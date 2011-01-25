@@ -736,15 +736,16 @@ void TagsPopupMenu::slotAddTag(QAction* action)
         return;
     }
 
-    QString title, icon;
+    QString      title, icon;
+    QKeySequence ks;
 
-    if (!TagEditDlg::tagCreate(kapp->activeWindow(), parent, title, icon))
+    if (!TagEditDlg::tagCreate(kapp->activeWindow(), parent, title, icon, ks))
     {
         return;
     }
 
     QMap<QString, QString> errMap;
-    AlbumList tList = TagEditDlg::createTAlbum(parent, title, icon, errMap);
+    AlbumList tList = TagEditDlg::createTAlbum(parent, title, icon, ks, errMap);
     TagEditDlg::showtagsListCreationError(kapp->activeWindow(), errMap);
 
     for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)

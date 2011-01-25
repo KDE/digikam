@@ -38,6 +38,7 @@
 
 #include "albumdb.h"
 #include "databaseaccess.h"
+#include "databaseconstants.h"
 
 namespace Digikam
 {
@@ -88,6 +89,11 @@ TagsActionMngr::~TagsActionMngr()
     }
 }
 
+KActionCollection* TagsActionMngr::actionCollection() const
+{
+    return d->actionCollection;
+}
+
 void TagsActionMngr::createActions()
 {
     TagInfo::List tList = DatabaseAccess().db()->scanTags();
@@ -96,7 +102,7 @@ void TagsActionMngr::createActions()
     {
         TagProperties tprop((*it).id);
 
-        if (tprop.hasProperty("KEYBOARD_SHORTCUT"))
+        if (tprop.hasProperty(TagPropertyName::tagKeyboardShortcut()))
         {
             createTagActionShortcut(*it, tprop);
         }
@@ -111,7 +117,7 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
     if (tinfo.isNull()) return false;
 
     TagProperties tprop(tinfo.id);
-    if (!tprop.hasProperty("KEYBOARD_SHORTCUT")) return false;
+    if (!tprop.hasProperty(TagPropertyName::tagKeyboardShortcut())) return false;
 
     createTagActionShortcut(tinfo, tprop);
     return true;
@@ -121,7 +127,7 @@ void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProp
 {
     KAction* action = d->actionCollection->addAction(QString("tagshortcut-%1").arg(tinfo.id));
     action->setText(i18n("Assign Tag \"%1\"", tinfo.name));
-    action->setShortcut(KShortcut(tprop.value("KEYBOARD_SHORTCUT")));
+    action->setShortcut(KShortcut(tprop.value(TagPropertyName::tagKeyboardShortcut())));
     action->setShortcutConfigurable(false);
     action->setIcon(KIcon(tinfo.icon));
 
@@ -131,14 +137,14 @@ void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProp
     d->tagsActionMap[tinfo.id] = action;
 }
 
-void TagsActionMngr::slotUpdateTagShortcut(int tagId, const QString& ks)
+void TagsActionMngr::slotUpdateTagShortcut(int tagId, const QKeySequence& ks)
 {
     if (!tagId) return;
 
     slotTagRemoved(tagId);
 
     TagProperties tprop(tagId);
-    tprop.setProperty("KEYBOARD_SHORTCUT", ks);
+    tprop.setProperty(TagPropertyName::tagKeyboardShortcut(), ks.toString());
 
     createTagActionShortcut(tagId);
 }

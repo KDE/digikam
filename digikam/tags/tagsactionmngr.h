@@ -57,6 +57,10 @@ public:
        */
       void createActions();
 
+      /** Return the instance of whole action collections.
+       */
+      KActionCollection* actionCollection() const;
+
       static TagsActionMngr* defaultManager();
 
 Q_SIGNALS:
@@ -69,7 +73,7 @@ public Q_SLOTS:
        * Updates the shortcut action for a tag. Call this when a shortcut was
        * added, removed or changed.
        */
-      void slotUpdateTagShortcut(int tagId, const QString& ks);
+      void slotUpdateTagShortcut(int tagId, const QKeySequence& ks);
 
       /**
        * Removes the shortcut actions associated with a tag.

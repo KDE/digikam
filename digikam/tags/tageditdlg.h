@@ -29,6 +29,7 @@
 
 #include <QMap>
 #include <QString>
+#include <QKeySequence>
 
 // KDE includes
 
@@ -50,11 +51,12 @@ public:
     TagEditDlg(QWidget* parent, TAlbum* album, bool create=false);
     ~TagEditDlg();
 
-    QString title() const;
-    QString icon() const;
+    QString      title() const;
+    QString      icon() const;
+    QKeySequence shortcut() const;
 
-    static bool tagEdit(QWidget* parent, TAlbum* album, QString& title, QString& icon);
-    static bool tagCreate(QWidget* parent, TAlbum* album, QString& title, QString& icon);
+    static bool tagEdit(QWidget* parent, TAlbum* album, QString& title, QString& icon, QKeySequence& ks);
+    static bool tagCreate(QWidget* parent, TAlbum* album, QString& title, QString& icon, QKeySequence& ks);
 
     /** Create a list of new Tag album using a list of tags hierarchies separated by ",".
         A hierarchy of tags is a string path of tags name separated by "/".
@@ -64,7 +66,7 @@ public:
         Return the list of created Albums.
     */
     static AlbumList createTAlbum(TAlbum* mainRootAlbum, const QString& tagStr, const QString& icon,
-                                  QMap<QString, QString>& errMap);
+                                  const QKeySequence& ks, QMap<QString, QString>& errMap);
 
     static void showtagsListCreationError(QWidget* parent, const QMap<QString, QString>& errMap);
 
@@ -73,6 +75,7 @@ private Q_SLOTS:
     void slotIconChanged();
     void slotIconResetClicked();
     void slotTitleChanged(const QString& newtitle);
+    void slotOk();
 
 private:
 

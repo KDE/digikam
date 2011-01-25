@@ -7,6 +7,7 @@
  * Description : helper class used to modify tag albums in views
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -90,13 +91,13 @@ TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, 
         }
     }
 
-    QString editTitle    = title;
-    QString editIconName = iconName;
+    QString      editTitle    = title;
+    QString      editIconName = iconName;
+    QKeySequence ks;
 
     if (title.isEmpty())
     {
-        bool doCreate = TagEditDlg::tagCreate(d->dialogParent, p, editTitle, editIconName);
-
+        bool doCreate = TagEditDlg::tagCreate(d->dialogParent, p, editTitle, editIconName, ks);
         if (!doCreate)
         {
             return 0;
@@ -104,7 +105,7 @@ TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, 
     }
 
     QMap<QString, QString> errMap;
-    AlbumList tList = TagEditDlg::createTAlbum(p, editTitle, editIconName, errMap);
+    AlbumList tList = TagEditDlg::createTAlbum(p, editTitle, editIconName, ks, errMap);
     TagEditDlg::showtagsListCreationError(d->dialogParent, errMap);
 
     if (errMap.isEmpty() && !tList.isEmpty())
@@ -139,9 +140,10 @@ void TagModificationHelper::slotTagEdit(TAlbum* tag)
         return;
     }
 
-    QString title, icon;
-    bool doEdit = TagEditDlg::tagEdit(d->dialogParent, tag, title, icon);
+    QString      title, icon;
+    QKeySequence ks;
 
+    bool doEdit = TagEditDlg::tagEdit(d->dialogParent, tag, title, icon, ks);
     if (!doEdit)
     {
         return;

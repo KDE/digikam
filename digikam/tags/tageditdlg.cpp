@@ -43,12 +43,15 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <kkeysequencewidget.h>
 
 // Local includes
 
 #include "album.h"
 #include "syncjob.h"
 #include "searchtextbar.h"
+#include "tagsactionmngr.h"
+#include "databaseconstants.h"
 
 namespace Digikam
 {
@@ -75,20 +78,23 @@ public:
         resetIconButton = 0;
         mainRootAlbum   = 0;
         topLabel        = 0;
+        keySeqWidget    = 0;
         create          = false;
     }
 
-    bool           create;
+    bool                create;
 
-    QLabel*        topLabel;
+    QLabel*             topLabel;
 
-    QString        icon;
+    QString             icon;
 
-    QPushButton*   iconButton;
-    QPushButton*   resetIconButton;
+    QPushButton*        iconButton;
+    QPushButton*        resetIconButton;
 
-    TAlbum*        mainRootAlbum;
-    SearchTextBar* titleEdit;
+    KKeySequenceWidget* keySeqWidget;
+
+    TAlbum*             mainRootAlbum;
+    SearchTextBar*      titleEdit;
 };
 
 TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
@@ -162,6 +168,8 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
         tipLabel->hide();
     }
 
+    // --------------------------------------------------------
+
     QLabel* iconTextLabel = new QLabel(page);
     iconTextLabel->setText(i18n("&Icon:"));
 
@@ -190,6 +198,17 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
 
     // --------------------------------------------------------
 
+    QLabel* kscTextLabel = new QLabel(page);
+    kscTextLabel->setText(i18n("&Shortcut:"));
+
+    d->keySeqWidget      = new KKeySequenceWidget(page);
+    kscTextLabel->setBuddy(d->keySeqWidget);
+    KShortcut ksc(album->property(TagPropertyName::tagKeyboardShortcut()));
+    d->keySeqWidget->setKeySequence(ksc.primary(), KKeySequenceWidget::NoValidate);
+    d->keySeqWidget->setCheckActionCollections(QList<KActionCollection*>() << TagsActionMngr::defaultManager()->actionCollection());
+
+    // --------------------------------------------------------
+
     grid->addWidget(logo,               0, 0, 1, 1);
     grid->addWidget(d->topLabel,        0, 1, 1, 4);
     grid->addWidget(line,               1, 0, 1, 4);
@@ -199,8 +218,10 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
     grid->addWidget(iconTextLabel,      4, 0, 1, 1);
     grid->addWidget(d->iconButton,      4, 1, 1, 1);
     grid->addWidget(d->resetIconButton, 4, 2, 1, 1);
+    grid->addWidget(kscTextLabel,       5, 0, 1, 1);
+    grid->addWidget(d->keySeqWidget,    5, 1, 1, 1);
     grid->setColumnStretch(3, 10);
-    grid->setRowStretch(5, 10);
+    grid->setRowStretch(6, 10);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
@@ -214,6 +235,10 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
 
     connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTitleChanged(const QString&)));
+
+    connect(this, SIGNAL(okClicked()),
+            this, SLOT(slotOk()));
+
 
     // --------------------------------------------------------
 
@@ -235,6 +260,11 @@ QString TagEditDlg::title() const
 QString TagEditDlg::icon() const
 {
     return d->icon;
+}
+
+QKeySequence TagEditDlg::shortcut() const
+{
+    return d->keySeqWidget->keySequence();
 }
 
 void TagEditDlg::slotIconResetClicked()
@@ -286,11 +316,16 @@ void TagEditDlg::slotTitleChanged(const QString& newtitle)
     }
 
     QRegExp emptyTitle = QRegExp("^\\s*$");
-    bool enable = (!emptyTitle.exactMatch(newtitle) && !newtitle.isEmpty());
+    bool enable        = (!emptyTitle.exactMatch(newtitle) && !newtitle.isEmpty());
     enableButtonOk(enable);
 }
 
-bool TagEditDlg::tagEdit(QWidget* parent, TAlbum* album, QString& title, QString& icon)
+void TagEditDlg::slotOk()
+{
+    //d->keySeqWidget->applyStealShortcut();
+}
+
+bool TagEditDlg::tagEdit(QWidget* parent, TAlbum* album, QString& title, QString& icon, QKeySequence& ks)
 {
     QPointer<TagEditDlg> dlg = new TagEditDlg(parent, album);
 
@@ -300,13 +335,14 @@ bool TagEditDlg::tagEdit(QWidget* parent, TAlbum* album, QString& title, QString
     {
         title = dlg->title();
         icon  = dlg->icon();
+        ks    = dlg->shortcut();
     }
 
     delete dlg;
     return valRet;
 }
 
-bool TagEditDlg::tagCreate(QWidget* parent, TAlbum* album, QString& title, QString& icon)
+bool TagEditDlg::tagCreate(QWidget* parent, TAlbum* album, QString& title, QString& icon, QKeySequence& ks)
 {
     QPointer<TagEditDlg> dlg = new TagEditDlg(parent, album, true);
 
@@ -316,6 +352,7 @@ bool TagEditDlg::tagCreate(QWidget* parent, TAlbum* album, QString& title, QStri
     {
         title = dlg->title();
         icon  = dlg->icon();
+        ks    = dlg->shortcut();
     }
 
     delete dlg;
@@ -323,10 +360,11 @@ bool TagEditDlg::tagCreate(QWidget* parent, TAlbum* album, QString& title, QStri
 }
 
 AlbumList TagEditDlg::createTAlbum(TAlbum* mainRootAlbum, const QString& tagStr, const QString& icon,
-                                   QMap<QString, QString>& errMap)
+                                   const QKeySequence& ks, QMap<QString, QString>& errMap)
 {
     errMap.clear();
     AlbumList createdTagsList;
+    TAlbum* root = 0;
 
     // Check if new tags are include in a list of tags hierarchy separated by ','.
     // Ex: /Country/France/people,/City/France/Paris
@@ -347,7 +385,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* mainRootAlbum, const QString& tagStr,
         {
             // Check if new tags is a hierarchy of tags separated by '/'.
 
-            TAlbum* root = 0;
+            root = 0;
 
             if (hierarchy.startsWith('/') || !mainRootAlbum)
             {
@@ -414,6 +452,12 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* mainRootAlbum, const QString& tagStr,
                 }
             }
         }
+    }
+
+    // Assign the keyboard shortcut to the last tag created from the hierarchy.
+    if (root)
+    {
+        TagsActionMngr::defaultManager()->slotUpdateTagShortcut(root->id(), ks);
     }
 
     return createdTagsList;

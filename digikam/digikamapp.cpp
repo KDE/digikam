@@ -8,8 +8,8 @@
 *
 * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
 * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
-* Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
-* Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+* Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+* Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
 *
 * This program is free software; you can redistribute it
 * and/or modify it under the terms of the GNU General
@@ -137,7 +137,7 @@
 #include "uifilevalidator.h"
 #include "scriptiface.h"
 #include "batchfacedetector.h"
-
+#include "tagsactionmngr.h"
 #include "databaseserverstarter.h"
 
 using KIO::Job;
@@ -230,7 +230,6 @@ DigikamApp::DigikamApp()
             this, SLOT(slotCameraRemoved(KAction*)));
 
     d->templateManager = new TemplateManager(this, KStandardDirs::locateLocal("appdata", "template.xml"));
-
     d->modelCollection = new DigikamModelCollection;
 
     setupView();
@@ -238,6 +237,9 @@ DigikamApp::DigikamApp()
     setupActions();
     setupStatusBar();
     initGui();
+
+    // This manager must be created after collection setup.
+    d->tagsActionManager = new TagsActionMngr(this, actionCollection());
 
     applyMainWindowSettings(d->config->group("General Settings"));
 
