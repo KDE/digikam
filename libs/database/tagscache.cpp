@@ -295,7 +295,7 @@ QString TagsCache::tagName(int id) const
     return QString();
 }
 
-QStringList TagsCache::tagNames(const QList<int>& ids) const
+QStringList TagsCache::tagNames(const QList<int>& ids, HiddenTagsPolicy hiddenTagsPolicy) const
 {
     QStringList names;
 
@@ -303,7 +303,10 @@ QStringList TagsCache::tagNames(const QList<int>& ids) const
     {
         foreach (int id, ids)
         {
-            names << tagName(id);
+            if (hiddenTagsPolicy == IncludeHiddenTags || !isInternalTag(id))
+            {
+                names << tagName(id);
+            }
         }
     }
 
@@ -338,7 +341,8 @@ QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy) const
     return path;
 }
 
-QStringList TagsCache::tagPaths(const QList<int>& ids, LeadingSlashPolicy slashPolicy) const
+QStringList TagsCache::tagPaths(const QList<int>& ids, LeadingSlashPolicy slashPolicy,
+                                HiddenTagsPolicy hiddenTagsPolicy) const
 {
     QStringList paths;
 
@@ -346,7 +350,10 @@ QStringList TagsCache::tagPaths(const QList<int>& ids, LeadingSlashPolicy slashP
     {
         foreach (int id, ids)
         {
-            paths << tagPath(id, slashPolicy);
+            if (hiddenTagsPolicy == IncludeHiddenTags || !isInternalTag(id))
+            {
+                paths << tagPath(id, slashPolicy);
+            }
         }
     }
 

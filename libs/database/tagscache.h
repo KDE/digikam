@@ -58,7 +58,7 @@ public:
      * If there is no tag for the given id a null string is returned.
      */
     QString     tagName(int id) const;
-    QStringList tagNames(const QList<int>& ids) const;
+    QStringList tagNames(const QList<int>& ids, HiddenTagsPolicy hiddenTagsPolicy = IncludeHiddenTags) const;
 
     /**
      * Returns the path of the tag with the given id.
@@ -66,7 +66,9 @@ public:
      * If there is no tag for the given id a null string is returned.
      */
     QString     tagPath(int id, LeadingSlashPolicy slashPolicy = IncludeLeadingSlash) const;
-    QStringList tagPaths(const QList<int>& ids, LeadingSlashPolicy slashPolicy = IncludeLeadingSlash) const;
+    QStringList tagPaths(const QList<int>& ids,
+                         LeadingSlashPolicy slashPolicy = IncludeLeadingSlash,
+                         HiddenTagsPolicy hiddenTagsPolicy = IncludeHiddenTags) const;
 
     /**
      * Returns true if the tag for the given id exists.
