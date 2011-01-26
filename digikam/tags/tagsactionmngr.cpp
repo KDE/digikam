@@ -201,6 +201,8 @@ void TagsActionMngr::tagRemoved(int tagId)
 
         for (int i =0 ; i < count ; ++i)
             delete d->tagsActionMap.take(tagId);
+
+        kDebug() << "Delete Shortcut assigned to tag " << tagId;
     }
 }
 
@@ -234,8 +236,6 @@ void TagsActionMngr::slotAssignTagsFromShortcut()
         kDebug() << "Handling by LightTableWindow";
         return;
     }
-
-    emit signalAssignTagsFromShortcut(tagId);
 }
 
 } // namespace Digikam

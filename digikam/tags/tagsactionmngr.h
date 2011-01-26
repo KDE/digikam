@@ -66,10 +66,6 @@ public:
 
     static TagsActionMngr* defaultManager();
 
-Q_SIGNALS:
-
-    void signalAssignTagsFromShortcut(int);
-
 public Q_SLOTS:
 
     /**
