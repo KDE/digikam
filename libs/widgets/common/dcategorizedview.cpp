@@ -766,6 +766,7 @@ void DCategorizedView::resizeEvent(QResizeEvent* e)
 {
     DigikamKCategorizedView::resizeEvent(e);
     updateDelegateSizes();
+    scrollTo(currentIndex());
 }
 
 bool DCategorizedView::viewportEvent(QEvent* event)

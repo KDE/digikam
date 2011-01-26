@@ -131,6 +131,8 @@ void ImageThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
     {
         setFlow(LeftToRight);
     }
+
+    scrollTo(currentIndex());
 }
 
 void ImageThumbnailBar::setScrollBarPolicy(Qt::ScrollBarPolicy policy)
