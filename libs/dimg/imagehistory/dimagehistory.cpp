@@ -77,7 +77,6 @@ DImageHistory::DImageHistory(const DImageHistory& other)
 
 DImageHistory::~DImageHistory()
 {
-    d->entries.clear();
 }
 
 DImageHistory& DImageHistory::operator=(const DImageHistory& other)

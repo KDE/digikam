@@ -304,15 +304,11 @@ void DImg::copyImageData(const DImgPrivate* src)
 
 int DImg::allocateData()
 {
-    int size = m_priv->width * m_priv->height * (m_priv->sixteenBit ? 8 : 4);
+    size_t size  = m_priv->width * m_priv->height * (m_priv->sixteenBit ? 8 : 4);
+    m_priv->data = DImgLoader::new_failureTolerant(size);
 
-    try
+    if (!m_priv->data)
     {
-        m_priv->data = new uchar[size];
-    }
-    catch (std::bad_alloc& ex)
-    {
-        Q_UNUSED(ex);
         m_priv->null = true;
         return 0;
     }
