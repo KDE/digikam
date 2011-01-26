@@ -1710,7 +1710,6 @@ void DigikamView::slotMoveSelectionToAlbum()
 
 void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 {
-
     // TODO update, temporary cast
     SidebarWidget* widget = dynamic_cast<SidebarWidget*> (w);
     foreach (SidebarWidget* sideBarWidget, d->leftSideBarWidgets)
@@ -1718,7 +1717,11 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
         bool active = (widget && (widget == sideBarWidget));
         sideBarWidget->setActive(active);
     }
+}
 
+void DigikamView::assignTag(int tagID)
+{
+    d->iconView->assignTagToSelected(tagID);
 }
 
 void DigikamView::slotAssignRating(int rating)

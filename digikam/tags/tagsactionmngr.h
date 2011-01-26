@@ -52,16 +52,17 @@ class TagsActionMngr : public QObject
 
 public:
 
-    TagsActionMngr(QWidget* parent, KActionCollection* actionCollection);
+    TagsActionMngr(QWidget* parent);
     ~TagsActionMngr();
 
-    /** Create all actions relevant of whole tags from DB which have a keyboard shortcut.
-      */
-    void createActions();
+    /** Register all action collections managed with keyboard shorcuts. 
+     *  Must be called after all root window instances created.
+     */
+    void registerActionCollections();
 
-    /** Return the instance of whole action collections.
+    /** Return the list of whole action collections managed.
       */
-    KActionCollection* actionCollection() const;
+    QList<KActionCollection*> actionCollections() const;
 
     static TagsActionMngr* defaultManager();
 
@@ -91,6 +92,11 @@ private:
     void tagRemoved(int tagId);
     bool createTagActionShortcut(int tagId);
     void createTagActionShortcut(const TagInfo& tinfo, const TagProperties& tprop);
+
+    /** Create all actions relevant of whole tags from DB which have a keyboard shortcut.
+      * This method is called by registerActionCollection() method.
+      */
+    void createActions();
 
 private:
 

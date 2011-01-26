@@ -25,7 +25,7 @@
 
 // Qt includes
 
-#include <QSortFilterProxyModel>
+#include <QList>
 
 // KDE includes
 
@@ -44,6 +44,7 @@
 #include "databaseaccess.h"
 #include "databaseconstants.h"
 #include "digikamapp.h"
+#include "digikamview.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
 
@@ -63,27 +64,21 @@ public:
 
     TagsActionMngrPrivate()
     {
-        actionCollection = 0;
-        view             = 0;
     }
 
-    QMap<int, KAction*> tagsActionMap;
-    QWidget*            view;
-    KActionCollection*  actionCollection;
+    QMultiMap<int, KAction*>  tagsActionMap;
+    QList<KActionCollection*> actionCollectionList;
 };
 
 // -------------------------------------------------------------------------------------------------
 
-TagsActionMngr::TagsActionMngr(QWidget* parent, KActionCollection* actionCollection)
+TagsActionMngr::TagsActionMngr(QWidget* parent)
     : QObject(parent), d(new TagsActionMngrPrivate)
 {
     if (!m_defaultManager)
     {
         m_defaultManager = this;
     }
-
-    d->actionCollection = actionCollection;
-    d->view             = parent;
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
@@ -99,9 +94,17 @@ TagsActionMngr::~TagsActionMngr()
     }
 }
 
-KActionCollection* TagsActionMngr::actionCollection() const
+void TagsActionMngr::registerActionCollections()
 {
-    return d->actionCollection;
+    d->actionCollectionList.append(DigikamApp::instance()->actionCollection());
+    d->actionCollectionList.append(ImageWindow::imageWindow()->actionCollection());
+    d->actionCollectionList.append(LightTableWindow::lightTableWindow()->actionCollection());
+    createActions();
+}
+
+QList<KActionCollection*> TagsActionMngr::actionCollections() const
+{
+    return d->actionCollectionList;
 }
 
 void TagsActionMngr::createActions()
@@ -135,20 +138,26 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
 
 void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProperties& tprop)
 {
-    KAction* action = d->actionCollection->addAction(QString("tagshortcut-%1").arg(tinfo.id));
-    action->setText(i18n("Assign Tag \"%1\"", tinfo.name));
-    action->setShortcut(KShortcut(tprop.value(TagPropertyName::tagKeyboardShortcut())));
-    action->setShortcutConfigurable(false);
-    action->setIcon(KIcon(tinfo.icon));
-    action->setData(tinfo.id);
+    KShortcut ks(tprop.value(TagPropertyName::tagKeyboardShortcut()));
+    KIcon     icon(tinfo.icon);
 
-    connect(action, SIGNAL(triggered()),
-            this, SLOT(slotAssignTagsFromShortcut()));
-
-    d->tagsActionMap[tinfo.id] = action;
-
-    kDebug() << "Create Shortcut " << action->shortcut().toString()
+    kDebug() << "Create Shortcut " << ks.toString()
              << " to Tag " << tinfo.name << " (" << tinfo.id << ")";
+
+    foreach(KActionCollection* ac, d->actionCollectionList)
+    {
+        KAction* action = ac->addAction(QString("tagshortcut-%1").arg(tinfo.id));
+        action->setText(i18n("Assign Tag \"%1\"", tinfo.name));
+        action->setShortcut(ks);
+        action->setShortcutConfigurable(false);
+        action->setIcon(icon);
+        action->setData(tinfo.id);
+
+        connect(action, SIGNAL(triggered()),
+                this, SLOT(slotAssignTagsFromShortcut()));
+
+        d->tagsActionMap.insert(tinfo.id, action);
+    }
 }
 
 void TagsActionMngr::slotUpdateTagShortcut(int tagId, const QKeySequence& ks)
@@ -174,12 +183,24 @@ void TagsActionMngr::slotAlbumDeleted(Album* album)
 
 void TagsActionMngr::tagRemoved(int tagId)
 {
-    KAction* action = d->tagsActionMap[tagId];
-    if (action)
+    int count = d->tagsActionMap.count(tagId);
+    if (count)
     {
-        // NOTE: Action is deleted by KActionCollection
-        d->actionCollection->removeAction(action);
-        delete d->tagsActionMap.take(tagId);
+        foreach(KAction* act, d->tagsActionMap.values(tagId))
+        {
+            if (act)
+            {
+                KActionCollection* ac = dynamic_cast<KActionCollection*>(act->parent());
+                if (ac)
+                {
+                    // NOTE: Action is deleted by KActionCollection
+                    ac->takeAction(act);
+                }
+            }
+        }
+
+        for (int i =0 ; i < count ; ++i)
+            delete d->tagsActionMap.take(tagId);
     }
 }
 
@@ -192,22 +213,23 @@ void TagsActionMngr::slotAssignTagsFromShortcut()
     kDebug() << "Fired Tag Shortcut " << tagId;
 
     QWidget* w      = kapp->activeWindow();
-    DigikamApp* lw1 = dynamic_cast<DigikamApp*>(w);
-    if (lw1)
+    DigikamApp* dkw = dynamic_cast<DigikamApp*>(w);
+    if (dkw)
     {
         kDebug() << "Handling by DigikamApp";
+        dkw->view()->assignTag(tagId);
         return;
     }
 
-    ImageWindow* lw2 = dynamic_cast<ImageWindow*>(w);
-    if (lw2)
+    ImageWindow* imw = dynamic_cast<ImageWindow*>(w);
+    if (imw)
     {
         kDebug() << "Handling by ImageWindow";
         return;
     }
 
-    LightTableWindow* lw3 = dynamic_cast<LightTableWindow*>(w);
-    if (lw3)
+    LightTableWindow* ltw = dynamic_cast<LightTableWindow*>(w);
+    if (ltw)
     {
         kDebug() << "Handling by LightTableWindow";
         return;

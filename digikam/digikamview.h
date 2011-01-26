@@ -83,6 +83,8 @@ public:
     double zoomMin();
     double zoomMax();
 
+    void assignTag(int tagID);
+
 Q_SIGNALS:
 
     void signalAlbumSelected(bool val);

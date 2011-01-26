@@ -205,7 +205,7 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
     kscTextLabel->setBuddy(d->keySeqWidget);
     KShortcut ksc(album->property(TagPropertyName::tagKeyboardShortcut()));
     d->keySeqWidget->setKeySequence(ksc.primary(), KKeySequenceWidget::NoValidate);
-    d->keySeqWidget->setCheckActionCollections(QList<KActionCollection*>() << TagsActionMngr::defaultManager()->actionCollection());
+    d->keySeqWidget->setCheckActionCollections(TagsActionMngr::defaultManager()->actionCollections());
 
     // --------------------------------------------------------
 

@@ -239,7 +239,7 @@ DigikamApp::DigikamApp()
     initGui();
 
     // This manager must be created after collection setup.
-    d->tagsActionManager = new TagsActionMngr(this, actionCollection());
+    d->tagsActionManager = new TagsActionMngr(this);
 
     applyMainWindowSettings(d->config->group("General Settings"));
 
@@ -2716,6 +2716,8 @@ void DigikamApp::preloadWindows()
     QueueMgrWindow::queueManagerWindow();
     ImageWindow::imageWindow();
     LightTableWindow::lightTableWindow();
+
+    d->tagsActionManager->registerActionCollections();
 }
 
 void DigikamApp::slotChangeTheme(const QString& theme)
