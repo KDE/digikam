@@ -75,6 +75,11 @@ public:
     static QByteArray uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
     static HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata& metadata);
 
+    static unsigned char*   new_failureTolerant(size_t unsecureSize);
+    static unsigned short*  new_short_failureTolerant(size_t unsecureSize);
+
+    static int checkAllocation(qint64 fullSize);
+
 protected:
 
     DImgLoader(DImg* image);
@@ -104,9 +109,6 @@ protected:
     virtual int             granularity(DImgLoaderObserver* observer, int total, float progressSlice = 1.0);
 
     bool                    checkExifWorkingColorSpace();
-
-    unsigned char*          new_failureTolerant(size_t unsecureSize);
-    unsigned short*         new_short_failureTolerant(size_t unsecureSize);
 
 protected:
 

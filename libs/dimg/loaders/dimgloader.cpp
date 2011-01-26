@@ -24,6 +24,10 @@
 
 #include "dimgloader.h"
 
+// C++ includes
+
+#include <limits>
+
 // Qt includes
 
 #include <QCryptographicHash>
@@ -41,6 +45,7 @@
 #include "dimg_p.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
+#include "kmemoryinfo.h"
 
 namespace Digikam
 {
@@ -157,6 +162,9 @@ void DImgLoader::loadingFailed()
 
 unsigned char* DImgLoader::new_failureTolerant(size_t size)
 {
+    if (!checkAllocation(size))
+        return 0;
+
     try
     {
         return new uchar[size];
@@ -170,6 +178,9 @@ unsigned char* DImgLoader::new_failureTolerant(size_t size)
 
 unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
 {
+    if (!checkAllocation(size))
+        return 0;
+
     try
     {
         return new unsigned short[size];
@@ -179,6 +190,30 @@ unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
         kError() << "Failed to allocate chunk of memory of size" << size << ex.what();
         return 0;
     }
+}
+
+int DImgLoader::checkAllocation(qint64 fullSize)
+{
+    if (fullSize > std::numeric_limits<int>::max())
+    {
+        kError() << "Cannot allocate buffer of size" << fullSize;
+        return 0;
+    }
+    int size = (int)fullSize;
+
+    // Do extra check if allocating serious amounts of memory.
+    // At the time of writing (2011), I consider 100 MB as "serious".
+    if (size > 100 * 1024 * 1024)
+    {
+        KMemoryInfo memory = KMemoryInfo::currentInfo();
+        if (size > memory.bytes(KMemoryInfo::AvailableMemory) && memory.isValid())
+        {
+            kError() << "Not enough memory to allocate buffer of size" << size;
+            return 0;
+        }
+    }
+
+    return size;
 }
 
 bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)

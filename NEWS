@@ -46,4 +46,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 235666 : All tags no longer shown when the "Tags already assigned" button is clicked.
 030 ==> 114465 : Simpler entry of tags using keyboard shortcuts.
 031 ==> 229471 : Editor: forward when saving in progress.
-032 ==> 
+032 ==> 255858 : memory leak (?) while thumbnailing very large files!
+033 ==> 
