@@ -34,6 +34,7 @@
 
 #include <klocale.h>
 #include <kdialog.h>
+#include <kstringhandler.h>
 
 // Local includes
 
@@ -119,6 +120,10 @@ public:
     DTextLabelName*  flash;
     DTextLabelName*  whiteBalance;
 
+    DTextLabelName*  caption;
+    DTextLabelName*  tags;
+    DTextLabelName*  rating;
+
     DTextLabelValue* labelFile;
     DTextLabelValue* labelFolder;
     DTextLabelValue* labelFileModifiedDate;
@@ -143,6 +148,10 @@ public:
     DTextLabelValue* labelPhotoExposureMode;
     DTextLabelValue* labelPhotoFlash;
     DTextLabelValue* labelPhotoWhiteBalance;
+
+    DTextLabelValue* labelCaption;
+    DTextLabelValue* labelTags;
+    DTextLabelValue* labelRating;
 };
 
 ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
@@ -280,6 +289,33 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     addItem(w3, SmallIcon("camera-photo"),
             i18n("Photograph Properties"), QString("PhotographProperties"), true);
+
+    // --------------------------------------------------
+
+    QWidget* const w4         = new QWidget(this);
+    QGridLayout* const glay4  = new QGridLayout(w4);
+
+    d->caption                = new DTextLabelName(i18n("Caption: "), w4);
+    d->rating                 = new DTextLabelName(i18n("Rating: "),  w4);
+    d->tags                   = new DTextLabelName(i18n("Tags: "),    w4);
+
+    d->labelCaption           = new DTextLabelValue(0, w4);
+    d->labelRating            = new DTextLabelValue(0, w4);
+    d->labelTags              = new DTextLabelValue(0, w4);
+    d->labelTags->setTextElideMode(Qt::ElideLeft);
+
+    glay4->addWidget(d->caption,       0, 0, 1, 1);
+    glay4->addWidget(d->labelCaption,  0, 1, 1, 1);
+    glay4->addWidget(d->rating,        1, 0, 1, 1);
+    glay4->addWidget(d->labelRating,   1, 1, 1, 1);
+    glay4->addWidget(d->tags,          2, 0, 1, 1);
+    glay4->addWidget(d->labelTags,     2, 1, 1, 1);
+    glay4->setMargin(KDialog::spacingHint());
+    glay4->setSpacing(0);
+    glay4->setColumnStretch(1, 10);
+
+    addItem(w4, SmallIcon("imagecomment"),
+            i18n("Caption and Tags"), QString("CaptionTags"), true);
 
     addStretch();
 }
@@ -447,6 +483,84 @@ void ImagePropertiesTab::setPhotoFlash(const QString& str)
 void ImagePropertiesTab::setPhotoWhiteBalance(const QString& str)
 {
     d->labelPhotoWhiteBalance->setText(str);
+}
+
+void ImagePropertiesTab::showOrHideCaptionAndTags()
+{
+    bool hasCaption = !d->labelCaption->text().isEmpty();
+    bool hasRating  = !d->labelRating->text().isEmpty();
+    bool hasTags    = !d->labelTags->text().isEmpty();
+
+    d->caption->setVisible(hasCaption);
+    d->labelCaption->setVisible(hasCaption);
+    d->rating->setVisible(hasRating);
+    d->labelRating->setVisible(hasRating);
+    d->tags->setVisible(hasTags);
+    d->labelTags->setVisible(hasTags);
+
+    widget(3)->setVisible(hasCaption || hasRating || hasTags);
+}
+
+void ImagePropertiesTab::setCaption(const QString& str)
+{
+    d->labelCaption->setText(str);
+}
+
+void ImagePropertiesTab::setRating(int rating)
+{
+    QString str;
+    if (rating > 0)
+    {
+        str = " ";
+        for (int i=0; i<rating; i++)
+        {
+            str += QChar(0x25CF);//0x2022);
+            str += ' ';
+        }
+    }
+    d->labelRating->setText(str);
+}
+
+static bool naturalLessThan(const QString& a, const QString& b)
+{
+    return KStringHandler::naturalCompare(a,b) < 0;
+}
+
+void ImagePropertiesTab::setTags(const QStringList& tagPaths, const QStringList& tagNames)
+{
+    Q_UNUSED(tagNames);
+    QStringList tagsSorted = tagPaths;
+    qStableSort(tagsSorted.begin(), tagsSorted.end(), naturalLessThan);
+
+    QStringList tagsShortened;
+    QString previous;
+    foreach (const QString tagPath, tagsSorted)
+    {
+        QString shortenedPath = tagPath;
+
+        QStringList currentPath = tagPath.split('/', QString::SkipEmptyParts);
+        QStringList previousPath = previous.split('/', QString::SkipEmptyParts);
+        int depth;
+        for (depth = 0; depth < currentPath.size() && depth < previousPath.size(); depth++)
+        {
+            if (currentPath[depth] != previousPath[depth])
+                break;
+        }
+
+        if (depth)
+        {
+            QString indent;
+            indent.fill(' ', qMin(depth, 5));
+            //indent += QChar(0x2026);
+            shortenedPath = indent + tagPath.section('/', depth);
+        }
+
+        shortenedPath.replace("/", " / ");
+        tagsShortened << shortenedPath;
+        previous = tagPath;
+    }
+
+    d->labelTags->setText(tagsShortened.join("\n"));
 }
 
 }  // namespace Digikam

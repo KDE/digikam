@@ -359,6 +359,23 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
 
     m_propertiesTab->setPhotoFlash(photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash);
     m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
+
+    // -- Caption, ratings, tag information ---------------------
+
+    CaptionsMap captions = metaData.getImageComments();
+    QString caption;
+    if (captions.contains("x-default"))
+        caption = captions.value("x-default").caption;
+    else if (!captions.isEmpty())
+        caption = captions.begin().value().caption;
+    m_propertiesTab->setCaption(caption);
+
+    m_propertiesTab->setRating(metaData.getImageRating());
+
+    QStringList tagPaths;
+    metaData.getImageTagsPath(tagPaths);
+    m_propertiesTab->setTags(tagPaths);
+    m_propertiesTab->showOrHideCaptionAndTags();
 }
 
 void ImagePropertiesSideBar::doLoadState()

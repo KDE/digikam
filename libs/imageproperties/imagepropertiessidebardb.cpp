@@ -45,19 +45,20 @@
 
 // Local includes
 
+#include "databaseinfocontainers.h"
+#include "databasewatch.h"
 #include "digikam2kmap_database.h"
 #include "dimg.h"
-#include "imageinfo.h"
-#include "databasewatch.h"
-#include "imagepropertiesgpstab.h"
-#include "imagedescedittab.h"
 #include "imageattributeswatch.h"
+#include "imagedescedittab.h"
+#include "imageinfo.h"
+#include "imagepropertiesgpstab.h"
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
 #include "imagepropertiesversionstab.h"
-#include "databaseinfocontainers.h"
 #include "imageposition.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -577,6 +578,16 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
 
             m_propertiesTab->setPhotoFlash(photoInfo.flashMode.isEmpty() ? unavailable : photoInfo.flashMode);
             m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
+
+            // -- Caption / Tags ------------------------------------------
+
+            m_propertiesTab->setCaption(info.comment());
+            m_propertiesTab->setRating(info.rating());
+            QList<int> tagIds = info.tagIds();
+            m_propertiesTab->setTags(TagsCache::instance()->tagPaths(tagIds, TagsCache::NoLeadingSlash, TagsCache::NoHiddenTags),
+                                     TagsCache::instance()->tagNames(tagIds, TagsCache::NoHiddenTags));
+            m_propertiesTab->showOrHideCaptionAndTags();
+
             return;
         }
     }

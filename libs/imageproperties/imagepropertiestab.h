@@ -56,6 +56,7 @@ public:
     void setCurrentURL(const KUrl& url=KUrl());
 
     void setPhotoInfoDisable(const bool b);
+    void showOrHideCaptionAndTags();
 
     void setFileModifiedDate(const QString& str);
     void setFileSize(const QString& str);
@@ -80,6 +81,10 @@ public:
     void setPhotoExposureMode(const QString& str);
     void setPhotoFlash(const QString& str);
     void setPhotoWhiteBalance(const QString& str);
+
+    void setCaption(const QString& str);
+    void setRating(int rating);
+    void setTags(const QStringList& tagPaths, const QStringList& tagNames = QStringList());
 
 private:
 
