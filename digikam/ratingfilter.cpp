@@ -6,7 +6,7 @@
  * Date        : 2007-10-09
  * Description : a widget to filter album contents by rating
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class RatingFilterPriv
+class RatingFilter::RatingFilterPriv
 {
 public:
 
@@ -59,12 +59,11 @@ public:
         filterCond    = ImageFilterSettings::GreaterEqualCondition;
     }
 
-    bool                          dirty;
+    bool                                 dirty;
 
-    DTipTracker*                  ratingTracker;
+    DTipTracker*                         ratingTracker;
 
-    ImageFilterSettings::
-    RatingCondition           filterCond;
+    ImageFilterSettings::RatingCondition filterCond;
 };
 
 RatingFilter::RatingFilter(QWidget* parent)
