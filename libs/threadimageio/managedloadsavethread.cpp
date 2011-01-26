@@ -37,7 +37,8 @@
 namespace Digikam
 {
 
-ManagedLoadSaveThread::ManagedLoadSaveThread()
+ManagedLoadSaveThread::ManagedLoadSaveThread(QObject* parent)
+    : LoadSaveThread(parent)
 {
     m_loadingPolicy     = LoadingPolicyAppend;
     m_terminationPolicy = TerminationPolicyTerminateLoading;

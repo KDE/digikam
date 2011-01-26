@@ -41,7 +41,7 @@ public:
 
     /// Termination is controlled by setting the TerminationPolicy
     /// Default is TerminationPolicyTerminateLoading
-    ManagedLoadSaveThread();
+    ManagedLoadSaveThread(QObject* parent = 0);
     ~ManagedLoadSaveThread();
 
     enum LoadingPolicy

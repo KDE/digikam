@@ -92,7 +92,7 @@ public:
         AccessModeReadWrite
     };
 
-    LoadSaveThread();
+    LoadSaveThread(QObject* parent = 0);
     /**
      * Destructor:
      * The thread will execute all pending tasks and wait for this upon destruction

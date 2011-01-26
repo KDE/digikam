@@ -32,6 +32,11 @@
 namespace Digikam
 {
 
+SharedLoadSaveThread::SharedLoadSaveThread(QObject* parent)
+    : ManagedLoadSaveThread(parent)
+{
+}
+
 void SharedLoadSaveThread::load(LoadingDescription description, AccessMode mode, LoadingPolicy policy)
 {
     ManagedLoadSaveThread::load(description, LoadingModeShared, policy, mode);

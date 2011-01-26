@@ -152,8 +152,9 @@ K_GLOBAL_STATIC(ThumbnailLoadThread, defaultIconViewObject)
 K_GLOBAL_STATIC(ThumbnailLoadThread, defaultObject)
 K_GLOBAL_STATIC(ThumbnailLoadThread, defaultThumbBarObject)
 
-ThumbnailLoadThread::ThumbnailLoadThread()
-    : d(new ThumbnailLoadThreadPriv)
+ThumbnailLoadThread::ThumbnailLoadThread(QObject* parent)
+    : ManagedLoadSaveThread(parent),
+      d(new ThumbnailLoadThreadPriv)
 {
     static_d->firstThreadCreated = true;
     d->creator = new ThumbnailCreator(static_d->storageMethod);

@@ -55,8 +55,9 @@ public:
 
 //---------------------------------------------------------------------------------------------------
 
-LoadSaveThread::LoadSaveThread()
-    : d(new LoadSaveThreadPriv)
+LoadSaveThread::LoadSaveThread(QObject* parent)
+    : DynamicThread(parent),
+      d(new LoadSaveThreadPriv)
 {
     m_currentTask        = 0;
     m_notificationPolicy = NotificationPolicyTimeLimited;

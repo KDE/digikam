@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT ThumbnailLoadThread : public ManagedLoadSaveThread
 
 public:
 
-    ThumbnailLoadThread();
+    ThumbnailLoadThread(QObject* parent = 0);
     ~ThumbnailLoadThread();
 
     /**
