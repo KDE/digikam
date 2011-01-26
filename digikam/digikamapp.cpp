@@ -1469,7 +1469,9 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
     {
         case 0:
         {
-            d->statusBarSelectionText = i18n("No item selected");
+            d->statusBarSelectionText = i18np("No item selected (%1 item)",
+                                              "No item selected (%1 items)",
+                                              num_images);
             break;
         }
         case 1:
