@@ -148,12 +148,6 @@ public:
         recurseTagsAction(0),
         showBarAction(0),
         showMenuBarAction(0),
-        rating0Star(0),
-        rating1Star(0),
-        rating2Star(0),
-        rating3Star(0),
-        rating4Star(0),
-        rating5Star(0),
         slideShowAction(0),
         slideShowAllAction(0),
         slideShowSelectionAction(0),
@@ -284,13 +278,6 @@ public:
     KToggleAction*                      recurseTagsAction;
     KToggleAction*                      showBarAction;
     KToggleAction*                      showMenuBarAction;
-
-    KAction*                            rating0Star;
-    KAction*                            rating1Star;
-    KAction*                            rating2Star;
-    KAction*                            rating3Star;
-    KAction*                            rating4Star;
-    KAction*                            rating5Star;
 
     // Tools Actions
     KActionMenu*                        slideShowAction;

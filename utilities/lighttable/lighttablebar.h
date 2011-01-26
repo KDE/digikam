@@ -67,6 +67,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
+    void slotAssignRating(int);
     void slotRatingChanged(const KUrl&, int);
 
 private:
@@ -82,15 +83,6 @@ private:
 private Q_SLOTS:
 
     void slotItemSelected(ThumbBarItem*);
-
-    void slotAssignRatingNoStar();
-    void slotAssignRatingOneStar();
-    void slotAssignRatingTwoStar();
-    void slotAssignRatingThreeStar();
-    void slotAssignRatingFourStar();
-    void slotAssignRatingFiveStar();
-    void slotAssignRating(int);
-
     void slotCollectionImageChange(const CollectionImageChangeset&);
 
 private:

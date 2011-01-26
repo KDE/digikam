@@ -1177,37 +1177,6 @@ void DigikamApp::setupActions()
 
     actionCollection()->addAction("logo_action", new DLogoAction(this));
 
-    // -- Rating actions ---------------------------------------------------------------
-
-    d->rating0Star = new KAction(i18n("Assign Rating \"No Stars\""), this);
-    d->rating0Star->setShortcut(KShortcut(Qt::CTRL+Qt::Key_0));
-    connect(d->rating0Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingNoStar()));
-    actionCollection()->addAction("ratenostar", d->rating0Star);
-
-    d->rating1Star = new KAction(i18n("Assign Rating \"One Star\""), this);
-    d->rating1Star->setShortcut(KShortcut(Qt::CTRL+Qt::Key_1));
-    connect(d->rating1Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingOneStar()));
-    actionCollection()->addAction("rateonestar", d->rating1Star);
-
-    d->rating2Star = new KAction(i18n("Assign Rating \"Two Stars\""), this);
-    d->rating2Star->setShortcut(KShortcut(Qt::CTRL+Qt::Key_2));
-    connect(d->rating2Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingTwoStar()));
-    actionCollection()->addAction("ratetwostar", d->rating2Star);
-
-    d->rating3Star = new KAction(i18n("Assign Rating \"Three Stars\""), this);
-    d->rating3Star->setShortcut(KShortcut(Qt::CTRL+Qt::Key_3));
-    connect(d->rating3Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingThreeStar()));
-    actionCollection()->addAction("ratethreestar", d->rating3Star);
-
-    d->rating4Star = new KAction(i18n("Assign Rating \"Four Stars\""), this);
-    d->rating4Star->setShortcut(KShortcut(Qt::CTRL+Qt::Key_4));
-    connect(d->rating4Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingFourStar()));
-    actionCollection()->addAction("ratefourstar", d->rating4Star);
-
-    d->rating5Star = new KAction(i18n("Assign Rating \"Five Stars\""), this);
-    d->rating5Star->setShortcut(KShortcut(Qt::CTRL+Qt::Key_5));
-    connect(d->rating5Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingFiveStar()));
-    actionCollection()->addAction("ratefivestar", d->rating5Star);
     //------------------------------------------------------------
 
     KAction* findAction = new KAction(KIcon("system-search"), i18n("Search..."), this);

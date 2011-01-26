@@ -74,6 +74,8 @@ public Q_SLOTS:
                         const ImageInfo& imageInfoCurrent, const QString& caption);
     void openImage(const ImageInfo& info);
 
+    void slotAssignRating(int rating);
+
 Q_SIGNALS:
 
     void signalFileDeleted(const KUrl& url);
@@ -157,13 +159,6 @@ private Q_SLOTS:
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
 
-    void slotAssignRatingNoStar();
-    void slotAssignRatingOneStar();
-    void slotAssignRatingTwoStar();
-    void slotAssignRatingThreeStar();
-    void slotAssignRatingFourStar();
-    void slotAssignRatingFiveStar();
-    void slotAssignRating(int rating);
     void slotRatingChanged(const KUrl& url, int rating);
 
     void slotFileMetadataChanged(const KUrl&);

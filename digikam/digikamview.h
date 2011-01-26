@@ -178,12 +178,6 @@ public Q_SLOTS:
 
     // Image Rating slots
     void slotAssignRating(int rating);
-    void slotAssignRatingNoStar();
-    void slotAssignRatingOneStar();
-    void slotAssignRatingTwoStar();
-    void slotAssignRatingThreeStar();
-    void slotAssignRatingFourStar();
-    void slotAssignRatingFiveStar();
 
     // Tools action slots.
     void slotLightTable();

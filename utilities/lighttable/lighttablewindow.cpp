@@ -634,38 +634,6 @@ void LightTableWindow::setupActions()
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
 
-    // -- Rating actions ---------------------------------------------------------------
-
-    d->star0 = new KAction(i18n("Assign Rating \"No Stars\""), this);
-    d->star0->setShortcut(KShortcut(Qt::CTRL+Qt::Key_0));
-    connect(d->star0, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingNoStar()));
-    actionCollection()->addAction("lighttable_ratenostar", d->star0);
-
-    d->star1 = new KAction(i18n("Assign Rating \"One Star\""), this);
-    d->star1->setShortcut(KShortcut(Qt::CTRL+Qt::Key_1));
-    connect(d->star1, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingOneStar()));
-    actionCollection()->addAction("lighttable_rateonestar", d->star1);
-
-    d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), this);
-    d->star2->setShortcut(KShortcut(Qt::CTRL+Qt::Key_2));
-    connect(d->star2, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingTwoStar()));
-    actionCollection()->addAction("lighttable_ratetwostar", d->star2);
-
-    d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), this);
-    d->star3->setShortcut(KShortcut(Qt::CTRL+Qt::Key_3));
-    connect(d->star3, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingThreeStar()));
-    actionCollection()->addAction("lighttable_ratethreestar", d->star3);
-
-    d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), this);
-    d->star4->setShortcut(KShortcut(Qt::CTRL+Qt::Key_4));
-    connect(d->star4, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingFourStar()));
-    actionCollection()->addAction("lighttable_ratefourstar", d->star4);
-
-    d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), this);
-    d->star5->setShortcut(KShortcut(Qt::CTRL+Qt::Key_5));
-    connect(d->star5, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingFiveStar()));
-    actionCollection()->addAction("lighttable_ratefivestar", d->star5);
-
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
     KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
@@ -1803,6 +1771,11 @@ void LightTableWindow::moveEvent(QMoveEvent* e)
 void LightTableWindow::toggleTag(int tagID)
 {
     d->barView->toggleTag(tagID);
+}
+
+void LightTableWindow::slotAssignRating(int rating)
+{
+    d->barView->slotAssignRating(rating);
 }
 
 }  // namespace Digikam

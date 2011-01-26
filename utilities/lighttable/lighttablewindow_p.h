@@ -6,7 +6,7 @@
  * Date        : 2007-03-05
  * Description : digiKam light table GUI
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -76,12 +76,6 @@ public:
         rightZoomMinusAction(0),
         rightZoomTo100percents(0),
         rightZoomFitToWindowAction(0),
-        star0(0),
-        star1(0),
-        star2(0),
-        star3(0),
-        star4(0),
-        star5(0),
         forwardAction(0),
         backwardAction(0),
         firstAction(0),
@@ -135,14 +129,6 @@ public:
     KAction*                  rightZoomMinusAction;
     KAction*                  rightZoomTo100percents;
     KAction*                  rightZoomFitToWindowAction;
-
-    // Rating actions.
-    KAction*                  star0;
-    KAction*                  star1;
-    KAction*                  star2;
-    KAction*                  star3;
-    KAction*                  star4;
-    KAction*                  star5;
 
     KAction*                  forwardAction;
     KAction*                  backwardAction;

@@ -222,36 +222,6 @@ void LightTableBar::toggleTag(int tagID)
     }
 }
 
-void LightTableBar::slotAssignRatingNoStar()
-{
-    slotAssignRating(0);
-}
-
-void LightTableBar::slotAssignRatingOneStar()
-{
-    slotAssignRating(1);
-}
-
-void LightTableBar::slotAssignRatingTwoStar()
-{
-    slotAssignRating(2);
-}
-
-void LightTableBar::slotAssignRatingThreeStar()
-{
-    slotAssignRating(3);
-}
-
-void LightTableBar::slotAssignRatingFourStar()
-{
-    slotAssignRating(4);
-}
-
-void LightTableBar::slotAssignRatingFiveStar()
-{
-    slotAssignRating(5);
-}
-
 void LightTableBar::setOnLeftPanel(const ImageInfo& info)
 {
     for (ThumbBarItem* item = firstItem(); item; item = item->next())

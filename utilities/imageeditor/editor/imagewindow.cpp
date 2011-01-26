@@ -157,12 +157,6 @@ public:
     ImageWindowPriv() :
         viewContainer(0),
         toMainWindowAction(0),
-        star0(0),
-        star1(0),
-        star2(0),
-        star3(0),
-        star4(0),
-        star5(0),
         fileDeletePermanentlyAction(0),
         fileDeletePermanentlyDirectlyAction(0),
         fileTrashDirectlyAction(0),
@@ -182,14 +176,6 @@ public:
     KMainWindow*              viewContainer;
 
     KAction*                  toMainWindowAction;
-
-    // Rating actions.
-    KAction*                  star0;
-    KAction*                  star1;
-    KAction*                  star2;
-    KAction*                  star3;
-    KAction*                  star4;
-    KAction*                  star5;
 
     // Delete actions
     KAction*                  fileDeletePermanentlyAction;
@@ -265,7 +251,6 @@ public:
         else
             thumbBar->setCurrentWhenAvailable(currentImageInfo.id());
     }
-
 };
 
 const QString ImageWindowPriv::configShowThumbbarEntry("Show Thumbbar");
@@ -420,14 +405,14 @@ void ImageWindow::setupUserArea()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
-    QWidget* widget = new QWidget(this);
+    QWidget* widget   = new QWidget(this);
     QHBoxLayout* hlay = new QHBoxLayout(widget);
     m_splitter        = new SidebarSplitter(widget);
 
     d->viewContainer = new KMainWindow(widget, Qt::Widget);
     m_splitter->addWidget(d->viewContainer);
-    m_stackView = new Digikam::EditorStackView(d->viewContainer);
-    m_canvas    = new Digikam::Canvas(m_stackView);
+    m_stackView      = new Digikam::EditorStackView(d->viewContainer);
+    m_canvas         = new Digikam::Canvas(m_stackView);
     d->viewContainer->setCentralWidget(m_stackView);
 
     m_splitter->setStretchFactor(0, 10);      // set Canvas default size to max.
@@ -563,38 +548,6 @@ void ImageWindow::setupActions()
                                         i18nc("@action Finish editing, close editor, back to main window", "Close Editor"), this);
     connect(d->toMainWindowAction, SIGNAL(triggered()), this, SLOT(slotToMainWindow()));
     actionCollection()->addAction("imageview_tomainwindow", d->toMainWindowAction);
-
-    // -- Rating actions ---------------------------------------------------------------
-
-    d->star0 = new KAction(i18n("Assign Rating \"No Stars\""), this);
-    d->star0->setShortcut(KShortcut(Qt::CTRL+Qt::Key_0));
-    connect(d->star0, SIGNAL(triggered()), this, SLOT(slotAssignRatingNoStar()));
-    actionCollection()->addAction("imageview_ratenostar", d->star0);
-
-    d->star1 = new KAction(i18n("Assign Rating \"One Star\""), this);
-    d->star1->setShortcut(KShortcut(Qt::CTRL+Qt::Key_1));
-    connect(d->star1, SIGNAL(triggered()), this, SLOT(slotAssignRatingOneStar()));
-    actionCollection()->addAction("imageview_rateonestar", d->star1);
-
-    d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), this);
-    d->star2->setShortcut(KShortcut(Qt::CTRL+Qt::Key_2));
-    connect(d->star2, SIGNAL(triggered()), this, SLOT(slotAssignRatingTwoStar()));
-    actionCollection()->addAction("imageview_ratetwostar", d->star2);
-
-    d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), this);
-    d->star3->setShortcut(KShortcut(Qt::CTRL+Qt::Key_3));
-    connect(d->star3, SIGNAL(triggered()), this, SLOT(slotAssignRatingThreeStar()));
-    actionCollection()->addAction("imageview_ratethreestar", d->star3);
-
-    d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), this);
-    d->star4->setShortcut(KShortcut(Qt::CTRL+Qt::Key_4));
-    connect(d->star4, SIGNAL(triggered()), this, SLOT(slotAssignRatingFourStar()));
-    actionCollection()->addAction("imageview_ratefourstar", d->star4);
-
-    d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), this);
-    d->star5->setShortcut(KShortcut(Qt::CTRL+Qt::Key_5));
-    connect(d->star5, SIGNAL(triggered()), this, SLOT(slotAssignRatingFiveStar()));
-    actionCollection()->addAction("imageview_ratefivestar", d->star5);
 
     // -- Special Delete actions ---------------------------------------------------------------
 
@@ -933,36 +886,6 @@ void ImageWindow::slotRemoveTag(int tagID)
         hub.write(d->currentImageInfo, MetadataHub::PartialWrite);
         hub.write(d->currentImageInfo.filePath(), MetadataHub::FullWriteIfChanged);
     }
-}
-
-void ImageWindow::slotAssignRatingNoStar()
-{
-    slotAssignRating(0);
-}
-
-void ImageWindow::slotAssignRatingOneStar()
-{
-    slotAssignRating(1);
-}
-
-void ImageWindow::slotAssignRatingTwoStar()
-{
-    slotAssignRating(2);
-}
-
-void ImageWindow::slotAssignRatingThreeStar()
-{
-    slotAssignRating(3);
-}
-
-void ImageWindow::slotAssignRatingFourStar()
-{
-    slotAssignRating(4);
-}
-
-void ImageWindow::slotAssignRatingFiveStar()
-{
-    slotAssignRating(5);
 }
 
 void ImageWindow::slotAssignRating(int rating)

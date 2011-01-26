@@ -1729,36 +1729,6 @@ void DigikamView::slotAssignRating(int rating)
     d->iconView->assignRatingToSelected(rating);
 }
 
-void DigikamView::slotAssignRatingNoStar()
-{
-    d->iconView->assignRatingToSelected(0);
-}
-
-void DigikamView::slotAssignRatingOneStar()
-{
-    d->iconView->assignRatingToSelected(1);
-}
-
-void DigikamView::slotAssignRatingTwoStar()
-{
-    d->iconView->assignRatingToSelected(2);
-}
-
-void DigikamView::slotAssignRatingThreeStar()
-{
-    d->iconView->assignRatingToSelected(3);
-}
-
-void DigikamView::slotAssignRatingFourStar()
-{
-    d->iconView->assignRatingToSelected(4);
-}
-
-void DigikamView::slotAssignRatingFiveStar()
-{
-    d->iconView->assignRatingToSelected(5);
-}
-
 void DigikamView::slotSlideShowAll()
 {
     slideShow(d->iconView->imageInfos());

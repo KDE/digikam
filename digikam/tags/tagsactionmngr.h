@@ -82,6 +82,7 @@ private Q_SLOTS:
     void slotAlbumDeleted(Album*);
 
     void slotAssignTagsFromShortcut();
+    void slotAssignRatingFromShortcut();
 
 private:
 
