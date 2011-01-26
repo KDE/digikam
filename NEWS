@@ -45,4 +45,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 261779 : digiKam crashes in Digikam::DynamicThread::DynamicThreadPriv::transitionToRunning while scanning faces.
 029 ==> 235666 : All tags no longer shown when the "Tags already assigned" button is clicked.
 030 ==> 114465 : Simpler entry of tags using keyboard shortcuts.
-031 ==> 
+031 ==> 229471 : Editor: forward when saving in progress.
+032 ==> 

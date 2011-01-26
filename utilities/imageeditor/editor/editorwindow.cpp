@@ -1161,6 +1161,10 @@ void EditorWindow::toggleStandardActions(bool val)
     d->zoomFitToSelectAction->setEnabled(val);
     toggleZoomActions(val);
 
+    m_forwardAction->setEnabled(val);
+    m_backwardAction->setEnabled(val);
+    m_firstAction->setEnabled(val);
+    m_lastAction->setEnabled(val);
     d->rotateLeftAction->setEnabled(val);
     d->rotateRightAction->setEnabled(val);
     d->flipHorizAction->setEnabled(val);
