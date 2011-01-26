@@ -317,6 +317,9 @@ void ScanController::shutDown()
     }
 
     d->running = false;
+    d->continueInitialization = false;
+    d->continueScan           = false;
+    d->continuePartialScan    = false;
     {
         QMutexLocker lock(&d->mutex);
         d->condVar.wakeAll();
