@@ -1336,11 +1336,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseguierrorhandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagcheckview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfiltersidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/taggingaction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagslineeditoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagdragdrop.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/taggingaction.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagslineeditoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagspopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsactionmngr.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tageditdlg.cpp
