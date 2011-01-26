@@ -63,7 +63,7 @@ public:
     void refreshView();
     bool isEmpty() const;
 
-    void assignTag(int tagID);
+    void toggleTag(int tagID);
 
 Q_SIGNALS:
 

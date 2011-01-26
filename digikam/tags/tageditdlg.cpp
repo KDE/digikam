@@ -207,6 +207,11 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
     d->keySeqWidget->setKeySequence(ksc.primary(), KKeySequenceWidget::NoValidate);
     d->keySeqWidget->setCheckActionCollections(TagsActionMngr::defaultManager()->actionCollections());
 
+    QLabel* tipLabel2 = new QLabel(page);
+    tipLabel2->setTextFormat(Qt::RichText);
+    tipLabel2->setWordWrap(true);
+    tipLabel2->setText(i18n("<p><b>Note</b>: this shortcut can be used to assign or unassign tag to items.</p>"));
+
     // --------------------------------------------------------
 
     grid->addWidget(logo,               0, 0, 1, 1);
@@ -219,9 +224,10 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
     grid->addWidget(d->iconButton,      4, 1, 1, 1);
     grid->addWidget(d->resetIconButton, 4, 2, 1, 1);
     grid->addWidget(kscTextLabel,       5, 0, 1, 1);
-    grid->addWidget(d->keySeqWidget,    5, 1, 1, 1);
+    grid->addWidget(d->keySeqWidget,    5, 1, 1, 3);
+    grid->addWidget(tipLabel2,          6, 0, 1, 4);
+    grid->setRowStretch(7, 10);
     grid->setColumnStretch(3, 10);
-    grid->setRowStretch(6, 10);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 

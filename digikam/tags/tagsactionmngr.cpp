@@ -31,7 +31,6 @@
 
 #include <kaction.h>
 #include <kapplication.h>
-#include <kactioncollection.h>
 #include <klocale.h>
 #include <kicon.h>
 #include <kdebug.h>
@@ -124,7 +123,6 @@ void TagsActionMngr::createActions()
 
 bool TagsActionMngr::createTagActionShortcut(int tagId)
 {
-    kDebug() << tagId;
     if (!tagId) return false;
 
     TagInfo tinfo = DatabaseAccess().db()->getTagInfo(tagId);
@@ -162,7 +160,6 @@ void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProp
 
 void TagsActionMngr::slotUpdateTagShortcut(int tagId, const QKeySequence& ks)
 {
-    kDebug() << tagId;
     if (!tagId) return;
 
     tagRemoved(tagId);
@@ -219,7 +216,7 @@ void TagsActionMngr::slotAssignTagsFromShortcut()
     if (dkw)
     {
         kDebug() << "Handling by DigikamApp";
-        dkw->view()->assignTag(tagId);
+        dkw->view()->toggleTag(tagId);
         return;
     }
 
@@ -227,7 +224,7 @@ void TagsActionMngr::slotAssignTagsFromShortcut()
     if (imw)
     {
         kDebug() << "Handling by ImageWindow";
-        imw->assignTag(tagId);
+        imw->toggleTag(tagId);
         return;
     }
 
@@ -235,7 +232,7 @@ void TagsActionMngr::slotAssignTagsFromShortcut()
     if (ltw)
     {
         kDebug() << "Handling by LightTableWindow";
-        ltw->assignTag(tagId);
+        ltw->toggleTag(tagId);
         return;
     }
 }

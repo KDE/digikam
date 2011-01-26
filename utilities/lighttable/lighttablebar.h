@@ -53,7 +53,7 @@ public:
 
     void setNavigateByPair(bool b);
 
-    void assignTag(int tagID);
+    void toggleTag(int tagID);
 
 Q_SIGNALS:
 

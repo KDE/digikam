@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <ksharedconfig.h>
+#include <kactioncollection.h>
 
 // Local includes
 

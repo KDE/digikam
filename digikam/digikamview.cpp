@@ -1719,9 +1719,9 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
     }
 }
 
-void DigikamView::assignTag(int tagID)
+void DigikamView::toggleTag(int tagID)
 {
-    d->iconView->assignTagToSelected(tagID);
+    d->iconView->toggleTagToSelected(tagID);
 }
 
 void DigikamView::slotAssignRating(int rating)

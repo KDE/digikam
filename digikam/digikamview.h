@@ -83,7 +83,7 @@ public:
     double zoomMin();
     double zoomMax();
 
-    void assignTag(int tagID);
+    void toggleTag(int tagID);
 
 Q_SIGNALS:
 

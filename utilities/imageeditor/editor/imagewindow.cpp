@@ -900,6 +900,17 @@ bool ImageWindow::hasChangesToSave()
     return EditorWindow::hasChangesToSave();// && d->allowSaving;
 }
 
+void ImageWindow::toggleTag(int tagID)
+{
+    if (!d->currentImageInfo.isNull())
+    {
+        if (d->currentImageInfo.tagIds().contains(tagID))
+            slotRemoveTag(tagID);
+        else
+            slotAssignTag(tagID);
+    }
+}
+
 void ImageWindow::slotAssignTag(int tagID)
 {
     if (!d->currentImageInfo.isNull())
@@ -1771,11 +1782,6 @@ void ImageWindow::slotComponentsInfo()
 void ImageWindow::slotDBStat()
 {
     showDigikamDatabaseStat();
-}
-
-void ImageWindow::assignTag(int tagID)
-{
-    slotAssignTag(tagID);
 }
 
 }  // namespace Digikam

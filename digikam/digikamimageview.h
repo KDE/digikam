@@ -50,6 +50,8 @@ public:
 
     virtual void setThumbnailSize(const ThumbnailSize& size);
 
+    void toggleTagToSelected(int tagID);
+
 public Q_SLOTS:
 
     void openInEditor(const ImageInfo& info);

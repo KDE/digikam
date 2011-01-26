@@ -208,7 +208,7 @@ void LightTableBar::assignRating(const ImageInfo& info, int rating)
     }
 }
 
-void LightTableBar::assignTag(int tagID)
+void LightTableBar::toggleTag(int tagID)
 {
     ImageInfo info = currentItemImageInfo();
 
@@ -216,7 +216,7 @@ void LightTableBar::assignTag(int tagID)
     {
         MetadataHub hub;
         hub.load(info);
-        hub.setTag(tagID, true);
+        hub.setTag(tagID, !info.tagIds().contains(tagID));
         hub.write(info, MetadataHub::PartialWrite);
         hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
     }

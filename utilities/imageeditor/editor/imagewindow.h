@@ -66,7 +66,7 @@ public:
     bool queryClose();
     virtual VersionManager* versionManager();
 
-    void assignTag(int tagID);
+    void toggleTag(int tagID);
 
 public Q_SLOTS:
 
