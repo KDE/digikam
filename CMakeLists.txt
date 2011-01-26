@@ -1326,8 +1326,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatamanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mimefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/monthwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingpopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/scancontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/sidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/syncjob.cpp
@@ -1338,6 +1336,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagcheckview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfiltersidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfolderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/ratingfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/ratingpopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/taggingaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagslineeditoverlay.cpp
