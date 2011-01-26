@@ -122,7 +122,7 @@ GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* const im
 {
     resetRootTile();
 
-    d->thumbnailLoadThread = new ThumbnailLoadThread();
+    d->thumbnailLoadThread = new ThumbnailLoadThread(this);
     d->imageFilterModel    = imageFilterModel;
     d->imageAlbumModel     = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel      = selectionModel;

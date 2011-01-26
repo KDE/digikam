@@ -52,7 +52,7 @@ ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QO
 
     d->itemModel           = itemModel;
     d->itemSelectionModel  = new QItemSelectionModel(d->itemModel);
-    d->thumbnailLoadThread = new ThumbnailLoadThread();
+    d->thumbnailLoadThread = new ThumbnailLoadThread(this);
 
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));

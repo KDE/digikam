@@ -197,8 +197,7 @@ MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
 {
     d->model               = filterModel;
     d->selectionModel      = selection;
-    /// @todo Who owns this guy?
-    d->thumbnailLoadThread = new ThumbnailLoadThread();
+    d->thumbnailLoadThread = new ThumbnailLoadThread(this);
 
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
