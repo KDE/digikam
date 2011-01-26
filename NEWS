@@ -6,6 +6,7 @@ NEW FEATURES:
 General     : XMP metadata sidecar support.
 General     : Reverse geo-coding support.
 General     : Face detection and recognition support.
+General     : Tags keyboard shortcuts support.
 
 ImageEditor : Image versionning support.
 ImageEditor : Foveon sensor based camera.
@@ -43,4 +44,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 263994 : Left-hand side bar too big and cannot be made smaller.
 028 ==> 261779 : digiKam crashes in Digikam::DynamicThread::DynamicThreadPriv::transitionToRunning while scanning faces.
 029 ==> 235666 : All tags no longer shown when the "Tags already assigned" button is clicked.
-030 ==>
+030 ==> 114465 : Simpler entry of tags using keyboard shortcuts.
+031 ==> 
