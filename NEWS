@@ -10,7 +10,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 263697 : digiKam 1.8.0 (svn) crashes on startup most times.
 003 ==> 237492 : Grayscale TIFF display broken.
 004 ==> 263786 : digikam 1.7.0 crashes on startup.
-005 ==> 
+005 ==> 228531 : Inconsistant use of preview zoom-in function key-strokes.
+006 ==> 
 
 
 
