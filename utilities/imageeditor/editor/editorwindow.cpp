@@ -492,7 +492,7 @@ void EditorWindow::setupStandardActions()
     connect(m_redoAction, SIGNAL(triggered()), d->redoSignalMapper, SLOT(map()));
     d->redoSignalMapper->setMapping(m_redoAction, 1);
 
-    d->selectAllAction = new KAction(i18n("Select All"), this);
+    d->selectAllAction = new KAction(i18nc("Create a selection containing the full image", "Select All"), this);
     d->selectAllAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_A));
     connect(d->selectAllAction, SIGNAL(triggered()), m_canvas, SLOT(slotSelectAll()));
     actionCollection()->addAction("editorwindow_selectAll", d->selectAllAction);
