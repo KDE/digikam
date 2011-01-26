@@ -49,24 +49,29 @@ namespace Digikam
 {
 
 IccConvert::IccConvert(QObject* parent)
-    : BatchTool("IccConvert", ColorTool, parent)
+    : BatchTool("IccConvert", ColorTool, parent),
+      m_settingsView(0)
 {
     setToolTitle(i18n("ICC Convert"));
     setToolDescription(i18n("A tool to convert image to a color space."));
     setToolIcon(KIcon(SmallIcon("colormanagement")));
-
-    KVBox* vbox    = new KVBox;
-    m_settingsView = new IccProfilesSettings(vbox);
-    QLabel* space  = new QLabel(vbox);
-    vbox->setStretchFactor(space, 10);
-    setSettingsWidget(vbox);
-
-    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 IccConvert::~IccConvert()
 {
+}
+
+QWidget* IccConvert::createSettingsWidget()
+{
+    KVBox* vbox    = new KVBox;
+    m_settingsView = new IccProfilesSettings(vbox);
+    QLabel* space  = new QLabel(vbox);
+    vbox->setStretchFactor(space, 10);
+
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    return vbox;
 }
 
 BatchToolSettings IccConvert::defaultSettings()
