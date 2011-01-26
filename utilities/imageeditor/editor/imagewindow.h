@@ -66,6 +66,8 @@ public:
     bool queryClose();
     virtual VersionManager* versionManager();
 
+    void assignTag(int tagID);
+
 public Q_SLOTS:
 
     void loadImageInfos(const ImageInfoList& imageInfoList,

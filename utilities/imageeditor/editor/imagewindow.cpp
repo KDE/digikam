@@ -1773,4 +1773,9 @@ void ImageWindow::slotDBStat()
     showDigikamDatabaseStat();
 }
 
+void ImageWindow::assignTag(int tagID)
+{
+    slotAssignTag(tagID);
+}
+
 }  // namespace Digikam

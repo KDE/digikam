@@ -63,6 +63,8 @@ public:
     void refreshView();
     bool isEmpty() const;
 
+    void assignTag(int tagID);
+
 Q_SIGNALS:
 
     void signalFileDeleted(const KUrl&);

@@ -75,7 +75,6 @@ private Q_SLOTS:
     void slotIconChanged();
     void slotIconResetClicked();
     void slotTitleChanged(const QString& newtitle);
-    void slotOk();
 
 private:
 

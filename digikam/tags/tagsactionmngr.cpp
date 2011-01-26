@@ -227,6 +227,7 @@ void TagsActionMngr::slotAssignTagsFromShortcut()
     if (imw)
     {
         kDebug() << "Handling by ImageWindow";
+        imw->assignTag(tagId);
         return;
     }
 
@@ -234,6 +235,7 @@ void TagsActionMngr::slotAssignTagsFromShortcut()
     if (ltw)
     {
         kDebug() << "Handling by LightTableWindow";
+        ltw->assignTag(tagId);
         return;
     }
 }

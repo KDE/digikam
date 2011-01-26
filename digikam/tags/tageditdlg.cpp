@@ -236,10 +236,6 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
     connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTitleChanged(const QString&)));
 
-    connect(this, SIGNAL(okClicked()),
-            this, SLOT(slotOk()));
-
-
     // --------------------------------------------------------
 
     slotTitleChanged(d->titleEdit->text());
@@ -318,11 +314,6 @@ void TagEditDlg::slotTitleChanged(const QString& newtitle)
     QRegExp emptyTitle = QRegExp("^\\s*$");
     bool enable        = (!emptyTitle.exactMatch(newtitle) && !newtitle.isEmpty());
     enableButtonOk(enable);
-}
-
-void TagEditDlg::slotOk()
-{
-    //d->keySeqWidget->applyStealShortcut();
 }
 
 bool TagEditDlg::tagEdit(QWidget* parent, TAlbum* album, QString& title, QString& icon, QKeySequence& ks)

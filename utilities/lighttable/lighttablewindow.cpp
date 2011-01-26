@@ -1800,4 +1800,9 @@ void LightTableWindow::moveEvent(QMoveEvent* e)
     emit signalWindowHasMoved();
 }
 
+void LightTableWindow::assignTag(int tagID)
+{
+    d->barView->assignTag(tagID);
+}
+
 }  // namespace Digikam
