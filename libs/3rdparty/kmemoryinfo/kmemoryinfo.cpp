@@ -20,18 +20,21 @@
 
 #include "kmemoryinfo.h"
 
+// Qt includes
+
 #include <QtCore/QDateTime>
 #include <QtCore/QSharedData>
 
+// KDE includes
+
 #include <KGlobal>
 
-
-static bool fillMemoryInfo(Digikam::KMemoryInfoData *data);
+static bool fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* data);
 
 namespace Digikam
 {
 
-class KMemoryInfoData : public QSharedData
+class KMemoryInfo::KMemoryInfoData : public QSharedData
 {
 public:
     KMemoryInfoData()
@@ -62,20 +65,28 @@ public:
     qint64 freeSwap;
 };
 
-class KMemoryInfoDataSharedNull : public QSharedDataPointer<KMemoryInfoData>
+// ------------------------------------------------------------------------------------------
+
+class KMemoryInfoDataSharedNull : public QSharedDataPointer<KMemoryInfo::KMemoryInfoData>
 {
 public:
-    KMemoryInfoDataSharedNull() : QSharedDataPointer<KMemoryInfoData>(new KMemoryInfoData) {}
+
+    KMemoryInfoDataSharedNull()
+        : QSharedDataPointer<KMemoryInfo::KMemoryInfoData>(new KMemoryInfo::KMemoryInfoData)
+    {
+    }
 };
+
 K_GLOBAL_STATIC(KMemoryInfoDataSharedNull, kmemoryInfoDataSharedNull)
 
+// ------------------------------------------------------------------------------------------
 
 KMemoryInfo::KMemoryInfo()
     : d(*kmemoryInfoDataSharedNull)
 {
 }
 
-KMemoryInfo::KMemoryInfo(const KMemoryInfo &other)
+KMemoryInfo::KMemoryInfo(const KMemoryInfo& other)
     : d(other.d)
 {
 }
@@ -84,7 +95,7 @@ KMemoryInfo::~KMemoryInfo()
 {
 }
 
-KMemoryInfo& KMemoryInfo::operator=(const KMemoryInfo &other)
+KMemoryInfo& KMemoryInfo::operator=(const KMemoryInfo& other)
 {
     d = other.d;
     return *this;
@@ -159,11 +170,10 @@ bool KMemoryInfo::update()
 {
     d->reset();
     const bool res = fillMemoryInfo(d);
-    d->lastUpdate = QDateTime::currentDateTime();
+    d->lastUpdate  = QDateTime::currentDateTime();
     return res;
 }
 
 } // namespace Digikam
 
 #include "kmemoryinfo_backend.cpp"
-

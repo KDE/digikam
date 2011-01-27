@@ -21,7 +21,11 @@
 #ifndef DIGIKAM_KMEMORYINFO_H
 #define DIGIKAM_KMEMORYINFO_H
 
+// Qt includes
+
 #include <QSharedDataPointer>
+
+// Local includes
 
 #include "digikam_export.h"
 
@@ -30,10 +34,11 @@ class QDateTime;
 namespace Digikam
 {
 
-class KMemoryInfoData;
 class DIGIKAM_EXPORT KMemoryInfo
 {
+
 public:
+
     /**
      * A detail of memory.
      */
@@ -43,7 +48,6 @@ public:
         AvailableRam    = 1 << 1,
         TotalSwap       = 1 << 10,
         AvailableSwap   = 1 << 11,
-
         AvailableMemory = AvailableRam | AvailableSwap
     };
     Q_DECLARE_FLAGS(MemoryDetails, MemoryDetail)
@@ -53,16 +57,18 @@ public:
      * @see update()
      */
     explicit KMemoryInfo();
+
     /**
      * Copy constructor.
      */
-    KMemoryInfo(const KMemoryInfo &info);
+    KMemoryInfo(const KMemoryInfo& info);
+
     /**
      * Destructor.
      */
     ~KMemoryInfo();
 
-    KMemoryInfo& operator=(const KMemoryInfo &info);
+    KMemoryInfo& operator=(const KMemoryInfo& info);
 
     /**
      * Returns true if the last update was successful and the data is valid.
@@ -98,13 +104,18 @@ public:
      */
     QDateTime lastUpdate() const;
 
+public:
+
+    // Defined as public due to use by external parts
+    class KMemoryInfoData;
+
 private:
 
     QSharedDataPointer<KMemoryInfoData> d;
 };
 
-}
+} // namespace Digikam
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::KMemoryInfo::MemoryDetails)
 
-#endif
+#endif // DIGIKAM_KMEMORYINFO_H

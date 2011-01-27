@@ -21,10 +21,10 @@
  * $Id: memory_stats.c,v 1.36 2010/02/21 10:04:26 tdb Exp $
  */
 
-static bool get_mem_stats(Digikam::KMemoryInfoData *data);
-static bool get_swap_stats(Digikam::KMemoryInfoData *data);
+static bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data);
+static bool get_swap_stats(Digikam::KMemoryInfo::KMemoryInfoData* data);
 
-static bool fillMemoryInfo(Digikam::KMemoryInfoData *data)
+static bool fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* data)
 {
     if (!get_mem_stats(data))
     {
@@ -143,7 +143,7 @@ struct uvmexp *sg_get_uvmexp() {
 #endif
 
 #ifdef Q_OS_HPUX
-struct pst_static *sg_get_pstat_static() {
+struct pst_KMemoryInfo::static *sg_get_pstat_static() {
     static int got = 0;
     static struct pst_static pst;
 
@@ -158,8 +158,9 @@ struct pst_static *sg_get_pstat_static() {
 }
 #endif
 
+// ----------------------------------------------------------------------------
 
-bool get_mem_stats(Digikam::KMemoryInfoData *data)
+bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
 {
 
 #ifdef Q_OS_HPUX
@@ -399,6 +400,7 @@ bool get_mem_stats(Digikam::KMemoryInfoData *data)
     return true;
 }
 
+// ----------------------------------------------------------------------------
 
 #ifdef Q_OS_SOLARIS
 #include <sys/stat.h>
@@ -436,7 +438,7 @@ bool get_mem_stats(Digikam::KMemoryInfoData *data)
 #include <windows.h>
 #endif
 
-bool get_swap_stats(Digikam::KMemoryInfoData *data)
+bool get_swap_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
 {
 
 #ifdef Q_OS_HPUX
@@ -612,4 +614,3 @@ bool get_swap_stats(Digikam::KMemoryInfoData *data)
 
     return true;
 }
-
