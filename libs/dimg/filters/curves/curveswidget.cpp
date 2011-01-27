@@ -492,7 +492,7 @@ void CurvesWidget::resetUI()
 {
     d->grabPoint    = -1;
     d->guideVisible = false;
-    repaint();
+    update();
 }
 
 ImageCurves* CurvesWidget::curves() const
@@ -516,7 +516,7 @@ void CurvesWidget::setLoadingFailed()
     d->clearFlag     = CurvesWidgetPriv::HistogramFailed;
     d->progressCount = 0;
     d->progressTimer->stop();
-    repaint();
+    update();
     setCursor(Qt::ArrowCursor);
 }
 
@@ -524,7 +524,7 @@ void CurvesWidget::setCurveGuide(const DColor& color)
 {
     d->guideVisible = true;
     d->colorGuide   = color;
-    repaint();
+    update();
 }
 
 void CurvesWidget::curveTypeChanged()
@@ -549,7 +549,7 @@ void CurvesWidget::curveTypeChanged()
             break;
     }
 
-    repaint();
+    update();
     emit signalCurvesChanged();
 }
 
@@ -558,7 +558,7 @@ void CurvesWidget::slotCalculationStarted(const ImageHistogram*)
     setCursor(Qt::WaitCursor);
     d->clearFlag = CurvesWidgetPriv::HistogramStarted;
     d->progressTimer->start(200);
-    repaint();
+    update();
 }
 
 void CurvesWidget::slotCalculationFinished(const ImageHistogram*, bool success)
@@ -568,14 +568,14 @@ void CurvesWidget::slotCalculationFinished(const ImageHistogram*, bool success)
         // Repaint histogram
         d->clearFlag = CurvesWidgetPriv::HistogramCompleted;
         d->progressTimer->stop();
-        repaint();
+        update();
         setCursor(Qt::ArrowCursor);
     }
     else
     {
         d->clearFlag = CurvesWidgetPriv::HistogramFailed;
         d->progressTimer->stop();
-        repaint();
+        update();
         setCursor(Qt::ArrowCursor);
         emit signalHistogramComputationFailed();
     }
@@ -594,7 +594,7 @@ void CurvesWidget::stopHistogramComputation()
 
 void CurvesWidget::slotProgressTimerDone()
 {
-    repaint();
+    update();
     d->progressTimer->start(200);
 }
 
@@ -712,7 +712,8 @@ void CurvesWidget::mousePressEvent(QMouseEvent* e)
     }
 
     d->curves->curvesCalculateCurve(d->channelType);
-    repaint();
+    emit signalCurvesChanged();
+    update();
 }
 
 void CurvesWidget::mouseReleaseEvent(QMouseEvent* e)
@@ -729,9 +730,6 @@ void CurvesWidget::mouseReleaseEvent(QMouseEvent* e)
 
     setCursor(Qt::ArrowCursor);
     d->grabPoint = -1;
-    d->curves->curvesCalculateCurve(d->channelType);
-    repaint();
-    emit signalCurvesChanged();
 }
 
 void CurvesWidget::mouseMoveEvent(QMouseEvent* e)
@@ -835,7 +833,7 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent* e)
     d->xMouseOver = x;
     d->yMouseOver = d->imageHistogram->getMaxSegmentIndex() - y;
     emit signalMouseMoved(d->xMouseOver, d->yMouseOver);
-    repaint();
+    update();
 }
 
 void CurvesWidget::leaveEvent(QEvent*)
@@ -843,7 +841,7 @@ void CurvesWidget::leaveEvent(QEvent*)
     d->xMouseOver = -1;
     d->yMouseOver = -1;
     emit signalMouseMoved(d->xMouseOver, d->yMouseOver);
-    repaint();
+    update();
 }
 
 void CurvesWidget::setChannelType(ChannelType channel)
