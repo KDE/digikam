@@ -12,8 +12,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 263786 : digikam 1.7.0 crashes on startup.
 005 ==> 228531 : Inconsistant use of preview zoom-in function key-strokes.
 006 ==> 233612 : The DocumentName tag is not added when importing.
-007 ==> 264363 : Image editor always crashes when triggering Colour Auto-Correction.
-008 ==> 
+007 ==> 
 
 
 
