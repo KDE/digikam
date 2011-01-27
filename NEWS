@@ -51,4 +51,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 243066 : Timeline view does not display images.
 035 ==> 243069 : Video replay restarts when starring.
 036 ==> 246772 : Curves: Don't recalculate on mouseUp if the position of the marker did not change.
-037 ==> 
+037 ==> 196922 : Both mouse buttons change ratings on thumbnail bar.
+038 ==> 

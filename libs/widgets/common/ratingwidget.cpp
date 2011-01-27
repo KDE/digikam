@@ -257,6 +257,11 @@ void RatingWidget::regeneratePixmaps()
 
 void RatingWidget::mousePressEvent(QMouseEvent* e)
 {
+    if (e->button() != Qt::LeftButton)
+    {
+        return;
+    }
+
     if (hasFading() && d->fadingValue < 255)
     {
         return;
@@ -293,6 +298,11 @@ void RatingWidget::mousePressEvent(QMouseEvent* e)
 
 void RatingWidget::mouseMoveEvent(QMouseEvent* e)
 {
+    if (!(e->buttons() & Qt::LeftButton))
+    {
+        return;
+    }
+
     if (hasFading() && d->fadingValue < 255)
     {
         return;
@@ -323,8 +333,13 @@ void RatingWidget::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-void RatingWidget::mouseReleaseEvent(QMouseEvent*)
+void RatingWidget::mouseReleaseEvent(QMouseEvent* e)
 {
+    if (e->button() != Qt::LeftButton)
+    {
+        return;
+    }
+
     if (hasFading() && d->fadingValue < 255)
     {
         return;
