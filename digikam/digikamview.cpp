@@ -1032,7 +1032,6 @@ void DigikamView::slotAlbumSelected(Album* album)
     d->parent->enableAlbumForwardHistory(d->useAlbumHistory && !d->albumHistory->isForwardEmpty());
 
     d->iconView->openAlbum(album);
-    d->mapView->openAlbum(album);
 
     if (album->isRoot())
     {
@@ -1040,9 +1039,13 @@ void DigikamView::slotAlbumSelected(Album* album)
     }
     else
     {
-        if (d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode)
+        switch (d->albumWidgetStack->previewMode())
         {
-            d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
+            case AlbumWidgetStack::PreviewImageMode:
+            case AlbumWidgetStack::MediaPlayerMode:
+                slotTogglePreviewMode(ImageInfo());
+                break;
+            default: break;
         }
     }
 }

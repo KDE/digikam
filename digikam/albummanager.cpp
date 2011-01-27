@@ -2807,9 +2807,7 @@ SAlbum* AlbumManager::createSAlbum(const QString& name, DatabaseSearch::Type typ
 
     if (album)
     {
-        album->setSearch(type, query);
-        DatabaseAccess access;
-        access.db()->updateSearch(album->id(), album->m_searchType, name, query);
+        updateSAlbum(album, query, name, type);
         return album;
     }
 
@@ -2853,6 +2851,11 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const QString& changedQuery,
     if (oldName != album->title())
     {
         emit signalAlbumRenamed(album);
+    }
+
+    if (d->currentAlbum == album)
+    {
+        emit signalAlbumCurrentChanged(d->currentAlbum);
     }
 
     return true;
@@ -3338,6 +3341,12 @@ void AlbumManager::slotSearchChange(const SearchChangeset& changeset)
 
             break;
         case SearchChangeset::Changed:
+            if (d->currentAlbum && d->currentAlbum->type() == Album::SEARCH
+                && d->currentAlbum->id() == changeset.searchId())
+            {
+                // the pointer is the same, but the contents changed
+                emit signalAlbumCurrentChanged(d->currentAlbum);
+            }
             break;
         case SearchChangeset::Unknown:
             break;
