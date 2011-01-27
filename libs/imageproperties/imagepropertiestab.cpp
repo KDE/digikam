@@ -6,7 +6,7 @@
  * Date        : 2006-04-19
  * Description : A tab to display general image information
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -306,16 +306,16 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     glay4->addWidget(d->caption,       0, 0, 1, 1);
     glay4->addWidget(d->labelCaption,  0, 1, 1, 1);
-    glay4->addWidget(d->rating,        1, 0, 1, 1);
-    glay4->addWidget(d->labelRating,   1, 1, 1, 1);
-    glay4->addWidget(d->tags,          2, 0, 1, 1);
-    glay4->addWidget(d->labelTags,     2, 1, 1, 1);
+    glay4->addWidget(d->tags,          1, 0, 1, 1);
+    glay4->addWidget(d->labelTags,     1, 1, 1, 1);
+    glay4->addWidget(d->rating,        2, 0, 1, 1);
+    glay4->addWidget(d->labelRating,   2, 1, 1, 1);
     glay4->setMargin(KDialog::spacingHint());
     glay4->setSpacing(0);
     glay4->setColumnStretch(1, 10);
 
     addItem(w4, SmallIcon("imagecomment"),
-            i18n("Caption and Tags"), QString("CaptionTags"), true);
+            i18n("digiKam Properties"), QString("DigikamProperties"), true);
 
     addStretch();
 }
@@ -538,7 +538,7 @@ void ImagePropertiesTab::setTags(const QStringList& tagPaths, const QStringList&
     {
         QString shortenedPath = tagPath;
 
-        QStringList currentPath = tagPath.split('/', QString::SkipEmptyParts);
+        QStringList currentPath  = tagPath.split('/', QString::SkipEmptyParts);
         QStringList previousPath = previous.split('/', QString::SkipEmptyParts);
         int depth;
         for (depth = 0; depth < currentPath.size() && depth < previousPath.size(); depth++)
