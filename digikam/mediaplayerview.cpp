@@ -126,6 +126,8 @@ public:
 
     QGridLayout*         grid;
 
+    ImageInfo            currentInfo;
+
     Phonon::VideoPlayer* player;
     Phonon::SeekSlider*  slider;
 };
@@ -229,9 +231,18 @@ void MediaPlayerView::setImageInfo(const ImageInfo& info, const ImageInfo& previ
 
     if (info.isNull() || url.isEmpty())
     {
+        d->currentInfo = info;
         d->player->stop();
         return;
     }
+
+    if (d->currentInfo == info &&
+        (d->player->isPlaying() || d->player->isPaused()))
+    {
+        return;
+    }
+
+    d->currentInfo = info;
 
     d->player->play(url);
     setPreviewMode(MediaPlayerViewPriv::PlayerView);
