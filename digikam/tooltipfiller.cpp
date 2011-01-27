@@ -334,10 +334,15 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             }
             else
             {
-                str.fill( 'X', info.rating() );
-            }
+                str = QString();
+                for (int i=0; i<rating; i++)
+                {
+                    str += QChar(0x25CF);//0x2022);
+                    str += ' ';
+                }
 
-            tip += cnt.cellSpecBeg + i18n("Rating:") + cnt.cellSpecMid + str + cnt.cellSpecEnd;
+                tip += cnt.cellSpecBeg + i18n("Rating:") + cnt.cellSpecMid + str + cnt.cellSpecEnd;
+            }
         }
     }
 
