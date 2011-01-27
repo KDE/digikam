@@ -7,7 +7,7 @@
  * Description : a widget to draw stars rating
  *
  * Copyright (C) 2005 by Owen Hirst <n8rider@sbcglobal.net>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -76,22 +76,22 @@ public:
         starPolygon << QPoint(4,  9);
     }
 
-    bool          tracking;
-    bool          isHovered;
-    bool          fading;
+    bool       tracking;
+    bool       isHovered;
+    bool       fading;
 
-    int           rating;
-    int           fadingValue;
-    int           duration;
-    int           offset;
+    int        rating;
+    int        fadingValue;
+    int        duration;
+    int        offset;
 
-    QTimeLine*    fadingTimeLine;
+    QTimeLine* fadingTimeLine;
 
-    QPolygon      starPolygon;
+    QPolygon   starPolygon;
 
-    QPixmap       selPixmap;      // Selected star.
-    QPixmap       regPixmap;      // Regular star.
-    QPixmap       disPixmap;      // Disable star.
+    QPixmap    selPixmap;      // Selected star.
+    QPixmap    regPixmap;      // Regular star.
+    QPixmap    disPixmap;      // Disable star.
 };
 
 RatingWidget::RatingWidget(QWidget* parent)
@@ -302,7 +302,7 @@ void RatingWidget::mouseMoveEvent(QMouseEvent* e)
 
     if (d->rating != pos)
     {
-        if (pos > RatingMax)       // B.K.O.: # 151357
+        if (pos > RatingMax)       // NOTE: B.K.O. # 151357
         {
             pos = RatingMax;
         }
