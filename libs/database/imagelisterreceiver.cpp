@@ -6,7 +6,7 @@
  * Date        : 2007-03-20
  * Description : Simple virtual interface for ImageLister
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -102,7 +102,7 @@ bool ImageListerRecord::checkStream(ImageListerRecord::BinaryFormat format, QDat
             quint32 streamFormat = 0;
             ds >> magicValue;
             ds >> streamFormat;
-            return (magicValue == MagicValue && streamFormat == format);
+            return (magicValue == MagicValue && streamFormat == (quint32)format);
     }
     return false;
 }
