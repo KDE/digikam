@@ -4012,10 +4012,7 @@ QDate AlbumDB::getAlbumAverageDate(int albumID)
                     " WHERE Images.album=?;",
                     albumID , &values);
 
-    int differenceInSecs = 0;
-    int amountOfImages = 0;
-    QDateTime baseDateTime;
-
+    QList<QDate> dates;
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
     {
         QDateTime itemDateTime = (*it).isNull() ? QDateTime()
@@ -4023,30 +4020,22 @@ QDate AlbumDB::getAlbumAverageDate(int albumID)
 
         if (itemDateTime.isValid())
         {
-            ++amountOfImages;
-
-            if ( baseDateTime.isNull() )
-            {
-                baseDateTime=itemDateTime;
-            }
-            else
-            {
-                differenceInSecs += itemDateTime.secsTo( baseDateTime );
-            }
+            dates << itemDateTime.date();
         }
     }
 
-    if ( amountOfImages > 0 )
-    {
-        QDateTime averageDateTime;
-        averageDateTime.setTime_t( baseDateTime.toTime_t() -
-                                   (int)( differenceInSecs/amountOfImages ) );
-        return ( averageDateTime.date() );
-    }
-    else
+    if (dates.isEmpty())
     {
         return QDate();
     }
+
+    qint64 julianDays;
+    foreach (const QDate& date, dates)
+    {
+        julianDays += date.toJulianDay();
+    }
+
+    return QDate::fromJulianDay(julianDays / dates.size());
 }
 
 void AlbumDB::deleteItem(int albumID, const QString& file)

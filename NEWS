@@ -52,4 +52,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 243069 : Video replay restarts when starring.
 036 ==> 246772 : Curves: Don't recalculate on mouseUp if the position of the marker did not change.
 037 ==> 196922 : Both mouse buttons change ratings on thumbnail bar.
-038 ==> 
+038 ==> 256789 : Bad calculated album mean date when pictures before 1964.
+039 ==> 
