@@ -7,8 +7,8 @@
  * Description : a widget to display a welcome page
  *               on root album.
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -189,7 +189,7 @@ QString WelcomePageView::infoPage() const
             QString(digikam_version),            // %1 : current digiKam version
             "help:/digikam/index.html",          // %2 : digiKam help:// Url
             webProjectUrl().url(),               // %3 : digiKam homepage Url
-            "0.9.6",                             // %4 : prior digiKam version
+            "0.9.x",                             // %4 : prior digiKam version
             featureItems,                        // %5 : prior KDE version
             QString(),                           // %6 : generated list of new features
             QString());                          // %7 : previous digiKam release.
