@@ -177,7 +177,7 @@ QString WelcomePageView::infoPage() const
             QString(digikam_version),            // %1 : current digiKam version
             "help:/digikam/index.html",          // %2 : digiKam help:// Url
             webProjectUrl().url(),               // %3 : digiKam homepage Url
-            "1.4.0",                             // %4 : prior digiKam version
+            "1.x",                               // %4 : prior digiKam version
             featureItems,                        // %5 : prior KDE version
             QString(),                           // %6 : generated list of new features
             QString());                          // %7 : previous digiKam release.
