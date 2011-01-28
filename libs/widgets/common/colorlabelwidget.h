@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QColor>
+#include <QToolButton>
 
 // KDE includes
 
@@ -81,6 +82,27 @@ private:
 
     class ColorLabelWidgetPriv;
     ColorLabelWidgetPriv* const d;
+};
+
+// ------------------------------------------------------------------------------
+
+class DIGIKAM_EXPORT ColorLabelSelector : public QToolButton
+{
+    Q_OBJECT
+
+public:
+
+    ColorLabelSelector(QWidget* parent=0);
+    ~ColorLabelSelector();
+
+private Q_SLOTS:
+
+    void slotColorLabelChanged(int);
+
+private:
+
+    class ColorLabelSelectorPriv;
+    ColorLabelSelectorPriv* const d;
 };
 
 }  // namespace Digikam

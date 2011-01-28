@@ -29,13 +29,17 @@
 #include <QPixmap>
 #include <QIcon>
 #include <QLayout>
-#include <QToolButton>
 #include <QButtonGroup>
+#include <QWidgetAction>
+#include <QFontMetrics>
+#include <QFont>
 
 // KDE includes
 
+#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kmenu.h>
 
 namespace Digikam
 {
@@ -229,6 +233,68 @@ QColor ColorLabelWidget::labelColor(ColorLabel label) const
     }
 
     return color;
+}
+
+// -----------------------------------------------------------------------------
+
+class ColorLabelSelector::ColorLabelSelectorPriv
+{
+
+public:
+
+    ColorLabelSelectorPriv()
+    {
+        clw = 0;
+    }
+
+    ColorLabelWidget* clw;
+};
+
+ColorLabelSelector::ColorLabelSelector(QWidget* parent)
+    : QToolButton(parent), d(new ColorLabelSelectorPriv)
+{
+    KMenu* popup = new KMenu(this);
+    setMenu(popup);
+    setPopupMode(QToolButton::InstantPopup);
+    setToolTip(i18n("Color Label"));
+
+    QWidgetAction* action = new QWidgetAction(this);
+    d->clw                = new ColorLabelWidget(this);
+    action->setDefaultWidget(d->clw);
+    popup->addAction(action);
+    slotColorLabelChanged(ColorLabelWidget::NoneLabel);
+
+    connect(d->clw, SIGNAL(signalColorLabelChanged(int)),
+            this, SLOT(slotColorLabelChanged(int)));
+}
+
+ColorLabelSelector::~ColorLabelSelector()
+{
+    delete d;
+}
+
+void ColorLabelSelector::slotColorLabelChanged(int label)
+{
+    QFont fnt     = font();
+    QFontMetrics fontMt(fnt);
+    QString none(i18n("None"));
+    QRect fntRect = fontMt.boundingRect(none);
+
+    kDebug() << fntRect;
+
+    QPixmap pix(fntRect.width()+2, fntRect.height()+2);
+    QPainter p(&pix);
+    p.setFont(fnt);
+    p.setBrush(palette().color(QPalette::Active, QPalette::ButtonText));
+
+    p.fillRect(fntRect, d->clw->labelColor((ColorLabelWidget::ColorLabel)label));
+
+    if (label == ColorLabelWidget::NoneLabel)
+        p.drawText(fntRect, none);
+
+    QIcon icon(pix);
+    setIconSize(pix.size());
+    setIcon(icon);
 }
 
 }  // namespace Digikam
