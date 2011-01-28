@@ -4029,7 +4029,7 @@ QDate AlbumDB::getAlbumAverageDate(int albumID)
         return QDate();
     }
 
-    qint64 julianDays;
+    qint64 julianDays = 0;
     foreach (const QDate& date, dates)
     {
         julianDays += date.toJulianDay();
@@ -4107,17 +4107,17 @@ void AlbumDB::deleteRemovedItems(QList<int> albumIds)
 
 void AlbumDB::renameAlbum(int albumID, int newAlbumRoot, const QString& newRelativePath)
 {
-    int albumRoot  = getAlbumRootId(albumID);
-    QString oldUrl = getAlbumRelativePath(albumID);
+    int albumRoot        = getAlbumRootId(albumID);
+    QString relativePath = getAlbumRelativePath(albumID);
 
-    if (oldUrl == newRelativePath)
+    if (relativePath == newRelativePath && albumRoot == newAlbumRoot)
     {
         return;
     }
 
-    // first delete any stale albums left behind
+    // first delete any stale albums left behind at the destination of renaming
     QMap<QString, QVariant> parameters;
-    parameters.insert(":albumRoot", albumRoot);
+    parameters.insert(":albumRoot", newAlbumRoot);
     parameters.insert(":relativePath", newRelativePath);
 
     if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumRootPath")), parameters))
