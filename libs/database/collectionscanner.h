@@ -166,7 +166,8 @@ public:
 protected:
 
     void mainEntryPoint(bool complete);
-    void scanForStaleAlbums(QList<CollectionLocation> locations);
+    void scanForStaleAlbums(const QList<CollectionLocation>& locations);
+    void scanForStaleAlbums(const QList<int>& locationIdsToScan);
     void scanAlbumRoot(const CollectionLocation& location);
     void scanAlbum(const CollectionLocation& location, const QString& album);
     int checkAlbum(const CollectionLocation& location, const QString& album);

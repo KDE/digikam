@@ -384,8 +384,20 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
         DatabaseAccess().db()->deleteStaleAlbums();
     }
 
-    //TODO: This can be optimized, no need to always scan the whole location
-    scanForStaleAlbums(QList<CollectionLocation>() << location);
+    // Usually, we can restrict stale album scanning to our own location.
+    // But when there are album hints from a second location to this location,
+    // also scan the second location
+    QSet<int> locationIdsToScan;
+    locationIdsToScan << location.id();
+    QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album>::const_iterator it;
+    for (it = d->albumHints.constBegin(); it != d->albumHints.constEnd(); ++it)
+    {
+        if (it.key().albumRootId == location.id())
+        {
+            locationIdsToScan << it.key().albumRootId;
+        }
+    }
+    scanForStaleAlbums(locationIdsToScan.toList());
 
     if (!d->checkObserver())
     {
@@ -542,10 +554,19 @@ void CollectionScanner::scanAlbumRoot(const CollectionLocation& location)
     }
 }
 
-void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
+void CollectionScanner::scanForStaleAlbums(const QList<CollectionLocation>& locations)
 {
-    Q_UNUSED(locations);
+    QList<int> locationIdsToScan;
+    foreach (const CollectionLocation& location, locations)
+    {
+        locationIdsToScan << location.id();
+    }
 
+    scanForStaleAlbums(locationIdsToScan);
+}
+
+void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
+{
     if (d->wantSignals)
     {
         emit startScanningForStaleAlbums();
@@ -566,6 +587,11 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
 
     for (it = albumList.constBegin(); it != albumList.constEnd(); ++it)
     {
+        if (!locationIdsToScan.contains((*it).albumRootId))
+        {
+            continue;
+        }
+
         CollectionLocation location = CollectionManager::instance()->locationForAlbumRootId((*it).albumRootId);
 
         // Only handle albums on available locations
@@ -595,6 +621,18 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
         {
             // if the src entry of a hint is found in toBeDeleted, we have a move/rename, no copy. Handle these here.
             toBeDeletedIndex = toBeDeleted.indexOf(it.value().albumId);
+
+            // We must double check that not, for some reason, the target album has already been scanned.
+            QList<AlbumShortInfo>::const_iterator it2;
+            for (it2 = albumList.constBegin(); it2 != albumList.constEnd(); ++it2)
+            {
+                if (it2->albumRootId == it.key().albumRootId
+                    && it2->relativePath == it.key().relativePath)
+                {
+                    toBeDeletedIndex = -1;
+                    break;
+                }
+            }
 
             if (toBeDeletedIndex != -1)
             {
