@@ -276,11 +276,12 @@ ColorLabelSelector::~ColorLabelSelector()
 void ColorLabelSelector::slotColorLabelChanged(int label)
 {
     QFont fnt     = font();
+    fnt.setPixelSize(10);
     QFontMetrics fontMt(fnt);
     QString none(i18n("None"));
     QRect fntRect = fontMt.boundingRect(none);
 
-    kDebug() << fntRect;
+    kDebug() << fnt.pixelSize() << "  " << fntRect;
 
     QPixmap pix(fntRect.width()+2, fntRect.height()+2);
     QPainter p(&pix);
