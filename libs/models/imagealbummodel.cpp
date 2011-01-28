@@ -330,6 +330,12 @@ void ImageAlbumModel::slotData(KIO::Job*, const QByteArray& data)
     {
         QList<QVariant> extraValues;
 
+        if (!ImageListerRecord::checkStream(ImageListerRecord::ExtraValueFormat, ds))
+        {
+            kError() << "Binary stream from ioslave is not valid, rejecting";
+            return;
+        }
+
         while (!ds.atEnd())
         {
             ImageListerRecord record(ImageListerRecord::ExtraValueFormat);

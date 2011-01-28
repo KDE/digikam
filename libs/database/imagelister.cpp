@@ -64,54 +64,6 @@
 namespace Digikam
 {
 
-QDataStream& operator<<(QDataStream& os, const ImageListerRecord& record)
-{
-    os << record.imageID;
-    os << record.albumID;
-    os << record.albumRootID;
-    os << record.name;
-
-    os << record.rating;
-    os << (int)record.category;
-    os << record.format;
-    os << record.creationDate;
-    os << record.modificationDate;
-    os << record.fileSize;
-    os << record.imageSize;
-
-    if (record.binaryFormat == ImageListerRecord::ExtraValueFormat)
-    {
-        os << record.extraValues;
-    }
-
-    return os;
-}
-
-QDataStream& operator>>(QDataStream& ds, ImageListerRecord& record)
-{
-    int category;
-    ds >> record.imageID;
-    ds >> record.albumID;
-    ds >> record.albumRootID;
-    ds >> record.name;
-
-    ds >> record.rating;
-    ds >> category;
-    record.category = (DatabaseItem::Category)category;
-    ds >> record.format;
-    ds >> record.creationDate;
-    ds >> record.modificationDate;
-    ds >> record.fileSize;
-    ds >> record.imageSize;
-
-    if (record.binaryFormat == ImageListerRecord::ExtraValueFormat)
-    {
-        ds >> record.extraValues;
-    }
-
-    return ds;
-}
-
 ImageLister::ImageLister()
 {
     m_recursive = true;

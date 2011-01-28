@@ -39,6 +39,8 @@
 #include "digikam_export.h"
 #include "imagelisterrecord.h"
 
+class QDataStream;
+
 namespace Digikam
 {
 
@@ -95,6 +97,21 @@ protected:
 
     int m_limit;
     int m_count;
+};
+
+class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseGrowingPartsSendingReceiver
+    : public ImageListerSlaveBasePartsSendingReceiver
+{
+
+public:
+
+    ImageListerSlaveBaseGrowingPartsSendingReceiver(KIO::SlaveBase* slave, int start, int end, int increment);
+    virtual void receive(const ImageListerRecord& record);
+
+protected:
+
+    int m_maxLimit;
+    int m_increment;
 };
 
 }  // namespace Digikam

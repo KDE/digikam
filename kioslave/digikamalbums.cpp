@@ -102,7 +102,7 @@ void kio_digikamalbums::special(const QByteArray& data)
         Digikam::ImageLister lister;
         lister.setRecursive(recursive);
         // send data every 200 images to be more responsive
-        Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
+        Digikam::ImageListerSlaveBaseGrowingPartsSendingReceiver receiver(this, 200, 2000, 100);
         lister.list(&receiver, kurl);
         receiver.sendData();
     }

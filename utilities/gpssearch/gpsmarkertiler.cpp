@@ -506,6 +506,12 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
         return;
     }
 
+    if (!ImageListerRecord::checkStream(ImageListerRecord::ExtraValueFormat, ds))
+    {
+        kError() << "Binary stream from ioslave is not valid, rejecting";
+        return;
+    }
+
     GPSImageInfo::List newEntries;
 
     while (!ds.atEnd())
