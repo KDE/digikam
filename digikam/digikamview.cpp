@@ -1043,6 +1043,7 @@ void DigikamView::slotAlbumSelected(Album* album)
         {
             case AlbumWidgetStack::PreviewImageMode:
             case AlbumWidgetStack::MediaPlayerMode:
+            case AlbumWidgetStack::WelcomePageMode:
                 slotTogglePreviewMode(ImageInfo());
                 break;
             default: break;
