@@ -273,19 +273,25 @@ ColorLabelSelector::~ColorLabelSelector()
     delete d;
 }
 
+void ColorLabelSelector::setColorLabel(ColorLabelWidget::ColorLabel label)
+{
+    d->clw->setColorLabel(label);
+}
+
+ColorLabelWidget::ColorLabel ColorLabelSelector::colorLabel()
+{
+    return d->clw->colorLabel();
+}
+
 void ColorLabelSelector::slotColorLabelChanged(int label)
 {
-    QFont fnt     = font();
-    fnt.setPixelSize(10);
-    QFontMetrics fontMt(fnt);
+    QFontMetrics fontMt = fontMetrics();
     QString none(i18n("None"));
-    QRect fntRect = fontMt.boundingRect(none);
+    QRect fntRect(0, 0, fontMt.width(none)+2, fontMt.height()+2);
 
-    kDebug() << fnt.pixelSize() << "  " << fntRect;
-
-    QPixmap pix(fntRect.width()+2, fntRect.height()+2);
+    QPixmap pix(fntRect.size());
     QPainter p(&pix);
-    p.setFont(fnt);
+    p.setFont(font());
     p.setBrush(palette().color(QPalette::Active, QPalette::ButtonText));
 
     p.fillRect(fntRect, d->clw->labelColor((ColorLabelWidget::ColorLabel)label));

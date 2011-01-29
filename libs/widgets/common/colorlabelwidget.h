@@ -95,6 +95,9 @@ public:
     ColorLabelSelector(QWidget* parent=0);
     ~ColorLabelSelector();
 
+    void setColorLabel(ColorLabelWidget::ColorLabel label);
+    ColorLabelWidget::ColorLabel colorLabel();
+
 private Q_SLOTS:
 
     void slotColorLabelChanged(int);
