@@ -476,6 +476,10 @@ void RegionFrameItem::setFlags(Flags flags)
     update();
     setAcceptHoverEvents(d->flags & GeometryEditable);
     d->resizeHandleVisibility->controller()->setShallBeShown(d->flags & ShowResizeHandles);
+
+    // ensure cursor is reset
+    CropHandle handle = d->handleAt(QCursor::pos());
+    d->updateCursor(handle, false/* buttonDown*/);
 }
 
 void RegionFrameItem::changeFlags(Flags flags, bool addOrRemove)

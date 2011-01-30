@@ -54,5 +54,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 196922 : Both mouse buttons change ratings on thumbnail bar.
 038 ==> 256789 : Bad calculated album mean date when pictures before 1964.
 039 ==> 258775 : Moving an album from one collection to another doesn't update the source collection.
-040 ==> 
+040 ==> 262174 : After confirming a face the mouse pointer is not correct inside the face.
+041 ==> 
 
