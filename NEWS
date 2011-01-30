@@ -14,7 +14,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 233612 : The DocumentName tag is not added when importing.
 007 ==> 246778 : Disable folder collapsing under certain circumstances.
 008 ==> 264363 : Image editor always crashes when triggering Colour Auto-Correction.
-009 ==> 
+009 ==> 234021 : digiKam crash on loading.
+010 ==> 
 
 
 
