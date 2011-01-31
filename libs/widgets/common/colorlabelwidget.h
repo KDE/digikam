@@ -100,6 +100,10 @@ public:
     void setColorLabel(ColorLabelWidget::ColorLabel label);
     ColorLabelWidget::ColorLabel colorLabel();
 
+Q_SIGNALS:
+
+    void signalColorLabelChanged(int);
+
 private Q_SLOTS:
 
     void slotColorLabelChanged(int);
