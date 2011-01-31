@@ -197,7 +197,7 @@ void ImageThumbnailBar::slotSetupChanged()
 
 void ImageThumbnailBar::assignRating(const QModelIndex& index, int rating)
 {
-    MetadataManager::instance()->assignRating(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), rating);
+    MetadataManager::instance()->assignRating(QList<ImageInfo>() << imageSortFilterModel()->imageInfo(index), rating);
 }
 
 bool ImageThumbnailBar::event(QEvent* e)
