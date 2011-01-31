@@ -35,6 +35,7 @@
 
 // Local includes
 
+#include "globals.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -43,22 +44,6 @@ namespace Digikam
 class DIGIKAM_EXPORT ColorLabelWidget : public KHBox
 {
     Q_OBJECT
-
-public:
-
-    enum ColorLabel
-    {
-        NoneLabel=0,
-        RedLabel,
-        OrangeLabel,
-        YellowLabel,
-        GreenLabel,
-        BlueLabel,
-        MagentaLabel,
-        GrayLabel,
-        BlackLabel,
-        WhiteLabel
-    };
 
 public:
 
@@ -97,8 +82,8 @@ public:
     ColorLabelSelector(QWidget* parent=0);
     ~ColorLabelSelector();
 
-    void setColorLabel(ColorLabelWidget::ColorLabel label);
-    ColorLabelWidget::ColorLabel colorLabel();
+    void setColorLabel(ColorLabel label);
+    ColorLabel colorLabel();
 
 Q_SIGNALS:
 

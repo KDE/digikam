@@ -169,7 +169,7 @@ void ColorLabelWidget::setColorLabel(ColorLabel label)
     if (btn) btn->setChecked(true);
 }
 
-ColorLabelWidget::ColorLabel ColorLabelWidget::colorLabel()
+ColorLabel ColorLabelWidget::colorLabel()
 {
     QAbstractButton* btn = d->colorBtns->checkedButton();
     if (btn) return (ColorLabel)(d->colorBtns->id(btn));
@@ -303,7 +303,7 @@ ColorLabelSelector::ColorLabelSelector(QWidget* parent)
     d->clw                = new ColorLabelWidget(this);
     action->setDefaultWidget(d->clw);
     popup->addAction(action);
-    slotColorLabelChanged(ColorLabelWidget::NoneLabel);
+    slotColorLabelChanged(NoneLabel);
 
     connect(d->clw, SIGNAL(signalColorLabelChanged(int)),
             this, SLOT(slotColorLabelChanged(int)));
@@ -314,12 +314,12 @@ ColorLabelSelector::~ColorLabelSelector()
     delete d;
 }
 
-void ColorLabelSelector::setColorLabel(ColorLabelWidget::ColorLabel label)
+void ColorLabelSelector::setColorLabel(ColorLabel label)
 {
     d->clw->setColorLabel(label);
 }
 
-ColorLabelWidget::ColorLabel ColorLabelSelector::colorLabel()
+ColorLabel ColorLabelSelector::colorLabel()
 {
     return d->clw->colorLabel();
 }
@@ -335,9 +335,9 @@ void ColorLabelSelector::slotColorLabelChanged(int colorId)
     p.setFont(font());
     p.setBrush(palette().color(QPalette::Active, QPalette::ButtonText));
 
-    p.fillRect(fntRect, d->clw->labelColor((ColorLabelWidget::ColorLabel)colorId));
+    p.fillRect(fntRect, d->clw->labelColor((ColorLabel)colorId));
 
-    if (colorId == ColorLabelWidget::NoneLabel)
+    if (colorId == NoneLabel)
         p.drawText(fntRect, none);
 
     QIcon icon(pix);
