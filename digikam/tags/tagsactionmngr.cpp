@@ -98,34 +98,34 @@ TagsActionMngr::~TagsActionMngr()
 
 void TagsActionMngr::registerColorLabelTagsToDb()
 {
-    d->colorLabelsMap.insert(ColorLabelWidget::NoneLabel, 
+    d->colorLabelsMap.insert(NoneLabel, 
                              TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelNone()));
 
-    d->colorLabelsMap.insert(ColorLabelWidget::RedLabel, 
+    d->colorLabelsMap.insert(RedLabel, 
                              TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelRed()));
 
-    d->colorLabelsMap.insert(ColorLabelWidget::OrangeLabel, 
+    d->colorLabelsMap.insert(OrangeLabel, 
                              TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelOrange()));
 
-    d->colorLabelsMap.insert(ColorLabelWidget::YellowLabel, 
+    d->colorLabelsMap.insert(YellowLabel, 
                              TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelYellow()));
 
-    d->colorLabelsMap.insert(ColorLabelWidget::GreenLabel, 
+    d->colorLabelsMap.insert(GreenLabel, 
                              TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelGreen()));
 
-    d->colorLabelsMap.insert(ColorLabelWidget::BlueLabel, 
+    d->colorLabelsMap.insert(BlueLabel, 
                              TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelBlue()));
 
-    d->colorLabelsMap.insert(ColorLabelWidget::MagentaLabel, 
+    d->colorLabelsMap.insert(MagentaLabel, 
                              TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelMagenta()));
 
-    d->colorLabelsMap.insert(ColorLabelWidget::GrayLabel, 
+    d->colorLabelsMap.insert(GrayLabel, 
                              TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelGray()));
 
-    d->colorLabelsMap.insert(ColorLabelWidget::BlackLabel, 
+    d->colorLabelsMap.insert(BlackLabel, 
                              TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelBlack()));
 
-    d->colorLabelsMap.insert(ColorLabelWidget::WhiteLabel, 
+    d->colorLabelsMap.insert(WhiteLabel, 
                              TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelWhite()));
 }
 
@@ -204,7 +204,7 @@ bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* ac, int c
     {
         KAction* action = ac->addAction(QString("colorlabel-%1").arg(colorId));
         action->setText(i18n("Assign Color Label \"%1\"",
-                             ColorLabelWidget::labelColorName((ColorLabelWidget::ColorLabel)colorId)));
+                             ColorLabelWidget::labelColorName((ColorLabel)colorId)));
         action->setShortcut(KShortcut(QString("ALT+%1").arg(colorId)));
         action->setShortcutConfigurable(false);
         action->forgetGlobalShortcut();
