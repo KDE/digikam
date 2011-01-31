@@ -51,6 +51,8 @@ enum Type
 
 } // namespace AlbumRoot
 
+// ----------------------------------------------------------------------------------
+
 namespace DatabaseSearch
 {
 
@@ -74,6 +76,8 @@ enum HaarSearchType
 };
 
 } // namespace DatabaseSearch
+
+// ----------------------------------------------------------------------------------
 
 namespace DatabaseItem
 {
@@ -99,6 +103,8 @@ enum Category
 
 } // namespace DatabaseItem
 
+// ----------------------------------------------------------------------------------
+
 namespace DatabaseRelation
 {
 
@@ -110,6 +116,8 @@ enum Type
 };
 
 } // namespace DatabaseRelation
+
+// ----------------------------------------------------------------------------------
 
 namespace DatabaseComment
 {
@@ -136,6 +144,8 @@ enum Type
 
 } // namespace DatabaseComment
 
+// ----------------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT InternalTagName
 {
 public:
@@ -148,7 +158,20 @@ public:
     static QLatin1String currentVersion();
     static QLatin1String intermediateVersion();
     static QLatin1String versionAlwaysVisible();
+
+    static QLatin1String colorLabelNone();
+    static QLatin1String colorLabelRed();
+    static QLatin1String colorLabelOrange();
+    static QLatin1String colorLabelYellow();
+    static QLatin1String colorLabelGreen();
+    static QLatin1String colorLabelBlue();
+    static QLatin1String colorLabelMagenta();
+    static QLatin1String colorLabelGray();
+    static QLatin1String colorLabelBlack();
+    static QLatin1String colorLabelWhite();
 };
+
+// ----------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT TagPropertyName
 {
@@ -159,6 +182,8 @@ public:
     static QLatin1String kfaceId();
     static QLatin1String tagKeyboardShortcut();
 };
+
+// ----------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT ImageTagPropertyName
 {

@@ -64,6 +64,58 @@ QLatin1String InternalTagName::versionAlwaysVisible()
     return QLatin1String("Version Always Visible");
 }
 
+QLatin1String InternalTagName::colorLabelNone()
+{
+    return QLatin1String("Color Label None");
+}
+
+QLatin1String InternalTagName::colorLabelRed()
+{
+    return QLatin1String("Color Label ");
+}
+
+QLatin1String InternalTagName::colorLabelOrange()
+{
+    return QLatin1String("Color Label Red");
+}
+
+QLatin1String InternalTagName::colorLabelYellow()
+{
+    return QLatin1String("Color Label Yellow");
+}
+
+QLatin1String InternalTagName::colorLabelGreen()
+{
+    return QLatin1String("Color Label Green");
+}
+
+QLatin1String InternalTagName::colorLabelBlue()
+{
+    return QLatin1String("Color Label Blue");
+}
+
+QLatin1String InternalTagName::colorLabelMagenta()
+{
+    return QLatin1String("Color Label Magenta");
+}
+
+QLatin1String InternalTagName::colorLabelGray()
+{
+    return QLatin1String("Color Label Gray");
+}
+
+QLatin1String InternalTagName::colorLabelBlack()
+{
+    return QLatin1String("Color Label Black");
+}
+
+QLatin1String InternalTagName::colorLabelWhite()
+{
+    return QLatin1String("Color Label White");
+}
+
+// ----------------------------------------------------------------------------------
+
 QLatin1String TagPropertyName::person()
 {
     return QLatin1String("person");
@@ -83,6 +135,8 @@ QLatin1String TagPropertyName::tagKeyboardShortcut()
 {
     return QLatin1String("tagKeyboardShortcut");
 }
+
+// ----------------------------------------------------------------------------------
 
 QLatin1String ImageTagPropertyName::tagRegion()
 {
