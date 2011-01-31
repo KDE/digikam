@@ -120,59 +120,32 @@ void TagsActionMngr::createActions()
         }
     }
 
-    // Create all Rating star action shorcuts.
-    KAction* action = 0;
-
     foreach(KActionCollection* ac, d->actionCollectionList)
     {
-        action = ac->addAction("ratenostar");
-        action->setText(i18n("Assign Rating \"No Stars\""));
-        action->setShortcut(KShortcut(Qt::CTRL+Qt::Key_0));
-        action->setShortcutConfigurable(false);
-        action->forgetGlobalShortcut();
-        action->setData(0);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotAssignRatingFromShortcut()));
-
-        action = ac->addAction("rateonestar");
-        action->setText(i18n("Assign Rating \"One Star\""));
-        action->setShortcut(KShortcut(Qt::CTRL+Qt::Key_1));
-        action->setShortcutConfigurable(false);
-        action->forgetGlobalShortcut();
-        action->setData(1);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotAssignRatingFromShortcut()));
-
-        action = ac->addAction("ratetwostar");
-        action->setText(i18n("Assign Rating \"Two Stars\""));
-        action->setShortcut(KShortcut(Qt::CTRL+Qt::Key_2));
-        action->setShortcutConfigurable(false);
-        action->forgetGlobalShortcut();
-        action->setData(2);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotAssignRatingFromShortcut()));
-
-        action = ac->addAction("ratethreestar");
-        action->setText(i18n("Assign Rating \"Three Stars\""));
-        action->setShortcut(KShortcut(Qt::CTRL+Qt::Key_3));
-        action->setShortcutConfigurable(false);
-        action->forgetGlobalShortcut();
-        action->setData(3);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotAssignRatingFromShortcut()));
-
-        action = ac->addAction("ratefourstar");
-        action->setText(i18n("Assign Rating \"Four Stars\""));
-        action->setShortcut(KShortcut(Qt::CTRL+Qt::Key_4));
-        action->setShortcutConfigurable(false);
-        action->forgetGlobalShortcut();
-        action->setData(4);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotAssignRatingFromShortcut()));
-
-        action = ac->addAction("ratefivestar");
-        action->setText(i18n("Assign Rating \"Five Stars\""));
-        action->setShortcut(KShortcut(Qt::CTRL+Qt::Key_5));
-        action->setShortcutConfigurable(false);
-        action->forgetGlobalShortcut();
-        action->setData(5);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotAssignRatingFromShortcut()));
+        createRatingActionShortcut(ac, 0);
+        createRatingActionShortcut(ac, 1);
+        createRatingActionShortcut(ac, 2);
+        createRatingActionShortcut(ac, 3);
+        createRatingActionShortcut(ac, 4);
+        createRatingActionShortcut(ac, 5);
     }
+}
+
+bool TagsActionMngr::createRatingActionShortcut(KActionCollection* ac, int rating)
+{
+    if (ac)
+    {
+        KAction* action = ac->addAction(QString("rate-%1-star").arg(rating));
+        action->setText(i18n("Assign Rating \"%1 Star\"", rating));
+        action->setShortcut(KShortcut(QString("CTRL+%1").arg(rating)));
+        action->setShortcutConfigurable(false);
+        action->forgetGlobalShortcut();
+        action->setData(rating);
+        connect(action, SIGNAL(triggered()), this, SLOT(slotAssignRatingFromShortcut()));
+        return true;
+    }
+
+    return false;
 }
 
 bool TagsActionMngr::createTagActionShortcut(int tagId)
@@ -200,6 +173,7 @@ void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProp
     {
         KAction* action = ac->addAction(QString("tagshortcut-%1").arg(tinfo.id));
         action->setText(i18n("Assign Tag \"%1\"", tinfo.name));
+        action->setParent(this);
         action->setShortcut(ks);
         action->setShortcutConfigurable(true);
         action->forgetGlobalShortcut();

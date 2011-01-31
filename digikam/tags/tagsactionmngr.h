@@ -98,6 +98,8 @@ private:
       */
     void createActions();
 
+    bool createRatingActionShortcut(KActionCollection* ac, int rating);
+
 private:
 
     static TagsActionMngr* m_defaultManager;
