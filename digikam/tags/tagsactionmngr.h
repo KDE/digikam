@@ -81,6 +81,7 @@ private Q_SLOTS:
 
     void slotAssignTagsFromShortcut();
     void slotAssignRatingFromShortcut();
+    void slotAssignColorLabelFromShortcut();
 
     /**
       * Called by KDE config shortcuts dialog, when user change action properties.
@@ -99,6 +100,9 @@ private:
     void createActions();
 
     bool createRatingActionShortcut(KActionCollection* ac, int rating);
+    bool createColorLabelActionShortcut(KActionCollection* ac, int colorId, int tagId);
+
+    void registerColorLabelTagsToDb();
 
 private:
 

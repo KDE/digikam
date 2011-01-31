@@ -46,6 +46,8 @@
 #include "digikamview.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
+#include "colorlabelwidget.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -65,6 +67,7 @@ public:
     {
     }
 
+    QMap<int, int>            colorLabelsMap;              // <color Id, tag label Id from Db>
     QMultiMap<int, KAction*>  tagsActionMap;
     QList<KActionCollection*> actionCollectionList;
 };
@@ -93,6 +96,39 @@ TagsActionMngr::~TagsActionMngr()
     }
 }
 
+void TagsActionMngr::registerColorLabelTagsToDb()
+{
+    d->colorLabelsMap.insert(ColorLabelWidget::NoneLabel, 
+                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelNone()));
+
+    d->colorLabelsMap.insert(ColorLabelWidget::RedLabel, 
+                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelRed()));
+
+    d->colorLabelsMap.insert(ColorLabelWidget::OrangeLabel, 
+                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelOrange()));
+
+    d->colorLabelsMap.insert(ColorLabelWidget::YellowLabel, 
+                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelYellow()));
+
+    d->colorLabelsMap.insert(ColorLabelWidget::GreenLabel, 
+                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelGreen()));
+
+    d->colorLabelsMap.insert(ColorLabelWidget::BlueLabel, 
+                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelBlue()));
+
+    d->colorLabelsMap.insert(ColorLabelWidget::MagentaLabel, 
+                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelMagenta()));
+
+    d->colorLabelsMap.insert(ColorLabelWidget::GrayLabel, 
+                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelGray()));
+
+    d->colorLabelsMap.insert(ColorLabelWidget::BlackLabel, 
+                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelBlack()));
+
+    d->colorLabelsMap.insert(ColorLabelWidget::WhiteLabel, 
+                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelWhite()));
+}
+
 void TagsActionMngr::registerActionCollections()
 {
     d->actionCollectionList.append(DigikamApp::instance()->actionCollection());
@@ -108,6 +144,8 @@ QList<KActionCollection*> TagsActionMngr::actionCollections() const
 
 void TagsActionMngr::createActions()
 {
+    // Create Tags shortcuts.
+
     TagInfo::List tList = DatabaseAccess().db()->scanTags();
 
     for (TagInfo::List::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
@@ -120,14 +158,26 @@ void TagsActionMngr::createActions()
         }
     }
 
+    // Create Rating shortcuts.
+
     foreach(KActionCollection* ac, d->actionCollectionList)
     {
-        createRatingActionShortcut(ac, 0);
-        createRatingActionShortcut(ac, 1);
-        createRatingActionShortcut(ac, 2);
-        createRatingActionShortcut(ac, 3);
-        createRatingActionShortcut(ac, 4);
-        createRatingActionShortcut(ac, 5);
+        for (int i = 0 ; i <= 5 ; ++i)
+            createRatingActionShortcut(ac, i);
+    }
+
+    // Create Color Label shortcuts.
+
+    registerColorLabelTagsToDb();
+
+    QMap<int, int>::const_iterator it;
+
+    foreach(KActionCollection* ac, d->actionCollectionList)
+    {
+        for (it = d->colorLabelsMap.begin() ; it != d->colorLabelsMap.end(); ++it)
+        {
+            createColorLabelActionShortcut(ac, it.key(), it.value());
+        }
     }
 }
 
@@ -142,6 +192,24 @@ bool TagsActionMngr::createRatingActionShortcut(KActionCollection* ac, int ratin
         action->forgetGlobalShortcut();
         action->setData(rating);
         connect(action, SIGNAL(triggered()), this, SLOT(slotAssignRatingFromShortcut()));
+        return true;
+    }
+
+    return false;
+}
+
+bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* ac, int colorId, int tagId)
+{
+    if (ac)
+    {
+        KAction* action = ac->addAction(QString("colorlabel-%1").arg(colorId));
+        action->setText(i18n("Assign Color Label \"%1\"",
+                             ColorLabelWidget::labelColorName((ColorLabelWidget::ColorLabel)colorId)));
+        action->setShortcut(KShortcut(QString("ALT+%1").arg(colorId)));
+        action->setShortcutConfigurable(false);
+        action->forgetGlobalShortcut();
+        action->setData(tagId);
+        connect(action, SIGNAL(triggered()), this, SLOT(slotAssignColorLabelFromShortcut()));
         return true;
     }
 
@@ -307,6 +375,37 @@ void TagsActionMngr::slotAssignRatingFromShortcut()
     {
         kDebug() << "Handling by LightTableWindow";
         ltw->slotAssignRating(rate);
+        return;
+    }
+}
+
+void TagsActionMngr::slotAssignColorLabelFromShortcut()
+{
+    KAction* action = dynamic_cast<KAction*>(sender());
+    if (!action) return;
+
+    int tagId = action->data().toInt();
+    kDebug() << "Fired Color Label Shortcut " << tagId;
+
+    QWidget* w      = kapp->activeWindow();
+    DigikamApp* dkw = dynamic_cast<DigikamApp*>(w);
+    if (dkw)
+    {
+        kDebug() << "Handling by DigikamApp";
+        return;
+    }
+
+    ImageWindow* imw = dynamic_cast<ImageWindow*>(w);
+    if (imw)
+    {
+        kDebug() << "Handling by ImageWindow";
+        return;
+    }
+
+    LightTableWindow* ltw = dynamic_cast<LightTableWindow*>(w);
+    if (ltw)
+    {
+        kDebug() << "Handling by LightTableWindow";
         return;
     }
 }
