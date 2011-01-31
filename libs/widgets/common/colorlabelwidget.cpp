@@ -33,6 +33,7 @@
 #include <QWidgetAction>
 #include <QFontMetrics>
 #include <QFont>
+#include <QToolButton>
 
 // KDE includes
 
@@ -251,11 +252,10 @@ public:
 };
 
 ColorLabelSelector::ColorLabelSelector(QWidget* parent)
-    : QToolButton(parent), d(new ColorLabelSelectorPriv)
+    : QPushButton(parent), d(new ColorLabelSelectorPriv)
 {
     KMenu* popup = new KMenu(this);
     setMenu(popup);
-    setPopupMode(QToolButton::InstantPopup);
     setToolTip(i18n("Color Label"));
 
     QWidgetAction* action = new QWidgetAction(this);
@@ -302,6 +302,7 @@ void ColorLabelSelector::slotColorLabelChanged(int label)
     QIcon icon(pix);
     setIconSize(pix.size());
     setIcon(icon);
+    menu()->close();
 }
 
 }  // namespace Digikam

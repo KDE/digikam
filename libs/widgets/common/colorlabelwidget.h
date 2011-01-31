@@ -27,7 +27,7 @@
 // Qt includes
 
 #include <QColor>
-#include <QToolButton>
+#include <QPushButton>
 
 // KDE includes
 
@@ -86,7 +86,7 @@ private:
 
 // ------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT ColorLabelSelector : public QToolButton
+class DIGIKAM_EXPORT ColorLabelSelector : public QPushButton
 {
     Q_OBJECT
 
