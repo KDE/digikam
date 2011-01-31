@@ -324,7 +324,7 @@ ColorLabelWidget::ColorLabel ColorLabelSelector::colorLabel()
     return d->clw->colorLabel();
 }
 
-void ColorLabelSelector::slotColorLabelChanged(int label)
+void ColorLabelSelector::slotColorLabelChanged(int colorId)
 {
     QFontMetrics fontMt = fontMetrics();
     QString none(i18n("None"));
@@ -335,15 +335,17 @@ void ColorLabelSelector::slotColorLabelChanged(int label)
     p.setFont(font());
     p.setBrush(palette().color(QPalette::Active, QPalette::ButtonText));
 
-    p.fillRect(fntRect, d->clw->labelColor((ColorLabelWidget::ColorLabel)label));
+    p.fillRect(fntRect, d->clw->labelColor((ColorLabelWidget::ColorLabel)colorId));
 
-    if (label == ColorLabelWidget::NoneLabel)
+    if (colorId == ColorLabelWidget::NoneLabel)
         p.drawText(fntRect, none);
 
     QIcon icon(pix);
     setIconSize(pix.size());
     setIcon(icon);
     menu()->close();
+
+    emit signalColorLabelChanged(colorId);
 }
 
 }  // namespace Digikam
