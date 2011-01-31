@@ -1103,6 +1103,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagregion.cpp
        )
 
+    # We must set this variable here at top level because it is used in both
+    # digikam/ and data/database
+    SET(DBCONFIG_XML_VERSION "1")
+
     SET(libdatabase_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp

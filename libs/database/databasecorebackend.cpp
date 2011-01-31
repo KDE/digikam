@@ -626,6 +626,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
     if (action.name.isNull())
     {
         kError() << "Attempt to execute null action";
+        return DatabaseCoreBackend::SQLError;
     }
 
 #ifdef DATABASCOREBACKEND_DEBUG

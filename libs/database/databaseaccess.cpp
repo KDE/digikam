@@ -260,6 +260,12 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
         return false;
     }
 
+    if (!DatabaseConfigElement::checkReadyForUse())
+    {
+        d->lastError = DatabaseConfigElement::errorMessage();
+        return false;
+    }
+
     // create an object with private shortcut constructor
     DatabaseAccess access(false);
 

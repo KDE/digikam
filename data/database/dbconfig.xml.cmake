@@ -27,6 +27,12 @@
 <databaseconfig>
     <defaultDB>QMYSQL</defaultDB>
 
+    <!-- Increment this version number whenever you change this file.
+         The number is defined in the toplevel CMakeList.txt file.
+         On version mismatch, users will be warned.
+    -->
+    <version>${DBCONFIG_XML_VERSION}</version>
+
     <database name="QSQLITE">
         <hostName>TestHost</hostName>
         <databaseName>DatabaseName</databaseName>

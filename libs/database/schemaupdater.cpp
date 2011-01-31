@@ -572,7 +572,15 @@ bool SchemaUpdater::updateV5toV6()
         m_observer->moreSchemaUpdateSteps(1);
     }
 
-    if (!m_Backend->execDBAction(m_Backend->getDBAction("UpdateSchemaFromV5ToV6")))
+    DatabaseAction updateAction = m_Backend->getDBAction("UpdateSchemaFromV5ToV6");
+    if (updateAction.name.isNull())
+    {
+        QString errorMsg = i18n("The database update action cannot be found. Please ensure that "
+                                "the dbconfig.xml file of the current version of digikam is installed "
+                                "at the correct place. ");
+    }
+
+    if (!m_Backend->execDBAction(updateAction))
     {
         kError() << "Schema update to V6 failed!";
         // resort to default error message, set above
