@@ -195,27 +195,38 @@ void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProp
         KAction* action = ac->addAction(QString("tagshortcut-%1").arg(tinfo.id));
         action->setText(i18n("Assign Tag \"%1\"", tinfo.name));
         action->setShortcut(ks);
-        action->setShortcutConfigurable(false);
+        action->setShortcutConfigurable(true);
         action->setIcon(icon);
         action->setData(tinfo.id);
 
         connect(action, SIGNAL(triggered()),
                 this, SLOT(slotAssignTagsFromShortcut()));
 
+        connect(action, SIGNAL(changed()),
+                this, SLOT(slotTagActionChanged()));
+
         d->tagsActionMap.insert(tinfo.id, action);
     }
 }
 
-void TagsActionMngr::slotUpdateTagShortcut(int tagId, const QKeySequence& ks)
+void TagsActionMngr::slotTagActionChanged()
+{
+    KAction* action = dynamic_cast<KAction*>(sender());
+    if (!action) return;
+
+    int tagId       = action->data().toInt();
+    QKeySequence ks = action->shortcut().primary();
+    updateTagShortcut(tagId, ks);
+}
+
+void TagsActionMngr::updateTagShortcut(int tagId, const QKeySequence& ks)
 {
     if (!tagId) return;
 
-    tagRemoved(tagId);
+    kDebug() << "Tag Shortcut " << tagId << "Changed to " << ks;
 
     TagProperties tprop(tagId);
     tprop.setProperty(TagPropertyName::tagKeyboardShortcut(), ks.toString());
-
-    createTagActionShortcut(tagId);
 }
 
 void TagsActionMngr::slotAlbumDeleted(Album* album)

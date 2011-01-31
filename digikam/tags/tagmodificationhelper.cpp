@@ -172,7 +172,7 @@ void TagModificationHelper::slotTagEdit(TAlbum* tag)
 
     if (tag->property(TagPropertyName::tagKeyboardShortcut()) != ks.toString())
     {
-        TagsActionMngr::defaultManager()->slotUpdateTagShortcut(tag->id(), ks);
+        TagsActionMngr::defaultManager()->updateTagShortcut(tag->id(), ks);
     }
 
     emit tagEdited(tag);

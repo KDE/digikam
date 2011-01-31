@@ -64,15 +64,13 @@ public:
       */
     QList<KActionCollection*> actionCollections() const;
 
-    static TagsActionMngr* defaultManager();
-
-public Q_SLOTS:
-
     /**
       * Updates the shortcut action for a tag. Call this when a shortcut was
       * added, removed or changed.
       */
-    void slotUpdateTagShortcut(int tagId, const QKeySequence& ks);
+    void updateTagShortcut(int tagId, const QKeySequence& ks);
+
+    static TagsActionMngr* defaultManager();
 
 private Q_SLOTS:
 
@@ -83,6 +81,11 @@ private Q_SLOTS:
 
     void slotAssignTagsFromShortcut();
     void slotAssignRatingFromShortcut();
+
+    /**
+      * Called by KDE config shortcuts dialog, when user change action properties.
+      */
+    void slotTagActionChanged();
 
 private:
 
