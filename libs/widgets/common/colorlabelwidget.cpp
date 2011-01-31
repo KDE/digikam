@@ -317,6 +317,7 @@ ColorLabelSelector::~ColorLabelSelector()
 void ColorLabelSelector::setColorLabel(ColorLabel label)
 {
     d->clw->setColorLabel(label);
+    slotColorLabelChanged(label);
 }
 
 ColorLabel ColorLabelSelector::colorLabel()
