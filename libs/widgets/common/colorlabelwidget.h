@@ -70,6 +70,8 @@ public:
 
     QColor labelColor(ColorLabel label) const;
 
+    static QString labelColorName(ColorLabel label);
+
 Q_SIGNALS:
 
     void signalColorLabelChanged(int);

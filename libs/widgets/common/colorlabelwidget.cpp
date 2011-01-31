@@ -236,6 +236,47 @@ QColor ColorLabelWidget::labelColor(ColorLabel label) const
     return color;
 }
 
+QString ColorLabelWidget::labelColorName(ColorLabel label)
+{
+    QString name;
+
+    switch(label)
+    {
+        case RedLabel:
+            name = i18n("Red");
+            break;
+        case OrangeLabel:
+            name = i18n("Orange");
+            break;
+        case YellowLabel:
+            name = i18n("Yellow");
+            break;
+        case GreenLabel:
+            name = i18n("Green");
+            break;
+        case BlueLabel:
+            name = i18n("Blue");
+            break;
+        case MagentaLabel:
+            name = i18n("Magenta");
+            break;
+        case GrayLabel:
+            name = i18n("Gray");
+            break;
+        case BlackLabel:
+            name = i18n("Black");
+            break;
+        case WhiteLabel:
+            name = i18n("White");
+            break;
+        default:   // NoneLabel
+            name = i18n("None");
+            break;
+    }
+
+    return name;
+}
+
 // -----------------------------------------------------------------------------
 
 class ColorLabelSelector::ColorLabelSelectorPriv
