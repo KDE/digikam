@@ -6,7 +6,7 @@
  * Date        : 2010-08-20
  * Description : Metadata Settings Container.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,7 +27,6 @@
 
 #include <kconfiggroup.h>
 
-
 // LibKExiv2 includes
 
 #include <libkexiv2/kexiv2.h>
@@ -47,6 +46,7 @@ MetadataSettingsContainer::MetadataSettingsContainer()
     exifSetOrientation    = true;
     saveComments          = false;
     saveDateTime          = false;
+    saveColorLabel        = false;
     saveRating            = false;
     saveTemplate          = false;
     saveTags              = false;
@@ -66,6 +66,7 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 
     saveComments          = group.readEntry("Save EXIF Comments",          false);
     saveDateTime          = group.readEntry("Save Date Time",              false);
+    saveColorLabel        = group.readEntry("Save Color Label",            false);
     saveRating            = group.readEntry("Save Rating",                 false);
 
     writeRawFiles         = group.readEntry("Write RAW Files",             false);
@@ -84,6 +85,7 @@ void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 
     group.writeEntry("Save EXIF Comments",          saveComments);
     group.writeEntry("Save Date Time",              saveDateTime);
+    group.writeEntry("Save Color Label",            saveColorLabel);
     group.writeEntry("Save Rating",                 saveRating);
 
     group.writeEntry("Write RAW Files",             writeRawFiles);
