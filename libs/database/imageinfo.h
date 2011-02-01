@@ -7,8 +7,8 @@
  * Description : Handling accesses to one image and associated data
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -182,6 +182,11 @@ public:
     QString   comment() const;
 
     /**
+     * Returns the Color Label Id (see ColorLabelWidget::ColorLabel values)
+     */
+    int       colorLabel() const;
+
+    /**
      * Returns the rating
      */
     int       rating() const;
@@ -309,7 +314,6 @@ public:
     ImageMetadataContainer imageMetadataContainer() const;
     PhotoInfoContainer     photoInfoContainer() const;
 
-
     /**
      * Retrieve metadata template information about the image.
      */
@@ -354,6 +358,11 @@ public:
      * Remove all tags from the item (removes it from database)
      */
     void        removeAllTags();
+
+    /**
+     * Set the color Label Id for the item (see ColorLabelWidget::ColorLabel values)
+     */
+    void        setColorLabel(int value);
 
     /**
      * Set the rating for the item

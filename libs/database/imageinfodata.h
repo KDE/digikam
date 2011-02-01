@@ -58,6 +58,7 @@ public:
     QString    name;
 
     QString    defaultComment;
+    int        colorLabel;
     int        rating;
     DatabaseItem::Category category;
     QString    format;
@@ -75,6 +76,7 @@ public:
     bool       hasAltitude            : 1;
 
     bool       defaultCommentCached   : 1;
+    bool       colorLabelCached       : 1;
     bool       ratingCached           : 1;
     bool       categoryCached         : 1;
     bool       formatCached           : 1;

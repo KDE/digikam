@@ -7,8 +7,8 @@
  * Description : Handling accesss to one image and associated data
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,6 +37,7 @@
 
 // Local includes
 
+#include "globals.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databaseinfocontainers.h"
@@ -67,6 +68,7 @@ ImageInfoData::ImageInfoData()
     albumId                = -1;
     albumRootId            = -1;
 
+    colorLabel             = -1;
     rating                 = -1;
     category               = DatabaseItem::UndefinedCategory;
     fileSize               = 0;
@@ -79,6 +81,7 @@ ImageInfoData::ImageInfoData()
     hasAltitude            = 0;
 
     defaultCommentCached   = false;
+    colorLabelCached       = false;
     ratingCached           = false;
     categoryCached         = false;
     formatCached           = false;
@@ -106,6 +109,7 @@ ImageInfo::ImageInfo(const ImageListerRecord& record)
     m_data->albumRootId            = record.albumRootID;
     m_data->name                   = record.name;
 
+    m_data->colorLabel             = record.colorLabel;
     m_data->rating                 = record.rating;
     m_data->category               = record.category;
     m_data->format                 = record.format;
@@ -114,6 +118,7 @@ ImageInfo::ImageInfo(const ImageListerRecord& record)
     m_data->fileSize               = record.fileSize;
     m_data->imageSize              = record.imageSize;
 
+    m_data->colorLabelCached       = true;
     m_data->ratingCached           = true;
     m_data->categoryCached         = true;
     m_data->formatCached           = true;
@@ -356,11 +361,39 @@ QString ImageInfo::comment() const
     if (!m_data->defaultCommentCached)
     {
         ImageComments comments(access, m_data->id);
-        m_data.constCastData()->defaultComment = comments.defaultComment();
+        m_data.constCastData()->defaultComment       = comments.defaultComment();
         m_data.constCastData()->defaultCommentCached = true;
     }
 
     return m_data->defaultComment;
+}
+
+int ImageInfo::colorLabel() const
+{
+    if (!m_data)
+    {
+        return 0;
+    }
+
+    if (!m_data->colorLabelCached)
+    {
+        m_data.constCastData()->colorLabelCached = NoneLabel;
+        m_data.constCastData()->colorLabelCached = true;
+
+        foreach(int tagId, tagIds())
+        {
+            for (int i = NoneLabel ; i <= WhiteLabel; ++i)
+            {
+                if (tagId == TagsCache::instance()->getTagForColorLabel((ColorLabel)i))
+                {
+                    m_data.constCastData()->colorLabelCached = i;
+                    break;
+                }
+            }
+        }
+    }
+
+    return m_data->colorLabel;
 }
 
 int ImageInfo::rating() const
@@ -518,7 +551,7 @@ QList<int> ImageInfo::tagIds() const
 
     if (!m_data->tagIdsCached)
     {
-        m_data.constCastData()->tagIds = access.db()->getItemTagIDs(m_data->id);
+        m_data.constCastData()->tagIds       = access.db()->getItemTagIDs(m_data->id);
         m_data.constCastData()->tagIdsCached = true;
     }
 
@@ -534,7 +567,7 @@ DatabaseUrl ImageInfo::databaseUrl() const
 
     DatabaseAccess access;
 
-    QString album = access.imageInfoCache()->albumName(access, m_data->albumId);
+    QString album     = access.imageInfoCache()->albumName(access, m_data->albumId);
     QString albumRoot = CollectionManager::instance()->albumRootPath(m_data->albumRootId);
 
     return DatabaseUrl::fromAlbumAndName(m_data->name, album, albumRoot, m_data->albumRootId);
@@ -983,6 +1016,27 @@ void ImageInfo::removeMetadataTemplate()
     ImageExtendedProperties ep = imageExtendedProperties();
     ep.removeLocation();
     ep.removeSubjectCode();
+}
+
+void ImageInfo::setColorLabel(int colorId)
+{
+    if (!m_data)
+    {
+        return;
+    }
+
+    TagsCache* tc = TagsCache::instance();
+    int tagId     = tc->getTagForColorLabel((ColorLabel)colorId);
+    if (!tagId) return;
+
+    // Color Label is an exclusive tags.
+
+    for (int i = NoneLabel ; i <= WhiteLabel ; ++i)
+        removeTag(tc->getTagForColorLabel((ColorLabel)i));
+
+    setTag(tagId);
+    m_data->colorLabel                       = tagId;
+    m_data.constCastData()->colorLabelCached = true;
 }
 
 void ImageInfo::setRating(int value)
