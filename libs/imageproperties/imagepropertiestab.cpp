@@ -373,7 +373,7 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
         d->labelColorLabel->clear();
         d->labelRating->clear();
         d->labelTags->clear();
-    
+
         setEnabled(false);
         return;
     }
@@ -542,7 +542,7 @@ void ImagePropertiesTab::setRating(int rating)
         str = " ";
         for (int i=0; i<rating; i++)
         {
-            str += QChar(0x25CF);//0x2022);
+            str += QChar(0x2731);
             str += ' ';
         }
     }
