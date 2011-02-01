@@ -39,6 +39,7 @@
 // KDE includes
 
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kfileitem.h>
@@ -468,6 +469,30 @@ void ContextMenuHelper::addRemoveTagsMenu(imageIds& ids)
             this, SIGNAL(signalRemoveTag(int)));
 }
 
+void ContextMenuHelper::addColorLabelAction()
+{
+/*
+    QWidgetAction* action = new QWidgetAction(this);
+    action->setText(i18n("Assign Color Label"));
+    ColorLabelWidget* clw = new ColorLabelWidget(d->parent);
+    action->setDefaultWidget(clw);
+    addAction(action);
+*/
+    KActionMenu* menu     = new KActionMenu(this);
+    menu->setText(i18n("Assign Color Label"));
+    QWidgetAction* wa     = new QWidgetAction(menu);
+    ColorLabelWidget* clw = new ColorLabelWidget(d->parent);
+    wa->setDefaultWidget(clw);
+    menu->addAction(wa);
+    addAction(menu);
+
+    connect(clw, SIGNAL(signalColorLabelChanged(int)),
+            this, SIGNAL(signalAssignColorLabel(int)));
+
+    connect(clw, SIGNAL(signalColorLabelChanged(int)),
+            d->parent, SLOT(close()));
+}
+
 void ContextMenuHelper::addRatingMenu()
 {
     KMenu* ratingMenu = new RatingPopupMenu(d->parent);
@@ -476,18 +501,6 @@ void ContextMenuHelper::addRatingMenu()
 
     connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
             this, SIGNAL(signalAssignRating(int)));
-}
-
-void ContextMenuHelper::addColorLabelAction()
-{
-    QWidgetAction* action = new QWidgetAction(this);
-    action->setText(i18n("Assign Color Label"));
-    ColorLabelWidget* clw = new ColorLabelWidget(d->parent);
-    action->setDefaultWidget(clw);
-    addAction(action);
-
-    connect(clw, SIGNAL(signalColorLabelChanged(int)),
-            this, SIGNAL(signalAssignColorLabel(int)));
 }
 
 void ContextMenuHelper::addCreateTagFromAddressbookMenu()
