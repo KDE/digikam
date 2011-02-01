@@ -67,6 +67,7 @@
 #include "template.h"
 #include "imageinfolist.h"
 #include "imageinfo.h"
+#include "colorlabelwidget.h"
 
 namespace Digikam
 {
@@ -106,6 +107,7 @@ public:
         tabWidget                  = 0;
         tagModel                   = 0;
         tagCheckView               = 0;
+        colorLabelSelector         = 0;
     }
 
     bool                 modified;
@@ -144,6 +146,7 @@ public:
     TemplateViewer*      templateViewer;
 
     RatingWidget*        ratingWidget;
+    ColorLabelSelector*  colorLabelSelector;
 
     MetadataHubOnTheRoad hub;
 
@@ -182,9 +185,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
 
-    KHBox* ratingBox = new KHBox(captionTagsArea);
-    new QLabel(i18n("Rating:"), ratingBox);
-    d->ratingWidget  = new RatingWidget(ratingBox);
+    KHBox* ratingBox      = new KHBox(captionTagsArea);
+    new QLabel(i18n("Label/Rating:"), ratingBox);
+    d->colorLabelSelector = new ColorLabelSelector(ratingBox);
+    d->ratingWidget       = new RatingWidget(ratingBox);
     ratingBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
 
     // Tags view ---------------------------------------------------
@@ -230,16 +234,16 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->recentTagsMapper = new QSignalMapper(this);
 
     // Buttons -----------------------------------------
-    
+
     KHBox* applyButtonBox = new KHBox(this);
     applyButtonBox->setSpacing(KDialog::spacingHint());
-    
+
     d->applyBtn = new QPushButton(i18n("Apply"), applyButtonBox);
     d->applyBtn->setIcon(SmallIcon("dialog-ok-apply"));
     d->applyBtn->setEnabled(false);
     d->applyBtn->setToolTip( i18n("Apply all changes to images"));
     //buttonsBox->setStretchFactor(d->applyBtn, 10);
-    
+
     KHBox* buttonsBox = new KHBox(this);
     buttonsBox->setSpacing(KDialog::spacingHint());
 
@@ -247,7 +251,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->revertBtn->setIcon(SmallIcon("document-revert"));
     d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
-    
+
     d->applyToAllVersionsButton = new QPushButton(i18n("Apply to all versions"), buttonsBox);
     d->applyToAllVersionsButton->setIcon(SmallIcon("dialog-ok-apply"));
     d->applyToAllVersionsButton->setEnabled(false);
@@ -305,6 +309,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     connect(d->dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime&)),
             this, SLOT(slotDateTimeChanged(const QDateTime&)));
 
+    connect(d->colorLabelSelector, SIGNAL(signalColorLabelChanged(int)),
+            this, SLOT(slotColorLabelChanged(int)));
+
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotRatingChanged(int)));
 
@@ -322,7 +329,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     connect(d->applyBtn, SIGNAL(clicked()),
             this, SLOT(slotApplyAllChanges()));
-    
+
     connect(d->applyToAllVersionsButton, SIGNAL(clicked()),
             this, SLOT(slotApplyChangesToAllVersions()));
 
@@ -342,6 +349,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     d->captionsEdit->installEventFilter(this);
     d->dateTimeEdit->installEventFilter(this);
+    d->colorLabelSelector->installEventFilter(this);
     d->ratingWidget->installEventFilter(this);
     // TODO update, what does this filter?
     d->tagCheckView->installEventFilter(this);
@@ -761,6 +769,14 @@ void ImageDescEditTab::slotTemplateSelected()
     slotModified();
 }
 
+void ImageDescEditTab::slotColorLabelChanged(int colorId)
+{
+    d->hub.setColorLabel(colorId);
+    // no handling for MetadataDisjoint needed for color label,
+    // we set it to 0 when disjoint, see below
+    slotModified();
+}
+
 void ImageDescEditTab::slotRatingChanged(int rating)
 {
     d->hub.setRating(rating);
@@ -774,7 +790,7 @@ void ImageDescEditTab::slotModified()
     d->modified = true;
     d->applyBtn->setEnabled(true);
     d->revertBtn->setEnabled(true);
-    
+
     if(d->currInfos.size() == 1)
     {
         d->applyToAllVersionsButton->setEnabled(true);
@@ -823,6 +839,11 @@ void ImageDescEditTab::slotTaggingActionActivated(const TaggingAction& action)
         d->newTagEdit->clear();
         d->tagCheckView->scrollTo(d->tagCheckView->albumFilterModel()->indexForAlbum(assigned));
     }
+}
+
+void ImageDescEditTab::assignColorLabel(int colorId)
+{
+    d->colorLabelSelector->setColorLabel((ColorLabel)colorId);
 }
 
 void ImageDescEditTab::assignRating(int rating)
@@ -905,6 +926,22 @@ void ImageDescEditTab::updateComments()
     d->captionsEdit->setValues(d->hub.comments());
     setMetadataWidgetStatus(d->hub.commentsStatus(), d->captionsEdit);
     d->captionsEdit->blockSignals(false);
+}
+
+void ImageDescEditTab::updateColorLabel()
+{
+    d->colorLabelSelector->blockSignals(true);
+
+    if (d->hub.colorLabelStatus() == MetadataHub::MetadataDisjoint)
+    {
+        d->colorLabelSelector->setColorLabel(NoneLabel);
+    }
+    else
+    {
+        d->colorLabelSelector->setColorLabel((ColorLabel)d->hub.colorLabel());
+    }
+
+    d->colorLabelSelector->blockSignals(false);
 }
 
 void ImageDescEditTab::updateRating()
