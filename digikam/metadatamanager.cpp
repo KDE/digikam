@@ -6,7 +6,8 @@
  * Date        : 2009-05-05
  * Description : Metadata operations on images
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,7 +54,9 @@ class MetadataManagerCreator
 {
 public:
     MetadataManager object;
+
 };
+
 K_GLOBAL_STATIC(MetadataManagerCreator, metadataManagercreator)
 
 MetadataManager* MetadataManager::instance()
@@ -152,6 +155,17 @@ void MetadataManager::removeTags(const QList<ImageInfo>& infos, const QList<int>
     d->removeTags(infos, tagIDs);
 }
 
+void MetadataManager::assignColorLabel(const ImageInfo& info, int colorId)
+{
+    assignColorLabel(QList<ImageInfo>() << info, colorId);
+}
+
+void MetadataManager::assignColorLabel(const QList<ImageInfo>& infos, int colorId)
+{
+    d->schedulingForDB(infos.size());
+    d->assignColorLabel(infos, colorId);
+}
+
 void MetadataManager::assignRating(const ImageInfo& info, int rating)
 {
     assignRating(QList<ImageInfo>() << info, rating);
@@ -203,6 +217,9 @@ MetadataManager::MetadataManagerPriv::MetadataManagerPriv(MetadataManager* q)
 
     WorkerObject::connectAndSchedule(this, SIGNAL(signalRemoveTags(const QList<ImageInfo>&, const QList<int>&)),
                                      dbWorker, SLOT(removeTags(const QList<ImageInfo>&, const QList<int>&)));
+
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignColorLabel(const QList<ImageInfo>&, int)),
+                                     dbWorker, SLOT(assignColorLabel(const QList<ImageInfo>&, int)));
 
     WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignRating(const QList<ImageInfo>&, int)),
                                      dbWorker, SLOT(assignRating(const QList<ImageInfo>&, int)));
@@ -422,6 +439,44 @@ void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos,
                 hub.setTag(*tagIt, addOrRemove);
             }
 
+            hub.write(info, MetadataHub::PartialWrite);
+
+            if (hub.willWriteMetadata(MetadataHub::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
+            {
+                forWriting << info;
+            }
+
+            d->dbProcessedOne();
+            group.allowLift();
+        }
+        //ScanController::instance()->resumeCollectionScan();
+    }
+
+    // send for writing file metadata
+    if (!forWriting.isEmpty())
+    {
+        d->schedulingForWrite(forWriting.size());
+        emit writeMetadataToFiles(forWriting);
+    }
+
+    d->dbFinished(infos.size());
+}
+
+void MetadataManagerDatabaseWorker::assignColorLabel(const QList<ImageInfo>& infos, int colorId)
+{
+    d->setDBAction(i18n("Assigning image color label. Please wait..."));
+
+    MetadataHub      hub;
+    QList<ImageInfo> forWriting;
+
+    {
+        //ScanController::instance()->suspendCollectionScan();
+        DatabaseOperationGroup group;
+        group.setMaximumTime(200);
+        foreach (const ImageInfo& info, infos)
+        {
+            hub.load(info);
+            hub.setColorLabel(colorId);
             hub.write(info, MetadataHub::PartialWrite);
 
             if (hub.willWriteMetadata(MetadataHub::FullWriteIfChanged) && d->shallSendForWriting(info.id()))

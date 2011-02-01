@@ -66,12 +66,14 @@ public Q_SLOTS:
     void deleteSelectedDirectly(bool permanently = false);
     void assignTagToSelected(int tagID);
     void removeTagFromSelected(int tagID);
+    void assignColorLabelToSelected(int colorId);
     void assignRatingToSelected(int rating);
     void setAsAlbumThumbnail(const ImageInfo& setAsThumbnail);
     void createNewAlbumForSelected();
     void setExifOrientationOfSelected(int orientation);
     void rename();
 
+    void assignColorLabel(const QModelIndex& index, int colorId);
     void assignRating(const QModelIndex& index, int rating);
     void assignTag(const QModelIndex& index, const QString& name);
 

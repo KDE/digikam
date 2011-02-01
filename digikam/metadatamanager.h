@@ -6,7 +6,8 @@
  * Date        : 2009-05-05
  * Description : Metadata operations on images
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,6 +59,9 @@ public Q_SLOTS:
     void removeTags(const ImageInfo& info, const QList<int>& tagIDs);
     void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
 
+    void assignColorLabel(const ImageInfo& infos, int colorId);
+    void assignColorLabel(const QList<ImageInfo>& infos, int colorId);
+
     void assignRating(const ImageInfo& infos, int rating);
     void assignRating(const QList<ImageInfo>& infos, int rating);
 
@@ -90,4 +94,3 @@ private:
 } // namespace Digikam
 
 #endif /* METADATAMANAGER_H */
-

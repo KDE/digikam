@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QAction>
+#include <QWidgetAction>
 #include <QClipboard>
 #include <QMap>
 #include <QMenu>
@@ -49,6 +50,10 @@
 #include <krun.h>
 #include <kstandardaction.h>
 
+#ifdef HAVE_KDEPIMLIBS
+#include <kabc/stdaddressbook.h>
+#endif // HAVE_KDEPIMLIBS
+
 // LibKIPI includes
 
 #include <libkipi/plugin.h>
@@ -65,12 +70,10 @@
 #include "imageinfo.h"
 #include "lighttablewindow.h"
 #include "queuemgrwindow.h"
+#include "colorlabelwidget.h"
 #include "ratingpopupmenu.h"
 #include "tagmodificationhelper.h"
 #include "tagspopupmenu.h"
-#ifdef HAVE_KDEPIMLIBS
-#include <kabc/stdaddressbook.h>
-#endif // HAVE_KDEPIMLIBS
 
 namespace Digikam
 {
@@ -473,6 +476,18 @@ void ContextMenuHelper::addRatingMenu()
 
     connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
             this, SIGNAL(signalAssignRating(int)));
+}
+
+void ContextMenuHelper::addColorLabelAction()
+{
+    QWidgetAction* action = new QWidgetAction(this);
+    action->setText(i18n("Assign Color Label"));
+    ColorLabelWidget* clw = new ColorLabelWidget(d->parent);
+    action->setDefaultWidget(clw);
+    addAction(action);
+
+    connect(clw, SIGNAL(signalColorLabelChanged(int)),
+            this, SIGNAL(signalAssignColorLabel(int)));
 }
 
 void ContextMenuHelper::addCreateTagFromAddressbookMenu()
