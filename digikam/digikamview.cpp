@@ -1728,6 +1728,11 @@ void DigikamView::toggleTag(int tagID)
     d->iconView->toggleTagToSelected(tagID);
 }
 
+void DigikamView::slotAssignColorLabel(int colorId)
+{
+    d->iconView->assignColorLabelToSelected(colorId);
+}
+
 void DigikamView::slotAssignRating(int rating)
 {
     d->iconView->assignRatingToSelected(rating);

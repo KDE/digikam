@@ -357,6 +357,7 @@ void TagsActionMngr::slotAssignColorLabelFromShortcut()
     if (dkw)
     {
         kDebug() << "Handling by DigikamApp";
+        dkw->view()->slotAssignColorLabel(tagId);
         return;
     }
 

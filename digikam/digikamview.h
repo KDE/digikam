@@ -176,7 +176,7 @@ public Q_SLOTS:
     void slotGroupImages(int mode);
     void slotMoveSelectionToAlbum();
 
-    // Image Rating slots
+    void slotAssignColorLabel(int colorId);
     void slotAssignRating(int rating);
 
     // Tools action slots.
