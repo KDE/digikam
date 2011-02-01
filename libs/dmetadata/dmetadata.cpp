@@ -6,8 +6,8 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -358,6 +358,32 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
     return true;
 }
 
+int DMetadata::getImageColorLabel() const
+{
+    if (getFilePath().isEmpty())
+    {
+        return -1;
+    }
+
+    if (hasXmp())
+    {
+        QString value = getXmpTagString("Xmp.digiKam.ColorLabel", false);
+
+        if (!value.isEmpty())
+        {
+            bool ok      = false;
+            long colorId = value.toLong(&ok);
+
+            if (ok && colorId >= NoneLabel && colorId <= WhiteLabel)
+            {
+                return colorId;
+            }
+        }
+    }
+
+    return -1;
+}
+
 int DMetadata::getImageRating() const
 {
     if (getFilePath().isEmpty())
@@ -498,6 +524,34 @@ int DMetadata::getImageRating() const
     }
 
     return -1;
+}
+
+bool DMetadata::setImageColorLabel(int colorId) const
+{
+    if (colorId < NoneLabel || colorId > WhiteLabel)
+    {
+        kDebug() << "Color Label value to write is out of range!";
+        return false;
+    }
+
+    kDebug() << getFilePath() << " ==> Color Label: " << colorId;
+
+    if (!setProgramId())
+    {
+        return false;
+    }
+
+    // Set standard XMP rating tag.
+
+    if (supportXmp())
+    {
+        if (!setXmpTagString("Xmp.digiKam.ColorLabel", QString::number(colorId)))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool DMetadata::setImageRating(int rating) const
