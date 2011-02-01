@@ -216,7 +216,7 @@ void DigikamImageView::addAssignNameOverlay(ImageDelegate* delegate)
 
 void DigikamImageView::slotUntagFace(const QModelIndex& index)
 {
-    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    ImageInfo info    = ImageModel::retrieveImageInfo(index);
     DatabaseFace face = d->faceDelegate->face(index);
     kDebug()<<"Untagging face in image " << info.filePath() << "and rect " << face.region().toRect();
     d->faceiface->removeFace(face);
