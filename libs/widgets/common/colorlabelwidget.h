@@ -53,8 +53,7 @@ public:
     void setColorLabel(ColorLabel label);
     ColorLabel colorLabel();
 
-    QColor labelColor(ColorLabel label) const;
-
+    static QColor  labelColor(ColorLabel label);
     static QString labelColorName(ColorLabel label);
 
 Q_SIGNALS:

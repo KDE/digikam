@@ -195,7 +195,7 @@ QIcon ColorLabelWidget::buildIcon(ColorLabel label) const
     return QIcon(pix);
 }
 
-QColor ColorLabelWidget::labelColor(ColorLabel label) const
+QColor ColorLabelWidget::labelColor(ColorLabel label)
 {
     QColor color;
 
@@ -229,7 +229,6 @@ QColor ColorLabelWidget::labelColor(ColorLabel label) const
             color = qRgb(0xF7, 0xFE, 0xFA);
             break;
         default:   // NoneLabel
-            color = palette().color(QPalette::Active, QPalette::Button);
             break;
     }
 

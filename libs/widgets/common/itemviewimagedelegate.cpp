@@ -7,9 +7,9 @@
  * Description : Qt item view for images - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,6 +47,8 @@
 
 #include "imagedelegateoverlay.h"
 #include "themeengine.h"
+#include "colorlabelwidget.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -387,6 +389,22 @@ void ItemViewImageDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewIte
                        : ThemeEngine::instance()->textRegColor(),
                        1, Qt::DotLine));
         p->drawRect(1, 1, d->rect.width()-3, d->rect.height()-3);
+    }
+}
+
+void ItemViewImageDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option, 
+                                               bool isSelected, int colorId) const
+{
+    Q_D(const ItemViewImageDelegate);
+    Q_UNUSED(option);
+    Q_UNUSED(isSelected);
+
+    if (colorId > NoneLabel)
+    {
+        // TODO: This draw a simple rectangle around item. We can do something more elegant of course...
+
+        p->setPen(QPen(ColorLabelWidget::labelColor((ColorLabel)colorId), 3, Qt::SolidLine));
+        p->drawRect(3, 3, d->rect.width()-5, d->rect.height()-5);
     }
 }
 
