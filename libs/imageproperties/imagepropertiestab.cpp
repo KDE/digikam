@@ -306,10 +306,10 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     QWidget* const w4         = new QWidget(this);
     QGridLayout* const glay4  = new QGridLayout(w4);
 
-    d->caption                = new DTextLabelName(i18n("Caption: "),    w4);
-    d->colorLabel             = new DTextLabelName(i18n("ColorLabel: "), w4);
-    d->rating                 = new DTextLabelName(i18n("Rating: "),     w4);
-    d->tags                   = new DTextLabelName(i18n("Tags: "),       w4);
+    d->caption                = new DTextLabelName(i18n("Caption: "),     w4);
+    d->colorLabel             = new DTextLabelName(i18n("Color label: "), w4);
+    d->rating                 = new DTextLabelName(i18n("Rating: "),      w4);
+    d->tags                   = new DTextLabelName(i18n("Tags: "),        w4);
 
     d->labelCaption           = new DTextLabelValue(0, w4);
     d->labelColorLabel        = new DTextLabelValue(0, w4);
