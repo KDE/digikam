@@ -7,7 +7,7 @@
  * Description : albums settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -59,7 +59,7 @@
 namespace Digikam
 {
 
-class AlbumSettingsPrivate
+class AlbumSettings::AlbumSettingsPrivate
 {
 
 public:
@@ -95,7 +95,7 @@ public:
         tooltipShowAlbumName(false),
         tooltipShowComments(false),
         tooltipShowTags(false),
-        tooltipShowRating(false),
+        tooltipShowLabelRating(false),
         showAlbumToolTips(false),
         tooltipShowAlbumTitle(false),
         tooltipShowAlbumDate(false),
@@ -165,7 +165,7 @@ public:
     static const QString                configToolTipsShowAlbumNameEntry;
     static const QString                configToolTipsShowCommentsEntry;
     static const QString                configToolTipsShowTagsEntry;
-    static const QString                configToolTipsShowRatingEntry;
+    static const QString                configToolTipsShowLabelRatingEntry;
     static const QString                configShowAlbumToolTipsEntry;
     static const QString                configToolTipsShowAlbumTitleEntry;
     static const QString                configToolTipsShowAlbumDateEntry;
@@ -238,7 +238,7 @@ public:
     bool                                tooltipShowAlbumName;
     bool                                tooltipShowComments;
     bool                                tooltipShowTags;
-    bool                                tooltipShowRating;
+    bool                                tooltipShowLabelRating;
 
     QFont                               toolTipsFont;
 
@@ -303,84 +303,84 @@ public:
     //misc
     AlbumSettings::StringComparisonType stringComparisonType;
 };
-const QString AlbumSettingsPrivate::configGroupDefault("Album Settings");
-const QString AlbumSettingsPrivate::configGroupExif("EXIF Settings");
-const QString AlbumSettingsPrivate::configGroupMetadata("Metadata Settings");
-const QString AlbumSettingsPrivate::configGroupNepomuk("Nepomuk Settings");
-const QString AlbumSettingsPrivate::configGroupGeneral("General Settings");
-const QString AlbumSettingsPrivate::configGroupVersioning("Versioning Settings");
-const QString AlbumSettingsPrivate::configGroupFaceDetection("Face Detection Settings");
-const QString AlbumSettingsPrivate::configAlbumCollectionsEntry("Album Collections");
-const QString AlbumSettingsPrivate::configAlbumSortOrderEntry("Album Sort Order");
-const QString AlbumSettingsPrivate::configImageSortOrderEntry("Image Sort Order");
-const QString AlbumSettingsPrivate::configImageSortingEntry("Image Sorting");
-const QString AlbumSettingsPrivate::configImageGroupModeEntry("Image Group Mode");
-const QString AlbumSettingsPrivate::configItemLeftClickActionEntry("Item Left Click Action");
-const QString AlbumSettingsPrivate::configDefaultIconSizeEntry("Default Icon Size");
-const QString AlbumSettingsPrivate::configDefaultTreeIconSizeEntry("Default Tree Icon Size");
-const QString AlbumSettingsPrivate::configTreeViewFontEntry("TreeView Font");
-const QString AlbumSettingsPrivate::configThemeEntry("Theme");
-const QString AlbumSettingsPrivate::configSidebarTitleStyleEntry("Sidebar Title Style");
-const QString AlbumSettingsPrivate::configRatingFilterConditionEntry("Rating Filter Condition");
-const QString AlbumSettingsPrivate::configRecursiveAlbumsEntry("Recursive Albums");
-const QString AlbumSettingsPrivate::configRecursiveTagsEntry("Recursive Tags");
-const QString AlbumSettingsPrivate::configIconShowNameEntry("Icon Show Name");
-const QString AlbumSettingsPrivate::configIconShowResolutionEntry("Icon Show Resolution");
-const QString AlbumSettingsPrivate::configIconShowSizeEntry("Icon Show Size");
-const QString AlbumSettingsPrivate::configIconShowDateEntry("Icon Show Date");
-const QString AlbumSettingsPrivate::configIconShowModificationDateEntry("Icon Show Modification Date");
-const QString AlbumSettingsPrivate::configIconShowCommentsEntry("Icon Show Comments");
-const QString AlbumSettingsPrivate::configIconShowTagsEntry("Icon Show Tags");
-const QString AlbumSettingsPrivate::configIconShowRatingEntry("Icon Show Rating");
-const QString AlbumSettingsPrivate::configIconShowOverlaysEntry("Icon Show Overlays");
-const QString AlbumSettingsPrivate::configIconViewFontEntry("IconView Font");
-const QString AlbumSettingsPrivate::configToolTipsFontEntry("ToolTips Font");
-const QString AlbumSettingsPrivate::configShowToolTipsEntry("Show ToolTips");
-const QString AlbumSettingsPrivate::configToolTipsShowFileNameEntry("ToolTips Show File Name");
-const QString AlbumSettingsPrivate::configToolTipsShowFileDateEntry("ToolTips Show File Date");
-const QString AlbumSettingsPrivate::configToolTipsShowFileSizeEntry("ToolTips Show File Size");
-const QString AlbumSettingsPrivate::configToolTipsShowImageTypeEntry("ToolTips Show Image Type");
-const QString AlbumSettingsPrivate::configToolTipsShowImageDimEntry("ToolTips Show Image Dim");
-const QString AlbumSettingsPrivate::configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make");
-const QString AlbumSettingsPrivate::configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date");
-const QString AlbumSettingsPrivate::configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal");
-const QString AlbumSettingsPrivate::configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo");
-const QString AlbumSettingsPrivate::configToolTipsShowPhotoModeEntry("ToolTips Show Photo Mode");
-const QString AlbumSettingsPrivate::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
-const QString AlbumSettingsPrivate::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
-const QString AlbumSettingsPrivate::configToolTipsShowAlbumNameEntry("ToolTips Show Album Name");
-const QString AlbumSettingsPrivate::configToolTipsShowCommentsEntry("ToolTips Show Comments");
-const QString AlbumSettingsPrivate::configToolTipsShowTagsEntry("ToolTips Show Tags");
-const QString AlbumSettingsPrivate::configToolTipsShowRatingEntry("ToolTips Show Rating");
-const QString AlbumSettingsPrivate::configShowAlbumToolTipsEntry("Show Album ToolTips");
-const QString AlbumSettingsPrivate::configToolTipsShowAlbumTitleEntry("ToolTips Show Album Title");
-const QString AlbumSettingsPrivate::configToolTipsShowAlbumDateEntry("ToolTips Show Album Date");
-const QString AlbumSettingsPrivate::configToolTipsShowAlbumCollectionEntry("ToolTips Show Album Collection");
-const QString AlbumSettingsPrivate::configToolTipsShowAlbumCategoryEntry("ToolTips Show Album Category");
-const QString AlbumSettingsPrivate::configToolTipsShowAlbumCaptionEntry("ToolTips Show Album Caption");
-const QString AlbumSettingsPrivate::configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size");
-const QString AlbumSettingsPrivate::configShowThumbbarEntry("Show Thumbbar");
-const QString AlbumSettingsPrivate::configShowFolderTreeViewItemsCountEntry("Show Folder Tree View Items Count");
-const QString AlbumSettingsPrivate::configEXIFRotateEntry("EXIF Rotate");
-const QString AlbumSettingsPrivate::configEXIFSetOrientationEntry("EXIF Set Orientation");
-const QString AlbumSettingsPrivate::configSaveTagsEntry("Save Tags");
-const QString AlbumSettingsPrivate::configSaveTemplateEntry("Save Template");
-const QString AlbumSettingsPrivate::configSaveEXIFCommentsEntry("Save EXIF Comments");
-const QString AlbumSettingsPrivate::configSaveDateTimeEntry("Save Date Time");
-const QString AlbumSettingsPrivate::configSaveRatingEntry("Save Rating");
-const QString AlbumSettingsPrivate::configWriteRAWFilesEntry("Write RAW Files");
-const QString AlbumSettingsPrivate::configUpdateFileTimestampEntry("Update File Timestamp");
-const QString AlbumSettingsPrivate::configShowSplashEntry("Show Splash");
-const QString AlbumSettingsPrivate::configUseTrashEntry("Use Trash");
-const QString AlbumSettingsPrivate::configShowTrashDeleteDialogEntry("Show Trash Delete Dialog");
-const QString AlbumSettingsPrivate::configShowPermanentDeleteDialogEntry("Show Permanent Delete Dialog");
-const QString AlbumSettingsPrivate::configApplySidebarChangesDirectlyEntry("Apply Sidebar Changes Directly");
-const QString AlbumSettingsPrivate::configScanAtStartEntry("Scan At Start");
-const QString AlbumSettingsPrivate::configSyncNepomuktoDigikamEntry("Sync Nepomuk to Digikam");
-const QString AlbumSettingsPrivate::configSyncDigikamtoNepomukEntry("Sync Digikam to Nepomuk");
-const QString AlbumSettingsPrivate::configStringComparisonTypeEntry("String Comparison Type");
-const QString AlbumSettingsPrivate::configFaceDetectionAccuracy("Detection Accuracy");
-const QString AlbumSettingsPrivate::configFaceDetectionSpecificity("Detection Specificity");
+const QString AlbumSettings::AlbumSettingsPrivate::configGroupDefault("Album Settings");
+const QString AlbumSettings::AlbumSettingsPrivate::configGroupExif("EXIF Settings");
+const QString AlbumSettings::AlbumSettingsPrivate::configGroupMetadata("Metadata Settings");
+const QString AlbumSettings::AlbumSettingsPrivate::configGroupNepomuk("Nepomuk Settings");
+const QString AlbumSettings::AlbumSettingsPrivate::configGroupGeneral("General Settings");
+const QString AlbumSettings::AlbumSettingsPrivate::configGroupVersioning("Versioning Settings");
+const QString AlbumSettings::AlbumSettingsPrivate::configGroupFaceDetection("Face Detection Settings");
+const QString AlbumSettings::AlbumSettingsPrivate::configAlbumCollectionsEntry("Album Collections");
+const QString AlbumSettings::AlbumSettingsPrivate::configAlbumSortOrderEntry("Album Sort Order");
+const QString AlbumSettings::AlbumSettingsPrivate::configImageSortOrderEntry("Image Sort Order");
+const QString AlbumSettings::AlbumSettingsPrivate::configImageSortingEntry("Image Sorting");
+const QString AlbumSettings::AlbumSettingsPrivate::configImageGroupModeEntry("Image Group Mode");
+const QString AlbumSettings::AlbumSettingsPrivate::configItemLeftClickActionEntry("Item Left Click Action");
+const QString AlbumSettings::AlbumSettingsPrivate::configDefaultIconSizeEntry("Default Icon Size");
+const QString AlbumSettings::AlbumSettingsPrivate::configDefaultTreeIconSizeEntry("Default Tree Icon Size");
+const QString AlbumSettings::AlbumSettingsPrivate::configTreeViewFontEntry("TreeView Font");
+const QString AlbumSettings::AlbumSettingsPrivate::configThemeEntry("Theme");
+const QString AlbumSettings::AlbumSettingsPrivate::configSidebarTitleStyleEntry("Sidebar Title Style");
+const QString AlbumSettings::AlbumSettingsPrivate::configRatingFilterConditionEntry("Rating Filter Condition");
+const QString AlbumSettings::AlbumSettingsPrivate::configRecursiveAlbumsEntry("Recursive Albums");
+const QString AlbumSettings::AlbumSettingsPrivate::configRecursiveTagsEntry("Recursive Tags");
+const QString AlbumSettings::AlbumSettingsPrivate::configIconShowNameEntry("Icon Show Name");
+const QString AlbumSettings::AlbumSettingsPrivate::configIconShowResolutionEntry("Icon Show Resolution");
+const QString AlbumSettings::AlbumSettingsPrivate::configIconShowSizeEntry("Icon Show Size");
+const QString AlbumSettings::AlbumSettingsPrivate::configIconShowDateEntry("Icon Show Date");
+const QString AlbumSettings::AlbumSettingsPrivate::configIconShowModificationDateEntry("Icon Show Modification Date");
+const QString AlbumSettings::AlbumSettingsPrivate::configIconShowCommentsEntry("Icon Show Comments");
+const QString AlbumSettings::AlbumSettingsPrivate::configIconShowTagsEntry("Icon Show Tags");
+const QString AlbumSettings::AlbumSettingsPrivate::configIconShowRatingEntry("Icon Show Rating");
+const QString AlbumSettings::AlbumSettingsPrivate::configIconShowOverlaysEntry("Icon Show Overlays");
+const QString AlbumSettings::AlbumSettingsPrivate::configIconViewFontEntry("IconView Font");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsFontEntry("ToolTips Font");
+const QString AlbumSettings::AlbumSettingsPrivate::configShowToolTipsEntry("Show ToolTips");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowFileNameEntry("ToolTips Show File Name");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowFileDateEntry("ToolTips Show File Date");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowFileSizeEntry("ToolTips Show File Size");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowImageTypeEntry("ToolTips Show Image Type");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowImageDimEntry("ToolTips Show Image Dim");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowPhotoModeEntry("ToolTips Show Photo Mode");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowAlbumNameEntry("ToolTips Show Album Name");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowCommentsEntry("ToolTips Show Comments");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowTagsEntry("ToolTips Show Tags");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowLabelRatingEntry("ToolTips Show Label Rating");
+const QString AlbumSettings::AlbumSettingsPrivate::configShowAlbumToolTipsEntry("Show Album ToolTips");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowAlbumTitleEntry("ToolTips Show Album Title");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowAlbumDateEntry("ToolTips Show Album Date");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowAlbumCollectionEntry("ToolTips Show Album Collection");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowAlbumCategoryEntry("ToolTips Show Album Category");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowAlbumCaptionEntry("ToolTips Show Album Caption");
+const QString AlbumSettings::AlbumSettingsPrivate::configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size");
+const QString AlbumSettings::AlbumSettingsPrivate::configShowThumbbarEntry("Show Thumbbar");
+const QString AlbumSettings::AlbumSettingsPrivate::configShowFolderTreeViewItemsCountEntry("Show Folder Tree View Items Count");
+const QString AlbumSettings::AlbumSettingsPrivate::configEXIFRotateEntry("EXIF Rotate");
+const QString AlbumSettings::AlbumSettingsPrivate::configEXIFSetOrientationEntry("EXIF Set Orientation");
+const QString AlbumSettings::AlbumSettingsPrivate::configSaveTagsEntry("Save Tags");
+const QString AlbumSettings::AlbumSettingsPrivate::configSaveTemplateEntry("Save Template");
+const QString AlbumSettings::AlbumSettingsPrivate::configSaveEXIFCommentsEntry("Save EXIF Comments");
+const QString AlbumSettings::AlbumSettingsPrivate::configSaveDateTimeEntry("Save Date Time");
+const QString AlbumSettings::AlbumSettingsPrivate::configSaveRatingEntry("Save Rating");
+const QString AlbumSettings::AlbumSettingsPrivate::configWriteRAWFilesEntry("Write RAW Files");
+const QString AlbumSettings::AlbumSettingsPrivate::configUpdateFileTimestampEntry("Update File Timestamp");
+const QString AlbumSettings::AlbumSettingsPrivate::configShowSplashEntry("Show Splash");
+const QString AlbumSettings::AlbumSettingsPrivate::configUseTrashEntry("Use Trash");
+const QString AlbumSettings::AlbumSettingsPrivate::configShowTrashDeleteDialogEntry("Show Trash Delete Dialog");
+const QString AlbumSettings::AlbumSettingsPrivate::configShowPermanentDeleteDialogEntry("Show Permanent Delete Dialog");
+const QString AlbumSettings::AlbumSettingsPrivate::configApplySidebarChangesDirectlyEntry("Apply Sidebar Changes Directly");
+const QString AlbumSettings::AlbumSettingsPrivate::configScanAtStartEntry("Scan At Start");
+const QString AlbumSettings::AlbumSettingsPrivate::configSyncNepomuktoDigikamEntry("Sync Nepomuk to Digikam");
+const QString AlbumSettings::AlbumSettingsPrivate::configSyncDigikamtoNepomukEntry("Sync Digikam to Nepomuk");
+const QString AlbumSettings::AlbumSettingsPrivate::configStringComparisonTypeEntry("String Comparison Type");
+const QString AlbumSettings::AlbumSettingsPrivate::configFaceDetectionAccuracy("Detection Accuracy");
+const QString AlbumSettings::AlbumSettingsPrivate::configFaceDetectionSpecificity("Detection Specificity");
 
 // --------------------------------------------------------
 
@@ -469,7 +469,7 @@ void AlbumSettings::init()
     d->tooltipShowAlbumName         = false;
     d->tooltipShowComments          = true;
     d->tooltipShowTags              = true;
-    d->tooltipShowRating            = true;
+    d->tooltipShowLabelRating       = true;
 
     d->showAlbumToolTips            = false;
     d->tooltipShowAlbumTitle        = true;
@@ -549,24 +549,24 @@ void AlbumSettings::readSettings()
     d->iconShowOverlays             = group.readEntry(d->configIconShowOverlaysEntry,         true);
     d->iconviewFont                 = group.readEntry(d->configIconViewFontEntry,             KGlobalSettings::generalFont());
 
-    d->toolTipsFont                 = group.readEntry(d->configToolTipsFontEntry,           KGlobalSettings::generalFont());
-    d->showToolTips                 = group.readEntry(d->configShowToolTipsEntry,           false);
-    d->tooltipShowFileName          = group.readEntry(d->configToolTipsShowFileNameEntry,   true);
-    d->tooltipShowFileDate          = group.readEntry(d->configToolTipsShowFileDateEntry,   false);
-    d->tooltipShowFileSize          = group.readEntry(d->configToolTipsShowFileSizeEntry,   false);
-    d->tooltipShowImageType         = group.readEntry(d->configToolTipsShowImageTypeEntry,  false);
-    d->tooltipShowImageDim          = group.readEntry(d->configToolTipsShowImageDimEntry,   true);
-    d->tooltipShowPhotoMake         = group.readEntry(d->configToolTipsShowPhotoMakeEntry,  true);
-    d->tooltipShowPhotoDate         = group.readEntry(d->configToolTipsShowPhotoDateEntry,  true);
-    d->tooltipShowPhotoFocal        = group.readEntry(d->configToolTipsShowPhotoFocalEntry, true);
-    d->tooltipShowPhotoExpo         = group.readEntry(d->configToolTipsShowPhotoExpoEntry,  true);
-    d->tooltipShowPhotoMode         = group.readEntry(d->configToolTipsShowPhotoModeEntry,  true);
-    d->tooltipShowPhotoFlash        = group.readEntry(d->configToolTipsShowPhotoFlashEntry, false);
-    d->tooltipShowPhotoWb           = group.readEntry(d->configToolTipsShowPhotoWBEntry,    false);
-    d->tooltipShowAlbumName         = group.readEntry(d->configToolTipsShowAlbumNameEntry,  false);
-    d->tooltipShowComments          = group.readEntry(d->configToolTipsShowCommentsEntry,   true);
-    d->tooltipShowTags              = group.readEntry(d->configToolTipsShowTagsEntry,       true);
-    d->tooltipShowRating            = group.readEntry(d->configToolTipsShowRatingEntry,     true);
+    d->toolTipsFont                 = group.readEntry(d->configToolTipsFontEntry,            KGlobalSettings::generalFont());
+    d->showToolTips                 = group.readEntry(d->configShowToolTipsEntry,            false);
+    d->tooltipShowFileName          = group.readEntry(d->configToolTipsShowFileNameEntry,    true);
+    d->tooltipShowFileDate          = group.readEntry(d->configToolTipsShowFileDateEntry,    false);
+    d->tooltipShowFileSize          = group.readEntry(d->configToolTipsShowFileSizeEntry,    false);
+    d->tooltipShowImageType         = group.readEntry(d->configToolTipsShowImageTypeEntry,   false);
+    d->tooltipShowImageDim          = group.readEntry(d->configToolTipsShowImageDimEntry,    true);
+    d->tooltipShowPhotoMake         = group.readEntry(d->configToolTipsShowPhotoMakeEntry,   true);
+    d->tooltipShowPhotoDate         = group.readEntry(d->configToolTipsShowPhotoDateEntry,   true);
+    d->tooltipShowPhotoFocal        = group.readEntry(d->configToolTipsShowPhotoFocalEntry,  true);
+    d->tooltipShowPhotoExpo         = group.readEntry(d->configToolTipsShowPhotoExpoEntry,   true);
+    d->tooltipShowPhotoMode         = group.readEntry(d->configToolTipsShowPhotoModeEntry,   true);
+    d->tooltipShowPhotoFlash        = group.readEntry(d->configToolTipsShowPhotoFlashEntry,  false);
+    d->tooltipShowPhotoWb           = group.readEntry(d->configToolTipsShowPhotoWBEntry,     false);
+    d->tooltipShowAlbumName         = group.readEntry(d->configToolTipsShowAlbumNameEntry,   false);
+    d->tooltipShowComments          = group.readEntry(d->configToolTipsShowCommentsEntry,    true);
+    d->tooltipShowTags              = group.readEntry(d->configToolTipsShowTagsEntry,        true);
+    d->tooltipShowLabelRating       = group.readEntry(d->configToolTipsShowLabelRatingEntry, true);
 
     d->showAlbumToolTips            = group.readEntry(d->configShowAlbumToolTipsEntry,            false);
     d->tooltipShowAlbumTitle        = group.readEntry(d->configToolTipsShowAlbumTitleEntry,       true);
@@ -673,7 +673,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowAlbumNameEntry,        d->tooltipShowAlbumName);
     group.writeEntry(d->configToolTipsShowCommentsEntry,         d->tooltipShowComments);
     group.writeEntry(d->configToolTipsShowTagsEntry,             d->tooltipShowTags);
-    group.writeEntry(d->configToolTipsShowRatingEntry,           d->tooltipShowRating);
+    group.writeEntry(d->configToolTipsShowLabelRatingEntry,      d->tooltipShowLabelRating);
 
     group.writeEntry(d->configShowAlbumToolTipsEntry,            d->showAlbumToolTips);
     group.writeEntry(d->configToolTipsShowAlbumTitleEntry,       d->tooltipShowAlbumTitle);
@@ -1238,14 +1238,14 @@ bool AlbumSettings::getToolTipsShowTags() const
     return d->tooltipShowTags;
 }
 
-void AlbumSettings::setToolTipsShowRating(bool val)
+void AlbumSettings::setToolTipsShowLabelRating(bool val)
 {
-    d->tooltipShowRating = val;
+    d->tooltipShowLabelRating = val;
 }
 
-bool AlbumSettings::getToolTipsShowRating() const
+bool AlbumSettings::getToolTipsShowLabelRating() const
 {
-    return d->tooltipShowRating;
+    return d->tooltipShowLabelRating;
 }
 
 void AlbumSettings::setShowAlbumToolTips(bool val)
@@ -1387,7 +1387,7 @@ bool AlbumSettings::showToolTipsIsValid() const
             d->tooltipShowAlbumName  ||
             d->tooltipShowComments   ||
             d->tooltipShowTags       ||
-            d->tooltipShowRating)
+            d->tooltipShowLabelRating)
         {
             return true;
         }

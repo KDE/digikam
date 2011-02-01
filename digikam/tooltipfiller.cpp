@@ -45,6 +45,7 @@
 #include "ditemtooltip.h"
 #include "filteraction.h"
 #include "imageinfo.h"
+#include "colorlabelwidget.h"
 
 namespace Digikam
 {
@@ -261,7 +262,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
     if (settings->getToolTipsShowAlbumName() ||
         settings->getToolTipsShowComments()  ||
         settings->getToolTipsShowTags()      ||
-        settings->getToolTipsShowRating())
+        settings->getToolTipsShowLabelRating())
     {
         tip += cnt.headBeg + i18n("digiKam Properties") + cnt.headEnd;
 
@@ -324,13 +325,17 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             }
         }
 
-        if (settings->getToolTipsShowRating())
+        if (settings->getToolTipsShowLabelRating())
         {
-            int rating = info.rating();
+            int colorId = info.colorLabel();
+            str         = ColorLabelWidget::labelColorName((ColorLabel)colorId);
 
+            str += QString(" / ");
+
+            int rating = info.rating();
             if (rating <= 0)
             {
-                str = QString("---");
+                str += QString("---");
             }
             else
             {
@@ -340,9 +345,9 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str += QChar(0x25CF);//0x2022);
                     str += ' ';
                 }
-
-                tip += cnt.cellSpecBeg + i18n("Rating:") + cnt.cellSpecMid + str + cnt.cellSpecEnd;
             }
+
+            tip += cnt.cellSpecBeg + i18n("Label/Rating:") + cnt.cellSpecMid + str + cnt.cellSpecEnd;
         }
     }
 

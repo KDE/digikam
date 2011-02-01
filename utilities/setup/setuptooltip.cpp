@@ -6,7 +6,7 @@
  * Date        : 2006-07-09
  * Description : item tool tip configuration setup tab
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class SetupToolTipPriv
+class SetupToolTip::SetupToolTipPriv
 {
 public:
 
@@ -223,8 +223,8 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d->showTagsBox       = new QCheckBox(i18n("Show image tags"), d->digikamSettingBox);
     d->showTagsBox->setWhatsThis(i18n("Set this option to display the image tags."));
 
-    d->showRatingBox     = new QCheckBox(i18n("Show image rating"), d->digikamSettingBox);
-    d->showRatingBox->setWhatsThis(i18n("Set this option to display the image rating."));
+    d->showRatingBox     = new QCheckBox(i18n("Show image color label and rating"), d->digikamSettingBox);
+    d->showRatingBox->setWhatsThis(i18n("Set this option to display the image color label and rating."));
 
     vlay4->addWidget(d->showAlbumNameBox);
     vlay4->addWidget(d->showCommentsBox);
@@ -346,7 +346,7 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowAlbumName(d->showAlbumNameBox->isChecked());
     settings->setToolTipsShowComments(d->showCommentsBox->isChecked());
     settings->setToolTipsShowTags(d->showTagsBox->isChecked());
-    settings->setToolTipsShowRating(d->showRatingBox->isChecked());
+    settings->setToolTipsShowLabelRating(d->showRatingBox->isChecked());
 
     settings->setShowAlbumToolTips(d->showAlbumToolTipsBox->isChecked());
     settings->setToolTipsShowAlbumTitle(d->showAlbumTitleBox->isChecked());
@@ -387,7 +387,7 @@ void SetupToolTip::readSettings()
     d->showAlbumNameBox->setChecked(settings->getToolTipsShowAlbumName());
     d->showCommentsBox->setChecked(settings->getToolTipsShowComments());
     d->showTagsBox->setChecked(settings->getToolTipsShowTags());
-    d->showRatingBox->setChecked(settings->getToolTipsShowRating());
+    d->showRatingBox->setChecked(settings->getToolTipsShowLabelRating());
 
     d->fileSettingBox->setEnabled(d->showToolTipsBox->isChecked());
     d->photoSettingBox->setEnabled(d->showToolTipsBox->isChecked());
