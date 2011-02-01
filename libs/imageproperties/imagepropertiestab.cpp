@@ -96,7 +96,7 @@ public:
         labelPhotoSensitivity(0),
         labelPhotoExposureMode(0),
         labelPhotoFlash(0),
-        labelPhotoWhiteBalance(0)
+        labelPhotoWhiteBalance(0),
         labelCaption(0),
         labelTags(0),
         labelColorLabel(0),
@@ -515,7 +515,7 @@ void ImagePropertiesTab::showOrHideCaptionAndTags()
     d->caption->setVisible(hasCaption);
     d->labelCaption->setVisible(hasCaption);
     d->colorLabel->setVisible(hasColorLabel);
-    d->labelColoLabel->setVisible(hasColorLabel;
+    d->labelColorLabel->setVisible(hasColorLabel);
     d->rating->setVisible(hasRating);
     d->labelRating->setVisible(hasRating);
     d->tags->setVisible(hasTags);
@@ -531,7 +531,7 @@ void ImagePropertiesTab::setCaption(const QString& str)
 
 void ImagePropertiesTab::setColorLabel(int colorId)
 {
-    d->labelRating->setText(ColorLabelWidget::labelColorName(colorId));
+    d->labelRating->setText(ColorLabelWidget::labelColorName((ColorLabel)colorId));
 }
 
 void ImagePropertiesTab::setRating(int rating)
