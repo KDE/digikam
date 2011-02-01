@@ -373,7 +373,7 @@ void TagsActionMngr::slotAssignColorLabelFromShortcut()
     if (ltw)
     {
         kDebug() << "Handling by LightTableWindow";
-        //ltw->slotAssignColorLabel(colorId);
+        ltw->slotAssignColorLabel(colorId);
         return;
     }
 }
