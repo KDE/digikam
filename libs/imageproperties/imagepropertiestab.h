@@ -83,6 +83,7 @@ public:
     void setPhotoWhiteBalance(const QString& str);
 
     void setCaption(const QString& str);
+    void setColorLabel(int colorId);
     void setRating(int rating);
     void setTags(const QStringList& tagPaths, const QStringList& tagNames = QStringList());
 
