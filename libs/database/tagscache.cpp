@@ -79,7 +79,7 @@ public:
     bool                        needUpdateHash;
     bool                        needUpdateProperties;
     bool                        changingDB;
-    
+
     QReadWriteLock              lock;
     QList<TagShortInfo>         infos;
     QMultiHash<QString, int>    nameHash;
@@ -137,7 +137,6 @@ public:
                     internalTags << property.tagId;
                 }
             }
-
         }
     }
 
@@ -250,9 +249,9 @@ void TagsCache::initialize()
             this, SLOT(slotTagChanged(const TagChangeset&)),
             Qt::DirectConnection);
 
-    registerColorLabelTagsToDb();
-
     d->initialized = true;
+
+    registerColorLabelTagsToDb();
 }
 
 void TagsCache::registerColorLabelTagsToDb()
