@@ -6,7 +6,8 @@
  * Date        : 2010-04-02
  * Description : Cache for Tag information
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +30,7 @@
 #include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>
+#include <QMap>
 
 // KDE includes
 
@@ -72,18 +74,20 @@ public:
     {
     }
 
-    bool                     initialized;
-    bool                     needUpdateInfos;
-    bool                     needUpdateHash;
-    bool                     needUpdateProperties;
-    bool                     changingDB;
-    QReadWriteLock           lock;
-    QList<TagShortInfo>      infos;
-    QMultiHash<QString, int> nameHash;
+    bool                        initialized;
+    bool                        needUpdateInfos;
+    bool                        needUpdateHash;
+    bool                        needUpdateProperties;
+    bool                        changingDB;
+    
+    QReadWriteLock              lock;
+    QList<TagShortInfo>         infos;
+    QMultiHash<QString, int>    nameHash;
 
-    QList<TagProperty>       tagProperties;
+    QList<TagProperty>          tagProperties;
     QHash<QString, QList<int> > tagsWithProperty;
-    QSet<int>                internalTags;
+    QSet<int>                   internalTags;
+    QMap<ColorLabel, int>       colorLabelsTags;              // Map between color Id and tag label Id created in DB.
 
     void checkInfos()
     {
@@ -91,7 +95,7 @@ public:
         {
             QList<TagShortInfo> newInfos = DatabaseAccess().db()->getTagShortInfos();
             QWriteLocker locker(&lock);
-            infos = newInfos;
+            infos           = newInfos;
             needUpdateInfos = false;
         }
     }
@@ -246,7 +250,23 @@ void TagsCache::initialize()
             this, SLOT(slotTagChanged(const TagChangeset&)),
             Qt::DirectConnection);
 
+    registerColorLabelTagsToDb();
+
     d->initialized = true;
+}
+
+void TagsCache::registerColorLabelTagsToDb()
+{
+    d->colorLabelsTags.insert(NoneLabel,    getOrCreateInternalTag(InternalTagName::colorLabelNone()));
+    d->colorLabelsTags.insert(RedLabel,     getOrCreateInternalTag(InternalTagName::colorLabelRed()));
+    d->colorLabelsTags.insert(OrangeLabel,  getOrCreateInternalTag(InternalTagName::colorLabelOrange()));
+    d->colorLabelsTags.insert(YellowLabel,  getOrCreateInternalTag(InternalTagName::colorLabelYellow()));
+    d->colorLabelsTags.insert(GreenLabel,   getOrCreateInternalTag(InternalTagName::colorLabelGreen()));
+    d->colorLabelsTags.insert(BlueLabel,    getOrCreateInternalTag(InternalTagName::colorLabelBlue()));
+    d->colorLabelsTags.insert(MagentaLabel, getOrCreateInternalTag(InternalTagName::colorLabelMagenta()));
+    d->colorLabelsTags.insert(GrayLabel,    getOrCreateInternalTag(InternalTagName::colorLabelGray()));
+    d->colorLabelsTags.insert(BlackLabel,   getOrCreateInternalTag(InternalTagName::colorLabelBlack()));
+    d->colorLabelsTags.insert(WhiteLabel,   getOrCreateInternalTag(InternalTagName::colorLabelWhite()));
 }
 
 void TagsCache::invalidate()
@@ -827,6 +847,14 @@ void TagsCache::slotTagChanged(const TagChangeset& changeset)
     {
         emit tagDeleted(changeset.tagId());
     }
+}
+
+int TagsCache::getTagForColorLabel(ColorLabel label)
+{
+    if (label < NoneLabel || label > WhiteLabel)
+        return 0;
+
+    return d->colorLabelsTags[label];
 }
 
 } // namespace Digikam
