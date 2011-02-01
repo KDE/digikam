@@ -67,7 +67,7 @@ public:
     {
     }
 
-    QMap<int, int>            colorLabelsMap;              // <color Id, tag label Id from Db>
+
     QMultiMap<int, KAction*>  tagsActionMap;
     QList<KActionCollection*> actionCollectionList;
 };
@@ -94,39 +94,6 @@ TagsActionMngr::~TagsActionMngr()
     {
         m_defaultManager = 0;
     }
-}
-
-void TagsActionMngr::registerColorLabelTagsToDb()
-{
-    d->colorLabelsMap.insert(NoneLabel, 
-                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelNone()));
-
-    d->colorLabelsMap.insert(RedLabel, 
-                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelRed()));
-
-    d->colorLabelsMap.insert(OrangeLabel, 
-                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelOrange()));
-
-    d->colorLabelsMap.insert(YellowLabel, 
-                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelYellow()));
-
-    d->colorLabelsMap.insert(GreenLabel, 
-                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelGreen()));
-
-    d->colorLabelsMap.insert(BlueLabel, 
-                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelBlue()));
-
-    d->colorLabelsMap.insert(MagentaLabel, 
-                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelMagenta()));
-
-    d->colorLabelsMap.insert(GrayLabel, 
-                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelGray()));
-
-    d->colorLabelsMap.insert(BlackLabel, 
-                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelBlack()));
-
-    d->colorLabelsMap.insert(WhiteLabel, 
-                             TagsCache::instance()->getOrCreateInternalTag(InternalTagName::colorLabelWhite()));
 }
 
 void TagsActionMngr::registerActionCollections()
@@ -168,15 +135,13 @@ void TagsActionMngr::createActions()
 
     // Create Color Label shortcuts.
 
-    registerColorLabelTagsToDb();
-
     QMap<int, int>::const_iterator it;
 
     foreach(KActionCollection* ac, d->actionCollectionList)
     {
-        for (it = d->colorLabelsMap.begin() ; it != d->colorLabelsMap.end(); ++it)
+        for (int i = NoneLabel ; i > WhiteLabel ; ++i)
         {
-            createColorLabelActionShortcut(ac, it.key(), it.value());
+            createColorLabelActionShortcut(ac, i);
         }
     }
 }
@@ -198,7 +163,7 @@ bool TagsActionMngr::createRatingActionShortcut(KActionCollection* ac, int ratin
     return false;
 }
 
-bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* ac, int colorId, int tagId)
+bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* ac, int colorId)
 {
     if (ac)
     {
@@ -208,7 +173,7 @@ bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* ac, int c
         action->setShortcut(KShortcut(QString("ALT+%1").arg(colorId)));
         action->setShortcutConfigurable(false);
         action->forgetGlobalShortcut();
-        action->setData(tagId);
+        action->setData((int)(TagsCache::instance()->getTagForColorLabel((ColorLabel)colorId)));
         connect(action, SIGNAL(triggered()), this, SLOT(slotAssignColorLabelFromShortcut()));
         return true;
     }

@@ -100,9 +100,7 @@ private:
     void createActions();
 
     bool createRatingActionShortcut(KActionCollection* ac, int rating);
-    bool createColorLabelActionShortcut(KActionCollection* ac, int colorId, int tagId);
-
-    void registerColorLabelTagsToDb();
+    bool createColorLabelActionShortcut(KActionCollection* ac, int colorId);
 
 private:
 
