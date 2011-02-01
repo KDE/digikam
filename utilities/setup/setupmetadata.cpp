@@ -7,7 +7,7 @@
  * Description : setup Metadata tab.
  *
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2003-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -78,6 +78,7 @@ public:
         saveCommentsBox(0),
         exifRotateBox(0),
         exifSetOrientationBox(0),
+        saveColorLabelBox(0),
         saveRatingBox(0),
         saveTagsBox(0),
         saveDateTimeBox(0),
@@ -99,6 +100,7 @@ public:
     QCheckBox*     saveCommentsBox;
     QCheckBox*     exifRotateBox;
     QCheckBox*     exifSetOrientationBox;
+    QCheckBox*     saveColorLabelBox;
     QCheckBox*     saveRatingBox;
     QCheckBox*     saveTagsBox;
     QCheckBox*     saveDateTimeBox;
@@ -170,6 +172,11 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->saveDateTimeBox->setWhatsThis( i18n("Turn on this option to store the image date and time "
                                            "in the EXIF, XMP, and IPTC tags."));
 
+    d->saveColorLabelBox = new QCheckBox(commonGroup);
+    d->saveColorLabelBox->setText(i18n("&Save image color label in metadata embedded in files"));
+    d->saveColorLabelBox->setWhatsThis( i18n("Turn on this option to store the image color label "
+                                             "in the XMP tags."));
+
     d->saveRatingBox = new QCheckBox(commonGroup);
     d->saveRatingBox->setText(i18n("&Save image rating in metadata embedded in files"));
     d->saveRatingBox->setWhatsThis( i18n("Turn on this option to store the image rating "
@@ -191,7 +198,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->useXMPSidecarBox->setWhatsThis( i18n("Turn on this option to prefer metadata from XMP sidecar files when reading metadata."));
     d->useXMPSidecarBox->setEnabled(KExiv2::supportXmp());
 
-    KHBox* hbox = new KHBox(commonGroup);
+    KHBox* hbox              = new KHBox(commonGroup);
     QLabel* writingModeLabel = new QLabel(i18n("Metadata Writing Mode:"), hbox);
     writingModeLabel->setEnabled(KExiv2::supportXmp());
     d->writingModeCombo      = new KComboBox(hbox);
@@ -206,6 +213,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     gLayout2->addWidget(d->saveTemplateBox);
     gLayout2->addWidget(d->saveCommentsBox);
     gLayout2->addWidget(d->saveDateTimeBox);
+    gLayout2->addWidget(d->saveColorLabelBox);
     gLayout2->addWidget(d->saveRatingBox);
     gLayout2->addWidget(d->updateFileTimeStampBox);
     gLayout2->addWidget(d->writeRawFilesBox);
@@ -399,6 +407,7 @@ void SetupMetadata::applySettings()
     set.exifSetOrientation    = d->exifSetOrientationBox->isChecked();
     set.saveComments          = d->saveCommentsBox->isChecked();
     set.saveDateTime          = d->saveDateTimeBox->isChecked();
+    set.saveColorLabel        = d->saveColorLabelBox->isChecked();
     set.saveRating            = d->saveRatingBox->isChecked();
     set.saveTags              = d->saveTagsBox->isChecked();
     set.saveTemplate          = d->saveTemplateBox->isChecked();
@@ -447,6 +456,7 @@ void SetupMetadata::readSettings()
     d->exifSetOrientationBox->setChecked(set.exifSetOrientation);
     d->saveCommentsBox->setChecked(set.saveComments);
     d->saveDateTimeBox->setChecked(set.saveDateTime);
+    d->saveColorLabelBox->setChecked(set.saveColorLabel);
     d->saveRatingBox->setChecked(set.saveRating);
     d->saveTagsBox->setChecked(set.saveTags);
     d->saveTemplateBox->setChecked(set.saveTemplate);
