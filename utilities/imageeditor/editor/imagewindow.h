@@ -74,6 +74,7 @@ public Q_SLOTS:
                         const ImageInfo& imageInfoCurrent, const QString& caption);
     void openImage(const ImageInfo& info);
 
+    void slotAssignColorLabel(int colorId);
     void slotAssignRating(int rating);
 
 Q_SIGNALS:
@@ -119,6 +120,7 @@ private:
 
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
 
+    void assignColorLabel(const ImageInfo& info, int colorId);
     void assignRating(const ImageInfo& info, int rating);
 
     ThumbBarDock* thumbBar() const;

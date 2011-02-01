@@ -115,6 +115,7 @@
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
 #include "metadatasettings.h"
+#include "colorlabelwidget.h"
 #include "ratingpopupmenu.h"
 #include "savingcontextcontainer.h"
 #include "scancontroller.h"
@@ -796,6 +797,19 @@ void ImageWindow::slotContextMenu()
 
         m_contextMenu->addSeparator();
 
+        // Assign Color Label -------------------------------------------
+
+        QWidgetAction* action = new QWidgetAction(m_contextMenu);
+        action->setText(i18n("Assign Color Label"));
+        ColorLabelWidget* clw = new ColorLabelWidget(this);
+        action->setDefaultWidget(clw);
+        m_contextMenu->addAction(action);
+
+        connect(clw, SIGNAL(signalColorLabelChanged(int)),
+                this, SLOT(slotAssignColorLabel(int)));
+
+        m_contextMenu->addSeparator();
+
         // Assign Star Rating -------------------------------------------
 
         ratingMenu = new RatingPopupMenu();
@@ -885,6 +899,23 @@ void ImageWindow::slotRemoveTag(int tagID)
         hub.setTag(tagID, false);
         hub.write(d->currentImageInfo, MetadataHub::PartialWrite);
         hub.write(d->currentImageInfo.filePath(), MetadataHub::FullWriteIfChanged);
+    }
+}
+
+void ImageWindow::slotAssignColorLabel(int colorId)
+{
+    assignColorLabel(d->currentImageInfo, colorId);
+}
+
+void ImageWindow::assignColorLabel(const ImageInfo& info, int colorId)
+{
+    if (!info.isNull())
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setColorLabel(colorId);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
     }
 }
 
