@@ -39,6 +39,7 @@
 // Local includes
 
 #include "imagepropertiestxtlabel.h"
+#include "colorlabelwidget.h"
 
 namespace Digikam
 {
@@ -70,6 +71,10 @@ public:
         exposureMode(0),
         flash(0),
         whiteBalance(0),
+        caption(0),
+        tags(0),
+        colorLabel(0),
+        rating(0),
         labelFile(0),
         labelFolder(0),
         labelFileModifiedDate(0),
@@ -92,6 +97,10 @@ public:
         labelPhotoExposureMode(0),
         labelPhotoFlash(0),
         labelPhotoWhiteBalance(0)
+        labelCaption(0),
+        labelTags(0),
+        labelColorLabel(0),
+        labelRating(0)
     {
     }
 
@@ -122,6 +131,7 @@ public:
 
     DTextLabelName*  caption;
     DTextLabelName*  tags;
+    DTextLabelName*  colorLabel;
     DTextLabelName*  rating;
 
     DTextLabelValue* labelFile;
@@ -151,6 +161,7 @@ public:
 
     DTextLabelValue* labelCaption;
     DTextLabelValue* labelTags;
+    DTextLabelValue* labelColorLabel;
     DTextLabelValue* labelRating;
 };
 
@@ -295,21 +306,25 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     QWidget* const w4         = new QWidget(this);
     QGridLayout* const glay4  = new QGridLayout(w4);
 
-    d->caption                = new DTextLabelName(i18n("Caption: "), w4);
-    d->rating                 = new DTextLabelName(i18n("Rating: "),  w4);
-    d->tags                   = new DTextLabelName(i18n("Tags: "),    w4);
+    d->caption                = new DTextLabelName(i18n("Caption: "),    w4);
+    d->colorLabel             = new DTextLabelName(i18n("ColorLabel: "), w4);
+    d->rating                 = new DTextLabelName(i18n("Rating: "),     w4);
+    d->tags                   = new DTextLabelName(i18n("Tags: "),       w4);
 
     d->labelCaption           = new DTextLabelValue(0, w4);
+    d->labelColorLabel        = new DTextLabelValue(0, w4);
     d->labelRating            = new DTextLabelValue(0, w4);
     d->labelTags              = new DTextLabelValue(0, w4);
     d->labelTags->setTextElideMode(Qt::ElideLeft);
 
-    glay4->addWidget(d->caption,       0, 0, 1, 1);
-    glay4->addWidget(d->labelCaption,  0, 1, 1, 1);
-    glay4->addWidget(d->tags,          1, 0, 1, 1);
-    glay4->addWidget(d->labelTags,     1, 1, 1, 1);
-    glay4->addWidget(d->rating,        2, 0, 1, 1);
-    glay4->addWidget(d->labelRating,   2, 1, 1, 1);
+    glay4->addWidget(d->caption,         0, 0, 1, 1);
+    glay4->addWidget(d->labelCaption,    0, 1, 1, 1);
+    glay4->addWidget(d->tags,            1, 0, 1, 1);
+    glay4->addWidget(d->labelTags,       1, 1, 1, 1);
+    glay4->addWidget(d->colorLabel,      2, 0, 1, 1);
+    glay4->addWidget(d->labelColorLabel, 2, 1, 1, 1);
+    glay4->addWidget(d->rating,          3, 0, 1, 1);
+    glay4->addWidget(d->labelRating,     3, 1, 1, 1);
     glay4->setMargin(KDialog::spacingHint());
     glay4->setSpacing(0);
     glay4->setColumnStretch(1, 10);
@@ -354,6 +369,11 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
         d->labelPhotoFlash->clear();
         d->labelPhotoWhiteBalance->clear();
 
+        d->labelCaption->clear();
+        d->labelColorLabel->clear();
+        d->labelRating->clear();
+        d->labelTags->clear();
+    
         setEnabled(false);
         return;
     }
@@ -487,23 +507,31 @@ void ImagePropertiesTab::setPhotoWhiteBalance(const QString& str)
 
 void ImagePropertiesTab::showOrHideCaptionAndTags()
 {
-    bool hasCaption = !d->labelCaption->text().isEmpty();
-    bool hasRating  = !d->labelRating->text().isEmpty();
-    bool hasTags    = !d->labelTags->text().isEmpty();
+    bool hasCaption    = !d->labelCaption->text().isEmpty();
+    bool hasColorLabel = !d->labelColorLabel->text().isEmpty();
+    bool hasRating     = !d->labelRating->text().isEmpty();
+    bool hasTags       = !d->labelTags->text().isEmpty();
 
     d->caption->setVisible(hasCaption);
     d->labelCaption->setVisible(hasCaption);
+    d->colorLabel->setVisible(hasColorLabel);
+    d->labelColoLabel->setVisible(hasColorLabel;
     d->rating->setVisible(hasRating);
     d->labelRating->setVisible(hasRating);
     d->tags->setVisible(hasTags);
     d->labelTags->setVisible(hasTags);
 
-    widget(3)->setVisible(hasCaption || hasRating || hasTags);
+    widget(3)->setVisible(hasCaption || hasRating || hasTags || hasColorLabel);
 }
 
 void ImagePropertiesTab::setCaption(const QString& str)
 {
     d->labelCaption->setText(str);
+}
+
+void ImagePropertiesTab::setColorLabel(int colorId)
+{
+    d->labelRating->setText(ColorLabelWidget::labelColorName(colorId));
 }
 
 void ImagePropertiesTab::setRating(int rating)
