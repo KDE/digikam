@@ -173,7 +173,7 @@ bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* ac, int c
         action->setShortcut(KShortcut(QString("ALT+%1").arg(colorId)));
         action->setShortcutConfigurable(false);
         action->forgetGlobalShortcut();
-        action->setData((int)(TagsCache::instance()->getTagForColorLabel((ColorLabel)colorId)));
+        action->setData(colorId);
         connect(action, SIGNAL(triggered()), this, SLOT(slotAssignColorLabelFromShortcut()));
         return true;
     }
@@ -349,15 +349,15 @@ void TagsActionMngr::slotAssignColorLabelFromShortcut()
     KAction* action = dynamic_cast<KAction*>(sender());
     if (!action) return;
 
-    int tagId = action->data().toInt();
-    kDebug() << "Fired Color Label Shortcut " << tagId;
+    int colorId = action->data().toInt();
+    kDebug() << "Fired Color Label Shortcut " << colorId;
 
     QWidget* w      = kapp->activeWindow();
     DigikamApp* dkw = dynamic_cast<DigikamApp*>(w);
     if (dkw)
     {
         kDebug() << "Handling by DigikamApp";
-        dkw->view()->slotAssignColorLabel(tagId);
+        dkw->view()->slotAssignColorLabel(colorId);
         return;
     }
 
@@ -365,6 +365,7 @@ void TagsActionMngr::slotAssignColorLabelFromShortcut()
     if (imw)
     {
         kDebug() << "Handling by ImageWindow";
+        imw->slotAssignColorLabel(colorId);
         return;
     }
 
@@ -372,6 +373,7 @@ void TagsActionMngr::slotAssignColorLabelFromShortcut()
     if (ltw)
     {
         kDebug() << "Handling by LightTableWindow";
+        //ltw->slotAssignColorLabel(colorId);
         return;
     }
 }
