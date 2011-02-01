@@ -6,8 +6,8 @@
  * Date        : 2007-01-05
  * Description : Metadata handling
  *
- * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,29 +59,37 @@ public:
 
     MetadataHubPriv()
     {
-        dateTimeStatus   = MetadataHub::MetadataInvalid;
-        ratingStatus     = MetadataHub::MetadataInvalid;
-        commentsStatus   = MetadataHub::MetadataInvalid;
-        templateStatus   = MetadataHub::MetadataInvalid;
+        dateTimeStatus    = MetadataHub::MetadataInvalid;
+        colorLabelStatus  = MetadataHub::MetadataInvalid;
+        ratingStatus      = MetadataHub::MetadataInvalid;
+        commentsStatus    = MetadataHub::MetadataInvalid;
+        templateStatus    = MetadataHub::MetadataInvalid;
 
-        rating           = -1;
-        highestRating    = -1;
+        colorLabel        = -1;
+        highestColorLabel = -1;
 
-        count            = 0;
+        rating            = -1;
+        highestRating     = -1;
 
-        dateTimeChanged  = false;
-        commentsChanged  = false;
-        ratingChanged    = false;
-        templateChanged  = false;
-        tagsChanged      = false;
+        count             = 0;
+
+        dateTimeChanged   = false;
+        commentsChanged   = false;
+        colorLabelChanged = false;
+        ratingChanged     = false;
+        templateChanged   = false;
+        tagsChanged       = false;
     }
 
     bool                              dateTimeChanged;
     bool                              commentsChanged;
+    bool                              colorLabelChanged;
     bool                              ratingChanged;
     bool                              templateChanged;
     bool                              tagsChanged;
 
+    int                               colorLabel;
+    int                               highestColorLabel;
     int                               rating;
     int                               highestRating;
     int                               count;
@@ -99,6 +107,7 @@ public:
 
     MetadataHub::Status               dateTimeStatus;
     MetadataHub::Status               commentsStatus;
+    MetadataHub::Status               colorLabelStatus;
     MetadataHub::Status               ratingStatus;
     MetadataHub::Status               templateStatus;
 
@@ -151,7 +160,11 @@ void MetadataHub::load(const ImageInfo& info)
     Template t    = TemplateManager::defaultManager()->findByContents(tref);
     //kDebug() << "Found Metadata Template: " << t.templateTitle();
 
-    load(info.dateTime(), commentMap, info.rating(), t.isNull() ? tref : t);
+    load(info.dateTime(),
+         commentMap,
+         info.colorLabel(),
+         info.rating(),
+         t.isNull() ? tref : t);
 
     QList<int> tagIds = info.tagIds();
     loadTags(tagIds);
@@ -164,6 +177,7 @@ void MetadataHub::load(const DMetadata& metadata)
     CaptionsMap comments;
     QStringList keywords;
     QDateTime   datetime;
+    int         colorLabel;
     int         rating;
 
     // Try to get comments from image :
@@ -186,6 +200,9 @@ void MetadataHub::load(const DMetadata& metadata)
         datetime = info.lastModified();
     }
 
+    // Try to get image color label from Xmp tag
+    colorLabel = metadata.getImageColorLabel();
+
     // Try to get image rating from Xmp tag, or Iptc Urgency tag
     rating = metadata.getImageRating();
 
@@ -194,7 +211,7 @@ void MetadataHub::load(const DMetadata& metadata)
 
     kDebug() << "Found Metadata Template: " << t.templateTitle();
 
-    load(datetime, comments, rating, t.isNull() ? tref : t);
+    load(datetime, comments, colorLabel, rating, t.isNull() ? tref : t);
 
     // Try to get image tags from Xmp using digiKam namespace tags.
 
@@ -293,13 +310,16 @@ void MetadataHub::loadTags(const QStringList& loadedTagPaths)
 }
 */
 
-// private common code to load dateTime, comment, rating
-void MetadataHub::load(const QDateTime& dateTime, const CaptionsMap& comments, int rating, const Template& t)
+// private common code to load dateTime, comment, color label, rating
+void MetadataHub::load(const QDateTime& dateTime, const CaptionsMap& comments, int colorLabel,
+                       int rating, const Template& t)
 {
     if (dateTime.isValid())
     {
         d->loadWithInterval<QDateTime>(dateTime, d->dateTime, d->lastDateTime, d->dateTimeStatus);
     }
+
+    d->loadWithInterval<int>(colorLabel, d->colorLabel, d->highestColorLabel, d->colorLabelStatus);
 
     d->loadWithInterval<int>(rating, d->rating, d->highestRating, d->ratingStatus);
 
@@ -308,7 +328,7 @@ void MetadataHub::load(const QDateTime& dateTime, const CaptionsMap& comments, i
     d->loadSingleValue<Template>(t, d->metadataTemplate, d->templateStatus);
 }
 
-// template method to share code for dateTime and rating
+// template method to share code for dateTime, colorLabel, and rating
 template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& data,
         T& storage,
         T& highestStorage,
@@ -394,11 +414,12 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     bool changed = false;
 
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
-    bool saveComment  = (d->commentsStatus == MetadataAvailable);
-    bool saveDateTime = (d->dateTimeStatus == MetadataAvailable);
-    bool saveRating   = (d->ratingStatus   == MetadataAvailable);
-    bool saveTemplate = (d->templateStatus == MetadataAvailable);
-    bool saveTags     = false;
+    bool saveComment    = (d->commentsStatus   == MetadataAvailable);
+    bool saveDateTime   = (d->dateTimeStatus   == MetadataAvailable);
+    bool saveColorLabel = (d->colorLabelStatus == MetadataAvailable);
+    bool saveRating     = (d->ratingStatus     == MetadataAvailable);
+    bool saveTemplate   = (d->templateStatus   == MetadataAvailable);
+    bool saveTags       = false;
 
     for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
     {
@@ -417,11 +438,12 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     }
     else if (writeMode == FullWriteIfChanged)
         writeAllFields = (
-                             (saveComment  && d->commentsChanged) ||
-                             (saveDateTime && d->dateTimeChanged) ||
-                             (saveRating   && d->ratingChanged)   ||
-                             (saveTemplate && d->templateChanged) ||
-                             (saveTags     && d->tagsChanged)
+                             (saveComment    && d->commentsChanged)   ||
+                             (saveDateTime   && d->dateTimeChanged)   ||
+                             (saveColorLabel && d->colorLabelChanged) ||
+                             (saveRating     && d->ratingChanged)     ||
+                             (saveTemplate   && d->templateChanged)   ||
+                             (saveTags       && d->tagsChanged)
                          );
     else // PartialWrite
     {
@@ -439,6 +461,12 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     if (saveDateTime && (writeAllFields || d->dateTimeChanged))
     {
         info.setDateTime(d->dateTime);
+        changed = true;
+    }
+
+    if (saveColorLabel && (writeAllFields || d->colorLabelChanged))
+    {
+        info.setColorLabel(d->colorLabel);
         changed = true;
     }
 
@@ -506,11 +534,12 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
 #endif
 
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
-    bool saveComment  = (settings.saveComments && d->commentsStatus == MetadataAvailable);
-    bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
-    bool saveRating   = (settings.saveRating   && d->ratingStatus   == MetadataAvailable);
-    bool saveTemplate = (settings.saveTemplate && d->templateStatus == MetadataAvailable);
-    bool saveTags     = false;
+    bool saveComment    = (settings.saveComments   && d->commentsStatus   == MetadataAvailable);
+    bool saveDateTime   = (settings.saveDateTime   && d->dateTimeStatus   == MetadataAvailable);
+    bool saveColorLabel = (settings.saveColorLabel && d->colorLabelStatus == MetadataAvailable);
+    bool saveRating     = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
+    bool saveTemplate   = (settings.saveTemplate   && d->templateStatus   == MetadataAvailable);
+    bool saveTags       = false;
 
     if (settings.saveTags)
     {
@@ -535,11 +564,12 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     }
     else if (writeMode == FullWriteIfChanged)
         writeAllFields = (
-                             (saveComment  && d->commentsChanged) ||
-                             (saveDateTime && d->dateTimeChanged) ||
-                             (saveRating   && d->ratingChanged)   ||
-                             (saveTemplate && d->templateChanged) ||
-                             (saveTags     && d->tagsChanged)
+                             (saveComment    && d->commentsChanged)   ||
+                             (saveDateTime   && d->dateTimeChanged)   ||
+                             (saveColorLabel && d->colorLabelChanged) ||
+                             (saveRating     && d->ratingChanged)     ||
+                             (saveTemplate   && d->templateChanged)   ||
+                             (saveTags       && d->tagsChanged)
                          );
     else // PartialWrite
     {
@@ -556,6 +586,12 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     {
         // Store Image Date & Time as Exif and Iptc tags.
         dirty |= metadata.setImageDateTime(d->dateTime, false);
+    }
+
+    if (saveColorLabel && (writeAllFields || d->colorLabelChanged))
+    {
+        // Store Image rating as Iptc tag.
+        dirty |= metadata.setImageColorLabel(d->colorLabel);
     }
 
     if (saveRating && (writeAllFields || d->ratingChanged))
@@ -682,11 +718,12 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
     // This is the same logic as in write(DMetadata) but without actually writing.
     // Adapt if the method above changes
 
-    bool saveComment  = (settings.saveComments && d->commentsStatus == MetadataAvailable);
-    bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
-    bool saveRating   = (settings.saveRating   && d->ratingStatus   == MetadataAvailable);
-    bool saveTemplate = (settings.saveTemplate && d->templateStatus == MetadataAvailable);
-    bool saveTags     = false;
+    bool saveComment    = (settings.saveComments   && d->commentsStatus   == MetadataAvailable);
+    bool saveDateTime   = (settings.saveDateTime   && d->dateTimeStatus   == MetadataAvailable);
+    bool saveColorLabel = (settings.saveColorLabel && d->colorLabelStatus == MetadataAvailable);
+    bool saveRating     = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
+    bool saveTemplate   = (settings.saveTemplate   && d->templateStatus   == MetadataAvailable);
+    bool saveTags       = false;
 
     if (settings.saveTags)
     {
@@ -711,11 +748,12 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
     }
     else if (writeMode == FullWriteIfChanged)
         writeAllFields = (
-                             (saveComment  && d->commentsChanged) ||
-                             (saveDateTime && d->dateTimeChanged) ||
-                             (saveRating   && d->ratingChanged)   ||
-                             (saveTemplate && d->templateChanged) ||
-                             (saveTags     && d->tagsChanged)
+                             (saveComment    && d->commentsChanged)   ||
+                             (saveDateTime   && d->dateTimeChanged)   ||
+                             (saveColorLabel && d->colorLabelChanged) ||
+                             (saveRating     && d->ratingChanged)     ||
+                             (saveTemplate   && d->templateChanged)   ||
+                             (saveTags       && d->tagsChanged)
                          );
     else // PartialWrite
     {
@@ -723,11 +761,12 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
     }
 
     return (
-               (saveComment &&  (writeAllFields || d->commentsChanged)) ||
-               (saveDateTime && (writeAllFields || d->dateTimeChanged)) ||
-               (saveRating &&   (writeAllFields || d->ratingChanged))   ||
-               (saveTags &&     (writeAllFields || d->tagsChanged))     ||
-               (saveTemplate && (writeAllFields || d->templateChanged))
+               (saveComment    && (writeAllFields || d->commentsChanged))   ||
+               (saveDateTime   && (writeAllFields || d->dateTimeChanged))   ||
+               (saveColorLabel && (writeAllFields || d->colorLabelChanged)) ||
+               (saveRating     && (writeAllFields || d->ratingChanged))     ||
+               (saveTags       && (writeAllFields || d->tagsChanged))       ||
+               (saveTemplate   && (writeAllFields || d->templateChanged))
            );
 }
 
@@ -741,6 +780,11 @@ MetadataHub::Status MetadataHub::dateTimeStatus() const
 MetadataHub::Status MetadataHub::commentsStatus() const
 {
     return d->commentsStatus;
+}
+
+MetadataHub::Status MetadataHub::colorLabelStatus() const
+{
+    return d->colorLabelStatus;
 }
 
 MetadataHub::Status MetadataHub::ratingStatus() const
@@ -780,6 +824,11 @@ bool MetadataHub::commentsChanged() const
     return d->commentsChanged;
 }
 
+bool MetadataHub::colorLabelChanged() const
+{
+    return d->colorLabelChanged;
+}
+
 bool MetadataHub::ratingChanged() const
 {
     return d->ratingChanged;
@@ -805,6 +854,11 @@ CaptionsMap MetadataHub::comments() const
     return d->comments;
 }
 
+int MetadataHub::colorLabel() const
+{
+    return d->colorLabel;
+}
+
 int MetadataHub::rating() const
 {
     return d->rating;
@@ -828,6 +882,23 @@ void MetadataHub::dateTimeInterval(QDateTime& lowest, QDateTime& highest) const
         case MetadataDisjoint:
             lowest  = d->dateTime;
             highest = d->lastDateTime;
+            break;
+    }
+}
+
+void MetadataHub::colorLabelInterval(int& lowest, int& highest) const
+{
+    switch (d->colorLabelStatus)
+    {
+        case MetadataInvalid:
+            lowest = highest = -1;
+            break;
+        case MetadataAvailable:
+            lowest = highest = d->colorLabel;
+            break;
+        case MetadataDisjoint:
+            lowest  = d->colorLabel;
+            highest = d->highestColorLabel;
             break;
     }
 }
@@ -904,6 +975,13 @@ void MetadataHub::setComments(const CaptionsMap& comments, Status status)
     d->commentsChanged = true;
 }
 
+void MetadataHub::setColorLabel(int colorId, Status status)
+{
+    d->colorLabelStatus  = status;
+    d->colorLabel        = colorId;
+    d->colorLabelChanged = true;
+}
+
 void MetadataHub::setRating(int rating, Status status)
 {
     d->ratingStatus   = status;
@@ -927,11 +1005,12 @@ void MetadataHub::setTag(int tagId, bool hasTag, Status status)
 
 void MetadataHub::resetChanged()
 {
-    d->dateTimeChanged = false;
-    d->commentsChanged = false;
-    d->ratingChanged   = false;
-    d->templateChanged = false;
-    d->tagsChanged     = false;
+    d->dateTimeChanged   = false;
+    d->commentsChanged   = false;
+    d->colorLabelChanged = false;
+    d->ratingChanged     = false;
+    d->templateChanged   = false;
+    d->tagsChanged       = false;
 }
 
 void MetadataHub::applyChangeNotifications()

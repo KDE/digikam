@@ -6,8 +6,8 @@
  * Date        : 2007-01-05
  * Description : Metadata handling
  *
- * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -205,10 +205,11 @@ public:
 
     // --------------------------------------------------
 
-    Status dateTimeStatus() const;
-    Status commentsStatus() const;
-    Status ratingStatus()   const;
-    Status templateStatus() const;
+    Status dateTimeStatus()   const;
+    Status commentsStatus()   const;
+    Status colorLabelStatus() const;
+    Status ratingStatus()     const;
+    Status templateStatus()   const;
 
     TagStatus tagStatus(int albumId) const;
     TagStatus tagStatus(const QString& tagPath) const;
@@ -217,11 +218,12 @@ public:
         Returns if the metadata field has been changed
         with the corresponding set... method
     */
-    bool dateTimeChanged() const;
-    bool commentsChanged() const;
-    bool ratingChanged()   const;
-    bool templateChanged() const;
-    bool tagsChanged()     const;
+    bool dateTimeChanged()   const;
+    bool commentsChanged()   const;
+    bool colorLabelChanged() const;
+    bool ratingChanged()     const;
+    bool templateChanged()   const;
+    bool tagsChanged()       const;
 
     /**
         Returns the dateTime.
@@ -236,6 +238,13 @@ public:
         If status is MetadataInvalid, CaptionMap() is returned.
     */
     CaptionsMap comments() const;
+    /**
+        Returns the Color Label id (see ColorLabelWidget::ColorLabel values).
+        If status is MetadataDisjoint, the None Label is returned.
+                                       (see colorLabelInterval())
+        If status is MetadataInvalid, -1 is returned.
+    */
+    int         colorLabel() const;
     /**
         Returns the rating.
         If status is MetadataDisjoint, the lowest rating is returned.
@@ -255,6 +264,12 @@ public:
         If status is MetadataInvalid, invalid dates are returned.
     */
     void                dateTimeInterval(QDateTime& lowest, QDateTime& highest) const;
+    /**
+        Returns the lowest and highest Color Label id (see ColorLabelWidget::ColorLabel values).
+        If status is MetadataAvailable, the values are the same.
+        If status is MetadataInvalid, -1 is returned.
+    */
+    void                colorLabelInterval(int& lowest, int& highest) const;
     /**
         Returns the lowest and highest rating.
         If status is MetadataAvailable, the values are the same.
@@ -294,6 +309,7 @@ public:
     */
     void setDateTime(const QDateTime& dateTime, Status status = MetadataAvailable);
     void setComments(const CaptionsMap& comments, Status status = MetadataAvailable);
+    void setColorLabel(int colorId, Status status = MetadataAvailable);
     void setRating(int rating, Status status = MetadataAvailable);
     void setMetadataTemplate(const Template& t, Status status = MetadataAvailable);
     void setTag(int albumID, bool hasTag, Status status = MetadataAvailable);
@@ -306,7 +322,8 @@ public:
 
 protected:
 
-    void load(const QDateTime& dateTime, const CaptionsMap& comment, int rating, const Template& t);
+    void load(const QDateTime& dateTime, const CaptionsMap& comment, int colorLabel,
+              int rating, const Template& t);
     void loadTags(const QList<int>& loadedTagIds);
     void loadTags(const QStringList& loadedTagPaths);
     void notifyTagDeleted(int id);
