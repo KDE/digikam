@@ -184,6 +184,23 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
     }
 }
 
+void LightTableBar::slotAssignColorLabel(int colorId)
+{
+    assignColorLabel(currentItemImageInfo(), colorId);
+}
+
+void LightTableBar::assignColorLabel(const ImageInfo& info, int colorId)
+{
+    if (!info.isNull())
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setColorLabel(colorId);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+    }
+}
+
 void LightTableBar::slotRatingChanged(const KUrl& url, int rating)
 {
     assignRating(ImageInfo(url), rating);
