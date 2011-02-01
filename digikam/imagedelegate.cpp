@@ -7,9 +7,9 @@
  * Description : Qt item view for images - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,14 +59,14 @@ namespace Digikam
 void ImageDelegate::ImageDelegatePrivate::clearRects()
 {
     ItemViewImageDelegatePrivate::clearRects();
-    dateRect       = QRect(0, 0, 0, 0);
-    modDateRect    = QRect(0, 0, 0, 0);
-    pixmapRect     = QRect(0, 0, 0, 0);
-    nameRect       = QRect(0, 0, 0, 0);
-    commentsRect   = QRect(0, 0, 0, 0);
-    resolutionRect = QRect(0, 0, 0, 0);
-    sizeRect       = QRect(0, 0, 0, 0);
-    tagRect        = QRect(0, 0, 0, 0);
+    dateRect             = QRect(0, 0, 0, 0);
+    modDateRect          = QRect(0, 0, 0, 0);
+    pixmapRect           = QRect(0, 0, 0, 0);
+    nameRect             = QRect(0, 0, 0, 0);
+    commentsRect         = QRect(0, 0, 0, 0);
+    resolutionRect       = QRect(0, 0, 0, 0);
+    sizeRect             = QRect(0, 0, 0, 0);
+    tagRect              = QRect(0, 0, 0, 0);
     imageInformationRect = QRect(0, 0, 0, 0);
 }
 
@@ -244,6 +244,9 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         pix = d->regPixmap;
     }
 
+    // Draw Color Label rectangle
+    drawColorLabelRect(p, option, isSelected, info.colorLabel());
+
     p->setPen(isSelected ? te->textSelColor() : te->textRegColor());
 
     // Thumbnail
@@ -257,7 +260,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
     if (info.hasImageHistory())
     {
-        p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, KIcon("svn_switch").pixmap(22,22));
+        p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, KIcon("svn_switch").pixmap(22, 22));
     }
 
     if (!d->ratingRect.isNull())
