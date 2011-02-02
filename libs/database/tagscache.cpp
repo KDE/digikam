@@ -264,6 +264,8 @@ void TagsCache::registerColorLabelTagsToDb()
     d->colorLabelsTags.insert(GrayLabel,    getOrCreateInternalTag(InternalTagName::colorLabelGray()));
     d->colorLabelsTags.insert(BlackLabel,   getOrCreateInternalTag(InternalTagName::colorLabelBlack()));
     d->colorLabelsTags.insert(WhiteLabel,   getOrCreateInternalTag(InternalTagName::colorLabelWhite()));
+
+    kDebug() << "Color Label Tags: " << d->colorLabelsTags;
 }
 
 void TagsCache::invalidate()
