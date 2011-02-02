@@ -340,7 +340,6 @@ void ColorLabelSelector::slotColorLabelChanged(int colorId)
 
         QPixmap pix(fntRect.size());
         QPainter p(&pix);
-        p.setFont(font());
         p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
 
         p.fillRect(fntRect, d->clw->labelColor((ColorLabel)colorId));
