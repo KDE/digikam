@@ -531,7 +531,7 @@ void ImagePropertiesTab::setCaption(const QString& str)
 
 void ImagePropertiesTab::setColorLabel(int colorId)
 {
-    d->labelRating->setText(ColorLabelWidget::labelColorName((ColorLabel)colorId));
+    d->labelColorLabel->setText(ColorLabelWidget::labelColorName((ColorLabel)colorId));
 }
 
 void ImagePropertiesTab::setRating(int rating)
