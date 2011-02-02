@@ -403,8 +403,8 @@ void ItemViewImageDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionVi
     {
         // TODO: This draw a simple rectangle around item. We can do something more elegant of course...
 
-        p->setPen(QPen(ColorLabelWidget::labelColor((ColorLabel)colorId), 3, Qt::SolidLine));
-        p->drawRect(3, 3, d->rect.width()-5, d->rect.height()-5);
+        p->setPen(QPen(ColorLabelWidget::labelColor((ColorLabel)colorId), 5, Qt::SolidLine));
+        p->drawRect(3, 3, d->rect.width()-7, d->rect.height()-7);
     }
 }
 
