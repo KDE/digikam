@@ -250,8 +250,6 @@ void TagsCache::initialize()
             Qt::DirectConnection);
 
     d->initialized = true;
-
-    registerColorLabelTagsToDb();
 }
 
 void TagsCache::registerColorLabelTagsToDb()

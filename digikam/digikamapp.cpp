@@ -137,6 +137,7 @@
 #include "uifilevalidator.h"
 #include "scriptiface.h"
 #include "batchfacedetector.h"
+#include "tagscache.h"
 #include "tagsactionmngr.h"
 #include "databaseserverstarter.h"
 
@@ -213,6 +214,9 @@ DigikamApp::DigikamApp()
     LoadingCacheInterface::initialize();
     IccSettings::instance()->loadAllProfilesProperties();
     ThumbnailLoadThread::setDisplayingWidget(this);
+
+    // FIXME : This is a temporally fix to register Color Label Tags. This must be done at a better place.
+    TagsCache::instance()->registerColorLabelTagsToDb();
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
