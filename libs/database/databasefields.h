@@ -6,7 +6,8 @@
  * Date        : 2007-09-22
  * Description : Enums for database fields
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,30 +48,29 @@ enum ImagesField
     ModificationDate   = 1 << 4,
     FileSize           = 1 << 5,
     UniqueHash         = 1 << 6,
-    ImagesAll          =
-    Album | Name | Status | Category |
-    ModificationDate | FileSize | UniqueHash,
+    ImagesAll          = Album | Name | Status | Category |
+                         ModificationDate | FileSize | UniqueHash,
     ImagesFirst        = Album,
     ImagesLast         = UniqueHash
 };
 
 enum ImageInformationField
 {
-    ImageInformationNone = 0,
-    Rating               = 1 << 0,
-    CreationDate         = 1 << 1,
-    DigitizationDate     = 1 << 2,
-    Orientation          = 1 << 3,
-    Width                = 1 << 4,
-    Height               = 1 << 5,
-    Format               = 1 << 6,
-    ColorDepth           = 1 << 7,
-    ColorModel           = 1 << 8,
-    ImageInformationAll  =
-    Rating | CreationDate | DigitizationDate | Orientation |
-    Width | Height | Format | ColorDepth | ColorModel,
+    ImageInformationNone  = 0,
+    Rating                = 1 << 0,
+    CreationDate          = 1 << 1,
+    DigitizationDate      = 1 << 2,
+    Orientation           = 1 << 3,
+    Width                 = 1 << 4,
+    Height                = 1 << 5,
+    Format                = 1 << 6,
+    ColorDepth            = 1 << 7,
+    ColorModel            = 1 << 8,
+    ColorLabel            = 1 << 9,
+    ImageInformationAll   = Rating | CreationDate | DigitizationDate | Orientation |
+                            Width | Height | Format | ColorDepth | ColorModel | ColorLabel,
     ImageInformationFirst = Rating,
-    ImageInformationLast  = ColorModel
+    ImageInformationLast  = ColorLabel
 };
 
 enum ImageMetadataField
@@ -92,11 +92,10 @@ enum ImageMetadataField
     MeteringMode                 = 1 << 13,
     SubjectDistance              = 1 << 14,
     SubjectDistanceCategory      = 1 << 15,
-    ImageMetadataAll             =
-    Make | Model | Lens | Aperture | FocalLength | FocalLength35 |
-    ExposureTime | ExposureProgram | ExposureMode | Sensitivity |
-    FlashMode | WhiteBalance | WhiteBalanceColorTemperature |
-    MeteringMode | SubjectDistance | SubjectDistanceCategory,
+    ImageMetadataAll             = Make | Model | Lens | Aperture | FocalLength | FocalLength35 |
+                                   ExposureTime | ExposureProgram | ExposureMode | Sensitivity |
+                                   FlashMode | WhiteBalance | WhiteBalanceColorTemperature |
+                                   MeteringMode | SubjectDistance | SubjectDistanceCategory,
     ImageMetadataFirst           = Make,
     ImageMetadataLast            = SubjectDistanceCategory
 };
@@ -114,23 +113,21 @@ enum ImagePositionsField
     PositionRoll        = 1 << 7,
     PositionAccuracy    = 1 << 8,
     PositionDescription = 1 << 9,
-    ImagePositionsAll   =
-    Latitude | LatitudeNumber | Longitude | LongitudeNumber | Altitude |
-    PositionOrientation | PositionRoll | PositionTilt | PositionAccuracy | PositionDescription,
+    ImagePositionsAll   = Latitude | LatitudeNumber | Longitude | LongitudeNumber | Altitude |
+                          PositionOrientation | PositionRoll | PositionTilt | PositionAccuracy | PositionDescription,
     ImagePositionsFirst = Latitude,
     ImagePositionsLast  = PositionDescription
 };
 
 enum ImageCommentsField
 {
-    ImageCommentsNone = 0,
-    CommentType       = 1 << 0,
-    CommentLanguage   = 1 << 1,
-    CommentAuthor     = 1 << 2,
-    CommentDate       = 1 << 3,
-    Comment           = 1 << 4,
-    ImageCommentsAll  =
-    CommentType | CommentAuthor | CommentLanguage | CommentDate | Comment,
+    ImageCommentsNone  = 0,
+    CommentType        = 1 << 0,
+    CommentLanguage    = 1 << 1,
+    CommentAuthor      = 1 << 2,
+    CommentDate        = 1 << 3,
+    Comment            = 1 << 4,
+    ImageCommentsAll   = CommentType | CommentAuthor | CommentLanguage | CommentDate | Comment,
     ImageCommentsFirst = CommentType,
     ImageCommentsLast  = Comment
 };
@@ -141,8 +138,7 @@ enum ImageHistoryInfoField
     ImageUUID             = 1 << 0,
     ImageHistory          = 1 << 1,
     ImageRelations        = 1 << 2,
-    ImageHistoryInfoAll   =
-    ImageUUID | ImageHistory | ImageRelations,
+    ImageHistoryInfoAll   = ImageUUID | ImageHistory | ImageRelations,
     ImageHistoryInfoFirst = ImageUUID,
     ImageHistoryInfoLast  = ImageRelations
 };
@@ -262,7 +258,6 @@ public:
     {
         return customEnum.operator&(f);
     }
-
 
     // databasechangesets.cpp
     Set& operator<<(const QDBusArgument& argument);
