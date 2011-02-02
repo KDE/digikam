@@ -25,10 +25,12 @@
 
 // Qt includes
 
+#include <QFont>
 #include <QPainter>
 #include <QPixmap>
 #include <QIcon>
 #include <QLayout>
+#include <QLabel>
 #include <QButtonGroup>
 #include <QWidgetAction>
 #include <QFontMetrics>
@@ -38,9 +40,14 @@
 // KDE includes
 
 #include <kglobalsettings.h>
+#include <ksqueezedtextlabel.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmenu.h>
+#include <khbox.h>
+#include <kapplication.h>
+#include <kxmlguiwindow.h>
+#include <kactioncollection.h>
 
 namespace Digikam
 {
@@ -63,79 +70,99 @@ public:
         btnGray    = 0;
         btnBlack   = 0;
         btnWhite   = 0;
+        desc       = 0;
+        shortcut   = 0;
     }
 
-    QButtonGroup* colorBtns;
+    QButtonGroup*       colorBtns;
 
-    QToolButton*  btnNone;
-    QToolButton*  btnRed;
-    QToolButton*  btnOrange;
-    QToolButton*  btnYellow;
-    QToolButton*  btnGreen;
-    QToolButton*  btnBlue;
-    QToolButton*  btnMagenta;
-    QToolButton*  btnGray;
-    QToolButton*  btnBlack;
-    QToolButton*  btnWhite;
+    QLabel*             desc;
+
+    QToolButton*        btnNone;
+    QToolButton*        btnRed;
+    QToolButton*        btnOrange;
+    QToolButton*        btnYellow;
+    QToolButton*        btnGreen;
+    QToolButton*        btnBlue;
+    QToolButton*        btnMagenta;
+    QToolButton*        btnGray;
+    QToolButton*        btnBlack;
+    QToolButton*        btnWhite;
+
+    KSqueezedTextLabel* shortcut;
 };
 
 ColorLabelWidget::ColorLabelWidget(QWidget* parent)
-    : KHBox(parent), d(new ColorLabelWidgetPriv)
+    : KVBox(parent), d(new ColorLabelWidgetPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
 
-    d->btnNone = new QToolButton(this);
+    KHBox* hbox = new KHBox(this);
+    hbox->setMargin(0);
+    hbox->setSpacing(0);
+
+    d->btnNone = new QToolButton(hbox);
     d->btnNone->setCheckable(true);
     d->btnNone->setFocusPolicy(Qt::NoFocus);
     d->btnNone->setIcon(buildIcon(NoneLabel));
+    d->btnNone->installEventFilter(this);
 
-    d->btnRed = new QToolButton(this);
+    d->btnRed = new QToolButton(hbox);
     d->btnRed->setCheckable(true);
     d->btnRed->setFocusPolicy(Qt::NoFocus);
     d->btnRed->setIcon(buildIcon(RedLabel));
+    d->btnRed->installEventFilter(this);
 
-    d->btnOrange = new QToolButton(this);
+    d->btnOrange = new QToolButton(hbox);
     d->btnOrange->setCheckable(true);
     d->btnOrange->setFocusPolicy(Qt::NoFocus);
     d->btnOrange->setIcon(buildIcon(OrangeLabel));
+    d->btnOrange->installEventFilter(this);
 
-    d->btnYellow = new QToolButton(this);
+    d->btnYellow = new QToolButton(hbox);
     d->btnYellow->setCheckable(true);
     d->btnYellow->setFocusPolicy(Qt::NoFocus);
     d->btnYellow->setIcon(buildIcon(YellowLabel));
+    d->btnYellow->installEventFilter(this);
 
-    d->btnGreen = new QToolButton(this);
+    d->btnGreen = new QToolButton(hbox);
     d->btnGreen->setCheckable(true);
     d->btnGreen->setFocusPolicy(Qt::NoFocus);
     d->btnGreen->setIcon(buildIcon(GreenLabel));
+    d->btnGreen->installEventFilter(this);
 
-    d->btnBlue = new QToolButton(this);
+    d->btnBlue = new QToolButton(hbox);
     d->btnBlue->setCheckable(true);
     d->btnBlue->setFocusPolicy(Qt::NoFocus);
     d->btnBlue->setIcon(buildIcon(BlueLabel));
+    d->btnBlue->installEventFilter(this);
 
-    d->btnMagenta = new QToolButton(this);
+    d->btnMagenta = new QToolButton(hbox);
     d->btnMagenta->setCheckable(true);
     d->btnMagenta->setFocusPolicy(Qt::NoFocus);
     d->btnMagenta->setIcon(buildIcon(MagentaLabel));
+    d->btnMagenta->installEventFilter(this);
 
-    d->btnGray = new QToolButton(this);
+    d->btnGray = new QToolButton(hbox);
     d->btnGray->setCheckable(true);
     d->btnGray->setFocusPolicy(Qt::NoFocus);
     d->btnGray->setIcon(buildIcon(GrayLabel));
+    d->btnGray->installEventFilter(this);
 
-    d->btnBlack = new QToolButton(this);
+    d->btnBlack = new QToolButton(hbox);
     d->btnBlack->setCheckable(true);
     d->btnBlack->setFocusPolicy(Qt::NoFocus);
     d->btnBlack->setIcon(buildIcon(BlackLabel));
+    d->btnBlack->installEventFilter(this);
 
-    d->btnWhite = new QToolButton(this);
+    d->btnWhite = new QToolButton(hbox);
     d->btnWhite->setCheckable(true);
     d->btnWhite->setFocusPolicy(Qt::NoFocus);
     d->btnWhite->setIcon(buildIcon(WhiteLabel));
+    d->btnWhite->installEventFilter(this);
 
-    d->colorBtns = new QButtonGroup(this);
+    d->colorBtns = new QButtonGroup(hbox);
     d->colorBtns->setExclusive(true);
     d->colorBtns->addButton(d->btnNone,    NoneLabel);
     d->colorBtns->addButton(d->btnRed,     RedLabel);
@@ -147,6 +174,17 @@ ColorLabelWidget::ColorLabelWidget(QWidget* parent)
     d->colorBtns->addButton(d->btnGray,    GrayLabel);
     d->colorBtns->addButton(d->btnBlack,   BlackLabel);
     d->colorBtns->addButton(d->btnWhite,   WhiteLabel);
+
+    KHBox* hbox2 = new KHBox(this);
+    hbox2->setMargin(0);
+    hbox2->setSpacing(0);
+    d->desc      = new QLabel(hbox2);
+    d->shortcut  = new KSqueezedTextLabel(hbox2);
+    QFont fnt = d->shortcut->font();
+    fnt.setItalic(true);
+    d->shortcut->setFont(fnt);
+    d->shortcut->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    d->shortcut->setWordWrap(false);
 
     setMargin(0);
     setSpacing(0);
@@ -167,6 +205,107 @@ void ColorLabelWidget::setColorLabel(ColorLabel label)
 {
     QAbstractButton* btn = d->colorBtns->button(label);
     if (btn) btn->setChecked(true);
+    updateDescription(label);
+}
+
+void ColorLabelWidget::updateDescription(ColorLabel label)
+{
+    d->desc->setText(labelColorName(label));
+
+    KXmlGuiWindow* app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
+    if (app)
+    {
+        QAction* ac = app->actionCollection()->action(QString("colorlabel-%1").arg(label));
+        if (ac)
+            d->shortcut->setText(ac->shortcut().toString());
+    }
+}
+
+bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
+{
+    if ( obj == d->btnNone)
+    {
+        if ( ev->type() == QEvent::Enter)
+        {
+            updateDescription(NoneLabel);
+            return false;
+        }
+    }
+    if ( obj == d->btnRed)
+    {
+        if ( ev->type() == QEvent::Enter)
+        {
+            updateDescription(RedLabel);
+            return false;
+        }
+    }
+    if ( obj == d->btnOrange)
+    {
+        if ( ev->type() == QEvent::Enter)
+        {
+            updateDescription(OrangeLabel);
+            return false;
+        }
+    }
+    if ( obj == d->btnYellow)
+    {
+        if ( ev->type() == QEvent::Enter)
+        {
+            updateDescription(YellowLabel);
+            return false;
+        }
+    }
+    if ( obj == d->btnGreen)
+    {
+        if ( ev->type() == QEvent::Enter)
+        {
+            updateDescription(GreenLabel);
+            return false;
+        }
+    }
+    if ( obj == d->btnBlue)
+    {
+        if ( ev->type() == QEvent::Enter)
+        {
+            updateDescription(BlueLabel);
+            return false;
+        }
+    }
+    if ( obj == d->btnMagenta)
+    {
+        if ( ev->type() == QEvent::Enter)
+        {
+            updateDescription(MagentaLabel);
+            return false;
+        }
+    }
+    if ( obj == d->btnGray)
+    {
+        if ( ev->type() == QEvent::Enter)
+        {
+            updateDescription(GrayLabel);
+            return false;
+        }
+    }
+    if ( obj == d->btnBlack)
+    {
+        if ( ev->type() == QEvent::Enter)
+        {
+            updateDescription(BlackLabel);
+            return false;
+        }
+    }
+    if ( obj == d->btnWhite)
+    {
+        if ( ev->type() == QEvent::Enter)
+        {
+            updateDescription(WhiteLabel);
+            return false;
+        }
+    }
+
+    // pass the event on to the parent class
+    return QWidget::eventFilter(obj, ev);
 }
 
 ColorLabel ColorLabelWidget::colorLabel()

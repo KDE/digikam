@@ -28,10 +28,11 @@
 
 #include <QColor>
 #include <QPushButton>
+#include <QEvent>
 
 // KDE includes
 
-#include <khbox.h>
+#include <kvbox.h>
 
 // Local includes
 
@@ -41,7 +42,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ColorLabelWidget : public KHBox
+class DIGIKAM_EXPORT ColorLabelWidget : public KVBox
 {
     Q_OBJECT
 
@@ -60,9 +61,14 @@ Q_SIGNALS:
 
     void signalColorLabelChanged(int);
 
+protected:
+
+    bool eventFilter(QObject* obj, QEvent* ev);
+
 private:
 
     QIcon buildIcon(ColorLabel label) const;
+    void updateDescription(ColorLabel label);
 
 private:
 
