@@ -102,6 +102,7 @@ QString WelcomePageView::infoPage() const
     newFeatures << i18n("Image versioning support;");
     newFeatures << i18n("Face detection and recognition support;");
     newFeatures << i18n("Tag keyboard shortcuts support;");
+    newFeatures << i18n("Color Labels support to improve photograph workflow;");
     newFeatures << i18n("Support for the latest camera RAW files using <a href=\"http://www.libraw.org\">LibRaw</a>, "
                         "including Foveon-sensor-based cameras, Nikon D7000, Canon 60D, Pentax K5, Olympus E5 and Sony A450 "
                         "(see the Help menu for the full list of RAW cameras supported);");
