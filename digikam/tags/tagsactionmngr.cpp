@@ -67,7 +67,6 @@ public:
     {
     }
 
-
     QMultiMap<int, KAction*>  tagsActionMap;
     QList<KActionCollection*> actionCollectionList;
 };
