@@ -300,8 +300,6 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addColorLabelAction();
-    cmhelper.addSeparator();
-    // --------------------------------------------------------
     cmhelper.addRatingMenu();
 
     // special action handling --------------------------------

@@ -471,13 +471,6 @@ void ContextMenuHelper::addRemoveTagsMenu(imageIds& ids)
 
 void ContextMenuHelper::addColorLabelAction()
 {
-/*
-    QWidgetAction* action = new QWidgetAction(this);
-    action->setText(i18n("Assign Color Label"));
-    ColorLabelWidget* clw = new ColorLabelWidget(d->parent);
-    action->setDefaultWidget(clw);
-    addAction(action);
-*/
     KActionMenu* menu     = new KActionMenu(this);
     menu->setText(i18n("Assign Color Label"));
     QWidgetAction* wa     = new QWidgetAction(menu);

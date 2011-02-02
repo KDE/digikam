@@ -400,10 +400,6 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
     // --------------------------------------------------------
 
     cmhelper.addColorLabelAction();
-    cmhelper.addSeparator();
-
-    // --------------------------------------------------------
-
     cmhelper.addRatingMenu();
 
     // special action handling --------------------------------
