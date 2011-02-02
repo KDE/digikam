@@ -378,8 +378,11 @@ int ImageInfo::colorLabel() const
     if (!m_data->colorLabelCached)
     {
         m_data.constCastData()->colorLabel = NoneLabel;
+        QList<int> tags = tagIds();
 
-        foreach(int tagId, tagIds())
+        kDebug() << tags;
+
+        foreach(int tagId, tags)
         {
             for (int i = NoneLabel ; i <= WhiteLabel; ++i)
             {
@@ -1031,14 +1034,20 @@ void ImageInfo::setColorLabel(int colorId)
     int tagId     = tc->getTagForColorLabel((ColorLabel)colorId);
     if (!tagId) return;
 
+    kDebug() << "Before to assign Color Label: " << tagIds();
+
     // Color Label is an exclusive tags.
 
     for (int i = NoneLabel ; i <= WhiteLabel ; ++i)
         removeTag(tc->getTagForColorLabel((ColorLabel)i));
 
-    kDebug() << colorId << " :: " << tagId;
+    kDebug() << "All Color Label removed: " << tagIds();
+
     setTag(tagId);
-    m_data->colorLabel                       = tagId;
+
+    kDebug() << "Color Label assigned: " << colorId << " :: " << tagId << " (" << tagIds() << ")";
+
+    m_data->colorLabel                       = colorId;
     m_data.constCastData()->colorLabelCached = true;
 }
 
