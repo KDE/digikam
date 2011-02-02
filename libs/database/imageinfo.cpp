@@ -377,8 +377,7 @@ int ImageInfo::colorLabel() const
 
     if (!m_data->colorLabelCached)
     {
-        m_data.constCastData()->colorLabelCached = NoneLabel;
-        m_data.constCastData()->colorLabelCached = true;
+        m_data.constCastData()->colorLabel = NoneLabel;
 
         foreach(int tagId, tagIds())
         {
@@ -386,11 +385,14 @@ int ImageInfo::colorLabel() const
             {
                 if (tagId == TagsCache::instance()->getTagForColorLabel((ColorLabel)i))
                 {
-                    m_data.constCastData()->colorLabelCached = i;
+                    m_data.constCastData()->colorLabel = i;
+                    kDebug() << i << " :: " << m_data->colorLabel;
                     break;
                 }
             }
         }
+
+        m_data.constCastData()->colorLabelCached = true;
     }
 
     return m_data->colorLabel;
@@ -1034,6 +1036,7 @@ void ImageInfo::setColorLabel(int colorId)
     for (int i = NoneLabel ; i <= WhiteLabel ; ++i)
         removeTag(tc->getTagForColorLabel((ColorLabel)i));
 
+    kDebug() << colorId << " :: " << tagId;
     setTag(tagId);
     m_data->colorLabel                       = tagId;
     m_data.constCastData()->colorLabelCached = true;
