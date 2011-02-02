@@ -68,7 +68,7 @@ ImageInfoData::ImageInfoData()
     albumId                = -1;
     albumRootId            = -1;
 
-    colorLabel             = -1;
+    colorLabel             = NoneLabel;
     rating                 = -1;
     category               = DatabaseItem::UndefinedCategory;
     fileSize               = 0;
@@ -109,7 +109,6 @@ ImageInfo::ImageInfo(const ImageListerRecord& record)
     m_data->albumRootId            = record.albumRootID;
     m_data->name                   = record.name;
 
-    m_data->colorLabel             = record.colorLabel;
     m_data->rating                 = record.rating;
     m_data->category               = record.category;
     m_data->format                 = record.format;
@@ -118,7 +117,6 @@ ImageInfo::ImageInfo(const ImageListerRecord& record)
     m_data->fileSize               = record.fileSize;
     m_data->imageSize              = record.imageSize;
 
-    m_data->colorLabelCached       = true;
     m_data->ratingCached           = true;
     m_data->categoryCached         = true;
     m_data->formatCached           = true;
@@ -377,10 +375,7 @@ int ImageInfo::colorLabel() const
 
     if (!m_data->colorLabelCached)
     {
-        m_data.constCastData()->colorLabel = NoneLabel;
         QList<int> tags = tagIds();
-
-        kDebug() << tags;
 
         foreach(int tagId, tags)
         {
@@ -389,7 +384,6 @@ int ImageInfo::colorLabel() const
                 if (tagId == TagsCache::instance()->getTagForColorLabel((ColorLabel)i))
                 {
                     m_data.constCastData()->colorLabel = i;
-                    kDebug() << i << " :: " << m_data->colorLabel;
                     break;
                 }
             }
@@ -397,8 +391,6 @@ int ImageInfo::colorLabel() const
 
         m_data.constCastData()->colorLabelCached = true;
     }
-
-    kDebug() << m_data->colorLabel;
 
     return m_data->colorLabel;
 }
@@ -1036,18 +1028,12 @@ void ImageInfo::setColorLabel(int colorId)
     int tagId     = tc->getTagForColorLabel((ColorLabel)colorId);
     if (!tagId) return;
 
-    kDebug() << "Before to assign Color Label: " << tagIds();
-
     // Color Label is an exclusive tags.
 
     for (int i = NoneLabel ; i <= WhiteLabel ; ++i)
         removeTag(tc->getTagForColorLabel((ColorLabel)i));
 
-    kDebug() << "All Color Label removed: " << tagIds();
-
     setTag(tagId);
-
-    kDebug() << "Color Label assigned: " << colorId << " :: " << tagId << " (" << tagIds() << ")";
 
     m_data->colorLabel                       = colorId;
     m_data.constCastData()->colorLabelCached = true;
@@ -1091,6 +1077,7 @@ void ImageInfo::setTag(int tagID)
         return;
     }
 
+    kDebug() << m_data->id << tagID;
     DatabaseAccess access;
     access.db()->addItemTag(m_data->id, tagID);
 }

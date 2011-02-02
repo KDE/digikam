@@ -30,6 +30,7 @@
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "imageinfodata.h"
+#include <kdebug.h>
 
 namespace Digikam
 {
@@ -211,7 +212,8 @@ void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset& changeset)
 
         if (it != m_infos.end())
         {
-            (*it)->tagIdsCached = false;
+            (*it)->tagIdsCached     = false;
+            (*it)->colorLabelCached = false;
         }
     }
 }

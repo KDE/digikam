@@ -65,14 +65,12 @@ public:
         imageID     = -1;
         albumID     = -1;
         albumRootID = -1;
-        colorLabel  = -1;
         rating      = -1;
         fileSize    = -1;
     }
 
     int                    albumID;
     int                    albumRootID;
-    int                    colorLabel;
     int                    rating;
     int                    fileSize;
 
