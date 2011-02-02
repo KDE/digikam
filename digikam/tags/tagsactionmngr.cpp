@@ -129,17 +129,15 @@ void TagsActionMngr::createActions()
 
     foreach(KActionCollection* ac, d->actionCollectionList)
     {
-        for (int i = 0 ; i <= 5 ; ++i)
+        for (int i = RatingMin ; i <= RatingMax ; ++i)
             createRatingActionShortcut(ac, i);
     }
 
     // Create Color Label shortcuts.
 
-    QMap<int, int>::const_iterator it;
-
     foreach(KActionCollection* ac, d->actionCollectionList)
     {
-        for (int i = NoneLabel ; i > WhiteLabel ; ++i)
+        for (int i = NoneLabel ; i <= WhiteLabel ; ++i)
         {
             createColorLabelActionShortcut(ac, i);
         }
