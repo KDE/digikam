@@ -29,6 +29,7 @@
 #include <QStyle>
 #include <QFile>
 #include <QPixmap>
+#include <QPainter>
 
 // KDE includes
 
@@ -508,7 +509,7 @@ void ImagePropertiesTab::setPhotoWhiteBalance(const QString& str)
 void ImagePropertiesTab::showOrHideCaptionAndTags()
 {
     bool hasCaption    = !d->labelCaption->text().isEmpty();
-    bool hasColorLabel = !d->labelColorLabel->text().isEmpty();
+    bool hasColorLabel = !d->labelColorLabel->pixmap()->isNull();
     bool hasRating     = !d->labelRating->text().isEmpty();
     bool hasTags       = !d->labelTags->text().isEmpty();
 
@@ -531,7 +532,21 @@ void ImagePropertiesTab::setCaption(const QString& str)
 
 void ImagePropertiesTab::setColorLabel(int colorId)
 {
-    d->labelColorLabel->setText(ColorLabelWidget::labelColorName((ColorLabel)colorId));
+    QPixmap pix;
+
+    if (colorId != NoneLabel)
+    {
+        QFontMetrics fontMt = d->labelColorLabel->fontMetrics();
+        QRect fntRect(0, 0, fontMt.width("           "), fontMt.height());
+
+        pix = QPixmap(fntRect.size());
+        QPainter p(&pix);
+        p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
+        p.fillRect(fntRect, ColorLabelWidget::labelColor((ColorLabel)colorId));
+        p.drawRect(0, 0, fntRect.width()-1, fntRect.height()-1);
+    }
+
+    d->labelColorLabel->setPixmap(pix);
 }
 
 void ImagePropertiesTab::setRating(int rating)
