@@ -233,6 +233,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     ThemeEngine* te = ThemeEngine::instance();
     bool isSelected = (option.state & QStyle::State_Selected);
 
+    // Thumbnail
     QPixmap pix;
 
     if (isSelected)
@@ -244,12 +245,6 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         pix = d->regPixmap;
     }
 
-    // Draw Color Label rectangle
-    drawColorLabelRect(p, option, isSelected, info.colorLabel());
-
-    p->setPen(isSelected ? te->textSelColor() : te->textRegColor());
-
-    // Thumbnail
     QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect, pix, thumbnailPixmap(index));
 
     if (!actualPixmapRect.isNull())
@@ -257,15 +252,20 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         const_cast<ImageDelegate*>(this)->updateActualPixmapRect(index, actualPixmapRect);
     }
 
+    if (!d->ratingRect.isNull())
+    {
+        drawRating(p, index, d->ratingRect, info.rating(), isSelected);
+    }
+
+    // Draw Color Label rectangle
+    drawColorLabelRect(p, option, isSelected, info.colorLabel());
+    
+    p->setPen(isSelected ? te->textSelColor() : te->textRegColor());
+
     // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
     if (info.hasImageHistory())
     {
         p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, KIcon("svn_switch").pixmap(22, 22));
-    }
-
-    if (!d->ratingRect.isNull())
-    {
-        drawRating(p, index, d->ratingRect, info.rating(), isSelected);
     }
 
     if (!d->nameRect.isNull())
