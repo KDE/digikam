@@ -612,7 +612,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     d->currInfos = infos;
     d->modified  = false;
     resetMetadataChangeInfo();
-    d->hub = MetadataHub();
+    d->hub       = MetadataHub();
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
 
@@ -622,6 +622,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     }
 
     updateComments();
+    updateColorLabel();
     updateRating();
     updateDate();
     updateTemplate();
