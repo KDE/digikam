@@ -341,7 +341,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             {
                 for (int i=0; i<rating; i++)
                 {
-                    str += QChar(0x2731);
+                    str += QChar(0x2730);
                     str += ' ';
                 }
             }
