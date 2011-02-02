@@ -398,6 +398,8 @@ int ImageInfo::colorLabel() const
         m_data.constCastData()->colorLabelCached = true;
     }
 
+    kDebug() << m_data->colorLabel;
+
     return m_data->colorLabel;
 }
 
