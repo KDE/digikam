@@ -394,8 +394,6 @@ void LightTablePreview::slotContextMenu()
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addColorLabelAction();
-    cmhelper.addSeparator();
-    // --------------------------------------------------------
     cmhelper.addRatingMenu();
 
     // special action handling --------------------------------
