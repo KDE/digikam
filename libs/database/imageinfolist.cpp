@@ -48,4 +48,4 @@ QList<qlonglong> ImageInfoList::toImageIdList() const
     return idList;
 }
 
-}
+} // namespace Digikam
