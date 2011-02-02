@@ -181,17 +181,21 @@ QIcon ColorLabelWidget::buildIcon(ColorLabel label) const
 {
     QPixmap pix(12, 12);
     QPainter p(&pix);
-    p.setBrush(palette().color(QPalette::Active, QPalette::ButtonText));
-    p.fillRect(0, 0, pix.width(), pix.height(), labelColor(label));
-    if (label == NoneLabel)
+    p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
+
+    if (label != NoneLabel)
     {
-        p.drawLine(0, 0, pix.width(), pix.height());
-        p.drawLine(0, pix.height(), pix.width(), 0);
+        p.fillRect(0, 0, pix.width()-1, pix.height()-1, labelColor(label));
+    }
+    else
+    {
+        p.fillRect(0, 0, pix.width()-1, pix.height()-1, palette().color(QPalette::Active, QPalette::Button));
+        p.drawLine(0, 0, pix.width()-1, pix.height()-1);
+        p.drawLine(0, pix.height()-1, pix.width()-1, 0);
     }
 
-/*
-    p.drawRect(0, 0, pix.width(), pix.height());
-*/
+    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
+
     return QIcon(pix);
 }
 
@@ -326,23 +330,33 @@ ColorLabel ColorLabelSelector::colorLabel()
 
 void ColorLabelSelector::slotColorLabelChanged(int colorId)
 {
-    QFontMetrics fontMt = fontMetrics();
     QString none(i18n("None"));
-    QRect fntRect(0, 0, fontMt.width(none)+2, fontMt.height()+2);
 
-    QPixmap pix(fntRect.size());
-    QPainter p(&pix);
-    p.setFont(font());
-    p.setBrush(palette().color(QPalette::Active, QPalette::ButtonText));
+    if (colorId != NoneLabel)
+    {
+        setText(QString());
+        QFontMetrics fontMt = fontMetrics();
+        QRect fntRect(0, 0, fontMt.width(none), fontMt.height());
 
-    p.fillRect(fntRect, d->clw->labelColor((ColorLabel)colorId));
+        QPixmap pix(fntRect.size());
+        QPainter p(&pix);
+        p.setFont(font());
+        p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
 
-    if (colorId == NoneLabel)
-        p.drawText(fntRect, none);
+        p.fillRect(fntRect, d->clw->labelColor((ColorLabel)colorId));
+        p.drawRect(0, 0, fntRect.width()-1, fntRect.height()-1);
 
-    QIcon icon(pix);
-    setIconSize(pix.size());
-    setIcon(icon);
+        QIcon icon(pix);
+        setIconSize(pix.size());
+        setIcon(icon);
+    }
+    else
+    {
+        setIconSize(QSize());
+        setIcon(QIcon());
+        setText(none);
+    }
+
     menu()->close();
 
     emit signalColorLabelChanged(colorId);
