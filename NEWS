@@ -20,7 +20,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 173901 : digiKam contains a convience copy of cimg code.
 013 ==> 264208 : Underexposure indicator should always work in "pure color" mode.
 014 ==> 264769 : digiKam crash on startup.
-015 ==> 
+015 ==> 264830 : Raw importer broken. Not possible to revert changes.
+016 ==> 
 
 
 
