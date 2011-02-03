@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "metadatasettingscontainer.h"
+#include "metadatasettings.h"
 #include "captionvalues.h"
 #include "dmetadata.h"
 #include "dimg.h"
@@ -145,7 +145,7 @@ public:
         (Uses DMetadata, QFileInfo)
         @returns True if the metadata could be loaded
     */
-    bool load(const QString& filePath, const MetadataSettingsContainer& settings = MetadataSettingsContainer());
+    bool load(const QString& filePath, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     // --------------------------------------------------
 
@@ -176,7 +176,7 @@ public:
         @return Returns true if the metadata object has been touched
     */
     bool write(DMetadata& metadata, WriteMode writeMode = FullWrite,
-               const MetadataSettingsContainer& settings = MetadataSettingsContainer());
+               const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     /**
         Constructs a DMetadata object for given filePath,
@@ -185,7 +185,7 @@ public:
         @return Returns if the file has been touched
     */
     bool write(const QString& filePath, WriteMode writeMode = FullWrite,
-               const MetadataSettingsContainer& settings = MetadataSettingsContainer());
+               const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     /**
         Constructs a DMetadata object from the metadata stored in the given DImg object,
@@ -193,7 +193,7 @@ public:
         @return Returns if the DImg object has been touched
     */
     bool write(DImg& image, WriteMode writeMode = FullWrite,
-               const MetadataSettingsContainer& settings = MetadataSettingsContainer());
+               const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     /**
         With the currently applied changes, the given writeMode and settings,
@@ -201,7 +201,7 @@ public:
         apply any changes.
     */
     bool willWriteMetadata(WriteMode writeMode,
-                           const MetadataSettingsContainer& settings = MetadataSettingsContainer()) const;
+                           const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings()) const;
 
     // --------------------------------------------------
 
