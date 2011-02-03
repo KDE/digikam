@@ -144,6 +144,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
             cmhelper.addAction(removeAction);
             cmhelper.addSeparator();
             // ------------------------------------------------
+            cmhelper.addColorLabelAction();
             cmhelper.addRatingMenu();
             cmhelper.addSeparator();
             // ------------------------------------------------
@@ -152,6 +153,9 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
         cmhelper.addAction(clearAllAction, true);
 
         // special action handling --------------------------------
+
+        connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
+                this, SLOT(slotAssignColorLabel(int)));
 
         connect(&cmhelper, SIGNAL(signalAssignRating(int)),
                 this, SLOT(slotAssignRating(int)));
