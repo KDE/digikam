@@ -1226,6 +1226,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(liblighttable_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/imagepreviewbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablepreview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttableview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablebar.cpp
@@ -1316,7 +1317,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorydrawer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedragdrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageratingoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagerotationoverlay.cpp
