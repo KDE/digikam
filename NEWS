@@ -16,7 +16,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 264363 : Image editor always crashes when triggering Colour Auto-Correction.
 009 ==> 234021 : digiKam crash on loading.
 010 ==> 264999 : Exif-dates not recognices OK.
-011 ==> 
+011 ==> 264745 : When adding new tag to multiple images, tags not in common are removed from metadata, though still present in database.
+012 ==> 
+
 
 
 
