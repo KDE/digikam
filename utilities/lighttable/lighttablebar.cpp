@@ -55,6 +55,8 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
+#include "colorlabelwidget.h"
+#include "globals.h"
 #include "ddragobjects.h"
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
@@ -366,6 +368,15 @@ ImagePreviewBarItem* LightTableBar::findItemById(qlonglong id) const
 void LightTableBar::drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile)
 {
     LightTableBarItem* rItem = dynamic_cast<LightTableBarItem*>(item);
+    int colorId              = rItem->info().colorLabel();
+
+    if (colorId > NoneLabel)
+    {
+
+        QRect r = item->rect();
+        p.setPen(QPen(ColorLabelWidget::labelColor((ColorLabel)colorId), 5, Qt::SolidLine));
+        p.drawRect(3, 3, r.width()-7, r.height()-7);
+    }
 
     if (rItem->isOnLeftPanel())
     {
