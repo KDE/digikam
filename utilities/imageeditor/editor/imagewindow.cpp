@@ -47,6 +47,7 @@
 // KDE includes
 
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcategorizedview.h>
@@ -799,16 +800,19 @@ void ImageWindow::slotContextMenu()
 
         // Assign Color Label -------------------------------------------
 
-        QWidgetAction* action = new QWidgetAction(m_contextMenu);
-        action->setText(i18n("Assign Color Label"));
-        ColorLabelWidget* clw = new ColorLabelWidget(this);
-        action->setDefaultWidget(clw);
-        m_contextMenu->addAction(action);
+        KActionMenu* colorLabelMenu = new KActionMenu(m_contextMenu);
+        colorLabelMenu->setText(i18n("Assign Color Label"));
+        QWidgetAction* wa           = new QWidgetAction(colorLabelMenu);
+        ColorLabelWidget* clw       = new ColorLabelWidget(this);
+        wa->setDefaultWidget(clw);
+        colorLabelMenu->addAction(wa);
+        m_contextMenu->addAction(colorLabelMenu);
 
         connect(clw, SIGNAL(signalColorLabelChanged(int)),
                 this, SLOT(slotAssignColorLabel(int)));
 
-        m_contextMenu->addSeparator();
+        connect(clw, SIGNAL(signalColorLabelChanged(int)),
+                m_contextMenu, SLOT(close()));
 
         // Assign Star Rating -------------------------------------------
 
@@ -824,6 +828,7 @@ void ImageWindow::slotContextMenu()
 
         delete assignTagsMenu;
         delete removeTagsMenu;
+        delete colorLabelMenu;
         delete ratingMenu;
     }
 }
