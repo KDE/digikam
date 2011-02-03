@@ -43,7 +43,7 @@ RawPostProcessing::RawPostProcessing(DImg* orgImage, QObject* parent, const DRaw
     : DImgThreadedFilter(parent)
 {
     setFilterName("RawPostProcessing");
-    setOriginalImage(*orgImage);
+    setOriginalImage(orgImage->copy());
     m_customRawSettings = settings;
     initFilter();
 }
