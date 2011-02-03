@@ -18,7 +18,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 264999 : Exif-dates not recognices OK.
 011 ==> 264745 : When adding new tag to multiple images, tags not in common are removed from metadata, though still present in database.
 012 ==> 173901 : digiKam contains a convience copy of cimg code.
-013 ==> 
+013 ==> 264208 : Underexposure indicator should always work in "pure color" mode.
+014 ==> 
 
 
 
