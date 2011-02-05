@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QCloseEvent>
 
 // KDE includes
@@ -41,6 +42,7 @@
 
 // Local includes
 
+#include "albumdb.h"
 #include "album.h"
 #include "albummanager.h"
 #include "facepipeline.h"
@@ -179,8 +181,37 @@ BatchFaceDetector::~BatchFaceDetector()
 void BatchFaceDetector::startAlbumListing()
 {
     // get total count, cached by AlbumManager
-    QMap<int, int> palbumCounts = AlbumManager::instance()->getPAlbumsCount();
-    QMap<int, int> talbumCounts = AlbumManager::instance()->getTAlbumsCount();
+    QMap<int, int> palbumCounts, talbumCounts;
+    bool hasPAlbums = false, hasTAlbums = false;
+
+    foreach (Album* album, d->albumTodoList)
+    {
+        if (album->type() == Album::PHYSICAL)
+        {
+            hasPAlbums = true;
+        }
+        else
+        {
+            hasTAlbums = true;
+        }
+    }
+
+    palbumCounts = AlbumManager::instance()->getPAlbumsCount();
+    talbumCounts = AlbumManager::instance()->getTAlbumsCount();
+
+    if (palbumCounts.isEmpty() && hasPAlbums)
+    {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+        palbumCounts = DatabaseAccess().db()->getNumberOfImagesInAlbums();
+        QApplication::restoreOverrideCursor();
+    }
+    if (talbumCounts.isEmpty() && hasTAlbums)
+    {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+        talbumCounts = DatabaseAccess().db()->getNumberOfImagesInTags();
+        QApplication::restoreOverrideCursor();
+    }
+
     d->total = 0;
     foreach (Album* album, d->albumTodoList)
     {
@@ -196,6 +227,7 @@ void BatchFaceDetector::startAlbumListing()
         }
     }
     kDebug() << "Total is" << d->total;
+    d->total = qMax(1, d->total);
     setMaximum(d->total);
 
     continueAlbumListing();
