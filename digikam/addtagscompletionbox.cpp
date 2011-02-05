@@ -232,12 +232,12 @@ AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::create
 
     if (parent)
     {
-        item->setText(i18nc("Create New Tag <tag name> in <parent tag path>", "Create New Tag \"%1\"\n  in %2",
+        item->setText(i18nc("Create New Tag <tag name> in <parent tag path>", "Create \"%1\"\n  in %2",
                             newName, parent->tagPath(false)));
     }
     else
     {
-        item->setText(i18n("Create New Tag \"%1\"", newName));
+        item->setText(i18n("Create \"%1\"", newName));
     }
 
     item->setData(Qt::DecorationRole, AlbumThumbnailLoader::instance()->getNewTagIcon());
