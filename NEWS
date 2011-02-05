@@ -57,5 +57,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 258775 : Moving an album from one collection to another doesn't update the source collection.
 040 ==> 262174 : After confirming a face the mouse pointer is not correct inside the face.
 041 ==> 265058 : digiKam crash when editing picture.
-042 ==> 
+042 ==> 263332 : "Tag Filters", "Captions/Tags" right-click options impair usability.
+043 ==> 
+
 

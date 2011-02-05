@@ -590,10 +590,6 @@ void ContextMenuHelper::addExportMenu()
     if (!exportActions.isEmpty())
     {
         menuExport->addActions(exportActions);
-        connect (menuExport, SIGNAL(hovered(QAction*)),
-                 selectAllAction, SIGNAL(triggered()));
-        connect (menuExport, SIGNAL(aboutToHide()),
-                 this, SLOT(slotDeselectAllAlbumItems()));
     }
 
     d->parent->addMenu(menuExport);
@@ -610,10 +606,6 @@ void ContextMenuHelper::addBatchMenu()
     if (!batchActions.isEmpty())
     {
         menuKIPIBatch->addActions(batchActions);
-        connect (menuKIPIBatch, SIGNAL(hovered(QAction*)),
-                 selectAllAction, SIGNAL(triggered()));
-        connect (menuKIPIBatch, SIGNAL(aboutToHide()),
-                 this, SLOT(slotDeselectAllAlbumItems()));
     }
 
     d->parent->addMenu(menuKIPIBatch);
