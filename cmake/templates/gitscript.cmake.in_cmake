@@ -1,0 +1,15 @@
+SET(CMAKE_BACKWARDS_COMPATIBILITY "2.4")
+
+# See if we have svn installed
+FIND_PROGRAM(GITEXEC git)
+
+# Read the version if installed, else set to "unknown"
+IF (GITEXEC)
+    EXEC_PROGRAM(${GITEXEC} ARGS rev-parse HEAD OUTPUT_VARIABLE MYVERSION)
+ELSE (GITEXEC)
+    SET(MYVERSION unknown)
+ENDIF (GITEXEC)
+
+# Configure the svnversion.h
+CONFIGURE_FILE("@CMAKE_CURRENT_SOURCE_DIR@/cmake/templates/gitversion.h.in_cmake"
+               "@CMAKE_CURRENT_BINARY_DIR@/digikam/gitversion.h")

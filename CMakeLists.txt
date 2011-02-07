@@ -19,7 +19,7 @@ SET(DIGIKAM_PATCH_VERSION "0")
 SET(DIGIKAM_RELEASE_DATE "2011-02-27")
 
 # Suffix to add at end of version string. Usual values are:
-# "-svn"   : alpha code unstable from svn. Do not use in production
+# "-git"   : alpha code unstable from git. Do not use in production
 # "-beta1" : beta1 release.
 # "-beta2" : beta2 release.
 # "-beta3" : beta3 release.
@@ -388,30 +388,28 @@ MESSAGE(STATUS "")
 IF(DIGIKAM_CAN_BE_COMPILED)
 
     # ==================================================================================================
-    # Create svn version header
+    # Create git version header
 
-    # See http://public.kitware.com/pipermail/cmake/2006-July/010299.html
-    # We only do this IF we are in a .svn dir
+    # We only do this IF we are in a .git dir
+    FIND_FILE(GIT_MARKER entries PATHS ${CMAKE_SOURCE_DIR}/.git)
 
-    FIND_FILE(SVN_MARKER entries PATHS ${CMAKE_SOURCE_DIR}/.svn)
+    IF(NOT GIT_MARKER)
+        SET (GIT_MARKER ${CMAKE_SOURCE_DIR}/CMakeLists.txt)  # Dummy file
+    ENDIF(NOT GIT_MARKER)
 
-    IF(NOT SVN_MARKER)
-        SET (SVN_MARKER ${CMAKE_SOURCE_DIR}/CMakeLists.txt)  # Dummy file
-    ENDIF(NOT SVN_MARKER)
-
-    # Add a custom command to drive the svn script whenever the svn entries
+    # Add a custom command to drive the git script whenever the git entries
     # file changes.
-    CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/svnscript.cmake.in_cmake"
-                   "${CMAKE_CURRENT_BINARY_DIR}/svnscript.cmake"
+    CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/gitscript.cmake.in_cmake"
+                   "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake"
                    @ONLY)
 
-    ADD_CUSTOM_COMMAND(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/digikam/svnversion.h"
-                       DEPENDS ${SVN_MARKER}
-                       COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/svnscript.cmake")
+    ADD_CUSTOM_COMMAND(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/digikam/gitversion.h"
+                       DEPENDS ${GIT_MARKER}
+                       COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake")
 
     # Add a custom target to drive the custom command.
-    ADD_CUSTOM_TARGET(digikam-svnversion
-                      ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/digikam/svnversion.h")
+    ADD_CUSTOM_TARGET(digikam-gitversion
+                      ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/digikam/gitversion.h")
 
     # ==================================================================================================
     # get the gcc version
