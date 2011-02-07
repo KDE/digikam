@@ -58,4 +58,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 040 ==> 262174 : After confirming a face the mouse pointer is not correct inside the face.
 041 ==> 265058 : digiKam crash when editing picture.
 042 ==> 263332 : "Tag Filters", "Captions/Tags" right-click options impair usability.
-043 ==> 
+043 ==> 263399 : Marking a face "Unknown"/Unconfirmed is not possible.
+044 ==> 142056 : Save changes of image modifications with Versioning.
+045 ==> 125387 : Simulate changes to images only.
+046 ==> 
