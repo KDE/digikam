@@ -257,6 +257,11 @@ bool DynamicThread::DynamicThreadPriv::transitionToRunning()
             kDebug() << "Transition to Running: Invalid Inactive state" << q;
             return false;
         }
+        default:
+        {
+            kDebug() << "Transition to Running: Should never reach here: assert?" << q;
+            return false;
+        }
     }
 }
 
