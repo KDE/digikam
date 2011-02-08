@@ -57,7 +57,7 @@ static inline KLocalizedString additionalInformation()
                      "digikam-devel@kde.org\n\n"
                      "Build date: %1 (target: %2)")
                      .subs(__DATE__)
-                     .subs("@CMAKE_BUILD_TYPE@")
+                     .subs("@CMAKE_BUILD_TYPE@");
 
     if (!gitVer.isEmpty() && !gitVer.startsWith("unknow") && !gitVer.startsWith("export"))
     {
