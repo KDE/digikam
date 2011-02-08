@@ -55,7 +55,9 @@ static inline KLocalizedString additionalInformation()
                      "irc.freenode.net - #digikam\n\n"
                      "Feedback:\n"
                      "digikam-devel@kde.org\n\n"
-                     "Build date: %1 (target: %2)").subs(__DATE__).subs("debugfull");
+                     "Build date: %1 (target: %2)")
+                     .subs(__DATE__)
+                     .subs("@CMAKE_BUILD_TYPE@")
 
     if (!gitVer.isEmpty() && !gitVer.startsWith("unknow") && !gitVer.startsWith("export"))
     {
@@ -64,7 +66,10 @@ static inline KLocalizedString additionalInformation()
                     "Feedback:\n"
                     "digikam-devel@kde.org\n\n"
                     "Build date: %1 (target: %2)\n"
-                    "Rev.: %3").subs(__DATE__).subs("debugfull").subs(gitVer);
+                    "Rev.: %3")
+                    .subs(__DATE__)
+                    .subs("@CMAKE_BUILD_TYPE@")
+                    .subs(gitVer);
     }
 
     return ret;
