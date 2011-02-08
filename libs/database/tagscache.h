@@ -194,11 +194,6 @@ public:
      */
     int getTagForColorLabel(ColorLabel label);
 
-    /**
-     * Register Color Label tags in database. If tags do not exists, create it as well.
-     */
-    void registerColorLabelTagsToDb();
-
     static QLatin1String tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
     static QLatin1String propertyNameDigikamInternalTag();
     static QLatin1String propertyNameExcludedFromWriting();

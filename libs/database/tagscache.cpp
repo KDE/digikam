@@ -65,12 +65,14 @@ class TagsCache::TagsCachePriv
 {
 public:
 
-    TagsCachePriv() :
+    TagsCachePriv(TagsCache* q) :
         initialized(false),
         needUpdateInfos(true),
         needUpdateHash(true),
         needUpdateProperties(true),
-        changingDB(false)
+        needUpdateColorLabelTags(true),
+        changingDB(false),
+        q(q)
     {
     }
 
@@ -78,6 +80,7 @@ public:
     bool                        needUpdateInfos;
     bool                        needUpdateHash;
     bool                        needUpdateProperties;
+    bool                        needUpdateColorLabelTags;
     bool                        changingDB;
 
     QReadWriteLock              lock;
@@ -88,6 +91,8 @@ public:
     QHash<QString, QList<int> > tagsWithProperty;
     QSet<int>                   internalTags;
     QMap<ColorLabel, int>       colorLabelsTags;              // Map between color Id and tag label Id created in DB.
+
+    TagsCache* const            q;
 
     void checkInfos()
     {
@@ -191,6 +196,29 @@ public:
     {
         return qBinaryFind(list, value) != list.end();
     }
+
+    void checkColorLabelTags()
+    {
+        if (needUpdateColorLabelTags && initialized)
+        {
+            QMap<ColorLabel, int> map;
+            map.insert(NoneLabel,    q->getOrCreateInternalTag(InternalTagName::colorLabelNone()));
+            map.insert(RedLabel,     q->getOrCreateInternalTag(InternalTagName::colorLabelRed()));
+            map.insert(OrangeLabel,  q->getOrCreateInternalTag(InternalTagName::colorLabelOrange()));
+            map.insert(YellowLabel,  q->getOrCreateInternalTag(InternalTagName::colorLabelYellow()));
+            map.insert(GreenLabel,   q->getOrCreateInternalTag(InternalTagName::colorLabelGreen()));
+            map.insert(BlueLabel,    q->getOrCreateInternalTag(InternalTagName::colorLabelBlue()));
+            map.insert(MagentaLabel, q->getOrCreateInternalTag(InternalTagName::colorLabelMagenta()));
+            map.insert(GrayLabel,    q->getOrCreateInternalTag(InternalTagName::colorLabelGray()));
+            map.insert(BlackLabel,   q->getOrCreateInternalTag(InternalTagName::colorLabelBlack()));
+            map.insert(WhiteLabel,   q->getOrCreateInternalTag(InternalTagName::colorLabelWhite()));
+
+            QWriteLocker locker(&lock);
+            needUpdateColorLabelTags = false;
+            colorLabelsTags = map;
+        }
+    }
+
 };
 
 // ------------------------------------------------------------------------------------------
@@ -229,7 +257,7 @@ TagsCache* TagsCache::instance()
 }
 
 TagsCache::TagsCache()
-    : d(new TagsCachePriv)
+    : d(new TagsCachePriv(this))
 {
 }
 
@@ -252,27 +280,12 @@ void TagsCache::initialize()
     d->initialized = true;
 }
 
-void TagsCache::registerColorLabelTagsToDb()
-{
-    d->colorLabelsTags.insert(NoneLabel,    getOrCreateInternalTag(InternalTagName::colorLabelNone()));
-    d->colorLabelsTags.insert(RedLabel,     getOrCreateInternalTag(InternalTagName::colorLabelRed()));
-    d->colorLabelsTags.insert(OrangeLabel,  getOrCreateInternalTag(InternalTagName::colorLabelOrange()));
-    d->colorLabelsTags.insert(YellowLabel,  getOrCreateInternalTag(InternalTagName::colorLabelYellow()));
-    d->colorLabelsTags.insert(GreenLabel,   getOrCreateInternalTag(InternalTagName::colorLabelGreen()));
-    d->colorLabelsTags.insert(BlueLabel,    getOrCreateInternalTag(InternalTagName::colorLabelBlue()));
-    d->colorLabelsTags.insert(MagentaLabel, getOrCreateInternalTag(InternalTagName::colorLabelMagenta()));
-    d->colorLabelsTags.insert(GrayLabel,    getOrCreateInternalTag(InternalTagName::colorLabelGray()));
-    d->colorLabelsTags.insert(BlackLabel,   getOrCreateInternalTag(InternalTagName::colorLabelBlack()));
-    d->colorLabelsTags.insert(WhiteLabel,   getOrCreateInternalTag(InternalTagName::colorLabelWhite()));
-
-    kDebug() << "Color Label Tags: " << d->colorLabelsTags;
-}
-
 void TagsCache::invalidate()
 {
-    d->needUpdateInfos      = true;
-    d->needUpdateHash       = true;
-    d->needUpdateProperties = true;
+    d->needUpdateInfos          = true;
+    d->needUpdateHash           = true;
+    d->needUpdateProperties     = true;
+    d->needUpdateColorLabelTags = true;
 }
 
 QLatin1String TagsCache::tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy)
@@ -833,9 +846,7 @@ void TagsCache::slotTagChanged(const TagChangeset& changeset)
 {
     if (!d->changingDB && changeset.operation() != TagChangeset::IconChanged)
     {
-        d->needUpdateInfos      = true;
-        d->needUpdateHash       = true;
-        d->needUpdateProperties = true;
+        invalidate();
     }
 
     if (changeset.operation() == TagChangeset::Added)
@@ -853,6 +864,8 @@ int TagsCache::getTagForColorLabel(ColorLabel label)
     if (label < NoneLabel || label > WhiteLabel)
         return 0;
 
+    d->checkColorLabelTags();
+    QReadLocker locker(&d->lock);
     return d->colorLabelsTags[label];
 }
 

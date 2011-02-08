@@ -215,9 +215,6 @@ DigikamApp::DigikamApp()
     IccSettings::instance()->loadAllProfilesProperties();
     ThumbnailLoadThread::setDisplayingWidget(this);
 
-    // FIXME : This is a temporally fix to register Color Label Tags. This must be done at a better place.
-    TagsCache::instance()->registerColorLabelTagsToDb();
-
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
