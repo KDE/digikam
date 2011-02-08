@@ -6,7 +6,8 @@
  * Date        : 2007-09-19
  * Description : Scanning of a single image
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -141,8 +142,8 @@ public:
      * for all contained referred images.
      * If needTaggingIds is given, all ids marked for needing tagging of the history graph are added.
      */
-    static bool resolveImageHistory(qlonglong id, QList<qlonglong> *needTaggingIds = 0);
-    static bool resolveImageHistory(qlonglong imageId, const QString& historyXml, QList<qlonglong> *needTaggingIds = 0);
+    static bool resolveImageHistory(qlonglong id, QList<qlonglong>* needTaggingIds = 0);
+    static bool resolveImageHistory(qlonglong imageId, const QString& historyXml, QList<qlonglong>* needTaggingIds = 0);
 
     /**
      * Takes the history graph reachable from the given image, and assigns
@@ -208,6 +209,8 @@ protected:
         ModifiedScan,
         Rescan
     };
+
+protected:
 
     bool scanFromIdenticalFile();
     bool copyFromSource(qlonglong src);
