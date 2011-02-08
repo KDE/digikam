@@ -6,7 +6,7 @@
  * Date        : 2010-04-13
  * Description : Dynamically active thread
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -273,6 +273,11 @@ bool DynamicThread::DynamicThreadPriv::transitionToRunning()
             kDebug() << "Transition to Running: Invalid Inactive state" << q;
             return false;
         }
+        default:
+        {
+            kDebug() << "Transition to Running: Should never reach here: assert?" << q;
+            return false;
+        }
     }
 }
 
@@ -318,13 +323,13 @@ void DynamicThread::DynamicThreadPriv::run()
     }
 
     if (transitionToRunning())
-    {        
-        takingThread();                
+    {
+        takingThread();
         q->run();
     }
     else
     {
-        takingThread();                
+        takingThread();
     }
 
     if (emitSignals)
