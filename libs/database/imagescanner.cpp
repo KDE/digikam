@@ -543,10 +543,17 @@ void ImageScanner::scanTags()
     int colorId = m_metadata.getImageColorLabel();
     if (colorId != -1)
     {
+        kDebug() << "Color Label found : " << colorId;
+
         int tagId = TagsCache::instance()->getTagForColorLabel((ColorLabel)colorId);
         if (tagId)
         {
             DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_scanInfo.id, QList<int>() << tagId);
+            kDebug() << "Assigned Color Label Tag  : " << tagId;
+        }
+        else
+        {
+            kDebug() << "Cannot find Color Label Tag for : " << colorId;
         }
     }
 }
