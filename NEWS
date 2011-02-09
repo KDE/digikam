@@ -62,5 +62,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 142056 : Save changes of image modifications with Versioning.
 045 ==> 125387 : Simulate changes to images only.
 046 ==> 260274 : Request to setup a git repository for digiKam.
-047 ==> 
-
+047 ==> 264864 : Keep focus on selected image when change filtering parameters
+048 ==> 

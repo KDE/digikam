@@ -395,6 +395,11 @@ void AlbumWidgetStack::syncSelection(ImageCategorizedView* from, ImageCategorize
 
 void AlbumWidgetStack::slotThumbBarSelectionChanged()
 {
+    if (currentIndex() != PreviewImageMode)
+    {
+        return;
+    }
+
     if (d->syncingSelection)
     {
         return;
@@ -405,7 +410,7 @@ void AlbumWidgetStack::slotThumbBarSelectionChanged()
 
 void AlbumWidgetStack::slotIconViewSelectionChanged()
 {
-    if (currentIndex() != PreviewImageMode)
+    if (currentIndex() != PreviewAlbumMode)
     {
         return;
     }

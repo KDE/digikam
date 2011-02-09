@@ -455,6 +455,7 @@ void DCategorizedView::layoutWasChanged()
 {
     // connected queued to layoutChanged()
     ensureSelectionAfterChanges();
+    scrollTo(currentIndex());
 }
 
 void DCategorizedView::userInteraction()
