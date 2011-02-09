@@ -6,7 +6,7 @@
  * Date        : 2004-09-09
  * Description : digiKam release ID header.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +35,7 @@
 
 // Local includes.
 
-#include "svnversion.h"
+#include "gitversion.h"
 
 namespace Digikam
 {
@@ -45,23 +45,34 @@ static const char digikam_version[]       = "@DIGIKAM_VERSION_STRING@";
 
 static inline const QString digiKamVersion()
 {
-    // We only take the mixed revision
-    QString svnVer      = QString(SVNVERSION).section(":", 0, 0);
-
-    QString digiKamVer  = QString(digikam_version);
-    if (!svnVer.isEmpty() && !svnVer.startsWith("unknow") && !svnVer.startsWith("export"))
-        digiKamVer = i18nc("%1 is digiKam version, %2 is the svn revision", "%1 (rev.: %2)", digikam_version, svnVer);
-
-    return digiKamVer;
+    return QString(digikam_version);
 }
 
 static inline KLocalizedString additionalInformation()
 {
-    return ki18n("IRC:\n"
-                 "irc.freenode.net - #digikam\n\n"
-                 "Feedback:\n"
-                 "digikam-devel@kde.org\n\n"
-                 "Build date: %1 (target: %2)").subs(__DATE__).subs("@CMAKE_BUILD_TYPE@");
+    QString gitVer       = QString(GITVERSION);
+    KLocalizedString ret = ki18n("IRC:\n"
+                     "irc.freenode.net - #digikam\n\n"
+                     "Feedback:\n"
+                     "digikam-devel@kde.org\n\n"
+                     "Build date: %1 (target: %2)")
+                     .subs(__DATE__)
+                     .subs("@CMAKE_BUILD_TYPE@");
+
+    if (!gitVer.isEmpty() && !gitVer.startsWith("unknow") && !gitVer.startsWith("export"))
+    {
+        ret = ki18n("IRC:\n"
+                    "irc.freenode.net - #digikam\n\n"
+                    "Feedback:\n"
+                    "digikam-devel@kde.org\n\n"
+                    "Build date: %1 (target: %2)\n"
+                    "Rev.: %3")
+                    .subs(__DATE__)
+                    .subs("@CMAKE_BUILD_TYPE@")
+                    .subs(QString("<a href='http://commits.kde.org/digikam/%1'>%2</a>").arg(gitVer).arg(gitVer));
+    }
+
+    return ret;
 }
 
 }  // namespace Digikam
