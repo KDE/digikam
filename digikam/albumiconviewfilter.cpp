@@ -6,7 +6,7 @@
  * Date        : 2007-11-27
  * Description : a bar to filter album contents
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,46 +25,39 @@
 
 // KDE includes
 
-
 #include <klocale.h>
-#include <kdeversion.h>
 #include <kdialog.h>
 
 // Local includes
 
 #include "albumsettings.h"
 #include "ratingfilter.h"
+#include "colorlabelfilter.h"
 #include "mimefilter.h"
 #include "statusled.h"
 
 namespace Digikam
 {
 
-class AlbumIconViewFilterPriv
+class AlbumIconViewFilter::AlbumIconViewFilterPriv
 {
 public:
 
     AlbumIconViewFilterPriv()
     {
-        textFilter   = 0;
-        mimeFilter   = 0;
-        ratingFilter = 0;
-        led          = 0;
+        textFilter       = 0;
+        mimeFilter       = 0;
+        ratingFilter     = 0;
+        colorLabelFilter = 0;
+        led              = 0;
     }
 
-    /* NOTE: There is a problem with Qt4.3 and KDE < 4.1.0 if statusbar host a KLineEdit:
-             digiKam crash. Text Filter bar is replaced by a simple QLineEdit in this case.
-     */
-#if KDE_IS_VERSION(4,1,0)
-    SearchTextBar*       textFilter;
-#else
-    QLineEdit*           textFilter; // krazy:exclude=qclasses
-#endif
-
-    StatusLed*           led;
-    MimeFilter*          mimeFilter;
-    RatingFilter*        ratingFilter;
-    ImageFilterSettings  settings;
+    SearchTextBar*      textFilter;
+    StatusLed*          led;
+    MimeFilter*         mimeFilter;
+    RatingFilter*       ratingFilter;
+    ColorLabelFilter*   colorLabelFilter;
+    ImageFilterSettings settings;
 };
 
 AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
@@ -81,19 +74,17 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                               "GREEN: filter(s) match(es) at least one item.\n\n"
                               "Any mouse button click will reset all filters."));
 
-#if KDE_IS_VERSION(4,1,0)
     d->textFilter = new SearchTextBar(this, "AlbumIconViewFilterSearchTextBar");
     d->textFilter->setTextQueryCompletion(true);
-#else
-    d->textFilter = new QLineEdit(this); // krazy:exclude=qclasses
-#endif
-
     d->textFilter->setToolTip(i18n("Text quick filter (search)"));
     d->textFilter->setWhatsThis(i18n("Enter search patterns to quickly filter this view on "
                                      "file names, captions (comments), and tags"));
 
-    d->mimeFilter   = new MimeFilter(this);
-    d->ratingFilter = new RatingFilter(this);
+    d->mimeFilter       = new MimeFilter(this);
+    d->ratingFilter     = new RatingFilter(this);
+
+    // TODO
+    //d->colorLabelFilter = new ColorLabelFilter(this);
 
     layout()->setAlignment(d->ratingFilter, Qt::AlignCenter);
     setSpacing(KDialog::spacingHint());
@@ -183,9 +174,7 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
 
 void AlbumIconViewFilter::slotFilterMatchesForText(bool match)
 {
-#if KDE_IS_VERSION(4,1,0)
     d->textFilter->slotSearchResult(match);
-#endif
 }
 
 void AlbumIconViewFilter::slotFilterSettingsChanged(const ImageFilterSettings& settings)
