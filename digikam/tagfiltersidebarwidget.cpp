@@ -201,7 +201,6 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
                                     AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());
 
-    QLabel* clLabel       = new QLabel(i18n("Color Labels:"), this);
     d->colorLabelFilter   = new ColorLabelFilter(this);
 
     const QString notTaggedTitle   = i18n("Images Without Tags");
@@ -222,7 +221,6 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
 
     layout->addWidget(d->tagFilterView);
     layout->addWidget(d->tagFilterSearchBar);
-    layout->addWidget(clLabel);
     layout->addWidget(d->colorLabelFilter);
     layout->addWidget(d->withoutTagCheckBox);
     layout->addWidget(matchingConditionLabel);

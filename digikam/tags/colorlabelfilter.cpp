@@ -27,6 +27,7 @@
 
 #include <QBrush>
 #include <QWidgetAction>
+#include <QHeaderView>
 
 // KDE includes
 
@@ -42,11 +43,12 @@
 namespace Digikam
 {
 
-ColorLabelCheckBox::ColorLabelCheckBox(QListWidget* parent)
-    : QListWidgetItem(parent)
+ColorLabelCheckBox::ColorLabelCheckBox(QTreeWidget* parent)
+    : QTreeWidgetItem(parent)
 {
+    setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     setFlags(Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
-    setCheckState(Qt::Unchecked);
+    setCheckState(0, Qt::Unchecked);
 }
 
 ColorLabelCheckBox::~ColorLabelCheckBox()
@@ -58,12 +60,12 @@ void ColorLabelCheckBox::setColorLabel(ColorLabel label)
     m_label = label;
 
     if (m_label != NoneLabel)
-        setBackground(QBrush(ColorLabelWidget::labelColor(label)));
+        setBackground(0, QBrush(ColorLabelWidget::labelColor(label)));
 
     if (m_label == BlackLabel)
-        setForeground(QBrush(Qt::white));
+        setForeground(0, QBrush(Qt::white));
 
-    setText(ColorLabelWidget::labelColorName(label));
+    setText(0, ColorLabelWidget::labelColorName(label));
 }
 
 ColorLabel ColorLabelCheckBox::colorLabel() const
@@ -74,14 +76,21 @@ ColorLabel ColorLabelCheckBox::colorLabel() const
 // -----------------------------------------------------------------------------
 
 ColorLabelFilter::ColorLabelFilter(QWidget* parent)
-    : QListWidget(parent)
+    : QTreeWidget(parent)
 {
+    setRootIsDecorated(false);
+    setSelectionMode(QAbstractItemView::NoSelection);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setAllColumnsShowFocus(true);
+    header()->setResizeMode(QHeaderView::Stretch);
+    setHeaderLabels(QStringList() << i18n("Color Labels"));
+
     for (int i = NoneLabel ; i <= WhiteLabel ; ++i)
     {
         ColorLabelCheckBox* item = new ColorLabelCheckBox(this);
         item->setColorLabel((ColorLabel)i);
     }
-    connect(this, SIGNAL(itemClicked(QListWidgetItem*)),
+    connect(this, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
             this, SLOT(slotColorLabelSelectionChanged()));
 }
 
@@ -96,42 +105,41 @@ void ColorLabelFilter::reset()
 
 void ColorLabelFilter::setColorLabelSelection(const QList<ColorLabel>& sel)
 {
-    int it = 0;
+    QTreeWidgetItemIterator it(this);
 
-    while (it <= count())
+    while (*it)
     {
-        ColorLabelCheckBox* cb = dynamic_cast<ColorLabelCheckBox*>(item(it));
+        ColorLabelCheckBox* cb = dynamic_cast<ColorLabelCheckBox*>(*it);
         if (cb)
         {
             if (sel.contains(cb->colorLabel()))
-                cb->setCheckState(Qt::Checked);
+                cb->setCheckState(0, Qt::Checked);
             else
-                cb->setCheckState(Qt::Unchecked);
+                cb->setCheckState(0, Qt::Unchecked);
         }
         ++it;
     }
 }
 
-QList<ColorLabel> ColorLabelFilter::colorLabelSelection() const
+QList<ColorLabel> ColorLabelFilter::colorLabelSelection()
 {
     QList<ColorLabel> sel;
-    int it = 0;
+    QTreeWidgetItemIterator it(this);
 
-    while (it <= count())
+    while (*it)
     {
-        ColorLabelCheckBox* cb = dynamic_cast<ColorLabelCheckBox*>(item(it));
-        if (cb && cb->checkState() == Qt::Checked)
+        ColorLabelCheckBox* cb = dynamic_cast<ColorLabelCheckBox*>(*it);
+        if (cb && cb->checkState(0) == Qt::Checked)
         {
             sel.append(cb->colorLabel());
         }
-
         ++it;
     }
 
     return sel;
 }
 
-QList<TAlbum*> ColorLabelFilter::getCheckedColorLabelTags() const
+QList<TAlbum*> ColorLabelFilter::getCheckedColorLabelTags()
 {
     QList<TAlbum*> list;
     int tagId   = 0;

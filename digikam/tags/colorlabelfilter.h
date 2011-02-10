@@ -27,8 +27,8 @@
 // Qt includes
 
 #include <QList>
-#include <QListWidget>
-#include <QListWidgetItem>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QPushButton>
 
 // Local includes
@@ -40,12 +40,12 @@ namespace Digikam
 
 class TAlbum;
 
-class ColorLabelCheckBox : public QListWidgetItem
+class ColorLabelCheckBox : public QTreeWidgetItem
 {
 
 public:
 
-    ColorLabelCheckBox(QListWidget* parent=0);
+    ColorLabelCheckBox(QTreeWidget* parent=0);
     ~ColorLabelCheckBox();
 
     void setColorLabel(ColorLabel label);
@@ -58,7 +58,7 @@ private:
 
 // ------------------------------------------------------------------------------
 
-class ColorLabelFilter : public QListWidget
+class ColorLabelFilter : public QTreeWidget
 {
     Q_OBJECT
 
@@ -68,9 +68,9 @@ public:
     ~ColorLabelFilter();
 
     void setColorLabelSelection(const QList<ColorLabel>& sel);
-    QList<ColorLabel> colorLabelSelection() const;
+    QList<ColorLabel> colorLabelSelection();
 
-    QList<TAlbum*> getCheckedColorLabelTags() const;
+    QList<TAlbum*> getCheckedColorLabelTags();
 
     void reset();
 
