@@ -29,6 +29,7 @@
 #include <QColor>
 #include <QPushButton>
 #include <QEvent>
+#include <QList>
 
 // KDE includes
 
@@ -51,8 +52,26 @@ public:
     ColorLabelWidget(QWidget* parent=0);
     ~ColorLabelWidget();
 
-    void setColorLabel(ColorLabel label);
-    ColorLabel colorLabel();
+    /**
+     * Show or not on the bottom view the description of label with shorcuts.
+     */
+    void setDescriptionBoxVisible(bool b);
+
+    /**
+     * Set all Color Label buttons exclusive or not. Default is true as only one can be selected.
+     * Non-exclusive mode is dedicated for Advanced Search tool.
+     */
+    void setButtonsExclusive(bool b);
+
+    /**
+     * Turn on Color Label buttons using list.
+     */
+    void setColorLabels(const QList<ColorLabel>& list);
+
+    /**
+     * Return the list of Color Label buttons turned on or an empty list of none.
+     */
+    QList<ColorLabel> colorLabels() const;
 
     static QColor  labelColor(ColorLabel label);
     static QString labelColorName(ColorLabel label);

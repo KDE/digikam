@@ -89,6 +89,8 @@ public:
     QToolButton*        btnBlack;
     QToolButton*        btnWhite;
 
+    KHBox*              descBox;
+
     KSqueezedTextLabel* shortcut;
 };
 
@@ -163,7 +165,6 @@ ColorLabelWidget::ColorLabelWidget(QWidget* parent)
     d->btnWhite->installEventFilter(this);
 
     d->colorBtns = new QButtonGroup(hbox);
-    d->colorBtns->setExclusive(true);
     d->colorBtns->addButton(d->btnNone,    NoneLabel);
     d->colorBtns->addButton(d->btnRed,     RedLabel);
     d->colorBtns->addButton(d->btnOrange,  OrangeLabel);
@@ -175,11 +176,11 @@ ColorLabelWidget::ColorLabelWidget(QWidget* parent)
     d->colorBtns->addButton(d->btnBlack,   BlackLabel);
     d->colorBtns->addButton(d->btnWhite,   WhiteLabel);
 
-    KHBox* hbox2 = new KHBox(this);
-    hbox2->setMargin(0);
-    hbox2->setSpacing(0);
-    d->desc      = new QLabel(hbox2);
-    d->shortcut  = new KSqueezedTextLabel(hbox2);
+    d->descBox  = new KHBox(this);
+    d->descBox->setMargin(0);
+    d->descBox->setSpacing(0);
+    d->desc     = new QLabel(d->descBox);
+    d->shortcut = new KSqueezedTextLabel(d->descBox);
     QFont fnt = d->shortcut->font();
     fnt.setItalic(true);
     d->shortcut->setFont(fnt);
@@ -188,7 +189,9 @@ ColorLabelWidget::ColorLabelWidget(QWidget* parent)
 
     setMargin(0);
     setSpacing(0);
-    setColorLabel(NoneLabel);
+    setColorLabels(QList<ColorLabel>() << NoneLabel);
+    setDescriptionBoxVisible(true);
+    setButtonsExclusive(true);
 
     // -------------------------------------------------------------
 
@@ -201,11 +204,14 @@ ColorLabelWidget::~ColorLabelWidget()
     delete d;
 }
 
-void ColorLabelWidget::setColorLabel(ColorLabel label)
+void ColorLabelWidget::setDescriptionBoxVisible(bool b)
 {
-    QAbstractButton* btn = d->colorBtns->button(label);
-    if (btn) btn->setChecked(true);
-    updateDescription(label);
+    d->descBox->setVisible(b);
+}
+
+void ColorLabelWidget::setButtonsExclusive(bool b)
+{
+    d->colorBtns->setExclusive(b);
 }
 
 void ColorLabelWidget::updateDescription(ColorLabel label)
@@ -308,12 +314,28 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
     return QWidget::eventFilter(obj, ev);
 }
 
-ColorLabel ColorLabelWidget::colorLabel()
+void ColorLabelWidget::setColorLabels(const QList<ColorLabel>& list)
 {
-    QAbstractButton* btn = d->colorBtns->checkedButton();
-    if (btn) return (ColorLabel)(d->colorBtns->id(btn));
+    if (list.isEmpty()) return;
 
-    return NoneLabel;
+    foreach(ColorLabel label, list)
+    {
+        QAbstractButton* btn = d->colorBtns->button(label);
+        if (btn) btn->setChecked(true);
+        updateDescription(label);
+    }
+}
+
+QList<ColorLabel> ColorLabelWidget::colorLabels() const
+{
+    QList<ColorLabel> list;
+    foreach(QAbstractButton* btn, d->colorBtns->buttons())
+    {
+        if (btn && btn->isChecked())
+            list.append((ColorLabel)(d->colorBtns->id(btn)));
+    }
+
+    return list;
 }
 
 QIcon ColorLabelWidget::buildIcon(ColorLabel label) const
@@ -458,13 +480,17 @@ ColorLabelSelector::~ColorLabelSelector()
 
 void ColorLabelSelector::setColorLabel(ColorLabel label)
 {
-    d->clw->setColorLabel(label);
+    d->clw->setColorLabels(QList<ColorLabel>() << label);
     slotColorLabelChanged(label);
 }
 
 ColorLabel ColorLabelSelector::colorLabel()
 {
-    return d->clw->colorLabel();
+    QList<ColorLabel> list = d->clw->colorLabels();
+    if (!list.isEmpty())
+        return list.first();
+
+    return NoneLabel;
 }
 
 void ColorLabelSelector::slotColorLabelChanged(int colorId)
