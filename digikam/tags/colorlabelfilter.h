@@ -72,6 +72,8 @@ public:
 
     QList<TAlbum*> getCheckedColorLabelTags() const;
 
+    void reset();
+
 Q_SIGNALS:
 
     void signalColorLabelSelectionChanged(const QList<ColorLabel>&);

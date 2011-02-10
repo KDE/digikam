@@ -254,6 +254,7 @@ void TagFilterSideBarWidget::slotResetTagFilters()
 {
     d->tagFilterView->slotResetCheckState();
     d->withoutTagCheckBox->setChecked(false);
+    d->colorLabelFilter->reset();
 }
 
 void TagFilterSideBarWidget::slotMatchingConditionChanged(int index)

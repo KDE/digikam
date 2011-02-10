@@ -89,6 +89,11 @@ ColorLabelFilter::~ColorLabelFilter()
 {
 }
 
+void ColorLabelFilter::reset()
+{
+    setColorLabelSelection(QList<ColorLabel>());
+}
+
 void ColorLabelFilter::setColorLabelSelection(const QList<ColorLabel>& sel)
 {
     int it = 0;
@@ -96,11 +101,13 @@ void ColorLabelFilter::setColorLabelSelection(const QList<ColorLabel>& sel)
     while (it <= count())
     {
         ColorLabelCheckBox* cb = dynamic_cast<ColorLabelCheckBox*>(item(it));
-        if (cb && sel.contains(cb->colorLabel()))
+        if (cb)
         {
-            cb->setCheckState(Qt::Checked);
+            if (sel.contains(cb->colorLabel()))
+                cb->setCheckState(Qt::Checked);
+            else
+                cb->setCheckState(Qt::Unchecked);
         }
-
         ++it;
     }
 }
