@@ -32,7 +32,6 @@
 
 #include "albumsettings.h"
 #include "ratingfilter.h"
-#include "colorlabelfilter.h"
 #include "mimefilter.h"
 #include "statusled.h"
 
@@ -82,22 +81,23 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 
     d->mimeFilter       = new MimeFilter(this);
     d->ratingFilter     = new RatingFilter(this);
-
-    // TODO
-    //d->colorLabelFilter = new ColorLabelFilter(this);
+    d->colorLabelFilter = new ColorLabelFilter(this);
 
     layout()->setAlignment(d->ratingFilter, Qt::AlignCenter);
     setSpacing(KDialog::spacingHint());
     setMargin(0);
 
-    connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
-            this, SIGNAL(ratingFilterChanged(int, ImageFilterSettings::RatingCondition)));
+    connect(d->textFilter, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            this, SIGNAL(textFilterChanged(const SearchTextSettings&)));
 
     connect(d->mimeFilter, SIGNAL(activated(int)),
             this, SIGNAL(mimeTypeFilterChanged(int)));
 
-    connect(d->textFilter, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SIGNAL(textFilterChanged(const SearchTextSettings&)));
+    connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
+            this, SIGNAL(ratingFilterChanged(int, ImageFilterSettings::RatingCondition)));
+
+    connect(d->colorLabelFilter, SIGNAL(signalColorLabelSelectionChanged(const QList<ColorLabel>&)),
+            this, SIGNAL(colorLabelFilterChanged(const QList<ColorLabel>&)));
 }
 
 AlbumIconViewFilter::~AlbumIconViewFilter()
@@ -137,6 +137,11 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
     if (d->mimeFilter->mimeFilter() != MimeFilter::AllFiles)
     {
         filtersList.append(i18n("<br/><nobr><i>Mime Type</i></nobr>"));
+    }
+
+    if (d->colorLabelFilter->colorLabelSelection().count() > 0)
+    {
+        filtersList.append(i18n("<br/><nobr><i>Color Label</i></nobr>"));
     }
 
     if (d->ratingFilter->rating() != 0 || d->ratingFilter->ratingFilterCondition() != ImageFilterSettings::GreaterEqualCondition)

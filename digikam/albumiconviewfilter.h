@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include "QString"
+#include <QString>
 
 // KDE includes
 
@@ -35,6 +35,7 @@
 // Local includes
 
 #include "searchtextbar.h"
+#include "colorlabelfilter.h"
 #include "imagefiltersettings.h"
 
 class QEvent;
@@ -64,6 +65,7 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     void resetTagFilters();
+    void colorLabelFilterChanged(const QList<ColorLabel>&);
     void ratingFilterChanged(int, ImageFilterSettings::RatingCondition);
     void mimeTypeFilterChanged(int);
     void textFilterChanged(const SearchTextSettings&);

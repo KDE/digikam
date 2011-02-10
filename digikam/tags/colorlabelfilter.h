@@ -89,7 +89,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalColorLabelSelectionChanged();
+    void signalColorLabelSelectionChanged(const QList<ColorLabel>&);
 
 private Q_SLOTS:
 
@@ -101,5 +101,7 @@ private:
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_METATYPE(QList<Digikam::ColorLabel>)
 
 #endif // COLORLABELFILTER_H

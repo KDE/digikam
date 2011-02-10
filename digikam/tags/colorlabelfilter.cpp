@@ -157,7 +157,7 @@ void ColorLabelFilter::slotColorLabelSelectionChanged()
     setText(i18nc("Indicate how many Color Labels are selected in Icon View filters", "(%1)",
                   colorLabelSelection().count()));
 
-    emit signalColorLabelSelectionChanged();
+    emit signalColorLabelSelectionChanged(colorLabelSelection());
 }
 
 }  // namespace Digikam
