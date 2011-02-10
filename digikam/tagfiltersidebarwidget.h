@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,6 +35,7 @@
 #include "imagefiltersettings.h"
 #include "statesavingobject.h"
 #include "tagcheckview.h"
+#include "colorlabelfilter.h"
 
 namespace Digikam
 {
@@ -73,7 +75,6 @@ private:
 
     class TagFilterViewPriv;
     TagFilterViewPriv* const d;
-
 };
 
 // ----------------------------------------------------------------------------------------------------------
@@ -132,6 +133,7 @@ private Q_SLOTS:
 
     void slotMatchingConditionChanged(int index);
     void slotCheckedTagsChanged(const QList<TAlbum*>& includedTags, const QList<TAlbum*>& excludedTags);
+    void slotColorLabelFilterChanged(const QList<ColorLabel>&);
     void slotWithoutTagChanged(int newState);
 
 private:

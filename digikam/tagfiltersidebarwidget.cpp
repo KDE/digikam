@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -160,6 +161,7 @@ public:
         tagFilterView(0),
         tagFilterSearchBar(0),
         tagFilterModel(0),
+        colorLabelFilter(0),
         withoutTagCheckBox(0),
         matchingConditionComboBox(0)
     {
@@ -172,6 +174,8 @@ public:
     SearchTextBar*       tagFilterSearchBar;
 
     TagModel*            tagFilterModel;
+
+    ColorLabelFilter*    colorLabelFilter;
 
     QCheckBox*           withoutTagCheckBox;
     KComboBox*           matchingConditionComboBox;
@@ -188,17 +192,20 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
 {
     setObjectName("TagFilter Sidebar");
 
-    d->tagFilterModel = tagFilterModel;
+    d->tagFilterModel     = tagFilterModel;
 
-    d->tagFilterView  = new TagFilterView(this, tagFilterModel);
+    d->tagFilterView      = new TagFilterView(this, tagFilterModel);
     d->tagFilterView->setObjectName("DigikamViewTagFilterView");
     d->tagFilterSearchBar = new SearchTextBar(this, "DigikamViewTagFilterSearchBar");
     d->tagFilterSearchBar->setModel(d->tagFilterView->filteredModel(),
                                     AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());
 
-    const QString notTaggedTitle = i18n("Images Without Tags");
-    d->withoutTagCheckBox        = new QCheckBox(notTaggedTitle, this);
+    QLabel* clLabel       = new QLabel(i18n("Color Labels:"), this);
+    d->colorLabelFilter   = new ColorLabelFilter(this);
+
+    const QString notTaggedTitle   = i18n("Images Without Tags");
+    d->withoutTagCheckBox          = new QCheckBox(notTaggedTitle, this);
     d->withoutTagCheckBox->setWhatsThis(i18n("Show images without a tag."));
 
     QLabel* matchingConditionLabel = new QLabel(i18n("Matching Condition:"), this);
@@ -206,23 +213,30 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
             "Defines in which way the selected tags are combined to filter the images. "
             "This also includes the '%1' check box.", notTaggedTitle));
 
-    d->matchingConditionComboBox = new KComboBox(this);
+    d->matchingConditionComboBox   = new KComboBox(this);
     d->matchingConditionComboBox->setWhatsThis(matchingConditionLabel->whatsThis());
     d->matchingConditionComboBox->addItem(i18n("AND"), ImageFilterSettings::AndCondition);
-    d->matchingConditionComboBox->addItem(i18n("OR"), ImageFilterSettings::OrCondition);
+    d->matchingConditionComboBox->addItem(i18n("OR"),  ImageFilterSettings::OrCondition);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout* layout            = new QVBoxLayout(this);
 
     layout->addWidget(d->tagFilterView);
     layout->addWidget(d->tagFilterSearchBar);
+    layout->addWidget(clLabel);
+    layout->addWidget(d->colorLabelFilter);
     layout->addWidget(d->withoutTagCheckBox);
     layout->addWidget(matchingConditionLabel);
     layout->addWidget(d->matchingConditionComboBox);
+    layout->setStretchFactor(d->tagFilterView,    50);
+    layout->setStretchFactor(d->colorLabelFilter, 15);
 
-    // connection
+    // signals/slots connections
 
     connect(d->tagFilterView, SIGNAL(checkedTagsChanged(const QList<TAlbum*>&, const QList<TAlbum*>&)),
             this, SLOT(slotCheckedTagsChanged(const QList<TAlbum*>&, const QList<TAlbum*>&)));
+
+    connect(d->colorLabelFilter, SIGNAL(signalColorLabelSelectionChanged(const QList<ColorLabel>&)),
+            this, SLOT(slotColorLabelFilterChanged(const QList<ColorLabel>&)));
 
     connect(d->withoutTagCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(slotWithoutTagChanged(int)));
@@ -256,6 +270,12 @@ void TagFilterSideBarWidget::slotCheckedTagsChanged(const QList<TAlbum*>& includ
     filterChanged();
 }
 
+void TagFilterSideBarWidget::slotColorLabelFilterChanged(const QList<ColorLabel>& list)
+{
+    Q_UNUSED(list);
+    filterChanged();
+}
+
 void TagFilterSideBarWidget::slotWithoutTagChanged(int newState)
 {
     Q_UNUSED(newState);
@@ -286,6 +306,13 @@ void TagFilterSideBarWidget::filterChanged()
             if (tag)
             {
                 excludedTagIds << tag->id();
+            }
+        }
+        foreach (TAlbum* tag, d->colorLabelFilter->getCheckedColorLabelTags())
+        {
+            if (tag)
+            {
+                includedTagIds << tag->id();
             }
         }
     }

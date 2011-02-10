@@ -38,6 +38,8 @@
 namespace Digikam
 {
 
+class TAlbum;
+
 class ColorLabelCheckBox : public QListWidgetItem
 {
 
@@ -56,26 +58,7 @@ private:
 
 // ------------------------------------------------------------------------------
 
-class ColorLabelFilterView : public QListWidget
-{
-    Q_OBJECT
-
-public:
-
-    ColorLabelFilterView(QWidget* parent=0);
-    ~ColorLabelFilterView();
-
-    void setColorLabelSelection(const QList<ColorLabel>& sel);
-    QList<ColorLabel> colorLabelSelection() const;
-
-Q_SIGNALS:
-
-    void signalColorLabelSelectionChanged();
-};
-
-// ------------------------------------------------------------------------------
-
-class ColorLabelFilter : public QPushButton
+class ColorLabelFilter : public QListWidget
 {
     Q_OBJECT
 
@@ -87,6 +70,8 @@ public:
     void setColorLabelSelection(const QList<ColorLabel>& sel);
     QList<ColorLabel> colorLabelSelection() const;
 
+    QList<TAlbum*> getCheckedColorLabelTags() const;
+
 Q_SIGNALS:
 
     void signalColorLabelSelectionChanged(const QList<ColorLabel>&);
@@ -94,10 +79,6 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotColorLabelSelectionChanged();
-
-private:
-
-    ColorLabelFilterView* m_view;
 };
 
 }  // namespace Digikam

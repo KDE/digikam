@@ -34,6 +34,11 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+// Local includes
+
+#include "albummanager.h"
+#include "tagscache.h"
+
 namespace Digikam
 {
 
@@ -68,7 +73,7 @@ ColorLabel ColorLabelCheckBox::colorLabel() const
 
 // -----------------------------------------------------------------------------
 
-ColorLabelFilterView::ColorLabelFilterView(QWidget* parent)
+ColorLabelFilter::ColorLabelFilter(QWidget* parent)
     : QListWidget(parent)
 {
     for (int i = NoneLabel ; i <= WhiteLabel ; ++i)
@@ -77,14 +82,14 @@ ColorLabelFilterView::ColorLabelFilterView(QWidget* parent)
         item->setColorLabel((ColorLabel)i);
     }
     connect(this, SIGNAL(itemClicked(QListWidgetItem*)),
-            this, SIGNAL(signalColorLabelSelectionChanged()));
+            this, SLOT(slotColorLabelSelectionChanged()));
 }
 
-ColorLabelFilterView::~ColorLabelFilterView()
+ColorLabelFilter::~ColorLabelFilter()
 {
 }
 
-void ColorLabelFilterView::setColorLabelSelection(const QList<ColorLabel>& sel)
+void ColorLabelFilter::setColorLabelSelection(const QList<ColorLabel>& sel)
 {
     int it = 0;
 
@@ -100,7 +105,7 @@ void ColorLabelFilterView::setColorLabelSelection(const QList<ColorLabel>& sel)
     }
 }
 
-QList<ColorLabel> ColorLabelFilterView::colorLabelSelection() const
+QList<ColorLabel> ColorLabelFilter::colorLabelSelection() const
 {
     QList<ColorLabel> sel;
     int it = 0;
@@ -119,44 +124,25 @@ QList<ColorLabel> ColorLabelFilterView::colorLabelSelection() const
     return sel;
 }
 
-// -----------------------------------------------------------------------------
-
-ColorLabelFilter::ColorLabelFilter(QWidget* parent)
-    : QPushButton(parent)
+QList<TAlbum*> ColorLabelFilter::getCheckedColorLabelTags() const
 {
-    KMenu* popup = new KMenu(this);
-    setMenu(popup);
-    setToolTip(i18n("Color Label Filter"));
+    QList<TAlbum*> list;
+    int tagId   = 0;
+    TAlbum* tag = 0;
 
-    QWidgetAction* action = new QWidgetAction(this);
-    m_view                = new ColorLabelFilterView(this);
-    action->setDefaultWidget(m_view);
-    popup->addAction(action);
-    slotColorLabelSelectionChanged();
+    foreach(ColorLabel cl, colorLabelSelection())
+    {
+        tagId = TagsCache::instance()->getTagForColorLabel(cl);
+        tag   = AlbumManager::instance()->findTAlbum(tagId);
+        if (tagId)
+            list.append(tag);
+    }
 
-    connect(m_view, SIGNAL(signalColorLabelSelectionChanged()),
-            this, SLOT(slotColorLabelSelectionChanged()));
-}
-
-ColorLabelFilter::~ColorLabelFilter()
-{
-}
-
-void ColorLabelFilter::setColorLabelSelection(const QList<ColorLabel>& sel)
-{
-    m_view->setColorLabelSelection(sel);
-}
-
-QList<ColorLabel> ColorLabelFilter::colorLabelSelection() const
-{
-    return m_view->colorLabelSelection();
+    return list;
 }
 
 void ColorLabelFilter::slotColorLabelSelectionChanged()
 {
-    setText(i18nc("Indicate how many Color Labels are selected in Icon View filters", "(%1)",
-                  colorLabelSelection().count()));
-
     emit signalColorLabelSelectionChanged(colorLabelSelection());
 }
 

@@ -47,7 +47,6 @@ public:
         textFilter       = 0;
         mimeFilter       = 0;
         ratingFilter     = 0;
-        colorLabelFilter = 0;
         led              = 0;
     }
 
@@ -55,7 +54,6 @@ public:
     StatusLed*          led;
     MimeFilter*         mimeFilter;
     RatingFilter*       ratingFilter;
-    ColorLabelFilter*   colorLabelFilter;
     ImageFilterSettings settings;
 };
 
@@ -81,7 +79,6 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 
     d->mimeFilter       = new MimeFilter(this);
     d->ratingFilter     = new RatingFilter(this);
-    d->colorLabelFilter = new ColorLabelFilter(this);
 
     layout()->setAlignment(d->ratingFilter, Qt::AlignCenter);
     setSpacing(KDialog::spacingHint());
@@ -95,9 +92,6 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 
     connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
             this, SIGNAL(ratingFilterChanged(int, ImageFilterSettings::RatingCondition)));
-
-    connect(d->colorLabelFilter, SIGNAL(signalColorLabelSelectionChanged(const QList<ColorLabel>&)),
-            this, SIGNAL(colorLabelFilterChanged(const QList<ColorLabel>&)));
 }
 
 AlbumIconViewFilter::~AlbumIconViewFilter()
@@ -137,11 +131,6 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
     if (d->mimeFilter->mimeFilter() != MimeFilter::AllFiles)
     {
         filtersList.append(i18n("<br/><nobr><i>Mime Type</i></nobr>"));
-    }
-
-    if (d->colorLabelFilter->colorLabelSelection().count() > 0)
-    {
-        filtersList.append(i18n("<br/><nobr><i>Color Label</i></nobr>"));
     }
 
     if (d->ratingFilter->rating() != 0 || d->ratingFilter->ratingFilterCondition() != ImageFilterSettings::GreaterEqualCondition)
