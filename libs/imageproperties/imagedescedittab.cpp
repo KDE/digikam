@@ -501,6 +501,11 @@ void ImageDescEditTab::slotChangingItems()
                 text += i18n("<li>date</li>");
             }
 
+            if (d->hub.colorLabelChanged())
+            {
+                text += i18n("<li>color label</li>");
+            }
+
             if (d->hub.ratingChanged())
             {
                 text += i18n("<li>rating</li>");
