@@ -201,6 +201,7 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
                                     AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());
 
+    QLabel* clLabel       = new QLabel(i18n("Color Labels"));
     d->colorLabelFilter   = new ColorLabelFilter(this);
 
     const QString notTaggedTitle   = i18n("Images Without Tags");
@@ -217,16 +218,15 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
     d->matchingConditionComboBox->addItem(i18n("AND"), ImageFilterSettings::AndCondition);
     d->matchingConditionComboBox->addItem(i18n("OR"),  ImageFilterSettings::OrCondition);
 
-    QVBoxLayout* layout            = new QVBoxLayout(this);
-
+    QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(d->tagFilterView);
     layout->addWidget(d->tagFilterSearchBar);
+    layout->addWidget(clLabel);
     layout->addWidget(d->colorLabelFilter);
     layout->addWidget(d->withoutTagCheckBox);
     layout->addWidget(matchingConditionLabel);
     layout->addWidget(d->matchingConditionComboBox);
-    layout->setStretchFactor(d->tagFilterView,    50);
-    layout->setStretchFactor(d->colorLabelFilter, 15);
+    layout->setStretchFactor(d->tagFilterView,    10);
 
     // signals/slots connections
 
@@ -261,7 +261,7 @@ void TagFilterSideBarWidget::slotMatchingConditionChanged(int index)
     filterChanged();
 }
 
-void TagFilterSideBarWidget::slotCheckedTagsChanged(const QList<TAlbum*>& includedTags, 
+void TagFilterSideBarWidget::slotCheckedTagsChanged(const QList<TAlbum*>& includedTags,
                                                     const QList<TAlbum*>& excludedTags)
 {
     Q_UNUSED(includedTags);

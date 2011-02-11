@@ -71,4 +71,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // RATINGWIDGET_H
+#endif // RATINGFILTER_H

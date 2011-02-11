@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT ColorLabelWidget : public KVBox
 public:
 
     ColorLabelWidget(QWidget* parent=0);
-    ~ColorLabelWidget();
+    virtual ~ColorLabelWidget();
 
     /**
      * Show or not on the bottom view the description of label with shorcuts.
@@ -64,7 +64,7 @@ public:
     void setButtonsExclusive(bool b);
 
     /**
-     * Turn on Color Label buttons using list.
+     * Turn on Color Label buttons using list. Pass an empty list to clear all selection.
      */
     void setColorLabels(const QList<ColorLabel>& list);
 
@@ -104,7 +104,7 @@ class DIGIKAM_EXPORT ColorLabelSelector : public QPushButton
 public:
 
     ColorLabelSelector(QWidget* parent=0);
-    ~ColorLabelSelector();
+    virtual ~ColorLabelSelector();
 
     void setColorLabel(ColorLabel label);
     ColorLabel colorLabel();

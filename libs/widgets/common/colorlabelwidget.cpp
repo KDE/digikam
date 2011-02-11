@@ -316,13 +316,11 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
 
 void ColorLabelWidget::setColorLabels(const QList<ColorLabel>& list)
 {
-    if (list.isEmpty()) return;
-
-    foreach(ColorLabel label, list)
+    foreach(QAbstractButton* btn, d->colorBtns->buttons())
     {
-        QAbstractButton* btn = d->colorBtns->button(label);
-        if (btn) btn->setChecked(true);
-        updateDescription(label);
+        ColorLabel id = (ColorLabel)(d->colorBtns->id(btn));
+        btn->setChecked(list.contains(id));
+        updateDescription(id);
     }
 }
 
