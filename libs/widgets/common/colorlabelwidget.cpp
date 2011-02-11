@@ -525,4 +525,26 @@ void ColorLabelSelector::slotColorLabelChanged(int colorId)
     emit signalColorLabelChanged(colorId);
 }
 
+// -----------------------------------------------------------------------------
+
+ColorLabelMenuAction::ColorLabelMenuAction(QMenu* parent)
+    : KActionMenu(parent)
+{
+    setText(i18n("Assign Color Label"));
+    QWidgetAction* wa     = new QWidgetAction(this);
+    ColorLabelWidget* clw = new ColorLabelWidget(parent);
+    wa->setDefaultWidget(clw);
+    addAction(wa);
+
+    connect(clw, SIGNAL(signalColorLabelChanged(int)),
+            this, SIGNAL(signalColorLabelChanged(int)));
+
+    connect(clw, SIGNAL(signalColorLabelChanged(int)),
+            parent, SLOT(close()));
+}
+
+ColorLabelMenuAction::~ColorLabelMenuAction()
+{
+}
+
 }  // namespace Digikam

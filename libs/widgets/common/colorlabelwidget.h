@@ -34,11 +34,14 @@
 // KDE includes
 
 #include <kvbox.h>
+#include <kactionmenu.h>
 
 // Local includes
 
 #include "globals.h"
 #include "digikam_export.h"
+
+class QMenu;
 
 namespace Digikam
 {
@@ -121,6 +124,22 @@ private:
 
     class ColorLabelSelectorPriv;
     ColorLabelSelectorPriv* const d;
+};
+
+// ------------------------------------------------------------------------------
+
+class DIGIKAM_EXPORT ColorLabelMenuAction : public KActionMenu
+{
+    Q_OBJECT
+
+public:
+
+    ColorLabelMenuAction(QMenu* parent=0);
+    virtual ~ColorLabelMenuAction();
+
+Q_SIGNALS:
+
+    void signalColorLabelChanged(int);
 };
 
 }  // namespace Digikam

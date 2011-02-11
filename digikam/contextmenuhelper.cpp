@@ -471,19 +471,11 @@ void ContextMenuHelper::addRemoveTagsMenu(imageIds& ids)
 
 void ContextMenuHelper::addColorLabelAction()
 {
-    KActionMenu* menu     = new KActionMenu(this);
-    menu->setText(i18n("Assign Color Label"));
-    QWidgetAction* wa     = new QWidgetAction(menu);
-    ColorLabelWidget* clw = new ColorLabelWidget(d->parent);
-    wa->setDefaultWidget(clw);
-    menu->addAction(wa);
+    ColorLabelMenuAction* menu = new ColorLabelMenuAction(d->parent);
     addAction(menu);
 
-    connect(clw, SIGNAL(signalColorLabelChanged(int)),
+    connect(menu, SIGNAL(signalColorLabelChanged(int)),
             this, SIGNAL(signalAssignColorLabel(int)));
-
-    connect(clw, SIGNAL(signalColorLabelChanged(int)),
-            d->parent, SLOT(close()));
 }
 
 void ContextMenuHelper::addRatingMenu()

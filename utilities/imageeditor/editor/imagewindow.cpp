@@ -799,19 +799,11 @@ void ImageWindow::slotContextMenu()
 
         // Assign Color Label -------------------------------------------
 
-        KActionMenu* colorLabelMenu = new KActionMenu(m_contextMenu);
-        colorLabelMenu->setText(i18n("Assign Color Label"));
-        QWidgetAction* wa           = new QWidgetAction(colorLabelMenu);
-        ColorLabelWidget* clw       = new ColorLabelWidget(this);
-        wa->setDefaultWidget(clw);
-        colorLabelMenu->addAction(wa);
+        ColorLabelMenuAction* colorLabelMenu = new ColorLabelMenuAction(m_contextMenu);
         m_contextMenu->addAction(colorLabelMenu);
 
-        connect(clw, SIGNAL(signalColorLabelChanged(int)),
+        connect(colorLabelMenu, SIGNAL(signalColorLabelChanged(int)),
                 this, SLOT(slotAssignColorLabel(int)));
-
-        connect(clw, SIGNAL(signalColorLabelChanged(int)),
-                m_contextMenu, SLOT(close()));
 
         // Assign Star Rating -------------------------------------------
 
