@@ -72,7 +72,7 @@
 #include "lighttablewindow.h"
 #include "queuemgrwindow.h"
 #include "colorlabelwidget.h"
-#include "ratingpopupmenu.h"
+#include "ratingwidget.h"
 #include "tagmodificationhelper.h"
 #include "tagspopupmenu.h"
 
@@ -488,12 +488,19 @@ void ContextMenuHelper::addColorLabelAction()
 
 void ContextMenuHelper::addRatingMenu()
 {
-    KMenu* ratingMenu = new RatingPopupMenu(d->parent);
-    ratingMenu->menuAction()->setText(i18n("Assign Rating"));
-    d->parent->addMenu(ratingMenu);
+    KActionMenu* menu = new KActionMenu(this);
+    menu->setText(i18n("Assign Rating"));
+    QWidgetAction* wa = new QWidgetAction(menu);
+    RatingBox* rb     = new RatingBox(d->parent);
+    wa->setDefaultWidget(rb);
+    menu->addAction(wa);
+    addAction(menu);
 
-    connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
+    connect(rb, SIGNAL(signalRatingChanged(int)),
             this, SIGNAL(signalAssignRating(int)));
+
+    connect(rb, SIGNAL(signalRatingChanged(int)),
+            d->parent, SLOT(close()));
 }
 
 void ContextMenuHelper::addCreateTagFromAddressbookMenu()

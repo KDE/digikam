@@ -62,7 +62,6 @@
 #include "metadatasettings.h"
 #include "metadatahub.h"
 #include "ratingwidget.h"
-#include "ratingpopupmenu.h"
 #include "databasewatch.h"
 #include "databasechangesets.h"
 #include "themeengine.h"

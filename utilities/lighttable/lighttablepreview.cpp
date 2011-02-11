@@ -62,7 +62,6 @@
 #include "metadatahub.h"
 #include "metadatasettings.h"
 #include "previewloadthread.h"
-#include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
 #include "themeengine.h"
 #include "globals.h"

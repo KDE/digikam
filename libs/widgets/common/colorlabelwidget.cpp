@@ -71,6 +71,7 @@ public:
         btnBlack   = 0;
         btnWhite   = 0;
         desc       = 0;
+        descBox    = 0;
         shortcut   = 0;
     }
 

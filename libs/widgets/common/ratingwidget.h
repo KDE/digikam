@@ -31,6 +31,10 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 
+// KDE includes
+
+#include <kvbox.h>
+
 // Local includes
 
 #include "digikam_export.h"
@@ -65,6 +69,7 @@ public:
 
 Q_SIGNALS:
 
+    void signalRatingModified(int);    // Not managed by tracking properties
     void signalRatingChanged(int);
 
 protected:
@@ -96,6 +101,31 @@ private:
 
     class RatingWidgetPriv;
     RatingWidgetPriv* const d;
+};
+
+// --------------------------------------------------------------------
+
+class DIGIKAM_EXPORT RatingBox : public KVBox
+{
+    Q_OBJECT
+
+public:
+
+    RatingBox(QWidget* parent);
+    virtual ~RatingBox();
+
+Q_SIGNALS:
+
+    void signalRatingChanged(int);
+
+private Q_SLOTS:
+
+    void slotUpdateDescription(int);
+
+private:
+
+    class RatingBoxPriv;
+    RatingBoxPriv* const d;
 };
 
 }  // namespace Digikam

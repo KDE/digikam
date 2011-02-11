@@ -64,7 +64,6 @@
 #include "imageinfo.h"
 #include "metadatamanager.h"
 #include "metadatasettings.h"
-#include "ratingpopupmenu.h"
 #include "regionframeitem.h"
 #include "tagspopupmenu.h"
 #include "themeengine.h"

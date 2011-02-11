@@ -117,7 +117,7 @@
 #include "metadatahub.h"
 #include "metadatasettings.h"
 #include "colorlabelwidget.h"
-#include "ratingpopupmenu.h"
+#include "ratingwidget.h"
 #include "savingcontextcontainer.h"
 #include "scancontroller.h"
 #include "setup.h"
@@ -763,7 +763,6 @@ void ImageWindow::slotContextMenu()
 {
     if (m_contextMenu)
     {
-        RatingPopupMenu* ratingMenu     = 0;
         TagsPopupMenu*   assignTagsMenu = 0;
         TagsPopupMenu*   removeTagsMenu = 0;
 
@@ -816,13 +815,21 @@ void ImageWindow::slotContextMenu()
 
         // Assign Star Rating -------------------------------------------
 
-        ratingMenu = new RatingPopupMenu();
-        ratingMenu->menuAction()->setText(i18n("Assign Rating"));
+        KActionMenu* ratingMenu = new KActionMenu(m_contextMenu);
+        ratingMenu->setText(i18n("Assign Rating"));
+        QWidgetAction* wa2      = new QWidgetAction(ratingMenu);
+        RatingBox* rb           = new RatingBox(this);
+        wa2->setDefaultWidget(rb);
+        ratingMenu->addAction(wa2);
+        m_contextMenu->addAction(ratingMenu);
 
-        connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
+        connect(rb, SIGNAL(signalRatingChanged(int)),
                 this, SLOT(slotAssignRating(int)));
 
-        m_contextMenu->addMenu(ratingMenu);
+        connect(rb, SIGNAL(signalRatingChanged(int)),
+                m_contextMenu, SLOT(close()));
+
+        // --------------------------------------------------------------
 
         m_contextMenu->exec(QCursor::pos());
 
