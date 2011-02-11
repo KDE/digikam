@@ -480,19 +480,11 @@ void ContextMenuHelper::addColorLabelAction()
 
 void ContextMenuHelper::addRatingMenu()
 {
-    KActionMenu* menu = new KActionMenu(this);
-    menu->setText(i18n("Assign Rating"));
-    QWidgetAction* wa = new QWidgetAction(menu);
-    RatingBox* rb     = new RatingBox(d->parent);
-    wa->setDefaultWidget(rb);
-    menu->addAction(wa);
+    RatingMenuAction* menu = new RatingMenuAction(d->parent);
     addAction(menu);
 
-    connect(rb, SIGNAL(signalRatingChanged(int)),
+    connect(menu, SIGNAL(signalRatingChanged(int)),
             this, SIGNAL(signalAssignRating(int)));
-
-    connect(rb, SIGNAL(signalRatingChanged(int)),
-            d->parent, SLOT(close()));
 }
 
 void ContextMenuHelper::addCreateTagFromAddressbookMenu()

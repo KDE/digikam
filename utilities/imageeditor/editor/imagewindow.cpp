@@ -807,19 +807,11 @@ void ImageWindow::slotContextMenu()
 
         // Assign Star Rating -------------------------------------------
 
-        KActionMenu* ratingMenu = new KActionMenu(m_contextMenu);
-        ratingMenu->setText(i18n("Assign Rating"));
-        QWidgetAction* wa2      = new QWidgetAction(ratingMenu);
-        RatingBox* rb           = new RatingBox(this);
-        wa2->setDefaultWidget(rb);
-        ratingMenu->addAction(wa2);
+        RatingMenuAction* ratingMenu = new RatingMenuAction(m_contextMenu);
         m_contextMenu->addAction(ratingMenu);
 
-        connect(rb, SIGNAL(signalRatingChanged(int)),
+        connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
                 this, SLOT(slotAssignRating(int)));
-
-        connect(rb, SIGNAL(signalRatingChanged(int)),
-                m_contextMenu, SLOT(close()));
 
         // --------------------------------------------------------------
 

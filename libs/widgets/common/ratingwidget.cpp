@@ -511,4 +511,26 @@ void RatingBox::slotUpdateDescription(int rating)
     }
 }
 
+// -------------------------------------------------------------------------------
+
+RatingMenuAction::RatingMenuAction(QMenu* parent)
+    : KActionMenu(parent)
+{
+    setText(i18n("Assign Rating"));
+    QWidgetAction* wa = new QWidgetAction(this);
+    RatingBox* rb     = new RatingBox(parent);
+    wa->setDefaultWidget(rb);
+    addAction(wa);
+
+    connect(rb, SIGNAL(signalRatingChanged(int)),
+            this, SIGNAL(signalRatingChanged(int)));
+
+    connect(rb, SIGNAL(signalRatingChanged(int)),
+            parent, SLOT(close()));
+}
+
+RatingMenuAction::~RatingMenuAction()
+{
+}
+
 }  // namespace Digikam

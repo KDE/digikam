@@ -34,10 +34,13 @@
 // KDE includes
 
 #include <kvbox.h>
+#include <kactionmenu.h>
 
 // Local includes
 
 #include "digikam_export.h"
+
+class QMenu;
 
 namespace Digikam
 {
@@ -126,6 +129,22 @@ private:
 
     class RatingBoxPriv;
     RatingBoxPriv* const d;
+};
+
+// --------------------------------------------------------------------
+
+class DIGIKAM_EXPORT RatingMenuAction : public KActionMenu
+{
+    Q_OBJECT
+
+public:
+
+    RatingMenuAction(QMenu* parent=0);
+    virtual ~RatingMenuAction();
+
+Q_SIGNALS:
+
+    void signalRatingChanged(int);
 };
 
 }  // namespace Digikam
