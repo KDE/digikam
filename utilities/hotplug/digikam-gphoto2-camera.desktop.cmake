@@ -21,6 +21,7 @@ Name[hne]=डिजिकैम पता लगिस अउ डाउनलो
 Name[hu]=digiKam keresés és letöltés
 Name[is]=digiKam Finna og Hala niður
 Name[it]=Rileva e scarica con digiKam
+Name[ja]=digiKam 検出とダウンロード
 Name[km]=រក​ឃើញ និង​ទាញយក digiKam
 Name[lv]=digiKam noteicējs un ielādētājs
 Name[nb]=digiKam «oppdag og last ned»
@@ -34,6 +35,8 @@ Name[ru]=Копировать в digiKam
 Name[sv]=Digikam detektering och nerladdning
 Name[th]=ตรวจสอบและดาวน์โหลดด้วย digiKam
 Name[tr]=digiKam Belirle ve İndir
+Name[uk]=digiKam - виявлення і звантаження
+Name[x-test]=xxdigiKam Detect and Downloadxx
 Name[zh_CN]=digiKam 探测和下载
 Name[zh_TW]=digiKam 偵測與下載
 
