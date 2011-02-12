@@ -242,6 +242,11 @@ void MetadataHub::loadTags(const QList<int>& loadedTags)
     // first go through all tags contained in this set
     foreach (int tagId, loadedTags)
     {
+        if (TagsCache::instance()->isInternalTag(tagId))
+        {
+            continue;
+        }
+
         // that is a reference
         TagStatus& status = d->tags[tagId];
 
