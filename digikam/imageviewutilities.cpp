@@ -275,6 +275,21 @@ void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, A
             this, SLOT(slotDIOResult(KJob*)));
 }
 
+void ImageViewUtilities::insertToLightTableAuto(const QList<ImageInfo>& all, const QList<ImageInfo>& selected, const ImageInfo& current)
+{
+    ImageInfoList list          = selected;
+    ImageInfo     singleInfo    = current;
+    if (list.isEmpty() || (list.size() == 1 && LightTableWindow::lightTableWindow()->isEmpty()))
+    {
+        list = all;
+    }
+    if (singleInfo.isNull() && !list.isEmpty())
+    {
+        singleInfo = list.first();
+    }
+    insertToLightTable(list, current, list.size() <= 1);
+}
+
 void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list, const ImageInfo& current, bool addTo)
 {
     LightTableWindow* ltview = LightTableWindow::lightTableWindow();
@@ -297,8 +312,15 @@ void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list, const 
     KWindowSystem::activateWindow(ltview->winId());
 }
 
-void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, const ImageInfo& /*current*/, bool newQueue)
+void ImageViewUtilities::insertToQueueManagerAuto(const QList<ImageInfo>& list, const ImageInfo& current)
 {
+    insertToQueueManager(list, current, QueueMgrWindow::queueManagerWindow()->isBusy());
+}
+
+void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, const ImageInfo& current, bool newQueue)
+{
+    Q_UNUSED(current);
+
     QueueMgrWindow* bqmview = QueueMgrWindow::queueManagerWindow();
 
     if (bqmview->isHidden())

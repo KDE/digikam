@@ -143,6 +143,7 @@ private:
     void runFaceScanner(const FaceScanSettings& rebuildAll);
     void runThumbnailsGenerator(bool rebuildAll);
     void updateCameraMenu();
+    void updateQuickImportAction();
     void initGui();
 
 private Q_SLOTS:
@@ -215,7 +216,10 @@ private Q_SLOTS:
     void slotZoomSliderChanged(int);
     void slotThumbSizeChanged(int);
     void slotZoomChanged(double);
-    void slotTogglePreview(bool);
+
+    void slotSwitchedToPreview();
+    void slotSwitchedToIconView();
+    void slotSwitchedToMapView();
 
     void slotImportAddImages();
     void slotImportAddFolders();

@@ -890,7 +890,7 @@ QPixmap SearchSideBarWidget::getIcon()
 
 QString SearchSideBarWidget::getCaption()
 {
-    return i18n("Searches");
+    return i18nc("Search images, access stored searches", "Search");
 }
 
 void SearchSideBarWidget::newKeywordSearch()
@@ -1073,7 +1073,7 @@ QPixmap GPSSearchSideBarWidget::getIcon()
 
 QString GPSSearchSideBarWidget::getCaption()
 {
-    return i18n("Map Searches");
+    return i18nc("Search images on a map", "Map Search");
 }
 
 // -----------------------------------------------------------------------------
@@ -1158,7 +1158,7 @@ QPixmap PeopleSideBarWidget::getIcon()
 
 QString PeopleSideBarWidget::getCaption()
 {
-    return i18nc("People on your photos", "People");
+    return i18nc("Browse images sorted by depicted people", "People");
 }
 
 void PeopleSideBarWidget::slotInit()

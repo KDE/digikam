@@ -218,9 +218,10 @@ DigikamApp::DigikamApp()
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
-    d->cameraMenu     = new KActionMenu(this);
-    d->usbMediaMenu   = new KActionMenu(this);
-    d->cardReaderMenu = new KActionMenu(this);
+    d->cameraMenu      = new KActionMenu(this);
+    d->usbMediaMenu    = new KActionMenu(this);
+    d->cardReaderMenu  = new KActionMenu(this);
+    d->quickImportMenu = new KActionMenu(this);
 
     d->cameraList = new CameraList(this, KStandardDirs::locateLocal("appdata", "cameras.xml"));
 
@@ -529,6 +530,14 @@ void DigikamApp::setupView()
 
     connect(d->view, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
             this, SLOT(slotImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
+
+    connect(d->view, SIGNAL(signalSwitchedToPreview()),
+            this, SLOT(slotSwitchedToPreview()));
+    connect(d->view, SIGNAL(signalSwitchedToIconView()),
+            this, SLOT(slotSwitchedToIconView()));
+    connect(d->view, SIGNAL(signalSwitchedToMapView()),
+            this, SLOT(slotSwitchedToMapView()));
+
 }
 
 void DigikamApp::setupStatusBar()
@@ -575,9 +584,6 @@ void DigikamApp::setupStatusBar()
 
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
-
-    connect(d->view, SIGNAL(signalTogglePreview(bool)),
-            this, SLOT(slotTogglePreview(bool)));
 
     connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
             d->view, SLOT(slotFirstItem()));
@@ -630,15 +636,17 @@ void DigikamApp::setupAccelerators()
     lastImageAction->setShortcut(KShortcut(Qt::Key_End) );
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
 
-    KAction* cutItemsAction = KStandardAction::cut(this, SIGNAL(signalCutAlbumItemsSelection()), this);
-    cutItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_X));
-    actionCollection()->addAction("cut_album_selection", cutItemsAction);
+    d->cutItemsAction = KStandardAction::cut(this, SIGNAL(signalCutAlbumItemsSelection()), this);
+    d->cutItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_X));
+    actionCollection()->addAction("cut_album_selection", d->cutItemsAction);
 
-    KAction* copyItemsAction = KStandardAction::copy(this, SIGNAL(signalCopyAlbumItemsSelection()), this);
-    actionCollection()->addAction("copy_album_selection", copyItemsAction);
+    d->copyItemsAction = KStandardAction::copy(this, SIGNAL(signalCopyAlbumItemsSelection()), this);
+    d->cutItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_C));
+    actionCollection()->addAction("copy_album_selection", d->copyItemsAction);
 
-    KAction* pasteItemsAction = KStandardAction::paste(this, SIGNAL(signalPasteAlbumItemsSelection()), this);
-    actionCollection()->addAction("paste_album_selection", pasteItemsAction);
+    d->pasteItemsAction = KStandardAction::paste(this, SIGNAL(signalPasteAlbumItemsSelection()), this);
+    d->cutItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_V));
+    actionCollection()->addAction("paste_album_selection", d->pasteItemsAction);
 }
 
 void DigikamApp::setupActions()
@@ -707,6 +715,32 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
+    d->refreshAlbumAction = new KAction(KIcon("view-refresh"), i18n("Refresh"), this);
+    d->refreshAlbumAction->setShortcut(KShortcut(Qt::Key_F5));
+    d->refreshAlbumAction->setWhatsThis(i18n("Refresh the contents of the current album."));
+    connect(d->refreshAlbumAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumRefresh()));
+    actionCollection()->addAction("album_refresh", d->refreshAlbumAction);
+
+    // -----------------------------------------------------------------
+
+    QSignalMapper* browseActionsMapper = new QSignalMapper(this);
+    connect(browseActionsMapper, SIGNAL(mapped(QWidget*)),
+            d->view, SLOT(slotLeftSideBarActivate(QWidget*)));
+
+    kDebug() << d->view->leftSidebarWidgets();
+    foreach (SidebarWidget* leftWidget, d->view->leftSidebarWidgets())
+    {
+        QString actionName = "browse_" +
+                leftWidget->objectName().remove(' ').remove("Sidebar").remove("FolderView").remove("View").toLower();
+        kDebug() << actionName << leftWidget->objectName();
+        KAction* action = new KAction(KIcon(leftWidget->getIcon()), leftWidget->getCaption(), this);
+        actionCollection()->addAction(actionName, action);
+        connect(action, SIGNAL(triggered()), browseActionsMapper, SLOT(map()));
+        browseActionsMapper->setMapping(action, leftWidget);
+    }
+
+    // -----------------------------------------------------------------
+
     d->newAction = new KAction(KIcon("albumfolder-new"), i18n("&New..."), this);
     d->newAction->setShortcut(KStandardShortcut::openNew());
     d->newAction->setWhatsThis(i18n("Creates a new empty Album in the collection."));
@@ -722,7 +756,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->deleteAction = new KAction(KIcon("albumfolder-user-trash"), i18n("Delete"), this);
+    d->deleteAction = new KAction(KIcon("albumfolder-user-trash"), i18n("Delete Album"), this);
     connect(d->deleteAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteAlbum()));
     actionCollection()->addAction("album_delete", d->deleteAction);
 
@@ -732,14 +766,6 @@ void DigikamApp::setupActions()
     d->propsEditAction->setWhatsThis(i18n("Edit album properties and collection information."));
     connect(d->propsEditAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumPropsEdit()));
     actionCollection()->addAction("album_propsEdit", d->propsEditAction);
-
-    // -----------------------------------------------------------------
-
-    d->refreshAlbumAction = new KAction(KIcon("view-refresh"), i18n("Refresh"), this);
-    d->refreshAlbumAction->setShortcut(KShortcut(Qt::Key_F5));
-    d->refreshAlbumAction->setWhatsThis(i18n("Refresh the contents of the current album."));
-    connect(d->refreshAlbumAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumRefresh()));
-    actionCollection()->addAction("album_refresh", d->refreshAlbumAction);
 
     // -----------------------------------------------------------------
     
@@ -782,6 +808,12 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->browseTagsAction = new KAction(KIcon("tag"), i18n("Browse Tags..."), this);
+    connect(d->browseTagsAction, SIGNAL(triggered()), d->view, SLOT(slotLeftSideBarActivateTags()));
+    actionCollection()->addAction("browse_tag_long", d->browseTagsAction);
+
+    // -----------------------------------------------------------
+
     d->newTagAction = new KAction(KIcon("tag-new"), i18nc("new tag", "N&ew..."), this);
     connect(d->newTagAction, SIGNAL(triggered()), d->view, SLOT(slotNewTag()));
     actionCollection()->addAction("tag_new", d->newTagAction);
@@ -800,24 +832,24 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imagePreviewAction = new KToggleAction(KIcon("viewimage"), i18nc("View the selected image", "View..."), this);
-    d->imagePreviewAction->setShortcut(KShortcut(Qt::Key_F3));
-    connect(d->imagePreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
-    actionCollection()->addAction("image_view", d->imagePreviewAction);
-
-
-    // -----------------------------------------------------------
-
-    d->imageViewSelectionAction = new KActionMenu(KIcon("viewimage"), i18n("Views"), this);
-    d->imageViewSelectionAction->setDelayed(false);
+    d->imageViewSelectionAction = new KSelectAction(KIcon("viewimage"), i18n("Views"), this);
+    //d->imageViewSelectionAction->setDelayed(false);
     actionCollection()->addAction("view_selection", d->imageViewSelectionAction);
 
-    d->imageIconViewAction = new KAction( i18n("Icon view..."), this);
+    d->imageIconViewAction = new KToggleAction(KIcon("view-list-icons"),
+                                               i18nc("@action Go to thumbnails (icon) view", "Thumbnails"), this);
     actionCollection()->addAction("icon_view", d->imageIconViewAction);
     connect(d->imageIconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
     d->imageViewSelectionAction->addAction(d->imageIconViewAction);
 
-    d->imageMapViewAction = new KAction( i18n("Map View..."), this);
+    d->imagePreviewAction = new KToggleAction(KIcon("viewimage"), i18nc("View the selected image", "View Image"), this);
+    d->imagePreviewAction->setShortcut(KShortcut(Qt::Key_F3));
+    actionCollection()->addAction("image_view", d->imagePreviewAction);
+    connect(d->imagePreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
+    d->imageViewSelectionAction->addAction(d->imagePreviewAction);
+
+    d->imageMapViewAction = new KToggleAction(KIcon("applications-internet"),
+                                              i18nc("@action Switch to map view", "Map"), this);
     actionCollection()->addAction("map_view", d->imageMapViewAction);
     connect(d->imageMapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->imageMapViewAction);
@@ -831,13 +863,24 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("script_console", d->scriptConsoleAction);
 
     // -----------------------------------------------------------
+
     d->imageViewAction = new KAction(KIcon("editimage"), i18n("Edit..."), this);
     d->imageViewAction->setShortcut(KShortcut(Qt::Key_F4));
     d->imageViewAction->setWhatsThis(i18n("Open the selected item in the image editor."));
     connect(d->imageViewAction, SIGNAL(triggered()), d->view, SLOT(slotImageEdit()));
     actionCollection()->addAction("image_edit", d->imageViewAction);
 
+    KAction* ieAction = new KAction(KIcon("editimage"), i18n("Image Editor"), this);
+    ieAction->setWhatsThis(i18n("Open the image editor."));
+    connect(ieAction, SIGNAL(triggered()), d->view, SLOT(slotEditor()));
+    actionCollection()->addAction("imageeditor", ieAction);
+
     // -----------------------------------------------------------
+
+    KAction* ltAction = new KAction(KIcon("lighttable"), i18n("Light Table"), this);
+    ltAction->setShortcut(KShortcut(Qt::Key_L));
+    connect(ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
+    actionCollection()->addAction("light_table", ltAction);
 
     d->imageLightTableAction = new KAction(KIcon("lighttable"), i18n("Place onto Light Table"), this);
     d->imageLightTableAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
@@ -845,7 +888,6 @@ void DigikamApp::setupActions()
     connect(d->imageLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageLightTable()));
     actionCollection()->addAction("image_lighttable", d->imageLightTableAction);
 
-    // -----------------------------------------------------------
 
     d->imageAddLightTableAction = new KAction(KIcon("lighttableadd"), i18n("Add to Light Table"), this);
     d->imageAddLightTableAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_L));
@@ -854,6 +896,11 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("image_add_to_lighttable", d->imageAddLightTableAction);
 
     // -----------------------------------------------------------
+
+    KAction* bqmAction = new KAction(KIcon("bqm-diff"), i18n("Batch Queue Manager"), this);
+    bqmAction->setShortcut(KShortcut(Qt::Key_B));
+    connect(bqmAction, SIGNAL(triggered()), d->view, SLOT(slotQueueMgr()));
+    actionCollection()->addAction("queue_manager", bqmAction);
 
     d->imageAddCurrentQueueAction = new KAction(KIcon("bqm-commit"), i18n("Add to Current Queue"), this);
     d->imageAddCurrentQueueAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_B));
@@ -866,6 +913,12 @@ void DigikamApp::setupActions()
     d->imageAddNewQueueAction->setWhatsThis(i18n("Add selected items to a new queue from batch manager."));
     connect(d->imageAddNewQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToNewQueue()));
     actionCollection()->addAction("image_add_to_new_queue", d->imageAddNewQueueAction);
+
+    // -----------------------------------------------------------------
+
+    d->quickImportMenu->setText(i18nc("@action Import photos from camera", "Import"));
+    d->quickImportMenu->setIcon(KIcon("camera-photo"));
+    actionCollection()->addAction("import_auto", d->quickImportMenu);
 
     // -----------------------------------------------------------------
 
@@ -1201,20 +1254,6 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction* ltAction = new KAction(KIcon("lighttable"), i18n("Light Table"), this);
-    ltAction->setShortcut(KShortcut(Qt::Key_L));
-    connect(ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
-    actionCollection()->addAction("light_table", ltAction);
-
-    // -----------------------------------------------------------
-
-    KAction* bqmAction = new KAction(KIcon("bqm-diff"), i18n("Batch Queue Manager"), this);
-    bqmAction->setShortcut(KShortcut(Qt::Key_B));
-    connect(bqmAction, SIGNAL(triggered()), d->view, SLOT(slotQueueMgr()));
-    actionCollection()->addAction("queue_manager", bqmAction);
-
-    // -----------------------------------------------------------
-
     KAction* databaseMigrationAction = new KAction(KIcon("server-database"), i18n("Database Migration..."), this);
     connect(databaseMigrationAction, SIGNAL(triggered()), this, SLOT(slotDatabaseMigration()));
     actionCollection()->addAction("database_migration", databaseMigrationAction);
@@ -1302,6 +1341,8 @@ void DigikamApp::initGui()
     // Setting the filter condition also updates the tooltip.
     // (So `setRating` is called first, as otherwise the filter value is not respected).
     d->albumIconViewFilter->readSettings();
+
+    slotSwitchedToIconView();
 }
 
 void DigikamApp::enableZoomPlusAction(bool val)
@@ -1356,22 +1397,45 @@ void DigikamApp::slotAlbumSelected(bool val)
 
     Album* album = AlbumManager::instance()->currentAlbum();
 
-    if (album && !val)
+    if (album)
     {
-        // Not a PAlbum is selected
-        d->deleteAction->setEnabled(false);
-        d->addImagesAction->setEnabled(false);
-        d->propsEditAction->setEnabled(false);
-        d->openInFileManagerAction->setEnabled(false);
-        d->openInTerminalAction->setEnabled(false);
-        d->newAction->setEnabled(false);
-        d->addFoldersAction->setEnabled(false);
-        d->writeAlbumMetadataAction->setEnabled(true);
-        d->readAlbumMetadataAction->setEnabled(true);
+        if (!val)
+        {
+            // Not a PAlbum is selected
+            d->deleteAction->setEnabled(false);
+            d->addImagesAction->setEnabled(false);
+            d->propsEditAction->setEnabled(false);
+            d->openInFileManagerAction->setEnabled(false);
+            d->openInTerminalAction->setEnabled(false);
+            d->newAction->setEnabled(false);
+            d->addFoldersAction->setEnabled(false);
+            d->writeAlbumMetadataAction->setEnabled(true);
+            d->readAlbumMetadataAction->setEnabled(true);
+            d->pasteItemsAction->setEnabled(!album->isRoot());
+        }
+        else
+        {
+            // We have either the abstract root album,
+            // the album root album for collection base dirs, or normal albums.
+            PAlbum* palbum     = static_cast<PAlbum*>(album);
+            bool isRoot        = palbum->isRoot();
+            bool isAlbumRoot   = palbum->isAlbumRoot();
+            bool isNormalAlbum = !isRoot && !isAlbumRoot;
+
+            d->deleteAction->setEnabled(isNormalAlbum);
+            d->addImagesAction->setEnabled(isNormalAlbum || isAlbumRoot);
+            d->propsEditAction->setEnabled(isNormalAlbum);
+            d->openInFileManagerAction->setEnabled(true);
+            d->openInTerminalAction->setEnabled(true);
+            d->newAction->setEnabled(isNormalAlbum || isAlbumRoot);
+            d->addFoldersAction->setEnabled(isNormalAlbum || isAlbumRoot);
+            d->writeAlbumMetadataAction->setEnabled(isNormalAlbum || isAlbumRoot);
+            d->readAlbumMetadataAction->setEnabled(isNormalAlbum || isAlbumRoot);
+            d->pasteItemsAction->setEnabled(isNormalAlbum || isAlbumRoot);
+        }
     }
-    else if (!album && !val)
+    else
     {
-        // Groupitem selected (Collection/date)
         d->deleteAction->setEnabled(false);
         d->addImagesAction->setEnabled(false);
         d->propsEditAction->setEnabled(false);
@@ -1381,25 +1445,7 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->addFoldersAction->setEnabled(false);
         d->writeAlbumMetadataAction->setEnabled(false);
         d->readAlbumMetadataAction->setEnabled(false);
-    }
-    else if (album && album->type() == Album::PHYSICAL)
-    {
-        // We have either the abstract root album,
-        // the album root album for collection base dirs, or normal albums.
-        PAlbum* palbum     = static_cast<PAlbum*>(album);
-        bool isRoot        = palbum->isRoot();
-        bool isAlbumRoot   = palbum->isAlbumRoot();
-        bool isNormalAlbum = !isRoot && !isAlbumRoot;
-
-        d->deleteAction->setEnabled(isNormalAlbum);
-        d->addImagesAction->setEnabled(isNormalAlbum || isAlbumRoot);
-        d->propsEditAction->setEnabled(isNormalAlbum);
-        d->openInFileManagerAction->setEnabled(true);
-        d->openInTerminalAction->setEnabled(true);
-        d->newAction->setEnabled(isNormalAlbum || isAlbumRoot);
-        d->addFoldersAction->setEnabled(isNormalAlbum || isAlbumRoot);
-        d->writeAlbumMetadataAction->setEnabled(isNormalAlbum || isAlbumRoot);
-        d->readAlbumMetadataAction->setEnabled(isNormalAlbum || isAlbumRoot);
+        d->pasteItemsAction->setEnabled(false);
     }
 }
 
@@ -1412,21 +1458,11 @@ void DigikamApp::slotTagSelected(bool val)
         return;
     }
 
-    if (!val)
-    {
-        d->deleteTagAction->setEnabled(false);
-        d->editTagAction->setEnabled(false);
-    }
-    else if (!album->isRoot())
-    {
-        d->deleteTagAction->setEnabled(true);
-        d->editTagAction->setEnabled(true);
-    }
-    else
-    {
-        d->deleteTagAction->setEnabled(false);
-        d->editTagAction->setEnabled(false);
-    }
+    bool enabled = val && album && !album->isRoot();
+    d->browseTagsAction->setEnabled(!val);
+    d->newTagAction->setEnabled(enabled);
+    d->deleteTagAction->setEnabled(enabled);
+    d->editTagAction->setEnabled(enabled);
 }
 
 void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev, bool hasNext,
@@ -1477,12 +1513,9 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
 {
     // The preview can either be activated when only one image is selected,
     // or if multiple images are selected, but one image is the 'current image'.
-    d->imagePreviewAction->setEnabled(
-               (selectionCount == 1)
-            || ( (selectionCount > 0) && d->view->hasCurrentItem())
-        );
-
-    d->imageViewAction->setEnabled(selectionCount == 1);
+    bool hasAtLeastCurrent =(selectionCount == 1) || ( (selectionCount > 0) && d->view->hasCurrentItem());
+    d->imagePreviewAction->setEnabled(hasAtLeastCurrent);
+    d->imageViewAction->setEnabled(hasAtLeastCurrent);
     d->imageFindSimilarAction->setEnabled(selectionCount == 1);
     d->imageRenameAction->setEnabled(selectionCount > 0);
     d->imageLightTableAction->setEnabled(selectionCount > 0);
@@ -1495,6 +1528,8 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     d->imageExifOrientationActionMenu->setEnabled(selectionCount > 0);
     d->slideShowSelectionAction->setEnabled(selectionCount > 0);
     d->moveSelectionToAlbumAction->setEnabled(selectionCount > 0);
+    d->cutItemsAction->setEnabled(selectionCount > 0);
+    d->copyItemsAction->setEnabled(selectionCount > 0);
 
     if (selectionCount > 0)
     {
@@ -1505,6 +1540,28 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
 
         slotResetExifOrientationActions();
     }
+}
+
+void DigikamApp::slotSwitchedToPreview()
+{
+    d->imagePreviewAction->setChecked(true);
+    d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
+    d->showBarAction->setEnabled(true);
+}
+
+void DigikamApp::slotSwitchedToIconView()
+{
+    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+    d->imageIconViewAction->setChecked(true);
+    d->showBarAction->setEnabled(false);
+}
+
+void DigikamApp::slotSwitchedToMapView()
+{
+    //TODO: Link to map view's zoom actions
+    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+    d->imageMapViewAction->setChecked(true);
+    d->showBarAction->setEnabled(false);
 }
 
 void DigikamApp::slotProgressBarMode(int mode, const QString& text)
@@ -1623,6 +1680,7 @@ void DigikamApp::slotCameraAdded(CameraType* ctype)
 
     ctype->setAction(cAction);
     updateCameraMenu();
+    updateQuickImportAction();
 }
 
 void DigikamApp::slotCameraRemoved(KAction* cAction)
@@ -1633,6 +1691,7 @@ void DigikamApp::slotCameraRemoved(KAction* cAction)
     }
 
     updateCameraMenu();
+    updateQuickImportAction();
 }
 
 void DigikamApp::slotCameraAutoDetect()
@@ -2011,6 +2070,7 @@ QString DigikamApp::labelForSolidCamera(const Solid::Device& cameraDevice)
 
 void DigikamApp::fillSolidMenus()
 {
+    QHash<QString, QDateTime> newAppearanceTimes;
     d->usbMediaMenu->menu()->clear();
     d->cardReaderMenu->menu()->clear();
 
@@ -2062,6 +2122,8 @@ void DigikamApp::fillSolidMenus()
         action->setIcon(KIcon(iconName));
         // set data to identify device in action slot slotSolidSetupDevice
         action->setData(cameraDevice.udi());
+        newAppearanceTimes[cameraDevice.udi()] = d->cameraAppearanceTimes.contains(cameraDevice.udi()) ?
+            d->cameraAppearanceTimes.value(cameraDevice.udi()) : QDateTime::currentDateTime();
 
         d->cameraMenu->addAction(action);
     }
@@ -2251,6 +2313,8 @@ void DigikamApp::fillSolidMenus()
 
         // set data to identify device in action slot slotSolidSetupDevice
         action->setData(accessDevice.udi());
+        newAppearanceTimes[accessDevice.udi()] = d->cameraAppearanceTimes.contains(accessDevice.udi()) ?
+            d->cameraAppearanceTimes.value(accessDevice.udi()) : QDateTime::currentDateTime();
 
         if (isCamera)
         {
@@ -2293,12 +2357,14 @@ void DigikamApp::fillSolidMenus()
     d->cardReaderMenu->menuAction()->setVisible(!d->cardReaderMenu->isEmpty());
     */
 
+    d->cameraAppearanceTimes = newAppearanceTimes;
 
     // disable empty menus
     d->usbMediaMenu->setEnabled(!d->usbMediaMenu->menu()->isEmpty());
     d->cardReaderMenu->setEnabled(!d->cardReaderMenu->menu()->isEmpty());
 
     updateCameraMenu();
+    updateQuickImportAction();
 }
 
 void DigikamApp::slotSetup()
@@ -2380,6 +2446,9 @@ void DigikamApp::slotConfToolbars()
         createGUI(xmlFile());
         applyMainWindowSettings(d->config->group("General Settings"));
         plugActionList( QString::fromLatin1("file_actions_import"), d->kipiFileActionsImport );
+        plugActionList( QString::fromLatin1("image_jpeglossless_actions"), d->kipiJpeglosslessActions);
+        plugActionList( QString::fromLatin1("image_print_actions"),  d->kipiPrintActions);
+        plugActionList( QString::fromLatin1("image_metadata_actions"), d->kipiMetadataActions);
         plugActionList( QString::fromLatin1("image_actions"),       d->kipiImageActions );
         plugActionList( QString::fromLatin1("tool_actions"),        d->kipiToolsActions );
         plugActionList( QString::fromLatin1("batch_actions"),       d->kipiBatchActions );
@@ -2507,6 +2576,9 @@ void DigikamApp::slotKipiPluginPlug()
 {
     unplugActionList(QString::fromLatin1("file_actions_export"));
     unplugActionList(QString::fromLatin1("file_actions_import"));
+    unplugActionList(QString::fromLatin1("image_jpeglossless_actions"));
+    unplugActionList(QString::fromLatin1("image_print_actions"));
+    unplugActionList(QString::fromLatin1("image_metadata_actions"));
     unplugActionList(QString::fromLatin1("image_actions"));
     unplugActionList(QString::fromLatin1("tool_actions"));
     unplugActionList(QString::fromLatin1("batch_actions"));
@@ -2565,11 +2637,10 @@ void DigikamApp::slotKipiPluginPlug()
         pluginActionsDisabled << QString("batch_convert_images");  // Obsolete since 1.2.0, replaced by BQM convert tools.
         pluginActionsDisabled << QString("batch_color_images");    // Obsolete since 1.2.0, replaced by BQM color tools.
         pluginActionsDisabled << QString("batch_filter_images");   // Obsolete since 1.2.0, replaced by BQM enhance tools.
+        pluginActionsDisabled << QString("jpeglossless_convert2grayscale");
 
         // Add actions to kipipluginsActionCollection
         QList<QAction*> allPluginActions = plugin->actionCollection()->actions();
-
-#if KDE_IS_VERSION(4,1,68)
 
         if (allPluginActions.count() > 3)
         {
@@ -2586,7 +2657,6 @@ void DigikamApp::slotKipiPluginPlug()
         }
         else
         {
-#endif
             foreach (QAction* action, allPluginActions)
             {
                 QString actionName(action->objectName());
@@ -2596,10 +2666,7 @@ void DigikamApp::slotKipiPluginPlug()
                     d->kipipluginsActionCollection->addAction(actionName, action);
                 }
             }
-#if KDE_IS_VERSION(4,1,68)
         }
-
-#endif
 
         // Plugin category identification using KAction method based.
 
@@ -2625,8 +2692,27 @@ void DigikamApp::slotKipiPluginPlug()
                         d->kipiFileActionsExport.append(action);
                         break;
                     case KIPI::ImagesPlugin:
-                        d->kipiImageActions.append(action);
+                    {
+                        if (plugin->objectName() == "JPEGLossless")
+                        {
+                            d->kipiJpeglosslessActions.append(action);
+                        }
+                        else if (plugin->objectName() == "PrintImages")
+                        {
+                            d->kipiPrintActions.append(action);
+                        }
+                        else if (plugin->objectName() == "GPSSync" ||
+                                 plugin->objectName() == "MetadataEdit" ||
+                                 plugin->objectName() == "TimeAdjust")
+                        {
+                            d->kipiMetadataActions.append(action);
+                        }
+                        else
+                        {
+                            d->kipiImageActions.append(action);
+                        }
                         break;
+                    }
                     case KIPI::ToolsPlugin:
                     {
                         if (actionName == QString("advancedslideshow"))
@@ -2659,6 +2745,9 @@ void DigikamApp::slotKipiPluginPlug()
     // Create GUI menu in according with plugins.
     plugActionList(QString::fromLatin1("file_actions_export"), d->kipiFileActionsExport);
     plugActionList(QString::fromLatin1("file_actions_import"), d->kipiFileActionsImport);
+    plugActionList(QString::fromLatin1("image_jpeglossless_actions"), d->kipiJpeglosslessActions);
+    plugActionList(QString::fromLatin1("image_print_actions"), d->kipiPrintActions);
+    plugActionList(QString::fromLatin1("image_metadata_actions"), d->kipiMetadataActions);
     plugActionList(QString::fromLatin1("image_actions"),       d->kipiImageActions);
     plugActionList(QString::fromLatin1("tool_actions"),        d->kipiToolsActions);
     plugActionList(QString::fromLatin1("batch_actions"),       d->kipiBatchActions);
@@ -2910,36 +2999,6 @@ void DigikamApp::slotZoomChanged(double zoom)
     }
 }
 
-void DigikamApp::slotTogglePreview(bool t)
-{
-    // NOTE: if 't' is true, we are in Preview Mode, else we are in AlbumView Mode
-
-    // This is require if ESC is pressed to go out of Preview Mode.
-    // imagePreviewAction is handled by F3 key only.
-    d->imagePreviewAction->setChecked(t);
-
-    // Here, we will toggle some menu actions depending of current Mode.
-
-    // Select menu.
-    d->selectAllAction->setEnabled(!t);
-    d->selectNoneAction->setEnabled(!t);
-    d->selectInvertAction->setEnabled(!t);
-
-    // View menu
-    d->albumSortAction->setEnabled(!t);
-    d->imageSortAction->setEnabled(!t);
-    d->showBarAction->setEnabled(t);
-
-    if (t)
-    {
-        d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
-    }
-    else
-    {
-        d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    }
-}
-
 void DigikamApp::slotImportAddImages()
 {
     QString startingPath;
@@ -3062,6 +3121,51 @@ void DigikamApp::updateCameraMenu()
     d->cameraMenu->addSeparator();
 
     d->cameraMenu->addAction(actionCollection()->action("camera_add"));
+}
+
+void DigikamApp::updateQuickImportAction()
+{
+    d->quickImportMenu->menu()->clear();
+    foreach (QAction* action, d->solidCameraActionGroup->actions())
+    {
+        d->quickImportMenu->addAction(action);
+    }
+    foreach (QAction* action, d->solidUsmActionGroup->actions())
+    {
+        d->quickImportMenu->addAction(action);
+    }
+    foreach (QAction* action, d->manualCameraActionGroup->actions())
+    {
+        d->quickImportMenu->addAction(action);
+    }
+
+    if (d->quickImportMenu->menu()->actions().isEmpty())
+    {
+        d->quickImportMenu->setEnabled(false);
+    }
+    else
+    {
+        disconnect(d->quickImportMenu, SIGNAL(triggered()), 0, 0);
+
+        QAction* primaryAction = 0;
+        QDateTime latest;
+        foreach (QAction* action, d->quickImportMenu->menu()->actions())
+        {
+            QDateTime appearanceTime = d->cameraAppearanceTimes.value(action->data().toString());
+            if (latest.isNull() || appearanceTime > latest)
+            {
+                primaryAction = action;
+                latest = appearanceTime;
+            }
+        }
+        if (!primaryAction)
+        {
+            primaryAction = d->quickImportMenu->menu()->actions().first();
+        }
+        connect(d->quickImportMenu, SIGNAL(triggered()),
+                primaryAction, SLOT(trigger()));
+        d->quickImportMenu->setDelayed(d->quickImportMenu->menu()->actions().size() > 1);
+    }
 }
 
 void DigikamApp::setupExifOrientationActions()

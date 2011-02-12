@@ -35,6 +35,7 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kedittoolbar.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -671,6 +672,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList& list,
                                       bool addTo)
 {
     // Clear all items before adding new images to the light table.
+    kDebug() << "Clearing LT" << (!addTo);
     if (!addTo)
     {
         slotClearItemsList();

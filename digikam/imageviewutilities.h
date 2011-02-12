@@ -61,7 +61,10 @@ public Q_SLOTS:
     bool deleteImages(const QList<ImageInfo>& infos, bool deletePermanently);
     void deleteImagesDirectly(const QList<ImageInfo>& infos, bool useTrash);
 
-    void insertToLightTable(const QList<ImageInfo>& list, const ImageInfo& current, bool emptyBeforeAdding);
+    void insertToLightTableAuto(const QList<ImageInfo>& all, const QList<ImageInfo>& selected, const ImageInfo& current);
+    void insertToLightTable(const QList<ImageInfo>& list, const ImageInfo& current, bool addTo);
+
+    void insertToQueueManagerAuto(const QList<ImageInfo>& list, const ImageInfo& currentInfo);
     void insertToQueueManager(const QList<ImageInfo>& list, const ImageInfo& currentInfo, bool newQueue);
     void insertSilentToQueueManager(const QList<ImageInfo>& list, const ImageInfo& currentInfo, int queueid);
 

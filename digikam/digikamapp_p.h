@@ -109,6 +109,7 @@ public:
         rebuildAlbumThumbsAction(0),
         writeAlbumMetadataAction(0),
         readAlbumMetadataAction(0),
+        browseTagsAction(0),
         newTagAction(0),
         deleteTagAction(0),
         editTagAction(0),
@@ -132,6 +133,9 @@ public:
         imageRenameAction(0),
         imageDeleteAction(0),
         imageExifOrientationActionMenu(0),
+        cutItemsAction(0),
+        copyItemsAction(0),
+        pasteItemsAction(0),
         selectAllAction(0),
         selectNoneAction(0),
         selectInvertAction(0),
@@ -194,6 +198,9 @@ public:
     // KIPI plugins support
     QList<QAction*>                     kipiFileActionsExport;
     QList<QAction*>                     kipiFileActionsImport;
+    QList<QAction*>                     kipiJpeglosslessActions;
+    QList<QAction*>                     kipiPrintActions;
+    QList<QAction*>                     kipiMetadataActions;
     QList<QAction*>                     kipiImageActions;
     QList<QAction*>                     kipiToolsActions;
     QList<QAction*>                     kipiBatchActions;
@@ -202,6 +209,8 @@ public:
     KActionMenu*                        cameraMenu;
     KActionMenu*                        usbMediaMenu;
     KActionMenu*                        cardReaderMenu;
+    KActionMenu*                        quickImportMenu;
+    QHash<QString, QDateTime>           cameraAppearanceTimes;
 
     KSharedConfig::Ptr                  config;
 
@@ -229,16 +238,16 @@ public:
     KAction*                            readAlbumMetadataAction;
 
     // Tag Actions
+    KAction*                            browseTagsAction;
     KAction*                            newTagAction;
     KAction*                            deleteTagAction;
     KAction*                            editTagAction;
 
     // Image Actions
+    KSelectAction*                      imageViewSelectionAction;
     KToggleAction*                      imagePreviewAction;
-    KAction*                            imageMapViewAction;
-    KActionMenu*                        imageViewSelectionAction;
-    KAction*                            imageIconViewAction;
-    KAction*                            imagePreviewViewAction;
+    KToggleAction*                      imageMapViewAction;
+    KToggleAction*                      imageIconViewAction;
     KAction*                            imageLightTableAction;
     KAction*                            imageAddLightTableAction;
     KAction*                            imageAddCurrentQueueAction;
@@ -259,7 +268,10 @@ public:
     KAction*                            imageDeleteAction;
     KActionMenu*                        imageExifOrientationActionMenu;
 
-    // Selection Actions
+    // Edit Actions
+    KAction*                            cutItemsAction;
+    KAction*                            copyItemsAction;
+    KAction*                            pasteItemsAction;
     KAction*                            selectAllAction;
     KAction*                            selectNoneAction;
     KAction*                            selectInvertAction;

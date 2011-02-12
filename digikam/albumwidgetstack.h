@@ -105,7 +105,7 @@ Q_SIGNALS:
     void signalPrevItem();
     void signalEditItem();
     void signalDeleteItem();
-    void signalToggledToPreviewMode(bool);
+    void signalViewModeChanged();
     void signalBack2Album();
     void signalSlideShow();
     void signalZoomFactorChanged(double);

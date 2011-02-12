@@ -54,10 +54,15 @@ public:
 
 public Q_SLOTS:
 
+    void openEditor();
     void openInEditor(const ImageInfo& info);
     void openCurrentInEditor();
 
-    void insertSelectedToLightTable(bool addTo);
+    void setOnLightTable();
+    void addSelectedToLightTable();
+    void setSelectedOnLightTable();
+
+    void insertToQueue();
     void insertSelectedToCurrentQueue();
     void insertSelectedToNewQueue();
     void insertSelectedToExistingQueue(int queueid);

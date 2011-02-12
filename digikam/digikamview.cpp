@@ -206,18 +206,18 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
     connect(d->albumFolderSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
 
-    // date view
-    d->dateViewSideBar = new DateFolderViewSideBarWidget(d->leftSideBar,
-            d->modelCollection->getDateAlbumModel(),
-            d->iconView->imageAlbumFilterModel());
-    d->leftSideBarWidgets << d->dateViewSideBar;
-
     // Tags sidebar tab contents.
     d->tagViewSideBar = new TagViewSideBarWidget(d->leftSideBar,
             d->modelCollection->getTagModel());
     d->leftSideBarWidgets << d->tagViewSideBar;
     connect(d->tagViewSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
+
+    // date view
+    d->dateViewSideBar = new DateFolderViewSideBarWidget(d->leftSideBar,
+            d->modelCollection->getDateAlbumModel(),
+            d->iconView->imageAlbumFilterModel());
+    d->leftSideBarWidgets << d->dateViewSideBar;
 
     // timeline side bar
     d->timelineSideBar = new TimelineSideBarWidget(d->leftSideBar,
@@ -467,8 +467,8 @@ void DigikamView::setupConnections()
     connect(d->albumWidgetStack, SIGNAL(signalDeleteItem()),
             this, SLOT(slotImageDelete()));
 
-    connect(d->albumWidgetStack, SIGNAL(signalToggledToPreviewMode(bool)),
-            this, SLOT(slotToggledToPreviewMode(bool)));
+    connect(d->albumWidgetStack, SIGNAL(signalViewModeChanged()),
+            this, SLOT(slotViewModeChanged()));
 
     connect(d->albumWidgetStack, SIGNAL(signalBack2Album()),
             this, SLOT(slotEscapePreview()));
@@ -652,6 +652,11 @@ void DigikamView::saveViewState()
     d->mapView->saveState();
 
     d->rightSideBar->saveState();
+}
+
+QList<SidebarWidget*> DigikamView::leftSidebarWidgets()
+{
+    return d->leftSideBarWidgets;
 }
 
 KUrl::List DigikamView::allUrls() const
@@ -1021,6 +1026,11 @@ void DigikamView::slotAlbumSelected(Album* album)
                 }
         */
         emit signalTagSelected(true);
+    }
+    else
+    {
+        emit signalAlbumSelected(false);
+        emit signalTagSelected(false);
     }
 
     if (d->useAlbumHistory)
@@ -1412,11 +1422,6 @@ void DigikamView::slotEscapePreview()
 
 void DigikamView::slotMapWidgetView()
 {
-    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
-    {
-        emit signalTogglePreview(false);
-    }
-
     d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::MapWidgetMode);
 }
 
@@ -1425,7 +1430,6 @@ void DigikamView::slotIconView()
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
         emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
-        emit signalTogglePreview(false);
     }
 
     // and switch to icon view
@@ -1481,27 +1485,31 @@ void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
     slotImageSelected();
 }
 
-void DigikamView::slotToggledToPreviewMode(bool b)
+void DigikamView::slotViewModeChanged()
 {
-    /// @todo What do we have to do in the map widget mode???
-
     toggleZoomActions();
 
-    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+    switch (d->albumWidgetStack->previewMode())
     {
-        emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
+        case AlbumWidgetStack::PreviewAlbumMode:
+            emit signalSwitchedToIconView();
+            emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
+            break;
+        case AlbumWidgetStack::PreviewImageMode:
+            emit signalSwitchedToPreview();
+            slotZoomFactorChanged(d->albumWidgetStack->zoomFactor());
+            break;
+        case AlbumWidgetStack::WelcomePageMode:
+            emit signalSwitchedToIconView();
+            break;
+        case AlbumWidgetStack::MediaPlayerMode:
+            emit signalSwitchedToPreview();
+            break;
+        case AlbumWidgetStack::MapWidgetMode:
+            emit signalSwitchedToMapView();
+            //TODO: connect map view's zoom buttons to main status bar zoom buttons
+            break;
     }
-    else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
-    {
-        slotZoomFactorChanged(d->albumWidgetStack->zoomFactor());
-    }
-
-    emit signalTogglePreview(b);
-}
-
-void DigikamView::slotImageEdit()
-{
-    d->iconView->openCurrentInEditor();
 }
 
 void DigikamView::slotImageFindSimilar()
@@ -1520,14 +1528,24 @@ void DigikamView::slotImageExifOrientation(int orientation)
     d->iconView->setExifOrientationOfSelected(orientation);
 }
 
+void DigikamView::slotEditor()
+{
+    d->iconView->openEditor();
+}
+
 void DigikamView::slotLightTable()
 {
-    d->iconView->utilities()->insertToLightTable(ImageInfoList(), ImageInfo(), true);
+    d->iconView->setOnLightTable();
 }
 
 void DigikamView::slotQueueMgr()
 {
-    d->iconView->utilities()->insertToQueueManager(ImageInfoList(), ImageInfo(), false);
+    d->iconView->insertToQueue();
+}
+
+void DigikamView::slotImageEdit()
+{
+    d->iconView->openCurrentInEditor();
 }
 
 void DigikamView::slotImageLightTable()
@@ -1536,7 +1554,7 @@ void DigikamView::slotImageLightTable()
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
         // put images into an emptied light table
-        d->iconView->insertSelectedToLightTable(false);
+        d->iconView->setSelectedOnLightTable();
     }
     else
     {
@@ -1554,7 +1572,7 @@ void DigikamView::slotImageAddToLightTable()
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
         // add images to the existing images in the light table
-        d->iconView->insertSelectedToLightTable(true);
+        d->iconView->addSelectedToLightTable();
     }
     else
     {
@@ -1899,9 +1917,24 @@ void DigikamView::slotOrientationChangeFailed(const QStringList& failedFileNames
     }
 }
 
+void DigikamView::slotLeftSideBarActivateAlbums()
+{
+    d->leftSideBar->setActiveTab(d->albumFolderSideBar);
+}
+
+void DigikamView::slotLeftSideBarActivateTags()
+{
+    d->leftSideBar->setActiveTab(d->tagViewSideBar);
+}
+
 void DigikamView::slotLeftSideBarActivate(SidebarWidget* widget)
 {
     d->leftSideBar->setActiveTab(widget);
+}
+
+void DigikamView::slotLeftSideBarActivate(QWidget* widget)
+{
+    slotLeftSideBarActivate(static_cast<SidebarWidget*>(widget));
 }
 
 void DigikamView::slotRatingChanged(const KUrl& url, int rating)

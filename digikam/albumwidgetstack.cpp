@@ -351,7 +351,6 @@ void AlbumWidgetStack::setPreviewMode(const int mode)
     {
         setPreviewItem();
         setCurrentIndex(mode);
-        emit signalToggledToPreviewMode(false);
     }
     else
     {
@@ -368,6 +367,8 @@ void AlbumWidgetStack::setPreviewMode(const int mode)
     {
         d->mapWidgetView->setFocus();
     }
+    
+    emit signalViewModeChanged();
 }
 
 void AlbumWidgetStack::syncSelection(ImageCategorizedView* from, ImageCategorizedView* to)
@@ -425,7 +426,7 @@ void AlbumWidgetStack::slotIconViewSelectionChanged()
 
 void AlbumWidgetStack::previewLoaded()
 {
-    emit signalToggledToPreviewMode(true);
+    emit signalViewModeChanged();
 }
 
 void AlbumWidgetStack::slotZoomFactorChanged(double z)

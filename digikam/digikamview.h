@@ -84,6 +84,7 @@ public:
     double zoomMax();
 
     void toggleTag(int tagID);
+    QList<SidebarWidget*> leftSidebarWidgets();
 
 Q_SIGNALS:
 
@@ -96,7 +97,9 @@ Q_SIGNALS:
     void signalProgressValue(int);
     void signalThumbSizeChanged(int);
     void signalZoomChanged(double);
-    void signalTogglePreview(bool);
+    void signalSwitchedToPreview();
+    void signalSwitchedToIconView();
+    void signalSwitchedToMapView();
 
     void signalGotoAlbumAndItem(const ImageInfo&);
     void signalGotoDateAndItem(AlbumIconItem*);
@@ -180,8 +183,14 @@ public Q_SLOTS:
     void slotAssignRating(int rating);
 
     // Tools action slots.
+    void slotEditor();
     void slotLightTable();
     void slotQueueMgr();
+
+    void slotLeftSideBarActivate(QWidget* widget);
+    void slotLeftSideBarActivate(SidebarWidget* widget);
+    void slotLeftSideBarActivateAlbums();
+    void slotLeftSideBarActivateTags();
 
 private:
 
@@ -194,8 +203,6 @@ private:
     void connectBatchSyncMetadata(BatchSyncMetadata* syncMetadata);
 
 private Q_SLOTS:
-
-    void slotLeftSideBarActivate(SidebarWidget* widget);
 
     void slotAllAlbumsLoaded();
 
@@ -214,7 +221,7 @@ private Q_SLOTS:
     void slotLastItem();
     void slotSelectItemByUrl(const KUrl&);
 
-    void slotToggledToPreviewMode(bool);
+    void slotViewModeChanged();
     void slotEscapePreview();
     void slotCancelSlideShow();
 
