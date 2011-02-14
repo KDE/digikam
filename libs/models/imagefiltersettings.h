@@ -6,8 +6,9 @@
  * Date        : 2009-03-05
  * Description : Filter values for use with ImageFilterModel
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,6 +47,7 @@ namespace Digikam
 {
 
 class ImageInfo;
+
 namespace DatabaseFields
 {
 class Set;
@@ -72,13 +74,14 @@ public:
         AndCondition
     };
 
-    bool                            untaggedFilter;
-    QList<int>                      includeTagFilter;
-    QList<int>                      excludeTagFilter;
-    MatchingCondition               matchingCond;
+    bool              untaggedFilter;
+    QList<int>        includeTagFilter;
+    QList<int>        excludeTagFilter;
+    MatchingCondition matchingCond;
+    QList<int>        colorLabelTagFilter;
 
     void setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags, MatchingCondition matchingCond,
-                      bool showUnTagged = false);
+                      bool showUnTagged, const QList<int>& clTagIds);
 
     /// --- Rating filter ---
 
@@ -140,7 +143,9 @@ public:
     DatabaseFields::Set watchFlags() const;
 };
 
+// ---------------------------------------------------------------------------------------
 class VersionManagerSettings;
+
 class DIGIKAM_DATABASE_EXPORT VersionImageFilterSettings
 {
 public:

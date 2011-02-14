@@ -115,12 +115,12 @@ Q_SIGNALS:
      * @param includedTags a list of included tag ids
      * @param excludedTags a list of excluded tag ids
      * @param matchingCond condition to join the selected tags
-     * @param showUnTagged if this is true, only photos without a tag shall be
-     *                     shown
+     * @param showUnTagged if this is true, only photos without a tag shall be shown
+     * @param includedTags a list of color label tag ids
      */
-    void tagFilterChanged(const QList<int>& includedTags, const QList<int>& excludedTags,
-                          ImageFilterSettings::MatchingCondition matchingCond,
-                          bool showUnTagged);
+    void signalTagFilterChanged(const QList<int>& includedTags, const QList<int>& excludedTags,
+                                ImageFilterSettings::MatchingCondition matchingCond,
+                                bool showUnTagged, const QList<int>& clTagIds);
 
 public Q_SLOTS:
 

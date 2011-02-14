@@ -34,6 +34,7 @@
 // KDE includes
 
 #include <kselectaction.h>
+#include <khbox.h>
 
 // Local includes
 
@@ -201,32 +202,31 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
                                     AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());
 
-    QLabel* clLabel       = new QLabel(i18n("Color Labels"));
-    d->colorLabelFilter   = new ColorLabelFilter(this);
-
     const QString notTaggedTitle   = i18n("Images Without Tags");
     d->withoutTagCheckBox          = new QCheckBox(notTaggedTitle, this);
     d->withoutTagCheckBox->setWhatsThis(i18n("Show images without a tag."));
 
-    QLabel* matchingConditionLabel = new QLabel(i18n("Matching Condition:"), this);
-    matchingConditionLabel->setWhatsThis(i18n(
-            "Defines in which way the selected tags are combined to filter the images. "
-            "This also includes the '%1' check box.", notTaggedTitle));
-
-    d->matchingConditionComboBox   = new KComboBox(this);
+    KHBox* hbox                    = new KHBox(this);
+    QLabel* matchingConditionLabel = new QLabel(i18n("Matching Condition:"), hbox);
+    d->matchingConditionComboBox   = new KComboBox(hbox);
     d->matchingConditionComboBox->setWhatsThis(matchingConditionLabel->whatsThis());
     d->matchingConditionComboBox->addItem(i18n("AND"), ImageFilterSettings::AndCondition);
     d->matchingConditionComboBox->addItem(i18n("OR"),  ImageFilterSettings::OrCondition);
+    d->matchingConditionComboBox->setWhatsThis(i18n(
+            "Defines in which way the selected tags are combined to filter the images. "
+            "This also includes the '%1' check box.", notTaggedTitle));
+
+    QLabel* clLabel       = new QLabel(i18n("Color Labels:"));
+    d->colorLabelFilter   = new ColorLabelFilter(this);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(d->tagFilterView);
     layout->addWidget(d->tagFilterSearchBar);
+    layout->addWidget(d->withoutTagCheckBox);
+    layout->addWidget(hbox);
     layout->addWidget(clLabel);
     layout->addWidget(d->colorLabelFilter);
-    layout->addWidget(d->withoutTagCheckBox);
-    layout->addWidget(matchingConditionLabel);
-    layout->addWidget(d->matchingConditionComboBox);
-    layout->setStretchFactor(d->tagFilterView,    10);
+    layout->setStretchFactor(d->tagFilterView, 10);
 
     // signals/slots connections
 
@@ -290,6 +290,7 @@ void TagFilterSideBarWidget::filterChanged()
 
     QList<int> includedTagIds;
     QList<int> excludedTagIds;
+    QList<int> clTagIds;
 
     if (!showUntagged || matchCond == ImageFilterSettings::OrCondition)
     {
@@ -311,12 +312,12 @@ void TagFilterSideBarWidget::filterChanged()
         {
             if (tag)
             {
-                includedTagIds << tag->id();
+                clTagIds << tag->id();
             }
         }
     }
 
-    emit tagFilterChanged(includedTagIds, excludedTagIds, matchCond, showUntagged);
+    emit signalTagFilterChanged(includedTagIds, excludedTagIds, matchCond, showUntagged, clTagIds);
 }
 
 void TagFilterSideBarWidget::setConfigGroup(KConfigGroup group)

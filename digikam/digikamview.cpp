@@ -449,9 +449,11 @@ void DigikamView::setupConnections()
     // -- Filter Bars Connections ---------------------------------
 
     connect(d->tagFilterWidget,
-            SIGNAL(tagFilterChanged(const QList<int>&, const QList<int>&, ImageFilterSettings::MatchingCondition, bool)),
+            SIGNAL(signalTagFilterChanged(const QList<int>&, const QList<int>&,
+                                          ImageFilterSettings::MatchingCondition, bool, const QList<int>&)),
             d->iconView->imageFilterModel(),
-            SLOT(setTagFilter(const QList<int>&, const QList<int>&, ImageFilterSettings::MatchingCondition, bool)));
+            SLOT(setTagFilter(const QList<int>&, const QList<int>&, 
+                              ImageFilterSettings::MatchingCondition, bool, const QList<int>&)));
 
     // -- Preview image widget Connections ------------------------
 

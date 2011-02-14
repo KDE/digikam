@@ -6,8 +6,9 @@
  * Date        : 2009-03-05
  * Description : Filter values for use with ImageFilterModel
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +28,10 @@
 // Qt includes
 
 #include <QDateTime>
+
+// KDE includes
+
+#include <kdebug.h>
 
 // Local includes
 
@@ -59,7 +64,8 @@ void ImageFilterSettings::setDayFilter(const QList<QDateTime>& days)
 
 bool ImageFilterSettings::isFilteringByTags() const
 {
-    if (!includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() || untaggedFilter)
+    if (!includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() ||
+        untaggedFilter || !colorLabelTagFilter.isEmpty())
     {
         return true;
     }
@@ -79,17 +85,20 @@ bool ImageFilterSettings::isFilteringByText() const
 
 bool ImageFilterSettings::isFiltering() const
 {
-    return !dayFilter.isEmpty() || !includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() || !textFilterSettings.text.isEmpty()
-           || untaggedFilter || ratingFilter >= 0 || mimeTypeFilter != MimeFilter::AllFiles;
+    return !dayFilter.isEmpty() || !includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() ||
+           !textFilterSettings.text.isEmpty() || untaggedFilter || ratingFilter >= 0 || 
+           mimeTypeFilter != MimeFilter::AllFiles || !colorLabelTagFilter.isEmpty();
 }
 
-void ImageFilterSettings::setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags, MatchingCondition matchingCondition,
-                                       bool showUnTagged)
+void ImageFilterSettings::setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags,
+                                       MatchingCondition matchingCondition, bool showUnTagged,
+                                       const QList<int>& clTagIds)
 {
-    includeTagFilter = includedTags;
-    excludeTagFilter = excludedTags;
-    matchingCond     = matchingCondition;
-    untaggedFilter   = showUnTagged;
+    includeTagFilter    = includedTags;
+    excludeTagFilter    = excludedTags;
+    matchingCond        = matchingCondition;
+    untaggedFilter      = showUnTagged;
+    colorLabelTagFilter = clTagIds;
 }
 
 void ImageFilterSettings::setRatingFilter(int rating, RatingCondition ratingCondition)
@@ -156,7 +165,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
     bool match = false;
 
-    if (!includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty())
+    if (!includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() || !colorLabelTagFilter.isEmpty())
     {
         QList<int> tagIds = info.tagIds();
         QList<int>::const_iterator it;
@@ -176,9 +185,8 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
             match |= (untaggedFilter && tagIds.isEmpty());
         }
-        else
+        else // AND matching condition...
         {
-            // AND matching condition...
             // untaggedFilter and non-empty tag filter, combined with AND, is logically no match
             if (!untaggedFilter)
             {
@@ -197,7 +205,6 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
             }
         }
 
-
         for (it = excludeTagFilter.begin(); it != excludeTagFilter.end(); ++it)
         {
             if (tagIds.contains(*it))
@@ -206,7 +213,6 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
                 break;
             }
         }
-
     }
     else if (untaggedFilter)
     {
@@ -216,6 +222,27 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
     {
         match = true;
     }
+
+    //-- Filter by color labels ------------------------------------------------
+
+    if (!colorLabelTagFilter.isEmpty())
+    {
+        bool matchCL      = false;
+        QList<int> tagIds = info.tagIds();
+
+        for (QList<int>::const_iterator it = colorLabelTagFilter.begin(); it != colorLabelTagFilter.end(); ++it)
+        {
+            if (tagIds.contains(*it))
+            {
+                matchCL = true;
+                break;
+            }
+        }
+
+        match &= matchCL;
+    }
+
+    //-- Filter by date -----------------------------------------------------------
 
     if (!dayFilter.isEmpty())
     {
