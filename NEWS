@@ -63,4 +63,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 045 ==> 125387 : Simulate changes to images only.
 046 ==> 260274 : Request to setup a git repository for digiKam.
 047 ==> 264864 : Keep focus on selected image when change filtering parameters
-048 ==> 
+048 ==> 152424 : Workflow organizing : use Color Label Tags over icon view items.
+049 ==> 
