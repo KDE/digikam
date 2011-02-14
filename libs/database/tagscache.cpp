@@ -869,4 +869,11 @@ int TagsCache::getTagForColorLabel(ColorLabel label)
     return d->colorLabelsTags[label];
 }
 
+ColorLabel TagsCache::getColorLabelForTag(int tagId)
+{
+    d->checkColorLabelTags();
+    QReadLocker locker(&d->lock);
+    return d->colorLabelsTags.key(tagId, (ColorLabel)(-1));
+}
+
 } // namespace Digikam

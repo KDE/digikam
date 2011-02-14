@@ -6,7 +6,8 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,6 +70,8 @@
 #include "ratingsearchutilities.h"
 #include "searchfieldgroup.h"
 #include "searchwindow.h"
+#include "tagscache.h"
+#include "colorlabelfilter.h"
 
 using namespace KDcrawIface;
 
@@ -157,7 +160,13 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* par
         field->setFactor(1024 * 1024);
         return field;
     }
-
+    else if (name == "colorlabel")
+    {
+        SearchFieldLabel* field = new SearchFieldLabel(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Color Labels"), i18n("Return pictures with color label"));
+        return field;
+    }
     else if (name == "rating")
     {
         SearchFieldRating* field = new SearchFieldRating(parent);
@@ -2504,6 +2513,103 @@ void SearchFieldPageOrientation::read(SearchXmlCachingReader& reader)
             m_comboBox->setCurrentIndex(2);
         }
     }
+}
+
+// -------------------------------------------------------------------------
+
+SearchFieldLabel::SearchFieldLabel(QObject* parent)
+    : SearchField(parent), m_colorLabelFilter(0)
+{
+}
+
+void SearchFieldLabel::setupValueWidgets(QGridLayout* layout, int row, int column)
+{
+    QHBoxLayout* hbox  = new QHBoxLayout;
+    m_colorLabelFilter = new ColorLabelFilter;
+    hbox->addWidget(m_colorLabelFilter);
+    hbox->addStretch(1);
+
+    connect(m_colorLabelFilter, SIGNAL(signalColorLabelSelectionChanged(const QList<ColorLabel>&)),
+            this, SLOT(updateState()));
+
+    updateState();
+
+    layout->addLayout(hbox, row, column, 1, 3);
+}
+
+void SearchFieldLabel::updateState()
+{
+    setValidValueState(!m_colorLabelFilter->colorLabels().isEmpty());
+}
+
+void SearchFieldLabel::read(SearchXmlCachingReader& reader)
+{
+    TAlbum* a      = 0;
+    QList<int> ids = reader.valueToIntOrIntList();
+    QList<ColorLabel> labels;
+
+    foreach(int id, ids)
+    {
+        a = AlbumManager::instance()->findTAlbum(id);
+        if (!a)
+        {
+            kDebug() << "Search: Did not find Color Label album for ID" << id << "given in Search XML";
+        }
+        else
+        {
+            labels.append(TagsCache::instance()->getColorLabelForTag(a->id()));
+        }
+    }
+
+    m_colorLabelFilter->setColorLabels(labels);
+}
+
+void SearchFieldLabel::write(SearchXmlWriter& writer)
+{
+    QList<TAlbum*> checkedAlbums = m_colorLabelFilter->getCheckedColorLabelTags();
+
+    if (checkedAlbums.isEmpty())
+    {
+        return;
+    }
+
+    QList<int> albumIds;
+    foreach (TAlbum* album, checkedAlbums)
+    {
+        albumIds << album->id();
+    }
+
+    // NOTE: there is no XML database query rule for Color Labels in ImageQueryBuilder::buildField()
+    //       As Color Labels are internal tags, we trig database on "tagid".
+    writer.writeField("tagid", SearchXml::InTree);
+
+    if (albumIds.size() > 1)
+    {
+        writer.writeValue(albumIds);
+    }
+    else
+    {
+        writer.writeValue(albumIds.first());
+    }
+
+    writer.finishField();
+}
+
+void SearchFieldLabel::reset()
+{
+    m_colorLabelFilter->reset();
+}
+
+void SearchFieldLabel::setValueWidgetsVisible(bool visible)
+{
+    m_colorLabelFilter->setVisible(visible);
+}
+
+QList<QRect> SearchFieldLabel::valueWidgetRects() const
+{
+    QList<QRect> rects;
+    rects << m_colorLabelFilter->geometry();
+    return rects;
 }
 
 } // namespace Digikam

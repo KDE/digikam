@@ -194,6 +194,12 @@ public:
      */
     int getTagForColorLabel(ColorLabel label);
 
+    /**
+     * Return color label id corresponding of internal tags ID. see ColorLabel values from globals.h.
+     * Return -1 if not it's found.
+     */
+    ColorLabel getColorLabelForTag(int tagId);
+
     static QLatin1String tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
     static QLatin1String propertyNameDigikamInternalTag();
     static QLatin1String propertyNameExcludedFromWriting();

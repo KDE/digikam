@@ -6,7 +6,8 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,6 +58,7 @@ class KDateEdit;
 class ChoiceSearchModel;
 class ChoiceSearchComboBox;
 class RatingComboBox;
+class ColorLabelFilter;
 
 class SearchField : public QObject, public VisibilityObject
 {
@@ -471,6 +473,32 @@ public:
 
     virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
+};
+
+//-----------------------------------------------------------------------------
+
+class SearchFieldLabel : public SearchField
+{
+    Q_OBJECT
+
+public:
+
+    SearchFieldLabel(QObject* parent);
+
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
+    virtual void read(SearchXmlCachingReader& reader);
+    virtual void write(SearchXmlWriter& writer);
+    virtual void reset();
+    virtual void setValueWidgetsVisible(bool visible);
+    virtual QList<QRect> valueWidgetRects() const;
+
+protected Q_SLOTS:
+
+    void updateState();
+
+protected:
+
+    ColorLabelFilter* m_colorLabelFilter;
 };
 
 } // namespace Digikam
