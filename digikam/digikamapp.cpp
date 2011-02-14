@@ -1,28 +1,28 @@
 /* ============================================================
-*
-* This file is a part of digiKam project
-* http://www.digikam.org
-*
-* Date        : 2002-16-10
-* Description : main digiKam interface implementation
-*
-* Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
-* Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
-* Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
-* Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
-*
-* This program is free software; you can redistribute it
-* and/or modify it under the terms of the GNU General
-* Public License as published by the Free Software Foundation;
-* either version 2, or (at your option)
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* ============================================================ */
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2002-16-10
+ * Description : main digiKam interface implementation
+ *
+ * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 #include "digikamapp.moc"
 #include "digikamapp_p.h"
@@ -533,11 +533,12 @@ void DigikamApp::setupView()
 
     connect(d->view, SIGNAL(signalSwitchedToPreview()),
             this, SLOT(slotSwitchedToPreview()));
+
     connect(d->view, SIGNAL(signalSwitchedToIconView()),
             this, SLOT(slotSwitchedToIconView()));
+
     connect(d->view, SIGNAL(signalSwitchedToMapView()),
             this, SLOT(slotSwitchedToMapView()));
-
 }
 
 void DigikamApp::setupStatusBar()
@@ -768,12 +769,12 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("album_propsEdit", d->propsEditAction);
 
     // -----------------------------------------------------------------
-    
+
     d->rebuildAlbumThumbsAction = new KAction(KIcon("view-process-all"), i18n("Rebuild Thumbnails In Current Album"), this);
     d->rebuildAlbumThumbsAction->setWhatsThis(i18n("Rebuilds all thumbnails for the current selected album"));
     connect(d->rebuildAlbumThumbsAction, SIGNAL(triggered()), this, SLOT(slotRebuildAlbumThumbnails()));
     actionCollection()->addAction("album_rebuild_thumbs", d->rebuildAlbumThumbsAction);
-    
+
     // -----------------------------------------------------------------
 
     d->writeAlbumMetadataAction = new KAction(KIcon("document-edit"), i18n("Write Metadata to Images"), this);
@@ -1190,15 +1191,14 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), this);
-    connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
-    actionCollection()->addAction("help_rawcameralist", d->rawCameraListAction);
-
-    // -----------------------------------------------------------
-
     d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
+
+    // -----------------------------------------------------------
+
+    d->about = new DAboutData(this);
+    d->about->registerHelpActions();
 
     // -----------------------------------------------------------
 
@@ -1216,16 +1216,6 @@ void DigikamApp::setupActions()
 
     d->tipAction = actionCollection()->addAction(KStandardAction::TipofDay, "help_tipofday",
                    this, SLOT(slotShowTip()));
-
-    // -----------------------------------------------------------
-
-    d->donateMoneyAction = new KAction(i18n("Donate..."), this);
-    connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
-    actionCollection()->addAction("help_donatemoney", d->donateMoneyAction);
-
-    d->contributeAction = new KAction(i18n("Contribute..."), this);
-    connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
-    actionCollection()->addAction("help_contribute", d->contributeAction);
 
     // -- Logo on the right of tool bar --------------------------
 
@@ -2521,16 +2511,6 @@ void DigikamApp::slotShowKipiHelp()
     KToolInvocation::invokeHelp( QString(), "kipi-plugins" );
 }
 
-void DigikamApp::slotRawCameraList()
-{
-    showRawCameraList();
-}
-
-void DigikamApp::slotComponentsInfo()
-{
-    showDigikamComponentsInfo();
-}
-
 void DigikamApp::slotDBStat()
 {
     showDigikamDatabaseStat();
@@ -2952,16 +2932,6 @@ void DigikamApp::slotScanForFacesDone()
     d->config->group("General Settings").writeEntry("Face Scanner First Run", true);
 }
 
-void DigikamApp::slotDonateMoney()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
-}
-
-void DigikamApp::slotContribute()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=contrib");
-}
-
 void DigikamApp::slotRecurseAlbums(bool checked)
 {
     d->view->setRecurseAlbums(checked);
@@ -3312,6 +3282,11 @@ void DigikamApp::slotScriptConsole()
 {
     ScriptIface* w = new ScriptIface();
     w->show();
+}
+
+void DigikamApp::slotComponentsInfo()
+{
+    showDigikamComponentsInfo();
 }
 
 }  // namespace Digikam

@@ -21,8 +21,7 @@
  *
  * ============================================================ */
 
-#ifndef DABOUT_DATA_H
-#define DABOUT_DATA_H
+#include "daboutdata.moc"
 
 // Qt includes
 
@@ -30,15 +29,62 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <kaction.h>
+#include <kactioncollection.h>
+#include <kicon.h>
 #include <klocale.h>
-#include <kaboutdata.h>
-#include <klocalizedstring.h>
+#include <kxmlguiwindow.h>
+#include <ktoolinvocation.h>
+
+// Local includes
+
+#include "componentsinfo.h"
 
 namespace Digikam
 {
 
-static inline KLocalizedString digiKamSloganFormated()
+DAboutData::DAboutData(KXmlGuiWindow* parent)
+    : QObject(parent)
+{
+}
+
+DAboutData::~DAboutData()
+{
+}
+
+void DAboutData::registerHelpActions()
+{
+    KXmlGuiWindow* kwin = dynamic_cast<KXmlGuiWindow*>(parent());
+
+    KAction* rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), kwin);
+    connect(rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
+    kwin->actionCollection()->addAction("help_rawcameralist", rawCameraListAction);
+
+    KAction* donateMoneyAction = new KAction(i18n("Donate..."), kwin);
+    connect(donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
+    kwin->actionCollection()->addAction("help_donatemoney", donateMoneyAction);
+
+    KAction* contributeAction = new KAction(i18n("Contribute..."), kwin);
+    connect(contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
+    kwin->actionCollection()->addAction("help_contribute", contributeAction);
+}
+
+void DAboutData::slotRawCameraList()
+{
+    showRawCameraList();
+}
+
+void DAboutData::slotDonateMoney()
+{
+    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
+}
+
+void DAboutData::slotContribute()
+{
+    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=contrib");
+}
+
+KLocalizedString DAboutData::digiKamSloganFormated()
 {
     return ki18nc("This is the slogan formated string displayed in splashscreen. "
                   "Please translate using short words else the slogan can be truncated.",
@@ -49,23 +95,23 @@ static inline KLocalizedString digiKamSloganFormated()
                  );
 }
 
-static inline KLocalizedString digiKamSlogan()
+KLocalizedString DAboutData::digiKamSlogan()
 {
     return ki18n("Manage your photographs like a professional, "
                  "with the power of open source");
 }
 
-static inline KLocalizedString copyright()
+KLocalizedString DAboutData::copyright()
 {
     return ki18n("(c) 2002-2011, digiKam developers team");
 }
 
-static inline KUrl webProjectUrl()
+KUrl DAboutData::webProjectUrl()
 {
     return KUrl("http://www.digikam.org");
 }
 
-static inline void authorsRegistration(KAboutData& aboutData)
+void DAboutData::authorsRegistration(KAboutData& aboutData)
 {
     aboutData.addAuthor ( ki18n("Caulier Gilles"),
                           ki18n("Main developer and coordinator"),
@@ -214,5 +260,3 @@ static inline void authorsRegistration(KAboutData& aboutData)
 }
 
 }  // namespace Digikam
-
-#endif // DABOUT_DATA_H

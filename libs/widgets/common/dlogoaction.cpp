@@ -149,7 +149,7 @@ QWidget* DLogoAction::createWidget(QWidget* parent)
 {
     QWidget* container  = new QWidget(parent);
     QHBoxLayout* layout = new QHBoxLayout(container);
-    d->urlLabel         = new KUrlLabel(webProjectUrl().url(), QString(), container);
+    d->urlLabel         = new KUrlLabel(DAboutData::webProjectUrl().url(), QString(), container);
     d->urlLabel->setMargin(0);
     d->urlLabel->setScaledContents(false);
     d->urlLabel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));

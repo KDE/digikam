@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : main image editor GUI implementation
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -102,64 +102,63 @@ Q_SIGNALS:
 
 protected:
 
-    bool                     m_nonDestructive;
+    bool                      m_nonDestructive;
+    bool                      m_fullScreenHideThumbBar;
+    bool                      m_cancelSlideShow;
+    bool                      m_fullScreen;
+    bool                      m_setExifOrientationTag;
+    bool                      m_editingOriginalImage;
 
-    bool                     m_fullScreenHideThumbBar;
-    bool                     m_cancelSlideShow;
-    bool                     m_fullScreen;
-    bool                     m_setExifOrientationTag;
-    bool                     m_editingOriginalImage;
+    QLabel*                   m_resLabel;
 
-    QLabel*                  m_resLabel;
+    QColor                    m_bgColor;
 
-    QColor                   m_bgColor;
+    SidebarSplitter*          m_splitter;
+    QSplitter*                m_vSplitter;
 
-    SidebarSplitter*         m_splitter;
-    QSplitter*               m_vSplitter;
+    KAction*                  m_openVersionAction;
+    KAction*                  m_saveAction;
+    KAction*                  m_saveAsAction;
+    KAction*                  m_saveNewVersionAction;
+    KAction*                  m_saveCurrentVersionAction;
+    KAction*                  m_saveNewVersionAsAction;
+    KActionMenu*              m_saveNewVersionInFormatAction;
+    KAction*                  m_exportAction;
+    KAction*                  m_revertAction;
+    KAction*                  m_discardChangesAction;
+    KAction*                  m_fileDeleteAction;
+    KAction*                  m_forwardAction;
+    KAction*                  m_backwardAction;
+    KAction*                  m_fullScreenAction;
 
-    KAction*                 m_openVersionAction;
-    KAction*                 m_saveAction;
-    KAction*                 m_saveAsAction;
-    KAction*                 m_saveNewVersionAction;
-    KAction*                 m_saveCurrentVersionAction;
-    KAction*                 m_saveNewVersionAsAction;
-    KActionMenu*             m_saveNewVersionInFormatAction;
-    KAction*                 m_exportAction;
-    KAction*                 m_revertAction;
-    KAction*                 m_discardChangesAction;
-    KAction*                 m_fileDeleteAction;
-    KAction*                 m_forwardAction;
-    KAction*                 m_backwardAction;
-    KAction*                 m_fullScreenAction;
+    KAction*                  m_lastAction;
+    KAction*                  m_firstAction;
 
-    KAction*                 m_lastAction;
-    KAction*                 m_firstAction;
+    KAction*                  m_applyToolAction;
+    KAction*                  m_closeToolAction;
 
-    KAction*                 m_applyToolAction;
-    KAction*                 m_closeToolAction;
+    KSelectAction*            m_themeMenuAction;
 
-    KSelectAction*           m_themeMenuAction;
+    KToggleAction*            m_showBarAction;
 
-    KToggleAction*           m_showBarAction;
+    KToolBarPopupAction*      m_undoAction;
+    KToolBarPopupAction*      m_redoAction;
 
-    KToolBarPopupAction*     m_undoAction;
-    KToolBarPopupAction*     m_redoAction;
+    KActionMenu*              m_selectToolsAction;
 
-    KActionMenu*             m_selectToolsAction;
-
-    DLogoAction*             m_animLogo;
-    DPopupMenu*              m_contextMenu;
-    EditorStackView*         m_stackView;
-    Canvas*                  m_canvas;
-    ImagePluginLoader*       m_imagePluginLoader;
-    StatusProgressBar*       m_nameLabel;
-    IOFileSettingsContainer* m_IOFileSettings;
+    DLogoAction*              m_animLogo;
+    DPopupMenu*               m_contextMenu;
+    EditorStackView*          m_stackView;
+    Canvas*                   m_canvas;
+    ImagePluginLoader*        m_imagePluginLoader;
+    StatusProgressBar*        m_nameLabel;
+    IOFileSettingsContainer*  m_IOFileSettings;
     QPointer<KProgressDialog> m_savingProgressDialog;
 
-    SavingContextContainer   m_savingContext;
+    SavingContextContainer    m_savingContext;
 
-    QString                  m_formatForRAWVersioning;
-    QString                  m_formatForSubversions;
+    QString                   m_formatForRAWVersioning;
+    QString                   m_formatForSubversions;
 
 protected:
 
@@ -318,8 +317,6 @@ private Q_SLOTS:
     void slotSoftProofingOptions();
     void slotUpdateSoftProofingState();
     void slotSavingFinished(const QString& filename, bool success);
-    void slotDonateMoney();
-    void slotContribute();
     void slotToggleSlideShow();
     void slotZoomTo100Percents();
     void slotZoomChanged(bool isMax, bool isMin, double zoom);
@@ -329,7 +326,6 @@ private Q_SLOTS:
     void slotFitToSelect();
     void slotIncreaseZoom();
     void slotDecreaseZoom();
-    void slotRawCameraList();
     void slotShowMenuBar();
     void slotCloseTool();
     void slotApplyTool();

@@ -609,17 +609,8 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->donateMoneyAction = new KAction(i18n("Donate Money..."), this);
-    connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
-    actionCollection()->addAction("lighttable_donatemoney", d->donateMoneyAction);
-
-    d->contributeAction = new KAction(i18n("Contribute..."), this);
-    connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
-    actionCollection()->addAction("lighttable_contribute", d->contributeAction);
-
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), this);
-    connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
-    actionCollection()->addAction("lighttable_rawcameralist", d->rawCameraListAction);
+    d->about = new DAboutData(this);
+    d->about->registerHelpActions();
 
     d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
@@ -1574,16 +1565,6 @@ void LightTableWindow::hideToolBars()
     }
 }
 
-void LightTableWindow::slotDonateMoney()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
-}
-
-void LightTableWindow::slotContribute()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=contrib");
-}
-
 void LightTableWindow::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
@@ -1711,11 +1692,6 @@ void LightTableWindow::slotToggleNavigateByPair()
     d->barView->setNavigateByPair(d->navigateByPairAction->isChecked());
     d->previewView->setNavigateByPair(d->navigateByPairAction->isChecked());
     slotItemSelected(d->barView->currentItemImageInfo());
-}
-
-void LightTableWindow::slotRawCameraList()
-{
-    showRawCameraList();
 }
 
 void LightTableWindow::slotThemeChanged()

@@ -148,15 +148,12 @@ private Q_SLOTS:
     void slotToggleSlideShow();
     void slotToggleFullScreen();
     void slotEscapePressed();
-    void slotDonateMoney();
-    void slotContribute();
     void slotEditKeys();
     void slotConfToolbars();
     void slotConfNotifications();
     void slotShowMenuBar();
     void slotNewToolbarConfig();
     void slotSetup();
-    void slotRawCameraList();
     void slotComponentsInfo();
     void slotDBStat();
 

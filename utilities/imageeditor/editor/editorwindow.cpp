@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : main image editor GUI implementation
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -145,7 +145,6 @@
 #include "printhelper.h"
 #include "jpegsettings.h"
 #include "pngsettings.h"
-#include "rawcameradlg.h"
 #include "savingcontextcontainer.h"
 #include "sidebar.h"
 #include "slideshowsettings.h"
@@ -637,17 +636,8 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->donateMoneyAction = new KAction(i18n("Donate Money..."), this);
-    connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
-    actionCollection()->addAction("editorwindow_donatemoney", d->donateMoneyAction);
-
-    d->contributeAction = new KAction(i18n("Contribute..."), this);
-    connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
-    actionCollection()->addAction("editorwindow_contribute", d->contributeAction);
-
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), this);
-    connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
-    actionCollection()->addAction("editorwindow_rawcameralist", d->rawCameraListAction);
+    d->about = new DAboutData(this);
+    d->about->registerHelpActions();
 
     d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
@@ -2869,16 +2859,6 @@ void EditorWindow::setOverExposureToolTip(bool on)
         : i18n("Over-Exposure indicator is disabled"));
 }
 
-void EditorWindow::slotDonateMoney()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
-}
-
-void EditorWindow::slotContribute()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=contrib");
-}
-
 void EditorWindow::slotToggleSlideShow()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -2901,12 +2881,6 @@ void EditorWindow::slotToggleSlideShow()
 void EditorWindow::slotSelectionChanged(const QRect& sel)
 {
     setToolInfoMessage(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y()).arg(sel.width()).arg(sel.height()));
-}
-
-void EditorWindow::slotRawCameraList()
-{
-    RawCameraDlg* dlg = new RawCameraDlg(kapp->activeWindow());
-    dlg->show();
 }
 
 void EditorWindow::slotThemeChanged()

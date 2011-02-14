@@ -177,7 +177,7 @@ QString WelcomePageView::infoPage() const
 
             QString(digikam_version),            // %1 : current digiKam version
             "help:/digikam/index.html",          // %2 : digiKam help:// Url
-            webProjectUrl().url(),               // %3 : digiKam homepage Url
+            DAboutData::webProjectUrl().url(),   // %3 : digiKam homepage Url
             "1.x",                               // %4 : prior digiKam version
             featureItems,                        // %5 : prior KDE version
             QString(),                           // %6 : generated list of new features
@@ -226,11 +226,11 @@ void WelcomePageView::slotThemeChanged()
     QString digikamCss       = KStandardDirs::locate("data", "digikam/about/digikam.css");
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
-    QString slogan           = digiKamSlogan().toString();
+    QString slogan           = DAboutData::digiKamSlogan().toString();
     QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
     QString locationRtl      = KStandardDirs::locate("data", "kdeui/about/kde_infopage_rtl.css" );
     QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
-                               : QString();
+                                                     : QString();
 
     begin(KUrl(locationHtml).toLocalFile());
 

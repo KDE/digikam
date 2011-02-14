@@ -54,6 +54,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "cameralist.h"
+#include "daboutdata.h"
 #include "templatemanager.h"
 #include "imagepluginloader.h"
 #include "splashscreen.h"
@@ -157,12 +158,9 @@ public:
         slideShowSelectionAction(0),
         slideShowRecursiveAction(0),
         scriptConsoleAction(0),
-        rawCameraListAction(0),
         libsInfoAction(0),
         dbStatAction(0),
         kipiHelpAction(0),
-        donateMoneyAction(0),
-        contributeAction(0),
         themeMenuAction(0),
         addCameraSeparatorAction(0),
         quitAction(0),
@@ -186,6 +184,7 @@ public:
         zoomBar(0),
         statusProgressBar(0),
         statusNavigateBar(0),
+        about(0),
         kipiPluginLoader(0),
         modelCollection(0)
     {
@@ -299,12 +298,9 @@ public:
     KAction*                            scriptConsoleAction;
 
     // Application Actions
-    KAction*                            rawCameraListAction;
     KAction*                            libsInfoAction;
     KAction*                            dbStatAction;
     KAction*                            kipiHelpAction;
-    KAction*                            donateMoneyAction;
-    KAction*                            contributeAction;
     KSelectAction*                      themeMenuAction;
     QAction*                            addCameraSeparatorAction;
     QAction*                            quitAction;
@@ -336,6 +332,8 @@ public:
     StatusNavigateBar*                  statusNavigateBar;
     QString                             statusBarSelectionText;
     KComboBox*                          mapViewSwitcher;
+
+    DAboutData*                         about;
 
     KIPI::PluginLoader*                 kipiPluginLoader;
 

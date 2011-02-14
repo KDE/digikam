@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager GUI
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -438,17 +438,8 @@ void QueueMgrWindow::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->donateMoneyAction = new KAction(i18n("Donate Money..."), this);
-    connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
-    actionCollection()->addAction("queuemgr_donatemoney", d->donateMoneyAction);
-
-    d->contributeAction = new KAction(i18n("Contribute..."), this);
-    connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
-    actionCollection()->addAction("queuemgr_contribute", d->contributeAction);
-
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), this);
-    connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
-    actionCollection()->addAction("queuemgr_rawcameralist", d->rawCameraListAction);
+    d->about = new DAboutData(this);
+    d->about->registerHelpActions();
 
     d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
@@ -715,16 +706,6 @@ void QueueMgrWindow::hideToolBars()
     }
 }
 
-void QueueMgrWindow::slotDonateMoney()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
-}
-
-void QueueMgrWindow::slotContribute()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=contrib");
-}
-
 void QueueMgrWindow::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
@@ -762,11 +743,6 @@ void QueueMgrWindow::slotSetup()
 void QueueMgrWindow::setup(Setup::Page page)
 {
     Setup::exec(this, page);
-}
-
-void QueueMgrWindow::slotRawCameraList()
-{
-    showRawCameraList();
 }
 
 void QueueMgrWindow::slotThemeChanged()

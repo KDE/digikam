@@ -7,7 +7,7 @@
  * Description : main program from digiKam
  *
  * Copyright (C) 2002-2006 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,13 +72,13 @@ int main(int argc, char* argv[])
                          0,
                          ki18n("digiKam"),
                          digiKamVersion().toAscii(),
-                         digiKamSlogan(),
+                         DAboutData::digiKamSlogan(),
                          KAboutData::License_GPL,
-                         copyright(),
+                         DAboutData::copyright(),
                          additionalInformation(),
-                         webProjectUrl().url().toUtf8());
+                         DAboutData::webProjectUrl().url().toUtf8());
 
-    authorsRegistration(aboutData);
+    DAboutData::authorsRegistration(aboutData);
 
     KCmdLineArgs::init(argc, argv, &aboutData);
 

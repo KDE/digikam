@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager GUI
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <qlabel.h>
-#include <qstring.h>
+#include <QLabel>
+#include <QString>
 
 // KDE includes
 
@@ -41,6 +41,7 @@
 
 #include "actionthread.h"
 #include "assignedlist.h"
+#include "daboutdata.h"
 #include "dlogoaction.h"
 #include "queuelist.h"
 #include "queuepool.h"
@@ -105,6 +106,7 @@ public:
         animLogo               = 0;
         progressCount          = 0;
         progressTimer          = 0;
+        about                  = 0;
         progressPix            = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
     }
 
@@ -166,6 +168,8 @@ public:
     QueueSettingsView*     queueSettingsView;
 
     QueuePoolItemsList     itemsList;
+
+    DAboutData*            about;
 
     const QString          TOP_SPLITTER_CONFIG_KEY;
     const QString          BOTTOM_SPLITTER_CONFIG_KEY;

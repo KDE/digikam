@@ -510,17 +510,8 @@ void CameraUI::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->donateMoneyAction = new KAction(i18n("Donate..."), this);
-    connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
-    actionCollection()->addAction("cameraui_donatemoney", d->donateMoneyAction);
-
-    d->contributeAction = new KAction(i18n("Contribute..."), this);
-    connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
-    actionCollection()->addAction("cameraui_contribute", d->contributeAction);
-
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), this);
-    connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
-    actionCollection()->addAction("cameraui_rawcameralist", d->rawCameraListAction);
+    d->about = new DAboutData(this);
+    d->about->registerHelpActions();
 
     d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
@@ -2320,16 +2311,6 @@ void CameraUI::slotLastItem()
     }
 }
 
-void CameraUI::slotDonateMoney()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
-}
-
-void CameraUI::slotContribute()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=contrib");
-}
-
 void CameraUI::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
@@ -2487,11 +2468,6 @@ bool CameraUI::cameraMkDirSupport()
 bool CameraUI::cameraDelDirSupport()
 {
     return d->controller->cameraDelDirSupport();
-}
-
-void CameraUI::slotRawCameraList()
-{
-    showRawCameraList();
 }
 
 void CameraUI::slotThemeChanged()

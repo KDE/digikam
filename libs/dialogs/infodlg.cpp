@@ -96,7 +96,7 @@ InfoDlg::InfoDlg(QWidget* parent)
                          "<p>%3</p>",
                          KGlobal::mainComponent().aboutData()->programName(),
                          KGlobal::mainComponent().aboutData()->version(),
-                         digiKamSlogan().toString()));
+                         DAboutData::digiKamSlogan().toString()));
 
     // --------------------------------------------------------
 

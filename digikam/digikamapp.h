@@ -155,9 +155,6 @@ private Q_SLOTS:
     void slotExit();
     void slotShowTip();
     void slotShowKipiHelp();
-    void slotDonateMoney();
-    void slotContribute();
-    void slotRawCameraList();
     void slotComponentsInfo();
     void slotDBStat();
 
