@@ -940,7 +940,7 @@ void ImageDescEditTab::updateColorLabel()
 
     if (d->hub.colorLabelStatus() == MetadataHub::MetadataDisjoint)
     {
-        d->colorLabelSelector->setColorLabel(NoneLabel);
+        d->colorLabelSelector->setColorLabel(NoColorLabel);
     }
     else
     {

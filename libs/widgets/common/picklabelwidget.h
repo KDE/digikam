@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2011-01-28
- * Description : color label widget
+ * Date        : 2011-02-14
+ * Description : pick label widget
  *
  * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COLORLABELWIDGET_H
-#define COLORLABELWIDGET_H
+#ifndef PICKLABELWIDGET_H
+#define PICKLABELWIDGET_H
 
 // Qt includes
 
@@ -47,14 +47,14 @@ class QMenu;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ColorLabelWidget : public KVBox
+class DIGIKAM_EXPORT PickLabelWidget : public KVBox
 {
     Q_OBJECT
 
 public:
 
-    ColorLabelWidget(QWidget* parent=0);
-    virtual ~ColorLabelWidget();
+    PickLabelWidget(QWidget* parent=0);
+    virtual ~PickLabelWidget();
 
     /**
      * Show or not on the bottom view the description of label with shorcuts.
@@ -70,19 +70,19 @@ public:
     /**
      * Turn on Color Label buttons using list. Pass an empty list to clear all selection.
      */
-    void setColorLabels(const QList<ColorLabel>& list);
+    void setPickLabels(const QList<PickLabel>& list);
 
     /**
      * Return the list of Color Label buttons turned on or an empty list of none.
      */
-    QList<ColorLabel> colorLabels() const;
+    QList<PickLabel> colorLabels() const;
 
-    static QColor  labelColor(ColorLabel label);
-    static QString labelColorName(ColorLabel label);
+    static QColor  labelColor(PickLabel label);
+    static QString labelPickName(PickLabel label);
 
 Q_SIGNALS:
 
-    void signalColorLabelChanged(int);
+    void signalPickLabelChanged(int);
 
 protected:
 
@@ -90,61 +90,61 @@ protected:
 
 private:
 
-    QIcon buildIcon(ColorLabel label) const;
-    void updateDescription(ColorLabel label);
+    QIcon buildIcon(PickLabel label) const;
+    void updateDescription(PickLabel label);
 
 private:
 
-    class ColorLabelWidgetPriv;
-    ColorLabelWidgetPriv* const d;
+    class PickLabelWidgetPriv;
+    PickLabelWidgetPriv* const d;
 };
 
 // ------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT ColorLabelSelector : public QPushButton
+class DIGIKAM_EXPORT PickLabelSelector : public QPushButton
 {
     Q_OBJECT
 
 public:
 
-    ColorLabelSelector(QWidget* parent=0);
-    virtual ~ColorLabelSelector();
+    PickLabelSelector(QWidget* parent=0);
+    virtual ~PickLabelSelector();
 
-    void setColorLabel(ColorLabel label);
-    ColorLabel colorLabel();
+    void setPickLabel(PickLabel label);
+    PickLabel colorLabel();
 
 Q_SIGNALS:
 
-    void signalColorLabelChanged(int);
+    void signalPickLabelChanged(int);
 
 private Q_SLOTS:
 
-    void slotColorLabelChanged(int);
+    void slotPickLabelChanged(int);
 
 private:
 
-    class ColorLabelSelectorPriv;
-    ColorLabelSelectorPriv* const d;
+    class PickLabelSelectorPriv;
+    PickLabelSelectorPriv* const d;
 };
 
 // ------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT ColorLabelMenuAction : public KActionMenu
+class DIGIKAM_EXPORT PickLabelMenuAction : public KActionMenu
 {
     Q_OBJECT
 
 public:
 
-    ColorLabelMenuAction(QMenu* parent=0);
-    virtual ~ColorLabelMenuAction();
+    PickLabelMenuAction(QMenu* parent=0);
+    virtual ~PickLabelMenuAction();
 
 Q_SIGNALS:
 
-    void signalColorLabelChanged(int);
+    void signalPickLabelChanged(int);
 };
 
 }  // namespace Digikam
 
-Q_DECLARE_METATYPE(QList<Digikam::ColorLabel>)
+Q_DECLARE_METATYPE(QList<Digikam::PickLabel>)
 
-#endif // COLORLABELWIDGET_H
+#endif // PICKLABELWIDGET_H

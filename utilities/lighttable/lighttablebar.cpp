@@ -1143,7 +1143,7 @@ void LightTableBar::drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile)
     LightTableBarItem* rItem = dynamic_cast<LightTableBarItem*>(item);
     int colorId              = rItem->info().colorLabel();
 
-    if (colorId > NoneLabel)
+    if (colorId > NoColorLabel)
     {
 
         QRect r = item->rect();

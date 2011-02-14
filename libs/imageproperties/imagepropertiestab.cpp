@@ -534,7 +534,7 @@ void ImagePropertiesTab::setColorLabel(int colorId)
 {
     QPixmap pix;
 
-    if (colorId != NoneLabel)
+    if (colorId != NoColorLabel)
     {
         QFontMetrics fontMt = d->labelColorLabel->fontMetrics();
         QRect fntRect(0, 0, fontMt.width("           "), fontMt.height());

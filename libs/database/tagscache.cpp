@@ -202,7 +202,7 @@ public:
         if (needUpdateColorLabelTags && initialized)
         {
             QMap<ColorLabel, int> map;
-            map.insert(NoneLabel,    q->getOrCreateInternalTag(InternalTagName::colorLabelNone()));
+            map.insert(NoColorLabel, q->getOrCreateInternalTag(InternalTagName::colorLabelNone()));
             map.insert(RedLabel,     q->getOrCreateInternalTag(InternalTagName::colorLabelRed()));
             map.insert(OrangeLabel,  q->getOrCreateInternalTag(InternalTagName::colorLabelOrange()));
             map.insert(YellowLabel,  q->getOrCreateInternalTag(InternalTagName::colorLabelYellow()));
@@ -861,7 +861,7 @@ void TagsCache::slotTagChanged(const TagChangeset& changeset)
 
 int TagsCache::getTagForColorLabel(ColorLabel label)
 {
-    if (label < NoneLabel || label > WhiteLabel)
+    if (label < NoColorLabel || label > WhiteLabel)
         return 0;
 
     d->checkColorLabelTags();

@@ -27,7 +27,6 @@
 // Qt includes
 
 #include <QList>
-#include <QMetaType>
 #include <QWidget>
 
 // Local includes
@@ -62,7 +61,5 @@ private Q_SLOTS:
 };
 
 }  // namespace Digikam
-
-Q_DECLARE_METATYPE(QList<Digikam::ColorLabel>)
 
 #endif // COLORLABELFILTER_H

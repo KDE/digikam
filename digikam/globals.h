@@ -53,7 +53,7 @@ static const int MAX_SEGMENT_8BIT   = NUM_SEGMENTS_8BIT - 1;
 
 enum ColorLabel
 {
-    NoneLabel=0,
+    NoColorLabel=0,
     RedLabel,
     OrangeLabel,
     YellowLabel,
@@ -63,6 +63,16 @@ enum ColorLabel
     GrayLabel,
     BlackLabel,
     WhiteLabel
+};
+
+// --------------------------------------------------------
+
+enum PickLabel
+{
+    NoPickLabel=0,
+    RejectedLabel,
+    PendingLabel,
+    AcceptedLabel,
 };
 
 // --------------------------------------------------------

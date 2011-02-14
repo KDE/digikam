@@ -68,7 +68,7 @@ ImageInfoData::ImageInfoData()
     albumId                = -1;
     albumRootId            = -1;
 
-    colorLabel             = NoneLabel;
+    colorLabel             = NoColorLabel;
     rating                 = -1;
     category               = DatabaseItem::UndefinedCategory;
     fileSize               = 0;
@@ -379,7 +379,7 @@ int ImageInfo::colorLabel() const
 
         foreach(int tagId, tags)
         {
-            for (int i = NoneLabel ; i <= WhiteLabel; ++i)
+            for (int i = NoColorLabel ; i <= WhiteLabel; ++i)
             {
                 if (tagId == TagsCache::instance()->getTagForColorLabel((ColorLabel)i))
                 {
@@ -1030,7 +1030,7 @@ void ImageInfo::setColorLabel(int colorId)
 
     // Color Label is an exclusive tags.
 
-    for (int i = NoneLabel ; i <= WhiteLabel ; ++i)
+    for (int i = NoColorLabel ; i <= WhiteLabel ; ++i)
         removeTag(tc->getTagForColorLabel((ColorLabel)i));
 
     setTag(tagId);

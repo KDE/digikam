@@ -374,7 +374,7 @@ int DMetadata::getImageColorLabel() const
             bool ok      = false;
             long colorId = value.toLong(&ok);
 
-            if (ok && colorId >= NoneLabel && colorId <= WhiteLabel)
+            if (ok && colorId >= NoColorLabel && colorId <= WhiteLabel)
             {
                 return colorId;
             }
@@ -528,7 +528,7 @@ int DMetadata::getImageRating() const
 
 bool DMetadata::setImageColorLabel(int colorId) const
 {
-    if (colorId < NoneLabel || colorId > WhiteLabel)
+    if (colorId < NoColorLabel || colorId > WhiteLabel)
     {
         kDebug() << "Color Label value to write is out of range!";
         return false;

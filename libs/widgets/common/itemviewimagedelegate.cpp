@@ -399,7 +399,7 @@ void ItemViewImageDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionVi
     Q_UNUSED(option);
     Q_UNUSED(isSelected);
 
-    if (colorId > NoneLabel)
+    if (colorId > NoColorLabel)
     {
         // TODO: This draw a simple rectangle around item. We can do something more elegant of course...
 

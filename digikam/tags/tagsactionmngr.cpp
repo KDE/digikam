@@ -136,7 +136,7 @@ void TagsActionMngr::createActions()
 
     foreach(KActionCollection* ac, d->actionCollectionList)
     {
-        for (int i = NoneLabel ; i <= WhiteLabel ; ++i)
+        for (int i = NoColorLabel ; i <= WhiteLabel ; ++i)
         {
             createColorLabelActionShortcut(ac, i);
         }

@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2011-01-28
- * Description : color label widget
+ * Date        : 2011-02-14
+ * Description : pick label widget
  *
  * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "colorlabelwidget.moc"
+#include "picklabelwidget.moc"
 
 // Qt includes
 
@@ -52,12 +52,12 @@
 namespace Digikam
 {
 
-class ColorLabelWidget::ColorLabelWidgetPriv
+class PickLabelWidget::PickLabelWidgetPriv
 {
 
 public:
 
-    ColorLabelWidgetPriv()
+    PickLabelWidgetPriv()
     {
         colorBtns  = 0;
         btnNone    = 0;
@@ -95,8 +95,8 @@ public:
     KSqueezedTextLabel* shortcut;
 };
 
-ColorLabelWidget::ColorLabelWidget(QWidget* parent)
-    : KVBox(parent), d(new ColorLabelWidgetPriv)
+PickLabelWidget::PickLabelWidget(QWidget* parent)
+    : KVBox(parent), d(new PickLabelWidgetPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
@@ -108,74 +108,32 @@ ColorLabelWidget::ColorLabelWidget(QWidget* parent)
     d->btnNone = new QToolButton(hbox);
     d->btnNone->setCheckable(true);
     d->btnNone->setFocusPolicy(Qt::NoFocus);
-    d->btnNone->setIcon(buildIcon(NoColorLabel));
+    d->btnNone->setIcon(buildIcon(NoPickLabel));
     d->btnNone->installEventFilter(this);
 
     d->btnRed = new QToolButton(hbox);
     d->btnRed->setCheckable(true);
     d->btnRed->setFocusPolicy(Qt::NoFocus);
-    d->btnRed->setIcon(buildIcon(RedLabel));
+    d->btnRed->setIcon(buildIcon(RejectedLabel));
     d->btnRed->installEventFilter(this);
 
     d->btnOrange = new QToolButton(hbox);
     d->btnOrange->setCheckable(true);
     d->btnOrange->setFocusPolicy(Qt::NoFocus);
-    d->btnOrange->setIcon(buildIcon(OrangeLabel));
+    d->btnOrange->setIcon(buildIcon(PendingLabel));
     d->btnOrange->installEventFilter(this);
 
     d->btnYellow = new QToolButton(hbox);
     d->btnYellow->setCheckable(true);
     d->btnYellow->setFocusPolicy(Qt::NoFocus);
-    d->btnYellow->setIcon(buildIcon(YellowLabel));
+    d->btnYellow->setIcon(buildIcon(AcceptedLabel));
     d->btnYellow->installEventFilter(this);
 
-    d->btnGreen = new QToolButton(hbox);
-    d->btnGreen->setCheckable(true);
-    d->btnGreen->setFocusPolicy(Qt::NoFocus);
-    d->btnGreen->setIcon(buildIcon(GreenLabel));
-    d->btnGreen->installEventFilter(this);
-
-    d->btnBlue = new QToolButton(hbox);
-    d->btnBlue->setCheckable(true);
-    d->btnBlue->setFocusPolicy(Qt::NoFocus);
-    d->btnBlue->setIcon(buildIcon(BlueLabel));
-    d->btnBlue->installEventFilter(this);
-
-    d->btnMagenta = new QToolButton(hbox);
-    d->btnMagenta->setCheckable(true);
-    d->btnMagenta->setFocusPolicy(Qt::NoFocus);
-    d->btnMagenta->setIcon(buildIcon(MagentaLabel));
-    d->btnMagenta->installEventFilter(this);
-
-    d->btnGray = new QToolButton(hbox);
-    d->btnGray->setCheckable(true);
-    d->btnGray->setFocusPolicy(Qt::NoFocus);
-    d->btnGray->setIcon(buildIcon(GrayLabel));
-    d->btnGray->installEventFilter(this);
-
-    d->btnBlack = new QToolButton(hbox);
-    d->btnBlack->setCheckable(true);
-    d->btnBlack->setFocusPolicy(Qt::NoFocus);
-    d->btnBlack->setIcon(buildIcon(BlackLabel));
-    d->btnBlack->installEventFilter(this);
-
-    d->btnWhite = new QToolButton(hbox);
-    d->btnWhite->setCheckable(true);
-    d->btnWhite->setFocusPolicy(Qt::NoFocus);
-    d->btnWhite->setIcon(buildIcon(WhiteLabel));
-    d->btnWhite->installEventFilter(this);
-
     d->colorBtns = new QButtonGroup(hbox);
-    d->colorBtns->addButton(d->btnNone,    NoColorLabel);
-    d->colorBtns->addButton(d->btnRed,     RedLabel);
-    d->colorBtns->addButton(d->btnOrange,  OrangeLabel);
-    d->colorBtns->addButton(d->btnYellow,  YellowLabel);
-    d->colorBtns->addButton(d->btnGreen,   GreenLabel);
-    d->colorBtns->addButton(d->btnBlue,    BlueLabel);
-    d->colorBtns->addButton(d->btnMagenta, MagentaLabel);
-    d->colorBtns->addButton(d->btnGray,    GrayLabel);
-    d->colorBtns->addButton(d->btnBlack,   BlackLabel);
-    d->colorBtns->addButton(d->btnWhite,   WhiteLabel);
+    d->colorBtns->addButton(d->btnNone,    NoPickLabel);
+    d->colorBtns->addButton(d->btnRed,     RejectedLabel);
+    d->colorBtns->addButton(d->btnOrange,  PendingLabel);
+    d->colorBtns->addButton(d->btnYellow,  AcceptedLabel);
 
     d->descBox  = new KHBox(this);
     d->descBox->setMargin(0);
@@ -190,34 +148,34 @@ ColorLabelWidget::ColorLabelWidget(QWidget* parent)
 
     setMargin(0);
     setSpacing(0);
-    setColorLabels(QList<ColorLabel>() << NoColorLabel);
+    setPickLabels(QList<PickLabel>() << NoPickLabel);
     setDescriptionBoxVisible(true);
     setButtonsExclusive(true);
 
     // -------------------------------------------------------------
 
     connect(d->colorBtns, SIGNAL(buttonReleased(int)),
-            this, SIGNAL(signalColorLabelChanged(int)));
+            this, SIGNAL(signalPickLabelChanged(int)));
 }
 
-ColorLabelWidget::~ColorLabelWidget()
+PickLabelWidget::~PickLabelWidget()
 {
     delete d;
 }
 
-void ColorLabelWidget::setDescriptionBoxVisible(bool b)
+void PickLabelWidget::setDescriptionBoxVisible(bool b)
 {
     d->descBox->setVisible(b);
 }
 
-void ColorLabelWidget::setButtonsExclusive(bool b)
+void PickLabelWidget::setButtonsExclusive(bool b)
 {
     d->colorBtns->setExclusive(b);
 }
 
-void ColorLabelWidget::updateDescription(ColorLabel label)
+void PickLabelWidget::updateDescription(PickLabel label)
 {
-    d->desc->setText(labelColorName(label));
+    d->desc->setText(labelPickName(label));
 
     KXmlGuiWindow* app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
     if (app)
@@ -228,13 +186,13 @@ void ColorLabelWidget::updateDescription(ColorLabel label)
     }
 }
 
-bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
+bool PickLabelWidget::eventFilter(QObject* obj, QEvent* ev)
 {
     if ( obj == d->btnNone)
     {
         if ( ev->type() == QEvent::Enter)
         {
-            updateDescription(NoColorLabel);
+            updateDescription(NoPickLabel);
             return false;
         }
     }
@@ -242,7 +200,7 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
     {
         if ( ev->type() == QEvent::Enter)
         {
-            updateDescription(RedLabel);
+            updateDescription(RejectedLabel);
             return false;
         }
     }
@@ -250,7 +208,7 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
     {
         if ( ev->type() == QEvent::Enter)
         {
-            updateDescription(OrangeLabel);
+            updateDescription(PendingLabel);
             return false;
         }
     }
@@ -258,55 +216,7 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
     {
         if ( ev->type() == QEvent::Enter)
         {
-            updateDescription(YellowLabel);
-            return false;
-        }
-    }
-    if ( obj == d->btnGreen)
-    {
-        if ( ev->type() == QEvent::Enter)
-        {
-            updateDescription(GreenLabel);
-            return false;
-        }
-    }
-    if ( obj == d->btnBlue)
-    {
-        if ( ev->type() == QEvent::Enter)
-        {
-            updateDescription(BlueLabel);
-            return false;
-        }
-    }
-    if ( obj == d->btnMagenta)
-    {
-        if ( ev->type() == QEvent::Enter)
-        {
-            updateDescription(MagentaLabel);
-            return false;
-        }
-    }
-    if ( obj == d->btnGray)
-    {
-        if ( ev->type() == QEvent::Enter)
-        {
-            updateDescription(GrayLabel);
-            return false;
-        }
-    }
-    if ( obj == d->btnBlack)
-    {
-        if ( ev->type() == QEvent::Enter)
-        {
-            updateDescription(BlackLabel);
-            return false;
-        }
-    }
-    if ( obj == d->btnWhite)
-    {
-        if ( ev->type() == QEvent::Enter)
-        {
-            updateDescription(WhiteLabel);
+            updateDescription(AcceptedLabel);
             return false;
         }
     }
@@ -315,35 +225,35 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
     return QWidget::eventFilter(obj, ev);
 }
 
-void ColorLabelWidget::setColorLabels(const QList<ColorLabel>& list)
+void PickLabelWidget::setPickLabels(const QList<PickLabel>& list)
 {
     foreach(QAbstractButton* btn, d->colorBtns->buttons())
     {
-        ColorLabel id = (ColorLabel)(d->colorBtns->id(btn));
+        PickLabel id = (PickLabel)(d->colorBtns->id(btn));
         btn->setChecked(list.contains(id));
         updateDescription(id);
     }
 }
 
-QList<ColorLabel> ColorLabelWidget::colorLabels() const
+QList<PickLabel> PickLabelWidget::colorLabels() const
 {
-    QList<ColorLabel> list;
+    QList<PickLabel> list;
     foreach(QAbstractButton* btn, d->colorBtns->buttons())
     {
         if (btn && btn->isChecked())
-            list.append((ColorLabel)(d->colorBtns->id(btn)));
+            list.append((PickLabel)(d->colorBtns->id(btn)));
     }
 
     return list;
 }
 
-QIcon ColorLabelWidget::buildIcon(ColorLabel label) const
+QIcon PickLabelWidget::buildIcon(PickLabel label) const
 {
     QPixmap pix(12, 12);
     QPainter p(&pix);
     p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
-
-    if (label != NoColorLabel)
+/* TODO
+    if (label != NoPickLabel)
     {
         p.fillRect(0, 0, pix.width()-1, pix.height()-1, labelColor(label));
     }
@@ -353,86 +263,50 @@ QIcon ColorLabelWidget::buildIcon(ColorLabel label) const
         p.drawLine(0, 0, pix.width()-1, pix.height()-1);
         p.drawLine(0, pix.height()-1, pix.width()-1, 0);
     }
-
+*/
     p.drawRect(0, 0, pix.width()-1, pix.height()-1);
 
     return QIcon(pix);
 }
 
-QColor ColorLabelWidget::labelColor(ColorLabel label)
+QColor PickLabelWidget::labelColor(PickLabel label)
 {
     QColor color;
 
     switch(label)
     {
-        case RedLabel:
+        case RejectedLabel:
             color = qRgb(0xDF, 0x6E, 0x5F);
             break;
-        case OrangeLabel:
+        case PendingLabel:
             color = qRgb(0xEE, 0xAF, 0x6B);
             break;
-        case YellowLabel:
+        case AcceptedLabel:
             color = qRgb(0xE4, 0xD3, 0x78);
             break;
-        case GreenLabel:
-            color = qRgb(0xAF, 0xD8, 0x78);
-            break;
-        case BlueLabel:
-            color = qRgb(0x77, 0xBA, 0xE8);
-            break;
-        case MagentaLabel:
-            color = qRgb(0xCB, 0x98, 0xE1);
-            break;
-        case GrayLabel:
-            color = qRgb(0xB7, 0xB7, 0xB7);
-            break;
-        case BlackLabel:
-            color = qRgb(0x28, 0x28, 0x28);
-            break;
-        case WhiteLabel:
-            color = qRgb(0xF7, 0xFE, 0xFA);
-            break;
-        default:   // NoColorLabel
+        default:   // NoPickLabel
             break;
     }
 
     return color;
 }
 
-QString ColorLabelWidget::labelColorName(ColorLabel label)
+QString PickLabelWidget::labelPickName(PickLabel label)
 {
     QString name;
 
     switch(label)
     {
-        case RedLabel:
-            name = i18n("Red");
+        case RejectedLabel:
+            name = i18n("Rejected");
             break;
-        case OrangeLabel:
-            name = i18n("Orange");
+        case PendingLabel:
+            name = i18n("Pending");
             break;
-        case YellowLabel:
-            name = i18n("Yellow");
+        case AcceptedLabel:
+            name = i18n("Accepted");
             break;
-        case GreenLabel:
-            name = i18n("Green");
-            break;
-        case BlueLabel:
-            name = i18n("Blue");
-            break;
-        case MagentaLabel:
-            name = i18n("Magenta");
-            break;
-        case GrayLabel:
-            name = i18n("Gray");
-            break;
-        case BlackLabel:
-            name = i18n("Black");
-            break;
-        case WhiteLabel:
-            name = i18n("White");
-            break;
-        default:   // NoColorLabel
+        default:   // NoPickLabel
             name = i18n("None");
             break;
     }
@@ -442,61 +316,61 @@ QString ColorLabelWidget::labelColorName(ColorLabel label)
 
 // -----------------------------------------------------------------------------
 
-class ColorLabelSelector::ColorLabelSelectorPriv
+class PickLabelSelector::PickLabelSelectorPriv
 {
 
 public:
 
-    ColorLabelSelectorPriv()
+    PickLabelSelectorPriv()
     {
         clw = 0;
     }
 
-    ColorLabelWidget* clw;
+    PickLabelWidget* clw;
 };
 
-ColorLabelSelector::ColorLabelSelector(QWidget* parent)
-    : QPushButton(parent), d(new ColorLabelSelectorPriv)
+PickLabelSelector::PickLabelSelector(QWidget* parent)
+    : QPushButton(parent), d(new PickLabelSelectorPriv)
 {
     KMenu* popup = new KMenu(this);
     setMenu(popup);
-    setToolTip(i18n("Color Label"));
+    setToolTip(i18n("Pick Label"));
 
     QWidgetAction* action = new QWidgetAction(this);
-    d->clw                = new ColorLabelWidget(this);
+    d->clw                = new PickLabelWidget(this);
     action->setDefaultWidget(d->clw);
     popup->addAction(action);
-    slotColorLabelChanged(NoColorLabel);
+    slotPickLabelChanged(NoPickLabel);
 
-    connect(d->clw, SIGNAL(signalColorLabelChanged(int)),
-            this, SLOT(slotColorLabelChanged(int)));
+    connect(d->clw, SIGNAL(signalPickLabelChanged(int)),
+            this, SLOT(slotPickLabelChanged(int)));
 }
 
-ColorLabelSelector::~ColorLabelSelector()
+PickLabelSelector::~PickLabelSelector()
 {
     delete d;
 }
 
-void ColorLabelSelector::setColorLabel(ColorLabel label)
+void PickLabelSelector::setPickLabel(PickLabel label)
 {
-    d->clw->setColorLabels(QList<ColorLabel>() << label);
-    slotColorLabelChanged(label);
+    d->clw->setPickLabels(QList<PickLabel>() << label);
+    slotPickLabelChanged(label);
 }
 
-ColorLabel ColorLabelSelector::colorLabel()
+PickLabel PickLabelSelector::colorLabel()
 {
-    QList<ColorLabel> list = d->clw->colorLabels();
+    QList<PickLabel> list = d->clw->colorLabels();
     if (!list.isEmpty())
         return list.first();
 
-    return NoColorLabel;
+    return NoPickLabel;
 }
 
-void ColorLabelSelector::slotColorLabelChanged(int colorId)
+void PickLabelSelector::slotPickLabelChanged(int colorId)
 {
     QString none(i18n("None"));
 
-    if (colorId != NoColorLabel)
+    if (colorId != NoPickLabel)
     {
         setText(QString());
         QFontMetrics fontMt = fontMetrics();
@@ -506,7 +380,7 @@ void ColorLabelSelector::slotColorLabelChanged(int colorId)
         QPainter p(&pix);
         p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
 
-        p.fillRect(fntRect, d->clw->labelColor((ColorLabel)colorId));
+        p.fillRect(fntRect, d->clw->labelColor((PickLabel)colorId));
         p.drawRect(0, 0, fntRect.width()-1, fntRect.height()-1);
 
         QIcon icon(pix);
@@ -522,28 +396,28 @@ void ColorLabelSelector::slotColorLabelChanged(int colorId)
 
     menu()->close();
 
-    emit signalColorLabelChanged(colorId);
+    emit signalPickLabelChanged(colorId);
 }
 
 // -----------------------------------------------------------------------------
 
-ColorLabelMenuAction::ColorLabelMenuAction(QMenu* parent)
+PickLabelMenuAction::PickLabelMenuAction(QMenu* parent)
     : KActionMenu(parent)
 {
-    setText(i18n("Assign Color Label"));
+    setText(i18n("Assign Pick Label"));
     QWidgetAction* wa     = new QWidgetAction(this);
-    ColorLabelWidget* clw = new ColorLabelWidget(parent);
+    PickLabelWidget* clw = new PickLabelWidget(parent);
     wa->setDefaultWidget(clw);
     addAction(wa);
 
-    connect(clw, SIGNAL(signalColorLabelChanged(int)),
-            this, SIGNAL(signalColorLabelChanged(int)));
+    connect(clw, SIGNAL(signalPickLabelChanged(int)),
+            this, SIGNAL(signalPickLabelChanged(int)));
 
-    connect(clw, SIGNAL(signalColorLabelChanged(int)),
+    connect(clw, SIGNAL(signalPickLabelChanged(int)),
             parent, SLOT(close()));
 }
 
-ColorLabelMenuAction::~ColorLabelMenuAction()
+PickLabelMenuAction::~PickLabelMenuAction()
 {
 }
 
