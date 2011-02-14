@@ -457,6 +457,11 @@ void ImageDescEditTab::slotChangingItems()
             ++changedFields;
         }
 
+        if (d->hub.colorLabelChanged())
+        {
+            ++changedFields;
+        }
+
         if (d->hub.tagsChanged())
         {
             ++changedFields;
@@ -473,6 +478,10 @@ void ImageDescEditTab::slotChangingItems()
             else if (d->hub.dateTimeChanged())
                 text = i18np("You have edited the date of the image. ",
                              "You have edited the date of %1 images. ",
+                             d->currInfos.count());
+            else if (d->hub.colorLabelChanged())
+                text = i18np("You have edited the color label of the image. ",
+                             "You have edited the color label of %1 images. ",
                              d->currInfos.count());
             else if (d->hub.ratingChanged())
                 text = i18np("You have edited the rating of the image. ",
@@ -1272,7 +1281,7 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
     d->modified = false;
     d->hub.resetChanged();
     d->applyBtn->setEnabled(false);
-    d->revertBtn->setEnabled(false);   
+    d->revertBtn->setEnabled(false);
     d->applyToAllVersionsButton->setEnabled(false);
 }
 

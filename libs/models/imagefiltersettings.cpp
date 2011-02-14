@@ -64,8 +64,17 @@ void ImageFilterSettings::setDayFilter(const QList<QDateTime>& days)
 
 bool ImageFilterSettings::isFilteringByTags() const
 {
-    if (!includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() ||
-        untaggedFilter || !colorLabelTagFilter.isEmpty())
+    if (!includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() || untaggedFilter)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool ImageFilterSettings::isFilteringByColorLabels() const
+{
+    if (!colorLabelTagFilter.isEmpty())
     {
         return true;
     }
@@ -86,7 +95,7 @@ bool ImageFilterSettings::isFilteringByText() const
 bool ImageFilterSettings::isFiltering() const
 {
     return !dayFilter.isEmpty() || !includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() ||
-           !textFilterSettings.text.isEmpty() || untaggedFilter || ratingFilter >= 0 || 
+           !textFilterSettings.text.isEmpty() || untaggedFilter || ratingFilter >= 0 ||
            mimeTypeFilter != MimeFilter::AllFiles || !colorLabelTagFilter.isEmpty();
 }
 

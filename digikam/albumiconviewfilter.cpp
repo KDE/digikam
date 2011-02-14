@@ -138,6 +138,11 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
         filtersList.append(i18n("<br/><nobr><i>Rating</i></nobr>"));
     }
 
+    if (d->settings.isFilteringByColorLabels())
+    {
+        filtersList.append(i18n("<br/><nobr><i>Color Labels</i></nobr>"));
+    }
+
     if (d->settings.isFilteringByTags())
     {
         filtersList.append(i18n("<br/><nobr><i>Tags</i></nobr>"));

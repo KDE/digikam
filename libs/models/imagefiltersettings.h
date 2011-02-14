@@ -119,6 +119,8 @@ public:
     MimeFilter::TypeMimeFilter      mimeTypeFilter;
     void setMimeTypeFilter(int mimeTypeFilter);
 
+    /// Returns if the color labales is a filter criteria
+    bool isFilteringByColorLabels() const;
     /// Returns if the tag is a filter criteria
     bool isFilteringByTags() const;
     /// Returns if the text (including comment) is a filter criteria
