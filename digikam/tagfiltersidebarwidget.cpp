@@ -216,8 +216,13 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
             "Defines in which way the selected tags are combined to filter the images. "
             "This also includes the '%1' check box.", notTaggedTitle));
 
-    QLabel* clLabel       = new QLabel(i18n("Color Labels:"));
-    d->colorLabelFilter   = new ColorLabelFilter(this);
+    QLabel* clLabel     = new QLabel(i18n("Color Labels:"));
+    KHBox* hbox2        = new KHBox(this);
+    d->colorLabelFilter = new ColorLabelFilter(hbox2);
+    QLabel* space       = new QLabel(hbox2);
+    hbox2->setStretchFactor(space, 10);
+    hbox2->setSpacing(0);
+    hbox2->setMargin(0);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(d->tagFilterView);
@@ -225,7 +230,7 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
     layout->addWidget(d->withoutTagCheckBox);
     layout->addWidget(hbox);
     layout->addWidget(clLabel);
-    layout->addWidget(d->colorLabelFilter);
+    layout->addWidget(hbox2);
     layout->setStretchFactor(d->tagFilterView, 10);
 
     // signals/slots connections
