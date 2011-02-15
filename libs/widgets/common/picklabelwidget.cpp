@@ -48,6 +48,7 @@
 #include <kapplication.h>
 #include <kxmlguiwindow.h>
 #include <kactioncollection.h>
+#include <kiconloader.h>
 
 namespace Digikam
 {
@@ -59,20 +60,14 @@ public:
 
     PickLabelWidgetPriv()
     {
-        colorBtns  = 0;
-        btnNone    = 0;
-        btnRed     = 0;
-        btnOrange  = 0;
-        btnYellow  = 0;
-        btnGreen   = 0;
-        btnBlue    = 0;
-        btnMagenta = 0;
-        btnGray    = 0;
-        btnBlack   = 0;
-        btnWhite   = 0;
-        desc       = 0;
-        descBox    = 0;
-        shortcut   = 0;
+        colorBtns = 0;
+        btnNone   = 0;
+        btnRej    = 0;
+        btnPndg   = 0;
+        btnAccpt  = 0;
+        desc      = 0;
+        descBox   = 0;
+        shortcut  = 0;
     }
 
     QButtonGroup*       colorBtns;
@@ -80,15 +75,9 @@ public:
     QLabel*             desc;
 
     QToolButton*        btnNone;
-    QToolButton*        btnRed;
-    QToolButton*        btnOrange;
-    QToolButton*        btnYellow;
-    QToolButton*        btnGreen;
-    QToolButton*        btnBlue;
-    QToolButton*        btnMagenta;
-    QToolButton*        btnGray;
-    QToolButton*        btnBlack;
-    QToolButton*        btnWhite;
+    QToolButton*        btnRej;
+    QToolButton*        btnPndg;
+    QToolButton*        btnAccpt;
 
     KHBox*              descBox;
 
@@ -111,29 +100,29 @@ PickLabelWidget::PickLabelWidget(QWidget* parent)
     d->btnNone->setIcon(buildIcon(NoPickLabel));
     d->btnNone->installEventFilter(this);
 
-    d->btnRed = new QToolButton(hbox);
-    d->btnRed->setCheckable(true);
-    d->btnRed->setFocusPolicy(Qt::NoFocus);
-    d->btnRed->setIcon(buildIcon(RejectedLabel));
-    d->btnRed->installEventFilter(this);
+    d->btnRej = new QToolButton(hbox);
+    d->btnRej->setCheckable(true);
+    d->btnRej->setFocusPolicy(Qt::NoFocus);
+    d->btnRej->setIcon(buildIcon(RejectedLabel));
+    d->btnRej->installEventFilter(this);
 
-    d->btnOrange = new QToolButton(hbox);
-    d->btnOrange->setCheckable(true);
-    d->btnOrange->setFocusPolicy(Qt::NoFocus);
-    d->btnOrange->setIcon(buildIcon(PendingLabel));
-    d->btnOrange->installEventFilter(this);
+    d->btnPndg = new QToolButton(hbox);
+    d->btnPndg->setCheckable(true);
+    d->btnPndg->setFocusPolicy(Qt::NoFocus);
+    d->btnPndg->setIcon(buildIcon(PendingLabel));
+    d->btnPndg->installEventFilter(this);
 
-    d->btnYellow = new QToolButton(hbox);
-    d->btnYellow->setCheckable(true);
-    d->btnYellow->setFocusPolicy(Qt::NoFocus);
-    d->btnYellow->setIcon(buildIcon(AcceptedLabel));
-    d->btnYellow->installEventFilter(this);
+    d->btnAccpt = new QToolButton(hbox);
+    d->btnAccpt->setCheckable(true);
+    d->btnAccpt->setFocusPolicy(Qt::NoFocus);
+    d->btnAccpt->setIcon(buildIcon(AcceptedLabel));
+    d->btnAccpt->installEventFilter(this);
 
     d->colorBtns = new QButtonGroup(hbox);
-    d->colorBtns->addButton(d->btnNone,    NoPickLabel);
-    d->colorBtns->addButton(d->btnRed,     RejectedLabel);
-    d->colorBtns->addButton(d->btnOrange,  PendingLabel);
-    d->colorBtns->addButton(d->btnYellow,  AcceptedLabel);
+    d->colorBtns->addButton(d->btnNone,  NoPickLabel);
+    d->colorBtns->addButton(d->btnRej,   RejectedLabel);
+    d->colorBtns->addButton(d->btnPndg,  PendingLabel);
+    d->colorBtns->addButton(d->btnAccpt, AcceptedLabel);
 
     d->descBox  = new KHBox(this);
     d->descBox->setMargin(0);
@@ -180,7 +169,7 @@ void PickLabelWidget::updateDescription(PickLabel label)
     KXmlGuiWindow* app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
     if (app)
     {
-        QAction* ac = app->actionCollection()->action(QString("colorlabel-%1").arg(label));
+        QAction* ac = app->actionCollection()->action(QString("picklabel-%1").arg(label));
         if (ac)
             d->shortcut->setText(ac->shortcut().toString());
     }
@@ -196,7 +185,7 @@ bool PickLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
-    if ( obj == d->btnRed)
+    if ( obj == d->btnRej)
     {
         if ( ev->type() == QEvent::Enter)
         {
@@ -204,7 +193,7 @@ bool PickLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
-    if ( obj == d->btnOrange)
+    if ( obj == d->btnPndg)
     {
         if ( ev->type() == QEvent::Enter)
         {
@@ -212,7 +201,7 @@ bool PickLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
-    if ( obj == d->btnYellow)
+    if ( obj == d->btnAccpt)
     {
         if ( ev->type() == QEvent::Enter)
         {
@@ -249,46 +238,29 @@ QList<PickLabel> PickLabelWidget::colorLabels() const
 
 QIcon PickLabelWidget::buildIcon(PickLabel label) const
 {
-    QPixmap pix(12, 12);
-    QPainter p(&pix);
-    p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
-/* TODO
-    if (label != NoPickLabel)
-    {
-        p.fillRect(0, 0, pix.width()-1, pix.height()-1, labelColor(label));
-    }
-    else
-    {
-        p.fillRect(0, 0, pix.width()-1, pix.height()-1, palette().color(QPalette::Active, QPalette::Button));
-        p.drawLine(0, 0, pix.width()-1, pix.height()-1);
-        p.drawLine(0, pix.height()-1, pix.width()-1, 0);
-    }
-*/
-    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
-
-    return QIcon(pix);
-}
-
-QColor PickLabelWidget::labelColor(PickLabel label)
-{
-    QColor color;
-
     switch(label)
     {
         case RejectedLabel:
-            color = qRgb(0xDF, 0x6E, 0x5F);
+            return KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, 12);
             break;
         case PendingLabel:
-            color = qRgb(0xEE, 0xAF, 0x6B);
+            return KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, 12);
             break;
         case AcceptedLabel:
-            color = qRgb(0xE4, 0xD3, 0x78);
+            return KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, 12);
             break;
         default:   // NoPickLabel
             break;
     }
 
-    return color;
+    QPixmap pix(12, 12);
+    QPainter p(&pix);
+    p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
+    p.fillRect(0, 0, pix.width()-1, pix.height()-1, palette().color(QPalette::Active, QPalette::Button));
+    p.drawLine(0, 0, pix.width()-1, pix.height()-1);
+    p.drawLine(0, pix.height()-1, pix.width()-1, 0);
+    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
+    return QIcon(pix);
 }
 
 QString PickLabelWidget::labelPickName(PickLabel label)
@@ -323,10 +295,10 @@ public:
 
     PickLabelSelectorPriv()
     {
-        clw = 0;
+        plw = 0;
     }
 
-    PickLabelWidget* clw;
+    PickLabelWidget* plw;
 };
 
 PickLabelSelector::PickLabelSelector(QWidget* parent)
@@ -334,15 +306,14 @@ PickLabelSelector::PickLabelSelector(QWidget* parent)
 {
     KMenu* popup = new KMenu(this);
     setMenu(popup);
-    setToolTip(i18n("Pick Label"));
 
     QWidgetAction* action = new QWidgetAction(this);
-    d->clw                = new PickLabelWidget(this);
-    action->setDefaultWidget(d->clw);
+    d->plw                = new PickLabelWidget(this);
+    action->setDefaultWidget(d->plw);
     popup->addAction(action);
     slotPickLabelChanged(NoPickLabel);
 
-    connect(d->clw, SIGNAL(signalPickLabelChanged(int)),
+    connect(d->plw, SIGNAL(signalPickLabelChanged(int)),
             this, SLOT(slotPickLabelChanged(int)));
 }
 
@@ -353,50 +324,27 @@ PickLabelSelector::~PickLabelSelector()
 
 void PickLabelSelector::setPickLabel(PickLabel label)
 {
-    d->clw->setPickLabels(QList<PickLabel>() << label);
+    d->plw->setPickLabels(QList<PickLabel>() << label);
     slotPickLabelChanged(label);
 }
 
 PickLabel PickLabelSelector::colorLabel()
 {
-    QList<PickLabel> list = d->clw->colorLabels();
+    QList<PickLabel> list = d->plw->colorLabels();
     if (!list.isEmpty())
         return list.first();
 
     return NoPickLabel;
 }
 
-void PickLabelSelector::slotPickLabelChanged(int colorId)
+void PickLabelSelector::slotPickLabelChanged(int id)
 {
-    QString none(i18n("None"));
-
-    if (colorId != NoPickLabel)
-    {
-        setText(QString());
-        QFontMetrics fontMt = fontMetrics();
-        QRect fntRect(0, 0, fontMt.width(none), fontMt.height());
-
-        QPixmap pix(fntRect.size());
-        QPainter p(&pix);
-        p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
-
-        p.fillRect(fntRect, d->clw->labelColor((PickLabel)colorId));
-        p.drawRect(0, 0, fntRect.width()-1, fntRect.height()-1);
-
-        QIcon icon(pix);
-        setIconSize(pix.size());
-        setIcon(icon);
-    }
-    else
-    {
-        setIconSize(QSize());
-        setIcon(QIcon());
-        setText(none);
-    }
-
+    setText(QString());
+    setIcon(d->plw->buildIcon((PickLabel)id));
+    setToolTip(i18n("Pick Label: %1", d->plw->labelPickName((PickLabel)id)));
     menu()->close();
 
-    emit signalPickLabelChanged(colorId);
+    emit signalPickLabelChanged(id);
 }
 
 // -----------------------------------------------------------------------------
@@ -405,15 +353,15 @@ PickLabelMenuAction::PickLabelMenuAction(QMenu* parent)
     : KActionMenu(parent)
 {
     setText(i18n("Assign Pick Label"));
-    QWidgetAction* wa     = new QWidgetAction(this);
-    PickLabelWidget* clw = new PickLabelWidget(parent);
-    wa->setDefaultWidget(clw);
+    QWidgetAction* wa    = new QWidgetAction(this);
+    PickLabelWidget* plw = new PickLabelWidget(parent);
+    wa->setDefaultWidget(plw);
     addAction(wa);
 
-    connect(clw, SIGNAL(signalPickLabelChanged(int)),
+    connect(plw, SIGNAL(signalPickLabelChanged(int)),
             this, SIGNAL(signalPickLabelChanged(int)));
 
-    connect(clw, SIGNAL(signalPickLabelChanged(int)),
+    connect(plw, SIGNAL(signalPickLabelChanged(int)),
             parent, SLOT(close()));
 }
 

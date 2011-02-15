@@ -80,6 +80,8 @@ public:
     static QColor  labelColor(ColorLabel label);
     static QString labelColorName(ColorLabel label);
 
+    QIcon buildIcon(ColorLabel label) const;
+
 Q_SIGNALS:
 
     void signalColorLabelChanged(int);
@@ -90,7 +92,6 @@ protected:
 
 private:
 
-    QIcon buildIcon(ColorLabel label) const;
     void updateDescription(ColorLabel label);
 
 private:

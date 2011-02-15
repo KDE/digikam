@@ -460,7 +460,6 @@ ColorLabelSelector::ColorLabelSelector(QWidget* parent)
 {
     KMenu* popup = new KMenu(this);
     setMenu(popup);
-    setToolTip(i18n("Color Label"));
 
     QWidgetAction* action = new QWidgetAction(this);
     d->clw                = new ColorLabelWidget(this);
@@ -492,37 +491,14 @@ ColorLabel ColorLabelSelector::colorLabel()
     return NoColorLabel;
 }
 
-void ColorLabelSelector::slotColorLabelChanged(int colorId)
+void ColorLabelSelector::slotColorLabelChanged(int id)
 {
-    QString none(i18n("None"));
-
-    if (colorId != NoColorLabel)
-    {
-        setText(QString());
-        QFontMetrics fontMt = fontMetrics();
-        QRect fntRect(0, 0, fontMt.width(none), fontMt.height());
-
-        QPixmap pix(fntRect.size());
-        QPainter p(&pix);
-        p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
-
-        p.fillRect(fntRect, d->clw->labelColor((ColorLabel)colorId));
-        p.drawRect(0, 0, fntRect.width()-1, fntRect.height()-1);
-
-        QIcon icon(pix);
-        setIconSize(pix.size());
-        setIcon(icon);
-    }
-    else
-    {
-        setIconSize(QSize());
-        setIcon(QIcon());
-        setText(none);
-    }
-
+    setText(QString());
+    setIcon(d->clw->buildIcon((ColorLabel)id));
+    setToolTip(i18n("Color Label: %1", d->clw->labelColorName((ColorLabel)id)));
     menu()->close();
 
-    emit signalColorLabelChanged(colorId);
+    emit signalColorLabelChanged(id);
 }
 
 // -----------------------------------------------------------------------------

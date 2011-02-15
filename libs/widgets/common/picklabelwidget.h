@@ -77,8 +77,9 @@ public:
      */
     QList<PickLabel> colorLabels() const;
 
-    static QColor  labelColor(PickLabel label);
     static QString labelPickName(PickLabel label);
+
+    QIcon buildIcon(PickLabel label) const;
 
 Q_SIGNALS:
 
@@ -90,7 +91,6 @@ protected:
 
 private:
 
-    QIcon buildIcon(PickLabel label) const;
     void updateDescription(PickLabel label);
 
 private:
