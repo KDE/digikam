@@ -1751,6 +1751,11 @@ void LightTableWindow::toggleTag(int tagID)
     d->barView->toggleTag(tagID);
 }
 
+void LightTableWindow::slotAssignPickLabel(int pickId)
+{
+    d->barView->slotAssignPickLabel(pickId);
+}
+
 void LightTableWindow::slotAssignColorLabel(int colorId)
 {
     d->barView->slotAssignColorLabel(colorId);

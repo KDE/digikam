@@ -91,6 +91,7 @@ Q_SIGNALS:
     void signalGotoTag(int);
     void signalAssignTag(int);
     void signalRemoveTag(int);
+    void signalAssignPickLabel(int);
     void signalAssignColorLabel(int);
     void signalAssignRating(int);
     void signalAddToExistingQueue(int);
@@ -277,6 +278,20 @@ public:
      * Add a menu to create new tags from adressbook entries.
      */
     void addCreateTagFromAddressbookMenu();
+
+    /**
+    * Add "Pick Label" action.
+    *
+    * This action will provide methods to assign pick label to the currently selected items.
+    *
+    * To make this menu work, you need to run exec() from this class, otherwise the signals
+    * are not emitted and you will not be able to react on triggered actions from this menu.
+    * Make sure to connect the signals to the appropriate slots in the context menu handling method.
+    *
+    * @see exec()
+    * @see signalAssignPickLabel()
+    */
+    void addPickLabelAction();
 
     /**
      * Add "Color Label" action.

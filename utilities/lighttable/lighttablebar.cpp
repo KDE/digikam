@@ -919,6 +919,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
             cmhelper.addAction(removeAction);
             cmhelper.addSeparator();
             // ------------------------------------------------
+            cmhelper.addPickLabelAction();
             cmhelper.addColorLabelAction();
             cmhelper.addRatingMenu();
             cmhelper.addSeparator();
@@ -928,6 +929,9 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
         cmhelper.addAction(clearAllAction, true);
 
         // special action handling --------------------------------
+
+        connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
+                this, SLOT(slotAssignPickLabel(int)));
 
         connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
                 this, SLOT(slotAssignColorLabel(int)));
@@ -963,9 +967,26 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
     }
 }
 
+void LightTableBar::slotAssignPickLabel(int pickId)
+{
+    assignPickLabel(currentItemImageInfo(), pickId);
+}
+
 void LightTableBar::slotAssignColorLabel(int colorId)
 {
     assignColorLabel(currentItemImageInfo(), colorId);
+}
+
+void LightTableBar::assignPickLabel(const ImageInfo& info, int pickId)
+{
+    if (!info.isNull())
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setPickLabel(pickId);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+    }
 }
 
 void LightTableBar::assignColorLabel(const ImageInfo& info, int colorId)
@@ -1141,6 +1162,7 @@ ImagePreviewBarItem* LightTableBar::findItemById(qlonglong id) const
 void LightTableBar::drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile)
 {
     LightTableBarItem* rItem = dynamic_cast<LightTableBarItem*>(item);
+    int pickId               = rItem->info().pickLabel();
     int colorId              = rItem->info().colorLabel();
 
     if (colorId > NoColorLabel)
@@ -1149,6 +1171,26 @@ void LightTableBar::drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile)
         QRect r = item->rect();
         p.setPen(QPen(ColorLabelWidget::labelColor((ColorLabel)colorId), 5, Qt::SolidLine));
         p.drawRect(3, 3, r.width()-7, r.height()-7);
+    }
+
+    if (pickId != NoPickLabel)
+    {
+        QIcon icon;
+        int size = KIconLoader::SizeSmallMedium;
+
+        if (pickId == RejectedLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, size);
+        }
+        else if (pickId == PendingLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, size);
+        }
+        else if (pickId == AcceptedLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, size);
+        }
+        icon.paint(&p, item->rect().width()/2 - size/2, 10, size, size);
     }
 
     if (rItem->isOnLeftPanel())

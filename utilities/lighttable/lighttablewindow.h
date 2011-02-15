@@ -73,6 +73,7 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotFileChanged(const QString& filePath);
+    void slotAssignPickLabel(int pickId);
     void slotAssignColorLabel(int colorId);
     void slotAssignRating(int rating);
 

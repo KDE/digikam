@@ -55,7 +55,7 @@ public:
     TagsActionMngr(QWidget* parent);
     ~TagsActionMngr();
 
-    /** Register all action collections managed with keyboard shorcuts. 
+    /** Register all action collections managed with keyboard shorcuts.
      *  Must be called after all root window instances created.
      */
     void registerActionCollections();
@@ -81,6 +81,7 @@ private Q_SLOTS:
 
     void slotAssignTagsFromShortcut();
     void slotAssignRatingFromShortcut();
+    void slotAssignPickLabelFromShortcut();
     void slotAssignColorLabelFromShortcut();
 
     /**
@@ -100,6 +101,7 @@ private:
     void createActions();
 
     bool createRatingActionShortcut(KActionCollection* ac, int rating);
+    bool createPickLabelActionShortcut(KActionCollection* ac, int pickId);
     bool createColorLabelActionShortcut(KActionCollection* ac, int colorId);
 
 private:

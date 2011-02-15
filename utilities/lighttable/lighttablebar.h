@@ -191,6 +191,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
+    void slotAssignPickLabel(int);
     void slotAssignColorLabel(int);
     void slotAssignRating(int);
     void slotRatingChanged(const KUrl&, int);
@@ -204,6 +205,7 @@ private:
     void contentsDragEnterEvent(QDragEnterEvent*);
     void contentsDropEvent(QDropEvent*);
 
+    void assignPickLabel(const ImageInfo& info, int pickId);
     void assignColorLabel(const ImageInfo& info, int colorId);
     void assignRating(const ImageInfo& info, int rating);
 

@@ -74,6 +74,7 @@ public Q_SLOTS:
                         const ImageInfo& imageInfoCurrent, const QString& caption);
     void openImage(const ImageInfo& info);
 
+    void slotAssignPickLabel(int pickId);
     void slotAssignColorLabel(int colorId);
     void slotAssignRating(int rating);
 
@@ -120,6 +121,7 @@ private:
 
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
 
+    void assignPickLabel(const ImageInfo& info, int pickId);
     void assignColorLabel(const ImageInfo& info, int colorId);
     void assignRating(const ImageInfo& info, int rating);
 

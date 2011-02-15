@@ -98,6 +98,7 @@ private Q_SLOTS:
     void slotContextMenu();
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
+    void slotAssignPickLabel(int pickId);
     void slotAssignColorLabel(int colorId);
     void slotAssignRating(int rating);
     void slotThemeChanged();

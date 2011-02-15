@@ -59,6 +59,9 @@ public Q_SLOTS:
     void removeTags(const ImageInfo& info, const QList<int>& tagIDs);
     void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
 
+    void assignPickLabel(const ImageInfo& infos, int pickId);
+    void assignPickLabel(const QList<ImageInfo>& infos, int pickId);
+
     void assignColorLabel(const ImageInfo& infos, int colorId);
     void assignColorLabel(const QList<ImageInfo>& infos, int colorId);
 

@@ -284,6 +284,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.addRemoveTagsMenu(selectedImageIDs);
     cmhelper.addSeparator();
     // --------------------------------------------------------
+    cmhelper.addPickLabelAction();
     cmhelper.addColorLabelAction();
     cmhelper.addRatingMenu();
 
@@ -306,6 +307,9 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     connect(&cmhelper, SIGNAL(signalGotoDate(const ImageInfo&)),
             this, SIGNAL(gotoDateAndImageRequested(const ImageInfo&)));
+
+    connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
+            this, SLOT(assignPickLabelToSelected(int)));
 
     connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
             this, SLOT(assignColorLabelToSelected(int)));
@@ -501,6 +505,16 @@ void DigikamImageView::assignTagToSelected(int tagID)
 void DigikamImageView::removeTagFromSelected(int tagID)
 {
     MetadataManager::instance()->removeTags(selectedImageInfos(), QList<int>() << tagID);
+}
+
+void DigikamImageView::assignPickLabelToSelected(int pickId)
+{
+    MetadataManager::instance()->assignPickLabel(selectedImageInfos(), pickId);
+}
+
+void DigikamImageView::assignPickLabel(const QModelIndex& index, int pickId)
+{
+    MetadataManager::instance()->assignPickLabel(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), pickId);
 }
 
 void DigikamImageView::assignColorLabelToSelected(int colorId)

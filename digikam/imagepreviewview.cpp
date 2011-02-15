@@ -398,6 +398,7 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
 
     // --------------------------------------------------------
 
+    cmhelper.addPickLabelAction();
     cmhelper.addColorLabelAction();
     cmhelper.addRatingMenu();
 
@@ -411,6 +412,9 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
 
     connect(&cmhelper, SIGNAL(signalRemoveTag(int)),
             this, SLOT(slotRemoveTag(int)));
+
+    connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
+            this, SLOT(slotAssignPickLabel(int)));
 
     connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
             this, SLOT(slotAssignColorLabel(int)));
@@ -441,6 +445,11 @@ void ImagePreviewView::slotAssignTag(int tagID)
 void ImagePreviewView::slotRemoveTag(int tagID)
 {
     MetadataManager::instance()->removeTag(d->item->imageInfo(), tagID);
+}
+
+void ImagePreviewView::slotAssignPickLabel(int pickId)
+{
+    MetadataManager::instance()->assignColorLabel(d->item->imageInfo(), pickId);
 }
 
 void ImagePreviewView::slotAssignColorLabel(int colorId)

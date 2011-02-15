@@ -117,6 +117,7 @@
 #include "metadatahub.h"
 #include "metadatasettings.h"
 #include "colorlabelwidget.h"
+#include "picklabelwidget.h"
 #include "ratingwidget.h"
 #include "savingcontextcontainer.h"
 #include "scancontroller.h"
@@ -797,6 +798,14 @@ void ImageWindow::slotContextMenu()
 
         m_contextMenu->addSeparator();
 
+        // Assign Pick Label -------------------------------------------
+
+        PickLabelMenuAction* pickLabelMenu = new PickLabelMenuAction(m_contextMenu);
+        m_contextMenu->addAction(pickLabelMenu);
+
+        connect(pickLabelMenu, SIGNAL(signalPickLabelChanged(int)),
+                this, SLOT(slotAssignPickLabel(int)));
+
         // Assign Color Label -------------------------------------------
 
         ColorLabelMenuAction* colorLabelMenu = new ColorLabelMenuAction(m_contextMenu);
@@ -820,6 +829,7 @@ void ImageWindow::slotContextMenu()
         delete assignTagsMenu;
         delete removeTagsMenu;
         delete colorLabelMenu;
+        delete pickLabelMenu;
         delete ratingMenu;
     }
 }
@@ -898,9 +908,26 @@ void ImageWindow::slotRemoveTag(int tagID)
     }
 }
 
+void ImageWindow::slotAssignPickLabel(int pickId)
+{
+    assignPickLabel(d->currentImageInfo, pickId);
+}
+
 void ImageWindow::slotAssignColorLabel(int colorId)
 {
     assignColorLabel(d->currentImageInfo, colorId);
+}
+
+void ImageWindow::assignPickLabel(const ImageInfo& info, int pickId)
+{
+    if (!info.isNull())
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setPickLabel(pickId);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+    }
 }
 
 void ImageWindow::assignColorLabel(const ImageInfo& info, int colorId)

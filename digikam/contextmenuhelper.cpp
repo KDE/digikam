@@ -71,6 +71,7 @@
 #include "imageinfo.h"
 #include "lighttablewindow.h"
 #include "queuemgrwindow.h"
+#include "picklabelwidget.h"
 #include "colorlabelwidget.h"
 #include "ratingwidget.h"
 #include "tagmodificationhelper.h"
@@ -467,6 +468,15 @@ void ContextMenuHelper::addRemoveTagsMenu(imageIds& ids)
 
     connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
             this, SIGNAL(signalRemoveTag(int)));
+}
+
+void ContextMenuHelper::addPickLabelAction()
+{
+    PickLabelMenuAction* menu = new PickLabelMenuAction(d->parent);
+    addAction(menu);
+
+    connect(menu, SIGNAL(signalPickLabelChanged(int)),
+            this, SIGNAL(signalAssignPickLabel(int)));
 }
 
 void ContextMenuHelper::addColorLabelAction()

@@ -179,6 +179,7 @@ public Q_SLOTS:
     void slotGroupImages(int mode);
     void slotMoveSelectionToAlbum();
 
+    void slotAssignPickLabel(int pickId);
     void slotAssignColorLabel(int colorId);
     void slotAssignRating(int rating);
 

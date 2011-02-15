@@ -94,6 +94,7 @@ private Q_SLOTS:
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
     void slotAssignRating(int rating);
+    void slotAssignPickLabel(int pickId);
     void slotAssignColorLabel(int colorId);
 
     void slotThemeChanged();

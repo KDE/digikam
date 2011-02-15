@@ -392,6 +392,7 @@ void LightTablePreview::slotContextMenu()
     cmhelper.addRemoveTagsMenu(idList);
     cmhelper.addSeparator();
     // --------------------------------------------------------
+    cmhelper.addPickLabelAction();
     cmhelper.addColorLabelAction();
     cmhelper.addRatingMenu();
 
@@ -402,6 +403,9 @@ void LightTablePreview::slotContextMenu()
 
     connect(&cmhelper, SIGNAL(signalRemoveTag(int)),
             this, SLOT(slotRemoveTag(int)));
+
+    connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
+            this, SLOT(slotAssignPickLabel(int)));
 
     connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
             this, SLOT(slotAssignColorLabel(int)));
@@ -462,6 +466,18 @@ void LightTablePreview::slotRemoveTag(int tagID)
         MetadataHub hub;
         hub.load(d->imageInfo);
         hub.setTag(tagID, false);
+        hub.write(d->imageInfo, MetadataHub::PartialWrite);
+        hub.write(d->imageInfo.filePath(), MetadataHub::FullWriteIfChanged);
+    }
+}
+
+void LightTablePreview::slotAssignPickLabel(int pickId)
+{
+    if (!d->imageInfo.isNull())
+    {
+        MetadataHub hub;
+        hub.load(d->imageInfo);
+        hub.setPickLabel(pickId);
         hub.write(d->imageInfo, MetadataHub::PartialWrite);
         hub.write(d->imageInfo.filePath(), MetadataHub::FullWriteIfChanged);
     }

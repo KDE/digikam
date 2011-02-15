@@ -46,6 +46,7 @@
 #include "digikamview.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
+#include "picklabelwidget.h"
 #include "colorlabelwidget.h"
 #include "tagscache.h"
 
@@ -141,6 +142,16 @@ void TagsActionMngr::createActions()
             createColorLabelActionShortcut(ac, i);
         }
     }
+
+    // Create Pick Label shortcuts.
+
+    foreach(KActionCollection* ac, d->actionCollectionList)
+    {
+        for (int i = NoPickLabel ; i <= AcceptedLabel ; ++i)
+        {
+            createPickLabelActionShortcut(ac, i);
+        }
+    }
 }
 
 bool TagsActionMngr::createRatingActionShortcut(KActionCollection* ac, int rating)
@@ -155,6 +166,24 @@ bool TagsActionMngr::createRatingActionShortcut(KActionCollection* ac, int ratin
         action->setData(rating);
         connect(action, SIGNAL(triggered()), this, SLOT(slotAssignRatingFromShortcut()));
         return true;
+    }
+
+    return false;
+}
+
+bool TagsActionMngr::createPickLabelActionShortcut(KActionCollection* ac, int pickId)
+{
+    if (ac)
+    {
+        KAction* action = ac->addAction(QString("picklabel-%1").arg(pickId));
+        action->setText(i18n("Assign Pick Label \"%1\"",
+                             PickLabelWidget::labelPickName((PickLabel)pickId)));
+                             action->setShortcut(KShortcut(QString("ALT+CTRL+%1").arg(pickId)));
+                             action->setShortcutConfigurable(false);
+                             action->forgetGlobalShortcut();
+                             action->setData(pickId);
+                             connect(action, SIGNAL(triggered()), this, SLOT(slotAssignPickLabelFromShortcut()));
+                             return true;
     }
 
     return false;
@@ -371,6 +400,40 @@ void TagsActionMngr::slotAssignColorLabelFromShortcut()
     {
         kDebug() << "Handling by LightTableWindow";
         ltw->slotAssignColorLabel(colorId);
+        return;
+    }
+}
+
+void TagsActionMngr::slotAssignPickLabelFromShortcut()
+{
+    KAction* action = dynamic_cast<KAction*>(sender());
+    if (!action) return;
+
+    int pickId = action->data().toInt();
+    kDebug() << "Fired Pick Label Shortcut " << pickId;
+
+    QWidget* w      = kapp->activeWindow();
+    DigikamApp* dkw = dynamic_cast<DigikamApp*>(w);
+    if (dkw)
+    {
+        kDebug() << "Handling by DigikamApp";
+        dkw->view()->slotAssignPickLabel(pickId);
+        return;
+    }
+
+    ImageWindow* imw = dynamic_cast<ImageWindow*>(w);
+    if (imw)
+    {
+        kDebug() << "Handling by ImageWindow";
+        imw->slotAssignPickLabel(pickId);
+        return;
+    }
+
+    LightTableWindow* ltw = dynamic_cast<LightTableWindow*>(w);
+    if (ltw)
+    {
+        kDebug() << "Handling by LightTableWindow";
+        ltw->slotAssignPickLabel(pickId);
         return;
     }
 }

@@ -80,6 +80,10 @@ public:
     {
         emit signalRemoveTags(infos, tagIDs);
     }
+    void assignPickLabel(const QList<ImageInfo>& infos, int pickId)
+    {
+        emit signalAssignPickLabel(infos, pickId);
+    }
     void assignColorLabel(const QList<ImageInfo>& infos, int colorId)
     {
         emit signalAssignColorLabel(infos, colorId);
@@ -141,6 +145,7 @@ Q_SIGNALS:
     // inter-thread signals: connected to database worker slots
     void signalAddTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
     void signalRemoveTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void signalAssignPickLabel(const QList<ImageInfo>& infos, int pickId);
     void signalAssignColorLabel(const QList<ImageInfo>& infos, int colorId);
     void signalAssignRating(const QList<ImageInfo>& infos, int rating);
     void signalSetExifOrientation(const QList<ImageInfo>& infos, int orientation);
@@ -162,6 +167,7 @@ public Q_SLOTS:
 
     void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
     void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void assignPickLabel(const QList<ImageInfo>& infos, int pickId);
     void assignColorLabel(const QList<ImageInfo>& infos, int colorId);
     void assignRating(const QList<ImageInfo>& infos, int rating);
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation);

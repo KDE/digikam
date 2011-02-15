@@ -452,7 +452,7 @@ void DigikamView::setupConnections()
             SIGNAL(signalTagFilterChanged(const QList<int>&, const QList<int>&,
                                           ImageFilterSettings::MatchingCondition, bool, const QList<int>&)),
             d->iconView->imageFilterModel(),
-            SLOT(setTagFilter(const QList<int>&, const QList<int>&, 
+            SLOT(setTagFilter(const QList<int>&, const QList<int>&,
                               ImageFilterSettings::MatchingCondition, bool, const QList<int>&)));
 
     // -- Preview image widget Connections ------------------------
@@ -1746,6 +1746,11 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 void DigikamView::toggleTag(int tagID)
 {
     d->iconView->toggleTagToSelected(tagID);
+}
+
+void DigikamView::slotAssignPickLabel(int pickId)
+{
+    d->iconView->assignPickLabelToSelected(pickId);
 }
 
 void DigikamView::slotAssignColorLabel(int colorId)
