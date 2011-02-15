@@ -60,17 +60,17 @@ public:
 
     PickLabelWidgetPriv()
     {
-        colorBtns = 0;
-        btnNone   = 0;
-        btnRej    = 0;
-        btnPndg   = 0;
-        btnAccpt  = 0;
-        desc      = 0;
-        descBox   = 0;
-        shortcut  = 0;
+        pickBtns = 0;
+        btnNone  = 0;
+        btnRej   = 0;
+        btnPndg  = 0;
+        btnAccpt = 0;
+        desc     = 0;
+        descBox  = 0;
+        shortcut = 0;
     }
 
-    QButtonGroup*       colorBtns;
+    QButtonGroup*       pickBtns;
 
     QLabel*             desc;
 
@@ -118,11 +118,11 @@ PickLabelWidget::PickLabelWidget(QWidget* parent)
     d->btnAccpt->setIcon(buildIcon(AcceptedLabel));
     d->btnAccpt->installEventFilter(this);
 
-    d->colorBtns = new QButtonGroup(hbox);
-    d->colorBtns->addButton(d->btnNone,  NoPickLabel);
-    d->colorBtns->addButton(d->btnRej,   RejectedLabel);
-    d->colorBtns->addButton(d->btnPndg,  PendingLabel);
-    d->colorBtns->addButton(d->btnAccpt, AcceptedLabel);
+    d->pickBtns = new QButtonGroup(hbox);
+    d->pickBtns->addButton(d->btnNone,  NoPickLabel);
+    d->pickBtns->addButton(d->btnRej,   RejectedLabel);
+    d->pickBtns->addButton(d->btnPndg,  PendingLabel);
+    d->pickBtns->addButton(d->btnAccpt, AcceptedLabel);
 
     d->descBox  = new KHBox(this);
     d->descBox->setMargin(0);
@@ -143,7 +143,7 @@ PickLabelWidget::PickLabelWidget(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->colorBtns, SIGNAL(buttonReleased(int)),
+    connect(d->pickBtns, SIGNAL(buttonReleased(int)),
             this, SIGNAL(signalPickLabelChanged(int)));
 }
 
@@ -159,7 +159,7 @@ void PickLabelWidget::setDescriptionBoxVisible(bool b)
 
 void PickLabelWidget::setButtonsExclusive(bool b)
 {
-    d->colorBtns->setExclusive(b);
+    d->pickBtns->setExclusive(b);
 }
 
 void PickLabelWidget::updateDescription(PickLabel label)
@@ -216,9 +216,9 @@ bool PickLabelWidget::eventFilter(QObject* obj, QEvent* ev)
 
 void PickLabelWidget::setPickLabels(const QList<PickLabel>& list)
 {
-    foreach(QAbstractButton* btn, d->colorBtns->buttons())
+    foreach(QAbstractButton* btn, d->pickBtns->buttons())
     {
-        PickLabel id = (PickLabel)(d->colorBtns->id(btn));
+        PickLabel id = (PickLabel)(d->pickBtns->id(btn));
         btn->setChecked(list.contains(id));
         updateDescription(id);
     }
@@ -227,10 +227,10 @@ void PickLabelWidget::setPickLabels(const QList<PickLabel>& list)
 QList<PickLabel> PickLabelWidget::colorLabels() const
 {
     QList<PickLabel> list;
-    foreach(QAbstractButton* btn, d->colorBtns->buttons())
+    foreach(QAbstractButton* btn, d->pickBtns->buttons())
     {
         if (btn && btn->isChecked())
-            list.append((PickLabel)(d->colorBtns->id(btn)));
+            list.append((PickLabel)(d->pickBtns->id(btn)));
     }
 
     return list;

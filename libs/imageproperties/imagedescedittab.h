@@ -59,6 +59,7 @@ public:
     ImageDescEditTab(QWidget* parent);
     ~ImageDescEditTab();
 
+    void assignPickLabel(int pickId);
     void assignColorLabel(int colorId);
     void assignRating(int rating);
     void setItem(const ImageInfo& info = ImageInfo());
@@ -88,6 +89,7 @@ private:
 
     void updateTagsView();
     void updateComments();
+    void updatePickLabel();
     void updateColorLabel();
     void updateRating();
     void updateDate();
@@ -109,6 +111,7 @@ private Q_SLOTS:
     void slotTagStateChanged(Album* album, Qt::CheckState checkState);
     void slotCommentChanged();
     void slotDateTimeChanged(const QDateTime& dateTime);
+    void slotPickLabelChanged(int pickId);
     void slotColorLabelChanged(int colorId);
     void slotRatingChanged(int rating);
     void slotTemplateSelected();

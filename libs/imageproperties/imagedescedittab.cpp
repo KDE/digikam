@@ -68,6 +68,7 @@
 #include "imageinfolist.h"
 #include "imageinfo.h"
 #include "colorlabelwidget.h"
+#include "picklabelwidget.h"
 
 namespace Digikam
 {
@@ -108,6 +109,7 @@ public:
         tagModel                   = 0;
         tagCheckView               = 0;
         colorLabelSelector         = 0;
+        pickLabelSelector          = 0;
     }
 
     bool                 modified;
@@ -147,6 +149,7 @@ public:
 
     RatingWidget*        ratingWidget;
     ColorLabelSelector*  colorLabelSelector;
+    PickLabelSelector*   pickLabelSelector;
 
     MetadataHubOnTheRoad hub;
 
@@ -186,7 +189,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
 
     KHBox* ratingBox      = new KHBox(captionTagsArea);
-    new QLabel(i18n("Label/Rating:"), ratingBox);
+    new QLabel(i18n("Labels:"), ratingBox);
+    d->pickLabelSelector  = new PickLabelSelector(ratingBox);
     d->colorLabelSelector = new ColorLabelSelector(ratingBox);
     d->ratingWidget       = new RatingWidget(ratingBox);
     ratingBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
@@ -309,6 +313,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     connect(d->dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime&)),
             this, SLOT(slotDateTimeChanged(const QDateTime&)));
 
+    connect(d->pickLabelSelector, SIGNAL(signalPickLabelChanged(int)),
+            this, SLOT(slotPickLabelChanged(int)));
+
     connect(d->colorLabelSelector, SIGNAL(signalColorLabelChanged(int)),
             this, SLOT(slotColorLabelChanged(int)));
 
@@ -349,6 +356,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     d->captionsEdit->installEventFilter(this);
     d->dateTimeEdit->installEventFilter(this);
+    d->pickLabelSelector->installEventFilter(this);
     d->colorLabelSelector->installEventFilter(this);
     d->ratingWidget->installEventFilter(this);
     // TODO update, what does this filter?
@@ -457,6 +465,11 @@ void ImageDescEditTab::slotChangingItems()
             ++changedFields;
         }
 
+        if (d->hub.pickLabelChanged())
+        {
+            ++changedFields;
+        }
+
         if (d->hub.colorLabelChanged())
         {
             ++changedFields;
@@ -478,6 +491,10 @@ void ImageDescEditTab::slotChangingItems()
             else if (d->hub.dateTimeChanged())
                 text = i18np("You have edited the date of the image. ",
                              "You have edited the date of %1 images. ",
+                             d->currInfos.count());
+            else if (d->hub.pickLabelChanged())
+                text = i18np("You have edited the pick label of the image. ",
+                             "You have edited the pick label of %1 images. ",
                              d->currInfos.count());
             else if (d->hub.colorLabelChanged())
                 text = i18np("You have edited the color label of the image. ",
@@ -508,6 +525,11 @@ void ImageDescEditTab::slotChangingItems()
             if (d->hub.dateTimeChanged())
             {
                 text += i18n("<li>date</li>");
+            }
+
+            if (d->hub.pickLabelChanged())
+            {
+                text += i18n("<li>pick label</li>");
             }
 
             if (d->hub.colorLabelChanged())
@@ -636,6 +658,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     }
 
     updateComments();
+    updatePickLabel();
     updateColorLabel();
     updateRating();
     updateDate();
@@ -784,6 +807,14 @@ void ImageDescEditTab::slotTemplateSelected()
     slotModified();
 }
 
+void ImageDescEditTab::slotPickLabelChanged(int pickId)
+{
+    d->hub.setPickLabel(pickId);
+    // no handling for MetadataDisjoint needed for pick label,
+    // we set it to 0 when disjoint, see below
+    slotModified();
+}
+
 void ImageDescEditTab::slotColorLabelChanged(int colorId)
 {
     d->hub.setColorLabel(colorId);
@@ -854,6 +885,11 @@ void ImageDescEditTab::slotTaggingActionActivated(const TaggingAction& action)
         d->newTagEdit->clear();
         d->tagCheckView->scrollTo(d->tagCheckView->albumFilterModel()->indexForAlbum(assigned));
     }
+}
+
+void ImageDescEditTab::assignPickLabel(int pickId)
+{
+    d->pickLabelSelector->setPickLabel((PickLabel)pickId);
 }
 
 void ImageDescEditTab::assignColorLabel(int colorId)
@@ -941,6 +977,22 @@ void ImageDescEditTab::updateComments()
     d->captionsEdit->setValues(d->hub.comments());
     setMetadataWidgetStatus(d->hub.commentsStatus(), d->captionsEdit);
     d->captionsEdit->blockSignals(false);
+}
+
+void ImageDescEditTab::updatePickLabel()
+{
+    d->pickLabelSelector->blockSignals(true);
+
+    if (d->hub.pickLabelStatus() == MetadataHub::MetadataDisjoint)
+    {
+        d->pickLabelSelector->setPickLabel(NoPickLabel);
+    }
+    else
+    {
+        d->pickLabelSelector->setPickLabel((PickLabel)d->hub.pickLabel());
+    }
+
+    d->pickLabelSelector->blockSignals(false);
 }
 
 void ImageDescEditTab::updateColorLabel()
@@ -1284,6 +1336,5 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
     d->revertBtn->setEnabled(false);
     d->applyToAllVersionsButton->setEnabled(false);
 }
-
 
 }  // namespace Digikam
