@@ -358,6 +358,33 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
     return true;
 }
 
+
+int DMetadata::getImagePickLabel() const
+{
+    if (getFilePath().isEmpty())
+    {
+        return -1;
+    }
+
+    if (hasXmp())
+    {
+        QString value = getXmpTagString("Xmp.digiKam.PickLabel", false);
+
+        if (!value.isEmpty())
+        {
+            bool ok     = false;
+            long pickId = value.toLong(&ok);
+
+            if (ok && pickId >= NoPickLabel && pickId <= AcceptedLabel)
+            {
+                return pickId;
+            }
+        }
+    }
+
+    return -1;
+}
+
 int DMetadata::getImageColorLabel() const
 {
     if (getFilePath().isEmpty())
@@ -524,6 +551,34 @@ int DMetadata::getImageRating() const
     }
 
     return -1;
+}
+
+bool DMetadata::setImagePickLabel(int pickId) const
+{
+    if (pickId < NoPickLabel || pickId > AcceptedLabel)
+    {
+        kDebug() << "Pick Label value to write is out of range!";
+        return false;
+    }
+
+    kDebug() << getFilePath() << " ==> Pick Label: " << pickId;
+
+    if (!setProgramId())
+    {
+        return false;
+    }
+
+    // Set standard XMP rating tag.
+
+    if (supportXmp())
+    {
+        if (!setXmpTagString("Xmp.digiKam.PickLabel", QString::number(pickId)))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool DMetadata::setImageColorLabel(int colorId) const

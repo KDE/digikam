@@ -70,6 +70,9 @@ public:
     CaptionsMap getImageComments() const;
     bool setImageComments(const CaptionsMap& comments) const;
 
+    int  getImagePickLabel() const;
+    bool setImagePickLabel(int pickId) const;
+
     int  getImageColorLabel() const;
     bool setImageColorLabel(int colorId) const;
 
