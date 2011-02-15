@@ -1,6 +1,6 @@
 SET(CMAKE_BACKWARDS_COMPATIBILITY "2.4")
 
-# See if we have svn installed
+# See if we have git installed
 FIND_PROGRAM(GITEXEC git)
 
 # Read the version if installed, else set to "unknown"
