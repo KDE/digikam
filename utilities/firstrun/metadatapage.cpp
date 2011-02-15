@@ -117,6 +117,7 @@ void MetadataPage::saveSettings()
     settings.saveComments   = d->storeInFiles->isChecked();
     settings.saveDateTime   = d->storeInFiles->isChecked();
     settings.saveRating     = d->storeInFiles->isChecked();
+    settings.savePickLabel  = d->storeInFiles->isChecked();
     settings.saveColorLabel = d->storeInFiles->isChecked();
     settings.saveTemplate   = d->storeInFiles->isChecked();
     MetadataSettings::instance()->setSettings(settings);

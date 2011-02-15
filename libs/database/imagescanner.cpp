@@ -538,6 +538,25 @@ void ImageScanner::scanTags()
         DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_scanInfo.id, tagIds);
     }
 
+    // Check Pick Label tag.
+
+    int pickId = m_metadata.getImagePickLabel();
+    if (pickId != -1)
+    {
+        kDebug() << "Pick Label found : " << pickId;
+
+        int tagId = TagsCache::instance()->getTagForPickLabel((PickLabel)pickId);
+        if (tagId)
+        {
+            DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_scanInfo.id, QList<int>() << tagId);
+            kDebug() << "Assigned Pick Label Tag  : " << tagId;
+        }
+        else
+        {
+            kDebug() << "Cannot find Pick Label Tag for : " << pickId;
+        }
+    }
+
     // Check Color Label tag.
 
     int colorId = m_metadata.getImageColorLabel();
@@ -600,7 +619,7 @@ bool ImageScanner::resolveImageHistory(qlonglong id, QList<qlonglong>* needTaggi
     return resolveImageHistory(id, history.history, needTaggingIds);
 }
 
-bool ImageScanner::resolveImageHistory(qlonglong imageId, const QString& historyXml, 
+bool ImageScanner::resolveImageHistory(qlonglong imageId, const QString& historyXml,
                                        QList<qlonglong>* needTaggingIds)
 {
     /** Stage 2 of history scanning */
