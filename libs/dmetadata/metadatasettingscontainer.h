@@ -60,6 +60,7 @@ public:
 
     bool saveComments;
     bool saveDateTime;
+    bool savePickLabel;
     bool saveColorLabel;
     bool saveRating;
 

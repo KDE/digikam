@@ -78,6 +78,7 @@ public:
         saveCommentsBox(0),
         exifRotateBox(0),
         exifSetOrientationBox(0),
+        savePickLabelBox(0),
         saveColorLabelBox(0),
         saveRatingBox(0),
         saveTagsBox(0),
@@ -100,6 +101,7 @@ public:
     QCheckBox*     saveCommentsBox;
     QCheckBox*     exifRotateBox;
     QCheckBox*     exifSetOrientationBox;
+    QCheckBox*     savePickLabelBox;
     QCheckBox*     saveColorLabelBox;
     QCheckBox*     saveRatingBox;
     QCheckBox*     saveTagsBox;
@@ -172,6 +174,11 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->saveDateTimeBox->setWhatsThis( i18n("Turn on this option to store the image date and time "
                                            "in the EXIF, XMP, and IPTC tags."));
 
+    d->savePickLabelBox = new QCheckBox(commonGroup);
+    d->savePickLabelBox->setText(i18n("&Save image pick label in metadata embedded in files"));
+    d->savePickLabelBox->setWhatsThis( i18n("Turn on this option to store the image pick label "
+                                            "in the XMP tags."));
+
     d->saveColorLabelBox = new QCheckBox(commonGroup);
     d->saveColorLabelBox->setText(i18n("&Save image color label in metadata embedded in files"));
     d->saveColorLabelBox->setWhatsThis( i18n("Turn on this option to store the image color label "
@@ -213,6 +220,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     gLayout2->addWidget(d->saveTemplateBox);
     gLayout2->addWidget(d->saveCommentsBox);
     gLayout2->addWidget(d->saveDateTimeBox);
+    gLayout2->addWidget(d->savePickLabelBox);
     gLayout2->addWidget(d->saveColorLabelBox);
     gLayout2->addWidget(d->saveRatingBox);
     gLayout2->addWidget(d->updateFileTimeStampBox);
@@ -407,6 +415,7 @@ void SetupMetadata::applySettings()
     set.exifSetOrientation    = d->exifSetOrientationBox->isChecked();
     set.saveComments          = d->saveCommentsBox->isChecked();
     set.saveDateTime          = d->saveDateTimeBox->isChecked();
+    set.savePickLabel         = d->savePickLabelBox->isChecked();
     set.saveColorLabel        = d->saveColorLabelBox->isChecked();
     set.saveRating            = d->saveRatingBox->isChecked();
     set.saveTags              = d->saveTagsBox->isChecked();
@@ -456,6 +465,7 @@ void SetupMetadata::readSettings()
     d->exifSetOrientationBox->setChecked(set.exifSetOrientation);
     d->saveCommentsBox->setChecked(set.saveComments);
     d->saveDateTimeBox->setChecked(set.saveDateTime);
+    d->savePickLabelBox->setChecked(set.savePickLabel);
     d->saveColorLabelBox->setChecked(set.saveColorLabel);
     d->saveRatingBox->setChecked(set.saveRating);
     d->saveTagsBox->setChecked(set.saveTags);

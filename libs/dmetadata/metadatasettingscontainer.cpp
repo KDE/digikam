@@ -46,6 +46,7 @@ MetadataSettingsContainer::MetadataSettingsContainer()
     exifSetOrientation    = true;
     saveComments          = false;
     saveDateTime          = false;
+    savePickLabel        = false;
     saveColorLabel        = false;
     saveRating            = false;
     saveTemplate          = false;
@@ -66,6 +67,7 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 
     saveComments          = group.readEntry("Save EXIF Comments",          false);
     saveDateTime          = group.readEntry("Save Date Time",              false);
+    savePickLabel         = group.readEntry("Save Pick Label",             false);
     saveColorLabel        = group.readEntry("Save Color Label",            false);
     saveRating            = group.readEntry("Save Rating",                 false);
 
@@ -85,6 +87,7 @@ void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 
     group.writeEntry("Save EXIF Comments",          saveComments);
     group.writeEntry("Save Date Time",              saveDateTime);
+    group.writeEntry("Save Pick Label",             savePickLabel);
     group.writeEntry("Save Color Label",            saveColorLabel);
     group.writeEntry("Save Rating",                 saveRating);
 
