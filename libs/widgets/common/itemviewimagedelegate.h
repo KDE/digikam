@@ -112,6 +112,7 @@ protected:
     void drawFileSize(QPainter* p, const QRect& r, int bytes) const;
     void drawTags(QPainter* p, const QRect& r, const QString& tagsString, bool isSelected) const;
     void drawFocusRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected) const;
+    void drawPickLabelIcon(QPainter* p, const QStyleOptionViewItem& option, bool isSelected, int pickId) const;
     void drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected, int colorId) const;
     void drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const;
     void prepareFonts();

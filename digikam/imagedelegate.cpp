@@ -259,7 +259,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
 
     // Draw Color Label rectangle
     drawColorLabelRect(p, option, isSelected, info.colorLabel());
-    
+
     p->setPen(isSelected ? te->textSelColor() : te->textRegColor());
 
     // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
@@ -313,6 +313,9 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     {
         drawMouseOverRect(p, option);
     }
+
+    // Draw Pick Label icon
+    drawPickLabelIcon(p, option, isSelected, info.pickLabel());
 
     p->restore();
 

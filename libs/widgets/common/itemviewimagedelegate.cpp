@@ -35,12 +35,14 @@
 
 #include <QCache>
 #include <QPainter>
+#include <QIcon>
 
 // KDE includes
 
 #include <kglobal.h>
 #include <kio/global.h>
 #include <klocale.h>
+#include <kiconloader.h>
 #include <kdebug.h>
 
 // Local includes
@@ -401,11 +403,38 @@ void ItemViewImageDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionVi
 
     if (colorId > NoColorLabel)
     {
-        // TODO: This draw a simple rectangle around item. We can do something more elegant of course...
+        // This draw a simple rectangle around item.
 
         p->setPen(QPen(ColorLabelWidget::labelColor((ColorLabel)colorId), 5, Qt::SolidLine));
         p->drawRect(3, 3, d->rect.width()-7, d->rect.height()-7);
     }
+}
+
+void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QStyleOptionViewItem& option, 
+                                               bool isSelected, int pickId) const
+{
+    Q_D(const ItemViewImageDelegate);
+    Q_UNUSED(option);
+    Q_UNUSED(isSelected);
+
+    if (pickId == NoPickLabel) return;
+
+    QIcon icon;
+    int size = KIconLoader::SizeSmallMedium;
+
+    if (pickId == RejectedLabel)
+    {
+        icon = KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, size);
+    }
+    else if (pickId == PendingLabel)
+    {
+        icon = KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, size);
+    }
+    else if (pickId == AcceptedLabel)
+    {
+        icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, size);
+    }
+    icon.paint(p, d->rect.width()/2 - size/2, 10, size, size);
 }
 
 void ItemViewImageDelegate::drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const
