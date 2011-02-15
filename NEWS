@@ -8,6 +8,7 @@ General     : Reverse geo-coding support.
 General     : Face detection and recognition support.
 General     : Tag keyboard shortcuts support.
 General     : Color Labels support to improve photograph workfow.
+General     : Pick Labels support to improve photograph selection.
 
 ImageEditor : Image versionning support.
 ImageEditor : Foveon sensor based camera.
