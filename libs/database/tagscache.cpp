@@ -70,7 +70,7 @@ public:
         needUpdateInfos(true),
         needUpdateHash(true),
         needUpdateProperties(true),
-        needUpdateColorLabelTags(true),
+        needUpdateLabelTags(true),
         changingDB(false),
         q(q)
     {
@@ -80,7 +80,7 @@ public:
     bool                        needUpdateInfos;
     bool                        needUpdateHash;
     bool                        needUpdateProperties;
-    bool                        needUpdateColorLabelTags;
+    bool                        needUpdateLabelTags;
     bool                        changingDB;
 
     QReadWriteLock              lock;
@@ -91,6 +91,7 @@ public:
     QHash<QString, QList<int> > tagsWithProperty;
     QSet<int>                   internalTags;
     QMap<ColorLabel, int>       colorLabelsTags;              // Map between color Id and tag label Id created in DB.
+    QMap<PickLabel, int>        pickLabelsTags;               // Map between pick Id and tag label Id created in DB.
 
     TagsCache* const            q;
 
@@ -197,9 +198,9 @@ public:
         return qBinaryFind(list, value) != list.end();
     }
 
-    void checkColorLabelTags()
+    void checkLabelTags()
     {
-        if (needUpdateColorLabelTags && initialized)
+        if (needUpdateLabelTags && initialized)
         {
             QMap<ColorLabel, int> map;
             map.insert(NoColorLabel, q->getOrCreateInternalTag(InternalTagName::colorLabelNone()));
@@ -213,12 +214,18 @@ public:
             map.insert(BlackLabel,   q->getOrCreateInternalTag(InternalTagName::colorLabelBlack()));
             map.insert(WhiteLabel,   q->getOrCreateInternalTag(InternalTagName::colorLabelWhite()));
 
+            QMap<PickLabel, int> map2;
+            map2.insert(NoPickLabel,   q->getOrCreateInternalTag(InternalTagName::pickLabelNone()));
+            map2.insert(RejectedLabel, q->getOrCreateInternalTag(InternalTagName::pickLabelRejected()));
+            map2.insert(PendingLabel,  q->getOrCreateInternalTag(InternalTagName::pickLabelPending()));
+            map2.insert(AcceptedLabel, q->getOrCreateInternalTag(InternalTagName::pickLabelAccepted()));
+
             QWriteLocker locker(&lock);
-            needUpdateColorLabelTags = false;
-            colorLabelsTags = map;
+            needUpdateLabelTags = false;
+            colorLabelsTags     = map;
+            pickLabelsTags      = map2;
         }
     }
-
 };
 
 // ------------------------------------------------------------------------------------------
@@ -285,7 +292,7 @@ void TagsCache::invalidate()
     d->needUpdateInfos          = true;
     d->needUpdateHash           = true;
     d->needUpdateProperties     = true;
-    d->needUpdateColorLabelTags = true;
+    d->needUpdateLabelTags = true;
 }
 
 QLatin1String TagsCache::tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy)
@@ -864,16 +871,33 @@ int TagsCache::getTagForColorLabel(ColorLabel label)
     if (label < NoColorLabel || label > WhiteLabel)
         return 0;
 
-    d->checkColorLabelTags();
+    d->checkLabelTags();
     QReadLocker locker(&d->lock);
     return d->colorLabelsTags[label];
 }
 
 ColorLabel TagsCache::getColorLabelForTag(int tagId)
 {
-    d->checkColorLabelTags();
+    d->checkLabelTags();
     QReadLocker locker(&d->lock);
     return d->colorLabelsTags.key(tagId, (ColorLabel)(-1));
+}
+
+int TagsCache::getTagForPickLabel(PickLabel label)
+{
+    if (label < NoPickLabel || label > AcceptedLabel)
+        return 0;
+
+    d->checkLabelTags();
+    QReadLocker locker(&d->lock);
+    return d->pickLabelsTags[label];
+}
+
+PickLabel TagsCache::getPickLabelForTag(int tagId)
+{
+    d->checkLabelTags();
+    QReadLocker locker(&d->lock);
+    return d->pickLabelsTags.key(tagId, (PickLabel)(-1));
 }
 
 } // namespace Digikam
