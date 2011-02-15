@@ -207,6 +207,7 @@ public:
 
     Status dateTimeStatus()   const;
     Status commentsStatus()   const;
+    Status pickLabelStatus()  const;
     Status colorLabelStatus() const;
     Status ratingStatus()     const;
     Status templateStatus()   const;
@@ -220,6 +221,7 @@ public:
     */
     bool dateTimeChanged()   const;
     bool commentsChanged()   const;
+    bool pickLabelChanged()  const;
     bool colorLabelChanged() const;
     bool ratingChanged()     const;
     bool templateChanged()   const;
@@ -239,7 +241,14 @@ public:
     */
     CaptionsMap comments() const;
     /**
-        Returns the Color Label id (see ColorLabelWidget::ColorLabel values).
+        Returns the Pick Label id (see PickLabel values in globals.h).
+        If status is MetadataDisjoint, the None Label is returned.
+                                       (see pickLabelInterval())
+        If status is MetadataInvalid, -1 is returned.
+    */
+    int         pickLabel() const;
+    /**
+        Returns the Color Label id (see ColorLabel values in globals.h).
         If status is MetadataDisjoint, the None Label is returned.
                                        (see colorLabelInterval())
         If status is MetadataInvalid, -1 is returned.
@@ -265,7 +274,13 @@ public:
     */
     void                dateTimeInterval(QDateTime& lowest, QDateTime& highest) const;
     /**
-        Returns the lowest and highest Color Label id (see ColorLabelWidget::ColorLabel values).
+        Returns the lowest and highest Pick Label id (see PickLabel values from globals.h).
+        If status is MetadataAvailable, the values are the same.
+        If status is MetadataInvalid, -1 is returned.
+    */
+    void                pickLabelInterval(int& lowest, int& highest) const;
+    /**
+        Returns the lowest and highest Color Label id (see ColorLabel values from globals.h).
         If status is MetadataAvailable, the values are the same.
         If status is MetadataInvalid, -1 is returned.
     */
@@ -309,6 +324,7 @@ public:
     */
     void setDateTime(const QDateTime& dateTime, Status status = MetadataAvailable);
     void setComments(const CaptionsMap& comments, Status status = MetadataAvailable);
+    void setPickLabel(int pickId, Status status = MetadataAvailable);
     void setColorLabel(int colorId, Status status = MetadataAvailable);
     void setRating(int rating, Status status = MetadataAvailable);
     void setMetadataTemplate(const Template& t, Status status = MetadataAvailable);
@@ -322,7 +338,8 @@ public:
 
 protected:
 
-    void load(const QDateTime& dateTime, const CaptionsMap& comment, int colorLabel,
+    void load(const QDateTime& dateTime, const CaptionsMap& comment, 
+              int colorLabel, int pickLabel,
               int rating, const Template& t);
     void loadTags(const QList<int>& loadedTagIds);
     void loadTags(const QStringList& loadedTagPaths);
