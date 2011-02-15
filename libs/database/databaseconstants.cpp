@@ -71,12 +71,12 @@ QLatin1String InternalTagName::colorLabelNone()
 
 QLatin1String InternalTagName::colorLabelRed()
 {
-    return QLatin1String("Color Label ");
+    return QLatin1String("Color Label Red");
 }
 
 QLatin1String InternalTagName::colorLabelOrange()
 {
-    return QLatin1String("Color Label Red");
+    return QLatin1String("Color Label Orange");
 }
 
 QLatin1String InternalTagName::colorLabelYellow()
@@ -112,6 +112,26 @@ QLatin1String InternalTagName::colorLabelBlack()
 QLatin1String InternalTagName::colorLabelWhite()
 {
     return QLatin1String("Color Label White");
+}
+
+QLatin1String InternalTagName::pickLabelNone()
+{
+    return QLatin1String("Pick Label None");
+}
+
+QLatin1String InternalTagName::pickLabelRejected()
+{
+    return QLatin1String("Pick Label Rejected");
+}
+
+QLatin1String InternalTagName::pickLabelPending()
+{
+    return QLatin1String("Pick Label Pending");
+}
+
+QLatin1String InternalTagName::pickLabelAccepted()
+{
+    return QLatin1String("Pick Label Accepted");
 }
 
 // ----------------------------------------------------------------------------------

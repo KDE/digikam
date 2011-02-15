@@ -169,6 +169,11 @@ public:
     static QLatin1String colorLabelGray();
     static QLatin1String colorLabelBlack();
     static QLatin1String colorLabelWhite();
+
+    static QLatin1String pickLabelNone();
+    static QLatin1String pickLabelRejected();
+    static QLatin1String pickLabelPending();
+    static QLatin1String pickLabelAccepted();
 };
 
 // ----------------------------------------------------------------------------------
