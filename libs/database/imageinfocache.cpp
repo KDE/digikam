@@ -157,6 +157,11 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
                 (*it)->formatCached = false;
             }
 
+            if (changes & DatabaseFields::PickLabel)
+            {
+                (*it)->pickLabelCached = false;
+            }
+
             if (changes & DatabaseFields::ColorLabel)
             {
                 (*it)->colorLabelCached = false;
@@ -214,6 +219,7 @@ void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset& changeset)
         {
             (*it)->tagIdsCached     = false;
             (*it)->colorLabelCached = false;
+            (*it)->pickLabelCached  = false;
         }
     }
 }

@@ -182,7 +182,12 @@ public:
     QString   comment() const;
 
     /**
-     * Returns the Color Label Id (see ColorLabelWidget::ColorLabel values)
+     * Returns the Pick Label Id (see PickLabel values in globals.h)
+     */
+    int       pickLabel() const;
+
+    /**
+     * Returns the Color Label Id (see ColorLabel values in globals.h)
      */
     int       colorLabel() const;
 
@@ -359,8 +364,12 @@ public:
      */
     void        removeAllTags();
 
+    /** Set the pick Label Id for the item (see PickLabel values from globals.h)
+     */
+    void        setPickLabel(int value);
+
     /**
-     * Set the color Label Id for the item (see ColorLabelWidget::ColorLabel values)
+     * Set the color Label Id for the item (see ColorLabel values from globals.h)
      */
     void        setColorLabel(int value);
 

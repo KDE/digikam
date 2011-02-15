@@ -67,10 +67,12 @@ enum ImageInformationField
     ColorDepth            = 1 << 7,
     ColorModel            = 1 << 8,
     ColorLabel            = 1 << 9,
+    PickLabel             = 1 << 10,
     ImageInformationAll   = Rating | CreationDate | DigitizationDate | Orientation |
-                            Width | Height | Format | ColorDepth | ColorModel | ColorLabel,
+                            Width | Height | Format | ColorDepth | ColorModel | 
+                            ColorLabel | PickLabel,
     ImageInformationFirst = Rating,
-    ImageInformationLast  = ColorLabel
+    ImageInformationLast  = PickLabel
 };
 
 enum ImageMetadataField

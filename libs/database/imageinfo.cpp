@@ -68,6 +68,7 @@ ImageInfoData::ImageInfoData()
     albumId                = -1;
     albumRootId            = -1;
 
+    pickLabel              = NoPickLabel;
     colorLabel             = NoColorLabel;
     rating                 = -1;
     category               = DatabaseItem::UndefinedCategory;
@@ -81,6 +82,7 @@ ImageInfoData::ImageInfoData()
     hasAltitude            = 0;
 
     defaultCommentCached   = false;
+    pickLabelCached        = false;
     colorLabelCached       = false;
     ratingCached           = false;
     categoryCached         = false;
@@ -364,6 +366,35 @@ QString ImageInfo::comment() const
     }
 
     return m_data->defaultComment;
+}
+
+int ImageInfo::pickLabel() const
+{
+    if (!m_data)
+    {
+        return 0;
+    }
+
+    if (!m_data->pickLabelCached)
+    {
+        QList<int> tags = tagIds();
+
+        foreach(int tagId, tags)
+        {
+            for (int i = NoPickLabel ; i <= AcceptedLabel; ++i)
+            {
+                if (tagId == TagsCache::instance()->getTagForPickLabel((PickLabel)i))
+                {
+                    m_data.constCastData()->pickLabel = i;
+                    break;
+                }
+            }
+        }
+
+        m_data.constCastData()->pickLabelCached = true;
+    }
+
+    return m_data->pickLabel;
 }
 
 int ImageInfo::colorLabel() const
@@ -1015,6 +1046,28 @@ void ImageInfo::removeMetadataTemplate()
     ImageExtendedProperties ep = imageExtendedProperties();
     ep.removeLocation();
     ep.removeSubjectCode();
+}
+
+void ImageInfo::setPickLabel(int pickId)
+{
+    if (!m_data)
+    {
+        return;
+    }
+
+    TagsCache* tc = TagsCache::instance();
+    int tagId     = tc->getTagForPickLabel((PickLabel)pickId);
+    if (!tagId) return;
+
+    // Color Label is an exclusive tags.
+
+    for (int i = NoPickLabel ; i <= AcceptedLabel ; ++i)
+        removeTag(tc->getTagForPickLabel((PickLabel)i));
+
+    setTag(tagId);
+
+    m_data->pickLabel                       = pickId;
+    m_data.constCastData()->pickLabelCached = true;
 }
 
 void ImageInfo::setColorLabel(int colorId)
