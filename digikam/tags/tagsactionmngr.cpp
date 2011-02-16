@@ -65,11 +65,20 @@ class TagsActionMngr::TagsActionMngrPrivate
 public:
 
     TagsActionMngrPrivate()
+        : ratingShortcutPrefix("rateshortcut"),
+          tagShortcutPrefix("tagshortcut"),
+          pickShortcutPrefix("pickshortcut"),
+          colorShortcutPrefix("colorshortcut")
     {
     }
 
     QMultiMap<int, KAction*>  tagsActionMap;
     QList<KActionCollection*> actionCollectionList;
+
+    const QString             ratingShortcutPrefix;
+    const QString             tagShortcutPrefix;
+    const QString             pickShortcutPrefix;
+    const QString             colorShortcutPrefix;
 };
 
 // -------------------------------------------------------------------------------------------------
@@ -94,6 +103,26 @@ TagsActionMngr::~TagsActionMngr()
     {
         m_defaultManager = 0;
     }
+}
+
+QString TagsActionMngr::ratingShortcutPrefix() const
+{
+    return d->ratingShortcutPrefix;
+}
+
+QString TagsActionMngr::tagShortcutPrefix() const
+{
+    return d->tagShortcutPrefix;
+}
+
+QString TagsActionMngr::pickShortcutPrefix() const
+{
+    return d->pickShortcutPrefix;
+}
+
+QString TagsActionMngr::colorShortcutPrefix() const
+{
+    return d->colorShortcutPrefix;
 }
 
 void TagsActionMngr::registerActionCollections()
@@ -158,13 +187,16 @@ bool TagsActionMngr::createRatingActionShortcut(KActionCollection* ac, int ratin
 {
     if (ac)
     {
-        KAction* action = ac->addAction(QString("rate-%1-star").arg(rating));
+        KAction* action = ac->addAction(QString("%1-%2").arg(d->ratingShortcutPrefix).arg(rating));
         action->setText(i18n("Assign Rating \"%1 Star\"", rating));
         action->setShortcut(KShortcut(QString("CTRL+%1").arg(rating)));
         action->setShortcutConfigurable(false);
         action->forgetGlobalShortcut();
         action->setData(rating);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotAssignRatingFromShortcut()));
+
+        connect(action, SIGNAL(triggered()),
+                this, SLOT(slotAssignFromShortcut()));
+
         return true;
     }
 
@@ -175,15 +207,17 @@ bool TagsActionMngr::createPickLabelActionShortcut(KActionCollection* ac, int pi
 {
     if (ac)
     {
-        KAction* action = ac->addAction(QString("picklabel-%1").arg(pickId));
-        action->setText(i18n("Assign Pick Label \"%1\"",
-                             PickLabelWidget::labelPickName((PickLabel)pickId)));
-                             action->setShortcut(KShortcut(QString("ALT+CTRL+%1").arg(pickId)));
-                             action->setShortcutConfigurable(false);
-                             action->forgetGlobalShortcut();
-                             action->setData(pickId);
-                             connect(action, SIGNAL(triggered()), this, SLOT(slotAssignPickLabelFromShortcut()));
-                             return true;
+        KAction* action = ac->addAction(QString("%1-%2").arg(d->pickShortcutPrefix).arg(pickId));
+        action->setText(i18n("Assign Pick Label \"%1\"", PickLabelWidget::labelPickName((PickLabel)pickId)));
+        action->setShortcut(KShortcut(QString("ALT+%1").arg(pickId)));
+        action->setShortcutConfigurable(false);
+        action->forgetGlobalShortcut();
+        action->setData(pickId);
+
+        connect(action, SIGNAL(triggered()),
+                this, SLOT(slotAssignFromShortcut()));
+
+        return true;
     }
 
     return false;
@@ -193,14 +227,16 @@ bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* ac, int c
 {
     if (ac)
     {
-        KAction* action = ac->addAction(QString("colorlabel-%1").arg(colorId));
-        action->setText(i18n("Assign Color Label \"%1\"",
-                             ColorLabelWidget::labelColorName((ColorLabel)colorId)));
-        action->setShortcut(KShortcut(QString("ALT+%1").arg(colorId)));
+        KAction* action = ac->addAction(QString("%1-%2").arg(d->colorShortcutPrefix).arg(colorId));
+        action->setText(i18n("Assign Color Label \"%1\"", ColorLabelWidget::labelColorName((ColorLabel)colorId)));
+        action->setShortcut(KShortcut(QString("ALT+CTRL+%1").arg(colorId)));
         action->setShortcutConfigurable(false);
         action->forgetGlobalShortcut();
         action->setData(colorId);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotAssignColorLabelFromShortcut()));
+
+        connect(action, SIGNAL(triggered()), 
+                this, SLOT(slotAssignFromShortcut()));
+
         return true;
     }
 
@@ -230,7 +266,7 @@ void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProp
 
     foreach(KActionCollection* ac, d->actionCollectionList)
     {
-        KAction* action = ac->addAction(QString("tagshortcut-%1").arg(tinfo.id));
+        KAction* action = ac->addAction(QString("%1-%2").arg(d->tagShortcutPrefix).arg(tinfo.id));
         action->setText(i18n("Assign Tag \"%1\"", tinfo.name));
         action->setParent(this);
         action->setShortcut(ks);
@@ -240,7 +276,7 @@ void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProp
         action->setData(tinfo.id);
 
         connect(action, SIGNAL(triggered()),
-                this, SLOT(slotAssignTagsFromShortcut()));
+                this, SLOT(slotAssignFromShortcut()));
 
         connect(action, SIGNAL(changed()),
                 this, SLOT(slotTagActionChanged()));
@@ -302,20 +338,35 @@ void TagsActionMngr::tagRemoved(int tagId)
     }
 }
 
-void TagsActionMngr::slotAssignTagsFromShortcut()
+void TagsActionMngr::slotAssignFromShortcut()
 {
     KAction* action = dynamic_cast<KAction*>(sender());
     if (!action) return;
 
-    int tagId = action->data().toInt();
-    kDebug() << "Fired Tag Shortcut " << tagId;
+    int val = action->data().toInt();
+    kDebug() << "Shortcut value: " << val;
 
     QWidget* w      = kapp->activeWindow();
     DigikamApp* dkw = dynamic_cast<DigikamApp*>(w);
     if (dkw)
     {
         kDebug() << "Handling by DigikamApp";
-        dkw->view()->toggleTag(tagId);
+        if (action->objectName().startsWith(d->ratingShortcutPrefix))
+        {
+            dkw->view()->slotAssignRating(val);
+        }
+        else if (action->objectName().startsWith(d->tagShortcutPrefix))
+        {
+            dkw->view()->toggleTag(val);
+        }
+        else if (action->objectName().startsWith(d->pickShortcutPrefix))
+        {
+            dkw->view()->slotAssignPickLabel(val);
+        }
+        else if (action->objectName().startsWith(d->colorShortcutPrefix))
+        {
+            dkw->view()->slotAssignColorLabel(val);
+        }
         return;
     }
 
@@ -323,7 +374,22 @@ void TagsActionMngr::slotAssignTagsFromShortcut()
     if (imw)
     {
         kDebug() << "Handling by ImageWindow";
-        imw->toggleTag(tagId);
+        if (action->objectName().startsWith(d->ratingShortcutPrefix))
+        {
+            imw->slotAssignRating(val);
+        }
+        else if (action->objectName().startsWith(d->tagShortcutPrefix))
+        {
+            imw->toggleTag(val);
+        }
+        else if (action->objectName().startsWith(d->pickShortcutPrefix))
+        {
+            imw->slotAssignPickLabel(val);
+        }
+        else if (action->objectName().startsWith(d->colorShortcutPrefix))
+        {
+            imw->slotAssignColorLabel(val);
+        }
         return;
     }
 
@@ -331,109 +397,22 @@ void TagsActionMngr::slotAssignTagsFromShortcut()
     if (ltw)
     {
         kDebug() << "Handling by LightTableWindow";
-        ltw->toggleTag(tagId);
-        return;
-    }
-}
-
-void TagsActionMngr::slotAssignRatingFromShortcut()
-{
-    KAction* action = dynamic_cast<KAction*>(sender());
-    if (!action) return;
-
-    int rate = action->data().toInt();
-    kDebug() << "Fired Rating Shortcut " << rate;
-
-    QWidget* w      = kapp->activeWindow();
-    DigikamApp* dkw = dynamic_cast<DigikamApp*>(w);
-    if (dkw)
-    {
-        kDebug() << "Handling by DigikamApp";
-        dkw->view()->slotAssignRating(rate);
-        return;
-    }
-
-    ImageWindow* imw = dynamic_cast<ImageWindow*>(w);
-    if (imw)
-    {
-        kDebug() << "Handling by ImageWindow";
-        imw->slotAssignRating(rate);
-        return;
-    }
-
-    LightTableWindow* ltw = dynamic_cast<LightTableWindow*>(w);
-    if (ltw)
-    {
-        kDebug() << "Handling by LightTableWindow";
-        ltw->slotAssignRating(rate);
-        return;
-    }
-}
-
-void TagsActionMngr::slotAssignColorLabelFromShortcut()
-{
-    KAction* action = dynamic_cast<KAction*>(sender());
-    if (!action) return;
-
-    int colorId = action->data().toInt();
-    kDebug() << "Fired Color Label Shortcut " << colorId;
-
-    QWidget* w      = kapp->activeWindow();
-    DigikamApp* dkw = dynamic_cast<DigikamApp*>(w);
-    if (dkw)
-    {
-        kDebug() << "Handling by DigikamApp";
-        dkw->view()->slotAssignColorLabel(colorId);
-        return;
-    }
-
-    ImageWindow* imw = dynamic_cast<ImageWindow*>(w);
-    if (imw)
-    {
-        kDebug() << "Handling by ImageWindow";
-        imw->slotAssignColorLabel(colorId);
-        return;
-    }
-
-    LightTableWindow* ltw = dynamic_cast<LightTableWindow*>(w);
-    if (ltw)
-    {
-        kDebug() << "Handling by LightTableWindow";
-        ltw->slotAssignColorLabel(colorId);
-        return;
-    }
-}
-
-void TagsActionMngr::slotAssignPickLabelFromShortcut()
-{
-    KAction* action = dynamic_cast<KAction*>(sender());
-    if (!action) return;
-
-    int pickId = action->data().toInt();
-    kDebug() << "Fired Pick Label Shortcut " << pickId;
-
-    QWidget* w      = kapp->activeWindow();
-    DigikamApp* dkw = dynamic_cast<DigikamApp*>(w);
-    if (dkw)
-    {
-        kDebug() << "Handling by DigikamApp";
-        dkw->view()->slotAssignPickLabel(pickId);
-        return;
-    }
-
-    ImageWindow* imw = dynamic_cast<ImageWindow*>(w);
-    if (imw)
-    {
-        kDebug() << "Handling by ImageWindow";
-        imw->slotAssignPickLabel(pickId);
-        return;
-    }
-
-    LightTableWindow* ltw = dynamic_cast<LightTableWindow*>(w);
-    if (ltw)
-    {
-        kDebug() << "Handling by LightTableWindow";
-        ltw->slotAssignPickLabel(pickId);
+        if (action->objectName().startsWith(d->ratingShortcutPrefix))
+        {
+            ltw->slotAssignRating(val);
+        }
+        else if (action->objectName().startsWith(d->tagShortcutPrefix))
+        {
+            ltw->toggleTag(val);
+        }
+        else if (action->objectName().startsWith(d->pickShortcutPrefix))
+        {
+            ltw->slotAssignPickLabel(val);
+        }
+        else if (action->objectName().startsWith(d->colorShortcutPrefix))
+        {
+            ltw->slotAssignColorLabel(val);
+        }
         return;
     }
 }

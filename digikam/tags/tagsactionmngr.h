@@ -70,6 +70,11 @@ public:
       */
     void updateTagShortcut(int tagId, const QKeySequence& ks);
 
+    QString ratingShortcutPrefix() const;
+    QString tagShortcutPrefix()    const;
+    QString pickShortcutPrefix()   const;
+    QString colorShortcutPrefix()  const;
+
     static TagsActionMngr* defaultManager();
 
 private Q_SLOTS:
@@ -79,10 +84,10 @@ private Q_SLOTS:
       */
     void slotAlbumDeleted(Album*);
 
-    void slotAssignTagsFromShortcut();
-    void slotAssignRatingFromShortcut();
-    void slotAssignPickLabelFromShortcut();
-    void slotAssignColorLabelFromShortcut();
+    /**
+      * Wrapper around windows to run relevant code about keyboard shorcuts in GUI.
+      */
+    void slotAssignFromShortcut();
 
     /**
       * Called by KDE config shortcuts dialog, when user change action properties.

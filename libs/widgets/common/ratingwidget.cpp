@@ -505,7 +505,7 @@ void RatingBox::slotUpdateDescription(int rating)
     KXmlGuiWindow* app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
     if (app)
     {
-        QAction* ac = app->actionCollection()->action(QString("rate-%1-star").arg(rating));
+        QAction* ac = app->actionCollection()->action(QString("rateshortcut-%1").arg(rating));
         if (ac)
             d->shortcut->setText(ac->shortcut().toString());
     }

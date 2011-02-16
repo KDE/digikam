@@ -169,7 +169,7 @@ void PickLabelWidget::updateDescription(PickLabel label)
     KXmlGuiWindow* app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
     if (app)
     {
-        QAction* ac = app->actionCollection()->action(QString("picklabel-%1").arg(label));
+        QAction* ac = app->actionCollection()->action(QString("pickshortcut-%1").arg(label));
         if (ac)
             d->shortcut->setText(ac->shortcut().toString());
     }

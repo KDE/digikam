@@ -222,7 +222,7 @@ void ColorLabelWidget::updateDescription(ColorLabel label)
     KXmlGuiWindow* app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
     if (app)
     {
-        QAction* ac = app->actionCollection()->action(QString("colorlabel-%1").arg(label));
+        QAction* ac = app->actionCollection()->action(QString("colorshortcut-%1").arg(label));
         if (ac)
             d->shortcut->setText(ac->shortcut().toString());
     }
