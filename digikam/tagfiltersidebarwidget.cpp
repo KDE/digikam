@@ -235,10 +235,12 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
 
     KHBox* hbox3        = new KHBox(this);
     d->pickLabelFilter  = new PickLabelFilter(hbox3);
-    d->ratingFilter     = new RatingFilter(hbox3);
     QLabel* space3      = new QLabel(hbox3);
+    d->ratingFilter     = new RatingFilter(hbox3);
+    QLabel* space4      = new QLabel(hbox3);
     hbox3->layout()->setAlignment(d->ratingFilter, Qt::AlignVCenter|Qt::AlignRight);
-    hbox3->setStretchFactor(space3, 10);
+    hbox3->setStretchFactor(space3, 1);
+    hbox3->setStretchFactor(space4, 10);
     hbox3->setSpacing(0);
     hbox3->setMargin(0);
 

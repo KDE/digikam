@@ -112,7 +112,7 @@ void SearchGroup::setup(Type type)
 
     group->addField(SearchField::createField("creationdate", group));
     group->addField(SearchField::createField("rating", group));
-    group->addField(SearchField::createField("colorlabel", group));
+    group->addField(SearchField::createField("labels", group));
     group->addField(SearchField::createField("dimension", group));
     group->addField(SearchField::createField("pageorientation", group));
     group->addField(SearchField::createField("width", group));

@@ -192,25 +192,25 @@ public:
      * Return internal tags ID corresponding of color label id. see ColorLabel values from globals.h.
      * Return 0 if not it's found.
      */
-    int getTagForColorLabel(ColorLabel label);
+    int getTagForColorLabel(int label);
 
     /**
      * Return color label id corresponding of internal tags ID. see ColorLabel values from globals.h.
      * Return -1 if not it's found.
      */
-    ColorLabel getColorLabelForTag(int tagId);
+    int getColorLabelForTag(int tagId);
 
     /**
      * Return internal tags ID corresponding of pick label id. see PickLabel values from globals.h.
      * Return 0 if not it's found.
      */
-    int getTagForPickLabel(PickLabel label);
+    int getTagForPickLabel(int label);
 
     /**
      * Return pick label id corresponding of internal tags ID. see PickLabel values from globals.h.
      * Return -1 if not it's found.
      */
-    PickLabel getPickLabelForTag(int tagId);
+    int getPickLabelForTag(int tagId);
 
     static QLatin1String tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
     static QLatin1String propertyNameDigikamInternalTag();

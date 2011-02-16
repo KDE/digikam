@@ -58,6 +58,7 @@ class KDateEdit;
 class ChoiceSearchModel;
 class ChoiceSearchComboBox;
 class RatingComboBox;
+class PickLabelFilter;
 class ColorLabelFilter;
 
 class SearchField : public QObject, public VisibilityObject
@@ -477,13 +478,13 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class SearchFieldLabel : public SearchField
+class SearchFieldLabels : public SearchField
 {
     Q_OBJECT
 
 public:
 
-    SearchFieldLabel(QObject* parent);
+    SearchFieldLabels(QObject* parent);
 
     virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
@@ -498,6 +499,7 @@ protected Q_SLOTS:
 
 protected:
 
+    PickLabelFilter*  m_pickLabelFilter;
     ColorLabelFilter* m_colorLabelFilter;
 };
 

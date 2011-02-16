@@ -72,6 +72,7 @@
 #include "searchwindow.h"
 #include "tagscache.h"
 #include "colorlabelfilter.h"
+#include "picklabelfilter.h"
 
 using namespace KDcrawIface;
 
@@ -160,11 +161,11 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* par
         field->setFactor(1024 * 1024);
         return field;
     }
-    else if (name == "colorlabel")
+    else if (name == "labels")
     {
-        SearchFieldLabel* field = new SearchFieldLabel(parent);
+        SearchFieldLabels* field = new SearchFieldLabels(parent);
         field->setFieldName(name);
-        field->setText(i18n("Color Labels"), i18n("Return pictures with color label"));
+        field->setText(i18n("Labels"), i18n("Return pictures with labels"));
         return field;
     }
     else if (name == "rating")
@@ -2085,11 +2086,16 @@ void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
         else if (m_type == TypeTag)
         {
             a = AlbumManager::instance()->findTAlbum(id);
+
+            // Ignore internal tags here.
+            if (a && TagsCache::instance()->isInternalTag(a->id()))
+                a = 0;
         }
 
         if (!a)
         {
             kDebug() << "Search: Did not find album for ID" << id << "given in Search XML";
+            return;
         }
 
         m_model->setChecked(a, true);
@@ -2517,17 +2523,22 @@ void SearchFieldPageOrientation::read(SearchXmlCachingReader& reader)
 
 // -------------------------------------------------------------------------
 
-SearchFieldLabel::SearchFieldLabel(QObject* parent)
-    : SearchField(parent), m_colorLabelFilter(0)
+SearchFieldLabels::SearchFieldLabels(QObject* parent)
+    : SearchField(parent), m_pickLabelFilter(0), m_colorLabelFilter(0)
 {
 }
 
-void SearchFieldLabel::setupValueWidgets(QGridLayout* layout, int row, int column)
+void SearchFieldLabels::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
     QHBoxLayout* hbox  = new QHBoxLayout;
+    m_pickLabelFilter  = new PickLabelFilter;
     m_colorLabelFilter = new ColorLabelFilter;
+    hbox->addWidget(m_pickLabelFilter);
+    hbox->addStretch(10);
     hbox->addWidget(m_colorLabelFilter);
-    hbox->addStretch(1);
+
+    connect(m_pickLabelFilter, SIGNAL(signalPickLabelSelectionChanged(const QList<PickLabel>&)),
+            this, SLOT(updateState()));
 
     connect(m_colorLabelFilter, SIGNAL(signalColorLabelSelectionChanged(const QList<ColorLabel>&)),
             this, SLOT(updateState()));
@@ -2537,47 +2548,67 @@ void SearchFieldLabel::setupValueWidgets(QGridLayout* layout, int row, int colum
     layout->addLayout(hbox, row, column, 1, 3);
 }
 
-void SearchFieldLabel::updateState()
+void SearchFieldLabels::updateState()
 {
     setValidValueState(!m_colorLabelFilter->colorLabels().isEmpty());
 }
 
-void SearchFieldLabel::read(SearchXmlCachingReader& reader)
+void SearchFieldLabels::read(SearchXmlCachingReader& reader)
 {
     TAlbum* a      = 0;
     QList<int> ids = reader.valueToIntOrIntList();
-    QList<ColorLabel> labels;
+    QList<ColorLabel> clabels;
+    QList<PickLabel>  plabels;
 
     foreach(int id, ids)
     {
         a = AlbumManager::instance()->findTAlbum(id);
         if (!a)
         {
-            kDebug() << "Search: Did not find Color Label album for ID" << id << "given in Search XML";
+            kDebug() << "Search: Did not find Label album for ID" << id << "given in Search XML";
         }
         else
         {
-            labels.append(TagsCache::instance()->getColorLabelForTag(a->id()));
+            int cl = TagsCache::instance()->getColorLabelForTag(a->id());
+            if (cl != -1)
+            {
+                clabels.append((ColorLabel)cl);
+            }
+            else
+            {
+                int pl = TagsCache::instance()->getPickLabelForTag(a->id());
+                if (pl != -1)
+                    plabels.append((PickLabel)pl);
+            }
         }
     }
 
-    m_colorLabelFilter->setColorLabels(labels);
+    m_colorLabelFilter->setColorLabels(clabels);
+    m_pickLabelFilter->setPickLabels(plabels);
 }
 
-void SearchFieldLabel::write(SearchXmlWriter& writer)
+void SearchFieldLabels::write(SearchXmlWriter& writer)
 {
-    QList<TAlbum*> checkedAlbums = m_colorLabelFilter->getCheckedColorLabelTags();
-
-    if (checkedAlbums.isEmpty())
+    QList<int>     albumIds;
+    QList<TAlbum*> clAlbums = m_colorLabelFilter->getCheckedColorLabelTags();
+    if (!clAlbums.isEmpty())
     {
-        return;
+        foreach (TAlbum* album, clAlbums)
+        {
+            albumIds << album->id();
+        }
     }
 
-    QList<int> albumIds;
-    foreach (TAlbum* album, checkedAlbums)
+    QList<TAlbum*> plAlbums = m_pickLabelFilter->getCheckedPickLabelTags();
+    if (!plAlbums.isEmpty())
     {
-        albumIds << album->id();
+        foreach (TAlbum* album, plAlbums)
+        {
+            albumIds << album->id();
+        }
     }
+
+    if (albumIds.isEmpty()) return;
 
     // NOTE: there is no XML database query rule for Color Labels in ImageQueryBuilder::buildField()
     //       As Color Labels are internal tags, we trig database on "tagid".
@@ -2595,19 +2626,22 @@ void SearchFieldLabel::write(SearchXmlWriter& writer)
     writer.finishField();
 }
 
-void SearchFieldLabel::reset()
+void SearchFieldLabels::reset()
 {
     m_colorLabelFilter->reset();
+    m_pickLabelFilter->reset();
 }
 
-void SearchFieldLabel::setValueWidgetsVisible(bool visible)
+void SearchFieldLabels::setValueWidgetsVisible(bool visible)
 {
     m_colorLabelFilter->setVisible(visible);
+    m_pickLabelFilter->setVisible(visible);
 }
 
-QList<QRect> SearchFieldLabel::valueWidgetRects() const
+QList<QRect> SearchFieldLabels::valueWidgetRects() const
 {
     QList<QRect> rects;
+    rects << m_pickLabelFilter->geometry();
     rects << m_colorLabelFilter->geometry();
     return rects;
 }

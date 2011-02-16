@@ -866,34 +866,34 @@ void TagsCache::slotTagChanged(const TagChangeset& changeset)
     }
 }
 
-int TagsCache::getTagForColorLabel(ColorLabel label)
+int TagsCache::getTagForColorLabel(int label)
 {
     if (label < NoColorLabel || label > WhiteLabel)
         return 0;
 
     d->checkLabelTags();
     QReadLocker locker(&d->lock);
-    return d->colorLabelsTags[label];
+    return d->colorLabelsTags[(ColorLabel)label];
 }
 
-ColorLabel TagsCache::getColorLabelForTag(int tagId)
+int TagsCache::getColorLabelForTag(int tagId)
 {
     d->checkLabelTags();
     QReadLocker locker(&d->lock);
     return d->colorLabelsTags.key(tagId, (ColorLabel)(-1));
 }
 
-int TagsCache::getTagForPickLabel(PickLabel label)
+int TagsCache::getTagForPickLabel(int label)
 {
     if (label < NoPickLabel || label > AcceptedLabel)
         return 0;
 
     d->checkLabelTags();
     QReadLocker locker(&d->lock);
-    return d->pickLabelsTags[label];
+    return d->pickLabelsTags[(PickLabel)label];
 }
 
-PickLabel TagsCache::getPickLabelForTag(int tagId)
+int TagsCache::getPickLabelForTag(int tagId)
 {
     d->checkLabelTags();
     QReadLocker locker(&d->lock);
