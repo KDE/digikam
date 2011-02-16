@@ -9,7 +9,8 @@
  *
  * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2010-2011 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -99,7 +100,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* parent, SidebarSplit
     d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
 
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Caption/Tags"));
-    appendTab(d->versionsHistoryTab, SmallIcon("view-catalog"), i18n("Image Versions/Used Filters"));
+    appendTab(d->versionsHistoryTab, SmallIcon("view-catalog"), i18n("Versioning"));
 
     // ----------------------------------------------------------
 
@@ -176,10 +177,9 @@ void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos)
 
 void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rect, DImg* img, const DImageHistory& history)
 {
-    m_currentRect     = rect;
-    m_image           = img;
-    d->currentHistory = history;
-
+    m_currentRect        = rect;
+    m_image              = img;
+    d->currentHistory    = history;
     d->currentInfos      = infos;
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
