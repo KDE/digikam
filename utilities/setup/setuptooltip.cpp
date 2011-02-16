@@ -65,7 +65,7 @@ public:
         showAlbumNameBox(0),
         showCommentsBox(0),
         showTagsBox(0),
-        showRatingBox(0),
+        showLabelsBox(0),
         showAlbumToolTipsBox(0),
         showAlbumTitleBox(0),
         showAlbumDateBox(0),
@@ -100,7 +100,7 @@ public:
     QCheckBox*   showAlbumNameBox;
     QCheckBox*   showCommentsBox;
     QCheckBox*   showTagsBox;
-    QCheckBox*   showRatingBox;
+    QCheckBox*   showLabelsBox;
 
     QCheckBox*   showAlbumToolTipsBox;
     QCheckBox*   showAlbumTitleBox;
@@ -223,13 +223,13 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d->showTagsBox       = new QCheckBox(i18n("Show image tags"), d->digikamSettingBox);
     d->showTagsBox->setWhatsThis(i18n("Set this option to display the image tags."));
 
-    d->showRatingBox     = new QCheckBox(i18n("Show image color label and rating"), d->digikamSettingBox);
-    d->showRatingBox->setWhatsThis(i18n("Set this option to display the image color label and rating."));
+    d->showLabelsBox      = new QCheckBox(i18n("Show image labels"), d->digikamSettingBox);
+    d->showLabelsBox->setWhatsThis(i18n("Set this option to display the image pick, color, rating labels."));
 
     vlay4->addWidget(d->showAlbumNameBox);
     vlay4->addWidget(d->showCommentsBox);
     vlay4->addWidget(d->showTagsBox);
-    vlay4->addWidget(d->showRatingBox);
+    vlay4->addWidget(d->showLabelsBox);
     vlay4->setMargin(KDialog::spacingHint());
     vlay4->setSpacing(0);
 
@@ -346,7 +346,7 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowAlbumName(d->showAlbumNameBox->isChecked());
     settings->setToolTipsShowComments(d->showCommentsBox->isChecked());
     settings->setToolTipsShowTags(d->showTagsBox->isChecked());
-    settings->setToolTipsShowLabelRating(d->showRatingBox->isChecked());
+    settings->setToolTipsShowLabelRating(d->showLabelsBox->isChecked());
 
     settings->setShowAlbumToolTips(d->showAlbumToolTipsBox->isChecked());
     settings->setToolTipsShowAlbumTitle(d->showAlbumTitleBox->isChecked());
@@ -387,7 +387,7 @@ void SetupToolTip::readSettings()
     d->showAlbumNameBox->setChecked(settings->getToolTipsShowAlbumName());
     d->showCommentsBox->setChecked(settings->getToolTipsShowComments());
     d->showTagsBox->setChecked(settings->getToolTipsShowTags());
-    d->showRatingBox->setChecked(settings->getToolTipsShowLabelRating());
+    d->showLabelsBox->setChecked(settings->getToolTipsShowLabelRating());
 
     d->fileSettingBox->setEnabled(d->showToolTipsBox->isChecked());
     d->photoSettingBox->setEnabled(d->showToolTipsBox->isChecked());

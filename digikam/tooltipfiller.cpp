@@ -46,6 +46,7 @@
 #include "filteraction.h"
 #include "imageinfo.h"
 #include "colorlabelwidget.h"
+#include "picklabelwidget.h"
 
 namespace Digikam
 {
@@ -327,9 +328,10 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
         if (settings->getToolTipsShowLabelRating())
         {
-            int colorId = info.colorLabel();
-            str         = ColorLabelWidget::labelColorName((ColorLabel)colorId);
+            str = PickLabelWidget::labelPickName((PickLabel)info.pickLabel());
+            str += QString(" / ");
 
+            str += ColorLabelWidget::labelColorName((ColorLabel)info.colorLabel());
             str += QString(" / ");
 
             int rating = info.rating();
@@ -346,7 +348,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 }
             }
 
-            tip += cnt.cellSpecBeg + i18n("Label/Rating:") + cnt.cellSpecMid + str + cnt.cellSpecEnd;
+            tip += cnt.cellSpecBeg + i18n("Labels:") + cnt.cellSpecMid + str + cnt.cellSpecEnd;
         }
     }
 
