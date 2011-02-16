@@ -582,6 +582,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             // -- Caption / Tags ------------------------------------------
 
             m_propertiesTab->setCaption(info.comment());
+            m_propertiesTab->setPickLabel(info.pickLabel());
             m_propertiesTab->setColorLabel(info.colorLabel());
             m_propertiesTab->setRating(info.rating());
             QList<int> tagIds = info.tagIds();

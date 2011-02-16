@@ -40,6 +40,7 @@
 // Local includes
 
 #include "imagepropertiestxtlabel.h"
+#include "picklabelwidget.h"
 #include "colorlabelwidget.h"
 
 namespace Digikam
@@ -74,6 +75,7 @@ public:
         whiteBalance(0),
         caption(0),
         tags(0),
+        pickLabel(0),
         colorLabel(0),
         rating(0),
         labelFile(0),
@@ -100,6 +102,7 @@ public:
         labelPhotoWhiteBalance(0),
         labelCaption(0),
         labelTags(0),
+        labelPickLabel(0),
         labelColorLabel(0),
         labelRating(0)
     {
@@ -132,6 +135,7 @@ public:
 
     DTextLabelName*  caption;
     DTextLabelName*  tags;
+    DTextLabelName*  pickLabel;
     DTextLabelName*  colorLabel;
     DTextLabelName*  rating;
 
@@ -162,6 +166,7 @@ public:
 
     DTextLabelValue* labelCaption;
     DTextLabelValue* labelTags;
+    DTextLabelValue* labelPickLabel;
     DTextLabelValue* labelColorLabel;
     DTextLabelValue* labelRating;
 };
@@ -308,11 +313,13 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     QGridLayout* const glay4  = new QGridLayout(w4);
 
     d->caption                = new DTextLabelName(i18n("Caption: "),     w4);
+    d->pickLabel              = new DTextLabelName(i18n("Pick label: "),  w4);
     d->colorLabel             = new DTextLabelName(i18n("Color label: "), w4);
     d->rating                 = new DTextLabelName(i18n("Rating: "),      w4);
     d->tags                   = new DTextLabelName(i18n("Tags: "),        w4);
 
     d->labelCaption           = new DTextLabelValue(0, w4);
+    d->labelPickLabel         = new DTextLabelValue(0, w4);
     d->labelColorLabel        = new DTextLabelValue(0, w4);
     d->labelRating            = new DTextLabelValue(0, w4);
     d->labelTags              = new DTextLabelValue(0, w4);
@@ -322,10 +329,12 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     glay4->addWidget(d->labelCaption,    0, 1, 1, 1);
     glay4->addWidget(d->tags,            1, 0, 1, 1);
     glay4->addWidget(d->labelTags,       1, 1, 1, 1);
-    glay4->addWidget(d->colorLabel,      2, 0, 1, 1);
-    glay4->addWidget(d->labelColorLabel, 2, 1, 1, 1);
-    glay4->addWidget(d->rating,          3, 0, 1, 1);
-    glay4->addWidget(d->labelRating,     3, 1, 1, 1);
+    glay4->addWidget(d->pickLabel,       2, 0, 1, 1);
+    glay4->addWidget(d->labelPickLabel,  2, 1, 1, 1);
+    glay4->addWidget(d->colorLabel,      3, 0, 1, 1);
+    glay4->addWidget(d->labelColorLabel, 3, 1, 1, 1);
+    glay4->addWidget(d->rating,          4, 0, 1, 1);
+    glay4->addWidget(d->labelRating,     4, 1, 1, 1);
     glay4->setMargin(KDialog::spacingHint());
     glay4->setSpacing(0);
     glay4->setColumnStretch(1, 10);
@@ -371,6 +380,7 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
         d->labelPhotoWhiteBalance->clear();
 
         d->labelCaption->clear();
+        d->labelPickLabel->clear();
         d->labelColorLabel->clear();
         d->labelRating->clear();
         d->labelTags->clear();
@@ -509,12 +519,15 @@ void ImagePropertiesTab::setPhotoWhiteBalance(const QString& str)
 void ImagePropertiesTab::showOrHideCaptionAndTags()
 {
     bool hasCaption    = !d->labelCaption->text().isEmpty();
-    bool hasColorLabel = !d->labelColorLabel->pixmap()->isNull();
+    bool hasPickLabel  = !d->labelPickLabel->text().isEmpty();
+    bool hasColorLabel = !d->labelColorLabel->text().isEmpty();
     bool hasRating     = !d->labelRating->text().isEmpty();
     bool hasTags       = !d->labelTags->text().isEmpty();
 
     d->caption->setVisible(hasCaption);
     d->labelCaption->setVisible(hasCaption);
+    d->pickLabel->setVisible(hasPickLabel);
+    d->labelPickLabel->setVisible(hasPickLabel);
     d->colorLabel->setVisible(hasColorLabel);
     d->labelColorLabel->setVisible(hasColorLabel);
     d->rating->setVisible(hasRating);
@@ -522,7 +535,7 @@ void ImagePropertiesTab::showOrHideCaptionAndTags()
     d->tags->setVisible(hasTags);
     d->labelTags->setVisible(hasTags);
 
-    widget(3)->setVisible(hasCaption || hasRating || hasTags || hasColorLabel);
+    widget(3)->setVisible(hasCaption || hasRating || hasTags || hasPickLabel || hasColorLabel);
 }
 
 void ImagePropertiesTab::setCaption(const QString& str)
@@ -532,21 +545,12 @@ void ImagePropertiesTab::setCaption(const QString& str)
 
 void ImagePropertiesTab::setColorLabel(int colorId)
 {
-    QPixmap pix;
+    d->labelColorLabel->setText(ColorLabelWidget::labelColorName((ColorLabel)colorId));
+}
 
-    if (colorId != NoColorLabel)
-    {
-        QFontMetrics fontMt = d->labelColorLabel->fontMetrics();
-        QRect fntRect(0, 0, fontMt.width("           "), fontMt.height());
-
-        pix = QPixmap(fntRect.size());
-        QPainter p(&pix);
-        p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
-        p.fillRect(fntRect, ColorLabelWidget::labelColor((ColorLabel)colorId));
-        p.drawRect(0, 0, fntRect.width()-1, fntRect.height()-1);
-    }
-
-    d->labelColorLabel->setPixmap(pix);
+void ImagePropertiesTab::setPickLabel(int pickId)
+{
+    d->labelPickLabel->setText(PickLabelWidget::labelPickName((PickLabel)pickId));
 }
 
 void ImagePropertiesTab::setRating(int rating)
