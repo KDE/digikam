@@ -155,6 +155,14 @@ PickLabelWidget::~PickLabelWidget()
 void PickLabelWidget::setDescriptionBoxVisible(bool b)
 {
     d->descBox->setVisible(b);
+    if (!b)
+    {
+        foreach(QAbstractButton* btn, d->pickBtns->buttons())
+        {
+            PickLabel id = (PickLabel)(d->pickBtns->id(btn));
+            btn->setToolTip(labelPickName(id));
+        }
+    }
 }
 
 void PickLabelWidget::setButtonsExclusive(bool b)

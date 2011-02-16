@@ -208,6 +208,14 @@ ColorLabelWidget::~ColorLabelWidget()
 void ColorLabelWidget::setDescriptionBoxVisible(bool b)
 {
     d->descBox->setVisible(b);
+    if (!b)
+    {
+        foreach(QAbstractButton* btn, d->colorBtns->buttons())
+        {
+            ColorLabel id = (ColorLabel)(d->colorBtns->id(btn));
+            btn->setToolTip(labelColorName(id));
+        }
+    }
 }
 
 void ColorLabelWidget::setButtonsExclusive(bool b)
