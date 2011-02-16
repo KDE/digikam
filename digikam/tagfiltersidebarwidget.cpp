@@ -169,6 +169,7 @@ public:
         colorLabelFilter(0),
         pickLabelFilter(0),
         ratingFilter(0),
+        textFilter(0),
         withoutTagCheckBox(0),
         matchingConditionComboBox(0)
     {
@@ -185,6 +186,7 @@ public:
     ColorLabelFilter*    colorLabelFilter;
     PickLabelFilter*     pickLabelFilter;
     RatingFilter*        ratingFilter;
+    SearchTextBar*       textFilter;
 
     QCheckBox*           withoutTagCheckBox;
     KComboBox*           matchingConditionComboBox;
@@ -200,8 +202,20 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
 {
     setObjectName("TagFilter Sidebar");
 
-    d->tagFilterModel     = tagFilterModel;
+    KHBox* hbox4  = new KHBox(this);
+    new QLabel(i18n("Text Filter:"), hbox4);
+    d->textFilter = new SearchTextBar(hbox4, "AlbumIconViewFilterSearchTextBar");
+    d->textFilter->setTextQueryCompletion(true);
+    d->textFilter->setToolTip(i18n("Text quick filter (search)"));
+    d->textFilter->setWhatsThis(i18n("Enter search patterns to quickly filter this view on "
+                                     "file names, captions (comments), and tags"));
+    hbox4->setStretchFactor(d->textFilter, 10);
+    hbox4->setSpacing(0);
+    hbox4->setMargin(0);
 
+    // --------------------------------------------------------------------------------------------------------
+
+    d->tagFilterModel     = tagFilterModel;
     d->tagFilterView      = new TagFilterView(this, tagFilterModel);
     d->tagFilterView->setObjectName("DigikamViewTagFilterView");
     d->tagFilterSearchBar = new SearchTextBar(this, "DigikamViewTagFilterSearchBar");
@@ -213,9 +227,9 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
     d->withoutTagCheckBox          = new QCheckBox(notTaggedTitle, this);
     d->withoutTagCheckBox->setWhatsThis(i18n("Show images without a tag."));
 
-    KHBox* hbox                    = new KHBox(this);
-    QLabel* matchingConditionLabel = new QLabel(i18n("Matching Condition:"), hbox);
-    d->matchingConditionComboBox   = new KComboBox(hbox);
+    KHBox* hbox1                    = new KHBox(this);
+    QLabel* matchingConditionLabel = new QLabel(i18n("Matching Condition:"), hbox1);
+    d->matchingConditionComboBox   = new KComboBox(hbox1);
     d->matchingConditionComboBox->setWhatsThis(matchingConditionLabel->whatsThis());
     d->matchingConditionComboBox->addItem(i18n("AND"), ImageFilterSettings::AndCondition);
     d->matchingConditionComboBox->addItem(i18n("OR"),  ImageFilterSettings::OrCondition);
@@ -245,16 +259,20 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
     hbox3->setMargin(0);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->addWidget(hbox4);
     layout->addWidget(d->tagFilterView);
     layout->addWidget(d->tagFilterSearchBar);
     layout->addWidget(d->withoutTagCheckBox);
-    layout->addWidget(hbox);
+    layout->addWidget(hbox1);
     layout->addWidget(fLabel);
     layout->addWidget(hbox2);
     layout->addWidget(hbox3);
     layout->setStretchFactor(d->tagFilterView, 10);
 
-    // signals/slots connections
+    // --------------------------------------------------------------------------------------------------------
+
+    connect(d->textFilter, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            this, SIGNAL(signalTextFilterChanged(const SearchTextSettings&)));
 
     connect(d->tagFilterView, SIGNAL(checkedTagsChanged(const QList<TAlbum*>&, const QList<TAlbum*>&)),
             this, SLOT(slotCheckedTagsChanged(const QList<TAlbum*>&, const QList<TAlbum*>&)));
@@ -280,8 +298,14 @@ TagFilterSideBarWidget::~TagFilterSideBarWidget()
     delete d;
 }
 
+void TagFilterSideBarWidget::slotFilterMatchesForText(bool match)
+{
+    d->textFilter->slotSearchResult(match);
+}
+
 void TagFilterSideBarWidget::slotResetFilters()
 {
+    d->textFilter->setText(QString());
     d->tagFilterView->slotResetCheckState();
     d->withoutTagCheckBox->setChecked(false);
     d->colorLabelFilter->reset();

@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QMouseEvent>
+#include <QLabel>
 
 // KDE includes
 
@@ -46,12 +47,10 @@ public:
 
     AlbumIconViewFilterPriv()
     {
-        textFilter       = 0;
         mimeFilter       = 0;
         led              = 0;
     }
 
-    SearchTextBar*      textFilter;
     StatusLed*          led;
     MimeFilter*         mimeFilter;
     ImageFilterSettings settings;
@@ -71,19 +70,12 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                               "GREEN: filter(s) match(es) at least one item.\n\n"
                               "Any mouse button click will reset all filters."));
 
-    d->textFilter = new SearchTextBar(this, "AlbumIconViewFilterSearchTextBar");
-    d->textFilter->setTextQueryCompletion(true);
-    d->textFilter->setToolTip(i18n("Text quick filter (search)"));
-    d->textFilter->setWhatsThis(i18n("Enter search patterns to quickly filter this view on "
-                                     "file names, captions (comments), and tags"));
-
-    d->mimeFilter       = new MimeFilter(this);
+    d->mimeFilter = new MimeFilter(this);
+    QLabel* space = new QLabel(this);
 
     setSpacing(KDialog::spacingHint());
     setMargin(0);
-
-    connect(d->textFilter, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SIGNAL(textFilterChanged(const SearchTextSettings&)));
+    setStretchFactor(space, 10);
 
     connect(d->mimeFilter, SIGNAL(activated(int)),
             this, SIGNAL(mimeTypeFilterChanged(int)));
@@ -99,7 +91,7 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
     QStringList filtersList;
     QString     message;
 
-    if (!d->textFilter->text().isEmpty())
+    if (d->settings.isFilteringByText())
     {
         filtersList.append(i18n("<br/><nobr><i>Text</i></nobr>"));
     }
@@ -152,11 +144,6 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
     }
 }
 
-void AlbumIconViewFilter::slotFilterMatchesForText(bool match)
-{
-    d->textFilter->slotSearchResult(match);
-}
-
 void AlbumIconViewFilter::slotFilterSettingsChanged(const ImageFilterSettings& settings)
 {
     d->settings = settings;
@@ -173,7 +160,6 @@ bool AlbumIconViewFilter::eventFilter(QObject* object, QEvent* e)
         if ( widget->rect().contains(event->pos()) && d->led->ledColor() != StatusLed::Gray)
         {
             // Reset all filters settings.
-            d->textFilter->setText(QString());
             d->mimeFilter->setMimeFilter(MimeFilter::AllFiles);
             emit signalResetFilters();
         }

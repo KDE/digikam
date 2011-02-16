@@ -31,11 +31,10 @@
 
 // KDE includes
 
-#include "khbox.h"
+#include <khbox.h>
 
 // Local includes
 
-#include "searchtextbar.h"
 #include "imagefiltersettings.h"
 
 class QEvent;
@@ -56,14 +55,12 @@ public:
 public Q_SLOTS:
 
     void slotFilterMatches(bool);
-    void slotFilterMatchesForText(bool);
     void slotFilterSettingsChanged(const ImageFilterSettings& settings);
 
 Q_SIGNALS:
 
     void signalResetFilters();
     void mimeTypeFilterChanged(int);
-    void textFilterChanged(const SearchTextSettings&);
 
 private:
 

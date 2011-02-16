@@ -448,6 +448,8 @@ void DigikamView::setupConnections()
 
     // -- Filter Bars Connections ---------------------------------
 
+    ImageAlbumFilterModel* model = d->iconView->imageAlbumFilterModel();
+
     connect(d->tagFilterWidget,
             SIGNAL(signalTagFilterChanged(const QList<int>&, const QList<int>&,
                                           ImageFilterSettings::MatchingCondition, bool, const QList<int>&, const QList<int>&)),
@@ -456,7 +458,13 @@ void DigikamView::setupConnections()
                               ImageFilterSettings::MatchingCondition, bool, const QList<int>&, const QList<int>&)));
 
     connect(d->tagFilterWidget, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
-            d->iconView->imageAlbumFilterModel(), SLOT(setRatingFilter(int, ImageFilterSettings::RatingCondition)));
+            model, SLOT(setRatingFilter(int, ImageFilterSettings::RatingCondition)));
+
+    connect(d->tagFilterWidget, SIGNAL(signalTextFilterChanged(const SearchTextSettings&)),
+            model, SLOT(setTextFilter(const SearchTextSettings&)));
+
+    connect(model, SIGNAL(filterMatchesForText(bool)),
+            d->tagFilterWidget, SLOT(slotFilterMatchesForText(bool)));
 
     // -- Preview image widget Connections ------------------------
 
@@ -576,14 +584,8 @@ void DigikamView::connectIconViewFilter(AlbumIconViewFilter* filter)
     connect(filter, SIGNAL(mimeTypeFilterChanged(int)),
             model, SLOT(setMimeTypeFilter(int)));
 
-    connect(filter, SIGNAL(textFilterChanged(const SearchTextSettings&)),
-            model, SLOT(setTextFilter(const SearchTextSettings&)));
-
     connect(model, SIGNAL(filterMatches(bool)),
             filter, SLOT(slotFilterMatches(bool)));
-
-    connect(model, SIGNAL(filterMatchesForText(bool)),
-            filter, SLOT(slotFilterMatchesForText(bool)));
 
     connect(model, SIGNAL(filterSettingsChanged(const ImageFilterSettings&)),
             filter, SLOT(slotFilterSettingsChanged(const ImageFilterSettings&)));

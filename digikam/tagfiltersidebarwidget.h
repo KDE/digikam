@@ -35,6 +35,7 @@
 #include "imagefiltersettings.h"
 #include "statesavingobject.h"
 #include "tagcheckview.h"
+#include "searchtextbar.h"
 #include "globals.h"
 
 namespace Digikam
@@ -125,6 +126,7 @@ Q_SIGNALS:
 
     void signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition);
 
+    void signalTextFilterChanged(const SearchTextSettings&);
 
 public Q_SLOTS:
 
@@ -132,6 +134,8 @@ public Q_SLOTS:
      * Resets all selected filters.
      */
     void slotResetFilters();
+
+    void slotFilterMatchesForText(bool);
 
 private Q_SLOTS:
 
