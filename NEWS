@@ -66,5 +66,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 264864 : Keep focus on selected image when change filtering parameters
 048 ==> 152424 : Workflow organizing : use Color Label Tags over icon view items.
 049 ==> 216726 : Turn off ratings on thumbnails in view mode.
-050 ==> 
+050 ==> 241847 : Workflow organizing : Possibility to pre-mark images for deletion (Pick Labels feature).
+051 ==> 
 
