@@ -165,7 +165,7 @@ public Q_SLOTS:
     void setDayFilter(const QList<QDateTime>& days);
     void setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags,
                       ImageFilterSettings::MatchingCondition matchingCond, bool showUnTagged, 
-                      const QList<int>& clTagIds);
+                      const QList<int>& clTagIds, const QList<int>& plTagIds);
     void setRatingFilter(int rating, ImageFilterSettings::RatingCondition ratingCond);
     void setMimeTypeFilter(int mimeTypeFilter);
     void setTextFilter(const SearchTextSettings& settings);

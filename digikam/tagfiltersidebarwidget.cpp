@@ -41,6 +41,8 @@
 #include "albummodel.h"
 #include "contextmenuhelper.h"
 #include "tagcheckview.h"
+#include "colorlabelfilter.h"
+#include "picklabelfilter.h"
 
 namespace Digikam
 {
@@ -163,6 +165,7 @@ public:
         tagFilterSearchBar(0),
         tagFilterModel(0),
         colorLabelFilter(0),
+        pickLabelFilter(0),
         withoutTagCheckBox(0),
         matchingConditionComboBox(0)
     {
@@ -177,6 +180,7 @@ public:
     TagModel*            tagFilterModel;
 
     ColorLabelFilter*    colorLabelFilter;
+    PickLabelFilter*     pickLabelFilter;
 
     QCheckBox*           withoutTagCheckBox;
     KComboBox*           matchingConditionComboBox;
@@ -216,21 +220,31 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
             "Defines in which way the selected tags are combined to filter the images. "
             "This also includes the '%1' check box.", notTaggedTitle));
 
-    QLabel* clLabel     = new QLabel(i18n("Color Labels:"));
+    // --------------------------------------------------------------------------------------------------------
+
+    QLabel* fLabel      = new QLabel(i18n("Label Filters:"));
     KHBox* hbox2        = new KHBox(this);
     d->colorLabelFilter = new ColorLabelFilter(hbox2);
-    QLabel* space       = new QLabel(hbox2);
-    hbox2->setStretchFactor(space, 10);
+    QLabel* space2      = new QLabel(hbox2);
+    hbox2->setStretchFactor(space2, 10);
     hbox2->setSpacing(0);
     hbox2->setMargin(0);
+
+    KHBox* hbox3        = new KHBox(this);
+    d->pickLabelFilter  = new PickLabelFilter(hbox3);
+    QLabel* space3      = new QLabel(hbox3);
+    hbox3->setStretchFactor(space3, 10);
+    hbox3->setSpacing(0);
+    hbox3->setMargin(0);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(d->tagFilterView);
     layout->addWidget(d->tagFilterSearchBar);
     layout->addWidget(d->withoutTagCheckBox);
     layout->addWidget(hbox);
-    layout->addWidget(clLabel);
+    layout->addWidget(fLabel);
     layout->addWidget(hbox2);
+    layout->addWidget(hbox3);
     layout->setStretchFactor(d->tagFilterView, 10);
 
     // signals/slots connections
@@ -240,6 +254,9 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
 
     connect(d->colorLabelFilter, SIGNAL(signalColorLabelSelectionChanged(const QList<ColorLabel>&)),
             this, SLOT(slotColorLabelFilterChanged(const QList<ColorLabel>&)));
+
+    connect(d->pickLabelFilter, SIGNAL(signalPickLabelSelectionChanged(const QList<PickLabel>&)),
+            this, SLOT(slotPickLabelFilterChanged(const QList<PickLabel>&)));
 
     connect(d->withoutTagCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(slotWithoutTagChanged(int)));
@@ -280,6 +297,12 @@ void TagFilterSideBarWidget::slotColorLabelFilterChanged(const QList<ColorLabel>
     filterChanged();
 }
 
+void TagFilterSideBarWidget::slotPickLabelFilterChanged(const QList<PickLabel>& list)
+{
+    Q_UNUSED(list);
+    filterChanged();
+}
+
 void TagFilterSideBarWidget::slotWithoutTagChanged(int newState)
 {
     Q_UNUSED(newState);
@@ -296,6 +319,7 @@ void TagFilterSideBarWidget::filterChanged()
     QList<int> includedTagIds;
     QList<int> excludedTagIds;
     QList<int> clTagIds;
+    QList<int> plTagIds;
 
     if (!showUntagged || matchCond == ImageFilterSettings::OrCondition)
     {
@@ -320,9 +344,16 @@ void TagFilterSideBarWidget::filterChanged()
                 clTagIds << tag->id();
             }
         }
+        foreach (TAlbum* tag, d->pickLabelFilter->getCheckedPickLabelTags())
+        {
+            if (tag)
+            {
+                plTagIds << tag->id();
+            }
+        }
     }
 
-    emit signalTagFilterChanged(includedTagIds, excludedTagIds, matchCond, showUntagged, clTagIds);
+    emit signalTagFilterChanged(includedTagIds, excludedTagIds, matchCond, showUntagged, clTagIds, plTagIds);
 }
 
 void TagFilterSideBarWidget::setConfigGroup(KConfigGroup group)

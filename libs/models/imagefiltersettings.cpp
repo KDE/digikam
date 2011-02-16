@@ -82,6 +82,16 @@ bool ImageFilterSettings::isFilteringByColorLabels() const
     return false;
 }
 
+bool ImageFilterSettings::isFilteringByPickLabels() const
+{
+    if (!pickLabelTagFilter.isEmpty())
+    {
+        return true;
+    }
+
+    return false;
+}
+
 bool ImageFilterSettings::isFilteringByText() const
 {
     if (!textFilterSettings.text.isEmpty())
@@ -94,20 +104,21 @@ bool ImageFilterSettings::isFilteringByText() const
 
 bool ImageFilterSettings::isFiltering() const
 {
-    return !dayFilter.isEmpty() || !includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() ||
-           !textFilterSettings.text.isEmpty() || untaggedFilter || ratingFilter >= 0 ||
-           mimeTypeFilter != MimeFilter::AllFiles || !colorLabelTagFilter.isEmpty();
+    return !dayFilter.isEmpty()                   || !includeTagFilter.isEmpty()         || !excludeTagFilter.isEmpty() ||
+           !textFilterSettings.text.isEmpty()     || untaggedFilter || ratingFilter >= 0 ||
+           mimeTypeFilter != MimeFilter::AllFiles || !colorLabelTagFilter.isEmpty()      || !pickLabelTagFilter.isEmpty();
 }
 
 void ImageFilterSettings::setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags,
                                        MatchingCondition matchingCondition, bool showUnTagged,
-                                       const QList<int>& clTagIds)
+                                       const QList<int>& clTagIds, const QList<int>& plTagIds)
 {
     includeTagFilter    = includedTags;
     excludeTagFilter    = excludedTags;
     matchingCond        = matchingCondition;
     untaggedFilter      = showUnTagged;
     colorLabelTagFilter = clTagIds;
+    pickLabelTagFilter  = plTagIds;
 }
 
 void ImageFilterSettings::setRatingFilter(int rating, RatingCondition ratingCondition)
@@ -174,7 +185,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
     bool match = false;
 
-    if (!includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() || !colorLabelTagFilter.isEmpty())
+    if (!includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty())
     {
         QList<int> tagIds = info.tagIds();
         QList<int>::const_iterator it;
@@ -230,6 +241,25 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
     else
     {
         match = true;
+    }
+
+    //-- Filter by pick labels ------------------------------------------------
+
+    if (!pickLabelTagFilter.isEmpty())
+    {
+        bool matchPL      = false;
+        QList<int> tagIds = info.tagIds();
+
+        for (QList<int>::const_iterator it = pickLabelTagFilter.begin(); it != pickLabelTagFilter.end(); ++it)
+        {
+            if (tagIds.contains(*it))
+            {
+                matchPL = true;
+                break;
+            }
+        }
+
+        match &= matchPL;
     }
 
     //-- Filter by color labels ------------------------------------------------

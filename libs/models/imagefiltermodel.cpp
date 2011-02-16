@@ -391,10 +391,10 @@ void ImageFilterModel::setDayFilter(const QList<QDateTime>& days)
 
 void ImageFilterModel::setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags,
                                     ImageFilterSettings::MatchingCondition matchingCond,
-                                    bool showUnTagged, const QList<int>& clTagIds)
+                                    bool showUnTagged, const QList<int>& clTagIds, const QList<int>& plTagIds)
 {
     Q_D(ImageFilterModel);
-    d->filter.setTagFilter(includedTags, excludedTags, matchingCond, showUnTagged, clTagIds);
+    d->filter.setTagFilter(includedTags, excludedTags, matchingCond, showUnTagged, clTagIds, plTagIds);
     setImageFilterSettings(d->filter);
 }
 

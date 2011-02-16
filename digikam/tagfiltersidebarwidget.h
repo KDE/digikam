@@ -35,7 +35,7 @@
 #include "imagefiltersettings.h"
 #include "statesavingobject.h"
 #include "tagcheckview.h"
-#include "colorlabelfilter.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -116,11 +116,12 @@ Q_SIGNALS:
      * @param excludedTags a list of excluded tag ids
      * @param matchingCond condition to join the selected tags
      * @param showUnTagged if this is true, only photos without a tag shall be shown
-     * @param includedTags a list of color label tag ids
+     * @param clTagIds     a list of color label tag ids
+     * @param plTagIds     a list of pick label tag ids
      */
     void signalTagFilterChanged(const QList<int>& includedTags, const QList<int>& excludedTags,
-                                ImageFilterSettings::MatchingCondition matchingCond,
-                                bool showUnTagged, const QList<int>& clTagIds);
+                                ImageFilterSettings::MatchingCondition matchingCond, bool showUnTagged,
+                                const QList<int>& clTagIds, const QList<int>& plTagIds);
 
 public Q_SLOTS:
 
@@ -134,6 +135,7 @@ private Q_SLOTS:
     void slotMatchingConditionChanged(int index);
     void slotCheckedTagsChanged(const QList<TAlbum*>& includedTags, const QList<TAlbum*>& excludedTags);
     void slotColorLabelFilterChanged(const QList<ColorLabel>&);
+    void slotPickLabelFilterChanged(const QList<PickLabel>&);
     void slotWithoutTagChanged(int newState);
 
 private:

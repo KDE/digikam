@@ -79,9 +79,10 @@ public:
     QList<int>        excludeTagFilter;
     MatchingCondition matchingCond;
     QList<int>        colorLabelTagFilter;
+    QList<int>        pickLabelTagFilter;
 
     void setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags, MatchingCondition matchingCond,
-                      bool showUnTagged, const QList<int>& clTagIds);
+                      bool showUnTagged, const QList<int>& clTagIds, const QList<int>& plTagIds);
 
     /// --- Rating filter ---
 
@@ -119,7 +120,9 @@ public:
     MimeFilter::TypeMimeFilter      mimeTypeFilter;
     void setMimeTypeFilter(int mimeTypeFilter);
 
-    /// Returns if the color labales is a filter criteria
+    /// Returns if the pick labels is a filter criteria
+    bool isFilteringByPickLabels() const;
+    /// Returns if the color labels is a filter criteria
     bool isFilteringByColorLabels() const;
     /// Returns if the tag is a filter criteria
     bool isFilteringByTags() const;

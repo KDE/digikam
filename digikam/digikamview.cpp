@@ -450,10 +450,10 @@ void DigikamView::setupConnections()
 
     connect(d->tagFilterWidget,
             SIGNAL(signalTagFilterChanged(const QList<int>&, const QList<int>&,
-                                          ImageFilterSettings::MatchingCondition, bool, const QList<int>&)),
+                                          ImageFilterSettings::MatchingCondition, bool, const QList<int>&, const QList<int>&)),
             d->iconView->imageFilterModel(),
             SLOT(setTagFilter(const QList<int>&, const QList<int>&,
-                              ImageFilterSettings::MatchingCondition, bool, const QList<int>&)));
+                              ImageFilterSettings::MatchingCondition, bool, const QList<int>&, const QList<int>&)));
 
     // -- Preview image widget Connections ------------------------
 
