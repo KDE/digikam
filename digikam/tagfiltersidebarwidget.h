@@ -108,6 +108,8 @@ public:
     virtual void doLoadState();
     virtual void doSaveState();
 
+    void setFocusToTextFilter();
+
 Q_SIGNALS:
 
     /**

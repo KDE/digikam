@@ -237,6 +237,8 @@ private Q_SLOTS:
     void slotOrientationChangeFailed(const QStringList& failedFileNames);
     void slotRatingChanged(const KUrl&, int);
 
+    void slotPopupFiltersView();
+
 private:
 
     class DigikamViewPriv;

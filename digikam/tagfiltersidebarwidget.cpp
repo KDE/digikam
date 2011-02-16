@@ -314,6 +314,11 @@ TagFilterSideBarWidget::~TagFilterSideBarWidget()
     delete d;
 }
 
+void TagFilterSideBarWidget::setFocusToTextFilter()
+{
+    d->textFilter->setFocus();
+}
+
 void TagFilterSideBarWidget::slotFilterMatchesForText(bool match)
 {
     d->textFilter->slotSearchResult(match);

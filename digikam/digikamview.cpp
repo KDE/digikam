@@ -265,7 +265,7 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
 
     // Tags Filter sidebar tab contents.
     d->tagFilterWidget = new TagFilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
-    d->rightSideBar->appendTab(d->tagFilterWidget, SmallIcon("tag-assigned"), i18n("Tag Filters"));
+    d->rightSideBar->appendTab(d->tagFilterWidget, SmallIcon("view-filter"), i18n("Filters"));
 
     // Versions sidebar overlays
     d->rightSideBar->getFiltersHistoryTab()->addOpenAlbumAction(d->iconView->imageModel());
@@ -592,6 +592,16 @@ void DigikamView::connectIconViewFilter(AlbumIconViewFilter* filter)
 
     connect(filter, SIGNAL(signalResetFilters()),
             d->tagFilterWidget, SLOT(slotResetFilters()));
+
+    connect(filter, SIGNAL(signalPopupFiltersView()),
+            this, SLOT(slotPopupFiltersView()));
+
+}
+
+void DigikamView::slotPopupFiltersView()
+{
+    d->rightSideBar->setActiveTab(d->tagFilterWidget);
+    d->tagFilterWidget->setFocusToTextFilter();
 }
 
 void DigikamView::loadViewState()

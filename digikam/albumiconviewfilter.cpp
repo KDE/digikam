@@ -27,9 +27,11 @@
 
 #include <QMouseEvent>
 #include <QLabel>
+#include <QToolButton>
 
 // KDE includes
 
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kdialog.h>
 
@@ -46,8 +48,13 @@ public:
 
     AlbumIconViewFilterPriv()
     {
-        led = 0;
+        led         = 0;
+        resetBtn    = 0;
+        settingsBtn = 0;
     }
+
+    QToolButton*        resetBtn;
+    QToolButton*        settingsBtn;
 
     StatusLed*          led;
     ImageFilterSettings settings;
@@ -56,6 +63,7 @@ public:
 AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     : KHBox(parent), d(new AlbumIconViewFilterPriv)
 {
+    new QLabel(i18n("Filters:"), this);
     d->led = new StatusLed(this);
     d->led->installEventFilter(this);
     d->led->setLedColor(StatusLed::Gray);
@@ -67,11 +75,29 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                               "GREEN: filter(s) match(es) at least one item.\n\n"
                               "Any mouse button click will reset all filters."));
 
-    QLabel* space = new QLabel(this);
+    d->resetBtn    = new QToolButton(this);
+    d->resetBtn->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar)); 
+    d->resetBtn->setToolTip(i18n("Reset all active filters"));
+    d->resetBtn->setFocusPolicy(Qt::NoFocus);
+    d->resetBtn->setAutoRaise(true);
+
+    d->settingsBtn = new QToolButton(this);
+    d->settingsBtn->setIcon(KIconLoader::global()->loadIcon("configure", KIconLoader::Toolbar)); 
+    d->settingsBtn->setToolTip(i18n("Open filters settings panel"));
+    d->settingsBtn->setFocusPolicy(Qt::NoFocus);
+    d->settingsBtn->setAutoRaise(true);
+
+    QLabel* space  = new QLabel(this);
 
     setSpacing(KDialog::spacingHint());
     setMargin(0);
     setStretchFactor(space, 10);
+
+    connect(d->resetBtn, SIGNAL(released()),
+            this, SIGNAL(signalResetFilters()));
+
+    connect(d->settingsBtn, SIGNAL(released()),
+            this, SIGNAL(signalPopupFiltersView()));
 }
 
 AlbumIconViewFilter::~AlbumIconViewFilter()
