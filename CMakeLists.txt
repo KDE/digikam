@@ -707,11 +707,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/imagehistogram.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogrambox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogramwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogrampainter.cpp        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/imagecurves.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogrampainter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/imagecurves.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvesfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvessettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curveswidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvesbox.cpp        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvesbox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/freerotationfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/freerotationsettings.cpp
@@ -1345,6 +1347,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfiltersidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/colorlabelfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/picklabelfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/ratingfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/taggingaction.cpp
