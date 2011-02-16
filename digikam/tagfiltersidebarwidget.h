@@ -123,12 +123,15 @@ Q_SIGNALS:
                                 ImageFilterSettings::MatchingCondition matchingCond, bool showUnTagged,
                                 const QList<int>& clTagIds, const QList<int>& plTagIds);
 
+    void signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition);
+
+
 public Q_SLOTS:
 
     /**
-     * Resets all selected tag filters.
+     * Resets all selected filters.
      */
-    void slotResetTagFilters();
+    void slotResetFilters();
 
 private Q_SLOTS:
 

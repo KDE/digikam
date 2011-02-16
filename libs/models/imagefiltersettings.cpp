@@ -48,8 +48,8 @@ ImageFilterSettings::ImageFilterSettings()
     untaggedFilter = false;
     ratingFilter   = 0;
     mimeTypeFilter = MimeFilter::AllFiles;
-    ratingCond     = ImageFilterSettings::GreaterEqualCondition;
-    matchingCond   = ImageFilterSettings::OrCondition;
+    ratingCond     = GreaterEqualCondition;
+    matchingCond   = OrCondition;
 }
 
 void ImageFilterSettings::setDayFilter(const QList<QDateTime>& days)
@@ -95,6 +95,16 @@ bool ImageFilterSettings::isFilteringByPickLabels() const
 bool ImageFilterSettings::isFilteringByText() const
 {
     if (!textFilterSettings.text.isEmpty())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool ImageFilterSettings::isFilteringByRating() const
+{
+    if (ratingFilter != 0 || ratingCond != GreaterEqualCondition)
     {
         return true;
     }

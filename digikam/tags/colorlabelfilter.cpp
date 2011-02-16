@@ -54,6 +54,7 @@ ColorLabelFilter::~ColorLabelFilter()
 void ColorLabelFilter::reset()
 {
     setColorLabels(QList<ColorLabel>());
+    slotColorLabelSelectionChanged();
 }
 
 QList<TAlbum*> ColorLabelFilter::getCheckedColorLabelTags()

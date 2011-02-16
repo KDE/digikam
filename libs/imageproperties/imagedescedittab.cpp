@@ -188,12 +188,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
 
-    KHBox* ratingBox      = new KHBox(captionTagsArea);
-    new QLabel(i18n("Labels:"), ratingBox);
-    d->pickLabelSelector  = new PickLabelSelector(ratingBox);
-    d->colorLabelSelector = new ColorLabelSelector(ratingBox);
-    d->ratingWidget       = new RatingWidget(ratingBox);
-    ratingBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
+    KHBox* labelsBox      = new KHBox(captionTagsArea);
+    new QLabel(i18n("Labels:"), labelsBox);
+    d->pickLabelSelector  = new PickLabelSelector(labelsBox);
+    d->colorLabelSelector = new ColorLabelSelector(labelsBox);
+    d->ratingWidget       = new RatingWidget(labelsBox);
+    labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
 
     // Tags view ---------------------------------------------------
 
@@ -269,7 +269,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     grid1->addWidget(d->captionsEdit, 0, 0, 1, 2);
     grid1->addWidget(dateBox,         1, 0, 1, 2);
-    grid1->addWidget(ratingBox,       2, 0, 1, 2);
+    grid1->addWidget(labelsBox,       2, 0, 1, 2);
     grid1->addWidget(d->newTagEdit,   3, 0, 1, 2);
     grid1->addWidget(d->tagCheckView, 4, 0, 1, 2);
     grid1->addWidget(tagsSearch,      5, 0, 1, 2);

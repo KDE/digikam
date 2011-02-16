@@ -308,7 +308,6 @@ DigikamApp::~DigikamApp()
 
     delete d->view;
 
-    d->albumIconViewFilter->saveSettings();
     AlbumSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
     AlbumSettings::instance()->setRecurseTags(d->recurseTagsAction->isChecked());
     AlbumSettings::instance()->setShowThumbbar(d->showBarAction->isChecked());
@@ -1327,10 +1326,6 @@ void DigikamApp::initGui()
     d->recurseTagsAction->setChecked(AlbumSettings::instance()->getRecurseTags());
     d->showBarAction->setChecked(AlbumSettings::instance()->getShowThumbbar());
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
-
-    // Setting the filter condition also updates the tooltip.
-    // (So `setRating` is called first, as otherwise the filter value is not respected).
-    d->albumIconViewFilter->readSettings();
 
     slotSwitchedToIconView();
 }
@@ -2399,7 +2394,6 @@ void DigikamApp::slotSetupChanged()
     }
 
     d->view->applySettings();
-    d->albumIconViewFilter->readSettings();
 
     AlbumThumbnailLoader::instance()->setThumbnailSize(AlbumSettings::instance()->getTreeViewIconSize());
 

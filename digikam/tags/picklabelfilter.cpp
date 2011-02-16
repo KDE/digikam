@@ -54,6 +54,7 @@ PickLabelFilter::~PickLabelFilter()
 void PickLabelFilter::reset()
 {
     setPickLabels(QList<PickLabel>());
+    slotPickLabelSelectionChanged();
 }
 
 QList<TAlbum*> PickLabelFilter::getCheckedPickLabelTags()

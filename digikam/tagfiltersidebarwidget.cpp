@@ -38,11 +38,13 @@
 
 // Local includes
 
+#include "albumsettings.h"
 #include "albummodel.h"
 #include "contextmenuhelper.h"
 #include "tagcheckview.h"
 #include "colorlabelfilter.h"
 #include "picklabelfilter.h"
+#include "ratingfilter.h"
 
 namespace Digikam
 {
@@ -166,6 +168,7 @@ public:
         tagFilterModel(0),
         colorLabelFilter(0),
         pickLabelFilter(0),
+        ratingFilter(0),
         withoutTagCheckBox(0),
         matchingConditionComboBox(0)
     {
@@ -181,10 +184,10 @@ public:
 
     ColorLabelFilter*    colorLabelFilter;
     PickLabelFilter*     pickLabelFilter;
+    RatingFilter*        ratingFilter;
 
     QCheckBox*           withoutTagCheckBox;
     KComboBox*           matchingConditionComboBox;
-
 };
 
 const QString TagFilterSideBarWidget::TagFilterSideBarWidgetPriv::configLastShowUntaggedEntry("Show Untagged");
@@ -232,7 +235,9 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
 
     KHBox* hbox3        = new KHBox(this);
     d->pickLabelFilter  = new PickLabelFilter(hbox3);
+    d->ratingFilter     = new RatingFilter(hbox3);
     QLabel* space3      = new QLabel(hbox3);
+    hbox3->layout()->setAlignment(d->ratingFilter, Qt::AlignVCenter|Qt::AlignRight);
     hbox3->setStretchFactor(space3, 10);
     hbox3->setSpacing(0);
     hbox3->setMargin(0);
@@ -263,6 +268,9 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
 
     connect(d->matchingConditionComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotMatchingConditionChanged(int)));
+
+    connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
+            this, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)));
 }
 
 TagFilterSideBarWidget::~TagFilterSideBarWidget()
@@ -270,11 +278,14 @@ TagFilterSideBarWidget::~TagFilterSideBarWidget()
     delete d;
 }
 
-void TagFilterSideBarWidget::slotResetTagFilters()
+void TagFilterSideBarWidget::slotResetFilters()
 {
     d->tagFilterView->slotResetCheckState();
     d->withoutTagCheckBox->setChecked(false);
     d->colorLabelFilter->reset();
+    d->pickLabelFilter->reset();
+    d->ratingFilter->setRating(0);
+    d->ratingFilter->setRatingFilterCondition(ImageFilterSettings::GreaterEqualCondition);
 }
 
 void TagFilterSideBarWidget::slotMatchingConditionChanged(int index)
@@ -364,6 +375,9 @@ void TagFilterSideBarWidget::setConfigGroup(KConfigGroup group)
 
 void TagFilterSideBarWidget::doLoadState()
 {
+    d->ratingFilter->setRatingFilterCondition((Digikam::ImageFilterSettings::RatingCondition)
+            (AlbumSettings::instance()->getRatingFilterCond()));
+
     d->matchingConditionComboBox->setCurrentIndex(getConfigGroup().readEntry(
                 entryName(d->configMatchingConditionEntry), 0));
     d->tagFilterView->loadState();
@@ -379,6 +393,8 @@ void TagFilterSideBarWidget::doLoadState()
 
 void TagFilterSideBarWidget::doSaveState()
 {
+    AlbumSettings::instance()->setRatingFilterCond(d->ratingFilter->ratingFilterCondition());
+
     getConfigGroup().writeEntry(entryName(d->configMatchingConditionEntry),
                                 d->matchingConditionComboBox->currentIndex());
     d->tagFilterView->saveState();

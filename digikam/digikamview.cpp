@@ -455,6 +455,9 @@ void DigikamView::setupConnections()
             SLOT(setTagFilter(const QList<int>&, const QList<int>&,
                               ImageFilterSettings::MatchingCondition, bool, const QList<int>&, const QList<int>&)));
 
+    connect(d->tagFilterWidget, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
+            d->iconView->imageAlbumFilterModel(), SLOT(setRatingFilter(int, ImageFilterSettings::RatingCondition)));
+
     // -- Preview image widget Connections ------------------------
 
     connect(d->albumWidgetStack, SIGNAL(signalNextItem()),
@@ -570,9 +573,6 @@ void DigikamView::connectIconViewFilter(AlbumIconViewFilter* filter)
 {
     ImageAlbumFilterModel* model = d->iconView->imageAlbumFilterModel();
 
-    connect(filter, SIGNAL(ratingFilterChanged(int, ImageFilterSettings::RatingCondition)),
-            model, SLOT(setRatingFilter(int, ImageFilterSettings::RatingCondition)));
-
     connect(filter, SIGNAL(mimeTypeFilterChanged(int)),
             model, SLOT(setMimeTypeFilter(int)));
 
@@ -588,8 +588,8 @@ void DigikamView::connectIconViewFilter(AlbumIconViewFilter* filter)
     connect(model, SIGNAL(filterSettingsChanged(const ImageFilterSettings&)),
             filter, SLOT(slotFilterSettingsChanged(const ImageFilterSettings&)));
 
-    connect(filter, SIGNAL(resetTagFilters()),
-            d->tagFilterWidget, SLOT(slotResetTagFilters()));
+    connect(filter, SIGNAL(signalResetFilters()),
+            d->tagFilterWidget, SLOT(slotResetFilters()));
 }
 
 void DigikamView::loadViewState()

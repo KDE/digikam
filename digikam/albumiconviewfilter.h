@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QString>
+#include <QEvent>
 
 // KDE includes
 
@@ -52,9 +53,6 @@ public:
     AlbumIconViewFilter(QWidget* parent);
     ~AlbumIconViewFilter();
 
-    void readSettings();
-    void saveSettings();
-
 public Q_SLOTS:
 
     void slotFilterMatches(bool);
@@ -63,8 +61,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void resetTagFilters();
-    void ratingFilterChanged(int, ImageFilterSettings::RatingCondition);
+    void signalResetFilters();
     void mimeTypeFilterChanged(int);
     void textFilterChanged(const SearchTextSettings&);
 

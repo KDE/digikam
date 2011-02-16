@@ -117,9 +117,11 @@ public:
 
     /// --- Mime filter ---
 
-    MimeFilter::TypeMimeFilter      mimeTypeFilter;
+    MimeFilter::TypeMimeFilter mimeTypeFilter;
     void setMimeTypeFilter(int mimeTypeFilter);
 
+    /// Returns if the rating is a filter criteria
+    bool isFilteringByRating() const;
     /// Returns if the pick labels is a filter criteria
     bool isFilteringByPickLabels() const;
     /// Returns if the color labels is a filter criteria

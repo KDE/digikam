@@ -23,6 +23,10 @@
 
 #include "albumiconviewfilter.moc"
 
+// Qt includes
+
+#include <QMouseEvent>
+
 // KDE includes
 
 #include <klocale.h>
@@ -30,8 +34,6 @@
 
 // Local includes
 
-#include "albumsettings.h"
-#include "ratingfilter.h"
 #include "mimefilter.h"
 #include "statusled.h"
 
@@ -46,14 +48,12 @@ public:
     {
         textFilter       = 0;
         mimeFilter       = 0;
-        ratingFilter     = 0;
         led              = 0;
     }
 
     SearchTextBar*      textFilter;
     StatusLed*          led;
     MimeFilter*         mimeFilter;
-    RatingFilter*       ratingFilter;
     ImageFilterSettings settings;
 };
 
@@ -78,9 +78,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                                      "file names, captions (comments), and tags"));
 
     d->mimeFilter       = new MimeFilter(this);
-    d->ratingFilter     = new RatingFilter(this);
 
-    layout()->setAlignment(d->ratingFilter, Qt::AlignCenter);
     setSpacing(KDialog::spacingHint());
     setMargin(0);
 
@@ -89,33 +87,11 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 
     connect(d->mimeFilter, SIGNAL(activated(int)),
             this, SIGNAL(mimeTypeFilterChanged(int)));
-
-    connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
-            this, SIGNAL(ratingFilterChanged(int, ImageFilterSettings::RatingCondition)));
 }
 
 AlbumIconViewFilter::~AlbumIconViewFilter()
 {
     delete d;
-}
-
-void AlbumIconViewFilter::readSettings()
-{
-    AlbumSettings* settings = AlbumSettings::instance();
-    d->ratingFilter->setRatingFilterCondition((Digikam::ImageFilterSettings::RatingCondition)
-            (settings->getRatingFilterCond()));
-    /*
-    Bug 181705: always enable filters
-    d->ratingFilter->setEnabled(settings->getIconShowRating());
-    d->textFilter->setEnabled(settings->getIconShowName()     ||
-                              settings->getIconShowComments() ||
-                              settings->getIconShowTags());
-    */
-}
-
-void AlbumIconViewFilter::saveSettings()
-{
-    AlbumSettings::instance()->setRatingFilterCond(d->ratingFilter->ratingFilterCondition());
 }
 
 void AlbumIconViewFilter::slotFilterMatches(bool match)
@@ -133,7 +109,7 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
         filtersList.append(i18n("<br/><nobr><i>Mime Type</i></nobr>"));
     }
 
-    if (d->ratingFilter->rating() != 0 || d->ratingFilter->ratingFilterCondition() != ImageFilterSettings::GreaterEqualCondition)
+    if (d->settings.isFilteringByRating())
     {
         filtersList.append(i18n("<br/><nobr><i>Rating</i></nobr>"));
     }
@@ -198,10 +174,8 @@ bool AlbumIconViewFilter::eventFilter(QObject* object, QEvent* e)
         {
             // Reset all filters settings.
             d->textFilter->setText(QString());
-            d->ratingFilter->setRating(0);
-            d->ratingFilter->setRatingFilterCondition(ImageFilterSettings::GreaterEqualCondition);
             d->mimeFilter->setMimeFilter(MimeFilter::AllFiles);
-            emit resetTagFilters();
+            emit signalResetFilters();
         }
     }
 
