@@ -516,7 +516,7 @@ void RatingBox::slotUpdateDescription(int rating)
 RatingMenuAction::RatingMenuAction(QMenu* parent)
     : KActionMenu(parent)
 {
-    setText(i18n("Assign Rating"));
+    setText(i18n("Rating"));
     QWidgetAction* wa = new QWidgetAction(this);
     RatingBox* rb     = new RatingBox(parent);
     wa->setDefaultWidget(rb);

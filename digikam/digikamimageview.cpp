@@ -284,9 +284,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.addRemoveTagsMenu(selectedImageIDs);
     cmhelper.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addPickLabelAction();
-    cmhelper.addColorLabelAction();
-    cmhelper.addRatingMenu();
+    cmhelper.addLabelsAction();
 
     // special action handling --------------------------------
 

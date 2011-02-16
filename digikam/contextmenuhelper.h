@@ -280,9 +280,9 @@ public:
     void addCreateTagFromAddressbookMenu();
 
     /**
-    * Add "Pick Label" action.
+    * Add "Pick/Color/Rating Labels" action.
     *
-    * This action will provide methods to assign pick label to the currently selected items.
+    * This action will provide methods to assign pick/color/rating labels to the currently selected items.
     *
     * To make this menu work, you need to run exec() from this class, otherwise the signals
     * are not emitted and you will not be able to react on triggered actions from this menu.
@@ -290,36 +290,10 @@ public:
     *
     * @see exec()
     * @see signalAssignPickLabel()
+    * @see signalAssignColorLabel()
+    * @see signalAssignRating()
     */
-    void addPickLabelAction();
-
-    /**
-     * Add "Color Label" action.
-     *
-     * This action will provide methods to assign color label to the currently selected items.
-     *
-     * To make this menu work, you need to run exec() from this class, otherwise the signals
-     * are not emitted and you will not be able to react on triggered actions from this menu.
-     * Make sure to connect the signals to the appropriate slots in the context menu handling method.
-     *
-     * @see exec()
-     * @see signalAssignColorLabel()
-     */
-    void addColorLabelAction();
-
-    /**
-     * Add "Rating" menu.
-     *
-     * This menu will provide methods to assign ratings to the currently selected items.
-     *
-     * To make this menu work, you need to run exec() from this class, otherwise the signals
-     * are not emitted and you will not be able to react on triggered actions from this menu.
-     * Make sure to connect the signals to the appropriate slots in the context menu handling method.
-     *
-     * @see exec()
-     * @see signalAssignRating()
-     */
-    void addRatingMenu();
+    void addLabelsAction();
 
     /**
      * Add some of the KIPI actions to the menu.

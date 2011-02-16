@@ -798,28 +798,24 @@ void ImageWindow::slotContextMenu()
 
         m_contextMenu->addSeparator();
 
-        // Assign Pick Label -------------------------------------------
+        // Assign Labels -------------------------------------------
 
-        PickLabelMenuAction* pickLabelMenu = new PickLabelMenuAction(m_contextMenu);
-        m_contextMenu->addAction(pickLabelMenu);
+        KMenu* menuLabels           = new KMenu(i18n("Assign Labels"), m_contextMenu);
+        PickLabelMenuAction* pmenu  = new PickLabelMenuAction(m_contextMenu);
+        ColorLabelMenuAction* cmenu = new ColorLabelMenuAction(m_contextMenu);
+        RatingMenuAction* rmenu     = new RatingMenuAction(m_contextMenu);
+        menuLabels->addAction(pmenu);
+        menuLabels->addAction(cmenu);
+        menuLabels->addAction(rmenu);
+        m_contextMenu->addMenu(menuLabels);
 
-        connect(pickLabelMenu, SIGNAL(signalPickLabelChanged(int)),
+        connect(pmenu, SIGNAL(signalPickLabelChanged(int)),
                 this, SLOT(slotAssignPickLabel(int)));
 
-        // Assign Color Label -------------------------------------------
-
-        ColorLabelMenuAction* colorLabelMenu = new ColorLabelMenuAction(m_contextMenu);
-        m_contextMenu->addAction(colorLabelMenu);
-
-        connect(colorLabelMenu, SIGNAL(signalColorLabelChanged(int)),
+        connect(cmenu, SIGNAL(signalColorLabelChanged(int)),
                 this, SLOT(slotAssignColorLabel(int)));
 
-        // Assign Star Rating -------------------------------------------
-
-        RatingMenuAction* ratingMenu = new RatingMenuAction(m_contextMenu);
-        m_contextMenu->addAction(ratingMenu);
-
-        connect(ratingMenu, SIGNAL(signalRatingChanged(int)),
+        connect(rmenu, SIGNAL(signalRatingChanged(int)),
                 this, SLOT(slotAssignRating(int)));
 
         // --------------------------------------------------------------
@@ -828,9 +824,10 @@ void ImageWindow::slotContextMenu()
 
         delete assignTagsMenu;
         delete removeTagsMenu;
-        delete colorLabelMenu;
-        delete pickLabelMenu;
-        delete ratingMenu;
+        delete cmenu;
+        delete pmenu;
+        delete rmenu;
+        delete menuLabels;
     }
 }
 

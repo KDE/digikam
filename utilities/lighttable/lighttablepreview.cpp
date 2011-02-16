@@ -392,9 +392,7 @@ void LightTablePreview::slotContextMenu()
     cmhelper.addRemoveTagsMenu(idList);
     cmhelper.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addPickLabelAction();
-    cmhelper.addColorLabelAction();
-    cmhelper.addRatingMenu();
+    cmhelper.addLabelsAction();
 
     // special action handling --------------------------------
 

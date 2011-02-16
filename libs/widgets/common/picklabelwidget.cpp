@@ -352,7 +352,7 @@ void PickLabelSelector::slotPickLabelChanged(int id)
 PickLabelMenuAction::PickLabelMenuAction(QMenu* parent)
     : KActionMenu(parent)
 {
-    setText(i18n("Assign Pick Label"));
+    setText(i18n("Pick"));
     QWidgetAction* wa    = new QWidgetAction(this);
     PickLabelWidget* plw = new PickLabelWidget(parent);
     wa->setDefaultWidget(plw);

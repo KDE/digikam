@@ -398,9 +398,7 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
 
     // --------------------------------------------------------
 
-    cmhelper.addPickLabelAction();
-    cmhelper.addColorLabelAction();
-    cmhelper.addRatingMenu();
+    cmhelper.addLabelsAction();
 
     // special action handling --------------------------------
 

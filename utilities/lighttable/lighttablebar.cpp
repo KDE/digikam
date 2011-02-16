@@ -919,9 +919,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
             cmhelper.addAction(removeAction);
             cmhelper.addSeparator();
             // ------------------------------------------------
-            cmhelper.addPickLabelAction();
-            cmhelper.addColorLabelAction();
-            cmhelper.addRatingMenu();
+            cmhelper.addLabelsAction();
             cmhelper.addSeparator();
             // ------------------------------------------------
         }

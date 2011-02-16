@@ -470,30 +470,24 @@ void ContextMenuHelper::addRemoveTagsMenu(imageIds& ids)
             this, SIGNAL(signalRemoveTag(int)));
 }
 
-void ContextMenuHelper::addPickLabelAction()
+void ContextMenuHelper::addLabelsAction()
 {
-    PickLabelMenuAction* menu = new PickLabelMenuAction(d->parent);
-    addAction(menu);
+    KMenu* menuLabels           = new KMenu(i18n("Assign Labels"), d->parent);
+    PickLabelMenuAction* pmenu  = new PickLabelMenuAction(d->parent);
+    ColorLabelMenuAction* cmenu = new ColorLabelMenuAction(d->parent);
+    RatingMenuAction* rmenu     = new RatingMenuAction(d->parent);
+    menuLabels->addAction(pmenu);
+    menuLabels->addAction(cmenu);
+    menuLabels->addAction(rmenu);
+    addSubMenu(menuLabels);
 
-    connect(menu, SIGNAL(signalPickLabelChanged(int)),
+    connect(pmenu, SIGNAL(signalPickLabelChanged(int)),
             this, SIGNAL(signalAssignPickLabel(int)));
-}
 
-void ContextMenuHelper::addColorLabelAction()
-{
-    ColorLabelMenuAction* menu = new ColorLabelMenuAction(d->parent);
-    addAction(menu);
-
-    connect(menu, SIGNAL(signalColorLabelChanged(int)),
+    connect(cmenu, SIGNAL(signalColorLabelChanged(int)),
             this, SIGNAL(signalAssignColorLabel(int)));
-}
 
-void ContextMenuHelper::addRatingMenu()
-{
-    RatingMenuAction* menu = new RatingMenuAction(d->parent);
-    addAction(menu);
-
-    connect(menu, SIGNAL(signalRatingChanged(int)),
+    connect(rmenu, SIGNAL(signalRatingChanged(int)),
             this, SIGNAL(signalAssignRating(int)));
 }
 

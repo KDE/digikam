@@ -506,7 +506,7 @@ void ColorLabelSelector::slotColorLabelChanged(int id)
 ColorLabelMenuAction::ColorLabelMenuAction(QMenu* parent)
     : KActionMenu(parent)
 {
-    setText(i18n("Assign Color Label"));
+    setText(i18n("Color"));
     QWidgetAction* wa     = new QWidgetAction(this);
     ColorLabelWidget* clw = new ColorLabelWidget(parent);
     wa->setDefaultWidget(clw);
