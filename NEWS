@@ -68,6 +68,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 049 ==> 216726 : Turn off ratings on thumbnails in view mode.
 050 ==> 241847 : Workflow organizing : Possibility to pre-mark images for deletion (Pick Labels feature).
 051 ==> 264976 : Face detection: "Clear results and rescan" doesn't clear results.
-052 ==> 
+052 ==> 201282 : Sort settings in status bar.
+053 ==> 210576 : Move tag filter to the bottom.
+054 ==> 
 
 
