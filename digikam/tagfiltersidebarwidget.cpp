@@ -45,6 +45,7 @@
 #include "colorlabelfilter.h"
 #include "picklabelfilter.h"
 #include "ratingfilter.h"
+#include "mimefilter.h"
 
 namespace Digikam
 {
@@ -170,6 +171,7 @@ public:
         pickLabelFilter(0),
         ratingFilter(0),
         textFilter(0),
+        mimeFilter(0),
         withoutTagCheckBox(0),
         matchingConditionComboBox(0)
     {
@@ -187,6 +189,7 @@ public:
     PickLabelFilter*     pickLabelFilter;
     RatingFilter*        ratingFilter;
     SearchTextBar*       textFilter;
+    MimeFilter*          mimeFilter;
 
     QCheckBox*           withoutTagCheckBox;
     KComboBox*           matchingConditionComboBox;
@@ -212,6 +215,15 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
     hbox4->setStretchFactor(d->textFilter, 10);
     hbox4->setSpacing(0);
     hbox4->setMargin(0);
+
+    // --------------------------------------------------------------------------------------------------------
+
+    KHBox* hbox5    = new KHBox(this);
+    QLabel* mtlabel = new QLabel(i18n("Type Mime Filter:"), hbox5);
+    d->mimeFilter   = new MimeFilter(hbox5);
+    hbox5->setStretchFactor(mtlabel, 10);
+    hbox5->setSpacing(0);
+    hbox5->setMargin(0);
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -260,6 +272,7 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(hbox4);
+    layout->addWidget(hbox5);
     layout->addWidget(d->tagFilterView);
     layout->addWidget(d->tagFilterSearchBar);
     layout->addWidget(d->withoutTagCheckBox);
@@ -270,6 +283,9 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
     layout->setStretchFactor(d->tagFilterView, 10);
 
     // --------------------------------------------------------------------------------------------------------
+
+    connect(d->mimeFilter, SIGNAL(activated(int)),
+            this, SIGNAL(signalMimeTypeFilterChanged(int)));
 
     connect(d->textFilter, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             this, SIGNAL(signalTextFilterChanged(const SearchTextSettings&)));
@@ -306,6 +322,7 @@ void TagFilterSideBarWidget::slotFilterMatchesForText(bool match)
 void TagFilterSideBarWidget::slotResetFilters()
 {
     d->textFilter->setText(QString());
+    d->mimeFilter->setMimeFilter(MimeFilter::AllFiles);
     d->tagFilterView->slotResetCheckState();
     d->withoutTagCheckBox->setChecked(false);
     d->colorLabelFilter->reset();

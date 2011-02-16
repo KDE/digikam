@@ -102,6 +102,16 @@ bool ImageFilterSettings::isFilteringByText() const
     return false;
 }
 
+bool ImageFilterSettings::isFilteringByTypeMime() const
+{
+    if (mimeTypeFilter != MimeFilter::AllFiles)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 bool ImageFilterSettings::isFilteringByRating() const
 {
     if (ratingFilter != 0 || ratingCond != GreaterEqualCondition)

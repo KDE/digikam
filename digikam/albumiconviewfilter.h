@@ -60,7 +60,6 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     void signalResetFilters();
-    void mimeTypeFilterChanged(int);
 
 private:
 

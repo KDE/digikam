@@ -35,7 +35,6 @@
 
 // Local includes
 
-#include "mimefilter.h"
 #include "statusled.h"
 
 namespace Digikam
@@ -47,12 +46,10 @@ public:
 
     AlbumIconViewFilterPriv()
     {
-        mimeFilter       = 0;
-        led              = 0;
+        led = 0;
     }
 
     StatusLed*          led;
-    MimeFilter*         mimeFilter;
     ImageFilterSettings settings;
 };
 
@@ -70,15 +67,11 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                               "GREEN: filter(s) match(es) at least one item.\n\n"
                               "Any mouse button click will reset all filters."));
 
-    d->mimeFilter = new MimeFilter(this);
     QLabel* space = new QLabel(this);
 
     setSpacing(KDialog::spacingHint());
     setMargin(0);
     setStretchFactor(space, 10);
-
-    connect(d->mimeFilter, SIGNAL(activated(int)),
-            this, SIGNAL(mimeTypeFilterChanged(int)));
 }
 
 AlbumIconViewFilter::~AlbumIconViewFilter()
@@ -96,7 +89,7 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
         filtersList.append(i18n("<br/><nobr><i>Text</i></nobr>"));
     }
 
-    if (d->mimeFilter->mimeFilter() != MimeFilter::AllFiles)
+    if (d->settings.isFilteringByTypeMime())
     {
         filtersList.append(i18n("<br/><nobr><i>Mime Type</i></nobr>"));
     }
@@ -159,8 +152,7 @@ bool AlbumIconViewFilter::eventFilter(QObject* object, QEvent* e)
 
         if ( widget->rect().contains(event->pos()) && d->led->ledColor() != StatusLed::Gray)
         {
-            // Reset all filters settings.
-            d->mimeFilter->setMimeFilter(MimeFilter::AllFiles);
+            // Reset all filters settings into Filters sidebar.
             emit signalResetFilters();
         }
     }

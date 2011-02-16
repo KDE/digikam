@@ -120,6 +120,8 @@ public:
     MimeFilter::TypeMimeFilter mimeTypeFilter;
     void setMimeTypeFilter(int mimeTypeFilter);
 
+    /// Returns if the type mime is a filter criteria
+    bool isFilteringByTypeMime() const;
     /// Returns if the rating is a filter criteria
     bool isFilteringByRating() const;
     /// Returns if the pick labels is a filter criteria

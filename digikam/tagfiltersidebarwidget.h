@@ -125,7 +125,7 @@ Q_SIGNALS:
                                 const QList<int>& clTagIds, const QList<int>& plTagIds);
 
     void signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition);
-
+    void signalMimeTypeFilterChanged(int);
     void signalTextFilterChanged(const SearchTextSettings&);
 
 public Q_SLOTS:

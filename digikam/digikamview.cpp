@@ -466,6 +466,9 @@ void DigikamView::setupConnections()
     connect(model, SIGNAL(filterMatchesForText(bool)),
             d->tagFilterWidget, SLOT(slotFilterMatchesForText(bool)));
 
+    connect(d->tagFilterWidget, SIGNAL(signalMimeTypeFilterChanged(int)),
+            model, SLOT(setMimeTypeFilter(int)));
+
     // -- Preview image widget Connections ------------------------
 
     connect(d->albumWidgetStack, SIGNAL(signalNextItem()),
@@ -580,9 +583,6 @@ void DigikamView::setupConnections()
 void DigikamView::connectIconViewFilter(AlbumIconViewFilter* filter)
 {
     ImageAlbumFilterModel* model = d->iconView->imageAlbumFilterModel();
-
-    connect(filter, SIGNAL(mimeTypeFilterChanged(int)),
-            model, SLOT(setMimeTypeFilter(int)));
 
     connect(model, SIGNAL(filterMatches(bool)),
             filter, SLOT(slotFilterMatches(bool)));
