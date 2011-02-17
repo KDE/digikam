@@ -30,6 +30,10 @@
 
 #include <QWidget>
 
+// KDE includes
+
+#include <kvbox.h>
+
 // Local includes
 
 #include "imagefiltersettings.h"
@@ -85,7 +89,7 @@ private:
  *
  * @author jwienke
  */
-class FilterSideBarWidget : public QWidget, public StateSavingObject
+class FilterSideBarWidget : public KVBox, public StateSavingObject
 {
     Q_OBJECT
 

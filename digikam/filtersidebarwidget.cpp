@@ -30,11 +30,16 @@
 #include <QLabel>
 #include <QLayout>
 #include <QCheckBox>
+#include <QGridLayout>
 
 // KDE includes
 
 #include <kselectaction.h>
 #include <khbox.h>
+
+// LibKDcraw includes
+
+#include <libkdcraw/rexpanderbox.h>
 
 // Local includes
 
@@ -46,6 +51,8 @@
 #include "picklabelfilter.h"
 #include "ratingfilter.h"
 #include "mimefilter.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -173,7 +180,8 @@ public:
         textFilter(0),
         mimeFilter(0),
         withoutTagCheckBox(0),
-        matchingConditionComboBox(0)
+        matchingConditionComboBox(0),
+        expbox(0)
     {
     }
 
@@ -193,6 +201,8 @@ public:
 
     QCheckBox*           withoutTagCheckBox;
     KComboBox*           matchingConditionComboBox;
+
+    RExpanderBox*        expbox;
 };
 
 const QString FilterSideBarWidget::FilterSideBarWidgetPriv::configLastShowUntaggedEntry("Show Untagged");
@@ -201,45 +211,57 @@ const QString FilterSideBarWidget::FilterSideBarWidgetPriv::configMatchingCondit
 // ---------------------------------------------------------------------------------------------------
 
 FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterModel)
-    : QWidget(parent), StateSavingObject(this), d(new FilterSideBarWidgetPriv)
+    : KVBox(parent), StateSavingObject(this), d(new FilterSideBarWidgetPriv)
 {
     setObjectName("TagFilter Sidebar");
 
-    KHBox* hbox4  = new KHBox(this);
-    new QLabel(i18n("Text Filter:"), hbox4);
-    d->textFilter = new SearchTextBar(hbox4, "AlbumIconViewFilterSearchTextBar");
+    d->expbox = new RExpanderBox(this);
+    d->expbox->setObjectName("FilterSideBarWidget Expander");
+
+    // --------------------------------------------------------------------------------------------------------
+
+    QWidget* box1 = new QWidget(d->expbox);
+    d->textFilter = new SearchTextBar(box1, "AlbumIconViewFilterSearchTextBar");
     d->textFilter->setTextQueryCompletion(true);
     d->textFilter->setToolTip(i18n("Text quick filter (search)"));
     d->textFilter->setWhatsThis(i18n("Enter search patterns to quickly filter this view on "
                                      "file names, captions (comments), and tags"));
-    hbox4->setStretchFactor(d->textFilter, 10);
-    hbox4->setSpacing(0);
-    hbox4->setMargin(0);
+
+    QGridLayout* lay1 = new QGridLayout(box1);
+    lay1->addWidget(d->textFilter, 0, 0, 1, 1);
+    lay1->setMargin(0);
+    lay1->setSpacing(0);
+
+    d->expbox->addItem(box1, SmallIcon("text-field"), i18n("Text Filter"), QString("TextFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
-    KHBox* hbox5    = new KHBox(this);
-    QLabel* mtlabel = new QLabel(i18n("Type Mime Filter:"), hbox5);
-    d->mimeFilter   = new MimeFilter(hbox5);
-    hbox5->setStretchFactor(mtlabel, 10);
-    hbox5->setSpacing(0);
-    hbox5->setMargin(0);
+    QWidget* box2 = new QWidget(d->expbox);
+    d->mimeFilter = new MimeFilter(box2);
+
+    QGridLayout* lay2 = new QGridLayout(box2);
+    lay2->addWidget(d->mimeFilter, 0, 0, 1, 1);
+    lay2->setMargin(0);
+    lay2->setSpacing(0);
+
+    d->expbox->addItem(box2, SmallIcon("system-file-manager"), i18n("Type Mime Filter"), QString("TypeMimeFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
+    QWidget* box3         = new QWidget(d->expbox);
     d->tagFilterModel     = tagFilterModel;
-    d->tagFilterView      = new TagFilterView(this, tagFilterModel);
+    d->tagFilterView      = new TagFilterView(box3, tagFilterModel);
     d->tagFilterView->setObjectName("DigikamViewTagFilterView");
-    d->tagFilterSearchBar = new SearchTextBar(this, "DigikamViewTagFilterSearchBar");
+    d->tagFilterSearchBar = new SearchTextBar(box3, "DigikamViewTagFilterSearchBar");
     d->tagFilterSearchBar->setModel(d->tagFilterView->filteredModel(),
                                     AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());
 
     const QString notTaggedTitle   = i18n("Images Without Tags");
-    d->withoutTagCheckBox          = new QCheckBox(notTaggedTitle, this);
+    d->withoutTagCheckBox          = new QCheckBox(notTaggedTitle, box3);
     d->withoutTagCheckBox->setWhatsThis(i18n("Show images without a tag."));
 
-    KHBox* hbox1                   = new KHBox(this);
+    KHBox* hbox1                   = new KHBox(box3);
     QLabel* matchingConditionLabel = new QLabel(i18n("Matching Condition:"), hbox1);
     d->matchingConditionComboBox   = new KComboBox(hbox1);
     d->matchingConditionComboBox->setWhatsThis(matchingConditionLabel->whatsThis());
@@ -249,17 +271,29 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
             "Defines in which way the selected tags are combined to filter the images. "
             "This also includes the '%1' check box.", notTaggedTitle));
 
+    QGridLayout* lay3 = new QGridLayout(box3);
+    lay3->addWidget(d->tagFilterView,      0, 0, 1, 1);
+    lay3->addWidget(d->tagFilterSearchBar, 1, 0, 1, 1);
+    lay3->addWidget(d->withoutTagCheckBox, 2, 0, 1, 1);
+    lay3->addWidget(hbox1,                 3, 0, 1, 1);
+    lay3->setRowStretch(0, 100);
+    lay3->setMargin(0);
+    lay3->setSpacing(0);
+
+    d->expbox->addItem(box3, SmallIcon("tag-assigned"), i18n("Tags Filter"), QString("TagsFilter"), true);
+
     // --------------------------------------------------------------------------------------------------------
 
-    QLabel* fLabel      = new QLabel(i18n("Label Filters:"));
-    KHBox* hbox2        = new KHBox(this);
+    QWidget* box4       = new QWidget(d->expbox);
+
+    KHBox* hbox2        = new KHBox(box4);
     d->colorLabelFilter = new ColorLabelFilter(hbox2);
     QLabel* space2      = new QLabel(hbox2);
     hbox2->setStretchFactor(space2, 10);
     hbox2->setSpacing(0);
     hbox2->setMargin(0);
 
-    KHBox* hbox3        = new KHBox(this);
+    KHBox* hbox3        = new KHBox(box4);
     d->pickLabelFilter  = new PickLabelFilter(hbox3);
     QLabel* space3      = new QLabel(hbox3);
     d->ratingFilter     = new RatingFilter(hbox3);
@@ -270,17 +304,20 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
     hbox3->setSpacing(0);
     hbox3->setMargin(0);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->addWidget(hbox4);
-    layout->addWidget(hbox5);
-    layout->addWidget(d->tagFilterView);
-    layout->addWidget(d->tagFilterSearchBar);
-    layout->addWidget(d->withoutTagCheckBox);
-    layout->addWidget(hbox1);
-    layout->addWidget(fLabel);
-    layout->addWidget(hbox2);
-    layout->addWidget(hbox3);
-    layout->setStretchFactor(d->tagFilterView, 10);
+    QGridLayout* lay4 = new QGridLayout(box4);
+    lay4->addWidget(hbox2, 0, 0, 1, 1);
+    lay4->addWidget(hbox3, 1, 0, 1, 1);
+    lay4->setMargin(0);
+    lay4->setSpacing(0);
+
+    d->expbox->addItem(box4, SmallIcon("favorites"), i18n("Labels Filter"), QString("LabelsFilter"), true);
+
+/*
+    QVBoxLayout* vlay =dynamic_cast<QVBoxLayout*>(dynamic_cast<QScrollArea*>(d->expbox)->widget()->layout());
+    vlay->setStretchFactor(box3, 1000);
+    QWidget* space = new QWidget();
+    vlay->addWidget(space, 10);
+*/
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -423,6 +460,8 @@ void FilterSideBarWidget::setConfigGroup(KConfigGroup group)
 
 void FilterSideBarWidget::doLoadState()
 {
+    d->expbox->readSettings();
+
     d->ratingFilter->setRatingFilterCondition((Digikam::ImageFilterSettings::RatingCondition)
             (AlbumSettings::instance()->getRatingFilterCond()));
 
@@ -441,6 +480,8 @@ void FilterSideBarWidget::doLoadState()
 
 void FilterSideBarWidget::doSaveState()
 {
+    d->expbox->writeSettings();
+
     AlbumSettings::instance()->setRatingFilterCond(d->ratingFilter->ratingFilterCondition());
 
     getConfigGroup().writeEntry(entryName(d->configMatchingConditionEntry),
