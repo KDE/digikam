@@ -36,6 +36,7 @@
 
 #include <kselectaction.h>
 #include <khbox.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -171,6 +172,8 @@ class FilterSideBarWidget::FilterSideBarWidgetPriv
 public:
 
     FilterSideBarWidgetPriv() :
+        space(0),
+        expanderVlay(0),
         tagFilterView(0),
         tagFilterSearchBar(0),
         tagFilterModel(0),
@@ -187,6 +190,9 @@ public:
 
     static const QString configLastShowUntaggedEntry;
     static const QString configMatchingConditionEntry;
+
+    QWidget*             space;
+    QVBoxLayout*         expanderVlay;
 
     TagFilterView*       tagFilterView;
     SearchTextBar*       tagFilterSearchBar;
@@ -312,14 +318,14 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
 
     d->expbox->addItem(box4, SmallIcon("favorites"), i18n("Labels Filter"), QString("LabelsFilter"), true);
 
-/*
-    QVBoxLayout* vlay =dynamic_cast<QVBoxLayout*>(dynamic_cast<QScrollArea*>(d->expbox)->widget()->layout());
-    vlay->setStretchFactor(box3, 1000);
-    QWidget* space = new QWidget();
-    vlay->addWidget(space, 10);
-*/
+    d->expanderVlay = dynamic_cast<QVBoxLayout*>(dynamic_cast<QScrollArea*>(d->expbox)->widget()->layout());
+    d->space        = new QWidget();
+    d->expanderVlay->addWidget(d->space);
 
     // --------------------------------------------------------------------------------------------------------
+
+    connect(d->expbox, SIGNAL(signalItemExpanded(int, bool)),
+            this, SLOT(slotItemExpanded(int, bool)));
 
     connect(d->mimeFilter, SIGNAL(activated(int)),
             this, SIGNAL(signalMimeTypeFilterChanged(int)));
@@ -349,6 +355,12 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
 FilterSideBarWidget::~FilterSideBarWidget()
 {
     delete d;
+}
+
+void FilterSideBarWidget::slotItemExpanded(int id, bool b)
+{
+    if (id == 2)
+        d->expanderVlay->setStretchFactor(d->space, b ? 0 : 100);
 }
 
 void FilterSideBarWidget::setFocusToTextFilter()
