@@ -52,14 +52,14 @@ ImageFilterSettings::ImageFilterSettings()
     m_matchingCond   = OrCondition;
 }
 
-void ImageFilterSettings::setDayFilter(const QList<QDateTime>& days)
+bool ImageFilterSettings::isFilteringByDay() const
 {
-    m_dayFilter.clear();
-
-    for (QList<QDateTime>::const_iterator it = days.constBegin(); it != days.constEnd(); ++it)
+    if (!m_dayFilter.isEmpty())
     {
-        m_dayFilter.insert(*it, true);
+        return true;
     }
+
+    return false;
 }
 
 bool ImageFilterSettings::isFilteringByTags() const
@@ -124,9 +124,23 @@ bool ImageFilterSettings::isFilteringByRating() const
 
 bool ImageFilterSettings::isFiltering() const
 {
-    return !m_dayFilter.isEmpty()                   || !m_includeTagFilter.isEmpty()         || !m_excludeTagFilter.isEmpty() ||
-           !m_textFilterSettings.text.isEmpty()     || m_untaggedFilter                      || m_ratingFilter >= 0           ||
-           m_mimeTypeFilter != MimeFilter::AllFiles || !m_colorLabelTagFilter.isEmpty()      || !m_pickLabelTagFilter.isEmpty();
+    return isFilteringByDay()         ||
+           isFilteringByTags()        ||
+           isFilteringByText()        ||
+           isFilteringByRating()      ||
+           isFilteringByTypeMime()    || 
+           isFilteringByColorLabels() || 
+           isFilteringByPickLabels();
+}
+
+void ImageFilterSettings::setDayFilter(const QList<QDateTime>& days)
+{
+    m_dayFilter.clear();
+
+    for (QList<QDateTime>::const_iterator it = days.constBegin(); it != days.constEnd(); ++it)
+    {
+        m_dayFilter.insert(*it, true);
+    }
 }
 
 void ImageFilterSettings::setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags,
@@ -433,10 +447,10 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
             break;
         }
         default:
-    	{
-    	    // All Files: do nothing...
+        {
+            // All Files: do nothing...
             break;
-	}
+        }
     }
 
     //-- Filter by text -----------------------------------------------------------
@@ -480,8 +494,9 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
         }
     }
 
-    // filter by URL-whitelists:
-    // whitelists are always AND for now:
+    // -- filter by URL-whitelists ------------------------------------------------
+    // NOTE: whitelists are always AND for now.
+
     if (match)
     {
         const KUrl url = info.fileUrl();

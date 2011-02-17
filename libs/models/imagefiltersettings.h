@@ -112,6 +112,8 @@ public:
 
 public:
 
+    /// Returns if the day is a filter criteria
+    bool isFilteringByDay() const;
     /// Returns if the type mime is a filter criteria
     bool isFilteringByTypeMime() const;
     /// Returns if the rating is a filter criteria
