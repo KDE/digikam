@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "tagfiltersidebarwidget.moc"
+#include "filtersidebarwidget.moc"
 
 // Qt includes
 
@@ -159,11 +159,11 @@ void TagFilterView::handleCustomContextMenuAction(QAction* action, AlbumPointer<
 
 // --------------------------------------------------------------------------------------------------------
 
-class TagFilterSideBarWidget::TagFilterSideBarWidgetPriv
+class FilterSideBarWidget::FilterSideBarWidgetPriv
 {
 public:
 
-    TagFilterSideBarWidgetPriv() :
+    FilterSideBarWidgetPriv() :
         tagFilterView(0),
         tagFilterSearchBar(0),
         tagFilterModel(0),
@@ -195,13 +195,13 @@ public:
     KComboBox*           matchingConditionComboBox;
 };
 
-const QString TagFilterSideBarWidget::TagFilterSideBarWidgetPriv::configLastShowUntaggedEntry("Show Untagged");
-const QString TagFilterSideBarWidget::TagFilterSideBarWidgetPriv::configMatchingConditionEntry("Matching Condition");
+const QString FilterSideBarWidget::FilterSideBarWidgetPriv::configLastShowUntaggedEntry("Show Untagged");
+const QString FilterSideBarWidget::FilterSideBarWidgetPriv::configMatchingConditionEntry("Matching Condition");
 
 // ---------------------------------------------------------------------------------------------------
 
-TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFilterModel)
-    : QWidget(parent), StateSavingObject(this), d(new TagFilterSideBarWidgetPriv)
+FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterModel)
+    : QWidget(parent), StateSavingObject(this), d(new FilterSideBarWidgetPriv)
 {
     setObjectName("TagFilter Sidebar");
 
@@ -239,7 +239,7 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
     d->withoutTagCheckBox          = new QCheckBox(notTaggedTitle, this);
     d->withoutTagCheckBox->setWhatsThis(i18n("Show images without a tag."));
 
-    KHBox* hbox1                    = new KHBox(this);
+    KHBox* hbox1                   = new KHBox(this);
     QLabel* matchingConditionLabel = new QLabel(i18n("Matching Condition:"), hbox1);
     d->matchingConditionComboBox   = new KComboBox(hbox1);
     d->matchingConditionComboBox->setWhatsThis(matchingConditionLabel->whatsThis());
@@ -309,22 +309,22 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget* parent, TagModel* tagFil
             this, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)));
 }
 
-TagFilterSideBarWidget::~TagFilterSideBarWidget()
+FilterSideBarWidget::~FilterSideBarWidget()
 {
     delete d;
 }
 
-void TagFilterSideBarWidget::setFocusToTextFilter()
+void FilterSideBarWidget::setFocusToTextFilter()
 {
     d->textFilter->setFocus();
 }
 
-void TagFilterSideBarWidget::slotFilterMatchesForText(bool match)
+void FilterSideBarWidget::slotFilterMatchesForText(bool match)
 {
     d->textFilter->slotSearchResult(match);
 }
 
-void TagFilterSideBarWidget::slotResetFilters()
+void FilterSideBarWidget::slotResetFilters()
 {
     d->textFilter->setText(QString());
     d->mimeFilter->setMimeFilter(MimeFilter::AllFiles);
@@ -336,39 +336,39 @@ void TagFilterSideBarWidget::slotResetFilters()
     d->ratingFilter->setRatingFilterCondition(ImageFilterSettings::GreaterEqualCondition);
 }
 
-void TagFilterSideBarWidget::slotMatchingConditionChanged(int index)
+void FilterSideBarWidget::slotMatchingConditionChanged(int index)
 {
     Q_UNUSED(index);
     filterChanged();
 }
 
-void TagFilterSideBarWidget::slotCheckedTagsChanged(const QList<TAlbum*>& includedTags,
-                                                    const QList<TAlbum*>& excludedTags)
+void FilterSideBarWidget::slotCheckedTagsChanged(const QList<TAlbum*>& includedTags,
+                                                 const QList<TAlbum*>& excludedTags)
 {
     Q_UNUSED(includedTags);
     Q_UNUSED(excludedTags);
     filterChanged();
 }
 
-void TagFilterSideBarWidget::slotColorLabelFilterChanged(const QList<ColorLabel>& list)
+void FilterSideBarWidget::slotColorLabelFilterChanged(const QList<ColorLabel>& list)
 {
     Q_UNUSED(list);
     filterChanged();
 }
 
-void TagFilterSideBarWidget::slotPickLabelFilterChanged(const QList<PickLabel>& list)
+void FilterSideBarWidget::slotPickLabelFilterChanged(const QList<PickLabel>& list)
 {
     Q_UNUSED(list);
     filterChanged();
 }
 
-void TagFilterSideBarWidget::slotWithoutTagChanged(int newState)
+void FilterSideBarWidget::slotWithoutTagChanged(int newState)
 {
     Q_UNUSED(newState);
     filterChanged();
 }
 
-void TagFilterSideBarWidget::filterChanged()
+void FilterSideBarWidget::filterChanged()
 {
     bool showUntagged = d->withoutTagCheckBox->checkState() == Qt::Checked;
     ImageFilterSettings::MatchingCondition matchCond =
@@ -415,13 +415,13 @@ void TagFilterSideBarWidget::filterChanged()
     emit signalTagFilterChanged(includedTagIds, excludedTagIds, matchCond, showUntagged, clTagIds, plTagIds);
 }
 
-void TagFilterSideBarWidget::setConfigGroup(KConfigGroup group)
+void FilterSideBarWidget::setConfigGroup(KConfigGroup group)
 {
     StateSavingObject::setConfigGroup(group);
     d->tagFilterView->setConfigGroup(group);
 }
 
-void TagFilterSideBarWidget::doLoadState()
+void FilterSideBarWidget::doLoadState()
 {
     d->ratingFilter->setRatingFilterCondition((Digikam::ImageFilterSettings::RatingCondition)
             (AlbumSettings::instance()->getRatingFilterCond()));
@@ -439,7 +439,7 @@ void TagFilterSideBarWidget::doLoadState()
     filterChanged();
 }
 
-void TagFilterSideBarWidget::doSaveState()
+void FilterSideBarWidget::doSaveState()
 {
     AlbumSettings::instance()->setRatingFilterCond(d->ratingFilter->ratingFilterCondition());
 

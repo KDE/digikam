@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2000-12-05
- * Description : tag filter view for the right sidebar
+ * Description : filter view for the right sidebar
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmx dot net>
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGFILTERSIDEBARWIDGET_H
-#define TAGFILTERSIDEBARWIDGET_H
+#ifndef FILTERSIDEBARWIDGET_H
+#define FILTERSIDEBARWIDGET_H
 
 // Qt includes
 
@@ -85,7 +85,7 @@ private:
  *
  * @author jwienke
  */
-class TagFilterSideBarWidget : public QWidget, public StateSavingObject
+class FilterSideBarWidget : public QWidget, public StateSavingObject
 {
     Q_OBJECT
 
@@ -97,12 +97,12 @@ public:
      * @param parent parent for qt parent child mechanism
      * @param tagFilterModel tag model to work on
      */
-    TagFilterSideBarWidget(QWidget* parent, TagModel* tagFilterModel);
+    FilterSideBarWidget(QWidget* parent, TagModel* tagFilterModel);
 
     /**
      * Destructor.
      */
-    virtual ~TagFilterSideBarWidget();
+    virtual ~FilterSideBarWidget();
 
     virtual void setConfigGroup(KConfigGroup group);
     virtual void doLoadState();
@@ -153,10 +153,10 @@ private:
 
 private:
 
-    class TagFilterSideBarWidgetPriv;
-    TagFilterSideBarWidgetPriv* const d;
+    class FilterSideBarWidgetPriv;
+    FilterSideBarWidgetPriv* const d;
 };
 
 } // nameSpace Digikam
 
-#endif /* TAGFILTERSIDEBARWIDGET_H*/
+#endif /* FILTERSIDEBARWIDGET_H*/

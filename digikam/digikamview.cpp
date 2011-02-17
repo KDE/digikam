@@ -62,7 +62,7 @@
 #include "sidebar.h"
 #include "slideshow.h"
 #include "statusprogressbar.h"
-#include "tagfiltersidebarwidget.h"
+#include "filtersidebarwidget.h"
 #include "tagmodificationhelper.h"
 #include "imagepropertiesversionstab.h"
 #include "tagscache.h"
@@ -105,7 +105,7 @@ public:
         searchModificationHelper(0),
         leftSideBar(0),
         rightSideBar(0),
-        tagFilterWidget(0),
+        filterWidget(0),
         optionAlbumViewPrefix("AlbumView"),
         modelCollection(0)
     {
@@ -155,7 +155,7 @@ public:
     Sidebar*                      leftSideBar;
     ImagePropertiesSideBarDB*     rightSideBar;
 
-    TagFilterSideBarWidget*       tagFilterWidget;
+    FilterSideBarWidget*          filterWidget;
 
     QString                       optionAlbumViewPrefix;
 
@@ -264,8 +264,8 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
     // To the right.
 
     // Tags Filter sidebar tab contents.
-    d->tagFilterWidget = new TagFilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
-    d->rightSideBar->appendTab(d->tagFilterWidget, SmallIcon("view-filter"), i18n("Filters"));
+    d->filterWidget = new FilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
+    d->rightSideBar->appendTab(d->filterWidget, SmallIcon("view-filter"), i18n("Filters"));
 
     // Versions sidebar overlays
     d->rightSideBar->getFiltersHistoryTab()->addOpenAlbumAction(d->iconView->imageModel());
@@ -450,23 +450,23 @@ void DigikamView::setupConnections()
 
     ImageAlbumFilterModel* model = d->iconView->imageAlbumFilterModel();
 
-    connect(d->tagFilterWidget,
+    connect(d->filterWidget,
             SIGNAL(signalTagFilterChanged(const QList<int>&, const QList<int>&,
                                           ImageFilterSettings::MatchingCondition, bool, const QList<int>&, const QList<int>&)),
             d->iconView->imageFilterModel(),
             SLOT(setTagFilter(const QList<int>&, const QList<int>&,
                               ImageFilterSettings::MatchingCondition, bool, const QList<int>&, const QList<int>&)));
 
-    connect(d->tagFilterWidget, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
+    connect(d->filterWidget, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
             model, SLOT(setRatingFilter(int, ImageFilterSettings::RatingCondition)));
 
-    connect(d->tagFilterWidget, SIGNAL(signalTextFilterChanged(const SearchTextSettings&)),
+    connect(d->filterWidget, SIGNAL(signalTextFilterChanged(const SearchTextSettings&)),
             model, SLOT(setTextFilter(const SearchTextSettings&)));
 
     connect(model, SIGNAL(filterMatchesForText(bool)),
-            d->tagFilterWidget, SLOT(slotFilterMatchesForText(bool)));
+            d->filterWidget, SLOT(slotFilterMatchesForText(bool)));
 
-    connect(d->tagFilterWidget, SIGNAL(signalMimeTypeFilterChanged(int)),
+    connect(d->filterWidget, SIGNAL(signalMimeTypeFilterChanged(int)),
             model, SLOT(setMimeTypeFilter(int)));
 
     // -- Preview image widget Connections ------------------------
@@ -591,7 +591,7 @@ void DigikamView::connectIconViewFilter(AlbumIconViewFilter* filter)
             filter, SLOT(slotFilterSettingsChanged(const ImageFilterSettings&)));
 
     connect(filter, SIGNAL(signalResetFilters()),
-            d->tagFilterWidget, SLOT(slotResetFilters()));
+            d->filterWidget, SLOT(slotResetFilters()));
 
     connect(filter, SIGNAL(signalPopupFiltersView()),
             this, SLOT(slotPopupFiltersView()));
@@ -600,8 +600,8 @@ void DigikamView::connectIconViewFilter(AlbumIconViewFilter* filter)
 
 void DigikamView::slotPopupFiltersView()
 {
-    d->rightSideBar->setActiveTab(d->tagFilterWidget);
-    d->tagFilterWidget->setFocusToTextFilter();
+    d->rightSideBar->setActiveTab(d->filterWidget);
+    d->filterWidget->setFocusToTextFilter();
 }
 
 void DigikamView::loadViewState()
@@ -611,7 +611,7 @@ void DigikamView::loadViewState()
         widget->loadState();
     }
 
-    d->tagFilterWidget->loadState();
+    d->filterWidget->loadState();
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
@@ -640,7 +640,7 @@ void DigikamView::saveViewState()
         widget->saveState();
     }
 
-    d->tagFilterWidget->saveState();
+    d->filterWidget->saveState();
 
     // Save the splitter states.
     d->splitter->saveState(group);
