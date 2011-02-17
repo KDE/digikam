@@ -74,12 +74,12 @@ public:
         AndCondition
     };
 
-    bool              untaggedFilter;
-    QList<int>        includeTagFilter;
-    QList<int>        excludeTagFilter;
-    MatchingCondition matchingCond;
-    QList<int>        colorLabelTagFilter;
-    QList<int>        pickLabelTagFilter;
+    bool              m_untaggedFilter;
+    QList<int>        m_includeTagFilter;
+    QList<int>        m_excludeTagFilter;
+    MatchingCondition m_matchingCond;
+    QList<int>        m_colorLabelTagFilter;
+    QList<int>        m_pickLabelTagFilter;
 
     void setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags, MatchingCondition matchingCond,
                       bool showUnTagged, const QList<int>& clTagIds, const QList<int>& plTagIds);
@@ -94,30 +94,34 @@ public:
         LessEqualCondition
     };
 
-    int                             ratingFilter;
-    RatingCondition                 ratingCond;
+    int                             m_ratingFilter;
+    RatingCondition                 m_ratingCond;
 
     void setRatingFilter(int rating, RatingCondition ratingCond);
 
     /// --- Date filter ---
 
-    QMap<QDateTime, bool>           dayFilter;
+    QMap<QDateTime, bool>           m_dayFilter;
+
     void setDayFilter(const QList<QDateTime>& days);
 
     /// --- Text filter ---
 
-    SearchTextSettings              textFilterSettings;
+    SearchTextSettings              m_textFilterSettings;
+
     void setTextFilter(const SearchTextSettings& settings);
 
     /// Helpers for text search: Set these if you want to search album or tag names with text search
-    QHash<int, QString> tagNameHash;
-    QHash<int, QString> albumNameHash;
+    QHash<int, QString>             m_tagNameHash;
+    QHash<int, QString>             m_albumNameHash;
+
     void setTagNames(const QHash<int, QString>& tagNameHash);
     void setAlbumNames(const QHash<int, QString>& albumNameHash);
 
     /// --- Mime filter ---
 
-    MimeFilter::TypeMimeFilter mimeTypeFilter;
+    MimeFilter::TypeMimeFilter m_mimeTypeFilter;
+
     void setMimeTypeFilter(int mimeTypeFilter);
 
     /// Returns if the type mime is a filter criteria
@@ -136,11 +140,13 @@ public:
     bool isFiltering() const;
 
     /// --- URL whitelist filter
-    QHash<QString,KUrl::List> urlWhitelists;
+    QHash<QString,KUrl::List>        m_urlWhitelists;
+
     void setUrlWhitelist(const KUrl::List& urlList, const QString& id);
 
     /// --- ID whitelist filter
-    QHash<QString,QList<qlonglong> > idWhitelists;
+    QHash<QString,QList<qlonglong> > m_idWhitelists;
+
     void setIdWhitelist(const QList<qlonglong>& idList, const QString& id);
 
     /// --- Change notification ---
@@ -153,6 +159,7 @@ public:
 };
 
 // ---------------------------------------------------------------------------------------
+
 class VersionManagerSettings;
 
 class DIGIKAM_DATABASE_EXPORT VersionImageFilterSettings
@@ -190,10 +197,10 @@ public:
 
 protected:
 
-    QList<int>                       excludeTagFilter;
-    int                              includeTagFilter;
-    int                              exceptionTagFilter;
-    QHash<QString,QList<qlonglong> > exceptionLists;
+    QList<int>                       m_excludeTagFilter;
+    int                              m_includeTagFilter;
+    int                              m_exceptionTagFilter;
+    QHash<QString,QList<qlonglong> > m_exceptionLists;
 };
 
 } // namespace Digikam

@@ -45,26 +45,26 @@ namespace Digikam
 
 ImageFilterSettings::ImageFilterSettings()
 {
-    untaggedFilter = false;
-    ratingFilter   = 0;
-    mimeTypeFilter = MimeFilter::AllFiles;
-    ratingCond     = GreaterEqualCondition;
-    matchingCond   = OrCondition;
+    m_untaggedFilter = false;
+    m_ratingFilter   = 0;
+    m_mimeTypeFilter = MimeFilter::AllFiles;
+    m_ratingCond     = GreaterEqualCondition;
+    m_matchingCond   = OrCondition;
 }
 
 void ImageFilterSettings::setDayFilter(const QList<QDateTime>& days)
 {
-    dayFilter.clear();
+    m_dayFilter.clear();
 
     for (QList<QDateTime>::const_iterator it = days.constBegin(); it != days.constEnd(); ++it)
     {
-        dayFilter.insert(*it, true);
+        m_dayFilter.insert(*it, true);
     }
 }
 
 bool ImageFilterSettings::isFilteringByTags() const
 {
-    if (!includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty() || untaggedFilter)
+    if (!m_includeTagFilter.isEmpty() || !m_excludeTagFilter.isEmpty() || m_untaggedFilter)
     {
         return true;
     }
@@ -74,7 +74,7 @@ bool ImageFilterSettings::isFilteringByTags() const
 
 bool ImageFilterSettings::isFilteringByColorLabels() const
 {
-    if (!colorLabelTagFilter.isEmpty())
+    if (!m_colorLabelTagFilter.isEmpty())
     {
         return true;
     }
@@ -84,7 +84,7 @@ bool ImageFilterSettings::isFilteringByColorLabels() const
 
 bool ImageFilterSettings::isFilteringByPickLabels() const
 {
-    if (!pickLabelTagFilter.isEmpty())
+    if (!m_pickLabelTagFilter.isEmpty())
     {
         return true;
     }
@@ -94,7 +94,7 @@ bool ImageFilterSettings::isFilteringByPickLabels() const
 
 bool ImageFilterSettings::isFilteringByText() const
 {
-    if (!textFilterSettings.text.isEmpty())
+    if (!m_textFilterSettings.text.isEmpty())
     {
         return true;
     }
@@ -104,7 +104,7 @@ bool ImageFilterSettings::isFilteringByText() const
 
 bool ImageFilterSettings::isFilteringByTypeMime() const
 {
-    if (mimeTypeFilter != MimeFilter::AllFiles)
+    if (m_mimeTypeFilter != MimeFilter::AllFiles)
     {
         return true;
     }
@@ -114,7 +114,7 @@ bool ImageFilterSettings::isFilteringByTypeMime() const
 
 bool ImageFilterSettings::isFilteringByRating() const
 {
-    if (ratingFilter != 0 || ratingCond != GreaterEqualCondition)
+    if (m_ratingFilter != 0 || m_ratingCond != GreaterEqualCondition)
     {
         return true;
     }
@@ -124,58 +124,58 @@ bool ImageFilterSettings::isFilteringByRating() const
 
 bool ImageFilterSettings::isFiltering() const
 {
-    return !dayFilter.isEmpty()                   || !includeTagFilter.isEmpty()         || !excludeTagFilter.isEmpty() ||
-           !textFilterSettings.text.isEmpty()     || untaggedFilter || ratingFilter >= 0 ||
-           mimeTypeFilter != MimeFilter::AllFiles || !colorLabelTagFilter.isEmpty()      || !pickLabelTagFilter.isEmpty();
+    return !m_dayFilter.isEmpty()                   || !m_includeTagFilter.isEmpty()         || !m_excludeTagFilter.isEmpty() ||
+           !m_textFilterSettings.text.isEmpty()     || m_untaggedFilter                      || m_ratingFilter >= 0           ||
+           m_mimeTypeFilter != MimeFilter::AllFiles || !m_colorLabelTagFilter.isEmpty()      || !m_pickLabelTagFilter.isEmpty();
 }
 
 void ImageFilterSettings::setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags,
                                        MatchingCondition matchingCondition, bool showUnTagged,
                                        const QList<int>& clTagIds, const QList<int>& plTagIds)
 {
-    includeTagFilter    = includedTags;
-    excludeTagFilter    = excludedTags;
-    matchingCond        = matchingCondition;
-    untaggedFilter      = showUnTagged;
-    colorLabelTagFilter = clTagIds;
-    pickLabelTagFilter  = plTagIds;
+    m_includeTagFilter    = includedTags;
+    m_excludeTagFilter    = excludedTags;
+    m_matchingCond        = matchingCondition;
+    m_untaggedFilter      = showUnTagged;
+    m_colorLabelTagFilter = clTagIds;
+    m_pickLabelTagFilter  = plTagIds;
 }
 
 void ImageFilterSettings::setRatingFilter(int rating, RatingCondition ratingCondition)
 {
-    ratingFilter = rating;
-    ratingCond   = ratingCondition;
+    m_ratingFilter = rating;
+    m_ratingCond   = ratingCondition;
 }
 
 void ImageFilterSettings::setMimeTypeFilter(int mime)
 {
-    mimeTypeFilter = (MimeFilter::TypeMimeFilter)mime;
+    m_mimeTypeFilter = (MimeFilter::TypeMimeFilter)mime;
 }
 
 void ImageFilterSettings::setTextFilter(const SearchTextSettings& settings)
 {
-    textFilterSettings = settings;
+    m_textFilterSettings = settings;
 }
 
 void ImageFilterSettings::setTagNames(const QHash<int, QString>& hash)
 {
-    tagNameHash = hash;
+    m_tagNameHash = hash;
 }
 
 void ImageFilterSettings::setAlbumNames(const QHash<int, QString>& hash)
 {
-    albumNameHash = hash;
+    m_albumNameHash = hash;
 }
 
 void ImageFilterSettings::setUrlWhitelist(const KUrl::List& urlList, const QString& id)
 {
     if (urlList.isEmpty())
     {
-        urlWhitelists.remove(id);
+        m_urlWhitelists.remove(id);
     }
     else
     {
-        urlWhitelists.insert(id, urlList);
+        m_urlWhitelists.insert(id, urlList);
     }
 }
 
@@ -183,11 +183,11 @@ void ImageFilterSettings::setIdWhitelist(const QList<qlonglong>& idList, const Q
 {
     if (idList.isEmpty())
     {
-        idWhitelists.remove(id);
+        m_idWhitelists.remove(id);
     }
     else
     {
-        idWhitelists.insert(id, idList);
+        m_idWhitelists.insert(id, idList);
     }
 }
 
@@ -205,16 +205,16 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
     bool match = false;
 
-    if (!includeTagFilter.isEmpty() || !excludeTagFilter.isEmpty())
+    if (!m_includeTagFilter.isEmpty() || !m_excludeTagFilter.isEmpty())
     {
         QList<int> tagIds = info.tagIds();
         QList<int>::const_iterator it;
 
-        match = includeTagFilter.isEmpty();
+        match = m_includeTagFilter.isEmpty();
 
-        if (matchingCond == OrCondition)
+        if (m_matchingCond == OrCondition)
         {
-            for (it = includeTagFilter.begin(); it != includeTagFilter.end(); ++it)
+            for (it = m_includeTagFilter.begin(); it != m_includeTagFilter.end(); ++it)
             {
                 if (tagIds.contains(*it))
                 {
@@ -223,14 +223,14 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
                 }
             }
 
-            match |= (untaggedFilter && tagIds.isEmpty());
+            match |= (m_untaggedFilter && tagIds.isEmpty());
         }
         else // AND matching condition...
         {
-            // untaggedFilter and non-empty tag filter, combined with AND, is logically no match
-            if (!untaggedFilter)
+            // m_untaggedFilter and non-empty tag filter, combined with AND, is logically no match
+            if (!m_untaggedFilter)
             {
-                for (it = includeTagFilter.begin(); it != includeTagFilter.end(); ++it)
+                for (it = m_includeTagFilter.begin(); it != m_includeTagFilter.end(); ++it)
                 {
                     if (!tagIds.contains(*it))
                     {
@@ -238,14 +238,14 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
                     }
                 }
 
-                if (it == includeTagFilter.end())
+                if (it == m_includeTagFilter.end())
                 {
                     match = true;
                 }
             }
         }
 
-        for (it = excludeTagFilter.begin(); it != excludeTagFilter.end(); ++it)
+        for (it = m_excludeTagFilter.begin(); it != m_excludeTagFilter.end(); ++it)
         {
             if (tagIds.contains(*it))
             {
@@ -254,7 +254,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
             }
         }
     }
-    else if (untaggedFilter)
+    else if (m_untaggedFilter)
     {
         match = info.tagIds().isEmpty();
     }
@@ -265,12 +265,12 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
     //-- Filter by pick labels ------------------------------------------------
 
-    if (!pickLabelTagFilter.isEmpty())
+    if (!m_pickLabelTagFilter.isEmpty())
     {
         bool matchPL      = false;
         QList<int> tagIds = info.tagIds();
 
-        for (QList<int>::const_iterator it = pickLabelTagFilter.begin(); it != pickLabelTagFilter.end(); ++it)
+        for (QList<int>::const_iterator it = m_pickLabelTagFilter.begin(); it != m_pickLabelTagFilter.end(); ++it)
         {
             if (tagIds.contains(*it))
             {
@@ -284,12 +284,12 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
     //-- Filter by color labels ------------------------------------------------
 
-    if (!colorLabelTagFilter.isEmpty())
+    if (!m_colorLabelTagFilter.isEmpty())
     {
         bool matchCL      = false;
         QList<int> tagIds = info.tagIds();
 
-        for (QList<int>::const_iterator it = colorLabelTagFilter.begin(); it != colorLabelTagFilter.end(); ++it)
+        for (QList<int>::const_iterator it = m_colorLabelTagFilter.begin(); it != m_colorLabelTagFilter.end(); ++it)
         {
             if (tagIds.contains(*it))
             {
@@ -303,14 +303,14 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
     //-- Filter by date -----------------------------------------------------------
 
-    if (!dayFilter.isEmpty())
+    if (!m_dayFilter.isEmpty())
     {
-        match &= dayFilter.contains(QDateTime(info.dateTime().date(), QTime()));
+        match &= m_dayFilter.contains(QDateTime(info.dateTime().date(), QTime()));
     }
 
     //-- Filter by rating ---------------------------------------------------------
 
-    if (ratingFilter >= 0)
+    if (m_ratingFilter >= 0)
     {
         // for now we treat -1 (no rating) just like a rating of 0.
         int rating = info.rating();
@@ -320,18 +320,18 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
             rating = 0;
         }
 
-        if (ratingCond == GreaterEqualCondition)
+        if (m_ratingCond == GreaterEqualCondition)
         {
             // If the rating is not >=, i.e it is <, then it does not match.
-            if (rating < ratingFilter)
+            if (rating < m_ratingFilter)
             {
                 match = false;
             }
         }
-        else if (ratingCond == EqualCondition)
+        else if (m_ratingCond == EqualCondition)
         {
             // If the rating is not =, i.e it is !=, then it does not match.
-            if (rating != ratingFilter)
+            if (rating != m_ratingFilter)
             {
                 match = false;
             }
@@ -339,7 +339,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
         else
         {
             // If the rating is not <=, i.e it is >, then it does not match.
-            if (rating > ratingFilter)
+            if (rating > m_ratingFilter)
             {
                 match = false;
             }
@@ -348,7 +348,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
     // -- Filter by mime type -----------------------------------------------------
 
-    switch (mimeTypeFilter)
+    switch (m_mimeTypeFilter)
     {
             // info.format is a standardized string: Only one possibility per mime type
         case MimeFilter::ImageFiles:
@@ -432,24 +432,27 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
             break;
         }
-        default:        // All Files: do nothing...
+        default:
+    	{
+    	    // All Files: do nothing...
             break;
+	}
     }
 
     //-- Filter by text -----------------------------------------------------------
 
-    if (!textFilterSettings.text.isEmpty())
+    if (!m_textFilterSettings.text.isEmpty())
     {
         bool textMatch = false;
 
         // Image name
-        if (info.name().contains(textFilterSettings.text, textFilterSettings.caseSensitive))
+        if (info.name().contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
         {
             textMatch = true;
         }
 
         // Image comment
-        if (info.comment().contains(textFilterSettings.text, textFilterSettings.caseSensitive))
+        if (info.comment().contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
         {
             textMatch = true;
         }
@@ -457,14 +460,14 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
         // Tag names
         foreach (int id, info.tagIds())
         {
-            if (tagNameHash.value(id).contains(textFilterSettings.text, textFilterSettings.caseSensitive))
+            if (m_tagNameHash.value(id).contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
             {
                 textMatch = true;
             }
         }
 
         // Album names
-        if (albumNameHash.value(info.albumId()).contains(textFilterSettings.text, textFilterSettings.caseSensitive))
+        if (m_albumNameHash.value(info.albumId()).contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
         {
             textMatch = true;
         }
@@ -483,7 +486,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
     {
         const KUrl url = info.fileUrl();
 
-        for (QHash<QString, KUrl::List>::const_iterator it = urlWhitelists.constBegin(); it!=urlWhitelists.constEnd(); ++it)
+        for (QHash<QString, KUrl::List>::const_iterator it = m_urlWhitelists.constBegin(); it!=m_urlWhitelists.constEnd(); ++it)
         {
             match = it->contains(url);
 
@@ -498,7 +501,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
     {
         const qlonglong id = info.id();
 
-        for (QHash<QString, QList<qlonglong> >::const_iterator it = idWhitelists.constBegin(); it!=idWhitelists.constEnd(); ++it)
+        for (QHash<QString, QList<qlonglong> >::const_iterator it = m_idWhitelists.constBegin(); it!=m_idWhitelists.constEnd(); ++it)
         {
             match = it->contains(id);
 
@@ -516,23 +519,23 @@ DatabaseFields::Set ImageFilterSettings::watchFlags() const
 {
     DatabaseFields::Set set;
 
-    if (!dayFilter.isEmpty())
+    if (!m_dayFilter.isEmpty())
     {
         set |= DatabaseFields::CreationDate;
     }
 
-    if (!textFilterSettings.text.isEmpty())
+    if (!m_textFilterSettings.text.isEmpty())
     {
         set |= DatabaseFields::Name;
         set |= DatabaseFields::Comment;
     }
 
-    if (ratingFilter >= 0)
+    if (m_ratingFilter >= 0)
     {
         set |= DatabaseFields::Rating;
     }
 
-    if (mimeTypeFilter != MimeFilter::AllFiles)
+    if (m_mimeTypeFilter != MimeFilter::AllFiles)
     {
         set |= DatabaseFields::Category;
         set |= DatabaseFields::Format;
@@ -541,7 +544,7 @@ DatabaseFields::Set ImageFilterSettings::watchFlags() const
     return set;
 }
 
-// -----------------
+// -------------------------------------------------------------------------------------------------
 
 VersionImageFilterSettings::VersionImageFilterSettings()
 {
@@ -554,8 +557,8 @@ VersionImageFilterSettings::VersionImageFilterSettings(const VersionManagerSetti
 
 bool VersionImageFilterSettings::operator==(const VersionImageFilterSettings& other) const
 {
-    return excludeTagFilter == other.excludeTagFilter
-        && exceptionLists == other.exceptionLists;
+    return m_excludeTagFilter == other.m_excludeTagFilter &&
+           m_exceptionLists   == other.m_exceptionLists;
 }
 
 bool VersionImageFilterSettings::matches(const ImageInfo& info) const
@@ -566,8 +569,9 @@ bool VersionImageFilterSettings::matches(const ImageInfo& info) const
     }
 
     const qlonglong id = info.id();
-    for (QHash<QString, QList<qlonglong> >::const_iterator it = exceptionLists.constBegin();
-         it != exceptionLists.constEnd(); ++it)
+
+    for (QHash<QString, QList<qlonglong> >::const_iterator it = m_exceptionLists.constBegin();
+         it != m_exceptionLists.constEnd(); ++it)
     {
         if (it->contains(id))
         {
@@ -575,14 +579,13 @@ bool VersionImageFilterSettings::matches(const ImageInfo& info) const
         }
     }
 
-    bool match = true;
-
+    bool match        = true;
     QList<int> tagIds = info.tagIds();
 
-    if (!tagIds.contains(includeTagFilter))
+    if (!tagIds.contains(m_includeTagFilter))
     {
-        for (QList<int>::const_iterator it = excludeTagFilter.begin();
-            it != excludeTagFilter.end(); ++it)
+        for (QList<int>::const_iterator it = m_excludeTagFilter.begin();
+            it != m_excludeTagFilter.end(); ++it)
         {
             if (tagIds.contains(*it))
             {
@@ -594,7 +597,7 @@ bool VersionImageFilterSettings::matches(const ImageInfo& info) const
 
     if (!match)
     {
-        if (tagIds.contains(exceptionTagFilter))
+        if (tagIds.contains(m_exceptionTagFilter))
         {
             match = true;
         }
@@ -606,7 +609,7 @@ bool VersionImageFilterSettings::matches(const ImageInfo& info) const
 bool VersionImageFilterSettings::isHiddenBySettings(const ImageInfo& info) const
 {
     QList<int> tagIds = info.tagIds();
-    foreach (int tagId, excludeTagFilter)
+    foreach (int tagId, m_excludeTagFilter)
     {
         if (tagIds.contains(tagId))
         {
@@ -618,49 +621,47 @@ bool VersionImageFilterSettings::isHiddenBySettings(const ImageInfo& info) const
 
 bool VersionImageFilterSettings::isExemptedBySettings(const ImageInfo& info) const
 {
-    return info.tagIds().contains(exceptionTagFilter);
+    return info.tagIds().contains(m_exceptionTagFilter);
 }
 
 void VersionImageFilterSettings::setVersionManagerSettings(const VersionManagerSettings& settings)
 {
-    excludeTagFilter.clear();
+    m_excludeTagFilter.clear();
 
     if (!(settings.showInViewFlags & VersionManagerSettings::ShowOriginal))
     {
-        excludeTagFilter << TagsCache::instance()->getOrCreateInternalTag(InternalTagName::originalVersion());
+        m_excludeTagFilter << TagsCache::instance()->getOrCreateInternalTag(InternalTagName::originalVersion());
     }
 
     if (!(settings.showInViewFlags & VersionManagerSettings::ShowIntermediates))
     {
-        excludeTagFilter << TagsCache::instance()->getOrCreateInternalTag(InternalTagName::intermediateVersion());
+        m_excludeTagFilter << TagsCache::instance()->getOrCreateInternalTag(InternalTagName::intermediateVersion());
     }
 
-    includeTagFilter = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::currentVersion());
-    exceptionTagFilter = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::versionAlwaysVisible());
+    m_includeTagFilter   = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::currentVersion());
+    m_exceptionTagFilter = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::versionAlwaysVisible());
 }
 
 void VersionImageFilterSettings::setExceptionList(const QList<qlonglong>& idList, const QString& id)
 {
     if (idList.isEmpty())
     {
-        exceptionLists.remove(id);
+        m_exceptionLists.remove(id);
     }
     else
     {
-        exceptionLists.insert(id, idList);
+        m_exceptionLists.insert(id, idList);
     }
 }
 
 bool VersionImageFilterSettings::isFiltering() const
 {
-    return !excludeTagFilter.isEmpty();
+    return !m_excludeTagFilter.isEmpty();
 }
 
 bool VersionImageFilterSettings::isFilteringByTags() const
 {
     return isFiltering();
 }
-
-
 
 } // namespace Digikam
