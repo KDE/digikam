@@ -106,7 +106,6 @@ protected:
     virtual void invalidatePaintingCache();
     virtual void updateSizeRectsAndPixmaps();
 
-
     void setModel(QAbstractItemModel* model);
 
     ImageDelegate(ImageDelegate::ImageDelegatePrivate& dd, QObject* parent);

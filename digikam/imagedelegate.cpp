@@ -315,7 +315,26 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     }
 
     // Draw Pick Label icon
-    drawPickLabelIcon(p, option, isSelected, info.pickLabel());
+    int pickId = info.pickLabel();
+    if (pickId != NoPickLabel)
+    {
+        QIcon icon;
+        int size = KIconLoader::SizeSmallMedium;
+
+        if (pickId == RejectedLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, size);
+        }
+        else if (pickId == PendingLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, size);
+        }
+        else if (pickId == AcceptedLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, size);
+        }
+        icon.paint(p, d->pixmapRect.left(), d->pixmapRect.bottom()-size+2, size, size);
+    }
 
     p->restore();
 

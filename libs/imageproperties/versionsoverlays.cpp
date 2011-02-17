@@ -69,7 +69,8 @@ QSize ShowHideVersionsOverlay::Button::sizeHint() const
 
 QPixmap ShowHideVersionsOverlay::Button::icon()
 {
-    const char* icon = isChecked() ? "layer-visible-off" : "layer-visible-on";
+    const char* icon = isChecked() ? "edit-bomb" : "edit-clear-history";
+    //const char* icon = isChecked() ? "layer-visible-off" : "layer-visible-on";
     return KIconLoader::global()->loadIcon(icon,
                                            KIconLoader::NoGroup,
                                            KIconLoader::SizeSmall);

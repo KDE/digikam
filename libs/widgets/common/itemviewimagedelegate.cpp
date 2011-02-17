@@ -394,7 +394,7 @@ void ItemViewImageDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewIte
     }
 }
 
-void ItemViewImageDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option, 
+void ItemViewImageDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option,
                                                bool isSelected, int colorId) const
 {
     Q_D(const ItemViewImageDelegate);
@@ -408,33 +408,6 @@ void ItemViewImageDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionVi
         p->setPen(QPen(ColorLabelWidget::labelColor((ColorLabel)colorId), 5, Qt::SolidLine));
         p->drawRect(3, 3, d->rect.width()-7, d->rect.height()-7);
     }
-}
-
-void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QStyleOptionViewItem& option, 
-                                               bool isSelected, int pickId) const
-{
-    Q_D(const ItemViewImageDelegate);
-    Q_UNUSED(option);
-    Q_UNUSED(isSelected);
-
-    if (pickId == NoPickLabel) return;
-
-    QIcon icon;
-    int size = KIconLoader::SizeSmallMedium;
-
-    if (pickId == RejectedLabel)
-    {
-        icon = KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, size);
-    }
-    else if (pickId == PendingLabel)
-    {
-        icon = KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, size);
-    }
-    else if (pickId == AcceptedLabel)
-    {
-        icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, size);
-    }
-    icon.paint(p, d->rect.width()/2 - size/2, 10, size, size);
 }
 
 void ItemViewImageDelegate::drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const
