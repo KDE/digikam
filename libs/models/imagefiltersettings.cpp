@@ -52,6 +52,45 @@ ImageFilterSettings::ImageFilterSettings()
     m_matchingCond   = OrCondition;
 }
 
+DatabaseFields::Set ImageFilterSettings::watchFlags() const
+{
+    DatabaseFields::Set set;
+
+    if (isFilteringByDay())
+    {
+        set |= DatabaseFields::CreationDate;
+    }
+
+    if (isFilteringByText())
+    {
+        set |= DatabaseFields::Name;
+        set |= DatabaseFields::Comment;
+    }
+
+    if (isFilteringByRating())
+    {
+        set |= DatabaseFields::Rating;
+    }
+
+    if (isFilteringByTypeMime())
+    {
+        set |= DatabaseFields::Category;
+        set |= DatabaseFields::Format;
+    }
+
+    if (isFilteringByColorLabels())
+    {
+        set |= DatabaseFields::ColorLabel;
+    }
+
+    if (isFilteringByPickLabels())
+    {
+        set |= DatabaseFields::PickLabel;
+    }
+
+    return set;
+}
+
 bool ImageFilterSettings::isFilteringByDay() const
 {
     if (!m_dayFilter.isEmpty())
@@ -528,35 +567,6 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
     }
 
     return match;
-}
-
-DatabaseFields::Set ImageFilterSettings::watchFlags() const
-{
-    DatabaseFields::Set set;
-
-    if (!m_dayFilter.isEmpty())
-    {
-        set |= DatabaseFields::CreationDate;
-    }
-
-    if (!m_textFilterSettings.text.isEmpty())
-    {
-        set |= DatabaseFields::Name;
-        set |= DatabaseFields::Comment;
-    }
-
-    if (m_ratingFilter >= 0)
-    {
-        set |= DatabaseFields::Rating;
-    }
-
-    if (m_mimeTypeFilter != MimeFilter::AllFiles)
-    {
-        set |= DatabaseFields::Category;
-        set |= DatabaseFields::Format;
-    }
-
-    return set;
 }
 
 // -------------------------------------------------------------------------------------------------
