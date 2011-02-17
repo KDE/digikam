@@ -65,6 +65,8 @@ public:
      */
     bool matches(const ImageInfo& info, bool* foundText = 0) const;
 
+public:
+
     /// --- Tags filter ---
 
     /// Possible logical matching condition used to sort tags id.
@@ -74,15 +76,10 @@ public:
         AndCondition
     };
 
-    bool              m_untaggedFilter;
-    QList<int>        m_includeTagFilter;
-    QList<int>        m_excludeTagFilter;
-    MatchingCondition m_matchingCond;
-    QList<int>        m_colorLabelTagFilter;
-    QList<int>        m_pickLabelTagFilter;
-
     void setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags, MatchingCondition matchingCond,
                       bool showUnTagged, const QList<int>& clTagIds, const QList<int>& plTagIds);
+
+public:
 
     /// --- Rating filter ---
 
@@ -94,35 +91,26 @@ public:
         LessEqualCondition
     };
 
-    int                             m_ratingFilter;
-    RatingCondition                 m_ratingCond;
-
     void setRatingFilter(int rating, RatingCondition ratingCond);
 
+public:
+
     /// --- Date filter ---
-
-    QMap<QDateTime, bool>           m_dayFilter;
-
     void setDayFilter(const QList<QDateTime>& days);
 
+public:
+
     /// --- Text filter ---
-
-    SearchTextSettings              m_textFilterSettings;
-
     void setTextFilter(const SearchTextSettings& settings);
-
-    /// Helpers for text search: Set these if you want to search album or tag names with text search
-    QHash<int, QString>             m_tagNameHash;
-    QHash<int, QString>             m_albumNameHash;
-
     void setTagNames(const QHash<int, QString>& tagNameHash);
     void setAlbumNames(const QHash<int, QString>& albumNameHash);
 
+public:
+
     /// --- Mime filter ---
-
-    MimeFilter::TypeMimeFilter m_mimeTypeFilter;
-
     void setMimeTypeFilter(int mimeTypeFilter);
+
+public:
 
     /// Returns if the type mime is a filter criteria
     bool isFilteringByTypeMime() const;
@@ -139,15 +127,17 @@ public:
     /// Returns if images will be filtered by these criteria at all
     bool isFiltering() const;
 
-    /// --- URL whitelist filter
-    QHash<QString,KUrl::List>        m_urlWhitelists;
+public:
 
+    /// --- URL whitelist filter
     void setUrlWhitelist(const KUrl::List& urlList, const QString& id);
 
-    /// --- ID whitelist filter
-    QHash<QString,QList<qlonglong> > m_idWhitelists;
+public:
 
+    /// --- ID whitelist filter
     void setIdWhitelist(const QList<qlonglong>& idList, const QString& id);
+
+public:
 
     /// --- Change notification ---
 
@@ -156,6 +146,39 @@ public:
      *  The text filter will also be affected by changes in tags and album names.
      */
     DatabaseFields::Set watchFlags() const;
+
+private:
+
+    /// --- Tags filter ---
+    bool                             m_untaggedFilter;
+    QList<int>                       m_includeTagFilter;
+    QList<int>                       m_excludeTagFilter;
+    MatchingCondition                m_matchingCond;
+    QList<int>                       m_colorLabelTagFilter;
+    QList<int>                       m_pickLabelTagFilter;
+
+    /// --- Rating filter ---
+    int                              m_ratingFilter;
+    RatingCondition                  m_ratingCond;
+
+    /// --- Date filter ---
+    QMap<QDateTime, bool>            m_dayFilter;
+
+    /// --- Text filter ---
+    SearchTextSettings               m_textFilterSettings;
+
+    /// Helpers for text search: Set these if you want to search album or tag names with text search
+    QHash<int, QString>              m_tagNameHash;
+    QHash<int, QString>              m_albumNameHash;
+
+    /// --- Mime filter ---
+    MimeFilter::TypeMimeFilter       m_mimeTypeFilter;
+
+    /// --- URL whitelist filter
+    QHash<QString,KUrl::List>        m_urlWhitelists;
+
+    /// --- ID whitelist filter
+    QHash<QString,QList<qlonglong> > m_idWhitelists;
 };
 
 // ---------------------------------------------------------------------------------------
