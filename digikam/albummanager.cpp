@@ -2642,7 +2642,7 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
     return true;
 }
 
-AlbumList AlbumManager::getRecentlyAssignedTags() const
+AlbumList AlbumManager::getRecentlyAssignedTags(bool includeInternal) const
 {
     QList<int> tagIDs = DatabaseAccess().db()->getRecentlyAssignedTags();
 
@@ -2650,7 +2650,16 @@ AlbumList AlbumManager::getRecentlyAssignedTags() const
 
     for (QList<int>::const_iterator it = tagIDs.constBegin() ; it != tagIDs.constEnd() ; ++it)
     {
-        resultList.append(findTAlbum(*it));
+        TAlbum* album = findTAlbum(*it);
+        if (album)
+        {
+            if (!includeInternal && album->isInternalTag())
+            {
+                continue;
+            }
+
+            resultList.append(album);
+        }
     }
 
     return resultList;

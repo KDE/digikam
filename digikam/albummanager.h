@@ -424,8 +424,9 @@ public:
     /**
      * Get a list of recently assigned tags (only last 6 tags are listed)
      * @return the list of recently assigned TAlbums
+     * @param includeInternal include internal tags in the returned list, or skip them
      */
-    AlbumList getRecentlyAssignedTags() const;
+    AlbumList getRecentlyAssignedTags(bool includeInternal = false) const;
 
     /**
      * @return A list with the tag paths for a list of tag IDs.
