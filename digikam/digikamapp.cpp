@@ -2584,8 +2584,18 @@ void DigikamApp::slotKipiPluginPlug()
     d->kipiAlbumActions.clear();
 
     KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
+    int cpt                             = 0;
 
-    int cpt = 0;
+    // List of obsolete kipi-plugins to not load.
+    QStringList pluginActionsDisabled;
+    pluginActionsDisabled << QString("gpssync2");              // Experimental plugin renamed gpssync during GoSC2010.
+    pluginActionsDisabled << QString("raw_converter_single");  // Obsolete since 0.9.5 and new Raw Import tool.
+    pluginActionsDisabled << QString("batch_rename_images");   // Obsolete since 1.0.0, replaced by AdvancedRename.
+    pluginActionsDisabled << QString("batch_border_images");   // Obsolete since 1.2.0, replaced by BQM border tool.
+    pluginActionsDisabled << QString("batch_convert_images");  // Obsolete since 1.2.0, replaced by BQM convert tool.
+    pluginActionsDisabled << QString("batch_color_images");    // Obsolete since 1.2.0, replaced by BQM color tool.
+    pluginActionsDisabled << QString("batch_filter_images");   // Obsolete since 1.2.0, replaced by BQM enhance tool.
+    pluginActionsDisabled << QString("jpeglossless_convert2grayscale"); // Obsolete since 1.7.0, replaced by BQM B&W tool.
 
     for ( KIPI::PluginLoader::PluginList::ConstIterator it = list.constBegin() ;
           it != list.constEnd() ; ++it )
@@ -2600,18 +2610,6 @@ void DigikamApp::slotKipiPluginPlug()
         ++cpt;
 
         plugin->setup( this );
-
-
-        // List of obsolete kipi-plugins to not load.
-        QStringList pluginActionsDisabled;
-        pluginActionsDisabled << QString("gpssync2");              // Experimental plugin renamed gpssync during GoSC2010.
-        pluginActionsDisabled << QString("raw_converter_single");  // Obsolete since 0.9.5 and new Raw Import tool.
-        pluginActionsDisabled << QString("batch_rename_images");   // Obsolete since 1.0.0, replaced by AdvancedRename.
-        pluginActionsDisabled << QString("batch_border_images");   // Obsolete since 1.2.0, replaced by BQM border tool.
-        pluginActionsDisabled << QString("batch_convert_images");  // Obsolete since 1.2.0, replaced by BQM convert tools.
-        pluginActionsDisabled << QString("batch_color_images");    // Obsolete since 1.2.0, replaced by BQM color tools.
-        pluginActionsDisabled << QString("batch_filter_images");   // Obsolete since 1.2.0, replaced by BQM enhance tools.
-        pluginActionsDisabled << QString("jpeglossless_convert2grayscale");
 
         // Add actions to kipipluginsActionCollection
         QList<QAction*> allPluginActions = plugin->actionCollection()->actions();
@@ -2654,17 +2652,25 @@ void DigikamApp::slotKipiPluginPlug()
                 switch (plugin->category(action))
                 {
                     case KIPI::BatchPlugin:
+                    {
                         d->kipiBatchActions.append(action);
                         break;
+                    }
                     case KIPI::CollectionsPlugin:
+                    {
                         d->kipiAlbumActions.append(action);
                         break;
+                    }
                     case KIPI::ImportPlugin:
+                    {
                         d->kipiFileActionsImport.append(action);
                         break;
+                    }
                     case KIPI::ExportPlugin:
+                    {
                         d->kipiFileActionsExport.append(action);
                         break;
+                    }
                     case KIPI::ImagesPlugin:
                     {
                         if (plugin->objectName() == "JPEGLossless")
@@ -2702,8 +2708,10 @@ void DigikamApp::slotKipiPluginPlug()
                         break;
                     }
                     default:
+                    {
                         kDebug() << "No menu found for a plugin!";
                         break;
+                    }
                 }
             }
             else
