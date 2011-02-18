@@ -2512,6 +2512,8 @@ void DigikamApp::slotDBStat()
 
 void DigikamApp::loadPlugins()
 {
+    d->kipipluginsActionCollection = new KActionCollection(this, KGlobal::mainComponent());
+
     if (d->splashScreen)
     {
         d->splashScreen->message(i18n("Loading Kipi Plugins"));
@@ -2558,13 +2560,15 @@ void DigikamApp::slotKipiPluginPlug()
     unplugActionList(QString::fromLatin1("batch_actions"));
     unplugActionList(QString::fromLatin1("album_actions"));
 
-    if (d->kipipluginsActionCollection)
-    {
-        d->kipipluginsActionCollection->clear();
-        delete d->kipipluginsActionCollection;
-    }
-
-    d->kipipluginsActionCollection = new KActionCollection(this, KGlobal::mainComponent());
+    d->kipiImageActions.clear();
+    d->kipiFileActionsExport.clear();
+    d->kipiFileActionsImport.clear();
+    d->kipiToolsActions.clear();
+    d->kipiBatchActions.clear();
+    d->kipiAlbumActions.clear();
+    d->kipiJpeglosslessActions.clear();
+    d->kipiPrintActions.clear();
+    d->kipiMetadataActions.clear();
 
     // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
     foreach (QAction* action, d->slideShowAction->menu()->actions())
@@ -2576,25 +2580,20 @@ void DigikamApp::slotKipiPluginPlug()
         }
     }
 
-    d->kipiImageActions.clear();
-    d->kipiFileActionsExport.clear();
-    d->kipiFileActionsImport.clear();
-    d->kipiToolsActions.clear();
-    d->kipiBatchActions.clear();
-    d->kipiAlbumActions.clear();
+    d->kipipluginsActionCollection->clear();
 
     KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
     int cpt                             = 0;
 
     // List of obsolete kipi-plugins to not load.
     QStringList pluginActionsDisabled;
-    pluginActionsDisabled << QString("gpssync2");              // Experimental plugin renamed gpssync during GoSC2010.
-    pluginActionsDisabled << QString("raw_converter_single");  // Obsolete since 0.9.5 and new Raw Import tool.
-    pluginActionsDisabled << QString("batch_rename_images");   // Obsolete since 1.0.0, replaced by AdvancedRename.
-    pluginActionsDisabled << QString("batch_border_images");   // Obsolete since 1.2.0, replaced by BQM border tool.
-    pluginActionsDisabled << QString("batch_convert_images");  // Obsolete since 1.2.0, replaced by BQM convert tool.
-    pluginActionsDisabled << QString("batch_color_images");    // Obsolete since 1.2.0, replaced by BQM color tool.
-    pluginActionsDisabled << QString("batch_filter_images");   // Obsolete since 1.2.0, replaced by BQM enhance tool.
+    pluginActionsDisabled << QString("gpssync2");                       // Experimental plugin renamed gpssync during GoSC2010.
+    pluginActionsDisabled << QString("raw_converter_single");           // Obsolete since 0.9.5 and new Raw Import tool.
+    pluginActionsDisabled << QString("batch_rename_images");            // Obsolete since 1.0.0, replaced by AdvancedRename.
+    pluginActionsDisabled << QString("batch_border_images");            // Obsolete since 1.2.0, replaced by BQM border tool.
+    pluginActionsDisabled << QString("batch_convert_images");           // Obsolete since 1.2.0, replaced by BQM convert tool.
+    pluginActionsDisabled << QString("batch_color_images");             // Obsolete since 1.2.0, replaced by BQM color tool.
+    pluginActionsDisabled << QString("batch_filter_images");            // Obsolete since 1.2.0, replaced by BQM enhance tool.
     pluginActionsDisabled << QString("jpeglossless_convert2grayscale"); // Obsolete since 1.7.0, replaced by BQM B&W tool.
 
     for ( KIPI::PluginLoader::PluginList::ConstIterator it = list.constBegin() ;
@@ -2725,15 +2724,15 @@ void DigikamApp::slotKipiPluginPlug()
     d->kipipluginsActionCollection->readSettings();
 
     // Create GUI menu in according with plugins.
-    plugActionList(QString::fromLatin1("file_actions_export"), d->kipiFileActionsExport);
-    plugActionList(QString::fromLatin1("file_actions_import"), d->kipiFileActionsImport);
+    plugActionList(QString::fromLatin1("file_actions_export"),        d->kipiFileActionsExport);
+    plugActionList(QString::fromLatin1("file_actions_import"),        d->kipiFileActionsImport);
     plugActionList(QString::fromLatin1("image_jpeglossless_actions"), d->kipiJpeglosslessActions);
-    plugActionList(QString::fromLatin1("image_print_actions"), d->kipiPrintActions);
-    plugActionList(QString::fromLatin1("image_metadata_actions"), d->kipiMetadataActions);
-    plugActionList(QString::fromLatin1("image_actions"),       d->kipiImageActions);
-    plugActionList(QString::fromLatin1("tool_actions"),        d->kipiToolsActions);
-    plugActionList(QString::fromLatin1("batch_actions"),       d->kipiBatchActions);
-    plugActionList(QString::fromLatin1("album_actions"),       d->kipiAlbumActions);
+    plugActionList(QString::fromLatin1("image_print_actions"),        d->kipiPrintActions);
+    plugActionList(QString::fromLatin1("image_metadata_actions"),     d->kipiMetadataActions);
+    plugActionList(QString::fromLatin1("image_actions"),              d->kipiImageActions);
+    plugActionList(QString::fromLatin1("tool_actions"),               d->kipiToolsActions);
+    plugActionList(QString::fromLatin1("batch_actions"),              d->kipiBatchActions);
+    plugActionList(QString::fromLatin1("album_actions"),              d->kipiAlbumActions);
 }
 
 void DigikamApp::populateThemes()
