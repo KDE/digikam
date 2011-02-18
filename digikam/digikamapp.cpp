@@ -8,8 +8,8 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -2468,6 +2468,8 @@ void DigikamApp::slotDBStat()
 
 void DigikamApp::loadPlugins()
 {
+    d->kipipluginsActionCollection = new KActionCollection(this, KGlobal::mainComponent());
+
     if (d->splashScreen)
     {
         d->splashScreen->message(i18n("Loading Kipi Plugins"));
@@ -2511,13 +2513,12 @@ void DigikamApp::slotKipiPluginPlug()
     unplugActionList(QString::fromLatin1("batch_actions"));
     unplugActionList(QString::fromLatin1("album_actions"));
 
-    if (d->kipipluginsActionCollection)
-    {
-        d->kipipluginsActionCollection->clear();
-        delete d->kipipluginsActionCollection;
-    }
-
-    d->kipipluginsActionCollection = new KActionCollection(this, KGlobal::mainComponent());
+    d->kipiImageActions.clear();
+    d->kipiFileActionsExport.clear();
+    d->kipiFileActionsImport.clear();
+    d->kipiToolsActions.clear();
+    d->kipiBatchActions.clear();
+    d->kipiAlbumActions.clear();
 
     // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
     foreach (QAction* action, d->slideShowAction->menu()->actions())
@@ -2529,16 +2530,19 @@ void DigikamApp::slotKipiPluginPlug()
         }
     }
 
-    d->kipiImageActions.clear();
-    d->kipiFileActionsExport.clear();
-    d->kipiFileActionsImport.clear();
-    d->kipiToolsActions.clear();
-    d->kipiBatchActions.clear();
-    d->kipiAlbumActions.clear();
+    d->kipipluginsActionCollection->clear();
 
     KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
+    int cpt                             = 0;
 
-    int cpt = 0;
+    // List of obsolete kipi-plugins to not load.
+    QStringList pluginActionsDisabled;
+    pluginActionsDisabled << QString("raw_converter_single");  // Obsolete since 0.9.5 and new Raw Import tool.
+    pluginActionsDisabled << QString("batch_rename_images");   // Obsolete since 1.0.0, replaced by AdvancedRename.
+    pluginActionsDisabled << QString("batch_border_images");   // Obsolete since 1.2.0, replaced by BQM border tool.
+    pluginActionsDisabled << QString("batch_convert_images");  // Obsolete since 1.2.0, replaced by BQM convert tools.
+    pluginActionsDisabled << QString("batch_color_images");    // Obsolete since 1.2.0, replaced by BQM color tools.
+    pluginActionsDisabled << QString("batch_filter_images");   // Obsolete since 1.2.0, replaced by BQM enhance tools.
 
     for ( KIPI::PluginLoader::PluginList::ConstIterator it = list.constBegin() ;
           it != list.constEnd() ; ++it )
@@ -2553,16 +2557,6 @@ void DigikamApp::slotKipiPluginPlug()
         ++cpt;
 
         plugin->setup( this );
-
-
-        // List of obsolete kipi-plugins to not load.
-        QStringList pluginActionsDisabled;
-        pluginActionsDisabled << QString("raw_converter_single");  // Obsolete since 0.9.5 and new Raw Import tool.
-        pluginActionsDisabled << QString("batch_rename_images");   // Obsolete since 1.0.0, replaced by AdvancedRename.
-        pluginActionsDisabled << QString("batch_border_images");   // Obsolete since 1.2.0, replaced by BQM border tool.
-        pluginActionsDisabled << QString("batch_convert_images");  // Obsolete since 1.2.0, replaced by BQM convert tools.
-        pluginActionsDisabled << QString("batch_color_images");    // Obsolete since 1.2.0, replaced by BQM color tools.
-        pluginActionsDisabled << QString("batch_filter_images");   // Obsolete since 1.2.0, replaced by BQM enhance tools.
 
         // Add actions to kipipluginsActionCollection
         QList<QAction*> allPluginActions = plugin->actionCollection()->actions();
@@ -2611,20 +2605,30 @@ void DigikamApp::slotKipiPluginPlug()
                 switch (plugin->category(action))
                 {
                     case KIPI::BatchPlugin:
+                    {
                         d->kipiBatchActions.append(action);
                         break;
+                    }
                     case KIPI::CollectionsPlugin:
+                    {
                         d->kipiAlbumActions.append(action);
                         break;
+                    }
                     case KIPI::ImportPlugin:
+                    {
                         d->kipiFileActionsImport.append(action);
                         break;
+                    }
                     case KIPI::ExportPlugin:
+                    {
                         d->kipiFileActionsExport.append(action);
                         break;
+                    }
                     case KIPI::ImagesPlugin:
+                    {
                         d->kipiImageActions.append(action);
                         break;
+                    }
                     case KIPI::ToolsPlugin:
                     {
                         if (actionName == QString("advancedslideshow"))
@@ -2640,8 +2644,10 @@ void DigikamApp::slotKipiPluginPlug()
                         break;
                     }
                     default:
+                    {
                         kDebug() << "No menu found for a plugin!";
                         break;
+                    }
                 }
             }
             else
