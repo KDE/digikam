@@ -447,7 +447,7 @@ void ImagePreviewView::slotRemoveTag(int tagID)
 
 void ImagePreviewView::slotAssignPickLabel(int pickId)
 {
-    MetadataManager::instance()->assignColorLabel(d->item->imageInfo(), pickId);
+    MetadataManager::instance()->assignPickLabel(d->item->imageInfo(), pickId);
 }
 
 void ImagePreviewView::slotAssignColorLabel(int colorId)
