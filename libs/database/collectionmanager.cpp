@@ -217,7 +217,7 @@ public:
     QString pathFromIdentifier(const AlbumRootLocation* location);
 
     /// Return the path, if location has a path-only identifier. Else returns a null string.
-    QString networkShareMountPathFromIdentifier(const AlbumRootLocation* location);
+    QStringList networkShareMountPathsFromIdentifier(const AlbumRootLocation* location);
 
     /// Create an MD5 hash of the top-level entries (file names, not file content) of the given path
     static QString directoryHash(const QString& path);
@@ -447,16 +447,17 @@ QString CollectionManagerPrivate::pathFromIdentifier(const AlbumRootLocation* lo
     return url.queryItem("path");
 }
 
-QString CollectionManagerPrivate::networkShareMountPathFromIdentifier(const AlbumRootLocation* location)
+QStringList CollectionManagerPrivate::networkShareMountPathsFromIdentifier(const AlbumRootLocation* location)
 {
-    KUrl url(location->identifier);
+    // using a QUrl because KUrl cannot handle duplicate query items
+    QUrl url(location->identifier);
 
-    if (url.protocol() != "networkshareid")
+    if (url.scheme() != "networkshareid")
     {
-        return QString();
+        return QStringList();
     }
 
-    return url.queryItem("mountpath");
+    return url.allQueryItemValues("mountpath");
 }
 
 QString CollectionManagerPrivate::directoryHash(const QString& path)
@@ -1542,11 +1543,18 @@ void CollectionManager::updateLocations()
 
             if (location->type() == CollectionLocation::TypeNetwork)
             {
-                QString path = d->networkShareMountPathFromIdentifier(location);
-                QDir dir(path);
-                available = dir.isReadable()
-                            && dir.entryList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot).count() > 0;
-                absolutePath = path;
+                foreach (const QString& path, d->networkShareMountPathsFromIdentifier(location))
+                {
+                    QDir dir(path);
+                    available = dir.isReadable()
+                                && dir.entryList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot).count() > 0;
+                    absolutePath = path;
+
+                    if (available)
+                    {
+                        break;
+                    }
+                }
             }
             else
             {
