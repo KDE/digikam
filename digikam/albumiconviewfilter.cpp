@@ -76,13 +76,13 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                               "Any mouse button click will reset all filters."));
 
     d->resetBtn    = new QToolButton(this);
-    d->resetBtn->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar)); 
+    d->resetBtn->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
     d->resetBtn->setToolTip(i18n("Reset all active filters"));
     d->resetBtn->setFocusPolicy(Qt::NoFocus);
     d->resetBtn->setAutoRaise(true);
 
     d->settingsBtn = new QToolButton(this);
-    d->settingsBtn->setIcon(KIconLoader::global()->loadIcon("configure", KIconLoader::Toolbar)); 
+    d->settingsBtn->setIcon(KIconLoader::global()->loadIcon("configure", KIconLoader::Toolbar));
     d->settingsBtn->setToolTip(i18n("Open filters settings panel"));
     d->settingsBtn->setFocusPolicy(Qt::NoFocus);
     d->settingsBtn->setAutoRaise(true);
@@ -155,11 +155,13 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
     {
         d->led->setToolTip(i18n("No active filter"));
         d->led->setLedColor(StatusLed::Gray);
+        d->resetBtn->setEnabled(false);
     }
     else
     {
         d->led->setToolTip(message);
         d->led->setLedColor(match ? StatusLed::Green : StatusLed::Red);
+        d->resetBtn->setEnabled(true);
     }
 }
 
