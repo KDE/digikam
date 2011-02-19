@@ -333,7 +333,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         {
             icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, size);
         }
-        icon.paint(p, d->pixmapRect.left(), d->pixmapRect.bottom()-size+2, size, size);
+        icon.paint(p, d->pixmapRect.left()+2, d->pixmapRect.bottom()-size+2, size, size);
     }
 
     p->restore();
