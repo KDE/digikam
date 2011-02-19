@@ -545,12 +545,26 @@ void ImagePropertiesTab::setCaption(const QString& str)
 
 void ImagePropertiesTab::setColorLabel(int colorId)
 {
-    d->labelColorLabel->setText(ColorLabelWidget::labelColorName((ColorLabel)colorId));
+    if (colorId == NoColorLabel)
+    {
+        d->labelColorLabel->setText(QString());
+    }
+    else
+    {
+        d->labelColorLabel->setText(ColorLabelWidget::labelColorName((ColorLabel)colorId));
+    }
 }
 
 void ImagePropertiesTab::setPickLabel(int pickId)
 {
-    d->labelPickLabel->setText(PickLabelWidget::labelPickName((PickLabel)pickId));
+    if (pickId == NoPickLabel)
+    {
+        d->labelPickLabel->setText(QString());
+    }
+    else
+    {
+        d->labelPickLabel->setText(PickLabelWidget::labelPickName((PickLabel)pickId));
+    }
 }
 
 void ImagePropertiesTab::setRating(int rating)
