@@ -28,6 +28,8 @@
 #include <QMouseEvent>
 #include <QLabel>
 #include <QToolButton>
+#include <QPainter>
+#include <QHBoxLayout>
 
 // KDE includes
 
@@ -46,13 +48,27 @@ class AlbumIconViewFilter::AlbumIconViewFilterPriv
 {
 public:
 
+    enum FilterStatus
+    {
+         None = 0,
+         Match,
+         NotMatch
+    };
+
+public:
+
     AlbumIconViewFilterPriv()
     {
+        status      = None;
+        info        = 0;
         led         = 0;
         resetBtn    = 0;
         settingsBtn = 0;
     }
 
+    int                 status;
+
+    QLabel*             info;
     QToolButton*        resetBtn;
     QToolButton*        settingsBtn;
 
@@ -61,9 +77,10 @@ public:
 };
 
 AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
-    : KHBox(parent), d(new AlbumIconViewFilterPriv)
+    : QWidget(parent), d(new AlbumIconViewFilterPriv)
 {
-    new QLabel(i18n("Filters:"), this);
+    QHBoxLayout* vlay = new QHBoxLayout(this);
+
     d->led = new StatusLed(this);
     d->led->installEventFilter(this);
     d->led->setLedColor(StatusLed::Gray);
@@ -75,7 +92,10 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
                               "GREEN: filter(s) match(es) at least one item.\n\n"
                               "Any mouse button click will reset all filters."));
 
-    d->resetBtn    = new QToolButton(this);
+    d->info       = new QLabel(this);
+    QLabel* space = new QLabel(this);
+
+    d->resetBtn   = new QToolButton(this);
     d->resetBtn->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
     d->resetBtn->setToolTip(i18n("Reset all active filters"));
     d->resetBtn->setFocusPolicy(Qt::NoFocus);
@@ -87,11 +107,15 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     d->settingsBtn->setFocusPolicy(Qt::NoFocus);
     d->settingsBtn->setAutoRaise(true);
 
-    QLabel* space  = new QLabel(this);
 
-    setSpacing(KDialog::spacingHint());
-    setMargin(0);
-    setStretchFactor(space, 10);
+    vlay->addWidget(d->led);
+    vlay->addWidget(d->info);
+    vlay->addWidget(space);
+    vlay->addWidget(d->resetBtn);
+    vlay->addWidget(d->settingsBtn);
+    vlay->setSpacing(KDialog::spacingHint());
+    vlay->setMargin(0);
+    vlay->setStretchFactor(space, 10);
 
     connect(d->resetBtn, SIGNAL(released()),
             this, SIGNAL(signalResetFilters()));
@@ -103,6 +127,25 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 AlbumIconViewFilter::~AlbumIconViewFilter()
 {
     delete d;
+}
+
+void AlbumIconViewFilter::paintEvent(QPaintEvent* e)
+{
+    if (d->status == AlbumIconViewFilterPriv::None)
+    {
+        QWidget::paintEvent(e);
+        return;
+    }
+
+    QColor bgnd = QColor(255, 200, 200);
+    if (d->status == AlbumIconViewFilterPriv::Match)
+        bgnd = QColor(200, 255, 200);
+
+    QPainter p(this);
+    p.setBrush(bgnd);
+    p.setPen(Qt::NoPen);
+    p.drawRoundedRect(QRect(0, 0, width()-1, height()-1), 5.0, 5.0);
+    p.end();
 }
 
 void AlbumIconViewFilter::slotFilterMatches(bool match)
@@ -153,16 +196,26 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
 
     if (filtersList.isEmpty())
     {
-        d->led->setToolTip(i18n("No active filter"));
+        d->info->setText(i18n("No active filter"));
+        d->led->setToolTip(QString());
         d->led->setLedColor(StatusLed::Gray);
         d->resetBtn->setEnabled(false);
+        d->status = AlbumIconViewFilterPriv::None;
     }
     else
     {
+        if (filtersList.count() == 1)
+            d->info->setText(i18n("One active filter"));
+        else
+            d->info->setText(i18n("%1 active filters", filtersList.count()));
+
         d->led->setToolTip(message);
         d->led->setLedColor(match ? StatusLed::Green : StatusLed::Red);
         d->resetBtn->setEnabled(true);
+        d->status = match ? AlbumIconViewFilterPriv::Match : AlbumIconViewFilterPriv::NotMatch;
     }
+
+    update();
 }
 
 void AlbumIconViewFilter::slotFilterSettingsChanged(const ImageFilterSettings& settings)

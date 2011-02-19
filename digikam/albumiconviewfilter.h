@@ -28,10 +28,7 @@
 
 #include <QString>
 #include <QEvent>
-
-// KDE includes
-
-#include <khbox.h>
+#include <QWidget>
 
 // Local includes
 
@@ -43,7 +40,7 @@ class QObject;
 namespace Digikam
 {
 
-class AlbumIconViewFilter : public KHBox
+    class AlbumIconViewFilter : public QWidget
 {
     Q_OBJECT
 
@@ -65,6 +62,7 @@ Q_SIGNALS:
 private:
 
     bool eventFilter(QObject* object, QEvent* e);
+    void paintEvent(QPaintEvent* e);
 
 private:
 
