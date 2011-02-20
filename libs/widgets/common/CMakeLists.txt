@@ -7,7 +7,6 @@ INSTALL(FILES colorgradientwidget.h
               dzoombar.h
               statusnavigatebar.h
               statusprogressbar.h
-              statusled.h
               paniconwidget.h
               previewwidget.h
               searchtextbar.h

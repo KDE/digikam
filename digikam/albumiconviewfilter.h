@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-11-27
- * Description : a bar to filter album contents
+ * Description : a bar to indicate icon-view filters status
  *
  * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -27,15 +27,11 @@
 // Qt includes
 
 #include <QString>
-#include <QEvent>
 #include <QWidget>
 
 // Local includes
 
 #include "imagefiltersettings.h"
-
-class QEvent;
-class QObject;
 
 namespace Digikam
 {
@@ -61,7 +57,6 @@ Q_SIGNALS:
 
 private:
 
-    bool eventFilter(QObject* object, QEvent* e);
     void paintEvent(QPaintEvent* e);
 
 private:

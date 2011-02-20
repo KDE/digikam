@@ -852,7 +852,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/sidebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/splashscreen.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statesavingobject.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusled.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusnavigatebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusprogressbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbar.cpp

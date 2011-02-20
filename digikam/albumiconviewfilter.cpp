@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-11-27
- * Description : a bar to filter album contents
+ * Description : a bar to indicate icon-view filters status
  *
  * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -25,7 +25,6 @@
 
 // Qt includes
 
-#include <QMouseEvent>
 #include <QLabel>
 #include <QToolButton>
 #include <QPainter>
@@ -36,10 +35,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdialog.h>
-
-// Local includes
-
-#include "statusled.h"
 
 namespace Digikam
 {
@@ -61,7 +56,6 @@ public:
     {
         status      = None;
         info        = 0;
-        led         = 0;
         resetBtn    = 0;
         settingsBtn = 0;
     }
@@ -72,7 +66,6 @@ public:
     QToolButton*        resetBtn;
     QToolButton*        settingsBtn;
 
-    StatusLed*          led;
     ImageFilterSettings settings;
 };
 
@@ -81,19 +74,8 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
 {
     QHBoxLayout* vlay = new QHBoxLayout(this);
 
-    d->led = new StatusLed(this);
-    d->led->installEventFilter(this);
-    d->led->setLedColor(StatusLed::Gray);
-    d->led->setWhatsThis(i18n("This LED indicates the global image filter status, "
-                              "encompassing all status-bar filters and all tag filters "
-                              "from the right sidebar.\n\n"
-                              "GRAY: no filter is active, all items are visible.\n"
-                              "RED: filtering is on, but no items match.\n"
-                              "GREEN: filter(s) match(es) at least one item.\n\n"
-                              "Any mouse button click will reset all filters."));
-
-    d->info       = new QLabel(this);
     QLabel* space = new QLabel(this);
+    space->setFixedWidth(KDialog::spacingHint());
 
     d->resetBtn   = new QToolButton(this);
     d->resetBtn->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
@@ -107,15 +89,23 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     d->settingsBtn->setFocusPolicy(Qt::NoFocus);
     d->settingsBtn->setAutoRaise(true);
 
+    d->info        = new QLabel(this);
+    d->info->setWhatsThis(i18n("Background color indicates the global image filter status, "
+                               "encompassing all filters settings from right sidebar.\n\n"
+                               "NO COLOR: no filter is active, all items are visible.\n"
+                               "RED: filtering is on, but no items match.\n"
+                               "GREEN: filter(s) match(es) at least one item.\n\n"
+                               "Move mouse cursor over this text to see more details about active filters.\n"
+                               "Press on Reset button from the right side to clean all filters settings.\n"
+                               "Press on Settings button from the right side to open filters pannel."));
 
-    vlay->addWidget(d->led);
-    vlay->addWidget(d->info);
     vlay->addWidget(space);
     vlay->addWidget(d->resetBtn);
     vlay->addWidget(d->settingsBtn);
+    vlay->addWidget(d->info);
     vlay->setSpacing(KDialog::spacingHint());
     vlay->setMargin(0);
-    vlay->setStretchFactor(space, 10);
+    vlay->setStretchFactor(d->info, 10);
 
     connect(d->resetBtn, SIGNAL(released()),
             this, SIGNAL(signalResetFilters()));
@@ -144,7 +134,7 @@ void AlbumIconViewFilter::paintEvent(QPaintEvent* e)
     QPainter p(this);
     p.setBrush(bgnd);
     p.setPen(Qt::NoPen);
-    p.drawRoundedRect(QRect(0, 0, width()-1, height()-1), 5.0, 5.0);
+    p.drawRoundedRect(QRect(0, 0, width()-1, height()-1), 3.0, 3.0);
     p.end();
 }
 
@@ -197,8 +187,7 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
     if (filtersList.isEmpty())
     {
         d->info->setText(i18n("No active filter"));
-        d->led->setToolTip(QString());
-        d->led->setLedColor(StatusLed::Gray);
+        d->info->setToolTip(QString());
         d->resetBtn->setEnabled(false);
         d->status = AlbumIconViewFilterPriv::None;
     }
@@ -209,8 +198,7 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
         else
             d->info->setText(i18n("%1 active filters", filtersList.count()));
 
-        d->led->setToolTip(message);
-        d->led->setLedColor(match ? StatusLed::Green : StatusLed::Red);
+        d->info->setToolTip(message);
         d->resetBtn->setEnabled(true);
         d->status = match ? AlbumIconViewFilterPriv::Match : AlbumIconViewFilterPriv::NotMatch;
     }
@@ -221,24 +209,6 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
 void AlbumIconViewFilter::slotFilterSettingsChanged(const ImageFilterSettings& settings)
 {
     d->settings = settings;
-}
-
-bool AlbumIconViewFilter::eventFilter(QObject* object, QEvent* e)
-{
-    QWidget* widget = static_cast<QWidget*>(object);
-
-    if (e->type() == QEvent::MouseButtonRelease)
-    {
-        QMouseEvent* event = static_cast<QMouseEvent*>(e);
-
-        if ( widget->rect().contains(event->pos()) && d->led->ledColor() != StatusLed::Gray)
-        {
-            // Reset all filters settings into Filters sidebar.
-            emit signalResetFilters();
-        }
-    }
-
-    return false;
 }
 
 }  // namespace Digikam
