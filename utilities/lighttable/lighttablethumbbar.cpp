@@ -46,12 +46,10 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "contextmenuhelper.h"
 #include "globals.h"
 #include "imageattributeswatch.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
-#include "imagelistmodel.h"
 #include "metadatasettings.h"
 #include "metadatahub.h"
 #include "databasewatch.h"
@@ -347,6 +345,15 @@ void LightTableThumbBar::setOnRightPanel(const ImageInfo& info)
 */
 }
 
+
+QModelIndex LightTableThumbBar::findItemByInfo(const ImageInfo& info) const
+{
+    if (!info.isNull())
+        return d->imageInfoModel->indexForImageInfo(info);
+
+    return QModelIndex();
+}
+
 void LightTableThumbBar::removeItemByInfo(const ImageInfo& info)
 {
 /*
@@ -558,6 +565,11 @@ void LightTableThumbBar::slotCollectionImageChange(const CollectionImageChangese
         }
     }
 */
+}
+
+int LightTableThumbBar::countItems() const
+{
+    return imageInfos().count();
 }
 
 }  // namespace Digikam

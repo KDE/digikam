@@ -28,6 +28,7 @@
 
 #include "imagethumbnailbar.h"
 #include "imageinfo.h"
+#include "imagelistmodel.h"
 
 namespace Digikam
 {
@@ -49,9 +50,13 @@ public:
     void removeItemByInfo(const ImageInfo& info);
     void removeItemById(qlonglong id);
 
+    QModelIndex findItemByInfo(const ImageInfo& info) const;
+
     void setNavigateByPair(bool b);
 
     void toggleTag(int tagID);
+
+    int countItems() const;
 
 Q_SIGNALS:
 
