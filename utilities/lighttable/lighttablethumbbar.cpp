@@ -283,7 +283,7 @@ void LightTableThumbBar::toggleTag(int tagID)
 
 void LightTableThumbBar::setOnLeftPanel(const ImageInfo& info)
 {
-/*
+/* FIXME
     for (ThumbBarItem* item = firstItem(); item; item = item->next())
     {
         LightTableThumbBarItem* ltItem = dynamic_cast<LightTableThumbBarItem*>(item);
@@ -315,7 +315,7 @@ void LightTableThumbBar::setOnLeftPanel(const ImageInfo& info)
 
 void LightTableThumbBar::setOnRightPanel(const ImageInfo& info)
 {
-/*
+/* FIXME
     for (ThumbBarItem* item = firstItem(); item; item = item->next())
     {
         LightTableThumbBarItem* ltItem = dynamic_cast<LightTableThumbBarItem*>(item);
