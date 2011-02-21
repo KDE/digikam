@@ -151,7 +151,6 @@
 #include "softproofdialog.h"
 #include "statusprogressbar.h"
 #include "themeengine.h"
-#include "thumbbar.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
 #include "triplechoicedialog.h"
