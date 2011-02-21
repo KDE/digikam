@@ -304,7 +304,6 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
     QLabel* space3      = new QLabel(hbox3);
     d->ratingFilter     = new RatingFilter(hbox3);
     QLabel* space4      = new QLabel(hbox3);
-    hbox3->layout()->setAlignment(d->ratingFilter, Qt::AlignVCenter|Qt::AlignRight);
     hbox3->setStretchFactor(space3, 1);
     hbox3->setStretchFactor(space4, 10);
     hbox3->setSpacing(0);

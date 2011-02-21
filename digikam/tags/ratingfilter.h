@@ -25,22 +25,28 @@
 #ifndef RATINGFILTER_H
 #define RATINGFILTER_H
 
+// KDE includes
+
+#include "khbox.h"
+
 // Local includes
 
 #include "imagefiltersettings.h"
 #include "ratingwidget.h"
 
+class QAction;
+
 namespace Digikam
 {
 
-class RatingFilter : public RatingWidget
+class RatingFilterWidget : public RatingWidget
 {
     Q_OBJECT
 
 public:
 
-    RatingFilter(QWidget* parent);
-    ~RatingFilter();
+    RatingFilterWidget(QWidget* parent);
+    ~RatingFilterWidget();
 
     void setRatingFilterCondition(ImageFilterSettings::RatingCondition cond);
     ImageFilterSettings::RatingCondition ratingFilterCondition();
@@ -62,6 +68,38 @@ private:
 private Q_SLOTS:
 
     void slotRatingChanged();
+
+private:
+
+    class RatingFilterWidgetPriv;
+    RatingFilterWidgetPriv* const d;
+};
+
+// -----------------------------------------------------------------------------
+
+class RatingFilter : public KHBox
+{
+    Q_OBJECT
+
+public:
+
+    RatingFilter(QWidget* parent);
+    ~RatingFilter();
+
+    void setRating(int val);
+    int  rating() const;
+
+    void setRatingFilterCondition(ImageFilterSettings::RatingCondition cond);
+    ImageFilterSettings::RatingCondition ratingFilterCondition();
+
+Q_SIGNALS:
+
+    void signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition);
+
+private Q_SLOTS:
+
+    void slotOptionsMenu();
+    void slotOptionsTriggered(QAction*);
 
 private:
 

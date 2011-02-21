@@ -26,10 +26,12 @@
 
 // Qt includes
 
+#include <QLayout>
 #include <QPainter>
 #include <QPalette>
 #include <QPixmap>
 #include <QCursor>
+#include <QToolButton>
 
 // KDE includes
 
@@ -48,11 +50,11 @@
 namespace Digikam
 {
 
-class RatingFilter::RatingFilterPriv
+class RatingFilterWidget::RatingFilterWidgetPriv
 {
 public:
 
-    RatingFilterPriv()
+    RatingFilterWidgetPriv()
     {
         dirty         = false;
         ratingTracker = 0;
@@ -66,8 +68,8 @@ public:
     ImageFilterSettings::RatingCondition filterCond;
 };
 
-RatingFilter::RatingFilter(QWidget* parent)
-    : RatingWidget(parent), d(new RatingFilterPriv)
+RatingFilterWidget::RatingFilterWidget(QWidget* parent)
+    : RatingWidget(parent), d(new RatingFilterWidgetPriv)
 {
     d->ratingTracker = new DTipTracker("", this);
     updateRatingTooltip();
@@ -82,29 +84,29 @@ RatingFilter::RatingFilter(QWidget* parent)
             this, SLOT(slotRatingChanged()));
 }
 
-RatingFilter::~RatingFilter()
+RatingFilterWidget::~RatingFilterWidget()
 {
     delete d;
 }
 
-void RatingFilter::slotRatingChanged()
+void RatingFilterWidget::slotRatingChanged()
 {
     emit signalRatingFilterChanged(rating(), d->filterCond);
 }
 
-void RatingFilter::setRatingFilterCondition(ImageFilterSettings::RatingCondition cond)
+void RatingFilterWidget::setRatingFilterCondition(ImageFilterSettings::RatingCondition cond)
 {
     d->filterCond = cond;
     updateRatingTooltip();
     slotRatingChanged();
 }
 
-ImageFilterSettings::RatingCondition RatingFilter::ratingFilterCondition()
+ImageFilterSettings::RatingCondition RatingFilterWidget::ratingFilterCondition()
 {
     return d->filterCond;
 }
 
-void RatingFilter::mouseMoveEvent(QMouseEvent* e)
+void RatingFilterWidget::mouseMoveEvent(QMouseEvent* e)
 {
     // This method have been re-implemented to display and update the famous TipTracker contents.
 
@@ -121,7 +123,7 @@ void RatingFilter::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-void RatingFilter::mousePressEvent(QMouseEvent* e)
+void RatingFilterWidget::mousePressEvent(QMouseEvent* e)
 {
     // This method must be re-implemented to handle which mouse button is pressed
     // and show the rating filter settings pop-up menu with right mouse button.
@@ -131,8 +133,8 @@ void RatingFilter::mousePressEvent(QMouseEvent* e)
 
     if ( e->button() == Qt::LeftButton || e->button() == Qt::MidButton )
     {
-        d->dirty   = true;
-        int pos = e->x() / regPixmapWidth() +1;
+        d->dirty = true;
+        int pos  = e->x() / regPixmapWidth() +1;
 
         if (rating() == pos)
         {
@@ -145,58 +147,14 @@ void RatingFilter::mousePressEvent(QMouseEvent* e)
 
         updateRatingTooltip();
     }
-    else if (e->button() == Qt::RightButton)
-    {
-        // Show pop-up menu about Rating Filter condition settings
-
-        KMenu popmenu(this);
-        popmenu.addTitle(SmallIcon("digikam"), i18n("Rating Filter"));
-        QAction* geCondAction = popmenu.addAction(i18n("Greater Than or Equals Condition"));
-        geCondAction->setCheckable(true);
-        QAction* eqCondAction = popmenu.addAction(i18n("Equals Condition"));
-        eqCondAction->setCheckable(true);
-        QAction* leCondAction = popmenu.addAction(i18n("Less Than or Equals Condition"));
-        leCondAction->setCheckable(true);
-
-        switch (d->filterCond)
-        {
-            case ImageFilterSettings::GreaterEqualCondition:
-                geCondAction->setChecked(true);
-                break;
-            case ImageFilterSettings::EqualCondition:
-                eqCondAction->setChecked(true);
-                break;
-            case ImageFilterSettings::LessEqualCondition:
-                leCondAction->setChecked(true);
-                break;
-        }
-
-        QAction* choice = popmenu.exec(QCursor::pos());
-
-        if (choice)
-        {
-            if (choice == geCondAction)
-            {
-                setRatingFilterCondition(ImageFilterSettings::GreaterEqualCondition);
-            }
-            else if (choice == eqCondAction)
-            {
-                setRatingFilterCondition(ImageFilterSettings::EqualCondition);
-            }
-            else if (choice == leCondAction)
-            {
-                setRatingFilterCondition(ImageFilterSettings::LessEqualCondition);
-            }
-        }
-    }
 }
 
-void RatingFilter::mouseReleaseEvent(QMouseEvent*)
+void RatingFilterWidget::mouseReleaseEvent(QMouseEvent*)
 {
     d->dirty = false;
 }
 
-void RatingFilter::updateRatingTooltip()
+void RatingFilterWidget::updateRatingTooltip()
 {
     // Adapt tip message with rating filter condition settings.
 
@@ -220,6 +178,130 @@ void RatingFilter::updateRatingTooltip()
         default:
             break;
     }
+}
+
+// -----------------------------------------------------------------------------------------------
+
+class RatingFilter::RatingFilterPriv
+{
+public:
+
+    RatingFilterPriv()
+    {
+        ratingWidget = 0;
+        optionsBtn   = 0;
+        optionsMenu  = 0;
+        geCondAction = 0;
+        eqCondAction = 0;
+        leCondAction = 0;
+    }
+
+    QToolButton*        optionsBtn;
+
+    QAction*            geCondAction;
+    QAction*            eqCondAction;
+    QAction*            leCondAction;
+
+    KMenu*              optionsMenu;
+
+    RatingFilterWidget* ratingWidget;
+};
+
+RatingFilter::RatingFilter(QWidget* parent)
+    : KHBox(parent), d(new RatingFilterPriv)
+{
+    d->ratingWidget = new RatingFilterWidget(this);
+
+    d->optionsBtn   = new QToolButton(this);
+    d->optionsBtn->setToolTip( i18n("Rating Filter Options"));
+    d->optionsBtn->setIcon(KIconLoader::global()->loadIcon("configure", KIconLoader::Toolbar));
+    d->optionsBtn->setPopupMode(QToolButton::InstantPopup);
+
+    d->optionsMenu  = new KMenu(d->optionsBtn);
+    d->geCondAction = d->optionsMenu->addAction(i18n("Greater Than or Equals Condition"));
+    d->geCondAction->setCheckable(true);
+    d->eqCondAction = d->optionsMenu->addAction(i18n("Equals Condition"));
+    d->eqCondAction->setCheckable(true);
+    d->leCondAction = d->optionsMenu->addAction(i18n("Less Than or Equals Condition"));
+    d->leCondAction->setCheckable(true);
+    d->optionsBtn->setMenu(d->optionsMenu);
+
+    layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
+    setMargin(0);
+    setSpacing(0);
+
+    connect(d->optionsMenu, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotOptionsTriggered(QAction*)));
+
+    connect(d->optionsMenu, SIGNAL(aboutToShow()),
+            this, SLOT(slotOptionsMenu()));
+
+    connect(d->ratingWidget, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
+            this, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)));
+}
+
+RatingFilter::~RatingFilter()
+{
+    delete d;
+}
+
+void RatingFilter::setRatingFilterCondition(ImageFilterSettings::RatingCondition cond)
+{
+    d->ratingWidget->setRatingFilterCondition(cond);
+}
+
+ImageFilterSettings::RatingCondition RatingFilter::ratingFilterCondition()
+{
+    return d->ratingWidget->ratingFilterCondition();
+}
+
+void RatingFilter::slotOptionsMenu()
+{
+    d->geCondAction->setChecked(false);
+    d->eqCondAction->setChecked(false);
+    d->leCondAction->setChecked(false);
+
+    switch (ratingFilterCondition())
+    {
+        case ImageFilterSettings::GreaterEqualCondition:
+            d->geCondAction->setChecked(true);
+            break;
+        case ImageFilterSettings::EqualCondition:
+            d->eqCondAction->setChecked(true);
+            break;
+        case ImageFilterSettings::LessEqualCondition:
+            d->leCondAction->setChecked(true);
+            break;
+    }
+}
+
+void RatingFilter::slotOptionsTriggered(QAction* action)
+{
+    if (action)
+    {
+        if (action == d->geCondAction)
+        {
+            setRatingFilterCondition(ImageFilterSettings::GreaterEqualCondition);
+        }
+        else if (action == d->eqCondAction)
+        {
+            setRatingFilterCondition(ImageFilterSettings::EqualCondition);
+        }
+        else if (action == d->leCondAction)
+        {
+            setRatingFilterCondition(ImageFilterSettings::LessEqualCondition);
+        }
+    }
+}
+
+void RatingFilter::setRating(int val)
+{
+    d->ratingWidget->setRating(val);
+}
+
+int RatingFilter::rating() const
+{
+    return d->ratingWidget->rating();
 }
 
 }  // namespace Digikam
