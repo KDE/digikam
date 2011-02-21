@@ -196,6 +196,14 @@ FIND_PROGRAM( INITCMD_MYSQL mysql_install_db mysql_install_db5 mysql_install_db.
                     ENV MYSQL_TOOLS_PATH )
 MESSAGE(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
 
+# check the libkdcraw version
+# note that old versions don't specify version information, so for now
+# just inform the user if version information was found
+IF (KDCRAW_LIB_VERSION)
+  MESSAGE(STATUS "libkdcraw: Found version ${KDCRAW_LIB_VERSION}")
+  # TODO: fail if the version is too low
+ENDIF (KDCRAW_LIB_VERSION)
+
 # ==================================================================================================
 # Optional dependencies
 
