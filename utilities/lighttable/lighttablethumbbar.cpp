@@ -49,11 +49,15 @@
 #include "contextmenuhelper.h"
 #include "globals.h"
 #include "imageattributeswatch.h"
+#include "imagefiltermodel.h"
+#include "imagedragdrop.h"
+#include "imagelistmodel.h"
 #include "metadatasettings.h"
 #include "metadatahub.h"
 #include "databasewatch.h"
 #include "databasechangesets.h"
 #include "themeengine.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -63,18 +67,41 @@ class LightTableThumbBar::LightTableThumbBarPriv
 
 public:
 
-    LightTableThumbBarPriv() :
-        navigateByPair(false)
+    LightTableThumbBarPriv()
     {
+        navigateByPair   = false;
+        imageInfoModel   = 0;
+        imageFilterModel = 0;
+        dragDropHandler  = 0;
     }
 
-    bool navigateByPair;
+    bool                  navigateByPair;
+
+    ImageListModel*       imageInfoModel;
+    ImageFilterModel*     imageFilterModel;
+    ImageDragDropHandler* dragDropHandler;
 };
 
 LightTableThumbBar::LightTableThumbBar(QWidget* parent)
     : ImageThumbnailBar(parent),
       d(new LightTableThumbBarPriv)
 {
+    d->imageInfoModel   = new ImageListModel(this);
+
+    d->imageFilterModel = new ImageFilterModel(this);
+    d->imageFilterModel->setSourceImageModel(d->imageInfoModel);
+
+    d->imageInfoModel->setWatchFlags(d->imageFilterModel->suggestedWatchFlags());
+    d->imageInfoModel->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
+
+    d->imageFilterModel->setCategorizationMode(ImageSortSettings::NoCategories);
+    d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)AlbumSettings::instance()->getImageSortOrder());
+    d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)AlbumSettings::instance()->getImageSorting());
+
+    d->dragDropHandler = new ImageDragDropHandler(d->imageInfoModel);
+    d->dragDropHandler->setReadOnlyDrop(true);
+    d->imageInfoModel->setDragDropHandler(d->dragDropHandler);
+
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
             this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)),
             Qt::QueuedConnection);
