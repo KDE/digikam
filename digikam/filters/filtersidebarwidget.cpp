@@ -31,11 +31,13 @@
 #include <QLayout>
 #include <QCheckBox>
 #include <QGridLayout>
+#include <QToolButton>
 
 // KDE includes
 
 #include <kselectaction.h>
 #include <khbox.h>
+#include <kmenu.h>
 #include <kdebug.h>
 
 // LibKDcraw includes
@@ -176,39 +178,45 @@ public:
         expanderVlay(0),
         tagFilterView(0),
         tagFilterSearchBar(0),
+        tagOptionsBtn(0),
+        tagOptionsMenu(0),
         tagFilterModel(0),
+        tagOrCondAction(0),
+        tagAndCondAction(0),
+        tagMatchCond(ImageFilterSettings::OrCondition),
         colorLabelFilter(0),
         pickLabelFilter(0),
         ratingFilter(0),
         textFilter(0),
         mimeFilter(0),
-        withoutTagCheckBox(0),
-        matchingConditionComboBox(0),
         expbox(0)
     {
     }
 
-    static const QString configLastShowUntaggedEntry;
-    static const QString configMatchingConditionEntry;
+    static const QString                   configLastShowUntaggedEntry;
+    static const QString                   configMatchingConditionEntry;
 
-    QWidget*             space;
-    QVBoxLayout*         expanderVlay;
+    QWidget*                               space;
+    QVBoxLayout*                           expanderVlay;
 
-    TagFilterView*       tagFilterView;
-    SearchTextBar*       tagFilterSearchBar;
+    TagFilterView*                         tagFilterView;
+    SearchTextBar*                         tagFilterSearchBar;
+    QToolButton*                           tagOptionsBtn;
+    KMenu*                                 tagOptionsMenu;
+    TagModel*                              tagFilterModel;
+    QAction*                               tagOrCondAction;
+    QAction*                               tagAndCondAction;
+    ImageFilterSettings::MatchingCondition tagMatchCond;
 
-    TagModel*            tagFilterModel;
+    ColorLabelFilter*                      colorLabelFilter;
+    PickLabelFilter*                       pickLabelFilter;
+    RatingFilter*                          ratingFilter;
+    SearchTextBar*                         textFilter;
+    MimeFilter*                            mimeFilter;
 
-    ColorLabelFilter*    colorLabelFilter;
-    PickLabelFilter*     pickLabelFilter;
-    RatingFilter*        ratingFilter;
-    SearchTextBar*       textFilter;
-    MimeFilter*          mimeFilter;
+    QCheckBox*                             withoutTagCheckBox;
 
-    QCheckBox*           withoutTagCheckBox;
-    KComboBox*           matchingConditionComboBox;
-
-    RExpanderBox*        expbox;
+    RExpanderBox*                          expbox;
 };
 
 const QString FilterSideBarWidget::FilterSideBarWidgetPriv::configLastShowUntaggedEntry("Show Untagged");
@@ -267,22 +275,28 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
     d->withoutTagCheckBox          = new QCheckBox(notTaggedTitle, box3);
     d->withoutTagCheckBox->setWhatsThis(i18n("Show images without a tag."));
 
-    KHBox* hbox1                   = new KHBox(box3);
-    QLabel* matchingConditionLabel = new QLabel(i18n("Matching Condition:"), hbox1);
-    d->matchingConditionComboBox   = new KComboBox(hbox1);
-    d->matchingConditionComboBox->setWhatsThis(matchingConditionLabel->whatsThis());
-    d->matchingConditionComboBox->addItem(i18n("AND"), ImageFilterSettings::AndCondition);
-    d->matchingConditionComboBox->addItem(i18n("OR"),  ImageFilterSettings::OrCondition);
-    d->matchingConditionComboBox->setWhatsThis(i18n(
-            "Defines in which way the selected tags are combined to filter the images. "
-            "This also includes the '%1' check box.", notTaggedTitle));
+    d->tagOptionsBtn = new QToolButton(box3);
+    d->tagOptionsBtn->setToolTip( i18n("Tags Matching Condition"));
+    d->tagOptionsBtn->setIcon(KIconLoader::global()->loadIcon("configure", KIconLoader::Toolbar));
+    d->tagOptionsBtn->setPopupMode(QToolButton::InstantPopup);
+    d->tagOptionsBtn->setWhatsThis(i18n("Defines in which way the selected tags are combined "
+                                        "to filter the images. This also includes the '%1' check box.",
+                                        notTaggedTitle));
+
+    d->tagOptionsMenu  = new KMenu(d->tagOptionsBtn);
+    d->tagOrCondAction = d->tagOptionsMenu->addAction(i18n("OR"));
+    d->tagOrCondAction->setCheckable(true);
+    d->tagAndCondAction = d->tagOptionsMenu->addAction(i18n("AND"));
+    d->tagAndCondAction->setCheckable(true);
+    d->tagOptionsBtn->setMenu(d->tagOptionsMenu);
 
     QGridLayout* lay3 = new QGridLayout(box3);
-    lay3->addWidget(d->tagFilterView,      0, 0, 1, 1);
-    lay3->addWidget(d->tagFilterSearchBar, 1, 0, 1, 1);
+    lay3->addWidget(d->tagFilterView,      0, 0, 1, 3);
+    lay3->addWidget(d->tagFilterSearchBar, 1, 0, 1, 3);
     lay3->addWidget(d->withoutTagCheckBox, 2, 0, 1, 1);
-    lay3->addWidget(hbox1,                 3, 0, 1, 1);
+    lay3->addWidget(d->tagOptionsBtn,      2, 2, 1, 1);
     lay3->setRowStretch(0, 100);
+    lay3->setColumnStretch(1, 10);
     lay3->setMargin(0);
     lay3->setSpacing(0);
 
@@ -333,8 +347,11 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
     connect(d->withoutTagCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(slotWithoutTagChanged(int)));
 
-    connect(d->matchingConditionComboBox, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotMatchingConditionChanged(int)));
+    connect(d->tagOptionsMenu, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotTagOptionsTriggered(QAction*)));
+
+    connect(d->tagOptionsMenu, SIGNAL(aboutToShow()),
+            this, SLOT(slotTagOptionsMenu()));
 
     connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
             this, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)));
@@ -343,6 +360,22 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
 FilterSideBarWidget::~FilterSideBarWidget()
 {
     delete d;
+}
+
+void FilterSideBarWidget::slotTagOptionsMenu()
+{
+    d->tagOrCondAction->setChecked(false);
+    d->tagAndCondAction->setChecked(false);
+
+    switch (d->tagMatchCond)
+    {
+        case ImageFilterSettings::OrCondition:
+            d->tagOrCondAction->setChecked(true);
+            break;
+        case ImageFilterSettings::AndCondition:
+            d->tagAndCondAction->setChecked(true);
+            break;
+    }
 }
 
 void FilterSideBarWidget::slotItemExpanded(int id, bool b)
@@ -371,11 +404,23 @@ void FilterSideBarWidget::slotResetFilters()
     d->pickLabelFilter->reset();
     d->ratingFilter->setRating(0);
     d->ratingFilter->setRatingFilterCondition(ImageFilterSettings::GreaterEqualCondition);
+    d->tagMatchCond = ImageFilterSettings::OrCondition;
 }
 
-void FilterSideBarWidget::slotMatchingConditionChanged(int index)
+void FilterSideBarWidget::slotTagOptionsTriggered(QAction* action)
 {
-    Q_UNUSED(index);
+    if (action)
+    {
+        if (action == d->tagOrCondAction)
+        {
+            d->tagMatchCond = ImageFilterSettings::OrCondition;
+        }
+        else if (action == d->tagAndCondAction)
+        {
+            d->tagMatchCond = ImageFilterSettings::AndCondition;
+        }
+    }
+
     filterChanged();
 }
 
@@ -408,16 +453,13 @@ void FilterSideBarWidget::slotWithoutTagChanged(int newState)
 void FilterSideBarWidget::filterChanged()
 {
     bool showUntagged = d->withoutTagCheckBox->checkState() == Qt::Checked;
-    ImageFilterSettings::MatchingCondition matchCond =
-        (ImageFilterSettings::MatchingCondition)d->matchingConditionComboBox->itemData(
-            d->matchingConditionComboBox->currentIndex()).toInt();
 
     QList<int> includedTagIds;
     QList<int> excludedTagIds;
     QList<int> clTagIds;
     QList<int> plTagIds;
 
-    if (!showUntagged || matchCond == ImageFilterSettings::OrCondition)
+    if (!showUntagged || d->tagMatchCond == ImageFilterSettings::OrCondition)
     {
         foreach (TAlbum* tag, d->tagFilterView->getCheckedTags())
         {
@@ -449,7 +491,7 @@ void FilterSideBarWidget::filterChanged()
         }
     }
 
-    emit signalTagFilterChanged(includedTagIds, excludedTagIds, matchCond, showUntagged, clTagIds, plTagIds);
+    emit signalTagFilterChanged(includedTagIds, excludedTagIds, d->tagMatchCond, showUntagged, clTagIds, plTagIds);
 }
 
 void FilterSideBarWidget::setConfigGroup(KConfigGroup group)
@@ -462,17 +504,19 @@ void FilterSideBarWidget::doLoadState()
 {
     d->expbox->readSettings();
 
-    d->ratingFilter->setRatingFilterCondition((Digikam::ImageFilterSettings::RatingCondition)
+    d->ratingFilter->setRatingFilterCondition((ImageFilterSettings::RatingCondition)
             (AlbumSettings::instance()->getRatingFilterCond()));
 
-    d->matchingConditionComboBox->setCurrentIndex(getConfigGroup().readEntry(
-                entryName(d->configMatchingConditionEntry), 0));
+    d->tagMatchCond = (ImageFilterSettings::MatchingCondition)
+                      (getConfigGroup().readEntry(entryName(d->configMatchingConditionEntry),
+                                                  (int)ImageFilterSettings::OrCondition));
+
     d->tagFilterView->loadState();
 
     if (d->tagFilterView->isRestoreCheckState())
     {
         d->withoutTagCheckBox->setChecked(getConfigGroup().readEntry(entryName(
-                                              d->configLastShowUntaggedEntry), false));
+                                          d->configLastShowUntaggedEntry), false));
     }
 
     filterChanged();
@@ -484,8 +528,8 @@ void FilterSideBarWidget::doSaveState()
 
     AlbumSettings::instance()->setRatingFilterCond(d->ratingFilter->ratingFilterCondition());
 
-    getConfigGroup().writeEntry(entryName(d->configMatchingConditionEntry),
-                                d->matchingConditionComboBox->currentIndex());
+    getConfigGroup().writeEntry(entryName(d->configMatchingConditionEntry), (int)d->tagMatchCond);
+
     d->tagFilterView->saveState();
     getConfigGroup().writeEntry(entryName(d->configLastShowUntaggedEntry),
                                 d->withoutTagCheckBox->isChecked());

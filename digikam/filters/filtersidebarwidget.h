@@ -145,12 +145,13 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void slotMatchingConditionChanged(int index);
     void slotCheckedTagsChanged(const QList<TAlbum*>& includedTags, const QList<TAlbum*>& excludedTags);
     void slotColorLabelFilterChanged(const QList<ColorLabel>&);
     void slotPickLabelFilterChanged(const QList<PickLabel>&);
     void slotWithoutTagChanged(int newState);
     void slotItemExpanded(int id, bool b);
+    void slotTagOptionsTriggered(QAction*);
+    void slotTagOptionsMenu();
 
 private:
 
