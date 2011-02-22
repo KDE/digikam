@@ -291,27 +291,16 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
     // --------------------------------------------------------------------------------------------------------
 
     QWidget* box4       = new QWidget(d->expbox);
+    d->colorLabelFilter = new ColorLabelFilter(box4);
+    d->pickLabelFilter  = new PickLabelFilter(box4);
+    d->ratingFilter     = new RatingFilter(box4);
 
-    KHBox* hbox2        = new KHBox(box4);
-    d->colorLabelFilter = new ColorLabelFilter(hbox2);
-    QLabel* space2      = new QLabel(hbox2);
-    hbox2->setStretchFactor(space2, 10);
-    hbox2->setSpacing(0);
-    hbox2->setMargin(0);
-
-    KHBox* hbox3        = new KHBox(box4);
-    d->pickLabelFilter  = new PickLabelFilter(hbox3);
-    QLabel* space3      = new QLabel(hbox3);
-    d->ratingFilter     = new RatingFilter(hbox3);
-    QLabel* space4      = new QLabel(hbox3);
-    hbox3->setStretchFactor(space3, 1);
-    hbox3->setStretchFactor(space4, 10);
-    hbox3->setSpacing(0);
-    hbox3->setMargin(0);
-
-    QGridLayout* lay4 = new QGridLayout(box4);
-    lay4->addWidget(hbox2, 0, 0, 1, 1);
-    lay4->addWidget(hbox3, 1, 0, 1, 1);
+    QGridLayout* lay4   = new QGridLayout(box4);
+    lay4->addWidget(d->colorLabelFilter, 0, 0, 1, 3);
+    lay4->addWidget(d->pickLabelFilter,  1, 0, 1, 1);
+    lay4->addWidget(d->ratingFilter,     1, 2, 1, 1);
+    lay4->setColumnStretch(2, 1);
+    lay4->setColumnStretch(3, 10);
     lay4->setMargin(0);
     lay4->setSpacing(0);
 

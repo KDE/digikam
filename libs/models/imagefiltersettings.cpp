@@ -485,6 +485,20 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
             break;
         }
+        case MimeFilter::RasterFiles:
+        {
+            if (info.format() != "PSD" &&         // Adobe Photoshop Document
+                info.format() != "PSB" &&         // Adobe Photoshop Big
+                info.format() != "XCF" &&         // Gimp
+                info.format() != "KRA" &&         // Krita
+                info.format() != "ORA"            // Open Raster
+               )
+            {
+                match = false;
+            }
+
+            break;
+        }
         default:
         {
             // All Files: do nothing...

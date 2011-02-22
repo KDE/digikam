@@ -484,7 +484,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${KMAP_INCLUDE_DIR}
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
-                        ${QT_QTSCRIPT_INCLUDE_DIR} #to include the QtScript include directories
+                        ${QT_QTSCRIPT_INCLUDE_DIR}                #to include the QtScript include directories
                         ${GPHOTO2_INCLUDE_DIRS}
                         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
                         ${CMAKE_CURRENT_BINARY_DIR}/digikam
@@ -1300,7 +1300,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumhistory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumiconviewfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albummanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albummodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumpropsedit.cpp
@@ -1350,7 +1349,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mapwidgetview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatahub.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatamanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mimefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/monthwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/scancontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/sidebarwidget.cpp
@@ -1359,12 +1357,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseguierrorhandler.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filtersidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagcheckview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/colorlabelfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/picklabelfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/ratingfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/albumiconviewfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filtersidebarwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/mimefilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/colorlabelfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/picklabelfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/ratingfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/taggingaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagslineeditoverlay.cpp
@@ -1381,6 +1381,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     INCLUDE_DIRECTORIES(
         ${CMAKE_CURRENT_SOURCE_DIR}/databaseserver
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
