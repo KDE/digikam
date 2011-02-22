@@ -71,5 +71,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 052 ==> 201282 : Sort settings in status bar.
 053 ==> 210576 : Move tag filter to the bottom.
 054 ==> 262539 : CMake Warning "cycle in the constraint graph" with libkipi.
-055 ==> 
+055 ==> 231597 : Add XCF to the filter list in the album view.
+056 ==> 
 
