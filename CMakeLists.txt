@@ -1294,9 +1294,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libdigikamgui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/addtagscombobox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/addtagscompletionbox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/addtagslineedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumhistory.cpp
@@ -1357,14 +1354,17 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseguierrorhandler.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagcheckview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/albumiconviewfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filtersidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/mimefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/colorlabelfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/picklabelfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/ratingfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscombobox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscompletionbox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagslineedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagcheckview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagfolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/taggingaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagslineeditoverlay.cpp
