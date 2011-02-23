@@ -50,7 +50,6 @@
 #include "picklabelfilter.h"
 #include "ratingfilter.h"
 #include "mimefilter.h"
-#include "textfilter.h"
 #include "tagfilterview.h"
 
 using namespace KDcrawIface;
@@ -82,6 +81,7 @@ public:
     {
     }
 
+    static const QString                   configSearchTextFilterFieldsEntry;
     static const QString                   configLastShowUntaggedEntry;
     static const QString                   configMatchingConditionEntry;
 
@@ -108,6 +108,7 @@ public:
     RExpanderBox*                          expbox;
 };
 
+const QString FilterSideBarWidget::FilterSideBarWidgetPriv::configSearchTextFilterFieldsEntry("Search Text Filter Fields");
 const QString FilterSideBarWidget::FilterSideBarWidgetPriv::configLastShowUntaggedEntry("Show Untagged");
 const QString FilterSideBarWidget::FilterSideBarWidgetPriv::configMatchingConditionEntry("Matching Condition");
 
@@ -205,8 +206,8 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
     connect(d->mimeFilter, SIGNAL(activated(int)),
             this, SIGNAL(signalMimeTypeFilterChanged(int)));
 
-    connect(d->textFilter->searchTextBar(), SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SIGNAL(signalTextFilterChanged(const SearchTextSettings&)));
+    connect(d->textFilter, SIGNAL(signalSearchTextFilterSettings(const SearchTextFilterSettings&)),
+            this, SIGNAL(signalSearchTextFilterChanged(const SearchTextFilterSettings&)));
 
     connect(d->tagFilterView, SIGNAL(checkedTagsChanged(const QList<TAlbum*>&, const QList<TAlbum*>&)),
             this, SLOT(slotCheckedTagsChanged(const QList<TAlbum*>&, const QList<TAlbum*>&)));
@@ -269,7 +270,7 @@ void FilterSideBarWidget::slotFilterMatchesForText(bool match)
 
 void FilterSideBarWidget::slotResetFilters()
 {
-    d->textFilter->searchTextBar()->setText(QString());
+    d->textFilter->reset();
     d->mimeFilter->setMimeFilter(MimeFilter::AllFiles);
     d->tagFilterView->slotResetCheckState();
     d->withoutTagCheckBox->setChecked(false);
@@ -377,6 +378,11 @@ void FilterSideBarWidget::doLoadState()
 {
     d->expbox->readSettings();
 
+    d->textFilter->setsearchTextFields((SearchTextFilterSettings::TextFilterFields)
+                      (getConfigGroup().readEntry(entryName(d->configSearchTextFilterFieldsEntry),
+                                                  (int)SearchTextFilterSettings::All)));
+
+
     d->ratingFilter->setRatingFilterCondition((ImageFilterSettings::RatingCondition)
             (AlbumSettings::instance()->getRatingFilterCond()));
 
@@ -398,6 +404,9 @@ void FilterSideBarWidget::doLoadState()
 void FilterSideBarWidget::doSaveState()
 {
     d->expbox->writeSettings();
+
+    getConfigGroup().writeEntry(entryName(d->configSearchTextFilterFieldsEntry),
+                                (int)d->textFilter->searchTextFields());
 
     AlbumSettings::instance()->setRatingFilterCond(d->ratingFilter->ratingFilterCondition());
 

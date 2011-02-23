@@ -426,7 +426,7 @@ void ImageFilterModel::setMimeTypeFilter(int mimeTypeFilter)
     setImageFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setTextFilter(const SearchTextSettings& settings)
+void ImageFilterModel::setTextFilter(const SearchTextFilterSettings& settings)
 {
     Q_D(ImageFilterModel);
     d->filter.setTextFilter(settings);

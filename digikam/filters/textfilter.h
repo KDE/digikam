@@ -28,6 +28,13 @@
 
 #include <khbox.h>
 
+// Local includes
+
+#include "searchtextbar.h"
+#include "imagefiltersettings.h"
+
+class QAction;
+
 namespace Digikam
 {
 
@@ -39,27 +46,23 @@ class TextFilter : public KHBox
 
 public:
 
-    enum TypeTextFilter
-    {
-        AllFiles = 0,
-        ImageFiles,
-        NoRAWFiles,
-        JPGFiles,
-        PNGFiles,
-        TIFFiles,
-        DNGFiles,
-        RAWFiles,
-        MoviesFiles,
-        AudioFiles,
-        RasterFiles               // PSD, XCF, etc...
-    };
-
-public:
-
     TextFilter(QWidget* parent);
     ~TextFilter();
 
     SearchTextBar* searchTextBar() const;
+
+    void reset();
+
+    SearchTextFilterSettings::TextFilterFields searchTextFields();
+    void setsearchTextFields(SearchTextFilterSettings::TextFilterFields fields);
+
+Q_SIGNALS:
+
+    void signalSearchTextFilterSettings(const SearchTextFilterSettings&);
+
+private Q_SLOTS:
+
+    void slotSearchFieldsChanged();
 
 private:
 

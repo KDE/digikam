@@ -53,6 +53,38 @@ namespace DatabaseFields
 class Set;
 }
 
+class DIGIKAM_DATABASE_EXPORT SearchTextFilterSettings : public SearchTextSettings
+{
+
+public:
+
+    enum TextFilterFields
+    {
+        None         = 0x00,
+        ImageName    = 0x01,
+        ImageComment = 0x02,
+        TagName      = 0x04,
+        AlbumName    = 0x08,
+        All          = ImageName | ImageComment | TagName | AlbumName
+    };
+
+public:
+
+    SearchTextFilterSettings()
+    {
+        textFields = None;
+    }
+
+    SearchTextFilterSettings(const SearchTextSettings& settings)
+    {
+        caseSensitive = settings.caseSensitive;
+        text          = settings.text;
+        textFields    = None;
+    }
+
+    TextFilterFields textFields;
+};
+
 class DIGIKAM_DATABASE_EXPORT ImageFilterSettings
 {
 public:
@@ -101,7 +133,7 @@ public:
 public:
 
     /// --- Text filter ---
-    void setTextFilter(const SearchTextSettings& settings);
+    void setTextFilter(const SearchTextFilterSettings& settings);
     void setTagNames(const QHash<int, QString>& tagNameHash);
     void setAlbumNames(const QHash<int, QString>& albumNameHash);
 
@@ -167,7 +199,7 @@ private:
     QMap<QDateTime, bool>            m_dayFilter;
 
     /// --- Text filter ---
-    SearchTextSettings               m_textFilterSettings;
+    SearchTextFilterSettings         m_textFilterSettings;
 
     /// Helpers for text search: Set these if you want to search album or tag names with text search
     QHash<int, QString>              m_tagNameHash;

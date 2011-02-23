@@ -205,7 +205,7 @@ void ImageFilterSettings::setMimeTypeFilter(int mime)
     m_mimeTypeFilter = (MimeFilter::TypeMimeFilter)mime;
 }
 
-void ImageFilterSettings::setTextFilter(const SearchTextSettings& settings)
+void ImageFilterSettings::setTextFilter(const SearchTextFilterSettings& settings)
 {
     m_textFilterSettings = settings;
 }
@@ -513,13 +513,15 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
         bool textMatch = false;
 
         // Image name
-        if (info.name().contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
+        if (m_textFilterSettings.textFields & SearchTextFilterSettings::ImageName &&
+            info.name().contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
         {
             textMatch = true;
         }
 
         // Image comment
-        if (info.comment().contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
+        if (m_textFilterSettings.textFields & SearchTextFilterSettings::ImageComment &&
+            info.comment().contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
         {
             textMatch = true;
         }
@@ -527,14 +529,17 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
         // Tag names
         foreach (int id, info.tagIds())
         {
-            if (m_tagNameHash.value(id).contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
+            if (m_textFilterSettings.textFields & SearchTextFilterSettings::TagName &&
+                m_tagNameHash.value(id).contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
             {
                 textMatch = true;
             }
         }
 
         // Album names
-        if (m_albumNameHash.value(info.albumId()).contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
+        if (m_textFilterSettings.textFields & SearchTextFilterSettings::AlbumName &&
+            m_albumNameHash.value(info.albumId()).contains(m_textFilterSettings.text,
+                                                           m_textFilterSettings.caseSensitive))
         {
             textMatch = true;
         }

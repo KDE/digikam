@@ -25,15 +25,14 @@
 
 // Qt includes
 
-#include <QGridLayout>
+#include <QAction>
+#include <QToolButton>
 
 // KDE includes
 
 #include <klocale.h>
-
-// Local includes
-
-#include "searchtextbar.h"
+#include <kmenu.h>
+#include <kiconloader.h>
 
 namespace Digikam
 {
@@ -44,8 +43,23 @@ public:
 
     TextFilterPriv()
     {
-        searchTextBar = 0;
+        imageNameAction    = 0;
+        imageCommentAction = 0;
+        tagNameAction      = 0;
+        albumNameAction    = 0;
+        optionsBtn         = 0;
+        optionsMenu        = 0;
+        searchTextBar      = 0;
     }
+
+    QAction*       imageNameAction;
+    QAction*       imageCommentAction;
+    QAction*       tagNameAction;
+    QAction*       albumNameAction;
+
+    QToolButton*   optionsBtn;
+
+    KMenu*         optionsMenu;
 
     SearchTextBar* searchTextBar;
 };
@@ -57,10 +71,33 @@ TextFilter::TextFilter(QWidget* parent)
     d->searchTextBar->setTextQueryCompletion(true);
     d->searchTextBar->setToolTip(i18n("Text quick filter (search)"));
     d->searchTextBar->setWhatsThis(i18n("Enter search patterns to quickly filter this view on "
-                                     "file names, captions (comments), and tags"));
+                                        "file names, captions (comments), and tags"));
+
+    d->optionsBtn = new QToolButton(this);
+    d->optionsBtn->setToolTip( i18n("Text Search Fields"));
+    d->optionsBtn->setIcon(KIconLoader::global()->loadIcon("configure", KIconLoader::Toolbar));
+    d->optionsBtn->setPopupMode(QToolButton::InstantPopup);
+    d->optionsBtn->setWhatsThis(i18n("Defines where text must be search in fields"));
+
+    d->optionsMenu        = new KMenu(d->optionsBtn);
+    d->imageNameAction    = d->optionsMenu->addAction(i18n("Image Name"));
+    d->imageNameAction->setCheckable(true);
+    d->imageCommentAction = d->optionsMenu->addAction(i18n("Image Comment"));
+    d->imageCommentAction->setCheckable(true);
+    d->tagNameAction      = d->optionsMenu->addAction(i18n("Tag Name"));
+    d->tagNameAction->setCheckable(true);
+    d->albumNameAction    = d->optionsMenu->addAction(i18n("Album Name"));
+    d->albumNameAction->setCheckable(true);
+    d->optionsBtn->setMenu(d->optionsMenu);
 
     setMargin(0);
     setSpacing(0);
+
+    connect(d->searchTextBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            this, SLOT(slotSearchFieldsChanged()));
+
+    connect(d->optionsMenu, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotSearchFieldsChanged()));
 }
 
 TextFilter::~TextFilter()
@@ -71,6 +108,52 @@ TextFilter::~TextFilter()
 SearchTextBar* TextFilter::searchTextBar() const
 {
     return d->searchTextBar;
+}
+
+SearchTextFilterSettings::TextFilterFields TextFilter::searchTextFields()
+{
+    int fields = SearchTextFilterSettings::None;
+
+    if (d->imageNameAction->isChecked())
+    {
+        fields |= SearchTextFilterSettings::ImageName;
+    }
+    if (d->imageCommentAction->isChecked())
+    {
+        fields |= SearchTextFilterSettings::ImageComment;
+    }
+    if (d->tagNameAction->isChecked())
+    {
+        fields |= SearchTextFilterSettings::TagName;
+    }
+    if (d->albumNameAction->isChecked())
+    {
+        fields |= SearchTextFilterSettings::AlbumName;
+    }
+
+    return (SearchTextFilterSettings::TextFilterFields)fields;
+}
+
+void TextFilter::setsearchTextFields(SearchTextFilterSettings::TextFilterFields fields)
+{
+    d->imageNameAction->setChecked(fields & SearchTextFilterSettings::ImageName);
+    d->imageCommentAction->setChecked(fields & SearchTextFilterSettings::ImageComment);
+    d->tagNameAction->setChecked(fields & SearchTextFilterSettings::TagName);
+    d->albumNameAction->setChecked(fields & SearchTextFilterSettings::AlbumName);
+}
+
+void TextFilter::slotSearchFieldsChanged()
+{
+    SearchTextFilterSettings settings(d->searchTextBar->searchTextSettings());
+    settings.textFields = searchTextFields();
+
+    emit signalSearchTextFilterSettings(settings);
+}
+
+void TextFilter::reset()
+{
+    d->searchTextBar->setText(QString());
+    setsearchTextFields(SearchTextFilterSettings::All);
 }
 
 }  // namespace Digikam

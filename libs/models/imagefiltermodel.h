@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include "textfilter.h"
 #include "imagefiltersettings.h"
 #include "imagemodel.h"
 #include "imagesortsettings.h"
@@ -168,7 +169,7 @@ public Q_SLOTS:
                       const QList<int>& clTagIds, const QList<int>& plTagIds);
     void setRatingFilter(int rating, ImageFilterSettings::RatingCondition ratingCond);
     void setMimeTypeFilter(int mimeTypeFilter);
-    void setTextFilter(const SearchTextSettings& settings);
+    void setTextFilter(const SearchTextFilterSettings& settings);
 
     void setCategorizationMode(ImageSortSettings::CategorizationMode mode);
     void setSortRole(ImageSortSettings::SortRole role);

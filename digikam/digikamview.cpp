@@ -460,8 +460,8 @@ void DigikamView::setupConnections()
     connect(d->filterWidget, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
             model, SLOT(setRatingFilter(int, ImageFilterSettings::RatingCondition)));
 
-    connect(d->filterWidget, SIGNAL(signalTextFilterChanged(const SearchTextSettings&)),
-            model, SLOT(setTextFilter(const SearchTextSettings&)));
+    connect(d->filterWidget, SIGNAL(signalSearchTextFilterChanged(const SearchTextFilterSettings&)),
+            model, SLOT(setTextFilter(const SearchTextFilterSettings&)));
 
     connect(model, SIGNAL(filterMatchesForText(bool)),
             d->filterWidget, SLOT(slotFilterMatchesForText(bool)));
