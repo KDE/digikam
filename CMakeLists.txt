@@ -419,13 +419,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                    "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake"
                    @ONLY)
 
-    ADD_CUSTOM_COMMAND(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/digikam/gitversion.h"
+    ADD_CUSTOM_COMMAND(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/gitversion.h"
                        DEPENDS ${GIT_MARKER}
                        COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake")
 
     # Add a custom target to drive the custom command.
     ADD_CUSTOM_TARGET(digikam-gitversion
-                      ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/digikam/gitversion.h")
+                      ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/gitversion.h")
 
     # ==================================================================================================
     # get the gcc version
