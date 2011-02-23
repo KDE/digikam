@@ -1290,19 +1290,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libdigikamgui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumdragdrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumhistory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albummanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albummodificationhelper.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumpropsedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectcombobox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectdialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectiontreeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumthumbnailloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumwidgetstack.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/assignnameoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/contextmenuhelper.cpp
@@ -1338,6 +1326,18 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tooltipfiller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/album.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumdragdrop.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumhistory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albummanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albummodificationhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumpropsedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectcombobox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectiontreeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumthumbnailloader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/databaseguierrorhandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dbstatdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filterstatusbar.cpp
@@ -1380,6 +1380,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     INCLUDE_DIRECTORIES(
         ${CMAKE_CURRENT_SOURCE_DIR}/databaseserver
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database
