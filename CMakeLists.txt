@@ -1289,10 +1289,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistoryitemdelegate.cpp
        )
 
-    SET(libtimeline_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
-       )
-
     SET(libdigikamgui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumdragdrop.cpp
@@ -1310,7 +1306,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumwidgetstack.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/assignnameoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/contextmenuhelper.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/datefolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ddragobjects.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview.cpp
@@ -1334,13 +1329,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageselectionoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/facerejectionoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageviewutilities.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdateedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatepickerpopup.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatetimeedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/leftsidebarwidgets.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mediaplayerview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mapwidgetview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/monthwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/scancontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/sidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/syncjob.cpp
@@ -1351,7 +1342,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dbstatdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filterstatusbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filtersidebarwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/textfilter.cpp        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/mimefilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/textfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/mimefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/colorlabelfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/picklabelfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/ratingfilter.cpp
@@ -1370,6 +1362,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsactionmngr.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tageditdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagmodificationhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/kdateedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/kdatepickerpopup.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/kdatetimeedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/datefolderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/monthwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/timelinewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/icongroupitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/iconitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/iconview.cpp
@@ -1385,6 +1383,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
@@ -1486,7 +1485,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline
 
         # config-digikam.h
         ${CMAKE_CURRENT_BINARY_DIR}

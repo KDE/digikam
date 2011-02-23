@@ -16,7 +16,6 @@ SET(digikamthemedesigner_SRCS
         ${libsearchwindow_SRCS}
         ${libsetup_SRCS}
         ${libtemplate_SRCS}
-        ${libtimeline_SRCS}
 
         main.cpp
         mainwindow.cpp

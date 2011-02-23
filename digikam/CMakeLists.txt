@@ -225,7 +225,6 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libfuzzysearch_SRCS}
                  ${libgpssearch_SRCS}
                  ${libkmaphelper_SRCS}
-                 ${libtimeline_SRCS}
                  ${libqueuemanager_SRCS}
                  ${libalbummodels_SRCS}
                  ${libdigikamgui_SRCS}
