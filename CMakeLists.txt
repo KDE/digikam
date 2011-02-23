@@ -1321,9 +1321,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dio.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/editablesearchtreeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/icongroupitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageattributeswatch.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorydrawer.cpp
@@ -1373,6 +1370,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsactionmngr.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tageditdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagmodificationhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/icongroupitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/iconitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/iconview.cpp
        )
 
     SET(libdigikamhelpers_SRCS
@@ -1386,6 +1386,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate
