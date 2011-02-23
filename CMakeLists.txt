@@ -1376,7 +1376,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libdigikamhelpers_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/uifilevalidator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/uifilevalidator.cpp
        )
 
     INCLUDE_DIRECTORIES(
