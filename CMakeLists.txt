@@ -1302,7 +1302,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimagefacedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikammodelcollection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dio.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/editablesearchtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageattributeswatch.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorizedview.cpp
@@ -1321,7 +1320,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mediaplayerview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mapwidgetview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/sidebarwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/syncjob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tooltipfiller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
@@ -1340,6 +1338,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/databaseguierrorhandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dbstatdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/scancontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dio.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/syncjob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filterstatusbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filtersidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/textfilter.cpp
