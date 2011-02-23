@@ -10,6 +10,8 @@ General     : Tag keyboard shortcuts support.
 General     : Color Labels support to improve photograph workfow.
 General     : Pick Labels support to improve photograph selection.
 
+AlbumGUI    : Re-designed Filters view on right sidebar to perform icon-view items filtering.
+
 ImageEditor : Image versionning support.
 ImageEditor : Foveon sensor based camera.
 ImageEditor : New advanced RAW decoding settings backported from RawTherapee project.
