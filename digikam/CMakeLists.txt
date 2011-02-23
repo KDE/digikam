@@ -1,4 +1,4 @@
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/utils/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/utils/version.h)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/../data/database/dbconfigversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/database/dbconfigversion.h)
 
 # Shared libdigikamcore ################################################################
@@ -284,4 +284,4 @@ INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 INSTALL(PROGRAMS digikam.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 INSTALL(FILES digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
 INSTALL(FILES digikam.notifyrc DESTINATION ${DATA_INSTALL_DIR}/digikam)
-INSTALL(FILES digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+INSTALL(FILES utils/digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
