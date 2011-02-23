@@ -1314,7 +1314,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/leftsidebarwidgets.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mediaplayerview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mapwidgetview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/sidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/album.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumdragdrop.cpp
@@ -1368,6 +1367,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/tooltipfiller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/editablesearchtreeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/sidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/icongroupitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/iconitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/iconview.cpp
