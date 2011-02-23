@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMWIDGETSTACK_H
-#define ALBUMWIDGETSTACK_H
+#ifndef STACKEDVIEW_H
+#define STACKEDVIEW_H
 
 // Qt includes
 
@@ -51,13 +51,13 @@ class ImageCategorizedView;
 class ImagePreviewView;
 class MapWidgetView;
 
-class AlbumWidgetStack : public QStackedWidget
+class StackedView : public QStackedWidget
 {
     Q_OBJECT
 
 public:
 
-    enum AlbumWidgetStackMode
+    enum StackedViewMode
     {
         PreviewAlbumMode=0,
         PreviewImageMode,
@@ -68,16 +68,16 @@ public:
 
 public:
 
-    AlbumWidgetStack(QWidget* parent=0);
-    ~AlbumWidgetStack();
+    StackedView(QWidget* parent=0);
+    ~StackedView();
 
     /* Attach the thumbnail dock widget to the specified QMainWindow. */
     void setDockArea(QMainWindow*);
 
-    ThumbBarDock*     thumbBarDock();
-    DigikamImageView* imageIconView();
-    ImagePreviewView* imagePreviewView();
-    MapWidgetView*    mapWidgetView();
+    ThumbBarDock*     thumbBarDock() const;
+    DigikamImageView* imageIconView() const;
+    ImagePreviewView* imagePreviewView() const;
+    MapWidgetView*    mapWidgetView() const;
 
     void setPreviewItem(const ImageInfo& info = ImageInfo(),
                         const ImageInfo& previous = ImageInfo(),
@@ -135,10 +135,10 @@ private:
 
 private:
 
-    class AlbumWidgetStackPriv;
-    AlbumWidgetStackPriv* const d;
+    class StackedViewPriv;
+    StackedViewPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* ALBUMWIDGETSTACK_H */
+#endif /* STACKEDVIEW_H */

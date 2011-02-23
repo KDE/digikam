@@ -45,7 +45,7 @@
 
 // Local includes
 
-#include "albumwidgetstack.h"
+#include "stackedview.h"
 #include "themeengine.h"
 
 namespace Digikam
@@ -132,7 +132,7 @@ public:
     Phonon::SeekSlider*  slider;
 };
 
-MediaPlayerView::MediaPlayerView(AlbumWidgetStack* parent)
+MediaPlayerView::MediaPlayerView(StackedView* parent)
     : QStackedWidget(parent), d(new MediaPlayerViewPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "albumwidgetstack.moc"
+#include "stackedview.moc"
 
 // Qt includes
 
@@ -60,12 +60,12 @@
 namespace Digikam
 {
 
-class AlbumWidgetStack::AlbumWidgetStackPriv
+class StackedView::StackedViewPriv
 {
 
 public:
 
-    AlbumWidgetStackPriv()
+    StackedViewPriv()
     {
         dockArea           = 0;
         splitter           = 0;
@@ -97,8 +97,8 @@ public:
     MapWidgetView*     mapWidgetView;
 };
 
-AlbumWidgetStack::AlbumWidgetStack(QWidget* parent)
-    : QStackedWidget(parent), d(new AlbumWidgetStackPriv)
+StackedView::StackedView(QWidget* parent)
+    : QStackedWidget(parent), d(new StackedViewPriv)
 {
     d->imageIconView    = new DigikamImageView(this);
     d->imagePreviewView = new ImagePreviewView(this);
@@ -215,19 +215,19 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget* parent)
             this, SIGNAL(signalBack2Album()));
 }
 
-AlbumWidgetStack::~AlbumWidgetStack()
+StackedView::~StackedView()
 {
     delete d;
 }
 
-void AlbumWidgetStack::readSettings()
+void StackedView::readSettings()
 {
     AlbumSettings* settings = AlbumSettings::instance();
     bool showThumbbar       = settings->getShowThumbbar();
     d->thumbBarDock->setShouldBeVisible(showThumbbar);
 }
 
-void AlbumWidgetStack::setDockArea(QMainWindow* dockArea)
+void StackedView::setDockArea(QMainWindow* dockArea)
 {
     // Attach the thumbbar dock to the given dock area and place it initially on top.
     d->dockArea = dockArea;
@@ -236,12 +236,12 @@ void AlbumWidgetStack::setDockArea(QMainWindow* dockArea)
     d->thumbBarDock->setFloating(false);
 }
 
-ThumbBarDock* AlbumWidgetStack::thumbBarDock()
+ThumbBarDock* StackedView::thumbBarDock() const
 {
     return d->thumbBarDock;
 }
 
-void AlbumWidgetStack::slotEscapePreview()
+void StackedView::slotEscapePreview()
 {
     if (previewMode() == MediaPlayerMode)
     {
@@ -249,22 +249,22 @@ void AlbumWidgetStack::slotEscapePreview()
     }
 }
 
-DigikamImageView* AlbumWidgetStack::imageIconView()
+DigikamImageView* StackedView::imageIconView() const
 {
     return d->imageIconView;
 }
 
-ImagePreviewView* AlbumWidgetStack::imagePreviewView()
+ImagePreviewView* StackedView::imagePreviewView() const
 {
     return d->imagePreviewView;
 }
 
-MapWidgetView* AlbumWidgetStack::mapWidgetView()
+MapWidgetView* StackedView::mapWidgetView() const
 {
     return d->mapWidgetView;
 }
 
-void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
+void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
     if (info.isNull())
     {
@@ -324,12 +324,12 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& pr
     }
 }
 
-int AlbumWidgetStack::previewMode()
+int StackedView::previewMode()
 {
     return indexOf(currentWidget());
 }
 
-void AlbumWidgetStack::setPreviewMode(const int mode)
+void StackedView::setPreviewMode(const int mode)
 {
     if (mode != PreviewAlbumMode && mode != PreviewImageMode &&
         mode != WelcomePageMode  && mode != MediaPlayerMode && mode != MapWidgetMode)
@@ -367,11 +367,11 @@ void AlbumWidgetStack::setPreviewMode(const int mode)
     {
         d->mapWidgetView->setFocus();
     }
-    
+
     emit signalViewModeChanged();
 }
 
-void AlbumWidgetStack::syncSelection(ImageCategorizedView* from, ImageCategorizedView* to)
+void StackedView::syncSelection(ImageCategorizedView* from, ImageCategorizedView* to)
 {
     ImageSortFilterModel* fromModel = from->imageSortFilterModel();
     ImageSortFilterModel* toModel = to->imageSortFilterModel();
@@ -394,7 +394,7 @@ void AlbumWidgetStack::syncSelection(ImageCategorizedView* from, ImageCategorize
     d->syncingSelection = false;
 }
 
-void AlbumWidgetStack::slotThumbBarSelectionChanged()
+void StackedView::slotThumbBarSelectionChanged()
 {
     if (currentIndex() != PreviewImageMode)
     {
@@ -409,7 +409,7 @@ void AlbumWidgetStack::slotThumbBarSelectionChanged()
     syncSelection(d->thumbBar, d->imageIconView);
 }
 
-void AlbumWidgetStack::slotIconViewSelectionChanged()
+void StackedView::slotIconViewSelectionChanged()
 {
     if (currentIndex() != PreviewAlbumMode)
     {
@@ -424,12 +424,12 @@ void AlbumWidgetStack::slotIconViewSelectionChanged()
     syncSelection(d->imageIconView, d->thumbBar);
 }
 
-void AlbumWidgetStack::previewLoaded()
+void StackedView::previewLoaded()
 {
     emit signalViewModeChanged();
 }
 
-void AlbumWidgetStack::slotZoomFactorChanged(double z)
+void StackedView::slotZoomFactorChanged(double z)
 {
     if (previewMode() == PreviewImageMode)
     {
@@ -439,7 +439,7 @@ void AlbumWidgetStack::slotZoomFactorChanged(double z)
 
 /*
 
-void AlbumWidgetStack::slotItemsAddedOrRemoved()
+void StackedView::slotItemsAddedOrRemoved()
 {
     // do this before the check in the next line, to store this state in any case,
     // even if we do not trigger updateThumbbar immediately
@@ -458,7 +458,7 @@ void AlbumWidgetStack::slotItemsAddedOrRemoved()
     }
 }
 
-void AlbumWidgetStack::updateThumbbar()
+void StackedView::updateThumbbar()
 {
     if (!d->needUpdateBar)
         return;
@@ -478,62 +478,62 @@ void AlbumWidgetStack::updateThumbbar()
 }
 */
 
-void AlbumWidgetStack::increaseZoom()
+void StackedView::increaseZoom()
 {
     d->imagePreviewView->layout()->increaseZoom();
 }
 
-void AlbumWidgetStack::decreaseZoom()
+void StackedView::decreaseZoom()
 {
     d->imagePreviewView->layout()->decreaseZoom();
 }
 
-void AlbumWidgetStack::zoomTo100Percents()
+void StackedView::zoomTo100Percents()
 {
     d->imagePreviewView->layout()->setZoomFactor(1.0);
 }
 
-void AlbumWidgetStack::fitToWindow()
+void StackedView::fitToWindow()
 {
     d->imagePreviewView->layout()->fitToWindow();
 }
 
-void AlbumWidgetStack::toggleFitToWindowOr100()
+void StackedView::toggleFitToWindowOr100()
 {
     d->imagePreviewView->layout()->toggleFitToWindowOr100();
 }
 
-bool AlbumWidgetStack::maxZoom()
+bool StackedView::maxZoom()
 {
     return d->imagePreviewView->layout()->atMaxZoom();
 }
 
-bool AlbumWidgetStack::minZoom()
+bool StackedView::minZoom()
 {
     return d->imagePreviewView->layout()->atMinZoom();
 }
 
-void AlbumWidgetStack::setZoomFactor(double z)
+void StackedView::setZoomFactor(double z)
 {
     d->imagePreviewView->layout()->setZoomFactor(z);
 }
 
-void AlbumWidgetStack::setZoomFactorSnapped(double z)
+void StackedView::setZoomFactorSnapped(double z)
 {
     d->imagePreviewView->layout()->setZoomFactor(z);
 }
 
-double AlbumWidgetStack::zoomFactor()
+double StackedView::zoomFactor()
 {
     return d->imagePreviewView->layout()->zoomFactor();
 }
 
-double AlbumWidgetStack::zoomMin()
+double StackedView::zoomMin()
 {
     return d->imagePreviewView->layout()->minZoomFactor();
 }
 
-double AlbumWidgetStack::zoomMax()
+double StackedView::zoomMax()
 {
     return d->imagePreviewView->layout()->maxZoomFactor();
 }

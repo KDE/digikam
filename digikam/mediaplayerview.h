@@ -42,7 +42,8 @@ class QEvent;
 
 namespace Digikam
 {
-class AlbumWidgetStack;
+
+class StackedView;
 
 class MediaPlayerMouseClickFilter : public QObject
 {
@@ -70,7 +71,7 @@ class MediaPlayerView : public QStackedWidget
 
 public:
 
-    MediaPlayerView(AlbumWidgetStack* parent);
+    MediaPlayerView(StackedView* parent);
     ~MediaPlayerView();
 
     void setImageInfo(const ImageInfo& info = ImageInfo(),

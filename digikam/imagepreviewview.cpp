@@ -54,7 +54,7 @@
 // Local includes
 
 #include "albumsettings.h"
-#include "albumwidgetstack.h"
+#include "stackedview.h"
 #include "contextmenuhelper.h"
 #include "digikamapp.h"
 #include "dimg.h"
@@ -175,12 +175,12 @@ public:
 
     QToolBar*             toolBar;
 
-    AlbumWidgetStack*     stack;
+    StackedView*     stack;
 
     FaceGroup*            faceGroup;
 };
 
-ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
+ImagePreviewView::ImagePreviewView(StackedView* parent)
     : GraphicsDImgView(parent), d(new ImagePreviewViewPriv)
 {
     d->item = new ImagePreviewViewItem(this);
@@ -285,7 +285,7 @@ void ImagePreviewView::reload()
 
 void ImagePreviewView::imageLoaded()
 {
-    d->stack->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
+    d->stack->setPreviewMode(StackedView::PreviewImageMode);
     d->stack->previewLoaded();
     emit signalPreviewLoaded(true);
     d->rotLeftAction->setEnabled(true);
@@ -296,7 +296,7 @@ void ImagePreviewView::imageLoaded()
 
 void ImagePreviewView::imageLoadingFailed()
 {
-    d->stack->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
+    d->stack->setPreviewMode(StackedView::PreviewImageMode);
     d->stack->previewLoaded();
     emit signalPreviewLoaded(false);
     d->rotLeftAction->setEnabled(false);

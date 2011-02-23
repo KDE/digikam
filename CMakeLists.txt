@@ -1290,7 +1290,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libdigikamgui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumwidgetstack.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/stackedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/assignnameoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview.cpp
