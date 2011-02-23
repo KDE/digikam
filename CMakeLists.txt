@@ -1343,8 +1343,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/leftsidebarwidgets.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mediaplayerview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mapwidgetview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatahub.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatamanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/monthwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/scancontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/sidebarwidget.cpp
@@ -1356,11 +1354,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dbstatdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filterstatusbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filtersidebarwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/mimefilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/textfilter.cpp        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/mimefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/colorlabelfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/picklabelfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/ratingfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/tagfilterview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata/metadatahub.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata/metadatamanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscompletionbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagslineedit.cpp
@@ -1385,6 +1385,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate

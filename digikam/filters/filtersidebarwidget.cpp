@@ -50,6 +50,7 @@
 #include "picklabelfilter.h"
 #include "ratingfilter.h"
 #include "mimefilter.h"
+#include "textfilter.h"
 #include "tagfilterview.h"
 
 using namespace KDcrawIface;
@@ -75,8 +76,8 @@ public:
         colorLabelFilter(0),
         pickLabelFilter(0),
         ratingFilter(0),
-        textFilter(0),
         mimeFilter(0),
+        textFilter(0),
         expbox(0)
     {
     }
@@ -99,8 +100,8 @@ public:
     ColorLabelFilter*                      colorLabelFilter;
     PickLabelFilter*                       pickLabelFilter;
     RatingFilter*                          ratingFilter;
-    SearchTextBar*                         textFilter;
     MimeFilter*                            mimeFilter;
+    TextFilter*                            textFilter;
 
     QCheckBox*                             withoutTagCheckBox;
 
@@ -122,31 +123,15 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
 
     // --------------------------------------------------------------------------------------------------------
 
-    QWidget* box1 = new QWidget(d->expbox);
-    d->textFilter = new SearchTextBar(box1, "AlbumIconViewFilterSearchTextBar");
-    d->textFilter->setTextQueryCompletion(true);
-    d->textFilter->setToolTip(i18n("Text quick filter (search)"));
-    d->textFilter->setWhatsThis(i18n("Enter search patterns to quickly filter this view on "
-                                     "file names, captions (comments), and tags"));
-
-    QGridLayout* lay1 = new QGridLayout(box1);
-    lay1->addWidget(d->textFilter, 0, 0, 1, 1);
-    lay1->setMargin(0);
-    lay1->setSpacing(0);
-
-    d->expbox->addItem(box1, SmallIcon("text-field"), i18n("Text Filter"), QString("TextFilter"), true);
+    d->textFilter = new TextFilter(d->expbox);
+    d->expbox->addItem(d->textFilter, SmallIcon("text-field"), 
+                       i18n("Text Filter"), QString("TextFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
-    QWidget* box2 = new QWidget(d->expbox);
-    d->mimeFilter = new MimeFilter(box2);
-
-    QGridLayout* lay2 = new QGridLayout(box2);
-    lay2->addWidget(d->mimeFilter, 0, 0, 1, 1);
-    lay2->setMargin(0);
-    lay2->setSpacing(0);
-
-    d->expbox->addItem(box2, SmallIcon("system-file-manager"), i18n("Type Mime Filter"), QString("TypeMimeFilter"), true);
+    d->mimeFilter = new MimeFilter(d->expbox);
+    d->expbox->addItem(d->mimeFilter, SmallIcon("system-file-manager"), 
+                       i18n("Type Mime Filter"), QString("TypeMimeFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -220,7 +205,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
     connect(d->mimeFilter, SIGNAL(activated(int)),
             this, SIGNAL(signalMimeTypeFilterChanged(int)));
 
-    connect(d->textFilter, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+    connect(d->textFilter->searchTextBar(), SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             this, SIGNAL(signalTextFilterChanged(const SearchTextSettings&)));
 
     connect(d->tagFilterView, SIGNAL(checkedTagsChanged(const QList<TAlbum*>&, const QList<TAlbum*>&)),
@@ -274,17 +259,17 @@ void FilterSideBarWidget::slotItemExpanded(int id, bool b)
 
 void FilterSideBarWidget::setFocusToTextFilter()
 {
-    d->textFilter->setFocus();
+    d->textFilter->searchTextBar()->setFocus();
 }
 
 void FilterSideBarWidget::slotFilterMatchesForText(bool match)
 {
-    d->textFilter->slotSearchResult(match);
+    d->textFilter->searchTextBar()->slotSearchResult(match);
 }
 
 void FilterSideBarWidget::slotResetFilters()
 {
-    d->textFilter->setText(QString());
+    d->textFilter->searchTextBar()->setText(QString());
     d->mimeFilter->setMimeFilter(MimeFilter::AllFiles);
     d->tagFilterView->slotResetCheckState();
     d->withoutTagCheckBox->setChecked(false);

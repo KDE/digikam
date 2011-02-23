@@ -343,11 +343,6 @@ DigikamView* DigikamApp::view() const
     return d->view;
 }
 
-FilterStatusBar* DigikamApp::filterBar() const
-{
-    return d->filterStatusBar;
-}
-
 void DigikamApp::show()
 {
     // Remove Splashscreen.

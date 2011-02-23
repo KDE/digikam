@@ -97,7 +97,6 @@ public:
     void stopInternalDatabase();
 
     DigikamView* view() const;
-    FilterStatusBar* filterBar() const;
 
 Q_SIGNALS:
 
