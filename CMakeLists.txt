@@ -1121,7 +1121,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     # We must set this variable here at top level because it is used in both
-    # digikam/ and data/database
+    # digikam/database and data/database
     SET(DBCONFIG_XML_VERSION "1")
 
     SET(libdatabase_SRCS
@@ -1311,7 +1311,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/assignnameoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/contextmenuhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/datefolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dbstatdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ddragobjects.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview.cpp
@@ -1353,13 +1352,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tooltipfiller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseguierrorhandler.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/albumiconviewfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/databaseguierrorhandler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dbstatdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filterstatusbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filtersidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/mimefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/colorlabelfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/picklabelfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/ratingfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/tagfilterview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscompletionbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagslineedit.cpp
@@ -1383,6 +1384,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate

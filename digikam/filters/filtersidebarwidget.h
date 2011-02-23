@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2000-12-05
- * Description : filter view for the right sidebar
+ * Description : filters view for the right sidebar
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmx dot net>
@@ -38,7 +38,6 @@
 
 #include "imagefiltersettings.h"
 #include "statesavingobject.h"
-#include "tagcheckview.h"
 #include "searchtextbar.h"
 #include "globals.h"
 
@@ -46,46 +45,10 @@ namespace Digikam
 {
 
 class TagModel;
+class TAlbum;
 
 /**
- * A view to filter the currently displayed album by tags.
- *
- * @author jwienke
- */
-class TagFilterView : public TagCheckView
-{
-    Q_OBJECT
-
-public:
-
-    /**
-     * Constructor.
-     *
-     * @param parent parent for qt parent child mechanism
-     * @param tagFilterModel tag model to work on
-     */
-    TagFilterView(QWidget* parent, TagModel* tagFilterModel);
-
-    /**
-     * Destructor.
-     */
-    virtual ~TagFilterView();
-
-protected:
-
-    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
-    virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
-
-private:
-
-    class TagFilterViewPriv;
-    TagFilterViewPriv* const d;
-};
-
-// ----------------------------------------------------------------------------------------------------------
-
-/**
- * Sidebar widget containing the tag filtering.
+ * Sidebar widget containing the all filter widgets.
  *
  * @author jwienke
  */

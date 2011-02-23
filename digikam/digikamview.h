@@ -50,8 +50,8 @@ namespace Digikam
 class AlbumIconItem;
 class AlbumSettings;
 class Album;
-class AlbumIconViewFilter;
 class BatchSyncMetadata;
+class FilterStatusBar;
 
 class DigikamView : public KHBox
 {
@@ -74,7 +74,7 @@ public:
     void setRecurseAlbums(bool recursive);
     void setRecurseTags(bool recursive);
 
-    void connectIconViewFilter(AlbumIconViewFilter* filter);
+    void connectIconViewFilter(FilterStatusBar* filter);
 
     KUrl::List allUrls() const;
     KUrl::List selectedUrls() const;
@@ -90,7 +90,8 @@ Q_SIGNALS:
 
     void signalAlbumSelected(bool val);
     void signalTagSelected(bool val);
-    void signalImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList& allImages);
+    void signalImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, 
+                             const ImageInfoList& allImages);
     void signalNoCurrentItem();
     void signalSelectionChanged(int numberOfSelectedItems);
     void signalProgressBarMode(int, const QString&);

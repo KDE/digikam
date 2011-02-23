@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMICONVIEWFILTER_H
-#define ALBUMICONVIEWFILTER_H
+#ifndef FILTERSTATUSBAR_H
+#define FILTERSTATUSBAR_H
 
 // Qt includes
 
@@ -36,14 +36,14 @@
 namespace Digikam
 {
 
-    class AlbumIconViewFilter : public QWidget
+class FilterStatusBar : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    AlbumIconViewFilter(QWidget* parent);
-    ~AlbumIconViewFilter();
+    FilterStatusBar(QWidget* parent);
+    ~FilterStatusBar();
 
 public Q_SLOTS:
 
@@ -61,10 +61,10 @@ private:
 
 private:
 
-    class AlbumIconViewFilterPriv;
-    AlbumIconViewFilterPriv* const d;
+    class FilterStatusBarPriv;
+    FilterStatusBarPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif // ALBUMICONVIEWFILTER_H
+#endif // FILTERSTATUSBAR_H

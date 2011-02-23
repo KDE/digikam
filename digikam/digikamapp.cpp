@@ -101,7 +101,6 @@
 
 #include "album.h"
 #include "albumdb.h"
-#include "albumiconviewfilter.h"
 #include "albumselectdialog.h"
 #include "albumthumbnailloader.h"
 #include "batchalbumssyncmetadata.h"
@@ -115,6 +114,7 @@
 #include "dio.h"
 #include "dlogoaction.h"
 #include "facescandialog.h"
+#include "filterstatusbar.h"
 #include "fingerprintsgenerator.h"
 #include "iccsettings.h"
 #include "imageattributeswatch.h"
@@ -343,9 +343,9 @@ DigikamView* DigikamApp::view() const
     return d->view;
 }
 
-AlbumIconViewFilter* DigikamApp::iconViewFilter() const
+FilterStatusBar* DigikamApp::filterBar() const
 {
-    return d->albumIconViewFilter;
+    return d->filterStatusBar;
 }
 
 void DigikamApp::show()
@@ -548,9 +548,9 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    d->albumIconViewFilter = new AlbumIconViewFilter(statusBar());
-    statusBar()->addWidget(d->albumIconViewFilter, 100);
-    d->view->connectIconViewFilter(d->albumIconViewFilter);
+    d->filterStatusBar = new FilterStatusBar(statusBar());
+    statusBar()->addWidget(d->filterStatusBar, 100);
+    d->view->connectIconViewFilter(d->filterStatusBar);
 
     //------------------------------------------------------------------------------
 

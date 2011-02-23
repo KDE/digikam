@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "albumiconviewfilter.moc"
+#include "filterstatusbar.moc"
 
 // Qt includes
 
@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class AlbumIconViewFilter::AlbumIconViewFilterPriv
+class FilterStatusBar::FilterStatusBarPriv
 {
 public:
 
@@ -52,7 +52,7 @@ public:
 
 public:
 
-    AlbumIconViewFilterPriv()
+    FilterStatusBarPriv()
     {
         status      = None;
         info        = 0;
@@ -69,8 +69,8 @@ public:
     ImageFilterSettings settings;
 };
 
-AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
-    : QWidget(parent), d(new AlbumIconViewFilterPriv)
+FilterStatusBar::FilterStatusBar(QWidget* parent)
+    : QWidget(parent), d(new FilterStatusBarPriv)
 {
     QHBoxLayout* vlay = new QHBoxLayout(this);
 
@@ -114,21 +114,21 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
             this, SIGNAL(signalPopupFiltersView()));
 }
 
-AlbumIconViewFilter::~AlbumIconViewFilter()
+FilterStatusBar::~FilterStatusBar()
 {
     delete d;
 }
 
-void AlbumIconViewFilter::paintEvent(QPaintEvent* e)
+void FilterStatusBar::paintEvent(QPaintEvent* e)
 {
-    if (d->status == AlbumIconViewFilterPriv::None)
+    if (d->status == FilterStatusBarPriv::None)
     {
         QWidget::paintEvent(e);
         return;
     }
 
     QColor bgnd = QColor(255, 200, 200);
-    if (d->status == AlbumIconViewFilterPriv::Match)
+    if (d->status == FilterStatusBarPriv::Match)
         bgnd = QColor(200, 255, 200);
 
     QPainter p(this);
@@ -138,7 +138,7 @@ void AlbumIconViewFilter::paintEvent(QPaintEvent* e)
     p.end();
 }
 
-void AlbumIconViewFilter::slotFilterMatches(bool match)
+void FilterStatusBar::slotFilterMatches(bool match)
 {
     QStringList filtersList;
     QString     message;
@@ -189,7 +189,7 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
         d->info->setText(i18n("No active filter"));
         d->info->setToolTip(QString());
         d->resetBtn->setEnabled(false);
-        d->status = AlbumIconViewFilterPriv::None;
+        d->status = FilterStatusBarPriv::None;
     }
     else
     {
@@ -200,13 +200,13 @@ void AlbumIconViewFilter::slotFilterMatches(bool match)
 
         d->info->setToolTip(message);
         d->resetBtn->setEnabled(true);
-        d->status = match ? AlbumIconViewFilterPriv::Match : AlbumIconViewFilterPriv::NotMatch;
+        d->status = match ? FilterStatusBarPriv::Match : FilterStatusBarPriv::NotMatch;
     }
 
     update();
 }
 
-void AlbumIconViewFilter::slotFilterSettingsChanged(const ImageFilterSettings& settings)
+void FilterStatusBar::slotFilterSettingsChanged(const ImageFilterSettings& settings)
 {
     d->settings = settings;
 }

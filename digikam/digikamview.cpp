@@ -38,7 +38,6 @@
 // Local includes
 
 #include "albumhistory.h"
-#include "albumiconviewfilter.h"
 #include "albumsettings.h"
 #include "albumwidgetstack.h"
 #include "batchsyncmetadata.h"
@@ -50,6 +49,7 @@
 #include "imagepreviewview.h"
 #include "imagepropertiessidebardb.h"
 #include "imageviewutilities.h"
+#include "filterstatusbar.h"
 #include "leftsidebarwidgets.h"
 #include "loadingcacheinterface.h"
 #include "mapwidgetview.h"
@@ -580,20 +580,20 @@ void DigikamView::setupConnections()
             this, SLOT(slotGotoAlbumAndItem(const ImageInfo&)));
 }
 
-void DigikamView::connectIconViewFilter(AlbumIconViewFilter* filter)
+void DigikamView::connectIconViewFilter(FilterStatusBar* filterbar)
 {
     ImageAlbumFilterModel* model = d->iconView->imageAlbumFilterModel();
 
     connect(model, SIGNAL(filterMatches(bool)),
-            filter, SLOT(slotFilterMatches(bool)));
+            filterbar, SLOT(slotFilterMatches(bool)));
 
     connect(model, SIGNAL(filterSettingsChanged(const ImageFilterSettings&)),
-            filter, SLOT(slotFilterSettingsChanged(const ImageFilterSettings&)));
+            filterbar, SLOT(slotFilterSettingsChanged(const ImageFilterSettings&)));
 
-    connect(filter, SIGNAL(signalResetFilters()),
+    connect(filterbar, SIGNAL(signalResetFilters()),
             d->filterWidget, SLOT(slotResetFilters()));
 
-    connect(filter, SIGNAL(signalPopupFiltersView()),
+    connect(filterbar, SIGNAL(signalPopupFiltersView()),
             this, SLOT(slotPopupFiltersView()));
 
 }

@@ -55,9 +55,9 @@ class Device;
 namespace Digikam
 {
 
-class AlbumIconViewFilter;
 class DigikamView;
 class FaceScanSettings;
+class FilterStatusBar;
 class ImageInfo;
 class ImageInfoList;
 class CameraType;
@@ -97,7 +97,7 @@ public:
     void stopInternalDatabase();
 
     DigikamView* view() const;
-    AlbumIconViewFilter* iconViewFilter() const;
+    FilterStatusBar* filterBar() const;
 
 Q_SIGNALS:
 

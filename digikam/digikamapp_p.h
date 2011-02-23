@@ -75,7 +75,7 @@ namespace Digikam
 class DCOPIface;
 class CameraUI;
 class SearchTextBar;
-class AlbumIconViewFilter;
+class FilterStatusBar;
 class TagsActionMngr;
 
 class DigikamAppPriv
@@ -172,7 +172,7 @@ public:
         solidUsmActionGroup(0),
         exifOrientationActionGroup(0),
         eventLoop(0),
-        albumIconViewFilter(0),
+        filterStatusBar(0),
         splashScreen(0),
         dcopIface(0),
         imagePluginsLoader(0),
@@ -318,7 +318,7 @@ public:
     QEventLoop*                         eventLoop;
     QString                             solidErrorMessage;
 
-    AlbumIconViewFilter*                albumIconViewFilter;
+    FilterStatusBar*                    filterStatusBar;
     SplashScreen*                       splashScreen;
     DCOPIface*                          dcopIface;
     ImagePluginLoader*                  imagePluginsLoader;
