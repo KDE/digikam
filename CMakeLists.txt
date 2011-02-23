@@ -1290,15 +1290,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libdigikamgui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/stackedview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/assignnameoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview_p.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimagefacedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikammodelcollection.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/leftsidebarwidgets.cpp
+
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorydrawer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedelegate.cpp
@@ -1309,12 +1308,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagethumbnailbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagethumbnaildelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageselectionoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/facerejectionoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageviewutilities.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/leftsidebarwidgets.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mediaplayerview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mapwidgetview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/assignnameoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/facerejectionoverlay.cpp
+
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/album.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumhistory.cpp
@@ -1368,6 +1365,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/editablesearchtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/sidebarwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/view/stackedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/view/digikamview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/view/mediaplayerview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/view/mapwidgetview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/view/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/icongroupitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/iconitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/iconview.cpp
@@ -1387,6 +1389,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/view
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
