@@ -127,8 +127,6 @@ public:
     /** List of pictures URL to slide */
     KUrl::List                   fileList;
 
-    QColor                       ratingColor;
-
     /** Map of pictures information to slide */
     QMap<KUrl, SlidePictureInfo> pictInfoMap;
 };

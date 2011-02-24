@@ -1458,7 +1458,6 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
     int i                = 0;
     m_cancelSlideShow    = false;
     settings.exifRotate  = MetadataSettings::instance()->settings().exifRotate;
-    settings.ratingColor = ThemeEngine::instance()->textSpecialRegColor();
 
     if (!d->imageInfoModel->isEmpty())
     {

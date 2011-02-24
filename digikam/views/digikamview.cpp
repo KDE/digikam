@@ -1827,7 +1827,6 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
 
     SlideShowSettings settings;
     settings.exifRotate           = MetadataSettings::instance()->settings().exifRotate;
-    settings.ratingColor          = ThemeEngine::instance()->textSpecialRegColor();
     settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
     settings.printName            = group.readEntry("SlideShowPrintName", true);
     settings.printDate            = group.readEntry("SlideShowPrintDate", false);
