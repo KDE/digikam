@@ -1376,7 +1376,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mapwidgetview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/leftsidebarwidgets.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/digikammodelcollection.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models/digikammodelcollection.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/icongroupitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/iconitem.cpp
@@ -1397,6 +1398,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support
