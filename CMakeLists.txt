@@ -1290,7 +1290,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libdigikamgui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/main/digikamapp.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/album.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumdragdrop.cpp
@@ -1397,6 +1397,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/main
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils
