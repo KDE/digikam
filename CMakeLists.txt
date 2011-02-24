@@ -1293,7 +1293,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/main/digikamapp.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/album.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumhistory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albummanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albummodificationhelper.cpp
@@ -1311,6 +1310,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dio.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/syncjob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/imageattributeswatch.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/albumdragdrop.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/ddragobjects.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/imagedragdrop.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/tagdragdrop.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filterstatusbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filtersidebarwidget.cpp
@@ -1345,7 +1349,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagslineedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagcheckview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagfolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/taggingaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagslineeditoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagspopupmenu.cpp
@@ -1362,8 +1365,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/albumsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/contextmenuhelper.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/ddragobjects.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/imagedragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/tooltipfiller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/editablesearchtreeview.cpp
@@ -1392,14 +1393,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/databaseserver
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/main
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support
