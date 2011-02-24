@@ -7,6 +7,7 @@
  * Description : a widget to edit time stamp.
  *
  * Copyright (C) 2005 Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef KDATETIMEEDIT_H
-#define KDATETIMEEDIT_H
+#ifndef DDATETIMEEDIT_H
+#define DDATETIMEEDIT_H
 
 // Qt includes
 
@@ -32,15 +33,11 @@
 
 #include <khbox.h>
 
-class QTimeEdit;
-
 namespace Digikam
 {
 
-class DDateEdit;
-
 /**
- * @class KDateTimeEdit
+ * @class DDateTimeEdit
  * This class is basically the same as the KDateTime class
  * with the exception that a QTimeEdit is placed directly
  * besides it.
@@ -48,7 +45,7 @@ class DDateEdit;
  * @image html kdatetimeedit.png "This is how it looks"
  * @author Tom Albers
  */
-class KDateTimeEdit : public KHBox
+class DDateTimeEdit : public KHBox
 {
     Q_OBJECT
 
@@ -59,23 +56,23 @@ public:
      * @param parent the parent widget
      * @param name the name of the widget
      */
-    KDateTimeEdit(QWidget* parent, const char* name);
+    DDateTimeEdit(QWidget* parent, const char* name);
 
     /**
      * destructor
      */
-    ~KDateTimeEdit();
+    ~DDateTimeEdit();
 
     /**
      * returns the date and time
      * @return a QDateTime with the currently chosen date and time
      */
-    QDateTime dateTime();
+    QDateTime dateTime() const;
 
     /**
      * Sets the date and the time of this widget.
      */
-    void setDateTime(const QDateTime dateTime);
+    void setDateTime(const QDateTime& dateTime);
 
 Q_SIGNALS:
 
@@ -85,15 +82,14 @@ Q_SIGNALS:
      */
     void dateTimeChanged( const QDateTime& dateTime );
 
-private:
-
-    QTimeEdit* m_timePopUp;
-
-    DDateEdit* m_datePopUp;
-
 private Q_SLOTS:
 
     void slotDateTimeChanged();
+
+private:
+
+    class DDateTimeEditPriv;
+    DDateTimeEditPriv* const d;
 };
 
 }  // namespace Digikam

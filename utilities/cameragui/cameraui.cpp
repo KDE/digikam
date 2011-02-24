@@ -96,7 +96,6 @@
 #include "statusnavigatebar.h"
 #include "dlogoaction.h"
 #include "thumbnailsize.h"
-#include "kdatetimeedit.h"
 #include "sidebar.h"
 #include "themeengine.h"
 #include "templateselector.h"
@@ -286,7 +285,7 @@ void CameraUI::setupUserArea()
     QVBoxLayout* onFlyVlay = new QVBoxLayout(onFlyBox);
     d->templateSelector    = new TemplateSelector(onFlyBox);
     d->fixDateTimeCheck    = new QCheckBox(i18n("Fix internal date && time"), onFlyBox);
-    d->dateTimeEdit        = new KDateTimeEdit(onFlyBox, "datepicker");
+    d->dateTimeEdit        = new DDateTimeEdit(onFlyBox, "datepicker");
     d->autoRotateCheck     = new QCheckBox(i18n("Auto-rotate/flip image"), onFlyBox);
     d->convertJpegCheck    = new QCheckBox(i18n("Convert to lossless file format"), onFlyBox);
     KHBox* hbox2           = new KHBox(onFlyBox);

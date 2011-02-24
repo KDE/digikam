@@ -49,7 +49,7 @@
 // Local includes
 
 #include "captionedit.h"
-#include "kdatetimeedit.h"
+#include "ddatetimeedit.h"
 #include "addtagslineedit.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
@@ -133,7 +133,7 @@ public:
 
     CaptionEdit*         captionsEdit;
 
-    KDateTimeEdit*       dateTimeEdit;
+    DDateTimeEdit*       dateTimeEdit;
 
     KTabWidget*          tabWidget;
 
@@ -186,7 +186,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     KHBox* dateBox  = new KHBox(captionTagsArea);
     new QLabel(i18n("Date:"), dateBox);
-    d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
+    d->dateTimeEdit = new DDateTimeEdit(dateBox, "datepicker");
 
     KHBox* labelsBox      = new KHBox(captionTagsArea);
     new QLabel(i18n("Labels:"), labelsBox);

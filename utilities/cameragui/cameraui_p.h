@@ -55,7 +55,7 @@
 #include "dzoombar.h"
 #include "freespacewidget.h"
 #include "imagepropertiessidebarcamgui.h"
-#include "kdatetimeedit.h"
+#include "ddatetimeedit.h"
 #include "renamecustomizer.h"
 #include "sidebar.h"
 #include "statusnavigatebar.h"
@@ -214,7 +214,7 @@ public:
 
     KHelpMenu*                    helpMenu;
 
-    KDateTimeEdit*                dateTimeEdit;
+    DDateTimeEdit*                dateTimeEdit;
 
     KIO::PreviewJob*              kdeJob;
 

@@ -7,6 +7,7 @@
  * Description : a widget to edit time stamp.
  *
  * Copyright (C) 2005 Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "kdatetimeedit.moc"
+#include "ddatetimeedit.moc"
 
 // Qt includes
 
@@ -34,42 +35,58 @@
 namespace Digikam
 {
 
-KDateTimeEdit::KDateTimeEdit(QWidget* parent, const char* name)
-    : KHBox(parent)
+class DDateTimeEdit::DDateTimeEditPriv
+{
+public:
+
+    DDateTimeEditPriv() :
+        timePopUp(0),
+        datePopUp(0)
+    {
+    }
+
+    QTimeEdit* timePopUp;
+    DDateEdit* datePopUp;
+};
+
+DDateTimeEdit::DDateTimeEdit(QWidget* parent, const char* name)
+    : KHBox(parent), d(new DDateTimeEditPriv)
 {
     setObjectName(name);
 
-    m_datePopUp = new DDateEdit(this, "datepopup");
-    m_timePopUp = new QTimeEdit(QTime::currentTime(), this);
+    d->datePopUp = new DDateEdit(this, "datepopup");
+    d->timePopUp = new QTimeEdit(QTime::currentTime(), this);
 
-    connect(m_datePopUp, SIGNAL(dateChanged(const QDate&)),
+    connect(d->datePopUp, SIGNAL(dateChanged(const QDate&)),
             this, SLOT(slotDateTimeChanged()));
 
-    connect(m_timePopUp, SIGNAL(timeChanged(const QTime&)),
+    connect(d->timePopUp, SIGNAL(timeChanged(const QTime&)),
             this, SLOT(slotDateTimeChanged()));
 }
 
-KDateTimeEdit::~KDateTimeEdit()
+DDateTimeEdit::~DDateTimeEdit()
 {
-    delete m_datePopUp;
-    m_datePopUp = 0;
+    delete d->datePopUp;
+    d->datePopUp = 0;
 
-    delete m_timePopUp;
-    m_timePopUp = 0;
+    delete d->timePopUp;
+    d->timePopUp = 0;
+
+    delete d;
 }
 
-QDateTime KDateTimeEdit::dateTime()
+QDateTime DDateTimeEdit::dateTime() const
 {
-    return QDateTime(m_datePopUp->date(), m_timePopUp->time());
+    return QDateTime(d->datePopUp->date(), d->timePopUp->time());
 }
 
-void KDateTimeEdit::setDateTime(const QDateTime dateTime)
+void DDateTimeEdit::setDateTime(const QDateTime& dateTime)
 {
-    m_datePopUp->setDate(dateTime.date());
-    m_timePopUp->setTime(dateTime.time());
+    d->datePopUp->setDate(dateTime.date());
+    d->timePopUp->setTime(dateTime.time());
 }
 
-void KDateTimeEdit::slotDateTimeChanged()
+void DDateTimeEdit::slotDateTimeChanged()
 {
     emit dateTimeChanged(dateTime());
 }
