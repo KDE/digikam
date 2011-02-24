@@ -233,10 +233,10 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libdatabaseui_SRCS}
                  ${libscriptiface_SRCS}
                  ${libfacedetection_SRCS}
-                 main.cpp
+                 main/main.cpp
 )
 
-QT4_ADD_DBUS_ADAPTOR(digikam_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
+QT4_ADD_DBUS_ADAPTOR(digikam_SRCS org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
 
 KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
 
@@ -281,7 +281,7 @@ INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # Others Files to install #######################################################
 
-INSTALL(PROGRAMS digikam.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-INSTALL(FILES digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
-INSTALL(FILES digikam.notifyrc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(PROGRAMS main/digikam.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+INSTALL(FILES main/digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(FILES main/digikam.notifyrc DESTINATION ${DATA_INSTALL_DIR}/digikam)
 INSTALL(FILES utils/digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
