@@ -7,9 +7,9 @@
  * Description : Qt Model for Albums - drag and drop handling
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -124,8 +124,8 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
 
         // Check if items dropped come from outside current album.
         // This can be the case with recursive content album mode.
-        KUrl::List extUrls;
-        ImageInfoList extImgInfList;
+        KUrl::List       extUrls;
+        ImageInfoList    extImgInfList;
         QList<qlonglong> extImageIDs;
 
         for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
@@ -196,8 +196,8 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         {
             KMenu popMenu(view);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-            QAction* moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
-            QAction* copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
+            QAction* moveAction      = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
+            QAction* copyAction      = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
             QAction* thumbnailAction = 0;
 
             if (imageIDs.count() == 1)

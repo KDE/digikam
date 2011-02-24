@@ -7,8 +7,8 @@
  * Description : Qt Model for Albums - drag and drop handling
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -107,7 +107,7 @@ static Qt::DropAction copyOrMove(const QDropEvent* e, QWidget* view, bool showMe
 bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)
 {
     ImageCategorizedView* view = static_cast<ImageCategorizedView*>(abstractview);
-    Album* album = view->albumAt(e->pos());
+    Album* album               = view->albumAt(e->pos());
 
     // unless we are readonly anyway, we always want an album
     if (!m_readOnly && (!album || album->isRoot()) )
@@ -173,7 +173,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         else if (palbum)
         {
             // Check if items dropped come from outside current album.
-            KUrl::List extUrls, intUrls;
+            KUrl::List       extUrls, intUrls;
             QList<qlonglong> extImageIDs, intImageIDs;
 
             for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
@@ -327,22 +327,23 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         KMenu popMenu(view);
 
-        QList<ImageInfo> selectedInfos = view->selectedImageInfosCurrentFirst();
-
+        QList<ImageInfo> selectedInfos  = view->selectedImageInfosCurrentFirst();
         QAction* assignToSelectedAction = 0;
-
-        if (selectedInfos.count() > 1)
-            assignToSelectedAction =
-                popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &Selected Items",talbum->tagPath().mid(1)));
-
         QAction* assignToThisAction = 0;
 
-        if (droppedOn.isValid())
-            assignToThisAction =
-                popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &This Item",talbum->tagPath().mid(1)));
+        if (selectedInfos.count() > 1)
+            assignToSelectedAction = popMenu.addAction(SmallIcon("tag"), 
+                                                       i18n("Assign '%1' to &Selected Items", 
+                                                            talbum->tagPath().mid(1)));
 
-        QAction* assignToAllAction =
-            popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &All Items",talbum->tagPath().mid(1)));
+        if (droppedOn.isValid())
+            assignToThisAction = popMenu.addAction(SmallIcon("tag"), 
+                                                   i18n("Assign '%1' to &This Item", 
+                                                        talbum->tagPath().mid(1)));
+
+        QAction* assignToAllAction = popMenu.addAction(SmallIcon("tag"), 
+                                                       i18n("Assign '%1' to &All Items", 
+                                                            talbum->tagPath().mid(1)));
 
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
@@ -376,7 +377,6 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         KMenu popMenu(view);
 
         QList<ImageInfo> selectedInfos = view->selectedImageInfosCurrentFirst();
-
         QAction* assignToSelectedAction = 0;
 
         if (selectedInfos.count() > 1)
@@ -391,8 +391,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             assignToThisAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &This Item"));
         }
 
-        QAction* assignToAllAction =
-            popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &All Items"));
+        QAction* assignToAllAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &All Items"));
 
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
