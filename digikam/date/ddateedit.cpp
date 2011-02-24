@@ -44,6 +44,10 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 
+// Local includes
+
+#include "ddatepickerpopup.h"
+
 namespace Digikam
 {
 
@@ -110,7 +114,7 @@ public:
 
     QMap<QString, int>  keywordMap;
 
-    KDatePickerPopup*   popup;
+    DDatePickerPopup*   popup;
 };
 
 DDateEdit::DDateEdit(QWidget* parent, const char* name)
@@ -121,7 +125,7 @@ DDateEdit::DDateEdit(QWidget* parent, const char* name)
     setMaxCount( 1 );
     setEditable( true );
 
-    d->date         = QDate::currentDate();
+    d->date       = QDate::currentDate();
     QString today = KGlobal::locale()->formatDate( d->date, KLocale::ShortDate );
 
     addItem( today );
@@ -134,7 +138,7 @@ DDateEdit::DDateEdit(QWidget* parent, const char* name)
     connect( this, SIGNAL( textChanged( const QString& ) ),
              SLOT( slotTextChanged( const QString& ) ) );
 
-    d->popup = new KDatePickerPopup( KDatePickerPopup::DatePicker | KDatePickerPopup::Words );
+    d->popup = new DDatePickerPopup( DDatePickerPopup::DatePicker | DDatePickerPopup::Words );
     d->popup->hide();
     d->popup->installEventFilter( this );
 
@@ -186,9 +190,8 @@ void DDateEdit::showPopup()
         return;
     }
 
-    QRect desk        = KGlobalSettings::desktopGeometry( this );
-    QPoint popupPoint = mapToGlobal( QPoint( 0,0 ) );
-
+    QRect desk          = KGlobalSettings::desktopGeometry( this );
+    QPoint popupPoint   = mapToGlobal( QPoint( 0,0 ) );
     int dateFrameHeight = d->popup->sizeHint().height();
 
     if ( popupPoint.y() + height() + dateFrameHeight > desk.bottom() )

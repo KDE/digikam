@@ -1313,7 +1313,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/ddateedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/ddatetimeedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/kdatepickerpopup.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/ddatepickerpopup.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/datefolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/monthwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/timelinewidget.cpp

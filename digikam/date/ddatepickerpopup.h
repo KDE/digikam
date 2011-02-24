@@ -9,6 +9,7 @@
  *
  * Copyright (C) 2004 Bram Schoenmakers <bramschoenmakers@kde.nl>
  * Copyright (C) 2006 Mikolaj Machowski <mikmach@wp.pl>
+ * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef KDATEPICKERPOPUP_H
-#define KDATEPICKERPOPUP_H
+#ifndef DDATEPICKERPOPUP_H
+#define DDATEPICKERPOPUP_H
 
 // Qt includes
 
@@ -53,7 +54,7 @@ namespace Digikam
 
    @author Bram Schoenmakers <bram_s@softhome.net>
 */
-class KDatePickerPopup: public KMenu
+class DDatePickerPopup: public KMenu
 {
     Q_OBJECT
 
@@ -69,14 +70,15 @@ public:
     Q_DECLARE_FLAGS( Items, ItemFlag )
 
     /**
-       A constructor for the KDatePickerPopup.
+       A constructor for the DDatePickerPopup.
 
        @param items List of all desirable items, separated with a bitwise OR.
        @param date Initial date of datepicker-widget.
        @param parent The object's parent.
     */
-    explicit KDatePickerPopup( Items items = DatePicker, const QDate& date = QDate::currentDate(),
+    explicit DDatePickerPopup( Items items = DatePicker, const QDate& date = QDate::currentDate(),
                                QWidget* parent = 0 );
+    virtual ~DDatePickerPopup();
 
     /**
        @return A pointer to the private variable mDatePicker, an instance of
@@ -92,11 +94,9 @@ public:
     */
     void setItems( int items = 1 );
 #endif
+
     /** @return Returns the bitwise result of the active items in the popup. */
-    int items() const
-    {
-        return mItems;
-    }
+    int items() const;
 
 Q_SIGNALS:
 
@@ -128,13 +128,12 @@ private:
 
 private:
 
-    KDatePicker* mDatePicker;
-
-    Items        mItems;
+    class DDatePickerPopupPriv;
+    DDatePickerPopupPriv* const d;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( KDatePickerPopup::Items )
+Q_DECLARE_OPERATORS_FOR_FLAGS( DDatePickerPopup::Items )
 
 }  // namespace Digikam
 
-#endif // KDATEPICKERPOPUP_H
+#endif // DDATEPICKERPOPUP_H

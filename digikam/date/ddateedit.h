@@ -38,7 +38,6 @@
 // KDE includes
 
 #include "kcombobox.h"
-#include "kdatepickerpopup.h"
 
 namespace Digikam
 {
