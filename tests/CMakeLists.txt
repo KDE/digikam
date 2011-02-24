@@ -24,7 +24,7 @@ SET(cameranamehelper_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/cameranamehelper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/gpcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/dkcamera.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albumsettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/utils/albumsettings.cpp
 )
 KDE4_ADD_UNIT_TEST(cameranamehelpertest ${cameranamehelper_SRCS})
 TARGET_LINK_LIBRARIES(cameranamehelpertest
@@ -113,13 +113,13 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
 #SET(albummodeltest_SRCS
 #    albummodeltest.cpp
 #    modeltest/modeltest.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albummanager.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albumsettings.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albumthumbnailloader.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/databaseguierrorhandler.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/album.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albummanager.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albumsettings.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albumthumbnailloader.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/databaseguierrorhandler.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common/databasewidget.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/scancontroller.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/scancontroller.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/dkcamera.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/gpcamera.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/cameralist.cpp
