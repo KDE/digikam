@@ -27,9 +27,10 @@
 
 // Qt includes
 
-#include <qobject.h>
+#include <QObject>
 
 // Local includes
+
 #include "abstractalbummodel.h"
 #include "albumfiltermodel.h"
 #include "albummodel.h"
@@ -37,8 +38,6 @@
 
 namespace Digikam
 {
-
-class DigikamModelCollectionPriv;
 
 /**
  * This class is simply a collection of all models that build the core of the
@@ -49,7 +48,9 @@ class DigikamModelCollectionPriv;
 class DigikamModelCollection: public QObject
 {
     Q_OBJECT
+
 public:
+
     DigikamModelCollection();
     virtual ~DigikamModelCollection();
 
@@ -62,13 +63,14 @@ public:
 
 private Q_SLOTS:
 
-    void albumSettingsChanged();
+    void slotAlbumSettingsChanged();
 
 private:
-    DigikamModelCollectionPriv* d;
 
+    class DigikamModelCollectionPriv;
+    DigikamModelCollectionPriv* const d;
 };
 
-}
+} // namespace Digikam
 
 #endif /* DIGIKAMMODELCOLLECTION_H */

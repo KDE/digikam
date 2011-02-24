@@ -35,10 +35,20 @@
 namespace Digikam
 {
 
-class DigikamModelCollectionPriv
+class DigikamModelCollection::DigikamModelCollectionPriv
 {
 
 public:
+
+    DigikamModelCollectionPriv()
+    {
+        albumModel        = 0;
+        tagModel          = 0;
+        tagFilterModel    = 0;
+        searchModel       = 0;
+        dateAlbumModel    = 0;
+        imageVersionModel = 0;
+    }
 
     AlbumModel*         albumModel;
     TagModel*           tagModel;
@@ -51,26 +61,21 @@ public:
 DigikamModelCollection::DigikamModelCollection() :
     d(new DigikamModelCollectionPriv)
 {
-    d->albumModel = new AlbumModel(AlbumModel::IncludeRootAlbum);
-
-    d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum);
-
+    d->albumModel     = new AlbumModel(AlbumModel::IncludeRootAlbum);
+    d->tagModel       = new TagModel(AbstractAlbumModel::IncludeRootAlbum);
     d->tagFilterModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
     d->tagFilterModel->setCheckable(true);
     d->tagFilterModel->setTristate(true);
 
-    d->searchModel = new SearchModel();
-
-    d->dateAlbumModel = new DateAlbumModel();
-
+    d->searchModel       = new SearchModel();
+    d->dateAlbumModel    = new DateAlbumModel();
     d->imageVersionModel = new ImageVersionsModel();
 
     // set icons initially
-    albumSettingsChanged();
+    slotAlbumSettingsChanged();
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
-            this, SLOT(albumSettingsChanged()));
-
+            this, SLOT(slotAlbumSettingsChanged()));
 }
 
 DigikamModelCollection::~DigikamModelCollection()
@@ -81,7 +86,6 @@ DigikamModelCollection::~DigikamModelCollection()
     delete d->searchModel;
     delete d->dateAlbumModel;
     delete d->imageVersionModel;
-
     delete d;
 }
 
@@ -110,9 +114,13 @@ DateAlbumModel* DigikamModelCollection::getDateAlbumModel() const
     return d->dateAlbumModel;
 }
 
-void DigikamModelCollection::albumSettingsChanged()
+ImageVersionsModel* DigikamModelCollection::getImageVersionsModel() const
 {
+    return d->imageVersionModel;
+}
 
+void DigikamModelCollection::slotAlbumSettingsChanged()
+{
     d->dateAlbumModel->setPixmaps(
         SmallIcon(
             "view-calendar-list",
@@ -122,10 +130,4 @@ void DigikamModelCollection::albumSettingsChanged()
             AlbumSettings::instance()->getTreeViewIconSize()));
 }
 
-ImageVersionsModel* DigikamModelCollection::getImageVersionsModel() const
-{
-    return d->imageVersionModel;
-}
-
-
-}
+} // namespace Digikam
