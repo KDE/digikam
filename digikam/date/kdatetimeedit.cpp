@@ -29,7 +29,7 @@
 
 // KDE includes
 
-#include "kdateedit.h"
+#include "ddateedit.h"
 
 namespace Digikam
 {
@@ -39,7 +39,7 @@ KDateTimeEdit::KDateTimeEdit(QWidget* parent, const char* name)
 {
     setObjectName(name);
 
-    m_datePopUp = new KDateEdit(this, "datepopup");
+    m_datePopUp = new DDateEdit(this, "datepopup");
     m_timePopUp = new QTimeEdit(QTime::currentTime(), this);
 
     connect(m_datePopUp, SIGNAL(dateChanged(const QDate&)),

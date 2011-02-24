@@ -1311,6 +1311,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/syncjob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/imageattributeswatch.cpp
 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/ddateedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/kdatepickerpopup.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/kdatetimeedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/datefolderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/monthwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/timelinewidget.cpp
+
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/albumdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/ddragobjects.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/imagedragdrop.cpp
@@ -1355,13 +1362,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsactionmngr.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tageditdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagmodificationhelper.cpp
-
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/kdateedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/kdatepickerpopup.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/kdatetimeedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/datefolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/monthwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/timelinewidget.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/albumsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/contextmenuhelper.cpp

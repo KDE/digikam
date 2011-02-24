@@ -7,9 +7,10 @@
  * Description : a combo box to list date.
  *               this widget come from libkdepim.
  *
- *  Copyright (C) 2002 Cornelius Schumacher <schumacher@kde.org>
- *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
- *  Copyright (C) 2004 Tobias Koenig <tokoe@kde.org>
+ * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002 Cornelius Schumacher <schumacher@kde.org>
+ * Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
+ * Copyright (C) 2004 Tobias Koenig <tokoe@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef KDATEEDIT_H
-#define KDATEEDIT_H
+#ifndef DDATEEDIT_H
+#define DDATEEDIT_H
 
 // Qt includes
 
@@ -59,14 +60,14 @@ namespace Digikam
   @author David Jarvie <software@astrojar.org.uk>
   @author Tobias Koenig <tokoe@kde.org>
 */
-class KDateEdit : public KComboBox
+class DDateEdit : public KComboBox
 {
     Q_OBJECT
 
 public:
 
-    explicit KDateEdit(QWidget* parent=0, const char* name=0);
-    virtual ~KDateEdit();
+    explicit DDateEdit(QWidget* parent=0, const char* name=0);
+    virtual ~DDateEdit();
 
     /**
       @return The date entered. This date could be invalid,
@@ -143,17 +144,10 @@ private:
 
 private:
 
-    bool                mReadOnly;
-    bool                mTextChanged;
-    bool                mDiscardNextMousePress;
-
-    QDate               mDate;
-
-    QMap<QString, int>  mKeywordMap;
-
-    KDatePickerPopup*   mPopup;
+    class DDateEditPriv;
+    DDateEditPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif // KDATEEDIT_H
+#endif // DDATEEDIT_H

@@ -7,7 +7,7 @@
  * Description : a folder view for date albums.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class DateFolderViewPriv
+class DateFolderView::DateFolderViewPriv
 {
 public:
 
@@ -82,14 +82,15 @@ DateFolderView::DateFolderView(QWidget* parent, DateAlbumModel* dateAlbumModel)
 {
     setObjectName("DateFolderView");
 
-    d->dateTreeView  = new DateAlbumTreeView(this);
+    d->dateTreeView = new DateAlbumTreeView(this);
     d->dateTreeView->setAlbumModel(dateAlbumModel);
     d->dateTreeView->setSelectAlbumOnClick(true);
     d->dateTreeView->setAlbumManagerCurrentAlbum(true);
-    d->monthview = new MonthWidget(this);
+    d->monthview    = new MonthWidget(this);
 
     connect(d->dateTreeView, SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(slotSelectionChanged(Album*)));
+
     // Loading of DAlbums may take longer that setting up the gui. Therefore
     // the first call to setActive may not set the current album in the album
     // manager as it is not yet loaded. To achieve this, we wait for loading

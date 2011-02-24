@@ -7,9 +7,10 @@
  * Description : a combo box to list date.
  *               this widget come from libkdepim.
  *
- *  Copyright (C) 2002 Cornelius Schumacher <schumacher@kde.org>
- *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
- *  Copyright (C) 2004 Tobias Koenig <tokoe@kde.org>
+ * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002 Cornelius Schumacher <schumacher@kde.org>
+ * Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
+ * Copyright (C) 2004 Tobias Koenig <tokoe@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "kdateedit.moc"
+#include "ddateedit.moc"
 
 // Qt includes
 
@@ -42,7 +43,6 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-
 
 namespace Digikam
 {
@@ -88,16 +88,41 @@ private:
     QStringList mKeywords;
 };
 
-KDateEdit::KDateEdit(QWidget* parent, const char* name)
-    : KComboBox(parent), mReadOnly(false), mDiscardNextMousePress(false)
+// -----------------------------------------------------------------------------------
+
+class DDateEdit::DDateEditPriv
+{
+public:
+
+    DDateEditPriv() :
+        readOnly(false),
+        textChanged(false),
+        discardNextMousePress(false),
+        popup(0)
+    {
+    }
+
+    bool                readOnly;
+    bool                textChanged;
+    bool                discardNextMousePress;
+
+    QDate               date;
+
+    QMap<QString, int>  keywordMap;
+
+    KDatePickerPopup*   popup;
+};
+
+DDateEdit::DDateEdit(QWidget* parent, const char* name)
+    : KComboBox(parent), d(new DDateEditPriv)
 {
     setObjectName(name);
     // need at least one entry for popup to work
     setMaxCount( 1 );
     setEditable( true );
 
-    mDate         = QDate::currentDate();
-    QString today = KGlobal::locale()->formatDate( mDate, KLocale::ShortDate );
+    d->date         = QDate::currentDate();
+    QString today = KGlobal::locale()->formatDate( d->date, KLocale::ShortDate );
 
     addItem( today );
     setCurrentIndex( 0 );
@@ -109,53 +134,54 @@ KDateEdit::KDateEdit(QWidget* parent, const char* name)
     connect( this, SIGNAL( textChanged( const QString& ) ),
              SLOT( slotTextChanged( const QString& ) ) );
 
-    mPopup = new KDatePickerPopup( KDatePickerPopup::DatePicker | KDatePickerPopup::Words );
-    mPopup->hide();
-    mPopup->installEventFilter( this );
+    d->popup = new KDatePickerPopup( KDatePickerPopup::DatePicker | KDatePickerPopup::Words );
+    d->popup->hide();
+    d->popup->installEventFilter( this );
 
-    connect( mPopup, SIGNAL( dateChanged( const QDate& ) ),
+    connect( d->popup, SIGNAL( dateChanged( const QDate& ) ),
              this, SLOT( dateSelected( const QDate& ) ) );
 
     // handle keyword entry
     setupKeywords();
     lineEdit()->installEventFilter( this );
 
-    setValidator( new DateValidator( mKeywordMap.keys(), this ) );
+    setValidator( new DateValidator( d->keywordMap.keys(), this ) );
 
-    mTextChanged = false;
+    d->textChanged = false;
 }
 
-KDateEdit::~KDateEdit()
+DDateEdit::~DDateEdit()
 {
-    delete mPopup;
-    mPopup = 0;
+    delete d->popup;
+    d->popup = 0;
+    delete d;
 }
 
-void KDateEdit::setDate( const QDate& date )
+void DDateEdit::setDate( const QDate& date )
 {
     assignDate( date );
     updateView();
 }
 
-QDate KDateEdit::date() const
+QDate DDateEdit::date() const
 {
-    return mDate;
+    return d->date;
 }
 
-void KDateEdit::setReadOnly( bool readOnly )
+void DDateEdit::setReadOnly( bool readOnly )
 {
-    mReadOnly = readOnly;
+    d->readOnly = readOnly;
     lineEdit()->setReadOnly( readOnly );
 }
 
-bool KDateEdit::isReadOnly() const
+bool DDateEdit::isReadOnly() const
 {
-    return mReadOnly;
+    return d->readOnly;
 }
 
-void KDateEdit::showPopup()
+void DDateEdit::showPopup()
 {
-    if ( mReadOnly )
+    if ( d->readOnly )
     {
         return;
     }
@@ -163,7 +189,7 @@ void KDateEdit::showPopup()
     QRect desk        = KGlobalSettings::desktopGeometry( this );
     QPoint popupPoint = mapToGlobal( QPoint( 0,0 ) );
 
-    int dateFrameHeight = mPopup->sizeHint().height();
+    int dateFrameHeight = d->popup->sizeHint().height();
 
     if ( popupPoint.y() + height() + dateFrameHeight > desk.bottom() )
     {
@@ -174,7 +200,7 @@ void KDateEdit::showPopup()
         popupPoint.setY( popupPoint.y() + height() );
     }
 
-    int dateFrameWidth = mPopup->sizeHint().width();
+    int dateFrameWidth = d->popup->sizeHint().width();
 
     if ( popupPoint.x() + dateFrameWidth > desk.right() )
     {
@@ -191,16 +217,16 @@ void KDateEdit::showPopup()
         popupPoint.setY( desk.top() );
     }
 
-    if ( mDate.isValid() )
+    if ( d->date.isValid() )
     {
-        mPopup->setDate( mDate );
+        d->popup->setDate( d->date );
     }
     else
     {
-        mPopup->setDate( QDate::currentDate() );
+        d->popup->setDate( QDate::currentDate() );
     }
 
-    mPopup->popup( popupPoint );
+    d->popup->popup( popupPoint );
 
     // The combo box is now shown pressed. Make it show not pressed again
     // by causing its (invisible) list box to emit a 'selected' signal.
@@ -219,7 +245,7 @@ void KDateEdit::showPopup()
     }
 }
 
-void KDateEdit::dateSelected( const QDate& date )
+void DDateEdit::dateSelected( const QDate& date )
 {
     if (assignDate( date ) )
     {
@@ -228,12 +254,12 @@ void KDateEdit::dateSelected( const QDate& date )
 
         if ( date.isValid() )
         {
-            mPopup->hide();
+            d->popup->hide();
         }
     }
 }
 
-void KDateEdit::dateEntered( const QDate& date )
+void DDateEdit::dateEntered( const QDate& date )
 {
     if (assignDate( date ) )
     {
@@ -242,7 +268,7 @@ void KDateEdit::dateEntered( const QDate& date )
     }
 }
 
-void KDateEdit::lineEnterPressed()
+void DDateEdit::lineEnterPressed()
 {
     bool replaced = false;
 
@@ -259,7 +285,7 @@ void KDateEdit::lineEnterPressed()
     }
 }
 
-QDate KDateEdit::parseDate( bool* replaced ) const
+QDate DDateEdit::parseDate( bool* replaced ) const
 {
     QString text = currentText();
     QDate result;
@@ -273,10 +299,10 @@ QDate KDateEdit::parseDate( bool* replaced ) const
     {
         result = QDate();
     }
-    else if ( mKeywordMap.contains( text.toLower() ) )
+    else if ( d->keywordMap.contains( text.toLower() ) )
     {
         QDate today = QDate::currentDate();
-        int i = mKeywordMap[ text.toLower() ];
+        int i = d->keywordMap[ text.toLower() ];
 
         if ( i >= 100 )
         {
@@ -316,16 +342,16 @@ QDate KDateEdit::parseDate( bool* replaced ) const
     return result;
 }
 
-bool KDateEdit::eventFilter( QObject* object, QEvent* event )
+bool DDateEdit::eventFilter( QObject* object, QEvent* event )
 {
     if ( object == lineEdit() )
     {
         // We only process the focus out event if the text has changed
         // since we got focus
-        if ( (event->type() == QEvent::FocusOut) && mTextChanged )
+        if ( (event->type() == QEvent::FocusOut) && d->textChanged )
         {
             lineEnterPressed();
-            mTextChanged = false;
+            d->textChanged = false;
         }
         else if ( event->type() == QEvent::KeyPress )
         {
@@ -349,7 +375,7 @@ bool KDateEdit::eventFilter( QObject* object, QEvent* event )
                 step = -1;
             }
 
-            if ( step && !mReadOnly )
+            if ( step && !d->readOnly )
             {
                 QDate date = parseDate();
 
@@ -377,15 +403,15 @@ bool KDateEdit::eventFilter( QObject* object, QEvent* event )
             {
                 QMouseEvent* mouseEvent = (QMouseEvent*)event;
 
-                if ( !mPopup->rect().contains( mouseEvent->pos() ) )
+                if ( !d->popup->rect().contains( mouseEvent->pos() ) )
                 {
-                    QPoint globalPos = mPopup->mapToGlobal( mouseEvent->pos() );
+                    QPoint globalPos = d->popup->mapToGlobal( mouseEvent->pos() );
 
                     if ( QApplication::widgetAt( globalPos ) == this )
                     {
                         // The date picker is being closed by a click on the
-                        // KDateEdit widget. Avoid popping it up again immediately.
-                        mDiscardNextMousePress = true;
+                        // DDateEdit widget. Avoid popping it up again immediately.
+                        d->discardNextMousePress = true;
                     }
                 }
 
@@ -399,18 +425,18 @@ bool KDateEdit::eventFilter( QObject* object, QEvent* event )
     return false;
 }
 
-void KDateEdit::mousePressEvent( QMouseEvent* event )
+void DDateEdit::mousePressEvent( QMouseEvent* event )
 {
-    if ( event->button() == Qt::LeftButton && mDiscardNextMousePress )
+    if ( event->button() == Qt::LeftButton && d->discardNextMousePress )
     {
-        mDiscardNextMousePress = false;
+        d->discardNextMousePress = false;
         return;
     }
 
     KComboBox::mousePressEvent( event );
 }
 
-void KDateEdit::slotTextChanged( const QString& )
+void DDateEdit::slotTextChanged( const QString& )
 {
     QDate date = parseDate();
 
@@ -419,40 +445,40 @@ void KDateEdit::slotTextChanged( const QString& )
         emit dateChanged( date );
     }
 
-    mTextChanged = true;
+    d->textChanged = true;
 }
 
-void KDateEdit::setupKeywords()
+void DDateEdit::setupKeywords()
 {
     // Create the keyword list. This will be used to match against when the user
     // enters information.
-    mKeywordMap.insert( i18n( "tomorrow" ), 1 );
-    mKeywordMap.insert( i18n( "today" ), 0 );
-    mKeywordMap.insert( i18n( "yesterday" ), -1 );
+    d->keywordMap.insert( i18n( "tomorrow" ), 1 );
+    d->keywordMap.insert( i18n( "today" ), 0 );
+    d->keywordMap.insert( i18n( "yesterday" ), -1 );
 
     QString dayName;
 
     for ( int i = 1; i <= 7; ++i )
     {
         dayName = KGlobal::locale()->calendar()->weekDayName( i ).toLower();
-        mKeywordMap.insert( dayName, i + 100 );
+        d->keywordMap.insert( dayName, i + 100 );
     }
 }
 
-bool KDateEdit::assignDate( const QDate& date )
+bool DDateEdit::assignDate( const QDate& date )
 {
-    mDate = date;
-    mTextChanged = false;
+    d->date = date;
+    d->textChanged = false;
     return true;
 }
 
-void KDateEdit::updateView()
+void DDateEdit::updateView()
 {
     QString dateString;
 
-    if ( mDate.isValid() )
+    if ( d->date.isValid() )
     {
-        dateString = KGlobal::locale()->formatDate( mDate, KLocale::ShortDate );
+        dateString = KGlobal::locale()->formatDate( d->date, KLocale::ShortDate );
     }
 
     // We do not want to generate a signal here,

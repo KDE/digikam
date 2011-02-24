@@ -37,7 +37,7 @@ class QTimeEdit;
 namespace Digikam
 {
 
-class KDateEdit;
+class DDateEdit;
 
 /**
  * @class KDateTimeEdit
@@ -89,7 +89,7 @@ private:
 
     QTimeEdit* m_timePopUp;
 
-    KDateEdit* m_datePopUp;
+    DDateEdit* m_datePopUp;
 
 private Q_SLOTS:
 

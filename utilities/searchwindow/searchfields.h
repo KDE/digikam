@@ -54,7 +54,7 @@ namespace Digikam
 class AlbumSelectComboBox;
 class SearchFieldGroup;
 class SqueezedComboBox;
-class KDateEdit;
+class DDateEdit;
 class ChoiceSearchModel;
 class ChoiceSearchComboBox;
 class RatingComboBox;
@@ -279,9 +279,9 @@ protected Q_SLOTS:
 protected:
 
     QTimeEdit* m_firstTimeEdit;
-    KDateEdit* m_firstDateEdit;
+    DDateEdit* m_firstDateEdit;
     QTimeEdit* m_secondTimeEdit;
-    KDateEdit* m_secondDateEdit;
+    DDateEdit* m_secondDateEdit;
     QLabel*    m_betweenLabel;
 
     Type       m_type;

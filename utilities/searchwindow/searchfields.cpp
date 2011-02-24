@@ -66,7 +66,7 @@
 #include "dimg.h"
 #include "dmetadata.h"
 #include "imagescanner.h"
-#include "kdateedit.h"
+#include "ddateedit.h"
 #include "ratingsearchutilities.h"
 #include "searchfieldgroup.h"
 #include "searchwindow.h"
@@ -795,8 +795,8 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout* layout, int row, int c
     //     QHBoxLayout *hbox = new QHBoxLayout;
     //     layout->addLayout(hbox, row, column, 1, 3);
 
-    m_firstDateEdit  = new KDateEdit;
-    m_secondDateEdit = new KDateEdit;
+    m_firstDateEdit  = new DDateEdit;
+    m_secondDateEdit = new DDateEdit;
 
     if (m_type == DateOnly)
     {
