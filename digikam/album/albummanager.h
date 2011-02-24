@@ -75,9 +75,6 @@ typedef QList<Album*> AlbumList;
 /**
  * \class AlbumManager
  *
- * There are two primary managers which manage the listing and
- * lifetime of Album and ImageInfo: AlbumManager and AlbumLister
- *
  * AlbumManager manages albums: does listing of albums and controls the lifetime of it.
  * For PAlbums and TAlbums, the listing is done by reading the db directly and
  * building the hierarchy of the albums. For DAlbums, since the listing takes
