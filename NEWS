@@ -74,5 +74,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 053 ==> 210576 : Move tag filter to the bottom.
 054 ==> 262539 : CMake Warning "cycle in the constraint graph" with libkipi.
 055 ==> 231597 : Add XCF to the filter list in the album view.
-056 ==> 
+056 ==> 266788 : Showfoto crashes when opening a photo.
+057 ==> 
 
