@@ -163,7 +163,9 @@ private Q_SLOTS:
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
 
-    void slotRatingChanged(const KUrl& url, int rating);
+    void slotRatingChanged(const KUrl&, int);
+    void slotColorLabelChanged(const KUrl&, int);
+    void slotPickLabelChanged(const KUrl&, int);
 
     void slotFileMetadataChanged(const KUrl&);
     //void slotCollectionImageChange(const CollectionImageChangeset&);

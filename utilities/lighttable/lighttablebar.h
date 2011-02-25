@@ -195,6 +195,8 @@ public Q_SLOTS:
     void slotAssignColorLabel(int);
     void slotAssignRating(int);
     void slotRatingChanged(const KUrl&, int);
+    void slotColorLabelChanged(const KUrl&, int);
+    void slotPickLabelChanged(const KUrl&, int);
 
 private:
 

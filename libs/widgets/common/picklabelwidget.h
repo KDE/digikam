@@ -113,6 +113,8 @@ public:
     void setPickLabel(PickLabel label);
     PickLabel colorLabel();
 
+    PickLabelWidget* pickLabelWidget() const;
+
 Q_SIGNALS:
 
     void signalPickLabelChanged(int);

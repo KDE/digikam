@@ -137,7 +137,7 @@ public:
     static const QString       configSlideShowPrintExpoSensitivityEntry;
     static const QString       configSlideShowPrintMakeModelEntry;
     static const QString       configSlideShowPrintNameEntry;
-    static const QString       configSlideShowPrintRatingEntry;
+    static const QString       configSlideShowPrintLabelsEntry;
     static const QString       configSlideShowStartCurrentEntry;
     static const QString       configSplitterStateEntry;
     static const QString       configTiffCompressionEntry;
@@ -291,7 +291,7 @@ const QString EditorWindow::EditorWindowPriv::configSlideShowPrintDateEntry("Sli
 const QString EditorWindow::EditorWindowPriv::configSlideShowPrintExpoSensitivityEntry("SlideShowPrintExpoSensitivity");
 const QString EditorWindow::EditorWindowPriv::configSlideShowPrintMakeModelEntry("SlideShowPrintMakeModel");
 const QString EditorWindow::EditorWindowPriv::configSlideShowPrintNameEntry("SlideShowPrintName");
-const QString EditorWindow::EditorWindowPriv::configSlideShowPrintRatingEntry("SlideShowPrintRating");
+const QString EditorWindow::EditorWindowPriv::configSlideShowPrintLabelsEntry("SlideShowPrintLabels");
 const QString EditorWindow::EditorWindowPriv::configSlideShowStartCurrentEntry("SlideShowStartCurrent");
 const QString EditorWindow::EditorWindowPriv::configSplitterStateEntry("SplitterState");
 const QString EditorWindow::EditorWindowPriv::configTiffCompressionEntry("TIFFCompression");

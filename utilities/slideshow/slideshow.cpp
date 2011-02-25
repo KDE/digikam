@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2004 by Enrico Ros <eros.kde@email.it>
  *
  * This program is free software; you can redistribute it
@@ -27,10 +27,12 @@
 // Qt includes
 
 #include <QColor>
+#include <QMenu>
 #include <QCursor>
 #include <QDesktopWidget>
 #include <QEvent>
 #include <QFont>
+#include <QLayout>
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -61,6 +63,8 @@
 #include "previewloadthread.h"
 #include "toolbar.h"
 #include "ratingwidget.h"
+#include "colorlabelwidget.h"
+#include "picklabelwidget.h"
 
 namespace Digikam
 {
@@ -72,7 +76,10 @@ public:
     SlideShowPriv()
         : maxStringLen(80)
     {
+        labelsBox         = 0;
+        clWidget          = 0;
         ratingWidget      = 0;
+        plWidget          = 0;
         previewThread     = 0;
         mouseMoveTimer    = 0;
         timer             = 0;
@@ -83,35 +90,39 @@ public:
         screenSaverCookie = -1;
     }
 
-    bool               endOfShow;
-    bool               pause;
+    bool                endOfShow;
+    bool                pause;
 
-    const int          maxStringLen;
+    const int           maxStringLen;
 
-    int                deskX;
-    int                deskY;
-    int                deskWidth;
-    int                deskHeight;
-    int                fileIndex;
-    int                screenSaverCookie;
+    int                 deskX;
+    int                 deskY;
+    int                 deskWidth;
+    int                 deskHeight;
+    int                 fileIndex;
+    int                 screenSaverCookie;
 
-    QTimer*            mouseMoveTimer;  // To hide cursor when not moved.
-    QTimer*            timer;
+    QTimer*             mouseMoveTimer;  // To hide cursor when not moved.
+    QTimer*             timer;
 
-    QPixmap            pixmap;
+    QPixmap             pixmap;
 
-    DImg               preview;
+    DImg                preview;
 
-    KUrl               currentImage;
+    KUrl                currentImage;
 
-    PreviewLoadThread* previewThread;
-    PreviewLoadThread* previewPreloadThread;
+    KHBox*              labelsBox;
 
-    ToolBar*           toolBar;
+    PreviewLoadThread*  previewThread;
+    PreviewLoadThread*  previewPreloadThread;
 
-    RatingWidget*      ratingWidget;
+    ToolBar*            toolBar;
 
-    SlideShowSettings  settings;
+    RatingWidget*       ratingWidget;
+    ColorLabelSelector* clWidget;
+    PickLabelSelector*  plWidget;
+
+    SlideShowSettings   settings;
 };
 
 SlideShow::SlideShow(const SlideShowSettings& settings)
@@ -168,13 +179,28 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
-    d->ratingWidget = new RatingWidget(this);
+    d->labelsBox    = new KHBox(this);
+    d->clWidget     = new ColorLabelSelector(d->labelsBox);
+    d->clWidget->installEventFilter(this);
+    d->clWidget->colorLabelWidget()->installEventFilter(this);
+    d->plWidget     = new PickLabelSelector(d->labelsBox);
+    d->plWidget->installEventFilter(this);
+    d->plWidget->pickLabelWidget()->installEventFilter(this);
+    d->ratingWidget = new RatingWidget(d->labelsBox);
     d->ratingWidget->setTracking(false);
     d->ratingWidget->setFading(false);
-    d->ratingWidget->setVisible(false);
+    d->ratingWidget->installEventFilter(this);
+    d->labelsBox->setVisible(false);
+    d->labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignLeft);
 
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotRatingChanged(int)));
+
+    connect(d->clWidget, SIGNAL(signalColorLabelChanged(int)),
+            this, SLOT(slotColorLabelChanged(int)));
+
+    connect(d->plWidget, SIGNAL(signalPickLabelChanged(int)),
+            this, SLOT(slotPickLabelChanged(int)));
 
     // ---------------------------------------------------------------
 
@@ -203,7 +229,6 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     setMouseTracking(true);
     slotMouseMoveTimeOut();
-    d->ratingWidget->installEventFilter(this);
 }
 
 SlideShow::~SlideShow()
@@ -367,18 +392,22 @@ void SlideShow::updatePixmap()
 
             QString str;
             PhotoInfoContainer photoInfo = d->settings.pictInfoMap[d->currentImage].photoInfo;
-            int offset                   = d->toolBar->height()+10;
+            int offset                   = d->toolBar->height()+30;
 
-            // Display Rating.
-            int rating                   = d->settings.pictInfoMap[d->currentImage].rating;
-            d->ratingWidget->setVisible(false);
+            // Display Labels.
 
-            if (d->settings.printRating)
+            int rating = d->settings.pictInfoMap[d->currentImage].rating;
+            int color  = d->settings.pictInfoMap[d->currentImage].colorLabel;
+            int pick   = d->settings.pictInfoMap[d->currentImage].pickLabel;
+            d->labelsBox->setVisible(d->settings.printLabels);
+
+            if (d->settings.printLabels)
             {
-                d->ratingWidget->setVisible(true);
                 d->ratingWidget->setRating(rating);
-                d->ratingWidget->move(10, height() - offset - d->ratingWidget->minimumHeight());
-                offset += d->ratingWidget->minimumHeight();
+                d->clWidget->setColorLabel((ColorLabel)color);
+                d->plWidget->setPickLabel((PickLabel)pick);
+                d->labelsBox->move(10, height() - offset - d->clWidget->minimumHeight());
+                offset += d->clWidget->minimumHeight();
             }
 
             // Display Comments.
@@ -853,9 +882,21 @@ void SlideShow::slotRatingChanged(int rating)
     emit signalRatingChanged(d->currentImage, rating);
 }
 
+void SlideShow::slotColorLabelChanged(int color)
+{
+    emit signalColorLabelChanged(d->currentImage, color);
+}
+
+void SlideShow::slotPickLabelChanged(int pick)
+{
+    emit signalPickLabelChanged(d->currentImage, pick);
+}
+
 bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
 {
-    if ( obj == d->ratingWidget )
+    if ( obj == d->ratingWidget || obj == d->clWidget || obj == d->plWidget ||
+         obj == d->clWidget->colorLabelWidget()       ||
+         obj == d->plWidget->pickLabelWidget())
     {
         if ( ev->type() == QEvent::Enter)
         {

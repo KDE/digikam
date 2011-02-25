@@ -330,6 +330,11 @@ PickLabelSelector::~PickLabelSelector()
     delete d;
 }
 
+PickLabelWidget* PickLabelSelector::pickLabelWidget() const
+{
+    return d->plw;
+}
+
 void PickLabelSelector::setPickLabel(PickLabel label)
 {
     d->plw->setPickLabels(QList<PickLabel>() << label);

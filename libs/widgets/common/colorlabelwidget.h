@@ -114,6 +114,8 @@ public:
     void setColorLabel(ColorLabel label);
     ColorLabel colorLabel();
 
+    ColorLabelWidget* colorLabelWidget() const;
+
 Q_SIGNALS:
 
     void signalColorLabelChanged(int);

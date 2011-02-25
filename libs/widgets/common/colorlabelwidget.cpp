@@ -484,6 +484,11 @@ ColorLabelSelector::~ColorLabelSelector()
     delete d;
 }
 
+ColorLabelWidget* ColorLabelSelector::colorLabelWidget() const
+{
+    return d->clw;
+}
+
 void ColorLabelSelector::setColorLabel(ColorLabel label)
 {
     d->clw->setColorLabels(QList<ColorLabel>() << label);

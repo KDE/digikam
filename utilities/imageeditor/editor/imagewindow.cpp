@@ -963,6 +963,16 @@ void ImageWindow::slotRatingChanged(const KUrl& url, int rating)
     assignRating(ImageInfo(url), rating);
 }
 
+void ImageWindow::slotColorLabelChanged(const KUrl& url, int color)
+{
+    assignColorLabel(ImageInfo(url), color);
+}
+
+void ImageWindow::slotPickLabelChanged(const KUrl& url, int pick)
+{
+    assignPickLabel(ImageInfo(url), pick);
+}
+
 void ImageWindow::slotUpdateItemInfo()
 {
     QString text = i18nc("<Image file name> (<Image number> of <Images in album>)",
@@ -1471,9 +1481,11 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
         foreach (const ImageInfo& info, d->imageInfoModel->imageInfos())
         {
             SlidePictureInfo pictInfo;
-            pictInfo.comment   = info.comment();
-            pictInfo.rating    = info.rating();
-            pictInfo.photoInfo = info.photoInfoContainer();
+            pictInfo.comment    = info.comment();
+            pictInfo.rating     = info.rating();
+            pictInfo.colorLabel = info.colorLabel();
+            pictInfo.pickLabel  = info.pickLabel();
+            pictInfo.photoInfo  = info.photoInfoContainer();
             settings.pictInfoMap.insert(info.fileUrl(), pictInfo);
             settings.fileList << info.fileUrl();
 
@@ -1521,6 +1533,12 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 
         connect(slide, SIGNAL(signalRatingChanged(const KUrl&, int)),
                 this, SLOT(slotRatingChanged(const KUrl&, int)));
+
+        connect(slide, SIGNAL(signalColorLabelChanged(const KUrl&, int)),
+                this, SLOT(slotColorLabelChanged(const KUrl&, int)));
+
+        connect(slide, SIGNAL(signalPickLabelChanged(const KUrl&, int)),
+                this, SLOT(slotPickLabelChanged(const KUrl&, int)));
 
         slide->show();
     }

@@ -50,7 +50,9 @@ public:
 
     SlidePictureInfo()
     {
-        rating = 0;
+        rating     = 0;
+        colorLabel = 0;
+        pickLabel  = 0;
     };
 
     ~SlidePictureInfo() {};
@@ -58,6 +60,8 @@ public:
 public:
 
     int                rating;
+    int                colorLabel;
+    int                pickLabel;
 
     /** Picture Comment */
     QString            comment;
@@ -80,7 +84,7 @@ public:
         printName            = true;
         printDate            = false;
         printComment         = false;
-        printRating          = false;
+        printLabels          = false;
         printApertureFocal   = false;
         printMakeModel       = false;
         printExpoSensitivity = false;
@@ -115,8 +119,11 @@ public:
     /** Print picture comment during slide */
     bool                         printComment;
 
-    /** Print rating during slide */
-    bool                         printRating;
+    /** Print color label, pick label, and rating during slide */
+    bool                         printLabels;
+
+    /** Print color label during slide */
+    bool                         printColorLabel;
 
     /** Slide pictures in loop */
     bool                         loop;

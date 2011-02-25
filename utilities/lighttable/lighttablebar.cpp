@@ -999,6 +999,16 @@ void LightTableBar::assignColorLabel(const ImageInfo& info, int colorId)
     }
 }
 
+void LightTableBar::slotPickLabelChanged(const KUrl& url, int pick)
+{
+    assignPickLabel(ImageInfo(url), pick);
+}
+
+void LightTableBar::slotColorLabelChanged(const KUrl& url, int color)
+{
+    assignColorLabel(ImageInfo(url), color);
+}
+
 void LightTableBar::slotRatingChanged(const KUrl& url, int rating)
 {
     assignRating(ImageInfo(url), rating);

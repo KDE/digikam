@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,6 +57,8 @@ public:
 Q_SIGNALS:
 
     void signalRatingChanged(const KUrl&, int);
+    void signalColorLabelChanged(const KUrl&, int);
+    void signalPickLabelChanged(const KUrl&, int);
 
 protected:
 
@@ -73,6 +75,8 @@ private Q_SLOTS:
     void slotMouseMoveTimeOut();
     void slotGotImagePreview(const LoadingDescription&, const DImg&);
     void slotRatingChanged(int);
+    void slotColorLabelChanged(int);
+    void slotPickLabelChanged(int);
 
     void slotPause();
     void slotPlay();

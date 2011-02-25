@@ -1402,7 +1402,7 @@ void LightTableWindow::slotToggleSlideShow()
     settings.printExpoSensitivity = group.readEntry("SlideShowPrintExpoSensitivity", false);
     settings.printMakeModel       = group.readEntry("SlideShowPrintMakeModel", false);
     settings.printComment         = group.readEntry("SlideShowPrintComment", false);
-    settings.printRating          = group.readEntry("SlideShowPrintRating", false);
+    settings.printLabels          = group.readEntry("SlideShowPrintLabels", false);
     settings.loop                 = group.readEntry("SlideShowLoop", false);
     slideShow(startWithCurrent, settings);
 }
@@ -1426,9 +1426,11 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
          !d->cancelSlideShow && it != list.constEnd() ; ++it)
     {
         SlidePictureInfo pictInfo;
-        pictInfo.comment   = (*it).comment();
-        pictInfo.rating    = (*it).rating();
-        pictInfo.photoInfo = (*it).photoInfoContainer();
+        pictInfo.comment    = (*it).comment();
+        pictInfo.rating     = (*it).rating();
+        pictInfo.colorLabel = (*it).colorLabel();
+        pictInfo.pickLabel  = (*it).pickLabel();
+        pictInfo.photoInfo  = (*it).photoInfoContainer();
         settings.pictInfoMap.insert((*it).fileUrl(), pictInfo);
         settings.fileList.append((*it).fileUrl());
 
@@ -1452,6 +1454,12 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
 
         connect(slide, SIGNAL(signalRatingChanged(const KUrl&, int)),
                 d->barView, SLOT(slotRatingChanged(const KUrl&, int)));
+
+        connect(slide, SIGNAL(signalColorLabelChanged(const KUrl&, int)),
+                d->barView, SLOT(slotColorLabelChanged(const KUrl&, int)));
+
+        connect(slide, SIGNAL(signalPickLabelChanged(const KUrl&, int)),
+                d->barView, SLOT(slotPickLabelChanged(const KUrl&, int)));
 
         slide->show();
     }

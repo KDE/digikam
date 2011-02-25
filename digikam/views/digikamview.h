@@ -90,7 +90,7 @@ Q_SIGNALS:
 
     void signalAlbumSelected(bool val);
     void signalTagSelected(bool val);
-    void signalImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, 
+    void signalImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext,
                              const ImageInfoList& allImages);
     void signalNoCurrentItem();
     void signalSelectionChanged(int numberOfSelectedItems);
@@ -236,7 +236,10 @@ private Q_SLOTS:
     void slotProgressValueChanged(float percent);
     void slotProgressFinished();
     void slotOrientationChangeFailed(const QStringList& failedFileNames);
+
     void slotRatingChanged(const KUrl&, int);
+    void slotColorLabelChanged(const KUrl&, int);
+    void slotPickLabelChanged(const KUrl&, int);
 
     void slotPopupFiltersView();
 

@@ -1834,7 +1834,7 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
     settings.printExpoSensitivity = group.readEntry("SlideShowPrintExpoSensitivity", false);
     settings.printMakeModel       = group.readEntry("SlideShowPrintMakeModel", false);
     settings.printComment         = group.readEntry("SlideShowPrintComment", false);
-    settings.printRating          = group.readEntry("SlideShowPrintRating", false);
+    settings.printLabels          = group.readEntry("SlideShowPrintLabels", false);
     settings.loop                 = group.readEntry("SlideShowLoop", false);
 
     d->cancelSlideShow = false;
@@ -1845,9 +1845,11 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
         ImageInfo info = *it;
         settings.fileList.append(info.fileUrl());
         SlidePictureInfo pictInfo;
-        pictInfo.comment   = info.comment();
-        pictInfo.rating    = info.rating();
-        pictInfo.photoInfo = info.photoInfoContainer();
+        pictInfo.comment    = info.comment();
+        pictInfo.rating     = info.rating();
+        pictInfo.colorLabel = info.colorLabel();
+        pictInfo.pickLabel  = info.pickLabel();
+        pictInfo.photoInfo  = info.photoInfoContainer();
         settings.pictInfoMap.insert(info.fileUrl(), pictInfo);
 
         emit signalProgressValue((int)((i++/cnt)*100.0));
@@ -1867,6 +1869,12 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
 
         connect(slide, SIGNAL(signalRatingChanged(const KUrl&, int)),
                 this, SLOT(slotRatingChanged(const KUrl&, int)));
+
+        connect(slide, SIGNAL(signalColorLabelChanged(const KUrl&, int)),
+                this, SLOT(slotColorLabelChanged(const KUrl&, int)));
+
+        connect(slide, SIGNAL(signalPickLabelChanged(const KUrl&, int)),
+                this, SLOT(slotPickLabelChanged(const KUrl&, int)));
 
         slide->show();
     }
@@ -1965,6 +1973,34 @@ void DigikamView::slotRatingChanged(const KUrl& url, int rating)
         MetadataHub hub;
         hub.load(info);
         hub.setRating(rating);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+    }
+}
+
+void DigikamView::slotColorLabelChanged(const KUrl& url, int color)
+{
+    ImageInfo info(url);
+
+    if (!info.isNull())
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setColorLabel(color);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+    }
+}
+
+void DigikamView::slotPickLabelChanged(const KUrl& url, int pick)
+{
+    ImageInfo info(url);
+
+    if (!info.isNull())
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setPickLabel(pick);
         hub.write(info, MetadataHub::PartialWrite);
         hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
     }

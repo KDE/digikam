@@ -2872,7 +2872,7 @@ void EditorWindow::slotToggleSlideShow()
     settings.printExpoSensitivity = group.readEntry(d->configSlideShowPrintExpoSensitivityEntry, false);
     settings.printMakeModel       = group.readEntry(d->configSlideShowPrintMakeModelEntry, false);
     settings.printComment         = group.readEntry(d->configSlideShowPrintCommentEntry, false);
-    settings.printRating          = group.readEntry(d->configSlideShowPrintRatingEntry, false);
+    settings.printLabels          = group.readEntry(d->configSlideShowPrintLabelsEntry, false);
     settings.loop                 = group.readEntry(d->configSlideShowLoopEntry, false);
     slideShow(startWithCurrent, settings);
 }
