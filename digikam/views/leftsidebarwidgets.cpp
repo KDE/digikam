@@ -1029,9 +1029,13 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* parent, SearchModel* sea
     d->gpsSearchView = new GPSSearchView(this, searchModel, searchModificationHelper, imageFilterModel, itemSelectionModel);
     d->gpsSearchView->setConfigGroup(getConfigGroup());
 
+    QScrollArea *scrollArea = new QScrollArea(this);
+
     QVBoxLayout* layout = new QVBoxLayout(this);
 
-    layout->addWidget(d->gpsSearchView);
+    layout->addWidget(scrollArea);
+    scrollArea->setWidget(d->gpsSearchView);
+    scrollArea->setWidgetResizable(true);
 
     connect(d->gpsSearchView, SIGNAL(signalMapSoloItems(const QList<qlonglong>&, const QString&)),
             this, SIGNAL(signalMapSoloItems(const QList<qlonglong>&, const QString&)));
