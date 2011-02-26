@@ -1508,6 +1508,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         # config-digikam.h
         ${CMAKE_CURRENT_BINARY_DIR}
 
+        # version.h, gitversion.h
+        ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils
+
+        # dbconfigversion.h
+        ${CMAKE_CURRENT_BINARY_DIR}/digikam/database
+
         # external library paths
         ${JPEG_INCLUDE_DIR}
         ${PNG_PNG_INCLUDE_DIR}
