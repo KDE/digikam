@@ -198,6 +198,12 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
             {
                 (*it)->positionsCached = false;
             }
+
+            if (changes & DatabaseFields::ImageRelations)
+            {
+                (*it)->groupedImagesIsCached = false;
+                (*it)->groupImageIsCached    = false;
+            }
         }
     }
 }

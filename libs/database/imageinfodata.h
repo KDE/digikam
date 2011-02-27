@@ -61,9 +61,10 @@ public:
     QString                name;
 
     QString                defaultComment;
-    int                    pickLabel;
-    int                    colorLabel;
-    int                    rating;
+    quint8                 pickLabel;
+    quint8                 colorLabel;
+    quint8                 groupingFlags;
+    quint8                 rating;
     DatabaseItem::Category category;
     QString                format;
     QDateTime              creationDate;
@@ -75,6 +76,11 @@ public:
     double                 longitude;
     double                 latitude;
     double                 altitude;
+
+    // number of grouped images, if this is group leader
+    int                    groupedImages;
+    // group leader, if the is grouped
+    qlonglong              groupImage;
 
     bool                   hasCoordinates         : 1;
     bool                   hasAltitude            : 1;
@@ -91,6 +97,8 @@ public:
     bool                   imageSizeCached        : 1;
     bool                   tagIdsCached           : 1;
     bool                   positionsCached        : 1;
+    bool                   groupedImagesIsCached  : 1;
+    bool                   groupImageIsCached     : 1;
 
     bool                   invalid                : 1;
 };

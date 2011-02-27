@@ -311,6 +311,46 @@ public:
     void markDerivedFrom(const ImageInfo& ancestorImage);
 
     /**
+     * The image is grouped in the group of another (leading) image.
+     */
+    bool isGrouped() const;
+    /**
+     * The image is the leading image of a group,
+     * there are other images grouped behind this one.
+     */
+    bool hasGroupedImages() const;
+    int  numberOfGroupedImages() const;
+
+    /**
+     * Returns the leading image of the group.
+     * Returns a null image if this image is not grouped (isGrouped())
+     */
+    ImageInfo groupImage() const;
+
+    /**
+     * Returns the list of images grouped behind this image,
+     * if hasGroupedImages().
+     */
+    QList<ImageInfo> groupedImages() const;
+
+    /**
+     * Group this image behind the given image
+     */
+    void addToGroup(const ImageInfo& info);
+
+    /**
+     * This image is grouped behind another image:
+     * Remove this image from its group
+     */
+    void removeFromGroup();
+
+    /**
+     * This image hasGroupedImages(): Split up the group,
+     * remove all groupedImages() from this image's group.
+     */
+    void clearGroup();
+
+    /**
      * Retrieve information about the image,
      * in form of numbers and user presentable strings,
      * for certain defined fields of information (see databaseinfocontainers.h)
