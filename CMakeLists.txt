@@ -199,9 +199,14 @@ MESSAGE(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
 # check the libkdcraw version
 # note that old versions don't specify version information, so for now
 # just inform the user if version information was found
+SET(KDCRAW_MIN_VERSION "2.0.0")
 IF (KDCRAW_VERSION)
-  MESSAGE(STATUS "libkdcraw: Found version ${KDCRAW_VERSION}")
-  # TODO: fail if the version is too low
+  MESSAGE(STATUS "libkdcraw: Found version ${KDCRAW_VERSION} (required: ${KDCRAW_MIN_VERSION})")
+  IF (${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
+    SET(KDCRAW_FOUND FALSE)
+  ENDIF (${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
+ELSE (KDCRAW_VERSION)
+  MESSAGE(WARNING "libkdcraw: Version information not found, your version is probably too old.")
 ENDIF (KDCRAW_VERSION)
 
 # check the libkmap version
@@ -288,7 +293,7 @@ PRINT_LIBRARY_STATUS("liblcms" "http://www.littlecms.com" "" LCMS_FOUND)
 PRINT_LIBRARY_STATUS("Boost Graph" "http://www.boost.org/doc/libs/1_43_0/libs/graph/doc/index.html" " (headers only)" Boost_FOUND)
 PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KIPI_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KEXIV2_FOUND)
-PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KDCRAW_FOUND)
+PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
 PRINT_LIBRARY_STATUS("libkface" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KFACE_FOUND)
 PRINT_LIBRARY_STATUS("libkmap" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KMAP_FOUND)
 
