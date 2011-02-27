@@ -603,6 +603,23 @@ void DCategorizedView::indexActivated(const QModelIndex&)
 {
 }
 
+bool DCategorizedView::showToolTip(QHelpEvent* he, const QModelIndex& index, QStyleOptionViewItem& option)
+{
+    QRect innerRect;
+
+    if (d->delegate->acceptsToolTip(he->pos(), option.rect, index, &innerRect))
+    {
+        if (!innerRect.isNull())
+        {
+            option.rect = innerRect;
+        }
+
+        d->toolTip->show(he, option, index);
+        return true;
+    }
+    return false;
+}
+
 void DCategorizedView::contextMenuEvent(QContextMenuEvent* event)
 {
     userInteraction();
@@ -797,18 +814,7 @@ bool DCategorizedView::viewportEvent(QEvent* event)
             QStyleOptionViewItem option = viewOptions();
             option.rect = visualRect(index);
             option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
-            QRect innerRect;
-
-            if (d->delegate->acceptsToolTip(he->pos(), option.rect, index, &innerRect))
-            {
-                if (!innerRect.isNull())
-                {
-                    option.rect = innerRect;
-                }
-
-                d->toolTip->show(he, option, index);
-            }
-
+            showToolTip(he, index, option);
             return true;
         }
         default:
