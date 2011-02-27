@@ -378,6 +378,7 @@ DatabaseFields::Set ImageFilterModel::suggestedWatchFlags() const
     watchFlags |= DatabaseFields::Rating | DatabaseFields::CreationDate | DatabaseFields::Orientation |
                   DatabaseFields::Width  | DatabaseFields::Height;
     watchFlags |= DatabaseFields::Comment;
+    watchFlags |= DatabaseFields::ImageRelations;
     return watchFlags;
 }
 
@@ -1158,7 +1159,7 @@ void ImageFilterModel::slotImageChange(const ImageChangeset& changeset)
     // is one of the values affected that we filter or sort by?
     DatabaseFields::Set set = changeset.changes();
     bool sortAffected       = (set & d->sorter.watchFlags());
-    bool filterAffected     = (set & d->filter.watchFlags());
+    bool filterAffected     = (set & d->filter.watchFlags()) || (set & d->groupFilter.watchFlags());
 
     if (!sortAffected && !filterAffected)
     {
