@@ -840,7 +840,7 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
         KUrl::List urls;
         KUrl::List kioURLs;
         QList<int> albumIDs;
-        QList<int> imageIDs;
+        QList<qlonglong> imageIDs;
 
         if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
         {

@@ -110,7 +110,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         KUrl::List urls;
         KUrl::List kioURLs;
         QList<int> albumIDs;
-        QList<int> imageIDs;
+        QList<qlonglong> imageIDs;
 
         if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
         {
@@ -128,7 +128,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         ImageInfoList    extImgInfList;
         QList<qlonglong> extImageIDs;
 
-        for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
+        for (QList<qlonglong>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);
 

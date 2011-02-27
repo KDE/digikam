@@ -112,7 +112,9 @@ enum Type
 {
     UndefinedType = 0,
     /** The subject is a derivative of the object */
-    DerivedFrom   = 1
+    DerivedFrom   = 1,
+    /** The subject is grouped behind the object */
+    Grouped       = 2
 };
 
 } // namespace DatabaseRelation

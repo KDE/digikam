@@ -139,7 +139,11 @@ public:
 
     ImageFilterSettings imageFilterSettings() const;
     VersionImageFilterSettings versionImageFilterSettings() const;
+    GroupImageFilterSettings groupImageFilterSettings() const;
     ImageSortSettings   imageSortSettings() const;
+
+    bool isGroupOpen(qlonglong group) const;
+    bool isAllGroupsOpen() const;
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual ImageFilterModel* imageFilterModel() const;
@@ -153,6 +157,8 @@ public Q_SLOTS:
     virtual void setImageFilterSettings(const ImageFilterSettings& settings);
     /** Changes the current version image filter settings and refilters. */
     void setVersionImageFilterSettings(const VersionImageFilterSettings& settings);
+    /** Changes the current version image filter settings and refilters. */
+    void setGroupImageFilterSettings(const GroupImageFilterSettings& settings);
     /** Changes the current image sort settings and resorts. */
     virtual void setImageSortSettings(const ImageSortSettings& settings);
 
@@ -179,6 +185,9 @@ public Q_SLOTS:
 
     void setVersionManagerSettings(const VersionManagerSettings& settings);
     void setExceptionList(const QList<qlonglong>& idlist, const QString& id);
+
+    void setGroupOpen(qlonglong group, bool open);
+    void setAllGroupsOpen(bool open);
 
 Q_SIGNALS:
 

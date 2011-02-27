@@ -60,7 +60,7 @@ public:
     DItemDrag(const KUrl::List& urls,
               const KUrl::List& kioURLs,
               const QList<int>& albumIDs,
-              const QList<int>& imageIDs);
+              const QList<qlonglong>& imageIDs);
 
     static bool canDecode(const QMimeData* e);
     static QStringList mimeTypes();
@@ -68,7 +68,7 @@ public:
                        KUrl::List& urls,
                        KUrl::List& kioURLs,
                        QList<int>& albumIDs,
-                       QList<int>& imageIDs);
+                       QList<qlonglong>& imageIDs);
 };
 
 // ------------------------------------------------------------------------

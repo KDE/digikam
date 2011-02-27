@@ -137,6 +137,9 @@ DigikamImageView::DigikamImageView(QWidget* parent)
     connect(imageModel()->dragDropHandler(), SIGNAL(assignTags(const QList<ImageInfo>&, const QList<int>&)),
             MetadataManager::instance(), SLOT(assignTags(const QList<ImageInfo>&, const QList<int>&)));
 
+    connect(imageModel()->dragDropHandler(), SIGNAL(addToGroup(const ImageInfo&, const QList<ImageInfo>&)),
+            MetadataManager::instance(), SLOT(addToGroup(const ImageInfo&, const QList<ImageInfo>&)));
+
     connect(imageModel()->dragDropHandler(), SIGNAL(dioResult(KJob*)),
             d->utilities, SLOT(slotDIOResult(KJob*)));
 
@@ -257,6 +260,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     DPopupMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
+    cmhelper.setImageFilterModel(imageFilterModel());
 
     cmhelper.addAction("move_selection_to_album");
     cmhelper.addAction(viewAction);
@@ -285,6 +289,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addLabelsAction();
+    cmhelper.addGroupMenu(selectedImageIDs);
 
     // special action handling --------------------------------
 
@@ -320,6 +325,15 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     connect(&cmhelper, SIGNAL(signalAddToExistingQueue(int)),
             this, SLOT(insertSelectedToExistingQueue(int)));
+
+    connect(&cmhelper, SIGNAL(signalCreateGroup()),
+            this, SLOT(createGroupFromSelection()));
+
+    connect(&cmhelper, SIGNAL(signalUngroup()),
+            this, SLOT(ungroupSelected()));
+
+    connect(&cmhelper, SIGNAL(signalRemoveFromGroup()),
+            this, SLOT(removeSelectedFromGroup()));
 
     // --------------------------------------------------------
 
@@ -552,6 +566,23 @@ void DigikamImageView::setAsAlbumThumbnail(const ImageInfo& setAsThumbnail)
 void DigikamImageView::createNewAlbumForSelected()
 {
     d->utilities->createNewAlbumForInfos(selectedImageInfos(), currentAlbum());
+}
+
+void DigikamImageView::createGroupFromSelection()
+{
+    QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
+    ImageInfo groupLeader = selectedInfos.takeFirst();
+    MetadataManager::instance()->addToGroup(groupLeader, selectedInfos);
+}
+
+void DigikamImageView::ungroupSelected()
+{
+    MetadataManager::instance()->ungroup(selectedImageInfos());
+}
+
+void DigikamImageView::removeSelectedFromGroup()
+{
+    MetadataManager::instance()->removeFromGroup(selectedImageInfos());
 }
 
 void DigikamImageView::setExifOrientationOfSelected(int orientation)

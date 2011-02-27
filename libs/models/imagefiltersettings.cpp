@@ -708,4 +708,68 @@ bool VersionImageFilterSettings::isFilteringByTags() const
     return isFiltering();
 }
 
+// -------------------------------------------------------------------------------------------------
+
+GroupImageFilterSettings::GroupImageFilterSettings()
+    : m_allOpen(false)
+{
+}
+
+bool GroupImageFilterSettings::operator==(const GroupImageFilterSettings& other) const
+{
+    return m_allOpen == other.m_allOpen &&
+           m_openGroups == other.m_openGroups;
+}
+
+bool GroupImageFilterSettings::matches(const ImageInfo& info) const
+{
+    if (m_allOpen)
+    {
+        return true;
+    }
+
+    if (info.isGrouped())
+    {
+        return m_openGroups.contains(info.groupImage().id());
+    }
+    return true;
+}
+
+void GroupImageFilterSettings::setOpen(qlonglong group, bool open)
+{
+    if (open)
+    {
+        m_openGroups << group;
+    }
+    else
+    {
+        m_openGroups.remove(group);
+    }
+}
+
+bool GroupImageFilterSettings::isOpen(qlonglong group) const
+{
+    return m_openGroups.contains(group);
+}
+
+void GroupImageFilterSettings::setAllOpen(bool open)
+{
+    m_allOpen = open;
+}
+
+bool GroupImageFilterSettings::isAllOpen() const
+{
+    return m_allOpen;
+}
+
+bool GroupImageFilterSettings::isFiltering() const
+{
+    return !m_allOpen;
+}
+
+DatabaseFields::Set GroupImageFilterSettings::watchFlags() const
+{
+    return DatabaseFields::ImageRelations;
+}
+
 } // namespace Digikam

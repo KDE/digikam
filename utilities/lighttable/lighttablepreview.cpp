@@ -622,7 +622,7 @@ void LightTablePreview::contentsDragEnterEvent(QDragEnterEvent* e)
     {
         int        albumID;
         QList<int> albumIDs;
-        QList<int> imageIDs;
+        QList<qlonglong> imageIDs;
         KUrl::List urls;
         KUrl::List kioURLs;
 
@@ -644,20 +644,13 @@ void LightTablePreview::contentsDropEvent(QDropEvent* e)
     {
         int           albumID;
         QList<int>    albumIDs;
-        QList<int>    imageIDs;
+        QList<qlonglong> imageIDs;
         KUrl::List    urls;
         KUrl::List    kioURLs;
-        ImageInfoList list;
 
         if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
         {
-            for (QList<int>::const_iterator it = imageIDs.constBegin();
-                 it != imageIDs.constEnd(); ++it)
-            {
-                list << ImageInfo(*it);
-            }
-
-            emit signalDroppedItems(list);
+            emit signalDroppedItems(ImageInfoList(imageIDs));
             e->accept();
             return;
         }
@@ -665,13 +658,7 @@ void LightTablePreview::contentsDropEvent(QDropEvent* e)
         {
             QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
 
-            for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
-                 it != itemIDs.constEnd(); ++it)
-            {
-                list << ImageInfo(*it);
-            }
-
-            emit signalDroppedItems(list);
+            emit signalDroppedItems(ImageInfoList(itemIDs));
             e->accept();
             return;
         }
@@ -687,13 +674,7 @@ void LightTablePreview::contentsDropEvent(QDropEvent* e)
             QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
             ImageInfoList imageInfoList;
 
-            for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
-                 it != itemIDs.constEnd(); ++it)
-            {
-                list << ImageInfo(*it);
-            }
-
-            emit signalDroppedItems(list);
+            emit signalDroppedItems(ImageInfoList(itemIDs));
             e->accept();
             return;
         }

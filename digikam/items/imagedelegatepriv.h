@@ -69,6 +69,8 @@ public:
     QRect                 sizeRect;
     QRect                 tagRect;
     QRect                 imageInformationRect;
+    QRect                 pickLabelRect;
+    QRect                 groupRect;
 
     bool                  drawFocusFrame;
     bool                  drawMouseOverFrame;

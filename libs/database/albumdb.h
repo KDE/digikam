@@ -950,17 +950,29 @@ public:
     void addImageRelations(const QList<qlonglong>& subjectIds, const QList<qlonglong>& objectIds, DatabaseRelation::Type type);
 
     /**
+     * Removes image relations.
+     * The batch methods return all removed partners.
+     */
+    void removeImageRelation(qlonglong subjectId, qlonglong objectId, DatabaseRelation::Type type);
+    void removeImageRelation(const ImageRelation& relation);
+
+    QList<qlonglong> removeAllImageRelationsTo(qlonglong objectId, DatabaseRelation::Type type);
+    QList<qlonglong> removeAllImageRelationsFrom(qlonglong subjectId, DatabaseRelation::Type type);
+
+    /**
      * Retrieves all images that the given image is related to (retrieves objects, given image is subject)
      * If type is given, filters by type, otherwise returns all types.
      * "Get images related to from this"
      */
     QList<qlonglong> getImagesRelatedFrom(qlonglong subjectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
+    bool hasImagesRelatedFrom(qlonglong subjectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
     /**
      * Retrieves all images that relate to the given image (retrieves subject, given image is object)
      * If type is given, filters by type, otherwise returns all types.
      * "Get images this image is relating to"
      */
     QList<qlonglong> getImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
+    bool hasImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
 
     /**
      * For the given image id, retrieves all relations of all related images:
@@ -1200,6 +1212,10 @@ public:
      * Destructor
      */
     ~AlbumDB();
+
+protected:
+
+    QList<qlonglong> getRelatedImages(qlonglong id, bool fromOrTo, DatabaseRelation::Type type, bool boolean);
 
 private:
 

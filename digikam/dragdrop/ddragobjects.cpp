@@ -37,7 +37,7 @@ namespace Digikam
 DItemDrag::DItemDrag(const KUrl::List& urls,
                      const KUrl::List& kioUrls,
                      const QList<int>& albumIDs,
-                     const QList<int>& imageIDs)
+                     const QList<qlonglong>& imageIDs)
     : QMimeData()
 {
     // Digikam specific mime data
@@ -59,7 +59,7 @@ DItemDrag::DItemDrag(const KUrl::List& urls,
     QByteArray  ba4;
     QDataStream ds4(&ba4, QIODevice::WriteOnly);
     ds4 << imageIDs;
-    setData("digikam/image-ids", ba4);
+    setData("digikam/image-ids-long", ba4);
 
     // commonly accessible mime data, for dragging to outside digikam
     urls.populateMimeData(this);
@@ -71,7 +71,7 @@ QStringList DItemDrag::mimeTypes()
     // we only export this data above for dragging to outside digikam.
     return QStringList() << "digikam/item-ids"
            << "digikam/album-ids"
-           << "digikam/image-ids"
+           << "digikam/image-ids-long"
            << "digikam/digikamalbums";
 }
 
@@ -91,7 +91,7 @@ bool DItemDrag::decode(const QMimeData* e,
                        KUrl::List& urls,
                        KUrl::List& kioUrls,
                        QList<int>& albumIDs,
-                       QList<int>& imageIDs)
+                       QList<qlonglong>& imageIDs)
 {
     urls.clear();
     kioUrls.clear();
@@ -113,7 +113,7 @@ bool DItemDrag::decode(const QMimeData* e,
     if (!urls.isEmpty())
     {
         QByteArray albumarray = e->data("digikam/album-ids");
-        QByteArray imagearray = e->data("digikam/image-ids");
+        QByteArray imagearray = e->data("digikam/image-ids-long");
         QByteArray kioarray   = e->data("digikam/digikamalbums");
 
         if (albumarray.size() && imagearray.size() && kioarray.size())
@@ -219,7 +219,7 @@ QStringList DAlbumDrag::mimeTypes()
 
 bool DAlbumDrag::canDecode(const QMimeData* e)
 {
-    if (e->hasFormat("digikam/item-ids") || e->hasFormat("digikam/image-ids"))
+    if (e->hasFormat("digikam/item-ids") || e->hasFormat("digikam/image-ids-long"))
     {
         return false;
     }

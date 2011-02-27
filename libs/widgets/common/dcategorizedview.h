@@ -128,6 +128,11 @@ protected:
     virtual void showContextMenu(QContextMenuEvent* event);
     virtual void indexActivated(const QModelIndex& index);
 
+    /** Provides default behavior, can reimplement in a subclass.
+     *  Returns true if a tooltip was shown.
+     */
+    virtual bool showToolTip(QHelpEvent* he, const QModelIndex& index, QStyleOptionViewItem& option);
+
     /** Returns an index that is representative for the category at position pos */
     QModelIndex indexForCategoryAt(const QPoint& pos) const;
 

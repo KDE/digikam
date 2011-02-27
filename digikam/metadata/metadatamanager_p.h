@@ -42,6 +42,13 @@ namespace Digikam
 class MetadataManagerDatabaseWorker;
 class MetadataManagerFileWorker;
 
+enum GroupAction
+{
+    AddToGroup,
+    RemoveFromGroup,
+    Ungroup
+};
+
 class MetadataManager::MetadataManagerPriv : public QObject
 {
     Q_OBJECT
@@ -91,6 +98,10 @@ public:
     void assignRating(const QList<ImageInfo>& infos, int rating)
     {
         emit signalAssignRating(infos, rating);
+    }
+    void editGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos)
+    {
+        emit signalEditGroup(groupAction, pick, infos);
     }
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation)
     {
@@ -150,6 +161,7 @@ Q_SIGNALS:
     void signalAssignRating(const QList<ImageInfo>& infos, int rating);
     void signalSetExifOrientation(const QList<ImageInfo>& infos, int orientation);
     void signalApplyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
+    void signalEditGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos);
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -170,6 +182,7 @@ public Q_SLOTS:
     void assignPickLabel(const QList<ImageInfo>& infos, int pickId);
     void assignColorLabel(const QList<ImageInfo>& infos, int colorId);
     void assignRating(const QList<ImageInfo>& infos, int rating);
+    void editGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos);
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
     void applyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
 

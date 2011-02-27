@@ -89,6 +89,7 @@ public:
     ImageFilterSettings        filter;
     ImageSortSettings          sorter;
     VersionImageFilterSettings versionFilter;
+    GroupImageFilterSettings   groupFilter;
 
     volatile unsigned int      version;
     unsigned int               lastDiscardVersion;
@@ -101,10 +102,12 @@ public:
     bool                       needPrepare;
     bool                       needPrepareComments;
     bool                       needPrepareTags;
+    bool                       needPrepareGroups;
 
     QMutex                     mutex;
     ImageFilterSettings        filterCopy;
     VersionImageFilterSettings versionFilterCopy;
+    GroupImageFilterSettings   groupFilterCopy;
     ImageFilterModelPreparer*  preparer;
     ImageFilterModelFilterer*  filterer;
 

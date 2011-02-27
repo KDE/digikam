@@ -68,6 +68,8 @@ void ImageDelegate::ImageDelegatePrivate::clearRects()
     sizeRect             = QRect(0, 0, 0, 0);
     tagRect              = QRect(0, 0, 0, 0);
     imageInformationRect = QRect(0, 0, 0, 0);
+    pickLabelRect        = QRect(0, 0, 0, 0);
+    groupRect            = QRect(0, 0, 0, 0);
 }
 
 ImageDelegate::ImageDelegate(QObject* parent)
@@ -190,6 +192,12 @@ QRect ImageDelegate::imageInformationRect() const
     return d->imageInformationRect;
 }
 
+QRect ImageDelegate::groupIndicatorRect() const
+{
+    Q_D(const ImageDelegate);
+    return d->groupRect;
+}
+
 void ImageDelegate::prepareThumbnails(ImageThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
 {
     thumbModel->prepareThumbnails(indexes, thumbnailSize());
@@ -304,6 +312,16 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         drawTags(p, d->tagRect, tags, isSelected);
     }
 
+    if (!d->pickLabelRect.isNull())
+    {
+        drawPickLabelIcon(p, d->pickLabelRect, info.pickLabel());
+    }
+
+    if (!d->groupRect.isNull())
+    {
+        drawGroupIndicator(p, d->groupRect, info.numberOfGroupedImages());
+    }
+
     if (d->drawFocusFrame)
     {
         drawFocusRect(p, option, isSelected);
@@ -312,28 +330,6 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     if (d->drawMouseOverFrame)
     {
         drawMouseOverRect(p, option);
-    }
-
-    // Draw Pick Label icon
-    int pickId = info.pickLabel();
-    if (pickId != NoPickLabel)
-    {
-        QIcon icon;
-        int size = KIconLoader::SizeSmallMedium;
-
-        if (pickId == RejectedLabel)
-        {
-            icon = KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, size);
-        }
-        else if (pickId == PendingLabel)
-        {
-            icon = KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, size);
-        }
-        else if (pickId == AcceptedLabel)
-        {
-            icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, size);
-        }
-        icon.paint(p, d->pixmapRect.left()+2, d->pixmapRect.bottom()-size+2, size, size);
     }
 
     p->restore();

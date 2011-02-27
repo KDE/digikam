@@ -84,6 +84,10 @@ public Q_SLOTS:
     void assignRating(const QModelIndex& index, int rating);
     void assignTag(const QModelIndex& index, const QString& name);
 
+    void createGroupFromSelection();
+    void ungroupSelected();
+    void removeSelectedFromGroup();
+
     void setFaceMode(bool on);
     void addRejectionOverlay(ImageDelegate* delegate = 0);
     void addTagEditOverlay(ImageDelegate* delegate = 0);

@@ -78,8 +78,11 @@ ImageInfoData::ImageInfoData()
     latitude               = 0;
     altitude               = 0;
 
-    hasCoordinates         = 0;
-    hasAltitude            = 0;
+    hasCoordinates         = false;
+    hasAltitude            = false;
+
+    groupedImages          = 0;
+    groupImage             = -1;
 
     defaultCommentCached   = false;
     pickLabelCached        = false;
@@ -93,6 +96,8 @@ ImageInfoData::ImageInfoData()
     imageSizeCached        = false;
     tagIdsCached           = false;
     positionsCached        = false;
+    groupedImagesIsCached  = false;
+    groupImageIsCached     = false;
 
     invalid                = false;
 }
@@ -676,8 +681,7 @@ bool ImageInfo::hasDerivedImages() const
         return false;
     }
 
-    //TODO: Decide whether to cache some of these values, or create an optimized SQL query
-    return DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::DerivedFrom).isEmpty();
+    return DatabaseAccess().db()->hasImagesRelatingTo(m_data->id, DatabaseRelation::DerivedFrom);
 }
 
 bool ImageInfo::hasAncestorImages() const
@@ -687,7 +691,7 @@ bool ImageInfo::hasAncestorImages() const
         return false;
     }
 
-    return !DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom).isEmpty();
+    return DatabaseAccess().db()->hasImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom);
 }
 
 QList<ImageInfo> ImageInfo::derivedImages() const
@@ -728,6 +732,113 @@ void ImageInfo::markDerivedFrom(const ImageInfo& ancestor)
     }
 
     DatabaseAccess().db()->addImageRelation(m_data->id, ancestor.id(), DatabaseRelation::DerivedFrom);
+}
+
+bool ImageInfo::hasGroupedImages() const
+{
+    return numberOfGroupedImages();
+}
+
+int ImageInfo::numberOfGroupedImages() const
+{
+    if (!m_data)
+    {
+        return false;
+    }
+
+    if (!m_data->groupedImagesIsCached)
+    {
+        m_data.constCastData()->groupedImages
+          = DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped).size();
+        m_data.constCastData()->groupedImagesIsCached = true;
+    }
+
+    return m_data->groupedImages;
+}
+
+bool ImageInfo::isGrouped() const
+{
+    if (!m_data)
+    {
+        return false;
+    }
+
+    if (!m_data->groupImageIsCached)
+    {
+        QList<qlonglong> ids = DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::Grouped);
+        // list size should be 0 or 1
+        m_data.constCastData()->groupImage = ids.isEmpty() ? -1 : ids.first();
+        m_data.constCastData()->groupImageIsCached = true;
+    }
+
+    return m_data->groupImage != -1;
+}
+
+ImageInfo ImageInfo::groupImage() const
+{
+    // isGrouped() will cache the value
+    if (!m_data || !isGrouped())
+    {
+        return ImageInfo();
+    }
+    return ImageInfo(m_data->groupImage);
+}
+
+QList<ImageInfo> ImageInfo::groupedImages() const
+{
+    if (!m_data || (m_data->groupedImagesIsCached && !m_data->groupedImages) || !hasGroupedImages())
+    {
+        return QList<ImageInfo>();
+    }
+
+    return ImageInfoList(DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped));
+}
+
+void ImageInfo::addToGroup(const ImageInfo& leader)
+{
+    if (!m_data || leader.isNull() || leader.id() == m_data->id)
+    {
+        return;
+    }
+
+    QList<ImageInfo> ownGroup = groupedImages();
+    foreach (const ImageInfo& info, ownGroup)
+    {
+        ImageInfo(info).addToGroup(leader);
+    }
+
+    DatabaseAccess().db()->removeAllImageRelationsFrom(m_data->id, DatabaseRelation::Grouped);
+    DatabaseAccess().db()->addImageRelation(m_data->id, leader.id(), DatabaseRelation::Grouped);
+}
+
+void ImageInfo::removeFromGroup()
+{
+    if (!m_data)
+    {
+        return;
+    }
+
+    if (!isGrouped())
+    {
+        return;
+    }
+
+    DatabaseAccess().db()->removeAllImageRelationsFrom(m_data->id, DatabaseRelation::Grouped);
+}
+
+void ImageInfo::clearGroup()
+{
+    if (!m_data)
+    {
+        return;
+    }
+
+    if (!hasGroupedImages())
+    {
+        return;
+    }
+
+    DatabaseAccess().db()->removeAllImageRelationsTo(m_data->id, DatabaseRelation::Grouped);
 }
 
 ImageComments ImageInfo::imageComments(DatabaseAccess& access) const
@@ -1130,7 +1241,6 @@ void ImageInfo::setTag(int tagID)
         return;
     }
 
-    kDebug() << m_data->id << tagID;
     DatabaseAccess access;
     access.db()->addItemTag(m_data->id, tagID);
 }

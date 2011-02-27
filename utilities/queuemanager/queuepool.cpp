@@ -304,7 +304,7 @@ void QueuePool::slotTestCanDecode(const QDragMoveEvent* e, bool& accept)
 {
     int        albumID;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
     KUrl::List urls;
     KUrl::List kioURLs;
 

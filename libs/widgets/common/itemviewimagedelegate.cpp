@@ -394,6 +394,49 @@ void ItemViewImageDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewIte
     }
 }
 
+void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int pickId) const
+{
+    // Draw Pick Label icon
+    if (pickId != NoPickLabel)
+    {
+        QIcon icon;
+
+        if (pickId == RejectedLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, r.width());
+        }
+        else if (pickId == PendingLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, r.width());
+        }
+        else if (pickId == AcceptedLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, r.width());
+        }
+        icon.paint(p, r);
+    }
+}
+
+void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r, int numberOfGroupedImages) const
+{
+    if (numberOfGroupedImages)
+    {
+        QIcon icon = KIconLoader::global()->loadIcon("mail-attachment", KIconLoader::NoGroup, r.width());
+        p->setOpacity(0.5);
+        icon.paint(p, r);
+        p->setOpacity(1.0);
+
+        QString text = QString::number(numberOfGroupedImages);
+        /*QRect br = p.boundingRect(pixmapRect, Qt::AlignLeft|Qt::AlignTop, text1).adjusted(0,0,1,1);
+        int rectSize = qMax(br.width(), br.height());
+        textRect = QRect(0, 0, rectSize, rectSize);
+        textRect.moveLeft((r.width() - textRect.width()) / 2 + r.x());
+        textRect.moveTop((r.height() - textRect.height()) * 4 / 5);
+        p.fillRect(textRect, QColor(0, 0, 0, 128));*/
+        p->drawText(r, Qt::AlignCenter, text);
+    }
+}
+
 void ItemViewImageDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option,
                                                bool isSelected, int colorId) const
 {

@@ -98,19 +98,9 @@ void MetadataManager::shutDown()
     d->fileWorker->deactivate();
 }
 
-void MetadataManager::assignTags(const QList<int>& ids, const QList<int>& tagIDs)
+void MetadataManager::assignTags(const QList<qlonglong>& ids, const QList<int>& tagIDs)
 {
-    QList<ImageInfo> infos;
-    foreach (int id, ids)
-    {
-        ImageInfo info(id);
-
-        if (!info.isNull())
-        {
-            infos << info;
-        }
-    }
-    assignTags(infos, tagIDs);
+    assignTags(ImageInfoList(ids), tagIDs);
 }
 
 void MetadataManager::assignTag(const ImageInfo& info, int tagID)
@@ -188,6 +178,34 @@ void MetadataManager::assignRating(const QList<ImageInfo>& infos, int rating)
     d->assignRating(infos, rating);
 }
 
+void MetadataManager::addToGroup(const ImageInfo& pick, const QList<ImageInfo>& infos)
+{
+    d->schedulingForDB(infos.size());
+    d->editGroup(AddToGroup, pick, infos);
+}
+
+void MetadataManager::removeFromGroup(const ImageInfo& info)
+{
+    removeFromGroup(QList<ImageInfo>() << info);
+}
+
+void MetadataManager::removeFromGroup(const QList<ImageInfo>& infos)
+{
+    d->schedulingForDB(infos.size());
+    d->editGroup(RemoveFromGroup, ImageInfo(), infos);
+}
+
+void MetadataManager::ungroup(const ImageInfo& info)
+{
+    ungroup(QList<ImageInfo>() << info);
+}
+
+void MetadataManager::ungroup(const QList<ImageInfo>& infos)
+{
+    d->schedulingForDB(infos.size());
+    d->editGroup(Ungroup, ImageInfo(), infos);
+}
+
 void MetadataManager::setExifOrientation(const QList<ImageInfo>& infos, int orientation)
 {
     d->schedulingForDB(infos.size());
@@ -237,6 +255,9 @@ MetadataManager::MetadataManagerPriv::MetadataManagerPriv(MetadataManager* q)
 
     WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignRating(const QList<ImageInfo>&, int)),
                                      dbWorker, SLOT(assignRating(const QList<ImageInfo>&, int)));
+
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalEditGroup(int, const ImageInfo&, const QList<ImageInfo>&)),
+                                     dbWorker, SLOT(editGroup(int, const ImageInfo&, const QList<ImageInfo>&)));
 
     WorkerObject::connectAndSchedule(this, SIGNAL(signalSetExifOrientation(const QList<ImageInfo>&, int)),
                                      dbWorker, SLOT(setExifOrientation(const QList<ImageInfo>&, int)));
@@ -588,6 +609,35 @@ void MetadataManagerDatabaseWorker::assignRating(const QList<ImageInfo>& infos, 
         emit writeMetadataToFiles(forWriting);
     }
 
+    d->dbFinished(infos.size());
+}
+
+void MetadataManagerDatabaseWorker::editGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos)
+{
+    d->setDBAction(i18n("Editing group. Please wait..."));
+
+    {
+        DatabaseOperationGroup group;
+        group.setMaximumTime(200);
+        foreach (const ImageInfo& constInfo, infos)
+        {
+            ImageInfo info(constInfo);
+            switch (groupAction)
+            {
+                case AddToGroup:
+                    info.addToGroup(pick);
+                    break;
+                case RemoveFromGroup:
+                    info.removeFromGroup();
+                    break;
+                case Ungroup:
+                    info.clearGroup();
+                    break;
+            }
+            d->dbProcessedOne();
+            group.allowLift();
+        }
+    }
     d->dbFinished(infos.size());
 }
 

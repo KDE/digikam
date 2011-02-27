@@ -70,6 +70,7 @@ Q_SIGNALS:
     void imageInfosDropped(const QList<ImageInfo>& infos);
     void urlsDropped(const KUrl::List& urls);
     void assignTags(const QList<ImageInfo>& list, const QList<int>& tagIDs);
+    void addToGroup(const ImageInfo& pick, const QList<ImageInfo>& infos);
     void dioResult(KJob*);
 
 protected:
