@@ -2175,53 +2175,113 @@ void AlbumDB::addImageRelation(const ImageRelation& relation)
     addImageRelation(relation.subjectId, relation.objectId, relation.type);
 }
 
+void AlbumDB::removeImageRelation(qlonglong subjectId, qlonglong objectId, DatabaseRelation::Type type)
+{
+    d->db->execSql("DELETE FROM ImageRelations WHERE subject=? AND object=? AND type=?;",
+                   subjectId, objectId, type);
+    d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << subjectId << objectId, DatabaseFields::ImageRelations));
+}
+
+void AlbumDB::removeImageRelation(const ImageRelation& relation)
+{
+    removeImageRelation(relation.subjectId, relation.objectId, relation.type);
+}
+
+QList<qlonglong> AlbumDB::removeAllImageRelationsTo(qlonglong objectId, DatabaseRelation::Type type)
+{
+    QList<qlonglong> affected = getImagesRelatingTo(objectId, type);
+    if (affected.isEmpty())
+    {
+        return affected;
+    }
+
+    d->db->execSql("DELETE FROM ImageRelations WHERE object=? AND type=?;",
+                   objectId, type);
+    d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << affected << objectId, DatabaseFields::ImageRelations));
+
+    return affected;
+}
+
+QList<qlonglong> AlbumDB::removeAllImageRelationsFrom(qlonglong subjectId, DatabaseRelation::Type type)
+{
+    QList<qlonglong> affected = getImagesRelatedFrom(subjectId, type);
+    if (affected.isEmpty())
+    {
+        return affected;
+    }
+
+    d->db->execSql("DELETE FROM ImageRelations WHERE subject=? AND type=?;",
+                   subjectId, type);
+    d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << affected << subjectId, DatabaseFields::ImageRelations));
+
+    return affected;
+}
+
 QList<qlonglong> AlbumDB::getImagesRelatedFrom(qlonglong subjectId, DatabaseRelation::Type type)
 {
-    QList<QVariant> values;
+    return getRelatedImages(subjectId, true, type, false);
+}
 
-    QString sql = "SELECT object FROM ImageRelations "
-                  "INNER JOIN Images ON ImageRelations.object=Images.id "
-                  "WHERE subject=? %1 AND status!=3;";
-
-    if (type == DatabaseRelation::UndefinedType)
-    {
-        d->db->execSql(sql.arg(QString()), subjectId, &values);
-    }
-    else
-    {
-        d->db->execSql(sql.arg(QString("AND type=?")), subjectId, type, &values);
-    }
-
-    QList<qlonglong> imageIds;
-
-    if (values.isEmpty())
-    {
-        return imageIds;
-    }
-
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
-    {
-        imageIds << (*it).toInt();
-    }
-
-    return imageIds;
+bool AlbumDB::hasImagesRelatedFrom(qlonglong subjectId, DatabaseRelation::Type type)
+{
+    // returns 0 or 1 item in list
+    return !getRelatedImages(subjectId, true, type, true).isEmpty();
 }
 
 QList<qlonglong> AlbumDB::getImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type)
 {
+    return getRelatedImages(objectId, false, type, false);
+}
+
+bool AlbumDB::hasImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type)
+{
+    // returns 0 or 1 item in list
+    return !getRelatedImages(objectId, false, type, true).isEmpty();
+}
+
+QList<qlonglong> AlbumDB::getRelatedImages(qlonglong id, bool fromOrTo, DatabaseRelation::Type type, bool boolean)
+{
     QList<QVariant> values;
 
-    QString sql = "SELECT subject FROM ImageRelations "
-                  "INNER JOIN Images ON ImageRelations.subject=Images.id "
-                  "WHERE object=? %1 AND status!=3;";
-
-    if (type == DatabaseRelation::UndefinedType)
+    QString sql;
+    if (fromOrTo)
     {
-        d->db->execSql(sql.arg(QString()), objectId, &values);
+        sql = "SELECT object FROM ImageRelations "
+              "INNER JOIN Images ON ImageRelations.object=Images.id "
+              "WHERE subject=? %1 AND status!=3 %2;";
     }
     else
     {
-        d->db->execSql(sql.arg(QString("AND type=?")), objectId, type, &values);
+        sql = "SELECT subject FROM ImageRelations "
+              "INNER JOIN Images ON ImageRelations.subject=Images.id "
+              "WHERE object=? %1 AND status!=3 %2;";
+    }
+
+    if (type != DatabaseRelation::UndefinedType)
+    {
+        sql = sql.arg(QString("AND type=?"));
+    }
+    else
+    {
+        sql = sql.arg(QString());
+    }
+
+    if (boolean)
+    {
+        sql = sql.arg(QString("LIMIT 1"));
+    }
+    else
+    {
+        sql = sql.arg(QString());
+    }
+
+    if (type == DatabaseRelation::UndefinedType)
+    {
+        d->db->execSql(sql, id, &values);
+    }
+    else
+    {
+        d->db->execSql(sql, id, type, &values);
     }
 
     QList<qlonglong> imageIds;
