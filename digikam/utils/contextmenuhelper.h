@@ -52,6 +52,7 @@ namespace Digikam
 class Album;
 class AlbumIconItem;
 class ImageInfo;
+class ImageFilterModel;
 class TagModificationHelper;
 
 /**
@@ -97,6 +98,9 @@ Q_SIGNALS:
     void signalAddToExistingQueue(int);
     void signalAddNewTagFromABCMenu(const QString&);
     void signalPopupTagsView();
+    void signalCreateGroup();
+    void signalUngroup();
+    void signalRemoveFromGroup();
 
 public:
 
@@ -296,6 +300,22 @@ public:
     void addLabelsAction();
 
     /**
+     * Add a "Group" menu.
+     * This menu will provide actions open, close, add to, remove from, or split a group.
+     *
+     * addGroupActions will add the actions as a flat list, not in a submenu.
+     * Note: Call setImageFilterModel before to have Open/Close group actions.
+     */
+    void addGroupMenu(imageIds& ids);
+    void addGroupActions(imageIds& ids);
+
+    /**
+     * Set a filter model.
+     * Some of the group actions will operate directly on the model.
+     */
+    void setImageFilterModel(ImageFilterModel* model);
+
+    /**
      * Add some of the KIPI actions to the menu.
      *
      * This method will add some of the KIPI actions into the context menu, right now only the
@@ -353,12 +373,18 @@ private Q_SLOTS:
     //    void slotABCContextMenu();
     void slotABCMenuTriggered(QAction*);
     void slotDeselectAllAlbumItems();
+    void slotOpenGroups();
+    void slotCloseGroups();
+    void slotOpenAllGroups();
+    void slotCloseAllGroups();
 
 private:
 
     void setSelectedIds(imageIds& ids);
     void setSelectedItems(const KUrl::List& urls);
     bool imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category);
+    QList<QAction*> groupMenuActions(imageIds& ids);
+    void setGroupsOpen(bool open);
 
 private:
 

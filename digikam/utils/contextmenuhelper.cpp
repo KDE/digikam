@@ -42,6 +42,7 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
+#include <kdebug.h>
 #include <kfileitem.h>
 #include <klocale.h>
 #include <kmenu.h>
@@ -69,6 +70,7 @@
 #include "databaseaccess.h"
 #include "digikamapp.h"
 #include "imageinfo.h"
+#include "imagefiltermodel.h"
 #include "lighttablewindow.h"
 #include "queuemgrwindow.h"
 #include "picklabelwidget.h"
@@ -88,6 +90,7 @@ public:
         gotoAlbumAction(0),
         gotoDateAction(0),
         setThumbnailAction(0),
+        imageFilterModel(0),
         parent(0),
         ABCmenu(0),
         stdActionCollection(0)
@@ -102,6 +105,8 @@ public:
 
     QMap<int, QAction*>          queueActions;
     QMap<QString, KService::Ptr> servicesMap;
+
+    ImageFilterModel*            imageFilterModel;
 
     QMenu*                       parent;
     QMenu*                       ABCmenu;
@@ -731,6 +736,180 @@ void ContextMenuHelper::addQueueManagerMenu()
     // NOTE: see B.K.O #252130 : we need to disable new items to add on BQM is this one is running.
     bqmMenu->setDisabled(QueueMgrWindow::queueManagerWindow()->isBusy());
 }
+
+void ContextMenuHelper::addGroupMenu(imageIds& ids)
+{
+    QList<QAction*> actions = groupMenuActions(ids);
+    if (actions.isEmpty())
+    {
+        return;
+    }
+    KMenu* menu = new KMenu(i18n("Group"));
+    foreach (QAction* action, actions)
+    {
+        menu->addAction(action);
+    }
+    d->parent->addMenu(menu);
+}
+
+void ContextMenuHelper::addGroupActions(imageIds& ids)
+{
+    foreach (QAction* action, groupMenuActions(ids))
+    {
+        d->parent->addAction(action);
+    }
+}
+
+void ContextMenuHelper::setImageFilterModel(ImageFilterModel* model)
+{
+    d->imageFilterModel = model;
+}
+
+QList<QAction*> ContextMenuHelper::groupMenuActions(imageIds& ids)
+{
+    setSelectedIds(ids);
+
+    QList<QAction*> actions;
+    if (ids.isEmpty())
+    {
+        if (d->imageFilterModel)
+        {
+            if (!d->imageFilterModel->isAllGroupsOpen())
+            {
+                QAction* openAction = new QAction(i18nc("@action:inmenu", "Open All Groups"), this);
+                connect(openAction, SIGNAL(triggered()), this, SLOT(slotOpenGroup()));
+                actions << openAction;
+            }
+            else
+            {
+                QAction* closeAction = new QAction(i18nc("@action:inmenu", "Close All Groups"), this);
+                connect(closeAction, SIGNAL(triggered()), this, SLOT(slotOpenGroup()));
+                actions << closeAction;
+            }
+        }
+        return actions;
+    }
+
+    ImageInfo info(ids.first());
+    if (ids.size() == 1)
+    {
+        if (info.hasGroupedImages())
+        {
+            if (d->imageFilterModel)
+            {
+                if (!d->imageFilterModel->isGroupOpen(info.id()))
+                {
+                    QAction* action = new QAction(i18nc("@action:inmenu", "Show Grouped Images"), this);
+                    connect(action, SIGNAL(triggered()), this, SLOT(slotOpenGroups()));
+                    actions << action;
+                }
+                else
+                {
+                    QAction* action = new QAction(i18nc("@action:inmenu", "Hide Grouped Images"), this);
+                    connect(action, SIGNAL(triggered()), this, SLOT(slotCloseGroups()));
+                    actions << action;
+                }
+            }
+
+            QAction* separator = new QAction(this);
+            separator->setSeparator(true);
+            actions << separator;
+
+            QAction* clearAction = new QAction(i18nc("@action:inmenu", "Ungroup"), this);
+            connect(clearAction, SIGNAL(triggered()), this, SIGNAL(signalUngroup()));
+            actions << clearAction;
+        }
+        else if (info.isGrouped())
+        {
+            QAction* action = new QAction(i18nc("@action:inmenu", "Remove From Group"), this);
+            connect(action, SIGNAL(triggered()), this, SIGNAL(signalRemoveFromGroup()));
+            actions << action;
+
+            // TODO: set as group leader / pick image
+        }
+    }
+    else
+    {
+        QAction* closeAction = new QAction(i18nc("@action:inmenu", "Group Selected Here"), this);
+        connect(closeAction, SIGNAL(triggered()), this, SIGNAL(signalCreateGroup()));
+        actions << closeAction;
+
+        QAction* separator = new QAction(this);
+        separator->setSeparator(true);
+        actions << separator;
+
+        if (d->imageFilterModel)
+        {
+            QAction* openAction = new QAction(i18nc("@action:inmenu", "Show Grouped Images"), this);
+            connect(openAction, SIGNAL(triggered()), this, SLOT(slotOpenGroups()));
+            actions << openAction;
+
+            QAction* closeAction = new QAction(i18nc("@action:inmenu", "Hide Grouped Images"), this);
+            connect(closeAction, SIGNAL(triggered()), this, SLOT(slotCloseGroups()));
+            actions << closeAction;
+
+            QAction* separator2 = new QAction(this);
+            separator2->setSeparator(true);
+            actions << separator2;
+        }
+
+        QAction* removeAction = new QAction(i18nc("@action:inmenu", "Remove Selected From Groups"), this);
+        connect(removeAction, SIGNAL(triggered()), this, SIGNAL(signalRemoveFromGroup()));
+        actions << removeAction;
+
+        QAction* clearAction = new QAction(i18nc("@action:inmenu", "Ungroup Selected"), this);
+        connect(clearAction, SIGNAL(triggered()), this, SIGNAL(signalUngroup()));
+        actions << clearAction;
+    }
+    return actions;
+}
+
+void ContextMenuHelper::setGroupsOpen(bool open)
+{
+    if (!d->imageFilterModel || d->selectedIds.isEmpty())
+    {
+        return;
+    }
+    GroupImageFilterSettings settings = d->imageFilterModel->groupImageFilterSettings();
+    foreach (qlonglong id, d->selectedIds)
+    {
+        ImageInfo info(id);
+        if (info.hasGroupedImages())
+        {
+            settings.setOpen(id, open);
+        }
+    }
+    d->imageFilterModel->setGroupImageFilterSettings(settings);
+}
+
+void ContextMenuHelper::slotOpenGroups()
+{
+    setGroupsOpen(true);
+}
+
+void ContextMenuHelper::slotCloseGroups()
+{
+    setGroupsOpen(false);
+}
+
+void ContextMenuHelper::slotOpenAllGroups()
+{
+    if (!d->imageFilterModel)
+    {
+        return;
+    }
+    d->imageFilterModel->setAllGroupsOpen(true);
+}
+
+void ContextMenuHelper::slotCloseAllGroups()
+{
+    if (!d->imageFilterModel)
+    {
+        return;
+    }
+    d->imageFilterModel->setAllGroupsOpen(false);
+}
+
 
 void ContextMenuHelper::addStandardActionCut(QObject* recv, const char* slot)
 {
