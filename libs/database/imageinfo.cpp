@@ -796,7 +796,7 @@ QList<ImageInfo> ImageInfo::groupedImages() const
 
 void ImageInfo::addToGroup(const ImageInfo& leader)
 {
-    if (!m_data || leader.isNull())
+    if (!m_data || leader.isNull() || leader.id() == m_data->id)
     {
         return;
     }
@@ -1241,7 +1241,6 @@ void ImageInfo::setTag(int tagID)
         return;
     }
 
-    kDebug() << m_data->id << tagID;
     DatabaseAccess access;
     access.db()->addItemTag(m_data->id, tagID);
 }

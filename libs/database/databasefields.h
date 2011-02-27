@@ -233,7 +233,8 @@ public:
     {
         return (images & other.images) || (imageInformation & other.imageInformation)  ||
                (imageMetadata & other.imageMetadata) || (imageComments & other.imageComments) ||
-               (imagePositions & other.imagePositions) || (customEnum & other.customEnum);
+               (imagePositions & other.imagePositions) || (imageHistory & other.imageHistory) ||
+               (customEnum & other.customEnum);
     }
 
     inline CustomEnum& operator=(const CustomEnum& f)
