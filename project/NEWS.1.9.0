@@ -1,0 +1,39 @@
+*********************************************************************************************************
+digiKam 1.9.0 - Release date: 2011-02-19
+
+NEW FEATURES:
+
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 264181 : png-1.5 compatibility fix.
+002 ==> 263697 : digiKam 1.8.0 (svn) crashes on startup most times.
+003 ==> 237492 : Grayscale TIFF display broken.
+004 ==> 263786 : digikam 1.7.0 crashes on startup.
+005 ==> 228531 : Inconsistant use of preview zoom-in function key-strokes.
+006 ==> 233612 : The DocumentName tag is not added when importing.
+007 ==> 246778 : Disable folder collapsing under certain circumstances.
+008 ==> 264363 : Image editor always crashes when triggering Colour Auto-Correction.
+009 ==> 234021 : digiKam crash on loading.
+010 ==> 264999 : Exif-dates not recognices OK.
+011 ==> 264745 : When adding new tag to multiple images, tags not in common are removed from metadata, though still present in database.
+012 ==> 173901 : digiKam contains a convience copy of cimg code.
+013 ==> 264208 : Underexposure indicator should always work in "pure color" mode.
+014 ==> 264769 : digiKam crash on startup.
+015 ==> 264830 : Raw importer broken. Not possible to revert changes.
+016 ==> 103371 : Only one digikam instance should run on the same image library path.
+017 ==> 265445 : digikam-1.8.0 fails to build against kde-4.6.x/gcc-4.6.
+018 ==> 264631 : Deleteing last TAG on a picture does actually not remove the tag within the exif metadata.
+019 ==> 195648 : Quickfilter by tags: Exclude tags.
+020 ==> 265641 : digiKam crash at startup.
+021 ==> 
+
+
+
+
+
+
+
+
+
+
