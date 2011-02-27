@@ -32,6 +32,7 @@
 // KDE includes
 
 #include <kdebug.h>
+#include <KIconLoader>
 
 // Local includes
 
@@ -81,6 +82,10 @@ void DigikamImageDelegate::updateRects()
     y                                  = d->pixmapRect.bottom();
     d->imageInformationRect            = QRect(d->margin, y, d->contentWidth, 0);
     const AlbumSettings* albumSettings = AlbumSettings::instance();
+
+    const int iconSize = KIconLoader::SizeSmallMedium;
+    d->pickLabelRect = QRect(d->margin, y, iconSize, iconSize);
+    d->groupRect     = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
 
     if (albumSettings->getIconShowRating())
     {

@@ -67,6 +67,7 @@ public:
     QRect commentsRect() const;
     QRect tagsRect() const;
     QRect actualPixmapRect(const QModelIndex& index) const;
+    QRect groupIndicatorRect() const;
 
     /** Call this from a paint event, with all indexes expected to be painted immediately,
      *  so that thumbnails become available in order. */
