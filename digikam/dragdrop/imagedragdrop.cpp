@@ -32,7 +32,7 @@
 
 // KDE includes
 
-
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <klocale.h>
@@ -67,41 +67,131 @@ void ImageDragDropHandler::setReadOnlyDrop(bool readOnly)
     m_readOnly = readOnly;
 }
 
-static Qt::DropAction copyOrMove(const QDropEvent* e, QWidget* view, bool showMenu = true)
+enum DropAction
+{
+    NoAction,
+    CopyAction,
+    MoveAction,
+    GroupAction,
+    AssignTagAction
+};
+
+static QAction* addGroupAction(KMenu* menu)
+{
+    return menu->addAction( SmallIcon("arrow-down-double"),
+                              i18nc("@action:inmenu Group images with this image", "Group here"));
+}
+
+static QAction* addCancelAction(KMenu* menu)
+{
+    return menu->addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
+}
+
+static DropAction copyOrMove(const QDropEvent* e, QWidget* view, bool allowMove = true, bool askForGrouping = false)
 {
     if (e->keyboardModifiers() & Qt::ControlModifier)
     {
-        return Qt::CopyAction;
+        return CopyAction;
     }
     else if (e->keyboardModifiers() & Qt::ShiftModifier)
     {
-        return Qt::MoveAction;
+        return MoveAction;
     }
 
-    if (!showMenu)
+    if (!allowMove && !askForGrouping)
     {
-        return e->proposedAction();
+        switch (e->proposedAction())
+        {
+            case Qt::CopyAction:
+                return CopyAction;
+            case Qt::MoveAction:
+                return MoveAction;
+            default:
+                return NoAction;
+        }
     }
 
     KMenu popMenu(view);
-    QAction* moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
+
+    QAction* moveAction = 0;
+    if (allowMove)
+    {
+        moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
+    }
+
     QAction* copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
     popMenu.addSeparator();
-    popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
+
+    QAction* groupAction = 0;
+    if (askForGrouping)
+    {
+        groupAction = addGroupAction(&popMenu);
+        popMenu.addSeparator();
+    }
+    addCancelAction(&popMenu);
 
     popMenu.setMouseTracking(true);
     QAction* choice = popMenu.exec(QCursor::pos());
 
-    if (choice == moveAction)
+    if (moveAction && choice == moveAction)
     {
-        return Qt::MoveAction;
+        return MoveAction;
     }
     else if (choice == copyAction)
     {
-        return Qt::CopyAction;
+        return CopyAction;
+    }
+    else if (groupAction && choice == groupAction)
+    {
+        return GroupAction;
     }
 
-    return Qt::IgnoreAction;
+    return NoAction;
+}
+
+static DropAction tagAction(const QDropEvent*, QWidget* view, bool askForGrouping)
+{
+    KMenu popMenu(view);
+    QAction* tagAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tag to Dropped Items"));
+    QAction* groupAction = 0;
+    if (askForGrouping)
+    {
+        popMenu.addSeparator();
+        groupAction = addGroupAction(&popMenu);
+    }
+
+    popMenu.addSeparator();
+    addCancelAction(&popMenu);
+
+    popMenu.setMouseTracking(true);
+    QAction* choice = popMenu.exec(QCursor::pos());
+
+    if (groupAction && choice == groupAction)
+    {
+        return GroupAction;
+    }
+    else if (tagAction && choice == tagAction)
+    {
+        return AssignTagAction;
+    }
+
+    return NoAction;
+}
+
+static DropAction groupAction(const QDropEvent*, QWidget* view)
+{
+    KMenu popMenu(view);
+    QAction* groupAction = addGroupAction(&popMenu);
+    popMenu.addSeparator();
+    addCancelAction(&popMenu);
+
+    QAction* choice = popMenu.exec(QCursor::pos());
+    if (groupAction && choice == groupAction)
+    {
+        return GroupAction;
+    }
+
+    return NoAction;
 }
 
 bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)
@@ -148,7 +238,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         KUrl::List urls;
         KUrl::List kioURLs;
         QList<int> albumIDs;
-        QList<int> imageIDs;
+        QList<qlonglong> imageIDs;
 
         if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
         {
@@ -160,14 +250,17 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             return false;
         }
 
+        DropAction action = NoAction;
+
+        ImageInfo droppedOnInfo;
+        if (droppedOn.isValid())
+        {
+            droppedOnInfo = model()->imageInfo(droppedOn);
+        }
+
         if (m_readOnly)
         {
-            QList<ImageInfo> infos;
-            foreach (int id, imageIDs)
-            {
-                infos << ImageInfo(id);
-            }
-            emit imageInfosDropped(infos);
+            emit imageInfosDropped(ImageInfoList(imageIDs));
             return true;
         }
         else if (palbum)
@@ -176,7 +269,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             KUrl::List       extUrls, intUrls;
             QList<qlonglong> extImageIDs, intImageIDs;
 
-            for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
+            for (QList<qlonglong>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
             {
                 ImageInfo info(*it);
 
@@ -192,84 +285,117 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                 }
             }
 
-            if (intUrls.isEmpty() && !extUrls.isEmpty())
+            if (intUrls.isEmpty() && extUrls.isEmpty())
+            {
+                return false;
+            }
+
+            bool onlyExternal = (intUrls.isEmpty() && !extUrls.isEmpty());
+            bool onlyInternal = (!intUrls.isEmpty() && extUrls.isEmpty());
+            bool mixed        = (!intUrls.isEmpty() && !extUrls.isEmpty());
+
+            // Check for drop of image on itself
+            if (intImageIDs.size() == 1 && intImageIDs.first() == droppedOnInfo.id())
+            {
+                return false;
+            }
+
+            if (droppedOn.isValid() && onlyInternal)
+            {
+                action = groupAction(e, view);
+            }
+            else
+            {
+                // Determine action. Show Menu only if there are any album-external items.
+                // Ask for grouping if dropped-on is valid (gives LinkAction)
+                action = copyOrMove(e, view, mixed || onlyExternal, !droppedOnInfo.isNull());
+            }
+
+            if (onlyExternal)
             {
                 // Only external items: copy or move as requested
 
-                Qt::DropAction action = copyOrMove(e, view);
-
-                if (action == Qt::MoveAction)
+                if (action == MoveAction)
                 {
                     KIO::Job* job = DIO::move(extUrls, extImageIDs, palbum);
                     connect(job, SIGNAL(result(KJob*)),
                             this, SIGNAL(dioResult(KJob*)));
+                    return true;
                 }
-                else if (action == Qt::CopyAction)
+                else if (action == CopyAction)
                 {
                     KIO::Job* job = DIO::copy(extUrls, extImageIDs, palbum);
                     connect(job, SIGNAL(result(KJob*)),
                             this, SIGNAL(dioResult(KJob*)));
+                    return true;
                 }
-
-                return true;
             }
-            else if (!intUrls.isEmpty() && extUrls.isEmpty())
+            else if (onlyInternal)
             {
                 // Only items from the current album:
                 // Move is a no-op. Do not show menu to ask for copy or move.
                 // If the user indicates a copy operation (holding Ctrl), copy.
 
-                Qt::DropAction action = copyOrMove(e, view, false);
-
-                if (action == Qt::CopyAction)
+                if (action == CopyAction)
                 {
                     KIO::Job* job = DIO::copy(intUrls, intImageIDs, palbum);
                     connect(job, SIGNAL(result(KJob*)),
                             this, SIGNAL(dioResult(KJob*)));
                     return true;
                 }
-                else
+                else if (action == MoveAction)
                 {
                     return false;
                 }
             }
-
-            if (!intUrls.isEmpty() && !extUrls.isEmpty())
+            else if (mixed)
             {
                 // Mixed items.
                 // For move operations, ignore items from current album.
                 // If user requests copy, copy.
 
-                Qt::DropAction action = copyOrMove(e, view);
-
-                if (action == Qt::MoveAction)
+                if (action == MoveAction)
                 {
                     KIO::Job* job = DIO::move(extUrls, extImageIDs, palbum);
                     connect(job, SIGNAL(result(KJob*)),
                             this, SIGNAL(dioResult(KJob*)));
+                    return true;
                 }
-                else if (action == Qt::CopyAction)
+                else if (action == CopyAction)
                 {
                     KIO::Job* job = DIO::copy(extUrls+intUrls, extImageIDs+intImageIDs, palbum);
                     connect(job, SIGNAL(result(KJob*)),
                             this, SIGNAL(dioResult(KJob*)));
+                     return true;
                 }
-
-                return true;
             }
         }
         else if (talbum)
         {
-            QList<ImageInfo> infos;
+            action = tagAction(e, view, droppedOn.isValid());
 
-            for (QList<int>::const_iterator it = imageIDs.constBegin();
-                 it != imageIDs.constEnd(); ++it)
+            if (action == AssignTagAction)
             {
-                ImageInfo info(*it);
-                infos << info;
+                emit assignTags(ImageInfoList(imageIDs), QList<int>() << talbum->id());
+                return true;
             }
+        }
+        else
+        {
+            if (droppedOn.isValid())
+            {
+                // Ask if the user wants to group
+                action = groupAction(e, view);
+            }
+        }
 
-            emit assignTags(infos, QList<int>() << talbum->id());
+        if (action == GroupAction)
+        {
+            if (droppedOnInfo.isNull())
+            {
+                return false;
+            }
+            emit addToGroup(droppedOnInfo, ImageInfoList(imageIDs));
             return true;
         }
 
@@ -292,15 +418,15 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             return true;
         }
 
-        Qt::DropAction action = copyOrMove(e, view);
+        DropAction action = copyOrMove(e, view);
 
-        if (action == Qt::MoveAction)
+        if (action == MoveAction)
         {
             KIO::Job* job = DIO::move(srcURLs, palbum);
             connect(job, SIGNAL(result(KJob*)),
                     this, SIGNAL(dioResult(KJob*)));
         }
-        else if (action == Qt::CopyAction)
+        else if (action == CopyAction)
         {
             KIO::Job* job = DIO::copy(srcURLs, palbum);
             connect(job, SIGNAL(result(KJob*)),
@@ -511,7 +637,7 @@ QMimeData* ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexe
     KUrl::List urls;
     KUrl::List kioURLs;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
 
     foreach (const ImageInfo& info, infos)
     {
