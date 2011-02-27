@@ -52,7 +52,7 @@ public:
 
 Q_SIGNALS:
 
-    void assignTags(const QList<int>& imageIDs, const QList<int>& tagIDs);
+    void assignTags(const QList<qlonglong>& imageIDs, const QList<int>& tagIDs);
 };
 
 } // namespace Digikam

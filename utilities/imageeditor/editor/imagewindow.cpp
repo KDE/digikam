@@ -1548,7 +1548,7 @@ void ImageWindow::dragMoveEvent(QDragMoveEvent* e)
 {
     int        albumID;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
     KUrl::List urls;
     KUrl::List kioURLs;
 
@@ -1567,20 +1567,13 @@ void ImageWindow::dropEvent(QDropEvent* e)
 {
     int        albumID;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
     KUrl::List urls;
     KUrl::List kioURLs;
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
     {
-        ImageInfoList imageInfoList;
-
-        for (QList<int>::const_iterator it = imageIDs.constBegin();
-             it != imageIDs.constEnd(); ++it)
-        {
-            ImageInfo info(*it);
-            imageInfoList << info;
-        }
+        ImageInfoList imageInfoList(imageIDs);
 
         if (imageInfoList.isEmpty())
         {
@@ -1605,14 +1598,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
     {
         AlbumManager* man        = AlbumManager::instance();
         QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
-        ImageInfoList imageInfoList;
-
-        for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
-             it != itemIDs.constEnd(); ++it)
-        {
-            ImageInfo info(*it);
-            imageInfoList << info;
-        }
+        ImageInfoList imageInfoList(itemIDs);
 
         if (imageInfoList.isEmpty())
         {
@@ -1643,14 +1629,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
 
         AlbumManager* man        = AlbumManager::instance();
         QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
-        ImageInfoList imageInfoList;
-
-        for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
-             it != itemIDs.constEnd(); ++it)
-        {
-            ImageInfo info(*it);
-            imageInfoList << info;
-        }
+        ImageInfoList imageInfoList(itemIDs);
 
         if (imageInfoList.isEmpty())
         {

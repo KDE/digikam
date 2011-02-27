@@ -455,7 +455,7 @@ void ImagePreviewBar::startDrag()
     KUrl::List urls;
     KUrl::List kioURLs;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
 
     ImagePreviewBarItem* item = dynamic_cast<ImagePreviewBarItem*>(currentItem());
 
@@ -1257,7 +1257,7 @@ void LightTableBar::startDrag()
     KUrl::List urls;
     KUrl::List kioURLs;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
 
     LightTableBarItem* item = dynamic_cast<LightTableBarItem*>(currentItem());
 
@@ -1288,7 +1288,7 @@ void LightTableBar::contentsDragEnterEvent(QDragEnterEvent* e)
 {
     int        albumID;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
     KUrl::List urls;
     KUrl::List kioURLs;
 
@@ -1307,7 +1307,7 @@ void LightTableBar::contentsDropEvent(QDropEvent* e)
 {
     int        albumID;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
     KUrl::List urls;
     KUrl::List kioURLs;
 
@@ -1315,7 +1315,7 @@ void LightTableBar::contentsDropEvent(QDropEvent* e)
     {
         ImageInfoList imageInfoList;
 
-        for (QList<int>::const_iterator it = imageIDs.constBegin();
+        for (QList<qlonglong>::const_iterator it = imageIDs.constBegin();
              it != imageIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);

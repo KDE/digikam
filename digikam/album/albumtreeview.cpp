@@ -1488,8 +1488,8 @@ void TagTreeView::setAlbumModel(TagModel* model)
         m_dragDropHandler = new TagDragDropHandler(albumModel());
         albumModel()->setDragDropHandler(m_dragDropHandler);
 
-        connect(albumModel()->dragDropHandler(), SIGNAL(assignTags(const QList<int>&, const QList<int>&)),
-                MetadataManager::instance(), SLOT(assignTags(const QList<int>&, const QList<int>&)));
+        connect(albumModel()->dragDropHandler(), SIGNAL(assignTags(const QList<qlonglong>&, const QList<int>&)),
+                MetadataManager::instance(), SLOT(assignTags(const QList<qlonglong>&, const QList<int>&)));
     }
 
     if (m_albumModel->rootAlbumBehavior() == AbstractAlbumModel::IncludeRootAlbum)
