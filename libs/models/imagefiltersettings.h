@@ -32,6 +32,7 @@
 #include <QList>
 #include <QMap>
 #include <QString>
+#include <QSet>
 
 // KDE includes
 
@@ -258,6 +259,44 @@ protected:
     int                              m_includeTagFilter;
     int                              m_exceptionTagFilter;
     QHash<QString,QList<qlonglong> > m_exceptionLists;
+};
+
+// ---------------------------------------------------------------------------------------
+
+class DIGIKAM_DATABASE_EXPORT GroupImageFilterSettings
+{
+public:
+
+    GroupImageFilterSettings();
+
+    bool operator==(const GroupImageFilterSettings& other) const;
+
+    /**
+     *  Returns true if the given ImageInfo matches the filter criteria.
+     */
+    bool matches(const ImageInfo& info) const;
+
+    /**
+     * Open or close a group.
+     */
+    void setOpen(qlonglong group, bool open);
+    bool isOpen(qlonglong group) const;
+
+    /**
+     * Open all groups
+     */
+    void setAllOpen(bool open);
+    bool isAllOpen() const;
+
+    /// Returns if images will be filtered by these criteria at all
+    bool isFiltering() const;
+
+    DatabaseFields::Set watchFlags() const;
+
+protected:
+
+    bool                     m_allOpen;
+    QSet<qlonglong>          m_openGroups;
 };
 
 } // namespace Digikam

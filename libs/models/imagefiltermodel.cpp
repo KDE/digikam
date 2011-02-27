@@ -229,6 +229,7 @@ ImageFilterModelPrivate::ImageFilterModelPrivate()
     needPrepare           = false;
     needPrepareComments   = false;
     needPrepareTags       = false;
+    needPrepareGroups     = false;
     preparer              = 0;
     filterer              = 0;
     hasOneMatch           = false;
@@ -443,10 +444,12 @@ void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& setting
         d->filter              = settings;
         d->filterCopy          = settings;
         d->versionFilterCopy   = d->versionFilter;
+        d->groupFilterCopy     = d->groupFilter;
 
         d->needPrepareComments = settings.isFilteringByText();
         d->needPrepareTags     = settings.isFilteringByTags();
-        d->needPrepare         = d->needPrepareComments || d->needPrepareTags;
+        d->needPrepareGroups   = true;
+        d->needPrepare         = d->needPrepareComments || d->needPrepareTags || d->needPrepareGroups;
 
         d->hasOneMatch         = false;
         d->hasOneMatchForText  = false;
@@ -491,6 +494,45 @@ void ImageFilterModel::setVersionImageFilterSettings(const VersionImageFilterSet
     slotUpdateFilter();
 }
 
+bool ImageFilterModel::isGroupOpen(qlonglong group) const
+{
+    Q_D(const ImageFilterModel);
+    return d->groupFilter.isOpen(group);
+}
+
+bool ImageFilterModel::isAllGroupsOpen() const
+{
+    Q_D(const ImageFilterModel);
+    return d->groupFilter.isAllOpen();
+}
+
+void ImageFilterModel::setGroupOpen(qlonglong group, bool open)
+{
+    Q_D(ImageFilterModel);
+    d->groupFilter.setOpen(group, open);
+    setGroupImageFilterSettings(d->groupFilter);
+}
+
+void ImageFilterModel::setAllGroupsOpen(bool open)
+{
+    Q_D(ImageFilterModel);
+    d->groupFilter.setAllOpen(open);
+    setGroupImageFilterSettings(d->groupFilter);
+}
+
+void ImageFilterModel::setGroupImageFilterSettings(const GroupImageFilterSettings& settings)
+{
+    Q_D(ImageFilterModel);
+    if (d->groupFilter == settings)
+    {
+        return;
+    }
+
+    d->groupFilter = settings;
+
+    slotUpdateFilter();
+}
+
 void ImageFilterModel::slotUpdateFilter()
 {
     Q_D(ImageFilterModel);
@@ -513,6 +555,12 @@ VersionImageFilterSettings ImageFilterModel::versionImageFilterSettings() const
 {
     Q_D(const ImageFilterModel);
     return d->versionFilter;
+}
+
+GroupImageFilterSettings ImageFilterModel::groupImageFilterSettings() const
+{
+    Q_D(const ImageFilterModel);
+    return d->groupFilter;
 }
 
 void ImageFilterModel::slotModelReset()
@@ -553,7 +601,8 @@ bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
     // usually done in thread and cache, unless source model changed
     ImageInfo info = d->imageModel->imageInfo(source_row);
     bool match = d->filter.matches(info);
-    return match ? d->versionFilter.matches(info) : false;
+    match = match ? d->versionFilter.matches(info) : false;
+    return match ? d->groupFilter.matches(info) : false;
 }
 
 void ImageFilterModel::setSendImageInfoSignals(bool sendSignals)
@@ -793,12 +842,13 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
     }
 
     // get thread-local copy
-    bool needPrepareTags, needPrepareComments;
+    bool needPrepareTags, needPrepareComments, needPrepareGroups;
     QList<ImageFilterModelPrepareHook*> prepareHooks;
     {
         QMutexLocker lock(&d->mutex);
         needPrepareTags     = d->needPrepareTags;
         needPrepareComments = d->needPrepareComments;
+        needPrepareGroups   = d->needPrepareGroups;
         prepareHooks        = d->prepareHooks;
     }
 
@@ -826,6 +876,15 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
         }
     }
 
+    //TODO: Make efficient!!
+    if (needPrepareGroups)
+    {
+        foreach(const ImageInfo& info, package.infos)
+        {
+            info.isGrouped();
+        }
+    }
+
     foreach (ImageFilterModelPrepareHook* hook, prepareHooks)
     {
         hook->prepare(package.infos);
@@ -845,12 +904,14 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     // get thread-local copy
     ImageFilterSettings localFilter;
     VersionImageFilterSettings localVersionFilter;
+    GroupImageFilterSettings localGroupFilter;
     bool hasOneMatch;
     bool hasOneMatchForText;
     {
         QMutexLocker lock(&d->mutex);
         localFilter        = d->filterCopy;
         localVersionFilter = d->versionFilterCopy;
+        localGroupFilter   = d->groupFilterCopy;
         hasOneMatch        = d->hasOneMatch;
         hasOneMatchForText = d->hasOneMatchForText;
     }
@@ -861,7 +922,8 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
         foreach (const ImageInfo& info, package.infos)
         {
             package.filterResults[info.id()] = localFilter.matches(info)
-                                                && localVersionFilter.matches(info);
+                                                && localVersionFilter.matches(info)
+                                                && localGroupFilter.matches(info);
         }
     }
     else if (hasOneMatch)
@@ -870,7 +932,8 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
         foreach (const ImageInfo& info, package.infos)
         {
             package.filterResults[info.id()] = localFilter.matches(info, &matchForText)
-                                                && localVersionFilter.matches(info);
+                                                && localVersionFilter.matches(info)
+                                                && localGroupFilter.matches(info);
 
             if (matchForText)
             {
@@ -884,7 +947,8 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
         foreach (const ImageInfo& info, package.infos)
         {
             result                           = localFilter.matches(info, &matchForText)
-                                                && localVersionFilter.matches(info);
+                                                && localVersionFilter.matches(info)
+                                                && localGroupFilter.matches(info);
             package.filterResults[info.id()] = result;
 
             if (result)
@@ -975,6 +1039,14 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelInde
     if (leftInfo == rightInfo)
     {
         return d->sorter.lessThan(left.data(ImageModel::ExtraDataRole), right.data(ImageModel::ExtraDataRole));
+    }
+
+    if ((leftInfo.isGrouped() || rightInfo.isGrouped())
+            && leftInfo.groupImage() != rightInfo.groupImage())
+    {
+        // only one of the two is grouped, or both are grouped, but on different images.
+        return infosLessThan(leftInfo.isGrouped() ? leftInfo.groupImage() : leftInfo,
+                             rightInfo.isGrouped() ? rightInfo.groupImage() : rightInfo);
     }
 
     return infosLessThan(leftInfo, rightInfo);
