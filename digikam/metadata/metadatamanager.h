@@ -41,6 +41,13 @@ class MetadataManager : public QObject
 
 public:
 
+    enum GroupAction
+    {
+        AddToGroup,
+        RemoveFromGroup,
+        SplitGroup
+    };
+
     static MetadataManager* instance();
 
     bool requestShutDown();
@@ -52,7 +59,7 @@ public Q_SLOTS:
     void assignTag(const QList<ImageInfo>& infos, int tagID);
     void assignTags(const ImageInfo& info, const QList<int>& tagIDs);
     void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
-    void assignTags(const QList<int>& imageIds, const QList<int>& tagIDs);
+    void assignTags(const QList<qlonglong>& imageIds, const QList<int>& tagIDs);
 
     void removeTag(const ImageInfo& info, int tagID);
     void removeTag(const QList<ImageInfo>& infos, int tagID);
@@ -67,6 +74,12 @@ public Q_SLOTS:
 
     void assignRating(const ImageInfo& infos, int rating);
     void assignRating(const QList<ImageInfo>& infos, int rating);
+
+    void addToGroup(const ImageInfo& pick, const QList<ImageInfo>& infos);
+    void removeFromGroup(const ImageInfo& info);
+    void removeFromGroup(const QList<ImageInfo>& infos);
+    void ungroup(const ImageInfo& info);
+    void ungroup(const QList<ImageInfo>& infos);
 
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
     void applyMetadata(const QList<ImageInfo>& infos, const MetadataHub& hub);
