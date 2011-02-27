@@ -199,10 +199,10 @@ MESSAGE(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
 # check the libkdcraw version
 # note that old versions don't specify version information, so for now
 # just inform the user if version information was found
-IF (KDCRAW_LIB_VERSION)
-  MESSAGE(STATUS "libkdcraw: Found version ${KDCRAW_LIB_VERSION}")
+IF (KDCRAW_VERSION)
+  MESSAGE(STATUS "libkdcraw: Found version ${KDCRAW_VERSION}")
   # TODO: fail if the version is too low
-ENDIF (KDCRAW_LIB_VERSION)
+ENDIF (KDCRAW_VERSION)
 
 # check the libkmap version
 # note that old versions don't specify version information, so for now
