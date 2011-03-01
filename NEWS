@@ -77,4 +77,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 056 ==> 266788 : Showfoto crashes when opening a photo.
 057 ==> 266326 : Move digiKam documentation to git.
 058 ==> 266327 : Move libkexiv2 to git.
-059 ==> 
+059 ==> 267361 : When using the luminosity curve in the image editor on an initial import from NEF, all changes are irreversible and cumulative.
+060 ==> 
