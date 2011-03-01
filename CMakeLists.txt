@@ -267,7 +267,7 @@ MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 
 # Set config files accordingly with optional dependencies
 
-CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
+CONFIGURE_FILE(digikam/utils/config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/config-digikam.h)
 CONFIGURE_FILE(libs/3rdparty/lensfun/config-lensfun.h.cmake
                ${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/config-lensfun.h)
 
@@ -1510,10 +1510,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow
 
-        # config-digikam.h
-        ${CMAKE_CURRENT_BINARY_DIR}
-
-        # version.h, gitversion.h
+        # version.h, gitversion.h config-digikam.h
         ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils
 
         # dbconfigversion.h
