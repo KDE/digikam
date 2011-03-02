@@ -359,6 +359,9 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
             return d->imageModel->imageInfoRef(mapToSource(index)).albumId();
         case CategoryFormatRole:
             return d->imageModel->imageInfoRef(mapToSource(index)).format();
+        case GroupIsOpenRole:
+            return d->groupFilter.isAllOpen() ||
+                   d->groupFilter.isOpen(d->imageModel->imageInfoRef(mapToSource(index)).id());
         case ImageFilterModelPointerRole:
             return QVariant::fromValue(const_cast<ImageFilterModel*>(this));
     }
@@ -485,13 +488,7 @@ void ImageFilterModel::setExceptionList(const QList<qlonglong>& idList, const QS
 void ImageFilterModel::setVersionImageFilterSettings(const VersionImageFilterSettings& settings)
 {
     Q_D(ImageFilterModel);
-    if (d->versionFilter == settings)
-    {
-        return;
-    }
-
     d->versionFilter = settings;
-
     slotUpdateFilter();
 }
 
@@ -514,6 +511,11 @@ void ImageFilterModel::setGroupOpen(qlonglong group, bool open)
     setGroupImageFilterSettings(d->groupFilter);
 }
 
+void ImageFilterModel::toggleGroupOpen(qlonglong group)
+{
+    setGroupOpen(group, !isGroupOpen(group));
+}
+
 void ImageFilterModel::setAllGroupsOpen(bool open)
 {
     Q_D(ImageFilterModel);
@@ -524,13 +526,7 @@ void ImageFilterModel::setAllGroupsOpen(bool open)
 void ImageFilterModel::setGroupImageFilterSettings(const GroupImageFilterSettings& settings)
 {
     Q_D(ImageFilterModel);
-    if (d->groupFilter == settings)
-    {
-        return;
-    }
-
     d->groupFilter = settings;
-
     slotUpdateFilter();
 }
 

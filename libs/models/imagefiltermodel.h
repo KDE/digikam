@@ -123,6 +123,8 @@ public:
         CategoryAlbumIdRole    = ImageModel::FilterModelRoles + 3,
         /// Returns the format of the index which is used for category
         CategoryFormatRole     = ImageModel::FilterModelRoles + 4,
+        /// Returns true if the given image is a group leader, and the group is opened
+        GroupIsOpenRole        = ImageModel::FilterModelRoles + 5,
         ImageFilterModelPointerRole  = ImageModel::FilterModelRoles + 50
     };
 
@@ -187,6 +189,7 @@ public Q_SLOTS:
     void setExceptionList(const QList<qlonglong>& idlist, const QString& id);
 
     void setGroupOpen(qlonglong group, bool open);
+    void toggleGroupOpen(qlonglong group);
     void setAllGroupsOpen(bool open);
 
 Q_SIGNALS:
