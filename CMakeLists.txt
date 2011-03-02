@@ -1341,6 +1341,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimageview_p.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimagefacedelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/groupindicatoroverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagecategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagecategorydrawer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagedelegate.cpp
