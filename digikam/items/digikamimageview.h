@@ -101,6 +101,11 @@ Q_SIGNALS:
     void gotoDateAndImageRequested(const ImageInfo& info);
     void signalPopupTagsView();
 
+protected Q_SLOTS:
+
+    void groupIndicatorClicked(const QModelIndex& index);
+    void showGroupContextMenu(const QModelIndex& index, QContextMenuEvent* event);
+
 protected:
 
     virtual void activated(const ImageInfo& info);

@@ -65,6 +65,7 @@
 #include "dio.h"
 #include "dpopupmenu.h"
 #include "facerejectionoverlay.h"
+#include "groupindicatoroverlay.h"
 #include "imagealbumfiltermodel.h"
 #include "imagealbummodel.h"
 #include "imagedragdrop.h"
@@ -126,8 +127,17 @@ DigikamImageView::DigikamImageView(QWidget* parent)
     addRejectionOverlay(d->faceDelegate);
     addAssignNameOverlay(d->faceDelegate);
 
+    GroupIndicatorOverlay* groupOverlay = new GroupIndicatorOverlay(this);
+    addOverlay(groupOverlay);
+
     connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex&, int)),
             this, SLOT(assignRating(const QModelIndex&, int)));
+
+    connect(groupOverlay, SIGNAL(toggleGroupOpen(const QModelIndex&)),
+            this, SLOT(groupIndicatorClicked(const QModelIndex&)));
+
+    connect(groupOverlay, SIGNAL(showButtonContextMenu(const QModelIndex&, QContextMenuEvent*)),
+            this, SLOT(showGroupContextMenu(const QModelIndex&, QContextMenuEvent*)));
 
     d->utilities = new ImageViewUtilities(this);
 
@@ -343,6 +353,36 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     {
         emit previewRequested(info);
     }
+}
+
+void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMenuEvent* event)
+{
+    QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
+    QList<qlonglong> selectedImageIDs;
+    foreach (const ImageInfo& info, selectedInfos)
+    {
+        selectedImageIDs << info.id();
+    }
+
+    DPopupMenu popmenu(this);
+    ContextMenuHelper cmhelper(&popmenu);
+    cmhelper.setImageFilterModel(imageFilterModel());
+
+    cmhelper.addGroupActions(selectedImageIDs);
+
+    // special action handling --------------------------------
+
+    connect(&cmhelper, SIGNAL(signalCreateGroup()),
+            this, SLOT(createGroupFromSelection()));
+
+    connect(&cmhelper, SIGNAL(signalUngroup()),
+            this, SLOT(ungroupSelected()));
+
+    connect(&cmhelper, SIGNAL(signalRemoveFromGroup()),
+            this, SLOT(removeSelectedFromGroup()));
+
+
+    cmhelper.exec(event->globalPos());
 }
 
 void DigikamImageView::showContextMenu(QContextMenuEvent* event)
@@ -566,6 +606,17 @@ void DigikamImageView::setAsAlbumThumbnail(const ImageInfo& setAsThumbnail)
 void DigikamImageView::createNewAlbumForSelected()
 {
     d->utilities->createNewAlbumForInfos(selectedImageInfos(), currentAlbum());
+}
+
+void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
+{
+    ImageInfo info = imageFilterModel()->imageInfo(index);
+    if (info.isNull())
+    {
+        return;
+    }
+    setCurrentIndex(index);
+    imageFilterModel()->toggleGroupOpen(info.id());
 }
 
 void DigikamImageView::createGroupFromSelection()
