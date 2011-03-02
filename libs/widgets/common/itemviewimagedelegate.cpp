@@ -417,22 +417,34 @@ void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int p
     }
 }
 
-void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r, int numberOfGroupedImages) const
+void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
+                                               int numberOfGroupedImages, bool open) const
 {
     if (numberOfGroupedImages)
     {
-        QIcon icon = KIconLoader::global()->loadIcon("mail-attachment", KIconLoader::NoGroup, r.width());
+        QIcon icon;
+        if (open)
+        {
+            icon = KIconLoader::global()->loadIcon("document-import", KIconLoader::NoGroup, r.width());
+        }
+        else
+        {
+            icon = KIconLoader::global()->loadIcon("document-multiple", KIconLoader::NoGroup, r.width());
+        }
+        qreal op = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);
-        p->setOpacity(1.0);
+        p->setOpacity(op);
 
         QString text = QString::number(numberOfGroupedImages);
-        /*QRect br = p.boundingRect(pixmapRect, Qt::AlignLeft|Qt::AlignTop, text1).adjusted(0,0,1,1);
+        /*
+        QRect br = p->boundingRect(r, Qt::AlignLeft|Qt::AlignTop, text).adjusted(0,0,1,1);
         int rectSize = qMax(br.width(), br.height());
-        textRect = QRect(0, 0, rectSize, rectSize);
-        textRect.moveLeft((r.width() - textRect.width()) / 2 + r.x());
+        QRect textRect = QRect(0, 0, rectSize, rectSize);
+        textRect.moveLeft((r.width() - textRect.width()) / 2);
         textRect.moveTop((r.height() - textRect.height()) * 4 / 5);
-        p.fillRect(textRect, QColor(0, 0, 0, 128));*/
+        p->fillRect(textRect.translated(r.topLeft(), QColor(0, 0, 0, 128));
+        */
         p->drawText(r, Qt::AlignCenter, text);
     }
 }
