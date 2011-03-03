@@ -570,7 +570,7 @@ void ImagePropertiesTab::setPickLabel(int pickId)
 void ImagePropertiesTab::setRating(int rating)
 {
     QString str;
-    if (rating > 0)
+    if (rating > RatingMin && rating <= RatingMax)
     {
         str = " ";
         for (int i=0; i<rating; i++)
