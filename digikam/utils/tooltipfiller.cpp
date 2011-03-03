@@ -335,17 +335,17 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             str += QString(" / ");
 
             int rating = info.rating();
-            if (rating <= 0)
-            {
-                str += QString("---");
-            }
-            else
+            if (rating > RatingMin && rating <= RatingMax)
             {
                 for (int i=0; i<rating; i++)
                 {
                     str += QChar(0x2730);
                     str += ' ';
                 }
+            }
+            else
+            {
+                str += QString("---");
             }
 
             tip += cnt.cellSpecBeg + i18n("Labels:") + cnt.cellSpecMid + str + cnt.cellSpecEnd;
