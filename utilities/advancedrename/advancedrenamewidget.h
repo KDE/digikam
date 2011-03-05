@@ -72,6 +72,10 @@ public:
      * @param text the new parse string
      */
     void    setParseString(const QString& text);
+
+
+    void setParseTimerDuration(int milliseconds);
+
     /**
      * resets the current parse string, the LineEdit widget will be empty
      */

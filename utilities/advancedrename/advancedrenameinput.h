@@ -76,6 +76,7 @@ public:
     Parser* parser() const;
 
     void setAllowDirectoryCreation(bool allow);
+    void setParseTimerDuration(int milliseconds);
 
 public Q_SLOTS:
 
@@ -118,6 +119,7 @@ public:
 
     void setParser(Parser* parser);
     void setAllowDirectoryCreation(bool allow);
+    void setParseTimerDuration(int milliseconds);
 
     QString text() const;
     void    setText(const QString& text);

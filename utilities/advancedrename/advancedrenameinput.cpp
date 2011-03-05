@@ -163,6 +163,11 @@ void AdvancedRenameLineEdit::setAllowDirectoryCreation(bool allow)
     d->allowDirectoryCreation = allow;
 }
 
+void AdvancedRenameLineEdit::setParseTimerDuration(int milliseconds)
+{
+    d->parseTimer->setInterval(milliseconds);
+}
+
 void AdvancedRenameLineEdit::setParser(Parser* parser)
 {
     if (parser)
@@ -367,6 +372,11 @@ void AdvancedRenameInput::setParser(Parser* parser)
 void AdvancedRenameInput::setAllowDirectoryCreation(bool allow)
 {
     d->lineEdit->setAllowDirectoryCreation(allow);
+}
+
+void AdvancedRenameInput::setParseTimerDuration(int milliseconds)
+{
+    d->lineEdit->setParseTimerDuration(milliseconds);
 }
 
 void AdvancedRenameInput::setText(const QString& text)

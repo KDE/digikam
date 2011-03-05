@@ -328,6 +328,7 @@ void AdvancedRenameDialog::initDialog()
         d->advancedRenameWidget->setParseString(info.fileName());
         d->advancedRenameWidget->focusLineEdit();
         d->advancedRenameWidget->highlightLineEdit(info.completeBaseName());
+        d->advancedRenameWidget->setParseTimerDuration(50);
         d->singleFileModeOldFilename = info.fileName();
     }
 

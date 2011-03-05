@@ -127,6 +127,11 @@ void AdvancedRenameWidget::setParseString(const QString& text)
     d->renameInput->setText(text);
 }
 
+void AdvancedRenameWidget::setParseTimerDuration(int milliseconds)
+{
+    d->renameInput->setParseTimerDuration(milliseconds);
+}
+
 void AdvancedRenameWidget::clearParseString()
 {
     d->renameInput->slotClearText();
