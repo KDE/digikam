@@ -39,6 +39,7 @@
 #include "albumfiltermodel.h"
 #include "albummanager.h"
 #include "assignnamewidget.h"
+#include "clickdragreleaseitem.h"
 #include "dimgpreviewitem.h"
 #include "faceiface.h"
 #include "facepipeline.h"
@@ -105,6 +106,8 @@ void FaceItem::setHudWidget(AssignNameWidget* widget)
     m_widget = widget;
     updateCurrentTag();
     RegionFrameItem::setHudWidget(widget);
+    // Ensure that all HUD widgets are stacked before the frame items
+    hudWidget()->setZValue(1);
 }
 
 AssignNameWidget* FaceItem::widget() const
@@ -170,6 +173,8 @@ public:
         view                 = 0;
         autoSuggest          = false;
         showOnHover          = false;
+        manuallyAddWrapItem  = 0;
+        manuallyAddedItem    = 0;
         visibilityController = 0;
         state                = NoFaces;
         tagModel             = 0;
@@ -179,6 +184,7 @@ public:
 
     void                       applyVisible();
     FaceItem*                  createItem(const DatabaseFace& face);
+    FaceItem*                  addItem(const DatabaseFace& face);
     AssignNameWidget*          createAssignNameWidget(const DatabaseFace& face, const QVariant& identifier);
     AssignNameWidget::Mode     assignWidgetMode(DatabaseFace::Type type);
     void                       checkModels();
@@ -192,6 +198,9 @@ public:
     bool                       showOnHover;
 
     QList<FaceItem*>           items;
+
+    ClickDragReleaseItem*      manuallyAddWrapItem;
+    FaceItem*                  manuallyAddedItem;
 
     FaceGroupState             state;
     ItemVisibilityController*  visibilityController;
@@ -498,6 +507,21 @@ FaceItem* FaceGroup::FaceGroupPriv::createItem(const DatabaseFace& face)
     return item;
 }
 
+FaceItem* FaceGroup::FaceGroupPriv::addItem(const DatabaseFace& face)
+{
+    FaceItem* item = createItem(face);
+
+    // for identification, use index in our list
+    AssignNameWidget* assignWidget = createAssignNameWidget(face, items.size());
+    item->setHudWidget(assignWidget);
+    //new StyleSheetDebugger(assignWidget);
+
+    visibilityController->addItem(item);
+
+    items << item;
+    return item;
+}
+
 void FaceGroup::FaceGroupPriv::checkModels()
 {
     if (!tagModel)
@@ -573,16 +597,7 @@ void FaceGroup::load()
 
     foreach (const DatabaseFace& face, faces)
     {
-        FaceItem* item = d->createItem(face);
-
-        // for identification, use index in our list
-        AssignNameWidget* assignWidget = d->createAssignNameWidget(face, d->items.size());
-        item->setHudWidget(assignWidget);
-        //new StyleSheetDebugger(assignWidget);
-
-        d->visibilityController->addItem(item);
-
-        d->items << item;
+        d->addItem(face);
     }
 
     d->state = FacesLoaded;
@@ -595,6 +610,7 @@ void FaceGroup::load()
 
 void FaceGroup::clear()
 {
+    cancelAddItem();
     d->visibilityController->clear();
     foreach (RegionFrameItem* item, d->items)
     {
@@ -602,18 +618,6 @@ void FaceGroup::clear()
     }
     d->items.clear();
     d->state = NoFaces;
-}
-
-void FaceGroup::addFace()
-{
-    /*
-        int w = this->scene()->width()/2;
-        int h = w;
-        int x = this->scene()->width()/2 - w/2;
-        int y = this->scene()->height()/2 - w/2;
-
-        d->faceitems.append(new FaceItem(0, this->scene(), QRect(x, y, w, h), d->scale , "", d->scale));
-    */
 }
 
 void FaceGroup::rejectAll()
@@ -683,6 +687,68 @@ void FaceGroup::startAutoSuggest()
     if (!d->autoSuggest)
     {
         return;
+    }
+}
+
+void FaceGroup::addFace()
+{
+    d->manuallyAddWrapItem = new ClickDragReleaseItem(d->view->previewItem());
+    d->manuallyAddWrapItem->setFocus();
+
+    connect(d->manuallyAddWrapItem, SIGNAL(started(const QPointF&)),
+            this, SLOT(slotAddItemStarted(const QPointF&)));
+
+    connect(d->manuallyAddWrapItem, SIGNAL(moving(const QRectF&)),
+            this, SLOT(slotAddItemMoving(const QRectF&)));
+
+    connect(d->manuallyAddWrapItem, SIGNAL(finished(const QRectF&)),
+            this, SLOT(slotAddItemFinished(const QRectF&)));
+
+    connect(d->manuallyAddWrapItem, SIGNAL(cancelled()),
+            this, SLOT(cancelAddItem()));
+}
+
+void FaceGroup::slotAddItemStarted(const QPointF& pos)
+{
+    Q_UNUSED(pos);
+}
+
+void FaceGroup::slotAddItemMoving(const QRectF& rect)
+{
+    if (!d->manuallyAddedItem)
+    {
+        d->manuallyAddedItem = d->createItem(DatabaseFace());
+        d->visibilityController->addItem(d->manuallyAddedItem);
+        d->visibilityController->showItem(d->manuallyAddedItem);
+    }
+    d->manuallyAddedItem->setRectInSceneCoordinates(rect);
+}
+
+void FaceGroup::slotAddItemFinished(const QRectF& rect)
+{
+    if (d->manuallyAddedItem)
+    {
+        d->manuallyAddedItem->setRectInSceneCoordinates(rect);
+        DatabaseFace face = d->faceIface.addUnknownManually(d->view->previewItem()->image(),
+                                                            d->info.id(),
+                                                            d->manuallyAddedItem->originalRect());
+        FaceItem* item = d->addItem(face);
+        d->visibilityController->setItemDirectlyVisible(item, true);
+        d->manuallyAddWrapItem->stackBefore(item);
+    }
+    cancelAddItem();
+}
+
+void FaceGroup::cancelAddItem()
+{
+    delete d->manuallyAddedItem;
+    d->manuallyAddedItem = 0;
+
+    if (d->manuallyAddWrapItem)
+    {
+        d->view->scene()->removeItem(d->manuallyAddWrapItem);
+        d->manuallyAddWrapItem->deleteLater();
+        d->manuallyAddWrapItem = 0;
     }
 }
 
