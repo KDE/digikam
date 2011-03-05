@@ -886,6 +886,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libgraphicsviewwidgets_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/clickdragreleaseitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/dimgchilditem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/dimgpreviewitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/regionframeitem.cpp
