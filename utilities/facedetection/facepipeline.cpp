@@ -1063,6 +1063,15 @@ bool FacePipeline::process(const ImageInfo& info, const DImg& image)
     return true;
 }
 
+/*bool FacePipeline::add(const ImageInfo& info, const QRect& rect, const DImg& image)
+{
+    FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
+    package->image = image;
+    package->detectionImage = image;
+    package->faces << KFaceIface::Face(rect);
+    d->send(package);
+}*/
+
 void FacePipeline::train(const ImageInfo& info, const QList<DatabaseFace> &databaseFaces)
 {
     train(info, databaseFaces, DImg());
