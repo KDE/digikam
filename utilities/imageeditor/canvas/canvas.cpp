@@ -109,6 +109,7 @@ public:
         autoZoom         = false;
         fullScreen       = false;
         zoom             = 1.0;
+        initialZoom      = true;
         tileTmpPix       = new QPixmap(tileSize, tileSize);
 
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
@@ -128,6 +129,7 @@ public:
     bool                     tsActive;
     bool                     dragActive;
     bool                     midButtonPressed;
+    bool                     initialZoom;
 
     const int                snapArea;
     const int                tileSize;
@@ -274,8 +276,9 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
     d->im->zoom(d->zoom);
 
-    if (d->autoZoom)
+    if (d->autoZoom || d->initialZoom)
     {
+        d->initialZoom = false;
         updateAutoZoom();
     }
 

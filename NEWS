@@ -83,6 +83,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 061 ==> 262574 : Add a face tag does not do anything.
 062 ==> 266126 : Renaming single file needs to be confirmed twice. 
 063 ==> 264976 : face detection: "Clear results and rescan" doesn't clear results.
-064 ==>
+064 ==> 213624 : editor: picture too "big" when comming to editor after digikam start
+065 ==>
 
 

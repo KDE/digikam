@@ -985,7 +985,7 @@ void EditorWindow::readStandardSettings()
 
     if (autoZoom)
     {
-        d->zoomFitToWindowAction->activate(QAction::Trigger);
+        d->zoomFitToWindowAction->trigger();
     }
 
     slotSetUnderExposureIndicator(group.readEntry(d->configUnderExposureIndicatorEntry, false));
