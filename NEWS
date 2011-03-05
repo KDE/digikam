@@ -81,6 +81,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 059 ==> 267361 : When using the luminosity curve in the image editor on an initial import from NEF, all changes are irreversible and cumulative.
 060 ==> 266733 : digiKam crashes on startup on OS X.
 061 ==> 262574 : Add a face tag does not do anything.
-062 ==> 
+062 ==> 266126 : Renaming single file needs to be confirmed twice. 
+063 ==> 
 
 
