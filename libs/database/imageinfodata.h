@@ -64,7 +64,7 @@ public:
     quint8                 pickLabel;
     quint8                 colorLabel;
     quint8                 groupingFlags;
-    quint8                 rating;
+    qint8                  rating;
     DatabaseItem::Category category;
     QString                format;
     QDateTime              creationDate;
