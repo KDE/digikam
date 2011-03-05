@@ -6,7 +6,8 @@
  * Date        : 2010-04-02
  * Description : Cache for Tag information
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +30,7 @@
 #include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>
+#include <QMap>
 
 // KDE includes
 
@@ -40,6 +42,7 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasewatch.h"
+#include "tagproperties.h"
 
 namespace Digikam
 {
@@ -49,27 +52,48 @@ static bool lessThanForTagShortInfo(const TagShortInfo& first, const TagShortInf
     return first.id < second.id;
 }
 
-// -----------------------------------------------------------------------------------------------
+static bool lessThanForTagProperty(const TagProperty& first, const TagProperty& second)
+{
+    return first.tagId < second.tagId;
+}
+typedef QList<TagProperty>::const_iterator TagPropertiesConstIterator;
+typedef QPair<TagPropertiesConstIterator, TagPropertiesConstIterator> TagPropertiesRange;
+
+// ------------------------------------------------------------------------------------------
 
 class TagsCache::TagsCachePriv
 {
 public:
 
-    TagsCachePriv() :
+    TagsCachePriv(TagsCache* q) :
         initialized(false),
         needUpdateInfos(true),
         needUpdateHash(true),
-        changingDB(false)
+        needUpdateProperties(true),
+        needUpdateLabelTags(true),
+        changingDB(false),
+        q(q)
     {
     }
 
-    bool                     initialized;
-    bool                     needUpdateInfos;
-    bool                     needUpdateHash;
-    bool                     changingDB;
-    QReadWriteLock           lock;
-    QList<TagShortInfo>      infos;
-    QMultiHash<QString, int> nameHash;
+    bool                        initialized;
+    bool                        needUpdateInfos;
+    bool                        needUpdateHash;
+    bool                        needUpdateProperties;
+    bool                        needUpdateLabelTags;
+    bool                        changingDB;
+
+    QReadWriteLock              lock;
+    QList<TagShortInfo>         infos;
+    QMultiHash<QString, int>    nameHash;
+
+    QList<TagProperty>          tagProperties;
+    QHash<QString, QList<int> > tagsWithProperty;
+    QSet<int>                   internalTags;
+    QMap<ColorLabel, int>       colorLabelsTags;              // Map between color Id and tag label Id created in DB.
+    QMap<PickLabel, int>        pickLabelsTags;               // Map between pick Id and tag label Id created in DB.
+
+    TagsCache* const            q;
 
     void checkInfos()
     {
@@ -77,7 +101,7 @@ public:
         {
             QList<TagShortInfo> newInfos = DatabaseAccess().db()->getTagShortInfos();
             QWriteLocker locker(&lock);
-            infos = newInfos;
+            infos           = newInfos;
             needUpdateInfos = false;
         }
     }
@@ -98,6 +122,30 @@ public:
         }
     }
 
+    void checkProperties()
+    {
+        if (needUpdateProperties && initialized)
+        {
+            QList<TagProperty> props = DatabaseAccess().db()->getTagProperties();
+
+            // Ensure not to lock both locks at the same time
+            QWriteLocker locker(&lock);
+
+            needUpdateProperties = false;
+            tagProperties = props;
+            tagsWithProperty.clear();
+
+            QLatin1String internalProp = TagsCache::propertyNameDigikamInternalTag();
+            foreach (const TagProperty& property, tagProperties)
+            {
+                if (property.property == internalProp)
+                {
+                    internalTags << property.tagId;
+                }
+            }
+        }
+    }
+
     // remember to call under lock
     QList<TagShortInfo>::const_iterator find(int id) const
     {
@@ -107,9 +155,80 @@ public:
         // we use the fact that d->infos is sorted by id
         return qBinaryFind(infos.constBegin(), infos.constEnd(), info, lessThanForTagShortInfo);
     }
+
+    TagPropertiesRange findProperties(int id) const
+    {
+        TagProperty prop;
+        prop.tagId = id;
+        TagPropertiesRange range;
+        range.first = qLowerBound(tagProperties.begin(), tagProperties.end(), prop, lessThanForTagProperty);
+        range.second = qUpperBound(range.first, tagProperties.end(), prop, lessThanForTagProperty);
+        return range;
+    }
+
+    inline TagPropertiesConstIterator toNextTag(TagPropertiesConstIterator it) const
+    {
+        // increment iterator until the next tagid is reached
+        int currentId = it->tagId;
+
+        for (++it; it != tagProperties.end(); ++it)
+            if (it->tagId != currentId)
+            {
+                break;
+            }
+
+        return it;
+    }
+
+    inline bool compareProperty(const TagPropertiesConstIterator& it,  const QString& property, const QString& value)
+    {
+        if (value.isNull())
+        {
+            return it->property == property;
+        }
+        else
+        {
+            return it->property == property && it->value == value;
+        }
+    }
+
+    template <typename T>
+    inline bool sortedListContains(const QList<T>& list, const T& value)
+    {
+        return qBinaryFind(list, value) != list.end();
+    }
+
+    void checkLabelTags()
+    {
+        if (needUpdateLabelTags && initialized)
+        {
+            QMap<ColorLabel, int> map;
+            map.insert(NoColorLabel, q->getOrCreateInternalTag(InternalTagName::colorLabelNone()));
+            map.insert(RedLabel,     q->getOrCreateInternalTag(InternalTagName::colorLabelRed()));
+            map.insert(OrangeLabel,  q->getOrCreateInternalTag(InternalTagName::colorLabelOrange()));
+            map.insert(YellowLabel,  q->getOrCreateInternalTag(InternalTagName::colorLabelYellow()));
+            map.insert(GreenLabel,   q->getOrCreateInternalTag(InternalTagName::colorLabelGreen()));
+            map.insert(BlueLabel,    q->getOrCreateInternalTag(InternalTagName::colorLabelBlue()));
+            map.insert(MagentaLabel, q->getOrCreateInternalTag(InternalTagName::colorLabelMagenta()));
+            map.insert(GrayLabel,    q->getOrCreateInternalTag(InternalTagName::colorLabelGray()));
+            map.insert(BlackLabel,   q->getOrCreateInternalTag(InternalTagName::colorLabelBlack()));
+            map.insert(WhiteLabel,   q->getOrCreateInternalTag(InternalTagName::colorLabelWhite()));
+
+            QMap<PickLabel, int> map2;
+            map2.insert(NoPickLabel,   q->getOrCreateInternalTag(InternalTagName::pickLabelNone()));
+            map2.insert(RejectedLabel, q->getOrCreateInternalTag(InternalTagName::pickLabelRejected()));
+            map2.insert(PendingLabel,  q->getOrCreateInternalTag(InternalTagName::pickLabelPending()));
+            map2.insert(AcceptedLabel, q->getOrCreateInternalTag(InternalTagName::pickLabelAccepted()));
+
+            QWriteLocker locker(&lock);
+            needUpdateLabelTags = false;
+            colorLabelsTags     = map;
+            pickLabelsTags      = map2;
+        }
+    }
 };
 
-// -----------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 class ChangingDB
 {
@@ -124,10 +243,11 @@ public:
     {
         d->changingDB = false;
     }
+
     TagsCache::TagsCachePriv* const d;
 };
 
-// -----------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 class TagsCacheCreator
 {
@@ -136,7 +256,7 @@ public:
 };
 K_GLOBAL_STATIC(TagsCacheCreator, creator)
 
-// -----------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
 TagsCache* TagsCache::instance()
 {
@@ -144,7 +264,7 @@ TagsCache* TagsCache::instance()
 }
 
 TagsCache::TagsCache()
-    : d(new TagsCachePriv)
+    : d(new TagsCachePriv(this))
 {
 }
 
@@ -167,7 +287,39 @@ void TagsCache::initialize()
     d->initialized = true;
 }
 
-QString TagsCache::tagName(int id)
+void TagsCache::invalidate()
+{
+    d->needUpdateInfos          = true;
+    d->needUpdateHash           = true;
+    d->needUpdateProperties     = true;
+    d->needUpdateLabelTags = true;
+}
+
+QLatin1String TagsCache::tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy)
+{
+    if (slashPolicy == IncludeLeadingSlash)
+    {
+        return QLatin1String("/_Digikam_Internal_Tags_");
+    }
+    else
+    {
+        return QLatin1String("_Digikam_Internal_Tags_");
+    }
+}
+
+QLatin1String TagsCache::propertyNameDigikamInternalTag()
+{
+    // Do not change, is written to users' databases
+    return QLatin1String("internalTag");
+}
+
+QLatin1String TagsCache::propertyNameExcludedFromWriting()
+{
+    // Do not change, is written to users' databases
+    return QLatin1String("noMetadataTag");
+}
+
+QString TagsCache::tagName(int id) const
 {
     d->checkInfos();
 
@@ -182,7 +334,7 @@ QString TagsCache::tagName(int id)
     return QString();
 }
 
-QStringList TagsCache::tagNames(const QList<int>& ids)
+QStringList TagsCache::tagNames(const QList<int>& ids, HiddenTagsPolicy hiddenTagsPolicy) const
 {
     QStringList names;
 
@@ -190,14 +342,17 @@ QStringList TagsCache::tagNames(const QList<int>& ids)
     {
         foreach (int id, ids)
         {
-            names << tagName(id);
+            if (hiddenTagsPolicy == IncludeHiddenTags || !isInternalTag(id))
+            {
+                names << tagName(id);
+            }
         }
     }
 
     return names;
 }
 
-QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy)
+QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy) const
 {
     d->checkInfos();
 
@@ -225,7 +380,8 @@ QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy)
     return path;
 }
 
-QStringList TagsCache::tagPaths(const QList<int>& ids, LeadingSlashPolicy slashPolicy)
+QStringList TagsCache::tagPaths(const QList<int>& ids, LeadingSlashPolicy slashPolicy,
+                                HiddenTagsPolicy hiddenTagsPolicy) const
 {
     QStringList paths;
 
@@ -233,20 +389,43 @@ QStringList TagsCache::tagPaths(const QList<int>& ids, LeadingSlashPolicy slashP
     {
         foreach (int id, ids)
         {
-            paths << tagPath(id, slashPolicy);
+            if (hiddenTagsPolicy == IncludeHiddenTags || !isInternalTag(id))
+            {
+                paths << tagPath(id, slashPolicy);
+            }
         }
     }
 
     return paths;
 }
 
-QList<int> TagsCache::tagsForName(const QString& tagName)
+QList<int> TagsCache::tagsForName(const QString& tagName, HiddenTagsPolicy hiddenTagsPolicy) const
 {
     d->checkNameHash();
-    return d->nameHash.values(tagName);
+
+    if (hiddenTagsPolicy == NoHiddenTags)
+    {
+        d->checkProperties();
+        QList<int> ids;
+        QMultiHash<QString, int>::const_iterator it;
+
+        for (it = d->nameHash.find(tagName); it != d->nameHash.end() && it.key() == tagName; ++it)
+        {
+            if (!d->internalTags.contains(it.value()))
+            {
+                ids << it.value();
+            }
+        }
+
+        return ids;
+    }
+    else
+    {
+        return d->nameHash.values(tagName);
+    }
 }
 
-int TagsCache::tagForName(const QString& tagName, int parentId)
+int TagsCache::tagForName(const QString& tagName, int parentId) const
 {
     d->checkNameHash();
     QReadLocker locker(&d->lock);
@@ -269,14 +448,14 @@ int TagsCache::tagForName(const QString& tagName, int parentId)
     return 0;
 }
 
-bool TagsCache::hasTag(int id)
+bool TagsCache::hasTag(int id) const
 {
     d->checkInfos();
     QReadLocker locker(&d->lock);
     return d->find(id) != d->infos.constEnd();
 }
 
-int TagsCache::parentTag(int id)
+int TagsCache::parentTag(int id) const
 {
     d->checkInfos();
     QReadLocker locker(&d->lock);
@@ -290,7 +469,7 @@ int TagsCache::parentTag(int id)
     return 0;
 }
 
-int TagsCache::tagForPath(const QString& tagPath)
+int TagsCache::tagForPath(const QString& tagPath) const
 {
     // split full tag "url" into list of single tag names
     QStringList tagHierarchy = tagPath.split('/', QString::SkipEmptyParts);
@@ -359,7 +538,7 @@ int TagsCache::tagForPath(const QString& tagPath)
     return tagID;
 }
 
-QList<int> TagsCache::tagsForPaths(const QStringList& tagPaths)
+QList<int> TagsCache::tagsForPaths(const QStringList& tagPaths) const
 {
     QList<int> ids;
 
@@ -508,12 +687,173 @@ int TagsCache::getOrCreateTag(const QString& tagPath)
     return id;
 }
 
+int TagsCache::getOrCreateTagWithProperty(const QString& tagPath, const QString& property, const QString& value)
+{
+    int tagId = getOrCreateTag(tagPath);
+
+    if (!hasProperty(tagId, property, value))
+    {
+        TagProperties props(tagId);
+        props.setProperty(property, value);
+    }
+
+    return tagId;
+}
+
+bool TagsCache::hasProperty(int tagId, const QString& property, const QString& value) const
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+    TagPropertiesRange range = d->findProperties(tagId);
+
+    for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+        if (d->compareProperty(it, property, value))
+        {
+            return true;
+        }
+
+    return false;
+}
+
+QString TagsCache::propertyValue(int tagId, const QString& property) const
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+    TagPropertiesRange range = d->findProperties(tagId);
+
+    for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+        if (it->property == property)
+        {
+            return it->value;
+        }
+
+    return QString();
+}
+
+QStringList TagsCache::propertyValues(int tagId, const QString& property) const
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+    TagPropertiesRange range = d->findProperties(tagId);
+    QStringList values;
+
+    for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+    {
+        if (it->property == property)
+        {
+            // the list is ordered by property, after id
+            for (; it != range.second && it->property == property; ++it)
+            {
+                values << it->value;
+            }
+
+            return values;
+        }
+    }
+
+    return values;
+}
+
+QMap<QString, QString> TagsCache::properties(int tagId) const
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+    QMap<QString, QString> map;
+    TagPropertiesRange range = d->findProperties(tagId);
+    QStringList values;
+
+    for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+    {
+        map[it->property] = it->value;
+    }
+
+    return map;
+}
+
+QList<int> TagsCache::tagsWithProperty(const QString& property, const QString& value) const
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+    QList<int>  ids;
+
+    for (TagPropertiesConstIterator it = d->tagProperties.begin(); it != d->tagProperties.end(); )
+    {
+        if (d->compareProperty(it, property, value))
+        {
+            ids << it->tagId;
+            it = d->toNextTag(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    return ids;
+}
+
+QList<int> TagsCache::tagsWithPropertyCached(const QString& property) const
+{
+    d->checkProperties();
+    {
+        QReadLocker locker(&d->lock);
+        QHash<QString, QList<int> >::iterator it;
+        it = d->tagsWithProperty.find(property);
+
+        if (it != d->tagsWithProperty.end())
+        {
+            return it.value();
+        }
+    }
+
+    QList<int> tags = tagsWithProperty(property);
+
+    {
+        QWriteLocker locker(&d->lock);
+        d->tagsWithProperty[property] = tags;
+    }
+
+    return tags;
+}
+
+bool TagsCache::isInternalTag(int tagId) const
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+    return d->internalTags.contains(tagId);
+}
+
+bool TagsCache::canBeWrittenToMetadata(int tagId) const
+{
+    // as long as we always call isInternalTag first, no need to call checkProperties() again
+    //d->checkProperties();
+    if (isInternalTag(tagId))
+    {
+        return false;
+    }
+
+    if (d->sortedListContains(tagsWithPropertyCached(propertyNameExcludedFromWriting()), tagId))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+int TagsCache::getOrCreateInternalTag(const QString& tagName)
+{
+    // ensure the parent tag exists, including the internal property
+    getOrCreateTagWithProperty(tagPathOfDigikamInternalTags(IncludeLeadingSlash), propertyNameDigikamInternalTag());
+
+    QString tagPath = tagPathOfDigikamInternalTags(IncludeLeadingSlash) + '/' + tagName;
+    return getOrCreateTagWithProperty(tagPath, propertyNameDigikamInternalTag());
+}
+
 void TagsCache::slotTagChanged(const TagChangeset& changeset)
 {
     if (!d->changingDB && changeset.operation() != TagChangeset::IconChanged)
     {
-        d->needUpdateInfos = true;
-        d->needUpdateHash  = true;
+        invalidate();
     }
 
     if (changeset.operation() == TagChangeset::Added)
@@ -524,6 +864,40 @@ void TagsCache::slotTagChanged(const TagChangeset& changeset)
     {
         emit tagDeleted(changeset.tagId());
     }
+}
+
+int TagsCache::getTagForColorLabel(int label)
+{
+    if (label < NoColorLabel || label > WhiteLabel)
+        return 0;
+
+    d->checkLabelTags();
+    QReadLocker locker(&d->lock);
+    return d->colorLabelsTags[(ColorLabel)label];
+}
+
+int TagsCache::getColorLabelForTag(int tagId)
+{
+    d->checkLabelTags();
+    QReadLocker locker(&d->lock);
+    return d->colorLabelsTags.key(tagId, (ColorLabel)(-1));
+}
+
+int TagsCache::getTagForPickLabel(int label)
+{
+    if (label < NoPickLabel || label > AcceptedLabel)
+        return 0;
+
+    d->checkLabelTags();
+    QReadLocker locker(&d->lock);
+    return d->pickLabelsTags[(PickLabel)label];
+}
+
+int TagsCache::getPickLabelForTag(int tagId)
+{
+    d->checkLabelTags();
+    QReadLocker locker(&d->lock);
+    return d->pickLabelsTags.key(tagId, (PickLabel)(-1));
 }
 
 } // namespace Digikam

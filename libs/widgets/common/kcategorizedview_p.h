@@ -58,10 +58,10 @@ private:
 /**
   * @internal
   */
-class KCategorizedView::Private
+class DigikamKCategorizedView::Private
 {
 public:
-    Private(KCategorizedView* listView);
+    Private(DigikamKCategorizedView* listView);
     ~Private();
 
 
@@ -168,7 +168,7 @@ public:
     };
 
     // Basic data
-    KCategorizedView* listView;
+    DigikamKCategorizedView* listView;
     KCategoryDrawer*  categoryDrawer;
     QSize             biggestItemSize;
 

@@ -47,30 +47,34 @@ public:
     DBActionType(const DBActionType& actionType);
     ~DBActionType();
 
+    static DBActionType value(const QVariant& value);
+    static DBActionType fieldEntry(const QVariant& actionValue);
+
     /**
-     * Returns the wrapped object.
-     */
+    * Returns the wrapped object.
+    */
     QVariant getActionValue();
 
     /**
-     * Sets the wrapped object.
-     */
-    void setActionValue(QVariant actionValue);
+    * Sets the wrapped object.
+    */
+    void setActionValue(const QVariant& actionValue);
 
     /**
-     * Returns true, if the entry is an value element.
-     * Returns false, if the entry should be used as field entry.
-     */
+    * Returns true, if the entry is an value element.
+    * Returns false, if the entry should be used as field entry.
+    */
     bool isValue() const;
 
     /**
-     * Sets the DBAction mode:
-     * true, if the entry is an value element.
-     * false, if the entry should be used as field entry.
-     */
+    * Sets the DBAction mode:
+    * true, if the entry is an value element.
+    * false, if the entry should be used as field entry.
+    */
     void setValue(bool isValue);
 
 private:
+
     bool     m_isValue;
     QVariant m_ActionValue;
 };

@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
  * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,6 +55,38 @@ bool s_hResize                 = false;
 
 ContentAwareFilter* s_resiser = 0;
 
+static LqrEnergyFuncBuiltinType toLqrEnergy(ContentAwareContainer::EnergyFunction func)
+{
+    switch (func)
+    {
+        case ContentAwareContainer::GradientNorm:
+        default:
+            return LQR_EF_GRAD_NORM;
+        case ContentAwareContainer::SumOfAbsoluteValues:
+            return LQR_EF_GRAD_SUMABS;
+        case ContentAwareContainer::XAbsoluteValue:
+            return LQR_EF_GRAD_XABS;
+        case ContentAwareContainer::LumaGradientNorm:
+            return LQR_EF_LUMA_GRAD_NORM;
+        case ContentAwareContainer::LumaSumOfAbsoluteValues:
+            return LQR_EF_LUMA_GRAD_SUMABS;
+        case ContentAwareContainer::LumaXAbsoluteValue:
+            return LQR_EF_LUMA_GRAD_XABS;
+    }
+}
+
+static LqrResizeOrder toLqrOrder(Qt::Orientation direction)
+{
+    switch (direction)
+    {
+        case Qt::Horizontal:
+        default:
+            return LQR_RES_ORDER_HOR;
+        case Qt::Vertical:
+            return LQR_RES_ORDER_VERT;
+    }
+}
+
 class ContentAwareFilterPriv
 {
 public:
@@ -70,6 +103,13 @@ public:
     LqrProgress*          progress;
 
 };
+
+ContentAwareFilter::ContentAwareFilter(QObject* parent)
+    : DImgThreadedFilter(parent),
+      d(new ContentAwareFilterPriv)
+{
+    initFilter();
+}
 
 ContentAwareFilter::ContentAwareFilter(DImg* orgImage, QObject* parent, const ContentAwareContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "ContentAwareFilter"),
@@ -106,17 +146,10 @@ ContentAwareFilter::ContentAwareFilter(DImg* orgImage, QObject* parent, const Co
         lqr_carver_set_enl_step(d->carver, 1.5);
 
         // Choose a gradient function
-        lqr_carver_set_energy_function_builtin(d->carver, d->settings.func);
+        lqr_carver_set_energy_function_builtin(d->carver, toLqrEnergy(d->settings.func));
 
         // Choose the resize order
-        if (d->settings.resize_order == 0)
-        {
-            lqr_carver_set_resize_order(d->carver, LQR_RES_ORDER_HOR);
-        }
-        else
-        {
-            lqr_carver_set_resize_order(d->carver, LQR_RES_ORDER_VERT);
-        }
+        lqr_carver_set_resize_order(d->carver, toLqrOrder(d->settings.resize_order));
 
         // Set a bias if any mask
         if (!d->settings.mask.isNull())
@@ -286,6 +319,35 @@ void ContentAwareFilter::buildBias(const QImage& mask)
             lqr_carver_bias_add_xy(d->carver,bias, x, y);
         }
     }
+}
+
+FilterAction ContentAwareFilter::filterAction()
+{
+    bool isReproducible = d->settings.mask.isNull();
+    DefaultFilterAction<ContentAwareFilter> action(isReproducible);
+
+    action.addParameter("height", d->settings.height);
+    action.addParameter("preserve_skin_tones", d->settings.preserve_skin_tones);
+    action.addParameter("rigidity", d->settings.rigidity);
+    action.addParameter("side_switch_freq", d->settings.side_switch_freq);
+    action.addParameter("step", d->settings.step);
+    action.addParameter("width", d->settings.width);
+    action.addParameter("func", d->settings.func);
+    action.addParameter("resize_order", d->settings.resize_order);
+
+    return action;
+}
+
+void ContentAwareFilter::readParameters(const FilterAction& action)
+{
+    d->settings.height = action.parameter("height").toUInt();
+    d->settings.preserve_skin_tones = action.parameter("preserve_skin_tones").toBool();
+    d->settings.rigidity = action.parameter("rigidity").toDouble();
+    d->settings.side_switch_freq = action.parameter("side_switch_freq").toInt();
+    d->settings.step = action.parameter("step").toInt();
+    d->settings.width = action.parameter("width").toUInt();
+    d->settings.func = (ContentAwareContainer::EnergyFunction)action.parameter("func").toInt();
+    d->settings.resize_order = (Qt::Orientation)action.parameter("resize_order").toInt();
 }
 
 // ------------------------------------------------------------------------------------

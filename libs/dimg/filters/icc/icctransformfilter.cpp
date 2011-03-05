@@ -30,9 +30,16 @@
 // Local includes
 
 #include "dimg.h"
+#include "iccsettings.h"
 
 namespace Digikam
 {
+
+IccTransformFilter::IccTransformFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
 
 IccTransformFilter::IccTransformFilter(DImg* orgImage, QObject* parent, const IccTransform& transform)
     : DImgThreadedFilter(orgImage, parent, "ICC Transform")
@@ -57,6 +64,60 @@ void IccTransformFilter::filterImage()
 void IccTransformFilter::progressInfo(const DImg*, float progress)
 {
     postProgress(lround(progress * 100));
+}
+
+FilterAction IccTransformFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.setParameter("renderingIntent", m_transform.intent());
+    action.setParameter("blackPointCompensation", m_transform.isUsingBlackPointCompensation());
+    action.setParameter("inputProfileDescription", m_transform.effectiveInputProfile().description());
+    action.setParameter("outputProfileDescription", m_transform.outputProfile().description());
+
+    return action;
+}
+
+void IccTransformFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_transform = IccTransform();
+
+    m_transform.setIntent((IccTransform::RenderingIntent)action.parameter("renderingIntent").toInt());
+    m_transform.setUseBlackPointCompensation(action.parameter("blackPointCompensation").toBool());
+
+    QList<IccProfile> profiles;
+    profiles = IccSettings::instance()->profilesForDescription(action.parameter("inputProfileDescription").toString());
+
+    if (!profiles.isEmpty())
+    {
+        m_transform.setInputProfile(profiles.first());
+    }
+
+    profiles = IccSettings::instance()->profilesForDescription(action.parameter("outputProfileDescription").toString());
+
+    if (!profiles.isEmpty())
+    {
+        m_transform.setOutputProfile(profiles.first());
+    }
+}
+
+bool IccTransformFilter::parametersSuccessfullyRead() const
+{
+    return !m_transform.inputProfile().isNull() && !m_transform.outputProfile().isNull();
+}
+
+QString IccTransformFilter::readParametersError(const FilterAction& actionThatFailed) const
+{
+    if (m_transform.inputProfile().isNull())
+        return i18n("Input color profile \"%1\" not available",
+                    actionThatFailed.parameter("inputProfileDescription").toString());
+
+    if (m_transform.outputProfile().isNull())
+        return i18n("Output color profile \"%1\" not available",
+                    actionThatFailed.parameter("outputProfileDescription").toString());
+
+    return QString();
 }
 
 }  // namespace DigikamImagesPluginCore

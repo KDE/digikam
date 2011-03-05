@@ -6,7 +6,7 @@
  * Date        : 2005-05-21
  * Description : setup tab for slideshow options.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class SetupSlideShowPriv
+class SetupSlideShow::SetupSlideShowPriv
 {
 public:
 
@@ -54,7 +54,7 @@ public:
         showExpoSensitivity(0),
         showMakeModel(0),
         showComment(0),
-        showRating(0),
+        showLabels(0),
         delayInput(0)
     {}
 
@@ -68,7 +68,7 @@ public:
     static const QString configSlideShowPrintExpoSensitivityEntry;
     static const QString configSlideShowPrintMakeModelEntry;
     static const QString configSlideShowPrintCommentEntry;
-    static const QString configSlideShowPrintRatingEntry;
+    static const QString configSlideShowPrintLabelsEntry;
 
     QCheckBox*           startWithCurrent;
     QCheckBox*           loopMode;
@@ -78,21 +78,21 @@ public:
     QCheckBox*           showExpoSensitivity;
     QCheckBox*           showMakeModel;
     QCheckBox*           showComment;
-    QCheckBox*           showRating;
+    QCheckBox*           showLabels;
 
     KIntNumInput*        delayInput;
 };
-const QString SetupSlideShowPriv::configGroupName("ImageViewer Settings");
-const QString SetupSlideShowPriv::configSlideShowDelayEntry("SlideShowDelay");
-const QString SetupSlideShowPriv::configSlideShowStartCurrentEntry("SlideShowStartCurrent");
-const QString SetupSlideShowPriv::configSlideShowLoopEntry("SlideShowLoop");
-const QString SetupSlideShowPriv::configSlideShowPrintNameEntry("SlideShowPrintName");
-const QString SetupSlideShowPriv::configSlideShowPrintDateEntry("SlideShowPrintDate");
-const QString SetupSlideShowPriv::configSlideShowPrintApertureFocalEntry("SlideShowPrintApertureFocal");
-const QString SetupSlideShowPriv::configSlideShowPrintExpoSensitivityEntry("SlideShowPrintExpoSensitivity");
-const QString SetupSlideShowPriv::configSlideShowPrintMakeModelEntry("SlideShowPrintMakeModel");
-const QString SetupSlideShowPriv::configSlideShowPrintCommentEntry("SlideShowPrintComment");
-const QString SetupSlideShowPriv::configSlideShowPrintRatingEntry("SlideShowPrintRating");
+const QString SetupSlideShow::SetupSlideShowPriv::configGroupName("ImageViewer Settings");
+const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowDelayEntry("SlideShowDelay");
+const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowStartCurrentEntry("SlideShowStartCurrent");
+const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowLoopEntry("SlideShowLoop");
+const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintNameEntry("SlideShowPrintName");
+const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintDateEntry("SlideShowPrintDate");
+const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintApertureFocalEntry("SlideShowPrintApertureFocal");
+const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintExpoSensitivityEntry("SlideShowPrintExpoSensitivity");
+const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintMakeModelEntry("SlideShowPrintMakeModel");
+const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintCommentEntry("SlideShowPrintComment");
+const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintLabelsEntry("SlideShowPrintLabels");
 
 // --------------------------------------------------------
 
@@ -136,13 +136,13 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
     d->showComment = new QCheckBox(i18n("Show image caption"), panel);
     d->showComment->setWhatsThis( i18n("Show the image caption at the bottom of the screen."));
 
-    d->showRating = new QCheckBox(i18n("Show image rating"), panel);
-    d->showRating->setWhatsThis( i18n("Show the digiKam image rating at the bottom of the screen."));
+    d->showLabels = new QCheckBox(i18n("Show image labels"), panel);
+    d->showLabels->setWhatsThis( i18n("Show the digiKam image color label, pick label, and rating at the bottom of the screen."));
 
     // Only digiKam support this feature, showFoto do not support digiKam database information.
     if (kapp->applicationName() == "showfoto")
     {
-        d->showRating->hide();
+        d->showLabels->hide();
     }
 
     layout->addWidget(d->delayInput);
@@ -154,7 +154,7 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
     layout->addWidget(d->showExpoSensitivity);
     layout->addWidget(d->showMakeModel);
     layout->addWidget(d->showComment);
-    layout->addWidget(d->showRating);
+    layout->addWidget(d->showLabels);
     layout->addStretch();
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
@@ -187,7 +187,7 @@ void SetupSlideShow::applySettings()
     group.writeEntry(d->configSlideShowPrintExpoSensitivityEntry, d->showExpoSensitivity->isChecked());
     group.writeEntry(d->configSlideShowPrintMakeModelEntry,       d->showMakeModel->isChecked());
     group.writeEntry(d->configSlideShowPrintCommentEntry,         d->showComment->isChecked());
-    group.writeEntry(d->configSlideShowPrintRatingEntry,          d->showRating->isChecked());
+    group.writeEntry(d->configSlideShowPrintLabelsEntry,          d->showLabels->isChecked());
     config->sync();
 }
 
@@ -205,7 +205,7 @@ void SetupSlideShow::readSettings()
     d->showExpoSensitivity->setChecked(group.readEntry(d->configSlideShowPrintExpoSensitivityEntry, false));
     d->showMakeModel->setChecked(group.readEntry(d->configSlideShowPrintMakeModelEntry,             false));
     d->showComment->setChecked(group.readEntry(d->configSlideShowPrintCommentEntry,                 false));
-    d->showRating->setChecked(group.readEntry(d->configSlideShowPrintRatingEntry,                   false));
+    d->showLabels->setChecked(group.readEntry(d->configSlideShowPrintLabelsEntry,                   false));
 }
 
 }   // namespace Digikam

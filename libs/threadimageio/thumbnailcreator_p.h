@@ -36,6 +36,7 @@ namespace Digikam
 class ThumbnailImage
 {
 public:
+
     ThumbnailImage()
     {
         exifOrientation = DMetadata::ORIENTATION_UNSPECIFIED;
@@ -50,14 +51,13 @@ public:
     int    exifOrientation;
 };
 
-class ThumbnailCreatorPriv
+class ThumbnailCreator::ThumbnailCreatorPriv
 {
 public:
 
     ThumbnailCreatorPriv()
     {
         thumbnailSize       = 0;
-        cachedSize          = 0;
         observer            = 0;
 
         thumbnailStorage    = ThumbnailCreator::FreeDesktopStandard;
@@ -69,6 +69,11 @@ public:
         onlyLargeThumbnails = false;
 
         digiKamFingerPrint  = QString("Digikam Thumbnail Generator");
+
+        fastRawSettings.optimizeTimeLoading();
+        fastRawSettings.rawPrm.halfSizeColorImage = true;
+        fastRawSettings.rawPrm.sixteenBitsImage   = false;
+
     }
 
     bool                            exifRotate;
@@ -80,7 +85,6 @@ public:
     int                             dbIdForReplacement;
 
     int                             thumbnailSize;
-    int                             cachedSize;
 
     QString                         error;
     QString                         bigThumbPath;
@@ -89,6 +93,9 @@ public:
 
     DImgLoaderObserver*             observer;
     DRawDecoding                    rawSettings;
+    DRawDecoding                    fastRawSettings;
+
+    int                             storageSize() const;
 };
 
 }  // namespace Digikam

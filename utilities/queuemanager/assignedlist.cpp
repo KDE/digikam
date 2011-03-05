@@ -499,6 +499,7 @@ void AssignedListView::dropEvent(QDropEvent* e)
 
                 BatchTool* tool = QueueMgrWindow::queueManagerWindow()->batchToolsManager()
                                   ->findTool(name, (BatchTool::BatchToolGroup)group);
+                tool->ensureIsInitialized();
 
                 AssignedListViewItem* preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
 
@@ -592,6 +593,7 @@ void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListVi
         BatchTool::BatchToolGroup group = (BatchTool::BatchToolGroup)(it.key());
         QString name                    = it.value();
         BatchTool* tool                 = QueueMgrWindow::queueManagerWindow()->batchToolsManager()->findTool(name, group);
+        tool->ensureIsInitialized();
         BatchToolSet set;
         set.tool                        = tool;
         set.settings                    = tool->defaultSettings();

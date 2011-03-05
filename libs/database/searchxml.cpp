@@ -313,6 +313,37 @@ QList<double> SearchXmlReader::valueToDoubleOrDoubleList()
     return list;
 }
 
+QList<QString> SearchXmlReader::valueToStringOrStringList()
+{
+    QList<QString> list;
+
+    // poke at next token
+    QXmlStreamReader::TokenType token = QXmlStreamReader::readNext();
+
+    // Found text? Treat text as with valueToString(), return single element list
+    if (token == QXmlStreamReader::Characters)
+    {
+        list << text().toString();
+        readNext();
+        return list;
+    }
+
+    // treat as with valueToStringList()
+    while (!atEnd())
+    {
+        if (token != QXmlStreamReader::StartElement || name() != "listitem")
+        {
+            break;
+        }
+
+        list << readElementText();
+
+        token = QXmlStreamReader::readNext();
+    }
+
+    return list;
+}
+
 SearchXml::Operator SearchXmlReader::readOperator(const QString& attributeName,
         SearchXml::Operator defaultOperator) const
 {
@@ -1180,6 +1211,30 @@ QList<double> SearchXmlCachingReader::valueToDoubleOrDoubleList()
         doubleList << var.toDouble();
     }
     return doubleList;
+}
+
+QList<QString> SearchXmlCachingReader::valueToStringOrStringList()
+{
+    if (!m_readValue)
+    {
+        QList<QString> QStringList = SearchXmlReader::valueToStringOrStringList();
+        QList<QVariant> varList;
+        foreach(QString v, QStringList)
+        {
+            varList << v;
+        }
+        m_value = varList;
+        m_readValue = true;
+        return QStringList;
+    }
+
+    QList<QString> QStringList;
+    QList<QVariant> varList = m_value.toList();
+    foreach (const QVariant& var, varList)
+    {
+        QStringList << var.toString();
+    }
+    return QStringList;
 }
 
 } // namespace Digikam

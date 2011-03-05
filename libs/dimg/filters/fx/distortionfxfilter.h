@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original Distortion algorithms copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -46,10 +47,35 @@ class DIGIKAM_EXPORT DistortionFXFilter : public DImgThreadedFilter
 
 public:
 
+    explicit DistortionFXFilter(QObject* parent = 0);
     explicit DistortionFXFilter(DImg* orgImage, QObject* parent=0, int effectType=0,
                                 int level=0, int iteration=0, bool antialiasing=true);
 
     ~DistortionFXFilter();
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:DistortionFXFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Distortion Effect");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 public:
 
@@ -149,6 +175,7 @@ private:
     int  m_level;
     int  m_iteration;
     int  m_effectType;
+    quint32 m_randomSeed;
 };
 
 }  // namespace Digikam

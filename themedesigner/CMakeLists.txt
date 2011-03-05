@@ -1,19 +1,21 @@
 SET(digikamthemedesigner_SRCS
-        ${libdimgimagewindow_SRCS}
-        ${libdeletedialog_SRCS}
-        ${libimagepropertiesdigikam_SRCS}
-        ${libsetup_SRCS}
-        ${liblighttable_SRCS}
+        ${libalbummodels_SRCS}
         ${libbatch_SRCS}
-        ${libkipiiface_SRCS}
-        ${libsearchwindow_SRCS}
+        ${libdatabaseui_SRCS}
+        ${libdeletedialog_SRCS}
+        ${libdigikamgui_SRCS}
+        ${libdimgimagewindow_SRCS}
+        ${libfacedetection_SRCS}
         ${libfuzzysearch_SRCS}
         ${libgpssearch_SRCS}
-        ${libtimeline_SRCS}
-        ${libdigikamgui_SRCS}
-        ${libalbummodels_SRCS}
+        ${libimagepropertiesdigikam_SRCS}
+        ${libimageversionssidebar_SRCS}
+        ${libkipiiface_SRCS}
+        ${liblighttable_SRCS}
+        ${libscriptiface_SRCS}
+        ${libsearchwindow_SRCS}
+        ${libsetup_SRCS}
         ${libtemplate_SRCS}
-        ${libdatabaseui_SRCS}
 
         main.cpp
         mainwindow.cpp
@@ -51,9 +53,4 @@ IF(KDEPIMLIBS_FOUND)
     TARGET_LINK_LIBRARIES(digikamthemedesigner ${KDE4_KABC_LIBS})
 ENDIF(KDEPIMLIBS_FOUND)
 
-IF(MARBLEWIDGET_FOUND)
-    TARGET_LINK_LIBRARIES(digikamthemedesigner ${LIBMARBLEWIDGET_LIBRARY})
-ENDIF(MARBLEWIDGET_FOUND)
-
 INSTALL(TARGETS digikamthemedesigner ${INSTALL_TARGETS_DEFAULT_ARGS})
-

@@ -73,6 +73,12 @@ public:
     void setListOnlyAvailable(bool listOnlyAvailable);
 
     /**
+     * Allow the binary protocol of ImageListerRecord using an extra value.
+     * Currently used for AreaRand and TagPropertySearch.
+     */
+    void setAllowExtraValues(bool useExtraValue);
+
+    /**
      * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
      */
     void list(ImageListerReceiver* receiver,
@@ -89,11 +95,23 @@ public:
      * List the images which have assigned the tag specified by tagId
      */
     void listTag(ImageListerReceiver* receiver, int tagId);
+
+    /**
+     * List the images which have faces. An image with n faces will be listed n times.
+     * FIXME: Obviously an ugly way. Should be trashed later in favor of a better method.
+     */
+    void listFaces(ImageListerReceiver* receiver, int personId);
+
     /**
       * List those images whose date lies in the range beginning with startDate (inclusive)
       * and ending before endDate (exclusive).
       */
     void listDateRange(ImageListerReceiver* receiver, const QDate& startDate, const QDate& endDate);
+
+    /**
+     * List the images whose coordinates are between coordinates contained in areaCoordinates(lat1, lat2, lng1, lng2)
+     */
+    void listAreaRange(ImageListerReceiver* receiver, double lat1, double lat2, double lon1, double lon2);
 
     /**
      * Execute the search specified by search XML
@@ -106,12 +124,23 @@ public:
                     int limit = 0);
 
     /**
+     * Execute the search specified by search XML describing a Tag Properties search.
+     * Two special add-ons: Non-unique by image id; if enabled, uses the extended ImageRecord protocol
+     * to pass the property value in the record's extraValue.
+     * @param receiver receiver for the searches
+     * @param xml SearchXml describing the query
+     */
+    void listImageTagPropertySearch(ImageListerReceiver* receiver, const QString& xml);
+
+    /**
      * Execute the search specified by search XML describing a Haar search
      * @param receiver receiver for the searches
      * @param xml SearchXml describing the query
      */
     void listHaarSearch(ImageListerReceiver* receiver,
                         const QString& xml);
+
+    QString tagSearchXml(const DatabaseUrl&, const QString& type);
 
 private:
 
@@ -122,6 +151,7 @@ private:
 
     bool m_recursive;
     bool m_listOnlyAvailableImages;
+    bool m_allowExtraValues;
 };
 
 }  // namespace Digikam

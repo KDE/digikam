@@ -539,6 +539,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     imageSetAttribute("format", "JP2K");
     imageSetAttribute("originalColorModel", colorModel);
     imageSetAttribute("originalBitDepth", maximum_component_depth);
+    imageSetAttribute("originalSize", QSize(imageWidth(), imageHeight()));
 
     jas_image_destroy(jp2_image);
 

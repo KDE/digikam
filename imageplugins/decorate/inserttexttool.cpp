@@ -406,7 +406,21 @@ void InsertTextTool::finalRendering()
 
     ImageIface iface(0, 0);
     DImg dest = d->previewWidget->makeInsertText();
-    iface.putOriginalImage(i18n("Insert Text"), dest.bits(), dest.width(), dest.height());
+
+    FilterAction action("digikam:insertTextTool", 1);
+    action.setDisplayableName(i18n("Insert Text Tool"));
+
+    action.addParameter("text", d->textEdit->toPlainText());
+    action.addParameter("textRotationIndex", d->textRotation->currentIndex());
+    //action.addParameter("textFont", d->textFont); FIXME: figure out how to store QFont
+    action.addParameter("colorR", d->fontColorButton->color().red());
+    action.addParameter("colorG", d->fontColorButton->color().green());
+    action.addParameter("colorB", d->fontColorButton->color().blue());
+    action.addParameter("colorA", d->fontColorButton->color().alpha());
+    action.addParameter("borderText", d->borderText->isChecked());
+    action.addParameter("transparentText", d->transparentText->isChecked());
+
+    iface.putOriginalImage(i18n("Insert Text"), action, dest.bits(), dest.width(), dest.height());
 
     kapp->restoreOverrideCursor();
 }

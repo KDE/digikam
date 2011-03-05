@@ -44,22 +44,27 @@ namespace Digikam
 {
 
 LocalContrast::LocalContrast(QObject* parent)
-    : BatchTool("LocalContrast", EnhanceTool, parent)
+    : BatchTool("LocalContrast", EnhanceTool, parent),
+      m_settingsView(0)
 {
     setToolTitle(i18n("Local Contrast"));
     setToolDescription(i18n("A tool to emulate tone mapping."));
     setToolIcon(KIcon(SmallIcon("tonemap")));
-
-    QWidget* box   = new QWidget;
-    m_settingsView = new LocalContrastSettings(box);
-    setSettingsWidget(box);
-
-    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 LocalContrast::~LocalContrast()
 {
+}
+
+QWidget* LocalContrast::createSettingsWidget()
+{
+    QWidget* box   = new QWidget;
+    m_settingsView = new LocalContrastSettings(box);
+
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    return box;
 }
 
 BatchToolSettings LocalContrast::defaultSettings()

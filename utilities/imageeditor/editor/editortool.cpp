@@ -30,6 +30,7 @@
 
 // KDE includes
 
+#include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -56,16 +57,20 @@ public:
         timer(0),
         settings(0)
     {
+        version  = 0;
     }
 
     QString             helpAnchor;
     QString             name;
+    int                 version;
 
     QWidget*            view;
     QPixmap             icon;
     QTimer*             timer;
 
     EditorToolSettings* settings;
+
+    FilterAction::Category category;
 };
 
 EditorTool::EditorTool(QObject* parent)
@@ -109,6 +114,27 @@ void EditorTool::setToolName(const QString& name)
 {
     d->name = name;
 }
+
+int EditorTool::toolVersion() const
+{
+    return d->version;
+}
+
+void EditorTool::setToolVersion(const int version)
+{
+    d->version = version;
+}
+
+FilterAction::Category EditorTool::toolCategory() const
+{
+    return d->category;
+}
+
+void EditorTool::setToolCategory ( const FilterAction::Category category)
+{
+    d->category = category;
+}
+
 
 void EditorTool::setPreviewModeMask(int mask)
 {

@@ -71,12 +71,6 @@ class ContentAwareResizeTool::ContentAwareResizeToolPriv
 {
 public:
 
-    enum LQRResizeOrder
-    {
-        Horizontally=0,
-        Vertically
-    };
-
     enum MaskTool
     {
         redMask=0,
@@ -349,7 +343,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
     d->funcInput->addItem(i18n("Sum of absolute values of luma gradients"));
     d->funcInput->addItem(i18n("Absolute value of luma gradient"));
 
-    d->funcInput->setDefaultIndex(LQR_EF_GRAD_XABS);
+    d->funcInput->setDefaultIndex(2);
     d->funcInput->setWhatsThis(i18n("This option allows you to choose a gradient function. This function is used "
                                     "to determine which pixels should be removed or kept."));
 
@@ -417,7 +411,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
     d->resizeOrderInput      = new RComboBox(d->gboxSettings->plainPage());
     d->resizeOrderInput->addItem(i18n("Horizontally first"));
     d->resizeOrderInput->addItem(i18n("Vertically first"));
-    d->resizeOrderInput->setDefaultIndex(ContentAwareResizeToolPriv::Horizontally);
+    d->resizeOrderInput->setDefaultIndex(0);
     d->resizeOrderInput->setWhatsThis(i18n("Here you can set whether to resize horizontally first or "
                                            "vertically first."));
 
@@ -668,8 +662,8 @@ void ContentAwareResizeTool::contentAwareResizeCore(DImg* image, int target_widt
     settings.side_switch_freq    = d->sideSwitchInput->value();
     settings.rigidity            = d->rigidityInput->value();
     settings.mask                = mask;
-    settings.func                = (LqrEnergyFuncBuiltinType)d->funcInput->currentIndex();
-    settings.resize_order        = (LqrResizeOrder)d->resizeOrderInput->currentIndex();
+    settings.func                = (ContentAwareContainer::EnergyFunction)d->funcInput->currentIndex();
+    settings.resize_order        = d->resizeOrderInput->currentIndex() == 0 ? Qt::Horizontal : Qt::Vertical;
     setFilter(new ContentAwareFilter(image, this, settings));
 }
 
@@ -782,7 +776,7 @@ void ContentAwareResizeTool::putFinalData()
 {
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginalImage(i18n("Liquid Rescale"), targetImage.bits(), targetImage.width(), targetImage.height());
+    iface.putOriginalImage(i18n("Liquid Rescale"), filter()->filterAction(), targetImage.bits(), targetImage.width(), targetImage.height());
 }
 
 void ContentAwareResizeTool::blockWidgetSignals(bool b)

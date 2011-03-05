@@ -29,4 +29,23 @@
 
 namespace Digikam
 {
+
+ImageInfoList::ImageInfoList(const QList<qlonglong>& idList)
+{
+    foreach (qlonglong id, idList)
+    {
+        append(ImageInfo(id));
+    }
 }
+
+QList<qlonglong> ImageInfoList::toImageIdList() const
+{
+    QList<qlonglong> idList;
+    foreach (const ImageInfo& info, *this)
+    {
+        idList << info.id();
+    }
+    return idList;
+}
+
+} // namespace Digikam

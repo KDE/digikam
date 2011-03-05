@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QString>
+#include <QVariant>
 
 // Local includes
 #include "albumdb.h"
@@ -48,7 +49,10 @@ public:
 
     static int schemaVersion();
     static int filterSettingsVersion();
+    static int uniqueHashVersion();
+    static bool isUniqueHashUpToDate();
     bool update();
+    bool updateUniqueHash();
     void setObserver(InitializationObserver* observer);
     const QString getLastErrorMessage();
     void setDatabaseAccess(DatabaseAccess* access);
@@ -57,22 +61,28 @@ private:
 
     bool startUpdates();
     bool makeUpdates();
+    bool beginWrapSchemaUpdateStep();
+    bool endWrapSchemaUpdateStep(bool stepOperationSuccess, const QString& errorMsg);
     void defaultFilterSettings(QStringList& defaultImageFilter,
                                QStringList& defaultVideoFilter,
                                QStringList& defaultAudioFilter);
     bool createFilterSettings();
     bool updateFilterSettings();
     bool createDatabase();
-    bool createTablesV5();
-    bool createIndicesV5();
-    bool createTriggersV5();
+    bool createTables();
+    bool createIndices();
+    bool createTriggers();
     bool copyV3toV4(const QString& digikam3DBPath, const QString& currentDBPath);
-    bool updateV4toV5();
+    bool updateV5toV6();
+    bool updateV4toV6();
     bool updateV2toV4(const QString& sqlite2DBPath);
-    bool createTablesV3();
+    void setLegacySettingEntries();
+    void readVersionSettings();
+    void setVersionSettings();
 
 private:
 
+    bool createTablesV3();
     void preAlpha010Update1();
     void preAlpha010Update2();
     void preAlpha010Update3();
@@ -83,7 +93,8 @@ private:
 
     bool                    m_setError;
 
-    int                     m_currentVersion;
+    QVariant                m_currentVersion;
+    QVariant                m_currentRequiredVersion;
 
     DatabaseBackend*        m_Backend;
     AlbumDB*                m_AlbumDB;

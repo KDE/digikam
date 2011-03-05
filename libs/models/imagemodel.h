@@ -30,6 +30,7 @@
 
 // Local includes
 
+#include "dragdropimplementations.h"
 #include "imageinfo.h"
 #include "digikam_export.h"
 
@@ -44,10 +45,10 @@ namespace DatabaseFields
 {
 class Set;
 }
-class ImageModelDragDropHandler;
+class AbstractItemDragDropHandler;
 class ImageModelPriv;
 
-class DIGIKAM_DATABASE_EXPORT ImageModel : public QAbstractListModel
+class DIGIKAM_DATABASE_EXPORT ImageModel : public QAbstractListModel, public DragDropModelImplementation
 {
     Q_OBJECT
 
@@ -61,8 +62,14 @@ public:
         /// Returns a thumbnail pixmap. May be implemented by subclasses.
         /// Returns either a valid pixmap or a null QVariant.
         ThumbnailRole         = Qt::UserRole + 2,
+
         /// Returns a QDateTime with the creation date
         CreationDateRole      = Qt::UserRole + 3,
+        /// Return (optional) extraData field
+        ExtraDataRole         = Qt::UserRole + 5,
+        /// Return n where index is the n-th duplicate
+        /// with the same id, but differing extra data
+        ExtraDataDuplicateCount = Qt::UserRole + 6,
         // For use by subclasses
         SubclassRoles         = Qt::UserRole + 100,
         // For use by filter models
@@ -105,25 +112,59 @@ public:
     qlonglong imageId(int row) const;
     /** Return the index for the given ImageInfo or id, if contained in this model. */
     QModelIndex indexForImageInfo(const ImageInfo& info) const;
+    QModelIndex indexForImageInfo(const ImageInfo& info, const QVariant& extraValue) const;
     QModelIndex indexForImageId(qlonglong id) const;
+    QModelIndex indexForImageId(qlonglong id, const QVariant& extraValue) const;
+    QList<QModelIndex> indexesForImageInfo(const ImageInfo& info) const;
+    QList<QModelIndex> indexesForImageId(qlonglong id) const;
     /** Returns the index or ImageInfo object from the underlying data
      *  for the given file path. This is fast if keepsFilePathCache is enabled.
-     *  The file path is as returned by ImageInfo.filePath(). */
+     *  The file path is as returned by ImageInfo.filePath().
+     *  In case of multiple occurrences of the same file, the simpler variants return
+     *  any one found first, use the QList methods to retrieve all occurrences. */
     QModelIndex indexForPath(const QString& filePath) const;
     ImageInfo imageInfo(const QString& filePath) const;
+    QList<QModelIndex> indexesForPath(const QString& filePath) const;
+    QList<ImageInfo> imageInfos(const QString& filePath) const;
 
     /** Retrieves the imageInfo object from the data() method of the given index.
      *  The index may be from a QSortFilterProxyModel as long as an ImageModel is at the end. */
     static ImageInfo retrieveImageInfo(const QModelIndex& index);
     static qlonglong retrieveImageId(const QModelIndex& index);
 
-    /** Main entry point for subclasses adding image infos to the model. */
+    /** Main entry point for subclasses adding image infos to the model.
+     *  If you list entries not unique per image id, you must add an extraValue
+     *  so that every entry is unique by imageId and extraValues.
+     *  Please note that these methods do not prevent addition of duplicate entries.
+     */
+    void addImageInfo(const ImageInfo& info);
     void addImageInfos(const QList<ImageInfo>& infos);
+    void addImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     /** Clears image infos and resets model. */
     void clearImageInfos();
+    /** Clears and adds the infos */
+    void setImageInfos(const QList<ImageInfo>& infos);
+    /**
+     * Directly remove the given indexes or infos from the model.
+     */
+    void removeIndex(const QModelIndex& indexes);
+    void removeIndexes(const QList<QModelIndex>& indexes);
+    void removeImageInfo(const ImageInfo& info);
+    void removeImageInfos(const QList<ImageInfo>& infos);
+    void removeImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    /**
+     * addImageInfo() is asynchronous if a prepocessor is set.
+     * This method first adds the info, synchronously.
+     * Only afterwards, the preprocessor will have the opportunity to process it.
+     * This method also bypasses any incremental updates.
+     */
+    void addImageInfoSynchronously(const ImageInfo& info);
+    void addImageInfosSynchronously(const QList<ImageInfo>& infos);
+    void addImageInfosSynchronously(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
 
     QList<ImageInfo> imageInfos() const;
     QList<qlonglong> imageIds()    const;
+    QList<ImageInfo> uniqueImageInfos() const;
 
     bool hasImage(qlonglong id) const;
     bool hasImage(const ImageInfo& info) const;
@@ -131,20 +172,7 @@ public:
     bool isEmpty() const;
 
     // Drag and Drop
-    virtual Qt::DropActions supportedDropActions() const;
-    virtual QStringList mimeTypes() const;
-    virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
-    virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
-
-    /// Set a drag drop handler.
-    void setDragDropHandler(ImageModelDragDropHandler* handler);
-    /// Returns the drag drop handler, or 0 if none is installed
-    ImageModelDragDropHandler* dragDropHandler() const;
-
-    /** Switch on drag and drop globally for all items. Default is true.
-     *  For per-item cases reimplement flags(). */
-    void setEnableDrag(bool enable);
-    void setEnableDrop(bool enable);
+    DECLARE_MODEL_DRAG_DROP_METHODS
 
     /**
      * Install an object as a preprocessor for ImageInfos added to this model.
@@ -168,6 +196,12 @@ public:
      */
     bool isRefreshing() const;
 
+    /**
+     * Enable sending of imageInfosAboutToBeRemoved and imageInfosRemoved signals.
+     * Default: false
+     */
+    void setSendRemovalSignals(bool send);
+
 Q_SIGNALS:
 
     /** Informs that ImageInfos will be added to the model.
@@ -177,8 +211,22 @@ Q_SIGNALS:
      *  This signal is sent after the model data is changed and views are informed. */
     void imageInfosAdded(const QList<ImageInfo>& infos);
 
+    /** Informs that ImageInfos will be removed from the model.
+     *  This signal is sent before the model data is changed and views are informed.
+     *  Note: You need to explicitly enable sending of this signal. It is not sent
+     *  in clearImageInfos().
+     */
+    void imageInfosAboutToBeRemoved(const QList<ImageInfo>& infos);
+    /** Informs that ImageInfos have been removed from the model.
+     *  This signal is sent after the model data is changed and views are informed. *
+     *  Note: You need to explicitly enable sending of this signal. It is not sent
+     *  in clearImageInfos().
+     */
+    void imageInfosRemoved(const QList<ImageInfo>& infos);
+
     /** Connect to this signal only if you are the current preprocessor */
-    void preprocess(const QList<ImageInfo>& infos);
+    void preprocess(const QList<ImageInfo>& infos, const QList<QVariant>&);
+    void processAdded(const QList<ImageInfo>& infos, const QList<QVariant>&);
 
     /** If an ImageChangeset affected indexes of this model with changes as set in watchFlags(),
      *  this signal contains the changeset and the affected indexes. */
@@ -199,7 +247,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void reAddImageInfos(const QList<ImageInfo>& infos);
+    void reAddImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void reAddingFinished();
 
 protected:
@@ -236,9 +284,10 @@ protected Q_SLOTS:
 
 private:
 
-    void appendInfos(const QList<ImageInfo>& infos);
-    void publiciseInfos(const QList<ImageInfo>& infos);
+    void appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void publiciseInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void cleanSituationChecks();
+    void removeRowPairs(const QList<QPair<int,int> >& toRemove);
 
     ImageModelPriv* const d;
 };

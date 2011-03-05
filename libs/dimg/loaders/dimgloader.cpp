@@ -24,9 +24,15 @@
 
 #include "dimgloader.h"
 
+// C++ includes
+
+#include <limits>
+
 // Qt includes
 
+#include <QCryptographicHash>
 #include <QFile>
+#include <QFileInfo>
 
 // KDE includes
 
@@ -39,6 +45,7 @@
 #include "dimg_p.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
+#include "kmemoryinfo.h"
 
 namespace Digikam
 {
@@ -155,6 +162,9 @@ void DImgLoader::loadingFailed()
 
 unsigned char* DImgLoader::new_failureTolerant(size_t size)
 {
+    if (!checkAllocation(size))
+        return 0;
+
     try
     {
         return new uchar[size];
@@ -168,6 +178,9 @@ unsigned char* DImgLoader::new_failureTolerant(size_t size)
 
 unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
 {
+    if (!checkAllocation(size))
+        return 0;
+
     try
     {
         return new unsigned short[size];
@@ -179,9 +192,33 @@ unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
     }
 }
 
+int DImgLoader::checkAllocation(qint64 fullSize)
+{
+    if (fullSize > std::numeric_limits<int>::max())
+    {
+        kError() << "Cannot allocate buffer of size" << fullSize;
+        return 0;
+    }
+    int size = (int)fullSize;
+
+    // Do extra check if allocating serious amounts of memory.
+    // At the time of writing (2011), I consider 100 MB as "serious".
+    if (size > 100 * 1024 * 1024)
+    {
+        KMemoryInfo memory = KMemoryInfo::currentInfo();
+        if (size > memory.bytes(KMemoryInfo::AvailableMemory) && memory.isValid())
+        {
+            kError() << "Not enough memory to allocate buffer of size" << size;
+            return 0;
+        }
+    }
+
+    return size;
+}
+
 bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
 {
-    if (! ((m_loadFlags & LoadMetadata) || (m_loadFlags & LoadUniqueHash)) )
+    if (! ((m_loadFlags & LoadMetadata) || (m_loadFlags & LoadUniqueHash) || (m_loadFlags & LoadImageHistory)) )
     {
         return false;
     }
@@ -196,7 +233,65 @@ bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
 
     m_image->setMetadata(metaDataFromFile.data());
 
+    if (m_loadFlags & LoadImageHistory)
+    {
+        DImageHistory history = DImageHistory::fromXml(metaDataFromFile.getImageHistory());
+
+        HistoryImageId id = createHistoryImageId(filePath, *m_image, metaDataFromFile);
+        id.m_type = HistoryImageId::Current;
+        history << id;
+
+        m_image->setImageHistory(history);
+        imageSetAttribute("originalImageHistory", QVariant::fromValue(history));
+    }
+
     return true;
+}
+
+// copied from imagescanner.cpp
+static QDateTime creationDateFromFilesystem(const QFileInfo& info)
+{
+    // creation date is not what it seems on Unix
+    QDateTime ctime = info.created();
+    QDateTime mtime = info.lastModified();
+
+    if (ctime.isNull())
+    {
+        return mtime;
+    }
+
+    if (mtime.isNull())
+    {
+        return ctime;
+    }
+
+    return qMin(ctime, mtime);
+}
+
+HistoryImageId DImgLoader::createHistoryImageId(const QString& filePath, const DImg& image, const DMetadata& metadata)
+{
+    QFileInfo file(filePath);
+
+    if (!file.exists())
+    {
+        return HistoryImageId();
+    }
+
+    HistoryImageId id(metadata.getImageUniqueId());
+
+    QDateTime dt = metadata.getImageDateTime();
+
+    if (dt.isNull())
+    {
+        dt = creationDateFromFilesystem(file);
+    }
+
+    id.setCreationDate(dt);
+    id.setFileName(file.fileName());
+    id.setPathOnDisk(file.path());
+    id.setUniqueHash(uniqueHashV2(filePath, &image), file.size());
+
+    return id;
 }
 
 bool DImgLoader::saveMetadata(const QString& filePath)
@@ -219,6 +314,52 @@ bool DImgLoader::checkExifWorkingColorSpace()
 
     return false;
 }
+
+QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* img)
+{
+    QFile file( filePath );
+    if (!file.open( QIODevice::Unbuffered | QIODevice::ReadOnly ))
+    {
+        return QByteArray();
+    }
+
+    QCryptographicHash md5(QCryptographicHash::Md5);
+
+    // Specified size: 100 kB; but limit to file size
+    const qint64 specifiedSize = 100 * 1024; // 100 kB
+    qint64 size = qMin(file.size(), specifiedSize);
+
+    if (size)
+    {
+        char *databuf = new char[size];
+        int   read;
+
+        // Read first 100 kB
+        if ((read = file.read(databuf, size)) > 0 )
+        {
+            md5.addData(databuf, read);
+        }
+
+        // Read last 100 kB
+        file.seek(file.size() - size);
+        if ((read = file.read(databuf, size)) > 0 )
+        {
+            md5.addData(databuf, read);
+        }
+
+        delete [] databuf;
+    }
+
+    QByteArray hash = md5.result().toHex();
+
+    if (img && !hash.isNull())
+    {
+        const_cast<DImg*>(img)->setAttribute("uniqueHashV2", hash);
+    }
+
+    return hash;
+}
+
 
 QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata)
 {
@@ -257,21 +398,24 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
     int readlen = 0;
     QByteArray size = 0;
 
+    QByteArray hash;
+
     if ( qfile.open( QIODevice::Unbuffered | QIODevice::ReadOnly ) )
     {
         if ( ( readlen = qfile.read( databuf, 8192 ) ) > 0 )
         {
             md5.update( databuf, readlen );
             md5.update( size.setNum( qfile.size() ) );
-            return md5.hexDigest();
-        }
-        else
-        {
-            return QByteArray();
+            hash = md5.hexDigest();
         }
     }
 
-    return QByteArray();
+    if (!hash.isNull())
+    {
+        const_cast<DImg&>(img).setAttribute("uniqueHash", hash);
+    }
+
+    return hash;
 }
 
 }  // namespace Digikam

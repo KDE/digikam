@@ -102,7 +102,7 @@ BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/, bool rebuildAll)
 }
 
 BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/, int albumId)
-: DProgressDlg(0), d(new BatchThumbsGeneratorPriv)
+    : DProgressDlg(0), d(new BatchThumbsGeneratorPriv)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->rebuildAll      = true;

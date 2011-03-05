@@ -49,6 +49,8 @@ extern "C"
 #include <QMap>
 #include <QPixmap>
 #include <QSysInfo>
+#include <QDebug>
+#include <QUuid>
 
 // KDE includes
 
@@ -61,6 +63,7 @@ extern "C"
 
 // Local includes
 
+#include "dimagehistory.h"
 #include "pngloader.h"
 #include "tiffloader.h"
 #include "ppmloader.h"
@@ -69,10 +72,12 @@ extern "C"
 #include "pgfloader.h"
 #include "qimageloader.h"
 #include "jpegloader.h"
+#include "iccmanager.h"
 #include "icctransform.h"
 #include "exposurecontainer.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
+#include "randomnumbergenerator.h"
 
 typedef uint64_t ullong;
 typedef int64_t  llong;
@@ -172,7 +177,10 @@ DImg::~DImg()
 
 DImg& DImg::operator=(const DImg& image)
 {
+    //kDebug() << "Original image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
+    //kDebug() << "New image: " << image.m_priv->imageHistory.entries().count() << " | " << &(image.m_priv);
     m_priv = image.m_priv;
+    //kDebug() << "Original new image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
     return *this;
 }
 
@@ -285,6 +293,7 @@ void DImg::copyMetaData(const DImgPrivate* src)
     m_priv->attributes   = src->attributes;
     m_priv->embeddedText = src->embeddedText;
     m_priv->iccProfile   = src->iccProfile;
+    m_priv->imageHistory = src->imageHistory;
     //FIXME: what about sharing and deleting lanczos_func?
 }
 
@@ -295,15 +304,11 @@ void DImg::copyImageData(const DImgPrivate* src)
 
 int DImg::allocateData()
 {
-    int size = m_priv->width * m_priv->height * (m_priv->sixteenBit ? 8 : 4);
+    size_t size  = m_priv->width * m_priv->height * (m_priv->sixteenBit ? 8 : 4);
+    m_priv->data = DImgLoader::new_failureTolerant(size);
 
-    try
+    if (!m_priv->data)
     {
-        m_priv->data = new uchar[size];
-    }
-    catch (std::bad_alloc& ex)
-    {
-        Q_UNUSED(ex);
         m_priv->null = true;
         return 0;
     }
@@ -331,7 +336,7 @@ void DImg::setImageData(bool null, uint width, uint height, bool sixteenBit, boo
 //---------------------------------------------------------------------------------------------------
 // load and save
 
-bool DImg::loadImageInfo(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash)
+bool DImg::loadImageInfo(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadImageHistory)
 {
     DImgLoader::LoadFlags loadFlags = DImgLoader::LoadImageInfo;
 
@@ -350,6 +355,11 @@ bool DImg::loadImageInfo(const QString& filePath, bool loadMetadata, bool loadIC
         loadFlags |= DImgLoader::LoadUniqueHash;
     }
 
+    if (loadImageHistory)
+    {
+        loadFlags |= DImgLoader::LoadImageHistory;
+    }
+
     return load(filePath, loadFlags, 0, DRawDecoding());
 }
 
@@ -359,7 +369,7 @@ bool DImg::load(const QString& filePath, DImgLoaderObserver* observer,
     return load(filePath, DImgLoader::LoadAll, observer, rawDecodingSettings);
 }
 
-bool DImg::load(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash,
+bool DImg::load(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadImageHistory,
                 DImgLoaderObserver* observer, DRawDecoding rawDecodingSettings)
 {
     DImgLoader::LoadFlags loadFlags = DImgLoader::LoadImageInfo | DImgLoader::LoadImageData;
@@ -377,6 +387,11 @@ bool DImg::load(const QString& filePath, bool loadMetadata, bool loadICCData, bo
     if (loadUniqueHash)
     {
         loadFlags |= DImgLoader::LoadUniqueHash;
+    }
+
+    if (loadImageHistory)
+    {
+        loadFlags |= DImgLoader::LoadImageHistory;
     }
 
     return load(filePath, loadFlags, observer, rawDecodingSettings);
@@ -615,6 +630,7 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
     }
 
     QString frm = format.toUpper();
+    setAttribute("savedFilePath", filePath);
 
     if (frm == "JPEG" || frm == "JPG" || frm == "JPE")
     {
@@ -1021,23 +1037,103 @@ QString DImg::embeddedText(const QString& key) const
     return QString();
 }
 
-void DImg::switchOriginToLastSaved()
+void DImg::imageSavedAs(const QString& savePath)
 {
-    QVariant savedformat = attribute("savedformat");
+    setAttribute("savedFilePath", savePath);
+    addAsReferredImage(savePath);
+}
 
+QString DImg::originalFilePath() const
+{
+    return attribute("originalFilePath").toString();
+}
+
+QString DImg::lastSavedFilePath() const
+{
+    return attribute("savedFilePath").toString();
+}
+
+QStringList DImgPrivate::fileOriginAttributes()
+{
+    QStringList list;
+    list << "format"
+         << "isreadonly"
+         << "originalFilePath"
+         << "originalSize"
+         << "originalImageHistory"
+         << "rawDecodingSettings"
+         << "rawDecodingFilterAction"
+         << "uniqueHash"
+         << "uniqueHashV2";
+    return list;
+}
+
+QVariant DImg::fileOriginData() const
+{
+    QVariantMap map;
+    foreach (const QString& key, m_priv->fileOriginAttributes())
+    {
+        QVariant attr = attribute(key);
+        if (!attr.isNull())
+        {
+            map.insert(key, attr);
+        }
+    }
+    return map;
+}
+
+QVariant DImg::lastSavedFileOriginData() const
+{
+    QVariantMap map;
+    QVariant savedformat = attribute("savedformat");
     if (!savedformat.isNull())
     {
-        setAttribute("format", savedformat);
+        map.insert("format", savedformat);
     }
 
     QVariant readonly = attribute("savedformat-isreadonly");
-
     if (!readonly.isNull())
     {
-        setAttribute("isreadonly", readonly);
+        map.insert("isreadonly", readonly);
     }
 
-    removeAttribute("rawDecodingSettings");
+    QVariant filePath = attribute("savedFilePath");
+    if (!filePath.isNull())
+    {
+        map.insert("originalFilePath", filePath);
+    }
+
+    DImageHistory history = m_priv->imageHistory;
+    if (!history.isEmpty())
+    {
+        history.adjustReferredImages();
+
+        if (!history.entries().last().referredImages.isEmpty())
+        {
+            history.entries().last().referredImages.last().setType(HistoryImageId::Current);
+        }
+        map.insert("originalImageHistory", QVariant::fromValue(history));
+    }
+    return map;
+}
+
+void DImg::setFileOriginData(const QVariant& data)
+{
+    QVariantMap map = data.toMap();
+    foreach (const QString& key, m_priv->fileOriginAttributes())
+    {
+        removeAttribute(key);
+        QVariant attr = map.value(key);
+        if (!attr.isNull())
+        {
+            setAttribute(key, attr);
+        }
+    }
+}
+
+void DImg::switchOriginToLastSaved()
+{
+    setFileOriginData(lastSavedFileOriginData());
 }
 
 DColor DImg::getPixelColor(uint x, uint y) const
@@ -1329,20 +1425,20 @@ void DImg::setPixelColor(uint x, uint y, const DColor& color)
 // copying operations
 
 
-DImg DImg::copy()
+DImg DImg::copy() const
 {
     DImg img(*this);
     img.detach();
     return img;
 }
 
-DImg DImg::copyImageData()
+DImg DImg::copyImageData() const
 {
     DImg img(width(), height(), sixteenBit(), hasAlpha(), bits(), true);
     return img;
 }
 
-DImg DImg::copyMetaData()
+DImg DImg::copyMetaData() const
 {
     DImg img;
     // copy width, height, alpha, sixteenBit, null
@@ -1354,16 +1450,21 @@ DImg DImg::copyMetaData()
     return img;
 }
 
-DImg DImg::copy(const QRect& rect)
+DImg DImg::copy(const QRect& rect) const
 {
     return copy(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
-DImg DImg::copy(int x, int y, int w, int h)
+DImg DImg::copy(int x, int y, int w, int h) const
 {
     if ( isNull() || w <= 0 || h <= 0)
     {
         kDebug() << " : return null image!";
+        return DImg();
+    }
+
+    if (!DImgPrivate::clipped(x, y, w, h, m_priv->width, m_priv->height))
+    {
         return DImg();
     }
 
@@ -1607,7 +1708,7 @@ void DImg::bitBlend (DColorComposer* composer, const uchar* src, uchar* dest,
 // QImage / QPixmap access
 
 
-QImage DImg::copyQImage()
+QImage DImg::copyQImage() const
 {
     if (isNull())
     {
@@ -1645,12 +1746,12 @@ QImage DImg::copyQImage()
     return img;
 }
 
-QImage DImg::copyQImage(const QRect& rect)
+QImage DImg::copyQImage(const QRect& rect) const
 {
     return (copyQImage(rect.x(), rect.y(), rect.width(), rect.height()));
 }
 
-QImage DImg::copyQImage(int x, int y, int w, int h)
+QImage DImg::copyQImage(int x, int y, int w, int h) const
 {
     if (isNull())
     {
@@ -1667,7 +1768,7 @@ QImage DImg::copyQImage(int x, int y, int w, int h)
     return img.copyQImage();
 }
 
-QPixmap DImg::convertToPixmap()
+QPixmap DImg::convertToPixmap() const
 {
     if (isNull())
     {
@@ -1711,7 +1812,7 @@ QPixmap DImg::convertToPixmap()
     }
 }
 
-QPixmap DImg::convertToPixmap(IccTransform& monitorICCtrans)
+QPixmap DImg::convertToPixmap(IccTransform& monitorICCtrans) const
 {
     if (isNull())
     {
@@ -1937,6 +2038,8 @@ void DImg::rotate(ANGLE angle)
         return;
     }
 
+    bool switchDims = false;
+
     switch (angle)
     {
         case(ROT90):
@@ -1962,7 +2065,7 @@ void DImg::rotate(ANGLE angle)
                     }
                 }
 
-                setImageDimension(w, h);
+                switchDims = true;
 
                 delete [] m_priv->data;
                 m_priv->data = (uchar*)newData;
@@ -1985,7 +2088,7 @@ void DImg::rotate(ANGLE angle)
                     }
                 }
 
-                setImageDimension(w, h);
+                switchDims = true;
 
                 delete [] m_priv->data;
                 m_priv->data = (uchar*)newData;
@@ -2095,7 +2198,7 @@ void DImg::rotate(ANGLE angle)
                     }
                 }
 
-                setImageDimension(w, h);
+                switchDims = true;
 
                 delete [] m_priv->data;
                 m_priv->data = (uchar*)newData;
@@ -2118,7 +2221,7 @@ void DImg::rotate(ANGLE angle)
                     }
                 }
 
-                setImageDimension(w, h);
+                switchDims = true;
 
                 delete [] m_priv->data;
                 m_priv->data = (uchar*)newData;
@@ -2128,6 +2231,18 @@ void DImg::rotate(ANGLE angle)
         }
         default:
             break;
+    }
+
+    if (switchDims)
+    {
+        setImageDimension(height(), width());
+        QMap<QString, QVariant>::iterator it = m_priv->attributes.find("originalSize");
+
+        if (it != m_priv->attributes.end())
+        {
+            QSize size = it.value().toSize();
+            it.value() = QSize(size.height(), size.width());
+        }
     }
 }
 
@@ -2271,6 +2386,60 @@ void DImg::flip(FLIP direction)
     }
 }
 
+bool DImg::rotateAndFlip(int orientation)
+{
+    bool rotatedOrFlipped = false;
+
+    if (orientation != DMetadata::ORIENTATION_NORMAL)
+    {
+        switch (orientation)
+        {
+            case DMetadata::ORIENTATION_NORMAL:
+            case DMetadata::ORIENTATION_UNSPECIFIED:
+                break;
+
+            case DMetadata::ORIENTATION_HFLIP:
+                flip(DImg::HORIZONTAL);
+                rotatedOrFlipped = true;
+                break;
+
+            case DMetadata::ORIENTATION_ROT_180:
+                rotate(DImg::ROT180);
+                rotatedOrFlipped = true;
+                break;
+
+            case DMetadata::ORIENTATION_VFLIP:
+                flip(DImg::VERTICAL);
+                rotatedOrFlipped = true;
+                break;
+
+            case DMetadata::ORIENTATION_ROT_90_HFLIP:
+                rotate(DImg::ROT90);
+                flip(DImg::HORIZONTAL);
+                rotatedOrFlipped = true;
+                break;
+
+            case DMetadata::ORIENTATION_ROT_90:
+                rotate(DImg::ROT90);
+                rotatedOrFlipped = true;
+                break;
+
+            case DMetadata::ORIENTATION_ROT_90_VFLIP:
+                rotate(DImg::ROT90);
+                flip(DImg::VERTICAL);
+                rotatedOrFlipped = true;
+                break;
+
+            case DMetadata::ORIENTATION_ROT_270:
+                rotate(DImg::ROT270);
+                rotatedOrFlipped = true;
+                break;
+        }
+    }
+
+    return rotatedOrFlipped;
+}
+
 void DImg::convertToSixteenBit()
 {
     convertDepth(64);
@@ -2339,12 +2508,8 @@ void DImg::convertDepth(int depth)
         ushort* dptr = (ushort*)data;
         uchar*  sptr = bits();
 
-        QDateTime dt = QDateTime::currentDateTime();
-        QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-        uint seed = dt.secsTo(Y2000);
-#ifdef WIN32
-        srand(seed);
-#endif
+        // use default seed of the generator
+        RandomNumberGenerator generator;
         ushort noise = 0;
 
         uint dim = width() * height() * 4;
@@ -2353,11 +2518,7 @@ void DImg::convertDepth(int depth)
         {
             if (i % 4 < 3)
             {
-#ifndef _WIN32
-                noise = (ushort)(256.0 * (rand_r(&seed) / (RAND_MAX + 1.0)));
-#else
-                noise = (ushort)(256.0 * (rand() / (RAND_MAX + 1.0)));
-#endif
+                noise = generator.number(0, 255);
             }
             else
             {
@@ -2417,7 +2578,7 @@ void DImg::fill(const DColor& color)
     }
 }
 
-QByteArray DImg::getUniqueHash()
+QByteArray DImg::getUniqueHash() const
 {
     if (m_priv->attributes.contains("uniqueHash"))
     {
@@ -2439,10 +2600,7 @@ QByteArray DImg::getUniqueHash()
 
     QByteArray hash = DImgLoader::uniqueHash(filePath, *this, false);
 
-    if (!hash.isNull())
-    {
-        setAttribute("uniqueHash", hash);
-    }
+    // attribute is written by DImgLoader
 
     return hash;
 }
@@ -2452,7 +2610,44 @@ QByteArray DImg::getUniqueHash(const QString& filePath)
     return DImgLoader::uniqueHash(filePath, DImg(), true);
 }
 
-void DImg::updateMetadata(const QString& destMimeType, const QString& originalFileName, bool resetExifOrientationTag)
+QByteArray DImg::getUniqueHashV2() const
+{
+    if (m_priv->attributes.contains("uniqueHashV2"))
+    {
+        return m_priv->attributes["uniqueHashV2"].toByteArray();
+    }
+
+    if (!m_priv->attributes.contains("originalFilePath"))
+    {
+        kWarning() << "DImg::getUniqueHash called without originalFilePath property set!";
+        return QByteArray();
+    }
+
+    QString filePath = m_priv->attributes.value("originalFilePath").toString();
+
+    if (filePath.isEmpty())
+    {
+        return QByteArray();
+    }
+
+    return DImgLoader::uniqueHashV2(filePath, this);
+}
+
+QByteArray DImg::getUniqueHashV2(const QString& filePath)
+{
+    return DImgLoader::uniqueHashV2(filePath);
+}
+
+QByteArray DImg::createImageUniqueId() const
+{
+    NonDeterministicRandomData randomData(16);
+    QByteArray imageUUID = randomData.toHex();
+    imageUUID += getUniqueHashV2();
+    return imageUUID;
+}
+
+void DImg::updateMetadata(const QString& destMimeType, const QString& originalFileName,
+                          bool resetExifOrientationTag, bool updateImageHistory)
 {
     // Get image Exif/IPTC data.
     DMetadata meta(getMetadata());
@@ -2471,15 +2666,36 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
     QSize previewSize = size();
     previewSize.scale(1280, 1024, Qt::KeepAspectRatio);
     QImage preview;
+    {
+        if (!IccManager::isSRGB(*this))
+        {
+            DImg previewDImg;
 
-    // Ensure that preview is not upscaled
-    if (previewSize.width() >= (int)width())
-    {
-        preview = copyQImage();
-    }
-    else
-    {
-        preview = smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio).copyQImage();
+            if (previewSize.width() >= (int)width())
+            {
+                previewDImg = copy();
+            }
+            else
+            {
+                previewDImg = smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio);
+            }
+
+            IccManager manager(previewDImg);
+            manager.transformToSRGB();
+            preview = previewDImg.copyQImage();
+        }
+        else
+        {
+            // Ensure that preview is not upscaled
+            if (previewSize.width() >= (int)width())
+            {
+                preview = copyQImage();
+            }
+            else
+            {
+                preview = smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio).copyQImage();
+            }
+        }
     }
 
     // With JPEG file, we don't store IPTC preview.
@@ -2522,8 +2738,90 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
         meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
     }
 
+    if (!m_priv->imageHistory.isEmpty())
+    {
+        DImageHistory forSaving(m_priv->imageHistory);
+        forSaving.adjustReferredImages();
+        QString imageHistoryXml = forSaving.toXml();
+        meta.setImageHistory(imageHistoryXml);
+    }
+
+    if (updateImageHistory)
+    {
+        meta.setImageUniqueId(createImageUniqueId());
+    }
+
     // Store new Exif/IPTC/XMP data into image.
     setMetadata(meta.data());
 }
+
+HistoryImageId DImg::createHistoryImageId(const QString& filePath, HistoryImageId::Type type) const
+{
+    HistoryImageId id = DImgLoader::createHistoryImageId(filePath, *this, DMetadata(getMetadata()));
+    id.setType(type);
+    return id;
+}
+
+HistoryImageId DImg::addAsReferredImage(const QString& filePath, HistoryImageId::Type type)
+{
+    HistoryImageId id = createHistoryImageId(filePath, type);
+    m_priv->imageHistory.purgePathFromReferredImages(id.path(), id.fileName());
+    addAsReferredImage(id);
+    return id;
+}
+
+void DImg::addAsReferredImage(const HistoryImageId& id)
+{
+    m_priv->imageHistory << id;
+}
+
+void DImg::insertAsReferredImage(int afterHistoryStep, const HistoryImageId& id)
+{
+    m_priv->imageHistory.insertReferredImage(afterHistoryStep, id);
+}
+
+void DImg::addCurrentUniqueImageId(const QString& uuid)
+{
+    m_priv->imageHistory.adjustCurrentUuid(uuid);
+}
+
+void DImg::addFilterAction(const Digikam::FilterAction& action)
+{
+    m_priv->imageHistory << action;
+}
+
+const DImageHistory& DImg::getImageHistory() const
+{
+    return m_priv->imageHistory;
+}
+
+DImageHistory& DImg::getImageHistory()
+{
+    return m_priv->imageHistory;
+}
+
+void DImg::setImageHistory(const DImageHistory& history)
+{
+    m_priv->imageHistory = history;
+}
+
+
+bool DImg::hasImageHistory() const
+{
+    if (m_priv->imageHistory.isEmpty())
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+DImageHistory DImg::getOriginalImageHistory() const
+{
+    return attribute("originalImageHistory").value<DImageHistory>();
+}
+
 
 }  // namespace Digikam

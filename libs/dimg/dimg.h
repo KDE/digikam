@@ -46,7 +46,9 @@
 #include "drawdecoding.h"
 #include "dcolor.h"
 #include "dcolorcomposer.h"
+#include "historyimageid.h"
 #include "iccprofile.h"
+
 
 class QString;
 
@@ -56,7 +58,9 @@ namespace Digikam
 typedef KExiv2Iface::KExiv2Data KExiv2Data;
 
 class ExposureSettingsContainer;
+class DImageHistory;
 class DImgPrivate;
+class FilterAction;
 class IccTransform;
 class DImgLoaderObserver;
 
@@ -197,19 +201,29 @@ public:
     bool        load(const QString& filePath, DImgLoaderObserver* observer = 0,
                      DRawDecoding rawDecodingSettings=DRawDecoding());
     bool        load(const QString& filePath,
-                     bool loadMetadata, bool loadICCData, bool loadUniqueHash,
+                     bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadHistory,
                      DImgLoaderObserver* observer = 0,
                      DRawDecoding rawDecodingSettings=DRawDecoding());
 
     bool        save(const QString& filePath, FORMAT frm, DImgLoaderObserver* observer = 0);
     bool        save(const QString& filePath, const QString& format, DImgLoaderObserver* observer = 0);
 
+    /**
+     * It is common that images are not directly saved to the destination path.
+     * For this reason, save() does not call addAsReferredImage(), and the stored
+     * save path may be wrong.
+     * Call this method after save() with the final destination path.
+     * This path will be stored in the image history as well.
+     */
+    void        imageSavedAs(const QString& savePath);
+
     /** Loads most parts of the meta information, but never the image data.
         If loadMetadata is true, the metadata will be available with getComments, getExif, getIptc, getXmp .
         If loadICCData is true, the ICC profile will be available with getICCProfile.
      */
     bool        loadImageInfo(const QString& filePath, bool loadMetadata = true,
-                              bool loadICCData = true, bool loadUniqueHash = false);
+                              bool loadICCData = true, bool loadUniqueHash = true,
+                              bool loadImageHistory = true);
 
     bool        isNull()         const;
     uint        width()          const;
@@ -230,6 +244,17 @@ public:
     /** Return the number of bits depth of one color component for one pixel : 8 (non sixteenBit) or 16 (sixteen)
      */
     int         bitsDepth()  const;
+
+    /** Returns the file path from which this DImg was originally loaded.
+     *  Returns a null string if the DImg was not loaded from a file.
+     */
+    QString     originalFilePath() const;
+
+    /** Returns the file path to which this DImg was saved.
+     *  Returns the file path set with imageSavedAs(), if that was not called,
+     *  save(), if that was not called, a null string.
+     */
+    QString     lastSavedFilePath() const;
 
     /** Returns the color model in which the image was stored in the file.
         The color space of the loaded image data is always RGB.
@@ -264,7 +289,7 @@ public:
     /** Returns the format string of the format that this image was last saved to.
         An image can be loaded from a file - retrieve that format with fileFormat()
         and loadedFormat() - and can the multiple times be saved to different formats.
-        Format strings used include JPEG, PGF, PNG, TIFF and JP2K.
+        Format strings used include JPG, PGF, PNG, TIFF and JP2K.
         If this file was not save, a null string is returned.
     */
     QString     savedFormat() const;
@@ -307,43 +332,88 @@ public:
     void       setEmbeddedText(const QString& key, const QString& text);
     QString    embeddedText(const QString& key) const;
 
+    const DImageHistory& getImageHistory() const;
+    DImageHistory&       getImageHistory();
+    void          setImageHistory(const DImageHistory& history);
+    bool          hasImageHistory() const;
+    DImageHistory getOriginalImageHistory() const;
+    void          addFilterAction(const FilterAction& action);
+
     /** Use this method to update lead metadata after image transformations.
         This fix Iptc preview, Exif thumbnail, image size information, etc.
         'destMimeType' is destination type mime. In some case, any metadata are not updated by the same way.
         'originalFileName' is original file name. Can be empty.
         'resetExifOrientationTag' is used to force Exif orientation flag to normal.
+        'updateImageHistory' sets a new image UUID. If the image is changed in any way, set this to true.
      */
     void       updateMetadata(const QString& destMimeType, const QString& originalFileName,
-                              bool resetExifOrientationTag);
+                              bool resetExifOrientationTag, bool updateImageHistory);
+
+    /** Create a HistoryImageId for _this_ image _already_ saved at the given file path.*/
+    HistoryImageId createHistoryImageId(const QString& filePath, HistoryImageId::Type type) const;
+
+    /** If you have saved this DImg to filePath, and want to continue using this DImg object
+     *  to add further changes to the image history, you can call this method to add to the image history
+     *  a reference to the just saved image.
+     *  First call updateMetadata(), then call save(), then call addAsReferredImage().
+     *  Do not call this directly after loading, before applying any changes:
+     *  The history is correctly initialized when loading.
+     *  If you need to insert the referred file to an entry which is not the last entry,
+     *  which may happen if the added image was saved after this image's history was created,
+     *  you can use insertAsReferredImage.
+     *  The added id is returned.
+     */
+    HistoryImageId addAsReferredImage(const QString& filePath, HistoryImageId::Type type = HistoryImageId::Intermediate);
+    void           addAsReferredImage(const HistoryImageId& id);
+    void           insertAsReferredImage(int afterHistoryStep, const HistoryImageId& otherImagesId);
+
+
+    /** In the history, adjusts the UUID of the ImageHistoryId of the current file.
+     *  Call this if you have associated a UUID with this file which is not written to the metadata.
+     *  If there is already a UUID present, read from metadata, it will not be replaced.
+     */
+    void       addCurrentUniqueImageId(const QString& uuid);
 
     /** When loaded from a file, some attributes like format and isReadOnly still depend on this
         originating file. When saving in a different format to a different file,
         you may wish to switch these attributes to the new file.
+        - fileOriginData() returns the current origin data, bundled in the returned QVariant.
+        - setFileOriginData() takes such a variant and adjusts the properties
+        - lastSavedFileOriginData() returns the origin data as if the image was loaded from
+          the last saved image.
+        - switchOriginToLastSaved is equivalent to setting origin data returned from lastSavedFileOriginData()
+
         Example: an image loaded from a RAW and saved to PNG will be read-only and format RAW.
-        After calling this method, it will not be read-only, format will be PNG,
+        After calling switchOriginToLastSaved, it will not be read-only, format will be PNG,
         and rawDecodingSettings will be null. detectedFormat() will not change.
+        In the history, the last referred image that was added (as intermediate) is made
+        the new Current image.
+        NOTE: Set the saved image path with imageSavedAs() before!
     */
+    QVariant    fileOriginData() const;
+    void        setFileOriginData(const QVariant& data);
+    QVariant    lastSavedFileOriginData() const;
     void        switchOriginToLastSaved();
 
     /** Return a deep copy of full image
       */
-    DImg       copy();
+    DImg       copy() const;
 
     /** Return a deep copy of the image, but do not include metadata.
      */
-    DImg       copyImageData();
+    DImg       copyImageData() const;
 
     /** Return an image that contains a deep copy of
         this image's metadata and the information associated
         with the image data (width, height, hasAlpha, sixteenBit),
         but no image data, i.e. isNull() is true.
      */
-    DImg       copyMetaData();
+    DImg       copyMetaData() const;
 
     /** Return a region of image
      */
-    DImg       copy(const QRect& rect);
-    DImg       copy(int x, int y, int w, int h);
+    DImg       copy(const QRect& rect) const;
+    DImg       copy(int x, int y, int w, int h) const;
 
     /** Copy a region of pixels from a source image to this image.
         Parameters:
@@ -370,9 +440,9 @@ public:
 
     /** QImage wrapper methods
      */
-    QImage     copyQImage();
-    QImage     copyQImage(const QRect& rect);
-    QImage     copyQImage(int x, int y, int w, int h);
+    QImage     copyQImage() const;
+    QImage     copyQImage(const QRect& rect) const;
+    QImage     copyQImage(int x, int y, int w, int h) const;
 
     /** Crop image to the specified region
      */
@@ -386,19 +456,40 @@ public:
     /** Return a version of this image scaled to the specified size with the specified mode.
         See QSize documentation for information on available modes
      */
-    DImg       smoothScale(int width, int height, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
+    DImg       smoothScale(int width, int height, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) const;
+    DImg       smoothScale(const QSize& destSize, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) const;
+
+    /** Executes the same scaling as smoothScale(width, height), but from the result of this call,
+     *  returns only the section specified by clipx, clipy, clipwidth, clipheight.
+     *  This is thus equivalent to calling
+     *  Dimg scaled = smoothScale(width, height); scaled.crop(clipx, clipy, clipwidth, clipheight);
+     *  but potentially much faster.
+     *  In smoothScaleSection, you specify the source region, here, the result region.
+     *  It will often not be possible to find _integer_ source coordinates for a result region!
+     */
+    DImg smoothScaleClipped(int width, int height,
+                            int clipx, int clipy, int clipwidth, int clipheight) const;
+    DImg smoothScaleClipped(const QSize& destSize, const QRect& clip) const;
 
     /** Take the region specified by the rectangle sx|sy, width and height sw * sh,
         and scale it to an image with size dw * dh
      */
     DImg       smoothScaleSection(int sx, int sy, int sw, int sh,
-                                  int dw, int dh);
+                                  int dw, int dh) const;
+    DImg       smoothScaleSection(const QRect& sourceRect, const QSize& destSize) const;
 
     void       rotate(ANGLE angle);
     void       flip(FLIP direction);
 
-    QPixmap    convertToPixmap();
-    QPixmap    convertToPixmap(IccTransform& monitorICCtrans);
+    /** Rotates and/or flip the DImg according to the given DMetadata::Orientation,
+     *  so that the current state is orientation and the resulting step is normal orientation.
+     *  Returns true if the image was actually rotated or flipped (e.g. if ORIENTATION_NORMAL
+     *  is given, returns false, because no action is taken).
+     */
+    bool       rotateAndFlip(int orientation);
+
+    QPixmap    convertToPixmap() const;
+    QPixmap    convertToPixmap(IccTransform& monitorICCtrans) const;
 
     /** Return a mask image where pure white and pure black pixels are over-colored.
         This way is used to identify over and under exposed pixels.
@@ -423,9 +514,10 @@ public:
     void       fill(const DColor& color);
 
 
-    /** This methods return a 16-byte MD5 hex digest which is meant to uniquely identify
+    /** This methods return a 128-bit MD5 hex digest which is meant to uniquely identify
         the file. The hash is calculated on parts of the file and the file metadata.
         It cannot be used to find similar images. It is not calculated from the image data.
+        The hash will be returned as a 32-byte hexadecimal string.
 
         If you already have a DImg object of the file, use the member method.
         The object does not need to have the full image data loaded, but it shall at least
@@ -439,8 +531,32 @@ public:
         You do not need a DImg object of the file to retrieve the unique hash;
         Use the static method and pass just the file path.
      */
-    QByteArray getUniqueHash();
+    QByteArray getUniqueHash() const;
     static QByteArray getUniqueHash(const QString& filePath);
+
+    /** This methods return a 128-bit MD5 hex digest which is meant to uniquely identify
+        the file. The hash is calculated on parts of the file.
+        It cannot be used to find similar images. It is not calculated from the image data.
+        The hash will be returned as a 32-byte hexadecimal string.
+
+        If you already have a DImg object loaded from the file, use the member method.
+        If the image has been loaded with loadUniqueHash = true, the hash will already
+        be available.
+
+        You do not need a DImg object of the file to retrieve the unique hash;
+        Use the static method and pass just the file path.
+     */
+    QByteArray getUniqueHashV2() const;
+    static QByteArray getUniqueHashV2(const QString& filePath);
+
+    /** This method creates a new 256-bit UUID meant to be globally unique.
+     *  The UUID will be returned as a 64-byte hexadecimal string.
+     *  At least 128bits of the UUID will be created by the platform random number
+     *  generator. The rest may be created from a content-based hash similar to the uniqueHash, see above.
+     *  This method only generates a new UUID for this image without in any way changing this image object
+     *  or saving the UUID anywhere.
+     */
+    QByteArray createImageUniqueId() const;
 
 private:
 

@@ -185,7 +185,6 @@ void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int st
 
 void ModelCompletion::slotModelReset()
 {
-    kDebug() << "model reset, resync";
     sync(d->model);
 }
 

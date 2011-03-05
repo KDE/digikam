@@ -226,6 +226,11 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
         }
     }
 
+    if (!d->infoCache)
+    {
+        d->infoCache = new ImageInfoCache();
+    }
+
     if (!d->backend || !d->backend->isCompatible(parameters))
     {
         delete d->db;
@@ -236,8 +241,9 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
         TagsCache::instance()->initialize();
     }
 
-    delete d->infoCache;
-    d->infoCache = new ImageInfoCache();
+    d->databaseWatch->sendDatabaseChanged();
+    d->infoCache->invalidate();
+    TagsCache::instance()->invalidate();
     d->databaseWatch->setDatabaseIdentifier(QString());
     CollectionManager::instance()->clear_locked();
 }
@@ -251,6 +257,12 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
         kError() << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
         d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
                             "digiKam depends on the drivers provided by the SQL module of Qt4.");
+        return false;
+    }
+
+    if (!DatabaseConfigElement::checkReadyForUse())
+    {
+        d->lastError = DatabaseConfigElement::errorMessage();
         return false;
     }
 

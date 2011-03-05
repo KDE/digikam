@@ -46,22 +46,27 @@ namespace Digikam
 {
 
 AntiVignetting::AntiVignetting(QObject* parent)
-    : BatchTool("AntiVignetting", EnhanceTool, parent)
+    : BatchTool("AntiVignetting", EnhanceTool, parent),
+      m_settingsView(0)
 {
     setToolTitle(i18n("Anti-Vignetting"));
     setToolDescription(i18n("A tool to remove/add vignetting to photograph."));
     setToolIcon(KIcon(SmallIcon("antivignetting")));
-
-    QWidget* box   = new QWidget;
-    m_settingsView = new AntiVignettingSettings(box);
-    setSettingsWidget(box);
-
-    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 AntiVignetting::~AntiVignetting()
 {
+}
+
+QWidget* AntiVignetting::createSettingsWidget()
+{
+    QWidget* box   = new QWidget;
+    m_settingsView = new AntiVignettingSettings(box);
+
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    return box;
 }
 
 BatchToolSettings AntiVignetting::defaultSettings()

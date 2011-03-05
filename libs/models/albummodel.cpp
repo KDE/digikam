@@ -47,11 +47,14 @@ AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject* parent)
 {
     m_columnHeader = i18n("My Albums");
     setupThumbnailLoading();
+
+    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
+            this, SLOT(setCountMap(const QMap<int, int>&)));
+    setCountMap(AlbumManager::instance()->getPAlbumsCount());
 }
 
 AlbumModel::~AlbumModel()
 {
-
 }
 
 PAlbum* AlbumModel::albumForIndex(const QModelIndex& index) const
@@ -79,7 +82,17 @@ TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject* parent)
 {
     m_columnHeader = i18n("My Tags");
     setupThumbnailLoading();
+
+    connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
+            this, SLOT(setCountMap(const QMap<int, int>&)));
+    setCountMap(AlbumManager::instance()->getTAlbumsCount());
 }
+
+void TagModel::setColumnHeader(const QString& header)
+{
+    m_columnHeader = header;
+}
+
 
 TAlbum* TagModel::albumForIndex(const QModelIndex& index) const
 {

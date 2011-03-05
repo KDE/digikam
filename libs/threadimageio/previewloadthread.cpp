@@ -32,9 +32,11 @@
 namespace Digikam
 {
 
-PreviewLoadThread::PreviewLoadThread()
-    : m_displayingWidget(0)
+PreviewLoadThread::PreviewLoadThread(QObject* parent)
+    : ManagedLoadSaveThread(parent),
+      m_displayingWidget(0)
 {
+    m_loadingPolicy = LoadingPolicyFirstRemovePrevious;
 }
 
 LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, int size, bool exifRotate)
@@ -65,6 +67,13 @@ void PreviewLoadThread::load(const QString& filePath, int size, bool exifRotate)
     load(createLoadingDescription(filePath, size, exifRotate));
 }
 
+void PreviewLoadThread::loadFastButLarge(const QString& filePath, int size, bool exifRotate)
+{
+    LoadingDescription description = createLoadingDescription(filePath, size, exifRotate);
+    description.previewParameters.flags |= LoadingDescription::PreviewParameters::FastButLarge;
+    load(description);
+}
+
 void PreviewLoadThread::loadHighQuality(const QString& filePath, bool exifRotate)
 {
     load(filePath, 0, exifRotate);
@@ -73,7 +82,7 @@ void PreviewLoadThread::loadHighQuality(const QString& filePath, bool exifRotate
 void PreviewLoadThread::load(LoadingDescription description)
 {
     // creates a PreviewLoadingTask, which uses different mechanisms than a normal loading task
-    ManagedLoadSaveThread::loadPreview(description);
+    ManagedLoadSaveThread::loadPreview(description, m_loadingPolicy);
 }
 
 void PreviewLoadThread::setDisplayingWidget(QWidget* widget)

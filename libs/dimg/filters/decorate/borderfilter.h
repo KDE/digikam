@@ -9,6 +9,7 @@
  * Copyright 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -129,8 +130,33 @@ public:
 
     /** Constructor using settings to preserve aspect ratio of image.
      */
+    explicit BorderFilter(QObject* parent = 0);
     explicit BorderFilter(DImg* orgImage, QObject* parent=0, const BorderContainer& settings = BorderContainer());
     virtual ~BorderFilter();
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:BorderFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Border Tool");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 

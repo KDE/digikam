@@ -73,6 +73,8 @@ public Q_SLOTS:
     void setRecurseAlbums(bool recursiveListing);
     void setRecurseTags(bool recursiveListing);
 
+    void setSpecialTagListing(const QString& specialListing);
+
 Q_SIGNALS:
 
     void listedAlbumChanged(Album* album);
@@ -102,7 +104,7 @@ protected Q_SLOTS:
 
 protected:
 
-    void startListJob(const KUrl& url);
+    void startListJob(Album* album);
 
 private:
 

@@ -64,10 +64,11 @@ public:
     void setPixmap(const QPixmap& p);
     QPixmap pixmap();
 
-    /// Set visible, possibly with animation
-    void animateVisible(bool visible);
-    /// Set visible without animation
-    void setDirectlyVisible(bool visible);
+    /**
+     * Sets a primary condition for the button to be shown.
+     * If false, animateVisible() will have no effect.
+     */
+    void setShallBeShown(bool show);
 
     /** This parameter determines the behavior when the animation
      *  to hide the widget has finished:
@@ -77,6 +78,13 @@ public:
      *  which removes the widget for layouting etc.
      *  Default: false */
     void stayVisibleWhenAnimatedOut(bool stayVisible);
+
+public Q_SLOTS:
+
+    /// Set visible, possibly with animation
+    void animateVisible(bool visible);
+    /// Set visible without animation
+    void setDirectlyVisible(bool visible);
 
 Q_SIGNALS:
 
@@ -89,14 +97,13 @@ protected:
 
 protected Q_SLOTS:
 
-    void animationFinished();
+    void visibleChanged();
     void updateAnimationSettings();
 
 private:
 
-    QTimeLine* m_timeline;
-    QPixmap    m_pixmap;
-    bool       m_stayAlwaysVisible;
+    class AnimatedClearButtonPriv;
+    AnimatedClearButtonPriv* const d;
 };
 
 // -------------------------------------------------------------------------

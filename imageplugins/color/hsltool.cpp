@@ -196,7 +196,7 @@ void HSLTool::prepareFinal()
 void HSLTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("HSL Adjustments"), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("HSL Adjustments"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 }  // namespace DigikamColorImagePlugin

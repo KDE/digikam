@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QRectF>
 
 // Local includes
 
@@ -249,6 +250,60 @@ int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right, So
         }
         default:
             return 1;
+    }
+}
+
+bool ImageSortSettings::lessThan(const QVariant& left, const QVariant& right) const
+{
+    if (left.type() != right.type())
+    {
+        return false;
+    }
+
+    switch (left.type())
+    {
+        case QVariant::Int:
+            return compareByOrder(left.toInt(), right.toInt(), currentSortOrder);
+        case QVariant::UInt:
+            return compareByOrder(left.toUInt(), right.toUInt(), currentSortOrder);
+        case QVariant::LongLong:
+            return compareByOrder(left.toLongLong(), right.toLongLong(), currentSortOrder);
+        case QVariant::ULongLong:
+            return compareByOrder(left.toULongLong(), right.toULongLong(), currentSortOrder);
+        case QVariant::Double:
+            return compareByOrder(left.toDouble(), right.toDouble(), currentSortOrder);
+        case QVariant::Date:
+            return compareByOrder(left.toDate(), right.toDate(), currentSortOrder);
+        case QVariant::DateTime:
+            return compareByOrder(left.toDateTime(), right.toDateTime(), currentSortOrder);
+        case QVariant::Time:
+            return compareByOrder(left.toTime(), right.toTime(), currentSortOrder);
+        case QVariant::Rect:
+        case QVariant::RectF:
+        {
+            QRectF rectLeft = left.toRectF();
+            QRectF rectRight = right.toRectF();
+            int result;
+
+            if ((result = compareByOrder(rectLeft.top(), rectRight.top(), currentSortOrder)) != 0)
+            {
+                return result < 0;
+            }
+
+            if ((result = compareByOrder(rectLeft.left(), rectRight.left(), currentSortOrder)) != 0)
+            {
+                return result < 0;
+            }
+
+            QSizeF sizeLeft = rectLeft.size(), sizeRight = rectRight.size();
+
+            if ((result = compareByOrder(sizeLeft.width()*sizeLeft.height(), sizeRight.width()*sizeRight.height(), currentSortOrder)) != 0)
+            {
+                return result < 0;
+            }
+        }
+        default:
+            return naturalCompare(left.toString(), right.toString(), currentSortOrder, sortCaseSensitivity);
     }
 }
 

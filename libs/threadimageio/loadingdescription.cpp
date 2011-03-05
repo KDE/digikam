@@ -32,9 +32,9 @@ namespace Digikam
 
 bool LoadingDescription::PreviewParameters::operator==(const PreviewParameters& other) const
 {
-    return type       == other.type &&
-           size       == other.size &&
-           exifRotate == other.exifRotate;
+    return type  == other.type &&
+           size  == other.size &&
+           flags == other.flags;
 }
 
 bool LoadingDescription::PostProcessingParameters::operator==(const PostProcessingParameters& other) const
@@ -101,8 +101,12 @@ LoadingDescription::LoadingDescription(const QString& filePath, int size, bool e
     rawDecodingHint                          = RawDecodingDefaultSettings;
     previewParameters.type                   = type;
     previewParameters.size                   = size;
-    previewParameters.exifRotate             = exifRotate;
     postProcessingParameters.colorManagement = cm;
+
+    if (exifRotate)
+    {
+        previewParameters.flags |= PreviewParameters::ExifRotate;
+    }
 }
 
 QString LoadingDescription::cacheKey() const
@@ -114,6 +118,12 @@ QString LoadingDescription::cacheKey() const
     if (previewParameters.type == PreviewParameters::Thumbnail)
     {
         return filePath + "-thumbnail-" + QString::number(previewParameters.size);
+    }
+    else if (previewParameters.type == PreviewParameters::DetailThumbnail)
+    {
+        QRect rect =  previewParameters.extraParameter.toRect();
+        QString rectString = QString("%1,%2-%3x%4-").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
+        return filePath + "-thumbnail-" + rectString + QString::number(previewParameters.size);
     }
 
     // DImg loading
@@ -172,7 +182,8 @@ QStringList LoadingDescription::lookupCacheKeys() const
     // Build a hierarchy which cache entries may be used for this LoadingDescription.
 
     // Thumbnail loading. No other cache key included!
-    if (previewParameters.type == PreviewParameters::Thumbnail)
+    if (previewParameters.type == PreviewParameters::Thumbnail
+        || previewParameters.type == PreviewParameters::DetailThumbnail)
     {
         return QStringList() << cacheKey();
     }
@@ -259,7 +270,7 @@ bool LoadingDescription::isReducedVersion() const
 bool LoadingDescription::operator==(const LoadingDescription& other) const
 {
     return filePath                 == other.filePath                   &&
-           rawDecodingSettings      == other.rawDecodingSettings.rawPrm &&
+           rawDecodingSettings      == other.rawDecodingSettings        &&
            previewParameters        == other.previewParameters          &&
            postProcessingParameters == other.postProcessingParameters;
 }
@@ -292,7 +303,8 @@ bool LoadingDescription::equalsOrBetterThan(const LoadingDescription& other) con
 
 bool LoadingDescription::isThumbnail() const
 {
-    return previewParameters.type == PreviewParameters::Thumbnail;
+    return previewParameters.type == PreviewParameters::Thumbnail
+           || previewParameters.type == PreviewParameters::DetailThumbnail;
 }
 
 bool LoadingDescription::isPreviewImage() const
@@ -321,6 +333,7 @@ QStringList LoadingDescription::possibleCacheKeys(const QString& filePath)
 
 QStringList LoadingDescription::possibleThumbnailCacheKeys(const QString& filePath)
 {
+    //FIXME: With details, there is an endless number of possible cache keys. Need different approach.
     QStringList keys;
     // there are 256 possible keys...
     QString path = filePath + "-thumbnail-";

@@ -38,6 +38,7 @@
 
 #include "dimg.h"
 #include "dcolor.h"
+#include "filteraction.h"
 #include "photoinfocontainer.h"
 #include "digikam_export.h"
 #include "globals.h"
@@ -101,7 +102,7 @@ public:
         If w == -1 and h == -1, the size is unchanged.
         Caller is an i18n'ed string that will be shown as the undo/redo action name.
     */
-    void   putOriginalImage(const QString& caller, uchar* data, int w=-1, int h=-1);
+    void   putOriginalImage(const QString& caller, const FilterAction& action, uchar* data, int w=-1, int h=-1);
 
     /** Set the color profile of the original image. */
     void   putOriginalIccProfile(const IccProfile& profile);
@@ -113,7 +114,7 @@ public:
         No ownership of the data pointer is assumed.
         Caller is an i18n'ed string that will be shown as the undo/redo action name.
     */
-    void   putImageSelection(const QString& caller, uchar* data);
+    void   putImageSelection(const QString& caller, const FilterAction& action, uchar* data);
 
     /** Replace the stored target preview data with the given data.
         The characteristics of the data must match the characteristics of the current

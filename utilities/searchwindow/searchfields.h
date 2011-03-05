@@ -6,7 +6,8 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,10 +54,12 @@ namespace Digikam
 class AlbumSelectComboBox;
 class SearchFieldGroup;
 class SqueezedComboBox;
-class KDateEdit;
+class DDateEdit;
 class ChoiceSearchModel;
 class ChoiceSearchComboBox;
 class RatingComboBox;
+class PickLabelFilter;
+class ColorLabelFilter;
 
 class SearchField : public QObject, public VisibilityObject
 {
@@ -276,9 +279,9 @@ protected Q_SLOTS:
 protected:
 
     QTimeEdit* m_firstTimeEdit;
-    KDateEdit* m_firstDateEdit;
+    DDateEdit* m_firstDateEdit;
     QTimeEdit* m_secondTimeEdit;
-    KDateEdit* m_secondDateEdit;
+    DDateEdit* m_secondDateEdit;
     QLabel*    m_betweenLabel;
 
     Type       m_type;
@@ -471,6 +474,33 @@ public:
 
     virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
+};
+
+//-----------------------------------------------------------------------------
+
+class SearchFieldLabels : public SearchField
+{
+    Q_OBJECT
+
+public:
+
+    SearchFieldLabels(QObject* parent);
+
+    virtual void setupValueWidgets(QGridLayout* layout, int row, int column);
+    virtual void read(SearchXmlCachingReader& reader);
+    virtual void write(SearchXmlWriter& writer);
+    virtual void reset();
+    virtual void setValueWidgetsVisible(bool visible);
+    virtual QList<QRect> valueWidgetRects() const;
+
+protected Q_SLOTS:
+
+    void updateState();
+
+protected:
+
+    PickLabelFilter*  m_pickLabelFilter;
+    ColorLabelFilter* m_colorLabelFilter;
 };
 
 } // namespace Digikam

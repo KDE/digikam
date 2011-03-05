@@ -96,15 +96,17 @@ Q_SIGNALS:
 protected:
 
     /**
-     * You must do one of the following:
-     * 1) Call this method from a derived class's destructor
+     * If you are deleting data in your destructor which is accessed from the thread,
+     * do one of the following from your destructor to guarantee a safe shutdown:
+     * 1) Call this method
      * 2) Call stop() and wait(), knowing that nothing will
      *    call start() anymore after this
-     * 3) You know the thread will never be running at destruction.
+     * 3) Be sure the thread will never be running at destruction.
+     * Note: This irrevocably stops this object.
      * Note: It is not sufficient that your parent class does this.
      * Calling this method, or providing one of the above mentioned
      * equivalent guarantees, must be done by every
-     * single last class in the hierarchy with an implemented destructor.
+     * single last class in the hierarchy with an implemented destructor deleting data.
      * (the base class destructor is always called after the derived class)
      */
     void shutDown();

@@ -47,34 +47,39 @@ public:
 
     enum Page
     {
-        LastPageUsed = -1,
+        LastPageUsed    = -1,
 
-        CollectionsPage = 0,
-        DatabasePage,
+        DatabasePage    = 0,
+        CollectionsPage,
         AlbumViewPage,
         CategoryPage,
         ToolTipPage,
+        FaceTagsPage,
         MetadataPage,
         TemplatePage,
         MimePage,
-        LightTablePage,
         EditorPage,
+        VersioningPage,
         DcrawPage,
         IOFilesPage,
-        SlideshowPage,
         ICCPage,
-        KipiPluginsPage,
+        LightTablePage,
+        SlideshowPage,
         CameraPage,
+        KipiPluginsPage,
+        ScriptManagerPage,
         MiscellaneousPage,
 
         SetupPageEnumLast
     };
 
     /** Show a setup dialog. The specified page will be selected.
-        True is returned if the dialog was closed with Ok. */
+        True is returned if the dialog was closed with Ok.
+     */
     static bool exec(Page page=LastPageUsed);
     static bool exec(QWidget* parent, Page page=LastPageUsed);
-    /** Show a setup dialog. Only the specified page will be available. */
+    /** Show a setup dialog. Only the specified page will be available.
+     */
     static bool execSinglePage(Page page);
     static bool execSinglePage(QWidget* parent, Page page);
 

@@ -62,8 +62,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "mixerfilter.h"
-#include "curvesfilter.h"
+#include "colorfxfilter.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
@@ -78,16 +77,6 @@ namespace DigikamFxFiltersImagePlugin
 
 class ColorFxTool::ColorFxToolPriv
 {
-
-public:
-
-    enum ColorFXTypes
-    {
-        Solarize=0,
-        Vivid,
-        Neon,
-        FindEdges
-    };
 
 public:
 
@@ -134,7 +123,7 @@ const QString ColorFxTool::ColorFxToolPriv::configIterationAdjustmentEntry("Iter
 // --------------------------------------------------------
 
 ColorFxTool::ColorFxTool(QObject* parent)
-    : EditorTool(parent),
+    : EditorToolThreaded(parent),
       d(new ColorFxToolPriv)
 {
     setObjectName("coloreffects");
@@ -161,7 +150,7 @@ ColorFxTool::ColorFxTool(QObject* parent)
     d->effectType->addItem(i18n("Vivid"));
     d->effectType->addItem(i18n("Neon"));
     d->effectType->addItem(i18n("Find Edges"));
-    d->effectType->setDefaultIndex(ColorFxToolPriv::Solarize);
+    d->effectType->setDefaultIndex(ColorFXFilter::Solarize);
     d->effectType->setWhatsThis(i18n("<p>Select the effect type to apply to the image here.</p>"
                                      "<p><b>Solarize</b>: simulates solarization of photograph.</p>"
                                      "<p><b>Vivid</b>: simulates the Velvia(tm) slide film colors.</p>"
@@ -298,7 +287,7 @@ void ColorFxTool::slotEffectTypeChanged(int type)
 
     switch (type)
     {
-        case ColorFxToolPriv::Solarize:
+        case ColorFXFilter::Solarize:
             d->levelInput->setRange(0, 100, 1);
             d->levelInput->setSliderEnabled(true);
             d->levelInput->setValue(0);
@@ -306,7 +295,7 @@ void ColorFxTool::slotEffectTypeChanged(int type)
             d->iterationLabel->setEnabled(false);
             break;
 
-        case ColorFxToolPriv::Vivid:
+        case ColorFXFilter::Vivid:
             d->levelInput->setRange(0, 50, 1);
             d->levelInput->setSliderEnabled(true);
             d->levelInput->setValue(5);
@@ -314,8 +303,8 @@ void ColorFxTool::slotEffectTypeChanged(int type)
             d->iterationLabel->setEnabled(false);
             break;
 
-        case ColorFxToolPriv::Neon:
-        case ColorFxToolPriv::FindEdges:
+        case ColorFXFilter::Neon:
+        case ColorFXFilter::FindEdges:
             d->levelInput->setRange(0, 5, 1);
             d->levelInput->setSliderEnabled(true);
             d->levelInput->setValue(3);
@@ -333,375 +322,109 @@ void ColorFxTool::slotEffectTypeChanged(int type)
     slotEffect();
 }
 
-void ColorFxTool::slotEffect()
+void ColorFxTool::prepareEffect()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    d->effectTypeLabel->setEnabled(false);
+    d->effectType->setEnabled(false);
+    d->levelInput->setEnabled(false);
+    d->levelLabel->setEnabled(false);
+    d->iterationInput->setEnabled(false);
+    d->iterationLabel->setEnabled(false);
 
-    d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
+    int l = d->levelInput->value();
+    int f = d->iterationInput->value();
+    int e = d->effectType->currentIndex();
 
-    if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
-
-    ImageIface* iface         = d->previewWidget->imageIface();
-    d->destinationPreviewData = iface->getPreviewImage();
-    int w                     = iface->previewWidth();
-    int h                     = iface->previewHeight();
-    bool sb                   = iface->previewSixteenBit();
-
-    colorEffect(d->destinationPreviewData, w, h, sb);
-
-    iface->putPreviewImage(d->destinationPreviewData);
-    d->previewWidget->updatePreview();
-
-    // Update histogram.
-
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
-
-    kapp->restoreOverrideCursor();
-}
-
-void ColorFxTool::finalRendering()
-{
-    kapp->setOverrideCursor( Qt::WaitCursor );
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar* data       = iface->getOriginalImage();
-    int w             = iface->originalWidth();
-    int h             = iface->originalHeight();
-    bool sb           = iface->originalSixteenBit();
+    uchar* data       = iface->getPreviewImage();
+    DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
+               iface->previewHasAlpha(), data);
+    delete [] data;
 
-    if (data)
-    {
-        colorEffect(data, w, h, sb);
-        QString name;
-
-        switch (d->effectType->currentIndex())
-        {
-            case ColorFxToolPriv::Solarize:
-                name = i18n("Solarize");
-                break;
-
-            case ColorFxToolPriv::Vivid:
-                name = i18n("Vivid");
-                break;
-
-            case ColorFxToolPriv::Neon:
-                name = i18n("Neon");
-                break;
-
-            case ColorFxToolPriv::FindEdges:
-                name = i18n("Find Edges");
-                break;
-        }
-
-        iface->putOriginalImage(name, data);
-        delete [] data;
-    }
-
-    kapp->restoreOverrideCursor();
+    setFilter(new ColorFXFilter(&image, this, e, l, f));
 }
 
-void ColorFxTool::colorEffect(uchar* data, int w, int h, bool sb)
+void ColorFxTool::prepareFinal()
 {
+    d->effectTypeLabel->setEnabled(false);
+    d->effectType->setEnabled(false);
+    d->levelInput->setEnabled(false);
+    d->levelLabel->setEnabled(false);
+    d->iterationInput->setEnabled(false);
+    d->iterationLabel->setEnabled(false);
+
+    int l = d->levelInput->value();
+    int f = d->iterationInput->value();
+    int e = d->effectType->currentIndex();
+
+    ImageIface iface(0, 0);
+
+    setFilter(new ColorFXFilter(iface.getOriginalImg(), this, e, l, f));
+}
+
+void ColorFxTool::putPreviewData()
+{
+    ImageIface* iface = d->previewWidget->imageIface();
+    DImg preview = filter()->getTargetImage();
+    DImg imDest  = preview.smoothScale(iface->previewWidth(), iface->previewHeight());
+    iface->putPreviewImage(imDest.bits());
+    d->gboxSettings->histogramBox()->histogram()->updateData(preview.bits(), preview.width(), preview.height(),
+            preview.sixteenBit(), 0, 0, 0, false);
+
+    d->previewWidget->updatePreview();
+}
+
+void ColorFxTool::putFinalData()
+{
+    ImageIface iface(0, 0);
+
+    QString name;
+
     switch (d->effectType->currentIndex())
     {
-        case ColorFxToolPriv::Solarize:
-            solarize(d->levelInput->value(), data, w, h, sb);
+        case ColorFXFilter::Solarize:
+            name = i18n("Solarize");
             break;
 
-        case ColorFxToolPriv::Vivid:
-            vivid(d->levelInput->value(), data, w, h, sb);
+        case ColorFXFilter::Vivid:
+            name = i18n("Vivid");
             break;
 
-        case ColorFxToolPriv::Neon:
-            neon(data, w, h, sb, d->levelInput->value(), d->iterationInput->value());
+        case ColorFXFilter::Neon:
+            name = i18n("Neon");
             break;
 
-        case ColorFxToolPriv::FindEdges:
-            findEdges(data, w, h, sb, d->levelInput->value(), d->iterationInput->value());
+        case ColorFXFilter::FindEdges:
+            name = i18n("Find Edges");
             break;
     }
+
+    iface.putOriginalImage(name, filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
-void ColorFxTool::solarize(int factor, uchar* data, int w, int h, bool sb)
+void ColorFxTool::renderingFinished()
 {
-    bool stretch = true;
+    d->effectTypeLabel->setEnabled(true);
+    d->effectType->setEnabled(true);
+    d->levelInput->setEnabled(true);
+    d->levelLabel->setEnabled(true);
+    d->iterationInput->setEnabled(true);
+    d->iterationLabel->setEnabled(true);
 
-    if (!sb)        // 8 bits image.
+    switch (d->effectType->currentIndex())
     {
-        uint threshold = (uint)((100-factor)*(255+1)/100);
-        threshold      = qMax((uint)1, threshold);
-        uchar* ptr     = data;
-        uchar  a, r, g, b;
+        case ColorFXFilter::Solarize:
+        case ColorFXFilter::Vivid:
+            d->iterationInput->setEnabled(false);
+            d->iterationLabel->setEnabled(false);
+            break;
 
-        for (int x=0 ; x < w*h ; ++x)
-        {
-            b = ptr[0];
-            g = ptr[1];
-            r = ptr[2];
-            a = ptr[3];
-
-            if (stretch)
-            {
-                r = (r > threshold) ? (255-r)*255/(255-threshold) : r*255/threshold;
-                g = (g > threshold) ? (255-g)*255/(255-threshold) : g*255/threshold;
-                b = (b > threshold) ? (255-b)*255/(255-threshold) : b*255/threshold;
-            }
-            else
-            {
-                if (r > threshold)
-                {
-                    r = (255-r);
-                }
-
-                if (g > threshold)
-                {
-                    g = (255-g);
-                }
-
-                if (b > threshold)
-                {
-                    b = (255-b);
-                }
-            }
-
-            ptr[0] = b;
-            ptr[1] = g;
-            ptr[2] = r;
-            ptr[3] = a;
-
-            ptr += 4;
-        }
+        case ColorFXFilter::Neon:
+        case ColorFXFilter::FindEdges:
+            d->iterationInput->setEnabled(true);
+            d->iterationLabel->setEnabled(true);
+            break;
     }
-    else                            // 16 bits image.
-    {
-        uint threshold      = (uint)((100-factor)*(65535+1)/100);
-        threshold           = qMax((uint)1, threshold);
-        unsigned short* ptr = (unsigned short*)data;
-        unsigned short  a, r, g, b;
-
-        for (int x=0 ; x < w*h ; ++x)
-        {
-            b = ptr[0];
-            g = ptr[1];
-            r = ptr[2];
-            a = ptr[3];
-
-            if (stretch)
-            {
-                r = (r > threshold) ? (65535-r)*65535/(65535-threshold) : r*65535/threshold;
-                g = (g > threshold) ? (65535-g)*65535/(65535-threshold) : g*65535/threshold;
-                b = (b > threshold) ? (65535-b)*65535/(65535-threshold) : b*65535/threshold;
-            }
-            else
-            {
-                if (r > threshold)
-                {
-                    r = (65535-r);
-                }
-
-                if (g > threshold)
-                {
-                    g = (65535-g);
-                }
-
-                if (b > threshold)
-                {
-                    b = (65535-b);
-                }
-            }
-
-            ptr[0] = b;
-            ptr[1] = g;
-            ptr[2] = r;
-            ptr[3] = a;
-
-            ptr += 4;
-        }
-    }
-}
-
-void ColorFxTool::vivid(int factor, uchar* data, int w, int h, bool sb)
-{
-    float amount = factor/100.0;
-
-    // Apply Channel Mixer adjustments.
-
-    MixerContainer settings;
-    settings.redRedGain     = 1.0 + amount + amount;
-    settings.redGreenGain   = (-1.0)*amount;
-    settings.redBlueGain    = (-1.0)*amount;
-    settings.greenRedGain   = (-1.0)*amount;
-    settings.greenGreenGain = 1.0 + amount + amount;
-    settings.greenBlueGain  = (-1.0)*amount;
-    settings.blueRedGain    = (-1.0)*amount;
-    settings.blueGreenGain  = (-1.0)*amount;
-    settings.blueBlueGain   = 1.0 + amount + amount;
-
-    DImg img(w, h, sb, true, data);
-    MixerFilter mixer(&img, 0L, settings);
-    mixer.startFilterDirectly();
-    DImg mixed = mixer.getTargetImage();
-
-    // And now apply the curve correction.
-
-    CurvesContainer prm;
-    prm.curvesType = ImageCurves::CURVE_SMOOTH;
-    prm.lumCurveVals.resize(18);
-
-    if (!sb)        // 8 bits image.
-    {
-        prm.lumCurveVals.setPoint(0,  QPoint(0,   0));
-        prm.lumCurveVals.setPoint(5,  QPoint(63,  60));
-        prm.lumCurveVals.setPoint(10, QPoint(191, 194));
-        prm.lumCurveVals.setPoint(16, QPoint(255, 255));
-    }
-    else            // 16 bits image.
-    {
-        prm.lumCurveVals.setPoint(0,  QPoint(0,     0));
-        prm.lumCurveVals.setPoint(5,  QPoint(16128, 15360));
-        prm.lumCurveVals.setPoint(10, QPoint(48896, 49664));
-        prm.lumCurveVals.setPoint(16, QPoint(65535, 65535));
-    }
-
-    CurvesFilter curves(&mixed, 0L, prm);
-    curves.startFilterDirectly();
-    DImg tgt = curves.getTargetImage();
-
-    memcpy(data, tgt.bits(), tgt.numBytes());
-}
-
-/* Function to apply the Neon effect
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * Intensity        => Intensity value
- * BW               => Border Width
- *
- * Theory           => Wow, this is a great effect, you've never seen a Neon effect
- *                     like this on PSC. Is very similar to Growing Edges (photoshop)
- *                     Some pictures will be very interesting
- */
-void ColorFxTool::neon(uchar* data, int w, int h, bool sb, int Intensity, int BW)
-{
-    neonFindEdges(data, w, h, sb, true, Intensity, BW);
-}
-
-/* Function to apply the Find Edges effect
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * Intensity        => Intensity value
- * BW               => Border Width
- *
- * Theory           => Wow, another Photoshop filter (FindEdges). Do you understand
- *                     Neon effect ? This is the same engine, but is inversed with
- *                     255 - color.
- */
-void ColorFxTool::findEdges(uchar* data, int w, int h, bool sb, int Intensity, int BW)
-{
-    neonFindEdges(data, w, h, sb, false, Intensity, BW);
-}
-
-// Implementation of neon and FindEdges. They share 99% of their code.
-void ColorFxTool::neonFindEdges(uchar* data, int w, int h, bool sb, bool neon, int Intensity, int BW)
-{
-    int Width       = w;
-    int Height      = h;
-    bool sixteenBit = sb;
-    int bytesDepth  = sb ? 8 : 4;
-    uchar* pResBits = new uchar[Width*Height*bytesDepth];
-
-    Intensity = (Intensity < 0) ? 0 : (Intensity > 5) ? 5 : Intensity;
-    BW        = (BW < 1) ? 1 : (BW > 5) ? 5 : BW;
-
-    uchar* ptr, *ptr1, *ptr2;
-
-    // these must be uint, we need full 2^32 range for 16 bit
-    uint color_1, color_2, colorPoint, colorOther1, colorOther2;
-
-    // initial copy
-    memcpy (pResBits, data, Width*Height*bytesDepth);
-
-    double intensityFactor = sqrt( 1 << Intensity );
-
-    for (int h = 0; h < Height; ++h)
-    {
-        for (int w = 0; w < Width; ++w)
-        {
-            ptr  = pResBits + getOffset(Width, w, h, bytesDepth);
-            ptr1 = pResBits + getOffset(Width, w + Lim_Max (w, BW, Width), h, bytesDepth);
-            ptr2 = pResBits + getOffset(Width, w, h + Lim_Max (h, BW, Height), bytesDepth);
-
-            if (sixteenBit)
-            {
-                for (int k = 0; k <= 2; ++k)
-                {
-                    colorPoint  = ((unsigned short*)ptr)[k];
-                    colorOther1 = ((unsigned short*)ptr1)[k];
-                    colorOther2 = ((unsigned short*)ptr2)[k];
-                    color_1     = (colorPoint - colorOther1) * (colorPoint - colorOther1);
-                    color_2     = (colorPoint - colorOther2) * (colorPoint - colorOther2);
-
-                    // old algorithm was
-                    // sqrt ((color_1 + color_2) << Intensity)
-                    // As (a << I) = a * (1 << I) = a * (2^I), and we can split the square root
-
-                    if (neon)
-                    {
-                        ((unsigned short*)ptr)[k] = CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
-                    }
-                    else
-                    {
-                        ((unsigned short*)ptr)[k] = 65535 - CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
-                    }
-                }
-            }
-            else
-            {
-                for (int k = 0; k <= 2; ++k)
-                {
-                    colorPoint  = ptr[k];
-                    colorOther1 = ptr1[k];
-                    colorOther2 = ptr2[k];
-                    color_1     = (colorPoint - colorOther1) * (colorPoint - colorOther1);
-                    color_2     = (colorPoint - colorOther2) * (colorPoint - colorOther2);
-
-                    if (neon)
-                    {
-                        ptr[k] = CLAMP0255 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
-                    }
-                    else
-                    {
-                        ptr[k] = 255 - CLAMP0255 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
-                    }
-                }
-            }
-        }
-    }
-
-    memcpy (data, pResBits, Width*Height*bytesDepth);
-    delete [] pResBits;
-}
-
-int ColorFxTool::getOffset(int Width, int X, int Y, int bytesDepth)
-{
-    return (Y * Width * bytesDepth) + (X * bytesDepth);
-}
-
-inline int ColorFxTool::Lim_Max(int Now, int Up, int Max)
-{
-    --Max;
-
-    while (Now > Max - Up)
-    {
-        --Up;
-    }
-
-    return (Up);
 }
 
 }  // namespace DigikamFxFiltersImagePlugin

@@ -66,6 +66,11 @@ QAbstractItemView* ItemViewToolTip::view() const
     return d->view;
 }
 
+QAbstractItemModel* ItemViewToolTip::model() const
+{
+    return d->view ? d->view->model() : 0;
+}
+
 QModelIndex ItemViewToolTip::currentIndex() const
 {
     return d->index;

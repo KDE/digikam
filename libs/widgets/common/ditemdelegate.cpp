@@ -32,6 +32,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QCache>
 #include <QPainter>
 
@@ -64,7 +65,7 @@ public:
 
 };
 
-DItemDelegate::DItemDelegate(DCategorizedView* parent)
+DItemDelegate::DItemDelegate(QObject* parent)
     : QAbstractItemDelegate(parent), d(new DItemDelegatePriv)
 {
 }
@@ -102,7 +103,7 @@ QPixmap DItemDelegate::thumbnailBorderPixmap(const QSize& pixSize) const
 
 QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
                                       const QList<QModelIndex>& indexes,
-                                      const QPixmap& suggestedPixmap) const
+                                      const QPixmap& suggestedPixmap)
 {
     QPixmap icon = suggestedPixmap;
 
@@ -111,32 +112,66 @@ QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
         icon = QPixmap(DesktopIcon("image-jp2", KIconLoader::SizeMedium));
     }
 
-    if (qMax(icon.width(), icon.height()) > KIconLoader::SizeMedium)
+    if (qMax(icon.width(), icon.height()) > KIconLoader::SizeHuge)
     {
-        icon = icon.scaled(KIconLoader::SizeMedium, KIconLoader::SizeMedium,
+        icon = icon.scaled(KIconLoader::SizeHuge, KIconLoader::SizeHuge,
                            Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
     int w = icon.width();
     int h = icon.height();
 
-    QPixmap pix(w+4, h+4);
-    QString text(QString::number(indexes.count()));
+    const int borderWidth = 6;
 
+    QRect   rect(0, 0, w + borderWidth*2, h + borderWidth*2);
+    QRect   pixmapRect(borderWidth, borderWidth, w, h);
+
+    QPixmap pix(rect.size());
     QPainter p(&pix);
-    p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
+    // border
+    /*p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
     p.setPen(QPen(Qt::black, 1));
-    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
-    p.drawPixmap(2, 2, icon);
-    QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft|Qt::AlignTop, text);
-    r.setWidth(qMax(r.width(), r.height()));
-    r.setHeight(qMax(r.width(), r.height()));
-    p.fillRect(r, QColor(0, 80, 0));
-    p.setPen(Qt::white);
+    p.drawRect(0, 0, pix.width()-1, pix.height()-1);*/
+
+    QStyleOption opt(option);
+    opt.rect = rect;
+    qApp->style()->drawPrimitive(QStyle::PE_PanelTipLabel, &opt, &p);
+
+    p.drawPixmap(pixmapRect.topLeft(), icon);
+
     QFont f(option.font);
     f.setBold(true);
     p.setFont(f);
-    p.drawText(r, Qt::AlignCenter, text);
+
+    if (indexes.size() > 1)
+    {
+        QRect textRect;
+        QString text;
+
+        QString text1 = QString::number(indexes.count());
+        QString text2(i18np("1 Image", "%1 Images", indexes.count()));
+        QRect r1 = p.boundingRect(pixmapRect, Qt::AlignLeft|Qt::AlignTop, text1).adjusted(0,0,1,1);
+        QRect r2 = p.boundingRect(pixmapRect, Qt::AlignLeft|Qt::AlignTop, text2).adjusted(0,0,1,1);
+
+        if (r2.width() > pixmapRect.width() || r2.height() > pixmapRect.height())
+        {
+            textRect = r1;
+            text = text1;
+            int rectSize = qMax(r1.width(), r1.height());
+            textRect = QRect(0, 0, rectSize, rectSize);
+        }
+        else
+        {
+            textRect = QRect(0, 0, r2.width(), r2.height());
+            text = text2;
+        }
+
+        textRect.moveLeft((pixmapRect.width() - textRect.width()) / 2 + pixmapRect.x());
+        textRect.moveTop((pixmapRect.height() - textRect.height()) * 4 / 5);
+        p.fillRect(textRect, QColor(0, 0, 0, 128));
+        p.setPen(Qt::white);
+        p.drawText(textRect, Qt::AlignCenter, text);
+    }
 
     return pix;
 }

@@ -44,6 +44,7 @@
 #include <kcursor.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kpixmapsequence.h>
 
 // Local includes
 
@@ -81,7 +82,7 @@ public:
         inInitialRepaintWait = false;
         progressCount        = 0;
         progressTimer        = 0;
-        progressPix          = SmallIcon("process-working", 22);
+        progressPix          = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
     }
 
     bool    inInitialRepaintWait;
@@ -110,7 +111,7 @@ public:
 
     QTimer* progressTimer;
 
-    QPixmap progressPix;
+    KPixmapSequence progressPix;
 
     DColor  colorGuide;
 
@@ -532,10 +533,10 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     {
         // In first, we draw an animation.
 
-        QPixmap anim(d->progressPix.copy(0, d->progressCount*22, 22, 22));
+        QPixmap anim(d->progressPix.frameAt(d->progressCount));
         d->progressCount++;
 
-        if (d->progressCount == 8)
+        if (d->progressCount >= d->progressPix.frameCount())
         {
             d->progressCount = 0;
         }

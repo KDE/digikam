@@ -7,7 +7,7 @@
  * Description : digiKam image editor GUI
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,34 +57,36 @@ public:
 
     ~ImageWindow();
 
-    void loadURL(const KUrl::List& urlList, const KUrl& urlCurrent,
-                 const QString& caption=QString(),
-                 bool allowSaving=true);
-
-    void loadImageInfos(const ImageInfoList& imageInfoList,
-                        const ImageInfo& imageInfoCurrent,
-                        const QString& caption, bool allowSaving);
-
     static ImageWindow* imageWindow();
     static bool         imageWindowCreated();
 
-    void applySettings();
-    void refreshView();
     bool setup();
     bool setupICC();
 
     bool queryClose();
+    virtual VersionManager* versionManager();
+
+    void toggleTag(int tagID);
+
+public Q_SLOTS:
+
+    void loadImageInfos(const ImageInfoList& imageInfoList,
+                        const ImageInfo& imageInfoCurrent, const QString& caption);
+    void openImage(const ImageInfo& info);
+
+    void slotAssignPickLabel(int pickId);
+    void slotAssignColorLabel(int colorId);
+    void slotAssignRating(int rating);
 
 Q_SIGNALS:
 
     void signalFileDeleted(const KUrl& url);
-    void signalFileAdded(const KUrl& url);
-    void signalFileModified(const KUrl& url);
     void signalURLChanged(const KUrl& url);
+    void signalSavingDialogProgress(float value);
 
 private:
 
-    void loadCurrentList(const QString& caption, bool allowSaving);
+    void loadIndex(const QModelIndex& index);
     void closeEvent(QCloseEvent* e);
     void showEvent(QShowEvent*);
 
@@ -97,17 +99,30 @@ private:
 
     bool save();
     bool saveAs();
+    bool saveNewVersion();
+    bool saveCurrentVersion();
+    bool saveNewVersionAs();
+    bool saveNewVersionInFormat(const QString& format);
+
     KUrl saveDestinationUrl();
     bool hasChangesToSave();
+    bool hasOriginalToRestore();
+    DImageHistory resolvedImageHistory(const DImageHistory& history);
+
+    void prepareImageToSave();
 
     void saveIsComplete();
     void saveAsIsComplete();
+    void saveVersionIsComplete();
     void setViewToURL(const KUrl& url);
     void deleteCurrentItem(bool ask, bool permanently);
-    bool removeItem(int index);
+    void removeCurrent();
+    void slotFileOriginChanged(const QString&);
 
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
 
+    void assignPickLabel(const ImageInfo& info, int pickId);
+    void assignColorLabel(const ImageInfo& info, int colorId);
     void assignRating(const ImageInfo& info, int rating);
 
     ThumbBarDock* thumbBar() const;
@@ -115,7 +130,13 @@ private:
 
     ImageWindow();
 
+Q_SIGNALS: // private signals
+
+    void loadCurrentLater();
+
 private Q_SLOTS:
+
+    void slotLoadImageInfosStage2();
 
     void slotForward();
     void slotBackward();
@@ -123,7 +144,9 @@ private Q_SLOTS:
     void slotLast();
     void slotFilePrint();
 
-    void slotThumbBarItemSelected(const KUrl&);
+    void slotToMainWindow();
+
+    void slotThumbBarImageSelected(const ImageInfo&);
     void slotLoadCurrent();
     void slotDeleteCurrentItem();
     void slotDeleteCurrentItemPermanently();
@@ -135,28 +158,26 @@ private Q_SLOTS:
 
     void slotContextMenu();
     void slotRevert();
+    void slotOpenOriginal();
 
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
 
-    void slotAssignRatingNoStar();
-    void slotAssignRatingOneStar();
-    void slotAssignRatingTwoStar();
-    void slotAssignRatingThreeStar();
-    void slotAssignRatingFourStar();
-    void slotAssignRatingFiveStar();
-    void slotAssignRating(int rating);
-    void slotRatingChanged(const KUrl& url, int rating);
+    void slotRatingChanged(const KUrl&, int);
+    void slotColorLabelChanged(const KUrl&, int);
+    void slotPickLabelChanged(const KUrl&, int);
 
     void slotFileMetadataChanged(const KUrl&);
-    void slotCollectionImageChange(const CollectionImageChangeset&);
+    //void slotCollectionImageChange(const CollectionImageChangeset&);
+    //void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
+    void slotDroppedOnThumbbar(const QList<ImageInfo>& infos);
 
     void slotChangeTheme(const QString& theme);
 
     void slotComponentsInfo();
     void slotDBStat();
 
-    void slotSidebarTabTitleStyleChanged();
+    void slotSetupChanged();
 
 private:
 

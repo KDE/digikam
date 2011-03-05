@@ -7,6 +7,7 @@
  * Description : Greycstoration interface.
  *
  * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -264,11 +265,6 @@ void GreycstorationFilter::filterImage()
     {
         kDebug() << "Error during Greycstoration filter computation!";
 
-        if (m_parent)
-        {
-            emit finished(false);
-        }
-
         return;
     }
 
@@ -478,7 +474,7 @@ void GreycstorationFilter::iterationLoop(uint iter)
     {
         usleep(100000);
 
-        if (m_parent && runningFlag())
+        if (runningFlag())
         {
             // Update the progress bar in dialog. We simply computes the global
             // progression index (including all iterations).
@@ -497,6 +493,45 @@ void GreycstorationFilter::iterationLoop(uint iter)
     // A delay is require here. I suspect a sync problem between threads
     // used by GreycStoration algorithm.
     usleep(100000);
+}
+
+FilterAction GreycstorationFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("alpha", d->settings.alpha);
+    action.addParameter("amplitude", d->settings.amplitude);
+    action.addParameter("anisotropy", d->settings.anisotropy);
+    action.addParameter("btile", d->settings.btile);
+    action.addParameter("da", d->settings.da);
+    action.addParameter("dl", d->settings.dl);
+    action.addParameter("fastApprox", d->settings.fastApprox);
+    action.addParameter("gaussPrec", d->settings.gaussPrec);
+    action.addParameter("interp", d->settings.interp);
+    action.addParameter("nbIter", d->settings.nbIter);
+    action.addParameter("sharpness", d->settings.sharpness);
+    action.addParameter("sigma", d->settings.sigma);
+    action.addParameter("tile", d->settings.tile);
+
+    return action;
+}
+
+void GreycstorationFilter::readParameters(const Digikam::FilterAction& action)
+{
+    d->settings.alpha = action.parameter("alpha").toFloat();
+    d->settings.amplitude = action.parameter("amplitude").toFloat();
+    d->settings.anisotropy = action.parameter("anisotropy").toFloat();
+    d->settings.btile = action.parameter("btile").toInt();
+    d->settings.da= action.parameter("da").toFloat();
+    d->settings.dl= action.parameter("dl").toFloat();
+    d->settings.fastApprox = action.parameter("fastApprox").toBool();
+    d->settings.gaussPrec = action.parameter("gaussPrec").toFloat();
+    d->settings.interp = action.parameter("interp").toFloat();
+    d->settings.nbIter = action.parameter("nbIter").toUInt();
+    d->settings.sharpness = action.parameter("sharpness").toFloat();
+    d->settings.sigma = action.parameter("sigma").toFloat();
+    d->settings.tile = action.parameter("tile").toInt();
 }
 
 }  // namespace Digikam

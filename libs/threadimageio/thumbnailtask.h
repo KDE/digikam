@@ -51,6 +51,7 @@ public:
 private:
 
     virtual void setResult(const LoadingDescription&, const DImg&) {};
+    void setupCreator();
 
     QImage            m_qimage;
     ThumbnailCreator* m_creator;

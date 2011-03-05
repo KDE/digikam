@@ -1,0 +1,205 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<gui version="202" name="digikam" >
+
+ <MenuBar>
+
+  <Menu name="Browse" >
+   <text>&amp;Browse</text>
+     <Action name="browse_album" />
+     <Action name="browse_tag" />
+     <Action name="browse_date" />
+     <Action name="browse_timeline" />
+     <Action name="browse_search" />
+     <Action name="browse_fuzzysearch" />
+     <Action name="browse_gpssearch" />
+     <Action name="browse_people" />
+   <Separator/>
+     <Action name="album_back" />
+     <Action name="album_forward" />
+     <Action name="album_refresh" />
+   <Separator/>
+     <Action name="app_exit" />
+  </Menu>
+
+  <Menu name="Album" >
+   <text>&amp;Album</text>
+     <Action name="album_new" />
+     <Action name="album_propsEdit" />
+     <Action name="album_openinfilemanager" />
+     <Action name="album_openinterminal" />
+     <Action name="album_remove" />
+     <Action name="album_delete" />
+   <Separator/>
+     <Action name="album_rebuild_thumbs" />
+     <Action name="album_write_metadata" />
+     <Action name="album_read_metadata" />
+  </Menu>
+
+  <Menu name="Tag" >
+   <text>T&amp;ag</text>
+     <Action name="browse_tag_long" />
+   <Separator/>
+     <Action name="tag_new" />
+     <Action name="tag_edit" />
+     <Action name="tag_delete" />
+  </Menu>
+
+  <Menu name="Image" >
+   <text>&amp;Image</text>
+     <Action name="image_edit" />
+   <Separator />
+     <Action name="image_rename" />
+     <Action name="image_delete" />
+   <Separator />
+     <Action name="image_lighttable" />
+     <Action name="image_add_to_lighttable" />
+     <Action name="image_add_to_current_queue" />
+     <Action name="image_add_to_new_queue" />
+     <Action name="image_find_similar" />
+   <Separator />
+     <ActionList name="image_print_actions"/>
+   <Separator />
+     <Action name="image_write_metadata" />
+     <Action name="image_read_metadata" />
+     <ActionList name="image_metadata_actions"/>
+   <Separator />
+     <ActionList name="image_jpeglossless_actions"/>
+     <Action name="image_set_exif_orientation"/>
+   <Separator />
+     <ActionList name="image_actions"/>
+   <Separator />
+  </Menu>
+
+  <Menu name="Edit" >
+   <text>&amp;Edit</text>
+     <Action name="cut_album_selection" />
+     <Action name="copy_album_selection" />
+     <Action name="paste_album_selection" />
+     <Separator/>
+     <Action name="selectAll" />
+     <Action name="selectNone" />
+     <Action name="selectInvert" />
+   </Menu>
+
+  <Menu name="View" >
+   <text>&amp;View</text>
+     <Action name="icon_view" />
+     <Action name="image_view" />
+     <Action name="map_view" />
+     <!--<Action name="view_selection" />-->
+     <Separator/>
+     <Action name="slideshow" />
+     <Action name="full_screen" />
+     <Separator/>
+     <Action name="album_zoomin" />
+     <Action name="album_zoomout" />
+    <Separator/>
+     <Action name="album_zoomto100percents" />
+     <Action name="album_zoomfit2window" />
+     <Action name="showthumbs" />
+     <Separator />
+     <Action name="album_sort" />
+     <Action name="image_sort" />
+     <Action name="image_sort_order" />
+     <Action name="image_group" />
+     <Action name="albums_recursive" />
+     <Action name="tags_recursive" />
+  </Menu>
+
+  <Menu name="Tools"><text>&amp;Tools</text>
+        <Action name="imageeditor" />
+        <Action name="light_table" />
+        <Action name="queue_manager" />
+      <Separator/>
+        <Action name="script_console"/>
+        <Action name="search_quick" />
+        <Action name="search_advanced" />
+        <Action name="find_duplicates" />
+      <Separator/>
+        <Action name="database_rescan" />
+        <Action name="thumbnails_rebuild" />
+        <Action name="fingerprints_rebuild" />
+        <Action name="sync_metadata" />
+      <Separator/>
+        <ActionList name="album_actions"/>
+      <Separator/>
+        <ActionList name="tool_actions"/>
+      <Separator/>
+        <ActionList name="batch_actions"/>
+  </Menu>
+
+  <Menu name="Import"><text>I&amp;mport</text>
+      <Action name="cameras" />
+      <Action name="usb_media" />
+      <Action name="card_reader" />
+      <Separator/>
+      <Action name="import_addImages" />
+      <Action name="import_addFolders" />
+      <Separator/>
+      <ActionList name="file_actions_import"/>
+  </Menu>
+
+   <Menu name="Export"><text>&amp;Export</text>
+        <ActionList name="file_actions_export"/>
+   </Menu>
+
+  <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
+     <Merge name="StandardToolBarMenuHandler" />
+     <Action name="options_show_menubar"/>
+     <Action name="options_show_statusbar"/>
+     <Action name="options_show_toolbar"/>
+     <Separator/>
+     <Action name="theme_menu" />
+     <Action name="options_configure_keybinding"/>
+     <Action name="options_configure_toolbars"/>
+     <Action name="options_configure_notifications"/>
+     <Action name="database_migration" />
+     <Action name="options_configure"/>
+  </Menu>
+
+  <Menu name="help"><Text>&amp;Help</Text>
+    <Action name="help_rawcameralist"/>
+    <Action name="help_librariesinfo"/>
+    <Action name="help_dbstat"/>
+    <Action name="help_kipi"/>
+    <Action name="help_tipofday"/>
+    <Separator/>
+    <Action name="help_donatemoney"/>
+    <Action name="help_contribute"/>
+  </Menu>
+
+  <Merge/>
+
+ </MenuBar>
+
+ <ToolBar noMerge="1" name="mainToolBar" >
+  <text>Main Toolbar</text>
+  <!--<Action name="album_back" />
+  <Action name="album_forward" />
+  <Separator/>-->
+  <Action name="imageeditor" />
+  <Action name="light_table" />
+  <Action name="queue_manager" />
+  <Action name="import_auto" />
+  <Separator/>
+  <Action name="icon_view" />
+  <Action name="image_view" />
+  <Action name="map_view" />
+  <Separator/>
+  <Action name="slideshow" />
+  <Action name="full_screen" />
+  <WeakSeparator/>
+  <Action name="logo_action" />
+ </ToolBar>
+
+ <MainWindow>
+  <Action name="exit_preview_mode"/>
+  <Action name="next_image"/>
+  <Action name="previous_image"/>
+  <Action name="first_image"/>
+  <Action name="last_image"/>
+ </MainWindow>
+
+ <ActionProperties/>
+
+</gui>

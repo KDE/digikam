@@ -94,8 +94,8 @@ public:
 
     IccTransformPriv()
     {
-        intent          = INTENT_PERCEPTUAL;
-        proofIntent     = INTENT_ABSOLUTE_COLORIMETRIC;
+        intent          = IccTransform::Perceptual;
+        proofIntent     = IccTransform::AbsoluteColorimetric;
         useBPC          = false;
         checkGamut      = false;
         doNotEmbed      = false;
@@ -150,8 +150,8 @@ public:
         }
     }
 
-    int        intent;
-    int        proofIntent;
+    IccTransform::RenderingIntent intent;
+    IccTransform::RenderingIntent proofIntent;
     bool       useBPC;
     bool       checkGamut;
     bool       doNotEmbed;
@@ -307,23 +307,6 @@ IccProfile IccTransform::effectiveInputProfile() const
     return d->effectiveInputProfileConst();
 }
 
-static int renderingIntentToLcmsIntent(IccTransform::RenderingIntent intent)
-{
-    switch (intent)
-    {
-        case IccTransform::Perceptual:
-            return INTENT_PERCEPTUAL;
-        case IccTransform::RelativeColorimetric:
-            return INTENT_RELATIVE_COLORIMETRIC;
-        case IccTransform::Saturation:
-            return INTENT_SATURATION;
-        case IccTransform::AbsoluteColorimetric:
-            return INTENT_ABSOLUTE_COLORIMETRIC;
-        default:
-            return INTENT_PERCEPTUAL;
-    }
-}
-
 void IccTransform::setIntent(RenderingIntent intent)
 {
     if (intent == d->intent)
@@ -331,7 +314,7 @@ void IccTransform::setIntent(RenderingIntent intent)
         return;
     }
 
-    d->intent = renderingIntentToLcmsIntent(intent);
+    d->intent = intent;
     close();
 }
 
@@ -342,7 +325,7 @@ void IccTransform::setProofIntent(RenderingIntent intent)
         return;
     }
 
-    d->proofIntent = renderingIntentToLcmsIntent(intent);
+    d->proofIntent = intent;
     close();
 }
 
@@ -371,6 +354,31 @@ void IccTransform::setCheckGamut(bool checkGamut)
 void IccTransform::setCheckGamutMaskColor(const QColor& color)
 {
     d->checkGamutColor = color;
+}
+
+IccTransform::RenderingIntent IccTransform::intent() const
+{
+    return d->intent;
+}
+
+IccTransform::RenderingIntent IccTransform::proofIntent() const
+{
+    return d->proofIntent;
+}
+
+bool IccTransform::isUsingBlackPointCompensation() const
+{
+    return d->useBPC;
+}
+
+bool IccTransform::isCheckingGamut() const
+{
+    return d->checkGamut;
+}
+
+QColor IccTransform::checkGamutMaskColor() const
+{
+    return d->checkGamutColor;
 }
 
 void IccTransform::setDoNotEmbedOutputProfile(bool doNotEmbed)
@@ -402,13 +410,30 @@ bool IccTransform::willHaveEffect()
     return !d->effectiveInputProfile().isSameProfileAs(d->outputProfile);
 }
 
+static int renderingIntentToLcmsIntent(IccTransform::RenderingIntent intent)
+{
+    switch (intent)
+    {
+        case IccTransform::Perceptual:
+            return INTENT_PERCEPTUAL;
+        case IccTransform::RelativeColorimetric:
+            return INTENT_RELATIVE_COLORIMETRIC;
+        case IccTransform::Saturation:
+            return INTENT_SATURATION;
+        case IccTransform::AbsoluteColorimetric:
+            return INTENT_ABSOLUTE_COLORIMETRIC;
+        default:
+            return INTENT_PERCEPTUAL;
+    }
+}
+
 TransformDescription IccTransform::getDescription(const DImg& image)
 {
     TransformDescription description;
 
     description.inputProfile = d->effectiveInputProfile();
     description.outputProfile = d->outputProfile;
-    description.intent = d->intent;
+    description.intent = renderingIntentToLcmsIntent(d->intent);
 
     if (d->useBPC)
     {
@@ -421,7 +446,7 @@ TransformDescription IccTransform::getDescription(const DImg& image)
     // our image data has 4 bytes per pixel with the fourth byte filled with 0xFF.
     if (image.sixteenBit())
     {
-        switch (cmsGetColorSpace(description.inputProfile))
+        /*switch (cmsGetColorSpace(description.inputProfile))
         {
             case icSigGrayData:
                 description.inputFormat = TYPE_GRAYA_16;
@@ -431,24 +456,15 @@ TransformDescription IccTransform::getDescription(const DImg& image)
                 break;
             default:
                 description.inputFormat = TYPE_BGRA_16;
-        }
+        }*/
 
+        // A Dimg is always BGRA, converted by the loader
+        description.inputFormat = TYPE_BGRA_16;
         description.outputFormat = TYPE_BGRA_16;
     }
     else
     {
-        switch (cmsGetColorSpace(description.inputProfile))
-        {
-            case icSigGrayData:
-                description.inputFormat = TYPE_GRAYA_8;
-                break;
-            case icSigCmykData:
-                description.inputFormat = TYPE_CMYK_8;
-                break;
-            default:
-                description.inputFormat = TYPE_BGRA_8;
-        }
-
+        description.inputFormat = TYPE_BGRA_8;
         description.outputFormat = TYPE_BGRA_8;
     }
 
@@ -461,7 +477,7 @@ TransformDescription IccTransform::getDescription(const QImage&)
 
     description.inputProfile  = d->effectiveInputProfile();
     description.outputProfile = d->outputProfile;
-    description.intent        = d->intent;
+    description.intent        = renderingIntentToLcmsIntent(d->intent);
 
     if (d->useBPC)
     {
@@ -479,7 +495,7 @@ TransformDescription IccTransform::getProofingDescription(const DImg& image)
     TransformDescription description = getDescription(image);
 
     description.proofProfile = d->proofProfile;
-    description.proofIntent  = d->proofIntent;
+    description.proofIntent  = renderingIntentToLcmsIntent(d->proofIntent);
 
     description.transformFlags |= cmsFLAGS_SOFTPROOFING;
 

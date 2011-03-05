@@ -31,15 +31,8 @@
 
 // KDE includes
 
+#include <kdeversion.h>
 #include <klocale.h>
-
-// Marble widget includes
-
-#include "config-digikam.h"
-#ifdef HAVE_MARBLEWIDGET
-#include <marble/global.h>
-using namespace Marble;
-#endif // HAVE_MARBLEWIDGET
 
 // Libkexiv2 includes
 
@@ -50,6 +43,10 @@ using namespace Marble;
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
+
+// Libkmap includes
+
+#include <libkmap/kmap_widget.h>
 
 // C ANSI includes
 
@@ -69,7 +66,7 @@ extern "C"
 
 #ifndef Q_CC_MSVC
 }
-#endif
+#endif // Q_CC_MSVC
 
 // Local includes
 
@@ -143,6 +140,8 @@ LibsInfoDlg::LibsInfoDlg(QWidget* parent)
     list.insert(i18n("LibJasper"),                   QString(jas_getversion()));
     list.insert(i18n("LibCImg"),                     GreycstorationFilter::cimgVersionString());
     list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
+    list.insert(i18n("LibKMap"),                     KMap::KMapWidget::version());
+    list.insert(i18n("Marble Widget"),               KMap::KMapWidget::MarbleWidgetVersion());
 
 #ifdef USE_EXT_LIBPGF
     list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(libPGFVersion()).arg(i18n("external shared library")));
@@ -155,10 +154,6 @@ LibsInfoDlg::LibsInfoDlg(QWidget* parent)
 #else
     list.insert(i18n("LibClapack"),                  i18n("internal library"));
 #endif // USE_EXT_LIBCLAPACK
-
-#ifdef HAVE_MARBLEWIDGET
-    list.insert(i18n("Marble widget"),               QString(MARBLE_VERSION_STRING));
-#endif // HAVE_MARBLEWIDGET
 
     listView()->setHeaderLabels(QStringList() << i18n("Component") << i18n("Info"));
     setInfoMap(list);

@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +41,47 @@
 namespace Digikam
 {
 
+BCGContainer::BCGContainer()
+{
+    channel    = LuminosityChannel;
+    brightness = 0.0;
+    contrast   = 0.0;
+    gamma      = 1.0;
+}
+
+bool BCGContainer::isDefault() const
+{
+    return *this == BCGContainer();
+}
+
+bool BCGContainer::operator==(const BCGContainer& other) const
+{
+    return channel    == other.channel &&
+           brightness == other.brightness &&
+           contrast   == other.contrast &&
+           gamma      == other.gamma;
+}
+
+void BCGContainer::writeToFilterAction(FilterAction& action, const QString& prefix) const
+{
+    action.addParameter(prefix + "channel",    channel);
+    action.addParameter(prefix + "brightness", brightness);
+    action.addParameter(prefix + "contrast",   contrast);
+    action.addParameter(prefix + "gamma",      gamma);
+}
+
+BCGContainer BCGContainer::fromFilterAction(const FilterAction& action, const QString& prefix)
+{
+    BCGContainer settings;
+    settings.channel =    action.parameter(prefix + "channel", settings.channel);
+    settings.brightness = action.parameter(prefix + "brightness", settings.brightness);
+    settings.contrast =   action.parameter(prefix + "contrast", settings.contrast);
+    settings.gamma =      action.parameter(prefix + "gamma", settings.gamma);
+    return settings;
+}
+
+// ---
+
 class BCGFilterPriv
 {
 public:
@@ -52,6 +94,14 @@ public:
     BCGContainer settings;
 };
 
+BCGFilter::BCGFilter(QObject* parent)
+    : DImgThreadedFilter(parent, "BCGFilter"),
+      d(new BCGFilterPriv)
+{
+    reset();
+    initFilter();
+}
+
 BCGFilter::BCGFilter(DImg* orgImage, QObject* parent, const BCGContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "BCGFilter"),
       d(new BCGFilterPriv)
@@ -61,10 +111,32 @@ BCGFilter::BCGFilter(DImg* orgImage, QObject* parent, const BCGContainer& settin
     initFilter();
 }
 
+BCGFilter::BCGFilter(const BCGContainer& settings, DImgThreadedFilter* master,
+                     const DImg& orgImage, const DImg& destImage, int progressBegin, int progressEnd)
+    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "WBFilter"),
+      d(new BCGFilterPriv)
+{
+    d->settings = settings;
+    reset();
+    filterImage();
+}
+
 BCGFilter::~BCGFilter()
 {
     cancelFilter();
     delete d;
+}
+
+FilterAction BCGFilter::filterAction()
+{
+    DefaultFilterAction<BCGFilter> action;
+    d->settings.writeToFilterAction(action);
+    return action;
+}
+
+void BCGFilter::readParameters(const FilterAction& action)
+{
+    d->settings = BCGContainer::fromFilterAction(action);
 }
 
 void BCGFilter::filterImage()
@@ -230,6 +302,7 @@ void BCGFilter::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
             }
         }
     }
+
 }
 
 }  // namespace Digikam

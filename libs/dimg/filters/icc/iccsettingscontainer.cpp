@@ -38,8 +38,7 @@ namespace Digikam
 
 ICCSettingsContainer::ICCSettingsContainer()
 {
-    // Note: by default, ICC color management is disabled.
-    enableCM                      = false;
+    enableCM                      = true;
 
     defaultMismatchBehavior       = EmbeddedToWorkspace;
     defaultMissingProfileBehavior = SRGBToWorkspace;
@@ -49,8 +48,8 @@ ICCSettingsContainer::ICCSettingsContainer()
     lastMissingProfileBehavior    = SRGBToWorkspace;
     lastUncalibratedBehavior      = AutoToWorkspace;
 
-    useManagedView                = false;
-    useManagedPreviews            = false;
+    useManagedView                = true;
+    useManagedPreviews            = true;
     useBPC                        = true;
     renderingIntent               = IccTransform::Perceptual;
     proofingRenderingIntent       = IccTransform::AbsoluteColorimetric;
@@ -60,7 +59,7 @@ ICCSettingsContainer::ICCSettingsContainer()
 
 void ICCSettingsContainer::readFromConfig(KConfigGroup& group)
 {
-    enableCM                      = group.readEntry("EnableCM", false);
+    enableCM                      = group.readEntry("EnableCM", true);
 
     //if (!group.hasKey("OnProfileMismatch") && group.hasKey("BehaviourICC")) // legacy
     //  behavior = group.readEntry("BehaviourICC", false) ? "convert" : "ask";
@@ -83,8 +82,8 @@ void ICCSettingsContainer::readFromConfig(KConfigGroup& group)
     lastSpecifiedInputProfile     = group.readEntry("LastSpecifiedInputProfile", defaultInputProfile);
 
     useBPC                        = group.readEntry("BPCAlgorithm", true);
-    useManagedView                = group.readEntry("ManagedView", false);
-    useManagedPreviews            = group.readEntry("ManagedPreviews", false);
+    useManagedView                = group.readEntry("ManagedView", true);
+    useManagedPreviews            = group.readEntry("ManagedPreviews", true);
     renderingIntent               = group.readEntry("RenderingIntent", (int)IccTransform::Perceptual);
 
     proofingRenderingIntent       = group.readEntry("ProofingRenderingIntent", (int)IccTransform::AbsoluteColorimetric);

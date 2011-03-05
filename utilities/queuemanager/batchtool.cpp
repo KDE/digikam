@@ -179,6 +179,7 @@ KIcon BatchTool::toolIcon() const
 
 QWidget* BatchTool::settingsWidget() const
 {
+    ensureIsInitialized();
     return d->settingsWidget;
 }
 
@@ -196,6 +197,22 @@ void BatchTool::setNoSettingsWidget()
     setSettingsWidget(label);
 }
 
+void BatchTool::ensureIsInitialized() const
+{
+    if (!d->settingsWidget)
+    {
+        // lazy caching: indication for const-cast
+        BatchTool *tool = const_cast<BatchTool*>(this);
+        tool->setSettingsWidget(tool->createSettingsWidget());
+    }
+}
+
+QWidget* BatchTool::createSettingsWidget()
+{
+    // default implementation: return 0.
+    return 0;
+}
+
 void BatchTool::slotResetSettingsToDefault()
 {
     slotSettingsChanged(defaultSettings());
@@ -210,6 +227,7 @@ void BatchTool::slotSettingsChanged(const BatchToolSettings& settings)
 void BatchTool::setSettings(const BatchToolSettings& settings)
 {
     d->settings = settings;
+    ensureIsInitialized();
     emit signalAssignSettings2Widget();
 }
 
@@ -363,11 +381,11 @@ bool BatchTool::savefromDImg() const
     if (frm.isEmpty())
     {
         // In case of output support is not set for ex. with all tool which do not convert to new format.
-        d->image.updateMetadata(DImg::formatToMimeType(detectedFormat), QString(), resetOrientation);
+        d->image.updateMetadata(DImg::formatToMimeType(detectedFormat), QString(), resetOrientation, true);
         return( d->image.save(outputUrl().toLocalFile(), detectedFormat, d->observer) );
     }
 
-    d->image.updateMetadata(frm, QString(), resetOrientation);
+    d->image.updateMetadata(frm, QString(), resetOrientation, true);
     bool b   = d->image.save(outputUrl().toLocalFile(), frm, d->observer);
     d->image = DImg();
     return b;

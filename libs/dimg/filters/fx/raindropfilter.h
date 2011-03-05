@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +31,7 @@
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
 #include "globals.h"
+#include "randomnumbergenerator.h"
 
 class QRect;
 
@@ -41,9 +43,34 @@ class DIGIKAM_EXPORT RainDropFilter : public DImgThreadedFilter
 
 public:
 
+    explicit RainDropFilter(QObject* parent = 0);
     explicit RainDropFilter(DImg* orgImage, QObject* parent=0, int drop=80,
                             int amount=150, int coeff=30, QRect* selection=0L);
     ~RainDropFilter();
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:RainDropFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Rain Drops Effect");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 
@@ -115,6 +142,8 @@ private:
     int m_selectedY;
     int m_selectedW;
     int m_selectedH;
+
+    RandomNumberGenerator m_generator;
 };
 
 }  // namespace Digikam

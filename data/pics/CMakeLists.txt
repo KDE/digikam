@@ -46,9 +46,6 @@ INSTALL(FILES splash-digikam.png
               duplicatebothvert.png
               duplicatebothhorz.png
               togglemouseover.png
-              indicator-gray.png
-              indicator-green.png
-              indicator-red.png
               assistant-collection.png
               assistant-rawimport.png
               assistant-tooltips.png

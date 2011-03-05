@@ -41,6 +41,7 @@
 #include "renamecustomizer.h"
 
 class QPixmap;
+class KPixmapSequence;
 
 namespace Digikam
 {
@@ -85,10 +86,10 @@ public:
     QPixmap itemBaseSelPixmap()     const;
     QPixmap newPicturePixmap()      const;
     QPixmap downloadUnknownPixmap() const;
-    QPixmap progressPixmap()        const;
     QPixmap lockedPixmap()          const;
     QPixmap downloadedPixmap()      const;
     QPixmap downloadFailedPixmap()  const;
+    KPixmapSequence progressPixmap() const;
 
     QString defaultDownloadName(CameraIconItem* item);
 

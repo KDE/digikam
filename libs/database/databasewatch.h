@@ -48,6 +48,13 @@ Q_SIGNALS:
     /** Retrieve the DatabaseWatch object from DatabaseAccess::databaseWatch(). */
 
     /**
+     * This does not describe a change of the contents of a table;
+     * rather, it signals that a new database has been loaded.
+     * That means all cached content has to be discarded.
+     */
+    void databaseChanged();
+
+    /**
      * Notifies of changes in the database.
      * Connect to the set of signals that you are interested in.
      */
@@ -136,6 +143,8 @@ public:
     void setApplicationIdentifier(const QString& identifier);
 
     // library-internal signal-trigger methods
+
+    void sendDatabaseChanged();
 
     void sendImageChange(const ImageChangeset& changeset);
     void sendImageTagChange(const ImageTagChangeset& changeset);

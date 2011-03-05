@@ -36,11 +36,13 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
 
 // Local includes
 
 #include "databaseconfigelement.h"
+#include "dbconfigversion.h"
 
 namespace Digikam
 {
@@ -53,17 +55,23 @@ public:
 
     QMap<QString, DatabaseConfigElement> databaseConfigs;
 
-    void readConfig();
+    bool readConfig();
     DatabaseConfigElement readDatabase(QDomElement& databaseElement);
     void readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement);
 
+    bool isValid;
+    QString errorMessage;
 };
 
 K_GLOBAL_STATIC(DatabaseConfigElementLoader, loader)
 
 DatabaseConfigElementLoader::DatabaseConfigElementLoader()
 {
-    readConfig();
+    isValid = readConfig();
+    if (!isValid)
+    {
+        kError() << errorMessage;
+    }
 }
 
 DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& databaseElement)
@@ -203,16 +211,16 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
     }
 }
 
-void DatabaseConfigElementLoader::readConfig()
+bool DatabaseConfigElementLoader::readConfig()
 {
     QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
-    kDebug() << filepath;
+    kDebug() << "Loading SQL code from config file" << filepath;
     QFile file(filepath);
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        kError() << "Couldn't open file: " << file.fileName().toAscii();
-        return;
+        errorMessage = i18n("Could not open dbconfig.xml file <filename>%1</filename>", filepath);
+        return false;
     }
 
     QDomDocument doc("DBConfig");
@@ -220,7 +228,8 @@ void DatabaseConfigElementLoader::readConfig()
     if (!doc.setContent(&file))
     {
         file.close();
-        return;
+        errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> is invalid and cannot be read.", filepath);
+        return false;
     }
 
     file.close();
@@ -229,22 +238,39 @@ void DatabaseConfigElementLoader::readConfig()
 
     if (element.isNull())
     {
-#ifdef DATABASEPARAMETERS_DEBUG
-        kDebug() << "Missing element <databaseconfig>.";
-#endif
-        return;
+        errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
+                            "is missing the required element <icode>%1</icode>",
+                            filepath, element.tagName());
+        return false;
     }
 
     QDomElement defaultDB =  element.namedItem("defaultDB").toElement();
 
     if (defaultDB.isNull())
     {
-#ifdef DATABASEPARAMETERS_DEBUG
-        kDebug() << "Missing element <defaultDB>.";
-#endif
-        return;
+        errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
+                            "is missing the required element <icode>%1</icode>",
+                            filepath, element.tagName());
+        return false;
     }
 
+    QDomElement versionElement = element.namedItem("version").toElement();
+    int version = 0;
+
+    kDebug() << versionElement.isNull() << versionElement.text() << versionElement.text().toInt() << dbconfig_xml_version;
+    if (!versionElement.isNull())
+    {
+        version = versionElement.text().toInt();
+    }
+
+    if (version < dbconfig_xml_version)
+    {
+        errorMessage = i18n("An old version of the dbconfig.xml file <filename>%1</filename> "
+                            "is found. Please ensure that the version released "
+                            "with the running version of digiKam is installed. ",
+                            filepath);
+        return false;
+    }
     //defaultDatabase = defaultDB.text();
 
 #ifdef DATABASEPARAMETERS_DEBUG
@@ -287,12 +313,24 @@ void DatabaseConfigElementLoader::readConfig()
         }
     }
 #endif
+
+    return true;
 }
 
 DatabaseConfigElement DatabaseConfigElement::element(const QString& databaseType)
 {
     // Unprotected read-only access? Usually accessed under DatabaseAccess protection anyway
     return loader->databaseConfigs.value(databaseType);
+}
+
+bool DatabaseConfigElement::checkReadyForUse()
+{
+    return loader->isValid;
+}
+
+QString DatabaseConfigElement::errorMessage()
+{
+    return loader->errorMessage;
 }
 
 } // namespace Digikam

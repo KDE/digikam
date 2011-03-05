@@ -56,13 +56,19 @@
 namespace DigikamEnhanceImagePlugin
 {
 
+HotPixelFixer::HotPixelFixer(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    m_interpolationMethod = TWODIM_DIRECTION;
+    initFilter();
+}
+
 HotPixelFixer::HotPixelFixer(Digikam::DImg* orgImage, QObject* parent, const QList<HotPixel>& hpList,
                              int interpolationMethod)
     : Digikam::DImgThreadedFilter(orgImage, parent, "HotPixels")
 {
     m_hpList              = hpList;
     m_interpolationMethod = interpolationMethod;
-    mWeightList.clear();
 
     initFilter();
 }
@@ -70,6 +76,38 @@ HotPixelFixer::HotPixelFixer(Digikam::DImg* orgImage, QObject* parent, const QLi
 HotPixelFixer::~HotPixelFixer()
 {
     cancelFilter();
+}
+
+Digikam::FilterAction HotPixelFixer::filterAction()
+{
+    DefaultFilterAction<HotPixelFixer> action;
+    action.addParameter("interpolationMethod", m_interpolationMethod);
+    foreach (const HotPixel& hp, m_hpList)
+    {
+        QString hpString("%1-%2x%3-%4x%5");
+        hpString = hpString.arg(hp.luminosity)
+                   .arg(hp.rect.x()).arg(hp.rect.y())
+                   .arg(hp.rect.width()).arg(hp.rect.height());
+        action.addParameter("hotPixel", hpString);
+    }
+    return action;
+}
+
+void HotPixelFixer::readParameters(const Digikam::FilterAction& action)
+{
+    m_interpolationMethod = action.parameter("interpolationMethod").toInt();
+    QRegExp exp("(\\d+)-(\\d+)x(\\d+)-(\\d+)x(\\d+)");
+    foreach (const QVariant& var, action.parameters().values("hotPixel"))
+    {
+        if (exp.exactMatch(var.toString()))
+        {
+            HotPixel hp;
+            hp.luminosity = exp.cap(1).toInt();
+            hp.rect = QRect(exp.cap(2).toInt(), exp.cap(3).toInt(),
+                            exp.cap(4).toInt(), exp.cap(5).toInt());
+            m_hpList << hp;
+        }
+    }
 }
 
 void HotPixelFixer::filterImage()

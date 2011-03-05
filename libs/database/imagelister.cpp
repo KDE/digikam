@@ -58,52 +58,17 @@
 #include "dmetadata.h"
 #include "haariface.h"
 #include "sqlquery.h"
+#include "tagscache.h"
+#include "imagetagpair.h"
 
 namespace Digikam
 {
-
-QDataStream& operator<<(QDataStream& os, const ImageListerRecord& record)
-{
-    os << record.imageID;
-    os << record.albumID;
-    os << record.albumRootID;
-    os << record.name;
-
-    os << record.rating;
-    os << (int)record.category;
-    os << record.format;
-    os << record.creationDate;
-    os << record.modificationDate;
-    os << record.fileSize;
-    os << record.imageSize;
-
-    return os;
-}
-
-QDataStream& operator>>(QDataStream& ds, ImageListerRecord& record)
-{
-    int category;
-    ds >> record.imageID;
-    ds >> record.albumID;
-    ds >> record.albumRootID;
-    ds >> record.name;
-
-    ds >> record.rating;
-    ds >> category;
-    record.category = (DatabaseItem::Category)category;
-    ds >> record.format;
-    ds >> record.creationDate;
-    ds >> record.modificationDate;
-    ds >> record.fileSize;
-    ds >> record.imageSize;
-
-    return ds;
-}
 
 ImageLister::ImageLister()
 {
     m_recursive = true;
     m_listOnlyAvailableImages = true;
+    m_allowExtraValues = false;
 }
 
 void ImageLister::setRecursive(bool recursive)
@@ -114,6 +79,11 @@ void ImageLister::setRecursive(bool recursive)
 void ImageLister::setListOnlyAvailable(bool listOnlyAvailable)
 {
     m_listOnlyAvailableImages = listOnlyAvailable;
+}
+
+void ImageLister::setAllowExtraValues(bool useExtraValue)
+{
+    m_allowExtraValues = useExtraValue;
 }
 
 KIO::TransferJob* ImageLister::startListJob(const DatabaseUrl& url, int extraValue)
@@ -145,6 +115,12 @@ void ImageLister::list(ImageListerReceiver* receiver, const DatabaseUrl& url)
     else if (url.isDateUrl())
     {
         listDateRange(receiver, url.startDate(), url.endDate());
+    }
+    else if (url.isMapImagesUrl())
+    {
+        double lat1, lat2, lon1, lon2;
+        url.areaCoordinates(&lat1, &lat2, &lon1, &lon2);
+        listAreaRange(receiver, lat1, lat2, lon1, lon2);
     }
 }
 
@@ -315,6 +291,46 @@ void ImageLister::listTag(ImageListerReceiver* receiver, int tagId)
     }
 }
 
+void ImageLister::listFaces(ImageListerReceiver* receiver, int personId)
+{
+
+    QList<qlonglong> list;
+
+    QList<QVariant> values;
+
+    DatabaseAccess access;
+    access.backend()->execSql(QString("SELECT Images.id "
+                                      " FROM Images "
+                                      "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                                      "       INNER JOIN Albums ON Albums.id="+
+                                      QString::number(personId)+
+                                      " WHERE Images.status=1 "
+                                      " ORDER BY Albums.id;"),
+                              &values);
+
+    QListIterator<QVariant> it(values);
+
+    while (it.hasNext())
+    {
+        TagsCache* cache;
+        cache = TagsCache::instance();
+
+        ImageTagPair pair(list.last(), cache->tagForPath("/People/Unknown"));
+        QList<QString> nameList = pair.values("face");
+
+        // push the image into the list every time a face with the name is found in the image
+        int count = nameList.count(cache->tagName(personId));
+
+        for (int i = 0; i < count; ++i)
+        {
+            list += it.next().toLongLong();
+        }
+    }
+
+    listFromIdList(receiver, list);
+}
+
+
 void ImageLister::listDateRange(ImageListerReceiver* receiver, const QDate& startDate, const QDate& endDate)
 {
     QList<QVariant> values;
@@ -385,6 +401,68 @@ void ImageLister::listDateRange(ImageListerReceiver* receiver, const QDate& star
     }
 }
 
+void ImageLister::listAreaRange(ImageListerReceiver* receiver,
+                                double lat1, double lat2, double lon1, double lon2)
+{
+    QList<QVariant> values;
+    QList<QVariant> boundValues;
+    boundValues << lat1 << lat2 << lon1 << lon2;
+
+    kDebug() << "Listing area" << lat1 << lat2 << lon1 << lon2;
+
+    DatabaseAccess access;
+
+    access.backend()->execSql(QString("SELECT DISTINCT Images.id, "
+                                      "       Albums.albumRoot, ImageInformation.rating, ImageInformation.creationDate, "
+                                      "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
+                                      " FROM Images "
+                                      "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                                      "       INNER JOIN Albums ON Albums.id=Images.album "
+                                      "       INNER JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
+                                      " WHERE Images.status=1 "
+                                      "   AND (ImagePositions.latitudeNumber>? AND ImagePositions.latitudeNumber<?) "
+                                      "   AND (ImagePositions.longitudeNumber>? AND ImagePositions.longitudeNumber<?);"),
+                              boundValues,
+                              &values);
+
+
+    kDebug() << "Results:" << values.size() / 14;
+    QSet<int> albumRoots = albumRootsToList();
+
+    double lat, lon;
+
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    {
+        ImageListerRecord record(m_allowExtraValues ? ImageListerRecord::ExtraValueFormat : ImageListerRecord::TraditionalFormat);
+
+        record.imageID           = (*it).toLongLong();
+        ++it;
+        record.albumRootID       = (*it).toInt();
+        ++it;
+
+        record.rating            = (*it).toInt();
+        ++it;
+        record.creationDate      = (*it).toDateTime();
+        ++it;
+        lat                      = (*it).toDouble();
+        ++it;
+        lon                      = (*it).toDouble();
+        ++it;
+
+        if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
+        {
+            continue;
+        }
+
+        record.extraValues       << lat << lon;
+
+        receiver->receive(record);
+    }
+
+
+}
+
+
 void ImageLister::listSearch(ImageListerReceiver* receiver,
                              const QString& xml,
                              int limit)
@@ -408,10 +486,10 @@ void ImageLister::listSearch(ImageListerReceiver* receiver,
                "       ImageInformation.width, ImageInformation.height, "
                "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
                " FROM Images "
-               "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-               "       LEFT JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
-               "       LEFT JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
-               "       LEFT JOIN Albums           ON Albums.id=Images.album "
+               "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+               "       LEFT  JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
+               "       LEFT  JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
+               "       INNER JOIN Albums           ON Albums.id=Images.album "
                "WHERE Images.status=1 AND ( ";
 
     // query body
@@ -495,6 +573,116 @@ void ImageLister::listSearch(ImageListerReceiver* receiver,
         }
 
         if (!hooks.checkPosition(lat, lon))
+        {
+            continue;
+        }
+
+        record.imageSize         = QSize(width, height);
+
+        receiver->receive(record);
+    }
+}
+
+void ImageLister::listImageTagPropertySearch(ImageListerReceiver* receiver, const QString& xml)
+{
+    if (xml.isEmpty())
+    {
+        return;
+    }
+
+    QList<QVariant> boundValues;
+    QList<QVariant> values;
+    QString sqlQuery;
+    QString errMsg;
+
+    // Currently, for optimization, this does not allow a general-purpose search,
+    // ImageMetadata and ImagePositions are not joined and hooks are ignored.
+
+    // query head
+    sqlQuery = "SELECT DISTINCT Images.id, Images.name, Images.album, "
+               "       Albums.albumRoot, "
+               "       ImageInformation.rating, Images.category, "
+               "       ImageInformation.format, ImageInformation.creationDate, "
+               "       Images.modificationDate, Images.fileSize, "
+               "       ImageInformation.width,  ImageInformation.height, "
+               "       ImageTagProperties.value, ImageTagProperties.property, ImageTagProperties.tagid "
+               " FROM Images "
+               "       INNER JOIN ImageTagProperties ON ImageTagProperties.imageid=Images.id "
+               "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+               "       INNER JOIN Albums           ON Albums.id=Images.album "
+               "WHERE Images.status=1 AND ( ";
+
+    // query body
+    ImageQueryBuilder builder;
+    ImageQueryPostHooks hooks;
+    builder.setImageTagPropertiesJoined(true); // ImageTagProperties added by INNER JOIN
+    sqlQuery += builder.buildQuery(xml, &boundValues, &hooks);
+    sqlQuery += " );";
+
+    kDebug() << "Search query:\n" << sqlQuery << "\n" << boundValues;
+
+    bool executionSuccess;
+    {
+        DatabaseAccess access;
+        executionSuccess = access.backend()->execSql(sqlQuery, boundValues, &values);
+
+        if (!executionSuccess)
+        {
+            errMsg = access.backend()->lastError();
+        }
+    }
+
+    if (!executionSuccess)
+    {
+        receiver->error(errMsg);
+        return;
+    }
+
+    kDebug() << "Search result:" << values.size();
+
+    QSet<int> albumRoots = albumRootsToList();
+
+    int width, height;
+
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    {
+        ImageListerRecord record(m_allowExtraValues ? ImageListerRecord::ExtraValueFormat : ImageListerRecord::TraditionalFormat);
+
+        record.imageID           = (*it).toLongLong();
+        ++it;
+        record.name              = (*it).toString();
+        ++it;
+        record.albumID           = (*it).toInt();
+        ++it;
+        record.albumRootID       = (*it).toInt();
+        ++it;
+        record.rating            = (*it).toInt();
+        ++it;
+        record.category          = (DatabaseItem::Category)(*it).toInt();
+        ++it;
+        record.format            = (*it).toString();
+        ++it;
+        record.creationDate      = (*it).isNull() ? QDateTime()
+                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        ++it;
+        record.modificationDate  = (*it).isNull() ? QDateTime()
+                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        ++it;
+        record.fileSize          = (*it).toInt();
+        ++it;
+        width                    = (*it).toInt();
+        ++it;
+        height                   = (*it).toInt();
+        ++it;
+        // sync the following order with the places where it's read, e.g., DatabaseFace
+        record.extraValues      << (*it); // value
+        ++it;
+        record.extraValues      << (*it); // property
+        ++it;
+        record.extraValues      << (*it); // tag id
+        ++it;
+
+        if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
         {
             continue;
         }
@@ -693,6 +881,54 @@ QSet<int> ImageLister::albumRootsToList()
         ids << location.id();
     }
     return ids;
+}
+
+QString ImageLister::tagSearchXml(const DatabaseUrl& url, const QString& type)
+{
+    int tagId = url.tagId();
+
+    if (type == "faces")
+    {
+        SearchXmlWriter writer;
+
+        writer.writeGroup();
+        writer.setDefaultFieldOperator(SearchXml::Or);
+
+        QStringList properties;
+        properties << "autodetectedFace";
+        properties << "tagRegion";
+
+        foreach (const QString& property, properties)
+        {
+            writer.writeField("imagetagproperty", SearchXml::Equal);
+
+            if (tagId != -1)
+            {
+                writer.writeAttribute("tagid", QString::number(tagId));
+            }
+
+            writer.writeValue(property);
+            writer.finishField();
+        }
+
+
+        /*
+        if (flags & TagAssigned && tagId)
+        {
+            writer.writeField("tagid", SearchXml::Equal);
+            writer.writeValue(tagId);
+            writer.finishField();
+        }
+        */
+
+        writer.finishGroup();
+
+        return writer.xml();
+    }
+    else
+    {
+        return QString();
+    }
 }
 
 }  // namespace Digikam

@@ -45,7 +45,22 @@ class DIGIKAM_DATABASE_EXPORT ImageListerRecord
 
 public:
 
-    ImageListerRecord()
+    enum
+    {
+        MagicValue = 0xD315783F
+    };
+
+    enum BinaryFormat
+    {
+        // keep values constant
+        TraditionalFormat = 1,
+        ExtraValueFormat  = 2
+    };
+
+    BinaryFormat binaryFormat;
+
+    ImageListerRecord(BinaryFormat format = TraditionalFormat)
+        : binaryFormat(format)
     {
         imageID     = -1;
         albumID     = -1;
@@ -70,6 +85,19 @@ public:
     QSize                  imageSize;
 
     DatabaseItem::Category category;
+
+    QList<QVariant>        extraValues;
+
+    /** Initializes the beginning of a data packet. For later check with checkStream(). */
+    static void initializeStream(ImageListerRecord::BinaryFormat format, QDataStream& ds);
+
+    /**
+     * Checks that the data accessible through the stream complies with
+     * the given protocol.
+     * Note: No check is possible for the TraditionalFormat, always returns true.
+     */
+    static bool checkStream(ImageListerRecord::BinaryFormat format, QDataStream& data);
+
 };
 
 DIGIKAM_DATABASE_EXPORT QDataStream& operator<<(QDataStream& os, const ImageListerRecord& record);

@@ -44,6 +44,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kpixmapsequence.h>
 
 // Local includes
 
@@ -173,7 +174,7 @@ public:
         hXYZProfile(0),
         hXFORM(0)
     {
-        progressPix = SmallIcon("process-working", 22);
+        progressPix         = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
         Measurement.Patches = 0;
         Measurement.Allowed = 0;
     }
@@ -197,7 +198,7 @@ public:
     QTimer*         progressTimer;
 
     QPixmap         pixmap;
-    QPixmap         progressPix;
+    KPixmapSequence progressPix;
 
     cmsHPROFILE     hMonitorProfile;
     cmsHPROFILE     hXYZProfile;
@@ -822,10 +823,10 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
     {
         // In first, we draw an animation.
 
-        QPixmap anim(d->progressPix.copy(0, d->progressCount*22, 22, 22));
+        QPixmap anim(d->progressPix.frameAt(d->progressCount));
         d->progressCount++;
 
-        if (d->progressCount == 8)
+        if (d->progressCount >= d->progressPix.frameCount())
         {
             d->progressCount = 0;
         }

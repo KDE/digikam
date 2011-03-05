@@ -51,6 +51,8 @@ public:
     HotPixelsTool(QObject* parent);
     ~HotPixelsTool();
 
+    static void registerFilter();
+
 private Q_SLOTS:
 
     void slotLoadingProgress(float v);

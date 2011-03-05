@@ -75,11 +75,11 @@ public:
     void    saveAs(const QString& filename, IOFileSettingsContainer* IOFileSettings,
                    bool setExifOrientationTag, const QString& mimeType=QString());
     void    resetImage();
-    void    switchToLastSaved(const QString& newFilename);
     void    abortSaving();
     void    applyTransform(const IccTransform& transform);
     void    setModified();
     void    readMetadataFromFile(const QString& file);
+    QString ensureHasCurrentUuid();
     void    clearUndoHistory();
     void    setUndoHistoryOrigin();
     void    updateUndoState();
@@ -116,14 +116,11 @@ public:
     void  resizeImage(int w, int h);
 
     void  setBackgroundColor(const QColor& color);
-    void  setICCSettings(ICCSettingsContainer* cmSettings);
+    void  setICCSettings(const ICCSettingsContainer& cmSettings);
     void  setExposureSettings(ExposureSettingsContainer* expoSettings);
     void  setSoftProofingEnabled(bool enable);
 
     void  setExifOrient(bool exifOrient);
-
-    void  getUndoHistory(QStringList& titles);
-    void  getRedoHistory(QStringList& titles);
 
     void  toggleFitToWindow();
     void  fitToSelect();
@@ -148,6 +145,8 @@ Q_SIGNALS:
     void signalSavingProgress(const QString& filePath, float progress);
     void signalSelectionChanged(const QRect&);
     void signalToggleOffFitToWindow();
+    void signalUndoSteps(int);
+    void signalRedoSteps(int);
 
 public Q_SLOTS:
 

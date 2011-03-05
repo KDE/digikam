@@ -989,7 +989,11 @@ void CameraController::slotOpen(const QString& folder, const QString& file, cons
 {
     Q_UNUSED(folder);
     Q_UNUSED(file);
+    Q_UNUSED(dest);
 
+    //TODO: Provide a preview window
+
+    /*
     KUrl url = KUrl::fromPath(dest);
     KUrl::List urlList;
     urlList << url;
@@ -1007,6 +1011,7 @@ void CameraController::slotOpen(const QString& folder, const QString& file, cons
     }
 
     im->setFocus();
+    */
 }
 
 void CameraController::addCommand(CameraCommand* cmd)

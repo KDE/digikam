@@ -37,13 +37,26 @@ class DIGIKAM_EXPORT PreviewLoadThread : public ManagedLoadSaveThread
 
 public:
 
-    PreviewLoadThread();
+    /**
+     * Creates a preview load thread.
+     * Provides three flavors of preview loading.
+     * The default loading policy, for the typical usage in a preview widget,
+     * always stops any previous tasks and loads the new task as soon as possible.
+     */
+    PreviewLoadThread(QObject* parent = 0);
 
     /**
      * Load a preview that is optimized for fast loading.
      * Raw decoding and color management settings will be adjusted.
      */
     void load(const QString& filePath, int size, bool exifRotate);
+
+    /**
+     * Load a preview that is as large as possible without sacrificing speed
+     * for performance. Especially, raw previews are taken if larger than the given size.
+     * Raw decoding and color management settings will be adjusted.
+     */
+    void loadFastButLarge(const QString& filePath, int minimumSize, bool exifRotate);
 
     /**
      * Load a preview with higher resolution, trading more quality
@@ -63,7 +76,7 @@ public:
 protected:
 
     LoadingDescription createLoadingDescription(const QString& filePath, int size, bool exifRotate);
-    QWidget* m_displayingWidget;
+    QWidget*      m_displayingWidget;
 };
 
 }   // namespace Digikam

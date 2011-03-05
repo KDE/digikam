@@ -32,6 +32,7 @@
 
 #include "imageinfo.h"
 #include "digikam_export.h"
+#include "config-digikam.h"
 
 namespace Digikam
 {
@@ -44,8 +45,11 @@ class DIGIKAM_DATABASE_EXPORT ImageInfoList : public QList<ImageInfo>
 public:
 
     ImageInfoList() {}
+    ImageInfoList(const QList<qlonglong>& idList);
     ImageInfoList(const QList<ImageInfo>& list)
         : QList<ImageInfo>(list) {}
+
+    QList<qlonglong> toImageIdList() const;
 };
 
 typedef ImageInfoList::iterator ImageInfoListIterator;

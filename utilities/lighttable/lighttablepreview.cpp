@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : digiKam light table preview item.
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,8 +60,8 @@
 #include "dpopupmenu.h"
 #include "loadingdescription.h"
 #include "metadatahub.h"
+#include "metadatasettings.h"
 #include "previewloadthread.h"
-#include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
 #include "themeengine.h"
 #include "globals.h"
@@ -246,11 +246,11 @@ void LightTablePreview::setImagePath(const QString& path)
 
     if (d->loadFullImageSize)
     {
-        d->previewThread->loadHighQuality(path, AlbumSettings::instance()->getExifRotate());
+        d->previewThread->loadHighQuality(path, MetadataSettings::instance()->settings().exifRotate);
     }
     else
     {
-        d->previewThread->load(path, d->previewSize, AlbumSettings::instance()->getExifRotate());
+        d->previewThread->load(path, d->previewSize, MetadataSettings::instance()->settings().exifRotate);
     }
 }
 
@@ -281,7 +281,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription& descriptio
     {
         DImg img(preview);
 
-        if (AlbumSettings::instance()->getExifRotate())
+        if (MetadataSettings::instance()->settings().exifRotate)
         {
             d->previewThread->exifRotate(img, description.filePath);
         }
@@ -316,11 +316,11 @@ void LightTablePreview::slotNextPreload()
 
     if (d->loadFullImageSize)
     {
-        d->previewThread->loadHighQuality(loadPath, AlbumSettings::instance()->getExifRotate());
+        d->previewThread->loadHighQuality(loadPath, MetadataSettings::instance()->settings().exifRotate);
     }
     else
     {
-        d->previewThread->load(loadPath, d->previewSize, AlbumSettings::instance()->getExifRotate());
+        d->previewThread->load(loadPath, d->previewSize, MetadataSettings::instance()->settings().exifRotate);
     }
 }
 
@@ -392,7 +392,7 @@ void LightTablePreview::slotContextMenu()
     cmhelper.addRemoveTagsMenu(idList);
     cmhelper.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addRatingMenu();
+    cmhelper.addLabelsAction();
 
     // special action handling --------------------------------
 
@@ -402,8 +402,17 @@ void LightTablePreview::slotContextMenu()
     connect(&cmhelper, SIGNAL(signalRemoveTag(int)),
             this, SLOT(slotRemoveTag(int)));
 
+    connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
+            this, SLOT(slotAssignPickLabel(int)));
+
+    connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
+            this, SLOT(slotAssignColorLabel(int)));
+
     connect(&cmhelper, SIGNAL(signalAssignRating(int)),
             this, SLOT(slotAssignRating(int)));
+
+    connect(&cmhelper, SIGNAL(signalPopupTagsView()),
+            this, SIGNAL(signalPopupTagsView()));
 
     QAction* choice = cmhelper.exec(QCursor::pos());
 
@@ -455,6 +464,30 @@ void LightTablePreview::slotRemoveTag(int tagID)
         MetadataHub hub;
         hub.load(d->imageInfo);
         hub.setTag(tagID, false);
+        hub.write(d->imageInfo, MetadataHub::PartialWrite);
+        hub.write(d->imageInfo.filePath(), MetadataHub::FullWriteIfChanged);
+    }
+}
+
+void LightTablePreview::slotAssignPickLabel(int pickId)
+{
+    if (!d->imageInfo.isNull())
+    {
+        MetadataHub hub;
+        hub.load(d->imageInfo);
+        hub.setPickLabel(pickId);
+        hub.write(d->imageInfo, MetadataHub::PartialWrite);
+        hub.write(d->imageInfo.filePath(), MetadataHub::FullWriteIfChanged);
+    }
+}
+
+void LightTablePreview::slotAssignColorLabel(int colorId)
+{
+    if (!d->imageInfo.isNull())
+    {
+        MetadataHub hub;
+        hub.load(d->imageInfo);
+        hub.setColorLabel(colorId);
         hub.write(d->imageInfo, MetadataHub::PartialWrite);
         hub.write(d->imageInfo.filePath(), MetadataHub::FullWriteIfChanged);
     }
@@ -589,7 +622,7 @@ void LightTablePreview::contentsDragEnterEvent(QDragEnterEvent* e)
     {
         int        albumID;
         QList<int> albumIDs;
-        QList<int> imageIDs;
+        QList<qlonglong> imageIDs;
         KUrl::List urls;
         KUrl::List kioURLs;
 
@@ -611,20 +644,13 @@ void LightTablePreview::contentsDropEvent(QDropEvent* e)
     {
         int           albumID;
         QList<int>    albumIDs;
-        QList<int>    imageIDs;
+        QList<qlonglong> imageIDs;
         KUrl::List    urls;
         KUrl::List    kioURLs;
-        ImageInfoList list;
 
         if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
         {
-            for (QList<int>::const_iterator it = imageIDs.constBegin();
-                 it != imageIDs.constEnd(); ++it)
-            {
-                list << ImageInfo(*it);
-            }
-
-            emit signalDroppedItems(list);
+            emit signalDroppedItems(ImageInfoList(imageIDs));
             e->accept();
             return;
         }
@@ -632,13 +658,7 @@ void LightTablePreview::contentsDropEvent(QDropEvent* e)
         {
             QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
 
-            for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
-                 it != itemIDs.constEnd(); ++it)
-            {
-                list << ImageInfo(*it);
-            }
-
-            emit signalDroppedItems(list);
+            emit signalDroppedItems(ImageInfoList(itemIDs));
             e->accept();
             return;
         }
@@ -654,13 +674,7 @@ void LightTablePreview::contentsDropEvent(QDropEvent* e)
             QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
             ImageInfoList imageInfoList;
 
-            for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
-                 it != itemIDs.constEnd(); ++it)
-            {
-                list << ImageInfo(*it);
-            }
-
-            emit signalDroppedItems(list);
+            emit signalDroppedItems(ImageInfoList(itemIDs));
             e->accept();
             return;
         }

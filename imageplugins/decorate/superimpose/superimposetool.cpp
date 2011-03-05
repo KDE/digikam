@@ -299,8 +299,9 @@ void SuperImposeTool::finalRendering()
 
     ImageIface iface(0, 0);
     DImg img = d->previewWidget->makeSuperImpose();
-    iface.putOriginalImage(i18n("Super Impose"), img.bits(),
-                           img.width(), img.height() );
+    //TODO: Make separate filter
+    FilterAction action(i18n("Super Impose Tool"), 1, FilterAction::DocumentedHistory);
+    iface.putOriginalImage(i18n("Super Impose"), action, img.bits(), img.width(), img.height() );
 
     d->previewWidget->setEnabled(true);
     d->dirSelect->setEnabled(true);

@@ -34,6 +34,12 @@
 namespace Digikam
 {
 
+AutoExpoFilter::AutoExpoFilter(QObject* parent)
+    : WBFilter(parent)
+{
+    initFilter();
+}
+
 AutoExpoFilter::AutoExpoFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
     : WBFilter(orgImage, parent),
       m_refImage(*refImage)
@@ -47,14 +53,29 @@ AutoExpoFilter::~AutoExpoFilter()
 
 void AutoExpoFilter::filterImage()
 {
+    if (m_refImage.isNull())
+    {
+        m_refImage = m_orgImage;
+    }
+
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        kDebug() << "Ref. image and Org. has different bits depth";
+        kDebug() << "Ref. image and Org. have different bits depth";
         return;
     }
 
     autoExposureAdjustement(&m_refImage, m_settings.black, m_settings.exposition);
     WBFilter::filterImage();
+}
+
+FilterAction AutoExpoFilter::filterAction()
+{
+    return DefaultFilterAction<AutoExpoFilter>();
+}
+
+void AutoExpoFilter::readParameters(const FilterAction& action)
+{
+    Q_UNUSED(action);
 }
 
 }  // namespace Digikam

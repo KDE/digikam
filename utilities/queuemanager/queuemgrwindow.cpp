@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager GUI
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -84,6 +84,7 @@
 #include "dlogoaction.h"
 #include "dmetadata.h"
 #include "albumsettings.h"
+#include "metadatasettings.h"
 #include "albummanager.h"
 #include "imagewindow.h"
 #include "imagedialog.h"
@@ -437,17 +438,8 @@ void QueueMgrWindow::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->donateMoneyAction = new KAction(i18n("Donate Money..."), this);
-    connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
-    actionCollection()->addAction("queuemgr_donatemoney", d->donateMoneyAction);
-
-    d->contributeAction = new KAction(i18n("Contribute..."), this);
-    connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
-    actionCollection()->addAction("queuemgr_contribute", d->contributeAction);
-
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), this);
-    connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
-    actionCollection()->addAction("queuemgr_rawcameralist", d->rawCameraListAction);
+    d->about = new DAboutData(this);
+    d->about->registerHelpActions();
 
     d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
@@ -515,7 +507,7 @@ void QueueMgrWindow::applySettings()
     AlbumSettings* settings   = AlbumSettings::instance();
     KSharedConfig::Ptr config = KGlobal::config();
 
-    d->thread->setResetExifOrientationAllowed(settings->getExifSetOrientation());
+    d->thread->setResetExifOrientationAllowed(MetadataSettings::instance()->settings().exifRotate);
     d->queuePool->setEnableToolTips(settings->getShowToolTips());
 
     // -- RAW images decoding settings ------------------------------------------------------
@@ -714,16 +706,6 @@ void QueueMgrWindow::hideToolBars()
     }
 }
 
-void QueueMgrWindow::slotDonateMoney()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
-}
-
-void QueueMgrWindow::slotContribute()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=contrib");
-}
-
 void QueueMgrWindow::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
@@ -761,11 +743,6 @@ void QueueMgrWindow::slotSetup()
 void QueueMgrWindow::setup(Setup::Page page)
 {
     Setup::exec(this, page);
-}
-
-void QueueMgrWindow::slotRawCameraList()
-{
-    showRawCameraList();
 }
 
 void QueueMgrWindow::slotThemeChanged()
@@ -1044,7 +1021,13 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
 
 void QueueMgrWindow::slotProgressTimerDone()
 {
-    QPixmap ico(d->progressPix.copy(0, d->progressCount*22, 22, 22));
+    QPixmap ico(d->progressPix.frameAt(d->progressCount));
+    d->progressCount++;
+
+    if (d->progressCount >= d->progressPix.frameCount())
+    {
+        d->progressCount = 0;
+    }
 
     if (d->currentProcessItem)
     {
@@ -1054,13 +1037,6 @@ void QueueMgrWindow::slotProgressTimerDone()
     if (d->currentTaskItem)
     {
         d->currentTaskItem->setProgressIcon(ico);
-    }
-
-    d->progressCount++;
-
-    if (d->progressCount == 8)
-    {
-        d->progressCount = 0;
     }
 
     d->progressTimer->start(300);

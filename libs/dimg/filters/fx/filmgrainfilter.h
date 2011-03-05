@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -104,12 +105,37 @@ class DIGIKAM_EXPORT FilmGrainFilter : public DImgThreadedFilter
 
 public:
 
+    explicit FilmGrainFilter(QObject* parent = 0);
     explicit FilmGrainFilter(DImg* orgImage, QObject* parent=0, const FilmGrainContainer& settings=FilmGrainContainer());
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     explicit FilmGrainFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
                              int progressBegin=0, int progressEnd=100,
                              const FilmGrainContainer& settings=FilmGrainContainer());
     ~FilmGrainFilter();
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:FilmGrainFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Film Grain Effect");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 

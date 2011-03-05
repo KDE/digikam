@@ -57,6 +57,7 @@
 // Local includes
 
 #include "colorcorrectiondlg.h"
+#include "dimgbuiltinfilter.h"
 #include "undomanager.h"
 #include "undoaction.h"
 #include "iccmanager.h"
@@ -68,11 +69,29 @@
 #include "dmetadata.h"
 #include "rawimport.h"
 #include "editortooliface.h"
+#include "dimg.h"
+#include "dimgfiltergenerator.h"
+#include "bcgfilter.h"
+#include "equalizefilter.h"
+#include "dimgfiltermanager.h"
+#include "versionmanager.h"
 
 namespace Digikam
 {
 
 class UndoManager;
+
+class FileToSave
+{
+public:
+    QString fileName;
+    QString filePath;
+    int     historyStep;
+    QString mimeType;
+    QMap<QString, QVariant> ioAttributes;
+    bool    setExifOrientationTag;
+    DImg    image;
+};
 
 class DImgInterfacePrivate
 {
@@ -97,8 +116,8 @@ public:
         contrast(0.0),
         zoom(1.0),
         displayingWidget(0),
+        currentFileToSave(0),
         undoMan(0),
-        cmSettings(0),
         expoSettings(0),
         thread(0)
 
@@ -127,14 +146,14 @@ public:
 
     QWidget*                   displayingWidget;
 
-    QString                    filename;
-    QString                    savingFilename;
+    QList<FileToSave>          filesToSave;
+    int                        currentFileToSave;
 
     DImg                       image;
-
+    DImageHistory              resolvedInitialHistory;
     UndoManager*               undoMan;
 
-    ICCSettingsContainer*      cmSettings;
+    ICCSettingsContainer       cmSettings;
 
     ExposureSettingsContainer* expoSettings;
 
@@ -174,6 +193,8 @@ DImgInterface::DImgInterface()
 
     connect( d->thread, SIGNAL(signalSavingProgress(const QString&, float)),
              this, SLOT(slotSavingProgress(const QString&, float)) );
+
+    //readMetadataFromFile();
 }
 
 DImgInterface::~DImgInterface()
@@ -193,21 +214,21 @@ void DImgInterface::setDisplayingWidget(QWidget* widget)
     d->displayingWidget = widget;
 }
 
-void DImgInterface::load(const QString& filename, IOFileSettingsContainer* iofileSettings)
+void DImgInterface::load(const QString& filePath, IOFileSettingsContainer* iofileSettings)
 {
-    LoadingDescription description(filename, LoadingDescription::ConvertForEditor);
+    LoadingDescription description(filePath, LoadingDescription::ConvertForEditor);
 
-    if (DImg::fileFormat(filename) == DImg::RAW)
+    if (DImg::fileFormat(filePath) == DImg::RAW)
     {
-        description = LoadingDescription(filename, iofileSettings->rawDecodingSettings,
+        description = LoadingDescription(filePath, iofileSettings->rawDecodingSettings,
                                          LoadingDescription::RawDecodingGlobalSettings,
                                          LoadingDescription::ConvertForEditor);
 
-        if (iofileSettings->useRAWImport)
+        if (EditorToolIface::editorToolIface() && iofileSettings->useRAWImport)
         {
             d->nextRawDescription = description;
 
-            RawImport* rawImport = new RawImport(KUrl(filename), this);
+            RawImport* rawImport = new RawImport(KUrl(filePath), this);
             EditorToolIface::editorToolIface()->loadTool(rawImport);
 
             connect(rawImport, SIGNAL(okClicked()),
@@ -230,25 +251,26 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer* iofil
 
 void DImgInterface::slotLoadRawFromTool()
 {
-    RawImport* rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
-
-    if (rawImport)
+    if (EditorToolIface::editorToolIface())
     {
-        d->nextRawDescription.rawDecodingSettings = rawImport->rawDecodingSettings();
-        d->nextRawDescription.rawDecodingHint     = LoadingDescription::RawDecodingCustomSettings;
+        RawImport* rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
 
-        if (!rawImport->demosaicingSettingsDirty())
+        if (rawImport)
+        {
+            d->nextRawDescription.rawDecodingSettings = rawImport->rawDecodingSettings();
+            d->nextRawDescription.rawDecodingHint     = LoadingDescription::RawDecodingCustomSettings;
+        }
+
+        if (rawImport->hasPostProcessedImage())
         {
             resetValues();
             d->currentDescription = d->nextRawDescription;
-            d->filename           = d->currentDescription.filePath;
-
             d->nextRawDescription = LoadingDescription();
 
-            emit signalLoadingStarted(d->filename);
+            emit signalLoadingStarted(d->currentDescription.filePath);
             slotImageLoaded(d->currentDescription, rawImport->postProcessedImage());
             EditorToolIface::editorToolIface()->unLoadTool();
-            emit signalImageLoaded(d->filename, true);
+            emit signalImageLoaded(d->currentDescription.filePath, true);
         }
         else
         {
@@ -275,14 +297,12 @@ void DImgInterface::load(const LoadingDescription& description)
     {
         resetValues();
         d->currentDescription = description;
-        d->filename           = d->currentDescription.filePath;
-
         loadCurrent();
     }
     else
     {
-        emit signalLoadingStarted(d->filename);
-        emit signalImageLoaded(d->filename, true);
+        emit signalLoadingStarted(d->currentDescription.filePath);
+        emit signalImageLoaded(d->currentDescription.filePath, true);
     }
 }
 
@@ -297,7 +317,10 @@ void DImgInterface::applyTransform(const IccTransform& transform)
     d->currentDescription.postProcessingParameters.setTransform(transform);
     loadCurrent();
 
-    EditorToolIface::editorToolIface()->unLoadTool();
+    if (EditorToolIface::editorToolIface())
+    {
+        EditorToolIface::editorToolIface()->unLoadTool();
+    }
 }
 
 void DImgInterface::loadCurrent()
@@ -305,7 +328,7 @@ void DImgInterface::loadCurrent()
     d->thread->load(d->currentDescription,
                     SharedLoadSaveThread::AccessModeReadWrite,
                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-    emit signalLoadingStarted(d->filename);
+    emit signalLoadingStarted(d->currentDescription.filePath);
 }
 
 void DImgInterface::restore()
@@ -317,7 +340,11 @@ void DImgInterface::restore()
 
 void DImgInterface::resetImage()
 {
-    EditorToolIface::editorToolIface()->unLoadTool();
+    if (EditorToolIface::editorToolIface())
+    {
+        EditorToolIface::editorToolIface()->unLoadTool();
+    }
+
     resetValues();
     d->image.reset();
 }
@@ -325,7 +352,6 @@ void DImgInterface::resetImage()
 void DImgInterface::resetValues()
 {
     d->valid          = false;
-    d->filename.clear();
     d->currentDescription = LoadingDescription();
     d->width          = 0;
     d->height         = 0;
@@ -338,16 +364,16 @@ void DImgInterface::resetValues()
     d->gamma          = 1.0f;
     d->contrast       = 1.0f;
     d->brightness     = 0.0f;
-
+    d->resolvedInitialHistory = DImageHistory();
     d->undoMan->clear();
 }
 
-void DImgInterface::setICCSettings(ICCSettingsContainer* cmSettings)
+void DImgInterface::setICCSettings(const ICCSettingsContainer& cmSettings)
 {
     d->cmSettings = cmSettings;
 }
 
-ICCSettingsContainer* DImgInterface::getICCSettings()
+ICCSettingsContainer DImgInterface::getICCSettings()
 {
     return d->cmSettings;
 }
@@ -364,9 +390,7 @@ ExposureSettingsContainer* DImgInterface::getExposureSettings()
 
 void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img)
 {
-    const QString& fileName = loadingDescription.filePath;
-
-    if (fileName != d->filename)
+    if (loadingDescription != d->currentDescription)
     {
         return;
     }
@@ -382,16 +406,14 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
 
     if (!d->image.isNull())
     {
-        d->origWidth  = d->image.width();
-        d->origHeight = d->image.height();
         d->valid      = true;
-        d->width      = d->origWidth;
-        d->height     = d->origHeight;
         valRet        = true;
+        d->resolvedInitialHistory = d->image.getOriginalImageHistory();
+        d->resolvedInitialHistory.clearReferredImages(); // default empty, real values set by higher level
 
         // Raw files are already rotated properly by dcraw. Only perform auto-rotation with non-RAW files.
-        // We don't have a feedback from dcraw about auto-rotated RAW file during decoding. Well set transformed
-        // flag as well.
+        // We don't have a feedback from dcraw about auto-rotated RAW file during decoding.
+        // Setting rotatedOrFlipped to true will reset the exif flag on save (the data is then already rotated)
 
         if (d->image.detectedFormat() == DImg::RAW)
         {
@@ -404,9 +426,16 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
 
             if (!attribute.isValid() || !attribute.toBool())
             {
-                exifRotate(d->filename);
+                DMetadata metadata(d->image.getMetadata());
+                d->rotatedOrFlipped = d->image.rotateAndFlip(metadata.getImageOrientation());
             }
         }
+
+        // set after rotation
+        d->origWidth  = d->image.width();
+        d->origHeight = d->image.height();
+        d->width      = d->origWidth;
+        d->height     = d->origHeight;
 
         updateColorManagement();
     }
@@ -415,8 +444,24 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
         valRet = false;
     }
 
-    emit signalImageLoaded(d->filename, valRet);
+    emit signalImageLoaded(d->currentDescription.filePath, valRet);
     setModified();
+
+    /*
+     *  TODO: FilterManager test block -- to be removed later
+     *
+        FilterAction fa("digikam:BCGFilter", 1);
+        fa.addParameter("contrast", 1);
+        fa.addParameter("channel", 1);
+        fa.addParameter("brightness", 1);
+        fa.addParameter("gamma", 1.2);
+
+        DImgThreadedFilter *f =  DImgFilterManager::instance()->createFilter("digikam:BCGFilter", 1);
+        f->readParameters(fa);
+        f->setupFilter(img);
+        f->startFilterDirectly();
+        delete f;
+    */
 }
 
 void DImgInterface::updateColorManagement()
@@ -425,7 +470,7 @@ void DImgInterface::updateColorManagement()
 
     if (d->doSoftProofing)
     {
-        d->monitorICCtrans = manager.displaySoftProofingTransform(d->cmSettings->defaultProofProfile, d->displayingWidget);
+        d->monitorICCtrans = manager.displaySoftProofingTransform(d->cmSettings.defaultProofProfile, d->displayingWidget);
     }
     else
     {
@@ -441,7 +486,7 @@ void DImgInterface::setSoftProofingEnabled(bool enabled)
 
 void DImgInterface::slotLoadingProgress(const LoadingDescription& loadingDescription, float progress)
 {
-    if (loadingDescription.filePath == d->filename)
+    if (loadingDescription == d->currentDescription)
     {
         emit signalLoadingProgress(loadingDescription.filePath, progress);
     }
@@ -450,56 +495,6 @@ void DImgInterface::slotLoadingProgress(const LoadingDescription& loadingDescrip
 bool DImgInterface::exifRotated()
 {
     return d->rotatedOrFlipped;
-}
-
-void DImgInterface::exifRotate(const QString& filename)
-{
-    // Rotate image based on EXIF rotate tag
-
-    DMetadata metadata(filename);
-    DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-
-    if (orientation != DMetadata::ORIENTATION_NORMAL)
-    {
-        switch (orientation)
-        {
-            case DMetadata::ORIENTATION_NORMAL:
-            case DMetadata::ORIENTATION_UNSPECIFIED:
-                break;
-
-            case DMetadata::ORIENTATION_HFLIP:
-                flipHoriz(false);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_180:
-                rotate180(false);
-                break;
-
-            case DMetadata::ORIENTATION_VFLIP:
-                flipVert(false);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90_HFLIP:
-                rotate90(false);
-                flipHoriz(false);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90:
-                rotate90(false);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90_VFLIP:
-                rotate90(false);
-                flipVert(false);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_270:
-                rotate270(false);
-                break;
-        }
-
-        d->rotatedOrFlipped = true;
-    }
 }
 
 void DImgInterface::setExifOrient(bool exifOrient)
@@ -531,42 +526,34 @@ void DImgInterface::redo()
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
-void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer* iofileSettings,
-                           bool setExifOrientationTag, const QString& givenMimeType)
+void DImgInterface::rollbackToOrigin()
 {
-    // No need to toggle off undo, redo or save action during saving using
-    // signalUndoStateChanged(), this is will done by GUI implementation directly.
+    d->undoMan->rollbackToOrigin();
+    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+}
 
-    // Try hard to find a mimetype.
-    QString mimeType = givenMimeType;
-
-    // This is possibly empty
-    if (mimeType.isEmpty())
-    {
-        mimeType = getImageFormat();
-    }
-
-    kDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " ("
-             << mimeType << ")";
+QMap<QString,QVariant> DImgInterface::ioAttributes(IOFileSettingsContainer* iofileSettings, const QString& mimeType)
+{
+    QMap<QString, QVariant> attributes;
 
     // JPEG file format.
     if ( mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") ||
          mimeType.toUpper() == QString("JPE"))
     {
-        d->image.setAttribute("quality",     iofileSettings->JPEGCompression);
-        d->image.setAttribute("subsampling", iofileSettings->JPEGSubSampling);
+        attributes.insert("quality",     iofileSettings->JPEGCompression);
+        attributes.insert("subsampling", iofileSettings->JPEGSubSampling);
     }
 
     // PNG file format.
     if ( mimeType.toUpper() == QString("PNG") )
     {
-        d->image.setAttribute("quality", iofileSettings->PNGCompression);
+        attributes.insert("quality", iofileSettings->PNGCompression);
     }
 
     // TIFF file format.
     if ( mimeType.toUpper() == QString("TIFF") || mimeType.toUpper() == QString("TIF") )
     {
-        d->image.setAttribute("compress", iofileSettings->TIFFCompression);
+        attributes.insert("compress", iofileSettings->TIFFCompression);
     }
 
     // JPEG 2000 file format.
@@ -576,11 +563,11 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer* iof
     {
         if (iofileSettings->JPEG2000LossLess)
         {
-            d->image.setAttribute("quality", 100);    // LossLess compression
+            attributes.insert("quality", 100);    // LossLess compression
         }
         else
         {
-            d->image.setAttribute("quality", iofileSettings->JPEG2000Compression);
+            attributes.insert("quality", iofileSettings->JPEG2000Compression);
         }
     }
 
@@ -589,40 +576,162 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer* iof
     {
         if (iofileSettings->PGFLossLess)
         {
-            d->image.setAttribute("quality", 0);    // LossLess compression
+            attributes.insert("quality", 0);    // LossLess compression
         }
         else
         {
-            d->image.setAttribute("quality", iofileSettings->PGFCompression);
+            attributes.insert("quality", iofileSettings->PGFCompression);
         }
     }
 
-    d->savingFilename = fileName;
-
-    d->image.updateMetadata(mimeType, getImageFileName(), setExifOrientationTag);
-
-    d->thread->save(d->image, fileName, mimeType);
+    return attributes;
 }
 
-void DImgInterface::slotImageSaved(const QString& filePath, bool success)
+void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iofileSettings,
+                           bool setExifOrientationTag, const QString& givenMimeType)
 {
-    if (filePath != d->savingFilename)
+    saveAs(filePath, iofileSettings, setExifOrientationTag, givenMimeType, VersionFileOperation());
+}
+
+void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iofileSettings,
+                           bool setExifOrientationTag, const QString& givenMimeType,
+                           const VersionFileOperation& op)
+{
+    // No need to toggle off undo, redo or save action during saving using
+    // signalUndoStateChanged(), this is will done by GUI implementation directly.
+
+    emit signalSavingStarted(filePath);
+
+    d->filesToSave.clear();
+    d->currentFileToSave = 0;
+
+    QString mimeType = givenMimeType;
+    // This is possibly empty
+    if (mimeType.isEmpty())
+    {
+        mimeType = getImageFormat();
+    }
+
+    if (op.tasks & VersionFileOperation::MoveToIntermediate ||
+        op.tasks & VersionFileOperation::SaveAndDelete)
+    {
+        // The current file will stored away at a different name. Adjust history.
+        d->image.getImageHistory().moveCurrentReferredImage(op.intermediateForLoadedFile.path,
+                                                            op.intermediateForLoadedFile.fileName);
+    }
+
+    QMap<int,VersionFileInfo>::const_iterator it;
+    for (it = op.intermediates.begin(); it != op.intermediates.end(); ++it)
+    {
+        FileToSave file;
+        file.fileName     = it.value().fileName;
+        file.filePath     = it.value().filePath();
+        file.mimeType     = it.value().format;
+        file.ioAttributes = ioAttributes(iofileSettings, it.value().format);
+        file.historyStep  = it.key();
+        file.setExifOrientationTag = setExifOrientationTag;
+        file.image        = d->image.copyMetaData();
+        d->filesToSave << file;
+        kDebug() << "Saving intermediate at history step" << file.historyStep
+                 << "to" << file.filePath << "(" << file.mimeType << ")";
+    }
+
+    // This shall be the last in the list. If not, adjust slotImageSaved
+    FileToSave primary;
+    primary.fileName     = getImageFileName();
+    primary.filePath     = filePath;
+    primary.mimeType     = mimeType;
+    primary.ioAttributes = ioAttributes(iofileSettings, mimeType);
+    primary.historyStep  = -1; // special value
+    primary.setExifOrientationTag = setExifOrientationTag;
+    primary.image        = d->image;
+    d->filesToSave << primary;
+
+    kDebug() << "Saving to :" << primary.filePath << "(" << primary.mimeType << ")";
+
+    saveNext();
+}
+
+void DImgInterface::saveNext()
+{
+    if (d->filesToSave.isEmpty() || d->currentFileToSave >= d->filesToSave.size())
     {
         return;
     }
 
-    if (!success)
+    FileToSave& file = d->filesToSave[d->currentFileToSave];
+    kDebug() << "Saving file" << file.filePath << "at" << file.historyStep;
+
+    if (file.historyStep != -1)
+    {
+        // intermediate. Need to get data from undo manager
+        int currentStep = getImageHistory().size() - 1;
+        kDebug() << "Requesting from undo manager data" << currentStep - file.historyStep << "steps back";
+        !d->undoMan->putImageDataAndHistory(&file.image, currentStep - file.historyStep);
+    }
+
+    QMap<QString,QVariant>::iterator it;
+    for (it = file.ioAttributes.begin(); it != file.ioAttributes.end(); ++it)
+    {
+        file.image.setAttribute(it.key(), it.value());
+    }
+
+    file.image.updateMetadata(file.mimeType, file.fileName, file.setExifOrientationTag, true);
+    kDebug() << "Adjusting image" << file.mimeType << file.fileName << file.setExifOrientationTag << file.ioAttributes
+             << "image:" << file.image.size() << file.image.isNull();
+
+    d->thread->save(file.image, file.filePath, file.mimeType);
+}
+
+void DImgInterface::slotImageSaved(const QString& filePath, bool success)
+{
+    if (d->filesToSave.isEmpty() || d->filesToSave[d->currentFileToSave].filePath != filePath)
+    {
+        return;
+    }
+
+    FileToSave& savedFile = d->filesToSave[d->currentFileToSave];
+
+    if (success)
+    {
+        if (savedFile.historyStep == -1)
+        {
+            // Note: We operate on a temp file here, so we cannot
+            // add it as referred image yet. Done in addLastSavedToHistory
+            LoadingDescription description(filePath, LoadingDescription::ConvertForEditor);
+            d->currentDescription = description;
+        }
+        else
+        {
+            HistoryImageId id = savedFile.image.addAsReferredImage(filePath);
+            // for all images following in history, we need to insert the now saved file at the right place
+            for (int i = d->currentFileToSave + 1; i < d->filesToSave.size(); i++)
+            {
+                d->filesToSave[i].image.insertAsReferredImage(savedFile.historyStep, id);
+            }
+        }
+    }
+    else
     {
         kWarning() << "error saving image '" << QFile::encodeName(filePath).data();
     }
 
-    emit signalImageSaved(filePath, success);
-    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+    d->currentFileToSave++;
+
+    if (d->currentFileToSave == d->filesToSave.size())
+    {
+        d->filesToSave.clear();
+        emit signalImageSaved(filePath, success);
+    }
+    else
+    {
+        saveNext();
+    }
 }
 
 void DImgInterface::slotSavingProgress(const QString& filePath, float progress)
 {
-    if (filePath == d->savingFilename)
+    if (!d->filesToSave.isEmpty() && d->filesToSave[d->currentFileToSave].filePath == filePath)
     {
         emit signalSavingProgress(filePath, progress);
     }
@@ -631,16 +740,89 @@ void DImgInterface::slotSavingProgress(const QString& filePath, float progress)
 void DImgInterface::abortSaving()
 {
     // failure will be reported by a signal
-    d->thread->stopSaving(d->savingFilename);
+    if (!d->filesToSave.isEmpty())
+    {
+        d->thread->stopSaving(d->filesToSave[d->currentFileToSave].filePath);
+        d->filesToSave.clear();
+    }
 }
 
-void DImgInterface::switchToLastSaved(const QString& newFilename)
+QString DImgInterface::ensureHasCurrentUuid()
+{
+    /*
+     * 1) An image is loaded. The DImgLoader adds the HistoryImageId of the loaded file as "Current" entry.
+     * 2) The loaded image has no UUID (created by camera etc.). Highler level calls ensureHasCurrentUuid
+     *    before any saving is started
+     * 3) We create a new UUID and add it to the image's history. When the new image is saved,
+     *    it references the original by UUID. Because we, here, do not touch the original,
+     *    it is out of scope to add the UUID to the original file's metadata.
+     *    Higher level is responsible for this.
+     * 4) When the image is saved, DImg::updateMetadata will create a new UUID for the saved
+     *    image, which is then of course written to the newly saved file.
+     */
+    if (!d->image.getImageHistory().currentReferredImage().hasUuid())
+    {
+        // if there is no uuid in the image, we create one.
+        QString uuid = d->image.createImageUniqueId();
+        d->image.addCurrentUniqueImageId(uuid);
+    }
+
+    return d->image.getImageHistory().currentReferredImage().uuid();
+}
+
+void DImgInterface::provideCurrentUuid(const QString& uuid)
+{
+    if (!d->image.getImageHistory().currentReferredImage().hasUuid())
+    {
+        d->image.addCurrentUniqueImageId(uuid);
+    }
+}
+
+void DImgInterface::setLastSaved(const QString& filePath)
+{
+    if (getImageFilePath() == filePath)
+    {
+        // if the file was overwritten, a complete undo, to the state of original loading,
+        // does not return to a real image anymore - it's overwritten
+        d->undoMan->clearPreviousOriginData();
+    }
+    // We cannot do it in slotImageSaved because we may operate on a temporary filePath.
+    d->image.imageSavedAs(filePath);
+}
+
+void DImgInterface::switchToLastSaved(const DImageHistory& resolvedCurrentHistory)
 {
     // Higher level wants to use the current DImg object to represent the file
     // it has previously been saved to.
-    d->filename = newFilename;
-
+    // setLastSaved shall have been called before.
     d->image.switchOriginToLastSaved();
+    if (resolvedCurrentHistory.isNull())
+    {
+        d->resolvedInitialHistory = d->image.getOriginalImageHistory();
+        d->resolvedInitialHistory.clearReferredImages();
+    }
+    else
+    {
+        d->resolvedInitialHistory = resolvedCurrentHistory;
+    }
+    setUndoManagerOrigin();
+}
+
+void DImgInterface::setHistoryIsBranch(bool isBranching)
+{
+    int firstStep = d->resolvedInitialHistory.size();
+    DImageHistory &history = d->image.getImageHistory();
+    if (firstStep < history.size())
+    {
+        if (isBranching)
+        {
+            history[firstStep].action.addFlag(FilterAction::ExplicitBranch);
+        }
+        else
+        {
+            history[firstStep].action.removeFlag(FilterAction::ExplicitBranch);
+        }
+    }
 }
 
 void DImgInterface::setModified()
@@ -658,6 +840,7 @@ void DImgInterface::readMetadataFromFile(const QString& file)
 {
     DMetadata meta(file);
     d->image.setMetadata(meta.data());
+    d->image.setImageHistory(DImageHistory::fromXml(meta.getImageHistory()));
 }
 
 void DImgInterface::clearUndoManager()
@@ -671,6 +854,7 @@ void DImgInterface::setUndoManagerOrigin()
 {
     d->undoMan->setOrigin();
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+    emit signalFileOriginChanged(getImageFilePath());
 }
 
 void DImgInterface::updateUndoState()
@@ -760,7 +944,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     img.convertDepth(32);
     QPainter painter(p);
 
-    if (d->cmSettings->enableCM && (d->cmSettings->useManagedView || d->doSoftProofing))
+    if (d->cmSettings.enableCM && (d->cmSettings.useManagedView || d->doSoftProofing))
     {
         QPixmap pix(img.convertToPixmap(d->monitorICCtrans));
         painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
@@ -824,7 +1008,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
         }
     }
 
-    if (d->cmSettings->enableCM && (d->cmSettings->useManagedView || d->doSoftProofing))
+    if (d->cmSettings.enableCM && (d->cmSettings.useManagedView || d->doSoftProofing))
     {
         QPixmap pix(img.convertToPixmap(d->monitorICCtrans));
         painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
@@ -854,102 +1038,66 @@ void DImgInterface::zoom(double val)
     d->height = (int)(d->origHeight * val);
 }
 
-void DImgInterface::rotate90(bool saveUndo)
+void DImgInterface::applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter)
 {
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R90));
-    }
+    applyBuiltinFilter(filter, new UndoActionReversible(this, filter));
+}
 
-    d->image.rotate(DImg::ROT90);
+void DImgInterface::applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* action)
+{
+    d->undoMan->addAction(action);
+
+    filter.apply(d->image);
+    d->image.addFilterAction(filter.filterAction());
+
+    // many operations change the image size
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
     setModified();
 }
 
-void DImgInterface::rotate180(bool saveUndo)
+void DImgInterface::rotate90()
 {
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R180));
-    }
-
-    d->image.rotate(DImg::ROT180);
-    d->origWidth  = d->image.width();
-    d->origHeight = d->image.height();
-
-    setModified();
+    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Rotate90));
 }
 
-void DImgInterface::rotate270(bool saveUndo)
+void DImgInterface::rotate180()
 {
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionRotate(this, UndoActionRotate::R270));
-    }
-
-    d->image.rotate(DImg::ROT270);
-    d->origWidth  = d->image.width();
-    d->origHeight = d->image.height();
-
-    setModified();
+    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Rotate180));
 }
 
-void DImgInterface::flipHoriz(bool saveUndo)
+void DImgInterface::rotate270()
 {
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionFlip(this, UndoActionFlip::Horizontal));
-    }
-
-    d->image.flip(DImg::HORIZONTAL);
-
-    setModified();
+    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Rotate270));
 }
 
-void DImgInterface::flipVert(bool saveUndo)
+void DImgInterface::flipHoriz()
 {
-    if (saveUndo)
-    {
-        d->undoMan->addAction(new UndoActionFlip(this, UndoActionFlip::Vertical));
-    }
+    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::FlipHorizontally));
+}
 
-    d->image.flip(DImg::VERTICAL);
-
-    setModified();
+void DImgInterface::flipVert()
+{
+    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::FlipVertically));
 }
 
 void DImgInterface::crop(int x, int y, int w, int h)
 {
-    d->undoMan->addAction(new UndoActionIrreversible(this, "Crop"));
-
-    d->image.crop(x, y, w, h);
-
-    d->origWidth  = d->image.width();
-    d->origHeight = d->image.height();
-
-    setModified();
+    applyBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Crop, QRect(x, y, w, h)),
+                       new UndoActionIrreversible(this, "Crop"));
 }
 
 void DImgInterface::resize(int w, int h)
 {
-    d->undoMan->addAction(new UndoActionIrreversible(this, "Resize"));
-
-    d->image.resize(w, h);
-
-    d->origWidth  = d->image.width();
-    d->origHeight = d->image.height();
-
-    setModified();
+    applyBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Resize, QSize(w, h)),
+                       new UndoActionIrreversible(this, "Resize"));
 }
 
 void DImgInterface::convertDepth(int depth)
 {
-    d->undoMan->addAction(new UndoActionIrreversible(this, "Convert Color Depth"));
-    d->image.convertDepth(depth);
-
-    setModified();
+    applyBuiltinFilter(DImgBuiltinFilter(depth == 32 ? DImgBuiltinFilter::ConvertTo8Bit : DImgBuiltinFilter::ConvertTo16Bit),
+                       new UndoActionIrreversible(this, "Convert Color Depth"));
 }
 
 DImg* DImgInterface::getImg()
@@ -978,23 +1126,45 @@ uchar* DImgInterface::getImage()
     }
 }
 
-void DImgInterface::putImage(const QString& caller, uchar* data, int w, int h)
+DImageHistory DImgInterface::getImageHistory()
 {
-    putImage(caller, data, w, h, d->image.sixteenBit());
+    return d->image.getImageHistory();
 }
 
-void DImgInterface::putImage(const QString& caller, uchar* data, int w, int h, bool sixteenBit)
+DImageHistory DImgInterface::getInitialImageHistory()
+{
+    return d->image.getOriginalImageHistory();
+}
+
+DImageHistory DImgInterface::getImageHistoryOfFullRedo()
+{
+    return d->undoMan->getImageHistoryOfFullRedo();
+}
+
+DImageHistory DImgInterface::getResolvedInitialHistory()
+{
+    return d->resolvedInitialHistory;
+}
+
+void DImgInterface::setResolvedInitialHistory(const DImageHistory& history)
+{
+    d->resolvedInitialHistory = history;
+}
+
+void DImgInterface::putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h)
+{
+    putImage(caller, action, data, w, h, d->image.sixteenBit());
+}
+
+void DImgInterface::putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h, bool sixteenBit)
 {
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
-    putImage(data, w, h, sixteenBit);
+    putImageData(data, w, h, sixteenBit);
+    d->image.addFilterAction(action);
+    setModified();
 }
 
-void DImgInterface::putImage(uchar* data, int w, int h)
-{
-    putImage(data, w, h, d->image.sixteenBit());
-}
-
-void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
+void DImgInterface::putImageData(uchar* data, int w, int h, bool sixteenBit)
 {
     if (d->image.isNull())
     {
@@ -1021,24 +1191,28 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
         d->origHeight = h;
     }
 
-    //kDebug() << data << " " << w << " " << h;
     d->image.putImageData(w, h, sixteenBit, d->image.hasAlpha(), data);
-
-    setModified();
 }
 
-void DImgInterface::putIccProfile(const IccProfile& profile)
+void DImgInterface::setUndoImageData(const DImageHistory& history, uchar* data, int w, int h, bool sixteenBit)
 {
-    if (d->image.isNull())
-    {
-        kWarning() << "d->image is NULL";
-        return;
-    }
+    // called from UndoManager
+    putImageData(data, w, h, sixteenBit);
+    d->image.setImageHistory(history);
+}
 
-    //kDebug() << "Embedding profile: " << profile;
-    d->image.setIccProfile(profile);
-    updateColorManagement();
-    setModified();
+void DImgInterface::imageUndoChanged(const DImageHistory& history)
+{
+    // called from UndoManager
+    d->origWidth  = d->image.width();
+    d->origHeight = d->image.height();
+    d->image.setImageHistory(history);
+}
+
+void DImgInterface::setFileOriginData(const QVariant& data)
+{
+    d->image.setFileOriginData(data);
+    emit signalFileOriginChanged(getImageFilePath());
 }
 
 uchar* DImgInterface::getImageSelection()
@@ -1057,7 +1231,7 @@ uchar* DImgInterface::getImageSelection()
     return 0;
 }
 
-void DImgInterface::putImageSelection(const QString& caller, uchar* data)
+void DImgInterface::putImageSelection(const QString& caller, const FilterAction& action, uchar* data)
 {
     if (!data || d->image.isNull())
     {
@@ -1068,17 +1242,42 @@ void DImgInterface::putImageSelection(const QString& caller, uchar* data)
 
     d->image.bitBltImage(data, 0, 0, d->selW, d->selH, d->selX, d->selY, d->selW, d->selH, d->image.bytesDepth());
 
+    d->image.addFilterAction(action);
     setModified();
 }
 
-void DImgInterface::getUndoHistory(QStringList& titles)
+void DImgInterface::putIccProfile(const IccProfile& profile)
 {
-    d->undoMan->getUndoHistory(titles);
+    if (d->image.isNull())
+    {
+        kWarning() << "d->image is NULL";
+        return;
+    }
+
+    //kDebug() << "Embedding profile: " << profile;
+    d->image.setIccProfile(profile);
+    updateColorManagement();
+    setModified();
 }
 
-void DImgInterface::getRedoHistory(QStringList& titles)
+QStringList DImgInterface::getUndoHistory() const
 {
-    d->undoMan->getRedoHistory(titles);
+    return d->undoMan->getUndoHistory();
+}
+
+QStringList DImgInterface::getRedoHistory() const
+{
+    return d->undoMan->getRedoHistory();
+}
+
+int DImgInterface::availableUndoSteps() const
+{
+    return d->undoMan->availableUndoSteps();
+}
+
+int DImgInterface::availableRedoSteps() const
+{
+    return d->undoMan->availableRedoSteps();
 }
 
 IccProfile DImgInterface::getEmbeddedICC()
@@ -1093,12 +1292,12 @@ KExiv2Data DImgInterface::getMetadata()
 
 QString DImgInterface::getImageFilePath()
 {
-    return d->filename;
+    return d->image.originalFilePath();
 }
 
 QString DImgInterface::getImageFileName()
 {
-    return d->filename.section( '/', -1 );
+    return getImageFilePath().section( '/', -1 );
 }
 
 QString DImgInterface::getImageFormat()
@@ -1114,7 +1313,7 @@ QString DImgInterface::getImageFormat()
     if (mimeType.isEmpty())
     {
         kWarning() << "DImg object does not contain attribute \"format\"";
-        mimeType = QImageReader::imageFormat(d->filename);
+        mimeType = QImageReader::imageFormat(getImageFilePath());
     }
 
     return mimeType;
@@ -1124,7 +1323,7 @@ QPixmap DImgInterface::convertToPixmap(DImg& img)
 {
     QPixmap pix;
 
-    if (d->cmSettings->enableCM && (d->cmSettings->useManagedView || d->doSoftProofing))
+    if (d->cmSettings.enableCM && (d->cmSettings.useManagedView || d->doSoftProofing))
     {
         // dont use d->monitorICCtrans here, because img may have a different embedded profile
         IccManager manager(img);
@@ -1132,7 +1331,7 @@ QPixmap DImgInterface::convertToPixmap(DImg& img)
 
         if (d->doSoftProofing)
         {
-            transform = manager.displaySoftProofingTransform(d->cmSettings->defaultProofProfile, d->displayingWidget);
+            transform = manager.displaySoftProofingTransform(d->cmSettings.defaultProofProfile, d->displayingWidget);
         }
         else
         {

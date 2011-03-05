@@ -7,6 +7,7 @@
  * Description : Charcoal threaded image filter.
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,6 +45,12 @@
 
 namespace Digikam
 {
+
+CharcoalFilter::CharcoalFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
 
 CharcoalFilter::CharcoalFilter(DImg* orgImage, QObject* parent, double pencil, double smooth)
     : DImgThreadedFilter(orgImage, parent, "Charcoal")
@@ -294,5 +301,23 @@ int CharcoalFilter::getOptimalKernelWidth(double radius, double sigma)
 
     return((int)kernelWidth-2);
 }
+
+FilterAction CharcoalFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("pencil", m_pencil);
+    action.addParameter("smooth", m_smooth);
+
+    return action;
+}
+
+void CharcoalFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_pencil = action.parameter("pencil").toDouble();
+    m_smooth = action.parameter("smooth").toDouble();
+}
+
 
 }  // namespace Digikam

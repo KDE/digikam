@@ -199,6 +199,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     imageSetAttribute("format", "PPM");
     imageSetAttribute("originalColorFormat", DImg::RGB);
     imageSetAttribute("originalBitDepth", 8);
+    imageSetAttribute("originalSize", QSize(width, height));
 
     return true;
 }

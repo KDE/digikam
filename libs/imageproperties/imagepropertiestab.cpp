@@ -6,7 +6,7 @@
  * Date        : 2006-04-19
  * Description : A tab to display general image information
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,21 +29,24 @@
 #include <QStyle>
 #include <QFile>
 #include <QPixmap>
+#include <QPainter>
 
 // KDE includes
 
-
 #include <klocale.h>
 #include <kdialog.h>
+#include <kstringhandler.h>
 
 // Local includes
 
 #include "imagepropertiestxtlabel.h"
+#include "picklabelwidget.h"
+#include "colorlabelwidget.h"
 
 namespace Digikam
 {
 
-class ImagePropertiesTabPriv
+class ImagePropertiesTab::ImagePropertiesTabPriv
 {
 public:
 
@@ -70,6 +73,11 @@ public:
         exposureMode(0),
         flash(0),
         whiteBalance(0),
+        caption(0),
+        tags(0),
+        pickLabel(0),
+        colorLabel(0),
+        rating(0),
         labelFile(0),
         labelFolder(0),
         labelFileModifiedDate(0),
@@ -91,7 +99,12 @@ public:
         labelPhotoSensitivity(0),
         labelPhotoExposureMode(0),
         labelPhotoFlash(0),
-        labelPhotoWhiteBalance(0)
+        labelPhotoWhiteBalance(0),
+        labelCaption(0),
+        labelTags(0),
+        labelPickLabel(0),
+        labelColorLabel(0),
+        labelRating(0)
     {
     }
 
@@ -120,6 +133,12 @@ public:
     DTextLabelName*  flash;
     DTextLabelName*  whiteBalance;
 
+    DTextLabelName*  caption;
+    DTextLabelName*  tags;
+    DTextLabelName*  pickLabel;
+    DTextLabelName*  colorLabel;
+    DTextLabelName*  rating;
+
     DTextLabelValue* labelFile;
     DTextLabelValue* labelFolder;
     DTextLabelValue* labelFileModifiedDate;
@@ -144,6 +163,12 @@ public:
     DTextLabelValue* labelPhotoExposureMode;
     DTextLabelValue* labelPhotoFlash;
     DTextLabelValue* labelPhotoWhiteBalance;
+
+    DTextLabelValue* labelCaption;
+    DTextLabelValue* labelTags;
+    DTextLabelValue* labelPickLabel;
+    DTextLabelValue* labelColorLabel;
+    DTextLabelValue* labelRating;
 };
 
 ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
@@ -154,8 +179,8 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    QWidget* w1               = new QWidget(this);
-    QGridLayout* glay1        = new QGridLayout(w1);
+    QWidget* const w1         = new QWidget(this);
+    QGridLayout* const glay1  = new QGridLayout(w1);
 
     d->file                   = new DTextLabelName(i18n("File: "),        w1);
     d->folder                 = new DTextLabelName(i18n("Folder: "),      w1);
@@ -192,8 +217,8 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    QWidget* w2               = new QWidget(this);
-    QGridLayout* glay2        = new QGridLayout(w2);
+    QWidget* const w2         = new QWidget(this);
+    QGridLayout* const glay2  = new QGridLayout(w2);
 
     d->mime                   = new DTextLabelName(i18n("Type: "),        w2);
     d->dimensions             = new DTextLabelName(i18n("Dimensions: "),  w2);
@@ -226,8 +251,8 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    QWidget* w3               = new QWidget(this);
-    QGridLayout* glay3        = new QGridLayout(w3);
+    QWidget* const w3         = new QWidget(this);
+    QGridLayout* const glay3  = new QGridLayout(w3);
 
     d->make                   = new DTextLabelName(i18n("Make: "),          w3);
     d->model                  = new DTextLabelName(i18n("Model: "),         w3);
@@ -282,6 +307,41 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     addItem(w3, SmallIcon("camera-photo"),
             i18n("Photograph Properties"), QString("PhotographProperties"), true);
 
+    // --------------------------------------------------
+
+    QWidget* const w4         = new QWidget(this);
+    QGridLayout* const glay4  = new QGridLayout(w4);
+
+    d->caption                = new DTextLabelName(i18n("Caption: "),     w4);
+    d->pickLabel              = new DTextLabelName(i18n("Pick label: "),  w4);
+    d->colorLabel             = new DTextLabelName(i18n("Color label: "), w4);
+    d->rating                 = new DTextLabelName(i18n("Rating: "),      w4);
+    d->tags                   = new DTextLabelName(i18n("Tags: "),        w4);
+
+    d->labelCaption           = new DTextLabelValue(0, w4);
+    d->labelPickLabel         = new DTextLabelValue(0, w4);
+    d->labelColorLabel        = new DTextLabelValue(0, w4);
+    d->labelRating            = new DTextLabelValue(0, w4);
+    d->labelTags              = new DTextLabelValue(0, w4);
+    d->labelTags->setTextElideMode(Qt::ElideLeft);
+
+    glay4->addWidget(d->caption,         0, 0, 1, 1);
+    glay4->addWidget(d->labelCaption,    0, 1, 1, 1);
+    glay4->addWidget(d->tags,            1, 0, 1, 1);
+    glay4->addWidget(d->labelTags,       1, 1, 1, 1);
+    glay4->addWidget(d->pickLabel,       2, 0, 1, 1);
+    glay4->addWidget(d->labelPickLabel,  2, 1, 1, 1);
+    glay4->addWidget(d->colorLabel,      3, 0, 1, 1);
+    glay4->addWidget(d->labelColorLabel, 3, 1, 1, 1);
+    glay4->addWidget(d->rating,          4, 0, 1, 1);
+    glay4->addWidget(d->labelRating,     4, 1, 1, 1);
+    glay4->setMargin(KDialog::spacingHint());
+    glay4->setSpacing(0);
+    glay4->setColumnStretch(1, 10);
+
+    addItem(w4, SmallIcon("imagecomment"),
+            i18n("digiKam Properties"), QString("DigikamProperties"), true);
+
     addStretch();
 }
 
@@ -294,30 +354,36 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
 {
     if (url.isEmpty())
     {
-        d->labelFile->setText(QString());
-        d->labelFolder->setText(QString());
-        d->labelFileModifiedDate->setText(QString());
-        d->labelFileSize->setText(QString());
-        d->labelFileOwner->setText(QString());
-        d->labelFilePermissions->setText(QString());
+        d->labelFile->clear();
+        d->labelFolder->clear();
+        d->labelFileModifiedDate->clear();
+        d->labelFileSize->clear();
+        d->labelFileOwner->clear();
+        d->labelFilePermissions->clear();
 
-        d->labelImageMime->setText(QString());
-        d->labelImageDimensions->setText(QString());
-        d->labelImageCompression->setText(QString());
-        d->labelImageBitDepth->setText(QString());
-        d->labelImageColorMode->setText(QString());
+        d->labelImageMime->clear();
+        d->labelImageDimensions->clear();
+        d->labelImageCompression->clear();
+        d->labelImageBitDepth->clear();
+        d->labelImageColorMode->clear();
 
-        d->labelPhotoMake->setText(QString());
-        d->labelPhotoModel->setText(QString());
-        d->labelPhotoDateTime->setText(QString());
-        d->labelPhotoLens->setText(QString());
-        d->labelPhotoAperture->setText(QString());
-        d->labelPhotoFocalLength->setText(QString());
-        d->labelPhotoExposureTime->setText(QString());
-        d->labelPhotoSensitivity->setText(QString());
-        d->labelPhotoExposureMode->setText(QString());
-        d->labelPhotoFlash->setText(QString());
-        d->labelPhotoWhiteBalance->setText(QString());
+        d->labelPhotoMake->clear();
+        d->labelPhotoModel->clear();
+        d->labelPhotoDateTime->clear();
+        d->labelPhotoLens->clear();
+        d->labelPhotoAperture->clear();
+        d->labelPhotoFocalLength->clear();
+        d->labelPhotoExposureTime->clear();
+        d->labelPhotoSensitivity->clear();
+        d->labelPhotoExposureMode->clear();
+        d->labelPhotoFlash->clear();
+        d->labelPhotoWhiteBalance->clear();
+
+        d->labelCaption->clear();
+        d->labelPickLabel->clear();
+        d->labelColorLabel->clear();
+        d->labelRating->clear();
+        d->labelTags->clear();
 
         setEnabled(false);
         return;
@@ -329,7 +395,7 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
     d->labelFolder->setText(url.directory());
 }
 
-void ImagePropertiesTab::setPhotoInfoDisable(bool b)
+void ImagePropertiesTab::setPhotoInfoDisable(const bool b)
 {
     if (b)
     {
@@ -448,6 +514,114 @@ void ImagePropertiesTab::setPhotoFlash(const QString& str)
 void ImagePropertiesTab::setPhotoWhiteBalance(const QString& str)
 {
     d->labelPhotoWhiteBalance->setText(str);
+}
+
+void ImagePropertiesTab::showOrHideCaptionAndTags()
+{
+    bool hasCaption    = !d->labelCaption->text().isEmpty();
+    bool hasPickLabel  = !d->labelPickLabel->text().isEmpty();
+    bool hasColorLabel = !d->labelColorLabel->text().isEmpty();
+    bool hasRating     = !d->labelRating->text().isEmpty();
+    bool hasTags       = !d->labelTags->text().isEmpty();
+
+    d->caption->setVisible(hasCaption);
+    d->labelCaption->setVisible(hasCaption);
+    d->pickLabel->setVisible(hasPickLabel);
+    d->labelPickLabel->setVisible(hasPickLabel);
+    d->colorLabel->setVisible(hasColorLabel);
+    d->labelColorLabel->setVisible(hasColorLabel);
+    d->rating->setVisible(hasRating);
+    d->labelRating->setVisible(hasRating);
+    d->tags->setVisible(hasTags);
+    d->labelTags->setVisible(hasTags);
+
+    widget(3)->setVisible(hasCaption || hasRating || hasTags || hasPickLabel || hasColorLabel);
+}
+
+void ImagePropertiesTab::setCaption(const QString& str)
+{
+    d->labelCaption->setText(str);
+}
+
+void ImagePropertiesTab::setColorLabel(int colorId)
+{
+    if (colorId == NoColorLabel)
+    {
+        d->labelColorLabel->setText(QString());
+    }
+    else
+    {
+        d->labelColorLabel->setText(ColorLabelWidget::labelColorName((ColorLabel)colorId));
+    }
+}
+
+void ImagePropertiesTab::setPickLabel(int pickId)
+{
+    if (pickId == NoPickLabel)
+    {
+        d->labelPickLabel->setText(QString());
+    }
+    else
+    {
+        d->labelPickLabel->setText(PickLabelWidget::labelPickName((PickLabel)pickId));
+    }
+}
+
+void ImagePropertiesTab::setRating(int rating)
+{
+    QString str;
+    if (rating > RatingMin && rating <= RatingMax)
+    {
+        str = " ";
+        for (int i=0; i<rating; i++)
+        {
+            str += QChar(0x2730);
+            str += ' ';
+        }
+    }
+    d->labelRating->setText(str);
+}
+
+static bool naturalLessThan(const QString& a, const QString& b)
+{
+    return KStringHandler::naturalCompare(a,b) < 0;
+}
+
+void ImagePropertiesTab::setTags(const QStringList& tagPaths, const QStringList& tagNames)
+{
+    Q_UNUSED(tagNames);
+    QStringList tagsSorted = tagPaths;
+    qStableSort(tagsSorted.begin(), tagsSorted.end(), naturalLessThan);
+
+    QStringList tagsShortened;
+    QString previous;
+    foreach (const QString tagPath, tagsSorted)
+    {
+        QString shortenedPath = tagPath;
+
+        QStringList currentPath  = tagPath.split('/', QString::SkipEmptyParts);
+        QStringList previousPath = previous.split('/', QString::SkipEmptyParts);
+        int depth;
+        for (depth = 0; depth < currentPath.size() && depth < previousPath.size(); depth++)
+        {
+            if (currentPath[depth] != previousPath[depth])
+                break;
+        }
+
+        if (depth)
+        {
+            QString indent;
+            indent.fill(' ', qMin(depth, 5));
+            //indent += QChar(0x2026);
+            shortenedPath = indent + tagPath.section('/', depth);
+        }
+
+        shortenedPath.replace("/", " / ");
+        tagsShortened << shortenedPath;
+        previous = tagPath;
+    }
+
+    d->labelTags->setText(tagsShortened.join("\n"));
 }
 
 }  // namespace Digikam

@@ -7,8 +7,8 @@
  * Description : image properties side bar using data from
  *               digiKam database.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include "dimagehistory.h"
 #include "imageinfolist.h"
 #include "imagepropertiessidebar.h"
 #include "digikam_export.h"
@@ -46,7 +47,7 @@ class DImg;
 class SidebarSplitter;
 class ImageInfo;
 class ImageChangeset;
-class ImagePropertiesSideBarDBPriv;
+class ImagePropertiesVersionsTab;
 
 class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 {
@@ -62,11 +63,16 @@ public:
 
     virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg* img = 0);
 
-    virtual void itemChanged(const ImageInfo& info, const QRect& rect = QRect(), DImg* img = 0);
+    virtual void itemChanged(const ImageInfo& info, const QRect& rect = QRect(),
+                             DImg* img = 0, const DImageHistory& history = DImageHistory());
     virtual void itemChanged(const ImageInfoList& infos);
 
     void populateTags(void);
     void refreshTagsView();
+
+    ///This is for image editor to be able to update the filter list in sidebar
+    ImagePropertiesVersionsTab* getFiltersHistoryTab();
+    void setFiltersHistoryDirty(bool dirty);
 
 Q_SIGNALS:
 
@@ -87,6 +93,8 @@ public Q_SLOTS:
     void slotAssignRatingFourStar();
     void slotAssignRatingFiveStar();
 
+    void slotPopupTagsView();
+
     virtual void slotNoCurrentItem();
 
 private Q_SLOTS:
@@ -97,12 +105,24 @@ private Q_SLOTS:
 
 private:
 
-    void itemChanged(const KUrl& url, const ImageInfo& info, const QRect& rect, DImg* img);
-    void itemChanged(const ImageInfoList infos, const QRect& rect, DImg* img);
+    void itemChanged(const KUrl& url, const ImageInfo& info, const QRect& rect, DImg* img, const DImageHistory& history);
+    void itemChanged(const ImageInfoList infos, const QRect& rect, DImg* img, const DImageHistory& history);
     void setImagePropertiesInformation(const KUrl& url);
+
+protected:
+    /**
+     * load the last view state from disk - called by StateSavingObject#loadState()
+     */
+    void doLoadState();
+
+    /**
+     * save the view state to disk - called by StateSavingObject#saveState()
+     */
+    void doSaveState();
 
 private:
 
+    class ImagePropertiesSideBarDBPriv;
     ImagePropertiesSideBarDBPriv* const d;
 };
 

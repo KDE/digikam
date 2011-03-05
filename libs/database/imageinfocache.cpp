@@ -6,7 +6,8 @@
  * Date        : 2007-05-01
  * Description : ImageInfo common data
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +30,7 @@
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "imageinfodata.h"
+#include <kdebug.h>
 
 namespace Digikam
 {
@@ -86,7 +88,7 @@ void ImageInfoCache::dropInfo(ImageInfoData* infodata)
         return;
     }
 
-    if (m_infos.remove(infodata->id))
+    if (infodata->invalid || m_infos.remove(infodata->id))
     {
         delete infodata;
     }
@@ -104,6 +106,26 @@ QString ImageInfoCache::albumName(DatabaseAccess& access, int albumId)
     }
 
     return (*it);
+}
+
+void ImageInfoCache::invalidate()
+{
+    QHash<qlonglong, ImageInfoData*>::iterator it;
+    for (it = m_infos.begin(); it != m_infos.end(); ++it)
+    {
+        if ((*it)->isReferenced())
+        {
+            (*it)->invalid = true;
+            (*it)->id = -1;
+        }
+        else
+        {
+            delete *it;
+        }
+    }
+
+    m_infos.clear();
+    m_albums.clear();
 }
 
 void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
@@ -135,6 +157,16 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
                 (*it)->formatCached = false;
             }
 
+            if (changes & DatabaseFields::PickLabel)
+            {
+                (*it)->pickLabelCached = false;
+            }
+
+            if (changes & DatabaseFields::ColorLabel)
+            {
+                (*it)->colorLabelCached = false;
+            }
+
             if (changes & DatabaseFields::Rating)
             {
                 (*it)->ratingCached = false;
@@ -159,12 +191,30 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
             {
                 (*it)->imageSizeCached = false;
             }
+
+            if (changes & DatabaseFields::LatitudeNumber     ||
+                changes & DatabaseFields::LongitudeNumber ||
+                changes & DatabaseFields::Altitude)
+            {
+                (*it)->positionsCached = false;
+            }
+
+            if (changes & DatabaseFields::ImageRelations)
+            {
+                (*it)->groupedImagesIsCached = false;
+                (*it)->groupImageIsCached    = false;
+            }
         }
     }
 }
 
 void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset& changeset)
 {
+    if (changeset.propertiesWereChanged())
+    {
+        return;
+    }
+
     DatabaseAccess access;
 
     foreach (const qlonglong& imageId, changeset.ids())
@@ -173,7 +223,9 @@ void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset& changeset)
 
         if (it != m_infos.end())
         {
-            (*it)->tagIdsCached = false;
+            (*it)->tagIdsCached     = false;
+            (*it)->colorLabelCached = false;
+            (*it)->pickLabelCached  = false;
         }
     }
 }

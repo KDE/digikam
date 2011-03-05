@@ -115,7 +115,9 @@ ImagePropertiesSideBarCamGui::~ImagePropertiesSideBarCamGui()
 
 void ImagePropertiesSideBarCamGui::applySettings()
 {
-    d->metadataTab->applySettings();
+    /// @todo Still needed?
+
+    /// @todo Are load/saveState called by the creator?
 }
 
 void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KUrl& url,
@@ -191,6 +193,8 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
         d->gpsTab->setMetadata(d->metaData, d->currentURL);
         d->dirtyGpsTab = true;
     }
+
+    d->gpsTab->setActive(tab==d->gpsTab);
 
     unsetCursor();
 }

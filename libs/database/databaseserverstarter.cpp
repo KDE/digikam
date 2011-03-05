@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include <databaseserverstarter.moc>
+#include "databaseserverstarter.moc"
 
 // Qt includes
 
@@ -66,6 +66,7 @@ namespace Digikam
 // For whatever reason, these methods are "static protected"
 class sotoSleep : public QThread
 {
+
 public:
 
     static void sleep(unsigned long secs)
@@ -91,7 +92,7 @@ bool DatabaseServerStarter::init()
 {
     if (qDBusRegisterMetaType<DatabaseServerError>() < 0)
     {
-        kError() << "Error while registering DatabaseServerError class.";
+        kError()<<"Error while registering DatabaseServerError class.";
         return false;
     }
 
@@ -162,7 +163,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
 
         QDBusMessage reply = dbus_iface.callWithArgumentList(QDBus::Block, "startDatabaseProcess", arguments);
 
-        if (QDBusMessage::ErrorMessage == reply.type())
+        if (QDBusMessage::ErrorMessage==reply.type())
         {
             result.setErrorType(DatabaseServerError::StartError);
             result.setErrorText(i18n("<p><b>Error while calling the database server starter.</b></p>"

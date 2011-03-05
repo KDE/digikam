@@ -58,6 +58,9 @@
 #include "setupslideshow.h"
 #include "setuptooltip.h"
 #include "setupdatabase.h"
+#include "setupscriptmanager.h"
+#include "setupfacetags.h"
+#include "setupversioning.h"
 
 namespace Digikam
 {
@@ -81,9 +84,12 @@ public:
         page_iofiles(0),
         page_slideshow(0),
         page_icc(0),
-        page_plugins(0),
         page_camera(0),
         page_misc(0),
+        page_plugins(0),
+        page_scriptmanager(0),
+        page_facetags(0),
+        page_versioning(0),
         databasePage(0),
         collectionsPage(0),
         albumViewPage(0),
@@ -99,46 +105,55 @@ public:
         slideshowPage(0),
         iccPage(0),
         cameraPage(0),
+        //faceTagsPage(0),
         miscPage(0),
-        pluginsPage(0)
+        pluginsPage(0),
+        scriptManagerPage(0),
+        versioningPage(0)
     {
     }
 
-    KPageWidgetItem*  page_database;
-    KPageWidgetItem*  page_collections;
-    KPageWidgetItem*  page_albumView;
-    KPageWidgetItem*  page_tooltip;
-    KPageWidgetItem*  page_metadata;
-    KPageWidgetItem*  page_template;
-    KPageWidgetItem*  page_category;
-    KPageWidgetItem*  page_mime;
-    KPageWidgetItem*  page_lighttable;
-    KPageWidgetItem*  page_editor;
-    KPageWidgetItem*  page_dcraw;
-    KPageWidgetItem*  page_iofiles;
-    KPageWidgetItem*  page_slideshow;
-    KPageWidgetItem*  page_icc;
-    KPageWidgetItem*  page_plugins;
-    KPageWidgetItem*  page_camera;
-    KPageWidgetItem*  page_misc;
+    KPageWidgetItem*    page_database;
+    KPageWidgetItem*    page_collections;
+    KPageWidgetItem*    page_albumView;
+    KPageWidgetItem*    page_tooltip;
+    KPageWidgetItem*    page_metadata;
+    KPageWidgetItem*    page_template;
+    KPageWidgetItem*    page_category;
+    KPageWidgetItem*    page_mime;
+    KPageWidgetItem*    page_lighttable;
+    KPageWidgetItem*    page_editor;
+    KPageWidgetItem*    page_dcraw;
+    KPageWidgetItem*    page_iofiles;
+    KPageWidgetItem*    page_slideshow;
+    KPageWidgetItem*    page_icc;
+    KPageWidgetItem*    page_camera;
+    KPageWidgetItem*    page_misc;
+    KPageWidgetItem*    page_plugins;
+    KPageWidgetItem*    page_scriptmanager;
+    KPageWidgetItem*    page_facetags;
+    KPageWidgetItem*    page_versioning;
 
-    SetupDatabase*    databasePage;
-    SetupCollections* collectionsPage;
-    SetupAlbumView*   albumViewPage;
-    SetupToolTip*     tooltipPage;
-    SetupMetadata*    metadataPage;
-    SetupTemplate*    templatePage;
-    SetupCategory*    categoryPage;
-    SetupMime*        mimePage;
-    SetupLightTable*  lighttablePage;
-    SetupEditor*      editorPage;
-    SetupDcraw*       dcrawPage;
-    SetupIOFiles*     iofilesPage;
-    SetupSlideShow*   slideshowPage;
-    SetupICC*         iccPage;
-    SetupCamera*      cameraPage;
-    SetupMisc*        miscPage;
-    SetupPlugins*     pluginsPage;
+    SetupDatabase*      databasePage;
+    SetupCollections*   collectionsPage;
+    SetupAlbumView*     albumViewPage;
+    SetupToolTip*       tooltipPage;
+    SetupMetadata*      metadataPage;
+    SetupTemplate*      templatePage;
+    SetupCategory*      categoryPage;
+    SetupMime*          mimePage;
+    SetupLightTable*    lighttablePage;
+    SetupEditor*        editorPage;
+    SetupDcraw*         dcrawPage;
+    SetupIOFiles*       iofilesPage;
+    SetupSlideShow*     slideshowPage;
+    SetupICC*           iccPage;
+    SetupCamera*        cameraPage;
+    SetupMisc*          miscPage;
+    SetupPlugins*       pluginsPage;
+    SetupScriptManager* scriptManagerPage;
+    //SetupFaceTags*      faceTagsPage;
+    SetupVersioning*    versioningPage;
 
 public:
 
@@ -185,6 +200,14 @@ Setup::Setup(QWidget* parent)
                                     "<i>Customize information in tool-tips</i></qt>"));
     d->page_tooltip->setIcon(KIcon("dialog-information"));
 
+/*
+    d->faceTagsPage  = new SetupFaceTags();
+    d->page_facetags = addPage(d->faceTagsPage, i18n("People Tags"));
+    d->page_facetags->setHeader(i18n("<qt>People Tags<br/>"
+                                     "<i>Configure digiKam's face detection and recognition</i></qt>"));
+    d->page_facetags->setIcon(KIcon("face-smile"));
+*/
+
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage(d->metadataPage, i18n("Metadata"));
     d->page_metadata->setHeader(i18n("<qt>Embedded Image Information Management<br/>"
@@ -203,41 +226,41 @@ Setup::Setup(QWidget* parent)
                                  "<i>Add new file types to show as album items</i></qt>"));
     d->page_mime->setIcon(KIcon("system-file-manager"));
 
+    d->editorPage  = new SetupEditor();
+    d->page_editor = addPage(d->editorPage, i18n("Editor Window"));
+    d->page_editor->setHeader(i18n("<qt>Image Editor Window Settings<br/>"
+                                   "<i>Customize the image editor window</i></qt>"));
+    d->page_editor->setIcon(KIcon("editimage"));
+
+    d->versioningPage  = new SetupVersioning();
+    d->page_versioning = addPage(d->versioningPage, i18n("Editing Images"));
+    d->page_versioning->setHeader(i18n("<qt>Editing Images<br/>"
+                                       "<i>Configure non-destructive editing and versioning</i></qt>"));
+    d->page_versioning->setIcon(KIcon("view-catalog"));
+
+    d->dcrawPage  = new SetupDcraw();
+    d->page_dcraw = addPage(d->dcrawPage, i18n("RAW Decoding"));
+    d->page_dcraw->setHeader(i18n("<qt>Image Editor: RAW File Decoding<br/>"
+                                  "<i>Configure RAW decoding settings of the image editor</i></qt>"));
+    d->page_dcraw->setIcon(KIcon("kdcraw"));
+
+    d->iofilesPage  = new SetupIOFiles();
+    d->page_iofiles = addPage(d->iofilesPage, i18n("Saving Images"));
+    d->page_iofiles->setHeader(i18n("<qt>Image Editor: Settings for Saving Image Files<br/>"
+                                    "<i>Set default configuration used to save images with the image editor</i></qt>"));
+    d->page_iofiles->setIcon(KIcon("document-save-all"));
+
+    d->iccPage  = new SetupICC(0, this);
+    d->page_icc = addPage(d->iccPage, i18n("Color Management"));
+    d->page_icc->setHeader(i18n("<qt>Settings for Color Management<br/>"
+                                "<i>Customize the color management settings</i></qt>"));
+    d->page_icc->setIcon(KIcon("colormanagement"));
+
     d->lighttablePage  = new SetupLightTable();
     d->page_lighttable = addPage(d->lighttablePage, i18n("Light Table"));
     d->page_lighttable->setHeader(i18n("<qt>Light Table Settings<br/>"
                                        "<i>Customize tool used to compare images</i></qt>"));
     d->page_lighttable->setIcon(KIcon("lighttable"));
-
-    d->editorPage  = new SetupEditor();
-    d->page_editor = addPage(d->editorPage, i18n("Image Editor"));
-    d->page_editor->setHeader(i18n("<qt>Image Editor Settings<br/>"
-                                   "<i>Customize image editor behavior</i></qt>"));
-    d->page_editor->setIcon(KIcon("editimage"));
-
-    d->iofilesPage  = new SetupIOFiles();
-    d->page_iofiles = addPage(d->iofilesPage, i18n("Save Images"));
-    d->page_iofiles->setHeader(i18n("<qt>Image Editor: Settings for Saving Image Files<br/>"
-                                    "<i>Set default configuration used to save images with the image editor</i></qt>"));
-    d->page_iofiles->setIcon(KIcon("document-save-all"));
-
-    d->dcrawPage = new SetupDcraw();
-    d->page_dcraw = addPage(d->dcrawPage, i18n("RAW Decoding"));
-    d->page_dcraw->setHeader(i18n("<qt>Image Editor: RAW Files Decoding Settings<br/>"
-                                  "<i>Customize the default RAW decoding settings of the image editor</i></qt>"));
-    d->page_dcraw->setIcon(KIcon("kdcraw"));
-
-    d->iccPage  = new SetupICC(0, this);
-    d->page_icc = addPage(d->iccPage, i18n("Color Management"));
-    d->page_icc->setHeader(i18n("<qt>Image Editor: Settings for Color Management<br/>"
-                                "<i>Customize the color management settings of the image editor</i></qt>"));
-    d->page_icc->setIcon(KIcon("colormanagement"));
-
-    d->pluginsPage  = new SetupPlugins();
-    d->page_plugins = addPage(d->pluginsPage, i18n("Kipi Plugins"));
-    d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
-                                    "<i>Set which plugins will be accessible from the main interface</i></qt>"));
-    d->page_plugins->setIcon(KIcon("kipi"));
 
     d->slideshowPage  = new SetupSlideShow();
     d->page_slideshow = addPage(d->slideshowPage, i18n("Slide Show"));
@@ -250,6 +273,18 @@ Setup::Setup(QWidget* parent)
     d->page_camera->setHeader(i18n("<qt>Camera Settings<br/>"
                                    "<i>Manage your camera devices</i></qt>"));
     d->page_camera->setIcon(KIcon("camera-photo"));
+
+    d->pluginsPage  = new SetupPlugins();
+    d->page_plugins = addPage(d->pluginsPage, i18n("Kipi Plugins"));
+    d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
+                                    "<i>Set which plugins will be accessible from the main interface</i></qt>"));
+    d->page_plugins->setIcon(KIcon("kipi"));
+
+    d->scriptManagerPage  = new SetupScriptManager();
+    d->page_scriptmanager = addPage(d->scriptManagerPage , i18n("Script Manager"));
+    d->page_scriptmanager->setHeader(i18n("<qt>Script Manager<br/>"
+                                          "<i>Add/Remove and Manage Digikam Scripts</i></qt>"));
+    d->page_scriptmanager->setIcon(KIcon("application-x-shellscript"));
 
     d->miscPage  = new SetupMisc();
     d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
@@ -415,6 +450,9 @@ void Setup::slotOkClicked()
     d->iccPage->applySettings();
     d->miscPage->applySettings();
     d->pluginsPage->applyPlugins();
+    //     d->scriptManagerPage->applySettings();
+    //d->faceTagsPage->applySettings();
+    d->versioningPage->applySettings();
 
     AlbumSettings::instance()->emitSetupChanged();
 
@@ -543,9 +581,24 @@ Setup::Page Setup::activePageIndex()
         return CameraPage;
     }
 
+    if (cur == d->page_scriptmanager)
+    {
+        return ScriptManagerPage;
+    }
+
+    if (cur == d->page_facetags)
+    {
+        return FaceTagsPage;
+    }
+
     if (cur == d->page_misc)
     {
         return MiscellaneousPage;
+    }
+
+    if (cur == d->page_versioning)
+    {
+        return VersioningPage;
     }
 
     return DatabasePage;
@@ -587,8 +640,14 @@ KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
             return page_plugins;
         case Setup::CameraPage:
             return page_camera;
+        case Setup::ScriptManagerPage:
+            return page_scriptmanager;
+        case Setup::FaceTagsPage:
+            return page_facetags;
         case Setup::MiscellaneousPage:
             return page_misc;
+        case Setup::VersioningPage:
+            return page_versioning;
         default:
             return 0;
     }

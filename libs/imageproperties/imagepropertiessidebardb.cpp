@@ -7,8 +7,10 @@
  * Description : image properties side bar using data from
  *               digiKam database.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,7 +35,7 @@
 
 // KDE includes
 
-
+#include <KDebug>
 #include <kfileitem.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -44,20 +46,25 @@
 
 // Local includes
 
-#include "dimg.h"
-#include "imageinfo.h"
+#include "databaseinfocontainers.h"
 #include "databasewatch.h"
-#include "imagepropertiesgpstab.h"
-#include "imagedescedittab.h"
+#include "digikam2kmap_database.h"
+#include "dimg.h"
 #include "imageattributeswatch.h"
+#include "imagedescedittab.h"
+#include "imageinfo.h"
+#include "imagepropertiesgpstab.h"
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
+#include "imagepropertiesversionstab.h"
+#include "imageposition.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
 
-class ImagePropertiesSideBarDBPriv
+class ImagePropertiesSideBarDB::ImagePropertiesSideBarDBPriv
 {
 public:
 
@@ -68,16 +75,20 @@ public:
         hasImageInfoOwnership(false),
         desceditTab(0)
     {
+        desceditTab           = 0;
+        versionsHistoryTab    = 0;
+        dirtyDesceditTab      = false;
     }
 
-    bool                  dirtyDesceditTab;
-    bool                  hasPrevious;
-    bool                  hasNext;
-    bool                  hasImageInfoOwnership;
+    bool                        dirtyDesceditTab;
+    bool                        hasPrevious;
+    bool                        hasNext;
+    bool                        hasImageInfoOwnership;
 
-    ImageInfoList         currentInfos;
-
-    ImageDescEditTab*     desceditTab;
+    ImageInfoList               currentInfos;
+    DImageHistory               currentHistory;
+    ImageDescEditTab*           desceditTab;
+    ImagePropertiesVersionsTab* versionsHistoryTab;
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* parent, SidebarSplitter* splitter,
@@ -85,9 +96,11 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* parent, SidebarSplit
     : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault),
       d(new ImagePropertiesSideBarDBPriv)
 {
-    d->desceditTab = new ImageDescEditTab(parent);
+    d->desceditTab        = new ImageDescEditTab(parent);
+    d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
 
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Caption/Tags"));
+    appendTab(d->versionsHistoryTab, SmallIcon("view-catalog"), i18n("Versioning"));
 
     // ----------------------------------------------------------
 
@@ -106,14 +119,11 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* parent, SidebarSplit
     connect(d->desceditTab, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
 
-    DatabaseWatch* dbwatch = DatabaseAccess::databaseWatch();
 
-    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset&)),
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
             this, SLOT(slotImageChangeDatabase(const ImageChangeset&)));
 
-    ImageAttributesWatch* watch = ImageAttributesWatch::instance();
-
-    connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl&)),
+    connect(ImageAttributesWatch::instance(), SIGNAL(signalFileMetadataChanged(const KUrl&)),
             this, SLOT(slotFileMetadataChanged(const KUrl&)));
 }
 
@@ -122,19 +132,19 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
     delete d;
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const ImageInfo& info,
-        const QRect& rect, DImg* img)
+void ImagePropertiesSideBarDB::itemChanged(const ImageInfo& info, const QRect& rect,
+        DImg* img, const DImageHistory& history)
 {
-    itemChanged(info.fileUrl(), info, rect, img);
+    itemChanged(info.fileUrl(), info, rect, img, history);
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect& rect, DImg* img)
 {
-    itemChanged(url, ImageInfo(), rect, img);
+    itemChanged(url, ImageInfo(), rect, img, DImageHistory());
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo& info,
-        const QRect& rect, DImg* img)
+        const QRect& rect, DImg* img, const DImageHistory& history)
 {
     if ( !url.isValid() )
     {
@@ -150,7 +160,7 @@ void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo& inf
         list << info;
     }
 
-    itemChanged(list, rect, img);
+    itemChanged(list, rect, img, history);
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos)
@@ -162,19 +172,20 @@ void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos)
 
     m_currentURL = infos.first().fileUrl();
 
-    itemChanged(infos, QRect(), 0);
+    itemChanged(infos, QRect(), 0, DImageHistory());
 }
 
-void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rect, DImg* img)
+void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rect, DImg* img, const DImageHistory& history)
 {
-    m_currentRect = rect;
-    m_image       = img;
-
+    m_currentRect        = rect;
+    m_image              = img;
+    d->currentHistory    = history;
     d->currentInfos      = infos;
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
     m_dirtyGpsTab        = false;
+    m_dirtyHistoryTab    = false;
     d->dirtyDesceditTab  = false;
 
     // All tabs that store the ImageInfo list and access it after selection change
@@ -244,6 +255,12 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             m_gpsTab->setCurrentURL(m_currentURL);
             m_dirtyGpsTab = true;
         }
+        else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
+        {
+            //TODO: Make a database-less parent class with only the filters tab
+            d->versionsHistoryTab->clear();
+            m_dirtyHistoryTab = true;
+        }
     }
     else if (d->currentInfos.count() == 1)   // Data from database available...
     {
@@ -279,24 +296,22 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
-            ImagePosition pos = d->currentInfos.first().imagePosition();
-
-            if (pos.isEmpty())
+            GPSImageInfo info;
+            if (!GPSImageInfo::fromImageInfo(d->currentInfos.first(), &info))
             {
                 m_gpsTab->setCurrentURL();
             }
             else
             {
-                GPSInfo info;
-                info.latitude  = pos.latitudeNumber();
-                info.longitude = pos.longitudeNumber();
-                info.altitude  = pos.altitude();
-                info.dateTime  = d->currentInfos.first().dateTime();
-                info.url       = d->currentInfos.first().fileUrl();
-                m_gpsTab->setGPSInfoList(GPSInfoList() << info);
+                m_gpsTab->setGPSInfoList(GPSImageInfo::List() << info);
             }
 
             m_dirtyGpsTab = true;
+        }
+        else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
+        {
+            d->versionsHistoryTab->setItem(d->currentInfos.first(), d->currentHistory);
+            m_dirtyHistoryTab = true;
         }
     }
     else  // Data from database available, multiple selection
@@ -326,22 +341,15 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
-            GPSInfoList list;
+            GPSImageInfo::List list;
 
             for (ImageInfoList::const_iterator it = d->currentInfos.constBegin();
                  it != d->currentInfos.constEnd(); ++it)
             {
-                ImagePosition pos = (*it).imagePosition();
-
-                if (!pos.isEmpty())
+                GPSImageInfo info;
+                if (GPSImageInfo::fromImageInfo(*it, &info))
                 {
-                    GPSInfo info;
-                    info.latitude  = pos.latitudeNumber();
-                    info.longitude = pos.longitudeNumber();
-                    info.altitude  = pos.altitude();
-                    info.dateTime  = (*it).dateTime();
-                    info.url       = (*it).fileUrl();
-                    list.append(info);
+                    list << info;
                 }
             }
 
@@ -356,7 +364,15 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 
             m_dirtyGpsTab = true;
         }
+        else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
+        {
+            // FIXME: Any sensible multi-selection functionality? Must scale for large n!
+            d->versionsHistoryTab->clear();
+            m_dirtyHistoryTab = true;
+        }
     }
+
+    m_gpsTab->setActive(tab==m_gpsTab);
 
     unsetCursor();
 }
@@ -562,9 +578,52 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
 
             m_propertiesTab->setPhotoFlash(photoInfo.flashMode.isEmpty() ? unavailable : photoInfo.flashMode);
             m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
+
+            // -- Caption / Tags ------------------------------------------
+
+            m_propertiesTab->setCaption(info.comment());
+            m_propertiesTab->setPickLabel(info.pickLabel());
+            m_propertiesTab->setColorLabel(info.colorLabel());
+            m_propertiesTab->setRating(info.rating());
+            QList<int> tagIds = info.tagIds();
+            m_propertiesTab->setTags(TagsCache::instance()->tagPaths(tagIds, TagsCache::NoLeadingSlash, TagsCache::NoHiddenTags),
+                                     TagsCache::instance()->tagNames(tagIds, TagsCache::NoHiddenTags));
+            m_propertiesTab->showOrHideCaptionAndTags();
+
             return;
         }
     }
+}
+
+ImagePropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab()
+{
+    return d->versionsHistoryTab;
+}
+
+void ImagePropertiesSideBarDB::doLoadState()
+{
+    ImagePropertiesSideBar::doLoadState();
+
+    KConfigGroup group = getConfigGroup();
+
+    const KConfigGroup groupVersionTab = KConfigGroup(&group, entryName("Version Properties Tab"));
+    d->versionsHistoryTab->readSettings(groupVersionTab);
+}
+
+void ImagePropertiesSideBarDB::doSaveState()
+{
+    ImagePropertiesSideBar::doSaveState();
+
+    KConfigGroup group = getConfigGroup();
+
+    KConfigGroup groupVersionTab = KConfigGroup(&group, entryName("Version Properties Tab"));
+    d->versionsHistoryTab->writeSettings(groupVersionTab);
+}
+
+void ImagePropertiesSideBarDB::slotPopupTagsView()
+{
+    setActiveTab(d->desceditTab);
+    d->desceditTab->setFocusToTagsView();
 }
 
 }  // namespace Digikam

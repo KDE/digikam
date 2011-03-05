@@ -61,6 +61,8 @@ class DIGIKAM_EXPORT DatabaseConfigElement
 {
 public:
 
+    static bool                   checkReadyForUse();
+    static QString                errorMessage();
     static DatabaseConfigElement  element(const QString& databaseType);
 
     QString                       databaseID;

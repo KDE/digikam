@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,11 +31,16 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+// Qt includes
+
+#include <QAbstractItemModel>
+
 // Local includes
 
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
+#include "metadatasettings.h"
 #include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "digikamapp.h"
@@ -51,16 +56,32 @@
 namespace Digikam
 {
 
-KipiInterface::KipiInterface(QObject* parent, const char* name)
-    : KIPI::Interface(parent, name)
+class KipiInterface::KipiInterfacePrivate
 {
-    m_thumbLoadThread = ThumbnailLoadThread::defaultThread();
-    m_albumManager    = AlbumManager::instance();
+public:
+
+    KipiInterfacePrivate()
+    {
+        tagModel        = 0;
+        thumbLoadThread = 0;
+        albumManager    = 0;
+    }
+
+    AlbumManager*        albumManager;
+    ThumbnailLoadThread* thumbLoadThread;
+    QAbstractItemModel*  tagModel;
+};
+
+KipiInterface::KipiInterface(QObject* parent, const char* name)
+    : KIPI::Interface(parent, name), d(new KipiInterfacePrivate())
+{
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
+    d->albumManager    = AlbumManager::instance();
 
     connect(DigikamApp::instance()->view(), SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
 
-    connect(m_thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 }
 
@@ -70,17 +91,13 @@ KipiInterface::~KipiInterface()
 
 KIPI::ImageCollection KipiInterface::currentAlbum()
 {
-    Album* currAlbum = m_albumManager->currentAlbum();
+    Album* currAlbum = d->albumManager->currentAlbum();
 
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems,
                                      currAlbum,
-#if KIPI_VERSION >= 0x000300
                                      hostSetting("FileExtensions").toString()));
-#else
-                                     fileExtensions()));
-#endif
     }
     else
     {
@@ -90,17 +107,13 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
 
 KIPI::ImageCollection KipiInterface::currentSelection()
 {
-    Album* currAlbum = m_albumManager->currentAlbum();
+    Album* currAlbum = d->albumManager->currentAlbum();
 
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::SelectedItems,
                                      currAlbum,
-#if KIPI_VERSION >= 0x000300
                                      hostSetting("FileExtensions").toString()));
-#else
-                                     fileExtensions()));
-#endif
     }
     else
     {
@@ -111,13 +124,9 @@ KIPI::ImageCollection KipiInterface::currentSelection()
 QList<KIPI::ImageCollection> KipiInterface::allAlbums()
 {
     QList<KIPI::ImageCollection> result;
-#if KIPI_VERSION >= 0x000300
     QString fileFilter(hostSetting("FileExtensions").toString());
-#else
-    QString fileFilter(fileExtensions());
-#endif
 
-    const AlbumList palbumList = m_albumManager->allPAlbums();
+    const AlbumList palbumList = d->albumManager->allPAlbums();
 
     for ( AlbumList::ConstIterator it = palbumList.constBegin();
           it != palbumList.constEnd(); ++it )
@@ -128,12 +137,11 @@ QList<KIPI::ImageCollection> KipiInterface::allAlbums()
             continue;
         }
 
-        KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems,
-                *it, fileFilter);
+        KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems, *it, fileFilter);
         result.append( KIPI::ImageCollection( col ) );
     }
 
-    const AlbumList talbumList = m_albumManager->allTAlbums();
+    const AlbumList talbumList = d->albumManager->allTAlbums();
 
     for ( AlbumList::ConstIterator it = talbumList.constBegin();
           it != talbumList.constEnd(); ++it )
@@ -210,7 +218,7 @@ bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
         return false;
     }
 
-    PAlbum* targetAlbum = m_albumManager->findPAlbum(url.directory());
+    PAlbum* targetAlbum = d->albumManager->findPAlbum(url.directory());
 
     if ( !targetAlbum )
     {
@@ -218,7 +226,7 @@ bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
         return false;
     }
 
-    //m_albumManager->refreshItemHandler( url );
+    //d->albumManager->refreshItemHandler( url );
 
     return true;
 }
@@ -234,7 +242,7 @@ void KipiInterface::delImage( const KUrl& url )
 
     // Is there a PAlbum for this URL
 
-    PAlbum* palbum = m_albumManager->findPAlbum( KUrl(url.directory()) );
+    PAlbum* palbum = d->albumManager->findPAlbum( KUrl(url.directory()) );
 
     if ( palbum )
     {
@@ -260,7 +268,7 @@ void KipiInterface::slotCurrentAlbumChanged( Album* album )
 void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
 {
     // NOTE: size is not used here. Cache use the max pixmap size to store thumbs (256).
-    m_thumbLoadThread->find(url.toLocalFile());
+    d->thumbLoadThread->find(url.toLocalFile());
 }
 
 void KipiInterface::thumbnails(const KUrl::List& list, int size)
@@ -286,16 +294,44 @@ KIPI::UploadWidget* KipiInterface::uploadWidget(QWidget* parent)
     return (new KipiUploadWidget(this, parent));
 }
 
-#if KIPI_VERSION >= 0x000300
+QAbstractItemModel* KipiInterface::getTagTree() const
+{
+
+    if (!d->tagModel)
+    {
+        QAbstractItemModel* newTagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, NULL);
+        d->tagModel = newTagModel;
+    }
+
+    return d->tagModel;
+}
+
 QVariant KipiInterface::hostSetting(const QString& settingName)
 {
+    MetadataSettings* mSettings = MetadataSettings::instance();
+
+    if (!mSettings)
+    {
+        return QVariant();
+    }
+
+    MetadataSettingsContainer set = mSettings->settings();
+
     if (settingName == QString("WriteMetadataUpdateFiletimeStamp"))
     {
-        return (AlbumSettings::instance()->getUpdateFileTimeStamp());
+        return (set.updateFileTimeStamp);
     }
     else if (settingName == QString("WriteMetadataToRAW"))
     {
-        return (AlbumSettings::instance()->getWriteRawFiles());
+        return (set.writeRawFiles);
+    }
+    else if (settingName == QString("UseXMPSidecar4Reading"))
+    {
+        return (set.useXMPSidecar4Reading);
+    }
+    else if (settingName == QString("MetadataWritingMode"))
+    {
+        return (set.metadataWritingMode);
     }
     else if (settingName == QString("FileExtensions"))
     {
@@ -311,18 +347,5 @@ QVariant KipiInterface::hostSetting(const QString& settingName)
 
     return QVariant();
 }
-#else
-QString KipiInterface::fileExtensions()
-{
-    // do not save this into a local variable, as this
-    // might change in the main app
-
-    AlbumSettings* s = AlbumSettings::instance();
-    return (s->getImageFileFilter() + ' ' +
-            s->getMovieFileFilter() + ' ' +
-            s->getAudioFileFilter() + ' ' +
-            s->getRawFileFilter());
-}
-#endif
 
 }  // namespace Digikam

@@ -41,6 +41,7 @@ namespace Digikam
 {
 
 class DImgLoaderObserver;
+class DMetadata;
 
 class DImgLoader
 {
@@ -48,12 +49,13 @@ public:
 
     enum LoadFlag
     {
-        LoadImageInfo  = 1,
-        LoadMetadata   = 2,
-        LoadICCData    = 4,
-        LoadImageData  = 8,
-        LoadUniqueHash = 16,
-        LoadAll        = LoadImageInfo | LoadMetadata | LoadUniqueHash | LoadICCData | LoadImageData
+        LoadImageInfo    = 1,
+        LoadMetadata     = 2,
+        LoadICCData      = 4,
+        LoadImageData    = 8,
+        LoadUniqueHash   = 16,
+        LoadImageHistory = 32,
+        LoadAll          = LoadImageInfo | LoadMetadata | LoadUniqueHash | LoadICCData | LoadImageData | LoadImageHistory
     };
     Q_DECLARE_FLAGS(LoadFlags, LoadFlag)
 
@@ -69,7 +71,14 @@ public:
     virtual bool isReadOnly()    const = 0;
     virtual bool hasLoadedData() const;
 
+    static QByteArray uniqueHashV2(const QString& filePath, const DImg* img = 0);
     static QByteArray uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
+    static HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata& metadata);
+
+    static unsigned char*   new_failureTolerant(size_t unsecureSize);
+    static unsigned short*  new_short_failureTolerant(size_t unsecureSize);
+
+    static int checkAllocation(qint64 fullSize);
 
 protected:
 
@@ -100,9 +109,6 @@ protected:
     virtual int             granularity(DImgLoaderObserver* observer, int total, float progressSlice = 1.0);
 
     bool                    checkExifWorkingColorSpace();
-
-    unsigned char*          new_failureTolerant(size_t unsecureSize);
-    unsigned short*         new_short_failureTolerant(size_t unsecureSize);
 
 protected:
 

@@ -7,6 +7,7 @@
  * Description : Curves image filter
  *
  * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,11 +35,28 @@
 namespace Digikam
 {
 
+CurvesFilter::CurvesFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 CurvesFilter::CurvesFilter(DImg* orgImage, QObject* parent, const CurvesContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "CurvesFilter")
 {
     m_settings = settings;
     initFilter();
+}
+
+CurvesFilter::CurvesFilter(const CurvesContainer& settings, DImgThreadedFilter* master,
+                           const DImg& orgImage, DImg& destImage, int progressBegin, int progressEnd)
+    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "CurvesFilter")
+{
+    m_settings = settings;
+
+    // cannot operate in-place, so allocate dest image
+    initFilter();
+    destImage = m_destImage;
 }
 
 CurvesFilter::~CurvesFilter()
@@ -48,54 +66,39 @@ CurvesFilter::~CurvesFilter()
 
 void CurvesFilter::filterImage()
 {
-    postProgress(10);
-    ImageCurves curves(m_orgImage.sixteenBit());
-    curves.setCurveType(m_settings.curvesType);
+    postProgress(0);
 
-    if (m_settings.curvesType == ImageCurves::CURVE_FREE)
+    ImageCurves curves(m_settings);
+
+    if (m_orgImage.sixteenBit() != m_settings.sixteenBit)
     {
-        curves.setCurveValues(LuminosityChannel, m_settings.lumCurveVals);
-        postProgress(20);
-
-        curves.setCurveValues(RedChannel, m_settings.redCurveVals);
-        postProgress(30);
-
-        curves.setCurveValues(GreenChannel, m_settings.greenCurveVals);
-        postProgress(40);
-
-        curves.setCurveValues(BlueChannel, m_settings.blueCurveVals);
-        postProgress(50);
-
-        curves.setCurveValues(AlphaChannel, m_settings.alphaCurveVals);
-        postProgress(60);
-    }
-    else
-    {
-        curves.setCurvePoints(LuminosityChannel, m_settings.lumCurveVals);
-        postProgress(20);
-
-        curves.setCurvePoints(RedChannel, m_settings.redCurveVals);
-        postProgress(30);
-
-        curves.setCurvePoints(GreenChannel, m_settings.greenCurveVals);
-        postProgress(40);
-
-        curves.setCurvePoints(BlueChannel, m_settings.blueCurveVals);
-        postProgress(50);
-
-        curves.setCurvePoints(AlphaChannel, m_settings.alphaCurveVals);
-        postProgress(60);
+        ImageCurves depthCurve(m_orgImage.sixteenBit());
+        depthCurve.fillFromOtherCurves(&curves);
+        curves = depthCurve;
     }
 
-    m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
-    postProgress(70);
+    postProgress(50);
 
     // Process all channels curves
     curves.curvesLutSetup(AlphaChannel);
-    postProgress(80);
+    postProgress(75);
 
     curves.curvesLutProcess(m_orgImage.bits(), m_destImage.bits(), m_orgImage.width(), m_orgImage.height());
-    postProgress(90);
+    postProgress(100);
+}
+
+FilterAction CurvesFilter::filterAction()
+{
+    DefaultFilterAction<CurvesFilter> action(m_settings.isStoredLosslessly());
+
+    m_settings.writeToFilterAction(action);
+
+    return action;
+}
+
+void CurvesFilter::readParameters(const FilterAction& action)
+{
+    m_settings = CurvesContainer::fromFilterAction(action);
 }
 
 }  // namespace Digikam

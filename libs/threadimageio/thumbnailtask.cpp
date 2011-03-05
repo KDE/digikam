@@ -69,6 +69,28 @@ void ThumbnailLoadingTask::execute()
         return;
     }
 
+    if (m_loadingDescription.previewParameters.onlyPregenerate())
+    {
+        setupCreator();
+
+        switch (m_loadingDescription.previewParameters.type)
+        {
+            case LoadingDescription::PreviewParameters::Thumbnail:
+                m_creator->pregenerate(m_loadingDescription.filePath);
+                break;
+            case LoadingDescription::PreviewParameters::DetailThumbnail:
+                m_creator->pregenerateDetail(m_loadingDescription.filePath,
+                                             m_loadingDescription.previewParameters.extraParameter.toRect());
+                break;
+            default:
+                break;
+        }
+
+        m_thread->taskHasFinished();
+        // dont emit any signal
+        return;
+    }
+
     LoadingCache* cache = LoadingCache::cache();
     {
         LoadingCache::CacheLock lock(cache);
@@ -139,10 +161,20 @@ void ThumbnailLoadingTask::execute()
     }
 
     // Load or create thumbnail
-    m_creator->setThumbnailSize(m_loadingDescription.previewParameters.size);
-    m_creator->setExifRotate(m_loadingDescription.previewParameters.exifRotate);
-    m_creator->setLoadingProperties(this, m_loadingDescription.rawDecodingSettings);
-    m_qimage = m_creator->load(m_loadingDescription.filePath);
+    setupCreator();
+
+    switch (m_loadingDescription.previewParameters.type)
+    {
+        case LoadingDescription::PreviewParameters::Thumbnail:
+            m_qimage = m_creator->load(m_loadingDescription.filePath);
+            break;
+        case LoadingDescription::PreviewParameters::DetailThumbnail:
+            m_qimage = m_creator->loadDetail(m_loadingDescription.filePath,
+                                             m_loadingDescription.previewParameters.extraParameter.toRect());
+            break;
+        default:
+            break;
+    }
 
     {
         LoadingCache::CacheLock lock(cache);
@@ -192,6 +224,13 @@ void ThumbnailLoadingTask::execute()
     postProcess();
     m_thread->taskHasFinished();
     m_thread->thumbnailLoaded(m_loadingDescription, m_qimage);
+}
+
+void ThumbnailLoadingTask::setupCreator()
+{
+    m_creator->setThumbnailSize(m_loadingDescription.previewParameters.size);
+    m_creator->setExifRotate(m_loadingDescription.previewParameters.exifRotate());
+    m_creator->setLoadingProperties(this, m_loadingDescription.rawDecodingSettings);
 }
 
 void ThumbnailLoadingTask::setResult(const LoadingDescription& loadingDescription, const QImage& qimage)

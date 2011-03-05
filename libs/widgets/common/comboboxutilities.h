@@ -166,6 +166,9 @@ protected:
     /** Implement in subclass:
      *  Send the given event to the viewportEvent() method of m_view.
      *  This method is protected for a usual QAbstractItemView.
+     *  You can override, pass a view, and call parent implementation.
+     *  The existing view will be used. You must then also
+     *  reimplement sendViewportEventToView.
      */
     virtual void sendViewportEventToView(QEvent* e) = 0;
 
@@ -198,7 +201,7 @@ public:
 
     /** Replace the standard combo box list view with a QTreeView.
      *  Call this after installing an appropriate model. */
-    virtual void installView();
+    virtual void installView(QAbstractItemView* view = 0);
 
     /** Returns the QTreeView of this class. Valid after installView() has been called */
     QTreeView* view() const;
@@ -227,7 +230,7 @@ public:
 
     /** Replace the standard combo box list view with a QTreeView.
      *  Call this after installing an appropriate model. */
-    virtual void installView();
+    virtual void installView(QAbstractItemView* view = 0);
 
     /** Returns the QTreeView of this class. Valid after installView() has been called */
     QListView* view() const;
@@ -256,11 +259,22 @@ public:
 
     /** Replace the standard combo box list view with a QTreeView.
      *  Call this after installing an appropriate model. */
-    virtual void installView();
+    virtual void installView(QAbstractItemView* view = 0);
 
     /** Set the text of the line edit (the text that is visible
-        if the popup is not opened) */
+        if the popup is not opened).
+        Applicable only for default installLineEdit() implementation.
+    */
     void setLineEditText(const QString& text);
+
+    void setLineEdit(QLineEdit* edit);
+
+protected:
+
+    /** Sets a line edit. Called by installView().
+     *  The default implementation is described above.
+     *  An empty implementation will keep the default QComboBox line edit. */
+    virtual void installLineEdit();
 
 protected:
 

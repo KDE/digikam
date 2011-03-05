@@ -45,12 +45,12 @@
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
-#include "albumsettings.h"
 #include "databaseaccess.h"
 #include "haar.h"
 #include "haariface.h"
 #include "previewloadthread.h"
 #include "knotificationwrapper.h"
+#include "metadatasettings.h"
 
 namespace Digikam
 {
@@ -142,7 +142,7 @@ void FingerPrintsGenerator::processOne()
 
     QString path = d->allPicturesPath.first();
     LoadingDescription description(path, HaarIface::preferredSize(),
-                                   AlbumSettings::instance()->getExifRotate(),
+                                   MetadataSettings::instance()->settings().exifRotate,
                                    LoadingDescription::ConvertToSRGB);
     description.rawDecodingSettings.rawPrm.sixteenBitsImage = false;
     d->previewLoadThread->load(description);

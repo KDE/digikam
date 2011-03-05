@@ -6,7 +6,8 @@
  * Date        : 2010-04-02
  * Description : Cache for Tag information
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +29,7 @@
 
 #include "databasechangesets.h"
 #include "digikam_export.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -43,7 +45,13 @@ public:
     enum LeadingSlashPolicy
     {
         NoLeadingSlash,      /// "Places/Cities/Paris"
-        IncludeLeadingSlash  ///  "/Places/Cities/Paris"
+        IncludeLeadingSlash  /// "/Places/Cities/Paris"
+    };
+
+    enum HiddenTagsPolicy
+    {
+        NoHiddenTags,
+        IncludeHiddenTags
     };
 
     /**
@@ -51,40 +59,42 @@ public:
      * For the tag Places/Cities/Paris, this is Paris.
      * If there is no tag for the given id a null string is returned.
      */
-    QString     tagName(int id);
-    QStringList tagNames(const QList<int>& ids);
+    QString     tagName(int id) const;
+    QStringList tagNames(const QList<int>& ids, HiddenTagsPolicy hiddenTagsPolicy = IncludeHiddenTags) const;
 
     /**
      * Returns the path of the tag with the given id.
      * For the tag Places/Cities/Paris, this is Places/Cities/Paris.
      * If there is no tag for the given id a null string is returned.
      */
-    QString     tagPath(int id, LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
-    QStringList tagPaths(const QList<int>& ids, LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
+    QString     tagPath(int id, LeadingSlashPolicy slashPolicy = IncludeLeadingSlash) const;
+    QStringList tagPaths(const QList<int>& ids,
+                         LeadingSlashPolicy slashPolicy = IncludeLeadingSlash,
+                         HiddenTagsPolicy hiddenTagsPolicy = IncludeHiddenTags) const;
 
     /**
      * Returns true if the tag for the given id exists.
      */
-    bool hasTag(int id);
+    bool hasTag(int id) const;
 
     /**
      * Returns the parent tag id, or 0 if a toplevel tag or tag does not exist.
      */
-    int parentTag(int id);
+    int parentTag(int id) const;
 
     /**
      * Finds all tags with the given name.
      * For "Paris", this may give "Places/Cities/Paris" and "Places/USA/Texas/Paris".
      * If there is no tag with the given name at all, returns an empty list.
      */
-    QList<int> tagsForName(const QString& tagName);
+    QList<int> tagsForName(const QString& tagName, HiddenTagsPolicy hiddenTagsPolicy = NoHiddenTags) const;
 
     /**
      * Returns the id of the tag with the given name and parent tag.
      * If parentId is 0, the tag is a toplevel tag.
      * Returns 0 if there is no such tag.
      */
-    int tagForName(const QString& tagName, int parentId = 0);
+    int tagForName(const QString& tagName, int parentId = 0) const;
 
     /**
      * Returns the tag matched exactly by the given path.
@@ -93,8 +103,8 @@ public:
      * If you want to create the tag if it does not yet exist,
      * use getOrCreateTag.
      */
-    int tagForPath(const QString& tagPath);
-    QList<int> tagsForPaths(const QStringList& tagPaths);
+    int tagForPath(const QString& tagPath) const;
+    QList<int> tagsForPaths(const QStringList& tagPaths) const;
 
     /**
      * Add the tag described by the given tag path,
@@ -114,6 +124,98 @@ public:
     int getOrCreateTag(const QString& tagPath);
     QList<int> getOrCreateTags(const QStringList& tagPaths);
 
+    /**
+     * Calls getOrCreateTag for the given path,
+     * and ensures that the tag has assigned the given property.
+     * If you pass a null string as value, then the value is not checked and not changed.
+     */
+    int getOrCreateTagWithProperty(const QString& tagPath, const QString& property, const QString& value = QString());
+
+    /**
+     * Tests if the tag has the given property
+     *  a) just has the property
+     *  b) has the property with the given value (value not null)
+     */
+    bool hasProperty(int tagId, const QString& property, const QString& value = QString()) const;
+
+    /**
+     * Returns the value of the property.
+     * Returning a null string cannot distinguish between the property set
+     * with a null value, or the property not set.
+     * The first method returns any property, if multiple are set with the same key.
+     */
+    QString     propertyValue(int tagId, const QString& property) const;
+    QStringList propertyValues(int tagId, const QString& property) const;
+
+    /**
+     * Returns a list or a map of the properties of the tag.
+     * Note: The list and map may be constructed for each call. Prefer hasProperty() and property().
+     */
+    QMap<QString, QString> properties(int tagId) const;
+
+    /**
+     * Finds all tags with the given property. The tag
+     *  a)just has the property
+     *  b) has the property with the given value (value not null)
+     * Note: The returned list is sorted.
+     */
+    QList<int> tagsWithProperty(const QString& property, const QString& value = QString()) const;
+
+    /**
+     * This method is equivalent to calling tagsWithProperty(property), but the immediate result
+     * will be cached for subsequent calls.
+     * Use it for queries for which you know that they will be issued very often,
+     * so that it's worth caching the result of the already pretty fast tagsWithProperty().
+     */
+    QList<int> tagsWithPropertyCached(const QString& property) const;
+
+    /**
+     * Returns if a tag is to be regarded program-internal, that is,
+     * a technical implementation detail not visible to the user at any time.
+     */
+    bool isInternalTag(int tagId) const;
+
+    /**
+     * Returns if a tag shall be written to the metadata of a file.
+     * Always returns false if the tag is a program-internal tag.
+     */
+    bool canBeWrittenToMetadata(int tagId) const;
+
+    /**
+     * For the given tag name (not path!), find the existing tag or
+     * creates a new internal tags under the usual tag path used for
+     * internal tags.
+     */
+    int getOrCreateInternalTag(const QString& tagName);
+
+    /**
+     * Return internal tags ID corresponding of color label id. see ColorLabel values from globals.h.
+     * Return 0 if not it's found.
+     */
+    int getTagForColorLabel(int label);
+
+    /**
+     * Return color label id corresponding of internal tags ID. see ColorLabel values from globals.h.
+     * Return -1 if not it's found.
+     */
+    int getColorLabelForTag(int tagId);
+
+    /**
+     * Return internal tags ID corresponding of pick label id. see PickLabel values from globals.h.
+     * Return 0 if not it's found.
+     */
+    int getTagForPickLabel(int label);
+
+    /**
+     * Return pick label id corresponding of internal tags ID. see PickLabel values from globals.h.
+     * Return -1 if not it's found.
+     */
+    int getPickLabelForTag(int tagId);
+
+    static QLatin1String tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
+    static QLatin1String propertyNameDigikamInternalTag();
+    static QLatin1String propertyNameExcludedFromWriting();
+
 Q_SIGNALS:
 
     /** These signals are provided for convenience; for finer grained information
@@ -129,13 +231,16 @@ private Q_SLOTS:
 
 private:
 
-    friend class DatabaseAccess;
-    friend class TagsCacheCreator;
-    friend class ChangingDB;
-
     TagsCache();
     ~TagsCache();
     void initialize();
+    void invalidate();
+
+private:
+
+    friend class DatabaseAccess;
+    friend class TagsCacheCreator;
+    friend class ChangingDB;
 
     class TagsCachePriv;
     TagsCachePriv* const d;

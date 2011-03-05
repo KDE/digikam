@@ -7,6 +7,7 @@
  * Description : Shear tool threaded image filter.
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original Shear algorithms copyrighted 2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -41,6 +42,12 @@
 
 namespace Digikam
 {
+
+ShearFilter::ShearFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
 
 ShearFilter::ShearFilter(DImg* orgImage, QObject* parent, float hAngle, float vAngle,
                          bool antialiasing, const QColor& backgroundColor, int orgW, int orgH)
@@ -191,5 +198,37 @@ void ShearFilter::filterImage()
     m_newSize.setWidth(W);
     m_newSize.setHeight(H);
 }
+
+FilterAction ShearFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("antiAlias", m_antiAlias);
+    action.addParameter("hAngle", m_hAngle);
+    action.addParameter("orgH", m_orgH);
+    action.addParameter("orgW", m_orgW);
+    action.addParameter("vAngle", m_vAngle);
+    action.addParameter("backgroundColorR", m_backgroundColor.red());
+    action.addParameter("backgroundColorG", m_backgroundColor.green());
+    action.addParameter("backgroundColorB", m_backgroundColor.blue());
+    action.addParameter("backgroundColorA", m_backgroundColor.alpha());
+
+    return action;
+}
+
+void ShearFilter::readParameters(const FilterAction& action)
+{
+    m_antiAlias = action.parameter("antiAlias").toBool();
+    m_hAngle = action.parameter("hAngle").toFloat();
+    m_orgH = action.parameter("orgH").toInt();
+    m_orgW = action.parameter("orgW").toInt();
+    m_vAngle = action.parameter("vAngle").toFloat();
+    m_backgroundColor.setRed(action.parameter("backgroundColorR").toInt());
+    m_backgroundColor.setGreen(action.parameter("backgroundColorG").toInt());
+    m_backgroundColor.setBlue(action.parameter("backgroundColorB").toInt());
+    m_backgroundColor.setAlpha(action.parameter("backgroundColorA").toInt());
+}
+
 
 }  // namespace Digikam

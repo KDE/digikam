@@ -274,7 +274,7 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
         const QString miscDir = KStandardDirs::locateLocal("data", "digikam/db_misc");
         databaseType= "QMYSQL";
         databaseName = "digikam";
-        internalServer = false;
+        internalServer = true;
         databaseNameThumbnails = "digikam";
         hostName = QString();
         port = -1;

@@ -28,8 +28,12 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dimgthreadedfilter.h"
 #include "digikam_export.h"
+
+// The filter is only compiled if GLib is available
+#ifdef HAVE_GLIB2
 
 namespace Digikam
 {
@@ -80,10 +84,35 @@ class DIGIKAM_EXPORT LensFunFilter : public DImgThreadedFilter
 
 public:
 
-    LensFunFilter(DImg* origImage, QObject* parent, const LensFunContainer& settings);
+    explicit LensFunFilter(QObject* parent = 0);
+    explicit LensFunFilter(DImg* origImage, QObject* parent, const LensFunContainer& settings);
     ~LensFunFilter();
 
     bool registerSettingsToXmp(KExiv2Data& data) const;
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:LensFunFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Lens Auto-Correction Tool");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 
@@ -96,5 +125,7 @@ private:
 };
 
 }  // namespace Digikam
+
+#endif // HAVE_GLIB2
 
 #endif /* LENSFUNFILTER_H */

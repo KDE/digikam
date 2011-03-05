@@ -180,11 +180,9 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
             DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
     d->decodingSettingsBox->setObjectName("RawSettingsBox Expander");
 
-    KFileDialog* inputDlg  = d->decodingSettingsBox->inputProfileUrlEdit()->fileDialog();
-    inputDlg->setPreviewWidget(new ICCPreviewWidget(inputDlg));
-
-    KFileDialog* outputDlg = d->decodingSettingsBox->outputProfileUrlEdit()->fileDialog();
-    outputDlg->setPreviewWidget(new ICCPreviewWidget(outputDlg));
+    // Note: dont touch the url edit's fileDialog() here.
+    // This creates the file dialog, which involved an event loop, which is evil.
+    // Adjust file dialog in fileDialogAboutToOpen
 
     d->abortBtn = new QPushButton(d->rawdecodingBox);
     d->abortBtn->setText(i18n("Abort"));
@@ -377,6 +375,12 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
 
     connect(d->fineExposureInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalPostProcessingChanged()));
+
+    connect(d->decodingSettingsBox->inputProfileUrlEdit(), SIGNAL(openFileDialog(KUrlRequester*)),
+            this, SLOT(fileDialogAboutToOpen(KUrlRequester*)));
+
+    connect(d->decodingSettingsBox->outputProfileUrlEdit(), SIGNAL(openFileDialog(KUrlRequester*)),
+            this, SLOT(fileDialogAboutToOpen(KUrlRequester*)));
 }
 
 RawSettingsBox::~RawSettingsBox()
@@ -395,7 +399,7 @@ void RawSettingsBox::enableUpdateBtn(bool b)
     d->updateBtn->setEnabled(b);
 }
 
-bool RawSettingsBox::updateBtnEnabled()
+bool RawSettingsBox::updateBtnEnabled() const
 {
     return d->updateBtn->isEnabled();
 }
@@ -493,18 +497,23 @@ DRawDecoding RawSettingsBox::settings() const
 {
     DRawDecoding settings(d->decodingSettingsBox->settings());
 
-    settings.lightness    = (double)d->brightnessInput->value()/250.0;
-    settings.contrast     = (double)(d->contrastInput->value()/100.0) + 1.00;
-    settings.gamma        = d->gammaInput->value();
-    settings.saturation   = d->saturationInput->value();
-    settings.exposureComp = d->fineExposureInput->value();
+    settings.bcg.brightness   = (double)d->brightnessInput->value()/250.0;
+    settings.bcg.contrast     = (double)(d->contrastInput->value()/100.0) + 1.00;
+    settings.bcg.gamma        = d->gammaInput->value();
+    settings.wb.saturation    = d->saturationInput->value();
+    settings.wb.exposition    = d->fineExposureInput->value();
 
     if (d->curveWidget->curves()->isDirty())
     {
-        settings.curveAdjust = d->curveWidget->curves()->getCurvePoints(LuminosityChannel);
+        settings.curvesAdjust = d->curveWidget->curves()->getContainer();
     }
 
     return settings;
+}
+
+void RawSettingsBox::fileDialogAboutToOpen(KUrlRequester *requester)
+{
+    requester->fileDialog()->setPreviewWidget(new ICCPreviewWidget(requester));
 }
 
 } // namespace Digikam

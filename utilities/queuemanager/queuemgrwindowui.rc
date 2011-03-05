@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="18" name="queuemgrwindow" >
+<gui version="201" name="queuemgrwindow" >
 
 <MenuBar>
 
@@ -29,11 +29,11 @@
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
-        <Action name="queuemgr_rawcameralist"/>
+        <Action name="help_rawcameralist"/>
         <Action name="queuemgr_librariesinfo"/>
         <Action name="queuemgr_dbstat"/>
-        <Action name="queuemgr_donatemoney" />
-        <Action name="queuemgr_contribute" />
+        <Action name="help_donatemoney" />
+        <Action name="help_contribute" />
     </Menu>
 
     <Merge/>

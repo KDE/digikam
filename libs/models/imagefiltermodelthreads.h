@@ -31,23 +31,18 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "workerobject.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT ImageFilterModelWorker : public QObject
+class DIGIKAM_DATABASE_EXPORT ImageFilterModelWorker : public WorkerObject
 {
     Q_OBJECT
 
 public:
 
     ImageFilterModelWorker(ImageFilterModelPrivate* d);
-
-    void shutDown()
-    {
-        thread->quit();
-        thread->wait();
-    }
 
     bool checkVersion(const ImageFilterModelTodoPackage& package)
     {
@@ -64,17 +59,6 @@ Q_SIGNALS:
     void discarded(const ImageFilterModelTodoPackage& package);
 
 protected:
-
-    class Thread : public QThread
-    {
-    public:
-        Thread(QObject* parent = 0) : QThread(parent) {}
-        virtual void run()
-        {
-            exec();
-        }
-    };
-    Thread*                  thread;
 
     ImageFilterModelPrivate* d;
 };

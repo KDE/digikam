@@ -29,6 +29,7 @@
 #include "digikam_export.h"
 #include "wbfilter.h"
 #include "globals.h"
+#include "filteraction.h"
 
 using namespace Digikam;
 
@@ -41,9 +42,32 @@ class DIGIKAM_EXPORT AutoExpoFilter : public WBFilter
 {
 
 public:
-
+    AutoExpoFilter(QObject* parent = 0);
     AutoExpoFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
     virtual ~AutoExpoFilter();
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:AutoExpoFilter";
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Auto Exposure");
+    }
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 
@@ -51,7 +75,7 @@ private:
 
 private:
 
-    const DImg m_refImage;
+    DImg m_refImage;
 };
 
 }  // namespace Digikam

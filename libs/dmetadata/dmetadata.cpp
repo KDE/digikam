@@ -6,8 +6,8 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -358,6 +358,59 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
     return true;
 }
 
+
+int DMetadata::getImagePickLabel() const
+{
+    if (getFilePath().isEmpty())
+    {
+        return -1;
+    }
+
+    if (hasXmp())
+    {
+        QString value = getXmpTagString("Xmp.digiKam.PickLabel", false);
+
+        if (!value.isEmpty())
+        {
+            bool ok     = false;
+            long pickId = value.toLong(&ok);
+
+            if (ok && pickId >= NoPickLabel && pickId <= AcceptedLabel)
+            {
+                return pickId;
+            }
+        }
+    }
+
+    return -1;
+}
+
+int DMetadata::getImageColorLabel() const
+{
+    if (getFilePath().isEmpty())
+    {
+        return -1;
+    }
+
+    if (hasXmp())
+    {
+        QString value = getXmpTagString("Xmp.digiKam.ColorLabel", false);
+
+        if (!value.isEmpty())
+        {
+            bool ok      = false;
+            long colorId = value.toLong(&ok);
+
+            if (ok && colorId >= NoColorLabel && colorId <= WhiteLabel)
+            {
+                return colorId;
+            }
+        }
+    }
+
+    return -1;
+}
+
 int DMetadata::getImageRating() const
 {
     if (getFilePath().isEmpty())
@@ -500,6 +553,62 @@ int DMetadata::getImageRating() const
     return -1;
 }
 
+bool DMetadata::setImagePickLabel(int pickId) const
+{
+    if (pickId < NoPickLabel || pickId > AcceptedLabel)
+    {
+        kDebug() << "Pick Label value to write is out of range!";
+        return false;
+    }
+
+    kDebug() << getFilePath() << " ==> Pick Label: " << pickId;
+
+    if (!setProgramId())
+    {
+        return false;
+    }
+
+    // Set standard XMP rating tag.
+
+    if (supportXmp())
+    {
+        if (!setXmpTagString("Xmp.digiKam.PickLabel", QString::number(pickId)))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool DMetadata::setImageColorLabel(int colorId) const
+{
+    if (colorId < NoColorLabel || colorId > WhiteLabel)
+    {
+        kDebug() << "Color Label value to write is out of range!";
+        return false;
+    }
+
+    kDebug() << getFilePath() << " ==> Color Label: " << colorId;
+
+    if (!setProgramId())
+    {
+        return false;
+    }
+
+    // Set standard XMP rating tag.
+
+    if (supportXmp())
+    {
+        if (!setXmpTagString("Xmp.digiKam.ColorLabel", QString::number(colorId)))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool DMetadata::setImageRating(int rating) const
 {
     // NOTE : with digiKam 0.9.x, we have used IPTC Urgency to store Rating.
@@ -574,6 +683,103 @@ bool DMetadata::setImageRating(int rating) const
     }
 
     return true;
+}
+
+bool DMetadata::setImageHistory(QString& imageHistoryXml) const
+{
+    if (supportXmp())
+    {
+        if (!setXmpTagString("Xmp.digiKam.ImageHistory", imageHistoryXml, false))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+QString DMetadata::getImageHistory() const
+{
+    if (hasXmp())
+    {
+        QString value = getXmpTagString("Xmp.digiKam.ImageHistory", false);
+        kDebug() << "Loading image history " << value;
+        return value;
+    }
+
+    return QString();
+}
+
+bool DMetadata::hasImageHistoryTag() const
+{
+    if (hasXmp())
+    {
+        if (QString(getXmpTagString("Xmp.digiKam.ImageHistory", false)).length() > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+QString DMetadata::getImageUniqueId() const
+{
+    if (hasXmp())
+    {
+        QString uuid = getXmpTagString("Xmp.digiKam.ImageUniqueID");
+
+        if (!uuid.isEmpty())
+        {
+            return uuid;
+        }
+
+        QString exifUid = getXmpTagString("Xmp.exif.ImageUniqueId");
+
+        if (exifUid.isEmpty())
+        {
+            exifUid = getExifTagString("Exif.Photo.ImageUniqueID");
+        }
+
+        // same makers may choose to use a "click counter" to generate the id,
+        // which is then weak and not a universally unique id
+        // The Exif ImageUniqueID is 128bit, or 32 hex digits.
+        // If the first 20 are zero, it's probably a counter,
+        // the left 12 are sufficient for more then 10^14 clicks.
+        if (!exifUid.isEmpty() && !exifUid.startsWith("00000000000000000000"))
+        {
+            return exifUid;
+        }
+
+        // Exif.Image.ImageID can also be a pathname, so it's not sufficiently unique
+
+        QString dngUid = getExifTagString("Exif.Image.RawDataUniqueID");
+
+        if (!dngUid.isEmpty())
+        {
+            return dngUid;
+        }
+    }
+
+    return QString();
+}
+
+bool DMetadata::setImageUniqueId(const QString& uuid) const
+{
+    if (supportXmp())
+    {
+        return setXmpTagString("Xmp.digiKam.ImageUniqueID", uuid);
+    }
+
+    return false;
 }
 
 PhotoInfoContainer DMetadata::getPhotographInformation() const

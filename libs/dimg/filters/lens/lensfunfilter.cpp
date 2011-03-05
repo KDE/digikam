@@ -53,6 +53,14 @@ public:
     lfModifier*   modifier;
 };
 
+LensFunFilter::LensFunFilter(QObject* parent)
+    : DImgThreadedFilter(parent),
+      d(new LensFunFilterPriv)
+{
+    d->iface = new LensFunIface;
+    initFilter();
+}
+
 LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent,  const LensFunContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "LensCorrection"),
       d(new LensFunFilterPriv)
@@ -197,7 +205,7 @@ void LensFunFilter::filterImage()
             // Update progress bar in dialog.
             int progress = (int)(((double)y * 100.0) / m_orgImage.height());
 
-            if (m_parent && progress%5 == 0)
+            if (progress%5 == 0)
             {
                 postProgress(progress/steps);
             }
@@ -235,7 +243,7 @@ void LensFunFilter::filterImage()
             // Update progress bar in dialog.
             int progress = (int)(((double)y * 100.0) / m_destImage.height());
 
-            if (m_parent && progress%5 == 0)
+            if (progress%5 == 0)
             {
                 postProgress(progress/steps + offset);
             }
@@ -272,7 +280,7 @@ void LensFunFilter::filterImage()
             // Update progress bar in dialog.
             int progress = (int)(((double)y * 100.0) / tempImage.height());
 
-            if (m_parent && progress%5 == 0)
+            if (progress%5 == 0)
             {
                 postProgress(progress/steps + 33.3*(steps-1));
             }
@@ -326,6 +334,46 @@ bool LensFunFilter::registerSettingsToXmp(KExiv2Data& data) const
     data = meta.data();
 
     return ret;
+}
+
+FilterAction LensFunFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    LensFunContainer prm = d->iface->settings();
+    action.addParameter("ccaCorrection", prm.filterCCA);
+    action.addParameter("vigCorrection", prm.filterVIG);
+    action.addParameter("cciCorrection", prm.filterCCI);
+    action.addParameter("dstCorrection", prm.filterDST);
+    action.addParameter("geoCorrection", prm.filterGEO);
+    action.addParameter("cropFactor", prm.cropFactor);
+    action.addParameter("focalLength", prm.focalLength);
+    action.addParameter("aperture", prm.aperture);
+    action.addParameter("subjectDistance", prm.subjectDistance);
+    action.addParameter("cameraMake", prm.cameraMake);
+    action.addParameter("cameraModel", prm.cameraModel);
+    action.addParameter("lensModel", prm.lensModel);
+
+    return action;
+}
+
+void LensFunFilter::readParameters(const Digikam::FilterAction& action)
+{
+    LensFunContainer prm = d->iface->settings();
+    prm.filterCCA   = action.parameter("ccaCorrection").toBool();
+    prm.filterVIG   = action.parameter("vigCorrection").toBool();
+    prm.filterCCI   = action.parameter("cciCorrection").toBool();
+    prm.filterDST   = action.parameter("dstCorrection").toBool();
+    prm.filterGEO   = action.parameter("geoCorrection").toBool();
+    prm.cropFactor  = action.parameter("cropFactor").toDouble();
+    prm.focalLength = action.parameter("focalLength").toDouble();
+    prm.aperture    = action.parameter("aperture").toDouble();
+    prm.subjectDistance = action.parameter("subjectDistance").toDouble();
+    prm.cameraMake  = action.parameter("cameraMake").toString();
+    prm.cameraModel = action.parameter("cameraModel").toString();
+    prm.lensModel   = action.parameter("lensModel").toString();
+    d->iface->setSettings(prm);
 }
 
 }  // namespace Digikam

@@ -66,7 +66,15 @@ LensAutoFix::LensAutoFix(QObject* parent)
     setToolTitle(i18n("Lens Auto-Correction"));
     setToolDescription(i18n("A tool to fix automatically lens distortions"));
     setToolIcon(KIcon(SmallIcon("lensautofix")));
+}
 
+LensAutoFix::~LensAutoFix()
+{
+    delete d;
+}
+
+QWidget* LensAutoFix::createSettingsWidget()
+{
     QWidget* box      = new QWidget;
     QLabel* note      = new QLabel(i18n("<b>Use Metadata</b> option will parse images' information at "
                                         "queue run-time to find relevant lens features."));
@@ -88,18 +96,13 @@ LensAutoFix::LensAutoFix(QObject* parent)
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
-    setSettingsWidget(box);
-
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->cameraSelector, SIGNAL(signalLensSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
-}
 
-LensAutoFix::~LensAutoFix()
-{
-    delete d;
+    return box;
 }
 
 BatchToolSettings LensAutoFix::defaultSettings()

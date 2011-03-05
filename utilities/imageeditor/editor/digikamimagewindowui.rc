@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="35" name="digikamimagewindow" >
+<gui version="202" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -14,6 +14,9 @@
         <Separator/>
         <Action name="editorwindow_save" />
         <Action name="editorwindow_saveas" />
+        <Action name="editorwindow_savecurrentversion" />
+        <Action name="editorwindow_savenewversion" />
+        <Action name="editorwindow_export" />
         <Action name="editorwindow_revert" />
         <Separator/>
         <Action name="editorwindow_delete" />
@@ -24,6 +27,7 @@
     <Menu name="Edit" ><text>&amp;Edit</text>
         <Action name="editorwindow_copy" />
         <Separator/>
+        <Action name="editorwindow_discardchanges" />
         <Action name="editorwindow_undo" />
         <Action name="editorwindow_redo" />
         <Separator/>
@@ -71,15 +75,15 @@
     <Menu name="Decorate" ><text>&amp;Decorate</text>
     </Menu>
 
-    <Menu name="Filters" ><text>F&amp;ilters</text>
+    <Menu name="Filters" ><text>Effec&amp;ts</text>
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
-        <Action name="editorwindow_rawcameralist"/>
+        <Action name="help_rawcameralist"/>
         <Action name="editorwindow_librariesinfo"/>
         <Action name="editorwindow_dbstat"/>
-        <Action name="editorwindow_donatemoney" />
-        <Action name="editorwindow_contribute" />
+        <Action name="help_donatemoney" />
+        <Action name="help_contribute" />
     </Menu>
 
     <Merge/>
@@ -100,23 +104,28 @@
 </MenuBar>
 
 <ToolBar name="mainToolBar" ><text>Main Toolbar</text>
-     <Action name="editorwindow_first" />
-     <Action name="editorwindow_backward" />
-     <Action name="editorwindow_forward" />
-     <Action name="editorwindow_last" />
+     <Action name="imageview_tomainwindow"/>
+     <Action name="editorwindow_openversion"/>
+     <Action name="editorwindow_export" />
      <Separator/>
      <Action name="editorwindow_save" />
      <Action name="editorwindow_saveas" />
+     <Action name="editorwindow_savecurrentversion" />
+     <Action name="editorwindow_savenewversion" />
+     <Action name="editorwindow_discardchanges" />
+     <Separator/>
      <Action name="editorwindow_undo" />
      <Action name="editorwindow_redo" />
      <Action name="editorwindow_revert" />
      <Separator/>
+     <Action name="editorwindow_selecttool" />
+     <Action name="editorwindow_applytool" />
+     <Action name="editorwindow_closetool" />
+     <!--
      <Action name="editorwindow_rotate_left" />
      <Action name="editorwindow_rotate_right" />
      <Action name="editorwindow_crop" />
-     <Separator/>
-     <Action name="editorwindow_fullscreen" />
-     <Action name="editorwindow_slideshow" />
+     -->
      <Merge />
      <WeakSeparator/>
      <Action name="logo_action" />

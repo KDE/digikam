@@ -6,7 +6,7 @@
  * Date        : 2009-03-11
  * Description : Qt item model for database entries - private shared header
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,14 +50,18 @@ public:
 
     ImageFilterModelTodoPackage()
         : version(0), isForReAdd(false) {}
-    ImageFilterModelTodoPackage(const QVector<ImageInfo>& infos, int version, bool isForReAdd)
-        : infos(infos), version(version), isForReAdd(isForReAdd) {}
+    ImageFilterModelTodoPackage(const QVector<ImageInfo>& infos, int version, bool isForReAdd,
+                                const QVector<QVariant>& extraValues = QVector<QVariant>())
+        : infos(infos), extraValues(extraValues), version(version), isForReAdd(isForReAdd) {}
 
     QVector<ImageInfo>         infos;
+    QVector<QVariant>          extraValues;
     unsigned int               version;
     bool                       isForReAdd;
     QHash<qlonglong, bool>     filterResults;
 };
+
+// ------------------------------------------------------------------------------------------------
 
 class ImageFilterModelPreparer;
 class ImageFilterModelFilterer;
@@ -73,7 +77,8 @@ public:
 
     void init(ImageFilterModel* q);
     void setupWorkers();
-    void infosToProcess(const QList<ImageInfo>& infos, bool forReAdd);
+    void infosToProcess(const QList<ImageInfo>& infos);
+    void infosToProcess(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd = true);
 
 public:
 
@@ -83,6 +88,8 @@ public:
 
     ImageFilterSettings        filter;
     ImageSortSettings          sorter;
+    VersionImageFilterSettings versionFilter;
+    GroupImageFilterSettings   groupFilter;
 
     volatile unsigned int      version;
     unsigned int               lastDiscardVersion;
@@ -95,9 +102,12 @@ public:
     bool                       needPrepare;
     bool                       needPrepareComments;
     bool                       needPrepareTags;
+    bool                       needPrepareGroups;
 
     QMutex                     mutex;
     ImageFilterSettings        filterCopy;
+    VersionImageFilterSettings versionFilterCopy;
+    GroupImageFilterSettings   groupFilterCopy;
     ImageFilterModelPreparer*  preparer;
     ImageFilterModelFilterer*  filterer;
 
@@ -105,19 +115,24 @@ public:
     bool                       hasOneMatch;
     bool                       hasOneMatchForText;
 
-    /*QHash<int, QSet<qlonglong> >
-                               categoryCountHashInt;
-    QHash<QString, QSet<qlonglong> >
-                               categoryCountHashString;
+    QList<ImageFilterModelPrepareHook*> prepareHooks;
 
-    void cacheCategoryCount(int id, qlonglong imageid) const
-    { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashInt[id].insert(imageid); }
-    void cacheCategoryCount(const QString& id, qlonglong imageid) const
-    { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashString[id].insert(imageid); }*/
+    /*
+        QHash<int, QSet<qlonglong> >        categoryCountHashInt;
+        QHash<QString, QSet<qlonglong> >    categoryCountHashString;
+
+    public:
+
+        void cacheCategoryCount(int id, qlonglong imageid) const
+        { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashInt[id].insert(imageid); }
+        void cacheCategoryCount(const QString& id, qlonglong imageid) const
+        { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashString[id].insert(imageid); }
+    */
 
 public Q_SLOTS:
 
-    void preprocessInfos(const QList<ImageInfo>& infos);
+    void preprocessInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void processAddedInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void packageFinished(const ImageFilterModelTodoPackage& package);
     void packageDiscarded(const ImageFilterModelTodoPackage& package);
 
@@ -125,7 +140,7 @@ Q_SIGNALS:
 
     void packageToPrepare(const ImageFilterModelTodoPackage& package);
     void packageToFilter(const ImageFilterModelTodoPackage& package);
-    void reAddImageInfos(const QList<ImageInfo>& infos);
+    void reAddImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void reAddingFinished();
 };
 

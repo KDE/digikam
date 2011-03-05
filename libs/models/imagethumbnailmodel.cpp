@@ -6,7 +6,7 @@
  * Date        : 2009-03-05
  * Description : Qt item model for database entries with support for thumbnail loading
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class ImageThumbnailModelPriv
+class ImageThumbnailModel::ImageThumbnailModelPriv
 {
 public:
 
@@ -59,6 +59,7 @@ public:
     ThumbnailSize        thumbSize;
     ThumbnailSize        lastGlobalThumbSize;
     ThumbnailSize        preloadThumbSize;
+    QRect                detailRect;
     bool                 emitDataChanged;
     bool                 exifRotate;
 
@@ -128,7 +129,7 @@ void ImageThumbnailModel::setPreloadThumbnails(bool preload)
             d->preloadThread = new ThumbnailLoadThread;
             d->preloadThread->setPixmapRequested(false);
             d->preloadThread->setExifRotate(d->exifRotate);
-            d->preloadThread->setPriority(QThread::LowPriority);
+            d->preloadThread->setPriority(QThread::LowestPriority);
         }
 
         connect(this, SIGNAL(allRefreshingFinished()),
@@ -191,7 +192,7 @@ void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
         filePaths << info.filePath();
     }
     d->preloadThread->stopAllTasks();
-    d->preloadThread->preloadGroup(filePaths, d->preloadThumbnailSize());
+    d->preloadThread->pregenerateGroup(filePaths, d->preloadThumbnailSize());
 }
 
 void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
@@ -207,7 +208,7 @@ void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
         filePaths << imageInfoRef(index).filePath();
     }
     d->preloadThread->stopAllTasks();
-    d->preloadThread->preloadGroup(filePaths, d->preloadThumbnailSize());
+    d->preloadThread->pregenerateGroup(filePaths, d->preloadThumbnailSize());
 }
 
 void ImageThumbnailModel::preloadAllThumbnails()
@@ -231,14 +232,22 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
         ImageInfo info = imageInfoRef(index);
         QString path = info.filePath();
 
-        if (d->thread->find(path, thumbnail, d->thumbSize.size()))
+        if (!d->detailRect.isNull())
         {
-            return thumbnail;
+            if (d->thread->find(path, d->detailRect, thumbnail, d->thumbSize.size()))
+            {
+                return thumbnail;
+            }
         }
         else
         {
-            return QVariant(QVariant::Pixmap);
+            if (d->thread->find(path, thumbnail, d->thumbSize.size()))
+            {
+                return thumbnail;
+            }
         }
+
+        return QVariant(QVariant::Pixmap);
     }
 
     return ImageModel::data(index, role);
@@ -246,15 +255,39 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
 
 bool ImageThumbnailModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if (role == ThumbnailRole && d->thread)
+    if (role == ThumbnailRole)
     {
-        if (value.isNull())
+        switch (value.type())
         {
-            d->thumbSize = d->lastGlobalThumbSize;
-        }
-        else
-        {
-            d->thumbSize = value.toInt();
+            case QVariant::Invalid:
+                d->thumbSize = d->lastGlobalThumbSize;
+                d->detailRect = QRect();
+                break;
+            case QVariant::Int:
+
+                if (value.isNull())
+                {
+                    d->thumbSize = d->lastGlobalThumbSize;
+                }
+                else
+                {
+                    d->thumbSize = value.toInt();
+                }
+
+                break;
+            case QVariant::Rect:
+
+                if (value.isNull())
+                {
+                    d->detailRect = QRect();
+                }
+                else
+                {
+                    d->detailRect = value.toRect();
+                }
+
+            default:
+                break;
         }
     }
 
@@ -268,18 +301,23 @@ void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingD
         return;
     }
 
-    QModelIndex changed = indexForPath(loadingDescription.filePath);
-
-    if (changed.isValid())
+    // In case of multiple occurrence, we currently dont know which thumbnail is this. Signal change on all.
+    foreach (const QModelIndex& index, indexesForPath(loadingDescription.filePath))
     {
-        emit thumbnailAvailable(changed, loadingDescription.previewParameters.size);
-
-        if (d->emitDataChanged)
+        if (thumb.isNull())
         {
-            emit dataChanged(changed, changed);
+            emit thumbnailFailed(index, loadingDescription.previewParameters.size);
+        }
+        else
+        {
+            emit thumbnailAvailable(index, loadingDescription.previewParameters.size);
+
+            if (d->emitDataChanged)
+            {
+                emit dataChanged(index, index);
+            }
         }
     }
 }
 
-}
-
+} // namespace Digikam

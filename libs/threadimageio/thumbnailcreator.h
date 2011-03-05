@@ -48,7 +48,7 @@ class IccProfile;
 class DImgLoaderObserver;
 class DMetadata;
 class ThumbnailImage;
-class ThumbnailCreatorPriv;
+
 
 class DIGIKAM_EXPORT ThumbnailInfo
 {
@@ -74,6 +74,9 @@ public:
      *  This can be used to supersede the Exif information in the file.
      *  Will not be used if DMetadata::ORIENTATION_UNSPECIFIED (default value) */
     int       orientationHint;
+
+    /** A custom identifier, if neither filePath nor uniqueHash are applicable. */
+    QString   customIdentifier;
 };
 
 class DIGIKAM_EXPORT ThumbnailInfoProvider
@@ -84,6 +87,8 @@ public:
     virtual ~ThumbnailInfoProvider() {};
     virtual ThumbnailInfo thumbnailInfo(const QString& path)=0;
 };
+
+class DatabaseThumbnailInfo;
 
 class DIGIKAM_EXPORT ThumbnailCreator
 {
@@ -109,7 +114,18 @@ public:
     /**
      * Create a thumbnail for the specified file.
      */
-    QImage load(const QString& filePath);
+    QImage load(const QString& filePath) const;
+
+    /**
+     * Creates a thumbnail for the specified detail of the file.
+     */
+    QImage loadDetail(const QString& filePath, const QRect& detailRect) const;
+
+    /**
+     * Ensures that the thumbnail is pregenerated in the database, but does not load it from there.
+     */
+    void pregenerate(const QString& filePath) const;
+    void pregenerateDetail(const QString& filePath, const QRect& detailRect) const;
 
     /**
      * Sets the thumbnail size. This is the maximum size of the QImage
@@ -169,7 +185,9 @@ public:
      * Store the given image as thumbnail of the given path.
      * Image should at least have storedSize().
      */
-    void store(const QString& path, const QImage& image);
+    void store(const QString& path, const QImage& image) const;
+
+    void storeDetailThumbnail(const QString& path, const QRect& detailRect, const QImage& image, bool isFace = false) const;
 
     /**
      * Returns the last error that occurred.
@@ -181,7 +199,7 @@ public:
      * Deletes all available thumbnails from the on-disk thumbnail cache.
      * A subsequent call to load() will recreate the thumbnail.
      */
-    void deleteThumbnailsFromDisk(const QString& filePath);
+    void deleteThumbnailsFromDisk(const QString& filePath) const;
 
     /** Creates a default ThumbnailInfo for the given path using QFileInfo only */
     static ThumbnailInfo fileThumbnailInfo(const QString& path);
@@ -190,21 +208,31 @@ private:
 
     void initialize();
 
-    ThumbnailImage createThumbnail(const ThumbnailInfo& info);
-    QImage loadWithDImg(const QString& path, IccProfile* profile);
-    QImage loadImagePreview(const DMetadata& metadata);
-    QImage handleAlphaChannel(const QImage& thumb);
-    int exifOrientation(const QString& filePath, const DMetadata& metadata, bool fromEmbeddedPreview);
-    QImage exifRotate(const QImage& thumb, int orientation);
-    QImage loadPNG(const QString& path);
+    QImage load(const QString& path, const QRect& rect, bool pregenerate) const;
+    ThumbnailImage createThumbnail(const Digikam::ThumbnailInfo& info, const QRect& detailRect = QRect(), bool isFace = false) const;
+    QImage loadWithDImg(const QString& path, IccProfile* profile) const;
+    QImage loadImageDetail(const QString& path, const DMetadata& metadata, const QRect& detailRect, IccProfile* profile) const;
+    QImage loadImagePreview(const DMetadata& metadata) const;
+    QImage handleAlphaChannel(const QImage& thumb) const;
+    int exifOrientation(const QString& filePath, const DMetadata& metadata, bool fromEmbeddedPreview, bool fromDetail) const;
+    QImage exifRotate(const QImage& thumb, int orientation) const;
+    QImage loadPNG(const QString& path) const;
 
-    void storeInDatabase(const ThumbnailInfo& info, const ThumbnailImage& image);
-    ThumbnailImage loadFromDatabase(const ThumbnailInfo& info);
-    void deleteFromDatabase(const ThumbnailInfo& info);
+    void store(const QString& path, const QImage& i, const QRect& rect, bool isFace = false) const;
 
-    void storeFreedesktop(const ThumbnailInfo& info, const ThumbnailImage& image);
-    ThumbnailImage loadFreedesktop(const ThumbnailInfo& info);
-    void deleteFromDiskFreedesktop(const QString& filePath);
+    ThumbnailInfo makeThumbnailInfo(const QString& path, const QRect& rect) const;
+    QString identifierForDetail(const QString& path, const QRect& rect) const;
+    QImage scaleForStorage(const QImage& qimage, bool isFace) const;
+
+    void storeInDatabase(const ThumbnailInfo& info, const ThumbnailImage& image) const;
+    DatabaseThumbnailInfo loadDatabaseThumbnailInfo(const ThumbnailInfo& info) const;
+    ThumbnailImage loadFromDatabase(const ThumbnailInfo& info) const;
+    bool isInDatabase(const ThumbnailInfo& info) const;
+    void deleteFromDatabase(const ThumbnailInfo& info) const;
+
+    void storeFreedesktop(const ThumbnailInfo& info, const ThumbnailImage& image) const;
+    ThumbnailImage loadFreedesktop(const ThumbnailInfo& info) const;
+    void deleteFromDiskFreedesktop(const QString& filePath) const;
     // implementations in thumbnailbasic.cpp
     static QString normalThumbnailDir();
     static QString largeThumbnailDir();
@@ -213,10 +241,11 @@ private:
     static QString thumbnailPathFromUri(const QString& uri, const QString& basePath);
 
     void initThumbnailDirs();
-    QString thumbnailPath(const QString& uri);
+    QString thumbnailPath(const QString& uri) const;
 
 private:
 
+    class ThumbnailCreatorPriv;
     ThumbnailCreatorPriv* const d;
 };
 

@@ -6,9 +6,9 @@
  * Date        : 2004-11-22
  * Description : stand alone digiKam image editor GUI
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>
@@ -166,6 +166,8 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     : Digikam::EditorWindow("Showfoto"), d(new ShowFotoPriv)
 {
     setXMLFile("showfotoui.rc");
+
+    m_nonDestructive = false;
 
     // --------------------------------------------------------
 
@@ -505,6 +507,8 @@ void ShowFoto::readSettings()
 
     d->lastOpenedDirectory.setPath(defaultDir);
 
+    d->rightSideBar->loadState();
+
     Digikam::ThemeEngine::instance()->setCurrentTheme(group.readEntry("Theme", i18nc("default theme name", "Default")));
 }
 
@@ -518,6 +522,8 @@ void ShowFoto::saveSettings()
     group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.toLocalFile() );
     group.writeEntry("Theme", Digikam::ThemeEngine::instance()->getCurrentThemeName());
 
+    d->rightSideBar->saveState();
+
     config->sync();
 }
 
@@ -530,7 +536,6 @@ void ShowFoto::applySettings()
 
     d->rightSideBar->setStyle(group.readEntry("Sidebar Title Style", 0) == 0 ?
                               KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
-    d->rightSideBar->applySettings();
 
     // Current image deleted go to trash ?
     d->deleteItem2Trash = group.readEntry("DeleteItem2Trash", true);
@@ -697,7 +702,6 @@ void ShowFoto::slotUpdateItemInfo()
 {
     d->itemsNb = d->thumbBar->countItems();
 
-    m_rotatedOrFlipped = false;
     int index = 0;
     QString text;
 
@@ -1018,7 +1022,7 @@ void ShowFoto::finishSaving(bool success)
 
 void ShowFoto::saveIsComplete()
 {
-    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
+    Digikam::LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
     d->thumbBar->invalidateThumb(d->currentItem);
 
     // Pop-up a message to bring user when save is done.
@@ -1028,16 +1032,16 @@ void ShowFoto::saveIsComplete()
 
 void ShowFoto::saveAsIsComplete()
 {
-    m_canvas->switchToLastSaved(m_savingContext->destinationURL.toLocalFile());
-    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
+    setOriginAfterSave();
+    Digikam::LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
 
     // Add the file to the list of thumbbar images if it's not there already
-    Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext->destinationURL);
+    Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext.destinationURL);
     d->thumbBar->invalidateThumb(foundItem);
 
     if (!foundItem)
     {
-        foundItem = new Digikam::ThumbBarItem(d->thumbBar, m_savingContext->destinationURL);
+        foundItem = new Digikam::ThumbBarItem(d->thumbBar, m_savingContext.destinationURL);
     }
 
     // shortcut slotOpenUrl
@@ -1050,6 +1054,10 @@ void ShowFoto::saveAsIsComplete()
     // Pop-up a message to bring user when save is done.
     Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
                                   this, windowTitle());
+}
+
+void ShowFoto::saveVersionIsComplete()
+{
 }
 
 KUrl ShowFoto::saveDestinationUrl()
@@ -1233,6 +1241,25 @@ void ShowFoto::slotRevert()
     }
 
     m_canvas->slotRestore();
+}
+
+bool ShowFoto::saveNewVersion()
+{
+    return false;
+}
+
+bool ShowFoto::saveCurrentVersion()
+{
+    return false;
+}
+
+bool ShowFoto::saveNewVersionAs()
+{
+    return false;
+}
+bool ShowFoto::saveNewVersionInFormat(const QString&)
+{
+    return false;
 }
 
 }   // namespace ShowFoto

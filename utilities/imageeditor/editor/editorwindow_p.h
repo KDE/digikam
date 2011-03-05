@@ -7,7 +7,7 @@
  * Description : main image editor GUI implementation
  *               private data.
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,8 +27,8 @@
 
 // Qt includes
 
-#include <qlist.h>
-#include <qstring.h>
+#include <QList>
+#include <QString>
 
 // KDE includes
 
@@ -37,7 +37,9 @@
 
 // Local includes
 
+#include "daboutdata.h"
 #include "editorwindow.h"
+#include "versionmanager.h"
 
 class QDialog;
 class QEventLoop;
@@ -54,6 +56,7 @@ class KToggleAction;
 namespace Digikam
 {
 
+class ActionCategorizedView;
 class DZoomBar;
 class EditorToolIface;
 class ExposureSettingsContainer;
@@ -73,15 +76,12 @@ public:
         overExposureIndicator(0),
         infoLabel(0),
         imagepluginsActionCollection(0),
-        contributeAction(0),
         copyAction(0),
         cropAction(0),
-        donateMoneyAction(0),
         filePrintAction(0),
         flipHorizAction(0),
         flipVertAction(0),
         libsInfoAction(0),
-        rawCameraListAction(0),
         rotateLeftAction(0),
         rotateRightAction(0),
         selectAllAction(0),
@@ -94,6 +94,7 @@ public:
         zoomTo100percents(0),
         undoSignalMapper(0),
         redoSignalMapper(0),
+        formatMenuActionMapper(0),
         waitingLoop(0),
         currentWindowModalDialog(0),
         zoomFitToWindowAction(0),
@@ -102,11 +103,13 @@ public:
         viewUnderExpoAction(0),
         viewOverExpoAction(0),
         showMenuBarAction(0),
+        selectToolsActionView(0),
         ICCSettings(0),
         zoomBar(0),
         previewToolBar(0),
         exposureSettings(0),
-        toolIface(0)
+        toolIface(0),
+        about(0)
     {
     }
 
@@ -134,7 +137,7 @@ public:
     static const QString       configSlideShowPrintExpoSensitivityEntry;
     static const QString       configSlideShowPrintMakeModelEntry;
     static const QString       configSlideShowPrintNameEntry;
-    static const QString       configSlideShowPrintRatingEntry;
+    static const QString       configSlideShowPrintLabelsEntry;
     static const QString       configSlideShowStartCurrentEntry;
     static const QString       configSplitterStateEntry;
     static const QString       configTiffCompressionEntry;
@@ -183,6 +186,7 @@ public:
 
     QSignalMapper*             undoSignalMapper;
     QSignalMapper*             redoSignalMapper;
+    QSignalMapper*             formatMenuActionMapper;
 
     QEventLoop*                waitingLoop;
     QDialog*                   currentWindowModalDialog;
@@ -194,6 +198,8 @@ public:
     KToggleAction*             viewOverExpoAction;
     KToggleAction*             showMenuBarAction;
 
+    ActionCategorizedView*     selectToolsActionView;
+
     QList<int>                 fullscreenSizeBackup;
 
     ICCSettingsContainer*      ICCSettings;
@@ -204,6 +210,10 @@ public:
     ExposureSettingsContainer* exposureSettings;
 
     EditorToolIface*           toolIface;
+
+    VersionManager             defaultVersionManager;
+
+    DAboutData*                about;
 
     void legacyUpdateSplitterState(KConfigGroup& group)
     {
@@ -258,7 +268,9 @@ public:
 
     }
 
+    void plugNewVersionInFormatAction(EditorWindow *q, KActionMenu* menuAction, const QString& text, const QString& format);
 };
+
 const QString EditorWindow::EditorWindowPriv::configAutoZoomEntry("AutoZoom");
 const QString EditorWindow::EditorWindowPriv::configBackgroundColorEntry("BackgroundColor");
 const QString EditorWindow::EditorWindowPriv::configFullScreenEntry("FullScreen");
@@ -279,7 +291,7 @@ const QString EditorWindow::EditorWindowPriv::configSlideShowPrintDateEntry("Sli
 const QString EditorWindow::EditorWindowPriv::configSlideShowPrintExpoSensitivityEntry("SlideShowPrintExpoSensitivity");
 const QString EditorWindow::EditorWindowPriv::configSlideShowPrintMakeModelEntry("SlideShowPrintMakeModel");
 const QString EditorWindow::EditorWindowPriv::configSlideShowPrintNameEntry("SlideShowPrintName");
-const QString EditorWindow::EditorWindowPriv::configSlideShowPrintRatingEntry("SlideShowPrintRating");
+const QString EditorWindow::EditorWindowPriv::configSlideShowPrintLabelsEntry("SlideShowPrintLabels");
 const QString EditorWindow::EditorWindowPriv::configSlideShowStartCurrentEntry("SlideShowStartCurrent");
 const QString EditorWindow::EditorWindowPriv::configSplitterStateEntry("SplitterState");
 const QString EditorWindow::EditorWindowPriv::configTiffCompressionEntry("TIFFCompression");

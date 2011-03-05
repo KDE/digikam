@@ -7,8 +7,8 @@
  * Description : Handling accesses to one image and associated data
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,23 +39,29 @@
 
 // Local includes
 
+#include "albuminfo.h"
 #include "digikam_export.h"
 #include "dshareddata.h"
 #include "databaseurl.h"
-#include "imagelisterrecord.h"
 #include "imageinfolist.h"
-#include "imagecomments.h"
-#include "imagecopyright.h"
-#include "imageextendedproperties.h"
-#include "imageposition.h"
-#include "template.h"
-#include "photoinfocontainer.h"
-#include "databaseinfocontainers.h"
 
 namespace Digikam
 {
 
+class DImageHistory;
+class HistoryImageId;
+class ImageComments;
+class ImageCommonContainer;
+class ImageCopyright;
+class ImageExtendedProperties;
 class ImageInfoData;
+class ImageListerRecord;
+class ImageMetadataContainer;
+class ImagePosition;
+class ImageTagPair;
+class PhotoInfoContainer;
+class Template;
+class TreeBuilder;
 
 /**
  * The ImageInfo class contains provides access to the database for a single image.
@@ -176,6 +182,16 @@ public:
     QString   comment() const;
 
     /**
+     * Returns the Pick Label Id (see PickLabel values in globals.h)
+     */
+    int       pickLabel() const;
+
+    /**
+     * Returns the Color Label Id (see ColorLabel values in globals.h)
+     */
+    int       colorLabel() const;
+
+    /**
      * Returns the rating
      */
     int       rating() const;
@@ -197,6 +213,11 @@ public:
      * @see Album::id()
      */
     QList<int> tagIds() const;
+
+    /**
+     * Returns true if the image is marked as visible in the database.
+     */
+    bool isVisible() const;
 
     /**
      * Retrieve the ImageComments object for this item.
@@ -227,6 +248,109 @@ public:
     ImagePosition imagePosition() const;
 
     /**
+     * Retrieves the coordinates and the altitude.
+     * Returns 0 if hasCoordinates(), or hasAltitude resp, is false.
+     */
+    double longitudeNumber() const;
+    double latitudeNumber() const;
+    double altitudeNumber() const;
+    bool hasCoordinates() const;
+    bool hasAltitude() const;
+
+    /**
+     * Retrieve an ImageTagPair object for a single tag, or for all
+     * image/tag pairs for which properties are available
+     * (not necessarily the assigned tags)
+     */
+    ImageTagPair imageTagPair(int tagId) const;
+    QList<ImageTagPair> availableImageTagPairs() const;
+
+    /**
+     * Retrieves and sets the image history from the database.
+     * Note: The image history retrieved here does typically include all
+     * steps from the original to this image, but does not reference this image
+     * itself.
+     *
+     */
+    DImageHistory imageHistory() const;
+    void setImageHistory(const DImageHistory& history);
+    bool hasImageHistory() const;
+
+    /**
+     * Retrieves and sets this' images UUID
+     */
+    QString uuid() const;
+    void setUuid(const QString& uuid);
+
+    /**
+     * Constructs a HistoryImageId with all available information for this image.
+     */
+    HistoryImageId historyImageId() const;
+
+    /**
+     * Retrieve information about images from which this image
+     * is derived (ancestorImages) and images that have been derived
+     * from this images (derivedImages).
+     */
+    bool hasDerivedImages() const;
+    bool hasAncestorImages() const;
+
+    QList<ImageInfo> derivedImages() const;
+    QList<ImageInfo> ancestorImages() const;
+
+    /**
+     * Returns the cloud of all directly or indirectly related images,
+     * derived images or ancestors, in from of "a derived from b" pairs.
+     */
+    QList<QPair<qlonglong, qlonglong> > relationCloud() const;
+
+    /**
+     * Add a relation to the database:
+     * This image is derived from the ancestorImage.
+     */
+    void markDerivedFrom(const ImageInfo& ancestorImage);
+
+    /**
+     * The image is grouped in the group of another (leading) image.
+     */
+    bool isGrouped() const;
+    /**
+     * The image is the leading image of a group,
+     * there are other images grouped behind this one.
+     */
+    bool hasGroupedImages() const;
+    int  numberOfGroupedImages() const;
+
+    /**
+     * Returns the leading image of the group.
+     * Returns a null image if this image is not grouped (isGrouped())
+     */
+    ImageInfo groupImage() const;
+
+    /**
+     * Returns the list of images grouped behind this image,
+     * if hasGroupedImages().
+     */
+    QList<ImageInfo> groupedImages() const;
+
+    /**
+     * Group this image behind the given image
+     */
+    void addToGroup(const ImageInfo& info);
+
+    /**
+     * This image is grouped behind another image:
+     * Remove this image from its group
+     */
+    void removeFromGroup();
+
+    /**
+     * This image hasGroupedImages(): Split up the group,
+     * remove all groupedImages() from this image's group.
+     */
+    void clearGroup();
+
+    /**
      * Retrieve information about the image,
      * in form of numbers and user presentable strings,
      * for certain defined fields of information (see databaseinfocontainers.h)
@@ -234,7 +358,6 @@ public:
     ImageCommonContainer   imageCommonContainer() const;
     ImageMetadataContainer imageMetadataContainer() const;
     PhotoInfoContainer     photoInfoContainer() const;
-
 
     /**
      * Retrieve metadata template information about the image.
@@ -281,10 +404,24 @@ public:
      */
     void        removeAllTags();
 
+    /** Set the pick Label Id for the item (see PickLabel values from globals.h)
+     */
+    void        setPickLabel(int value);
+
+    /**
+     * Set the color Label Id for the item (see ColorLabel values from globals.h)
+     */
+    void        setColorLabel(int value);
+
     /**
      * Set the rating for the item
      */
     void        setRating(int value);
+
+    /**
+     * Set the visibility flag - triggers between Visible and Hidden
+     */
+    void        setVisible(bool isVisible);
 
 
     /**
@@ -308,7 +445,6 @@ inline uint qHash(const ImageInfo& info)
 {
     return info.hash();
 }
-
 DIGIKAM_DATABASE_EXPORT QDebug& operator<<(QDebug& stream, const ImageInfo& info);
 
 }  // namespace Digikam

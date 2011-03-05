@@ -47,6 +47,7 @@
 
 #include "databasebackend.h"
 #include "databasetransaction.h"
+#include "databasechecker.h"
 #include "upgradedb_sqlite2tosqlite3.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
@@ -59,12 +60,22 @@ namespace Digikam
 
 int SchemaUpdater::schemaVersion()
 {
-    return 5;
+    return 6;
 }
 
 int SchemaUpdater::filterSettingsVersion()
 {
     return 3;
+}
+
+int SchemaUpdater::uniqueHashVersion()
+{
+    return 2;
+}
+
+bool SchemaUpdater::isUniqueHashUpToDate()
+{
+    return DatabaseAccess().db()->getUniqueHashVersion() >= uniqueHashVersion();
 }
 
 const QString SchemaUpdater::getLastErrorMessage()
@@ -82,9 +93,8 @@ SchemaUpdater::SchemaUpdater(AlbumDB* albumDB, DatabaseBackend* backend, Databas
     m_Backend         = backend;
     m_AlbumDB         = albumDB;
     m_Parameters      = parameters;
-    m_currentVersion = 0;
-    m_observer       = 0;
-    m_setError       = false;
+    m_observer        = 0;
+    m_setError        = false;
 }
 
 bool SchemaUpdater::update()
@@ -99,7 +109,7 @@ bool SchemaUpdater::update()
     }
 
     // even on failure, try to set current version - it may have incremented
-    m_AlbumDB->setSetting("DBVersion",QString::number(m_currentVersion));
+    setVersionSettings();
 
     if (!success)
     {
@@ -116,6 +126,37 @@ bool SchemaUpdater::update()
     return success;
 }
 
+void SchemaUpdater::setVersionSettings()
+{
+    if (m_currentVersion.isValid())
+    {
+        m_AlbumDB->setSetting("DBVersion", QString::number(m_currentVersion.toInt()));
+    }
+
+    if (m_currentRequiredVersion.isValid())
+    {
+        m_AlbumDB->setSetting("DBVersionRequired", QString::number(m_currentRequiredVersion.toInt()));
+    }
+}
+
+static QVariant safeToVariant(const QString& s)
+{
+    if (s.isEmpty())
+    {
+        return QVariant();
+    }
+    else
+    {
+        return s.toInt();
+    }
+}
+
+void SchemaUpdater::readVersionSettings()
+{
+    m_currentVersion         = safeToVariant(m_AlbumDB->getSetting("DBVersion"));
+    m_currentRequiredVersion = safeToVariant(m_AlbumDB->getSetting("DBVersionRequired"));
+}
+
 void SchemaUpdater::setObserver(InitializationObserver* observer)
 {
     m_observer = observer;
@@ -123,18 +164,46 @@ void SchemaUpdater::setObserver(InitializationObserver* observer)
 
 bool SchemaUpdater::startUpdates()
 {
+    // Do we have sufficient privileges
+    QStringList insufficientRights;
+    DatabasePrivilegesChecker checker(m_Parameters);
+
+    if (!checker.checkPrivileges(insufficientRights))
+    {
+
+
+        kError() << "Insufficient rights on databse.";
+        QString errorMsg = i18n(
+                               "You have insufficient privileges on the database.\n"
+                               "Following privileges are not assigned to you:\n %1"
+                               "\nCheck your privileges on the database and restart digikam again.",
+                               insufficientRights.join(",\n")
+                           );
+
+        m_LastErrorMessage=errorMsg;
+
+        if (m_observer)
+        {
+            m_observer->error(errorMsg);
+            m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+        }
+
+        return false;
+    }
+
+
+
     // First step: do we have an empty database?
     QStringList tables = m_Backend->tables();
 
     if (tables.contains("Albums"))
     {
         // Find out schema version of db file
-        QString version = m_AlbumDB->getSetting("DBVersion");
-        QString versionRequired = m_AlbumDB->getSetting("DBVersionRequired");
-        kDebug() << "Have a database structure version " << version;
+        readVersionSettings();
+        kDebug() << "Have a database structure version " << m_currentVersion.toInt();
 
         // We absolutely require the DBVersion setting
-        if (version.isEmpty())
+        if (!m_currentVersion.isValid())
         {
             // Something is damaged. Give up.
             kError() << "DBVersion not available! Giving up schema upgrading.";
@@ -157,12 +226,10 @@ bool SchemaUpdater::startUpdates()
 
         // current version describes the current state of the schema in the db,
         // schemaVersion is the version required by the program.
-        m_currentVersion = version.toInt();
-
-        if (m_currentVersion > schemaVersion())
+        if (m_currentVersion.toInt() > schemaVersion())
         {
             // trying to open a database with a more advanced than this SchemaUpdater supports
-            if (!versionRequired.isEmpty() && versionRequired.toInt() <= schemaVersion())
+            if (m_currentRequiredVersion.isValid() && m_currentRequiredVersion.toInt() <= schemaVersion())
             {
                 // version required may be less than current version
                 return true;
@@ -259,84 +326,109 @@ bool SchemaUpdater::startUpdates()
     }
 }
 
-bool SchemaUpdater::makeUpdates()
+bool SchemaUpdater::beginWrapSchemaUpdateStep()
 {
-    kDebug() << "makeUpdates " << m_currentVersion << " to " << schemaVersion();
-
-    //DatabaseTransaction transaction(m_access);
-    if (m_currentVersion < schemaVersion())
+    if (!m_Backend->beginTransaction())
     {
-        if (m_currentVersion < 5)
+        QFileInfo currentDBFile(m_Parameters.databaseName);
+        QString errorMsg = i18n("Failed to open a database transaction on your database file \"%1\". "
+                                "This is unusual. Please check that you can access the file and no "
+                                "other process has currently locked the file. "
+                                "If the problem persists you can get help from the digikam-devel@kde.org "
+                                "mailing list. As well, please have a look at what digiKam prints on the console. ",
+                                currentDBFile.filePath());
+        m_observer->error(errorMsg);
+        m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+        return false;
+    }
+
+    return true;
+}
+
+bool SchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, const QString& errorMsg)
+{
+    if (!stepOperationSuccess)
+    {
+        m_Backend->rollbackTransaction();
+
+        if (m_observer)
         {
-            if (!m_Backend->beginTransaction())
+            // error or cancelled?
+            if (!m_observer->continueQuery())
             {
-                QFileInfo currentDBFile(m_Parameters.databaseName);
-                QString errorMsg = i18n("Failed to open a database transaction on your database file \"%1\". "
-                                        "This is unusual. Please check that you can access the file and no "
-                                        "other process has currently locked the file. "
-                                        "If the problem persists you can get help from the digikam-devel@kde.org "
-                                        "mailing list. As well, please have a look at what digiKam prints on the console. ",
-                                        currentDBFile.filePath());
+                kDebug() << "Schema update cancelled by user";
+            }
+            else if (!m_setError)
+            {
                 m_observer->error(errorMsg);
                 m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
             }
+        }
 
-            if (!updateV4toV5())
+        return false;
+    }
+
+    kDebug() << "Success updating to v5";
+    m_Backend->commitTransaction();
+    return true;
+}
+
+bool SchemaUpdater::makeUpdates()
+{
+    kDebug() << "makeUpdates " << m_currentVersion.toInt() << " to " << schemaVersion();
+
+    if (m_currentVersion.toInt() < schemaVersion())
+    {
+        if (m_currentVersion.toInt() < 5)
+        {
+            if (!beginWrapSchemaUpdateStep())
             {
-                m_Backend->rollbackTransaction();
-
-                if (m_observer)
-                {
-                    // error or cancelled?
-                    if (!m_observer->continueQuery())
-                    {
-                        kDebug() << "Schema update cancelled by user";
-                    }
-                    else if (!m_setError)
-                    {
-                        QFileInfo currentDBFile(m_Parameters.databaseName);
-                        QString errorMsg = i18n("The schema updating process from version 4 to 5 failed, "
-                                                "caused by an error that we did not expect. "
-                                                "You can try to discard your old database and start with an empty one. "
-                                                "(In this case, please move the database files "
-                                                "\"%1\" and \"%2\" from the directory \"%3\"). "
-                                                "More probably you will want to report this error to the digikam-devel@kde.org "
-                                                "mailing list. As well, please have a look at what digiKam prints on the console. ",
-                                                QString("digikam3.db"), QString("digikam4.db"), currentDBFile.dir().path());
-                        m_observer->error(errorMsg);
-                        m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
-                    }
-                }
-
                 return false;
             }
 
-            kDebug() << "Success updating to v5";
-            m_Backend->commitTransaction();
-            // REMOVE BEFORE FINAL VERSION
-            m_AlbumDB->setSetting("preAlpha010Update1", "true");
-            m_AlbumDB->setSetting("preAlpha010Update2", "true");
-            m_AlbumDB->setSetting("preAlpha010Update3", "true");
-            // END REMOVE
-            // REMOVE BEFORE NEXT SCHEMA UPDATE
-            m_AlbumDB->setSetting("beta010Update1", "true");
-            m_AlbumDB->setSetting("beta010Update2", "true");
-            // END REMOVE
+            // v4 was always SQLite
+            QFileInfo currentDBFile(m_Parameters.databaseName);
+            QString errorMsg = i18n("The schema updating process from version 4 to 6 failed, "
+                                    "caused by an error that we did not expect. "
+                                    "You can try to discard your old database and start with an empty one. "
+                                    "(In this case, please move the database files "
+                                    "\"%1\" and \"%2\" from the directory \"%3\"). "
+                                    "More probably you will want to report this error to the digikam-devel@kde.org "
+                                    "mailing list. As well, please have a look at what digiKam prints on the console. ",
+                                    QString("digikam3.db"), QString("digikam4.db"), currentDBFile.dir().path());
+
+            if (!endWrapSchemaUpdateStep(updateV4toV6(), errorMsg))
+            {
+                return false;
+            }
+
+            kDebug() << "Success updating v4 to v6";
+
+            // Still set these even in >= 1.4 because 0.10 - 1.3 may want to apply the updates if not set
+            setLegacySettingEntries();
+        }
+
+        if (m_currentVersion.toInt() < 6)
+        {
+            //updateV5toV6();
+            if (!beginWrapSchemaUpdateStep())
+            {
+                return false;
+            }
+
+            QString errorMsg = i18n("Failed to update the database schema from version 5 to version 6. "
+                                    "Please read the error messages printed on the console and "
+                                    "report this error as a bug at bugs.kde.org. ");
+
+            if (!endWrapSchemaUpdateStep(updateV5toV6(), errorMsg))
+            {
+                return false;
+            }
+
+            kDebug() << "Success updating to v6";
         }
 
         // add future updates here
-    }
-    else
-    {
-        // REMOVE BEFORE FINAL VERSION
-        preAlpha010Update1();
-        preAlpha010Update2();
-        preAlpha010Update3();
-        // END REMOVE
-        // REMOVE BEFORE NEXT SCHEMA UPDATE
-        beta010Update1();
-        beta010Update2();
-        // END REMOVE
     }
 
     return true;
@@ -394,20 +486,21 @@ bool SchemaUpdater::updateFilterSettings()
 
 bool SchemaUpdater::createDatabase()
 {
-    if ( createTablesV5()
-         && createIndicesV5()
-         && createTriggersV5())
+    if ( createTables()
+         && createIndices()
+         && createTriggers())
     {
-        // REMOVE BEFORE ALPHA VERSION
-        m_AlbumDB->setSetting("preAlpha010Update1", "true");
-        m_AlbumDB->setSetting("preAlpha010Update2", "true");
-        m_AlbumDB->setSetting("preAlpha010Update3", "true");
-        // END REMOVE
-        // REMOVE BEFORE NEXT SCHEMA UPDATE
-        m_AlbumDB->setSetting("beta010Update1", "true");
-        m_AlbumDB->setSetting("beta010Update2", "true");
-        // END REMOVE
-        m_currentVersion = 5;
+        setLegacySettingEntries();
+
+        m_currentVersion = schemaVersion();
+
+        // if we start with the V2 hash, version 6 is required
+        m_AlbumDB->setUniqueHashVersion(uniqueHashVersion());
+        m_currentRequiredVersion = schemaVersion();
+        /*
+        // Digikam for database version 5 can work with version 6, though not using the new features
+        m_currentRequiredVersion = 5;
+        */
         return true;
     }
     else
@@ -416,30 +509,98 @@ bool SchemaUpdater::createDatabase()
     }
 }
 
-bool SchemaUpdater::createTablesV5()
+bool SchemaUpdater::createTables()
 {
-    if (DatabaseCoreBackend::NoErrors!=m_Backend->execDBAction(m_Backend->getDBAction(QString("CreateDB"))))
-    {
-        return false;
-    }
-
-    return true;
+    return m_Backend->execDBAction(m_Backend->getDBAction("CreateDB"));
 }
 
-bool SchemaUpdater::createIndicesV5()
+bool SchemaUpdater::createIndices()
 {
     // TODO: see which more indices are needed
     // create indices
-    m_Backend->execDBAction(m_Backend->getDBAction("CreateIdx1"));
-    m_Backend->execDBAction(m_Backend->getDBAction("CreateIdx2"));
-    m_Backend->execDBAction(m_Backend->getDBAction("CreateIdx3"));
+    return m_Backend->execDBAction(m_Backend->getDBAction("CreateIndices"));
+}
 
+bool SchemaUpdater::createTriggers()
+{
+    return m_Backend->execDBAction(m_Backend->getDBAction(QString("CreateTriggers")));
+}
+
+bool SchemaUpdater::updateUniqueHash()
+{
+    if (isUniqueHashUpToDate())
+    {
+        return true;
+    }
+
+    readVersionSettings();
+
+    {
+        DatabaseTransaction transaction;
+
+        DatabaseAccess().db()->setUniqueHashVersion(uniqueHashVersion());
+
+        CollectionScanner scanner;
+        scanner.setNeedFileCount(true);
+        scanner.setUpdateHashHint();
+        if (m_observer)
+        {
+            m_observer->connectCollectionScanner(&scanner);
+            scanner.setObserver(m_observer);
+        }
+        scanner.completeScan();
+
+        // earlier digikam does not know about the hash
+        if (m_currentRequiredVersion.toInt() < 6)
+        {
+            m_currentRequiredVersion = 6;
+            setVersionSettings();
+        }
+    }
     return true;
 }
 
-bool SchemaUpdater::createTriggersV5()
+bool SchemaUpdater::updateV5toV6()
 {
-    m_Backend->execDBAction(m_Backend->getDBAction(QString("CreateTriggersV5")));
+    if (m_observer)
+    {
+        if (!m_observer->continueQuery())
+        {
+            return false;
+        }
+
+        m_observer->moreSchemaUpdateSteps(1);
+    }
+
+    DatabaseAction updateAction = m_Backend->getDBAction("UpdateSchemaFromV5ToV6");
+    if (updateAction.name.isNull())
+    {
+        QString errorMsg = i18n("The database update action cannot be found. Please ensure that "
+                                "the dbconfig.xml file of the current version of digikam is installed "
+                                "at the correct place. ");
+    }
+
+    if (!m_Backend->execDBAction(updateAction))
+    {
+        kError() << "Schema update to V6 failed!";
+        // resort to default error message, set above
+        return false;
+    }
+
+    if (m_observer)
+    {
+        if (!m_observer->continueQuery())
+        {
+            return false;
+        }
+
+        m_observer->schemaUpdateProgress(i18n("Updated schema to version 6."));
+    }
+
+    m_currentVersion = 6;
+    // Digikam for database version 5 can work with version 6, though not using the new features
+    // Note: We dont upgrade the uniqueHash
+    m_currentRequiredVersion = 5;
     return true;
 }
 
@@ -467,6 +628,7 @@ bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& cur
                                 "or delete it.",
                                 digikam3DBPath, currentDBPath, oldFile.errorString());
         m_LastErrorMessage=errorMsg;
+        m_setError = true;
 
         if (m_observer)
         {
@@ -491,6 +653,7 @@ bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& cur
                                 digikam3DBPath, currentDBPath);
 
         m_LastErrorMessage=errorMsg;
+        m_setError = true;
 
         if (m_observer)
         {
@@ -575,9 +738,9 @@ static QStringList cleanUserFilterString(const QString& filterString)
     return filterList;
 }
 
-bool SchemaUpdater::updateV4toV5()
+bool SchemaUpdater::updateV4toV6()
 {
-    kDebug() << "updateV4toV5";
+    kDebug() << "updateV4toV6";
 
     if (m_observer)
     {
@@ -635,7 +798,7 @@ bool SchemaUpdater::updateV4toV5()
 
     // --- Create new tables ---
 
-    if (!createTablesV5() || !createIndicesV5())
+    if (!createTables() || !createIndices())
     {
         return false;
     }
@@ -820,7 +983,7 @@ bool SchemaUpdater::updateV4toV5()
 
     // --- Create triggers ---
 
-    if (!createTriggersV5())
+    if (!createTriggers())
     {
         return false;
     }
@@ -974,10 +1137,23 @@ bool SchemaUpdater::updateV4toV5()
         m_observer->schemaUpdateProgress(i18n("Dropped v3 tables"));
     }
 
-    m_currentVersion = 5;
+    m_currentRequiredVersion = 5;
+    m_currentVersion = 6;
     kDebug() << "Returning true from updating to 5";
     return true;
 }
+
+void SchemaUpdater::setLegacySettingEntries()
+{
+    m_AlbumDB->setSetting("preAlpha010Update1", "true");
+    m_AlbumDB->setSetting("preAlpha010Update2", "true");
+    m_AlbumDB->setSetting("preAlpha010Update3", "true");
+    m_AlbumDB->setSetting("beta010Update1", "true");
+    m_AlbumDB->setSetting("beta010Update2", "true");
+}
+
+// ---------- Legacy code ------------
+
 
 void SchemaUpdater::preAlpha010Update1()
 {
@@ -1194,9 +1370,6 @@ void SchemaUpdater::beta010Update2()
 
     m_AlbumDB->setSetting("beta010Update2", "true");
 }
-
-// ---------- Legacy code ------------
-
 
 bool SchemaUpdater::createTablesV3()
 {

@@ -70,12 +70,15 @@ void kio_digikamdates::special(const QByteArray& data)
     QDataStream ds(data);
     ds >> kurl;
 
+    kDebug()<<"Entered kio_digikamdates::special";
+
     Digikam::DatabaseUrl dbUrl(kurl);
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
     if (folders)
     {
+
         QMap<QDateTime, int> dateNumberMap = Digikam::DatabaseAccess().db()->getAllCreationDatesAndNumberOfImages();
 
         QByteArray  ba;

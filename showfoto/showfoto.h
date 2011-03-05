@@ -82,9 +82,14 @@ private:
     bool saveAs();
     void finishSaving(bool success);
     KUrl saveDestinationUrl();
+    bool saveNewVersion();
+    bool saveCurrentVersion();
+    bool saveNewVersionAs();
+    bool saveNewVersionInFormat(const QString&);
 
     void saveIsComplete();
     void saveAsIsComplete();
+    void saveVersionIsComplete();
 
     void slideShow(bool startWithCurrent, Digikam::SlideShowSettings& settings);
 

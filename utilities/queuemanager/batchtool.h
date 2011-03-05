@@ -202,6 +202,10 @@ public:
      */
     virtual BatchToolSettings defaultSettings() = 0;
 
+    /** For delayed creation: Ensure that createSettingsWidget() has been called.
+     */
+    void ensureIsInitialized() const;
+
 Q_SIGNALS:
 
     void signalSettingsChanged(const BatchToolSettings&);
@@ -230,6 +234,14 @@ protected:
         This method is called by apply().
      */
     virtual bool toolOperations()=0;
+
+    /** For delayed creation of a settings widget:
+     *  If your tool's settings widget takes long to create, you can
+     *  avoid creating it in your constructor. If you call neither
+     *  setSettingsWidget() nor setNoSettingsWidget() from your constructor,
+     *  this method will be invoked later when the settings widget is requested.
+     */
+    virtual QWidget* createSettingsWidget();
 
 protected Q_SLOTS:
 

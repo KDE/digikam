@@ -39,6 +39,12 @@
 namespace Digikam
 {
 
+NormalizeFilter::NormalizeFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 NormalizeFilter::NormalizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
     : DImgThreadedFilter(orgImage, parent, "NormalizeFilter"),
       m_refImage(*refImage)
@@ -53,6 +59,11 @@ NormalizeFilter::~NormalizeFilter()
 
 void NormalizeFilter::filterImage()
 {
+    if (m_refImage.isNull())
+    {
+        m_refImage = m_orgImage;
+    }
+
     normalizeImage();
     m_destImage = m_orgImage;
 }
@@ -257,5 +268,16 @@ void NormalizeFilter::normalizeImage()
 
     delete [] param.lut;
 }
+
+FilterAction NormalizeFilter::filterAction()
+{
+    return DefaultFilterAction<NormalizeFilter>();
+}
+
+void NormalizeFilter::readParameters(const Digikam::FilterAction& /*action*/)
+{
+    return;
+}
+
 
 }  // namespace Digikam

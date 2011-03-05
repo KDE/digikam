@@ -76,6 +76,7 @@ public:
         stack(0),
         splitter(0),
         dragSwitchTimer(0),
+        appendedTabsStateCache(),
         optionActiveTabEntry("ActiveTab"),
         optionMinimizedEntry("Minimized"),
         optionRestoreSizeEntry("RestoreSize")

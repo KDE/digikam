@@ -6,7 +6,7 @@
  * Date        : 2007-03-05
  * Description : digiKam light table GUI
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,6 +35,7 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kedittoolbar.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -65,6 +66,7 @@
 #include "dimg.h"
 #include "dlogoaction.h"
 #include "dmetadata.h"
+#include "metadatasettings.h"
 #include "albumsettings.h"
 #include "albummanager.h"
 #include "loadingcacheinterface.h"
@@ -134,13 +136,13 @@ LightTableWindow::LightTableWindow()
 
     //-------------------------------------------------------------
 
-    d->leftSideBar->loadState();
-    d->rightSideBar->loadState();
-    d->leftSideBar->populateTags();
-    d->rightSideBar->populateTags();
     slotSidebarTabTitleStyleChanged();
 
     readSettings();
+
+    d->leftSideBar->populateTags();
+    d->rightSideBar->populateTags();
+
     applySettings();
     setAutoSaveSettings("LightTable Settings", true);
 }
@@ -164,6 +166,11 @@ void LightTableWindow::readSettings()
     d->barViewDock->setShouldBeVisible(group.readEntry("Show Thumbbar", true));
     d->navigateByPairAction->setChecked(group.readEntry("Navigate By Pair", false));
     slotToggleNavigateByPair();
+
+    d->leftSideBar->setConfigGroup(KConfigGroup(&group, "Left Sidebar"));
+    d->leftSideBar->loadState();
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
+    d->rightSideBar->loadState();
 }
 
 void LightTableWindow::writeSettings()
@@ -174,6 +181,11 @@ void LightTableWindow::writeSettings()
     group.writeEntry("Show Thumbbar", d->barViewDock->shouldBeVisible());
     group.writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
     group.writeEntry("Clear On Close", d->clearOnCloseAction->isChecked());
+
+    d->leftSideBar->setConfigGroup(KConfigGroup(&group, "Left Sidebar"));
+    d->leftSideBar->saveState();
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
+    d->rightSideBar->saveState();
     config->sync();
 }
 
@@ -267,7 +279,7 @@ void LightTableWindow::setupUserArea()
     d->barViewDock = new ThumbBarDock(viewContainer, Qt::Tool);
     d->barViewDock->setObjectName("lighttable_thumbbar");
     d->barView     = new LightTableBar(d->barViewDock, Qt::Horizontal,
-                                       AlbumSettings::instance()->getExifRotate());
+                                       MetadataSettings::instance()->settings().exifRotate);
     d->barViewDock->setWidget(d->barView);
     viewContainer->addDockWidget(Qt::TopDockWidgetArea, d->barViewDock);
     d->barViewDock->setFloating(false);
@@ -362,6 +374,12 @@ void LightTableWindow::setupConnections()
             d->previewView, SLOT(setRightZoomFactor(double)));
 
     // View connections ---------------------------------------------
+
+    connect(d->previewView, SIGNAL(signalLeftPopupTagsView()),
+            d->leftSideBar, SLOT(slotPopupTagsView()));
+
+    connect(d->previewView, SIGNAL(signalRightPopupTagsView()),
+            d->rightSideBar, SLOT(slotPopupTagsView()));
 
     connect(d->previewView, SIGNAL(signalLeftZoomFactorChanged(double)),
             this, SLOT(slotLeftZoomFactorChanged(double)));
@@ -591,17 +609,8 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->donateMoneyAction = new KAction(i18n("Donate Money..."), this);
-    connect(d->donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
-    actionCollection()->addAction("lighttable_donatemoney", d->donateMoneyAction);
-
-    d->contributeAction = new KAction(i18n("Contribute..."), this);
-    connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
-    actionCollection()->addAction("lighttable_contribute", d->contributeAction);
-
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), this);
-    connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
-    actionCollection()->addAction("lighttable_rawcameralist", d->rawCameraListAction);
+    d->about = new DAboutData(this);
+    d->about->registerHelpActions();
 
     d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
@@ -616,38 +625,6 @@ void LightTableWindow::setupActions()
 
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
-
-    // -- Rating actions ---------------------------------------------------------------
-
-    d->star0 = new KAction(i18n("Assign Rating \"No Stars\""), this);
-    d->star0->setShortcut(KShortcut(Qt::CTRL+Qt::Key_0));
-    connect(d->star0, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingNoStar()));
-    actionCollection()->addAction("lighttable_ratenostar", d->star0);
-
-    d->star1 = new KAction(i18n("Assign Rating \"One Star\""), this);
-    d->star1->setShortcut(KShortcut(Qt::CTRL+Qt::Key_1));
-    connect(d->star1, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingOneStar()));
-    actionCollection()->addAction("lighttable_rateonestar", d->star1);
-
-    d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), this);
-    d->star2->setShortcut(KShortcut(Qt::CTRL+Qt::Key_2));
-    connect(d->star2, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingTwoStar()));
-    actionCollection()->addAction("lighttable_ratetwostar", d->star2);
-
-    d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), this);
-    d->star3->setShortcut(KShortcut(Qt::CTRL+Qt::Key_3));
-    connect(d->star3, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingThreeStar()));
-    actionCollection()->addAction("lighttable_ratethreestar", d->star3);
-
-    d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), this);
-    d->star4->setShortcut(KShortcut(Qt::CTRL+Qt::Key_4));
-    connect(d->star4, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingFourStar()));
-    actionCollection()->addAction("lighttable_ratefourstar", d->star4);
-
-    d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), this);
-    d->star5->setShortcut(KShortcut(Qt::CTRL+Qt::Key_5));
-    connect(d->star5, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingFiveStar()));
-    actionCollection()->addAction("lighttable_ratefivestar", d->star5);
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
@@ -686,6 +663,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList& list,
                                       bool addTo)
 {
     // Clear all items before adding new images to the light table.
+    kDebug() << "Clearing LT" << (!addTo);
     if (!addTo)
     {
         slotClearItemsList();
@@ -1395,7 +1373,7 @@ void LightTableWindow::slotEditItem(const ImageInfo& info)
     ImageWindow* im    = ImageWindow::imageWindow();
     ImageInfoList list = d->barView->itemsImageInfoList();
 
-    im->loadImageInfos(list, info, i18n("Light Table"), true);
+    im->loadImageInfos(list, info, i18n("Light Table"));
 
     if (im->isHidden())
     {
@@ -1416,8 +1394,7 @@ void LightTableWindow::slotToggleSlideShow()
     bool startWithCurrent     = group.readEntry("SlideShowStartCurrent", false);
 
     SlideShowSettings settings;
-    settings.exifRotate           = AlbumSettings::instance()->getExifRotate();
-    settings.ratingColor          = ThemeEngine::instance()->textSpecialRegColor();
+    settings.exifRotate           = MetadataSettings::instance()->settings().exifRotate;
     settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
     settings.printName            = group.readEntry("SlideShowPrintName", true);
     settings.printDate            = group.readEntry("SlideShowPrintDate", false);
@@ -1425,7 +1402,7 @@ void LightTableWindow::slotToggleSlideShow()
     settings.printExpoSensitivity = group.readEntry("SlideShowPrintExpoSensitivity", false);
     settings.printMakeModel       = group.readEntry("SlideShowPrintMakeModel", false);
     settings.printComment         = group.readEntry("SlideShowPrintComment", false);
-    settings.printRating          = group.readEntry("SlideShowPrintRating", false);
+    settings.printLabels          = group.readEntry("SlideShowPrintLabels", false);
     settings.loop                 = group.readEntry("SlideShowLoop", false);
     slideShow(startWithCurrent, settings);
 }
@@ -1449,9 +1426,11 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
          !d->cancelSlideShow && it != list.constEnd() ; ++it)
     {
         SlidePictureInfo pictInfo;
-        pictInfo.comment   = (*it).comment();
-        pictInfo.rating    = (*it).rating();
-        pictInfo.photoInfo = (*it).photoInfoContainer();
+        pictInfo.comment    = (*it).comment();
+        pictInfo.rating     = (*it).rating();
+        pictInfo.colorLabel = (*it).colorLabel();
+        pictInfo.pickLabel  = (*it).pickLabel();
+        pictInfo.photoInfo  = (*it).photoInfoContainer();
         settings.pictInfoMap.insert((*it).fileUrl(), pictInfo);
         settings.fileList.append((*it).fileUrl());
 
@@ -1464,7 +1443,7 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
 
     if (!d->cancelSlideShow)
     {
-        settings.exifRotate = AlbumSettings::instance()->getExifRotate();
+        settings.exifRotate = MetadataSettings::instance()->settings().exifRotate;
 
         SlideShow* slide = new SlideShow(settings);
 
@@ -1475,6 +1454,12 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
 
         connect(slide, SIGNAL(signalRatingChanged(const KUrl&, int)),
                 d->barView, SLOT(slotRatingChanged(const KUrl&, int)));
+
+        connect(slide, SIGNAL(signalColorLabelChanged(const KUrl&, int)),
+                d->barView, SLOT(slotColorLabelChanged(const KUrl&, int)));
+
+        connect(slide, SIGNAL(signalPickLabelChanged(const KUrl&, int)),
+                d->barView, SLOT(slotPickLabelChanged(const KUrl&, int)));
 
         slide->show();
     }
@@ -1585,16 +1570,6 @@ void LightTableWindow::hideToolBars()
     {
         toolbar->hide();
     }
-}
-
-void LightTableWindow::slotDonateMoney()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=donation");
-}
-
-void LightTableWindow::slotContribute()
-{
-    KToolInvocation::invokeBrowser("http://www.digikam.org/?q=contrib");
 }
 
 void LightTableWindow::slotEditKeys()
@@ -1726,11 +1701,6 @@ void LightTableWindow::slotToggleNavigateByPair()
     slotItemSelected(d->barView->currentItemImageInfo());
 }
 
-void LightTableWindow::slotRawCameraList()
-{
-    showRawCameraList();
-}
-
 void LightTableWindow::slotThemeChanged()
 {
     QStringList themes(ThemeEngine::instance()->themeNames());
@@ -1772,13 +1742,35 @@ void LightTableWindow::slotSidebarTabTitleStyleChanged()
 {
     d->leftSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
-    d->rightSideBar->applySettings();
+
+    /// @todo Which part of the settings has to be reloaded?
+//     d->rightSideBar->applySettings();
 }
 
 void LightTableWindow::moveEvent(QMoveEvent* e)
 {
     Q_UNUSED(e)
     emit signalWindowHasMoved();
+}
+
+void LightTableWindow::toggleTag(int tagID)
+{
+    d->barView->toggleTag(tagID);
+}
+
+void LightTableWindow::slotAssignPickLabel(int pickId)
+{
+    d->barView->slotAssignPickLabel(pickId);
+}
+
+void LightTableWindow::slotAssignColorLabel(int colorId)
+{
+    d->barView->slotAssignColorLabel(colorId);
+}
+
+void LightTableWindow::slotAssignRating(int rating)
+{
+    d->barView->slotAssignRating(rating);
 }
 
 }  // namespace Digikam

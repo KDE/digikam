@@ -313,8 +313,25 @@ void PerspectiveWidget::applyPerspectiveAdjustment()
 
     DImg targetImg = destImage.copy(getTargetSize());
 
+    FilterAction action("digikam:PerspectiveAdjustment", 1);
+    action.setDisplayableName(i18n("Perspective Adjustment Tool"));
+
+    action.addParameter("topLeftPointX", d->topLeftPoint.x());
+    action.addParameter("topLeftPointY", d->topLeftPoint.y());
+    action.addParameter("topRightPointX", d->topRightPoint.x());
+    action.addParameter("topRightPointY", d->topRightPoint.y());
+
+    action.addParameter("bottomLeftPointX", d->bottomLeftPoint.x());
+    action.addParameter("bottomLeftPointY", d->bottomLeftPoint.y());
+    action.addParameter("bottomRightPointX", d->bottomRightPoint.x());
+    action.addParameter("bottomRightPointY", d->bottomRightPoint.y());
+
+    action.addParameter("spotX", d->spot.x());
+    action.addParameter("spotY", d->spot.y());
+
+    action.addParameter("antiAliasing", d->antiAliasing);
     // Update target image.
-    d->iface->putOriginalImage(i18n("Perspective Adjustment"),
+    d->iface->putOriginalImage(i18n("Perspective Adjustment"), action,
                                targetImg.bits(), targetImg.width(), targetImg.height());
 }
 

@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Matthias Welwarsky <matze at welwarsky dot de>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,6 +47,12 @@ namespace Digikam
 int RefocusFilter::maxMatrixSize()
 {
     return MAX_MATRIX_SIZE;
+}
+
+RefocusFilter::RefocusFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
 }
 
 RefocusFilter::RefocusFilter(DImg* orgImage, QObject* parent, int matrixSize, double radius,
@@ -283,5 +290,29 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
         }
     }
 }
+
+FilterAction RefocusFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("correlation", m_correlation);
+    action.addParameter("gauss", m_gauss);
+    action.addParameter("matrixSize", m_matrixSize);
+    action.addParameter("noise", m_noise);
+    action.addParameter("radius", m_radius);
+
+    return action;
+}
+
+void RefocusFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_correlation = action.parameter("correlation").toDouble();
+    m_gauss = action.parameter("gauss").toDouble();
+    m_matrixSize = action.parameter("matrixSize").toInt();
+    m_noise = action.parameter("noise").toDouble();
+    m_radius = action.parameter("radius").toDouble();
+}
+
 
 }  // namespace DigikamImagesPluginCore

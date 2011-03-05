@@ -93,8 +93,10 @@ BCGTool::BCGTool(QObject* parent)
 {
     setObjectName("bcgadjust");
     setToolName(i18n("Brightness / Contrast / Gamma"));
+    setToolVersion(1);
     setToolIcon(SmallIcon("contrast"));
     setToolHelp("bcgadjusttool.anchor");
+    setToolCategory(FilterAction::ReproducibleFilter);
 
     d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
@@ -197,13 +199,14 @@ void BCGTool::prepareFinal()
     BCGContainer settings = d->settingsView->settings();
 
     ImageIface iface(0, 0);
+
     setFilter(new BCGFilter(iface.getOriginalImg(), this, settings));
 }
 
 void BCGTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Brightness / Contrast / Gamma"), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Brightness / Contrast / Gamma"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 }  // namespace DigikamColorImagePlugin

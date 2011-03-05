@@ -7,6 +7,7 @@
  * Description : Chanels mixer filter
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,6 +40,12 @@
 
 namespace Digikam
 {
+
+MixerFilter::MixerFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
 
 MixerFilter::MixerFilter(DImg* orgImage, QObject* parent, const MixerContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "MixerFilter")
@@ -176,5 +183,47 @@ unsigned short MixerFilter::MixPixel(double RedGain, double GreenGain, double Bl
 
     return( (unsigned short)CLAMP((int)lfMix, 0, segment));
 }
+
+FilterAction MixerFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("blackBlueGain", m_settings.blackBlueGain);
+    action.addParameter("blackGreenGain", m_settings.blackGreenGain);
+    action.addParameter("blackRedGain", m_settings.blackRedGain);
+    action.addParameter("blueBlueGain", m_settings.blueBlueGain);
+    action.addParameter("blueGreenGain", m_settings.blueGreenGain);
+    action.addParameter("blueRedGain", m_settings.blueRedGain);
+    action.addParameter("bMonochrome", m_settings.bMonochrome);
+    action.addParameter("bPreserveLum", m_settings.bPreserveLum);
+    action.addParameter("greenBlueGain", m_settings.greenBlueGain);
+    action.addParameter("greenGreenGain", m_settings.greenGreenGain);
+    action.addParameter("greenRedGain", m_settings.greenRedGain);
+    action.addParameter("redBlueGain", m_settings.redBlueGain);
+    action.addParameter("redGreenGain", m_settings.redGreenGain);
+    action.addParameter("redRedGain", m_settings.redRedGain);
+
+    return action;
+}
+
+void MixerFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_settings.blackBlueGain = action.parameter("blackBlueGain").toDouble();
+    m_settings.blackGreenGain = action.parameter("blackGreenGain").toDouble();
+    m_settings.blackRedGain = action.parameter("blackRedGain").toDouble();
+    m_settings.blueBlueGain = action.parameter("blueBlueGain").toDouble();
+    m_settings.blueGreenGain = action.parameter("blueGreenGain").toDouble();
+    m_settings.blueRedGain = action.parameter("blueRedGain").toDouble();
+    m_settings.bMonochrome = action.parameter("bMonochrome").toBool();
+    m_settings.bPreserveLum = action.parameter("bPreserveLum").toBool();
+    m_settings.greenBlueGain = action.parameter("greenBlueGain").toDouble();
+    m_settings.greenGreenGain = action.parameter("greenGreenGain").toDouble();
+    m_settings.greenRedGain = action.parameter("greenRedGain").toDouble();
+    m_settings.redBlueGain = action.parameter("redBlueGain").toDouble();
+    m_settings.redGreenGain = action.parameter("redGreenGain").toDouble();
+    m_settings.redRedGain = action.parameter("redRedGain").toDouble();
+}
+
 
 }  // namespace Digikam

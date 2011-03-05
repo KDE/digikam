@@ -6,7 +6,7 @@
  * Date        : 2006-04-19
  * Description : A tab to display general image information
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,14 +41,10 @@
 
 #include "digikam_export.h"
 
-using namespace KDcrawIface;
-
 namespace Digikam
 {
 
-class ImagePropertiesTabPriv;
-
-class DIGIKAM_EXPORT ImagePropertiesTab : public RExpanderBox
+class DIGIKAM_EXPORT ImagePropertiesTab : public KDcrawIface::RExpanderBox
 {
     Q_OBJECT
 
@@ -59,7 +55,8 @@ public:
 
     void setCurrentURL(const KUrl& url=KUrl());
 
-    void setPhotoInfoDisable(bool b);
+    void setPhotoInfoDisable(const bool b);
+    void showOrHideCaptionAndTags();
 
     void setFileModifiedDate(const QString& str);
     void setFileSize(const QString& str);
@@ -85,8 +82,15 @@ public:
     void setPhotoFlash(const QString& str);
     void setPhotoWhiteBalance(const QString& str);
 
+    void setCaption(const QString& str);
+    void setPickLabel(int pickId);
+    void setColorLabel(int colorId);
+    void setRating(int rating);
+    void setTags(const QStringList& tagPaths, const QStringList& tagNames = QStringList());
+
 private:
 
+    class ImagePropertiesTabPriv;
     ImagePropertiesTabPriv* const d;
 };
 

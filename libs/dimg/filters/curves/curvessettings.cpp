@@ -203,23 +203,13 @@ void CurvesSettings::slotSpotColorChanged(const DColor& color)
 
 CurvesContainer CurvesSettings::settings() const
 {
-    CurvesContainer prm;
-    prm.lumCurveVals   = d->curvesBox->curves()->getCurveValues(LuminosityChannel);
-    prm.redCurveVals   = d->curvesBox->curves()->getCurveValues(RedChannel);
-    prm.greenCurveVals = d->curvesBox->curves()->getCurveValues(GreenChannel);
-    prm.blueCurveVals  = d->curvesBox->curves()->getCurveValues(BlueChannel);
-    prm.alphaCurveVals = d->curvesBox->curves()->getCurveValues(AlphaChannel);
-    return prm;
+    return d->curvesBox->curves()->getContainer();
 }
 
 void CurvesSettings::setSettings(const CurvesContainer& settings)
 {
     blockSignals(true);
-    d->curvesBox->curves()->setCurveValues(LuminosityChannel, settings.lumCurveVals);
-    d->curvesBox->curves()->setCurveValues(RedChannel,        settings.redCurveVals);
-    d->curvesBox->curves()->setCurveValues(GreenChannel,      settings.greenCurveVals);
-    d->curvesBox->curves()->setCurveValues(BlueChannel,       settings.blueCurveVals);
-    d->curvesBox->curves()->setCurveValues(AlphaChannel,      settings.alphaCurveVals);
+    d->curvesBox->curves()->setCurves(settings);
     blockSignals(false);
 }
 

@@ -35,6 +35,8 @@
 
 #include "digikam_export.h"
 #include "dimg.h"
+#include "dimagehistory.h"
+#include "versionmanager.h"
 
 class QWidget;
 class QPixmap;
@@ -47,6 +49,9 @@ class ExposureSettingsContainer;
 class IOFileSettingsContainer;
 class LoadingDescription;
 class DImgInterfacePrivate;
+class DImgBuiltinFilter;
+class UndoAction;
+class VersionFileOperation;
 
 class DIGIKAM_EXPORT DImgInterface : public QObject
 {
@@ -65,8 +70,8 @@ public:
     void   updateColorManagement();
     void   setSoftProofingEnabled(bool enabled);
 
-    void   setICCSettings(ICCSettingsContainer* cmSettings);
-    ICCSettingsContainer* getICCSettings();
+    void   setICCSettings(const ICCSettingsContainer& cmSettings);
+    ICCSettingsContainer getICCSettings();
 
     void   setExposureSettings(ExposureSettingsContainer* expoSettings);
     ExposureSettingsContainer* getExposureSettings();
@@ -77,11 +82,17 @@ public:
     void   undo();
     void   redo();
     void   restore();
+    void   rollbackToOrigin();
 
     void   saveAs(const QString& file, IOFileSettingsContainer* iofileSettings,
                   bool setExifOrientationTag, const QString& mimeType=QString());
+    void   saveAs(const QString& file, IOFileSettingsContainer* iofileSettings,
+                  bool setExifOrientationTag, const QString& mimeType,
+                  const VersionFileOperation& operation);
 
-    void   switchToLastSaved(const QString& newFilename);
+    void   setHistoryIsBranch(bool isBranching);
+    void   setLastSaved(const QString& filePath);
+    void   switchToLastSaved(const DImageHistory& resolvedCurrentHistory = DImageHistory());
     void   abortSaving();
     void   setModified();
     void   readMetadataFromFile(const QString& file);
@@ -90,6 +101,8 @@ public:
     void   updateUndoState();
     void   resetImage();
     bool   hasChangesToSave();
+    QString ensureHasCurrentUuid();
+    void   provideCurrentUuid(const QString& uuid);
 
     void   zoom(double val);
 
@@ -117,12 +130,12 @@ public:
     void   setSelectedArea(int x, int y, int w, int h);
     void   getSelectedArea(int& x, int& y, int& w, int& h);
 
-    void   rotate90(bool saveUndo=true);
-    void   rotate180(bool saveUndo=true);
-    void   rotate270(bool saveUndo=true);
+    void   rotate90();
+    void   rotate180();
+    void   rotate270();
 
-    void   flipHoriz(bool saveUndo=true);
-    void   flipVert(bool saveUndo=true);
+    void   flipHoriz();
+    void   flipVert();
 
     void   crop(int x, int y, int w, int h);
 
@@ -130,21 +143,26 @@ public:
 
     void   convertDepth(int depth);
 
-    void   getUndoHistory(QStringList& titles);
-    void   getRedoHistory(QStringList& titles);
+    QStringList getUndoHistory() const;
+    QStringList getRedoHistory() const;
+    int    availableUndoSteps() const;
+    int    availableRedoSteps() const;
 
     DImg*  getImg();
     uchar* getImage();
 
-    void   putImage(uchar* data, int w, int h);
-    void   putImage(uchar* data, int w, int h, bool sixteenBit);
-    void   putImage(const QString& caller, uchar* data, int w, int h);
-    void   putImage(const QString& caller, uchar* data, int w, int h, bool sixteenBit);
+    void   putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h);
+    void   putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h, bool sixteenBit);
 
     uchar* getImageSelection();
-    void   putImageSelection(const QString& caller, uchar* data);
+    void   putImageSelection(const QString& caller, const FilterAction& action, uchar* data);
 
     void   putIccProfile(const IccProfile& profile);
+
+    /// For internal usage by UndoManager
+    void   setUndoImageData(const DImageHistory& history, uchar* data, int w, int h, bool sixteenBit);
+    void   imageUndoChanged(const DImageHistory& history);
+    void   setFileOriginData(const QVariant& data);
 
     /** Convert a DImg image to a pixmap for screen using color
         managed view if necessary */
@@ -152,6 +170,11 @@ public:
 
     IccProfile            getEmbeddedICC();
     KExiv2Data            getMetadata();
+    DImageHistory         getImageHistory();
+    DImageHistory         getInitialImageHistory();
+    DImageHistory         getImageHistoryOfFullRedo();
+    DImageHistory         getResolvedInitialHistory();
+    void                  setResolvedInitialHistory(const DImageHistory& history);
 
     QString               getImageFileName();
     QString               getImageFilePath();
@@ -168,10 +191,12 @@ Q_SIGNALS:
 
     void   signalModified();
     void   signalUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave);
+    void   signalFileOriginChanged(const QString& filePath);
 
     void   signalLoadingStarted(const QString& filename);
     void   signalLoadingProgress(const QString& filePath, float progress);
     void   signalImageLoaded(const QString& filePath, bool success);
+    void   signalSavingStarted(const QString& filename);
     void   signalSavingProgress(const QString& filePath, float progress);
     void   signalImageSaved(const QString& filePath, bool success);
 
@@ -182,10 +207,15 @@ private Q_SLOTS:
 
 private:
 
+    void   putImageData(uchar* data, int w, int h, bool sixteenBit);
+    void   applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* action);
+    void   applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter);
+
     void   load(const LoadingDescription& description);
     void   loadCurrent();
-    void   exifRotate(const QString& filename);
     void   resetValues();
+    void   saveNext();
+    QMap<QString,QVariant> ioAttributes(IOFileSettingsContainer* iofileSettings, const QString& givenMimeType);
 
 private:
 

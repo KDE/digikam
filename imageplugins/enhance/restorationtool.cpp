@@ -348,7 +348,7 @@ void RestorationTool::putPreviewData()
 void RestorationTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Restoration"), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Restoration"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 void RestorationTool::slotLoadSettings()

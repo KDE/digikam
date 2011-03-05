@@ -29,7 +29,9 @@
 
 // local includes
 
+#include "databaseinfocontainers.h"
 #include "imageinfo.h"
+#include "imageposition.h"
 
 static const QString KEY_LATITUDE("Latitude");
 static const QString KEY_LONGITUDE("Longitude");

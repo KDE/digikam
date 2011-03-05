@@ -38,7 +38,7 @@ namespace Digikam
 UndoAction::UndoAction(DImgInterface* iface)
     : m_iface(iface)
 {
-    m_title = i18n("unknown");
+    m_history = iface->getImageHistory();
 }
 
 UndoAction::~UndoAction()
@@ -50,103 +50,53 @@ QString UndoAction::getTitle() const
     return m_title;
 }
 
-// ---------------------------------------------------------------------------------------------
-
-UndoActionRotate::UndoActionRotate(DImgInterface* iface,
-                                   UndoActionRotate::Angle angle)
-    : UndoAction(iface), m_angle(angle)
+void UndoAction::setHistory(const DImageHistory& history)
 {
-    switch (m_angle)
-    {
-        case(R90):
-            m_title = i18n("Rotate 90 Degrees");
-            break;
-        case(R180):
-            m_title = i18n("Rotate 180 Degrees");
-            break;
-        case(R270):
-            m_title = i18n("Rotate 270 Degrees");
-            break;
-    }
+    m_history = history;
 }
 
-UndoActionRotate::~UndoActionRotate()
+DImageHistory UndoAction::getHistory() const
 {
+    return m_history;
 }
 
-void UndoActionRotate::rollBack()
+bool UndoAction::hasFileOriginData()
 {
-    switch (m_angle)
-    {
-        case(R90):
-            m_iface->rotate270(false);
-            return;
-        case(R180):
-            m_iface->rotate180(false);
-            return;
-        case(R270):
-            m_iface->rotate90(false);
-            return;
-        default:
-            kWarning() << "Unknown rotate angle specified";
-    }
+    return !m_fileOrigin.isNull();
 }
 
-void UndoActionRotate::execute()
+void UndoAction::setFileOriginData(const QVariant& data, const DImageHistory& resolvedInitialHistory)
 {
-    switch (m_angle)
-    {
-        case R90:
-            m_iface->rotate90(false);
-            return;
-        case R180:
-            m_iface->rotate180(false);
-            return;
-        case R270:
-            m_iface->rotate270(false);
-            return;
-        default:
-            kWarning() << "Unknown rotate angle specified";
-    }
+    m_fileOrigin = data;
+    m_fileOriginResolvedHistory = resolvedInitialHistory;
+}
+
+QVariant UndoAction::fileOriginData() const
+{
+    return m_fileOrigin;
+}
+
+DImageHistory UndoAction::fileOriginResolvedHistory() const
+{
+    return m_fileOriginResolvedHistory;
 }
 
 // ---------------------------------------------------------------------------------------------
 
-UndoActionFlip::UndoActionFlip(DImgInterface* iface, UndoActionFlip::Direction dir)
-    : UndoAction(iface), m_dir(dir)
+UndoActionReversible::UndoActionReversible(DImgInterface* iface, const DImgBuiltinFilter& reversibleFilter)
+    : UndoAction(iface), m_filter(reversibleFilter)
 {
-    if (m_dir == Horizontal)
-    {
-        m_title = i18n("Flip Horizontal");
-    }
-    else if (m_dir == Vertical)
-    {
-        m_title = i18n("Flip Vertical");
-    }
+    m_title = m_filter.i18nDisplayableName();
 }
 
-UndoActionFlip::~UndoActionFlip()
+DImgBuiltinFilter UndoActionReversible::getFilter() const
 {
+    return m_filter;
 }
 
-void UndoActionFlip::rollBack()
+DImgBuiltinFilter UndoActionReversible::getReverseFilter() const
 {
-    switch (m_dir)
-    {
-        case Horizontal:
-            m_iface->flipHoriz(false);
-            return;
-        case Vertical:
-            m_iface->flipVert(false);
-            return;
-        default:
-            kWarning() << "Unknown flip direction specified";
-    }
-}
-
-void UndoActionFlip::execute()
-{
-    rollBack();
+    return m_filter.reverseFilter();
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -158,14 +108,6 @@ UndoActionIrreversible::UndoActionIrreversible(DImgInterface* iface, const QStri
 }
 
 UndoActionIrreversible::~UndoActionIrreversible()
-{
-}
-
-void UndoActionIrreversible::rollBack()
-{
-}
-
-void UndoActionIrreversible::execute()
 {
 }
 

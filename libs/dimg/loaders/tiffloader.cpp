@@ -666,6 +666,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     imageSetAttribute("format", "TIFF");
     imageSetAttribute("originalColorModel", colorModel);
     imageSetAttribute("originalBitDepth", bits_per_sample);
+    imageSetAttribute("originalSize", QSize(w,h));
 
     return true;
 }

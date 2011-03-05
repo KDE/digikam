@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="38" name="showfoto" >
+<gui version="200" name="showfoto" >
 
 <MenuBar>
 

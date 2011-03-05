@@ -52,17 +52,21 @@ Sharpen::Sharpen(QObject* parent)
     setToolTitle(i18n("Sharpen Image"));
     setToolDescription(i18n("A tool to sharpen images"));
     setToolIcon(KIcon(SmallIcon("sharpenimage")));
-
-    QWidget* box   = new QWidget;
-    m_settingsView = new SharpSettings(box);
-    setSettingsWidget(box);
-
-    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 Sharpen::~Sharpen()
 {
+}
+
+QWidget* Sharpen::createSettingsWidget()
+{
+    QWidget* box   = new QWidget;
+    m_settingsView = new SharpSettings(box);
+
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    return box;
 }
 
 BatchToolSettings Sharpen::defaultSettings()

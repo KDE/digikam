@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original RainDrop algorithm copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -44,6 +45,12 @@
 namespace Digikam
 {
 
+RainDropFilter::RainDropFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
 RainDropFilter::RainDropFilter(DImg* orgImage, QObject* parent, int drop,
                                int amount, int coeff, QRect* selection)
     : DImgThreadedFilter(orgImage, parent, "RainDrop")
@@ -62,6 +69,8 @@ RainDropFilter::RainDropFilter(DImg* orgImage, QObject* parent, int drop,
         m_selectedH = selection->height();
     }
 
+    m_generator.seedByTime();
+
     initFilter();
 }
 
@@ -74,6 +83,8 @@ void RainDropFilter::filterImage()
 {
     int w = m_orgImage.width();
     int h = m_orgImage.height();
+
+    m_generator.reseed();
 
     // If we have a region selection in image, use it to apply the filter modification around,
     // else, applied the filter on the full image.
@@ -174,28 +185,16 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
 
     // Randomize.
 
-    QDateTime dt = QDateTime::currentDateTime();
-    QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-    uint seed = dt.secsTo(Y2000);
-#ifdef _WIN32
-    srand(seed);
-#endif
-
     for (i = 0; runningFlag() && (i < Amount); ++i)
     {
         nCounter = 0;
 
         do
         {
-#ifndef _WIN32
-            nRandX = (int)(rand_r(&seed) * ((double)( nWidth - 1) / RAND_MAX));
-            nRandY = (int)(rand_r(&seed) * ((double)(nHeight - 1) / RAND_MAX));
-#else
-            nRandX = (int)(rand() * ((double)( nWidth - 1) / RAND_MAX));
-            nRandY = (int)(rand() * ((double)(nHeight - 1) / RAND_MAX));
-#endif
+            nRandX = m_generator.number(0, nWidth - 1);
+            nRandY = m_generator.number(0, nHeight - 1);
 
-            nRandSize = (rand() % (MaxDropSize - MinDropSize)) + MinDropSize;
+            nRandSize = m_generator.number(MinDropSize, MaxDropSize);
 
             bResp = CreateRainDrop (data, nWidth, nHeight, sixteenBit, bytesDepth,
                                     pResBits, pStatusBits,
@@ -516,6 +515,35 @@ bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* pStatusBits
     }
 
     return (true);
+}
+
+FilterAction RainDropFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("amount", m_amount);
+    action.addParameter("coeff", m_coeff);
+    action.addParameter("drop", m_drop);
+    action.addParameter("selectedH", m_selectedH);
+    action.addParameter("selectedW", m_selectedW);
+    action.addParameter("selectedX", m_selectedX);
+    action.addParameter("selectedY", m_selectedY);
+    action.addParameter("randomSeed", m_generator.currentSeed());
+
+    return action;
+}
+
+void RainDropFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_amount = action.parameter("amount").toInt();
+    m_coeff = action.parameter("coeff").toInt();
+    m_drop = action.parameter("drop").toInt();
+    m_selectedH = action.parameter("selectedH").toInt();
+    m_selectedW = action.parameter("selectedW").toInt();
+    m_selectedX = action.parameter("selectedX").toInt();
+    m_selectedY = action.parameter("selectedY").toInt();
+    m_generator.seed(action.parameter("randomSeed").toUInt());
 }
 
 }  // namespace Digikam

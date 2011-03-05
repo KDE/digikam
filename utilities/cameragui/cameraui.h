@@ -7,8 +7,8 @@
  * Description : Camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -197,15 +197,12 @@ private Q_SLOTS:
     void slotNextItem();
     void slotLastItem();
 
-    void slotDonateMoney();
-    void slotContribute();
     void slotEditKeys();
     void slotShowMenuBar();
     void slotConfToolbars();
     void slotConfNotifications();
     void slotNewToolbarConfig();
     void slotSetup();
-    void slotRawCameraList();
     void slotComponentsInfo();
     void slotDBStat();
 

@@ -6,7 +6,7 @@
  * Date        : 2009-03-05
  * Description : Qt item model for database entries with support for thumbnail loading
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +35,6 @@ namespace Digikam
 
 class LoadingDescription;
 class ThumbnailLoadThread;
-class ImageThumbnailModelPriv;
 
 class DIGIKAM_DATABASE_EXPORT ImageThumbnailModel : public ImageModel
 {
@@ -94,7 +93,8 @@ public:
 
 public Q_SLOTS:
 
-    /** Prepare the thumbnail loading for the given indexes */
+    /** Prepare the thumbnail loading for the given indexes
+     */
     void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare);
     void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare, const ThumbnailSize& thumbSize);
 
@@ -113,6 +113,7 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     void thumbnailAvailable(const QModelIndex& index, int requestedSize);
+    void thumbnailFailed(const QModelIndex& index, int requestedSize);
 
 protected:
 
@@ -124,6 +125,7 @@ protected Q_SLOTS:
 
 private:
 
+    class ImageThumbnailModelPriv;
     ImageThumbnailModelPriv* const d;
 };
 

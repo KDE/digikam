@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QCheckBox>
+#include <QGroupBox>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -35,7 +36,6 @@
 #include <kdialog.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kseparator.h>
 
 // Local includes
 
@@ -101,65 +101,51 @@ const QString SetupIOFilesPriv::configShowImageSettingsDialog("ShowImageSettings
 
 // --------------------------------------------------------
 
+static QWidget *createGroupBox(QWidget *w)
+{
+    QGroupBox*   box = new QGroupBox;
+    QVBoxLayout* layout = new QVBoxLayout;
+    layout->addWidget(w);
+    box->setLayout(layout);
+    return box;
+}
+
 SetupIOFiles::SetupIOFiles(QWidget* parent )
     : QScrollArea(parent), d(new SetupIOFilesPriv)
 {
-    QWidget* panel = new QWidget(viewport());
-    setWidget(panel);
-    setWidgetResizable(true);
+    QWidget* panel = new QWidget;
+    QVBoxLayout* vbox = new QVBoxLayout;
 
-    QVBoxLayout* vbox = new QVBoxLayout(panel);
-
-    //-- JPEG Settings ------------------------------------------------------
-
-    d->JPEGOptions    = new JPEGSettings(panel);
-    KSeparator* line1 = new KSeparator(Qt::Horizontal, panel);
-
-    //-- PNG Settings -------------------------------------------------------
-
-    d->PNGOptions     = new PNGSettings(panel);
-    KSeparator* line2 = new KSeparator(Qt::Horizontal, panel);
-
-    //-- TIFF Settings ------------------------------------------------------
-
-    d->TIFFOptions    = new TIFFSettings(panel);
-    KSeparator* line3 = new KSeparator(Qt::Horizontal, panel);
-
-    //-- JPEG 2000 Settings -------------------------------------------------
-
-    d->JPEG2000Options = new JP2KSettings(panel);
-    KSeparator* line4 = new KSeparator(Qt::Horizontal, panel);
-
-    //-- PGF Settings -------------------------------------------------
-
-    d->PGFOptions = new PGFSettings(panel);
+    d->JPEGOptions     = new JPEGSettings;
+    d->PNGOptions      = new PNGSettings;
+    d->TIFFOptions     = new TIFFSettings;
+    d->JPEG2000Options = new JP2KSettings;
+    d->PGFOptions      = new PGFSettings;
 
 #ifdef _WIN32
-    //-- Show Settings Dialog ----------------------------------------------
+    // Show Settings Dialog Option
 
-    KSeparator* line5 = new KSeparator(Qt::Horizontal, panel);
     d->showImageSettingsDialog = new QCheckBox(panel);
     d->showImageSettingsDialog->setText(i18n("Show Settings Dialog when Saving Image Files"));
     d->showImageSettingsDialog->setWhatsThis( i18n("<ul><li>Checked: A dialog where settings can be changed when saving image files</li>"
             "<li>Unchecked: Default settings are used when saving image files</li></ul>"));
 #endif
 
-    vbox->setMargin(0);
-    vbox->setSpacing(KDialog::spacingHint());
-    vbox->addWidget(d->JPEGOptions);
-    vbox->addWidget(line1);
-    vbox->addWidget(d->PNGOptions);
-    vbox->addWidget(line2);
-    vbox->addWidget(d->TIFFOptions);
-    vbox->addWidget(line3);
-    vbox->addWidget(d->JPEG2000Options);
-    vbox->addWidget(line4);
-    vbox->addWidget(d->PGFOptions);
+    vbox->addWidget(createGroupBox(d->JPEGOptions));
+    vbox->addWidget(createGroupBox(d->PNGOptions));
+    vbox->addWidget(createGroupBox(d->TIFFOptions));
+    vbox->addWidget(createGroupBox(d->JPEG2000Options));
+    vbox->addWidget(createGroupBox(d->PGFOptions));
 #ifdef _WIN32
-    vbox->addWidget(line5);
-    vbox->addWidget(d->showImageSettingsDialog);
+    vbox->addWidget(createGroupBox(d->showImageSettingsDialog));
 #endif
-    vbox->addStretch(10);
+    vbox->addStretch();
+
+    panel->setLayout(vbox);
+    setWidget(panel);
+    setWidgetResizable(true);
+
+    // --------------------------------------------------------
 
     readSettings();
 

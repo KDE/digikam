@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original Emboss algorithm copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -39,6 +40,12 @@
 
 namespace Digikam
 {
+
+EmbossFilter::EmbossFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
 
 EmbossFilter::EmbossFilter(DImg* orgImage, QObject* parent, int depth)
     : DImgThreadedFilter(orgImage, parent, "Emboss")
@@ -139,5 +146,21 @@ int EmbossFilter::getOffset(int Width, int X, int Y, int bytesDepth)
 {
     return (Y * Width * bytesDepth) + (X * bytesDepth);
 }
+
+FilterAction EmbossFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("depth", m_depth);
+
+    return action;
+}
+
+void EmbossFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_depth = action.parameter("depth").toInt();
+}
+
 
 }  // namespace DigikamEmbossImagesPlugin

@@ -7,7 +7,7 @@
  * Description : a widget to select an image collection
  *               to upload new items using digiKam album folder views
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +35,6 @@ class QWidget;
 namespace Digikam
 {
 class KipiInterface;
-class KipiUploadWidgetPriv;
 
 class KipiUploadWidget : public KIPI::UploadWidget
 {
@@ -43,7 +42,7 @@ class KipiUploadWidget : public KIPI::UploadWidget
 
 public:
 
-    explicit KipiUploadWidget(KipiInterface* iface, QWidget* parent=0);
+    explicit KipiUploadWidget(KipiInterface* const iface, QWidget* parent=0);
     ~KipiUploadWidget();
 
     KIPI::ImageCollection selectedImageCollection() const;
@@ -54,6 +53,7 @@ private Q_SLOTS:
 
 private:
 
+    class KipiUploadWidgetPriv;
     KipiUploadWidgetPriv* const d;
 };
 

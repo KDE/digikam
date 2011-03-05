@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
  * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,15 +30,15 @@
 
 #include <QImage>
 
-// Liquid rescale library include
-
-#include "lqr.h"
-
 // Local includes
 
+#include "config-digikam.h"
 #include "dcolor.h"
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+
+// The filter is only compiled if GLib is available
+#ifdef HAVE_GLIB2
 
 namespace Digikam
 {
@@ -47,6 +48,16 @@ class DIGIKAM_EXPORT ContentAwareContainer
 
 public:
 
+    enum EnergyFunction
+    {
+        GradientNorm = 0,
+        SumOfAbsoluteValues,
+        XAbsoluteValue,
+        LumaGradientNorm,
+        LumaSumOfAbsoluteValues,
+        LumaXAbsoluteValue
+    };
+
     ContentAwareContainer()
     {
         preserve_skin_tones = false;
@@ -55,8 +66,8 @@ public:
         step                = 1;
         side_switch_freq    = 4;
         rigidity            = 0.0;
-        func                = LQR_EF_GRAD_XABS;
-        resize_order        = LQR_RES_ORDER_HOR;
+        func                = GradientNorm;
+        resize_order        = Qt::Horizontal;
     };
 
     ~ContentAwareContainer() {};
@@ -75,8 +86,8 @@ public:
 
     QImage                   mask;
 
-    LqrEnergyFuncBuiltinType func;
-    LqrResizeOrder           resize_order;
+    EnergyFunction           func;
+    Qt::Orientation          resize_order;
 };
 
 class ContentAwareFilterPriv;
@@ -86,10 +97,35 @@ class DIGIKAM_EXPORT ContentAwareFilter : public DImgThreadedFilter
 
 public:
 
+    explicit ContentAwareFilter(QObject* parent = 0);
     explicit ContentAwareFilter(DImg* orgImage, QObject* parent = 0, const ContentAwareContainer& settings = ContentAwareContainer());
     ~ContentAwareFilter();
 
     void progressCallback(int progress);
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:ContentAwareFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Content-Aware Filter");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 
@@ -107,5 +143,7 @@ private:
 };
 
 } // namespace Digikam
+
+#endif // HAVE_GLIB2
 
 #endif /*CONTENT_AWARE_FILTER_H*/

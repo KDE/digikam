@@ -7,7 +7,7 @@
  * Description : Simple virtual interface for ImageLister
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,6 +39,8 @@
 #include "digikam_export.h"
 #include "imagelisterrecord.h"
 
+class QDataStream;
+
 namespace Digikam
 {
 
@@ -68,6 +70,8 @@ public:
     virtual void error(const QString& errMsg);
 };
 
+// ------------------------------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseReceiver : public ImageListerValueListReceiver
 {
 
@@ -95,6 +99,23 @@ protected:
 
     int m_limit;
     int m_count;
+};
+
+// ------------------------------------------------------------------------------------------------
+
+class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseGrowingPartsSendingReceiver
+    : public ImageListerSlaveBasePartsSendingReceiver
+{
+
+public:
+
+    ImageListerSlaveBaseGrowingPartsSendingReceiver(KIO::SlaveBase* slave, int start, int end, int increment);
+    virtual void receive(const ImageListerRecord& record);
+
+protected:
+
+    int m_maxLimit;
+    int m_increment;
 };
 
 }  // namespace Digikam

@@ -4,7 +4,7 @@ SET(digikamdatabaseserver_SRCS ${lib..._SRCS}
                                databaseserver.cpp
                                pollthread.cpp
                                main.cpp
-    )
+   )
 
 QT4_ADD_DBUS_ADAPTOR(digikamdatabaseserver_SRCS org.kde.digikam.DatabaseServer.xml
                      databaseserver.h Digikam::DatabaseServer)
@@ -17,13 +17,6 @@ TARGET_LINK_LIBRARIES(digikamdatabaseserver
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTSQL_LIBRARY}
                       ${QT_QT3SUPPORT_LIBRARY}
-#                      ${KDE4_SOLID_LIBS}
-#                      ${KIPI_LIBRARIES}
-#                      ${KEXIV2_LIBRARIES}
-#                      ${KDCRAW_LIBRARIES}
-#                      ${STRIGI_LIBRARIES}
-#                      ${LCMS_LIBRARIES}
-#                      ${GPHOTO2_LIBRARIES}
                      )
 
 INSTALL(TARGETS digikamdatabaseserver DESTINATION ${LIBEXEC_INSTALL_DIR})

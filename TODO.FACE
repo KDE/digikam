@@ -1,0 +1,4 @@
+Priority    Description
+==================================================================================================================
+Low         Parallelize different face detection operations
+Low         Fix the redraw artifacts made when dragging and resizing face items.

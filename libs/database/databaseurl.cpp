@@ -32,6 +32,10 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 
+// KDE includes
+
+#include "kdebug.h"
+
 namespace Digikam
 {
 
@@ -151,6 +155,28 @@ DatabaseUrl DatabaseUrl::fromDateRange(const QDate& startDate,
     return url;
 }
 
+DatabaseUrl DatabaseUrl::mapImagesUrl(const DatabaseParameters& parameters)
+{
+    DatabaseUrl url;
+    url.setProtocol("digikammapimages");
+    url.setParameters(parameters);
+    return url;
+}
+
+DatabaseUrl DatabaseUrl::fromAreaRange(const qreal lat1, const qreal lat2,
+                                       const qreal lng1, const qreal lng2,
+                                       const DatabaseParameters& parameters)
+{
+    DatabaseUrl url;
+    url.setProtocol("digikammapimages");
+    url.addQueryItem("lat1", QString::number(lat1));
+    url.addQueryItem("lon1", QString::number(lng1));
+    url.addQueryItem("lat2", QString::number(lat2));
+    url.addQueryItem("lon2", QString::number(lng2));
+    url.setParameters(parameters);
+    return url;
+}
+
 DatabaseUrl DatabaseUrl::searchUrl(int id,
                                    const DatabaseParameters& parameters)
 {
@@ -227,6 +253,11 @@ bool DatabaseUrl::isTagUrl() const
 bool DatabaseUrl::isDateUrl() const
 {
     return protocol() == QString("digikamdates");
+}
+
+bool DatabaseUrl::isMapImagesUrl() const
+{
+    return protocol() == QString("digikammapimages");
 }
 
 bool DatabaseUrl::isSearchUrl() const
@@ -335,6 +366,23 @@ QDate DatabaseUrl::endDate() const
     {
         return QDate();
     }
+}
+
+// --- MapImages URL ---
+
+bool DatabaseUrl::areaCoordinates(double* lat1, double* lat2, double* lon1, double* lon2) const
+{
+    bool ok, allOk = true;
+    *lat1 = queryItem("lat1").toDouble(&ok);
+    allOk = ok && allOk;
+    *lat2 = queryItem("lat2").toDouble(&ok);
+    allOk = ok && allOk;
+    *lon1 = queryItem("lon1").toDouble(&ok);
+    allOk = ok && allOk;
+    *lon2 = queryItem("lon2").toDouble(&ok);
+    allOk = ok && allOk;
+
+    return allOk;
 }
 
 // --- Search URL ---

@@ -50,15 +50,19 @@
 #include "wbfilter.h"
 #include "globals.h"
 
+#include "dimagehistory.h"
 namespace Digikam
 {
 
 RAWLoader::RAWLoader(DImg* image, DRawDecoding rawDecodingSettings)
-    : DImgLoader(image)
+    : DImgLoader(image),
+      m_observer(0),
+      m_filter(0)
 {
     m_rawDecodingSettings = rawDecodingSettings.rawPrm;
-    m_customRawSettings   = rawDecodingSettings;
-    m_observer            = 0;
+
+    m_filter = new RawProcessingFilter(this);
+    m_filter->setSettings(rawDecodingSettings);
 }
 
 bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
@@ -67,14 +71,21 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     readMetadata(filePath, DImg::RAW);
 
-    // NOTE: Here, we don't check a possible embedded work-space color profile using
-    // the method checkExifWorkingColorSpace() like with JPEG, PNG, and TIFF loaders,
-    // because RAW file are always in linear mode.
+    KDcrawIface::DcrawInfoContainer dcrawIdentify;
+
+    if (!KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath))
+    {
+        return false;
+    }
 
     if (m_loadFlags & LoadImageData)
     {
         int        width, height, rgbmax;
         QByteArray data;
+
+        // NOTE: Here, we don't check a possible embedded work-space color profile using
+        // the method checkExifWorkingColorSpace() like with JPEG, PNG, and TIFF loaders,
+        // because RAW file are always in linear mode.
 
         if (m_rawDecodingSettings.outputColorSpace == RawDecodingSettings::CUSTOMOUTPUTCS)
         {
@@ -98,7 +109,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             {
                 // Specifying a custom output is broken somewhere. We use the extremely
                 // wide gamut pro photo profile for 16bit (sRGB for 8bit) and convert afterwards.
-                m_customOutputProfile = m_rawDecodingSettings.outputProfile;
+                m_filter->setOutputProfile(m_rawDecodingSettings.outputProfile);
 
                 if (m_rawDecodingSettings.sixteenBitsImage)
                 {
@@ -126,20 +137,14 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     }
     else
     {
-        KDcrawIface::DcrawInfoContainer dcrawIdentify;
-
-        if (!KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath))
-        {
-            return false;
-        }
-
         imageWidth()  = dcrawIdentify.imageSize.width();
         imageHeight() = dcrawIdentify.imageSize.height();
-        imageSetAttribute("format", "RAW");
-        imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
-        imageSetAttribute("originalBitDepth", 16);
-        return true;
     }
+
+    imageSetAttribute("format", "RAW");
+    imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
+    imageSetAttribute("originalBitDepth", 16);
+    imageSetAttribute("originalSize", dcrawIdentify.imageSize);
 
     return true;
 }
@@ -307,87 +312,31 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
     //----------------------------------------------------------
 
+    FilterAction action = m_filter->filterAction();
+    m_image->addFilterAction(action);
+
     imageWidth()  = width;
     imageHeight() = height;
-    imageSetAttribute("format", "RAW");
-    imageSetAttribute("rawDecodingSettings", QVariant::fromValue(m_customRawSettings));
-    imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
-    imageSetAttribute("originalBitDepth", 16);
+    imageSetAttribute("rawDecodingSettings", QVariant::fromValue(m_filter->settings()));
+    imageSetAttribute("rawDecodingFilterAction", QVariant::fromValue(action));
+    // other attributes are set above
 
     return true;
 }
 
 void RAWLoader::postProcess(DImgLoaderObserver* observer)
 {
-    // emulate LibRaw custom output profile
-    if (!m_customOutputProfile.isNull())
+    if (m_filter->settings().postProcessingSettingsIsDirty())
     {
-        // Note the m_image is not yet ready in load()!
-        IccTransform trans;
-        trans.setIntent(IccTransform::Perceptual);
-        trans.setEmbeddedProfile(*m_image);
-        trans.setOutputProfile(m_customOutputProfile);
-        trans.apply(*m_image, observer);
-        imageSetIccProfile(m_customOutputProfile);
+        m_filter->setObserver(observer, 90, 100);
+        m_filter->setupFilter(*m_image);
+        m_filter->startFilterDirectly();
     }
+}
 
-    if (!m_customRawSettings.postProcessingSettingsIsDirty())
-    {
-        return;
-    }
-
-    if (m_customRawSettings.exposureComp != 0.0 || m_customRawSettings.saturation != 1.0)
-    {
-        WBContainer settings;
-        settings.temperature  = 6500.0;
-        settings.dark         = 0.5;
-        settings.black        = 0.0;
-        settings.exposition   = m_customRawSettings.exposureComp;
-        settings.gamma        = 1.0;
-        settings.saturation   = m_customRawSettings.saturation;
-        settings.green        = 1.0;
-        WBFilter wb(m_image, 0L, settings);
-        wb.startFilterDirectly();
-        m_image->putImageData(wb.getTargetImage().bits());
-    }
-
-    if (observer)
-    {
-        observer->progressInfo(m_image, 0.92F);
-    }
-
-    if (m_customRawSettings.lightness != 0.0 ||
-        m_customRawSettings.contrast  != 1.0 ||
-        m_customRawSettings.gamma     != 1.0)
-    {
-        BCGContainer settings;
-        settings.brightness = m_customRawSettings.lightness;
-        settings.contrast   = m_customRawSettings.contrast;
-        settings.gamma      = m_customRawSettings.gamma;
-        BCGFilter bcg(m_image, 0L, settings);
-        bcg.startFilterDirectly();
-        m_image->putImageData(bcg.getTargetImage().bits());
-    }
-
-    if (observer)
-    {
-        observer->progressInfo(m_image, 0.94F);
-    }
-
-    if (!m_customRawSettings.curveAdjust.isEmpty())
-    {
-        CurvesContainer settings;
-        settings.curvesType   = ImageCurves::CURVE_SMOOTH;
-        settings.lumCurveVals = m_customRawSettings.curveAdjust;
-        CurvesFilter curves(m_image, 0L, settings);
-        curves.startFilterDirectly();
-        m_image->putImageData(curves.getTargetImage().bits());
-    }
-
-    if (observer)
-    {
-        observer->progressInfo(m_image, 0.96F);
-    }
+FilterAction RAWLoader::filterAction() const
+{
+    return m_filter->filterAction();
 }
 
 }  // namespace Digikam

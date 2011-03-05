@@ -35,6 +35,7 @@
 
 // Local includes
 
+#include "albummanager.h"
 #include "albummodel.h"
 #include "albumsettings.h"
 
@@ -44,8 +45,8 @@ namespace Digikam
 AlbumFilterModel::AlbumFilterModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
+    m_filterBehavior = FullFiltering;
     m_chainedModel = 0;
-    setDynamicSortFilter(true);
     setSortRole(AbstractAlbumModel::AlbumSortRole);
     setSortCaseSensitivity(Qt::CaseInsensitive);
 
@@ -53,10 +54,34 @@ AlbumFilterModel::AlbumFilterModel(QObject* parent)
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(invalidate()));
 
+    // dynamicSortFilter does not work well for us: a dataChange may, because of our way of filtering,
+    // also affect parents and children of the changed index, which is not handled by QSortFilterProxyModel.
+    //setDynamicSortFilter(true);
+    // Instead, we listen directly to AlbumManager's relevant change signals
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
+            this, SLOT(slotAlbumRenamed(Album*)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumsUpdated(int)),
+            this, SLOT(slotAlbumsHaveBeenUpdated(int)));
+}
+
+void AlbumFilterModel::setFilterBehavior(FilterBehavior behavior)
+{
+    if (behavior == m_filterBehavior)
+    {
+        return;
+    }
+
+    m_filterBehavior = behavior;
+    invalidateFilter();
 }
 
 void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
 {
+    if (!sourceModel())
+    {
+        return;
+    }
 
     // don't use isFiltering here because it may be reimplemented
     bool wasSearching = settingsFilter(m_settings);
@@ -112,12 +137,28 @@ SearchTextSettings AlbumFilterModel::searchTextSettings() const
 
 void AlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel* source)
 {
-    m_chainedModel = 0;
-    setSourceModel(source);
+    if (m_chainedModel)
+    {
+        m_chainedModel->setSourceAlbumModel(source);
+    }
+    else
+    {
+        setSourceModel(source);
+    }
 }
 
-void AlbumFilterModel::setSourceAlbumModel(AlbumFilterModel* source)
+void AlbumFilterModel::setSourceFilterModel(AlbumFilterModel* source)
 {
+    if (source)
+    {
+        AbstractAlbumModel* model = sourceAlbumModel();
+
+        if (model)
+        {
+            source->setSourceAlbumModel(model);
+        }
+    }
+
     m_chainedModel = source;
     setSourceModel(source);
 }
@@ -136,6 +177,11 @@ AbstractAlbumModel* AlbumFilterModel::sourceAlbumModel() const
     }
 
     return static_cast<AbstractAlbumModel*>(sourceModel());
+}
+
+AlbumFilterModel* AlbumFilterModel::sourceFilterModel() const
+{
+    return m_chainedModel;
 }
 
 QModelIndex AlbumFilterModel::mapToSourceAlbumModel(const QModelIndex& index) const
@@ -165,12 +211,26 @@ Album* AlbumFilterModel::albumForIndex(const QModelIndex& index) const
 
 QModelIndex AlbumFilterModel::indexForAlbum(Album* album) const
 {
-    return mapFromSourceAlbumModel(sourceAlbumModel()->indexForAlbum(album));
+    AbstractAlbumModel* model = sourceAlbumModel();
+
+    if (!model)
+    {
+        return QModelIndex();
+    }
+
+    return mapFromSourceAlbumModel(model->indexForAlbum(album));
 }
 
 QModelIndex AlbumFilterModel::rootAlbumIndex() const
 {
-    return mapFromSourceAlbumModel(sourceAlbumModel()->rootAlbumIndex());
+    AbstractAlbumModel* model = sourceAlbumModel();
+
+    if (!model)
+    {
+        return QModelIndex();
+    }
+
+    return mapFromSourceAlbumModel(model->rootAlbumIndex());
 }
 
 bool AlbumFilterModel::matches(Album* album) const
@@ -209,23 +269,38 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matchResult(Album* album) const
         return SpecialMatch;
     }
 
-    if (matches(album))
+    TAlbum* talbum = dynamic_cast<TAlbum*>(album);
+
+    if (talbum && talbum->isInternalTag())
     {
-        return TitleMatch;
+        return NoMatch;
     }
 
-    // check if any of the parents match the search
-    Album* parent = album->parent();
-    PAlbum* pparent = palbum ? static_cast<PAlbum*>(parent) : 0;
-
-    while (parent && !(parent->isRoot() || (pparent && pparent->isAlbumRoot()) ) )
+    if (matches(album))
     {
-        if (matches(parent))
-        {
-            return ParentMatch;
-        }
+        return DirectMatch;
+    }
 
-        parent = parent->parent();
+    if (m_filterBehavior == SimpleFiltering)
+    {
+        return NoMatch;
+    }
+
+    if (m_filterBehavior == FullFiltering)
+    {
+        // check if any of the parents match the search
+        Album* parent = album->parent();
+        PAlbum* pparent = palbum ? static_cast<PAlbum*>(parent) : 0;
+
+        while (parent && !(parent->isRoot() || (pparent && pparent->isAlbumRoot()) ) )
+        {
+            if (matches(parent))
+            {
+                return ParentMatch;
+            }
+
+            parent = parent->parent();
+        }
     }
 
     // check if any of the children match the search
@@ -272,6 +347,29 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
     }
 }
 
+void AlbumFilterModel::slotAlbumRenamed(Album* album)
+{
+    if (!isFiltering())
+    {
+        return;
+    }
+
+    QModelIndex index = indexForAlbum(album);
+
+    if (index.isValid())
+    {
+        invalidateFilter();
+    }
+}
+
+void AlbumFilterModel::slotAlbumsHaveBeenUpdated(int type)
+{
+    if (isFiltering() && sourceAlbumModel() && sourceAlbumModel()->albumType() == type)
+    {
+        invalidateFilter();
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 CheckableAlbumFilterModel::CheckableAlbumFilterModel(QObject* parent) :
@@ -280,19 +378,19 @@ CheckableAlbumFilterModel::CheckableAlbumFilterModel(QObject* parent) :
 {
 }
 
-void CheckableAlbumFilterModel::setSourceCheckableAlbumModel(AbstractCheckableAlbumModel* source)
+void CheckableAlbumFilterModel::setSourceAlbumModel(AbstractCheckableAlbumModel* source)
 {
-    setSourceModel(source);
+    AlbumFilterModel::setSourceAlbumModel(source);
+}
+
+void CheckableAlbumFilterModel::setSourceFilterModel(CheckableAlbumFilterModel* source)
+{
+    AlbumFilterModel::setSourceFilterModel(source);
 }
 
 AbstractCheckableAlbumModel* CheckableAlbumFilterModel::sourceAlbumModel() const
 {
-    return dynamic_cast<AbstractCheckableAlbumModel*> (sourceModel());
-}
-
-void CheckableAlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel* source)
-{
-    AlbumFilterModel::setSourceAlbumModel(source);
+    return static_cast<AbstractCheckableAlbumModel*>(AlbumFilterModel::sourceAlbumModel());
 }
 
 void CheckableAlbumFilterModel::setFilterChecked(bool filter)
@@ -353,7 +451,7 @@ SearchFilterModel::SearchFilterModel(QObject* parent)
 
 void SearchFilterModel::setSourceSearchModel(SearchModel* source)
 {
-    setSourceModel(source);
+    setSourceAlbumModel(source);
 }
 
 SearchModel* SearchFilterModel::sourceSearchModel() const
@@ -453,6 +551,115 @@ bool SearchFilterModel::matches(Album* album) const
 void SearchFilterModel::setSourceAlbumModel(AbstractAlbumModel* source)
 {
     AlbumFilterModel::setSourceAlbumModel(source);
+}
+
+// -----------------------------------------------------------------------------
+
+TagPropertiesFilterModel::TagPropertiesFilterModel(QObject* parent)
+    : CheckableAlbumFilterModel(parent)
+{
+    connect(AlbumManager::instance(), SIGNAL(signalTagPropertiesChanged(TAlbum*)),
+            this, SLOT(tagPropertiesChanged(TAlbum*)));
+}
+
+void TagPropertiesFilterModel::setSourceAlbumModel(TagModel* source)
+{
+    CheckableAlbumFilterModel::setSourceAlbumModel(source);
+}
+
+TagModel* TagPropertiesFilterModel::sourceTagModel() const
+{
+    return dynamic_cast<TagModel*> (sourceModel());
+}
+
+void TagPropertiesFilterModel::listOnlyTagsWithProperty(const QString& property)
+{
+    if (m_propertiesWhiteList.contains(property))
+    {
+        return;
+    }
+
+    m_propertiesWhiteList << property;
+    invalidateFilter();
+    emit filterChanged();
+}
+
+void TagPropertiesFilterModel::removeListOnlyProperty(const QString& property)
+{
+    if (!m_propertiesWhiteList.contains(property))
+    {
+        return;
+    }
+
+    m_propertiesWhiteList.removeAll(property);
+    invalidateFilter();
+    emit filterChanged();
+}
+
+void TagPropertiesFilterModel::doNotListTagsWithProperty(const QString& property)
+{
+    if (m_propertiesBlackList.contains(property))
+    {
+        return;
+    }
+
+    m_propertiesBlackList << property;
+    invalidateFilter();
+    emit filterChanged();
+}
+
+void TagPropertiesFilterModel::removeDoNotListProperty(const QString& property)
+{
+    if (!m_propertiesBlackList.contains(property))
+    {
+        return;
+    }
+
+    m_propertiesBlackList.removeAll(property);
+    invalidateFilter();
+    emit filterChanged();
+}
+
+bool TagPropertiesFilterModel::isFiltering() const
+{
+    return !m_propertiesWhiteList.isEmpty() || !m_propertiesBlackList.isEmpty();
+}
+
+void TagPropertiesFilterModel::tagPropertiesChanged(TAlbum*)
+{
+    // I do not expect batch changes. Otherwise we'll need a timer.
+    if (isFiltering())
+    {
+        invalidateFilter();
+    }
+}
+
+bool TagPropertiesFilterModel::matches(Album* album) const
+{
+    if (!AlbumFilterModel::matches(album))
+    {
+        return false;
+    }
+
+    TAlbum* talbum = static_cast<TAlbum*>(album);
+
+    foreach (const QString& prop, m_propertiesBlackList)
+    {
+        if (talbum->hasProperty(prop))
+        {
+            return false;
+        }
+    }
+
+    foreach (const QString& prop, m_propertiesWhiteList)
+    {
+        if (!talbum->hasProperty(prop))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 } // namespace Digikam

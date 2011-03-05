@@ -7,6 +7,7 @@
  * Description : A Sharpen threaded image filter.
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original Sharpen algorithm copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
@@ -40,6 +41,12 @@
 
 namespace Digikam
 {
+
+SharpenFilter::SharpenFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
 
 SharpenFilter::SharpenFilter(DImg* orgImage, QObject* parent, double radius, double sigma)
     : DImgThreadedFilter(orgImage, parent, "Sharpen")
@@ -264,5 +271,23 @@ int SharpenFilter::getOptimalKernelWidth(double radius, double sigma)
 
     return((int)kernelWidth-2);
 }
+
+FilterAction SharpenFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("radius", m_radius);
+    action.addParameter("sigma", m_sigma);
+
+    return action;
+}
+
+void SharpenFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_radius = action.parameter("radius").toDouble();
+    m_sigma = action.parameter("sigma").toDouble();
+}
+
 
 }  // namespace Digikam

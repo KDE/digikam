@@ -203,7 +203,7 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual void installView();
+    virtual void installView(QAbstractItemView* view = 0);
 
 protected:
 

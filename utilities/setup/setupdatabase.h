@@ -50,6 +50,11 @@ private:
 
     void readSettings();
 
+private Q_SLOTS:
+
+    void upgradeUniqueHashes();
+    void showHashInformation();
+
 private:
 
     SetupDatabasePriv* const d;

@@ -49,7 +49,7 @@
 // Local includes
 
 #include "captionedit.h"
-#include "kdatetimeedit.h"
+#include "ddatetimeedit.h"
 #include "addtagslineedit.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
@@ -64,6 +64,11 @@
 #include "imageattributeswatch.h"
 #include "statusprogressbar.h"
 #include "tagmodificationhelper.h"
+#include "template.h"
+#include "imageinfolist.h"
+#include "imageinfo.h"
+#include "colorlabelwidget.h"
+#include "picklabelwidget.h"
 
 namespace Digikam
 {
@@ -84,6 +89,7 @@ public:
         modified                   = false;
         ignoreImageAttributesWatch = false;
         ignoreTagChanges           = false;
+        togglingSearchSettings     = false;
         recentTagsBtn              = 0;
         captionsEdit               = 0;
         tagsSearchBar              = 0;
@@ -93,6 +99,7 @@ public:
         assignedTagsBtn            = 0;
         applyBtn                   = 0;
         revertBtn                  = 0;
+        applyToAllVersionsButton   = 0;
         recentTagsMapper           = 0;
         newTagEdit                 = 0;
         lastSelectedWidget         = 0;
@@ -101,11 +108,14 @@ public:
         tabWidget                  = 0;
         tagModel                   = 0;
         tagCheckView               = 0;
+        colorLabelSelector         = 0;
+        pickLabelSelector          = 0;
     }
 
     bool                 modified;
     bool                 ignoreImageAttributesWatch;
     bool                 ignoreTagChanges;
+    bool                 togglingSearchSettings;
 
     QToolButton*         recentTagsBtn;
     QToolButton*         assignedTagsBtn;
@@ -117,12 +127,13 @@ public:
 
     QPushButton*         applyBtn;
     QPushButton*         moreButton;
+    QPushButton*         applyToAllVersionsButton;
 
     QWidget*             lastSelectedWidget;
 
     CaptionEdit*         captionsEdit;
 
-    KDateTimeEdit*       dateTimeEdit;
+    DDateTimeEdit*       dateTimeEdit;
 
     KTabWidget*          tabWidget;
 
@@ -137,6 +148,8 @@ public:
     TemplateViewer*      templateViewer;
 
     RatingWidget*        ratingWidget;
+    ColorLabelSelector*  colorLabelSelector;
+    PickLabelSelector*   pickLabelSelector;
 
     MetadataHubOnTheRoad hub;
 
@@ -173,12 +186,14 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     KHBox* dateBox  = new KHBox(captionTagsArea);
     new QLabel(i18n("Date:"), dateBox);
-    d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
+    d->dateTimeEdit = new DDateTimeEdit(dateBox, "datepicker");
 
-    KHBox* ratingBox = new KHBox(captionTagsArea);
-    new QLabel(i18n("Rating:"), ratingBox);
-    d->ratingWidget  = new RatingWidget(ratingBox);
-    ratingBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
+    KHBox* labelsBox      = new KHBox(captionTagsArea);
+    new QLabel(i18n("Labels:"), labelsBox);
+    d->pickLabelSelector  = new PickLabelSelector(labelsBox);
+    d->colorLabelSelector = new ColorLabelSelector(labelsBox);
+    d->ratingWidget       = new RatingWidget(labelsBox);
+    labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
 
     // Tags view ---------------------------------------------------
 
@@ -189,7 +204,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->tagCheckView->setCheckNewTags(true);
 
     d->newTagEdit = new AddTagsLineEdit(captionTagsArea);
-    d->newTagEdit->setTagModel(d->tagModel);
+    d->newTagEdit->setModel(d->tagModel);
     d->newTagEdit->setTagTreeView(d->tagCheckView);
     //, "ImageDescEditTabNewTagEdit",
     //d->newTagEdit->setCaseSensitive(false);
@@ -202,7 +217,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     tagsSearch->setSpacing(KDialog::spacingHint());
 
     d->tagsSearchBar   = new SearchTextBar(tagsSearch, "ImageDescEditTabTagsSearchBar");
-    d->tagsSearchBar->setModel(d->tagModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->tagsSearchBar->setModel(d->tagCheckView->filteredModel(),
+                               AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagsSearchBar->setFilterModel(d->tagCheckView->albumFilterModel());
 
     d->assignedTagsBtn = new QToolButton(tagsSearch);
@@ -223,6 +239,15 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     // Buttons -----------------------------------------
 
+    KHBox* applyButtonBox = new KHBox(this);
+    applyButtonBox->setSpacing(KDialog::spacingHint());
+
+    d->applyBtn = new QPushButton(i18n("Apply"), applyButtonBox);
+    d->applyBtn->setIcon(SmallIcon("dialog-ok-apply"));
+    d->applyBtn->setEnabled(false);
+    d->applyBtn->setToolTip( i18n("Apply all changes to images"));
+    //buttonsBox->setStretchFactor(d->applyBtn, 10);
+
     KHBox* buttonsBox = new KHBox(this);
     buttonsBox->setSpacing(KDialog::spacingHint());
 
@@ -231,11 +256,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
 
-    d->applyBtn = new QPushButton(i18n("Apply"), buttonsBox);
-    d->applyBtn->setIcon(SmallIcon("dialog-ok-apply"));
-    d->applyBtn->setEnabled(false);
-    d->applyBtn->setToolTip( i18n("Apply all changes to images"));
-    buttonsBox->setStretchFactor(d->applyBtn, 10);
+    d->applyToAllVersionsButton = new QPushButton(i18n("Apply to all versions"), buttonsBox);
+    d->applyToAllVersionsButton->setIcon(SmallIcon("dialog-ok-apply"));
+    d->applyToAllVersionsButton->setEnabled(false);
+    d->applyToAllVersionsButton->setToolTip(i18n("Apply all changes to all versions of this image"));
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
     d->moreMenu   = new KMenu(captionTagsArea);
@@ -245,7 +269,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     grid1->addWidget(d->captionsEdit, 0, 0, 1, 2);
     grid1->addWidget(dateBox,         1, 0, 1, 2);
-    grid1->addWidget(ratingBox,       2, 0, 1, 2);
+    grid1->addWidget(labelsBox,       2, 0, 1, 2);
     grid1->addWidget(d->newTagEdit,   3, 0, 1, 2);
     grid1->addWidget(d->tagCheckView, 4, 0, 1, 2);
     grid1->addWidget(tagsSearch,      5, 0, 1, 2);
@@ -289,6 +313,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     connect(d->dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime&)),
             this, SLOT(slotDateTimeChanged(const QDateTime&)));
 
+    connect(d->pickLabelSelector, SIGNAL(signalPickLabelChanged(int)),
+            this, SLOT(slotPickLabelChanged(int)));
+
+    connect(d->colorLabelSelector, SIGNAL(signalColorLabelChanged(int)),
+            this, SLOT(slotColorLabelChanged(int)));
+
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotRatingChanged(int)));
 
@@ -307,6 +337,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     connect(d->applyBtn, SIGNAL(clicked()),
             this, SLOT(slotApplyAllChanges()));
 
+    connect(d->applyToAllVersionsButton, SIGNAL(clicked()),
+            this, SLOT(slotApplyChangesToAllVersions()));
+
     connect(d->revertBtn, SIGNAL(clicked()),
             this, SLOT(slotRevertAllChanges()));
 
@@ -323,6 +356,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     d->captionsEdit->installEventFilter(this);
     d->dateTimeEdit->installEventFilter(this);
+    d->pickLabelSelector->installEventFilter(this);
+    d->colorLabelSelector->installEventFilter(this);
     d->ratingWidget->installEventFilter(this);
     // TODO update, what does this filter?
     d->tagCheckView->installEventFilter(this);
@@ -348,6 +383,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
             this, SLOT(slotImageCaptionChanged(qlonglong)));
 
     // -- read config ---------------------------------------------------------
+
+    /// @todo Implement read/writeSettings functions with externally supplied groups
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group2       = config->group("Image Properties SideBar");
@@ -428,6 +465,16 @@ void ImageDescEditTab::slotChangingItems()
             ++changedFields;
         }
 
+        if (d->hub.pickLabelChanged())
+        {
+            ++changedFields;
+        }
+
+        if (d->hub.colorLabelChanged())
+        {
+            ++changedFields;
+        }
+
         if (d->hub.tagsChanged())
         {
             ++changedFields;
@@ -444,6 +491,14 @@ void ImageDescEditTab::slotChangingItems()
             else if (d->hub.dateTimeChanged())
                 text = i18np("You have edited the date of the image. ",
                              "You have edited the date of %1 images. ",
+                             d->currInfos.count());
+            else if (d->hub.pickLabelChanged())
+                text = i18np("You have edited the pick label of the image. ",
+                             "You have edited the pick label of %1 images. ",
+                             d->currInfos.count());
+            else if (d->hub.colorLabelChanged())
+                text = i18np("You have edited the color label of the image. ",
+                             "You have edited the color label of %1 images. ",
                              d->currInfos.count());
             else if (d->hub.ratingChanged())
                 text = i18np("You have edited the rating of the image. ",
@@ -470,6 +525,16 @@ void ImageDescEditTab::slotChangingItems()
             if (d->hub.dateTimeChanged())
             {
                 text += i18n("<li>date</li>");
+            }
+
+            if (d->hub.pickLabelChanged())
+            {
+                text += i18n("<li>pick label</li>");
+            }
+
+            if (d->hub.colorLabelChanged())
+            {
+                text += i18n("<li>color label</li>");
             }
 
             if (d->hub.ratingChanged())
@@ -528,6 +593,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     d->hub.resetChanged();
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
+    d->applyToAllVersionsButton->setEnabled(false);
 }
 
 void ImageDescEditTab::slotRevertAllChanges()
@@ -582,7 +648,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     d->currInfos = infos;
     d->modified  = false;
     resetMetadataChangeInfo();
-    d->hub = MetadataHub();
+    d->hub       = MetadataHub();
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
 
@@ -592,12 +658,14 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     }
 
     updateComments();
+    updatePickLabel();
+    updateColorLabel();
     updateRating();
     updateDate();
     updateTemplate();
     updateTagsView();
     updateRecentTags();
-    focusLastSelectedWidget();
+    setFocusToLastSelectedWidget();
 }
 
 void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
@@ -739,6 +807,22 @@ void ImageDescEditTab::slotTemplateSelected()
     slotModified();
 }
 
+void ImageDescEditTab::slotPickLabelChanged(int pickId)
+{
+    d->hub.setPickLabel(pickId);
+    // no handling for MetadataDisjoint needed for pick label,
+    // we set it to 0 when disjoint, see below
+    slotModified();
+}
+
+void ImageDescEditTab::slotColorLabelChanged(int colorId)
+{
+    d->hub.setColorLabel(colorId);
+    // no handling for MetadataDisjoint needed for color label,
+    // we set it to 0 when disjoint, see below
+    slotModified();
+}
+
 void ImageDescEditTab::slotRatingChanged(int rating)
 {
     d->hub.setRating(rating);
@@ -752,6 +836,11 @@ void ImageDescEditTab::slotModified()
     d->modified = true;
     d->applyBtn->setEnabled(true);
     d->revertBtn->setEnabled(true);
+
+    if(d->currInfos.size() == 1)
+    {
+        d->applyToAllVersionsButton->setEnabled(true);
+    }
 }
 
 void ImageDescEditTab::slotCreateNewTag()
@@ -796,6 +885,16 @@ void ImageDescEditTab::slotTaggingActionActivated(const TaggingAction& action)
         d->newTagEdit->clear();
         d->tagCheckView->scrollTo(d->tagCheckView->albumFilterModel()->indexForAlbum(assigned));
     }
+}
+
+void ImageDescEditTab::assignPickLabel(int pickId)
+{
+    d->pickLabelSelector->setPickLabel((PickLabel)pickId);
+}
+
+void ImageDescEditTab::assignColorLabel(int colorId)
+{
+    d->colorLabelSelector->setColorLabel((ColorLabel)colorId);
 }
 
 void ImageDescEditTab::assignRating(int rating)
@@ -878,6 +977,38 @@ void ImageDescEditTab::updateComments()
     d->captionsEdit->setValues(d->hub.comments());
     setMetadataWidgetStatus(d->hub.commentsStatus(), d->captionsEdit);
     d->captionsEdit->blockSignals(false);
+}
+
+void ImageDescEditTab::updatePickLabel()
+{
+    d->pickLabelSelector->blockSignals(true);
+
+    if (d->hub.pickLabelStatus() == MetadataHub::MetadataDisjoint)
+    {
+        d->pickLabelSelector->setPickLabel(NoPickLabel);
+    }
+    else
+    {
+        d->pickLabelSelector->setPickLabel((PickLabel)d->hub.pickLabel());
+    }
+
+    d->pickLabelSelector->blockSignals(false);
+}
+
+void ImageDescEditTab::updateColorLabel()
+{
+    d->colorLabelSelector->blockSignals(true);
+
+    if (d->hub.colorLabelStatus() == MetadataHub::MetadataDisjoint)
+    {
+        d->colorLabelSelector->setColorLabel(NoColorLabel);
+    }
+    else
+    {
+        d->colorLabelSelector->setColorLabel((ColorLabel)d->hub.colorLabel());
+    }
+
+    d->colorLabelSelector->blockSignals(false);
 }
 
 void ImageDescEditTab::updateRating()
@@ -1126,8 +1257,12 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
     Q_UNUSED(settings);
 
     // if we filter, we should reset the assignedTagsBtn again
-    d->assignedTagsBtn->setChecked(false);
-    slotAssignedTagsToggled(false);
+    if (d->assignedTagsBtn->isChecked() && !d->togglingSearchSettings)
+    {
+        d->togglingSearchSettings = true;
+        d->assignedTagsBtn->setChecked(false);
+        d->togglingSearchSettings = false;
+    }
 }
 
 void ImageDescEditTab::slotAssignedTagsToggled(bool t)
@@ -1137,17 +1272,69 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 
     if (t)
     {
+        // if we filter by assigned, we should initially clear the normal search
+        if (!d->togglingSearchSettings)
+        {
+            d->togglingSearchSettings = true;
+            d->tagsSearchBar->clear();
+            d->togglingSearchSettings = false;
+        }
+
+        // Only after above change, do this
         d->tagCheckView->expandMatches(d->tagCheckView->rootIndex());
-    }
+   }
 }
 
-void ImageDescEditTab::focusLastSelectedWidget()
+void ImageDescEditTab::setFocusToLastSelectedWidget()
 {
     if (d->lastSelectedWidget)
     {
         d->lastSelectedWidget->setFocus();
     }
     d->lastSelectedWidget = 0;
+}
+
+void ImageDescEditTab::setFocusToTagsView()
+{
+    d->lastSelectedWidget = qobject_cast<QWidget*>(d->tagCheckView);
+    d->tagCheckView->setFocus();
+}
+
+void ImageDescEditTab::slotApplyChangesToAllVersions()
+{
+    if (!d->modified)
+    {
+        return;
+    }
+
+    if (d->currInfos.isEmpty())
+    {
+        return;
+    }
+
+    QSet<qlonglong> tmpSet;
+    QList<QPair<qlonglong, qlonglong> > relations;
+
+    foreach(const ImageInfo& info, d->currInfos)
+    {
+        // Collect all ids in all image's relations
+        relations.append(info.relationCloud());
+    }
+
+    for(int i = 0; i < relations.size(); i++)
+    {
+        // Use QSet to prevent duplicates
+        tmpSet.insert(relations.at(i).first);
+        tmpSet.insert(relations.at(i).second);
+    }
+
+    MetadataManager::instance()->applyMetadata(ImageInfoList(tmpSet.toList()), d->hub);
+
+    d->modified = false;
+    d->hub.resetChanged();
+    d->applyBtn->setEnabled(false);
+    d->revertBtn->setEnabled(false);
+    d->applyToAllVersionsButton->setEnabled(false);
 }
 
 }  // namespace Digikam

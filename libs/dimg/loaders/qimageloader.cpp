@@ -136,6 +136,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     imageSetAttribute("format", "PNG");
     imageSetAttribute("originalColorModel", colorModel);
     imageSetAttribute("originalBitDepth", originalDepth);
+    imageSetAttribute("originalSize", QSize(w,h));
 
     return true;
 }

@@ -64,6 +64,10 @@ public:
     {
     }
 
+    QPixmap checkPixmap();
+
+public:
+
     bool    usePreviewSelection;
 
     int     originalWidth;
@@ -82,6 +86,24 @@ public:
     DImg    targetPreviewImage;
 };
 
+QPixmap ImageIface::ImageIfacePriv::checkPixmap()
+{
+    if (qcheck.isNull())
+    {
+        qcheck = QPixmap(8, 8);
+
+        QPainter p;
+        p.begin(&qcheck);
+        p.fillRect(0, 0, 4, 4, QColor(144, 144, 144));
+        p.fillRect(4, 4, 4, 4, QColor(144, 144, 144));
+        p.fillRect(0, 4, 4, 4, QColor(100, 100, 100));
+        p.fillRect(4, 0, 4, 4, QColor(100, 100, 100));
+        p.end();
+    }
+
+    return qcheck;
+}
+
 ImageIface::ImageIface(int w, int h)
     : d(new ImageIfacePriv)
 {
@@ -90,16 +112,6 @@ ImageIface::ImageIface(int w, int h)
     d->originalWidth      = DImgInterface::defaultInterface()->origWidth();
     d->originalHeight     = DImgInterface::defaultInterface()->origHeight();
     d->originalBytesDepth = DImgInterface::defaultInterface()->bytesDepth();
-
-    d->qcheck = QPixmap(8, 8);
-
-    QPainter p;
-    p.begin(&d->qcheck);
-    p.fillRect(0, 0, 4, 4, QColor(144,144,144));
-    p.fillRect(4, 4, 4, 4, QColor(144,144,144));
-    p.fillRect(0, 4, 4, 4, QColor(100,100,100));
-    p.fillRect(4, 0, 4, 4, QColor(100,100,100));
-    p.end();
 }
 
 ImageIface::~ImageIface()
@@ -266,14 +278,14 @@ void ImageIface::putPreviewIccProfile(const IccProfile& profile)
     d->targetPreviewImage.setIccProfile(profile);
 }
 
-void ImageIface::putOriginalImage(const QString& caller, uchar* data, int w, int h)
+void ImageIface::putOriginalImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h)
 {
     if (!data)
     {
         return;
     }
 
-    DImgInterface::defaultInterface()->putImage(caller, data, w, h);
+    DImgInterface::defaultInterface()->putImage(caller, action, data, w, h);
 }
 
 void ImageIface::putOriginalIccProfile(const IccProfile& profile)
@@ -281,14 +293,14 @@ void ImageIface::putOriginalIccProfile(const IccProfile& profile)
     DImgInterface::defaultInterface()->putIccProfile( profile );
 }
 
-void ImageIface::putImageSelection(const QString& caller, uchar* data)
+void ImageIface::putImageSelection(const QString& caller, const FilterAction& action, uchar* data)
 {
     if (!data)
     {
         return;
     }
 
-    DImgInterface::defaultInterface()->putImageSelection(caller, data);
+    DImgInterface::defaultInterface()->putImageSelection(caller, action, data);
 }
 
 int ImageIface::previewWidth()
@@ -412,13 +424,13 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainte
     {
         if (d->targetPreviewImage.hasAlpha())
         {
-            p->drawTiledPixmap(x, y, width, height, d->qcheck);
+            p->drawTiledPixmap(x, y, width, height, d->checkPixmap());
         }
 
         QPixmap pixImage;
-        ICCSettingsContainer* iccSettings = DImgInterface::defaultInterface()->getICCSettings();
+        ICCSettingsContainer iccSettings = DImgInterface::defaultInterface()->getICCSettings();
 
-        if (iccSettings && iccSettings->enableCM && iccSettings->useManagedView)
+        if (iccSettings.enableCM && iccSettings.useManagedView)
         {
             IccManager manager(d->targetPreviewImage);
             IccTransform monitorICCtrans = manager.displayTransform();

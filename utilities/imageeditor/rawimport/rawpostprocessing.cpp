@@ -116,9 +116,8 @@ void RawPostProcessing::rawPostProcessing()
 
     if (!m_customRawSettings.curveAdjust.isEmpty())
     {
-        CurvesContainer prm;
-        prm.curvesType   = ImageCurves::CURVE_SMOOTH;
-        prm.lumCurveVals = m_customRawSettings.curveAdjust;
+        CurvesContainer prm(ImageCurves::CURVE_SMOOTH, m_orgImage.sixteenBit());
+        prm.values[LuminosityChannel] = m_customRawSettings.curveAdjust;
         CurvesFilter curves(&m_orgImage, 0L, prm);
         curves.startFilterDirectly();
         m_orgImage.putImageData(curves.getTargetImage().bits());

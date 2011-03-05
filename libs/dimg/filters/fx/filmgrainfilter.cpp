@@ -38,6 +38,7 @@
 
 #include "dimg.h"
 #include "globals.h"
+#include "randomnumbergenerator.h"
 
 namespace Digikam
 {
@@ -67,7 +68,16 @@ public:
     double leadChromaRedNoise;
 
     FilmGrainContainer settings;
+
+    RandomNumberGenerator generator;
 };
+
+FilmGrainFilter::FilmGrainFilter(QObject* parent)
+    : DImgThreadedFilter(parent),
+      d(new FilmGrainFilterPriv)
+{
+    initFilter();
+}
 
 FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, const FilmGrainContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "FilmGrain"),
@@ -140,7 +150,7 @@ void FilmGrainFilter::filterImage()
     d->leadChromaBlueNoise = d->settings.chromaBlueIntensity * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
     d->leadChromaRedNoise  = d->settings.chromaRedIntensity  * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
 
-    qsrand(1); // noise will always be the same
+    d->generator.seed(1); // noise will always be the same
 
     for (int x = 0; runningFlag() && x < width; x += d->settings.grainSize)
     {
@@ -290,7 +300,7 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
  */
 double FilmGrainFilter::randomizeUniform(double range)
 {
-    return ((double)(qrand() % (int)range) - range/2.0) ;
+    return d->generator.number(- range/2, range/2);
 }
 
 /** This method compute Guaussian noise value used to randomize all matrix points.
@@ -298,15 +308,8 @@ double FilmGrainFilter::randomizeUniform(double range)
  */
 double FilmGrainFilter::randomizeGauss(double sigma)
 {
-    double u;
-
-    do
-    {
-        u = qrand() / (double)RAND_MAX;
-    }
-    while (runningFlag() && u == 0.0);
-
-    double v = qrand () / (double) RAND_MAX;
+    double u = - d->generator.number(-1.0, 0.0); // exclude 0
+    double v = d->generator.number(0.0, 1.0);
     return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) ;
 }
 
@@ -347,5 +350,60 @@ double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, c
         return 1.0;
     }
 }
+
+FilterAction FilmGrainFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("grainSize", d->settings.grainSize);
+    action.addParameter("photoDistribution", d->settings.photoDistribution);
+
+    action.addParameter("addLuminanceNoise", d->settings.addLuminanceNoise);
+    action.addParameter("lumaIntensity", d->settings.lumaIntensity);
+    action.addParameter("lumaShadows", d->settings.lumaShadows);
+    action.addParameter("lumaMidtones", d->settings.lumaMidtones);
+    action.addParameter("lumaHighlights", d->settings.lumaHighlights);
+
+    action.addParameter("addChrominanceBlueNoise", d->settings.addChrominanceBlueNoise);
+    action.addParameter("chromaBlueIntensity", d->settings.chromaBlueIntensity);
+    action.addParameter("chromaBlueShadows", d->settings.chromaBlueShadows);
+    action.addParameter("chromaBlueMidtones", d->settings.chromaBlueMidtones);
+    action.addParameter("chromaBlueHighlights", d->settings.chromaBlueHighlights);
+
+    action.addParameter("addChrominanceRedNoise", d->settings.addChrominanceRedNoise);
+    action.addParameter("chromaRedIntensity", d->settings.chromaRedIntensity);
+    action.addParameter("chromaRedShadows", d->settings.chromaRedShadows);
+    action.addParameter("chromaRedMidtones", d->settings.chromaRedMidtones);
+    action.addParameter("chromaRedHighlights", d->settings.chromaRedHighlights);
+
+    return action;
+}
+
+void FilmGrainFilter::readParameters(const Digikam::FilterAction& action)
+{
+    d->settings.grainSize               = action.parameter("grainSize").toInt();
+    d->settings.photoDistribution       = action.parameter("photoDistribution").toBool();
+
+    d->settings.addLuminanceNoise       = action.parameter("addLuminanceNoise").toBool();
+    d->settings.lumaIntensity           = action.parameter("lumaIntensity").toInt();
+    d->settings.lumaShadows             = action.parameter("lumaShadows").toInt();
+    d->settings.lumaMidtones            = action.parameter("lumaMidtones").toInt();
+    d->settings.lumaHighlights          = action.parameter("lumaHighlights").toInt();
+
+    d->settings.addChrominanceBlueNoise = action.parameter("addChrominanceBlueNoise").toBool();
+    d->settings.chromaBlueIntensity     = action.parameter("chromaBlueIntensity").toInt();
+    d->settings.chromaBlueShadows       = action.parameter("chromaBlueShadows").toInt();
+    d->settings.chromaBlueMidtones      = action.parameter("chromaBlueMidtones").toInt();
+    d->settings.chromaBlueHighlights    = action.parameter("chromaBlueHighlights").toInt();
+
+    d->settings.addChrominanceRedNoise  = action.parameter("addChrominanceRedNoise").toBool();
+    d->settings.chromaRedIntensity      = action.parameter("chromaRedIntensity").toInt();
+    d->settings.chromaRedShadows        = action.parameter("chromaRedShadows").toInt();
+    d->settings.chromaRedMidtones       = action.parameter("chromaRedMidtones").toInt();
+    d->settings.chromaRedHighlights     = action.parameter("chromaRedHighlights").toInt();
+}
+
+
 
 }  // namespace Digikam

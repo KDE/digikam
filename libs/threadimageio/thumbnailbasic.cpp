@@ -106,15 +106,15 @@ void ThumbnailCreator::initThumbnailDirs()
     KStandardDirs::makeDir(d->bigThumbPath, 0700);
 }
 
-QString ThumbnailCreator::thumbnailPath(const QString& filePath)
+QString ThumbnailCreator::thumbnailPath(const QString& filePath) const
 {
-    QString basePath = (d->cachedSize == 128) ? d->smallThumbPath : d->bigThumbPath;
+    QString basePath = (d->storageSize() == 128) ? d->smallThumbPath : d->bigThumbPath;
     return thumbnailPath(filePath, basePath);
 }
 
 // --- Basic PNG loading ---
 
-QImage ThumbnailCreator::loadPNG(const QString& path)
+QImage ThumbnailCreator::loadPNG(const QString& path) const
 {
     png_uint_32  w32, h32;
     int          w, h;

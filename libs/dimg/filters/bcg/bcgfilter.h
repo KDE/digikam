@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +28,7 @@
 
 // Local includes
 
+#include "bcgcontainer.h"
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
 #include "globals.h"
@@ -37,39 +39,40 @@ namespace Digikam
 class DImg;
 class BCGFilterPriv;
 
-class DIGIKAM_EXPORT BCGContainer
-{
-
-public:
-
-    BCGContainer()
-    {
-        channel    = LuminosityChannel;
-        brightness = 0.0;
-        contrast   = 0.0;
-        gamma      = 1.0;
-    };
-
-    ~BCGContainer() {};
-
-public:
-
-    int    channel;
-
-    double brightness;
-    double contrast;
-    double gamma;
-};
-
-// -----------------------------------------------------------------------------------------------
-
 class DIGIKAM_EXPORT BCGFilter : public DImgThreadedFilter
 {
 
 public:
 
+    explicit BCGFilter(QObject* parent=0);
     explicit BCGFilter(DImg* orgImage, QObject* parent=0, const BCGContainer& settings=BCGContainer());
+    explicit BCGFilter(const BCGContainer& settings, DImgThreadedFilter* master,
+                       const DImg& orgImage, const DImg& destImage, int progressBegin=0, int progressEnd=100);
     virtual ~BCGFilter();
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:BCGFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Brightness / Contrast / Gamma Filter");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 

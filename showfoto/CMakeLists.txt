@@ -31,6 +31,7 @@ TARGET_LINK_LIBRARIES(showfoto
                       digikamcore
                       ${KEXIV2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
+                      ${KMAP_LIBRARIES}
                       ${KDE4_KIO_LIBS}
                       ${LCMS_LIBRARIES}
                       ${QT_QT3SUPPORT_LIBRARY}

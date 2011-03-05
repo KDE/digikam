@@ -37,6 +37,7 @@
 #include "albummanager.h"
 #include "databaseaccess.h"
 #include "databasechangesets.h"
+#include "databaseface.h"
 #include "databasewatch.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
@@ -57,6 +58,7 @@ public:
         incrementalTimer    = 0;
         recurseAlbums       = false;
         recurseTags         = false;
+        extraValueJob       = false;
     }
 
     Album*                   currentAlbum;
@@ -66,6 +68,9 @@ public:
 
     bool                     recurseAlbums;
     bool                     recurseTags;
+    QString                  specialListing;
+
+    bool                     extraValueJob;
 };
 
 ImageAlbumModel::ImageAlbumModel(QObject* parent)
@@ -151,6 +156,15 @@ bool ImageAlbumModel::isRecursingTags() const
     return d->recurseTags;
 }
 
+void ImageAlbumModel::setSpecialTagListing(const QString& specialListing)
+{
+    if (d->specialListing != specialListing)
+    {
+        d->specialListing = specialListing;
+        refresh();
+    }
+}
+
 void ImageAlbumModel::openAlbum(Album* album)
 {
     if (d->currentAlbum == album)
@@ -185,7 +199,7 @@ void ImageAlbumModel::refresh()
 
     startRefresh();
 
-    startListJob(d->currentAlbum->databaseUrl());
+    startListJob(d->currentAlbum);
 }
 
 void ImageAlbumModel::incrementalRefresh()
@@ -208,7 +222,7 @@ void ImageAlbumModel::incrementalRefresh()
 
     startIncrementalRefresh();
 
-    startListJob(d->currentAlbum->databaseUrl());
+    startListJob(d->currentAlbum);
 }
 
 bool ImageAlbumModel::hasScheduledRefresh() const
@@ -259,11 +273,19 @@ void ImageAlbumModel::slotNextIncrementalRefresh()
     }
 }
 
-void ImageAlbumModel::startListJob(const KUrl& url)
+void ImageAlbumModel::startListJob(Album* album)
 {
+    KUrl url = album->databaseUrl();
+    d->extraValueJob = false;
     d->job = ImageLister::startListJob(url);
     d->job->addMetaData("listAlbumsRecursively", d->recurseAlbums ? "true" : "false");
     d->job->addMetaData("listTagsRecursively", d->recurseTags ? "true" : "false");
+
+    if (album->type() == Album::TAG && !d->specialListing.isNull())
+    {
+        d->job->addMetaData("specialTagListing", d->specialListing);
+        d->extraValueJob = true;
+    }
 
     connect(d->job, SIGNAL(result(KJob*)),
             this, SLOT(slotResult(KJob*)));
@@ -304,16 +326,62 @@ void ImageAlbumModel::slotData(KIO::Job*, const QByteArray& data)
     QByteArray tmp(data);
     QDataStream ds(&tmp, QIODevice::ReadOnly);
 
-    while (!ds.atEnd())
+    if (d->extraValueJob)
     {
-        ImageListerRecord record;
-        ds >> record;
+        QList<QVariant> extraValues;
 
-        ImageInfo info(record);
-        newItemsList << info;
+        if (!ImageListerRecord::checkStream(ImageListerRecord::ExtraValueFormat, ds))
+        {
+            kError() << "Binary stream from ioslave is not valid, rejecting";
+            return;
+        }
+
+        while (!ds.atEnd())
+        {
+            ImageListerRecord record(ImageListerRecord::ExtraValueFormat);
+            ds >> record;
+
+            ImageInfo info(record);
+            newItemsList << info;
+
+            if (d->specialListing == "faces")
+            {
+                DatabaseFace face = DatabaseFace::fromListing(info.id(), record.extraValues);
+                extraValues << face.toVariant();
+            }
+            else
+            {
+                // default handling: just pass extraValue
+                if (record.extraValues.isEmpty())
+                {
+                    extraValues  << QVariant();
+                }
+                else if (record.extraValues.size() == 1)
+                {
+                    extraValues  << record.extraValues.first();
+                }
+                else
+                {
+                    extraValues  << QVariant(record.extraValues);    // uh-uh. List in List.
+                }
+            }
+        }
+
+        addImageInfos(newItemsList, extraValues);
     }
+    else
+    {
+        while (!ds.atEnd())
+        {
+            ImageListerRecord record;
+            ds >> record;
 
-    addImageInfos(newItemsList);
+            ImageInfo info(record);
+            newItemsList << info;
+        }
+
+        addImageInfos(newItemsList);
+    }
 }
 
 void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
@@ -327,6 +395,12 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
     if (hasScheduledRefresh())
     {
         return;
+    }
+
+    // this is for the case that _only_ the status changes, i.e., explicit setVisible()
+    if ((DatabaseFields::Images)changeset.changes() == DatabaseFields::Status)
+    {
+        scheduleIncrementalRefresh();
     }
 
     if (d->currentAlbum->type() == Album::SEARCH)

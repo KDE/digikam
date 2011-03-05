@@ -32,6 +32,8 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dimagehistory.h"
+#include "dimgbuiltinfilter.h"
 
 namespace Digikam
 {
@@ -46,64 +48,40 @@ public:
     explicit UndoAction(DImgInterface* iface);
     virtual ~UndoAction();
 
-    virtual void rollBack() = 0;
-    virtual void execute()  = 0;
-
     QString getTitle() const;
+
+    void setHistory(const DImageHistory& history);
+    DImageHistory getHistory() const;
+
+    bool hasFileOriginData();
+    void setFileOriginData(const QVariant& data, const DImageHistory& resolvedInitialHistory);
+    QVariant fileOriginData() const;
+    DImageHistory fileOriginResolvedHistory() const;
 
 protected:
 
     DImgInterface* m_iface;
     QString        m_title;
+    DImageHistory  m_history;
+    QVariant       m_fileOrigin;
+    DImageHistory  m_fileOriginResolvedHistory;
 };
 
 // --------------------------------------------------------------------
 
-class DIGIKAM_EXPORT UndoActionRotate : public UndoAction
+class DIGIKAM_EXPORT UndoActionReversible : public UndoAction
 {
 
 public:
 
-    enum Angle
-    {
-        R90,
-        R180,
-        R270
-    };
+    UndoActionReversible(DImgInterface* iface, const DImgBuiltinFilter& reversibleFilter);
 
-    UndoActionRotate(DImgInterface* iface, Angle angle);
-    ~UndoActionRotate();
+    DImgBuiltinFilter getFilter() const;
+    DImgBuiltinFilter getReverseFilter() const;
 
-    void rollBack();
-    void execute();
+protected:
 
-private:
-
-    int m_angle;
-};
-
-// --------------------------------------------------------------------
-
-class DIGIKAM_EXPORT UndoActionFlip : public UndoAction
-{
-
-public:
-
-    enum Direction
-    {
-        Horizontal,
-        Vertical
-    };
-
-    UndoActionFlip(DImgInterface* iface, Direction dir);
-    ~UndoActionFlip();
-
-    void rollBack();
-    void execute();
-
-private:
-
-    int m_dir;
+    DImgBuiltinFilter m_filter;
 };
 
 // --------------------------------------------------------------------
@@ -116,9 +94,6 @@ public:
     explicit UndoActionIrreversible(DImgInterface* iface,
                                     const QString& caller=i18n("Unknown"));
     ~UndoActionIrreversible();
-
-    void rollBack();
-    void execute();
 };
 
 }  // namespace Digikam

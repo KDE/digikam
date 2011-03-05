@@ -319,17 +319,19 @@ public:
     /// Returns the check state of the album
     Qt::CheckState checkState(Album* album) const;
 
+    /// Returns a list of album with check state Checked
+    QList<Album*> checkedAlbums() const;
+    /// Returns a list of album with partially check state Checked
+    QList<Album*> partiallyCheckedAlbums() const;
+
+public Q_SLOTS:
+
     /// Sets the check state of album to Checked or Unchecked
     void setChecked(Album* album, bool isChecked);
     /// Sets the check state of the album
     void setCheckState(Album* album, Qt::CheckState state);
     /// Toggles the check state of album between Checked or Unchecked
     void toggleChecked(Album* album);
-
-    /// Returns a list of album with check state Checked
-    QList<Album*> checkedAlbums() const;
-    /// Returns a list of album with partially check state Checked
-    QList<Album*> partiallyCheckedAlbums() const;
 
     /// Resets the checked state of all albums to Qt::Unchecked
     void resetAllCheckedAlbums();

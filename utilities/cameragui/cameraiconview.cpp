@@ -48,6 +48,7 @@
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmimetype.h>
+#include <kpixmapsequence.h>
 #include <kdebug.h>
 
 // Local includes
@@ -77,7 +78,7 @@ public:
         thumbSize(ThumbnailSize::Large),
         pixmapNewPicture(SmallIcon("get-hot-new-stuff")),
         pixmapDownloadUnknown(SmallIcon("status_unknown")),
-        progressPix(SmallIcon("process-working", 22)),
+        progressPix(KPixmapSequence("process-working", KIconLoader::SizeSmallMedium)),
         pixmapLocked(SmallIcon("object-locked")),
         pixmapDownloaded(SmallIcon("dialog-ok")),
         pixmapDownloadFailed(SmallIcon("dialog-cancel")),
@@ -98,7 +99,7 @@ public:
     QPixmap                          itemSelPixmap;
     QPixmap                          pixmapNewPicture;
     QPixmap                          pixmapDownloadUnknown;
-    QPixmap                          progressPix;
+    KPixmapSequence                  progressPix;
     QPixmap                          pixmapLocked;
     QPixmap                          pixmapDownloaded;
     QPixmap                          pixmapDownloadFailed;
@@ -161,7 +162,7 @@ CameraIconView::~CameraIconView()
     delete d;
 }
 
-QPixmap CameraIconView::progressPixmap() const
+KPixmapSequence CameraIconView::progressPixmap() const
 {
     return d->progressPix;
 }

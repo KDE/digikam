@@ -24,7 +24,7 @@ SET(cameranamehelper_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/cameranamehelper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/gpcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/dkcamera.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albumsettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/utils/albumsettings.cpp
 )
 KDE4_ADD_UNIT_TEST(cameranamehelpertest ${cameranamehelper_SRCS})
 TARGET_LINK_LIBRARIES(cameranamehelpertest
@@ -113,13 +113,13 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
 #SET(albummodeltest_SRCS
 #    albummodeltest.cpp
 #    modeltest/modeltest.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albummanager.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albumsettings.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albumthumbnailloader.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/databaseguierrorhandler.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/album.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albummanager.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albumsettings.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albumthumbnailloader.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/databaseguierrorhandler.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common/databasewidget.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/scancontroller.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/scancontroller.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/dkcamera.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/gpcamera.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/cameralist.cpp
@@ -131,6 +131,7 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcollectionview.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupalbumview.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcategory.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupfacetags.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setuptooltip.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupmetadata.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setuptemplate.cpp
@@ -142,8 +143,13 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupicc.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupplugins.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupslideshow.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupscriptmanager.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/scriptplugintype.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupversioning.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcamera.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupmisc.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupfacetags.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupversioning.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/batch/batchthumbsgenerator.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models/abstractalbummodel.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models/albumfiltermodel.cpp
@@ -170,6 +176,56 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
 
 
 #------------------------------------------------------------------------
+
+SET(dimagehistorytest_SRCS
+    abstractdimagehistorytest.cpp
+    dimagehistorytest.cpp
+)
+KDE4_ADD_UNIT_TEST(dimagehistorytest ${dimagehistorytest_SRCS})
+TARGET_LINK_LIBRARIES(dimagehistorytest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      digikamcore
+                      )
+
+
+#------------------------------------------------------------------------
+
+SET(dimagehistorygraphtest_SRCS
+    abstractdimagehistorytest.cpp
+    dimagehistorygraphtest.cpp
+    modeltest/modeltest.cpp
+)
+KDE4_ADD_UNIT_TEST(dimagehistorygraphtest ${dimagehistorygraphtest_SRCS})
+TARGET_LINK_LIBRARIES(dimagehistorygraphtest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      digikamdatabase
+                      digikamcore
+                      )
+
+
+#------------------------------------------------------------------------
+
+SET(dimagefilteractiontest_SRCS
+    dimagefilteractiontest.cpp
+)
+KDE4_ADD_UNIT_TEST(dimagefilteractiontest ${dimagefilteractiontest_SRCS})
+TARGET_LINK_LIBRARIES(dimagefilteractiontest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      digikamcore
+                      )
+
+
+#------------------------------------------------------------------------
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/libpgf
+                   )
 
 # Disable libpgf warnings.
 SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")

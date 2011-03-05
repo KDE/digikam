@@ -39,7 +39,6 @@ namespace Digikam
 {
 
 class IccProfile;
-class IccSettingsPriv;
 
 class DIGIKAM_EXPORT IccSettings : public QObject
 {
@@ -91,6 +90,9 @@ public:
     /// Get available profiles suitable as proof/output profiles
     QList<IccProfile> outputProfiles();
 
+    /// Returns a list of profiles with the given description()
+    QList<IccProfile> profilesForDescription(const QString& description);
+
     /**
      * IccProfile caches some of its properties (description, type)
      * when it was read once. Subsequently, to read these values no
@@ -113,8 +115,10 @@ private:
 
 private:
 
+    class IccSettingsPriv;
     IccSettingsPriv* const d;
 
+    friend class IccSettingsPriv;
     friend class IccSettingsCreator;
 };
 

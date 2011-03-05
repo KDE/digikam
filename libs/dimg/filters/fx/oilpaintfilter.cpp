@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original OilPaint algorithm copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -38,6 +39,12 @@
 
 namespace Digikam
 {
+
+OilPaintFilter::OilPaintFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
 
 OilPaintFilter::OilPaintFilter(DImg* orgImage, QObject* parent, int brushSize, int smoothness)
     : DImgThreadedFilter(orgImage, parent, "OilPaintFilter")
@@ -196,6 +203,23 @@ DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, in
 double OilPaintFilter::GetIntensity(uint Red, uint Green, uint Blue)
 {
     return Red * 0.3 + Green * 0.59 + Blue * 0.11;
+}
+
+FilterAction OilPaintFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("brushSize", m_brushSize);
+    action.addParameter("smoothness", m_smoothness);
+
+    return action;
+}
+
+void OilPaintFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_brushSize = action.parameter("brushSize").toInt();
+    m_smoothness = action.parameter("smoothness").toInt();
 }
 
 }  // namespace Digikam

@@ -1,4 +1,5 @@
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/utils/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/utils/version.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/../data/database/dbconfigversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/database/dbconfigversion.h)
 
 # Shared libdigikamcore ################################################################
 
@@ -33,6 +34,9 @@ SET(digikamcore_LIB_SRCS
         ${pgfutils_SRCS}
         ${libdigikamhelpers_SRCS}
         ${libtthread_SRCS}
+        ${libversionmanager_SRCS}
+        ${libkmaphelper_SRCS}
+        ${libkmemoryinfo_SRCS}
 
         # widgets and dialogs
         ${libcommonwidgets_SRCS}
@@ -41,6 +45,8 @@ SET(digikamcore_LIB_SRCS
         ${libmetadatawidgets_SRCS}
         ${libdialogs_SRCS}
         ${libimageproperties_SRCS}
+        ${libgraphicsviewwidgets_SRCS}
+        ${libgenericmodels_SRCS}
 
         # utilities
         ${libslideshow_SRCS}
@@ -63,6 +69,10 @@ KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 ADD_DEPENDENCIES(digikamcore digikam-gitversion)
 
 TARGET_LINK_LIBRARIES(digikamcore
+        ${QT_QT3SUPPORT_LIBRARY}
+        ${QT_QTSQL_LIBRARY}
+        ${QT_QTSCRIPT_LIBRARY}
+
         ${KDE4_KDECORE_LIBS}
         ${KDE4_KIO_LIBS}
         ${KDE4_KFILE_LIBS}
@@ -71,8 +81,6 @@ TARGET_LINK_LIBRARIES(digikamcore
         ${KDE4_KDEUI_LIBS}
         ${KDE4_KUTILS_LIBS}
         ${KDE4_SOLID_LIBS}
-        ${QT_QTSQL_LIBRARY}
-        ${QT_QT3SUPPORT_LIBRARY}
 
         ${JPEG_LIBRARIES}
         ${TIFF_LIBRARIES}
@@ -86,15 +94,13 @@ TARGET_LINK_LIBRARIES(digikamcore
         ${KDCRAW_LIBRARIES}
         ${KEXIV2_LIBRARIES}
         ${KIPI_LIBRARIES}
+        ${KFACE_LIBRARIES}
+        ${KMAP_LIBRARIES}
 )
 
 IF(PGF_FOUND)
    TARGET_LINK_LIBRARIES(digikamcore ${PGF_LIBRARIES})
 ENDIF(PGF_FOUND)
-
-IF(MARBLEWIDGET_FOUND)
-    TARGET_LINK_LIBRARIES(digikamcore ${LIBMARBLEWIDGET_LIBRARY})
-ENDIF(MARBLEWIDGET_FOUND)
 
 IF(CLAPACK_FOUND)
    TARGET_LINK_LIBRARIES(digikamcore ${CLAPACK_LIBRARY})
@@ -109,7 +115,7 @@ IF(GLIB2_FOUND)
     TARGET_LINK_LIBRARIES(digikamcore ${GLIB2_LIBRARIES} ${liblqr_LIBS} ${liblensfun_LIBS})
 ENDIF(GLIB2_FOUND)
 
-SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION 1.0.0 SOVERSION 1)
+SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION 2.0.0 SOVERSION 2)
 IF(WIN32)
     SET_TARGET_PROPERTIES(digikamcore PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
     SET_TARGET_PROPERTIES(digikamcore PROPERTIES OUTPUT_NAME digikamlib)
@@ -141,21 +147,27 @@ SET(digikamdatabase_LIB_SRCS
 KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamdatabase
-        digikamcore
-        ${KDE4_KIO_LIBS}
-        ${KDE4_SOLID_LIBS}
-        ${KEXIV2_LIBRARIES}
-        ${KDCRAW_LIBRARIES}
-        ${QT_QTCORE_LIBRARY}
-        ${QT_QTGUI_LIBRARY}
-        ${QT_QTSQL_LIBRARY}
-)
+                      digikamcore
+                      ${QT_QTCORE_LIBRARY}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTSQL_LIBRARY}
+                      ${QT_QTSCRIPT_LIBRARY}
+
+                      ${KDE4_KIO_LIBS}
+                      ${KDE4_SOLID_LIBS}
+
+                      ${KEXIV2_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
+                      ${KFACE_LIBRARIES}
+                      ${KMAP_LIBRARIES}
+                     )
 
 IF(PGF_FOUND)
    TARGET_LINK_LIBRARIES(digikamdatabase ${PGF_LIBRARIES})
 ENDIF(PGF_FOUND)
 
-SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 2.0.0 SOVERSION 2)
+
 INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 # digiKam nepomuk services #########################################################
@@ -171,20 +183,23 @@ IF (NEPOMUK_FOUND)
     KDE4_ADD_PLUGIN(digikamnepomukservice ${digikamnepomukservices_SRCS})
 
     TARGET_LINK_LIBRARIES(digikamnepomukservice
-            ${KDE4_KIO_LIBS}
-            ${KDE4_SOLID_LIBS}
-            ${KIPI_LIBRARIES}
-            ${KEXIV2_LIBRARIES}
-            ${KDCRAW_LIBRARIES}
-            ${QT_QTSQL_LIBRARY}
-            ${SOPRANO_CLIENT_LIBRARIES}
-            ${SOPRANO_LIBRARIES}
-            ${KDE4_KDEUI_LIBS}
-            ${KDE4_KIO_LIBS}
-            ${NEPOMUK_LIBRARIES}
-            digikamcore
-            digikamdatabase
-)
+                          ${QT_QTSQL_LIBRARY}
+                          ${QT_QTSCRIPT_LIBRARY}
+
+                          ${KDE4_KIO_LIBS}
+                          ${KDE4_SOLID_LIBS}
+                          ${KDE4_KDEUI_LIBS}
+
+                          ${KIPI_LIBRARIES}
+                          ${KEXIV2_LIBRARIES}
+                          ${KDCRAW_LIBRARIES}
+                          ${SOPRANO_CLIENT_LIBRARIES}
+                          ${SOPRANO_LIBRARIES}
+                          ${NEPOMUK_LIBRARIES}
+
+                          digikamcore
+                          digikamdatabase
+                         )
 
     INSTALL(
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/nepomuk/digikamnepomukservice.desktop
@@ -197,28 +212,31 @@ ENDIF (NEPOMUK_FOUND)
 
 # digiKam binary progam #########################################################
 
-SET(digikam_SRCS
-        ${libdimgimagewindow_SRCS}
-        ${libdeletedialog_SRCS}
-        ${libimagepropertiesdigikam_SRCS}
-        ${libsetup_SRCS}
-        ${liblighttable_SRCS}
-        ${libbatch_SRCS}
-        ${libkipiiface_SRCS}
-        ${libsearchwindow_SRCS}
-        ${libfuzzysearch_SRCS}
-        ${libgpssearch_SRCS}
-        ${libtimeline_SRCS}
-        ${libalbummodels_SRCS}
-        ${libdigikamgui_SRCS}
-        ${libfirstrun_SRCS}
-        ${libtemplate_SRCS}
-        ${libdatabaseui_SRCS}
-
-        main.cpp
+SET(digikam_SRCS ${libdimgimagewindow_SRCS}
+                 ${libdeletedialog_SRCS}
+                 ${libimagepropertiesdigikam_SRCS}
+                 ${libimageversionssidebar_SRCS}
+                 ${libsetup_SRCS}
+                 ${libcameragui_SRCS}
+                 ${liblighttable_SRCS}
+                 ${libbatch_SRCS}
+                 ${libkipiiface_SRCS}
+                 ${libsearchwindow_SRCS}
+                 ${libfuzzysearch_SRCS}
+                 ${libgpssearch_SRCS}
+                 ${libkmaphelper_SRCS}
+                 ${libqueuemanager_SRCS}
+                 ${libalbummodels_SRCS}
+                 ${libdigikamgui_SRCS}
+                 ${libfirstrun_SRCS}
+                 ${libtemplate_SRCS}
+                 ${libdatabaseui_SRCS}
+                 ${libscriptiface_SRCS}
+                 ${libfacedetection_SRCS}
+                 main/main.cpp
 )
 
-QT4_ADD_DBUS_ADAPTOR(digikam_SRCS org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
+QT4_ADD_DBUS_ADAPTOR(digikam_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
 
 KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
 
@@ -231,10 +249,13 @@ TARGET_LINK_LIBRARIES(digikam
         ${KDE4_KUTILS_LIBS}
         ${KDE4_KNOTIFYCONFIG_LIBRARY}
         ${KDE4_SOLID_LIBS}
+        ${KFACE_LIBRARIES}
+        ${KMAP_LIBRARIES}
         ${KIPI_LIBRARIES}
         ${KEXIV2_LIBRARIES}
         ${KDCRAW_LIBRARIES}
         ${QT_QTSQL_LIBRARY}
+        ${QT_QTSCRIPT_LIBRARY}
         ${QT_QT3SUPPORT_LIBRARY}
         ${STRIGI_LIBRARIES}
         ${LCMS_LIBRARIES}
@@ -252,10 +273,6 @@ IF(KDEPIMLIBS_FOUND)
   TARGET_LINK_LIBRARIES(digikam ${KDE4_KABC_LIBS})
 ENDIF(KDEPIMLIBS_FOUND)
 
-IF(MARBLEWIDGET_FOUND)
-  TARGET_LINK_LIBRARIES(digikam ${LIBMARBLEWIDGET_LIBRARY})
-ENDIF(MARBLEWIDGET_FOUND)
-
 IF(CLAPACK_FOUND)
    TARGET_LINK_LIBRARIES(digikam ${CLAPACK_LIBRARY})
 ENDIF(CLAPACK_FOUND)
@@ -264,7 +281,7 @@ INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # Others Files to install #######################################################
 
-INSTALL(PROGRAMS digikam.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-INSTALL(FILES digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
-INSTALL(FILES digikam.notifyrc DESTINATION ${DATA_INSTALL_DIR}/digikam)
-INSTALL(FILES digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+INSTALL(PROGRAMS main/digikam.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+INSTALL(FILES main/digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(FILES main/digikam.notifyrc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(FILES utils/digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)

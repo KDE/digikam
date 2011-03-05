@@ -27,7 +27,8 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "kcategorizedview.h"
+#include "digikamkcategorizedview.h"
+#include "dragdropimplementations.h"
 
 class QSortFilterProxyModel;
 
@@ -36,10 +37,10 @@ namespace Digikam
 
 class DItemDelegate;
 class DCategorizedViewPriv;
-class ImageModelDragDropHandler;
+class AbstractItemDragDropHandler;
 class ItemViewToolTip;
 
-class DIGIKAM_EXPORT DCategorizedView : public KCategorizedView
+class DIGIKAM_EXPORT DCategorizedView : public DigikamKCategorizedView, public DragDropViewImplementation
 {
     Q_OBJECT
 
@@ -77,9 +78,9 @@ public:
 
 public Q_SLOTS:
 
-    virtual void cut();
-    virtual void copy();
-    virtual void paste();
+    virtual void cut() { DragDropViewImplementation::cut(); }
+    virtual void copy() { DragDropViewImplementation::copy(); }
+    virtual void paste() { DragDropViewImplementation::paste(); }
 
 Q_SIGNALS:
 
@@ -126,16 +127,22 @@ protected:
     virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
     virtual void showContextMenu(QContextMenuEvent* event);
     virtual void indexActivated(const QModelIndex& index);
-    virtual ImageModelDragDropHandler* dragDropHandler() const = 0;
+
+    /** Provides default behavior, can reimplement in a subclass.
+     *  Returns true if a tooltip was shown.
+     */
+    virtual bool showToolTip(QHelpEvent* he, const QModelIndex& index, QStyleOptionViewItem& option);
 
     /** Returns an index that is representative for the category at position pos */
     QModelIndex indexForCategoryAt(const QPoint& pos) const;
 
+    DECLARE_VIEW_DRAG_DROP_METHODS(DigikamKCategorizedView)
+    /// Note: pure virtual dragDropHandler() still open from DragDropViewImplementation
+    virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const;
+    virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
+
     // reimplemented from parent class
     void contextMenuEvent(QContextMenuEvent* event);
-    void dragEnterEvent(QDragEnterEvent* event);
-    void dragMoveEvent(QDragMoveEvent* e);
-    void dropEvent(QDropEvent* e);
     void keyPressEvent(QKeyEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
     void mousePressEvent(QMouseEvent* event);
@@ -146,7 +153,6 @@ protected:
     void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
     void rowsInserted(const QModelIndex& parent, int start, int end);
     void selectionChanged(const QItemSelection&, const QItemSelection&);
-    void startDrag(Qt::DropActions supportedActions);
     bool viewportEvent(QEvent* event);
     void wheelEvent(QWheelEvent* event);
 

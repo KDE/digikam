@@ -8,7 +8,7 @@
  *               standard libkdcraw parameters plus
  *               few customized for post processing.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +40,9 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "bcgcontainer.h"
+#include "wbcontainer.h"
+#include "curvescontainer.h"
 
 using namespace KDcrawIface;
 
@@ -79,9 +82,8 @@ public:
      */
     bool operator==(const DRawDecoding& other) const;
 
-    /** Equivalent to the copy constructor
-     */
-    DRawDecoding& operator=(const DRawDecoding& prm);
+    void writeToFilterAction(FilterAction& action, const QString& prefix = QString()) const;
+    static DRawDecoding fromFilterAction(const FilterAction& action, const QString& prefix = QString());
 
 public:
 
@@ -91,29 +93,17 @@ public:
 
     /// Post Processing settings ----------------------------------------------------
 
-    /** Lightness correction value.
+    /** BCG correction values.
     */
-    double lightness;
+    BCGContainer        bcg;
 
-    /** Contrast correction value.
+    /** White Balance correction values.
     */
-    double contrast;
+    WBContainer         wb;
 
-    /** Gamma correction value.
+    /** Curve adjustments.
     */
-    double gamma;
-
-    /** Color saturation correction value.
-    */
-    double saturation;
-
-    /** Exposure compensation value.
-    */
-    double exposureComp;
-
-    /** Luminosity curve adjustments.
-    */
-    QPolygon curveAdjust;
+    CurvesContainer     curvesAdjust;
 };
 
 }  // namespace Digikam

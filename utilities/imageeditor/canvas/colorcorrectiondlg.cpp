@@ -592,7 +592,7 @@ void ColorCorrectionDlg::updateInfo()
     setCursor(Qt::WaitCursor);
 
     DImg colorPreview = d->preview.copy();
-    IccManager manager(colorPreview, d->filePath);
+    IccManager manager(colorPreview);
     ICCSettingsContainer::Behavior b = currentBehavior();
     d->imageProfile = manager.imageProfile(b, specifiedProfile());
 

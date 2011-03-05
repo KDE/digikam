@@ -41,8 +41,11 @@
 #include "databaseaccess.h"
 #include "dmetadata.h"
 #include "imageattributeswatch.h"
+#include "imagecomments.h"
+#include "imageposition.h"
 #include "globals.h"
 #include "tagscache.h"
+#include "metadatasettings.h"
 
 namespace Digikam
 {
@@ -146,6 +149,14 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
         int rating           = m_info.rating();
         res["rating"]        = rating;
 
+        // Get digiKam Color Label of picture from database.
+        int color            = m_info.colorLabel();
+        res["colorlabel"]    = color;
+
+        // Get digiKam Pick Label of picture from database.
+        int pick             = m_info.pickLabel();
+        res["picklabel"]     = pick;
+
         // Get GPS location of picture from database.
         ImagePosition pos = m_info.imagePosition();
 
@@ -191,6 +202,28 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             if (rating >= RatingMin && rating <= RatingMax)
             {
                 m_info.setRating(rating);
+            }
+        }
+
+        // Set digiKam Color Label of picture into database.
+        if (attributes.contains("colorlabel"))
+        {
+            int color = attributes["colorlabel"].toInt();
+
+            if (color >= NoColorLabel && color <= WhiteLabel)
+            {
+                m_info.setColorLabel(color);
+            }
+        }
+
+        // Set digiKam Pick Label of picture into database.
+        if (attributes.contains("picklabel"))
+        {
+            int pick = attributes["picklabel"].toInt();
+
+            if (pick >= NoPickLabel && pick <= AcceptedLabel)
+            {
+                m_info.setPickLabel(pick);
             }
         }
 
@@ -291,9 +324,7 @@ void KipiImageInfo::clearAttributes()
 
 int KipiImageInfo::angle()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
-
-    if (settings->getExifRotate())
+    if (MetadataSettings::instance()->settings().exifRotate)
     {
         //TODO: read from DB
         DMetadata metadata(_url.toLocalFile());

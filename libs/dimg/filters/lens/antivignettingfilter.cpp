@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original AntiVignettingFilter algorithm copyrighted 2003 by
  * John Walker from 'pnmctrfilt' implementation. See
@@ -44,6 +45,12 @@
 
 namespace Digikam
 {
+
+AntiVignettingFilter::AntiVignettingFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
 
 AntiVignettingFilter::AntiVignettingFilter(DImg* orgImage, QObject* parent,
         const AntiVignettingContainer& settings)
@@ -195,6 +202,33 @@ unsigned short  AntiVignettingFilter::clamp16bits(double x)
     {
         return ((unsigned short) x);
     }
+}
+
+FilterAction AntiVignettingFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("addvignetting", m_settings.addvignetting);
+    action.addParameter("density", m_settings.density);
+    action.addParameter("innerradius", m_settings.innerradius);
+    action.addParameter("outerradius", m_settings.outerradius);
+    action.addParameter("power", m_settings.power);
+    action.addParameter("xshift", m_settings.xshift);
+    action.addParameter("yshift", m_settings.yshift);
+
+    return action;
+}
+
+void AntiVignettingFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_settings.addvignetting = action.parameter("addvignetting").toBool();
+    m_settings.density = action.parameter("density").toDouble();
+    m_settings.innerradius = action.parameter("innerradius").toDouble();
+    m_settings.outerradius = action.parameter("outerradius").toDouble();
+    m_settings.power = action.parameter("power").toDouble();
+    m_settings.xshift = action.parameter("xshift").toDouble();
+    m_settings.yshift = action.parameter("yshift").toDouble();
 }
 
 }  // namespace Digikam

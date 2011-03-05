@@ -25,12 +25,15 @@
 
 // Qt includes
 
+#include <QApplication>
+#include <QCursor>
 #include <QGroupBox>
 #include <QLabel>
 #include <QDir>
 #include <QList>
 #include <QFileInfo>
 #include <QGridLayout>
+#include <QHelpEvent>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QComboBox>
@@ -58,6 +61,8 @@
 #include "albumsettings.h"
 #include "databasewidget.h"
 #include "databaseparameters.h"
+#include "scancontroller.h"
+#include "schemaupdater.h"
 
 namespace Digikam
 {
@@ -68,23 +73,66 @@ public:
 
     SetupDatabasePriv() :
         mainDialog(0),
-        databaseWidget(0)
+        databaseWidget(0),
+        updateBox(0),
+        hashesButton(0)
     {
     }
 
     KPageDialog*    mainDialog;
     DatabaseWidget* databaseWidget;
+    QGroupBox*      updateBox;
+    QPushButton*    hashesButton;
 };
 
 SetupDatabase::SetupDatabase(KPageDialog* dialog, QWidget* parent)
     : QScrollArea(parent), d(new SetupDatabasePriv)
 {
     d->mainDialog  = dialog;
-    d->databaseWidget = new DatabaseWidget(viewport());
-    d->databaseWidget->setAutoFillBackground(false);
-    setWidget(d->databaseWidget);
+
+    QWidget *page = new QWidget;
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+
+    d->databaseWidget = new DatabaseWidget;
+    mainLayout->addWidget(d->databaseWidget);
+
+    if (!SchemaUpdater::isUniqueHashUpToDate())
+    {
+        d->updateBox = new QGroupBox(i18nc("@title:group", "Updates"));
+        QGridLayout *updateLayout = new QGridLayout;
+
+        d->hashesButton = new QPushButton(i18nc("@action:button", "Update File Hashes"));
+        d->hashesButton->setWhatsThis(i18nc("@info:tooltip",
+                                          "File hashes are used to identify identical files and to display thumbnails. "
+                                          "A new, improved algorithm to create the hash is now used. "
+                                          "The old algorithm, though, still works quite well, so it is recommended to "
+                                          "carry out this upgrade, but not required.<nl/> "
+                                          "<note>After the upgrade you cannot use your database with a digiKam version "
+                                          "prior to 2.0.</note>"));
+
+        QPushButton* infoHash = new QPushButton;
+        infoHash->setIcon(SmallIcon("dialog-information"));
+        infoHash->setToolTip(i18nc("@info:tooltip", "Get information about <interface>Update File Hashes</interface>"));
+
+        updateLayout->addWidget(d->hashesButton, 0, 0);
+        updateLayout->addWidget(infoHash,        0, 1);
+        updateLayout->setColumnStretch(2, 1);
+
+        d->updateBox->setLayout(updateLayout);
+
+        mainLayout->addStretch(10);
+        mainLayout->addWidget(d->updateBox);
+
+        connect(d->hashesButton, SIGNAL(clicked()),
+                this, SLOT(upgradeUniqueHashes()));
+
+        connect(infoHash, SIGNAL(clicked()),
+                this, SLOT(showHashInformation()));
+    }
+
+    page->setLayout(mainLayout);
+    setWidget(page);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     // --------------------------------------------------------
 
@@ -165,5 +213,27 @@ void SetupDatabase::readSettings()
 
     d->databaseWidget->setParametersFromSettings(settings);
 }
+
+void SetupDatabase::upgradeUniqueHashes()
+{
+    int result = KMessageBox::warningContinueCancel(this, i18nc("@info",
+                    "<para>The process of updating the file hashes takes a few minutes.</para> "
+                    "<para>Please ensure that any important collections on removable media are connected. "
+                    "<note>After the upgrade you cannot use your database with a digiKam version "
+                    "prior to 2.0.</note></para> "
+                    "<para>Do you want to begin the update?</para>"));
+
+    if (result == KMessageBox::Continue)
+    {
+        ScanController::instance()->updateUniqueHash();
+    }
+}
+
+void SetupDatabase::showHashInformation()
+{
+    qApp->postEvent(d->hashesButton, new QHelpEvent(QEvent::WhatsThis, QPoint(0,0), QCursor::pos()));
+}
+
+
 
 }  // namespace Digikam

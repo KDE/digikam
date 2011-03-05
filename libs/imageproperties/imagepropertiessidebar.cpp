@@ -40,6 +40,7 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <KDebug>
 
 // LibKDcraw includes
 
@@ -54,6 +55,7 @@
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
+#include "imagepropertiesversionstab.h"
 
 namespace Digikam
 {
@@ -70,6 +72,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* parent,
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
     m_dirtyGpsTab        = false;
+    m_dirtyHistoryTab    = false;
 
     m_propertiesTab      = new ImagePropertiesTab(parent);
     m_metadataTab        = new ImagePropertiesMetaDataTab(parent);
@@ -83,18 +86,10 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* parent,
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
-
-    m_propertiesTab->setObjectName("Image Properties SideBar Expander");
-    m_propertiesTab->readSettings();
 }
 
 ImagePropertiesSideBar::~ImagePropertiesSideBar()
 {
-}
-
-void ImagePropertiesSideBar::applySettings()
-{
-    m_metadataTab->applySettings();
 }
 
 void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DImg* img)
@@ -111,6 +106,7 @@ void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DIm
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
     m_dirtyGpsTab        = false;
+    m_dirtyHistoryTab    = false;
 
     slotChangedTab( getActiveTab() );
 }
@@ -128,6 +124,7 @@ void ImagePropertiesSideBar::slotNoCurrentItem()
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
     m_dirtyGpsTab        = false;
+    m_dirtyHistoryTab    = false;
 }
 
 void ImagePropertiesSideBar::slotImageSelectionChanged(const QRect& rect)
@@ -148,6 +145,8 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
 {
     if (!m_currentURL.isValid())
     {
+        m_gpsTab->setActive(tab==m_gpsTab);
+
         return;
     }
 
@@ -174,6 +173,8 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
         m_gpsTab->setCurrentURL(m_currentURL);
         m_dirtyGpsTab = true;
     }
+
+    m_gpsTab->setActive(tab==m_gpsTab);
 
     unsetCursor();
 }
@@ -358,6 +359,53 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
 
     m_propertiesTab->setPhotoFlash(photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash);
     m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
+
+    // -- Caption, ratings, tag information ---------------------
+
+    CaptionsMap captions = metaData.getImageComments();
+    QString caption;
+    if (captions.contains("x-default"))
+        caption = captions.value("x-default").caption;
+    else if (!captions.isEmpty())
+        caption = captions.begin().value().caption;
+    m_propertiesTab->setCaption(caption);
+
+    m_propertiesTab->setRating(metaData.getImageRating());
+
+    QStringList tagPaths;
+    metaData.getImageTagsPath(tagPaths);
+    m_propertiesTab->setTags(tagPaths);
+    m_propertiesTab->showOrHideCaptionAndTags();
+}
+
+void ImagePropertiesSideBar::doLoadState()
+{
+    Sidebar::doLoadState();
+
+    /// @todo m_propertiesTab should load its settings from our group
+    m_propertiesTab->setObjectName("Image Properties SideBar Expander");
+    m_propertiesTab->readSettings();
+
+    KConfigGroup group = getConfigGroup();
+
+    const KConfigGroup groupGPSTab = KConfigGroup(&group, entryName("GPS Properties Tab"));
+    m_gpsTab->readSettings(groupGPSTab);
+
+    const KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
+    m_metadataTab->readSettings(groupMetadataTab);
+}
+
+void ImagePropertiesSideBar::doSaveState()
+{
+    Sidebar::doSaveState();
+
+    KConfigGroup group = getConfigGroup();
+
+    KConfigGroup groupGPSTab = KConfigGroup(&group, entryName("GPS Properties Tab"));
+    m_gpsTab->writeSettings(groupGPSTab);
+
+    KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
+    m_metadataTab->writeSettings(groupMetadataTab);
 }
 
 }  // namespace Digikam

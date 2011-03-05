@@ -7,6 +7,7 @@
  * Description : a tab to display GPS info
  *
  * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,8 +27,6 @@
 
 // Qt includes
 
-#include <QDateTime>
-#include <QString>
 #include <QWidget>
 
 // KDE includes
@@ -37,13 +36,11 @@
 // Local includes
 
 #include "dmetadata.h"
-#include "worldmapwidget.h"
 #include "digikam_export.h"
+#include "digikam2kmap.h"
 
 namespace Digikam
 {
-
-class ImagePropertiesGPSTabPriv;
 
 class DIGIKAM_EXPORT ImagePropertiesGPSTab : public QWidget
 {
@@ -65,8 +62,8 @@ public:
     ImagePropertiesGPSTab(QWidget* parent);
     ~ImagePropertiesGPSTab();
 
-    void setGPSInfo();
-    void setGPSInfoList(const GPSInfoList& list);
+    void clearGPSInfo();
+    void setGPSInfoList(const GPSImageInfo::List& list);
     void setCurrentURL(const KUrl& url=KUrl());
 
     void setMetadata(const DMetadata& meta, const KUrl& url);
@@ -74,17 +71,18 @@ public:
     int  getWebGPSLocator();
     void setWebGPSLocator(int locator);
 
+    void setActive(const bool state);
+
+    void readSettings(const KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
+
 private Q_SLOTS:
 
     void slotGPSDetails();
 
 private:
 
-    void readConfig();
-    void writeConfig();
-
-private:
-
+    class ImagePropertiesGPSTabPriv;
     ImagePropertiesGPSTabPriv* const d;
 };
 

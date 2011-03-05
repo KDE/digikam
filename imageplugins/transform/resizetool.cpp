@@ -69,6 +69,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "dimgbuiltinfilter.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
 #include "editortoolsettings.h"
@@ -81,42 +82,6 @@ using namespace KDcrawIface;
 
 namespace DigikamTransformImagePlugin
 {
-
-class ResizeImage : public DImgThreadedFilter
-{
-
-public:
-
-    ResizeImage(DImg* orgImage, int newWidth, int newHeight, QObject* parent=0)
-        : DImgThreadedFilter(orgImage, parent, "resizeimage")
-
-    {
-        m_newWidth  = newWidth;
-        m_newHeight = newHeight;
-        initFilter();
-    };
-
-    ~ResizeImage()
-    {
-        cancelFilter();
-    };
-
-private:
-
-    void filterImage()
-    {
-        postProgress(25);
-        m_destImage = m_orgImage.copy();
-        postProgress(50);
-        m_destImage.resize(m_newWidth, m_newHeight);
-        postProgress(75);
-    };
-
-private:
-
-    int m_newWidth;
-    int m_newHeight;
-};
 
 // -------------------------------------------------------------
 
@@ -525,7 +490,8 @@ void ResizeTool::prepareEffect()
     {
         // See B.K.O #152192: CImg resize() sound like defective or unadapted
         // to resize image without good quality.
-        setFilter(new ResizeImage(&imTemp, new_w, new_h, this));
+        DImgBuiltinFilter resize(DImgBuiltinFilter::Resize, QSize(new_w, new_h));
+        setFilter(resize.createThreadedFilter(&imTemp, this));
     }
 }
 
@@ -555,10 +521,8 @@ void ResizeTool::prepareFinal()
     {
         // See B.K.O #152192: CImg resize() sound like defective or unadapted
         // to resize image without good quality.
-        setFilter(new ResizeImage(iface.getOriginalImg(),
-                                  d->wInput->value(),
-                                  d->hInput->value(),
-                                  this));
+        DImgBuiltinFilter resize(DImgBuiltinFilter::Resize, QSize(d->wInput->value(), d->hInput->value()));
+        setFilter(resize.createThreadedFilter(iface.getOriginalImg(), this));
     }
 }
 
@@ -588,6 +552,7 @@ void ResizeTool::putFinalData()
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
     iface.putOriginalImage(i18n("Resize"),
+                           filter()->filterAction(),
                            targetImage.bits(),
                            targetImage.width(), targetImage.height());
 }

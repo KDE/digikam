@@ -37,22 +37,14 @@
 
 #include <kurl.h>
 
+// Local includes
+
+#include "databaseconstants.h"
+
 namespace Digikam
 {
 
 typedef QPair<int, int> YearMonth;
-
-namespace AlbumRoot
-{
-enum Type
-{
-    // Keep values constant
-    UndefinedType   = 0,
-    VolumeHardWired = 1,
-    VolumeRemovable = 2,
-    Network         = 3
-};
-}
 
 /**
  * \class AlbumRootInfo
@@ -139,27 +131,6 @@ public:
     }
 };
 
-namespace DatabaseSearch
-{
-enum Type
-{
-    UndefinedType,
-    KeywordSearch,
-    AdvancedSearch,
-    LegacyUrlSearch,
-    TimeLineSearch,
-    HaarSearch,
-    MapSearch,
-    DuplicatesSearch
-};
-
-enum HaarSearchType
-{
-    HaarImageSearch,
-    HaarSketchSearch
-};
-}
-
 /**
  * \class SearchInfo
  * A container class for transporting search information
@@ -224,28 +195,6 @@ public:
     QString name;
 };
 
-namespace DatabaseItem
-{
-enum Status
-{
-    // Keep values constant
-    UndefinedStatus = 0,
-    Visible         = 1,
-    Hidden          = 2,
-    Removed         = 3
-};
-
-enum Category
-{
-    // Keep values constant
-    UndefinedCategory = 0,
-    Image             = 1,
-    Video             = 2,
-    Audio             = 3,
-    Other             = 4
-};
-}
-
 class ItemShortInfo
 {
 public:
@@ -288,29 +237,6 @@ public:
     QString                uniqueHash;
 };
 
-namespace DatabaseComment
-{
-enum Type
-{
-    // Keep values constant
-    /// UndefinedType: Shall never appear in the database
-    UndefinedType   = 0,
-    /**
-     *  Comment: The default - a normal comment
-     *  This is what the user in digikam edits as the comment.
-     *  It is mapped to and from the JFIF comment,
-     *  the EXIF user comment, the IPTC Caption,
-     *  Dublin Core and Photoshop Description.
-     */
-    Comment         = 1,
-    /// Headline: as with IPTC or Photoshop
-    Headline        = 2,
-    /// Title: as with Dublin Core Title, Photoshop Title, IPTC Object Name
-    Title           = 3
-    // Feel free to add here any more types that you need!
-};
-}
-
 class CommentInfo
 {
 public:
@@ -346,6 +272,66 @@ public:
     QString   property;
     QString   value;
     QString   extraValue;
+};
+
+class ImageHistoryEntry
+{
+public:
+
+    ImageHistoryEntry() : imageId(0) {};
+
+    bool isNull() const
+    {
+        return imageId == 0;
+    }
+
+    qlonglong imageId;
+    QString   uuid;
+    QString   history;
+};
+
+class ImageRelation
+{
+public:
+
+    ImageRelation() : subjectId(0), objectId(0), type(DatabaseRelation::UndefinedType) {}
+
+    qlonglong              subjectId;
+    qlonglong              objectId;
+    DatabaseRelation::Type type;
+};
+
+class TagProperty
+{
+public:
+
+    TagProperty() : tagId(-1) {};
+
+    bool isNull() const
+    {
+        return tagId == -1;
+    }
+
+    int tagId;
+    QString property;
+    QString value;
+};
+
+class ImageTagProperty
+{
+public:
+
+    ImageTagProperty() : imageId(-1), tagId(-1) {};
+
+    bool isNull() const
+    {
+        return imageId == -1;
+    }
+
+    qlonglong imageId;
+    int tagId;
+    QString property;
+    QString value;
 };
 
 }  // namespace Digikam

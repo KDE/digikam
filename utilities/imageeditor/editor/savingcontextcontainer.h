@@ -37,6 +37,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "versionfileoperation.h"
 
 namespace Digikam
 {
@@ -61,7 +62,8 @@ public:
     {
         SavingStateNone,
         SavingStateSave,
-        SavingStateSaveAs
+        SavingStateSaveAs,
+        SavingStateVersion
     };
 
     enum SynchronizingState
@@ -82,9 +84,12 @@ public:
 
     KUrl                srcURL;
     KUrl                destinationURL;
+    KUrl                moveSrcURL;
 
     KTemporaryFile*     saveTempFile;
     QString             saveTempFileName;
+
+    VersionFileOperation versionFileOperation;
 };
 
 } // namespace Digikam

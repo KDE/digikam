@@ -135,6 +135,57 @@ DatabaseThumbnailInfo ThumbnailDB::findByFilePath(const QString& path)
     return info;
 }
 
+DatabaseThumbnailInfo ThumbnailDB::findByFilePath(const QString& path, const QString& uniqueHash)
+{
+    DatabaseThumbnailInfo info = findByFilePath(path);
+
+    if (uniqueHash.isNull())
+    {
+        return info;
+    }
+
+    if (info.data.isNull())
+    {
+        return info;
+    }
+
+    // double check that thumbnail is not referenced by a different hash
+    QList<QVariant> values;
+    d->db->execSql("SELECT uniqueHash FROM UniqueHashes WHERE thumbId=?;",
+                info.id, &values);
+
+    if (values.isEmpty())
+    {
+        return info;
+    }
+    else
+    {
+        foreach (const QVariant& hash, values)
+        {
+            if (hash == uniqueHash)
+            {
+                return info;
+            }
+        }
+        return DatabaseThumbnailInfo();
+    }
+}
+
+DatabaseThumbnailInfo ThumbnailDB::findByCustomIdentifier(const QString& id)
+{
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT id, type, modificationDate, orientationHint, data "
+                            "FROM CustomIdentifiers "
+                            "   INNER JOIN Thumbnails ON thumbId = id "
+                            "WHERE identifier=?;"),
+                    id,
+                    &values );
+
+    DatabaseThumbnailInfo info;
+    fillThumbnailInfo(values, info);
+    return info;
+}
+
 QHash<QString, int> ThumbnailDB::getFilePathsWithThumbnail()
 {
     SqlQuery query = d->db->prepareQuery(QString("SELECT path, id "
@@ -171,6 +222,12 @@ DatabaseCoreBackend::QueryState ThumbnailDB::insertFilePath(const QString& path,
                           path, thumbId);
 }
 
+DatabaseCoreBackend::QueryState ThumbnailDB::insertCustomIdentifier(const QString& path, int thumbId)
+{
+    return d->db->execSql("REPLACE INTO CustomIdentifiers (identifier, thumbId) VALUES (?,?)",
+                          path, thumbId);
+}
+
 DatabaseCoreBackend::QueryState ThumbnailDB::removeByUniqueHash(const QString& uniqueHash, int fileSize)
 {
     // UniqueHashes + FilePaths entries are removed by trigger
@@ -186,6 +243,14 @@ DatabaseCoreBackend::QueryState ThumbnailDB::removeByFilePath(const QString& pat
     QMap<QString, QVariant> parameters;
     parameters.insert(":path", path);
     return d->db->execDBAction(d->db->getDBAction(QString("Delete_Thumbnail_ByPath")), parameters);
+}
+
+DatabaseCoreBackend::QueryState ThumbnailDB::removeByCustomIdentifier(const QString& id)
+{
+    // UniqueHashes + FilePaths entries are removed by trigger
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":identifier", id);
+    return d->db->execDBAction(d->db->getDBAction(QString("Delete_Thumbnail_ByCustomIdentifier")), parameters);
 }
 
 DatabaseCoreBackend::QueryState ThumbnailDB::insertThumbnail(const DatabaseThumbnailInfo& info, QVariant* lastInsertId)
@@ -212,6 +277,13 @@ DatabaseCoreBackend::QueryState ThumbnailDB::replaceThumbnail(const DatabaseThum
 {
     return d->db->execSql("REPLACE INTO Thumbnails (id, type, modificationDate, orientationHint, data) VALUES(?, ?, ?, ?, ?);",
                           QList<QVariant>() << info.id << info.type << info.modificationDate << info.orientationHint << info.data);
+}
+
+void ThumbnailDB::replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize,
+                                    const QString& newUniqueHash, int newFileSize)
+{
+    d->db->execSql("UPDATE UniqueHashes SET uniqueHash=?, fileSize=? WHERE uniqueHash=? AND fileSize=?",
+                   newUniqueHash, newFileSize, oldUniqueHash, oldFileSize);
 }
 
 }  // namespace Digikam

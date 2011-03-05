@@ -6,7 +6,8 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,10 +66,13 @@
 #include "dimg.h"
 #include "dmetadata.h"
 #include "imagescanner.h"
-#include "kdateedit.h"
+#include "ddateedit.h"
 #include "ratingsearchutilities.h"
 #include "searchfieldgroup.h"
 #include "searchwindow.h"
+#include "tagscache.h"
+#include "colorlabelfilter.h"
+#include "picklabelfilter.h"
 
 using namespace KDcrawIface;
 
@@ -157,7 +161,13 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* par
         field->setFactor(1024 * 1024);
         return field;
     }
-
+    else if (name == "labels")
+    {
+        SearchFieldLabels* field = new SearchFieldLabels(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Labels"), i18n("Return pictures with labels"));
+        return field;
+    }
     else if (name == "rating")
     {
         SearchFieldRating* field = new SearchFieldRating(parent);
@@ -624,9 +634,7 @@ void SearchField::setVisible(bool visible)
 {
     m_label->setVisible(visible && m_categoryLabelVisible);
     m_detailLabel->setVisible(visible);
-    // Note: setVisible visibility is independent from animateVisible visibility!
-    m_clearButton->setVisible(visible);
-    m_clearButton->setDirectlyVisible(m_valueIsValid);
+    m_clearButton->setShallBeShown(visible);
     setValueWidgetsVisible(visible);
 }
 
@@ -787,8 +795,8 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout* layout, int row, int c
     //     QHBoxLayout *hbox = new QHBoxLayout;
     //     layout->addLayout(hbox, row, column, 1, 3);
 
-    m_firstDateEdit  = new KDateEdit;
-    m_secondDateEdit = new KDateEdit;
+    m_firstDateEdit  = new DDateEdit;
+    m_secondDateEdit = new DDateEdit;
 
     if (m_type == DateOnly)
     {
@@ -2040,12 +2048,12 @@ void SearchFieldAlbum::setupValueWidgets(QGridLayout* layout, int row, int colum
 
     if (m_type == TypeAlbum)
     {
-        m_comboBox->setDefaultAlbumModels();
+        m_comboBox->setDefaultAlbumModel();
         m_comboBox->setNoSelectionText(i18n("Any Album"));
     }
     else if (m_type == TypeTag)
     {
-        m_comboBox->setDefaultTagModels();
+        m_comboBox->setDefaultTagModel();
         m_comboBox->setNoSelectionText(i18n("Any Tag"));
     }
 
@@ -2078,11 +2086,16 @@ void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
         else if (m_type == TypeTag)
         {
             a = AlbumManager::instance()->findTAlbum(id);
+
+            // Ignore internal tags here.
+            if (a && TagsCache::instance()->isInternalTag(a->id()))
+                a = 0;
         }
 
         if (!a)
         {
             kDebug() << "Search: Did not find album for ID" << id << "given in Search XML";
+            return;
         }
 
         m_model->setChecked(a, true);
@@ -2506,6 +2519,131 @@ void SearchFieldPageOrientation::read(SearchXmlCachingReader& reader)
             m_comboBox->setCurrentIndex(2);
         }
     }
+}
+
+// -------------------------------------------------------------------------
+
+SearchFieldLabels::SearchFieldLabels(QObject* parent)
+    : SearchField(parent), m_pickLabelFilter(0), m_colorLabelFilter(0)
+{
+}
+
+void SearchFieldLabels::setupValueWidgets(QGridLayout* layout, int row, int column)
+{
+    QHBoxLayout* hbox  = new QHBoxLayout;
+    m_pickLabelFilter  = new PickLabelFilter;
+    m_colorLabelFilter = new ColorLabelFilter;
+    hbox->addWidget(m_pickLabelFilter);
+    hbox->addStretch(10);
+    hbox->addWidget(m_colorLabelFilter);
+
+    connect(m_pickLabelFilter, SIGNAL(signalPickLabelSelectionChanged(const QList<PickLabel>&)),
+            this, SLOT(updateState()));
+
+    connect(m_colorLabelFilter, SIGNAL(signalColorLabelSelectionChanged(const QList<ColorLabel>&)),
+            this, SLOT(updateState()));
+
+    updateState();
+
+    layout->addLayout(hbox, row, column, 1, 3);
+}
+
+void SearchFieldLabels::updateState()
+{
+    setValidValueState(!m_colorLabelFilter->colorLabels().isEmpty());
+}
+
+void SearchFieldLabels::read(SearchXmlCachingReader& reader)
+{
+    TAlbum* a      = 0;
+    QList<int> ids = reader.valueToIntOrIntList();
+    QList<ColorLabel> clabels;
+    QList<PickLabel>  plabels;
+
+    foreach(int id, ids)
+    {
+        a = AlbumManager::instance()->findTAlbum(id);
+        if (!a)
+        {
+            kDebug() << "Search: Did not find Label album for ID" << id << "given in Search XML";
+        }
+        else
+        {
+            int cl = TagsCache::instance()->getColorLabelForTag(a->id());
+            if (cl != -1)
+            {
+                clabels.append((ColorLabel)cl);
+            }
+            else
+            {
+                int pl = TagsCache::instance()->getPickLabelForTag(a->id());
+                if (pl != -1)
+                    plabels.append((PickLabel)pl);
+            }
+        }
+    }
+
+    m_colorLabelFilter->setColorLabels(clabels);
+    m_pickLabelFilter->setPickLabels(plabels);
+}
+
+void SearchFieldLabels::write(SearchXmlWriter& writer)
+{
+    QList<int>     albumIds;
+    QList<TAlbum*> clAlbums = m_colorLabelFilter->getCheckedColorLabelTags();
+    if (!clAlbums.isEmpty())
+    {
+        foreach (TAlbum* album, clAlbums)
+        {
+            albumIds << album->id();
+        }
+    }
+
+    QList<TAlbum*> plAlbums = m_pickLabelFilter->getCheckedPickLabelTags();
+    if (!plAlbums.isEmpty())
+    {
+        foreach (TAlbum* album, plAlbums)
+        {
+            albumIds << album->id();
+        }
+    }
+
+    if (albumIds.isEmpty()) return;
+
+    // NOTE: there is no XML database query rule for Color Labels in ImageQueryBuilder::buildField()
+    //       As Color Labels are internal tags, we trig database on "tagid".
+    writer.writeField("tagid", SearchXml::InTree);
+
+    if (albumIds.size() > 1)
+    {
+        writer.writeValue(albumIds);
+    }
+    else
+    {
+        writer.writeValue(albumIds.first());
+    }
+
+    writer.finishField();
+}
+
+void SearchFieldLabels::reset()
+{
+    m_colorLabelFilter->reset();
+    m_pickLabelFilter->reset();
+}
+
+void SearchFieldLabels::setValueWidgetsVisible(bool visible)
+{
+    m_colorLabelFilter->setVisible(visible);
+    m_pickLabelFilter->setVisible(visible);
+}
+
+QList<QRect> SearchFieldLabels::valueWidgetRects() const
+{
+    QList<QRect> rects;
+    rects << m_pickLabelFilter->geometry();
+    rects << m_colorLabelFilter->geometry();
+    return rects;
 }
 
 } // namespace Digikam

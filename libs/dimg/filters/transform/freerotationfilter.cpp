@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,6 +52,13 @@ public:
 
     FreeRotationContainer settings;
 };
+
+FreeRotationFilter::FreeRotationFilter(QObject* parent)
+    : DImgThreadedFilter(parent),
+      d(new FreeRotationFilterPriv)
+{
+    initFilter();
+}
 
 FreeRotationFilter::FreeRotationFilter(DImg* orgImage, QObject* parent, const FreeRotationContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "FreeRotation"),
@@ -386,6 +394,39 @@ bool FreeRotationFilter::isInside (int Width, int Height, int X, int Y)
     bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
     bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
     return (bIsWOk && bIsHOk);
+}
+
+FilterAction FreeRotationFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("angle", d->settings.angle);
+    action.addParameter("antiAlias", d->settings.antiAlias);
+    action.addParameter("autoCrop", d->settings.autoCrop);
+    action.addParameter("newSize", d->settings.newSize);
+    action.addParameter("orgH", d->settings.orgH);
+    action.addParameter("orgW", d->settings.orgW);
+    action.addParameter("backgroundColorR", d->settings.backgroundColor.red());
+    action.addParameter("backgroundColorG", d->settings.backgroundColor.green());
+    action.addParameter("backgroundColorB", d->settings.backgroundColor.blue());
+    action.addParameter("backgroundColorA", d->settings.backgroundColor.alpha());
+
+    return action;
+}
+
+void FreeRotationFilter::readParameters(const FilterAction& action)
+{
+    d->settings.angle = action.parameter("angle").toDouble();
+    d->settings.antiAlias = action.parameter("antiAlias").toBool();
+    d->settings.autoCrop = action.parameter("autoCrop").toInt();
+    d->settings.newSize = action.parameter("newSize").toSize();
+    d->settings.orgH = action.parameter("orgH").toInt();
+    d->settings.orgW = action.parameter("orgW").toInt();
+    d->settings.backgroundColor.setRed(action.parameter("backgroundColorR").toInt());
+    d->settings.backgroundColor.setGreen(action.parameter("backgroundColorG").toInt());
+    d->settings.backgroundColor.setBlue(action.parameter("backgroundColorB").toInt());
+    d->settings.backgroundColor.setAlpha(action.parameter("backgroundColorA").toInt());
 }
 
 }  // namespace Digikam

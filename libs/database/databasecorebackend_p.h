@@ -50,6 +50,9 @@ public:
     QString connectionName(QThread* thread);
 
     QSqlDatabase databaseForThread();
+    QSqlError    databaseErrorForThread();
+    void         setDatabaseErrorForThread(QSqlError lastError);
+
     void closeDatabaseForThread();
     bool open(QSqlDatabase& db);
     bool incrementTransactionCount();
@@ -61,11 +64,13 @@ public:
 
     bool reconnectOnError() const;
     bool isSQLiteLockError(const SqlQuery& query) const;
-    bool checkRetrySQLiteLockError(int retries) const;
+    bool isSQLiteLockTransactionError(const QSqlError& lastError) const;
+    bool checkRetrySQLiteLockError(int retries);
     bool isConnectionError(const SqlQuery& query) const;
     bool needToConsultUserForError(const SqlQuery& query) const;
     bool needToHandleWithErrorHandler(const SqlQuery& query) const;
     void debugOutputFailedQuery(const QSqlQuery& query) const;
+    void debugOutputFailedTransaction(const QSqlError& error) const;
 
     bool checkOperationStatus();
     bool handleWithErrorHandler(const SqlQuery* query);
@@ -75,7 +80,7 @@ public:
     void setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status);
     void queryOperationWakeAll(DatabaseCoreBackend::QueryOperationStatus status);
 
-    virtual void transactionFinished() {};
+    virtual void transactionFinished();
 
 public:
 
@@ -85,6 +90,8 @@ public:
     QHash<QThread*, int>                      databasesValid;
     // for recursive transactions
     QHash<QThread*, int>                      transactionCount;
+
+    QHash<QThread*, QSqlError>                databaseErrors;
 
     bool                                      isInTransaction;
 
@@ -102,24 +109,56 @@ public:
     QWaitCondition                            errorLockCondVar;
     DatabaseCoreBackend::QueryOperationStatus errorLockOperationStatus;
 
+    QMutex                                    busyWaitMutex;
+    QWaitCondition                            busyWaitCondVar;
+
     DatabaseErrorHandler*                     errorHandler;
 
 public :
 
-    class ErrorLocker
+    class AbstractUnlocker
     {
     public:
 
-        ErrorLocker(DatabaseCoreBackendPrivate* d);
-        ~ErrorLocker();
-        void wait();
+        AbstractUnlocker(DatabaseCoreBackendPrivate* d);
+        void finishAcquire();
+        ~AbstractUnlocker();
 
-    private:
+    protected:
 
         int count;
         DatabaseCoreBackendPrivate* const d;
     };
-    friend class ErrorLocker;
+    friend class AbstractUnlocker;
+
+    class AbstractWaitingUnlocker : public AbstractUnlocker
+    {
+    public:
+
+        AbstractWaitingUnlocker(DatabaseCoreBackendPrivate* d, QMutex* mutex, QWaitCondition* condVar);
+        ~AbstractWaitingUnlocker();
+
+        bool wait(unsigned long time = ULONG_MAX);
+
+    protected:
+
+        QMutex*         const mutex;
+        QWaitCondition* const condVar;
+    };
+
+    class ErrorLocker : public AbstractWaitingUnlocker
+    {
+    public:
+
+        ErrorLocker(DatabaseCoreBackendPrivate* d);
+        void wait();
+    };
+
+    class BusyWaiter : public AbstractWaitingUnlocker
+    {
+    public:
+        BusyWaiter(DatabaseCoreBackendPrivate* d);
+    };
 
 public :
 

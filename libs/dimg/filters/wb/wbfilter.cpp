@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Guillaume Castagnino <casta at xwing dot info>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +41,58 @@
 
 namespace Digikam
 {
+
+WBContainer::WBContainer()
+{
+    // Neutral color temperature settings.
+    black       = 0.0;
+    exposition  = 0.0;
+    temperature = 6500.0;
+    green       = 1.0;
+    dark        = 0.5;
+    gamma       = 1.0;
+    saturation  = 1.0;
+};
+
+bool WBContainer::isDefault() const
+{
+    return *this == WBContainer();
+}
+
+bool WBContainer::operator==(const WBContainer& other) const
+{
+    return black       == other.black &&
+           exposition  == other.exposition &&
+           temperature == other.temperature &&
+           green       == other.green &&
+           dark        == other.dark  &&
+           gamma       == other.gamma &&
+           saturation  == other.saturation;
+}
+
+void WBContainer::writeToFilterAction(FilterAction& action, const QString& prefix) const
+{
+    action.addParameter(prefix + "black", black);
+    action.addParameter(prefix + "exposition", exposition);
+    action.addParameter(prefix + "temperature", temperature);
+    action.addParameter(prefix + "green", green);
+    action.addParameter(prefix + "dark", dark);
+    action.addParameter(prefix + "gamma", gamma);
+    action.addParameter(prefix + "saturation", saturation);
+}
+
+WBContainer WBContainer::fromFilterAction(const FilterAction& action, const QString& prefix)
+{
+    WBContainer settings;
+    settings.black       = action.parameter(prefix + "black", settings.black);
+    settings.exposition  = action.parameter(prefix + "exposition", settings.exposition);
+    settings.temperature = action.parameter(prefix + "temperature", settings.temperature);
+    settings.green       = action.parameter(prefix + "green", settings.green);
+    settings.dark        = action.parameter(prefix + "dark", settings.dark);
+    settings.gamma       = action.parameter(prefix + "gamma", settings.gamma);
+    settings.saturation  = action.parameter(prefix + "saturation", settings.saturation);
+    return settings;
+}
 
 class WBFilterPriv
 {
@@ -74,14 +127,29 @@ public:
     float mb;
 };
 
+WBFilter::WBFilter(QObject* parent)
+    : DImgThreadedFilter(parent),
+      d(new WBFilterPriv)
+{
+    initFilter();
+}
+
+
 WBFilter::WBFilter(DImg* orgImage, QObject* parent, const WBContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "WBFilter"),
       d(new WBFilterPriv)
 {
     m_settings = settings;
-    d->WP      = m_orgImage.sixteenBit() ? 65536 : 256;
-    d->rgbMax  = m_orgImage.sixteenBit() ? 65536 : 256;
     initFilter();
+}
+
+WBFilter::WBFilter(const WBContainer& settings, DImgThreadedFilter* master,
+                   const DImg& orgImage, const DImg& destImage, int progressBegin, int progressEnd)
+    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "WBFilter"),
+      d(new WBFilterPriv)
+{
+    m_settings = settings;
+    filterImage();
 }
 
 WBFilter::~WBFilter()
@@ -92,6 +160,9 @@ WBFilter::~WBFilter()
 
 void WBFilter::filterImage()
 {
+    d->WP      = m_orgImage.sixteenBit() ? 65536 : 256;
+    d->rgbMax  = m_orgImage.sixteenBit() ? 65536 : 256;
+
     // Set final lut.
     setRGBmult();
     d->mr = d->mb = 1.0;
@@ -413,5 +484,21 @@ unsigned short WBFilter::pixelColor(int colorMult, int index, int value)
 
     return((unsigned short)CLAMP((int)((index - m_settings.saturation*(index - r)) * d->curve[index]), 0, (int)(d->rgbMax-1)));
 }
+
+FilterAction WBFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    m_settings.writeToFilterAction(action);
+
+    return action;
+}
+
+void WBFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_settings = WBContainer::fromFilterAction(action);
+}
+
 
 }  // namespace Digikam

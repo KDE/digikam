@@ -296,7 +296,7 @@ QMimeData* QueueListView::mimeData(const QList<QTreeWidgetItem*> items) const
     KUrl::List urls;
     KUrl::List kioURLs;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
 
     foreach(QTreeWidgetItem* itm, items)
     {
@@ -363,7 +363,7 @@ void QueueListView::dragMoveEvent(QDragMoveEvent* e)
 {
     int        albumID;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
     KUrl::List urls;
     KUrl::List kioURLs;
 
@@ -375,7 +375,7 @@ void QueueListView::dragMoveEvent(QDragMoveEvent* e)
         {
             ImageInfoList imageInfoList;
 
-            for (QList<int>::const_iterator it = imageIDs.constBegin();
+            for (QList<qlonglong>::const_iterator it = imageIDs.constBegin();
                  it != imageIDs.constEnd(); ++it)
             {
                 ImageInfo info(*it);
@@ -402,7 +402,7 @@ void QueueListView::dropEvent(QDropEvent* e)
 {
     int        albumID;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
     KUrl::List urls;
     KUrl::List kioURLs;
 
@@ -410,7 +410,7 @@ void QueueListView::dropEvent(QDropEvent* e)
     {
         ImageInfoList imageInfoList;
 
-        for (QList<int>::const_iterator it = imageIDs.constBegin();
+        for (QList<qlonglong>::const_iterator it = imageIDs.constBegin();
              it != imageIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);

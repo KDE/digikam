@@ -132,6 +132,11 @@ DatabaseParameters ThumbnailDatabaseAccess::parameters()
     return DatabaseParameters();
 }
 
+bool ThumbnailDatabaseAccess::isInitialized()
+{
+    return d;
+}
+
 void ThumbnailDatabaseAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler)
 {
     if (!d)

@@ -457,7 +457,7 @@ void InPaintingTool::putFinalData()
 
     d->originalImage.bitBltImage(&d->cropImage, d->maskRect.left(), d->maskRect.top());
 
-    iface.putOriginalImage(i18n("In-Painting"), d->originalImage.bits());
+    iface.putOriginalImage(i18n("In-Painting"), filter()->filterAction(), d->originalImage.bits());
 }
 
 void InPaintingTool::slotLoadSettings()

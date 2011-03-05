@@ -6,7 +6,8 @@
  * Date        : 2009-04-19
  * Description : Qt item view for images - the delegate
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011      by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +30,7 @@
 // Local includes
 
 #include "ditemdelegate.h"
+#include "imagedelegateoverlay.h"
 #include "thumbnailsize.h"
 #include "digikam_export.h"
 
@@ -37,18 +39,17 @@ namespace Digikam
 
 class ImageCategoryDrawer;
 class ImageCategorizedView;
-class ImageDelegateOverlay;
 class ImageFilterModel;
 class ImageModel;
 class ItemViewImageDelegatePrivate;
 
-class DIGIKAM_EXPORT ItemViewImageDelegate : public DItemDelegate
+class DIGIKAM_EXPORT ItemViewImageDelegate : public DItemDelegate, public ImageDelegateOverlayContainer
 {
     Q_OBJECT
 
 public:
 
-    ItemViewImageDelegate(DCategorizedView* parent);
+    ItemViewImageDelegate(QObject* parent = 0);
     ~ItemViewImageDelegate();
 
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
@@ -65,7 +66,20 @@ public:
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
                                    const QModelIndex& index, QRect* activationRect = 0) const;
 
+    int spacing() const;
+
     QRect rect() const;
+
+    /** Returns the area where the pixmap is drawn,
+     *  or null if not supported */
+    virtual QRect pixmapRect() const;
+    /** Returns the area where the image information is drawn,
+     *  or null if empty / not supported.
+     *  The image information is textual or graphical information,
+     *  but not the pixmap. The ratingRect() will e.g. typically
+     *  be contained in this area.
+     */
+    virtual QRect imageInformationRect() const;
 
     /** Can be used to temporarily disable drawing of the rating.
      *  Call with QModelIndex() afterwards. */
@@ -74,19 +88,18 @@ public:
      *  or a null rectangle if not supported. */
     virtual QRect ratingRect() const;
 
-    /** Support for overlays. To be called by the item view only. */
-    void installOverlay(ImageDelegateOverlay* overlay);
-    void removeOverlay(ImageDelegateOverlay* overlay);
-    void setAllOverlaysActive(bool active);
-    void removeAllOverlays();
-    void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index);
+    virtual void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index);
 
 protected Q_SLOTS:
 
     void slotThemeChanged();
     void slotSetupChanged();
 
+    virtual void overlayDestroyed(QObject* o);
+
 protected:
+
+    virtual QAbstractItemDelegate* asDelegate();
 
     /// Use the tool methods for painting in subclasses
     QRect drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
@@ -98,9 +111,11 @@ protected:
     void drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const;
     void drawFileSize(QPainter* p, const QRect& r, int bytes) const;
     void drawTags(QPainter* p, const QRect& r, const QString& tagsString, bool isSelected) const;
+    void drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected, int colorId) const;
+    void drawPickLabelIcon(QPainter* p, const QRect& r, int pickLabel) const;
+    void drawGroupIndicator(QPainter* p, const QRect& r, int numberOfGroupedImages, bool open) const;
     void drawFocusRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected) const;
     void drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const;
-    void drawDelegates(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     void prepareFonts();
     void prepareMetrics(int maxWidth);
     void prepareBackground();
@@ -114,7 +129,7 @@ protected:
     QPixmap ratingPixmap(int rating, bool selected) const;
 
     ItemViewImageDelegatePrivate* const d_ptr;
-    ItemViewImageDelegate(ItemViewImageDelegatePrivate& dd, DCategorizedView* parent);
+    ItemViewImageDelegate(ItemViewImageDelegatePrivate& dd, QObject* parent);
 
 private:
 

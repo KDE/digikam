@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,6 +42,12 @@ using namespace cimg_library;
 
 namespace Digikam
 {
+
+BlurFilter::BlurFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
 
 BlurFilter::BlurFilter(DImg* orgImage, QObject* parent, int radius)
     : DImgThreadedFilter(orgImage, parent, "GaussianBlur")
@@ -450,5 +457,19 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
     delete [] Kernel;
 }
 
+FilterAction BlurFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("radius", m_radius);
+
+    return action;
+}
+
+void BlurFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_radius = action.parameter("radius").toInt();
+}
 
 }  // namespace Digikam

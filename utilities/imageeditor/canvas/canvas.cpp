@@ -217,6 +217,9 @@ Canvas::Canvas(QWidget* parent)
     connect(d->im, SIGNAL(signalLoadingProgress(const QString&, float)),
             this, SIGNAL(signalLoadingProgress(const QString&, float)));
 
+    connect(d->im, SIGNAL(signalSavingStarted(const QString&)),
+            this, SIGNAL(signalSavingStarted(const QString&)));
+
     connect(d->im, SIGNAL(signalSavingProgress(const QString&, float)),
             this, SIGNAL(signalSavingProgress(const QString&, float)));
 
@@ -337,17 +340,11 @@ void Canvas::saveAs(const QString& filename, IOFileSettingsContainer* IOFileSett
                     bool setExifOrientationTag, const QString& mimeType)
 {
     d->im->saveAs(filename, IOFileSettings, setExifOrientationTag, mimeType);
-    emit signalSavingStarted(filename);
 }
 
 void Canvas::slotImageSaved(const QString& filePath, bool success)
 {
     emit signalSavingFinished(filePath, success);
-}
-
-void Canvas::switchToLastSaved(const QString& newFilename)
-{
-    d->im->switchToLastSaved(newFilename);
 }
 
 void Canvas::abortSaving()
@@ -363,6 +360,11 @@ void Canvas::setModified()
 void Canvas::readMetadataFromFile(const QString& file)
 {
     d->im->readMetadataFromFile(file);
+}
+
+QString Canvas::ensureHasCurrentUuid()
+{
+    return d->im->ensureHasCurrentUuid();
 }
 
 void Canvas::clearUndoHistory()
@@ -1355,8 +1357,9 @@ void Canvas::setBackgroundColor(const QColor& color)
     viewport()->update();
 }
 
-void Canvas::setICCSettings(ICCSettingsContainer* cmSettings)
+void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
 {
+    ICCSettingsContainer old = d->im->getICCSettings();
     d->im->setICCSettings(cmSettings);
     d->tileCache.clear();
     viewport()->update();
@@ -1389,6 +1392,8 @@ void Canvas::slotRestore()
 
 void Canvas::slotUndo(int steps)
 {
+    emit signalUndoSteps(steps);
+
     while (steps > 0)
     {
         d->im->undo();
@@ -1396,18 +1401,10 @@ void Canvas::slotUndo(int steps)
     }
 }
 
-void Canvas::getUndoHistory(QStringList& titles)
-{
-    d->im->getUndoHistory(titles);
-}
-
-void Canvas::getRedoHistory(QStringList& titles)
-{
-    d->im->getRedoHistory(titles);
-}
-
 void Canvas::slotRedo(int steps)
 {
+    emit signalRedoSteps(steps);
+
     while (steps > 0)
     {
         d->im->redo();

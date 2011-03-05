@@ -43,24 +43,29 @@ namespace Digikam
 {
 
 BWConvert::BWConvert(QObject* parent)
-    : BatchTool("BWConvert", ColorTool, parent)
+    : BatchTool("BWConvert", ColorTool, parent),
+      m_settingsView(0)
 {
     setToolTitle(i18n("B&W Convert"));
     setToolDescription(i18n("A tool to convert to black and white."));
     setToolIcon(KIcon(SmallIcon("bwtonal")));
+}
 
+BWConvert::~BWConvert()
+{
+}
+
+QWidget* BWConvert::createSettingsWidget()
+{
     QWidget* box   = new QWidget;
     m_settingsView = new BWSepiaSettings(box, &m_preview);
-    setSettingsWidget(box);
 
     m_settingsView->startPreviewFilters();
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
-}
 
-BWConvert::~BWConvert()
-{
+    return box;
 }
 
 void BWConvert::slotResetSettingsToDefault()
@@ -81,7 +86,7 @@ BatchToolSettings BWConvert::defaultSettings()
     prm.insert("toneType",   (int)defaultPrm.toneType);
     prm.insert("contrast",   (double)defaultPrm.bcgPrm.contrast);
     prm.insert("strength",   (double)defaultPrm.strength);
-    prm.insert("curves",     defaultPrm.curvesPrm.lumCurveVals);
+    prm.insert("curves",     defaultPrm.curvesPrm.values[LuminosityChannel]);
 
     return prm;
 }
@@ -95,7 +100,7 @@ void BWConvert::slotAssignSettings2Widget()
     prm.toneType               = settings()["toneType"].toInt();
     prm.bcgPrm.contrast        = settings()["contrast"].toDouble();
     prm.strength               = settings()["strength"].toDouble();
-    prm.curvesPrm.lumCurveVals = settings()["curves"].value<QPolygon>();
+    prm.curvesPrm.values[LuminosityChannel] = settings()["curves"].value<QPolygon>();
 
     m_settingsView->setSettings(prm);
 }
@@ -110,7 +115,7 @@ void BWConvert::slotSettingsChanged()
     prm.insert("toneType",   (int)currentPrm.toneType);
     prm.insert("contrast",   (double)currentPrm.bcgPrm.contrast);
     prm.insert("strength",   (double)currentPrm.strength);
-    prm.insert("curves",     currentPrm.curvesPrm.lumCurveVals);
+    prm.insert("curves",     currentPrm.curvesPrm.values[LuminosityChannel]);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -129,7 +134,7 @@ bool BWConvert::toolOperations()
     prm.toneType               = settings()["toneType"].toInt();
     prm.bcgPrm.contrast        = settings()["contrast"].toDouble();
     prm.strength               = settings()["strength"].toDouble();
-    prm.curvesPrm.lumCurveVals = settings()["curves"].value<QPolygon>();
+    prm.curvesPrm.values[LuminosityChannel] = settings()["curves"].value<QPolygon>();
 
     BWSepiaFilter bw(&image(), 0L, prm);
     bw.startFilterDirectly();

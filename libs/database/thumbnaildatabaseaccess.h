@@ -60,6 +60,7 @@ public:
     static void initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler);
     static void setParameters(const DatabaseParameters& parameters);
     static bool checkReadyForUse(InitializationObserver* observer);
+    static bool isInitialized();
 
     static void cleanUpDatabase();
 

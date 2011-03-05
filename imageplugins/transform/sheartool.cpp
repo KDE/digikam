@@ -338,7 +338,7 @@ void ShearTool::putFinalData()
 {
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginalImage(i18n("Shear Tool"), targetImage.bits(), targetImage.width(), targetImage.height());
+    iface.putOriginalImage(i18n("Shear Tool"), filter()->filterAction(), targetImage.bits(), targetImage.width(), targetImage.height());
 }
 
 }  // namespace DigikamTransformImagePlugin

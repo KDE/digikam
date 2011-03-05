@@ -35,7 +35,6 @@
 namespace Digikam
 {
 
-class ItemViewImageDelegate;
 class ItemViewHoverButton;
 
 class DIGIKAM_EXPORT ImageDelegateOverlay : public QObject
@@ -62,8 +61,9 @@ public:
 
     void setView(QAbstractItemView* view);
     QAbstractItemView* view() const;
-    void setDelegate(ItemViewImageDelegate* delegate);
-    ItemViewImageDelegate* delegate() const;
+    void setDelegate(QAbstractItemDelegate* delegate);
+    QAbstractItemDelegate* delegate() const;
+    virtual bool acceptsDelegate(QAbstractItemDelegate*) const { return true; }
 
 Q_SIGNALS:
 
@@ -78,8 +78,16 @@ protected Q_SLOTS:
 protected:
 
     QAbstractItemView*     m_view;
-    ItemViewImageDelegate* m_delegate;
+    QAbstractItemDelegate* m_delegate;
 };
+
+#define REQUIRE_DELEGATE(Delegate) \
+public: \
+    void setDelegate(Delegate* delegate) { ImageDelegateOverlay::setDelegate(delegate); } \
+    Delegate* delegate() const { return static_cast<Delegate*>(ImageDelegateOverlay::delegate()); } \
+    virtual bool acceptsDelegate(QAbstractItemDelegate*d) const { return dynamic_cast<Delegate*>(d); } \
+private:
+
 
 // -------------------------------------------------------------------------------------------
 
@@ -116,6 +124,10 @@ protected:
     /** Return true here if you want to show the overlay for the given index.
      *  The default implementation returns true. */
     virtual bool checkIndex(const QModelIndex& index) const;
+
+    /** Called when a QEvent::Leave of the viewport is received.
+     *  The default implementation hide()s. */
+    virtual void viewportLeaveEvent(QObject* obj, QEvent* event);
 
 protected Q_SLOTS:
 
@@ -165,6 +177,44 @@ protected Q_SLOTS:
 
     virtual void slotEntered(const QModelIndex& index);
     virtual void slotReset();
+
+};
+
+class DIGIKAM_EXPORT ImageDelegateOverlayContainer
+{
+public:
+
+    /**
+     * This is a sample implementation for
+     * delegate management methods, to be inherited by a delegate.
+     * Does not inherit QObject, the delegate already does.
+     */
+
+    virtual ~ImageDelegateOverlayContainer();
+
+    void installOverlay(ImageDelegateOverlay* overlay);
+    void removeOverlay(ImageDelegateOverlay* overlay);
+    void setAllOverlaysActive(bool active);
+    void setViewOnAllOverlays(QAbstractItemView* view);
+    void removeAllOverlays();
+    void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index);
+
+    /// Provide as signal in the delegate:
+    ///  void visualChange();
+
+protected:
+
+    virtual void drawDelegates(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
+    /// Declare as slot in the derived class calling this method
+    virtual void overlayDestroyed(QObject* o);
+
+    /// Returns the delegate, typically, the derived class
+    virtual QAbstractItemDelegate* asDelegate() = 0;
+
+protected:
+
+    QList<ImageDelegateOverlay*> m_overlays;
 
 };
 

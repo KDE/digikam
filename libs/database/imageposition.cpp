@@ -41,13 +41,7 @@ public:
 
     ImagePositionPriv() :
         empty(true),
-        latitudeNumber(0),
-        longitudeNumber(0),
-        altitude(0),
-        orientation(0),
-        tilt(0),
-        roll(0),
-        accuracy(0),
+        //Note: Do not initialize the QVariants here, they are expected to be null
         imageId(-1),
         dirtyFields(DatabaseFields::ImagePositionsNone)
     {
@@ -58,25 +52,25 @@ public:
         description.clear();
         latitude.clear();
         longitude.clear();
-        latitudeNumber  = 0;
-        longitudeNumber = 0;
-        altitude        = 0;
-        orientation     = 0;
-        tilt            = 0;
-        roll            = 0;
+        latitudeNumber  = QVariant();
+        longitudeNumber = QVariant();
+        altitude        = QVariant();
+        orientation     = QVariant();
+        tilt            = QVariant();
+        roll            = QVariant();
         empty           = true;
         dirtyFields     = DatabaseFields::ImagePositionsNone;
     }
 
     bool                           empty;
 
-    double                         latitudeNumber;
-    double                         longitudeNumber;
-    double                         altitude;
-    double                         orientation;
-    double                         tilt;
-    double                         roll;
-    double                         accuracy;
+    QVariant                       latitudeNumber;
+    QVariant                       longitudeNumber;
+    QVariant                       altitude;
+    QVariant                       orientation;
+    QVariant                       tilt;
+    QVariant                       roll;
+    QVariant                       accuracy;
 
     qlonglong                      imageId;
 
@@ -85,7 +79,31 @@ public:
     QString                        longitude;
 
     DatabaseFields::ImagePositions dirtyFields;
+
+    void init(DatabaseAccess& access, qlonglong imageId);
 };
+
+void ImagePositionPriv::init(DatabaseAccess& access, qlonglong id)
+{
+    imageId = id;
+
+    QVariantList values = access.db()->getImagePosition(imageId);
+
+    if (values.size() == 10)
+    {
+        empty           = false;
+        latitude        = values[0].toString();
+        latitudeNumber  = values[1];
+        longitude       = values[2].toString();
+        longitudeNumber = values[3];
+        altitude        = values[4];
+        orientation     = values[5];
+        tilt            = values[6];
+        roll            = values[7];
+        accuracy        = values[8];
+        description     = values[9].toString();
+    }
+}
 
 ImagePosition::ImagePosition()
 {
@@ -94,24 +112,14 @@ ImagePosition::ImagePosition()
 ImagePosition::ImagePosition(qlonglong imageId)
 {
     d = new ImagePositionPriv;
-    d->imageId = imageId;
+    DatabaseAccess access;
+    d->init(access, imageId);
+}
 
-    QVariantList values = DatabaseAccess().db()->getImagePosition(imageId);
-
-    if (values.size() == 10)
-    {
-        d->empty           = false;
-        d->latitude        = values[0].toString();
-        d->latitudeNumber  = values[1].toDouble();
-        d->longitude       = values[2].toString();
-        d->longitudeNumber = values[3].toDouble();
-        d->altitude        = values[4].toDouble();
-        d->orientation     = values[5].toDouble();
-        d->tilt            = values[6].toDouble();
-        d->roll            = values[7].toDouble();
-        d->accuracy        = values[8].toDouble();
-        d->description     = values[9].toString();
-    }
+ImagePosition::ImagePosition(DatabaseAccess& access, qlonglong imageId)
+{
+    d = new ImagePositionPriv;
+    d->init(access, imageId);
 }
 
 ImagePosition::ImagePosition(const ImagePosition& other)
@@ -167,7 +175,7 @@ double ImagePosition::latitudeNumber() const
         return 0;
     }
 
-    return d->latitudeNumber;
+    return d->latitudeNumber.toDouble();
 }
 
 double ImagePosition::longitudeNumber() const
@@ -177,7 +185,7 @@ double ImagePosition::longitudeNumber() const
         return 0;
     }
 
-    return d->longitudeNumber;
+    return d->longitudeNumber.toDouble();
 }
 
 QString ImagePosition::latitudeFormatted() const
@@ -227,7 +235,7 @@ double ImagePosition::altitude() const
         return 0;
     }
 
-    return d->altitude;
+    return d->altitude.toDouble();
 }
 
 QString ImagePosition::altitudeFormatted() const
@@ -247,7 +255,7 @@ double ImagePosition::orientation() const
         return 0;
     }
 
-    return d->orientation;
+    return d->orientation.toDouble();
 }
 
 double ImagePosition::tilt() const
@@ -257,7 +265,7 @@ double ImagePosition::tilt() const
         return 0;
     }
 
-    return d->tilt;
+    return d->tilt.toDouble();
 }
 
 double ImagePosition::roll() const
@@ -267,7 +275,7 @@ double ImagePosition::roll() const
         return 0;
     }
 
-    return d->roll;
+    return d->roll.toDouble();
 }
 
 double ImagePosition::accuracy() const
@@ -277,7 +285,7 @@ double ImagePosition::accuracy() const
         return 0;
     }
 
-    return d->accuracy;
+    return d->accuracy.toDouble();
 }
 
 QString ImagePosition::description() const
@@ -288,6 +296,36 @@ QString ImagePosition::description() const
     }
 
     return d->description;
+}
+
+bool ImagePosition::hasCoordinates() const
+{
+    return d && !d->latitudeNumber.isNull() && !d->longitudeNumber.isNull();
+}
+
+bool ImagePosition::hasAltitude() const
+{
+    return d && !d->altitude.isNull();
+}
+
+bool ImagePosition::hasOrientation() const
+{
+    return d && !d->orientation.isNull();
+}
+
+bool ImagePosition::hasTilt() const
+{
+    return d && !d->tilt.isNull();
+}
+
+bool ImagePosition::hasRoll() const
+{
+    return d && !d->roll.isNull();
+}
+
+bool ImagePosition::hasAccuracy() const
+{
+    return d && !d->accuracy.isNull();
 }
 
 bool ImagePosition::setLatitude(const QString& latitude)

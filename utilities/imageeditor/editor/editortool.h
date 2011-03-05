@@ -36,6 +36,7 @@
 #include "digikam_export.h"
 #include "dcolor.h"
 #include "previewtoolbar.h"
+#include "filteraction.h"
 
 namespace Digikam
 {
@@ -56,9 +57,12 @@ public:
 
     QString             toolHelp() const;
     QString             toolName() const;
+    int                 toolVersion() const;
     QPixmap             toolIcon() const;
     QWidget*            toolView() const;
     EditorToolSettings* toolSettings() const;
+
+    FilterAction::Category toolCategory() const;
 
     virtual void        ICCSettingsChanged();
     virtual void        exposureSettingsChanged();
@@ -80,8 +84,10 @@ protected:
     void setToolInfoMessage(const QString& txt);
     void setToolHelp(const QString& anchor);
     void setToolName(const QString& name);
+    void setToolVersion(const int version);
     void setToolIcon(const QPixmap& icon);
     void setPreviewModeMask(int mask);
+    void setToolCategory(const FilterAction::Category category);
 
     virtual void setToolView(QWidget* view);
     virtual void setToolSettings(EditorToolSettings* settings);

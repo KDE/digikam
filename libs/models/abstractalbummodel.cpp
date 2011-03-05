@@ -513,6 +513,11 @@ void AbstractAlbumModel::slotAlbumIconChanged(Album* album)
 
 void AbstractAlbumModel::slotAlbumRenamed(Album* album)
 {
+    if (!filterAlbum(album))
+    {
+        return;
+    }
+
     QModelIndex index = indexForAlbum(album);
     emit dataChanged(index, index);
 }

@@ -79,9 +79,6 @@ public:
 
     QPersistentModelIndex     editingRating;
 
-    QList<ImageDelegateOverlay*>
-    overlays;
-
     ItemViewImageDelegate*    q;
 
     QRect                     oneRowRegRect;

@@ -75,6 +75,7 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
     bool folders = (metaData("folders") == "true");
+    QString special = metaData("specialTagListing");
 
     if (folders)
     {
@@ -93,8 +94,19 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
         lister.setRecursive(recursive);
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
-        lister.list(&receiver, kurl);
-        // send rest
+
+        if (!special.isNull())
+        {
+            QString searchXml = lister.tagSearchXml(kurl, special);
+            lister.setAllowExtraValues(true); // pass property value as extra value, different binary protocol
+            lister.listImageTagPropertySearch(&receiver, searchXml);
+        }
+        else
+        {
+            lister.list(&receiver, kurl);
+        }
+
+        // finish sending
         receiver.sendData();
     }
 

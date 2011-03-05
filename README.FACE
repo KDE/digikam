@@ -1,0 +1,20 @@
+While running a scan, we assign a tag to images, indicating whether they have been scanned or not.
+In this case, we tag the scanned images with the "/Scanned/Scanned for Faces" tag.
+This allows us to easily know if the image has been scanned or not, since this does not involve
+coding a new table. Other jobs which need to "mark" images like this can create their own "/Scanned/<Name of job>" tag.
+I am not aware of any other simpler mechanism of "marking" images like this without making my own table.
+
+Since we do not want such tags from being written to the metadata or shown to the user, we can have a check that omits all tags under
+"Scanned" from these operations.
+
+=============================
+
+Initially, when any face scan is run (either from an image preview or a batch job), we
+create a tag for People and a subtag for Unknown people, in the form "/People/Unknown".
+
+Now, when a face is detected (not identified) in an image, we must assign this "Unknown" tag to that image.
+After that, we must add the property with a key "faceRegion" to the image-tag pair and with a value 
+which is the region rectangle in the form of an SVG rect.
+
+When the face is later identified by the user/recognizer, we must assign a new tag "/People/<Person Name>" to the image,
+and move the "faceRegion" property with the relevant rect to this tag, and delete this property from "/People/Unknown" for this image.

@@ -39,6 +39,7 @@
 // Local includes
 
 #include "iccsettings.h"
+#include "kmemoryinfo.h"
 
 namespace Digikam
 {
@@ -92,8 +93,9 @@ void LoadingCache::cleanUp()
 LoadingCache::LoadingCache()
     : d(new LoadingCachePriv(this))
 {
-    setCacheSize(60);
-    setThumbnailCacheSize(5, 100);
+    KMemoryInfo memory = KMemoryInfo::currentInfo();
+    setCacheSize(qBound(60, int(memory.megabytes(KMemoryInfo::TotalRam)*0.05), 200));
+    setThumbnailCacheSize(5, 100); // the pixmap number should not be based on system memory, it's graphics memory
 
     // good place to call it here as LoadingCache is a singleton
     qRegisterMetaType<LoadingDescription>("LoadingDescription");
@@ -174,6 +176,7 @@ void LoadingCache::notifyNewLoadingProcess(LoadingProcess* process, LoadingDescr
 
 void LoadingCache::setCacheSize(int megabytes)
 {
+    kDebug() << "Allowing a cache size of" << megabytes << "MB";
     d->imageCache.setMaxCost(megabytes * 1024 * 1024);
 }
 

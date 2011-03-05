@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : digiKam light table preview item.
  *
- * Copyright (C) 2006-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,7 +50,6 @@ class LoadingDescription;
 
 class LightTablePreview : public PreviewWidget
 {
-
     Q_OBJECT
 
 public:
@@ -85,6 +84,7 @@ Q_SIGNALS:
     void signalEditItem(const ImageInfo&);
     void signalPreviewLoaded(bool success);
     void signalSlideShow();
+    void signalPopupTagsView();
 
 protected:
 
@@ -98,6 +98,8 @@ private Q_SLOTS:
     void slotContextMenu();
     void slotAssignTag(int tagID);
     void slotRemoveTag(int tagID);
+    void slotAssignPickLabel(int pickId);
+    void slotAssignColorLabel(int colorId);
     void slotAssignRating(int rating);
     void slotThemeChanged();
 

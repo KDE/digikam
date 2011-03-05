@@ -7,6 +7,7 @@
  * Description : black and white image filter.
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,6 +70,13 @@ public:
     BWSepiaContainer settings;
 };
 
+BWSepiaFilter::BWSepiaFilter(QObject* parent)
+    : DImgThreadedFilter(parent),
+      d(new BWSepiaFilterPriv)
+{
+    initFilter();
+}
+
 BWSepiaFilter::BWSepiaFilter(DImg* orgImage, QObject* parent, const BWSepiaContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "BWSepiaFilter"),
       d(new BWSepiaFilterPriv)
@@ -91,7 +99,7 @@ void BWSepiaFilter::filterImage()
     }
     else
     {
-        m_destImage.putImageData(m_orgImage.bits());
+        m_destImage = m_orgImage;
         postProgress(10);
 
         // Apply black and white filter.
@@ -483,5 +491,37 @@ void BWSepiaFilter::applyToneFilter(DImg& img, TonalityContainer& settings)
     tone.startFilterDirectly();
     img.putImageData(tone.getTargetImage().bits());
 }
+
+FilterAction BWSepiaFilter::filterAction()
+{
+    DefaultFilterAction<BWSepiaFilter> action(d->settings.curvesPrm.isStoredLosslessly());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("filmType", d->settings.filmType);
+    action.addParameter("filterType", d->settings.filterType);
+    action.addParameter("preview", d->settings.preview);
+    action.addParameter("previewType", d->settings.previewType);
+    action.addParameter("strength", d->settings.strength);
+    action.addParameter("toneType", d->settings.toneType);
+
+    d->settings.curvesPrm.writeToFilterAction(action);
+    d->settings.bcgPrm.writeToFilterAction(action);
+
+    return action;
+}
+
+void BWSepiaFilter::readParameters(const FilterAction& action)
+{
+    d->settings.filmType = action.parameter("filmType").toInt();
+    d->settings.filterType = action.parameter("filterType").toInt();
+    d->settings.preview = action.parameter("preview").toBool();
+    d->settings.previewType = action.parameter("previewType").toInt();
+    d->settings.strength = action.parameter("strength").toDouble();
+    d->settings.toneType = action.parameter("toneType").toInt();
+
+    d->settings.curvesPrm = CurvesContainer::fromFilterAction(action);
+    d->settings.bcgPrm    = BCGContainer::fromFilterAction(action);
+}
+
 
 }  // namespace Digikam

@@ -27,19 +27,16 @@
 
 // Qt includes
 
-#include <QtCore/QEvent>
-#include <QtCore/QThread>
-#include <QtCore/QString>
-
 // KDE includes
 
-#include <kapplication.h>
+#include <klocalizedstring.h>
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimg.h"
 #include "dynamicthread.h"
-#include "digikam_export.h"
+#include "filteraction.h"
 
 class QObject;
 
@@ -53,13 +50,14 @@ class DIGIKAM_EXPORT DImgThreadedFilter : public DynamicThread
 public:
 
     /** Constructs a filter without argument.
-        You need to call setOriginalImage(), setFilterName(), and startFilter()
+        You need to call setupFilter() and startFilter()
         to start the threaded computation.
         To run filter without to use multithreading, call startFilterDirectly().
     */
-    DImgThreadedFilter(QObject* parent=0);
+    DImgThreadedFilter(QObject* parent=0, const QString& name = QString());
 
     /** Constructs a filter with all arguments (ready to use).
+        The given original image will be copied.
         You need to call startFilter() to start the threaded computation.
         To run filter without to use multithreading, call startFilterDirectly().
     */
@@ -68,9 +66,19 @@ public:
 
     ~DImgThreadedFilter();
 
+    /** You need to call this and then start filter of you used
+     *  the constructor not setting an original image.
+     *  The original image's data will not be copied.
+     */
+    void setupFilter(const DImg& orgImage);
+
+    /** Initializes the filter for use as a slave and directly starts computation (in-thread)
+     */
+    void setupAndStartDirectly(const DImg& orgImage, DImgThreadedFilter* master,
+                               int progressBegin = 0, int progressEnd = 100);
+
     void setOriginalImage(const DImg& orgImage);
     void setFilterName(const QString& name);
-    void setParent(QObject* parent);
 
     DImg getTargetImage()
     {
@@ -87,6 +95,35 @@ public:
     virtual void cancelFilter();
     /** Start computation of this filter, directly in this thread. */
     virtual void startFilterDirectly();
+
+    /** Returns the action description corresponding to currently set options */
+    virtual FilterAction filterAction() = 0;
+    virtual void readParameters(const FilterAction&) = 0;
+    /** Return the identifier for this filter in the image history */
+    virtual QString filterIdentifier() const = 0;
+    virtual QList<int> supportedVersions() const;
+
+    /** Set the filter version. A filter may implement different versions, to preserve
+     *  image history when the algorithm is changed.
+     *  Any value set here must be contained in supportedVersions, otherwise
+     *  this call will be ignored. Default value is 1.
+     */
+    void setFilterVersion(int version);
+    int filterVersion() const;
+
+    /**
+     * Optional: error handling for readParameters.
+     * When readParameters() has been called, this method will return true
+     * if the call was successful, and false if not.
+     * If returning false, readParametersError() will give an error message.
+     * The default implementation always returns success. You only need to reimplement
+     * when a filter is likely to fail in a different environment, e.g.
+     * depending on availability of installed files.
+     * These methods have an undefined return value if readParameters() was not called
+     * previously.
+     */
+    virtual bool parametersSuccessfullyRead() const;
+    virtual QString readParametersError(const FilterAction& actionThatFailed) const;
 
 Q_SIGNALS:
 
@@ -132,6 +169,7 @@ protected:
       Constructs a new slave filter with the specified master.
       The filter will be executed in the current thread.
       orgImage and destImage will not be copied.
+      Note that the slave is still free to reallocate his destImage.
       progressBegin and progressEnd can indicate the progress span
       that the slave filter uses in the parent filter's progress.
       Any derived filter class that is publicly available to other filters
@@ -140,6 +178,11 @@ protected:
     DImgThreadedFilter(DImgThreadedFilter* master, const DImg& orgImage, const DImg& destImage,
                        int progressBegin=0, int progressEnd=100, const QString& name=QString());
 
+    /** Initialize the filter for use as a slave - reroutes progress info to master.
+     *  Note: Computation will be started from setupFilter().
+     */
+    void initSlave(DImgThreadedFilter* master, int progressBegin = 0, int progressEnd = 100);
+
     /** Inform the master that there is currently a slave. At destruction of the slave, call with slave=0. */
     void setSlave(DImgThreadedFilter* slave);
 
@@ -147,7 +190,34 @@ protected:
         Called by postProgress if master is not null. */
     virtual int modulateProgress(int progress);
 
+    void initMaster();
+    void prepareDestImage();
+
+    /**
+     * Convenience class to spare the few repeating lines of code
+     */
+    template <class Filter>
+    class DefaultFilterAction : public FilterAction
+    {
+    public:
+        DefaultFilterAction(FilterAction::Category category = FilterAction::ReproducibleFilter)
+            : FilterAction(Filter::FilterIdentifier(), Filter::CurrentVersion(), category)
+        {
+            setDisplayableName(Filter::DisplayableName());
+        }
+
+        DefaultFilterAction(bool isReproducible)
+            : FilterAction(Filter::FilterIdentifier(), Filter::CurrentVersion(),
+                           isReproducible ? FilterAction::ReproducibleFilter : FilterAction::ComplexFilter)
+        {
+            setDisplayableName(Filter::DisplayableName());
+        }
+
+    };
+
 protected:
+
+    int                 m_version;
 
     bool                m_wasCancelled;
 
@@ -155,9 +225,6 @@ protected:
     int                 m_progressBegin;
     int                 m_progressSpan;
     int                 m_progressCurrent;  // To prevent signals bombarding with progress indicator value in postProgress().
-
-    /** To post event from thread to parent. */
-    QObject*            m_parent;
 
     /** Filter name.*/
     QString             m_name;

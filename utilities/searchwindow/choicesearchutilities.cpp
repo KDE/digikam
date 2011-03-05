@@ -256,10 +256,10 @@ void ChoiceSearchComboBox::labelClicked()
     showPopup();
 }
 
-void ChoiceSearchComboBox::installView()
+void ChoiceSearchComboBox::installView(QAbstractItemView* v)
 {
     // make protected again
-    ListViewComboBox::installView();
+    ListViewComboBox::installView(v);
 
     //view()->setHeaderHidden(true);
     view()->setAlternatingRowColors(true);

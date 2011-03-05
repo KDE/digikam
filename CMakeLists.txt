@@ -1,4 +1,8 @@
+
 PROJECT(digikam)
+
+MESSAGE(STATUS "----------------------------------------------------------------------------------")
+MESSAGE(STATUS "Starting CMake configuration for: digikam")
 
 OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
 OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
@@ -7,12 +11,12 @@ OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default
 # Information to update before to release this package.
 
 # digiKam version
-SET(DIGIKAM_MAJOR_VERSION "1")
-SET(DIGIKAM_MINOR_VERSION "9")
+SET(DIGIKAM_MAJOR_VERSION "2")
+SET(DIGIKAM_MINOR_VERSION "0")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2011-02-19")
+SET(DIGIKAM_RELEASE_DATE "2011-03-27")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -21,7 +25,7 @@ SET(DIGIKAM_RELEASE_DATE "2011-02-19")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "")
+SET(DIGIKAM_SUFFIX_VERSION "-beta4")
 
 # ==================================================================================================
 # Set env. variables accordingly.
@@ -131,6 +135,7 @@ INCLUDE(KDE4Defaults)
 INCLUDE(MacroLibrary)
 
 INCLUDE(FindPackageHandleStandardArgs)
+SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
 FIND_PACKAGE(LCMS)
 FIND_PACKAGE(JPEG)
@@ -140,8 +145,21 @@ FIND_PACKAGE(Jasper)
 FIND_PACKAGE(Kdcraw)
 FIND_PACKAGE(Kexiv2)
 FIND_PACKAGE(Kipi)
+FIND_PACKAGE(Kface)
+FIND_PACKAGE(Kmap)
 FIND_PACKAGE(PGF)
 FIND_PACKAGE(CLAPACK)
+FIND_PACKAGE(Boost) # 1.36.0)
+
+IF(Boost_FOUND)
+    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+ENDIF(Boost_FOUND)
+
+#---------------following code is to add the QtScript libraries-----------------------
+
+TARGET_LINK_LIBRARIES(${QT_QTSCRIPT_LIBRARY})
+
+#-------------------------------------------------------------------------------------
 
 MACRO_BOOL_TO_01(PGF_FOUND USE_EXT_LIBPGF)
 IF(NOT APPLE)
@@ -163,32 +181,6 @@ ELSE ("${jpeglib_version}" LESS 80)
     SET(DIGIKAM_LIBJPEG_DIR libjpeg-80)
 ENDIF ("${jpeglib_version}" LESS 80)
 
-# Check KDcraw version installed to compile fine.
-IF(NOT WIN32)
-    FIND_PACKAGE(PkgConfig)
-    PKG_CHECK_MODULES(Kdcraw libkdcraw>=1.1.0)
-    IF(Kdcraw_FOUND)
-        SET(KDCRAW_FOR_DIGIKAM TRUE)
-    ELSE(Kdcraw_FOUND)
-        SET(KDCRAW_FOR_DIGIKAM FALSE)
-    ENDIF(Kdcraw_FOUND)
-ELSE(NOT WIN32)
-    SET(KDCRAW_FOR_DIGIKAM TRUE)
-ENDIF(NOT WIN32)
-
-# Check KExiv2 version installed to compile fine.
-IF(NOT WIN32)
-    FIND_PACKAGE(PkgConfig)
-    PKG_CHECK_MODULES(Kexiv2 libkexiv2>=1.1.0)
-    IF(Kexiv2_FOUND)
-        SET(KEXIV2_FOR_DIGIKAM TRUE)
-    ELSE(Kexiv2_FOUND)
-        SET(KEXIV2_FOR_DIGIKAM FALSE)
-    ENDIF(Kexiv2_FOUND)
-ELSE(NOT WIN32)
-    SET(KEXIV2_FOR_DIGIKAM TRUE)
-ENDIF(NOT WIN32)
-
 # Check MySQL executables
 FIND_PROGRAM( SERVERCMD_MYSQL mysqld
               PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec /opt/local/libexec
@@ -204,6 +196,27 @@ FIND_PROGRAM( INITCMD_MYSQL mysql_install_db mysql_install_db5 mysql_install_db.
                     ENV MYSQL_TOOLS_PATH )
 MESSAGE(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
 
+# check the libkdcraw version
+# note that old versions don't specify version information, so for now
+# just inform the user if version information was found
+SET(KDCRAW_MIN_VERSION "2.0.0")
+IF (KDCRAW_VERSION)
+  MESSAGE(STATUS "libkdcraw: Found version ${KDCRAW_VERSION} (required: ${KDCRAW_MIN_VERSION})")
+  IF (${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
+    SET(KDCRAW_FOUND FALSE)
+  ENDIF (${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
+ELSE (KDCRAW_VERSION)
+  MESSAGE(WARNING "libkdcraw: Version information not found, your version is probably too old.")
+ENDIF (KDCRAW_VERSION)
+
+# check the libkmap version
+# note that old versions don't specify version information, so for now
+# just inform the user if version information was found
+IF (KMAP_VERSION)
+  MESSAGE(STATUS "libkmap: Found version ${KMAP_VERSION}")
+  # TODO: fail if the version is too low
+ENDIF (KMAP_VERSION)
+
 # ==================================================================================================
 # Optional dependencies
 
@@ -214,13 +227,6 @@ MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
 MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
-
-# Check MarbleWidget library for geolocation.
-MACRO_OPTIONAL_FIND_PACKAGE(MarbleWidget)
-MACRO_BOOL_TO_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
-IF (MARBLEWIDGET_FOUND)
-    INCLUDE(libs/imageproperties/markerclusterholderplugin/CheckPluginBuildable.cmake)
-ENDIF (MARBLEWIDGET_FOUND)
 
 # Check GLib2 library for lrqr-1 and lensfun libraries.
 MACRO_OPTIONAL_FIND_PACKAGE(GLIB2)
@@ -261,7 +267,7 @@ MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 
 # Set config files accordingly with optional dependencies
 
-CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
+CONFIGURE_FILE(digikam/utils/config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/config-digikam.h)
 CONFIGURE_FILE(libs/3rdparty/lensfun/config-lensfun.h.cmake
                ${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/config-lensfun.h)
 
@@ -274,6 +280,8 @@ MESSAGE(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <http:
 MESSAGE(STATUS "")
 
 PRINT_QTMODULE_STATUS("Qt4 SQL" QT_QTSQL_FOUND)
+PRINT_QTMODULE_STATUS("Qt4 SCRIPT" QT_QTSCRIPT_FOUND)
+PRINT_QTMODULE_STATUS("Qt4 SCRIPTTOOLS" QT_QTSCRIPTTOOLS_FOUND)
 PRINT_EXECUTABLE_STATUS("MySQL Server" mysqld MYSQLD_PATH SERVERCMD_MYSQL)
 IF (NOT WIN32)
     PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
@@ -282,9 +290,12 @@ PRINT_LIBRARY_STATUS("libtiff" "http://www.remotesensing.org/libtiff" "" TIFF_FO
 PRINT_LIBRARY_STATUS("libpng" "http://www.libpng.org/pub/png/libpng.html" " (version >= 1.2.7)" PNG_FOUND)
 PRINT_LIBRARY_STATUS("libjasper" "http://www.ece.uvic.ca/~mdadams/jasper" "" JASPER_FOUND)
 PRINT_LIBRARY_STATUS("liblcms" "http://www.littlecms.com" "" LCMS_FOUND)
-PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 0.2.0)" KIPI_FOUND)
-PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 1.1.0)" KEXIV2_FOR_DIGIKAM)
-PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 1.1.0)" KDCRAW_FOR_DIGIKAM)
+PRINT_LIBRARY_STATUS("Boost Graph" "http://www.boost.org/doc/libs/1_43_0/libs/graph/doc/index.html" " (headers only)" Boost_FOUND)
+PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KIPI_FOUND)
+PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KEXIV2_FOUND)
+PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
+PRINT_LIBRARY_STATUS("libkface" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KFACE_FOUND)
+PRINT_LIBRARY_STATUS("libkmap" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KMAP_FOUND)
 
 IF(PGF_FOUND)
     MESSAGE(STATUS " libpgf library found..................... YES (optional)")
@@ -333,20 +344,6 @@ ELSE(KDEPIMLIBS_FOUND)
     MESSAGE(STATUS "")
 ENDIF(KDEPIMLIBS_FOUND)
 
-IF(MARBLEWIDGET_FOUND)
-    MESSAGE(STATUS " libmarblewidget library found............ YES (optional)")
-    IF(MARBLEWIDGET_SUPPORTS_PLUGINS)
-      MESSAGE(STATUS " Can build Marble plugin.................. YES (optional)")
-    ELSE(MARBLEWIDGET_SUPPORTS_PLUGINS)
-      MESSAGE(STATUS " Can build Marble plugin.................. NO  (optional)")
-    ENDIF(MARBLEWIDGET_SUPPORTS_PLUGINS)
-ELSE(MARBLEWIDGET_FOUND)
-    MESSAGE(STATUS " libmarblewidget library found............ NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without geolocation using Marble widget support.")
-    MESSAGE(STATUS "")
-ENDIF(MARBLEWIDGET_FOUND)
-
 IF(NEPOMUK_FOUND)
     MESSAGE(STATUS " Nepomuk libraries found.................. YES (optional)")
 ELSE(NEPOMUK_FOUND)
@@ -392,13 +389,13 @@ ELSE(DOXYGEN_FOUND)
 
 ENDIF(DOXYGEN_FOUND)
 
-IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND)
+IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
     MESSAGE(STATUS " digiKam can be compiled.................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
-ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND)
+ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND)
+ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
 
 IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND) OR (NOT LENSFUN_FOUND)))
     MESSAGE(STATUS "")
@@ -427,13 +424,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                    "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake"
                    @ONLY)
 
-    ADD_CUSTOM_COMMAND(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/digikam/gitversion.h"
+    ADD_CUSTOM_COMMAND(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/gitversion.h"
                        DEPENDS ${GIT_MARKER}
                        COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake")
 
     # Add a custom target to drive the custom command.
     ADD_CUSTOM_TARGET(digikam-gitversion
-                      ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/digikam/gitversion.h")
+                      ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/gitversion.h")
 
     # ==================================================================================================
     # get the gcc version
@@ -473,6 +470,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                     ${KDE4_DEFINITIONS}
                     ${KDCRAW_DEFINITIONS}
                     ${KEXIV2_DEFINITIONS}
+                    ${KFACE_DEFINITIONS}
+                    ${KMAP_DEFINITIONS}
                    )
 
     # QT3 support rules
@@ -486,8 +485,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
                         ${KEXIV2_INCLUDE_DIR}
                         ${KDCRAW_INCLUDE_DIR}
+                        ${KFACE_INCLUDE_DIR}
+                        ${KMAP_INCLUDE_DIR}
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
+                        ${QT_QTSCRIPT_INCLUDE_DIR}                #to include the QtScript include directories
                         ${GPHOTO2_INCLUDE_DIRS}
                         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
                         ${CMAKE_CURRENT_BINARY_DIR}/digikam
@@ -496,10 +498,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(NEPOMUK_FOUND)
         INCLUDE_DIRECTORIES(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDE_DIR})
     ENDIF(NEPOMUK_FOUND)
-
-    IF(MARBLEWIDGET_FOUND)
-        INCLUDE_DIRECTORIES(${LIBMARBLEWIDGET_INCLUDE_DIR})
-    ENDIF(MARBLEWIDGET_FOUND)
 
     IF(PGF_FOUND)
        INCLUDE_DIRECTORIES(${PGF_INCLUDE_DIRS})
@@ -643,6 +641,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dimgscale.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dcolor.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dcolorcomposer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory/dimagehistory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory/filteraction.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory/historyimageid.cpp
        )
 
     SET(libdimgloaders_SRCS
@@ -665,12 +666,19 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libdimgfilters_SRCS
         ${libclapack_SRCS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgbuiltinfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgfiltermanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgfiltergenerator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/filteractionfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/randomnumbergenerator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/rawprocessingfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/borderfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/bordersettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/texturefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfxfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/colorfxfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/distortionfxfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/charcoalfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/embossfilter.cpp
@@ -698,6 +706,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hslfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hslsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hspreviewwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccprofile.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccprofilesettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/icctransform.cpp
@@ -719,11 +728,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/imagehistogram.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogrambox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogramwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogrampainter.cpp        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/imagecurves.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogrampainter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/imagecurves.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvesfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvessettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curveswidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvesbox.cpp        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvesbox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/freerotationfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/freerotationsettings.cpp
@@ -754,6 +765,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ENDIF(GLIB2_FOUND)
 
     SET(libdmetadata_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatasettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatasettingscontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatainfo.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/photoinfocontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/dmetadata.cpp
@@ -762,20 +775,22 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/captionvalues.cpp
        )
 
+    SET(libversionmanager_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager/versionmanager.cpp
+       )
+
     SET(libimageproperties_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiestab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesmetadatatab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiescolorstab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesgpstab.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/worldmapwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagegpsmodelhelper.cpp
        )
 
-    IF(MARBLEWIDGET_FOUND)
-        SET(libimageproperties_SRCS ${libimageproperties_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/markerclusterholder.cpp
-        )
-    ENDIF(MARBLEWIDGET_FOUND)
+    SET(libkmaphelper_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/kmaphelper/digikam2kmap.cpp
+       )
 
     # --enable-final triggers: http://bugs.kde.org/show_bug.cgi?id=126326
     # digikam: camera download: auto-rotated images lose EXIF info ...
@@ -828,6 +843,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libcommonwidgets_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/abstractitemdragdrophandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/buttonicondisabler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorgradientwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/comboboxutilities.cpp
@@ -840,6 +856,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ditemtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dlogoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dpopupmenu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dragdropimplementations.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/drubberband.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dzoombar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
@@ -847,7 +864,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewhoverbutton.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewimagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewtooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/kcategorizedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/digikamkcategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/knotificationwrapper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/modelcompletion.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/paniconwidget.cpp
@@ -856,15 +873,28 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/sidebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/splashscreen.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statesavingobject.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusled.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusnavigatebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusprogressbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbardock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbartooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/rexpanderboxexclusive.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/workingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ratingwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorlabelwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/picklabelwidget.cpp
+       )
+
+    SET(libgraphicsviewwidgets_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/clickdragreleaseitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/dimgchilditem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/dimgpreviewitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/regionframeitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/graphicsdimgitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/graphicsdimgview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/imagezoomsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/previewlayout.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/itemvisibilitycontroller.cpp
        )
 
     SET(libiccprofileswidgets_SRCS
@@ -885,6 +915,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/exifwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/makernotewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/xmpwidget.cpp
+       )
+
+    SET(libscriptiface_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/scriptiface.cpp
        )
 
     SET(libslideshow_SRCS
@@ -916,7 +950,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/colorcorrectiondlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/softproofdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/dimginterface.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccmanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccpostloadingmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/canvas.cpp
        )
 
@@ -926,7 +960,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(librawimport_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawpostprocessing.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawimport.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawpreview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawsettingsbox.cpp
@@ -967,14 +1000,16 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libdialogs_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/infodlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dprogressdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dbusydlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/filesaveoptionsdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/rawcameradlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/infodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/libsinfodlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/rawcameradlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/triplechoicedialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/daboutdata.cpp
        )
 
     SET(libdeletedialog_SRCS
@@ -1004,6 +1039,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameratype.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdatabase.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupscriptmanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupfacetags.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupversioning.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/scriptplugintype.cpp
        )
 
     SET(libkipiiface_SRCS
@@ -1016,6 +1055,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libnepomukservices_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk/digikamnepomukservice.cpp
+       )
+
+    SET(libfacedetection_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/databaseface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/faceiface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facegroup.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facepipeline.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facescandialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/assignnamewidget.cpp
        )
 
     SET(libfirstrun_SRCS
@@ -1052,6 +1100,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
        )
 
+#    SET(libmaintenancemgr_SRCS
+#        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenancemgr/maintenancemgrdlg.cpp
+#       )
+
     SET(libbatch_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfojob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfoalbumsjob.cpp
@@ -1059,6 +1111,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchalbumssyncmetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchsyncmetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/fingerprintsgenerator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchfacedetector.cpp
        )
 
     SET(libdatabasecore_SRCS
@@ -1070,7 +1123,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseconfigelement.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlquery.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/dbactiontype.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagregion.cpp
        )
+
+    # We must set this variable here at top level because it is used in both
+    # digikam/database and data/database
+    SET(DBCONFIG_XML_VERSION "1")
 
     SET(libdatabase_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
@@ -1082,9 +1140,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseaccess.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasewatch.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasebackend.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseoperationgroup.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasetransaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseurl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasechangesets.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseconstants.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasethumbnailinfoprovider.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/downloadhistory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagecomments.cpp
@@ -1098,14 +1158,19 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagecopyright.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagequerybuilder.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagescanner.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagetagpair.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/namefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/searchxml.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagproperties.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasechecker.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecopymanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseserverstarter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagscache.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseservererror.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory/imagehistorygraph.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory/imagehistorygraphmodel.cpp
        )
 
     SET(libdatabaseui_SRCS
@@ -1152,16 +1217,24 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/where.c
        )
 
+    SET(libkmemoryinfo_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo/kmemoryinfo.cpp
+       )
+
     SET(libhaar_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/haar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/haariface.cpp
+       )
+
+    SET(libgenericmodels_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/categorizeditemmodel.cpp
        )
 
     SET(libdatabasemodels_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagemodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltersettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagemodeldragdrophandler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagelistmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagesortsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagethumbnailmodel.cpp
        )
@@ -1179,6 +1252,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablepreview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttableview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablebar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablethumbbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp
        )
 
@@ -1204,187 +1278,245 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libgpssearch_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpsmarkertiler.cpp
        )
 
-    SET(libtimeline_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
+    SET(libimageversionssidebar_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imageversionsmodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesversionstab.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/versionsdelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/versionstreeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/versionsoverlays.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/versionswidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filtershistorywidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistorytreeitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistorymodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistoryview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistoryitemdelegate.cpp
        )
 
     SET(libdigikamgui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/addtagslineedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumdragdrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumhistory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumiconviewfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albummanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albummodificationhelper.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumpropsedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectcombobox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectdialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectiontreeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumthumbnailloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumtreeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumwidgetstack.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/contextmenuhelper.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/datefolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dbstatdlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ddragobjects.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview_p.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimagedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikammodelcollection.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dio.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/editablesearchtreeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/icongroupitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageattributeswatch.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorizedview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorydrawer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedragdrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewbar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageratingoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagerotationoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagethumbnailbar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagethumbnaildelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageselectionoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageviewutilities.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdateedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatepickerpopup.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatetimeedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/leftsidebarwidgets.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mediaplayerview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatahub.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatamanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mimefilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/monthwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingpopupmenu.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/scancontroller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/sidebarwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/syncjob.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagcheckview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagdragdrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tageditdlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfiltersidebarwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagmodificationhelper.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagspopupmenu.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tooltipfiller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseguierrorhandler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/main/digikamapp.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/album.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumhistory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albummanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albummodificationhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumpropsedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectcombobox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectiontreeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumthumbnailloader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumtreeview.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/databaseguierrorhandler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dbstatdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/scancontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dio.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/syncjob.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/imageattributeswatch.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/ddateedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/ddatetimeedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/ddatepickerpopup.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/datefolderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/monthwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/timelinewidget.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/albumdragdrop.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/ddragobjects.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/imagedragdrop.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/tagdragdrop.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filterstatusbar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filtersidebarwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/textfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/mimefilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/colorlabelfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/picklabelfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/ratingfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/tagfilterview.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimageview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimageview_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimagedelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimagefacedelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/groupindicatoroverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagecategorizedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagecategorydrawer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagedelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imageratingoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagerotationoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagethumbnailbar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagethumbnaildelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imageselectionoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imageviewutilities.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/assignnameoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/facerejectionoverlay.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata/metadatahub.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata/metadatamanager.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscombobox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscompletionbox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagslineedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagcheckview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagfolderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/taggingaction.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagslineeditoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagspopupmenu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsactionmngr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tageditdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagmodificationhelper.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/albumsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/contextmenuhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/tooltipfiller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/searchmodificationhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/editablesearchtreeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/sidebarwidget.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/stackedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/digikamview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/imagepreviewview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mediaplayerview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mapwidgetview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/welcomepageview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/leftsidebarwidgets.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models/digikammodelcollection.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/icongroupitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/iconitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/iconview.cpp
        )
 
     SET(libdigikamhelpers_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/uifilevalidator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/uifilevalidator.cpp
        )
 
-
     INCLUDE_DIRECTORIES(
+        ${CMAKE_CURRENT_SOURCE_DIR}/databaseserver
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/main
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate/superimpose
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/enhance
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/enhance/hotpixels
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/filters
+        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/transform
+        ${CMAKE_CURRENT_SOURCE_DIR}/kioslave
         ${CMAKE_CURRENT_SOURCE_DIR}/libs
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/markerclusterholderplugin
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/cb
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/cb
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/kmaphelper
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
         ${CMAKE_CURRENT_SOURCE_DIR}/showfoto
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest
+        ${CMAKE_CURRENT_SOURCE_DIR}/themedesigner
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts/cleanup_digikamdb
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts/digitaglinktree
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/metadata
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/decorate
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/hotplug
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/hotplug
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
-        ${CMAKE_CURRENT_SOURCE_DIR}/databaseserver
-        ${CMAKE_CURRENT_SOURCE_DIR}/kioslave
-        ${CMAKE_CURRENT_SOURCE_DIR}/themedesigner
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/transform
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate/superimpose
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/filters
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/enhance
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/enhance/hotpixels
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/decorate
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/metadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts/cleanup_digikamdb
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts/digitaglinktree
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow
 
-        # config-digikam.h
-        ${CMAKE_CURRENT_BINARY_DIR}
+        # version.h, gitversion.h config-digikam.h
+        ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils
+
+        # dbconfigversion.h
+        ${CMAKE_CURRENT_BINARY_DIR}/digikam/database
 
         # external library paths
         ${JPEG_INCLUDE_DIR}
@@ -1409,8 +1541,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(ENABLE_THEMEDESIGNER)
         ADD_SUBDIRECTORY(themedesigner)
     ENDIF(ENABLE_THEMEDESIGNER)
-
-    INSTALL(FILES tips DESTINATION ${DATA_INSTALL_DIR}/digikam)
 
     IF(NOT WIN32)
         CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/digikam.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam.lsm)

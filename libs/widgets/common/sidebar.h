@@ -53,6 +53,13 @@ class SidebarSplitterPriv;
 
 /**
  * This class handles a sidebar view
+ *
+ * Since this class derives from StateSavingObject, you can call
+ * StateSavingObject#loadState() and StateSavingObject#saveState()
+ * for loading/saving of settings. However, if you use multiple
+ * sidebar instances in your program, you have to remember to either
+ * call QObject#setObjectName(), StateSavingObject#setEntryPrefix() or
+ * StateSavingObject#setConfigGroup() first.
  */
 class DIGIKAM_EXPORT Sidebar : public KMultiTabBar, public StateSavingObject
 {
@@ -111,11 +118,6 @@ public:
     void expand();
 
     /**
-     * load the last view state from disk
-     */
-    void doLoadState();
-
-    /**
      * hide sidebar and backup minimized state.
      */
     void backup();
@@ -143,8 +145,15 @@ public:
      */
     bool isExpanded();
 
+protected:
+
     /**
-     * save the view state to disk
+     * load the last view state from disk - called by StateSavingObject#loadState()
+     */
+    void doLoadState();
+
+    /**
+     * save the view state to disk - called by StateSavingObject#saveState()
      */
     void doSaveState();
 

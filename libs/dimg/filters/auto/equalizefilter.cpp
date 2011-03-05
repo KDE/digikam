@@ -40,6 +40,13 @@
 namespace Digikam
 {
 
+EqualizeFilter::EqualizeFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
+
+
 EqualizeFilter::EqualizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
     : DImgThreadedFilter(orgImage, parent, "EqualizeFilter"),
       m_refImage(*refImage)
@@ -53,6 +60,11 @@ EqualizeFilter::~EqualizeFilter()
 
 void EqualizeFilter::filterImage()
 {
+    if (m_refImage.isNull())
+    {
+        m_refImage = m_orgImage;
+    }
+
     equalizeImage();
     m_destImage = m_orgImage;
 }
@@ -252,6 +264,16 @@ void EqualizeFilter::equalizeImage()
     }
 
     delete [] equalize_map;
+}
+
+FilterAction EqualizeFilter::filterAction()
+{
+    return DefaultFilterAction<EqualizeFilter>();
+}
+
+void EqualizeFilter::readParameters(const Digikam::FilterAction& /*action*/)
+{
+    return; //Digikam::DImgThreadedFilter::readParameters(action);
 }
 
 }  // namespace Digikam

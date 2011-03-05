@@ -1,0 +1,16 @@
+[Protocol]
+exec=kio_digikammapimages
+protocol=digikammapimages
+input=stream
+output=stream
+listing=Name,Type
+reading=false
+writing=false
+makedir=false
+linking=false
+deleting=false
+moving=false
+maxInstances=1
+Description=digiKam mapimages kioslave
+Class=:local
+Icon=digikam

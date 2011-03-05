@@ -49,7 +49,6 @@
 // LibKDcraw includes
 
 #include <libkdcraw/rexpanderbox.h>
-#include "rexpanderboxexclusive.h"
 #include <libkdcraw/rnuminput.h>
 
 // Local includes
@@ -460,7 +459,7 @@ BWSepiaContainer BWSepiaSettings::settings() const
     prm.toneType               = d->bwTone->currentId();
     prm.bcgPrm.contrast        = ((double)(d->cInput->value()/100.0) + 1.00);
     prm.strength               = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
-    prm.curvesPrm.lumCurveVals = d->curvesBox->curves()->getCurveValues(LuminosityChannel);
+    prm.curvesPrm              = d->curvesBox->curves()->getContainer(LuminosityChannel);
 
     return prm;
 }
@@ -474,7 +473,7 @@ void BWSepiaSettings::setSettings(const BWSepiaContainer& settings)
     d->bwTone->setCurrentId(settings.toneType);
     d->cInput->setValue((int)((settings.bcgPrm.contrast - 1.00) * 100.0));
     d->strengthInput->setValue((int)(1.0 + (settings.strength-1.0) * 3.0));
-    d->curvesBox->curves()->setCurveValues(LuminosityChannel, settings.curvesPrm.lumCurveVals);
+    d->curvesBox->curves()->setCurves(settings.curvesPrm);
     d->curvesBox->update();
 
     slotFilterSelected();
@@ -522,7 +521,7 @@ void BWSepiaSettings::readSettings(KConfigGroup& group)
     prm.strength        = group.readEntry(d->configStrengthAdjustmentEntry, defaultPrm.strength);
 
     d->curvesBox->readCurveSettings(group, d->configCurveEntry);
-    prm.curvesPrm.lumCurveVals = d->curvesBox->curves()->getCurveValues(LuminosityChannel);
+    prm.curvesPrm = d->curvesBox->curves()->getContainer(LuminosityChannel);
 
     setSettings(prm);
 }

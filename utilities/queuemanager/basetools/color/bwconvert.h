@@ -51,6 +51,7 @@ public Q_SLOTS:
 private:
 
     bool toolOperations();
+    QWidget* createSettingsWidget();
 
 private Q_SLOTS:
 

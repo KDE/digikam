@@ -37,6 +37,8 @@
 namespace Digikam
 {
 
+class DImageHistory;
+class DImg;
 class DImgInterface;
 class UndoManagerPriv;
 class UndoAction;
@@ -49,23 +51,37 @@ public:
     UndoManager(DImgInterface* iface);
     ~UndoManager();
 
+    void addAction(UndoAction* action);
     void undo();
     void redo();
+    void rollbackToOrigin();
+    bool putImageDataAndHistory(DImg *img, int stepsBack);
 
     void clear(bool clearCache=true);
-    bool anyMoreUndo();
-    bool anyMoreRedo();
-    void getUndoHistory(QStringList& titles);
-    void getRedoHistory(QStringList& titles);
-    bool isAtOrigin();
-    void setOrigin();
 
-    void addAction(UndoAction* action);
+    bool anyMoreUndo() const;
+    bool anyMoreRedo() const;
+    int  availableUndoSteps() const;
+    int  availableRedoSteps() const;
+    QStringList getUndoHistory() const;
+    QStringList getRedoHistory() const;
+    bool isAtOrigin() const;
+    void setOrigin() const;
+
+    void clearPreviousOriginData();
+
+    /// The history if all available redo steps are redone
+    DImageHistory getImageHistoryOfFullRedo() const;
 
 private:
 
     void clearUndoActions();
     void clearRedoActions();
+    void undoStep(bool saveRedo, bool execute, bool flyingRollback);
+    void redoStep(bool execute, bool flyingRollback);
+    void makeSnapshot(int index);
+    void restoreSnapshot(int index, const DImageHistory& history);
+    void getSnapshot(int index, DImg* img);
 
 private:
 

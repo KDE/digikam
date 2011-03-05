@@ -305,25 +305,25 @@ void SharedLoadingTask::postProcess()
         }
         case LoadingDescription::ConvertForEditor:
         {
-            IccManager manager(m_img, m_loadingDescription.filePath);
+            IccManager manager(m_img);
             manager.transformDefault();
             break;
         }
         case LoadingDescription::ConvertToSRGB:
         {
-            IccManager manager(m_img, m_loadingDescription.filePath);
+            IccManager manager(m_img);
             manager.transformToSRGB();
             break;
         }
         case LoadingDescription::ConvertForDisplay:
         {
-            IccManager manager(m_img, m_loadingDescription.filePath);
+            IccManager manager(m_img);
             manager.transformForDisplay(m_loadingDescription.postProcessingParameters.profile());
             break;
         }
         case LoadingDescription::ConvertForOutput:
         {
-            IccManager manager(m_img, m_loadingDescription.filePath);
+            IccManager manager(m_img);
             manager.transformForOutput(m_loadingDescription.postProcessingParameters.profile());
             break;
         }

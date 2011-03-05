@@ -129,6 +129,12 @@ public:
                                      const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     /**
+     * Create an empty digikammapimages:/ url
+     */
+
+    static DatabaseUrl mapImagesUrl(const DatabaseParameters& parameters = DatabaseAccess::parameters());
+    static DatabaseUrl fromAreaRange(const qreal lat1, const qreal lng1, const qreal lat2, const qreal lng2, const DatabaseParameters& parameters = DatabaseAccess::parameters());
+    /**
      * Create a digikamsearch: URL for the search with the given id.
      */
     static DatabaseUrl searchUrl(int searchId,
@@ -151,7 +157,7 @@ public:
     bool isTagUrl() const;
     bool isDateUrl() const;
     bool isSearchUrl() const;
-
+    bool isMapImagesUrl() const;
     /**
      * Returns the DatabaseParameters stored in this URL.
      * Applicable to all protocols.
@@ -222,6 +228,15 @@ public:
      * Return the referenced end date (excluded from the referenced span)
      */
     QDate endDate() const;
+
+    /// MapImages URL
+
+    /**
+     * Returns the coordinates surrounding the map area.
+     * Returns true if the string to number conversion was ok.
+     */
+
+    bool areaCoordinates(double* lat1, double* lat2, double* lon1, double* lon2) const;
 
     /// Search URL
 

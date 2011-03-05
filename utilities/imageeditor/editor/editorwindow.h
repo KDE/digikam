@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : main image editor GUI implementation
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +28,7 @@
 // Qt includes
 
 #include <QColor>
+#include <QPointer>
 #include <QRect>
 #include <QString>
 
@@ -36,17 +37,21 @@
 #include <kxmlguiwindow.h>
 #include <kurl.h>
 #include <kjob.h>
+#include <kprogressdialog.h>
 
 // Local includes
 
 #include "digikam_export.h"
 #include "thumbbardock.h"
 #include "previewtoolbar.h"
+#include "savingcontextcontainer.h"
 
 class QSplitter;
 class QLabel;
 
 class KAction;
+class KActionMenu;
+class KCategorizedView;
 class KSelectAction;
 class KToggleAction;
 class KToolBarPopupAction;
@@ -55,19 +60,22 @@ namespace Digikam
 {
 
 class Canvas;
+class DImageHistory;
 class DPopupMenu;
 class DLogoAction;
+class EditorTool;
 class EditorStackView;
 class ExposureSettingsContainer;
 class IOFileSettingsContainer;
 class ImagePluginLoader;
 class ICCSettingsContainer;
-class SavingContextContainer;
 class Sidebar;
 class SidebarSplitter;
 class SlideShowSettings;
 class StatusProgressBar;
 class ThumbBarView;
+class VersionManager;
+class VersionFileOperation;
 
 class DIGIKAM_EXPORT EditorWindow : public KXmlGuiWindow
 {
@@ -78,72 +86,97 @@ public:
     EditorWindow(const char* name);
     ~EditorWindow();
 
-    virtual void applySettings() {};
-    virtual bool setup()=0;
-    virtual bool setupICC()=0;
-
     const static QString CONFIG_GROUP_NAME;
+
+public Q_SLOTS:
+
+    virtual bool setup() = 0;
+    virtual bool setupICC() = 0;
 
 Q_SIGNALS:
 
     void signalSelectionChanged(const QRect&);
     void signalNoCurrentItem();
     void signalPreviewModeChanged(int);
+    void signalToolApplied();
 
 protected:
 
-    bool                     m_fullScreenHideThumbBar;
-    bool                     m_cancelSlideShow;
-    bool                     m_fullScreen;
-    bool                     m_rotatedOrFlipped;
-    bool                     m_setExifOrientationTag;
+    bool                      m_nonDestructive;
+    bool                      m_fullScreenHideThumbBar;
+    bool                      m_cancelSlideShow;
+    bool                      m_fullScreen;
+    bool                      m_setExifOrientationTag;
+    bool                      m_editingOriginalImage;
 
-    QLabel*                  m_resLabel;
+    QLabel*                   m_resLabel;
 
-    QColor                   m_bgColor;
+    QColor                    m_bgColor;
 
-    SidebarSplitter*         m_splitter;
-    QSplitter*               m_vSplitter;
+    SidebarSplitter*          m_splitter;
+    QSplitter*                m_vSplitter;
 
-    KAction*                 m_saveAction;
-    KAction*                 m_saveAsAction;
-    KAction*                 m_revertAction;
-    KAction*                 m_fileDeleteAction;
-    KAction*                 m_forwardAction;
-    KAction*                 m_backwardAction;
-    KAction*                 m_fullScreenAction;
+    KAction*                  m_openVersionAction;
+    KAction*                  m_saveAction;
+    KAction*                  m_saveAsAction;
+    KAction*                  m_saveNewVersionAction;
+    KAction*                  m_saveCurrentVersionAction;
+    KAction*                  m_saveNewVersionAsAction;
+    KActionMenu*              m_saveNewVersionInFormatAction;
+    KAction*                  m_exportAction;
+    KAction*                  m_revertAction;
+    KAction*                  m_discardChangesAction;
+    KAction*                  m_fileDeleteAction;
+    KAction*                  m_forwardAction;
+    KAction*                  m_backwardAction;
+    KAction*                  m_fullScreenAction;
 
-    KAction*                 m_lastAction;
-    KAction*                 m_firstAction;
+    KAction*                  m_lastAction;
+    KAction*                  m_firstAction;
 
-    KSelectAction*           m_themeMenuAction;
+    KAction*                  m_applyToolAction;
+    KAction*                  m_closeToolAction;
 
-    KToggleAction*           m_showBarAction;
+    KSelectAction*            m_themeMenuAction;
 
-    KToolBarPopupAction*     m_undoAction;
-    KToolBarPopupAction*     m_redoAction;
+    KToggleAction*            m_showBarAction;
 
-    DLogoAction*             m_animLogo;
-    DPopupMenu*              m_contextMenu;
-    EditorStackView*         m_stackView;
-    Canvas*                  m_canvas;
-    ImagePluginLoader*       m_imagePluginLoader;
-    StatusProgressBar*       m_nameLabel;
-    IOFileSettingsContainer* m_IOFileSettings;
-    SavingContextContainer*  m_savingContext;
+    KToolBarPopupAction*      m_undoAction;
+    KToolBarPopupAction*      m_redoAction;
+
+    KActionMenu*              m_selectToolsAction;
+
+    DLogoAction*              m_animLogo;
+    DPopupMenu*               m_contextMenu;
+    EditorStackView*          m_stackView;
+    Canvas*                   m_canvas;
+    ImagePluginLoader*        m_imagePluginLoader;
+    StatusProgressBar*        m_nameLabel;
+    IOFileSettingsContainer*  m_IOFileSettings;
+    QPointer<KProgressDialog> m_savingProgressDialog;
+
+    SavingContextContainer    m_savingContext;
+
+    QString                   m_formatForRAWVersioning;
+    QString                   m_formatForSubversions;
 
 protected:
 
     void saveStandardSettings();
     void readStandardSettings();
     void applyStandardSettings();
+    void applyIOSettings();
+    void applyColorManagementSettings();
 
     void setupStandardConnections();
     void setupStandardActions();
     void setupStatusBar();
     void setupContextMenu();
+    void setupSelectToolsAction();
     void toggleStandardActions(bool val);
     void toggleZoomActions(bool val);
+    void toggleNonDestructiveActions();
+    void toggleToolActions(EditorTool* tool=0);
 
     void printImage(const KUrl& url);
 
@@ -152,40 +185,41 @@ protected:
 
     bool promptForOverWrite();
     virtual bool hasChangesToSave();
+    virtual bool hasOriginalToRestore();
+    virtual DImageHistory resolvedImageHistory(const DImageHistory& history);
 
-    enum SaveOrSaveAs
+    enum SaveAskMode
     {
         AskIfNeeded,
         OverwriteWithoutAsking,
-        AlwaysSaveAs
+        AlwaysSaveAs,
+        SaveVersionWithoutAsking = OverwriteWithoutAsking,
+        AlwaysNewVersion = AlwaysSaveAs
     };
 
-    bool promptUserSave(const KUrl& url, SaveOrSaveAs = AskIfNeeded, bool allowCancel = true);
+    bool promptUserSave(const KUrl& url, SaveAskMode mode = AskIfNeeded, bool allowCancel = true);
     bool waitForSavingToComplete();
     void startingSave(const KUrl& url);
     bool startingSaveAs(const KUrl& url);
+    bool startingSaveCurrentVersion(const KUrl& url);
+    bool startingSaveNewVersion(const KUrl& url);
+    bool startingSaveNewVersionAs(const KUrl& url);
+    bool startingSaveNewVersionInFormat(const KUrl& url, const QString& format);
     bool checkPermissions(const KUrl& url);
+    bool checkOverwrite(const KUrl& url);
+    bool moveLocalFile(const QString& src, const QString& dest, bool destinationExisted);
     void moveFile();
     void colorManage();
+    void execSavingProgressDialog();
 
     EditorStackView*           editorStackView()  const;
     ExposureSettingsContainer* exposureSettings() const;
-    ICCSettingsContainer*      cmSettings()       const;
 
     virtual void finishSaving(bool success);
 
-    virtual void readSettings()
-    {
-        readStandardSettings();
-    };
-    virtual void saveSettings()
-    {
-        saveStandardSettings();
-    };
-    virtual void toggleActions(bool val)
-    {
-        toggleStandardActions(val);
-    };
+    virtual void readSettings();
+    virtual void saveSettings();
+    virtual void toggleActions(bool val);
 
     void toggleGUI2FullScreen();
 
@@ -197,8 +231,12 @@ protected:
     virtual void setupConnections()=0;
     virtual void setupActions()=0;
     virtual void setupUserArea()=0;
-    virtual bool saveAs()=0;
-    virtual bool save()=0;
+
+    void setOriginAfterSave();
+    virtual VersionManager* versionManager();
+    VersionFileOperation saveVersionFileOperation(const KUrl& url, bool fork);
+    VersionFileOperation saveAsVersionFileOperation(const KUrl& url, const KUrl& saveLocation, const QString& format);
+    VersionFileOperation saveInFormatVersionFileOperation(const KUrl& url, const QString& format);
 
     /**
      * Hook method that subclasses must implement to return the destination url
@@ -212,14 +250,19 @@ protected:
 
     virtual void saveIsComplete()=0;
     virtual void saveAsIsComplete()=0;
+    virtual void saveVersionIsComplete()=0;
+
+    KCategorizedView* createToolSelectionView();
 
 protected Q_SLOTS:
 
-    void slotSave();
-    void slotSaveAs()
-    {
-        saveAs();
-    };
+    virtual bool saveOrSaveAs();
+    virtual bool saveAs()=0;
+    virtual bool save()=0;
+    virtual bool saveNewVersion()=0;
+    virtual bool saveCurrentVersion()=0;
+    virtual bool saveNewVersionAs()=0;
+    virtual bool saveNewVersionInFormat(const QString&)=0;
 
     void slotEditKeys();
 
@@ -246,11 +289,8 @@ protected Q_SLOTS:
     virtual void slotLoadingStarted(const QString& filename);
     virtual void slotLoadingFinished(const QString& filename, bool success);
     virtual void slotSavingStarted(const QString& filename);
+    virtual void slotFileOriginChanged(const QString& filePath);
 
-    virtual void slotSetup()
-    {
-        setup();
-    };
     virtual void slotChangeTheme(const QString& theme);
 
     virtual void slotComponentsInfo();
@@ -265,6 +305,8 @@ protected Q_SLOTS:
     virtual void slotChanged()=0;
     virtual void slotContextMenu()=0;
     virtual void slotRevert()=0;
+    virtual void slotDiscardChanges();
+    virtual void slotOpenOriginal();
 
 private Q_SLOTS:
 
@@ -274,10 +316,7 @@ private Q_SLOTS:
     void slotToggleColorManagedView();
     void slotSoftProofingOptions();
     void slotUpdateSoftProofingState();
-    void slotRotatedOrFlipped();
     void slotSavingFinished(const QString& filename, bool success);
-    void slotDonateMoney();
-    void slotContribute();
     void slotToggleSlideShow();
     void slotZoomTo100Percents();
     void slotZoomChanged(bool isMax, bool isMin, double zoom);
@@ -287,12 +326,12 @@ private Q_SLOTS:
     void slotFitToSelect();
     void slotIncreaseZoom();
     void slotDecreaseZoom();
-    void slotRawCameraList();
     void slotShowMenuBar();
     void slotCloseTool();
     void slotApplyTool();
     void slotKioMoveFinished(KJob* job);
     void slotUndoStateChanged(bool, bool, bool);
+    void slotSelectToolsMenuAboutToShow();
 
 private:
 
@@ -310,8 +349,12 @@ private:
 
     void setToolInfoMessage(const QString& txt);
 
+    bool startingSaveVersion(const KUrl& url, bool subversion, bool saveAs, const QString& format);
+
     void setPreviewModeMask(int mask);
     PreviewToolBar::PreviewMode previewMode();
+
+    bool showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL);
 
     /**
      * Sets up a temp file to save image contents to and updates the saving
@@ -355,11 +398,11 @@ private:
      * @param filter filter selected in the dialog
      * @param targetUrl target url selected for the file to save
      * @param autoFilter filter that indicates automatic format selection
-     * @return true if a valid extension could be found, else false
+     * @return The valid extension which could be found, or a null string
      */
-    bool selectValidSavingFormat(const QString& filter,
-                                 const KUrl& targetUrl,
-                                 const QString& autoFilter);
+    QString selectValidSavingFormat(const QString& filter,
+                                    const KUrl& targetUrl,
+                                    const QString& autoFilter);
 
     void movingSaveFileFinished(bool successful);
 

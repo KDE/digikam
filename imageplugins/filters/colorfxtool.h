@@ -40,7 +40,7 @@ class DColor;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class ColorFxTool : public EditorTool
+class ColorFxTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -53,21 +53,15 @@ private:
 
     void readSettings();
     void writeSettings();
-    void finalRendering();
-    void colorEffect(uchar* data, int w, int h, bool sb);
-    void solarize(int factor, uchar* data, int w, int h, bool sb);
-    void vivid(int factor, uchar* data, int w, int h, bool sb);
-    void neon(uchar* data, int w, int h, bool sb, int Intensity, int BW);
-    void findEdges(uchar* data, int w, int h, bool sb, int Intensity, int BW);
-    void neonFindEdges(uchar* data, int w, int h, bool sb, bool neon, int Intensity, int BW);
-
-    inline int getOffset(int Width, int X, int Y, int bytesDepth);
-    inline int Lim_Max(int Now, int Up, int Max);
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
 
 private Q_SLOTS:
 
     void slotEffectTypeChanged(int type);
-    void slotEffect();
     void slotResetSettings();
     void slotColorSelectedFromTarget(const Digikam::DColor& color);
 

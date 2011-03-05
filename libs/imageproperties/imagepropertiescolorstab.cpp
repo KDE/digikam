@@ -284,6 +284,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
 
     // -- read config ---------------------------------------------------------
 
+    /// @todo Implement read/writeSettings functions with externally supplied groups
+
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Image Properties SideBar"));
 

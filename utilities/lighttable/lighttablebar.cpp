@@ -6,7 +6,7 @@
  * Date        : 2007-04-11
  * Description : light table thumbs bar
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,16 +55,791 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
+#include "colorlabelwidget.h"
+#include "globals.h"
 #include "ddragobjects.h"
 #include "imageattributeswatch.h"
+#include "metadatasettings.h"
 #include "metadatahub.h"
-#include "ratingpopupmenu.h"
+#include "ratingwidget.h"
 #include "databasewatch.h"
 #include "databasechangesets.h"
 #include "themeengine.h"
+#include "tooltipfiller.h"
 
 namespace Digikam
 {
+
+    class ImagePreviewBar::ImagePreviewBarPriv
+{
+
+public:
+
+    ImagePreviewBarPriv()
+    {
+        // Pre-computed star polygon for a 15x15 pixmap.
+        starPolygon << QPoint(0,  6);
+        starPolygon << QPoint(5,  5);
+        starPolygon << QPoint(7,  0);
+        starPolygon << QPoint(9,  5);
+        starPolygon << QPoint(14, 6);
+        starPolygon << QPoint(10, 9);
+        starPolygon << QPoint(11, 14);
+        starPolygon << QPoint(7,  11);
+        starPolygon << QPoint(3,  14);
+        starPolygon << QPoint(4,  9);
+
+        ratingItem   = 0;
+        ratingWidget = 0;
+    }
+
+    QPolygon      starPolygon;
+
+    QPixmap       ratingPixmap;
+
+    ThumbBarItem* ratingItem;
+
+    RatingWidget* ratingWidget;
+};
+
+ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRotate)
+    : ThumbBarView(parent, orientation, exifRotate),
+      d(new ImagePreviewBarPriv)
+{
+    setMouseTracking(true);
+    readToolTipSettings();
+    setToolTip(new ImagePreviewBarToolTip(this));
+
+    // -- Load rating Pixmap ------------------------------------------
+
+    d->ratingPixmap = QPixmap(16, 15);
+    d->ratingPixmap.fill(Qt::transparent);
+
+    QPainter painter(&d->ratingPixmap);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(ThemeEngine::instance()->textSpecialRegColor());
+    painter.setPen(ThemeEngine::instance()->textRegColor());
+    painter.drawPolygon(d->starPolygon, Qt::WindingFill);
+    painter.end();
+
+    d->ratingWidget = new RatingWidget(viewport());
+    d->ratingWidget->setTracking(false);
+    d->ratingWidget->setFading(true);
+    d->ratingWidget->installEventFilter(this);
+    d->ratingWidget->hide();
+
+    if (orientation == Qt::Vertical)
+    {
+        setMinimumWidth(d->ratingPixmap.width()*5 + 6 + 2*getMargin() + 2*getRadius());
+    }
+    else
+    {
+        setMinimumHeight(d->ratingPixmap.width()*5 + 6 + 2*getMargin() + 2*getRadius());
+    }
+
+    // ----------------------------------------------------------------
+
+    ImageAttributesWatch* watch = ImageAttributesWatch::instance();
+
+    connect(watch, SIGNAL(signalImageRatingChanged(qlonglong)),
+            this, SLOT(slotImageRatingChanged(qlonglong)));
+
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
+
+    connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
+            this, SLOT(slotEditRatingFromItem(int)));
+}
+
+ImagePreviewBar::~ImagePreviewBar()
+{
+    delete d;
+}
+
+void ImagePreviewBar::clear(bool updateView)
+{
+    ThumbBarItem* item = d->ratingItem;
+
+    if (item)
+    {
+        unsetCursor();
+        d->ratingItem = 0;
+        d->ratingWidget->hide();
+        item->repaint();
+    }
+
+    ThumbBarView::clear(updateView);
+}
+
+void ImagePreviewBar::takeItem(ThumbBarItem* item)
+{
+    if (!item)
+    {
+        return;
+    }
+
+    if (d->ratingItem == item)
+    {
+        unsetCursor();
+        d->ratingWidget->hide();
+        d->ratingItem = 0;
+        item->repaint();
+    }
+
+    ThumbBarView::takeItem(item);
+}
+
+void ImagePreviewBar::removeItem(ThumbBarItem* item)
+{
+    if (!item)
+    {
+        return;
+    }
+
+    if (d->ratingItem == item)
+    {
+        unsetCursor();
+        d->ratingWidget->hide();
+        d->ratingItem = 0;
+        item->repaint();
+    }
+
+    ThumbBarView::removeItem(item);
+}
+
+void ImagePreviewBar::rearrangeItems()
+{
+    ThumbBarItem* item = d->ratingItem;
+
+    if (item)
+    {
+        unsetCursor();
+        d->ratingItem = 0;
+        d->ratingWidget->hide();
+        item->repaint();
+    }
+
+    ThumbBarView::rearrangeItems();
+}
+
+void ImagePreviewBar::ensureItemVisible(ThumbBarItem* item)
+{
+    if (!item)
+    {
+        return;
+    }
+
+    ThumbBarItem* ritem = d->ratingItem;
+
+    if (ritem)
+    {
+        unsetCursor();
+        d->ratingItem = 0;
+        d->ratingWidget->hide();
+        ritem->repaint();
+    }
+
+    ThumbBarView::ensureItemVisible(item);
+}
+
+void ImagePreviewBar::leaveEvent(QEvent* e)
+{
+    ThumbBarItem* item = d->ratingItem;
+
+    if (item)
+    {
+        unsetCursor();
+        d->ratingItem = 0;
+        d->ratingWidget->hide();
+        item->repaint();
+    }
+
+    ThumbBarView::leaveEvent(e);
+}
+
+void ImagePreviewBar::focusOutEvent(QFocusEvent* e)
+{
+    ThumbBarItem* item = d->ratingItem;
+
+    if (item)
+    {
+        unsetCursor();
+        d->ratingItem = 0;
+        d->ratingWidget->hide();
+        item->repaint();
+    }
+
+    ThumbBarView::focusOutEvent(e);
+}
+
+void ImagePreviewBar::contentsWheelEvent(QWheelEvent* e)
+{
+    ThumbBarItem* item = d->ratingItem;
+
+    if (item)
+    {
+        unsetCursor();
+        d->ratingItem = 0;
+        d->ratingWidget->hide();
+        item->repaint();
+    }
+
+    ThumbBarView::contentsWheelEvent(e);
+}
+
+ThumbBarItem* ImagePreviewBar::ratingItem() const
+{
+    return d->ratingItem;
+}
+
+QPixmap ImagePreviewBar::ratingPixmap() const
+{
+    return d->ratingPixmap;
+}
+
+void ImagePreviewBar::setSelectedItem(ImagePreviewBarItem* ltItem)
+{
+    ThumbBarItem* item = dynamic_cast<ThumbBarItem*>(ltItem);
+
+    if (item)
+    {
+        ThumbBarView::setSelected(item);
+    }
+}
+
+void ImagePreviewBar::slotImageRatingChanged(qlonglong imageId)
+{
+    for (ThumbBarItem* item = firstItem(); item; item = item->next())
+    {
+        ImagePreviewBarItem* ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+
+        if (ltItem->info().id() == imageId)
+        {
+            triggerUpdate();
+            return;
+        }
+    }
+}
+
+void ImagePreviewBar::slotEditRatingFromItem(int rating)
+{
+    if (!d->ratingItem)
+    {
+        return;
+    }
+
+    ImagePreviewBarItem* ltItem = dynamic_cast<ImagePreviewBarItem*>(d->ratingItem);
+
+    rating = qMin(5, qMax(0, rating));
+    ImageInfo info = ltItem->info();
+
+    if (!info.isNull())
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setRating(rating);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+    }
+}
+
+ImageInfo ImagePreviewBar::currentItemImageInfo() const
+{
+    if (currentItem())
+    {
+        ImagePreviewBarItem* item = dynamic_cast<ImagePreviewBarItem*>(currentItem());
+        return item->info();
+    }
+
+    return ImageInfo();
+}
+
+ImageInfoList ImagePreviewBar::itemsImageInfoList()
+{
+    ImageInfoList list;
+
+    for (ThumbBarItem* item = firstItem(); item; item = item->next())
+    {
+        ImagePreviewBarItem* ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+
+        if (ltItem)
+        {
+            list << ltItem->info();
+        }
+    }
+
+    return list;
+}
+
+ImagePreviewBarItem* ImagePreviewBar::findItemByInfo(const ImageInfo& info) const
+{
+    if (!info.isNull())
+    {
+        for (ThumbBarItem* item = firstItem(); item; item = item->next())
+        {
+            ImagePreviewBarItem* ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+
+            if (ltItem)
+            {
+                if (ltItem->info() == info)
+                {
+                    return ltItem;
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
+ImagePreviewBarItem* ImagePreviewBar::findItemByPos(const QPoint& pos) const
+{
+    ThumbBarItem* item = findItem(pos);
+
+    if (item)
+    {
+        ImagePreviewBarItem* ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+        return ltItem;
+    }
+
+    return 0;
+}
+
+void ImagePreviewBar::applySettings()
+{
+    readToolTipSettings();
+
+    MetadataSettings* mSettings = MetadataSettings::instance();
+
+    if (!mSettings)
+    {
+        return;
+    }
+
+    setExifRotate(mSettings->settings().exifRotate);
+}
+
+void ImagePreviewBar::readToolTipSettings()
+{
+    AlbumSettings* albumSettings = AlbumSettings::instance();
+
+    if (!albumSettings)
+    {
+        return;
+    }
+
+    ThumbBarToolTipSettings settings;
+    settings.showToolTips   = albumSettings->getShowToolTips();
+    settings.showFileName   = albumSettings->getToolTipsShowFileName();
+    settings.showFileDate   = albumSettings->getToolTipsShowFileDate();
+    settings.showFileSize   = albumSettings->getToolTipsShowFileSize();
+    settings.showImageType  = albumSettings->getToolTipsShowImageType();
+    settings.showImageDim   = albumSettings->getToolTipsShowImageDim();
+    settings.showPhotoMake  = albumSettings->getToolTipsShowPhotoMake();
+    settings.showPhotoDate  = albumSettings->getToolTipsShowPhotoDate();
+    settings.showPhotoFocal = albumSettings->getToolTipsShowPhotoFocal();
+    settings.showPhotoExpo  = albumSettings->getToolTipsShowPhotoExpo();
+    settings.showPhotoMode  = albumSettings->getToolTipsShowPhotoMode();
+    settings.showPhotoFlash = albumSettings->getToolTipsShowPhotoFlash();
+    settings.showPhotoWB    = albumSettings->getToolTipsShowPhotoWB();
+    setToolTipSettings(settings);
+}
+
+void ImagePreviewBar::startDrag()
+{
+    if (!currentItem())
+    {
+        return;
+    }
+
+    KUrl::List urls;
+    KUrl::List kioURLs;
+    QList<int> albumIDs;
+    QList<qlonglong> imageIDs;
+
+    ImagePreviewBarItem* item = dynamic_cast<ImagePreviewBarItem*>(currentItem());
+
+    urls.append(item->info().fileUrl());
+    kioURLs.append(item->info().databaseUrl());
+    imageIDs.append(item->info().id());
+    albumIDs.append(item->info().albumId());
+
+    QPixmap icon;
+
+    if (pixmapForItem(item, icon))
+    {
+        icon = icon.scaled(48, 48, Qt::KeepAspectRatio);
+    }
+    else
+    {
+        icon = DesktopIcon("image-jp2", 48);
+    }
+
+    int w = icon.width();
+    int h = icon.height();
+
+    QPixmap pix(w+4, h+4);
+    QPainter p(&pix);
+    p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
+    p.setPen(QPen(Qt::black, 1));
+    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
+    p.drawPixmap(2, 2, icon);
+    p.end();
+
+    QDrag* drag = new QDrag(this);
+    drag->setMimeData(new DItemDrag(urls, kioURLs, albumIDs, imageIDs));
+    drag->setPixmap(pix);
+    drag->exec();
+}
+
+void ImagePreviewBar::contentsMouseMoveEvent(QMouseEvent* e)
+{
+    if (!e)
+    {
+        return;
+    }
+
+    if (e->buttons() == Qt::NoButton)
+    {
+        ImagePreviewBarItem* item = dynamic_cast<ImagePreviewBarItem*>(findItem(e->pos()));
+
+        if (item)
+        {
+            QRect rect = clickToRateRect(item);
+
+            if (rect.contains(e->pos()))
+            {
+                setCursor(Qt::CrossCursor);
+
+                d->ratingItem = item;
+                item->repaint();
+
+                rect.moveTopLeft(contentsToViewport(rect.topLeft()));
+                d->ratingWidget->setFixedSize(rect.size());
+                d->ratingWidget->move(rect.topLeft().x()-1, rect.topLeft().y());
+                d->ratingWidget->setRating(item->info().rating());
+                d->ratingWidget->show();
+            }
+            else
+            {
+                unsetCursor();
+                d->ratingWidget->hide();
+                d->ratingItem = 0;
+                item->repaint();
+            }
+        }
+        else
+        {
+            unsetCursor();
+            d->ratingWidget->hide();
+            d->ratingItem = 0;
+        }
+    }
+
+    ThumbBarView::contentsMouseMoveEvent(e);
+}
+
+void ImagePreviewBar::drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile)
+{
+
+    Q_UNUSED(tile);
+
+    if (item != d->ratingItem)
+    {
+        ImagePreviewBarItem* rItem = dynamic_cast<ImagePreviewBarItem*>(item);
+        int rating                 = rItem->info().rating();
+        QRect r                    = clickToRateRect(rItem);
+
+        if (getOrientation() == Qt::Vertical)
+        {
+            r.translate(0, -rItem->position());
+        }
+        else
+        {
+            r.translate(-rItem->position(), 0);
+        }
+
+        r.setX(((r.right() - rating * d->ratingPixmap.width())/2) - 1);
+        r.setY(r.y()+1);
+        r.setWidth((rating * d->ratingPixmap.width()));
+        r.setBottom(r.bottom()+1);
+        p.drawTiledPixmap(r, d->ratingPixmap);
+
+    }
+
+}
+
+void ImagePreviewBar::drawEmptyMessage(QPixmap& pixmap)
+{
+    Q_UNUSED(pixmap)
+}
+
+void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
+{
+    ThemeEngine* te = ThemeEngine::instance();
+    QRect    er(e->rect());
+    QPixmap  bgPix;
+
+    if (countItems() > 0)
+    {
+        int cy=0, cx=0, ts=0, y1=0, y2=0, x1=0, x2=0;
+        QPixmap  tile;
+
+        if (getOrientation() == Qt::Vertical)
+        {
+            cy = viewportToContents(er.topLeft()).y();
+
+            bgPix = QPixmap(contentsRect().width(), er.height());
+
+            ts   = getTileSize() + 2*getMargin() + 2*getRadius();
+            tile = QPixmap(visibleWidth()-1, ts-1);
+
+            y1 = (cy/ts)*ts;
+            y2 = ((y1 + er.height())/ts +1)*ts;
+        }
+        else
+        {
+            cx = viewportToContents(er.topLeft()).x();
+
+            bgPix = QPixmap(er.width(), contentsRect().height());
+
+            ts   = getTileSize() + 2*getMargin() + 2*getRadius();
+            tile = QPixmap(ts-1, visibleHeight()-1);
+
+            x1 = (cx/ts)*ts;
+            x2 = ((x1 + er.width())/ts +1)*ts;
+        }
+
+        bgPix.fill(te->baseColor());
+
+        for (ThumbBarItem* item = firstItem(); item; item = item->next())
+        {
+            if (getOrientation() == Qt::Vertical)
+            {
+                if (y1 <= item->position() && item->position() <= y2)
+                {
+                    if (item == currentItem())
+                    {
+                        tile = te->thumbSelPixmap(tile.width(), tile.height());
+                    }
+                    else
+                    {
+                        tile = te->thumbRegPixmap(tile.width(), tile.height());
+                    }
+
+                    QPainter p(&tile);
+
+                    if (item == currentItem())
+                    {
+                        p.setPen(QPen(te->textSelColor(), 3));
+                        p.drawRect(1, 1, tile.width()-2, tile.height()-2);
+                    }
+                    else
+                    {
+                        p.setPen(QPen(te->textRegColor(), 1));
+                        p.drawRect(0, 0, tile.width()-1, tile.height()-1);
+                    }
+
+                    if (item == highlightedItem())
+                    {
+                        QRect r = item->rect();
+                        p.setPen(QPen(palette().color(QPalette::Highlight), 3, Qt::SolidLine));
+                        p.drawRect(1, 1, r.width()-3, r.height()-3);
+                    }
+
+                    QPixmap pix;
+
+                    if (pixmapForItem(item, pix))
+                    {
+                        int x = (tile.width()  - pix.width())/2;
+                        int y = (tile.height() - pix.height())/2;
+
+                        p.drawPixmap(x, y, pix);
+                        p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, pix.height()+6),
+                                     QColor(0, 0, 0, 128), 3));
+                        item->setTooltipRect(QRect(x, y+item->position(), pix.width(), pix.height()));
+
+                        drawItem(item, p, tile);
+                    }
+
+                    p.end();
+
+                    QPainter p2(&bgPix);
+                    p2.drawPixmap(0, item->position() - cy, tile);
+                    p2.end();
+                }
+            }
+            else
+            {
+                if (x1 <= item->position() && item->position() <= x2)
+                {
+                    if (item == currentItem())
+                    {
+                        tile = te->thumbSelPixmap(tile.width(), tile.height());
+                    }
+                    else
+                    {
+                        tile = te->thumbRegPixmap(tile.width(), tile.height());
+                    }
+
+                    QPainter p(&tile);
+
+                    if (item == currentItem())
+                    {
+                        p.setPen(QPen(te->textSelColor(), 3));
+                        p.drawRect(1, 1, tile.width()-2, tile.height()-2);
+                    }
+                    else
+                    {
+                        p.setPen(QPen(te->textRegColor(), 1));
+                        p.drawRect(0, 0, tile.width()-1, tile.height()-1);
+                    }
+
+                    if (item == highlightedItem())
+                    {
+                        QRect r = item->rect();
+                        p.setPen(QPen(palette().color(QPalette::Highlight), 3, Qt::SolidLine));
+                        p.drawRect(1, 1, r.width()-3, r.height()-3);
+                    }
+
+                    QPixmap pix;
+
+                    if (pixmapForItem(item, pix))
+                    {
+                        int x = (tile.width() - pix.width())/2;
+                        int y = (tile.height()- pix.height())/2;
+                        p.drawPixmap(x, y, pix);
+                        p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, pix.height()+6),
+                                     QColor(0, 0, 0, 128), 3));
+                        item->setTooltipRect(QRect(x+item->position(), y, pix.width(), pix.height()));
+
+                        drawItem(item, p, tile);
+                    }
+
+                    p.end();
+
+                    QPainter p2(&bgPix);
+                    p2.drawPixmap(item->position() - cx, 0, tile);
+                    p2.end();
+                }
+            }
+        }
+
+        QPainter p3(viewport());
+
+        if (getOrientation() == Qt::Vertical)
+        {
+            p3.drawPixmap(0, er.y(), bgPix);
+        }
+        else
+        {
+            p3.drawPixmap(er.x(), 0, bgPix);
+        }
+
+        p3.end();
+    }
+    else
+    {
+        bgPix = QPixmap(contentsRect().width(), contentsRect().height());
+        bgPix.fill(te->baseColor());
+
+        drawEmptyMessage(bgPix);
+
+        QPainter p5(viewport());
+        p5.drawPixmap(0, 0, bgPix);
+        p5.end();
+    }
+
+    checkPreload();
+}
+
+void ImagePreviewBar::slotThemeChanged()
+{
+    QPainter painter(&d->ratingPixmap);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(ThemeEngine::instance()->textSpecialRegColor());
+    painter.setPen(ThemeEngine::instance()->textRegColor());
+    painter.drawPolygon(d->starPolygon, Qt::WindingFill);
+    painter.end();
+    slotUpdate();
+}
+
+// NOTE: see B.K.O #181184 : we need to catch mouse leave event from rating
+//       box when user move cursor over scrollbar.
+
+bool ImagePreviewBar::eventFilter(QObject* obj, QEvent* ev)
+{
+    if ( obj == d->ratingWidget )
+    {
+        if ( ev->type() == QEvent::Leave)
+        {
+            // Cave: ratingWidget->hide can recurse here again! See bug 184473
+            ThumbBarItem* item = d->ratingItem;
+
+            if (item)
+            {
+                unsetCursor();
+                d->ratingItem = 0;
+                d->ratingWidget->hide();
+                item->repaint();
+            }
+        }
+    }
+
+    // pass the event on to the parent class
+    return ThumbBarView::eventFilter(obj, ev);
+}
+
+QRect ImagePreviewBar::clickToRateRect(ImagePreviewBarItem* item)
+{
+    QRect r    = item->rect();
+    int top    = r.bottom() - getMargin() - ratingPixmap().height() - 2;
+    int left   = r.left() - 1;
+    int bottom = r.bottom() - getMargin() - 2;
+    int right  = r.right() - 1;
+    return QRect(left, top, right-left, bottom-top);
+}
+
+// -------------------------------------------------------------------------
+
+ImagePreviewBarItem::ImagePreviewBarItem(ImagePreviewBar* view, const ImageInfo& info)
+    : ThumbBarItem(view, info.fileUrl())
+{
+    m_info = info;
+}
+
+ImagePreviewBarItem::~ImagePreviewBarItem()
+{
+}
+
+ImageInfo ImagePreviewBarItem::info()
+{
+    return m_info;
+}
+
+// -------------------------------------------------------------------------
+
+ImagePreviewBarToolTip::ImagePreviewBarToolTip(ThumbBarView* parent)
+    : ThumbBarToolTip(parent)
+{
+}
+
+ImagePreviewBarToolTip::~ImagePreviewBarToolTip()
+{
+}
+
+QString ImagePreviewBarToolTip::tipContents()
+{
+    if (!item())
+    {
+        return QString();
+    }
+
+    ImageInfo info = dynamic_cast<ImagePreviewBarItem*>(item())->info();
+    return ToolTipFiller::imageInfoTipContents(info);
+}
+
+// -------------------------------------------------------------------------
 
 class LightTableBar::LightTableBarPriv
 {
@@ -144,7 +919,7 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
             cmhelper.addAction(removeAction);
             cmhelper.addSeparator();
             // ------------------------------------------------
-            cmhelper.addRatingMenu();
+            cmhelper.addLabelsAction();
             cmhelper.addSeparator();
             // ------------------------------------------------
         }
@@ -152,6 +927,12 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
         cmhelper.addAction(clearAllAction, true);
 
         // special action handling --------------------------------
+
+        connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
+                this, SLOT(slotAssignPickLabel(int)));
+
+        connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
+                this, SLOT(slotAssignColorLabel(int)));
 
         connect(&cmhelper, SIGNAL(signalAssignRating(int)),
                 this, SLOT(slotAssignRating(int)));
@@ -184,6 +965,50 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
     }
 }
 
+void LightTableBar::slotAssignPickLabel(int pickId)
+{
+    assignPickLabel(currentItemImageInfo(), pickId);
+}
+
+void LightTableBar::slotAssignColorLabel(int colorId)
+{
+    assignColorLabel(currentItemImageInfo(), colorId);
+}
+
+void LightTableBar::assignPickLabel(const ImageInfo& info, int pickId)
+{
+    if (!info.isNull())
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setPickLabel(pickId);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+    }
+}
+
+void LightTableBar::assignColorLabel(const ImageInfo& info, int colorId)
+{
+    if (!info.isNull())
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setColorLabel(colorId);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+    }
+}
+
+void LightTableBar::slotPickLabelChanged(const KUrl& url, int pick)
+{
+    assignPickLabel(ImageInfo(url), pick);
+}
+
+void LightTableBar::slotColorLabelChanged(const KUrl& url, int color)
+{
+    assignColorLabel(ImageInfo(url), color);
+}
+
 void LightTableBar::slotRatingChanged(const KUrl& url, int rating)
 {
     assignRating(ImageInfo(url), rating);
@@ -208,34 +1033,18 @@ void LightTableBar::assignRating(const ImageInfo& info, int rating)
     }
 }
 
-void LightTableBar::slotAssignRatingNoStar()
+void LightTableBar::toggleTag(int tagID)
 {
-    slotAssignRating(0);
-}
+    ImageInfo info = currentItemImageInfo();
 
-void LightTableBar::slotAssignRatingOneStar()
-{
-    slotAssignRating(1);
-}
-
-void LightTableBar::slotAssignRatingTwoStar()
-{
-    slotAssignRating(2);
-}
-
-void LightTableBar::slotAssignRatingThreeStar()
-{
-    slotAssignRating(3);
-}
-
-void LightTableBar::slotAssignRatingFourStar()
-{
-    slotAssignRating(4);
-}
-
-void LightTableBar::slotAssignRatingFiveStar()
-{
-    slotAssignRating(5);
+    if (!info.isNull())
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setTag(tagID, !info.tagIds().contains(tagID));
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+    }
 }
 
 void LightTableBar::setOnLeftPanel(const ImageInfo& info)
@@ -361,6 +1170,36 @@ ImagePreviewBarItem* LightTableBar::findItemById(qlonglong id) const
 void LightTableBar::drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile)
 {
     LightTableBarItem* rItem = dynamic_cast<LightTableBarItem*>(item);
+    int pickId               = rItem->info().pickLabel();
+    int colorId              = rItem->info().colorLabel();
+
+    if (colorId > NoColorLabel)
+    {
+
+        QRect r = item->rect();
+        p.setPen(QPen(ColorLabelWidget::labelColor((ColorLabel)colorId), 5, Qt::SolidLine));
+        p.drawRect(3, 3, r.width()-7, r.height()-7);
+    }
+
+    if (pickId != NoPickLabel)
+    {
+        QIcon icon;
+        int size = KIconLoader::SizeSmallMedium;
+
+        if (pickId == RejectedLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, size);
+        }
+        else if (pickId == PendingLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, size);
+        }
+        else if (pickId == AcceptedLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, size);
+        }
+        icon.paint(&p, item->rect().width()/2 - size/2, 10, size, size);
+    }
 
     if (rItem->isOnLeftPanel())
     {
@@ -418,7 +1257,7 @@ void LightTableBar::startDrag()
     KUrl::List urls;
     KUrl::List kioURLs;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
 
     LightTableBarItem* item = dynamic_cast<LightTableBarItem*>(currentItem());
 
@@ -449,7 +1288,7 @@ void LightTableBar::contentsDragEnterEvent(QDragEnterEvent* e)
 {
     int        albumID;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
     KUrl::List urls;
     KUrl::List kioURLs;
 
@@ -468,7 +1307,7 @@ void LightTableBar::contentsDropEvent(QDropEvent* e)
 {
     int        albumID;
     QList<int> albumIDs;
-    QList<int> imageIDs;
+    QList<qlonglong> imageIDs;
     KUrl::List urls;
     KUrl::List kioURLs;
 
@@ -476,7 +1315,7 @@ void LightTableBar::contentsDropEvent(QDropEvent* e)
     {
         ImageInfoList imageInfoList;
 
-        for (QList<int>::const_iterator it = imageIDs.constBegin();
+        for (QList<qlonglong>::const_iterator it = imageIDs.constBegin();
              it != imageIDs.constEnd(); ++it)
         {
             ImageInfo info(*it);

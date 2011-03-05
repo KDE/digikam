@@ -59,10 +59,13 @@ public:
     ImageDescEditTab(QWidget* parent);
     ~ImageDescEditTab();
 
+    void assignPickLabel(int pickId);
+    void assignColorLabel(int colorId);
     void assignRating(int rating);
     void setItem(const ImageInfo& info = ImageInfo());
     void setItems(const ImageInfoList& infos);
     void populateTags();
+    void setFocusToTagsView();
 
 Q_SIGNALS:
 
@@ -82,10 +85,12 @@ private:
     void setTagState(TAlbum* tag, MetadataHub::TagStatus status);
 
     void setInfos(const ImageInfoList& infos);
-    void focusLastSelectedWidget();
+    void setFocusToLastSelectedWidget();
 
     void updateTagsView();
     void updateComments();
+    void updatePickLabel();
+    void updateColorLabel();
     void updateRating();
     void updateDate();
     void updateTemplate();
@@ -99,12 +104,15 @@ private:
 private Q_SLOTS:
 
     void slotApplyAllChanges();
+    void slotApplyChangesToAllVersions();
     void slotRevertAllChanges();
     void slotChangingItems();
     void slotTagsSearchChanged(const SearchTextSettings& settings);
     void slotTagStateChanged(Album* album, Qt::CheckState checkState);
     void slotCommentChanged();
     void slotDateTimeChanged(const QDateTime& dateTime);
+    void slotPickLabelChanged(int pickId);
+    void slotColorLabelChanged(int colorId);
     void slotRatingChanged(int rating);
     void slotTemplateSelected();
     void slotModified();

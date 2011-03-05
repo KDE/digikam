@@ -41,10 +41,23 @@ TARGET_LINK_LIBRARIES(kio_digikamdates
                       ${QT_QTCORE_LIBRARY}
                      )
 
+# # digiKam MapImages kio slave ###########################################################
+
+SET(kio_digikammapimages_PART_SRCS digikammapimages.cpp)
+
+KDE4_ADD_PLUGIN(kio_digikammapimages ${kio_digikammapimages_PART_SRCS})
+
+TARGET_LINK_LIBRARIES(kio_digikammapimages
+                      digikamcore
+                      digikamdatabase
+                      ${KDE4_KDECORE_LIBS}
+                      ${KDE4_KIO_LIBS}
+                      ${QT_QTCORE_LIBRARY}
+                     )
+
 # # digiKam Search kio slave #########################################################
 
 SET(kio_digikamsearch_PART_SRCS digikamsearch.cpp )
-
 
 KDE4_ADD_PLUGIN(kio_digikamsearch ${kio_digikamsearch_PART_SRCS})
 
@@ -62,10 +75,12 @@ INSTALL( TARGETS kio_digikamtags DESTINATION ${PLUGIN_INSTALL_DIR} )
 INSTALL( TARGETS kio_digikamdates DESTINATION ${PLUGIN_INSTALL_DIR} )
 INSTALL( TARGETS kio_digikamsearch DESTINATION ${PLUGIN_INSTALL_DIR} )
 INSTALL( TARGETS kio_digikamalbums DESTINATION ${PLUGIN_INSTALL_DIR} )
+INSTALL( TARGETS kio_digikammapimages DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 INSTALL( FILES digikamtags.protocol
                digikamalbums.protocol
                digikamdates.protocol
                digikamsearch.protocol
+               digikammapimages.protocol
          DESTINATION ${SERVICES_INSTALL_DIR}
        )

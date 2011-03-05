@@ -91,19 +91,33 @@ public:
 
     DatabaseThumbnailInfo findByHash(const QString& uniqueHash, int fileSize);
     DatabaseThumbnailInfo findByFilePath(const QString& path);
+    DatabaseThumbnailInfo findByCustomIdentifier(const QString& id);
+
+    /** This is findByFilePath with extra security: Pass the uniqueHash which you have.
+     *  If an entry is found by file path, and the entry is referenced by any uniqueHash,
+     *  which is different from the given hash, a null info is returned.
+     *  If uniqueHash is null, equivalent to the simple findByFilePath.
+     */
+    DatabaseThumbnailInfo findByFilePath(const QString& path, const QString& uniqueHash);
 
     DatabaseCoreBackend::QueryState insertUniqueHash(const QString& uniqueHash, int fileSize, int thumbId);
     DatabaseCoreBackend::QueryState insertFilePath(const QString& path, int thumbId);
+    DatabaseCoreBackend::QueryState insertCustomIdentifier(const QString& id, int thumbId);
 
     /** Removes thumbnail data associated to the given uniqueHash/fileSize */
     DatabaseCoreBackend::QueryState removeByUniqueHash(const QString& uniqueHash, int fileSize);
     /** Removes thumbnail data associated to the given file path */
     DatabaseCoreBackend::QueryState removeByFilePath(const QString& path);
+    DatabaseCoreBackend::QueryState removeByCustomIdentifier(const QString& id);
 
     DatabaseCoreBackend::QueryState insertThumbnail(const DatabaseThumbnailInfo& info, QVariant* lastInsertId = 0);
     DatabaseCoreBackend::QueryState replaceThumbnail(const DatabaseThumbnailInfo& info);
 
     QHash<QString, int> getFilePathsWithThumbnail();
+
+    void replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize, const QString& newUniqueHash, int newFileSize);
+
+    //QStringList getAllThumbnailPaths();
 
 private:
 

@@ -6,7 +6,8 @@
  * Date        : 2007-09-22
  * Description : Enums for database fields
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,30 +48,31 @@ enum ImagesField
     ModificationDate   = 1 << 4,
     FileSize           = 1 << 5,
     UniqueHash         = 1 << 6,
-    ImagesAll          =
-    Album | Name | Status | Category |
-    ModificationDate | FileSize | UniqueHash,
+    ImagesAll          = Album | Name | Status | Category |
+                         ModificationDate | FileSize | UniqueHash,
     ImagesFirst        = Album,
     ImagesLast         = UniqueHash
 };
 
 enum ImageInformationField
 {
-    ImageInformationNone = 0,
-    Rating               = 1 << 0,
-    CreationDate         = 1 << 1,
-    DigitizationDate     = 1 << 2,
-    Orientation          = 1 << 3,
-    Width                = 1 << 4,
-    Height               = 1 << 5,
-    Format               = 1 << 6,
-    ColorDepth           = 1 << 7,
-    ColorModel           = 1 << 8,
-    ImageInformationAll  =
-    Rating | CreationDate | DigitizationDate | Orientation |
-    Width | Height | Format | ColorDepth | ColorModel,
+    ImageInformationNone  = 0,
+    Rating                = 1 << 0,
+    CreationDate          = 1 << 1,
+    DigitizationDate      = 1 << 2,
+    Orientation           = 1 << 3,
+    Width                 = 1 << 4,
+    Height                = 1 << 5,
+    Format                = 1 << 6,
+    ColorDepth            = 1 << 7,
+    ColorModel            = 1 << 8,
+    ColorLabel            = 1 << 9,
+    PickLabel             = 1 << 10,
+    ImageInformationAll   = Rating | CreationDate | DigitizationDate | Orientation |
+                            Width | Height | Format | ColorDepth | ColorModel | 
+                            ColorLabel | PickLabel,
     ImageInformationFirst = Rating,
-    ImageInformationLast  = ColorModel
+    ImageInformationLast  = PickLabel
 };
 
 enum ImageMetadataField
@@ -92,11 +94,10 @@ enum ImageMetadataField
     MeteringMode                 = 1 << 13,
     SubjectDistance              = 1 << 14,
     SubjectDistanceCategory      = 1 << 15,
-    ImageMetadataAll             =
-    Make | Model | Lens | Aperture | FocalLength | FocalLength35 |
-    ExposureTime | ExposureProgram | ExposureMode | Sensitivity |
-    FlashMode | WhiteBalance | WhiteBalanceColorTemperature |
-    MeteringMode | SubjectDistance | SubjectDistanceCategory,
+    ImageMetadataAll             = Make | Model | Lens | Aperture | FocalLength | FocalLength35 |
+                                   ExposureTime | ExposureProgram | ExposureMode | Sensitivity |
+                                   FlashMode | WhiteBalance | WhiteBalanceColorTemperature |
+                                   MeteringMode | SubjectDistance | SubjectDistanceCategory,
     ImageMetadataFirst           = Make,
     ImageMetadataLast            = SubjectDistanceCategory
 };
@@ -114,25 +115,34 @@ enum ImagePositionsField
     PositionRoll        = 1 << 7,
     PositionAccuracy    = 1 << 8,
     PositionDescription = 1 << 9,
-    ImagePositionsAll   =
-    Latitude | LatitudeNumber | Longitude | LongitudeNumber | Altitude |
-    PositionOrientation | PositionRoll | PositionTilt | PositionAccuracy | PositionDescription,
+    ImagePositionsAll   = Latitude | LatitudeNumber | Longitude | LongitudeNumber | Altitude |
+                          PositionOrientation | PositionRoll | PositionTilt | PositionAccuracy | PositionDescription,
     ImagePositionsFirst = Latitude,
     ImagePositionsLast  = PositionDescription
 };
 
 enum ImageCommentsField
 {
-    ImageCommentsNone = 0,
-    CommentType       = 1 << 0,
-    CommentLanguage   = 1 << 1,
-    CommentAuthor     = 1 << 2,
-    CommentDate       = 1 << 3,
-    Comment           = 1 << 4,
-    ImageCommentsAll  =
-    CommentType | CommentAuthor | CommentLanguage | CommentDate | Comment,
+    ImageCommentsNone  = 0,
+    CommentType        = 1 << 0,
+    CommentLanguage    = 1 << 1,
+    CommentAuthor      = 1 << 2,
+    CommentDate        = 1 << 3,
+    Comment            = 1 << 4,
+    ImageCommentsAll   = CommentType | CommentAuthor | CommentLanguage | CommentDate | Comment,
     ImageCommentsFirst = CommentType,
     ImageCommentsLast  = Comment
+};
+
+enum ImageHistoryInfoField
+{
+    ImageHistoryInfoNone  = 0,
+    ImageUUID             = 1 << 0,
+    ImageHistory          = 1 << 1,
+    ImageRelations        = 1 << 2,
+    ImageHistoryInfoAll   = ImageUUID | ImageHistory | ImageRelations,
+    ImageHistoryInfoFirst = ImageUUID,
+    ImageHistoryInfoLast  = ImageRelations
 };
 
 Q_DECLARE_FLAGS(Images, ImagesField)
@@ -140,6 +150,7 @@ Q_DECLARE_FLAGS(ImageInformation, ImageInformationField)
 Q_DECLARE_FLAGS(ImageMetadata, ImageMetadataField)
 Q_DECLARE_FLAGS(ImageComments, ImageCommentsField)
 Q_DECLARE_FLAGS(ImagePositions, ImagePositionsField)
+Q_DECLARE_FLAGS(ImageHistoryInfo, ImageHistoryInfoField)
 
 /**
  * You can iterate over each of the Enumerations defined above:
@@ -163,6 +174,7 @@ DATABASEFIELDS_ENUM_ITERATOR(ImageInformation)
 DATABASEFIELDS_ENUM_ITERATOR(ImageMetadata)
 DATABASEFIELDS_ENUM_ITERATOR(ImagePositions)
 DATABASEFIELDS_ENUM_ITERATOR(ImageComments)
+DATABASEFIELDS_ENUM_ITERATOR(ImageHistoryInfo)
 
 /**
  * For your custom enum, you need to use the CustomEnum class.
@@ -206,6 +218,7 @@ public:
         imageMetadata    = ImageMetadataNone;
         imageComments    = ImageCommentsNone;
         imagePositions   = ImagePositionsNone;
+        imageHistory     = ImageHistoryInfoNone;
         customEnum       = (CustomEnum)0;
     }
 
@@ -214,12 +227,14 @@ public:
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageMetadata, imageMetadata)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageComments, imageComments)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImagePositions, imagePositions)
+    DATABASEFIELDS_SET_DECLARE_METHODS(ImageHistoryInfo, imageHistory)
 
     inline bool operator&(const Set& other)
     {
         return (images & other.images) || (imageInformation & other.imageInformation)  ||
                (imageMetadata & other.imageMetadata) || (imageComments & other.imageComments) ||
-               (imagePositions & other.imagePositions) || (customEnum & other.customEnum);
+               (imagePositions & other.imagePositions) || (imageHistory & other.imageHistory) ||
+               (customEnum & other.customEnum);
     }
 
     inline CustomEnum& operator=(const CustomEnum& f)
@@ -247,7 +262,6 @@ public:
         return customEnum.operator&(f);
     }
 
-
     // databasechangesets.cpp
     Set& operator<<(const QDBusArgument& argument);
     const Set& operator>>(QDBusArgument& argument) const;
@@ -259,6 +273,7 @@ private:
     ImageMetadata    imageMetadata;
     ImageComments    imageComments;
     ImagePositions   imagePositions;
+    ImageHistoryInfo imageHistory;
     CustomEnum       customEnum;
 };
 
@@ -313,6 +328,10 @@ public:
     {
         return (int)f | (4 << 26);
     }
+    static inline unsigned int uniqueKey(ImageHistoryInfo f)
+    {
+        return (int)f | (5 << 26);
+    }
     static inline unsigned int uniqueKey(CustomEnum f)
     {
         return      f | (63 << 26);
@@ -324,6 +343,7 @@ public:
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageMetadata, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageComments, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImagePositions, uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageHistoryInfo, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(CustomEnum, uniqueKey);
 };
 
@@ -337,5 +357,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageInformation)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageMetadata)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageComments)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImagePositions)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageHistoryInfo)
 
 #endif // DATABASEFIELDS_H

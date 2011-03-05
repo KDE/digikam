@@ -49,15 +49,17 @@ private:
     bool startUpdates();
     bool makeUpdates();
     bool createDatabase();
-    bool createTablesV1();
-    bool createIndicesV1();
-    bool createTriggersV1();
+    bool createTables();
+    bool createIndices();
+    bool createTriggers();
+    bool updateV1ToV2();
 
 private:
 
     bool                    m_setError;
 
     int                     m_currentVersion;
+    int                     m_currentRequiredVersion;
 
     ThumbnailDatabaseAccess* m_access;
 

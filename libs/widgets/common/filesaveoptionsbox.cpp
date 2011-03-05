@@ -177,7 +177,8 @@ void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
     }
 
     // if the new filter is the auto filter and we shall use the auto filter
-    if (!d->autoFilter.isEmpty() && d->autoFilter == newFilter)
+    if (!d->autoFilter.isEmpty() &&
+        (d->autoFilter == newFilter || d->autoFilter.section('|', 0, 0) == newFilter))
     {
         kDebug() << "use automatic extension detection";
         // use the user provided file name for guessing the desired file format

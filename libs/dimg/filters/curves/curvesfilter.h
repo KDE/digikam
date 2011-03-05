@@ -7,6 +7,7 @@
  * Description : Curves image filter
  *
  * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,58 +43,40 @@ namespace Digikam
 
 class DImg;
 
-class DIGIKAM_EXPORT CurvesContainer
-{
-
-public:
-
-    CurvesContainer(bool init=true)
-    {
-        curvesType = ImageCurves::CURVE_FREE;
-
-        // Construct linear curves.
-        lumCurveVals.resize(MAX_SEGMENT_16BIT+1);
-        redCurveVals.resize(MAX_SEGMENT_16BIT+1);
-        greenCurveVals.resize(MAX_SEGMENT_16BIT+1);
-        blueCurveVals.resize(MAX_SEGMENT_16BIT+1);
-        alphaCurveVals.resize(MAX_SEGMENT_16BIT+1);
-
-        if (init)
-        {
-            for (int i = 0 ; i <= MAX_SEGMENT_16BIT ; ++i)
-            {
-                lumCurveVals.setPoint(i, i, i);
-                redCurveVals.setPoint(i, i, i);
-                greenCurveVals.setPoint(i, i, i);
-                blueCurveVals.setPoint(i, i, i);
-                alphaCurveVals.setPoint(i, i, i);
-            }
-        }
-    };
-
-    ~CurvesContainer() {};
-
-public:
-
-    ImageCurves::CurveType curvesType;      // Smooth : QPolygon have size of 18 points.
-    // Free   : QPolygon have size of 255 or 65535 values.
-
-    QPolygon               lumCurveVals;
-    QPolygon               redCurveVals;
-    QPolygon               greenCurveVals;
-    QPolygon               blueCurveVals;
-    QPolygon               alphaCurveVals;
-};
-
-// --------------------------------------------------------------------------------
-
 class DIGIKAM_EXPORT CurvesFilter : public DImgThreadedFilter
 {
 
 public:
 
+    explicit CurvesFilter(QObject* parent = 0);
     explicit CurvesFilter(DImg* orgImage, QObject* parent=0, const CurvesContainer& settings=CurvesContainer());
+    explicit CurvesFilter(const CurvesContainer& settings, DImgThreadedFilter* master,
+                          const DImg& orgImage, DImg& destImage, int progressBegin=0, int progressEnd=100);
     virtual ~CurvesFilter();
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:CurvesFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Adjust Curves");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 

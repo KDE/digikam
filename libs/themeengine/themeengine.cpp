@@ -335,6 +335,8 @@ void ThemeEngine::changePalette()
         plt.setColor(QPalette::Inactive, QPalette::Text,            ThemeEngine::instance()->textRegColor());
         plt.setColor(QPalette::Inactive, QPalette::Link,            ThemeEngine::instance()->textSpecialRegColor());
         plt.setColor(QPalette::Inactive, QPalette::LinkVisited,     ThemeEngine::instance()->textSpecialSelColor());
+        plt.setColor(QPalette::Inactive, QPalette::ToolTipText,     ThemeEngine::instance()->textRegColor());
+        plt.setColor(QPalette::Inactive, QPalette::ToolTipBase,     bg);
 
         plt.setColor(QPalette::Disabled, QPalette::Base,            bg);
         plt.setColor(QPalette::Disabled, QPalette::Background,      bg.dark(115));

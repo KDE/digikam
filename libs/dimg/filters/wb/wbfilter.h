@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Guillaume Castagnino <casta at xwing dot info>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,6 +35,7 @@
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
 #include "globals.h"
+#include "wbcontainer.h"
 
 using namespace Digikam;
 
@@ -43,48 +45,41 @@ namespace Digikam
 class DImg;
 class WBFilterPriv;
 
-class DIGIKAM_EXPORT WBContainer
-{
-
-public:
-
-    WBContainer()
-    {
-        // Neutral color temperature settings.
-        black       = 0.0;
-        exposition  = 0.0;
-        temperature = 6500.0;
-        green       = 1.0;
-        dark        = 0.5;
-        gamma       = 1.0;
-        saturation  = 1.0;
-    };
-
-    ~WBContainer() {};
-
-public:
-
-    double black;
-    double exposition;
-    double temperature;
-    double green;
-    double dark;
-    double gamma;
-    double saturation;
-};
-
-// -----------------------------------------------------------------------------------------------
-
 class DIGIKAM_EXPORT WBFilter : public DImgThreadedFilter
 {
 
 public:
-
+    explicit WBFilter(QObject* parent = 0);
     explicit WBFilter(DImg* orgImage, QObject* parent=0, const WBContainer& settings=WBContainer());
+    explicit WBFilter(const WBContainer& settings, DImgThreadedFilter* master, const DImg& orgImage, const DImg& destImage,
+                      int progressBegin=0, int progressEnd=100);
     virtual ~WBFilter();
 
     static void autoExposureAdjustement(const DImg* img, double& black, double& expo);
     static void autoWBAdjustementFromColor(const QColor& tc, double& temperature, double& green);
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:WhiteBalanceFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("White Balance Tool");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 protected:
 

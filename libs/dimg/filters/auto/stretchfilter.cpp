@@ -39,6 +39,11 @@
 
 namespace Digikam
 {
+StretchFilter::StretchFilter(QObject* parent)
+    : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
 
 StretchFilter::StretchFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
     : DImgThreadedFilter(orgImage, parent, "StretchFilter"),
@@ -54,6 +59,11 @@ StretchFilter::~StretchFilter()
 
 void StretchFilter::filterImage()
 {
+    if (m_refImage.isNull())
+    {
+        m_refImage = m_orgImage;
+    }
+
     stretchContrastImage();
     m_destImage = m_orgImage;
 }
@@ -440,6 +450,16 @@ void StretchFilter::stretchContrastImage()
 
     delete histogram;
     delete [] normalize_map;
+}
+
+FilterAction StretchFilter::filterAction()
+{
+    return DefaultFilterAction<StretchFilter>();
+}
+
+void StretchFilter::readParameters(const Digikam::FilterAction& /*action*/)
+{
+    return; //Digikam::DImgThreadedFilter::readParameters(action);
 }
 
 }  // namespace Digikam

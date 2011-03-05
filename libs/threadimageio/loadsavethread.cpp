@@ -55,8 +55,9 @@ public:
 
 //---------------------------------------------------------------------------------------------------
 
-LoadSaveThread::LoadSaveThread()
-    : d(new LoadSaveThreadPriv)
+LoadSaveThread::LoadSaveThread(QObject* parent)
+    : DynamicThread(parent),
+      d(new LoadSaveThreadPriv)
 {
     m_currentTask        = 0;
     m_notificationPolicy = NotificationPolicyTimeLimited;
@@ -272,54 +273,7 @@ bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
     DMetadata metadata(filePath);
     DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
 
-    bool rotatedOrFlipped = false;
-
-    if (orientation != DMetadata::ORIENTATION_NORMAL)
-    {
-        switch (orientation)
-        {
-            case DMetadata::ORIENTATION_NORMAL:
-            case DMetadata::ORIENTATION_UNSPECIFIED:
-                break;
-
-            case DMetadata::ORIENTATION_HFLIP:
-                image.flip(DImg::HORIZONTAL);
-                rotatedOrFlipped = true;
-                break;
-
-            case DMetadata::ORIENTATION_ROT_180:
-                image.rotate(DImg::ROT180);
-                rotatedOrFlipped = true;
-                break;
-
-            case DMetadata::ORIENTATION_VFLIP:
-                image.flip(DImg::VERTICAL);
-                rotatedOrFlipped = true;
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90_HFLIP:
-                image.rotate(DImg::ROT90);
-                image.flip(DImg::HORIZONTAL);
-                rotatedOrFlipped = true;
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90:
-                image.rotate(DImg::ROT90);
-                rotatedOrFlipped = true;
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90_VFLIP:
-                image.rotate(DImg::ROT90);
-                image.flip(DImg::VERTICAL);
-                rotatedOrFlipped = true;
-                break;
-
-            case DMetadata::ORIENTATION_ROT_270:
-                image.rotate(DImg::ROT270);
-                rotatedOrFlipped = true;
-                break;
-        }
-    }
+    bool rotatedOrFlipped = image.rotateAndFlip(orientation);
 
     image.setAttribute("exifRotated", true);
     return rotatedOrFlipped;

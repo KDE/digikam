@@ -38,8 +38,35 @@ class DIGIKAM_EXPORT IccTransformFilter : public DImgThreadedFilter, public DImg
 
 public:
 
-    IccTransformFilter(DImg* orgImage, QObject* parent, const IccTransform& transform);
+    explicit IccTransformFilter(QObject* parent = 0);
+    explicit IccTransformFilter(DImg* orgImage, QObject* parent, const IccTransform& transform);
     ~IccTransformFilter();
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:IccTransformFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Color Profile Conversion");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
+    bool                    parametersSuccessfullyRead() const;
+    QString                 readParametersError(const FilterAction& actionThatFailed) const;
 
 protected:
 

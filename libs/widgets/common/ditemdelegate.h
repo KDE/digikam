@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT DItemDelegate : public QAbstractItemDelegate
 
 public:
 
-    DItemDelegate(DCategorizedView* parent);
+    DItemDelegate(QObject* parent = 0);
     ~DItemDelegate();
 
     /// Returns the gridsize to be set by the view. It's sizeHint plus spacing.
@@ -73,6 +73,8 @@ public:
 
     static QString squeezedText(const QFontMetrics& fm, int width, const QString& text);
     static QString dateToString(const QDateTime& datetime);
+    static QPixmap makeDragPixmap(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes,
+                                  const QPixmap& suggestedPixmap = QPixmap());
 
 Q_SIGNALS:
 
@@ -85,8 +87,6 @@ protected:
 
     QString squeezedTextCached(QPainter* p, int width, const QString& text) const;
     QPixmap thumbnailBorderPixmap(const QSize& pixSize) const;
-    QPixmap makeDragPixmap(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes,
-                           const QPixmap& suggestedPixmap = QPixmap()) const;
 
 private:
 

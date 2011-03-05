@@ -116,6 +116,12 @@ public:
     IccProfile outputProfile() const;
     IccProfile proofProfile() const;
 
+    RenderingIntent intent() const;
+    RenderingIntent proofIntent() const;
+    bool isUsingBlackPointCompensation() const;
+    bool isCheckingGamut() const;
+    QColor checkGamutMaskColor() const;
+
     /**
      * Returns if this transformation will have an effect, i.e. if
      * effective input profile and output profile are different.

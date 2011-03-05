@@ -44,12 +44,20 @@ namespace Digikam
 {
 
 Blur::Blur(QObject* parent)
-    : BatchTool("Blur", EnhanceTool, parent)
+    : BatchTool("Blur", EnhanceTool, parent),
+      m_radiusInput(0)
 {
     setToolTitle(i18n("Blur Image"));
     setToolDescription(i18n("A tool to blur images"));
     setToolIcon(KIcon(SmallIcon("blurimage")));
+}
 
+Blur::~Blur()
+{
+}
+
+QWidget* Blur::createSettingsWidget()
+{
     QWidget* box  = new QWidget;
     QLabel* label = new QLabel(i18n("Smoothness:"));
     m_radiusInput = new RIntNumInput();
@@ -66,14 +74,10 @@ Blur::Blur(QObject* parent)
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
-    setSettingsWidget(box);
-
     connect(m_radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
-}
 
-Blur::~Blur()
-{
+    return box;
 }
 
 BatchToolSettings Blur::defaultSettings()

@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QSharedDataPointer>
 #include <QtCore/QPoint>
 #include <QtGui/QPolygon>
 
@@ -35,10 +36,14 @@
 
 // Local includes
 
+#include "curvescontainer.h"
+#include "globals.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
+
+class CurvesContainer;
 
 class DIGIKAM_EXPORT ImageCurves
 {
@@ -71,7 +76,10 @@ public:
 public:
 
     ImageCurves(bool sixteenBit);
+    ImageCurves(const CurvesContainer& container);
+    ImageCurves(const ImageCurves& other);
     ~ImageCurves();
+    ImageCurves& operator=(const ImageCurves& other);
 
     /**
      * Fills this curves with the data supplied by another curves object. This
@@ -83,8 +91,8 @@ public:
 
     // Methods for to manipulate the curves data.
 
-    bool   isDirty();
-    bool   isSixteenBits();
+    bool   isDirty() const;
+    bool   isSixteenBits() const;
     void   curvesReset();
     void   curvesChannelReset(int channel);
     void   curvesCalculateCurve(int channel);
@@ -93,6 +101,9 @@ public:
     void   curvesLutProcess(uchar* srcPR, uchar* destPR, int w, int h);
 
     // Methods for to set manually the curves values.
+
+    /// Note that bits depth must match
+    void   setCurves(const CurvesContainer& container);
 
     void   setCurveValue(int channel, int bin, int val);
     void   setCurvePointX(int channel, int point, int x);
@@ -104,20 +115,52 @@ public:
     void   setCurvePoints(int channel, const QPolygon& vals);
     void   setCurveValues(int channel, const QPolygon& vals);
 
-    int    getCurveValue(int channel, int bin);
-    int    getCurvePointX(int channel, int point);
-    int    getCurvePointY(int channel, int point);
-    CurveType getCurveType(int channel);
+    int    getCurveValue(int channel, int bin) const;
+    int    getCurvePointX(int channel, int point) const;
+    int    getCurvePointY(int channel, int point) const;
+    CurveType getCurveType(int channel) const;
 
     static QPoint getDisabledValue();
     bool isCurvePointEnabled(int channel, int point) const;
-    QPoint getCurvePoint(int channel, int point);
-    QPolygon getCurvePoints(int channel);
-    QPolygon getCurveValues(int channel);
+    QPoint getCurvePoint(int channel, int point) const;
+    QPolygon getCurvePoints(int channel) const;
+    QPolygon getCurveValues(int channel) const;
+
+    /**
+     * Returns a container with the settings for all channels of this Curves object
+     */
+    CurvesContainer getContainer() const;
+
+    /**
+     * Returns a container containing the values of this Curves
+     * object for the given channel, and linear values for all
+     * other channels.
+     */
+    CurvesContainer getContainer(int channel) const;
+
+    /**
+     * Returns true if the curve is linear for the given channel, or all channels.
+     */
+    bool isLinear(int channel) const;
+    bool isLinear() const;
+
+    /**
+     * Writes the given channel to a base64 representation.
+     * Note that 16bit free curves take a lot of memory (~85kB)
+     * while all other forms take less than 400 bytes.
+     */
+    QByteArray channelToBase64(int channel) const;
+    /**
+     * Set the channel from the given base64 representation.
+     * The data is checked for validity, only on valid data true is returned.
+     * Note that the bytes depth (isSixteenBits()) of the encoded
+     * representation must match the depth of this curves object.
+     */
+    bool setChannelFromBase64(int channel, const QByteArray& array);
 
     // Methods for to save/load the curves values to/from a Gimp curves text file.
 
-    bool   saveCurvesToGimpCurvesFile(const KUrl& fileUrl);
+    bool   saveCurvesToGimpCurvesFile(const KUrl& fileUrl) const;
     bool   loadCurvesFromGimpCurvesFile(const KUrl& fileUrl);
 
 private:
@@ -130,7 +173,7 @@ private:
 private:
 
     class ImageCurvesPriv;
-    ImageCurvesPriv* const d;
+    QSharedDataPointer<ImageCurvesPriv> d;
 };
 
 }  // namespace Digikam

@@ -30,6 +30,7 @@ namespace Digikam
 
 DBActionType::DBActionType()
 {
+    m_isValue = false;
 }
 
 DBActionType::DBActionType(const DBActionType& actionType)
@@ -42,18 +43,37 @@ DBActionType::~DBActionType()
     m_ActionValue.~QVariant();
 }
 
+DBActionType DBActionType::value(const QVariant& value)
+{
+    DBActionType actionType;
+    actionType.setValue(true);
+    actionType.setActionValue(value);
+    return actionType;
+}
+
+DBActionType DBActionType::fieldEntry(const QVariant& actionValue)
+{
+    DBActionType actionType;
+    actionType.setValue(false);
+    actionType.setActionValue(actionValue);
+    return actionType;
+}
+
 QVariant DBActionType::getActionValue()
 {
     return m_ActionValue;
 }
-void DBActionType::setActionValue(QVariant actionValue)
+
+void DBActionType::setActionValue(const QVariant& actionValue)
 {
     m_ActionValue = actionValue;
 }
+
 bool DBActionType::isValue() const
 {
     return m_isValue;
 }
+
 void DBActionType::setValue(bool isValue)
 {
     m_isValue = isValue;

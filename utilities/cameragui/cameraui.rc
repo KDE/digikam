@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="28" name="cameraui" >
+<gui version="201" name="cameraui" >
 
 <MenuBar>
 
@@ -51,11 +51,11 @@
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
-        <Action name="cameraui_rawcameralist"/>
+        <Action name="help_rawcameralist"/>
         <Action name="cameraui_librariesinfo"/>
         <Action name="cameraui_dbstat"/>
-        <Action name="cameraui_donatemoney" />
-        <Action name="cameraui_contribute" />
+        <Action name="help_donatemoney" />
+        <Action name="help_contribute" />
     </Menu>
 
     <Merge/>

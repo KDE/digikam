@@ -6,8 +6,8 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -70,6 +70,12 @@ public:
     CaptionsMap getImageComments() const;
     bool setImageComments(const CaptionsMap& comments) const;
 
+    int  getImagePickLabel() const;
+    bool setImagePickLabel(int pickId) const;
+
+    int  getImageColorLabel() const;
+    bool setImageColorLabel(int colorId) const;
+
     int  getImageRating() const;
     bool setImageRating(int rating) const;
 
@@ -79,6 +85,13 @@ public:
     bool     setMetadataTemplate(const Template& t) const;
     Template getMetadataTemplate() const;
     bool     removeMetadataTemplate() const;
+
+    QString getImageHistory() const;
+    bool    setImageHistory(QString& imageHistoryXml) const;
+    bool    hasImageHistoryTag() const;
+
+    QString getImageUniqueId() const;
+    bool setImageUniqueId(const QString& uuid) const;
 
     /// Fills only the copyright values in the template. Use getMetadataTemplate() usually.
     /// Returns true if valid fields were read.

@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,6 +57,14 @@ public:
 
     HSLContainer settings;
 };
+
+HSLFilter::HSLFilter(QObject* parent)
+    : DImgThreadedFilter(parent),
+      d(new HSLFilterPriv)
+{
+    reset();
+    initFilter();
+}
 
 HSLFilter::HSLFilter(DImg* orgImage, QObject* parent, const HSLContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "HSLFilter"),
@@ -288,5 +297,27 @@ void HSLFilter::applyHSL(DImg& image)
         }
     }
 }
+
+FilterAction HSLFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("hue", d->settings.hue);
+    action.addParameter("lightness", d->settings.lightness);
+    action.addParameter("saturation", d->settings.saturation);
+    action.addParameter("vibrance", d->settings.vibrance);
+
+    return action;
+}
+
+void HSLFilter::readParameters(const Digikam::FilterAction& action)
+{
+    d->settings.hue = action.parameter("hue").toDouble();
+    d->settings.lightness = action.parameter("lightness").toDouble();
+    d->settings.saturation = action.parameter("saturation").toDouble();
+    d->settings.vibrance = action.parameter("vibrance").toDouble();
+}
+
 
 }  // namespace Digikam

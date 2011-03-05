@@ -7,6 +7,7 @@
  * Description : black and white image filter.
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -88,7 +89,7 @@ public:
 
 public:
 
-    BWSepiaContainer(bool init=true) : curvesPrm(init)
+    BWSepiaContainer()
     {
         previewType = BWGeneric;
         preview     = false;
@@ -98,7 +99,7 @@ public:
         strength    = 1.0;
     };
 
-    BWSepiaContainer(int ptype, bool init=true) : curvesPrm(init)
+    BWSepiaContainer(int ptype)
     {
         previewType = ptype;
         preview     = true;
@@ -108,7 +109,7 @@ public:
         toneType    = BWNoTone;
     };
 
-    BWSepiaContainer(int ptype, const CurvesContainer& container) : curvesPrm(false)
+    BWSepiaContainer(int ptype, const CurvesContainer& container)
     {
         previewType = ptype;
         preview     = true;
@@ -144,8 +145,33 @@ class DIGIKAM_EXPORT BWSepiaFilter : public DImgThreadedFilter
 
 public:
 
+    explicit BWSepiaFilter(QObject* parent = 0);
     explicit BWSepiaFilter(DImg* orgImage, QObject* parent=0, const BWSepiaContainer& settings=BWSepiaContainer());
     virtual ~BWSepiaFilter();
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:BWSepiaFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Black & White / Sepia Filter");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 

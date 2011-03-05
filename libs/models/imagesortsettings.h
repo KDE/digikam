@@ -74,6 +74,12 @@ public:
      */
     int compare(const ImageInfo& left, const ImageInfo& right) const;
 
+    /** Returns true if left QVariant is less than right.
+     *  Adheres to current sort role and sort order.
+     *  Use for extraValue, if necessary.
+     */
+    bool lessThan(const QVariant& left, const QVariant& right) const;
+
     enum SortOrder
     {
         AscendingOrder = Qt::AscendingOrder,

@@ -68,7 +68,6 @@ public:
         themebackgroundColor(0),
         hideToolBar(0),
         hideThumbBar(0),
-        useRawImportTool(0),
         expoIndicatorMode(0),
         expoPreview(0),
         colorBox(0),
@@ -85,7 +84,6 @@ public:
     static const QString  configBackgroundColorEntry;
     static const QString  configFullScreenHideToolBarEntry;
     static const QString  configFullScreenHideThumbBarEntry;
-    static const QString  configUseRawImportToolEntry;
     static const QString  configUnderExposureColorEntry;
     static const QString  configOverExposureColorEntry;
     static const QString  configUnderExposurePercentsEntry;
@@ -95,7 +93,6 @@ public:
     QCheckBox*       themebackgroundColor;
     QCheckBox*       hideToolBar;
     QCheckBox*       hideThumbBar;
-    QCheckBox*       useRawImportTool;
     QCheckBox*       expoIndicatorMode;
 
     QLabel*          expoPreview;
@@ -117,7 +114,6 @@ const QString SetupEditor::SetupEditorPriv::configUseThemeBackgroundColorEntry("
 const QString SetupEditor::SetupEditorPriv::configBackgroundColorEntry("BackgroundColor");
 const QString SetupEditor::SetupEditorPriv::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
 const QString SetupEditor::SetupEditorPriv::configFullScreenHideThumbBarEntry("FullScreenHideThumbBar");
-const QString SetupEditor::SetupEditorPriv::configUseRawImportToolEntry("UseRawImportTool");
 const QString SetupEditor::SetupEditorPriv::configUnderExposureColorEntry("UnderExposureColor");
 const QString SetupEditor::SetupEditorPriv::configOverExposureColorEntry("OverExposureColor");
 const QString SetupEditor::SetupEditorPriv::configUnderExposurePercentsEntry("UnderExposurePercentsEntry");
@@ -156,16 +152,10 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->hideToolBar      = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar     = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
 
-    d->useRawImportTool = new QCheckBox(i18n("Use Raw Import Tool to handle Raw images"), interfaceOptionsGroup);
-    d->useRawImportTool->setWhatsThis(i18n("Set this option to use the Raw Import "
-                                           "tool to load RAW images. "
-                                           "With this tool you are able to customize indeep decoding settings."));
-
     gLayout1->addWidget(d->themebackgroundColor);
     gLayout1->addWidget(d->colorBox);
     gLayout1->addWidget(d->hideToolBar);
     gLayout1->addWidget(d->hideThumbBar);
-    gLayout1->addWidget(d->useRawImportTool);
     gLayout1->setMargin(KDialog::spacingHint());
     gLayout1->setSpacing(KDialog::spacingHint());
 
@@ -338,7 +328,6 @@ void SetupEditor::readSettings()
     d->hideThumbBar->setChecked(group.readEntry(d->configFullScreenHideThumbBarEntry,          true));
     d->underExposureColor->setColor(group.readEntry(d->configUnderExposureColorEntry,          White));
     d->overExposureColor->setColor(group.readEntry(d->configOverExposureColorEntry,            Black));
-    d->useRawImportTool->setChecked(group.readEntry(d->configUseRawImportToolEntry,            false));
     d->expoIndicatorMode->setChecked(group.readEntry(d->configExpoIndicatorModeEntry,          true));
     d->underExposurePcents->setValue(group.readEntry(d->configUnderExposurePercentsEntry,      1.0));
     d->overExposurePcents->setValue(group.readEntry(d->configOverExposurePercentsEntry,        1.0));
@@ -354,7 +343,6 @@ void SetupEditor::applySettings()
     group.writeEntry(d->configFullScreenHideThumbBarEntry,  d->hideThumbBar->isChecked());
     group.writeEntry(d->configUnderExposureColorEntry,      d->underExposureColor->color());
     group.writeEntry(d->configOverExposureColorEntry,       d->overExposureColor->color());
-    group.writeEntry(d->configUseRawImportToolEntry,        d->useRawImportTool->isChecked());
     group.writeEntry(d->configExpoIndicatorModeEntry,       d->expoIndicatorMode->isChecked());
     group.writeEntry(d->configUnderExposurePercentsEntry,   d->underExposurePcents->value());
     group.writeEntry(d->configOverExposurePercentsEntry,    d->overExposurePcents->value());

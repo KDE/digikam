@@ -82,7 +82,8 @@ public:
         Unknown,
         Added,
         Removed,
-        RemovedAll
+        RemovedAll,
+        PropertiesChanged
     };
 
     ImageTagChangeset();
@@ -114,6 +115,10 @@ public:
     bool tagsWereRemoved() const
     {
         return operation() == Removed || operation() == RemovedAll;
+    }
+    bool propertiesWereChanged() const
+    {
+        return operation() == PropertiesChanged;
     }
 
 private:
@@ -252,7 +257,8 @@ public:
         Deleted,
         Renamed,
         Reparented,
-        IconChanged
+        IconChanged,
+        PropertiesChanged /// ImageTagProperties Table
     };
 
     TagChangeset();

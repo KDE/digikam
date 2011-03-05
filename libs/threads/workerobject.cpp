@@ -51,6 +51,7 @@ public:
         state     = WorkerObject::Inactive;
         eventLoop = 0;
         runnable  = 0;
+        inDestruction = false;
     }
 
     volatile WorkerObject::State state;
@@ -58,6 +59,7 @@ public:
     QWaitCondition               condVar;
     QEventLoop*                  eventLoop;
     WorkerObjectRunnable*        runnable;
+    bool                         inDestruction;
 };
 
 WorkerObject::WorkerObject()
@@ -68,9 +70,18 @@ WorkerObject::WorkerObject()
 
 WorkerObject::~WorkerObject()
 {
+    shutDown();
+    delete d;
+}
+
+void WorkerObject::shutDown()
+{
+    {
+        QMutexLocker locker(&d->mutex);
+        d->inDestruction = true;
+    }
     deactivate(PhaseOut);
     wait();
-    delete d;
 }
 
 void WorkerObject::wait()
@@ -152,6 +163,11 @@ void WorkerObject::removeRunnable(WorkerObjectRunnable* runnable)
 
 void WorkerObject::schedule()
 {
+    if (d->inDestruction)
+    {
+        return;
+    }
+
     {
         QMutexLocker locker(&d->mutex);
 
@@ -166,6 +182,7 @@ void WorkerObject::schedule()
                 return;
         }
     }
+
     ThreadManager::instance()->schedule(this);
 }
 

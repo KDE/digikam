@@ -7,6 +7,7 @@
  * Description : Charcoal threaded image filter.
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,8 +39,33 @@ class DIGIKAM_EXPORT CharcoalFilter : public DImgThreadedFilter
 
 public:
 
+    explicit CharcoalFilter(QObject* parent = 0);
     explicit CharcoalFilter(DImg* orgImage, QObject* parent=0, double pencil=5.0, double smooth=10.0);
     ~CharcoalFilter();
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:CharcoalFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Charcoal Effect");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 

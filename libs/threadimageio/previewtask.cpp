@@ -42,9 +42,7 @@
 // libkexiv2 includes
 
 #include <libkexiv2/version.h>
-#if KEXIV2_VERSION >= 0x010000
 #include <libkexiv2/kexiv2previews.h>
-#endif
 
 // LibKDcraw includes
 
@@ -111,7 +109,7 @@ void PreviewLoadingTask::execute()
 
             // rotate if needed - images are unrotated in the cache,
             // except for RAW images, which are already rotated by dcraw.
-            if (m_loadingDescription.previewParameters.exifRotate)
+            if (m_loadingDescription.previewParameters.exifRotate())
             {
                 m_img = m_img.copy();
                 LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
@@ -179,8 +177,13 @@ void PreviewLoadingTask::execute()
     {
         // following the golden rule to avoid deadlocks, do this when CacheLock is not held
 
-        // The image from the cache may or may not be post processed.
-        // postProcess() will detect if work is needed.
+        // The image from the cache may or may not be rotated and post processed.
+        // exifRotate() and postProcess() will detect if work is needed.
+        if (m_loadingDescription.previewParameters.exifRotate())
+        {
+            LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
+        }
+
         postProcess();
         m_thread->taskHasFinished();
         m_thread->imageLoaded(m_resultLoadingDescription, m_img);
@@ -192,23 +195,45 @@ void PreviewLoadingTask::execute()
 
     QImage qimage;
     bool fromEmbeddedPreview = false;
-    QSize originalSize;
 
     // -- Get the image preview --------------------------------
 
     if (size)
     {
+        DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
         // First the QImage-dependent loading methods
 
         // check embedded previews
-#if KEXIV2_VERSION >= 0x010000
         KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
 
+        int sizeLimit = -1;
+        QSize originalSize = previews.originalSize();
+        int bestSize = qMax(originalSize.width(), originalSize.height());
+
+        // for RAWs, the alternative is the half preview, so best size is already originalSize / 2
+        if (format == DImg::RAW)
+        {
+            bestSize /= 2;
+        }
+
+        if (m_loadingDescription.previewParameters.fastButLarge())
+        {
+            if (format == DImg::RAW)
+            {
+                sizeLimit = qMin(size, bestSize);
+            }
+        }
+        else
+        {
+            int aBitSmallerThanSize = (int)lround(double(size) * 0.8);
+            sizeLimit = qMin(aBitSmallerThanSize, bestSize);
+        }
+
         // Only check the first and largest preview
-        if (!previews.isEmpty() && continueQuery())
+        if (sizeLimit != -1 && !previews.isEmpty() && continueQuery())
         {
             // require at least half preview size
-            if (qMax(previews.width(), previews.height()) >= size / 2)
+            if (qMax(previews.width(), previews.height()) >= sizeLimit)
             {
                 qimage = previews.image();
 
@@ -218,24 +243,6 @@ void PreviewLoadingTask::execute()
                 }
             }
         }
-
-#else
-
-        // Trying to load with dcraw: RAW files.
-        if (continueQuery() && KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
-        {
-            // Discard if too small
-            if (qMax(qimage.width(), qimage.height()) < size / 2)
-            {
-                qimage = QImage();
-            }
-            else
-            {
-                fromEmbeddedPreview = true;
-            }
-        }
-
-#endif
 
         if (qimage.isNull() && continueQuery())
         {
@@ -259,9 +266,7 @@ void PreviewLoadingTask::execute()
             m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
 
             DMetadata metadata(m_loadingDescription.filePath);
-#if KEXIV2_VERSION >= 0x010100
             m_img.setAttribute("originalSize", metadata.getPixelSize());
-#endif
 
             // mark as embedded preview (for Exif rotation)
             if (fromEmbeddedPreview)
@@ -281,7 +286,11 @@ void PreviewLoadingTask::execute()
         if (m_img.isNull() && continueQuery())
         {
             // Set a hint to try to load a JPEG or PGF with the fast scale-before-decoding method
-            m_img.setAttribute("scaledLoadingSize", size);
+            if (!m_loadingDescription.previewParameters.fastButLarge())
+            {
+                m_img.setAttribute("scaledLoadingSize", size);
+            }
+
             m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
         }
 
@@ -292,56 +301,32 @@ void PreviewLoadingTask::execute()
     }
     else
     {
-        KDcrawIface::DcrawInfoContainer dcrawIdentify;
-
-        if (KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, m_loadingDescription.filePath))
         {
-#if KEXIV2_VERSION >= 0x010000
-            // Check if full-size preview is available
+            // check embedded previews
+            KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
+
+            QSize originalSize = previews.originalSize();
+            // discard if smaller than half preview
+            int acceptableWidth  = lround(originalSize.width() * 0.48);
+            int acceptableHeight = lround(originalSize.height() * 0.48);
+
+            if (qimage.isNull() && !previews.isEmpty() && continueQuery())
             {
-                KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
-
-                // Only check the first and largest preview
-                if (!previews.isEmpty() && continueQuery())
+                if (previews.width() >= acceptableWidth &&  previews.height() >= acceptableHeight)
                 {
-                    // discard if smaller than half preview
-                    int acceptableWidth = lround(dcrawIdentify.imageSize.width() * 0.5);
-                    int acceptableHeight = lround(dcrawIdentify.imageSize.height() * 0.5);
+                    qimage = previews.image();
 
-                    if (previews.width() >= acceptableWidth &&  previews.height() >= acceptableHeight)
+                    if (!qimage.isNull())
                     {
-                        qimage = previews.image();
-
-                        if (!qimage.isNull())
-                        {
-                            fromEmbeddedPreview = true;
-                        }
+                        fromEmbeddedPreview = true;
                     }
                 }
             }
-#else
+        }
 
-            // Trying to load with dcraw: RAW files.
-            if (qimage.isNull() && continueQuery() && dcrawIdentify.isDecodable &&
-                KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
-            {
-                // discard if smaller than half preview
-                if (qMax(qimage.width(), qimage.height()) < dcrawIdentify.imageSize.width() / 2)
-                {
-                    qimage = QImage();
-                }
-                else
-                {
-                    fromEmbeddedPreview = true;
-                }
-            }
-
-#endif
-
-            if (qimage.isNull() && continueQuery())
-            {
-                KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
-            }
+        if (qimage.isNull() && continueQuery())
+        {
+            KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
         }
 
         if (!qimage.isNull() && continueQuery())
@@ -354,9 +339,7 @@ void PreviewLoadingTask::execute()
             m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
 
             DMetadata metadata(m_loadingDescription.filePath);
-#if KEXIV2_VERSION >= 0x010100
             m_img.setAttribute("originalSize", metadata.getPixelSize());
-#endif
 
             // mark as embedded preview (for Exif rotation)
             if (fromEmbeddedPreview)
@@ -409,7 +392,7 @@ void PreviewLoadingTask::execute()
         }
 
         // Scale if hinted, Store previews rotated in the cache (?)
-        if (m_loadingDescription.previewParameters.exifRotate)
+        if (m_loadingDescription.previewParameters.exifRotate())
         {
             LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
         }
@@ -486,6 +469,11 @@ void PreviewLoadingTask::execute()
 bool PreviewLoadingTask::needToScale(const QSize& imageSize, int previewSize)
 {
     if (!previewSize)
+    {
+        return false;
+    }
+
+    if (m_loadingDescription.previewParameters.fastButLarge())
     {
         return false;
     }

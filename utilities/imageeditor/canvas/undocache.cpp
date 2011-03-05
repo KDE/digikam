@@ -44,6 +44,7 @@ extern "C"
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
+#include <kdebug.h>
 #include <kglobal.h>
 
 namespace Digikam
@@ -91,7 +92,7 @@ void UndoCache::clear()
 /**
  * write the data into a cache file
  */
-bool UndoCache::putData(int level, int w, int h, int bytesDepth, uchar* data)
+bool UndoCache::putData(int level, int w, int h, bool sixteenBit, bool hasAlpha, uchar* data)
 {
     QString cacheFile = QString("%1-%2.bin")
                         .arg(d->cachePrefix)
@@ -107,9 +108,10 @@ bool UndoCache::putData(int level, int w, int h, int bytesDepth, uchar* data)
     QDataStream ds(&file);
     ds << w;
     ds << h;
-    ds << bytesDepth;
+    ds << sixteenBit;
+    ds << hasAlpha;
 
-    QByteArray ba((char*)data, w*h*bytesDepth);
+    QByteArray ba((char*)data, w*h*(sixteenBit ? 8 : 4));
     ds << ba;
 
     file.close();
@@ -122,8 +124,13 @@ bool UndoCache::putData(int level, int w, int h, int bytesDepth, uchar* data)
 /**
  * get the data from a cache file
  */
-uchar* UndoCache::getData(int level, int& w, int& h, int& bytesDepth, bool del)
+uchar* UndoCache::getData(int level, int& w, int& h, bool& sixteenBit, bool& hasAlpha, bool del)
 {
+    w = 0;
+    h = 0;
+    sixteenBit = false;
+    hasAlpha   = false;
+
     QString cacheFile = QString("%1-%2.bin")
                         .arg(d->cachePrefix)
                         .arg(level);
@@ -138,9 +145,10 @@ uchar* UndoCache::getData(int level, int& w, int& h, int& bytesDepth, bool del)
     QDataStream ds(&file);
     ds >> w;
     ds >> h;
-    ds >> bytesDepth;
+    ds >> sixteenBit;
+    ds >> hasAlpha;
 
-    uchar* data = new uchar[w*h*bytesDepth];
+    uchar* data = new uchar[w*h*(sixteenBit ? 8 : 4)];
 
     if (!data)
     {

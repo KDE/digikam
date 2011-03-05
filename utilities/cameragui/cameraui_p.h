@@ -7,8 +7,8 @@
  * Description : Camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,11 +50,12 @@
 
 #include "cameracontroller.h"
 #include "cameraiconview.h"
+#include "daboutdata.h"
 #include "dlogoaction.h"
 #include "dzoombar.h"
 #include "freespacewidget.h"
 #include "imagepropertiessidebarcamgui.h"
-#include "kdatetimeedit.h"
+#include "ddatetimeedit.h"
 #include "renamecustomizer.h"
 #include "sidebar.h"
 #include "statusnavigatebar.h"
@@ -98,11 +99,9 @@ public:
         cameraCancelAction(0),
         cameraCaptureAction(0),
         cameraInfoAction(0),
-        contributeAction(0),
         decreaseThumbsAction(0),
         deleteAllAction(0),
         deleteSelectedAction(0),
-        donateMoneyAction(0),
         downloadAllAction(0),
         downloadDelAllAction(0),
         downloadDelSelectedAction(0),
@@ -110,7 +109,6 @@ public:
         fullScreenAction(0),
         imageViewAction(0),
         increaseThumbsAction(0),
-        rawCameraListAction(0),
         libsInfoAction(0),
         dbStatAction(0),
         lockAction(0),
@@ -144,7 +142,8 @@ public:
         statusNavigateBar(0),
         albumLibraryFreeSpace(0),
         cameraFreeSpace(0),
-        historyView(0)
+        historyView(0),
+        about(0)
     {
     }
 
@@ -182,11 +181,9 @@ public:
     KAction*                      cameraCancelAction;
     KAction*                      cameraCaptureAction;
     KAction*                      cameraInfoAction;
-    KAction*                      contributeAction;
     KAction*                      decreaseThumbsAction;
     KAction*                      deleteAllAction;
     KAction*                      deleteSelectedAction;
-    KAction*                      donateMoneyAction;
     KAction*                      downloadAllAction;
     KAction*                      downloadDelAllAction;
     KAction*                      downloadDelSelectedAction;
@@ -194,7 +191,6 @@ public:
     KAction*                      fullScreenAction;
     KAction*                      imageViewAction;
     KAction*                      increaseThumbsAction;
-    KAction*                      rawCameraListAction;
     KAction*                      libsInfoAction;
     KAction*                      dbStatAction;
     KAction*                      lockAction;
@@ -218,7 +214,7 @@ public:
 
     KHelpMenu*                    helpMenu;
 
-    KDateTimeEdit*                dateTimeEdit;
+    DDateTimeEdit*                dateTimeEdit;
 
     KIO::PreviewJob*              kdeJob;
 
@@ -247,6 +243,8 @@ public:
     FreeSpaceWidget*              cameraFreeSpace;
 
     DHistoryView*                 historyView;
+
+    DAboutData*                   about;
 };
 
 }  // namespace Digikam

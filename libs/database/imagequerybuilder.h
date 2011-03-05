@@ -71,6 +71,12 @@ public:
     QString buildQueryFromXml(const QString& xml, QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const;
     QString convertFromUrlToXml(const KUrl& url) const;
 
+    /**
+     * Use for special queries where ImageTagProperties table is JOIN'ed.
+     * (Default: false)
+     */
+    void setImageTagPropertiesJoined(bool isJoined);
+
 protected:
 
     void buildGroup(QString& sql, SearchXmlCachingReader& reader,
@@ -90,6 +96,7 @@ protected:
 
     QString  m_longMonths[12];
     QString  m_shortMonths[12];
+    bool     m_imageTagPropertiesJoined;
 };
 
 }  // namespace Digikam

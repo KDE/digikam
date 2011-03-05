@@ -7,6 +7,7 @@
  * Description : Shear tool threaded image filter.
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,6 +44,7 @@ class DIGIKAM_EXPORT ShearFilter : public DImgThreadedFilter
 
 public:
 
+    explicit ShearFilter(QObject* parent = 0);
     explicit ShearFilter(DImg* orgImage, QObject* parent=0, float hAngle=0.0, float vAngle=0.0,
                          bool antialiasing=true, const QColor& backgroundColor=Qt::black, int orgW=0, int orgH=0);
     ~ShearFilter();
@@ -51,6 +53,30 @@ public:
     {
         return m_newSize;
     };
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:ShearFilter";
+    }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Shear Tool");
+    }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 private:
 

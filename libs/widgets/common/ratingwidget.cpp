@@ -35,10 +35,20 @@
 #include <QPixmap>
 #include <QTimeLine>
 #include <QPolygon>
+#include <QFont>
+#include <QAction>
 
 // KDE includes
 
+#include <kglobalsettings.h>
+#include <ksqueezedtextlabel.h>
+#include <klocale.h>
 #include <kdebug.h>
+#include <kmenu.h>
+#include <khbox.h>
+#include <kapplication.h>
+#include <kxmlguiwindow.h>
+#include <kactioncollection.h>
 
 // Local includes
 
@@ -139,6 +149,7 @@ void RatingWidget::setRating(int val)
         emit signalRatingChanged(d->rating);
     }
 
+    emit signalRatingModified(d->rating);
     update();
 }
 
@@ -257,6 +268,11 @@ void RatingWidget::regeneratePixmaps()
 
 void RatingWidget::mousePressEvent(QMouseEvent* e)
 {
+    if (e->button() != Qt::LeftButton)
+    {
+        return;
+    }
+
     if (hasFading() && d->fadingValue < 255)
     {
         return;
@@ -288,11 +304,17 @@ void RatingWidget::mousePressEvent(QMouseEvent* e)
         emit signalRatingChanged(d->rating);
     }
 
+    emit signalRatingModified(d->rating);
     update();
 }
 
 void RatingWidget::mouseMoveEvent(QMouseEvent* e)
 {
+    if (!(e->buttons() & Qt::LeftButton))
+    {
+        return;
+    }
+
     if (hasFading() && d->fadingValue < 255)
     {
         return;
@@ -319,12 +341,18 @@ void RatingWidget::mouseMoveEvent(QMouseEvent* e)
             emit signalRatingChanged(d->rating);
         }
 
+        emit signalRatingModified(d->rating);
         update();
     }
 }
 
-void RatingWidget::mouseReleaseEvent(QMouseEvent*)
+void RatingWidget::mouseReleaseEvent(QMouseEvent* e)
 {
+    if (e->button() != Qt::LeftButton)
+    {
+        return;
+    }
+
     if (hasFading() && d->fadingValue < 255)
     {
         return;
@@ -419,6 +447,90 @@ void RatingWidget::applyFading(QPixmap& pix)
         alphaMask.fill(color);
         pix.setAlphaChannel(alphaMask);
     }
+}
+
+// -------------------------------------------------------------------------------
+
+class RatingBox::RatingBoxPriv
+{
+
+public:
+
+    RatingBoxPriv()
+    {
+        shortcut     = 0;
+        ratingWidget = 0;
+    }
+
+    KSqueezedTextLabel* shortcut;
+
+    RatingWidget*       ratingWidget;
+};
+
+RatingBox::RatingBox(QWidget* parent)
+    : KVBox(parent), d(new RatingBoxPriv)
+{
+    setAttribute(Qt::WA_DeleteOnClose);
+    setFocusPolicy(Qt::NoFocus);
+
+    d->ratingWidget = new RatingWidget(this);
+    d->ratingWidget->setTracking(false);
+
+    d->shortcut = new KSqueezedTextLabel(this);
+    QFont fnt   = d->shortcut->font();
+    fnt.setItalic(true);
+    d->shortcut->setFont(fnt);
+    d->shortcut->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    d->shortcut->setWordWrap(false);
+
+    setMargin(0);
+    setSpacing(0);
+
+    // -------------------------------------------------------------
+
+    connect(d->ratingWidget, SIGNAL(signalRatingModified(int)),
+            this, SLOT(slotUpdateDescription(int)));
+
+    connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
+            this, SIGNAL(signalRatingChanged(int)));
+}
+
+RatingBox::~RatingBox()
+{
+    delete d;
+}
+
+void RatingBox::slotUpdateDescription(int rating)
+{
+    KXmlGuiWindow* app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
+    if (app)
+    {
+        QAction* ac = app->actionCollection()->action(QString("rateshortcut-%1").arg(rating));
+        if (ac)
+            d->shortcut->setText(ac->shortcut().toString());
+    }
+}
+
+// -------------------------------------------------------------------------------
+
+RatingMenuAction::RatingMenuAction(QMenu* parent)
+    : KActionMenu(parent)
+{
+    setText(i18n("Rating"));
+    QWidgetAction* wa = new QWidgetAction(this);
+    RatingBox* rb     = new RatingBox(parent);
+    wa->setDefaultWidget(rb);
+    addAction(wa);
+
+    connect(rb, SIGNAL(signalRatingChanged(int)),
+            this, SIGNAL(signalRatingChanged(int)));
+
+    connect(rb, SIGNAL(signalRatingChanged(int)),
+            parent, SLOT(close()));
+}
+
+RatingMenuAction::~RatingMenuAction()
+{
 }
 
 }  // namespace Digikam

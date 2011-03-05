@@ -7,7 +7,7 @@
  * Description : setup Metadata tab.
  *
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,6 +48,8 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 #include <kvbox.h>
+#include <khbox.h>
+#include <kcombobox.h>
 
 // LibKExiv2 includes
 
@@ -59,11 +61,14 @@
 #include "albumsettings.h"
 #include "config-digikam.h"
 #include "metadatapanel.h"
+#include "metadatasettings.h"
+
+using namespace KExiv2Iface;
 
 namespace Digikam
 {
 
-class SetupMetadataPriv
+class SetupMetadata::SetupMetadataPriv
 {
 public:
 
@@ -73,6 +78,8 @@ public:
         saveCommentsBox(0),
         exifRotateBox(0),
         exifSetOrientationBox(0),
+        savePickLabelBox(0),
+        saveColorLabelBox(0),
         saveRatingBox(0),
         saveTagsBox(0),
         saveDateTimeBox(0),
@@ -82,6 +89,7 @@ public:
         saveToNepomukBox(0),
         readFromNepomukBox(0),
         resyncButton(0),
+        writingModeCombo(0),
         tab(0),
         tagsCfgPanel(0)
     {
@@ -93,17 +101,21 @@ public:
     QCheckBox*     saveCommentsBox;
     QCheckBox*     exifRotateBox;
     QCheckBox*     exifSetOrientationBox;
+    QCheckBox*     savePickLabelBox;
+    QCheckBox*     saveColorLabelBox;
     QCheckBox*     saveRatingBox;
     QCheckBox*     saveTagsBox;
     QCheckBox*     saveDateTimeBox;
     QCheckBox*     saveTemplateBox;
     QCheckBox*     writeRawFilesBox;
+    QCheckBox*     useXMPSidecarBox;
     QCheckBox*     updateFileTimeStampBox;
 
     QCheckBox*     saveToNepomukBox;
     QCheckBox*     readFromNepomukBox;
     QToolButton*   resyncButton;
 
+    KComboBox*     writingModeCombo;
     KTabWidget*    tab;
 
     MetadataPanel* tagsCfgPanel;
@@ -162,6 +174,16 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->saveDateTimeBox->setWhatsThis( i18n("Turn on this option to store the image date and time "
                                            "in the EXIF, XMP, and IPTC tags."));
 
+    d->savePickLabelBox = new QCheckBox(commonGroup);
+    d->savePickLabelBox->setText(i18n("&Save image pick label in metadata embedded in files"));
+    d->savePickLabelBox->setWhatsThis( i18n("Turn on this option to store the image pick label "
+                                            "in the XMP tags."));
+
+    d->saveColorLabelBox = new QCheckBox(commonGroup);
+    d->saveColorLabelBox->setText(i18n("&Save image color label in metadata embedded in files"));
+    d->saveColorLabelBox->setWhatsThis( i18n("Turn on this option to store the image color label "
+                                             "in the XMP tags."));
+
     d->saveRatingBox = new QCheckBox(commonGroup);
     d->saveRatingBox->setText(i18n("&Save image rating in metadata embedded in files"));
     d->saveRatingBox->setWhatsThis( i18n("Turn on this option to store the image rating "
@@ -172,25 +194,39 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->writeRawFilesBox->setWhatsThis( i18n("Turn on this option to write metadata into RAW TIFF/EP files. "
                                             "This feature requires the Exiv2 shared library, version >= 0.18.0. It is still "
                                             "experimental, and is disabled by default."));
-    d->writeRawFilesBox->setEnabled(KExiv2Iface::KExiv2::supportMetadataWritting("image/x-raw"));
+    d->writeRawFilesBox->setEnabled(KExiv2::supportMetadataWritting("image/x-raw"));
 
     d->updateFileTimeStampBox = new QCheckBox(commonGroup);
     d->updateFileTimeStampBox->setText(i18n("&Update file timestamp when metadata are saved"));
     d->updateFileTimeStampBox->setWhatsThis( i18n("Turn on this option to update file timestamps when metadata are saved."));
 
-#if KEXIV2_VERSION >= 0x000600
-    d->updateFileTimeStampBox->show();
-#else
-    d->updateFileTimeStampBox->hide();
-#endif
+    d->useXMPSidecarBox = new QCheckBox(commonGroup);
+    d->useXMPSidecarBox->setText(i18n("&Read metadata from XMP sidecar files"));
+    d->useXMPSidecarBox->setWhatsThis( i18n("Turn on this option to prefer metadata from XMP sidecar files when reading metadata."));
+    d->useXMPSidecarBox->setEnabled(KExiv2::supportXmp());
+
+    KHBox* hbox              = new KHBox(commonGroup);
+    QLabel* writingModeLabel = new QLabel(i18n("Metadata Writing Mode:"), hbox);
+    writingModeLabel->setEnabled(KExiv2::supportXmp());
+    d->writingModeCombo      = new KComboBox(hbox);
+    d->writingModeCombo->addItem(i18n("Write to image only"),                           KExiv2::WRITETOIMAGEONLY);
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     KExiv2::WRITETOSIDECARONLY);
+    d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),                KExiv2::WRITETOSIDECARANDIMAGE);
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only image only"), KExiv2::WRITETOSIDECARONLY4READONLYFILES);
+    d->writingModeCombo->setToolTip(i18n("Choose here how metadata should be stored."));
+    d->writingModeCombo->setEnabled(KExiv2::supportXmp());
 
     gLayout2->addWidget(d->saveTagsBox);
     gLayout2->addWidget(d->saveTemplateBox);
     gLayout2->addWidget(d->saveCommentsBox);
     gLayout2->addWidget(d->saveDateTimeBox);
+    gLayout2->addWidget(d->savePickLabelBox);
+    gLayout2->addWidget(d->saveColorLabelBox);
     gLayout2->addWidget(d->saveRatingBox);
-    gLayout2->addWidget(d->writeRawFilesBox);
     gLayout2->addWidget(d->updateFileTimeStampBox);
+    gLayout2->addWidget(d->writeRawFilesBox);
+    gLayout2->addWidget(d->useXMPSidecarBox);
+    gLayout2->addWidget(hbox);
     gLayout2->setMargin(KDialog::spacingHint());
     gLayout2->setSpacing(0);
 
@@ -219,7 +255,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
                     "an older standard used in digital photography to store "
                     "photographer information in images.</p>"));
 
-    if (KExiv2Iface::KExiv2::supportXmp())
+    if (KExiv2::supportXmp())
         txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a> - "
                         "a new standard used in digital photography, designed to replace IPTC.</p>"));
 
@@ -360,59 +396,88 @@ void SetupMetadata::slotProcessExiv2Url(const QString& url)
 
 void SetupMetadata::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* aSettings    = AlbumSettings::instance();
 
-    if (!settings)
+    if (!aSettings)
     {
         return;
     }
 
-    settings->setExifRotate(d->exifRotateBox->isChecked());
-    settings->setExifSetOrientation(d->exifSetOrientationBox->isChecked());
-    settings->setSaveComments(d->saveCommentsBox->isChecked());
-    settings->setSaveDateTime(d->saveDateTimeBox->isChecked());
-    settings->setSaveRating(d->saveRatingBox->isChecked());
-    settings->setSaveTags(d->saveTagsBox->isChecked());
-    settings->setSaveTemplate(d->saveTemplateBox->isChecked());
-    settings->setWriteRawFiles(d->writeRawFilesBox->isChecked());
-    settings->setUpdateFileTimeStamp(d->updateFileTimeStampBox->isChecked());
+    MetadataSettings* mSettings = MetadataSettings::instance();
+
+    if (!mSettings)
+    {
+        return;
+    }
+
+    MetadataSettingsContainer set;
+    set.exifRotate            = d->exifRotateBox->isChecked();
+    set.exifSetOrientation    = d->exifSetOrientationBox->isChecked();
+    set.saveComments          = d->saveCommentsBox->isChecked();
+    set.saveDateTime          = d->saveDateTimeBox->isChecked();
+    set.savePickLabel         = d->savePickLabelBox->isChecked();
+    set.saveColorLabel        = d->saveColorLabelBox->isChecked();
+    set.saveRating            = d->saveRatingBox->isChecked();
+    set.saveTags              = d->saveTagsBox->isChecked();
+    set.saveTemplate          = d->saveTemplateBox->isChecked();
+    set.writeRawFiles         = d->writeRawFilesBox->isChecked();
+    set.useXMPSidecar4Reading = d->useXMPSidecarBox->isChecked();
+    set.metadataWritingMode   = d->writingModeCombo->currentIndex();
+    set.updateFileTimeStamp   = d->updateFileTimeStampBox->isChecked();
+    mSettings->setSettings(set);
+
 #ifdef HAVE_NEPOMUK
-    settings->setSyncDigikamToNepomuk(d->saveToNepomukBox->isChecked());
-    settings->setSyncNepomukToDigikam(d->readFromNepomukBox->isChecked());
+    aSettings->setSyncDigikamToNepomuk(d->saveToNepomukBox->isChecked());
+    aSettings->setSyncNepomukToDigikam(d->readFromNepomukBox->isChecked());
 
     if (d->resyncButton->isEnabled() && d->resyncButton->isChecked())
     {
-        settings->triggerResyncWithNepomuk();
+        aSettings->triggerResyncWithNepomuk();
     }
 
 #endif
-    settings->saveSettings();
+
+    aSettings->saveSettings();
 
     d->tagsCfgPanel->applySettings();
 }
 
 void SetupMetadata::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* aSettings      = AlbumSettings::instance();
 
-    if (!settings)
+    if (!aSettings)
     {
         return;
     }
 
-    d->exifAutoRotateOrg = settings->getExifRotate();
+    MetadataSettings* mSettings   = MetadataSettings::instance();
+
+    if (!mSettings)
+    {
+        return;
+    }
+
+    MetadataSettingsContainer set = mSettings->settings();
+
+    d->exifAutoRotateOrg = set.exifRotate;
     d->exifRotateBox->setChecked(d->exifAutoRotateOrg);
-    d->exifSetOrientationBox->setChecked(settings->getExifSetOrientation());
-    d->saveCommentsBox->setChecked(settings->getSaveComments());
-    d->saveDateTimeBox->setChecked(settings->getSaveDateTime());
-    d->saveRatingBox->setChecked(settings->getSaveRating());
-    d->saveTagsBox->setChecked(settings->getSaveTags());
-    d->saveTemplateBox->setChecked(settings->getSaveTemplate());
-    d->writeRawFilesBox->setChecked(settings->getWriteRawFiles());
-    d->updateFileTimeStampBox->setChecked(settings->getUpdateFileTimeStamp());
+    d->exifSetOrientationBox->setChecked(set.exifSetOrientation);
+    d->saveCommentsBox->setChecked(set.saveComments);
+    d->saveDateTimeBox->setChecked(set.saveDateTime);
+    d->savePickLabelBox->setChecked(set.savePickLabel);
+    d->saveColorLabelBox->setChecked(set.saveColorLabel);
+    d->saveRatingBox->setChecked(set.saveRating);
+    d->saveTagsBox->setChecked(set.saveTags);
+    d->saveTemplateBox->setChecked(set.saveTemplate);
+    d->writeRawFilesBox->setChecked(set.writeRawFiles);
+    d->useXMPSidecarBox->setChecked(set.useXMPSidecar4Reading);
+    d->writingModeCombo->setCurrentIndex(set.metadataWritingMode);
+    d->updateFileTimeStampBox->setChecked(set.updateFileTimeStamp);
+
 #ifdef HAVE_NEPOMUK
-    d->saveToNepomukBox->setChecked(settings->getSyncDigikamToNepomuk());
-    d->readFromNepomukBox->setChecked(settings->getSyncNepomukToDigikam());
+    d->saveToNepomukBox->setChecked(aSettings->getSyncDigikamToNepomuk());
+    d->readFromNepomukBox->setChecked(aSettings->getSyncNepomukToDigikam());
     slotNepomukToggled();
 #endif
 }

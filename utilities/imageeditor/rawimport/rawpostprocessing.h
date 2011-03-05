@@ -50,6 +50,19 @@ private:
     virtual void filterImage();
     void rawPostProcessing();
 
+    /**
+     * This filter is only for preview calculation.
+     */
+    virtual FilterAction filterAction()
+    {
+        return FilterAction();
+    }
+    virtual void readParameters(const FilterAction&) {}
+    virtual QString filterIdentifier() const
+    {
+        return QString();
+    }
+
 private:
 
     DRawDecoding m_customRawSettings;

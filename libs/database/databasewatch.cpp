@@ -6,7 +6,7 @@
  * Date        : 2007-03-23
  * Description : Keeping image properties in sync.
  *
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -230,6 +230,11 @@ void DatabaseWatch::setApplicationIdentifier(const QString& identifier)
     d->applicationId = identifier;
 }
 
+void DatabaseWatch::sendDatabaseChanged()
+{
+    // Note: This is not dispatched by DBus!
+    emit databaseChanged();
+}
 
 // --- methods to dispatch changes from database to listeners (local and remote) ---
 
