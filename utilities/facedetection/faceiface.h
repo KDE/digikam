@@ -196,6 +196,7 @@ public:
      * If a face was skipped (because of an existing entry), a null DatabaseFace will be at this place.
      */
     QList<DatabaseFace> writeUnconfirmedResults(const DImg& image, qlonglong imageid, const QList<KFaceIface::Face>& faceList);
+    DatabaseFace addUnknownManually(const DImg& image, qlonglong imageid, const QRect& rect);
 
     /**
      * Detects faces from the image and returns a list of faces

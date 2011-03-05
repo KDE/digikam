@@ -763,6 +763,29 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
     return newFaces;
 }
 
+DatabaseFace FaceIface::addUnknownManually(const DImg& image, qlonglong imageid, const QRect& rect)
+{
+    DatabaseFace newFace;
+
+    int tagId          = d->unknownPeopleTagId();
+    QRect fullSizeRect = TagRegion::mapToOriginalSize(image, rect);
+
+    if (!tagId || !fullSizeRect.isValid())
+    {
+        return newFace;
+    }
+
+    kDebug() << "New Entry" << fullSizeRect << tagId;
+    newFace = DatabaseFace(DatabaseFace::UnconfirmedName, imageid, tagId, TagRegion(fullSizeRect));
+
+
+    ImageTagPair pair(imageid, newFace.tagId());
+    // UnconfirmedName and UnknownName have the same attribute
+    d->add(pair, newFace, DatabaseFace::attributesForFlags(DatabaseFace::UnconfirmedName), false);
+
+    return newFace;
+}
+
 // --- Confirming and adding ---
 
 DatabaseFace FaceIface::confirmedEntry(const DatabaseFace& face, int tagId, const TagRegion& confirmedRegion)
