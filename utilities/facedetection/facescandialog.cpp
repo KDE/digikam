@@ -340,7 +340,7 @@ void FaceScanDialog::setupUi()
     d->alreadyScannedBox = new QComboBox;
     d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Skip images already scanned"), FaceScanSettings::Skip);
     d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Scan again and merge results"), FaceScanSettings::Merge);
-    d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Clear results and rescan"), FaceScanSettings::Rescan);
+    d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Clear unconfirmed results and rescan"), FaceScanSettings::Rescan);
     d->alreadyScannedBox->setCurrentIndex(0);
     QGridLayout* detectAndRecognizeLabelLayout = new QGridLayout;
     detectAndRecognizeLabelLayout->addWidget(detectAndRecognizeLabel, 0, 0, 1, -1);

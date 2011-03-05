@@ -82,6 +82,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 060 ==> 266733 : digiKam crashes on startup on OS X.
 061 ==> 262574 : Add a face tag does not do anything.
 062 ==> 266126 : Renaming single file needs to be confirmed twice. 
-063 ==> 
+063 ==> 264976 : face detection: "Clear results and rescan" doesn't clear results.
+064 ==>
 
 
