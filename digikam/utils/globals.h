@@ -72,7 +72,7 @@ enum PickLabel
     NoPickLabel=0,
     RejectedLabel,
     PendingLabel,
-    AcceptedLabel,
+    AcceptedLabel
 };
 
 // --------------------------------------------------------

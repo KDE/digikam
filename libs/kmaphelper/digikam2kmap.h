@@ -101,7 +101,7 @@ public:
         SortOldestFirst   = 1,
         SortRating        = 2
     };
-    Q_DECLARE_FLAGS(SortOptions, SortOption);
+    Q_DECLARE_FLAGS(SortOptions, SortOption)
 
     GPSImageInfoSorter(QObject* const parent);
     ~GPSImageInfoSorter();
@@ -128,7 +128,7 @@ private:
 
 } /* namespace Digikam */
 
-Q_DECLARE_METATYPE(Digikam::GPSImageInfo);
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSImageInfoSorter::SortOptions);
+Q_DECLARE_METATYPE(Digikam::GPSImageInfo)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSImageInfoSorter::SortOptions)
 
 #endif /* DIGIKAM2KMAP_H */

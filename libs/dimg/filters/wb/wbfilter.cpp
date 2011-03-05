@@ -52,7 +52,7 @@ WBContainer::WBContainer()
     dark        = 0.5;
     gamma       = 1.0;
     saturation  = 1.0;
-};
+}
 
 bool WBContainer::isDefault() const
 {

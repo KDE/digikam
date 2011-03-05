@@ -37,7 +37,7 @@
 
 /// @todo Actually use this definition!
 typedef QPair<KMap::TileIndex, int> MapPair;
-Q_DECLARE_METATYPE(MapPair);
+Q_DECLARE_METATYPE(MapPair)
 
 namespace Digikam
 {
