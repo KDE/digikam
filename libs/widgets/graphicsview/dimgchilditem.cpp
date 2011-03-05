@@ -233,6 +233,18 @@ void DImgChildItem::setRect(const QRectF& rect)
     setSize(rect.size());
 }
 
+void DImgChildItem::setRectInSceneCoordinates(const QRectF& rect)
+{
+    if (!parentItem())
+    {
+        return;
+    }
+
+    QRectF itemRect(parentItem()->mapFromScene(rect.topLeft()),
+                    parentItem()->mapFromScene(rect.bottomRight()));
+    setRect(itemRect);
+}
+
 QRectF DImgChildItem::rect() const
 {
     return QRectF(pos(), size());

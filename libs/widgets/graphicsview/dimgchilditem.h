@@ -117,8 +117,8 @@ public:
     QSize  originalSize() const;
 
     /**
-     * Sets the position and size of this item, in coordinates of the parent DImg.
-     * This is accepting unscaled parent coordinates, to it is corresponding to setPos().
+     * Sets the position and size of this item, in coordinates of the parent DImg item.
+     * This is accepting unscaled parent coordinates, just like the "normal" setPos() does.
      * Requires a valid parent item.
      */
     void setPos(const QPointF& zoomedPos);
@@ -139,6 +139,11 @@ public:
         setPos(QPointF(x,y));
         setSize(QSizeF(width, height));
     }
+
+    /**
+     * Equivalent to mapping the scene coordinates to the parent item, and calling setRect().
+     */
+    void setRectInSceneCoordinates(const QRectF& rect);
 
     /**
      * Returns position and size of this item, in coordinates of the parent DImg with the current zoom.

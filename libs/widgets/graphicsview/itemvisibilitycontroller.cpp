@@ -524,6 +524,11 @@ AnimationControl* ItemVisibilityController::ItemVisibilityControllerPriv::findIn
 
 AnimationControl* ItemVisibilityController::ItemVisibilityControllerPriv::getChild(QObject* item)
 {
+    if (!control)
+    {
+        return 0;
+    }
+
     if (control->hasItem(item))
     {
         AnimationControl* child = new AnimationControl(control, item);
