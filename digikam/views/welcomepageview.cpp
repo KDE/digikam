@@ -105,6 +105,7 @@ QString WelcomePageView::infoPage() const
     newFeatures << i18n("Pick Labels support to improve photograph selection;");
     newFeatures << i18n("Color Labels support to improve photograph workflow;");
     newFeatures << i18n("Re-designed Filters view on right sidebar to perform icon-view items filtering;");
+    newFeatures << i18n("Add options to group/ungroup items from icon-view;");
     newFeatures << i18n("Support for the latest camera RAW files using <a href=\"http://www.libraw.org\">LibRaw</a>, "
                         "including Foveon-sensor-based cameras, Nikon D7000, Canon 60D, Pentax K5, Olympus E5 and Sony A450 "
                         "(see the Help menu for the full list of RAW cameras supported);");

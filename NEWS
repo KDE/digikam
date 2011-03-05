@@ -11,6 +11,7 @@ General     : Color Labels support to improve photograph workfow.
 General     : Pick Labels support to improve photograph selection.
 
 AlbumGUI    : Re-designed Filters view on right sidebar to perform icon-view items filtering.
+AlbumGUI    : Add options to group/ungroup items from icon-view.
 
 ImageEditor : Image versionning support.
 ImageEditor : Foveon sensor based camera.
