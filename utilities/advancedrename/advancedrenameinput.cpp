@@ -158,11 +158,6 @@ AdvancedRenameLineEdit::~AdvancedRenameLineEdit()
     delete d;
 }
 
-void AdvancedRenameLineEdit::setAllowDirectoryCreation(bool allow)
-{
-    d->allowDirectoryCreation = allow;
-}
-
 void AdvancedRenameLineEdit::setParseTimerDuration(int milliseconds)
 {
     d->parseTimer->setInterval(milliseconds);
@@ -367,11 +362,6 @@ void AdvancedRenameInput::setParser(Parser* parser)
 {
     d->lineEdit->setParser(parser);
     enableHighlighter(true);
-}
-
-void AdvancedRenameInput::setAllowDirectoryCreation(bool allow)
-{
-    d->lineEdit->setAllowDirectoryCreation(allow);
 }
 
 void AdvancedRenameInput::setParseTimerDuration(int milliseconds)

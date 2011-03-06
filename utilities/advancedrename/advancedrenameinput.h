@@ -75,7 +75,6 @@ public:
     void    setParser(Parser* parser);
     Parser* parser() const;
 
-    void setAllowDirectoryCreation(bool allow);
     void setParseTimerDuration(int milliseconds);
 
 public Q_SLOTS:
@@ -118,7 +117,6 @@ public:
     ~AdvancedRenameInput();
 
     void setParser(Parser* parser);
-    void setAllowDirectoryCreation(bool allow);
     void setParseTimerDuration(int milliseconds);
 
     QString text() const;
