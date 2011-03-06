@@ -82,12 +82,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 060 ==> 266733 : digiKam crashes on startup on OS X.
 061 ==> 262574 : Add a face tag does not do anything.
 062 ==> 266126 : Renaming single file needs to be confirmed twice.
-063 ==> 264976 : face detection: "Clear results and rescan" doesn't clear results.
+063 ==> 264976 : Face detection: "Clear results and rescan" doesn't clear results.
 064 ==> 213624 : Editor: picture too "big" when comming to editor after digikam start.
 065 ==> 192425 : Star rating setting under thumbnails is a nuisance.
 066 ==> 219202 : digiKam database on multiple hosts.
-067 ==> 
-
-
-
-
+067 ==> 216894 : Slow quadratic runtime generating fingerprints or thumbnails in beta6 during a big import.
+068 ==> 
