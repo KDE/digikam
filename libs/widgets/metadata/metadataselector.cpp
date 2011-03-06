@@ -113,7 +113,7 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
     uint                    subItems = 0;
     QString                 ifDItemName, currentIfDName;
     MdKeyListViewItem*      parentifDItem = 0;
-    QList<QTreeWidgetItem*> treeItems;
+    QList<QTreeWidgetItem*> toplevelItems;
 
     for (DMetadata::TagsMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
@@ -131,7 +131,7 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
             }
 
             parentifDItem = new MdKeyListViewItem(0, currentIfDName);
-            treeItems << parentifDItem;
+            toplevelItems << parentifDItem;
             subItems = 0;
         }
 
@@ -143,12 +143,12 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
         }
     }
 
-    addTopLevelItems(treeItems);
+    addTopLevelItems(toplevelItems);
 
     // We need to call setFirstColumnSpanned() in here again because the widgets were added parentless and therefore
     // no layout information was present at construction time. Now that all items have a parent, we need to trigger the
     // method again.
-    for (QList<QTreeWidgetItem*>::const_iterator it = treeItems.constBegin(); it != treeItems.constEnd(); ++it)
+    for (QList<QTreeWidgetItem*>::const_iterator it = toplevelItems.constBegin(); it != toplevelItems.constEnd(); ++it)
     {
         if (*it)
         {
