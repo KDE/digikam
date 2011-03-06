@@ -85,7 +85,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 063 ==> 264976 : face detection: "Clear results and rescan" doesn't clear results.
 064 ==> 213624 : Editor: picture too "big" when comming to editor after digikam start.
 065 ==> 192425 : Star rating setting under thumbnails is a nuisance.
-066 ==> 
+066 ==> 219202 : digiKam database on multiple hosts.
+067 ==> 
+
 
 
 
