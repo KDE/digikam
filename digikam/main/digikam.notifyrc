@@ -426,7 +426,5 @@ Action=Popup
 
 [Event/batchfacedetectioncompleted]
 Name=Update of face detected database complete
-Name[x-test]=xxUpdate of face detected database completexx
 Comment=The update of the face detected database has been completed.
-Comment[x-test]=xxThe update of the face detected database has been completed.xx
 Action=Popup
