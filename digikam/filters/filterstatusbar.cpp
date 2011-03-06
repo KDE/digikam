@@ -97,7 +97,7 @@ FilterStatusBar::FilterStatusBar(QWidget* parent)
                                "GREEN: filter(s) match(es) at least one item.\n\n"
                                "Move mouse cursor over this text to see more details about active filters.\n"
                                "Press on Reset button from the right side to clean all filters settings.\n"
-                               "Press on Settings button from the right side to open filters pannel."));
+                               "Press on Settings button from the right side to open filters panel."));
 
     vlay->addWidget(space);
     vlay->addWidget(d->resetBtn);

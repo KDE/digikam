@@ -176,7 +176,7 @@ bool SchemaUpdater::startUpdates()
         QString errorMsg = i18n(
                                "You have insufficient privileges on the database.\n"
                                "Following privileges are not assigned to you:\n %1"
-                               "\nCheck your privileges on the database and restart digikam again.",
+                               "\nCheck your privileges on the database and restart digiKam.",
                                insufficientRights.join(",\n")
                            );
 
@@ -240,7 +240,7 @@ bool SchemaUpdater::startUpdates()
                                        "The database has been used with a more recent version of digiKam "
                                        "and has been updated to a database schema which cannot be used with this version. "
                                        "(This means this digiKam version is too old, or the database format is to recent) "
-                                       "Please use the more recent version of digikam that you used before. "
+                                       "Please use the more recent version of digiKam that you used before. "
                                    );
                 m_LastErrorMessage=errorMsg;
 
@@ -576,7 +576,7 @@ bool SchemaUpdater::updateV5toV6()
     if (updateAction.name.isNull())
     {
         QString errorMsg = i18n("The database update action cannot be found. Please ensure that "
-                                "the dbconfig.xml file of the current version of digikam is installed "
+                                "the dbconfig.xml file of the current version of digiKam is installed "
                                 "at the correct place. ");
     }
 
