@@ -39,7 +39,7 @@
 #include <KLocale>
 #include <KIconLoader>
 #include <KUrl>
-#include <KDebug>
+#include <kdebug.h>
 
 // Local includes
 

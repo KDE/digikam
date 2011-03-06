@@ -35,7 +35,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KGlobal>
-#include <KDebug>
+#include <kdebug.h>
 #include <KLocale>
 #include <KIconLoader>
 #include <KStandardGuiItem>

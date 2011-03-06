@@ -40,7 +40,7 @@
 
 // KDE includes
 
-#include <KDebug>
+#include <kdebug.h>
 #include <KDialog>
 #include <KIconLoader>
 #include <KLocale>

@@ -33,7 +33,7 @@
 
 #include <KIconLoader>
 #include <KLocale>
-#include <KDebug>
+#include <kdebug.h>
 #include <KColorScheme>
 
 // Local includes

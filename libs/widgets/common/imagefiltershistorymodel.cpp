@@ -30,7 +30,7 @@
 // KDE includes
 
 #include <KUrl>
-#include <KDebug>
+#include <kdebug.h>
 #include <KIconLoader>
 
 // Local includes

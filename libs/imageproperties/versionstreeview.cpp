@@ -32,7 +32,7 @@
 
 #include <KLocale>
 #include <KIconLoader>
-#include <KDebug>
+#include <kdebug.h>
 
 // Local includes
 

@@ -26,7 +26,7 @@
 // KDE includes
 
 #include <KLocale>
-#include <KDebug>
+#include <kdebug.h>
 
 // Local includes
 

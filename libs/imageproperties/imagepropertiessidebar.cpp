@@ -40,7 +40,7 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <KDebug>
+#include <kdebug.h>
 
 // LibKDcraw includes
 

@@ -34,7 +34,7 @@
 
 #include <KUrl>
 #include <KLocale>
-#include <KDebug>
+#include <kdebug.h>
 
 // Local includes
 

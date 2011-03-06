@@ -30,9 +30,9 @@
 
 #include <KConfigGroup>
 #include <KDiskFreeSpaceInfo>
-#include <KDebug>
 #include <KGlobal>
 #include <KUrl>
+#include <kdebug.h>
 
 // Local includes
 

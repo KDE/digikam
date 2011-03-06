@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <KDebug>
+#include <kdebug.h>
 #include <KCategoryDrawer>
 #include <KColorScheme>
 #include <KIconLoader>
