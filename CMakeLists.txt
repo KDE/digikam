@@ -1476,6 +1476,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/controller
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/devices
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/dialogs
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/items
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/views
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/main
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/q3support
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun
