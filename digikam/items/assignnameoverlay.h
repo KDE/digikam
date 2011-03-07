@@ -56,8 +56,8 @@ public:
 
 Q_SIGNALS:
 
-    void faceConfirmed(const DatabaseFace& face);
-    void faceRejected(const DatabaseFace& face);
+    void confirmFaces(const QList<QModelIndex>& indexes, int tagId);
+    void removeFaces(const QList<QModelIndex>& indexes);
 
 protected Q_SLOTS:
 
@@ -73,6 +73,8 @@ protected:
     virtual void hide();
     virtual bool checkIndex(const QModelIndex& index) const;
     virtual void viewportLeaveEvent(QObject* obj, QEvent* event);
+    virtual void widgetEnterEvent();
+    virtual void widgetLeaveEvent();
 
     void updatePosition();
     void updateFace();

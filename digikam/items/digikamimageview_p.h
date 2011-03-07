@@ -34,7 +34,7 @@
 
 #include "digikamimageview.h"
 #include "digikamimagedelegate.h"
-#include "faceiface.h"
+#include "facepipeline.h"
 #include "imagerotationoverlay.h"
 #include "albumsettings.h"
 
@@ -60,7 +60,7 @@ public:
 public:
 
     ImageViewUtilities*       utilities;
-    FaceIface*                faceiface;
+    FacePipeline              editPipeline;
 
     DigikamImageDelegate*     normalDelegate;
     DigikamImageFaceDelegate* faceDelegate;

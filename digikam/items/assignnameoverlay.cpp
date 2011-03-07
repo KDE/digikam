@@ -72,7 +72,6 @@ public:
     TagPropertiesFilterModel  filteredModel;
 
     FaceIface                 faceIface;
-    FacePipeline              editPipeline;
 
     AssignNameWidget*         assignNameWidget;
     QPersistentModelIndex     index;
@@ -81,10 +80,6 @@ public:
 AssignNameOverlay::AssignNameOverlay(QObject* parent)
     : AbstractWidgetDelegateOverlay(parent), d(new AssignNameOverlayPriv)
 {
-    d->editPipeline.plugDatabaseEditor();
-    d->editPipeline.plugTrainer();
-    d->editPipeline.construct();
-
     d->filteredModel.setSourceAlbumModel(&d->tagModel);
     d->filterModel.setSourceFilterModel(&d->filteredModel);
 }
@@ -252,6 +247,7 @@ void AssignNameOverlay::viewportLeaveEvent(QObject*, QEvent*)
 
 void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier)
 {
+    Q_UNUSED(info);
     DatabaseFace face = DatabaseFace::fromVariant(faceIdentifier);
     //kDebug() << "Confirming" << face << action.shallAssignTag() << action.tagId();
 
@@ -273,18 +269,30 @@ void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ImageInf
 
     if (tagId)
     {
-        d->editPipeline.confirm(info, face, tagId);
+        emit confirmFaces(affectedIndexes(d->index), tagId);
     }
 
-    //TODO fast-remove if filtered by unconfirmed face etc.
     hide();
 }
 
 void AssignNameOverlay::slotRejected(const ImageInfo& info, const QVariant& faceIdentifier)
 {
-    DatabaseFace face = DatabaseFace::fromVariant(faceIdentifier);
-    d->editPipeline.remove(info, face);
+    Q_UNUSED(info);
+    Q_UNUSED(faceIdentifier);
+    //DatabaseFace face = DatabaseFace::fromVariant(faceIdentifier);
+    emit removeFaces(affectedIndexes(d->index));
     hide();
 }
+
+void AssignNameOverlay::widgetEnterEvent()
+{
+    widgetEnterNotifyMultiple(d->index);
+}
+
+void AssignNameOverlay::widgetLeaveEvent()
+{
+    widgetLeaveNotifyMultiple();
+}
+
 
 } // namespace Digikam

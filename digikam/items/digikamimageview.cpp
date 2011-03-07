@@ -86,7 +86,10 @@ DigikamImageView::DigikamImageView(QWidget* parent)
 {
     installDefaultModels();
 
-    d->faceiface      = new FaceIface;
+    d->editPipeline.plugDatabaseEditor();
+    d->editPipeline.plugTrainer();
+    d->editPipeline.construct();
+
     d->normalDelegate = new DigikamImageDelegate(this);
     d->faceDelegate   = new DigikamImageFaceDelegate(this);
     setItemDelegate(d->normalDelegate);
@@ -161,7 +164,6 @@ DigikamImageView::DigikamImageView(QWidget* parent)
 
 DigikamImageView::~DigikamImageView()
 {
-    delete d->faceiface;
     delete d;
 }
 
@@ -204,14 +206,15 @@ void DigikamImageView::setFaceMode(bool on)
 void DigikamImageView::addRejectionOverlay(ImageDelegate* delegate)
 {
     FaceRejectionOverlay* rejectionOverlay = new FaceRejectionOverlay(this);
-    connect(rejectionOverlay, SIGNAL(rejectFace(const QModelIndex&)),
-            this, SLOT(slotUntagFace(const QModelIndex&)));
+
+    connect(rejectionOverlay, SIGNAL(rejectFaces(const QList<QModelIndex>&)),
+            this, SLOT(removeFaces(const QList<QModelIndex>&)));
 
     addOverlay(rejectionOverlay, delegate);
 }
 
 
-void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
+/*void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
 {
     TagsLineEditOverlay* tagOverlay = new TagsLineEditOverlay(this);
 
@@ -219,20 +222,39 @@ void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
             this, SLOT(assignTag(QModelIndex, QString)));
 
     addOverlay(tagOverlay, delegate);
-}
+}*/
 
 void DigikamImageView::addAssignNameOverlay(ImageDelegate* delegate)
 {
     AssignNameOverlay* nameOverlay = new AssignNameOverlay(this);
     addOverlay(nameOverlay, delegate);
+
+    connect(nameOverlay, SIGNAL(confirmFaces(const QList<QModelIndex>&, int)),
+            this, SLOT(confirmFaces(const QList<QModelIndex>&, int)));
+
+    connect(nameOverlay, SIGNAL(removeFaces(const QList<QModelIndex>&)),
+            this, SLOT(removeFaces(const QList<QModelIndex>&)));
 }
 
-void DigikamImageView::slotUntagFace(const QModelIndex& index)
+void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId)
 {
-    ImageInfo info    = ImageModel::retrieveImageInfo(index);
-    DatabaseFace face = d->faceDelegate->face(index);
-    kDebug()<<"Untagging face in image " << info.filePath() << "and rect " << face.region().toRect();
-    d->faceiface->removeFace(face);
+    foreach (const QModelIndex& index, indexes)
+    {
+        ImageInfo info    = ImageModel::retrieveImageInfo(index);
+        DatabaseFace face = d->faceDelegate->face(index);
+        d->editPipeline.confirm(info, face, tagId);
+        //TODO fast-remove if filtered by unconfirmed face etc.
+    }
+}
+
+void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
+{
+    foreach (const QModelIndex& index, indexes)
+    {
+        ImageInfo info = ImageModel::retrieveImageInfo(index);
+        DatabaseFace face = d->faceDelegate->face(index);
+        d->editPipeline.remove(info, face);
+    }
 }
 
 void DigikamImageView::activated(const ImageInfo& info)
@@ -588,15 +610,6 @@ void DigikamImageView::assignRatingToSelected(int rating)
 void DigikamImageView::assignRating(const QList<QModelIndex>& indexes, int rating)
 {
     MetadataManager::instance()->assignRating(imageFilterModel()->imageInfos(indexes), rating);
-}
-
-void DigikamImageView::assignTag(const QModelIndex& index, const QString& name)
-{
-    ImageInfo info = ImageModel::retrieveImageInfo(index);
-    DatabaseFace face = d->faceDelegate->face(index);
-    int tagId = d->faceiface->tagForPerson(name);
-    kDebug()<<"Untagging face in image " << info.filePath() << "name" << name << "tag" << tagId << "region" << face.region().toRect();
-    d->faceiface->confirmName(face, tagId);
 }
 
 void DigikamImageView::setAsAlbumThumbnail(const ImageInfo& setAsThumbnail)

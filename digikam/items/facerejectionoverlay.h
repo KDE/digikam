@@ -67,6 +67,8 @@ protected:
     virtual ItemViewHoverButton* createButton();
     virtual void updateButton(const QModelIndex& index);
     virtual bool checkIndex(const QModelIndex& index) const;
+    virtual void widgetEnterEvent();
+    virtual void widgetLeaveEvent();
 
 protected Q_SLOTS:
 
@@ -74,7 +76,7 @@ protected Q_SLOTS:
 
 Q_SIGNALS:
 
-    void rejectFace(const QModelIndex& index);
+    void rejectFaces(const QList<QModelIndex>& indexes);
 };
 
 } // namespace Digikam

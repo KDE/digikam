@@ -106,7 +106,7 @@ void FaceRejectionOverlay::slotClicked()
 
     if (index.isValid())
     {
-        emit rejectFace(index);
+        emit rejectFaces(affectedIndexes(index));
     }
 }
 
@@ -114,5 +114,16 @@ bool FaceRejectionOverlay::checkIndex(const QModelIndex& index) const
 {
     return !index.data(ImageModel::ExtraDataRole).isNull();
 }
+
+void FaceRejectionOverlay::widgetEnterEvent()
+{
+    widgetEnterNotifyMultiple(button()->index());
+}
+
+void FaceRejectionOverlay::widgetLeaveEvent()
+{
+    widgetLeaveNotifyMultiple();
+}
+
 
 } // namespace Digikam

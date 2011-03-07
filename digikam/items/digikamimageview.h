@@ -82,16 +82,14 @@ public Q_SLOTS:
     void assignPickLabel(const QModelIndex& index, int pickId);
     void assignColorLabel(const QModelIndex& index, int colorId);
     void assignRating(const QList<QModelIndex>& index, int rating);
-    void assignTag(const QModelIndex& index, const QString& name);
 
     void createGroupFromSelection();
     void ungroupSelected();
     void removeSelectedFromGroup();
 
     void setFaceMode(bool on);
-    void addRejectionOverlay(ImageDelegate* delegate = 0);
-    void addTagEditOverlay(ImageDelegate* delegate = 0);
-    void addAssignNameOverlay(ImageDelegate* delegate = 0);
+    void confirmFaces(const QList<QModelIndex>& indexes, int tagId);
+    void removeFaces(const QList<QModelIndex>& indexes);
 
 Q_SIGNALS:
 
@@ -108,6 +106,9 @@ protected Q_SLOTS:
 
 protected:
 
+    void addRejectionOverlay(ImageDelegate* delegate = 0);
+    void addAssignNameOverlay(ImageDelegate* delegate = 0);
+
     virtual void activated(const ImageInfo& info);
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info);
     virtual void showContextMenu(QContextMenuEvent* event);
@@ -117,7 +118,6 @@ private Q_SLOTS:
 
     void slotRotateLeft(const QList<QModelIndex>&);
     void slotRotateRight(const QList<QModelIndex>&);
-    void slotUntagFace(const QModelIndex& index);
 
 private:
 
