@@ -67,7 +67,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class CameraUIPriv
+class CameraUI::CameraUIPriv
 {
 public:
 

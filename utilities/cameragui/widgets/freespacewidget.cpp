@@ -6,7 +6,7 @@
  * Date        : 2007-08-31
  * Description : a widget to display free space for a mount-point.
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,7 +75,9 @@ public:
     QString       mountPoint;
 };
 
-class FreeSpaceWidgetPriv
+// ---------------------------------------------------------------------------------
+
+class FreeSpaceWidget::FreeSpaceWidgetPriv
 {
 public:
 

@@ -59,7 +59,6 @@ namespace Digikam
 class Album;
 class CameraIconItem;
 class CollectionLocation;
-class CameraUIPriv;
 class CameraHistoryUpdater;
 
 class CameraUI : public KXmlGuiWindow
@@ -216,6 +215,7 @@ private Q_SLOTS:
 
 private:
 
+    class CameraUIPriv;
     CameraUIPriv* const d;
 };
 

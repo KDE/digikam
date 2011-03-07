@@ -6,7 +6,7 @@
  * Date        : 2009-10-16
  * Description : history updater thread for cameraui
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class CameraHistoryUpdaterPriv
+class CameraHistoryUpdater::CameraHistoryUpdaterPriv
 {
     typedef QList<CHUpdateItem> CHUpdateItemsList;
 
