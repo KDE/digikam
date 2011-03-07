@@ -115,8 +115,8 @@ DigikamImageView::DigikamImageView(QWidget* parent)
     addSelectionOverlay(d->faceDelegate);
 
     // rotation overlays
-    d->rotateLeftOverlay = new ImageRotateLeftOverlay(this);
-    d->rotateRightOverlay = new ImageRotateRightOverlay(this);
+    d->rotateLeftOverlay = ImageRotateOverlay::left(this);
+    d->rotateRightOverlay = ImageRotateOverlay::right(this);
     d->updateOverlays();
 
     // rating overlay
@@ -130,8 +130,8 @@ DigikamImageView::DigikamImageView(QWidget* parent)
     GroupIndicatorOverlay* groupOverlay = new GroupIndicatorOverlay(this);
     addOverlay(groupOverlay);
 
-    connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex&, int)),
-            this, SLOT(assignRating(const QModelIndex&, int)));
+    connect(ratingOverlay, SIGNAL(ratingEdited(const QList<QModelIndex>&, int)),
+            this, SLOT(assignRating(const QList<QModelIndex>&, int)));
 
     connect(groupOverlay, SIGNAL(toggleGroupOpen(const QModelIndex&)),
             this, SLOT(groupIndicatorClicked(const QModelIndex&)));
@@ -357,6 +357,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
 void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMenuEvent* event)
 {
+    Q_UNUSED(index);
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
     QList<qlonglong> selectedImageIDs;
     foreach (const ImageInfo& info, selectedInfos)
@@ -584,9 +585,9 @@ void DigikamImageView::assignRatingToSelected(int rating)
     MetadataManager::instance()->assignRating(selectedImageInfos(), rating);
 }
 
-void DigikamImageView::assignRating(const QModelIndex& index, int rating)
+void DigikamImageView::assignRating(const QList<QModelIndex>& indexes, int rating)
 {
-    MetadataManager::instance()->assignRating(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), rating);
+    MetadataManager::instance()->assignRating(imageFilterModel()->imageInfos(indexes), rating);
 }
 
 void DigikamImageView::assignTag(const QModelIndex& index, const QString& name)
@@ -664,38 +665,16 @@ void DigikamImageView::rename()
     }
 }
 
-void DigikamImageView::slotRotateLeft()
+void DigikamImageView::slotRotateLeft(const QList<QModelIndex>& indexes)
 {
-    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
-
-    if (action)
-    {
-        QList<QAction*> list = action->menu()->actions();
-        foreach(QAction* ac, list)
-        {
-            if (ac->objectName() == QString("rotate_ccw"))
-            {
-                ac->trigger();
-            }
-        }
-    }
+    setSelectedIndexes(indexes);
+    d->triggerRotateAction("rotate_ccw");
 }
 
-void DigikamImageView::slotRotateRight()
+void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 {
-    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
-
-    if (action)
-    {
-        QList<QAction*> list = action->menu()->actions();
-        foreach(QAction* ac, list)
-        {
-            if (ac->objectName() == QString("rotate_cw"))
-            {
-                ac->trigger();
-            }
-        }
-    }
+    setSelectedIndexes(indexes);
+    d->triggerRotateAction("rotate_cw");
 }
 
 } // namespace Digikam

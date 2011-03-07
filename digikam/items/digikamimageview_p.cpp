@@ -25,6 +25,15 @@
 
 #include "digikamimageview_p.moc"
 
+// KDE includes
+
+#include <KActionMenu>
+#include <KMenu>
+
+// Local includes
+
+#include "contextmenuhelper.h"
+
 namespace Digikam
 {
 
@@ -52,11 +61,11 @@ void DigikamImageViewPriv::updateOverlays()
     {
         if (!settings->getIconShowOverlays())
         {
-            disconnect(rotateLeftOverlay, SIGNAL(signalRotateLeft()),
-                       q, SLOT(slotRotateLeft()));
+            disconnect(rotateLeftOverlay, SIGNAL(signalRotate(const QList<QModelIndex>&)),
+                       q, SLOT(slotRotateLeft(const QList<QModelIndex>&)));
 
-            disconnect(rotateRightOverlay, SIGNAL(signalRotateRight()),
-                       q, SLOT(slotRotateRight()));
+            disconnect(rotateRightOverlay, SIGNAL(signalRotate(const QList<QModelIndex>&)),
+                       q, SLOT(slotRotateRight(const QList<QModelIndex>&)));
 
             q->removeOverlay(rotateLeftOverlay);
             q->removeOverlay(rotateRightOverlay);
@@ -71,13 +80,30 @@ void DigikamImageViewPriv::updateOverlays()
             q->addOverlay(rotateLeftOverlay, normalDelegate);
             q->addOverlay(rotateRightOverlay, normalDelegate);
 
-            connect(rotateLeftOverlay, SIGNAL(signalRotateLeft()),
-                    q, SLOT(slotRotateLeft()));
+            connect(rotateLeftOverlay, SIGNAL(signalRotate(const QList<QModelIndex>&)),
+                    q, SLOT(slotRotateLeft(const QList<QModelIndex>&)));
 
-            connect(rotateRightOverlay, SIGNAL(signalRotateRight()),
-                    q, SLOT(slotRotateRight()));
+            connect(rotateRightOverlay, SIGNAL(signalRotate(const QList<QModelIndex>&)),
+                    q, SLOT(slotRotateRight(const QList<QModelIndex>&)));
 
             overlaysActive = true;
+        }
+    }
+}
+
+void DigikamImageViewPriv::triggerRotateAction(const char* actionName)
+{
+    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
+
+    if (action)
+    {
+        QList<QAction*> list = action->menu()->actions();
+        foreach(QAction* ac, list)
+        {
+            if (ac->objectName() == actionName)
+            {
+                ac->trigger();
+            }
         }
     }
 }

@@ -60,7 +60,7 @@ public:
 
 public Q_SLOTS:
 
-    void assignRating(const QModelIndex& index, int rating);
+    void assignRating(const QList<QModelIndex>& index, int rating);
     void slotDockLocationChanged(Qt::DockWidgetArea area);
 
 protected:

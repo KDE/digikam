@@ -95,6 +95,16 @@ void ImageRatingOverlay::visualChange()
     }
 }
 
+void ImageRatingOverlay::widgetEnterEvent()
+{
+    widgetEnterNotifyMultiple(m_index);
+}
+
+void ImageRatingOverlay::widgetLeaveEvent()
+{
+    widgetLeaveNotifyMultiple();
+}
+
 void ImageRatingOverlay::hide()
 {
     delegate()->setRatingEdited(QModelIndex());
@@ -138,7 +148,7 @@ void ImageRatingOverlay::slotRatingChanged(int rating)
 {
     if (m_widget && m_widget->isVisible() && m_index.isValid())
     {
-        emit ratingEdited(m_index, rating);
+        emit ratingEdited(affectedIndexes(m_index), rating);
     }
 }
 

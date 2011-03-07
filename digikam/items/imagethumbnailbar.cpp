@@ -116,8 +116,8 @@ void ImageThumbnailBar::installRatingOverlay()
     ImageRatingOverlay* ratingOverlay = new ImageRatingOverlay(this);
     addOverlay(ratingOverlay);
 
-    connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex&, int)),
-            this, SLOT(assignRating(const QModelIndex&, int)));
+    connect(ratingOverlay, SIGNAL(ratingEdited(const QList<QModelIndex>&, int)),
+            this, SLOT(assignRating(const QList<QModelIndex>&, int)));
 
 }
 
@@ -195,9 +195,9 @@ void ImageThumbnailBar::slotSetupChanged()
     ImageCategorizedView::slotSetupChanged();
 }
 
-void ImageThumbnailBar::assignRating(const QModelIndex& index, int rating)
+void ImageThumbnailBar::assignRating(const QList<QModelIndex>& indexes, int rating)
 {
-    MetadataManager::instance()->assignRating(QList<ImageInfo>() << imageSortFilterModel()->imageInfo(index), rating);
+    MetadataManager::instance()->assignRating(imageSortFilterModel()->imageInfos(indexes), rating);
 }
 
 bool ImageThumbnailBar::event(QEvent* e)

@@ -53,7 +53,7 @@ public:
 
 Q_SIGNALS:
 
-    void ratingEdited(const QModelIndex& index, int rating);
+    void ratingEdited(const QList<QModelIndex>& indexes, int rating);
 
 protected Q_SLOTS:
 
@@ -67,6 +67,8 @@ protected:
     virtual void visualChange();
     virtual void hide();
     virtual void slotEntered(const QModelIndex& index);
+    virtual void widgetEnterEvent();
+    virtual void widgetLeaveEvent();
 
     void updatePosition();
     void updateRating();

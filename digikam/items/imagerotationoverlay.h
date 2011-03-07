@@ -37,85 +37,66 @@
 namespace Digikam
 {
 
-class ImageRotateLeftOverlayButton : public ItemViewHoverButton
+enum ImageRotateOverlayDirection
+{
+    ImageRotateOverlayLeft,
+    ImageRotateOverlayRight
+};
+
+class ImageRotateOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    ImageRotateLeftOverlayButton(QAbstractItemView* parentView);
+    ImageRotateOverlayButton(ImageRotateOverlayDirection dir, QAbstractItemView* parentView);
     virtual QSize sizeHint() const;
 
 protected:
 
     virtual QPixmap icon();
     virtual void updateToolTip();
+
+    ImageRotateOverlayDirection const m_direction;
 };
 
 // --------------------------------------------------------------------
 
-class ImageRotateRightOverlayButton : public ItemViewHoverButton
-{
-public:
-
-    ImageRotateRightOverlayButton(QAbstractItemView* parentView);
-    virtual QSize sizeHint() const;
-
-protected:
-
-    virtual QPixmap icon();
-    virtual void updateToolTip();
-};
-
-// --------------------------------------------------------------------
-
-class ImageRotateLeftOverlay : public HoverButtonDelegateOverlay
+class ImageRotateOverlay : public HoverButtonDelegateOverlay
 {
     Q_OBJECT
 
 public:
 
-    ImageRotateLeftOverlay(QObject* parent);
+    ImageRotateOverlay(ImageRotateOverlayDirection dir, QObject* parent);
     virtual void setActive(bool active);
+
+    ImageRotateOverlayDirection direction() const { return m_direction; }
+    bool isLeft() const { return m_direction  == ImageRotateOverlayLeft; }
+    bool isRight() const { return m_direction == ImageRotateOverlayRight; }
+
+    static ImageRotateOverlay* left(QObject* parent) { return new ImageRotateOverlay(ImageRotateOverlayLeft, parent); }
+    static ImageRotateOverlay* right(QObject* parent) { return new ImageRotateOverlay(ImageRotateOverlayRight, parent); }
 
 Q_SIGNALS:
 
-    void signalRotateLeft();
+    void signalRotate(const QList<QModelIndex>& indexes);
 
 protected:
 
     virtual ItemViewHoverButton* createButton();
     virtual void updateButton(const QModelIndex& index);
     virtual bool checkIndex(const QModelIndex& index) const;
+    virtual void widgetEnterEvent();
+    virtual void widgetLeaveEvent();
 
 private Q_SLOTS:
 
     void slotClicked();
+
+private:
+
+    ImageRotateOverlayDirection const m_direction;
 };
 
-// --------------------------------------------------------------------
-
-class ImageRotateRightOverlay : public HoverButtonDelegateOverlay
-{
-    Q_OBJECT
-
-public:
-
-    ImageRotateRightOverlay(QObject* parent);
-    virtual void setActive(bool active);
-
-Q_SIGNALS:
-
-    void signalRotateRight();
-
-protected:
-
-    virtual ItemViewHoverButton* createButton();
-    virtual void updateButton(const QModelIndex& index);
-    virtual bool checkIndex(const QModelIndex& index) const;
-
-private Q_SLOTS:
-
-    void slotClicked();
-};
 
 } // namespace Digikam
 

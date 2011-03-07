@@ -81,7 +81,7 @@ public Q_SLOTS:
 
     void assignPickLabel(const QModelIndex& index, int pickId);
     void assignColorLabel(const QModelIndex& index, int colorId);
-    void assignRating(const QModelIndex& index, int rating);
+    void assignRating(const QList<QModelIndex>& index, int rating);
     void assignTag(const QModelIndex& index, const QString& name);
 
     void createGroupFromSelection();
@@ -115,8 +115,8 @@ protected:
 
 private Q_SLOTS:
 
-    void slotRotateLeft();
-    void slotRotateRight();
+    void slotRotateLeft(const QList<QModelIndex>&);
+    void slotRotateRight(const QList<QModelIndex>&);
     void slotUntagFace(const QModelIndex& index);
 
 private:

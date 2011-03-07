@@ -55,6 +55,7 @@ public:
     virtual ~DigikamImageViewPriv();
 
     void updateOverlays();
+    void triggerRotateAction(const char* actionName);
 
 public:
 
@@ -66,8 +67,8 @@ public:
 
     bool                      overlaysActive;
 
-    ImageRotateLeftOverlay*   rotateLeftOverlay;
-    ImageRotateRightOverlay*  rotateRightOverlay;
+    ImageRotateOverlay*       rotateLeftOverlay;
+    ImageRotateOverlay*       rotateRightOverlay;
 
 private:
 
