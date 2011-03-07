@@ -248,7 +248,7 @@ bool AlbumSelectionTreeView::viewportEvent(QEvent* event)
     // visualRect can be larger than viewport, intersect with viewport rect
     option.rect                 &= viewport()->rect();
     option.state                |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
-    d->toolTip->show(helpEvent, option, index);
+    d->toolTip->show(option, index);
 
     return true;
 }

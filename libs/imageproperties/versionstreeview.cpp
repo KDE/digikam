@@ -66,10 +66,10 @@ public:
         FilterActionMode
     };
 
-    void show(QHelpEvent* event, const QStyleOptionViewItem& option, const QModelIndex& index, Mode mode)
+    void show(const QStyleOptionViewItem& option, const QModelIndex& index, Mode mode)
     {
         m_mode = mode;
-        ItemViewToolTip::show(event, option, index);
+        ItemViewToolTip::show(option, index);
         m_mode = InvalidMode;
     }
 
@@ -244,7 +244,7 @@ bool VersionsTreeView::viewportEvent(QEvent* event)
             option.rect = visualRect(index);
             option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
 
-            m_toolTip->show(he, option, index, mode);
+            m_toolTip->show(option, index, mode);
 
             return true;
         }

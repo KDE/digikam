@@ -37,6 +37,7 @@
 #include <QToolTip>
 #include <QVBoxLayout>
 
+#include <QTextDocument>
 // KDE includes
 
 #include <kdebug.h>
@@ -145,10 +146,8 @@ public:
         corner = 0;
     }
 
-    const int  tipBorder;
-
+    const int   tipBorder;
     int         corner;
-
     QPixmap     corners[4];
 };
 
@@ -157,7 +156,7 @@ DItemToolTip::DItemToolTip(QWidget* parent)
 {
     hide();
 
-    setForegroundRole(QPalette::ToolTipText);
+    //setForegroundRole(QPalette::ToolTipText);
     setBackgroundRole(QPalette::ToolTipBase);
     setPalette(QToolTip::palette());
     ensurePolished();
@@ -183,7 +182,11 @@ DItemToolTip::~DItemToolTip()
 void DItemToolTip::updateToolTip()
 {
     renderArrows();
-    setText(tipContents());
+
+    QString contents = tipContents();
+    //setWordWrap(Qt::mightBeRichText(contents));
+    setText(contents);
+    resize(sizeHint());
 }
 
 bool DItemToolTip::toolTipIsEmpty() const
@@ -331,8 +334,6 @@ bool DItemToolTip::event(QEvent* e)
 
 void DItemToolTip::resizeEvent(QResizeEvent* e)
 {
-    QFrame::resizeEvent(e);
-
     QStyleHintReturnMask frameMask;
     QStyleOption option;
     option.init(this);
@@ -342,7 +343,8 @@ void DItemToolTip::resizeEvent(QResizeEvent* e)
         setMask(frameMask.region);
     }
 
-    reposition();
+    update();
+    QLabel::resizeEvent(e);
 }
 
 void DItemToolTip::paintEvent(QPaintEvent* e)

@@ -49,7 +49,19 @@ public:
     QAbstractItemModel* model() const;
     QModelIndex currentIndex() const;
 
-    void show(QHelpEvent* event, const QStyleOptionViewItem& option, const QModelIndex& index);
+    /**
+     * Show the tooltip for the given item.
+     * The rect of the given option is taken as area for which
+     * the tooltip is shown.
+     */
+    void show(const QStyleOptionViewItem& option, const QModelIndex& index);
+
+    void setTipContents(const QString& tipContents);
+    /**
+     * Default implementation is based on setTipContents().
+     * Reimplement if you dynamically provide the contents.
+     */
+    virtual QString tipContents();
 
 protected:
 

@@ -27,6 +27,10 @@
 
 #include <QApplication>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 namespace Digikam
@@ -45,6 +49,7 @@ public:
     QAbstractItemView* view;
     QModelIndex        index;
     QRect              rect;
+    QString            text;
     bool               filterInstalled;
 };
 
@@ -76,7 +81,7 @@ QModelIndex ItemViewToolTip::currentIndex() const
     return d->index;
 }
 
-void ItemViewToolTip::show(QHelpEvent*, const QStyleOptionViewItem& option, const QModelIndex& index)
+void ItemViewToolTip::show(const QStyleOptionViewItem& option, const QModelIndex& index)
 {
     d->index = index;
     d->rect  = option.rect;
@@ -94,6 +99,17 @@ void ItemViewToolTip::show(QHelpEvent*, const QStyleOptionViewItem& option, cons
 
         DItemToolTip::show();
     }
+}
+
+void ItemViewToolTip::setTipContents(const QString& tipContents)
+{
+    d->text = tipContents;
+    updateToolTip();
+}
+
+QString ItemViewToolTip::tipContents()
+{
+    return d->text;
 }
 
 QRect ItemViewToolTip::repositionRect()

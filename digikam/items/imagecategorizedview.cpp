@@ -244,8 +244,10 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
 
     if (oldDelegate)
     {
+        hideIndexNotification();
         d->delegate->setAllOverlaysActive(false);
         d->delegate->setViewOnAllOverlays(0);
+        disconnect(d->delegate, 0, this, 0);
     }
 
     d->delegate = delegate;
@@ -262,6 +264,10 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
 
     d->delegate->setViewOnAllOverlays(this);
     d->delegate->setAllOverlaysActive(true);
+    connect(d->delegate, SIGNAL(requestNotification(const QModelIndex&, const QString&)),
+            this, SLOT(showIndexNotification(const QModelIndex&, const QString&)));
+    connect(d->delegate, SIGNAL(hideNotification()),
+            this, SLOT(hideIndexNotification()));
 }
 
 Album* ImageCategorizedView::currentAlbum() const
