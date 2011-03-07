@@ -7,7 +7,7 @@
  * Description : icons group item.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class IconGroupItemPriv
+class IconGroupItem::IconGroupItemPriv
 {
 public:
 
@@ -269,8 +269,7 @@ void IconGroupItem::clear(bool update)
 
 void IconGroupItem::sort()
 {
-    IconGroupItemPriv::SortableItem* items
-    = new IconGroupItemPriv::SortableItem[ count() ];
+    IconGroupItemPriv::SortableItem* items = new IconGroupItemPriv::SortableItem[ count() ];
 
     IconItem* item = d->firstItem;
     int i = 0;
@@ -283,7 +282,7 @@ void IconGroupItem::sort()
     qsort( items, count(), sizeof( IconGroupItemPriv::SortableItem ), cmpItems );
 
     IconItem* prev = 0;
-    item = 0;
+    item           = 0;
 
     for ( i = 0; i < (int)count(); ++i )
     {
