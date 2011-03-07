@@ -56,6 +56,7 @@ public:
     DCategorizedViewPriv() :
         delegate(0),
         toolTip(0),
+        notificationToolTip(0),
         showToolTip(false),
         usePointingHand(true),
         scrollStepFactor(10),
@@ -68,6 +69,7 @@ public:
 
     DItemDelegate*        delegate;
     ItemViewToolTip*      toolTip;
+    ItemViewToolTip*      notificationToolTip;
     bool                  showToolTip;
     bool                  usePointingHand;
     int                   scrollStepFactor;
@@ -256,6 +258,23 @@ void DCategorizedView::invertSelection()
 
     const QItemSelection selection(topLeft, bottomRight);
     selectionModel()->select(selection, QItemSelectionModel::Toggle);
+}
+
+void DCategorizedView::setSelectedIndexes(const QList<QModelIndex>& indexes)
+{
+    if (selectedIndexes() == indexes)
+    {
+        return;
+    }
+
+    QItemSelection mySelection;
+
+    foreach (const QModelIndex& index, indexes)
+    {
+        mySelection.select(index, index);
+    }
+
+    selectionModel()->select(mySelection, QItemSelectionModel::ClearAndSelect);
 }
 
 void DCategorizedView::setToolTipEnabled(bool enable)
@@ -603,9 +622,18 @@ void DCategorizedView::indexActivated(const QModelIndex&)
 {
 }
 
-bool DCategorizedView::showToolTip(QHelpEvent* he, const QModelIndex& index, QStyleOptionViewItem& option)
+bool DCategorizedView::showToolTip(const QModelIndex& index, QStyleOptionViewItem& option, QHelpEvent* he)
 {
     QRect innerRect;
+    QPoint pos;
+    if (he)
+    {
+        pos = he->pos();
+    }
+    else
+    {
+        pos = option.rect.center();
+    }
 
     if (d->delegate->acceptsToolTip(he->pos(), option.rect, index, &innerRect))
     {
@@ -614,7 +642,7 @@ bool DCategorizedView::showToolTip(QHelpEvent* he, const QModelIndex& index, QSt
             option.rect = innerRect;
         }
 
-        d->toolTip->show(he, option, index);
+        d->toolTip->show(option, index);
         return true;
     }
     return false;
@@ -814,7 +842,7 @@ bool DCategorizedView::viewportEvent(QEvent* event)
             QStyleOptionViewItem option = viewOptions();
             option.rect = visualRect(index);
             option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
-            showToolTip(he, index, option);
+            showToolTip(index, option, he);
             return true;
         }
         default:
@@ -822,6 +850,35 @@ bool DCategorizedView::viewportEvent(QEvent* event)
     }
 
     return DigikamKCategorizedView::viewportEvent(event);
+}
+
+void DCategorizedView::showIndexNotification(const QModelIndex& index, const QString& message)
+{
+    hideIndexNotification();
+    if (!index.isValid())
+    {
+        return;
+    }
+
+    if (!d->notificationToolTip)
+    {
+        d->notificationToolTip = new ItemViewToolTip(this);
+    }
+
+    d->notificationToolTip->setTipContents(message);
+
+    QStyleOptionViewItem option = viewOptions();
+    option.rect = visualRect(index);
+    option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
+    d->notificationToolTip->show(option, index);
+}
+
+void DCategorizedView::hideIndexNotification()
+{
+    if (d->notificationToolTip)
+    {
+        d->notificationToolTip->hide();
+    }
 }
 
 /**

@@ -64,6 +64,7 @@ public:
     void awayFromSelection();
 
     void invertSelection();
+    void setSelectedIndexes(const QList<QModelIndex>& indexes);
 
     void setToolTipEnabled(bool enabled);
     bool isToolTipEnabled() const;
@@ -81,6 +82,9 @@ public Q_SLOTS:
     virtual void cut() { DragDropViewImplementation::cut(); }
     virtual void copy() { DragDropViewImplementation::copy(); }
     virtual void paste() { DragDropViewImplementation::paste(); }
+
+    void showIndexNotification(const QModelIndex& index, const QString& message);
+    void hideIndexNotification();
 
 Q_SIGNALS:
 
@@ -130,8 +134,9 @@ protected:
 
     /** Provides default behavior, can reimplement in a subclass.
      *  Returns true if a tooltip was shown.
+     *  The help event is optional.
      */
-    virtual bool showToolTip(QHelpEvent* he, const QModelIndex& index, QStyleOptionViewItem& option);
+    virtual bool showToolTip(const QModelIndex& index, QStyleOptionViewItem& option, QHelpEvent* e = 0);
 
     /** Returns an index that is representative for the category at position pos */
     QModelIndex indexForCategoryAt(const QPoint& pos) const;
