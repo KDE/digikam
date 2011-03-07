@@ -19,6 +19,10 @@ SET(libcameragui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/gpiteminfo.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/renamecustomizer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/umscamera.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/q3support/icongroupitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/q3support/iconitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/q3support/iconview.cpp
 )
 
 KDE4_ADD_LIBRARY(cameragui STATIC ${libcameragui_SRCS})

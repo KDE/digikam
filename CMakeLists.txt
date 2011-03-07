@@ -1386,10 +1386,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/leftsidebarwidgets.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models/digikammodelcollection.cpp
-
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/icongroupitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/iconitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support/iconview.cpp
        )
 
     SET(libdigikamhelpers_SRCS
@@ -1411,7 +1407,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/q3support
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate
@@ -1481,6 +1476,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/q3support
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch
