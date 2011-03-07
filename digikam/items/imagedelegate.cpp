@@ -337,7 +337,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
 
     p->restore();
 
-    drawDelegates(p, option, index);
+    drawOverlays(p, option, index);
 }
 
 QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const

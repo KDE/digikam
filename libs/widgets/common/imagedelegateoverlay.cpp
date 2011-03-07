@@ -31,6 +31,7 @@
 // KDE includes
 
 #include <kdebug.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -108,6 +109,54 @@ void ImageDelegateOverlay::setDelegate(QAbstractItemDelegate* delegate)
 QAbstractItemDelegate* ImageDelegateOverlay::delegate() const
 {
     return m_delegate;
+}
+
+bool ImageDelegateOverlay::affectsMultiple(const QModelIndex& index) const
+{
+    // note how selectionModel->selectedIndexes().contains() can scale badly
+    QItemSelectionModel *selectionModel = view()->selectionModel();
+    if (!selectionModel->hasSelection())
+    {
+        return false;
+    }
+    if (!selectionModel->isSelected(index))
+    {
+        return false;
+    }
+    QItemSelection selection = selectionModel->selection();
+    if (selection.size() > 1)
+    {
+        return true;
+    }
+    return selection.indexes().size() > 1;
+}
+
+QList<QModelIndex> ImageDelegateOverlay::affectedIndexes(const QModelIndex& index) const
+{
+    if (!affectsMultiple(index))
+    {
+        return QList<QModelIndex>() << index;
+    }
+    else
+    {
+        return view()->selectionModel()->selectedIndexes();
+    }
+}
+
+int ImageDelegateOverlay::numberOfAffectedIndexes(const QModelIndex& index) const
+{
+    if (!affectsMultiple(index))
+    {
+        return 1;
+    }
+
+    // scales better than selectedIndexes().count()
+    int count = 0;
+    foreach (const QItemSelectionRange& range, view()->selectionModel()->selection())
+    {
+        count += range.height();
+    }
+    return count;
 }
 
 // -----------------------------
@@ -232,6 +281,32 @@ void AbstractWidgetDelegateOverlay::viewportLeaveEvent(QObject*, QEvent*)
     hide();
 }
 
+void AbstractWidgetDelegateOverlay::widgetEnterEvent()
+{
+}
+
+void AbstractWidgetDelegateOverlay::widgetLeaveEvent()
+{
+}
+
+void AbstractWidgetDelegateOverlay::widgetEnterNotifyMultiple(const QModelIndex& index)
+{
+    if (index.isValid() && affectsMultiple(index))
+    {
+        emit requestNotification(index, notifyMultipleMessage(index, numberOfAffectedIndexes(index)));
+    }
+}
+
+void AbstractWidgetDelegateOverlay::widgetLeaveNotifyMultiple()
+{
+    emit hideNotification();
+}
+
+QString AbstractWidgetDelegateOverlay::notifyMultipleMessage(const QModelIndex&, int number)
+{
+    return i18nc("@info", "<i>Applying operation on <br/><b>%1</b> selected pictures</i>", number);
+}
+
 bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
 {
     if (m_widget && obj == m_widget->parent())   // events on view's viewport
@@ -275,6 +350,12 @@ bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
                 break;
             case QEvent::MouseButtonRelease:
                 m_mouseButtonPressedOnWidget = false;
+                break;
+            case QEvent::Enter:
+                widgetEnterEvent();
+                break;
+            case QEvent::Leave:
+                widgetLeaveEvent();
                 break;
             default:
                 break;
@@ -361,6 +442,17 @@ void ImageDelegateOverlayContainer::installOverlay(ImageDelegateOverlay* overlay
 
     QObject::connect(overlay, SIGNAL(destroyed(QObject*)),
                      asDelegate(), SLOT(overlayDestroyed(QObject*)));
+
+    QObject::connect(overlay, SIGNAL(requestNotification(const QModelIndex&, const QString&)),
+                     asDelegate(), SIGNAL(requestNotification(const QModelIndex&, const QString&)));
+
+    QObject::connect(overlay, SIGNAL(hideNotification()),
+                     asDelegate(), SIGNAL(hideNotification()));
+}
+
+QList<ImageDelegateOverlay*> ImageDelegateOverlayContainer::overlays() const
+{
+    return m_overlays;
 }
 
 void ImageDelegateOverlayContainer::removeOverlay(ImageDelegateOverlay* overlay)
@@ -368,6 +460,7 @@ void ImageDelegateOverlayContainer::removeOverlay(ImageDelegateOverlay* overlay)
     overlay->setActive(false);
     overlay->setDelegate(0);
     m_overlays.removeAll(overlay);
+    QObject::disconnect(overlay, 0, asDelegate(), 0);
 }
 
 void ImageDelegateOverlayContainer::setAllOverlaysActive(bool active)
@@ -414,7 +507,7 @@ void ImageDelegateOverlayContainer::mouseMoved(QMouseEvent* e, const QRect& visu
     }
 }
 
-void ImageDelegateOverlayContainer::drawDelegates(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void ImageDelegateOverlayContainer::drawOverlays(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     foreach (ImageDelegateOverlay* overlay, m_overlays)
     {

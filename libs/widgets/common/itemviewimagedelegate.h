@@ -97,6 +97,11 @@ protected Q_SLOTS:
 
     virtual void overlayDestroyed(QObject* o);
 
+Q_SIGNALS:
+
+    void requestNotification(const QModelIndex& index, const QString& message);
+    void hideNotification();
+
 protected:
 
     virtual QAbstractItemDelegate* asDelegate();

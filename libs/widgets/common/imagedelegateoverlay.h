@@ -69,11 +69,26 @@ Q_SIGNALS:
 
     void update(const QModelIndex& index);
 
+    void requestNotification(const QModelIndex& index, const QString& message);
+    void hideNotification();
+
 protected Q_SLOTS:
 
     /** Called when any change from the delegate occurs - when the overlay is installed,
      *  when size hints, styles or fonts change */
     virtual void visualChange();
+
+protected:
+
+    /**
+     * For the context that an overlay can affect multiple items:
+     * Assuming the currently overlayed index is given.
+     * Will an operation affect only the single item, or multiple?
+     * If multiple, retrieve the affected selection.
+     */
+    bool affectsMultiple(const QModelIndex& index) const;
+    QList<QModelIndex> affectedIndexes(const QModelIndex& index) const;
+    int numberOfAffectedIndexes(const QModelIndex& index) const;
 
 protected:
 
@@ -128,6 +143,16 @@ protected:
     /** Called when a QEvent::Leave of the viewport is received.
      *  The default implementation hide()s. */
     virtual void viewportLeaveEvent(QObject* obj, QEvent* event);
+
+    /** Called when a QEvent::Enter resp. QEvent::Leave event for the widget is received.
+     *  The default implementation does nothing. */
+    virtual void widgetEnterEvent();
+    virtual void widgetLeaveEvent();
+
+    /** A sample implementation for above methods */
+    void widgetEnterNotifyMultiple(const QModelIndex& index);
+    void widgetLeaveNotifyMultiple();
+    virtual QString notifyMultipleMessage(const QModelIndex&, int number);
 
 protected Q_SLOTS:
 
@@ -192,6 +217,8 @@ public:
 
     virtual ~ImageDelegateOverlayContainer();
 
+    QList<ImageDelegateOverlay*> overlays() const;
+
     void installOverlay(ImageDelegateOverlay* overlay);
     void removeOverlay(ImageDelegateOverlay* overlay);
     void setAllOverlaysActive(bool active);
@@ -201,10 +228,12 @@ public:
 
     /// Provide as signal in the delegate:
     ///  void visualChange();
+    ///  void requestNotification(const QModelIndex& index, const QString& message);
+    ///  void hideNotification();
 
 protected:
 
-    virtual void drawDelegates(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual void drawOverlays(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
     /// Declare as slot in the derived class calling this method
     virtual void overlayDestroyed(QObject* o);

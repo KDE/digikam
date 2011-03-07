@@ -65,6 +65,10 @@ Q_SIGNALS:
     void animationStateChanged();
     void visualChange(); // for ImageDelegateOverlayContainer
 
+    // for ImageDelegateOverlayContainer, unimplemented:
+    void requestNotification(const QModelIndex& index, const QString& message);
+    void hideNotification();
+
 protected Q_SLOTS:
 
     virtual void overlayDestroyed(QObject* o) { ImageDelegateOverlayContainer::overlayDestroyed(o); }
