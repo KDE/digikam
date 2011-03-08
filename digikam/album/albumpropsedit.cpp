@@ -82,8 +82,6 @@ public:
     {
     }
 
-    QStringList  albumCollections;
-
     KComboBox*   categoryCombo;
     KLineEdit*   titleEdit;
     KTextEdit*   commentsEdit;
@@ -205,7 +203,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
         d->categoryCombo->addItem(QString());
         QStringList Categories = settings->getAlbumCategoryNames();
         d->categoryCombo->addItems(Categories);
-        int categoryIndex = Categories.indexOf(album->category());
+        int categoryIndex      = Categories.indexOf(album->category());
 
         if (categoryIndex != -1)
         {
