@@ -87,4 +87,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 065 ==> 192425 : Star rating setting under thumbnails is a nuisance.
 066 ==> 219202 : digiKam database on multiple hosts.
 067 ==> 216894 : Slow quadratic runtime generating fingerprints or thumbnails in beta6 during a big import.
-068 ==> 
+068 ==> 267944 : Album properties - Date manually entered not saved when clicking Ok.
+069 ==>
