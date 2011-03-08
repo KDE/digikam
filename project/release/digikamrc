@@ -1,0 +1,8 @@
+[main]
+customsrc=git@git.kde.org:digikam
+doc=false
+l10n=true
+protocol=anonsvn
+branch=trunk
+gitbranch=master
+version=1.9.0
