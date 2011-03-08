@@ -68,6 +68,28 @@
 namespace Digikam
 {
 
+class DDatePicker : public KDatePicker
+{
+
+public:
+
+    DDatePicker(QWidget* widget)
+        : KDatePicker(widget)
+    {
+    }
+
+    ~DDatePicker()
+    {
+    }
+
+    void dateLineEnterPressed()
+    {
+        lineEnterPressed();
+    }
+};
+
+// --------------------------------------------------------------------------------
+
 class AlbumPropsEdit::AlbumPropsEditPriv
 {
 
@@ -85,7 +107,8 @@ public:
     KComboBox*   categoryCombo;
     KLineEdit*   titleEdit;
     KTextEdit*   commentsEdit;
-    KDatePicker* datePicker;
+
+    DDatePicker* datePicker;
 
     PAlbum*      album;
 };
@@ -157,7 +180,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     QLabel* dateLabel = new QLabel(page);
     dateLabel->setText(i18n("Album &date:"));
 
-    d->datePicker = new KDatePicker(page);
+    d->datePicker = new DDatePicker(page);
     dateLabel->setBuddy(d->datePicker);
 
     KHBox* buttonRow            = new KHBox(page);
@@ -226,6 +249,9 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // -- slots connections -------------------------------------------
 
+    connect(d->datePicker, SIGNAL(dateEntered(const QDate&)),
+            this, SLOT(slotDateEntered(const QDate&)));
+
     connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTitleChanged(const QString&)));
 
@@ -260,6 +286,9 @@ QString AlbumPropsEdit::comments() const
 
 QDate AlbumPropsEdit::date() const
 {
+    // See B.K.O #267944 : update calendar view if user enter a date in text field.
+    d->datePicker->dateLineEnterPressed();
+
     return d->datePicker->date();
 }
 
@@ -302,7 +331,7 @@ bool AlbumPropsEdit::editProps(PAlbum* album, QString& title,
 {
     QPointer<AlbumPropsEdit> dlg = new AlbumPropsEdit(album);
 
-    bool ok = dlg->exec() == QDialog::Accepted;
+    bool ok = (dlg->exec() == QDialog::Accepted);
 
     title           = dlg->title();
     comments        = dlg->comments();
@@ -319,7 +348,7 @@ bool AlbumPropsEdit::createNew(PAlbum* parent, QString& title, QString& comments
 {
     QPointer<AlbumPropsEdit> dlg = new AlbumPropsEdit(parent, true);
 
-    bool ok = dlg->exec() == QDialog::Accepted;
+    bool ok = (dlg->exec() == QDialog::Accepted);
 
     title           = dlg->title();
     comments        = dlg->comments();
@@ -334,7 +363,7 @@ bool AlbumPropsEdit::createNew(PAlbum* parent, QString& title, QString& comments
 void AlbumPropsEdit::slotTitleChanged(const QString& newtitle)
 {
     QRegExp emptyTitle = QRegExp("^\\s*$");
-    bool enable = (!emptyTitle.exactMatch(newtitle) && !newtitle.isEmpty());
+    bool enable        = (!emptyTitle.exactMatch(newtitle) && !newtitle.isEmpty());
     enableButtonOk(enable);
 }
 
@@ -343,13 +372,12 @@ void AlbumPropsEdit::slotDateLowButtonClicked()
     setCursor(Qt::WaitCursor);
 
     QDate lowDate = DatabaseAccess().db()->getAlbumLowestDate(d->album->id());
-
-    setCursor(Qt::ArrowCursor);
-
     if (lowDate.isValid())
     {
         d->datePicker->setDate(lowDate);
     }
+
+    setCursor(Qt::ArrowCursor);
 }
 
 void AlbumPropsEdit::slotDateHighButtonClicked()
@@ -357,13 +385,12 @@ void AlbumPropsEdit::slotDateHighButtonClicked()
     setCursor(Qt::WaitCursor);
 
     QDate highDate = DatabaseAccess().db()->getAlbumHighestDate(d->album->id());
-
-    setCursor(Qt::ArrowCursor);
-
     if (highDate.isValid())
     {
         d->datePicker->setDate(highDate);
     }
+
+    setCursor(Qt::ArrowCursor);
 }
 
 void AlbumPropsEdit::slotDateAverageButtonClicked()
