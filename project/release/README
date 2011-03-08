@@ -1,10 +1,7 @@
 This is the release script wizard.
 
-You need to install these packages:
-- ruby
+You need to install ruby package first.
 
-You first need to modify the digikamrc file and change the version.
+You first need to modify the rc config file and change the version.
 
-To create the tarball you need to do : 
-
-ruby digikam.rb
+To create the tarball, run ruby script as well
