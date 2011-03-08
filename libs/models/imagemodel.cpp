@@ -258,6 +258,28 @@ QList<QModelIndex> ImageModel::indexesForImageId(qlonglong id) const
     return indexes;
 }
 
+int ImageModel::numberOfIndexesForImageInfo(const ImageInfo& info) const
+{
+    return numberOfIndexesForImageId(info.id());
+}
+
+int ImageModel::numberOfIndexesForImageId(qlonglong id) const
+{
+    if (d->extraValues.isEmpty())
+    {
+        return 0;
+    }
+
+    int count = 0;
+    QHash<qlonglong,int>::iterator it;
+    for (it = d->idHash.find(id); it != d->idHash.end() && it.key() == id; ++it)
+    {
+        ++count;
+    }
+
+    return count;
+}
+
 // static method
 ImageInfo ImageModel::retrieveImageInfo(const QModelIndex& index)
 {

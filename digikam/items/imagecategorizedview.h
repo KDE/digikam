@@ -172,6 +172,7 @@ protected:
     void selectionChanged(const QItemSelection&, const QItemSelection&);
     void updateGeometries();
     AbstractItemDragDropHandler* dragDropHandler() const;
+    QModelIndex nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const;
 
 private Q_SLOTS:
 

@@ -117,6 +117,8 @@ public:
     QModelIndex indexForImageId(qlonglong id, const QVariant& extraValue) const;
     QList<QModelIndex> indexesForImageInfo(const ImageInfo& info) const;
     QList<QModelIndex> indexesForImageId(qlonglong id) const;
+    int numberOfIndexesForImageInfo(const ImageInfo& info) const;
+    int numberOfIndexesForImageId(qlonglong id) const;
     /** Returns the index or ImageInfo object from the underlying data
      *  for the given file path. This is fast if keepsFilePathCache is enabled.
      *  The file path is as returned by ImageInfo.filePath().

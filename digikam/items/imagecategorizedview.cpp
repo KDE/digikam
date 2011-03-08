@@ -362,6 +362,40 @@ ImageInfo ImageCategorizedView::nextInOrder(const ImageInfo& startingPoint, int 
     return d->filterModel->imageInfo(d->filterModel->index(index.row() + nth, 0, QModelIndex()));
 }
 
+QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const QItemSelectionRange& removed) const
+{
+    QModelIndex hint = DCategorizedView::nextIndexHint(anchor, removed);
+    ImageInfo info = d->filterModel->imageInfo(anchor);
+    kDebug() << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForImageInfo(info);
+    // Fixes a special case of multiple (face) entries for the same image.
+    // If one is removed, any entry of the same image shall be preferred.
+    if (d->model->numberOfIndexesForImageInfo(info) > 1)
+    {
+        // The hint is for a different info, but we may have a hint for the same info
+        if (info != d->filterModel->imageInfo(hint))
+        {
+            int minDiff = d->filterModel->rowCount();
+            QList<QModelIndex> indexesForImageInfo =
+                d->filterModel->mapListFromSource(d->model->indexesForImageInfo(info));
+            foreach (const QModelIndex& index, indexesForImageInfo)
+            {
+                if (index == anchor || !index.isValid() || removed.contains(index))
+                {
+                    continue;
+                }
+                int distance = qAbs(index.row() - anchor.row());
+                if (distance < minDiff)
+                {
+                    minDiff = distance;
+                    hint = index;
+                    kDebug() << "Chose index" << hint << "at distance" << minDiff << "to" << anchor;
+                }
+            }
+        }
+    }
+    return hint;
+}
+
 void ImageCategorizedView::openAlbum(Album* album)
 {
     ImageAlbumModel* albumModel = imageAlbumModel();

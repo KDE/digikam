@@ -146,6 +146,13 @@ protected:
     virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const;
     virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
 
+    /**
+     * Assuming the given indexes would be removed (hypothetically!),
+     * return the index to be selected instead, starting from anchor.
+     * The default implementation returns the next remaining sibling.
+     */
+    virtual QModelIndex nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const;
+
     // reimplemented from parent class
     void contextMenuEvent(QContextMenuEvent* event);
     void keyPressEvent(QKeyEvent* event);

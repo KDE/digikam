@@ -420,22 +420,24 @@ void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start
     {
         // find out which selected indexes are left after rows are removed
         QItemSelection selected = selectionModel()->selection();
+
+        QModelIndex current = currentIndex();
+        QModelIndex indexToAnchor;
+        if (selected.contains(current))
+        {
+            indexToAnchor = current;
+        }
+        else if (!selected.isEmpty())
+        {
+            indexToAnchor = selected.first().topLeft();
+        }
+
         QItemSelection removed(model()->index(start, 0), model()->index(end, 0));
         selected.merge(removed, QItemSelectionModel::Deselect);
 
         if (selected.isEmpty())
         {
-            QModelIndex newCurrent;
-
-            if (end == model()->rowCount(parent) - 1)
-            {
-                newCurrent = model()->index(start - 1, 0);    // last remaining, no next one left
-            }
-            else
-            {
-                newCurrent = model()->index(end + 1, 0);    // next remaining
-            }
-
+            QModelIndex newCurrent = nextIndexHint(indexToAnchor, removed.first());
             selectionModel()->setCurrentIndex(newCurrent, QItemSelectionModel::SelectCurrent);
         }
     }
@@ -444,6 +446,7 @@ void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start
 void DCategorizedView::layoutAboutToBeChanged()
 {
     d->ensureOneSelectedItem = selectionModel()->hasSelection();
+    kDebug() << d->ensureOneSelectedItem;
 
     // store some hints so that if all selected items were removed dont need to default to 0,0.
     if (d->ensureOneSelectedItem)
@@ -464,9 +467,25 @@ void DCategorizedView::layoutAboutToBeChanged()
         if (indexToAnchor.isValid())
         {
             d->hintAtSelectionRow = indexToAnchor.row();
-            d->hintAtSelectionIndex = model()->index(d->hintAtSelectionRow == model()->rowCount()
-                                      ? d->hintAtSelectionRow : d->hintAtSelectionRow + 1, 0);
+            d->hintAtSelectionIndex = nextIndexHint(indexToAnchor, QItemSelectionRange(indexToAnchor));
         }
+    }
+}
+
+QModelIndex DCategorizedView::nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const
+{
+    Q_UNUSED(indexToAnchor);
+    if (removed.bottomRight().row() == model()->rowCount() - 1)
+    {
+        if (removed.topLeft().row() == 0)
+        {
+            return QModelIndex();
+        }
+        return model()->index(removed.topLeft().row() - 1, 0);    // last remaining, no next one left
+    }
+    else
+    {
+        return model()->index(removed.bottomRight().row() + 1, 0);    // next remaining
     }
 }
 
