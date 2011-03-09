@@ -1,7 +1,37 @@
 #!/usr/bin/env python
 
+# ============================================================
+# 
+# This file is a part of digiKam project
+# http://www.digikam.org
+# 
+# Date        : 2011-03-09
+# Description : a helper script for formatting the digiKam source code
+# 
+# Copyright (C) 2011 by Andi Clemens <andi dot clemens at gmx dot net>
+# 
+# This program is free software; you can redistribute it
+# and/or modify it under the terms of the GNU General
+# Public License as published by the Free Software Foundation;
+# either version 2, or (at your option)
+# any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# ============================================================ */
 
-# this scripts depends on Python 2.7 or higher
+
+
+
+# prerequisites:
+#     Python 2.7 or higher: http://www.python.org
+#     AStyle:               http://astyle.sourceforge.net
+
+
+
 
 import os
 import sys
@@ -100,11 +130,7 @@ def main():
     parser.add_argument("path", help="the path where the source files are located")
     parser.add_argument("-v", "--verbose", help="verbose output", default=False, action="store_true")
     parser.add_argument("-b", "--backup", help="keep backup files", default=False, action="store_true")
-
     args = parser.parse_args()
-    path = args.path
-    verbose = args.verbose
-    backup = args.backup
 
     errors = format_path(args.path, args.verbose)
 
