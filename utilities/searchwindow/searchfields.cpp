@@ -2089,7 +2089,9 @@ void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
 
             // Ignore internal tags here.
             if (a && TagsCache::instance()->isInternalTag(a->id()))
+            {
                 a = 0;
+            }
         }
 
         if (!a)
@@ -2563,6 +2565,7 @@ void SearchFieldLabels::read(SearchXmlCachingReader& reader)
     foreach(int id, ids)
     {
         a = AlbumManager::instance()->findTAlbum(id);
+
         if (!a)
         {
             kDebug() << "Search: Did not find Label album for ID" << id << "given in Search XML";
@@ -2570,6 +2573,7 @@ void SearchFieldLabels::read(SearchXmlCachingReader& reader)
         else
         {
             int cl = TagsCache::instance()->getColorLabelForTag(a->id());
+
             if (cl != -1)
             {
                 clabels.append((ColorLabel)cl);
@@ -2577,8 +2581,11 @@ void SearchFieldLabels::read(SearchXmlCachingReader& reader)
             else
             {
                 int pl = TagsCache::instance()->getPickLabelForTag(a->id());
+
                 if (pl != -1)
+                {
                     plabels.append((PickLabel)pl);
+                }
             }
         }
     }
@@ -2591,6 +2598,7 @@ void SearchFieldLabels::write(SearchXmlWriter& writer)
 {
     QList<int>     albumIds;
     QList<TAlbum*> clAlbums = m_colorLabelFilter->getCheckedColorLabelTags();
+
     if (!clAlbums.isEmpty())
     {
         foreach (TAlbum* album, clAlbums)
@@ -2600,6 +2608,7 @@ void SearchFieldLabels::write(SearchXmlWriter& writer)
     }
 
     QList<TAlbum*> plAlbums = m_pickLabelFilter->getCheckedPickLabelTags();
+
     if (!plAlbums.isEmpty())
     {
         foreach (TAlbum* album, plAlbums)
@@ -2608,7 +2617,10 @@ void SearchFieldLabels::write(SearchXmlWriter& writer)
         }
     }
 
-    if (albumIds.isEmpty()) return;
+    if (albumIds.isEmpty())
+    {
+        return;
+    }
 
     // NOTE: there is no XML database query rule for Color Labels in ImageQueryBuilder::buildField()
     //       As Color Labels are internal tags, we trig database on "tagid".

@@ -90,8 +90,8 @@ SetupDatabase::SetupDatabase(KPageDialog* dialog, QWidget* parent)
 {
     d->mainDialog  = dialog;
 
-    QWidget *page = new QWidget;
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QWidget* page = new QWidget;
+    QVBoxLayout* mainLayout = new QVBoxLayout;
 
     d->databaseWidget = new DatabaseWidget;
     mainLayout->addWidget(d->databaseWidget);
@@ -99,7 +99,7 @@ SetupDatabase::SetupDatabase(KPageDialog* dialog, QWidget* parent)
     if (!SchemaUpdater::isUniqueHashUpToDate())
     {
         d->updateBox = new QGroupBox(i18nc("@title:group", "Updates"));
-        QGridLayout *updateLayout = new QGridLayout;
+        QGridLayout* updateLayout = new QGridLayout;
 
         d->hashesButton = new QPushButton(i18nc("@action:button", "Update File Hashes"));
         d->hashesButton->setWhatsThis(i18nc("@info:tooltip",

@@ -200,13 +200,13 @@ Setup::Setup(QWidget* parent)
                                     "<i>Customize information in tool-tips</i></qt>"));
     d->page_tooltip->setIcon(KIcon("dialog-information"));
 
-/*
-    d->faceTagsPage  = new SetupFaceTags();
-    d->page_facetags = addPage(d->faceTagsPage, i18n("People Tags"));
-    d->page_facetags->setHeader(i18n("<qt>People Tags<br/>"
-                                     "<i>Configure digiKam's face detection and recognition</i></qt>"));
-    d->page_facetags->setIcon(KIcon("face-smile"));
-*/
+    /*
+        d->faceTagsPage  = new SetupFaceTags();
+        d->page_facetags = addPage(d->faceTagsPage, i18n("People Tags"));
+        d->page_facetags->setHeader(i18n("<qt>People Tags<br/>"
+                                         "<i>Configure digiKam's face detection and recognition</i></qt>"));
+        d->page_facetags->setIcon(KIcon("face-smile"));
+    */
 
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage(d->metadataPage, i18n("Metadata"));

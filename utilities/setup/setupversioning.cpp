@@ -135,7 +135,7 @@ SetupVersioning::SetupVersioning(QWidget* parent)
                                                 "whilst always preserving the original image.</para> "
                                                 "<para> All steps of the editing history are recorded and can be accessed later.</para>"));
 
-    QLabel *iconLabel = new QLabel;
+    QLabel* iconLabel = new QLabel;
     iconLabel->setPixmap(SmallIcon("view-catalog", KIconLoader::SizeMedium));//"folder-image"));
 
     d->infoNonDestructive = new QPushButton;
@@ -233,7 +233,7 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     // ---
 
     d->closingGB = new QGroupBox;//(i18nc("@title:group", "Automatic Saving"));
-    QGridLayout *closingLayout = new QGridLayout;
+    QGridLayout* closingLayout = new QGridLayout;
 
     QLabel* closingExplanation = new QLabel(i18nc("@label", "When closing the editor"));
     QLabel* closingIcon  = new QLabel;
@@ -267,7 +267,7 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     */
 
     d->snapshotGB = new QGroupBox;//(i18nc("@title:group", "Intermediate Version Snapshots"));
-    QGridLayout *snapshotLayout = new QGridLayout;
+    QGridLayout* snapshotLayout = new QGridLayout;
 
     QString snapshotWhatsThis = i18nc("@info:whatsthis",
                                       "<para>First and foremost, the <emphasis>original image will never be overwritten.</emphasis> "
@@ -282,7 +282,7 @@ SetupVersioning::SetupVersioning(QWidget* parent)
                                       "access, for example if some editing steps cannot be automatically reproduced.</para> ");
     d->snapshotGB->setWhatsThis(snapshotWhatsThis);
 
-    QLabel *snapshotIconLabel = new QLabel;
+    QLabel* snapshotIconLabel = new QLabel;
     snapshotIconLabel->setPixmap(SmallIcon("insert-image", KIconLoader::SizeMedium));
 
     QLabel* snapshotLabel = new QLabel(i18nc("@label", "Keep a snapshot of an edited image"));
@@ -334,7 +334,7 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     // ---*/
 
     d->viewGB = new QGroupBox;
-    QGridLayout *viewGBLayout = new QGridLayout;
+    QGridLayout* viewGBLayout = new QGridLayout;
 
     QString viewWhatsThis = i18nc("@info:whatsthis",
                                   "<para>If an image has been edited, only the <interface>current versions</interface> "
@@ -343,9 +343,9 @@ SetupVersioning::SetupVersioning(QWidget* parent)
                                   "<para>With the options here, you can choose to show certain files permanently.</para>");
     d->viewGB->setWhatsThis(viewWhatsThis);
 
-    QLabel *viewLabel =  new QLabel(i18nc("@label", "In main view"));
+    QLabel* viewLabel =  new QLabel(i18nc("@label", "In main view"));
 
-    QLabel *viewIconLabel = new QLabel;
+    QLabel* viewIconLabel = new QLabel;
     viewIconLabel->setPixmap(SmallIcon("view-list-icons", KIconLoader::SizeMedium));
 
     d->infoView = new QPushButton;
@@ -421,22 +421,40 @@ void SetupVersioning::applySettings()
 {
     VersionManagerSettings settings;
     settings.enabled = d->enableNonDestructive->isChecked();
+
     if (d->snapshotSession->isChecked())
+    {
         settings.saveIntermediateVersions |= VersionManagerSettings::AfterEachSession;
+    }
+
     if (d->snapshotAfterRaw->isChecked())
+    {
         settings.saveIntermediateVersions |= VersionManagerSettings::AfterRawConversion;
+    }
+
     if (d->snapshotComplex->isChecked())
+    {
         settings.saveIntermediateVersions |= VersionManagerSettings::WhenNotReproducible;
+    }
 
     if (d->viewShowOriginal->isChecked())
+    {
         settings.showInViewFlags |= VersionManagerSettings::ShowOriginal;
+    }
+
     if (d->viewShowSnapshots->isChecked())
+    {
         settings.showInViewFlags |= VersionManagerSettings::ShowIntermediates;
+    }
 
     if (d->autoSave->isChecked())
+    {
         settings.editorClosingMode = VersionManagerSettings::AutoSave;
+    }
     else //if (d->askToSave->isChecked())
+    {
         settings.editorClosingMode = VersionManagerSettings::AlwaysAsk;
+    }
 
     /*if (d->jpgFormat->isChecked())
         settings.format = "JPG";

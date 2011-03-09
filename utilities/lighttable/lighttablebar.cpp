@@ -70,7 +70,7 @@
 namespace Digikam
 {
 
-    class ImagePreviewBar::ImagePreviewBarPriv
+class ImagePreviewBar::ImagePreviewBarPriv
 {
 
 public:
@@ -1198,6 +1198,7 @@ void LightTableBar::drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile)
         {
             icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, size);
         }
+
         icon.paint(&p, item->rect().width()/2 - size/2, 10, size, size);
     }
 

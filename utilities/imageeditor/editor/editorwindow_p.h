@@ -268,7 +268,7 @@ public:
 
     }
 
-    void plugNewVersionInFormatAction(EditorWindow *q, KActionMenu* menuAction, const QString& text, const QString& format);
+    void plugNewVersionInFormatAction(EditorWindow* q, KActionMenu* menuAction, const QString& text, const QString& format);
 };
 
 const QString EditorWindow::EditorWindowPriv::configAutoZoomEntry("AutoZoom");

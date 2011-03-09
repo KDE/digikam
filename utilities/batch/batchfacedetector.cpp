@@ -205,6 +205,7 @@ void BatchFaceDetector::startAlbumListing()
         palbumCounts = DatabaseAccess().db()->getNumberOfImagesInAlbums();
         QApplication::restoreOverrideCursor();
     }
+
     if (talbumCounts.isEmpty() && hasTAlbums)
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);

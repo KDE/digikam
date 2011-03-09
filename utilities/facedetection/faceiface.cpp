@@ -126,8 +126,8 @@ void FaceIface::FaceIfacePriv::setupTags()
     if (!unknownPeopleTagId())
     {
         int unknownPeopleTagId = TagsCache::instance()->getOrCreateTag(tagPath(i18nc(
-                                 "The list of detected faces from the collections but not recognized",
-                                 "Unknown"), peopleTagId()));
+                                     "The list of detected faces from the collections but not recognized",
+                                     "Unknown"), peopleTagId()));
         TagProperties props(unknownPeopleTagId);
         props.setProperty(TagPropertyName::person(), QString()); // no name associated
         props.setProperty(TagPropertyName::unknownPerson(), QString()); // special property

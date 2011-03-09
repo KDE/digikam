@@ -606,6 +606,7 @@ void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iof
     d->currentFileToSave = 0;
 
     QString mimeType = givenMimeType;
+
     // This is possibly empty
     if (mimeType.isEmpty())
     {
@@ -621,6 +622,7 @@ void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iof
     }
 
     QMap<int,VersionFileInfo>::const_iterator it;
+
     for (it = op.intermediates.begin(); it != op.intermediates.end(); ++it)
     {
         FileToSave file;
@@ -671,6 +673,7 @@ void DImgInterface::saveNext()
     }
 
     QMap<QString,QVariant>::iterator it;
+
     for (it = file.ioAttributes.begin(); it != file.ioAttributes.end(); ++it)
     {
         file.image.setAttribute(it.key(), it.value());
@@ -704,6 +707,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
         else
         {
             HistoryImageId id = savedFile.image.addAsReferredImage(filePath);
+
             // for all images following in history, we need to insert the now saved file at the right place
             for (int i = d->currentFileToSave + 1; i < d->filesToSave.size(); i++)
             {
@@ -786,6 +790,7 @@ void DImgInterface::setLastSaved(const QString& filePath)
         // does not return to a real image anymore - it's overwritten
         d->undoMan->clearPreviousOriginData();
     }
+
     // We cannot do it in slotImageSaved because we may operate on a temporary filePath.
     d->image.imageSavedAs(filePath);
 }
@@ -796,6 +801,7 @@ void DImgInterface::switchToLastSaved(const DImageHistory& resolvedCurrentHistor
     // it has previously been saved to.
     // setLastSaved shall have been called before.
     d->image.switchOriginToLastSaved();
+
     if (resolvedCurrentHistory.isNull())
     {
         d->resolvedInitialHistory = d->image.getOriginalImageHistory();
@@ -805,13 +811,15 @@ void DImgInterface::switchToLastSaved(const DImageHistory& resolvedCurrentHistor
     {
         d->resolvedInitialHistory = resolvedCurrentHistory;
     }
+
     setUndoManagerOrigin();
 }
 
 void DImgInterface::setHistoryIsBranch(bool isBranching)
 {
     int firstStep = d->resolvedInitialHistory.size();
-    DImageHistory &history = d->image.getImageHistory();
+    DImageHistory& history = d->image.getImageHistory();
+
     if (firstStep < history.size())
     {
         if (isBranching)

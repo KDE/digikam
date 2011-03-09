@@ -721,6 +721,7 @@ void FaceGroup::slotAddItemMoving(const QRectF& rect)
         d->visibilityController->addItem(d->manuallyAddedItem);
         d->visibilityController->showItem(d->manuallyAddedItem);
     }
+
     d->manuallyAddedItem->setRectInSceneCoordinates(rect);
 }
 
@@ -736,6 +737,7 @@ void FaceGroup::slotAddItemFinished(const QRectF& rect)
         d->visibilityController->setItemDirectlyVisible(item, true);
         d->manuallyAddWrapItem->stackBefore(item);
     }
+
     cancelAddItem();
 }
 

@@ -202,7 +202,7 @@ void BatchTool::ensureIsInitialized() const
     if (!d->settingsWidget)
     {
         // lazy caching: indication for const-cast
-        BatchTool *tool = const_cast<BatchTool*>(this);
+        BatchTool* tool = const_cast<BatchTool*>(this);
         tool->setSettingsWidget(tool->createSettingsWidget());
     }
 }

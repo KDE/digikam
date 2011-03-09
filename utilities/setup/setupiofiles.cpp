@@ -101,7 +101,7 @@ const QString SetupIOFilesPriv::configShowImageSettingsDialog("ShowImageSettings
 
 // --------------------------------------------------------
 
-static QWidget *createGroupBox(QWidget *w)
+static QWidget* createGroupBox(QWidget* w)
 {
     QGroupBox*   box = new QGroupBox;
     QVBoxLayout* layout = new QVBoxLayout;

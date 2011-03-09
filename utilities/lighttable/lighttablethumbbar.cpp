@@ -103,10 +103,10 @@ LightTableThumbBar::LightTableThumbBar(QWidget* parent)
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
             this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)),
             Qt::QueuedConnection);
-/*
-    connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
-            this, SLOT(slotItemSelected(ThumbBarItem*)));
-*/
+    /*
+        connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
+                this, SLOT(slotItemSelected(ThumbBarItem*)));
+    */
 }
 
 LightTableThumbBar::~LightTableThumbBar()
@@ -250,7 +250,7 @@ void LightTableThumbBar::slotRatingChanged(const KUrl& url, int rating)
 
 void LightTableThumbBar::slotAssignRating(int /*rating*/)
 {
-//    assignRating(currentItemImageInfo(), rating);
+    //    assignRating(currentItemImageInfo(), rating);
 }
 
 void LightTableThumbBar::assignRating(const ImageInfo& info, int rating)

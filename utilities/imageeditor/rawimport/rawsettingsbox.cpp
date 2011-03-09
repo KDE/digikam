@@ -511,7 +511,7 @@ DRawDecoding RawSettingsBox::settings() const
     return settings;
 }
 
-void RawSettingsBox::fileDialogAboutToOpen(KUrlRequester *requester)
+void RawSettingsBox::fileDialogAboutToOpen(KUrlRequester* requester)
 {
     requester->fileDialog()->setPreviewWidget(new ICCPreviewWidget(requester));
 }

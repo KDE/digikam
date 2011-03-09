@@ -132,11 +132,11 @@ void BatchThumbsGenerator::slotRebuildThumbs()
     // Get all digiKam albums collection pictures path.
     AlbumList palbumList;
 
-    if(d->albumId == -1)
+    if (d->albumId == -1)
     {
         palbumList  = AlbumManager::instance()->allPAlbums();
     }
-    else 
+    else
     {
         palbumList.append(AlbumManager::instance()->findPAlbum(d->albumId));
     }

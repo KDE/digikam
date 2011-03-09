@@ -184,19 +184,19 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     vlayTop->addWidget(mapPanel);
     vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
     d->mapSearchWidget->setAvailableMouseModes(
-                KMap::MouseModePan |
-                KMap::MouseModeRegionSelection |
-                KMap::MouseModeZoomIntoGroup |
-                KMap::MouseModeRegionSelectionFromIcon |
-                KMap::MouseModeFilter |
-                KMap::MouseModeSelectThumbnail
-            );
+        KMap::MouseModePan |
+        KMap::MouseModeRegionSelection |
+        KMap::MouseModeZoomIntoGroup |
+        KMap::MouseModeRegionSelectionFromIcon |
+        KMap::MouseModeFilter |
+        KMap::MouseModeSelectThumbnail
+    );
     d->mapSearchWidget->setVisibleMouseModes(
-                KMap::MouseModePan |
-                KMap::MouseModeZoomIntoGroup |
-                KMap::MouseModeFilter |
-                KMap::MouseModeSelectThumbnail
-            );
+        KMap::MouseModePan |
+        KMap::MouseModeZoomIntoGroup |
+        KMap::MouseModeFilter |
+        KMap::MouseModeSelectThumbnail
+    );
 
     // construct a second row of control actions below the control widget
     /// @todo Should we still replace the icons of the actions with text as discussed during the sprint?
@@ -297,8 +297,8 @@ void GPSSearchView::doLoadState()
     }
 
     d->sortOrderOptionsHelper->setSortOptions(
-            GPSImageInfoSorter::SortOptions(group.readEntry(entryName("Sort Order"), int(d->sortOrderOptionsHelper->getSortOptions())))
-        );
+        GPSImageInfoSorter::SortOptions(group.readEntry(entryName("Sort Order"), int(d->sortOrderOptionsHelper->getSortOptions())))
+    );
 
     const KConfigGroup groupMapWidget = KConfigGroup(&group, entryName("GPSSearch Map Widget"));
 
@@ -346,8 +346,8 @@ void GPSSearchView::setActive(bool state)
 
         if (d->searchTreeView->currentAlbum())
         {
-           AlbumManager::instance()->setCurrentAlbum(
-                           d->searchTreeView->currentAlbum());
+            AlbumManager::instance()->setCurrentAlbum(
+                d->searchTreeView->currentAlbum());
         }
 
         slotClearImages();
@@ -420,8 +420,8 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     // NOTE: coordinates as lon1, lat1, lon2, lat2 (or West, North, East, South)
     // as left/top, right/bottom rectangle.
     QList<qreal> coordinatesList = QList<qreal>() <<
-                                         coordinates.first.lon() << coordinates.first.lat() <<
-                                         coordinates.second.lon() << coordinates.second.lat();
+                                   coordinates.first.lon() << coordinates.first.lat() <<
+                                   coordinates.second.lon() << coordinates.second.lat();
 
     if (!haveCoordinates)
     {
@@ -471,9 +471,9 @@ void GPSSearchView::slotAlbumSelected(Album* a)
         const QList<double> list = reader.valueToDoubleList();
 
         const KMap::GeoCoordinates::Pair coordinates(
-                KMap::GeoCoordinates(list.at(1), list.at(0)),
-                KMap::GeoCoordinates(list.at(3), list.at(2))
-            );
+            KMap::GeoCoordinates(list.at(1), list.at(0)),
+            KMap::GeoCoordinates(list.at(3), list.at(2))
+        );
 
         /// @todo Currently, invalid coordinates are stored as -200:
         if (list.at(1)!=-200)
@@ -486,6 +486,7 @@ void GPSSearchView::slotAlbumSelected(Album* a)
             d->mapSearchWidget->clearRegionSelection();
             d->gpsMarkerTiler->removeCurrentRegionSelection();
         }
+
         slotCheckNameEditGPSConditions();
     }
 

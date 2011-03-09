@@ -97,13 +97,13 @@ SetupDcraw::SetupDcraw(QWidget* parent)
     d->behaviorPanel = new QWidget;
     QVBoxLayout* behaviorLayout = new QVBoxLayout;
 
-    QLabel *rawExplanation = new QLabel;
+    QLabel* rawExplanation = new QLabel;
     rawExplanation->setText(i18nc("@info",
                                   "A <emphasis>raw image file</emphasis> contains minimally processed data "
                                   "from the image sensor of a digital camera.<nl/>"
                                   "Opening a raw file requires extensive data interpretation and processing."));
     rawExplanation->setWordWrap(true);
-    QLabel *rawIcon = new QLabel;
+    QLabel* rawIcon = new QLabel;
     rawIcon->setPixmap(SmallIcon("camera-photo", KIconLoader::SizeLarge));
     QHBoxLayout* header = new QHBoxLayout;
     header->addWidget(rawIcon);
@@ -114,10 +114,10 @@ SetupDcraw::SetupDcraw(QWidget* parent)
     QGroupBox* behaviorBox = new QGroupBox;
     QGridLayout* boxLayout = new QGridLayout;
 
-    QLabel *openIcon = new QLabel;
+    QLabel* openIcon = new QLabel;
     openIcon->setPixmap(SmallIcon("document-open", KIconLoader::SizeMedium));
 
-    QLabel *openIntro = new QLabel(i18nc("@label", "Open raw files in the image editor"));
+    QLabel* openIntro = new QLabel(i18nc("@label", "Open raw files in the image editor"));
 
     d->openSimple  = new QRadioButton(i18nc("@option:radio Open raw files...",
                                             "Fast and simple, as 8 bit image"));
@@ -221,14 +221,21 @@ void SetupDcraw::readSettings()
     d->dcrawSettings->readSettings(group);
 
     bool useTool = group.readEntry(d->configUseRawImportToolEntry, false);
+
     if (useTool)
+    {
         d->openTool->setChecked(true);
+    }
     else
     {
         if (d->dcrawSettings->settings().sixteenBitsImage)
+        {
             d->openDefault->setChecked(true);
+        }
         else
+        {
             d->openSimple->setChecked(true);
+        }
     }
 }
 

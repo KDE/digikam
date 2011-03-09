@@ -664,6 +664,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList& list,
 {
     // Clear all items before adding new images to the light table.
     kDebug() << "Clearing LT" << (!addTo);
+
     if (!addTo)
     {
         slotClearItemsList();
@@ -1744,7 +1745,7 @@ void LightTableWindow::slotSidebarTabTitleStyleChanged()
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
 
     /// @todo Which part of the settings has to be reloaded?
-//     d->rightSideBar->applySettings();
+    //     d->rightSideBar->applySettings();
 }
 
 void LightTableWindow::moveEvent(QMoveEvent* e)

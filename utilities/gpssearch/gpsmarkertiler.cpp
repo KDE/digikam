@@ -137,7 +137,7 @@ GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* const im
             this, SLOT(slotNewModelData(const QList<ImageInfo>&)));
 
     connect(d->selectionModel, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                this, SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
+            this, SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
 }
 
 /**
@@ -227,16 +227,23 @@ void GPSMarkerTiler::prepareTiles(const KMap::GeoCoordinates& upperLeft, const K
     }
 
     const QRectF newRect(lat1, lng1, lat2-lat1, lng2-lng1);
+
     d->rectList.append(newRect);
+
     d->rectLevel.append(level);
 
     kDebug() << "Listing" << lat1 << lat2 << lng1 << lng2;
+
     DatabaseUrl u = DatabaseUrl::fromAreaRange(lat1, lat2, lng1, lng2);
+
     KIO::Job* currentJob = ImageLister::startListJob(u);
+
     currentJob->addMetaData("wantDirectQuery", "false");
 
     GPSMarkerTilerPrivate::InternalJobs currentJobInfo;
+
     currentJobInfo.kioJob = currentJob;
+
     currentJobInfo.level  = level;
 
     d->jobs.append(currentJobInfo);
@@ -344,6 +351,7 @@ int GPSMarkerTiler::getTileSelectedCount(const KMap::TileIndex& tileIndex)
 QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::TileIndex& tileIndex, const int sortKey)
 {
     MyTile* const tile = static_cast<MyTile*>(getTile(tileIndex, true));
+
     if (!tile)
     {
         return QVariant();
@@ -388,10 +396,13 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
     }
 
     const QPair<KMap::TileIndex, int> firstIndex = indices.first().value<QPair<KMap::TileIndex, int> >();
+
     GPSImageInfo bestMarkerInfo = d->imagesHash.value(firstIndex.second);
+
     KMap::KMapGroupState bestMarkerGroupState = getImageState(firstIndex.second);
+
     KMap::TileIndex bestMarkerTileIndex = firstIndex.first;
-    
+
     for (int i=1; i<indices.count(); ++i)
     {
         const QPair<KMap::TileIndex, int> currentIndex = indices.at(i).value<QPair<KMap::TileIndex, int> >();
@@ -460,6 +471,7 @@ bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
 KMap::KMapGroupState GPSMarkerTiler::getTileGroupState(const KMap::TileIndex& tileIndex)
 {
     const bool haveGlobalSelection = (d->mapGlobalGroupState & (KMap::KMapFilteredPositiveMask | KMap::KMapRegionSelectedMask) );
+
     if (!haveGlobalSelection)
     {
         return KMap::KMapSelectedNone;
@@ -468,6 +480,7 @@ KMap::KMapGroupState GPSMarkerTiler::getTileGroupState(const KMap::TileIndex& ti
     /// @todo Store this state in the tiles!
     MyTile* tile = static_cast<MyTile*>(getTile(tileIndex, true));
     KMap::KMapGroupStateComputer tileStateComputer;
+
     for (int i=0; i<tile->imagesId.count(); ++i)
     {
         const KMap::KMapGroupState imageState = getImageState(tile->imagesId.at(i));
@@ -492,6 +505,7 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
     QDataStream ds(&di, QIODevice::ReadOnly);
 
     GPSMarkerTilerPrivate::InternalJobs* internalJob = 0;
+
     for (int i=0; i<d->jobs.count(); ++i)
     {
         if (job == d->jobs.at(i).kioJob)
@@ -501,6 +515,7 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
             break;
         }
     }
+
     if (!internalJob)
     {
         return;
@@ -544,6 +559,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     KIO::Job* const currentJob = qobject_cast<KIO::Job*>(job);
 
     int foundIndex = -1;
+
     for (int i=0; i<d->jobs.count(); ++i)
     {
         if (currentJob == d->jobs.at(i).kioJob)
@@ -567,7 +583,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     // get the results from the job:
     const QList<GPSImageInfo> returnedImageInfo = d->jobs.at(foundIndex).dataFromDatabase;
     /// @todo Currently, we ignore the wanted level and just add the images
-//     const int wantedLevel = d->jobs.at(foundIndex).level;
+    //     const int wantedLevel = d->jobs.at(foundIndex).level;
 
     // remove the finished job
     d->jobs[foundIndex].kioJob->kill();
@@ -582,6 +598,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     for (int i=0; i<returnedImageInfo.count(); ++i)
     {
         const GPSImageInfo currentImageInfo = returnedImageInfo.at(i);
+
         if (!currentImageInfo.coordinates.hasCoordinates())
         {
             continue;
@@ -638,8 +655,8 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
     const DatabaseFields::ImagePositions imagePositionChanges = changes;
 
     if (! (   ( changes & DatabaseFields::LatitudeNumber )
-           || ( changes & DatabaseFields::LongitudeNumber )
-           || ( changes & DatabaseFields::Altitude ) ) )
+              || ( changes & DatabaseFields::LongitudeNumber )
+              || ( changes & DatabaseFields::Altitude ) ) )
     {
         return;
     }
@@ -664,6 +681,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
         }
 
         KMap::GeoCoordinates newCoordinates(newImageInfo.latitudeNumber(), newImageInfo.longitudeNumber());
+
         if (newImageInfo.hasAltitude())
         {
             newCoordinates.setAlt(newImageInfo.altitudeNumber());
@@ -685,6 +703,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 
             // find out up to which level the tile indices are equal
             int separatorLevel = -1;
+
             for (int i=0; i<KMap::TileIndex::MaxLevel; ++i)
             {
                 if (oldTileIndex.at(i) != newTileIndex.at(i))
@@ -704,6 +723,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             MyTile* currentTileNew = currentTileOld;
 
             int level = 0;
+
             for (level=0; level<=oldTileIndex.level(); ++level)
             {
                 if (currentTileOld->childrenEmpty())
@@ -712,6 +732,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
                 }
 
                 const int tileIndex = oldTileIndex.at(level);
+
                 MyTile* childTileOld = static_cast<MyTile*>(currentTileOld->getChild(tileIndex));
 
                 if (childTileOld == 0)
@@ -801,6 +822,7 @@ void GPSMarkerTiler::onIndicesClicked(const KMap::TileIndex::List& tileIndicesLi
     }
 
     int repImageId = -1;
+
     if (representativeIndex.canConvert<QPair<KMap::TileIndex, int> >())
     {
         repImageId = representativeIndex.value<QPair<KMap::TileIndex, int> >().second;
@@ -831,6 +853,7 @@ void GPSMarkerTiler::onIndicesClicked(const KMap::TileIndex::List& tileIndicesLi
         if (repImageId>=0)
         {
             const QModelIndex repImageIndex = d->imageFilterModel->indexForImageId(repImageId);
+
             if (repImageIndex.isValid())
             {
                 d->selectionModel->setCurrentIndex(repImageIndex, selectionFlags);
@@ -870,6 +893,7 @@ KMap::KMapGroupState GPSMarkerTiler::getImageState(const qlonglong imageId)
     if (d->mapGlobalGroupState&KMap::KMapRegionSelectedMask)
     {
         const QModelIndex imageAlbumModelIndex = d->imageAlbumModel->indexForImageId(imageId);
+
         if (imageAlbumModelIndex.isValid())
         {
             imageState|= KMap::KMapRegionSelectedAll;
@@ -886,6 +910,7 @@ KMap::KMapGroupState GPSMarkerTiler::getImageState(const qlonglong imageId)
     if (d->mapGlobalGroupState&KMap::KMapFilteredPositiveMask)
     {
         const QModelIndex imageIndexInFilterModel = d->imageFilterModel->indexForImageId(imageId);
+
         if (imageIndexInFilterModel.isValid())
         {
             imageState|= KMap::KMapFilteredPositiveAll;
@@ -912,6 +937,7 @@ KMap::KMapGroupState GPSMarkerTiler::getImageState(const qlonglong imageId)
         if (d->selectionModel->hasSelection())
         {
             const QModelIndex imageIndexInFilterModel = d->imageFilterModel->indexForImageId(imageId);
+
             if (d->selectionModel->isSelected(imageIndexInFilterModel))
             {
                 imageState|= KMap::KMapSelectedAll;
@@ -935,7 +961,7 @@ void GPSMarkerTiler::setPositiveFilterIsActive(const bool state)
 
     /// @todo Somehow, a delay is necessary before emitting this signal - probably the order in which the filtering is propagated to other parts of digikam is wrong or just takes too long
     QTimer::singleShot(100, this, SIGNAL(signalTilesOrSelectionChanged()));
-//     emit(signalTilesOrSelectionChanged());
+    //     emit(signalTilesOrSelectionChanged());
 }
 
 void GPSMarkerTiler::slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
@@ -975,6 +1001,7 @@ void GPSMarkerTiler::removeMarkerFromTileAndChildren(const qlonglong imageId, co
 
         currentParentTile = currentTile;
         currentTile = static_cast<MyTile*>(currentParentTile->getChild(markerTileIndex.at(level)));
+
         if (!currentTile)
         {
             break;
@@ -1000,6 +1027,7 @@ void GPSMarkerTiler::addMarkerToTileAndChildren(const qlonglong imageId, const K
         }
 
         MyTile* nextTile = static_cast<MyTile*>(currentTile->getChild(markerTileIndex.at(level)));
+
         if (!nextTile)
         {
             nextTile = static_cast<MyTile*>(tileNew());

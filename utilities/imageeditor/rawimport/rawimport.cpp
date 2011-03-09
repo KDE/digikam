@@ -203,7 +203,7 @@ void RawImport::putPreviewData()
     d->postProcessedImage = d->previewWidget->demosaicedImage().copyMetaData();
     DImg data = filter()->getTargetImage();
     d->postProcessedImage.putImageData(data.width(), data.height(), data.sixteenBit(), data.hasAlpha(),
-                           data.stripImageData(), false);
+                                       data.stripImageData(), false);
     d->previewWidget->setPostProcessedImage(d->postProcessedImage);
     d->settingsBox->setPostProcessedImage(d->postProcessedImage);
     EditorToolIface::editorToolIface()->setToolStopProgress();

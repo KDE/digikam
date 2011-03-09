@@ -451,8 +451,8 @@ void DImageHistoryGraphTest::testGraph()
 
     // depth-first
     QList<qlonglong> subgraphTwoSorted = mapList(
-        graph.data().verticesDominatedByDepthFirstSorted(idToVertex.value(2), idToVertex.value(1),lessThanById(vertexToId)),
-                                                 vertexToId);
+            graph.data().verticesDominatedByDepthFirstSorted(idToVertex.value(2), idToVertex.value(1),lessThanById(vertexToId)),
+            vertexToId);
     // no sorting this time
     QVERIFY(subgraphTwoSorted == controlSubgraphTwoSorted);
 

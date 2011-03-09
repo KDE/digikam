@@ -244,6 +244,7 @@ void EditorToolIface::setupICC()
 void EditorToolIface::updateICCSettings()
 {
     EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
+
     if (tool)
     {
         tool->ICCSettingsChanged();

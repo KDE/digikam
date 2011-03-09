@@ -249,10 +249,15 @@ public:
     void setThumbBarToCurrent()
     {
         QModelIndex index = imageFilterModel->indexForImageInfo(currentImageInfo);
+
         if (index.isValid())
+        {
             thumbBar->setCurrentIndex(index);
+        }
         else
+        {
             thumbBar->setCurrentWhenAvailable(currentImageInfo.id());
+        }
     }
 };
 
@@ -652,6 +657,7 @@ void ImageWindow::openImage(const ImageInfo& info)
     }
 
     d->currentImageInfo = info;
+
     if (!d->imageInfoModel->hasImage(d->currentImageInfo))
     {
         d->imageInfoModel->addImageInfoSynchronously(d->currentImageInfo);
@@ -663,11 +669,14 @@ void ImageWindow::openImage(const ImageInfo& info)
 void ImageWindow::slotLoadCurrent()
 {
     if (!d->currentIsValid())
+    {
         return;
+    }
 
     m_canvas->load(d->currentImageInfo.filePath(), m_IOFileSettings);
 
     QModelIndex next = d->nextIndex();
+
     if (next.isValid())
     {
         m_canvas->preload(d->imageInfo(next).filePath());
@@ -717,6 +726,7 @@ void ImageWindow::slotFileOriginChanged(const QString& filePath)
     // By redo or undo, we have virtually switched to a new image.
     // So we do _not_ load anything!
     ImageInfo newCurrent(filePath);
+
     if (newCurrent.isNull() || !d->imageInfoModel->hasImage(newCurrent))
     {
         return;
@@ -735,7 +745,10 @@ void ImageWindow::loadIndex(const QModelIndex& index)
     }
 
     if (!index.isValid())
+    {
         return;
+    }
+
     d->currentImageInfo = d->imageFilterModel->imageInfo(index);
     slotLoadCurrent();
 }
@@ -842,7 +855,9 @@ void ImageWindow::slotChanged()
     m_resLabel->setText(str);
 
     if (!d->currentIsValid())
+    {
         return;
+    }
 
 
     DImg* img = m_canvas->interface()->getImg();
@@ -875,9 +890,13 @@ void ImageWindow::toggleTag(int tagID)
     if (!d->currentImageInfo.isNull())
     {
         if (d->currentImageInfo.tagIds().contains(tagID))
+        {
             slotRemoveTag(tagID);
+        }
         else
+        {
             slotAssignTag(tagID);
+        }
     }
 }
 
@@ -1057,6 +1076,7 @@ void ImageWindow::saveIsComplete()
                          this, windowTitle());
 
     QModelIndex next = d->nextIndex();
+
     if (next.isValid())
     {
         m_canvas->preload(d->imageInfo(next).filePath());
@@ -1104,6 +1124,7 @@ void ImageWindow::saveAsIsComplete()
 
     // Set new current index
     d->currentImageInfo = ImageInfo(m_savingContext.destinationURL.toLocalFile());
+
     if (!d->imageInfoModel->hasImage(d->currentImageInfo))
     {
         d->imageInfoModel->addImageInfoSynchronously(d->currentImageInfo);
@@ -1127,6 +1148,7 @@ void ImageWindow::saveAsIsComplete()
     d->thumbBar->setCurrentIndex(d->currentIndex());
 
     QModelIndex next = d->nextIndex();
+
     if (next.isValid())
     {
         m_canvas->preload(d->imageInfo(next).filePath());
@@ -1238,7 +1260,9 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
     // The meaning of permanently differs depending on the value of ask
 
     if (d->currentImageInfo.isNull())
+    {
         return;
+    }
 
     //PAlbum* palbum = AlbumManager::instance()->findPAlbum(d->currentImageInfo.albumId());
 
@@ -1325,10 +1349,15 @@ void ImageWindow::removeCurrent()
     d->imageInfoModel->removeImageInfo(d->currentImageInfo);
 
     QModelIndex newCurrent;
+
     if (next.isValid())
+    {
         newCurrent = next;
+    }
     else if (prev.isValid())
+    {
         newCurrent = prev;
+    }
 
     if (newCurrent.isValid())
     {
@@ -1339,9 +1368,9 @@ void ImageWindow::removeCurrent()
         // No image in the current Album -> Quit ImageEditor...
 
         KMessageBox::information(this,
-                                i18n("There is no image to show in the current album.\n"
-                                    "The image editor will be closed."),
-                                i18n("No Image in Current Album"));
+                                 i18n("There is no image to show in the current album.\n"
+                                      "The image editor will be closed."),
+                                 i18n("No Image in Current Album"));
 
         close();
     }
@@ -1493,6 +1522,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
             kapp->processEvents();
         }
     }
+
     /*else
     {
         // We have started image editor from Camera GUI. we get picture comments from metadata.

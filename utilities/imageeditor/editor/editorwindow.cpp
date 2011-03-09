@@ -685,7 +685,8 @@ void EditorWindow::EditorWindowPriv::plugNewVersionInFormatAction(EditorWindow *
         connect(formatMenuActionMapper, SIGNAL(mapped(const QString&)),
                 q, SLOT(saveNewVersionInFormat(const QString&)));
     }
-    KAction *action = new KAction(text, q);
+
+    KAction* action = new KAction(text, q);
     connect(action, SIGNAL(triggered()), formatMenuActionMapper, SLOT(map()));
     formatMenuActionMapper->setMapping(action, format);
     menuAction->menu()->addAction(action);
@@ -1059,6 +1060,7 @@ void EditorWindow::applyIOSettings()
     // else, sRGB color workspace will be used.
 
     ICCSettingsContainer settings = IccSettings::instance()->settings();
+
     if (settings.enableCM)
     {
         if (settings.defaultUncalibratedBehavior & ICCSettingsContainer::AutomaticColors)
@@ -1224,6 +1226,7 @@ void EditorWindow::toggleToolActions(EditorTool* tool)
         m_closeToolAction->setIcon(tool->toolSettings()->button(EditorToolSettings::Cancel)->icon());
         m_closeToolAction->setToolTip(tool->toolSettings()->button(EditorToolSettings::Cancel)->toolTip());
     }
+
     m_applyToolAction->setVisible(tool);
     m_closeToolAction->setVisible(tool);
 }
@@ -1855,6 +1858,7 @@ bool EditorWindow::saveOrSaveAs()
     {
         return save();
     }
+
     return false;
 }
 
@@ -2072,6 +2076,7 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
 
     // adjust extension of proposed filename
     QString fileName = initialUrl.fileName(KUrl::ObeyTrailingSlash);
+
     if (!fileName.isNull())
     {
         int lastDot = fileName.lastIndexOf(QLatin1Char('.'));
@@ -2082,6 +2087,7 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
     QString autoFilter = imageFileSaveDialog->filterWidget()->defaultFilter();
 
     QStringList writablePattern = getWritingFilters();
+
     if (writablePattern.first().count("*.") > 10) // try to verify it's the "All image files" filter
     {
         /*
@@ -2091,6 +2097,7 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
          */
         writablePattern.removeFirst();
     }
+
     qSort(writablePattern);
     writablePattern.prepend(autoFilter);
     imageFileSaveDialog->setFilter(writablePattern.join(QChar('\n')));
@@ -2201,6 +2208,7 @@ QStringList EditorWindow::getWritingFilters()
     {
         writablePattern.append(QString("*.jp2|") + i18n("JPEG 2000 image"));
     }
+
     if (!pattern.contains("*.pgf"))
     {
         writablePattern.append(QString("*.pgf|") + i18n("Progressive Graphics File"));
@@ -2512,6 +2520,7 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, 
     if (saveAs)
     {
         KUrl suggested = newURL;
+
         if (!showFileSaveDialog(suggested, newURL))
         {
             return false;
@@ -2623,12 +2632,12 @@ bool EditorWindow::checkOverwrite(const KUrl& url)
     int result =
 
         KMessageBox::warningYesNo( this, i18n("A file named \"%1\" already "
-                                    "exists. Are you sure you want "
-                                    "to overwrite it?",
-                                    url.fileName()),
-                                    i18n("Overwrite File?"),
-                                    KStandardGuiItem::overwrite(),
-                                    KStandardGuiItem::cancel() );
+                                   "exists. Are you sure you want "
+                                   "to overwrite it?",
+                                   url.fileName()),
+                                   i18n("Overwrite File?"),
+                                   KStandardGuiItem::overwrite(),
+                                   KStandardGuiItem::cancel() );
 
     return result == KMessageBox::Yes;
 }
@@ -2700,6 +2709,7 @@ bool EditorWindow::moveLocalFile(const QString& src, const QString& destPath, bo
 void EditorWindow::moveFile()
 {
     kDebug() << m_savingContext.destinationURL << m_savingContext.destinationURL.isLocalFile();
+
     // how to move a file depends on if the file is on a local system or not.
     if (m_savingContext.destinationURL.isLocalFile())
     {
@@ -2711,10 +2721,10 @@ void EditorWindow::moveFile()
             if (m_savingContext.versionFileOperation.tasks & VersionFileOperation::MoveToIntermediate)
             {
                 kDebug() << "MoveToIntermediate: Moving " << m_savingContext.srcURL.toLocalFile() << "to" <<
-                m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath() <<
-                moveLocalFile(m_savingContext.srcURL.toLocalFile(),
-                              m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath(),
-                              false);
+                         m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath() <<
+                         moveLocalFile(m_savingContext.srcURL.toLocalFile(),
+                                       m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath(),
+                                       false);
                 LoadingCacheInterface::fileChanged(m_savingContext.destinationURL.toLocalFile());
                 ThumbnailLoadThread::deleteThumbnail(m_savingContext.destinationURL.toLocalFile());
             }
@@ -3009,7 +3019,7 @@ class ActionCategorizedView : public KCategorizedView
 {
 public:
 
-    ActionCategorizedView(QWidget *parent = 0)
+    ActionCategorizedView(QWidget* parent = 0)
         : KCategorizedView(parent)
     {
         m_horizontalScrollAnimation = new QPropertyAnimation(horizontalScrollBar(), "value", this);
@@ -3037,10 +3047,12 @@ public:
         int maxSize = viewOptions().decorationSize.width() * 4;
         QFontMetrics fm(viewOptions().font);
         QSize grid;
+
         for (int i = 0; i < model()->rowCount(); ++i)
         {
             const QModelIndex index = model()->index(i, 0);
             const QSize size = sizeHintForIndex( index );
+
             if (size.width() > maxSize)
             {
                 QString text = index.data(Qt::DisplayRole).toString();
@@ -3053,6 +3065,7 @@ public:
                 grid = grid.expandedTo(size);
             }
         }
+
         //grid += QSize(KDialog::spacingHint(), KDialog::spacingHint());
         setGridSize(grid);
     }
@@ -3073,7 +3086,7 @@ protected:
         return qMax(minimumTime, duration);
     }
 
-    void autoScroll(float relativePos, QScrollBar *scrollBar, QPropertyAnimation* animation)
+    void autoScroll(float relativePos, QScrollBar* scrollBar, QPropertyAnimation* animation)
     {
         const float lowerPart = 0.15;
         const float upperPart = 0.85;
@@ -3103,14 +3116,14 @@ protected:
         }
     }
 
-    void mouseMoveEvent(QMouseEvent *e)
+    void mouseMoveEvent(QMouseEvent* e)
     {
         KCategorizedView::mouseMoveEvent(e);
         autoScroll(float(e->pos().x()) / viewport()->width(), horizontalScrollBar(), m_horizontalScrollAnimation);
         autoScroll(float(e->pos().y()) / viewport()->height(), verticalScrollBar(), m_verticalScrollAnimation);
     }
 
-    void leaveEvent(QEvent *e)
+    void leaveEvent(QEvent* e)
     {
         KCategorizedView::leaveEvent(e);
         m_horizontalScrollAnimation->stop();
@@ -3124,10 +3137,12 @@ protected:
 KCategorizedView* EditorWindow::createToolSelectionView()
 {
     if (d->selectToolsActionView)
+    {
         return d->selectToolsActionView;
+    }
 
     // Create action model
-    ActionItemModel *actionModel = new ActionItemModel(this);
+    ActionItemModel* actionModel = new ActionItemModel(this);
     actionModel->setMode(ActionItemModel::ToplevelMenuCategory | ActionItemModel::SortCategoriesByInsertionOrder);
     QString basicTransformCategory = i18nc("@title Image transformations", "Basic Transformations");
 
@@ -3157,7 +3172,7 @@ KCategorizedView* EditorWindow::createToolSelectionView()
 
 void EditorWindow::setupSelectToolsAction()
 {
-    QWidgetAction *viewAction = new QWidgetAction(this);
+    QWidgetAction* viewAction = new QWidgetAction(this);
     viewAction->setDefaultWidget(createToolSelectionView());
     d->selectToolsActionView->setMinimumSize(QSize(400, 400));
     m_selectToolsAction->addAction(viewAction);

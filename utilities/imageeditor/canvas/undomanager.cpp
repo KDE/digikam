@@ -93,7 +93,7 @@ void UndoManager::addAction(UndoAction* action)
     clearRedoActions();
 
     // If the _last_ action was irreversible, we need to snapshot it
-    UndoAction *lastAction = d->undoActions.isEmpty() ? 0 : d->undoActions.last();
+    UndoAction* lastAction = d->undoActions.isEmpty() ? 0 : d->undoActions.last();
 
     d->undoActions << action;
 
@@ -213,6 +213,7 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
     DImageHistory originHistoryBeforeStep;
 
     int lastOrigin = 0;
+
     if (isAtOrigin())
     {
         // undoing from an origin: need to switch to previous origin?
@@ -230,6 +231,7 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
     if (saveRedo)
     {
         bool needSnapshot = false;
+
         if (d->redoActions.isEmpty())
         {
             // Undoing from the tip of the list:
@@ -272,10 +274,15 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
 
     // Record history and origin for redo
     action->setHistory(historyAfterStep);
+
     if (isAtOrigin())
+    {
         action->setFileOriginData(originDataAfterStep, originHistoryAfterStep);
+    }
     else
+    {
         action->setFileOriginData(QVariant(), DImageHistory());
+    }
 
     d->undoActions.removeLast();
     d->redoActions << action;
@@ -328,10 +335,15 @@ void UndoManager::redoStep(bool execute, bool flyingRollback)
     }
 
     action->setHistory(historyBeforeStep);
+
     if (isAtOrigin())
+    {
         action->setFileOriginData(originDataBeforeStep, originHistoryBeforeStep);
+    }
     else
+    {
         action->setFileOriginData(QVariant(), DImageHistory());
+    }
 
     d->redoActions.removeLast();
     d->undoActions << action;
@@ -345,7 +357,7 @@ void UndoManager::redoStep(bool execute, bool flyingRollback)
     else
     {
         d->origin++;
-   }
+    }
 }
 
 void UndoManager::makeSnapshot(int index)
@@ -386,7 +398,8 @@ void UndoManager::clearPreviousOriginData()
 {
     for (int i = d->undoActions.size() - 1; i >= 0; i--)
     {
-        UndoAction *action = d->undoActions[i];
+        UndoAction* action = d->undoActions[i];
+
         if (action->hasFileOriginData())
         {
             action->setFileOriginData(QVariant(), DImageHistory());
@@ -395,7 +408,7 @@ void UndoManager::clearPreviousOriginData()
     }
 }
 
-bool UndoManager::putImageDataAndHistory(DImg *img, int stepsBack)
+bool UndoManager::putImageDataAndHistory(DImg* img, int stepsBack)
 {
     if (stepsBack <= 0 || stepsBack > d->undoActions.size())
     {
@@ -412,6 +425,7 @@ bool UndoManager::putImageDataAndHistory(DImg *img, int stepsBack)
      */
     int step = d->undoActions.size() - stepsBack;
     int snapshot;
+
     for (snapshot = step; snapshot < d->undoActions.size(); snapshot++)
     {
         if (dynamic_cast<UndoActionIrreversible*>(d->undoActions[snapshot]))
@@ -441,7 +455,7 @@ bool UndoManager::putImageDataAndHistory(DImg *img, int stepsBack)
         // revert reversible actions, until reaching desired step
         for (; snapshot > step; snapshot--)
         {
-            UndoActionReversible *reversible = dynamic_cast<UndoActionReversible*>(d->undoActions[snapshot - 1]);
+            UndoActionReversible* reversible = dynamic_cast<UndoActionReversible*>(d->undoActions[snapshot - 1]);
             reversible->getReverseFilter().apply(reverting);
         }
 
