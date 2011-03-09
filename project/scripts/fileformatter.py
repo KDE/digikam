@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# this scripts depends on Python 2.7 or higher
 
 # ============================================================
 # 
@@ -23,6 +22,15 @@
 # GNU General Public License for more details.
 # 
 # ============================================================ */
+
+
+
+
+# prerequisites:
+#     Python 2.7 or higher: http://www.python.org
+#     AStyle:               http://astyle.sourceforge.net
+
+
 
 
 import os
