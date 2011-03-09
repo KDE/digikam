@@ -81,9 +81,9 @@ LightTableView::LightTableView(QWidget* parent)
     d->grid->addWidget(d->leftPreview,  0, 0, 1, 1);
     d->grid->addWidget(d->rightPreview, 0, 1, 1, 1);
 
-    d->grid->setColumnStretch(0, 10),
-    d->grid->setColumnStretch(1, 10),
-    d->grid->setRowStretch(0, 10),
+    d->grid->setColumnStretch(0, 10);
+    d->grid->setColumnStretch(1, 10);
+    d->grid->setRowStretch(0, 10);
 
     // Left panel connections ------------------------------------------------
 
