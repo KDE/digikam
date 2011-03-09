@@ -30,14 +30,15 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
+namespace
+{
+static const QString TOOLBARKEY("ToolBar");
+static const QString TOOLBARATTRIBUTE("name");
+static const QString TOOLBARVALUE("mainToolBar");
+}
+
 namespace Digikam
 {
-
-const QString toolbarKey("ToolBar");
-const QString toolbarAttribute("name");
-const QString toolbarValue("mainToolBar");
-
-// --------------------------------------------------------
 
 class ToolbarNameHandler : public QXmlDefaultHandler
 {
@@ -53,7 +54,7 @@ bool ToolbarNameHandler::startElement(const QString& namespaceURI, const QString
     Q_UNUSED(namespaceURI);
     Q_UNUSED(localName);
 
-    if ( (qName == toolbarKey) && (atts.value(toolbarAttribute) != toolbarValue) )
+    if ( (qName == TOOLBARKEY) && (atts.value(TOOLBARATTRIBUTE) != TOOLBARVALUE) )
     {
         return false;
     }
@@ -183,18 +184,18 @@ QByteArray UiFileValidator::getFixedContent()
 
         if (reader.isStartElement())
         {
-            if (reader.qualifiedName() == toolbarKey)
+            if (reader.qualifiedName() == TOOLBARKEY)
             {
-                writer.writeStartElement(toolbarKey);
+                writer.writeStartElement(TOOLBARKEY);
 
                 QXmlStreamAttributes attrs;
                 QXmlStreamAttributes _a = reader.attributes();
 
                 for (QXmlStreamAttributes::iterator it = _a.begin(); it != _a.end(); ++it)
                 {
-                    if (it->qualifiedName() == toolbarAttribute && it->value() != toolbarValue)
+                    if (it->qualifiedName() == TOOLBARATTRIBUTE && it->value() != TOOLBARVALUE)
                     {
-                        attrs.append(toolbarAttribute, toolbarValue);
+                        attrs.append(TOOLBARATTRIBUTE, TOOLBARVALUE);
                     }
                     else
                     {
