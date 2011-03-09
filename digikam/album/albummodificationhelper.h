@@ -110,7 +110,6 @@ private:
 
     class AlbumModificationHelperPriv;
     AlbumModificationHelperPriv* const d;
-
 };
 
 } // namespace Digikam

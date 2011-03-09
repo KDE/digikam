@@ -98,6 +98,8 @@ private:
     AlbumSelectComboBoxPriv* const d;
 };
 
+// ------------------------------------------------------------------------------------
+
 class AbstractAlbumTreeView;
 class AlbumModel;
 class AlbumTreeView;
@@ -128,6 +130,8 @@ protected:
     AbstractAlbumTreeView* m_treeView;
 };
 
+// ------------------------------------------------------------------------------------
+
 class AlbumTreeViewSelectComboBox : public AbstractAlbumTreeViewSelectComboBox
 {
     Q_OBJECT
@@ -141,6 +145,8 @@ public:
     AlbumTreeView* view() const;
 };
 
+// ------------------------------------------------------------------------------------
+
 class TagTreeViewSelectComboBox : public AbstractAlbumTreeViewSelectComboBox
 {
     Q_OBJECT
@@ -150,14 +156,10 @@ public:
     TagTreeViewSelectComboBox(QWidget* parent = 0);
 
     void setDefaultModel();
-    void setModel(TagModel* model,
-                  TagPropertiesFilterModel* filteredModel = 0, CheckableAlbumFilterModel* filterModel = 0);
+    void setModel(TagModel* model, TagPropertiesFilterModel* filteredModel = 0, CheckableAlbumFilterModel* filterModel = 0);
     TagTreeView* view() const;
-
 };
-
 
 } // namespace Digikam
 
 #endif /* ALBUMSELECTCOMBOBOX_H */
-
