@@ -7,7 +7,7 @@
  * Description : Tree View for album models
  *
  * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +30,7 @@
 #include <QTreeView>
 
 // KDE includes
+
 #include <kconfiggroup.h>
 
 // Local includes
@@ -44,9 +45,9 @@ namespace Digikam
 
 class  ContextMenuHelper;
 class  TagModificationHelper;
-struct State;
 
-class AbstractAlbumTreeViewPriv;
+// NOTE: This structure name can be in conflict with QAbstractItemView::State.
+struct State;
 
 /**
  * Base class for all tree views that display Album-based content provided by an
@@ -287,13 +288,15 @@ protected:
     void setAlbumFilterModel(AlbumFilterModel* filterModel);
     void setAlbumModel(AbstractSpecificAlbumModel* model);
 
+protected:
+
     AbstractSpecificAlbumModel* m_albumModel;
     AlbumFilterModel*           m_albumFilterModel;
     AlbumModelDragDropHandler*  m_dragDropHandler;
 
     bool                        m_checkOnMiddleClick;
     bool                        m_restoreCheckState;
-    Flags          m_flags;
+    Flags                       m_flags;
 
 private:
 
@@ -354,6 +357,7 @@ private Q_SLOTS:
 
 private:
 
+    class AbstractAlbumTreeViewPriv;
     AbstractAlbumTreeViewPriv* d;
 };
 
@@ -386,8 +390,6 @@ private:
 };
 
 // -------------------------------------------------------------------------------------
-
-class AbstractCheckableAlbumTreeViewPriv;
 
 class AbstractCheckableAlbumTreeView : public AbstractCountingAlbumTreeView
 {
@@ -444,12 +446,13 @@ private:
     void restoreCheckStateForHierarchy(const QModelIndex& index);
     void restoreCheckState(const QModelIndex& index);
 
+private:
+
+    class AbstractCheckableAlbumTreeViewPriv;
     AbstractCheckableAlbumTreeViewPriv* d;
 };
 
 // -------------------------------------------------------------------------------------
-
-class AlbumTreeViewPriv;
 
 class AlbumTreeView : public AbstractCheckableAlbumTreeView
 {

@@ -6,8 +6,8 @@
  * Date        : 2009-03-25
  * Description : Tree View for album models
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,20 +72,28 @@ static QList<A*> selectedAlbums(QItemSelectionModel* selModel, AlbumFilterModel*
     return albums;
 }
 
+// -------------------------------------------------------------------------------
+
 struct State
 {
-    State() :
-        selected(false), expanded(false), currentIndex(false)
+    State()
+        : selected(false),
+          expanded(false),
+          currentIndex(false)
     {
     }
+
     bool selected;
     bool expanded;
     bool currentIndex;
 };
 
+// -------------------------------------------------------------------------------
+
 class AlbumTreeViewDelegate : public QStyledItemDelegate
 {
 public:
+
     AlbumTreeViewDelegate(AbstractAlbumTreeView* treeView = 0)
         : QStyledItemDelegate(treeView),
           m_treeView(treeView), m_height(0)
@@ -126,13 +134,15 @@ public:
 protected:
 
     AbstractAlbumTreeView* m_treeView;
-    int m_height;
+    int                    m_height;
 };
 
-class AbstractAlbumTreeViewPriv
-{
+// -------------------------------------------------------------------------------
 
+class AbstractAlbumTreeView::AbstractAlbumTreeViewPriv
+{
 public:
+
     AbstractAlbumTreeViewPriv() :
         delegate(0),
         expandOnSingleClick(false),
@@ -145,34 +155,35 @@ public:
     {
     }
 
-    AlbumTreeViewDelegate* delegate;
+    AlbumTreeViewDelegate*    delegate;
 
-    bool expandOnSingleClick;
-    bool expandNewCurrent;
-    bool selectAlbumOnClick;
-    bool selectOnContextMenu;
-    bool enableContextMenu;
-    bool setInAlbumManager;
+    bool                      expandOnSingleClick;
+    bool                      expandNewCurrent;
+    bool                      selectAlbumOnClick;
+    bool                      selectOnContextMenu;
+    bool                      enableContextMenu;
+    bool                      setInAlbumManager;
 
-    QMap<int, State>     statesByAlbumId;
-    QMap<int, State>     searchBackup;
+    QMap<int, Digikam::State> statesByAlbumId;
+    QMap<int, Digikam::State> searchBackup;
 
-    static const QString configSelectionEntry;
-    static const QString configExpansionEntry;
-    static const QString configCurrentIndexEntry;
-    static const QString configSortColumnEntry;
-    static const QString configSortOrderEntry;
+    static const QString      configSelectionEntry;
+    static const QString      configExpansionEntry;
+    static const QString      configCurrentIndexEntry;
+    static const QString      configSortColumnEntry;
+    static const QString      configSortOrderEntry;
 
-    QTimer*              resizeColumnsTimer;
+    QTimer*                   resizeColumnsTimer;
 
-    AlbumPointer<Album>  lastSelectedAlbum;
+    AlbumPointer<Album>       lastSelectedAlbum;
 
 };
-const QString AbstractAlbumTreeViewPriv::configSelectionEntry("Selection");
-const QString AbstractAlbumTreeViewPriv::configExpansionEntry("Expansion");
-const QString AbstractAlbumTreeViewPriv::configCurrentIndexEntry("CurrentIndex");
-const QString AbstractAlbumTreeViewPriv::configSortColumnEntry("SortColumn");
-const QString AbstractAlbumTreeViewPriv::configSortOrderEntry("SortOrder");
+
+const QString AbstractAlbumTreeView::AbstractAlbumTreeViewPriv::configSelectionEntry("Selection");
+const QString AbstractAlbumTreeView::AbstractAlbumTreeViewPriv::configExpansionEntry("Expansion");
+const QString AbstractAlbumTreeView::AbstractAlbumTreeViewPriv::configCurrentIndexEntry("CurrentIndex");
+const QString AbstractAlbumTreeView::AbstractAlbumTreeViewPriv::configSortColumnEntry("SortColumn");
+const QString AbstractAlbumTreeView::AbstractAlbumTreeViewPriv::configSortOrderEntry("SortOrder");
 
 // --------------------------------------------------------
 
@@ -192,11 +203,13 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(QWidget* parent, Flags flags)
     d->resizeColumnsTimer = new QTimer(this);
     d->resizeColumnsTimer->setInterval(200);
     d->resizeColumnsTimer->setSingleShot(true);
+
     connect(d->resizeColumnsTimer, SIGNAL(timeout()),
             this, SLOT(adaptColumnsToContent()));
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(albumSettingsChanged()));
+
     connect(this, SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(currentAlbumChangedForBackupSelection(Album*)));
 
@@ -289,6 +302,7 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel* filterModel)
                 this, SLOT(adaptColumnsOnRowChange(const QModelIndex&, int, int)));
         connect(m_albumFilterModel, SIGNAL(layoutChanged()),
                 this, SLOT(adaptColumnsOnLayoutChange()));
+
         adaptColumnsToContent();
 
         if (m_albumModel)
@@ -340,11 +354,9 @@ QModelIndex AbstractAlbumTreeView::indexVisuallyAt(const QPoint& p)
 
 void AbstractAlbumTreeView::slotSearchTextSettingsAboutToChange(bool searched, bool willSearch)
 {
-
     // backup before we begin searching
     if (!searched && willSearch && d->searchBackup.isEmpty())
     {
-
         kDebug() << "Searching started, backing up state";
 
         QList<int> selection, expansion;
@@ -361,14 +373,11 @@ void AbstractAlbumTreeView::slotSearchTextSettingsAboutToChange(bool searched, b
         // slot
         Album* current = currentAlbum<Album>(selectionModel(), m_albumFilterModel);
         d->lastSelectedAlbum = current;
-
     }
-
 }
 
 void AbstractAlbumTreeView::slotSearchTextSettingsChanged(bool wasSearching, bool searched)
 {
-
     // ensure that all search results are visible if there is currently a search
     // working
     if (searched)
@@ -395,9 +404,7 @@ void AbstractAlbumTreeView::slotSearchTextSettingsChanged(bool wasSearching, boo
             scrollTo(m_albumFilterModel->indexForAlbum(d->lastSelectedAlbum));
             scrollTo(m_albumFilterModel->indexForAlbum(d->lastSelectedAlbum));
         }
-
     }
-
 }
 
 void AbstractAlbumTreeView::currentAlbumChangedForBackupSelection(Album* currentAlbum)
@@ -412,10 +419,10 @@ void AbstractAlbumTreeView::slotRootAlbumAvailable()
 
 bool AbstractAlbumTreeView::expandMatches(const QModelIndex& index)
 {
-    bool anyMatch        = false;
+    bool anyMatch = false;
 
     // expand index if a child matches
-    QModelIndex source_index = m_albumFilterModel->mapToSource(index);
+    QModelIndex source_index             = m_albumFilterModel->mapToSource(index);
     AlbumFilterModel::MatchResult result = m_albumFilterModel->matchResult(source_index);
 
     switch (result)
@@ -494,7 +501,6 @@ void AbstractAlbumTreeView::slotSelectionChanged()
 
 void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
 {
-
     if (d->selectAlbumOnClick && e->button() == Qt::LeftButton)
     {
         QModelIndex index = indexVisuallyAt(e->pos());
@@ -655,14 +661,12 @@ bool AbstractAlbumTreeView::viewportEvent(QEvent* event)
 
 void AbstractAlbumTreeView::doLoadState()
 {
-
     KConfigGroup configGroup = getConfigGroup();
 
     //kDebug() << "Loading view state from " << this << configGroup.name() << objectName();
 
     // extract the selection from the config
-    const QStringList selection = configGroup.readEntry(entryName(d->configSelectionEntry),
-                                  QStringList());
+    const QStringList selection = configGroup.readEntry(entryName(d->configSelectionEntry), QStringList());
     //kDebug() << "selection: " << selection;
     foreach (const QString& key, selection)
     {
@@ -676,8 +680,7 @@ void AbstractAlbumTreeView::doLoadState()
     }
 
     // extract expansion state from config
-    const QStringList expansion = configGroup.readEntry(entryName(d->configExpansionEntry),
-                                  QStringList());
+    const QStringList expansion = configGroup.readEntry(entryName(d->configExpansionEntry), QStringList());
     //kDebug() << "expansion: " << expansion;
     foreach (const QString& key, expansion)
     {
@@ -712,7 +715,6 @@ void AbstractAlbumTreeView::doLoadState()
     }
     */
 
-
     // initial restore run, for everything already loaded
     //kDebug() << "initial restore run with " << model()->rowCount() << " rows";
     restoreStateForHierarchy(QModelIndex(), d->statesByAlbumId);
@@ -727,10 +729,9 @@ void AbstractAlbumTreeView::doLoadState()
     selectCurrentTimer->setSingleShot(true);
     connect(selectCurrentTimer, SIGNAL(timeout()),
             this, SLOT(scrollToSelectedAlbum()));
-
 }
 
-void AbstractAlbumTreeView::restoreStateForHierarchy(const QModelIndex& index, QMap<int, Digikam::State> &stateStore)
+void AbstractAlbumTreeView::restoreStateForHierarchy(const QModelIndex& index, QMap<int, Digikam::State>& stateStore)
 {
     restoreState(index, stateStore);
 
@@ -742,7 +743,7 @@ void AbstractAlbumTreeView::restoreStateForHierarchy(const QModelIndex& index, Q
     }
 }
 
-void AbstractAlbumTreeView::restoreState(const QModelIndex& index, QMap<int, Digikam::State> &stateStore)
+void AbstractAlbumTreeView::restoreState(const QModelIndex& index, QMap<int, Digikam::State>& stateStore)
 {
     Album* album = albumFilterModel()->albumForIndex(index);
 
@@ -760,8 +761,7 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex& index, QMap<int, Dig
         if (state.selected)
         {
             //kDebug() << "Selecting" << album->title();
-            selectionModel()->select(index, QItemSelectionModel::SelectCurrent
-                                     | QItemSelectionModel::Rows);
+            selectionModel()->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
         }
 
         // restore expansion state but ensure that the root album is always
@@ -779,8 +779,7 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex& index, QMap<int, Dig
         if (state.currentIndex)
         {
             //kDebug() << "Setting current index" << album->title() << "(" << album->id() << ")";
-            selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent
-                                              | QItemSelectionModel::Rows);
+            selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
         }
     }
 }
@@ -842,14 +841,12 @@ void AbstractAlbumTreeView::scrollToSelectedAlbum()
 
 void AbstractAlbumTreeView::expandEverything(const QModelIndex& index)
 {
-
     for (int row = 0; row < albumFilterModel()->rowCount(index); ++row)
     {
         QModelIndex rowIndex = albumFilterModel()->index(row, 0, index);
         expand(rowIndex);
         expandEverything(rowIndex);
     }
-
 }
 
 void AbstractAlbumTreeView::adaptColumnsOnDataChange(const QModelIndex& topLeft, const QModelIndex& bottomRight)
@@ -885,7 +882,6 @@ void AbstractAlbumTreeView::adaptColumnsOnLayoutChange()
 
 void AbstractAlbumTreeView::doSaveState()
 {
-
     KConfigGroup configGroup = getConfigGroup();
 
     QList<int> selection, expansion;
@@ -913,13 +909,10 @@ void AbstractAlbumTreeView::doSaveState()
     configGroup.writeEntry(entryName(d->configCurrentIndexEntry), currentIndex);
     configGroup.writeEntry(entryName(d->configSortColumnEntry), albumFilterModel()->sortColumn());
     configGroup.writeEntry(entryName(d->configSortOrderEntry), (int) albumFilterModel()->sortOrder());
-
 }
 
-void AbstractAlbumTreeView::saveStateRecursive(const QModelIndex& index,
-        QList<int> &selection, QList<int> &expansion)
+void AbstractAlbumTreeView::saveStateRecursive(const QModelIndex& index, QList<int>& selection, QList<int>& expansion)
 {
-
     Album* album = albumFilterModel()->albumForIndex(index);
 
     if (album)
@@ -942,7 +935,6 @@ void AbstractAlbumTreeView::saveStateRecursive(const QModelIndex& index,
         const QModelIndex child = model()->index(i, 0, index);
         saveStateRecursive(child, selection, expansion);
     }
-
 }
 
 void AbstractAlbumTreeView::setEnableContextMenu(bool enable)
@@ -1022,7 +1014,7 @@ void AbstractAlbumTreeView::albumSettingsChanged()
     d->delegate->updateHeight();
 }
 
-// --------------------------------------- //
+// ----------------------------------------------------------------------------------------------
 
 AbstractCountingAlbumTreeView::AbstractCountingAlbumTreeView(QWidget* parent, Flags flags)
     : AbstractAlbumTreeView(parent, flags & ~CreateDefaultFilterModel)
@@ -1111,9 +1103,9 @@ void AbstractCountingAlbumTreeView::rowsInserted(const QModelIndex& parent, int 
     }
 }
 
-// --------------------------------------- //
+// ----------------------------------------------------------------------------------------------
 
-class AbstractCheckableAlbumTreeViewPriv
+class AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeViewPriv
 {
 public:
 
@@ -1127,11 +1119,11 @@ public:
 
     QList<int>           checkedAlbumIds;
     QList<int>           partiallyCheckedAlbumIds;
-
 };
-const QString AbstractCheckableAlbumTreeViewPriv::configCheckedAlbumsEntry("Checked");
-const QString AbstractCheckableAlbumTreeViewPriv::configPartiallyCheckedAlbumsEntry("PartiallyChecked");
-const QString AbstractCheckableAlbumTreeViewPriv::configRestoreCheckedEntry("RestoreChecked");
+
+const QString AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeViewPriv::configCheckedAlbumsEntry("Checked");
+const QString AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeViewPriv::configPartiallyCheckedAlbumsEntry("PartiallyChecked");
+const QString AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeViewPriv::configRestoreCheckedEntry("RestoreChecked");
 
 // --------------------------------------------------------
 
@@ -1227,8 +1219,7 @@ void AbstractCheckableAlbumTreeView::doLoadState()
         return;
     }
 
-    QStringList checkedAlbums = group.readEntry(entryName(
-                                    d->configCheckedAlbumsEntry), QStringList());
+    QStringList checkedAlbums = group.readEntry(entryName(d->configCheckedAlbumsEntry), QStringList());
 
     d->checkedAlbumIds.clear();
     foreach(const QString& albumId, checkedAlbums)
@@ -1242,8 +1233,7 @@ void AbstractCheckableAlbumTreeView::doLoadState()
         }
     }
 
-    QStringList partiallyCheckedAlbums = group.readEntry(entryName(
-            d->configPartiallyCheckedAlbumsEntry), QStringList());
+    QStringList partiallyCheckedAlbums = group.readEntry(entryName(d->configPartiallyCheckedAlbumsEntry), QStringList());
 
     d->partiallyCheckedAlbumIds.clear();
     foreach(const QString& albumId, partiallyCheckedAlbums)
@@ -1343,10 +1333,9 @@ void AbstractCheckableAlbumTreeView::doSaveState()
     }
 
     group.writeEntry(entryName(d->configPartiallyCheckedAlbumsEntry), partiallyCheckedIds);
-
 }
 
-// --------------------------------------- //
+// ----------------------------------------------------------------------------------------------------
 
 AlbumTreeView::AlbumTreeView(QWidget* parent, Flags flags)
     : AbstractCheckableAlbumTreeView(parent, flags)
@@ -1382,11 +1371,12 @@ void AlbumTreeView::setAlbumModel(AlbumModel* model)
     if (!m_dragDropHandler)
     {
         m_dragDropHandler = new AlbumDragDropHandler(albumModel());
+
         connect(m_dragDropHandler, SIGNAL(dioResult(KJob*)),
                 this, SLOT(slotDIOResult(KJob*)));
+
         model->setDragDropHandler(m_dragDropHandler);
     }
-
 }
 
 void AlbumTreeView::setAlbumFilterModel(CheckableAlbumFilterModel* filterModel)
@@ -1431,7 +1421,7 @@ void AlbumTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
     setCurrentAlbum(album, selectInAlbumManager);
 }
 
-// --------------------------------------- //
+// -------------------------------------------------------------------------------------------------------
 
 TagTreeView::TagTreeView(QWidget* parent, Flags flags)
     : AbstractCheckableAlbumTreeView(parent, flags), m_filteredModel(0)
@@ -1539,7 +1529,7 @@ void TagTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
     setCurrentAlbum(album, selectInAlbumManager);
 }
 
-// --------------------------------------- //
+// --------------------------------------------------------------------------------------
 
 SearchTreeView::SearchTreeView(QWidget* parent, Flags flags)
     : AbstractCheckableAlbumTreeView(parent, flags)
@@ -1605,7 +1595,7 @@ void SearchTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
     setCurrentAlbum(album, selectInAlbumManager);
 }
 
-// --------------------------------------- //
+// ---------------------------------------------------------------------------------------------------
 
 DateAlbumTreeView::DateAlbumTreeView(QWidget* parent, Flags flags)
     : AbstractCountingAlbumTreeView(parent, flags)
@@ -1613,6 +1603,7 @@ DateAlbumTreeView::DateAlbumTreeView(QWidget* parent, Flags flags)
     // this view should always show the inclusive counts
     disconnect(this, SIGNAL(expanded(const QModelIndex&)),
                this, SLOT(slotExpanded(const QModelIndex&)));
+
     disconnect(this, SIGNAL(collapsed(const QModelIndex&)),
                this, SLOT(slotCollapsed(const QModelIndex&)));
 
