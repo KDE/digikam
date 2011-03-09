@@ -18,7 +18,6 @@ file_srcs = [
         ".c",
         ".hpp",
         ".h",
-        ".java"
 ]
 
 # the file type that defines a backup file (defined by its extension)
