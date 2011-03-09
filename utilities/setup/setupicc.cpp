@@ -193,8 +193,8 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->enableColorManagement = new QCheckBox(colorPolicy);
     d->enableColorManagement->setText(i18n("Enable Color Management"));
     d->enableColorManagement->setWhatsThis( i18n("<ul><li>Checked: Color Management is enabled</li>"
-                                            "<li>Unchecked: Color Management is "
-                                            "disabled</li></ul>"));
+                                                 "<li>Unchecked: Color Management is "
+                                                 "disabled</li></ul>"));
 
     KUrlLabel* lcmsLogoLabel = new KUrlLabel(colorPolicy);
     lcmsLogoLabel->setText(QString());
@@ -246,16 +246,16 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->defaultAskMismatch = new QRadioButton(d->mismatchGB);
     d->defaultAskMismatch->setText(i18n("Ask when opening the image"));
     d->defaultAskMismatch->setWhatsThis(i18n("<p>If an image has an embedded color profile not matching the working "
-                                        "space profile, digiKam will ask if you want to convert to the working space, "
-                                        "keep the embedded profile or discard the embedded profile and assign "
-                                        "a different one.</p>"));
+                                             "space profile, digiKam will ask if you want to convert to the working space, "
+                                             "keep the embedded profile or discard the embedded profile and assign "
+                                             "a different one.</p>"));
 
     d->defaultConvertMismatch = new QRadioButton(d->mismatchGB);
     d->defaultConvertMismatch->setText(i18n("Convert the image to the working color space"));
     d->defaultConvertMismatch->setWhatsThis(i18n("<p>If an image has an embedded color profile not matching the working "
-                                            "space profile, digiKam will convert the image's color information to "
-                                            "the working color space. This changes the pixel data, but not the "
-                                            "appearance of the image.</p>"));
+                                                 "space profile, digiKam will convert the image's color information to "
+                                                 "the working color space. This changes the pixel data, but not the "
+                                                 "appearance of the image.</p>"));
 
     vlayMismatch->addLayout(hboxBL);
     vlayMismatch->addWidget(d->defaultAskMismatch);
@@ -374,7 +374,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->infoMonitorProfiles   = new QPushButton;
     d->infoMonitorProfiles->setIcon(SmallIcon("dialog-information"));
     d->infoMonitorProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
-                                         "information about the selected monitor profile.</p>"));
+                                              "information about the selected monitor profile.</p>"));
 
     d->managedView     = new QCheckBox;
     d->managedView->setText(i18n("Use color managed view in editor"));

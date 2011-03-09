@@ -288,8 +288,8 @@ void QueuePool::removeTab(int index)
     {
         int ret = KMessageBox::questionYesNo(this,
                                              i18np("There is still 1 unprocessed item in \"%2\". Do you want to close this queue?",
-                                                     "There are still %1 unprocessed items in \"%2\". Do you want to close this queue?",
-                                                     count, queueTitle(index)));
+                                                   "There are still %1 unprocessed items in \"%2\". Do you want to close this queue?",
+                                                   count, queueTitle(index)));
 
         if (ret == KMessageBox::No)
         {

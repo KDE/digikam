@@ -854,7 +854,7 @@ void SlideShow::slotMouseMoveTimeOut()
 void SlideShow::inhibitScreenSaver()
 {
     QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.ScreenSaver", "/ScreenSaver",
-                           "org.freedesktop.ScreenSaver", "Inhibit" );
+                                                           "org.freedesktop.ScreenSaver", "Inhibit" );
     message << QString( "digiKam" );
     message << i18nc( "Reason for inhibiting the screensaver activation, when the presentation mode is active", "Giving a presentation" );
 
@@ -871,7 +871,7 @@ void SlideShow::allowScreenSaver()
     if ( d->screenSaverCookie != -1 )
     {
         QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.ScreenSaver", "/ScreenSaver",
-                               "org.freedesktop.ScreenSaver", "UnInhibit" );
+                                                               "org.freedesktop.ScreenSaver", "UnInhibit" );
         message << (uint)d->screenSaverCookie;
         QDBusConnection::sessionBus().send( message );
     }

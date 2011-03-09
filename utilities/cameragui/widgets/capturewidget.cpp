@@ -79,7 +79,7 @@ void CaptureWidget::updatePixmap()
     if (!d->preview.isNull())
     {
         QPixmap pix = QPixmap::fromImage(d->preview.scaled(contentsRect().size(),
-                                         Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                                                           Qt::KeepAspectRatio, Qt::SmoothTransformation));
         p.drawPixmap((contentsRect().width()-pix.width())/2,
                      (contentsRect().height()-pix.height())/2, pix,
                      0, 0, pix.width(), pix.height());

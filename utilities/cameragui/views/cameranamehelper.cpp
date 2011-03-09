@@ -36,7 +36,7 @@ namespace Digikam
 {
 
 QString CameraNameHelper::createCameraName(const QString& vendor, const QString& product,
-        const QString& mode,   bool autoDetected)
+                                           const QString& mode,   bool autoDetected)
 {
     if (vendor.isEmpty())
     {
@@ -78,7 +78,7 @@ QString CameraNameHelper::formattedFullCameraName(const QString& name, bool auto
 }
 
 QString CameraNameHelper::parseAndFormatCameraName(const QString& cameraName,
-        bool parseMode, bool autoDetected)
+                                                   bool parseMode, bool autoDetected)
 {
     QString tmp;
 

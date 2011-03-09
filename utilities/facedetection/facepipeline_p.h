@@ -312,9 +312,9 @@ public:
     void send(FacePipelineExtendedPackage::Ptr package);
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info);
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info,
-            const FacePipelineDatabaseFace&, const DImg& image);
+                                                  const FacePipelineDatabaseFace&, const DImg& image);
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info,
-            const FacePipelineDatabaseFaceList& faces, const DImg& image);
+                                                  const FacePipelineDatabaseFaceList& faces, const DImg& image);
     FacePipelineExtendedPackage::Ptr filterOrBuildPackage(const ImageInfo& info);
 
     bool hasFinished();

@@ -375,22 +375,22 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_save", m_saveAction);
 
     m_saveCurrentVersionAction = new KAction(KIcon("dialog-ok-apply"),//"task-accepted//"document-save"),
-            i18nc("@action Save changes to current version", "Save Changes"), this);
+                                             i18nc("@action Save changes to current version", "Save Changes"), this);
     m_saveCurrentVersionAction->setToolTip(i18nc("@info:tooltip", "Save the modifications to the current version of the file"));
     connect(m_saveCurrentVersionAction, SIGNAL(triggered()), this, SLOT(saveCurrentVersion()));
     actionCollection()->addAction("editorwindow_savecurrentversion", m_saveCurrentVersionAction);
 
     m_saveNewVersionAction = new KToolBarPopupAction(KIcon("list-add"),//"document-save-as"),
-                                         i18nc("@action Save changes to a newly created version", "Save As New Version"), this);
+                                                     i18nc("@action Save changes to a newly created version", "Save As New Version"), this);
     m_saveNewVersionAction->setToolTip(i18nc("@info:tooltip", "Save the current modifications to a new version of the file"));
     connect(m_saveNewVersionAction, SIGNAL(triggered()), this, SLOT(saveNewVersion()));
     actionCollection()->addAction("editorwindow_savenewversion", m_saveNewVersionAction);
 
     KAction* m_saveNewVersionAsAction = new KAction(KIcon("document-save-as"),
-                                           i18nc("@action Save changes to a newly created version, specifying the filename and format",
-                                                 "Save New Version As..."), this);
+                                                    i18nc("@action Save changes to a newly created version, specifying the filename and format",
+                                                          "Save New Version As..."), this);
     m_saveNewVersionAsAction->setToolTip(i18nc("@info:tooltip", "Save the current modifications to a new version of the file, "
-                                                              "specifying the filename and format"));
+                                               "specifying the filename and format"));
     connect(m_saveNewVersionAsAction, SIGNAL(triggered()), this, SLOT(saveNewVersionAs()));
     //actionCollection()->addAction("editorwindow_savenewversionas", m_m_saveNewVersionAsAction);
 
@@ -530,7 +530,7 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_zoomfit2select", d->zoomFitToSelectAction);
     d->zoomFitToSelectAction->setEnabled(false);
     d->zoomFitToSelectAction->setWhatsThis(i18n("This option can be used to zoom the image to the "
-                                           "current selection area."));
+                                                "current selection area."));
 
     // --------------------------------------------------------
 
@@ -545,16 +545,16 @@ void EditorWindow::setupStandardActions()
     d->viewUnderExpoAction = new KToggleAction(KIcon("underexposure"), i18n("Under-Exposure Indicator"), this);
     d->viewUnderExpoAction->setShortcut(KShortcut(Qt::Key_F10));
     d->viewUnderExpoAction->setWhatsThis(i18n("Set this option to display black "
-                                         "overlaid on the image. This will help you to avoid "
-                                         "under-exposing the image."));
+                                              "overlaid on the image. This will help you to avoid "
+                                              "under-exposing the image."));
     connect(d->viewUnderExpoAction, SIGNAL(triggered(bool)), this, SLOT(slotSetUnderExposureIndicator(bool)));
     actionCollection()->addAction("editorwindow_underexposure", d->viewUnderExpoAction);
 
     d->viewOverExpoAction = new KToggleAction(KIcon("overexposure"), i18n("Over-Exposure Indicator"), this);
     d->viewOverExpoAction->setShortcut(KShortcut(Qt::Key_F11));
     d->viewOverExpoAction->setWhatsThis(i18n("Set this option to display white "
-                                        "overlaid on the image. This will help you to avoid "
-                                        "over-exposing the image." ) );
+                                             "overlaid on the image. This will help you to avoid "
+                                             "over-exposing the image." ) );
     connect(d->viewOverExpoAction, SIGNAL(triggered(bool)), this, SLOT(slotSetOverExposureIndicator(bool)));
     actionCollection()->addAction("editorwindow_overexposure", d->viewOverExpoAction);
 
@@ -676,7 +676,7 @@ void EditorWindow::setupStandardActions()
     toggleToolActions();
 }
 
-void EditorWindow::EditorWindowPriv::plugNewVersionInFormatAction(EditorWindow *q, KActionMenu* menuAction,
+void EditorWindow::EditorWindowPriv::plugNewVersionInFormatAction(EditorWindow* q, KActionMenu* menuAction,
                                                                   const QString& text, const QString& format)
 {
     if (!formatMenuActionMapper)
@@ -1330,7 +1330,7 @@ void EditorWindow::execSavingProgressDialog()
     }
 
     m_savingProgressDialog = new KProgressDialog(this, i18n("Saving image..."),
-            i18n("Please wait for the image to be saved..."));
+                                                 i18n("Please wait for the image to be saved..."));
     m_savingProgressDialog->setAttribute(Qt::WA_DeleteOnClose);
     m_savingProgressDialog->setAutoClose(true);
     m_savingProgressDialog->setMinimumDuration(1000);
@@ -1351,11 +1351,11 @@ bool EditorWindow::promptForOverWrite()
         QFileInfo fi(m_canvas->currentImageFilePath());
         QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?", fi.fileName()));
         return (KMessageBox::warningContinueCancel(this,
-                warnMsg,
-                i18n("Warning"),
-                KGuiItem(i18n("Overwrite")),
-                KStandardGuiItem::cancel(),
-                QString("editorWindowSaveOverwrite"))
+                                                   warnMsg,
+                                                   i18n("Warning"),
+                                                   KGuiItem(i18n("Overwrite")),
+                                                   KStandardGuiItem::cancel(),
+                                                   QString("editorWindowSaveOverwrite"))
                 ==  KMessageBox::Continue);
 
     }
@@ -1547,10 +1547,10 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
                 if (allowCancel)
                 {
                     result = KMessageBox::warningYesNoCancel(this,
-                             boxMessage,
-                             QString(),
-                             KStandardGuiItem::save(),
-                             KStandardGuiItem::discard());
+                                                             boxMessage,
+                                                             QString(),
+                                                             KStandardGuiItem::save(),
+                                                             KStandardGuiItem::discard());
                 }
                 else
                 {
@@ -2277,7 +2277,7 @@ QString EditorWindow::getExtensionFromFilter(const QString& filter)
 }
 
 QString EditorWindow::selectValidSavingFormat(const QString& filter,
-        const KUrl& targetUrl, const QString& autoFilter)
+                                              const KUrl& targetUrl, const QString& autoFilter)
 {
     kDebug() << "Trying to find a saving format with filter = "
              << filter << ", targetUrl = " << targetUrl << ", autoFilter" << autoFilter;
@@ -2610,10 +2610,10 @@ bool EditorWindow::checkPermissions(const KUrl& url)
         int result =
 
             KMessageBox::warningYesNo( this, i18n("You do not have write permissions "
-                                       "for the file named \"%1\". "
-                                       "Are you sure you want "
-                                       "to overwrite it?",
-                                       url.fileName()),
+                                                  "for the file named \"%1\". "
+                                                  "Are you sure you want "
+                                                  "to overwrite it?",
+                                                  url.fileName()),
                                        i18n("Overwrite File?"),
                                        KStandardGuiItem::overwrite(),
                                        KStandardGuiItem::cancel() );
@@ -2632,9 +2632,9 @@ bool EditorWindow::checkOverwrite(const KUrl& url)
     int result =
 
         KMessageBox::warningYesNo( this, i18n("A file named \"%1\" already "
-                                   "exists. Are you sure you want "
-                                   "to overwrite it?",
-                                   url.fileName()),
+                                              "exists. Are you sure you want "
+                                              "to overwrite it?",
+                                              url.fileName()),
                                    i18n("Overwrite File?"),
                                    KStandardGuiItem::overwrite(),
                                    KStandardGuiItem::cancel() );

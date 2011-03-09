@@ -315,7 +315,7 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
         QString text        = QString("%1%").arg(peUsed);
         QFontMetrics fontMt = p.fontMetrics();
         QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(),
-                              tRect.width(), tRect.height(), 0, text);
+                                                  tRect.width(), tRect.height(), 0, text);
         p.setPen(Qt::black);
         p.drawText(tRect, Qt::AlignCenter, text);
     }
@@ -418,7 +418,7 @@ void FreeSpaceWidget::slotTimeout()
 #endif /* KDE_IS_VERSION(4,1,68) */
 
 void FreeSpaceWidget::slotAvailableFreeSpace(const QString& mountPoint, quint64 kBSize,
-        quint64 kBUsed, quint64 kBAvail)
+                                             quint64 kBUsed, quint64 kBAvail)
 {
 #if KDE_IS_VERSION(4,1,68)
     Q_UNUSED(mountPoint);

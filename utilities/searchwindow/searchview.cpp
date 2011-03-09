@@ -521,9 +521,9 @@ SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache* cache, QWid
                            this,
                            SIGNAL(cancelPressed()));
     KPushButton* aBtn = m_buttonBox->addButton(KStandardGuiItem::apply(),
-                        QDialogButtonBox::ApplyRole,
-                        this,
-                        SIGNAL(tryoutPressed()));
+                                               QDialogButtonBox::ApplyRole,
+                                               this,
+                                               SIGNAL(tryoutPressed()));
     aBtn->setText(i18n("Try"));
     m_mainLayout->addWidget(m_buttonBox);
 

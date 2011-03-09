@@ -490,7 +490,7 @@ void SearchTabHeader::saveSearch()
                               "\nPlease enter a new name:" );
         bool ok;
         QString newTitle = KInputDialog::getText( i18n("Name exists"), label,
-                           name, &ok, this );
+                                                  name, &ok, this );
 
         if (!ok)
         {
@@ -502,7 +502,7 @@ void SearchTabHeader::saveSearch()
     }
 
     SAlbum* newAlbum = AlbumManager::instance()->createSAlbum(name, d->currentAlbum->searchType(),
-                       d->currentAlbum->query());
+                                                              d->currentAlbum->query());
     emit searchShallBeSelected(newAlbum);
 }
 
@@ -575,7 +575,7 @@ void SearchTabHeader::setCurrentSearch(DatabaseSearch::Type type, const QString&
     else
     {
         album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch),
-                type, query);
+                                                       type, query);
     }
 
     if (selectCurrentAlbum)

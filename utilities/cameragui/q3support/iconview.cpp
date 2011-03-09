@@ -2365,8 +2365,8 @@ QPixmap IconView::thumbnailBorderPixmap(const QSize& pixSize)
     if (!cachePix)
     {
         QPixmap pix = ThumbBarView::generateFuzzyRect(QSize(pixSize.width()  + 2*radius,
-                      pixSize.height() + 2*radius),
-                      borderColor, radius);
+                                                            pixSize.height() + 2*radius),
+                                                      borderColor, radius);
         d->thumbnailBorderCache.insert(cacheKey, new QPixmap(pix));
         return pix;
     }

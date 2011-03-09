@@ -96,8 +96,8 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems,
-                                     currAlbum,
-                                     hostSetting("FileExtensions").toString()));
+                                                             currAlbum,
+                                                             hostSetting("FileExtensions").toString()));
     }
     else
     {
@@ -112,8 +112,8 @@ KIPI::ImageCollection KipiInterface::currentSelection()
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::SelectedItems,
-                                     currAlbum,
-                                     hostSetting("FileExtensions").toString()));
+                                                             currAlbum,
+                                                             hostSetting("FileExtensions").toString()));
     }
     else
     {
@@ -153,7 +153,7 @@ QList<KIPI::ImageCollection> KipiInterface::allAlbums()
         }
 
         KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems,
-                *it, fileFilter);
+                                                           *it, fileFilter);
         result.append( KIPI::ImageCollection( col ) );
     }
 

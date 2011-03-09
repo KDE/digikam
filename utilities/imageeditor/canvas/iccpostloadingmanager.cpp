@@ -54,7 +54,7 @@ IccTransform IccPostLoadingManager::postLoadingManage(QWidget* parent)
         image().removeAttribute("missingProfileAskUser");
         DImg preview                     = image().smoothScale(240, 180, Qt::KeepAspectRatio);
         QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::MissingProfile, preview,
-                m_filePath, parent);
+                                                                  m_filePath, parent);
         dlg->exec();
 
         IccTransform trans;
@@ -67,7 +67,7 @@ IccTransform IccPostLoadingManager::postLoadingManage(QWidget* parent)
         image().removeAttribute("profileMismatchAskUser");
         DImg preview                     = image().smoothScale(240, 180, Qt::KeepAspectRatio);
         QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::ProfileMismatch, preview,
-                m_filePath, parent);
+                                                                  m_filePath, parent);
         dlg->exec();
 
         IccTransform trans;
@@ -80,7 +80,7 @@ IccTransform IccPostLoadingManager::postLoadingManage(QWidget* parent)
         image().removeAttribute("uncalibratedColorAskUser");
         DImg preview                     = image().smoothScale(240, 180, Qt::KeepAspectRatio);
         QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::UncalibratedColor, preview,
-                m_filePath, parent);
+                                                                  m_filePath, parent);
         dlg->exec();
 
         IccTransform trans;

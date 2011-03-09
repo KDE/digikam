@@ -177,7 +177,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
     d->rawdecodingBox      = new QWidget(d->tabView);
     QGridLayout* rawGrid   = new QGridLayout(d->rawdecodingBox);
     d->decodingSettingsBox = new DcrawSettingsWidget(d->rawdecodingBox,
-            DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
+                                                     DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
     d->decodingSettingsBox->setObjectName("RawSettingsBox Expander");
 
     // Note: dont touch the url edit's fileDialog() here.
@@ -245,7 +245,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
     d->fineExposureInput->setRange(-3.0, 3.0, 0.1);
     d->fineExposureInput->setDefaultValue(0.0);
     d->fineExposureInput->input()->setWhatsThis(i18n("This value in E.V will be used to perform "
-            "an exposure compensation of the image."));
+                                                     "an exposure compensation of the image."));
 
     advExposureLayout->addWidget(d->brightnessLabel,   0, 0, 1, 1);
     advExposureLayout->addWidget(d->brightnessInput,   0, 1, 1, 2);
@@ -450,11 +450,11 @@ void RawSettingsBox::readSettings()
     KConfigGroup group        = config->group(d->optionGroupName);
 
     histogramBox()->setChannel((ChannelType)group.readEntry(d->optionHistogramChannelEntry,
-                               (int) LuminosityChannel));
+                                                            (int) LuminosityChannel));
     histogramBox()->setScale((HistogramScale)group.readEntry(d->optionHistogramScaleEntry,
-                             (int) LogScaleHistogram));
+                                                             (int) LogScaleHistogram));
     curvesWidget()->setScaleType((HistogramScale)group.readEntry(d->optionHistogramScaleEntry,
-                                 (int) LogScaleHistogram));
+                                                                 (int) LogScaleHistogram));
 
     d->decodingSettingsBox->readSettings(group);
 

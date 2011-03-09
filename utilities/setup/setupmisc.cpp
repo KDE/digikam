@@ -102,12 +102,12 @@ SetupMisc::SetupMisc(QWidget* parent)
     d->stringComparisonType->addItem(i18nc("method to compare strings", "Natural"), AlbumSettings::Natural);
     d->stringComparisonType->addItem(i18nc("method to compare strings", "Normal"),  AlbumSettings::Normal);
     d->stringComparisonType->setToolTip(i18n("<qt>Sets the way in which strings are compared inside digiKam. "
-                                        "This eg. influences the sorting of the tree views.<br/>"
-                                        "<b>Natural</b> tries to compare strings in a way that regards some normal conventions "
-                                        "and will eg. result in sorting numbers naturally even if they have a different number of digits.<br/>"
-                                        "<b>Normal</b> uses a more technical approach. "
-                                        "Use this style if you eg. want to entitle albums with ISO dates (201006 or 20090523) "
-                                        "and the albums should be sorted according to these dates.</qt>"));
+                                             "This eg. influences the sorting of the tree views.<br/>"
+                                             "<b>Natural</b> tries to compare strings in a way that regards some normal conventions "
+                                             "and will eg. result in sorting numbers naturally even if they have a different number of digits.<br/>"
+                                             "<b>Normal</b> uses a more technical approach. "
+                                             "Use this style if you eg. want to entitle albums with ISO dates (201006 or 20090523) "
+                                             "and the albums should be sorted according to these dates.</qt>"));
 
     // --------------------------------------------------------
 

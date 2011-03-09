@@ -217,7 +217,7 @@ void CameraIconView::addItem(const GPItemInfo& info)
 
     // Just to have a generic image thumb from desktop with KDE < 3.5.0
     KMimeType::Ptr mime = KMimeType::mimeType(info.mime == QString("image/x-raw") ?
-                          QString("image/tiff") : info.mime);
+                                              QString("image/tiff") : info.mime);
 
     if (mime)
     {
@@ -540,7 +540,7 @@ void CameraIconView::slotContextMenu(IconItem* item, const QPoint&)
 
     DPopupMenu menu(this);
     QAction* viewAction      = menu.addAction(SmallIcon("editimage"),
-                               i18nc("View the selected image", "&View"));
+                                              i18nc("View the selected image", "&View"));
     menu.addSeparator();
     QAction* downAction      = menu.addAction(SmallIcon("computer"),i18n("Download"));
     QAction* downDelAction   = menu.addAction(SmallIcon("computer"),i18n("Download && Delete"));

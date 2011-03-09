@@ -109,7 +109,7 @@ MetadataOption::MetadataOption()
 {
     // metadataedit icon can be missing if KIPI plugins are not installed, load different icon in this case
     QPixmap icon = KIconLoader::global()->loadIcon("metadataedit", KIconLoader::Small, 0,
-                   KIconLoader::DefaultState, QStringList(), 0L, true);
+                                                   KIconLoader::DefaultState, QStringList(), 0L, true);
 
     if (icon.isNull())
     {

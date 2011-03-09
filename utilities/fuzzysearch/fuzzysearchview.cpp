@@ -561,7 +561,7 @@ void FuzzySearchView::doLoadState()
     KConfigGroup group = getConfigGroup();
 
     d->tabWidget->setCurrentIndex(group.readEntry(entryName(d->configTabEntry),
-                                  (int)FuzzySearchViewPriv::SKETCH));
+                                                  (int)FuzzySearchViewPriv::SKETCH));
     d->penSize->setValue(group.readEntry(entryName(d->configPenSketchSizeEntry), 10));
     d->resultsSketch->setValue(group.readEntry(entryName(d->configResultSketchItemsEntry), 10));
     d->hsSelector->setHue(group.readEntry(entryName(d->configPenSketchHueEntry), 180));

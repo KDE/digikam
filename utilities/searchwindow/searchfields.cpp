@@ -245,7 +245,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* par
         SearchFieldPageOrientation* field = new SearchFieldPageOrientation(parent);
         field->setFieldName(name);
         field->setText(i18n("Orientation"), i18nc("Find pictures with any orientation / landscape / portrait orientation...",
-                       "Find pictures with"));
+                                                  "Find pictures with"));
         return field;
     }
     else if (name == "format")

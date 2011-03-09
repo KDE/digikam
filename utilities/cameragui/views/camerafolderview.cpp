@@ -98,7 +98,7 @@ void CameraFolderView::addRootFolder(const QString& folder, int nbItems, const Q
 }
 
 CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QString& subFolder,
-        int nbItems, const QPixmap& pixmap)
+                                              int nbItems, const QPixmap& pixmap)
 {
     CameraFolderItem* parentItem = findFolder(folder);
 

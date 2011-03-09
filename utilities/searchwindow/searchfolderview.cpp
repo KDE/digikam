@@ -58,8 +58,8 @@ public:
 };
 
 NormalSearchTreeView::NormalSearchTreeView(QWidget* parent,
-        SearchModel* searchModel,
-        SearchModificationHelper* searchModificationHelper) :
+                                           SearchModel* searchModel,
+                                           SearchModificationHelper* searchModificationHelper) :
     EditableSearchTreeView(parent, searchModel, searchModificationHelper),
     d(new NormalSearchTreeViewPriv)
 {
@@ -77,7 +77,7 @@ NormalSearchTreeView::~NormalSearchTreeView()
 }
 
 void NormalSearchTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh,
-        Album* album)
+                                                       Album* album)
 {
 
     cmh.addAction(d->newAction);

@@ -245,7 +245,7 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     d->albumSettingBox        = new QGroupBox(i18n("Album Information"), vbox2);
 
     d->showAlbumToolTipsBox->setWhatsThis(i18n("Set this option to display album information when "
-                                          "the mouse hovers over a folder-view item."));
+                                               "the mouse hovers over a folder-view item."));
 
     d->showAlbumTitleBox      = new QCheckBox(i18n("Show album name"));
     d->showAlbumTitleBox->setWhatsThis(i18n("Set this option to display the album name."));

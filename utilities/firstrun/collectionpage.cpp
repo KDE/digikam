@@ -233,9 +233,9 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
     {
         int rc = KMessageBox::questionYesNo(this,
                                             i18n("<p>The folder to use as the root album path does not exist:</p>"
-                                                    "<p><b>%1</b></p>"
-                                                    "Would you like digiKam to create it for you?",
-                                                    rootAlbumFolder),
+                                                 "<p><b>%1</b></p>"
+                                                 "Would you like digiKam to create it for you?",
+                                                 rootAlbumFolder),
                                             i18n("Create Root Album Folder?"));
 
         if (rc == KMessageBox::No)
@@ -310,9 +310,9 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
     {
         int rc = KMessageBox::questionYesNo(this,
                                             i18n("<p>The folder to put your database in does not seem to exist:</p>"
-                                                    "<p><b>%1</b></p>"
-                                                    "Would you like digiKam to create it for you?",
-                                                    dbFolder),
+                                                 "<p><b>%1</b></p>"
+                                                 "Would you like digiKam to create it for you?",
+                                                 dbFolder),
                                             i18n("Create Database Folder?"));
 
         if (rc == KMessageBox::No)

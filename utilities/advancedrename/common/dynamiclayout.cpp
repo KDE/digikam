@@ -94,9 +94,9 @@ void DynamicLayout::addItem(QLayoutItem* item)
     {
         QWidget* wid    = item->widget();
         d->spaceX       = qMax<int>(wid->style()->layoutSpacing(QSizePolicy::PushButton, QSizePolicy::PushButton,
-                                    Qt::Horizontal), d->spaceX);
+                                                                Qt::Horizontal), d->spaceX);
         d->spaceY       = qMax<int>(wid->style()->layoutSpacing(QSizePolicy::PushButton, QSizePolicy::PushButton,
-                                    Qt::Vertical), d->spaceY);
+                                                                Qt::Vertical), d->spaceY);
         d->minItemWidth = qMax<int>(wid->sizeHint().width(), d->minItemWidth);
     }
 

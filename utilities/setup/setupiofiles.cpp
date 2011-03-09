@@ -128,7 +128,7 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     d->showImageSettingsDialog = new QCheckBox(panel);
     d->showImageSettingsDialog->setText(i18n("Show Settings Dialog when Saving Image Files"));
     d->showImageSettingsDialog->setWhatsThis( i18n("<ul><li>Checked: A dialog where settings can be changed when saving image files</li>"
-            "<li>Unchecked: Default settings are used when saving image files</li></ul>"));
+                                                   "<li>Unchecked: Default settings are used when saving image files</li></ul>"));
 #endif
 
     vbox->addWidget(createGroupBox(d->JPEGOptions));

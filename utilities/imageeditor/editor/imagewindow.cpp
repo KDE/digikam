@@ -571,14 +571,14 @@ void ImageWindow::setupActions()
     // Power users may add them.
 
     d->fileDeletePermanentlyDirectlyAction = new KAction(KIcon("edit-delete"),
-            i18n("Delete Permanently without Confirmation"), this);
+                                                         i18n("Delete Permanently without Confirmation"), this);
     connect(d->fileDeletePermanentlyDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanentlyDirectly()));
     actionCollection()->addAction("image_delete_permanently_directly",
                                   d->fileDeletePermanentlyDirectlyAction);
 
     d->fileTrashDirectlyAction = new KAction(KIcon("user-trash"),
-            i18n("Move to Trash without Confirmation"), this);
+                                             i18n("Move to Trash without Confirmation"), this);
     connect(d->fileTrashDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotTrashCurrentItemDirectly()));
     actionCollection()->addAction("image_trash_directly", d->fileTrashDirectlyAction);
@@ -850,7 +850,7 @@ void ImageWindow::slotChanged()
     QSize dims(m_canvas->imageWidth(), m_canvas->imageHeight());
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
     QString str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
-                  dims.width(), dims.height(), mpixels);
+                                                             dims.width(), dims.height(), mpixels);
 
     m_resLabel->setText(str);
 

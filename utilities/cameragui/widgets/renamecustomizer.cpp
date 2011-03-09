@@ -125,7 +125,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameDefaultCaseType->insertItem(2, i18nc("Filename to lowercase",   "Lower"));
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     d->renameDefaultCaseType->setWhatsThis( i18n("Set the method to use to change the case "
-                                            "of the image filenames."));
+                                                 "of the image filenames."));
 
     boxLayout1->setMargin(KDialog::spacingHint());
     boxLayout1->setSpacing(KDialog::spacingHint());

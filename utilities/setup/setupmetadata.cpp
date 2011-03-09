@@ -299,8 +299,8 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->readFromNepomukBox   = new QCheckBox;
     d->readFromNepomukBox->setText(i18n("Read metadata from Nepomuk"));
     d->readFromNepomukBox->setWhatsThis( i18n("Turn on this option if you want to apply changes to "
-                                         "rating, comments and tags made in Nepomuk to digiKam's metadata storage. "
-                                         "Please note that image metadata will not be edited automatically."));
+                                              "rating, comments and tags made in Nepomuk to digiKam's metadata storage. "
+                                              "Please note that image metadata will not be edited automatically."));
 
     gLayout3->addWidget(d->saveToNepomukBox);
     gLayout3->addWidget(d->readFromNepomukBox);

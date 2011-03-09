@@ -81,7 +81,7 @@ Q_SIGNALS:
 protected:
 
     virtual void addCustomContextMenuActions(ContextMenuHelper& cmh,
-            Album* album);
+                                             Album* album);
     virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
 private:

@@ -133,7 +133,7 @@ void GPConfigDlg::appendWidget(QWidget* parent, CameraWidget* widget)
             QWidget* tab = new QWidget(d->tabWidget);
             // widgets are to be aligned vertically in the tab
             QVBoxLayout* tabLayout = new QVBoxLayout(tab, marginHint(),
-                    spacingHint());
+                                                     spacingHint());
             d->tabWidget->insertTab(tab, widget_label);
             KVBox* tabContainer = new KVBox(tab);
             tabContainer->setSpacing(spacingHint());

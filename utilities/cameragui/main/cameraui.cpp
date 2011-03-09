@@ -263,11 +263,11 @@ void CameraUI::setupUserArea()
 
     albumBox->setWhatsThis( i18n("Set how digiKam creates albums automatically when downloading."));
     d->autoAlbumExtCheck->setWhatsThis( i18n("Enable this option if you want to download your "
-                                        "pictures into automatically created file extension-based sub-albums of the destination "
-                                        "album. This way, you can separate JPEG and RAW files as they are downloaded from your camera."));
+                                             "pictures into automatically created file extension-based sub-albums of the destination "
+                                             "album. This way, you can separate JPEG and RAW files as they are downloaded from your camera."));
     d->autoAlbumDateCheck->setWhatsThis( i18n("Enable this option if you want to "
-                                         "download your pictures into automatically created file date-based sub-albums "
-                                         "of the destination album."));
+                                              "download your pictures into automatically created file date-based sub-albums "
+                                              "of the destination album."));
     d->folderDateFormat->setWhatsThis( i18n("<p>Select your preferred date format used to "
                                             "create new albums. The options available are:</p>"
                                             "<p><b>ISO</b>: the date format is in accordance with ISO 8601 "
@@ -481,7 +481,7 @@ void CameraUI::setupActions()
     actionCollection()->addAction("cameraui_zoomminus", d->decreaseThumbsAction);
 
     d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
-                          "cameraui_fullscreen", this, SLOT(slotToggleFullScreen()));
+                                                        "cameraui_fullscreen", this, SLOT(slotToggleFullScreen()));
 
     d->showLogAction = new KToggleAction(KIcon("view-history"), i18n("Show History"), this);
     d->showLogAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
@@ -1413,7 +1413,7 @@ void CameraUI::slotUpload()
     kDebug() << "fileformats=" << fileformats;
 
     KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::instance()->oneAlbumRootPath(),
-                      fileformats, this, i18n("Select Image to Upload"));
+                                               fileformats, this, i18n("Select Image to Upload"));
 
     if (!urls.isEmpty())
     {
@@ -1457,8 +1457,8 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
     }
 
     QPointer<CameraFolderDialog> dlg = new CameraFolderDialog(this, d->view, d->cameraFolderList,
-            d->controller->cameraTitle(),
-            d->controller->cameraPath());
+                                                              d->controller->cameraTitle(),
+                                                              d->controller->cameraPath());
 
     if (dlg->exec() != QDialog::Accepted)
     {
@@ -2036,9 +2036,9 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                           deleteList.count()));
 
     if (KMessageBox::warningContinueCancelList(this, warnMsg,
-            deleteList,
-            i18n("Warning"),
-            KGuiItem(i18n("Delete")))
+                                               deleteList,
+                                               i18n("Warning"),
+                                               KGuiItem(i18n("Delete")))
         ==  KMessageBox::Continue)
     {
         QStringList::iterator itFolder = folders.begin();

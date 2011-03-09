@@ -97,15 +97,15 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
 #ifndef _WIN32
     QLabel* albumPathLabel  = new QLabel(i18n("<p>Below are the locations of your root albums used to store "
-                                         "your images. Write access is necessary to be able "
-                                         "to edit images in these albums.</p>"
-                                         "<p>Note: Removable media (such as USB drives or DVDs) and remote file systems "
-                                         "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p><p></p>"),
+                                              "your images. Write access is necessary to be able "
+                                              "to edit images in these albums.</p>"
+                                              "<p>Note: Removable media (such as USB drives or DVDs) and remote file systems "
+                                              "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p><p></p>"),
                                          albumPathBox);
 #else
     QLabel* albumPathLabel  = new QLabel(i18n("<p>Below are the locations of your root albums used to store "
-                                         "your images. Write access is necessary to be able "
-                                         "to edit images in these albums.</p><p></p>"),
+                                              "your images. Write access is necessary to be able "
+                                              "to edit images in these albums.</p><p></p>"),
                                          albumPathBox);
 #endif
     albumPathLabel->setWordWrap(true);

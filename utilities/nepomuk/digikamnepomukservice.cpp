@@ -1210,7 +1210,7 @@ DatabaseParameters NepomukService::databaseParameters() const
 KSharedConfig::Ptr NepomukService::digikamConfig() const
 {
     return KSharedConfig::openConfig(KComponentData("digikam", QByteArray(),
-                                     KComponentData::SkipMainComponentRegistration));
+                                                    KComponentData::SkipMainComponentRegistration));
 }
 
 } // namespace Digikam

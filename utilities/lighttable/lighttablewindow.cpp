@@ -527,7 +527,7 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_showthumbbar", d->showThumbBarAction);
 
     d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
-                          "lighttable_fullscreen", this, SLOT(slotToggleFullScreen()));
+                                                        "lighttable_fullscreen", this, SLOT(slotToggleFullScreen()));
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(KShortcut(Qt::Key_F9));
@@ -702,7 +702,7 @@ void LightTableWindow::refreshStatusBar()
 {
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                           i18np("%1 item on Light Table", "%1 items on Light Table",
-                                                  d->barView->countItems()));
+                                                d->barView->countItems()));
 }
 
 void LightTableWindow::slotFileChanged(const QString& path)

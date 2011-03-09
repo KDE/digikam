@@ -837,8 +837,8 @@ void GPSMarkerTiler::onIndicesClicked(const KMap::TileIndex::List& tileIndicesLi
         const bool doSelect = (groupSelectionState & KMap::KMapSelectedMask) != KMap::KMapSelectedAll;
 
         const QItemSelectionModel::SelectionFlags selectionFlags =
-                  (doSelect ? QItemSelectionModel::Select : QItemSelectionModel::Deselect)
-                | QItemSelectionModel::Rows;
+            (doSelect ? QItemSelectionModel::Select : QItemSelectionModel::Deselect)
+            | QItemSelectionModel::Rows;
 
         for (int i=0; i<clickedImagesId.count(); ++i)
         {

@@ -638,7 +638,7 @@ void FaceIface::storeThumbnails(ThumbnailLoadThread* thread, const QString& file
 
 // --- Face detection: merging results ------------------------------------------------------------------------------------
 
-QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlonglong imageid, 
+QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlonglong imageid,
                                                        const QList<KFaceIface::Face>& faceList)
 {
     QList<DatabaseFace> newFaces;

@@ -630,7 +630,7 @@ void ImageGuideWidget::mouseReleaseEvent(QMouseEvent* e)
                 {
                     color = getSpotColor(TargetPreviewImage);
                     emit spotPositionChangedFromTarget(color, QPoint(d->spot.x() - d->rect.width()/2,
-                                                       d->spot.y()));
+                                                                     d->spot.y()));
                 }
                 else
                 {
@@ -657,7 +657,7 @@ void ImageGuideWidget::mouseReleaseEvent(QMouseEvent* e)
                 {
                     color = getSpotColor(TargetPreviewImage);
                     emit spotPositionChangedFromTarget(color, QPoint(d->spot.x(),
-                                                       d->spot.y() - d->rect.height()/2 ));
+                                                                     d->spot.y() - d->rect.height()/2 ));
                 }
                 else
                 {

@@ -415,7 +415,7 @@ void QueueMgrWindow::setupActions()
     // -- Standard 'View' menu actions ---------------------------------------------
 
     d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
-                          "queuemgr_fullscreen", this, SLOT(slotToggleFullScreen()));
+                                                        "queuemgr_fullscreen", this, SLOT(slotToggleFullScreen()));
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 

@@ -205,7 +205,7 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
 }
 
 void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
-        const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const
+                                                const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const
 {
     QPushButton* pushButton = static_cast<QPushButton*>(widgets[0]);
     QToolButton* toolButton = static_cast<QToolButton*>(widgets[1]);
@@ -251,7 +251,7 @@ QWidget* SetupCollectionDelegate::createEditor(QWidget* parent, const QStyleOpti
 }
 
 bool SetupCollectionDelegate::editorEvent(QEvent* event, QAbstractItemModel* model,
-        const QStyleOptionViewItem& option, const QModelIndex& index)
+                                          const QStyleOptionViewItem& option, const QModelIndex& index)
 {
     return static_cast<QAbstractItemDelegate*>(m_styledDelegate)->editorEvent(event, model, option, index);
 }
@@ -540,10 +540,10 @@ void SetupCollectionModel::addCollection(int category)
     }
 
     QString path = KFileDialog::getExistingDirectory(KUrl(picturesPath), m_dialogParentWidget,
-                   i18n("Choose the folder containing your collection"));
+                                                     i18n("Choose the folder containing your collection"));
 #else
     QString path = KFileDialog::getExistingDirectory(KUrl("kfiledialog:///collectionlocation"), m_dialogParentWidget,
-                   i18n("Choose the folder containing your collection"));
+                                                     i18n("Choose the folder containing your collection"));
 #endif
 
     if (path.isEmpty())
@@ -567,10 +567,10 @@ void SetupCollectionModel::addCollection(int category)
 
     if (category == CategoryRemote)
         result = CollectionManager::instance()->checkNetworkLocation(KUrl::fromPath(path), assumeDeleted,
-                 &messageFromManager, &deviceIcon);
+                                                                     &messageFromManager, &deviceIcon);
     else
         result = CollectionManager::instance()->checkLocation(KUrl::fromPath(path), assumeDeleted,
-                 &messageFromManager, &deviceIcon);
+                                                              &messageFromManager, &deviceIcon);
 
     // If there are other added collections then CollectionManager does not know about them. Check here.
     foreach (const Item& item, m_collections)
@@ -713,9 +713,9 @@ void SetupCollectionModel::deleteCollection(int internalId)
     KGuiItem removeItem = KStandardGuiItem::cont();
     removeItem.setText(i18n("Remove Collection"));
     int result = KMessageBox::warningContinueCancel(m_dialogParentWidget,
-                 i18n("Do you want to remove the collection \"%1\" from your list of collections?", label),
-                 i18n("Remove Collection?"),
-                 removeItem);
+                                                    i18n("Do you want to remove the collection \"%1\" from your list of collections?", label),
+                                                    i18n("Remove Collection?"),
+                                                    removeItem);
 
     if (result == KMessageBox::Continue)
     {
