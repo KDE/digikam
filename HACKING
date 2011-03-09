@@ -194,6 +194,11 @@ astyle --brackets=break --indent=spaces=4 --convert-tabs --indent-switches \
        --min-conditional-indent=0                                          \
        `find -type f -name '*.cpp'` `find -type f -name '*.cc'` `find -type f -name '*.h'`
 
+Another way to apply the coding guidelines with astyle is to use the
+fileformatter script in /project/scripts. This script will also clean up the
+source tree and remove backup files that had been created by astyle, 
+if the appropriate command line argument is given.
+
 ========================================================================
 
 To handle the command easier, create a bash function in ~/.bashrc, e.g.
