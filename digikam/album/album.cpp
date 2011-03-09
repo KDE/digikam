@@ -7,7 +7,7 @@
  * Description : digiKam album types
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -144,8 +144,6 @@ QList< int > Album::childAlbumIds(bool recursive)
 
     return ids;
 }
-
-
 
 void Album::insertChild(Album* child)
 {
@@ -700,7 +698,7 @@ bool SAlbum::isTemporarySearch() const
     if (isHaarSearch())
     {
         return (title() == getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch)) ||
-               title() == getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch);
+                title() == getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch);
     }
 
     return (title() == getTemporaryTitle(m_searchType));

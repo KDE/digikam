@@ -7,7 +7,7 @@
  * Description : digiKam album types
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -378,24 +378,24 @@ public:
                "People/Friend/John" if leadingSlash if false.
      *         The root TAlbum returns "/" resp. "".
      */
-    QString     tagPath(bool leadingSlash = true) const;
-    DatabaseUrl databaseUrl() const;
-    QString     prettyUrl() const;
-    QString     icon() const;
-    QList<int>  tagIDs() const;
+    QString                tagPath(bool leadingSlash = true) const;
+    DatabaseUrl            databaseUrl() const;
+    QString                prettyUrl() const;
+    QString                icon() const;
+    QList<int>             tagIDs() const;
 
-    bool        isInternalTag() const;
-    bool        hasProperty(const QString& key) const;
-    QString     property(const QString& key) const;
+    bool                   isInternalTag() const;
+    bool                   hasProperty(const QString& key) const;
+    QString                property(const QString& key) const;
     QMap<QString, QString> properties() const;
 
 private:
 
+    bool    m_person;
+
     int     m_pid;
 
     QString m_icon;
-
-    bool    m_person;
 
     friend class AlbumManager;
 };
@@ -418,17 +418,17 @@ public:
     explicit DAlbum(const QDate& date, bool root=false, Range range=Month);
     ~DAlbum();
 
-    QDate date() const;
-    Range range() const;
+    QDate       date() const;
+    Range       range() const;
     DatabaseUrl databaseUrl() const;
 
 private:
 
-    static int  m_uniqueID;
+    static int m_uniqueID;
 
-    QDate       m_date;
+    QDate      m_date;
 
-    Range       m_range;
+    Range      m_range;
 
     friend class AlbumManager;
 };
