@@ -71,6 +71,7 @@ def format_file(f, verbose=False):
     args.append("--indent-col1-comments")
     args.append("--add-brackets")
     args.append("--min-conditional-indent=0")
+    args.append("--max-instatement-indent=70")
     args.append(f)
 
     if (verbose):
