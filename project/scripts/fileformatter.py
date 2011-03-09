@@ -100,11 +100,7 @@ def main():
     parser.add_argument("path", help="the path where the source files are located")
     parser.add_argument("-v", "--verbose", help="verbose output", default=False, action="store_true")
     parser.add_argument("-b", "--backup", help="keep backup files", default=False, action="store_true")
-
     args = parser.parse_args()
-    path = args.path
-    verbose = args.verbose
-    backup = args.backup
 
     errors = format_path(args.path, args.verbose)
 
