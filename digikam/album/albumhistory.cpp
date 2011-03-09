@@ -118,7 +118,7 @@ public:
 };
 
 AlbumHistory::AlbumHistory()
-            : d(new AlbumHistoryPriv)
+    : d(new AlbumHistoryPriv)
 {
     d->backwardStack = new AlbumHistoryPriv::AlbumStack;
     d->forwardStack  = new AlbumHistoryPriv::AlbumStack;

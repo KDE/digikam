@@ -740,10 +740,12 @@ void ContextMenuHelper::addQueueManagerMenu()
 void ContextMenuHelper::addGroupMenu(imageIds& ids)
 {
     QList<QAction*> actions = groupMenuActions(ids);
+
     if (actions.isEmpty())
     {
         return;
     }
+
     KMenu* menu = new KMenu(i18n("Group"));
     foreach (QAction* action, actions)
     {
@@ -770,6 +772,7 @@ QList<QAction*> ContextMenuHelper::groupMenuActions(imageIds& ids)
     setSelectedIds(ids);
 
     QList<QAction*> actions;
+
     if (ids.isEmpty())
     {
         if (d->imageFilterModel)
@@ -787,10 +790,12 @@ QList<QAction*> ContextMenuHelper::groupMenuActions(imageIds& ids)
                 actions << closeAction;
             }
         }
+
         return actions;
     }
 
     ImageInfo info(ids.first());
+
     if (ids.size() == 1)
     {
         if (info.hasGroupedImages())
@@ -861,6 +866,7 @@ QList<QAction*> ContextMenuHelper::groupMenuActions(imageIds& ids)
         connect(clearAction, SIGNAL(triggered()), this, SIGNAL(signalUngroup()));
         actions << clearAction;
     }
+
     return actions;
 }
 
@@ -870,10 +876,12 @@ void ContextMenuHelper::setGroupsOpen(bool open)
     {
         return;
     }
+
     GroupImageFilterSettings settings = d->imageFilterModel->groupImageFilterSettings();
     foreach (qlonglong id, d->selectedIds)
     {
         ImageInfo info(id);
+
         if (info.hasGroupedImages())
         {
             settings.setOpen(id, open);
@@ -898,6 +906,7 @@ void ContextMenuHelper::slotOpenAllGroups()
     {
         return;
     }
+
     d->imageFilterModel->setAllGroupsOpen(true);
 }
 
@@ -907,6 +916,7 @@ void ContextMenuHelper::slotCloseAllGroups()
     {
         return;
     }
+
     d->imageFilterModel->setAllGroupsOpen(false);
 }
 
@@ -940,7 +950,7 @@ void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
 void ContextMenuHelper::addStandardActionItemDelete(QObject* recv, const char* slot, int quantity)
 {
     QAction* trashAction = new QAction(SmallIcon("user-trash"), i18ncp("@action:inmenu Pluralized",
-                                       "Move to Trash", "Move %1 Files to Trash", quantity), d->parent);
+                                                                       "Move to Trash", "Move %1 Files to Trash", quantity), d->parent);
     connect(trashAction, SIGNAL(triggered()),
             recv, slot);
     addAction(trashAction);

@@ -171,7 +171,7 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget* parent, PAlbum* albumToSelect)
     d->albumTreeView->setEntryPrefix("AlbumTreeView");
 
     d->newAlbumBtn = new KPushButton(KGuiItem(i18n("&New Album"), "albumfolder-new",
-                                     i18n("Create new album")), this);
+                                              i18n("Create new album")), this);
 
     grid->addWidget(d->albumTreeView, 0, 0, 1, 2);
     grid->addWidget(d->searchBar,     1, 0, 1, 1);

@@ -873,7 +873,7 @@ static AlbumCopyMoveHint hintForAlbum(const PAlbum* album, int dstAlbumRootId, c
 }
 
 static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum* album, int dstAlbumRootId, QString relativeDstPath,
-        const QString& albumName)
+                                              const QString& albumName)
 {
     QList<AlbumCopyMoveHint> newHints;
 
@@ -910,7 +910,7 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* album, const QString&
     QString relativeDstPath = CollectionManager::instance()->album(location, dstPath);
 
     QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album, location.id(), relativeDstPath,
-                                        newAlbumName.isNull() ? album->title() : newAlbumName);
+                                                      newAlbumName.isNull() ? album->title() : newAlbumName);
 
     QMutexLocker lock(&d->mutex);
     d->albumHints << newHints;
@@ -919,7 +919,7 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* album, const QString&
 void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* album, const PAlbum* dstAlbum, const QString& newAlbumName)
 {
     QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album, dstAlbum->albumRootId(), dstAlbum->albumPath(),
-                                        newAlbumName.isNull() ? album->title() : newAlbumName);
+                                                      newAlbumName.isNull() ? album->title() : newAlbumName);
 
     QMutexLocker lock(&d->mutex);
     d->albumHints << newHints;

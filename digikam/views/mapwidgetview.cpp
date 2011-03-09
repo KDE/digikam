@@ -129,8 +129,8 @@ void MapWidgetView::doLoadState()
     KConfigGroup group = getConfigGroup();
 
     d->gpsImageInfoSorter->setSortOptions(
-            GPSImageInfoSorter::SortOptions(group.readEntry("Sort Order", int(d->gpsImageInfoSorter->getSortOptions())))
-        );
+        GPSImageInfoSorter::SortOptions(group.readEntry("Sort Order", int(d->gpsImageInfoSorter->getSortOptions())))
+    );
 
     const KConfigGroup groupCentralMap = KConfigGroup(&group, "Central Map Widget");
     d->mapWidget->readSettingsFromGroup(&groupCentralMap);
@@ -180,9 +180,9 @@ class MapViewModelHelper::MapViewModelHelperPrivate
 {
 public:
     MapViewModelHelperPrivate()
-      : model(0),
-        selectionModel(0),
-        thumbnailLoadThread(0)
+        : model(0),
+          selectionModel(0),
+          thumbnailLoadThread(0)
     {
     }
 
@@ -302,6 +302,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
 
     // first convert from QPersistentModelIndex to QModelIndex
     QList<QModelIndex> indexList;
+
     for (int i=0; i<list.count(); ++i)
     {
         const QModelIndex newIndex(list.at(i));
@@ -314,6 +315,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
     foreach (const ImageInfo& imageInfo, imageInfoList)
     {
         GPSImageInfo gpsImageInfo;
+
         if (GPSImageInfo::fromImageInfo(imageInfo, &gpsImageInfo))
         {
             gpsImageInfoList << gpsImageInfo;
@@ -329,9 +331,11 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
     // now determine the best available index
     QModelIndex bestIndex = indexList.first();
     GPSImageInfo bestGPSImageInfo = gpsImageInfoList.first();
+
     for (int i=1; i<gpsImageInfoList.count(); ++i)
     {
         const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
+
         if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, KMap::KMapSelectedNone,
                                            currentInfo, KMap::KMapSelectedNone,
                                            KMap::KMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
@@ -374,6 +378,7 @@ void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& cl
 
 #if 0
     QList<QModelIndex> indexList;
+
     for (int i=0; i<clickedIndices.count(); ++i)
     {
         const QModelIndex newIndex(clickedIndices.at(i));
@@ -381,6 +386,7 @@ void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& cl
     }
 
     const QList<ImageInfo> imageInfoList = d->model->imageInfos(indexList);
+
     QList<qlonglong> imagesIdList;
 
     for (int i=0; i<imageInfoList.count(); ++i)
@@ -402,8 +408,8 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 
     /// @todo More detailed check
     if (   ( changes & DatabaseFields::LatitudeNumber )
-        || ( changes & DatabaseFields::LongitudeNumber )
-        || ( changes & DatabaseFields::Altitude ) )
+           || ( changes & DatabaseFields::LongitudeNumber )
+           || ( changes & DatabaseFields::Altitude ) )
     {
         kDebug() << "changes!";
 
@@ -429,9 +435,10 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
  */
 ImageInfo MapWidgetView::currentInfo()
 {
-   /// @todo Have kmapwidget honor the 'current index'
+    /// @todo Have kmapwidget honor the 'current index'
     QModelIndex currentIndex = d->selectionModel->currentIndex();
     kDebug()<<currentIndex;
+
     if (!currentIndex.isValid())
     {
         /// @todo This is temporary until kmapwidget marks a 'current index'
@@ -442,6 +449,7 @@ ImageInfo MapWidgetView::currentInfo()
 
         currentIndex = d->selectionModel->selectedIndexes().first();
     }
+
     kDebug()<<currentIndex;
     return d->imageFilterModel->imageInfo(currentIndex);
 }

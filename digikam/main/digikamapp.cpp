@@ -726,7 +726,7 @@ void DigikamApp::setupActions()
     foreach (SidebarWidget* leftWidget, d->view->leftSidebarWidgets())
     {
         QString actionName = "browse_" +
-                leftWidget->objectName().remove(' ').remove("Sidebar").remove("FolderView").remove("View").toLower();
+                             leftWidget->objectName().remove(' ').remove("Sidebar").remove("FolderView").remove("View").toLower();
         kDebug() << actionName << leftWidget->objectName();
         KAction* action = new KAction(KIcon(leftWidget->getIcon()), leftWidget->getCaption(), this);
         actionCollection()->addAction(actionName, action);
@@ -773,9 +773,9 @@ void DigikamApp::setupActions()
 
     d->writeAlbumMetadataAction = new KAction(KIcon("document-edit"), i18n("Write Metadata to Images"), this);
     d->writeAlbumMetadataAction->setWhatsThis(i18n("Updates metadata of images in the current "
-            "album with the contents of digiKam database "
-            "(image metadata will be overwritten with data from "
-            "the database)."));
+                                                   "album with the contents of digiKam database "
+                                                   "(image metadata will be overwritten with data from "
+                                                   "the database)."));
     connect(d->writeAlbumMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumWriteMetadata()));
     actionCollection()->addAction("album_write_metadata", d->writeAlbumMetadataAction);
 
@@ -783,9 +783,9 @@ void DigikamApp::setupActions()
 
     d->readAlbumMetadataAction = new KAction(KIcon("edit-redo"), i18n("Reread Metadata From Images"), this);
     d->readAlbumMetadataAction->setWhatsThis(i18n("Updates the digiKam database from the metadata "
-            "of the files in the current album "
-            "(information in the database will be overwritten with data from "
-            "the files' metadata)."));
+                                                  "of the files in the current album "
+                                                  "(information in the database will be overwritten with data from "
+                                                  "the files' metadata)."));
     connect(d->readAlbumMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumReadMetadata()));
     actionCollection()->addAction("album_read_metadata", d->readAlbumMetadataAction);
 
@@ -919,9 +919,9 @@ void DigikamApp::setupActions()
 
     d->imageWriteMetadataAction = new KAction(KIcon("document-edit"), i18n("Write Metadata to Selected Images"), this);
     d->imageWriteMetadataAction->setWhatsThis(i18n("Updates metadata of images in the current "
-            "album with the contents of digiKam database "
-            "(image metadata will be overwritten with data from "
-            "the database)."));
+                                                   "album with the contents of digiKam database "
+                                                   "(image metadata will be overwritten with data from "
+                                                   "the database)."));
     connect(d->imageWriteMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotImageWriteMetadata()));
     actionCollection()->addAction("image_write_metadata", d->imageWriteMetadataAction);
 
@@ -929,9 +929,9 @@ void DigikamApp::setupActions()
 
     d->imageReadMetadataAction = new KAction(KIcon("edit-redo"), i18n("Reread Metadata From Selected Images"), this);
     d->imageReadMetadataAction->setWhatsThis(i18n("Updates the digiKam database from the metadata "
-            "of the files in the current album "
-            "(information in the database will be overwritten with data from "
-            "the files' metadata)."));
+                                                  "of the files in the current album "
+                                                  "(information in the database will be overwritten with data from "
+                                                  "the files' metadata)."));
     connect(d->imageReadMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotImageReadMetadata()));
     actionCollection()->addAction("image_read_metadata", d->imageReadMetadataAction);
 
@@ -971,7 +971,7 @@ void DigikamApp::setupActions()
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
     // Power users may add them.
     d->imageDeletePermanentlyDirectlyAction = new KAction(KIcon("edit-delete"),
-            i18n("Delete permanently without confirmation"), this);
+                                                          i18n("Delete permanently without confirmation"), this);
     connect(d->imageDeletePermanentlyDirectlyAction, SIGNAL(triggered()),
             d->view, SLOT(slotImageDeletePermanentlyDirectly()));
     actionCollection()->addAction("image_delete_permanently_directly", d->imageDeletePermanentlyDirectlyAction);
@@ -979,7 +979,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imageTrashDirectlyAction = new KAction(KIcon("user-trash"),
-            i18n("Move to trash without confirmation"), this);
+                                              i18n("Move to trash without confirmation"), this);
     connect(d->imageTrashDirectlyAction, SIGNAL(triggered()),
             d->view, SLOT(slotImageTrashDirectly()));
     actionCollection()->addAction("image_trash_directly", d->imageTrashDirectlyAction);
@@ -1003,7 +1003,7 @@ void DigikamApp::setupActions()
 
     d->recurseAlbumsAction = new KToggleAction(i18n("Include Album Sub-Tree"), this);
     d->recurseAlbumsAction->setWhatsThis(i18n("Activate this option to show all sub-albums below "
-                                         "the current album."));
+                                              "the current album."));
     connect(d->recurseAlbumsAction, SIGNAL(toggled(bool)), this, SLOT(slotRecurseAlbums(bool)));
     actionCollection()->addAction("albums_recursive", d->recurseAlbumsAction);
 
@@ -1209,7 +1209,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->tipAction = actionCollection()->addAction(KStandardAction::TipofDay, "help_tipofday",
-                   this, SLOT(slotShowTip()));
+                                                 this, SLOT(slotShowTip()));
 
     // -- Logo on the right of tool bar --------------------------
 
@@ -1263,7 +1263,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     KAction* writeMetadataAction = new KAction(KIcon("run-build-file"),
-            i18n("Write Metadata to All Images"), this);
+                                               i18n("Write Metadata to All Images"), this);
     connect(writeMetadataAction, SIGNAL(triggered()), this, SLOT(slotWriteMetadataToAllImages()));
     actionCollection()->addAction("sync_metadata", writeMetadataAction);
 
@@ -1514,9 +1514,9 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     if (selectionCount > 0)
     {
         d->imageWriteMetadataAction->setText(i18np("Write Metadata to Image",
-                                             "Write Metadata to Selected Images", selectionCount));
+                                                   "Write Metadata to Selected Images", selectionCount));
         d->imageReadMetadataAction->setText(i18np("Reread Metadata From Image",
-                                            "Reread Metadata From Selected Images", selectionCount));
+                                                  "Reread Metadata From Selected Images", selectionCount));
 
         slotResetExifOrientationActions();
     }
@@ -1813,7 +1813,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
             return;
         }
 
-        // NOTE: See B.K.O #262296: With KDE 4.6, Solid API return device vendor id 
+        // NOTE: See B.K.O #262296: With KDE 4.6, Solid API return device vendor id
         // and product id in hexadecimal strings.
 #if KDE_IS_VERSION(4,5,90)
         bool ok;
@@ -2103,7 +2103,7 @@ void DigikamApp::fillSolidMenus()
         // set data to identify device in action slot slotSolidSetupDevice
         action->setData(cameraDevice.udi());
         newAppearanceTimes[cameraDevice.udi()] = d->cameraAppearanceTimes.contains(cameraDevice.udi()) ?
-            d->cameraAppearanceTimes.value(cameraDevice.udi()) : QDateTime::currentDateTime();
+                                                 d->cameraAppearanceTimes.value(cameraDevice.udi()) : QDateTime::currentDateTime();
 
         d->cameraMenu->addAction(action);
     }
@@ -2294,7 +2294,7 @@ void DigikamApp::fillSolidMenus()
         // set data to identify device in action slot slotSolidSetupDevice
         action->setData(accessDevice.udi());
         newAppearanceTimes[accessDevice.udi()] = d->cameraAppearanceTimes.contains(accessDevice.udi()) ?
-            d->cameraAppearanceTimes.value(accessDevice.udi()) : QDateTime::currentDateTime();
+                                                 d->cameraAppearanceTimes.value(accessDevice.udi()) : QDateTime::currentDateTime();
 
         if (isCamera)
         {
@@ -2377,8 +2377,8 @@ void DigikamApp::slotSetupChanged()
     //  d->view->clearHistory();
 
     if (!AlbumManager::instance()->databaseEqual(AlbumSettings::instance()->getDatabaseType(),
-            AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseHostName(),
-            AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getInternalDatabaseServer()))
+                                                 AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseHostName(),
+                                                 AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getInternalDatabaseServer()))
     {
         AlbumManager::instance()->changeDatabase(AlbumSettings::instance()->getDatabaseParameters());
     }
@@ -2685,6 +2685,7 @@ void DigikamApp::slotKipiPluginPlug()
                         {
                             d->kipiImageActions.append(action);
                         }
+
                         break;
                     }
                     case KIPI::ToolsPlugin:
@@ -2820,13 +2821,13 @@ void DigikamApp::slotWriteMetadataToAllImages()
 void DigikamApp::slotRebuildThumbnails()
 {
     QString msg = i18n("Image thumbnailing can take some time.\n"
-                    "Which would you prefer?\n"
-                    "- Scan for missing thumbnails (quick)\n"
-                    "- Rebuild all thumbnails (takes a long time)");
+                       "Which would you prefer?\n"
+                       "- Scan for missing thumbnails (quick)\n"
+                       "- Rebuild all thumbnails (takes a long time)");
     int result = KMessageBox::questionYesNoCancel(this, msg,
-                i18n("Warning"),
-                KGuiItem(i18n("Scan")),
-                KGuiItem(i18n("Rebuild All")));
+                                                  i18n("Warning"),
+                                                  KGuiItem(i18n("Scan")),
+                                                  KGuiItem(i18n("Rebuild All")));
 
     if (result == KMessageBox::Cancel)
     {
@@ -2839,13 +2840,13 @@ void DigikamApp::slotRebuildThumbnails()
 void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
 {
     BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this, rebuildAll);
-    thumbsGenerator->show();       
+    thumbsGenerator->show();
 }
 
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
     BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this, AlbumManager::instance()->currentAlbum()->id());
-    thumbsGenerator->show();       
+    thumbsGenerator->show();
 }
 
 void DigikamApp::slotGenerateFingerPrintsFirstTime()
@@ -2860,9 +2861,9 @@ void DigikamApp::slotRebuildFingerPrints()
                        "- Scan for changed or non-cataloged items in the database (quick)\n"
                        "- Rebuild all fingerprints (takes a long time)");
     int result = KMessageBox::questionYesNoCancel(this, msg,
-                 i18n("Warning"),
-                 KGuiItem(i18n("Scan")),
-                 KGuiItem(i18n("Rebuild All")));
+                                                  i18n("Warning"),
+                                                  KGuiItem(i18n("Scan")),
+                                                  KGuiItem(i18n("Rebuild All")));
 
     if (result == KMessageBox::Cancel)
     {
@@ -2974,7 +2975,7 @@ void DigikamApp::slotImportAddImages()
     startingPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
 #endif
     QString path = KFileDialog::getExistingDirectory(startingPath, this,
-                   i18n("Select folder to parse"));
+                                                     i18n("Select folder to parse"));
 
     if (path.isEmpty())
     {
@@ -3118,16 +3119,19 @@ void DigikamApp::updateQuickImportAction()
         foreach (QAction* action, d->quickImportMenu->menu()->actions())
         {
             QDateTime appearanceTime = d->cameraAppearanceTimes.value(action->data().toString());
+
             if (latest.isNull() || appearanceTime > latest)
             {
                 primaryAction = action;
                 latest = appearanceTime;
             }
         }
+
         if (!primaryAction)
         {
             primaryAction = d->quickImportMenu->menu()->actions().first();
         }
+
         connect(d->quickImportMenu, SIGNAL(triggered()),
                 primaryAction, SLOT(trigger()));
         d->quickImportMenu->setDelayed(d->quickImportMenu->menu()->actions().size() > 1);

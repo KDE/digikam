@@ -401,8 +401,8 @@ template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& 
 
 // template method used by comment and template
 template <class T> void MetadataHub::MetadataHubPriv::loadSingleValue(const T& data,
-        T& storage,
-        MetadataHub::Status& status)
+                                                                      T& storage,
+                                                                      MetadataHub::Status& status)
 {
     switch (status)
     {
@@ -683,12 +683,14 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
                 // have explicitly been removed with setTag.
                 QString tagName = TagsCache::instance()->tagName(it.key());
                 QString tagPath = TagsCache::instance()->tagPath(it.key(), TagsCache::NoLeadingSlash);
+
                 if (it.value().hasTag)
                 {
                     if (!tagsPathList.contains(tagPath))
                     {
                         tagsPathList << tagPath;
                     }
+
                     newKeywords << tagName;
                 }
                 else

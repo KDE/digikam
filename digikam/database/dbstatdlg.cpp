@@ -73,7 +73,7 @@ DBStatDlg::DBStatDlg(QWidget* parent)
 
     // To see total count of items at end of list.
     QTreeWidgetItem* ti = new QTreeWidgetItem(listView(), QStringList()
-            << i18n("Total Items") << QString::number(total));
+                                              << i18n("Total Items") << QString::number(total));
     QFont ft = ti->font(0);
     ft.setBold(true);
     ti->setFont(0, ft);

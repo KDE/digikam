@@ -45,9 +45,9 @@ public:
 
     enum FilterStatus
     {
-         None = 0,
-         Match,
-         NotMatch
+        None = 0,
+        Match,
+        NotMatch
     };
 
 public:
@@ -128,8 +128,11 @@ void FilterStatusBar::paintEvent(QPaintEvent* e)
     }
 
     QColor bgnd = QColor(255, 200, 200);
+
     if (d->status == FilterStatusBarPriv::Match)
+    {
         bgnd = QColor(200, 255, 200);
+    }
 
     QPainter p(this);
     p.setBrush(bgnd);
@@ -194,9 +197,13 @@ void FilterStatusBar::slotFilterMatches(bool match)
     else
     {
         if (filtersList.count() == 1)
+        {
             d->info->setText(i18n("One active filter"));
+        }
         else
+        {
             d->info->setText(i18n("%1 active filters", filtersList.count()));
+        }
 
         d->info->setToolTip(message);
         d->resetBtn->setEnabled(true);

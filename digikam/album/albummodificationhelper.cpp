@@ -129,12 +129,12 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
     if (parent->isRoot())
     {
         album = AlbumManager::instance()->createPAlbum(albumRootPath, title, comments,
-                date, category, errMsg);
+                                                       date, category, errMsg);
     }
     else
     {
         album = AlbumManager::instance()->createPAlbum(parent, title, comments,
-                date, category, errMsg);
+                                                       date, category, errMsg);
     }
 
     if (!album)

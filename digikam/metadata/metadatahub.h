@@ -338,7 +338,7 @@ public:
 
 protected:
 
-    void load(const QDateTime& dateTime, const CaptionsMap& comment, 
+    void load(const QDateTime& dateTime, const CaptionsMap& comment,
               int colorLabel, int pickLabel,
               int rating, const Template& t);
     void loadTags(const QList<int>& loadedTagIds);

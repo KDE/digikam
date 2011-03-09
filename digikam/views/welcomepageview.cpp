@@ -233,7 +233,7 @@ void WelcomePageView::slotThemeChanged()
     QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
     QString locationRtl      = KStandardDirs::locate("data", "kdeui/about/kde_infopage_rtl.css" );
     QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
-                                                     : QString();
+                               : QString();
 
     begin(KUrl(locationHtml).toLocalFile());
 

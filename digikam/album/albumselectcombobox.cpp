@@ -366,7 +366,7 @@ void TagTreeViewSelectComboBox::setDefaultModel()
 }
 
 void TagTreeViewSelectComboBox::setModel(TagModel* model,
-        TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel)
+                                         TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel)
 {
     if (!m_treeView)
     {

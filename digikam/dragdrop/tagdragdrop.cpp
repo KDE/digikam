@@ -187,7 +187,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             KMenu popMenu(view);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
             QAction* assignAction = popMenu.addAction(SmallIcon("tag"),
-                                    i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()));
+                                                      i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()));
             popMenu.addSeparator();
             popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
 

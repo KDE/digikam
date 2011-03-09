@@ -455,7 +455,7 @@ void MetadataManagerDatabaseWorker::removeTags(const QList<ImageInfo>& infos, co
 }
 
 void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos,
-        const QList<int>& tagIDs, bool addOrRemove)
+                                               const QList<int>& tagIDs, bool addOrRemove)
 {
     MetadataHub      hub;
     QList<ImageInfo> forWriting;
@@ -622,6 +622,7 @@ void MetadataManagerDatabaseWorker::editGroup(int groupAction, const ImageInfo& 
         foreach (const ImageInfo& constInfo, infos)
         {
             ImageInfo info(constInfo);
+
             switch (groupAction)
             {
                 case AddToGroup:
@@ -634,6 +635,7 @@ void MetadataManagerDatabaseWorker::editGroup(int groupAction, const ImageInfo& 
                     info.clearGroup();
                     break;
             }
+
             d->dbProcessedOne();
             group.allowLift();
         }

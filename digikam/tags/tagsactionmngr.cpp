@@ -159,7 +159,9 @@ void TagsActionMngr::createActions()
     foreach(KActionCollection* ac, d->actionCollectionList)
     {
         for (int i = RatingMin ; i <= RatingMax ; ++i)
+        {
             createRatingActionShortcut(ac, i);
+        }
     }
 
     // Create Color Label shortcuts.
@@ -234,7 +236,7 @@ bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* ac, int c
         action->forgetGlobalShortcut();
         action->setData(colorId);
 
-        connect(action, SIGNAL(triggered()), 
+        connect(action, SIGNAL(triggered()),
                 this, SLOT(slotAssignFromShortcut()));
 
         return true;
@@ -245,10 +247,17 @@ bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* ac, int c
 
 bool TagsActionMngr::createTagActionShortcut(int tagId)
 {
-    if (!tagId) return false;
+    if (!tagId)
+    {
+        return false;
+    }
 
     TagInfo tinfo = DatabaseAccess().db()->getTagInfo(tagId);
-    if (tinfo.isNull()) return false;
+
+    if (tinfo.isNull())
+    {
+        return false;
+    }
 
     TagProperties tprop(tinfo.id);
     createTagActionShortcut(tinfo, tprop);
@@ -288,7 +297,11 @@ void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProp
 void TagsActionMngr::slotTagActionChanged()
 {
     KAction* action = dynamic_cast<KAction*>(sender());
-    if (!action) return;
+
+    if (!action)
+    {
+        return;
+    }
 
     int tagId       = action->data().toInt();
     QKeySequence ks = action->shortcut().primary();
@@ -297,7 +310,10 @@ void TagsActionMngr::slotTagActionChanged()
 
 void TagsActionMngr::updateTagShortcut(int tagId, const QKeySequence& ks)
 {
-    if (!tagId) return;
+    if (!tagId)
+    {
+        return;
+    }
 
     kDebug() << "Tag Shortcut " << tagId << "Changed to " << ks;
 
@@ -308,7 +324,11 @@ void TagsActionMngr::updateTagShortcut(int tagId, const QKeySequence& ks)
 void TagsActionMngr::slotAlbumDeleted(Album* album)
 {
     TAlbum* talbum = dynamic_cast<TAlbum*>(album);
-    if (!talbum) return;
+
+    if (!talbum)
+    {
+        return;
+    }
 
     tagRemoved(talbum->id());
 }
@@ -316,6 +336,7 @@ void TagsActionMngr::slotAlbumDeleted(Album* album)
 void TagsActionMngr::tagRemoved(int tagId)
 {
     int count = d->tagsActionMap.count(tagId);
+
     if (count)
     {
         foreach(KAction* act, d->tagsActionMap.values(tagId))
@@ -323,6 +344,7 @@ void TagsActionMngr::tagRemoved(int tagId)
             if (act)
             {
                 KActionCollection* ac = dynamic_cast<KActionCollection*>(act->parent());
+
                 if (ac)
                 {
                     // NOTE: Action is deleted by KActionCollection
@@ -332,7 +354,9 @@ void TagsActionMngr::tagRemoved(int tagId)
         }
 
         for (int i =0 ; i < count ; ++i)
+        {
             delete d->tagsActionMap.take(tagId);
+        }
 
         kDebug() << "Delete Shortcut assigned to tag " << tagId;
     }
@@ -341,16 +365,22 @@ void TagsActionMngr::tagRemoved(int tagId)
 void TagsActionMngr::slotAssignFromShortcut()
 {
     KAction* action = dynamic_cast<KAction*>(sender());
-    if (!action) return;
+
+    if (!action)
+    {
+        return;
+    }
 
     int val = action->data().toInt();
     kDebug() << "Shortcut value: " << val;
 
     QWidget* w      = kapp->activeWindow();
     DigikamApp* dkw = dynamic_cast<DigikamApp*>(w);
+
     if (dkw)
     {
         kDebug() << "Handling by DigikamApp";
+
         if (action->objectName().startsWith(d->ratingShortcutPrefix))
         {
             dkw->view()->slotAssignRating(val);
@@ -367,13 +397,16 @@ void TagsActionMngr::slotAssignFromShortcut()
         {
             dkw->view()->slotAssignColorLabel(val);
         }
+
         return;
     }
 
     ImageWindow* imw = dynamic_cast<ImageWindow*>(w);
+
     if (imw)
     {
         kDebug() << "Handling by ImageWindow";
+
         if (action->objectName().startsWith(d->ratingShortcutPrefix))
         {
             imw->slotAssignRating(val);
@@ -390,13 +423,16 @@ void TagsActionMngr::slotAssignFromShortcut()
         {
             imw->slotAssignColorLabel(val);
         }
+
         return;
     }
 
     LightTableWindow* ltw = dynamic_cast<LightTableWindow*>(w);
+
     if (ltw)
     {
         kDebug() << "Handling by LightTableWindow";
+
         if (action->objectName().startsWith(d->ratingShortcutPrefix))
         {
             ltw->slotAssignRating(val);
@@ -413,6 +449,7 @@ void TagsActionMngr::slotAssignFromShortcut()
         {
             ltw->slotAssignColorLabel(val);
         }
+
         return;
     }
 }

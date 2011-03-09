@@ -57,8 +57,8 @@ public:
 };
 
 EditableSearchTreeView::EditableSearchTreeView(QWidget* parent,
-        SearchModel* searchModel,
-        SearchModificationHelper* searchModificationHelper)
+                                               SearchModel* searchModel,
+                                               SearchModificationHelper* searchModificationHelper)
     : SearchTreeView(parent), d(new EditableSearchTreeViewPriv)
 {
     setAlbumModel(searchModel);

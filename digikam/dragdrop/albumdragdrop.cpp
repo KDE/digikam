@@ -257,9 +257,9 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
             KMenu popMenu(view);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
             QAction* downAction    = popMenu.addAction(SmallIcon("file-export"),
-                                     i18n("Download From Camera"));
+                                                       i18n("Download From Camera"));
             QAction* downDelAction = popMenu.addAction(SmallIcon("file-export"),
-                                     i18n("Download && Delete From Camera"));
+                                                       i18n("Download && Delete From Camera"));
             popMenu.addSeparator();
             popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
             popMenu.setMouseTracking(true);

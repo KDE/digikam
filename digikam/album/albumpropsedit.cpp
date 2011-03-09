@@ -185,11 +185,11 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     KHBox* buttonRow            = new KHBox(page);
     QPushButton* dateLowButton  = new QPushButton(i18nc("Selects the date of the oldest image",
-            "&Oldest"), buttonRow);
+                                                        "&Oldest"), buttonRow);
     QPushButton* dateAvgButton  = new QPushButton(i18nc("Calculates the average date",
-            "&Average"), buttonRow);
+                                                        "&Average"), buttonRow);
     QPushButton* dateHighButton = new QPushButton(i18nc("Selects the date of the newest image",
-            "Newest"), buttonRow);
+                                                        "Newest"), buttonRow);
 
     setTabOrder(d->titleEdit, d->categoryCombo);
     setTabOrder(d->categoryCombo, d->commentsEdit);
@@ -372,6 +372,7 @@ void AlbumPropsEdit::slotDateLowButtonClicked()
     setCursor(Qt::WaitCursor);
 
     QDate lowDate = DatabaseAccess().db()->getAlbumLowestDate(d->album->id());
+
     if (lowDate.isValid())
     {
         d->datePicker->setDate(lowDate);
@@ -385,6 +386,7 @@ void AlbumPropsEdit::slotDateHighButtonClicked()
     setCursor(Qt::WaitCursor);
 
     QDate highDate = DatabaseAccess().db()->getAlbumHighestDate(d->album->id());
+
     if (highDate.isValid())
     {
         d->datePicker->setDate(highDate);

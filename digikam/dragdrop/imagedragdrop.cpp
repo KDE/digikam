@@ -79,7 +79,7 @@ enum DropAction
 static QAction* addGroupAction(KMenu* menu)
 {
     return menu->addAction( SmallIcon("arrow-down-double"),
-                              i18nc("@action:inmenu Group images with this image", "Group here"));
+                            i18nc("@action:inmenu Group images with this image", "Group here"));
 }
 
 static QAction* addCancelAction(KMenu* menu)
@@ -114,6 +114,7 @@ static DropAction copyOrMove(const QDropEvent* e, QWidget* view, bool allowMove 
     KMenu popMenu(view);
 
     QAction* moveAction = 0;
+
     if (allowMove)
     {
         moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
@@ -123,11 +124,13 @@ static DropAction copyOrMove(const QDropEvent* e, QWidget* view, bool allowMove 
     popMenu.addSeparator();
 
     QAction* groupAction = 0;
+
     if (askForGrouping)
     {
         groupAction = addGroupAction(&popMenu);
         popMenu.addSeparator();
     }
+
     addCancelAction(&popMenu);
 
     popMenu.setMouseTracking(true);
@@ -154,6 +157,7 @@ static DropAction tagAction(const QDropEvent*, QWidget* view, bool askForGroupin
     KMenu popMenu(view);
     QAction* tagAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tag to Dropped Items"));
     QAction* groupAction = 0;
+
     if (askForGrouping)
     {
         popMenu.addSeparator();
@@ -186,6 +190,7 @@ static DropAction groupAction(const QDropEvent*, QWidget* view)
     addCancelAction(&popMenu);
 
     QAction* choice = popMenu.exec(QCursor::pos());
+
     if (groupAction && choice == groupAction)
     {
         return GroupAction;
@@ -253,6 +258,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         DropAction action = NoAction;
 
         ImageInfo droppedOnInfo;
+
         if (droppedOn.isValid())
         {
             droppedOnInfo = model()->imageInfo(droppedOn);
@@ -366,7 +372,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
                     KIO::Job* job = DIO::copy(extUrls+intUrls, extImageIDs+intImageIDs, palbum);
                     connect(job, SIGNAL(result(KJob*)),
                             this, SIGNAL(dioResult(KJob*)));
-                     return true;
+                    return true;
                 }
             }
         }
@@ -395,6 +401,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             {
                 return false;
             }
+
             emit addToGroup(droppedOnInfo, ImageInfoList(imageIDs));
             return true;
         }
@@ -458,17 +465,17 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         QAction* assignToThisAction = 0;
 
         if (selectedInfos.count() > 1)
-            assignToSelectedAction = popMenu.addAction(SmallIcon("tag"), 
-                                                       i18n("Assign '%1' to &Selected Items", 
+            assignToSelectedAction = popMenu.addAction(SmallIcon("tag"),
+                                                       i18n("Assign '%1' to &Selected Items",
                                                             talbum->tagPath().mid(1)));
 
         if (droppedOn.isValid())
-            assignToThisAction = popMenu.addAction(SmallIcon("tag"), 
-                                                   i18n("Assign '%1' to &This Item", 
+            assignToThisAction = popMenu.addAction(SmallIcon("tag"),
+                                                   i18n("Assign '%1' to &This Item",
                                                         talbum->tagPath().mid(1)));
 
-        QAction* assignToAllAction = popMenu.addAction(SmallIcon("tag"), 
-                                                       i18n("Assign '%1' to &All Items", 
+        QAction* assignToAllAction = popMenu.addAction(SmallIcon("tag"),
+                                                       i18n("Assign '%1' to &All Items",
                                                             talbum->tagPath().mid(1)));
 
         popMenu.addSeparator();
@@ -560,9 +567,9 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         KMenu popMenu(view);
         popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
         QAction* downAction    = popMenu.addAction(SmallIcon("file-export"),
-                                 i18n("Download From Camera"));
+                                                   i18n("Download From Camera"));
         QAction* downDelAction = popMenu.addAction(SmallIcon("file-export"),
-                                 i18n("Download && Delete From Camera"));
+                                                   i18n("Download && Delete From Camera"));
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
         popMenu.setMouseTracking(true);

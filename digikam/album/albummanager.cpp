@@ -441,11 +441,11 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
             KGuiItem upgrade(i18n("Upgrade Database"), "view-refresh");
             int result = KMessageBox::warningYesNo(0,
                                                    i18n("<p>You have chosen the folder \"%1\" as the place to store the database. "
-                                                           "A database file from an older version of digiKam is found in this folder.</p> "
-                                                           "<p>Would you like to upgrade the old database file - confirming "
-                                                           "that this database file was indeed created for the pictures located in the folder \"%2\" - "
-                                                           "or ignore the old file and start with a new database?</p> ",
-                                                           newDir.path(), albumDir.path()),
+                                                        "A database file from an older version of digiKam is found in this folder.</p> "
+                                                        "<p>Would you like to upgrade the old database file - confirming "
+                                                        "that this database file was indeed created for the pictures located in the folder \"%2\" - "
+                                                        "or ignore the old file and start with a new database?</p> ",
+                                                        newDir.path(), albumDir.path()),
                                                    i18n("Database Folder"),
                                                    upgrade, startFresh);
 
@@ -493,13 +493,13 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                 if (params.isSQLite())
                 {
                     result = KMessageBox::warningYesNoCancel(0,
-                             i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
-                                  "A database file from an older version of digiKam is found in this folder.</p> "
-                                  "<p>Would you like to upgrade the old database file, start with a new database, "
-                                  "or copy the current database to this location and continue using it?</p> ",
-                                  newDir.path()),
-                             i18n("New database folder"),
-                             upgrade, startFresh, copyCurrent);
+                                                             i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
+                                                                  "A database file from an older version of digiKam is found in this folder.</p> "
+                                                                  "<p>Would you like to upgrade the old database file, start with a new database, "
+                                                                  "or copy the current database to this location and continue using it?</p> ",
+                                                                  newDir.path()),
+                                                             i18n("New database folder"),
+                                                             upgrade, startFresh, copyCurrent);
                 }
                 else
                 {
@@ -531,9 +531,9 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                     QDir oldDir(d->dbName);
                     QFileInfo oldFile(params.SQLiteDatabaseFile());
                     copyToNewLocation(oldFile, newFile, i18n("Failed to copy the old database file (\"%1\") "
-                                      "to its new location (\"%2\"). "
-                                      "Trying to upgrade old databases.",
-                                      oldFile.filePath(), newFile.filePath()));
+                                                             "to its new location (\"%2\"). "
+                                                             "Trying to upgrade old databases.",
+                                                             oldFile.filePath(), newFile.filePath()));
                 }
             }
             else
@@ -972,7 +972,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     }
 
     ThumbnailLoadThread::initializeThumbnailDatabase(DatabaseAccess::parameters().thumbnailParameters(),
-            new DatabaseThumbnailInfoProvider());
+                                                     new DatabaseThumbnailInfoProvider());
 
     DatabaseGUIErrorHandler* thumbnailsDBHandler = new DatabaseGUIErrorHandler(ThumbnailDatabaseAccess::parameters());
     ThumbnailDatabaseAccess::initDatabaseErrorHandler(thumbnailsDBHandler);
@@ -2651,6 +2651,7 @@ AlbumList AlbumManager::getRecentlyAssignedTags(bool includeInternal) const
     for (QList<int>::const_iterator it = tagIDs.constBegin() ; it != tagIDs.constEnd() ; ++it)
     {
         TAlbum* album = findTAlbum(*it);
+
         if (album)
         {
             if (!includeInternal && album->isInternalTag())
@@ -3350,12 +3351,14 @@ void AlbumManager::slotSearchChange(const SearchChangeset& changeset)
 
             break;
         case SearchChangeset::Changed:
+
             if (d->currentAlbum && d->currentAlbum->type() == Album::SEARCH
                 && d->currentAlbum->id() == changeset.searchId())
             {
                 // the pointer is the same, but the contents changed
                 emit signalAlbumCurrentChanged(d->currentAlbum);
             }
+
             break;
         case SearchChangeset::Unknown:
             break;

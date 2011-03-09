@@ -135,6 +135,7 @@ QString AlbumSelectionTreeView::contextMenuTitle() const
 void AlbumSelectionTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a)
 {
     PAlbum* album = dynamic_cast<PAlbum*> (a);
+
     if (!album)
     {
         return;

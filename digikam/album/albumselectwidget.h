@@ -79,7 +79,7 @@ public Q_SLOTS:
     void slotNewAlbum();
 
 private:
-  
+
     class AlbumSelectTreeViewPriv;
     AlbumSelectTreeViewPriv* d;
 };

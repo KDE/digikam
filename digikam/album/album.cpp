@@ -698,7 +698,7 @@ bool SAlbum::isTemporarySearch() const
     if (isHaarSearch())
     {
         return (title() == getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch)) ||
-                title() == getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch);
+               title() == getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch);
     }
 
     return (title() == getTemporaryTitle(m_searchType));

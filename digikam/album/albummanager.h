@@ -803,7 +803,7 @@ public:
     {
         return *static_cast<T*>(const_cast<Album*>(album));
     }
-    operator T*() const
+    operator T* () const
     {
         return static_cast<T*>(const_cast<Album*>(album));
     }

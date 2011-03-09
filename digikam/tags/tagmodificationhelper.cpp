@@ -99,6 +99,7 @@ TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, 
     if (title.isEmpty())
     {
         bool doCreate = TagEditDlg::tagCreate(d->dialogParent, p, editTitle, editIconName, ks);
+
         if (!doCreate)
         {
             return 0;
@@ -145,6 +146,7 @@ void TagModificationHelper::slotTagEdit(TAlbum* tag)
     QKeySequence ks;
 
     bool doEdit = TagEditDlg::tagEdit(d->dialogParent, tag, title, icon, ks);
+
     if (!doEdit)
     {
         return;
@@ -207,16 +209,16 @@ void TagModificationHelper::slotTagDelete(TAlbum* tag)
     if (children)
     {
         int result = KMessageBox::warningContinueCancel(d->dialogParent,
-                     i18np("Tag '%2' has one subtag. "
-                           "Deleting this will also delete "
-                           "the subtag. "
-                           "Do you want to continue?",
-                           "Tag '%2' has %1 subtags. "
-                           "Deleting this will also delete "
-                           "the subtags. "
-                           "Do you want to continue?",
-                           children,
-                           tag->title()));
+                                                        i18np("Tag '%2' has one subtag. "
+                                                              "Deleting this will also delete "
+                                                              "the subtag. "
+                                                              "Do you want to continue?",
+                                                              "Tag '%2' has %1 subtags. "
+                                                              "Deleting this will also delete "
+                                                              "the subtags. "
+                                                              "Do you want to continue?",
+                                                              children,
+                                                              tag->title()));
 
         if (result != KMessageBox::Continue)
         {
@@ -241,9 +243,9 @@ void TagModificationHelper::slotTagDelete(TAlbum* tag)
     }
 
     int result = KMessageBox::warningContinueCancel(0, message,
-                 i18n("Delete Tag"),
-                 KGuiItem(i18n("Delete"),
-                          "edit-delete"));
+                                                    i18n("Delete Tag"),
+                                                    KGuiItem(i18n("Delete"),
+                                                             "edit-delete"));
 
     if (result == KMessageBox::Continue)
     {

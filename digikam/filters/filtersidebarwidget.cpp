@@ -125,13 +125,13 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
     // --------------------------------------------------------------------------------------------------------
 
     d->textFilter = new TextFilter(d->expbox);
-    d->expbox->addItem(d->textFilter, SmallIcon("text-field"), 
+    d->expbox->addItem(d->textFilter, SmallIcon("text-field"),
                        i18n("Text Filter"), QString("TextFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
     d->mimeFilter = new MimeFilter(d->expbox);
-    d->expbox->addItem(d->mimeFilter, SmallIcon("system-file-manager"), 
+    d->expbox->addItem(d->mimeFilter, SmallIcon("system-file-manager"),
                        i18n("Type Mime Filter"), QString("TypeMimeFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
@@ -255,7 +255,9 @@ void FilterSideBarWidget::slotTagOptionsMenu()
 void FilterSideBarWidget::slotItemExpanded(int id, bool b)
 {
     if (id == 2)
+    {
         d->expanderVlay->setStretchFactor(d->space, b ? 0 : 100);
+    }
 }
 
 void FilterSideBarWidget::setFocusToTextFilter()
@@ -379,12 +381,12 @@ void FilterSideBarWidget::doLoadState()
     d->expbox->readSettings();
 
     d->textFilter->setsearchTextFields((SearchTextFilterSettings::TextFilterFields)
-                      (getConfigGroup().readEntry(entryName(d->configSearchTextFilterFieldsEntry),
-                                                  (int)SearchTextFilterSettings::All)));
+                                       (getConfigGroup().readEntry(entryName(d->configSearchTextFilterFieldsEntry),
+                                                                   (int)SearchTextFilterSettings::All)));
 
 
     d->ratingFilter->setRatingFilterCondition((ImageFilterSettings::RatingCondition)
-            (AlbumSettings::instance()->getRatingFilterCond()));
+                                              (AlbumSettings::instance()->getRatingFilterCond()));
 
     d->tagMatchCond = (ImageFilterSettings::MatchingCondition)
                       (getConfigGroup().readEntry(entryName(d->configMatchingConditionEntry),

@@ -515,14 +515,14 @@ void AlbumSettings::readSettings()
     }
 
     d->albumSortOrder = AlbumSettings::AlbumSortOrder(group.readEntry(d->configAlbumSortOrderEntry,
-                        (int)AlbumSettings::ByFolder));
+                                                                      (int)AlbumSettings::ByFolder));
 
     d->imageSortOrder               = group.readEntry(d->configImageSortOrderEntry, (int)ImageSortSettings::SortByFileName);
     d->imageSorting                 = group.readEntry(d->configImageSortingEntry,   (int)ImageSortSettings::AscendingOrder);
     d->imageGroupMode               = group.readEntry(d->configImageGroupModeEntry, (int)ImageSortSettings::CategoryByAlbum);
 
     d->itemLeftClickAction          = AlbumSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
-                                      (int)AlbumSettings::ShowPreview));
+                                                                         (int)AlbumSettings::ShowPreview));
 
     d->thumbnailSize                = group.readEntry(d->configDefaultIconSizeEntry,        (int)ThumbnailSize::Medium);
     d->treeThumbnailSize            = group.readEntry(d->configDefaultTreeIconSizeEntry,    22);

@@ -428,8 +428,12 @@ bool AbstractAlbumTreeView::expandMatches(const QModelIndex& index)
     switch (result)
     {
         case AlbumFilterModel::NoMatch:
+
             if (index != rootIndex())
+            {
                 return false;
+            }
+
         case AlbumFilterModel::ParentMatch:
             // Does not rule out additional child match, return value is unknown
             break;
@@ -447,6 +451,7 @@ bool AbstractAlbumTreeView::expandMatches(const QModelIndex& index)
 
     // Recurse. Expand if children if have an (indirect) match
     const int rows = m_albumFilterModel->rowCount(index);
+
     for (int i = 0; i < rows; ++i)
     {
         QModelIndex child = m_albumFilterModel->index(i, 0, index);

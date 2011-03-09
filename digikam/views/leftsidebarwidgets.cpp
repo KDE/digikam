@@ -80,7 +80,7 @@ public:
 };
 
 AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* parent, AlbumModel* model,
-        AlbumModificationHelper* albumModificationHelper)
+                                                           AlbumModificationHelper* albumModificationHelper)
     : SidebarWidget(parent), d(new AlbumFolderViewSideBarWidgetPriv)
 {
     setObjectName("AlbumFolderView Sidebar");
@@ -272,7 +272,7 @@ public:
 };
 
 DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* parent, DateAlbumModel* model,
-        ImageAlbumFilterModel* imageFilterModel)
+                                                         ImageAlbumFilterModel* imageFilterModel)
     : SidebarWidget(parent), d(new DateFolderViewSideBarWidgetPriv)
 {
     setObjectName("DateFolderView Sidebar");
@@ -388,7 +388,7 @@ const QString TimelineSideBarWidgetPriv::configCursorPositionEntry("Cursor Posit
 // --------------------------------------------------------
 
 TimelineSideBarWidget::TimelineSideBarWidget(QWidget* parent, SearchModel* searchModel,
-        SearchModificationHelper* searchModificationHelper)
+                                             SearchModificationHelper* searchModificationHelper)
     : SidebarWidget(parent), d(new TimelineSideBarWidgetPriv)
 {
     setObjectName("TimeLine Sidebar");
@@ -695,7 +695,7 @@ void TimelineSideBarWidget::slotUpdateCurrentDateSearchAlbum()
     int totalCount           = 0;
     DateRangeList dateRanges = d->timeLineWidget->selectedDateRange(totalCount);
     d->searchModificationHelper->slotCreateTimeLineSearch(SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch),
-            dateRanges, true);
+                                                          dateRanges, true);
 }
 
 void TimelineSideBarWidget::slotSaveSelection()
@@ -812,7 +812,7 @@ public:
 };
 
 SearchSideBarWidget::SearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-        SearchModificationHelper* searchModeificationHelper)
+                                         SearchModificationHelper* searchModeificationHelper)
     : SidebarWidget(parent), d(new SearchSideBarWidgetPriv)
 {
     setObjectName("Search Sidebar");
@@ -823,7 +823,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget* parent, SearchModel* searchMod
 
     d->searchTabHeader  = new SearchTabHeader(this);
     d->searchTreeView   = new NormalSearchTreeView(this, searchModel,
-            searchModeificationHelper);
+                                                   searchModeificationHelper);
     d->searchTreeView->setConfigGroup(getConfigGroup());
     d->searchTreeView->filteredModel()->listNormalSearches();
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
@@ -921,7 +921,7 @@ public:
 };
 
 FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-        SearchModificationHelper* searchModificationHelper)
+                                                   SearchModificationHelper* searchModificationHelper)
     : SidebarWidget(parent), d(new FuzzySearchSideBarWidgetPriv)
 {
     setObjectName("Fuzzy Search Sidebar");
@@ -1018,8 +1018,8 @@ public:
 };
 
 GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-        SearchModificationHelper* searchModificationHelper,
-        ImageFilterModel* imageFilterModel,  QItemSelectionModel* itemSelectionModel)
+                                               SearchModificationHelper* searchModificationHelper,
+                                               ImageFilterModel* imageFilterModel,  QItemSelectionModel* itemSelectionModel)
     : SidebarWidget(parent), d(new GPSSearchSideBarWidgetPriv)
 {
     setObjectName("GPS Search Sidebar");
@@ -1029,7 +1029,7 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* parent, SearchModel* sea
     d->gpsSearchView = new GPSSearchView(this, searchModel, searchModificationHelper, imageFilterModel, itemSelectionModel);
     d->gpsSearchView->setConfigGroup(getConfigGroup());
 
-    QScrollArea *scrollArea = new QScrollArea(this);
+    QScrollArea* scrollArea = new QScrollArea(this);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
 
@@ -1102,7 +1102,7 @@ public:
 };
 
 PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
-        SearchModificationHelper* searchModificationHelper)
+                                         SearchModificationHelper* searchModificationHelper)
     : SidebarWidget(parent), d(new PeopleSideBarWidgetPriv)
 {
     setObjectName("People Sidebar");

@@ -200,54 +200,54 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
 
     // album folder view
     d->albumFolderSideBar = new AlbumFolderViewSideBarWidget(d->leftSideBar,
-            d->modelCollection->getAlbumModel(),
-            d->albumModificationHelper);
+                                                             d->modelCollection->getAlbumModel(),
+                                                             d->albumModificationHelper);
     d->leftSideBarWidgets << d->albumFolderSideBar;
     connect(d->albumFolderSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
 
     // Tags sidebar tab contents.
     d->tagViewSideBar = new TagViewSideBarWidget(d->leftSideBar,
-            d->modelCollection->getTagModel());
+                                                 d->modelCollection->getTagModel());
     d->leftSideBarWidgets << d->tagViewSideBar;
     connect(d->tagViewSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
 
     // date view
     d->dateViewSideBar = new DateFolderViewSideBarWidget(d->leftSideBar,
-            d->modelCollection->getDateAlbumModel(),
-            d->iconView->imageAlbumFilterModel());
+                                                         d->modelCollection->getDateAlbumModel(),
+                                                         d->iconView->imageAlbumFilterModel());
     d->leftSideBarWidgets << d->dateViewSideBar;
 
     // timeline side bar
     d->timelineSideBar = new TimelineSideBarWidget(d->leftSideBar,
-            d->modelCollection->getSearchModel(),
-            d->searchModificationHelper);
+                                                   d->modelCollection->getSearchModel(),
+                                                   d->searchModificationHelper);
     d->leftSideBarWidgets << d->timelineSideBar;
 
     // Search sidebar tab contents.
     d->searchSideBar = new SearchSideBarWidget(d->leftSideBar,
-            d->modelCollection->getSearchModel(),
-            d->searchModificationHelper);
+                                               d->modelCollection->getSearchModel(),
+                                               d->searchModificationHelper);
     d->leftSideBarWidgets << d->searchSideBar;
 
     // Fuzzy search
     d->fuzzySearchSideBar = new FuzzySearchSideBarWidget(d->leftSideBar,
-            d->modelCollection->getSearchModel(),
-            d->searchModificationHelper);
+                                                         d->modelCollection->getSearchModel(),
+                                                         d->searchModificationHelper);
     d->leftSideBarWidgets << d->fuzzySearchSideBar;
 
     d->gpsSearchSideBar = new GPSSearchSideBarWidget(d->leftSideBar,
-            d->modelCollection->getSearchModel(),
-            d->searchModificationHelper,
-            d->iconView->imageFilterModel(),d->iconView->getSelectionModel());
+                                                     d->modelCollection->getSearchModel(),
+                                                     d->searchModificationHelper,
+                                                     d->iconView->imageFilterModel(),d->iconView->getSelectionModel());
 
     d->leftSideBarWidgets << d->gpsSearchSideBar;
 
     // People Sidebar
     d->peopleSideBar = new PeopleSideBarWidget(d->leftSideBar,
-            d->modelCollection->getTagModel(),
-            d->searchModificationHelper);
+                                               d->modelCollection->getTagModel(),
+                                               d->searchModificationHelper);
     connect(d->peopleSideBar, SIGNAL(requestFaceMode(bool)),
             d->iconView, SLOT(setFaceMode(bool)));
 
@@ -1070,7 +1070,8 @@ void DigikamView::slotAlbumSelected(Album* album)
             case StackedView::WelcomePageMode:
                 slotTogglePreviewMode(ImageInfo());
                 break;
-            default: break;
+            default:
+                break;
         }
     }
 }
@@ -1201,7 +1202,7 @@ void DigikamView::slotDispatchImageSelected()
             }
 
             if (   (d->stackedview->previewMode() != StackedView::PreviewAlbumMode)
-                && (d->stackedview->previewMode() != StackedView::MapWidgetMode) )
+                   && (d->stackedview->previewMode() != StackedView::MapWidgetMode) )
             {
                 d->stackedview->setPreviewItem(list.first(), previousInfo, nextInfo);
             }
@@ -1457,6 +1458,7 @@ void DigikamView::slotImagePreview()
 {
     const int currentPreviewMode = d->stackedview->previewMode();
     ImageInfo currentInfo;
+
     if (currentPreviewMode == StackedView::PreviewAlbumMode)
     {
         currentInfo = d->iconView->currentInfo();
@@ -1476,7 +1478,7 @@ void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
 {
     if (  (d->stackedview->previewMode() == StackedView::PreviewAlbumMode
            || d->stackedview->previewMode() == StackedView::MapWidgetMode)
-        && !info.isNull() )
+          && !info.isNull() )
     {
         d->lastPreviewMode = d->stackedview->previewMode();
 
@@ -1906,7 +1908,7 @@ void DigikamView::slotSidebarTabTitleStyleChanged()
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
 
     /// @todo Which settings actually have to be reloaded?
-//     d->rightSideBar->applySettings();
+    //     d->rightSideBar->applySettings();
 }
 
 void DigikamView::slotProgressMessageChanged(const QString& descriptionOfAction)

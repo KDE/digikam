@@ -373,7 +373,7 @@ private:
 
     friend class AlbumSettingsCreator;
 
-    class AlbumSettingsPrivate;    
+    class AlbumSettingsPrivate;
     AlbumSettingsPrivate* const d;
 };
 

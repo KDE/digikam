@@ -335,6 +335,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             str += QString(" / ");
 
             int rating = info.rating();
+
             if (rating > RatingMin && rating <= RatingMax)
             {
                 for (int i=0; i<rating; i++)

@@ -194,7 +194,7 @@ StackedView::StackedView(QWidget* parent)
     */
 
     //connect(d->thumbBar, SIGNAL(imageActivated(const ImageInfo&)),
-      //      d->imageIconView, SIGNAL(setCurrentInfo(const ImageInfo&)));
+    //      d->imageIconView, SIGNAL(setCurrentInfo(const ImageInfo&)));
 
     connect(d->thumbBar, SIGNAL(selectionChanged()),
             this, SLOT(slotThumbBarSelectionChanged()));
