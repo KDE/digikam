@@ -857,7 +857,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dlogoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dpopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dragdropimplementations.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/drubberband.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dzoombar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagedelegateoverlay.cpp
@@ -874,9 +873,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statesavingobject.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusnavigatebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusprogressbar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbardock.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbartooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/workingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ratingwidget.cpp
@@ -884,7 +880,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/picklabelwidget.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/q3support/previewwidget.cpp
-
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/q3support/drubberband.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/q3support/thumbbar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/q3support/thumbbardock.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/q3support/thumbbartooltip.cpp
        )
 
     SET(libgraphicsviewwidgets_SRCS
