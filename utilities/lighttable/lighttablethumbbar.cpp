@@ -119,7 +119,7 @@ void LightTableThumbBar::setNavigateByPair(bool b)
     d->navigateByPair = b;
 }
 
-void LightTableThumbBar::contentsMouseReleaseEvent(QMouseEvent* e)
+void LightTableThumbBar::contentsMouseReleaseEvent(QMouseEvent* /*e*/)
 {
 /*    if (!e)
     {
@@ -209,12 +209,12 @@ void LightTableThumbBar::contentsMouseReleaseEvent(QMouseEvent* e)
 */
 }
 
-void LightTableThumbBar::slotAssignPickLabel(int pickId)
+void LightTableThumbBar::slotAssignPickLabel(int /*pickId*/)
 {
 //    assignPickLabel(currentItemImageInfo(), pickId);
 }
 
-void LightTableThumbBar::slotAssignColorLabel(int colorId)
+void LightTableThumbBar::slotAssignColorLabel(int /*colorId*/)
 {
 //    assignColorLabel(currentItemImageInfo(), colorId);
 }
@@ -248,7 +248,7 @@ void LightTableThumbBar::slotRatingChanged(const KUrl& url, int rating)
     assignRating(ImageInfo(url), rating);
 }
 
-void LightTableThumbBar::slotAssignRating(int rating)
+void LightTableThumbBar::slotAssignRating(int /*rating*/)
 {
 //    assignRating(currentItemImageInfo(), rating);
 }
@@ -281,7 +281,7 @@ void LightTableThumbBar::toggleTag(int tagID)
     }
 }
 
-void LightTableThumbBar::setOnLeftPanel(const ImageInfo& info)
+void LightTableThumbBar::setOnLeftPanel(const ImageInfo& /*info*/)
 {
 /* FIXME
     for (ThumbBarItem* item = firstItem(); item; item = item->next())
@@ -313,7 +313,7 @@ void LightTableThumbBar::setOnLeftPanel(const ImageInfo& info)
 */
 }
 
-void LightTableThumbBar::setOnRightPanel(const ImageInfo& info)
+void LightTableThumbBar::setOnRightPanel(const ImageInfo& /*info*/)
 {
 /* FIXME
     for (ThumbBarItem* item = firstItem(); item; item = item->next())
@@ -354,7 +354,7 @@ QModelIndex LightTableThumbBar::findItemByInfo(const ImageInfo& info) const
     return QModelIndex();
 }
 
-void LightTableThumbBar::removeItemByInfo(const ImageInfo& info)
+void LightTableThumbBar::removeItemByInfo(const ImageInfo& /*info*/)
 {
 /*
     if (info.isNull())
@@ -372,7 +372,7 @@ void LightTableThumbBar::removeItemByInfo(const ImageInfo& info)
 */
 }
 
-void LightTableThumbBar::removeItemById(qlonglong id)
+void LightTableThumbBar::removeItemById(qlonglong /*id*/)
 {
 /*
     ImagePreviewBarItem* item = findItemById(id);
@@ -384,7 +384,7 @@ void LightTableThumbBar::removeItemById(qlonglong id)
 */
 }
 
-void LightTableThumbBar::drawEmptyMessage(QPixmap& bgPix)
+void LightTableThumbBar::drawEmptyMessage(QPixmap& /*bgPix*/)
 {
 /*
     ThemeEngine* te = ThemeEngine::instance();
@@ -437,7 +437,7 @@ void LightTableThumbBar::startDrag()
 */
 }
 
-void LightTableThumbBar::contentsDragEnterEvent(QDragEnterEvent* e)
+void LightTableThumbBar::contentsDragEnterEvent(QDragEnterEvent* /*e*/)
 {
 /*
     int        albumID;
@@ -458,7 +458,7 @@ void LightTableThumbBar::contentsDragEnterEvent(QDragEnterEvent* e)
 */
 }
 
-void LightTableThumbBar::contentsDropEvent(QDropEvent* e)
+void LightTableThumbBar::contentsDropEvent(QDropEvent* /*e*/)
 {
 /*
     int        albumID;
@@ -537,7 +537,7 @@ void LightTableThumbBar::contentsDropEvent(QDropEvent* e)
 */
 }
 
-void LightTableThumbBar::slotCollectionImageChange(const CollectionImageChangeset& changeset)
+void LightTableThumbBar::slotCollectionImageChange(const CollectionImageChangeset& /*changeset*/)
 {
 /*
     switch (changeset.operation())
