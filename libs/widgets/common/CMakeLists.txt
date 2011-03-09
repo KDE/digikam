@@ -8,7 +8,6 @@ INSTALL(FILES colorgradientwidget.h
               statusnavigatebar.h
               statusprogressbar.h
               paniconwidget.h
-              previewwidget.h
               searchtextbar.h
               knotificationwrapper.h
               imagefiltershistorytreeitem.h

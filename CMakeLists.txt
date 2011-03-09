@@ -868,7 +868,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/knotificationwrapper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/modelcompletion.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/paniconwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/previewwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/searchtextbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/sidebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/splashscreen.cpp
@@ -883,6 +882,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ratingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorlabelwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/picklabelwidget.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/q3support/previewwidget.cpp
+
        )
 
     SET(libgraphicsviewwidgets_SRCS
@@ -1459,6 +1461,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/q3support
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
