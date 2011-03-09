@@ -61,13 +61,28 @@ public:
     }
 
     QList<QPointer<KMap::KMapWidget> > mapWidgets;
-    GPSImageInfoSorter::SortOptions sortOrder;
-    QPointer<QMenu>                 sortMenu;
-    KAction*                        sortActionOldestFirst;
-    KAction*                        sortActionYoungestFirst;
-    KAction*                        sortActionRating;
+    GPSImageInfoSorter::SortOptions    sortOrder;
+    QPointer<QMenu>                    sortMenu;
+    KAction*                           sortActionOldestFirst;
+    KAction*                           sortActionYoungestFirst;
+    KAction*                           sortActionRating;
 
 };
+
+GPSImageInfoSorter::GPSImageInfoSorter(QObject* const parent)
+    : QObject(parent), d(new Private())
+{
+}
+
+GPSImageInfoSorter::~GPSImageInfoSorter()
+{
+    if (d->sortMenu)
+    {
+        delete d->sortMenu;
+    }
+
+    delete d;
+}
 
 bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const KMap::KMapGroupState oldState,
                                     const GPSImageInfo& newInfo, const KMap::KMapGroupState newState,
@@ -157,21 +172,6 @@ bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const KMap::KMa
     return oldInfo.id > newInfo.id;
 }
 
-GPSImageInfoSorter::GPSImageInfoSorter(QObject* const parent)
-    : QObject(parent), d(new Private())
-{
-}
-
-GPSImageInfoSorter::~GPSImageInfoSorter()
-{
-    if (d->sortMenu)
-    {
-        delete d->sortMenu;
-    }
-
-    delete d;
-}
-
 void GPSImageInfoSorter::addToKMapWidget(KMap::KMapWidget* const mapWidget)
 {
     initializeSortMenu();
@@ -187,7 +187,7 @@ void GPSImageInfoSorter::initializeSortMenu()
         return;
     }
 
-    d->sortMenu = new QMenu();
+    d->sortMenu                            = new QMenu();
     d->sortMenu->setTitle(i18n("Sorting"));
     QActionGroup* const sortOrderExclusive = new QActionGroup(d->sortMenu);
     sortOrderExclusive->setExclusive(true);

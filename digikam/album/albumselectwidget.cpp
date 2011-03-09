@@ -6,7 +6,7 @@
  * Date        : 2009-26-02
  * Description : a widget to select a physical album
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-class AlbumSelectTreeViewPriv
+class AlbumSelectTreeView::AlbumSelectTreeViewPriv
 {
 public:
     AlbumSelectTreeViewPriv() :
@@ -66,21 +66,16 @@ public:
 
     AlbumModificationHelper* albumModificationHelper;
     KAction*                 newAlbumAction;
-
 };
 
-AlbumSelectTreeView::AlbumSelectTreeView(AlbumModel* model,
-        AlbumModificationHelper* albumModificationHelper,
-        QWidget* parent) :
-    AlbumTreeView(parent),
-    d(new AlbumSelectTreeViewPriv)
+AlbumSelectTreeView::AlbumSelectTreeView(AlbumModel* model, AlbumModificationHelper* albumModificationHelper, QWidget* parent)
+    : AlbumTreeView(parent),
+      d(new AlbumSelectTreeViewPriv)
 {
-
     setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
 
     d->newAlbumAction = new KAction(KIcon("albumfolder-new"), i18n("Create New Album"), this);
-
 }
 
 AlbumSelectTreeView::~AlbumSelectTreeView()
@@ -88,25 +83,21 @@ AlbumSelectTreeView::~AlbumSelectTreeView()
     delete d;
 }
 
-void AlbumSelectTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh,
-        Album* album)
+void AlbumSelectTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album)
 {
     cmh.addAction(d->newAlbumAction);
     d->newAlbumAction->setEnabled(album);
 }
 
-void AlbumSelectTreeView::handleCustomContextMenuAction(QAction* action,
-        AlbumPointer<Album> album)
+void AlbumSelectTreeView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album)
 {
-
-    Album* a = album;
-    PAlbum* palbum = dynamic_cast<PAlbum*> (a);
+    Album* a       = album;
+    PAlbum* palbum = dynamic_cast<PAlbum*>(a);
 
     if (palbum && action == d->newAlbumAction)
     {
         d->albumModificationHelper->slotAlbumNew(palbum);
     }
-
 }
 
 void AlbumSelectTreeView::slotNewAlbum()
@@ -124,7 +115,9 @@ void AlbumSelectTreeView::slotNewAlbum()
     }
 }
 
-class AlbumSelectWidgetPriv
+// --------------------------------------------------------------------------------------------------------
+
+class AlbumSelectWidget::AlbumSelectWidgetPriv
 {
 public:
 
@@ -151,7 +144,6 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget* parent, PAlbum* albumToSelect)
     : QWidget(parent),
       d(new AlbumSelectWidgetPriv)
 {
-
     setObjectName("AlbumSelectWidget");
 
     d->albumModificationHelper = new AlbumModificationHelper(this, this);
@@ -172,19 +164,18 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget* parent, PAlbum* albumToSelect)
     d->albumTreeView->setConfigGroup(group);
     d->albumTreeView->setEntryPrefix("AlbumTreeView");
 
-    d->searchBar      = new SearchTextBar(this, "AlbumSelectWidgetSearchBar");
-    d->searchBar->setModel(d->albumModel,
-                           AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->searchBar   = new SearchTextBar(this, "AlbumSelectWidgetSearchBar");
+    d->searchBar->setModel(d->albumModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->searchBar->setFilterModel(d->albumTreeView->albumFilterModel());
     d->searchBar->setConfigGroup(group);
     d->albumTreeView->setEntryPrefix("AlbumTreeView");
 
-    d->newAlbumBtn    = new KPushButton(KGuiItem(i18n("&New Album"), "albumfolder-new",
-                                        i18n("Create new album")), this);
+    d->newAlbumBtn = new KPushButton(KGuiItem(i18n("&New Album"), "albumfolder-new",
+                                     i18n("Create new album")), this);
 
-    grid->addWidget(d->albumTreeView,  0, 0, 1, 2);
-    grid->addWidget(d->searchBar,   1, 0, 1, 1);
-    grid->addWidget(d->newAlbumBtn, 1, 1, 1, 1);
+    grid->addWidget(d->albumTreeView, 0, 0, 1, 2);
+    grid->addWidget(d->searchBar,     1, 0, 1, 1);
+    grid->addWidget(d->newAlbumBtn,   1, 1, 1, 1);
     grid->setRowStretch(0, 10);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
@@ -213,7 +204,6 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget* parent, PAlbum* albumToSelect)
 
     d->albumTreeView->loadState();
     d->searchBar->loadState();
-
 }
 
 AlbumSelectWidget::~AlbumSelectWidget()

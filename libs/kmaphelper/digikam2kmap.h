@@ -55,11 +55,11 @@ public:
     /// @todo De-inline these functions?
 
     GPSImageInfo()
-     : id(-2),
-       coordinates(),
-       rating(-1),
-       dateTime(),
-       url()
+        : id(-2),
+          coordinates(),
+          rating(-1),
+          dateTime(),
+          url()
     {
     }
 
@@ -81,20 +81,23 @@ public:
 
     static bool fromImageInfo(const ImageInfo& imageInfo, GPSImageInfo* const gpsImageInfo);
 
-    qlonglong               id;
-    KMap::GeoCoordinates    coordinates;
-    int                     rating;
-    QDateTime               dateTime;
-    KUrl                    url;
+    qlonglong                   id;
+    KMap::GeoCoordinates        coordinates;
+    int                         rating;
+    QDateTime                   dateTime;
+    KUrl                        url;
 
     typedef QList<GPSImageInfo> List;
 };
 
+// --------------------------------------------------------------------------------------------------------------------------
+
 class GPSImageInfoSorter : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
+
     enum SortOption
     {
         SortYoungestFirst = 0,
@@ -102,6 +105,8 @@ public:
         SortRating        = 2
     };
     Q_DECLARE_FLAGS(SortOptions, SortOption)
+
+public:
 
     GPSImageInfoSorter(QObject* const parent);
     ~GPSImageInfoSorter();
