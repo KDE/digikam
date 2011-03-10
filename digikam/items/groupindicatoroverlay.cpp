@@ -108,8 +108,7 @@ void GroupIndicatorOverlay::updatePosition()
         return;
     }
 
-    QRect rect = static_cast<ImageDelegate*>(delegate())->groupIndicatorRect();
-
+    QRect rect       = static_cast<ImageDelegate*>(delegate())->groupIndicatorRect();
     QRect visualRect = m_view->visualRect(m_index);
     rect.translate(visualRect.topLeft());
 

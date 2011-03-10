@@ -41,6 +41,7 @@ namespace Digikam
 class GroupIndicatorOverlayWidget : public QAbstractButton
 {
     Q_OBJECT
+
 public:
 
     GroupIndicatorOverlayWidget(QWidget* parent = 0);
@@ -54,6 +55,8 @@ Q_SIGNALS:
 
     void contextMenu(QContextMenuEvent* event);
 };
+
+// ----------------------------------------------------------------------------------
 
 class GroupIndicatorOverlay : public AbstractWidgetDelegateOverlay
 {
