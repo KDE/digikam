@@ -19,5 +19,6 @@ Description[pt_BR]=kioslave de imagens do mapa do digiKam
 Description[sv]=I/O-slav för Digikams kartbilder
 Description[uk]=Додаток карти зображень digiKam
 Description[x-test]=xxdigiKam mapimages kioslavexx
+Description[zh_TW]=digiKam mapimages kioslave
 Class=:local
 Icon=digikam
