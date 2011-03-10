@@ -1,4 +1,1 @@
-ADD_SUBDIRECTORY( dmetadata )
 ADD_SUBDIRECTORY( dimg )
-ADD_SUBDIRECTORY( widgets )
-ADD_SUBDIRECTORY( versionmanager )
