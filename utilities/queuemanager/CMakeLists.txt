@@ -50,7 +50,6 @@ IF(GLIB2_FOUND)
     )
 ENDIF(GLIB2_FOUND)
 
-
 KDE4_ADD_LIBRARY(queuemanager STATIC ${libqueuemanager_SRCS})
 
 INSTALL( FILES queuemgrwindowui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )
