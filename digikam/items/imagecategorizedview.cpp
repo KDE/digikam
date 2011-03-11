@@ -247,7 +247,11 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
         hideIndexNotification();
         d->delegate->setAllOverlaysActive(false);
         d->delegate->setViewOnAllOverlays(0);
-        disconnect(d->delegate, 0, this, 0);
+        // Note: Be precise, no wildcard disconnect!
+        disconnect(d->delegate, SIGNAL(requestNotification(const QModelIndex&, const QString&)),
+                   this, SLOT(showIndexNotification(const QModelIndex&, const QString&)));
+        disconnect(d->delegate, SIGNAL(hideNotification()),
+                   this, SLOT(hideIndexNotification()));
     }
 
     d->delegate = delegate;
