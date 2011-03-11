@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <KPixmapSequence>
+#include <kpixmapsequence.h>
 
 // Local includes
 

@@ -29,9 +29,9 @@
 
 // KDE includes
 
-#include <KUrl>
+#include <kurl.h>
 #include <kdebug.h>
-#include <KIconLoader>
+#include <kiconloader.h>
 
 // Local includes
 

@@ -36,7 +36,7 @@
 
 //KDE includes
 
-#include <KUrl>
+#include <kurl.h>
 
 namespace Digikam
 {

@@ -34,8 +34,8 @@
 
 //KDE includes
 
-#include <KHBox>
-#include <KVBox>
+#include <khbox.h>
+#include <kvbox.h>
 #include <kconfig.h>
 
 // libkmap includes

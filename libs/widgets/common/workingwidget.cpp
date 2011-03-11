@@ -33,8 +33,8 @@
 
 // KDE includes
 
-#include <KIconLoader>
-#include <KPixmapSequence>
+#include <kiconloader.h>
+#include <kpixmapsequence.h>
 
 // Local includes
 

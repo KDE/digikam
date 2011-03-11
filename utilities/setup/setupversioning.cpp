@@ -39,9 +39,9 @@
 
 // KDE includes
 
-#include <KIconLoader>
-#include <KLocale>
-#include <KTabWidget>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <ktabwidget.h>
 
 // Local includes
 

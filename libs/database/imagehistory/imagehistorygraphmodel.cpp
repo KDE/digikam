@@ -30,9 +30,9 @@
 
 // KDE includes
 
-#include <KCategorizedSortFilterProxyModel>
-#include <KIcon>
-#include <KLocale>
+#include <kcategorizedsortfilterproxymodel.h>
+#include <kicon.h>
+#include <klocale.h>
 
 // Local includes
 

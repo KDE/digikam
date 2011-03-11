@@ -36,8 +36,8 @@
 
 //KDE includes
 
-#include <KDialog>
-#include <KLocale>
+#include <kdialog.h>
+#include <klocale.h>
 
 //local includes
 

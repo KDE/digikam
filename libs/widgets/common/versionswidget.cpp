@@ -35,10 +35,10 @@
 
 // KDE includes
 
-#include <KConfigGroup>
-#include <KLocale>
-#include <KIconLoader>
-#include <KUrl>
+#include <kconfiggroup.h>
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kurl.h>
 #include <kdebug.h>
 
 // Local includes

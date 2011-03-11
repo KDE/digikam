@@ -31,8 +31,8 @@
 
 // KDE includes
 
-#include <KIconLoader>
-#include <KPushButton>
+#include <kiconloader.h>
+#include <kpushbutton.h>
 
 // Local includes
 

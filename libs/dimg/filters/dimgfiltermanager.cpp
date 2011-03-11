@@ -34,7 +34,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <KLocale>
+#include <klocale.h>
 
 // Local includes
 

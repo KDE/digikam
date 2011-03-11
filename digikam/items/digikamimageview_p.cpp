@@ -27,8 +27,8 @@
 
 // KDE includes
 
-#include <KActionMenu>
-#include <KMenu>
+#include <kactionmenu.h>
+#include <kmenu.h>
 
 // Local includes
 

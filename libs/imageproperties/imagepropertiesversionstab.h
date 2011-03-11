@@ -32,8 +32,8 @@
 
 // KDE includes
 
-#include <KUrl>
-#include <KTabWidget>
+#include <kurl.h>
+#include <ktabwidget.h>
 
 // Local includes
 

@@ -32,14 +32,14 @@
 
 // KDE includes
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KGlobal>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kglobal.h>
 #include <kdebug.h>
-#include <KLocale>
-#include <KIconLoader>
-#include <KStandardGuiItem>
-#include <KUrl>
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kstandardguiitem.h>
+#include <kurl.h>
 
 // Local includes
 

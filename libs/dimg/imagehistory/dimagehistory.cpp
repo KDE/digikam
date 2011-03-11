@@ -36,7 +36,7 @@
 
 #include <kglobal.h>
 #include <kdebug.h>
-#include <KUrl>
+#include <kurl.h>
 
 namespace Digikam
 {

@@ -29,7 +29,7 @@
 
 // KDE includes
 
-#include <KGuiItem>
+#include <kguiitem.h>
 
 // Local includes
 

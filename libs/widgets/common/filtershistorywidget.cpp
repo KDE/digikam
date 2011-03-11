@@ -32,8 +32,8 @@
 
 // KDE includes
 
-#include <KUrl>
-#include <KLocale>
+#include <kurl.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 // Local includes

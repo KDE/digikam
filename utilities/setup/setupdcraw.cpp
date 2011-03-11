@@ -38,7 +38,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <KTabWidget>
+#include <ktabwidget.h>
 
 // LibKDcraw includes
 

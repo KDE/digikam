@@ -27,7 +27,7 @@
 
 // KDE includes
 
-#include <KGlobal>
+#include <kglobal.h>
 
 static bool fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* data);
 

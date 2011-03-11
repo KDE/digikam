@@ -41,12 +41,12 @@
 // KDE includes
 
 #include <kdebug.h>
-#include <KDialog>
-#include <KIconLoader>
-#include <KLocale>
-#include <KIntNumInput>
-#include <KSeparator>
-#include <KStandardGuiItem>
+#include <kdialog.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <knuminput.h>
+#include <kseparator.h>
+#include <kstandardguiitem.h>
 
 // Local includes
 

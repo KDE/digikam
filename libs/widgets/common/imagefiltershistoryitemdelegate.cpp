@@ -31,10 +31,10 @@
 
 // KDE includes
 
-#include <KIconLoader>
-#include <KLocale>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kdebug.h>
-#include <KColorScheme>
+#include <kcolorscheme.h>
 
 // Local includes
 

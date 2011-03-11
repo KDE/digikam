@@ -28,8 +28,8 @@
 
 // KDE includes
 
-#include <KLocale>
-#include <KIconLoader>
+#include <klocale.h>
+#include <kiconloader.h>
 #include <kdebug.h>
 
 // Local includes

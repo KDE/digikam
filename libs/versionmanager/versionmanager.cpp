@@ -28,10 +28,10 @@
 
 // KDE includes
 
-#include <KConfigGroup>
-#include <KDiskFreeSpaceInfo>
-#include <KGlobal>
-#include <KUrl>
+#include <kconfiggroup.h>
+#include <kdiskfreespaceinfo.h>
+#include <kglobal.h>
+#include <kurl.h>
 #include <kdebug.h>
 
 // Local includes

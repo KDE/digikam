@@ -34,11 +34,11 @@
 // KDE includes
 
 #include <kdebug.h>
-#include <KCategoryDrawer>
-#include <KColorScheme>
-#include <KIconLoader>
-#include <KLocale>
-#include <KPixmapSequence>
+#include <kcategorydrawer.h>
+#include <kcolorscheme.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kpixmapsequence.h>
 
 // Local includes
 

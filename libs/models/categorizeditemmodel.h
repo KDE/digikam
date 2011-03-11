@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <KCategorizedSortFilterProxyModel>
+#include <kcategorizedsortfilterproxymodel.h>
 
 // Local includes
 
