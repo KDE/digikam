@@ -185,6 +185,9 @@ public:
     void setIconShowRating(bool val);
     bool getIconShowRating() const;
 
+    void setIconShowImageFormat(bool val);
+    bool getIconShowImageFormat() const;
+
     /**
      * Sets the visibility of the overlay buttons on the image icons.
      */

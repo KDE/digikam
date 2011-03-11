@@ -6,7 +6,8 @@
  * Date        : 2009-02-06
  * Description : thumbnail bar for images - the delegate
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +37,7 @@ namespace Digikam
 {
 
 class ImageCategoryDrawer;
+class ImageThumbnailDelegatePrivate;
 
 class ImageThumbnailDelegate : public ImageDelegate
 {
@@ -64,7 +66,6 @@ protected:
 
 private:
 
-    class ImageThumbnailDelegatePrivate;
     Q_DECLARE_PRIVATE(ImageThumbnailDelegate)
 };
 

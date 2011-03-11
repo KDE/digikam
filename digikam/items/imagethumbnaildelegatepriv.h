@@ -4,12 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : Qt item view for images - the delegate
+ * Description : thumbnail bar for images - the delegate
  *
- * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMIMAGEDELEGATEPRIV_H
-#define DIGIKAMIMAGEDELEGATEPRIV_H
+#ifndef IMAGETHUMBNAILDELEGATEPRIV_H
+#define IMAGETHUMBNAILDELEGATEPRIV_H
 
 // Qt includes
 
@@ -39,28 +37,30 @@
 namespace Digikam
 {
 
-class DigikamImageDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
+class ImageThumbnailDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
 {
 public:
 
-    DigikamImageDelegatePrivate()
+    ImageThumbnailDelegatePrivate()
     {
+        flow                = QListView::LeftToRight;
+
+        // switch off drawing of frames
+        drawMouseOverFrame  = false;
+        drawFocusFrame      = false;
+
+        // switch off composing rating over background
+        ratingOverThumbnail = true;
     }
 
-    void init(DigikamImageDelegate* q, ImageCategorizedView* parent);
-};
+    QListView::Flow flow;
+    QRect           viewSize;
 
-// -----------------------------------------------------------------------------------------
-
-class DigikamImageFaceDelegatePrivate : public DigikamImageDelegatePrivate
-{
 public:
 
-    DigikamImageFaceDelegatePrivate()
-    {
-    }
+    void init(ImageThumbnailDelegate* q);
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAMIMAGEDELEGATEPRIV_H
+#endif // IMAGETHUMBNAILDELEGATEPRIV_H

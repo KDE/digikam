@@ -7,9 +7,9 @@
  * Description : Qt item view for images - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,6 +49,7 @@ public:
     {
         categoryDrawer      = 0;
         contentWidth        = 0;
+        drawImageFormat     = true;
         drawMouseOverFrame  = true;
         drawFocusFrame      = true;
         ratingOverThumbnail = false;
@@ -72,6 +73,7 @@ public:
     QRect                 pickLabelRect;
     QRect                 groupRect;
 
+    bool                  drawImageFormat;
     bool                  drawFocusFrame;
     bool                  drawMouseOverFrame;
     bool                  ratingOverThumbnail;

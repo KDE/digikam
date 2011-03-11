@@ -7,9 +7,9 @@
  * Description : thumbnail bar for images - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,34 +41,22 @@
 #include "imagemodel.h"
 #include "imagefiltermodel.h"
 #include "thumbnailloadthread.h"
+#include "imagethumbnaildelegatepriv.h"
 
 namespace Digikam
 {
 
-class ImageThumbnailDelegate::ImageThumbnailDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
+void ImageThumbnailDelegatePrivate::init(ImageThumbnailDelegate* q)
 {
-public:
-
-    ImageThumbnailDelegatePrivate()
-    {
-        flow                = QListView::LeftToRight;
-
-        // switch off drawing of frames
-        drawMouseOverFrame  = false;
-        drawFocusFrame      = false;
-
-        // switch off composing rating over background
-        ratingOverThumbnail = true;
-    }
-
-    QListView::Flow flow;
-    QRect           viewSize;
-
-};
+    QObject::connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+                     q, SLOT(slotSetupChanged()));
+}
 
 ImageThumbnailDelegate::ImageThumbnailDelegate(ImageCategorizedView* parent)
     : ImageDelegate(*new ImageThumbnailDelegatePrivate, parent)
 {
+    Q_D(ImageThumbnailDelegate);
+    d->init(this);
 }
 
 ImageThumbnailDelegate::~ImageThumbnailDelegate()
@@ -131,22 +119,23 @@ void ImageThumbnailDelegate::updateRects()
 {
     Q_D(ImageThumbnailDelegate);
 
-    d->pixmapRect = QRect(d->margin, d->margin, d->contentWidth, d->contentWidth);
-    d->rect = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
+    d->pixmapRect      = QRect(d->margin, d->margin, d->contentWidth, d->contentWidth);
+    d->rect            = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
+    d->drawImageFormat = AlbumSettings::instance()->getIconShowImageFormat();
 
     if (AlbumSettings::instance()->getIconShowRating())
     {
-        int top    = d->rect.bottom() - d->margin - d->starPolygonSize.height() - 2;
+        int top       = d->rect.bottom() - d->margin - d->starPolygonSize.height() - 2;
         d->ratingRect = QRect(d->margin, top, d->contentWidth, d->starPolygonSize.height());
     }
 
     if (d->flow == QListView::LeftToRight)
     {
-        d->gridSize  = QSize(d->rect.width() + d->spacing, d->rect.height());
+        d->gridSize = QSize(d->rect.width() + d->spacing, d->rect.height());
     }
     else
     {
-        d->gridSize  = QSize(d->rect.width(), d->rect.height() + d->spacing);
+        d->gridSize = QSize(d->rect.width(), d->rect.height() + d->spacing);
     }
 }
 

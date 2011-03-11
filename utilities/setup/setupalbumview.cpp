@@ -7,7 +7,7 @@
  * Description : album view configuration setup tab
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class SetupAlbumViewPriv
+class SetupAlbumView::SetupAlbumViewPriv
 {
 public:
 
@@ -62,8 +62,9 @@ public:
         iconShowResolutionBox(0),
         iconShowCommentsBox(0),
         iconShowTagsBox(0),
-        iconShowRatingBox(0),
         iconShowOverlaysBox(0),
+        iconShowRatingBox(0),
+        iconShowFormatBox(0),
         previewLoadFullImageSize(0),
         showFolderTreeViewItemsCount(0),
         iconTreeThumbSize(0),
@@ -82,8 +83,9 @@ public:
     QCheckBox*   iconShowResolutionBox;
     QCheckBox*   iconShowCommentsBox;
     QCheckBox*   iconShowTagsBox;
-    QCheckBox*   iconShowRatingBox;
     QCheckBox*   iconShowOverlaysBox;
+    QCheckBox*   iconShowRatingBox;
+    QCheckBox*   iconShowFormatBox;
     QCheckBox*   previewLoadFullImageSize;
     QCheckBox*   showFolderTreeViewItemsCount;
 
@@ -97,7 +99,7 @@ public:
 SetupAlbumView::SetupAlbumView(QWidget* parent)
     : QScrollArea(parent), d(new SetupAlbumViewPriv)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget* panel      = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
@@ -134,13 +136,16 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->iconShowTagsBox->setWhatsThis(i18n("Set this option to show the digiKam tags "
                                           "below the image thumbnail."));
 
+    d->iconShowOverlaysBox   = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
+    d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
+                                              "the image thumbnail for image rotation."));
+
     d->iconShowRatingBox     = new QCheckBox(i18n("Show digiKam &rating"), iconViewGroup);
     d->iconShowRatingBox->setWhatsThis(i18n("Set this option to show the digiKam rating "
                                             "below the image thumbnail."));
 
-    d->iconShowOverlaysBox   = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
-    d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
-                                              "the image thumbnail for image rotation."));
+    d->iconShowFormatBox     = new QCheckBox(i18n("Show image Format"), iconViewGroup);
+    d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
 
     QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
     d->leftClickActionComboBox = new KComboBox(iconViewGroup);
@@ -158,8 +163,9 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     grid->addWidget(d->iconShowResolutionBox,    4, 0, 1, 1);
     grid->addWidget(d->iconShowCommentsBox,      0, 1, 1, 1);
     grid->addWidget(d->iconShowTagsBox,          1, 1, 1, 1);
-    grid->addWidget(d->iconShowRatingBox,        2, 1, 1, 1);
-    grid->addWidget(d->iconShowOverlaysBox,      3, 1, 1, 1);
+    grid->addWidget(d->iconShowOverlaysBox,      2, 1, 1, 1);
+    grid->addWidget(d->iconShowRatingBox,        3, 1, 1, 1);
+    grid->addWidget(d->iconShowFormatBox,        4, 1, 1, 1);
     grid->addWidget(leftClickLabel,              5, 0, 1, 1);
     grid->addWidget(d->leftClickActionComboBox,  5, 1, 1, 1);
     grid->addWidget(d->iconViewFontSelect,       6, 0, 1, 2);
@@ -253,8 +259,9 @@ void SetupAlbumView::applySettings()
     settings->setIconShowModDate(d->iconShowModDateBox->isChecked());
     settings->setIconShowResolution(d->iconShowResolutionBox->isChecked());
     settings->setIconShowComments(d->iconShowCommentsBox->isChecked());
-    settings->setIconShowRating(d->iconShowRatingBox->isChecked());
     settings->setIconShowOverlays(d->iconShowOverlaysBox->isChecked());
+    settings->setIconShowRating(d->iconShowRatingBox->isChecked());
+    settings->setIconShowImageFormat(d->iconShowFormatBox->isChecked());
     settings->setIconViewFont(d->iconViewFontSelect->font());
 
     settings->setItemLeftClickAction((AlbumSettings::ItemLeftClickAction)
@@ -299,8 +306,9 @@ void SetupAlbumView::readSettings()
     d->iconShowModDateBox->setChecked(settings->getIconShowModDate());
     d->iconShowResolutionBox->setChecked(settings->getIconShowResolution());
     d->iconShowCommentsBox->setChecked(settings->getIconShowComments());
-    d->iconShowRatingBox->setChecked(settings->getIconShowRating());
     d->iconShowOverlaysBox->setChecked(settings->getIconShowOverlays());
+    d->iconShowRatingBox->setChecked(settings->getIconShowRating());
+    d->iconShowFormatBox->setChecked(settings->getIconShowImageFormat());
     d->iconViewFontSelect->setFont(settings->getIconViewFont());
 
     d->leftClickActionComboBox->setCurrentIndex((int)settings->getItemLeftClickAction());

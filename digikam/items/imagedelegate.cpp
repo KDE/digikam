@@ -7,7 +7,7 @@
  * Description : Qt item view for images - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
@@ -38,6 +38,7 @@
 #include <kio/global.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kicon.h>
 
 // Local includes
 
@@ -51,7 +52,6 @@
 #include "themeengine.h"
 #include "thumbbar.h"
 #include "thumbnailloadthread.h"
-#include <KIcon>
 
 namespace Digikam
 {
@@ -323,6 +323,13 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     if (!d->pickLabelRect.isNull())
     {
         drawPickLabelIcon(p, d->pickLabelRect, info.pickLabel());
+    }
+
+    if (d->drawImageFormat)
+    {
+        QString frm = info.format();
+        if (frm.contains("-")) frm = frm.section("-", -1);   // For RAW format annoted as "RAW-xxx" => "xxx"
+        drawImageFormat(p, actualPixmapRect, frm);
     }
 
     if (d->drawFocusFrame)

@@ -394,6 +394,34 @@ void ItemViewImageDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewIte
     }
 }
 
+void ItemViewImageDelegate::drawImageFormat(QPainter* p, const QRect& r, const QString& f) const
+{
+    Q_D(const ItemViewImageDelegate);
+
+    if (!f.isEmpty() && !r.isNull())
+    {
+        p->save();
+
+        QFont fnt(d->fontReg);
+        fnt.setWeight(QFont::Black);
+        fnt.setItalic(false);
+        p->setFont(fnt);
+        p->setPen(QPen(Qt::gray));
+        p->setOpacity(0.50);
+
+        QRect bRect = p->boundingRect(r, Qt::AlignTop | Qt::AlignHCenter, f.toUpper());
+        bRect.adjust(-1, -1, 1, 1);
+        bRect.translate(0, 1);
+
+        p->fillRect(bRect, Qt::SolidPattern);
+        p->setPen(QPen(Qt::white));
+        p->setOpacity(1.0);
+        p->drawText(bRect, Qt::AlignTop | Qt::AlignHCenter, f.toUpper());
+
+        p->restore();
+    }
+}
+
 void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int pickId) const
 {
     // Draw Pick Label icon
