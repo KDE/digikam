@@ -557,7 +557,6 @@ void DigikamApp::setupStatusBar()
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     statusBar()->addPermanentWidget(d->zoomBar);
 
-
     //------------------------------------------------------------------------------
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
@@ -2207,8 +2206,7 @@ void DigikamApp::fillSolidMenus()
             continue;
         }
 
-        bool isCamera = accessDevice.is<Solid::Camera>();
-
+        bool isCamera                      = accessDevice.is<Solid::Camera>();
         const Solid::StorageAccess* access = accessDevice.as<Solid::StorageAccess>();
         const Solid::StorageVolume* volume = volumeDevice.as<Solid::StorageVolume>();
 

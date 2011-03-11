@@ -78,7 +78,7 @@ class SearchTextBar;
 class FilterStatusBar;
 class TagsActionMngr;
 
-class DigikamAppPriv
+class DigikamApp::DigikamAppPriv
 {
 public:
 

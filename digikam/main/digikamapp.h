@@ -61,7 +61,6 @@ class FilterStatusBar;
 class ImageInfo;
 class ImageInfoList;
 class CameraType;
-class DigikamAppPriv;
 
 class DigikamApp : public KXmlGuiWindow
 {
@@ -224,6 +223,7 @@ private Q_SLOTS:
 
 private:
 
+    class DigikamAppPriv;
     DigikamAppPriv* const d;
 
     static DigikamApp* m_instance;
