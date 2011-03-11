@@ -7,7 +7,7 @@
  * Description : gui database error handler
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010 by Gilles Caulier<caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier<caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,8 +44,6 @@
 namespace Digikam
 {
 
-class DatabaseConnectionCheckerPriv;
-
 class DatabaseConnectionChecker : public QThread
 {
     Q_OBJECT
@@ -72,12 +70,11 @@ Q_SIGNALS:
 
 private:
 
+    class DatabaseConnectionCheckerPriv;
     DatabaseConnectionCheckerPriv* const d;
 };
 
 // --------------------------------------------------------------
-
-class DatabaseGUIErrorHandlerPriv;
 
 class DatabaseGUIErrorHandler : public DatabaseErrorHandler
 {
@@ -99,6 +96,7 @@ private Q_SLOTS:
 
 private:
 
+    class DatabaseGUIErrorHandlerPriv;
     DatabaseGUIErrorHandlerPriv* const d;
 };
 
