@@ -89,6 +89,8 @@ protected:
     QAbstractButton* m_button;
 };
 
+// ------------------------------------------------------------------------------------------
+
 class ModelClearButton : public AnimatedClearButton
 {
 public:
@@ -103,7 +105,6 @@ public:
                 model, SLOT(resetAllCheckedAlbums()));
     }
 };
-
 
 // ------------------------------------------------------------------------------------------
 
@@ -131,7 +132,6 @@ public:
         tagClearButton           = 0;
         parametersResetButton    = 0;
         accuracyInput            = 0;
-        specificityInput         = 0;
         useFullCpuButton         = 0;
         retrainAllButton         = 0;
     }
@@ -150,7 +150,6 @@ public:
 
     QToolButton*                 parametersResetButton;
     KIntNumInput*                accuracyInput;
-    KIntNumInput*                specificityInput;
 
     QCheckBox*                   useFullCpuButton;
     QCheckBox*                   retrainAllButton;
@@ -205,7 +204,6 @@ void FaceScanDialog::accept()
 void FaceScanDialog::setDetectionDefaultParameters()
 {
     d->accuracyInput->setValue(80);
-    d->specificityInput->setValue(80);
 }
 
 void FaceScanDialog::doLoadState()
@@ -243,7 +241,6 @@ void FaceScanDialog::doLoadState()
     d->alreadyScannedBox->setCurrentIndex(d->alreadyScannedBox->findData(handling));
 
     d->accuracyInput->setValue(AlbumSettings::instance()->getFaceDetectionAccuracy() * 100);
-    d->specificityInput->setValue(AlbumSettings::instance()->getFaceDetectionSpecificity() * 100);
 
     d->albumSelectCB->view()->loadState();
     d->tagSelectCB->view()->loadState();
@@ -292,7 +289,6 @@ void FaceScanDialog::doSaveState()
     group.writeEntry(entryName(d->configAlreadyScannedHandling), handling);
 
     AlbumSettings::instance()->setFaceDetectionAccuracy(double(d->accuracyInput->value()) / 100);
-    AlbumSettings::instance()->setFaceDetectionSpecificity(double(d->specificityInput->value()) / 100);
 
     d->albumSelectCB->view()->saveState();
     d->tagSelectCB->view()->saveState();
@@ -443,20 +439,9 @@ void FaceScanDialog::setupUi()
                                        "Adjust speed versus accuracy: The higher the value, the more accurate the results "
                                        "will be, but it will take more time."));
 
-    d->specificityInput = new KIntNumInput;
-    d->specificityInput->setRange(0, 100, 10);
-    d->specificityInput->setSliderEnabled();
-    d->specificityInput->setLabel(i18nc("@label Two extremities of a scale", "Sensitive   -   Specific"),
-                                  Qt::AlignTop | Qt::AlignHCenter);
-    d->specificityInput->setToolTip(i18nc("@info:tooltip",
-                                          "Adjust sensitivity versus specificity: If the value is high, most faces returned will "
-                                          "really be a face - few false positives. If the value is low, more faces will be found, "
-                                          "but some returned faces will not really be faces."));
-
     parametersLayout->addWidget(detectionLabel, 0, 0);
     parametersLayout->addWidget(d->parametersResetButton, 0, 1);
     parametersLayout->addWidget(d->accuracyInput, 1, 0, 1, -1);
-    parametersLayout->addWidget(d->specificityInput, 2, 0, 1, -1);
     parametersLayout->setColumnStretch(0, 1);
 
     parametersTab->setLayout(parametersLayout);
@@ -552,13 +537,12 @@ FaceScanSettings FaceScanDialog::settings() const
     settings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)
                                       d->alreadyScannedBox->itemData(d->alreadyScannedBox->currentIndex()).toInt();
 
-    settings.accuracy    = double(d->accuracyInput->value()) / 100;
-    settings.specificity = double(d->specificityInput->value()) / 100;
+    settings.accuracy               = double(d->accuracyInput->value()) / 100;
 
     settings.albums << d->albumSelectCB->model()->checkedAlbums();
     settings.albums << d->tagSelectCB->model()->checkedAlbums();
 
-    settings.useFullCpu = d->useFullCpuButton->isChecked();
+    settings.useFullCpu             = d->useFullCpuButton->isChecked();
 
     return settings;
 }

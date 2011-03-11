@@ -252,7 +252,6 @@ public Q_SLOTS:
     void process(const QList<ImageInfo>& infos);
 
     void setDetectionAccuracy(double accuracy);
-    void setDetectionSpecificity(double specificity);
 
 Q_SIGNALS:
 

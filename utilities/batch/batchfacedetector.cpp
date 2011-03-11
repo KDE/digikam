@@ -7,7 +7,7 @@
  * Description : batch face detection
  *
  * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,8 +60,8 @@ public:
 
     BatchFaceDetectorPriv()
     {
-        rebuildAll          = true;
-        total               = 0;
+        rebuildAll = true;
+        total      = 0;
 
         duration.start();
     }
@@ -143,7 +143,6 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings
         d->pipeline.construct();
 
         d->pipeline.setDetectionAccuracy(settings.accuracy);
-        d->pipeline.setDetectionSpecificity(settings.specificity);
     }
 
     connect(&d->albumListing, SIGNAL(signalItemsInfo(const ImageInfoList&)),

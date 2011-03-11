@@ -7,7 +7,7 @@
  * Description : Managing of face tag region items on a GraphicsDImgView
  *
  * Copyright (C) 2010 Aditya Bhatt <adityabhatt1991 at gmail dot com>
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,6 +60,8 @@ enum FaceGroupState
     FacesLoaded
 };
 
+//-------------------------------------------------------------------------------
+
 class FaceItem : public RegionFrameItem
 {
 public:
@@ -81,7 +83,7 @@ protected:
     HidingStateChanger* m_changer;
 };
 
-// ---
+//-------------------------------------------------------------------------------
 
 FaceItem::FaceItem(QGraphicsItem* parent)
     : RegionFrameItem(parent),
@@ -143,7 +145,7 @@ void FaceItem::updateCurrentTag()
     }
 }
 
-// ---
+//-------------------------------------------------------------------------------
 
 AssignNameWidgetHidingStateChanger::AssignNameWidgetHidingStateChanger(FaceItem* item)
     : HidingStateChanger(item->widget(), "mode", item)
@@ -162,7 +164,7 @@ void AssignNameWidgetHidingStateChanger::slotStateChanged()
     item->setEditable(item->widget()->mode() != AssignNameWidget::ConfirmedMode);
 }
 
-// ---
+//-------------------------------------------------------------------------------
 
 class FaceGroup::FaceGroupPriv
 {

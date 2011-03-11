@@ -357,9 +357,6 @@ public:
     double getFaceDetectionAccuracy() const;
     void setFaceDetectionAccuracy(double value);
 
-    double getFaceDetectionSpecificity() const;
-    void setFaceDetectionSpecificity(double value);
-
 public Q_SLOTS:
 
     void applyNepomukSettings() const;

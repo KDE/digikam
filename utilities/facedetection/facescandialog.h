@@ -65,7 +65,6 @@ public:
 
     // detection
     double        accuracy;
-    double        specificity;
 
     // albums to scan
     QList<Album*> albums;

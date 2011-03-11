@@ -196,7 +196,6 @@ public:
     static const QString                configSyncDigikamtoNepomukEntry;
     static const QString                configStringComparisonTypeEntry;
     static const QString                configFaceDetectionAccuracy;
-    static const QString                configFaceDetectionSpecificity;
 
     // start up setting
     bool                                showSplash;
@@ -300,7 +299,6 @@ public:
 
     // face detection settings
     double                              faceDetectionAccuracy;
-    double                              faceDetectionSpecificity;
 
     //misc
     AlbumSettings::StringComparisonType stringComparisonType;
@@ -384,7 +382,6 @@ const QString AlbumSettings::AlbumSettingsPrivate::configSyncNepomuktoDigikamEnt
 const QString AlbumSettings::AlbumSettingsPrivate::configSyncDigikamtoNepomukEntry("Sync Digikam to Nepomuk");
 const QString AlbumSettings::AlbumSettingsPrivate::configStringComparisonTypeEntry("String Comparison Type");
 const QString AlbumSettings::AlbumSettingsPrivate::configFaceDetectionAccuracy("Detection Accuracy");
-const QString AlbumSettings::AlbumSettingsPrivate::configFaceDetectionSpecificity("Detection Specificity");
 
 // -------------------------------------------------------------------------------------------------
 
@@ -499,7 +496,6 @@ void AlbumSettings::init()
     d->syncToNepomuk                = false;
 
     d->faceDetectionAccuracy        = 0.8;
-    d->faceDetectionSpecificity     = 0.8;
 
     d->stringComparisonType         = AlbumSettings::Natural;
 
@@ -626,7 +622,6 @@ void AlbumSettings::readSettings()
     group = config->group(d->configGroupFaceDetection);
 
     d->faceDetectionAccuracy       = group.readEntry(d->configFaceDetectionAccuracy, double(0.8));
-    d->faceDetectionSpecificity    = group.readEntry(d->configFaceDetectionSpecificity, double(0.8));
 
     emit setupChanged();
     emit recurseSettingsChanged();
@@ -733,7 +728,6 @@ void AlbumSettings::saveSettings()
     group = config->group(d->configGroupFaceDetection);
 
     group.writeEntry(d->configFaceDetectionAccuracy, d->faceDetectionAccuracy);
-    group.writeEntry(d->configFaceDetectionSpecificity, d->faceDetectionSpecificity);
 
     config->sync();
 }
@@ -1639,17 +1633,6 @@ void AlbumSettings::setFaceDetectionAccuracy(double value)
 {
     d->faceDetectionAccuracy = value;
 }
-
-double AlbumSettings::getFaceDetectionSpecificity() const
-{
-    return d->faceDetectionSpecificity;
-}
-
-void AlbumSettings::setFaceDetectionSpecificity(double value)
-{
-    d->faceDetectionSpecificity = value;
-}
-
 
 void AlbumSettings::applyNepomukSettings() const
 {

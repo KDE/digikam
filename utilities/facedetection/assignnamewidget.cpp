@@ -6,7 +6,7 @@
  * Date        : 2010-09-12
  * Description : Widget for assignment and confirmation of names for faces
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +59,8 @@ class AssignNameWidget::AssignNameWidgetPriv
 {
 public:
 
-    AssignNameWidgetPriv(AssignNameWidget* q) : q(q)
+    AssignNameWidgetPriv(AssignNameWidget* q)
+        : q(q)
     {
         mode           = InvalidMode;
         layoutMode     = InvalidLayout;

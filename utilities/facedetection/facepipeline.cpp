@@ -480,11 +480,6 @@ void DetectionWorker::setAccuracy(double accuracy)
     detector.setAccuracy(accuracy);
 }
 
-void DetectionWorker::setSpecificity(double specificity)
-{
-//    detector.setSpecificity(specificity);
-}
-
 // ----------------------------------------------------------------------------------------
 
 RecognitionWorker::RecognitionWorker(FacePipeline::FacePipelinePriv* d)
@@ -917,9 +912,6 @@ void FacePipeline::plugFaceDetector()
 
     connect(d, SIGNAL(accuracyChanged(double)),
             d->detectionWorker, SLOT(setAccuracy(double)));
-
-    connect(d, SIGNAL(specificityChanged(double)),
-            d->detectionWorker, SLOT(setSpecificity(double)));
 }
 
 void FacePipeline::plugParallelFaceDetectors()
@@ -939,9 +931,6 @@ void FacePipeline::plugParallelFaceDetectors()
 
         connect(d, SIGNAL(accuracyChanged(double)),
                 worker, SLOT(setAccuracy(double)));
-
-        connect(d, SIGNAL(specificityChanged(double)),
-                worker, SLOT(setSpecificity(double)));
 
         d->parallelDetectors->add(worker);
     }
@@ -1119,11 +1108,6 @@ void FacePipeline::process(const QList<ImageInfo>& infos)
 void FacePipeline::setDetectionAccuracy(double value)
 {
     emit d->accuracyChanged(value);
-}
-
-void FacePipeline::setDetectionSpecificity(double value)
-{
-    emit d->specificityChanged(value);
 }
 
 } // namespace Digikam

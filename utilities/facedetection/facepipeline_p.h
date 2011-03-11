@@ -197,7 +197,6 @@ public Q_SLOTS:
 
     void process(FacePipelineExtendedPackage::Ptr package);
     void setAccuracy(double value);
-    void setSpecificity(double value);
 
 Q_SIGNALS:
 
@@ -352,7 +351,6 @@ Q_SIGNALS:
     void startProcess(FacePipelineExtendedPackage::Ptr package);
 
     void accuracyChanged(double accuracy);
-    void specificityChanged(double accuracy);
     void thresholdChanged(double threshold);
 
 private:
