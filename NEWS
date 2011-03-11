@@ -12,6 +12,7 @@ General     : Pick Labels support to improve photograph selection.
 
 AlbumGUI    : Re-designed Filters view on right sidebar to perform icon-view items filtering.
 AlbumGUI    : Add options to group/ungroup items from icon-view.
+AlbumGUI    : Add options to show file format over icon-view items.
 
 ImageEditor : Image versionning support.
 ImageEditor : Foveon sensor based camera.
@@ -90,5 +91,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 068 ==> 267944 : Album properties - Date manually entered not saved when clicking Ok.
 069 ==> 211489 : Renaming doesn't prevent from concurrent operation.
 070 ==> 268058 : Use XMP sidecar files to store changes to RAW (or other files).
-071 ==> 
+071 ==> 148223 : Themes: different color of "plate" for different MIME.
+072 ==> 208504 : Add type icon to images under the thumbnail.
+073 ==> 268098 : Usability enhanced showing format of each photo in its background frame with BIG letters.
+074 ==> 
+
 
