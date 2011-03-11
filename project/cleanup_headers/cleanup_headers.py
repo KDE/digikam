@@ -138,19 +138,18 @@ def parse_files(filelist):
                     continue
 
                 if pow.match(include):          owninc.append(include)
+                elif (include.strip() in pknown['kde']): kdeinc.append(include)
+                elif (include.strip() in pknown['cpp']): cppinc.append(include)
+                elif (include.strip() in pknown['c']):   cinc.append(include)
+
                 elif plocal.match(include):     localinc.append(include)
                 elif pqt.match(include):        qtinc.append(include)
                 elif pkde.match(include):       kdeinc.append(include)
-
-                elif ((pcpp.match(include)) or
-                      (include.strip() in pknown['cpp'])
-                     ):                         cppinc.append(include)
-
+                elif pcpp.match(include):       cppinc.append(include)
                 elif pkdcraw.match(include):    kdcrawinc.append(include)
                 elif pkexiv2.match(include):    kexiv2inc.append(include)
                 elif pkipi.match(include):      kipiinc.append(include)
-                elif include.strip() in pknown['c']:
-                                                cinc.append(include)
+
                 else:
                     includes.append(include)
                     errors = True

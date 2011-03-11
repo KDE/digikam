@@ -5,3 +5,4 @@ c       <sys/stat.h>
 c       <utime.h>
 cpp     <iostream>
 cpp     <typeinfo>
+kde     <qtest_kde.h>
