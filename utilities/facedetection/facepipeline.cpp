@@ -482,7 +482,7 @@ void DetectionWorker::setAccuracy(double accuracy)
 
 void DetectionWorker::setSpecificity(double specificity)
 {
-    detector.setSpecificity(specificity);
+//    detector.setSpecificity(specificity);
 }
 
 // ----------------------------------------------------------------------------------------
