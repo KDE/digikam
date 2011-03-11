@@ -26,8 +26,8 @@
 
 // QT includes
 
-#include <qpixmap.h>
-#include <qwidget.h>
+#include <QPixmap>
+#include <QWidget>
 
 // KDE includes
 
@@ -48,9 +48,10 @@ namespace Digikam
  *
  * @author jwienke
  */
-class SidebarWidget: public QWidget, public StateSavingObject
+class SidebarWidget : public QWidget, public StateSavingObject
 {
     Q_OBJECT
+
 public:
 
     /**
@@ -107,9 +108,8 @@ Q_SIGNALS:
      * that is active.
      */
     void requestActiveTab(SidebarWidget*);
-
 };
 
-}
+} // namespace Digikam
 
 #endif /* SIDEBARWIDGET_H */

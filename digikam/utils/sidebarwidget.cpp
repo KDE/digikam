@@ -35,4 +35,4 @@ SidebarWidget::~SidebarWidget()
 {
 }
 
-}
+} // namespace Digikam
