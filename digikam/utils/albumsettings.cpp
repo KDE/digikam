@@ -455,7 +455,7 @@ void AlbumSettings::init()
     d->iconShowTags                 = true;
     d->iconShowOverlays             = true;
     d->iconShowRating               = true;
-    d->iconShowImageFormat          = true;
+    d->iconShowImageFormat          = false;
     d->iconviewFont                 = KGlobalSettings::generalFont();
 
     d->toolTipsFont                 = KGlobalSettings::generalFont();
@@ -553,7 +553,7 @@ void AlbumSettings::readSettings()
     d->iconShowTags                 = group.readEntry(d->configIconShowTagsEntry,                 true);
     d->iconShowOverlays             = group.readEntry(d->configIconShowOverlaysEntry,             true);
     d->iconShowRating               = group.readEntry(d->configIconShowRatingEntry,               true);
-    d->iconShowRating               = group.readEntry(d->configIconShowImageFormatEntry,          true);
+    d->iconShowImageFormat          = group.readEntry(d->configIconShowImageFormatEntry,          false);
     d->iconviewFont                 = group.readEntry(d->configIconViewFontEntry,                 KGlobalSettings::generalFont());
 
     d->toolTipsFont                 = group.readEntry(d->configToolTipsFontEntry,                 KGlobalSettings::generalFont());
@@ -621,7 +621,7 @@ void AlbumSettings::readSettings()
 
     group = config->group(d->configGroupFaceDetection);
 
-    d->faceDetectionAccuracy       = group.readEntry(d->configFaceDetectionAccuracy, double(0.8));
+    d->faceDetectionAccuracy = group.readEntry(d->configFaceDetectionAccuracy,     double(0.8));
 
     emit setupChanged();
     emit recurseSettingsChanged();
@@ -658,8 +658,9 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configIconShowModificationDateEntry,     d->iconShowModDate);
     group.writeEntry(d->configIconShowCommentsEntry,             d->iconShowComments);
     group.writeEntry(d->configIconShowTagsEntry,                 d->iconShowTags);
-    group.writeEntry(d->configIconShowRatingEntry,               d->iconShowRating);
     group.writeEntry(d->configIconShowOverlaysEntry,             d->iconShowOverlays);
+    group.writeEntry(d->configIconShowRatingEntry,               d->iconShowRating);
+    group.writeEntry(d->configIconShowImageFormatEntry,          d->iconShowImageFormat);
     group.writeEntry(d->configIconViewFontEntry,                 d->iconviewFont);
 
     group.writeEntry(d->configToolTipsFontEntry,                 d->toolTipsFont);
@@ -697,13 +698,13 @@ void AlbumSettings::saveSettings()
 
     group = config->group(d->configGroupGeneral);
 
-    group.writeEntry(d->configShowSplashEntry,                  d->showSplash);
-    group.writeEntry(d->configUseTrashEntry,                    d->useTrash);
-    group.writeEntry(d->configShowTrashDeleteDialogEntry,       d->showTrashDeleteDialog);
-    group.writeEntry(d->configShowPermanentDeleteDialogEntry,   d->showPermanentDeleteDialog);
-    group.writeEntry(d->configApplySidebarChangesDirectlyEntry, d->sidebarApplyDirectly);
-    group.writeEntry(d->configScanAtStartEntry,                 d->scanAtStart);
-    group.writeEntry(d->configStringComparisonTypeEntry,        (int) d->stringComparisonType);
+    group.writeEntry(d->configShowSplashEntry,                   d->showSplash);
+    group.writeEntry(d->configUseTrashEntry,                     d->useTrash);
+    group.writeEntry(d->configShowTrashDeleteDialogEntry,        d->showTrashDeleteDialog);
+    group.writeEntry(d->configShowPermanentDeleteDialogEntry,    d->showPermanentDeleteDialog);
+    group.writeEntry(d->configApplySidebarChangesDirectlyEntry,  d->sidebarApplyDirectly);
+    group.writeEntry(d->configScanAtStartEntry,                  d->scanAtStart);
+    group.writeEntry(d->configStringComparisonTypeEntry,         (int) d->stringComparisonType);
 
     // ---------------------------------------------------------------------
 
