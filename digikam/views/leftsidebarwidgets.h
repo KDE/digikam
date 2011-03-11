@@ -38,14 +38,12 @@
 #include "sidebarwidget.h"
 #include "imagefiltermodel.h"
 
-
 namespace Digikam
 {
 
 template <class T>
 class AlbumPointer;
 
-class AlbumFolderViewSideBarWidgetPriv;
 /**
  * SideBarWidget for the folder view.
  *
@@ -80,10 +78,12 @@ Q_SIGNALS:
 
 private:
 
+    class AlbumFolderViewSideBarWidgetPriv;
     AlbumFolderViewSideBarWidgetPriv* const d;
 };
 
-class TagViewSideBarWidgetPriv;
+// -----------------------------------------------------------------------------------------
+
 /**
  * SideBarWidget for the tag view.
  *
@@ -116,12 +116,18 @@ Q_SIGNALS:
 
     void signalFindDuplicatesInAlbum(Album*);
 
+public:
+
+    // Declared as public due to use by PeopleSideBarWidgetPriv
+    class TagViewSideBarWidgetPriv;
+
 private:
 
     TagViewSideBarWidgetPriv* const d;
 };
 
-class DateFolderViewSideBarWidgetPriv;
+// -----------------------------------------------------------------------------------------
+
 /**
  * SideBarWidget for the date folder view.
  *
@@ -150,10 +156,12 @@ public:
 
 private:
 
+    class DateFolderViewSideBarWidgetPriv;
     DateFolderViewSideBarWidgetPriv* const d;
 };
 
-class TimelineSideBarWidgetPriv;
+// -----------------------------------------------------------------------------------------
+
 /**
  * SideBarWidget for the date folder view.
  *
@@ -194,10 +202,12 @@ private Q_SLOTS:
 
 private:
 
+    class TimelineSideBarWidgetPriv;
     TimelineSideBarWidgetPriv* const d;
 };
 
-class SearchSideBarWidgetPriv;
+// -----------------------------------------------------------------------------------------
+
 /**
  * SideBarWidget for the search.
  *
@@ -226,10 +236,12 @@ public:
 
 private:
 
+    class SearchSideBarWidgetPriv;
     SearchSideBarWidgetPriv* const d;
 };
 
-class FuzzySearchSideBarWidgetPriv;
+// -----------------------------------------------------------------------------------------
+
 /**
  * SideBarWidget for the fuzzy search.
  *
@@ -261,10 +273,12 @@ Q_SIGNALS:
 
 private:
 
+    class FuzzySearchSideBarWidgetPriv;
     FuzzySearchSideBarWidgetPriv* const d;
 };
 
-class GPSSearchSideBarWidgetPriv;
+// -----------------------------------------------------------------------------------------
+
 /**
  * SideBarWidget for the gps search.
  *
@@ -295,10 +309,12 @@ Q_SIGNALS:
 
 private:
 
+    class GPSSearchSideBarWidgetPriv;
     GPSSearchSideBarWidgetPriv* const d;
 };
 
-class PeopleSideBarWidgetPriv;
+// -----------------------------------------------------------------------------------------
+
 /**
  * SideBarWidget for People
  *
@@ -337,8 +353,8 @@ Q_SIGNALS:
 
 private:
 
+    class PeopleSideBarWidgetPriv;
     PeopleSideBarWidgetPriv* const d;
-
 };
 
 } // namespace Digikam

@@ -63,7 +63,7 @@
 namespace Digikam
 {
 
-class AlbumFolderViewSideBarWidgetPriv
+class AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidgetPriv
 {
 public:
 
@@ -164,7 +164,7 @@ QString AlbumFolderViewSideBarWidget::getCaption()
 
 // -----------------------------------------------------------------------------
 
-class TagViewSideBarWidgetPriv
+class TagViewSideBarWidget::TagViewSideBarWidgetPriv
 {
 public:
 
@@ -259,7 +259,7 @@ void TagViewSideBarWidget::setCurrentAlbum(TAlbum* album)
 
 // -----------------------------------------------------------------------------
 
-class DateFolderViewSideBarWidgetPriv
+class DateFolderViewSideBarWidget::DateFolderViewSideBarWidgetPriv
 {
 public:
 
@@ -337,7 +337,7 @@ QString DateFolderViewSideBarWidget::getCaption()
 
 // -----------------------------------------------------------------------------
 
-class TimelineSideBarWidgetPriv
+class TimelineSideBarWidget::TimelineSideBarWidgetPriv
 {
 public:
 
@@ -381,9 +381,9 @@ public:
 
     SearchModificationHelper* searchModificationHelper;
 };
-const QString TimelineSideBarWidgetPriv::configHistogramTimeUnitEntry("Histogram TimeUnit");
-const QString TimelineSideBarWidgetPriv::configHistogramScaleEntry("Histogram Scale");
-const QString TimelineSideBarWidgetPriv::configCursorPositionEntry("Cursor Position");
+const QString TimelineSideBarWidget::TimelineSideBarWidgetPriv::configHistogramTimeUnitEntry("Histogram TimeUnit");
+const QString TimelineSideBarWidget::TimelineSideBarWidgetPriv::configHistogramScaleEntry("Histogram Scale");
+const QString TimelineSideBarWidget::TimelineSideBarWidgetPriv::configCursorPositionEntry("Cursor Position");
 
 // --------------------------------------------------------
 
@@ -794,7 +794,7 @@ void TimelineSideBarWidget::slotCheckAboutSelection()
 
 // -----------------------------------------------------------------------------
 
-class SearchSideBarWidgetPriv
+class SearchSideBarWidget::SearchSideBarWidgetPriv
 {
 public:
     SearchSideBarWidgetPriv() :
@@ -905,7 +905,7 @@ void SearchSideBarWidget::newAdvancedSearch()
 
 // -----------------------------------------------------------------------------
 
-class FuzzySearchSideBarWidgetPriv
+class FuzzySearchSideBarWidget::FuzzySearchSideBarWidgetPriv
 {
 public:
     FuzzySearchSideBarWidgetPriv() :
@@ -1004,7 +1004,7 @@ void FuzzySearchSideBarWidget::newSimilarSearch(const ImageInfo& imageInfo)
 
 // -----------------------------------------------------------------------------
 
-class GPSSearchSideBarWidgetPriv
+class GPSSearchSideBarWidget::GPSSearchSideBarWidgetPriv
 {
 public:
     GPSSearchSideBarWidgetPriv() :
@@ -1082,21 +1082,21 @@ QString GPSSearchSideBarWidget::getCaption()
 
 // -----------------------------------------------------------------------------
 
-class PeopleSideBarWidgetPriv : public TagViewSideBarWidgetPriv
+class PeopleSideBarWidget::PeopleSideBarWidgetPriv : public TagViewSideBarWidget::TagViewSideBarWidgetPriv
 {
 public:
 
     PeopleSideBarWidgetPriv()
     {
-        personIcon   = 0;
-        textLabel    = 0;
-        rescanButton = 0;
+        personIcon               = 0;
+        textLabel                = 0;
+        rescanButton             = 0;
         searchModificationHelper = 0;
     }
 
-    QLabel*      personIcon;
-    QLabel*      textLabel;
-    QPushButton* rescanButton;
+    QLabel*                   personIcon;
+    QLabel*                   textLabel;
+    QPushButton*              rescanButton;
 
     SearchModificationHelper* searchModificationHelper;
 };
