@@ -216,28 +216,6 @@ QString RenameCustomizer::newName(const QString& fileName, const QDateTime& date
     return d->advancedRenameManager->newName(fileName);
 }
 
-//QString RenameCustomizer::newName(const QString& fileName, const QDateTime& dateTime) const
-//{
-//
-//    if (d->renameDefault->isChecked())
-//        return QString();
-//
-//    QString name;
-//    QString cameraName = QString("%1").arg(d->cameraTitle.simplified().remove(' '));
-//
-//    if (d->renameCustom->isChecked())
-//    {
-//        ParseSettings settings;
-//        settings.fileUrl    = fileName;
-//        settings.cameraName = cameraName;
-//        settings.dateTime   = dateTime;
-//
-//        name = d->advancedRenameWidget->parse(settings);
-//    }
-//
-//    return name;
-//}
-
 RenameCustomizer::Case RenameCustomizer::changeCase() const
 {
     RenameCustomizer::Case type = NONE;
