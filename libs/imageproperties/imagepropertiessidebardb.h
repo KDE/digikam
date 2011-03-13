@@ -47,6 +47,7 @@ class DImg;
 class SidebarSplitter;
 class ImageInfo;
 class ImageChangeset;
+class ImageTagChangeset;
 class ImagePropertiesVersionsTab;
 
 class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
@@ -102,6 +103,7 @@ private Q_SLOTS:
     void slotChangedTab(QWidget* tab);
     void slotFileMetadataChanged(const KUrl& url);
     void slotImageChangeDatabase(const ImageChangeset& changeset);
+    void slotImageTagChanged(const ImageTagChangeset& changeset);
 
 private:
 

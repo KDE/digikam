@@ -123,6 +123,9 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* parent, SidebarSplit
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
             this, SLOT(slotImageChangeDatabase(const ImageChangeset&)));
 
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset&)),
+            this, SLOT(slotImageTagChanged(const ImageTagChangeset&)));
+
     connect(ImageAttributesWatch::instance(), SIGNAL(signalFileMetadataChanged(const KUrl&)),
             this, SLOT(slotFileMetadataChanged(const KUrl&)));
 }
@@ -429,6 +432,30 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
                     // update now - reuse code form slotChangedTab
                     slotChangedTab(tab);
                 }
+            }
+        }
+    }
+}
+
+void ImagePropertiesSideBarDB::slotImageTagChanged(const ImageTagChangeset& changeset)
+{
+    if (!d->currentInfos.isEmpty())
+    {
+        QWidget* tab = getActiveTab();
+
+        if (!tab)
+        {
+            return;
+        }
+
+        if (tab == m_propertiesTab)
+        {
+            ImageInfo& info = d->currentInfos.first();
+
+            if (changeset.ids().contains(info.id()))
+            {
+                m_dirtyPropertiesTab = false;
+                slotChangedTab(tab);
             }
         }
     }
