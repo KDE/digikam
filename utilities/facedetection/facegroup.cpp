@@ -737,6 +737,7 @@ void FaceGroup::slotAddItemFinished(const QRectF& rect)
                                                             d->manuallyAddedItem->originalRect());
         FaceItem* item = d->addItem(face);
         d->visibilityController->setItemDirectlyVisible(item, true);
+        item->switchMode(AssignNameWidget::UnconfirmedEditMode);
         d->manuallyAddWrapItem->stackBefore(item);
     }
 

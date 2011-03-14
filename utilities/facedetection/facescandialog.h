@@ -49,7 +49,8 @@ public:
     {
         DetectAndRecognize,
         RecognizeMarkedFaces,
-        RetrainAll
+        RetrainAll,
+        Benchmark
     };
 
     ScanTask      task;
@@ -97,6 +98,7 @@ protected Q_SLOTS:
     void setDetectionDefaultParameters();
     void updateClearButtons();
     void retrainAllButtonToggled(bool on);
+    void benchmarkButtonToggled(bool on);
 
 private:
 

@@ -310,6 +310,8 @@ public:
     QList<KFaceIface::Face> toFaces(const QList<DatabaseFace>& databaseFaces) const;
     QList<DatabaseFace> databaseFaces(qlonglong imageId, DatabaseFace::TypeFlags flags) const;
     QList<ImageTagPair> faceImageTagPairs(qlonglong imageid, DatabaseFace::TypeFlags flags) const;
+    QList<DatabaseFace> toDatabaseFaces(const DImg& image, qlonglong imageid, 
+                                        const QList<KFaceIface::Face>& faces) const;
 
 private:
 

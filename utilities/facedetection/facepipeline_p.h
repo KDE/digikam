@@ -264,6 +264,42 @@ protected:
 
 // ----------------------------------------------------------------------------------------
 
+class Benchmarker : public WorkerObject
+{
+    Q_OBJECT
+
+public:
+
+    Benchmarker(FacePipeline::FacePipelinePriv* d);
+    QString result() const;
+
+public Q_SLOTS:
+
+    void process(FacePipelineExtendedPackage::Ptr package);
+
+Q_SIGNALS:
+
+    void processed(FacePipelineExtendedPackage::Ptr package);
+
+protected:
+
+    int totalImages;
+    int faces;
+    double totalPixels;
+    double facePixels;
+
+    int trueNegativeImages;
+    int falsePositiveImages;
+
+    int truePositiveFaces;
+    int falseNegativeFaces;
+    int falsePositiveFaces;
+
+    FacePipeline::FacePipelinePriv* const d;
+};
+
+// ----------------------------------------------------------------------------------------
+
 class Trainer : public WorkerObject
 {
     Q_OBJECT
@@ -332,6 +368,7 @@ public:
     RecognitionWorker*   recognitionWorker;
     DatabaseWriter*      databaseWriter;
     Trainer*             trainer;
+    Benchmarker*         benchmarker;
 
     QList<QObject*>      pipeline;
 

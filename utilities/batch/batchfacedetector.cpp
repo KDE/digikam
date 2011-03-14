@@ -27,14 +27,18 @@
 // Qt includes
 
 #include <QApplication>
+#include <QClipboard>
 #include <QCloseEvent>
+#include <QVBoxLayout>
 
 // KDE includes
 
-#include <klocale.h>
-#include <kstandardguiitem.h>
 #include <kdebug.h>
+#include <klocale.h>
+#include <kpushbutton.h>
 #include <kstandarddirs.h>
+#include <kstandardguiitem.h>
+#include <ktextedit.h>
 
 // KFace includes
 
@@ -61,12 +65,14 @@ public:
     BatchFaceDetectorPriv()
     {
         rebuildAll = true;
+        benchmark  = false;
         total      = 0;
 
         duration.start();
     }
 
     bool         rebuildAll;
+    bool         benchmark;
 
     QTime        duration;
     int          total;
@@ -91,6 +97,22 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings
         KFaceIface::RecognitionDatabase::addDatabase();
         d->pipeline.plugRetrainingDatabaseFilter();
         d->pipeline.plugTrainer();
+        d->pipeline.construct();
+    }
+    else if (settings.task == FaceScanSettings::Benchmark)
+    {
+        d->benchmark = true;
+        d->pipeline.plugDatabaseFilter(FacePipeline::ScanAll);
+        d->pipeline.plugPreviewLoader();
+        if (settings.useFullCpu)
+        {
+            d->pipeline.plugParallelFaceDetectors();
+        }
+        else
+        {
+            d->pipeline.plugFaceDetector();
+        }
+        d->pipeline.plugBenchmarker();
         d->pipeline.construct();
     }
     else
@@ -258,6 +280,35 @@ void BatchFaceDetector::slotItemsInfo(const ImageInfoList& items)
     d->pipeline.process(items);
 }
 
+class BenchmarkMessageDisplay : public QWidget
+{
+public:
+    BenchmarkMessageDisplay(const QString& richText)
+        : QWidget(0)
+    {
+        setAttribute(Qt::WA_DeleteOnClose);
+
+        QVBoxLayout* vbox = new QVBoxLayout;
+
+        KTextEdit* edit = new KTextEdit;
+        vbox->addWidget(edit, 1);
+        KPushButton* okButton = new KPushButton(KStandardGuiItem::ok());
+        vbox->addWidget(okButton, 0, Qt::AlignRight);
+
+        setLayout(vbox);
+
+        connect(okButton, SIGNAL(clicked()),
+                this, SLOT(close()));
+
+        edit->setHtml(richText);
+        QApplication::clipboard()->setText(edit->toPlainText());
+
+        resize(500, 400);
+        show();
+        raise();
+    }
+};
+
 void BatchFaceDetector::complete()
 {
     QTime t;
@@ -272,6 +323,11 @@ void BatchFaceDetector::complete()
     KNotificationWrapper("batchfacedetectioncompleted", i18n("The face detected database has been updated."),
                          this, windowTitle());
     emit signalDetectAllFacesDone();
+
+    if (d->benchmark)
+    {
+        new BenchmarkMessageDisplay(d->pipeline.benchmarkResult());
+    }
 }
 
 void BatchFaceDetector::slotCancel()

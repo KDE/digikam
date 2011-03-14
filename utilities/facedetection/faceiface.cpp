@@ -638,12 +638,10 @@ void FaceIface::storeThumbnails(ThumbnailLoadThread* thread, const QString& file
 
 // --- Face detection: merging results ------------------------------------------------------------------------------------
 
-QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlonglong imageid,
-                                                       const QList<KFaceIface::Face>& faceList)
+QList<DatabaseFace> FaceIface::toDatabaseFaces(const DImg& image, qlonglong imageid, 
+                                    const QList<KFaceIface::Face>& faceList) const
 {
-    QList<DatabaseFace> newFaces;
-
-    // Build list of new entries
+    QList<DatabaseFace> faces;
     foreach (const KFaceIface::Face& face, faceList)
     {
         // We'll get the unknownPeopleTagId if face.name() is null
@@ -652,13 +650,21 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
 
         if (!tagId || !fullSizeRect.isValid())
         {
-            newFaces << DatabaseFace();
+            faces << DatabaseFace();
             continue;
         }
 
-        kDebug() << "New Entry" << fullSizeRect << tagId;
-        newFaces << DatabaseFace(DatabaseFace::UnconfirmedName, imageid, tagId, TagRegion(fullSizeRect));
+        //kDebug() << "New Entry" << fullSizeRect << tagId;
+        faces << DatabaseFace(DatabaseFace::UnconfirmedName, imageid, tagId, TagRegion(fullSizeRect));
     }
+    return faces;
+}
+
+QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlonglong imageid,
+                                                       const QList<KFaceIface::Face>& faceList)
+{
+    // Build list of new entries
+    QList<DatabaseFace> newFaces = toDatabaseFaces(image, imageid, faceList);
 
     if (newFaces.isEmpty())
     {

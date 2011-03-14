@@ -206,12 +206,14 @@ public:
     void plugDatabaseWriter(WriteMode mode);
     void plugDatabaseEditor();
     void plugTrainer();
+    void plugBenchmarker();
     void construct();
 
     /** Cancels all processing */
     void cancel();
 
     bool hasFinished() const;
+    QString benchmarkResult() const;
 
 public Q_SLOTS:
 
