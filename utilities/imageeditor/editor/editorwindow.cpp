@@ -2870,21 +2870,9 @@ void EditorWindow::setOverExposureToolTip(bool on)
 
 void EditorWindow::slotToggleSlideShow()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
-    bool startWithCurrent     = group.readEntry(d->configSlideShowStartCurrentEntry, false);
-
     SlideShowSettings settings;
-    settings.delay                = group.readEntry(d->configSlideShowDelayEntry, 5) * 1000;
-    settings.printName            = group.readEntry(d->configSlideShowPrintNameEntry, true);
-    settings.printDate            = group.readEntry(d->configSlideShowPrintDateEntry, false);
-    settings.printApertureFocal   = group.readEntry(d->configSlideShowPrintApertureFocalEntry, false);
-    settings.printExpoSensitivity = group.readEntry(d->configSlideShowPrintExpoSensitivityEntry, false);
-    settings.printMakeModel       = group.readEntry(d->configSlideShowPrintMakeModelEntry, false);
-    settings.printComment         = group.readEntry(d->configSlideShowPrintCommentEntry, false);
-    settings.printLabels          = group.readEntry(d->configSlideShowPrintLabelsEntry, false);
-    settings.loop                 = group.readEntry(d->configSlideShowLoopEntry, false);
-    slideShow(startWithCurrent, settings);
+    settings.readFromConfig();
+    slideShow(settings);
 }
 
 void EditorWindow::slotSelectionChanged(const QRect& sel)

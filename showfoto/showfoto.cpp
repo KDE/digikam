@@ -1184,7 +1184,7 @@ void ShowFoto::slotContextMenu()
     m_contextMenu->exec(QCursor::pos());
 }
 
-void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& settings)
+void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
 {
     if (!d->thumbBar->countItems())
     {
@@ -1196,10 +1196,9 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
 
     settings.exifRotate = group.readEntry("EXIF Rotate", true);
     settings.fileList   = d->thumbBar->itemsUrls();
-
-    int   i           = 0;
-    float cnt         = settings.fileList.count();
-    m_cancelSlideShow = false;
+    int   i             = 0;
+    float cnt           = settings.fileList.count();
+    m_cancelSlideShow   = false;
     Digikam::DMetadata meta;
 
     m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
@@ -1224,7 +1223,7 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     {
         Digikam::SlideShow* slide = new Digikam::SlideShow(settings);
 
-        if (startWithCurrent)
+        if (settings.startWithCurrent)
         {
             slide->setCurrent(d->currentItem->url());
         }

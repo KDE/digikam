@@ -1818,26 +1818,13 @@ void DigikamView::slotItemsInfoFromAlbums(const ImageInfoList& infoList)
 
 void DigikamView::slideShow(const ImageInfoList& infoList)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
-    bool startWithCurrent     = group.readEntry("SlideShowStartCurrent", false);
-
     int     i = 0;
     float cnt = (float)infoList.count();
     emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode,
                                i18np("Preparing slideshow of 1 image. Please wait...","Preparing slideshow of %1 images. Please wait...", infoList.count()));
 
     SlideShowSettings settings;
-    settings.exifRotate           = MetadataSettings::instance()->settings().exifRotate;
-    settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
-    settings.printName            = group.readEntry("SlideShowPrintName", true);
-    settings.printDate            = group.readEntry("SlideShowPrintDate", false);
-    settings.printApertureFocal   = group.readEntry("SlideShowPrintApertureFocal", false);
-    settings.printExpoSensitivity = group.readEntry("SlideShowPrintExpoSensitivity", false);
-    settings.printMakeModel       = group.readEntry("SlideShowPrintMakeModel", false);
-    settings.printComment         = group.readEntry("SlideShowPrintComment", false);
-    settings.printLabels          = group.readEntry("SlideShowPrintLabels", false);
-    settings.loop                 = group.readEntry("SlideShowLoop", false);
+    settings.readFromConfig();
 
     d->cancelSlideShow = false;
 
@@ -1864,7 +1851,7 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
     {
         SlideShow* slide = new SlideShow(settings);
 
-        if (startWithCurrent)
+        if (settings.startWithCurrent)
         {
             slide->setCurrent(d->iconView->currentUrl());
         }

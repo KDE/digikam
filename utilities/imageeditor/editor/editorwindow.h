@@ -226,7 +226,7 @@ protected:
     virtual ThumbBarDock* thumbBar() const=0;
     virtual Sidebar* rightSideBar() const=0;
 
-    virtual void slideShow(bool startWithCurrent, SlideShowSettings& settings)=0;
+    virtual void slideShow(SlideShowSettings& settings)=0;
 
     virtual void setupConnections()=0;
     virtual void setupActions()=0;

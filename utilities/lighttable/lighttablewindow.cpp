@@ -1390,25 +1390,12 @@ void LightTableWindow::slotEditItem(const ImageInfo& info)
 
 void LightTableWindow::slotToggleSlideShow()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
-    bool startWithCurrent     = group.readEntry("SlideShowStartCurrent", false);
-
     SlideShowSettings settings;
-    settings.exifRotate           = MetadataSettings::instance()->settings().exifRotate;
-    settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
-    settings.printName            = group.readEntry("SlideShowPrintName", true);
-    settings.printDate            = group.readEntry("SlideShowPrintDate", false);
-    settings.printApertureFocal   = group.readEntry("SlideShowPrintApertureFocal", false);
-    settings.printExpoSensitivity = group.readEntry("SlideShowPrintExpoSensitivity", false);
-    settings.printMakeModel       = group.readEntry("SlideShowPrintMakeModel", false);
-    settings.printComment         = group.readEntry("SlideShowPrintComment", false);
-    settings.printLabels          = group.readEntry("SlideShowPrintLabels", false);
-    settings.loop                 = group.readEntry("SlideShowLoop", false);
-    slideShow(startWithCurrent, settings);
+    settings.readFromConfig();
+    slideShow(settings);
 }
 
-void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
+void LightTableWindow::slideShow(SlideShowSettings& settings)
 {
     if (!d->barView->countItems())
     {
@@ -1444,11 +1431,9 @@ void LightTableWindow::slideShow(bool startWithCurrent, SlideShowSettings& setti
 
     if (!d->cancelSlideShow)
     {
-        settings.exifRotate = MetadataSettings::instance()->settings().exifRotate;
-
         SlideShow* slide = new SlideShow(settings);
 
-        if (startWithCurrent)
+        if (settings.startWithCurrent)
         {
             slide->setCurrent(d->barView->currentItemImageInfo().fileUrl());
         }

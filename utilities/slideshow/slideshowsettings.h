@@ -78,25 +78,18 @@ class DIGIKAM_EXPORT SlideShowSettings
 
 public:
 
-    SlideShowSettings()
-    {
-        exifRotate           = true;
-        printName            = true;
-        printDate            = false;
-        printComment         = false;
-        printLabels          = false;
-        printApertureFocal   = false;
-        printMakeModel       = false;
-        printExpoSensitivity = false;
-        loop                 = false;
-        delay                = 5;
-    };
+    SlideShowSettings();
+    ~SlideShowSettings();
 
-    ~SlideShowSettings() {};
+    void readFromConfig();
+    void writeToConfig();
 
 public:
 
     // Global Slide Show Settings
+
+    /** Start Slide with current selected item */
+    bool                         startWithCurrent;
 
     /** Auto-rotate image accordingly with Exif Rotation tag */
     bool                         exifRotate;
@@ -136,6 +129,20 @@ public:
 
     /** Map of pictures information to slide */
     QMap<KUrl, SlidePictureInfo> pictInfoMap;
+
+private:
+
+    static const QString         configGroupName;
+    static const QString         configSlideShowStartCurrentEntry;
+    static const QString         configSlideShowDelayEntry;
+    static const QString         configSlideShowLoopEntry;
+    static const QString         configSlideShowPrintApertureFocalEntry;
+    static const QString         configSlideShowPrintCommentEntry;
+    static const QString         configSlideShowPrintDateEntry;
+    static const QString         configSlideShowPrintExpoSensitivityEntry;
+    static const QString         configSlideShowPrintMakeModelEntry;
+    static const QString         configSlideShowPrintNameEntry;
+    static const QString         configSlideShowPrintLabelsEntry;
 };
 
 }  // namespace Digikam

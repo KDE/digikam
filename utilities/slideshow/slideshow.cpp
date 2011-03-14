@@ -346,7 +346,7 @@ void SlideShow::slotGotImagePreview(const LoadingDescription& desc, const DImg& 
         if (!d->pause)
         {
             d->timer->setSingleShot(true);
-            d->timer->start(d->settings.delay);
+            d->timer->start(d->settings.delay * 1000);
         }
 
         preloadNextImage();

@@ -89,7 +89,7 @@ private:
     void setupConnections();
     void setupUserArea();
     void setupStatusBar();
-    void slideShow(bool startWithCurrent, SlideShowSettings& settings);
+    void slideShow(SlideShowSettings& settings);
     void showToolBars();
     void hideToolBars();
     void readSettings();

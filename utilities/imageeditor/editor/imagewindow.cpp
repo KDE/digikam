@@ -1491,12 +1491,12 @@ void ImageWindow::slotFilePrint()
     printImage(d->currentUrl());
 }
 
-void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
+void ImageWindow::slideShow(SlideShowSettings& settings)
 {
     float cnt;
-    int i                = 0;
-    m_cancelSlideShow    = false;
-    settings.exifRotate  = MetadataSettings::instance()->settings().exifRotate;
+    int i               = 0;
+    m_cancelSlideShow   = false;
+    settings.exifRotate = MetadataSettings::instance()->settings().exifRotate;
 
     if (!d->imageInfoModel->isEmpty())
     {
@@ -1552,11 +1552,9 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
 
     if (!m_cancelSlideShow)
     {
-        settings.exifRotate = MetadataSettings::instance()->settings().exifRotate;
-
         SlideShow* slide = new SlideShow(settings);
 
-        if (startWithCurrent)
+        if (settings.startWithCurrent)
         {
             slide->setCurrent(d->currentUrl());
         }

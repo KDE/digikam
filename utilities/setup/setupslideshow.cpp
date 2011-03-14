@@ -38,6 +38,10 @@
 #include <klocale.h>
 #include <knuminput.h>
 
+// Local includes
+
+#include "slideshowsettings.h"
+
 namespace Digikam
 {
 
@@ -58,41 +62,18 @@ public:
         delayInput(0)
     {}
 
-    static const QString configGroupName;
-    static const QString configSlideShowDelayEntry;
-    static const QString configSlideShowStartCurrentEntry;
-    static const QString configSlideShowLoopEntry;
-    static const QString configSlideShowPrintNameEntry;
-    static const QString configSlideShowPrintDateEntry;
-    static const QString configSlideShowPrintApertureFocalEntry;
-    static const QString configSlideShowPrintExpoSensitivityEntry;
-    static const QString configSlideShowPrintMakeModelEntry;
-    static const QString configSlideShowPrintCommentEntry;
-    static const QString configSlideShowPrintLabelsEntry;
+    QCheckBox*    startWithCurrent;
+    QCheckBox*    loopMode;
+    QCheckBox*    showName;
+    QCheckBox*    showDate;
+    QCheckBox*    showApertureFocal;
+    QCheckBox*    showExpoSensitivity;
+    QCheckBox*    showMakeModel;
+    QCheckBox*    showComment;
+    QCheckBox*    showLabels;
 
-    QCheckBox*           startWithCurrent;
-    QCheckBox*           loopMode;
-    QCheckBox*           showName;
-    QCheckBox*           showDate;
-    QCheckBox*           showApertureFocal;
-    QCheckBox*           showExpoSensitivity;
-    QCheckBox*           showMakeModel;
-    QCheckBox*           showComment;
-    QCheckBox*           showLabels;
-
-    KIntNumInput*        delayInput;
+    KIntNumInput* delayInput;
 };
-const QString SetupSlideShow::SetupSlideShowPriv::configGroupName("ImageViewer Settings");
-const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowDelayEntry("SlideShowDelay");
-const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowStartCurrentEntry("SlideShowStartCurrent");
-const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowLoopEntry("SlideShowLoop");
-const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintNameEntry("SlideShowPrintName");
-const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintDateEntry("SlideShowPrintDate");
-const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintApertureFocalEntry("SlideShowPrintApertureFocal");
-const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintExpoSensitivityEntry("SlideShowPrintExpoSensitivity");
-const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintMakeModelEntry("SlideShowPrintMakeModel");
-const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintCommentEntry("SlideShowPrintComment");
-const QString SetupSlideShow::SetupSlideShowPriv::configSlideShowPrintLabelsEntry("SlideShowPrintLabels");
 
 // --------------------------------------------------------
 
@@ -175,37 +156,34 @@ SetupSlideShow::~SetupSlideShow()
 
 void SetupSlideShow::applySettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
-
-    group.writeEntry(d->configSlideShowDelayEntry,                d->delayInput->value());
-    group.writeEntry(d->configSlideShowStartCurrentEntry,         d->startWithCurrent->isChecked());
-    group.writeEntry(d->configSlideShowLoopEntry,                 d->loopMode->isChecked());
-    group.writeEntry(d->configSlideShowPrintNameEntry,            d->showName->isChecked());
-    group.writeEntry(d->configSlideShowPrintDateEntry,            d->showDate->isChecked());
-    group.writeEntry(d->configSlideShowPrintApertureFocalEntry,   d->showApertureFocal->isChecked());
-    group.writeEntry(d->configSlideShowPrintExpoSensitivityEntry, d->showExpoSensitivity->isChecked());
-    group.writeEntry(d->configSlideShowPrintMakeModelEntry,       d->showMakeModel->isChecked());
-    group.writeEntry(d->configSlideShowPrintCommentEntry,         d->showComment->isChecked());
-    group.writeEntry(d->configSlideShowPrintLabelsEntry,          d->showLabels->isChecked());
-    config->sync();
+    SlideShowSettings settings;
+    settings.delay                = d->delayInput->value();
+    settings.startWithCurrent     = d->startWithCurrent->isChecked();
+    settings.loop                 = d->loopMode->isChecked();
+    settings.printName            = d->showName->isChecked();
+    settings.printDate            = d->showDate->isChecked();
+    settings.printApertureFocal   = d->showApertureFocal->isChecked();
+    settings.printExpoSensitivity = d->showExpoSensitivity->isChecked();
+    settings.printMakeModel       = d->showMakeModel->isChecked();
+    settings.printComment         = d->showComment->isChecked();
+    settings.printLabels          = d->showLabels->isChecked();
+    settings.writeToConfig();
 }
 
 void SetupSlideShow::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
-
-    d->delayInput->setValue(group.readEntry(d->configSlideShowDelayEntry,                           5));
-    d->startWithCurrent->setChecked(group.readEntry(d->configSlideShowStartCurrentEntry,            false));
-    d->loopMode->setChecked(group.readEntry(d->configSlideShowLoopEntry,                            false));
-    d->showName->setChecked(group.readEntry(d->configSlideShowPrintNameEntry,                       true));
-    d->showDate->setChecked(group.readEntry(d->configSlideShowPrintDateEntry,                       false));
-    d->showApertureFocal->setChecked(group.readEntry(d->configSlideShowPrintApertureFocalEntry,     false));
-    d->showExpoSensitivity->setChecked(group.readEntry(d->configSlideShowPrintExpoSensitivityEntry, false));
-    d->showMakeModel->setChecked(group.readEntry(d->configSlideShowPrintMakeModelEntry,             false));
-    d->showComment->setChecked(group.readEntry(d->configSlideShowPrintCommentEntry,                 false));
-    d->showLabels->setChecked(group.readEntry(d->configSlideShowPrintLabelsEntry,                   false));
+    SlideShowSettings settings;
+    settings.readFromConfig();
+    d->delayInput->setValue(settings.delay);
+    d->startWithCurrent->setChecked(settings.startWithCurrent);
+    d->loopMode->setChecked(settings.loop);
+    d->showName->setChecked(settings.printName);
+    d->showDate->setChecked(settings.printDate);
+    d->showApertureFocal->setChecked(settings.printApertureFocal);
+    d->showExpoSensitivity->setChecked(settings.printExpoSensitivity);
+    d->showMakeModel->setChecked(settings.printMakeModel);
+    d->showComment->setChecked(settings.printComment);
+    d->showLabels->setChecked(settings.printLabels);
 }
 
 }   // namespace Digikam
