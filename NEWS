@@ -94,6 +94,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 071 ==> 148223 : Themes: different color of "plate" for different MIME.
 072 ==> 208504 : Add type icon to images under the thumbnail.
 073 ==> 268098 : Usability enhanced showing format of each photo in its background frame with BIG letters.
-074 ==> 
+074 ==> 268329 : Labels (rating, color, pick) in slideshow not alway shown correctly/sometimes forgotten.
+075 ==> 
+
 
 
