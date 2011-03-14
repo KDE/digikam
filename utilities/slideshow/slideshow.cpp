@@ -879,16 +879,19 @@ void SlideShow::allowScreenSaver()
 
 void SlideShow::slotRatingChanged(int rating)
 {
+    d->settings.pictInfoMap[d->currentImage].rating = rating;
     emit signalRatingChanged(d->currentImage, rating);
 }
 
 void SlideShow::slotColorLabelChanged(int color)
 {
+    d->settings.pictInfoMap[d->currentImage].colorLabel = color;
     emit signalColorLabelChanged(d->currentImage, color);
 }
 
 void SlideShow::slotPickLabelChanged(int pick)
 {
+    d->settings.pictInfoMap[d->currentImage].pickLabel = pick;
     emit signalPickLabelChanged(d->currentImage, pick);
 }
 
