@@ -221,6 +221,7 @@ AnimationControl::~AnimationControl()
 void AnimationControl::clear()
 {
     state = ItemVisibilityController::Hidden;
+    disconnect(animation);
     delete animation;
     animation      = 0;
     animationGroup = 0; // the same pointer as animation
@@ -654,7 +655,7 @@ void ItemVisibilityController::addItem(QObject* item)
 
 void ItemVisibilityController::removeItem(QObject* item)
 {
-    if (!item)
+    if (!item || !d->control)
     {
         return;
     }
