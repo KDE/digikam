@@ -46,7 +46,7 @@ MetadataSettingsContainer::MetadataSettingsContainer()
     exifSetOrientation    = true;
     saveComments          = false;
     saveDateTime          = false;
-    savePickLabel        = false;
+    savePickLabel         = false;
     saveColorLabel        = false;
     saveRating            = false;
     saveTemplate          = false;
