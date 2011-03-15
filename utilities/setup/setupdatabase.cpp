@@ -67,7 +67,7 @@
 namespace Digikam
 {
 
-class SetupDatabasePriv
+class SetupDatabase::SetupDatabasePriv
 {
 public:
 
@@ -88,9 +88,8 @@ public:
 SetupDatabase::SetupDatabase(KPageDialog* dialog, QWidget* parent)
     : QScrollArea(parent), d(new SetupDatabasePriv)
 {
-    d->mainDialog  = dialog;
-
-    QWidget* page = new QWidget;
+    d->mainDialog           = dialog;
+    QWidget* page           = new QWidget;
     QVBoxLayout* mainLayout = new QVBoxLayout;
 
     d->databaseWidget = new DatabaseWidget;
@@ -98,7 +97,7 @@ SetupDatabase::SetupDatabase(KPageDialog* dialog, QWidget* parent)
 
     if (!SchemaUpdater::isUniqueHashUpToDate())
     {
-        d->updateBox = new QGroupBox(i18nc("@title:group", "Updates"));
+        d->updateBox    = new QGroupBox(i18nc("@title:group", "Updates"));
         QGridLayout* updateLayout = new QGridLayout;
 
         d->hashesButton = new QPushButton(i18nc("@action:button", "Update File Hashes"));
@@ -233,7 +232,5 @@ void SetupDatabase::showHashInformation()
 {
     qApp->postEvent(d->hashesButton, new QHelpEvent(QEvent::WhatsThis, QPoint(0,0), QCursor::pos()));
 }
-
-
 
 }  // namespace Digikam

@@ -81,7 +81,7 @@ public:
     CameraAutoDetectThread(QObject* parent);
     virtual ~CameraAutoDetectThread();
 
-    int     result();
+    int     result() const;
     QString model() const;
     QString port() const;
 
@@ -91,10 +91,8 @@ private:
 
 private:
 
-    int     m_result;
-
-    QString m_model;
-    QString m_port;
+    class CameraAutoDetectThreadPriv;
+    CameraAutoDetectThreadPriv* const d;
 };
 
 }  // namespace Digikam

@@ -33,8 +33,6 @@ class KPageDialog;
 namespace Digikam
 {
 
-class SetupDatabasePriv;
-
 class SetupDatabase : public QScrollArea
 {
     Q_OBJECT
@@ -57,6 +55,7 @@ private Q_SLOTS:
 
 private:
 
+    class SetupDatabasePriv;
     SetupDatabasePriv* const d;
 };
 

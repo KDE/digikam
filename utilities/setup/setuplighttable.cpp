@@ -6,7 +6,7 @@
  * Date        : 2007-05-11
  * Description : setup Light Table tab.
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class SetupLightTablePriv
+class SetupLightTable::SetupLightTablePriv
 {
 public:
 
@@ -66,12 +66,13 @@ public:
     QCheckBox*           loadFullImageSize;
     QCheckBox*           clearOnClose;
 };
-const QString SetupLightTablePriv::configGroupName("LightTable Settings");
-const QString SetupLightTablePriv::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
-const QString SetupLightTablePriv::configAutoSyncPreviewEntry("Auto Sync Preview");
-const QString SetupLightTablePriv::configAutoLoadRightPanelEntry("Auto Load Right Panel");
-const QString SetupLightTablePriv::configLoadFullImagesizeEntry("Load Full Image size");
-const QString SetupLightTablePriv::configClearOnCloseEntry("Clear On Close");
+
+const QString SetupLightTable::SetupLightTablePriv::configGroupName("LightTable Settings");
+const QString SetupLightTable::SetupLightTablePriv::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
+const QString SetupLightTable::SetupLightTablePriv::configAutoSyncPreviewEntry("Auto Sync Preview");
+const QString SetupLightTable::SetupLightTablePriv::configAutoLoadRightPanelEntry("Auto Load Right Panel");
+const QString SetupLightTable::SetupLightTablePriv::configLoadFullImagesizeEntry("Load Full Image size");
+const QString SetupLightTable::SetupLightTablePriv::configClearOnCloseEntry("Clear On Close");
 
 // --------------------------------------------------------
 

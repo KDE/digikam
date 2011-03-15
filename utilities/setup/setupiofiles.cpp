@@ -6,7 +6,7 @@
  * Date        : 2006-01-23
  * Description : setup image editor output files settings.
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class SetupIOFilesPriv
+class SetupIOFiles::SetupIOFilesPriv
 {
 public:
 
@@ -86,15 +86,17 @@ public:
     QCheckBox*           showImageSettingsDialog;
 #endif
 };
-const QString SetupIOFilesPriv::configGroupName("ImageViewer Settings");
-const QString SetupIOFilesPriv::configJPEGCompressionEntry("JPEGCompression");
-const QString SetupIOFilesPriv::configJPEGSubSamplingEntry("JPEGSubSampling");
-const QString SetupIOFilesPriv::configPNGCompressionEntry("PNGCompression");
-const QString SetupIOFilesPriv::configTIFFCompressionEntry("TIFFCompression");
-const QString SetupIOFilesPriv::configJPEG2000CompressionEntry("JPEG2000Compression");
-const QString SetupIOFilesPriv::configJPEG2000LossLessEntry("JPEG2000LossLess");
-const QString SetupIOFilesPriv::configPGFCompressionEntry("PGFCompression");
-const QString SetupIOFilesPriv::configPGFLossLessEntry("PGFLossLess");
+
+const QString SetupIOFiles::SetupIOFilesPriv::configGroupName("ImageViewer Settings");
+const QString SetupIOFiles::SetupIOFilesPriv::configJPEGCompressionEntry("JPEGCompression");
+const QString SetupIOFiles::SetupIOFilesPriv::configJPEGSubSamplingEntry("JPEGSubSampling");
+const QString SetupIOFiles::SetupIOFilesPriv::configPNGCompressionEntry("PNGCompression");
+const QString SetupIOFiles::SetupIOFilesPriv::configTIFFCompressionEntry("TIFFCompression");
+const QString SetupIOFiles::SetupIOFilesPriv::configJPEG2000CompressionEntry("JPEG2000Compression");
+const QString SetupIOFiles::SetupIOFilesPriv::configJPEG2000LossLessEntry("JPEG2000LossLess");
+const QString SetupIOFiles::SetupIOFilesPriv::configPGFCompressionEntry("PGFCompression");
+const QString SetupIOFiles::SetupIOFilesPriv::configPGFLossLessEntry("PGFLossLess");
+
 #ifdef _WIN32
 const QString SetupIOFilesPriv::configShowImageSettingsDialog("ShowImageSettingsDialog");
 #endif
@@ -103,7 +105,7 @@ const QString SetupIOFilesPriv::configShowImageSettingsDialog("ShowImageSettings
 
 static QWidget* createGroupBox(QWidget* w)
 {
-    QGroupBox*   box = new QGroupBox;
+    QGroupBox*   box    = new QGroupBox;
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget(w);
     box->setLayout(layout);
@@ -113,9 +115,8 @@ static QWidget* createGroupBox(QWidget* w)
 SetupIOFiles::SetupIOFiles(QWidget* parent )
     : QScrollArea(parent), d(new SetupIOFilesPriv)
 {
-    QWidget* panel = new QWidget;
-    QVBoxLayout* vbox = new QVBoxLayout;
-
+    QWidget* panel     = new QWidget;
+    QVBoxLayout* vbox  = new QVBoxLayout;
     d->JPEGOptions     = new JPEGSettings;
     d->PNGOptions      = new PNGSettings;
     d->TIFFOptions     = new TIFFSettings;

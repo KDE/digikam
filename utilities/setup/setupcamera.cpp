@@ -105,35 +105,51 @@ private:
 
 // -------------------------------------------------------------------
 
-CameraAutoDetectThread::CameraAutoDetectThread(QObject* parent)
-    : DBusyThread(parent)
+class CameraAutoDetectThread::CameraAutoDetectThreadPriv
 {
-    m_result = -1;
+    public:
+
+        CameraAutoDetectThreadPriv()
+        {
+            result = 0;
+        }
+
+    int     result;
+
+    QString model;
+    QString port;
+};
+
+CameraAutoDetectThread::CameraAutoDetectThread(QObject* parent)
+    : DBusyThread(parent), d(new CameraAutoDetectThreadPriv)
+{
+    d->result = -1;
 }
 
 CameraAutoDetectThread::~CameraAutoDetectThread()
 {
+    delete d;
 }
 
 void CameraAutoDetectThread::run()
 {
-    m_result = GPCamera::autoDetect(m_model, m_port);
+    d->result = GPCamera::autoDetect(d->model, d->port);
     emit signalComplete();
 }
 
-int CameraAutoDetectThread::result()
+int CameraAutoDetectThread::result() const
 {
-    return(m_result);
+    return(d->result);
 }
 
 QString CameraAutoDetectThread::model() const
 {
-    return(m_model);
+    return(d->model);
 }
 
 QString CameraAutoDetectThread::port() const
 {
-    return(m_port);
+    return(d->port);
 }
 
 // -------------------------------------------------------------------

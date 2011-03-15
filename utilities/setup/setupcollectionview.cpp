@@ -6,8 +6,8 @@
  * Date        : 2008-11-15
  * Description : collections setup tab model/view
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -130,7 +130,7 @@ SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView* view, QObjec
 
     // Implement mapping of signals. Every button gets a mapping ID from the model
     m_categoryButtonMapper = new QSignalMapper(this);
-    m_buttonMapper = new QSignalMapper(this);
+    m_buttonMapper         = new QSignalMapper(this);
 
     connect(m_categoryButtonMapper, SIGNAL(mapped(int)),
             this, SIGNAL(categoryButtonPressed(int)));
@@ -192,7 +192,7 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
     else if (index.data(SetupCollectionModel::IsButtonRole).toBool())
     {
         // set real pixmap on sample button to compute correct size hint
-        QPixmap pix = index.data(SetupCollectionModel::ButtonDecorationRole).value<QPixmap>();
+        QPixmap pix      = index.data(SetupCollectionModel::ButtonDecorationRole).value<QPixmap>();
         m_sampleToolButton->setIcon(index.data(SetupCollectionModel::ButtonDecorationRole).value<QPixmap>());
         QSize widgetHint = m_sampleToolButton->sizeHint();
 
@@ -436,7 +436,7 @@ void SetupCollectionModel::apply()
     // Delete deleted items
     foreach (int i, deletedItems)
     {
-        Item& item = m_collections[i];
+        Item& item    = m_collections[i];
         CollectionManager::instance()->removeLocation(item.location);
         item.location = CollectionLocation();
     }
@@ -698,7 +698,7 @@ void SetupCollectionModel::emitDataChangedForChildren(const QModelIndex& parent)
 
 void SetupCollectionModel::deleteCollection(int internalId)
 {
-    QModelIndex index = indexForId(internalId, (int)ColumnStatus);
+    QModelIndex index       = indexForId(internalId, (int)ColumnStatus);
     QModelIndex parentIndex = parent(index);
 
     if (!index.isValid() || internalId >= m_collections.count())
@@ -709,7 +709,7 @@ void SetupCollectionModel::deleteCollection(int internalId)
     Item& item = m_collections[index.internalId()];
 
     // Ask for confirmation
-    QString label = data(indexForId(internalId, (int)ColumnName), Qt::DisplayRole).toString();
+    QString label       = data(indexForId(internalId, (int)ColumnName), Qt::DisplayRole).toString();
     KGuiItem removeItem = KStandardGuiItem::cont();
     removeItem.setText(i18n("Remove Collection"));
     int result = KMessageBox::warningContinueCancel(m_dialogParentWidget,
