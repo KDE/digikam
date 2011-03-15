@@ -230,7 +230,7 @@ CaptionsMap DMetadata::getImageComments() const
         }
     }
 
-    // Now, we trying to get image comments, outside of XMP, Exif, and IPTC.
+    // Now, we trying to get image comments, outside of XMP.
     // For JPEG, string is extracted from JFIF Comments section.
     // For PNG, string is extracted from iTXt chunk.
 
