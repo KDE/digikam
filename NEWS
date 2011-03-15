@@ -96,4 +96,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 073 ==> 268098 : Usability enhanced showing format of each photo in its background frame with BIG letters.
 074 ==> 268300 : digiKam crash on confirm create new person.
 075 ==> 267262 : digiKam not compliant with "Metadata Working Group" specification when reading caption.
-076 ==> 
+076 ==> 266735 : digiKam displays no images: "unable to create io-slave" (OS X).
+077 ==> 
