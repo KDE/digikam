@@ -78,6 +78,7 @@ ClickDragReleaseItem::ClickDragReleaseItem(QGraphicsItem* parent)
       d(new ClickDragReleaseItemPriv)
 {
     setCursor(Qt::CrossCursor);
+    setFlags(ItemIsFocusable | ItemHasNoContents);
 }
 
 ClickDragReleaseItem::~ClickDragReleaseItem()
@@ -92,11 +93,6 @@ QRectF ClickDragReleaseItem::boundingRect() const
         return QRectF(QPointF(0,0), parentItem()->boundingRect().size());
     }
     return QRectF();
-}
-
-QGraphicsItem::GraphicsItemFlags ClickDragReleaseItem::flags() const
-{
-    return ItemIsFocusable | ItemHasNoContents;
 }
 
 void ClickDragReleaseItem::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)

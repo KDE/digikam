@@ -694,9 +694,15 @@ void FaceGroup::startAutoSuggest()
 
 void FaceGroup::addFace()
 {
+    if (d->manuallyAddWrapItem)
+    {
+        return;
+    }
+
     d->manuallyAddWrapItem = new ClickDragReleaseItem(d->view->previewItem());
     d->manuallyAddWrapItem->setFocus();
-
+    d->view->setFocus();
+    
     connect(d->manuallyAddWrapItem, SIGNAL(started(const QPointF&)),
             this, SLOT(slotAddItemStarted(const QPointF&)));
 

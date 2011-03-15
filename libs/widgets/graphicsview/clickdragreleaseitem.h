@@ -46,7 +46,6 @@ public:
     ClickDragReleaseItem(QGraphicsItem* parent);
     ~ClickDragReleaseItem();
 
-    virtual GraphicsItemFlags flags() const;
     virtual QRectF boundingRect() const;
     virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 
