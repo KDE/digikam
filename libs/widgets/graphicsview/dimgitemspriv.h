@@ -6,7 +6,7 @@
  * Date        : 2010-04-30
  * Description : Graphics View item for DImg
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,9 +43,12 @@ namespace Digikam
 class CachedPixmapKey
 {
 public:
+
     QRect             region;
     QPixmapCache::Key key;
 };
+
+// -------------------------------------------------------------------------------
 
 class CachedPixmaps
 {
@@ -63,8 +66,9 @@ protected:
 
     int                     maxCount;
     QQueue<CachedPixmapKey> keys;
-
 };
+
+// -------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT GraphicsDImgItem::GraphicsDImgItemPrivate
 {
@@ -76,8 +80,10 @@ public:
 
     void init(GraphicsDImgItem* q);
 
-    DImg              image;
-    ImageZoomSettings zoomSettings;
+public:
+
+    DImg                  image;
+    ImageZoomSettings     zoomSettings;
     mutable CachedPixmaps cachedPixmaps;
 };
 
@@ -92,6 +98,8 @@ public:
 
     DImgPreviewItemPrivate();
     void init(DImgPreviewItem* q);
+
+public:
 
     DImgPreviewItem::State state;
     bool                   exifRotate;

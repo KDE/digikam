@@ -6,7 +6,7 @@
  * Date        : 2010-09-20
  * Description : Managing visibility state with animations
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,8 +31,6 @@
 // KDE includes
 
 #include <kdebug.h>
-
-// Local includes
 
 namespace Digikam
 {
@@ -66,7 +64,7 @@ void ItemVisibilityControllerPropertyObject::setVisible(bool visible)
     visibleChanged();
 }
 
-// ---
+// ---------------------------------------------------------------------------------
 
 AnimatedVisibility::AnimatedVisibility(QObject* parent)
     : ItemVisibilityControllerPropertyObject(parent)
@@ -80,7 +78,7 @@ ItemVisibilityController* AnimatedVisibility::controller() const
     return m_controller;
 }
 
-// ---
+// ---------------------------------------------------------------------------------
 
 HidingStateChanger::HidingStateChanger(QObject* parent)
     : ItemVisibilityController(parent)
@@ -146,7 +144,7 @@ void HidingStateChanger::slotPropertiesAssigned(bool visible)
     }
 }
 
-// ---
+// ---------------------------------------------------------------------------------
 
 class AnimationControl
 {
@@ -475,13 +473,14 @@ void AnimationControl::setAnimationDuration(int msecs)
     }
 }
 
-// ---
+// ---------------------------------------------------------------------------------
 
 class ItemVisibilityController::ItemVisibilityControllerPriv
 {
 public:
 
-    ItemVisibilityControllerPriv(ItemVisibilityController* q) : q(q)
+    ItemVisibilityControllerPriv(ItemVisibilityController* q)
+        : q(q)
     {
         visible          = false;
         shallBeShown     = true;
@@ -491,23 +490,27 @@ public:
         control          = 0;
     }
 
-    bool                               visible;
-    bool                               shallBeShown;
-    QObject*                           itemShallBeShown;
 
-    int                                animationDuration;
-    QEasingCurve                       easingCurve;
+public:
 
-    AnimationControl*                  control;
-    QList<AnimationControl*>           childControls;
+    void              setVisible(bool v, bool immediately);
+    void              setItemVisible(QObject* item, bool visible, bool immediately);
 
-    void                       setVisible(bool v, bool immediately);
-    void                       setItemVisible(QObject* item, bool visible, bool immediately);
+    AnimationControl* findInChildren(QObject* item) const;
+    AnimationControl* getChild(QObject* item);
+    void              cleanupChildren(QAbstractAnimation* finishedAnimation);
 
-    AnimationControl*          findInChildren(QObject* item) const;
-    AnimationControl*          getChild(QObject* item);
-    void                       cleanupChildren(QAbstractAnimation* finishedAnimation);
+public:
 
+    bool                            visible;
+    bool                            shallBeShown;
+    QObject*                        itemShallBeShown;
+
+    int                             animationDuration;
+    QEasingCurve                    easingCurve;
+
+    AnimationControl*               control;
+    QList<AnimationControl*>        childControls;
     ItemVisibilityController* const q;
 };
 
@@ -607,7 +610,7 @@ void ItemVisibilityController::ItemVisibilityControllerPriv::setItemVisible(QObj
     }
 }
 
-// ---
+// ---------------------------------------------------------------------------------
 
 ItemVisibilityController::ItemVisibilityController(QObject* parent)
     : QObject(parent), d(new ItemVisibilityControllerPriv(this))
@@ -649,7 +652,6 @@ void ItemVisibilityController::addItem(QObject* item)
     anim->setTargetObject(item);
     d->control->connect(item);
     d->control->syncProperties(item);
-
     d->control->addItem(anim, item);
 }
 

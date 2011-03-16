@@ -6,7 +6,7 @@
  * Date        : 2011-03-04
  * Description : A simple item to click, drag and release
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,8 +69,8 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
-    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent* e);
-    virtual void keyPressEvent(QKeyEvent* e);
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*);
+    virtual void keyPressEvent(QKeyEvent*);
 
 private:
 
@@ -78,6 +78,6 @@ private:
     ClickDragReleaseItemPriv* const d;
 };
 
-}
+} // namespace Digikam
 
 #endif // CLICKDRAGRELEASEITEM_H

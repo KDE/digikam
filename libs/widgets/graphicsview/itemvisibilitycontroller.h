@@ -6,7 +6,7 @@
  * Date        : 2010-09-20
  * Description : Managing visibility state with animations
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -204,6 +204,8 @@ private:
     ItemVisibilityControllerPriv* const d;
 };
 
+// ------------------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT ItemVisibilityControllerPropertyObject : public QObject
 {
     Q_OBJECT
@@ -237,6 +239,8 @@ protected:
     qreal m_visible;
 };
 
+// ------------------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT AnimatedVisibility : public ItemVisibilityControllerPropertyObject
 {
     Q_OBJECT
@@ -258,6 +262,8 @@ protected:
 
     ItemVisibilityController* m_controller;
 };
+
+// ------------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT HidingStateChanger : public ItemVisibilityController
 {
