@@ -1,6 +1,4 @@
 SET(libqueuemanager_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/actionthread.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/assignedlist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/color/autocorrection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/color/bcgcorrection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/color/bwconvert.cpp
@@ -32,16 +30,18 @@ SET(libqueuemanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/transform/flip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/transform/resize.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/transform/rotate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/batchtool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/batchtoolsmanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/queuelist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/queuemgrwindow.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/queuepool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/queuesettingsview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/queuetooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/toolsettingsview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/toolslistview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/toolsview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/manager/actionthread.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/manager/batchtool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/manager/batchtoolsmanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/views/assignedlist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/views/queuelist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/views/queuepool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/views/queuesettingsview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/views/queuetooltip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/views/toolsettingsview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/views/toolslistview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/views/toolsview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/main/queuemgrwindow.cpp
 )
 
 IF(GLIB2_FOUND)
@@ -52,4 +52,4 @@ ENDIF(GLIB2_FOUND)
 
 KDE4_ADD_LIBRARY(queuemanager STATIC ${libqueuemanager_SRCS})
 
-INSTALL( FILES queuemgrwindowui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )
+INSTALL( FILES main/queuemgrwindowui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )

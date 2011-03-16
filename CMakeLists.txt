@@ -1500,7 +1500,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/main
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/manager
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/views
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert
