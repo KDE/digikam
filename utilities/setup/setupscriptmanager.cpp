@@ -6,8 +6,8 @@
  * Date        : 19-07-2010
  * Description : script manager for digiKam
  *
- * Copyright (C) 2010 Created By: Kunal Ghosh <kunal dot t2 at gmail dot com>
- * Copyright (C) 2010 Created By: Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Kunal Ghosh <kunal dot t2 at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,10 +63,10 @@ public:
 
     const QString configGroupName;
 
-    QGroupBox*    group;
-    QGroupBox*    pluginGroup;
-    QVBoxLayout*  mainLayout;
-    int*          count;//count of the number of plugins loaded
+    QGroupBox*   group;
+    QGroupBox*   pluginGroup;
+    QVBoxLayout* mainLayout;
+    int*         count;           //count of the number of plugins loaded
 };
 
 SetupScriptManager::SetupScriptManager(QWidget* parent)

@@ -6,7 +6,7 @@
  * Date        : 2003-05-03
  * Description : mime types setup tab
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class SetupMimePriv
+class SetupMime::SetupMimePriv
 {
 public:
 
@@ -109,7 +109,7 @@ SetupMime::SetupMime(QWidget* parent)
     d->imageFileFilterLabel = new QLabel(imageFileFilterBox);
     d->imageFileFilterLabel->setText(i18n("Additional &image file extensions (<a href='image'>Currently-supported types</a>):"));
 
-    KHBox* hbox1 = new KHBox(imageFileFilterBox);
+    KHBox* hbox1           = new KHBox(imageFileFilterBox);
     d->imageFileFilterEdit = new KLineEdit(hbox1);
     d->imageFileFilterEdit->setWhatsThis( i18n("<p>Here you can add the extensions of image files (including RAW files) "
                                                "to be displayed in the Album view. Just put \"xyz abc\" "
@@ -127,9 +127,9 @@ SetupMime::SetupMime(QWidget* parent)
     d->revertImageFileFilterBtn->setIcon(SmallIcon("view-refresh"));
     d->revertImageFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
-    grid1->addWidget(logoLabel1,                0, 0, 2, 1);
-    grid1->addWidget(d->imageFileFilterLabel,   0, 1, 1, 1);
-    grid1->addWidget(hbox1,                     1, 1, 1, 1);
+    grid1->addWidget(logoLabel1,              0, 0, 2, 1);
+    grid1->addWidget(d->imageFileFilterLabel, 0, 1, 1, 1);
+    grid1->addWidget(hbox1,                   1, 1, 1, 1);
     grid1->setColumnStretch(1, 10);
     grid1->setMargin(KDialog::spacingHint());
     grid1->setSpacing(KDialog::spacingHint());
@@ -183,7 +183,7 @@ SetupMime::SetupMime(QWidget* parent)
     d->audioFileFilterLabel = new QLabel(audioFileFilterBox);
     d->audioFileFilterLabel->setText(i18n("Additional &audio file extensions (<a href='audio'>Currently-supported types</a>):"));
 
-    KHBox* hbox3 = new KHBox(audioFileFilterBox);
+    KHBox* hbox3           = new KHBox(audioFileFilterBox);
     d->audioFileFilterEdit = new KLineEdit(hbox3);
     d->audioFileFilterEdit->setWhatsThis( i18n("<p>Here you can add extra extensions of audio files "
                                                "to be displayed in your Album view. Just write \"mp7\" "
@@ -203,9 +203,9 @@ SetupMime::SetupMime(QWidget* parent)
     d->revertAudioFileFilterBtn->setIcon(SmallIcon("view-refresh"));
     d->revertAudioFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
-    grid3->addWidget(logoLabel3,                0, 0, 2, 1);
-    grid3->addWidget(d->audioFileFilterLabel,   0, 1, 1, 1);
-    grid3->addWidget(hbox3,                     1, 1, 1, 1);
+    grid3->addWidget(logoLabel3,              0, 0, 2, 1);
+    grid3->addWidget(d->audioFileFilterLabel, 0, 1, 1, 1);
+    grid3->addWidget(hbox3,                   1, 1, 1, 1);
     grid3->setColumnStretch(1, 10);
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(KDialog::spacingHint());
