@@ -100,6 +100,8 @@ private:
         Aggressive
     };
 
+private:
+
     class RedEyeToolPriv;
     RedEyeToolPriv* const d;
 };
