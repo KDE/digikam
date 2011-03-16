@@ -4,6 +4,7 @@ SET_DEBUG_AREA_CODE(${AREA_CODE_SHOWFOTO})
 # otherwise the one from the "utilities" dir will be used
 INCLUDE_DIRECTORIES(BEFORE
         ${CMAKE_CURRENT_SOURCE_DIR}/setup
+        ${CMAKE_CURRENT_SOURCE_DIR}/main
 )
 
 #Require by Greycstoration algorithm (CImg.h)
@@ -15,8 +16,8 @@ SET(showfoto_SRCS
     ${libsetupshowfoto_SRCS}
     ${libshowfotosetup_SRCS}
 
-    main.cpp
-    showfoto.cpp
+    main/main.cpp
+    main/showfoto.cpp
    )
 
 KDE4_ADD_APP_ICON(showfoto_SRCS "../data/icons/apps/hi*-app-showfoto.png")
@@ -39,5 +40,5 @@ TARGET_LINK_LIBRARIES(showfoto
 
 INSTALL(TARGETS showfoto ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-INSTALL(PROGRAMS showfoto.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
-INSTALL(FILES showfotoui.rc DESTINATION ${DATA_INSTALL_DIR}/showfoto )
+INSTALL(PROGRAMS main/showfoto.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+INSTALL(FILES main/showfotoui.rc DESTINATION ${DATA_INSTALL_DIR}/showfoto )

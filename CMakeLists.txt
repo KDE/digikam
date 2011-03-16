@@ -1465,7 +1465,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
-        ${CMAKE_CURRENT_SOURCE_DIR}/showfoto
         ${CMAKE_CURRENT_SOURCE_DIR}/tests
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest
         ${CMAKE_CURRENT_SOURCE_DIR}/themedesigner
