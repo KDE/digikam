@@ -7,7 +7,7 @@
  * Description : a class to calculate filter weights
  *
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,46 +57,54 @@ public:
         }
     }
 
-    unsigned int height()        const
+    unsigned int height() const
     {
         return mHeight;
     };
+
     unsigned int polynomeOrder() const
     {
         return mPolynomeOrder;
     };
-    bool         twoDim()        const
+
+    bool twoDim() const
     {
         return mTwoDim;
     };
-    unsigned int width()         const
+
+    unsigned int width() const
     {
         return mWidth;
     };
 
-    void     setHeight(int h)
+    void setHeight(int h)
     {
         mHeight = h;
     };
-    void     setPolynomeOrder(int order)
+
+    void setPolynomeOrder(int order)
     {
         mPolynomeOrder = order;
     };
-    void     setTwoDim(bool td)
+
+    void setTwoDim(bool td)
     {
         mTwoDim = td;
     };
-    void     setWidth(int w)
+
+    void setWidth(int w)
     {
         mWidth = w;
     };
 
-    void     calculateWeights();
-    bool     operator==(const Weights& ws) const;
+    void calculateWeights();
+    bool operator==(const Weights& ws) const;
+
     double** operator[](int n) const
     {
         return mWeightMatrices[n];
     };
+
     const QList <QPoint> positions() const
     {
         return mPositions;
@@ -104,7 +112,7 @@ public:
 
 protected:
 
-    int       coefficientNumber() const
+    int coefficientNumber() const
     {
         return mCoefficientNumber;
     };
@@ -126,7 +134,7 @@ private:
     unsigned int   mCoefficientNumber;
     bool           mTwoDim;
     unsigned int   mPolynomeOrder;
-    double** *      mWeightMatrices;   //Stores a list of weight matrices
+    double** *     mWeightMatrices;   // Stores a list of weight matrices
     QList <QPoint> mPositions;
 };
 
