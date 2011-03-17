@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-21
- * Description : Structures for use in AlbumDB
+ * Description : Structures to use in AlbumDB
  *
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -63,6 +63,8 @@ public:
     QString         specificPath;
 };
 
+// --------------------------------------------------------------------------
+
 /**
  * \class AlbumInfo
  * A container class for transporting album information
@@ -100,6 +102,8 @@ public:
     }
 };
 
+// --------------------------------------------------------------------------
+
 /**
  * \class TagInfo
  * A container class for transporting tag information
@@ -130,6 +134,8 @@ public:
         return name < info.name;
     }
 };
+
+// --------------------------------------------------------------------------
 
 /**
  * \class SearchInfo
@@ -163,6 +169,8 @@ public:
     }
 };
 
+// --------------------------------------------------------------------------
+
 class AlbumShortInfo
 {
 public:
@@ -179,6 +187,8 @@ public:
     int     albumRootId;
 };
 
+// --------------------------------------------------------------------------
+
 class TagShortInfo
 {
 public:
@@ -194,6 +204,8 @@ public:
     int     pid;
     QString name;
 };
+
+// --------------------------------------------------------------------------
 
 class ItemShortInfo
 {
@@ -212,6 +224,8 @@ public:
     int       albumRootID;
     QString   album;
 };
+
+// --------------------------------------------------------------------------
 
 class ItemScanInfo
 {
@@ -237,6 +251,8 @@ public:
     QString                uniqueHash;
 };
 
+// --------------------------------------------------------------------------
+
 class CommentInfo
 {
 public:
@@ -257,6 +273,8 @@ public:
     QString               comment;
 };
 
+// --------------------------------------------------------------------------
+
 class CopyrightInfo
 {
 public:
@@ -274,6 +292,8 @@ public:
     QString   extraValue;
 };
 
+// --------------------------------------------------------------------------
+
 class ImageHistoryEntry
 {
 public:
@@ -290,6 +310,8 @@ public:
     QString   history;
 };
 
+// --------------------------------------------------------------------------
+
 class ImageRelation
 {
 public:
@@ -300,6 +322,8 @@ public:
     qlonglong              objectId;
     DatabaseRelation::Type type;
 };
+
+// --------------------------------------------------------------------------
 
 class TagProperty
 {
@@ -316,6 +340,8 @@ public:
     QString property;
     QString value;
 };
+
+// --------------------------------------------------------------------------
 
 class ImageTagProperty
 {
