@@ -7,7 +7,7 @@
  * Description : DImg interface for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -84,16 +84,19 @@ class UndoManager;
 class FileToSave
 {
 public:
-    QString fileName;
-    QString filePath;
-    int     historyStep;
-    QString mimeType;
+
+    QString                 fileName;
+    QString                 filePath;
+    int                     historyStep;
+    QString                 mimeType;
     QMap<QString, QVariant> ioAttributes;
-    bool    setExifOrientationTag;
-    DImg    image;
+    bool                    setExifOrientationTag;
+    DImg                    image;
 };
 
-class DImgInterfacePrivate
+// --------------------------------------------------------------
+
+class DImgInterface::DImgInterfacePrivate
 {
 
 public:
@@ -120,7 +123,6 @@ public:
         undoMan(0),
         expoSettings(0),
         thread(0)
-
     {
     }
 
@@ -351,19 +353,19 @@ void DImgInterface::resetImage()
 
 void DImgInterface::resetValues()
 {
-    d->valid          = false;
-    d->currentDescription = LoadingDescription();
-    d->width          = 0;
-    d->height         = 0;
-    d->origWidth      = 0;
-    d->origHeight     = 0;
-    d->selX           = 0;
-    d->selY           = 0;
-    d->selW           = 0;
-    d->selH           = 0;
-    d->gamma          = 1.0f;
-    d->contrast       = 1.0f;
-    d->brightness     = 0.0f;
+    d->valid                  = false;
+    d->currentDescription     = LoadingDescription();
+    d->width                  = 0;
+    d->height                 = 0;
+    d->origWidth              = 0;
+    d->origHeight             = 0;
+    d->selX                   = 0;
+    d->selY                   = 0;
+    d->selW                   = 0;
+    d->selH                   = 0;
+    d->gamma                  = 1.0f;
+    d->contrast               = 1.0f;
+    d->brightness             = 0.0f;
     d->resolvedInitialHistory = DImageHistory();
     d->undoMan->clear();
 }
@@ -626,13 +628,13 @@ void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iof
     for (it = op.intermediates.begin(); it != op.intermediates.end(); ++it)
     {
         FileToSave file;
-        file.fileName     = it.value().fileName;
-        file.filePath     = it.value().filePath();
-        file.mimeType     = it.value().format;
-        file.ioAttributes = ioAttributes(iofileSettings, it.value().format);
-        file.historyStep  = it.key();
+        file.fileName              = it.value().fileName;
+        file.filePath              = it.value().filePath();
+        file.mimeType              = it.value().format;
+        file.ioAttributes          = ioAttributes(iofileSettings, it.value().format);
+        file.historyStep           = it.key();
         file.setExifOrientationTag = setExifOrientationTag;
-        file.image        = d->image.copyMetaData();
+        file.image                 = d->image.copyMetaData();
         d->filesToSave << file;
         kDebug() << "Saving intermediate at history step" << file.historyStep
                  << "to" << file.filePath << "(" << file.mimeType << ")";
@@ -640,13 +642,13 @@ void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iof
 
     // This shall be the last in the list. If not, adjust slotImageSaved
     FileToSave primary;
-    primary.fileName     = getImageFileName();
-    primary.filePath     = filePath;
-    primary.mimeType     = mimeType;
-    primary.ioAttributes = ioAttributes(iofileSettings, mimeType);
-    primary.historyStep  = -1; // special value
+    primary.fileName              = getImageFileName();
+    primary.filePath              = filePath;
+    primary.mimeType              = mimeType;
+    primary.ioAttributes          = ioAttributes(iofileSettings, mimeType);
+    primary.historyStep           = -1; // special value
     primary.setExifOrientationTag = setExifOrientationTag;
-    primary.image        = d->image;
+    primary.image                 = d->image;
     d->filesToSave << primary;
 
     kDebug() << "Saving to :" << primary.filePath << "(" << primary.mimeType << ")";

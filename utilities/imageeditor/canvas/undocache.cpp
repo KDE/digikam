@@ -50,7 +50,7 @@ extern "C"
 namespace Digikam
 {
 
-class UndoCachePriv
+class UndoCache::UndoCachePriv
 {
 public:
 
@@ -124,13 +124,12 @@ bool UndoCache::putData(int level, int w, int h, bool sixteenBit, bool hasAlpha,
 /**
  * get the data from a cache file
  */
-uchar* UndoCache::getData(int level, int& w, int& h, bool& sixteenBit, bool& hasAlpha, bool del)
+uchar* UndoCache::getData(int level, int& w, int& h, bool& sixteenBit, bool& hasAlpha, bool del) const
 {
-    w = 0;
-    h = 0;
-    sixteenBit = false;
-    hasAlpha   = false;
-
+    w                 = 0;
+    h                 = 0;
+    sixteenBit        = false;
+    hasAlpha          = false;
     QString cacheFile = QString("%1-%2.bin")
                         .arg(d->cachePrefix)
                         .arg(level);

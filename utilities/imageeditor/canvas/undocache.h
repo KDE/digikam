@@ -32,7 +32,6 @@
 namespace Digikam
 {
 
-class UndoCachePriv;
 
 class DIGIKAM_EXPORT UndoCache
 {
@@ -44,12 +43,13 @@ public:
 
     void   clear();
     bool   putData(int level, int w, int h, bool sixteenBit, bool hasAlpha, uchar* data);
-    uchar* getData(int level, int& w, int& h, bool& sixteenBit, bool& hasAlpha, bool del);
+    uchar* getData(int level, int& w, int& h, bool& sixteenBit, bool& hasAlpha, bool del) const;
 
     void   erase(int level);
 
 private:
 
+    class UndoCachePriv;
     UndoCachePriv* const d;
 };
 

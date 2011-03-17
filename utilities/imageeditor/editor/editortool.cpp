@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : editor tool template class.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,22 +53,22 @@ class EditorTool::EditorToolPriv
 public:
 
     EditorToolPriv() :
+        version(0),
         view(0),
         timer(0),
         settings(0)
     {
-        version  = 0;
     }
 
-    QString             helpAnchor;
-    QString             name;
-    int                 version;
+    QString                helpAnchor;
+    QString                name;
+    int                    version;
 
-    QWidget*            view;
-    QPixmap             icon;
-    QTimer*             timer;
+    QWidget*               view;
+    QPixmap                icon;
+    QTimer*                timer;
 
-    EditorToolSettings* settings;
+    EditorToolSettings*    settings;
 
     FilterAction::Category category;
 };

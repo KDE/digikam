@@ -7,7 +7,7 @@
  * Description : a dialog to see preview ICC color correction
  *               before to apply color profile.
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,7 +58,7 @@
 namespace Digikam
 {
 
-class ColorCorrectionDlgPriv
+class ColorCorrectionDlg::ColorCorrectionDlgPriv
 {
 public:
 
@@ -109,11 +109,11 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
                                        const QString& file, QWidget* parent)
     : KDialog(parent), d(new ColorCorrectionDlgPriv)
 {
-    d->mode = mode;
-    d->preview = preview;
-    d->filePath = file;
+    d->mode                          = mode;
+    d->preview                       = preview;
+    d->filePath                      = file;
     ICCSettingsContainer iccSettings = IccSettings::instance()->settings();
-    d->workspaceProfile = IccProfile(iccSettings.workspaceProfile);
+    d->workspaceProfile              = IccProfile(iccSettings.workspaceProfile);
 
     QString caption;
 
@@ -193,7 +193,7 @@ ColorCorrectionDlg::~ColorCorrectionDlg()
     delete d;
 }
 
-QLayout* ColorCorrectionDlg::createHeading()
+QLayout* ColorCorrectionDlg::createHeading() const
 {
     QLabel* icon = new QLabel;
     icon->setPixmap(SmallIcon("fill-color", KIconLoader::SizeMedium));
@@ -221,11 +221,11 @@ QLayout* ColorCorrectionDlg::createHeading()
 
     message->setWordWrap(true);
 
-    QLabel* logo    = new QLabel;
+    QLabel* logo      = new QLabel;
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    KSeparator* line              = new KSeparator(Qt::Horizontal);
+    KSeparator* line  = new KSeparator(Qt::Horizontal);
 
     QGridLayout* grid = new QGridLayout;
     grid->addWidget(icon,    0, 0);
@@ -236,15 +236,15 @@ QLayout* ColorCorrectionDlg::createHeading()
     return grid;
 }
 
-QLayout* ColorCorrectionDlg::createProfilesInfo()
+QLayout* ColorCorrectionDlg::createProfilesInfo() const
 {
     QVBoxLayout* vbox = new QVBoxLayout;
 
     if (d->mode == ProfileMismatch || d->mode == UncalibratedColor)
     {
-        d->imageProfileTitle     = new QLabel;
+        d->imageProfileTitle = new QLabel;
 
-        if (d->mode ==  ProfileMismatch)
+        if (d->mode == ProfileMismatch)
         {
             d->imageProfileTitle->setText(i18n("Embedded Color Profile:"));
         }
@@ -255,8 +255,7 @@ QLayout* ColorCorrectionDlg::createProfilesInfo()
             d->imageProfileTitle->setText(i18n("Input Color Profile:"));
         }
 
-        d->imageProfileDesc   = new QLabel;
-
+        d->imageProfileDesc        = new QLabel;
         QPushButton* imageProfInfo = new QPushButton(i18n("Info..."));
         //d->imageProfileTitle->setWordWrap(true);
         d->imageProfileDesc->setWordWrap(true);
@@ -285,11 +284,10 @@ QLayout* ColorCorrectionDlg::createProfilesInfo()
     return vbox;
 }
 
-QLayout* ColorCorrectionDlg::createPreviews()
+QLayout* ColorCorrectionDlg::createPreviews() const
 {
-    QGridLayout* grid = new QGridLayout;
-
-    QLabel* originalTitle         = new QLabel;
+    QGridLayout* grid     = new QGridLayout;
+    QLabel* originalTitle = new QLabel;
 
     if (d->mode == ProfileMismatch)
     {
@@ -306,13 +304,13 @@ QLayout* ColorCorrectionDlg::createPreviews()
 
     originalTitle->setWordWrap(true);
 
-    QLabel* previewOriginal       = new QLabel;
-    DImg copyOriginal = d->preview.copy();
+    QLabel* previewOriginal = new QLabel;
+    DImg copyOriginal       = d->preview.copy();
     IccManager manager(copyOriginal);
     manager.transformForDisplay();
     previewOriginal->setPixmap(copyOriginal.convertToPixmap());
 
-    QLabel* targetTitle           = new QLabel;
+    QLabel* targetTitle = new QLabel;
 
     if (d->mode == ProfileMismatch)
     {
@@ -329,27 +327,27 @@ QLayout* ColorCorrectionDlg::createPreviews()
 
     targetTitle->setWordWrap(true);
 
-    d->previewTarget              = new QLabel;
+    d->previewTarget = new QLabel;
 
     if (d->preview.width() > d->preview.height())
     {
-        grid->addWidget(originalTitle,     0, 0, Qt::AlignTop);
-        grid->addWidget(previewOriginal,   1, 0);
-        grid->addWidget(targetTitle,       2, 0, Qt::AlignTop);
-        grid->addWidget(d->previewTarget,  3, 0);
+        grid->addWidget(originalTitle,    0, 0, Qt::AlignTop);
+        grid->addWidget(previewOriginal,  1, 0);
+        grid->addWidget(targetTitle,      2, 0, Qt::AlignTop);
+        grid->addWidget(d->previewTarget, 3, 0);
     }
     else
     {
-        grid->addWidget(originalTitle,     0, 0, Qt::AlignTop);
-        grid->addWidget(previewOriginal,   1, 0);
-        grid->addWidget(targetTitle,       0, 1, Qt::AlignTop);
-        grid->addWidget(d->previewTarget,  1, 1);
+        grid->addWidget(originalTitle,    0, 0, Qt::AlignTop);
+        grid->addWidget(previewOriginal,  1, 0);
+        grid->addWidget(targetTitle,      0, 1, Qt::AlignTop);
+        grid->addWidget(d->previewTarget, 1, 1);
     }
 
     return grid;
 }
 
-QWidget* ColorCorrectionDlg::createOptions()
+QWidget* ColorCorrectionDlg::createOptions() const
 {
     QGroupBox* box    = new QGroupBox;
     QVBoxLayout* vbox = new QVBoxLayout(box);
@@ -438,7 +436,7 @@ QWidget* ColorCorrectionDlg::createOptions()
     return box;
 }
 
-QWidget* ColorCorrectionDlg::createAssumeOptions()
+QWidget* ColorCorrectionDlg::createAssumeOptions() const
 {
     QGroupBox*   box  = new QGroupBox;
     QGridLayout* grid = new QGridLayout(box);
@@ -499,7 +497,7 @@ QWidget* ColorCorrectionDlg::createAssumeOptions()
         QLabel* label = new QLabel(i18n("Please select the input color profile of the device (camera) used to create this image:"));
         label->setWordWrap(true);
 
-        d->imageProfileBox  = new IccProfilesComboBox;
+        d->imageProfileBox = new IccProfilesComboBox;
         d->imageProfileBox->addProfilesSqueezed(IccSettings::instance()->inputProfiles());
         d->imageProfileBox->setCurrentProfile(IccSettings::instance()->settings().defaultInputProfile);
         d->imageProfileBox->setNoProfileIfEmpty(i18n("No Input Profile Available"));
@@ -591,10 +589,10 @@ void ColorCorrectionDlg::updateInfo()
 {
     setCursor(Qt::WaitCursor);
 
-    DImg colorPreview = d->preview.copy();
+    DImg colorPreview                = d->preview.copy();
     IccManager manager(colorPreview);
     ICCSettingsContainer::Behavior b = currentBehavior();
-    d->imageProfile = manager.imageProfile(b, specifiedProfile());
+    d->imageProfile                  = manager.imageProfile(b, specifiedProfile());
 
     if (d->mode == ProfileMismatch)
     {
@@ -741,8 +739,8 @@ void ColorCorrectionDlg::readSettings()
 
     if (d->mode == ProfileMismatch)
     {
-        if ((settings.lastMismatchBehavior & ICCSettingsContainer::UseSpecifiedProfile)
-            && d->otherProfileBox->count() > 0)
+        if ((settings.lastMismatchBehavior & ICCSettingsContainer::UseSpecifiedProfile) &&
+            d->otherProfileBox->count() > 0)
         {
             d->thirdOption->setChecked(true);
             d->thirdCheckBox->setChecked(settings.lastMismatchBehavior & ICCSettingsContainer::ConvertToWorkspace);
@@ -771,7 +769,7 @@ void ColorCorrectionDlg::readSettings()
     {
         if (settings.lastMissingProfileBehavior == ICCSettingsContainer::NoColorManagement)
         {
-            d->imageSRGB->setChecked(true); //?
+            d->imageSRGB->setChecked(true); // ?
             d->thirdOption->setChecked(true);
             d->thirdOption->setFocus();
         }

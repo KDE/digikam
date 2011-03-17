@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2005-2006 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class UndoManagerPriv
+class UndoManager::UndoManagerPriv
 {
 
 public:
@@ -59,13 +59,13 @@ public:
     {
     }
 
-    QList<UndoAction*>    undoActions;
-    QList<UndoAction*>    redoActions;
-    int                   origin;
+    QList<UndoAction*> undoActions;
+    QList<UndoAction*> redoActions;
+    int                origin;
 
-    UndoCache*            undoCache;
+    UndoCache*         undoCache;
 
-    DImgInterface*        dimgiface;
+    DImgInterface*     dimgiface;
 };
 
 UndoManager::UndoManager(DImgInterface* iface)
@@ -198,15 +198,12 @@ void UndoManager::rollbackToOrigin()
 
 void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
 {
-    UndoAction* action = d->undoActions.back();
-
-    DImageHistory historyBeforeStep = action->getHistory();
-    DImageHistory historyAfterStep  = d->dimgiface->getImageHistory();
-
+    UndoAction* action                   = d->undoActions.back();
+    DImageHistory historyBeforeStep      = action->getHistory();
+    DImageHistory historyAfterStep       = d->dimgiface->getImageHistory();
     UndoActionIrreversible* irreversible = dynamic_cast<UndoActionIrreversible*>(action);
     UndoActionReversible*   reversible   = dynamic_cast<UndoActionReversible*>(action);
-
-    QVariant originDataAfterStep  = d->dimgiface->getImg()->fileOriginData();
+    QVariant originDataAfterStep         = d->dimgiface->getImg()->fileOriginData();
     QVariant originDataBeforeStep; // only needed if isAtOrigin()
 
     DImageHistory originHistoryAfterStep = d->dimgiface->getResolvedInitialHistory();
@@ -302,19 +299,15 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
 
 void UndoManager::redoStep(bool execute, bool flyingRollback)
 {
-    UndoAction* action = d->redoActions.back();
-
-    DImageHistory historyBeforeStep = d->dimgiface->getImageHistory();
-    DImageHistory historyAfterStep  = action->getHistory();
-
-    QVariant      originDataBeforeStep = d->dimgiface->getImg()->fileOriginData();
-    QVariant      originDataAfterStep  = action->fileOriginData();
-
+    UndoAction* action                    = d->redoActions.back();
+    DImageHistory historyBeforeStep       = d->dimgiface->getImageHistory();
+    DImageHistory historyAfterStep        = action->getHistory();
+    QVariant originDataBeforeStep         = d->dimgiface->getImg()->fileOriginData();
+    QVariant originDataAfterStep          = action->fileOriginData();
     DImageHistory originHistoryBeforeStep = d->dimgiface->getResolvedInitialHistory();
     DImageHistory originHistoryAfterStep  = action->fileOriginResolvedHistory();
-
-    UndoActionIrreversible* irreversible = dynamic_cast<UndoActionIrreversible*>(action);
-    UndoActionReversible*   reversible   = dynamic_cast<UndoActionReversible*>(action);
+    UndoActionIrreversible* irreversible  = dynamic_cast<UndoActionIrreversible*>(action);
+    UndoActionReversible* reversible      = dynamic_cast<UndoActionReversible*>(action);
 
     if (execute)
     {
@@ -485,7 +478,7 @@ void UndoManager::clear(bool clearCache)
 
 void UndoManager::clearUndoActions()
 {
-    UndoAction* action;
+    UndoAction* action = 0;
     QList<UndoAction*>::iterator it;
 
     for (it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
@@ -504,7 +497,7 @@ void UndoManager::clearRedoActions()
         return;
     }
 
-    UndoAction* action;
+    UndoAction* action = 0;
     QList<UndoAction*>::iterator it;
 
     // get the level of the first redo action
@@ -560,7 +553,7 @@ QStringList UndoManager::getRedoHistory() const
 
 bool UndoManager::isAtOrigin() const
 {
-    return d->origin == 0;
+    return (d->origin == 0);
 }
 
 void UndoManager::setOrigin() const

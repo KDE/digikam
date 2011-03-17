@@ -7,7 +7,7 @@
  * Description : image plugins loader for image editor.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -88,7 +88,7 @@ static const char* ObsoleteImagePluginsList[] =
     "-1"
 };
 
-class ImagePluginLoaderPrivate
+class ImagePluginLoader::ImagePluginLoaderPrivate
 {
 
 public:
@@ -103,11 +103,11 @@ public:
         }
     }
 
-    QStringList   obsoleteImagePluginsList;
-    SplashScreen* splash;
+    QStringList                  obsoleteImagePluginsList;
+    SplashScreen*                splash;
 
     // a map of _loaded_ plugins
-    QMap<QString, ImagePlugin*> pluginMap;
+    QMap<QString, ImagePlugin*>  pluginMap;
     // a map of _available_ plugins
     QMap<QString, KService::Ptr> pluginServiceMap;
 };
@@ -152,7 +152,7 @@ ImagePluginLoader::~ImagePluginLoader()
     QList<QString> pluginNames = d->pluginMap.keys();
     foreach(const QString& name, pluginNames)
     {
-        ImagePlugin* plugin = d->pluginMap.value(name);
+        ImagePlugin* plugin   = d->pluginMap.value(name);
         KService::Ptr service = d->pluginServiceMap.value(name);
         delete plugin;
     }
