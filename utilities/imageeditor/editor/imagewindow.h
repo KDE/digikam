@@ -45,7 +45,6 @@ class QDropEvent;
 namespace Digikam
 {
 
-class ImageWindowPriv;
 class SlideShowSettings;
 class CollectionImageChangeset;
 
@@ -64,7 +63,7 @@ public:
     bool setupICC();
 
     bool queryClose();
-    virtual VersionManager* versionManager();
+    virtual VersionManager* versionManager() const;
 
     void toggleTag(int tagID);
 
@@ -181,6 +180,7 @@ private Q_SLOTS:
 
 private:
 
+    class ImageWindowPriv;
     ImageWindowPriv* const d;
 
     static ImageWindow* m_instance;

@@ -152,7 +152,9 @@ public:
     }
 };
 
-class ImageWindowPriv
+// -----------------------------------------------------------------------------------------
+
+class ImageWindow::ImageWindowPriv
 {
 
 public:
@@ -261,8 +263,8 @@ public:
     }
 };
 
-const QString ImageWindowPriv::configShowThumbbarEntry("Show Thumbbar");
-const QString ImageWindowPriv::configHorizontalThumbbarEntry("HorizontalThumbbar");
+const QString ImageWindow::ImageWindowPriv::configShowThumbbarEntry("Show Thumbbar");
+const QString ImageWindow::ImageWindowPriv::configHorizontalThumbbarEntry("HorizontalThumbbar");
 
 ImageWindow* ImageWindow::m_instance = 0;
 
@@ -1187,7 +1189,7 @@ void ImageWindow::prepareImageToSave()
     }
 }
 
-VersionManager* ImageWindow::versionManager()
+VersionManager* ImageWindow::versionManager() const
 {
     return &d->versionManager;
 }

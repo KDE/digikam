@@ -167,48 +167,47 @@ EditorWindow::EditorWindow(const char* name)
     setObjectName(name);
     setWindowFlags(Qt::Window);
 
-    m_nonDestructive         = true;
-
-    m_themeMenuAction        = 0;
-    m_contextMenu            = 0;
-    m_canvas                 = 0;
-    m_imagePluginLoader      = 0;
-    m_fullScreenAction       = 0;
-    m_openVersionAction      = 0;
-    m_saveAction             = 0;
-    m_saveAsAction           = 0;
+    m_nonDestructive           = true;
+    m_themeMenuAction          = 0;
+    m_contextMenu              = 0;
+    m_canvas                   = 0;
+    m_imagePluginLoader        = 0;
+    m_fullScreenAction         = 0;
+    m_openVersionAction        = 0;
+    m_saveAction               = 0;
+    m_saveAsAction             = 0;
     m_saveCurrentVersionAction = 0;
-    m_saveNewVersionAction   = 0;
-    m_exportAction           = 0;
-    m_revertAction           = 0;
-    m_discardChangesAction   = 0;
-    m_fileDeleteAction       = 0;
-    m_forwardAction          = 0;
-    m_backwardAction         = 0;
-    m_firstAction            = 0;
-    m_lastAction             = 0;
-    m_applyToolAction        = 0;
-    m_closeToolAction        = 0;
-    m_undoAction             = 0;
-    m_redoAction             = 0;
-    m_selectToolsAction      = 0;
-    m_showBarAction          = 0;
-    m_splitter               = 0;
-    m_vSplitter              = 0;
-    m_stackView              = 0;
-    m_animLogo               = 0;
-    m_fullScreen             = false;
-    m_setExifOrientationTag  = true;
-    m_cancelSlideShow        = false;
-    m_fullScreenHideThumbBar = true;
-    m_editingOriginalImage   = true;
+    m_saveNewVersionAction     = 0;
+    m_exportAction             = 0;
+    m_revertAction             = 0;
+    m_discardChangesAction     = 0;
+    m_fileDeleteAction         = 0;
+    m_forwardAction            = 0;
+    m_backwardAction           = 0;
+    m_firstAction              = 0;
+    m_lastAction               = 0;
+    m_applyToolAction          = 0;
+    m_closeToolAction          = 0;
+    m_undoAction               = 0;
+    m_redoAction               = 0;
+    m_selectToolsAction        = 0;
+    m_showBarAction            = 0;
+    m_splitter                 = 0;
+    m_vSplitter                = 0;
+    m_stackView                = 0;
+    m_animLogo                 = 0;
+    m_fullScreen               = false;
+    m_setExifOrientationTag    = true;
+    m_cancelSlideShow          = false;
+    m_fullScreenHideThumbBar   = true;
+    m_editingOriginalImage     = true;
 
     // Settings containers instance.
 
-    d->exposureSettings = new ExposureSettingsContainer();
-    d->toolIface        = new EditorToolIface(this);
-    m_IOFileSettings    = new IOFileSettingsContainer();
-    d->waitingLoop      = new QEventLoop(this);
+    d->exposureSettings        = new ExposureSettingsContainer();
+    d->toolIface               = new EditorToolIface(this);
+    m_IOFileSettings           = new IOFileSettingsContainer();
+    d->waitingLoop             = new QEventLoop(this);
 }
 
 EditorWindow::~EditorWindow()
@@ -2998,7 +2997,7 @@ void EditorWindow::setToolInfoMessage(const QString& txt)
     d->infoLabel->setText(txt);
 }
 
-VersionManager* EditorWindow::versionManager()
+VersionManager* EditorWindow::versionManager() const
 {
     return &d->defaultVersionManager;
 }
