@@ -37,6 +37,7 @@ namespace Digikam
 class KMemoryInfo::KMemoryInfoData : public QSharedData
 {
 public:
+
     KMemoryInfoData()
     {
         reset();
@@ -44,25 +45,25 @@ public:
 
     void reset()
     {
-        valid          = false;
-        totalRam       = -1;
-        freeRam        = -1;
-        usedRam        = -1;
-        cacheRam       = -1;
-        totalSwap      = -1;
-        usedSwap       = -1;
-        freeSwap       = -1;
+        valid     = false;
+        totalRam  = -1;
+        freeRam   = -1;
+        usedRam   = -1;
+        cacheRam  = -1;
+        totalSwap = -1;
+        usedSwap  = -1;
+        freeSwap  = -1;
     }
 
     QDateTime lastUpdate;
-    bool   valid;
-    qint64 totalRam;
-    qint64 freeRam;
-    qint64 usedRam;
-    qint64 cacheRam;
-    qint64 totalSwap;
-    qint64 usedSwap;
-    qint64 freeSwap;
+    bool      valid;
+    qint64    totalRam;
+    qint64    freeRam;
+    qint64    usedRam;
+    qint64    cacheRam;
+    qint64    totalSwap;
+    qint64    usedSwap;
+    qint64    freeSwap;
 };
 
 // ------------------------------------------------------------------------------------------
@@ -150,6 +151,7 @@ double KMemoryInfo::kilobytes(MemoryDetails detail) const
     qint64 b = bytes(detail);
     if (b == -1)
         return -1;
+
     return double(b) / 1024.0;
 }
 
@@ -158,6 +160,7 @@ double KMemoryInfo::megabytes(MemoryDetails detail) const
     qint64 b = bytes(detail);
     if (b == -1)
         return -1;
+
     return double(b) / 1024.0 / 1024.0;
 }
 
