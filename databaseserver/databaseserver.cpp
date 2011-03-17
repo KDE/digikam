@@ -6,8 +6,8 @@
  * Date        : 2009-11-14
  * Description : database migration dialog
  *
- * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010 by Gilles Caulier<caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2010-2011 by Gilles Caulier<caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,9 +55,8 @@
 namespace Digikam
 {
 
-class DatabaseServerPriv
+class DatabaseServer::DatabaseServerPriv
 {
-
 public:
 
     DatabaseServerPriv()
@@ -203,11 +202,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     }
 
     const QString globalConfig = KStandardDirs::locate("data", "digikam/database/mysql-global.conf");
-
     const QString localConfig  = KStandardDirs::locate("data", "digikam/database/mysql-local.conf");
-
     const QString actualConfig = KStandardDirs::locateLocal( "data", QLatin1String( "digikam" ) ) + QLatin1String("/mysql.conf");
-
 
     if ( globalConfig.isEmpty() )
     {
@@ -255,8 +251,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     // MySQL doesn't like world writeable config files (which makes sense), but
     // our config file somehow ends up being world-writable on some systems for no
     // apparent reason nevertheless, so fix that
-    const QFile::Permissions allowedPerms = actualFile.permissions()
-                                            & ( QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther );
+    const QFile::Permissions allowedPerms = actualFile.permissions() &
+                                            (QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther);
 
     if ( allowedPerms != actualFile.permissions() )
     {
@@ -339,11 +335,11 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     if ( !d->databaseProcess->waitForStarted() )
     {
-        QString argumentStr = arguments.join(", ");
-        QString  str = i18n("Could not start database server.");
-        str+=i18n("<p>Executable: %1</p>", mysqldPath);
-        str+=i18n("<p>Arguments: %1</p>", argumentStr);
-        str+=i18n("<p>Process error: %1</p>", d->databaseProcess->errorString());
+        QString argumentStr =  arguments.join(", ");
+        QString  str        =  i18n("Could not start database server.");
+        str                 += i18n("<p>Executable: %1</p>", mysqldPath);
+        str                 += i18n("<p>Arguments: %1</p>", argumentStr);
+        str                 += i18n("<p>Process error: %1</p>", d->databaseProcess->errorString());
         kDebug() << str;
         return DatabaseServerError(DatabaseServerError::StartError, str);
     }
