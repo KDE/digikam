@@ -100,6 +100,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 077 ==> 268668 : digiKam/libkmap does not compile (missing header file, OS X).
 078 ==> 264007 : XMP sidecar file does not distinguish between images of the same name but with different extension.
 079 ==> 238776 : Node of curves stick to cursor.
-080 ==> 
+080 ==> 268302 : Images are Invisible.
+081 ==> 
 
 
