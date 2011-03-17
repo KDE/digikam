@@ -6,7 +6,7 @@
  * Date        : 2007-04-09
  * Description : Collection location abstraction
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,6 +60,8 @@ public:
         LocationDeleted
     };
 
+public:
+
     enum Type
     {
         /** The location is located on a storage device that is built-in
@@ -73,6 +75,8 @@ public:
          *  The availability depends on the network connection. */
         TypeNetwork         = AlbumRoot::Network
     };
+
+public:
 
     CollectionLocation();
 
@@ -103,7 +107,6 @@ public:
     }
 
 protected:
-
 
     int     m_id;
     QString m_path;
