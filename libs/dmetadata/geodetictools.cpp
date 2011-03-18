@@ -6,7 +6,7 @@
  * Date        : 2008-05-05
  * Description : Geodetic tools
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2004-2006 by Daniele Franzoni
  * Copyright (C) 2004-2006 by Martin Desruisseaux
  * Copyright (C) 2003-2006 GeoTools Project Managment Committee (PMC), http://geotools.org
@@ -144,7 +144,7 @@ Ellipsoid GeodeticCalculator::ellipsoid() const
 
 void GeodeticCalculator::setStartingGeographicPoint(double longitude, double latitude)
 {
-    if (!checkLongitude(&longitude) || !checkLatitude (&latitude))
+    if (!checkLongitude(&longitude) || !checkLatitude(&latitude))
     {
         return;
     }
@@ -158,7 +158,7 @@ void GeodeticCalculator::setStartingGeographicPoint(double longitude, double lat
 
 void GeodeticCalculator::setDestinationGeographicPoint(double longitude, double latitude)
 {
-    if (!checkLongitude(&longitude) || !checkLatitude (&latitude))
+    if (!checkLongitude(&longitude) || !checkLatitude(&latitude))
     {
         return;
     }
@@ -243,7 +243,7 @@ bool GeodeticCalculator::checkOrthodromicDistance()
     check = m_ellipsoid.orthodromicDistance(toDegrees(m_long1), toDegrees(m_lat1),
                                             toDegrees(m_long2), toDegrees(m_lat2));
     check = fabs(m_distance - check);
-    return check <= (m_distance+1) * TOLERANCE_CHECK;
+    return (check <= (m_distance+1) * TOLERANCE_CHECK);
 }
 
 bool GeodeticCalculator::computeDestinationPoint()
@@ -319,9 +319,9 @@ bool GeodeticCalculator::computeDestinationPoint()
 
 double GeodeticCalculator::meridianArcLength(double latitude1, double latitude2)
 {
-    if (!checkLatitude(&latitude1) || !checkLatitude (&latitude2))
+    if (!checkLatitude(&latitude1) || !checkLatitude(&latitude2))
     {
-        return 0;
+        return 0.0;
     }
 
     return meridianArcLengthRadians(latitude1, latitude2);
@@ -401,8 +401,8 @@ bool GeodeticCalculator::computeDirection()
 
     if (ss < TOLERANCE_1)
     {
-        m_distance = meridianArcLengthRadians(lat1, lat2);
-        m_azimuth = (lat2>lat1) ? 0.0 : M_PI;
+        m_distance       = meridianArcLengthRadians(lat1, lat2);
+        m_azimuth        = (lat2>lat1) ? 0.0 : M_PI;
         m_directionValid = true;
         return true;
     }
@@ -445,7 +445,7 @@ bool GeodeticCalculator::computeDirection()
         }
         while (fabs(S-AZ_TEMP) >= TOLERANCE_2);
 
-        const double AZ1 = (dlon<0.0) ? 2.0*M_PI - S : S;
+        const double AZ1 = (dlon < 0.0) ? 2.0*M_PI - S : S;
         m_azimuth        = castToAngleRange(AZ1);
         //const double AZ2 = 2.0*M_PI - AZ1;
         S                = cos(AZ1);
@@ -612,9 +612,7 @@ public Shape getGeodeticCurve() {
 }
 */
 
-
-// ---------------------------- //
-
+// ---------------------------------------------------------------------------------
 
 Ellipsoid Ellipsoid::WGS84()
 {
@@ -669,7 +667,7 @@ Ellipsoid Ellipsoid::createEllipsoid(const QString& name,
 }
 
 Ellipsoid Ellipsoid::createFlattenedSphere(const QString& name,
-        double m_semiMajorAxis, double m_inverseFlattening)
+                                           double m_semiMajorAxis, double m_inverseFlattening)
 {
     if (m_inverseFlattening == DBL_MAX)
     {
@@ -697,7 +695,7 @@ double Ellipsoid::eccentricity() const
 {
     if (m_isSphere)
     {
-        return 0;
+        return 0.0;
     }
 
     const double f = 1-m_semiMinorAxis/m_semiMajorAxis;
@@ -717,7 +715,7 @@ bool Ellipsoid::isIvfDefinitive() const
 
 bool Ellipsoid::isSphere() const
 {
-    return m_semiMajorAxis == m_semiMinorAxis;
+    return (m_semiMajorAxis == m_semiMinorAxis);
 }
 
 double Ellipsoid::orthodromicDistance(double x1, double y1, double x2, double y2)
@@ -807,18 +805,18 @@ double Ellipsoid::orthodromicDistance(double x1, double y1, double x2, double y2
     // are equals or because they are at antipodes.
     const double LEPS = 1E-10;
 
-    if (fabs(x1-x2)<=LEPS && fabs(y1-y2)<=LEPS)
+    if (fabs(x1-x2) <= LEPS && fabs(y1-y2) <= LEPS)
     {
-        return 0; // Coordinate points are equals
+        return 0.0; // Coordinate points are equals
     }
 
-    if (fabs(y1)<=LEPS && fabs(y2)<=LEPS)
+    if (fabs(y1) <= LEPS && fabs(y2) <= LEPS)
     {
         return fabs(x1-x2) * m_semiMajorAxis; // Points are on the equator.
     }
 
     // Other cases: no solution for this algorithm.
-    return 0;
+    return 0.0;
 }
 
 double Ellipsoid::radiusOfCurvature(double latitude)

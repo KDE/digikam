@@ -6,7 +6,7 @@
  * Date        : 2010-08-20
  * Description : central place for Metadata settings
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,24 +42,25 @@ class DIGIKAM_EXPORT MetadataSettings : public QObject
 
 public:
 
-    /** Global container for Metadata settings. All accessor methods are thread-safe. */
-
+    /**
+     * Global container for Metadata settings. All accessor methods are thread-safe.
+     */
     static MetadataSettings* instance();
 
     /**
-     * Returns the current ICC settings.
+     * Returns the current Metadata settings.
      */
-    MetadataSettingsContainer settings();
+    MetadataSettingsContainer settings() const;
 
     /**
-     * Shortcut to fields in settings()
-     */
-    bool exifRotate() const;
-
-    /**
-     * Sets the current ICC settings and writes them to config.
+     * Sets the current Metadata settings and writes them to config.
      */
     void setSettings(const MetadataSettingsContainer& settings);
+
+    /**
+     * Shortcut to get exif rotation settings from container.
+     */
+    bool exifRotate() const;
 
 Q_SIGNALS:
 
