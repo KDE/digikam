@@ -769,36 +769,31 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
     return newFaces;
 }
 
-DatabaseFace FaceIface::addUnknownManually(const DImg& image, qlonglong imageid, const QRect& rect)
+// --- Confirming and adding ---
+
+DatabaseFace FaceIface::unknownPersonEntry(qlonglong imageId, const TagRegion& region)
 {
-    DatabaseFace newFace;
-
-    int tagId          = d->unknownPeopleTagId();
-    QRect fullSizeRect = TagRegion::mapToOriginalSize(image, rect);
-
-    if (!tagId || !fullSizeRect.isValid())
-    {
-        return newFace;
-    }
-
-    kDebug() << "New Entry" << fullSizeRect << tagId;
-    newFace = DatabaseFace(DatabaseFace::UnconfirmedName, imageid, tagId, TagRegion(fullSizeRect));
-
-
-    ImageTagPair pair(imageid, newFace.tagId());
-    // UnconfirmedName and UnknownName have the same attribute
-    d->add(pair, newFace, DatabaseFace::attributesForFlags(DatabaseFace::UnconfirmedName), false);
-
-    return newFace;
+    return unconfirmedEntry(imageId, -1, region);
 }
 
-// --- Confirming and adding ---
+DatabaseFace FaceIface::unconfirmedEntry(qlonglong imageId, int tagId, const TagRegion& region)
+{
+    return DatabaseFace(DatabaseFace::UnconfirmedName, imageId,
+                        tagId == -1 ? d->unknownPeopleTagId() : tagId, region);
+}
 
 DatabaseFace FaceIface::confirmedEntry(const DatabaseFace& face, int tagId, const TagRegion& confirmedRegion)
 {
     return DatabaseFace(DatabaseFace::ConfirmedName, face.imageId(),
                         tagId == -1 ? face.tagId() : tagId,
                         confirmedRegion.isValid() ? confirmedRegion : face.region());
+}
+
+DatabaseFace FaceIface::addManually(const DatabaseFace& face)
+{
+    ImageTagPair pair(face.imageId(), face.tagId());
+    d->add(pair, face, DatabaseFace::attributesForFlags(face.type()), false);
+    return face;
 }
 
 DatabaseFace FaceIface::confirmName(const DatabaseFace& face, int tagId, const TagRegion& confirmedRegion)
@@ -968,6 +963,24 @@ void FaceIface::FaceIfacePriv::remove(ImageTagPair& pair, const DatabaseFace& fa
     {
         MetadataManager::instance()->removeTag(ImageInfo(face.imageId()), pair.tagId());
     }
+}
+
+DatabaseFace FaceIface::changeRegion(const DatabaseFace& face, const TagRegion& newRegion)
+{
+    if (face.isNull() || face.region() == newRegion)
+    {
+        return face;
+    }
+
+    ImageTagPair pair(face.imageId(), face.tagId());
+    d->remove(pair, face, false);
+
+    DatabaseFace newFace = face;
+    newFace.setRegion(newRegion);
+    d->add(pair, newFace, DatabaseFace::attributesForFlags(face.type()), false);
+    return newFace;
+
+    // todo: the Training entry is cleared.
 }
 
 // --- Utilities ---

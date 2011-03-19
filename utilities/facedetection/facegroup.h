@@ -101,6 +101,9 @@ public Q_SLOTS:
     /** Sets the current ImageInfo */
     void setInfo(const ImageInfo& info);
 
+    /** Closes the face group for editing */
+    void finish();
+
     /** Enters a special state where by click + drag a new face can be created */
     void addFace();
 
@@ -113,6 +116,7 @@ protected:
 
     void load();
     void clear();
+    void applyItemGeometryChanges();
 
 protected Q_SLOTS:
 

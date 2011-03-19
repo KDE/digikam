@@ -174,6 +174,14 @@ void ParallelPipes::deactivate(WorkerObject::DeactivatingMode mode)
     }
 }
 
+void ParallelPipes::setPriority(QThread::Priority priority)
+{
+    foreach (WorkerObject* object, m_workers)
+    {
+        object->setPriority(priority);
+    }
+}
+
 void ParallelPipes::add(WorkerObject* worker)
 {
     QByteArray normalizedSignature = QMetaObject::normalizedSignature("process(FacePipelineExtendedPackage::Ptr)");
@@ -548,8 +556,10 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
             package->databaseFaces.setRole(FacePipelineDatabaseFace::DetectedFromImage);
 
             if (!package->image.isNull())
+            {
                 d->iface->storeThumbnails(d->thumbnailLoadThread, package->filePath,
                                           package->databaseFaces.toDatabaseFaceList(), package->image);
+            }
         }
     }
     else
@@ -568,14 +578,36 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
                 confirmed.roles |= FacePipelineDatabaseFace::Confirmed | FacePipelineDatabaseFace::ForTraining;
                 add << confirmed;
             }
-            else if (it->roles & FacePipelineDatabaseFace::ForRemoval)
+            else if (it->roles & FacePipelineDatabaseFace::ForEditing)
             {
-                d->iface->removeFace(*it);
-                it->roles &= ~FacePipelineDatabaseFace::ForRemoval;
-                it->roles |= FacePipelineDatabaseFace::Removed;
+                if (it->isNull())
+                {
+                    // add Manually
+                    DatabaseFace newFace = d->iface->unconfirmedEntry(package->info.id(), it->assignedTagId, it->assignedRegion);
+                    d->iface->addManually(newFace);
+                    add << newFace;
+                }
+                else if (it->assignedRegion.isValid())
+                {
+                    add << d->iface->changeRegion(*it, it->assignedRegion);
+                    // not implemented: changing tag id
+                }
+                else
+                {
+                    d->iface->removeFace(*it);
+                }
+
+                it->roles &= ~FacePipelineDatabaseFace::ForEditing;
+                it->roles |= FacePipelineDatabaseFace::Edited;
             }
 
             // Training is done by trainer
+        }
+
+        if (!package->image.isNull())
+        {
+            d->iface->storeThumbnails(d->thumbnailLoadThread, package->filePath,
+                                      add.toDatabaseFaceList(), package->image);
         }
 
         package->databaseFaces << add;
@@ -826,6 +858,7 @@ FacePipeline::FacePipelinePriv::FacePipelinePriv(FacePipeline* q)
     benchmarker          = 0;
     iface                = 0;
     thumbnailLoadThread  = 0;
+    priority             = QThread::LowPriority;
 
     started              = false;
     infosForFiltering    = 0;
@@ -1004,6 +1037,27 @@ void FacePipeline::FacePipelinePriv::stop()
     started = false;
 }
 
+void FacePipeline::FacePipelinePriv::applyPriority()
+{
+    WorkerObject*  workerObject;
+    ParallelPipes* pipes;
+    foreach (QObject* element, pipeline)
+    {
+        if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
+        {
+            workerObject->setPriority(priority);
+        }
+        else if ( (pipes = qobject_cast<ParallelPipes*>(element)) )
+        {
+            pipes->setPriority(priority);
+        }
+    }
+    if (thumbnailLoadThread)
+    {
+        thumbnailLoadThread->setPriority(priority);
+    }
+}
+
 void FacePipeline::FacePipelinePriv::createThumbnailLoadThread()
 {
     if (!thumbnailLoadThread)
@@ -1013,6 +1067,7 @@ void FacePipeline::FacePipelinePriv::createThumbnailLoadThread()
         thumbnailLoadThread->setThumbnailSize(ThumbnailLoadThread::maximumThumbnailSize());
         // KFaceIface::Image::recommendedSizeForRecognition()
         thumbnailLoadThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
+        thumbnailLoadThread->setPriority(priority);
     }
 
     //FaceIface::faceRectDisplayMargin()
@@ -1133,6 +1188,7 @@ void FacePipeline::plugBenchmarker()
 void FacePipeline::plugDatabaseEditor()
 {
     plugDatabaseWriter(NormalWrite);
+    d->createThumbnailLoadThread();
 }
 
 void FacePipeline::construct()
@@ -1188,6 +1244,24 @@ void FacePipeline::construct()
 
     connect(d->pipeline.last(), SIGNAL(processed(FacePipelineExtendedPackage::Ptr)),
             d, SLOT(finishProcess(FacePipelineExtendedPackage::Ptr)));
+
+    d->applyPriority();
+}
+
+void FacePipeline::setPriority(QThread::Priority priority)
+{
+    if (d->priority == priority)
+    {
+        return;
+    }
+
+    d->priority = priority;
+    d->applyPriority();
+}
+
+QThread::Priority FacePipeline::priority() const
+{
+    return d->priority;
 }
 
 void FacePipeline::cancel()
@@ -1272,10 +1346,41 @@ DatabaseFace FacePipeline::confirm(const ImageInfo& info, const DatabaseFace& da
     return d->iface->confirmedEntry(face, assignedTagId, assignedRegion);
 }
 
+DatabaseFace FacePipeline::addManually(const ImageInfo& info, const DImg& image, const TagRegion& assignedRegion)
+{
+    FacePipelineDatabaseFace face; // giving a null face => no existing face yet, add it
+    face.assignedTagId            = -1;
+    face.assignedRegion           = assignedRegion;
+    face.roles                    |= FacePipelineDatabaseFace::ForEditing;
+
+    FacePipelineExtendedPackage::Ptr package = d->buildPackage(info, face, image);
+    package->databaseFaces.setRole(FacePipelineDatabaseFace::ForEditing);
+    d->send(package);
+
+    return d->iface->unconfirmedEntry(info.id(), face.assignedTagId, face.assignedRegion);
+}
+
+DatabaseFace FacePipeline::editRegion(const ImageInfo& info, const DImg& image,
+                                       const DatabaseFace& databaseFace,
+                                       const TagRegion& newRegion)
+{
+    FacePipelineDatabaseFace face = databaseFace;
+    face.assignedTagId            = -1;
+    face.assignedRegion           = newRegion;
+    face.roles                    |= FacePipelineDatabaseFace::ForEditing;
+
+    FacePipelineExtendedPackage::Ptr package = d->buildPackage(info, face, image);
+    package->databaseFaces.setRole(FacePipelineDatabaseFace::ForEditing);
+    d->send(package);
+
+    face.setRegion(newRegion);
+    return face;
+}
+
 void FacePipeline::remove(const ImageInfo& info, const DatabaseFace& databaseFace)
 {
     FacePipelineExtendedPackage::Ptr package = d->buildPackage(info, databaseFace, DImg());
-    package->databaseFaces.setRole(FacePipelineDatabaseFace::ForRemoval);
+    package->databaseFaces.setRole(FacePipelineDatabaseFace::ForEditing);
     d->send(package);
 }
 

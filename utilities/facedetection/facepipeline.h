@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QFlags>
+#include <QThread>
 
 // KDE includes
 
@@ -63,12 +64,12 @@ public:
         /// Task
         ForConfirmation    = 1 << 10,
         ForTraining        = 1 << 11,
-        ForRemoval         = 1 << 12,
+        ForEditing         = 1 << 12, // Add, Change or remove
 
         /// Executed action (task is cleared)
         Confirmed          = 1 << 20,
         Trained            = 1 << 21,
-        Removed            = 1 << 22
+        Edited             = 1 << 22
     };
     Q_DECLARE_FLAGS(Roles, Role)
 
@@ -215,6 +216,13 @@ public:
     bool hasFinished() const;
     QString benchmarkResult() const;
 
+    /**
+     * Set the priority of the threads used by this pipeline.
+     * The default setting is QThread::LowPriority.
+     */
+    void setPriority(QThread::Priority priority);
+    QThread::Priority priority() const;
+
 public Q_SLOTS:
 
     /**
@@ -245,6 +253,17 @@ public Q_SLOTS:
      * Remove the given face.
      */
     void remove(const ImageInfo& info, const DatabaseFace& face);
+
+    /**
+     * Add an entry manually.
+     */
+    DatabaseFace addManually(const ImageInfo& info, const DImg& image, const TagRegion& assignedRegion);
+    /**
+     * Change the given face's region to newRegion.
+     * Does not care for training atm.
+     */
+    DatabaseFace editRegion(const ImageInfo& info, const DImg& image,
+                            const DatabaseFace& databaseFace, const TagRegion& newRegion);
 
     /**
      * Batch processing. If a filter is installed, the skipped() signal

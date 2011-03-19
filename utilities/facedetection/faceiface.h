@@ -196,7 +196,6 @@ public:
      * If a face was skipped (because of an existing entry), a null DatabaseFace will be at this place.
      */
     QList<DatabaseFace> writeUnconfirmedResults(const DImg& image, qlonglong imageid, const QList<KFaceIface::Face>& faceList);
-    DatabaseFace addUnknownManually(const DImg& image, qlonglong imageid, const QRect& rect);
 
     /**
      * Detects faces from the image and returns a list of faces
@@ -223,6 +222,7 @@ public:
      */
     void add(const DatabaseFace& face, bool trainFace = true);
     DatabaseFace add(qlonglong imageid, int tagId, const TagRegion& region, bool trainFace = true);
+    DatabaseFace addManually(const DatabaseFace& face);
 
     /**
      * Assign the name tag for given face entry.
@@ -239,6 +239,12 @@ public:
      * Returns the entry that would be added if the given face is confirmed.
      */
     static DatabaseFace confirmedEntry(const DatabaseFace& face, int tagId = -1, const TagRegion& confirmedRegion = TagRegion());
+    /**
+     * Returns the entry that would be added if the given face is autodetected.
+     * If tagId is -1, the unknown person will be taken.
+     */
+    DatabaseFace unconfirmedEntry(qlonglong imageId, int tagId, const TagRegion& region);
+    DatabaseFace unknownPersonEntry(qlonglong imageId, const TagRegion& region);
 
     // --- Training ---
 
@@ -277,6 +283,13 @@ public:
      * Remove a face or the face for a certain rect from an image.
      */
     void                removeFace(qlonglong imageid, const QRect& rect);
+
+    // --- Edit entry ---
+
+    /**
+     * Changes the region of the given entry. Returns the face with the new region set.
+     */
+    DatabaseFace        changeRegion(const DatabaseFace& face, const TagRegion& newRegion);
 
     // --- Status flags ---
 

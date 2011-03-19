@@ -89,6 +89,7 @@ public:
     void deactivate(WorkerObject::DeactivatingMode mode = WorkerObject::FlushSignals);
 
     void add(WorkerObject* worker);
+    void setPriority(QThread::Priority priority);
 
 public:
 
@@ -356,6 +357,7 @@ public:
     void checkFinished();
     void start();
     void stop();
+    void applyPriority();
 
     void createThumbnailLoadThread();
 
@@ -371,6 +373,7 @@ public:
     Benchmarker*         benchmarker;
 
     QList<QObject*>      pipeline;
+    QThread::Priority    priority;
 
     FaceIface*           iface;
     ThumbnailLoadThread* thumbnailLoadThread;

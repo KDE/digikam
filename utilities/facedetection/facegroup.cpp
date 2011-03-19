@@ -353,6 +353,12 @@ void FaceGroup::setInfo(const ImageInfo& info)
     }
 }
 
+void FaceGroup::finish()
+{
+    applyItemGeometryChanges();
+    clear();
+}
+
 static QPointF closestPointOfRect(const QPointF& p, const QRectF& r)
 {
     QPointF cp = p;
@@ -738,9 +744,8 @@ void FaceGroup::slotAddItemFinished(const QRectF& rect)
     if (d->manuallyAddedItem)
     {
         d->manuallyAddedItem->setRectInSceneCoordinates(rect);
-        DatabaseFace face = d->faceIface.addUnknownManually(d->view->previewItem()->image(),
-                                                            d->info.id(),
-                                                            d->manuallyAddedItem->originalRect());
+        DatabaseFace face = d->editPipeline.addManually(d->info, d->view->previewItem()->image(),
+                                                        TagRegion(d->manuallyAddedItem->originalRect()));
         FaceItem* item = d->addItem(face);
         d->visibilityController->setItemDirectlyVisible(item, true);
         item->switchMode(AssignNameWidget::UnconfirmedEditMode);
@@ -760,6 +765,18 @@ void FaceGroup::cancelAddItem()
         d->view->scene()->removeItem(d->manuallyAddWrapItem);
         d->manuallyAddWrapItem->deleteLater();
         d->manuallyAddWrapItem = 0;
+    }
+}
+
+void FaceGroup::applyItemGeometryChanges()
+{
+    foreach (FaceItem* item, d->items)
+    {
+        TagRegion currentRegion = TagRegion(item->originalRect());
+        if (item->face().region() != currentRegion)
+        {
+            d->editPipeline.editRegion(d->info, d->view->previewItem()->image(), item->face(), currentRegion);
+        }
     }
 }
 
