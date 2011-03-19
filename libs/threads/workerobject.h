@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QObject>
+#include <QThread>
 
 // Local includes
 
@@ -96,6 +97,15 @@ public:
         /// The thread is stopped when all signals emitted until now have been processed
         PhaseOut
     };
+
+    /** Sets the priority for this dynamic thread.
+     *  Can be set anytime. If the thread is currently not running,
+     *  the priority will be set when it is run next time.
+     *  When you set QThread::InheritPriority (default), the
+     *  priority is not changed but inherited from the thread pool.
+     */
+    void setPriority(QThread::Priority priority);
+    QThread::Priority priority() const;
 
 public Q_SLOTS:
 

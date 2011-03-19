@@ -185,10 +185,21 @@ void WorkerObjectRunnable::run()
 
     if (object->transitionToRunning())
     {
+        QThread::Priority previousPriority = QThread::currentThread()->priority();
+        if (object->priority() != QThread::InheritPriority)
+        {
+            QThread::currentThread()->setPriority(object->priority());
+        }
+
         QEventLoop loop;
         object->setEventLoop(&loop);
         loop.exec();
         object->setEventLoop(0);
+
+        if (previousPriority != QThread::InheritPriority)
+        {
+            QThread::currentThread()->setPriority(previousPriority);
+        }
     }
 
     object->transitionToInactive();
@@ -197,7 +208,7 @@ void WorkerObjectRunnable::run()
     // if this is rescheduled, it will wait in the other thread at moveToCurrentThread() above until we park
     parkingThread->parkObject(object);
 
-    // now, free the object - if it want to get deleted
+    // now, free the object - in case it wants to get deleted
     object->removeRunnable(this);
 }
 

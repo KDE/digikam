@@ -52,6 +52,7 @@ public:
         eventLoop = 0;
         runnable  = 0;
         inDestruction = false;
+        priority      = QThread::InheritPriority;
     }
 
     volatile WorkerObject::State state;
@@ -60,6 +61,7 @@ public:
     QEventLoop*                  eventLoop;
     WorkerObjectRunnable*        runnable;
     bool                         inDestruction;
+    QThread::Priority             priority;
 };
 
 WorkerObject::WorkerObject()
@@ -119,6 +121,31 @@ bool WorkerObject::disconnectAndSchedule(const QObject* sender, const char* sign
 WorkerObject::State WorkerObject::state() const
 {
     return d->state;
+}
+
+void WorkerObject::setPriority(QThread::Priority priority)
+{
+    if (d->priority == priority)
+    {
+        return;
+    }
+
+    d->priority = priority;
+
+    if (d->priority != QThread::InheritPriority)
+    {
+        QMutexLocker locker(&d->mutex);
+
+        if (d->state == Running)
+        {
+            thread()->setPriority(d->priority);
+        }
+    }
+}
+
+QThread::Priority WorkerObject::priority() const
+{
+    return d->priority;
 }
 
 bool WorkerObject::event(QEvent* e)
