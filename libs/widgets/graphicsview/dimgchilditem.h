@@ -183,6 +183,7 @@ Q_SIGNALS:
      */
     void positionOnImageChanged();
     void sizeOnImageChanged();
+    void geometryOnImageChanged();
 
     /**
      * These signals are emitted in any case when the geometry changed:
@@ -192,6 +193,7 @@ Q_SIGNALS:
      */
     void positionChanged();
     void sizeChanged();
+    void geometryChanged();
 
 protected:
 

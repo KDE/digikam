@@ -93,6 +93,10 @@ public Q_SLOTS:
      */
     void setViewportRect(const QRectF& rect);
 
+Q_SIGNALS:
+
+    void geometryEdited();
+
 protected:
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);

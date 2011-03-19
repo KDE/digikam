@@ -117,6 +117,7 @@ void DImgChildItem::setRelativePos(const QPointF& relativePos)
     d->relativePos = relativePos;
     updatePos();
     emit positionOnImageChanged();
+    emit geometryOnImageChanged();
 }
 
 void DImgChildItem::setRelativeSize(const QSizeF& relativeSize)
@@ -129,6 +130,7 @@ void DImgChildItem::setRelativeSize(const QSizeF& relativeSize)
     d->relativeSize = relativeSize;
     updateSize();
     emit sizeOnImageChanged();
+    emit geometryOnImageChanged();
 }
 
 void DImgChildItem::setRelativeRect(const QRectF& rect)
@@ -278,12 +280,14 @@ void DImgChildItem::updatePos()
     QSizeF imageSize = parentItem()->boundingRect().size();
     QGraphicsObject::setPos(imageSize.width() * d->relativePos.x(), imageSize.height() * d->relativePos.y());
     emit positionChanged();
+    emit geometryChanged();
 }
 
 void DImgChildItem::updateSize()
 {
     prepareGeometryChange();
     emit sizeChanged();
+    emit geometryChanged();
 }
 
 void DImgChildItem::imageSizeChanged(const QSizeF&)
