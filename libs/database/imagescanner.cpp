@@ -1162,7 +1162,7 @@ QString ImageScanner::detectFormat()
         case DImg::PPM:
             return "PPM";
         case DImg::JP2K:
-            return "JP2k";
+            return "JP2";
         case DImg::PGF:
             return "PGF";
         case DImg::RAW:
@@ -1270,7 +1270,7 @@ QString ImageScanner::formatToString(const QString& format)
     {
         return format;
     }
-    else if (format == "JP2K")
+    else if (format == "JP2" || format == "JP2k" || format == "JP2K")
     {
         return "JPEG 2000";
     }

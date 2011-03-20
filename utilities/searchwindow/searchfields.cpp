@@ -260,7 +260,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* par
         formats << "RAW*" << "RAW";
         formats << "TIFF" << "TIFF";
         formats << "PPM" << "PPM";
-        formats << "JP2K" << "JPEG 2000";
+        formats << "JP2*" << "JPEG 2000";
         field->setChoice(formats);
         return field;
     }

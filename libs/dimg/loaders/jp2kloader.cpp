@@ -98,7 +98,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     fclose(file);
 
-    imageSetAttribute("format", "JP2K");
+    imageSetAttribute("format", "JP2");
 
     if (!(m_loadFlags & LoadImageData) && !(m_loadFlags & LoadICCData))
     {
@@ -536,7 +536,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     }
 
     imageData() = data;
-    imageSetAttribute("format", "JP2K");
+    imageSetAttribute("format", "JP2");
     imageSetAttribute("originalColorModel", colorModel);
     imageSetAttribute("originalBitDepth", maximum_component_depth);
     imageSetAttribute("originalSize", QSize(imageWidth(), imageHeight()));
@@ -815,7 +815,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
         observer->progressInfo(m_image, 1.0);
     }
 
-    imageSetAttribute("savedformat", "JP2K");
+    imageSetAttribute("savedformat", "JP2");
 
     saveMetadata(filePath);
 

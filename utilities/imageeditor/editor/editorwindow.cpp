@@ -400,7 +400,7 @@ void EditorWindow::setupStandardActions()
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "TIFF"), "TIFF");
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "PNG"), "PNG");
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "PGF"), "PGF");
-    d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "JPEG 2000"), "JP2K");
+    d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "JPEG 2000"), "JP2");
 
     m_saveNewVersionAction->menu()->addAction(m_saveNewVersionAsAction);
     m_saveNewVersionAction->menu()->addAction(m_saveNewVersionInFormatAction);

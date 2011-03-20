@@ -712,7 +712,7 @@ QString VersionManager::toplevelDirectory(const QString& path)
 QStringList VersionManager::workspaceFileFormats() const
 {
     QStringList formats;
-    formats << "JPG" << "PNG" << "TIFF" << "PGF" << "JP2K";
+    formats << "JPG" << "PNG" << "TIFF" << "PGF" << "JP2";
     QString f = d->settings.format.toUpper();
 
     if (!formats.contains(f))

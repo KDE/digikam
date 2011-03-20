@@ -98,4 +98,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 075 ==> 267262 : digiKam not compliant with "Metadata Working Group" specification when reading caption.
 076 ==> 266735 : digiKam displays no images: "unable to create io-slave" (OS X).
 077 ==> 268925 : The editor 'forgets' one step when a crop is undone and redone.
-078 ==> 
+078 ==> 268924 : Versioning fails to save a new version as a JPEG2000.
+079 ==>
+

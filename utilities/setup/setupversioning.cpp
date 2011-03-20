@@ -162,7 +162,7 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     d->formatBox->addItem(i18nc("@label:listbox", "TIFF"), "TIFF");
     d->formatBox->addItem(i18nc("@label:listbox", "PNG"), "PNG");
     d->formatBox->addItem(i18nc("@label:listbox", "PGF"), "PGF");
-    d->formatBox->addItem(i18nc("@label:listbox", "JPEG 2000"), "JP2K");
+    d->formatBox->addItem(i18nc("@label:listbox", "JPEG 2000"), "JP2");
     d->formatBox->insertSeparator(1);
     d->formatBox->insertSeparator(4);
 
