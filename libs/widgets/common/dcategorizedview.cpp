@@ -439,7 +439,7 @@ void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start
         if (selected.isEmpty())
         {
             QModelIndex newCurrent = nextIndexHint(indexToAnchor, removed.first());
-            selectionModel()->setCurrentIndex(newCurrent, QItemSelectionModel::SelectCurrent);
+            setCurrentIndex(newCurrent);
         }
     }
 }
