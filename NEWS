@@ -97,10 +97,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 074 ==> 268300 : digiKam crash on confirm create new person.
 075 ==> 267262 : digiKam not compliant with "Metadata Working Group" specification when reading caption.
 076 ==> 266735 : digiKam displays no images: "unable to create io-slave" (OS X).
-077 ==> 268668 : digiKam/libkmap does not compile (missing header file, OS X).
-078 ==> 264007 : XMP sidecar file does not distinguish between images of the same name but with different extension.
-079 ==> 238776 : Node of curves stick to cursor.
-080 ==> 268302 : Images are Invisible.
-081 ==> 
-
-
+077 ==> 268925 : The editor 'forgets' one step when a crop is undone and redone.
+078 ==> 

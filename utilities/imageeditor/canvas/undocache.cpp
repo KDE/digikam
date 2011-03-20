@@ -24,19 +24,14 @@
 
 #include "undocache.h"
 
-// C ANSI includes
-
-extern "C"
-{
-#include <unistd.h>
-}
-
 // Qt includes
 
 #include <QByteArray>
-#include <QString>
-#include <QFile>
+#include <QCoreApplication>
 #include <QDataStream>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 #include <QStringList>
 
 // KDE includes
@@ -55,7 +50,14 @@ class UndoCache::UndoCachePriv
 public:
 
     QString     cachePrefix;
-    QStringList cacheFilenames;
+    QSet<int>   cachedLevels;
+
+    QString cacheFile(int level) const
+    {
+        return QString("%1-%2.bin")
+                        .arg(cachePrefix)
+                        .arg(level);
+    }
 };
 
 UndoCache::UndoCache()
@@ -66,7 +68,14 @@ UndoCache::UndoCache()
 
     d->cachePrefix = QString("%1undocache-%2")
                      .arg(cacheDir)
-                     .arg(getpid());
+                     .arg(QCoreApplication::applicationPid());
+
+    // remove any remnants
+    QDir dir(cacheDir);
+    foreach (const QFileInfo& info, dir.entryInfoList(QStringList() << (d->cachePrefix + "*")))
+    {
+        QFile(info.filePath()).remove();
+    }
 }
 
 UndoCache::~UndoCache()
@@ -75,30 +84,30 @@ UndoCache::~UndoCache()
     delete d;
 }
 
-/**
- * delete all cache files
- */
 void UndoCache::clear()
 {
-    for (QStringList::const_iterator it = d->cacheFilenames.constBegin();
-         it != d->cacheFilenames.constEnd(); ++it)
+    foreach (int level, d->cachedLevels)
     {
-        ::unlink(QFile::encodeName(*it));
+        QFile(d->cacheFile(level)).remove();
     }
-
-    d->cacheFilenames.clear();
+    d->cachedLevels.clear();
 }
 
-/**
- * write the data into a cache file
- */
+void UndoCache::clearFrom(int fromLevel)
+{
+    foreach (int level, d->cachedLevels)
+    {
+        if (level >= fromLevel)
+        {
+            QFile(d->cacheFile(level)).remove();
+            d->cachedLevels.remove(level);
+        }
+    }
+}
+
 bool UndoCache::putData(int level, int w, int h, bool sixteenBit, bool hasAlpha, uchar* data)
 {
-    QString cacheFile = QString("%1-%2.bin")
-                        .arg(d->cachePrefix)
-                        .arg(level);
-
-    QFile file(cacheFile);
+    QFile file(d->cacheFile(level));
 
     if (file.exists() || !file.open(QIODevice::WriteOnly))
     {
@@ -116,25 +125,19 @@ bool UndoCache::putData(int level, int w, int h, bool sixteenBit, bool hasAlpha,
 
     file.close();
 
-    d->cacheFilenames.append(cacheFile);
+    d->cachedLevels << level;
 
     return true;
 }
 
-/**
- * get the data from a cache file
- */
-uchar* UndoCache::getData(int level, int& w, int& h, bool& sixteenBit, bool& hasAlpha, bool del) const
+uchar* UndoCache::getData(int level, int& w, int& h, bool& sixteenBit, bool& hasAlpha) const
 {
     w                 = 0;
     h                 = 0;
     sixteenBit        = false;
     hasAlpha          = false;
-    QString cacheFile = QString("%1-%2.bin")
-                        .arg(d->cachePrefix)
-                        .arg(level);
 
-    QFile file(cacheFile);
+    QFile file(d->cacheFile(level));
 
     if (!file.open(QIODevice::ReadOnly))
     {
@@ -160,31 +163,7 @@ uchar* UndoCache::getData(int level, int& w, int& h, bool& sixteenBit, bool& has
 
     file.close();
 
-    if (del)
-    {
-        ::unlink(QFile::encodeName(cacheFile));
-        d->cacheFilenames.removeAll(cacheFile);
-    }
-
     return data;
-}
-
-/**
- * delete a cache file
- */
-void UndoCache::erase(int level)
-{
-    QString cacheFile = QString("%1-%2.bin")
-                        .arg(d->cachePrefix)
-                        .arg(level);
-
-    if (!d->cacheFilenames.isEmpty() &&
-        d->cacheFilenames.indexOf(cacheFile) == d->cacheFilenames.indexOf(d->cacheFilenames.last()))
-    {
-        return;
-    }
-
-    ::unlink(QFile::encodeName(cacheFile));
 }
 
 }  // namespace Digikam

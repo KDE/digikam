@@ -368,7 +368,7 @@ void UndoManager::restoreSnapshot(int index, const DImageHistory& history)
 {
     int    newW, newH;
     bool   sixteenBit, hasAlpha;
-    uchar* newData = d->undoCache->getData(index, newW, newH, sixteenBit, hasAlpha, false);
+    uchar* newData = d->undoCache->getData(index, newW, newH, sixteenBit, hasAlpha);
 
     if (newData)
     {
@@ -381,7 +381,7 @@ void UndoManager::getSnapshot(int index, DImg* img)
 {
     int    newW, newH;
     bool   sixteenBit, hasAlpha;
-    uchar* newData = d->undoCache->getData(index, newW, newH, sixteenBit, hasAlpha, false);
+    uchar* newData = d->undoCache->getData(index, newW, newH, sixteenBit, hasAlpha);
 
     // Pass ownership of buffer. If newData is null, img will be null
     img->putImageData(newW, newH, sixteenBit, hasAlpha, newData, false);
@@ -497,21 +497,10 @@ void UndoManager::clearRedoActions()
         return;
     }
 
-    UndoAction* action = 0;
-    QList<UndoAction*>::iterator it;
+    // clear from the level of the first redo action
+    d->undoCache->clearFrom(d->undoActions.size() + 1);
 
-    // get the level of the first redo action
-    int level = d->undoActions.size() + 1;
-
-    for (it = d->redoActions.begin(); it != d->redoActions.end(); ++it)
-    {
-        action = *it;
-        d->undoCache->erase(level);
-        delete action;
-        ++level;
-    }
-
-    d->undoCache->erase(level);
+    qDeleteAll(d->redoActions);
     d->redoActions.clear();
 }
 

@@ -41,11 +41,22 @@ public:
     UndoCache();
     ~UndoCache();
 
+    /**
+     * Delete all cache files
+     */
     void   clear();
+    /**
+     * Delete all cache files starting from the given level upwards
+     */
+    void   clearFrom(int level);
+    /**
+    * Write the data into a cache file
+    */
     bool   putData(int level, int w, int h, bool sixteenBit, bool hasAlpha, uchar* data);
-    uchar* getData(int level, int& w, int& h, bool& sixteenBit, bool& hasAlpha, bool del) const;
-
-    void   erase(int level);
+    /**
+    * Get the data from a cache file
+    */
+    uchar* getData(int level, int& w, int& h, bool& sixteenBit, bool& hasAlpha) const;
 
 private:
 
