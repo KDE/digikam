@@ -84,16 +84,16 @@ public:
 
 public:
 
-    inline const QWidget *widget(const QStyleOptionViewItem &option)
+    inline const QWidget* widget(const QStyleOptionViewItem& option)
     {
-        if (const QStyleOptionViewItemV3 *v3 = qstyleoption_cast<const QStyleOptionViewItemV3 *>(&option))
+        if (const QStyleOptionViewItemV3* v3 = qstyleoption_cast<const QStyleOptionViewItemV3*>(&option))
             return v3->widget;
         return 0;
     }
 
-    inline const QStyle *style(const QStyleOptionViewItem &option)
+    inline const QStyle* style(const QStyleOptionViewItem& option)
     {
-        const QWidget *w = widget(option);
+        const QWidget* w = widget(option);
         return w ? w->style() : QApplication::style();
     }
 };
@@ -110,7 +110,7 @@ VersionsDelegate::VersionsDelegate(QObject* parent)
     d->animation->setLoopCount(-1);
 
 #if KDE_IS_VERSION(4,5,0)
-    d->categoryDrawer = new KCategoryDrawerV3;
+    d->categoryDrawer = new KCategoryDrawerV3(0);
 #else
     d->categoryDrawer = new KCategoryDrawerV2;
 #endif
