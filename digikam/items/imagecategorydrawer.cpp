@@ -67,7 +67,11 @@ public:
 };
 
 ImageCategoryDrawer::ImageCategoryDrawer(ImageCategorizedView* parent)
+#if KDE_IS_VERSION(4,5,0)
+    : KCategoryDrawerV3(0), d(new ImageCategoryDrawerPriv)
+#else
     : d(new ImageCategoryDrawerPriv)
+#endif
 {
     d->view = parent;
 }
