@@ -3002,6 +3002,8 @@ VersionManager* EditorWindow::versionManager() const
     return &d->defaultVersionManager;
 }
 
+// -------------------------------------------------------------------------------------------------------
+
 class ActionCategorizedView : public KCategorizedView
 {
 public:
@@ -3017,7 +3019,11 @@ public:
     {
         setViewMode(QListView::IconMode);
         setMovement(QListView::Static);
+#if KDE_IS_VERSION(4,5,0)
+        setCategoryDrawer(new KCategoryDrawerV3); // deprecated, but needed for KDE 4.4 compatibility
+#else
         setCategoryDrawer(new KCategoryDrawerV2); // deprecated, but needed for KDE 4.4 compatibility
+#endif
         setSelectionMode( QAbstractItemView::SingleSelection );
 
         setMouseTracking( true );
@@ -3042,10 +3048,10 @@ public:
 
             if (size.width() > maxSize)
             {
-                QString text = index.data(Qt::DisplayRole).toString();
+                QString text        = index.data(Qt::DisplayRole).toString();
                 QRect unwrappedRect = fm.boundingRect(QRect(0, 0, size.width(), size.height()), Qt::AlignLeft, text);
                 QRect wrappedRect   = fm.boundingRect(QRect(0, 0, maxSize, maxSize), Qt::AlignLeft | Qt::TextWordWrap, text);
-                grid = grid.expandedTo(QSize(maxSize, size.height() + wrappedRect.height() - unwrappedRect.height()));
+                grid                = grid.expandedTo(QSize(maxSize, size.height() + wrappedRect.height() - unwrappedRect.height()));
             }
             else
             {
@@ -3061,14 +3067,14 @@ protected:
 
     int autoScrollDuration(float relativeDifference, QPropertyAnimation* animation)
     {
-        const int minimumTime    = 1000;
+        const int minimumTime       = 1000;
         const int maxPixelPerSecond = 1000;
 
-        int pixelToScroll = qAbs(animation->startValue().toInt() - animation->endValue().toInt());
-        int factor = qMax(1.0f, relativeDifference * 100); // in [1;15]
+        int pixelToScroll           = qAbs(animation->startValue().toInt() - animation->endValue().toInt());
+        int factor                  = qMax(1.0f, relativeDifference * 100); // in [1;15]
 
-        int duration = 1000 * pixelToScroll / maxPixelPerSecond;
-        duration *= factor;
+        int duration                = 1000 * pixelToScroll / maxPixelPerSecond;
+        duration                    *= factor;
 
         return qMax(minimumTime, duration);
     }
@@ -3117,6 +3123,8 @@ protected:
         m_verticalScrollAnimation->stop();
     }
 
+protected:
+  
     QPropertyAnimation* m_verticalScrollAnimation;
     QPropertyAnimation* m_horizontalScrollAnimation;
 };
@@ -3172,8 +3180,8 @@ void EditorWindow::slotSelectToolsMenuAboutToShow()
 {
     // adjust to window size
     QSize s = size();
-    s *= 2;
-    s /= 3;
+    s       *= 2;
+    s       /= 3;
     d->selectToolsActionView->setMinimumSize(s);
 }
 
