@@ -97,6 +97,10 @@
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/version.h>
 
+// LibKFace includes
+
+#include <libkface/face.h>
+
 // Local includes
 
 #include "album.h"
@@ -2873,20 +2877,15 @@ void DigikamApp::slotRebuildFingerPrints()
 
 void DigikamApp::slotScanForFaces()
 {
-    /*QString msg = i18n("Scanning for people in photographs can take a lot of time.\n"
-                       "Which would you prefer?\n"
-                       "- Resume scanning photographs from where the scanning was stopped last time\n"
-                       "- Rescan all photographs (takes a long time)");
-    int result = KMessageBox::questionYesNoCancel(this, msg,
-                                                  i18n("Warning"),
-                                                  KGuiItem(i18n("Resume scan")),
-                                                  KGuiItem(i18n("Rescan all from scratch")));
-
-    if (result == KMessageBox::Cancel)
+    // In first, we check if OpenCV Haar Cascade data file are available.
+    if (!KFaceIface::OpenCVCascadeDataDirExist())
+    {
+        KMessageBox::error(this, i18n("OpenCV library Haar Cascade data files are not installed on your system. "
+                                      "These files needs to be available to run face detection and recognition "
+                                      "properly. Please check your OpenCV library installation..."));
         return;
+    }
 
-    runFaceScanner(result == KMessageBox::Yes ? false : true);
-    */
     FaceScanDialog dialog;
 
     if (dialog.exec() == QDialog::Accepted)
