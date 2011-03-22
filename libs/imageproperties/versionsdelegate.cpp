@@ -6,7 +6,7 @@
  * Date        : 2010-07-15
  * Description : Item delegate for image versions list view
  *
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010-2011 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,6 +39,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kpixmapsequence.h>
+#include <kdeversion.h>
 
 // Local includes
 
@@ -69,13 +70,19 @@ public:
     const int           filterItemExtraSpacing;
 
     int                 animationState;
-    QPropertyAnimation *animation;
+    QPropertyAnimation* animation;
     KPixmapSequence     workingPixmap;
-    KCategoryDrawerV2  *categoryDrawer;
+#if KDE_IS_VERSION(4,5,0)
+    KCategoryDrawerV3*  categoryDrawer;
+#else
+    KCategoryDrawerV2*  categoryDrawer;
+#endif
     int                 thumbnailSize;
 
     int                 thumbsWaitingFor;
     bool                inSizeHint;
+
+public:
 
     inline const QWidget *widget(const QStyleOptionViewItem &option)
     {
@@ -89,7 +96,6 @@ public:
         const QWidget *w = widget(option);
         return w ? w->style() : QApplication::style();
     }
-
 };
 
 VersionsDelegate::VersionsDelegate(QObject* parent)
@@ -103,7 +109,11 @@ VersionsDelegate::VersionsDelegate(QObject* parent)
     d->animation->setDuration(100 * d->workingPixmap.frameCount());
     d->animation->setLoopCount(-1);
 
+#if KDE_IS_VERSION(4,5,0)
+    d->categoryDrawer = new KCategoryDrawerV3;
+#else
     d->categoryDrawer = new KCategoryDrawerV2;
+#endif
 }
 
 VersionsDelegate::~VersionsDelegate()
@@ -153,7 +163,7 @@ void VersionsDelegate::finishPainting()
     }
 }
 
-QSize VersionsDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize VersionsDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     if (index.data(ImageHistoryGraphModel::IsImageItemRole).toBool())
     {
@@ -216,7 +226,7 @@ void VersionsDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
     }
 }
 
-void VersionsDelegate::initStyleOption(QStyleOptionViewItem * option, const QModelIndex& index) const
+void VersionsDelegate::initStyleOption(QStyleOptionViewItem* option, const QModelIndex& index) const
 {
     QStyledItemDelegate::initStyleOption(option, index);
 
@@ -231,7 +241,7 @@ void VersionsDelegate::initStyleOption(QStyleOptionViewItem * option, const QMod
         option->font.setWeight(QFont::Bold);
     }
 
-    if (QStyleOptionViewItemV4 *v4 = qstyleoption_cast<QStyleOptionViewItemV4 *>(option))
+    if (QStyleOptionViewItemV4* v4 = qstyleoption_cast<QStyleOptionViewItemV4*>(option))
     {
         v4->features |= QStyleOptionViewItemV2::HasDecoration;
         if (d->inSizeHint)
@@ -246,7 +256,7 @@ void VersionsDelegate::initStyleOption(QStyleOptionViewItem * option, const QMod
                 pix = d->workingPixmap.frameAt(d->animationState);
                 d->thumbsWaitingFor++;
             }
-            v4->icon = QIcon(pix);
+            v4->icon           = QIcon(pix);
             v4->decorationSize = pix.size();
         }
     }

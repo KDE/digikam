@@ -6,7 +6,7 @@
  * Date        : 2010-07-15
  * Description : Item delegate for image versions list view
  *
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010-2011 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -71,15 +71,20 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    virtual void overlayDestroyed(QObject* o) { ImageDelegateOverlayContainer::overlayDestroyed(o); }
+    virtual void overlayDestroyed(QObject* o)
+    {
+        ImageDelegateOverlayContainer::overlayDestroyed(o);
+    }
 
 protected:
 
-    void initStyleOption(QStyleOptionViewItem * option, const QModelIndex& index) const;
-
+    void initStyleOption(QStyleOptionViewItem* option, const QModelIndex& index) const;
 
     /// Returns the delegate, typically, the derived class
-    virtual QAbstractItemDelegate* asDelegate() { return this; }
+    virtual QAbstractItemDelegate* asDelegate()
+    {
+        return this;
+    }
 
 private:
 
