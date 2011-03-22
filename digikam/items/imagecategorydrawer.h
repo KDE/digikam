@@ -6,7 +6,7 @@
  * Date        : 2009-04-20
  * Description : Qt item view for images - category drawer
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,6 +26,7 @@
 
 // KDE includes
 
+#include <kdeversion.h>
 #include <kcategorydrawer.h>
 
 // Local includes
@@ -42,7 +43,12 @@ class TAlbum;
 class SAlbum;
 class DAlbum;
 
-class ImageCategoryDrawer : public KCategoryDrawerV2
+class ImageCategoryDrawer : 
+#if KDE_IS_VERSION(4,5,0)
+    public KCategoryDrawerV3
+#else
+    public KCategoryDrawerV2
+#endif
 {
 public:
 
