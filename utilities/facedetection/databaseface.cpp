@@ -7,7 +7,7 @@
  * Description : structure for info stored about a face in the database
  *
  * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -208,9 +208,9 @@ DatabaseFace DatabaseFace::fromListing(qlonglong imageId, const QList<QVariant>&
     }
 
     // See imagelister.cpp: value - property - tagId
-    int tagId = extraValues[2].toInt();
+    int tagId         = extraValues[2].toInt();
     QString attribute = extraValues[1].toString();
-    QString value = extraValues[0].toString();
+    QString value     = extraValues[0].toString();
     //kDebug() << tagId << attribute << value;
 
     return DatabaseFace(attribute,
