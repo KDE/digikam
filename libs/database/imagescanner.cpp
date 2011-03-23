@@ -1101,14 +1101,7 @@ void ImageScanner::copyProperties(qlonglong source, qlonglong dest)
 
 void ImageScanner::loadFromDisk()
 {
-    MetadataSettings* const mSettings = MetadataSettings::instance();
-
-    if (mSettings)
-    {
-        MetadataSettingsContainer set = mSettings->settings();
-
-        m_metadata.setUseXMPSidecar4Reading(set.useXMPSidecar4Reading);
-    }
+    m_metadata.registerMetadataSettings();
 
     m_hasMetadata = m_metadata.load(m_fileInfo.filePath());
 

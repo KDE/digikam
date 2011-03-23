@@ -85,7 +85,6 @@
 #include <solid/storageaccess.h>
 #include <solid/storagedrive.h>
 #include <solid/storagevolume.h>
-#include "config-digikam.h"
 
 // LibKIPI includes
 
@@ -103,6 +102,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumselectdialog.h"
@@ -144,6 +144,7 @@
 #include "tagscache.h"
 #include "tagsactionmngr.h"
 #include "databaseserverstarter.h"
+#include "metadatasettings.h"
 
 using KIO::Job;
 using KIO::UDSEntryList;
@@ -217,6 +218,7 @@ DigikamApp::DigikamApp()
     AlbumManager::instance();
     LoadingCacheInterface::initialize();
     IccSettings::instance()->loadAllProfilesProperties();
+    MetadataSettings::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),

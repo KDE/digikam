@@ -240,7 +240,7 @@ void MetadataHub::load(const DMetadata& metadata)
 bool MetadataHub::load(const QString& filePath, const MetadataSettingsContainer& settings)
 {
     DMetadata metadata;
-    metadata.setUseXMPSidecar4Reading(settings.useXMPSidecar4Reading);
+    metadata.setSettings(settings);
     bool success = metadata.load(filePath);
     load(metadata); // increments count
     return success;
@@ -555,12 +555,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
 
     bool dirty = false;
 
-    metadata.setWriteRawFiles(settings.writeRawFiles);
-    metadata.setMetadataWritingMode(settings.metadataWritingMode);
-
-#if KEXIV2_VERSION >= 0x000600
-    metadata.setUpdateFileTimeStamp(settings.updateFileTimeStamp);
-#endif
+    metadata.setSettings(settings);
 
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
     bool saveComment    = (settings.saveComments   && d->commentsStatus   == MetadataAvailable);

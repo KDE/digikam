@@ -46,6 +46,7 @@
 
 // Local includes
 
+#include "metadatasettings.h"
 #include "template.h"
 #include "version.h"
 #include "globals.h"
@@ -58,11 +59,13 @@ namespace Digikam
 DMetadata::DMetadata()
     : KExiv2()
 {
+    registerMetadataSettings();
 }
 
 DMetadata::DMetadata(const QString& filePath)
     : KExiv2()
 {
+    registerMetadataSettings();
     load(filePath);
 }
 
@@ -70,11 +73,28 @@ DMetadata::DMetadata(const QString& filePath)
 DMetadata::DMetadata(const KExiv2Data& data)
     : KExiv2Iface::KExiv2(data)
 {
+    registerMetadataSettings();
 }
 #endif
 
 DMetadata::~DMetadata()
 {
+}
+
+void DMetadata::registerMetadataSettings()
+{
+    setSettings(MetadataSettings::instance()->settings());
+}
+
+void DMetadata::setSettings(const MetadataSettingsContainer& settings)
+{
+    setUseXMPSidecar4Reading(settings.useXMPSidecar4Reading);
+    setWriteRawFiles(settings.writeRawFiles);
+    setMetadataWritingMode(settings.metadataWritingMode);
+
+#if KEXIV2_VERSION >= 0x000600
+    setUpdateFileTimeStamp(settings.updateFileTimeStamp);
+#endif
 }
 
 bool DMetadata::load(const QString& filePath) const

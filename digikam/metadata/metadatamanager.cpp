@@ -693,9 +693,6 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
         DMetadata metadata(path);
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
         metadata.setImageOrientation(o);
-        metadata.setWriteRawFiles(MetadataSettings::instance()->settings().writeRawFiles);
-        metadata.setUseXMPSidecar4Reading(MetadataSettings::instance()->settings().useXMPSidecar4Reading);
-        metadata.setMetadataWritingMode(MetadataSettings::instance()->settings().metadataWritingMode);
 
         if (!metadata.applyChanges())
         {

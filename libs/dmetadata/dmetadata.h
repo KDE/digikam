@@ -39,6 +39,7 @@
 
 #include "dimg.h"
 #include "captionvalues.h"
+#include "metadatasettingscontainer.h"
 #include "photoinfocontainer.h"
 #include "metadatainfo.h"
 #include "digikam_export.h"
@@ -58,6 +59,9 @@ public:
     DMetadata(const QString& filePath);
     DMetadata(const KExiv2Data& data);
     ~DMetadata();
+
+    void registerMetadataSettings();
+    void setSettings(const MetadataSettingsContainer& settings);
 
     /** Re-implemented from libKexiv2 to use dcraw identify method if Exiv2 failed. */
     bool load(const QString& filePath) const;
