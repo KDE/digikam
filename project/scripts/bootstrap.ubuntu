@@ -1,9 +1,0 @@
-# Copy this script on root folder where are source code
-
-#!/bin/sh
-# set devel env from Ubuntu 8.04
-export QTDIR=/usr/lib/qt4/
-export PATH=$QTDIR/bin:$PATH
-export LD_LIBRARY_PATH=/usr/lib/kde4/lib/
-export PKG_CONFIG_PATH=/usr/lib/kde4/lib/pkgconfig
-cmake -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix` ../../graphics
