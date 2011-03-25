@@ -90,7 +90,7 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
 
         result = QString("%1").arg("#", digits, QChar('#'));
 
-        if (start > 1 || step > 1 || extensionAware)
+        if (start > 1 || step > 1 || extensionAware || folderAware)
         {
             result.append(QChar('['));
 
