@@ -337,7 +337,7 @@ void AdvancedRenameDialog::initDialog()
 
 NewNamesList AdvancedRenameDialog::newNames()
 {
-    return d->newNamesList;
+    return filterNewNames();
 }
 
 void AdvancedRenameDialog::readSettings()
@@ -369,8 +369,8 @@ void AdvancedRenameDialog::writeSettings()
 
 bool AdvancedRenameDialog::checkNewNames()
 {
-    QSet<QString> tmpNewNames;
-    bool ok = true;
+    int numNames        = 0;
+    int numInvalidNames = 0;
 
     QTreeWidgetItemIterator it(d->listView);
 
@@ -380,16 +380,39 @@ bool AdvancedRenameDialog::checkNewNames()
 
         if (item)
         {
-            bool valid = !item->isInvalid() && ( !tmpNewNames.contains(item->newName()) );
-            ok         = ok && valid;
-            item->markInvalid(!valid);
-            tmpNewNames << item->newName();
+            ++numNames;
+            bool invalid = item->isInvalid();
+            item->markInvalid(invalid);
+            if (invalid)
+            {
+                ++ numInvalidNames;
+            }
         }
 
         ++it;
     }
 
-    return ok;
+    return !(numNames == numInvalidNames);
+}
+
+NewNamesList AdvancedRenameDialog::filterNewNames()
+{
+    NewNamesList filteredNames;
+    QTreeWidgetItemIterator it(d->listView);
+
+    while (*it)
+    {
+        AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
+
+        if (item && !item->isInvalid())
+        {
+            filteredNames << NewNameInfo(item->imageUrl(), item->newName());
+        }
+
+        ++it;
+    }
+
+    return filteredNames;
 }
 
 }  // namespace Digikam

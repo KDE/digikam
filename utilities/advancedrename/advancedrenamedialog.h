@@ -114,6 +114,7 @@ private:
     void readSettings();
     void writeSettings();
     bool checkNewNames();
+    NewNamesList filterNewNames();
 
 private:
 
