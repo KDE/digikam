@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>238</width>
-    <height>209</height>
+    <width>429</width>
+    <height>484</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -87,14 +87,14 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="extensionAware">
+    <widget class="QRadioButton" name="extensionAware">
      <property name="text">
       <string>Extension aware numbering</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="folderAware">
+    <widget class="QRadioButton" name="folderAware">
      <property name="text">
       <string>Folder aware numbering</string>
      </property>
