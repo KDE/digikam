@@ -98,7 +98,7 @@ const QString SetupIOFiles::SetupIOFilesPriv::configPGFCompressionEntry("PGFComp
 const QString SetupIOFiles::SetupIOFilesPriv::configPGFLossLessEntry("PGFLossLess");
 
 #ifdef _WIN32
-const QString SetupIOFilesPriv::configShowImageSettingsDialog("ShowImageSettingsDialog");
+const QString SetupIOFiles::SetupIOFilesPriv::configShowImageSettingsDialog("ShowImageSettingsDialog");
 #endif
 
 // --------------------------------------------------------

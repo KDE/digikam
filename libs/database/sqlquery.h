@@ -26,9 +26,9 @@
 
 // Qt includes
 
-#include <QMetaType>
-#include <QSqlQuery>
-#include <QString>
+#include <QtCore/QMetaType>
+#include <QtCore/QString>
+#include <QtSql/QSqlQuery>
 
 // Local includes
 

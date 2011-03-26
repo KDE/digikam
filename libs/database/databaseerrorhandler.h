@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QMetaType>
-#include <QSqlError>
+#include <QtCore/QMetaType>
+#include <QtSql/QSqlError>
 
 // Local includes
 
