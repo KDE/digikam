@@ -1238,7 +1238,7 @@ void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
 
         if (!lastPhotoFirst)
         {
-            it++;
+            ++it;
         }
     }
     while ((lastPhotoFirst ? it != _map.begin() : it != _map.end()));
