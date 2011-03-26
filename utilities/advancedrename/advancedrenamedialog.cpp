@@ -102,7 +102,7 @@ void AdvancedRenameListItem::setName(const QString& name, bool check)
 
     if (check)
     {
-        markInvalid(isInvalid());
+        markInvalid(isNameEqual());
     }
 }
 
@@ -117,7 +117,7 @@ void AdvancedRenameListItem::setNewName(const QString& name, bool check)
 
     if (check)
     {
-        markInvalid(isInvalid());
+        markInvalid(isNameEqual());
     }
 }
 
@@ -133,9 +133,9 @@ void AdvancedRenameListItem::markInvalid(bool invalid)
     setTextColor(NewName, invalid ? Qt::red : normalText);
 }
 
-bool AdvancedRenameListItem::isInvalid()
+bool AdvancedRenameListItem::isNameEqual()
 {
-    return ( name() == newName() );
+    return (name() == newName());
 }
 
 // --------------------------------------------------------
@@ -369,9 +369,11 @@ void AdvancedRenameDialog::writeSettings()
 
 bool AdvancedRenameDialog::checkNewNames()
 {
-    int numNames        = 0;
-    int numInvalidNames = 0;
+    int numNames      = 0;
+    int numEqualNames = 0;
+    bool ok           = true;
 
+    QSet<QString> tmpNewNames;
     QTreeWidgetItemIterator it(d->listView);
 
     while (*it)
@@ -381,18 +383,28 @@ bool AdvancedRenameDialog::checkNewNames()
         if (item)
         {
             ++numNames;
-            bool invalid = item->isInvalid();
+            QFileInfo fi(item->imageUrl().toLocalFile());
+
+            QString completeNewName = fi.path();
+            completeNewName.append('/');
+            completeNewName.append(item->newName());
+
+            bool invalid = tmpNewNames.contains(completeNewName);
+            tmpNewNames << completeNewName;
+
             item->markInvalid(invalid);
-            if (invalid)
+            ok = !invalid;
+
+            if (item->isNameEqual())
             {
-                ++ numInvalidNames;
+                ++ numEqualNames;
             }
         }
 
         ++it;
     }
 
-    return !(numNames == numInvalidNames);
+    return (ok && !(numNames == numEqualNames));
 }
 
 NewNamesList AdvancedRenameDialog::filterNewNames()
@@ -404,7 +416,7 @@ NewNamesList AdvancedRenameDialog::filterNewNames()
     {
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
 
-        if (item && !item->isInvalid())
+        if (item && !item->isNameEqual())
         {
             filteredNames << NewNameInfo(item->imageUrl(), item->newName());
         }
