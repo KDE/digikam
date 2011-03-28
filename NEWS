@@ -101,4 +101,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 078 ==> 268924 : Versioning fails to save a new version as a JPEG2000.
 079 ==> 269418 : Possibility of having the tag hierarchy also written in the Xmp.MicrosoftPhoto.LastKeywordXMP field.
 080 ==> 269378 : Not assigned face tags showing up.
-081 ==> 
+081 ==> 269458 : digiKam 2.0.0-beta3 crash while assigning face tags.
+082 ==> 
