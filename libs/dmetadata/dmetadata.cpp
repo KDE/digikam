@@ -952,7 +952,13 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
 {
     // Try to get Tags Path list from XMP in first.
     tagsPath = getXmpTagStringSeq("Xmp.digiKam.TagsList", false);
+    if (!tagsPath.isEmpty())
+    {
+        return true;
+    }
 
+    // See B.K.O #269418 : try to get Tags Path list from M$ Windows Live Photo Gallery.
+    tagsPath = getXmpTagStringSeq("Xmp.MicrosoftPhoto.LastKeywordXMP", false);
     if (!tagsPath.isEmpty())
     {
         return true;
@@ -977,7 +983,6 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
 
     // Try to get Tags Path list from XMP keywords.
     tagsPath = getXmpKeywords();
-
     if (!tagsPath.isEmpty())
     {
         return true;
@@ -989,7 +994,6 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     // do not support UTF-8 and have strings size limitation. But we will
     // let the capability to import it for interworking issues.
     tagsPath = getIptcKeywords();
-
     if (!tagsPath.isEmpty())
     {
         // Work around to Imach tags path list hosted in IPTC with '.' as separator.
@@ -1017,6 +1021,12 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
     if (supportXmp())
     {
         if (!setXmpTagStringSeq("Xmp.digiKam.TagsList", tagsPath))
+        {
+            return false;
+        }
+
+        // See B.K.O #269418 : register Tags path list for Windows Live Photo Gallery.
+        if (!setXmpTagStringSeq("Xmp.MicrosoftPhoto.LastKeywordXMP", tagsPath))
         {
             return false;
         }
