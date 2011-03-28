@@ -100,5 +100,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 077 ==> 268925 : The editor 'forgets' one step when a crop is undone and redone.
 078 ==> 268924 : Versioning fails to save a new version as a JPEG2000.
 079 ==> 269418 : Possibility of having the tag hierarchy also written in the Xmp.MicrosoftPhoto.LastKeywordXMP field.
-080 ==> 
-
+080 ==> 269378 : Not assigned face tags showing up.
+081 ==> 
