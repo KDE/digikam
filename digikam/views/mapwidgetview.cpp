@@ -273,9 +273,9 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
     {
         const QString path   = info.filePath();
 
-        if (d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width(), size.height())))
+        if (d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width()+2, size.height()+2)))
         {
-            return thumbnail;
+            return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);
         }
         else
         {
@@ -364,7 +364,7 @@ void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDe
     if (currentIndex.isValid())
     {
         QPersistentModelIndex goodIndex(currentIndex);
-        emit(signalThumbnailAvailableForIndex(goodIndex, thumb));
+        emit(signalThumbnailAvailableForIndex(goodIndex, thumb.copy(1, 1, thumb.size().width()-2, thumb.size().height()-2)));
     }
 }
 
