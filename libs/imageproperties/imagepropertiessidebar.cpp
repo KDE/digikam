@@ -7,7 +7,7 @@
  * Description : simple image properties side bar (without support
  *               of digiKam database).
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -384,9 +384,14 @@ void ImagePropertiesSideBar::doLoadState()
 
     /// @todo m_propertiesTab should load its settings from our group
     m_propertiesTab->setObjectName("Image Properties SideBar Expander");
-    m_propertiesTab->readSettings();
 
     KConfigGroup group = getConfigGroup();
+
+#if KDCRAW_VERSION >= 0x020000
+    m_propertiesTab->readSettings(group);
+#else
+    m_propertiesTab->readSettings();
+#endif
 
     const KConfigGroup groupGPSTab = KConfigGroup(&group, entryName("GPS Properties Tab"));
     m_gpsTab->readSettings(groupGPSTab);
@@ -400,6 +405,12 @@ void ImagePropertiesSideBar::doSaveState()
     Sidebar::doSaveState();
 
     KConfigGroup group = getConfigGroup();
+
+#if KDCRAW_VERSION >= 0x020000
+    m_propertiesTab->writeSettings(group);
+#else
+    m_propertiesTab->writeSettings();
+#endif
 
     KConfigGroup groupGPSTab = KConfigGroup(&group, entryName("GPS Properties Tab"));
     m_gpsTab->writeSettings(groupGPSTab);

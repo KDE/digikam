@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email dot cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,6 +57,7 @@
 #include <libkdcraw/rcombobox.h>
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rexpanderbox.h>
+#include <libkdcraw/version.h>
 
 // Local includes
 
@@ -558,7 +559,11 @@ void RatioCropTool::readSettings()
     // This is necessary to avoid jumping of the selection when reading the settings.
     // The drawing must be activated later on in this method to have a working selection.
 
+#if KDCRAW_VERSION >= 0x020000
+    d->expbox->readSettings(group);
+#else
     d->expbox->readSettings();
+#endif
 
     // No guide lines per default.
     d->guideLinesCB->setCurrentIndex(group.readEntry(d->configGuideLinesTypeEntry,
@@ -633,7 +638,7 @@ void RatioCropTool::readSettings()
 void RatioCropTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
     if (d->originalIsLandscape)
     {
@@ -671,6 +676,13 @@ void RatioCropTool::writeSettings()
     group.writeEntry(d->configGoldenFlipVerticalEntry,     d->flipVerBox->isChecked());
     group.writeEntry(d->configGuideColorEntry,             d->guideColorBt->color());
     group.writeEntry(d->configGuideWidthEntry,             d->guideSize->value());
+
+#if KDCRAW_VERSION >= 0x020000
+    d->expbox->writeSettings(group);
+#else
+    d->expbox->writeSettings();
+#endif
+
     group.sync();
 }
 

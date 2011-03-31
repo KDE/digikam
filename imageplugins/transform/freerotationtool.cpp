@@ -7,7 +7,7 @@
  * Description : a digiKam image editor plugin to process image
  *               free rotation.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -51,6 +51,7 @@
 // LibKDcraw includes
 
 #include <libkdcraw/rexpanderbox.h>
+#include <libkdcraw/version.h>
 
 // Local includes
 
@@ -274,7 +275,12 @@ void FreeRotationTool::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->settingsView->readSettings(group);
+
+#if KDCRAW_VERSION >= 0x020000
+    d->expanderBox->readSettings(group);
+#else
     d->expanderBox->readSettings();
+#endif
 
     resetPoints();
     slotColorGuideChanged();
@@ -285,6 +291,12 @@ void FreeRotationTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     d->settingsView->writeSettings(group);
+
+#if KDCRAW_VERSION >= 0x020000
+    d->expanderBox->writeSettings(group);
+#else
+    d->expanderBox->writeSettings();
+#endif
 
     group.sync();
 }

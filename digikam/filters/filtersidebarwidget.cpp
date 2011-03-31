@@ -39,8 +39,9 @@
 #include <kmenu.h>
 #include <kdebug.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
+#include <libkdcraw/version.h>
 #include <libkdcraw/rexpanderbox.h>
 
 // Local includes
@@ -378,10 +379,16 @@ void FilterSideBarWidget::setConfigGroup(KConfigGroup group)
 
 void FilterSideBarWidget::doLoadState()
 {
+    KConfigGroup group = getConfigGroup();
+
+#if KDCRAW_VERSION >= 0x020000
+    d->expbox->readSettings(group);
+#else
     d->expbox->readSettings();
+#endif
 
     d->textFilter->setsearchTextFields((SearchTextFilterSettings::TextFilterFields)
-                                       (getConfigGroup().readEntry(entryName(d->configSearchTextFilterFieldsEntry),
+                                       (group.readEntry(entryName(d->configSearchTextFilterFieldsEntry),
                                                                    (int)SearchTextFilterSettings::All)));
 
 
@@ -389,15 +396,14 @@ void FilterSideBarWidget::doLoadState()
                                               (AlbumSettings::instance()->getRatingFilterCond()));
 
     d->tagMatchCond = (ImageFilterSettings::MatchingCondition)
-                      (getConfigGroup().readEntry(entryName(d->configMatchingConditionEntry),
+                      (group.readEntry(entryName(d->configMatchingConditionEntry),
                                                   (int)ImageFilterSettings::OrCondition));
 
     d->tagFilterView->loadState();
 
     if (d->tagFilterView->isRestoreCheckState())
     {
-        d->withoutTagCheckBox->setChecked(getConfigGroup().readEntry(entryName(
-                                          d->configLastShowUntaggedEntry), false));
+        d->withoutTagCheckBox->setChecked(group.readEntry(entryName(d->configLastShowUntaggedEntry), false));
     }
 
     filterChanged();
@@ -405,19 +411,23 @@ void FilterSideBarWidget::doLoadState()
 
 void FilterSideBarWidget::doSaveState()
 {
-    d->expbox->writeSettings();
+    KConfigGroup group = getConfigGroup();
 
-    getConfigGroup().writeEntry(entryName(d->configSearchTextFilterFieldsEntry),
-                                (int)d->textFilter->searchTextFields());
+#if KDCRAW_VERSION >= 0x020000
+    d->expbox->writeSettings(group);
+#else
+    d->expbox->writeSettings();
+#endif
+
+    group.writeEntry(entryName(d->configSearchTextFilterFieldsEntry), (int)d->textFilter->searchTextFields());
 
     AlbumSettings::instance()->setRatingFilterCond(d->ratingFilter->ratingFilterCondition());
 
-    getConfigGroup().writeEntry(entryName(d->configMatchingConditionEntry), (int)d->tagMatchCond);
+    group.writeEntry(entryName(d->configMatchingConditionEntry), (int)d->tagMatchCond);
 
     d->tagFilterView->saveState();
-    getConfigGroup().writeEntry(entryName(d->configLastShowUntaggedEntry),
-                                d->withoutTagCheckBox->isChecked());
-    getConfigGroup().sync();
+    group.writeEntry(entryName(d->configLastShowUntaggedEntry), d->withoutTagCheckBox->isChecked());
+    group.sync();
 }
 
 } // namespace Digikam

@@ -46,6 +46,10 @@
 #include <ktabwidget.h>
 #include <kdebug.h>
 
+// Libkdcraw includes
+
+#include <libkdcraw/version.h>
+
 // Local includes
 
 #include "captionedit.h"
@@ -391,7 +395,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->tabWidget->setCurrentIndex(group2.readEntry("ImageDescEditTab Tab",
                                   (int)ImageDescEditTabPriv::DESCRIPTIONS));
     d->templateViewer->setObjectName("ImageDescEditTab Expander");
+
+#if KDCRAW_VERSION >= 0x020000
+    d->templateViewer->readSettings(group2);
+#else
     d->templateViewer->readSettings();
+#endif
+
     d->tagCheckView->setConfigGroup(group2);
     d->tagCheckView->setEntryPrefix("ImageDescEditTab TagCheckView");
     d->tagCheckView->loadState();
@@ -411,6 +421,13 @@ ImageDescEditTab::~ImageDescEditTab()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Properties SideBar");
     group.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
+
+#if KDCRAW_VERSION >= 0x020000
+    d->templateViewer->writeSettings(group);
+#else
+    d->templateViewer->writeSettings();
+#endif
+
     group.sync();
 
     d->tagCheckView->saveState();

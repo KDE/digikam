@@ -753,7 +753,12 @@ void CameraUI::readSettings()
     d->showLogAction->setChecked(group.readEntry("ShowLog",                  false));
     d->lastPhotoFirstAction->setChecked(group.readEntry("LastPhotoFirst",    true));
 
+#if KDCRAW_VERSION >= 0x020000
+    d->advBox->readSettings(group);
+#else
     d->advBox->readSettings();
+#endif
+
     d->splitter->restoreState(group);
 
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
@@ -780,6 +785,12 @@ void CameraUI::saveSettings()
     group.writeEntry("FolderDateFormat",    d->folderDateFormat->currentIndex());
     group.writeEntry("ShowLog",             d->showLogAction->isChecked());
     group.writeEntry("LastPhotoFirst",      d->lastPhotoFirstAction->isChecked());
+
+#if KDCRAW_VERSION >= 0x020000
+    d->advBox->writeSettings(group);
+#else
+    d->advBox->writeSettings();
+#endif
 
     d->rightSideBar->saveState();
     d->splitter->saveState(group);

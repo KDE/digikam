@@ -50,6 +50,7 @@
 
 #include <libkdcraw/rexpanderbox.h>
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/version.h>
 
 // Local includes
 
@@ -512,7 +513,11 @@ void BWSepiaSettings::readSettings(KConfigGroup& group)
     BWSepiaContainer prm;
     BWSepiaContainer defaultPrm = defaultSettings();
 
+#if KDCRAW_VERSION >= 0x020000
+    d->tab->readSettings(group);
+#else
     d->tab->readSettings();
+#endif
 
     prm.filmType        = group.readEntry(d->configBWFilmEntry,             defaultPrm.filmType);
     prm.filterType      = group.readEntry(d->configBWFilterEntry,           defaultPrm.filterType);
@@ -530,7 +535,11 @@ void BWSepiaSettings::writeSettings(KConfigGroup& group)
 {
     BWSepiaContainer prm = settings();
 
+#if KDCRAW_VERSION >= 0x020000
+    d->tab->writeSettings(group);
+#else
     d->tab->writeSettings();
+#endif
 
     group.writeEntry(d->configBWFilmEntry,             prm.filmType);
     group.writeEntry(d->configBWFilterEntry,           prm.filterType);

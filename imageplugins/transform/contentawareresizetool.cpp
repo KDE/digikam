@@ -54,6 +54,7 @@
 #include <libkdcraw/rcombobox.h>
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rexpanderbox.h>
+#include <libkdcraw/version.h>
 
 // Local includes
 
@@ -499,7 +500,12 @@ void ContentAwareResizeTool::readSettings()
     d->mixedRescaleInput->setValue(group.readEntry(d->configMixedRescaleValueEntry, d->mixedRescaleInput->defaultValue()));
     d->maskPenSize->setValue(group.readEntry(d->configBrushSizeEntry,               d->maskPenSize->defaultValue()));
     d->preserveSkinTones->setChecked(group.readEntry(d->configPreserveTonesEntry,   false));
+
+#if KDCRAW_VERSION >= 0x020000
+    d->expanderBox->readSettings(group);
+#else
     d->expanderBox->readSettings();
+#endif
 
     enableContentAwareSettings(d->mixedRescaleInput->value() > 0.0);
 
@@ -520,6 +526,12 @@ void ContentAwareResizeTool::writeSettings()
     group.writeEntry(d->configMixedRescaleValueEntry, d->mixedRescaleInput->value());
     group.writeEntry(d->configBrushSizeEntry,         d->maskPenSize->value());
     group.writeEntry(d->configPreserveTonesEntry,     d->preserveSkinTones->isChecked());
+
+#if KDCRAW_VERSION >= 0x020000
+    d->expanderBox->writeSettings(group);
+#else
+    d->expanderBox->writeSettings();
+#endif
 
     group.sync();
 }

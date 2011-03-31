@@ -467,7 +467,12 @@ void RawSettingsBox::readSettings()
     d->curveWidget->restoreCurve(group, d->optionCurvePrefix);
 
     d->tabView->setCurrentIndex(group.readEntry(d->optionSettingsPageEntry, 0));
+
+#if KDCRAW_VERSION >= 0x020000
+    d->postProcessSettingsBox->readSettings(group);
+#else
     d->postProcessSettingsBox->readSettings();
+#endif
 }
 
 void RawSettingsBox::writeSettings()
@@ -489,6 +494,12 @@ void RawSettingsBox::writeSettings()
     d->curveWidget->saveCurve(group, d->optionCurvePrefix);
 
     group.writeEntry(d->optionSettingsPageEntry, d->tabView->currentIndex());
+
+#if KDCRAW_VERSION >= 0x020000
+    d->postProcessSettingsBox->writeSettings(group);
+#else
+    d->postProcessSettingsBox->writeSettings();
+#endif
 
     group.sync();
 }

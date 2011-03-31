@@ -60,6 +60,7 @@
 #include <libkdcraw/rcombobox.h>
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rexpanderbox.h>
+#include <libkdcraw/version.h>
 
 using namespace KDcrawIface;
 
@@ -513,9 +514,6 @@ void LocalContrastSettings::setSettings(const LocalContrastContainer& settings)
     d->powerInput4->setValue(settings.stage[3].power);
     d->blurInput4->setValue(settings.stage[3].blur);
 
-    d->expanderBox->readSettings();
-    d->expanderBox->setEnabled(true);
-
     /*
     slotStage1Enabled(d->stageOne->isChecked());
     slotStage2Enabled(d->stageTwo->isChecked());
@@ -609,6 +607,14 @@ void LocalContrastSettings::readSettings(KConfigGroup& group)
     prm.stage[3].blur    = group.readEntry(d->configBlur4Entry,           defaultPrm.stage[3].blur);
 
     setSettings(prm);
+
+#if KDCRAW_VERSION >= 0x020000
+    d->expanderBox->readSettings(group);
+#else
+    d->expanderBox->readSettings();
+#endif
+
+    d->expanderBox->setEnabled(true);
 }
 
 void LocalContrastSettings::writeSettings(KConfigGroup& group)
@@ -635,7 +641,12 @@ void LocalContrastSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configStageFourEntry,       prm.stage[3].enabled);
     group.writeEntry(d->configPower4Entry,          prm.stage[3].power);
     group.writeEntry(d->configBlur4Entry,           prm.stage[3].blur);
+
+#if KDCRAW_VERSION >= 0x020000
+    d->expanderBox->writeSettings(group);
+#else
     d->expanderBox->writeSettings();
+#endif
 }
 
 void LocalContrastSettings::loadSettings()
