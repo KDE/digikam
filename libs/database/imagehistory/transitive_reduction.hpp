@@ -105,9 +105,9 @@ transitive_reduction(const Graph& g, GraphTR& tr,
                 //looking if they are successors of *it
                 if( std::find( neighbors.begin(), neighbors.end(), *rit) != neighbors.end() ) {
                     size_type j = topo_number[ *rit ];
-                    if( not edge_in_closure[i][j] ) {
+                    if( !edge_in_closure[i][j] ) {
                     for(size_type k = j; k < num_vertices(g); ++k) {
-                        if( not edge_in_closure[i][k] ) {
+                        if( !edge_in_closure[i][k] ) {
                         //here we need edge_in_closure to be in topological order,
                         edge_in_closure[i][k] = edge_in_closure[j][k];
                         }
