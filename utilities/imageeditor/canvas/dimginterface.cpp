@@ -671,7 +671,7 @@ void DImgInterface::saveNext()
         // intermediate. Need to get data from undo manager
         int currentStep = getImageHistory().size() - 1;
         kDebug() << "Requesting from undo manager data" << currentStep - file.historyStep << "steps back";
-        !d->undoMan->putImageDataAndHistory(&file.image, currentStep - file.historyStep);
+        d->undoMan->putImageDataAndHistory(&file.image, currentStep - file.historyStep);
     }
 
     QMap<QString,QVariant>::iterator it;
