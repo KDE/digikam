@@ -461,6 +461,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     IF(WIN32 AND MSVC)
         ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+        ADD_DEFINITIONS(-D_ATL_SECURE_NO_WARNINGS)
+        ADD_DEFINITIONS(-D_AFX_SECURE_NO_WARNINGS)
     ENDIF(WIN32 AND MSVC)
 
     # ==================================================================================================
