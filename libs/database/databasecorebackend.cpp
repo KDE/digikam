@@ -321,7 +321,7 @@ bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries)
 
     if (retries > qMax(uiMaxRetries, maxRetries))
     {
-        if (retries > isInUIThread() ? uiMaxRetries : maxRetries)
+        if (retries > (isInUIThread() ? uiMaxRetries : maxRetries))
         {
             kWarning() << "Detected locked database file. There is an active transaction. Waited but giving up now.";
             return false;
