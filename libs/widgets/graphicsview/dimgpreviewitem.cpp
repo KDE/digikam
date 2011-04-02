@@ -202,9 +202,13 @@ QString DImgPreviewItem::userLoadingHint() const
     switch (d->state)
     {
         case NoImage:
+        {
             return QString();
+        }
         case Loading:
+        {
             return i18n("Loading...");
+        }
         case ImageLoaded:
         {
             if (d->image.detectedFormat() == DImg::RAW)
@@ -232,8 +236,10 @@ QString DImgPreviewItem::userLoadingHint() const
 
             return QString();   // To please compiler without warnings.
         }
-        case ImageLoadingFailed:
+        default: // ImageLoadingFailed:
+        {
             return i18n("Failed to load image");
+        }
     }
 }
 
