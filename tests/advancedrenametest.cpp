@@ -29,7 +29,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kurl.h>
 #include <qtest_kde.h>
 
