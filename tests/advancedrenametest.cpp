@@ -29,6 +29,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kurl.h>
 #include <qtest_kde.h>
 
@@ -130,9 +131,16 @@ void AdvancedRenameWidgetTest::testDirectoryNameToken_data()
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("result");
 
+    // The main directory of digikam can have different names, depending on how the
+    // user named it. Therefore we have to detect the name here:
+    const KUrl dir2up = KUrl(KDESRCDIR).upUrl();
+    const QString dir2upString = dir2up.url();
+    QString digikamDir = dir2upString.right(dir2upString.size()-dir2up.upUrl().url().size());
+    digikamDir.chop(1);
+
     QTest::newRow("[dir]")          << QString("[dir]")          << QString("tests.jpg");
-    QTest::newRow("[dir.]")         << QString("[dir.]")         << QString("digikam.jpg");
-    QTest::newRow("[dir.]_[dir]")   << QString("[dir.]_[dir]")   << QString("digikam_tests.jpg");
+    QTest::newRow("[dir.]")         << QString("[dir.]")         << QString("%1.jpg").arg(digikamDir);
+    QTest::newRow("[dir.]_[dir]")   << QString("[dir.]_[dir]")   << QString("%1_tests.jpg").arg(digikamDir);
     QTest::newRow("[dir.......]")   << QString("[dir.......]")   << fileName;
 }
 
