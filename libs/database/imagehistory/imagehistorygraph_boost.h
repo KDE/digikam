@@ -24,6 +24,11 @@
 #ifndef IMAGEHISTORYGRAPH_BOOST_H
 #define IMAGEHISTORYGRAPH_BOOST_H
 
+// To disable warnings under MSVC2008.
+#ifdef _MSC_VER
+#pragma warning(disable : 4181)
+#endif
+
 // boost includes
 
 // prohibit boost using deprecated header files
