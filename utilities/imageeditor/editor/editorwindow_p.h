@@ -370,8 +370,8 @@ protected:
 
     void autoScroll(float relativePos, QScrollBar* scrollBar, QPropertyAnimation* animation)
     {
-        const float lowerPart = 0.15;
-        const float upperPart = 0.85;
+        const float lowerPart = 0.15F;
+        const float upperPart = 0.85F;
 
         if (scrollBar->minimum() != scrollBar->maximum())
         {
