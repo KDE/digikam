@@ -105,5 +105,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 082 ==> 269312 : Wish Rename file extension.
 083 ==> 269903 : Libkdcraw no longer compiles due to a linking error [patch].
 084 ==> 269862 : Libkmap compilation fails because of changes in MarbleWidget [patch].
-085 ==> 
+085 ==> 269435 : digiKam does not display any picture from any source.
+086 ==> 
 
