@@ -6,7 +6,7 @@
  * Date        : 2007-03-23
  * Description : Keeping image properties in sync.
  *
- * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,6 +20,11 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// To disable warnings under MSVC2008 about POSIX methods().
+#ifdef _MSC_VER
+#pragma warning(disable : 4996)
+#endif
 
 #include "databasewatch.h"
 #include "databasewatchadaptor.h"
