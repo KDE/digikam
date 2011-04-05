@@ -141,7 +141,7 @@ RegionFrameItem::RegionFrameItemPriv::RegionFrameItemPriv(RegionFrameItem* q)
     hudWidget             = 0;
     hoverAnimationOpacity = 1.0;
     hudTimer              = 0;
-    flags                 = RegionFrameItem::NoFlags;
+    flags                 = NoFlags;
 
     cropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom
                    << CH_TopLeft << CH_TopRight
@@ -184,7 +184,7 @@ QRectF RegionFrameItem::RegionFrameItemPriv::handleRect(CropHandle handle) const
 
 CropHandle RegionFrameItem::RegionFrameItemPriv::handleAt(const QPointF& pos) const
 {
-    if (flags & RegionFrameItem::ShowResizeHandles)
+    if (flags & ShowResizeHandles)
     {
         foreach (const CropHandle& handle, cropHandleList)
         {
@@ -197,7 +197,7 @@ CropHandle RegionFrameItem::RegionFrameItemPriv::handleAt(const QPointF& pos) co
         }
     }
 
-    if (flags & RegionFrameItem::MoveByDrag)
+    if (flags & MoveByDrag)
     {
         if (q->boundingRect().contains(pos))
         {
