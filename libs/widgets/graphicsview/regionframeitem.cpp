@@ -618,7 +618,7 @@ void RegionFrameItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     // FIXME: Fade out?
     //d->hudWidget->hide();
-    if (d->flags == NoFlags)
+    if (!(d->flags & GeometryEditable))
     {
         return DImgChildItem::mousePressEvent(event);
     }
