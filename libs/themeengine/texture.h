@@ -7,7 +7,7 @@
  * Description : texture pixmap methods
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Adapted from fluxbox: Texture/TextureRender
  *
@@ -44,7 +44,6 @@
 
 namespace Digikam
 {
-
 
 class DIGIKAM_EXPORT Texture
 {

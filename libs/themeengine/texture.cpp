@@ -7,7 +7,7 @@
  * Description : texture pixmap methods
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Adapted from fluxbox: Texture/TextureRender
  *
@@ -222,7 +222,10 @@ void Texture::doHgradient()
           xr = (float) d->color0.red(),
           xg = (float) d->color0.green(),
           xb = (float) d->color0.blue();
-    unsigned char* pr = d->red, *pg = d->green, *pb = d->blue;
+
+    unsigned char *pr = d->red,
+                  *pg = d->green,
+                  *pb = d->blue;
 
     register int x, y;
 
@@ -234,7 +237,7 @@ void Texture::doHgradient()
     dgx /= d->width;
     dbx /= d->width;
 
-    for (x = 0; x < d->width; ++x)
+    for (x = 0 ; x < d->width ; ++x)
     {
         *(pr++) = (unsigned char) (xr); // krazy:exclude=postfixop
         *(pg++) = (unsigned char) (xg); // krazy:exclude=postfixop
@@ -245,7 +248,7 @@ void Texture::doHgradient()
         xb += dbx;
     }
 
-    for (y = 1; y < d->height; ++y, pr += d->width, pg += d->width, pb += d->width)
+    for (y = 1 ; y < d->height ; ++y, pr += d->width, pg += d->width, pb += d->width)
     {
         memcpy(pr, d->red, d->width);
         memcpy(pg, d->green, d->width);
@@ -268,14 +271,17 @@ void Texture::doVgradient()
     dgy /= d->height;
     dby /= d->height;
 
-    unsigned char* pr = d->red, *pg = d->green, *pb = d->blue;
+    unsigned char *pr = d->red,
+                  *pg = d->green,
+                  *pb = d->blue;
+
     register int y;
 
-    for (y = 0; y < d->height; ++y, pr += d->width, pg += d->width, pb += d->width)
+    for (y = 0 ; y < d->height ; ++y, pr += d->width, pg += d->width, pb += d->width)
     {
-        memset(pr, (unsigned char) yr, d->width);
-        memset(pg, (unsigned char) yg, d->width);
-        memset(pb, (unsigned char) yb, d->width);
+        memset(pr, (unsigned char)yr, d->width);
+        memset(pg, (unsigned char)yg, d->width);
+        memset(pb, (unsigned char)yb, d->width);
 
         yr += dry;
         yg += dgy;
@@ -288,12 +294,20 @@ void Texture::doDgradient()
     unsigned int* xtable = new unsigned int[d->width*3];
     unsigned int* ytable = new unsigned int[d->height*3];
 
-    float drx, dgx, dbx, dry, dgy, dby, yr = 0.0, yg = 0.0, yb = 0.0,
+    float drx, dgx, dbx, dry, dgy, dby, yr = 0.0,
+                                        yg = 0.0,
+                                        yb = 0.0,
                                         xr = (float) d->color0.red(),
                                         xg = (float) d->color0.green(),
                                         xb = (float) d->color0.blue();
-    unsigned char* pr = d->red, *pg = d->green, *pb = d->blue;
-    unsigned int w    = d->width * 2, h = d->height * 2;
+
+    unsigned char *pr = d->red,
+                  *pg = d->green,
+                  *pb = d->blue;
+
+    unsigned int    w = d->width * 2,
+                    h = d->height * 2;
+
     unsigned int* xt  = xtable;
     unsigned int* yt  = ytable;
 
@@ -337,7 +351,7 @@ void Texture::doDgradient()
 
     // Combine tables to create gradient
 
-    for (yt = ytable, y = 0; y < d->height; ++y, yt += 3)
+    for (yt = ytable, y = 0 ; y < d->height ; ++y, yt += 3)
     {
         for (xt = xtable, x = 0; x < d->width; ++x)
         {
@@ -353,10 +367,15 @@ void Texture::doDgradient()
 
 void Texture::doBevel()
 {
-    unsigned char* pr = d->red, *pg = d->green, *pb = d->blue;
+    unsigned char *pr = d->red,
+                  *pg = d->green,
+                  *pb = d->blue;
 
-    register unsigned char r, g, b, rr ,gg ,bb;
-    register unsigned int w = d->width, h = d->height - 1, wh = w * h;
+    register unsigned char r, g, b, rr, gg, bb;
+
+    register unsigned int w = d->width,
+                          h = d->height - 1,
+                          wh = w * h;
 
     while (--w)
     {
@@ -603,7 +622,9 @@ void Texture::doBevel()
 
 void Texture::buildImage()
 {
-    unsigned char* pr = d->red, *pg = d->green, *pb = d->blue;
+    unsigned char *pr = d->red,
+                  *pg = d->green,
+                  *pb = d->blue;
 
     QImage image(d->width, d->height, QImage::Format_ARGB32);
 
@@ -611,7 +632,7 @@ void Texture::buildImage()
 
     register int p;
 
-    for (p =0; p < d->width*d->height; ++p)
+    for (p =0 ; p < d->width*d->height ; ++p)
     {
         *bits = 0xff << 24 | *pr << 16 | *pg << 8 | *pb;
         ++bits;
