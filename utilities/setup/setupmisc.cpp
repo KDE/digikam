@@ -30,9 +30,11 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QStyleFactory>
 
 // KDE includes
 
+#include <kapplication.h>
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <khbox.h>
@@ -52,18 +54,21 @@ public:
     SetupMiscPriv() :
         sidebarTypeLabel(0),
         stringComparisonTypeLabel(0),
+        applicationStyleLabel(0),
         showSplashCheck(0),
         showTrashDeleteDialogCheck(0),
         showPermanentDeleteDialogCheck(0),
         sidebarApplyDirectlyCheck(0),
         scanAtStart(0),
         sidebarType(0),
-        stringComparisonType(0)
+        stringComparisonType(0),
+        applicationStyle(0)
     {
     }
 
     QLabel*    sidebarTypeLabel;
     QLabel*    stringComparisonTypeLabel;
+    QLabel*    applicationStyleLabel;
 
     QCheckBox* showSplashCheck;
     QCheckBox* showTrashDeleteDialogCheck;
@@ -73,6 +78,7 @@ public:
 
     KComboBox* sidebarType;
     KComboBox* stringComparisonType;
+    KComboBox* applicationStyle;
 };
 
 SetupMisc::SetupMisc(QWidget* parent)
@@ -82,6 +88,8 @@ SetupMisc::SetupMisc(QWidget* parent)
     setWidget(panel);
     setWidgetResizable(true);
 
+    // --------------------------------------------------------
+
     QVBoxLayout* layout               = new QVBoxLayout(panel);
     d->showTrashDeleteDialogCheck     = new QCheckBox(i18n("Confirm when moving items to the &trash"), panel);
     d->showPermanentDeleteDialogCheck = new QCheckBox(i18n("Confirm when permanently deleting items"), panel);
@@ -89,12 +97,16 @@ SetupMisc::SetupMisc(QWidget* parent)
     d->showSplashCheck                = new QCheckBox(i18n("&Show splash screen at startup"), panel);
     d->scanAtStart                    = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), panel);
 
+    // --------------------------------------------------------
+
     KHBox* tabStyleHbox = new KHBox(panel);
     d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
     d->sidebarType      = new KComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
     d->sidebarType->addItem(i18n("For All Tabs"),        1);
     d->sidebarType->setToolTip(i18n("Set this option to configure how sidebar tab titles are visible."));
+
+    // --------------------------------------------------------
 
     KHBox* stringComparisonHbox  = new KHBox(panel);
     d->stringComparisonTypeLabel = new QLabel(i18n("String comparison type:"), stringComparisonHbox);
@@ -111,6 +123,17 @@ SetupMisc::SetupMisc(QWidget* parent)
 
     // --------------------------------------------------------
 
+    KHBox* appStyleHbox      = new KHBox(panel);
+    d->applicationStyleLabel = new QLabel(i18n("Widget style:"), appStyleHbox);
+    d->applicationStyle      = new KComboBox(appStyleHbox);
+    d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
+
+    QStringList styleList = QStyleFactory::keys();
+    for (int i = 0; i < styleList.count(); ++i)
+        d->applicationStyle->addItem(styleList[i]);
+
+    // --------------------------------------------------------
+
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
     layout->addWidget(d->showTrashDeleteDialogCheck);
@@ -119,6 +142,7 @@ SetupMisc::SetupMisc(QWidget* parent)
     layout->addWidget(d->showSplashCheck);
     layout->addWidget(d->scanAtStart);
     layout->addWidget(tabStyleHbox);
+    layout->addWidget(appStyleHbox);
     layout->addWidget(stringComparisonHbox);
     layout->addStretch();
 
@@ -148,6 +172,7 @@ void SetupMisc::applySettings()
     settings->setScanAtStart(d->scanAtStart->isChecked());
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
     settings->setStringComparisonType((AlbumSettings::StringComparisonType)d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
+    settings->setApplicationStyle(d->applicationStyle->currentText());
     settings->saveSettings();
 }
 
@@ -162,6 +187,7 @@ void SetupMisc::readSettings()
     d->scanAtStart->setChecked(settings->getScanAtStart());
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == KMultiTabBar::VSNET ? 0 : 1);
     d->stringComparisonType->setCurrentIndex(settings->getStringComparisonType());
+    d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(settings->getApplicationStyle()));
 }
 
 }  // namespace Digikam

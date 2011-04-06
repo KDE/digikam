@@ -357,6 +357,9 @@ public:
     double getFaceDetectionAccuracy() const;
     void setFaceDetectionAccuracy(double value);
 
+    void setApplicationStyle(const QString& style);
+    QString getApplicationStyle() const;
+
 public Q_SLOTS:
 
     void applyNepomukSettings() const;

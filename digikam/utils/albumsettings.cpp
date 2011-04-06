@@ -28,6 +28,7 @@
 // Qt includes
 
 #include <QDBusInterface>
+#include <QStyle>
 
 // KDE includes
 
@@ -195,7 +196,8 @@ public:
     static const QString                configSyncNepomuktoDigikamEntry;
     static const QString                configSyncDigikamtoNepomukEntry;
     static const QString                configStringComparisonTypeEntry;
-    static const QString                configFaceDetectionAccuracy;
+    static const QString                configFaceDetectionAccuracyEntry;
+    static const QString                configApplicationStyleEntry;
 
     // start up setting
     bool                                showSplash;
@@ -302,6 +304,7 @@ public:
 
     //misc
     AlbumSettings::StringComparisonType stringComparisonType;
+    QString                             applicationStyle;
 };
 
 const QString AlbumSettings::AlbumSettingsPrivate::configGroupDefault("Album Settings");
@@ -381,7 +384,8 @@ const QString AlbumSettings::AlbumSettingsPrivate::configScanAtStartEntry("Scan 
 const QString AlbumSettings::AlbumSettingsPrivate::configSyncNepomuktoDigikamEntry("Sync Nepomuk to Digikam");
 const QString AlbumSettings::AlbumSettingsPrivate::configSyncDigikamtoNepomukEntry("Sync Digikam to Nepomuk");
 const QString AlbumSettings::AlbumSettingsPrivate::configStringComparisonTypeEntry("String Comparison Type");
-const QString AlbumSettings::AlbumSettingsPrivate::configFaceDetectionAccuracy("Detection Accuracy");
+const QString AlbumSettings::AlbumSettingsPrivate::configFaceDetectionAccuracyEntry("Detection Accuracy");
+const QString AlbumSettings::AlbumSettingsPrivate::configApplicationStyleEntry("Application Style");
 
 // -------------------------------------------------------------------------------------------------
 
@@ -498,6 +502,7 @@ void AlbumSettings::init()
     d->faceDetectionAccuracy        = 0.8;
 
     d->stringComparisonType         = AlbumSettings::Natural;
+    d->applicationStyle             = kapp->style()->objectName();
 
     connect(this, SIGNAL(nepomukSettingsChanged()),
             this, SLOT(applyNepomukSettings()));
@@ -621,7 +626,9 @@ void AlbumSettings::readSettings()
 
     group = config->group(d->configGroupFaceDetection);
 
-    d->faceDetectionAccuracy = group.readEntry(d->configFaceDetectionAccuracy,     double(0.8));
+    d->faceDetectionAccuracy = group.readEntry(d->configFaceDetectionAccuracyEntry, double(0.8));
+
+    setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, kapp->style()->objectName()));
 
     emit setupChanged();
     emit recurseSettingsChanged();
@@ -728,7 +735,8 @@ void AlbumSettings::saveSettings()
 
     group = config->group(d->configGroupFaceDetection);
 
-    group.writeEntry(d->configFaceDetectionAccuracy, d->faceDetectionAccuracy);
+    group.writeEntry(d->configFaceDetectionAccuracyEntry, d->faceDetectionAccuracy);
+    group.writeEntry(d->configApplicationStyleEntry,      d->applicationStyle);
 
     config->sync();
 }
@@ -1664,5 +1672,18 @@ void AlbumSettings::triggerResyncWithNepomuk() const
 #endif // HAVE_NEPOMUK
 }
 
+void AlbumSettings::setApplicationStyle(const QString& style)
+{
+    if (d->applicationStyle != style)
+    {
+        d->applicationStyle = style;
+        kapp->setStyle(d->applicationStyle);
+    }
+}
+
+QString AlbumSettings::getApplicationStyle() const
+{
+    return d->applicationStyle;
+}
 
 }  // namespace Digikam

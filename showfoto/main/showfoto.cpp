@@ -537,6 +537,11 @@ void ShowFoto::applySettings()
     d->rightSideBar->setStyle(group.readEntry("Sidebar Title Style", 0) == 0 ?
                               KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
 
+    QString currentStyle = kapp->style()->objectName();
+    QString newStyle     = group.readEntry("Application Style", currentStyle);
+    if (newStyle != currentStyle)
+        kapp->setStyle(newStyle);
+
     // Current image deleted go to trash ?
     d->deleteItem2Trash = group.readEntry("DeleteItem2Trash", true);
 

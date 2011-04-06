@@ -34,6 +34,7 @@ namespace Digikam
 
 class SetupMisc : public QScrollArea
 {
+
 public:
 
     SetupMisc(QWidget* parent=0);

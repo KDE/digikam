@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : setup Misc tab.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "setupmisc.moc"
+#include "setupmisc.h"
 
 // Qt includes
 
@@ -31,6 +31,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QStyleFactory>
 
 // KDE includes
 
@@ -53,11 +54,13 @@ public:
 
     SetupMiscPriv() :
         sidebarTypeLabel(0),
+        applicationStyleLabel(0),
         showSplash(0),
         sortReverse(0),
         useTrash(0),
         sidebarType(0),
-        sortOrderComboBox(0)
+        sortOrderComboBox(0),
+        applicationStyle(0)
     {}
 
     static const QString configGroupName;
@@ -66,8 +69,10 @@ public:
     static const QString configSidebarTitleStyleEntry;
     static const QString configSortOrderEntry;
     static const QString configReverseSortEntry;
+    static const QString configApplicationStyleEntry;
 
     QLabel*              sidebarTypeLabel;
+    QLabel*              applicationStyleLabel;
 
     QCheckBox*           showSplash;
     QCheckBox*           sortReverse;
@@ -75,13 +80,16 @@ public:
 
     KComboBox*           sidebarType;
     KComboBox*           sortOrderComboBox;
+    KComboBox*           applicationStyle;
 };
+
 const QString SetupMisc::SetupMiscPriv::configGroupName("ImageViewer Settings");
 const QString SetupMisc::SetupMiscPriv::configDeleteItem2TrashEntry("DeleteItem2Trash");
 const QString SetupMisc::SetupMiscPriv::configShowSplashEntry("ShowSplash");
 const QString SetupMisc::SetupMiscPriv::configSidebarTitleStyleEntry("Sidebar Title Style");
 const QString SetupMisc::SetupMiscPriv::configSortOrderEntry("SortOrder");
 const QString SetupMisc::SetupMiscPriv::configReverseSortEntry("ReverseSort");
+const QString SetupMisc::SetupMiscPriv::configApplicationStyleEntry("Application Style");
 
 // --------------------------------------------------------
 
@@ -102,16 +110,26 @@ SetupMisc::SetupMisc(QWidget* parent)
     d->useTrash         = new QCheckBox(i18n("&Deleted items should go to the trash"), miscOptionsGroup);
     d->showSplash       = new QCheckBox(i18n("&Show splash screen at startup"), miscOptionsGroup);
 
-    KHBox* hbox         = new KHBox(miscOptionsGroup);
-    d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), hbox);
-    d->sidebarType      = new KComboBox(hbox);
+    KHBox* tabStyleHbox = new KHBox(miscOptionsGroup);
+    d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
+    d->sidebarType      = new KComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
     d->sidebarType->addItem(i18n("For All Tabs"),        1);
     d->sidebarType->setToolTip(i18n("Set this option to configure how sidebars tab title are visible."));
 
+    KHBox* appStyleHbox      = new KHBox(miscOptionsGroup);
+    d->applicationStyleLabel = new QLabel(i18n("Widget style:"), appStyleHbox);
+    d->applicationStyle      = new KComboBox(appStyleHbox);
+    d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
+
+    QStringList styleList = QStyleFactory::keys();
+    for (int i = 0; i < styleList.count(); ++i)
+        d->applicationStyle->addItem(styleList[i]);
+
     gLayout5->addWidget(d->useTrash);
     gLayout5->addWidget(d->showSplash);
-    gLayout5->addWidget(hbox);
+    gLayout5->addWidget(tabStyleHbox);
+    gLayout5->addWidget(appStyleHbox);
     miscOptionsGroup->setLayout(gLayout5);
 
     // -- Sort Order Options --------------------------------------------------------
@@ -162,22 +180,25 @@ void SetupMisc::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    d->useTrash->setChecked(group.readEntry(d->configDeleteItem2TrashEntry,                    false));
-    d->showSplash->setChecked(group.readEntry(d->configShowSplashEntry,                        true));
-    d->sidebarType->setCurrentIndex(group.readEntry(d->configSidebarTitleStyleEntry,           0));
-    d->sortOrderComboBox->setCurrentIndex(group.readEntry(d->configSortOrderEntry,             (int)SortByDate));
-    d->sortReverse->setChecked(group.readEntry(d->configReverseSortEntry,                      false));
+    d->useTrash->setChecked(group.readEntry(d->configDeleteItem2TrashEntry,          false));
+    d->showSplash->setChecked(group.readEntry(d->configShowSplashEntry,              true));
+    d->sidebarType->setCurrentIndex(group.readEntry(d->configSidebarTitleStyleEntry, 0));
+    d->sortOrderComboBox->setCurrentIndex(group.readEntry(d->configSortOrderEntry,   (int)SortByDate));
+    d->sortReverse->setChecked(group.readEntry(d->configReverseSortEntry,            false));
+    d->applicationStyle->setCurrentIndex(d->applicationStyle->
+        findText(group.readEntry(d->configApplicationStyleEntry, kapp->style()->objectName())));
 }
 
 void SetupMisc::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    group.writeEntry(d->configDeleteItem2TrashEntry,        d->useTrash->isChecked());
-    group.writeEntry(d->configShowSplashEntry,              d->showSplash->isChecked());
-    group.writeEntry(d->configSidebarTitleStyleEntry,       d->sidebarType->currentIndex());
-    group.writeEntry(d->configSortOrderEntry,               d->sortOrderComboBox->currentIndex());
-    group.writeEntry(d->configReverseSortEntry,             d->sortReverse->isChecked());
+    group.writeEntry(d->configDeleteItem2TrashEntry,  d->useTrash->isChecked());
+    group.writeEntry(d->configShowSplashEntry,        d->showSplash->isChecked());
+    group.writeEntry(d->configSidebarTitleStyleEntry, d->sidebarType->currentIndex());
+    group.writeEntry(d->configSortOrderEntry,         d->sortOrderComboBox->currentIndex());
+    group.writeEntry(d->configReverseSortEntry,       d->sortReverse->isChecked());
+    group.writeEntry(d->configApplicationStyleEntry,  d->applicationStyle->currentText());
     config->sync();
 }
 
