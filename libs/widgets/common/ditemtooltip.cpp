@@ -6,7 +6,7 @@
  * Date        : 2008-12-10
  * Description : tool tip widget for iconview, thumbbar, and folderview items
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,7 +75,7 @@ DToolTipStyleSheet::DToolTipStyleSheet(const QFont& font)
                   .arg(ThemeEngine::instance()->textRegColor().name())
                   .arg(font.family());
     cellSpecMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\"><i>")
-                  .arg(ThemeEngine::instance()->textSpecialRegColor().name())
+                  .arg(ThemeEngine::instance()->textRegColor().name())
                   .arg(font.family());
     cellSpecEnd = QString("</i></font></nobr></td></tr>");
 }
@@ -136,7 +136,9 @@ QString DToolTipStyleSheet::elidedText(const QString& str, Qt::TextElideMode eli
     }
 }
 
-class DItemToolTipPriv
+// --------------------------------------------------------------------------------------------------
+
+class DItemToolTip::DItemToolTipPriv
 {
 public:
 
