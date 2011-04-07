@@ -114,4 +114,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 090 ==> 220068 : Dark theme: active item in menu is hardly different than others items.
 091 ==> 250265 : Black background of short summary display.
 092 ==> 257803 : Grey font on grey context (Obsidian Coast colour scheme).
-093 ==> 
+093 ==> 266086 : digiKam 2.0.0-beta2 crashed after closing it.
+094 ==> 
