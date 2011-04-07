@@ -4,7 +4,6 @@ PROJECT(digikam)
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: digikam")
 
-OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
 OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
 
 # ==================================================================================================
@@ -1469,7 +1468,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
         ${CMAKE_CURRENT_SOURCE_DIR}/tests
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest
-        ${CMAKE_CURRENT_SOURCE_DIR}/themedesigner
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common
@@ -1546,10 +1544,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(KDE4_BUILD_TESTS)
         MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
     ENDIF(KDE4_BUILD_TESTS)
-
-    IF(ENABLE_THEMEDESIGNER)
-        ADD_SUBDIRECTORY(themedesigner)
-    ENDIF(ENABLE_THEMEDESIGNER)
 
     IF(NOT WIN32)
         CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/digikam.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam.lsm)
