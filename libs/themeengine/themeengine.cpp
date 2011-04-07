@@ -198,7 +198,7 @@ void ThemeEngine::buildTheme()
     d->theme.baseColor           = d->palette.color(QPalette::Base);
     d->theme.textRegColor        = d->palette.color(QPalette::Text);
     d->theme.textSelColor        = d->palette.color(QPalette::HighlightedText);
-    d->theme.textSpecialRegColor = QColor("#FFC800");
+    d->theme.textSpecialRegColor = d->palette.color(QPalette::Link);
     d->theme.textSpecialSelColor = d->palette.color(QPalette::HighlightedText);
 
     d->theme.bannerColor         = d->palette.color(QPalette::Highlight);
@@ -213,14 +213,14 @@ void ThemeEngine::buildTheme()
     d->theme.thumbRegBevel       = Theme::FLAT;
     d->theme.thumbRegGrad        = Theme::SOLID;
     d->theme.thumbRegBorder      = true;
-    d->theme.thumbRegBorderColor = QColor("#E0E0EF");
+    d->theme.thumbRegBorderColor = d->palette.color(QPalette::Midlight);
 
     d->theme.thumbSelColor       = d->palette.color(QPalette::Highlight);
     d->theme.thumbSelColorTo     = d->palette.color(QPalette::Highlight);
     d->theme.thumbSelBevel       = Theme::FLAT;
     d->theme.thumbSelGrad        = Theme::SOLID;
     d->theme.thumbSelBorder      = true;
-    d->theme.thumbSelBorderColor = QColor("#E0E0EF");
+    d->theme.thumbSelBorderColor = d->palette.color(QPalette::Midlight);
 
     d->theme.listRegColor        = d->palette.color(QPalette::Base);
     d->theme.listRegColorTo      = d->palette.color(QPalette::Base);
