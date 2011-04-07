@@ -27,11 +27,9 @@
 
 // Qt includes
 
-#include <QStringList>
 #include <QObject>
 #include <QColor>
 #include <QPixmap>
-#include <QDomElement>
 
 // KDE includes
 

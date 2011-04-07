@@ -27,7 +27,6 @@
 
 // Qt includes
 
-#include <QString>
 #include <QColor>
 
 // Local includes

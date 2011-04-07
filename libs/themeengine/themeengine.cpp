@@ -26,19 +26,15 @@
 
 // Qt includes
 
-#include <QHash>
+#include <QStringList>
 #include <QFileInfo>
 #include <QFile>
 #include <QApplication>
 #include <QPalette>
-#include <QTimer>
 #include <QBitmap>
 #include <QPainter>
 #include <QPixmap>
-#include <QDomDocument>
-#include <QTextStream>
 #include <QDate>
-#include <QTextCodec>
 #include <QDesktopWidget>
 
 // KDE includes
@@ -48,7 +44,6 @@
 #include <kcolorscheme.h>
 #include <kactioncollection.h>
 #include <kstandarddirs.h>
-#include <kuser.h>
 #include <kselectaction.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -244,8 +239,6 @@ void ThemeEngine::buildTheme()
     d->theme.listSelBorder       = true;
     d->theme.listSelBorderColor  = Qt::black;
 }
-
-// -----------------------------------------------------------------------------------------------------------
 
 void ThemeEngine::slotChangePalette(const QString& name)
 {
