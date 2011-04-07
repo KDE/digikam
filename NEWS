@@ -9,6 +9,7 @@ General     : Face detection and recognition support.
 General     : Tag keyboard shortcuts support.
 General     : Color Labels support to improve photograph workfow.
 General     : Pick Labels support to improve photograph selection.
+General     : Color Theme engine is now ported to KDE color theme manager.
 
 AlbumGUI    : Re-designed Filters view on right sidebar to perform icon-view items filtering.
 AlbumGUI    : Add options to group/ungroup items from icon-view.
@@ -107,5 +108,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 084 ==> 269862 : Libkmap compilation fails because of changes in MarbleWidget [patch].
 085 ==> 269435 : digiKam does not display any picture from any source.
 086 ==> 246074 : Can't export photos to Picasaweb (with gwenview it's works fine).
-087 ==> 
-
+087 ==> 252700 : Font color for icons in toolbar does not change for darker Themes.
+088 ==> 168669 : Disabled entry menu seems more important and active in dark theme.
+089 ==> 241116 : [Themes] Cannot change text colour in menu bar.
+090 ==> 220068 : Dark theme: active item in menu is hardly different than others items.
+091 ==> 250265 : Black background of short summary display.
+092 ==> 257803 : Grey font on grey context (Obsidian Coast colour scheme).
+093 ==> 
