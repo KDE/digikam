@@ -83,7 +83,6 @@ public:
         lastAction(0),
         libsInfoAction(0),
         dbStatAction(0),
-        themeMenuAction(0),
         showThumbBarAction(0),
         syncPreviewAction(0),
         navigateByPairAction(0),
@@ -138,8 +137,6 @@ public:
     KAction*                  rawCameraListAction;
     KAction*                  libsInfoAction;
     KAction*                  dbStatAction;
-
-    KSelectAction*            themeMenuAction;
 
     KToggleAction*            showThumbBarAction;
     KToggleAction*            syncPreviewAction;

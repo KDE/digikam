@@ -67,7 +67,6 @@
 class KToolBarPopupAction;
 class KToggleAction;
 class KActionMenu;
-class KSelectAction;
 
 namespace Digikam
 {
@@ -161,7 +160,6 @@ public:
         libsInfoAction(0),
         dbStatAction(0),
         kipiHelpAction(0),
-        themeMenuAction(0),
         addCameraSeparatorAction(0),
         quitAction(0),
         tipAction(0),
@@ -301,7 +299,6 @@ public:
     KAction*                            libsInfoAction;
     KAction*                            dbStatAction;
     KAction*                            kipiHelpAction;
-    KSelectAction*                      themeMenuAction;
     QAction*                            addCameraSeparatorAction;
     QAction*                            quitAction;
     QAction*                            tipAction;

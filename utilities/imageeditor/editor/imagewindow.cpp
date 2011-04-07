@@ -525,9 +525,6 @@ void ImageWindow::setupConnections()
             this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)),
             Qt::QueuedConnection);*/
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
-
     /*connect(d->imageFilterModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
             this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));*/
 
@@ -1753,15 +1750,6 @@ bool ImageWindow::hasOriginalToRestore()
 DImageHistory ImageWindow::resolvedImageHistory(const DImageHistory& history)
 {
     return ImageScanner::resolvedImageHistory(history);
-}
-
-void ImageWindow::slotChangeTheme(const QString& theme)
-{
-    // Theme menu entry is returned with keyboard accelerator. We remove it.
-    QString name = theme;
-    name.remove(QChar('&'));
-    AlbumSettings::instance()->setCurrentTheme(theme);
-    ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
 ThumbBarDock* ImageWindow::thumbBar() const

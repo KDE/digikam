@@ -136,9 +136,6 @@ private Q_SLOTS:
     void slotQueueContentsChanged();
     void slotItemSelectionChanged();
 
-    void slotThemeChanged();
-    void slotChangeTheme(const QString&);
-
 private:
 
     class QueueMgrWindowPriv;

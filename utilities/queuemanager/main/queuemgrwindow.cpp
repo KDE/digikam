@@ -340,9 +340,6 @@ void QueueMgrWindow::setupConnections()
 
     // -- GUI connections ---------------------------------------------------
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
-
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
 
@@ -428,13 +425,7 @@ void QueueMgrWindow::setupActions()
 
     // ---------------------------------------------------------------------------------
 
-    d->themeMenuAction = new KSelectAction(i18n("&Themes"), this);
-    connect(d->themeMenuAction, SIGNAL(triggered(const QString&)),
-            this, SLOT(slotChangeTheme(const QString&)));
-    actionCollection()->addAction("theme_menu", d->themeMenuAction);
-
-    d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
-    slotThemeChanged();
+    ThemeEngine::instance()->registerThemeActions(this);
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
@@ -743,28 +734,6 @@ void QueueMgrWindow::slotSetup()
 void QueueMgrWindow::setup(Setup::Page page)
 {
     Setup::exec(this, page);
-}
-
-void QueueMgrWindow::slotThemeChanged()
-{
-    QStringList themes(ThemeEngine::instance()->themeNames());
-    int index = themes.indexOf(AlbumSettings::instance()->getCurrentTheme());
-
-    if (index == -1)
-    {
-        index = themes.indexOf(i18n("Default"));
-    }
-
-    d->themeMenuAction->setCurrentItem(index);
-}
-
-void QueueMgrWindow::slotChangeTheme(const QString& theme)
-{
-    // Theme menu entry is returned with keyboard accelerator. We remove it.
-    QString name = theme;
-    name.remove(QChar('&'));
-    AlbumSettings::instance()->setCurrentTheme(theme);
-    ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
 void QueueMgrWindow::slotComponentsInfo()

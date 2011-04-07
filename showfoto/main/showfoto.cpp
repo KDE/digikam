@@ -59,6 +59,7 @@ extern "C"
 // KDE includes
 
 #include <kaction.h>
+#include <kselectaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -208,7 +209,6 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     {
         d->splash->message(i18n("Checking ICC repository"));
     }
-
     d->validIccPath = Digikam::SetupICC::iccRepositoryIsValid();
 
     // Populate Themes
@@ -217,8 +217,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     {
         d->splash->message(i18n("Loading themes"));
     }
-
-    Digikam::ThemeEngine::instance()->scanThemes();
+    Digikam::ThemeEngine::instance();
 
     // -- Build the GUI -----------------------------------
 
@@ -462,6 +461,7 @@ void ShowFoto::setupUserArea()
 
 void ShowFoto::setupActions()
 {
+    Digikam::ThemeEngine::instance()->setThemeMenuAction(new KSelectAction(i18n("&Themes"), this));
     setupStandardActions();
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
@@ -509,7 +509,8 @@ void ShowFoto::readSettings()
 
     d->rightSideBar->loadState();
 
-    Digikam::ThemeEngine::instance()->setCurrentTheme(group.readEntry("Theme", i18nc("default theme name", "Default")));
+    Digikam::ThemeEngine::instance()->setCurrentTheme(group.readEntry("Theme",
+                                                                      i18nc("default theme name", "Default")));
 }
 
 void ShowFoto::saveSettings()
@@ -520,7 +521,7 @@ void ShowFoto::saveSettings()
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.toLocalFile() );
-    group.writeEntry("Theme", Digikam::ThemeEngine::instance()->getCurrentThemeName());
+    group.writeEntry("Theme", Digikam::ThemeEngine::instance()->currentThemeName());
 
     d->rightSideBar->saveState();
 

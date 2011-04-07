@@ -27,10 +27,8 @@
 namespace Digikam
 {
 
-Theme::Theme(const QString& n, const QString& p)
+Theme::Theme()
 {
-    name     = n;
-    filePath = p;
 }
 
 Theme::Theme(const Theme& theme)
@@ -132,8 +130,6 @@ Theme& Theme::operator=(const Theme& theme)
 void Theme::print()
 {
     /*
-        kDebug() << "Theme :                      " << name;
-
         kDebug() << "Base Color:                  " << baseColor;
         kDebug() << "Text Regular  Color:         " << textRegColor;
         kDebug() << "Text Selected Color:         " << textSelColor;

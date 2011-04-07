@@ -330,9 +330,6 @@ void LightTableWindow::setupConnections()
     connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotProgressBarCancelButtonPressed()));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
-
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
 
@@ -599,13 +596,7 @@ void LightTableWindow::setupActions()
 
     // ---------------------------------------------------------------------------------
 
-    d->themeMenuAction = new KSelectAction(i18n("&Themes"), this);
-    connect(d->themeMenuAction, SIGNAL(triggered(const QString&)),
-            this, SLOT(slotChangeTheme(const QString&)));
-    actionCollection()->addAction("theme_menu", d->themeMenuAction);
-
-    d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
-    slotThemeChanged();
+    ThemeEngine::instance()->registerThemeActions(this);
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
@@ -1685,28 +1676,6 @@ void LightTableWindow::slotToggleNavigateByPair()
     d->barView->setNavigateByPair(d->navigateByPairAction->isChecked());
     d->previewView->setNavigateByPair(d->navigateByPairAction->isChecked());
     slotItemSelected(d->barView->currentItemImageInfo());
-}
-
-void LightTableWindow::slotThemeChanged()
-{
-    QStringList themes(ThemeEngine::instance()->themeNames());
-    int index = themes.indexOf(AlbumSettings::instance()->getCurrentTheme());
-
-    if (index == -1)
-    {
-        index = themes.indexOf(i18n("Default"));
-    }
-
-    d->themeMenuAction->setCurrentItem(index);
-}
-
-void LightTableWindow::slotChangeTheme(const QString& theme)
-{
-    // Theme menu entry is returned with keyboard accelerator. We remove it.
-    QString name = theme;
-    name.remove(QChar('&'));
-    AlbumSettings::instance()->setCurrentTheme(theme);
-    ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
 void LightTableWindow::slotComponentsInfo()

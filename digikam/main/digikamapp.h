@@ -202,9 +202,6 @@ private Q_SLOTS:
     void slotScanForFaces();
     void slotScanForFacesDone();
 
-    void slotChangeTheme(const QString& theme);
-    void slotThemeChanged();
-
     void slotProgressBarMode(int, const QString&);
     void slotProgressValue(int);
 
@@ -220,6 +217,7 @@ private Q_SLOTS:
     void slotImportAddFolders();
     void slotDIOResult(KJob*);
     void slotScriptConsole();
+    void slotThemeChanged();
 
 private:
 

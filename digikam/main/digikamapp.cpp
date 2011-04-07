@@ -271,9 +271,6 @@ DigikamApp::DigikamApp()
     // Load KIPI Plugins.
     loadPlugins();
 
-    // Load Themes
-    populateThemes();
-
     // preload additional windows
     preloadWindows();
 
@@ -662,16 +659,6 @@ void DigikamApp::setupActions()
     d->manualCameraActionGroup = new QActionGroup(this);
     connect(d->manualCameraActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotOpenManualCamera(QAction*)));
-
-    // -----------------------------------------------------------------
-
-    d->themeMenuAction = new KSelectAction(i18n("&Themes"), this);
-    connect(d->themeMenuAction, SIGNAL(triggered(const QString&)),
-            this, SLOT(slotChangeTheme(const QString&)));
-    actionCollection()->addAction("theme_menu", d->themeMenuAction);
-
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
 
     // -----------------------------------------------------------------
 
@@ -1292,8 +1279,10 @@ void DigikamApp::setupActions()
     {
         d->splashScreen->message(i18n("Loading cameras"));
     }
-
     loadCameras();
+
+    // Load Themes
+    populateThemes();
 
     createGUI(xmlFile());
 }
@@ -2741,11 +2730,17 @@ void DigikamApp::populateThemes()
     {
         d->splashScreen->message(i18n("Loading themes"));
     }
+    ThemeEngine::instance()->setThemeMenuAction(new KSelectAction(i18n("&Themes"), this));
+    ThemeEngine::instance()->registerThemeActions(this);
+    ThemeEngine::instance()->setCurrentTheme(AlbumSettings::instance()->getCurrentTheme());
 
-    ThemeEngine::instance()->scanThemes();
-    d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
-    slotThemeChanged();
-    ThemeEngine::instance()->slotChangeTheme(d->themeMenuAction->currentText());
+    connect (ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+             this, SLOT(slotThemeChanged()));
+}
+
+void DigikamApp::slotThemeChanged()
+{
+    AlbumSettings::instance()->setCurrentTheme(ThemeEngine::instance()->currentThemeName());
 }
 
 void DigikamApp::preloadWindows()
@@ -2760,28 +2755,6 @@ void DigikamApp::preloadWindows()
     LightTableWindow::lightTableWindow();
 
     d->tagsActionManager->registerActionCollections();
-}
-
-void DigikamApp::slotChangeTheme(const QString& theme)
-{
-    // Theme menu entry is returned with keyboard accelerator. We remove it.
-    QString name = theme;
-    name.remove(QChar('&'));
-    AlbumSettings::instance()->setCurrentTheme(name);
-    ThemeEngine::instance()->slotChangeTheme(name);
-}
-
-void DigikamApp::slotThemeChanged()
-{
-    QStringList themes(ThemeEngine::instance()->themeNames());
-    int index = themes.indexOf(AlbumSettings::instance()->getCurrentTheme());
-
-    if (index == -1)
-    {
-        index = themes.indexOf(i18n("Default"));
-    }
-
-    d->themeMenuAction->setCurrentItem(index);
 }
 
 void DigikamApp::slotDatabaseMigration()

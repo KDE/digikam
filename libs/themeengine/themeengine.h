@@ -33,9 +33,16 @@
 #include <QPixmap>
 #include <QDomElement>
 
+// KDE includes
+
+#include <ksharedconfig.h>
+
 // Local includes
 
 #include "digikam_export.h"
+
+class KXmlGuiWindow;
+class KSelectAction;
 
 namespace Digikam
 {
@@ -51,16 +58,9 @@ public:
     ~ThemeEngine();
     static ThemeEngine* instance();
 
-    void        scanThemes();
-    QStringList themeNames() const;
-    bool        saveTheme();
-
+    void    setThemeMenuAction(KSelectAction* const action);
+    QString currentThemeName() const;
     void    setCurrentTheme(const QString& name);
-    void    setCurrentTheme(const Theme& theme, const QString& name,
-                            bool loadFromDisk=false);
-
-    Theme*  getCurrentTheme() const;
-    QString getCurrentThemeName() const;
 
     QColor  baseColor()     const;
     QColor  thumbSelColor() const;
@@ -77,22 +77,23 @@ public:
     QPixmap listRegPixmap(int w, int h);
     QPixmap listSelPixmap(int w, int h);
 
+    void registerThemeActions(KXmlGuiWindow* const kwin);
+
 Q_SIGNALS:
 
     void signalThemeChanged();
 
-public Q_SLOTS:
+private Q_SLOTS:
 
-    void slotChangeTheme(const QString& name);
+    void slotChangePalette(const QString& name);
 
 private:
 
     ThemeEngine();
 
-    void    buildDefaultTheme();
-    bool    loadTheme();
-    void    changePalette();
-    QString resourceValue(const QDomElement& rootElem, const QString& key);
+    void    buildTheme();
+    void    populateThemeMenu();
+    QPixmap createSchemePreviewIcon(const KSharedConfigPtr& config);
 
 private:
 

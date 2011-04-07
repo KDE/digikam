@@ -58,16 +58,13 @@ public:
 
 public:
 
-    Theme(const QString& n, const QString& p);
+    Theme();
     Theme(const Theme& theme);
     Theme& operator=(const Theme& theme);
 
     void print();
 
 public:
-
-    QString  name;
-    QString  filePath;
 
     QColor   baseColor;
     QColor   textRegColor;

@@ -137,8 +137,6 @@ protected:
     KAction*                  m_applyToolAction;
     KAction*                  m_closeToolAction;
 
-    KSelectAction*            m_themeMenuAction;
-
     KToggleAction*            m_showBarAction;
 
     KToolBarPopupAction*      m_undoAction;
@@ -283,15 +281,11 @@ protected Q_SLOTS:
 
     void slotNameLabelCancelButtonPressed();
 
-    void slotThemeChanged();
-
     virtual void slotPrepareToLoad();
     virtual void slotLoadingStarted(const QString& filename);
     virtual void slotLoadingFinished(const QString& filename, bool success);
     virtual void slotSavingStarted(const QString& filename);
     virtual void slotFileOriginChanged(const QString& filePath);
-
-    virtual void slotChangeTheme(const QString& theme);
 
     virtual void slotComponentsInfo();
 

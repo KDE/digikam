@@ -171,8 +171,6 @@ private Q_SLOTS:
     //void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
     void slotDroppedOnThumbbar(const QList<ImageInfo>& infos);
 
-    void slotChangeTheme(const QString& theme);
-
     void slotComponentsInfo();
     void slotDBStat();
 

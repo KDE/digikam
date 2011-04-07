@@ -91,7 +91,6 @@ public:
         topSplitter            = 0;
         bottomSplitter         = 0;
         verticalSplitter       = 0;
-        themeMenuAction        = 0;
         contributeAction       = 0;
         assignedList           = 0;
         queuePool              = 0;
@@ -147,8 +146,6 @@ public:
     SidebarSplitter*       verticalSplitter;
 
     KToggleAction*         showMenuBarAction;
-
-    KSelectAction*         themeMenuAction;
 
     DLogoAction*           animLogo;
     QueueListViewItem*     currentProcessItem;

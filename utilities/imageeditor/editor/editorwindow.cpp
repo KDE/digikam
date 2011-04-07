@@ -165,7 +165,6 @@ EditorWindow::EditorWindow(const char* name)
     setWindowFlags(Qt::Window);
 
     m_nonDestructive           = true;
-    m_themeMenuAction          = 0;
     m_contextMenu              = 0;
     m_canvas                   = 0;
     m_imagePluginLoader        = 0;
@@ -620,14 +619,7 @@ void EditorWindow::setupStandardActions()
 
     // ---------------------------------------------------------------------------------
 
-    m_themeMenuAction = new KSelectAction(i18n("&Themes"), this);
-    m_themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
-    connect(m_themeMenuAction, SIGNAL(triggered(const QString&)),
-            this, SLOT(slotChangeTheme(const QString&)));
-    actionCollection()->addAction("theme_menu", m_themeMenuAction);
-
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
+    ThemeEngine::instance()->registerThemeActions(this);
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
@@ -1006,8 +998,6 @@ void EditorWindow::applyStandardSettings()
 
     d->fullScreenHideToolBar = group.readEntry(d->configFullScreenHideToolBarEntry, false);
     m_fullScreenHideThumbBar = group.readEntry(d->configFullScreenHideThumbBarEntry, true);
-
-    slotThemeChanged();
 
     // -- Exposure Indicators Settings ---------------------------------------
 
@@ -2874,38 +2864,6 @@ void EditorWindow::slotToggleSlideShow()
 void EditorWindow::slotSelectionChanged(const QRect& sel)
 {
     setToolInfoMessage(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y()).arg(sel.width()).arg(sel.height()));
-}
-
-void EditorWindow::slotThemeChanged()
-{
-    QStringList themes(ThemeEngine::instance()->themeNames());
-    int index = themes.indexOf(ThemeEngine::instance()->getCurrentThemeName());
-
-    if (index == -1)
-    {
-        index = themes.indexOf(i18n("Default"));
-    }
-
-    m_themeMenuAction->setCurrentItem(index);
-
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
-
-    if (!group.readEntry(d->configUseThemeBackgroundColorEntry, true))
-    {
-        m_bgColor = group.readEntry(d->configBackgroundColorEntry, QColor(Qt::black));
-    }
-    else
-    {
-        m_bgColor = ThemeEngine::instance()->baseColor();
-    }
-
-    m_canvas->setBackgroundColor(m_bgColor);
-}
-
-void EditorWindow::slotChangeTheme(const QString& theme)
-{
-    ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
 void EditorWindow::toggleGUI2FullScreen()

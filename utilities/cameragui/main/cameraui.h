@@ -205,9 +205,6 @@ private Q_SLOTS:
     void slotComponentsInfo();
     void slotDBStat();
 
-    void slotThemeChanged();
-    void slotChangeTheme(const QString& theme);
-
     void slotSidebarTabTitleStyleChanged();
 
     void slotRefreshIconViewTimer();

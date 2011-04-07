@@ -499,13 +499,7 @@ void CameraUI::setupActions()
 
     // ---------------------------------------------------------------------------------
 
-    d->themeMenuAction = new KSelectAction(i18n("&Themes"), this);
-    connect(d->themeMenuAction, SIGNAL(triggered(const QString&)),
-            this, SLOT(slotChangeTheme(const QString&)));
-    actionCollection()->addAction("theme_menu", d->themeMenuAction);
-
-    d->themeMenuAction->setItems(ThemeEngine::instance()->themeNames());
-    slotThemeChanged();
+    ThemeEngine::instance()->registerThemeActions(this);
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
@@ -2478,28 +2472,6 @@ bool CameraUI::cameraMkDirSupport()
 bool CameraUI::cameraDelDirSupport()
 {
     return d->controller->cameraDelDirSupport();
-}
-
-void CameraUI::slotThemeChanged()
-{
-    QStringList themes(ThemeEngine::instance()->themeNames());
-    int index = themes.indexOf(AlbumSettings::instance()->getCurrentTheme());
-
-    if (index == -1)
-    {
-        index = themes.indexOf(i18n("Default"));
-    }
-
-    d->themeMenuAction->setCurrentItem(index);
-}
-
-void CameraUI::slotChangeTheme(const QString& theme)
-{
-    // Theme menu entry is returned with keyboard accelerator. We remove it.
-    QString name = theme;
-    name.remove(QChar('&'));
-    AlbumSettings::instance()->setCurrentTheme(theme);
-    ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
 void CameraUI::slotComponentsInfo()

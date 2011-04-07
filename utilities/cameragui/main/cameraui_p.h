@@ -124,7 +124,6 @@ public:
         showLogAction(0),
         losslessFormat(0),
         folderDateFormat(0),
-        themeMenuAction(0),
         helpMenu(0),
         dateTimeEdit(0),
         kdeJob(0),
@@ -207,8 +206,6 @@ public:
 
     KComboBox*                    losslessFormat;
     KComboBox*                    folderDateFormat;
-
-    KSelectAction*                themeMenuAction;
 
     KUrl                          lastDestURL;
 
