@@ -78,11 +78,8 @@ public:
 
     ThemeEnginePriv()
     {
-        themeMenuAction   = 0;
-        themeInitiallySet = false;
+        themeMenuAction = 0;
     }
-
-    bool                   themeInitiallySet;
 
     QMap<QString, QString> themeMap;            // map<theme name, theme config path>
     QPalette               palette;
