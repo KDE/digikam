@@ -3123,7 +3123,7 @@ void AlbumManager::slotDatesJobResult(KJob* job)
 
 void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
 {
-    if (data.isEmpty())
+    if (data.isEmpty() || !d->rootDAlbum)
     {
         return;
     }
