@@ -93,6 +93,8 @@ private:
     void    buildTheme();
     void    populateThemeMenu();
     QPixmap createSchemePreviewIcon(const KSharedConfigPtr& config);
+    QString currentKDEdefaultTheme() const;
+    void    updateCurrentKDEdefaultThemePreview();
 
 private:
 

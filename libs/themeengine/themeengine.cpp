@@ -249,14 +249,13 @@ void ThemeEngine::buildTheme()
 
 void ThemeEngine::slotChangePalette()
 {
+    updateCurrentKDEdefaultThemePreview();
+
     QString theme(currentThemeName());
 
     if (theme == defaultThemeName() || theme.isEmpty())
-    {
-        KSharedConfigPtr config = KSharedConfig::openConfig("kdeglobals");
-        KConfigGroup group(config, "General");
-        theme                   = group.readEntry("ColorScheme");
-    }
+        theme = currentKDEdefaultTheme();
+
     kDebug() << theme;
 
     QString filename        = d->themeMap.value(theme);
@@ -336,11 +335,8 @@ void ThemeEngine::populateThemeMenu()
 
     for (int i = 0; i < schemeFiles.size(); ++i)
     {
-        // get the file name
-        const QString filename = schemeFiles.at(i);
+        const QString filename  = schemeFiles.at(i);
         const QFileInfo info(filename);
-
-        // add the entry
         KSharedConfigPtr config = KSharedConfig::openConfig(filename);
         QIcon icon              = createSchemePreviewIcon(config);
         KConfigGroup group(config, "General");
@@ -351,6 +347,15 @@ void ThemeEngine::populateThemeMenu()
         action->setCheckable(true);
         d->themeMenuAction->addAction(action);
     }
+    updateCurrentKDEdefaultThemePreview();
+}
+
+void ThemeEngine::updateCurrentKDEdefaultThemePreview()
+{
+    QAction* action         = d->themeMenuAction->action(defaultThemeName());
+    KSharedConfigPtr config = KSharedConfig::openConfig(d->themeMap.value(currentKDEdefaultTheme()));
+    QIcon icon              = createSchemePreviewIcon(config);
+    action->setIcon(icon);
 }
 
 QPixmap ThemeEngine::createSchemePreviewIcon(const KSharedConfigPtr& config)
@@ -391,6 +396,13 @@ QPixmap ThemeEngine::createSchemePreviewIcon(const KSharedConfigPtr& config)
 
     p.end();
     return pixmap;
+}
+
+QString ThemeEngine::currentKDEdefaultTheme() const
+{
+    KSharedConfigPtr config = KSharedConfig::openConfig("kdeglobals");
+    KConfigGroup group(config, "General");
+    return group.readEntry("ColorScheme");
 }
 
 }  // namespace Digikam
