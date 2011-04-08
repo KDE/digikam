@@ -212,7 +212,7 @@ void ThemeEngine::buildTheme()
     d->theme.textSpecialSelColor = d->palette.color(QPalette::HighlightedText);
 
     d->theme.bannerColor         = d->palette.color(QPalette::Highlight);
-    d->theme.bannerColorTo       = d->palette.color(QPalette::Highlight).dark(120);
+    d->theme.bannerColorTo       = d->palette.color(QPalette::Highlight);
     d->theme.bannerBevel         = Theme::FLAT;
     d->theme.bannerGrad          = Theme::SOLID;
     d->theme.bannerBorder        = false;
@@ -244,7 +244,7 @@ void ThemeEngine::buildTheme()
     d->theme.listSelBevel        = Theme::FLAT;
     d->theme.listSelGrad         = Theme::SOLID;
     d->theme.listSelBorder       = true;
-    d->theme.listSelBorderColor  = Qt::black;
+    d->theme.listSelBorderColor  = d->palette.color(QPalette::Midlight);
 }
 
 void ThemeEngine::slotChangePalette()
