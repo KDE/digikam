@@ -59,6 +59,7 @@ public:
     void    setThemeMenuAction(KSelectAction* const action);
     QString currentThemeName() const;
     void    setCurrentTheme(const QString& name);
+    QString defaultThemeName() const;
 
     QColor  baseColor()     const;
     QColor  thumbSelColor() const;
@@ -75,7 +76,7 @@ public:
     QPixmap listRegPixmap(int w, int h);
     QPixmap listSelPixmap(int w, int h);
 
-    void registerThemeActions(KXmlGuiWindow* const kwin);
+    void    registerThemeActions(KXmlGuiWindow* const kwin);
 
 Q_SIGNALS:
 
@@ -83,7 +84,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotChangePalette(const QString& name);
+    void slotChangePalette();
 
 private:
 

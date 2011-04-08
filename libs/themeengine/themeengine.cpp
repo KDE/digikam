@@ -36,6 +36,7 @@
 #include <QPixmap>
 #include <QDate>
 #include <QDesktopWidget>
+#include <QTimer>
 
 // KDE includes
 
@@ -77,10 +78,12 @@ class ThemeEngine::ThemeEnginePriv
 public:
 
     ThemeEnginePriv()
+        : defaultThemeName(i18nc("default theme name", "Default")),
+          themeMenuAction(0)
     {
-        themeMenuAction = 0;
     }
 
+    const QString          defaultThemeName;
     QMap<QString, QString> themeMap;            // map<theme name, theme config path>
     QPalette               palette;
 
@@ -92,6 +95,8 @@ public:
 ThemeEngine::ThemeEngine()
     : d(new ThemeEnginePriv)
 {
+    connect (KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+             this, SLOT(slotChangePalette()));
 }
 
 ThemeEngine::~ThemeEngine()
@@ -102,6 +107,11 @@ ThemeEngine::~ThemeEngine()
 ThemeEngine* ThemeEngine::instance()
 {
     return &creator->object;
+}
+
+QString ThemeEngine::defaultThemeName() const
+{
+    return d->defaultThemeName;
 }
 
 QColor ThemeEngine::baseColor() const
@@ -181,16 +191,16 @@ QPixmap ThemeEngine::listSelPixmap(int w, int h)
 
 QString ThemeEngine::currentThemeName() const
 {
-    if (!d->themeMenuAction) return i18n("Default");
+    if (!d->themeMenuAction) return defaultThemeName();
     QString name = d->themeMenuAction->currentText();
-    return name.isEmpty() ? i18n("Default") : name;
+    return name.isEmpty() ? defaultThemeName() : name;
 }
 
 void ThemeEngine::setCurrentTheme(const QString& name)
 {
     if (!d->themeMenuAction) return;
-    slotChangePalette(name);
     d->themeMenuAction->setCurrentAction(name);
+    slotChangePalette();
 }
 
 void ThemeEngine::buildTheme()
@@ -237,53 +247,60 @@ void ThemeEngine::buildTheme()
     d->theme.listSelBorderColor  = Qt::black;
 }
 
-void ThemeEngine::slotChangePalette(const QString& name)
+void ThemeEngine::slotChangePalette()
 {
-    kDebug() << name;
-    d->palette = kapp->palette();
+    QString theme(currentThemeName());
 
-    if (name == i18n("Default"))
+    if (theme == defaultThemeName() || theme.isEmpty())
     {
-        d->palette = QApplication::desktop()->palette();
+        KSharedConfigPtr config = KSharedConfig::openConfig("kdeglobals");
+        KConfigGroup group(config, "General");
+        theme                   = group.readEntry("ColorScheme");
     }
-    else
+    kDebug() << theme;
+
+    QString filename        = d->themeMap.value(theme);
+    KSharedConfigPtr config = KSharedConfig::openConfig(filename);
+
+    /*
+    TODO: with recent KDE4 api, we can use KGlobalSettings::createNewApplicationPalette()
+    d->palette = KGlobalSettings::createNewApplicationPalette(config);
+    */
+
+    d->palette                     = kapp->palette();
+    QPalette::ColorGroup states[3] = { QPalette::Active, QPalette::Inactive, QPalette::Disabled };
+    kDebug() << filename;
+    // TT thinks tooltips shouldn't use active, so we use our active colors for all states
+    KColorScheme schemeTooltip(QPalette::Active, KColorScheme::Tooltip, config);
+
+    for ( int i = 0; i < 3 ; i++ )
     {
-        QString filename = d->themeMap.value(name);
-        kDebug() << filename;
-        KSharedConfigPtr config        = KSharedConfig::openConfig(filename);
-        QPalette::ColorGroup states[3] = { QPalette::Active, QPalette::Inactive, QPalette::Disabled };
-        // TT thinks tooltips shouldn't use active, so we use our active colors for all states
-        KColorScheme schemeTooltip(QPalette::Active, KColorScheme::Tooltip, config);
+        QPalette::ColorGroup state = states[i];
+        KColorScheme schemeView(state,      KColorScheme::View,      config);
+        KColorScheme schemeWindow(state,    KColorScheme::Window,    config);
+        KColorScheme schemeButton(state,    KColorScheme::Button,    config);
+        KColorScheme schemeSelection(state, KColorScheme::Selection, config);
 
-        for ( int i = 0; i < 3 ; i++ )
-        {
-            QPalette::ColorGroup state = states[i];
-            KColorScheme schemeView(state,      KColorScheme::View,      config);
-            KColorScheme schemeWindow(state,    KColorScheme::Window,    config);
-            KColorScheme schemeButton(state,    KColorScheme::Button,    config);
-            KColorScheme schemeSelection(state, KColorScheme::Selection, config);
+        d->palette.setBrush(state, QPalette::WindowText,      schemeWindow.foreground());
+        d->palette.setBrush(state, QPalette::Window,          schemeWindow.background());
+        d->palette.setBrush(state, QPalette::Base,            schemeView.background());
+        d->palette.setBrush(state, QPalette::Text,            schemeView.foreground());
+        d->palette.setBrush(state, QPalette::Button,          schemeButton.background());
+        d->palette.setBrush(state, QPalette::ButtonText,      schemeButton.foreground());
+        d->palette.setBrush(state, QPalette::Highlight,       schemeSelection.background());
+        d->palette.setBrush(state, QPalette::HighlightedText, schemeSelection.foreground());
+        d->palette.setBrush(state, QPalette::ToolTipBase,     schemeTooltip.background());
+        d->palette.setBrush(state, QPalette::ToolTipText,     schemeTooltip.foreground());
 
-            d->palette.setBrush( state, QPalette::WindowText,      schemeWindow.foreground() );
-            d->palette.setBrush( state, QPalette::Window,          schemeWindow.background() );
-            d->palette.setBrush( state, QPalette::Base,            schemeView.background() );
-            d->palette.setBrush( state, QPalette::Text,            schemeView.foreground() );
-            d->palette.setBrush( state, QPalette::Button,          schemeButton.background() );
-            d->palette.setBrush( state, QPalette::ButtonText,      schemeButton.foreground() );
-            d->palette.setBrush( state, QPalette::Highlight,       schemeSelection.background() );
-            d->palette.setBrush( state, QPalette::HighlightedText, schemeSelection.foreground() );
-            d->palette.setBrush( state, QPalette::ToolTipBase,     schemeTooltip.background() );
-            d->palette.setBrush( state, QPalette::ToolTipText,     schemeTooltip.foreground() );
+        d->palette.setColor(state, QPalette::Light,           schemeWindow.shade(KColorScheme::LightShade));
+        d->palette.setColor(state, QPalette::Midlight,        schemeWindow.shade(KColorScheme::MidlightShade));
+        d->palette.setColor(state, QPalette::Mid,             schemeWindow.shade(KColorScheme::MidShade));
+        d->palette.setColor(state, QPalette::Dark,            schemeWindow.shade(KColorScheme::DarkShade));
+        d->palette.setColor(state, QPalette::Shadow,          schemeWindow.shade(KColorScheme::ShadowShade));
 
-            d->palette.setColor( state, QPalette::Light,    schemeWindow.shade( KColorScheme::LightShade ) );
-            d->palette.setColor( state, QPalette::Midlight, schemeWindow.shade( KColorScheme::MidlightShade ) );
-            d->palette.setColor( state, QPalette::Mid,      schemeWindow.shade( KColorScheme::MidShade ) );
-            d->palette.setColor( state, QPalette::Dark,     schemeWindow.shade( KColorScheme::DarkShade ) );
-            d->palette.setColor( state, QPalette::Shadow,   schemeWindow.shade( KColorScheme::ShadowShade ) );
-
-            d->palette.setBrush( state, QPalette::AlternateBase, schemeView.background( KColorScheme::AlternateBackground) );
-            d->palette.setBrush( state, QPalette::Link,          schemeView.foreground( KColorScheme::LinkText ) );
-            d->palette.setBrush( state, QPalette::LinkVisited,   schemeView.foreground( KColorScheme::VisitedText ) );
-        }
+        d->palette.setBrush(state, QPalette::AlternateBase,   schemeView.background(KColorScheme::AlternateBackground));
+        d->palette.setBrush(state, QPalette::Link,            schemeView.foreground(KColorScheme::LinkText));
+        d->palette.setBrush(state, QPalette::LinkVisited,     schemeView.foreground(KColorScheme::VisitedText));
     }
 
     kapp->setPalette(d->palette);
@@ -309,9 +326,9 @@ void ThemeEngine::populateThemeMenu()
     if (!d->themeMenuAction) return;
 
     connect(d->themeMenuAction, SIGNAL(triggered(const QString&)),
-            this, SLOT(slotChangePalette(const QString&)));
+            this, SLOT(slotChangePalette()));
 
-    KAction* action = new KAction(i18n("Default"), d->themeMenuAction);
+    KAction* action = new KAction(defaultThemeName(), d->themeMenuAction);
     action->setCheckable(true);
     d->themeMenuAction->addAction(action);
 

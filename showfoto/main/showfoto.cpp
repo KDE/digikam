@@ -510,7 +510,7 @@ void ShowFoto::readSettings()
     d->rightSideBar->loadState();
 
     Digikam::ThemeEngine::instance()->setCurrentTheme(group.readEntry("Theme",
-                                                                      i18nc("default theme name", "Default")));
+                                                      Digikam::ThemeEngine::instance()->defaultThemeName()));
 }
 
 void ShowFoto::saveSettings()
