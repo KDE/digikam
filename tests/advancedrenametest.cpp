@@ -225,7 +225,6 @@ void AdvancedRenameWidgetTest::testChainedModifiers()
 
     QList<ParseSettings> files;
     ParseSettings ps;
-    KUrl url(filePath);
     ps.fileUrl = KUrl(filePath);
     files << ps;
     AdvancedRenameManager manager(files);
