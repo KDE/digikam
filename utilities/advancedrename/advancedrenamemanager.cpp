@@ -212,6 +212,8 @@ void AdvancedRenameManager::parseFiles(const QString& parseString)
         return;
     }
 
+    d->parser->reset();
+
     foreach (const QString& file, fileList())
     {
         KUrl url(file);
@@ -231,6 +233,8 @@ void AdvancedRenameManager::parseFiles(const QString& parseString, ParseSettings
     {
         return;
     }
+
+    d->parser->reset();
 
     foreach (const QString& file, fileList())
     {
@@ -273,6 +277,11 @@ void AdvancedRenameManager::clearAll()
 void AdvancedRenameManager::reset()
 {
     clearAll();
+    resetState();
+}
+
+void AdvancedRenameManager::resetState()
+{
     d->parser->reset();
     d->startIndex = 1;
 }

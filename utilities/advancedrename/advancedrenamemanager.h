@@ -93,6 +93,7 @@ private:
     void addFile(const QString& filename);
     void addFile(const QString& filename, const QDateTime& datetime);
     bool initialize();
+    void resetState();
 
     QString fileGroupKey(const QString& filename);
 

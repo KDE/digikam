@@ -37,7 +37,9 @@ using namespace Digikam;
 QTEST_KDEMAIN(AdvancedRenameWidgetTest, GUI)
 
 const QString fileName("advancedrename_testimage.jpg");
+const QString fileName2("advancedrename_testimage2.jpg");
 const QString filePath(KDESRCDIR+fileName);
+const QString filePath2(KDESRCDIR+fileName2);
 
 void AdvancedRenameWidgetTest::testFileNameToken()
 {
@@ -254,79 +256,29 @@ void AdvancedRenameWidgetTest::testUppercaseModifier()
     QCOMPARE(parsed, fi.baseName().toUpper() + "." + fi.suffix());
 }
 
-//void AdvancedRenameWidgetTest::testUniqueModifier()
-//{
-//    ParseSettings settings;
-//    DefaultRenameParser parser;
-//
-//    settings.fileUrl     = filePath;
-//    settings.cameraName  = QString("Nikon D50");
-//    settings.parseString = QString("[file]{unique}_T[date:hhmmss]{unique}_[cam]{unique}");
-//
-//#define DIGITS_STR(VALUE, DIGITS) QString("%1").arg(VALUE, DIGITS, 10, QChar('0'))
-//
-//    QStringList validResults;
-//    validResults << QString("advancedrename_testimage_T100012_Nikon D50.jpg");
-//    validResults << QString("advancedrename_testimage_%1_T100012_%2_Nikon D50_%3.jpg")
-//            .arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(1, 1));
-//    validResults << QString("advancedrename_testimage_%1_T214536_Nikon D50_%2.jpg")
-//            .arg(DIGITS_STR(2, 1)).arg(DIGITS_STR(2, 1));
-//    validResults << QString("advancedrename_testimage_%1_T214536_%2_Nikon D50_%3.jpg")
-//            .arg(DIGITS_STR(3, 1)).arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(3, 1));
-//    validResults << QString("advancedrename_testimage_%1_T214536_%2_Nikon D50_%3.jpg")
-//            .arg(DIGITS_STR(4, 1)).arg(DIGITS_STR(2, 1)).arg(DIGITS_STR(4, 1));
-//
-//    QTime t1;
-//    t1.setHMS(10, 00, 12);
-//
-//    QTime t2;
-//    t2.setHMS(21, 45, 36);
-//
-//    QDateTime date = QDateTime::currentDateTime();
-//    date.setTime(t1);
-//    settings.dateTime = date;
-//
-//    QStringList results;
-//    results << parser.parse(settings);
-//    results << parser.parse(settings);
-//    date.setTime(t2);
-//    settings.dateTime = date;
-//    results << parser.parse(settings);
-//    results << parser.parse(settings);
-//    results << parser.parse(settings);
-//
-//    QCOMPARE(results, validResults);
-//
-//    // --------------------------------------------------------
-//
-//    settings.parseString = QString("[file]{unique:2}_T[date:hhmmss]{unique}_[cam]{unique:4}");
-//    results.clear();
-//    validResults.clear();
-//    parser.reset();
-//    date.setTime(t1);
-//    settings.dateTime = date;
-//    validResults << QString("advancedrename_testimage_T100012_Nikon D50.jpg");
-//    validResults << QString("advancedrename_testimage_%1_T100012_%2_Nikon D50_%3.jpg")
-//            .arg(DIGITS_STR(1, 2)).arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(1, 4));
-//    validResults << QString("advancedrename_testimage_%1_T214536_Nikon D50_%2.jpg")
-//            .arg(DIGITS_STR(2, 2)).arg(DIGITS_STR(2, 4));
-//    validResults << QString("advancedrename_testimage_%1_T214536_%2_Nikon D50_%3.jpg")
-//            .arg(DIGITS_STR(3, 2)).arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(3, 4));
-//    validResults << QString("advancedrename_testimage_%1_T214536_%2_Nikon D50_%3.jpg")
-//            .arg(DIGITS_STR(4, 2)).arg(DIGITS_STR(2, 1)).arg(DIGITS_STR(4, 4));
-//
-//    results << parser.parse(settings);
-//    results << parser.parse(settings);
-//    date.setTime(t2);
-//    settings.dateTime = date;
-//    results << parser.parse(settings);
-//    results << parser.parse(settings);
-//    results << parser.parse(settings);
-//
-//    QCOMPARE(results, validResults);
-//
-//#undef DIGITS_STR
-//}
+void AdvancedRenameWidgetTest::testUniqueModifier()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+    ps.fileUrl = KUrl(filePath2);
+    files << ps;
+    AdvancedRenameManager manager(files);
+    manager.parseFiles("[file]_[dir]{unique}");
+
+    QString parsed = manager.newName(filePath);
+    QString parsed2 = manager.newName(filePath2);
+
+    // parse again, unique tokens should not be modified
+    manager.parseFiles("[file]_[dir]{unique}");
+
+    QString parsed3 = manager.newName(filePath);
+    QString parsed4 = manager.newName(filePath2);
+
+    QCOMPARE(parsed,  parsed3);
+    QCOMPARE(parsed2, parsed4);
+}
 
 void AdvancedRenameWidgetTest::testReplaceModifier_data()
 {

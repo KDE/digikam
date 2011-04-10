@@ -81,6 +81,8 @@ private Q_SLOTS:
     void testChainedModifiers();
     void testChainedModifiers_data();
 
+    void testUniqueModifier();
+
     /*
      * OTHER TESTS
      */
