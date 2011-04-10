@@ -57,7 +57,9 @@ public:
         Standard = 0,
         ISO,
         FullText,
+#if QT_VERSION >= 0x040700
         UnixTimeStamp,
+#endif
         Custom
     };
 

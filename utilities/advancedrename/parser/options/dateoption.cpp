@@ -54,7 +54,9 @@ DateFormat::DateFormat()
     m_map.insert(Standard,      DateFormatDescriptor(QString("Standard"),       QString("yyyyMMddThhmmss")));
     m_map.insert(ISO,           DateFormatDescriptor(QString("ISO"),            Qt::ISODate));
     m_map.insert(FullText,      DateFormatDescriptor(QString("Text"),           Qt::TextDate));
+#if QT_VERSION >= 0x040700
     m_map.insert(UnixTimeStamp, DateFormatDescriptor(QString("UnixTimeStamp"),  QVariant()));
+#endif
     m_map.insert(Custom,        DateFormatDescriptor(QString("Custom"),         QVariant()));
 }
 
@@ -183,9 +185,11 @@ QString DateOptionDialog::formattedDateTime(const QDateTime& date)
         case DateFormat::Custom:
             return date.toString(ui->customFormatInput->text());
             break;
+#if QT_VERSION >= 0x040700
         case DateFormat::UnixTimeStamp:
             return QString("%1").arg(date.toMSecsSinceEpoch());
             break;
+#endif
         default:
             break;
     }
@@ -243,7 +247,11 @@ DateOption::DateOption()
              SmallIcon("view-pim-calendar"))
 {
     addToken("[date]",            i18n("Date and time (standard format)"));
+#if QT_VERSION >= 0x040700
     addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|UnixTimeStamp|Text)"));
+#else
+    addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|Text)"));
+#endif
     addToken("[date:||format||]", i18n("Date and time") + " (" +  dateFormatLink + ')');
 
     QRegExp reg("\\[date(:(.*))?\\]");
@@ -306,9 +314,11 @@ QString DateOption::parseOperation(ParseSettings& settings)
         // we seem to use custom format settings or UnixTimeStamp here
         switch (df.type(token))
         {
+#if QT_VERSION >= 0x040700
             case DateFormat::UnixTimeStamp:
                 result = QString("%1").arg(dateTime.toMSecsSinceEpoch());
                 break;
+#endif
             default:
                 result = dateTime.toString(token);
                 break;
@@ -358,9 +368,11 @@ void DateOption::slotTokenTriggered(const QString& token)
                 // we seem to use UnixTimeStamp here
                 switch (index)
                 {
+#if QT_VERSION >= 0x040700
                     case DateFormat::UnixTimeStamp:
                         dateString = QString("%1").arg(date.toMSecsSinceEpoch());
                         break;
+#endif
                     default:
                         break;
                 }
