@@ -234,9 +234,10 @@ QString DateOption::parseOperation(ParseSettings& settings)
 
     QString token = reg.cap(2);
 
-    if ( !(token.isEmpty() || token.isNull()) &&
-         (token.startsWith('"') && token.endsWith('"'))
-       )
+    // search for quoted token parameters (indicates custom formatting)
+    const int MIN_TOKEN_SIZE = 2;
+    if ( (token.size() > MIN_TOKEN_SIZE) &&
+         (token.startsWith('"') && token.endsWith('"')) )
     {
         token = token.remove(0, 1);
         token.chop(1);
