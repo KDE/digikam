@@ -85,13 +85,15 @@ void AdvancedRenameWidgetTest::testFileExtensionToken()
 
 void AdvancedRenameWidgetTest::testFileOwnerToken()
 {
-    ParseSettings settings;
-    DefaultRenameParser parser;
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    QString filePath = KDESRCDIR"/test.png";
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+    AdvancedRenameManager manager(files);
+    manager.parseFiles("[user]");
 
-    settings.fileUrl     = KUrl(KDESRCDIR"/test.png");
-    settings.parseString = "[user]";
-
-    QFileInfo fi(settings.fileUrl.toLocalFile());
+    QFileInfo fi(ps.fileUrl.toLocalFile());
     QVERIFY(fi.exists());
     QVERIFY(fi.isReadable());
 
@@ -99,20 +101,22 @@ void AdvancedRenameWidgetTest::testFileOwnerToken()
     QVERIFY(!userName.isEmpty());
 
     QString result = userName + ".png";
-    QString parsed = parser.parse(settings);
+    QString parsed = manager.newName(filePath);
 
     QCOMPARE(parsed, result);
 }
 
 void AdvancedRenameWidgetTest::testFileGroupToken()
 {
-    ParseSettings settings;
-    DefaultRenameParser parser;
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    QString filePath = KDESRCDIR"/test.png";
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+    AdvancedRenameManager manager(files);
+    manager.parseFiles("[group]");
 
-    settings.fileUrl     = KUrl(KDESRCDIR"/test.png");
-    settings.parseString = "[group]";
-
-    QFileInfo fi(settings.fileUrl.toLocalFile());
+    QFileInfo fi(ps.fileUrl.toLocalFile());
     QVERIFY(fi.exists());
     QVERIFY(fi.isReadable());
 
@@ -120,7 +124,7 @@ void AdvancedRenameWidgetTest::testFileGroupToken()
     QVERIFY(!groupName.isEmpty());
 
     QString result = groupName + ".png";
-    QString parsed = parser.parse(settings);
+    QString parsed = manager.newName(filePath);
 
     QCOMPARE(parsed, result);
 }
@@ -236,13 +240,14 @@ void AdvancedRenameWidgetTest::testChainedModifiers()
 
 void AdvancedRenameWidgetTest::testUppercaseModifier()
 {
-    ParseSettings settings;
-    DefaultRenameParser parser;
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+    AdvancedRenameManager manager(files);
+    manager.parseFiles("[file]{upper}");
 
-    settings.fileUrl     = filePath;
-    settings.parseString = "[file]{upper}";
-
-    QString parsed = parser.parse(settings);
+    QString parsed = manager.newName(filePath);
     QFileInfo fi(filePath);
     QCOMPARE(parsed, fi.baseName().toUpper() + "." + fi.suffix());
 }
@@ -428,29 +433,32 @@ void AdvancedRenameWidgetTest::testDefaultValueModifier()
 
 void AdvancedRenameWidgetTest::testLowercaseModifier()
 {
-    ParseSettings settings;
-    DefaultRenameParser parser;
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+    AdvancedRenameManager manager(files);
+    manager.parseFiles("[file]{lower}");
 
-    settings.fileUrl     = filePath;
-    settings.parseString = "[file]{lower}";
-
-    QString parsed = parser.parse(settings);
+    QString parsed = manager.newName(filePath);
     QCOMPARE(parsed, fileName.toLower());
 }
 
 void AdvancedRenameWidgetTest::testEmptyParseString()
 {
-    ParseSettings settings;
-    DefaultRenameParser parser;
-
-    settings.fileUrl = filePath;
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+    AdvancedRenameManager manager(files);
 
     // test for empty parser string
-    settings.parseString.clear();
-    QString parsed = parser.parse(settings);
+    manager.parseFiles("");
+
+    QString parsed = manager.newName(filePath);
     QCOMPARE(parsed, fileName);
 
-    settings.parseString = QString("   ");
-    parsed = parser.parse(settings);
+    manager.parseFiles("      ");
+    parsed = manager.newName(filePath);
     QCOMPARE(parsed, fileName);
 }
