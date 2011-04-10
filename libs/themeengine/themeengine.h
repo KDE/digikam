@@ -56,27 +56,29 @@ public:
     ~ThemeEngine();
     static ThemeEngine* instance();
 
-    void    setThemeMenuAction(KSelectAction* const action);
     QString currentThemeName() const;
     void    setCurrentTheme(const QString& name);
+
     QString defaultThemeName() const;
 
-    QColor  baseColor()     const;
-    QColor  thumbSelColor() const;
-    QColor  thumbRegColor() const;
-
-    QColor  textRegColor() const;
-    QColor  textSelColor() const;
-    QColor  textSpecialRegColor() const;
-    QColor  textSpecialSelColor() const;
-
-    QPixmap bannerPixmap(int w, int h);
-    QPixmap thumbRegPixmap(int w, int h);
-    QPixmap thumbSelPixmap(int w, int h);
-    QPixmap listRegPixmap(int w, int h);
-    QPixmap listSelPixmap(int w, int h);
-
+    void    setThemeMenuAction(KSelectAction* const action);
     void    registerThemeActions(KXmlGuiWindow* const kwin);
+
+    // TODO: Methods to remove with Theme and Texture Classes
+    KDE_DEPRECATED QColor  baseColor()     const;
+    KDE_DEPRECATED QColor  thumbSelColor() const;
+    KDE_DEPRECATED QColor  thumbRegColor() const;
+
+    KDE_DEPRECATED QColor  textRegColor() const;
+    KDE_DEPRECATED QColor  textSelColor() const;
+    KDE_DEPRECATED QColor  textSpecialRegColor() const;
+    KDE_DEPRECATED QColor  textSpecialSelColor() const;
+
+    KDE_DEPRECATED QPixmap bannerPixmap(int w, int h);
+    KDE_DEPRECATED QPixmap thumbRegPixmap(int w, int h);
+    KDE_DEPRECATED QPixmap thumbSelPixmap(int w, int h);
+    KDE_DEPRECATED QPixmap listRegPixmap(int w, int h);
+    KDE_DEPRECATED QPixmap listSelPixmap(int w, int h);
 
 Q_SIGNALS:
 
