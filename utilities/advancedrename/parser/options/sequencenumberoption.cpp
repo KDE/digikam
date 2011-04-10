@@ -63,10 +63,10 @@ SequenceNumberOption::SequenceNumberOption()
     : Option(i18nc("Sequence Number", "Number..."), i18n("Add a sequence number"),
              SmallIcon("accessories-calculator"))
 {
-    addToken("#",                                   i18n("Sequence number"));
-    addToken("#[||options||]",                      i18n("Sequence number (||options||: ||e|| = extension aware, ||f|| = folder aware)"));
-    addToken("#[||options||,||start||]",            i18n("Sequence number (custom start)"));
-    addToken("#[||options||,||start||,||step||]",   i18n("Sequence number (custom start + step)"));
+    addToken("#",                                 i18n("Sequence number"));
+    addToken("#[||options||]",                    i18n("Sequence number (||options||: ||e|| = extension aware, ||f|| = folder aware)"));
+    addToken("#[||options||,||start||]",          i18n("Sequence number (custom start)"));
+    addToken("#[||options||,||start||,||step||]", i18n("Sequence number (custom start + step)"));
 
     QRegExp reg("(#+)(\\[(e?f?,?)?((\\d+)(,(\\d+))?)?\\])?");
     setRegExp(reg);
