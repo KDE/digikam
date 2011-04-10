@@ -333,16 +333,18 @@ bool AdvancedRenameManager::initialize()
     clearMappings();
 
     // fill normal index map
-    int counter = 1;
-    foreach (const QString& file, fileList())
     {
-        d->fileIndexMap[file] = counter++;
+        int counter = 1;
+        foreach (const QString& file, fileList())
+        {
+            d->fileIndexMap[file] = counter++;
+        }
     }
 
     // fill file group index map
-    counter = 1;
-    foreach (const QString& file, fileList())
     {
+        int counter = 1;
+        foreach (const QString& file, fileList())
         if (!d->fileGroupIndexMap.contains(fileGroupKey(file)))
         {
             d->fileGroupIndexMap[fileGroupKey(file)] = counter++;
@@ -351,7 +353,6 @@ bool AdvancedRenameManager::initialize()
 
     // fill folder group index map
     {
-        counter = 1;
         QMap<QString, QList<QString> > dirMap;
         foreach (const QString& file, fileList())
         {
