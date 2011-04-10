@@ -6,7 +6,6 @@
  * Date        : 2004-08-02
  * Description : theme engine methods
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -55,7 +54,6 @@
 
 // Local includes
 
-#include "theme.h"
 #include "texture.h"
 
 namespace Digikam
@@ -88,8 +86,6 @@ public:
     QPalette               palette;
 
     KSelectAction*         themeMenuAction;
-
-    Theme                  theme;
 };
 
 ThemeEngine::ThemeEngine()
@@ -114,81 +110,6 @@ QString ThemeEngine::defaultThemeName() const
     return d->defaultThemeName;
 }
 
-QColor ThemeEngine::baseColor() const
-{
-    return d->theme.baseColor;
-}
-
-QColor ThemeEngine::thumbSelColor() const
-{
-    return d->theme.thumbSelColor;
-}
-
-QColor ThemeEngine::thumbRegColor() const
-{
-    return d->theme.thumbRegColor;
-}
-
-QColor ThemeEngine::textRegColor() const
-{
-    return d->theme.textRegColor;
-}
-
-QColor ThemeEngine::textSelColor() const
-{
-    return d->theme.textSelColor;
-}
-
-QColor ThemeEngine::textSpecialRegColor() const
-{
-    return d->theme.textSpecialRegColor;
-}
-
-QColor ThemeEngine::textSpecialSelColor() const
-{
-    return d->theme.textSpecialSelColor;
-}
-
-QPixmap ThemeEngine::bannerPixmap(int w, int h)
-{
-    Texture tex(w, h, d->theme.bannerColor, d->theme.bannerColorTo,
-                d->theme.bannerBevel, d->theme.bannerGrad,
-                d->theme.bannerBorder, d->theme.bannerBorderColor);
-    return tex.renderPixmap();
-}
-
-QPixmap ThemeEngine::thumbRegPixmap(int w, int h)
-{
-    Texture tex(w, h, d->theme.thumbRegColor, d->theme.thumbRegColorTo,
-                d->theme.thumbRegBevel, d->theme.thumbRegGrad,
-                d->theme.thumbRegBorder, d->theme.thumbRegBorderColor);
-    return tex.renderPixmap();
-}
-
-QPixmap ThemeEngine::thumbSelPixmap(int w, int h)
-{
-    Texture tex(w, h, d->theme.thumbSelColor, d->theme.thumbSelColorTo,
-                d->theme.thumbSelBevel, d->theme.thumbSelGrad,
-                d->theme.thumbSelBorder, d->theme.thumbSelBorderColor);
-    return tex.renderPixmap();
-}
-
-QPixmap ThemeEngine::listRegPixmap(int w, int h)
-{
-    Texture tex(w, h, d->theme.listRegColor, d->theme.listRegColorTo,
-                d->theme.listRegBevel, d->theme.listRegGrad,
-                d->theme.listRegBorder, d->theme.listRegBorderColor);
-    return tex.renderPixmap();
-}
-
-QPixmap ThemeEngine::listSelPixmap(int w, int h)
-{
-    Texture tex(w, h, d->theme.listSelColor, d->theme.listSelColorTo,
-                d->theme.listSelBevel, d->theme.listSelGrad,
-                d->theme.listSelBorder, d->theme.listSelBorderColor);
-    return tex.renderPixmap();
-}
-
 QString ThemeEngine::currentThemeName() const
 {
     if (!d->themeMenuAction) return defaultThemeName();
@@ -201,50 +122,6 @@ void ThemeEngine::setCurrentTheme(const QString& name)
     if (!d->themeMenuAction) return;
     d->themeMenuAction->setCurrentAction(name);
     slotChangePalette();
-}
-
-void ThemeEngine::buildTheme()
-{
-    d->theme.baseColor           = d->palette.color(QPalette::Base);
-    d->theme.textRegColor        = d->palette.color(QPalette::Text);
-    d->theme.textSelColor        = d->palette.color(QPalette::HighlightedText);
-    d->theme.textSpecialRegColor = d->palette.color(QPalette::Link);
-    d->theme.textSpecialSelColor = d->palette.color(QPalette::HighlightedText);
-
-    d->theme.bannerColor         = d->palette.color(QPalette::Highlight);
-    d->theme.bannerColorTo       = d->palette.color(QPalette::Highlight);
-    d->theme.bannerBevel         = Theme::FLAT;
-    d->theme.bannerGrad          = Theme::SOLID;
-    d->theme.bannerBorder        = false;
-    d->theme.bannerBorderColor   = Qt::black;
-
-    d->theme.thumbRegColor       = d->palette.color(QPalette::Base);
-    d->theme.thumbRegColorTo     = d->palette.color(QPalette::Base);
-    d->theme.thumbRegBevel       = Theme::FLAT;
-    d->theme.thumbRegGrad        = Theme::SOLID;
-    d->theme.thumbRegBorder      = true;
-    d->theme.thumbRegBorderColor = d->palette.color(QPalette::Midlight);
-
-    d->theme.thumbSelColor       = d->palette.color(QPalette::Highlight);
-    d->theme.thumbSelColorTo     = d->palette.color(QPalette::Highlight);
-    d->theme.thumbSelBevel       = Theme::FLAT;
-    d->theme.thumbSelGrad        = Theme::SOLID;
-    d->theme.thumbSelBorder      = true;
-    d->theme.thumbSelBorderColor = d->palette.color(QPalette::Midlight);
-
-    d->theme.listRegColor        = d->palette.color(QPalette::Base);
-    d->theme.listRegColorTo      = d->palette.color(QPalette::Base);
-    d->theme.listRegBevel        = Theme::FLAT;
-    d->theme.listRegGrad         = Theme::SOLID;
-    d->theme.listRegBorder       = false;
-    d->theme.listRegBorderColor  = Qt::black;
-
-    d->theme.listSelColor        = d->palette.color(QPalette::Highlight);
-    d->theme.listSelColorTo      = d->palette.color(QPalette::Highlight);
-    d->theme.listSelBevel        = Theme::FLAT;
-    d->theme.listSelGrad         = Theme::SOLID;
-    d->theme.listSelBorder       = true;
-    d->theme.listSelBorderColor  = d->palette.color(QPalette::Midlight);
 }
 
 void ThemeEngine::slotChangePalette()
@@ -303,7 +180,6 @@ void ThemeEngine::slotChangePalette()
     }
 
     kapp->setPalette(d->palette);
-    buildTheme();
     emit signalThemeChanged();
 }
 
@@ -311,7 +187,6 @@ void ThemeEngine::setThemeMenuAction(KSelectAction* const action)
 {
     d->themeMenuAction = action;
     populateThemeMenu();
-    buildTheme();
 }
 
 void ThemeEngine::registerThemeActions(KXmlGuiWindow* const kwin)
@@ -403,6 +278,67 @@ QString ThemeEngine::currentKDEdefaultTheme() const
     KSharedConfigPtr config = KSharedConfig::openConfig("kdeglobals");
     KConfigGroup group(config, "General");
     return group.readEntry("ColorScheme");
+}
+
+// -------------------------------------------------------------------------------------------------
+
+QColor ThemeEngine::baseColor() const
+{
+    return d->palette.color(QPalette::Base);
+}
+
+QColor ThemeEngine::thumbSelColor() const
+{
+    return d->palette.color(QPalette::Highlight);
+}
+
+QColor ThemeEngine::thumbRegColor() const
+{
+    return d->palette.color(QPalette::Base);
+}
+
+QColor ThemeEngine::textRegColor() const
+{
+    return d->palette.color(QPalette::Text);
+}
+
+QColor ThemeEngine::textSelColor() const
+{
+    return d->palette.color(QPalette::HighlightedText);
+}
+
+QColor ThemeEngine::textSpecialRegColor() const
+{
+    return d->palette.color(QPalette::Link);
+}
+
+QColor ThemeEngine::textSpecialSelColor() const
+{
+    return d->palette.color(QPalette::HighlightedText);
+}
+
+QPixmap ThemeEngine::bannerPixmap(int w, int h)
+{
+    Texture tex(w, h, d->palette.color(QPalette::Highlight), d->palette.color(QPalette::Highlight),
+                Theme::FLAT, Theme::SOLID,
+                false, Qt::black);
+    return tex.renderPixmap();
+}
+
+QPixmap ThemeEngine::thumbRegPixmap(int w, int h)
+{
+    Texture tex(w, h, d->palette.color(QPalette::Base), d->palette.color(QPalette::Base),
+                Theme::FLAT, Theme::SOLID,
+                true, d->palette.color(QPalette::Midlight));
+    return tex.renderPixmap();
+}
+
+QPixmap ThemeEngine::thumbSelPixmap(int w, int h)
+{
+    Texture tex(w, h, d->palette.color(QPalette::Highlight), d->palette.color(QPalette::Highlight),
+                Theme::FLAT, Theme::SOLID,
+                true, d->palette.color(QPalette::Midlight));
+    return tex.renderPixmap();
 }
 
 }  // namespace Digikam
