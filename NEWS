@@ -19,7 +19,7 @@ ImageEditor    : Image versionning support.
 ImageEditor    : Foveon sensor based camera.
 ImageEditor    : New advanced RAW decoding settings backported from RawTherapee project.
 
-AdvancedRename : New datetime option "UnixTimeStamp"
+AdvancedRename : New datetime option "UnixTimeStamp" (requires Qt 4.7 or higher)
 
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
