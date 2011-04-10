@@ -35,7 +35,6 @@
 #include <QPixmap>
 #include <QDate>
 #include <QDesktopWidget>
-#include <QTimer>
 
 // KDE includes
 
@@ -51,10 +50,6 @@
 #include <kglobalsettings.h>
 #include <kdebug.h>
 #include <kxmlguiwindow.h>
-
-// Local includes
-
-#include "texture.h"
 
 namespace Digikam
 {
@@ -319,26 +314,29 @@ QColor ThemeEngine::textSpecialSelColor() const
 
 QPixmap ThemeEngine::bannerPixmap(int w, int h)
 {
-    Texture tex(w, h, d->palette.color(QPalette::Highlight), d->palette.color(QPalette::Highlight),
-                Theme::FLAT, Theme::SOLID,
-                false, Qt::black);
-    return tex.renderPixmap();
+    QPixmap pix(w+2, h+2);
+    pix.fill(d->palette.color(QPalette::Highlight));
+    return pix;
 }
 
 QPixmap ThemeEngine::thumbRegPixmap(int w, int h)
 {
-    Texture tex(w, h, d->palette.color(QPalette::Base), d->palette.color(QPalette::Base),
-                Theme::FLAT, Theme::SOLID,
-                true, d->palette.color(QPalette::Midlight));
-    return tex.renderPixmap();
+    QPixmap pix(w+2, h+2);
+    pix.fill(d->palette.color(QPalette::Base));
+    QPainter p(&pix);
+    p.setPen(d->palette.color(QPalette::Midlight));
+    p.drawRect(0, 0, w+1, h+1);
+    return pix;
 }
 
 QPixmap ThemeEngine::thumbSelPixmap(int w, int h)
 {
-    Texture tex(w, h, d->palette.color(QPalette::Highlight), d->palette.color(QPalette::Highlight),
-                Theme::FLAT, Theme::SOLID,
-                true, d->palette.color(QPalette::Midlight));
-    return tex.renderPixmap();
+    QPixmap pix(w+2, h+2);
+    pix.fill(d->palette.color(QPalette::Highlight));
+    QPainter p(&pix);
+    p.setPen(d->palette.color(QPalette::Midlight));
+    p.drawRect(0, 0, w+1, h+1);
+    return pix;
 }
 
 }  // namespace Digikam
