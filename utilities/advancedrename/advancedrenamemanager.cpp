@@ -221,7 +221,6 @@ void AdvancedRenameManager::parseFiles(const QString& parseString)
         settings.startIndex   = d->startIndex;
         settings.creationTime = d->fileDatesMap[file];
         settings.manager      = this;
-
         d->renamedFiles[file] = d->parser->parse(settings);
     }
 }
