@@ -1101,10 +1101,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
        )
 
-#    SET(libmaintenancemgr_SRCS
-#        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenancemgr/maintenancemgrdlg.cpp
-#       )
-
     SET(libbatch_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfojob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfoalbumsjob.cpp
