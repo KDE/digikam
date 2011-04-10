@@ -3,21 +3,23 @@ digiKam 2.0.0-beta5 - Release date: 2011-04-24
 
 NEW FEATURES:
 
-General     : XMP metadata sidecar support.
-General     : Reverse geo-coding support.
-General     : Face detection and recognition support.
-General     : Tag keyboard shortcuts support.
-General     : Color Labels support to improve photograph workfow.
-General     : Pick Labels support to improve photograph selection.
-General     : Color Theme engine is now ported to KDE color theme manager.
+General        : XMP metadata sidecar support.
+General        : Reverse geo-coding support.
+General        : Face detection and recognition support.
+General        : Tag keyboard shortcuts support.
+General        : Color Labels support to improve photograph workfow.
+General        : Pick Labels support to improve photograph selection.
+General        : Color Theme engine is now ported to KDE color theme manager.
+               
+AlbumGUI       : Re-designed Filters view on right sidebar to perform icon-view items filtering.
+AlbumGUI       : Add options to group/ungroup items from icon-view.
+AlbumGUI       : Add options to show file format over icon-view items.
+               
+ImageEditor    : Image versionning support.
+ImageEditor    : Foveon sensor based camera.
+ImageEditor    : New advanced RAW decoding settings backported from RawTherapee project.
 
-AlbumGUI    : Re-designed Filters view on right sidebar to perform icon-view items filtering.
-AlbumGUI    : Add options to group/ungroup items from icon-view.
-AlbumGUI    : Add options to show file format over icon-view items.
-
-ImageEditor : Image versionning support.
-ImageEditor : Foveon sensor based camera.
-ImageEditor : New advanced RAW decoding settings backported from RawTherapee project.
+AdvancedRename : New datetime option "UnixTimeStamp"
 
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
