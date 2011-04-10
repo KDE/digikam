@@ -51,11 +51,28 @@ static const QString dateFormatLink =
 
 DateFormat::DateFormat()
 {
-    m_map.insert(Standard, DateFormatDescriptor(QString("Standard"), QString("yyyyMMddThhmmss")));
-    m_map.insert(ISO,      DateFormatDescriptor(QString("ISO"),      Qt::ISODate));
-    m_map.insert(FullText, DateFormatDescriptor(QString("Text"),     Qt::TextDate));
-    //    m_map.insert(Locale,   DateFormatDescriptor(QString("Locale"),   Qt::SystemLocaleShortDate));
-    m_map.insert(Custom,   DateFormatDescriptor(QString("Custom"),   QString("")));
+    m_map.insert(Standard,      DateFormatDescriptor(QString("Standard"),       QString("yyyyMMddThhmmss")));
+    m_map.insert(ISO,           DateFormatDescriptor(QString("ISO"),            Qt::ISODate));
+    m_map.insert(FullText,      DateFormatDescriptor(QString("Text"),           Qt::TextDate));
+    m_map.insert(UnixTimeStamp, DateFormatDescriptor(QString("UnixTimeStamp"),  QVariant()));
+    m_map.insert(Custom,        DateFormatDescriptor(QString("Custom"),         QVariant()));
+}
+
+DateFormat::Type DateFormat::type(const QString& identifier)
+{
+    if (identifier.isEmpty())
+    {
+        return Standard;
+    }
+
+    for (int i = 0; i < m_map.size(); ++i)
+    {
+        if (m_map.at(i).first == identifier)
+        {
+            return (Type)i;
+        }
+    }
+    return Standard;
 }
 
 QString DateFormat::identifier(Type type)
@@ -63,12 +80,12 @@ QString DateFormat::identifier(Type type)
     return m_map.at((int)type).first;
 }
 
-QVariant DateFormat::formatType(Type type)
+QVariant DateFormat::format(Type type)
 {
     return m_map.at((int)type).second;
 }
 
-QVariant DateFormat::formatType(const QString& identifier)
+QVariant DateFormat::format(const QString& identifier)
 {
     if (identifier.isEmpty())
     {
@@ -161,15 +178,22 @@ DateOptionDialog::DateSource DateOptionDialog::dateSource()
 
 QString DateOptionDialog::formattedDateTime(const QDateTime& date)
 {
-    if (ui->dateFormatPicker->currentIndex() == DateFormat::Custom)
+    switch (ui->dateFormatPicker->currentIndex())
     {
-        return date.toString(ui->customFormatInput->text());
+        case DateFormat::Custom:
+            return date.toString(ui->customFormatInput->text());
+            break;
+        case DateFormat::UnixTimeStamp:
+            return QString("%1").arg(date.toMSecsSinceEpoch());
+            break;
+        default:
+            break;
     }
 
     DateFormat df;
     QVariant   v;
 
-    v = df.formatType(static_cast<DateFormat::Type>(ui->dateFormatPicker->currentIndex()));
+    v = df.format(static_cast<DateFormat::Type>(ui->dateFormatPicker->currentIndex()));
     QString result;
 
     if (v.type() == QVariant::String)
@@ -219,8 +243,7 @@ DateOption::DateOption()
              SmallIcon("view-pim-calendar"))
 {
     addToken("[date]",            i18n("Date and time (standard format)"));
-    //    addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|Text|Locale)"));
-    addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|Text)"));
+    addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|UnixTimeStamp|Text)"));
     addToken("[date:||format||]", i18n("Date and time") + " (" +  dateFormatLink + ')');
 
     QRegExp reg("\\[date(:(.*))?\\]");
@@ -276,11 +299,20 @@ QString DateOption::parseOperation(ParseSettings& settings)
 
     QString    result;
     DateFormat df;
-    QVariant   v = df.formatType(token);
+    QVariant   v = df.format(token);
 
     if (v.isNull())
     {
-        result = dateTime.toString(token);
+        // we seem to use custom format settings or UnixTimeStamp here
+        switch (df.type(token))
+        {
+            case DateFormat::UnixTimeStamp:
+                result = QString("%1").arg(dateTime.toMSecsSinceEpoch());
+                break;
+            default:
+                result = dateTime.toString(token);
+                break;
+        }
     }
     else
     {
@@ -319,15 +351,30 @@ void DateOption::slotTokenTriggered(const QString& token)
 
             QVariant v = (index == DateFormat::Custom)
                          ? dlg->ui->customFormatInput->text()
-                         : df.formatType((DateFormat::Type)index);
+                         : df.format((DateFormat::Type)index);
 
-            if (v.type() == QVariant::String)
+            if (v.isNull())
             {
-                dateString = date.toString(v.toString());
+                // we seem to use UnixTimeStamp here
+                switch (index)
+                {
+                    case DateFormat::UnixTimeStamp:
+                        dateString = QString("%1").arg(date.toMSecsSinceEpoch());
+                        break;
+                    default:
+                        break;
+                }
             }
             else
             {
-                dateString = date.toString((Qt::DateFormat)v.toInt());
+                if (v.type() == QVariant::String)
+                {
+                    dateString = date.toString(v.toString());
+                }
+                else
+                {
+                    dateString = date.toString((Qt::DateFormat)v.toInt());
+                }
             }
         }
         // use predefined keywords for date formatting

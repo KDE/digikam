@@ -57,14 +57,16 @@ public:
         Standard = 0,
         ISO,
         FullText,
-        //        Locale,
+        UnixTimeStamp,
         Custom
     };
 
+    Type     type(const QString& identifier);
+
     QString  identifier(Type type);
 
-    QVariant formatType(Type type);
-    QVariant formatType(const QString& identifier);
+    QVariant format(Type type);
+    QVariant format(const QString& identifier);
 
     DateFormatMap& map()
     {
