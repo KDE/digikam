@@ -54,7 +54,6 @@
 #include "metadatahub.h"
 #include "databasewatch.h"
 #include "databasechangesets.h"
-#include "themeengine.h"
 #include "thumbnailloadthread.h"
 
 namespace Digikam
@@ -387,10 +386,8 @@ void LightTableThumbBar::removeItemById(qlonglong /*id*/)
 void LightTableThumbBar::drawEmptyMessage(QPixmap& /*bgPix*/)
 {
 /*
-    ThemeEngine* te = ThemeEngine::instance();
-
     QPainter p4(&bgPix);
-    p4.setPen(QPen(te->textRegColor()));
+    p4.setPen(QPen(kapp->palette().color(QPalette::Text)));
     p4.drawText(0, 0, bgPix.width(), bgPix.height(),
                 Qt::AlignCenter|Qt::TextWordWrap,
                 i18n("Drag and drop images here"));

@@ -39,6 +39,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -268,7 +269,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     // Draw Color Label rectangle
     drawColorLabelRect(p, option, isSelected, info.colorLabel());
 
-    p->setPen(isSelected ? te->textSelColor() : te->textRegColor());
+    p->setPen(isSelected ? te->textSelColor() : kapp->palette().color(QPalette::Text));
 
     /*
     // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image

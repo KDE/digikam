@@ -46,7 +46,6 @@
 // Local includes
 
 #include "globals.h"
-#include "themeengine.h"
 
 namespace Digikam
 {
@@ -139,7 +138,7 @@ void RatingComboBoxDelegate::drawRating(QPainter* painter, const QRect& rect, in
 
     painter->setRenderHint(QPainter::Antialiasing, true);
     //pen.setJoinStyle(Qt::MiterJoin);
-    painter->setPen(ThemeEngine::instance()->textRegColor());
+    painter->setPen(kapp->palette().color(QPalette::Text));
 
     if (!selectable)
     {

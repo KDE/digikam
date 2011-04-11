@@ -171,7 +171,7 @@ void LightTablePreview::setDragAndDropMessage()
         QPixmap pix(visibleWidth(), visibleHeight());
         pix.fill(kapp->palette().color(QPalette::Base));
         QPainter p(&pix);
-        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+        p.setPen(QPen(kapp->palette().color(QPalette::Text)));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Drag and drop an image here"));
@@ -267,7 +267,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription& descriptio
         pix.fill(kapp->palette().color(QPalette::Base));
         QPainter p(&pix);
         QFileInfo info(d->path);
-        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+        p.setPen(QPen(kapp->palette().color(QPalette::Text)));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Unable to display preview for\n\"%1\"",

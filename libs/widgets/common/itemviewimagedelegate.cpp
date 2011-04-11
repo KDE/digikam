@@ -389,7 +389,7 @@ void ItemViewImageDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewIte
     if (option.state & QStyle::State_HasFocus) //?? is current item
     {
         p->setPen(QPen(isSelected ? ThemeEngine::instance()->textSelColor()
-                       : ThemeEngine::instance()->textRegColor(),
+                                  : kapp->palette().color(QPalette::Text),
                        1, Qt::DotLine));
         p->drawRect(1, 1, d->rect.width()-3, d->rect.height()-3);
     }
@@ -622,7 +622,7 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
             // use antialiasing
             painter.setRenderHint(QPainter::Antialiasing, true);
             painter.setBrush(kapp->palette().color(QPalette::Link));
-            QPen pen(ThemeEngine::instance()->textRegColor());
+            QPen pen(kapp->palette().color(QPalette::Text));
             // set a pen which joins the lines at a filled angle
             pen.setJoinStyle(Qt::MiterJoin);
             painter.setPen(pen);

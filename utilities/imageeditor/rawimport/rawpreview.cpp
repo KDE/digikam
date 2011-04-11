@@ -183,7 +183,7 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
         QPixmap pix(visibleWidth(), visibleHeight());
         pix.fill(kapp->palette().color(QPalette::Base));
         QPainter p(&pix);
-        p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+        p.setPen(QPen(kapp->palette().color(QPalette::Text)));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Cannot decode RAW image for\n\"%1\"",

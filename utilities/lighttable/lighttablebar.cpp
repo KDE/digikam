@@ -65,7 +65,6 @@
 #include "ratingwidget.h"
 #include "databasewatch.h"
 #include "databasechangesets.h"
-#include "themeengine.h"
 #include "tooltipfiller.h"
 
 namespace Digikam
@@ -119,7 +118,7 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
     QPainter painter(&d->ratingPixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(kapp->palette().color(QPalette::Link));
-    painter.setPen(ThemeEngine::instance()->textRegColor());
+    painter.setPen(kapp->palette().color(QPalette::Text));
     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
 
@@ -640,7 +639,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                     }
                     else
                     {
-                        p.setPen(QPen(te->textRegColor(), 1));
+                        p.setPen(QPen(kapp->palette().color(QPalette::Text), 1));
                         p.drawRect(0, 0, tile.width()-1, tile.height()-1);
                     }
 
@@ -701,7 +700,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                     }
                     else
                     {
-                        p.setPen(QPen(te->textRegColor(), 1));
+                        p.setPen(QPen(kapp->palette().color(QPalette::Text), 1));
                         p.drawRect(0, 0, tile.width()-1, tile.height()-1);
                     }
 
@@ -768,7 +767,7 @@ void ImagePreviewBar::slotThemeChanged()
     QPainter painter(&d->ratingPixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setBrush(kapp->palette().color(QPalette::Link));
-    painter.setPen(ThemeEngine::instance()->textRegColor());
+    painter.setPen(kapp->palette().color(QPalette::Text));
     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
     slotUpdate();
@@ -1248,10 +1247,8 @@ void LightTableBar::drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile)
 
 void LightTableBar::drawEmptyMessage(QPixmap& bgPix)
 {
-    ThemeEngine* te = ThemeEngine::instance();
-
     QPainter p4(&bgPix);
-    p4.setPen(QPen(te->textRegColor()));
+    p4.setPen(QPen(kapp->palette().color(QPalette::Text)));
     p4.drawText(0, 0, bgPix.width(), bgPix.height(),
                 Qt::AlignCenter|Qt::TextWordWrap,
                 i18n("Drag and drop images here"));

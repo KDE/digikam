@@ -75,7 +75,6 @@
 #include "iofilesettingscontainer.h"
 #include "loadingcacheinterface.h"
 #include "drubberband.h"
-#include "themeengine.h"
 
 namespace Digikam
 {
@@ -698,7 +697,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
         QRect fullRect(0, 0, visibleWidth(), visibleHeight());
         QRect textRect = painter.boundingRect(fullRect, Qt::AlignCenter|Qt::TextWordWrap, d->errorMessage);
         painter.fillRect(textRect, kapp->palette().color(QPalette::Base));
-        painter.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+        painter.setPen(QPen(kapp->palette().color(QPalette::Text)));
         painter.drawText(textRect, Qt::AlignCenter|Qt::TextWordWrap, d->errorMessage);
 
         clipRegion -= textRect;
