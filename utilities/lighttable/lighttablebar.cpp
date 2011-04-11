@@ -40,6 +40,7 @@
 
 // KDE includes
 
+#include <kapplication.h>
 #include <kfileitem.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -541,7 +542,6 @@ void ImagePreviewBar::contentsMouseMoveEvent(QMouseEvent* e)
 
 void ImagePreviewBar::drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile)
 {
-
     Q_UNUSED(tile);
 
     if (item != d->ratingItem)
@@ -564,9 +564,7 @@ void ImagePreviewBar::drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile)
         r.setWidth((rating * d->ratingPixmap.width()));
         r.setBottom(r.bottom()+1);
         p.drawTiledPixmap(r, d->ratingPixmap);
-
     }
-
 }
 
 void ImagePreviewBar::drawEmptyMessage(QPixmap& pixmap)
@@ -587,27 +585,27 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
 
         if (getOrientation() == Qt::Vertical)
         {
-            cy = viewportToContents(er.topLeft()).y();
+            cy    = viewportToContents(er.topLeft()).y();
 
             bgPix = QPixmap(contentsRect().width(), er.height());
 
-            ts   = getTileSize() + 2*getMargin() + 2*getRadius();
-            tile = QPixmap(visibleWidth()-1, ts-1);
+            ts    = getTileSize() + 2*getMargin() + 2*getRadius();
+            tile  = QPixmap(visibleWidth()-1, ts-1);
 
-            y1 = (cy/ts)*ts;
-            y2 = ((y1 + er.height())/ts +1)*ts;
+            y1    = (cy/ts)*ts;
+            y2    = ((y1 + er.height())/ts +1)*ts;
         }
         else
         {
-            cx = viewportToContents(er.topLeft()).x();
+            cx    = viewportToContents(er.topLeft()).x();
 
             bgPix = QPixmap(er.width(), contentsRect().height());
 
-            ts   = getTileSize() + 2*getMargin() + 2*getRadius();
-            tile = QPixmap(ts-1, visibleHeight()-1);
+            ts    = getTileSize() + 2*getMargin() + 2*getRadius();
+            tile  = QPixmap(ts-1, visibleHeight()-1);
 
-            x1 = (cx/ts)*ts;
-            x2 = ((x1 + er.width())/ts +1)*ts;
+            x1    = (cx/ts)*ts;
+            x2    = ((x1 + er.width())/ts +1)*ts;
         }
 
         bgPix.fill(te->baseColor());
@@ -620,11 +618,17 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                 {
                     if (item == currentItem())
                     {
-                        tile = te->thumbSelPixmap(tile.width(), tile.height());
+                        tile.fill(kapp->palette().color(QPalette::Highlight));
+                        QPainter p(&tile);
+                        p.setPen(kapp->palette().color(QPalette::Midlight));
+                        p.drawRect(0, 0, tile.width(), tile.height());
                     }
                     else
                     {
-                        tile = te->thumbRegPixmap(tile.width(), tile.height());
+                        tile.fill(kapp->palette().color(QPalette::Base));
+                        QPainter p(&tile);
+                        p.setPen(kapp->palette().color(QPalette::Midlight));
+                        p.drawRect(0, 0, tile.width(), tile.height());
                     }
 
                     QPainter p(&tile);
@@ -675,11 +679,17 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                 {
                     if (item == currentItem())
                     {
-                        tile = te->thumbSelPixmap(tile.width(), tile.height());
+                        tile.fill(kapp->palette().color(QPalette::Highlight));
+                        QPainter p(&tile);
+                        p.setPen(kapp->palette().color(QPalette::Midlight));
+                        p.drawRect(0, 0, tile.width(), tile.height());
                     }
                     else
                     {
-                        tile = te->thumbRegPixmap(tile.width(), tile.height());
+                        tile.fill(kapp->palette().color(QPalette::Base));
+                        QPainter p(&tile);
+                        p.setPen(kapp->palette().color(QPalette::Midlight));
+                        p.drawRect(0, 0, tile.width(), tile.height());
                     }
 
                     QPainter p(&tile);

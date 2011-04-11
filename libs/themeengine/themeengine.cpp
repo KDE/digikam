@@ -302,24 +302,4 @@ QColor ThemeEngine::textSpecialRegColor() const
     return d->palette.color(QPalette::Link);
 }
 
-QPixmap ThemeEngine::thumbRegPixmap(int w, int h)
-{
-    QPixmap pix(w, h);
-    pix.fill(d->palette.color(QPalette::Base));
-    QPainter p(&pix);
-    p.setPen(d->palette.color(QPalette::Midlight));
-    p.drawRect(0, 0, w, h);
-    return pix;
-}
-
-QPixmap ThemeEngine::thumbSelPixmap(int w, int h)
-{
-    QPixmap pix(w, h);
-    pix.fill(d->palette.color(QPalette::Highlight));
-    QPainter p(&pix);
-    p.setPen(d->palette.color(QPalette::Midlight));
-    p.drawRect(0, 0, w, h);
-    return pix;
-}
-
 }  // namespace Digikam

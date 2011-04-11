@@ -71,9 +71,6 @@ public:
     KDE_DEPRECATED QColor  textSelColor() const;
     KDE_DEPRECATED QColor  textSpecialRegColor() const;
 
-    KDE_DEPRECATED QPixmap thumbRegPixmap(int w, int h);
-    KDE_DEPRECATED QPixmap thumbSelPixmap(int w, int h);
-
 Q_SIGNALS:
 
     void signalThemeChanged();

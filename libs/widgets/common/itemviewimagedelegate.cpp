@@ -558,8 +558,17 @@ void ItemViewImageDelegate::prepareBackground()
     }
     else
     {
-        d->regPixmap = ThemeEngine::instance()->thumbRegPixmap(d->rect.width(), d->rect.height());
-        d->selPixmap = ThemeEngine::instance()->thumbSelPixmap(d->rect.width(), d->rect.height());
+        d->regPixmap = QPixmap(d->rect.width(), d->rect.height());
+        d->regPixmap.fill(kapp->palette().color(QPalette::Base));
+        QPainter p1(&d->regPixmap);
+        p1.setPen(kapp->palette().color(QPalette::Midlight));
+        p1.drawRect(0, 0, d->rect.width(), d->rect.height());
+
+        d->selPixmap = QPixmap(d->rect.width(), d->rect.height());
+        d->selPixmap.fill(kapp->palette().color(QPalette::Highlight));
+        QPainter p2(&d->selPixmap);
+        p2.setPen(kapp->palette().color(QPalette::Midlight));
+        p2.drawRect(0, 0, d->rect.width(), d->rect.height());
     }
 }
 

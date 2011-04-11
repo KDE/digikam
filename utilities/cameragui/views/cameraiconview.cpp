@@ -7,7 +7,7 @@
  * Description : camera icon view
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -834,9 +834,19 @@ void CameraIconView::updateItemRectsPixmap()
     r.setWidth(qMax(qMax(pixRect.width(), textRect.width()), extraRect.width()) + 4);
     r.setHeight(pixRect.height() + textRect.height() + extraRect.height() + 4);
 
-    d->itemRect      = r;
-    d->itemRegPixmap = ThemeEngine::instance()->thumbRegPixmap(d->itemRect.width(), d->itemRect.height());
-    d->itemSelPixmap = ThemeEngine::instance()->thumbSelPixmap(d->itemRect.width(), d->itemRect.height());
+    d->itemRect = r;
+
+    d->itemRegPixmap = QPixmap(d->itemRect.width(), d->itemRect.height());
+    d->itemRegPixmap.fill(kapp->palette().color(QPalette::Base));
+    QPainter p1(&d->itemRegPixmap);
+    p1.setPen(kapp->palette().color(QPalette::Midlight));
+    p1.drawRect(0, 0, d->itemRect.width(), d->itemRect.height());
+
+    d->itemSelPixmap = QPixmap(d->itemRect.width(), d->itemRect.height());
+    d->itemSelPixmap.fill(kapp->palette().color(QPalette::Highlight));
+    QPainter p2(&d->itemSelPixmap);
+    p2.setPen(kapp->palette().color(QPalette::Midlight));
+    p2.drawRect(0, 0, d->itemRect.width(), d->itemRect.height());
 
     clearThumbnailBorderCache();
 }
