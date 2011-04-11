@@ -62,6 +62,7 @@
 #include <kiconloader.h>
 #include <kdatetable.h>
 #include <kglobalsettings.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -696,7 +697,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
     {
         QRect fullRect(0, 0, visibleWidth(), visibleHeight());
         QRect textRect = painter.boundingRect(fullRect, Qt::AlignCenter|Qt::TextWordWrap, d->errorMessage);
-        painter.fillRect(textRect, ThemeEngine::instance()->baseColor());
+        painter.fillRect(textRect, kapp->palette().color(QPalette::Base));
         painter.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         painter.drawText(textRect, Qt::AlignCenter|Qt::TextWordWrap, d->errorMessage);
 

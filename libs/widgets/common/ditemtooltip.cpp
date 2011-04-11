@@ -44,6 +44,7 @@
 #include <kglobalsettings.h>
 #include <kglobal.h>
 #include <kdeversion.h>
+#include <kapplication.h>
 
 namespace Digikam
 {
@@ -58,7 +59,7 @@ DToolTipStyleSheet::DToolTipStyleSheet(const QFont& font)
 
     headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
                           "<nobr><font size=\"-1\" color=\"%2\" face=\"%3\"><center><b>")
-                  .arg(ThemeEngine::instance()->baseColor().name())
+                  .arg(kapp->palette().color(QPalette::Base).name())
                   .arg(ThemeEngine::instance()->textRegColor().name())
                   .arg(font.family());
     headEnd     = QString("</b></center></font></nobr></td></tr>");

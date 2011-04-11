@@ -64,8 +64,6 @@ public:
     void    registerThemeActions(KXmlGuiWindow* const kwin);
 
     // TODO: Methods to remove with Theme and Texture Classes
-    KDE_DEPRECATED QColor  baseColor()     const;
-
     KDE_DEPRECATED QColor  textRegColor() const;
     KDE_DEPRECATED QColor  textSelColor() const;
 

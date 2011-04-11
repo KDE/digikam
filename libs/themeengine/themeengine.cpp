@@ -277,11 +277,6 @@ QString ThemeEngine::currentKDEdefaultTheme() const
 
 // -------------------------------------------------------------------------------------------------
 
-QColor ThemeEngine::baseColor() const
-{
-    return d->palette.color(QPalette::Base);
-}
-
 QColor ThemeEngine::textRegColor() const
 {
     return d->palette.color(QPalette::Text);

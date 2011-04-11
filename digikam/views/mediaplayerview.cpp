@@ -36,6 +36,7 @@
 
 // KDE includes
 
+#include <kapplication.h>
 #include <kaction.h>
 #include <kdialog.h>
 #include <klocale.h>
@@ -272,11 +273,11 @@ void MediaPlayerView::escapePreview()
 void MediaPlayerView::slotThemeChanged()
 {
     QPalette palette;
-    palette.setColor(d->errorView->backgroundRole(), ThemeEngine::instance()->baseColor());
+    palette.setColor(d->errorView->backgroundRole(), kapp->palette().color(QPalette::Base));
     d->errorView->setPalette(palette);
 
     QPalette palette2;
-    palette2.setColor(d->mediaPlayerView->backgroundRole(), ThemeEngine::instance()->baseColor());
+    palette2.setColor(d->mediaPlayerView->backgroundRole(), kapp->palette().color(QPalette::Base));
     d->mediaPlayerView->setPalette(palette2);
 }
 

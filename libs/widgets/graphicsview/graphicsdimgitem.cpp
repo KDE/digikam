@@ -212,7 +212,7 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
     /*
         QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::instance()->baseColor());
+        pix.fill(kapp->palette().color(QPalette::Base));
         QPainter p(&pix);
         QFileInfo info(d->path);
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));

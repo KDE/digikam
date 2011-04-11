@@ -608,7 +608,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
             x2    = ((x1 + er.width())/ts +1)*ts;
         }
 
-        bgPix.fill(te->baseColor());
+        bgPix.fill(kapp->palette().color(QPalette::Base));
 
         for (ThumbBarItem* item = firstItem(); item; item = item->next())
         {
@@ -751,7 +751,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
     else
     {
         bgPix = QPixmap(contentsRect().width(), contentsRect().height());
-        bgPix.fill(te->baseColor());
+        bgPix.fill(kapp->palette().color(QPalette::Base));
 
         drawEmptyMessage(bgPix);
 

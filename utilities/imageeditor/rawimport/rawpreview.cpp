@@ -37,6 +37,7 @@
 #include <kcursor.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -180,7 +181,7 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
     if (image.isNull())
     {
         QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::instance()->baseColor());
+        pix.fill(kapp->palette().color(QPalette::Base));
         QPainter p(&pix);
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
@@ -203,7 +204,7 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
 void RawPreview::slotThemeChanged()
 {
     QPalette plt(palette());
-    plt.setColor(backgroundRole(), ThemeEngine::instance()->baseColor());
+    plt.setColor(backgroundRole(), kapp->palette().color(QPalette::Base));
     setPalette(plt);
 }
 

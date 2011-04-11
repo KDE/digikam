@@ -32,6 +32,7 @@
 // KDE includes
 
 #include <kdebug.h>
+#include <kapplication.h>
 #include <kglobalsettings.h>
 #include <kstandardguiitem.h>
 
@@ -454,7 +455,7 @@ void AssignNameWidget::AssignNameWidgetPriv::updateVisualStyle()
         }
         case TranslucentThemedFrameless:
         {
-            QColor bg = ThemeEngine::instance()->baseColor();
+            QColor bg = kapp->palette().color(QPalette::Base);
             q->setStyleSheet(
                 QString(
                     "QWidget { "

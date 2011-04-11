@@ -187,11 +187,11 @@ void ToolSettingsView::setToolSettingsWidget(QWidget* w)
 void ToolSettingsView::slotThemeChanged()
 {
     QPalette palette;
-    palette.setColor(d->messageView->backgroundRole(), ThemeEngine::instance()->baseColor());
+    palette.setColor(d->messageView->backgroundRole(), kapp->palette().color(QPalette::Base));
     d->messageView->setPalette(palette);
 
     QPalette palette2;
-    palette2.setColor(d->settingsView->backgroundRole(), ThemeEngine::instance()->baseColor());
+    palette2.setColor(d->settingsView->backgroundRole(), kapp->palette().color(QPalette::Base));
     d->settingsView->setPalette(palette2);
 }
 

@@ -400,7 +400,7 @@ void SearchView::setTheme()
     }
 
     QString sheet =
-        // ".SearchView { background-color: " + ThemeEngine::instance()->baseColor().name() + "; } "
+        // ".SearchView { background-color: " + kapp->palette().color(QPalette::Base).name() + "; } "
         "#SearchGroupLabel_MainLabel "
         " { font-weight: bold; font-size: "
         + fontSizeLarger + ';' +

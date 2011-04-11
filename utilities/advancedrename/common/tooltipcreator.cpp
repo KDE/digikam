@@ -171,7 +171,7 @@ QString TooltipCreator::createEntries(const QList<T*> &data)
                               "<td style=\"background-color: %1;\">"
                               "<font color=\"%2\"><b>&nbsp;%3&nbsp;</b></font></td>"
                               "<td>&nbsp;%4&nbsp;</td></tr>")
-                      .arg(ThemeEngine::instance()->baseColor().name())
+                      .arg(kapp->palette().color(QPalette::Base).name())
                       .arg(ThemeEngine::instance()->textRegColor().name())
                       .arg(markOption(token->id()))
                       .arg(markOption(token->description()));

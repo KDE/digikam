@@ -169,7 +169,7 @@ void LightTablePreview::setDragAndDropMessage()
     if (d->dragAndDropEnabled)
     {
         QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::instance()->baseColor());
+        pix.fill(kapp->palette().color(QPalette::Base));
         QPainter p(&pix);
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
         p.drawText(0, 0, pix.width(), pix.height(),
@@ -264,7 +264,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription& descriptio
     if (preview.isNull())
     {
         QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(ThemeEngine::instance()->baseColor());
+        pix.fill(kapp->palette().color(QPalette::Base));
         QPainter p(&pix);
         QFileInfo info(d->path);
         p.setPen(QPen(ThemeEngine::instance()->textRegColor()));
@@ -510,7 +510,7 @@ void LightTablePreview::slotAssignRating(int rating)
 void LightTablePreview::slotThemeChanged()
 {
     QPalette palette;
-    palette.setColor(backgroundRole(), ThemeEngine::instance()->baseColor());
+    palette.setColor(backgroundRole(), kapp->palette().color(QPalette::Base));
     setPalette(palette);
     frameChanged();
     update();
@@ -707,7 +707,7 @@ void LightTablePreview::drawFrame(QPainter* p)
     }
     else
     {
-        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->baseColor(), lineWidth());
+        qDrawPlainRect(p, frameRect(), kapp->palette().color(QPalette::Base), lineWidth());
     }
 }
 
