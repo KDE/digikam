@@ -51,7 +51,7 @@
 #include "databaseface.h"
 #include "dimg.h"
 #include "imageinfo.h"
-#include "themeengine.h"
+#include "thememanager.h"
 
 namespace Digikam
 {

@@ -134,7 +134,7 @@
 #include "setupeditor.h"
 #include "setupicc.h"
 #include "setupplugins.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "dmetadata.h"
@@ -2730,17 +2730,17 @@ void DigikamApp::populateThemes()
     {
         d->splashScreen->message(i18n("Loading themes"));
     }
-    ThemeEngine::instance()->setThemeMenuAction(new KSelectAction(i18n("&Themes"), this));
-    ThemeEngine::instance()->registerThemeActions(this);
-    ThemeEngine::instance()->setCurrentTheme(AlbumSettings::instance()->getCurrentTheme());
+    ThemeManager::instance()->setThemeMenuAction(new KSelectAction(i18n("&Themes"), this));
+    ThemeManager::instance()->registerThemeActions(this);
+    ThemeManager::instance()->setCurrentTheme(AlbumSettings::instance()->getCurrentTheme());
 
-    connect (ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect (ThemeManager::instance(), SIGNAL(signalThemeChanged()),
              this, SLOT(slotThemeChanged()));
 }
 
 void DigikamApp::slotThemeChanged()
 {
-    AlbumSettings::instance()->setCurrentTheme(ThemeEngine::instance()->currentThemeName());
+    AlbumSettings::instance()->setCurrentTheme(ThemeManager::instance()->currentThemeName());
 }
 
 void DigikamApp::preloadWindows()

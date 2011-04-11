@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-02
- * Description : theme engine methods
+ * Description : theme manager
  *
  * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef THEMEENGINE_H
-#define THEMEENGINE_H
+#ifndef THEMEMANAGER_H
+#define THEMEMANAGER_H
 
 // Qt includes
 
@@ -46,14 +46,14 @@ namespace Digikam
 
 class Theme;
 
-class DIGIKAM_EXPORT ThemeEngine : public QObject
+class DIGIKAM_EXPORT ThemeManager : public QObject
 {
     Q_OBJECT
 
 public:
 
-    ~ThemeEngine();
-    static ThemeEngine* instance();
+    ~ThemeManager();
+    static ThemeManager* instance();
 
     QString currentThemeName() const;
     void    setCurrentTheme(const QString& name);
@@ -73,7 +73,7 @@ private Q_SLOTS:
 
 private:
 
-    ThemeEngine();
+    ThemeManager();
 
     void    populateThemeMenu();
     QPixmap createSchemePreviewIcon(const KSharedConfigPtr& config);
@@ -82,12 +82,12 @@ private:
 
 private:
 
-    friend class ThemeEngineCreator;
+    friend class ThemeManagerCreator;
 
-    class ThemeEnginePriv;
-    ThemeEnginePriv* const d;
+    class ThemeManagerPriv;
+    ThemeManagerPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* THEMEENGINE_H */
+#endif /* THEMEMANAGER_H */

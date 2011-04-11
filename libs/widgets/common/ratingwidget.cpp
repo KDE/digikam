@@ -53,7 +53,7 @@
 // Local includes
 
 #include "globals.h"
-#include "themeengine.h"
+#include "thememanager.h"
 
 namespace Digikam
 {
@@ -109,7 +109,7 @@ RatingWidget::RatingWidget(QWidget* parent)
 {
     slotThemeChanged();
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 }
 

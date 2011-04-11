@@ -63,7 +63,7 @@
 #include "metadatasettings.h"
 #include "previewloadthread.h"
 #include "tagspopupmenu.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "globals.h"
 
 namespace Digikam
@@ -138,7 +138,7 @@ LightTablePreview::LightTablePreview(QWidget* parent)
     connect(this, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     // ------------------------------------------------------------

@@ -58,7 +58,7 @@
 
 #include "albummodel.h"
 #include "ratingwidget.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "itemvisibilitycontroller.h"
 
 namespace Digikam

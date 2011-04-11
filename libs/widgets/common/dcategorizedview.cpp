@@ -39,6 +39,7 @@
 
 // Local includes
 
+#include "thememanager.h"
 #include "albumsettings.h"
 #include "ditemdelegate.h"
 #include "abstractitemdragdrophandler.h"
@@ -113,7 +114,7 @@ DCategorizedView::DCategorizedView(QWidget* parent)
     connect(this, SIGNAL(entered(const QModelIndex&)),
             this, SLOT(slotEntered(const QModelIndex&)));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 }
 

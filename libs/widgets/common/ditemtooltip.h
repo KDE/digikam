@@ -40,7 +40,6 @@
 
 // Local includes
 
-#include "themeengine.h"
 #include "digikam_export.h"
 
 namespace Digikam

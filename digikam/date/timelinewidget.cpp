@@ -45,7 +45,7 @@
 
 // Local includes
 
-#include "themeengine.h"
+#include "thememanager.h"
 
 namespace Digikam
 {
@@ -133,7 +133,7 @@ TimeLineWidget::TimeLineWidget(QWidget* parent)
     connect(&d->timer, SIGNAL(timeout()),
             this, SLOT(slotFlickerTimer()));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 }
 

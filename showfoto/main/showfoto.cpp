@@ -112,7 +112,7 @@ extern "C"
 #include "slideshow.h"
 #include "splashscreen.h"
 #include "statusprogressbar.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "thumbbar.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
@@ -217,7 +217,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     {
         d->splash->message(i18n("Loading themes"));
     }
-    Digikam::ThemeEngine::instance();
+    Digikam::ThemeManager::instance();
 
     // -- Build the GUI -----------------------------------
 
@@ -461,7 +461,7 @@ void ShowFoto::setupUserArea()
 
 void ShowFoto::setupActions()
 {
-    Digikam::ThemeEngine::instance()->setThemeMenuAction(new KSelectAction(i18n("&Themes"), this));
+    Digikam::ThemeManager::instance()->setThemeMenuAction(new KSelectAction(i18n("&Themes"), this));
     setupStandardActions();
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
@@ -509,8 +509,8 @@ void ShowFoto::readSettings()
 
     d->rightSideBar->loadState();
 
-    Digikam::ThemeEngine::instance()->setCurrentTheme(group.readEntry("Theme",
-                                                      Digikam::ThemeEngine::instance()->defaultThemeName()));
+    Digikam::ThemeManager::instance()->setCurrentTheme(group.readEntry("Theme",
+                                                      Digikam::ThemeManager::instance()->defaultThemeName()));
 }
 
 void ShowFoto::saveSettings()
@@ -521,7 +521,7 @@ void ShowFoto::saveSettings()
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.toLocalFile() );
-    group.writeEntry("Theme", Digikam::ThemeEngine::instance()->currentThemeName());
+    group.writeEntry("Theme", Digikam::ThemeManager::instance()->currentThemeName());
 
     d->rightSideBar->saveState();
 

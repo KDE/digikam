@@ -52,7 +52,7 @@
 // Local includes
 
 #include "daboutdata.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "version.h"
 
 namespace Digikam
@@ -79,7 +79,7 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     connect(browserExtension(), SIGNAL(openUrlRequest(const KUrl&, const KParts::OpenUrlArguments&, const KParts::BrowserArguments&)),
             this, SLOT(slotUrlOpen(const KUrl&)));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     QTimer::singleShot(0, this, SLOT(slotThemeChanged()));

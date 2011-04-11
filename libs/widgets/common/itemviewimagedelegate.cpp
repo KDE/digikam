@@ -49,7 +49,7 @@
 // Local includes
 
 #include "imagedelegateoverlay.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "colorlabelwidget.h"
 #include "globals.h"
 
@@ -74,7 +74,7 @@ void ItemViewImageDelegatePrivate::init(ItemViewImageDelegate* _q)
 {
     q = _q;
 
-    q->connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    q->connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
                q, SLOT(slotThemeChanged()));
 }
 

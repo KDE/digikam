@@ -47,7 +47,7 @@
 #include "iccmanager.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "dimginterface.h"
 
 namespace Digikam
@@ -92,7 +92,7 @@ RawPreview::RawPreview(const KUrl& url, QWidget* parent)
     connect(d->thread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
             this, SLOT(slotLoadingProgress(const LoadingDescription&, float)));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     // ------------------------------------------------------------

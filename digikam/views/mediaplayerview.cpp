@@ -47,7 +47,7 @@
 // Local includes
 
 #include "stackedview.h"
-#include "themeengine.h"
+#include "thememanager.h"
 
 namespace Digikam
 {
@@ -203,7 +203,7 @@ MediaPlayerView::MediaPlayerView(StackedView* parent)
     connect(d->player->mediaObject(), SIGNAL(stateChanged(Phonon::State, Phonon::State)),
             this, SLOT(slotPlayerstateChanged(Phonon::State, Phonon::State)));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     connect(d->prevAction, SIGNAL(triggered()),

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-02
- * Description : theme engine methods
+ * Description : theme manager
  *
  * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "themeengine.moc"
+#include "thememanager.moc"
 
 // Qt includes
 
@@ -55,23 +55,23 @@
 namespace Digikam
 {
 
-class ThemeEngineCreator
+class ThemeManagerCreator
 {
 public:
 
-    ThemeEngine object;
+    ThemeManager object;
 };
 
-K_GLOBAL_STATIC(ThemeEngineCreator, creator)
+K_GLOBAL_STATIC(ThemeManagerCreator, creator)
 
 // ---------------------------------------------------------------
 
 
-class ThemeEngine::ThemeEnginePriv
+class ThemeManager::ThemeManagerPriv
 {
 public:
 
-    ThemeEnginePriv()
+    ThemeManagerPriv()
         : defaultThemeName(i18nc("default theme name", "Default")),
           themeMenuAction(0)
     {
@@ -83,43 +83,43 @@ public:
     KSelectAction*         themeMenuAction;
 };
 
-ThemeEngine::ThemeEngine()
-    : d(new ThemeEnginePriv)
+ThemeManager::ThemeManager()
+    : d(new ThemeManagerPriv)
 {
     connect (KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
              this, SLOT(slotChangePalette()));
 }
 
-ThemeEngine::~ThemeEngine()
+ThemeManager::~ThemeManager()
 {
     delete d;
 }
 
-ThemeEngine* ThemeEngine::instance()
+ThemeManager* ThemeManager::instance()
 {
     return &creator->object;
 }
 
-QString ThemeEngine::defaultThemeName() const
+QString ThemeManager::defaultThemeName() const
 {
     return d->defaultThemeName;
 }
 
-QString ThemeEngine::currentThemeName() const
+QString ThemeManager::currentThemeName() const
 {
     if (!d->themeMenuAction) return defaultThemeName();
     QString name = d->themeMenuAction->currentText();
     return name.isEmpty() ? defaultThemeName() : name;
 }
 
-void ThemeEngine::setCurrentTheme(const QString& name)
+void ThemeManager::setCurrentTheme(const QString& name)
 {
     if (!d->themeMenuAction) return;
     d->themeMenuAction->setCurrentAction(name);
     slotChangePalette();
 }
 
-void ThemeEngine::slotChangePalette()
+void ThemeManager::slotChangePalette()
 {
     updateCurrentKDEdefaultThemePreview();
 
@@ -178,19 +178,19 @@ void ThemeEngine::slotChangePalette()
     emit signalThemeChanged();
 }
 
-void ThemeEngine::setThemeMenuAction(KSelectAction* const action)
+void ThemeManager::setThemeMenuAction(KSelectAction* const action)
 {
     d->themeMenuAction = action;
     populateThemeMenu();
 }
 
-void ThemeEngine::registerThemeActions(KXmlGuiWindow* const kwin)
+void ThemeManager::registerThemeActions(KXmlGuiWindow* const kwin)
 {
     if (!d->themeMenuAction) return;
     kwin->actionCollection()->addAction("theme_menu", d->themeMenuAction);
 }
 
-void ThemeEngine::populateThemeMenu()
+void ThemeManager::populateThemeMenu()
 {
     if (!d->themeMenuAction) return;
 
@@ -220,7 +220,7 @@ void ThemeEngine::populateThemeMenu()
     updateCurrentKDEdefaultThemePreview();
 }
 
-void ThemeEngine::updateCurrentKDEdefaultThemePreview()
+void ThemeManager::updateCurrentKDEdefaultThemePreview()
 {
     QAction* action         = d->themeMenuAction->action(defaultThemeName());
     KSharedConfigPtr config = KSharedConfig::openConfig(d->themeMap.value(currentKDEdefaultTheme()));
@@ -228,7 +228,7 @@ void ThemeEngine::updateCurrentKDEdefaultThemePreview()
     action->setIcon(icon);
 }
 
-QPixmap ThemeEngine::createSchemePreviewIcon(const KSharedConfigPtr& config)
+QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config)
 {
     // code taken from kdebase/workspace/kcontrol/colors/colorscm.cpp
     const uchar bits1[] = { 0xff, 0xff, 0xff, 0x2c, 0x16, 0x0b };
@@ -268,7 +268,7 @@ QPixmap ThemeEngine::createSchemePreviewIcon(const KSharedConfigPtr& config)
     return pixmap;
 }
 
-QString ThemeEngine::currentKDEdefaultTheme() const
+QString ThemeManager::currentKDEdefaultTheme() const
 {
     KSharedConfigPtr config = KSharedConfig::openConfig("kdeglobals");
     KConfigGroup group(config, "General");

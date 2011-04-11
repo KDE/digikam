@@ -968,8 +968,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawsettingsbox.cpp
        )
 
-    SET(libthemeengine_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine/themeengine.cpp
+    SET(libthememanager_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/thememanager/thememanager.cpp
        )
 
     SET(libtthread_SRCS
@@ -1450,7 +1450,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/themeengine
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/thememanager
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager

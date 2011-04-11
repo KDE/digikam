@@ -127,7 +127,7 @@
 #include "syncjob.h"
 #include "tagscache.h"
 #include "tagspopupmenu.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "thumbbardock.h"
 #include "thumbnailloadthread.h"
 #include "uifilevalidator.h"

@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "themeengine.h"
+#include "thememanager.h"
 
 namespace Digikam
 {
@@ -63,7 +63,7 @@ DbHeaderListItem::DbHeaderListItem(QTreeWidget* parent, const QString& key)
     setText(0, key);
     slotThemeChanged();
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 }
 

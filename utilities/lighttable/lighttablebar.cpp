@@ -66,6 +66,7 @@
 #include "databasewatch.h"
 #include "databasechangesets.h"
 #include "tooltipfiller.h"
+#include "thememanager.h"
 
 namespace Digikam
 {
@@ -144,7 +145,7 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
     connect(watch, SIGNAL(signalImageRatingChanged(qlonglong)),
             this, SLOT(slotImageRatingChanged(qlonglong)));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),

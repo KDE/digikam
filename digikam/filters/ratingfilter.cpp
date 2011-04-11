@@ -45,7 +45,7 @@
 // Local includes
 
 #include "dcursortracker.h"
-#include "themeengine.h"
+#include "thememanager.h"
 
 namespace Digikam
 {

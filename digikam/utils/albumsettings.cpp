@@ -56,7 +56,7 @@
 #include "mimefilter.h"
 #include "thumbnailsize.h"
 #include "versionmanager.h"
-#include "themeengine.h"
+#include "thememanager.h"
 
 namespace Digikam
 {
@@ -538,7 +538,7 @@ void AlbumSettings::readSettings()
     d->thumbnailSize                = group.readEntry(d->configDefaultIconSizeEntry,              (int)ThumbnailSize::Medium);
     d->treeThumbnailSize            = group.readEntry(d->configDefaultTreeIconSizeEntry,          22);
     d->treeviewFont                 = group.readEntry(d->configTreeViewFontEntry,                 KGlobalSettings::generalFont());
-    d->currentTheme                 = group.readEntry(d->configThemeEntry,                        ThemeEngine::instance()->defaultThemeName());
+    d->currentTheme                 = group.readEntry(d->configThemeEntry,                        ThemeManager::instance()->defaultThemeName());
 
     d->sidebarTitleStyle            = (KMultiTabBar::KMultiTabBarStyle)group.readEntry(d->configSidebarTitleStyleEntry,
                                       (int)KMultiTabBar::VSNET);

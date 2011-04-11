@@ -63,7 +63,7 @@
 #include "gpiteminfo.h"
 #include "icongroupitem.h"
 #include "renamecustomizer.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "thumbnailsize.h"
 
 namespace Digikam
@@ -143,7 +143,7 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     connect(this, SIGNAL(signalDoubleClicked(IconItem*)),
             this, SLOT(slotDoubleClicked(IconItem*)));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     connect(this, SIGNAL(signalShowToolTip(IconItem*)),

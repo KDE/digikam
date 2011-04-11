@@ -47,7 +47,7 @@
 #include "searchutilities.h"
 #include "searchwindow.h"
 #include "searchxml.h"
-#include "themeengine.h"
+#include "thememanager.h"
 
 namespace Digikam
 {
@@ -177,7 +177,7 @@ SearchView::~SearchView()
 
 void SearchView::setup()
 {
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(setTheme()));
 
     setTheme();

@@ -37,7 +37,7 @@
 
 #include "searchview.h"
 #include "searchxml.h"
-#include "themeengine.h"
+#include "thememanager.h"
 
 namespace Digikam
 {

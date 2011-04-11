@@ -46,7 +46,7 @@
 // Local includes
 
 #include "dcategorizedview.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "thumbbar.h"
 
 namespace Digikam

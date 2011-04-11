@@ -97,7 +97,7 @@
 #include "dlogoaction.h"
 #include "thumbnailsize.h"
 #include "sidebar.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "templateselector.h"
 #include "setup.h"
 #include "downloadsettingscontainer.h"
@@ -499,7 +499,7 @@ void CameraUI::setupActions()
 
     // ---------------------------------------------------------------------------------
 
-    ThemeEngine::instance()->registerThemeActions(this);
+    ThemeManager::instance()->registerThemeActions(this);
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 

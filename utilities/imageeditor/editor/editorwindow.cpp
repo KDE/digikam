@@ -147,7 +147,7 @@
 #include "slideshowsettings.h"
 #include "softproofdialog.h"
 #include "statusprogressbar.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
 #include "triplechoicedialog.h"
@@ -619,7 +619,7 @@ void EditorWindow::setupStandardActions()
 
     // ---------------------------------------------------------------------------------
 
-    ThemeEngine::instance()->registerThemeActions(this);
+    ThemeManager::instance()->registerThemeActions(this);
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 

@@ -36,8 +36,8 @@
 #include <QStylePainter>
 #include <QToolTip>
 #include <QVBoxLayout>
-
 #include <QTextDocument>
+
 // KDE includes
 
 #include <kdebug.h>

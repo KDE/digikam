@@ -62,7 +62,7 @@
 
 #include "componentsinfo.h"
 #include "digikamapp.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "dimg.h"
 #include "dlogoaction.h"
 #include "dmetadata.h"
@@ -596,7 +596,7 @@ void LightTableWindow::setupActions()
 
     // ---------------------------------------------------------------------------------
 
-    ThemeEngine::instance()->registerThemeActions(this);
+    ThemeManager::instance()->registerThemeActions(this);
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 

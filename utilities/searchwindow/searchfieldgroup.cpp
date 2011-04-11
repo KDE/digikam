@@ -34,7 +34,7 @@
 #include "searchfields.h"
 #include "searchgroup.h"
 #include "searchutilities.h"
-#include "themeengine.h"
+#include "thememanager.h"
 
 namespace Digikam
 {

@@ -66,7 +66,7 @@
 #include "metadatasettings.h"
 #include "regionframeitem.h"
 #include "tagspopupmenu.h"
-#include "themeengine.h"
+#include "thememanager.h"
 #include "previewlayout.h"
 #include "tagscache.h"
 #include "imagetagpair.h"
@@ -263,7 +263,7 @@ ImagePreviewView::ImagePreviewView(StackedView* parent)
     connect(this, SIGNAL(activated()),
             this, SIGNAL(signalBack2Album()));
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),

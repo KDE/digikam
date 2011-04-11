@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "themeengine.h"
+#include "thememanager.h"
 
 namespace Digikam
 {
@@ -173,7 +173,7 @@ MdKeyListViewItem::MdKeyListViewItem(QTreeWidget* parent, const QString& key)
     setText(0, m_decryptedKey);
     slotThemeChanged();
 
-    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 }
 
