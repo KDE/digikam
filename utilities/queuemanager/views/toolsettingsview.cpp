@@ -6,7 +6,7 @@
  * Date        : 2008-11-27
  * Description : a view to show Batch Tool Settings.
  *
- * Copyright (C) 2008-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,6 +37,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kvbox.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -113,7 +114,7 @@ ToolSettingsView::ToolSettingsView(QWidget* parent)
                                  "}")
                          .arg(ThemeEngine::instance()->textSelColor().name())
                          .arg(ThemeEngine::instance()->textSelColor().name())
-                         .arg(ThemeEngine::instance()->thumbSelColor().name());
+                         .arg(kapp->palette().color(QPalette::Highlight).name());
 
     QString noFrameStyle("QFrame {"
                          "border: none;"

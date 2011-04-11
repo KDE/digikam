@@ -702,7 +702,7 @@ void LightTablePreview::drawFrame(QPainter* p)
 {
     if (d->selected)
     {
-        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->thumbSelColor(), lineWidth());
+        qDrawPlainRect(p, frameRect(), kapp->palette().color(QPalette::Highlight), lineWidth());
         qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->textSelColor(), 2);
     }
     else

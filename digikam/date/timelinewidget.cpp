@@ -41,6 +41,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -934,7 +935,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
 
         if (sel == Selected || sel == FuzzySelection)
         {
-            selBrush.setColor(ThemeEngine::instance()->thumbSelColor());
+            selBrush.setColor(kapp->palette().color(QPalette::Highlight));
             selBrush.setStyle(Qt::SolidPattern);
 
             if (sel == FuzzySelection)
@@ -1011,7 +1012,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
 
         if (sel == Selected || sel == FuzzySelection)
         {
-            selBrush.setColor(ThemeEngine::instance()->thumbSelColor());
+            selBrush.setColor(kapp->palette().color(QPalette::Highlight));
             selBrush.setStyle(Qt::SolidPattern);
 
             if (sel == FuzzySelection)

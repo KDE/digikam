@@ -169,7 +169,7 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
                                  "}")
                          .arg(ThemeEngine::instance()->textSelColor().name())
                          .arg(ThemeEngine::instance()->textSelColor().name())
-                         .arg(ThemeEngine::instance()->thumbSelColor().name());
+                         .arg(kapp->palette().color(QPalette::Highlight).name());
 
     QString noFrameStyle("QFrame {"
                          "border: none;"

@@ -6,7 +6,7 @@
  * Date        : 2009-09-14
  * Description : a class to build the tooltip for a renameparser and its options
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +31,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -150,7 +151,7 @@ QString TooltipCreator::createHeader(const QString& str)
     QString templateStr = QString("<tr><td style=\"background-color: %1; padding:0.25em;\" colspan=\"2\">"
                                   "<nobr><font color=\"%2\"><center><b>%3"
                                   "</b></center></font></nobr></td></tr>")
-                          .arg(ThemeEngine::instance()->thumbSelColor().name())
+                          .arg(kapp->palette().color(QPalette::Highlight).name())
                           .arg(ThemeEngine::instance()->textSelColor().name());
 
     result += templateStr.arg(str);

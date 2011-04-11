@@ -282,11 +282,6 @@ QColor ThemeEngine::baseColor() const
     return d->palette.color(QPalette::Base);
 }
 
-QColor ThemeEngine::thumbSelColor() const
-{
-    return d->palette.color(QPalette::Highlight);
-}
-
 QColor ThemeEngine::textRegColor() const
 {
     return d->palette.color(QPalette::Text);

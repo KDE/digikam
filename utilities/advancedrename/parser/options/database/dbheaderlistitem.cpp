@@ -6,7 +6,7 @@
  * Date        : 2010-05-22
  * Description : header list view item
  *
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +32,7 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -72,8 +73,8 @@ DbHeaderListItem::~DbHeaderListItem()
 
 void DbHeaderListItem::slotThemeChanged()
 {
-    setBackground(0, QBrush(ThemeEngine::instance()->thumbSelColor()));
-    setBackground(1, QBrush(ThemeEngine::instance()->thumbSelColor()));
+    setBackground(0, QBrush(kapp->palette().color(QPalette::Highlight)));
+    setBackground(1, QBrush(kapp->palette().color(QPalette::Highlight)));
     setForeground(0, QBrush(ThemeEngine::instance()->textSelColor()));
     setForeground(1, QBrush(ThemeEngine::instance()->textSelColor()));
 }
