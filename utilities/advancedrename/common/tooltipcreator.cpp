@@ -141,7 +141,7 @@ QString TooltipCreator::markOption(const QString& str)
     optionsRegExp.setMinimal(true);
 
     result.replace(optionsRegExp, QString("<i><font color=\"%1\">\\1</font></i>")
-                   .arg(ThemeEngine::instance()->textSpecialRegColor().name()));
+                   .arg(kapp->palette().color(QPalette::Link).name()));
     return result;
 }
 

@@ -68,7 +68,6 @@ public:
 
     KDE_DEPRECATED QColor  textRegColor() const;
     KDE_DEPRECATED QColor  textSelColor() const;
-    KDE_DEPRECATED QColor  textSpecialRegColor() const;
 
 Q_SIGNALS:
 

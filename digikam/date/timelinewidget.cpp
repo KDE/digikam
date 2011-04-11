@@ -909,7 +909,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
         }
 
         p.setPen(palette().color(QPalette::Foreground));
-        p.fillRect(barRect, QBrush(ThemeEngine::instance()->textSpecialRegColor()));
+        p.fillRect(barRect, QBrush(kapp->palette().color(QPalette::Link)));
         p.drawLine(barRect.topLeft(), barRect.topRight());
         p.drawLine(barRect.topRight(), barRect.bottomRight());
         p.drawLine(barRect.bottomRight(), barRect.bottomLeft());
@@ -986,7 +986,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
         }
 
         p.setPen(palette().color(QPalette::Foreground));
-        p.fillRect(barRect, QBrush(ThemeEngine::instance()->textSpecialRegColor()));
+        p.fillRect(barRect, QBrush(kapp->palette().color(QPalette::Link)));
         p.drawLine(barRect.topLeft(), barRect.topRight());
         p.drawLine(barRect.topRight(), barRect.bottomRight());
         p.drawLine(barRect.bottomRight(), barRect.bottomLeft());

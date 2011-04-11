@@ -292,9 +292,4 @@ QColor ThemeEngine::textSelColor() const
     return d->palette.color(QPalette::HighlightedText);
 }
 
-QColor ThemeEngine::textSpecialRegColor() const
-{
-    return d->palette.color(QPalette::Link);
-}
-
 }  // namespace Digikam

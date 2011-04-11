@@ -356,7 +356,7 @@ void SearchView::paintEvent(QPaintEvent*)
 
         QRadialGradient grad(0.5, 0.5, 1, 0.5, 0.3);
         grad.setCoordinateMode(QGradient::ObjectBoundingMode);
-        QColor color = ThemeEngine::instance()->textSpecialRegColor();
+        QColor color = kapp->palette().color(QPalette::Link);
         QColor colorStart(color), colorEnd(color);
         colorStart.setAlphaF(0);
         colorEnd.setAlphaF(color.alphaF()  * animationStep / 100.0);
@@ -439,14 +439,14 @@ void SearchView::setTheme()
         " } "
         "#SearchFieldGroupLabel_Label "
         " { color: "
-        + ThemeEngine::instance()->textSpecialRegColor().name() + ';' +
+        + kapp->palette().color(QPalette::Link).name() + ';' +
         "   font-weight: bold; "
         " } "
         "#SearchField_MainLabel "
         " { font-weight: bold; } "
         "#SearchFieldChoice_ClickLabel "
         " { color: "
-        + ThemeEngine::instance()->textSpecialRegColor().name() + ';' +
+        + kapp->palette().color(QPalette::Link).name() + ';' +
         "   font-style: italic; "
         "   text-decoration: underline; "
         " } "

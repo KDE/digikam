@@ -118,7 +118,7 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
 
     QPainter painter(&d->ratingPixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setBrush(ThemeEngine::instance()->textSpecialRegColor());
+    painter.setBrush(kapp->palette().color(QPalette::Link));
     painter.setPen(ThemeEngine::instance()->textRegColor());
     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
@@ -767,7 +767,7 @@ void ImagePreviewBar::slotThemeChanged()
 {
     QPainter painter(&d->ratingPixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setBrush(ThemeEngine::instance()->textSpecialRegColor());
+    painter.setBrush(kapp->palette().color(QPalette::Link));
     painter.setPen(ThemeEngine::instance()->textRegColor());
     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();

@@ -621,7 +621,7 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
 
             // use antialiasing
             painter.setRenderHint(QPainter::Antialiasing, true);
-            painter.setBrush(ThemeEngine::instance()->textSpecialRegColor());
+            painter.setBrush(kapp->palette().color(QPalette::Link));
             QPen pen(ThemeEngine::instance()->textRegColor());
             // set a pen which joins the lines at a filled angle
             pen.setJoinStyle(Qt::MiterJoin);
