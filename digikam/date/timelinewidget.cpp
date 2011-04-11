@@ -1049,7 +1049,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
 
         p.setPen(palette().color(QPalette::Active, QPalette::Shadow));
         focusRect.adjust(-1,-1, 1, 1);
-        p.setPen(ThemeEngine::instance()->textSelColor());
+        p.setPen(kapp->palette().color(QPalette::HighlightedText));
         p.drawLine(focusRect.topLeft(), focusRect.topRight());
         p.drawLine(focusRect.topRight(), focusRect.bottomRight());
         p.drawLine(focusRect.bottomRight(), focusRect.bottomLeft());

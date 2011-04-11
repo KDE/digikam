@@ -702,8 +702,8 @@ void LightTablePreview::drawFrame(QPainter* p)
 {
     if (d->selected)
     {
-        qDrawPlainRect(p, frameRect(), kapp->palette().color(QPalette::Highlight), lineWidth());
-        qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->textSelColor(), 2);
+        qDrawPlainRect(p, frameRect(), kapp->palette().color(QPalette::Highlight),       lineWidth());
+        qDrawPlainRect(p, frameRect(), kapp->palette().color(QPalette::HighlightedText), 2);
     }
     else
     {

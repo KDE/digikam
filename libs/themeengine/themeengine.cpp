@@ -30,6 +30,7 @@
 #include <QFile>
 #include <QApplication>
 #include <QPalette>
+#include <QColor>
 #include <QBitmap>
 #include <QPainter>
 #include <QPixmap>
@@ -78,7 +79,6 @@ public:
 
     const QString          defaultThemeName;
     QMap<QString, QString> themeMap;            // map<theme name, theme config path>
-    QPalette               palette;
 
     KSelectAction*         themeMenuAction;
 };
@@ -138,7 +138,7 @@ void ThemeEngine::slotChangePalette()
     d->palette = KGlobalSettings::createNewApplicationPalette(config);
     */
 
-    d->palette                     = kapp->palette();
+    QPalette palette               = kapp->palette();
     QPalette::ColorGroup states[3] = { QPalette::Active, QPalette::Inactive, QPalette::Disabled };
     kDebug() << filename;
     // TT thinks tooltips shouldn't use active, so we use our active colors for all states
@@ -152,29 +152,29 @@ void ThemeEngine::slotChangePalette()
         KColorScheme schemeButton(state,    KColorScheme::Button,    config);
         KColorScheme schemeSelection(state, KColorScheme::Selection, config);
 
-        d->palette.setBrush(state, QPalette::WindowText,      schemeWindow.foreground());
-        d->palette.setBrush(state, QPalette::Window,          schemeWindow.background());
-        d->palette.setBrush(state, QPalette::Base,            schemeView.background());
-        d->palette.setBrush(state, QPalette::Text,            schemeView.foreground());
-        d->palette.setBrush(state, QPalette::Button,          schemeButton.background());
-        d->palette.setBrush(state, QPalette::ButtonText,      schemeButton.foreground());
-        d->palette.setBrush(state, QPalette::Highlight,       schemeSelection.background());
-        d->palette.setBrush(state, QPalette::HighlightedText, schemeSelection.foreground());
-        d->palette.setBrush(state, QPalette::ToolTipBase,     schemeTooltip.background());
-        d->palette.setBrush(state, QPalette::ToolTipText,     schemeTooltip.foreground());
+        palette.setBrush(state, QPalette::WindowText,      schemeWindow.foreground());
+        palette.setBrush(state, QPalette::Window,          schemeWindow.background());
+        palette.setBrush(state, QPalette::Base,            schemeView.background());
+        palette.setBrush(state, QPalette::Text,            schemeView.foreground());
+        palette.setBrush(state, QPalette::Button,          schemeButton.background());
+        palette.setBrush(state, QPalette::ButtonText,      schemeButton.foreground());
+        palette.setBrush(state, QPalette::Highlight,       schemeSelection.background());
+        palette.setBrush(state, QPalette::HighlightedText, schemeSelection.foreground());
+        palette.setBrush(state, QPalette::ToolTipBase,     schemeTooltip.background());
+        palette.setBrush(state, QPalette::ToolTipText,     schemeTooltip.foreground());
 
-        d->palette.setColor(state, QPalette::Light,           schemeWindow.shade(KColorScheme::LightShade));
-        d->palette.setColor(state, QPalette::Midlight,        schemeWindow.shade(KColorScheme::MidlightShade));
-        d->palette.setColor(state, QPalette::Mid,             schemeWindow.shade(KColorScheme::MidShade));
-        d->palette.setColor(state, QPalette::Dark,            schemeWindow.shade(KColorScheme::DarkShade));
-        d->palette.setColor(state, QPalette::Shadow,          schemeWindow.shade(KColorScheme::ShadowShade));
+        palette.setColor(state, QPalette::Light,           schemeWindow.shade(KColorScheme::LightShade));
+        palette.setColor(state, QPalette::Midlight,        schemeWindow.shade(KColorScheme::MidlightShade));
+        palette.setColor(state, QPalette::Mid,             schemeWindow.shade(KColorScheme::MidShade));
+        palette.setColor(state, QPalette::Dark,            schemeWindow.shade(KColorScheme::DarkShade));
+        palette.setColor(state, QPalette::Shadow,          schemeWindow.shade(KColorScheme::ShadowShade));
 
-        d->palette.setBrush(state, QPalette::AlternateBase,   schemeView.background(KColorScheme::AlternateBackground));
-        d->palette.setBrush(state, QPalette::Link,            schemeView.foreground(KColorScheme::LinkText));
-        d->palette.setBrush(state, QPalette::LinkVisited,     schemeView.foreground(KColorScheme::VisitedText));
+        palette.setBrush(state, QPalette::AlternateBase,   schemeView.background(KColorScheme::AlternateBackground));
+        palette.setBrush(state, QPalette::Link,            schemeView.foreground(KColorScheme::LinkText));
+        palette.setBrush(state, QPalette::LinkVisited,     schemeView.foreground(KColorScheme::VisitedText));
     }
 
-    kapp->setPalette(d->palette);
+    kapp->setPalette(palette);
     emit signalThemeChanged();
 }
 
@@ -273,13 +273,6 @@ QString ThemeEngine::currentKDEdefaultTheme() const
     KSharedConfigPtr config = KSharedConfig::openConfig("kdeglobals");
     KConfigGroup group(config, "General");
     return group.readEntry("ColorScheme");
-}
-
-// -------------------------------------------------------------------------------------------------
-
-QColor ThemeEngine::textSelColor() const
-{
-    return d->palette.color(QPalette::HighlightedText);
 }
 
 }  // namespace Digikam

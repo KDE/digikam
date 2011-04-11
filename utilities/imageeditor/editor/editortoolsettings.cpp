@@ -60,7 +60,6 @@
 #include "histogramwidget.h"
 #include "histogrambox.h"
 #include "globals.h"
-#include "themeengine.h"
 
 using namespace KDcrawIface;
 
@@ -167,8 +166,8 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
                                  "border-radius: 5px;"
                                  "background-color: %3;"
                                  "}")
-                         .arg(ThemeEngine::instance()->textSelColor().name())
-                         .arg(ThemeEngine::instance()->textSelColor().name())
+                         .arg(kapp->palette().color(QPalette::HighlightedText).name())
+                         .arg(kapp->palette().color(QPalette::HighlightedText).name())
                          .arg(kapp->palette().color(QPalette::Highlight).name());
 
     QString noFrameStyle("QFrame {"

@@ -390,12 +390,12 @@ void SearchView::setTheme()
     if (f.pointSizeF() == -1)
     {
         // set pixel size
-        fontSizeLarger = QString::number(f.pixelSize() + 2) + "px";
+        fontSizeLarger  = QString::number(f.pixelSize() + 2) + "px";
         fontSizeSmaller = QString::number(f.pixelSize() - 2) + "px";
     }
     else
     {
-        fontSizeLarger = QString::number(f.pointSizeF() + 2) + "pt";
+        fontSizeLarger  = QString::number(f.pointSizeF() + 2) + "pt";
         fontSizeSmaller = QString::number(f.pointSizeF() - 2) + "pt";
     }
 
@@ -405,34 +405,34 @@ void SearchView::setTheme()
         " { font-weight: bold; font-size: "
         + fontSizeLarger + ';' +
         "   color: "
-        + ThemeEngine::instance()->textSelColor().name() + ';' +
+        + kapp->palette().color(QPalette::HighlightedText).name() + ';' +
         " } "
         "#SearchGroupLabel_SimpleLabel "
         " { font-size: "
         + fontSizeLarger + ';' +
         "   color: "
-        + ThemeEngine::instance()->textSelColor().name() + ';' +
+        + kapp->palette().color(QPalette::HighlightedText).name() + ';' +
         " } "
         "#SearchGroupLabel_GroupOpLabel "
         " { font-weight: bold; font-size: "
         + fontSizeLarger + ';' +
         "   color: "
-        + ThemeEngine::instance()->textSelColor().name() + ';' +
+        + kapp->palette().color(QPalette::HighlightedText).name() + ';' +
         "   text-decoration: underline; "
         " } "
         "#SearchGroupLabel_CheckBox "
         " { color: "
-        + ThemeEngine::instance()->textSelColor().name() + ';' +
+        + kapp->palette().color(QPalette::HighlightedText).name() + ';' +
         " } "
         "#SearchGroupLabel_RemoveLabel "
         " { color: "
-        + ThemeEngine::instance()->textSelColor().name() + ';' +
+        + kapp->palette().color(QPalette::HighlightedText).name() + ';' +
         "   font-style: italic; "
         "   text-decoration: underline; "
         " } "
         "#SearchGroupLabel_OptionsLabel "
         " { color: "
-        + ThemeEngine::instance()->textSelColor().name() + ';' +
+        + kapp->palette().color(QPalette::HighlightedText).name() + ';' +
         "   font-style: italic; "
         "   text-decoration: underline; font-size: "
         + fontSizeSmaller + ';' +

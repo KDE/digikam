@@ -50,7 +50,6 @@
 #include "imagemodel.h"
 #include "imagefiltermodel.h"
 #include "imagethumbnailmodel.h"
-#include "themeengine.h"
 #include "thumbbar.h"
 #include "thumbnailloadthread.h"
 
@@ -239,7 +238,6 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     p->translate(option.rect.topLeft());
 
     QRect r;
-    ThemeEngine* te = ThemeEngine::instance();
     bool isSelected = (option.state & QStyle::State_Selected);
 
     // Thumbnail
@@ -269,7 +267,8 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     // Draw Color Label rectangle
     drawColorLabelRect(p, option, isSelected, info.colorLabel());
 
-    p->setPen(isSelected ? te->textSelColor() : kapp->palette().color(QPalette::Text));
+    p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
+                         : kapp->palette().color(QPalette::Text));
 
     /*
     // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image

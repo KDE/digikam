@@ -58,12 +58,12 @@ namespace Digikam
 
 ItemViewImageDelegatePrivate::ItemViewImageDelegatePrivate()
 {
-    spacing        = 0;
-    thumbSize      = 0;
+    spacing   = 0;
+    thumbSize = 0;
 
     // painting constants
-    radius         = 3;
-    margin         = 5;
+    radius    = 3;
+    margin    = 5;
 
     makeStarPolygon();
 
@@ -80,9 +80,9 @@ void ItemViewImageDelegatePrivate::init(ItemViewImageDelegate* _q)
 
 void ItemViewImageDelegatePrivate::clearRects()
 {
-    gridSize       = QSize(0, 0);
-    rect           = QRect(0, 0, 0, 0);
-    ratingRect     = QRect(0, 0, 0, 0);
+    gridSize   = QSize(0, 0);
+    rect       = QRect(0, 0, 0, 0);
+    ratingRect = QRect(0, 0, 0, 0);
 }
 
 void ItemViewImageDelegatePrivate::makeStarPolygon()
@@ -388,7 +388,7 @@ void ItemViewImageDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewIte
 
     if (option.state & QStyle::State_HasFocus) //?? is current item
     {
-        p->setPen(QPen(isSelected ? ThemeEngine::instance()->textSelColor()
+        p->setPen(QPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
                                   : kapp->palette().color(QPalette::Text),
                        1, Qt::DotLine));
         p->drawRect(1, 1, d->rect.width()-3, d->rect.height()-3);

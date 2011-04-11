@@ -38,7 +38,6 @@
 #include "modifier.h"
 #include "option.h"
 #include "parser.h"
-#include "themeengine.h"
 
 using namespace Digikam;
 
@@ -152,7 +151,7 @@ QString TooltipCreator::createHeader(const QString& str)
                                   "<nobr><font color=\"%2\"><center><b>%3"
                                   "</b></center></font></nobr></td></tr>")
                           .arg(kapp->palette().color(QPalette::Highlight).name())
-                          .arg(ThemeEngine::instance()->textSelColor().name());
+                          .arg(kapp->palette().color(QPalette::HighlightedText).name());
 
     result += templateStr.arg(str);
     return result;

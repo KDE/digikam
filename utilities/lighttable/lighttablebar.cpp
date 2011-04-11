@@ -573,9 +573,8 @@ void ImagePreviewBar::drawEmptyMessage(QPixmap& pixmap)
 
 void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
 {
-    ThemeEngine* te = ThemeEngine::instance();
-    QRect    er(e->rect());
-    QPixmap  bgPix;
+    QRect   er(e->rect());
+    QPixmap bgPix;
 
     if (countItems() > 0)
     {
@@ -634,7 +633,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
 
                     if (item == currentItem())
                     {
-                        p.setPen(QPen(te->textSelColor(), 3));
+                        p.setPen(QPen(kapp->palette().color(QPalette::HighlightedText), 3));
                         p.drawRect(1, 1, tile.width()-2, tile.height()-2);
                     }
                     else
@@ -695,7 +694,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
 
                     if (item == currentItem())
                     {
-                        p.setPen(QPen(te->textSelColor(), 3));
+                        p.setPen(QPen(kapp->palette().color(QPalette::HighlightedText), 3));
                         p.drawRect(1, 1, tile.width()-2, tile.height()-2);
                     }
                     else

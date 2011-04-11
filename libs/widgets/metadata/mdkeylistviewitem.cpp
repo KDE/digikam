@@ -195,8 +195,8 @@ void MdKeyListViewItem::slotThemeChanged()
 {
     setBackground(0, QBrush(kapp->palette().color(QPalette::Highlight)));
     setBackground(1, QBrush(kapp->palette().color(QPalette::Highlight)));
-    setForeground(0, QBrush(ThemeEngine::instance()->textSelColor()));
-    setForeground(1, QBrush(ThemeEngine::instance()->textSelColor()));
+    setForeground(0, QBrush(kapp->palette().color(QPalette::HighlightedText)));
+    setForeground(1, QBrush(kapp->palette().color(QPalette::HighlightedText)));
 }
 
 }  // namespace Digikam

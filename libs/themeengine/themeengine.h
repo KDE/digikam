@@ -27,8 +27,8 @@
 // Qt includes
 
 #include <QObject>
-#include <QColor>
 #include <QPixmap>
+#include <QString>
 
 // KDE includes
 
@@ -62,9 +62,6 @@ public:
 
     void    setThemeMenuAction(KSelectAction* const action);
     void    registerThemeActions(KXmlGuiWindow* const kwin);
-
-    // TODO: Methods to remove with Theme and Texture Classes
-    KDE_DEPRECATED QColor  textSelColor() const;
 
 Q_SIGNALS:
 
