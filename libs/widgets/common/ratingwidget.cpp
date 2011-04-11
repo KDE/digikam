@@ -379,7 +379,7 @@ void RatingWidget::slotThemeChanged()
 
     QPainter p2(&d->selPixmap);
     p2.setRenderHint(QPainter::Antialiasing, true);
-    p2.setBrush(ThemeEngine::instance()->textSpecialRegColor());
+    p2.setBrush(kapp->palette().color(QPalette::Link));
     p2.setPen(palette().color(QPalette::Active, foregroundRole()));
     p2.drawPolygon(d->starPolygon, Qt::WindingFill);
     p2.end();
