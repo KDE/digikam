@@ -66,14 +66,11 @@ public:
     // TODO: Methods to remove with Theme and Texture Classes
     KDE_DEPRECATED QColor  baseColor()     const;
     KDE_DEPRECATED QColor  thumbSelColor() const;
-    KDE_DEPRECATED QColor  thumbRegColor() const;
 
     KDE_DEPRECATED QColor  textRegColor() const;
     KDE_DEPRECATED QColor  textSelColor() const;
     KDE_DEPRECATED QColor  textSpecialRegColor() const;
-    KDE_DEPRECATED QColor  textSpecialSelColor() const;
 
-    KDE_DEPRECATED QPixmap bannerPixmap(int w, int h);
     KDE_DEPRECATED QPixmap thumbRegPixmap(int w, int h);
     KDE_DEPRECATED QPixmap thumbSelPixmap(int w, int h);
 

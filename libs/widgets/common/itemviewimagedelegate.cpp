@@ -44,6 +44,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -375,8 +376,8 @@ void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString&
 {
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontCom);
-    p->setPen(isSelected ? ThemeEngine::instance()->textSpecialSelColor()
-              : ThemeEngine::instance()->textSpecialRegColor());
+    p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
+                         : kapp->palette().color(QPalette::Link));
 
     p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), tagsString));
 }

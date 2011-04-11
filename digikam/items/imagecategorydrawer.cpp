@@ -32,6 +32,7 @@
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -44,7 +45,6 @@
 #include "imagemodel.h"
 #include "imagescanner.h"
 #include "searchfolderview.h"
-#include "themeengine.h"
 
 namespace Digikam
 {
@@ -169,7 +169,7 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
             break;
     }
 
-    p->setPen(ThemeEngine::instance()->textSelColor());
+    p->setPen(kapp->palette().color(QPalette::HighlightedText));
     p->setFont(fontBold);
 
     QRect tr;
@@ -388,7 +388,6 @@ void ImageCategoryDrawer::updateRectsAndPixmaps(int width)
 
     fn.setBold(false);
     fm = QFontMetrics(fn);
-
     tr = fm.boundingRect(0, 0, width,
                          0xFFFFFFFF, Qt::AlignLeft | Qt::AlignVCenter,
                          "XXX");
@@ -396,7 +395,8 @@ void ImageCategoryDrawer::updateRectsAndPixmaps(int width)
     d->rect.setHeight(d->rect.height() + tr.height() + 10);
     d->rect.setWidth(width);
 
-    d->pixmap = ThemeEngine::instance()->bannerPixmap(d->rect.width(), d->rect.height());
+    d->pixmap = QPixmap(d->rect.width(), d->rect.height());
+    d->pixmap.fill(kapp->palette().color(QPalette::Highlight));
 }
 
 } // namespace Digikam

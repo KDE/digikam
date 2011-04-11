@@ -6,7 +6,7 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,6 +39,7 @@
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
 #include <kdebug.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -469,7 +470,9 @@ QPixmap SearchView::cachedBannerPixmap(int w, int h)
 
     if (!pix)
     {
-        QPixmap pixmap = ThemeEngine::instance()->bannerPixmap(w, h);
+
+        QPixmap pixmap(w, h);
+        pixmap.fill(kapp->palette().color(QPalette::Highlight));
         d->pixmapCache.insert(key, new QPixmap(pixmap));
         return pixmap;
     }

@@ -287,11 +287,6 @@ QColor ThemeEngine::thumbSelColor() const
     return d->palette.color(QPalette::Highlight);
 }
 
-QColor ThemeEngine::thumbRegColor() const
-{
-    return d->palette.color(QPalette::Base);
-}
-
 QColor ThemeEngine::textRegColor() const
 {
     return d->palette.color(QPalette::Text);
@@ -305,18 +300,6 @@ QColor ThemeEngine::textSelColor() const
 QColor ThemeEngine::textSpecialRegColor() const
 {
     return d->palette.color(QPalette::Link);
-}
-
-QColor ThemeEngine::textSpecialSelColor() const
-{
-    return d->palette.color(QPalette::HighlightedText);
-}
-
-QPixmap ThemeEngine::bannerPixmap(int w, int h)
-{
-    QPixmap pix(w, h);
-    pix.fill(d->palette.color(QPalette::Highlight));
-    return pix;
 }
 
 QPixmap ThemeEngine::thumbRegPixmap(int w, int h)

@@ -7,7 +7,7 @@
  * Description : camera icon view item
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,6 +33,7 @@
 // KDE includes
 
 #include <kpixmapsequence.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -40,7 +41,6 @@
 #include "thumbnailsize.h"
 #include "imagedelegate.h"
 #include "gpiteminfo.h"
-#include "themeengine.h"
 #include "cameraiconview.h"
 
 namespace Digikam
@@ -229,7 +229,6 @@ QRect CameraIconItem::clickToOpenRect()
 
 void CameraIconItem::paintItem(QPainter* p)
 {
-    ThemeEngine* te      = ThemeEngine::instance();
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
 
     QFont fn(view->font());
@@ -240,7 +239,8 @@ void CameraIconItem::paintItem(QPainter* p)
 
     calcRect(itemName, downloadName);
 
-    p->setPen(isSelected() ? te->textSelColor() : te->textRegColor());
+    p->setPen(isSelected() ? kapp->palette().color(QPalette::HighlightedText)
+                           : kapp->palette().color(QPalette::Text));
 
     QRect pixmapDrawRect(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())  /2,
                          d->pixRect.y() + (d->pixRect.height() - d->pixmap.height()) /2,
@@ -275,7 +275,8 @@ void CameraIconItem::paintItem(QPainter* p)
 
         QFont oldFn = p->font();
         p->setFont(fn);
-        p->setPen(isSelected() ? te->textSpecialSelColor() : te->textSpecialRegColor());
+        p->setPen(isSelected() ? kapp->palette().color(QPalette::HighlightedText)
+                               : kapp->palette().color(QPalette::Link));
         p->drawText(d->extraRect, Qt::AlignHCenter|Qt::AlignTop, downloadName);
         p->setFont(oldFn);
     }
