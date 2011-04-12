@@ -347,24 +347,17 @@ QList<ColorLabel> ColorLabelWidget::colorLabels() const
 
 QIcon ColorLabelWidget::buildIcon(ColorLabel label) const
 {
-    QPixmap pix(12, 12);
-    QPainter p(&pix);
-    p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
-
     if (label != NoColorLabel)
     {
+        QPixmap pix(12, 12);
+        QPainter p(&pix);
+        p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
         p.fillRect(0, 0, pix.width()-1, pix.height()-1, labelColor(label));
-    }
-    else
-    {
-        p.fillRect(0, 0, pix.width()-1, pix.height()-1, palette().color(QPalette::Active, QPalette::Button));
-        p.drawLine(0, 0, pix.width()-1, pix.height()-1);
-        p.drawLine(0, pix.height()-1, pix.width()-1, 0);
+        p.drawRect(0, 0, pix.width()-1, pix.height()-1);
+        return QIcon(pix);
     }
 
-    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
-
-    return QIcon(pix);
+    return KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 12);
 }
 
 QColor ColorLabelWidget::labelColor(ColorLabel label)

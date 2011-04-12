@@ -257,18 +257,12 @@ QIcon PickLabelWidget::buildIcon(PickLabel label) const
         case AcceptedLabel:
             return KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, 12);
             break;
-        default:   // NoPickLabel
+        default:
             break;
     }
 
-    QPixmap pix(12, 12);
-    QPainter p(&pix);
-    p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
-    p.fillRect(0, 0, pix.width()-1, pix.height()-1, palette().color(QPalette::Active, QPalette::Button));
-    p.drawLine(0, 0, pix.width()-1, pix.height()-1);
-    p.drawLine(0, pix.height()-1, pix.width()-1, 0);
-    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
-    return QIcon(pix);
+    // default : NoPickLabel
+    return KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 12);
 }
 
 QString PickLabelWidget::labelPickName(PickLabel label)
