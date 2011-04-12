@@ -9,7 +9,7 @@
  *
  * Copyright (C) 1996-2000 the kicker authors.
  * Copyright (C) 2005 Mark Kretschmann <markey@web.de>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@
 #include <kiconeffect.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-
+#include <kdebug.h>
 
 // Local includes
 
@@ -56,11 +56,14 @@
 namespace Digikam
 {
 
-class DPopupMenuPriv
+class DPopupMenu::DPopupMenuPriv
 {
 public:
 
-    DPopupMenuPriv() : gradientWidth(0) {};
+    DPopupMenuPriv() 
+        : gradientWidth(0)
+    {
+    };
 
     int     gradientWidth;
 
@@ -90,85 +93,10 @@ DPopupMenu::~DPopupMenu()
     delete d;
 }
 
-void DPopupMenu::renderSidebarGradient(QPainter* p)
-{
-    p->setRenderHint(QPainter::TextAntialiasing);
-    p->setPen(Qt::white);
-
-    int frameWidth = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, this);
-    QRect drawRect = QStyle::visualRect(layoutDirection(), rect(),
-                                        QRect(frameWidth, frameWidth,
-                                                d->gradientWidth, height() - 2*frameWidth));
-    p->setClipRect(drawRect);
-
-    // ----------------------------------------
-
-    // draw gradient
-    QLinearGradient linearGrad;
-    linearGrad.setCoordinateMode(QGradient::ObjectBoundingMode);
-    linearGrad.setStart(0.0, 0.0);
-    linearGrad.setFinalStop(0.0, 1.0);
-    linearGrad.setColorAt(0, QColor(255, 255, 255, 25));
-    linearGrad.setColorAt(1, QColor(98, 98, 98));
-
-    // FIXME: this doesn't seem to work in 0.10.x versions, so I disable it for now
-    //    linearGrad.setColorAt(1, calcPixmapColor());
-
-    p->fillRect(drawRect, QBrush(linearGrad));
-
-    // ----------------------------------------
-
-    p->resetTransform();
-    p->translate(drawRect.bottomLeft());
-    p->rotate(-90.0);
-
-    // ----------------------------------------
-
-    const int    spacing = 8;
-    const int    margin  = 4;
-    QPixmap      appIcon;
-    QString      appName;
-    QFontMetrics fontMt(d->fontAppName);
-    QFontMetrics fontMt2(d->fontVersion);
-
-    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
-    {
-        appIcon = SmallIcon("digikam", d->fontAppName.pixelSize());
-        appName = QString("digiKam");
-    }
-    else
-    {
-        appIcon = SmallIcon("showfoto", d->fontAppName.pixelSize());
-        appName = QString("showFoto");
-    }
-
-    QRect fontRect = QRect(appIcon.width() + spacing, 1, fontMt.width(appName), drawRect.width());
-    int   shift    = fontMt.ascent() - fontMt2.ascent();
-
-    // ----------------------------------------
-    // draw application icon.
-
-    p->drawPixmap(margin, 1, appIcon);
-
-    // ----------------------------------------
-    // draw app name.
-
-    p->setFont(d->fontAppName);
-    p->drawText(fontRect, Qt::AlignLeft|Qt::AlignVCenter, appName);
-
-    // ----------------------------------------
-    // draw version string.
-
-    fontRect.moveLeft(fontRect.right() + spacing);
-    fontRect.setY(shift);
-    p->setFont(d->fontVersion);
-    p->drawText(fontRect, Qt::AlignLeft|Qt::AlignVCenter, QString(digikam_version_short));
-}
-
-QColor DPopupMenu::calcPixmapColor()
+QColor DPopupMenu::calcPixmapColor() const
 {
     QColor color;
-    QColor activeTitle   = QApplication::palette().color(QPalette::Active, QPalette::Background);
+    QColor activeTitle   = QApplication::palette().color(QPalette::Active,   QPalette::Background);
     QColor inactiveTitle = QApplication::palette().color(QPalette::Inactive, QPalette::Background);
 
     // figure out which color is most suitable for recoloring to
@@ -246,6 +174,82 @@ void DPopupMenu::paintEvent(QPaintEvent* e)
 
         renderSidebarGradient(&p);
     }
+}
+
+void DPopupMenu::renderSidebarGradient(QPainter* p)
+{
+    p->setRenderHint(QPainter::TextAntialiasing);
+    p->setPen(Qt::white);
+
+    int frameWidth = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, this);
+    kDebug() << frameWidth;
+    QRect drawRect = QStyle::visualRect(layoutDirection(), rect(),
+                                        QRect(frameWidth, frameWidth,
+                                        d->gradientWidth, height() - 2*frameWidth));
+    p->setClipRect(drawRect);
+
+    // ----------------------------------------
+
+    // draw gradient
+    QLinearGradient linearGrad;
+    linearGrad.setCoordinateMode(QGradient::ObjectBoundingMode);
+    linearGrad.setStart(0.0, 0.0);
+    linearGrad.setFinalStop(0.0, 1.0);
+    linearGrad.setColorAt(0, QColor(255, 255, 255, 25));
+    linearGrad.setColorAt(1, QColor(98, 98, 98));
+
+    // FIXME: this doesn't seem to work in 0.10.x versions, so I disable it for now
+    //    linearGrad.setColorAt(1, calcPixmapColor());
+
+    p->fillRect(drawRect, QBrush(linearGrad));
+
+    // ----------------------------------------
+
+    p->resetTransform();
+    p->translate(drawRect.bottomLeft());
+    p->rotate(-90.0);
+
+    // ----------------------------------------
+
+    const int    spacing = 8;
+    const int    margin  = 4;
+    QPixmap      appIcon;
+    QString      appName;
+    QFontMetrics fontMt(d->fontAppName);
+    QFontMetrics fontMt2(d->fontVersion);
+
+    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+    {
+        appIcon = SmallIcon("digikam", d->fontAppName.pixelSize());
+        appName = QString("digiKam");
+    }
+    else
+    {
+        appIcon = SmallIcon("showfoto", d->fontAppName.pixelSize());
+        appName = QString("showFoto");
+    }
+
+    QRect fontRect = QRect(appIcon.width() + spacing, 1, fontMt.width(appName), drawRect.width());
+    int   shift    = fontMt.ascent() - fontMt2.ascent();
+
+    // ----------------------------------------
+    // draw application icon.
+
+    p->drawPixmap(margin, 1, appIcon);
+
+    // ----------------------------------------
+    // draw app name.
+
+    p->setFont(d->fontAppName);
+    p->drawText(fontRect, Qt::AlignLeft|Qt::AlignVCenter, appName);
+
+    // ----------------------------------------
+    // draw version string.
+
+    fontRect.moveLeft(fontRect.right() + spacing);
+    fontRect.setY(shift);
+    p->setFont(d->fontVersion);
+    p->drawText(fontRect, Qt::AlignLeft|Qt::AlignVCenter, QString(digikam_version_short));
 }
 
 }  // namespace Digikam
