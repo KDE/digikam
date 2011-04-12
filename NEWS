@@ -119,4 +119,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 093 ==> 266086 : digiKam 2.0.0-beta2 crashed after closing it.
 094 ==> 265554 : Problem in colors between dgikam's theme and Gnome appearance.
 095 ==> 270553 : Import Wizard: Selecting "date" in File Renaming Options does not work.
-096 ==> 
+096 ==> 270728 : CMakeLists.txt:159 doesn't specify which target needs to link to QtScript library.
+097 ==>
