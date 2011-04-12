@@ -2730,7 +2730,7 @@ void DigikamApp::populateThemes()
     {
         d->splashScreen->message(i18n("Loading themes"));
     }
-    ThemeManager::instance()->setThemeMenuAction(new KSelectAction(i18n("&Themes"), this));
+    ThemeManager::instance()->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
     ThemeManager::instance()->registerThemeActions(this);
     ThemeManager::instance()->setCurrentTheme(AlbumSettings::instance()->getCurrentTheme());
 

@@ -59,6 +59,7 @@ extern "C"
 // KDE includes
 
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <kselectaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
@@ -461,7 +462,7 @@ void ShowFoto::setupUserArea()
 
 void ShowFoto::setupActions()
 {
-    Digikam::ThemeManager::instance()->setThemeMenuAction(new KSelectAction(i18n("&Themes"), this));
+    Digikam::ThemeManager::instance()->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
     setupStandardActions();
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)

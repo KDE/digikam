@@ -31,6 +31,7 @@
 #include <QApplication>
 #include <QPalette>
 #include <QColor>
+#include <QActionGroup>
 #include <QBitmap>
 #include <QPainter>
 #include <QPixmap>
@@ -39,18 +40,21 @@
 
 // KDE includes
 
+#include <kmenu.h>
+#include <kmessagebox.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcolorscheme.h>
 #include <kactioncollection.h>
 #include <kstandarddirs.h>
-#include <kselectaction.h>
+#include <kactionmenu.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>
 #include <kxmlguiwindow.h>
+#include <ktoolinvocation.h>
 
 namespace Digikam
 {
@@ -73,6 +77,7 @@ public:
 
     ThemeManagerPriv()
         : defaultThemeName(i18nc("default theme name", "Default")),
+          themeMenuActionGroup(0),
           themeMenuAction(0)
     {
     }
@@ -80,14 +85,15 @@ public:
     const QString          defaultThemeName;
     QMap<QString, QString> themeMap;            // map<theme name, theme config path>
 
-    KSelectAction*         themeMenuAction;
+    QActionGroup*          themeMenuActionGroup;
+    KActionMenu*           themeMenuAction;
 };
 
 ThemeManager::ThemeManager()
     : d(new ThemeManagerPriv)
 {
-    connect (KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-             this, SLOT(slotChangePalette()));
+    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+            this, SLOT(slotSettingsChanged()));
 }
 
 ThemeManager::~ThemeManager()
@@ -107,16 +113,23 @@ QString ThemeManager::defaultThemeName() const
 
 QString ThemeManager::currentThemeName() const
 {
-    if (!d->themeMenuAction) return defaultThemeName();
-    QString name = d->themeMenuAction->currentText();
-    return name.isEmpty() ? defaultThemeName() : name;
+    if (!d->themeMenuAction || !d->themeMenuActionGroup) return defaultThemeName();
+    QAction* action = d->themeMenuActionGroup->checkedAction();
+    return !action ? defaultThemeName() : action->text().remove("&");
 }
 
 void ThemeManager::setCurrentTheme(const QString& name)
 {
-    if (!d->themeMenuAction) return;
-    d->themeMenuAction->setCurrentAction(name);
-    slotChangePalette();
+    if (!d->themeMenuAction || !d->themeMenuActionGroup) return;
+    QList<QAction*> list = d->themeMenuActionGroup->actions();
+    foreach(QAction* action, list)
+    {
+        if (action->text().remove("&") == name)
+        {
+            action->setChecked(true);
+            slotChangePalette();
+        }
+    }
 }
 
 void ThemeManager::slotChangePalette()
@@ -178,7 +191,7 @@ void ThemeManager::slotChangePalette()
     emit signalThemeChanged();
 }
 
-void ThemeManager::setThemeMenuAction(KSelectAction* const action)
+void ThemeManager::setThemeMenuAction(KActionMenu* const action)
 {
     d->themeMenuAction = action;
     populateThemeMenu();
@@ -194,10 +207,16 @@ void ThemeManager::populateThemeMenu()
 {
     if (!d->themeMenuAction) return;
 
-    connect(d->themeMenuAction, SIGNAL(triggered(const QString&)),
+    QString theme(currentThemeName());
+
+    d->themeMenuAction->menu()->clear();
+    delete d->themeMenuActionGroup;
+
+    d->themeMenuActionGroup = new QActionGroup(d->themeMenuAction);
+    connect(d->themeMenuActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotChangePalette()));
 
-    KAction* action = new KAction(defaultThemeName(), d->themeMenuAction);
+    KAction* action = new KAction(defaultThemeName(), d->themeMenuActionGroup);
     action->setCheckable(true);
     d->themeMenuAction->addAction(action);
 
@@ -211,21 +230,46 @@ void ThemeManager::populateThemeMenu()
         QIcon icon              = createSchemePreviewIcon(config);
         KConfigGroup group(config, "General");
         const QString name      = group.readEntry("Name", info.baseName());
-        action                  = new KAction(name, d->themeMenuAction);
+        action                  = new KAction(name, d->themeMenuActionGroup);
         d->themeMap.insert(name, filename);
         action->setIcon(icon);
         action->setCheckable(true);
         d->themeMenuAction->addAction(action);
     }
     updateCurrentKDEdefaultThemePreview();
+    setCurrentTheme(theme);
+
+    d->themeMenuAction->addSeparator();
+    KAction* config = new KAction(i18n("Configuration..."), d->themeMenuAction);
+    config->setIcon(KIcon("preferences-desktop-theme"));
+    d->themeMenuAction->addAction(config);
+
+    connect(config, SIGNAL(triggered()),
+            this, SLOT(slotConfigColors()));
+}
+
+void ThemeManager::slotConfigColors()
+{
+    int ret = KToolInvocation::kdeinitExec("kcmshell4", QStringList() << "colors");
+    if (ret > 0)
+    {
+        KMessageBox::error(0, i18n("Cannot start Colors Settings panel from KDE Control Center. "
+                                   "Please check your system..."));
+    }
 }
 
 void ThemeManager::updateCurrentKDEdefaultThemePreview()
 {
-    QAction* action         = d->themeMenuAction->action(defaultThemeName());
-    KSharedConfigPtr config = KSharedConfig::openConfig(d->themeMap.value(currentKDEdefaultTheme()));
-    QIcon icon              = createSchemePreviewIcon(config);
-    action->setIcon(icon);
+    QList<QAction*> list = d->themeMenuActionGroup->actions();
+    foreach(QAction* action, list)
+    {
+        if (action->text().remove("&") == defaultThemeName())
+        {
+            KSharedConfigPtr config = KSharedConfig::openConfig(d->themeMap.value(currentKDEdefaultTheme()));
+            QIcon icon              = createSchemePreviewIcon(config);
+            action->setIcon(icon);
+        }
+    }
 }
 
 QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config)
@@ -273,6 +317,12 @@ QString ThemeManager::currentKDEdefaultTheme() const
     KSharedConfigPtr config = KSharedConfig::openConfig("kdeglobals");
     KConfigGroup group(config, "General");
     return group.readEntry("ColorScheme");
+}
+
+void ThemeManager::slotSettingsChanged()
+{
+    populateThemeMenu();
+    slotChangePalette();
 }
 
 }  // namespace Digikam

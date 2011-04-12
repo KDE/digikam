@@ -39,7 +39,7 @@
 #include "digikam_export.h"
 
 class KXmlGuiWindow;
-class KSelectAction;
+class KActionMenu;
 
 namespace Digikam
 {
@@ -60,7 +60,7 @@ public:
 
     QString defaultThemeName() const;
 
-    void    setThemeMenuAction(KSelectAction* const action);
+    void    setThemeMenuAction(KActionMenu* const action);
     void    registerThemeActions(KXmlGuiWindow* const kwin);
 
 Q_SIGNALS:
@@ -70,6 +70,8 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotChangePalette();
+    void slotConfigColors();
+    void slotSettingsChanged();
 
 private:
 
