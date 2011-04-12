@@ -58,16 +58,16 @@ namespace Digikam
 
 ItemViewImageDelegatePrivate::ItemViewImageDelegatePrivate()
 {
-    spacing   = 0;
-    thumbSize = 0;
+    spacing       = 0;
+    thumbSize     = 0;
 
     // painting constants
-    radius    = 3;
-    margin    = 5;
+    radius        = 3;
+    margin        = 5;
 
     makeStarPolygon();
 
-    ratingPixmaps   = QVector<QPixmap>(10);
+    ratingPixmaps = QVector<QPixmap>(10);
 }
 
 void ItemViewImageDelegatePrivate::init(ItemViewImageDelegate* _q)
@@ -562,13 +562,13 @@ void ItemViewImageDelegate::prepareBackground()
         d->regPixmap.fill(kapp->palette().color(QPalette::Base));
         QPainter p1(&d->regPixmap);
         p1.setPen(kapp->palette().color(QPalette::Midlight));
-        p1.drawRect(0, 0, d->rect.width(), d->rect.height());
+        p1.drawRect(0, 0, d->rect.width()-1, d->rect.height()-1);
 
         d->selPixmap = QPixmap(d->rect.width(), d->rect.height());
         d->selPixmap.fill(kapp->palette().color(QPalette::Highlight));
         QPainter p2(&d->selPixmap);
         p2.setPen(kapp->palette().color(QPalette::Midlight));
-        p2.drawRect(0, 0, d->rect.width(), d->rect.height());
+        p2.drawRect(0, 0, d->rect.width()-1, d->rect.height()-1);
     }
 }
 
