@@ -154,10 +154,6 @@ IF(Boost_FOUND)
     INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 ENDIF(Boost_FOUND)
 
-#---------------following code is to add the QtScript libraries-----------------------
-
-TARGET_LINK_LIBRARIES(${QT_QTSCRIPT_LIBRARY})
-
 #-------------------------------------------------------------------------------------
 
 MACRO_BOOL_TO_01(PGF_FOUND USE_EXT_LIBPGF)
