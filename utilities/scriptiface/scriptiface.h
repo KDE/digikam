@@ -29,12 +29,8 @@
 
 #include <kdialog.h>
 
-// Local includes
-
 namespace Digikam
 {
-
-class ScriptIfacePriv;
 
 class ScriptIface : public KDialog
 {

@@ -53,8 +53,8 @@ public:
     }
 
 
-    KTextEdit* edit;
-    QLabel*    label;
+    KTextEdit*     edit;
+    QLabel*        label;
     //create a new QScript Engine object
     QScriptEngine* engine;
 };
@@ -92,7 +92,6 @@ ScriptIface::ScriptIface(QWidget* parent)
     //the following function calls
     //importExtension() for each binding
     ImportQtBindings();
-
 }
 
 ScriptIface::~ScriptIface()
@@ -105,11 +104,13 @@ void ScriptIface::slotEvaluate()
     QString script      = d->edit->toPlainText();
     QScriptValue result = d->engine->evaluate(script);
     d->label->setText(result.toString());
-    /*if(d->label->text() == QString())
+/*
+    if(d->label->text() == QString())
     {
         d->label->setText("hello");
     }
-    else d->label->clear();*/
+    else d->label->clear();
+*/
 }
 
 void ScriptIface::ImportQtBindings()

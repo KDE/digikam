@@ -73,14 +73,14 @@ SetupScriptManager::SetupScriptManager(QWidget* parent)
     : QScrollArea(parent), d(new SetupScriptManagerPriv)
 {
     //first create a GroupBox
-    d->group = new QGroupBox(viewport());
+    d->group      = new QGroupBox(viewport());
     setWidget(d->group);
     setWidgetResizable(true);
 
     //create a vbox layout and set the layout to the GroupBox
     d->mainLayout = new QVBoxLayout;
     d->group->setLayout(d->mainLayout);
-    d->count = new int;
+    d->count      = new int;
 
     //read settings from a xml file
     readSettings();
@@ -109,17 +109,17 @@ void SetupScriptManager::readSettings()
 
     //The first entry into the scriptManager
     ScriptPluginType* plugin = new ScriptPluginType();
-    //plugin->createPlugin(name,path,mod);
-    plugin->createPlugin("Name","",false);
+    //plugin->createPlugin(name, path, mod);
+    plugin->createPlugin("Name", "", false);
     addEntry(plugin);
 
     //Second entry into the scriptManager
     ScriptPluginType* plugin2 = new ScriptPluginType();
-    plugin2->createPlugin("Plugin2","",false);
+    plugin2->createPlugin("Plugin2", "", false);
     addEntry(plugin2);
 
     ScriptPluginType* plugin3 = new ScriptPluginType();
-    plugin3->createPlugin("Plugin3","",false);
+    plugin3->createPlugin("Plugin3", "", false);
     addEntry(plugin3);
 
     d->mainLayout->setMargin(0);
@@ -133,15 +133,17 @@ void SetupScriptManager::addEntry(ScriptPluginType* plugin)
     QCheckBox* box             = new QCheckBox(plugin->name());
     QPushButton* btnDebug      = new QPushButton(i18n("Debug"));
     QPushButton* btnInfo       = new QPushButton(i18n("Info"));
+
     //add the widgets to a Horizontal layout whose parent is a GroupBox
     QHBoxLayout* pluginHLayout = new QHBoxLayout;
+
     //add the individual plugins to the horizontal layout
-    pluginHLayout->addWidget(box,Qt::AlignLeft);//the second argument is stretch
-    pluginHLayout->addWidget(btnDebug,0,Qt::AlignRight);
-    pluginHLayout->addWidget(btnInfo,0,Qt::AlignRight);
+    pluginHLayout->addWidget(box,         Qt::AlignLeft);//the second argument is stretch
+    pluginHLayout->addWidget(btnDebug, 0, Qt::AlignRight);
+    pluginHLayout->addWidget(btnInfo, 0,  Qt::AlignRight);
     pluginHLayout->setSpacing(0);
 
-    d->mainLayout->insertLayout(-1,pluginHLayout);
+    d->mainLayout->insertLayout(-1, pluginHLayout);
     d->count++;
     //the index is negative(-1) to add the layout at the end
 }
