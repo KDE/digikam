@@ -31,6 +31,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "setuptemplate.h"
 #include "template.h"
 
@@ -67,8 +68,11 @@ public:
         SlideshowPage,
         CameraPage,
         KipiPluginsPage,
-        ScriptManagerPage,
         MiscellaneousPage,
+
+#ifdef USE_SCRIPT_IFACE
+        ScriptManagerPage,
+#endif
 
         SetupPageEnumLast
     };

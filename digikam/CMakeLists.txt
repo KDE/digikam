@@ -71,7 +71,6 @@ ADD_DEPENDENCIES(digikamcore digikam-gitversion)
 TARGET_LINK_LIBRARIES(digikamcore
         ${QT_QT3SUPPORT_LIBRARY}
         ${QT_QTSQL_LIBRARY}
-        ${QT_QTSCRIPT_LIBRARY}
 
         ${KDE4_KDECORE_LIBS}
         ${KDE4_KIO_LIBS}
@@ -98,12 +97,16 @@ TARGET_LINK_LIBRARIES(digikamcore
         ${KMAP_LIBRARIES}
 )
 
+IF(USE_SCRIPT_IFACE)
+    TARGET_LINK_LIBRARIES(digikamcore ${QT_QTSCRIPT_LIBRARY})
+ENDIF(USE_SCRIPT_IFACE)
+
 IF(PGF_FOUND)
-   TARGET_LINK_LIBRARIES(digikamcore ${PGF_LIBRARIES})
+    TARGET_LINK_LIBRARIES(digikamcore ${PGF_LIBRARIES})
 ENDIF(PGF_FOUND)
 
 IF(CLAPACK_FOUND)
-   TARGET_LINK_LIBRARIES(digikamcore ${CLAPACK_LIBRARY})
+    TARGET_LINK_LIBRARIES(digikamcore ${CLAPACK_LIBRARY})
 ENDIF(CLAPACK_FOUND)
 
 IF(Q_WS_X11)
@@ -151,7 +154,6 @@ TARGET_LINK_LIBRARIES(digikamdatabase
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTSQL_LIBRARY}
-                      ${QT_QTSCRIPT_LIBRARY}
 
                       ${KDE4_KIO_LIBS}
                       ${KDE4_SOLID_LIBS}
@@ -162,8 +164,12 @@ TARGET_LINK_LIBRARIES(digikamdatabase
                       ${KMAP_LIBRARIES}
                      )
 
+IF(USE_SCRIPT_IFACE)
+    TARGET_LINK_LIBRARIES(digikamdatabase ${QT_QTSCRIPT_LIBRARY})
+ENDIF(USE_SCRIPT_IFACE)
+
 IF(PGF_FOUND)
-   TARGET_LINK_LIBRARIES(digikamdatabase ${PGF_LIBRARIES})
+    TARGET_LINK_LIBRARIES(digikamdatabase ${PGF_LIBRARIES})
 ENDIF(PGF_FOUND)
 
 SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 2.0.0 SOVERSION 2)
@@ -184,7 +190,6 @@ IF (NEPOMUK_FOUND)
 
     TARGET_LINK_LIBRARIES(digikamnepomukservice
                           ${QT_QTSQL_LIBRARY}
-                          ${QT_QTSCRIPT_LIBRARY}
 
                           ${KDE4_KIO_LIBS}
                           ${KDE4_SOLID_LIBS}
@@ -201,12 +206,15 @@ IF (NEPOMUK_FOUND)
                           digikamdatabase
                          )
 
-    INSTALL(
-    FILES ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/nepomuk/digikamnepomukservice.desktop
-    DESTINATION ${SERVICES_INSTALL_DIR})
-    INSTALL(
-    TARGETS digikamnepomukservice
-    DESTINATION ${PLUGIN_INSTALL_DIR})
+    IF(USE_SCRIPT_IFACE)
+        TARGET_LINK_LIBRARIES(digikamnepomukservice ${QT_QTSCRIPT_LIBRARY})
+    ENDIF(USE_SCRIPT_IFACE)
+
+    INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/nepomuk/digikamnepomukservice.desktop
+            DESTINATION ${SERVICES_INSTALL_DIR})
+
+    INSTALL(TARGETS digikamnepomukservice
+            DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ENDIF (NEPOMUK_FOUND)
 
@@ -231,10 +239,13 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libfirstrun_SRCS}
                  ${libtemplate_SRCS}
                  ${libdatabaseui_SRCS}
-                 ${libscriptiface_SRCS}
                  ${libfacedetection_SRCS}
                  main/main.cpp
 )
+
+IF(USE_SCRIPT_IFACE)
+    SET(digikam_SRCS ${digikam_SRCS} ${libscriptiface_SRCS})
+ENDIF(USE_SCRIPT_IFACE)
 
 QT4_ADD_DBUS_ADAPTOR(digikam_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
 
@@ -243,31 +254,36 @@ KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
 KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 
 TARGET_LINK_LIBRARIES(digikam
+        ${QT_QTSQL_LIBRARY}
+        ${QT_QT3SUPPORT_LIBRARY}
+
         ${KDE4_KPARTS_LIBS}
         ${KDE4_PHONON_LIBS}
         ${KDE4_KHTML_LIBS}
         ${KDE4_KUTILS_LIBS}
         ${KDE4_KNOTIFYCONFIG_LIBRARY}
         ${KDE4_SOLID_LIBS}
+
         ${KFACE_LIBRARIES}
         ${KMAP_LIBRARIES}
         ${KIPI_LIBRARIES}
         ${KEXIV2_LIBRARIES}
         ${KDCRAW_LIBRARIES}
-        ${QT_QTSQL_LIBRARY}
-        ${QT_QTSCRIPT_LIBRARY}
-        ${QT_QT3SUPPORT_LIBRARY}
+
         ${STRIGI_LIBRARIES}
         ${LCMS_LIBRARIES}
+        ${GPHOTO2_LIBRARIES}
 
         digikamcore
         digikamdatabase
         advancedrename
         queuemanager
         cameragui
-
-        ${GPHOTO2_LIBRARIES}
 )
+
+IF(USE_SCRIPT_IFACE)
+    TARGET_LINK_LIBRARIES(digikam ${QT_QTSCRIPT_LIBRARY})
+ENDIF(USE_SCRIPT_IFACE)
 
 IF(KDEPIMLIBS_FOUND)
   TARGET_LINK_LIBRARIES(digikam ${KDE4_KABC_LIBS})

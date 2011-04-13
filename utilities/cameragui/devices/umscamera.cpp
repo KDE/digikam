@@ -22,11 +22,6 @@
  *
  * ============================================================ */
 
-// To disable warnings under MSVC2008 about POSIX methods().
-#ifdef _MSC_VER
-#pragma warning(disable : 4996)
-#endif
-
 #include "umscamera.h"
 
 // C ANSI includes
@@ -66,6 +61,7 @@ extern "C"
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dimg.h"
 #include "dmetadata.h"
 #include "imagescanner.h"

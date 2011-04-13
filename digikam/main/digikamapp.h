@@ -43,6 +43,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "digikam_export.h"
 
 class KAction;
@@ -216,8 +217,11 @@ private Q_SLOTS:
     void slotImportAddImages();
     void slotImportAddFolders();
     void slotDIOResult(KJob*);
-    void slotScriptConsole();
     void slotThemeChanged();
+
+#ifdef USE_SCRIPT_IFACE
+    void slotScriptConsole();
+#endif
 
 private:
 

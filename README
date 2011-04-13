@@ -112,8 +112,8 @@ computer to compile digiKam.
 
 CMake compilation option de customized for digiKam:
 
-Use CMake "-DENABLE_THEMEDESIGNER=yes" flag to compile digiKam theme designer (disabled by default).
-Use CMake "-DENABLE_THUMB_DB=no"       flag to compile digiKam without thumbnail database support (enabled by default).
+Use CMake "-DENABLE_SCRIPTIFACE=yes" flag to compile digiKam with experimental scripting interface (disabled by default).
+Use CMake "-DENABLE_THUMB_DB=no"     flag to compile digiKam without thumbnail database support    (enabled by default).
 
 Video thumbs support under Linux : please install "mplayerthumbs" package.
 

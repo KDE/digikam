@@ -58,9 +58,12 @@
 #include "setupslideshow.h"
 #include "setuptooltip.h"
 #include "setupdatabase.h"
-#include "setupscriptmanager.h"
 #include "setupfacetags.h"
 #include "setupversioning.h"
+
+#ifdef USE_SCRIPT_IFACE
+#include "setupscriptmanager.h"
+#endif
 
 namespace Digikam
 {
@@ -87,7 +90,9 @@ public:
         page_camera(0),
         page_misc(0),
         page_plugins(0),
+#ifdef USE_SCRIPT_IFACE
         page_scriptmanager(0),
+#endif
         page_facetags(0),
         page_versioning(0),
         databasePage(0),
@@ -108,7 +113,9 @@ public:
         //faceTagsPage(0),
         miscPage(0),
         pluginsPage(0),
+#ifdef USE_SCRIPT_IFACE
         scriptManagerPage(0),
+#endif
         versioningPage(0)
     {
     }
@@ -130,7 +137,9 @@ public:
     KPageWidgetItem*    page_camera;
     KPageWidgetItem*    page_misc;
     KPageWidgetItem*    page_plugins;
+#ifdef USE_SCRIPT_IFACE
     KPageWidgetItem*    page_scriptmanager;
+#endif
     KPageWidgetItem*    page_facetags;
     KPageWidgetItem*    page_versioning;
 
@@ -151,7 +160,9 @@ public:
     SetupCamera*        cameraPage;
     SetupMisc*          miscPage;
     SetupPlugins*       pluginsPage;
+#ifdef USE_SCRIPT_IFACE
     SetupScriptManager* scriptManagerPage;
+#endif
     //SetupFaceTags*      faceTagsPage;
     SetupVersioning*    versioningPage;
 
@@ -280,11 +291,13 @@ Setup::Setup(QWidget* parent)
                                     "<i>Set which plugins will be accessible from the main interface</i></qt>"));
     d->page_plugins->setIcon(KIcon("kipi"));
 
+#ifdef USE_SCRIPT_IFACE
     d->scriptManagerPage  = new SetupScriptManager();
     d->page_scriptmanager = addPage(d->scriptManagerPage , i18n("Script Manager"));
     d->page_scriptmanager->setHeader(i18n("<qt>Script Manager<br/>"
                                           "<i>Add/Remove and Manage Digikam Scripts</i></qt>"));
     d->page_scriptmanager->setIcon(KIcon("application-x-shellscript"));
+#endif
 
     d->miscPage  = new SetupMisc();
     d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
@@ -450,9 +463,12 @@ void Setup::slotOkClicked()
     d->iccPage->applySettings();
     d->miscPage->applySettings();
     d->pluginsPage->applyPlugins();
-    //     d->scriptManagerPage->applySettings();
     //d->faceTagsPage->applySettings();
     d->versioningPage->applySettings();
+
+#ifdef USE_SCRIPT_IFACE
+    d->scriptManagerPage->applySettings();
+#endif
 
     AlbumSettings::instance()->emitSetupChanged();
 
@@ -581,11 +597,6 @@ Setup::Page Setup::activePageIndex()
         return CameraPage;
     }
 
-    if (cur == d->page_scriptmanager)
-    {
-        return ScriptManagerPage;
-    }
-
     if (cur == d->page_facetags)
     {
         return FaceTagsPage;
@@ -600,6 +611,13 @@ Setup::Page Setup::activePageIndex()
     {
         return VersioningPage;
     }
+
+#ifdef USE_SCRIPT_IFACE
+    if (cur == d->page_scriptmanager)
+    {
+        return ScriptManagerPage;
+    }
+#endif
 
     return DatabasePage;
 }
@@ -640,14 +658,16 @@ KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
             return page_plugins;
         case Setup::CameraPage:
             return page_camera;
-        case Setup::ScriptManagerPage:
-            return page_scriptmanager;
         case Setup::FaceTagsPage:
             return page_facetags;
         case Setup::MiscellaneousPage:
             return page_misc;
         case Setup::VersioningPage:
             return page_versioning;
+#ifdef USE_SCRIPT_IFACE
+        case Setup::ScriptManagerPage:
+            return page_scriptmanager;
+#endif
         default:
             return 0;
     }

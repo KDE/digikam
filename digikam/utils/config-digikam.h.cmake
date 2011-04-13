@@ -6,7 +6,7 @@
  * Date        : 2009-08-03
  * Description : digiKam config header
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,6 +48,9 @@
 /* Define to 1 if thumbnails database is used */
 #cmakedefine USE_THUMBS_DB 1
 
+/* Define to 1 if script interface is used */
+#cmakedefine USE_SCRIPT_IFACE 1
+
 /* Define to 1 if you have Nepomuk shared libraries installed */
 #cmakedefine HAVE_NEPOMUK 1
 
@@ -57,7 +60,12 @@
   Disable indeep warnings from Visual Studio C++ 2008 (9.0)
 */
 #if defined(_MSC_VER)
-# pragma warning(disable : 4661)
+// To disable warnings about no suitable definition provided for explicit template instantiation request.
+#pragma warning(disable : 4661)
+// To disable warnings about deprecated POSIX methods().
+#pragma warning(disable : 4996)
+// To disable warnings about qualifier applied to reference type ignored.
+#pragma warning(disable : 4181)
 #endif
 
 #endif /* CONFIG_DIGIKAM_H */

@@ -24,10 +24,8 @@
 #ifndef IMAGEHISTORYGRAPH_BOOST_H
 #define IMAGEHISTORYGRAPH_BOOST_H
 
-// To disable warnings under MSVC2008.
-#ifdef _MSC_VER
-#pragma warning(disable : 4181)
-#endif
+// To include pragma directives for MSVC
+#include "config-digikam.h"
 
 // boost includes
 

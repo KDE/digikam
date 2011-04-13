@@ -21,11 +21,6 @@
  *
  * ============================================================ */
 
-// To disable warnings under MSVC2008 about POSIX methods().
-#ifdef _MSC_VER
-#pragma warning(disable : 4996)
-#endif
-
 #include "actionthread.moc"
 
 // C ANSI includes
@@ -50,6 +45,7 @@ extern "C"
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dimg.h"
 
 namespace Digikam

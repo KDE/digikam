@@ -21,11 +21,6 @@
  *
  * ============================================================ */
 
-// To disable warnings under MSVC2008 about POSIX methods().
-#ifdef _MSC_VER
-#pragma warning(disable : 4996)
-#endif
-
 #include "databasewatch.h"
 #include "databasewatchadaptor.h"
 #include "moc_databasewatch.cpp"
@@ -34,7 +29,6 @@
 // C Ansi includes
 
 #include <unistd.h>
-
 
 // Qt includes
 
@@ -45,6 +39,7 @@
 // Local includes
 
 #include "collectionmanager.h"
+#include "config-digikam.h"
 
 Digikam_DatabaseWatchAdaptor::Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch* watch)
     : QDBusAbstractAdaptor(watch)

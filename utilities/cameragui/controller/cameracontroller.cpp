@@ -23,11 +23,6 @@
  *
  * ============================================================ */
 
-// To disable warnings under MSVC2008 about POSIX methods().
-#ifdef _MSC_VER
-#pragma warning(disable : 4996)
-#endif
-
 #include "cameracontroller.moc"
 
 // C ANSI includes
@@ -65,6 +60,7 @@ extern "C"
 
 // Local includes
 
+#include "config-digikam.h"
 #include "templatemanager.h"
 #include "thumbnailsize.h"
 #include "imagewindow.h"

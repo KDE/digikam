@@ -102,7 +102,6 @@
 
 // Local includes
 
-#include "config-digikam.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumselectdialog.h"
@@ -139,12 +138,15 @@
 #include "thumbnailsize.h"
 #include "dmetadata.h"
 #include "uifilevalidator.h"
-#include "scriptiface.h"
 #include "batchfacedetector.h"
 #include "tagscache.h"
 #include "tagsactionmngr.h"
 #include "databaseserverstarter.h"
 #include "metadatasettings.h"
+
+#ifdef USE_SCRIPT_IFACE
+#include "scriptiface.h"
+#endif
 
 using KIO::Job;
 using KIO::UDSEntryList;
@@ -844,10 +846,12 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+#ifdef USE_SCRIPT_IFACE
     d->scriptConsoleAction = new KAction(KIcon("application-x-shellscript"), i18n("Script Console"), this);
     d->scriptConsoleAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
     connect(d->scriptConsoleAction, SIGNAL(triggered()), this, SLOT(slotScriptConsole()));
     actionCollection()->addAction("script_console", d->scriptConsoleAction);
+#endif
 
     // -----------------------------------------------------------
 
@@ -3250,15 +3254,17 @@ void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
     }
 }
 
+void DigikamApp::slotComponentsInfo()
+{
+    showDigikamComponentsInfo();
+}
+
+#ifdef USE_SCRIPT_IFACE
 void DigikamApp::slotScriptConsole()
 {
     ScriptIface* w = new ScriptIface();
     w->show();
 }
-
-void DigikamApp::slotComponentsInfo()
-{
-    showDigikamComponentsInfo();
-}
+#endif
 
 }  // namespace Digikam

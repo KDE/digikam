@@ -4,6 +4,7 @@ PROJECT(digikam)
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: digikam")
 
+OPTION(ENABLE_SCRIPTIFACE "Build digiKam with experimental scripting support (default=OFF)" OFF)
 OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
 
 # ==================================================================================================
@@ -235,17 +236,18 @@ MACRO_BOOL_TO_01(LENSFUN_FOUND USE_EXT_LIBLENSFUN)
 MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
 
+MACRO_BOOL_TO_01(ENABLE_SCRIPTIFACE script)
 MACRO_BOOL_TO_01(ENABLE_THUMBS_DB USE_THUMBS_DB)
 
 # Win32 compilation with Nepomuk is broken. It's temporally disabled.
 IF (NOT WIN32)
     IF (${KDE_VERSION} VERSION_GREATER "4.3.99")
     MACRO_OPTIONAL_FIND_PACKAGE(Nepomuk)
-    macro_log_feature(NEPOMUK_FOUND "Nepomuk" "The Nepomuk libraries"
+    MACRO_LOG_FEATURE(NEPOMUK_FOUND "Nepomuk" "The Nepomuk libraries"
               "http://www.kde.org" FALSE "" "Nepomuk extends the search and tagging")
 
     MACRO_OPTIONAL_FIND_PACKAGE(SharedDesktopOntologies 0.2)
-    macro_log_feature(SHAREDDESKTOPONTOLOGIES_FOUND "Shared desktop ontologies" "Desktop ontologies"
+    MACRO_LOG_FEATURE(SHAREDDESKTOPONTOLOGIES_FOUND "Shared desktop ontologies" "Desktop ontologies"
               "http://oscaf.sourceforge.net" TRUE "0.2" "Ontologies necessary for the Nepomuk semantic desktop.")
 
     IF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
@@ -486,11 +488,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${KMAP_INCLUDE_DIR}
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
-                        ${QT_QTSCRIPT_INCLUDE_DIR}                #to include the QtScript include directories
                         ${GPHOTO2_INCLUDE_DIRS}
                         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
                         ${CMAKE_CURRENT_BINARY_DIR}/digikam
     )
+
+    IF(USE_SCRIPT_IFACE)
+        INCLUDE_DIRECTORIES(${QT_QTSCRIPT_INCLUDE_DIR})
+    ENDIF(USE_SCRIPT_IFACE)
 
     IF(NEPOMUK_FOUND)
         INCLUDE_DIRECTORIES(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDE_DIR})
@@ -915,9 +920,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/xmpwidget.cpp
        )
 
-    SET(libscriptiface_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/scriptiface.cpp
-       )
+    IF(USE_SCRIPT_IFACE)
+
+        SET(libscriptiface_SRCS
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/scriptiface.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/scriptplugintype.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/setupscriptmanager.cpp
+           )
+
+    ENDIF(USE_SCRIPT_IFACE)
 
     SET(libslideshow_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/toolbar.cpp
@@ -1036,10 +1047,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameratype.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdatabase.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupscriptmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupfacetags.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupversioning.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/scriptplugintype.cpp
        )
 
     SET(libkipiiface_SRCS

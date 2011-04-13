@@ -51,6 +51,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "cameralist.h"
@@ -156,7 +157,9 @@ public:
         slideShowAllAction(0),
         slideShowSelectionAction(0),
         slideShowRecursiveAction(0),
+#ifdef USE_SCRIPT_IFACE
         scriptConsoleAction(0),
+#endif
         libsInfoAction(0),
         dbStatAction(0),
         kipiHelpAction(0),
@@ -293,7 +296,10 @@ public:
     KAction*                            slideShowAllAction;
     KAction*                            slideShowSelectionAction;
     KAction*                            slideShowRecursiveAction;
+
+#ifdef USE_SCRIPT_IFACE
     KAction*                            scriptConsoleAction;
+#endif
 
     // Application Actions
     KAction*                            libsInfoAction;

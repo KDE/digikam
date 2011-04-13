@@ -25,11 +25,6 @@
  *
  * ============================================================ */
 
-// To disable warnings under MSVC2008 about POSIX methods().
-#ifdef _MSC_VER
-#pragma warning(disable : 4996)
-#endif
-
 #define XMD_H
 
 /*
@@ -72,6 +67,7 @@ extern "C"
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dmetadata.h"
 #include "transupp.h"
 
