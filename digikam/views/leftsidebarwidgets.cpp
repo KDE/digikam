@@ -1107,13 +1107,11 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
 {
     setObjectName("People Sidebar");
 
-    d->tagModel = model;
+    d->tagModel                 = model;
     d->searchModificationHelper = searchModificationHelper;
-
-    QVBoxLayout* layout = new QVBoxLayout;
-    QHBoxLayout* hlay = new QHBoxLayout;
-
-    d->tagFolderView = new TagFolderView(this, model);
+    QVBoxLayout* layout         = new QVBoxLayout;
+    QHBoxLayout* hlay           = new QHBoxLayout;
+    d->tagFolderView            = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
@@ -1121,22 +1119,22 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
     d->tagFolderView->filteredModel()->listOnlyTagsWithProperty("person");
     d->tagFolderView->filteredModel()->setFilterBehavior(AlbumFilterModel::StrictFiltering);
 
-    d->tagSearchBar  = new SearchTextBar(this, "DigikamViewPeopleSearchBar");
+    d->tagSearchBar   = new SearchTextBar(this, "DigikamViewPeopleSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(d->tagFolderView->filteredModel(),
                               AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
 
-    d->rescanButton = new QPushButton;
-    d->rescanButton->setText("Scan collection for faces");
+    d->rescanButton   = new QPushButton;
+    d->rescanButton->setText(i18n("Scan collection for faces"));
 
     QString s("user-identity");
     KIcon* icon       = new KIcon(s);
     QPixmap personPix = icon->pixmap(QSize(48, 48));
-    d->personIcon = new QLabel;
+    d->personIcon     = new QLabel;
     d->personIcon->setPixmap(personPix);
 
-    d->textLabel = new QLabel("People Tags");
+    d->textLabel      = new QLabel(i18n("People Tags"));
 
     hlay->addWidget(d->personIcon);
     hlay->addWidget(d->textLabel);
