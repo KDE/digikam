@@ -7,6 +7,8 @@ QtScript interface for digiKam is a work taken up as a Part of Season of KDE.
 
 ********************* README *******************************************************
 
+To enable digiKam script interface, please use CMake option "-DENABLE_SCRIPTIFACE=ON"
+
 QtScript is a module added to the Qt API from version 4.3 onwards.
 It is available to all applications which use Qt internally(KDE applications).
 
