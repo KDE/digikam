@@ -69,7 +69,8 @@ public:
         removeAlphaChannel  = true;
         onlyLargeThumbnails = false;
 
-        digiKamFingerPrint  = i18n("Digikam Thumbnail Generator");
+        // Used internaly as PNG metadata. Do not use i18n.
+        digiKamFingerPrint  = QString("Digikam Thumbnail Generator");
 
         fastRawSettings.optimizeTimeLoading();
         fastRawSettings.rawPrm.halfSizeColorImage = true;
