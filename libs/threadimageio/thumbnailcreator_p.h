@@ -29,6 +29,7 @@
 // Local includes
 
 #include "dmetadata.h"
+#include <KLocale>
 
 namespace Digikam
 {
@@ -68,7 +69,7 @@ public:
         removeAlphaChannel  = true;
         onlyLargeThumbnails = false;
 
-        digiKamFingerPrint  = QString("Digikam Thumbnail Generator");
+        digiKamFingerPrint  = i18n("Digikam Thumbnail Generator");
 
         fastRawSettings.optimizeTimeLoading();
         fastRawSettings.rawPrm.halfSizeColorImage = true;
