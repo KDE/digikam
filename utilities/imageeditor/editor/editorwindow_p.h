@@ -301,7 +301,7 @@ public:
         : KCategorizedView(parent)
     {
         m_horizontalScrollAnimation = new QPropertyAnimation(horizontalScrollBar(), "value", this);
-        m_verticalScrollAnimation   = new QPropertyAnimation(verticalScrollBar(), "value", this);
+        m_verticalScrollAnimation   = new QPropertyAnimation(verticalScrollBar(),   "value", this);
     }
 
     void setupIconMode()
@@ -311,7 +311,7 @@ public:
 #if KDE_IS_VERSION(4,5,0)
         setCategoryDrawer(new KCategoryDrawerV3(this)); // deprecated, but needed for KDE 4.4 compatibility
 #else
-        setCategoryDrawer(new KCategoryDrawerV2); // deprecated, but needed for KDE 4.4 compatibility
+        setCategoryDrawer(new KCategoryDrawerV2);       // deprecated, but needed for KDE 4.4 compatibility
 #endif
         setSelectionMode( QAbstractItemView::SingleSelection );
 
@@ -333,7 +333,7 @@ public:
         for (int i = 0; i < model()->rowCount(); ++i)
         {
             const QModelIndex index = model()->index(i, 0);
-            const QSize size = sizeHintForIndex( index );
+            const QSize size        = sizeHintForIndex(index);
 
             if (size.width() > maxSize)
             {
@@ -401,8 +401,8 @@ protected:
     void mouseMoveEvent(QMouseEvent* e)
     {
         KCategorizedView::mouseMoveEvent(e);
-        autoScroll(float(e->pos().x()) / viewport()->width(), horizontalScrollBar(), m_horizontalScrollAnimation);
-        autoScroll(float(e->pos().y()) / viewport()->height(), verticalScrollBar(), m_verticalScrollAnimation);
+        autoScroll(float(e->pos().x()) / viewport()->width(),  horizontalScrollBar(), m_horizontalScrollAnimation);
+        autoScroll(float(e->pos().y()) / viewport()->height(), verticalScrollBar(),   m_verticalScrollAnimation);
     }
 
     void leaveEvent(QEvent* e)
@@ -413,7 +413,7 @@ protected:
     }
 
 protected:
-  
+
     QPropertyAnimation* m_verticalScrollAnimation;
     QPropertyAnimation* m_horizontalScrollAnimation;
 };

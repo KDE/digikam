@@ -3000,6 +3000,10 @@ void EditorWindow::setupSelectToolsAction()
     d->selectToolsActionView->setMinimumSize(QSize(400, 400));
     m_selectToolsAction->addAction(viewAction);
     m_selectToolsAction->setVisible(true);
+
+    connect(d->selectToolsActionView, SIGNAL(activated(const QModelIndex&)),
+            m_selectToolsAction->menu(), SLOT(hide()));
+
     connect(m_selectToolsAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotSelectToolsMenuAboutToShow()));
 }
@@ -3008,8 +3012,7 @@ void EditorWindow::slotSelectToolsMenuAboutToShow()
 {
     // adjust to window size
     QSize s = size();
-    s       *= 2;
-    s       /= 3;
+    s       /= 2;
     d->selectToolsActionView->setMinimumSize(s);
 }
 
