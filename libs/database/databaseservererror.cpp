@@ -61,7 +61,7 @@ const DatabaseServerError& DatabaseServerError::operator>>(QDBusArgument& argume
     return *this;
 }
 
-int DatabaseServerError::getErrorType()
+int DatabaseServerError::getErrorType() const
 {
     return m_ErrorType;
 }
@@ -71,7 +71,7 @@ void DatabaseServerError::setErrorType(DatabaseServerErrorEnum errorType)
     m_ErrorType = errorType;
 }
 
-QString DatabaseServerError::getErrorText()
+QString DatabaseServerError::getErrorText() const
 {
     return m_ErrorText;
 }

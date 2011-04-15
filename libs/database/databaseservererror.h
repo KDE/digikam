@@ -66,9 +66,9 @@ public:
     // Retrieve the DatabaseServerError data from the D-BUS argument
     const DatabaseServerError& operator>>(QDBusArgument& argument) const;
 
-    int                      getErrorType();
+    int                      getErrorType() const;
     void                     setErrorType(DatabaseServerErrorEnum errorType);
-    QString                  getErrorText();
+    QString                  getErrorText() const;
     void                     setErrorText(const QString& errorText);
 
 
