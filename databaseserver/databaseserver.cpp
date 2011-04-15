@@ -341,6 +341,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         str                 += i18n("<p>Arguments: %1</p>", argumentStr);
         str                 += i18n("<p>Process error: %1</p>", d->databaseProcess->errorString());
         kDebug() << str;
+	delete d->databaseProcess;
+	d->databaseProcess = 0;
         return DatabaseServerError(DatabaseServerError::StartError, str);
     }
 
