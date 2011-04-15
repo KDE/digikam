@@ -173,7 +173,7 @@ public:
      */
 
     ItemCopyMoveHint();
-    ItemCopyMoveHint(QList<qlonglong> srcIds, int dstAlbumRootId, int albumId, QStringList dstNames);
+    ItemCopyMoveHint(const QList<qlonglong>& srcIds, int dstAlbumRootId, int albumId, const QStringList& dstNames);
 
     QList<qlonglong> srcIds() const;
     bool isSrcId(qlonglong id) const;

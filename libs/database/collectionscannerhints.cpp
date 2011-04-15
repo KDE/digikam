@@ -175,7 +175,7 @@ ItemCopyMoveHint::ItemCopyMoveHint()
 {
 }
 
-ItemCopyMoveHint::ItemCopyMoveHint(QList<qlonglong> srcIds, int dstItemRootId, int dstAlbumId, QStringList dstNames)
+ItemCopyMoveHint::ItemCopyMoveHint(const QList<qlonglong>& srcIds, int dstItemRootId, int dstAlbumId, const QStringList& dstNames)
     : m_srcIds(srcIds),
       m_dst(dstItemRootId, dstAlbumId),
       m_dstNames(dstNames)
