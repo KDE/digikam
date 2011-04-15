@@ -229,7 +229,7 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
     emit finished(DatabaseCopyManager::success, QString());
 }
 
-bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, QString fromActionName, DatabaseBackend& toDBbackend, QString toActionName)
+bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QString& fromActionName, DatabaseBackend& toDBbackend, const QString& toActionName)
 {
     kDebug(50003) << "Trying to copy contents from DB with ActionName: [" << fromActionName
                   << "] to DB with ActionName [" << toActionName << "]";

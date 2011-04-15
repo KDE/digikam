@@ -69,7 +69,7 @@ public Q_SLOTS:
 private:
 
     bool isStopProcessing;
-    bool copyTable(DatabaseBackend& fromDBbackend, QString fromActionName, DatabaseBackend& toDBbackend, QString toActionName);
+    bool copyTable(DatabaseBackend& fromDBbackend, const QString& fromActionName, DatabaseBackend& toDBbackend, const QString &toActionName);
     void handleClosing(bool isstopThread, DatabaseBackend& fromDBbackend, DatabaseBackend& toDBbackend);
 };
 
