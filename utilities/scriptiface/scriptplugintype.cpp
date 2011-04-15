@@ -38,7 +38,7 @@ public:
         modified = false;
     }
 
-    ScriptPluginTypePriv(QString& pname,QString& ppath,bool pmod)
+    ScriptPluginTypePriv(const QString& pname,const QString& ppath,bool pmod)
     {
         name     = pname;
         path     = ppath;
