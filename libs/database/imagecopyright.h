@@ -85,12 +85,12 @@ public:
      *  included. If there are more than one item in this array the first one should be considered as
      *  the IPTC Core Creator value.&rdquo;
      */
-    QStringList creator();
-    QStringList author()
+    QStringList creator() const;
+    QStringList author() const
     {
         return creator();
     }
-    QStringList byLine()
+    QStringList byLine() const
     {
         return creator();
     }
@@ -118,8 +118,8 @@ public:
      *  This is photoshop:Credit in XMP
      *  &ldquo;Identifies the provider of the news object, who is not necessarily the owner/creator.&rdquo;
      */
-    QString provider();
-    QString credit()
+    QString provider() const;
+    QString credit() const
     {
         return provider();
     }
@@ -207,12 +207,12 @@ public:
      *    sort of a qualifier the Creator element has to be filled in as mandatory prerequisite for
      *    using Creator's Jobtitle.&rdquo;
      */
-    QString creatorJobTitle();
-    QString authorsPosition()
+    QString creatorJobTitle() const;
+    QString authorsPosition() const
     {
         return creatorJobTitle();
     }
-    QString byLineTitle()
+    QString byLineTitle() const 
     {
         return creatorJobTitle();
     }
@@ -270,9 +270,9 @@ public:
 
 protected:
 
-    CopyrightInfo copyrightInfo(const QString& property);
-    QList<CopyrightInfo> copyrightInfos(const QString& property);
-    QString readSimpleProperty(const QString& property);
+    CopyrightInfo copyrightInfo(const QString& property) const;
+    QList<CopyrightInfo> copyrightInfos(const QString& property) const;
+    QString readSimpleProperty(const QString& property) const;
     void    setSimpleProperty(const QString& property, const QString& value);
     QString readLanguageProperty(const QString& property, const QString& languageCode);
     KExiv2Iface::KExiv2::AltLangMap readLanguageProperties(const QString& property);

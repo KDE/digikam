@@ -118,7 +118,7 @@ void ImageCopyright::replaceFrom(const ImageCopyright& source)
     }
 }
 
-QStringList ImageCopyright::creator()
+QStringList ImageCopyright::creator() const
 {
     QList<CopyrightInfo> infos = copyrightInfos(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
     QStringList list;
@@ -151,7 +151,7 @@ void ImageCopyright::removeCreators()
     removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
 }
 
-QString ImageCopyright::provider()
+QString ImageCopyright::provider() const
 {
     return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider));
 }
@@ -221,7 +221,7 @@ void ImageCopyright::removeSource()
     removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource));
 }
 
-QString ImageCopyright::creatorJobTitle()
+QString ImageCopyright::creatorJobTitle() const
 {
     return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle));
 }
@@ -348,7 +348,7 @@ void ImageCopyright::removeAll()
     removeContactInfo();
 }
 
-CopyrightInfo ImageCopyright::copyrightInfo(const QString& property)
+CopyrightInfo ImageCopyright::copyrightInfo(const QString& property) const
 {
     if (m_cache)
     {
@@ -373,7 +373,7 @@ CopyrightInfo ImageCopyright::copyrightInfo(const QString& property)
     return CopyrightInfo();
 }
 
-QList<CopyrightInfo> ImageCopyright::copyrightInfos(const QString& property)
+QList<CopyrightInfo> ImageCopyright::copyrightInfos(const QString& property) const
 {
     if (m_cache)
     {
@@ -393,7 +393,7 @@ QList<CopyrightInfo> ImageCopyright::copyrightInfos(const QString& property)
     }
 }
 
-QString ImageCopyright::readSimpleProperty(const QString& property)
+QString ImageCopyright::readSimpleProperty(const QString& property) const
 {
     return copyrightInfo(property).value;
 }
