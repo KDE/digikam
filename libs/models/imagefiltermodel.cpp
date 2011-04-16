@@ -133,6 +133,16 @@ QModelIndex ImageSortFilterModel::mapFromSourceImageModel(const QModelIndex& alb
     return mapFromSource(albummodel_index);
 }
 
+
+QModelIndex ImageSortFilterModel::mapFromDirectSourceToSourceImageModel(const QModelIndex& sourceModel_index) const
+{
+    if (m_chainedModel)
+    {
+        return m_chainedModel->mapToSourceImageModel(sourceModel_index);
+    }
+    return sourceModel_index;
+}
+
 // -------------- Convenience mappers -------------------------------------------------------------------
 
 QList<QModelIndex> ImageSortFilterModel::mapListToSource(const QList<QModelIndex>& indexes) const
@@ -1199,7 +1209,59 @@ NoDuplicatesImageFilterModel::NoDuplicatesImageFilterModel(QObject* parent)
 bool NoDuplicatesImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
     QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
-    return index.data(ImageModel::ExtraDataDuplicateCount).toInt() == 0;
+    if (index.data(ImageModel::ExtraDataDuplicateCount).toInt() <= 1)
+    {
+        return true;
+    }
+
+    QModelIndex previousIndex = sourceModel()->index(source_row - 1, 0, source_parent);
+    if (!previousIndex.isValid())
+    {
+        return true;
+    }
+
+    if (sourceImageModel()->imageId(mapFromDirectSourceToSourceImageModel(index))
+        == sourceImageModel()->imageId(mapFromDirectSourceToSourceImageModel(previousIndex)))
+    {
+        return false;
+    }
+    return true;
 }
+
+/*
+void NoDuplicatesImageFilterModel::setSourceModel(QAbstractItemModel* model)
+{
+    if (sourceModel())
+    {
+    }
+
+    ImageSortFilterModel::setSourceModel(model);
+
+    if (sourceModel())
+    {
+        connect(sourceModel(), SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
+                this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
+    }
+}
+
+void NoDuplicatesImageFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int begin, int end)
+{
+    bool needInvalidate = false;
+    for (int i = begin; i<=end; i++)
+    {
+        QModelIndex index = sourceModel()->index(i, 0, parent);
+        // filtered out by us?
+        if (!mapFromSource(index).isValid())
+        {
+            continue;
+        }
+        QModelIndex sourceIndex = mapFromDirectSourceToSourceImageModel(index);
+        qlonglong id = sourceImageModel()->imageId(sourceIndex);
+        if (sourceImageModel()->numberOfIndexesForImageId(id) > 1)
+        {
+            needInvalidate = true;
+        }
+    }
+}*/
 
 } // namespace Digikam

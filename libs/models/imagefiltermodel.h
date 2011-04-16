@@ -76,6 +76,8 @@ public:
     QModelIndex mapToSourceImageModel(const QModelIndex& index) const;
     QModelIndex mapFromSourceImageModel(const QModelIndex& imagemodel_index) const;
 
+    QModelIndex mapFromDirectSourceToSourceImageModel(const QModelIndex& sourceModel_index) const;
+
     /// Convenience methods mapped to ImageModel.
     /// Mentioned indexes returned come from the source image model.
     QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes) const;
