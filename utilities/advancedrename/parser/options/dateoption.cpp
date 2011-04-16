@@ -43,9 +43,15 @@
 namespace Digikam
 {
 
-static const QString dateFormatLinkDescr = i18nc("date format settings", "format settings");
-static const QString dateFormatLink =
-    QString("<a href='http://doc.trolltech.com/latest/qdatetime.html#toString'>%1</a>").arg(dateFormatLinkDescr);
+static QString getDateFormatLinkText()
+{
+    const QString dateFormatLinkDescr = i18nc("date format settings", "format settings");
+    const QString dateFormatLinkText =
+        QString("<a href='http://doc.trolltech.com/latest/qdatetime.html#toString'>%1</a>")
+        .arg(dateFormatLinkDescr);
+
+    return dateFormatLinkText;
+}
 
 // --------------------------------------------------------
 
@@ -136,7 +142,7 @@ DateOptionDialog::DateOptionDialog(Parseable* parent)
 
     ui->dateFormatLink->setOpenExternalLinks(true);
     ui->dateFormatLink->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::LinksAccessibleByKeyboard);
-    ui->dateFormatLink->setText(dateFormatLink);
+    ui->dateFormatLink->setText(getDateFormatLinkText());
 
     QRegExp validRegExp("[^/]+");
     QValidator* validator = new QRegExpValidator(validRegExp, this);
@@ -252,7 +258,7 @@ DateOption::DateOption()
 #else
     addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|Text)"));
 #endif
-    addToken("[date:||format||]", i18n("Date and time") + " (" +  dateFormatLink + ')');
+    addToken("[date:||format||]", i18n("Date and time") + " (" +  getDateFormatLinkText() + ')');
 
     QRegExp reg("\\[date(:(.*))?\\]");
     reg.setMinimal(true);
