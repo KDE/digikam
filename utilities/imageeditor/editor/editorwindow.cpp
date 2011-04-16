@@ -2987,7 +2987,7 @@ KCategorizedView* EditorWindow::createToolSelectionView()
     d->selectToolsActionView->setModel(filterModel);
     d->selectToolsActionView->adjustGridSize();
 
-    connect(d->selectToolsActionView, SIGNAL(activated(const QModelIndex&)),
+    connect(d->selectToolsActionView, SIGNAL(clicked(const QModelIndex&)),
             actionModel, SLOT(trigger(const QModelIndex&)));
 
     return d->selectToolsActionView;
@@ -3000,9 +3000,6 @@ void EditorWindow::setupSelectToolsAction()
     d->selectToolsActionView->setMinimumSize(QSize(400, 400));
     m_selectToolsAction->addAction(viewAction);
     m_selectToolsAction->setVisible(true);
-
-    connect(d->selectToolsActionView, SIGNAL(activated(const QModelIndex&)),
-            m_selectToolsAction->menu(), SLOT(hide()));
 
     connect(m_selectToolsAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotSelectToolsMenuAboutToShow()));
