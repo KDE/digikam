@@ -67,8 +67,7 @@ public:
         CreationDateRole      = Qt::UserRole + 3,
         /// Return (optional) extraData field
         ExtraDataRole         = Qt::UserRole + 5,
-        /// Return n where index is the n-th duplicate
-        /// with the same id, but differing extra data
+        /// Returns the number of duplicate indexes for the same image id
         ExtraDataDuplicateCount = Qt::UserRole + 6,
         // For use by subclasses
         SubclassRoles         = Qt::UserRole + 100,

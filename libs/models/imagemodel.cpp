@@ -971,7 +971,7 @@ QList<QPair<int,int> > ImageModelIncrementalUpdater::toContiguousPairs(const QLi
 
 QVariant ImageModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid() || index.row() < 0 || index.row() >= d->infos.size())
     {
         return QVariant();
     }
@@ -1000,26 +1000,8 @@ QVariant ImageModel::data(const QModelIndex& index, int role) const
 
         case ExtraDataDuplicateCount:
         {
-            if (d->extraValues.isEmpty())
-            {
-                return 0;
-            }
-
-            int count = 0;
             qlonglong id = d->infos[index.row()].id();
-            QHash<qlonglong,int>::iterator it;
-
-            for (it = d->idHash.find(id); it != d->idHash.end() && it.key() == id; ++it)
-            {
-                if (it.value() == index.row())
-                {
-                    return count;
-                }
-
-                ++count;
-            }
-
-            return 0; // never reached, or data structures are broken
+            return numberOfIndexesForImageId(id);
         }
     }
 
