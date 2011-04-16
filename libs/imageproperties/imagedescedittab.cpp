@@ -1286,6 +1286,8 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 {
     d->tagCheckView->checkableAlbumFilterModel()->setFilterChecked(t);
     d->tagCheckView->checkableAlbumFilterModel()->setFilterPartiallyChecked(t);
+    d->tagCheckView->checkableAlbumFilterModel()->setFilterBehavior(
+                        t ? AlbumFilterModel::StrictFiltering : AlbumFilterModel::FullFiltering);
 
     if (t)
     {
