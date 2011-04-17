@@ -293,7 +293,7 @@ void ImageGuideWidget::updatePixmap()
     QString text;
     p.setPen(QPen(Qt::red, 1));
 
-    d->pixmap->fill(palette().color(QPalette::Background));
+    d->pixmap->fill(palette().color(QPalette::Base));
 
     if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
         (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))

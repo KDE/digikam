@@ -1223,8 +1223,6 @@ void EditorWindow::slotToggleFullScreen()
     {
         setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
 
-        m_canvas->setBackgroundColor(m_bgColor);
-
         slotShowMenuBar();
         statusBar()->show();
         showToolBars();
@@ -1248,8 +1246,6 @@ void EditorWindow::slotToggleFullScreen()
     }
     else  // go to fullscreen
     {
-        m_canvas->setBackgroundColor(QColor(Qt::black));
-
         // hide the menubar and the statusbar
         menuBar()->hide();
         statusBar()->hide();
@@ -3003,6 +2999,9 @@ void EditorWindow::setupSelectToolsAction()
 
     connect(m_selectToolsAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotSelectToolsMenuAboutToShow()));
+
+    connect(d->selectToolsActionView, SIGNAL(clicked(const QModelIndex&)),
+            m_selectToolsAction->menu(), SLOT(close()));
 }
 
 void EditorWindow::slotSelectToolsMenuAboutToShow()

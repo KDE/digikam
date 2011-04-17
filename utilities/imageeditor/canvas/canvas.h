@@ -114,7 +114,6 @@ public:
 
     void  resizeImage(int w, int h);
 
-    void  setBackgroundColor(const QColor& color);
     void  setICCSettings(const ICCSettingsContainer& cmSettings);
     void  setExposureSettings(ExposureSettingsContainer* expoSettings);
     void  setSoftProofingEnabled(bool enable);

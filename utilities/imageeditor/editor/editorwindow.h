@@ -111,8 +111,6 @@ protected:
 
     QLabel*                   m_resLabel;
 
-    QColor                    m_bgColor;
-
     SidebarSplitter*          m_splitter;
     QSplitter*                m_vSplitter;
 

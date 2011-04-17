@@ -153,8 +153,6 @@ public:
     QPixmap*                 tileTmpPix;
     QPixmap                  qcheck;
 
-    QColor                   bgColor;
-
     QWidget*                 parent;
 
     KPopupFrame*             panIconPopup;
@@ -169,7 +167,6 @@ Canvas::Canvas(QWidget* parent)
 {
     d->im     = new DImgInterface();
     d->parent = parent;
-    d->bgColor.setRgb(0, 0, 0);
 
     d->qcheck = QPixmap(16, 16);
     QPainter p(&d->qcheck);
@@ -626,7 +623,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                     }
                     else
                     {
-                        pix->fill(d->bgColor);
+                        pix->fill(palette().base());
                     }
 
                     // NOTE : with implementations <= 0.9.1, the canvas doesn't work properly using high zoom level (> 500).
@@ -704,7 +701,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
     }
 
     painter.setClipRegion(clipRegion);
-    painter.fillRect(er, d->bgColor);
+    painter.fillRect(er, palette().base());
     painter.end();
 }
 
@@ -1347,17 +1344,6 @@ void Canvas::slotCrop()
 void Canvas::resizeImage(int w, int h)
 {
     d->im->resize(w, h);
-}
-
-void Canvas::setBackgroundColor(const QColor& color)
-{
-    if (d->bgColor == color)
-    {
-        return;
-    }
-
-    d->bgColor = color;
-    viewport()->update();
 }
 
 void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
