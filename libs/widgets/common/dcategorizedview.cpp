@@ -54,7 +54,7 @@ class DCategorizedViewPriv
 {
 public:
 
-    DCategorizedViewPriv() :
+    DCategorizedViewPriv(DCategorizedView* q) :
         delegate(0),
         toolTip(0),
         notificationToolTip(0),
@@ -64,7 +64,8 @@ public:
         currentMouseEvent(0),
         ensureOneSelectedItem(false),
         ensureInitialSelectedItem(false),
-        hintAtSelectionRow(-1)
+        hintAtSelectionRow(-1),
+        q(q)
     {
     }
 
@@ -80,12 +81,17 @@ public:
     bool                  ensureInitialSelectedItem;
     QPersistentModelIndex hintAtSelectionIndex;
     int                   hintAtSelectionRow;
+    QPersistentModelIndex hintAtScrollPosition;
+
+    DCategorizedView* const q;
+
+    QModelIndex scrollPositionHint() const;
 };
 
 // -------------------------------------------------------------------------------
 
 DCategorizedView::DCategorizedView(QWidget* parent)
-    : DigikamKCategorizedView(parent), d(new DCategorizedViewPriv)
+    : DigikamKCategorizedView(parent), d(new DCategorizedViewPriv(this))
 {
     setViewMode(QListView::IconMode);
     setLayoutDirection(Qt::LeftToRight);
@@ -410,14 +416,39 @@ void DCategorizedView::rowsInserted(const QModelIndex& parent, int start, int en
     }
 }
 
+QModelIndex DCategorizedViewPriv::scrollPositionHint() const
+{
+    QModelIndex hint = q->currentIndex();
+
+    // If the user scrolled, dont take current item, but first visible
+    if (!hint.isValid() || !q->viewport()->rect().intersects(q->visualRect(hint)))
+    {
+        QList<QModelIndex> visibleIndexes = q->categorizedIndexesIn(q->viewport()->rect());
+        if (!visibleIndexes.isEmpty())
+        {
+            hint = visibleIndexes.first();
+        }
+    }
+
+    return hint; 
+}
+
 void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
     DigikamKCategorizedView::rowsAboutToBeRemoved(parent, start, end);
 
     // Ensure one selected item
-    int totalToRemove = end - start + 1;
+    int totalToRemove  = end - start + 1;
+    bool remainingRows = model()->rowCount(parent) > totalToRemove;
 
-    if (selectionModel()->hasSelection() && model()->rowCount(parent) > totalToRemove)
+    if (!remainingRows)
+    {
+        return;
+    }
+
+    QItemSelection removed(model()->index(start, 0), model()->index(end, 0));
+
+    if (selectionModel()->hasSelection())
     {
         // find out which selected indexes are left after rows are removed
         QItemSelection selected = selectionModel()->selection();
@@ -433,27 +464,31 @@ void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start
             indexToAnchor = selected.first().topLeft();
         }
 
-        QItemSelection removed(model()->index(start, 0), model()->index(end, 0));
         selected.merge(removed, QItemSelectionModel::Deselect);
 
         if (selected.isEmpty())
         {
-            QModelIndex newCurrent = nextIndexHint(indexToAnchor, removed.first());
+            QModelIndex newCurrent = nextIndexHint(indexToAnchor, removed.first() /*a range*/);
             setCurrentIndex(newCurrent);
         }
+    }
+
+    QModelIndex hint = d->scrollPositionHint();
+    if (removed.contains(hint))
+    {
+        d->hintAtScrollPosition = nextIndexHint(hint, removed.first() /*a range*/);
     }
 }
 
 void DCategorizedView::layoutAboutToBeChanged()
 {
     d->ensureOneSelectedItem = selectionModel()->hasSelection();
-    kDebug() << d->ensureOneSelectedItem;
+    QModelIndex current = currentIndex();
 
     // store some hints so that if all selected items were removed dont need to default to 0,0.
     if (d->ensureOneSelectedItem)
     {
         QItemSelection currentSelection = selectionModel()->selection();
-        QModelIndex current = currentIndex();
         QModelIndex indexToAnchor;
 
         if (currentSelection.contains(current))
@@ -471,6 +506,9 @@ void DCategorizedView::layoutAboutToBeChanged()
             d->hintAtSelectionIndex = nextIndexHint(indexToAnchor, QItemSelectionRange(indexToAnchor));
         }
     }
+
+    // some precautions to keep current scroll position
+    d->hintAtScrollPosition = d->scrollPositionHint();
 }
 
 QModelIndex DCategorizedView::nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const
@@ -494,7 +532,16 @@ void DCategorizedView::layoutWasChanged()
 {
     // connected queued to layoutChanged()
     ensureSelectionAfterChanges();
-    scrollTo(currentIndex());
+
+    if (d->hintAtScrollPosition.isValid())
+    {
+        scrollTo(d->hintAtScrollPosition);
+        d->hintAtScrollPosition = QModelIndex();
+    }
+    else
+    {
+        scrollTo(currentIndex());
+    }
 }
 
 void DCategorizedView::userInteraction()
