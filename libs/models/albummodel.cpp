@@ -65,7 +65,9 @@ PAlbum* AlbumModel::albumForIndex(const QModelIndex& index) const
 QVariant AlbumModel::decorationRoleData(Album* album) const
 {
     // asynchronous signals are handled by parent class
-    return AlbumThumbnailLoader::instance()->getAlbumThumbnailDirectly(static_cast<PAlbum*>(album));
+    QPixmap pix = AlbumThumbnailLoader::instance()->getAlbumThumbnailDirectly(static_cast<PAlbum*>(album));
+    prepareAddExcludeDecoration(album, pix);
+    return pix;
 }
 
 Album* AlbumModel::albumForId(int id) const
@@ -101,7 +103,9 @@ TAlbum* TagModel::albumForIndex(const QModelIndex& index) const
 
 QVariant TagModel::decorationRoleData(Album* album) const
 {
-    return AlbumThumbnailLoader::instance()->getTagThumbnailDirectly(static_cast<TAlbum*>(album), true);
+    QPixmap pix = AlbumThumbnailLoader::instance()->getTagThumbnailDirectly(static_cast<TAlbum*>(album), true);
+    prepareAddExcludeDecoration(album, pix);
+    return pix;
 }
 
 Album* TagModel::albumForId(int id) const

@@ -120,4 +120,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 094 ==> 265554 : Problem in colors between dgikam's theme and Gnome appearance.
 095 ==> 270553 : Import Wizard: Selecting "date" in File Renaming Options does not work.
 096 ==> 270728 : CMakeLists.txt:159 doesn't specify which target needs to link to QtScript library.
-097 ==>
+097 ==> 267421 : Tagging panel shows tags as checked which previously where partially checked (when selecting multiple images).
+098 ==>

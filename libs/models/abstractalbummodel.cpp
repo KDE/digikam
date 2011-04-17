@@ -815,10 +815,11 @@ void AbstractCountingAlbumModel::slotAlbumMoved(Album*)
 AbstractCheckableAlbumModel::AbstractCheckableAlbumModel(Album::Type albumType, Album* rootAlbum,
         RootAlbumBehavior rootBehavior,
         QObject* parent)
-    : AbstractCountingAlbumModel(albumType, rootAlbum, rootBehavior, parent)
+    : AbstractCountingAlbumModel(albumType, rootAlbum, rootBehavior, parent),
+      m_extraFlags(0),
+      m_rootIsCheckable(true),
+      m_addExcludeTristate(false)
 {
-    m_extraFlags = 0;
-    m_rootIsCheckable = true;
 }
 
 void AbstractCheckableAlbumModel::setCheckable(bool isCheckable)
@@ -870,6 +871,18 @@ void AbstractCheckableAlbumModel::setTristate(bool isTristate)
 bool AbstractCheckableAlbumModel::isTristate() const
 {
     return m_extraFlags & Qt::ItemIsTristate;
+}
+
+void AbstractCheckableAlbumModel::setAddExcludeTristate(bool b)
+{
+    m_addExcludeTristate = b;
+    setCheckable(true);
+    setTristate(b);
+}
+
+bool AbstractCheckableAlbumModel::isAddExcludeTristate() const
+{
+    return m_addExcludeTristate && isTristate();
 }
 
 bool AbstractCheckableAlbumModel::isChecked(Album* album) const
@@ -1009,33 +1022,39 @@ QVariant AbstractCheckableAlbumModel::albumData(Album* a, int role) const
         {
             // with Qt::Unchecked as default, albums not in the hash (initially all)
             // are simply regarded as unchecked
-            // Use Qt::PartiallyChecked only internally, dont't expose it to the TreeView
-            return (m_checkedAlbums.value(a, Qt::Unchecked) == Qt::Unchecked) ? Qt::Unchecked : Qt::Checked;
+            Qt::CheckState state = m_checkedAlbums.value(a, Qt::Unchecked);
+
+            if (m_addExcludeTristate)
+            {
+                // Use Qt::PartiallyChecked only internally, dont't expose it to the TreeView
+                return (state == Qt::Unchecked) ? Qt::Unchecked : Qt::Checked;
+            }
+            return state;
         }
     }
-
-    if (role == Qt::DecorationRole)
-    {
-        Qt::CheckState state = m_checkedAlbums.value(a, Qt::Unchecked);
-
-        if (isTristate() && state != Qt::Unchecked)
-        {
-            QPixmap icon = decorationRoleData(a).value<QPixmap>();
-            int overlay_size = qMax(16, qRound(qMax(icon.width(), icon.height()) / 3.0 * 2.0));
-            QPixmap pm(qMax(overlay_size, icon.width()),
-                       qMax(overlay_size, icon.height()));
-            pm.fill(Qt::transparent);
-            QPainter p(&pm);
-            p.drawPixmap(0, 0, icon);
-            p.drawPixmap(pm.width() - overlay_size,
-                         pm.height() - overlay_size,
-                         KIcon(state == Qt::PartiallyChecked ? "list-remove" : "list-add").pixmap(overlay_size, overlay_size));
-            return pm;
-        }
-    }
-
 
     return AbstractCountingAlbumModel::albumData(a, role);
+}
+
+void AbstractCheckableAlbumModel::prepareAddExcludeDecoration(Album* a, QPixmap& icon) const
+{
+    if (!m_addExcludeTristate)
+    {
+        return;
+    }
+
+    Qt::CheckState state = checkState(a);
+
+    if (state != Qt::Unchecked)
+    {
+        kDebug() << m_addExcludeTristate << state;
+        int iconSize = qMax(icon.width(), icon.height());
+        int overlay_size = qMin(iconSize, qMax(16, iconSize * 2 / 3));
+        QPainter p(&icon);
+        p.drawPixmap((icon.width() - overlay_size) / 2,
+                     (icon.height() - overlay_size) / 2,
+                     KIcon(state == Qt::PartiallyChecked ? "list-remove" : "list-add").pixmap(overlay_size, overlay_size));
+    }
 }
 
 Qt::ItemFlags AbstractCheckableAlbumModel::flags(const QModelIndex& index) const

@@ -308,11 +308,20 @@ public:
     void setRootCheckable(bool rootIsCheckable);
     bool rootIsCheckable() const;
     /** Triggers if the albums in this model are tristate.
-     *  Used to allow the user to set a third state,
+     *  Used to allow the user to actively set a third state,
      *  don't use if you only want to display a third state.
      *  Note that you want to set setCheckable(true) before. */
     void setTristate(bool isTristate);
     bool isTristate() const;
+
+    /**
+     * Sets a special tristate mode, which offers the
+     * three modes "unchecked", "added" and "excluded",
+     * where "excluded" corresponds to partially checked internally,
+     * but is reflected in the treeview through the decoration only.
+     */
+    void setAddExcludeTristate(bool b);
+    bool isAddExcludeTristate() const;
 
     /// Returns if the given album has the check state Checked
     bool isChecked(Album* album) const;
@@ -365,6 +374,11 @@ protected:
     virtual void albumCleared(Album* album);
     virtual void allAlbumsCleared();
 
+    /**
+     * If in AddExcludeTristate mode, changes the icon as to indicate the state.
+     */
+    void prepareAddExcludeDecoration(Album* a, QPixmap& icon) const;
+
 private:
 
     void setDataForParents(QModelIndex& child, const QVariant& value, int role = Qt::EditRole);
@@ -372,6 +386,7 @@ private:
 
     Qt::ItemFlags                 m_extraFlags;
     bool                          m_rootIsCheckable;
+    bool                          m_addExcludeTristate;
     QHash<Album*, Qt::CheckState> m_checkedAlbums;
 };
 
