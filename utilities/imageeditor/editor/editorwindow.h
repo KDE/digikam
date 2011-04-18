@@ -111,6 +111,8 @@ protected:
 
     QLabel*                   m_resLabel;
 
+    QColor                    m_bgColor;
+
     SidebarSplitter*          m_splitter;
     QSplitter*                m_vSplitter;
 
@@ -158,6 +160,17 @@ protected:
 
 protected:
 
+    enum SaveAskMode
+    {
+        AskIfNeeded,
+        OverwriteWithoutAsking,
+        AlwaysSaveAs,
+        SaveVersionWithoutAsking = OverwriteWithoutAsking,
+        AlwaysNewVersion         = AlwaysSaveAs
+    };
+
+protected:
+
     void saveStandardSettings();
     void readStandardSettings();
     void applyStandardSettings();
@@ -183,15 +196,6 @@ protected:
     virtual bool hasChangesToSave();
     virtual bool hasOriginalToRestore();
     virtual DImageHistory resolvedImageHistory(const DImageHistory& history);
-
-    enum SaveAskMode
-    {
-        AskIfNeeded,
-        OverwriteWithoutAsking,
-        AlwaysSaveAs,
-        SaveVersionWithoutAsking = OverwriteWithoutAsking,
-        AlwaysNewVersion = AlwaysSaveAs
-    };
 
     bool promptUserSave(const KUrl& url, SaveAskMode mode = AskIfNeeded, bool allowCancel = true);
     bool waitForSavingToComplete();
@@ -324,6 +328,7 @@ private Q_SLOTS:
     void slotKioMoveFinished(KJob* job);
     void slotUndoStateChanged(bool, bool, bool);
     void slotSelectToolsMenuAboutToShow();
+    void slotThemeChanged();
 
 private:
 

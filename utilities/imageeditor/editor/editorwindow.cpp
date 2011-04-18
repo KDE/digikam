@@ -621,6 +621,10 @@ void EditorWindow::setupStandardActions()
 
     ThemeManager::instance()->registerThemeActions(this);
 
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
+
+
     // -- Standard 'Help' menu actions ---------------------------------------------
 
     d->about = new DAboutData(this);
@@ -999,6 +1003,8 @@ void EditorWindow::applyStandardSettings()
     d->fullScreenHideToolBar = group.readEntry(d->configFullScreenHideToolBarEntry, false);
     m_fullScreenHideThumbBar = group.readEntry(d->configFullScreenHideThumbBarEntry, true);
 
+    slotThemeChanged();
+
     // -- Exposure Indicators Settings ---------------------------------------
 
     d->exposureSettings->underExposureColor    = group.readEntry(d->configUnderExposureColorEntry,    QColor(Qt::white));
@@ -1222,6 +1228,7 @@ void EditorWindow::slotToggleFullScreen()
     if (m_fullScreen) // out of fullscreen
     {
         setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
+        m_canvas->setBackgroundColor(m_bgColor);
 
         slotShowMenuBar();
         statusBar()->show();
@@ -1246,6 +1253,8 @@ void EditorWindow::slotToggleFullScreen()
     }
     else  // go to fullscreen
     {
+        m_canvas->setBackgroundColor(QColor(Qt::black));
+
         // hide the menubar and the statusbar
         menuBar()->hide();
         statusBar()->hide();
@@ -1259,7 +1268,7 @@ void EditorWindow::slotToggleFullScreen()
             showToolBars();
 
             QList<KToolBar*> toolbars = toolBars();
-            KToolBar* mainToolbar = 0;
+            KToolBar* mainToolbar     = 0;
             foreach (KToolBar* toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
@@ -3010,6 +3019,23 @@ void EditorWindow::slotSelectToolsMenuAboutToShow()
     QSize s = size();
     s       /= 2;
     d->selectToolsActionView->setMinimumSize(s);
+}
+
+void EditorWindow::slotThemeChanged()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
+
+    if (!group.readEntry(d->configUseThemeBackgroundColorEntry, true))
+    {
+        m_bgColor = group.readEntry(d->configBackgroundColorEntry, QColor(Qt::black));
+    }
+    else
+    {
+        m_bgColor = palette().color(QPalette::Base);
+    }
+
+    m_canvas->setBackgroundColor(m_bgColor);
 }
 
 }  // namespace Digikam
