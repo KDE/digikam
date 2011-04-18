@@ -535,7 +535,7 @@ void DCategorizedView::layoutWasChanged()
 
     if (d->hintAtScrollPosition.isValid())
     {
-        scrollTo(d->hintAtScrollPosition);
+        scrollTo(d->hintAtScrollPosition, QAbstractItemView::PositionAtTop);
         d->hintAtScrollPosition = QModelIndex();
     }
     else
@@ -877,9 +877,10 @@ void DCategorizedView::keyPressEvent(QKeyEvent* event)
 
 void DCategorizedView::resizeEvent(QResizeEvent* e)
 {
+    QModelIndex oldPosition = d->scrollPositionHint();
     DigikamKCategorizedView::resizeEvent(e);
     updateDelegateSizes();
-    scrollTo(currentIndex());
+    scrollTo(oldPosition, QAbstractItemView::PositionAtTop);
 }
 
 bool DCategorizedView::viewportEvent(QEvent* event)
