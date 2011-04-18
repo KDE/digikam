@@ -10,11 +10,11 @@ General        : Tag keyboard shortcuts support.
 General        : Color Labels support to improve photograph workfow.
 General        : Pick Labels support to improve photograph selection.
 General        : Color Theme engine is now ported to KDE color theme manager.
-               
+
 AlbumGUI       : Re-designed Filters view on right sidebar to perform icon-view items filtering.
 AlbumGUI       : Add options to group/ungroup items from icon-view.
 AlbumGUI       : Add options to show file format over icon-view items.
-               
+
 ImageEditor    : Image versionning support.
 ImageEditor    : Foveon sensor based camera.
 ImageEditor    : New advanced RAW decoding settings backported from RawTherapee project.
@@ -121,4 +121,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 095 ==> 270553 : Import Wizard: Selecting "date" in File Renaming Options does not work.
 096 ==> 270728 : CMakeLists.txt:159 doesn't specify which target needs to link to QtScript library.
 097 ==> 267421 : Tagging panel shows tags as checked which previously where partially checked (when selecting multiple images).
-098 ==>
+098 ==> 270168 : ¨Select Tool¨ item in edit window all 46 icons idle.
+099 ==> 
