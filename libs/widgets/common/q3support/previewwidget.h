@@ -6,7 +6,7 @@
  * Date        : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright (C) 2006-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,8 +42,6 @@
 namespace Digikam
 {
 
-class PreviewWidgetPriv;
-
 class DIGIKAM_EXPORT PreviewWidget : public Q3ScrollView
 {
     Q_OBJECT
@@ -72,6 +70,8 @@ public:
     double zoomMin();
     void   setZoomMax(double z);
     void   setZoomMin(double z);
+
+    void   setBackgroundColor(const QColor& color);
 
 Q_SIGNALS:
 
@@ -148,6 +148,7 @@ protected:
 
 private:
 
+    class PreviewWidgetPriv;
     PreviewWidgetPriv* const d;
 };
 

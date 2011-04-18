@@ -6,7 +6,7 @@
  * Date        : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright (C) 2006-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,7 +57,7 @@
 namespace Digikam
 {
 
-class PreviewWidgetPriv
+class PreviewWidget::PreviewWidgetPriv
 {
 public:
 
@@ -101,6 +101,8 @@ public:
 
     QPixmap*                 tileTmpPix;
 
+    QColor                   bgColor;
+
     QToolButton*             cornerButton;
 
     KPopupFrame*             panIconPopup;
@@ -111,8 +113,8 @@ PreviewWidget::PreviewWidget(QWidget* parent)
 {
     m_movingInProgress = false;
     setAttribute(Qt::WA_DeleteOnClose);
-    setBackgroundRole(QPalette::Base);
 
+    d->bgColor      = palette().color(QPalette::Base);
     d->cornerButton = PanIconWidget::button();
     setCornerWidget(d->cornerButton);
 
@@ -544,8 +546,6 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent* e)
     QRegion clipRegion(er);
     cr = d->pixmapRect.intersect(cr);
 
-    QColor bgColor = palette().color(QPalette::Base);
-
     if (!cr.isEmpty() && !previewIsNull())
     {
         clipRegion -= QRect(contentsToViewport(cr.topLeft()), cr.size());
@@ -581,7 +581,7 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent* e)
                         pix = d->tileTmpPix;
                     }
 
-                    pix->fill(bgColor);
+                    pix->fill(d->bgColor);
 
                     sx = (int)floor((double)i / d->tileSize ) * step;
                     sy = (int)floor((double)j / d->tileSize ) * step;
@@ -605,7 +605,7 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent* e)
     }
 
     p.setClipRegion(clipRegion);
-    p.fillRect(er, bgColor);
+    p.fillRect(er, d->bgColor);
     p.end();
 
     viewportPaintExtraData();
@@ -951,6 +951,15 @@ void PreviewWidget::keyReleaseEvent(QKeyEvent* e)
             break;
         }
     }
+}
+
+void PreviewWidget::setBackgroundColor(const QColor& color)
+{
+    if (d->bgColor == color)
+        return;
+
+    d->bgColor = color;
+    viewport()->update();
 }
 
 }  // namespace Digikam
