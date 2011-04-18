@@ -509,9 +509,7 @@ void LightTablePreview::slotAssignRating(int rating)
 
 void LightTablePreview::slotThemeChanged()
 {
-    QPalette palette;
-    palette.setColor(backgroundRole(), kapp->palette().color(QPalette::Base));
-    setPalette(palette);
+    setBackgroundColor(kapp->palette().color(QPalette::Base));
     frameChanged();
     update();
 }

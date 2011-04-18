@@ -243,6 +243,11 @@ void RawImport::slotCancel()
     EditorTool::slotCancel();
 }
 
+void RawImport::setBackgroundColor(const QColor& bg)
+{
+    d->previewWidget->setBackgroundColor(bg);
+}
+
 void RawImport::exposureSettingsChanged()
 {
     d->previewWidget->exposureSettingsChanged();

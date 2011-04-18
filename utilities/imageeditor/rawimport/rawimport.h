@@ -60,6 +60,7 @@ private:
     void setBusy(bool busy);
     void prepareEffect();
     void putPreviewData();
+    void setBackgroundColor(const QColor& bg);
     void ICCSettingsChanged();
     void exposureSettingsChanged();
 

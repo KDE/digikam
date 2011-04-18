@@ -284,6 +284,23 @@ void EditorTool::slotPreviewModeChanged()
     slotEffect();
 }
 
+void EditorTool::setBackgroundColor(const QColor& bg)
+{
+    ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->view);
+
+    if (view)
+    {
+        view->setBackgroundColor(bg);
+    }
+
+    ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->view);
+
+    if (view2)
+    {
+        view2->setBackgroundColor(bg);
+    }
+}
+
 void EditorTool::ICCSettingsChanged()
 {
     ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->view);

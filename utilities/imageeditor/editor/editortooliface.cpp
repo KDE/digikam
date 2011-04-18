@@ -138,6 +138,7 @@ void EditorToolIface::loadTool(EditorTool* tool)
         view2->slotPreviewModeChanged(d->editor->previewMode());
     }
 
+    themeChanged();
     updateExposureSettings();
     updateICCSettings();
     setToolInfoMessage(QString());
@@ -239,6 +240,16 @@ void EditorToolIface::slotApplyTool()
 void EditorToolIface::setupICC()
 {
     d->editor->setupICC();
+}
+
+void EditorToolIface::themeChanged()
+{
+    EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
+
+    if (tool)
+    {
+        tool->setBackgroundColor(d->editor->m_bgColor);
+    }
 }
 
 void EditorToolIface::updateICCSettings()

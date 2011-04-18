@@ -66,6 +66,7 @@ public:
 
     void setupICC();
 
+    void themeChanged();
     void updateExposureSettings();
     void updateICCSettings();
 

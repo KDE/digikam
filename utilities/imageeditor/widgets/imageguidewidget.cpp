@@ -108,6 +108,7 @@ public:
 
     QColor      guideColor;
     QColor      paintColor;
+    QColor      bgColor;
 
     QPixmap*    pixmap;
     QPixmap*    maskPixmap;
@@ -133,6 +134,7 @@ ImageGuideWidget::ImageGuideWidget(QWidget* parent,
     d->guideMode   = guideMode;
     d->guideColor  = guideColor;
     d->guideSize   = guideSize;
+    d->bgColor     = palette().color(QPalette::Base);
 
     setMinimumSize(w, h);
     setMouseTracking(true);
@@ -153,9 +155,8 @@ ImageGuideWidget::ImageGuideWidget(QWidget* parent,
     d->rect          = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
     d->maskPixmap    = new QPixmap(d->rect.width(), d->rect.height());
     d->previewPixmap = new QPixmap(d->rect.width(), d->rect.height());
-    d->maskPixmap->fill(QColor(0,0,0,0));
-    d->previewPixmap->fill(QColor(0,0,0,0));
-
+    d->maskPixmap->fill(QColor(0, 0, 0, 0));
+    d->previewPixmap->fill(QColor(0, 0, 0, 0));
 
     d->paintColor.setRgb(255, 255, 255, 255);
 
@@ -195,6 +196,12 @@ ImageGuideWidget::~ImageGuideWidget()
 ImageIface* ImageGuideWidget::imageIface() const
 {
     return d->iface;
+}
+
+void ImageGuideWidget::setBackgroundColor(const QColor& bg)
+{
+    d->bgColor = bg;
+    updatePreview();
 }
 
 void ImageGuideWidget::ICCSettingsChanged()
@@ -293,7 +300,7 @@ void ImageGuideWidget::updatePixmap()
     QString text;
     p.setPen(QPen(Qt::red, 1));
 
-    d->pixmap->fill(palette().color(QPalette::Base));
+    d->pixmap->fill(d->bgColor);
 
     if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
         (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))

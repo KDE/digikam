@@ -64,6 +64,7 @@ public:
 
     FilterAction::Category toolCategory() const;
 
+    virtual void        setBackgroundColor(const QColor& bg);
     virtual void        ICCSettingsChanged();
     virtual void        exposureSettingsChanged();
 

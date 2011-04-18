@@ -47,7 +47,6 @@
 #include "iccmanager.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
-#include "thememanager.h"
 #include "dimginterface.h"
 
 namespace Digikam
@@ -91,9 +90,6 @@ RawPreview::RawPreview(const KUrl& url, QWidget* parent)
 
     connect(d->thread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
             this, SLOT(slotLoadingProgress(const LoadingDescription&, float)));
-
-    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
-            this, SLOT(slotThemeChanged()));
 
     // ------------------------------------------------------------
 
@@ -199,13 +195,6 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
         emit signalDemosaicedImage();
         // NOTE: we will apply all Raw post processing corrections in RawImport class.
     }
-}
-
-void RawPreview::slotThemeChanged()
-{
-    QPalette plt(palette());
-    plt.setColor(backgroundRole(), kapp->palette().color(QPalette::Base));
-    setPalette(plt);
 }
 
 void RawPreview::resizeEvent(QResizeEvent* e)

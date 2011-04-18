@@ -3036,6 +3036,7 @@ void EditorWindow::slotThemeChanged()
     }
 
     m_canvas->setBackgroundColor(m_bgColor);
+    d->toolIface->themeChanged();
 }
 
 }  // namespace Digikam

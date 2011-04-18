@@ -92,6 +92,7 @@ public:
 
     QImage getMask() const;
 
+    void   setBackgroundColor(const QColor&);
     void   ICCSettingsChanged();
     void   exposureSettingsChanged();
 
