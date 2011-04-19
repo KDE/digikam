@@ -36,55 +36,73 @@
 namespace Digikam
 {
 
-UndoAction::UndoAction(DImgInterface* iface)
-    : m_iface(iface)
+class UndoAction::UndoActionPriv
 {
-    m_history = iface->getImageHistory();
+public:
+
+    UndoActionPriv()
+    {
+        iface = 0;
+    }
+
+    QString        title;
+    QVariant       fileOrigin;
+    DImageHistory  history;
+    DImageHistory  fileOriginResolvedHistory;
+    DImgInterface* iface;
+};
+
+UndoAction::UndoAction(DImgInterface* iface)
+    : d(new UndoActionPriv)
+{
+    d->iface   = iface;
+    d->history = iface->getImageHistory();
 }
 
 UndoAction::~UndoAction()
 {
+    delete d;
 }
 
 void UndoAction::setTitle(const QString& title)
 {
-    m_title = title;
+    d->title = title;
 }
 
 QString UndoAction::getTitle() const
 {
-    return m_title;
+    return d->title;
 }
 
 void UndoAction::setHistory(const DImageHistory& history)
 {
-    m_history = history;
+    d->history = history;
 }
 
 DImageHistory UndoAction::getHistory() const
 {
-    return m_history;
+    return d->history;
 }
 
 bool UndoAction::hasFileOriginData()
 {
-    return !m_fileOrigin.isNull();
+    return !d->fileOrigin.isNull();
 }
 
 void UndoAction::setFileOriginData(const QVariant& data, const DImageHistory& resolvedInitialHistory)
 {
-    m_fileOrigin = data;
-    m_fileOriginResolvedHistory = resolvedInitialHistory;
+    d->fileOrigin = data;
+    d->fileOriginResolvedHistory = resolvedInitialHistory;
 }
 
 QVariant UndoAction::fileOriginData() const
 {
-    return m_fileOrigin;
+    return d->fileOrigin;
 }
 
 DImageHistory UndoAction::fileOriginResolvedHistory() const
 {
-    return m_fileOriginResolvedHistory;
+    return d->fileOriginResolvedHistory;
 }
 
 // ---------------------------------------------------------------------------------------------

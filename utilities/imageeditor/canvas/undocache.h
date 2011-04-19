@@ -33,7 +33,6 @@
 namespace Digikam
 {
 
-
 class DIGIKAM_EXPORT UndoCache
 {
 

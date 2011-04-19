@@ -50,15 +50,15 @@ class UndoCache::UndoCachePriv
 {
 public:
 
-    QString     cachePrefix;
-    QSet<int>   cachedLevels;
+    UndoCachePriv(){}
 
     QString cacheFile(int level) const
     {
-        return QString("%1-%2.bin")
-                        .arg(cachePrefix)
-                        .arg(level);
+        return QString("%1-%2.bin").arg(cachePrefix).arg(level);
     }
+
+    QString     cachePrefix;
+    QSet<int>   cachedLevels;
 };
 
 UndoCache::UndoCache()

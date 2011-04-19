@@ -62,11 +62,8 @@ public:
 
 private:
 
-    QString        m_title;
-    QVariant       m_fileOrigin;
-    DImageHistory  m_history;
-    DImageHistory  m_fileOriginResolvedHistory;
-    DImgInterface* m_iface;
+    class UndoActionPriv;
+    UndoActionPriv* const d;
 };
 
 // --------------------------------------------------------------------

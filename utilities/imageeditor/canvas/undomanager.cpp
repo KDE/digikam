@@ -49,7 +49,6 @@ namespace Digikam
 
 class UndoManager::UndoManagerPriv
 {
-
 public:
 
     UndoManagerPriv() :
