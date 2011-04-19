@@ -6,7 +6,7 @@
  * Date        : 2005-01-18
  * Description : triangle geometry calculation class.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,13 +39,13 @@ public:
     Triangle(const QPoint& A, const QPoint& B, const QPoint& C);
     ~Triangle() {};
 
-    float angleABC();
-    float angleACB();
-    float angleBAC();
+    float angleABC() const;
+    float angleACB() const;
+    float angleBAC() const;
 
 private:
 
-    float distanceP2P(const QPoint& p1, const QPoint& p2);
+    float distanceP2P(const QPoint& p1, const QPoint& p2) const;
 
 private:
 
