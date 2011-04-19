@@ -6,7 +6,7 @@
  * Date        : 2008-03-14
  * Description : User interface for searches
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -84,6 +84,8 @@ protected:
 
     QSize minimumSizeHint() const;
     QSize sizeHint()        const;
+
+protected:
 
     QWidget*     m_widget;
     QVBoxLayout* m_layout;
@@ -179,7 +181,9 @@ protected:
 
     virtual bool eventFilter(QObject* watched, QEvent* event);
 
-    QAbstractItemView*   m_view;
+protected:
+
+    QAbstractItemView* m_view;
 };
 
 // -------------------------------------------------------------------------
@@ -245,6 +249,7 @@ protected:
 class DIGIKAM_EXPORT TreeViewLineEditComboBox : public TreeViewComboBox
 {
 public:
+
     /** This class provides a TreeViewComboBox
      *  with a read-only line edit.
      *  The text in the line edit can be adjusted. The combo box will
@@ -254,7 +259,6 @@ public:
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a QTreeView.
      */
-
     TreeViewLineEditComboBox(QWidget* parent = 0);
 
     /** Replace the standard combo box list view with a QTreeView.
