@@ -209,17 +209,17 @@ PrintOptionsPage::~PrintOptionsPage()
     delete d;
 }
 
-bool PrintOptionsPage::colorManaged()
+bool PrintOptionsPage::colorManaged() const
 {
     return d->colorManaged->isChecked();
 }
 
-bool PrintOptionsPage::autoRotation()
+bool PrintOptionsPage::autoRotation() const
 {
     return d->kcfg_PrintAutoRotate->isChecked();
 }
 
-IccProfile PrintOptionsPage::outputProfile()
+IccProfile PrintOptionsPage::outputProfile() const
 {
     return d->outputProfile;
 }

@@ -64,9 +64,9 @@ public:
     Unit scaleUnit() const;
     double scaleWidth() const;
     double scaleHeight() const;
-    bool colorManaged();
-    bool autoRotation();
-    IccProfile outputProfile();
+    bool colorManaged() const;
+    bool autoRotation() const;
+    IccProfile outputProfile() const;
 
     void loadConfig();
     void saveConfig();

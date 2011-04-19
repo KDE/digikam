@@ -45,7 +45,7 @@ public:
 // --------------------------------------------------------
 
 ImagePlugin::ImagePlugin(QObject* parent, const char* name)
-    : QObject(parent), d(new ImagePluginPriv())
+    : QObject(parent), d(new ImagePluginPriv)
 {
     setObjectName(name);
 }
@@ -103,4 +103,5 @@ void ImagePlugin::setActionCategory(const QString& name)
         d->actionCategory = name;
     }
 }
+
 }  // namespace Digikam
