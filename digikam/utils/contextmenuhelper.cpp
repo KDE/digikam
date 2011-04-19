@@ -583,10 +583,10 @@ void ContextMenuHelper::addExportMenu()
 {
     KMenu* menuExport = new KMenu(i18n("Export"), d->parent);
     const QList<QAction*> exportActions = DigikamApp::instance()->menuExportActions();
-
+#if 0
     QAction* selectAllAction = 0;
     selectAllAction = d->stdActionCollection->action("selectAll");
-
+#endif
     if (!exportActions.isEmpty())
     {
         menuExport->addActions(exportActions);
@@ -599,10 +599,10 @@ void ContextMenuHelper::addBatchMenu()
 {
     KMenu* menuKIPIBatch = new KMenu(i18n("Batch Process"), d->parent);
     const QList<QAction*> batchActions = DigikamApp::instance()->menuBatchActions();
-
+#if 0
     QAction* selectAllAction = 0;
     selectAllAction = d->stdActionCollection->action("selectAll");
-
+#endif
     if (!batchActions.isEmpty())
     {
         menuKIPIBatch->addActions(batchActions);
