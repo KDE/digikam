@@ -419,7 +419,7 @@ void DCategorizedView::rowsInserted(const QModelIndex& parent, int start, int en
     }
 }
 
-QModelIndex DCategorizedViewPriv::scrollPositionHint() const
+QModelIndex DCategorizedView::DCategorizedViewPriv::scrollPositionHint() const
 {
     QModelIndex hint = q->currentIndex();
 
