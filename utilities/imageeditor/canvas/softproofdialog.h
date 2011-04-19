@@ -36,7 +36,6 @@
 namespace Digikam
 {
 
-
 class SoftProofDialog : public KDialog
 {
     Q_OBJECT

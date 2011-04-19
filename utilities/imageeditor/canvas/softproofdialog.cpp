@@ -100,26 +100,25 @@ SoftProofDialog::SoftProofDialog(QWidget* parent)
     // -------------------------------------------------------------
 
     QGridLayout* profileGrid = new QGridLayout;
-
-    QLabel* proofIcon   = new QLabel;
+    QLabel* proofIcon        = new QLabel;
     proofIcon->setPixmap(SmallIcon("printer", KIconLoader::SizeMedium));
-    QLabel* proofLabel  = new QLabel(i18n("Profile of the output device to simulate:"));
-    d->deviceProfileBox = new IccProfilesComboBox;
+    QLabel* proofLabel       = new QLabel(i18n("Profile of the output device to simulate:"));
+    d->deviceProfileBox      = new IccProfilesComboBox;
     proofLabel->setBuddy(d->deviceProfileBox);
     d->deviceProfileBox->setWhatsThis( i18n("<p>Select the profile for your output device "
                                             "(usually, your printer). This profile will be used to do a soft proof, so you will "
                                             "be able to preview how an image will be rendered via an output device.</p>"));
 
-    d->infoProofProfiles = new QPushButton;
+    d->infoProofProfiles      = new QPushButton;
     d->infoProofProfiles->setIcon(SmallIcon("dialog-information"));
     d->infoProofProfiles->setWhatsThis( i18n("Press this button to get detailed "
                                              "information about the selected proofing profile.</p>"));
 
     d->deviceProfileBox->replaceProfilesSqueezed(IccSettings::instance()->outputProfiles());
 
-    profileGrid->addWidget(proofIcon, 0, 0);
-    profileGrid->addWidget(proofLabel, 0, 1, 1, 2);
-    profileGrid->addWidget(d->deviceProfileBox, 1, 0, 1, 2);
+    profileGrid->addWidget(proofIcon,            0, 0);
+    profileGrid->addWidget(proofLabel,           0, 1, 1, 2);
+    profileGrid->addWidget(d->deviceProfileBox,  1, 0, 1, 2);
     profileGrid->addWidget(d->infoProofProfiles, 1, 2);
     profileGrid->setColumnStretch(1, 10);
 
@@ -148,7 +147,7 @@ SoftProofDialog::SoftProofDialog(QWidget* parent)
     optionsGrid->setColumnStretch(2, 1);
     optionsBox->setLayout(optionsGrid);
 
-    // ---
+    // -------------------------------------------------------
 
     mainLayout->addWidget(headerLabel);
     mainLayout->addWidget(separator);
