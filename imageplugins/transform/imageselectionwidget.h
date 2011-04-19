@@ -116,8 +116,8 @@ public:
 
     int   getMinWidthRange() const;
     int   getMinHeightRange() const;
-    int   getMaxWidthRange();
-    int   getMaxHeightRange();
+    int   getMaxWidthRange() const;
+    int   getMaxHeightRange() const;
     int   getWidthStep() const;
     int   getHeightStep() const;
 
@@ -158,7 +158,7 @@ private:
     QPoint convertPoint(int x, int y, bool localToReal=true);
     void   normalizeRegion();
     void   reverseRatioValues();
-    int    computePreciseSize(int size, int step);
+    int    computePreciseSize(int size, int step) const;
     void   applyAspectRatio(bool useHeight, bool repaintWidget=true);
     void   updatePixmap();
     QPoint opposite();

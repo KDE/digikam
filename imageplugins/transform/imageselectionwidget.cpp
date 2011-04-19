@@ -312,7 +312,7 @@ int ImageSelectionWidget::getMinHeightRange() const
     return MINRANGE;
 }
 
-int ImageSelectionWidget::getMaxWidthRange()
+int ImageSelectionWidget::getMaxWidthRange() const
 {
     int maxW = d->image.width() - d->regionSelection.left();
 
@@ -334,7 +334,7 @@ int ImageSelectionWidget::getMaxWidthRange()
     return computePreciseSize(maxW, (int)d->currentWidthRatioValue);
 }
 
-int ImageSelectionWidget::getMaxHeightRange()
+int ImageSelectionWidget::getMaxHeightRange() const
 {
     int maxH = d->image.height() - d->regionSelection.top();
 
@@ -689,7 +689,7 @@ QPoint ImageSelectionWidget::convertPoint(int x, int y, bool localToReal)
     return QPoint(pmX, pmY);
 }
 
-int ImageSelectionWidget::computePreciseSize(int size, int step)
+int ImageSelectionWidget::computePreciseSize(int size, int step) const
 {
     // Adjust size if precise crop is wanted
     if ( d->preciseCrop && preciseCropAvailable() )
