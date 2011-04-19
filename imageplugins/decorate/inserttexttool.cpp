@@ -131,7 +131,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
 {
     setObjectName("inserttext");
     setToolName(i18n("Insert Text"));
-    setToolIcon(SmallIcon("inserttext"));
+    setToolIcon(SmallIcon("insert-text"));
 
     // -------------------------------------------------------------
 
@@ -161,7 +161,6 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    KIconLoader icon;
     QWidget* alignBox   = new QWidget();
     QHBoxLayout* hlay   = new QHBoxLayout(alignBox);
     d->alignButtonGroup = new QButtonGroup(alignBox);
@@ -193,10 +192,12 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     hlay->setMargin(0);
     hlay->setSpacing(0);
+    hlay->addStretch();
     hlay->addWidget(alignLeft);
     hlay->addWidget(alignRight);
     hlay->addWidget(alignCenter);
     hlay->addWidget(alignBlock);
+    hlay->addStretch();
 
     // -------------------------------------------------------------
 
