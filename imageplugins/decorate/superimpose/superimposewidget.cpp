@@ -54,6 +54,7 @@ SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget* parent)
     : QWidget(parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
+    m_bgColor  = palette().color(QPalette::Background);
     m_pixmap   = new QPixmap(w, h);
     m_editMode = MOVE;
 
@@ -81,7 +82,7 @@ DImg SuperImposeWidget::makeSuperImpose()
 
 void SuperImposeWidget::resetEdit()
 {
-    m_zoomFactor = 1.0;
+    m_zoomFactor       = 1.0;
     m_currentSelection = QRect(m_w/2 - m_rect.width()/2, m_h/2 - m_rect.height()/2,
                                m_rect.width(), m_rect.height());
     makePixmap();
@@ -94,7 +95,7 @@ void SuperImposeWidget::makePixmap()
     SuperImpose superimpose(iface.getOriginalImg(), &m_templateScaled, m_currentSelection);
     DImg image = superimpose.getTargetImage();
 
-    m_pixmap->fill(palette().color(QPalette::Background));
+    m_pixmap->fill(m_bgColor);
     QPainter p(m_pixmap);
     QPixmap imagePix = image.convertToPixmap();
     p.drawPixmap(m_rect.x(), m_rect.y(), imagePix, 0, 0, m_rect.width(), m_rect.height());
@@ -117,12 +118,12 @@ void SuperImposeWidget::resizeEvent(QResizeEvent* e)
         if (templateWidth < templateHeight)
         {
             int neww = (int) ((float)height() / (float)templateHeight * (float)templateWidth);
-            m_rect = QRect(width()/2-neww/2, 0, neww, height());
+            m_rect   = QRect(width()/2-neww/2, 0, neww, height());
         }
         else
         {
             int newh = (int) ((float)width() / (float)templateWidth * (float)templateHeight);
-            m_rect = QRect(0, height()/2-newh/2, width(), newh);
+            m_rect   = QRect(0, height()/2-newh/2, width(), newh);
         }
 
         m_templateScaled = m_template.smoothScale(m_rect.width(), m_rect.height());
@@ -135,6 +136,13 @@ void SuperImposeWidget::resizeEvent(QResizeEvent* e)
     }
 
     blockSignals(false);
+}
+
+void SuperImposeWidget::setBackgroundColor(const QColor& bg)
+{
+    m_bgColor = bg;
+    makePixmap();
+    repaint();
 }
 
 void SuperImposeWidget::paintEvent(QPaintEvent*)
@@ -165,17 +173,17 @@ void SuperImposeWidget::slotSetCurrentTemplate(const KUrl& url)
     if (templateWidth < templateHeight)
     {
         int neww = (int) ((float)height() / (float)templateHeight * (float)templateWidth);
-        m_rect = QRect(width()/2-neww/2, 0, neww, height());
+        m_rect   = QRect(width()/2-neww/2, 0, neww, height());
     }
     else
     {
         int newh = (int) ((float)width() / (float)templateWidth * (float)templateHeight);
-        m_rect = QRect(0, height()/2-newh/2, width(), newh);
+        m_rect   = QRect(0, height()/2-newh/2, width(), newh);
     }
 
-    m_templateScaled = m_template.smoothScale(m_rect.width(), m_rect.height());
-
-    m_currentSelection = QRect(m_w/2 - m_rect.width()/2, m_h/2 - m_rect.height()/2, m_rect.width(), m_rect.height());
+    m_templateScaled  = m_template.smoothScale(m_rect.width(), m_rect.height());
+    m_currentSelection = QRect(m_w/2 - m_rect.width()/2, m_h/2 - m_rect.height()/2,
+                               m_rect.width(), m_rect.height());
     zoomSelection(0);
 }
 
@@ -220,10 +228,10 @@ bool SuperImposeWidget::zoomSelection(float deltaZoomFactor)
     }
 
     QRect selection = m_currentSelection;
-    int wf = (int)((float)m_rect.width()  / newZoom);
-    int hf = (int)((float)m_rect.height() / newZoom);
-    int deltaX = (m_currentSelection.width()  - wf) / 2;
-    int deltaY = (m_currentSelection.height() - hf) / 2;
+    int wf          = (int)((float)m_rect.width()  / newZoom);
+    int hf          = (int)((float)m_rect.height() / newZoom);
+    int deltaX      = (m_currentSelection.width()  - wf) / 2;
+    int deltaY      = (m_currentSelection.height() - hf) / 2;
 
     selection.setLeft(m_currentSelection.left() + deltaX);
     selection.setTop(m_currentSelection.top() + deltaY);
@@ -264,7 +272,7 @@ bool SuperImposeWidget::zoomSelection(float deltaZoomFactor)
 
     }
 
-    m_zoomFactor = newZoom;
+    m_zoomFactor       = newZoom;
     m_currentSelection = selection;
 
     makePixmap();

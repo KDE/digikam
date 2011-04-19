@@ -7,8 +7,8 @@
  * Description : a Digikam image editor plugin for superimpose a
  *               template to an image.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -88,6 +88,7 @@ public:
     SuperImposeWidget*   previewWidget;
     DirSelectWidget*     dirSelect;
 };
+
 const QString SuperImposeTool::SuperImposeToolPriv::configGroupName("superimpose Tool");
 const QString SuperImposeTool::SuperImposeToolPriv::configTemplatesRootURLEntry("Templates Root URL");
 const QString SuperImposeTool::SuperImposeToolPriv::configTemplatesURLEntry("Templates URL");
@@ -162,14 +163,14 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings   = new EditorToolSettings;
 
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
-    d->thumbnailsBar = new ThumbBarView(d->gboxSettings->plainPage());
+    d->thumbnailsBar  = new ThumbBarView(d->gboxSettings->plainPage());
     d->thumbnailsBar->setToolTip(new ThumbBarToolTip(d->thumbnailsBar));
 
-    d->dirSelect = new DirSelectWidget(d->gboxSettings->plainPage());
+    d->dirSelect      = new DirSelectWidget(d->gboxSettings->plainPage());
     QPushButton* templateDirButton = new QPushButton(i18n("Root Directory..."), d->gboxSettings->plainPage());
     templateDirButton->setWhatsThis(i18n("Set here the current templates' root directory."));
 
@@ -245,7 +246,7 @@ void SuperImposeTool::populateTemplates(void)
 void SuperImposeTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("Album Settings");
+    KConfigGroup group        = config->group("Album Settings");
     KUrl albumDBUrl( group.readEntry("Album Path", KGlobalSettings::documentPath()) );
 
     group = config->group(d->configGroupName);
@@ -257,7 +258,7 @@ void SuperImposeTool::readSettings()
 void SuperImposeTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry( d->configTemplatesRootURLEntry, d->dirSelect->rootPath().toLocalFile() );
     group.writeEntry( d->configTemplatesURLEntry,     d->templatesUrl.toLocalFile() );
     group.sync();
@@ -306,6 +307,11 @@ void SuperImposeTool::finalRendering()
     d->previewWidget->setEnabled(true);
     d->dirSelect->setEnabled(true);
     d->thumbnailsBar->setEnabled(true);
+}
+
+void SuperImposeTool::setBackgroundColor(const QColor& bg)
+{
+    d->previewWidget->setBackgroundColor(bg);
 }
 
 }  // namespace DigikamDecorateImagePlugin

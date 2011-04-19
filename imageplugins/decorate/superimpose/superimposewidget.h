@@ -7,8 +7,8 @@
  * Description : a Digikam image editor plugin for superimpose a
  *               template to an image.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,11 +68,12 @@ public:
     SuperImposeWidget(int w, int h, QWidget* parent=0);
     ~SuperImposeWidget();
 
+    void   setBackgroundColor(const QColor& bg);
     void   setEditMode(int mode);
     void   resetEdit();
     QRect  getCurrentSelection();
     QSize  getTemplateSize();
-    DImg makeSuperImpose();
+    DImg   makeSuperImpose();
 
 public Q_SLOTS:
 
@@ -101,6 +102,8 @@ private:
     int      m_ypos;
     int      m_editMode;
     float    m_zoomFactor;
+
+    QColor   m_bgColor;           // Pixmap background color.
 
     QPixmap* m_pixmap;            // For image region selection manipulations.
 
