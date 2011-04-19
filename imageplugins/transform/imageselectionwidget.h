@@ -44,7 +44,6 @@ namespace DigikamTransformImagePlugin
 
 class ImageSelectionWidget : public QWidget
 {
-
     Q_OBJECT
 
 public:
@@ -60,8 +59,8 @@ public:
         RATIO07x10,                // 7:10
         RATIO08x05,                // 8:5
         RATIOGOLDEN,               // Golden ratio : 1:1.618
-        RATIOCURRENT,               // Current loaded image aspect ratio
-        RATIONONE                 // No aspect ratio.
+        RATIOCURRENT,              // Current loaded image aspect ratio
+        RATIONONE                  // No aspect ratio.
     };
 
     enum Orient
@@ -111,18 +110,18 @@ public:
                               bool drawGoldenSpiral,   bool drawGoldenTriangle,
                               bool flipHorGoldenGuide, bool flipVerGoldenGuide);
 
-    int   getOriginalImageWidth();
-    int   getOriginalImageHeight();
+    int   getOriginalImageWidth() const;
+    int   getOriginalImageHeight() const;
     QRect getRegionSelection() const;
 
-    int   getMinWidthRange();
-    int   getMinHeightRange();
+    int   getMinWidthRange() const;
+    int   getMinHeightRange() const;
     int   getMaxWidthRange();
     int   getMaxHeightRange();
-    int   getWidthStep();
-    int   getHeightStep();
+    int   getWidthStep() const;
+    int   getHeightStep() const;
 
-    bool  preciseCropAvailable();
+    bool  preciseCropAvailable() const;
 
     void  resetSelection();
     void  maxAspectSelection();

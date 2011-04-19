@@ -287,12 +287,12 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent* e)
     updatePixmap();
 }
 
-int ImageSelectionWidget::getOriginalImageWidth()
+int ImageSelectionWidget::getOriginalImageWidth() const
 {
     return d->image.width();
 }
 
-int ImageSelectionWidget::getOriginalImageHeight()
+int ImageSelectionWidget::getOriginalImageHeight() const
 {
     return d->image.height();
 }
@@ -302,12 +302,12 @@ QRect ImageSelectionWidget::getRegionSelection() const
     return d->regionSelection;
 }
 
-int ImageSelectionWidget::getMinWidthRange()
+int ImageSelectionWidget::getMinWidthRange() const
 {
     return MINRANGE;
 }
 
-int ImageSelectionWidget::getMinHeightRange()
+int ImageSelectionWidget::getMinHeightRange() const
 {
     return MINRANGE;
 }
@@ -356,7 +356,7 @@ int ImageSelectionWidget::getMaxHeightRange()
     return computePreciseSize(maxH, (int)d->currentHeightRatioValue);
 }
 
-int ImageSelectionWidget::getWidthStep()
+int ImageSelectionWidget::getWidthStep() const
 {
     if ( d->preciseCrop && preciseCropAvailable() )
     {
@@ -368,7 +368,7 @@ int ImageSelectionWidget::getWidthStep()
     }
 }
 
-int ImageSelectionWidget::getHeightStep()
+int ImageSelectionWidget::getHeightStep() const
 {
     if ( d->preciseCrop && preciseCropAvailable() )
     {
@@ -601,7 +601,7 @@ void ImageSelectionWidget::reverseRatioValues()
     }
 }
 
-bool ImageSelectionWidget::preciseCropAvailable()
+bool ImageSelectionWidget::preciseCropAvailable() const
 {
     // Define when precise crop feature can be used
     // No needed when aspect ratio is 1:1
