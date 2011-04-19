@@ -6,8 +6,8 @@
  * Date        : 2005-02-14
  * Description : a plugin to insert a text over an image.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -112,6 +112,7 @@ public:
     InsertTextWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
 };
+
 const QString InsertTextTool::InsertTextToolPriv::configGroupName("inserttext Tool");
 const QString InsertTextTool::InsertTextToolPriv::configTextRotationEntry("Text Rotation");
 const QString InsertTextTool::InsertTextToolPriv::configFontColorEntry("Font Color");
@@ -134,7 +135,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QFrame* frame = new QFrame(0);
+    QFrame* frame    = new QFrame(0);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
     QVBoxLayout* l   = new QVBoxLayout(frame);
@@ -147,10 +148,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
-
-    // -------------------------------------------------------------
-
-    d->textEdit = new KTextEdit();
+    d->textEdit     = new KTextEdit();
     d->textEdit->setCheckSpellingEnabled(true);
     d->textEdit->setWordWrapMode(QTextOption::NoWrap);
     d->textEdit->setWhatsThis( i18n("Here, enter the text you want to insert in your image."));
@@ -218,7 +216,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->borderText = new QCheckBox(i18n("Add border"));
+    d->borderText      = new QCheckBox(i18n("Add border"));
     d->borderText->setToolTip(i18n("Add a solid border around text using current text color"));
 
     d->transparentText = new QCheckBox(i18n("Semi-transparent"));
@@ -390,6 +388,11 @@ void InsertTextTool::slotFontPropertiesChanged(const QFont& font)
 {
     d->textFont = font;
     emit signalUpdatePreview();
+}
+
+void InsertTextTool::setBackgroundColor(const QColor& bg)
+{
+    d->previewWidget->setBackgroundColor(bg);
 }
 
 void InsertTextTool::slotUpdatePreview()

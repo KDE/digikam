@@ -6,8 +6,8 @@
  * Date        : 2005-02-14
  * Description : a widget to insert a text over an image.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -87,7 +87,8 @@ public:
     int         xpos;
     int         ypos;
 
-    QColor      backgroundColor;
+    QColor      backgroundColor;   // For text
+    QColor      bgColor;           // For Pixmap
     QColor      textColor;
 
     QFont       textFont;
@@ -107,24 +108,24 @@ InsertTextWidget::InsertTextWidget(int w, int h, QWidget* parent)
     : QWidget(parent),
       d(new InsertTextWidgetPriv)
 {
-    d->currentMoving = false;
+    d->currentMoving   = false;
+    d->bgColor         = palette().color(QPalette::Background);
+    d->backgroundColor = QColor(0xCC, 0xCC, 0xCC);
+    d->transparency    = 210;
 
     d->iface  = new ImageIface(w, h);
     d->data   = d->iface->getPreviewImage();
     d->w      = d->iface->previewWidth();
     d->h      = d->iface->previewHeight();
     d->pixmap = new QPixmap(w, h);
-    d->pixmap->fill(palette().color(QPalette::Background));
+    d->pixmap->fill(d->bgColor);
 
     setMinimumSize(w, h);
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->rect = QRect(width()/2-d->w/2, height()/2-d->h/2, d->w, d->h);
+    d->rect     = QRect(width()/2-d->w/2, height()/2-d->h/2, d->w, d->h);
     d->textRect = QRect();
-
-    d->backgroundColor = QColor(0xCC, 0xCC, 0xCC);
-    d->transparency    = 210;
 }
 
 InsertTextWidget::~InsertTextWidget()
@@ -178,7 +179,7 @@ void InsertTextWidget::setText(const QString& text, const QFont& font, const QCo
 
     // Center text if top left corner text area is not visible.
 
-    /*
+/*
     if ( d->textFont.pointSize() != font.pointSize() &&
          !rect().contains( d->textRect.x(), d->textRect.y() ) )
     {
@@ -186,7 +187,7 @@ void InsertTextWidget::setText(const QString& text, const QFont& font, const QCo
         resetEdit();
         return;
     }
-    */
+*/
 
     d->textFont = font;
 
@@ -194,7 +195,14 @@ void InsertTextWidget::setText(const QString& text, const QFont& font, const QCo
     repaint();
 }
 
-void InsertTextWidget::setPositionHint(QRect hint)
+void InsertTextWidget::setBackgroundColor(const QColor& bg)
+{
+    d->bgColor = bg;
+    makePixmap();
+    repaint();
+}
+
+void InsertTextWidget::setPositionHint(const QRect& hint)
 {
     // interpreted by composeImage
     d->positionHint = hint;
@@ -208,7 +216,7 @@ void InsertTextWidget::setPositionHint(QRect hint)
     }
 }
 
-QRect InsertTextWidget::getPositionHint()
+QRect InsertTextWidget::getPositionHint() const
 {
     QRect hint;
 
@@ -246,9 +254,9 @@ DImg InsertTextWidget::makeInsertText()
     }
 
     // Get original image
-    DImg image = d->iface->getOriginalImg()->copy();
-
+    DImg image      = d->iface->getOriginalImg()->copy();
     int borderWidth = qMax(1, (int)lroundf(ratioW));
+
     // compose and draw result on image
     composeImage(&image, 0, x, y,
                  d->textFont, d->textFont.pointSizeF(),
@@ -289,7 +297,7 @@ void InsertTextWidget::makePixmap()
 
     // paint pixmap for drawing this widget
     // First, fill with background color
-    d->pixmap->fill(palette().color(QPalette::Background));
+    d->pixmap->fill(d->bgColor);
     QPainter p(d->pixmap);
 
     // Convert image to pixmap and draw it

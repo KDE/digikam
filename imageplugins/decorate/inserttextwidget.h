@@ -6,8 +6,8 @@
  * Date        : 2005-02-14
  * Description : a widget to insert a text over an image.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -98,12 +98,16 @@ public:
     ImageIface* imageIface() const;
     DImg        makeInsertText();
 
+    /** Set background color for pixmap */
+    void   setBackgroundColor(const QColor& bg);
+
     void   setText(const QString& text, const QFont& font, const QColor& color, int alignMode,
                    bool border, bool transparent, int rotation);
-    void   resetEdit(void);
 
-    void  setPositionHint(QRect hint);
-    QRect getPositionHint();
+    void   resetEdit();
+
+    void  setPositionHint(const QRect& hint);
+    QRect getPositionHint() const;
 
 protected:
 
