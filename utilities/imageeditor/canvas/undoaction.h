@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005 by Joern Ahrens <joern.ahrens@kdemail.net>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,23 +49,24 @@ public:
     explicit UndoAction(DImgInterface* iface);
     virtual ~UndoAction();
 
-    QString getTitle() const;
+    void          setTitle(const QString& title);
+    QString       getTitle() const;
 
-    void setHistory(const DImageHistory& history);
+    void          setHistory(const DImageHistory& history);
     DImageHistory getHistory() const;
 
-    bool hasFileOriginData();
-    void setFileOriginData(const QVariant& data, const DImageHistory& resolvedInitialHistory);
-    QVariant fileOriginData() const;
+    bool          hasFileOriginData();
+    void          setFileOriginData(const QVariant& data, const DImageHistory& resolvedInitialHistory);
+    QVariant      fileOriginData() const;
     DImageHistory fileOriginResolvedHistory() const;
 
-protected:
+private:
 
-    DImgInterface* m_iface;
     QString        m_title;
-    DImageHistory  m_history;
     QVariant       m_fileOrigin;
+    DImageHistory  m_history;
     DImageHistory  m_fileOriginResolvedHistory;
+    DImgInterface* m_iface;
 };
 
 // --------------------------------------------------------------------
