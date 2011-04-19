@@ -77,10 +77,7 @@ public:
 
     void setCameraType(CameraType* ctype)
     {
-        if (m_ctype)
-        {
-            delete m_ctype;
-        }
+        delete m_ctype;
 
         m_ctype = new CameraType(*ctype);
 
@@ -341,10 +338,7 @@ void SetupCamera::slotRemoveCamera()
 {
     SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
 
-    if (item)
-    {
-        delete item;
-    }
+    delete item;
 }
 
 void SetupCamera::slotEditCamera()

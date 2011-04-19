@@ -90,11 +90,7 @@ AdvancedRenameManager::~AdvancedRenameManager()
 {
     clearAll();
 
-    if (d->parser)
-    {
-        delete d->parser;
-    }
-
+    delete d->parser;
     delete d;
 }
 
@@ -139,10 +135,7 @@ void AdvancedRenameManager::setWidget(AdvancedRenameWidget* widget)
 
 void AdvancedRenameManager::setParserType(ParserType type)
 {
-    if (d->parser)
-    {
-        delete d->parser;
-    }
+    delete d->parser;
 
     if (type == ImportParser)
     {

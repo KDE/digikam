@@ -175,20 +175,9 @@ ImageGuideWidget::~ImageGuideWidget()
         killTimer(d->timerID);
     }
 
-    if (d->pixmap)
-    {
-        delete d->pixmap;
-    }
-
-    if (d->maskPixmap)
-    {
-        delete d->maskPixmap;
-    }
-
-    if (d->previewPixmap)
-    {
-        delete d->previewPixmap;
-    }
+    delete d->pixmap;
+    delete d->maskPixmap;
+    delete d->previewPixmap;
 
     delete d;
 }

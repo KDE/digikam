@@ -234,11 +234,7 @@ Canvas::~Canvas()
     delete d->tileTmpPix;
     delete d->im;
 
-    if (d->rubber)
-    {
-        delete d->rubber;
-    }
-
+    delete d->rubber;
     delete d;
 }
 

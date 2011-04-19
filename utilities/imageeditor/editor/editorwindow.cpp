@@ -1947,11 +1947,8 @@ void EditorWindow::finishSaving(bool success)
 {
     m_savingContext.synchronousSavingResult = success;
 
-    if (m_savingContext.saveTempFile)
-    {
-        delete m_savingContext.saveTempFile;
-        m_savingContext.saveTempFile = 0;
-    }
+    delete m_savingContext.saveTempFile;
+    m_savingContext.saveTempFile = 0;
 
     // Exit of internal Qt event loop to unlock promptUserSave() method.
     if (m_savingContext.synchronizingState == SavingContextContainer::SynchronousSaving)

@@ -640,10 +640,7 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::tileNew()
 
 void GPSMarkerTiler::tileDelete(KMap::AbstractMarkerTiler::Tile* const tile)
 {
-    if (tile)
-    {
-        delete static_cast<MyTile*>(tile);
-    }
+    delete static_cast<MyTile*>(tile);
 }
 
 /**
