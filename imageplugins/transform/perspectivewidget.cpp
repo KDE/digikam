@@ -214,31 +214,31 @@ ImageIface* PerspectiveWidget::imageIface() const
     return d->iface;
 }
 
-QPoint PerspectiveWidget::getTopLeftCorner()
+QPoint PerspectiveWidget::getTopLeftCorner() const
 {
     return QPoint( lroundf((float)(d->topLeftPoint.x()*d->origW) / (float)d->width),
                    lroundf((float)(d->topLeftPoint.y()*d->origH) / (float)d->height));
 }
 
-QPoint PerspectiveWidget::getTopRightCorner()
+QPoint PerspectiveWidget::getTopRightCorner() const
 {
     return QPoint( lroundf((float)(d->topRightPoint.x()*d->origW) / (float)d->width),
                    lroundf((float)(d->topRightPoint.y()*d->origH) / (float)d->height));
 }
 
-QPoint PerspectiveWidget::getBottomLeftCorner()
+QPoint PerspectiveWidget::getBottomLeftCorner() const
 {
     return QPoint( lroundf((float)(d->bottomLeftPoint.x()*d->origW) / (float)d->width),
                    lroundf((float)(d->bottomLeftPoint.y()*d->origH) / (float)d->height));
 }
 
-QPoint PerspectiveWidget::getBottomRightCorner()
+QPoint PerspectiveWidget::getBottomRightCorner() const
 {
     return QPoint( lroundf((float)(d->bottomRightPoint.x()*d->origW) / (float)d->width),
                    lroundf((float)(d->bottomRightPoint.y()*d->origH) / (float)d->height));
 }
 
-QRect PerspectiveWidget::getTargetSize()
+QRect PerspectiveWidget::getTargetSize() const
 {
     QPolygon perspectiveArea;
 
@@ -251,25 +251,25 @@ QRect PerspectiveWidget::getTargetSize()
     return perspectiveArea.boundingRect();
 }
 
-float PerspectiveWidget::getAngleTopLeft()
+float PerspectiveWidget::getAngleTopLeft() const
 {
     Triangle topLeft(getTopLeftCorner(), getTopRightCorner(), getBottomLeftCorner());
     return topLeft.angleBAC();
 }
 
-float PerspectiveWidget::getAngleTopRight()
+float PerspectiveWidget::getAngleTopRight() const
 {
     Triangle topLeft(getTopRightCorner(), getBottomRightCorner(), getTopLeftCorner());
     return topLeft.angleBAC();
 }
 
-float PerspectiveWidget::getAngleBottomLeft()
+float PerspectiveWidget::getAngleBottomLeft() const
 {
     Triangle topLeft(getBottomLeftCorner(), getTopLeftCorner(), getBottomRightCorner());
     return topLeft.angleBAC();
 }
 
-float PerspectiveWidget::getAngleBottomRight()
+float PerspectiveWidget::getAngleBottomRight() const
 {
     Triangle topLeft(getBottomRightCorner(), getBottomLeftCorner(), getTopRightCorner());
     return topLeft.angleBAC();
@@ -680,13 +680,13 @@ void PerspectiveWidget::transformAffine(DImg* orgImage, DImg* destImage,
 
     double tu[5],tv[5],tw[5];     // undivided source coordinates and divisor
 
-    uchar* data, *newData;
+    uchar* data=0 , *newData=0;
     bool   sixteenBit;
     int    coords;
     int    width, height;
     int    bytesDepth;
     int    offset;
-    uchar* dest, *d2;
+    uchar* dest=0, *d2=0;
     DColor color;
 
     bytesDepth  = orgImage->bytesDepth();

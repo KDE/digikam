@@ -59,17 +59,17 @@ public:
     PerspectiveWidget(int width, int height, QWidget* parent=0);
     ~PerspectiveWidget();
 
-    QRect  getTargetSize();
-    QPoint getTopLeftCorner();
-    QPoint getTopRightCorner();
-    QPoint getBottomLeftCorner();
-    QPoint getBottomRightCorner();
+    QRect  getTargetSize() const;
+    QPoint getTopLeftCorner() const;
+    QPoint getTopRightCorner() const;
+    QPoint getBottomLeftCorner() const;
+    QPoint getBottomRightCorner() const;
     void   reset();
 
-    float getAngleTopLeft();
-    float getAngleTopRight();
-    float getAngleBottomLeft();
-    float getAngleBottomRight();
+    float getAngleTopLeft() const;
+    float getAngleTopRight() const;
+    float getAngleBottomLeft() const;
+    float getAngleBottomRight() const;
 
     void  setBackgroundColor(const QColor& bg);
     void  applyPerspectiveAdjustment();
