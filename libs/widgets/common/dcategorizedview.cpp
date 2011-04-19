@@ -6,7 +6,7 @@
  * Date        : 2010-01-16
  * Description : Qt item view for images
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,7 +50,7 @@ namespace Digikam
 
 // -------------------------------------------------------------------------------
 
-class DCategorizedViewPriv
+class DCategorizedView::DCategorizedViewPriv
 {
 public:
 
@@ -69,23 +69,25 @@ public:
     {
     }
 
-    DItemDelegate*        delegate;
-    ItemViewToolTip*      toolTip;
-    ItemViewToolTip*      notificationToolTip;
-    bool                  showToolTip;
-    bool                  usePointingHand;
-    int                   scrollStepFactor;
+    QModelIndex scrollPositionHint() const;
 
-    QMouseEvent*          currentMouseEvent;
-    bool                  ensureOneSelectedItem;
-    bool                  ensureInitialSelectedItem;
-    QPersistentModelIndex hintAtSelectionIndex;
-    int                   hintAtSelectionRow;
-    QPersistentModelIndex hintAtScrollPosition;
+public:
+
+    DItemDelegate*          delegate;
+    ItemViewToolTip*        toolTip;
+    ItemViewToolTip*        notificationToolTip;
+    bool                    showToolTip;
+    bool                    usePointingHand;
+    int                     scrollStepFactor;
+
+    QMouseEvent*            currentMouseEvent;
+    bool                    ensureOneSelectedItem;
+    bool                    ensureInitialSelectedItem;
+    QPersistentModelIndex   hintAtSelectionIndex;
+    int                     hintAtSelectionRow;
+    QPersistentModelIndex   hintAtScrollPosition;
 
     DCategorizedView* const q;
-
-    QModelIndex scrollPositionHint() const;
 };
 
 // -------------------------------------------------------------------------------
@@ -227,7 +229,6 @@ void DCategorizedView::awayFromSelection()
     }
 
     const QModelIndex first = model()->index(0, 0);
-
     const QModelIndex last  = model()->index(model()->rowCount() - 1, 0);
 
     if (selection.contains(first) && selection.contains(last))
@@ -260,7 +261,7 @@ void DCategorizedView::awayFromSelection()
 
 void DCategorizedView::invertSelection()
 {
-    const QModelIndex topLeft = model()->index(0, 0);
+    const QModelIndex topLeft     = model()->index(0, 0);
     const QModelIndex bottomRight = model()->index(model()->rowCount() - 1, 0);
 
     const QItemSelection selection(topLeft, bottomRight);
@@ -318,18 +319,20 @@ void DCategorizedView::slotGridSizeChanged(const QSize& gridSize)
 void DCategorizedView::updateDelegateSizes()
 {
     QStyleOptionViewItem option = viewOptions();
-    /*int frameAroundContents = 0;
-    if (style()->styleHint(QStyle::SH_ScrollView_FrameOnlyAroundContents)) {
+/*
+    int frameAroundContents = 0;
+    if (style()->styleHint(QStyle::SH_ScrollView_FrameOnlyAroundContents))
+    {
         frameAroundContents = style()->pixelMetric(QStyle::PM_DefaultFrameWidth) * 2;
     }
-    const int contentWidth = viewport()->width() - 1
+    const int contentWidth  = viewport()->width() - 1
                                 - frameAroundContents
                                 - style()->pixelMetric(QStyle::PM_ScrollBarExtent, 0, verticalScrollBar());
     const int contentHeight = viewport()->height() - 1
                                 - frameAroundContents
                                 - style()->pixelMetric(QStyle::PM_ScrollBarExtent, 0, horizontalScrollBar());
-    option.rect = QRect(0, 0, contentWidth, contentHeight);
-    */
+    option.rect             = QRect(0, 0, contentWidth, contentHeight);
+*/
     option.rect = QRect(QPoint(0,0), viewport()->size());
     d->delegate->setDefaultViewOptions(option);
 }
@@ -340,8 +343,8 @@ void DCategorizedView::slotActivated(const QModelIndex& index)
     {
         // ignore activation if Ctrl or Shift is pressed (for selection)
         Qt::KeyboardModifiers modifiers = d->currentMouseEvent->modifiers();
-        const bool shiftKeyPressed = modifiers & Qt::ShiftModifier;
-        const bool controlKeyPressed = modifiers & Qt::ControlModifier;
+        const bool shiftKeyPressed      = modifiers & Qt::ShiftModifier;
+        const bool controlKeyPressed    = modifiers & Qt::ControlModifier;
 
         if (shiftKeyPressed || controlKeyPressed)
         {
@@ -452,9 +455,9 @@ void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start
     {
         // find out which selected indexes are left after rows are removed
         QItemSelection selected = selectionModel()->selection();
-
-        QModelIndex current = currentIndex();
+        QModelIndex current     = currentIndex();
         QModelIndex indexToAnchor;
+
         if (selected.contains(current))
         {
             indexToAnchor = current;
@@ -483,7 +486,7 @@ void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start
 void DCategorizedView::layoutAboutToBeChanged()
 {
     d->ensureOneSelectedItem = selectionModel()->hasSelection();
-    QModelIndex current = currentIndex();
+    QModelIndex current      = currentIndex();
 
     // store some hints so that if all selected items were removed dont need to default to 0,0.
     if (d->ensureOneSelectedItem)
@@ -548,7 +551,7 @@ void DCategorizedView::userInteraction()
 {
     // as soon as the user did anything affecting selection, we don't interfere anymore
     d->ensureInitialSelectedItem = false;
-    d->hintAtSelectionIndex = QModelIndex();
+    d->hintAtSelectionIndex      = QModelIndex();
 }
 
 void DCategorizedView::ensureSelectionAfterChanges()
@@ -558,11 +561,10 @@ void DCategorizedView::ensureSelectionAfterChanges()
         // Ensure the item (0,0) is selected, if the model was reset previously
         // and the user did not change the selection since reset.
         // Caveat: Item at (0,0) may have changed.
-        bool hadInitial = d->ensureInitialSelectedItem;
+        bool hadInitial              = d->ensureInitialSelectedItem;
         d->ensureInitialSelectedItem = false;
         d->ensureOneSelectedItem     = false;
-
-        QModelIndex index = model()->index(0,0);
+        QModelIndex index            = model()->index(0,0);
 
         if (index.isValid())
         {
@@ -691,8 +693,9 @@ void DCategorizedView::indexActivated(const QModelIndex&)
 
 bool DCategorizedView::showToolTip(const QModelIndex& index, QStyleOptionViewItem& option, QHelpEvent* he)
 {
-    QRect innerRect;
+    QRect  innerRect;
     QPoint pos;
+
     if (he)
     {
         pos = he->pos();
@@ -712,6 +715,7 @@ bool DCategorizedView::showToolTip(const QModelIndex& index, QStyleOptionViewIte
         d->toolTip->show(option, index);
         return true;
     }
+
     return false;
 }
 
@@ -733,14 +737,14 @@ void DCategorizedView::contextMenuEvent(QContextMenuEvent* event)
 void DCategorizedView::mousePressEvent(QMouseEvent* event)
 {
     userInteraction();
-    const QModelIndex index = indexAt(event->pos());
+    const QModelIndex index         = indexAt(event->pos());
 
     // Clear selection on click on empty area. Standard behavior, but not done by QAbstractItemView for some reason.
     Qt::KeyboardModifiers modifiers = event->modifiers();
-    const Qt::MouseButton button = event->button();
-    const bool rightButtonPressed = button & Qt::RightButton;
-    const bool shiftKeyPressed = modifiers & Qt::ShiftModifier;
-    const bool controlKeyPressed = modifiers & Qt::ControlModifier;
+    const Qt::MouseButton button    = event->button();
+    const bool rightButtonPressed   = button & Qt::RightButton;
+    const bool shiftKeyPressed      = modifiers & Qt::ShiftModifier;
+    const bool controlKeyPressed    = modifiers & Qt::ControlModifier;
 
     if (!index.isValid() && !rightButtonPressed && !shiftKeyPressed && !controlKeyPressed)
     {
@@ -854,22 +858,22 @@ void DCategorizedView::keyPressEvent(QKeyEvent* event)
         return;
     }
 
-    /*
+/*
     // from dolphincontroller.cpp
     const QItemSelectionModel* selModel = m_itemView->selectionModel();
-    const QModelIndex currentIndex = selModel->currentIndex();
-    const bool trigger = currentIndex.isValid()
-                         && ((event->key() == Qt::Key_Return)
-                            || (event->key() == Qt::Key_Enter))
-                         && (selModel->selectedIndexes().count() > 0);
-    if (trigger) {
+    const QModelIndex currentIndex      = selModel->currentIndex();
+    const bool trigger                  = currentIndex.isValid() &&
+                                          ((event->key() == Qt::Key_Return) || (event->key() == Qt::Key_Enter)) &&
+                                          (selModel->selectedIndexes().count() > 0);
+    if (trigger)
+    {
         const QModelIndexList indexList = selModel->selectedIndexes();
         foreach (const QModelIndex& index, indexList)
         {
             emit itemTriggered(itemForIndex(index));
         }
     }
-    */
+*/
     DigikamKCategorizedView::keyPressEvent(event);
 
     emit keyPressed(event);
@@ -899,7 +903,7 @@ bool DCategorizedView::viewportEvent(QEvent* event)
                 return true;
             }
 
-            QHelpEvent* he = static_cast<QHelpEvent*>(event);
+            QHelpEvent* he          = static_cast<QHelpEvent*>(event);
             const QModelIndex index = indexAt(he->pos());
 
             if (!index.isValid())
@@ -907,9 +911,9 @@ bool DCategorizedView::viewportEvent(QEvent* event)
                 break;
             }
 
-            QStyleOptionViewItem option = viewOptions();
-            option.rect = visualRect(index);
-            option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
+            QStyleOptionViewItem option =  viewOptions();
+            option.rect                 =  visualRect(index);
+            option.state                |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
             showToolTip(index, option, he);
             return true;
         }
@@ -935,9 +939,9 @@ void DCategorizedView::showIndexNotification(const QModelIndex& index, const QSt
 
     d->notificationToolTip->setTipContents(message);
 
-    QStyleOptionViewItem option = viewOptions();
-    option.rect = visualRect(index);
-    option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
+    QStyleOptionViewItem option =  viewOptions();
+    option.rect                 =  visualRect(index);
+    option.state                |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
     d->notificationToolTip->show(option, index);
 }
 
@@ -962,7 +966,7 @@ QModelIndex DCategorizedView::mapIndexForDragDrop(const QModelIndex& index) cons
 QPixmap DCategorizedView::pixmapForDrag(const QList<QModelIndex>& indexes) const
 {
     QStyleOptionViewItem option = viewOptions();
-    option.rect = viewport()->rect();
+    option.rect                 = viewport()->rect();
     return d->delegate->pixmapForDrag(option, indexes);
 }
 

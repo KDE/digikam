@@ -6,7 +6,7 @@
  * Date        : 2010-01-16
  * Description : Qt item view for images
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,6 @@ namespace Digikam
 {
 
 class DItemDelegate;
-class DCategorizedViewPriv;
 class AbstractItemDragDropHandler;
 class ItemViewToolTip;
 
@@ -79,8 +78,8 @@ public:
 
 public Q_SLOTS:
 
-    virtual void cut() { DragDropViewImplementation::cut(); }
-    virtual void copy() { DragDropViewImplementation::copy(); }
+    virtual void cut()   { DragDropViewImplementation::cut();   }
+    virtual void copy()  { DragDropViewImplementation::copy();  }
     virtual void paste() { DragDropViewImplementation::paste(); }
 
     void showIndexNotification(const QModelIndex& index, const QString& message);
@@ -178,6 +177,7 @@ private:
 
 private:
 
+    class DCategorizedViewPriv;
     DCategorizedViewPriv* const d;
 };
 
