@@ -7,7 +7,7 @@
  * Description : database migration dialog
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,7 +81,7 @@ void DatabaseWidget::setupMainArea()
 {
     setAutoFillBackground(false);
 
-    QVBoxLayout* layout = new QVBoxLayout();
+    QVBoxLayout* layout  = new QVBoxLayout();
     setLayout(layout);
 
     // --------------------------------------------------------
@@ -96,7 +96,7 @@ void DatabaseWidget::setupMainArea()
     d->databasePathLabel->setWordWrap(true);
     d->databasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
 
-    databasePathEdit = new KUrlRequester(dbPathBox);
+    databasePathEdit     = new KUrlRequester(dbPathBox);
     databasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
 
     QLabel* databaseTypeLabel           = new QLabel(i18n("Type"));
