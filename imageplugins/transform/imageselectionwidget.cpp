@@ -660,12 +660,12 @@ void ImageSelectionWidget::setSelectionHeight(int h)
     regionSelectionChanged();
 }
 
-QPoint ImageSelectionWidget::convertPoint(const QPoint& pm, bool localToReal)
+QPoint ImageSelectionWidget::convertPoint(const QPoint& pm, bool localToReal) const
 {
     return convertPoint(pm.x(), pm.y(), localToReal);
 }
 
-QPoint ImageSelectionWidget::convertPoint(int x, int y, bool localToReal)
+QPoint ImageSelectionWidget::convertPoint(int x, int y, bool localToReal) const
 {
     int pmX, pmY;
 
@@ -1147,7 +1147,7 @@ void ImageSelectionWidget::paintEvent(QPaintEvent*)
     p.end();
 }
 
-QPoint ImageSelectionWidget::opposite()
+QPoint ImageSelectionWidget::opposite() const
 {
     QPoint opp;
 
@@ -1174,7 +1174,7 @@ QPoint ImageSelectionWidget::opposite()
     return opp;
 }
 
-float ImageSelectionWidget::distance(const QPoint& a, const QPoint& b)
+float ImageSelectionWidget::distance(const QPoint& a, const QPoint& b) const
 {
     return sqrt(pow(a.x() - b.x(), 2) + pow(a.y() - b.y(), 2));
 }

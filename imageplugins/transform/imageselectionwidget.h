@@ -154,15 +154,15 @@ private:
     void   regionSelectionMoved();
 
     void   regionSelectionChanged();
-    QPoint convertPoint(const QPoint& pm, bool localToReal=true);
-    QPoint convertPoint(int x, int y, bool localToReal=true);
+    QPoint convertPoint(const QPoint& pm, bool localToReal=true) const;
+    QPoint convertPoint(int x, int y, bool localToReal=true) const;
     void   normalizeRegion();
     void   reverseRatioValues();
     int    computePreciseSize(int size, int step) const;
     void   applyAspectRatio(bool useHeight, bool repaintWidget=true);
     void   updatePixmap();
-    QPoint opposite();
-    float  distance(const QPoint& a, const QPoint& b);
+    QPoint opposite() const;
+    float  distance(const QPoint& a, const QPoint& b) const;
     void   placeSelection(const QPoint& pm, bool symmetric, const QPoint& center);
     void   setCursorResizing();
 
