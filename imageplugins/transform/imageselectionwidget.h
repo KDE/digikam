@@ -113,7 +113,7 @@ public:
 
     int   getOriginalImageWidth();
     int   getOriginalImageHeight();
-    QRect getRegionSelection();
+    QRect getRegionSelection() const;
 
     int   getMinWidthRange();
     int   getMinHeightRange();

@@ -297,7 +297,7 @@ int ImageSelectionWidget::getOriginalImageHeight()
     return d->image.height();
 }
 
-QRect ImageSelectionWidget::getRegionSelection()
+QRect ImageSelectionWidget::getRegionSelection() const
 {
     return d->regionSelection;
 }

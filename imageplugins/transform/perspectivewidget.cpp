@@ -3,11 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date  : 2005-01-18
+ * Date        : 2005-01-18
  * Description : a widget class to edit perspective.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -129,6 +129,7 @@ public:
     QPoint      spot;
 
     QColor      guideColor;
+    QColor      bgColor;
 
     // 60 points will be stored to compute a grid of 15x15 lines.
     QPolygon    grid;
@@ -146,6 +147,7 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget* parent)
     setMinimumSize(w, h);
     setMouseTracking(true);
 
+    d->bgColor  = palette().color(QPalette::Background);
     d->iface    = new ImageIface(w, h);
     uchar* data = d->iface->setPreviewImageSize(w, h);
     d->width    = d->iface->previewWidth();
@@ -375,6 +377,13 @@ void PerspectiveWidget::slotChangeGuideSize(int size)
     update();
 }
 
+void PerspectiveWidget::setBackgroundColor(const QColor& bg)
+{
+    d->bgColor = bg;
+    updatePixmap();
+    update();
+}
+
 void PerspectiveWidget::updatePixmap()
 {
     d->topLeftCorner.setRect(d->topLeftPoint.x() + d->rect.topLeft().x(),
@@ -406,7 +415,7 @@ void PerspectiveWidget::updatePixmap()
 
     // Draw background
 
-    d->pixmap->fill(palette().color(QPalette::Background));
+    d->pixmap->fill(d->bgColor);
 
     if (d->inverseTransformation)
     {
@@ -419,14 +428,15 @@ void PerspectiveWidget::updatePixmap()
                         d->rect.width(), d->rect.height());
     }
     // if we are resizing with the mouse, compute and draw only if drawWhileMoving is set
-    else if ((d->currentResizing == PerspectiveWidgetPriv::ResizingNone || d->drawWhileMoving) && d->validPerspective)
+    else if ((d->currentResizing == PerspectiveWidgetPriv::ResizingNone || d->drawWhileMoving) &&
+             d->validPerspective)
     {
         // Create preview image
 
         DImg destImage(d->preview.width(), d->preview.height(),
                        d->preview.sixteenBit(), d->preview.hasAlpha());
 
-        DColor background(palette().color(QPalette::Background));
+        DColor background(d->bgColor);
 
         d->transformedCenter = buildPerspective(QPoint(0, 0), QPoint(d->width, d->height),
                                                 d->topLeftPoint, d->topRightPoint,
