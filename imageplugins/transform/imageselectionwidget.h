@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -91,17 +91,11 @@ public:
 
 public:
 
-    /*
-    ImageSelectionWidget(int width, int height, QWidget *parent=0,
-                         int widthRatioValue=1, int heightRatioValue=1,
-                         int aspectRatio=RATIO01X01, int orient=Landscape,
-                         int guideLinesType=GuideNone);
-    */
-
     ImageSelectionWidget(int width, int height, QWidget* parent = 0);
     ImageSelectionWidget(int width, int height, bool initDrawing, QWidget* parent = 0);
     ~ImageSelectionWidget();
 
+    void  setBackgroundColor(const QColor& bg);
     void  setCenterSelection(int centerType=CenterImage);
     void  setSelectionX(int x);
     void  setSelectionY(int y);

@@ -155,6 +155,7 @@ public:
     QPixmap     previewPixmap;
 
     QColor      guideColor;
+    QColor      bgColor;
 
     DImg        preview;
 
@@ -165,6 +166,7 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget* parent)
     : QWidget(parent), d(new ImageSelectionWidgetPriv)
 {
     d->isDrawingSelection = true;
+    d->bgColor            = palette().color(QPalette::Background);
     setup(w, h);
 }
 
@@ -441,8 +443,8 @@ void ImageSelectionWidget::maxAspectSelection()
 }
 
 void ImageSelectionWidget::setGoldenGuideTypes(bool drawGoldenSection,  bool drawGoldenSpiralSection,
-        bool drawGoldenSpiral,   bool drawGoldenTriangle,
-        bool flipHorGoldenGuide, bool flipVerGoldenGuide)
+                                               bool drawGoldenSpiral,   bool drawGoldenTriangle,
+                                               bool flipHorGoldenGuide, bool flipVerGoldenGuide)
 {
     d->drawGoldenSection       = drawGoldenSection;
     d->drawGoldenSpiralSection = drawGoldenSpiralSection;
@@ -450,6 +452,13 @@ void ImageSelectionWidget::setGoldenGuideTypes(bool drawGoldenSection,  bool dra
     d->drawGoldenTriangle      = drawGoldenTriangle;
     d->flipHorGoldenGuide      = flipHorGoldenGuide;
     d->flipVerGoldenGuide      = flipVerGoldenGuide;
+}
+
+void ImageSelectionWidget::setBackgroundColor(const QColor& bg)
+{
+    d->bgColor = bg;
+    updatePixmap();
+    repaint();
 }
 
 void ImageSelectionWidget::slotGuideLines(int guideLinesType)
@@ -969,7 +978,7 @@ void ImageSelectionWidget::updatePixmap()
     d->localBottomRightCorner.setRect(d->localRegionSelection.right() - 7, d->localRegionSelection.bottom() - 7, 8, 8);
 
     // Drawing background.
-    d->pixmap->fill(palette().color(QPalette::Background));
+    d->pixmap->fill(d->bgColor);
 
     if (d->preview.isNull())
     {

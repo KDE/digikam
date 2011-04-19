@@ -170,6 +170,7 @@ public:
     RExpanderBox*         expbox;
     EditorToolSettings*   gboxSettings;
 };
+
 const QString RatioCropTool::RatioCropToolPriv::configGroupName("aspectratiocrop Tool");
 const QString RatioCropTool::RatioCropToolPriv::configHorOrientedAspectRatioEntry("Hor.Oriented Aspect Ratio");
 const QString RatioCropTool::RatioCropToolPriv::configHorOrientedAspectRatioOrientationEntry("Hor.Oriented Aspect Ratio Orientation");
@@ -1026,6 +1027,11 @@ void RatioCropTool::blockWidgetSignals(bool b)
     d->widthInput->blockSignals(b);
     d->xInput->blockSignals(b);
     d->yInput->blockSignals(b);
+}
+
+void RatioCropTool::setBackgroundColor(const QColor& bg)
+{
+    d->imageSelectionWidget->setBackgroundColor(bg);
 }
 
 }  // namespace DigikamTransformImagePlugin

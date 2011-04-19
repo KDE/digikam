@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email dot cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,7 +55,9 @@ private:
 
     void finalRendering();
     void applyRatioChanges(int a);
+    void blockWidgetSignals(bool b);
     void setRatioCBText(int orientation);
+    void setBackgroundColor(const QColor& bg);
 
 private Q_SLOTS:
 
@@ -79,10 +81,6 @@ private Q_SLOTS:
     void slotSelectionOrientationChanged(int);
     void slotGuideTypeChanged(int t);
     void slotGoldenGuideTypeChanged();
-
-private:
-
-    void blockWidgetSignals(bool b);
 
 private:
 
