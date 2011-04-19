@@ -6,7 +6,7 @@
  * Date        : 2008-04-07
  * Description : Raw camera list dialog
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,8 +33,6 @@
 namespace Digikam
 {
 
-class RawCameraDlgPriv;
-
 class DIGIKAM_EXPORT RawCameraDlg : public InfoDlg
 {
     Q_OBJECT
@@ -44,12 +42,17 @@ public:
     RawCameraDlg(QWidget* parent);
     ~RawCameraDlg();
 
+private:
+
+    void updateHeader(int results=0);
+
 private Q_SLOTS:
 
     void slotSearchTextChanged(const SearchTextSettings&);
 
 private:
 
+    class RawCameraDlgPriv;
     RawCameraDlgPriv* const d;
 };
 

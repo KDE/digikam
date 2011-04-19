@@ -49,42 +49,32 @@
 namespace Digikam
 {
 
-class RawCameraDlgPriv
+class RawCameraDlg::RawCameraDlgPriv
 {
 public:
 
     RawCameraDlgPriv() :
+        header(0),
         searchBar(0)
     {
     }
+
+    QLabel*        header;
     SearchTextBar* searchBar;
 };
 
 RawCameraDlg::RawCameraDlg(QWidget* parent)
     : InfoDlg(parent), d(new RawCameraDlgPriv)
 {
-
-    QStringList list      = KDcrawIface::KDcraw::supportedCamera();
-    QString     librawVer = KDcrawIface::KDcraw::librawVersion();
-    QString     KDcrawVer = KDcrawIface::KDcraw::version();
-
-    // --------------------------------------------------------
-
-    QLabel* header = new QLabel(this);
-    header->setText(i18np("<p>Using KDcraw library version %2<br/>"
-                          "Using LibRaw version %3<br/>"
-                          "1 model in the list</p>",
-                          "<p>Using KDcraw library version %2<br/>"
-                          "Using LibRaw version %3<br/>"
-                          "%1 models in the list</p>",
-                          list.count(), KDcrawVer, librawVer));
-
-    // --------------------------------------------------------
-
-    //    kapp->setOverrideCursor(Qt::WaitCursor);
     setCaption(i18n("List of supported RAW cameras"));
 
+    QStringList list = KDcrawIface::KDcraw::supportedCamera();
+
+    // --------------------------------------------------------
+
+    d->header    = new QLabel(this);
     d->searchBar = new SearchTextBar(this, "RawCameraDlgSearchBar");
+    updateHeader();
 
     listView()->setColumnCount(1);
     listView()->setHeaderLabels(QStringList() << "Camera Model"); // Header is hidden. No i18n here.
@@ -98,8 +88,8 @@ RawCameraDlg::RawCameraDlg(QWidget* parent)
     // --------------------------------------------------------
 
     QGridLayout* grid = dynamic_cast<QGridLayout*>(mainWidget()->layout());
-    grid->addWidget(header,       1, 0, 1,-1);
-    grid->addWidget(d->searchBar, 3, 0, 1,-1);
+    grid->addWidget(d->header,       1, 0, 1, -1);
+    grid->addWidget(d->searchBar, 3, 0, 1, -1);
 
     // --------------------------------------------------------
 
@@ -115,6 +105,7 @@ RawCameraDlg::~RawCameraDlg()
 void RawCameraDlg::slotSearchTextChanged(const SearchTextSettings& settings)
 {
     bool query     = false;
+    int  results   = 0;
     QString search = settings.text.toLower();
 
     QTreeWidgetItemIterator it(listView());
@@ -125,6 +116,7 @@ void RawCameraDlg::slotSearchTextChanged(const SearchTextSettings& settings)
 
         if (item->text(0).toLower().contains(search, settings.caseSensitive))
         {
+            results++;
             query = true;
             item->setHidden(false);
         }
@@ -136,7 +128,33 @@ void RawCameraDlg::slotSearchTextChanged(const SearchTextSettings& settings)
         ++it;
     }
 
+    updateHeader(results);
     d->searchBar->slotSearchResult(query);
+}
+
+void RawCameraDlg::updateHeader(int results)
+{
+    QString librawVer = KDcrawIface::KDcraw::librawVersion();
+    QString KDcrawVer = KDcrawIface::KDcraw::version();
+    QStringList list  = KDcrawIface::KDcraw::supportedCamera();
+
+    if (!results)
+    {
+        d->header->setText(i18n("<p>Using KDcraw library version %1<br/>"
+                                "Using LibRaw version %2<br/>"
+                                "%3 models in the list</p>",
+                                KDcrawVer, librawVer,
+                                list.count()));
+    }
+    else
+    {
+        d->header->setText(i18n("<p>Using KDcraw library version %1<br/>"
+                                "Using LibRaw version %2<br/>"
+                                "%3 models in the list (found: %4)</p>",
+                                KDcrawVer, librawVer,
+                                list.count(),
+                                results));
+    }
 }
 
 }  // namespace Digikam
