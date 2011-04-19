@@ -6,7 +6,7 @@
  * Date        : 2008-09-07
  * Description : Rubber band for Q3ScrollView
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,17 +26,16 @@
 
 // Qt includes
 
-#include <Qt3Support/Q3ScrollView>
 #include <QtGui/QRubberBand>
 
 // Local includes
 
 #include "digikam_export.h"
 
+class Q3ScrollView;
+
 namespace Digikam
 {
-
-class DRubberBandPrivate;
 
 class DIGIKAM_EXPORT DRubberBand : public QRubberBand
 {
@@ -46,7 +45,7 @@ public:
     DRubberBand(Q3ScrollView* parent);
     ~DRubberBand();
 
-    QRect rubberBandAreaOnContents();
+    QRect rubberBandAreaOnContents() const;
 
     /// Returns the active state.
     bool isActive() const;
@@ -90,9 +89,12 @@ protected:
 
     void updateForContentsPosition(int contentsX, int contentsY);
 
+private:
+
+    class DRubberBandPrivate;
     DRubberBandPrivate* const d;
 };
 
-}
+} // namespace Digikam
 
 #endif // DRUBBERBAND

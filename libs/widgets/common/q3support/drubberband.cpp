@@ -6,7 +6,7 @@
  * Date        : 2008-09-07
  * Description : Rubber band for Q3ScrollView
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,15 +23,14 @@
 
 #include "drubberband.h"
 
-// KDE includes
+// Qt includes
 
-
-
+#include <Qt3Support/Q3ScrollView>
 
 namespace Digikam
 {
 
-class DRubberBandPrivate
+class DRubberBand::DRubberBandPrivate
 {
 public:
 
@@ -61,7 +60,7 @@ DRubberBand::~DRubberBand()
     delete d;
 }
 
-QRect DRubberBand::rubberBandAreaOnContents()
+QRect DRubberBand::rubberBandAreaOnContents() const
 {
     QRect rubber = QRect(d->firstPoint, d->secondPoint);
     rubber       = rubber.normalized();
@@ -96,7 +95,7 @@ void DRubberBand::setActive(bool active)
 void DRubberBand::setFirstPointOnViewport(const QPoint& p)
 {
     d->firstPoint = p;
-    d->active = true;
+    d->active     = true;
 }
 
 void DRubberBand::setFirstPointOnContents(const QPoint& p)
