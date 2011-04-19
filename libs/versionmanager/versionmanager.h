@@ -6,7 +6,7 @@
  * Date        : 2010-06-18
  * Description : class for determining new file name in terms of version management
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -46,6 +46,14 @@ class DIGIKAM_EXPORT VersionManager
 {
 public:
 
+    enum FileNameType
+    {
+        CurrentVersionName,
+        NewVersionName
+    };
+
+public:
+
     VersionManager();
     virtual ~VersionManager();
 
@@ -54,12 +62,6 @@ public:
 
     void setNamingScheme(VersionNamingScheme* scheme);
     VersionNamingScheme* namingScheme() const;
-
-    enum FileNameType
-    {
-        CurrentVersionName,
-        NewVersionName
-    };
 
     VersionFileOperation operation(FileNameType request, const VersionFileInfo& loadedFile,
                                    const DImageHistory& initialResolvedHistory,

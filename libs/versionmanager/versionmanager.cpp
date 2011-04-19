@@ -6,7 +6,7 @@
  * Date        : 2010-06-18
  * Description : class for determining new file name in terms of version management
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -45,6 +45,7 @@ namespace Digikam
 class VersionManagerSettingsConfig
 {
 public:
+
     static const QString configEnabled;
     static const QString configIntermediateAfterEachSession;
     static const QString configIntermediateAfterRawConversion;
@@ -54,6 +55,7 @@ public:
     static const QString configAutoSaveWhenClosingEditor;
     static const QString configVersionStorageFormat;
 };
+
 const QString VersionManagerSettingsConfig::configEnabled("Non-Destructive Editing Enabled");
 const QString VersionManagerSettingsConfig::configIntermediateAfterEachSession("Save Intermediate After Each Session");
 const QString VersionManagerSettingsConfig::configIntermediateAfterRawConversion("Save Intermediate After Raw Conversion");
@@ -65,18 +67,18 @@ const QString VersionManagerSettingsConfig::configVersionStorageFormat("Saving F
 
 VersionManagerSettings::VersionManagerSettings()
 {
-    enabled                     = true;
-    saveIntermediateVersions    = NoIntermediates;
-    showInViewFlags             = OnlyShowCurrent;
-    editorClosingMode           = AlwaysAsk;
-    format                      = "JPG";
+    enabled                  = true;
+    saveIntermediateVersions = NoIntermediates;
+    showInViewFlags          = OnlyShowCurrent;
+    editorClosingMode        = AlwaysAsk;
+    format                   = "JPG";
 }
 
 void VersionManagerSettings::readFromConfig(KConfigGroup& group)
 {
     enabled                     = group.readEntry(VersionManagerSettingsConfig::configEnabled, true);
-
     saveIntermediateVersions    = NoIntermediates;
+
     if (group.readEntry(VersionManagerSettingsConfig::configIntermediateAfterEachSession, false))
         saveIntermediateVersions |= AfterEachSession;
     if (group.readEntry(VersionManagerSettingsConfig::configIntermediateAfterRawConversion, false))
@@ -85,30 +87,31 @@ void VersionManagerSettings::readFromConfig(KConfigGroup& group)
         saveIntermediateVersions |= WhenNotReproducible;
 
     showInViewFlags             = OnlyShowCurrent;
+
     if (group.readEntry(VersionManagerSettingsConfig::configViewShowOriginal, false))
         showInViewFlags |= ShowOriginal;
     if (group.readEntry(VersionManagerSettingsConfig::configViewShowIntermediates, false))
         showInViewFlags |= ShowIntermediates;
 
     bool autoSave               = group.readEntry(VersionManagerSettingsConfig::configAutoSaveWhenClosingEditor, false);
-    editorClosingMode = autoSave ? AutoSave : AlwaysAsk;
+    editorClosingMode           = autoSave ? AutoSave : AlwaysAsk;
 
     format                      = group.readEntry(VersionManagerSettingsConfig::configVersionStorageFormat, "JPG").toUpper();
 }
 
 void VersionManagerSettings::writeToConfig(KConfigGroup& group) const
 {
-    group.writeEntry(VersionManagerSettingsConfig::configEnabled, enabled);
-    group.writeEntry(VersionManagerSettingsConfig::configIntermediateAfterEachSession, bool(saveIntermediateVersions & AfterEachSession));
-    group.writeEntry(VersionManagerSettingsConfig::configIntermediateAfterRawConversion, bool(saveIntermediateVersions & AfterRawConversion));
+    group.writeEntry(VersionManagerSettingsConfig::configEnabled,                         enabled);
+    group.writeEntry(VersionManagerSettingsConfig::configIntermediateAfterEachSession,    bool(saveIntermediateVersions & AfterEachSession));
+    group.writeEntry(VersionManagerSettingsConfig::configIntermediateAfterRawConversion,  bool(saveIntermediateVersions & AfterRawConversion));
     group.writeEntry(VersionManagerSettingsConfig::configIntermediateWhenNotReproducible, bool(saveIntermediateVersions & WhenNotReproducible));
-    group.writeEntry(VersionManagerSettingsConfig::configViewShowIntermediates, bool(showInViewFlags & ShowIntermediates));
-    group.writeEntry(VersionManagerSettingsConfig::configViewShowOriginal, bool(showInViewFlags & ShowOriginal));
-    group.writeEntry(VersionManagerSettingsConfig::configAutoSaveWhenClosingEditor, bool(editorClosingMode == AutoSave));
-    group.writeEntry(VersionManagerSettingsConfig::configVersionStorageFormat, format);
+    group.writeEntry(VersionManagerSettingsConfig::configViewShowIntermediates,           bool(showInViewFlags & ShowIntermediates));
+    group.writeEntry(VersionManagerSettingsConfig::configViewShowOriginal,                bool(showInViewFlags & ShowOriginal));
+    group.writeEntry(VersionManagerSettingsConfig::configAutoSaveWhenClosingEditor,       bool(editorClosingMode == AutoSave));
+    group.writeEntry(VersionManagerSettingsConfig::configVersionStorageFormat,            format);
 }
 
-// --------------
+// ---------------------------------------------------------------------------------------------
 
 class DefaultVersionNamingScheme : public VersionNamingScheme
 {
@@ -144,7 +147,7 @@ QString DefaultVersionNamingScheme::baseName(const QString& currentPath, const Q
     // Perl: /^(.+?)(_v\d+?)?(-\d+?)?\.([^\.]+?)$/
     // But setMinimal() cannot replace Perl's non-greedy quantifiers, so we need three regexps
 
-    int index = fileName.lastIndexOf(QLatin1Char('.'));
+    int index                = fileName.lastIndexOf(QLatin1Char('.'));
     QString completeBaseName = (index == -1) ? fileName : fileName.left(index);
 
     // DSC000636_v5-3.JPG: intermediate
@@ -205,7 +208,7 @@ QString DefaultVersionNamingScheme::intermediateDirectory(const QString& current
     return currentPath;
 }
 
-// --------------
+// -------------------------------------------------------------------------------------------------------
 
 class VersionNameCreator
 {
@@ -235,23 +238,23 @@ public:
 
     VersionManagerSettings m_settings;
 
-    VersionFileInfo m_result;
-    VersionFileInfo m_loadedFile;
+    VersionFileInfo        m_result;
+    VersionFileInfo        m_loadedFile;
 
-    VersionFileOperation m_operation;
+    VersionFileOperation   m_operation;
 
-    const DImageHistory m_resolvedInitialHistory;
-    const DImageHistory m_currentHistory;
+    const DImageHistory    m_resolvedInitialHistory;
+    const DImageHistory    m_currentHistory;
 
-    bool m_fromRaw;
-    bool m_newVersion;
+    bool                   m_fromRaw;
+    bool                   m_newVersion;
 
-    QVariant        m_version;
-    QVariant        m_intermediateCounter;
-    QString         m_baseName;
-    QString         m_intermediatePath;
+    QVariant               m_version;
+    QVariant               m_intermediateCounter;
+    QString                m_baseName;
+    QString                m_intermediatePath;
 
-    VersionManager* const q;
+    VersionManager* const  q;
 };
 
 VersionNameCreator::VersionNameCreator(const VersionFileInfo& loadedFile,
@@ -261,11 +264,9 @@ VersionNameCreator::VersionNameCreator(const VersionFileInfo& loadedFile,
       m_resolvedInitialHistory(m_resolvedInitialHistory), m_currentHistory(m_currentHistory),
       m_fromRaw(false), m_newVersion(false), q(q)
 {
-    m_loadedFile.format = m_loadedFile.format.toUpper();
-
-    m_fromRaw = (m_loadedFile.format.startsWith("RAW")); // also accept RAW-... format
-
-    m_version = q->namingScheme()->initialCounter();
+    m_loadedFile.format   = m_loadedFile.format.toUpper();
+    m_fromRaw             = (m_loadedFile.format.startsWith("RAW")); // also accept RAW-... format
+    m_version             = q->namingScheme()->initialCounter();
     m_intermediateCounter = q->namingScheme()->initialCounter();
 }
 
@@ -278,8 +279,8 @@ void VersionNameCreator::checkNeedNewVersion()
              << m_resolvedInitialHistory.hasReferredImageOfType(HistoryImageId::Intermediate)
              << m_fromRaw << q->workspaceFileFormats().contains(m_loadedFile.format);
 
-    if (!m_resolvedInitialHistory.hasReferredImageOfType(HistoryImageId::Original)
-        && !m_resolvedInitialHistory.hasReferredImageOfType(HistoryImageId::Intermediate))
+    if (!m_resolvedInitialHistory.hasReferredImageOfType(HistoryImageId::Original) &&
+        !m_resolvedInitialHistory.hasReferredImageOfType(HistoryImageId::Intermediate))
     {
         m_newVersion = true;
     }
@@ -301,27 +302,29 @@ void VersionNameCreator::fork()
 
 void VersionNameCreator::setSaveDirectory()
 {
-    m_result.path = q->namingScheme()->directory(m_loadedFile.path, m_loadedFile.fileName);
+    m_result.path      = q->namingScheme()->directory(m_loadedFile.path, m_loadedFile.fileName);
     m_intermediatePath = q->namingScheme()->directory(m_loadedFile.path, m_loadedFile.fileName);
 }
 
 void VersionNameCreator::setSaveDirectory(const QString& path)
 {
-    m_result.path = path;
+    m_result.path      = path;
     m_intermediatePath = path;
 }
 
 void VersionNameCreator::setSaveFormat()
 {
     m_result.format = m_settings.format;
-    /*if (m_fromRaw)
+/*
+    if (m_fromRaw)
     {
         m_result.format = m_settings.formatForStoringRAW;
     }
     else
     {
         m_result.format = m_settings.formatForStoringSubversions;
-    }*/
+    }
+*/
 }
 
 void VersionNameCreator::setSaveFormat(const QString& override)
@@ -374,14 +377,14 @@ void VersionNameCreator::setSaveFileName()
 void VersionNameCreator::setSaveFileName(const QString& fileName)
 {
     m_result.fileName = fileName;
-    m_baseName = fileName.section(QLatin1Char('.'), 0, 0);
+    m_baseName        = fileName.section(QLatin1Char('.'), 0, 0);
     // m_version remains unknown
 }
 
 void VersionNameCreator::initOperation()
 {
-    m_operation.loadedFile     = m_loadedFile;
-    m_operation.saveFile       = m_result;
+    m_operation.loadedFile = m_loadedFile;
+    m_operation.saveFile   = m_result;
 
     if (m_newVersion)
     {
@@ -404,9 +407,9 @@ void VersionNameCreator::checkIntermediates()
 {
     // call when task has been determined
     kDebug() << "Will replace" << bool(m_operation.tasks & VersionFileOperation::Replace)
-    << "save after each session" << bool(m_settings.saveIntermediateVersions & VersionManagerSettings::AfterEachSession)
-    << "save after raw" << bool(m_settings.saveIntermediateVersions & VersionManagerSettings::AfterRawConversion)
-    << "save when not repro" << bool(m_settings.saveIntermediateVersions & VersionManagerSettings::WhenNotReproducible);
+             << "save after each session" << bool(m_settings.saveIntermediateVersions & VersionManagerSettings::AfterEachSession)
+             << "save after raw" << bool(m_settings.saveIntermediateVersions & VersionManagerSettings::AfterRawConversion)
+             << "save when not repro" << bool(m_settings.saveIntermediateVersions & VersionManagerSettings::WhenNotReproducible);
 
     if ( (m_settings.saveIntermediateVersions & VersionManagerSettings::AfterEachSession) &&
          (m_operation.tasks & VersionFileOperation::Replace) )
@@ -426,7 +429,8 @@ void VersionNameCreator::checkIntermediates()
     int firstStep = m_resolvedInitialHistory.size();
     int lastStep  = m_currentHistory.size() - 2; // index of last but one entry
 
-    kDebug() << "initial history" << m_resolvedInitialHistory.size() << "current history" << m_currentHistory.size()
+    kDebug() << "initial history" << m_resolvedInitialHistory.size()
+             << "current history" << m_currentHistory.size()
              << "first step" << firstStep << "last step" << lastStep;
 
     if (lastStep < firstStep)
@@ -444,7 +448,8 @@ void VersionNameCreator::checkIntermediates()
     if (m_settings.saveIntermediateVersions & VersionManagerSettings::AfterRawConversion)
     {
         int rawConversionStep = -1;
-        for (int i=firstStep; i<=lastStep; i++)
+
+        for (int i = firstStep; i <= lastStep; i++)
         {
             if (DImgFilterManager::instance()->isRawConversion(m_currentHistory.action(i).identifier()))
             {
@@ -461,9 +466,11 @@ void VersionNameCreator::checkIntermediates()
 
     if (m_settings.saveIntermediateVersions & VersionManagerSettings::WhenNotReproducible)
     {
-        for (int i=firstStep; i<=lastStep; i++)
+        for (int i = firstStep; i <= lastStep; i++)
         {
-            kDebug() << "step" <<i << "is reproducable" << (m_currentHistory.action(i).category() == FilterAction::ReproducibleFilter);
+            kDebug() << "step" << i 
+                     << "is reproducable" << (m_currentHistory.action(i).category() == FilterAction::ReproducibleFilter);
+
             switch (m_currentHistory.action(i).category())
             {
                 case FilterAction::ReproducibleFilter:
@@ -471,9 +478,11 @@ void VersionNameCreator::checkIntermediates()
                 case FilterAction::ComplexFilter:
                 case FilterAction::DocumentedHistory:
                     m_operation.intermediates.insert(i, VersionFileInfo());
+                    break;
             }
         }
     }
+
     kDebug() << "Save intermediates after steps" << m_operation.intermediates.keys();
 
     if (!m_operation.intermediates.isEmpty())
@@ -482,6 +491,7 @@ void VersionNameCreator::checkIntermediates()
 
         // now all steps are available, already ordered thanks to QMap. Just fill in the empty VersionFileInfos.
         QMap<int,VersionFileInfo>::iterator it;
+
         for (it = m_operation.intermediates.begin(); it != m_operation.intermediates.end(); ++it)
         {
             it.value() = nextIntermediate(m_result.format);
@@ -494,8 +504,8 @@ VersionFileInfo VersionNameCreator::nextIntermediate(const QString& format)
     VersionNamingScheme* scheme = q->namingScheme();
 
     VersionFileInfo intermediate;
-    intermediate.path   = m_intermediatePath;
-    intermediate.format = format;
+    intermediate.path           = m_intermediatePath;
+    intermediate.format         = format;
 
     QDir dirInfo(m_intermediatePath);
 
@@ -527,8 +537,9 @@ void VersionNameCreator::setFileSuffix(QString& fileName, const QString& format)
     }
 
     // QFileInfo uses the same string manipulation
-    int lastDot = fileName.lastIndexOf(QLatin1Char('.'));
+    int lastDot  = fileName.lastIndexOf(QLatin1Char('.'));
     bool isLower = true;
+
     if (lastDot == -1)
     {
         fileName += '.';
@@ -538,6 +549,7 @@ void VersionNameCreator::setFileSuffix(QString& fileName, const QString& format)
     {
         isLower = fileName.at(fileName.size() - 1).isLower();
     }
+
     int suffixBegin = lastDot + 1;
 
     if (fileName.mid(suffixBegin).compare(format, Qt::CaseInsensitive))
@@ -546,7 +558,7 @@ void VersionNameCreator::setFileSuffix(QString& fileName, const QString& format)
     }
 }
 
-// --------------
+// -----------------------------------------------------------------------------------------------------------
 
 bool VersionFileInfo::isNull() const
 {
@@ -568,18 +580,22 @@ KUrl VersionFileInfo::fileUrl() const
 QStringList VersionFileOperation::allFilePaths() const
 {
     QStringList paths;
+
     if (!saveFile.isNull())
         paths << saveFile.filePath();
+
     if (!intermediateForLoadedFile.isNull())
         paths << intermediateForLoadedFile.filePath();
+
     foreach (const VersionFileInfo& intermediate, intermediates)
     {
         paths << intermediate.filePath();
     }
+
     return paths;
 }
 
-// --------------
+// ------------------------------------------------------------------------------------------------------
 
 class VersionManager::VersionManagerPriv
 {
@@ -590,14 +606,15 @@ public:
         scheme = 0;
     }
 
-    VersionManagerSettings  settings;
-    VersionNamingScheme*    scheme;
+    VersionManagerSettings     settings;
+    VersionNamingScheme*       scheme;
 
     DefaultVersionNamingScheme defaultScheme;
 };
 
 /*
-    bool hasFreeSpace(const QString& path, int assumedFileSize) const;
+bool hasFreeSpace(const QString& path, int assumedFileSize) const;
+
 bool VersionManager::VersionManagerPriv::hasFreeSpace(const QString& path, int assumedFileSize) const
 {
     KDiskFreeSpaceInfo diskInfo = KDiskFreeSpaceInfo::freeSpaceInfo(originalPath);
@@ -605,7 +622,7 @@ bool VersionManager::VersionManagerPriv::hasFreeSpace(const QString& path, int a
 }
 */
 
-// --------------
+// ------------------------------------------------------------------------------------------------------
 
 VersionManager::VersionManager()
     : d(new VersionManagerPriv)
@@ -646,8 +663,8 @@ VersionNamingScheme* VersionManager::namingScheme() const
 }
 
 VersionFileOperation VersionManager::operation(FileNameType request, const VersionFileInfo& loadedFile,
-        const DImageHistory& initialResolvedHistory,
-        const DImageHistory& currentHistory)
+                                               const DImageHistory& initialResolvedHistory,
+                                               const DImageHistory& currentHistory)
 {
     VersionNameCreator name(loadedFile, initialResolvedHistory, currentHistory, this);
 
@@ -686,10 +703,10 @@ VersionFileOperation VersionManager::operationNewVersionInFormat(const VersionFi
     return name.m_operation;
 }
 
-VersionFileOperation VersionManager::operationNewVersionAs(
-        const VersionFileInfo& loadedFile, const VersionFileInfo& saveLocation,
-        const DImageHistory& initialResolvedHistory,
-        const DImageHistory& currentHistory)
+VersionFileOperation VersionManager::operationNewVersionAs(const VersionFileInfo& loadedFile,
+                                                           const VersionFileInfo& saveLocation,
+                                                           const DImageHistory& initialResolvedHistory,
+                                                           const DImageHistory& currentHistory)
 {
     VersionNameCreator name(loadedFile, initialResolvedHistory, currentHistory, this);
 
@@ -719,14 +736,14 @@ QStringList VersionManager::workspaceFileFormats() const
     {
         formats << f;
     }
-
-    /*f = d->settings.formatForStoringSubversions.toUpper();
+/*
+    f = d->settings.formatForStoringSubversions.toUpper();
 
     if (!formats.contains(f))
     {
         formats << f;
-    }*/
-
+    }
+*/
     return formats;
 }
 

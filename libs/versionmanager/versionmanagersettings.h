@@ -6,7 +6,7 @@
  * Date        : 2010-12-20
  * Description : settings container for versioning
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -43,25 +43,20 @@ class DIGIKAM_EXPORT VersionManagerSettings
 {
 public:
 
-    VersionManagerSettings();
-
-    void readFromConfig(KConfigGroup& group);
-    void writeToConfig(KConfigGroup& group) const;
-
     enum IntermediateSavepoint
     {
-        NoIntermediates        = 0,
-        AfterEachSession       = 1 << 0,
-        AfterRawConversion     = 1 << 1,
-        WhenNotReproducible    = 1 << 2
+        NoIntermediates     = 0,
+        AfterEachSession    = 1 << 0,
+        AfterRawConversion  = 1 << 1,
+        WhenNotReproducible = 1 << 2
     };
     Q_DECLARE_FLAGS(IntermediateBehavior, IntermediateSavepoint)
 
     enum ShowInViewFlag
     {
-        OnlyShowCurrent        = 0,
-        ShowOriginal           = 1 << 0,
-        ShowIntermediates      = 1 << 1
+        OnlyShowCurrent     = 0,
+        ShowOriginal        = 1 << 0,
+        ShowIntermediates   = 1 << 1
     };
     Q_DECLARE_FLAGS(ShowInViewFlags, ShowInViewFlag)
 
@@ -70,6 +65,15 @@ public:
         AlwaysAsk,
         AutoSave
     };
+
+public:
+
+    VersionManagerSettings();
+
+    void readFromConfig(KConfigGroup& group);
+    void writeToConfig(KConfigGroup& group) const;
+
+public:
 
     bool                 enabled;
 

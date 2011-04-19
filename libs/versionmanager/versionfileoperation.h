@@ -6,7 +6,7 @@
  * Date        : 2010-12-20
  * Description : description of actions when saving a file with versioning
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -49,15 +49,17 @@ public:
     VersionFileInfo(const QString& path, const QString& fileName, const QString& format)
         : path(path), fileName(fileName), format(format) {}
 
-    bool isNull() const;
+    bool    isNull() const;
 
     QString filePath() const;
-    KUrl fileUrl() const;
+    KUrl    fileUrl() const;
 
     QString path;
     QString fileName;
     QString format;
 };
+
+// -------------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT VersionFileOperation
 {
@@ -79,9 +81,9 @@ public:
     enum Task
     {
         /// saveFile is a new file. Excludes Replace.
-        NewFile = 1 << 0,
+        NewFile            = 1 << 0,
         /// loadedFile and saveFile are the same - replace. Excludes NewFile.
-        Replace = 1 << 1,
+        Replace            = 1 << 1,
         /// Similar to Replace, but the new file name differs from the old one, which should be removed
         SaveAndDelete      = 1 << 2,
         /// Move loadedFile to loadedFileToIntermediate
@@ -91,13 +93,13 @@ public:
     };
     Q_DECLARE_FLAGS(Tasks, Task)
 
-    Tasks           tasks;
+    Tasks                     tasks;
 
-    VersionFileInfo loadedFile;
+    VersionFileInfo           loadedFile;
 
-    VersionFileInfo saveFile;
+    VersionFileInfo           saveFile;
 
-    VersionFileInfo intermediateForLoadedFile;
+    VersionFileInfo           intermediateForLoadedFile;
 
     QMap<int,VersionFileInfo> intermediates;
 

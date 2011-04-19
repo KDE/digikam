@@ -6,7 +6,7 @@
  * Date        : 2010-12-20
  * Description : Interface for version file naming
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -101,7 +101,6 @@ public:
      */
     virtual QVariant incrementedCounter(const QVariant& counter) = 0;
 };
-
 
 } // namespace Digikam
 
