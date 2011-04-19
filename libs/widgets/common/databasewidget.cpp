@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class DatabaseWidgetPriv
+class DatabaseWidget::DatabaseWidgetPriv
 {
 
 public:
