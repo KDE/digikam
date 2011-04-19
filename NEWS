@@ -123,5 +123,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 097 ==> 267421 : Tagging panel shows tags as checked which previously where partially checked (when selecting multiple images).
 098 ==> 270168 : ¨Select Tool¨ item in edit window all 46 icons idle.
 099 ==> 266674 : Green grid in images imported from raw file (cr2).
-100 ==> 
+100 ==> 270365 : Drag & drop picture in upwards folder collapses and reopens it.
+101 ==> 
 
