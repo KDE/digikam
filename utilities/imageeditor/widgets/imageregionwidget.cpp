@@ -111,11 +111,7 @@ ImageRegionWidget::ImageRegionWidget(QWidget* parent)
 
 ImageRegionWidget::~ImageRegionWidget()
 {
-    if (d->iface)
-    {
-        delete d->iface;
-    }
-
+    delete d->iface;
     delete d;
 }
 

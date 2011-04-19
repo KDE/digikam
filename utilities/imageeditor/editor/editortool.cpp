@@ -400,11 +400,7 @@ DImgThreadedFilter* EditorToolThreaded::filter() const
 
 void EditorToolThreaded::setFilter(DImgThreadedFilter* filter)
 {
-    if (d->threadedFilter)
-    {
-        delete d->threadedFilter;
-    }
-
+    delete d->threadedFilter;
     d->threadedFilter = filter;
 
     connect(d->threadedFilter, SIGNAL(started()),

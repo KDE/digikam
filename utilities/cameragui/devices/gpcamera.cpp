@@ -645,12 +645,7 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
     CameraList* clist;
     gp_list_new(&clist);
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
     d->status = new GPStatus();
 
     errorCode = gp_camera_folder_list_folders(d->camera, QFile::encodeName(folder), clist, d->status->context);
@@ -702,12 +697,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
     CameraList* clist;
     const char* cname;
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
     d->status = new GPStatus;
 
     gp_list_new(&clist);
@@ -763,12 +753,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
     CameraList* clist;
     const char* cname;
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
     d->status = new GPStatus;
 
     gp_list_new(&clist);
@@ -900,12 +885,7 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
 
     gp_file_new(&cfile);
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
     d->status = new GPStatus;
 
     errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder),
@@ -959,12 +939,7 @@ bool GPCamera::getExif(const QString& folder, const QString& itemName,
 
     gp_file_new(&cfile);
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
     d->status = new GPStatus;
 
     errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder),
@@ -1017,11 +992,8 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
     int         errorCode;
     CameraFile* cfile;
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
+    delete d->status;
+    d->status = 0;
 
     QFile file(saveFile);
 
@@ -1097,12 +1069,7 @@ bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool 
 #ifdef HAVE_GPHOTO2
     int errorCode;
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
     d->status = new GPStatus;
 
     CameraFileInfo info;
@@ -1165,12 +1132,7 @@ bool GPCamera::deleteItem(const QString& folder, const QString& itemName)
 #ifdef HAVE_GPHOTO2
     int errorCode;
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
     d->status = new GPStatus;
 
     errorCode = gp_camera_file_delete(d->camera, QFile::encodeName(folder),
@@ -1222,12 +1184,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
         }
     }
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
     d->status = new GPStatus;
 
     errorCode = gp_camera_folder_delete_all(d->camera, QFile::encodeName(folder),
@@ -1287,12 +1244,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
         return false;
     }
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
     d->status = new GPStatus;
 
     errorCode = gp_camera_folder_put_file(d->camera,
@@ -1416,12 +1368,7 @@ bool GPCamera::cameraSummary(QString& summary)
     int        errorCode;
     CameraText sum;
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
     d->status = new GPStatus;
 
     errorCode = gp_camera_get_summary(d->camera, &sum, d->status->context);
@@ -1478,12 +1425,7 @@ bool GPCamera::cameraManual(QString& manual)
     int        errorCode;
     CameraText man;
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
     d->status = new GPStatus;
 
     errorCode = gp_camera_get_manual(d->camera, &man, d->status->context);
@@ -1516,12 +1458,7 @@ bool GPCamera::cameraAbout(QString& about)
     int        errorCode;
     CameraText abt;
 
-    if (d->status)
-    {
-        delete d->status;
-        d->status = 0;
-    }
-
+    delete d->status;
     d->status = new GPStatus;
 
     errorCode = gp_camera_get_about(d->camera, &abt, d->status->context);

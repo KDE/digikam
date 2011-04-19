@@ -406,11 +406,7 @@ void AdvancedRenameInput::slotHighlightLineEdit(const QString& word)
 
 void AdvancedRenameInput::enableHighlighter(bool enable)
 {
-    if (d->highlighter)
-    {
-        delete d->highlighter;
-    }
-
+    delete d->highlighter;
     d->highlighter = enable
                      ? new Highlighter(d->lineEdit, d->lineEdit->parser())
                      : 0;
