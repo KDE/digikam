@@ -68,7 +68,8 @@ enum DeleteMode
     UseTrash,                  // same checkbox as above, preset to trash
     DeletePermanently          // same checkbox as above, preset to permanent
 };
-}
+
+} // namespace DeleteDialogMode
 
 // -----------------------------------------------------------
 
@@ -79,35 +80,24 @@ class DeleteWidget : public QWidget
 public:
 
     DeleteWidget(QWidget* parent = 0);
-    virtual ~DeleteWidget() {};
+    virtual ~DeleteWidget();
 
     void setFiles(const KUrl::List& files);
     void setListMode(DeleteDialogMode::ListMode mode);
     void setDeleteMode(DeleteDialogMode::DeleteMode deleteMode);
 
-protected Q_SLOTS:
+private Q_SLOTS:
 
     void slotShouldDelete(bool);
 
-protected:
+private:
 
     void updateText();
 
-protected:
+private:
 
-    QStackedWidget*               m_checkBoxStack;
-
-    QLabel*                       m_warningIcon;
-    QLabel*                       m_deleteText;
-    QLabel*                       m_numFiles;
-
-    QCheckBox*                    m_shouldDelete;
-    QCheckBox*                    m_doNotShowAgain;
-
-    KListWidget*                  m_fileList;
-
-    DeleteDialogMode::ListMode    m_listMode;
-    DeleteDialogMode::DeleteMode  m_deleteMode;
+    class DeleteWidgetPriv;
+    DeleteWidgetPriv* const d;
 
     friend class DeleteDialog;
 };
