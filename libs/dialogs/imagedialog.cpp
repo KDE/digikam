@@ -6,7 +6,7 @@
  * Date        : 2008-03-13
  * Description : image files selector dialog.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,7 +55,6 @@ namespace Digikam
 
 class ImageDialogPreview::ImageDialogPreviewPrivate
 {
-
 public:
 
     ImageDialogPreviewPrivate() :
@@ -233,7 +232,7 @@ void ImageDialogPreview::slotThumbnail(const LoadingDescription& desc, const QPi
     if (KUrl(desc.filePath) == d->currentURL)
     {
         QPixmap pixmap;
-        QSize s = d->imageLabel->contentsRect().size();
+        QSize   s = d->imageLabel->contentsRect().size();
 
         if (s.width() < pix.width() || s.height() < pix.height())
         {
@@ -285,7 +284,8 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
     // All Images from list must been always the first entry given by KDE API
     QString allPictures = patternList[0];
 
-    allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::KDcraw::rawFiles()) + QString(" *.JPE *.TIF *.PGF"));
+    allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::KDcraw::rawFiles()) +
+                                                 QString(" *.JPE *.TIF *.PGF"));
     patternList.removeAll(patternList[0]);
     // Added RAW file formats supported by dcraw program like a type mime.
     // Note: we cannot use here "image/x-raw" type mime from KDE because it is incomplete

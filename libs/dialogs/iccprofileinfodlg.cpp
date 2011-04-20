@@ -6,7 +6,7 @@
  * Date        : 2006-02-16
  * Description : a dialog to display ICC profile information.
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,7 +25,6 @@
 
 // KDE includes
 
-
 #include <klocale.h>
 
 // Local includes
@@ -35,8 +34,7 @@
 namespace Digikam
 {
 
-ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath,
-                                     const IccProfile& profile)
+ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath, const IccProfile& profile)
     : KDialog(parent)
 {
     setCaption(i18n("Color Profile Info - %1", profilePath));

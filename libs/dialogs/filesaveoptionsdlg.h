@@ -38,7 +38,6 @@ class QWidget;
 namespace Digikam
 {
 
-
 class DIGIKAM_EXPORT FileSaveOptionsDlg : public KDialog
 {
 

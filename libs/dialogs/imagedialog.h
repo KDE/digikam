@@ -6,7 +6,7 @@
  * Date        : 2008-03-13
  * Description : image files selector dialog.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -79,11 +79,11 @@ public:
     ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect=false, const QString& caption=QString());
     ~ImageDialog();
 
-    KUrl       url() const;
+    KUrl       url()  const;
     KUrl::List urls() const;
 
     bool       singleSelect() const;
-    QString    fileFormats() const;
+    QString    fileFormats()  const;
 
     static KUrl::List getImageURLs(QWidget* parent, const KUrl& url, const QString& caption=QString());
     static KUrl getImageURL(QWidget* parent, const KUrl& url, const QString& caption=QString());
