@@ -6,7 +6,7 @@
  * Date        : 2010-04-30
  * Description : Graphics View for DImg preview
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,8 +47,8 @@ public:
     GraphicsDImgView(QWidget* parent = 0);
     ~GraphicsDImgView();
 
-    DImgPreviewItem* previewItem() const;
-    SinglePhotoPreviewLayout* layout() const;
+    DImgPreviewItem*          previewItem() const;
+    SinglePhotoPreviewLayout* layout()      const;
 
     /** Scrolls the view such that scenePos (in scene coordinates
      *  is displayed on the viewport at viewportPos (in viewport coordinates).
@@ -95,8 +95,8 @@ protected:
 
 protected Q_SLOTS:
 
-    void slotCornerButtonPressed();
-    void slotPanIconHidden();
+    void         slotCornerButtonPressed();
+    void         slotPanIconHidden();
     virtual void slotPanIconSelectionMoved(const QRect&, bool);
 
 private:

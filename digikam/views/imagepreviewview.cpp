@@ -6,9 +6,9 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  *
- * Copyright (C) 2006-2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2010-2011 Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,6 +45,8 @@
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <ktoggleaction.h>
+#include <kstandarddirs.h>
+#include <kglobalsettings.h>
 
 // LibKIPI includes
 
@@ -72,11 +74,6 @@
 #include "imagetagpair.h"
 #include "albummanager.h"
 #include "faceiface.h"
-
-// KDE includes
-
-#include "kglobalsettings.h"
-#include <kstandarddirs.h>
 
 namespace Digikam
 {
@@ -134,27 +131,29 @@ protected:
     ImageInfo         m_info;
 };
 
+// ---------------------------------------------------------------------
+
 class ImagePreviewView::ImagePreviewViewPriv
 {
 public:
 
     ImagePreviewViewPriv()
     {
-        peopleTagsShown      = false;
-        fullSize             = 0;
-        scale                = 1.0;
-        item                 = 0;
-        stack                = 0;
-        isValid              = false;
-        toolBar              = 0;
-        back2AlbumAction     = 0;
-        prevAction           = 0;
-        nextAction           = 0;
-        rotLeftAction        = 0;
-        rotRightAction       = 0;
-        peopleToggleAction   = 0;
-        addPersonAction      = 0;
-        faceGroup            = 0;
+        peopleTagsShown    = false;
+        fullSize           = 0;
+        scale              = 1.0;
+        item               = 0;
+        stack              = 0;
+        isValid            = false;
+        toolBar            = 0;
+        back2AlbumAction   = 0;
+        prevAction         = 0;
+        nextAction         = 0;
+        rotLeftAction      = 0;
+        rotRightAction     = 0;
+        peopleToggleAction = 0;
+        addPersonAction    = 0;
+        faceGroup          = 0;
     }
 
     bool                  peopleTagsShown;
@@ -175,7 +174,7 @@ public:
 
     QToolBar*             toolBar;
 
-    StackedView*     stack;
+    StackedView*          stack;
 
     FaceGroup*            faceGroup;
 };
@@ -209,14 +208,14 @@ ImagePreviewView::ImagePreviewView(StackedView* parent)
 
     // ------------------------------------------------------------
 
-    d->back2AlbumAction   = new QAction(SmallIcon("folder-image"),        i18n("Back to Album"),                    this);
-    d->prevAction         = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),    this);
-    d->nextAction         = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),     this);
-    d->rotLeftAction      = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),    this);
-    d->rotRightAction     = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"),   this);
-    d->addPersonAction    = new QAction(SmallIcon("list-add-user"),       i18n("Add a Face Tag"), this);
-    d->forgetFacesAction  = new QAction(SmallIcon("list-remove-user"),    i18n("Clear all faces on this image"), this);
-    d->peopleToggleAction = new KToggleAction(i18n("Show Face Tags"), this);
+    d->back2AlbumAction   = new QAction(SmallIcon("folder-image"),        i18n("Back to Album"),                  this);
+    d->prevAction         = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
+    d->nextAction         = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
+    d->rotLeftAction      = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
+    d->rotRightAction     = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"), this);
+    d->addPersonAction    = new QAction(SmallIcon("list-add-user"),       i18n("Add a Face Tag"),                 this);
+    d->forgetFacesAction  = new QAction(SmallIcon("list-remove-user"),    i18n("Clear all faces on this image"),  this);
+    d->peopleToggleAction = new KToggleAction(i18n("Show Face Tags"),                                             this);
     d->peopleToggleAction->setIcon(SmallIcon("user-identity"));
 
     d->toolBar = new QToolBar(this);

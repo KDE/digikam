@@ -6,7 +6,7 @@
  * Date        : 2010-04-30
  * Description : Graphics View items for DImg
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,11 +65,11 @@ public:
     void setExifRotate(bool rotate);
 
     QString path() const;
-    void setPath(const QString& path);
+    void    setPath(const QString& path);
 
     State state() const;
-    bool isLoaded() const;
-    void reload();
+    bool  isLoaded() const;
+    void  reload();
 
     void setPreloadPaths(const QStringList& pathsToPreload);
 
@@ -80,6 +80,7 @@ Q_SIGNALS:
     void stateChanged(int state);
     void loaded();
     void loadingFailed();
+
 
 private Q_SLOTS:
 

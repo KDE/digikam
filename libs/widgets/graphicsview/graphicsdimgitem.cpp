@@ -6,7 +6,7 @@
  * Date        : 2010-04-30
  * Description : Graphics View item for DImg
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -103,7 +103,7 @@ void CachedPixmaps::insert(const QRect& region, const QPixmap& pixmap)
     keys.enqueue(key);
 }
 
-// ---
+// ---------------------------------------------------------------------------------------
 
 GraphicsDImgItem::GraphicsDImgItem(QGraphicsItem* parent)
     : QGraphicsObject(parent),
@@ -180,10 +180,10 @@ QRectF GraphicsDImgItem::boundingRect() const
 void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
 {
     Q_D(GraphicsDImgItem);
-    QRect drawRect = option->exposedRect.intersected(boundingRect()).toAlignedRect();
 
+    QRect   drawRect = option->exposedRect.intersected(boundingRect()).toAlignedRect();
+    QRect   pixSourceRect;
     QPixmap pix;
-    QRect pixSourceRect;
 
     if (d->cachedPixmaps.find(drawRect, &pix, &pixSourceRect))
     {
@@ -201,29 +201,30 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
         QSize completeSize = boundingRect().size().toSize();
 
         // scale "as if" scaling to whole image, but clip output to our exposed region
-        DImg scaledImage = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
-                           drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
+        DImg scaledImage   = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
+                             drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
 
-        pix = scaledImage.convertToPixmap();
+        pix                = scaledImage.convertToPixmap();
         d->cachedPixmaps.insert(drawRect, pix);
 
         painter->drawPixmap(drawRect.topLeft(), pix);
     }
 
-    /*
-        QPixmap pix(visibleWidth(), visibleHeight());
-        pix.fill(kapp->palette().color(QPalette::Base));
-        QPainter p(&pix);
-        QFileInfo info(d->path);
-        p.setPen(QPen(kapp->palette().color(QPalette::Text)));
-        p.drawText(0, 0, pix.width(), pix.height(),
-                   Qt::AlignCenter|Qt::TextWordWrap,
-                   i18n("Cannot display preview for\n\"%1\"",
-                   info.fileName()));
-        p.end();
-        // three copies - but the image is small
-        setImage(DImg(pix.toImage()));
-    */
+/*
+    QPixmap pix(visibleWidth(), visibleHeight());
+    pix.fill(kapp->palette().color(QPalette::Base));
+    QPainter p(&pix);
+    QFileInfo info(d->path);
+    p.setPen(QPen(kapp->palette().color(QPalette::Text)));
+    p.drawText(0, 0, pix.width(), pix.height(),
+               Qt::AlignCenter|Qt::TextWordWrap,
+               i18n("Cannot display preview for\n\"%1\"",
+               info.fileName()));
+    p.end();
+
+    // three copies - but the image is small
+    setImage(DImg(pix.toImage()));
+*/
 }
 
 } // namespace Digikam

@@ -6,7 +6,7 @@
  * Date        : 2010-04-30
  * Description : Graphics View for DImg preview
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -135,8 +135,8 @@ void GraphicsDImgView::drawForeground(QPainter* p, const QRectF& rect)
             return;
         }
 
-        QRect viewportRect = viewport()->rect();
-        QRect fontRect = p->fontMetrics().boundingRect(viewportRect, 0, text);
+        QRect viewportRect        = viewport()->rect();
+        QRect fontRect            = p->fontMetrics().boundingRect(viewportRect, 0, text);
         QPoint drawingPoint(viewportRect.topRight().x() - fontRect.width() - 10,
                             viewportRect.topRight().y() + 5);
 
@@ -160,7 +160,7 @@ void GraphicsDImgView::drawText(QPainter* p, const QRectF& rect, const QString& 
     p->setBackgroundMode(Qt::TransparentMode);
 
     // increase width by 5 and height by 2
-    QRectF textRect = rect.adjusted(0, 0, 5, 2);
+    QRectF textRect    = rect.adjusted(0, 0, 5, 2);
 
     // Draw background
     p->setPen(Qt::black);

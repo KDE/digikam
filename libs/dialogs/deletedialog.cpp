@@ -9,8 +9,8 @@
  * Copyright (C) 2004 by Michael Pyne <michael.pyne@kdemail.net>
  * Copyright (C) 2006 by Ian Monroe <ian@monroe.nu>
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,11 +66,11 @@ DeleteWidget::DeleteWidget(QWidget* parent)
 
     m_checkBoxStack = new QStackedWidget(this);
 
-    QLabel* logo = new QLabel(this);
+    QLabel* logo    = new QLabel(this);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    m_warningIcon = new QLabel(this);
+    m_warningIcon   = new QLabel(this);
     m_warningIcon->setWordWrap(false);
 
     QSizePolicy sizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
@@ -273,30 +273,53 @@ void DeleteWidget::updateText()
 
 //----------------------------------------------------------------------------
 
+class DeleteDialog::DeleteDialogPriv
+{
+public:
+
+    DeleteDialogPriv()
+    {
+        saveShouldDeleteUserPreference = true;
+        saveDoNotShowAgainTrash        = false;
+        saveDoNotShowAgainPermanent    = false;
+        trashGuiItem                   = KGuiItem(i18n("&Move to Trash"), "user-trash-full");
+        widget                         = 0;
+    }
+
+    bool          saveShouldDeleteUserPreference;
+    bool          saveDoNotShowAgainTrash;
+    bool          saveDoNotShowAgainPermanent;
+
+    KGuiItem      trashGuiItem;
+
+    DeleteWidget* widget;
+};
+
 DeleteDialog::DeleteDialog(QWidget* parent)
-    : KDialog(parent),
-      m_saveShouldDeleteUserPreference(true),
-      m_saveDoNotShowAgainTrash(false),
-      m_saveDoNotShowAgainPermanent(false),
-      m_trashGuiItem(i18n("&Move to Trash"), "user-trash-full")
+    : KDialog(parent), d(new DeleteDialogPriv)
 {
     setButtons(User1 | Cancel);
     setButtonFocus(User1);
     setModal(true);
-    m_widget = new DeleteWidget(this);
-    setMainWidget(m_widget);
+    d->widget = new DeleteWidget(this);
+    setMainWidget(d->widget);
 
-    m_widget->setMinimumSize(400, 300);
+    d->widget->setMinimumSize(400, 300);
     setMinimumSize(410, 326);
     adjustSize();
 
     slotShouldDelete(shouldDelete());
 
-    connect(m_widget->m_shouldDelete, SIGNAL(toggled(bool)),
+    connect(d->widget->m_shouldDelete, SIGNAL(toggled(bool)),
             this, SLOT(slotShouldDelete(bool)));
 
     connect(this, SIGNAL(user1Clicked()),
             this, SLOT(slotUser1Clicked()));
+}
+
+DeleteDialog::~DeleteDialog()
+{
+    delete d;
 }
 
 bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
@@ -327,7 +350,7 @@ bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
 
 void DeleteDialog::setURLs(const KUrl::List& files)
 {
-    m_widget->setFiles(files);
+    d->widget->setFiles(files);
 }
 
 void DeleteDialog::slotUser1Clicked()
@@ -335,21 +358,21 @@ void DeleteDialog::slotUser1Clicked()
     // Save user's preference
     AlbumSettings* settings = AlbumSettings::instance();
 
-    if (m_saveShouldDeleteUserPreference)
+    if (d->saveShouldDeleteUserPreference)
     {
         settings->setUseTrash(!shouldDelete());
     }
 
-    if (m_saveDoNotShowAgainTrash)
+    if (d->saveDoNotShowAgainTrash)
     {
-        kDebug() << "setShowTrashDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked();
-        settings->setShowTrashDeleteDialog(!m_widget->m_doNotShowAgain->isChecked());
+        kDebug() << "setShowTrashDeleteDialog " << !d->widget->m_doNotShowAgain->isChecked();
+        settings->setShowTrashDeleteDialog(!d->widget->m_doNotShowAgain->isChecked());
     }
 
-    if (m_saveDoNotShowAgainPermanent)
+    if (d->saveDoNotShowAgainPermanent)
     {
-        kDebug() << "setShowPermanentDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked();
-        settings->setShowPermanentDeleteDialog(!m_widget->m_doNotShowAgain->isChecked());
+        kDebug() << "setShowPermanentDeleteDialog " << !d->widget->m_doNotShowAgain->isChecked();
+        settings->setShowPermanentDeleteDialog(!d->widget->m_doNotShowAgain->isChecked());
     }
 
     settings->saveSettings();
@@ -359,15 +382,15 @@ void DeleteDialog::slotUser1Clicked()
 
 bool DeleteDialog::shouldDelete() const
 {
-    return m_widget->m_shouldDelete->isChecked();
+    return d->widget->m_shouldDelete->isChecked();
 }
 
 void DeleteDialog::slotShouldDelete(bool shouldDelete)
 {
     // This is called once from constructor, and then when the user changed the checkbox state.
     // In that case, save the user's preference.
-    m_saveShouldDeleteUserPreference = true;
-    setButtonGuiItem(User1, shouldDelete ? KStandardGuiItem::del() : m_trashGuiItem);
+    d->saveShouldDeleteUserPreference = true;
+    setButtonGuiItem(User1, shouldDelete ? KStandardGuiItem::del() : d->trashGuiItem);
 }
 
 void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
@@ -377,17 +400,17 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
         case DeleteDialogMode::NoChoiceTrash:
         {
             // access the widget directly, signals will be fired to DeleteDialog and DeleteWidget
-            m_widget->m_shouldDelete->setChecked(false);
-            m_widget->m_checkBoxStack->setCurrentWidget(m_widget->m_doNotShowAgain);
-            m_saveDoNotShowAgainTrash = true;
+            d->widget->m_shouldDelete->setChecked(false);
+            d->widget->m_checkBoxStack->setCurrentWidget(d->widget->m_doNotShowAgain);
+            d->saveDoNotShowAgainTrash = true;
             break;
         }
         case DeleteDialogMode::NoChoiceDeletePermanently:
         {
-            m_widget->m_shouldDelete->setChecked(true);
-            m_widget->m_checkBoxStack->setCurrentWidget(m_widget->m_doNotShowAgain);
-            m_saveDoNotShowAgainPermanent = true;
-            //            m_widget->m_checkBoxStack->hide();
+            d->widget->m_shouldDelete->setChecked(true);
+            d->widget->m_checkBoxStack->setCurrentWidget(d->widget->m_doNotShowAgain);
+            d->saveDoNotShowAgainPermanent = true;
+            //            d->widget->m_checkBoxStack->hide();
             break;
         }
         case DeleteDialogMode::UserPreference:
@@ -398,12 +421,12 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
         case DeleteDialogMode::DeletePermanently:
         {
             // toggles signals which do the rest
-            m_widget->m_shouldDelete->setChecked(mode == DeleteDialogMode::DeletePermanently);
+            d->widget->m_shouldDelete->setChecked(mode == DeleteDialogMode::DeletePermanently);
 
             // the preference set by this preset method will be ignored
             // for the next DeleteDialog instance and not stored as user preference.
             // Only if the user once changes this value, it will be taken as user preference.
-            m_saveShouldDeleteUserPreference = false;
+            d->saveShouldDeleteUserPreference = false;
             break;
         }
     }
@@ -411,7 +434,7 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
 
 void DeleteDialog::setListMode(DeleteDialogMode::ListMode mode)
 {
-    m_widget->setListMode(mode);
+    d->widget->setListMode(mode);
 
     switch (mode)
     {

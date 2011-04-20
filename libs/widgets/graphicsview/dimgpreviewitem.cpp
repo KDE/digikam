@@ -6,7 +6,7 @@
  * Date        : 2010-04-30
  * Description : Graphics View items for DImg
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -90,8 +90,7 @@ void DImgPreviewItem::DImgPreviewItemPrivate::init(DImgPreviewItem* q)
         previewSize = 2560;
     }
 
-    LoadingCacheInterface::connectToSignalFileChanged(q,
-            SLOT(slotFileChanged(const QString&)));
+    LoadingCacheInterface::connectToSignalFileChanged(q, SLOT(slotFileChanged(const QString&)));
 }
 
 DImgPreviewItem::~DImgPreviewItem()
@@ -260,7 +259,7 @@ DImgPreviewItem::State DImgPreviewItem::state() const
 bool DImgPreviewItem::isLoaded() const
 {
     Q_D(const DImgPreviewItem);
-    return d->state == ImageLoaded;
+    return (d->state == ImageLoaded);
 }
 
 void DImgPreviewItem::slotGotImagePreview(const LoadingDescription& description, const DImg& image)
