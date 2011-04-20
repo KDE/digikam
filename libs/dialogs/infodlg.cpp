@@ -6,7 +6,7 @@
  * Date        : 2008-07-11
  * Description : general info list dialog
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class InfoDlgPriv
+class InfoDlg::InfoDlgPriv
 {
 public:
 
@@ -73,13 +73,13 @@ InfoDlg::InfoDlg(QWidget* parent)
     setCaption(i18n("Shared Libraries and Components Information"));
     setButtonText(User1, i18n("Copy to Clipboard"));
 
-    QWidget* page = new QWidget(this);
+    QWidget* page     = new QWidget(this);
     setMainWidget(page);
     QGridLayout* grid = new QGridLayout(page);
 
     // --------------------------------------------------------
 
-    QLabel* logo = new QLabel(page);
+    QLabel* logo      = new QLabel(page);
 
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
         logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
@@ -90,7 +90,7 @@ InfoDlg::InfoDlg(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel* header = new QLabel(page);
+    QLabel* header    = new QLabel(page);
     header->setWordWrap(true);
     header->setText(i18n("<font size=\"5\">%1</font><br/><b>Version %2</b>"
                          "<p>%3</p>",
@@ -114,7 +114,7 @@ InfoDlg::InfoDlg(QWidget* parent)
     grid->addWidget(logo,        0, 0, 1, 1);
     grid->addWidget(header,      0, 1, 1, 1);
     // row 1 can be expanded by custom widgets in the subclassed dialog
-    grid->addWidget(d->listView, 2, 0, 1,-1);
+    grid->addWidget(d->listView, 2, 0, 1, -1);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(2, 10);
     grid->setMargin(0);
