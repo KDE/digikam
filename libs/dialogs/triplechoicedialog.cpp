@@ -6,7 +6,7 @@
  * Date        : 2011-01-03
  * Description : dialog which provides at least three choices, plus a cancel button
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,9 +33,6 @@
 
 #include <kiconloader.h>
 #include <kpushbutton.h>
-
-// Local includes
-
 
 namespace Digikam
 {
@@ -82,7 +79,8 @@ TripleChoiceDialog::TripleChoiceDialog(QWidget *parent)
     button(Ok)->setVisible(false);
     button(Apply)->setVisible(false);
 
-    connect(&d->mapper, SIGNAL(mapped(int)), this, SLOT(slotButtonClicked(int)));
+    connect(&d->mapper, SIGNAL(mapped(int)),
+            this, SLOT(slotButtonClicked(int)));
 }
 
 TripleChoiceDialog::~TripleChoiceDialog()
@@ -115,7 +113,9 @@ QToolButton* TripleChoiceDialog::addChoiceButton(int key, const QString& iconNam
     button->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
 
     d->mapper.setMapping(button, key);
-    connect(button, SIGNAL(clicked()), &d->mapper, SLOT(map()));
+
+    connect(button, SIGNAL(clicked()),
+            &d->mapper, SLOT(map()));
 
     d->checkToolBar();
     d->toolBar->insertWidget(d->secondSeparator, button);
