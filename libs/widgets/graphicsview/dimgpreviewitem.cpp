@@ -246,7 +246,7 @@ void DImgPreviewItem::reload()
 {
     Q_D(DImgPreviewItem);
     QString path = d->path;
-    d->path = QString();
+    d->path      = QString();
     setPath(path);
 }
 

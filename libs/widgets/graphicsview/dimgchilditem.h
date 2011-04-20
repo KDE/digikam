@@ -6,7 +6,7 @@
  * Date        : 2010-05-15
  * Description : Graphics View item for a child item on a DImg item
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -80,7 +80,7 @@ public:
      * All four values are in the interval [0;1].
      */
     QRectF  relativeRect() const;
-    QPointF relativePos() const;
+    QPointF relativePos()  const;
     QSizeF  relativeSize() const;
 
     /**
@@ -113,7 +113,7 @@ public:
      * when one pixel in the original is represented by more than one pixel on screen.
      */
     QRect  originalRect() const;
-    QPoint originalPos() const;
+    QPoint originalPos()  const;
     QSize  originalSize() const;
 
     /**

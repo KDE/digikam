@@ -6,7 +6,7 @@
  * Date        : 2010-05-15
  * Description : Graphics View item for a child item on a DImg item
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,14 +65,17 @@ class DImgChildItem::DImgChildItemPriv
 {
 public:
 
-    DImgChildItemPriv(DImgChildItem* q) : q(q)
+    DImgChildItemPriv(DImgChildItem* q)
+        : q(q)
     {
     }
 
-    QPointF relativePos;
-    QSizeF  relativeSize;
-
     void connectParent(bool active = true);
+
+public:
+
+    QPointF              relativePos;
+    QSizeF               relativeSize;
 
     DImgChildItem* const q;
 };
@@ -174,7 +177,7 @@ void DImgChildItem::setOriginalSize(const QSizeF& sizeInOriginal)
     }
 
     QSizeF originalSize = parentDImgItem()->zoomSettings()->originalImageSize();
-    setRelativeSize( QSizeF(sizeInOriginal.width() / originalSize.width(),
+    setRelativeSize( QSizeF(sizeInOriginal.width()  / originalSize.width(),
                             sizeInOriginal.height() / originalSize.height()) );
 }
 
@@ -225,7 +228,7 @@ void DImgChildItem::setSize(const QSizeF& size)
 
     const QSizeF imageSize = parentItem()->boundingRect().size();
 
-    setRelativeSize( QSizeF(size.width() / imageSize.width(),
+    setRelativeSize( QSizeF(size.width()  / imageSize.width(),
                             size.height() / imageSize.height()) );
 }
 
@@ -317,7 +320,7 @@ QRectF DImgChildItem::boundingRect() const
         return QRectF();
     }
 
-    return QRectF(QPointF(0,0), size());
+    return QRectF(QPointF(0, 0), size());
 }
 
 } // namespace Digikam
