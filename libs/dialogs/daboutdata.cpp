@@ -54,17 +54,17 @@ DAboutData::~DAboutData()
 
 void DAboutData::registerHelpActions()
 {
-    KXmlGuiWindow* kwin = dynamic_cast<KXmlGuiWindow*>(parent());
+    KXmlGuiWindow* kwin          = dynamic_cast<KXmlGuiWindow*>(parent());
 
     KAction* rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), kwin);
     connect(rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     kwin->actionCollection()->addAction("help_rawcameralist", rawCameraListAction);
 
-    KAction* donateMoneyAction = new KAction(i18n("Donate..."), kwin);
+    KAction* donateMoneyAction   = new KAction(KIcon("internet-web-browser"), i18n("Donate..."), kwin);
     connect(donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     kwin->actionCollection()->addAction("help_donatemoney", donateMoneyAction);
 
-    KAction* contributeAction = new KAction(i18n("Contribute..."), kwin);
+    KAction* contributeAction    = new KAction(KIcon("internet-web-browser"), i18n("Contribute..."), kwin);
     connect(contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
     kwin->actionCollection()->addAction("help_contribute", contributeAction);
 }

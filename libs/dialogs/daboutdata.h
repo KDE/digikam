@@ -57,8 +57,8 @@ public:
     static KLocalizedString digiKamSloganFormated();
     static KLocalizedString digiKamSlogan();
     static KLocalizedString copyright();
-    static KUrl webProjectUrl();
-    static void authorsRegistration(KAboutData& aboutData);
+    static KUrl             webProjectUrl();
+    static void             authorsRegistration(KAboutData& aboutData);
 
 private Q_SLOTS:
 
