@@ -213,6 +213,9 @@ StackedView::StackedView(QWidget* parent)
 
     connect(d->mediaPlayerView, SIGNAL(signalBack2Album()),
             this, SIGNAL(signalBack2Album()));
+
+    connect(d->imagePreviewView, SIGNAL(signalPreviewLoaded(bool)),
+            this, SLOT(slotPreviewLoaded(bool)));
 }
 
 StackedView::~StackedView()
@@ -536,6 +539,12 @@ double StackedView::zoomMin()
 double StackedView::zoomMax()
 {
     return d->imagePreviewView->layout()->maxZoomFactor();
+}
+
+void StackedView::slotPreviewLoaded(bool)
+{
+    setPreviewMode(StackedView::PreviewImageMode);
+    previewLoaded();
 }
 
 }  // namespace Digikam

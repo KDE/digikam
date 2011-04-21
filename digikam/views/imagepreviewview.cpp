@@ -56,7 +56,6 @@
 // Local includes
 
 #include "albumsettings.h"
-#include "stackedview.h"
 #include "contextmenuhelper.h"
 #include "digikamapp.h"
 #include "dimg.h"
@@ -143,7 +142,6 @@ public:
         fullSize           = 0;
         scale              = 1.0;
         item               = 0;
-        stack              = 0;
         isValid            = false;
         toolBar            = 0;
         back2AlbumAction   = 0;
@@ -174,12 +172,10 @@ public:
 
     QToolBar*             toolBar;
 
-    StackedView*          stack;
-
     FaceGroup*            faceGroup;
 };
 
-ImagePreviewView::ImagePreviewView(StackedView* parent)
+ImagePreviewView::ImagePreviewView(QWidget* parent)
     : GraphicsDImgView(parent), d(new ImagePreviewViewPriv)
 {
     d->item = new ImagePreviewViewItem(this);
@@ -203,7 +199,6 @@ ImagePreviewView::ImagePreviewView(StackedView* parent)
 
     installPanIcon();
 
-    d->stack = parent;
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // ------------------------------------------------------------
@@ -284,8 +279,6 @@ void ImagePreviewView::reload()
 
 void ImagePreviewView::imageLoaded()
 {
-    d->stack->setPreviewMode(StackedView::PreviewImageMode);
-    d->stack->previewLoaded();
     emit signalPreviewLoaded(true);
     d->rotLeftAction->setEnabled(true);
     d->rotRightAction->setEnabled(true);
@@ -295,8 +288,6 @@ void ImagePreviewView::imageLoaded()
 
 void ImagePreviewView::imageLoadingFailed()
 {
-    d->stack->setPreviewMode(StackedView::PreviewImageMode);
-    d->stack->previewLoaded();
     emit signalPreviewLoaded(false);
     d->rotLeftAction->setEnabled(false);
     d->rotRightAction->setEnabled(false);

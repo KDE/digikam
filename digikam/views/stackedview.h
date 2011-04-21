@@ -74,10 +74,10 @@ public:
     /* Attach the thumbnail dock widget to the specified QMainWindow. */
     void setDockArea(QMainWindow*);
 
-    ThumbBarDock*     thumbBarDock() const;
-    DigikamImageView* imageIconView() const;
+    ThumbBarDock*     thumbBarDock()     const;
+    DigikamImageView* imageIconView()    const;
     ImagePreviewView* imagePreviewView() const;
-    MapWidgetView*    mapWidgetView() const;
+    MapWidgetView*    mapWidgetView()    const;
 
     void setPreviewItem(const ImageInfo& info = ImageInfo(),
                         const ImageInfo& previous = ImageInfo(),
@@ -124,6 +124,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
+    void slotPreviewLoaded(bool);
     void slotZoomFactorChanged(double);
     void slotThumbBarSelectionChanged();
     void slotIconViewSelectionChanged();
