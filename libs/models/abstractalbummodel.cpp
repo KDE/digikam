@@ -6,7 +6,7 @@
  * Date        : 2009-03-23
  * Description : Qt Model for Albums
  *
- * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <qpainter.h>
+#include <QPainter>
 
 // KDE includes
 
@@ -49,8 +49,8 @@ AbstractAlbumModel::AbstractAlbumModel(Album::Type albumType, Album* rootAlbum, 
                                        QObject* parent)
     : QAbstractItemModel(parent), d(new AlbumModelPriv)
 {
-    d->type = albumType;
-    d->rootAlbum = rootAlbum;
+    d->type         = albumType;
+    d->rootAlbum    = rootAlbum;
     d->rootBehavior = rootBehavior;
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAboutToBeAdded(Album*, Album*, Album*)),
@@ -209,7 +209,7 @@ QModelIndex AbstractAlbumModel::index(int row, int column, const QModelIndex& pa
     if (parent.isValid())
     {
         Album* parentAlbum = static_cast<Album*>(parent.internalPointer());
-        Album* a = d->findNthChild(parentAlbum, row);
+        Album* a           = d->findNthChild(parentAlbum, row);
 
         if (a)
         {
@@ -449,7 +449,7 @@ void AbstractAlbumModel::slotAlbumAdded(Album* album)
 {
     if (d->addingAlbum == album)
     {
-        bool isRoot = d->addingAlbum == d->rootAlbum;
+        bool isRoot    = d->addingAlbum == d->rootAlbum;
         d->addingAlbum = 0;
         endInsertRows();
 
@@ -657,7 +657,7 @@ void AbstractCountingAlbumModel::includeChildrenCount(const QModelIndex& index)
 
 void AbstractCountingAlbumModel::setCountMap(const QMap<int, int>& idCountMap)
 {
-    m_countMap = idCountMap;
+    m_countMap                        = idCountMap;
     QMap<int, int>::const_iterator it = m_countMap.constBegin();
 
     for (; it != m_countMap.constEnd(); ++it)
@@ -682,7 +682,7 @@ void AbstractCountingAlbumModel::updateCount(Album* album)
     }
 
     QHash<int, int>::iterator includeIt = m_countHashReady.find(album->id());
-    bool changed = false;
+    bool changed                        = false;
 
     // get count for album without children
     int count = m_countMap.value(album->id());
@@ -744,7 +744,7 @@ void AbstractCountingAlbumModel::setCount(Album* album, int count)
     }
     else
     {
-        changed = (includeIt.value() != count);
+        changed           = (includeIt.value() != count);
         includeIt.value() = count;
     }
 
@@ -812,40 +812,59 @@ void AbstractCountingAlbumModel::slotAlbumMoved(Album*)
 
 // ------------------------------------------------------------------
 
-AbstractCheckableAlbumModel::AbstractCheckableAlbumModel(Album::Type albumType, Album* rootAlbum,
-        RootAlbumBehavior rootBehavior,
-        QObject* parent)
-    : AbstractCountingAlbumModel(albumType, rootAlbum, rootBehavior, parent),
-      m_extraFlags(0),
-      m_rootIsCheckable(true),
-      m_addExcludeTristate(false)
+class AbstractCheckableAlbumModel::AbstractCheckableAlbumModelPriv
 {
+public:
+
+    AbstractCheckableAlbumModelPriv()
+    {
+        extraFlags         = 0;
+        rootIsCheckable    = true;
+        addExcludeTristate = false;
+    }
+
+    Qt::ItemFlags                 extraFlags;
+    bool                          rootIsCheckable;
+    bool                          addExcludeTristate;
+    QHash<Album*, Qt::CheckState> checkedAlbums;
+};
+
+AbstractCheckableAlbumModel::AbstractCheckableAlbumModel(Album::Type albumType, Album* rootAlbum,
+                                                         RootAlbumBehavior rootBehavior, QObject* parent)
+    : AbstractCountingAlbumModel(albumType, rootAlbum, rootBehavior, parent),
+      d(new AbstractCheckableAlbumModelPriv)
+{
+}
+
+AbstractCheckableAlbumModel::~AbstractCheckableAlbumModel()
+{
+    delete d;
 }
 
 void AbstractCheckableAlbumModel::setCheckable(bool isCheckable)
 {
     if (isCheckable)
     {
-        m_extraFlags |= Qt::ItemIsUserCheckable;
+        d->extraFlags |= Qt::ItemIsUserCheckable;
     }
     else
     {
-        m_extraFlags &= ~Qt::ItemIsUserCheckable;
+        d->extraFlags &= ~Qt::ItemIsUserCheckable;
         resetCheckedAlbums();
     }
 }
 
 bool AbstractCheckableAlbumModel::isCheckable() const
 {
-    return m_extraFlags & Qt::ItemIsUserCheckable;
+    return d->extraFlags & Qt::ItemIsUserCheckable;
 }
 
 void AbstractCheckableAlbumModel::setRootCheckable(bool isCheckable)
 {
-    m_rootIsCheckable = isCheckable;
-    Album* root = rootAlbum();
+    d->rootIsCheckable = isCheckable;
+    Album* root        = rootAlbum();
 
-    if (!m_rootIsCheckable && root)
+    if (!d->rootIsCheckable && root)
     {
         setChecked(root, false);
     }
@@ -853,46 +872,46 @@ void AbstractCheckableAlbumModel::setRootCheckable(bool isCheckable)
 
 bool AbstractCheckableAlbumModel::rootIsCheckable() const
 {
-    return m_rootIsCheckable && isCheckable();
+    return d->rootIsCheckable && isCheckable();
 }
 
 void AbstractCheckableAlbumModel::setTristate(bool isTristate)
 {
     if (isTristate)
     {
-        m_extraFlags |= Qt::ItemIsTristate;
+        d->extraFlags |= Qt::ItemIsTristate;
     }
     else
     {
-        m_extraFlags &= ~Qt::ItemIsTristate;
+        d->extraFlags &= ~Qt::ItemIsTristate;
     }
 }
 
 bool AbstractCheckableAlbumModel::isTristate() const
 {
-    return m_extraFlags & Qt::ItemIsTristate;
+    return d->extraFlags & Qt::ItemIsTristate;
 }
 
 void AbstractCheckableAlbumModel::setAddExcludeTristate(bool b)
 {
-    m_addExcludeTristate = b;
+    d->addExcludeTristate = b;
     setCheckable(true);
     setTristate(b);
 }
 
 bool AbstractCheckableAlbumModel::isAddExcludeTristate() const
 {
-    return m_addExcludeTristate && isTristate();
+    return d->addExcludeTristate && isTristate();
 }
 
 bool AbstractCheckableAlbumModel::isChecked(Album* album) const
 {
-    return m_checkedAlbums.value(album, Qt::Unchecked) == Qt::Checked;
+    return d->checkedAlbums.value(album, Qt::Unchecked) == Qt::Checked;
 }
 
 Qt::CheckState AbstractCheckableAlbumModel::checkState(Album* album) const
 {
-    return m_checkedAlbums.value(album, Qt::Unchecked);
+    return d->checkedAlbums.value(album, Qt::Unchecked);
 }
 
 void AbstractCheckableAlbumModel::setChecked(Album* album, bool isChecked)
@@ -916,19 +935,19 @@ void AbstractCheckableAlbumModel::toggleChecked(Album* album)
 QList<Album*> AbstractCheckableAlbumModel::checkedAlbums() const
 {
     // return a list with all keys with value Qt::Checked
-    return m_checkedAlbums.keys(Qt::Checked);
+    return d->checkedAlbums.keys(Qt::Checked);
 }
 
 QList<Album*> AbstractCheckableAlbumModel::partiallyCheckedAlbums() const
 {
     // return a list with all keys with value Qt::PartiallyChecked
-    return m_checkedAlbums.keys(Qt::PartiallyChecked);
+    return d->checkedAlbums.keys(Qt::PartiallyChecked);
 }
 
 void AbstractCheckableAlbumModel::resetAllCheckedAlbums()
 {
-    QList<Album*> oldChecked = m_checkedAlbums.keys();
-    m_checkedAlbums.clear();
+    QList<Album*> oldChecked = d->checkedAlbums.keys();
+    d->checkedAlbums.clear();
     foreach (Album* album, oldChecked)
     {
         QModelIndex index = indexForAlbum(album);
@@ -1017,14 +1036,14 @@ QVariant AbstractCheckableAlbumModel::albumData(Album* a, int role) const
 {
     if (role == Qt::CheckStateRole)
     {
-        if ((m_extraFlags & Qt::ItemIsUserCheckable)
-            && (!a->isRoot() || m_rootIsCheckable))
+        if ((d->extraFlags & Qt::ItemIsUserCheckable)
+            && (!a->isRoot() || d->rootIsCheckable))
         {
             // with Qt::Unchecked as default, albums not in the hash (initially all)
             // are simply regarded as unchecked
-            Qt::CheckState state = m_checkedAlbums.value(a, Qt::Unchecked);
+            Qt::CheckState state = d->checkedAlbums.value(a, Qt::Unchecked);
 
-            if (m_addExcludeTristate)
+            if (d->addExcludeTristate)
             {
                 // Use Qt::PartiallyChecked only internally, dont't expose it to the TreeView
                 return (state == Qt::Unchecked) ? Qt::Unchecked : Qt::Checked;
@@ -1038,7 +1057,7 @@ QVariant AbstractCheckableAlbumModel::albumData(Album* a, int role) const
 
 void AbstractCheckableAlbumModel::prepareAddExcludeDecoration(Album* a, QPixmap& icon) const
 {
-    if (!m_addExcludeTristate)
+    if (!d->addExcludeTristate)
     {
         return;
     }
@@ -1047,11 +1066,11 @@ void AbstractCheckableAlbumModel::prepareAddExcludeDecoration(Album* a, QPixmap&
 
     if (state != Qt::Unchecked)
     {
-        kDebug() << m_addExcludeTristate << state;
-        int iconSize = qMax(icon.width(), icon.height());
+        kDebug() << d->addExcludeTristate << state;
+        int iconSize     = qMax(icon.width(), icon.height());
         int overlay_size = qMin(iconSize, qMax(16, iconSize * 2 / 3));
         QPainter p(&icon);
-        p.drawPixmap((icon.width() - overlay_size) / 2,
+        p.drawPixmap((icon.width()  - overlay_size) / 2,
                      (icon.height() - overlay_size) / 2,
                      KIcon(state == Qt::PartiallyChecked ? "list-remove" : "list-add").pixmap(overlay_size, overlay_size));
     }
@@ -1059,9 +1078,9 @@ void AbstractCheckableAlbumModel::prepareAddExcludeDecoration(Album* a, QPixmap&
 
 Qt::ItemFlags AbstractCheckableAlbumModel::flags(const QModelIndex& index) const
 {
-    Qt::ItemFlags extraFlags = m_extraFlags;
+    Qt::ItemFlags extraFlags = d->extraFlags;
 
-    if (!m_rootIsCheckable)
+    if (!d->rootIsCheckable)
     {
         QModelIndex root = rootAlbumIndex();
 
@@ -1079,7 +1098,7 @@ bool AbstractCheckableAlbumModel::setData(const QModelIndex& index, const QVaria
     if (role == Qt::CheckStateRole)
     {
         Qt::CheckState state = (Qt::CheckState)value.toInt();
-        Album* album = albumForIndex(index);
+        Album* album         = albumForIndex(index);
 
         if (!album)
         {
@@ -1087,7 +1106,7 @@ bool AbstractCheckableAlbumModel::setData(const QModelIndex& index, const QVaria
         }
 
         //kDebug() << "Updating check state for album" << album->title() << "to" << value;
-        m_checkedAlbums.insert(album, state);
+        d->checkedAlbums.insert(album, state);
         emit dataChanged(index, index);
         emit checkStateChanged(album, state);
         return true;
@@ -1103,7 +1122,7 @@ void AbstractCheckableAlbumModel::albumCleared(Album* album)
     // preserve check state if album is only being moved
     if (!AlbumManager::instance()->isMovingAlbum(album))
     {
-        m_checkedAlbums.remove(album);
+        d->checkedAlbums.remove(album);
     }
 
     AbstractCountingAlbumModel::albumCleared(album);
@@ -1111,7 +1130,7 @@ void AbstractCheckableAlbumModel::albumCleared(Album* album)
 
 void AbstractCheckableAlbumModel::allAlbumsCleared()
 {
-    m_checkedAlbums.clear();
+    d->checkedAlbums.clear();
     AbstractCountingAlbumModel::allAlbumsCleared();
 }
 

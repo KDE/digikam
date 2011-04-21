@@ -6,7 +6,7 @@
  * Date        : 2009-03-23
  * Description : Qt Model for Albums
  *
- * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -299,6 +299,7 @@ public:
     AbstractCheckableAlbumModel(Album::Type albumType, Album* rootAlbum,
                                 RootAlbumBehavior rootBehavior = IncludeRootAlbum,
                                 QObject* parent = 0);
+    ~AbstractCheckableAlbumModel();
 
     /// Triggers if the albums in this model are checkable
     void setCheckable(bool isCheckable);
@@ -386,10 +387,8 @@ private:
 
 private:
 
-    Qt::ItemFlags                 m_extraFlags;
-    bool                          m_rootIsCheckable;
-    bool                          m_addExcludeTristate;
-    QHash<Album*, Qt::CheckState> m_checkedAlbums;
+    class AbstractCheckableAlbumModelPriv;
+    AbstractCheckableAlbumModelPriv* const d;
 };
 
 } // namespace Digikam
