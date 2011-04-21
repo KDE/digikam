@@ -42,7 +42,6 @@ namespace Digikam
 class Album;
 class AlbumManager;
 class AlbumModelDragDropHandler;
-class AlbumModelPriv;
 
 class AbstractAlbumModel : public QAbstractItemModel
 {
@@ -177,6 +176,7 @@ protected Q_SLOTS:
 
 private:
 
+    class AlbumModelPriv;
     AlbumModelPriv* const d;
 };
 
@@ -383,6 +383,8 @@ private:
 
     void setDataForParents(QModelIndex& child, const QVariant& value, int role = Qt::EditRole);
     void setDataForChildren(QModelIndex& parent, const QVariant& value, int role = Qt::EditRole);
+
+private:
 
     Qt::ItemFlags                 m_extraFlags;
     bool                          m_rootIsCheckable;

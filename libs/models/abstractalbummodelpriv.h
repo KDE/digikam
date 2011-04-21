@@ -27,34 +27,33 @@
 namespace Digikam
 {
 
-class AlbumModelPriv
+class AbstractAlbumModel::AlbumModelPriv
 {
 public:
 
     AlbumModelPriv()
     {
-        rootAlbum     = 0;
-        type          = Album::PHYSICAL;
-        rootBehavior  = AbstractAlbumModel::IncludeRootAlbum;
-        addingAlbum   = 0;
-        removingAlbum = 0;
-        itemDrag      = true;
-        itemDrop      = true;
-        dragDropHandler
-        = 0;
+        rootAlbum       = 0;
+        type            = Album::PHYSICAL;
+        rootBehavior    = AbstractAlbumModel::IncludeRootAlbum;
+        addingAlbum     = 0;
+        removingAlbum   = 0;
+        itemDrag        = true;
+        itemDrop        = true;
+        dragDropHandler = 0;
     }
 
-    Album*            rootAlbum;
-    Album::Type       type;
-    AbstractAlbumModel::RootAlbumBehavior
-    rootBehavior;
-    bool              itemDrag;
-    bool              itemDrop;
-    AlbumModelDragDropHandler
-    *dragDropHandler;
+    Album*                                rootAlbum;
+    Album::Type                           type;
+    AbstractAlbumModel::RootAlbumBehavior rootBehavior;
+    bool                                  itemDrag;
+    bool                                  itemDrop;
+    AlbumModelDragDropHandler*            dragDropHandler;
 
-    Album*            addingAlbum;
-    Album*            removingAlbum;
+    Album*                                addingAlbum;
+    Album*                                removingAlbum;
+
+public:
 
     Album* findNthChild(Album* parent, int n)
     {
