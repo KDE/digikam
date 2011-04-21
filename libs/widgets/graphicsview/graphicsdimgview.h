@@ -58,6 +58,7 @@ public:
 
 Q_SIGNALS:
 
+    void contentsMoving(int, int);
     void rightButtonClicked();
     void leftButtonClicked();
     void leftButtonDoubleClicked();
@@ -95,6 +96,7 @@ protected:
 
 protected Q_SLOTS:
 
+    void         slotContentsMoved();
     void         slotCornerButtonPressed();
     void         slotPanIconHidden();
     virtual void slotPanIconSelectionMoved(const QRect&, bool);

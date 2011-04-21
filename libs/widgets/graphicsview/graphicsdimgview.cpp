@@ -89,6 +89,12 @@ GraphicsDImgView::GraphicsDImgView(QWidget* parent)
     horizontalScrollBar()->setPageStep(1);
     verticalScrollBar()->setSingleStep(1);
     verticalScrollBar()->setPageStep(1);
+
+    connect(horizontalScrollBar(), SIGNAL(valueChanged(int)),
+            this, SLOT(slotContentsMoved()));
+
+    connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
+            this, SLOT(slotContentsMoved()));
 }
 
 GraphicsDImgView::~GraphicsDImgView()
@@ -448,6 +454,11 @@ void GraphicsDImgView::slotPanIconSelectionMoved(const QRect& imageRect, bool b)
         slotPanIconHidden();
         //slotContentLeaveFocus();
     }
+}
+
+void GraphicsDImgView::slotContentsMoved()
+{
+    emit contentsMoving(horizontalScrollBar()->value(), verticalScrollBar()->value());
 }
 
 } // namespace Digikam
