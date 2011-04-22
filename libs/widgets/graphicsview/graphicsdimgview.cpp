@@ -461,4 +461,14 @@ void GraphicsDImgView::slotContentsMoved()
     emit contentsMoving(horizontalScrollBar()->value(), verticalScrollBar()->value());
 }
 
+int GraphicsDImgView::contentsX() const
+{
+    return horizontalScrollBar()->value();
+}
+
+int GraphicsDImgView::contentsY() const
+{
+    return verticalScrollBar()->value();
+}
+
 } // namespace Digikam
