@@ -248,9 +248,9 @@ void AdvancedRenameWidget::registerParserControls()
             // register options
             QPushButton* btn      = 0;
             DynamicLayout* layout = new DynamicLayout(KDialog::marginHint(), KDialog::marginHint());
-            foreach (Option* option, d->parser->options())
+            foreach (Parseable* p, d->parser->options())
             {
-                btn = option->registerButton(this);
+                btn = p->registerButton(this);
 
                 if (!btn)
                 {
@@ -258,11 +258,11 @@ void AdvancedRenameWidget::registerParserControls()
                 }
 
                 // set button tooltip
-                btn->setToolTip(option->description());
+                btn->setToolTip(p->description());
 
                 layout->addWidget(btn);
 
-                connect(option, SIGNAL(signalTokenTriggered(const QString&)),
+                connect(p, SIGNAL(signalTokenTriggered(const QString&)),
                         d->renameInput, SLOT(slotAddToken(const QString&)));
             }
             d->btnContainer->setLayout(layout);
