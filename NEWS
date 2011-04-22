@@ -121,8 +121,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 095 ==> 270553 : Import Wizard: Selecting "date" in File Renaming Options does not work.
 096 ==> 270728 : CMakeLists.txt:159 doesn't specify which target needs to link to QtScript library.
 097 ==> 267421 : Tagging panel shows tags as checked which previously where partially checked (when selecting multiple images).
-098 ==> 270168 : ¨Select Tool¨ item in edit window all 46 icons idle.
+098 ==> 270168 : Select Tool item in edit window all 46 icons idle.
 099 ==> 266674 : Green grid in images imported from raw file (cr2).
 100 ==> 270365 : Drag & drop picture in upwards folder collapses and reopens it.
 101 ==> 231536 : Save As New File.
-102 ==> 
+102 ==> 271153 : Tokina AT-X 107 AF DX Fish-eye not recognised.
+103 ==> 
