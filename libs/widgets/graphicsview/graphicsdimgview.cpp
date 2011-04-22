@@ -217,6 +217,11 @@ void GraphicsDImgView::mousePressEvent(QMouseEvent* e)
         return;
     }
 
+    if (e->button() == Qt::LeftButton)
+    {
+        emit leftButtonClicked();
+    }
+
     if (e->button() == Qt::LeftButton || e->button() == Qt::MidButton)
     {
         d->mousePressPos = e->pos();
@@ -227,6 +232,11 @@ void GraphicsDImgView::mousePressEvent(QMouseEvent* e)
         }
 
         return;
+    }
+
+    if (e->button() == Qt::RightButton)
+    {
+        emit rightButtonClicked();
     }
 }
 
@@ -261,8 +271,6 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
     {
         if (!d->movingInProgress && e->button() == Qt::LeftButton)
         {
-            emit leftButtonClicked();
-
             if (KGlobalSettings::singleClick())
             {
                 emit activated();
@@ -272,11 +280,6 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
         {
             finishPanning();
         }
-    }
-
-    if (e->button() == Qt::RightButton)
-    {
-        emit rightButtonClicked();
     }
 
     d->movingInProgress = false;
