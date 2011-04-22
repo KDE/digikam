@@ -471,4 +471,10 @@ int GraphicsDImgView::contentsY() const
     return verticalScrollBar()->value();
 }
 
+void GraphicsDImgView::setContentsPos(int x, int y)
+{
+    horizontalScrollBar()->setValue(x);
+    verticalScrollBar()->setValue(y);
+}
+
 } // namespace Digikam

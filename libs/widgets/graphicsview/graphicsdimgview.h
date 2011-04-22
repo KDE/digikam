@@ -56,8 +56,9 @@ public:
      *  equivalent to calling centerOn(scenePos). */
     void scrollPointOnPoint(const QPointF& scenePos, const QPoint& viewportPos);
 
-    int contentsX() const;
-    int contentsY() const;
+    int  contentsX() const;
+    int  contentsY() const;
+    void setContentsPos(int x, int y);
 
 Q_SIGNALS:
 
