@@ -45,7 +45,15 @@ class ImagePreviewView : public GraphicsDImgView
 
 public:
 
-    ImagePreviewView(QWidget* parent);
+    enum Mode
+    {
+        IconViewPreview,
+        LightTablePreview
+    };
+
+public:
+
+    ImagePreviewView(QWidget* parent, Mode mode=IconViewPreview);
     ~ImagePreviewView();
 
     void setImageInfo(const ImageInfo& info     = ImageInfo(),

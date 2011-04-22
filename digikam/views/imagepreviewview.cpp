@@ -152,32 +152,36 @@ public:
         peopleToggleAction = 0;
         addPersonAction    = 0;
         faceGroup          = 0;
+        mode               = ImagePreviewView::IconViewPreview;
     }
 
-    bool                  peopleTagsShown;
-    bool                  fullSize;
-    double                scale;
-    bool                  isValid;
+    bool                   peopleTagsShown;
+    bool                   fullSize;
+    double                 scale;
+    bool                   isValid;
 
-    ImagePreviewViewItem* item;
+    ImagePreviewView::Mode mode;
 
-    QAction*              back2AlbumAction;
-    QAction*              prevAction;
-    QAction*              nextAction;
-    QAction*              rotLeftAction;
-    QAction*              rotRightAction;
-    KToggleAction*        peopleToggleAction;
-    QAction*              addPersonAction;
-    QAction*              forgetFacesAction;
+    ImagePreviewViewItem*  item;
 
-    QToolBar*             toolBar;
+    QAction*               back2AlbumAction;
+    QAction*               prevAction;
+    QAction*               nextAction;
+    QAction*               rotLeftAction;
+    QAction*               rotRightAction;
+    KToggleAction*         peopleToggleAction;
+    QAction*               addPersonAction;
+    QAction*               forgetFacesAction;
 
-    FaceGroup*            faceGroup;
+    QToolBar*              toolBar;
+
+    FaceGroup*             faceGroup;
 };
 
-ImagePreviewView::ImagePreviewView(QWidget* parent)
+ImagePreviewView::ImagePreviewView(QWidget* parent, Mode mode)
     : GraphicsDImgView(parent), d(new ImagePreviewViewPriv)
 {
+    d->mode = mode;
     d->item = new ImagePreviewViewItem(this);
     setItem(d->item);
 
@@ -214,9 +218,13 @@ ImagePreviewView::ImagePreviewView(QWidget* parent)
     d->peopleToggleAction->setIcon(SmallIcon("user-identity"));
 
     d->toolBar = new QToolBar(this);
-    d->toolBar->addAction(d->prevAction);
-    d->toolBar->addAction(d->nextAction);
-    d->toolBar->addAction(d->back2AlbumAction);
+
+    if (mode == IconViewPreview)
+    {
+        d->toolBar->addAction(d->prevAction);
+        d->toolBar->addAction(d->nextAction);
+        d->toolBar->addAction(d->back2AlbumAction);
+    }
     d->toolBar->addAction(d->rotLeftAction);
     d->toolBar->addAction(d->rotRightAction);
     d->toolBar->addAction(d->peopleToggleAction);
@@ -356,11 +364,14 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
 
     // --------------------------------------------------------
 
-    cmhelper.addAction(d->prevAction, true);
-    cmhelper.addAction(d->nextAction, true);
-    cmhelper.addAction(d->back2AlbumAction);
-    cmhelper.addGotoMenu(idList);
-    popmenu.addSeparator();
+    if (d->mode == IconViewPreview)
+    {
+        cmhelper.addAction(d->prevAction, true);
+        cmhelper.addAction(d->nextAction, true);
+        cmhelper.addAction(d->back2AlbumAction);
+        cmhelper.addGotoMenu(idList);
+        popmenu.addSeparator();
+    }
 
     // --------------------------------------------------------
 
