@@ -27,25 +27,16 @@
 
 #include <QList>
 #include <QPainter>
-#include <QCursor>
 #include <QString>
 #include <QFontMetrics>
 #include <QPixmap>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QResizeEvent>
 #include <QPalette>
 
 // KDE includes
 
 #include <kapplication.h>
-#include <kcursor.h>
 #include <kdialog.h>
-#include <kiconloader.h>
 #include <klocale.h>
-#include <kmenu.h>
-#include <kmimetype.h>
-#include <kmimetypetrader.h>
 #include <kdebug.h>
 
 // Local includes
