@@ -333,6 +333,9 @@ void LightTableWindow::setupConnections()
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
 
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
+
     // Thumbs bar connections ---------------------------------------
 
     connect(d->barView, SIGNAL(signalSetItemOnLeftPanel(const ImageInfo&)),
@@ -1726,6 +1729,12 @@ void LightTableWindow::slotAssignColorLabel(int colorId)
 void LightTableWindow::slotAssignRating(int rating)
 {
     d->barView->slotAssignRating(rating);
+}
+
+void LightTableWindow::slotThemeChanged()
+{
+    d->previewView->checkForSelection(d->previewView->leftImageInfo());
+    d->previewView->checkForSelection(d->previewView->rightImageInfo());
 }
 
 }  // namespace Digikam

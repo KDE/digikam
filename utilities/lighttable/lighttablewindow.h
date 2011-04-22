@@ -159,6 +159,7 @@ private Q_SLOTS:
     void slotDBStat();
 
     void slotSidebarTabTitleStyleChanged();
+    void slotThemeChanged();
 
 private:
 

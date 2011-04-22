@@ -403,8 +403,8 @@ void LightTableView::checkForSyncPreview()
 
 void LightTableView::checkForSelection(const ImageInfo& info)
 {
-    QString selected = QString("QLabel { background-color: %1; }")
-                       .arg(kapp->palette().color(QPalette::Highlight).name());
+    QString selected    = QString("QLabel { background-color: %1; }")
+                          .arg(kapp->palette().color(QPalette::Highlight).name());
 
     QString notSelected = QString("QLabel { background-color: %1; }")
                           .arg(kapp->palette().color(QPalette::Base).name());
