@@ -277,6 +277,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             cinfo.out_color_space     = JCS_CMYK;
             colorModel = DImg::CMYK;
             break;
+        default:
+            break;
     }
 
     // -------------------------------------------------------------------
