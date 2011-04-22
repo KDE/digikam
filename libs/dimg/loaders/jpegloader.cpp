@@ -335,7 +335,9 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
         uchar* ptr, *line[16], *data=0;
         uchar* ptr2=0;
-        int    x, y, l, i, scans, count, prevy;
+        int    x, y, l, i, scans;
+//        int count;
+//        int prevy;
 
         if (cinfo.rec_outbuf_height > 16)
         {
@@ -389,8 +391,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         }
 
         ptr2  = dest;
-        count = 0;
-        prevy = 0;
+//        count = 0;
+//        prevy = 0;
 
         if (cinfo.output_components == 3)
         {
