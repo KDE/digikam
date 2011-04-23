@@ -71,7 +71,7 @@ void AntiVignettingFilter::filterImage()
 {
     int    progress;
     int    col, row, xd, td, yd, p;
-    int    xsize, ysize, diagonal, erad, irad, xctr, yctr;
+    int    xsize, ysize, /*diagonal,*/ erad, irad, xctr, yctr;
 
     uchar* NewBits = m_destImage.bits();
     uchar* data    = m_orgImage.bits();
@@ -97,7 +97,7 @@ void AntiVignettingFilter::filterImage()
     xsize    = qRound(Width  / 2.0 + fabs(m_settings.xshift));
     ysize    = qRound(Height / 2.0 + fabs(m_settings.yshift));
 
-    diagonal = qRound(hypothenuse(xsize,ysize)) +  1;
+//    diagonal = qRound(hypothenuse(xsize,ysize)) +  1;
 
     xctr     = qRound(Width  / 2.0 + m_settings.xshift);
     yctr     = qRound(Height / 2.0 + m_settings.yshift);

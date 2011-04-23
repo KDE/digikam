@@ -394,7 +394,7 @@ CMat* RefocusMatrix::compute_g (const CMat* const convolution, const int m, cons
     CMat* result;
     Mat* b;
     Mat* s;
-    int status;
+//    int status;
 
     init_c_mat (&h_conv_ruv, 3 * m);
     fill_matrix2 (&corr, 4 * m, correlation, gamma, musq);
@@ -424,7 +424,8 @@ CMat* RefocusMatrix::compute_g (const CMat* const convolution, const int m, cons
 
     Q_ASSERT (s->cols == s->rows);
     Q_ASSERT (s->rows == b->rows);
-    status = dgesv (s->rows, 1, s->data, s->rows, b->data, b->rows);
+//    status =
+    dgesv (s->rows, 1, s->data, s->rows, b->data, b->rows);
 
     if (symmetric)
     {
