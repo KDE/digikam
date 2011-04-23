@@ -840,7 +840,7 @@ void DistortionFXFilter::blockWaves(DImg* orgImage, DImg* destImage,
     uchar* pResBits = destImage->bits();
 
     int nw, nh, progress;
-    double Radius;
+//    double Radius;
 
     DColor color;
     int offset, offsetOther;
@@ -854,7 +854,7 @@ void DistortionFXFilter::blockWaves(DImg* orgImage, DImg* destImage,
             nw = nHalfW - w;
             nh = nHalfH - h;
 
-            Radius = sqrt (nw * nw + nh * nh);
+//            Radius = sqrt (nw * nw + nh * nh);
 
             if (Mode)
             {
