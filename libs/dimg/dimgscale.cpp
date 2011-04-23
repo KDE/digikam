@@ -305,9 +305,9 @@ DImg DImg::smoothScaleSection(int sx, int sy,
     }
 
     // clip the source rect to be within the actual image
-    int  psx, psy, psw, psh;
-    psx = sx;
-    psy = sy;
+    int  /*psx, psy,*/ psw, psh;
+//    psx = sx;
+//    psy = sy;
     psw = sw;
     psh = sh;
 
