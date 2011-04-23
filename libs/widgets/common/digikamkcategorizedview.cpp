@@ -1042,7 +1042,7 @@ void DigikamKCategorizedView::setSelection(const QRect& rect,
     }
 
     QItemSelection selection;
-    QRect contentsRect = rect.translated(horizontalOffset(), verticalOffset());
+//    QRect contentsRect = rect.translated(horizontalOffset(), verticalOffset());
     QModelIndexList intersectedIndexes = d->intersectionSet(rect);
 
     if (rect.width() == 1 && rect.height() == 1)
@@ -1967,17 +1967,17 @@ void DigikamKCategorizedView::currentChanged(const QModelIndex& current,
 
     int viewportWidth = viewport()->width() - spacing();
 
-    int itemHeight;
+//    int itemHeight;
     int itemWidth;
 
     if (gridSize().isEmpty())
     {
-        itemHeight = d->biggestItemSize.height();
+//        itemHeight = d->biggestItemSize.height();
         itemWidth = d->biggestItemSize.width();
     }
     else
     {
-        itemHeight = gridSize().height();
+//        itemHeight = gridSize().height();
         itemWidth = gridSize().width();
     }
 

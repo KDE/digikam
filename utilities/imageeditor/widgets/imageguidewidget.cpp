@@ -607,7 +607,7 @@ void ImageGuideWidget::mouseReleaseEvent(QMouseEvent* e)
             d->spot.setY(e->y()-d->rect.y());
 
             DColor color;
-            QPoint point = getSpotPosition();
+//            QPoint point = getSpotPosition();
 
             if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage)
             {
