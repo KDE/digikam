@@ -493,7 +493,7 @@ void MixerSettings::loadSettings()
 
     if ( fp )
     {
-        ChannelType currentOutputChannel = RedChannel;
+//        ChannelType currentOutputChannel = RedChannel;
         char buf1[1024];
         char buf2[1024];
         char buf3[1024];
@@ -504,20 +504,20 @@ void MixerSettings::loadSettings()
 
         fscanf (fp, "%*s %s", buf1);
 
-        // Get the current output channel in dialog.
-
-        if (strcmp (buf1, "RED") == 0)
-        {
-            currentOutputChannel = RedChannel;
-        }
-        else if (strcmp (buf1, "GREEN") == 0)
-        {
-            currentOutputChannel = GreenChannel;
-        }
-        else if (strcmp (buf1, "BLUE") == 0)
-        {
-            currentOutputChannel = BlueChannel;
-        }
+//        // Get the current output channel in dialog.
+//
+//        if (strcmp (buf1, "RED") == 0)
+//        {
+//            currentOutputChannel = RedChannel;
+//        }
+//        else if (strcmp (buf1, "GREEN") == 0)
+//        {
+//            currentOutputChannel = GreenChannel;
+//        }
+//        else if (strcmp (buf1, "BLUE") == 0)
+//        {
+//            currentOutputChannel = BlueChannel;
+//        }
 
         fscanf (fp, "%*s %s", buf1); // preview flag, preserved for compatibility
 
