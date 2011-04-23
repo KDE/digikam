@@ -500,7 +500,7 @@ WBContainer WBSettings::defaultSettings() const
 void WBSettings::readSettings(KConfigGroup& group)
 {
     WBContainer prm;
-    WBContainer defaultPrm = defaultSettings();
+//    WBContainer defaultPrm = defaultSettings();
 
     prm.black       = group.readEntry(d->configBlackInputEntry,       d->blackInput->defaultValue());
     prm.temperature = group.readEntry(d->configTemperatureInputEntry, d->temperatureInput->defaultValue());
@@ -516,7 +516,7 @@ void WBSettings::readSettings(KConfigGroup& group)
 
 void WBSettings::writeSettings(KConfigGroup& group)
 {
-    WBContainer prm = settings();
+//    WBContainer prm = settings();
 
     group.writeEntry(d->configDarkInputEntry,        d->darkInput->value());
     group.writeEntry(d->configBlackInputEntry,       d->blackInput->value());

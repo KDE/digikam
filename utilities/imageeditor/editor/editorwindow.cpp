@@ -1501,7 +1501,7 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
 
         bool shallSave    = true;
         bool shallDiscard = false;
-        bool newVersion   = false;
+//        bool newVersion   = false;
 
         if (mode == AskIfNeeded)
         {
@@ -1523,7 +1523,7 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
 
                     shallSave    = dialog->shallSave();
                     shallDiscard = dialog->shallDiscard();
-                    newVersion   = dialog->newVersion();
+//                    newVersion   = dialog->newVersion();
                 }
             }
             else

@@ -211,14 +211,15 @@ void SharedLoadingTask::execute()
     // load image
     m_img = DImg(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
 
-    bool isCached = false;
+//    bool isCached = false;
     {
         LoadingCache::CacheLock lock(cache);
 
         // put (valid) image into cache of loaded images
         if (!m_img.isNull())
         {
-            isCached = cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img), m_loadingDescription.filePath);
+//            isCached =
+            cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img), m_loadingDescription.filePath);
         }
 
         // remove this from the list of loading processes in cache
