@@ -114,7 +114,7 @@ public:
         int categorySortStartIndex = model->rowCount();
         foreach (QAction* a, actions)
         {
-            QAction *categoryAction;
+            QAction *categoryAction = 0;
             if (mode & ActionItemModel::ToplevelMenuCategory)
             {
                 for (QAction* p = a; p; p = parents.value(p))
