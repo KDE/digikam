@@ -209,6 +209,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
         case JCS_YCCK:
             cinfo.out_color_space = JCS_CMYK;
             break;
+        default:
+            break;
     }
 
     jpeg_start_decompress(&cinfo);
