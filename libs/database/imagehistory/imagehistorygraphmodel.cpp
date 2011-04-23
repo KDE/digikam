@@ -413,7 +413,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildCombinedTree(const
     {
         const HistoryGraph::Vertex& v = path[i];
         HistoryGraph::Vertex previous = i ? path[i-1] : HistoryGraph::Vertex();
-        HistoryGraph::Vertex next     = i < path.size() - 1 ? path[i+1] : HistoryGraph::Vertex();
+//        HistoryGraph::Vertex next     = i < path.size() - 1 ? path[i+1] : HistoryGraph::Vertex();
         //kDebug() << "Vertex on path" << path[i];
         // create new item
         item = createVertexItem(v);

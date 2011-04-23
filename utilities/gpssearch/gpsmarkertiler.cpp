@@ -619,8 +619,8 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 void GPSMarkerTiler::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumbnail)
 {
     QVariant index = d->thumbnailMap.value(loadingDescription.filePath);
-    QPair<KMap::TileIndex, int> indexForPixmap =
-        index.value<QPair<KMap::TileIndex, int> >();
+//    QPair<KMap::TileIndex, int> indexForPixmap =
+//        index.value<QPair<KMap::TileIndex, int> >();
     emit signalThumbnailAvailableForIndex(index, thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2));
 }
 
@@ -649,7 +649,7 @@ void GPSMarkerTiler::tileDelete(KMap::AbstractMarkerTiler::Tile* const tile)
 void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 {
     const DatabaseFields::Set changes = changeset.changes();
-    const DatabaseFields::ImagePositions imagePositionChanges = changes;
+//    const DatabaseFields::ImagePositions imagePositionChanges = changes;
 
     if (! (   ( changes & DatabaseFields::LatitudeNumber )
               || ( changes & DatabaseFields::LongitudeNumber )

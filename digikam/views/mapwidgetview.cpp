@@ -404,7 +404,7 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 {
     kDebug() << "---------------------------------------------------------------";
     const DatabaseFields::Set changes = changeset.changes();
-    const DatabaseFields::ImagePositions imagePositionChanges = changes;
+//    const DatabaseFields::ImagePositions imagePositionChanges = changes;
 
     /// @todo More detailed check
     if (   ( changes & DatabaseFields::LatitudeNumber )

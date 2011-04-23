@@ -314,8 +314,8 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
         QRect tRect(d->iconPix.height()+3, 2, width()-3-d->iconPix.width()-2, height()-5);
         QString text        = QString("%1%").arg(peUsed);
         QFontMetrics fontMt = p.fontMetrics();
-        QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(),
-                                                  tRect.width(), tRect.height(), 0, text);
+//        QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(),
+//                                                  tRect.width(), tRect.height(), 0, text);
         p.setPen(Qt::black);
         p.drawText(tRect, Qt::AlignCenter, text);
     }

@@ -295,16 +295,16 @@ void DatabaseWidget::checkDatabaseConnection()
 
 void DatabaseWidget::checkDBPath()
 {
-    bool dbOk          = false;
-    bool pathUnchanged = true;
+//    bool dbOk          = false;
+//    bool pathUnchanged = true;
     QString newPath    = databasePathEdit->url().toLocalFile();
 
     if (!databasePathEdit->url().path().isEmpty())
     {
         QDir dbDir(newPath);
         QDir oldDir(originalDbPath);
-        dbOk          = dbDir.exists();
-        pathUnchanged = (dbDir == oldDir);
+//        dbOk          = dbDir.exists();
+//        pathUnchanged = (dbDir == oldDir);
     }
 
     //TODO create an Enable button slot, if the path is vald
