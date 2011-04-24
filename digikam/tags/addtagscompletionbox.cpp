@@ -32,6 +32,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QScrollBar>
 
 // KDE includes
 
@@ -510,7 +511,7 @@ QRect AddTagsCompletionBox::calculateGeometry() const
 
     const QSize maxSize   = d->maximumAvailableScreenSize(globalPositionHint());
 
-    int suggestedHeight   = qMin(15, count()) * itemSizeHint.height();
+    int suggestedHeight   = qMin(suggestedShownItems, count()) * itemSizeHint.height();
 
     //kDebug() << itemSizeHint << maxHeight << suggestedHeight;
     int h                 = qMin(maxSize.height(), suggestedHeight + frameHeight);
@@ -519,7 +520,9 @@ QRect AddTagsCompletionBox::calculateGeometry() const
 
     if (d->allowExceedBounds)
     {
-        w = qMin(itemSizeHint.width(), maxSize.width());
+        const int scrollBarMargin = (count() > suggestedShownItems && verticalScrollBar())
+                        ? verticalScrollBar()->sizeHint().width() : 0;
+        w = qMin(itemSizeHint.width() + scrollBarMargin, maxSize.width());
     }
     else
     {
