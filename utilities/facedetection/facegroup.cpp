@@ -353,8 +353,13 @@ void FaceGroup::setInfo(const ImageInfo& info)
     }
 }
 
-void FaceGroup::finish()
+void FaceGroup::aboutToSetInfo(const ImageInfo& info)
 {
+    if (d->info == info)
+    {
+        return;
+    }
+
     applyItemGeometryChanges();
     clear();
 }

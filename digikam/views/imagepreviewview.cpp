@@ -304,7 +304,7 @@ void ImagePreviewView::imageLoadingFailed()
 
 void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
-    d->faceGroup->finish();
+    d->faceGroup->aboutToSetInfo(info);
     d->item->setImageInfo(info);
 
     d->prevAction->setEnabled(!previous.isNull());
