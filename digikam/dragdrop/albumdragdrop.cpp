@@ -62,7 +62,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         return false;
     }
 
-    PAlbum* destAlbum = model()->albumForIndex(droppedOn);
+    AlbumPointer<PAlbum> destAlbum = model()->albumForIndex(droppedOn);
 
     if (!destAlbum)
     {
@@ -79,7 +79,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
             return false;
         }
 
-        PAlbum* droppedAlbum = AlbumManager::instance()->findPAlbum(albumId);
+        AlbumPointer<PAlbum> droppedAlbum = AlbumManager::instance()->findPAlbum(albumId);
 
         if (!droppedAlbum)
         {
@@ -94,6 +94,11 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
         QAction* choice = popMenu.exec(QCursor::pos());
+
+        if (!droppedAlbum || !destAlbum)
+        {
+            return false;
+        }
 
         if (choice == moveAction)
         {
@@ -169,7 +174,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
                 set = (setAction == choice);
             }
 
-            if (set)
+            if (set && destAlbum)
             {
                 QString errMsg;
                 AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
@@ -227,6 +232,11 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
             }
         }
 
+        if (!destAlbum)
+        {
+            return false;
+        }
+
         if (move)
         {
             KIO::Job* job = DIO::move(extUrls, extImageIDs, destAlbum);
@@ -265,7 +275,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
             popMenu.setMouseTracking(true);
             QAction* choice = popMenu.exec(QCursor::pos());
 
-            if (choice)
+            if (choice && destAlbum)
             {
                 if (choice == downAction)
                 {
@@ -318,6 +328,11 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
             {
                 move = true;
             }
+        }
+
+        if (!destAlbum)
+        {
+            return false;
         }
 
         if (move)
