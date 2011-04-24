@@ -239,7 +239,6 @@ DigikamApp::DigikamApp()
     connect(d->cameraList, SIGNAL(signalCameraRemoved(KAction*)),
             this, SLOT(slotCameraRemoved(KAction*)));
 
-    d->templateManager = new TemplateManager(this, KStandardDirs::locateLocal("appdata", "template.xml"));
     d->modelCollection = new DigikamModelCollection;
 
     setupView();

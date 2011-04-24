@@ -35,8 +35,9 @@
 
 // KDE includes
 
+#include <kglobal.h>
 #include <klocale.h>
-
+#include <kstandarddirs.h>
 
 // Local includes
 
@@ -44,13 +45,6 @@
 
 namespace Digikam
 {
-
-TemplateManager* TemplateManager::m_defaultManager = 0;
-
-TemplateManager* TemplateManager::defaultManager()
-{
-    return m_defaultManager;
-}
 
 class TemplateManager::TemplateManagerPrivate
 {
@@ -70,15 +64,22 @@ public:
     QMutex          mutex;
 };
 
-TemplateManager::TemplateManager(QObject* parent, const QString& file)
-    : QObject(parent), d(new TemplateManagerPrivate)
+class TemplateManagerCreator
 {
-    d->file = file;
+public:
+    TemplateManager object;
+};
+K_GLOBAL_STATIC(TemplateManagerCreator, creator)
 
-    if (!m_defaultManager)
-    {
-        m_defaultManager = this;
-    }
+TemplateManager* TemplateManager::defaultManager()
+{
+    return &creator->object;
+}
+
+TemplateManager::TemplateManager()
+    : d(new TemplateManagerPrivate)
+{
+    d->file = KStandardDirs::locateLocal("appdata", "template.xml");
 
     load();
 }
@@ -88,11 +89,6 @@ TemplateManager::~TemplateManager()
     save();
     clear();
     delete d;
-
-    if (m_defaultManager == this)
-    {
-        m_defaultManager = 0;
-    }
 }
 
 bool TemplateManager::load()

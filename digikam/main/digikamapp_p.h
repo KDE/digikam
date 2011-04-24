@@ -56,7 +56,6 @@
 #include "albumsettings.h"
 #include "cameralist.h"
 #include "daboutdata.h"
-#include "templatemanager.h"
 #include "imagepluginloader.h"
 #include "splashscreen.h"
 #include "kipiinterface.h"
@@ -180,7 +179,6 @@ public:
         kipiInterface(0),
         view(0),
         cameraList(0),
-        templateManager(0),
         tagsActionManager(0),
         zoomBar(0),
         statusProgressBar(0),
@@ -328,7 +326,6 @@ public:
     KipiInterface*                      kipiInterface;
     DigikamView*                        view;
     CameraList*                         cameraList;
-    TemplateManager*                    templateManager;
     TagsActionMngr*                     tagsActionManager;
     DZoomBar*                           zoomBar;
     StatusProgressBar*                  statusProgressBar;

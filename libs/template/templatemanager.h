@@ -42,9 +42,6 @@ class TemplateManager : public QObject
 
 public:
 
-    TemplateManager(QObject* parent, const QString& file);
-    ~TemplateManager();
-
     bool load();
     bool save();
     void clear();
@@ -72,7 +69,9 @@ private:
 
 private:
 
-    static TemplateManager* m_defaultManager;
+    friend class TemplateManagerCreator;
+    TemplateManager();
+    ~TemplateManager();
 
     class TemplateManagerPrivate;
     TemplateManagerPrivate* const d;
