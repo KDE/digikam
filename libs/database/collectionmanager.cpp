@@ -450,7 +450,7 @@ QString CollectionManagerPrivate::pathFromIdentifier(const AlbumRootLocation* lo
 QStringList CollectionManagerPrivate::networkShareMountPathsFromIdentifier(const AlbumRootLocation* location)
 {
     // using a QUrl because KUrl cannot handle duplicate query items
-    QUrl url(location->identifier);
+    QUrl url = QUrl::fromEncoded(location->identifier.toLocal8Bit());
 
     if (url.scheme() != "networkshareid")
     {
