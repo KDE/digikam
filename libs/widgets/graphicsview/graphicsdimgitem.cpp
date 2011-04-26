@@ -209,22 +209,6 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
         painter->drawPixmap(drawRect.topLeft(), pix);
     }
-
-/*
-    QPixmap pix(visibleWidth(), visibleHeight());
-    pix.fill(kapp->palette().color(QPalette::Base));
-    QPainter p(&pix);
-    QFileInfo info(d->path);
-    p.setPen(QPen(kapp->palette().color(QPalette::Text)));
-    p.drawText(0, 0, pix.width(), pix.height(),
-               Qt::AlignCenter|Qt::TextWordWrap,
-               i18n("Cannot display preview for\n\"%1\"",
-               info.fileName()));
-    p.end();
-
-    // three copies - but the image is small
-    setImage(DImg(pix.toImage()));
-*/
 }
 
 } // namespace Digikam
