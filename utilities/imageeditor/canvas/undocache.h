@@ -52,7 +52,7 @@ public:
     /**
     * Write the data into a cache file
     */
-    bool   putData(int level, int w, int h, bool sixteenBit, bool hasAlpha, uchar* data);
+    bool   putData(int level, int w, int h, bool sixteenBit, bool hasAlpha, uchar* data) const;
     /**
     * Get the data from a cache file
     */

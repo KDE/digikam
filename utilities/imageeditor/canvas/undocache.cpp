@@ -57,19 +57,18 @@ public:
         return QString("%1-%2.bin").arg(cachePrefix).arg(level);
     }
 
-    QString     cachePrefix;
-    QSet<int>   cachedLevels;
+    QString   cachePrefix;
+    QSet<int> cachedLevels;
 };
 
 UndoCache::UndoCache()
     : d(new UndoCachePriv)
 {
-    QString cacheDir = KStandardDirs::locateLocal("cache",
-                                                  KGlobal::mainComponent().aboutData()->programName() + '/');
+    QString cacheDir = KStandardDirs::locateLocal("cache", KGlobal::mainComponent().aboutData()->programName() + '/');
 
-    d->cachePrefix = QString("%1undocache-%2")
-                     .arg(cacheDir)
-                     .arg(QCoreApplication::applicationPid());
+    d->cachePrefix   = QString("%1undocache-%2")
+                       .arg(cacheDir)
+                       .arg(QCoreApplication::applicationPid());
 
     // remove any remnants
     QDir dir(cacheDir);
@@ -106,7 +105,7 @@ void UndoCache::clearFrom(int fromLevel)
     }
 }
 
-bool UndoCache::putData(int level, int w, int h, bool sixteenBit, bool hasAlpha, uchar* data)
+bool UndoCache::putData(int level, int w, int h, bool sixteenBit, bool hasAlpha, uchar* data) const
 {
     QFile file(d->cacheFile(level));
 
@@ -133,10 +132,10 @@ bool UndoCache::putData(int level, int w, int h, bool sixteenBit, bool hasAlpha,
 
 uchar* UndoCache::getData(int level, int& w, int& h, bool& sixteenBit, bool& hasAlpha) const
 {
-    w                 = 0;
-    h                 = 0;
-    sixteenBit        = false;
-    hasAlpha          = false;
+    w          = 0;
+    h          = 0;
+    sixteenBit = false;
+    hasAlpha   = false;
 
     QFile file(d->cacheFile(level));
 
