@@ -55,7 +55,7 @@ public:
     void          setHistory(const DImageHistory& history);
     DImageHistory getHistory() const;
 
-    bool          hasFileOriginData();
+    bool          hasFileOriginData() const;
     void          setFileOriginData(const QVariant& data, const DImageHistory& resolvedInitialHistory);
     QVariant      fileOriginData() const;
     DImageHistory fileOriginResolvedHistory() const;

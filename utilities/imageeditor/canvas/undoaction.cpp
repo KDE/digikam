@@ -84,7 +84,7 @@ DImageHistory UndoAction::getHistory() const
     return d->history;
 }
 
-bool UndoAction::hasFileOriginData()
+bool UndoAction::hasFileOriginData() const
 {
     return !d->fileOrigin.isNull();
 }
