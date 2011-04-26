@@ -30,6 +30,7 @@
 #include <QPixmap>
 #include <QFileInfo>
 #include <QResizeEvent>
+#include <QFontMetrics>
 
 // KDE includes
 
@@ -176,14 +177,15 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
 
     if (image.isNull())
     {
-        QPixmap pix(visibleWidth(), visibleHeight());
+        QString msg    = i18n("Cannot decode RAW image\n\"%1\"",
+                         QFileInfo(d->loadingDesc.filePath).fileName());
+        QFontMetrics fontMt(font());
+        QRect fontRect = fontMt.boundingRect(0, 0, width(), height(), 0, msg);
+        QPixmap pix(fontRect.size());
         pix.fill(kapp->palette().color(QPalette::Base));
         QPainter p(&pix);
         p.setPen(QPen(kapp->palette().color(QPalette::Text)));
-        p.drawText(0, 0, pix.width(), pix.height(),
-                   Qt::AlignCenter|Qt::TextWordWrap,
-                   i18n("Cannot decode RAW image for\n\"%1\"",
-                        QFileInfo(d->loadingDesc.filePath).fileName()));
+        p.drawText(0, 0, pix.width(), pix.height(), Qt::AlignCenter|Qt::TextWordWrap, msg);
         p.end();
         // three copies - but the image is small
         setPostProcessedImage(DImg(pix.toImage()));
