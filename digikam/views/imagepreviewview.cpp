@@ -511,4 +511,9 @@ void ImagePreviewView::slotRotateRight()
     }
 }
 
+void ImagePreviewView::slotDeleteItem()
+{
+    emit signalDeleteItem();
+}
+
 }  // namespace Digikam

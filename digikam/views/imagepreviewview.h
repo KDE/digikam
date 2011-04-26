@@ -109,6 +109,7 @@ private Q_SLOTS:
 
     void slotRotateLeft();
     void slotRotateRight();
+    void slotDeleteItem();
 
 private:
 
