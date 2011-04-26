@@ -35,9 +35,7 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kdialog.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 // Local includes
 
@@ -45,8 +43,6 @@
 #include "ddragobjects.h"
 #include "dimg.h"
 #include "dimgpreviewitem.h"
-#include "thememanager.h"
-#include "globals.h"
 
 namespace Digikam
 {
@@ -89,48 +85,41 @@ void LightTablePreview::setDragAndDropMessage()
 
 void LightTablePreview::dragEnterEvent(QDragEnterEvent* e)
 {
-    if (acceptDrops())
-    {
-        int        albumID;
-        QList<int> albumIDs;
-        QList<qlonglong> imageIDs;
-        KUrl::List urls, kioURLs;
-
-        if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
-            DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
-            DTagDrag::canDecode(e->mimeData()))
-        {
-            e->accept();
-        }
-    }
+    if (dragEventWrapper(e->mimeData())) e->accept();
 }
 
 void LightTablePreview::dragMoveEvent(QDragMoveEvent* e)
 {
+    if (dragEventWrapper(e->mimeData())) e->accept();
+}
+
+bool LightTablePreview::dragEventWrapper(const QMimeData* data) const
+{
     if (acceptDrops())
     {
-        int        albumID;
-        QList<int> albumIDs;
+        int              albumID;
+        QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
-        KUrl::List urls, kioURLs;
+        KUrl::List       urls, kioURLs;
 
-        if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
-            DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
-            DTagDrag::canDecode(e->mimeData()))
+        if (DItemDrag::decode(data, urls, kioURLs, albumIDs, imageIDs) ||
+            DAlbumDrag::decode(data, urls, albumID)                    ||
+            DTagDrag::canDecode(data))
         {
-            e->accept();
+            return true;
         }
     }
+    return false;
 }
 
 void LightTablePreview::dropEvent(QDropEvent* e)
 {
     if (acceptDrops())
     {
-        int           albumID;
-        QList<int>    albumIDs;
+        int              albumID;
+        QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
-        KUrl::List    urls, kioURLs;
+        KUrl::List       urls, kioURLs;
 
         if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
         {

@@ -29,6 +29,7 @@
 #include <QString>
 #include <QDropEvent>
 #include <QDragMoveEvent>
+#include <QMimeData>
 
 // Local includes
 
@@ -60,6 +61,7 @@ private:
     void dragMoveEvent(QDragMoveEvent*);
     void dragEnterEvent(QDragEnterEvent*);
     void dropEvent(QDropEvent*);
+    bool dragEventWrapper(const QMimeData*) const;
 };
 
 }  // namespace Digikam
