@@ -62,7 +62,7 @@ public:
     }
 
     QGraphicsScene*           scene;
-    DImgPreviewItem*          item;
+    GraphicsDImgItem*         item;
     SinglePhotoPreviewLayout* layout;
 
     QToolButton*              cornerButton;
@@ -102,16 +102,21 @@ GraphicsDImgView::~GraphicsDImgView()
     delete d;
 }
 
-void GraphicsDImgView::setItem(DImgPreviewItem* item)
+void GraphicsDImgView::setItem(GraphicsDImgItem* item)
 {
     d->item = item;
     d->scene->addItem(d->item);
     d->layout->addItem(d->item);
 }
 
-DImgPreviewItem* GraphicsDImgView::previewItem() const
+GraphicsDImgItem* GraphicsDImgView::item() const
 {
     return d->item;
+}
+
+DImgPreviewItem* GraphicsDImgView::previewItem() const
+{
+    return dynamic_cast<DImgPreviewItem*>(item());
 }
 
 SinglePhotoPreviewLayout* GraphicsDImgView::layout() const

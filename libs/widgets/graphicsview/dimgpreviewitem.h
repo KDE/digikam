@@ -58,7 +58,7 @@ public:
 public:
 
     DImgPreviewItem(QGraphicsItem* parent = 0);
-    ~DImgPreviewItem();
+    virtual ~DImgPreviewItem();
 
     void setDisplayingWidget(QWidget* widget);
     void setLoadFullImageSize(bool b);

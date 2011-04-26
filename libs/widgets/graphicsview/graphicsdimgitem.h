@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT GraphicsDImgItem : public QGraphicsObject
 public:
 
     GraphicsDImgItem(QGraphicsItem* parent = 0);
-    ~GraphicsDImgItem();
+    virtual ~GraphicsDImgItem();
 
     /**
      * Sets the DImg to be drawn by this item.
@@ -59,9 +59,10 @@ public:
     const ImageZoomSettings* zoomSettings() const;
     ImageZoomSettings*       zoomSettings();
 
-    void           sizeHasChanged();
-    virtual QRectF boundingRect() const;
-    virtual void   paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    void            sizeHasChanged();
+    virtual QRectF  boundingRect() const;
+    virtual void    paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    virtual QString userLoadingHint() const { return QString(); };
 
 Q_SIGNALS:
 

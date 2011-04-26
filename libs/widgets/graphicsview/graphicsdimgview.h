@@ -35,6 +35,7 @@
 namespace Digikam
 {
 
+class GraphicsDImgItem;
 class DImgPreviewItem;
 class SinglePhotoPreviewLayout;
 
@@ -45,8 +46,9 @@ class DIGIKAM_EXPORT GraphicsDImgView : public QGraphicsView
 public:
 
     GraphicsDImgView(QWidget* parent = 0);
-    ~GraphicsDImgView();
+    virtual ~GraphicsDImgView();
 
+    GraphicsDImgItem*         item()        const;
     DImgPreviewItem*          previewItem() const;
     SinglePhotoPreviewLayout* layout()      const;
 
@@ -80,7 +82,7 @@ protected:
     void drawForeground(QPainter* painter, const QRectF& rect);
     void drawText(QPainter* p, const QRectF& rect, const QString& text);
 
-    void setItem(DImgPreviewItem* item);
+    void setItem(GraphicsDImgItem* item);
     void installPanIcon();
 
     void mouseDoubleClickEvent(QMouseEvent*);
