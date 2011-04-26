@@ -1043,13 +1043,15 @@ void LightTableWindow::deleteItem(bool permanently)
 
 void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
 {
-    KUrl u = info.fileUrl();
+    KUrl u         = info.fileUrl();
     PAlbum* palbum = AlbumManager::instance()->findPAlbum(u.directory());
 
     if (!palbum)
     {
         return;
     }
+
+    kDebug() << "Item to delete: " << u;
 
     // Provide a digikamalbums:// URL to KIO
     KUrl kioURL  = info.databaseUrl();

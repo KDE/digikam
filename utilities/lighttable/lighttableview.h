@@ -119,6 +119,8 @@ private Q_SLOTS:
     void slotRightContentsMoved(int, int);
     void slotLeftPreviewLoaded(bool);
     void slotRightPreviewLoaded(bool);
+    void slotDeleteLeftItem();
+    void slotDeleteRightItem();
 
 private :
 

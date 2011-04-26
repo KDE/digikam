@@ -129,6 +129,9 @@ LightTableView::LightTableView(QWidget* parent)
     connect(d->leftPreview, SIGNAL(leftButtonClicked()),
             this, SIGNAL(signalLeftPanelLeftButtonClicked()));
 
+    connect(d->leftPreview, SIGNAL(signalDeleteItem()),
+            this, SLOT(slotDeleteLeftItem()));
+
     // Right panel connections ------------------------------------------------
 
     connect(d->rightPreview, SIGNAL(signalPopupTagsView()),
@@ -151,6 +154,9 @@ LightTableView::LightTableView(QWidget* parent)
 
     connect(d->rightPreview, SIGNAL(leftButtonClicked()),
             this, SIGNAL(signalRightPanelLeftButtonClicked()));
+
+    connect(d->rightPreview, SIGNAL(signalDeleteItem()),
+            this, SLOT(slotDeleteRightItem()));
 }
 
 LightTableView::~LightTableView()
@@ -427,6 +433,16 @@ void LightTableView::checkForSelection(const ImageInfo& info)
         bool onRight = (d->rightPreview->getImageInfo() == info);
         d->rightFrame->setStyleSheet(onRight ? selected : notSelected);
     }
+}
+
+void LightTableView::slotDeleteLeftItem()
+{
+    emit signalDeleteItem(d->leftPreview->getImageInfo());
+}
+
+void LightTableView::slotDeleteRightItem()
+{
+    emit signalDeleteItem(d->rightPreview->getImageInfo());
 }
 
 }  // namespace Digikam
