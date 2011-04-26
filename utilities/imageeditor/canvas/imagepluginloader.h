@@ -51,18 +51,18 @@ public:
 
     static ImagePluginLoader* instance();
 
-    QList<ImagePlugin*> pluginList();
+    QList<ImagePlugin*> pluginList() const;
     void loadPluginsFromList(const QStringList& list);
 
     // Return true if plugin library is loaded in memory.
     // 'libraryName' is internal plugin library name not i18n.
-    bool pluginLibraryIsLoaded(const QString& libraryName);
+    bool pluginLibraryIsLoaded(const QString& libraryName) const;
 
-    ImagePlugin* pluginInstance(const QString& libraryName);
+    ImagePlugin* pluginInstance(const QString& libraryName) const;
 
 private:
 
-    ImagePlugin* pluginIsLoaded(const QString& name);
+    ImagePlugin* pluginIsLoaded(const QString& name) const;
 
 private:
 

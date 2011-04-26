@@ -219,12 +219,12 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
     // use the old splashscreen instance.
 }
 
-ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& name)
+ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& name) const
 {
     return d->pluginMap.value(name);
 }
 
-ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName)
+ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName) const
 {
     foreach (const KService::Ptr& service, d->pluginServiceMap)
     {
@@ -237,7 +237,7 @@ ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName)
     return 0;
 }
 
-bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)
+bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName) const
 {
     foreach (const KService::Ptr& service, d->pluginServiceMap)
     {
@@ -253,7 +253,7 @@ bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)
     return false;
 }
 
-QList<ImagePlugin*> ImagePluginLoader::pluginList()
+QList<ImagePlugin*> ImagePluginLoader::pluginList() const
 {
     return d->pluginMap.values();
 }
