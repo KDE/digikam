@@ -77,6 +77,8 @@ void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     }
     else
     {
+	// TODO: factoring ICC settings code using ImageIface/DImgInterface methods.
+
         // Apply CM settings.
 
         ICCSettingsContainer iccSettings = DImgInterface::defaultInterface()->getICCSettings();
