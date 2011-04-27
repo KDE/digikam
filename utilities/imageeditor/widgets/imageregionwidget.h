@@ -54,7 +54,7 @@ public:
 
     /** To get target image region area to render.
      */
-    QRect  getOriginalImageRegionToRender();
+    QRect  getOriginalImageRegionToRender() const;
 
     /** To get target image region image to use for render operations
         If the bool parameter is true a downscaled version of the image
@@ -99,9 +99,9 @@ private:
     /** To get image region including original or/and target area depending of separate view mode.
         The region is given using not scaled image unit.
      */
-    QRect  getOriginalImageRegion();
+    QRect  getOriginalImageRegion() const;
 
-    QRect  getLocalImageRegionToRender();
+    QRect  getLocalImageRegionToRender() const;
 
     void   backupPixmapRegion();
     void   restorePixmapRegion();

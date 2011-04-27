@@ -55,19 +55,19 @@ public:
     void   setZoomFactor(double z, bool centerView);
     void   setZoomFactorSnapped(double z);
     void   fitToWindow();
-    bool   isFitToWindow();
+    bool   isFitToWindow() const;
     void   toggleFitToWindow();
     void   toggleFitToWindowOr100();
 
-    int    zoomWidth();
-    int    zoomHeight();
-    bool   maxZoom();
-    bool   minZoom();
+    int    zoomWidth() const;
+    int    zoomHeight() const;
+    bool   maxZoom() const;
+    bool   minZoom() const;
     double snapZoom(double zoom);
 
-    double zoomFactor();
-    double zoomMax();
-    double zoomMin();
+    double zoomFactor() const;
+    double zoomMax() const;
+    double zoomMin() const;
     void   setZoomMax(double z);
     void   setZoomMin(double z);
 
@@ -114,12 +114,12 @@ protected:
     };
 
     double calcAutoZoomFactor(AutoZoomMode mode = ZoomInOrOut);
-    int    tileSize();
+    int    tileSize() const;
     void   updateAutoZoom(AutoZoomMode mode = ZoomInOrOut);
     void   updateContentsSize();
     void   updateZoomAndSize(bool alwaysFitToWindow);
     void   clearCache();
-    QRect  previewRect();
+    QRect  previewRect() const;
     void   drawText(QPainter* p, const QPoint& corner, const QString& text);
     void   startPanning(const QPoint& pos);
     void   continuePanning(const QPoint& pos);

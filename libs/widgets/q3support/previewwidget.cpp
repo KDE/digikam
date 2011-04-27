@@ -165,32 +165,32 @@ void PreviewWidget::slotReset()
     resetPreview();
 }
 
-QRect PreviewWidget::previewRect()
+QRect PreviewWidget::previewRect() const
 {
     return d->pixmapRect;
 }
 
-int PreviewWidget::tileSize()
+int PreviewWidget::tileSize() const
 {
     return d->tileSize;
 }
 
-int PreviewWidget::zoomWidth()
+int PreviewWidget::zoomWidth() const
 {
     return d->zoomWidth;
 }
 
-int PreviewWidget::zoomHeight()
+int PreviewWidget::zoomHeight() const
 {
     return d->zoomHeight;
 }
 
-double PreviewWidget::zoomMax()
+double PreviewWidget::zoomMax() const
 {
     return d->maxZoom;
 }
 
-double PreviewWidget::zoomMin()
+double PreviewWidget::zoomMin() const
 {
     return d->minZoom;
 }
@@ -205,12 +205,12 @@ void PreviewWidget::setZoomMin(double z)
     d->minZoom = floor(z * 10000.0) / 10000.0;
 }
 
-bool PreviewWidget::maxZoom()
+bool PreviewWidget::maxZoom() const
 {
     return (d->zoom >= d->maxZoom);
 }
 
-bool PreviewWidget::minZoom()
+bool PreviewWidget::minZoom() const
 {
     return (d->zoom <= d->minZoom);
 }
@@ -364,12 +364,12 @@ void PreviewWidget::setZoomFactor(double zoom, bool centerView)
     zoomFactorChanged(d->zoom);
 }
 
-double PreviewWidget::zoomFactor()
+double PreviewWidget::zoomFactor() const
 {
     return d->zoom;
 }
 
-bool PreviewWidget::isFitToWindow()
+bool PreviewWidget::isFitToWindow() const
 {
     return d->autoZoom;
 }

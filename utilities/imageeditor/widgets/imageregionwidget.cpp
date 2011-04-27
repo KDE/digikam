@@ -309,7 +309,7 @@ void ImageRegionWidget::viewportPaintExtraData()
     }
 }
 
-QRect ImageRegionWidget::getLocalImageRegionToRender()
+QRect ImageRegionWidget::getLocalImageRegionToRender() const
 {
     QRect region;
     QRect pr = previewRect();
@@ -357,7 +357,7 @@ QRect ImageRegionWidget::getLocalImageRegionToRender()
     return (region);
 }
 
-QRect ImageRegionWidget::getOriginalImageRegion()
+QRect ImageRegionWidget::getOriginalImageRegion() const
 {
     QRect region;
 
@@ -381,7 +381,7 @@ QRect ImageRegionWidget::getOriginalImageRegion()
     return region;
 }
 
-QRect ImageRegionWidget::getOriginalImageRegionToRender()
+QRect ImageRegionWidget::getOriginalImageRegionToRender() const
 {
     QRect r = getLocalImageRegionToRender();
 
