@@ -31,6 +31,7 @@
 #include <QFileInfo>
 #include <QResizeEvent>
 #include <QFontMetrics>
+#include <QStyleOptionGraphicsItem>
 
 // KDE includes
 
@@ -49,9 +50,86 @@
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "dimginterface.h"
+#include "graphicsdimgitem.h"
+#include "dimgitemspriv.h"
+#include "previewlayout.h"
 
 namespace Digikam
 {
+
+class RawPreviewItem : public GraphicsDImgItem
+{
+public:
+
+    RawPreviewItem()
+    {
+    }
+
+private:
+
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+    {
+        Q_D(GraphicsDImgItem);
+
+        QRect   drawRect = option->exposedRect.intersected(boundingRect()).toAlignedRect();
+        QRect   pixSourceRect;
+        QPixmap pix;
+        QSize   completeSize = boundingRect().size().toSize();
+
+        // scale "as if" scaling to whole image, but clip output to our exposed region
+        DImg scaledImage     = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
+                               drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
+
+        if (d->cachedPixmaps.find(drawRect, &pix, &pixSourceRect))
+        {
+            if (pixSourceRect.isNull())
+            {
+                painter->drawPixmap(drawRect.topLeft(), pix);
+            }
+            else
+            {
+                painter->drawPixmap(drawRect.topLeft(), pix, pixSourceRect);
+            }
+        }
+        else
+        {
+            // Apply CM settings.
+
+            ICCSettingsContainer iccSettings = DImgInterface::defaultInterface()->getICCSettings();
+
+            if (iccSettings.enableCM && iccSettings.useManagedView)
+            {
+                IccManager manager(scaledImage);
+                IccTransform monitorICCtrans = manager.displayTransform(widget);
+                pix                          = scaledImage.convertToPixmap(monitorICCtrans);
+            }
+            else
+            {
+                pix = scaledImage.convertToPixmap();
+            }
+
+            d->cachedPixmaps.insert(drawRect, pix);
+
+            painter->drawPixmap(drawRect.topLeft(), pix);
+        }
+
+        // Show the Over/Under exposure pixels indicators
+
+        ExposureSettingsContainer* expoSettings = DImgInterface::defaultInterface()->getExposureSettings();
+
+        if (expoSettings)
+        {
+            if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)
+            {
+                QImage pureColorMask = scaledImage.pureColorMask(expoSettings);
+                QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
+                painter->drawPixmap(drawRect.topLeft(), pixMask);
+            }
+        }
+    }
+};
+
+// --------------------------------------------------------------------------
 
 class RawPreview::RawPreviewPriv
 {
@@ -59,7 +137,8 @@ public:
 
     RawPreviewPriv() :
         currentFitWindowZoom(0.0),
-        thread(0)
+        thread(0),
+        item(0)
     {
     }
 
@@ -68,21 +147,33 @@ public:
     KUrl                   url;
 
     DImg                   demosaicedImg;
-    DImg                   postProcessedImg;
+
     DRawDecoding           settings;
     ManagedLoadSaveThread* thread;
     LoadingDescription     loadingDesc;
+    RawPreviewItem*        item;
 };
 
 RawPreview::RawPreview(const KUrl& url, QWidget* parent)
-    : PreviewWidget(parent), d(new RawPreviewPriv)
+    : GraphicsDImgView(parent), d(new RawPreviewPriv)
 {
+    d->item = new RawPreviewItem();
+    setItem(d->item);
+
+    d->url    = url;
     d->thread = new ManagedLoadSaveThread;
     d->thread->setLoadingPolicy(ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-    d->url    = url;
+
+    // ------------------------------------------------------------
+
+    // set default zoom
+    layout()->fitToWindow();
+
+    installPanIcon();
 
     setMinimumWidth(500);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
 
     // ------------------------------------------------------------
 
@@ -91,30 +182,22 @@ RawPreview::RawPreview(const KUrl& url, QWidget* parent)
 
     connect(d->thread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
             this, SLOT(slotLoadingProgress(const LoadingDescription&, float)));
-
-    // ------------------------------------------------------------
-
-    slotReset();
 }
 
 RawPreview::~RawPreview()
 {
+    delete d->item;
     delete d;
 }
 
 void RawPreview::setPostProcessedImage(const DImg& image)
 {
-    d->postProcessedImg = image;
-
-    updateZoomAndSize(false);
-
-    viewport()->setUpdatesEnabled(true);
-    viewport()->update();
+    d->item->setImage(image);
 }
 
-DImg& RawPreview::postProcessedImage() const
+DImg RawPreview::postProcessedImage() const
 {
-    return d->postProcessedImg;
+    return d->item->image();
 }
 
 DImg& RawPreview::demosaicedImage() const
@@ -143,14 +226,12 @@ void RawPreview::setDecodingSettings(const DRawDecoding& settings)
 
 void RawPreview::exposureSettingsChanged()
 {
-    clearCache();
-    viewport()->update();
+    update();
 }
 
 void RawPreview::ICCSettingsChanged()
 {
-    clearCache();
-    viewport()->update();
+    update();
 }
 
 void RawPreview::cancelLoading()
@@ -199,103 +280,31 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
     }
 }
 
-void RawPreview::resizeEvent(QResizeEvent* e)
-{
-    if (!e)
-    {
-        return;
-    }
-
-    PreviewWidget::resizeEvent(e);
-
-    updateZoomAndSize(false);
-}
-
-void RawPreview::updateZoomAndSize(bool alwaysFitToWindow)
-{
-    // Set zoom for fit-in-window as minimum, but don't scale up images
-    // that are smaller than the available space, only scale down.
-    double zoom = calcAutoZoomFactor(ZoomInOnly);
-    setZoomMin(zoom);
-    setZoomMax(zoom*12.0);
-
-    // Is currently the zoom factor set to fit to window? Then set it again to fit the new size.
-    if (zoomFactor() < zoom || alwaysFitToWindow || zoomFactor() == d->currentFitWindowZoom)
-    {
-        setZoomFactor(zoom);
-    }
-
-    // store which zoom factor means it is fit to window
-    d->currentFitWindowZoom = zoom;
-
-    updateContentsSize();
-}
-
 int RawPreview::previewWidth()
 {
-    return d->postProcessedImg.width();
+    return d->item->image().width();
 }
 
 int RawPreview::previewHeight()
 {
-    return d->postProcessedImg.height();
+    return d->item->image().height();
 }
 
 bool RawPreview::previewIsNull()
 {
-    return d->postProcessedImg.isNull();
+    return d->item->image().isNull();
 }
 
 void RawPreview::resetPreview()
 {
-    d->postProcessedImg = DImg();
-    d->loadingDesc      = LoadingDescription();
-
-    updateZoomAndSize(false);
-}
-
-void RawPreview::paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh)
-{
-    DImg img = d->postProcessedImg.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
-
-    QPixmap pixImage;
-
-    ICCSettingsContainer iccSettings = DImgInterface::defaultInterface()->getICCSettings();
-
-    if (iccSettings.enableCM && iccSettings.useManagedView)
-    {
-        IccManager manager(img);
-        IccTransform monitorICCtrans = manager.displayTransform(this);
-        pixImage                     = img.convertToPixmap(monitorICCtrans);
-    }
-    else
-    {
-        pixImage = img.convertToPixmap();
-    }
-
-    QPainter p(pix);
-    p.drawPixmap(0, 0, pixImage);
-
-    // Show the Over/Under exposure pixels indicators
-
-    ExposureSettingsContainer* expoSettings = DImgInterface::defaultInterface()->getExposureSettings();
-
-    if (expoSettings)
-    {
-        if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)
-        {
-            QImage pureColorMask = img.pureColorMask(expoSettings);
-            QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
-            p.drawPixmap(0, 0, pixMask);
-        }
-    }
-
-    p.end();
+    d->item->setImage(DImg());
+    d->loadingDesc = LoadingDescription();
+    update();
 }
 
 QImage RawPreview::previewToQImage() const
 {
-    return d->postProcessedImg.copyQImage();
+    return d->item->image().copyQImage();
 }
 
 }  // namespace Digikam

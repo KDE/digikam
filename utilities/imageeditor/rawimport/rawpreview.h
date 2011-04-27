@@ -37,7 +37,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "previewwidget.h"
+#include "graphicsdimgview.h"
 #include "digikam_export.h"
 
 class QPixmap;
@@ -47,7 +47,7 @@ namespace Digikam
 
 class LoadingDescription;
 
-class DIGIKAM_EXPORT RawPreview : public PreviewWidget
+class DIGIKAM_EXPORT RawPreview : public GraphicsDImgView
 {
     Q_OBJECT
 
@@ -57,7 +57,7 @@ public:
     ~RawPreview();
 
     DImg& demosaicedImage() const;
-    DImg& postProcessedImage() const;
+    DImg  postProcessedImage() const;
 
     void setDecodingSettings(const DRawDecoding& settings);
     void setPostProcessedImage(const DImg& image);
@@ -75,10 +75,6 @@ Q_SIGNALS:
     void signalDemosaicedImage();
     void signalPostProcessedImage();
 
-protected:
-
-    void resizeEvent(QResizeEvent* e);
-
 private Q_SLOTS:
 
     void slotLoadingProgress(const LoadingDescription& description, float progress);
@@ -92,10 +88,7 @@ private:
     int    previewHeight();
     bool   previewIsNull();
     void   resetPreview();
-    void   updateZoomAndSize(bool alwaysFitToWindow);
     QImage previewToQImage() const;
-
-    inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 
 private:
 

@@ -138,7 +138,7 @@ DRawDecoding RawImport::rawDecodingSettings() const
     return d->settingsBox->settings();
 }
 
-DImg& RawImport::postProcessedImage() const
+DImg RawImport::postProcessedImage() const
 {
     return d->previewWidget->postProcessedImage();
 }
@@ -245,7 +245,9 @@ void RawImport::slotCancel()
 
 void RawImport::setBackgroundColor(const QColor& bg)
 {
-    d->previewWidget->setBackgroundColor(bg);
+    QPalette plt(d->previewWidget->palette());
+    plt.setColor(d->previewWidget->backgroundRole(), bg);
+    d->previewWidget->setPalette(plt);
 }
 
 void RawImport::exposureSettingsChanged()

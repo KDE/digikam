@@ -35,8 +35,9 @@
 namespace Digikam
 {
 
-class PreviewWidget;
 class Canvas;
+class GraphicsDImgView;
+class PreviewWidget;
 
 class DIGIKAM_EXPORT EditorStackView : public QStackedWidget
 {
@@ -73,11 +74,8 @@ public:
     double zoomMax();
     double zoomMin();
 
-    /** Two widgets are embedded in Editor Tool to perform preview with panning and zooming:
-        a PreviewWidget derived class (ImageRegionWidget) or ImageGuideWidget.
-        This method try to find the right PreviewWidget instance accordingly else return 0.
-     */
-    PreviewWidget* previewWidget() const;
+    PreviewWidget*    previewWidget_old() const;
+    GraphicsDImgView* previewWidget() const;
 
 Q_SIGNALS:
 
@@ -92,6 +90,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotZoomChanged(double);
+    void slotToggleOffFitToWindow(bool);
 
 private:
 

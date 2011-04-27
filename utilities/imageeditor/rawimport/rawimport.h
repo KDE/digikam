@@ -51,7 +51,7 @@ public:
     ~RawImport();
 
     DRawDecoding rawDecodingSettings() const;
-    DImg& postProcessedImage() const;
+    DImg postProcessedImage() const;
     bool hasPostProcessedImage() const;
     bool demosaicingSettingsDirty() const;
 
