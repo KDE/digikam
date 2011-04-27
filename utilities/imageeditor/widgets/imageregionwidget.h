@@ -62,12 +62,12 @@ public:
         Should be use to increase preview speed for the effects whose
         behaviour is a function of each pixel.
      */
-    DImg   getOriginalRegionImage(bool useDownscaledImage = false);
+    DImg   getOriginalRegionImage(bool useDownscaledImage = false) const;
 
     void   setPreviewImage(const DImg& img);
 
     void   setCapturePointMode(bool b);
-    bool   capturePointMode();
+    bool   capturePointMode() const;
 
     void   setHighLightPoints(const QPolygon& pointsList);
     void   setCenterImageRegionPosition();

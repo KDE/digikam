@@ -168,7 +168,7 @@ void ImageRegionWidget::setCapturePointMode(bool b)
     }
 }
 
-bool ImageRegionWidget::capturePointMode()
+bool ImageRegionWidget::capturePointMode() const
 {
     return d->capturePtMode;
 }
@@ -445,7 +445,7 @@ void ImageRegionWidget::setPreviewImage(const DImg& img)
     repaintContents(false);
 }
 
-DImg ImageRegionWidget::getOriginalRegionImage(bool useDownscaledImage)
+DImg ImageRegionWidget::getOriginalRegionImage(bool useDownscaledImage) const
 {
     DImg image = d->image.copy(getOriginalImageRegionToRender());
 
