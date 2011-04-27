@@ -7,6 +7,7 @@
  * Description : Graphics View for DImg preview
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -425,9 +426,9 @@ void GraphicsDImgView::slotCornerButtonPressed()
     connect(pan, SIGNAL(signalHidden()),
             this, SLOT(slotPanIconHiden()));
 
-    pan->setImage(180, 120, previewItem()->image());
+    pan->setImage(180, 120, item()->image());
     QRectF sceneRect(mapToScene(viewport()->rect().topLeft()), mapToScene(viewport()->rect().bottomRight()));
-    pan->setRegionSelection(previewItem()->zoomSettings()->sourceRect(sceneRect).toRect());
+    pan->setRegionSelection(item()->zoomSettings()->sourceRect(sceneRect).toRect());
     pan->setMouseFocus();
     d->panIconPopup->setMainWidget(pan);
     //slotContentTakeFocus();
@@ -450,9 +451,9 @@ void GraphicsDImgView::slotPanIconHidden()
 
 void GraphicsDImgView::slotPanIconSelectionMoved(const QRect& imageRect, bool b)
 {
-    QRectF zoomRect = previewItem()->zoomSettings()->mapImageToZoom(imageRect);
+    QRectF zoomRect = item()->zoomSettings()->mapImageToZoom(imageRect);
     kDebug() << imageRect << zoomRect;
-    centerOn(previewItem()->mapToScene(zoomRect.center()));
+    centerOn(item()->mapToScene(zoomRect.center()));
 
     if (b)
     {

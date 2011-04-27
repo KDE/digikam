@@ -7,6 +7,7 @@
  * Description : Graphics View for DImg preview
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,8 +49,13 @@ public:
     GraphicsDImgView(QWidget* parent = 0);
     virtual ~GraphicsDImgView();
 
+    /** Return the instance of item set by setItem().*/
     GraphicsDImgItem*         item()        const;
+
+    /** Return a cast of item instance of item set by setItem() as DImgPreviewItem
+        Note: if you store a GraphicsDImgItem object using setItem(), this method will return 0 */
     DImgPreviewItem*          previewItem() const;
+
     SinglePhotoPreviewLayout* layout()      const;
 
     /** Scrolls the view such that scenePos (in scene coordinates
@@ -82,7 +88,11 @@ protected:
     void drawForeground(QPainter* painter, const QRectF& rect);
     void drawText(QPainter* p, const QRectF& rect, const QString& text);
 
+    /** Store internal instance of item as GraphicsDImgItem. You can store DImgPreviewItem object also by this method.
+        Use item() or previewItem() to get right version.
+        Note: if you store a GraphicsDImgItem object, previewItem() will return 0 */
     void setItem(GraphicsDImgItem* item);
+
     void installPanIcon();
 
     void mouseDoubleClickEvent(QMouseEvent*);
