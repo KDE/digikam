@@ -126,8 +126,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 100 ==> 270365 : Drag & drop picture in upwards folder collapses and reopens it.
 101 ==> 231536 : Save As New File.
 102 ==> 271153 : Tokina AT-X 107 AF DX Fish-eye not recognised.
-103 ==> 271551 : digikam crashes when trying to move the same album twice in parallel.
-104 ==> 266211 : media-gfx/digikam-1.8.0 crash on exit.
-105 ==> 
+103 ==> 271551 : digiKam crashes when trying to move the same album twice in parallel.
+104 ==> 266211 : Media-gfx/digikam-1.8.0 crash on exit.
+105 ==> 271252 : digiKam crashes while scanning for new pictures on the same drive it worked before.
+106 ==> 
 
 
