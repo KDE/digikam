@@ -31,7 +31,6 @@
 #include <QFileInfo>
 #include <QResizeEvent>
 #include <QFontMetrics>
-#include <QStyleOptionGraphicsItem>
 
 // KDE includes
 
@@ -45,91 +44,12 @@
 
 #include "managedloadsavethread.h"
 #include "loadingdescription.h"
-#include "exposurecontainer.h"
-#include "iccmanager.h"
-#include "iccsettingscontainer.h"
-#include "icctransform.h"
 #include "dimginterface.h"
-#include "graphicsdimgitem.h"
-#include "dimgitemspriv.h"
 #include "previewlayout.h"
+#include "imagepreviewitem.h"
 
 namespace Digikam
 {
-
-class RawPreviewItem : public GraphicsDImgItem
-{
-public:
-
-    RawPreviewItem()
-    {
-    }
-
-private:
-
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
-    {
-        Q_D(GraphicsDImgItem);
-
-        QRect   drawRect = option->exposedRect.intersected(boundingRect()).toAlignedRect();
-        QRect   pixSourceRect;
-        QPixmap pix;
-        QSize   completeSize = boundingRect().size().toSize();
-
-        // scale "as if" scaling to whole image, but clip output to our exposed region
-        DImg scaledImage     = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
-                               drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
-
-        if (d->cachedPixmaps.find(drawRect, &pix, &pixSourceRect))
-        {
-            if (pixSourceRect.isNull())
-            {
-                painter->drawPixmap(drawRect.topLeft(), pix);
-            }
-            else
-            {
-                painter->drawPixmap(drawRect.topLeft(), pix, pixSourceRect);
-            }
-        }
-        else
-        {
-            // Apply CM settings.
-
-            ICCSettingsContainer iccSettings = DImgInterface::defaultInterface()->getICCSettings();
-
-            if (iccSettings.enableCM && iccSettings.useManagedView)
-            {
-                IccManager manager(scaledImage);
-                IccTransform monitorICCtrans = manager.displayTransform(widget);
-                pix                          = scaledImage.convertToPixmap(monitorICCtrans);
-            }
-            else
-            {
-                pix = scaledImage.convertToPixmap();
-            }
-
-            d->cachedPixmaps.insert(drawRect, pix);
-
-            painter->drawPixmap(drawRect.topLeft(), pix);
-        }
-
-        // Show the Over/Under exposure pixels indicators
-
-        ExposureSettingsContainer* expoSettings = DImgInterface::defaultInterface()->getExposureSettings();
-
-        if (expoSettings)
-        {
-            if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)
-            {
-                QImage pureColorMask = scaledImage.pureColorMask(expoSettings);
-                QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
-                painter->drawPixmap(drawRect.topLeft(), pixMask);
-            }
-        }
-    }
-};
-
-// --------------------------------------------------------------------------
 
 class RawPreview::RawPreviewPriv
 {
@@ -151,13 +71,13 @@ public:
     DRawDecoding           settings;
     ManagedLoadSaveThread* thread;
     LoadingDescription     loadingDesc;
-    RawPreviewItem*        item;
+    ImagePreviewItem*      item;
 };
 
 RawPreview::RawPreview(const KUrl& url, QWidget* parent)
     : GraphicsDImgView(parent), d(new RawPreviewPriv)
 {
-    d->item = new RawPreviewItem();
+    d->item = new ImagePreviewItem();
     setItem(d->item);
 
     d->url    = url;
