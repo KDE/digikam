@@ -6,7 +6,7 @@
  * Date        : 2010-04-30
  * Description : Image zoom settings
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,8 +64,10 @@ public:
 
     /// Return the currently set zoom factor
     double zoomFactor() const;
+
     /// Returns the (available) image size
-    QSizeF  imageSize() const;
+    QSizeF imageSize() const;
+
     /// Return the original image size. Can be identical to size().
     QSizeF originalImageSize() const;
 
@@ -77,8 +79,11 @@ public:
 
     bool isFitToSize(const QSizeF& frameSize) const;
 
-    /** Sets the current zoom factor, relative to (original) size. */
+    /**
+     * Sets the current zoom factor, relative to (original) size.
+     */
     void setZoomFactor(double zoom);
+
     /**
      * Sets the current zoom factor to the factor needed to fit
      * the current (original) image size into the given view size.
@@ -92,10 +97,8 @@ public:
      * For a given rectangle contained in ((0,0), zoomedSize())
      * returns the corresponding rectangle in (0,0),imageSize().
      */
-    QRectF sourceRect(const QRectF& imageRect) const
-    {
-        return mapZoomToImage(imageRect);
-    }
+    QRectF sourceRect(const QRectF& imageRect) const;
+
     QRectF mapZoomToImage(const QRectF& imageRect) const;
 
     /**
@@ -109,12 +112,12 @@ public:
      * returns the corresponding point in (0,0),imageSize().
      */
     QPointF mapZoomToImage(const QPointF& zoomedPoint) const;
+
     /**
      * For a given point (in (0,0), imageSize())
      * returns the corresponding point in (0,0),zoomedSize().
      */
     QPointF mapImageToZoom(const QPointF& imagePoint) const;
-
 
     /**
      * Returns the zoom factor that would be used by fitToSize()
