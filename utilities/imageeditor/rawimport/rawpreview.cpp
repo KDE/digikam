@@ -146,12 +146,12 @@ void RawPreview::setDecodingSettings(const DRawDecoding& settings)
 
 void RawPreview::exposureSettingsChanged()
 {
-    update();
+    viewport()->update();
 }
 
 void RawPreview::ICCSettingsChanged()
 {
-    update();
+    viewport()->update();
 }
 
 void RawPreview::cancelLoading()
