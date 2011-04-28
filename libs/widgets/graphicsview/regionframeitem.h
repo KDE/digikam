@@ -6,8 +6,8 @@
 * Date        : 2010-09-09
 * Description : tag region frame
 *
-* Copyright (C) 2007 by Aurelien Gateau <agateau@kde.org>
-* Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+* Copyright (C) 2007      by Aurelien Gateau <agateau@kde.org>
+* Copyright (C) 2010-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
 *
 * This program is free software; you can redistribute it
 * and/or modify it under the terms of the GNU General
@@ -62,8 +62,8 @@ public:
     RegionFrameItem(QGraphicsItem* parent);
     ~RegionFrameItem();
 
-    void setFlags(Flags flags);
-    void changeFlags(Flags flags, bool addOrRemove);
+    void  setFlags(Flags flags);
+    void  changeFlags(Flags flags, bool addOrRemove);
     Flags flags() const;
 
     /**
@@ -72,11 +72,10 @@ public:
      * Ownership of the item is taken, and it is made a child item of this item.
      * You can also add QWidget directly. It will be wrapped in a proxy item.
      */
-    void setHudWidget(QGraphicsWidget* hudWidget);
-    void setHudWidget(QWidget* widget, Qt::WindowFlags wFlags = 0);
+    void             setHudWidget(QGraphicsWidget* hudWidget);
+    void             setHudWidget(QWidget* widget, Qt::WindowFlags wFlags = 0);
     QGraphicsWidget* hudWidget() const;
-
-    void setHudWidgetVisible(bool visible);
+    void             setHudWidgetVisible(bool visible);
 
     void setFixedRatio(double ratio);
 
@@ -123,7 +122,7 @@ private:
     RegionFrameItemPriv* const d;
 };
 
-} // namespace
+} // namespace Digikam
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::RegionFrameItem::Flags)
 

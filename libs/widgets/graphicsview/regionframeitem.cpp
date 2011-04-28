@@ -6,8 +6,8 @@
 * Date        : 2010-09-09
 * Description : tag region frame
 *
-* Copyright (C) 2007 by Aurelien Gateau <agateau@kde.org>
-* Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+* Copyright (C) 2007      by Aurelien Gateau <agateau@kde.org>
+* Copyright (C) 2010-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
 *
 * This program is free software; you can redistribute it
 * and/or modify it under the terms of the GNU General
@@ -285,20 +285,16 @@ OptimalPosition RegionFrameItem::RegionFrameItemPriv::computeOptimalHudWidgetPos
     const QRectF visibleSceneRect = viewportRect.isValid() ? viewportRect : q->scene()->sceneRect();
     const QRectF rect             = q->sceneBoundingRect();
 
-    const int margin        = HANDLE_SIZE;
-    const int hudHeight     = hudWidget->boundingRect().height();
-    const QRectF hudMaxRect = visibleSceneRect.adjusted(0, 0, 0, -hudHeight);
+    const int margin              = HANDLE_SIZE;
+    const int hudHeight           = hudWidget->boundingRect().height();
+    const QRectF hudMaxRect       = visibleSceneRect.adjusted(0, 0, 0, -hudHeight);
 
     OptimalPosition ret;
 
     // Compute preferred and fallback positions. Preferred is outside rect
     // on the same side, fallback is outside on the other side.
-    OptimalPosition preferred = OptimalPosition(
-                                    QPointF(rect.left(), rect.bottom() + margin),
-                                    HS_Bottom);
-    OptimalPosition fallback = OptimalPosition(
-                                   QPointF(rect.left(), rect.top() - margin - hudHeight),
-                                   HS_Top);
+    OptimalPosition preferred     = OptimalPosition(QPointF(rect.left(), rect.bottom() + margin),          HS_Bottom);
+    OptimalPosition fallback      = OptimalPosition(QPointF(rect.left(), rect.top() - margin - hudHeight), HS_Top);
 
     if (hudSide & HS_Top)
     {
@@ -335,7 +331,8 @@ OptimalPosition RegionFrameItem::RegionFrameItemPriv::computeOptimalHudWidgetPos
     ret.first.rx() = qMin(ret.first.rx(), hudMaxRect.width() - hudWidget->boundingRect().width());
 
     // map from scene to item coordinates
-    ret.first = q->mapFromScene(ret.first);
+    ret.first      = q->mapFromScene(ret.first);
+
     return ret;
 }
 
@@ -422,7 +419,7 @@ void RegionFrameItem::setHudWidget(QWidget* widget, Qt::WindowFlags wFlags)
      * If you set WA_TranslucentBackground on the widget directly, a lot of the
      * painting and stylesheets is broken. Like this, with an extra container, it seems to work.
      */
-    QWidget* container = new QWidget;
+    QWidget* container  = new QWidget;
     container->setAttribute(Qt::WA_TranslucentBackground);
     QHBoxLayout* layout = new QHBoxLayout;
     layout->setSizeConstraint(QLayout::SetFixedSize);
@@ -540,19 +537,19 @@ QRectF RegionFrameItem::boundingRect() const
 
 void RegionFrameItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    /*
-        QRect rect = d->viewportCropRect();
+/*
+    QRect rect = d->viewportCropRect();
 
-        QRect imageRect = imageView()->rect();
+    QRect imageRect = imageView()->rect();
 
-        static const QColor outerColor  = QColor::fromHsvF(0, 0, 0, 0.5);
+    static const QColor outerColor  = QColor::fromHsvF(0, 0, 0, 0.5);
 
-        QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
-        foreach (const QRect& outerRect, outerRegion.rects())
-        {
-            painter->fillRect(outerRect, outerColor);
-        }
-    */
+    QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
+    foreach (const QRect& outerRect, outerRegion.rects())
+    {
+        painter->fillRect(outerRect, outerColor);
+    }
+*/
 
     const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66 + 0.34 * d->hoverAnimationOpacity);
     const QColor fillColor   = QColor::fromHsvF(0, 0, 0.75, 0.66);
@@ -757,4 +754,4 @@ void RegionFrameItem::moveHudWidget()
     d->hudWidget->setPos(pos);
 }
 
-} // namespace
+} // namespace Digikam
