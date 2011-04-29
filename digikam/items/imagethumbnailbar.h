@@ -57,6 +57,11 @@ public:
      */
     void setModelsFiltered(ImageModel* model, ImageSortFilterModel* filterModel);
 
+    QModelIndex nextIndex(const QModelIndex& index)     const;
+    QModelIndex previousIndex(const QModelIndex& index) const;
+    QModelIndex firstIndex() const;
+    QModelIndex lastIndex()  const;
+
 public Q_SLOTS:
 
     void assignRating(const QList<QModelIndex>& index, int rating);

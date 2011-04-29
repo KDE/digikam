@@ -210,4 +210,24 @@ bool ImageThumbnailBar::event(QEvent* e)
     return ImageCategorizedView::event(e);
 }
 
+QModelIndex ImageThumbnailBar::nextIndex(const QModelIndex& index) const
+{
+    return imageFilterModel()->index(index.row() + 1, 0);
+}
+
+QModelIndex ImageThumbnailBar::previousIndex(const QModelIndex& index) const
+{
+    return imageFilterModel()->index(index.row() - 1, 0);
+}
+
+QModelIndex ImageThumbnailBar::firstIndex() const
+{
+    return imageFilterModel()->index(0, 0);
+}
+
+QModelIndex ImageThumbnailBar::lastIndex() const
+{
+    return imageFilterModel()->index(imageFilterModel->rowCount() - 1, 0);
+}
+
 } // namespace Digikam
