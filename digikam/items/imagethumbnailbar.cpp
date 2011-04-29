@@ -227,7 +227,7 @@ QModelIndex ImageThumbnailBar::firstIndex() const
 
 QModelIndex ImageThumbnailBar::lastIndex() const
 {
-    return imageFilterModel()->index(imageFilterModel->rowCount() - 1, 0);
+    return imageFilterModel()->index(imageFilterModel()->rowCount() - 1, 0);
 }
 
 } // namespace Digikam
