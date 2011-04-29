@@ -82,18 +82,19 @@ class ImageModelIncrementalUpdater
 {
 public:
 
-    ImageModelIncrementalUpdater(ImageModelPriv* d);
-    void appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
-    QList<QPair<int,int> > oldIndexes() const;
+    ImageModelIncrementalUpdater(ImageModel::ImageModelPriv* d);
+
+    void                          appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    QList<QPair<int,int> >        oldIndexes() const;
 
     static QList<QPair<int,int> > toContiguousPairs(const QList<int>& ids);
 
 public:
 
-    QHash<qlonglong, int>    oldIds;
-    QList<QVariant>          oldExtraValues;
-    QList<ImageInfo>         newInfos;
-    QList<QVariant>          newExtraValues;
+    QHash<qlonglong, int> oldIds;
+    QList<QVariant>       oldExtraValues;
+    QList<ImageInfo>      newInfos;
+    QList<QVariant>       newExtraValues;
 };
 
 ImageModel::ImageModel(QObject* parent)
@@ -876,7 +877,7 @@ void ImageModel::removeRowPairs(const QList<QPair<int,int> >& toRemove)
     }
 }
 
-ImageModelIncrementalUpdater::ImageModelIncrementalUpdater(ImageModelPriv* d)
+ImageModelIncrementalUpdater::ImageModelIncrementalUpdater(ImageModel::ImageModelPriv* d)
 {
     oldIds         = d->idHash;
     oldExtraValues = d->extraValues;

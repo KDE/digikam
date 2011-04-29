@@ -87,45 +87,49 @@ public:
      *  Default is no flag (no signal will be emitted) */
     void setWatchFlags(const DatabaseFields::Set& set);
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual QVariant      data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual QVariant      headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    virtual int           rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual QModelIndex index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;
+    virtual QModelIndex   index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;
 
     /** Returns the ImageInfo object, reference or image id from the underlying data
      *  pointed to by the index.
      *  If the index is not valid, imageInfo will return a null ImageInfo, imageId will
      *  return 0, imageInfoRef must not be called with an invalid index. */
-    ImageInfo imageInfo(const QModelIndex& index) const;
-    ImageInfo& imageInfoRef(const QModelIndex& index) const;
-    qlonglong imageId(const QModelIndex& index) const;
+    ImageInfo        imageInfo(const QModelIndex& index) const;
+    ImageInfo&       imageInfoRef(const QModelIndex& index) const;
+    qlonglong        imageId(const QModelIndex& index) const;
     QList<ImageInfo> imageInfos(const QList<QModelIndex>& indexes) const;
     QList<qlonglong> imageIds(const QList<QModelIndex>& indexes) const;
+
     /** Returns the ImageInfo object, reference or image id from the underlying data
      *  of the given row (parent is the invalid QModelIndex, column is 0).
      *  Note that imageInfoRef will crash if index is invalid. */
-    ImageInfo imageInfo(int row) const;
+    ImageInfo  imageInfo(int row) const;
     ImageInfo& imageInfoRef(int row) const;
-    qlonglong imageId(int row) const;
+    qlonglong  imageId(int row) const;
+
     /** Return the index for the given ImageInfo or id, if contained in this model. */
-    QModelIndex indexForImageInfo(const ImageInfo& info) const;
-    QModelIndex indexForImageInfo(const ImageInfo& info, const QVariant& extraValue) const;
-    QModelIndex indexForImageId(qlonglong id) const;
-    QModelIndex indexForImageId(qlonglong id, const QVariant& extraValue) const;
+    QModelIndex        indexForImageInfo(const ImageInfo& info) const;
+    QModelIndex        indexForImageInfo(const ImageInfo& info, const QVariant& extraValue) const;
+    QModelIndex        indexForImageId(qlonglong id) const;
+    QModelIndex        indexForImageId(qlonglong id, const QVariant& extraValue) const;
     QList<QModelIndex> indexesForImageInfo(const ImageInfo& info) const;
     QList<QModelIndex> indexesForImageId(qlonglong id) const;
+
     int numberOfIndexesForImageInfo(const ImageInfo& info) const;
     int numberOfIndexesForImageId(qlonglong id) const;
+
     /** Returns the index or ImageInfo object from the underlying data
      *  for the given file path. This is fast if keepsFilePathCache is enabled.
      *  The file path is as returned by ImageInfo.filePath().
      *  In case of multiple occurrences of the same file, the simpler variants return
      *  any one found first, use the QList methods to retrieve all occurrences. */
-    QModelIndex indexForPath(const QString& filePath) const;
-    ImageInfo imageInfo(const QString& filePath) const;
+    QModelIndex        indexForPath(const QString& filePath) const;
+    ImageInfo          imageInfo(const QString& filePath) const;
     QList<QModelIndex> indexesForPath(const QString& filePath) const;
-    QList<ImageInfo> imageInfos(const QString& filePath) const;
+    QList<ImageInfo>   imageInfos(const QString& filePath) const;
 
     /** Retrieves the imageInfo object from the data() method of the given index.
      *  The index may be from a QSortFilterProxyModel as long as an ImageModel is at the end. */
@@ -140,10 +144,13 @@ public:
     void addImageInfo(const ImageInfo& info);
     void addImageInfos(const QList<ImageInfo>& infos);
     void addImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+
     /** Clears image infos and resets model. */
     void clearImageInfos();
+
     /** Clears and adds the infos */
     void setImageInfos(const QList<ImageInfo>& infos);
+
     /**
      * Directly remove the given indexes or infos from the model.
      */
@@ -152,6 +159,7 @@ public:
     void removeImageInfo(const ImageInfo& info);
     void removeImageInfos(const QList<ImageInfo>& infos);
     void removeImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+
     /**
      * addImageInfo() is asynchronous if a prepocessor is set.
      * This method first adds the info, synchronously.
@@ -265,6 +273,7 @@ protected:
      *  if the model is ready right now. */
     void requestIncrementalRefresh();
     bool hasIncrementalRefreshPending() const;
+
     /** Starts an incremental refresh operation. You shall only call this method from a slot
      *  connected to readyForIncrementalRefresh(). To initiate an incremental refresh,
      *  call requestIncrementalRefresh() */
@@ -289,9 +298,12 @@ private:
     void cleanSituationChecks();
     void removeRowPairs(const QList<QPair<int,int> >& toRemove);
 
-private:
+public:
 
+    // Declared public because it's used in ImageModelIncrementalUpdater class
     class ImageModelPriv;
+
+private:
     ImageModelPriv* const d;
 };
 
