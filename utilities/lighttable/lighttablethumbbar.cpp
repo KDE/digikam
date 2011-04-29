@@ -99,6 +99,8 @@ LightTableThumbBar::LightTableThumbBar(QWidget* parent)
     d->dragDropHandler->setReadOnlyDrop(true);
     d->imageInfoModel->setDragDropHandler(d->dragDropHandler);
 
+    setModels(d->imageInfoModel, d->imageFilterModel);
+
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
             this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)),
             Qt::QueuedConnection);
@@ -111,6 +113,11 @@ LightTableThumbBar::LightTableThumbBar(QWidget* parent)
 LightTableThumbBar::~LightTableThumbBar()
 {
     delete d;
+}
+
+void LightTableThumbBar::setItems(const ImageInfoList& list)
+{
+    d->imageInfoModel->setImageInfos(list);
 }
 
 void LightTableThumbBar::setNavigateByPair(bool b)
@@ -351,6 +358,14 @@ QModelIndex LightTableThumbBar::findItemByInfo(const ImageInfo& info) const
         return d->imageInfoModel->indexForImageInfo(info);
 
     return QModelIndex();
+}
+
+ImageInfo LightTableThumbBar::findItemByIndex(const QModelIndex& index) const
+{
+    if (index.isValid())
+        return d->imageInfoModel->imageInfo(index);
+
+    return ImageInfo();
 }
 
 void LightTableThumbBar::removeItemByInfo(const ImageInfo& /*info*/)
