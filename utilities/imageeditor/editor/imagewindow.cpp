@@ -419,15 +419,15 @@ void ImageWindow::setupUserArea()
     QHBoxLayout* hlay = new QHBoxLayout(widget);
     m_splitter        = new SidebarSplitter(widget);
 
-    d->viewContainer = new KMainWindow(widget, Qt::Widget);
+    d->viewContainer  = new KMainWindow(widget, Qt::Widget);
     m_splitter->addWidget(d->viewContainer);
-    m_stackView      = new Digikam::EditorStackView(d->viewContainer);
-    m_canvas         = new Digikam::Canvas(m_stackView);
+    m_stackView       = new EditorStackView(d->viewContainer);
+    m_canvas          = new Canvas(m_stackView);
     d->viewContainer->setCentralWidget(m_stackView);
 
     m_splitter->setStretchFactor(0, 10);      // set Canvas default size to max.
 
-    d->rightSideBar = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
+    d->rightSideBar   = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("ImageEditor Right Sidebar");
     d->rightSideBar->getFiltersHistoryTab()->addOpenImageAction();
 
@@ -448,7 +448,7 @@ void ImageWindow::setupUserArea()
     // Code to check for the now depreciated HorizontalThumbar directive. It
     // is found, it is honored and deleted. The state will from than on be saved
     // by d->viewContainers built-in mechanism.
-    Qt::DockWidgetArea dockArea    = Qt::LeftDockWidgetArea;
+    Qt::DockWidgetArea dockArea = Qt::LeftDockWidgetArea;
 
     if (group.hasKey(d->configHorizontalThumbbarEntry))
     {
@@ -473,15 +473,15 @@ void ImageWindow::setupUserArea()
     d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)AlbumSettings::instance()->getImageSortOrder());
     d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)AlbumSettings::instance()->getImageSorting());
 
-    d->dragDropHandler = new ImageDragDropHandler(d->imageInfoModel);
+    d->dragDropHandler  = new ImageDragDropHandler(d->imageInfoModel);
     d->dragDropHandler->setReadOnlyDrop(true);
     d->imageInfoModel->setDragDropHandler(d->dragDropHandler);
 
     // The thumb bar is placed in a detachable/dockable widget.
-    d->thumbBarDock = new ThumbBarDock(d->viewContainer, Qt::Tool);
+    d->thumbBarDock     = new ThumbBarDock(d->viewContainer, Qt::Tool);
     d->thumbBarDock->setObjectName("editor_thumbbar");
 
-    d->thumbBar = new ImageThumbnailBar(d->thumbBarDock);
+    d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
     d->thumbBar->setModels(d->imageInfoModel, d->imageFilterModel);
 
     d->thumbBarDock->setWidget(d->thumbBar);
