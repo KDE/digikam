@@ -6,7 +6,7 @@
  * Date        : 2009-03-05
  * Description : Qt item model for database entries
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,6 @@ namespace DatabaseFields
 class Set;
 }
 class AbstractItemDragDropHandler;
-class ImageModelPriv;
 
 class DIGIKAM_DATABASE_EXPORT ImageModel : public QAbstractListModel, public DragDropModelImplementation
 {
@@ -290,6 +289,9 @@ private:
     void cleanSituationChecks();
     void removeRowPairs(const QList<QPair<int,int> >& toRemove);
 
+private:
+
+    class ImageModelPriv;
     ImageModelPriv* const d;
 };
 

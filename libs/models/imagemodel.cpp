@@ -6,7 +6,7 @@
  * Date        : 2009-03-05
  * Description : Qt item model for database entries
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,50 +44,51 @@
 namespace Digikam
 {
 
-class ImageModelPriv
+class ImageModel::ImageModelPriv
 {
 public:
 
     ImageModelPriv()
     {
-        preprocessor       = 0;
-        keepFilePathCache  = false;
-        sendRemovalSignals = false;
-        incrementalUpdater = 0;
-        refreshing         = false;
-        reAdding           = false;
+        preprocessor                = 0;
+        keepFilePathCache           = false;
+        sendRemovalSignals          = false;
+        incrementalUpdater          = 0;
+        refreshing                  = false;
+        reAdding                    = false;
         incrementalRefreshRequested = false;
     }
 
-    ImageInfoList         infos;
-    QList<QVariant>       extraValues;
-    QHash<qlonglong, int> idHash;
+    ImageInfoList                       infos;
+    QList<QVariant>                     extraValues;
+    QHash<qlonglong, int>               idHash;
 
-    bool                  keepFilePathCache;
-    QHash<QString, qlonglong>
-    filePathHash;
+    bool                                keepFilePathCache;
+    QHash<QString, qlonglong>           filePathHash;
 
-    bool                  sendRemovalSignals;
+    bool                                sendRemovalSignals;
 
-    QObject*              preprocessor;
-    bool                  refreshing;
-    bool                  reAdding;
-    bool                  incrementalRefreshRequested;
+    QObject*                            preprocessor;
+    bool                                refreshing;
+    bool                                reAdding;
+    bool                                incrementalRefreshRequested;
 
-    DatabaseFields::Set   watchFlags;
+    DatabaseFields::Set                 watchFlags;
 
-    class ImageModelIncrementalUpdater
-            *incrementalUpdater;
+    class ImageModelIncrementalUpdater* incrementalUpdater;
 };
 
 class ImageModelIncrementalUpdater
 {
 public:
+
     ImageModelIncrementalUpdater(ImageModelPriv* d);
     void appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     QList<QPair<int,int> > oldIndexes() const;
 
     static QList<QPair<int,int> > toContiguousPairs(const QList<int>& ids);
+
+public:
 
     QHash<qlonglong, int>    oldIds;
     QList<QVariant>          oldExtraValues;
@@ -767,9 +768,11 @@ static bool pairsContain(const List& list, T value)
     int n = int(end - begin);
     int half;
 
-    while (n > 0) {
-        half = n >> 1;
+    while (n > 0)
+    {
+        half   = n >> 1;
         middle = begin + half;
+
         if (middle->first <= value && middle->second >= value)
         {
             return true;
@@ -778,10 +781,13 @@ static bool pairsContain(const List& list, T value)
         {
             begin = middle + 1;
             n -= half + 1;
-        } else {
+        }
+        else
+        {
             n = half;
         }
     }
+
     return false;
 }
 
@@ -872,7 +878,7 @@ void ImageModel::removeRowPairs(const QList<QPair<int,int> >& toRemove)
 
 ImageModelIncrementalUpdater::ImageModelIncrementalUpdater(ImageModelPriv* d)
 {
-    oldIds = d->idHash;
+    oldIds         = d->idHash;
     oldExtraValues = d->extraValues;
 }
 
@@ -899,7 +905,7 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
         for (int i=0; i<infos.size(); i++)
         {
             const ImageInfo& info = infos[i];
-            bool found = false;
+            bool found            = false;
             QHash<qlonglong,int>::iterator it;
 
             for (it = oldIds.find(info.id()); it != oldIds.end() && it.key() == info.id(); ++it)
