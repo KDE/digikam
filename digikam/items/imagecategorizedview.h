@@ -6,7 +6,7 @@
  * Date        : 2009-04-22
  * Description : Qt item view for images
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,6 @@ class ImageSortFilterModel;
 class ImageDelegate;
 class ImageDelegateOverlay;
 class ImageThumbnailModel;
-class ImageCategorizedViewPriv;
 
 class ImageCategorizedView : public DCategorizedView
 {
@@ -105,7 +104,7 @@ public:
     /** If the model is categorized by an album, returns the album of the category
      *  that contains the position.
      *  If this is not applicable, return the current album. May return 0. */
-    Album* albumAt(const QPoint& pos);
+    Album* albumAt(const QPoint& pos) const;
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     /// Unless you pass a different delegate, the current delegate will be used.
@@ -114,7 +113,7 @@ public:
 
     void addSelectionOverlay(ImageDelegate* delegate = 0);
 
-    QItemSelectionModel* getSelectionModel();
+    QItemSelectionModel* getSelectionModel() const;
 
 public Q_SLOTS:
 
@@ -185,6 +184,7 @@ private:
 
 private:
 
+    class ImageCategorizedViewPriv;
     ImageCategorizedViewPriv* const d;
 };
 

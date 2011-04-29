@@ -6,7 +6,7 @@
  * Date        : 2009-04-22
  * Description : Qt item view for images
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -83,7 +83,7 @@ protected:
 
 // -------------------------------------------------------------------------------
 
-class ImageCategorizedViewPriv
+class ImageCategorizedView::ImageCategorizedViewPriv
 {
 public:
 
@@ -268,8 +268,10 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
 
     d->delegate->setViewOnAllOverlays(this);
     d->delegate->setAllOverlaysActive(true);
+
     connect(d->delegate, SIGNAL(requestNotification(const QModelIndex&, const QString&)),
             this, SLOT(showIndexNotification(const QModelIndex&, const QString&)));
+
     connect(d->delegate, SIGNAL(hideNotification()),
             this, SLOT(hideIndexNotification()));
 }
@@ -412,11 +414,11 @@ void ImageCategorizedView::openAlbum(Album* album)
 
 ThumbnailSize ImageCategorizedView::thumbnailSize() const
 {
-    /*
-        ImageThumbnailModel *thumbModel = imageThumbnailModel();
-        if (thumbModel)
-            return thumbModel->thumbnailSize();
-    */
+/*
+    ImageThumbnailModel *thumbModel = imageThumbnailModel();
+    if (thumbModel)
+        return thumbModel->thumbnailSize();
+*/
     if (d->delegate)
     {
         return d->delegate->thumbnailSize();
@@ -641,7 +643,7 @@ void ImageCategorizedView::selectionChanged(const QItemSelection& selectedItems,
     }
 }
 
-Album* ImageCategorizedView::albumAt(const QPoint& pos)
+Album* ImageCategorizedView::albumAt(const QPoint& pos) const
 {
     if (imageFilterModel()->imageSortSettings().categorizationMode == ImageSortSettings::CategoryByAlbum)
     {
@@ -687,7 +689,7 @@ void ImageCategorizedView::paintEvent(QPaintEvent* e)
     DCategorizedView::paintEvent(e);
 }
 
-QItemSelectionModel* ImageCategorizedView::getSelectionModel()
+QItemSelectionModel* ImageCategorizedView::getSelectionModel() const
 {
     return selectionModel();
 }
