@@ -132,5 +132,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 106 ==> 217886 : Database and visualization error when renaming folders.
 107 ==> 269289 : Rename scrambles order of files. 
 108 ==> 228718 : Renaming doesn't allow [file]{r:"%20"," "}.[ext]. 
-109 ==> 
+109 ==> 235928 : digiKam fails to open database at startup.
+110 ==> 
+
 
