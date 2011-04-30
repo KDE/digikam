@@ -129,6 +129,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 103 ==> 271551 : digiKam crashes when trying to move the same album twice in parallel.
 104 ==> 266211 : Media-gfx/digikam-1.8.0 crash on exit.
 105 ==> 271252 : digiKam crashes while scanning for new pictures on the same drive it worked before.
-106 ==> 
-
+106 ==> 217886 : Database and visualization error when renaming folders.
+107 ==> 
 
