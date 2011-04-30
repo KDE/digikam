@@ -130,5 +130,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 104 ==> 266211 : Media-gfx/digikam-1.8.0 crash on exit.
 105 ==> 271252 : digiKam crashes while scanning for new pictures on the same drive it worked before.
 106 ==> 217886 : Database and visualization error when renaming folders.
-107 ==> 
+107 ==> 269289 : Rename scrambles order of files. 
+108 ==> 
 
