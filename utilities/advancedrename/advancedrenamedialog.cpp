@@ -292,7 +292,7 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
         ps.fileUrl = url;
         files << ps;
     }
-    d->advancedRenameManager->addFiles(files, AdvancedRenameManager::SortAscending);
+    d->advancedRenameManager->addFiles(files);
 
     initDialog();
     slotParseStringChanged(d->advancedRenameWidget->parseString());
