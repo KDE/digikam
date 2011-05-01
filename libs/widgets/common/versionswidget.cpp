@@ -110,7 +110,7 @@ VersionsWidget::VersionsWidget(QWidget* parent)
     d->combinedModeButton = new QToolButton;
     d->combinedModeButton->setIcon(SmallIcon("view-list-details"));
     d->combinedModeButton->setCheckable(true);
-    d->combinedModeButton->setToolTip(i18n("Show available version and the applied filters in a combined list"));
+    d->combinedModeButton->setToolTip(i18n("Show available versions and the applied filters in a combined list"));
     d->viewButtonGroup->addButton(d->combinedModeButton, ImageHistoryGraphModel::CombinedTreeMode);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;

@@ -133,7 +133,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
 
     d->mimeFilter = new MimeFilter(d->expbox);
     d->expbox->addItem(d->mimeFilter, SmallIcon("system-file-manager"),
-                       i18n("Mime Type Filter"), QString("TypeMimeFilter"), true);
+                       i18n("MIME Type Filter"), QString("TypeMimeFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 

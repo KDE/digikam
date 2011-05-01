@@ -140,20 +140,27 @@ void RawCameraDlg::updateHeader(int results)
 
     if (!results)
     {
-        d->header->setText(i18n("<p>Using KDcraw library version %1<br/>"
-                                "Using LibRaw version %2<br/>"
-                                "%3 models in the list</p>",
-                                KDcrawVer, librawVer,
-                                list.count()));
+        d->header->setText(i18np("<p>Using KDcraw library version %2<br/>"
+                                 "Using LibRaw version %3<br/>"
+                                 "1 model on the list</p>",
+                                 "<p>Using KDcraw library version %2<br/>"
+                                 "Using LibRaw version %3<br/>"
+                                 "%1 models on the list</p>",
+                                 list.count(),
+                                 KDcrawVer, librawVer
+                                 ));
     }
     else
     {
-        d->header->setText(i18n("<p>Using KDcraw library version %1<br/>"
-                                "Using LibRaw version %2<br/>"
-                                "%3 models in the list (found: %4)</p>",
-                                KDcrawVer, librawVer,
-                                list.count(),
-                                results));
+        d->header->setText(i18np("<p>Using KDcraw library version %2<br/>"
+                                 "Using LibRaw version %3<br/>"
+                                 "1 model on the list (found: %4)</p>",
+                                 "<p>Using KDcraw library version %2<br/>"
+                                 "Using LibRaw version %3<br/>"
+                                 "%1 models on the list (found: %4)</p>",
+                                 list.count(),
+                                 KDcrawVer, librawVer,                                
+                                 results));
     }
 }
 

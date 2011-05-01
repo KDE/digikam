@@ -304,7 +304,7 @@ void AbstractWidgetDelegateOverlay::widgetLeaveNotifyMultiple()
 
 QString AbstractWidgetDelegateOverlay::notifyMultipleMessage(const QModelIndex&, int number)
 {
-    return i18nc("@info", "<i>Applying operation to <br/><b>%1</b> selected pictures</i>", number);
+    return i18ncp("@info", "<i>Applying operation to<br/>the selected picture</i>", "<i>Applying operation to <br/><b>%1</b> selected pictures</i>", number);
 }
 
 bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)

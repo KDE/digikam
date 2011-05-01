@@ -76,7 +76,7 @@ RatingFilterWidget::RatingFilterWidget(QWidget* parent)
     setMouseTracking(true);
 
     setWhatsThis(i18n("Select the rating value used to filter "
-                      "albums contents. Use the context pop-up menu to "
+                      "albums' contents. Use the context pop-up menu to "
                       "set rating filter conditions."));
 
     // To dispatch signal from parent widget with filter condition.

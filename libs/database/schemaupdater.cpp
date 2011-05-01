@@ -239,7 +239,7 @@ bool SchemaUpdater::startUpdates()
                 QString errorMsg = i18n(
                                        "The database has been used with a more recent version of digiKam "
                                        "and has been updated to a database schema which cannot be used with this version. "
-                                       "(This means this digiKam version is too old, or the database format is to recent) "
+                                       "(This means this digiKam version is too old, or the database format is too recent.) "
                                        "Please use the more recent version of digiKam that you used before. "
                                    );
                 m_LastErrorMessage=errorMsg;

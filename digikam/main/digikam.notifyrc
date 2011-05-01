@@ -428,7 +428,7 @@ Comment[zh_TW]=用資料庫同步影像的中繼資料已經完成。
 Action=Popup
 
 [Event/batchfacedetectioncompleted]
-Name=Update of face detected database complete
+Name=Update of detected faces database complete
 Name[ca]=Actualització completada de la base de dades de cares detectades
 Name[et]=Näotuvastuse andmebaas on uuendatud
 Name[is]=Uppfærslu andlitagagnagrunns lokið
@@ -442,7 +442,7 @@ Name[uk]=Оновлення бази даних виявлених облич з
 Name[x-test]=xxUpdate of face detected database completexx
 Name[zh_CN]=更新人脸识别数据库完成
 Name[zh_TW]=面部偵測資料庫更新完成
-Comment=The update of the face detected database has been completed.
+Comment=The update of the detected faces database has completed.
 Comment[ca]=L'actualització de la base de dades de cares detectades ha finalitzat.
 Comment[et]=Näotuvastuse andmebaas on uuendatud.
 Comment[is]=Uppfærslu andlitagagnagrunns er lokið.

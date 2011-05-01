@@ -77,7 +77,7 @@ TextFilter::TextFilter(QWidget* parent)
     d->optionsBtn->setToolTip( i18n("Text Search Fields"));
     d->optionsBtn->setIcon(KIconLoader::global()->loadIcon("configure", KIconLoader::Toolbar));
     d->optionsBtn->setPopupMode(QToolButton::InstantPopup);
-    d->optionsBtn->setWhatsThis(i18n("Defines where text must be search in fields"));
+    d->optionsBtn->setWhatsThis(i18n("Defines which fields to search for the text in."));
 
     d->optionsMenu        = new KMenu(d->optionsBtn);
     d->imageNameAction    = d->optionsMenu->addAction(i18n("Image Name"));

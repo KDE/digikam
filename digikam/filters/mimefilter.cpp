@@ -46,9 +46,9 @@ MimeFilter::MimeFilter(QWidget* parent)
     insertItem( RasterFiles, i18n("Raster Files") );
 
     setToolTip(i18n("Filter by file type"));
-    setWhatsThis(i18n("Select the file types (mime types) that you want shown. "
-                      "Note: \"Raster Files\" are format from raster graphic editors "
-                      "as Photoshop, Gimp, Krita, etc..."));
+    setWhatsThis(i18n("Select the file types (MIME types) that you want shown. "
+                      "Note: \"Raster Files\" are formats from raster graphics editors, "
+                      "such as Photoshop, The Gimp, Krita, etc."));
 
     setMimeFilter(AllFiles);
 }

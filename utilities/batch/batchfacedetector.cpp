@@ -320,7 +320,7 @@ void BatchFaceDetector::complete()
     setButtonGuiItem(KStandardGuiItem::ok());
     setButtonText(i18n("&Close"));
     // Pop-up a message to bring user when all is done.
-    KNotificationWrapper("batchfacedetectioncompleted", i18n("The face detected database has been updated."),
+    KNotificationWrapper("batchfacedetectioncompleted", i18n("The database of detected faces has been updated."),
                          this, windowTitle());
     emit signalDetectAllFacesDone();
 

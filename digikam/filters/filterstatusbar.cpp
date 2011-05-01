@@ -85,19 +85,19 @@ FilterStatusBar::FilterStatusBar(QWidget* parent)
 
     d->settingsBtn = new QToolButton(this);
     d->settingsBtn->setIcon(KIconLoader::global()->loadIcon("configure", KIconLoader::Toolbar));
-    d->settingsBtn->setToolTip(i18n("Open filters settings panel"));
+    d->settingsBtn->setToolTip(i18n("Open filter settings panel"));
     d->settingsBtn->setFocusPolicy(Qt::NoFocus);
     d->settingsBtn->setAutoRaise(true);
 
     d->info        = new QLabel(this);
     d->info->setWhatsThis(i18n("Background color indicates the global image filter status, "
-                               "encompassing all filters settings from right sidebar.\n\n"
+                               "encompassing all filter settings from the right sidebar.\n\n"
                                "NO COLOR: no filter is active, all items are visible.\n"
                                "RED: filtering is on, but no items match.\n"
                                "GREEN: filter(s) match(es) at least one item.\n\n"
                                "Move mouse cursor over this text to see more details about active filters.\n"
-                               "Press on Reset button from the right side to clean all filters settings.\n"
-                               "Press on Settings button from the right side to open filters panel."));
+                               "Press the Reset button from the right side to clear all filter settings.\n"
+                               "Press the Settings button from the right side to open the filters panel."));
 
     vlay->addWidget(space);
     vlay->addWidget(d->resetBtn);
@@ -202,7 +202,7 @@ void FilterStatusBar::slotFilterMatches(bool match)
         }
         else
         {
-            d->info->setText(i18n("%1 active filters", filtersList.count()));
+            d->info->setText(i18np("1 active filter", "%1 active filters", filtersList.count()));
         }
 
         d->info->setToolTip(message);
