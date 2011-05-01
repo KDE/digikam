@@ -351,6 +351,17 @@ void LightTableThumbBar::setOnRightPanel(const ImageInfo& /*info*/)
 */
 }
 
+bool LightTableThumbBar::isOnLeftPanel(const ImageInfo& info) const
+{
+    // FIXME
+    return false;
+}
+
+bool LightTableThumbBar::isOnRightPanel(const ImageInfo& info) const
+{
+    // FIXME
+    return false;
+}
 
 QModelIndex LightTableThumbBar::findItemByInfo(const ImageInfo& info) const
 {

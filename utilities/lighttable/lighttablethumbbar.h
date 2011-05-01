@@ -50,6 +50,8 @@ public:
 
     void setOnLeftPanel(const ImageInfo& info);
     void setOnRightPanel(const ImageInfo& info);
+    bool isOnLeftPanel(const ImageInfo& info) const;
+    bool isOnRightPanel(const ImageInfo& info) const;
 
     void removeItemByInfo(const ImageInfo& info);
     void removeItemById(qlonglong id);
