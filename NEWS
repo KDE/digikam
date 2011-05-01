@@ -134,5 +134,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 108 ==> 228718 : Renaming doesn't allow [file]{r:"%20"," "}.[ext]. 
 109 ==> 235928 : digiKam fails to open database at startup.
 110 ==> 271916 : digiKam crashed when opening editor.
-111 ==> 
+111 ==> 272133 : Crash editing Geo coordinates of several images.
+112 ==> 
 
