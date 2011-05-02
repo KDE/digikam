@@ -308,6 +308,7 @@ QList<ImageInfo> ImageCategorizedView::selectedImageInfosCurrentFirst() const
     QList<QModelIndex> indexes = selectedIndexes();
     QModelIndex        current = currentIndex();
     QList<ImageInfo>   infos;
+
     foreach (const QModelIndex& index, indexes)
     {
         ImageInfo info = d->filterModel->imageInfo(index);
@@ -321,6 +322,7 @@ QList<ImageInfo> ImageCategorizedView::selectedImageInfosCurrentFirst() const
             infos.append(info);
         }
     }
+
     return infos;
 }
 
@@ -332,22 +334,26 @@ QList<ImageInfo> ImageCategorizedView::imageInfos() const
 KUrl::List ImageCategorizedView::urls() const
 {
     QList<ImageInfo> infos = imageInfos();
-    KUrl::List urls;
+    KUrl::List       urls;
+
     foreach (const ImageInfo& info, infos)
     {
         urls << info.fileUrl();
     }
+
     return urls;
 }
 
 KUrl::List ImageCategorizedView::selectedUrls() const
 {
     QList<ImageInfo> infos = selectedImageInfos();
-    KUrl::List urls;
+    KUrl::List       urls;
+
     foreach (const ImageInfo& info, infos)
     {
         urls << info.fileUrl();
     }
+
     return urls;
 }
 
@@ -371,8 +377,10 @@ ImageInfo ImageCategorizedView::nextInOrder(const ImageInfo& startingPoint, int 
 QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const QItemSelectionRange& removed) const
 {
     QModelIndex hint = DCategorizedView::nextIndexHint(anchor, removed);
-    ImageInfo info = d->filterModel->imageInfo(anchor);
+    ImageInfo info   = d->filterModel->imageInfo(anchor);
+
     //kDebug() << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForImageInfo(info);
+
     // Fixes a special case of multiple (face) entries for the same image.
     // If one is removed, any entry of the same image shall be preferred.
     if (d->model->numberOfIndexesForImageInfo(info) > 1)
@@ -380,16 +388,18 @@ QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const
         // The hint is for a different info, but we may have a hint for the same info
         if (info != d->filterModel->imageInfo(hint))
         {
-            int minDiff = d->filterModel->rowCount();
-            QList<QModelIndex> indexesForImageInfo =
-                d->filterModel->mapListFromSource(d->model->indexesForImageInfo(info));
+            int minDiff                            = d->filterModel->rowCount();
+            QList<QModelIndex> indexesForImageInfo = d->filterModel->mapListFromSource(d->model->indexesForImageInfo(info));
+
             foreach (const QModelIndex& index, indexesForImageInfo)
             {
                 if (index == anchor || !index.isValid() || removed.contains(index))
                 {
                     continue;
                 }
+
                 int distance = qAbs(index.row() - anchor.row());
+
                 if (distance < minDiff)
                 {
                     minDiff = distance;
@@ -399,6 +409,7 @@ QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const
             }
         }
     }
+
     return hint;
 }
 
@@ -454,7 +465,7 @@ void ImageCategorizedView::setCurrentUrl(const KUrl& url)
         return;
     }
 
-    QString path = url.toLocalFile();
+    QString path      = url.toLocalFile();
     QModelIndex index = d->filterModel->indexForPath(path);
 
     if (!index.isValid())

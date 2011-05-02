@@ -84,6 +84,7 @@ public:
 
     /** Selects the index as current and scrolls to it */
     void toIndex(const KUrl& url);
+
     /** Returns the n-th info after the given one.
      *  Specifically, return the previous info for nth = -1
      *  and the next info for n = 1.
