@@ -33,8 +33,6 @@
 namespace Digikam
 {
 
-class CollectionImageChangeset;
-
 class LightTableThumbBar : public ImageThumbnailBar
 {
     Q_OBJECT
@@ -90,10 +88,6 @@ private:
     void assignPickLabel(const ImageInfo& info, int pickId);
     void assignColorLabel(const ImageInfo& info, int colorId);
     void assignRating(const ImageInfo& info, int rating);
-
-private Q_SLOTS:
-
-    void slotCollectionImageChange(const CollectionImageChangeset&);
 
 private:
 

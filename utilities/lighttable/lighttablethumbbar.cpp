@@ -25,36 +25,29 @@
 
 // Qt includes
 
+#include <QAction>
 #include <QList>
 #include <QPixmap>
 #include <QPainter>
 #include <QImage>
-#include <QCursor>
-#include <QPaintEvent>
+#include <QContextMenuEvent>
 
 // KDE includes
 
-#include <kglobal.h>
-#include <kiconloader.h>
-#include <klocale.h>
 #include <kmenu.h>
-#include <kstandarddirs.h>
+#include <klocale.h>
+#include <kiconloader.h>
 
 // Local includes
 
-#include "album.h"
 #include "albumdb.h"
-#include "albummanager.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
 #include "globals.h"
-#include "imageattributeswatch.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
 #include "metadatasettings.h"
 #include "metadatahub.h"
-#include "databasewatch.h"
-#include "databasechangesets.h"
 #include "thumbnailloadthread.h"
 
 namespace Digikam
@@ -97,18 +90,12 @@ LightTableThumbBar::LightTableThumbBar(QWidget* parent)
     d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)AlbumSettings::instance()->getImageSorting());
 
     d->dragDropHandler = new ImageDragDropHandler(d->imageInfoModel);
-    d->dragDropHandler->setReadOnlyDrop(true);
     d->imageInfoModel->setDragDropHandler(d->dragDropHandler);
 
+    setDragEnabled(true);
+    setAcceptDrops(true);
+    setDropIndicatorShown(false);
     setModels(d->imageInfoModel, d->imageFilterModel);
-
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
-            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)),
-            Qt::QueuedConnection);
-    /*
-        connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
-                this, SLOT(slotItemSelected(ThumbBarItem*)));
-    */
 }
 
 LightTableThumbBar::~LightTableThumbBar()
@@ -388,37 +375,6 @@ void LightTableThumbBar::drawEmptyMessage(QPixmap& /*bgPix*/)
                 Qt::AlignCenter|Qt::TextWordWrap,
                 i18n("Drag and drop images here"));
     p4.end();
-*/
-}
-
-
-void LightTableThumbBar::slotCollectionImageChange(const CollectionImageChangeset& /*changeset*/)
-{
-/*
-    switch (changeset.operation())
-    {
-        case CollectionImageChangeset::Removed:
-        case CollectionImageChangeset::RemovedAll:
-        {
-            ImageInfo info;
-            foreach (const qlonglong& id, changeset.ids())
-            {
-                ImagePreviewBarItem* item = findItemById(id);
-
-                if (item)
-                {
-                    info = item->info();
-                    removeItem(item);
-                    emit signalRemoveItem(info);
-                }
-            }
-            break;
-        }
-        default:
-        {
-            break;
-        }
-    }
 */
 }
 
