@@ -21,7 +21,11 @@
 #ifndef DIGIKAMKCATEGORIZEDVIEW_H
 #define DIGIKAMKCATEGORIZEDVIEW_H
 
+// Qt includes.
+
 #include <QtGui/QListView>
+
+// Local includes.
 
 #include "digikam_export.h"
 
@@ -42,20 +46,18 @@ class DIGIKAM_EXPORT DigikamKCategorizedView : public QListView
     Q_OBJECT
 
 public:
+
     DigikamKCategorizedView(QWidget* parent = 0);
 
     ~DigikamKCategorizedView();
 
-    virtual void setModel(QAbstractItemModel* model);
-
     void setGridSize(const QSize& size);
-
-    virtual QRect visualRect(const QModelIndex& index) const;
+    void setCategoryDrawer(KCategoryDrawer* categoryDrawer);
 
     KCategoryDrawer* categoryDrawer() const;
 
-    void setCategoryDrawer(KCategoryDrawer* categoryDrawer);
-
+    virtual void setModel(QAbstractItemModel* model);
+    virtual QRect visualRect(const QModelIndex& index) const;
     virtual QModelIndex indexAt(const QPoint& point) const;
 
     /**
@@ -97,15 +99,16 @@ public:
     void setDrawDraggedItems(bool drawDraggedItems);
 
 public Q_SLOTS:
+
     virtual void reset();
 
 protected:
+
     virtual void paintEvent(QPaintEvent* event);
 
     virtual void resizeEvent(QResizeEvent* event);
 
-    virtual void setSelection(const QRect& rect,
-                              QItemSelectionModel::SelectionFlags flags);
+    virtual void setSelection(const QRect& rect, QItemSelectionModel::SelectionFlags flags);
 
     virtual void mouseMoveEvent(QMouseEvent* event);
 
@@ -123,14 +126,13 @@ protected:
 
     virtual void dropEvent(QDropEvent* event);
 
-    virtual QModelIndex moveCursor(CursorAction cursorAction,
-                                   Qt::KeyboardModifiers modifiers);
+    virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
 
 protected Q_SLOTS:
+
     virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 
-    virtual void rowsInsertedArtifficial(const QModelIndex& parent, int start,
-                                         int end);
+    virtual void rowsInsertedArtifficial(const QModelIndex& parent, int start, int end);
 
     virtual void rowsRemoved(const QModelIndex& parent, int start, int end);
 
@@ -138,10 +140,10 @@ protected Q_SLOTS:
 
     virtual void slotLayoutChanged();
 
-    virtual void currentChanged(const QModelIndex& current,
-                                const QModelIndex& previous);
+    virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 
 private:
+
     class Private;
     Private* const d;
 };
