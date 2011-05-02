@@ -54,32 +54,33 @@ public:
 
     void setModels(ImageModel* model, ImageSortFilterModel* filterModel);
 
-    ImageModel* imageModel() const;
-    ImageSortFilterModel* imageSortFilterModel() const;
+    ImageModel*            imageModel()            const;
+    ImageSortFilterModel*  imageSortFilterModel()  const;
+
+    QItemSelectionModel*   getSelectionModel()     const;
 
     /// Returns any ImageFilterMode in chain. May not be sourceModel()
-    ImageFilterModel* imageFilterModel() const;
+    ImageFilterModel*      imageFilterModel()      const;
 
     /// Returns 0 if the ImageModel is not an ImageThumbnailModel
-    ImageThumbnailModel* imageThumbnailModel() const;
+    ImageThumbnailModel*   imageThumbnailModel()   const;
 
     /// Returns 0 if the ImageModel is not an ImageAlbumModel
-    ImageAlbumModel* imageAlbumModel() const;
+    ImageAlbumModel*       imageAlbumModel()       const;
     ImageAlbumFilterModel* imageAlbumFilterModel() const;
 
-    ImageDelegate* delegate() const;
+    ImageDelegate*         delegate()              const;
 
-    Album* currentAlbum() const;
+    Album*                 currentAlbum()          const;
+    ImageInfo              currentInfo()           const;
+    KUrl                   currentUrl()            const;
 
-    ImageInfo currentInfo() const;
-    KUrl currentUrl() const;
+    QList<ImageInfo>       selectedImageInfos()             const;
+    QList<ImageInfo>       selectedImageInfosCurrentFirst() const;
+    KUrl::List             selectedUrls()                   const;
 
-    QList<ImageInfo> selectedImageInfos() const;
-    QList<ImageInfo> selectedImageInfosCurrentFirst() const;
-    KUrl::List selectedUrls() const;
-
-    QList<ImageInfo> imageInfos() const;
-    KUrl::List urls() const;
+    QList<ImageInfo>       imageInfos()                     const;
+    KUrl::List             urls()                           const;
 
     /** Selects the index as current and scrolls to it */
     void toIndex(const KUrl& url);
@@ -89,16 +90,19 @@ public:
      *  Returns a null info if either startingPoint or the nth info are
      *  not contained in the model */
     ImageInfo nextInOrder(const ImageInfo& startingPoint, int nth);
+
     ImageInfo previousInfo(const ImageInfo& info)
     {
         return nextInOrder(info, -1);
     }
+
     ImageInfo nextInfo(const ImageInfo& info)
     {
         return nextInOrder(info, 1);
     }
 
     ThumbnailSize thumbnailSize() const;
+
     virtual void setThumbnailSize(const ThumbnailSize& size);
 
     /** If the model is categorized by an album, returns the album of the category
@@ -109,39 +113,47 @@ public:
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     /// Unless you pass a different delegate, the current delegate will be used.
     void addOverlay(ImageDelegateOverlay* overlay, ImageDelegate* delegate = 0);
+
     void removeOverlay(ImageDelegateOverlay* overlay);
 
     void addSelectionOverlay(ImageDelegate* delegate = 0);
-
-    QItemSelectionModel* getSelectionModel() const;
 
 public Q_SLOTS:
 
     void openAlbum(Album* album);
 
     void setThumbnailSize(int size);
+
     /** Scroll the view to the given item when it becomes available */
     void setCurrentWhenAvailable(qlonglong imageId);
+
     /** Set as current item the item identified by its file url */
     void setCurrentUrl(const KUrl& url);
+
     /** Set as current item the item identified by the imageinfo */
     void setCurrentInfo(const ImageInfo& info);
+
     /** Set selected items identified by their file urls */
     void setSelectedUrls(const KUrl::List& urlList);
+
     /** Set selected items */
     void setSelectedImageInfos(const QList<ImageInfo>& infos);
+
     /** Does something to gain attention for info, but not changing current selection */
     void hintAt(const ImageInfo& info);
 
 Q_SIGNALS:
 
     void currentChanged(const ImageInfo& info);
+
     /// Emitted when new items are selected. The parameter includes only the newly selected infos,
     /// there may be other already selected infos.
     void selected(const QList<ImageInfo>& newSelectedInfos);
+
     /// Emitted when items are deselected. There may be other selected infos left.
     /// This signal is not emitted when the model is reset; then only selectionCleared is emitted.
     void deselected(const QList<ImageInfo>& nowDeselectedInfos);
+
     /// Emitted when the given image is activated. Info is never null.
     void imageActivated(const ImageInfo& info);
 
@@ -163,15 +175,17 @@ protected:
     virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
 
     // reimplemented from parent class
+
+    QSortFilterProxyModel*       filterModel()     const;
+    AbstractItemDragDropHandler* dragDropHandler() const;
+    QModelIndex                  nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const;
+
     void setItemDelegate(ImageDelegate* delegate);
     void indexActivated(const QModelIndex& index);
-    QSortFilterProxyModel* filterModel() const;
     void currentChanged(const QModelIndex& index, const QModelIndex& previous);
     void paintEvent(QPaintEvent* e);
     void selectionChanged(const QItemSelection&, const QItemSelection&);
     void updateGeometries();
-    AbstractItemDragDropHandler* dragDropHandler() const;
-    QModelIndex nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const;
 
 private Q_SLOTS:
 
