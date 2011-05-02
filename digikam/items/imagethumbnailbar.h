@@ -29,12 +29,8 @@
 
 #include "imagecategorizedview.h"
 
-class QMimeData;
-
 namespace Digikam
 {
-
-class ImageViewUtilities;
 
 class ImageThumbnailBar : public ImageCategorizedView
 {
