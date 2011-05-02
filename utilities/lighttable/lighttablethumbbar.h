@@ -47,6 +47,7 @@ public:
     ~LightTableThumbBar();
 
     void setItems(const ImageInfoList& list);
+    void setSelectedItem(const ImageInfo& info);
 
     void setOnLeftPanel(const ImageInfo& info);
     void setOnRightPanel(const ImageInfo& info);

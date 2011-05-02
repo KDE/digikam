@@ -595,4 +595,9 @@ int LightTableThumbBar::countItems() const
     return imageInfos().count();
 }
 
+void LightTableThumbBar::setSelectedItem(const ImageInfo& info)
+{
+    setSelectedImageInfos(QList<ImageInfo>() << info);
+}
+
 }  // namespace Digikam
