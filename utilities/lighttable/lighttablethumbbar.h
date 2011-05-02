@@ -39,8 +39,6 @@ class LightTableThumbBar : public ImageThumbnailBar
 
 public:
 
-    using Digikam::DCategorizedView::startDrag;
-
     explicit LightTableThumbBar(QWidget* parent);
     ~LightTableThumbBar();
 
