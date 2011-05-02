@@ -7,7 +7,7 @@
  * Description : selection icon view item at mouse hover
  *
  * Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,8 +49,7 @@ QSize ImageSelectionOverlayButton::sizeHint() const
 
 QPixmap ImageSelectionOverlayButton::icon()
 {
-    const char* icon = isChecked() ? "list-remove" : "list-add";
-    return KIconLoader::global()->loadIcon(icon,
+    return KIconLoader::global()->loadIcon(isChecked() ? "list-remove" : "list-add",
                                            KIconLoader::NoGroup,
                                            KIconLoader::SizeSmall);
 }
@@ -100,10 +99,9 @@ ItemViewHoverButton* ImageSelectionOverlay::createButton()
 void ImageSelectionOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
-
-    const int gap = 5;
-    const int x   = rect.left() + gap;
-    const int y   = rect.top() + gap;
+    const int gap    = 5;
+    const int x      = rect.left() + gap;
+    const int y      = rect.top() + gap;
     button()->move(QPoint(x, y));
 
     QItemSelectionModel* selModel = m_view->selectionModel();
