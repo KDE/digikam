@@ -64,6 +64,8 @@ public:
     QModelIndex findItemByInfo(const ImageInfo& info) const;
     ImageInfo   findItemByIndex(const QModelIndex& index) const;
 
+    void ensureItemVisible(const ImageInfo& info);
+
 Q_SIGNALS:
 
     void signalLightTableBarItemSelected(const ImageInfo&);

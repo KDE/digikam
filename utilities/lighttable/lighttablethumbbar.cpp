@@ -151,7 +151,6 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* event, const I
         // ------------------------------------------------
         cmhelper.addLabelsAction();
         cmhelper.addSeparator();
-        // ------------------------------------------------
     }
 
     cmhelper.addAction(clearAllAction, true);
@@ -391,6 +390,12 @@ void LightTableThumbBar::setSelectedItem(const ImageInfo& info)
 void LightTableThumbBar::setSelectedIndex(const QModelIndex& index)
 {
     setSelectedItem(findItemByIndex(index));
+}
+
+void LightTableThumbBar::ensureItemVisible(const ImageInfo& info)
+{
+    if (!info.isNull())
+        scrollTo(findItemByInfo(info), QAbstractItemView::PositionAtCenter);
 }
 
 }  // namespace Digikam
