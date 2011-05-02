@@ -75,6 +75,8 @@ public:
         FilterModelRoles      = Qt::UserRole + 500
     };
 
+public:
+
     ImageModel(QObject* parent = 0);
     ~ImageModel();
 
@@ -87,12 +89,6 @@ public:
      *  If either of these is changed, dataChanged() will be emitted.
      *  Default is no flag (no signal will be emitted) */
     void setWatchFlags(const DatabaseFields::Set& set);
-
-    virtual QVariant      data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual QVariant      headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    virtual int           rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual QModelIndex   index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;
 
     /** Returns the ImageInfo object, reference or image id from the underlying data
      *  pointed to by the index.
@@ -131,11 +127,6 @@ public:
     ImageInfo          imageInfo(const QString& filePath) const;
     QList<QModelIndex> indexesForPath(const QString& filePath) const;
     QList<ImageInfo>   imageInfos(const QString& filePath) const;
-
-    /** Retrieves the imageInfo object from the data() method of the given index.
-     *  The index may be from a QSortFilterProxyModel as long as an ImageModel is at the end. */
-    static ImageInfo retrieveImageInfo(const QModelIndex& index);
-    static qlonglong retrieveImageId(const QModelIndex& index);
 
     /** Main entry point for subclasses adding image infos to the model.
      *  If you list entries not unique per image id, you must add an extraValue
@@ -211,11 +202,23 @@ public:
      */
     void setSendRemovalSignals(bool send);
 
+    virtual QVariant      data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual QVariant      headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    virtual int           rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual QModelIndex   index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;
+
+    /** Retrieves the imageInfo object from the data() method of the given index.
+     *  The index may be from a QSortFilterProxyModel as long as an ImageModel is at the end. */
+    static ImageInfo retrieveImageInfo(const QModelIndex& index);
+    static qlonglong retrieveImageId(const QModelIndex& index);
+
 Q_SIGNALS:
 
     /** Informs that ImageInfos will be added to the model.
      *  This signal is sent before the model data is changed and views are informed. */
     void imageInfosAboutToBeAdded(const QList<ImageInfo>& infos);
+
     /** Informs that ImageInfos have been added to the model.
      *  This signal is sent after the model data is changed and views are informed. */
     void imageInfosAdded(const QList<ImageInfo>& infos);
@@ -226,6 +229,7 @@ Q_SIGNALS:
      *  in clearImageInfos().
      */
     void imageInfosAboutToBeRemoved(const QList<ImageInfo>& infos);
+
     /** Informs that ImageInfos have been removed from the model.
      *  This signal is sent after the model data is changed and views are informed. *
      *  Note: You need to explicitly enable sending of this signal. It is not sent
@@ -240,6 +244,7 @@ Q_SIGNALS:
     /** If an ImageChangeset affected indexes of this model with changes as set in watchFlags(),
      *  this signal contains the changeset and the affected indexes. */
     void imageChange(const ImageChangeset&, const QItemSelection&);
+
     /** If an ImageTagChangeset affected indexes of this model,
      *  this signal contains the changeset and the affected indexes. */
     void imageTagChange(const ImageTagChangeset&, const QItemSelection&);
@@ -281,11 +286,11 @@ protected:
     void startIncrementalRefresh();
     void finishIncrementalRefresh();
 
-    // Called when the internal storage is cleared
-    virtual void imageInfosCleared() {};
-
     void emitDataChangedForAll();
     void emitDataChangedForSelection(const QItemSelection& selection);
+
+    // Called when the internal storage is cleared
+    virtual void imageInfosCleared() {};
 
 protected Q_SLOTS:
 
