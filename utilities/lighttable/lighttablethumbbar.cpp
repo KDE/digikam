@@ -392,18 +392,6 @@ void LightTableThumbBar::removeItemByInfo(const ImageInfo& info)
     d->imageInfoModel->removeImageInfo(info);
 }
 
-void LightTableThumbBar::removeItemById(qlonglong /*id*/)
-{
-/*
-    ImagePreviewBarItem* item = findItemById(id);
-
-    if (item)
-    {
-        removeItem(item);
-    }
-*/
-}
-
 void LightTableThumbBar::drawEmptyMessage(QPixmap& /*bgPix*/)
 {
 /*
