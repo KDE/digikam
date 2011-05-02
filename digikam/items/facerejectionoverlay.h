@@ -6,7 +6,7 @@
  * Date        : 2009-04-30
  * Description : rejection icon view item on mouse hover
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,6 +62,10 @@ public:
     FaceRejectionOverlay(QObject* parent);
     virtual void setActive(bool active);
 
+Q_SIGNALS:
+
+    void rejectFaces(const QList<QModelIndex>& indexes);
+
 protected:
 
     virtual ItemViewHoverButton* createButton();
@@ -73,10 +77,6 @@ protected:
 protected Q_SLOTS:
 
     void slotClicked();
-
-Q_SIGNALS:
-
-    void rejectFaces(const QList<QModelIndex>& indexes);
 };
 
 } // namespace Digikam

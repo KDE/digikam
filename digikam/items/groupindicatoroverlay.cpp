@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,6 +58,8 @@ void GroupIndicatorOverlayWidget::contextMenuEvent(QContextMenuEvent* event)
 void GroupIndicatorOverlayWidget::paintEvent(QPaintEvent*)
 {
 }
+
+// --------------------------------------------------------------------------------
 
 GroupIndicatorOverlay::GroupIndicatorOverlay(QObject* parent)
     : AbstractWidgetDelegateOverlay(parent)
