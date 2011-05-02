@@ -595,4 +595,9 @@ void LightTableThumbBar::setSelectedItem(const ImageInfo& info)
     setSelectedImageInfos(QList<ImageInfo>() << info);
 }
 
+void LightTableThumbBar::setSelectedIndex(const QModelIndex& index)
+{
+    setSelectedItem(findItemByIndex(index));
+}
+
 }  // namespace Digikam

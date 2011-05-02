@@ -50,6 +50,7 @@ public:
     void clear();
     void setItems(const ImageInfoList& list);
     void setSelectedItem(const ImageInfo& info);
+    void setSelectedIndex(const QModelIndex& index);
 
     void setOnLeftPanel(const ImageInfo& info);
     void setOnRightPanel(const ImageInfo& info);
