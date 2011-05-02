@@ -46,6 +46,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "contextmenuhelper.h"
 #include "globals.h"
 #include "imageattributeswatch.h"
 #include "imagefiltermodel.h"
@@ -130,94 +131,80 @@ void LightTableThumbBar::setNavigateByPair(bool b)
     d->navigateByPair = b;
 }
 
-void LightTableThumbBar::contentsMouseReleaseEvent(QMouseEvent* /*e*/)
+void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info)
 {
-/*    if (!e)
+    // temporary actions ----------------------------------
+
+    QAction* leftPanelAction=0, *rightPanelAction=0, *editAction=0, *removeAction=0, *clearAllAction=0;
+
+    leftPanelAction  = new QAction(SmallIcon("arrow-left"),        i18n("Show on left panel"),  this);
+    rightPanelAction = new QAction(SmallIcon("arrow-right"),       i18n("Show on right panel"), this);
+    editAction       = new QAction(SmallIcon("editimage"),         i18n("Edit"),                this);
+    removeAction     = new QAction(SmallIcon("dialog-close"),      i18n("Remove item"),         this);
+    clearAllAction   = new QAction(SmallIcon("edit-delete-shred"), i18n("Clear all"),           this);
+
+    leftPanelAction->setEnabled(d->navigateByPair  ? false : true);
+    rightPanelAction->setEnabled(d->navigateByPair ? false : true);
+    clearAllAction->setEnabled(countItems()        ? true  : false);
+
+    // ----------------------------------------------------
+
+    KMenu popmenu(this);
+    ContextMenuHelper cmhelper(&popmenu);
+
+    if (!info.isNull())
     {
-        return;
+        cmhelper.addAction(leftPanelAction, true);
+        cmhelper.addAction(rightPanelAction, true);
+        cmhelper.addSeparator();
+        // ------------------------------------------------
+        cmhelper.addAction(editAction);
+        cmhelper.addAction(removeAction);
+        cmhelper.addSeparator();
+        // ------------------------------------------------
+        cmhelper.addLabelsAction();
+        cmhelper.addSeparator();
+        // ------------------------------------------------
     }
 
-    ThumbBarView::contentsMouseReleaseEvent(e);
+    cmhelper.addAction(clearAllAction, true);
 
-    QPoint pos = QCursor::pos();
-    LightTableThumbBarItem* item = dynamic_cast<LightTableThumbBarItem*>(findItemByPos(e->pos()));
+    // special action handling --------------------------------
 
-    if (e->button() == Qt::RightButton)
+    connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
+            this, SLOT(slotAssignPickLabel(int)));
+
+    connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
+            this, SLOT(slotAssignColorLabel(int)));
+
+    connect(&cmhelper, SIGNAL(signalAssignRating(int)),
+            this, SLOT(slotAssignRating(int)));
+
+    QAction* choice = cmhelper.exec(event->globalPos());
+
+    if (choice)
     {
-        // temporary actions ----------------------------------
-
-        QAction* leftPanelAction, *rightPanelAction, *editAction, *removeAction, *clearAllAction = 0;
-
-        leftPanelAction  = new QAction(SmallIcon("arrow-left"),         i18n("Show on left panel"), this);
-        rightPanelAction = new QAction(SmallIcon("arrow-right"),        i18n("Show on right panel"), this);
-        editAction       = new QAction(SmallIcon("editimage"),          i18n("Edit"), this);
-        removeAction     = new QAction(SmallIcon("dialog-close"),       i18n("Remove item"), this);
-        clearAllAction   = new QAction(SmallIcon("edit-delete-shred"),  i18n("Clear all"), this);
-
-        leftPanelAction->setEnabled(d->navigateByPair  ? false : true);
-        rightPanelAction->setEnabled(d->navigateByPair ? false : true);
-        clearAllAction->setEnabled(itemsUrls().count() ? true  : false);
-
-        // ----------------------------------------------------
-
-        KMenu popmenu(this);
-        ContextMenuHelper cmhelper(&popmenu);
-
-        if (item)
+        if (choice == leftPanelAction)
         {
-            cmhelper.addAction(leftPanelAction, true);
-            cmhelper.addAction(rightPanelAction, true);
-            cmhelper.addSeparator();
-            // ------------------------------------------------
-            cmhelper.addAction(editAction);
-            cmhelper.addAction(removeAction);
-            cmhelper.addSeparator();
-            // ------------------------------------------------
-            cmhelper.addLabelsAction();
-            cmhelper.addSeparator();
-            // ------------------------------------------------
+            emit signalSetItemOnLeftPanel(info);
         }
-
-        cmhelper.addAction(clearAllAction, true);
-
-        // special action handling --------------------------------
-
-        connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
-                this, SLOT(slotAssignPickLabel(int)));
-
-        connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
-                this, SLOT(slotAssignColorLabel(int)));
-
-        connect(&cmhelper, SIGNAL(signalAssignRating(int)),
-                this, SLOT(slotAssignRating(int)));
-
-        QAction* choice = cmhelper.exec(pos);
-
-        if (choice)
+        else if (choice == rightPanelAction)
         {
-            if (choice == leftPanelAction)
-            {
-                emit signalSetItemOnLeftPanel(item->info());
-            }
-            else if (choice == rightPanelAction)
-            {
-                emit signalSetItemOnRightPanel(item->info());
-            }
-            else if (choice == editAction)
-            {
-                emit signalEditItem(item->info());
-            }
-            else if (choice == removeAction)
-            {
-                emit signalRemoveItem(item->info());
-            }
-            else if (choice == clearAllAction)
-            {
-                emit signalClearAll();
-            }
+            emit signalSetItemOnRightPanel(info);
+        }
+        else if (choice == editAction)
+        {
+            emit signalEditItem(info);
+        }
+        else if (choice == removeAction)
+        {
+            emit signalRemoveItem(info);
+        }
+        else if (choice == clearAllAction)
+        {
+            emit signalClearAll();
         }
     }
-*/
 }
 
 void LightTableThumbBar::slotAssignPickLabel(int pickId)
@@ -404,144 +391,6 @@ void LightTableThumbBar::drawEmptyMessage(QPixmap& /*bgPix*/)
 */
 }
 
-void LightTableThumbBar::startDrag()
-{
-/*
-    if (!currentItem())
-    {
-        return;
-    }
-
-    KUrl::List urls;
-    KUrl::List kioURLs;
-    QList<int> albumIDs;
-    QList<int> imageIDs;
-
-    LightTableThumbBarItem* item = dynamic_cast<LightTableThumbBarItem*>(currentItem());
-
-    urls.append(item->info().fileUrl());
-    kioURLs.append(item->info().databaseUrl());
-    imageIDs.append(item->info().id());
-    albumIDs.append(item->info().albumId());
-
-    QPixmap icon(DesktopIcon("image-jp2", 48));
-    int w = icon.width();
-    int h = icon.height();
-
-    QPixmap pix(w+4, h+4);
-    QPainter p(&pix);
-    p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
-    p.setPen(QPen(Qt::black, 1));
-    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
-    p.drawPixmap(2, 2, icon);
-    p.end();
-
-    QDrag* drag = new QDrag(this);
-    drag->setMimeData(new DItemDrag(urls, kioURLs, albumIDs, imageIDs));
-    drag->setPixmap(pix);
-    drag->exec();
-*/
-}
-
-void LightTableThumbBar::contentsDragEnterEvent(QDragEnterEvent* /*e*/)
-{
-/*
-    int        albumID;
-    QList<int> albumIDs;
-    QList<int> imageIDs;
-    KUrl::List urls;
-    KUrl::List kioURLs;
-
-    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
-        DAlbumDrag::decode(e->mimeData(), urls, albumID) ||
-        DTagDrag::canDecode(e->mimeData()))
-    {
-        e->accept();
-        return;
-    }
-
-    e->ignore();
-*/
-}
-
-void LightTableThumbBar::contentsDropEvent(QDropEvent* /*e*/)
-{
-/*
-    int        albumID;
-    QList<int> albumIDs;
-    QList<int> imageIDs;
-    KUrl::List urls;
-    KUrl::List kioURLs;
-
-    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
-    {
-        ImageInfoList imageInfoList;
-
-        for (QList<int>::const_iterator it = imageIDs.constBegin();
-             it != imageIDs.constEnd(); ++it)
-        {
-            ImageInfo info(*it);
-
-            if (!findItemByInfo(info))
-            {
-                imageInfoList.append(info);
-            }
-        }
-
-        emit signalDroppedItems(imageInfoList);
-        e->accept();
-    }
-    else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
-    {
-        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
-        ImageInfoList imageInfoList;
-
-        for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
-             it != itemIDs.constEnd(); ++it)
-        {
-            ImageInfo info(*it);
-
-            if (!findItemByInfo(info))
-            {
-                imageInfoList.append(info);
-            }
-        }
-
-        emit signalDroppedItems(imageInfoList);
-        e->accept();
-    }
-    else if (DTagDrag::canDecode(e->mimeData()))
-    {
-        int tagID;
-
-        if (!DTagDrag::decode(e->mimeData(), tagID))
-        {
-            return;
-        }
-
-        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
-        ImageInfoList imageInfoList;
-
-        for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
-             it != itemIDs.constEnd(); ++it)
-        {
-            ImageInfo info(*it);
-
-            if (!findItemByInfo(info))
-            {
-                imageInfoList.append(info);
-            }
-        }
-
-        emit signalDroppedItems(imageInfoList);
-        e->accept();
-    }
-    else
-    {
-        e->ignore();
-    }
-*/
-}
 
 void LightTableThumbBar::slotCollectionImageChange(const CollectionImageChangeset& /*changeset*/)
 {

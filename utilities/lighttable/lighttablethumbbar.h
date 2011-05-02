@@ -68,7 +68,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalLightTableThumbBarItemSelected(const ImageInfo&);
+    void signalLightTableBarItemSelected(const ImageInfo&);
     void signalSetItemOnLeftPanel(const ImageInfo&);
     void signalSetItemOnRightPanel(const ImageInfo&);
     void signalEditItem(const ImageInfo&);
@@ -86,11 +86,7 @@ public Q_SLOTS:
 private:
 
     void drawEmptyMessage(QPixmap& pixmap);
-    void contentsMouseReleaseEvent(QMouseEvent*);
-    void startDrag();
-    void contentsDragEnterEvent(QDragEnterEvent*);
-    void contentsDropEvent(QDropEvent*);
-
+    void showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info);
     void assignPickLabel(const ImageInfo& info, int pickId);
     void assignColorLabel(const ImageInfo& info, int colorId);
     void assignRating(const ImageInfo& info, int rating);
