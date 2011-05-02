@@ -90,11 +90,9 @@ LightTableThumbBar::LightTableThumbBar(QWidget* parent)
     d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)AlbumSettings::instance()->getImageSorting());
 
     d->dragDropHandler = new ImageDragDropHandler(d->imageInfoModel);
+    d->dragDropHandler->setReadOnlyDrop(true);
     d->imageInfoModel->setDragDropHandler(d->dragDropHandler);
 
-    setDragEnabled(true);
-    setAcceptDrops(true);
-    setDropIndicatorShown(false);
     setModels(d->imageInfoModel, d->imageFilterModel);
 
     connect(d->dragDropHandler, SIGNAL(imageInfosDropped(const QList<ImageInfo>&)),
