@@ -98,9 +98,8 @@ ItemViewHoverButton* ImagePanelOverlay::createButton()
 void ImagePanelOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
-    const int gap    = 5;
-    const int x      = rect.left() + gap;
-    const int y      = rect.top()  + gap;
+    const int x      = rect.width()/2  - button()->sizeHint().width()/2;
+    const int y      = rect.height()/2 - button()->sizeHint().height()/2;
     button()->move(QPoint(x, y));
 
     QItemSelectionModel* selModel = m_view->selectionModel();
