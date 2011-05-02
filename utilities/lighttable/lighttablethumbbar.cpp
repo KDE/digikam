@@ -96,6 +96,9 @@ LightTableThumbBar::LightTableThumbBar(QWidget* parent)
     setAcceptDrops(true);
     setDropIndicatorShown(false);
     setModels(d->imageInfoModel, d->imageFilterModel);
+
+    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(const QList<ImageInfo>&)),
+            this, SIGNAL(signalDroppedItems(const QList<ImageInfo>&)));
 }
 
 LightTableThumbBar::~LightTableThumbBar()

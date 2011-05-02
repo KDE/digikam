@@ -66,13 +66,12 @@ public:
 
 Q_SIGNALS:
 
-    void signalLightTableBarItemSelected(const ImageInfo&);
     void signalSetItemOnLeftPanel(const ImageInfo&);
     void signalSetItemOnRightPanel(const ImageInfo&);
     void signalEditItem(const ImageInfo&);
     void signalRemoveItem(const ImageInfo&);
     void signalClearAll();
-    void signalDroppedItems(const ImageInfoList&);
+    void signalDroppedItems(const QList<ImageInfo>&);
 
 public Q_SLOTS:
 
