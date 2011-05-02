@@ -46,6 +46,7 @@
 #include "globals.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
+#include "imagepaneloverlay.h"
 #include "metadatasettings.h"
 #include "metadatahub.h"
 #include "thumbnailloadthread.h"
@@ -94,6 +95,8 @@ LightTableThumbBar::LightTableThumbBar(QWidget* parent)
     d->imageInfoModel->setDragDropHandler(d->dragDropHandler);
 
     setModels(d->imageInfoModel, d->imageFilterModel);
+
+    addOverlay(new ImagePanelOverlay(this), delegate());
 
     connect(d->dragDropHandler, SIGNAL(imageInfosDropped(const QList<ImageInfo>&)),
             this, SIGNAL(signalDroppedItems(const QList<ImageInfo>&)));
