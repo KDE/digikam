@@ -203,6 +203,16 @@ void LightTableThumbBar::slotAssignColorLabel(int colorId)
     assignColorLabel(currentInfo(), colorId);
 }
 
+void LightTableThumbBar::slotRatingChanged(const KUrl& url, int rating)
+{
+    assignRating(ImageInfo(url), rating);
+}
+
+void LightTableThumbBar::slotAssignRating(int rating)
+{
+    assignRating(currentInfo(), rating);
+}
+
 void LightTableThumbBar::assignPickLabel(const ImageInfo& info, int pickId)
 {
     if (!info.isNull())
@@ -215,28 +225,6 @@ void LightTableThumbBar::assignPickLabel(const ImageInfo& info, int pickId)
     }
 }
 
-void LightTableThumbBar::assignColorLabel(const ImageInfo& info, int colorId)
-{
-    if (!info.isNull())
-    {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setColorLabel(colorId);
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
-    }
-}
-
-void LightTableThumbBar::slotRatingChanged(const KUrl& url, int rating)
-{
-    assignRating(ImageInfo(url), rating);
-}
-
-void LightTableThumbBar::slotAssignRating(int rating)
-{
-    assignRating(currentInfo(), rating);
-}
-
 void LightTableThumbBar::assignRating(const ImageInfo& info, int rating)
 {
     rating = qMin(5, qMax(0, rating));
@@ -246,6 +234,18 @@ void LightTableThumbBar::assignRating(const ImageInfo& info, int rating)
         MetadataHub hub;
         hub.load(info);
         hub.setRating(rating);
+        hub.write(info, MetadataHub::PartialWrite);
+        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+    }
+}
+
+void LightTableThumbBar::assignColorLabel(const ImageInfo& info, int colorId)
+{
+    if (!info.isNull())
+    {
+        MetadataHub hub;
+        hub.load(info);
+        hub.setColorLabel(colorId);
         hub.write(info, MetadataHub::PartialWrite);
         hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
     }
@@ -365,18 +365,6 @@ void LightTableThumbBar::removeItemByInfo(const ImageInfo& info)
     d->imageInfoModel->removeImageInfo(info);
 }
 
-void LightTableThumbBar::drawEmptyMessage(QPixmap& /*bgPix*/)
-{
-/*
-    QPainter p4(&bgPix);
-    p4.setPen(QPen(kapp->palette().color(QPalette::Text)));
-    p4.drawText(0, 0, bgPix.width(), bgPix.height(),
-                Qt::AlignCenter|Qt::TextWordWrap,
-                i18n("Drag and drop images here"));
-    p4.end();
-*/
-}
-
 int LightTableThumbBar::countItems() const
 {
     return imageInfos().count();
@@ -396,6 +384,18 @@ void LightTableThumbBar::ensureItemVisible(const ImageInfo& info)
 {
     if (!info.isNull())
         scrollTo(findItemByInfo(info), QAbstractItemView::PositionAtCenter);
+}
+
+void LightTableThumbBar::drawEmptyMessage(QPixmap& /*bgPix*/)
+{
+/*
+    QPainter p4(&bgPix);
+    p4.setPen(QPen(kapp->palette().color(QPalette::Text)));
+    p4.drawText(0, 0, bgPix.width(), bgPix.height(),
+                Qt::AlignCenter|Qt::TextWordWrap,
+                i18n("Drag and drop images here"));
+    p4.end();
+*/
 }
 
 }  // namespace Digikam
