@@ -120,6 +120,11 @@ void LightTableThumbBar::setItems(const ImageInfoList& list)
     d->imageInfoModel->setImageInfos(list);
 }
 
+void LightTableThumbBar::clear()
+{
+    setItems(ImageInfoList());
+}
+
 void LightTableThumbBar::setNavigateByPair(bool b)
 {
     d->navigateByPair = b;

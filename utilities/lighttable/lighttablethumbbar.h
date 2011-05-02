@@ -46,6 +46,8 @@ public:
     explicit LightTableThumbBar(QWidget* parent);
     ~LightTableThumbBar();
 
+    int  countItems() const;
+    void clear();
     void setItems(const ImageInfoList& list);
     void setSelectedItem(const ImageInfo& info);
 
@@ -60,8 +62,6 @@ public:
     void setNavigateByPair(bool b);
 
     void toggleTag(int tagID);
-
-    int  countItems() const;
 
     QModelIndex findItemByInfo(const ImageInfo& info) const;
     ImageInfo   findItemByIndex(const QModelIndex& index) const;
