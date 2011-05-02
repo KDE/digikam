@@ -432,7 +432,7 @@ enum lfDistortionModel
      * PTLens rectilinear:
      * Ru = Rd * (a * Rd^3 + b * Rd^2 + c * Rd + 1)
      */
-    LF_DIST_MODEL_PTLENS,
+    LF_DIST_MODEL_PTLENS
 };
 
 C_TYPEDEF (enum, lfDistortionModel)
