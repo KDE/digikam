@@ -384,22 +384,12 @@ ImageInfo LightTableThumbBar::findItemByIndex(const QModelIndex& index) const
     return ImageInfo();
 }
 
-void LightTableThumbBar::removeItemByInfo(const ImageInfo& /*info*/)
+void LightTableThumbBar::removeItemByInfo(const ImageInfo& info)
 {
-/*
     if (info.isNull())
-    {
         return;
-    }
 
-    ImagePreviewBarItem* ltItem = findItemByInfo(info);
-    ThumbBarItem* item          = dynamic_cast<ThumbBarItem*>(ltItem);
-
-    if (item)
-    {
-        removeItem(item);
-    }
-*/
+    d->imageInfoModel->removeImageInfo(info);
 }
 
 void LightTableThumbBar::removeItemById(qlonglong /*id*/)
