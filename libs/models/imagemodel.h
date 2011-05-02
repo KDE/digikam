@@ -41,11 +41,12 @@ namespace Digikam
 
 class ImageChangeset;
 class ImageTagChangeset;
+class AbstractItemDragDropHandler;
+
 namespace DatabaseFields
 {
 class Set;
 }
-class AbstractItemDragDropHandler;
 
 class DIGIKAM_DATABASE_EXPORT ImageModel : public QAbstractListModel, public DragDropModelImplementation
 {
@@ -296,7 +297,7 @@ private:
     void appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void publiciseInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void cleanSituationChecks();
-    void removeRowPairs(const QList<QPair<int,int> >& toRemove);
+    void removeRowPairs(const QList<QPair<int, int> >& toRemove);
 
 public:
 
@@ -304,6 +305,7 @@ public:
     class ImageModelPriv;
 
 private:
+
     ImageModelPriv* const d;
 };
 
