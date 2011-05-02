@@ -86,6 +86,7 @@ void GroupIndicatorOverlay::setActive(bool active)
     {
         connect(buttonWidget(), SIGNAL(clicked()),
                 this, SLOT(slotButtonClicked()));
+
         connect(buttonWidget(), SIGNAL(contextMenu(QContextMenuEvent*)),
                 this, SLOT(slotButtonContextMenu(QContextMenuEvent*)));
     }
