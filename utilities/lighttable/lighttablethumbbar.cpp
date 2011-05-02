@@ -215,14 +215,14 @@ void LightTableThumbBar::contentsMouseReleaseEvent(QMouseEvent* /*e*/)
 */
 }
 
-void LightTableThumbBar::slotAssignPickLabel(int /*pickId*/)
+void LightTableThumbBar::slotAssignPickLabel(int pickId)
 {
-//    assignPickLabel(currentItemImageInfo(), pickId);
+    assignPickLabel(currentInfo(), pickId);
 }
 
-void LightTableThumbBar::slotAssignColorLabel(int /*colorId*/)
+void LightTableThumbBar::slotAssignColorLabel(int colorId)
 {
-//    assignColorLabel(currentItemImageInfo(), colorId);
+    assignColorLabel(currentInfo(), colorId);
 }
 
 void LightTableThumbBar::assignPickLabel(const ImageInfo& info, int pickId)
@@ -254,9 +254,9 @@ void LightTableThumbBar::slotRatingChanged(const KUrl& url, int rating)
     assignRating(ImageInfo(url), rating);
 }
 
-void LightTableThumbBar::slotAssignRating(int /*rating*/)
+void LightTableThumbBar::slotAssignRating(int rating)
 {
-    //    assignRating(currentItemImageInfo(), rating);
+    assignRating(currentInfo(), rating);
 }
 
 void LightTableThumbBar::assignRating(const ImageInfo& info, int rating)
@@ -275,7 +275,7 @@ void LightTableThumbBar::assignRating(const ImageInfo& info, int rating)
 
 void LightTableThumbBar::toggleTag(int tagID)
 {
-    ImageInfo info/* = currentItemImageInfo()*/;
+    ImageInfo info = currentInfo();
 
     if (!info.isNull())
     {
