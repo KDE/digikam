@@ -429,5 +429,17 @@ Action=Popup
 
 [Event/batchfacedetectioncompleted]
 Name=Update of detected faces database complete
+Name[et]=Näotuvastuse andmebaas on uuendatud
+Name[nl]=Bijwerken van database met gedetecteerde gezichten is voltooid
+Name[pt]=Actualização da base de dados de caras detectadas completa
+Name[sv]=Uppdatering av databas med detekterade ansikten klar
+Name[uk]=Оновлення бази даних виявлених облич завершено
+Name[x-test]=xxUpdate of detected faces database completexx
 Comment=The update of the detected faces database has completed.
+Comment[et]=Näotuvastuse andmebaas on uuendatud.
+Comment[nl]=Bijwerken van de database met gedetecteerde gezichten is voltooid.
+Comment[pt]=Terminou com sucesso a actualização da base de dados da detecção de caras.
+Comment[sv]=Uppdateringen av databasen med detekterade ansikten är klar.
+Comment[uk]=Оновлення бази даних виявлених облич завершено.
+Comment[x-test]=xxThe update of the detected faces database has completed.xx
 Action=Popup
