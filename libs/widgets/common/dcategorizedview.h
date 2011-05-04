@@ -67,8 +67,10 @@ public:
 
     /** Sets the spacing. Does not use setSpacing()/spacing() from QListView */
     void setSpacing(int spacing);
+
     /** Set if the PointingHand Cursor should be shown over the activation area */
     void setUsePointingHandCursor(bool useCursor);
+
     /** Determine a step size for scrolling: The larger this number,
      *  the smaller and more precise is the scrolling. Default is 10. */
     void setScrollStepGranularity(int factor);
