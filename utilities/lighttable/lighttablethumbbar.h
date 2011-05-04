@@ -70,8 +70,9 @@ Q_SIGNALS:
     void signalSetItemOnRightPanel(const ImageInfo&);
     void signalEditItem(const ImageInfo&);
     void signalRemoveItem(const ImageInfo&);
-    void signalClearAll();
     void signalDroppedItems(const QList<ImageInfo>&);
+    void signalClearAll();
+    void signalContentChanged();
 
 public Q_SLOTS:
 

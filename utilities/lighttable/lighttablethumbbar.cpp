@@ -29,11 +29,11 @@
 #include <QList>
 #include <QPixmap>
 #include <QPainter>
-#include <QImage>
 #include <QContextMenuEvent>
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -43,10 +43,8 @@
 #include "albumdb.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
-#include "globals.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
-#include "imagepaneloverlay.h"
 #include "metadatasettings.h"
 #include "metadatahub.h"
 #include "thumbnailloadthread.h"
@@ -96,10 +94,11 @@ LightTableThumbBar::LightTableThumbBar(QWidget* parent)
 
     setModels(d->imageInfoModel, d->imageFilterModel);
 
-    addOverlay(new ImagePanelOverlay(this), delegate());
-
     connect(d->dragDropHandler, SIGNAL(imageInfosDropped(const QList<ImageInfo>&)),
             this, SIGNAL(signalDroppedItems(const QList<ImageInfo>&)));
+
+    connect(d->imageInfoModel, SIGNAL(imageInfosAdded(const QList<ImageInfo>&)),
+            this, SIGNAL(signalContentChanged()));
 }
 
 LightTableThumbBar::~LightTableThumbBar()
@@ -109,12 +108,17 @@ LightTableThumbBar::~LightTableThumbBar()
 
 void LightTableThumbBar::setItems(const ImageInfoList& list)
 {
-    d->imageInfoModel->setImageInfos(list);
+    foreach(ImageInfo info, list)
+    {
+        if (!d->imageInfoModel->hasImage(info))
+            d->imageInfoModel->addImageInfo(info);
+    }
 }
 
 void LightTableThumbBar::clear()
 {
-    setItems(ImageInfoList());
+    d->imageInfoModel->clearImageInfos();
+    emit signalContentChanged();
 }
 
 void LightTableThumbBar::setNavigateByPair(bool b)
@@ -269,79 +273,67 @@ void LightTableThumbBar::toggleTag(int tagID)
     }
 }
 
-void LightTableThumbBar::setOnLeftPanel(const ImageInfo& /*info*/)
+void LightTableThumbBar::setOnLeftPanel(const ImageInfo& info)
 {
-/* FIXME
-    for (ThumbBarItem* item = firstItem(); item; item = item->next())
+    for (QModelIndex index = firstIndex(); index.isValid(); index = nextIndex(index))
     {
-        LightTableThumbBarItem* ltItem = dynamic_cast<LightTableThumbBarItem*>(item);
-
-        if (ltItem)
+        if (!info.isNull())
         {
-            if (!info.isNull())
+            if (findItemByIndex(index) == info)
             {
-                if (ltItem->info() == info)
-                {
-                    ltItem->setOnLeftPanel(true);
-                    repaintItem(item);
-                }
-                else if (ltItem->isOnLeftPanel() == true)
-                {
-                    ltItem->setOnLeftPanel(false);
-                    repaintItem(item);
-                }
+                d->imageInfoModel->setData(index, true, ImageModel::LTLeftPanelRole);
             }
-            else if (ltItem->isOnLeftPanel() == true)
+            else if (isOnLeftPanel(findItemByIndex(index)))
             {
-                ltItem->setOnLeftPanel(false);
-                repaintItem(item);
+                d->imageInfoModel->setData(index, false, ImageModel::LTLeftPanelRole);
             }
         }
+        else if (isOnLeftPanel(findItemByIndex(index)))
+        {
+            d->imageInfoModel->setData(index, false, ImageModel::LTLeftPanelRole);
+        }
     }
-*/
+    viewport()->update();
 }
 
-void LightTableThumbBar::setOnRightPanel(const ImageInfo& /*info*/)
+void LightTableThumbBar::setOnRightPanel(const ImageInfo& info)
 {
-/* FIXME
-    for (ThumbBarItem* item = firstItem(); item; item = item->next())
+    for (QModelIndex index = firstIndex(); index.isValid(); index = nextIndex(index))
     {
-        LightTableThumbBarItem* ltItem = dynamic_cast<LightTableThumbBarItem*>(item);
-
-        if (ltItem)
+        if (!info.isNull())
         {
-            if (!info.isNull())
+            if (findItemByIndex(index) == info)
             {
-                if (ltItem->info() == info)
-                {
-                    ltItem->setOnRightPanel(true);
-                    repaintItem(item);
-                }
-                else if (ltItem->isOnRightPanel() == true)
-                {
-                    ltItem->setOnRightPanel(false);
-                    repaintItem(item);
-                }
+                d->imageInfoModel->setData(index, true, ImageModel::LTRightPanelRole);
             }
-            else if (ltItem->isOnRightPanel() == true)
+            else if (isOnRightPanel(findItemByIndex(index)))
             {
-                ltItem->setOnRightPanel(false);
-                repaintItem(item);
+                d->imageInfoModel->setData(index, false, ImageModel::LTRightPanelRole);
             }
         }
+        else if (isOnRightPanel(findItemByIndex(index)))
+        {
+            d->imageInfoModel->setData(index, false, ImageModel::LTRightPanelRole);
+        }
     }
-*/
+    viewport()->update();
 }
 
 bool LightTableThumbBar::isOnLeftPanel(const ImageInfo& info) const
 {
-    // FIXME
+    QModelIndex index = findItemByInfo(info);
+    if (index.isValid())
+        return (d->imageInfoModel->data(index, ImageModel::LTLeftPanelRole).toBool());
+
     return false;
 }
 
 bool LightTableThumbBar::isOnRightPanel(const ImageInfo& info) const
 {
-    // FIXME
+    QModelIndex index = findItemByInfo(info);
+    if (index.isValid())
+        return (d->imageInfoModel->data(index, ImageModel::LTRightPanelRole).toBool());
+
     return false;
 }
 
@@ -367,11 +359,12 @@ void LightTableThumbBar::removeItemByInfo(const ImageInfo& info)
         return;
 
     d->imageInfoModel->removeImageInfo(info);
+    emit signalContentChanged();
 }
 
 int LightTableThumbBar::countItems() const
 {
-    return imageInfos().count();
+    return d->imageInfoModel->imageInfos().count();
 }
 
 void LightTableThumbBar::setSelectedItem(const ImageInfo& info)
