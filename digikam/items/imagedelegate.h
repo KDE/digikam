@@ -48,12 +48,14 @@ public:
     ImageDelegate(QObject* parent = 0);
     ~ImageDelegate();
 
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const;
-
     void setView(ImageCategorizedView* view);
 
     ImageCategoryDrawer* categoryDrawer() const;
+
+    QRect commentsRect() const;
+    QRect tagsRect() const;
+    QRect actualPixmapRect(const QModelIndex& index) const;
+    QRect groupIndicatorRect() const;
 
     virtual void setSpacing(int spacing);
     virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
@@ -64,10 +66,9 @@ public:
 
     virtual QRect pixmapRect() const;
     virtual QRect imageInformationRect() const;
-    QRect commentsRect() const;
-    QRect tagsRect() const;
-    QRect actualPixmapRect(const QModelIndex& index) const;
-    QRect groupIndicatorRect() const;
+
+    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const;
 
     /** Call this from a paint event, with all indexes expected to be painted immediately,
      *  so that thumbnails become available in order. */
