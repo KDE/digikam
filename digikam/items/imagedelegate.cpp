@@ -325,6 +325,10 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         drawPickLabelIcon(p, d->pickLabelRect, info.pickLabel());
     }
 
+    bool left  = index.data(ImageModel::LTLeftPanelRole).toBool();
+    bool right = index.data(ImageModel::LTRightPanelRole).toBool();
+    drawPanelSideIcon(p, left, right);
+
     if (d->drawImageFormat)
     {
         QString frm = info.format();
