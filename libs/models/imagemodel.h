@@ -57,22 +57,25 @@ public:
     enum ImageModelRoles
     {
         /// An ImageModel* pointer to this model
-        ImageModelPointerRole = Qt::UserRole,
-        ImageModelInternalId  = Qt::UserRole + 1,
+        ImageModelPointerRole   = Qt::UserRole,
+        ImageModelInternalId    = Qt::UserRole + 1,
         /// Returns a thumbnail pixmap. May be implemented by subclasses.
         /// Returns either a valid pixmap or a null QVariant.
-        ThumbnailRole         = Qt::UserRole + 2,
-
+        ThumbnailRole           = Qt::UserRole + 2,
         /// Returns a QDateTime with the creation date
-        CreationDateRole      = Qt::UserRole + 3,
+        CreationDateRole        = Qt::UserRole + 3,
         /// Return (optional) extraData field
-        ExtraDataRole         = Qt::UserRole + 5,
+        ExtraDataRole           = Qt::UserRole + 5,
         /// Returns the number of duplicate indexes for the same image id
         ExtraDataDuplicateCount = Qt::UserRole + 6,
+        /// Returns position of item in Left Light Table preview.
+        LTLeftPanelRole         = Qt::UserRole + 7,
+        /// Returns position of item in Right Light Table preview.
+        LTRightPanelRole        = Qt::UserRole + 8,
         // For use by subclasses
-        SubclassRoles         = Qt::UserRole + 100,
+        SubclassRoles           = Qt::UserRole + 100,
         // For use by filter models
-        FilterModelRoles      = Qt::UserRole + 500
+        FilterModelRoles        = Qt::UserRole + 500
     };
 
 public:

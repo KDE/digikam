@@ -6,7 +6,8 @@
  * Date        : 2009-03-05
  * Description : Qt item model for database entries with support for thumbnail loading
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,6 +36,7 @@
 
 #include "thumbnailloadthread.h"
 #include "digikam_export.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -54,14 +56,18 @@ public:
     {
     }
 
-    ThumbnailLoadThread* thread;
-    ThumbnailLoadThread* preloadThread;
-    ThumbnailSize        thumbSize;
-    ThumbnailSize        lastGlobalThumbSize;
-    ThumbnailSize        preloadThumbSize;
-    QRect                detailRect;
-    bool                 emitDataChanged;
-    bool                 exifRotate;
+    ThumbnailLoadThread*   thread;
+    ThumbnailLoadThread*   preloadThread;
+    ThumbnailSize          thumbSize;
+    ThumbnailSize          lastGlobalThumbSize;
+    ThumbnailSize          preloadThumbSize;
+    QRect                  detailRect;
+
+    QHash<int, bool>       leftSideMap;       // Map of <image ID, side> to store LT Left Panel indicator.
+    QHash<int, bool>       rightSideMap;      // Map of <image ID, side> to store LT Right Panel indicator.
+
+    bool                   emitDataChanged;
+    bool                   exifRotate;
 
     int preloadThumbnailSize() const
     {
@@ -222,15 +228,18 @@ void ImageThumbnailModel::imageInfosCleared()
     {
         d->preloadThread->stopAllTasks();
     }
+
+    d->leftSideMap.clear();
+    d->rightSideMap.clear();
 }
 
 QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
 {
     if (role == ThumbnailRole && d->thread && index.isValid())
     {
-        QPixmap thumbnail;
+        QPixmap   thumbnail;
         ImageInfo info = imageInfoRef(index);
-        QString path = info.filePath();
+        QString   path = info.filePath();
 
         if (!d->detailRect.isNull())
         {
@@ -249,6 +258,14 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
 
         return QVariant(QVariant::Pixmap);
     }
+    else if (role == LTLeftPanelRole)
+    {
+        return d->leftSideMap.value(imageInfoRef(index).id());
+    }
+    else if (role == LTRightPanelRole)
+    {
+        return d->rightSideMap.value(imageInfoRef(index).id());
+    }
 
     return ImageModel::data(index, role);
 }
@@ -260,9 +277,10 @@ bool ImageThumbnailModel::setData(const QModelIndex& index, const QVariant& valu
         switch (value.type())
         {
             case QVariant::Invalid:
-                d->thumbSize = d->lastGlobalThumbSize;
+                d->thumbSize  = d->lastGlobalThumbSize;
                 d->detailRect = QRect();
                 break;
+
             case QVariant::Int:
 
                 if (value.isNull())
@@ -273,8 +291,8 @@ bool ImageThumbnailModel::setData(const QModelIndex& index, const QVariant& valu
                 {
                     d->thumbSize = value.toInt();
                 }
-
                 break;
+
             case QVariant::Rect:
 
                 if (value.isNull())
@@ -285,10 +303,19 @@ bool ImageThumbnailModel::setData(const QModelIndex& index, const QVariant& valu
                 {
                     d->detailRect = value.toRect();
                 }
+                break;
 
             default:
                 break;
         }
+    }
+    else if (role == LTLeftPanelRole)
+    {
+        d->leftSideMap[imageInfoRef(index).id()] = value.toBool();
+    }
+    else if (role == LTRightPanelRole)
+    {
+        d->rightSideMap[imageInfoRef(index).id()] = value.toBool();
     }
 
     return ImageModel::setData(index, value, role);

@@ -6,7 +6,8 @@
  * Date        : 2009-03-05
  * Description : Qt item model for database entries with support for thumbnail loading
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,19 +49,23 @@ public:
      *  Adjust the thumbnail size to your needs.
      *  Note that setKeepsFilePathCache is enabled per default.
      */
-
     ImageThumbnailModel(QObject* parent);
     ~ImageThumbnailModel();
 
     /** Enable thumbnail loading and set the thread that shall be used.
-     *  The thumbnail size of this thread will be adjusted. */
+     *  The thumbnail size of this thread will be adjusted.
+     */
     void setThumbnailLoadThread(ThumbnailLoadThread* thread);
     ThumbnailLoadThread* thumbnailLoadThread() const;
+
     /// Set the thumbnail size to use
     void setThumbnailSize(const ThumbnailSize& thumbSize);
+
     /// If you want to fix a size for preloading, do it here.
     void setPreloadThumbnailSize(const ThumbnailSize& thumbSize);
+
     void setExifRotate(bool rotate);
+
     /**
      *  Enable emitting dataChanged() when a thumbnail becomes available.
      *  The thumbnailAvailable() signal will be emitted in any case.
@@ -84,6 +89,7 @@ public:
      *  thumbnailAvailable() as soon as it is available.
      */
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+
     /**
      * You can override the current thumbnail size by giving an integer value for ThumbnailRole.
      * Set a null QVariant to use the thumbnail size set by setThumbnailSize() again.
