@@ -120,6 +120,7 @@ protected:
     void drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected, int colorId) const;
     void drawPickLabelIcon(QPainter* p, const QRect& r, int pickLabel) const;
     void drawGroupIndicator(QPainter* p, const QRect& r, int numberOfGroupedImages, bool open) const;
+    void drawPanelSideIcon(QPainter* p, bool left, bool right) const;
     void drawFocusRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected) const;
     void drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const;
     void prepareFonts();

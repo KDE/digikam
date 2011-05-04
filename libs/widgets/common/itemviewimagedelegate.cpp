@@ -51,7 +51,6 @@
 #include "imagedelegateoverlay.h"
 #include "thememanager.h"
 #include "colorlabelwidget.h"
-#include "globals.h"
 
 namespace Digikam
 {
@@ -442,6 +441,24 @@ void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int p
         {
             icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, r.width());
         }
+        icon.paint(p, r);
+    }
+}
+
+void ItemViewImageDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right) const
+{
+    Q_D(const ItemViewImageDelegate);
+    int iconSize = KIconLoader::SizeSmall;
+    if (left)
+    {
+        QRect r(3, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
+        QIcon icon = KIconLoader::global()->loadIcon("arrow-left", KIconLoader::NoGroup, iconSize);
+        icon.paint(p, r);
+    }
+    if (right)
+    {
+        QRect r(d->rect.width() - 3 - iconSize, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
+        QIcon icon = KIconLoader::global()->loadIcon("arrow-right", KIconLoader::NoGroup, iconSize);
         icon.paint(p, r);
     }
 }
