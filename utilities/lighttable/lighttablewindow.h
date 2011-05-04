@@ -39,8 +39,6 @@
 
 #include "imageinfo.h"
 
-class KAction;
-
 namespace Digikam
 {
 
@@ -94,7 +92,6 @@ private:
     void hideToolBars();
     void readSettings();
     void writeSettings();
-    void refreshStatusBar();
 
     void deleteItem(bool permanently);
     void deleteItem(const ImageInfo& info, bool permanently);
@@ -143,7 +140,7 @@ private Q_SLOTS:
     void slotItemSelected(const ImageInfo&);
     void slotClearItemsList();
 
-    void slotThumbbarDroppedItems(const ImageInfoList&);
+    void slotThumbbarDroppedItems(const QList<ImageInfo>&);
 
     void slotProgressBarCancelButtonPressed();
     void slotToggleSlideShow();
@@ -160,6 +157,8 @@ private Q_SLOTS:
 
     void slotSidebarTabTitleStyleChanged();
     void slotThemeChanged();
+
+    void slotRefreshStatusBar();
 
 private:
 

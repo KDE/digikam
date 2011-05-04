@@ -41,9 +41,8 @@
 #include "daboutdata.h"
 #include "dzoombar.h"
 #include "lighttableview.h"
-#include "lighttablebar.h"
+#include "lighttablethumbbar.h"
 #include "thumbbardock.h"
-#include "albummodel.h"
 
 namespace Digikam
 {
@@ -92,7 +91,7 @@ public:
         rightFileName(0),
         hSplitter(0),
         barViewDock(0),
-        barView(0),
+        thumbView(0),
         previewView(0),
         leftZoomBar(0),
         rightZoomBar(0),
@@ -149,7 +148,8 @@ public:
 
     SidebarSplitter*          hSplitter;
     ThumbBarDock*             barViewDock;
-    LightTableBar*            barView;
+
+    LightTableThumbBar*       thumbView;
 
     LightTableView*           previewView;
 
