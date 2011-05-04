@@ -52,9 +52,19 @@ public:
     ~DigikamKCategorizedView();
 
     void setGridSize(const QSize& size);
-    void setCategoryDrawer(KCategoryDrawer* categoryDrawer);
 
+    void setCategoryDrawer(KCategoryDrawer* categoryDrawer);
     KCategoryDrawer* categoryDrawer() const;
+
+    /**
+     * Switch on drawing of dragged items. Default: on.
+     * While dragging over the view, dragged items will be drawn transparently
+     * following the mouse cursor.
+     *
+     * @param drawDraggedItems if <code>true</code>, dragged items will be
+     *                         drawn
+     */
+    void setDrawDraggedItems(bool drawDraggedItems);
 
     virtual void setModel(QAbstractItemModel* model);
     virtual QRect visualRect(const QModelIndex& index) const;
@@ -87,16 +97,6 @@ public:
      * @note Returns an empty range if the view is no categorized.
      */
     virtual QItemSelectionRange categoryRange(const QModelIndex& index) const;
-
-    /**
-     * Switch on drawing of dragged items. Default: on.
-     * While dragging over the view, dragged items will be drawn transparently
-     * following the mouse cursor.
-     *
-     * @param drawDraggedItems if <code>true</code>, dragged items will be
-     *                         drawn
-     */
-    void setDrawDraggedItems(bool drawDraggedItems);
 
 public Q_SLOTS:
 
