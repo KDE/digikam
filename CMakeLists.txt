@@ -1262,7 +1262,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablethumbbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/imagepaneloverlay.cpp
        )
 
     SET(libsearchwindow_SRCS
