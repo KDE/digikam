@@ -6,7 +6,7 @@
  * Date        : 2008-03-14
  * Description : User interface for searches
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,6 @@
 namespace Digikam
 {
 
-class VisibilityControllerPriv;
 
 class DIGIKAM_EXPORT VisibilityObject
 {
@@ -48,24 +47,13 @@ public:
     virtual bool isVisible() = 0;
 };
 
+// -----------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT VisibilityController : public QObject
 {
     Q_OBJECT
 
 public:
-
-    VisibilityController(QObject* parent);
-
-    /** Set the widget containing the widgets added to this controller */
-    void setContainerWidget(QWidget* widget);
-    /** Add a widget to this controller */
-    void addWidget(QWidget* widget);
-    /** Add an object implementing the VisibilityObject interface.
-     *  You can use this if you have your widgets grouped in intermediate objects. */
-    void addObject(VisibilityObject* object);
-
-    /** Returns true if the contained objects are visible or becoming visible */
-    bool isVisible() const;
 
     enum Status
     {
@@ -76,12 +64,30 @@ public:
         Hiding
     };
 
+public:
+
+    VisibilityController(QObject* parent);
+
+    /** Set the widget containing the widgets added to this controller */
+    void setContainerWidget(QWidget* widget);
+
+    /** Add a widget to this controller */
+
+    void addWidget(QWidget* widget);
+    /** Add an object implementing the VisibilityObject interface.
+     *  You can use this if you have your widgets grouped in intermediate objects. */
+    void addObject(VisibilityObject* object);
+
+    /** Returns true if the contained objects are visible or becoming visible */
+    bool isVisible() const;
+
 public Q_SLOTS:
 
     /// Shows/hides all added objects
     void setVisible(bool visible);
     void show();
     void hide();
+
     /// Shows if hidden and hides if visible.
     void triggerVisibility();
 
@@ -93,6 +99,7 @@ protected:
 
 private:
 
+    class VisibilityControllerPriv;
     VisibilityControllerPriv* const d;
 };
 
