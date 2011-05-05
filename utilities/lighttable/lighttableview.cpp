@@ -69,7 +69,7 @@ public:
 
     QGridLayout*       grid;
 
-    // These label are used to draw a frame around preview views to identify easily which item has the focus.
+    // These labels are used to draw a frame around preview views to identify easily which item has the focus.
     QLabel*            leftFrame;
     QLabel*            rightFrame;
 

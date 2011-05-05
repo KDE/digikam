@@ -24,6 +24,8 @@
 class KCategorizedSortFilterProxyModel;
 class KCategoryDrawer;
 
+namespace Digikam
+{
 
 class SparseModelIndexVector : public QVector<QModelIndex>
 {
@@ -44,6 +46,7 @@ public:
 
         return index;
     }
+
 private:
     // not to be used
     const QModelIndex& operator[](int i) const
@@ -61,9 +64,9 @@ private:
 class DigikamKCategorizedView::Private
 {
 public:
+
     Private(DigikamKCategorizedView* listView);
     ~Private();
-
 
     // Methods
 
@@ -159,6 +162,8 @@ public:
       */
     QItemSelection selectionForRect(const QRect& rect);
 
+public:
+
     // Attributes
 
     struct ElementInfo
@@ -168,35 +173,37 @@ public:
     };
 
     // Basic data
-    DigikamKCategorizedView* listView;
-    KCategoryDrawer*  categoryDrawer;
-    QSize             biggestItemSize;
+    DigikamKCategorizedView*          listView;
+    KCategoryDrawer*                  categoryDrawer;
+    QSize                             biggestItemSize;
 
     // Behavior data
-    bool        mouseButtonPressed;
-    bool        rightMouseButtonPressed;
-    bool        dragLeftViewport;
-    bool        drawItemsWhileDragging;
-    QModelIndex hovered;
-    QString     hoveredCategory;
-    QPoint      initialPressPosition;
-    QPoint      mousePosition;
-    int         forcedSelectionPosition;
+    bool                              mouseButtonPressed;
+    bool                              rightMouseButtonPressed;
+    bool                              dragLeftViewport;
+    bool                              drawItemsWhileDragging;
+    QModelIndex                       hovered;
+    QString                           hoveredCategory;
+    QPoint                            initialPressPosition;
+    QPoint                            mousePosition;
+    int                               forcedSelectionPosition;
 
     // Cache data
     // We cannot merge some of them into structs because it would affect
     // performance
-    QVector<struct ElementInfo>   elementsInfo;
-    QHash<int, QRect>             elementsPosition;
-    QHash<QString, QVector<int> > categoriesIndexes;
-    QHash<QString, QRect>         categoriesPosition;
-    QStringList                   categories;
-    QModelIndexList               intersectedIndexes;
-    QRect                         lastDraggedItemsRect;
-    QItemSelection                lastSelection;
+    QVector<struct ElementInfo>       elementsInfo;
+    QHash<int, QRect>                 elementsPosition;
+    QHash<QString, QVector<int> >     categoriesIndexes;
+    QHash<QString, QRect>             categoriesPosition;
+    QStringList                       categories;
+    QModelIndexList                   intersectedIndexes;
+    QRect                             lastDraggedItemsRect;
+    QItemSelection                    lastSelection;
 
     // Attributes for speed reasons
     KCategorizedSortFilterProxyModel* proxyModel;
 };
+
+}  // namespace Digikam
 
 #endif // KCATEGORIZEDVIEW_P_H

@@ -31,6 +31,9 @@
 
 class KCategoryDrawer;
 
+namespace Digikam
+{
+
 /**
  * @short Item view for listing items
  *
@@ -66,8 +69,8 @@ public:
      */
     void setDrawDraggedItems(bool drawDraggedItems);
 
-    virtual void setModel(QAbstractItemModel* model);
-    virtual QRect visualRect(const QModelIndex& index) const;
+    virtual void        setModel(QAbstractItemModel* model);
+    virtual QRect       visualRect(const QModelIndex& index) const;
     virtual QModelIndex indexAt(const QPoint& point) const;
 
     /**
@@ -147,5 +150,7 @@ private:
     class Private;
     Private* const d;
 };
+
+} // namespace Digikam
 
 #endif // DIGIKAMKCATEGORIZEDVIEW_H
