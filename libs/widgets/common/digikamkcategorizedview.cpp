@@ -20,7 +20,7 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include "digikamkcategorizedview.h"
+#include "digikamkcategorizedview.moc"
 #include "kcategorizedview_p.h"
 
 // C++ includes
@@ -1989,5 +1989,3 @@ void DigikamKCategorizedView::currentChanged(const QModelIndex& current, const Q
 }
 
 } // namespace Digikam
-
-#include "digikamkcategorizedview.moc"
