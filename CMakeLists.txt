@@ -890,7 +890,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support/previewwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support/drubberband.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support/thumbbar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support/thumbbartooltip.cpp
        )
 
     SET(libgraphicsviewwidgets_SRCS

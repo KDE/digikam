@@ -7,7 +7,7 @@
  * Description : a bar widget to display image thumbnails
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,10 +38,11 @@
 // KDE includes
 
 #include <kurl.h>
+#include <kglobalsettings.h>
 
 // Local includes
 
-#include "thumbbartooltip.h"
+#include "ditemtooltip.h"
 #include "digikam_export.h"
 
 class KFileItem;
@@ -51,8 +52,73 @@ namespace Digikam
 
 class LoadingDescription;
 class ThumbBarItem;
-class ThumbBarViewPriv;
-class ThumbBarItemPriv;
+class ThumbBarView;
+
+// -------------------------------------------------------------------------
+
+class DIGIKAM_EXPORT ThumbBarToolTipSettings
+{
+public:
+
+    ThumbBarToolTipSettings()
+    {
+        showToolTips   = true;
+        showFileName   = true;
+        showFileDate   = false;
+        showFileSize   = false;
+        showImageType  = false;
+        showImageDim   = true;
+        showPhotoMake  = true;
+        showPhotoDate  = true;
+        showPhotoFocal = true;
+        showPhotoExpo  = true;
+        showPhotoMode  = true;
+        showPhotoFlash = false;
+        showPhotoWB    = false;
+        font           = KGlobalSettings::generalFont();
+    };
+
+    bool  showToolTips;
+    bool  showFileName;
+    bool  showFileDate;
+    bool  showFileSize;
+    bool  showImageType;
+    bool  showImageDim;
+    bool  showPhotoMake;
+    bool  showPhotoDate;
+    bool  showPhotoFocal;
+    bool  showPhotoExpo;
+    bool  showPhotoMode;
+    bool  showPhotoFlash;
+    bool  showPhotoWB;
+
+    QFont font;
+};
+
+// --------------------------------------------------------
+
+class DIGIKAM_EXPORT ThumbBarToolTip : public DItemToolTip
+{
+public:
+
+    ThumbBarToolTip(ThumbBarView* view);
+    virtual ~ThumbBarToolTip();
+
+    void setItem(ThumbBarItem* item);
+    ThumbBarItem* item() const;
+
+protected:
+
+    ThumbBarToolTipSettings& toolTipSettings() const;
+
+    virtual QRect   repositionRect();
+    virtual QString tipContents();
+
+private:
+
+    class ThumbBarToolTipPriv;
+    ThumbBarToolTipPriv* const d;
+};
 
 // -------------------------------------------------------------------------
 
@@ -63,7 +129,7 @@ class DIGIKAM_EXPORT ThumbBarView : public Q3ScrollView
 public:
 
     explicit ThumbBarView(QWidget* parent, int orientation=Qt::Vertical, bool exifRotate=true,
-                          ThumbBarToolTipSettings settings=ThumbBarToolTipSettings());
+                          const ThumbBarToolTipSettings& settings=ThumbBarToolTipSettings());
     virtual ~ThumbBarView();
 
     void setOrientation(int orientation);
@@ -154,6 +220,7 @@ private Q_SLOTS:
 
 private:
 
+    class ThumbBarViewPriv;
     ThumbBarViewPriv* const d;
 
     friend class ThumbBarItem;
@@ -182,6 +249,7 @@ public:
 
 private:
 
+    class ThumbBarItemPriv;
     ThumbBarItemPriv* const d;
 
     friend class ThumbBarView;
