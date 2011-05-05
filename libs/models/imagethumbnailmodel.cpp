@@ -233,6 +233,15 @@ void ImageThumbnailModel::imageInfosCleared()
     d->rightSideMap.clear();
 }
 
+void ImageThumbnailModel::imageInfosDeleted(const QList<ImageInfo>& infos)
+{
+    foreach(ImageInfo inf, infos)
+    {
+        d->leftSideMap.remove(inf.id());
+        d->rightSideMap.remove(inf.id());
+    }
+}
+
 QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
 {
     if (role == ThumbnailRole && d->thread && index.isValid())

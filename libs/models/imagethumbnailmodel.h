@@ -124,6 +124,7 @@ Q_SIGNALS:
 protected:
 
     virtual void imageInfosCleared();
+    virtual void imageInfosDeleted(const QList<ImageInfo>& infos);
 
 protected Q_SLOTS:
 

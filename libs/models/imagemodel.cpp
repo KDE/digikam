@@ -721,6 +721,7 @@ void ImageModel::removeIndexes(const QList<QModelIndex>& indexes)
             listIndexes << index.row();
         }
     }
+    imageInfosDeleted(imageInfos(indexes));
     removeRowPairs(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
 
@@ -738,6 +739,7 @@ void ImageModel::removeImageInfos(const QList<ImageInfo>& infos)
         if (index.isValid())
             listIndexes << index.row();
     }
+    imageInfosDeleted(infos);
     removeRowPairs(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
 
@@ -758,6 +760,7 @@ void ImageModel::removeImageInfos(const QList<ImageInfo>& infos, const QList<QVa
             listIndexes << index.row();
     }
 
+    imageInfosDeleted(infos);
     removeRowPairs(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
 

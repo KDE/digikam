@@ -295,6 +295,9 @@ protected:
     // Called when the internal storage is cleared
     virtual void imageInfosCleared() {};
 
+    // Called when items are deleted from the internal storage
+    virtual void imageInfosDeleted(const QList<ImageInfo>&) {};
+
 protected Q_SLOTS:
 
     virtual void slotImageChange(const ImageChangeset& changeset);
