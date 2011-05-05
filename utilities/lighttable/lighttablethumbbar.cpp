@@ -37,6 +37,7 @@
 #include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -383,16 +384,20 @@ void LightTableThumbBar::ensureItemVisible(const ImageInfo& info)
         scrollTo(findItemByInfo(info), QAbstractItemView::PositionAtCenter);
 }
 
-void LightTableThumbBar::drawEmptyMessage(QPixmap& /*bgPix*/)
+void LightTableThumbBar::paintEvent(QPaintEvent* e)
 {
-/*
-    QPainter p4(&bgPix);
-    p4.setPen(QPen(kapp->palette().color(QPalette::Text)));
-    p4.drawText(0, 0, bgPix.width(), bgPix.height(),
-                Qt::AlignCenter|Qt::TextWordWrap,
-                i18n("Drag and drop images here"));
-    p4.end();
-*/
+    if (!countItems())
+    {
+        QPainter p(viewport());
+        p.setPen(QPen(kapp->palette().color(QPalette::Text)));
+        p.drawText(0, 0, width(), height(),
+                    Qt::AlignCenter|Qt::TextWordWrap,
+                    i18n("Drag and drop images here"));
+        p.end();
+        return;
+    }
+
+    ImageThumbnailBar::paintEvent(e);
 }
 
 }  // namespace Digikam

@@ -83,7 +83,7 @@ public Q_SLOTS:
 
 private:
 
-    void drawEmptyMessage(QPixmap& pixmap);
+    void paintEvent(QPaintEvent*);
     void showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info);
     void assignPickLabel(const ImageInfo& info, int pickId);
     void assignColorLabel(const ImageInfo& info, int colorId);
