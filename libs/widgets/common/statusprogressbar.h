@@ -7,7 +7,7 @@
  * Description : a progress bar used to display file access
  *               progress or a text in status bar.
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,8 +37,6 @@
 namespace Digikam
 {
 
-class StatusProgressBarPriv;
-
 class DIGIKAM_EXPORT StatusProgressBar : public QStackedWidget
 {
     Q_OBJECT
@@ -61,9 +59,9 @@ public:
 
     void progressBarMode(int mode, const QString& text=QString());
 
-    int  progressValue();
+    int  progressValue() const;
 
-    int  progressTotalSteps();
+    int  progressTotalSteps() const;
     void setProgressTotalSteps(int v);
 
 public Q_SLOTS:
@@ -78,6 +76,7 @@ Q_SIGNALS:
 
 private:
 
+    class StatusProgressBarPriv;
     StatusProgressBarPriv* const d;
 };
 
