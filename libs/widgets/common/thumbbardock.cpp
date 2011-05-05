@@ -148,7 +148,7 @@ void ThumbBarDock::reInitialize()
     update();
 }
 
-KToggleAction* ThumbBarDock::getToggleAction(QObject* parent, QString caption)
+KToggleAction* ThumbBarDock::getToggleAction(QObject* parent, QString caption) const
 {
     KToggleAction* action = new KToggleAction(KIcon("view-choose"), caption, parent);
 
@@ -184,7 +184,7 @@ void ThumbBarDock::restoreVisibility()
     setVisible(m_visible == WAS_SHOWN);
 }
 
-bool ThumbBarDock::shouldBeVisible()
+bool ThumbBarDock::shouldBeVisible() const
 {
     if ((m_visible == WAS_SHOWN) || (m_visible == SHOULD_BE_SHOWN))
     {

@@ -105,7 +105,7 @@ public:
     void reInitialize();
 
     /* Return a KToggleAction to show and hide the thumbnail bar. */
-    KToggleAction* getToggleAction(QObject* parent, QString caption = i18n("Show Thumbbar"));
+    KToggleAction* getToggleAction(QObject* parent, QString caption = i18n("Show Thumbbar")) const;
 
     /* The normal show() and hide() functions don't apply that well, because
      * there are two orthogonal reasons to hide the thumbbar: the user doesn't
@@ -116,7 +116,7 @@ public:
      * show the thumbbar according to the user preference. shouldBeVisible()
      * tells whether the thumbbar should be shown according to the user.
      */
-    bool shouldBeVisible();
+    bool shouldBeVisible() const;
     void setShouldBeVisible(bool);
     void restoreVisibility();
 
