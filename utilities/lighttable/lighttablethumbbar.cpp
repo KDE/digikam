@@ -33,17 +33,18 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albumdb.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
+#include "dpopupmenu.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
 #include "metadatasettings.h"
@@ -127,7 +128,7 @@ void LightTableThumbBar::setNavigateByPair(bool b)
     d->navigateByPair = b;
 }
 
-void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info)
+void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const ImageInfo& info)
 {
     // temporary actions ----------------------------------
 
@@ -145,23 +146,16 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* event, const I
 
     // ----------------------------------------------------
 
-    KMenu popmenu(this);
+    DPopupMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
-
-    if (!info.isNull())
-    {
-        cmhelper.addAction(leftPanelAction, true);
-        cmhelper.addAction(rightPanelAction, true);
-        cmhelper.addSeparator();
-        // ------------------------------------------------
-        cmhelper.addAction(editAction);
-        cmhelper.addAction(removeAction);
-        cmhelper.addSeparator();
-        // ------------------------------------------------
-        cmhelper.addLabelsAction();
-        cmhelper.addSeparator();
-    }
-
+    cmhelper.addAction(leftPanelAction, true);
+    cmhelper.addAction(rightPanelAction, true);
+    cmhelper.addSeparator();
+    cmhelper.addAction(editAction);
+    cmhelper.addAction(removeAction);
+    cmhelper.addSeparator();
+    cmhelper.addLabelsAction();
+    cmhelper.addSeparator();
     cmhelper.addAction(clearAllAction, true);
 
     // special action handling --------------------------------
@@ -175,7 +169,7 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* event, const I
     connect(&cmhelper, SIGNAL(signalAssignRating(int)),
             this, SLOT(slotAssignRating(int)));
 
-    QAction* choice = cmhelper.exec(event->globalPos());
+    QAction* choice = cmhelper.exec(e->globalPos());
 
     if (choice)
     {
