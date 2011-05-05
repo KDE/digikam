@@ -148,7 +148,7 @@ void ThumbBarDock::reInitialize()
     update();
 }
 
-KToggleAction* ThumbBarDock::getToggleAction(QObject* parent, QString caption) const
+KToggleAction* ThumbBarDock::getToggleAction(QObject* parent, const QString& caption) const
 {
     KToggleAction* action = new KToggleAction(KIcon("view-choose"), caption, parent);
 

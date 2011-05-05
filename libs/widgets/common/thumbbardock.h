@@ -39,7 +39,6 @@
 
 // KDE includes
 
-
 #include <klocale.h>
 #include <ktoggleaction.h>
 
@@ -84,6 +83,8 @@ class DIGIKAM_EXPORT ThumbBarDock : public QDockWidget
 {
     Q_OBJECT
 
+public:
+
     enum Visibility
     {
         WAS_HIDDEN,
@@ -105,7 +106,7 @@ public:
     void reInitialize();
 
     /* Return a KToggleAction to show and hide the thumbnail bar. */
-    KToggleAction* getToggleAction(QObject* parent, QString caption = i18n("Show Thumbbar")) const;
+    KToggleAction* getToggleAction(QObject* parent, const QString& caption = i18n("Show Thumbbar")) const;
 
     /* The normal show() and hide() functions don't apply that well, because
      * there are two orthogonal reasons to hide the thumbbar: the user doesn't
