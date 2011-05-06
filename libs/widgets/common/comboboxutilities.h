@@ -59,8 +59,8 @@ public:
      * Use this class if you need to pass a QLineEdit but
      * want actually to use a different widget.
      */
-
     ProxyLineEdit(QWidget* parent = 0);
+
     /// After constructing, set the actual widget here
     virtual void setWidget(QWidget* widget);
 
@@ -266,9 +266,9 @@ public:
     virtual void installView(QAbstractItemView* view = 0);
 
     /** Set the text of the line edit (the text that is visible
-        if the popup is not opened).
-        Applicable only for default installLineEdit() implementation.
-    */
+     *  if the popup is not opened).
+     *  Applicable only for default installLineEdit() implementation.
+     */
     void setLineEditText(const QString& text);
 
     void setLineEdit(QLineEdit* edit);
@@ -277,7 +277,8 @@ protected:
 
     /** Sets a line edit. Called by installView().
      *  The default implementation is described above.
-     *  An empty implementation will keep the default QComboBox line edit. */
+     *  An empty implementation will keep the default QComboBox line edit.
+     */
     virtual void installLineEdit();
 
 protected:
