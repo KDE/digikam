@@ -792,7 +792,7 @@ void LightTableWindow::slotRightPreviewLoaded(bool b)
         d->previewView->checkForSelection(d->thumbView->currentInfo());
         d->thumbView->setOnRightPanel(d->previewView->rightImageInfo());
 
-        QModelIndex index = d->thumbView->findItemByInfo(d->previewView->leftImageInfo());
+        QModelIndex index = d->thumbView->findItemByInfo(d->previewView->rightImageInfo());
         if (index.isValid())
         {
             d->thumbView->setOnRightPanel(d->thumbView->findItemByIndex(index));
