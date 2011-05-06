@@ -6,7 +6,7 @@
  * Date        : 2009-04-26
  * Description : Qt Model for Images - drag and drop handling
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,9 +31,6 @@
 #include <QDrag>
 #include <QDropEvent>
 #include <QMimeData>
-
-// Local includes
-
 
 namespace Digikam
 {
@@ -193,7 +190,7 @@ void DragDropViewImplementation::startDrag(Qt::DropActions supportedActions)
         }
 
         QPixmap pixmap = pixmapForDrag(indexes);
-        QDrag* drag = new QDrag(asView());
+        QDrag* drag    = new QDrag(asView());
         drag->setPixmap(pixmap);
         drag->setMimeData(data);
         drag->exec(supportedActions, Qt::IgnoreAction);
@@ -222,7 +219,7 @@ void DragDropViewImplementation::dragMoveEvent(QDragMoveEvent* e)
 
     if (handler)
     {
-        QModelIndex index = asView()->indexAt(e->pos());
+        QModelIndex index     = asView()->indexAt(e->pos());
         Qt::DropAction action = handler->accepts(e, mapIndexForDragDrop(index));
 
         if (action == Qt::IgnoreAction)
@@ -274,5 +271,4 @@ bool DragDropViewImplementation::decodeIsCutSelection(const QMimeData* mime)
     return (a.at(0) == '1'); // true if 1
 }
 
-}
-
+} // namespace Digikam

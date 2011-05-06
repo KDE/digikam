@@ -7,7 +7,7 @@
  * Description : a stack of widgets to set image file save
  *               options into image editor.
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,7 +56,7 @@
 namespace Digikam
 {
 
-class FileSaveOptionsBoxPriv
+class FileSaveOptionsBox::FileSaveOptionsBoxPriv
 {
 
 public:
@@ -107,15 +107,15 @@ FileSaveOptionsBox::FileSaveOptionsBox(QWidget* parent)
 
     //-- JPEG Settings ------------------------------------------------------
 
-    d->JPEGOptions = new JPEGSettings(this);
+    d->JPEGOptions     = new JPEGSettings(this);
 
     //-- PNG Settings -------------------------------------------------------
 
-    d->PNGOptions = new PNGSettings(this);
+    d->PNGOptions      = new PNGSettings(this);
 
     //-- TIFF Settings ------------------------------------------------------
 
-    d->TIFFOptions = new TIFFSettings(this);
+    d->TIFFOptions     = new TIFFSettings(this);
 
     //-- JPEG 2000 Settings -------------------------------------------------
 
@@ -123,7 +123,7 @@ FileSaveOptionsBox::FileSaveOptionsBox(QWidget* parent)
 
     //-- PGF Settings -------------------------------------------------
 
-    d->PGFOptions = new PGFSettings(this);
+    d->PGFOptions      = new PGFSettings(this);
 
     //-----------------------------------------------------------------------
 
@@ -146,7 +146,6 @@ FileSaveOptionsBox::~FileSaveOptionsBox()
 
 void FileSaveOptionsBox::setDialog(KFileDialog* dialog)
 {
-
     if (d->dialog)
     {
         disconnect(d->dialog);
@@ -162,12 +161,10 @@ void FileSaveOptionsBox::setDialog(KFileDialog* dialog)
 
     connect(d->dialog, SIGNAL(fileSelected(const QString&)),
             this, SLOT(slotImageFileSelected(const QString&)));
-
 }
 
 void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
 {
-
     kDebug() << "filter changed to '" << newFilter << "'";
 
     if (!d->dialog)
@@ -181,25 +178,27 @@ void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
         (d->autoFilter == newFilter || d->autoFilter.section('|', 0, 0) == newFilter))
     {
         kDebug() << "use automatic extension detection";
+
         // use the user provided file name for guessing the desired file format
         connect(d->dialog->locationEdit(), SIGNAL(editTextChanged(const QString&)),
                 this, SLOT(slotImageFileFormatChanged(const QString&)));
+
         slotImageFileFormatChanged(d->dialog->locationEdit()->currentText());
     }
     else
     {
         kDebug() << "use manual extension detection";
+
         // don't use the file name provided by the user any more
         disconnect(d->dialog->locationEdit(), SIGNAL(editTextChanged(const QString&)),
                    this, SLOT(slotImageFileFormatChanged(const QString&)));
+
         slotImageFileFormatChanged(newFilter);
     }
-
 }
 
 void FileSaveOptionsBox::setAutoFilter(const QString& autoFilter)
 {
-
     kDebug() << "new auto filter is '" << autoFilter << "'";
 
     d->autoFilter = autoFilter;
@@ -212,7 +211,6 @@ void FileSaveOptionsBox::setAutoFilter(const QString& autoFilter)
     }
 
     slotFilterChanged(d->dialog->currentFilter());
-
 }
 
 void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
@@ -229,7 +227,6 @@ void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
 DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString& filename,
         DImg::FORMAT fallback)
 {
-
     kDebug() << "Trying to discover format based on filename '" << filename
              << "', fallback = " << fallback;
 

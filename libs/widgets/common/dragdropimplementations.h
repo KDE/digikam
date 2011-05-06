@@ -6,7 +6,7 @@
  * Date        : 2011-01-02
  * Description : Sample implementations for drag and drop handling
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,9 +55,9 @@ public:
      * dropMimeData() always returns false, leaving implementation to the view.
      */
     Qt::DropActions supportedDropActions() const;
-    QStringList mimeTypes() const;
-    bool dropMimeData(const QMimeData*, Qt::DropAction, int, int, const QModelIndex&);
-    QMimeData* mimeData(const QModelIndexList& indexes) const;
+    QStringList     mimeTypes() const;
+    bool            dropMimeData(const QMimeData*, Qt::DropAction, int, int, const QModelIndex&);
+    QMimeData*      mimeData(const QModelIndexList& indexes) const;
 
     /**
      * Call from your flags() method, adding the relevant drag drop flags.
@@ -75,8 +75,8 @@ public:
      * or reimplement dragDropFlags() if you fine-tune it yourself.
      */
     Qt::ItemFlags dragDropFlagsV2(const QModelIndex& index) const;
-    virtual bool isDragEnabled(const QModelIndex& index) const;
-    virtual bool isDropEnabled(const QModelIndex& index) const;
+    virtual bool  isDragEnabled(const QModelIndex& index) const;
+    virtual bool  isDropEnabled(const QModelIndex& index) const;
 
     /// Set a drag drop handler.
     void setDragDropHandler(AbstractItemDragDropHandler* handler);
@@ -97,6 +97,8 @@ protected:
     AbstractItemDragDropHandler* m_dragDropHandler;
 };
 
+// --------------------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT DragDropViewImplementation
 {
 public:
@@ -115,11 +117,13 @@ protected:
     /// You need to implement these three methods
     /// Returns the drag drop handler
     virtual AbstractItemDragDropHandler* dragDropHandler() const = 0;
+
     /**
      * Maps the given index of the view's model to an index of the handler's model,
      * which can be a source model of the view's model.
      */
     virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const = 0;
+
     /**
      * Creates a pixmap for dragging the given indexes.
      */

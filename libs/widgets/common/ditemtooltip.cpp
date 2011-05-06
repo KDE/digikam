@@ -168,11 +168,11 @@ DItemToolTip::DItemToolTip(QWidget* parent)
     setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
     setFrameStyle(QFrame::StyledPanel);
-    /*
+/*
     Old-style box:
     setFrameStyle(QFrame::Plain | QFrame::Box);
     setLineWidth(1);
-    */
+*/
 
     renderArrows();
 }

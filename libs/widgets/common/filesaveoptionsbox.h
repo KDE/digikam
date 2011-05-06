@@ -7,7 +7,7 @@
  * Description : a stack of widgets to set image file save
  *               options into image editor.
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,8 +41,6 @@
 
 namespace Digikam
 {
-
-class FileSaveOptionsBoxPriv;
 
 class DIGIKAM_EXPORT FileSaveOptionsBox : public QStackedWidget
 {
@@ -107,6 +105,7 @@ private:
 
 private:
 
+    class FileSaveOptionsBoxPriv;
     FileSaveOptionsBoxPriv* const d;
 };
 

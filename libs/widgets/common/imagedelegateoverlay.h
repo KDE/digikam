@@ -6,7 +6,7 @@
  * Date        : 2009-04-29
  * Description : Qt item view for images - delegate additions
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,20 +49,24 @@ public:
     /** Called when the overlay was installed and shall begin working,
      *  and before it is removed and shall stop.
      *  Setup your connections to view and delegate here.
-     *  You will be disconnected automatically on removal. */
+     *  You will be disconnected automatically on removal.
+     */
     virtual void setActive(bool active);
 
     /** Only these two methods are implemented as virtual methods.
      *  For all other events, connect to the view's signals.
      *  There are a few signals specifically for overlays and all
-     *  QAbstractItemView standard signals. */
+     *  QAbstractItemView standard signals.
+     */
     virtual void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index);
     virtual void paint(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index);
 
     void setView(QAbstractItemView* view);
     QAbstractItemView* view() const;
+
     void setDelegate(QAbstractItemDelegate* delegate);
     QAbstractItemDelegate* delegate() const;
+
     virtual bool acceptsDelegate(QAbstractItemDelegate*) const { return true; }
 
 Q_SIGNALS:
@@ -86,9 +90,9 @@ protected:
      * Will an operation affect only the single item, or multiple?
      * If multiple, retrieve the affected selection.
      */
-    bool affectsMultiple(const QModelIndex& index) const;
-    QList<QModelIndex> affectedIndexes(const QModelIndex& index) const;
-    int numberOfAffectedIndexes(const QModelIndex& index) const;
+    bool               affectsMultiple(const QModelIndex& index)         const;
+    QList<QModelIndex> affectedIndexes(const QModelIndex& index)         const;
+    int                numberOfAffectedIndexes(const QModelIndex& index) const;
 
 protected:
 
@@ -129,6 +133,7 @@ protected:
     /** Create your widget here. When creating the object, pass parentWidget() as parent widget.
      *  Ownership of the object is passed. It will be deleted in setActive(false). */
     virtual QWidget* createWidget() = 0;
+
     /** Called when the widget shall be hidden (mouse cursor left index, viewport, uninstalled etc.).
      *  Default implementation hide()s m_widget. */
     virtual void hide();
@@ -158,6 +163,7 @@ protected Q_SLOTS:
 
     /** Default implementation shows the widget iff the index is valid and checkIndex returns true. */
     virtual void slotEntered(const QModelIndex& index);
+
     /** Default implementations of these three slots call hide() */
     virtual void slotReset();
     virtual void slotViewportEntered();
@@ -168,10 +174,14 @@ protected:
 
     bool eventFilter(QObject* obj, QEvent* event);
 
+protected:
+
     QWidget* m_widget;
 
-    bool m_mouseButtonPressedOnWidget;
+    bool     m_mouseButtonPressedOnWidget;
 };
+
+// -------------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT HoverButtonDelegateOverlay : public AbstractWidgetDelegateOverlay
 {
@@ -190,6 +200,7 @@ protected:
 
     /** Create your widget here. Pass view() as parent. */
     virtual ItemViewHoverButton* createButton() = 0;
+
     /** Called when a new index is entered. Reposition your button here,
      *  adjust and store state. */
     virtual void updateButton(const QModelIndex& index) = 0;
@@ -197,13 +208,13 @@ protected:
     virtual QWidget* createWidget();
     virtual void visualChange();
 
-
 protected Q_SLOTS:
 
     virtual void slotEntered(const QModelIndex& index);
     virtual void slotReset();
-
 };
+
+// -------------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT ImageDelegateOverlayContainer
 {
@@ -244,7 +255,6 @@ protected:
 protected:
 
     QList<ImageDelegateOverlay*> m_overlays;
-
 };
 
 } // namespace Digikam

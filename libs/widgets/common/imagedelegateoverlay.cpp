@@ -6,7 +6,7 @@
  * Date        : 2009-04-29
  * Description : Qt item view for images - delegate additions
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,7 +40,6 @@
 
 namespace Digikam
 {
-
 
 ImageDelegateOverlay::ImageDelegateOverlay(QObject* parent)
     : QObject(parent), m_view(0), m_delegate(0)
@@ -114,20 +113,25 @@ QAbstractItemDelegate* ImageDelegateOverlay::delegate() const
 bool ImageDelegateOverlay::affectsMultiple(const QModelIndex& index) const
 {
     // note how selectionModel->selectedIndexes().contains() can scale badly
-    QItemSelectionModel *selectionModel = view()->selectionModel();
+    QItemSelectionModel* selectionModel = view()->selectionModel();
+
     if (!selectionModel->hasSelection())
     {
         return false;
     }
+
     if (!selectionModel->isSelected(index))
     {
         return false;
     }
+
     QItemSelection selection = selectionModel->selection();
+
     if (selection.size() > 1)
     {
         return true;
     }
+
     return selection.indexes().size() > 1;
 }
 
@@ -159,7 +163,7 @@ int ImageDelegateOverlay::numberOfAffectedIndexes(const QModelIndex& index) cons
     return count;
 }
 
-// -----------------------------
+// --------------------------------------------------------------------------------------------
 
 AbstractWidgetDelegateOverlay::AbstractWidgetDelegateOverlay(QObject* parent)
     : ImageDelegateOverlay(parent),
@@ -304,7 +308,8 @@ void AbstractWidgetDelegateOverlay::widgetLeaveNotifyMultiple()
 
 QString AbstractWidgetDelegateOverlay::notifyMultipleMessage(const QModelIndex&, int number)
 {
-    return i18ncp("@info", "<i>Applying operation to<br/>the selected picture</i>", "<i>Applying operation to <br/><b>%1</b> selected pictures</i>", number);
+    return i18ncp("@info", "<i>Applying operation to<br/>the selected picture</i>",
+                  "<i>Applying operation to <br/><b>%1</b> selected pictures</i>", number);
 }
 
 bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
@@ -327,11 +332,12 @@ bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
                     // above the viewport.
                     return true;
                 }
-
                 break;
+
             case QEvent::MouseButtonRelease:
                 m_mouseButtonPressedOnWidget = false;
                 break;
+
             default:
                 break;
         }
@@ -348,15 +354,19 @@ bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
                 }
 
                 break;
+
             case QEvent::MouseButtonRelease:
                 m_mouseButtonPressedOnWidget = false;
                 break;
+
             case QEvent::Enter:
                 widgetEnterEvent();
                 break;
+
             case QEvent::Leave:
                 widgetLeaveEvent();
                 break;
+
             default:
                 break;
         }
@@ -365,7 +375,7 @@ bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
     return ImageDelegateOverlay::eventFilter(obj, event);
 }
 
-// -----------------------------
+// ------------------------------------------------------------------------------------------
 
 HoverButtonDelegateOverlay::HoverButtonDelegateOverlay(QObject* parent)
     : AbstractWidgetDelegateOverlay(parent)
@@ -422,7 +432,7 @@ void HoverButtonDelegateOverlay::slotEntered(const QModelIndex& index)
     }
 }
 
-// -----------------------------
+// -----------------------------------------------------------------------------------
 
 ImageDelegateOverlayContainer::~ImageDelegateOverlayContainer()
 {
@@ -507,13 +517,13 @@ void ImageDelegateOverlayContainer::mouseMoved(QMouseEvent* e, const QRect& visu
     }
 }
 
-void ImageDelegateOverlayContainer::drawOverlays(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void ImageDelegateOverlayContainer::drawOverlays(QPainter* p, const QStyleOptionViewItem& option,
+                                                 const QModelIndex& index) const
 {
     foreach (ImageDelegateOverlay* overlay, m_overlays)
     {
         overlay->paint(p, option, index);
     }
 }
-
 
 } // namespace Digikam

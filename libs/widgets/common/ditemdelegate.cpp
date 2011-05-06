@@ -7,9 +7,9 @@
  * Description : Qt item view for images - common delegate code
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C)      2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class DItemDelegatePriv
+class DItemDelegate::DItemDelegatePriv
 {
 public:
 
@@ -62,7 +62,6 @@ public:
 
     QCache<QString, QPixmap>  thumbnailBorderCache;
     QCache<QString, QString>  squeezedTextCache;
-
 };
 
 DItemDelegate::DItemDelegate(QObject* parent)
@@ -145,25 +144,25 @@ QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
 
     if (indexes.size() > 1)
     {
-        QRect textRect;
+        QRect   textRect;
         QString text;
 
-        QString text1 = QString::number(indexes.count());
         QString text2(i18np("1 Image", "%1 Images", indexes.count()));
-        QRect r1 = p.boundingRect(pixmapRect, Qt::AlignLeft|Qt::AlignTop, text1).adjusted(0,0,1,1);
-        QRect r2 = p.boundingRect(pixmapRect, Qt::AlignLeft|Qt::AlignTop, text2).adjusted(0,0,1,1);
+        QString text1 = QString::number(indexes.count());
+        QRect r1      = p.boundingRect(pixmapRect, Qt::AlignLeft|Qt::AlignTop, text1).adjusted(0,0,1,1);
+        QRect r2      = p.boundingRect(pixmapRect, Qt::AlignLeft|Qt::AlignTop, text2).adjusted(0,0,1,1);
 
         if (r2.width() > pixmapRect.width() || r2.height() > pixmapRect.height())
         {
-            textRect = r1;
-            text = text1;
+            textRect     = r1;
+            text         = text1;
             int rectSize = qMax(r1.width(), r1.height());
-            textRect = QRect(0, 0, rectSize, rectSize);
+            textRect     = QRect(0, 0, rectSize, rectSize);
         }
         else
         {
             textRect = QRect(0, 0, r2.width(), r2.height());
-            text = text2;
+            text     = text2;
         }
 
         textRect.moveLeft((pixmapRect.width() - textRect.width()) / 2 + pixmapRect.x());
@@ -183,10 +182,10 @@ QString DItemDelegate::dateToString(const QDateTime& datetime)
 
 QString DItemDelegate::squeezedTextCached(QPainter* p, int width, const QString& text) const
 {
-    QCache<QString, QString> *cache = &const_cast<DItemDelegate*>(this)->d->squeezedTextCache;
+    QCache<QString, QString>* cache = &const_cast<DItemDelegate*>(this)->d->squeezedTextCache;
     // We do not need to include the font into cache key, the cache is cleared on font change
-    QString cacheKey = QString::number(width) + QString::number(qHash(text));
-    QString* cachedString = cache->object(cacheKey);
+    QString cacheKey                = QString::number(width) + QString::number(qHash(text));
+    QString* cachedString           = cache->object(cacheKey);
 
     if (cachedString)
     {
@@ -203,7 +202,7 @@ QString DItemDelegate::squeezedText(const QFontMetrics& fm, int width, const QSt
 {
     QString fullText(text);
     fullText.replace('\n',' ');
-    int textWidth = fm.width(fullText);
+    int textWidth  = fm.width(fullText);
     QString result = fullText;
 
     if (textWidth > width)
@@ -213,7 +212,7 @@ QString DItemDelegate::squeezedText(const QFontMetrics& fm, int width, const QSt
         int squeezedWidth    = fm.width(squeezedText);
 
         // estimate how many letters we can add to the dots on both sides
-        int letters = fullText.length() * (width - squeezedWidth) / textWidth;
+        int letters          = fullText.length() * (width - squeezedWidth) / textWidth;
 
         if (width < squeezedWidth)
         {

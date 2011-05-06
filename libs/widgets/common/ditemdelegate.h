@@ -6,7 +6,7 @@
  * Date        : 2010-01-16
  * Description : Qt item view for images - common delegate code
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +37,6 @@ namespace Digikam
 {
 
 class DCategorizedView;
-class DItemDelegatePriv;
 
 class DIGIKAM_EXPORT DItemDelegate : public QAbstractItemDelegate
 {
@@ -90,6 +89,7 @@ protected:
 
 private:
 
+    class DItemDelegatePriv;
     DItemDelegatePriv* const d;
 };
 

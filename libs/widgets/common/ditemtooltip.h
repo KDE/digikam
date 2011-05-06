@@ -69,6 +69,8 @@ public:
     QString   cellSpecEnd;
 };
 
+// --------------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT DItemToolTip : public QLabel
 {
 
