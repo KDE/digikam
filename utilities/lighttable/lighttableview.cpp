@@ -53,8 +53,6 @@ public:
 
     LightTableViewPriv() :
         syncPreview(false),
-        leftLoading(false),
-        rightLoading(false),
         grid(0),
         leftFrame(0),
         rightFrame(0),
@@ -64,8 +62,6 @@ public:
     }
 
     bool               syncPreview;
-    bool               leftLoading;     // To not sync right panel during left loading.
-    bool               rightLoading;    // To not sync left panel during right loading.
 
     QGridLayout*       grid;
 
@@ -307,7 +303,7 @@ void LightTableView::rightReload()
 
 void LightTableView::slotLeftContentsMoved(int x, int y)
 {
-    if (d->syncPreview && !d->leftLoading)
+    if (d->syncPreview && !leftPreviewLoading())
     {
         disconnect(d->rightPreview->layout(), SIGNAL(zoomFactorChanged(double)),
                    this, SIGNAL(signalRightZoomFactorChanged(double)));
@@ -329,7 +325,7 @@ void LightTableView::slotLeftContentsMoved(int x, int y)
 
 void LightTableView::slotRightContentsMoved(int x, int y)
 {
-    if (d->syncPreview && !d->rightLoading)
+    if (d->syncPreview && !rightPreviewLoading())
     {
         disconnect(d->leftPreview->layout(), SIGNAL(zoomFactorChanged(double)),
                    this, SIGNAL(signalLeftZoomFactorChanged(double)));
@@ -362,14 +358,12 @@ ImageInfo LightTableView::rightImageInfo() const
 
 void LightTableView::setLeftImageInfo(const ImageInfo& info)
 {
-    d->leftLoading = true;
     d->leftPreview->setImageInfo(info);
     if (info.isNull()) d->leftPreview->setDragAndDropMessage();
 }
 
 void LightTableView::setRightImageInfo(const ImageInfo& info)
 {
-    d->rightLoading = true;
     d->rightPreview->setImageInfo(info);
     if (info.isNull()) d->rightPreview->setDragAndDropMessage();
 }
@@ -377,7 +371,6 @@ void LightTableView::setRightImageInfo(const ImageInfo& info)
 void LightTableView::slotLeftPreviewLoaded(bool success)
 {
     checkForSyncPreview();
-    d->leftLoading = false;
     slotRightContentsMoved(d->rightPreview->contentsX(), d->rightPreview->contentsY());
 
     emit signalLeftPreviewLoaded(success);
@@ -386,7 +379,6 @@ void LightTableView::slotLeftPreviewLoaded(bool success)
 void LightTableView::slotRightPreviewLoaded(bool success)
 {
     checkForSyncPreview();
-    d->rightLoading = false;
     slotLeftContentsMoved(d->leftPreview->contentsX(), d->leftPreview->contentsY());
 
     emit signalRightPreviewLoaded(success);
@@ -444,6 +436,16 @@ void LightTableView::slotDeleteLeftItem()
 void LightTableView::slotDeleteRightItem()
 {
     emit signalDeleteItem(d->rightPreview->getImageInfo());
+}
+
+bool LightTableView::leftPreviewLoading() const
+{
+     return (d->leftPreview->previewItem()->state() == DImgPreviewItem::Loading);
+}
+
+bool LightTableView::rightPreviewLoading() const
+{
+     return (d->rightPreview->previewItem()->state() == DImgPreviewItem::Loading);
 }
 
 }  // namespace Digikam

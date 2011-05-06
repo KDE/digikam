@@ -126,6 +126,12 @@ private :
 
     void checkForSyncPreview();
 
+    /// To not sync right panel during left loading
+    bool leftPreviewLoading() const;
+
+    /// To not sync left panel during right loading.
+    bool rightPreviewLoading() const;
+
 private :
 
     class LightTableViewPriv;
