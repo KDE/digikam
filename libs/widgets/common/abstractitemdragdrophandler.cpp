@@ -6,7 +6,7 @@
  * Date        : 2009-04-26
  * Description : Qt Model for Images - drag and drop handling
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,9 +27,6 @@
 
 #include <QMimeData>
 #include <QStringList>
-
-// Local includes
-
 
 namespace Digikam
 {
@@ -59,7 +56,7 @@ QStringList AbstractItemDragDropHandler::mimeTypes() const
     return QStringList();
 }
 
-QMimeData* AbstractItemDragDropHandler::createMimeData(const QList<QModelIndex> &)
+QMimeData* AbstractItemDragDropHandler::createMimeData(const QList<QModelIndex>&)
 {
     return 0;
 }
@@ -79,5 +76,4 @@ bool AbstractItemDragDropHandler::acceptsMimeData(const QMimeData* mime)
     return false;
 }
 
-}
-
+} // namespace Digikam

@@ -6,7 +6,7 @@
  * Date        : 2009-04-26
  * Description : Qt Model for Images - drag and drop handling
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,7 +63,7 @@ public:
     virtual QStringList mimeTypes() const;
 
     /** Create a mime data object for starting a drag from the given Albums */
-    virtual QMimeData* createMimeData(const QList<QModelIndex> &);
+    virtual QMimeData* createMimeData(const QList<QModelIndex>&);
 
     /** Returns if the given mime data can be handled. acceptsMimeData shall return true
      *  if a drop of the given mime data will be accepted on any index or place at all.
