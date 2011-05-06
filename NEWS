@@ -136,6 +136,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 110 ==> 271916 : digiKam crashed when opening editor.
 111 ==> 272133 : Crash editing Geo coordinates of several images.
 112 ==> 272216 : Compile error: No rule to make target /usr/lib/libm.so, required for lib/libkdcraw.so.20.0.0.
-113 ==> 
-
+113 ==> 272569 : Crashing in start.
+114 ==> 
 
