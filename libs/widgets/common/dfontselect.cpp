@@ -6,7 +6,7 @@
  * Date        : 2008-12-23
  * Description : a widget to select between system font or a custom font.
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class DFontSelectPriv
+class DFontSelect::DFontSelectPriv
 {
 public:
 
@@ -52,16 +52,16 @@ public:
     {
     }
 
-    QLabel*                space;
-    QLabel*                label;
+    QLabel*               space;
+    QLabel*               label;
 
-    QFont                  font;
+    QFont                 font;
 
-    QPushButton*           chooseFontButton;
+    QPushButton*          chooseFontButton;
 
-    KComboBox*             modeCombo;
+    KComboBox*            modeCombo;
 
-    DFontSelect::FontMode  mode;
+    DFontSelect::FontMode mode;
 };
 
 DFontSelect::DFontSelect(const QString& text=QString(), QWidget* parent=0)
@@ -145,7 +145,7 @@ bool DFontSelect::event(QEvent* e)
 
 void DFontSelect::slotOpenFontDialog()
 {
-    QFont f = font();
+    QFont f          = font();
     const int result = KFontDialog::getFont(f, KFontChooser::NoDisplayFlags, this);
 
     if (result == KFontDialog::Accepted)
