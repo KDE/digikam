@@ -13,6 +13,7 @@ moving=false
 maxInstances=1
 Description=digiKam mapimages kioslave
 Description[ca]=«Kioslave» de mapes d'imatges del digiKam
+Description[el]=kioslave χαρτών του digiKam
 Description[en_GB]=digiKam mapimages kioslave
 Description[et]=DigiKami kaartide KIO-moodul
 Description[is]=digiKam kortamynda-kioslave
