@@ -137,5 +137,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 111 ==> 272133 : Crash editing Geo coordinates of several images.
 112 ==> 272216 : Compile error: No rule to make target /usr/lib/libm.so, required for lib/libkdcraw.so.20.0.0.
 113 ==> 272569 : Crashing in start.
-114 ==> 
+114 ==> 271651 : 2.0 beta4 can't use network shares.
+115 ==> 
 
