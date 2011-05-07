@@ -68,10 +68,10 @@ public:
     void setImageUrl(const KUrl& url);
     KUrl imageUrl() const;
 
-    void setName(const QString& name, bool check = true);
+    void setName(const QString& name);
     QString name() const;
 
-    void setNewName(const QString& name, bool check = true);
+    void setNewName(const QString& name);
     QString newName() const;
 
     void markInvalid(bool invalid);

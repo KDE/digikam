@@ -87,8 +87,8 @@ void AdvancedRenameListItem::setImageUrl(const KUrl& url)
     QFileInfo fi(d->imageUrl.toLocalFile());
     d->completeFileName  = fi.fileName();
 
-    setName(d->completeFileName,    false);
-    setNewName(d->completeFileName, false);
+    setName(d->completeFileName);
+    setNewName(d->completeFileName);
 }
 
 KUrl AdvancedRenameListItem::imageUrl() const
@@ -96,14 +96,9 @@ KUrl AdvancedRenameListItem::imageUrl() const
     return d->imageUrl;
 }
 
-void AdvancedRenameListItem::setName(const QString& name, bool check)
+void AdvancedRenameListItem::setName(const QString& name)
 {
     setText(OldName, name);
-
-    if (check)
-    {
-        markInvalid(isNameEqual());
-    }
 }
 
 QString AdvancedRenameListItem::name() const
@@ -111,14 +106,9 @@ QString AdvancedRenameListItem::name() const
     return text(OldName);
 }
 
-void AdvancedRenameListItem::setNewName(const QString& name, bool check)
+void AdvancedRenameListItem::setNewName(const QString& name)
 {
     setText(NewName, name);
-
-    if (check)
-    {
-        markInvalid(isNameEqual());
-    }
 }
 
 QString AdvancedRenameListItem::newName() const
@@ -275,7 +265,7 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
         ++it;
     }
 
-    bool enableBtn = !parseString.isEmpty() && checkNewNames();
+    bool enableBtn = checkNewNames() && !parseString.isEmpty();
     enableButton(Ok, enableBtn);
 
     d->listView->viewport()->update();
