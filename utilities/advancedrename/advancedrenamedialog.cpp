@@ -246,6 +246,11 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
         return;
     }
 
+    if (!d->singleFileMode)
+    {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+    }
+
     d->newNamesList.clear();
 
     // generate new file names
@@ -274,6 +279,11 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
     enableButton(Ok, enableBtn);
 
     d->listView->viewport()->update();
+
+    if (!d->singleFileMode)
+    {
+        QApplication::restoreOverrideCursor();
+    }
 }
 
 void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
