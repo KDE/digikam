@@ -2,6 +2,7 @@
 Name=ImagePlugin_Transform
 Name[ast]=ImagePlugin_Transform
 Name[bg]=Приставка за снимки - Преобразуване
+Name[bs]=ImagePlugin_Transform
 Name[ca]=ImagePlugin_Transform
 Name[ca@valencia]=ImagePlugin_Transform
 Name[cs]=ImagePlugin_Transform
@@ -40,6 +41,7 @@ Encoding=UTF-8
 Comment=A tool to transform image geometry
 Comment[ast]=Una ferramienta pa tresformar la xeometría de la imaxe
 Comment[bg]=Инструмент за промяна на геометрията в снимките
+Comment[bs]=Alat za preoblikovanje geometrije slike
 Comment[ca]=Una eina per transforma la geometria de les imatges
 Comment[ca@valencia]=Una eina per transforma la geometria de les imatges
 Comment[cs]=Nástroj pro transformaci geometrie obrázku

@@ -14,6 +14,7 @@ maxInstances=1
 Description=digiKam dates kioslave
 Description[ast]=kioslave de digiKam pa dates
 Description[bg]=digiKam kioslave за дати
+Description[bs]=digiKam datumi kioslave
 Description[ca]=«Kioslave» de dates del digiKam
 Description[ca@valencia]=«Kioslave» de dates del digiKam
 Description[cs]=digiKam datový kioslave

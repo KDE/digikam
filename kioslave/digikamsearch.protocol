@@ -7,6 +7,7 @@ maxInstances=1
 Description=digiKam search kioslave
 Description[ast]=kioslave de digiKam de gueta
 Description[bg]=digiKam kioslave за търсене
+Description[bs]=digiKam pretraga kioslave
 Description[ca]=«Kioslave» de cerca del digiKam
 Description[ca@valencia]=«Kioslave» de cerca del digiKam
 Description[cs]=digiKam kioslave vyhledávání

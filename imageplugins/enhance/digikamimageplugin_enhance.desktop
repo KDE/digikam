@@ -2,6 +2,7 @@
 Name=ImagePlugin_Enhance
 Name[ast]=ImagePlugin_Enhance
 Name[bg]=Приставка за снимки - Дорисуване
+Name[bs]=ImagePlugin_Enhance
 Name[ca]=ImagePlugin_Enhance
 Name[ca@valencia]=ImagePlugin_Enhance
 Name[cs]=ImagePlugin_Enhance
@@ -40,6 +41,7 @@ Encoding=UTF-8
 Comment=digiKam plugin to enhance photograph
 Comment[ast]=Complementu digikam pa meyorar semeyes
 Comment[bg]=Приставка на digiKam за дорисуване на повредени или липсващи области от снимки
+Comment[bs]=digiKam dodatak za pojačavanje fotografije
 Comment[ca]=Connector pel digiKam per realçar una fotografia
 Comment[ca@valencia]=Connector pel digiKam per realçar una fotografia
 Comment[cs]=Modul digiKamu pro vylepšování fotografií
