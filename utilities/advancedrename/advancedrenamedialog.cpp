@@ -313,12 +313,10 @@ void AdvancedRenameDialog::initDialog()
 
     d->singleFileMode = count == 1;
 
-    AdvancedRenameListItem* item = 0;
     foreach (const QString& file, d->advancedRenameManager->fileList())
     {
-        item = new AdvancedRenameListItem(d->listView);
         KUrl url(file);
-        item->setImageUrl(url);
+        new AdvancedRenameListItem(d->listView, url);
     }
 
     // set current filename if only one image has been added
