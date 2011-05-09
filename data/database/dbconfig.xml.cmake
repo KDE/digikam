@@ -718,7 +718,7 @@
         	</dbaction>
         	        	
         	<dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
-        		CREATE TABLE PrivCheck
+                        CREATE TABLE IF NOT EXISTS PrivCheck
         		(
  				   id   INT,
     			   name VARCHAR(35)
@@ -741,7 +741,38 @@
             </statement>
             </dbaction>
         
-            <dbaction name="CreateDB" mode="transaction"><statement mode="plain">  CREATE TABLE AlbumRoots
+            <dbaction name="CreateDB" mode="transaction"><statement mode="plain">
+                DROP PROCEDURE IF EXISTS create_index_if_not_exists;
+            </statement>
+            <statement mode="plain">
+                CREATE PROCEDURE create_index_if_not_exists(table_name_vc varchar(50), index_name_vc varchar(50), field_list_vc varchar(1024))
+                SQL SECURITY INVOKER
+                BEGIN
+
+                set @Index_cnt = (
+                    SELECT COUNT(1) cnt
+                    FROM INFORMATION_SCHEMA.STATISTICS
+                    WHERE CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
+                      AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
+                );
+
+                IF IFNULL(@Index_cnt, 0) = 0 THEN
+                    set @index_sql = CONCAT( 
+                        CONVERT( 'ALTER TABLE ' USING latin1),
+                        CONVERT( table_name_vc USING latin1),
+                        CONVERT( ' ADD INDEX ' USING latin1),
+                        CONVERT( index_name_vc USING latin1),
+                        CONVERT( '(' USING latin1),
+                        CONVERT( field_list_vc USING latin1),
+                        CONVERT( ');' USING latin1)
+                    );
+                    PREPARE stmt FROM @index_sql;
+                    EXECUTE stmt;
+                    DEALLOCATE PREPARE stmt;
+                END IF;
+                END;
+            </statement>
+            <statement mode="plain">  CREATE TABLE IF NOT EXISTS AlbumRoots
             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
             label LONGTEXT,
             status INTEGER NOT NULL,
@@ -749,7 +780,7 @@
             identifier LONGTEXT,
             specificPath LONGTEXT,
             UNIQUE(identifier(127), specificPath(128)));</statement>
-            <statement mode="plain">CREATE TABLE Albums
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS Albums
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             albumRoot INTEGER NOT NULL,
                             relativePath LONGTEXT CHARACTER SET utf8 NOT NULL,
@@ -758,7 +789,7 @@
                             collection LONGTEXT CHARACTER SET utf8,
                             icon INTEGER,
                             UNIQUE(albumRoot, relativePath(255)));</statement>
-            <statement mode="plain">CREATE TABLE Images
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS Images
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             album INTEGER,
                             name LONGTEXT CHARACTER SET utf8 NOT NULL,
@@ -768,12 +799,12 @@
                             fileSize INTEGER,
                             uniqueHash VARCHAR(128),
                             UNIQUE (album, name(255)));</statement>
-            <statement mode="plain">CREATE TABLE ImageHaarMatrix
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHaarMatrix
                             (imageid INTEGER PRIMARY KEY,
                             modificationDate DATETIME,
                             uniqueHash LONGTEXT CHARACTER SET utf8,
                             matrix LONGBLOB);</statement>
-            <statement mode="plain">CREATE TABLE ImageInformation
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageInformation
                             (imageid INTEGER PRIMARY KEY,
                             rating INTEGER,
                             creationDate DATETIME,
@@ -784,7 +815,7 @@
                             format LONGTEXT CHARACTER SET utf8,
                             colorDepth INTEGER,
                             colorModel INTEGER);</statement>
-            <statement mode="plain">CREATE TABLE ImageMetadata
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageMetadata
                             (imageid INTEGER PRIMARY KEY,
                             make LONGTEXT CHARACTER SET utf8,
                             model LONGTEXT CHARACTER SET utf8,
@@ -802,7 +833,7 @@
                             meteringMode INTEGER,
                             subjectDistance REAL,
                             subjectDistanceCategory INTEGER);</statement>
-            <statement mode="plain">CREATE TABLE ImagePositions
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImagePositions
                             (imageid INTEGER PRIMARY KEY,
                             latitude LONGTEXT CHARACTER SET utf8,
                             latitudeNumber REAL,
@@ -814,7 +845,7 @@
                             roll REAL,
                             accuracy REAL,
                             description LONGTEXT CHARACTER SET utf8);</statement>
-            <statement mode="plain">CREATE TABLE ImageComments
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageComments
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             imageid INTEGER,
                             type INTEGER,
@@ -823,14 +854,14 @@
                             date DATETIME,
                             comment LONGTEXT CHARACTER SET utf8,
                             UNIQUE(imageid, type, language, author(202)));</statement>
-            <statement mode="plain">CREATE TABLE ImageCopyright
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageCopyright
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             imageid INTEGER,
                             property LONGTEXT CHARACTER SET utf8,
                             value LONGTEXT CHARACTER SET utf8,
                             extraValue LONGTEXT CHARACTER SET utf8,
                             UNIQUE(imageid, property(110), value(111), extraValue(111)));</statement>
-            <statement mode="plain">CREATE TABLE Tags
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS Tags
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                 pid INTEGER,
                             name LONGTEXT CHARACTER SET utf8 NOT NULL,
@@ -857,7 +888,7 @@
                             type INTEGER,
                             name LONGTEXT CHARACTER SET utf8 NOT NULL,
                             query LONGTEXT CHARACTER SET utf8 NOT NULL);</statement>
-            <statement mode="plain">CREATE TABLE DownloadHistory
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS DownloadHistory
                             (id  INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             identifier LONGTEXT CHARACTER SET utf8,
                             filename LONGTEXT CHARACTER SET utf8,
@@ -868,20 +899,20 @@
                             (keyword LONGTEXT CHARACTER SET utf8 NOT NULL,
                             value LONGTEXT CHARACTER SET utf8,
                             UNIQUE(keyword(255)));</statement>
-            <statement mode="plain">CREATE TABLE ImageHistory
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHistory
                             (imageid INTEGER PRIMARY KEY,
                              uuid VARCHAR(128),
                              history LONGTEXT CHARACTER SET utf8);</statement>
-            <statement mode="plain">CREATE TABLE ImageRelations
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageRelations
                             (subject INTEGER,
                              object INTEGER,
                              type INTEGER,
                              UNIQUE(subject, object, type));</statement>
-            <statement mode="plain">CREATE TABLE TagProperties
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS TagProperties
                             (tagid INTEGER,
                              property TEXT CHARACTER SET utf8,
                              value LONGTEXT CHARACTER SET utf8);</statement>
-            <statement mode="plain">CREATE TABLE ImageTagProperties
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTagProperties
                             (imageid INTEGER,
                              tagid INTEGER,
                              property TEXT CHARACTER SET utf8,
@@ -891,25 +922,26 @@
 
             <!-- Indices -->
             <dbaction name="CreateIndices" mode="transaction">
-                <statement mode="plain">CREATE INDEX dir_index  ON Images (album);</statement>
-                <statement mode="plain">CREATE INDEX hash_index ON Images (uniqueHash);</statement>
-                <statement mode="plain">CREATE INDEX tag_index  ON ImageTags (tagid);</statement>
-                <statement mode="plain">CREATE INDEX tag_id_index  ON ImageTags (imageid);</statement>
-                <statement mode="plain">CREATE INDEX image_name_index ON Images (name(996));</statement>
-                <statement mode="plain">CREATE INDEX creationdate_index ON ImageInformation (creationDate);</statement>
-                <statement mode="plain">CREATE INDEX comments_imageid_index ON ImageComments (imageid);</statement>
-                <statement mode="plain">CREATE INDEX copyright_imageid_index ON ImageCopyright (imageid);</statement>
-                <statement mode="plain">CREATE INDEX uuid_index ON ImageHistory (uuid);</statement>
-                <statement mode="plain">CREATE INDEX subject_relations_index ON ImageRelations (subject);</statement>
-                <statement mode="plain">CREATE INDEX object_relations_index ON ImageRelations (object);</statement>
-                <statement mode="plain">CREATE INDEX tagproperties_index ON TagProperties (tagid);</statement>
-                <statement mode="plain">CREATE INDEX imagetagproperties_index ON ImageTagProperties (imageid, tagid);</statement>
-                <statement mode="plain">CREATE INDEX imagetagproperties_imageid_index ON ImageTagProperties (imageid);</statement>
-                <statement mode="plain">CREATE INDEX imagetagproperties_tagid_index ON ImageTagProperties (tagid);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('Images','dir_index','album');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('Images','hash_index','uniqueHash');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTags','tag_index','tagid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTags','tag_id_index','imageid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('Images','image_name_index','name(996)');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageInformation','creationdate_index','creationDate');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageComments','comments_imageid_index','imageid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageCopyright','copyright_imageid_index','imageid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageHistory','uuid_index','uuid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageRelations','subject_relations_index','subject');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageRelations','object_relations_index','object');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('TagProperties','tagproperties_index','tagid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_index','imageid, tagid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_imageid_index','imageid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_tagid_index','tagid');</statement>
             </dbaction>
 
             <!-- Triggers -->
             <dbaction name="CreateTriggers" mode="transaction">
+            <statement mode="plain">DROP TRIGGER IF EXISTS delete_image;</statement>
             <statement mode="plain">CREATE TRIGGER delete_image AFTER DELETE ON Images
                     FOR EACH ROW BEGIN
                         DELETE FROM ImageTags          WHERE imageid=OLD.id;
@@ -927,6 +959,7 @@
                         UPDATE Tags SET icon=null      WHERE icon=OLD.id;
                     END;
             </statement>
+            <statement mode="plain">DROP TRIGGER IF EXISTS delete_tag;</statement>
             <statement mode="plain">CREATE TRIGGER delete_tag AFTER DELETE ON Tags
             FOR EACH ROW BEGIN
                 DELETE FROM ImageTags          WHERE tagid=OLD.id;
@@ -940,6 +973,7 @@
                 ORDER BY parent.lft;
             END;
             </statement>
+            <statement mode="plain">DROP TRIGGER IF EXISTS move_tagstree;</statement>
             <statement mode="plain">CREATE TRIGGER move_tagstree AFTER UPDATE ON Tags
             FOR EACH ROW BEGIN
             DELETE FROM TagsTree;
@@ -1086,25 +1120,25 @@
 
             <!-- Thumbnails Schema DB -->
             <dbaction name="CreateThumbnailsDB" mode="transaction">
-                <statement mode="plain">CREATE TABLE Thumbnails
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS Thumbnails
                             (id INTEGER PRIMARY KEY AUTO_INCREMENT,
                             type INTEGER,
                             modificationDate DATETIME,
                             orientationHint INTEGER,
                             data LONGBLOB)
                 </statement>
-                <statement mode="plain">CREATE TABLE UniqueHashes
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS UniqueHashes
                             (uniqueHash VARCHAR(128),
                             fileSize INTEGER,
                             thumbId INTEGER,
                             UNIQUE(uniqueHash, fileSize))
                 </statement>
-                <statement mode="plain">CREATE TABLE FilePaths
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS FilePaths
                             (path LONGTEXT CHARACTER SET utf8,
                             thumbId INTEGER,
                             UNIQUE(path(255)))
                 </statement>
-                <statement mode="plain">CREATE TABLE CustomIdentifiers
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS CustomIdentifiers
                             (identifier LONGTEXT CHARACTER SET utf8,
                             thumbId INTEGER,
                             UNIQUE(identifier(255)))
@@ -1117,9 +1151,9 @@
             </dbaction>
             <!-- Thumbnails Indexes DB -->
             <dbaction name="CreateThumbnailsDBIndices" mode="transaction">
-                <statement mode="plain">CREATE INDEX id_uniqueHashes ON UniqueHashes (thumbId);</statement>
-                <statement mode="plain">CREATE INDEX id_filePaths ON FilePaths (thumbId);</statement>
-                <statement mode="plain">CREATE INDEX id_customIdentifiers ON CustomIdentifiers (thumbId);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('UniqueHashes','id_uniqueHashes','thumbId');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('FilePaths','id_filePaths','thumbId');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('CustomIdentifiers','id_customIdentifiers','thumbId');</statement>
             </dbaction>
 
             <!-- Thumbnails Trigger DB -->
@@ -1290,36 +1324,36 @@
 
             <!-- Migration from DB Version 5 (0.10 - 1.4) to Version 6 (1.5-) -->
             <dbaction name="UpdateSchemaFromV5ToV6" mode="transaction">
-            <statement mode="plain">CREATE TABLE ImageHistory
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHistory
                             (imageid INTEGER PRIMARY KEY,
                              uuid VARCHAR(128),
                              history LONGTEXT CHARACTER SET utf8);</statement>
-            <statement mode="plain">CREATE TABLE ImageRelations
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageRelations
                             (subject INTEGER,
                              object INTEGER,
                              type INTEGER,
                              UNIQUE(subject, object, type));</statement>
-            <statement mode="plain">CREATE TABLE TagProperties
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS TagProperties
                             (tagid INTEGER,
                              property TEXT CHARACTER SET utf8,
                              value LONGTEXT CHARACTER SET utf8);</statement>
-            <statement mode="plain">CREATE TABLE ImageTagProperties
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTagProperties
                             (imageid INTEGER,
                              tagid INTEGER,
                              property TEXT CHARACTER SET utf8,
                              value LONGTEXT CHARACTER SET utf8);</statement>
-            <statement mode="plain">CREATE INDEX tag_id_index  ON ImageTags (imageid);</statement>
-            <statement mode="plain">CREATE INDEX image_name_index ON Images (name(996));</statement>
-            <statement mode="plain">CREATE INDEX creationdate_index ON ImageInformation (creationDate);</statement>
-            <statement mode="plain">CREATE INDEX comments_imageid_index ON ImageComments (imageid);</statement>
-            <statement mode="plain">CREATE INDEX copyright_imageid_index ON ImageCopyright (imageid);</statement>
-            <statement mode="plain">CREATE INDEX uuid_index ON ImageHistory (uuid);</statement>
-            <statement mode="plain">CREATE INDEX subject_relations_index ON ImageRelations (subject);</statement>
-            <statement mode="plain">CREATE INDEX object_relations_index ON ImageRelations (object);</statement>
-            <statement mode="plain">CREATE INDEX tagproperties_index ON TagProperties (tagid);</statement>
-            <statement mode="plain">CREATE INDEX imagetagproperties_index ON ImageTagProperties (imageid, tagid);</statement>
-            <statement mode="plain">CREATE INDEX imagetagproperties_imageid_index ON ImageTagProperties (imageid);</statement>
-            <statement mode="plain">CREATE INDEX imagetagproperties_tagid_index ON ImageTagProperties (tagid);</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('ImageTags','tag_id_index','imageid');</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('Images','image_name_index','name(996)');</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('ImageInformation','creationdate_index','creationDate');</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('ImageComments','comments_imageid_index','imageid');</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('ImageCopyright','copyright_imageid_index','imageid');</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('ImageHistory','uuid_index','uuid');</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('ImageRelations','subject_relations_index','subject');</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('ImageRelations','object_relations_index','object');</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('TagProperties','tagproperties_index','tagid');</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_index','imageid,tagid');</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_imageid_index','imageid');</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_tagid_index','tagid');</statement>
             <statement mode="plain">ALTER TABLE Images CHANGE uniqueHash uniqueHash VARCHAR(128);</statement>
             <statement mode="plain">DROP TRIGGER IF EXISTS delete_image;</statement>
             <statement mode="plain">CREATE TRIGGER delete_image AFTER DELETE ON Images
@@ -1356,12 +1390,12 @@
             </dbaction>
             <dbaction name="UpdateThumbnailsDBSchemaFromV1ToV2" mode="transaction">
                 <statement mode="plain">ALTER TABLE UniqueHashes CHANGE uniqueHash uniqueHash VARCHAR(128);</statement>
-                <statement mode="plain">CREATE TABLE CustomIdentifiers
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS CustomIdentifiers
                             (identifier LONGTEXT CHARACTER SET utf8,
                             thumbId INTEGER,
                             UNIQUE(identifier(333)))
                 </statement>
-                <statement mode="plain">CREATE INDEX id_customIdentifiers ON CustomIdentifiers (thumbId);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('CustomIdentifiers','id_customIdentifiers','thumbId')</statement>
             </dbaction>
 
         </dbactions>
