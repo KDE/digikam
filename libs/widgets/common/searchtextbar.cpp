@@ -6,7 +6,7 @@
  * Date        : 2007-11-25
  * Description : a bar used to search a string.
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
@@ -53,7 +53,7 @@ bool operator==(const SearchTextSettings& a, const SearchTextSettings& b)
     return a.caseSensitive == b.caseSensitive && a.text == b.text;
 }
 
-class SearchTextBarPriv
+class SearchTextBar::SearchTextBarPriv
 {
 public:
 
@@ -70,21 +70,21 @@ public:
     {
     }
 
-    QString optionAutoCompletionModeEntry;
-    QString optionCaseSensitiveEntry;
+    QString                    optionAutoCompletionModeEntry;
+    QString                    optionCaseSensitiveEntry;
 
-    bool               textQueryCompletion;
-    bool               hasCaseSensitive;
-    bool               highlightOnResult;
+    bool                       textQueryCompletion;
+    bool                       hasCaseSensitive;
+    bool                       highlightOnResult;
 
-    QColor             hasResultColor;
-    QColor             hasNoResultColor;
+    QColor                     hasResultColor;
+    QColor                     hasNoResultColor;
 
-    ModelCompletion*   completion;
+    ModelCompletion*           completion;
 
-    QPointer<AlbumFilterModel>   filterModel;
+    QPointer<AlbumFilterModel> filterModel;
 
-    SearchTextSettings settings;
+    SearchTextSettings         settings;
 };
 
 SearchTextBar::SearchTextBar(QWidget* parent, const char* name, const QString& msg)
@@ -106,7 +106,6 @@ SearchTextBar::SearchTextBar(QWidget* parent, const char* name, const QString& m
             this, SLOT(slotTextChanged(const QString&)));
 
     loadState();
-
 }
 
 SearchTextBar::~SearchTextBar()
@@ -174,7 +173,6 @@ void SearchTextBar::setModel(AbstractAlbumModel* model)
 
 void SearchTextBar::setFilterModel(AlbumFilterModel* filterModel)
 {
-
     // if there already was a model, disconnect from this model
     if (d->filterModel)
     {
@@ -188,15 +186,14 @@ void SearchTextBar::setFilterModel(AlbumFilterModel* filterModel)
     {
         connect(this, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
                 d->filterModel, SLOT(setSearchTextSettings(const SearchTextSettings&)));
+
         connect(d->filterModel, SIGNAL(hasSearchResult(bool)),
                 this, SLOT(slotSearchResult(bool)));
     }
-
 }
 
 SearchTextBar::HighlightState SearchTextBar::getCurrentHighlightState() const
 {
-
     if (palette() == QPalette())
     {
         return NEUTRAL;
@@ -213,7 +210,6 @@ SearchTextBar::HighlightState SearchTextBar::getCurrentHighlightState() const
     kError() << "Impossible highlighting state";
 
     return NEUTRAL;
-
 }
 
 void SearchTextBar::setCaseSensitive(bool b)
@@ -231,7 +227,6 @@ void SearchTextBar::setCaseSensitive(bool b)
     {
         emit signalSearchTextSettings(d->settings);
     }
-
 }
 
 bool SearchTextBar::hasCaseSensitive() const
@@ -263,7 +258,6 @@ void SearchTextBar::slotTextChanged(const QString& text)
 
 void SearchTextBar::slotSearchResult(bool match)
 {
-
     // only highlight if text is not empty or highlighting is disabled.
     if (userText().isEmpty() || !d->highlightOnResult)
     {
@@ -277,7 +271,6 @@ void SearchTextBar::slotSearchResult(bool match)
                  d->hasNoResultColor);
     pal.setColor(QPalette::Active, QPalette::Text, Qt::black);
     setPalette(pal);
-
 }
 
 void SearchTextBar::contextMenuEvent(QContextMenuEvent* e)
@@ -304,7 +297,6 @@ void SearchTextBar::contextMenuEvent(QContextMenuEvent* e)
 
 void SearchTextBar::setIgnoreCase(bool ignore)
 {
-
     if (hasCaseSensitive())
     {
 
@@ -327,7 +319,6 @@ void SearchTextBar::setIgnoreCase(bool ignore)
     }
 
     emit signalSearchTextSettings(d->settings);
-
 }
 
 }  // namespace Digikam

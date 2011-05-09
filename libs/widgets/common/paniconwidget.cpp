@@ -7,7 +7,7 @@
  * Description : a generic widget to display a panel to choose
  *               a rectangular image area.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class PanIconWidgetPriv
+class PanIconWidget::PanIconWidgetPriv
 {
 
 public:
@@ -186,7 +186,7 @@ void PanIconWidget::setRegionSelection(const QRect& regionSelection)
     update();
 }
 
-QRect PanIconWidget::getRegionSelection()
+QRect PanIconWidget::getRegionSelection() const
 {
     return (d->regionSelection);
 }
@@ -317,7 +317,7 @@ void PanIconWidget::hideEvent(QHideEvent* e)
     }
 }
 
-void PanIconWidget::mousePressEvent ( QMouseEvent* e )
+void PanIconWidget::mousePressEvent(QMouseEvent* e)
 {
     if ( (e->button() == Qt::LeftButton || e->button() == Qt::MidButton) &&
          d->localRegionSelection.contains( e->x(), e->y() ) )
@@ -330,7 +330,7 @@ void PanIconWidget::mousePressEvent ( QMouseEvent* e )
     }
 }
 
-void PanIconWidget::mouseMoveEvent ( QMouseEvent* e )
+void PanIconWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if ( d->moveSelection &&
          (e->buttons() == Qt::LeftButton || e->buttons() == Qt::MidButton) )
@@ -382,7 +382,7 @@ void PanIconWidget::mouseMoveEvent ( QMouseEvent* e )
     }
 }
 
-void PanIconWidget::mouseReleaseEvent ( QMouseEvent* )
+void PanIconWidget::mouseReleaseEvent(QMouseEvent*)
 {
     if ( d->moveSelection )
     {

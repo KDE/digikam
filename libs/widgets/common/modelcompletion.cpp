@@ -6,9 +6,9 @@
  * Date        : 2010-06-13
  * Description : A KCompletion for AbstractAlbumModels
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,12 +34,10 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-// Local includes
-
 namespace Digikam
 {
 
-class ModelCompletionPriv
+class ModelCompletion::ModelCompletionPriv
 {
 public:
 
@@ -50,8 +48,8 @@ public:
     {
     }
 
-    int                displayRole;
-    int                uniqueIdRole;
+    int                          displayRole;
+    int                          uniqueIdRole;
 
     QPointer<QAbstractItemModel> model;
 
@@ -62,7 +60,7 @@ public:
      * from the completion object.
      */
     //TODO: if we want to use models that return unique strings but not integer, add support
-    QMap<int, QString> idToTextMap;
+    QMap<int, QString>           idToTextMap;
 };
 
 ModelCompletion::ModelCompletion()
@@ -88,8 +86,8 @@ void ModelCompletion::setModel(QAbstractItemModel* model, int uniqueIdRole, int 
         clear();
     }
 
-    d->model = model;
-    d->displayRole = displayRole;
+    d->model        = model;
+    d->displayRole  = displayRole;
     d->uniqueIdRole = uniqueIdRole;
 
     // connect to the new model
@@ -106,13 +104,15 @@ void ModelCompletion::connectToModel(QAbstractItemModel* model)
 {
     connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
             this, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
+
     connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
             this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
+
     connect(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
             this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)));
+
     connect(model, SIGNAL(modelReset()),
             this, SLOT(slotModelReset()));
-
 }
 
 QAbstractItemModel* ModelCompletion::model() const
@@ -151,7 +151,6 @@ void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int st
     //         << ", end = " << end;
     for (int i = start; i <= end; ++i)
     {
-
         QModelIndex index = d->model->index(i, 0, parent);
 
         if (!index.isValid())
@@ -179,7 +178,6 @@ void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int st
             kWarning() << "idToTextMap seems to be out of sync with the model. "
                        << "There is no entry for model index " << index;
         }
-
     }
 }
 
@@ -190,10 +188,8 @@ void ModelCompletion::slotModelReset()
 
 void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
-
     for (int row = topLeft.row(); row <= bottomRight.row(); ++row)
     {
-
         if (!d->model->hasIndex(row, topLeft.column(), topLeft.parent()))
         {
             kError() << "Got wrong change event for index with row " << row
@@ -211,7 +207,7 @@ void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIn
             continue;
         }
 
-        int id = index.data(d->uniqueIdRole).toInt();
+        int id           = index.data(d->uniqueIdRole).toInt();
         QString itemName = index.data(d->displayRole).toString();
 
         if (d->idToTextMap.contains(id))
@@ -235,9 +231,7 @@ void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIn
 
         d->idToTextMap[id] = itemName;
         addItem(itemName);
-
     }
-
 }
 
 void ModelCompletion::disconnectFromModel(QAbstractItemModel* model)
@@ -247,7 +241,6 @@ void ModelCompletion::disconnectFromModel(QAbstractItemModel* model)
 
 void ModelCompletion::sync(QAbstractItemModel* model)
 {
-
     //kDebug() << "Starting sync with model " << model
     //         << ", rowCount for parent: " << model->rowCount();
 
@@ -259,12 +252,10 @@ void ModelCompletion::sync(QAbstractItemModel* model)
         const QModelIndex index = model->index(i, 0);
         sync(model, index);
     }
-
 }
 
 void ModelCompletion::sync(QAbstractItemModel* model, const QModelIndex& index)
 {
-
     QString itemName = index.data(d->displayRole).toString();
     //kDebug() << "sync adding item '" << itemName << "' for index " << index;
     addItem(itemName);
@@ -275,7 +266,6 @@ void ModelCompletion::sync(QAbstractItemModel* model, const QModelIndex& index)
         const QModelIndex child = model->index(i, 0, index);
         sync(model, child);
     }
-
 }
 
 }  // namespace Digikam
