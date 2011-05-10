@@ -965,23 +965,18 @@
                 DELETE FROM ImageTags          WHERE tagid=OLD.id;
                 DELETE FROM TagProperties      WHERE tagid=OLD.id;
                 DELETE FROM ImageTagProperties WHERE tagid=OLD.id;
-                DELETE FROM TagsTree;
-                REPLACE INTO TagsTree
-                SELECT node.id, parent.pid
-                FROM Tags AS node, Tags AS parent
-                WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                ORDER BY parent.lft;
+                DELETE FROM TagsTree WHERE lft BETWEEN OLD.lft AND OLD.rgt;
             END;
             </statement>
             <statement mode="plain">DROP TRIGGER IF EXISTS move_tagstree;</statement>
             <statement mode="plain">CREATE TRIGGER move_tagstree AFTER UPDATE ON Tags
             FOR EACH ROW BEGIN
-            DELETE FROM TagsTree;
-            REPLACE INTO TagsTree
-            SELECT node.id, parent.pid
-            FROM Tags AS node, Tags AS parent
-            WHERE node.lft BETWEEN parent.lft AND parent.rgt
-            ORDER BY parent.lft;
+                DELETE FROM TagsTree WHERE lft BETWEEN OLD.lft AND OLD.rgt;
+                REPLACE INTO TagsTree
+                    SELECT node.id, parent.pid
+                    FROM Tags AS node, Tags AS parent
+                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
+                    ORDER BY parent.lft;
             END;</statement>
             </dbaction>
                        
