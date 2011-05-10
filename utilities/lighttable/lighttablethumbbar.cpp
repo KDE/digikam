@@ -47,8 +47,7 @@
 #include "dpopupmenu.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
-#include "metadatasettings.h"
-#include "metadatahub.h"
+#include "metadatamanager.h"
 #include "thumbnailloadthread.h"
 
 namespace Digikam
@@ -218,40 +217,17 @@ void LightTableThumbBar::slotAssignRating(int rating)
 
 void LightTableThumbBar::assignPickLabel(const ImageInfo& info, int pickId)
 {
-    if (!info.isNull())
-    {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setPickLabel(pickId);
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
-    }
+    MetadataManager::instance()->assignPickLabel(info, pickId);
 }
 
 void LightTableThumbBar::assignRating(const ImageInfo& info, int rating)
 {
-    rating = qMin(5, qMax(0, rating));
-
-    if (!info.isNull())
-    {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setRating(rating);
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
-    }
+    MetadataManager::instance()->assignRating(info, rating);
 }
 
 void LightTableThumbBar::assignColorLabel(const ImageInfo& info, int colorId)
 {
-    if (!info.isNull())
-    {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setColorLabel(colorId);
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
-    }
+    MetadataManager::instance()->assignColorLabel(info, colorId);
 }
 
 void LightTableThumbBar::toggleTag(int tagID)
@@ -260,11 +236,10 @@ void LightTableThumbBar::toggleTag(int tagID)
 
     if (!info.isNull())
     {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setTag(tagID, !info.tagIds().contains(tagID));
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+        if (!info.tagIds().contains(tagID))
+            MetadataManager::instance()->assignTag(info, tagID);
+        else
+            MetadataManager::instance()->removeTag(info, tagID);
     }
 }
 
