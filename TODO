@@ -64,9 +64,6 @@ Later:
 LATER 1.0.0 TODO LIST
 ------------------------------------------------------------------------------------
 
-* Database:
-   - Implement versioning of picture based on Image editor 'Action List' feature.
-
 * New CD/DVD album folders+database backup/restore tool :
    - Take a look of music database backup in amarok.
    - Take a look of image database backup in showimg.
