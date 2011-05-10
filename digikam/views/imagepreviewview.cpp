@@ -383,7 +383,10 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
     // --------------------------------------------------------
 
     cmhelper.addAction("image_find_similar");
-    cmhelper.addStandardActionLightTable();
+
+    if (d->mode == IconViewPreview)
+        cmhelper.addStandardActionLightTable();
+
     cmhelper.addQueueManagerMenu();
     popmenu.addSeparator();
 
