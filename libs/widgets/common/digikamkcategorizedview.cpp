@@ -21,7 +21,7 @@
   */
 
 #include "digikamkcategorizedview.moc"
-#include "kcategorizedview_p.h"
+#include "digikamkcategorizedview_p.h"
 
 // C++ includes
 
@@ -91,10 +91,10 @@ const QModelIndexList& DigikamKCategorizedView::Private::intersectionSet(const Q
 
     while (bottom <= top)
     {
-        middle = (top + bottom) / 2;
-
+        middle          = (top + bottom) / 2;
         index           = proxyModel->index(middle, 0);
         indexVisualRect = visualRect(index);
+
         // We need the whole height (not only the visualRect). This will help us to update
         // all needed indexes correctly (ereslibre)
         indexVisualRect.setHeight(indexVisualRect.height() + (itemHeight - indexVisualRect.height()));
@@ -138,8 +138,8 @@ QRect DigikamKCategorizedView::Private::visualRectInViewport(const QModelIndex& 
         return QRect();
     }
 
-    QString    curCategory = elementsInfo[index.row()].category;
     QRect      retRect;
+    QString    curCategory     = elementsInfo[index.row()].category;
     const bool leftToRightFlow = (listView->flow() == QListView::LeftToRight);
 
     if (leftToRightFlow)
@@ -443,8 +443,10 @@ QSize DigikamKCategorizedView::Private::contentsSize()
     QModelIndex lastIndex = categoriesIndexes.isEmpty() ? QModelIndex() :
                             proxyModel->index(categoriesIndexes[categories.last()].last(), 0);
 
-    int lastItemBottom = cachedRectIndex(lastIndex).top() +
-                         listView->spacing() + (listView->gridSize().isEmpty() ? biggestItemSize.height() : listView->gridSize().height()) - listView->viewport()->height();
+    int lastItemBottom    = cachedRectIndex(lastIndex).top() +
+                            listView->spacing() +
+                            (listView->gridSize().isEmpty() ? biggestItemSize.height() 
+                                                            : listView->gridSize().height()) - listView->viewport()->height();
 
     return QSize(listView->viewport()->width(), lastItemBottom);
 }
@@ -458,8 +460,7 @@ void DigikamKCategorizedView::Private::drawNewCategory(const QModelIndex& index,
     }
 
     QStyleOption optionCopy = option;
-    const QString category  = proxyModel->data(index,
-                                               KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+    const QString category  = proxyModel->data(index, KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
     optionCopy.state        &= ~QStyle::State_Selected;
 
     if ((listView->selectionMode() != SingleSelection) && (listView->selectionMode() != NoSelection))
@@ -512,8 +513,7 @@ void DigikamKCategorizedView::Private::drawDraggedItems(QPainter* painter)
     {
         const int dx = mousePosition.x() - initialPressPosition.x() + listView->horizontalOffset();
         const int dy = mousePosition.y() - initialPressPosition.y() + listView->verticalOffset();
-
-        option.rect = visualRect(index);
+        option.rect  = visualRect(index);
         option.rect.adjust(dx, dy, dx, dy);
 
         if (option.rect.intersects(listView->viewport()->rect()))
@@ -530,9 +530,8 @@ void DigikamKCategorizedView::Private::drawDraggedItems()
 
     foreach (const QModelIndex& index, listView->selectionModel()->selectedIndexes())
     {
-        int dx = mousePosition.x() - initialPressPosition.x() + listView->horizontalOffset();
-        int dy = mousePosition.y() - initialPressPosition.y() + listView->verticalOffset();
-
+        int dx      = mousePosition.x() - initialPressPosition.x() + listView->horizontalOffset();
+        int dy      = mousePosition.y() - initialPressPosition.y() + listView->verticalOffset();
         currentRect = visualRect(index);
         currentRect.adjust(dx, dy, dx, dy);
 
@@ -901,13 +900,11 @@ void DigikamKCategorizedView::paintEvent(QPaintEvent* event)
 
         if (otherOption.rect.intersects(area))
         {
-            intersectedInThePast = true;
-
+            intersectedInThePast    = true;
             QModelIndex indexToDraw = d->proxyModel->index(d->categoriesIndexes[category][0],
                                                            d->proxyModel->sortColumn());
 
-            d->drawNewCategory(indexToDraw,
-                               d->proxyModel->sortRole(), otherOption, &painter);
+            d->drawNewCategory(indexToDraw, d->proxyModel->sortRole(), otherOption, &painter);
         }
         else if (intersectedInThePast)
         {
@@ -1021,7 +1018,7 @@ QItemSelection DigikamKCategorizedView::Private::selectionForRect(const QRect& r
 }
 
 void DigikamKCategorizedView::setSelection(const QRect& rect,
-                                    QItemSelectionModel::SelectionFlags command)
+                                           QItemSelectionModel::SelectionFlags command)
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
     {
@@ -1077,14 +1074,14 @@ void DigikamKCategorizedView::setSelection(const QRect& rect,
             }
 
             // get the ranges
-            if (tl.isValid() && br.isValid()
-                && (tl.flags() & Qt::ItemIsEnabled)
-                && (br.flags() & Qt::ItemIsEnabled))
+            if (tl.isValid() && br.isValid()     &&
+                (tl.flags() & Qt::ItemIsEnabled) &&
+                (br.flags() & Qt::ItemIsEnabled))
             {
                 // first, middle, last in content coordinates
-                QRect first = d->cachedRectIndex(tl);
-                QRect last  = d->cachedRectIndex(br);
                 QRect middle;
+                QRect first    = d->cachedRectIndex(tl);
+                QRect last     = d->cachedRectIndex(br);
                 QSize fullSize = d->contentsSize();
 
                 if (flow() == LeftToRight)
@@ -1233,7 +1230,7 @@ void DigikamKCategorizedView::mouseMoveEvent(QMouseEvent* event)
     // was a dragging started?
     if (state() == DraggingState)
     {
-        d->mouseButtonPressed = false;
+        d->mouseButtonPressed      = false;
         d->rightMouseButtonPressed = false;
 
         if (d->drawItemsWhileDragging)
@@ -1294,12 +1291,12 @@ void DigikamKCategorizedView::mouseMoveEvent(QMouseEvent* event)
             d->initialPressPosition.y() > d->mousePosition.y())
         {
             start = d->mousePosition;
-            end = initialPressPosition;
+            end   = initialPressPosition;
         }
         else
         {
             start = initialPressPosition;
-            end = d->mousePosition;
+            end   = d->mousePosition;
         }
 
         rect = QRect(start, end).adjusted(-16, -16, 16, 16);
@@ -1556,8 +1553,7 @@ QModelIndex DigikamKCategorizedView::moveCursor(CursorAction cursorAction,
         if (category == d->elementsInfo[current.row()].category)
         {
             theCategory = category;
-
-            hasToBreak = true;
+            hasToBreak  = true;
         }
 
         if (!hasToBreak)
@@ -1873,12 +1869,11 @@ void DigikamKCategorizedView::rowsInsertedArtifficial(const QModelIndex& parent,
 
     for (int k = 0; k < rowCount; )
     {
-        lastCategory = d->proxyModel->data(modelIndexList[k], KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
-
+        lastCategory   = d->proxyModel->data(modelIndexList[k], KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
         int upperBound = d->categoryUpperBound(modelIndexList, k, categorySizes / ++categoryCounts);
         categorySizes  += upperBound - k;
+        offset         = 0;
 
-        offset = 0;
         QVector<int> rows(upperBound - k);
 
         for (int i=k; i<upperBound; ++i, ++offset)
