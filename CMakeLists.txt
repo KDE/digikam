@@ -6,6 +6,7 @@ MESSAGE(STATUS "Starting CMake configuration for: digikam")
 
 OPTION(ENABLE_SCRIPTIFACE "Build digiKam with experimental scripting support (default=OFF)" OFF)
 OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
+OPTION(ENABLE_INTERNALMYSQL "Look for MySQL server executable at build time (default=ON)" ON)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -177,20 +178,26 @@ ELSE ("${jpeglib_version}" LESS 80)
     SET(DIGIKAM_LIBJPEG_DIR libjpeg-80)
 ENDIF ("${jpeglib_version}" LESS 80)
 
+IF (ENABLE_INTERNALMYSQL)
 # Check MySQL executables
-FIND_PROGRAM( SERVERCMD_MYSQL mysqld
-              PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec /opt/local/libexec
-                    /opt/mysql/libexec /usr/mysql/bin /opt/mysql/sbin ${MYSQLD_PATH}
-                    ENV MYSQLD_PATH )
-MESSAGE(STATUS "Found MySQL server executable at: ${SERVERCMD_MYSQL}")
+    FIND_PROGRAM( SERVERCMD_MYSQL mysqld
+                  PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec /opt/local/libexec
+                        /opt/mysql/libexec /usr/mysql/bin /opt/mysql/sbin ${MYSQLD_PATH}
+                        ENV MYSQLD_PATH )
+    MESSAGE(STATUS "Found MySQL server executable at: ${SERVERCMD_MYSQL}")
 
 # NOTE: under windows, mysql_install_db PERL script is named "mysql_install_db.pl"
 #       under MACOS-X, through macports project, mysql_install_db PERL script is named "mysql_install_db5"
-FIND_PROGRAM( INITCMD_MYSQL mysql_install_db mysql_install_db5 mysql_install_db.pl
-              PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
-                    /opt/mysql/libexec /usr/mysql/bin /opt/mysql/bin ${MYSQL_TOOLS_PATH}
-                    ENV MYSQL_TOOLS_PATH )
-MESSAGE(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
+    FIND_PROGRAM( INITCMD_MYSQL mysql_install_db mysql_install_db5 mysql_install_db.pl
+                  PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
+                        /opt/mysql/libexec /usr/mysql/bin /opt/mysql/bin ${MYSQL_TOOLS_PATH}
+                       ENV MYSQL_TOOLS_PATH )
+    MESSAGE(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
+    SET(DATABASESERVERDIR "${CMAKE_CURRENT_SOURCE_DIR}/databaseserver")    
+ELSE (ENABLE_INTERNALMYSQL)
+    SET(DATABASESERVERDIR "")
+ENDIF (ENABLE_INTERNALMYSQL)
+MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL HAVE_INTERNALMYSQL)
 
 # check the libkdcraw version
 # note that old versions don't specify version information, so for now
@@ -283,11 +290,14 @@ IF(USE_SCRIPT_IFACE)
     PRINT_QTMODULE_STATUS("Qt4 SCRIPTTOOLS" QT_QTSCRIPTTOOLS_FOUND)
 ENDIF(USE_SCRIPT_IFACE)
 
-PRINT_EXECUTABLE_STATUS("MySQL Server" mysqld MYSQLD_PATH SERVERCMD_MYSQL)
-
-IF (NOT WIN32)
-    PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
-ENDIF (NOT WIN32)
+IF (ENABLE_INTERNALMYSQL)
+    PRINT_EXECUTABLE_STATUS("MySQL Server" mysqld MYSQLD_PATH SERVERCMD_MYSQL)
+    IF (NOT WIN32)
+        PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
+    ENDIF (NOT WIN32)
+ELSE (ENABLE_INTERNALMYSQL)
+    MESSAGE(STATUS " mysql server found..................... NO  (optional - disabled by user)")
+ENDIF (ENABLE_INTERNALMYSQL)
 
 PRINT_LIBRARY_STATUS("libtiff" "http://www.remotesensing.org/libtiff" "" TIFF_FOUND)
 PRINT_LIBRARY_STATUS("libpng" "http://www.libpng.org/pub/png/libpng.html" " (version >= 1.2.7)" PNG_FOUND)
@@ -1398,7 +1408,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     INCLUDE_DIRECTORIES(
-        ${CMAKE_CURRENT_SOURCE_DIR}/databaseserver
+        ${DATABASESERVERDIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database
@@ -1541,7 +1551,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ADD_SUBDIRECTORY(kioslave)
     ADD_SUBDIRECTORY(showfoto)
     ADD_SUBDIRECTORY(imageplugins)
-    ADD_SUBDIRECTORY(databaseserver)
+    IF (ENABLE_INTERNALMYSQL)
+        ADD_SUBDIRECTORY(databaseserver)
+    ENDIF (ENABLE_INTERNALMYSQL)
 
     IF(KDE4_BUILD_TESTS)
         MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)

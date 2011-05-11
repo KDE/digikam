@@ -54,6 +54,9 @@
 /* Define to 1 if you have Nepomuk shared libraries installed */
 #cmakedefine HAVE_NEPOMUK 1
 
+/* Define to 1 if we know how to start mysqld */
+#cmakedefine HAVE_INTERNALMYSQL 1
+
 #define LIBEXEC_INSTALL_DIR "${LIBEXEC_INSTALL_DIR}"
 
 /*
