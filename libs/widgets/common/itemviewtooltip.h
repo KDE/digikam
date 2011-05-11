@@ -6,7 +6,7 @@
  * Date        : 2009-04-24
  * Description : A DItemToolTip prepared for use in QAbstractItemViews
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,8 +36,6 @@
 namespace Digikam
 {
 
-class ItemViewToolTipPriv;
-
 class DIGIKAM_EXPORT ItemViewToolTip : public DItemToolTip
 {
 public:
@@ -57,6 +55,7 @@ public:
     void show(const QStyleOptionViewItem& option, const QModelIndex& index);
 
     void setTipContents(const QString& tipContents);
+
     /**
      * Default implementation is based on setTipContents().
      * Reimplement if you dynamically provide the contents.
@@ -73,6 +72,7 @@ protected:
 
 private:
 
+    class ItemViewToolTipPriv;
     ItemViewToolTipPriv* const d;
 };
 
