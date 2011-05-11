@@ -44,9 +44,7 @@ namespace Digikam
 {
 
 class ActionVersionsOverlay;
-class ImageVersionsModel;
 class ImageInfo;
-class ImageInfoList;
 class ShowHideVersionsOverlay;
 class VersionsDelegate;
 class VersionsTreeView;
@@ -63,10 +61,10 @@ public:
     void readSettings(const KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
-    VersionsTreeView *view() const;
-    VersionsDelegate *delegate() const;
+    VersionsTreeView* view() const;
+    VersionsDelegate* delegate() const;
 
-    ActionVersionsOverlay* addActionOverlay(const KGuiItem& gui);
+    ActionVersionsOverlay*   addActionOverlay(const KGuiItem& gui);
     ShowHideVersionsOverlay* addShowHideOverlay();
 
 public Q_SLOTS:

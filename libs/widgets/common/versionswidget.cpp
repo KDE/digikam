@@ -73,18 +73,18 @@ public:
     {
     }
 
-    VersionsTreeView*                view;
-    ImageHistoryGraphModel*          model;
-    VersionsDelegate*                delegate;
+    VersionsTreeView*        view;
+    ImageHistoryGraphModel*  model;
+    VersionsDelegate*        delegate;
 
-    ShowHideVersionsOverlay*         showHideOverlay;
+    ShowHideVersionsOverlay* showHideOverlay;
 
-    QButtonGroup*                    viewButtonGroup;
-    QToolButton*                     listModeButton;
-    QToolButton*                     treeModeButton;
-    QToolButton*                     combinedModeButton;
+    QButtonGroup*            viewButtonGroup;
+    QToolButton*             listModeButton;
+    QToolButton*             treeModeButton;
+    QToolButton*             combinedModeButton;
 
-    static const QString             configCurrentMode;
+    static const QString     configCurrentMode;
 };
 const QString VersionsWidget::VersionsWidgetPriv::configCurrentMode("Version Properties View Mode");
 
@@ -92,7 +92,7 @@ const QString VersionsWidget::VersionsWidgetPriv::configCurrentMode("Version Pro
 VersionsWidget::VersionsWidget(QWidget* parent)
     : QWidget(parent), d(new VersionsWidgetPriv)
 {
-    QGridLayout* layout      = new QGridLayout;
+    QGridLayout* layout   = new QGridLayout;
 
     d->viewButtonGroup    = new QButtonGroup(this);
     d->listModeButton     = new QToolButton;
@@ -113,7 +113,7 @@ VersionsWidget::VersionsWidget(QWidget* parent)
     d->combinedModeButton->setToolTip(i18n("Show available versions and the applied filters in a combined list"));
     d->viewButtonGroup->addButton(d->combinedModeButton, ImageHistoryGraphModel::CombinedTreeMode);
 
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    QHBoxLayout* buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(d->listModeButton);
     buttonLayout->addWidget(d->treeModeButton);
     buttonLayout->addWidget(d->combinedModeButton);
@@ -130,8 +130,8 @@ VersionsWidget::VersionsWidget(QWidget* parent)
     //d->view->setFrameShape(QFrame::NoFrame);
     d->view->setFrameShadow(QFrame::Plain);
 
-    layout->addLayout(buttonLayout,   0, 1);
-    layout->addWidget(d->view,        1, 0, 1, 2);
+    layout->addLayout(buttonLayout, 0, 1);
+    layout->addWidget(d->view,      1, 0, 1, 2);
     layout->setColumnStretch(0, 1);
     layout->setRowStretch(1, 1);
     setLayout(layout);
@@ -175,12 +175,12 @@ void VersionsWidget::readSettings(const KConfigGroup& group)
     slotViewModeChanged(mode);
 }
 
-VersionsTreeView *VersionsWidget::view() const
+VersionsTreeView* VersionsWidget::view() const
 {
     return d->view;
 }
 
-VersionsDelegate *VersionsWidget::delegate() const
+VersionsDelegate* VersionsWidget::delegate() const
 {
     return d->delegate;
 }
