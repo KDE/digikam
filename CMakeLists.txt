@@ -1297,7 +1297,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filtershistorywidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistorytreeitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistorymodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistoryview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistoryitemdelegate.cpp
        )
 

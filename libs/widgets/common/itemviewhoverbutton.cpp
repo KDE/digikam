@@ -7,7 +7,7 @@
  * Description : Qt item view mouse hover button
  *
  * Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -110,7 +110,6 @@ void ItemViewHoverButton::setVisible(bool visible)
     {
         startFading();
     }
-
 }
 
 void ItemViewHoverButton::enterEvent(QEvent* event)
@@ -140,15 +139,15 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
     painter.setRenderHint(QPainter::Antialiasing);
 
     // draw an alpha blended circle as background
-    const QPalette& palette = parentWidget()->palette();
+    const QPalette& palette       = parentWidget()->palette();
 
     const QBrush& backgroundBrush = palette.brush(QPalette::Normal, QPalette::Window);
-    QColor background = backgroundBrush.color();
+    QColor background             = backgroundBrush.color();
     background.setAlpha(m_fadingValue / 2);
     painter.setBrush(background);
 
     const QBrush& foregroundBrush = palette.brush(QPalette::Normal, QPalette::WindowText);
-    QColor foreground = foregroundBrush.color();
+    QColor foreground             = foregroundBrush.color();
     foreground.setAlpha(m_fadingValue / 4);
     painter.setPen(foreground);
 
