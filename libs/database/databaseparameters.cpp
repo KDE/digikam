@@ -7,7 +7,7 @@
  * Description : Storage container for database connection parameters.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Holger F�rster <hamsi2k at freenet dot de>
+ * Copyright (C) 2010 by Holger Foerster <hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +27,7 @@
 #endif
 */
 
+#include "config-digikam.h"
 #include "databaseparameters.h"
 
 // Qt includes
@@ -97,12 +98,16 @@ DatabaseParameters::DatabaseParameters(const KUrl& url)
         port = queryPort.toInt();
     }
 
+#ifdef HAVE_INTERNALMYSQL
     QString queryServer = url.queryItem("internalServer");
 
     if (!queryServer.isNull())
     {
         internalServer = (queryServer == "true");
     }
+#else
+    internalServer = false;
+#endif // HAVE_INTERNALMYSQL
 
     userName       = url.queryItem("userName");
     password       = url.queryItem("password");
@@ -207,7 +212,11 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
     userName                 = group.readEntry(configDatabaseUsername, QString());
     password                 = group.readEntry(configDatabasePassword, QString());
     connectOptions           = group.readEntry(configDatabaseConnectOptions, QString());
+#ifdef HAVE_INTERNALMYSQL
     internalServer           = group.readEntry(configInternalDatabaseServer, false);
+#else
+    internalServer           = false;
+#endif // HAVE_INTERNALMYSQL
 
     if (isSQLite() && !databaseName.isNull())
     {

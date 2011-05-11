@@ -45,6 +45,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "databaseparameters.h"
 #include "databaseserverstarter.h"
 
@@ -130,7 +131,9 @@ void DatabaseWidget::setupMainArea()
     QFormLayout* expertSettinglayout    = new QFormLayout();
     d->expertSettings->setLayout(expertSettinglayout);
 
+#ifdef HAVE_INTERNALMYSQL
     expertSettinglayout->addRow(internalServerLabel, internalServer);
+#endif // HAVE_INTERNALMYSQL
     expertSettinglayout->addRow(hostNameLabel, hostName);
     expertSettinglayout->addRow(hostPortLabel, hostPort);
     expertSettinglayout->addRow(databaseNameLabel, databaseName);
@@ -177,8 +180,10 @@ void DatabaseWidget::setupMainArea()
     connect(databaseType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotHandleDBTypeIndexChanged(int)));
 
+#ifdef HAVE_INTERNALMYSQL
     connect(internalServer, SIGNAL(stateChanged(int)),
             this, SLOT(slotHandleInternalServerCheckbox(int)));
+#endif // HAVE_INTERNALMYSQL
 
     connect(checkDatabaseConnectionButton, SIGNAL(clicked()),
             this, SLOT(checkDatabaseConnection()));
@@ -317,7 +322,11 @@ void DatabaseWidget::setParametersFromSettings(const AlbumSettings* settings)
     originalDbType = settings->getDatabaseType();
     databasePathEdit->setUrl(settings->getDatabaseFilePath());
 
+#ifdef HAVE_INTERNALMYSQL
     internalServer->setChecked(settings->getInternalDatabaseServer());
+#else
+    internalServer->setChecked(false);
+#endif // HAVE_INTERNALMYSQL
     databaseName->setText(settings->getDatabaseName());
     databaseNameThumbnails->setText(settings->getDatabaseNameThumbnails());
     hostName->setText(settings->getDatabaseHostName());
