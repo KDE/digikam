@@ -10,7 +10,7 @@ General        : Tag keyboard shortcuts support.
 General        : Color Labels support to improve photograph workfow.
 General        : Pick Labels support to improve photograph selection.
 General        : Color Theme engine is now ported to KDE color theme manager.
-General        : MySQl support improved.
+General        : MySQl support improvements. Dependency is now optional.
 
 AlbumGUI       : Re-designed Filters view on right sidebar to perform icon-view items filtering.
 AlbumGUI       : Add options to group/ungroup items from icon-view.
@@ -147,4 +147,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 120 ==> 257183 : Failed to add tag to database.
 121 ==> 262231 : Missing records after migration from SQLite to digiKam.
 122 ==> 267733 : Automatical initialisation of Internal MySQL database doesn't work after digikam start.
-123 ==> 
+123 ==> 254533 : Make MySQL support as optional dependency [patch].
+124 ==> 
