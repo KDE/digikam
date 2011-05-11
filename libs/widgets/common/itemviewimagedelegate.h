@@ -25,8 +25,6 @@
 #ifndef ITEMVIEWIMAGEDELEGATE_H
 #define ITEMVIEWIMAGEDELEGATE_H
 
-// Qt includes
-
 // Local includes
 
 #include "ditemdelegate.h"
@@ -52,10 +50,12 @@ public:
     ItemViewImageDelegate(QObject* parent = 0);
     ~ItemViewImageDelegate();
 
+    ThumbnailSize thumbnailSize() const;
+    int spacing() const;
+    QRect rect() const;
+
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual QSize gridSize() const;
-
-    ThumbnailSize thumbnailSize() const;
 
     // reimplemented from DItemDelegate
     virtual void setThumbnailSize(const ThumbnailSize& thumbSize);
@@ -66,13 +66,10 @@ public:
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
                                    const QModelIndex& index, QRect* activationRect = 0) const;
 
-    int spacing() const;
-
-    QRect rect() const;
-
     /** Returns the area where the pixmap is drawn,
      *  or null if not supported */
     virtual QRect pixmapRect() const;
+
     /** Returns the area where the image information is drawn,
      *  or null if empty / not supported.
      *  The image information is textual or graphical information,
@@ -84,6 +81,7 @@ public:
     /** Can be used to temporarily disable drawing of the rating.
      *  Call with QModelIndex() afterwards. */
     void setRatingEdited(const QModelIndex& index);
+
     /** Returns the rectangle where the rating is drawn,
      *  or a null rectangle if not supported. */
     virtual QRect ratingRect() const;
@@ -103,8 +101,6 @@ Q_SIGNALS:
     void hideNotification();
 
 protected:
-
-    virtual QAbstractItemDelegate* asDelegate();
 
     /// Use the tool methods for painting in subclasses
     QRect drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
@@ -128,12 +124,16 @@ protected:
     void prepareBackground();
     void prepareRatingPixmaps(bool composeOverBackground = true);
 
+    /// Returns the relevant pixmap from the cached rating pixmaps
+    QPixmap ratingPixmap(int rating, bool selected) const;
+
+    virtual QAbstractItemDelegate* asDelegate();
+
     // reimplement these in subclasses
     virtual void invalidatePaintingCache();
     virtual void updateSizeRectsAndPixmaps() = 0;
 
-    /// Returns the relevant pixmap from the cached rating pixmaps
-    QPixmap ratingPixmap(int rating, bool selected) const;
+protected:
 
     ItemViewImageDelegatePrivate* const d_ptr;
     ItemViewImageDelegate(ItemViewImageDelegatePrivate& dd, QObject* parent);

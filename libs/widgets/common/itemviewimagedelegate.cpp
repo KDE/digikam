@@ -264,7 +264,8 @@ void ItemViewImageDelegate::invalidatePaintingCache()
     emit visualChange();
 }
 
-QRect ItemViewImageDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const
+QRect ItemViewImageDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background,
+                                           const QPixmap& thumbnail) const
 {
     p->drawPixmap(0, 0, background);
 
@@ -297,7 +298,8 @@ QRect ItemViewImageDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, 
     return actualPixmapRect;
 }
 
-void ItemViewImageDelegate::drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected) const
+void ItemViewImageDelegate::drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect,
+                                       int rating, bool isSelected) const
 {
     Q_D(const ItemViewImageDelegate);
 
@@ -305,9 +307,10 @@ void ItemViewImageDelegate::drawRating(QPainter* p, const QModelIndex& index, co
     {
         p->drawPixmap(ratingRect, ratingPixmap(rating, isSelected));
     }
-
-    /*else
-        p->drawPixmap(r, ratingPixmap(-1, isSelected));*/
+/*
+    else
+        p->drawPixmap(r, ratingPixmap(-1, isSelected));
+*/
 }
 
 void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QString& name) const
@@ -329,7 +332,7 @@ void ItemViewImageDelegate::drawCreationDate(QPainter* p, const QRect& dateRect,
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
-    str = i18nc("date of image creation", "created: %1", str);
+    str         = i18nc("date of image creation", "created: %1", str);
     p->drawText(dateRect, Qt::AlignCenter, squeezedTextCached(p, dateRect.width(), str));
 }
 
@@ -338,7 +341,7 @@ void ItemViewImageDelegate::drawModificationDate(QPainter* p, const QRect& dateR
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
-    str = i18nc("date of last image modification", "modified: %1",str);
+    str         = i18nc("date of last image modification", "modified: %1",str);
     p->drawText(dateRect, Qt::AlignCenter, squeezedTextCached(p, dateRect.width(), str));
 }
 
@@ -371,7 +374,8 @@ void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, int bytes)
     p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
 }
 
-void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString, bool isSelected) const
+void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,
+                                     bool isSelected) const
 {
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontCom);
@@ -381,7 +385,8 @@ void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString&
     p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), tagsString));
 }
 
-void ItemViewImageDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected) const
+void ItemViewImageDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewItem& option,
+                                          bool isSelected) const
 {
     Q_D(const ItemViewImageDelegate);
 
@@ -483,14 +488,14 @@ void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
         p->setOpacity(op);
 
         QString text = QString::number(numberOfGroupedImages);
-        /*
-        QRect br = p->boundingRect(r, Qt::AlignLeft|Qt::AlignTop, text).adjusted(0,0,1,1);
-        int rectSize = qMax(br.width(), br.height());
+/*
+        QRect br       = p->boundingRect(r, Qt::AlignLeft|Qt::AlignTop, text).adjusted(0,0,1,1);
+        int rectSize   = qMax(br.width(), br.height());
         QRect textRect = QRect(0, 0, rectSize, rectSize);
         textRect.moveLeft((r.width() - textRect.width()) / 2);
         textRect.moveTop((r.height() - textRect.height()) * 4 / 5);
         p->fillRect(textRect.translated(r.topLeft(), QColor(0, 0, 0, 128));
-        */
+*/
         p->drawText(r, Qt::AlignCenter, text);
     }
 }
@@ -505,7 +510,6 @@ void ItemViewImageDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionVi
     if (colorId > NoColorLabel)
     {
         // This draw a simple rectangle around item.
-
         p->setPen(QPen(ColorLabelWidget::labelColor((ColorLabel)colorId), 5, Qt::SolidLine));
         p->drawRect(3, 3, d->rect.width()-7, d->rect.height()-7);
     }
