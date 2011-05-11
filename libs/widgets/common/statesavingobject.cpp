@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class StateSavingObjectPriv
+class StateSavingObject::StateSavingObjectPriv
 {
 public:
 
@@ -45,12 +45,6 @@ public:
         depth(StateSavingObject::INSTANCE)
     {
     }
-
-    QObject* host;
-    KConfigGroup group;
-    QString prefix;
-    bool groupSet;
-    StateSavingObject::StateSavingDepth depth;
 
     inline KConfigGroup getGroupFromObjectName()
     {
@@ -67,17 +61,13 @@ public:
 
     void recurse(const QObjectList& children, const bool save)
     {
-
-        for (QObjectList::const_iterator childIt = children.constBegin(); childIt
-             != children.constEnd(); ++childIt)
+        for (QObjectList::const_iterator childIt = children.constBegin();
+             childIt != children.constEnd(); ++childIt)
         {
-
-            StateSavingObject* const statefulChild =
-                dynamic_cast<StateSavingObject*> (*childIt);
+            StateSavingObject* const statefulChild = dynamic_cast<StateSavingObject*> (*childIt);
 
             if (statefulChild)
             {
-
                 // if the child implements the interface, it can be save /
                 // restored
 
@@ -97,20 +87,15 @@ public:
                 }
 
                 statefulChild->setStateSavingDepth(oldState);
-
-
             }
 
             // recurse children everytime
             recurse((*childIt)->children(), save);
-
         }
-
     }
 
     void recurseOperation(const bool save)
     {
-
         QString action("loading");
 
         if (save)
@@ -121,11 +106,10 @@ public:
         if (depth == StateSavingObject::DIRECT_CHILDREN)
         {
             //kDebug() << "Also restoring " << action << " of direct children";
-            for (QObjectList::const_iterator childIt = host->children().begin(); childIt
-                 != host->children().end(); ++childIt)
+            for (QObjectList::const_iterator childIt = host->children().begin();
+                 childIt != host->children().end(); ++childIt)
             {
-                StateSavingObject* const statefulChild =
-                    dynamic_cast<StateSavingObject*> (*childIt);
+                StateSavingObject* const statefulChild = dynamic_cast<StateSavingObject*> (*childIt);
 
                 if (statefulChild)
                 {
@@ -145,9 +129,15 @@ public:
             //kDebug() << "Also " << action << " state of all children (recursive)";
             recurse(host->children(), save);
         }
-
     }
 
+public:
+
+    QObject*                            host;
+    KConfigGroup                        group;
+    QString                             prefix;
+    bool                                groupSet;
+    StateSavingObject::StateSavingDepth depth;
 };
 
 StateSavingObject::StateSavingObject(QObject* const host) :
@@ -177,7 +167,7 @@ void StateSavingObject::setStateSavingDepth(const StateSavingObject::StateSaving
 void StateSavingObject::setConfigGroup(KConfigGroup group)
 {
     //kDebug() << "received new config group: " << group.name();
-    d->group = group;
+    d->group    = group;
     d->groupSet = true;
 }
 
@@ -188,29 +178,24 @@ void StateSavingObject::setEntryPrefix(const QString& prefix)
 
 void StateSavingObject::loadState()
 {
-
     //kDebug() << "Loading state";
 
     doLoadState();
 
     d->recurseOperation(false);
-
 }
 
 void StateSavingObject::saveState()
 {
-
     //kDebug() << "Saving state";
 
     doSaveState();
 
     d->recurseOperation(true);
-
 }
 
-KConfigGroup StateSavingObject::getConfigGroup()
+KConfigGroup StateSavingObject::getConfigGroup() const
 {
-
     if (!d->groupSet)
     {
         //kDebug() << "No config group set, returning one based on object name";
@@ -227,9 +212,9 @@ KConfigGroup StateSavingObject::getConfigGroup()
     return d->group;
 }
 
-QString StateSavingObject::entryName(const QString& base)
+QString StateSavingObject::entryName(const QString& base) const
 {
     return d->prefix + base;
 }
 
-}
+} // namespace Digikam

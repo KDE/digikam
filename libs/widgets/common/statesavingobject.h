@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <qobject.h>
+#include <QObject>
 
 // KDE includes
 
@@ -38,8 +38,6 @@
 
 namespace Digikam
 {
-
-class StateSavingObjectPriv;
 
 /**
  * An interface-like class with utility methods and a general public interface
@@ -86,7 +84,6 @@ public:
      */
     enum StateSavingDepth
     {
-
         /**
          * Only the instance the saving / restoring was invoked on is
          * saved / restored.
@@ -104,7 +101,6 @@ public:
          * restored.
          */
         RECURSIVE
-
     };
 
     /**
@@ -187,7 +183,7 @@ protected:
      *
      * @return config group for state saving and loading
      */
-    KConfigGroup getConfigGroup();
+    KConfigGroup getConfigGroup() const;
 
     /**
      * Always use this method to create config group entry names. This allows
@@ -196,13 +192,14 @@ protected:
      * @param base original name planned for the config group entry
      * @return entry name after manipulating it with externally set parameters
      */
-    QString entryName(const QString& base);
+    QString entryName(const QString& base) const;
 
 private:
-    StateSavingObjectPriv* const d;
 
+    class StateSavingObjectPriv;
+    StateSavingObjectPriv* const d;
 };
 
-}
+} // namespace Digikam
 
 #endif /* STATESAVINGOBJECT_H */
