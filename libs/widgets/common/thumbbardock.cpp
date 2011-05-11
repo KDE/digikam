@@ -30,49 +30,64 @@
 namespace Digikam
 {
 
-DragHandle::DragHandle(QDockWidget* parent)
-    : QWidget(),
-      m_currentArea(Qt::LeftDockWidgetArea)
+class DragHandle::DragHandlePriv
 {
-    m_parent = parent;
+
+public:
+
+    DragHandlePriv() :
+        parent(0),
+        currentArea(Qt::LeftDockWidgetArea)
+    {
+    }
+
+    QDockWidget*       parent;
+    Qt::DockWidgetArea currentArea;
+};
+
+DragHandle::DragHandle(QDockWidget* parent)
+    : QWidget(), d(new DragHandlePriv)
+{
+    d->parent = parent;
 
     setToolTip(i18n("Drag to reposition"));
     setCursor(Qt::PointingHandCursor);
 
     // When the dock location changes, check if the orientation has changed.
-    connect(m_parent, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+    connect(d->parent, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
 }
 
 DragHandle::~DragHandle()
 {
+    delete d;
 }
 
 void DragHandle::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
-    QStyle* style = m_parent->style();
+    QStyle* style = d->parent->style();
 
     // The QStyleOptionToolBar contains every parameter needed to draw the
     // handle.
     QStyleOptionToolBar opt;
-    opt.initFrom(m_parent);
+    opt.initFrom(d->parent);
     opt.features = QStyleOptionToolBar::Movable;
 
     // If the thumbnail bar is layed out horizontally, the state should be set
     // to horizontal to draw the handle in the proper orientation.
-    if (m_currentArea == Qt::LeftDockWidgetArea || m_currentArea == Qt::RightDockWidgetArea)
+    if (d->currentArea == Qt::LeftDockWidgetArea || d->currentArea == Qt::RightDockWidgetArea)
     {
         opt.rect = QRect(opt.rect.x(), opt.rect.y(),
-                         m_parent->width(),
+                         d->parent->width(),
                          style->pixelMetric(QStyle::PM_ToolBarHandleExtent));
     }
     else
     {
         opt.state |= QStyle::State_Horizontal;
-        opt.rect = QRect(opt.rect.x(), opt.rect.y(),
-                         style->pixelMetric(QStyle::PM_ToolBarHandleExtent),
-                         m_parent->height());
+        opt.rect  = QRect(opt.rect.x(), opt.rect.y(),
+                          style->pixelMetric(QStyle::PM_ToolBarHandleExtent),
+                          d->parent->height());
     }
 
     // Draw the toolbar handle.
@@ -81,37 +96,37 @@ void DragHandle::paintEvent(QPaintEvent*)
 
 void DragHandle::dockLocationChanged(Qt::DockWidgetArea area)
 {
-    m_currentArea = area;
+    d->currentArea = area;
 
     // When the dock widget that contains this handle changes to a different
     // orientation, the DockWidgetVerticalTitleBar feature needs to be adjusted:
     // present when the thumbbar orientation is horizontal, absent when it is
     // vertical(!)
-    if (m_currentArea == Qt::LeftDockWidgetArea || m_currentArea == Qt::RightDockWidgetArea)
+    if (d->currentArea == Qt::LeftDockWidgetArea || d->currentArea == Qt::RightDockWidgetArea)
     {
-        m_parent->setFeatures(m_parent->features() & ~QDockWidget::DockWidgetVerticalTitleBar);
+        d->parent->setFeatures(d->parent->features() & ~QDockWidget::DockWidgetVerticalTitleBar);
     }
     else
     {
-        m_parent->setFeatures(m_parent->features() | QDockWidget::DockWidgetVerticalTitleBar);
+        d->parent->setFeatures(d->parent->features() | QDockWidget::DockWidgetVerticalTitleBar);
     }
 }
 
 QSize DragHandle::sizeHint() const
 {
     // Size is the sum of the margin, frame width and the handle itself.
-    QStyle* style = m_parent->style();
+    QStyle* style   = d->parent->style();
     int handleWidth = style->pixelMetric(QStyle::PM_ToolBarHandleExtent);
     int margin      = style->pixelMetric(QStyle::PM_ToolBarItemMargin) +
                       style->pixelMetric(QStyle::PM_ToolBarFrameWidth);
 
-    if (m_currentArea == Qt::LeftDockWidgetArea || m_currentArea == Qt::RightDockWidgetArea)
+    if (d->currentArea == Qt::LeftDockWidgetArea || d->currentArea == Qt::RightDockWidgetArea)
     {
-        return QSize(m_parent->width(), handleWidth + 2*margin);
+        return QSize(d->parent->width(), handleWidth + 2*margin);
     }
     else
     {
-        return QSize(handleWidth + 2*margin, m_parent->height());
+        return QSize(handleWidth + 2*margin, d->parent->height());
     }
 }
 
@@ -141,7 +156,7 @@ void ThumbBarDock::reInitialize()
 {
     // Measure orientation of the widget and adjust the child thumbbar to this
     // orientation and size.
-    QMainWindow* parent = qobject_cast<QMainWindow*>(parentWidget());
+    QMainWindow* parent   = qobject_cast<QMainWindow*>(parentWidget());
     emit dockLocationChanged(parent->dockWidgetArea(this));
     //ThumbBarView *child = qobject_cast<ThumbBarView *>(widget());
     widget()->resize(size());
@@ -172,7 +187,7 @@ void ThumbBarDock::restoreVisibility()
     // Set the visibility to what it should be or to what it was. Reset
     // SHOULD_BE_ values to their WAS_ values, to implement correct behavior
     // on subsequent calls.
-    if      (m_visible == SHOULD_BE_SHOWN)
+    if (m_visible == SHOULD_BE_SHOWN)
     {
         m_visible = WAS_SHOWN;
     }
