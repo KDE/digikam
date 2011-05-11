@@ -71,7 +71,7 @@ public:
      */
     virtual ~FilterSideBarWidget();
 
-    virtual void setConfigGroup(KConfigGroup group);
+    virtual void setConfigGroup(const KConfigGroup& group);
     virtual void doLoadState();
     virtual void doSaveState();
 

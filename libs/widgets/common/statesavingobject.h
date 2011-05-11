@@ -141,7 +141,7 @@ public:
      *
      * @param group config group to use for state saving and restoring
      */
-    virtual void setConfigGroup(KConfigGroup group);
+    virtual void setConfigGroup(const KConfigGroup& group);
 
     /**
      * Define a prefix that will be used for every entry in the config group.

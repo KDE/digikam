@@ -72,8 +72,8 @@ private Q_SLOTS:
 
 private:
 
-    QDockWidget*       m_parent;
-    Qt::DockWidgetArea m_currentArea;
+    class DragHandlePriv;
+    DragHandlePriv* const d;
 };
 
 /* A dock widget specifically designed for thumbnail bars (class ThumbNailView
