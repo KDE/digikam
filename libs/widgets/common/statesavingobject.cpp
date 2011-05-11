@@ -164,7 +164,7 @@ void StateSavingObject::setStateSavingDepth(const StateSavingObject::StateSaving
     d->depth = depth;
 }
 
-void StateSavingObject::setConfigGroup(KConfigGroup group)
+void StateSavingObject::setConfigGroup(const KConfigGroup& group)
 {
     //kDebug() << "received new config group: " << group.name();
     d->group    = group;

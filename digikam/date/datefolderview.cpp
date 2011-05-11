@@ -6,7 +6,7 @@
  * Date        : 2005-04-27
  * Description : a folder view for date albums.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C)      2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
@@ -168,7 +168,7 @@ void DateFolderView::slotAllAlbumsLoaded()
     }
 }
 
-void DateFolderView::setConfigGroup(KConfigGroup group)
+void DateFolderView::setConfigGroup(const KConfigGroup& group)
 {
     StateSavingObject::setConfigGroup(group);
     d->dateTreeView->setConfigGroup(group);

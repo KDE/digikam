@@ -371,7 +371,7 @@ void FilterSideBarWidget::filterChanged()
     emit signalTagFilterChanged(includedTagIds, excludedTagIds, d->tagMatchCond, showUntagged, clTagIds, plTagIds);
 }
 
-void FilterSideBarWidget::setConfigGroup(KConfigGroup group)
+void FilterSideBarWidget::setConfigGroup(const KConfigGroup& group)
 {
     StateSavingObject::setConfigGroup(group);
     d->tagFilterView->setConfigGroup(group);
