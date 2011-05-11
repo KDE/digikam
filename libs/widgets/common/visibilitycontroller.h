@@ -36,7 +36,6 @@
 namespace Digikam
 {
 
-
 class DIGIKAM_EXPORT VisibilityObject
 {
 public:
@@ -72,8 +71,8 @@ public:
     void setContainerWidget(QWidget* widget);
 
     /** Add a widget to this controller */
-
     void addWidget(QWidget* widget);
+
     /** Add an object implementing the VisibilityObject interface.
      *  You can use this if you have your widgets grouped in intermediate objects. */
     void addObject(VisibilityObject* object);
