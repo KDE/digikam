@@ -730,7 +730,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
         if (dbInfo.data.isNull())
         {
-            kWarning() << "Cannot save JPEG2000 thumb in DB";
+            kWarning() << "Cannot save PNG thumb in DB";
             return;
         }
     }
