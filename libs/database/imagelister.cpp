@@ -883,7 +883,7 @@ QSet<int> ImageLister::albumRootsToList()
     return ids;
 }
 
-QString ImageLister::tagSearchXml(const DatabaseUrl& url, const QString& type)
+QString ImageLister::tagSearchXml(const DatabaseUrl& url, const QString& type, bool includeChildTags)
 {
     int tagId = url.tagId();
 
@@ -900,7 +900,7 @@ QString ImageLister::tagSearchXml(const DatabaseUrl& url, const QString& type)
 
         foreach (const QString& property, properties)
         {
-            writer.writeField("imagetagproperty", SearchXml::Equal);
+            writer.writeField("imagetagproperty", includeChildTags ? SearchXml::InTree : SearchXml::Equal);
 
             if (tagId != -1)
             {

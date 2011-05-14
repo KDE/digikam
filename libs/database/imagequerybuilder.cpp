@@ -1151,7 +1151,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == "imagetagproperty")
     {
-        if (relation == SearchXml::Equal)
+        if (relation == SearchXml::Equal || relation == SearchXml::InTree)
         {
             // First, read attributes
             QStringRef tagAttribute = reader.attributes().value("tagid");
@@ -1165,81 +1165,55 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             // read values: one or two strings
             QStringList values = reader.valueToStringOrStringList();
 
-            if (values.size() == 1)
+            if (values.size() < 1 || values.size() > 2)
             {
-                // This indicates that the ImageTagProperties is joined in the SELECT query,
-                // so one entry is listed for each property entry (not for each image id)
-                if (m_imageTagPropertiesJoined)
+                kDebug() << "The imagetagproperty field requires one value (property) or two values (property, value).";
+                return false;
+            }
+
+            QString selectQuery;
+            // %1 is resolved to either "ImageTagProperties." or the empty string
+            if (tagId)
+            {
+                if (relation == SearchXml::Equal)
                 {
-                    sql += " (";
-
-                    if (tagId)
-                    {
-                        sql += "ImageTagProperties.tagid=? AND ";
-                    }
-
-                    sql += "ImageTagProperties.property=?) ";
-                }
-                else
-                {
-                    sql += " (Images.id IN "
-                           " (SELECT imageid FROM ImageTagProperties WHERE ";
-
-                    if (tagId)
-                    {
-                        sql += " tagid=? AND ";
-                    }
-
-                    sql += "property=?)) ";
-                }
-
-                if (tagId)
-                {
+                    selectQuery += "%1tagid=? AND ";
                     *boundValues << tagId;
                 }
+                else // InTree
+                {
+                    selectQuery += "(%1tagid=? OR %1tagid IN (SELECT id FROM TagsTree WHERE pid=?)) AND ";
+                    *boundValues << tagId << tagId;
+                }
+            }
 
+            if (values.size() == 1)
+            {
+                selectQuery += "%1property=? ";
                 *boundValues << values.first();
             }
             else if (values.size() == 2)
             {
-                if (m_imageTagPropertiesJoined)
-                {
-                    sql += " (";
-
-                    if (tagId)
-                    {
-                        sql += "ImageTagProperties.tagid=? AND ";
-                    }
-
-                    sql += "ImageTagProperties.property=? AND ImageTagProperties.value ";
-                    ImageQueryBuilder::addSqlRelation(sql, relation);
-                    sql += " ?) ";
-                }
-                else
-                {
-                    sql += " (Images.id IN "
-                           " (SELECT imageid FROM ImageTagProperties WHERE ";
-
-                    if (tagId)
-                    {
-                        sql += "tagid=? AND ";
-                    }
-
-                    sql += "property=? AND value ";
-                    ImageQueryBuilder::addSqlRelation(sql, relation);
-                    sql += " ?)) ";
-                }
-
-                if (tagId)
-                {
-                    *boundValues << tagId;
-                }
-
+                selectQuery += "%1property=? AND %1value ";
+                ImageQueryBuilder::addSqlRelation(selectQuery, relation);
+                selectQuery += " ? ";
                 *boundValues << values[0] << fieldQuery.prepareForLike(values[1]);
+            }
+            
+            // This indicates that the ImageTagProperties is joined in the SELECT query,
+            // so one entry is listed for each property entry (not for each image id)
+            if (m_imageTagPropertiesJoined)
+            {
+                sql += " ( ";
+                sql += selectQuery.arg("ImageTagProperties.");
+                sql += " ) ";
             }
             else
             {
-                kDebug() << "The imagetagproperty field requires one value (property) or two values (property, value).";
+                sql += " (Images.id IN "
+                       " (SELECT imageid FROM ImageTagProperties WHERE ";
+                sql += selectQuery.arg(QString());
+                sql += " )) ";
             }
         }
     }

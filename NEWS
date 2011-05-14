@@ -150,4 +150,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 123 ==> 254533 : Make MySQL support as optional dependency [patch].
 124 ==> 271598 : digiKam crashes while downloading photos.
 125 ==> 269375 : face tags count error.
-126 ==>
+126 ==> 269291 : function "View->Include tag subtree" does not function on "People".
+127 ==>

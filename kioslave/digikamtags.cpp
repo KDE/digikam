@@ -111,7 +111,7 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
 
         if (!special.isNull())
         {
-            QString searchXml = lister.tagSearchXml(kurl, special);
+            QString searchXml = lister.tagSearchXml(kurl, special, recursive);
             lister.setAllowExtraValues(true); // pass property value as extra value, different binary protocol
             lister.listImageTagPropertySearch(&receiver, searchXml);
         }
