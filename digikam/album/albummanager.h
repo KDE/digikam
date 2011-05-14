@@ -595,12 +595,12 @@ public:
     QMap<YearMonth, int> getDAlbumsCount() const;
 
     /**
-     * Returns the latest count for FAlbums as also emitted via
-     * signalFAlbumsDirty.
+     * Returns the latest count for faces as also emitted via
+     * signalFaceCountsDirty.
      *
-     * @return count map for FAlbums
+     * @return count map for faces (confirmed and unconfirmed combined)
      */
-    QMap<QString, int> getFAlbumsCount() const;
+    QMap<int, int> getFaceCount() const;
 
     /**
      * Returns if the given album is currently being moved, that is,
@@ -643,7 +643,7 @@ Q_SIGNALS:
     void signalPAlbumsDirty(const QMap<int, int>&);
     void signalTAlbumsDirty(const QMap<int, int>&);
     void signalDAlbumsDirty(const QMap<YearMonth, int>&);
-    void signalFAlbumsDirty(const QMap<QString, int>&);
+    void signalFaceCountsDirty(const QMap<int, int>&);
     void signalDatesMapDirty(const QMap<QDateTime, int>&);
     void signalTagPropertiesChanged(TAlbum* album);
     void signalAlbumsUpdated(int type);
@@ -681,14 +681,6 @@ private Q_SLOTS:
     void updateChangedPAlbums();
 
     /**
-     * Scan albums directly from database and creates new FAlbums
-     * It only creates those FAlbums which haven't already been
-     * created.
-     */
-    void scanFAlbums();
-    void updateChangedFAlbums();
-
-    /**
      * Scan tags directly from database and creates new TAlbums
      * It only creates those TAlbums which haven't already been
      * created.
@@ -708,7 +700,6 @@ private Q_SLOTS:
 
     void getAlbumItemsCount();
     void getTagItemsCount();
-    void getPeopleItemsCount();
 
 private:
 

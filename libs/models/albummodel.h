@@ -63,6 +63,18 @@ public:
     TAlbum* albumForIndex(const QModelIndex& index) const;
     void setColumnHeader(const QString& header);
 
+    /**
+     * If setShowCount() is enabled:
+     * Per default, normal tag counts are shown, setUseTagCount().
+     * You can switch to showing face count.
+     */
+    enum TagCountMode
+    {
+        NormalTagCount,
+        FaceTagCount
+    };
+    void setTagCount(TagCountMode mode);
+
 protected:
 
     virtual QVariant decorationRoleData(Album* a) const;

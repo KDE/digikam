@@ -149,5 +149,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 122 ==> 267733 : Automatical initialisation of Internal MySQL database doesn't work after digikam start.
 123 ==> 254533 : Make MySQL support as optional dependency [patch].
 124 ==> 271598 : digiKam crashes while downloading photos.
-125 ==> 
-
+125 ==> 269375 : face tags count error.
+126 ==>

@@ -227,7 +227,7 @@ public:
     QMap<int, int>              pAlbumsCount;
     QMap<int, int>              tAlbumsCount;
     QMap<YearMonth, int>        dAlbumsCount;
-    QMap<QString, int>          fAlbumsCount;
+    QMap<int,int>               fAlbumsCount;
 
     QList<QDateTime> buildDirectoryModList(const QFileInfo& dbFile)
     {
@@ -371,6 +371,12 @@ void AlbumManager::cleanUp()
     {
         d->tagListJob->kill();
         d->tagListJob = 0;
+    }
+
+    if (d->personListJob)
+    {
+        d->personListJob->kill();
+        d->personListJob = 0;
     }
 }
 
@@ -635,23 +641,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
     d->dbPathModificationDateList.clear();
 
-    if (d->dateListJob)
-    {
-        d->dateListJob->kill();
-        d->dateListJob = 0;
-    }
-
-    if (d->albumListJob)
-    {
-        d->albumListJob->kill();
-        d->albumListJob = 0;
-    }
-
-    if (d->tagListJob)
-    {
-        d->tagListJob->kill();
-        d->tagListJob = 0;
-    }
+    cleanUp();
 
     foreach (const QString& addedDirectory, d->dirWatchAddedDirs)
     {
@@ -1479,11 +1469,6 @@ void AlbumManager::updateChangedPAlbums()
     }
 }
 
-void AlbumManager::updateChangedFAlbums()
-{
-    // FIXME: Add stuff!
-}
-
 void AlbumManager::getAlbumItemsCount()
 {
     d->albumItemCountTimer->stop();
@@ -1511,16 +1496,6 @@ void AlbumManager::getAlbumItemsCount()
 
     connect(d->albumListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotAlbumsJobData(KIO::Job*, const QByteArray&)));
-}
-
-void AlbumManager::getPeopleItemsCount()
-{
-    // FIXME: Add stuff!
-}
-
-void AlbumManager::scanFAlbums()
-{
-    // FIXME: Add stuff!
 }
 
 void AlbumManager::scanTAlbums()
@@ -1699,6 +1674,21 @@ void AlbumManager::getTagItemsCount()
 
     connect(d->tagListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotTagsJobData(KIO::Job*, const QByteArray&)));
+
+    if (d->personListJob)
+    {
+        d->personListJob->kill();
+        d->personListJob = 0;
+    }
+
+    d->personListJob = ImageLister::startListJob(u);
+    d->personListJob->addMetaData("facefolders", "true");
+
+    connect(d->personListJob, SIGNAL(result(KJob*)),
+            this, SLOT(slotPeopleJobResult(KJob*)));
+
+    connect(d->personListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
+            this, SLOT(slotPeopleJobData(KIO::Job*, const QByteArray&)));
 }
 
 void AlbumManager::scanSAlbums()
@@ -2909,6 +2899,11 @@ QMap<YearMonth, int> AlbumManager::getDAlbumsCount() const
     return d->dAlbumsCount;
 }
 
+QMap<int, int> AlbumManager::getFaceCount() const
+{
+    return d->fAlbumsCount;
+}
+
 bool AlbumManager::isMovingAlbum(Album* album) const
 {
     return d->currentlyMovingAlbum == album;
@@ -3071,14 +3066,42 @@ void AlbumManager::slotAlbumsJobData(KIO::Job*, const QByteArray& data)
     emit signalPAlbumsDirty(albumsStatMap);
 }
 
-void AlbumManager::slotPeopleJobResult(KJob* /*job*/)
+void AlbumManager::slotPeopleJobResult(KJob* job)
 {
-    // TODO: Add stuff!
+    d->personListJob = 0;
+
+    if (job->error())
+    {
+        kWarning() << k_funcinfo << "Failed to list face tags";
+        return;
+    }
 }
 
-void AlbumManager::slotPeopleJobData(KIO::Job*, const QByteArray& /*data*/)
+void AlbumManager::slotPeopleJobData(KIO::Job*, const QByteArray& data)
 {
-    // TODO: Add stuff!
+    if (data.isEmpty())
+    {
+        return;
+    }
+
+    QMap<QString, QMap<int,int> > facesStatMap;
+    QByteArray di(data);
+    QDataStream ds(&di, QIODevice::ReadOnly);
+    ds >> facesStatMap;
+
+    // For now, we only use the sum of confirmed and unconfirmed faces
+    d->fAlbumsCount.clear();
+    typedef QMap<int,int> IntIntMap;
+    foreach (const IntIntMap& counts, facesStatMap)
+    {
+        QMap<int,int>::const_iterator it;
+        for (it = counts.begin(); it != counts.end(); ++it)
+        {
+            d->fAlbumsCount[it.key()] += it.value();
+        }
+    }
+
+    emit signalFaceCountsDirty(d->fAlbumsCount);
 }
 
 void AlbumManager::slotTagsJobResult(KJob* job)

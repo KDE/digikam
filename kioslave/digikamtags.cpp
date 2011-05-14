@@ -74,7 +74,8 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
-    bool folders = (metaData("folders") == "true");
+    bool folders     = (metaData("folders") == "true");
+    bool facefolders = (metaData("facefolders") == "true");
     QString special = metaData("specialTagListing");
 
     if (folders)
@@ -84,6 +85,19 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
         QByteArray  ba;
         QDataStream os(&ba, QIODevice::WriteOnly);
         os << tagNumberMap;
+        SlaveBase::data(ba);
+    }
+    else if (facefolders)
+    {
+        QMap<QString, QMap<int, int> > facesNumberMap;
+        facesNumberMap[Digikam::ImageTagPropertyName::autodetectedFace()] =
+            Digikam::DatabaseAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::autodetectedFace());
+        facesNumberMap[Digikam::ImageTagPropertyName::tagRegion()] =
+            Digikam::DatabaseAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::tagRegion());
+
+        QByteArray  ba;
+        QDataStream os(&ba, QIODevice::WriteOnly);
+        os << facesNumberMap;
         SlaveBase::data(ba);
     }
     else

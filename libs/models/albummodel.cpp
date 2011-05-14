@@ -85,9 +85,7 @@ TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject* parent)
     m_columnHeader = i18n("My Tags");
     setupThumbnailLoading();
 
-    connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
-            this, SLOT(setCountMap(const QMap<int, int>&)));
-    setCountMap(AlbumManager::instance()->getTAlbumsCount());
+    setTagCount(NormalTagCount);
 }
 
 void TagModel::setColumnHeader(const QString& header)
@@ -111,6 +109,27 @@ QVariant TagModel::decorationRoleData(Album* album) const
 Album* TagModel::albumForId(int id) const
 {
     return AlbumManager::instance()->findTAlbum(id);
+}
+
+void TagModel::setTagCount(TagCountMode mode)
+{
+    disconnect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
+            this, SLOT(setCountMap(const QMap<int, int>&)));
+    disconnect(AlbumManager::instance(), SIGNAL(signalFaceCountsDirty(const QMap<int, int>&)),
+            this, SLOT(setCountMap(const QMap<int, int>&)));
+
+    if (mode == NormalTagCount)
+    {
+        connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
+                this, SLOT(setCountMap(const QMap<int, int>&)));
+        setCountMap(AlbumManager::instance()->getTAlbumsCount());
+    }
+    else
+    {
+        connect(AlbumManager::instance(), SIGNAL(signalFaceCountsDirty(const QMap<int, int>&)),
+                this, SLOT(setCountMap(const QMap<int, int>&)));
+        setCountMap(AlbumManager::instance()->getFaceCount());
+    }
 }
 
 // ------------------------------------------------------------------

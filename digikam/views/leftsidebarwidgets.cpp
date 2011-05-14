@@ -1108,6 +1108,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
     setObjectName("People Sidebar");
 
     d->tagModel                 = model;
+    d->tagModel->setTagCount(TagModel::FaceTagCount);
     d->searchModificationHelper = searchModificationHelper;
     QVBoxLayout* layout         = new QVBoxLayout;
     QHBoxLayout* hlay           = new QHBoxLayout;
