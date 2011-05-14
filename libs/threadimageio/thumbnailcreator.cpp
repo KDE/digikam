@@ -822,18 +822,18 @@ DatabaseThumbnailInfo ThumbnailCreator::loadDatabaseThumbnailInfo(const Thumbnai
     DatabaseThumbnailInfo   dbInfo;
 
     // Custom identifier takes precedence
-    if (!info.customIdentifier.isNull())
+    if (!info.customIdentifier.isEmpty())
     {
         dbInfo = access.db()->findByCustomIdentifier(info.customIdentifier);
     }
     else
     {
-        if (!info.uniqueHash.isNull())
+        if (!info.uniqueHash.isEmpty())
         {
             dbInfo = access.db()->findByHash(info.uniqueHash, info.fileSize);
         }
 
-        if (dbInfo.data.isNull() && !info.filePath.isNull())
+        if (dbInfo.data.isNull() && !info.filePath.isEmpty())
         {
             dbInfo = access.db()->findByFilePath(info.filePath, info.uniqueHash);
         }
