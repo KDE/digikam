@@ -148,4 +148,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 121 ==> 262231 : Missing records after migration from SQLite to digiKam.
 122 ==> 267733 : Automatical initialisation of Internal MySQL database doesn't work after digikam start.
 123 ==> 254533 : Make MySQL support as optional dependency [patch].
-124 ==> 
+124 ==> 271598 : digiKam crashes while downloading photos.
+125 ==> 
+
