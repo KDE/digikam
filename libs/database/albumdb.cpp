@@ -3251,6 +3251,31 @@ QMap<int, int> AlbumDB::getNumberOfImagesInTags()
     return tagsStatMap;
 }
 
+QMap<int, int> AlbumDB::getNumberOfImagesInTagProperties(const QString& property)
+{
+    QList<QVariant> values;
+    QMap<int, int>  tagsStatMap;
+    int             tagID, count;
+
+    d->db->execSql( "SELECT tagid, COUNT(*) FROM ImageTagProperties "
+                    " LEFT JOIN Images ON Images.id=ImageTagProperties.imageid "
+                    " WHERE ImageTagProperties.property=? AND Images.status=1 "
+                    " GROUP BY tagid;",
+                    property, &values );
+
+    for (QList<QVariant>::const_iterator it=values.constBegin(); it != values.constEnd();)
+    {
+        tagID = (*it).toInt();
+        ++it;
+        count = (*it).toInt();
+        ++it;
+
+        tagsStatMap[tagID] = count;
+    }
+
+    return tagsStatMap;
+}
+
 QMap<QString,int> AlbumDB::getImageFormatStatistics()
 {
     QMap<QString, int>  map;

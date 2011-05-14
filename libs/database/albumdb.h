@@ -1133,6 +1133,12 @@ public:
     QMap<int, int> getNumberOfImagesInTags();
 
     /**
+     * Returns a QMap<int,int> of tag id -> count of items
+     * with the given tag property
+     */
+    QMap<int, int> getNumberOfImagesInTagProperties(const QString& property);
+
+    /**
      * Returns a QMap<QString,int> of ImageInformation.format
      * -> count of items with that format.
      */
