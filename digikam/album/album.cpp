@@ -783,65 +783,6 @@ QString SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType)
 
 // --------------------------------------------------------------------------
 
-FAlbum::FAlbum(const QString& f_name, bool root)
-    : Album(Album::FACE, f_name, root)
-{
-    m_name = f_name;
-}
-
-FAlbum::~FAlbum()
-{
-}
-
-QString FAlbum::name() const
-{
-    return m_name;
-}
-
-QString FAlbum::namePath(bool leadingSlash) const
-{
-    if (isRoot())
-    {
-        return leadingSlash ? QString("/") : QString();
-    }
-
-    QString u;
-
-    if (parent())
-    {
-        u = ((FAlbum*)parent())->namePath(leadingSlash);
-
-        if (!parent()->isRoot())
-        {
-            u += '/';
-        }
-    }
-
-    u += title();
-
-    return u;
-}
-
-QString FAlbum::prettyUrl() const
-{
-    QString u = i18n("Person ") + namePath(true);
-    return u;
-}
-
-DatabaseUrl FAlbum::databaseUrl() const
-{
-    // FIXME : Make an alternative implemention for people
-    //return DatabaseUrl::fromTagIds(tagIDs());
-    return DatabaseUrl::albumUrl();
-}
-
-QString FAlbum::icon() const
-{
-    return m_icon;
-}
-
-// --------------------------------------------------------------------------
-
 AlbumIterator::AlbumIterator(Album* album)
 {
     m_root    = album;

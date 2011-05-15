@@ -807,4 +807,9 @@ private:
 
 }  // namespace Digikam
 
+Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::PAlbum>)
+Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::TAlbum>)
+Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::SAlbum>)
+Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::DAlbum>)
+
 #endif /* ALBUMMANAGER_H */
