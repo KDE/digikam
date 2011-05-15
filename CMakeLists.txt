@@ -166,17 +166,23 @@ ELSE(NOT APPLE)
     SET(CLAPACK_FOUND FALSE)
 ENDIF(NOT APPLE)
 
-# Extract version of libjpeg so that we can use the appropriate dir
-# See bug #227313, #228483
-FILE(READ "${JPEG_INCLUDE_DIR}/jpeglib.h" jpeglib_h_content)
-STRING(REGEX REPLACE ".*#define +JPEG_LIB_VERSION +([0-9]+).*" "\\1" jpeglib_version "${jpeglib_h_content}")
-MESSAGE(STATUS "Identified libjpeg version: ${jpeglib_version}")
+# check version of libjpeg so that we can use the appropriate dir
+# See bug #227313
+set(_jpeglib_version_source "#include <stddef.h>\n#include<stdio.h>\n#include <jpeglib.h>\n int main()\n {\n #if (JPEG_LIB_VERSION >= 80) \n #error JPEG_LIB_VERSION >= 80 found \n #endif \n }\n")
+set(_jpeglib_version_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/cmake_jpeglib_version_check.cpp)
+file(WRITE "${_jpeglib_version_source_file}" "${_jpeglib_version_source}")
+set(_jpeglib_version_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${JPEG_INCLUDE_DIR}")
 
-IF ("${jpeglib_version}" LESS 80)
-    SET(DIGIKAM_LIBJPEG_DIR libjpeg-62)
-ELSE ("${jpeglib_version}" LESS 80)
-    SET(DIGIKAM_LIBJPEG_DIR libjpeg-80)
-ENDIF ("${jpeglib_version}" LESS 80)
+try_compile(_jpeglib_version_compile_result ${CMAKE_BINARY_DIR} ${_jpeglib_version_source_file} CMAKE_FLAGS "${_jpeglib_version_include_dirs}" COMPILE_OUTPUT_VARIABLE _jpeglib_version_compile_output_var)
+
+if(_jpeglib_version_compile_result)
+MESSAGE(STATUS "Identified libjpeg version: 62")
+set(DIGIKAM_LIBJPEG_DIR libjpeg-62)
+else(_jpeglib_version_compile_result)
+MESSAGE(STATUS "Identified libjpeg version: 80+")
+set(DIGIKAM_LIBJPEG_DIR libjpeg-80)
+endif(_jpeglib_version_compile_result)
+
 
 IF (ENABLE_INTERNALMYSQL)
 # Check MySQL executables
