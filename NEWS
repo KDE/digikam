@@ -153,4 +153,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 126 ==> 269291 : Function "View->Include tag subtree" does not function on "People".
 127 ==> 272023 : digiKam crash on deleting tags (quickly).
 128 ==> 265431 : digiKam cmake check for JPEG_LIB_VERSION fails for libjpeg-turbo >= 1.0.90.
-129 ==> 
+129 ==> 273068 : digiKam 1.9.0 crashes while importing images.
+130 ==> 
+
