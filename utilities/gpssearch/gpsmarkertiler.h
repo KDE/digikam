@@ -90,8 +90,7 @@ public:
     virtual KMap::KMapGroupState getTileGroupState(const KMap::TileIndex& tileIndex);
     virtual KMap::KMapGroupState getGlobalGroupState();
 
-    virtual void onIndicesClicked(const KMap::TileIndex::List& tileIndicesList, const QVariant& representativeIndex,
-                                  const KMap::KMapGroupState& groupSelectionState, const KMap::MouseModes currentMouseMode);
+    virtual void onIndicesClicked(const ClickInfo& clickInfo);
 
     virtual void setActive(const bool state);
 

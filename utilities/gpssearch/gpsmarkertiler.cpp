@@ -805,33 +805,32 @@ void GPSMarkerTiler::removeCurrentRegionSelection()
     emit(signalTilesOrSelectionChanged());
 }
 
-void GPSMarkerTiler::onIndicesClicked(const KMap::TileIndex::List& tileIndicesList, const QVariant& representativeIndex,
-                                      const KMap::KMapGroupState& groupSelectionState, const KMap::MouseModes currentMouseMode)
+void GPSMarkerTiler::onIndicesClicked(const ClickInfo& clickInfo)
 {
     /// @todo Also handle the representative index
 
     QList<qlonglong> clickedImagesId;
 
-    for (int i=0; i<tileIndicesList.count(); ++i)
+    for (int i=0; i<clickInfo.tileIndicesList.count(); ++i)
     {
-        const KMap::TileIndex tileIndex = tileIndicesList.at(i);
+        const KMap::TileIndex tileIndex = clickInfo.tileIndicesList.at(i);
         clickedImagesId << getTileMarkerIds(tileIndex);
     }
 
     int repImageId = -1;
 
-    if (representativeIndex.canConvert<QPair<KMap::TileIndex, int> >())
+    if (clickInfo.representativeIndex.canConvert<QPair<KMap::TileIndex, int> >())
     {
-        repImageId = representativeIndex.value<QPair<KMap::TileIndex, int> >().second;
+        repImageId = clickInfo.representativeIndex.value<QPair<KMap::TileIndex, int> >().second;
     }
 
-    if (currentMouseMode == KMap::MouseModeSelectThumbnail && d->selectionModel)
+    if (clickInfo.currentMouseMode == KMap::MouseModeSelectThumbnail && d->selectionModel)
     {
         /**
          * @todo This does not work properly, because not all images in a tile
          * may be selectable because some of them are outside of the region selection
          */
-        const bool doSelect = (groupSelectionState & KMap::KMapSelectedMask) != KMap::KMapSelectedAll;
+        const bool doSelect = (clickInfo.groupSelectionState & KMap::KMapSelectedMask) != KMap::KMapSelectedAll;
 
         const QItemSelectionModel::SelectionFlags selectionFlags =
             (doSelect ? QItemSelectionModel::Select : QItemSelectionModel::Deselect)
@@ -857,7 +856,7 @@ void GPSMarkerTiler::onIndicesClicked(const KMap::TileIndex::List& tileIndicesLi
             }
         }
     }
-    else if (currentMouseMode == KMap::MouseModeFilter)
+    else if (clickInfo.currentMouseMode == KMap::MouseModeFilter)
     {
         setPositiveFilterIsActive(true);
         emit signalModelFilteredImages(clickedImagesId);
