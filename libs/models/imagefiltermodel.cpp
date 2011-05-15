@@ -430,7 +430,7 @@ void ImageFilterModel::setUrlWhitelist(const KUrl::List urlList, const QString& 
 void ImageFilterModel::setIdWhitelist(const QList<qlonglong>& idList, const QString& id)
 {
     Q_D(ImageFilterModel);
-    d->filter.setIdWhitelist(idList,id);
+    d->filter.setIdWhitelist(idList, id);
     setImageFilterSettings(d->filter);
 }
 
