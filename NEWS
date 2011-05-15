@@ -149,7 +149,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 122 ==> 267733 : Automatical initialisation of Internal MySQL database doesn't work after digikam start.
 123 ==> 254533 : Make MySQL support as optional dependency [patch].
 124 ==> 271598 : digiKam crashes while downloading photos.
-125 ==> 269375 : face tags count error.
-126 ==> 269291 : function "View->Include tag subtree" does not function on "People".
-127 ==> 272023 : DigiKam crash on deleting tags (quickly).
-128 ==>
+125 ==> 269375 : Face tags count error.
+126 ==> 269291 : Function "View->Include tag subtree" does not function on "People".
+127 ==> 272023 : digiKam crash on deleting tags (quickly).
+128 ==> 265431 : digiKam cmake check for JPEG_LIB_VERSION fails for libjpeg-turbo >= 1.0.90.
+129 ==> 
