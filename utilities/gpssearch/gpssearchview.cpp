@@ -396,6 +396,9 @@ void GPSSearchView::slotRegionSelectionChanged()
         slotClearImages();
     }
 
+    // also remove any filters which may have been there
+    slotRemoveCurrentFilter();
+
     slotRefreshMap();
 }
 
@@ -550,6 +553,7 @@ void GPSSearchView::slotRemoveCurrentFilter()
     const QList<qlonglong> emptyIdList;
     emit signalMapSoloItems(emptyIdList, "gpssearch");
     slotRefreshMap();
+    d->mapSearchWidget->slotUpdateActionsEnabled();
 }
 
 /**
@@ -580,8 +584,8 @@ void GPSSearchView::slotCheckNameEditGPSConditions()
 void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
 {
     emit(signalMapSoloItems(idList, "gpssearch"));
+    d->mapSearchWidget->slotUpdateActionsEnabled();
 }
-
 
 void GPSSearchView::slotRefreshMap()
 {
