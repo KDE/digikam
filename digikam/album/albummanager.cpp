@@ -163,7 +163,6 @@ public:
         rootTAlbum(0),
         rootDAlbum(0),
         rootSAlbum(0),
-        rootFAlbum(0),
         currentlyMovingAlbum(0),
         currentAlbum(0),
         changingDB(false),
@@ -171,7 +170,6 @@ public:
         scanTAlbumsTimer(0),
         scanSAlbumsTimer(0),
         scanDAlbumsTimer(0),
-        scanFAlbumsTimer(0),
         updatePAlbumsTimer(0),
         albumItemCountTimer(0),
         tagItemCountTimer(0)
@@ -202,7 +200,6 @@ public:
     TAlbum*                     rootTAlbum;
     DAlbum*                     rootDAlbum;
     SAlbum*                     rootSAlbum;
-    SAlbum*                     rootFAlbum;
 
     QHash<int,Album*>          allAlbumsIdHash;
     QHash<PAlbumPath, PAlbum*>  albumPathHash;
@@ -218,7 +215,6 @@ public:
     QTimer*                     scanTAlbumsTimer;
     QTimer*                     scanSAlbumsTimer;
     QTimer*                     scanDAlbumsTimer;
-    QTimer*                     scanFAlbumsTimer;
     QTimer*                     updatePAlbumsTimer;
     QTimer*                     albumItemCountTimer;
     QTimer*                     tagItemCountTimer;
@@ -1873,26 +1869,6 @@ AlbumList AlbumManager::allDAlbums() const
     return list;
 }
 
-AlbumList AlbumManager::allFAlbums() const
-{
-    AlbumList list;
-
-    if (d->rootFAlbum)
-    {
-        list.append(d->rootFAlbum);
-    }
-
-    AlbumIterator it(d->rootFAlbum);
-
-    while (it.current())
-    {
-        list.append(*it);
-        ++it;
-    }
-
-    return list;
-}
-
 void AlbumManager::setCurrentAlbum(Album* album)
 {
     if (d->currentAlbum == album)
@@ -1917,11 +1893,6 @@ PAlbum* AlbumManager::currentPAlbum() const
 TAlbum* AlbumManager::currentTAlbum() const
 {
     return dynamic_cast<TAlbum*> (d->currentAlbum);
-}
-
-FAlbum* AlbumManager::currentFAlbum() const
-{
-    return dynamic_cast<FAlbum*> (d->currentAlbum);
 }
 
 PAlbum* AlbumManager::findPAlbum(const KUrl& url) const
@@ -1982,25 +1953,6 @@ DAlbum* AlbumManager::findDAlbum(int id) const
     int gid = d->rootDAlbum->globalID() + id;
 
     return (DAlbum*)(d->allAlbumsIdHash.value(gid));
-}
-
-FAlbum* AlbumManager::findFAlbum(const QString& name) const
-{
-    AlbumIterator it(d->rootFAlbum);
-
-    while (it.current())
-    {
-        FAlbum* falbum = static_cast<FAlbum*>(*it);
-
-        if (falbum->name() == name)
-        {
-            return falbum;
-        }
-
-        ++it;
-    }
-
-    return 0;
 }
 
 Album* AlbumManager::findAlbum(int gid) const
@@ -2384,52 +2336,6 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
 
     insertTAlbum(album, parent);
     emit signalAlbumsUpdated(Album::TAG);
-
-    return album;
-}
-
-FAlbum* AlbumManager::createFAlbum(FAlbum* parent, const QString& name,
-                                   const QString& iconkde, QString& errMsg)
-{
-    if (!parent)
-    {
-        errMsg = i18n("No parent found for person");
-        return 0;
-    }
-
-    // sanity checks
-    if (name.isEmpty())
-    {
-        errMsg = i18n("Person name cannot be empty");
-        return 0;
-    }
-
-    if (name.contains("/"))
-    {
-        errMsg = i18n("Person name cannot contain '/'");
-        return 0;
-    }
-
-    // first check if we have another album (person) with the same name
-    if (hasDirectChildAlbumWithTitle(parent, name))
-    {
-        errMsg = i18n("Person name already exists");
-        return 0;
-    }
-
-    /*  // FIXME: ? Do I need this?
-        ChangingDB changing(d);
-        int id = DatabaseAccess().db()->addTag(parent->id(), name, iconkde, 0);
-        if (id == -1)
-        {
-            errMsg = i18n("Failed to add tag to database");
-            return 0;
-        }
-    */
-    FAlbum* album = new FAlbum(name);
-    album->m_icon = iconkde;
-
-    //insertTAlbum(album, parent);
 
     return album;
 }

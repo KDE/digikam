@@ -501,38 +501,6 @@ private:
 };
 
 /**
- * \class FAlbum
- *
- * A Face Album representation
- */
-class FAlbum : public Album
-{
-public:
-
-    explicit FAlbum(const QString& f_name, bool root=false);
-    ~FAlbum();
-
-    /**
-    * @return The name path, e.g. "/People/Friend/John" if leadingSlash is true,
-              "People/Friend/John" if leadingSlash if false.
-    *         The root FAlbum returns "/" resp. "".
-    */
-
-    QString     name() const;
-    QString     namePath(bool leadingSlash = true) const;
-    DatabaseUrl databaseUrl() const;
-    QString     prettyUrl() const;
-    QString     icon() const;
-
-private:
-
-    QString     m_name;
-    QString     m_icon;
-
-    friend class AlbumManager;
-};
-
-/**
  *  \class AlbumIterator
  *
  *  Iterate over all children of this Album.

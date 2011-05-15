@@ -54,6 +54,7 @@ class AlbumIconItem;
 class ImageInfo;
 class ImageFilterModel;
 class TagModificationHelper;
+class TAlbum;
 
 /**
  * @brief A helper class to add actions and special menus to the context menu.
@@ -242,9 +243,9 @@ public:
      * The tag modification helper is used to execute the action.
      * You must set the parent tag to use on modification helper.
      */
-    void addActionNewTag(TagModificationHelper* helper);
-    void addActionDeleteTag(TagModificationHelper* helper);
-    void addActionEditTag(TagModificationHelper* helper);
+    void addActionNewTag(TagModificationHelper* helper, TAlbum* parentTag = 0);
+    void addActionDeleteTag(TagModificationHelper* helper, TAlbum* tag);
+    void addActionEditTag(TagModificationHelper* helper, TAlbum* tag);
 
     /**
      * Add "Assign Tags" menu.
