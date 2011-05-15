@@ -184,6 +184,13 @@ public:
 
 private:
 
+    /**
+     * @brief Returns whether some internal filtering (whitelist by id or URL) or normal filtering is going on
+     */
+    bool isFilteringInterally() const;
+
+private:
+
     /// --- Tags filter ---
     bool                             m_untaggedFilter;
     QList<int>                       m_includeTagFilter;

@@ -161,6 +161,11 @@ bool ImageFilterSettings::isFilteringByRating() const
     return false;
 }
 
+bool ImageFilterSettings::isFilteringInterally() const
+{
+    return isFiltering() || !m_urlWhitelists.isEmpty() || !m_idWhitelists.isEmpty();
+}
+
 bool ImageFilterSettings::isFiltering() const
 {
     return isFilteringByDay()         ||
@@ -251,7 +256,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
         *foundText = false;
     }
 
-    if (!isFiltering())
+    if (!isFilteringInterally())
     {
         return true;
     }
