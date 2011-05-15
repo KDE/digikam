@@ -24,6 +24,10 @@
 
 #include "tagmodificationhelper.moc"
 
+// Qt includes
+
+#include <QAction>
+
 // KDE includes
 
 #include <kapplication.h>
@@ -58,6 +62,16 @@ public:
 
     AlbumPointer<TAlbum>  parentTag;
     QWidget*              dialogParent;
+
+    TAlbum* tagFromAction(QObject* sender)
+    {
+        QAction* action;
+        if ( (action = qobject_cast<QAction*>(sender)) )
+        {
+            return action->data().value<AlbumPointer<TAlbum> >();
+        }
+        return 0;
+    }
 };
 
 TagModificationHelper::TagModificationHelper(QObject* parent, QWidget* dialogParent)
@@ -71,15 +85,15 @@ TagModificationHelper::~TagModificationHelper()
     delete d;
 }
 
-void TagModificationHelper::setParentTag(TAlbum* parent)
+void TagModificationHelper::bindTag(QAction* action, TAlbum* album)
 {
-    d->parentTag = parent;
+    action->setData(QVariant::fromValue(AlbumPointer<TAlbum>(album)));
 }
 
 TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, const QString& iconName)
 {
     // ensure that there is a parent
-    TAlbum* p = parent;
+    AlbumPointer<TAlbum> p(parent);
 
     if (!p)
     {
@@ -100,7 +114,7 @@ TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, 
     {
         bool doCreate = TagEditDlg::tagCreate(d->dialogParent, p, editTitle, editIconName, ks);
 
-        if (!doCreate)
+        if (!doCreate || !p)
         {
             return 0;
         }
@@ -124,35 +138,29 @@ TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, 
 
 TAlbum* TagModificationHelper::slotTagNew()
 {
-    if (d->parentTag)
-    {
-        return slotTagNew(d->parentTag);
-    }
-    else
-    {
-        kWarning() << "Tried to create a new tag but no parent tag was given";
-        return 0;
-    }
+    return slotTagNew(d->tagFromAction(sender()));
 }
 
-void TagModificationHelper::slotTagEdit(TAlbum* tag)
+void TagModificationHelper::slotTagEdit(TAlbum* t)
 {
-    if (!tag)
+    if (!t)
     {
         return;
     }
+
+    AlbumPointer<TAlbum> tag(t);
 
     QString      title, icon;
     QKeySequence ks;
 
     bool doEdit = TagEditDlg::tagEdit(d->dialogParent, tag, title, icon, ks);
 
-    if (!doEdit)
+    if (!doEdit || !tag)
     {
         return;
     }
 
-    if (tag->title() != title)
+    if (tag && tag->title() != title)
     {
         QString errMsg;
 
@@ -162,7 +170,7 @@ void TagModificationHelper::slotTagEdit(TAlbum* tag)
         }
     }
 
-    if (tag->icon() != icon)
+    if (tag && tag->icon() != icon)
     {
         QString errMsg;
 
@@ -172,7 +180,7 @@ void TagModificationHelper::slotTagEdit(TAlbum* tag)
         }
     }
 
-    if (tag->property(TagPropertyName::tagKeyboardShortcut()) != ks.toString())
+    if (tag && tag->property(TagPropertyName::tagKeyboardShortcut()) != ks.toString())
     {
         TagsActionMngr::defaultManager()->updateTagShortcut(tag->id(), ks);
     }
@@ -182,18 +190,17 @@ void TagModificationHelper::slotTagEdit(TAlbum* tag)
 
 void TagModificationHelper::slotTagEdit()
 {
-    if (d->parentTag)
-    {
-        slotTagEdit(d->parentTag);
-    }
+    slotTagEdit(d->tagFromAction(sender()));
 }
 
-void TagModificationHelper::slotTagDelete(TAlbum* tag)
+void TagModificationHelper::slotTagDelete(TAlbum* t)
 {
-    if (!tag || tag->isRoot())
+    if (!t || t->isRoot())
     {
         return;
     }
+
+    AlbumPointer<TAlbum> tag(t);
 
     // find number of subtags
     int children = 0;
@@ -220,7 +227,7 @@ void TagModificationHelper::slotTagDelete(TAlbum* tag)
                                                               children,
                                                               tag->title()));
 
-        if (result != KMessageBox::Continue)
+        if (result != KMessageBox::Continue || !tag)
         {
             return;
         }
@@ -247,7 +254,7 @@ void TagModificationHelper::slotTagDelete(TAlbum* tag)
                                                     KGuiItem(i18n("Delete"),
                                                              "edit-delete"));
 
-    if (result == KMessageBox::Continue)
+    if (result == KMessageBox::Continue && tag)
     {
         emit aboutToDeleteTag(tag);
         QString errMsg;
@@ -261,10 +268,7 @@ void TagModificationHelper::slotTagDelete(TAlbum* tag)
 
 void TagModificationHelper::slotTagDelete()
 {
-    if (d->parentTag)
-    {
-        slotTagDelete(d->parentTag);
-    }
+    slotTagDelete(d->tagFromAction(sender()));
 }
 
 } // namespace Digikam

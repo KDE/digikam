@@ -151,4 +151,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 124 ==> 271598 : digiKam crashes while downloading photos.
 125 ==> 269375 : face tags count error.
 126 ==> 269291 : function "View->Include tag subtree" does not function on "People".
-127 ==>
+127 ==> 272023 : DigiKam crash on deleting tags (quickly).
+128 ==>

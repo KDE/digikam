@@ -798,6 +798,10 @@ public:
     {
         return static_cast<T*>(const_cast<Album*>(album));
     }
+    bool operator!() const
+    {
+        return !album;
+    }
 
 private:
 

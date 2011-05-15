@@ -101,9 +101,7 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
         return;
     }
 
-    tagModificationHelper()->setParentTag(tag);
-
-    cmh.addActionNewTag(tagModificationHelper());
+    cmh.addActionNewTag(tagModificationHelper(), tag);
     cmh.addCreateTagFromAddressbookMenu();
     cmh.addAction(d->resetIconAction);
     cmh.addSeparator();
@@ -116,9 +114,9 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
     cmh.addExportMenu();
     cmh.addBatchMenu();
     cmh.addSeparator();
-    cmh.addActionDeleteTag(tagModificationHelper());
+    cmh.addActionDeleteTag(tagModificationHelper(), tag);
     cmh.addSeparator();
-    cmh.addActionEditTag(tagModificationHelper());
+    cmh.addActionEditTag(tagModificationHelper(), tag);
 
     connect(&cmh, SIGNAL(signalAddNewTagFromABCMenu(const QString&)),
             this, SLOT(slotTagNewFromABCMenu(const QString&)));

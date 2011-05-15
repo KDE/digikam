@@ -34,6 +34,8 @@
 
 #include "album.h"
 
+class QAction;
+
 namespace Digikam
 {
 
@@ -84,7 +86,9 @@ public Q_SLOTS:
                        const QString& iconName = QString());
 
     /**
-     * Same as above, but this slot is using the parent TAlbum set previously
+     * Same as above, but this slot can be triggered from a QAction
+     * if a parent tag is bound to this action, see below.
+     * Without this mechanism, will add a toplevel tag.
      *
      * @return new tag created or 0 if no tag was created
      */
@@ -96,7 +100,7 @@ public Q_SLOTS:
      * @param tag the tag to change
      */
     void slotTagEdit(TAlbum* tag);
-    void slotTagEdit();
+    void slotTagEdit(); /// must use bindTag and a QAction
 
     /**
      * Deletes the given tag and after prompting the user for this.
@@ -104,14 +108,15 @@ public Q_SLOTS:
      * @param tag the tag to delete, must not be the root tag album
      */
     void slotTagDelete(TAlbum* tag);
-    void slotTagDelete();
+    void slotTagDelete(); /// must use bindTag and a QAction
 
     /**
-     * Sets the parent tag. This will be used by the variants which do not
-     * take a TAlbum* argument.
-     * You may find this useful if you want to connect a signal to this object.
+     * Sets the tag that the given action operates on.
+     * You must call bindTag and then connect the action's triggered
+     * to the desired slot, slotTagNew(), slotTagEdit() or slotTagDelete().
+     * Note: Changes the Action's user data.
      */
-    void setParentTag(TAlbum* parent);
+    void bindTag(QAction* action, TAlbum* parent);
 
 Q_SIGNALS:
 

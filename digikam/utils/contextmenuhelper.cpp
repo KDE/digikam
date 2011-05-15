@@ -415,26 +415,29 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
     return sameCategory;
 }
 
-void ContextMenuHelper::addActionNewTag(TagModificationHelper* helper)
+void ContextMenuHelper::addActionNewTag(TagModificationHelper* helper, TAlbum* tag)
 {
     QAction* newTagAction = new QAction(SmallIcon("tag-new"), i18n("New Tag..."), this);
     addAction(newTagAction);
+    helper->bindTag(newTagAction, tag);
     connect(newTagAction, SIGNAL(triggered()),
             helper, SLOT(slotTagNew()));
 }
 
-void ContextMenuHelper::addActionDeleteTag(TagModificationHelper* helper)
+void ContextMenuHelper::addActionDeleteTag(TagModificationHelper* helper, TAlbum* tag)
 {
     QAction* deleteTagAction = new QAction(SmallIcon("user-trash"), i18n("Delete Tag"), this);
     addAction(deleteTagAction);
+    helper->bindTag(deleteTagAction, tag);
     connect(deleteTagAction, SIGNAL(triggered()),
             helper, SLOT(slotTagDelete()));
 }
 
-void ContextMenuHelper::addActionEditTag(TagModificationHelper* helper)
+void ContextMenuHelper::addActionEditTag(TagModificationHelper* helper, TAlbum* tag)
 {
     QAction* editTagAction = new QAction(SmallIcon("tag-properties"), i18nc("Edit Tag Properties", "Properties..."), this);
     addAction(editTagAction);
+    helper->bindTag(editTagAction, tag);
     connect(editTagAction, SIGNAL(triggered()),
             helper, SLOT(slotTagEdit()));
 }
