@@ -6,7 +6,7 @@
  * Date        : 2006-05-04
  * Description : Watch image attributes
  *
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -78,7 +78,7 @@ void ImageAttributesWatch::slotImageChange(const ImageChangeset& changeset)
     DatabaseFields::Set set = changeset.changes();
 
     if ((set & DatabaseFields::ImageCommentsAll) ||
-        (set & DatabaseFields::CreationDate) ||
+        (set & DatabaseFields::CreationDate)     ||
         (set & DatabaseFields::ModificationDate) ||
         (set & DatabaseFields::Rating))
     {
@@ -111,7 +111,13 @@ void ImageAttributesWatch::slotImageTagChange(const ImageTagChangeset& changeset
     }
 }
 
+void ImageAttributesWatch::fileMetadataChanged(const KUrl& url)
+{
+    emit signalFileMetadataChanged(url);
+}
+
 /*
+
 void ImageAttributesWatch::slotImageFieldChanged(qlonglong imageId, int field)
 {
     // Translate signals
@@ -158,11 +164,7 @@ void ImageAttributesWatch::imageCaptionChanged(qint64 imageId)
 {
     emit signalImageCaptionChanged(imageId);
 }
-*/
 
-void ImageAttributesWatch::fileMetadataChanged(const KUrl& url)
-{
-    emit signalFileMetadataChanged(url);
-}
+*/
 
 } // namespace Digikam

@@ -53,16 +53,20 @@ class ScanController : public QThread, public InitializationObserver
 
 public:
 
-    static ScanController* instance();
-    /** Wait for the thread to finish. Returns after all tasks are done. */
-    void shutDown();
-
     enum Advice
     {
         Success,
         ContinueWithoutDatabase,
         AbortImmediately
     };
+
+public:
+
+    static ScanController* instance();
+
+    /** Wait for the thread to finish. Returns after all tasks are done. */
+    void shutDown();
+
 
     /**
      * Calls DatabaseAccess::checkReadyForUse(), providing progress

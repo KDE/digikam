@@ -156,6 +156,8 @@ public:
 
     bool                      needTotalFiles;
 
+public:
+
     QPixmap albumPixmap()
     {
         if (albumPix.isNull())
@@ -212,7 +214,8 @@ public:
         QDateTime current = QDateTime::currentDateTime();
 
         if (idle &&
-            lastHintAdded.isValid() && lastHintAdded.secsTo(current) > 5*60)
+            lastHintAdded.isValid() &&
+            lastHintAdded.secsTo(current) > 5*60)
         {
             itemHints.clear();
             albumHints.clear();
@@ -225,6 +228,8 @@ public:
         }
     }
 };
+
+// ------------------------------------------------------------------------------
 
 class ScanControllerLoadingCacheFileWatch : public ClassicLoadingCacheFileWatch
 {
@@ -244,15 +249,20 @@ private Q_SLOTS:
     void slotImageChanged(const ImageChangeset& changeset);
 };
 
+// ------------------------------------------------------------------------------
+
 // for ScanControllerLoadingCacheFileWatch
 #include "scancontroller.moc"
 
 class ScanControllerCreator
 {
 public:
+
     ScanController object;
 };
 K_GLOBAL_STATIC(ScanControllerCreator, creator)
+
+// ------------------------------------------------------------------------------
 
 ScanController* ScanController::instance()
 {
@@ -316,7 +326,7 @@ void ScanController::shutDown()
         return;
     }
 
-    d->running = false;
+    d->running                = false;
     d->continueInitialization = false;
     d->continueScan           = false;
     d->continuePartialScan    = false;
@@ -393,7 +403,7 @@ ScanController::Advice ScanController::databaseInitialization()
     if (!d->fileWatchInstalled)
     {
         d->fileWatchInstalled = true; // once per application lifetime only
-        LoadingCache* cache = LoadingCache::cache();
+        LoadingCache* cache   = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
         cache->setFileWatch(new ScanControllerLoadingCacheFileWatch);
     }
@@ -511,7 +521,7 @@ void ScanController::scanFileDirectlyCopyAttributes(const QString& filePath, qlo
 void ScanController::abortInitialization()
 {
     QMutexLocker lock(&d->mutex);
-    d->needsInitialization = false;
+    d->needsInitialization    = false;
     d->continueInitialization = false;
 }
 
@@ -519,21 +529,21 @@ void ScanController::cancelCompleteScan()
 {
     QMutexLocker lock(&d->mutex);
     d->needsCompleteScan = false;
-    d->continueScan = false;
+    d->continueScan      = false;
 }
 
 void ScanController::cancelAllAndSuspendCollectionScan()
 {
     QMutexLocker lock(&d->mutex);
 
-    d->needsInitialization = false;
+    d->needsInitialization    = false;
     d->continueInitialization = false;
 
-    d->needsCompleteScan = false;
-    d->continueScan = false;
+    d->needsCompleteScan      = false;
+    d->continueScan           = false;
 
     d->scanTasks.clear();
-    d->continuePartialScan = false;
+    d->continuePartialScan    = false;
 
     d->relaxedTimer->stop();
 
@@ -571,7 +581,11 @@ void ScanController::run()
 {
     while (d->running)
     {
-        bool doInit = false, doScan = false, doPartialScan = false, doUpdateUniqueHash = false;
+        bool doInit             = false;
+        bool doScan             = false;
+        bool doPartialScan      = false;
+        bool doUpdateUniqueHash = false;
+
         QString task;
         {
             QMutexLocker lock(&d->mutex);
@@ -961,7 +975,7 @@ void ScanController::hintAtModificationOfItem(qlonglong id)
     d->itemChangeHints << hint;
 }
 
-// --------------------------------------------------- //
+// --------------------------------------------------------------------------------------------
 
 ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
 {

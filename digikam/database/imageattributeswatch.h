@@ -6,7 +6,7 @@
  * Date        : 2006-05-04
  * Description : Watch image attributes
  *
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,14 +49,14 @@ public:
     static void cleanUp();
     static void shutDown();
 
-    /*
+/*
         void imageTagsChanged(qint64 imageId);
         void imagesChanged(int albumId);
 
         void imageRatingChanged(qint64 imageId);
         void imageDateChanged(qint64 imageId);
         void imageCaptionChanged(qint64 imageId);
-    */
+*/
 
     void fileMetadataChanged(const KUrl& url);
 
@@ -91,17 +91,17 @@ Q_SIGNALS:
     */
     void signalFileMetadataChanged(const KUrl& url);
 
+private Q_SLOTS:
+
+    void slotImageChange(const ImageChangeset& changeset);
+    void slotImageTagChange(const ImageTagChangeset& changeset);
+
 private:
 
     ImageAttributesWatch();
     ~ImageAttributesWatch();
 
     static ImageAttributesWatch* m_instance;
-
-private Q_SLOTS:
-
-    void slotImageChange(const ImageChangeset& changeset);
-    void slotImageTagChange(const ImageTagChangeset& changeset);
 };
 
 } // namespace Digikam
