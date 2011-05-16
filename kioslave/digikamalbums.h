@@ -7,7 +7,7 @@
  * Description : a kio-slave to process file operations on
  *               digiKam albums.
  *
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * The forwarding code is copied from kdelibs' ForwardingSlavebase.
@@ -47,22 +47,21 @@ class kio_digikamalbums : public QObject, public KIO::SlaveBase
 
 public:
 
-    kio_digikamalbums(const QByteArray& pool_socket,
-                      const QByteArray& app_socket);
+    kio_digikamalbums(const QByteArray& pool_socket, const QByteArray& app_socket);
     ~kio_digikamalbums();
 
     void special(const QByteArray& data);
 
-    void get( const KUrl& url );
-    void put( const KUrl& url, int _mode, KIO::JobFlags _flags );
-    void copy( const KUrl& src, const KUrl& dest, int mode, KIO::JobFlags flags );
-    void rename( const KUrl& src, const KUrl& dest, KIO::JobFlags flags );
+    void get(const KUrl& url);
+    void put(const KUrl& url, int _mode, KIO::JobFlags _flags);
+    void copy(const KUrl& src, const KUrl& dest, int mode, KIO::JobFlags flags);
+    void rename(const KUrl& src, const KUrl& dest, KIO::JobFlags flags);
 
-    void stat( const KUrl& url );
-    void listDir( const KUrl& url );
-    void mkdir( const KUrl& url, int permissions );
-    void chmod( const KUrl& url, int permissions );
-    void del( const KUrl& url, bool isfile);
+    void stat(const KUrl& url);
+    void listDir(const KUrl& url);
+    void mkdir(const KUrl& url, int permissions);
+    void chmod(const KUrl& url, int permissions);
+    void del(const KUrl& url, bool isfile);
 
 private:
 

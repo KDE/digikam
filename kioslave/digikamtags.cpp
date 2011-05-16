@@ -25,14 +25,11 @@
 
 #include "digikamtags.h"
 
-// C++ includes
-
-#include <cstdlib>
-
 // Qt includes
 
 #include <QCoreApplication>
 #include <QDBusConnection>
+#include <QString>
 
 // KDE includes
 
@@ -53,8 +50,7 @@
 #include "imagelister.h"
 #include "imagelisterreceiver.h"
 
-kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QByteArray& pool_socket,
-                                                 const QByteArray& app_socket)
+kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QByteArray& pool_socket, const QByteArray& app_socket)
     : SlaveBase("kio_digikamtags", pool_socket, app_socket)
 {
 }
@@ -140,7 +136,7 @@ extern "C"
 
         KLocale::setMainCatalog("digikam");
         KComponentData componentData( "kio_digikamtags" );
-        ( void ) KGlobal::locale();
+        KGlobal::locale();
 
         kDebug() << "*** kio_digikamtag started ***";
 

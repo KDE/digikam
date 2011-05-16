@@ -28,7 +28,7 @@
 
 // Qt includes
 
-#include <QString>
+#include <QByteArray>
 
 // KDE includes
 

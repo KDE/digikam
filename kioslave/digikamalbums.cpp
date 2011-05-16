@@ -7,7 +7,7 @@
  * Description : a kio-slave to process file operations on
  *               digiKam albums.
  *
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * The forwarding code is copied from kdelibs' ForwardingSlavebase.
@@ -58,8 +58,7 @@
 #include "digikam_export.h"
 #include "imagelister.h"
 
-kio_digikamalbums::kio_digikamalbums(const QByteArray& pool_socket,
-                                     const QByteArray& app_socket)
+kio_digikamalbums::kio_digikamalbums(const QByteArray& pool_socket, const QByteArray& app_socket)
     : SlaveBase("kio_digikamalbums", pool_socket, app_socket)
 {
     m_eventLoop = new QEventLoop(this);
@@ -73,8 +72,7 @@ kio_digikamalbums::~kio_digikamalbums()
 
 void kio_digikamalbums::special(const QByteArray& data)
 {
-    KUrl    kurl;
-
+    KUrl        kurl;
     QDataStream ds(data);
     ds >> kurl;
 
@@ -112,7 +110,7 @@ void kio_digikamalbums::special(const QByteArray& data)
 
 // ------------------------ Implementation of KIO::SlaveBase ------------------------ //
 
-void kio_digikamalbums::get( const KUrl& url )
+void kio_digikamalbums::get(const KUrl& url)
 {
     kDebug() << " : " << url;
 
@@ -162,7 +160,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
     finished();
 }
 
-void kio_digikamalbums::copy( const KUrl& src, const KUrl& dst, int mode, KIO::JobFlags flags )
+void kio_digikamalbums::copy(const KUrl& src, const KUrl& dst, int mode, KIO::JobFlags flags)
 {
     kDebug() << "Src: " << src.path() << ", Dst: " << dst.path();
 
@@ -212,14 +210,14 @@ void kio_digikamalbums::copy( const KUrl& src, const KUrl& dst, int mode, KIO::J
     // if the filename is .digikam_properties, we have been asked to copy the
     // metadata of the src album to the dst album
     //NOTE: Feature old and currently unused
-    /*
+/*
     if (src.fileName() == ".digikam_properties")
     {
         access.db()->copyAlbumProperties(srcAlbumID, dstAlbumID);
         finished();
         return;
     }
-    */
+*/
 
     KIO::Job* job = KIO::file_copy(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), mode, flags | KIO::HideProgressInfo );
     connectJob(job);
@@ -235,7 +233,7 @@ void kio_digikamalbums::copy( const KUrl& src, const KUrl& dst, int mode, KIO::J
     finished();
 }
 
-void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags flags )
+void kio_digikamalbums::rename(const KUrl& src, const KUrl& dst, KIO::JobFlags flags)
 {
     kDebug() << "Src: " << src << ", Dst: " << dst;
 
@@ -302,7 +300,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
     }
 
     // Let CollectionScanner do the database part.
-    /*
+/*
     if (renamingAlbum)
     {
         // rename subalbums as well
@@ -313,12 +311,12 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
         access.db()->moveItem(srcAlbumID, dbUrlSrc.fileName(),
                               dstAlbumID, dbUrlDst.fileName());
     }
-    */
+*/
 
     finished();
 }
 
-void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
+void kio_digikamalbums::mkdir(const KUrl& url, int permissions)
 {
     kDebug() << " : " << url.url();
 
@@ -343,7 +341,7 @@ void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
     finished();
 }
 
-void kio_digikamalbums::chmod( const KUrl& url, int permissions )
+void kio_digikamalbums::chmod(const KUrl& url, int permissions)
 {
     kDebug() << " : " << url.url();
 
@@ -360,7 +358,7 @@ void kio_digikamalbums::chmod( const KUrl& url, int permissions )
     finished();
 }
 
-void kio_digikamalbums::del( const KUrl& url, bool isFile)
+void kio_digikamalbums::del(const KUrl& url, bool isFile)
 {
     kDebug() << " : " << url.url();
 
@@ -418,7 +416,7 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
 
     // Let CollectionScanner do the database part
 
-    /*
+/*
     if (isFile)
     {
         // successful deletion. now remove file entry from the database
@@ -429,12 +427,12 @@ void kio_digikamalbums::del( const KUrl& url, bool isFile)
         // successful deletion. now remove album entry from the database
         access.db()->deleteAlbum(albumID);
     }
-    */
+*/
 
     finished();
 }
 
-void kio_digikamalbums::stat( const KUrl& url )
+void kio_digikamalbums::stat(const KUrl& url)
 {
     Digikam::DatabaseUrl dbUrl(url);
 
@@ -449,7 +447,7 @@ void kio_digikamalbums::stat( const KUrl& url )
     finished();
 }
 
-void kio_digikamalbums::listDir( const KUrl& url )
+void kio_digikamalbums::listDir(const KUrl& url)
 {
     kDebug() << " : " << url.path();
 
@@ -497,14 +495,19 @@ void kio_digikamalbums::connectJob(KIO::Job* job)
 
     connect( job, SIGNAL( result(KJob*) ),
              this, SLOT( slotResult(KJob*) ) );
+
     connect( job, SIGNAL( warning(KJob*, const QString&, const QString&) ),
              this, SLOT( slotWarning(KJob*, const QString&) ) );
+
     connect( job, SIGNAL( infoMessage(KJob*, const QString&, const QString&) ),
              this, SLOT( slotInfoMessage(KJob*, const QString&) ) );
+
     connect( job, SIGNAL( totalSize(KJob*, qulonglong) ),
              this, SLOT( slotTotalSize(KJob*, qulonglong) ) );
+
     connect( job, SIGNAL( processedSize(KJob*, qulonglong) ),
              this, SLOT( slotProcessedSize(KJob*, qulonglong) ) );
+
     connect( job, SIGNAL( speed(KJob*, unsigned long) ),
              this, SLOT( slotSpeed(KJob*, unsigned long) ) );
 }
@@ -512,6 +515,7 @@ void kio_digikamalbums::connectJob(KIO::Job* job)
 void kio_digikamalbums::connectSimpleJob(KIO::SimpleJob* job)
 {
     connectJob(job);
+
     connect( job, SIGNAL( redirection(KIO::Job*, const KUrl&) ),
              this, SLOT( slotRedirection(KIO::Job*, const KUrl&) ) );
 }
@@ -519,6 +523,7 @@ void kio_digikamalbums::connectSimpleJob(KIO::SimpleJob* job)
 void kio_digikamalbums::connectListJob(KIO::ListJob* job)
 {
     connectSimpleJob(job);
+
     connect( job, SIGNAL( entries(KIO::Job*, const KIO::UDSEntryList&) ),
              this, SLOT( slotEntries(KIO::Job*, const KIO::UDSEntryList&) ) );
 }
@@ -526,12 +531,16 @@ void kio_digikamalbums::connectListJob(KIO::ListJob* job)
 void kio_digikamalbums::connectTransferJob(KIO::TransferJob* job)
 {
     connectSimpleJob(job);
+
     connect( job, SIGNAL( data(KIO::Job*, const QByteArray&) ),
              this, SLOT( slotData(KIO::Job*, const QByteArray&) ) );
+
     connect( job, SIGNAL( dataReq(KIO::Job*, QByteArray&) ),
              this, SLOT( slotDataReq(KIO::Job*, QByteArray&) ) );
+
     connect( job, SIGNAL( mimetype(KIO::Job*, const QString&) ),
              this, SLOT( slotMimetype(KIO::Job*, const QString&) ) );
+
     connect( job, SIGNAL( canResume(KIO::Job*, KIO::filesize_t) ),
              this, SLOT( slotCanResume(KIO::Job*, KIO::filesize_t) ) );
 }
@@ -595,10 +604,9 @@ void kio_digikamalbums::slotRedirection(KIO::Job* job, const KUrl& url)
     m_eventLoop->exit();
 }
 
-void kio_digikamalbums::slotEntries(KIO::Job* /*job*/,
-                                    const KIO::UDSEntryList& entries)
+void kio_digikamalbums::slotEntries(KIO::Job* /*job*/, const KIO::UDSEntryList& entries)
 {
-    /*
+/*
     KIO::UDSEntryList final_entries = entries;
 
     KIO::UDSEntryList::iterator it = final_entries.begin();
@@ -610,7 +618,7 @@ void kio_digikamalbums::slotEntries(KIO::Job* /*job*/,
     }
 
     listEntries( final_entries );
-    */
+*/
     listEntries(entries);
 }
 
