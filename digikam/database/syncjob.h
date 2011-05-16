@@ -4,11 +4,11 @@
  * http://www.digikam.org
  *
  * Date        : 2004-10-04
- * Description : sync IO jobs.
+ * Description : synchronize Input/Output jobs.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Concept copied from kdelibs/kio/kio/netaccess.h/cpp
  *   This file is part of the KDE libraries
@@ -55,7 +55,6 @@ namespace Digikam
 
 class Album;
 class TAlbum;
-class SyncJobPriv;
 
 class SyncJobResult
 {
@@ -69,6 +68,8 @@ public:
         return success;
     }
 };
+
+// -------------------------------------------------------------------------------
 
 class SyncJob : public QObject
 {
@@ -98,12 +99,13 @@ private:
 
 private Q_SLOTS:
 
-    void slotResult( KJob* job );
+    void slotResult(KJob* job);
     void slotGotThumbnailFromIcon(Album* album, const QPixmap& pix);
     void slotLoadThumbnailFailed(Album* album);
 
 private:
 
+    class SyncJobPriv;
     SyncJobPriv* const d;
 };
 
