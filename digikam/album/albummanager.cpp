@@ -7,8 +7,8 @@
  * Description : Albums manager interface.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -139,14 +139,17 @@ public:
     QString albumPath;
 };
 
+// -----------------------------------------------------------------------------------
+
 uint qHash(const PAlbumPath& id)
 {
     return ::qHash(id.albumRootId) ^ ::qHash(id.albumPath);
 }
 
-class AlbumManagerPriv
-{
+// -----------------------------------------------------------------------------------
 
+class AlbumManager::AlbumManagerPriv
+{
 public:
 
     AlbumManagerPriv() :
@@ -201,7 +204,7 @@ public:
     DAlbum*                     rootDAlbum;
     SAlbum*                     rootSAlbum;
 
-    QHash<int,Album*>          allAlbumsIdHash;
+    QHash<int,Album*>           allAlbumsIdHash;
     QHash<PAlbumPath, PAlbum*>  albumPathHash;
     QHash<int, PAlbum*>         albumRootAlbumHash;
     Album*                      currentlyMovingAlbum;
@@ -225,11 +228,13 @@ public:
     QMap<YearMonth, int>        dAlbumsCount;
     QMap<int,int>               fAlbumsCount;
 
+public:
+
     QList<QDateTime> buildDirectoryModList(const QFileInfo& dbFile)
     {
         // retrieve modification dates
         QList<QDateTime> modList;
-        QFileInfoList fileInfoList = dbFile.dir().entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+        QFileInfoList    fileInfoList = dbFile.dir().entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
 
         // build list
         foreach (const QFileInfo& info, fileInfoList)
@@ -256,28 +261,38 @@ public:
     }
 };
 
+// -----------------------------------------------------------------------------------
+
 class ChangingDB
 {
 public:
 
-    ChangingDB(AlbumManagerPriv* d)
+    ChangingDB(AlbumManager::AlbumManagerPriv* d)
         : d(d)
     {
         d->changingDB = true;
     }
+
     ~ChangingDB()
     {
         d->changingDB = false;
     }
-    AlbumManagerPriv* const d;
+
+    AlbumManager::AlbumManagerPriv* const d;
 };
+
+// -----------------------------------------------------------------------------------
 
 class AlbumManagerCreator
 {
 public:
+
     AlbumManager object;
 };
+
 K_GLOBAL_STATIC(AlbumManagerCreator, creator)
+
+// -----------------------------------------------------------------------------------
 
 // A friend-class shortcut to circumvent accessing this from within the destructor
 AlbumManager* AlbumManager::internalInstance = 0;
@@ -291,8 +306,8 @@ AlbumManager::AlbumManager()
     : d(new AlbumManagerPriv)
 {
     internalInstance = this;
+    d->dirWatch      = new KDirWatch(this);
 
-    d->dirWatch = new KDirWatch(this);
     connect(d->dirWatch, SIGNAL(dirty(const QString&)),
             this, SLOT(slotDirWatchDirty(const QString&)));
 
@@ -300,40 +315,54 @@ AlbumManager::AlbumManager()
     d->scanPAlbumsTimer = new QTimer(this);
     d->scanPAlbumsTimer->setInterval(50);
     d->scanPAlbumsTimer->setSingleShot(true);
-    connect(d->scanPAlbumsTimer, SIGNAL(timeout()), this, SLOT(scanPAlbums()));
+
+    connect(d->scanPAlbumsTimer, SIGNAL(timeout()),
+            this, SLOT(scanPAlbums()));
 
     d->scanTAlbumsTimer = new QTimer(this);
     d->scanTAlbumsTimer->setInterval(50);
     d->scanTAlbumsTimer->setSingleShot(true);
-    connect(d->scanTAlbumsTimer, SIGNAL(timeout()), this, SLOT(scanTAlbums()));
+
+    connect(d->scanTAlbumsTimer, SIGNAL(timeout()),
+            this, SLOT(scanTAlbums()));
 
     d->scanSAlbumsTimer = new QTimer(this);
     d->scanSAlbumsTimer->setInterval(50);
     d->scanSAlbumsTimer->setSingleShot(true);
-    connect(d->scanSAlbumsTimer, SIGNAL(timeout()), this, SLOT(scanSAlbums()));
+
+    connect(d->scanSAlbumsTimer, SIGNAL(timeout()),
+            this, SLOT(scanSAlbums()));
 
     d->updatePAlbumsTimer = new QTimer(this);
     d->updatePAlbumsTimer->setInterval(50);
     d->updatePAlbumsTimer->setSingleShot(true);
-    connect(d->updatePAlbumsTimer, SIGNAL(timeout()), this, SLOT(updateChangedPAlbums()));
+
+    connect(d->updatePAlbumsTimer, SIGNAL(timeout()),
+            this, SLOT(updateChangedPAlbums()));
 
     // this operation is much more expensive than the other scan methods
     d->scanDAlbumsTimer = new QTimer(this);
     d->scanDAlbumsTimer->setInterval(5000);
     d->scanDAlbumsTimer->setSingleShot(true);
-    connect(d->scanDAlbumsTimer, SIGNAL(timeout()), this, SLOT(scanDAlbums()));
+
+    connect(d->scanDAlbumsTimer, SIGNAL(timeout()),
+            this, SLOT(scanDAlbums()));
 
     // moderately expensive
     d->albumItemCountTimer = new QTimer(this);
     d->albumItemCountTimer->setInterval(1000);
     d->albumItemCountTimer->setSingleShot(true);
-    connect(d->albumItemCountTimer, SIGNAL(timeout()), this, SLOT(getAlbumItemsCount()));
+
+    connect(d->albumItemCountTimer, SIGNAL(timeout()),
+            this, SLOT(getAlbumItemsCount()));
 
     // more expensive
     d->tagItemCountTimer = new QTimer(this);
     d->tagItemCountTimer->setInterval(2500);
     d->tagItemCountTimer->setSingleShot(true);
-    connect(d->tagItemCountTimer, SIGNAL(timeout()), this, SLOT(getTagItemsCount()));
+
+    connect(d->tagItemCountTimer, SIGNAL(timeout()),
+            this, SLOT(getTagItemsCount()));
 }
 
 AlbumManager::~AlbumManager()
@@ -380,11 +409,12 @@ bool AlbumManager::databaseEqual(const QString& dbType, const QString& dbName,
                                  const QString& dbHostName, int dbPort, bool dbInternalServer) const
 {
     DatabaseParameters params = DatabaseAccess::parameters();
-    return params.databaseType == dbType
-           && params.databaseName == dbName
-           && params.hostName == dbHostName
-           && params.port == dbPort
-           && params.internalServer == dbInternalServer;
+
+    return params.databaseType   == dbType          &&
+           params.databaseName   == dbName          &&
+           params.hostName       == dbHostName      &&
+           params.port           == dbPort          &&
+           params.internalServer == dbInternalServer;
 }
 
 static bool moveToBackup(const QFileInfo& info)
@@ -406,7 +436,8 @@ static bool moveToBackup(const QFileInfo& info)
     return true;
 }
 
-static bool copyToNewLocation(const QFileInfo& oldFile, const QFileInfo& newFile, const QString otherMessage = QString())
+static bool copyToNewLocation(const QFileInfo& oldFile, const QFileInfo& newFile,
+                              const QString otherMessage = QString())
 {
     QString message = otherMessage;
 
@@ -416,7 +447,8 @@ static bool copyToNewLocation(const QFileInfo& oldFile, const QFileInfo& newFile
                        "Starting with an empty database.",
                        oldFile.filePath(), newFile.filePath());
 
-    KIO::Job* job = KIO::file_copy(oldFile.filePath(), newFile.filePath(), -1, KIO::Overwrite /*| KIO::HideProgressInfo*/);
+    KIO::Job* job = KIO::file_copy(oldFile.filePath(), newFile.filePath(), -1,
+                                   KIO::Overwrite /*| KIO::HideProgressInfo*/);
 
     if (!KIO::NetAccess::synchronousRun(job, 0))
     {
@@ -430,10 +462,10 @@ static bool copyToNewLocation(const QFileInfo& oldFile, const QFileInfo& newFile
 void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const QString& albumPath)
 {
     // for bug #193522
-    QDir newDir(dbPath);
-    QDir albumDir(albumPath);
+    QDir               newDir(dbPath);
+    QDir               albumDir(albumPath);
     DatabaseParameters newParams = DatabaseParameters::parametersForSQLiteDefaultFile(newDir.path());
-    QFileInfo digikam4DB(newParams.SQLiteDatabaseFile());
+    QFileInfo          digikam4DB(newParams.SQLiteDatabaseFile());
 
     if (!digikam4DB.exists())
     {
@@ -459,7 +491,7 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
                 // SchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
                 // Restore this situation.
                 KSharedConfigPtr config = KGlobal::config();
-                KConfigGroup group = config->group("Album Settings");
+                KConfigGroup group      = config->group("Album Settings");
                 group.writeEntry("Album Path", albumDir.path());
                 group.sync();
             }
@@ -834,9 +866,8 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         CollectionManager::instance()->migrationCandidates(loc, &locDescription, &candidateIds, &candidateDescriptions);
         kDebug() << "Migration candidates for" << locDescription << ":" << candidateIds << candidateDescriptions;
 
-        KDialog* dialog = new KDialog;
-
-        QWidget* widget = new QWidget;
+        KDialog* dialog         = new KDialog;
+        QWidget* widget         = new QWidget;
         QGridLayout* mainLayout = new QGridLayout;
         mainLayout->setColumnStretch(1, 1);
 
@@ -858,7 +889,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         layout->setColumnStretch(1, 1);
 
         QRadioButton* migrateButton = 0;
-        KComboBox* migrateChoices = 0;
+        KComboBox* migrateChoices   = 0;
 
         if (!candidateIds.isEmpty())
         {
@@ -877,26 +908,26 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
                 migrateChoices->addItem(candidateDescriptions[i], candidateIds[i]);
             }
 
-            layout->addWidget(migrateButton, 0, 0, Qt::AlignTop);
-            layout->addWidget(migrateLabel, 0, 1);
+            layout->addWidget(migrateButton,  0, 0, Qt::AlignTop);
+            layout->addWidget(migrateLabel,   0, 1);
             layout->addWidget(migrateChoices, 1, 1);
         }
 
         QRadioButton* isRemovableButton = new QRadioButton;
-        QLabel* isRemovableLabel = new QLabel(
+        QLabel* isRemovableLabel        = new QLabel(
             i18n("The collection is located on a storage device which is not always attached. "
                  "Mark the collection as a removable collection."));
         isRemovableLabel->setWordWrap(true);
         layout->addWidget(isRemovableButton, 2, 0, Qt::AlignTop);
-        layout->addWidget(isRemovableLabel, 2, 1);
+        layout->addWidget(isRemovableLabel,  2, 1);
 
         QRadioButton* solveManuallyButton = new QRadioButton;
-        QLabel* solveManuallyLabel = new QLabel(
+        QLabel* solveManuallyLabel        = new QLabel(
             i18n("Take no action now. I would like to solve the problem "
                  "later using the setup dialog"));
         solveManuallyLabel->setWordWrap(true);
         layout->addWidget(solveManuallyButton, 3, 0, Qt::AlignTop);
-        layout->addWidget(solveManuallyLabel, 3, 1);
+        layout->addWidget(solveManuallyLabel,  3, 1);
 
         groupBox->setLayout(layout);
 
@@ -1037,7 +1068,7 @@ bool AlbumManager::checkNepomukService()
         return false;
     }
 
-    /*
+/*
     QEventLoop loop;
 
     if (!connect(&nepomukInterface, SIGNAL(serviceInitialized(const QString &)),
@@ -1048,15 +1079,16 @@ bool AlbumManager::checkNepomukService()
     }
 
     QTimer::singleShot(1000, &loop, SLOT(quit()));
-    */
+*/
 
     kDebug() << "Trying to start up digikamnepomukservice";
     nepomukInterface.call(QDBus::NoBlock, "startService", "digikamnepomukservice");
 
-    /*
+/*
     // wait (at most 1sec) for service to start up
     loop.exec();
-    */
+*/
+
     hasNepomuk = true;
 #endif // HAVE_NEPOMUK
 
@@ -1073,7 +1105,7 @@ void AlbumManager::startScan()
     d->changed = false;
 
     KDirWatch::Method m = d->dirWatch->internalMethod();
-    QString mName("FAM");
+    QString           mName("FAM");
 
     if (m == KDirWatch::DNotify)
     {
@@ -1126,6 +1158,7 @@ void AlbumManager::startScan()
     // listen to location status changes
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation&, int)),
             this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation&, int)));
+
     connect(CollectionManager::instance(), SIGNAL(locationPropertiesChanged(const CollectionLocation&)),
             this, SLOT(slotCollectionLocationPropertiesChanged(const CollectionLocation&)));
 
@@ -1135,13 +1168,17 @@ void AlbumManager::startScan()
     // listen to album database changes
     connect(DatabaseAccess::databaseWatch(), SIGNAL(albumChange(const AlbumChangeset&)),
             this, SLOT(slotAlbumChange(const AlbumChangeset&)));
+
     connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(const TagChangeset&)),
             this, SLOT(slotTagChange(const TagChangeset&)));
+
     connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(const SearchChangeset&)),
             this, SLOT(slotSearchChange(const SearchChangeset&)));
+
     // listen to collection image changes
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
             this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)));
+
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset&)),
             this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
 
@@ -1156,15 +1193,15 @@ void AlbumManager::slotCollectionLocationStatusChanged(const CollectionLocation&
         return;
     }
 
-    if (location.status() == CollectionLocation::LocationAvailable
-        && oldStatus != CollectionLocation::LocationAvailable)
+    if (location.status() == CollectionLocation::LocationAvailable &&
+        oldStatus         != CollectionLocation::LocationAvailable)
     {
         addAlbumRoot(location);
         // New albums have possibly appeared
         scanPAlbums();
     }
-    else if (oldStatus == CollectionLocation::LocationAvailable
-             && location.status() != CollectionLocation::LocationAvailable)
+    else if (oldStatus         == CollectionLocation::LocationAvailable &&
+             location.status() != CollectionLocation::LocationAvailable)
     {
         removeAlbumRoot(location);
         // Albums have possibly disappeared
@@ -1249,7 +1286,7 @@ void AlbumManager::scanPAlbums()
 
     while (it.current())
     {
-        PAlbum* a = (PAlbum*)(*it);
+        PAlbum* a          = (PAlbum*)(*it);
         oldAlbums[a->id()] = a;
         ++it;
     }
@@ -1313,7 +1350,7 @@ void AlbumManager::scanPAlbums()
             continue;
         }
 
-        PAlbum* album, *parent;
+        PAlbum* album=0, *parent=0;
 
         if (info.relativePath == "/")
         {
@@ -1357,7 +1394,7 @@ void AlbumManager::scanPAlbums()
             }
 
             // Create the new album
-            album       = new PAlbum(info.albumRootId, parentPath, name, info.id);
+            album = new PAlbum(info.albumRootId, parentPath, name, info.id);
         }
 
         album->m_caption  = info.caption;
@@ -1391,8 +1428,7 @@ void AlbumManager::updateChangedPAlbums()
 
     // scan db and get a list of all albums
     QList<AlbumInfo> currentAlbums = DatabaseAccess().db()->scanAlbums();
-
-    bool needScanPAlbums = false;
+    bool needScanPAlbums           = false;
 
     // Find the AlbumInfo for each id in changedPAlbums
     foreach (int id, d->changedPAlbums)
@@ -1412,7 +1448,7 @@ void AlbumManager::updateChangedPAlbums()
                     {
                         // Handle rename of album name
                         // last section, no slash
-                        QString name = info.relativePath.section('/', -1, -1);
+                        QString name       = info.relativePath.section('/', -1, -1);
                         QString parentPath = info.relativePath;
                         parentPath.chop(name.length());
 
@@ -1432,9 +1468,9 @@ void AlbumManager::updateChangedPAlbums()
                     }
 
                     // Update caption, collection, date
-                    album->m_caption = info.caption;
-                    album->m_category  = info.category;
-                    album->m_date    = info.date;
+                    album->m_caption  = info.caption;
+                    album->m_category = info.category;
+                    album->m_date     = info.date;
 
                     // Icon changed?
                     QString icon;
@@ -1482,8 +1518,7 @@ void AlbumManager::getAlbumItemsCount()
         d->albumListJob = 0;
     }
 
-    DatabaseUrl u = DatabaseUrl::albumUrl();
-
+    DatabaseUrl u   = DatabaseUrl::albumUrl();
     d->albumListJob = ImageLister::startListJob(u);
     d->albumListJob->addMetaData("folders", "true");
 
@@ -1661,7 +1696,6 @@ void AlbumManager::getTagItemsCount()
     }
 
     DatabaseUrl u = DatabaseUrl::fromTagIds(QList<int>());
-
     d->tagListJob = ImageLister::startListJob(u);
     d->tagListJob->addMetaData("folders", "true");
 
@@ -1699,7 +1733,7 @@ void AlbumManager::scanSAlbums()
 
     while (it.current())
     {
-        SAlbum* search = (SAlbum*)(*it);
+        SAlbum* search            = (SAlbum*)(*it);
         oldSearches[search->id()] = search;
         ++it;
     }
@@ -1716,9 +1750,9 @@ void AlbumManager::scanSAlbums()
         {
             SAlbum* album = oldSearches[info.id];
 
-            if (info.name != album->title()
-                || info.type != album->searchType()
-                || info.query != album->query())
+            if (info.name != album->title()      ||
+                info.type != album->searchType() ||
+                info.query != album->query())
             {
                 QString oldName = album->title();
 
@@ -1777,8 +1811,7 @@ void AlbumManager::scanDAlbums()
         d->dateListJob = 0;
     }
 
-    DatabaseUrl u = DatabaseUrl::dateUrl();
-
+    DatabaseUrl u  = DatabaseUrl::dateUrl();
     d->dateListJob = ImageLister::startListJob(u);
     d->dateListJob->addMetaData("folders", "true");
 
@@ -1963,7 +1996,7 @@ Album* AlbumManager::findAlbum(int gid) const
 TAlbum* AlbumManager::findTAlbum(const QString& tagPath) const
 {
     // handle gracefully with or without leading slash
-    bool withLeadingSlash = tagPath.startsWith('/');
+    bool          withLeadingSlash = tagPath.startsWith('/');
     AlbumIterator it(d->rootTAlbum);
 
     while (it.current())
@@ -2073,7 +2106,6 @@ PAlbum* AlbumManager::createPAlbum(const CollectionLocation& location, const QSt
     return createPAlbum(album, name, caption, date, category, errMsg);
 }
 
-
 PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
                                    const QString& name,
                                    const QString& caption,
@@ -2110,7 +2142,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     int albumRootId   = parent->albumRootId();
 
     // first check if we have a sibling album with the same name
-    PAlbum* child = static_cast<PAlbum*>(parent->m_firstChild);
+    PAlbum* child     = static_cast<PAlbum*>(parent->m_firstChild);
 
     while (child)
     {
@@ -2134,7 +2166,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     }
 
     ChangingDB changing(d);
-    int id = DatabaseAccess().db()->addAlbum(albumRootId, albumPath, caption, date, category);
+    int        id = DatabaseAccess().db()->addAlbum(albumRootId, albumPath, caption, date, category);
 
     if (id == -1)
     {
@@ -2149,10 +2181,10 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
         parentPath = parent->albumPath();
     }
 
-    PAlbum* album    = new PAlbum(albumRootId, parentPath, name, id);
-    album->m_caption = caption;
-    album->m_category  = category;
-    album->m_date    = date;
+    PAlbum* album     = new PAlbum(albumRootId, parentPath, name, id);
+    album->m_caption  = caption;
+    album->m_category = category;
+    album->m_date     = date;
 
     insertPAlbum(album, parent);
     emit signalAlbumsUpdated(Album::PHYSICAL);
@@ -2196,12 +2228,10 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     }
 
     QString oldAlbumPath = album->albumPath();
-
-    KUrl oldUrl = album->fileUrl();
+    KUrl oldUrl          = album->fileUrl();
     album->setTitle(newName);
-    album->m_path = newName;
-    KUrl newUrl = album->fileUrl();
-
+    album->m_path        = newName;
+    KUrl newUrl          = album->fileUrl();
     QString newAlbumPath = album->albumPath();
 
     // We use a private shortcut around collection scanner noticing our changes,
@@ -2280,7 +2310,7 @@ bool AlbumManager::updatePAlbumIcon(PAlbum* album, qlonglong iconID, QString& er
         if (access.db()->getAlbumIcon(album->id(), &iconAlbumRootId, &iconRelativePath))
         {
             QString albumRootPath = CollectionManager::instance()->albumRootPath(iconAlbumRootId);
-            album->m_icon = albumRootPath + iconRelativePath;
+            album->m_icon         = albumRootPath + iconRelativePath;
         }
         else
         {
@@ -2746,7 +2776,7 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const QString& changedQuery,
         return false;
     }
 
-    QString newName = changedName.isNull() ? album->title() : changedName;
+    QString newName              = changedName.isNull()                    ? album->title()      : changedName;
     DatabaseSearch::Type newType = (type == DatabaseSearch::UndefinedType) ? album->searchType() : type;
 
     ChangingDB changing(d);
@@ -2998,6 +3028,7 @@ void AlbumManager::slotPeopleJobData(KIO::Job*, const QByteArray& data)
     // For now, we only use the sum of confirmed and unconfirmed faces
     d->fAlbumsCount.clear();
     typedef QMap<int,int> IntIntMap;
+
     foreach (const IntIntMap& counts, facesStatMap)
     {
         QMap<int,int>::const_iterator it;
@@ -3029,8 +3060,8 @@ void AlbumManager::slotTagsJobData(KIO::Job*, const QByteArray& data)
     }
 
     QMap<int, int> tagsStatMap;
-    QByteArray di(data);
-    QDataStream ds(&di, QIODevice::ReadOnly);
+    QByteArray     di(data);
+    QDataStream    ds(&di, QIODevice::ReadOnly);
     ds >> tagsStatMap;
 
     d->tAlbumsCount = tagsStatMap;
@@ -3080,8 +3111,8 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
     }
 
     QMap<QDateTime, int> datesStatMap;
-    QByteArray di(data);
-    QDataStream ds(&di, QIODevice::ReadOnly);
+    QByteArray           di(data);
+    QDataStream          ds(&di, QIODevice::ReadOnly);
     ds >> datesStatMap;
 
     QMap<YearMonth, int> yearMonthMap;
@@ -3466,6 +3497,5 @@ void AlbumManager::handleKioNotification(const KUrl& url)
         }
     }
 }
-
 
 }  // namespace Digikam

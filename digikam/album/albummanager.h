@@ -7,8 +7,8 @@
  * Description : Albums manager interface.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,7 +68,6 @@ class TagChangeset;
 class SearchChangeset;
 class CollectionImageChangeset;
 class ImageTagChangeset;
-class AlbumManagerPriv;
 
 typedef QList<Album*> AlbumList;
 
@@ -730,8 +729,6 @@ private:
 
     void handleKioNotification(const KUrl& url);
 
-    template <class T> friend class AlbumPointer;
-    friend class Album;
     static AlbumManager* internalInstance;
     void addGuardedPointer(Album* a, Album** pointer);
     void removeGuardedPointer(Album* a, Album** pointer);
@@ -740,10 +737,20 @@ private:
 
     bool checkNepomukService();
 
+public:
+
+    // Declared public because it used in ChangingDB class.
+    class AlbumManagerPriv;
+
 private:
 
     AlbumManagerPriv* const d;
+
+    template <class T> friend class AlbumPointer;
+    friend class Album;
 };
+
+// ------------------------------------------------------------------------------------
 
 /**
  * You can use AlbumPointer to store a guarded pointer to Album
@@ -774,14 +781,14 @@ public:
     AlbumPointer<T> operator=(T* a)
     {
         Album* oldAlbum = album;
-        album = a;
+        album           = a;
         AlbumManager::instance()->changeGuardedPointer(oldAlbum, album, &album);
         return *this;
     }
     AlbumPointer<T> operator=(const AlbumPointer<T>& p)
     {
         Album* oldAlbum = album;
-        album = p.album;
+        album           = p.album;
         AlbumManager::instance()->changeGuardedPointer(oldAlbum, album, &album);
         return *this;
     }
