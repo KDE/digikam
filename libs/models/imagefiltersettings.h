@@ -187,7 +187,7 @@ private:
     /**
      * @brief Returns whether some internal filtering (whitelist by id or URL) or normal filtering is going on
      */
-    bool isFilteringInterally() const;
+    bool isFilteringInternally() const;
 
 private:
 

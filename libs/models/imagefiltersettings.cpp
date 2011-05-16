@@ -161,7 +161,7 @@ bool ImageFilterSettings::isFilteringByRating() const
     return false;
 }
 
-bool ImageFilterSettings::isFilteringInterally() const
+bool ImageFilterSettings::isFilteringInternally() const
 {
     return isFiltering() || !m_urlWhitelists.isEmpty() || !m_idWhitelists.isEmpty();
 }
@@ -256,7 +256,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
         *foundText = false;
     }
 
-    if (!isFilteringInterally())
+    if (!isFilteringInternally())
     {
         return true;
     }
