@@ -159,8 +159,8 @@ public:
      *  and give the names at destination in itemNames (Unless for rename, names wont usually change.
      *  Give them nevertheless.)
      */
-    void hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum* dstAlbum, QStringList itemNames);
-    void hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum* dstAlbum, QString itemName);
+    void hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum* dstAlbum, const QStringList& itemNames);
+    void hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum* dstAlbum, const QString& itemName);
 
     /** Hint at the fact that an item may have changed, although its modification date may not have changed.
      *  Note that a scan of the containing directory will need to be triggered nonetheless for the hints to take effect. */

@@ -88,6 +88,8 @@ public:
     bool* m_continue;
 };
 
+// ------------------------------------------------------------------------------
+
 class ScanController::ScanControllerPriv
 {
 public:
@@ -416,7 +418,7 @@ ScanController::Advice ScanController::databaseInitialization()
 
 void ScanController::completeCollectionScan(SplashScreen* splash)
 {
-    d->splash = splash;
+    d->splash         = splash;
     createProgressDialog();
     // we only need to count the files in advance
     //if we show a progress percentage in progress dialog
@@ -939,7 +941,8 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* album, const PAlbum* 
     d->albumHints << newHints;
 }
 
-void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum* dstAlbum, QStringList itemNames)
+void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum* dstAlbum,
+                                             const QStringList& itemNames)
 {
     ItemCopyMoveHint hint(ids, dstAlbum->albumRootId(), dstAlbum->id(), itemNames);
 
@@ -948,7 +951,7 @@ void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const P
     d->itemHints << hint;
 }
 
-void ScanController::hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum* dstAlbum, QString itemName)
+void ScanController::hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum* dstAlbum, const QString& itemName)
 {
     ItemCopyMoveHint hint(QList<qlonglong>() << id, dstAlbum->albumRootId(), dstAlbum->id(), QStringList() << itemName);
 
