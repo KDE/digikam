@@ -7,6 +7,7 @@
  * Description : a kio-slave to process tag query on
  *               digiKam albums.
  *
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -37,8 +38,7 @@ class kio_digikamtagsProtocol : public KIO::SlaveBase
 {
 public:
 
-    kio_digikamtagsProtocol(const QByteArray& pool_socket,
-                            const QByteArray& app_socket);
+    kio_digikamtagsProtocol(const QByteArray& pool_socket, const QByteArray& app_socket);
     virtual ~kio_digikamtagsProtocol();
 
     void special(const QByteArray& data);

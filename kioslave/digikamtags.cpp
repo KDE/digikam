@@ -7,6 +7,7 @@
  * Description : a kio-slave to process tag query on
  *               digiKam albums.
  *
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -53,7 +54,7 @@
 #include "imagelisterreceiver.h"
 
 kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QByteArray& pool_socket,
-        const QByteArray& app_socket)
+                                                 const QByteArray& app_socket)
     : SlaveBase("kio_digikamtags", pool_socket, app_socket)
 {
 }
@@ -71,12 +72,13 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     ds >> kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
-    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
+    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-%1")
+                                                  .arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
     bool folders     = (metaData("folders") == "true");
     bool facefolders = (metaData("facefolders") == "true");
-    QString special = metaData("specialTagListing");
+    QString special  = metaData("specialTagListing");
 
     if (folders)
     {
@@ -92,7 +94,7 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
         QMap<QString, QMap<int, int> > facesNumberMap;
         facesNumberMap[Digikam::ImageTagPropertyName::autodetectedFace()] =
             Digikam::DatabaseAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::autodetectedFace());
-        facesNumberMap[Digikam::ImageTagPropertyName::tagRegion()] =
+        facesNumberMap[Digikam::ImageTagPropertyName::tagRegion()]        =
             Digikam::DatabaseAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::tagRegion());
 
         QByteArray  ba;
