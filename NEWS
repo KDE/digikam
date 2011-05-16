@@ -11,6 +11,7 @@ General        : Color Labels support to improve photograph workfow.
 General        : Pick Labels support to improve photograph selection.
 General        : Color Theme engine is now ported to KDE color theme manager.
 General        : MySQl support improvements. Dependency is now optional.
+General        : Added JPEGTurbo library support.
 
 AlbumGUI       : Re-designed Filters view on right sidebar to perform icon-view items filtering.
 AlbumGUI       : Add options to group/ungroup items from icon-view.
@@ -154,5 +155,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 127 ==> 272023 : digiKam crash on deleting tags (quickly).
 128 ==> 265431 : digiKam cmake check for JPEG_LIB_VERSION fails for libjpeg-turbo >= 1.0.90.
 129 ==> 273068 : digiKam 1.9.0 crashes while importing images.
-130 ==> 
-
+130 ==> 272301 : Mysql database corruption upon tag hierarchy removal.
+131 ==> 
