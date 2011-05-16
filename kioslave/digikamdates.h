@@ -7,6 +7,7 @@
  * Description : a kio-slave to process date query on
  *               digiKam albums.
  *
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -34,9 +35,8 @@ class kio_digikamdates : public KIO::SlaveBase
 
 public:
 
-    kio_digikamdates(const QByteArray& pool_socket,
-                     const QByteArray& app_socket);
-    ~kio_digikamdates();
+    kio_digikamdates(const QByteArray& pool_socket, const QByteArray& app_socket);
+    virtual ~kio_digikamdates();
 
     void special(const QByteArray& data);
 };

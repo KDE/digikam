@@ -48,7 +48,7 @@ class kio_digikamalbums : public QObject, public KIO::SlaveBase
 public:
 
     kio_digikamalbums(const QByteArray& pool_socket, const QByteArray& app_socket);
-    ~kio_digikamalbums();
+    virtual ~kio_digikamalbums();
 
     void special(const QByteArray& data);
 

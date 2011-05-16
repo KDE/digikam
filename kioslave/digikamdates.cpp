@@ -7,6 +7,7 @@
  * Description : a kio-slave to process date query on
  *               digiKam albums.
  *
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
@@ -23,10 +24,6 @@
  * ============================================================ */
 
 #include "digikamdates.h"
-
-// C++ includes
-
-#include <cstdlib>
 
 // Qt includes
 
@@ -50,8 +47,7 @@
 #include "digikam_export.h"
 #include "imagelister.h"
 
-kio_digikamdates::kio_digikamdates(const QByteArray& pool_socket,
-                                   const QByteArray& app_socket)
+kio_digikamdates::kio_digikamdates(const QByteArray& pool_socket, const QByteArray& app_socket)
     : SlaveBase("kio_digikamdates", pool_socket, app_socket)
 {
 }
@@ -62,27 +58,25 @@ kio_digikamdates::~kio_digikamdates()
 
 void kio_digikamdates::special(const QByteArray& data)
 {
-    bool folders = (metaData("folders") == "true");
-
-    KUrl    kurl;
-    QString filter;
-
+    bool        folders = (metaData("folders") == "true");
+    KUrl        kurl;
+    QString     filter;
     QDataStream ds(data);
     ds >> kurl;
 
-    kDebug()<<"Entered kio_digikamdates::special";
+    kDebug() << "Entered kio_digikamdates::special";
 
     Digikam::DatabaseUrl dbUrl(kurl);
-    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
+    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1")
+                                                  .arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
     if (folders)
     {
 
         QMap<QDateTime, int> dateNumberMap = Digikam::DatabaseAccess().db()->getAllCreationDatesAndNumberOfImages();
-
-        QByteArray  ba;
-        QDataStream os(&ba, QIODevice::WriteOnly);
+        QByteArray           ba;
+        QDataStream          os(&ba, QIODevice::WriteOnly);
         os << dateNumberMap;
         SlaveBase::data(ba);
     }
