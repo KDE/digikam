@@ -106,15 +106,18 @@ extern "C"
         KComponentData componentData( "kio_digikamdates" );
         KGlobal::locale();
 
+        kDebug() << "*** kio_digikamdates started ***";
+
         if (argc != 4)
         {
-            kDebug() << "Usage: kio_digikamdates  protocol domain-socket1 domain-socket2";
+            kDebug() << "Usage: kio_digikamdates protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 
         kio_digikamdates slave(argv[2], argv[3]);
         slave.dispatchLoop();
 
+        kDebug() << "*** kio_digikamdates finished ***";
         return 0;
     }
 }

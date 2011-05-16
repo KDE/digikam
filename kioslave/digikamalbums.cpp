@@ -656,15 +656,18 @@ extern "C"
         KComponentData componentData( "kio_digikamalbums" );
         KGlobal::locale();
 
+        kDebug() << "*** kio_digikamalbums started ***";
+
         if (argc != 4)
         {
-            kDebug() << "Usage: kio_digikamalbums  protocol domain-socket1 domain-socket2";
+            kDebug() << "Usage: kio_digikamalbums protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 
         kio_digikamalbums slave(argv[2], argv[3]);
         slave.dispatchLoop();
 
+        kDebug() << "*** kio_digikamalbums finished ***";
         return 0;
     }
 }

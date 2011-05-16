@@ -116,15 +116,18 @@ extern "C"
         KComponentData componentData( "kio_digikammapimages" );
         KGlobal::locale();
 
+        kDebug() << "*** kio_digikammapimages started ***";
+
         if (argc != 4)
         {
-            kDebug() << "Usage: kio_digikammapimages  protocol domain-socket1 domain-socket2";
+            kDebug() << "Usage: kio_digikammapimages protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 
         kio_digikammapimages slave(argv[2], argv[3]);
         slave.dispatchLoop();
 
+        kDebug() << "*** kio_digikammapimages finished ***";
         return 0;
     }
 }

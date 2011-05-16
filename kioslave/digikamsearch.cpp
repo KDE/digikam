@@ -7,7 +7,7 @@
  * Description : a kio-slave to process search on digiKam albums
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,10 +23,6 @@
  * ============================================================ */
 
 #include "digikamsearch.h"
-
-// C++ includes
-
-#include <cstdlib>
 
 // Qt includes
 
@@ -48,8 +44,30 @@
 #include "haariface.h"
 #include "imagelister.h"
 
-kio_digikamsearch::kio_digikamsearch(const QByteArray& pool_socket,
-                                     const QByteArray& app_socket)
+// route progress info to KIOSlave facilities
+class DuplicatesProgressObserver : public Digikam::HaarProgressObserver
+{
+public:
+
+    DuplicatesProgressObserver(KIO::SlaveBase* slave) : m_slave(slave) {}
+
+    virtual void totalNumberToScan(int number)
+    {
+        m_slave->totalSize(number);
+    }
+    virtual void processedNumber(int number)
+    {
+        m_slave->processedSize(number);
+    }
+
+private:
+
+    KIO::SlaveBase* m_slave;
+};
+
+// -----------------------------------------------------------------------------------------------------
+
+kio_digikamsearch::kio_digikamsearch(const QByteArray& pool_socket, const QByteArray& app_socket)
     : SlaveBase("kio_digikamsearch", pool_socket, app_socket)
 {
 }
@@ -60,11 +78,9 @@ kio_digikamsearch::~kio_digikamsearch()
 
 void kio_digikamsearch::special(const QByteArray& data)
 {
-    bool duplicates = !metaData("duplicates").isEmpty();
-
-    KUrl    kurl;
-    int     listingType = 0;
-
+    bool        duplicates = !metaData("duplicates").isEmpty();
+    KUrl        kurl;
+    int         listingType = 0;
     QDataStream ds(data);
     ds >> kurl;
 
@@ -76,12 +92,13 @@ void kio_digikamsearch::special(const QByteArray& data)
     kDebug() << "kio_digikamsearch::special " << kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
-    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
+    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1")
+                                                  .arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
     if (!duplicates)
     {
-        int id = dbUrl.searchId();
+        int id                   = dbUrl.searchId();
         Digikam::SearchInfo info = Digikam::DatabaseAccess().db()->getSearchInfo(id);
 
         Digikam::ImageLister lister;
@@ -119,15 +136,15 @@ void kio_digikamsearch::special(const QByteArray& data)
     }
     else
     {
-        QString albumIdsString  = metaData("albumids");
-        QString tagIdsString    = metaData("tagids");
-        QString thresholdString = metaData("threshold");
+        QString albumIdsString         = metaData("albumids");
+        QString tagIdsString           = metaData("tagids");
+        QString thresholdString        = metaData("threshold");
 
         // get albums to scan
         QStringList albumIdsStringList = albumIdsString.split(',');
         QStringList tagIdsStringList   = tagIdsString.split(',');
-        QList<int> albumIds;
-        QList<int> tagIds;
+        QList<int>  albumIds;
+        QList<int>  tagIds;
 
         {
             bool ok = true;
@@ -164,7 +181,7 @@ void kio_digikamsearch::special(const QByteArray& data)
         // get info about threshold
         // If threshold value cannot be converted from string, we will use 0.4 instead.
         // 40% sound like the minimum value to use to have suitable results.
-        bool ok;
+        bool   ok;
         double threshold = thresholdString.toDouble(&ok);
 
         if (!ok)
@@ -172,24 +189,6 @@ void kio_digikamsearch::special(const QByteArray& data)
             threshold = 0.4;
         }
 
-        // route progress info to KIOSlave facilities
-        class DuplicatesProgressObserver : public Digikam::HaarProgressObserver
-        {
-        public:
-            DuplicatesProgressObserver(KIO::SlaveBase* slave) : m_slave(slave) {}
-
-            virtual void totalNumberToScan(int number)
-            {
-                m_slave->totalSize(number);
-            }
-            virtual void processedNumber(int number)
-            {
-                m_slave->processedSize(number);
-            }
-
-        private:
-            KIO::SlaveBase* m_slave;
-        };
         DuplicatesProgressObserver observer(this);
 
         // rebuild the duplicate albums
@@ -213,15 +212,18 @@ extern "C"
         KComponentData componentData( "kio_digikamsearch" );
         KGlobal::locale();
 
+        kDebug() << "*** kio_digikamsearch started ***";
+
         if (argc != 4)
         {
-            kDebug() << "Usage: kio_digikamsearch  protocol domain-socket1 domain-socket2";
+            kDebug() << "Usage: kio_digikamsearch protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 
         kio_digikamsearch slave(argv[2], argv[3]);
         slave.dispatchLoop();
 
+        kDebug() << "*** kio_digikamsearch finished ***";
         return 0;
     }
 }

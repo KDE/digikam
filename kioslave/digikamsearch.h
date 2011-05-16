@@ -7,7 +7,7 @@
  * Description : a kio-slave to process search on digiKam albums
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +35,7 @@ class kio_digikamsearch : public KIO::SlaveBase
 public:
 
     kio_digikamsearch(const QByteArray& pool_socket, const QByteArray& app_socket);
-    ~kio_digikamsearch();
+    virtual ~kio_digikamsearch();
 
     void special(const QByteArray& data);
 };
