@@ -7,9 +7,9 @@
  * Date        : 2010-07-20
  * Description : a kio-slave to process map search
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
- * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Gabriel Voicu <ping dot gabi at gmail dot com>
+ * Copyright (C) 2010-2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,10 +25,6 @@
  * ============================================================ */
 
 #include "digikammapimages.h"
-
-// C++ includes
-
-#include <cstdlib>
 
 // Qt includes
 
@@ -63,16 +59,15 @@ kio_digikammapimages::~kio_digikammapimages()
 
 void kio_digikammapimages::special(const QByteArray& data)
 {
-    bool wantDirectQuery = (metaData("wantDirectQuery") == "true");
-
-    KUrl    kurl;
-    QString filter;
-
+    bool        wantDirectQuery = (metaData("wantDirectQuery") == "true");
+    KUrl        kurl;
+    QString     filter;
     QDataStream ds(data);
     ds >> kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
-    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikammapimages-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
+    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikammapimages-%1")
+                                                  .arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
     if (wantDirectQuery)
@@ -81,13 +76,13 @@ void kio_digikammapimages::special(const QByteArray& data)
         QString strLng1 = metaData("lng1");
         QString strLat2 = metaData("lat2");
         QString strLng2 = metaData("lng2");
-        qreal lat1 = strLat1.toDouble();
-        qreal lng1 = strLng1.toDouble();
-        qreal lat2 = strLat2.toDouble();
-        qreal lng2 = strLng2.toDouble();
+        qreal lat1      = strLat1.toDouble();
+        qreal lng1      = strLng1.toDouble();
+        qreal lat2      = strLat2.toDouble();
+        qreal lng2      = strLng2.toDouble();
 
         QList<QVariant> imagesInfoFromArea = Digikam::DatabaseAccess().db()->getImageIdsFromArea(lat1, lat2, lng1, lng2, 0, QString("rating"));
-        // kDebug()<<"IMAGE IDS:"<<imageIds;
+        // kDebug() << "IMAGE IDS:" << imageIds;
 
         QByteArray  ba;
         QDataStream os(&ba, QIODevice::WriteOnly);

@@ -6,9 +6,9 @@
  * Date        : 2010-07-20
  * Description : a kio-slave to process map search
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
- * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Gabriel Voicu <ping dot gabi at gmail dot com>
+ * Copyright (C) 2010-2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,7 @@ class kio_digikammapimages : public KIO::SlaveBase
 public:
 
     kio_digikammapimages(const QByteArray& pool_socket, const QByteArray& app_socket);
-    ~kio_digikammapimages();
+    virtual ~kio_digikammapimages();
 
     void special(const QByteArray& data);
 };
