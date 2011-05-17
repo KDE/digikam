@@ -948,6 +948,7 @@ void AbstractCheckableAlbumModel::resetAllCheckedAlbums()
 {
     QList<Album*> oldChecked = d->checkedAlbums.keys();
     d->checkedAlbums.clear();
+
     foreach (Album* album, oldChecked)
     {
         QModelIndex index = indexForAlbum(album);

@@ -6,7 +6,7 @@
  * Date        : 2009-03-24
  * Description : Qt Model for Albums - filter model
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
@@ -46,7 +46,7 @@ AlbumFilterModel::AlbumFilterModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
     m_filterBehavior = FullFiltering;
-    m_chainedModel = 0;
+    m_chainedModel   = 0;
     setSortRole(AbstractAlbumModel::AlbumSortRole);
     setSortCaseSensitivity(Qt::CaseInsensitive);
 
@@ -85,7 +85,7 @@ void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
 
     // don't use isFiltering here because it may be reimplemented
     bool wasSearching = settingsFilter(m_settings);
-    bool willSearch = settingsFilter(settings);
+    bool willSearch   = settingsFilter(settings);
     emit searchTextSettingsAboutToChange(wasSearching, willSearch);
 
     m_settings = settings;
@@ -104,7 +104,7 @@ void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
         {
             QModelIndex collectionIndex = index(i, 0, rootAlbumIndex());
             // count the number of rows
-            validRows += rowCount(collectionIndex);
+            validRows                   += rowCount(collectionIndex);
         }
 
         bool hasResult = validRows > 0;
@@ -289,7 +289,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matchResult(Album* album) const
     if (m_filterBehavior == FullFiltering)
     {
         // check if any of the parents match the search
-        Album* parent = album->parent();
+        Album* parent   = album->parent();
         PAlbum* pparent = palbum ? static_cast<PAlbum*>(parent) : 0;
 
         while (parent && !(parent->isRoot() || (pparent && pparent->isAlbumRoot()) ) )
@@ -321,15 +321,15 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matchResult(Album* album) const
 
 bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
-    QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
-    Album* album = AbstractAlbumModel::retrieveAlbum(index);
+    QModelIndex index  = sourceModel()->index(source_row, 0, source_parent);
+    Album* album       = AbstractAlbumModel::retrieveAlbum(index);
     MatchResult result = matchResult(album);
     return result;
 }
 
 bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
 {
-    QVariant valLeft = left.data(sortRole());
+    QVariant valLeft  = left.data(sortRole());
     QVariant valRight = right.data(sortRole());
 
     if ((valLeft.type() == QVariant::String) && (valRight.type() == QVariant::String))
@@ -337,6 +337,7 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
         {
             case AlbumSettings::Natural:
                 return KStringHandler::naturalCompare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
+
             case AlbumSettings::Normal:
             default:
                 return QString::compare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
@@ -373,7 +374,8 @@ void AlbumFilterModel::slotAlbumsHaveBeenUpdated(int type)
 // -----------------------------------------------------------------------------
 
 CheckableAlbumFilterModel::CheckableAlbumFilterModel(QObject* parent) :
-    AlbumFilterModel(parent), m_filterChecked(false),
+    AlbumFilterModel(parent),
+    m_filterChecked(false),
     m_filterPartiallyChecked(false)
 {
 }
@@ -409,13 +411,11 @@ void CheckableAlbumFilterModel::setFilterPartiallyChecked(bool filter)
 
 bool CheckableAlbumFilterModel::isFiltering() const
 {
-    return AlbumFilterModel::isFiltering() || m_filterChecked
-           || m_filterPartiallyChecked;
+    return (AlbumFilterModel::isFiltering() || m_filterChecked || m_filterPartiallyChecked);
 }
 
 bool CheckableAlbumFilterModel::matches(Album* album) const
 {
-
     bool accepted = AlbumFilterModel::matches(album);
 
     if (!m_filterChecked && !m_filterPartiallyChecked)
@@ -438,9 +438,7 @@ bool CheckableAlbumFilterModel::matches(Album* album) const
     }
 
     return accepted && stateAccepted;
-
 }
-
 
 // -----------------------------------------------------------------------------
 
@@ -510,7 +508,7 @@ void SearchFilterModel::setListTemporarySearches(bool list)
 
 bool SearchFilterModel::isFiltering() const
 {
-    return m_searchType != -2 || !m_listTemporary;
+    return (m_searchType != -2 || !m_listTemporary);
 }
 
 bool SearchFilterModel::matches(Album* album) const

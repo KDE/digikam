@@ -6,7 +6,7 @@
  * Date        : 2009-03-24
  * Description : Qt Model for Albums - filter model
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
@@ -44,46 +44,19 @@ class AlbumFilterModel : public QSortFilterProxyModel
 
 public:
 
-    AlbumFilterModel(QObject* parent = 0);
-
-    /**
-     * Sets the source model.
-     * Note: If a chained filter model is set, it will not be reset, but
-     * the source album model will be made source of the chained filter model.
-     */
-    void setSourceAlbumModel(AbstractAlbumModel* source);
-
-    /**
-     * Sets a chained filter model.
-     * Note: If a direct source album model is set as current source, it will be set as
-     * sourceAlbumModel of the new source filter model.
-     */
-    void setSourceFilterModel(AlbumFilterModel* source);
-
-    AbstractAlbumModel* sourceAlbumModel() const;
-    AlbumFilterModel*   sourceFilterModel() const;
-    QModelIndex mapToSourceAlbumModel(const QModelIndex& index) const;
-    QModelIndex mapFromSourceAlbumModel(const QModelIndex& index) const;
-
-    /// Convenience methods
-    Album* albumForIndex(const QModelIndex& index) const;
-    QModelIndex indexForAlbum(Album* album) const;
-    QModelIndex rootAlbumIndex() const;
-
-    /**
-     * Returns if the currently applied filters will result in any filtering.
-     *
-     * @return <code>true</code> if the current selected filter could result in
-     *         any filtering without checking if this really happens.
-     */
-    virtual bool isFiltering() const;
-
-    /**
-     * Returns the settings currently used for filtering.
-     *
-     * @return current settings for filtering.
-     */
-    SearchTextSettings searchTextSettings() const;
+    enum MatchResult
+    {
+        /// This enum can be used as a boolean value if match/no match only is needed
+        NoMatch = 0,
+        /// The index itself is matched
+        DirectMatch,
+        /// A parent if the index is matched
+        ParentMatch,
+        /// A child of the index is matched
+        ChildMatch,
+        /// The index is matched not because of search settings, but because it has a special type
+        SpecialMatch
+    };
 
     enum FilterBehavior
     {
@@ -99,30 +72,60 @@ public:
         StrictFiltering
     };
 
+public:
+
+    AlbumFilterModel(QObject* parent = 0);
+
+    /**
+     * Sets the source model.
+     * Note: If a chained filter model is set, it will not be reset, but
+     * the source album model will be made source of the chained filter model.
+     */
+    void                setSourceAlbumModel(AbstractAlbumModel* source);
+    AbstractAlbumModel* sourceAlbumModel() const;
+
+    /**
+     * Sets a chained filter model.
+     * Note: If a direct source album model is set as current source, it will be set as
+     * sourceAlbumModel of the new source filter model.
+     */
+    void              setSourceFilterModel(AlbumFilterModel* source);
+    AlbumFilterModel* sourceFilterModel() const;
+
+    QModelIndex       mapToSourceAlbumModel(const QModelIndex& index) const;
+    QModelIndex       mapFromSourceAlbumModel(const QModelIndex& index) const;
+
+    /// Convenience methods
+    Album*      albumForIndex(const QModelIndex& index) const;
+    QModelIndex indexForAlbum(Album* album) const;
+    QModelIndex rootAlbumIndex() const;
+
+    /**
+     * Returns the settings currently used for filtering.
+     *
+     * @return current settings for filtering.
+     */
+    SearchTextSettings searchTextSettings() const;
+
     /**
      * Sets the filter behavior. Default is FullFiltering.
      */
     void setFilterBehavior(FilterBehavior behavior);
 
-    enum MatchResult
-    {
-        /// This enum can be used as a boolean value if match/no match only is needed
-        NoMatch = 0,
-        /// The index itself is matched
-        DirectMatch,
-        /// A parent if the index is matched
-        ParentMatch,
-        /// A child of the index is matched
-        ChildMatch,
-        /// The index is matched not because of search settings, but because it has a special type
-        SpecialMatch
-    };
     /**
      * Returns the MatchResult of an index of this model.
      * Never returns NoMatch for a valid index, because in this case,
      * the index would rather be filtered out.
      **/
     MatchResult matchResult(const QModelIndex& index) const;
+
+    /**
+     * Returns if the currently applied filters will result in any filtering.
+     *
+     * @return <code>true</code> if the current selected filter could result in
+     *         any filtering without checking if this really happens.
+     */
+    virtual bool isFiltering() const;
 
 public Q_SLOTS:
 
@@ -207,8 +210,8 @@ protected Q_SLOTS:
 
 protected:
 
-    FilterBehavior     m_filterBehavior;
-    SearchTextSettings m_settings;
+    FilterBehavior             m_filterBehavior;
+    SearchTextSettings         m_settings;
     QPointer<AlbumFilterModel> m_chainedModel;
 
 private:
@@ -223,6 +226,8 @@ private:
 
 };
 
+// -----------------------------------------------------------------------------------
+
 /**
  * Filter model for checkable album models that allows more filtering options
  * based on check state.
@@ -230,12 +235,15 @@ private:
 class CheckableAlbumFilterModel : public AlbumFilterModel
 {
     Q_OBJECT
+
 public:
+
     CheckableAlbumFilterModel(QObject* parent = 0);
 
-    void setSourceAlbumModel(AbstractCheckableAlbumModel* source);
-    void setSourceFilterModel(CheckableAlbumFilterModel* source);
+    void                         setSourceAlbumModel(AbstractCheckableAlbumModel* source);
     AbstractCheckableAlbumModel* sourceAlbumModel() const;
+
+    void setSourceFilterModel(CheckableAlbumFilterModel* source);
 
     void setFilterChecked(bool filter);
     void setFilterPartiallyChecked(bool filter);
@@ -244,11 +252,13 @@ public:
 
 protected:
 
-    virtual bool matches(Album* album) const;
-
     bool m_filterChecked;
     bool m_filterPartiallyChecked;
+
+    virtual bool matches(Album* album) const;
 };
+
+// -----------------------------------------------------------------------------------
 
 /**
  * Filter model for searches that can filter by search type
@@ -260,7 +270,8 @@ class SearchFilterModel : public CheckableAlbumFilterModel
 public:
 
     SearchFilterModel(QObject* parent = 0);
-    void setSourceSearchModel(SearchModel* source);
+
+    void         setSourceSearchModel(SearchModel* source);
     SearchModel* sourceSearchModel() const;
 
     /** Set the DatabaseSearch::Type. */
@@ -279,15 +290,20 @@ public:
 
 protected:
 
-    virtual bool matches(Album* album) const;
     // make protected
     void setSourceAlbumModel(AbstractAlbumModel* source);
 
     void setTypeFilter(int type);
 
-    int                     m_searchType;
-    bool                    m_listTemporary;
+    virtual bool matches(Album* album) const;
+
+protected:
+
+    int  m_searchType;
+    bool m_listTemporary;
 };
+
+// -----------------------------------------------------------------------------------
 
 /**
  * Filter model for tags that can filter by tag property
@@ -299,7 +315,8 @@ class TagPropertiesFilterModel : public CheckableAlbumFilterModel
 public:
 
     TagPropertiesFilterModel(QObject* parent = 0);
-    void setSourceAlbumModel(TagModel* source);
+
+    void      setSourceAlbumModel(TagModel* source);
     TagModel* sourceTagModel() const;
 
     void listOnlyTagsWithProperty(const QString& property);
@@ -316,6 +333,8 @@ protected slots:
 protected:
 
     virtual bool matches(Album* album) const;
+
+protected:
 
     QStringList        m_propertiesBlackList;
     QStringList        m_propertiesWhiteList;

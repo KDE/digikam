@@ -81,6 +81,8 @@ public:
         AlbumSortRole = Qt::UserRole + 5
     };
 
+public:
+
     /**
      * Create an AbstractAlbumModel object for albums with the given type.
      * Pass the root album if it is already available.
@@ -89,6 +91,35 @@ public:
     AbstractAlbumModel(Album::Type albumType, Album* rootAlbum, RootAlbumBehavior rootBehavior = IncludeRootAlbum,
                        QObject* parent = 0);
     ~AbstractAlbumModel();
+
+    /// Set a drag drop handler.
+    void setDragDropHandler(AlbumModelDragDropHandler* handler);
+
+    /// Returns the drag drop handler, or 0 if none is installed
+    AlbumModelDragDropHandler* dragDropHandler() const;
+
+    /** Returns the album object associated with the given model index */
+    Album* albumForIndex(const QModelIndex& index) const;
+
+    /** Return the QModelIndex for the given album, or an invalid index if
+        the album is not contained in this model. */
+    QModelIndex indexForAlbum(Album* album) const;
+
+    /** Returns the album represented by the index. In contrast to albumForIndex(),
+     *  the index can be from any proxy model, as long as an AbstractAlbumModel is at the end.
+     */
+    static Album* retrieveAlbum(const QModelIndex& index);
+
+    Album* rootAlbum() const;
+
+    /// Return the index corresponding to the root album. If the policy is IgnoreRootAlbum, this is an invalid index. */
+    QModelIndex rootAlbumIndex() const;
+
+    /// Returns the root album behavior set for this model
+    RootAlbumBehavior rootAlbumBehavior() const;
+
+    /// Returns the Album::Type of the contained albums
+    Album::Type albumType() const;
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
@@ -104,33 +135,6 @@ public:
     virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
     virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
 
-    /// Set a drag drop handler.
-    void setDragDropHandler(AlbumModelDragDropHandler* handler);
-
-    /// Returns the drag drop handler, or 0 if none is installed
-    AlbumModelDragDropHandler* dragDropHandler() const;
-
-    /** Returns the album object associated with the given model index */
-    Album* albumForIndex(const QModelIndex& index) const;
-    /** Return the QModelIndex for the given album, or an invalid index if
-        the album is not contained in this model. */
-    QModelIndex indexForAlbum(Album* album) const;
-
-    /** Returns the album represented by the index. In contrast to albumForIndex(),
-     *  the index can be from any proxy model, as long as an AbstractAlbumModel is at the end.
-     */
-    static Album* retrieveAlbum(const QModelIndex& index);
-
-    Album* rootAlbum() const;
-    /// Return the index corresponding to the root album. If the policy is IgnoreRootAlbum, this is an invalid index. */
-    QModelIndex rootAlbumIndex() const;
-
-    /// Returns the root album behavior set for this model
-    RootAlbumBehavior rootAlbumBehavior() const;
-
-    /// Returns the Album::Type of the contained albums
-    Album::Type albumType() const;
-
 Q_SIGNALS:
 
     /** This is initialized once after creation, if the root album becomes available,
@@ -140,29 +144,36 @@ Q_SIGNALS:
 
 protected:
 
-    // these can be reimplemented in a subclass
-    /// For subclassing convenience: A part of the implementation of data()
-    virtual QVariant albumData(Album* a, int role) const;
-    /// For subclassing convenience: A part of the implementation of data()
-    virtual QVariant decorationRoleData(Album* a) const;
-    /// For subclassing convenience: A port of the implementation of data()
-    virtual QVariant sortRoleData(Album* a) const;
-    /// For subclassing convenience: A part of the implementation of headerData()
-    virtual QString columnHeader() const;
-    /// For subclassing convenience: A part of the implementation of itemFlags()
-    virtual Qt::ItemFlags itemFlags(Album* album) const;
-    /** Returns true for those and only those albums that shall be contained in this model.
-     *  They must have a common root album, which is set in the constructor. */
-    virtual bool filterAlbum(Album* album) const;
-    /// Notification when an entry is removed
-    virtual void albumCleared(Album* /*album*/) {};
-    /// Notification when all entries are removed
-    virtual void allAlbumsCleared() {};
-
     /** Switch on drag and drop globally for all items. Default is true.
      *  For per-item cases reimplement itemFlags(). */
     void setEnableDrag(bool enable);
     void setEnableDrop(bool enable);
+
+    // these can be reimplemented in a subclass
+    /// For subclassing convenience: A part of the implementation of data()
+    virtual QVariant albumData(Album* a, int role) const;
+
+    /// For subclassing convenience: A part of the implementation of data()
+    virtual QVariant decorationRoleData(Album* a) const;
+
+    /// For subclassing convenience: A port of the implementation of data()
+    virtual QVariant sortRoleData(Album* a) const;
+
+    /// For subclassing convenience: A part of the implementation of headerData()
+    virtual QString columnHeader() const;
+
+    /// For subclassing convenience: A part of the implementation of itemFlags()
+    virtual Qt::ItemFlags itemFlags(Album* album) const;
+
+    /** Returns true for those and only those albums that shall be contained in this model.
+     *  They must have a common root album, which is set in the constructor. */
+    virtual bool filterAlbum(Album* album) const;
+
+    /// Notification when an entry is removed
+    virtual void albumCleared(Album* /*album*/) {};
+
+    /// Notification when all entries are removed
+    virtual void allAlbumsCleared() {};
 
 protected Q_SLOTS:
 
@@ -242,6 +253,7 @@ public Q_SLOTS:
      *  This is the default.
      *  Can connect to QTreeView's expanded() signal. */
     void excludeChildrenCount(const QModelIndex& index);
+
     /** Displays sum of the count of the album and child albums' counts.
      *  Can connect to QTreeView's collapsed() signal. */
     void includeChildrenCount(const QModelIndex& index);
@@ -255,6 +267,9 @@ public Q_SLOTS:
 
 protected:
 
+    /// If you do not use setCountMap, excludeChildrenCount and includeChildrenCount, you can set a count here.
+    void setCount(Album* album, int count);
+
     /// need to implement in subclass
     virtual Album* albumForId(int id) const = 0;
 
@@ -265,9 +280,6 @@ protected:
     virtual QVariant albumData(Album* a, int role) const;
     virtual void albumCleared(Album* album);
     virtual void allAlbumsCleared();
-
-    /// If you do not use setCountMap, excludeChildrenCount and includeChildrenCount, you can set a count here.
-    void setCount(Album* album, int count);
 
 protected Q_SLOTS:
 
@@ -304,10 +316,12 @@ public:
     /// Triggers if the albums in this model are checkable
     void setCheckable(bool isCheckable);
     bool isCheckable() const;
+
     /** Triggers if the root album is checkable.
      *  Only applicable if the root album is contained at all, and if isCheckable() is true. */
     void setRootCheckable(bool rootIsCheckable);
     bool rootIsCheckable() const;
+
     /** Triggers if the albums in this model are tristate.
      *  Used to allow the user to actively set a third state,
      *  don't use if you only want to display a third state.
@@ -326,11 +340,13 @@ public:
 
     /// Returns if the given album has the check state Checked
     bool isChecked(Album* album) const;
+
     /// Returns the check state of the album
     Qt::CheckState checkState(Album* album) const;
 
     /// Returns a list of album with check state Checked
     QList<Album*> checkedAlbums() const;
+
     /// Returns a list of album with partially check state Checked
     QList<Album*> partiallyCheckedAlbums() const;
 
@@ -338,25 +354,34 @@ public Q_SLOTS:
 
     /// Sets the check state of album to Checked or Unchecked
     void setChecked(Album* album, bool isChecked);
+
     /// Sets the check state of the album
     void setCheckState(Album* album, Qt::CheckState state);
+
     /// Toggles the check state of album between Checked or Unchecked
     void toggleChecked(Album* album);
 
     /// Resets the checked state of all albums to Qt::Unchecked
     void resetAllCheckedAlbums();
+
     /// Resets the checked state of all albums under the given parent
     void resetCheckedAlbums(QModelIndex parent = QModelIndex());
+
     /// Resets the checked state of all parents of the child including it.
     void resetCheckedParentAlbums(QModelIndex& child);
+
     /// Checks all albums beneath the given parent
     void checkAllAlbums(QModelIndex parent = QModelIndex());
-    // Checks all parent albums starting at the child, including it.
+
+    /// Checks all parent albums starting at the child, including it.
     void checkAllParentAlbums(QModelIndex& child);
+
     /// Inverts the checked state of all albums under the given parent.
     void invertCheckedAlbums(QModelIndex parent = QModelIndex());
+
     /// Sets the checked state recursively for all children of and the given album.
     void setCheckStateForChildren(Album* album, Qt::CheckState state);
+
     /// Sets the checked state recursively for all parents of and the given album.
     void setCheckStateForParents(Album* album, Qt::CheckState state);
 
@@ -368,17 +393,17 @@ Q_SIGNALS:
 
 protected:
 
+    /**
+     * If in AddExcludeTristate mode, changes the icon as to indicate the state.
+     */
+    void prepareAddExcludeDecoration(Album* a, QPixmap& icon) const;
+
     virtual QVariant albumData(Album* a, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 
     virtual void albumCleared(Album* album);
     virtual void allAlbumsCleared();
-
-    /**
-     * If in AddExcludeTristate mode, changes the icon as to indicate the state.
-     */
-    void prepareAddExcludeDecoration(Album* a, QPixmap& icon) const;
 
 private:
 
