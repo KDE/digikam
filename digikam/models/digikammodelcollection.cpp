@@ -45,6 +45,7 @@ public:
         albumModel        = 0;
         tagModel          = 0;
         tagFilterModel    = 0;
+        tagFacesModel    = 0;
         searchModel       = 0;
         dateAlbumModel    = 0;
         imageVersionModel = 0;
@@ -53,6 +54,7 @@ public:
     AlbumModel*         albumModel;
     TagModel*           tagModel;
     TagModel*           tagFilterModel;
+    TagModel*           tagFacesModel;
     SearchModel*        searchModel;
     DateAlbumModel*     dateAlbumModel;
     ImageVersionsModel* imageVersionModel;
@@ -65,6 +67,8 @@ DigikamModelCollection::DigikamModelCollection() :
     d->tagModel       = new TagModel(AbstractAlbumModel::IncludeRootAlbum);
     d->tagFilterModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
     d->tagFilterModel->setAddExcludeTristate(true);
+    d->tagFacesModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
+    d->tagFacesModel->setTagCount(TagModel::FaceTagCount);
 
     d->searchModel       = new SearchModel();
     d->dateAlbumModel    = new DateAlbumModel();
@@ -101,6 +105,11 @@ TagModel* DigikamModelCollection::getTagModel() const
 TagModel* DigikamModelCollection::getTagFilterModel() const
 {
     return d->tagFilterModel;
+}
+
+TagModel* DigikamModelCollection::getTagFacesModel() const
+{
+    return d->tagFacesModel;
 }
 
 SearchModel* DigikamModelCollection::getSearchModel() const

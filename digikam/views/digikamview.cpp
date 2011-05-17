@@ -246,7 +246,7 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
 
     // People Sidebar
     d->peopleSideBar = new PeopleSideBarWidget(d->leftSideBar,
-                                               d->modelCollection->getTagModel(),
+                                               d->modelCollection->getTagFacesModel(),
                                                d->searchModificationHelper);
     connect(d->peopleSideBar, SIGNAL(requestFaceMode(bool)),
             d->iconView, SLOT(setFaceMode(bool)));

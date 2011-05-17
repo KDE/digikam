@@ -57,6 +57,7 @@ public:
     AlbumModel* getAlbumModel() const;
     TagModel* getTagModel() const;
     TagModel* getTagFilterModel() const;
+    TagModel* getTagFacesModel() const;
     SearchModel* getSearchModel() const;
     DateAlbumModel* getDateAlbumModel() const;
     ImageVersionsModel* getImageVersionsModel() const;
