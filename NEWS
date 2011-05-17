@@ -157,4 +157,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 129 ==> 273068 : digiKam 1.9.0 crashes while importing images.
 130 ==> 272301 : Mysql database corruption upon tag hierarchy removal.
 131 ==> 266264 : Localized version of batch raw converter not fit to window.
-132 ==> 
+132 ==> 273369 : digikam does not get UUID for disk devices inside LVM.
+133 ==> 

@@ -332,10 +332,14 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
             }
         }
 
+        /*
+         * We cannot require a drive, some logical volumes may not have "one" drive as parent
+         * See bug 273369
         if (!driveDevice.isValid())
         {
             continue;
         }
+        */
 
         Solid::StorageDrive* drive = driveDevice.as<Solid::StorageDrive>();
 
@@ -370,7 +374,15 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 
         info.uuid = volume->uuid();
         info.label = volume->label();
-        info.isRemovable = drive->isHotpluggable() || drive->isRemovable();
+        if (drive)
+        {
+            info.isRemovable = drive->isHotpluggable() || drive->isRemovable();
+        }
+        else
+        {
+            // impossible to know, but probably not hotpluggable (see comment above)
+            info.isRemovable = false;
+        }
         info.isOpticalDisc = volumeDevice.is<Solid::OpticalDisc>();
 
         volumes << info;
