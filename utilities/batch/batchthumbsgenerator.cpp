@@ -144,6 +144,11 @@ void BatchThumbsGenerator::slotRebuildThumbs()
     for (AlbumList::Iterator it = palbumList.begin();
          !d->cancel && (it != palbumList.end()); ++it )
     {
+        if (!(*it))
+        {
+            continue;
+        }
+
         d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
     }
 
