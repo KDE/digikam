@@ -159,5 +159,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 131 ==> 266264 : Localized version of batch raw converter not fit to window.
 132 ==> 273369 : digikam does not get UUID for disk devices inside LVM.
 133 ==> 271591 : Startup may take a very long time.
-134 ==> 202202 : loosing tags from database.
-135 ==> 
+134 ==> 202202 : Loosing tags from database.
+135 ==> 194950 : digiKam endlessly spewing text to stderr.
+136 ==> 
