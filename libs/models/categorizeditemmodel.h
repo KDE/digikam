@@ -6,7 +6,7 @@
  * Date        : 2010-12-02
  * Description : Generic, standard item based model for KCategorizedView
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,14 +54,18 @@ public:
         ItemOrderRole = Qt::UserRole + 1
     };
 
+public:
+
     CategorizedItemModel(QObject* parent = 0);
 
-    QStandardItem *addItem(const QString& text, const QVariant& category, const QVariant& categorySorting = QVariant());
-    QStandardItem *addItem(const QString& text, const QIcon& decoration, const QVariant& category,
+    QStandardItem* addItem(const QString& text, const QVariant& category, const QVariant& categorySorting = QVariant());
+    QStandardItem* addItem(const QString& text, const QIcon& decoration, const QVariant& category,
                            const QVariant& categorySorting = QVariant());
 
-    KCategorizedSortFilterProxyModel *createFilterModel();
+    KCategorizedSortFilterProxyModel* createFilterModel();
 };
+
+// -----------------------------------------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT ActionItemModel : public CategorizedItemModel
 {
@@ -73,17 +77,6 @@ public:
     {
         ItemActionRole = Qt::UserRole + 10
     };
-
-    /**
-     * This class is a CategorizedItemModel based on QActions, taking an action's text and icon
-     * for display and decoration.
-     * It is possible to retrieve an action for an index, and to call the action's slots from
-     * a given index.
-     */
-
-    ActionItemModel(QObject* parent = 0);
-
-    QStandardItem *addAction(QAction *action, const QString& category, const QVariant& categorySorting = QVariant());
 
     enum MenuCategoryFlag
     {
@@ -99,7 +92,19 @@ public:
     };
     Q_DECLARE_FLAGS(MenuCategoryMode, MenuCategoryFlag)
 
-    void setMode(MenuCategoryMode mode);
+public:
+
+    /**
+     * This class is a CategorizedItemModel based on QActions, taking an action's text and icon
+     * for display and decoration.
+     * It is possible to retrieve an action for an index, and to call the action's slots from
+     * a given index.
+     */
+    ActionItemModel(QObject* parent = 0);
+
+    QStandardItem* addAction(QAction *action, const QString& category, const QVariant& categorySorting = QVariant());
+
+    void             setMode(MenuCategoryMode mode);
     MenuCategoryMode mode() const;
 
     void addActions(QWidget* widget);
@@ -107,15 +112,16 @@ public:
 
     /**
      * Returns the action for the given index.
-     * The method can also be used for indices from proxy models.
-     */
-    static QAction *actionForIndex(const QModelIndex& index);
-    /**
-     * Returns the action for the given index.
      * Note: these methods perform O(n).
      */
     QStandardItem* itemForAction(QAction *action) const;
-    QModelIndex indexForAction(QAction *action) const;
+    QModelIndex    indexForAction(QAction *action) const;
+
+    /**
+     * Returns the action for the given index.
+     * The method can also be used for indices from proxy models.
+     */
+    static QAction* actionForIndex(const QModelIndex& index);
 
 public Q_SLOTS:
 
@@ -136,12 +142,13 @@ protected:
 
     void setPropertiesFromAction(QStandardItem *item, QAction* action);
 
+protected:
+
     MenuCategoryMode m_mode;
 };
 
-} // namespace
+} // namespace Digikam
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ActionItemModel::MenuCategoryMode)
 
 #endif // CATEGORIZEDITEMMODEL_H
-
