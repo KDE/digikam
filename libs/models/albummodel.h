@@ -6,7 +6,7 @@
  * Date        : 2008-03-22
  * Description : Qt Model for Albums
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,7 +48,7 @@ public:
 protected:
 
     virtual QVariant decorationRoleData(Album* a) const;
-    virtual Album* albumForId(int id) const;
+    virtual Album*   albumForId(int id) const;
 };
 
 // ------------------------------------------------------------------
@@ -56,12 +56,6 @@ protected:
 class TagModel : public AbstractCheckableAlbumModel
 {
 public:
-
-    /// Create a model containing all tags
-    explicit TagModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject* parent = 0);
-
-    TAlbum* albumForIndex(const QModelIndex& index) const;
-    void setColumnHeader(const QString& header);
 
     /**
      * If setShowCount() is enabled:
@@ -73,12 +67,20 @@ public:
         NormalTagCount,
         FaceTagCount
     };
-    void setTagCount(TagCountMode mode);
+
+public:
+
+    /// Create a model containing all tags
+    explicit TagModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject* parent = 0);
+
+    TAlbum* albumForIndex(const QModelIndex& index) const;
+    void    setColumnHeader(const QString& header);
+    void    setTagCount(TagCountMode mode);
 
 protected:
 
     virtual QVariant decorationRoleData(Album* a) const;
-    virtual Album* albumForId(int id) const;
+    virtual Album*   albumForId(int id) const;
 };
 
 // ------------------------------------------------------------------
@@ -86,6 +88,7 @@ protected:
 class SearchModel : public AbstractCheckableAlbumModel
 {
     Q_OBJECT
+
 public:
 
     /// Create a model containing searches
@@ -95,7 +98,7 @@ public:
 
     /** Set a hash of internal names (key) that shall be replaced by a user-visible string (value).
      *  This affects Qt::DisplayRole and AlbumTitleRole. */
-    void setReplaceNames(QHash<QString, QString> replaceNames);
+    void setReplaceNames(const QHash<QString, QString>& replaceNames);
     void addReplaceName(const QString& technicalName, const QString& userVisibleName);
 
     /** Set pixmaps for the DecorationRole */
@@ -109,7 +112,7 @@ public:
 protected:
 
     virtual QVariant albumData(Album* a, int role) const;
-    virtual Album* albumForId(int id) const;
+    virtual Album*   albumForId(int id) const;
 
 private Q_SLOTS:
 
@@ -117,8 +120,8 @@ private Q_SLOTS:
 
 protected:
 
-    QHash<int, QPixmap>      m_pixmaps;
-    QHash<QString, QString>  m_replaceNames;
+    QHash<int, QPixmap>     m_pixmaps;
+    QHash<QString, QString> m_replaceNames;
 };
 
 // ------------------------------------------------------------------
@@ -164,7 +167,7 @@ protected:
     virtual QString  albumName(Album* a) const;
     virtual QVariant decorationRoleData(Album* a) const;
     virtual QVariant sortRoleData(Album* a) const;
-    virtual Album* albumForId(int id) const;
+    virtual Album*   albumForId(int id) const;
 
 protected:
 

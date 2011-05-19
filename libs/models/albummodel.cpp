@@ -6,7 +6,7 @@
  * Date        : 2008-03-22
  * Description : Qt Model for Albums
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,6 +50,7 @@ AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject* parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
             this, SLOT(setCountMap(const QMap<int, int>&)));
+
     setCountMap(AlbumManager::instance()->getPAlbumsCount());
 }
 
@@ -93,7 +94,6 @@ void TagModel::setColumnHeader(const QString& header)
     m_columnHeader = header;
 }
 
-
 TAlbum* TagModel::albumForIndex(const QModelIndex& index) const
 {
     return static_cast<TAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
@@ -115,6 +115,7 @@ void TagModel::setTagCount(TagCountMode mode)
 {
     disconnect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
             this, SLOT(setCountMap(const QMap<int, int>&)));
+
     disconnect(AlbumManager::instance(), SIGNAL(signalFaceCountsDirty(const QMap<int, int>&)),
             this, SLOT(setCountMap(const QMap<int, int>&)));
 
@@ -122,12 +123,14 @@ void TagModel::setTagCount(TagCountMode mode)
     {
         connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
                 this, SLOT(setCountMap(const QMap<int, int>&)));
+
         setCountMap(AlbumManager::instance()->getTAlbumsCount());
     }
     else
     {
         connect(AlbumManager::instance(), SIGNAL(signalFaceCountsDirty(const QMap<int, int>&)),
                 this, SLOT(setCountMap(const QMap<int, int>&)));
+
         setCountMap(AlbumManager::instance()->getFaceCount());
     }
 }
@@ -139,14 +142,12 @@ SearchModel::SearchModel(QObject* parent)
                                   AlbumManager::instance()->findSAlbum(0),
                                   IgnoreRootAlbum, parent)
 {
-
     setShowCount(false);
 
     // handle search icons
     albumSettingsChanged();
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(albumSettingsChanged()));
-
 }
 
 SAlbum* SearchModel::albumForIndex(const QModelIndex& index) const
@@ -154,7 +155,7 @@ SAlbum* SearchModel::albumForIndex(const QModelIndex& index) const
     return static_cast<SAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
 }
 
-void SearchModel::setReplaceNames(QHash<QString, QString> replaceNames)
+void SearchModel::setReplaceNames(const QHash<QString, QString>& replaceNames)
 {
     m_replaceNames = replaceNames;
 }
@@ -198,8 +199,8 @@ QVariant SearchModel::albumData(Album* a, int role) const
 {
     if (role == Qt::DisplayRole || role == AlbumTitleRole || role == Qt::ToolTipRole)
     {
-        SAlbum* salbum = static_cast<SAlbum*>(a);
-        QString title = a->title();
+        SAlbum* salbum       = static_cast<SAlbum*>(a);
+        QString title        = a->title();
         QString displayTitle = salbum->displayTitle();
         return m_replaceNames.value(title, displayTitle);
     }
@@ -232,9 +233,9 @@ Album* SearchModel::albumForId(int id) const
 void SearchModel::albumSettingsChanged()
 {
     setPixmapForMapSearches(SmallIcon("applications-internet", AlbumSettings::instance()->getTreeViewIconSize()));
-    setPixmapForHaarSearches(SmallIcon("tools-wizard", AlbumSettings::instance()->getTreeViewIconSize()));
-    setPixmapForNormalSearches(SmallIcon("edit-find", AlbumSettings::instance()->getTreeViewIconSize()));
-    setPixmapForTimelineSearches(SmallIcon("chronometer", AlbumSettings::instance()->getTreeViewIconSize()));
+    setPixmapForHaarSearches(SmallIcon("tools-wizard",         AlbumSettings::instance()->getTreeViewIconSize()));
+    setPixmapForNormalSearches(SmallIcon("edit-find",          AlbumSettings::instance()->getTreeViewIconSize()));
+    setPixmapForTimelineSearches(SmallIcon("chronometer",      AlbumSettings::instance()->getTreeViewIconSize()));
 }
 
 // ------------------------------------------------------------------
@@ -246,6 +247,7 @@ DateAlbumModel::DateAlbumModel(QObject* parent)
 {
     connect(AlbumManager::instance(), SIGNAL(signalDAlbumsDirty(const QMap<YearMonth, int>&)),
             this, SLOT(setYearMonthMap(const QMap<YearMonth, int>&)));
+
     setYearMonthMap(AlbumManager::instance()->getDAlbumsCount());
 }
 
@@ -256,17 +258,16 @@ DAlbum* DateAlbumModel::albumForIndex(const QModelIndex& index) const
 
 QModelIndex DateAlbumModel::monthIndexForDate(const QDate& date) const
 {
-
     // iterate over all years
     for (int yearIndex = 0; yearIndex < rowCount(); ++yearIndex)
     {
-        QModelIndex year = index(yearIndex, 0);
+        QModelIndex year  = index(yearIndex, 0);
         DAlbum* yearAlbum = albumForIndex(year);
 
         // do not search through months if we are sure, that the year already
         // does not match
-        if (yearAlbum && (yearAlbum->range() == DAlbum::Year)
-            && (yearAlbum->date().year() != date.year()))
+        if (yearAlbum && (yearAlbum->range() == DAlbum::Year) &&
+            (yearAlbum->date().year() != date.year()))
         {
             continue;
         }
@@ -274,12 +275,12 @@ QModelIndex DateAlbumModel::monthIndexForDate(const QDate& date) const
         // search the album with the correct month
         for (int monthIndex = 0; monthIndex < rowCount(year); ++monthIndex)
         {
-            QModelIndex month = index(monthIndex, 0, year);
+            QModelIndex month  = index(monthIndex, 0, year);
             DAlbum* monthAlbum = albumForIndex(month);
 
-            if (monthAlbum && (monthAlbum->range() == DAlbum::Month)
-                && (monthAlbum->date().year() == date.year())
-                && (monthAlbum->date().month() == date.month()))
+            if (monthAlbum && (monthAlbum->range() == DAlbum::Month) &&
+                (monthAlbum->date().year() == date.year())           &&
+                (monthAlbum->date().month() == date.month()))
             {
                 return month;
             }
@@ -288,12 +289,11 @@ QModelIndex DateAlbumModel::monthIndexForDate(const QDate& date) const
     }
 
     return QModelIndex();
-
 }
 
 void DateAlbumModel::setPixmaps(const QPixmap& forYearAlbums, const QPixmap& forMonthAlbums)
 {
-    m_yearPixmap = forYearAlbums;
+    m_yearPixmap  = forYearAlbums;
     m_monthPixmap = forMonthAlbums;
 }
 
@@ -345,7 +345,6 @@ Album* DateAlbumModel::albumForId(int id) const
 
 void DateAlbumModel::setYearMonthMap(const QMap<YearMonth, int>& yearMonthMap)
 {
-
     AlbumIterator it(rootAlbum());
 
     QMap<int, int> albumToCountMap;
@@ -353,7 +352,7 @@ void DateAlbumModel::setYearMonthMap(const QMap<YearMonth, int>& yearMonthMap)
     while (it.current())
     {
         DAlbum* dalbum = static_cast<DAlbum*>(*it);
-        QDate date = dalbum->date();
+        QDate date     = dalbum->date();
 
         switch (dalbum->range())
         {
@@ -382,7 +381,6 @@ void DateAlbumModel::setYearMonthMap(const QMap<YearMonth, int>& yearMonthMap)
     }
 
     setCountMap(albumToCountMap);
-
 }
 
 } // namespace Digikam
