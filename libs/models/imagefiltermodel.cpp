@@ -215,8 +215,8 @@ QModelIndex ImageSortFilterModel::indexForImageId(qlonglong id) const
 QList<ImageInfo> ImageSortFilterModel::imageInfosSorted() const
 {
     QList<ImageInfo> infos;
-    const int size = rowCount();
-    ImageModel* model = sourceImageModel();
+    const int        size  = rowCount();
+    ImageModel*      model = sourceImageModel();
 
     for (int i=0; i<size; ++i)
     {
@@ -284,7 +284,7 @@ void ImageFilterModelPrivate::init(ImageFilterModel* _q)
 {
     q = _q;
 
-    updateFilterTimer  = new QTimer(this);
+    updateFilterTimer = new QTimer(this);
     updateFilterTimer->setSingleShot(true);
     updateFilterTimer->setInterval(250);
 
@@ -597,7 +597,7 @@ bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
         return false;
     }
 
-    qlonglong id = d->imageModel->imageId(source_row);
+    qlonglong id                              = d->imageModel->imageId(source_row);
     QHash<qlonglong, bool>::const_iterator it = d->filterResults.constFind(id);
 
     if (it != d->filterResults.constEnd())
@@ -607,8 +607,9 @@ bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
 
     // usually done in thread and cache, unless source model changed
     ImageInfo info = d->imageModel->imageInfo(source_row);
-    bool match = d->filter.matches(info);
-    match = match ? d->versionFilter.matches(info) : false;
+    bool match     = d->filter.matches(info);
+    match          = match ? d->versionFilter.matches(info) : false;
+
     return match ? d->groupFilter.matches(info) : false;
 }
 
@@ -618,6 +619,7 @@ void ImageFilterModel::setSendImageInfoSignals(bool sendSignals)
     {
         connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
                 this, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
+
         connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
                 this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
     }
@@ -625,6 +627,7 @@ void ImageFilterModel::setSendImageInfoSignals(bool sendSignals)
     {
         disconnect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
                    this, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
+
         disconnect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
                    this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
     }
@@ -909,11 +912,11 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     }
 
     // get thread-local copy
-    ImageFilterSettings localFilter;
+    ImageFilterSettings        localFilter;
     VersionImageFilterSettings localVersionFilter;
-    GroupImageFilterSettings localGroupFilter;
-    bool hasOneMatch;
-    bool hasOneMatchForText;
+    GroupImageFilterSettings   localGroupFilter;
+    bool                       hasOneMatch;
+    bool                       hasOneMatchForText;
     {
         QMutexLocker lock(&d->mutex);
         localFilter        = d->filterCopy;
@@ -928,9 +931,9 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     {
         foreach (const ImageInfo& info, package.infos)
         {
-            package.filterResults[info.id()] = localFilter.matches(info)
-                                                && localVersionFilter.matches(info)
-                                                && localGroupFilter.matches(info);
+            package.filterResults[info.id()] = localFilter.matches(info) &&
+                                               localVersionFilter.matches(info) &&
+                                               localGroupFilter.matches(info);
         }
     }
     else if (hasOneMatch)
@@ -938,9 +941,9 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
         bool matchForText;
         foreach (const ImageInfo& info, package.infos)
         {
-            package.filterResults[info.id()] = localFilter.matches(info, &matchForText)
-                                                && localVersionFilter.matches(info)
-                                                && localGroupFilter.matches(info);
+            package.filterResults[info.id()] = localFilter.matches(info, &matchForText) &&
+                                               localVersionFilter.matches(info) &&
+                                               localGroupFilter.matches(info);
 
             if (matchForText)
             {
@@ -953,9 +956,9 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
         bool result, matchForText;
         foreach (const ImageInfo& info, package.infos)
         {
-            result                           = localFilter.matches(info, &matchForText)
-                                                && localVersionFilter.matches(info)
-                                                && localGroupFilter.matches(info);
+            result                           = localFilter.matches(info, &matchForText) &&
+                                               localVersionFilter.matches(info) &&
+                                               localGroupFilter.matches(info);
             package.filterResults[info.id()] = result;
 
             if (result)
@@ -973,7 +976,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     if (checkVersion(package))
     {
         QMutexLocker lock(&d->mutex);
-        d->hasOneMatch = hasOneMatch;
+        d->hasOneMatch        = hasOneMatch;
         d->hasOneMatchForText = hasOneMatchForText;
     }
 
@@ -1040,7 +1043,6 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelInde
     }
 
     const ImageInfo& leftInfo  = d->imageModel->imageInfoRef(left);
-
     const ImageInfo& rightInfo = d->imageModel->imageInfoRef(right);
 
     if (leftInfo == rightInfo)
@@ -1048,11 +1050,11 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelInde
         return d->sorter.lessThan(left.data(ImageModel::ExtraDataRole), right.data(ImageModel::ExtraDataRole));
     }
 
-    if ((leftInfo.isGrouped() || rightInfo.isGrouped())
-            && leftInfo.groupImage() != rightInfo.groupImage())
+    if ((leftInfo.isGrouped() || rightInfo.isGrouped()) &&
+        leftInfo.groupImage() != rightInfo.groupImage())
     {
         // only one of the two is grouped, or both are grouped, but on different images.
-        return infosLessThan(leftInfo.isGrouped() ? leftInfo.groupImage() : leftInfo,
+        return infosLessThan(leftInfo.isGrouped()  ? leftInfo.groupImage()  : leftInfo,
                              rightInfo.isGrouped() ? rightInfo.groupImage() : rightInfo);
     }
 
@@ -1128,9 +1130,9 @@ void ImageFilterModel::slotImageTagChange(const ImageTagChangeset& changeset)
     }
 
     // do we filter at all?
-    if (!d->versionFilter.isFilteringByTags()
-        && !d->filter.isFilteringByTags()
-        && !d->filter.isFilteringByText())
+    if (!d->versionFilter.isFilteringByTags() &&
+        !d->filter.isFilteringByTags() &&
+        !d->filter.isFilteringByText())
     {
         return;
     }

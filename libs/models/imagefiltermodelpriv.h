@@ -6,7 +6,7 @@
  * Date        : 2009-03-11
  * Description : Qt item model for database entries - private shared header
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,16 +49,21 @@ class ImageFilterModelTodoPackage
 public:
 
     ImageFilterModelTodoPackage()
-        : version(0), isForReAdd(false) {}
+        : version(0), isForReAdd(false)
+    {
+    }
+
     ImageFilterModelTodoPackage(const QVector<ImageInfo>& infos, int version, bool isForReAdd,
                                 const QVector<QVariant>& extraValues = QVector<QVariant>())
-        : infos(infos), extraValues(extraValues), version(version), isForReAdd(isForReAdd) {}
+        : infos(infos), extraValues(extraValues), version(version), isForReAdd(isForReAdd)
+    {
+    }
 
-    QVector<ImageInfo>         infos;
-    QVector<QVariant>          extraValues;
-    unsigned int               version;
-    bool                       isForReAdd;
-    QHash<qlonglong, bool>     filterResults;
+    QVector<ImageInfo>     infos;
+    QVector<QVariant>      extraValues;
+    unsigned int           version;
+    bool                   isForReAdd;
+    QHash<qlonglong, bool> filterResults;
 };
 
 // ------------------------------------------------------------------------------------------------
@@ -82,52 +87,52 @@ public:
 
 public:
 
-    ImageFilterModel*          q;
+    ImageFilterModel*                   q;
 
-    ImageModel*                imageModel;
+    ImageModel*                         imageModel;
 
-    ImageFilterSettings        filter;
-    ImageSortSettings          sorter;
-    VersionImageFilterSettings versionFilter;
-    GroupImageFilterSettings   groupFilter;
+    ImageFilterSettings                 filter;
+    ImageSortSettings                   sorter;
+    VersionImageFilterSettings          versionFilter;
+    GroupImageFilterSettings            groupFilter;
 
-    volatile unsigned int      version;
-    unsigned int               lastDiscardVersion;
-    unsigned int               lastFilteredVersion;
-    int                        sentOut;
-    int                        sentOutForReAdd;
+    volatile unsigned int               version;
+    unsigned int                        lastDiscardVersion;
+    unsigned int                        lastFilteredVersion;
+    int                                 sentOut;
+    int                                 sentOutForReAdd;
 
-    QTimer*                    updateFilterTimer;
+    QTimer*                             updateFilterTimer;
 
-    bool                       needPrepare;
-    bool                       needPrepareComments;
-    bool                       needPrepareTags;
-    bool                       needPrepareGroups;
+    bool                                needPrepare;
+    bool                                needPrepareComments;
+    bool                                needPrepareTags;
+    bool                                needPrepareGroups;
 
-    QMutex                     mutex;
-    ImageFilterSettings        filterCopy;
-    VersionImageFilterSettings versionFilterCopy;
-    GroupImageFilterSettings   groupFilterCopy;
-    ImageFilterModelPreparer*  preparer;
-    ImageFilterModelFilterer*  filterer;
+    QMutex                              mutex;
+    ImageFilterSettings                 filterCopy;
+    VersionImageFilterSettings          versionFilterCopy;
+    GroupImageFilterSettings            groupFilterCopy;
+    ImageFilterModelPreparer*           preparer;
+    ImageFilterModelFilterer*           filterer;
 
-    QHash<qlonglong, bool>     filterResults;
-    bool                       hasOneMatch;
-    bool                       hasOneMatchForText;
+    QHash<qlonglong, bool>              filterResults;
+    bool                                hasOneMatch;
+    bool                                hasOneMatchForText;
 
     QList<ImageFilterModelPrepareHook*> prepareHooks;
 
-    /*
-        QHash<int, QSet<qlonglong> >        categoryCountHashInt;
-        QHash<QString, QSet<qlonglong> >    categoryCountHashString;
+/*
+    QHash<int, QSet<qlonglong> >        categoryCountHashInt;
+    QHash<QString, QSet<qlonglong> >    categoryCountHashString;
 
-    public:
+public:
 
         void cacheCategoryCount(int id, qlonglong imageid) const
         { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashInt[id].insert(imageid); }
         void cacheCategoryCount(const QString& id, qlonglong imageid) const
         { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashString[id].insert(imageid); }
-    */
+*/
 
 public Q_SLOTS:
 

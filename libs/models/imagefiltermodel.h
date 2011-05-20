@@ -64,35 +64,37 @@ public:
 
     ImageSortFilterModel(QObject* parent = 0);
 
-    void setSourceImageModel(ImageModel* model);
-    void setSourceFilterModel(ImageSortFilterModel* model);
-
+    void        setSourceImageModel(ImageModel* model);
     ImageModel* sourceImageModel() const;
-    ImageSortFilterModel* sourceFilterModel() const;
 
-    /// Returns this, any chained ImageFilterModel, or 0.
-    virtual ImageFilterModel* imageFilterModel() const;
+    void                  setSourceFilterModel(ImageSortFilterModel* model);
+    ImageSortFilterModel* sourceFilterModel() const;
 
     QModelIndex mapToSourceImageModel(const QModelIndex& index) const;
     QModelIndex mapFromSourceImageModel(const QModelIndex& imagemodel_index) const;
-
     QModelIndex mapFromDirectSourceToSourceImageModel(const QModelIndex& sourceModel_index) const;
 
     /// Convenience methods mapped to ImageModel.
     /// Mentioned indexes returned come from the source image model.
     QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes) const;
     QList<QModelIndex> mapListFromSource(const QList<QModelIndex>& sourceIndexes) const;
-    ImageInfo imageInfo(const QModelIndex& index) const;
-    qlonglong imageId(const QModelIndex& index) const;
+
+    ImageInfo        imageInfo(const QModelIndex& index) const;
+    qlonglong        imageId(const QModelIndex& index) const;
     QList<ImageInfo> imageInfos(const QList<QModelIndex>& indexes) const;
     QList<qlonglong> imageIds(const QList<QModelIndex>& indexes) const;
+
     QModelIndex indexForPath(const QString& filePath) const;
     QModelIndex indexForImageInfo(const ImageInfo& info) const;
     QModelIndex indexForImageId(qlonglong id) const;
+
     /** Returns a list of all image infos, sorted according to this model.
      *  If you do not need a sorted list, use ImageModel's imageInfos() method.
      */
     QList<ImageInfo> imageInfosSorted() const;
+
+    /// Returns this, any chained ImageFilterModel, or 0.
+    virtual ImageFilterModel* imageFilterModel() const;
 
 protected:
 
@@ -101,6 +103,8 @@ protected:
 
     // made protected
     virtual void setSourceModel(QAbstractItemModel* model);
+
+protected:
 
     ImageSortFilterModel* m_chainedModel;
 };
@@ -116,19 +120,21 @@ public:
     enum ImageFilterModelRoles
     {
         /// Returns the current categorization mode
-        CategorizationModeRole = ImageModel::FilterModelRoles + 1,
+        CategorizationModeRole      = ImageModel::FilterModelRoles + 1,
         /// Returns the current sort order
-        SortOrderRole          = ImageModel::FilterModelRoles + 2,
+        SortOrderRole               = ImageModel::FilterModelRoles + 2,
         // / Returns the number of items in the index' category
-        //CategoryCountRole      = ImageModel::FilterModelRoles + 3,
+        //CategoryCountRole         = ImageModel::FilterModelRoles + 3,
         /// Returns the id of the PAlbum of the index which is used for category
-        CategoryAlbumIdRole    = ImageModel::FilterModelRoles + 3,
+        CategoryAlbumIdRole         = ImageModel::FilterModelRoles + 3,
         /// Returns the format of the index which is used for category
-        CategoryFormatRole     = ImageModel::FilterModelRoles + 4,
+        CategoryFormatRole          = ImageModel::FilterModelRoles + 4,
         /// Returns true if the given image is a group leader, and the group is opened
-        GroupIsOpenRole        = ImageModel::FilterModelRoles + 5,
-        ImageFilterModelPointerRole  = ImageModel::FilterModelRoles + 50
+        GroupIsOpenRole             = ImageModel::FilterModelRoles + 5,
+        ImageFilterModelPointerRole = ImageModel::FilterModelRoles + 50
     };
+
+public:
 
     ImageFilterModel(QObject* parent = 0);
     ~ImageFilterModel();
@@ -141,30 +147,27 @@ public:
      *  The contained flags will be those that this model can sort or filter by. */
     DatabaseFields::Set suggestedWatchFlags() const;
 
-    ImageFilterSettings imageFilterSettings() const;
+    ImageFilterSettings        imageFilterSettings() const;
     VersionImageFilterSettings versionImageFilterSettings() const;
-    GroupImageFilterSettings groupImageFilterSettings() const;
-    ImageSortSettings   imageSortSettings() const;
+    GroupImageFilterSettings   groupImageFilterSettings() const;
+    ImageSortSettings          imageSortSettings() const;
 
     bool isGroupOpen(qlonglong group) const;
     bool isAllGroupsOpen() const;
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual ImageFilterModel* imageFilterModel() const;
-
     /// Enables sending imageInfosAdded and imageInfosAboutToBeRemoved
     void setSendImageInfoSignals(bool sendSignals);
 
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual ImageFilterModel* imageFilterModel() const;
+
 public Q_SLOTS:
 
-    /** Changes the current image filter settings and refilters. */
-    virtual void setImageFilterSettings(const ImageFilterSettings& settings);
     /** Changes the current version image filter settings and refilters. */
     void setVersionImageFilterSettings(const VersionImageFilterSettings& settings);
+
     /** Changes the current version image filter settings and refilters. */
     void setGroupImageFilterSettings(const GroupImageFilterSettings& settings);
-    /** Changes the current image sort settings and resorts. */
-    virtual void setImageSortSettings(const ImageSortSettings& settings);
 
     /** Adjust the current ImageFilterSettings.
      *  Equivalent to retrieving the current filter settings, adjusting the parameter
@@ -175,7 +178,7 @@ public Q_SLOTS:
      */
     void setDayFilter(const QList<QDateTime>& days);
     void setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags,
-                      ImageFilterSettings::MatchingCondition matchingCond, bool showUnTagged, 
+                      ImageFilterSettings::MatchingCondition matchingCond, bool showUnTagged,
                       const QList<int>& clTagIds, const QList<int>& plTagIds);
     void setRatingFilter(int rating, ImageFilterSettings::RatingCondition ratingCond);
     void setMimeTypeFilter(int mimeTypeFilter);
@@ -194,10 +197,17 @@ public Q_SLOTS:
     void toggleGroupOpen(qlonglong group);
     void setAllGroupsOpen(bool open);
 
+    /** Changes the current image filter settings and refilters. */
+    virtual void setImageFilterSettings(const ImageFilterSettings& settings);
+
+    /** Changes the current image sort settings and resorts. */
+    virtual void setImageSortSettings(const ImageSortSettings& settings);
+
 Q_SIGNALS:
 
     /// Signals that the set filter matches at least one index
     void filterMatches(bool matches);
+
     /** Signals that the set text filter matches at least one entry.
         If no text filter is set, this signal is emitted
         with 'false' when filterMatches() is emitted.
@@ -216,6 +226,12 @@ Q_SIGNALS:
 
 protected:
 
+    ImageFilterModelPrivate* const d_ptr;
+
+protected:
+
+    ImageFilterModel(ImageFilterModelPrivate& dd, QObject* parent);
+
     virtual void setDirectSourceImageModel(ImageModel* model);
 
     virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
@@ -229,15 +245,14 @@ protected:
      *  Return 0 if left and right are in the same category, else return positive.
      */
     virtual int compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const;
+
     /** Reimplement to customize sorting. Do not take categories into account here.
      */
     virtual bool infosLessThan(const ImageInfo& left, const ImageInfo& right) const;
+
     /** Returns a unique identifier for the category if info. The string need not be for user display.
      */
     virtual QString categoryIdentifier(const ImageInfo& info) const;
-
-    ImageFilterModelPrivate* const d_ptr;
-    ImageFilterModel(ImageFilterModelPrivate& dd, QObject* parent);
 
 protected Q_SLOTS:
 
