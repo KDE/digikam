@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class ImageAlbumFilterModelPrivate : public ImageFilterModelPrivate
+class ImageAlbumFilterModelPrivate : public ImageFilterModel::ImageFilterModelPrivate
 {
 public:
 

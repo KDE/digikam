@@ -43,6 +43,9 @@
 namespace Digikam
 {
 
+const int PrepareChunkSize = 101;
+const int FilterChunkSize  = 2001;
+
 ImageSortFilterModel::ImageSortFilterModel(QObject* parent)
     : KCategorizedSortFilterProxyModel(parent), m_chainedModel(0)
 {
@@ -226,9 +229,9 @@ QList<ImageInfo> ImageSortFilterModel::imageInfosSorted() const
     return infos;
 }
 
-// -------------- ImageFilterModelPrivate --------------
+// -------------- ImageFilterModelPrivate -----------------------------------------------------
 
-ImageFilterModelPrivate::ImageFilterModelPrivate()
+ImageFilterModel::ImageFilterModelPrivate::ImageFilterModelPrivate()
 {
     imageModel            = 0;
     version               = 0;
@@ -248,7 +251,7 @@ ImageFilterModelPrivate::ImageFilterModelPrivate()
     setupWorkers();
 }
 
-ImageFilterModelPrivate::~ImageFilterModelPrivate()
+ImageFilterModel::ImageFilterModelPrivate::~ImageFilterModelPrivate()
 {
     // facilitate thread stopping
     ++version;
@@ -258,13 +261,199 @@ ImageFilterModelPrivate::~ImageFilterModelPrivate()
     delete filterer;
 }
 
-ImageFilterModelWorker::ImageFilterModelWorker(ImageFilterModelPrivate* d)
+void ImageFilterModel::ImageFilterModelPrivate::init(ImageFilterModel* _q)
+{
+    q = _q;
+
+    updateFilterTimer = new QTimer(this);
+    updateFilterTimer->setSingleShot(true);
+    updateFilterTimer->setInterval(250);
+
+    connect(updateFilterTimer, SIGNAL(timeout()),
+            q, SLOT(slotUpdateFilter()));
+
+    // inter-thread redirection
+    qRegisterMetaType<ImageFilterModelTodoPackage>("ImageFilterModelTodoPackage");
+}
+
+void ImageFilterModel::ImageFilterModelPrivate::preprocessInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+{
+    infosToProcess(infos, extraValues, true);
+}
+
+void ImageFilterModel::ImageFilterModelPrivate::processAddedInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+{
+    // These have already been added, we just process them afterwards
+    infosToProcess(infos, extraValues, false);
+}
+
+void ImageFilterModel::ImageFilterModelPrivate::setupWorkers()
+{
+    preparer = new ImageFilterModelPreparer(this);
+    filterer = new ImageFilterModelFilterer(this);
+
+    // A package in constructed in infosToProcess.
+    // Normal flow is infosToProcess -> preparer::process -> filterer::process -> packageFinished.
+    // If no preparation is needed, the first step is skipped.
+    // If filter version changes, both will discard old package and send them to packageDiscarded.
+
+    connect(this, SIGNAL(packageToPrepare(const ImageFilterModelTodoPackage&)),
+            preparer, SLOT(process(ImageFilterModelTodoPackage)));
+
+    connect(this, SIGNAL(packageToFilter(const ImageFilterModelTodoPackage&)),
+            filterer, SLOT(process(ImageFilterModelTodoPackage)));
+
+    connect(preparer, SIGNAL(processed(const ImageFilterModelTodoPackage&)),
+            filterer, SLOT(process(ImageFilterModelTodoPackage)));
+
+    connect(filterer, SIGNAL(processed(const ImageFilterModelTodoPackage&)),
+            this, SLOT(packageFinished(const ImageFilterModelTodoPackage&)));
+
+    connect(preparer, SIGNAL(discarded(const ImageFilterModelTodoPackage&)),
+            this, SLOT(packageDiscarded(const ImageFilterModelTodoPackage&)));
+
+    connect(filterer, SIGNAL(discarded(const ImageFilterModelTodoPackage&)),
+            this, SLOT(packageDiscarded(const ImageFilterModelTodoPackage&)));
+}
+
+void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos)
+{
+    infosToProcess(infos, QList<QVariant>(), false);
+}
+
+void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd)
+{
+    if (infos.isEmpty())
+    {
+        return;
+    }
+
+    filterer->schedule();
+
+    if (needPrepare)
+    {
+        preparer->schedule();
+    }
+
+    // prepare and filter in chunks
+    const int size                      = infos.size();
+    const int maxChunkSize              = needPrepare ? PrepareChunkSize : FilterChunkSize;
+    QList<ImageInfo>::const_iterator it = infos.constBegin();
+    QList<QVariant>::const_iterator xit = extraValues.constBegin();
+    int index                           = 0;
+    QVector<QVariant> extraValueVector;
+
+    while (it != infos.constEnd())
+    {
+        QVector<ImageInfo> infoVector(qMin(maxChunkSize, size - index));
+        QList<ImageInfo>::const_iterator end = it + infoVector.size();
+        qCopy(it, end, infoVector.begin());
+
+        if (xit != extraValues.constEnd())
+        {
+            extraValueVector                     = QVector<QVariant>(infoVector.size());
+            QList<QVariant>::const_iterator xend = xit + extraValueVector.size();
+            qCopy(xit, xend, extraValueVector.begin());
+            xit = xend;
+        }
+
+        it    = end;
+        index += infoVector.size();
+
+        ++sentOut;
+
+        if (forReAdd)
+        {
+            ++sentOutForReAdd;
+        }
+
+        if (needPrepare)
+        {
+            emit packageToPrepare(ImageFilterModelTodoPackage(infoVector, version, forReAdd, extraValueVector));
+        }
+        else
+        {
+            emit packageToFilter(ImageFilterModelTodoPackage(infoVector, version, forReAdd, extraValueVector));
+        }
+    }
+}
+
+void ImageFilterModel::ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage& package)
+{
+    // check if it got discarded on the journey
+    if (package.version != version)
+    {
+        packageDiscarded(package);
+        return;
+    }
+
+    // incorporate result
+    QHash<qlonglong, bool>::const_iterator it = package.filterResults.constBegin();
+
+    for (; it != package.filterResults.constEnd(); ++it)
+    {
+        filterResults.insert(it.key(), it.value());
+    }
+
+    // re-add if necessary
+    if (package.isForReAdd)
+    {
+        emit reAddImageInfos(package.infos.toList(), package.extraValues.toList());
+
+        if (sentOutForReAdd == 1) // last package
+        {
+            emit reAddingFinished();
+        }
+    }
+
+    // decrement counters
+    --sentOut;
+
+    if (package.isForReAdd)
+    {
+        --sentOutForReAdd;
+    }
+
+    // If all packages have returned, filtered and readded, and no more are expected,
+    // and there is need to tell the filter result to the view, do that
+    if (sentOut == 0 && sentOutForReAdd == 0 && !imageModel->isRefreshing())
+    {
+        q->invalidate(); // use invalidate, not invalidateFilter only. Sorting may have changed as well.
+        emit q->filterMatches(hasOneMatch);
+        emit q->filterMatchesForText(hasOneMatchForText);
+        filterer->deactivate();
+        preparer->deactivate();
+    }
+}
+
+void ImageFilterModel::ImageFilterModelPrivate::packageDiscarded(const ImageFilterModelTodoPackage& package)
+{
+    // Either, the model was reset, or the filter changed
+    // In the former case throw all away, in the latter case, recycle
+    if (package.version > lastDiscardVersion)
+    {
+        // Recycle packages: Send again with current version
+        // Do not increment sentOut or sentOutForReAdd here: it was not decremented!
+
+        if (needPrepare)
+        {
+            emit packageToPrepare(ImageFilterModelTodoPackage(package.infos, version, package.isForReAdd));
+        }
+        else
+        {
+            emit packageToFilter(ImageFilterModelTodoPackage(package.infos, version, package.isForReAdd));
+        }
+    }
+}
+
+// --------------------------------------------------------------------------------------------
+
+ImageFilterModelWorker::ImageFilterModelWorker(ImageFilterModel::ImageFilterModelPrivate* d)
     : d(d)
 {
 }
 
-const int PrepareChunkSize = 101;
-const int FilterChunkSize  = 2001;
+// --------------------------------------------------------------------------------------------
 
 ImageFilterModel::ImageFilterModel(QObject* parent)
     : ImageSortFilterModel(parent),
@@ -278,21 +467,6 @@ ImageFilterModel::ImageFilterModel(ImageFilterModelPrivate& dd, QObject* parent)
       d_ptr(&dd)
 {
     d_ptr->init(this);
-}
-
-void ImageFilterModelPrivate::init(ImageFilterModel* _q)
-{
-    q = _q;
-
-    updateFilterTimer = new QTimer(this);
-    updateFilterTimer->setSingleShot(true);
-    updateFilterTimer->setInterval(250);
-
-    connect(updateFilterTimer, SIGNAL(timeout()),
-            q, SLOT(slotUpdateFilter()));
-
-    // inter-thread redirection
-    qRegisterMetaType<ImageFilterModelTodoPackage>("ImageFilterModelTodoPackage");
 }
 
 ImageFilterModel::~ImageFilterModel()
@@ -671,176 +845,6 @@ void ImageFilterModel::removePrepareHook(ImageFilterModelPrepareHook* hook)
     Q_D(ImageFilterModel);
     QMutexLocker lock(&d->mutex);
     d->prepareHooks.removeAll(hook);
-}
-
-void ImageFilterModelPrivate::preprocessInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
-{
-    infosToProcess(infos, extraValues, true);
-}
-
-void ImageFilterModelPrivate::processAddedInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
-{
-    // These have already been added, we just process them afterwards
-    infosToProcess(infos, extraValues, false);
-}
-
-void ImageFilterModelPrivate::setupWorkers()
-{
-    preparer = new ImageFilterModelPreparer(this);
-    filterer = new ImageFilterModelFilterer(this);
-
-    // A package in constructed in infosToProcess.
-    // Normal flow is infosToProcess -> preparer::process -> filterer::process -> packageFinished.
-    // If no preparation is needed, the first step is skipped.
-    // If filter version changes, both will discard old package and send them to packageDiscarded.
-
-    connect(this, SIGNAL(packageToPrepare(const ImageFilterModelTodoPackage&)),
-            preparer, SLOT(process(ImageFilterModelTodoPackage)));
-
-    connect(this, SIGNAL(packageToFilter(const ImageFilterModelTodoPackage&)),
-            filterer, SLOT(process(ImageFilterModelTodoPackage)));
-
-    connect(preparer, SIGNAL(processed(const ImageFilterModelTodoPackage&)),
-            filterer, SLOT(process(ImageFilterModelTodoPackage)));
-
-    connect(filterer, SIGNAL(processed(const ImageFilterModelTodoPackage&)),
-            this, SLOT(packageFinished(const ImageFilterModelTodoPackage&)));
-
-    connect(preparer, SIGNAL(discarded(const ImageFilterModelTodoPackage&)),
-            this, SLOT(packageDiscarded(const ImageFilterModelTodoPackage&)));
-
-    connect(filterer, SIGNAL(discarded(const ImageFilterModelTodoPackage&)),
-            this, SLOT(packageDiscarded(const ImageFilterModelTodoPackage&)));
-}
-
-void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos)
-{
-    infosToProcess(infos, QList<QVariant>(), false);
-}
-
-void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues, bool forReAdd)
-{
-    if (infos.isEmpty())
-    {
-        return;
-    }
-
-    filterer->schedule();
-
-    if (needPrepare)
-    {
-        preparer->schedule();
-    }
-
-    // prepare and filter in chunks
-    const int size                      = infos.size();
-    const int maxChunkSize              = needPrepare ? PrepareChunkSize : FilterChunkSize;
-    QList<ImageInfo>::const_iterator it = infos.constBegin();
-    QList<QVariant>::const_iterator xit = extraValues.constBegin();
-    int index                           = 0;
-    QVector<QVariant> extraValueVector;
-
-    while (it != infos.constEnd())
-    {
-        QVector<ImageInfo> infoVector(qMin(maxChunkSize, size - index));
-        QList<ImageInfo>::const_iterator end = it + infoVector.size();
-        qCopy(it, end, infoVector.begin());
-
-        if (xit != extraValues.constEnd())
-        {
-            extraValueVector                     = QVector<QVariant>(infoVector.size());
-            QList<QVariant>::const_iterator xend = xit + extraValueVector.size();
-            qCopy(xit, xend, extraValueVector.begin());
-            xit = xend;
-        }
-
-        it    = end;
-        index += infoVector.size();
-
-        ++sentOut;
-
-        if (forReAdd)
-        {
-            ++sentOutForReAdd;
-        }
-
-        if (needPrepare)
-        {
-            emit packageToPrepare(ImageFilterModelTodoPackage(infoVector, version, forReAdd, extraValueVector));
-        }
-        else
-        {
-            emit packageToFilter(ImageFilterModelTodoPackage(infoVector, version, forReAdd, extraValueVector));
-        }
-    }
-}
-
-void ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage& package)
-{
-    // check if it got discarded on the journey
-    if (package.version != version)
-    {
-        packageDiscarded(package);
-        return;
-    }
-
-    // incorporate result
-    QHash<qlonglong, bool>::const_iterator it = package.filterResults.constBegin();
-
-    for (; it != package.filterResults.constEnd(); ++it)
-    {
-        filterResults.insert(it.key(), it.value());
-    }
-
-    // re-add if necessary
-    if (package.isForReAdd)
-    {
-        emit reAddImageInfos(package.infos.toList(), package.extraValues.toList());
-
-        if (sentOutForReAdd == 1) // last package
-        {
-            emit reAddingFinished();
-        }
-    }
-
-    // decrement counters
-    --sentOut;
-
-    if (package.isForReAdd)
-    {
-        --sentOutForReAdd;
-    }
-
-    // If all packages have returned, filtered and readded, and no more are expected,
-    // and there is need to tell the filter result to the view, do that
-    if (sentOut == 0 && sentOutForReAdd == 0 && !imageModel->isRefreshing())
-    {
-        q->invalidate(); // use invalidate, not invalidateFilter only. Sorting may have changed as well.
-        emit q->filterMatches(hasOneMatch);
-        emit q->filterMatchesForText(hasOneMatchForText);
-        filterer->deactivate();
-        preparer->deactivate();
-    }
-}
-
-void ImageFilterModelPrivate::packageDiscarded(const ImageFilterModelTodoPackage& package)
-{
-    // Either, the model was reset, or the filter changed
-    // In the former case throw all away, in the latter case, recycle
-    if (package.version > lastDiscardVersion)
-    {
-        // Recycle packages: Send again with current version
-        // Do not increment sentOut or sentOutForReAdd here: it was not decremented!
-
-        if (needPrepare)
-        {
-            emit packageToPrepare(ImageFilterModelTodoPackage(package.infos, version, package.isForReAdd));
-        }
-        else
-        {
-            emit packageToFilter(ImageFilterModelTodoPackage(package.infos, version, package.isForReAdd));
-        }
-    }
 }
 
 void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)

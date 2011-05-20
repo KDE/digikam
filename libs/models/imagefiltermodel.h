@@ -44,7 +44,6 @@ namespace Digikam
 class ImageChangeset;
 class ImageFilterModel;
 class ImageTagChangeset;
-class ImageFilterModelPrivate;
 
 class DIGIKAM_DATABASE_EXPORT ImageFilterModelPrepareHook
 {
@@ -223,6 +222,11 @@ Q_SIGNALS:
      */
     void imageInfosAdded(const QList<ImageInfo>& infos);
     void imageInfosAboutToBeRemoved(const QList<ImageInfo>& infos);
+
+public:
+
+    // Declared as public because of use in sub-classes.
+    class ImageFilterModelPrivate;
 
 protected:
 

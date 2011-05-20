@@ -6,7 +6,7 @@
  * Date        : 2009-03-11
  * Description : Qt item model for database entries - private header
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,7 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModelWorker : public WorkerObject
 
 public:
 
-    ImageFilterModelWorker(ImageFilterModelPrivate* d);
+    ImageFilterModelWorker(ImageFilterModel::ImageFilterModelPrivate* d);
 
     bool checkVersion(const ImageFilterModelTodoPackage& package)
     {
@@ -60,8 +60,10 @@ Q_SIGNALS:
 
 protected:
 
-    ImageFilterModelPrivate* d;
+    ImageFilterModel::ImageFilterModelPrivate* d;
 };
+
+// -----------------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT ImageFilterModelPreparer : public ImageFilterModelWorker
 {
@@ -69,11 +71,13 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModelPreparer : public ImageFilterModel
 
 public:
 
-    ImageFilterModelPreparer(ImageFilterModelPrivate* d)
+    ImageFilterModelPreparer(ImageFilterModel::ImageFilterModelPrivate* d)
         : ImageFilterModelWorker(d) {}
 
     void process(ImageFilterModelTodoPackage package);
 };
+
+// ----------------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT ImageFilterModelFilterer : public ImageFilterModelWorker
 {
@@ -81,7 +85,7 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModelFilterer : public ImageFilterModel
 
 public:
 
-    ImageFilterModelFilterer(ImageFilterModelPrivate* d)
+    ImageFilterModelFilterer(ImageFilterModel::ImageFilterModelPrivate* d)
         : ImageFilterModelWorker(d) {}
 
     void process(ImageFilterModelTodoPackage package);
