@@ -6,7 +6,7 @@
  * Date        : 2009-03-11
  * Description : Qt item model for database entries, using AlbumManager
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,13 +44,13 @@ public:
     ImageAlbumFilterModel(QObject* parent = 0);
     ~ImageAlbumFilterModel();
 
-    virtual void setImageFilterSettings(const ImageFilterSettings& settings);
-
-    void setSourceImageModel(ImageAlbumModel* model);
+    void             setSourceImageModel(ImageAlbumModel* model);
     ImageAlbumModel* sourceModel() const;
 
     // convenience mappers
     void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare);
+
+    virtual void setImageFilterSettings(const ImageFilterSettings& settings);
 
 protected:
 
@@ -66,6 +66,8 @@ protected Q_SLOTS:
 private:
 
     void albumChange(Album* album);
+
+private:
 
     Q_DECLARE_PRIVATE(ImageAlbumFilterModel)
 };

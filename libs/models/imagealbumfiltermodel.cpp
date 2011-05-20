@@ -6,7 +6,7 @@
  * Date        : 2009-03-11
  * Description : Qt item model for database entries, using AlbumManager
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,7 +24,6 @@
 #include "imagealbumfiltermodel.moc"
 
 // KDE includes
-
 
 #include <kstringhandler.h>
 
@@ -68,6 +67,7 @@ ImageAlbumFilterModel::ImageAlbumFilterModel(QObject* parent)
     {
         albumChange(a);
     }
+
     foreach (Album* a, AlbumManager::instance()->allTAlbums())
     {
         albumChange(a);
@@ -111,10 +111,10 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const I
     {
         case ImageSortSettings::CategoryByAlbum:
         {
-            int leftAlbumId = left.albumId();
-            int rightAlbumId = right.albumId();
+            int leftAlbumId    = left.albumId();
+            int rightAlbumId   = right.albumId();
 
-            PAlbum* leftAlbum = AlbumManager::instance()->findPAlbum(leftAlbumId);
+            PAlbum* leftAlbum  = AlbumManager::instance()->findPAlbum(leftAlbumId);
             PAlbum* rightAlbum = AlbumManager::instance()->findPAlbum(rightAlbumId);
 
             if (!leftAlbum || !rightAlbum)
@@ -132,7 +132,7 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const I
             {
                 // Here we want to sort the _categories_ by _album_ date if images are sorted by date
                 // We must still make sure that categorization is unique!
-                QDate leftDate = leftAlbum->date();
+                QDate leftDate  = leftAlbum->date();
                 QDate rightDate = rightAlbum->date();
 
                 if (leftDate != rightDate)
@@ -157,11 +157,13 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const I
             }
 
             return ImageSortSettings::naturalCompare(leftAlbum->albumPath(), rightAlbum->albumPath(),
-                    d->sorter.currentCategorizationSortOrder,
-                    d->sorter.categorizationCaseSensitivity);
+                                                     d->sorter.currentCategorizationSortOrder,
+                                                     d->sorter.categorizationCaseSensitivity);
         }
         default:
+        {
             return ImageFilterModel::compareInfosCategories(left, right);
+        }
     }
 }
 
