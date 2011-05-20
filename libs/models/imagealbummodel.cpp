@@ -6,7 +6,7 @@
  * Date        : 2009-03-08
  * Description : Qt item model for database entries, listing done with ioslave
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,38 +46,38 @@
 namespace Digikam
 {
 
-class ImageAlbumModelPriv
+class ImageAlbumModel::ImageAlbumModelPriv
 {
 public:
 
     ImageAlbumModelPriv()
     {
-        currentAlbum        = 0;
-        job                 = 0;
-        refreshTimer        = 0;
-        incrementalTimer    = 0;
-        recurseAlbums       = false;
-        recurseTags         = false;
-        extraValueJob       = false;
+        currentAlbum     = 0;
+        job              = 0;
+        refreshTimer     = 0;
+        incrementalTimer = 0;
+        recurseAlbums    = false;
+        recurseTags      = false;
+        extraValueJob    = false;
     }
 
-    Album*                   currentAlbum;
-    KIO::TransferJob*        job;
-    QTimer*                  refreshTimer;
-    QTimer*                  incrementalTimer;
+    Album*            currentAlbum;
+    KIO::TransferJob* job;
+    QTimer*           refreshTimer;
+    QTimer*           incrementalTimer;
 
-    bool                     recurseAlbums;
-    bool                     recurseTags;
-    QString                  specialListing;
+    bool              recurseAlbums;
+    bool              recurseTags;
+    QString           specialListing;
 
-    bool                     extraValueJob;
+    bool              extraValueJob;
 };
 
 ImageAlbumModel::ImageAlbumModel(QObject* parent)
     : ImageThumbnailModel(parent),
       d(new ImageAlbumModelPriv)
 {
-    d->refreshTimer = new QTimer(this);
+    d->refreshTimer     = new QTimer(this);
     d->refreshTimer->setSingleShot(true);
 
     d->incrementalTimer = new QTimer(this);
@@ -109,7 +109,6 @@ ImageAlbumModel::ImageAlbumModel(QObject* parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
-
 }
 
 ImageAlbumModel::~ImageAlbumModel()
@@ -277,7 +276,7 @@ void ImageAlbumModel::startListJob(Album* album)
 {
     KUrl url = album->databaseUrl();
     d->extraValueJob = false;
-    d->job = ImageLister::startListJob(url);
+    d->job   = ImageLister::startListJob(url);
     d->job->addMetaData("listAlbumsRecursively", d->recurseAlbums ? "true" : "false");
     d->job->addMetaData("listTagsRecursively", d->recurseTags ? "true" : "false");
 
@@ -322,9 +321,8 @@ void ImageAlbumModel::slotData(KIO::Job*, const QByteArray& data)
     }
 
     ImageInfoList newItemsList;
-
-    QByteArray tmp(data);
-    QDataStream ds(&tmp, QIODevice::ReadOnly);
+    QByteArray    tmp(data);
+    QDataStream   ds(&tmp, QIODevice::ReadOnly);
 
     if (d->extraValueJob)
     {
@@ -565,7 +563,6 @@ void ImageAlbumModel::slotAlbumDeleted(Album* album)
     {
         emitDataChangedForAll();
     }
-
 }
 
 void ImageAlbumModel::slotAlbumRenamed(Album* album)

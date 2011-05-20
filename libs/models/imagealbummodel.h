@@ -6,7 +6,7 @@
  * Date        : 2009-03-08
  * Description : Qt item model for database entries, listing done with ioslave
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,6 @@ class ImageChangeset;
 class CollectionImageChangeset;
 class SearchChangeset;
 class Album;
-class ImageAlbumModelPriv;
 
 class ImageAlbumModel : public ImageThumbnailModel
 {
@@ -90,8 +89,6 @@ protected Q_SLOTS:
     void slotNextRefresh();
     void slotNextIncrementalRefresh();
 
-    virtual void slotImageChange(const ImageChangeset& changeset);
-    virtual void slotImageTagChange(const ImageTagChangeset& changeset);
     void slotCollectionImageChange(const CollectionImageChangeset& changeset);
     void slotSearchChange(const SearchChangeset& changeset);
 
@@ -102,12 +99,16 @@ protected Q_SLOTS:
 
     void incrementalRefresh();
 
+    virtual void slotImageChange(const ImageChangeset& changeset);
+    virtual void slotImageTagChange(const ImageTagChangeset& changeset);
+
 protected:
 
     void startListJob(Album* album);
 
 private:
 
+    class ImageAlbumModelPriv;
     ImageAlbumModelPriv* const d;
 };
 
