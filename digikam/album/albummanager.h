@@ -816,6 +816,32 @@ private:
     Album* album;
 };
 
+template <class T = Album>
+class AlbumPointerList : public QList<AlbumPointer<T> >
+{
+public:
+    AlbumPointerList() {}
+    AlbumPointerList(const AlbumPointerList<T>& list) : QList<AlbumPointer<T> >(list) {}
+    AlbumPointerList(const QList<T*>& list)
+    {
+        operator=(list);
+    }
+
+    AlbumPointerList<T>& operator=(const AlbumPointerList<T>& list)
+    {
+        return QList<AlbumPointer<T> >::operator=(list);
+    }
+
+    AlbumPointerList<T>& operator=(const QList<T*>& list)
+    {
+        foreach (T* t, list)
+        {
+            append(AlbumPointer<T>(t));
+        }
+        return *this;
+    }
+};
+
 }  // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::PAlbum>)

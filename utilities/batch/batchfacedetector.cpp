@@ -77,7 +77,7 @@ public:
     QTime        duration;
     int          total;
 
-    AlbumList    albumTodoList;
+    AlbumPointerList<> albumTodoList;
     ImageInfoJob albumListing;
     FacePipeline pipeline;
 };
@@ -265,13 +265,18 @@ void BatchFaceDetector::continueAlbumListing()
         return;
     }
 
-    if (d->albumTodoList.isEmpty())
+    // list can have null pointer if album was deleted recently
+    Album* album;
+    do
     {
-        return complete();
-    }
+        if (d->albumTodoList.isEmpty())
+        {
+            return complete();
+        }
 
-    Album* album = d->albumTodoList.takeFirst();
-    kDebug() << "Album" << album->title();
+        album = d->albumTodoList.takeFirst();
+    } while (!album);
+
     d->albumListing.allItemsFromAlbum(album);
 }
 
