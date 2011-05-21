@@ -84,6 +84,7 @@ public Q_SLOTS:
 
     void            slotAlbumCurrentChanged();
     void            slotAlbumDeleted(Album* album);
+    void            slotAlbumsCleared();
     void            slotAlbumSelected();
     void            slotClearSelectPAlbum(const ImageInfo& imageInfo);
     void            slotClearSelectTAlbum(int id);

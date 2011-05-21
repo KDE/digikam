@@ -544,6 +544,7 @@ void DigikamView::setupConnections()
             this, SLOT(slotSidebarTabTitleStyleChanged()));
 
     // -- Album History -----------------
+
     connect(this, SIGNAL(signalAlbumSelected(bool)),
             d->albumHistory, SLOT(slotAlbumSelected()));
 
@@ -570,6 +571,9 @@ void DigikamView::setupConnections()
 
     connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
             d->albumHistory, SLOT(slotAlbumDeleted(Album*)));
+
+    connect(d->albumManager, SIGNAL(signalAlbumsCleared()),
+            d->albumHistory, SLOT(slotAlbumsCleared()));
 
     // -- Image versions ----------------
 

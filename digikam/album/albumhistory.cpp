@@ -146,6 +146,7 @@ void AlbumHistory::clearHistory()
 {
     d->backwardStack.clear();
     d->forwardStack.clear();
+    d->historyPos.clear();
 
     d->moving = false;
 }
@@ -458,6 +459,11 @@ void AlbumHistory::slotAlbumDeleted(Album* album)
     {
         d->historyPos.remove(album);
     }
+}
+
+void AlbumHistory::slotAlbumsCleared()
+{
+    clearHistory();
 }
 
 }  // namespace Digikam
