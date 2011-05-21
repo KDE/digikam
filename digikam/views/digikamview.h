@@ -130,9 +130,6 @@ public Q_SLOTS:
     void slotAlbumRefresh();
     void slotAlbumHistoryBack(int steps=1);
     void slotAlbumHistoryForward(int steps=1);
-    void slotAlbumAdded(Album* album);
-    void slotAlbumDeleted(Album* album);
-    void slotAlbumRenamed(Album* album);
     void slotAlbumWriteMetadata();
     void slotAlbumReadMetadata();
     void slotAlbumSelected(Album* album);

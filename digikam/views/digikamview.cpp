@@ -357,15 +357,6 @@ void DigikamView::setupConnections()
     connect(d->albumManager, SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));
 
-    connect(d->albumManager, SIGNAL(signalAlbumAdded(Album*)),
-            this, SLOT(slotAlbumAdded(Album*)));
-
-    connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
-            this, SLOT(slotAlbumDeleted(Album*)));
-
-    connect(d->albumManager, SIGNAL(signalAlbumRenamed(Album*)),
-            this, SLOT(slotAlbumRenamed(Album*)));
-
     connect(d->albumManager, SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
 
@@ -796,22 +787,6 @@ void DigikamView::slotNewDuplicatesSearch(Album* album)
 {
     slotLeftSideBarActivate(d->fuzzySearchSideBar);
     d->fuzzySearchSideBar->newDuplicatesSearch(album);
-}
-
-void DigikamView::slotAlbumAdded(Album* album)
-{
-    Q_UNUSED(album);
-    // right now nothing has to be done here anymore
-}
-
-void DigikamView::slotAlbumDeleted(Album* album)
-{
-    d->albumHistory->deleteAlbum(album);
-}
-
-void DigikamView::slotAlbumRenamed(Album* album)
-{
-    Q_UNUSED(album);
 }
 
 void DigikamView::slotAlbumsCleared()

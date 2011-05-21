@@ -455,6 +455,8 @@ void AlbumHistory::slotClearSelectTAlbum(int id)
 
 void AlbumHistory::slotAlbumDeleted(Album* album)
 {
+    deleteAlbum(album);
+
     if (d->historyPos.contains(album))
     {
         d->historyPos.remove(album);
