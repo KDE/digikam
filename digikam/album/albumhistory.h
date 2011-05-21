@@ -92,11 +92,6 @@ public Q_SLOTS:
 
 private:
 
-    HistoryItem*    getCurrentAlbum() const;
-    void            forward(unsigned int steps=1);
-
-private:
-
     class AlbumHistoryPriv;
     AlbumHistoryPriv* const d;
 };
