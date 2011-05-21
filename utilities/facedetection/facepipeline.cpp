@@ -499,6 +499,9 @@ RecognitionWorker::RecognitionWorker(FacePipeline::FacePipelinePriv* d)
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
+    /*
+     * Disable recognition for stable release. See bug 269720.
+     *
     QSize size = database.recommendedImageSize(package->image.size());
     d->iface->fillImageInFaces(package->image, package->faces, size);
 
@@ -516,6 +519,7 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
             package->faces[i].clearRecognition();
         }
     }
+    */
 
     package->processFlags |= FacePipelinePackage::ProcessedByRecognizer;
     emit processed(package);
