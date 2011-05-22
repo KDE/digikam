@@ -222,7 +222,7 @@ public:
     void setSignatureCacheEnabled(bool cache)
     {
         delete signatureCache;
-	signatureCache = 0;
+        signatureCache = 0;
 
         if (cache)
         {
