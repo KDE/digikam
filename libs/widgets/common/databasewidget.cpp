@@ -222,7 +222,7 @@ void DatabaseWidget::slotDatabasePathEdited(const QString& newPath)
 
     if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
     {
-        databasePathEdit->setUrl(QDir::homePath() + '/' + newPath);
+        databasePathEdit->setUrl(QString(QDir::homePath() + QLatin1Char('/') + newPath));
     }
 
 #endif

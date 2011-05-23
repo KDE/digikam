@@ -339,7 +339,7 @@ QVariant KipiInterface::hostSetting(const QString& settingName)
         // might change in the main app
 
         AlbumSettings* s = AlbumSettings::instance();
-        return (s->getImageFileFilter() + ' ' +
+        return QString(s->getImageFileFilter() + ' ' +
                 s->getMovieFileFilter() + ' ' +
                 s->getAudioFileFilter() + ' ' +
                 s->getRawFileFilter());

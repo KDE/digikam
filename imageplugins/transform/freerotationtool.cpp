@@ -522,7 +522,7 @@ void FreeRotationTool::slotAutoAdjustClicked()
             mainAngle = 0;
         }
 
-        double fineAngle = (QString("0.") + anglesList[1]).toDouble(&ok);
+        double fineAngle = QString(QString("0.") + anglesList[1]).toDouble(&ok);
         fineAngle        = (angle < 0.0) ? -fineAngle : fineAngle;
 
         if (!ok)

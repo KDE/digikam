@@ -3080,7 +3080,7 @@ QStringList AlbumDB::getItemNamesInAlbum(int albumID, bool recursive)
         d->db->execSql( QString("SELECT Images.name FROM Images WHERE Images.album IN "
                                 " (SELECT DISTINCT id FROM Albums "
                                 "  WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?));"),
-                        rootId, path, path == "/" ? "/%" : path + "/%",
+                        rootId, path, path == "/" ? "/%" : QString(path + QLatin1String("/%")),
                         &values );
     }
     else
@@ -3368,7 +3368,7 @@ QList<int> AlbumDB::getAlbumAndSubalbumsForPath(int albumRootId, const QString& 
 {
     QList<QVariant> values;
     d->db->execSql( QString("SELECT id, relativePath FROM Albums WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?);"),
-                    albumRootId, relativePath, (relativePath == "/" ? "/%" : relativePath + "/%"), &values);
+                    albumRootId, relativePath, (relativePath == "/" ? "/%" : QString(relativePath + QLatin1String("/%"))), &values);
 
     QList<int> albumIds;
     int id;
