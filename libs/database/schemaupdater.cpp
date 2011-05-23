@@ -164,34 +164,33 @@ void SchemaUpdater::setObserver(InitializationObserver* observer)
 
 bool SchemaUpdater::startUpdates()
 {
-    // Do we have sufficient privileges
-    QStringList insufficientRights;
-    DatabasePrivilegesChecker checker(m_Parameters);
-
-    if (!checker.checkPrivileges(insufficientRights))
+    if (!m_Parameters.isSQLite())
     {
+        // Do we have sufficient privileges
+        QStringList insufficientRights;
+        DatabasePrivilegesChecker checker(m_Parameters);
 
-
-        kError() << "Insufficient rights on databse.";
-        QString errorMsg = i18n(
-                               "You have insufficient privileges on the database.\n"
-                               "Following privileges are not assigned to you:\n %1"
-                               "\nCheck your privileges on the database and restart digiKam.",
-                               insufficientRights.join(",\n")
-                           );
-
-        m_LastErrorMessage=errorMsg;
-
-        if (m_observer)
+        if (!checker.checkPrivileges(insufficientRights))
         {
-            m_observer->error(errorMsg);
-            m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+            kError() << "Insufficient rights on databse.";
+            QString errorMsg = i18n(
+                                "You have insufficient privileges on the database.\n"
+                                "Following privileges are not assigned to you:\n %1"
+                                "\nCheck your privileges on the database and restart digiKam.",
+                                insufficientRights.join(",\n")
+                            );
+
+            m_LastErrorMessage=errorMsg;
+
+            if (m_observer)
+            {
+                m_observer->error(errorMsg);
+                m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+            }
+
+            return false;
         }
-
-        return false;
     }
-
-
 
     // First step: do we have an empty database?
     QStringList tables = m_Backend->tables();

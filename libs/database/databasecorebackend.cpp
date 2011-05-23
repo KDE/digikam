@@ -576,6 +576,7 @@ DatabaseCoreBackend::DatabaseCoreBackend(const QString& backendName, DatabaseLoc
 DatabaseCoreBackend::~DatabaseCoreBackend()
 {
     Q_D(DatabaseCoreBackend);
+    close();
     delete d;
 }
 
