@@ -48,11 +48,14 @@ namespace Digikam
 {
 
 class ImageInfo;
+class VersionManagerSettings;
 
 namespace DatabaseFields
 {
 class Set;
 }
+
+// ---------------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT SearchTextFilterSettings : public SearchTextSettings
 {
@@ -86,6 +89,8 @@ public:
     TextFilterFields textFields;
 };
 
+// ---------------------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT ImageFilterSettings
 {
 public:
@@ -109,8 +114,12 @@ public:
         AndCondition
     };
 
-    void setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags, MatchingCondition matchingCond,
-                      bool showUnTagged, const QList<int>& clTagIds, const QList<int>& plTagIds);
+    void setTagFilter(const QList<int>& includedTags,
+                      const QList<int>& excludedTags,
+                      MatchingCondition matchingCond,
+                      bool showUnTagged,
+                      const QList<int>& clTagIds,
+                      const QList<int>& plTagIds);
 
 public:
 
@@ -147,18 +156,25 @@ public:
 
     /// Returns if the day is a filter criteria
     bool isFilteringByDay() const;
+
     /// Returns if the type mime is a filter criteria
     bool isFilteringByTypeMime() const;
+
     /// Returns if the rating is a filter criteria
     bool isFilteringByRating() const;
+
     /// Returns if the pick labels is a filter criteria
     bool isFilteringByPickLabels() const;
+
     /// Returns if the color labels is a filter criteria
     bool isFilteringByColorLabels() const;
+
     /// Returns if the tag is a filter criteria
     bool isFilteringByTags() const;
+
     /// Returns if the text (including comment) is a filter criteria
     bool isFilteringByText() const;
+
     /// Returns if images will be filtered by these criteria at all
     bool isFiltering() const;
 
@@ -225,8 +241,6 @@ private:
 
 // ---------------------------------------------------------------------------------------
 
-class VersionManagerSettings;
-
 class DIGIKAM_DATABASE_EXPORT VersionImageFilterSettings
 {
 public:
@@ -255,6 +269,7 @@ public:
 
     /// Returns if images will be filtered by these criteria at all
     bool isFiltering() const;
+
     /// Returns if the tag is a filter criteria
     bool isFilteringByTags() const;
 

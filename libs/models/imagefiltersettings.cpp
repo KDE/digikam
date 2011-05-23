@@ -172,8 +172,8 @@ bool ImageFilterSettings::isFiltering() const
            isFilteringByTags()        ||
            isFilteringByText()        ||
            isFilteringByRating()      ||
-           isFilteringByTypeMime()    || 
-           isFilteringByColorLabels() || 
+           isFilteringByTypeMime()    ||
+           isFilteringByColorLabels() ||
            isFilteringByPickLabels();
 }
 
@@ -187,9 +187,12 @@ void ImageFilterSettings::setDayFilter(const QList<QDateTime>& days)
     }
 }
 
-void ImageFilterSettings::setTagFilter(const QList<int>& includedTags, const QList<int>& excludedTags,
-                                       MatchingCondition matchingCondition, bool showUnTagged,
-                                       const QList<int>& clTagIds, const QList<int>& plTagIds)
+void ImageFilterSettings::setTagFilter(const QList<int>& includedTags,
+                                       const QList<int>& excludedTags,
+                                       MatchingCondition matchingCondition,
+                                       bool showUnTagged,
+                                       const QList<int>& clTagIds,
+                                       const QList<int>& plTagIds)
 {
     m_includeTagFilter    = includedTags;
     m_excludeTagFilter    = excludedTags;
@@ -265,7 +268,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
     if (!m_includeTagFilter.isEmpty() || !m_excludeTagFilter.isEmpty())
     {
-        QList<int> tagIds = info.tagIds();
+        QList<int>                 tagIds = info.tagIds();
         QList<int>::const_iterator it;
 
         match = m_includeTagFilter.isEmpty();
@@ -328,7 +331,8 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
         bool matchPL      = false;
         QList<int> tagIds = info.tagIds();
 
-        for (QList<int>::const_iterator it = m_pickLabelTagFilter.begin(); it != m_pickLabelTagFilter.end(); ++it)
+        for (QList<int>::const_iterator it = m_pickLabelTagFilter.begin();
+             it != m_pickLabelTagFilter.end(); ++it)
         {
             if (tagIds.contains(*it))
             {
@@ -347,7 +351,8 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
         bool matchCL      = false;
         QList<int> tagIds = info.tagIds();
 
-        for (QList<int>::const_iterator it = m_colorLabelTagFilter.begin(); it != m_colorLabelTagFilter.end(); ++it)
+        for (QList<int>::const_iterator it = m_colorLabelTagFilter.begin();
+             it != m_colorLabelTagFilter.end(); ++it)
         {
             if (tagIds.contains(*it))
             {
@@ -543,8 +548,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
         // Album names
         if (m_textFilterSettings.textFields & SearchTextFilterSettings::AlbumName &&
-            m_albumNameHash.value(info.albumId()).contains(m_textFilterSettings.text,
-                                                           m_textFilterSettings.caseSensitive))
+            m_albumNameHash.value(info.albumId()).contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
         {
             textMatch = true;
         }
@@ -564,7 +568,8 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
     {
         const KUrl url = info.fileUrl();
 
-        for (QHash<QString, KUrl::List>::const_iterator it = m_urlWhitelists.constBegin(); it!=m_urlWhitelists.constEnd(); ++it)
+        for (QHash<QString, KUrl::List>::const_iterator it = m_urlWhitelists.constBegin();
+             it!=m_urlWhitelists.constEnd(); ++it)
         {
             match = it->contains(url);
 
@@ -579,7 +584,8 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
     {
         const qlonglong id = info.id();
 
-        for (QHash<QString, QList<qlonglong> >::const_iterator it = m_idWhitelists.constBegin(); it!=m_idWhitelists.constEnd(); ++it)
+        for (QHash<QString, QList<qlonglong> >::const_iterator it = m_idWhitelists.constBegin();
+             it!=m_idWhitelists.constEnd(); ++it)
         {
             match = it->contains(id);
 
@@ -634,7 +640,7 @@ bool VersionImageFilterSettings::matches(const ImageInfo& info) const
     if (!tagIds.contains(m_includeTagFilter))
     {
         for (QList<int>::const_iterator it = m_excludeTagFilter.begin();
-            it != m_excludeTagFilter.end(); ++it)
+             it != m_excludeTagFilter.end(); ++it)
         {
             if (tagIds.contains(*it))
             {
@@ -658,6 +664,7 @@ bool VersionImageFilterSettings::matches(const ImageInfo& info) const
 bool VersionImageFilterSettings::isHiddenBySettings(const ImageInfo& info) const
 {
     QList<int> tagIds = info.tagIds();
+
     foreach (int tagId, m_excludeTagFilter)
     {
         if (tagIds.contains(tagId))
@@ -665,6 +672,7 @@ bool VersionImageFilterSettings::isHiddenBySettings(const ImageInfo& info) const
             return true;
         }
     }
+
     return false;
 }
 
@@ -722,7 +730,7 @@ GroupImageFilterSettings::GroupImageFilterSettings()
 
 bool GroupImageFilterSettings::operator==(const GroupImageFilterSettings& other) const
 {
-    return m_allOpen == other.m_allOpen &&
+    return m_allOpen    == other.m_allOpen &&
            m_openGroups == other.m_openGroups;
 }
 
