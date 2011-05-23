@@ -485,6 +485,7 @@ bool exifTransform(const QString& file, const QString& documentName,
                 jpeg_destroy_compress(&dstinfo);
                 fclose(input_file);
                 fclose(output_file);
+                unlink(out);
                 return false;
             }
 
