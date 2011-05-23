@@ -48,15 +48,18 @@ public:
     ~ImageVersionsModel();
 
     Qt::ItemFlags flags(const QModelIndex& index) const;
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    QVariant      data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    int           rowCount(const QModelIndex& parent = QModelIndex()) const;
+
     void setupModelData(QList<QPair<QString, int> >& data);
     void clearModelData();
-    QString currentSelectedImage() const;
-    void setCurrentSelectedImage(const QString& path);
+
+    QString     currentSelectedImage() const;
+    void        setCurrentSelectedImage(const QString& path);
     QModelIndex currentSelectedImageIndex() const;
+
     bool paintTree() const;
-    int listIndexOf(const QString& item) const;
+    int  listIndexOf(const QString& item) const;
 
 public Q_SLOTS:
 
