@@ -343,28 +343,28 @@ bool ImageIface::originalHasAlpha() const
     return DImgInterface::defaultInterface()->hasAlpha();
 }
 
-int ImageIface::selectedWidth()
+int ImageIface::selectedWidth() const
 {
     int x, y, w, h;
     DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
     return w;
 }
 
-int ImageIface::selectedHeight()
+int ImageIface::selectedHeight() const
 {
     int x, y, w, h;
     DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
     return h;
 }
 
-int ImageIface::selectedXOrg()
+int ImageIface::selectedXOrg() const
 {
     int x, y, w, h;
     DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
     return x;
 }
 
-int ImageIface::selectedYOrg()
+int ImageIface::selectedYOrg() const
 {
     int x, y, w, h;
     DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);

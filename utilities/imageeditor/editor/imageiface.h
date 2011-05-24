@@ -170,13 +170,13 @@ public:
 
     /** Standard methods to get image selection information.
      */
-    int  selectedWidth();
-    int  selectedHeight();
+    int  selectedWidth()  const;
+    int  selectedHeight() const;
 
     /** Get selected (X, Y) position on the top/left corner of the original image.
      */
-    int  selectedXOrg();
-    int  selectedYOrg();
+    int  selectedXOrg() const;
+    int  selectedYOrg() const;
 
     /** Convert depth of original image.
      */
