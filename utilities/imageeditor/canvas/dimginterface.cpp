@@ -385,7 +385,7 @@ void DImgInterface::setExposureSettings(ExposureSettingsContainer* expoSettings)
     d->expoSettings = expoSettings;
 }
 
-ExposureSettingsContainer* DImgInterface::getExposureSettings()
+ExposureSettingsContainer* DImgInterface::getExposureSettings() const
 {
     return d->expoSettings;
 }
@@ -1110,7 +1110,7 @@ void DImgInterface::convertDepth(int depth)
                        new UndoActionIrreversible(this, "Convert Color Depth"));
 }
 
-DImg* DImgInterface::getImg()
+DImg* DImgInterface::getImg() const
 {
     if (!d->image.isNull())
     {
@@ -1123,7 +1123,7 @@ DImg* DImgInterface::getImg()
     }
 }
 
-uchar* DImgInterface::getImage()
+uchar* DImgInterface::getImage() const
 {
     if (!d->image.isNull())
     {
@@ -1225,7 +1225,7 @@ void DImgInterface::setFileOriginData(const QVariant& data)
     emit signalFileOriginChanged(getImageFilePath());
 }
 
-uchar* DImgInterface::getImageSelection()
+uchar* DImgInterface::getImageSelection() const
 {
     if (!d->selW || !d->selH)
     {

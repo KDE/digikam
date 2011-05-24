@@ -69,11 +69,11 @@ public:
     void   updateColorManagement();
     void   setSoftProofingEnabled(bool enabled);
 
-    void   setICCSettings(const ICCSettingsContainer& cmSettings);
+    void                 setICCSettings(const ICCSettingsContainer& cmSettings);
     ICCSettingsContainer getICCSettings();
 
-    void   setExposureSettings(ExposureSettingsContainer* expoSettings);
-    ExposureSettingsContainer* getExposureSettings();
+    void                       setExposureSettings(ExposureSettingsContainer* expoSettings);
+    ExposureSettingsContainer* getExposureSettings() const;
 
     void   setExifOrient(bool exifOrient);
     void   setDisplayingWidget(QWidget* widget);
@@ -89,71 +89,72 @@ public:
                   bool setExifOrientationTag, const QString& mimeType,
                   const VersionFileOperation& operation);
 
-    void   setHistoryIsBranch(bool isBranching);
-    void   setLastSaved(const QString& filePath);
-    void   switchToLastSaved(const DImageHistory& resolvedCurrentHistory = DImageHistory());
-    void   abortSaving();
-    void   setModified();
-    void   readMetadataFromFile(const QString& file);
-    void   clearUndoManager();
-    void   setUndoManagerOrigin();
-    void   updateUndoState();
-    void   resetImage();
-    bool   hasChangesToSave();
+    void    setHistoryIsBranch(bool isBranching);
+    void    setLastSaved(const QString& filePath);
+    void    switchToLastSaved(const DImageHistory& resolvedCurrentHistory = DImageHistory());
+    void    abortSaving();
+    void    setModified();
+    void    readMetadataFromFile(const QString& file);
+    void    clearUndoManager();
+    void    setUndoManagerOrigin();
+    void    updateUndoState();
+    void    resetImage();
+    bool    hasChangesToSave();
     QString ensureHasCurrentUuid() const;
-    void   provideCurrentUuid(const QString& uuid);
+    void    provideCurrentUuid(const QString& uuid);
 
-    void   zoom(double val);
+    void    zoom(double val);
 
-    void   paintOnDevice(QPaintDevice* p,
-                         int sx, int sy, int sw, int sh,
-                         int dx, int dy, int dw, int dh,
-                         int antialias);
-    void   paintOnDevice(QPaintDevice* p,
-                         int sx, int sy, int sw, int sh,
-                         int dx, int dy, int dw, int dh,
-                         int mx, int my, int mw, int mh,
-                         int antialias);
+    void    paintOnDevice(QPaintDevice* p,
+                          int sx, int sy, int sw, int sh,
+                          int dx, int dy, int dw, int dh,
+                          int antialias);
+    void    paintOnDevice(QPaintDevice* p,
+                          int sx, int sy, int sw, int sh,
+                          int dx, int dy, int dw, int dh,
+                          int mx, int my, int mw, int mh,
+                          int antialias);
 
-    bool   imageValid();
-    int    width();
-    int    height();
-    int    origWidth();
-    int    origHeight();
-    int    bytesDepth();
-    bool   hasAlpha();
-    bool   sixteenBit();
-    bool   exifRotated();
-    bool   isReadOnly();
+    bool    imageValid();
+    int     width();
+    int     height();
+    int     origWidth();
+    int     origHeight();
+    int     bytesDepth();
+    bool    hasAlpha();
+    bool    sixteenBit();
+    bool    exifRotated();
+    bool    isReadOnly();
 
-    void   setSelectedArea(int x, int y, int w, int h);
-    void   getSelectedArea(int& x, int& y, int& w, int& h);
+    void    setSelectedArea(int x, int y, int w, int h);
+    void    getSelectedArea(int& x, int& y, int& w, int& h);
 
-    void   rotate90();
-    void   rotate180();
-    void   rotate270();
+    void    rotate90();
+    void    rotate180();
+    void    rotate270();
 
-    void   flipHoriz();
-    void   flipVert();
+    void    flipHoriz();
+    void    flipVert();
 
-    void   crop(int x, int y, int w, int h);
+    void    crop(int x, int y, int w, int h);
 
-    void   resize(int w, int h);
+    void    resize(int w, int h);
 
-    void   convertDepth(int depth);
+    void    convertDepth(int depth);
 
     QStringList getUndoHistory() const;
     QStringList getRedoHistory() const;
+
     int    availableUndoSteps() const;
     int    availableRedoSteps() const;
 
-    DImg*  getImg();
-    uchar* getImage();
+    DImg*  getImg() const;
+    uchar* getImage() const;
 
     void   putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h);
     void   putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h, bool sixteenBit);
 
-    uchar* getImageSelection();
+    uchar* getImageSelection() const;
     void   putImageSelection(const QString& caller, const FilterAction& action, uchar* data);
 
     void   putIccProfile(const IccProfile& profile);
@@ -214,6 +215,7 @@ private:
     void   loadCurrent();
     void   resetValues();
     void   saveNext();
+
     QMap<QString,QVariant> ioAttributes(IOFileSettingsContainer* iofileSettings, const QString& givenMimeType);
 
 private:
