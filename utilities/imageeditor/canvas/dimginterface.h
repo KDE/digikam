@@ -99,7 +99,7 @@ public:
     void    setUndoManagerOrigin();
     void    updateUndoState();
     void    resetImage();
-    bool    hasChangesToSave();
+    bool    hasChangesToSave() const;
     QString ensureHasCurrentUuid() const;
     void    provideCurrentUuid(const QString& uuid);
 
@@ -115,16 +115,16 @@ public:
                           int mx, int my, int mw, int mh,
                           int antialias);
 
-    bool    imageValid();
-    int     width();
-    int     height();
-    int     origWidth();
-    int     origHeight();
-    int     bytesDepth();
-    bool    hasAlpha();
-    bool    sixteenBit();
-    bool    exifRotated();
-    bool    isReadOnly();
+    bool    imageValid()  const;
+    int     width()       const;
+    int     height()      const;
+    int     origWidth()   const;
+    int     origHeight()  const;
+    int     bytesDepth()  const;
+    bool    hasAlpha()    const;
+    bool    sixteenBit()  const;
+    bool    exifRotated() const;
+    bool    isReadOnly()  const;
 
     void    setSelectedArea(int x, int y, int w, int h);
     void    getSelectedArea(int& x, int& y, int& w, int& h);
@@ -216,7 +216,7 @@ private:
     void   resetValues();
     void   saveNext();
 
-    QMap<QString,QVariant> ioAttributes(IOFileSettingsContainer* iofileSettings, const QString& givenMimeType);
+    QMap<QString, QVariant> ioAttributes(IOFileSettingsContainer* iofileSettings, const QString& givenMimeType) const;
 
 private:
 

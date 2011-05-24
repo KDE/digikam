@@ -494,7 +494,7 @@ void DImgInterface::slotLoadingProgress(const LoadingDescription& loadingDescrip
     }
 }
 
-bool DImgInterface::exifRotated()
+bool DImgInterface::exifRotated() const
 {
     return d->rotatedOrFlipped;
 }
@@ -534,7 +534,8 @@ void DImgInterface::rollbackToOrigin()
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
-QMap<QString,QVariant> DImgInterface::ioAttributes(IOFileSettingsContainer* iofileSettings, const QString& mimeType)
+QMap<QString, QVariant> DImgInterface::ioAttributes(IOFileSettingsContainer* iofileSettings,
+                                                    const QString& mimeType) const
 {
     QMap<QString, QVariant> attributes;
 
@@ -841,7 +842,7 @@ void DImgInterface::setModified()
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
-bool DImgInterface::hasChangesToSave()
+bool DImgInterface::hasChangesToSave() const
 {
     return !d->undoMan->isAtOrigin();
 }
@@ -872,47 +873,47 @@ void DImgInterface::updateUndoState()
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
-bool DImgInterface::imageValid()
+bool DImgInterface::imageValid() const
 {
     return d->valid;
 }
 
-int DImgInterface::width()
+int DImgInterface::width() const
 {
     return d->width;
 }
 
-int DImgInterface::height()
+int DImgInterface::height() const
 {
     return d->height;
 }
 
-int DImgInterface::origWidth()
+int DImgInterface::origWidth() const
 {
     return d->origWidth;
 }
 
-int DImgInterface::origHeight()
+int DImgInterface::origHeight() const
 {
     return d->origHeight;
 }
 
-int DImgInterface::bytesDepth()
+int DImgInterface::bytesDepth() const
 {
     return d->image.bytesDepth();
 }
 
-bool DImgInterface::sixteenBit()
+bool DImgInterface::sixteenBit() const
 {
     return d->image.sixteenBit();
 }
 
-bool DImgInterface::hasAlpha()
+bool DImgInterface::hasAlpha() const
 {
     return d->image.hasAlpha();
 }
 
-bool DImgInterface::isReadOnly()
+bool DImgInterface::isReadOnly() const
 {
     if (d->image.isNull())
     {
