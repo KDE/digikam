@@ -376,7 +376,7 @@ void ImageIface::convertOriginalColorDepth(int depth)
     DImgInterface::defaultInterface()->convertDepth(depth);
 }
 
-QPixmap ImageIface::convertToPixmap(DImg& img)
+QPixmap ImageIface::convertToPixmap(DImg& img) const
 {
     return DImgInterface::defaultInterface()->convertToPixmap(img);
 }
