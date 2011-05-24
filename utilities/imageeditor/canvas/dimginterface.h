@@ -70,7 +70,7 @@ public:
     void   setSoftProofingEnabled(bool enabled);
 
     void                 setICCSettings(const ICCSettingsContainer& cmSettings);
-    ICCSettingsContainer getICCSettings();
+    ICCSettingsContainer getICCSettings() const;
 
     void                       setExposureSettings(ExposureSettingsContainer* expoSettings);
     ExposureSettingsContainer* getExposureSettings() const;
@@ -165,20 +165,21 @@ public:
     void   setFileOriginData(const QVariant& data);
 
     /** Convert a DImg image to a pixmap for screen using color
-        managed view if necessary */
-    QPixmap               convertToPixmap(DImg& img);
+     *  managed view if necessary.
+     */
+    QPixmap               convertToPixmap(DImg& img) const;
 
-    IccProfile            getEmbeddedICC();
-    KExiv2Data            getMetadata();
-    DImageHistory         getImageHistory();
-    DImageHistory         getInitialImageHistory();
-    DImageHistory         getImageHistoryOfFullRedo();
-    DImageHistory         getResolvedInitialHistory();
+    IccProfile            getEmbeddedICC() const;
+    KExiv2Data            getMetadata() const;
+    DImageHistory         getImageHistory() const;
+    DImageHistory         getInitialImageHistory() const;
+    DImageHistory         getImageHistoryOfFullRedo() const;
+    DImageHistory         getResolvedInitialHistory() const;
     void                  setResolvedInitialHistory(const DImageHistory& history);
 
-    QString               getImageFileName();
-    QString               getImageFilePath();
-    QString               getImageFormat();
+    QString               getImageFileName() const;
+    QString               getImageFilePath() const;
+    QString               getImageFormat()   const;
 
 protected Q_SLOTS:
 

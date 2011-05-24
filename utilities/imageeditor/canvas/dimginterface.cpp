@@ -375,7 +375,7 @@ void DImgInterface::setICCSettings(const ICCSettingsContainer& cmSettings)
     d->cmSettings = cmSettings;
 }
 
-ICCSettingsContainer DImgInterface::getICCSettings()
+ICCSettingsContainer DImgInterface::getICCSettings() const
 {
     return d->cmSettings;
 }
@@ -1137,22 +1137,22 @@ uchar* DImgInterface::getImage() const
     }
 }
 
-DImageHistory DImgInterface::getImageHistory()
+DImageHistory DImgInterface::getImageHistory() const
 {
     return d->image.getImageHistory();
 }
 
-DImageHistory DImgInterface::getInitialImageHistory()
+DImageHistory DImgInterface::getInitialImageHistory() const
 {
     return d->image.getOriginalImageHistory();
 }
 
-DImageHistory DImgInterface::getImageHistoryOfFullRedo()
+DImageHistory DImgInterface::getImageHistoryOfFullRedo() const
 {
     return d->undoMan->getImageHistoryOfFullRedo();
 }
 
-DImageHistory DImgInterface::getResolvedInitialHistory()
+DImageHistory DImgInterface::getResolvedInitialHistory() const
 {
     return d->resolvedInitialHistory;
 }
@@ -1167,7 +1167,8 @@ void DImgInterface::putImage(const QString& caller, const FilterAction& action, 
     putImage(caller, action, data, w, h, d->image.sixteenBit());
 }
 
-void DImgInterface::putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h, bool sixteenBit)
+void DImgInterface::putImage(const QString& caller, const FilterAction& action,
+                             uchar* data, int w, int h, bool sixteenBit)
 {
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
     putImageData(data, w, h, sixteenBit);
@@ -1291,27 +1292,27 @@ int DImgInterface::availableRedoSteps() const
     return d->undoMan->availableRedoSteps();
 }
 
-IccProfile DImgInterface::getEmbeddedICC()
+IccProfile DImgInterface::getEmbeddedICC() const
 {
     return d->image.getIccProfile();
 }
 
-KExiv2Data DImgInterface::getMetadata()
+KExiv2Data DImgInterface::getMetadata() const
 {
     return d->image.getMetadata();
 }
 
-QString DImgInterface::getImageFilePath()
+QString DImgInterface::getImageFilePath() const
 {
     return d->image.originalFilePath();
 }
 
-QString DImgInterface::getImageFileName()
+QString DImgInterface::getImageFileName() const
 {
     return getImageFilePath().section( '/', -1 );
 }
 
-QString DImgInterface::getImageFormat()
+QString DImgInterface::getImageFormat() const
 {
     if (d->image.isNull())
     {
@@ -1330,7 +1331,7 @@ QString DImgInterface::getImageFormat()
     return mimeType;
 }
 
-QPixmap DImgInterface::convertToPixmap(DImg& img)
+QPixmap DImgInterface::convertToPixmap(DImg& img) const
 {
     QPixmap pix;
 
