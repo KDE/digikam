@@ -2138,7 +2138,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
         return 0;
     }
 
-    QString albumPath = parent->isAlbumRoot() ? ('/' + name) : (parent->albumPath() + '/' + name);
+    QString albumPath = parent->isAlbumRoot() ? QString(QLatin1Char('/') + name) : QString(parent->albumPath() + QLatin1Char('/') + name);
     int albumRootId   = parent->albumRootId();
 
     // first check if we have a sibling album with the same name

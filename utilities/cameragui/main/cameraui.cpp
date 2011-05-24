@@ -2111,7 +2111,7 @@ void CameraUI::slotExifFromFile(const QString& folder, const QString& file)
         return;
     }
 
-    d->rightSideBar->itemChanged(item->itemInfo(), folder + QString("/") + file,
+    d->rightSideBar->itemChanged(item->itemInfo(), QString(folder + QLatin1String("/") + file),
                                  QByteArray(), d->view, item);
 }
 

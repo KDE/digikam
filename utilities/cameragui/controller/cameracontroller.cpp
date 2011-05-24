@@ -801,7 +801,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
             }
 
             QPointer<KIO::RenameDialog> dlg = new KIO::RenameDialog(d->parent, i18n("Rename File"),
-                                                                    folder + QString("/") + file, dest,
+                                                                    QString(folder + QLatin1String("/") + file), dest,
                                                                     KIO::RenameDialog_Mode(KIO::M_MULTI     |
                                                                             KIO::M_OVERWRITE |
                                                                             KIO::M_SKIP));
