@@ -303,42 +303,42 @@ void ImageIface::putImageSelection(const QString& caller, const FilterAction& ac
     DImgInterface::defaultInterface()->putImageSelection(caller, action, data);
 }
 
-int ImageIface::previewWidth()
+int ImageIface::previewWidth() const
 {
     return d->previewWidth;
 }
 
-int ImageIface::previewHeight()
+int ImageIface::previewHeight() const
 {
     return d->previewHeight;
 }
 
-bool ImageIface::previewSixteenBit()
+bool ImageIface::previewSixteenBit() const
 {
     return originalSixteenBit();
 }
 
-bool ImageIface::previewHasAlpha()
+bool ImageIface::previewHasAlpha() const
 {
     return originalHasAlpha();
 }
 
-int ImageIface::originalWidth()
+int ImageIface::originalWidth() const
 {
     return DImgInterface::defaultInterface()->origWidth();
 }
 
-int ImageIface::originalHeight()
+int ImageIface::originalHeight() const
 {
     return DImgInterface::defaultInterface()->origHeight();
 }
 
-bool ImageIface::originalSixteenBit()
+bool ImageIface::originalSixteenBit() const
 {
     return DImgInterface::defaultInterface()->sixteenBit();
 }
 
-bool ImageIface::originalHasAlpha()
+bool ImageIface::originalHasAlpha() const
 {
     return DImgInterface::defaultInterface()->hasAlpha();
 }

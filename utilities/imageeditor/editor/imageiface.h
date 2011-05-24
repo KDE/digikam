@@ -132,18 +132,25 @@ public:
     void   putPreviewIccProfile(const IccProfile& profile);
 
     /** Get colors from original, (unchanged) preview
-     *   or target preview (set by putPreviewImage) image.
+     *  or target preview (set by putPreviewImage) image.
      */
     DColor getColorInfoFromOriginalImage(const QPoint& point);
     DColor getColorInfoFromPreviewImage(const QPoint& point);
     DColor getColorInfoFromTargetPreviewImage(const QPoint& point);
 
+    /** Standard methods to get/set preview information.
+     */
+    int  previewWidth()      const;
+    int  previewHeight()     const;
+    bool previewHasAlpha()   const;
+    bool previewSixteenBit() const;
+
     /** Original image information.
      */
-    int  originalWidth();
-    int  originalHeight();
-    bool originalSixteenBit();
-    bool originalHasAlpha();
+    int  originalWidth()      const;
+    int  originalHeight()     const;
+    bool originalHasAlpha()   const;
+    bool originalSixteenBit() const;
 
     /** Original image metadata.
      */
@@ -154,13 +161,6 @@ public:
     /** Get photograph information from original image.
      */
     PhotoInfoContainer getPhotographInformation() const;
-
-    /** Standard methods to get/set preview information.
-     */
-    int  previewWidth();
-    int  previewHeight();
-    bool previewHasAlpha();
-    bool previewSixteenBit();
 
     /** Sets preview size and returns new preview data as with getPreviewImage.
      *  The parameters are only hints, previewWidth() and previewHeight()
