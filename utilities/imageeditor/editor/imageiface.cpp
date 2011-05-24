@@ -124,7 +124,7 @@ void ImageIface::setPreviewType(bool useSelect)
     d->usePreviewSelection = useSelect;
 }
 
-bool ImageIface::previewType()
+bool ImageIface::previewType() const
 {
     return d->usePreviewSelection;
 }
@@ -232,7 +232,7 @@ uchar* ImageIface::getPreviewImage() const
     return previewData.stripImageData();
 }
 
-DImg ImageIface::getPreviewImg()
+DImg ImageIface::getPreviewImg() const
 {
     DImg preview(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), getPreviewImage());
     return preview;
@@ -381,12 +381,12 @@ QPixmap ImageIface::convertToPixmap(DImg& img) const
     return DImgInterface::defaultInterface()->convertToPixmap(img);
 }
 
-IccProfile ImageIface::getOriginalIccProfile()
+IccProfile ImageIface::getOriginalIccProfile() const
 {
     return DImgInterface::defaultInterface()->getEmbeddedICC();
 }
 
-KExiv2Data ImageIface::getOriginalMetadata()
+KExiv2Data ImageIface::getOriginalMetadata() const
 {
     return DImgInterface::defaultInterface()->getImg()->getMetadata();
 }

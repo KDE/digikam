@@ -63,7 +63,7 @@ public:
     /** Return 'true' if the preview is rendered using the current selection in editor.
      *  Return 'false' if the preview is rendered using the full image in editor.
      */
-    bool previewType();
+    bool previewType() const;
 
     /** Return image data for the current, scaled preview image.
      *  The preview...() methods provide the characteristics of the data
@@ -74,7 +74,7 @@ public:
 
     /** Return a DImg object representing the preview image.
      */
-    DImg getPreviewImg();
+    DImg getPreviewImg() const;
 
     /** Return image data for the current original image selection.
      *  The selectionWidth(), selectionHeight(), originalSixteenBit()
@@ -154,8 +154,8 @@ public:
 
     /** Original image metadata.
      */
-    IccProfile getOriginalIccProfile();
-    KExiv2Data getOriginalMetadata();
+    IccProfile getOriginalIccProfile() const;
+    KExiv2Data getOriginalMetadata() const;
     void       setOriginalMetadata(const KExiv2Data& meta);
 
     /** Get photograph information from original image.
