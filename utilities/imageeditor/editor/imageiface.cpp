@@ -129,7 +129,7 @@ bool ImageIface::previewType() const
     return d->usePreviewSelection;
 }
 
-DColor ImageIface::getColorInfoFromOriginalImage(const QPoint& point)
+DColor ImageIface::getColorInfoFromOriginalImage(const QPoint& point) const
 {
     if ( !DImgInterface::defaultInterface()->getImage() || point.x() > originalWidth() || point.y() > originalHeight() )
     {
@@ -140,7 +140,7 @@ DColor ImageIface::getColorInfoFromOriginalImage(const QPoint& point)
     return DImgInterface::defaultInterface()->getImg()->getPixelColor(point.x(), point.y());
 }
 
-DColor ImageIface::getColorInfoFromPreviewImage(const QPoint& point)
+DColor ImageIface::getColorInfoFromPreviewImage(const QPoint& point) const
 {
     if ( d->previewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {
@@ -151,7 +151,7 @@ DColor ImageIface::getColorInfoFromPreviewImage(const QPoint& point)
     return d->previewImage.getPixelColor(point.x(), point.y());
 }
 
-DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point)
+DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point) const
 {
     if ( d->targetPreviewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {

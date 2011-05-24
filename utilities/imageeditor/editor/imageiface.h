@@ -134,9 +134,9 @@ public:
     /** Get colors from original, (unchanged) preview
      *  or target preview (set by putPreviewImage) image.
      */
-    DColor getColorInfoFromOriginalImage(const QPoint& point);
-    DColor getColorInfoFromPreviewImage(const QPoint& point);
-    DColor getColorInfoFromTargetPreviewImage(const QPoint& point);
+    DColor getColorInfoFromOriginalImage(const QPoint& point) const;
+    DColor getColorInfoFromPreviewImage(const QPoint& point) const;
+    DColor getColorInfoFromTargetPreviewImage(const QPoint& point) const;
 
     /** Standard methods to get/set preview information.
      */
