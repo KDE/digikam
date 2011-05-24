@@ -100,7 +100,7 @@ public:
     void   updateUndoState();
     void   resetImage();
     bool   hasChangesToSave();
-    QString ensureHasCurrentUuid();
+    QString ensureHasCurrentUuid() const;
     void   provideCurrentUuid(const QString& uuid);
 
     void   zoom(double val);

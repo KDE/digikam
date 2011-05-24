@@ -753,7 +753,7 @@ void DImgInterface::abortSaving()
     }
 }
 
-QString DImgInterface::ensureHasCurrentUuid()
+QString DImgInterface::ensureHasCurrentUuid() const
 {
     /*
      * 1) An image is loaded. The DImgLoader adds the HistoryImageId of the loaded file as "Current" entry.
