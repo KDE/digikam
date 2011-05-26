@@ -7,7 +7,7 @@
  * Description : a list of selectable options with preview
  *               effects as thumbnails.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -112,7 +112,7 @@ void PreviewThreadWrapper::slotFilterFinished(bool success)
 
     if (success)
     {
-        int key = d->map.key(filter);
+        int key     = d->map.key(filter);
         QPixmap pix = filter->getTargetImage().smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
         emit signalFilterFinished(key, pix);
     }
