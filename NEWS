@@ -163,5 +163,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 135 ==> 194950 : digiKam endlessly spewing text to stderr.
 136 ==> 273716 : transupp.cpp failing at make (2.0.0 Beta 5 under Fedora 14).
 137 ==> 272586 : crash when playing with databasebackend.
-138 ==>
+138 ==> 269907 : Please consider attached patch for build system: make apidoc generation controllable.
+139 ==> 
+
 
