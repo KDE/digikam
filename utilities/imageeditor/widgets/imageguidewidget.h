@@ -76,10 +76,10 @@ public:
 
     ImageIface* imageIface() const;
 
-    QPoint getSpotPosition();
-    DColor getSpotColor(int getColorFrom);
+    QPoint getSpotPosition() const;
+    DColor getSpotColor(int getColorFrom) const;
     void   setSpotVisible(bool spotVisible, bool blink=false);
-    int    previewMode();
+    int    previewMode() const;
     void   resetSpotPosition();
     void   updatePreview();
     void   setPoints(const QPolygon& p, bool drawLine=false);
@@ -121,7 +121,7 @@ private:
     void   updatePixmap();
     void   drawLineTo(const QPoint& endPoint);
     void   drawLineTo(int width, bool erase, const QColor& color, const QPoint& start, const QPoint& end);
-    QPoint translatePointPosition(QPoint& point);
+    QPoint translatePointPosition(QPoint& point) const;
     void   drawText(QPainter* p, const QPoint& corner, const QString& text);
     void   updateMaskCursor();
 

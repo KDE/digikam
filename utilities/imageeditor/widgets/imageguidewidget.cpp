@@ -216,18 +216,18 @@ void ImageGuideWidget::slotPreviewModeChanged(int mode)
     updatePreview();
 }
 
-int ImageGuideWidget::previewMode()
+int ImageGuideWidget::previewMode() const
 {
     return (d->renderingPreviewMode);
 }
 
-QPoint ImageGuideWidget::getSpotPosition()
+QPoint ImageGuideWidget::getSpotPosition() const
 {
     return (QPoint( (int)((float)d->spot.x() * (float)d->iface->originalWidth()  / (float)d->width),
                     (int)((float)d->spot.y() * (float)d->iface->originalHeight() / (float)d->height)));
 }
 
-DColor ImageGuideWidget::getSpotColor(int getColorFrom)
+DColor ImageGuideWidget::getSpotColor(int getColorFrom) const
 {
     if (getColorFrom == OriginalImage)                          // Get point color from full original image
     {
@@ -814,12 +814,12 @@ QImage ImageGuideWidget::getMask() const
     return mask;
 }
 
-QPoint ImageGuideWidget::translatePointPosition(QPoint& point)
+QPoint ImageGuideWidget::translatePointPosition(QPoint& point) const
 {
     int x = (int)(point.x() * (float)(d->width)  / (float) d->iface->originalWidth());
     int y = (int)(point.y() * (float)(d->height) / (float) d->iface->originalHeight());
-    x += d->rect.x() + 1;
-    y += d->rect.y() + 1;
+    x     += d->rect.x() + 1;
+    y     += d->rect.y() + 1;
     return (QPoint(x,y));
 }
 
