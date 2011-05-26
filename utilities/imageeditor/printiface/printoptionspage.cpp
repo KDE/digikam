@@ -69,6 +69,8 @@ static inline double unitToInches( PrintOptionsPage::Unit unit )
     }
 }
 
+// --------------------------------------------------------------------------
+
 class PrintOptionsPage::PrintOptionsPagePrivate : public Ui_PrintOptionsPage
 {
 public:
@@ -125,8 +127,8 @@ public:
         );
 
         QGridLayout* layout = new QGridLayout( mPositionFrame );
-        layout->setMargin( 0 );
-        layout->setSpacing( 1 );
+        layout->setMargin(0);
+        layout->setSpacing(1);
 
         for ( int row = 0; row < 3; ++row )
         {
@@ -174,7 +176,7 @@ public:
 PrintOptionsPage::PrintOptionsPage(QWidget* parent, const QSize& imageSize)
     : QWidget(), d ( new PrintOptionsPagePrivate )
 {
-    d->setupUi ( this );
+    d->setupUi(this);
     d->mParent              = parent;
     d->mImageSize           = imageSize;
     d->mConfigDialogManager = new KConfigDialogManager(this, DigikamConfig::self());
@@ -188,20 +190,20 @@ PrintOptionsPage::PrintOptionsPage(QWidget* parent, const QSize& imageSize)
     d->mScaleGroup.addButton( d->mScaleToPage, ScaleToPage );
     d->mScaleGroup.addButton( d->mScaleTo, ScaleToCustomSize );
 
-    connect ( d->kcfg_PrintWidth, SIGNAL( valueChanged ( double ) ),
-              SLOT( adjustHeightToRatio() ) );
+    connect(d->kcfg_PrintWidth, SIGNAL(valueChanged(double)),
+            this, SLOT(adjustHeightToRatio()));
 
-    connect ( d->kcfg_PrintHeight, SIGNAL( valueChanged ( double ) ),
-              SLOT( adjustWidthToRatio() ) );
+    connect(d->kcfg_PrintHeight, SIGNAL(valueChanged(double)),
+            this, SLOT(adjustWidthToRatio()));
 
-    connect ( d->kcfg_PrintKeepRatio, SIGNAL( toggled ( bool ) ),
-              SLOT( adjustHeightToRatio() ) );
+    connect(d->kcfg_PrintKeepRatio, SIGNAL(toggled(bool)),
+            this, SLOT(adjustHeightToRatio()));
 
-    connect( d->colorManaged, SIGNAL(toggled(bool)),
-             this, SLOT(slotAlertSettings( bool )) );
+    connect(d->colorManaged, SIGNAL(toggled(bool)),
+            this, SLOT(slotAlertSettings(bool)));
 
-    connect( d->cmPreferences, SIGNAL(clicked()),
-             this, SLOT(slotSetupDlg()) );
+    connect(d->cmPreferences, SIGNAL(clicked()),
+            this, SLOT(slotSetupDlg()));
 }
 
 PrintOptionsPage::~PrintOptionsPage()
@@ -321,7 +323,7 @@ void PrintOptionsPage::loadConfig()
 
 void PrintOptionsPage::saveConfig()
 {
-    int position = d->mPositionGroup.checkedId();
+    int position        = d->mPositionGroup.checkedId();
     DigikamConfig::setPrintPosition( position );
 
     ScaleMode scaleMode = ScaleMode( d->mScaleGroup.checkedId() );

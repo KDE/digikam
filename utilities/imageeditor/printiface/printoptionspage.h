@@ -55,21 +55,24 @@ public:
         Inches
     };
 
+public:
+
     PrintOptionsPage(QWidget* parent, const QSize& imageSize );
     ~PrintOptionsPage();
 
-    Qt::Alignment alignment() const;
-    ScaleMode scaleMode() const;
-    bool enlargeSmallerImages() const;
-    Unit scaleUnit() const;
-    double scaleWidth() const;
-    double scaleHeight() const;
-    bool colorManaged() const;
-    bool autoRotation() const;
-    IccProfile outputProfile() const;
-
     void loadConfig();
     void saveConfig();
+
+    bool          enlargeSmallerImages() const;
+    bool          colorManaged() const;
+    bool          autoRotation() const;
+    Qt::Alignment alignment() const;
+    IccProfile    outputProfile() const;
+
+    ScaleMode     scaleMode() const;
+    Unit          scaleUnit() const;
+    double        scaleWidth() const;
+    double        scaleHeight() const;
 
 private Q_SLOTS:
 
