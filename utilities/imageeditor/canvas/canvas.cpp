@@ -361,7 +361,7 @@ void Canvas::readMetadataFromFile(const QString& file)
     d->im->readMetadataFromFile(file);
 }
 
-QString Canvas::ensureHasCurrentUuid()
+QString Canvas::ensureHasCurrentUuid() const
 {
     return d->im->ensureHasCurrentUuid();
 }
@@ -381,7 +381,7 @@ void Canvas::updateUndoState()
     d->im->updateUndoState();
 }
 
-DImg Canvas::currentImage()
+DImg Canvas::currentImage() const
 {
     DImg* image = d->im->getImg();
 
@@ -393,44 +393,44 @@ DImg Canvas::currentImage()
     return DImg();
 }
 
-QString Canvas::currentImageFileFormat()
+QString Canvas::currentImageFileFormat() const
 {
     return d->im->getImageFormat();
 }
 
-QString Canvas::currentImageFilePath()
+QString Canvas::currentImageFilePath() const
 {
     return d->im->getImageFilePath();
 }
 
-int Canvas::imageWidth()
+int Canvas::imageWidth() const
 {
     return d->im->origWidth();
 }
 
-int Canvas::imageHeight()
+int Canvas::imageHeight() const
 {
     return d->im->origHeight();
 }
 
-bool Canvas::isReadOnly()
+bool Canvas::isReadOnly() const
 {
     return d->im->isReadOnly();
 }
 
-bool Canvas::hasChangesToSave()
+bool Canvas::hasChangesToSave() const
 {
     return d->im->hasChangesToSave();
 }
 
-QRect Canvas::getSelectedArea()
+QRect Canvas::getSelectedArea() const
 {
     int x, y, w, h;
     d->im->getSelectedArea(x, y, w, h);
     return ( QRect(x, y, w, h) );
 }
 
-QRect Canvas::visibleArea()
+QRect Canvas::visibleArea() const
 {
     return ( QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()) );
 }
@@ -445,7 +445,7 @@ void Canvas::makeDefaultEditingCanvas()
     DImgInterface::setDefaultInterface(d->im);
 }
 
-double Canvas::calcAutoZoomFactor()
+double Canvas::calcAutoZoomFactor() const
 {
     if (!d->im->imageValid())
     {
@@ -1086,32 +1086,32 @@ void Canvas::contentsWheelEvent(QWheelEvent* e)
     Q3ScrollView::contentsWheelEvent(e);
 }
 
-bool Canvas::maxZoom()
+bool Canvas::maxZoom() const
 {
     return ((d->zoom * d->zoomMultiplier) >= d->maxZoom);
 }
 
-bool Canvas::minZoom()
+bool Canvas::minZoom() const
 {
     return ((d->zoom / d->zoomMultiplier) <= d->minZoom);
 }
 
-double Canvas::zoomMax()
+double Canvas::zoomMax() const
 {
     return d->maxZoom;
 }
 
-double Canvas::zoomMin()
+double Canvas::zoomMin() const
 {
     return d->minZoom;
 }
 
-bool Canvas::exifRotated()
+bool Canvas::exifRotated() const
 {
     return d->im->exifRotated();
 }
 
-double Canvas::snapZoom(double zoom)
+double Canvas::snapZoom(double zoom) const
 {
     // If the zoom value gets changed from d->zoom to zoom
     // across 50%, 100% or fit-to-window, then return the
@@ -1205,7 +1205,7 @@ void Canvas::setZoomFactorSnapped(double zoom)
     setZoomFactor(zoom);
 }
 
-double Canvas::zoomFactor()
+double Canvas::zoomFactor() const
 {
     return d->zoom;
 }
@@ -1272,7 +1272,7 @@ void Canvas::fitToSelect()
     }
 }
 
-bool Canvas::fitToWindow()
+bool Canvas::fitToWindow() const
 {
     return d->autoZoom;
 }
@@ -1449,7 +1449,7 @@ void Canvas::slotSelected()
     d->im->setSelectedArea(x, y, w, h);
 }
 
-QRect Canvas::calcSelectedArea()
+QRect Canvas::calcSelectedArea() const
 {
     int x=0, y=0, w=0, h=0;
     QRect r(d->rubber->rubberBandAreaOnContents());

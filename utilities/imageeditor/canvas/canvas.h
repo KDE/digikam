@@ -78,39 +78,42 @@ public:
     void    applyTransform(const IccTransform& transform);
     void    setModified();
     void    readMetadataFromFile(const QString& file);
-    QString ensureHasCurrentUuid();
+    QString ensureHasCurrentUuid() const;
     void    clearUndoHistory();
     void    setUndoHistoryOrigin();
     void    updateUndoState();
-    DImg    currentImage();
-    QString currentImageFileFormat();
-    QString currentImageFilePath();
+    DImg    currentImage() const;
+    QString currentImageFileFormat() const;
+    QString currentImageFilePath() const;
 
     DImgInterface* interface() const;
     void makeDefaultEditingCanvas();
 
-    double snapZoom(double z);
+    double snapZoom(double z) const;
     void   setZoomFactorSnapped(double zoom);
 
-    double zoomFactor();
-    double zoomMax();
-    double zoomMin();
+    double zoomMax() const;
+    double zoomMin() const;
+
     void   setZoomFactor(double z);
+    double zoomFactor() const;
 
     void   setFitToWindow(bool enable);
-    bool   fitToWindow();
-    bool   maxZoom();
-    bool   minZoom();
-    bool   exifRotated();
-    int    imageWidth();
-    int    imageHeight();
-    QRect  getSelectedArea();
-    QRect  visibleArea();
+    bool   fitToWindow() const;
+
+    bool   maxZoom() const;
+    bool   minZoom() const;
+
+    int    imageWidth()       const;
+    int    imageHeight()      const;
+    bool   exifRotated()      const;
+    QRect  getSelectedArea()  const;
+    QRect  visibleArea()      const;
 
     // If current image file format is only available in read only,
     // typically all RAW image file formats.
-    bool  isReadOnly();
-    bool  hasChangesToSave();
+    bool  isReadOnly()        const;
+    bool  hasChangesToSave()  const;
 
     void  resizeImage(int w, int h);
 
@@ -183,8 +186,8 @@ protected:
 
 private:
 
-    QRect  calcSelectedArea();
-    double calcAutoZoomFactor();
+    QRect  calcSelectedArea() const;
+    double calcAutoZoomFactor() const;
     void   updateAutoZoom();
     void   updateContentsSize(bool deleteRubber);
 
