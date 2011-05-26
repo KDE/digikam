@@ -146,7 +146,9 @@ Compared to old KDE3 autoconf options:
 
 More details can be found at this url: http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables
 
-Note: To know KDE install path on your computer, use 'kde-config --prefix' command line.
+Note: To know KDE install path on your computer, use 'kde-config --prefix' command line like this (with full debug object enabled):
+
+"cmake . -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix`"
 
 -- DONATE MONEY --------------------------------------------------------
 
