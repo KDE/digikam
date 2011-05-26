@@ -6,7 +6,7 @@
  * Date        : 2010-01-10
  * Description : a tool bar for preview mode
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -209,14 +209,14 @@ void PreviewToolBar::setPreviewMode(PreviewMode mode)
     }
 }
 
-PreviewToolBar::PreviewMode PreviewToolBar::previewMode()
+PreviewToolBar::PreviewMode PreviewToolBar::previewMode() const
 {
     if (!isEnabled())
     {
         return PreviewToolBar::NoPreviewMode;
     }
 
-    return((PreviewMode)d->previewButtons->checkedId());
+    return ((PreviewMode)d->previewButtons->checkedId());
 }
 
 void PreviewToolBar::readSettings(KConfigGroup& group)
