@@ -7,8 +7,8 @@
  * Description : digiKam 8/16 bits image management API
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -110,11 +110,15 @@ public:
         COLORMODELRAW
     };
 
+public:
+
     /** Identify file format
      */
     static FORMAT fileFormat(const QString& filePath);
 
     static QString formatToMimeType(FORMAT frm);
+
+public:
 
     /** Create null image
      */
@@ -200,6 +204,7 @@ public:
 
     bool        load(const QString& filePath, DImgLoaderObserver* observer = 0,
                      DRawDecoding rawDecodingSettings=DRawDecoding());
+
     bool        load(const QString& filePath,
                      bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadHistory,
                      DImgLoaderObserver* observer = 0,
@@ -334,10 +339,10 @@ public:
 
     const DImageHistory& getImageHistory() const;
     DImageHistory&       getImageHistory();
-    void          setImageHistory(const DImageHistory& history);
-    bool          hasImageHistory() const;
-    DImageHistory getOriginalImageHistory() const;
-    void          addFilterAction(const FilterAction& action);
+    void                 setImageHistory(const DImageHistory& history);
+    bool                 hasImageHistory() const;
+    DImageHistory        getOriginalImageHistory() const;
+    void                 addFilterAction(const FilterAction& action);
 
     /** Use this method to update lead metadata after image transformations.
         This fix Iptc preview, Exif thumbnail, image size information, etc.
@@ -346,8 +351,8 @@ public:
         'resetExifOrientationTag' is used to force Exif orientation flag to normal.
         'updateImageHistory' sets a new image UUID. If the image is changed in any way, set this to true.
      */
-    void       updateMetadata(const QString& destMimeType, const QString& originalFileName,
-                              bool resetExifOrientationTag, bool updateImageHistory);
+    void updateMetadata(const QString& destMimeType, const QString& originalFileName,
+                        bool resetExifOrientationTag, bool updateImageHistory);
 
     /** Create a HistoryImageId for _this_ image _already_ saved at the given file path.*/
     HistoryImageId createHistoryImageId(const QString& filePath, HistoryImageId::Type type) const;
@@ -367,12 +372,11 @@ public:
     void           addAsReferredImage(const HistoryImageId& id);
     void           insertAsReferredImage(int afterHistoryStep, const HistoryImageId& otherImagesId);
 
-
     /** In the history, adjusts the UUID of the ImageHistoryId of the current file.
      *  Call this if you have associated a UUID with this file which is not written to the metadata.
      *  If there is already a UUID present, read from metadata, it will not be replaced.
      */
-    void       addCurrentUniqueImageId(const QString& uuid);
+    void addCurrentUniqueImageId(const QString& uuid);
 
     /** When loaded from a file, some attributes like format and isReadOnly still depend on this
         originating file. When saving in a different format to a different file,
@@ -467,15 +471,13 @@ public:
      *  In smoothScaleSection, you specify the source region, here, the result region.
      *  It will often not be possible to find _integer_ source coordinates for a result region!
      */
-    DImg smoothScaleClipped(int width, int height,
-                            int clipx, int clipy, int clipwidth, int clipheight) const;
+    DImg smoothScaleClipped(int width, int height, int clipx, int clipy, int clipwidth, int clipheight) const;
     DImg smoothScaleClipped(const QSize& destSize, const QRect& clip) const;
 
     /** Take the region specified by the rectangle sx|sy, width and height sw * sh,
         and scale it to an image with size dw * dh
      */
-    DImg       smoothScaleSection(int sx, int sy, int sw, int sh,
-                                  int dw, int dh) const;
+    DImg       smoothScaleSection(int sx, int sy, int sw, int sh, int dw, int dh) const;
     DImg       smoothScaleSection(const QRect& sourceRect, const QSize& destSize) const;
 
     void       rotate(ANGLE angle);
@@ -494,7 +496,7 @@ public:
     /** Return a mask image where pure white and pure black pixels are over-colored.
         This way is used to identify over and under exposed pixels.
      */
-    QImage     pureColorMask(ExposureSettingsContainer* expoSettings);
+    QImage     pureColorMask(ExposureSettingsContainer* expoSettings) const;
 
     /** Convert depth of image. Depth is bytesDepth * bitsDepth.
         If depth is 32, converts to 8 bits,
@@ -564,14 +566,16 @@ private:
 
 private:
 
-    bool       load(const QString& filePath, int loadFlags, DImgLoaderObserver* observer,
-                    DRawDecoding rawDecodingSettings=DRawDecoding());
-    void       copyMetaData(const DImgPrivate* src);
-    void       copyImageData(const DImgPrivate* src);
-    void       setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha);
-    void       setImageDimension(uint width, uint height);
-    int        allocateData();
     DImg(const DImg& image, int w, int h);
+
+    bool load(const QString& filePath, int loadFlags, DImgLoaderObserver* observer,
+              DRawDecoding rawDecodingSettings=DRawDecoding());
+    void copyMetaData(const DImgPrivate* src);
+    void copyImageData(const DImgPrivate* src);
+    void setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha);
+    void setImageDimension(uint width, uint height);
+    int  allocateData();
+
     static void bitBlt(const uchar* src, uchar* dest,
                        int sx, int sy, int w, int h, int dx, int dy,
                        uint swidth, uint sheight, uint dwidth, uint dheight,

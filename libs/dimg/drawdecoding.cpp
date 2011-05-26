@@ -143,7 +143,7 @@ void DRawDecoding::resetPostProcessingSettings()
     curvesAdjust = CurvesContainer();
 }
 
-bool DRawDecoding::postProcessingSettingsIsDirty()
+bool DRawDecoding::postProcessingSettingsIsDirty() const
 {
     return !(bcg == BCGContainer() &&
              wb  == WBContainer()  &&
@@ -364,7 +364,7 @@ void RawDecodingSettingsReader::read()
     ReadParameterWithValue(noiseReductionChrominanceThreshold, NRChroThreshold);
     ReadParameter(expoCorrection);
     ReadParameterWithValue(exposureCorrectionShift,     expoCorrectionShift);
-    ReadParameterWithValue(exposureCorrectionHighlight, expoCorrectionHighlight);    
+    ReadParameterWithValue(exposureCorrectionHighlight, expoCorrectionHighlight);
 }
 
 }  // namespace Digikam

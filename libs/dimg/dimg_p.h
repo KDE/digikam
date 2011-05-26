@@ -7,7 +7,7 @@
  * Description : DImg private data members
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -88,6 +88,18 @@ public:
         delete [] lanczos_func;
     }
 
+    static QStringList fileOriginAttributes();
+
+    /**
+     * x,y, w x h is a section of the image. The image size is width x height.
+     * Clips the section to the bounds of the image.
+     * Returns if the (clipped) section is a valid rectangle.
+     */
+    // implementation in dimgscale.cpp
+    static bool clipped(int& x, int& y, int& w, int& h, uint width, uint height);
+
+public:
+
     bool                    null;
     bool                    alpha;
     bool                    sixteenBit;
@@ -103,16 +115,6 @@ public:
     QMap<QString, QString>  embeddedText;
     IccProfile              iccProfile;
     DImageHistory           imageHistory;
-
-    static QStringList      fileOriginAttributes();
-
-    /**
-     * x,y, w x h is a section of the image. The image size is width x height.
-     * Clips the section to the bounds of the image.
-     * Returns if the (clipped) section is a valid rectangle.
-     */
-    // implementation in dimgscale.cpp
-    static bool clipped(int& x, int& y, int& w, int& h, uint width, uint height);
 };
 
 }  // namespace Digikam

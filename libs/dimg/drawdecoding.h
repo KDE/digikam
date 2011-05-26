@@ -76,7 +76,7 @@ public:
 
     /** Method to check is a post-processing setting have been changed
      */
-    bool postProcessingSettingsIsDirty();
+    bool postProcessingSettingsIsDirty() const;
 
     /** Equality operator.
      */
