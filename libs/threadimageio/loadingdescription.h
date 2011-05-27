@@ -45,12 +45,27 @@ public:
     enum ColorManagementSettings
     {
         NoColorConversion,
-        ApplyTransform, /// IccData is an IccTransform
+        ApplyTransform,    /// IccData is an IccTransform
         ConvertForEditor,
         ConvertToSRGB,
         ConvertForDisplay, /// IccData can be the output profile
-        ConvertForOutput /// IccData is the output profile
+        ConvertForOutput   /// IccData is the output profile
     };
+
+    enum RawDecodingHint
+    {
+        /// The raw decoding options passed are taken from default, hardcoded settings
+        RawDecodingDefaultSettings,
+        /// The raw decoding options passed are taken from global settings
+        RawDecodingGlobalSettings,
+        /// The raw decoding options may be customly edited by the user
+        RawDecodingCustomSettings,
+        /// The raw decoding options are hardcoded settings optimized for loading time
+        /// The halfSizeColorImage and 16bit settings can be adjusted separately
+        RawDecodingTimeOptimized
+    };
+
+public:
 
     class PreviewParameters
     {
@@ -66,13 +81,13 @@ public:
 
         enum PreviewFlag
         {
-            NoFlags           = 0,
-            ExifRotate        = 1 << 0,
-            OnlyPregenerate   = 1 << 1,
+            NoFlags         = 0,
+            ExifRotate      = 1 << 0,
+            OnlyPregenerate = 1 << 1,
             /// This prefers large images, but if loading a larger
             /// image is very much slower, it will give a smaller image.
             /// Size serves as a lower bound.
-            FastButLarge      = 1 << 2
+            FastButLarge    = 1 << 2
         };
         Q_DECLARE_FLAGS(PreviewFlags, PreviewFlag)
 
@@ -83,26 +98,29 @@ public:
             flags           = NoFlags;
         }
 
-
-        PreviewType type;
-        int  size;
-        PreviewFlags flags;
-        QVariant extraParameter;
-
         bool exifRotate() const
         {
             return flags & ExifRotate;
         }
+
         bool onlyPregenerate() const
         {
             return flags & OnlyPregenerate;
         }
+
         bool fastButLarge() const
         {
             return flags & FastButLarge;
         }
 
         bool operator==(const PreviewParameters& other) const;
+
+    public:
+
+        PreviewType  type;
+        int          size;
+        PreviewFlags flags;
+        QVariant     extraParameter;
     };
 
     class PostProcessingParameters
@@ -116,31 +134,23 @@ public:
 
         bool needsProcessing() const;
 
-        void setTransform(const IccTransform& transform);
-        bool hasTransform() const;
+        void         setTransform(const IccTransform& transform);
+        bool         hasTransform() const;
         IccTransform transform() const;
-        void setProfile(const IccProfile& profile);
-        bool hasProfile() const;
+
+        void       setProfile(const IccProfile& profile);
+        bool       hasProfile() const;
         IccProfile profile() const;
+
+        bool operator==(const PostProcessingParameters& other) const;
+
+    public:
 
         ColorManagementSettings colorManagement;
         QVariant                iccData;
-
-        bool operator==(const PostProcessingParameters& other) const;
     };
 
-    enum RawDecodingHint
-    {
-        /// The raw decoding options passed are taken from default, hardcoded settings
-        RawDecodingDefaultSettings,
-        /// The raw decoding options passed are taken from global settings
-        RawDecodingGlobalSettings,
-        /// The raw decoding options may be customly edited by the user
-        RawDecodingCustomSettings,
-        /// The raw decoding options are hardcoded settings optimized for loading time
-        /// The halfSizeColorImage and 16bit settings can be adjusted separately
-        RawDecodingTimeOptimized
-    };
+public:
 
     /**
      * An invalid LoadingDescription
@@ -178,12 +188,6 @@ public:
                        ColorManagementSettings = NoColorConversion,
                        PreviewParameters::PreviewType = PreviewParameters::PreviewImage);
 
-    QString                  filePath;
-    DRawDecoding             rawDecodingSettings;
-    RawDecodingHint          rawDecodingHint;
-    PreviewParameters        previewParameters;
-    PostProcessingParameters postProcessingParameters;
-
     /**
      * Return the cache key for this description
      */
@@ -210,7 +214,6 @@ public:
      */
     bool                isThumbnail() const;
 
-
     /**
      * Returns if this description will load a preview
      */
@@ -224,6 +227,7 @@ public:
     {
         return !operator==(other);
     }
+
     /**
      * Returns whether the other loading task equals this one
      * ignoring parameters used to specify a reduced version.
@@ -236,12 +240,22 @@ public:
      */
     bool equalsOrBetterThan(const LoadingDescription& other) const;
 
+public:
+
     /**
      * Returns all possible cacheKeys for the given file path
      * (all cache keys under which the given file could be stored in the cache).
      */
     static QStringList possibleCacheKeys(const QString& filePath);
     static QStringList possibleThumbnailCacheKeys(const QString& filePath);
+
+public:
+
+    QString                  filePath;
+    DRawDecoding             rawDecodingSettings;
+    RawDecodingHint          rawDecodingHint;
+    PreviewParameters        previewParameters;
+    PostProcessingParameters postProcessingParameters;
 };
 
 }   // namespace Digikam
