@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,19 +46,20 @@ class LoadSaveTask
 {
 public:
 
-    LoadSaveTask(LoadSaveThread* thread)
-        : m_thread(thread)
-    {};
-    virtual ~LoadSaveTask() {};
-
-    virtual void execute() = 0;
-
     enum TaskType
     {
         TaskTypeLoading,
         TaskTypeSaving
     };
 
+public:
+
+    LoadSaveTask(LoadSaveThread* thread)
+        : m_thread(thread)
+    {};
+    virtual ~LoadSaveTask() {};
+
+    virtual void execute() = 0;
     virtual TaskType type() = 0;
 
 protected:
@@ -79,22 +80,12 @@ public:
         LoadingTaskStatusStopping
     };
 
+public:
+
     LoadingTask(LoadSaveThread* thread, LoadingDescription description,
                 LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading)
         : LoadSaveTask(thread), m_loadingDescription(description), m_loadingTaskStatus(loadingTaskStatus)
     {}
-
-    // LoadSaveTask
-
-    virtual void execute();
-    virtual TaskType type();
-
-    // DImgLoaderObserver
-
-    virtual void progressInfo(const DImg*, float progress);
-    virtual bool continueQuery(const DImg*);
-
-    virtual void setStatus(LoadingTaskStatus status);
 
     LoadingTaskStatus status() const
     {
@@ -110,6 +101,18 @@ public:
     {
         return m_loadingDescription;
     }
+
+    // LoadSaveTask
+
+    virtual void execute();
+    virtual TaskType type();
+
+    // DImgLoaderObserver
+
+    virtual void progressInfo(const DImg*, float progress);
+    virtual bool continueQuery(const DImg*);
+
+    virtual void setStatus(LoadingTaskStatus status);
 
 protected:
 
@@ -173,18 +176,12 @@ public:
         SavingTaskStatusStopping
     };
 
+public:
+
     SavingTask(LoadSaveThread* thread, DImg& img, const QString& filePath, const QString& format)
         : LoadSaveTask(thread),
           m_filePath(filePath), m_format(format), m_img(img), m_savingTaskStatus(SavingTaskStatusSaving)
     {};
-
-    virtual void execute();
-    virtual TaskType type();
-
-    virtual void progressInfo(const DImg*, float progress);
-    virtual bool continueQuery(const DImg*);
-
-    virtual void setStatus(SavingTaskStatus status);
 
     SavingTaskStatus status() const
     {
@@ -195,6 +192,16 @@ public:
     {
         return m_filePath;
     }
+
+public:
+
+    virtual void     execute();
+    virtual TaskType type();
+
+    virtual void     progressInfo(const DImg*, float progress);
+    virtual bool     continueQuery(const DImg*);
+
+    virtual void     setStatus(SavingTaskStatus status);
 
 private:
 

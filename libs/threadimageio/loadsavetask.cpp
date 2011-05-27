@@ -6,8 +6,8 @@
  * Date        : 2005-12-17
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,8 +26,11 @@
 
 // Qt includes
 
-#include <kdebug.h>
 #include <QApplication>
+
+// KDE includes
+
+#include <kdebug.h>
 
 // Local includes
 
@@ -107,8 +110,9 @@ void SharedLoadingTask::execute()
         LoadingCache::CacheLock lock(cache);
 
         // find possible cached images
-        DImg* cachedImg = 0;
+        DImg* cachedImg        = 0;
         QStringList lookupKeys = m_loadingDescription.lookupCacheKeys();
+
         foreach (const QString& key, lookupKeys)
         {
             if ( (cachedImg = cache->retrieveImage(key)) )
@@ -275,10 +279,10 @@ void SharedLoadingTask::setResult(const LoadingDescription& loadingDescription, 
 {
     // this is called from another process's execute while this task is waiting on m_usedProcess.
     // Note that loadingDescription need not equal m_loadingDescription (may be superior)
-    m_resultLoadingDescription = loadingDescription;
+    m_resultLoadingDescription                          = loadingDescription;
     // these are taken from our own description
     m_resultLoadingDescription.postProcessingParameters = m_loadingDescription.postProcessingParameters;
-    m_img = img;
+    m_img                                               = img;
 }
 
 bool SharedLoadingTask::needsPostProcessing() const
@@ -414,8 +418,8 @@ void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess* process, Loading
     // In this case, we notify our own thread (a signal to the API user is emitted) of this.
     // The fact that we are receiving the method call shows that this task is registered with the LoadingCache,
     // somewhere in between the calls to addLoadingProcess(this) and removeLoadingProcess(this) above.
-    if (process != this &&
-        m_loadingDescription.isReducedVersion() &&
+    if (process != this                                              &&
+        m_loadingDescription.isReducedVersion()                      &&
         m_loadingDescription.equalsIgnoreReducedVersion(description) &&
         !description.isReducedVersion()
        )
