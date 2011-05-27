@@ -6,8 +6,8 @@
  * Date        : 2005-12-17
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,6 @@
 namespace Digikam
 {
 
-class LoadSaveThreadPriv;
 class LoadSaveTask;
 
 class DIGIKAM_EXPORT LoadSaveNotifier
@@ -57,12 +56,14 @@ public:
     virtual void loadingProgress(const LoadingDescription& loadingDescription, float progress) = 0;
     virtual void imageLoaded(const LoadingDescription& loadingDescription, const DImg& img) = 0;
     virtual void moreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
-            const LoadingDescription& newLoadingDescription) = 0;
+                                              const LoadingDescription& newLoadingDescription) = 0;
     virtual void imageStartedSaving(const QString& filePath) = 0;
     virtual void savingProgress(const QString& filePath, float progress) = 0;
     virtual void imageSaved(const QString& filePath, bool success) = 0;
     virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img) = 0;
 };
+
+// -------------------------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT LoadSaveThread : public DynamicThread, public LoadSaveNotifier
 {
@@ -91,6 +92,8 @@ public:
         // image data will possibly be changed
         AccessModeReadWrite
     };
+
+public:
 
     LoadSaveThread(QObject* parent = 0);
     /**
@@ -124,17 +127,20 @@ Q_SIGNALS:
 
     /** This signal is emitted when the loading process begins. */
     void signalImageStartedLoading(const LoadingDescription& loadingDescription);
+
     /**
      * This signal is emitted whenever new progress info is available
      * and the notification policy allows emitting the signal.
      * No progress info will be sent for preloaded images (ManagedLoadSaveThread).
      */
     void signalLoadingProgress(const LoadingDescription& loadingDescription, float progress);
+
     /**
      * This signal is emitted when the loading process has finished.
      * If the process failed, img is null.
      */
     void signalImageLoaded(const LoadingDescription& loadingDescription, const DImg& img);
+
     /**
      * This signal is emitted if
      *  - you are doing shared loading (SharedLoadSaveThread)
@@ -158,7 +164,7 @@ public:
     virtual void loadingProgress(const LoadingDescription& loadingDescription, float progress);
     virtual void imageLoaded(const LoadingDescription& loadingDescription, const DImg& img);
     virtual void moreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
-            const LoadingDescription& newLoadingDescription);
+                                              const LoadingDescription& newLoadingDescription);
     virtual void imageStartedSaving(const QString& filePath);
     virtual void savingProgress(const QString& filePath, float progress);
     virtual void imageSaved(const QString& filePath, bool success);
@@ -184,6 +190,7 @@ protected:
 
 private:
 
+    class LoadSaveThreadPriv;
     LoadSaveThreadPriv* const d;
 };
 

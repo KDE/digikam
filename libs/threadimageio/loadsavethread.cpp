@@ -6,8 +6,8 @@
  * Date        : 2005-12-17
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class LoadSaveThreadPriv
+class LoadSaveThread::LoadSaveThreadPriv
 {
 public:
 
@@ -94,6 +94,7 @@ void LoadSaveThread::run()
             d->lastTask = 0;
             delete m_currentTask;
             m_currentTask = 0;
+
             if (!m_todo.isEmpty())
             {
                 m_currentTask = m_todo.takeFirst();
@@ -102,7 +103,7 @@ void LoadSaveThread::run()
                 {
                     // set timing values so that first event is sent only
                     // after an initial time span.
-                    d->notificationTime = QTime::currentTime();
+                    d->notificationTime  = QTime::currentTime();
                     d->blockNotification = true;
                 }
             }
@@ -132,7 +133,7 @@ void LoadSaveThread::taskHasFinished()
     // So we set m_currentTask to 0 immediately before the final message is emitted,
     // so that anyone who finds this task running as m_current task will get a message.
     QMutexLocker lock(threadMutex());
-    d->lastTask = m_currentTask;
+    d->lastTask   = m_currentTask;
     m_currentTask = 0;
 }
 
@@ -272,10 +273,9 @@ bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
 
     DMetadata metadata(filePath);
     DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-
-    bool rotatedOrFlipped = image.rotateAndFlip(orientation);
-
+    bool rotatedOrFlipped                   = image.rotateAndFlip(orientation);
     image.setAttribute("exifRotated", true);
+
     return rotatedOrFlipped;
 }
 
