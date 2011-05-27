@@ -6,7 +6,7 @@
  * Date        : 2006-01-11
  * Description : shared image loading and caching
  *
- * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,12 +45,14 @@ class LoadingProcessListener
 {
 public:
 
-    virtual ~LoadingProcessListener() {}
+    virtual ~LoadingProcessListener() {};
     virtual bool querySendNotifyEvent() = 0;
     virtual void setResult(const LoadingDescription& loadingDescription, const DImg& img) = 0;
     virtual LoadSaveNotifier* loadSaveNotifier() = 0;
     virtual LoadSaveThread::AccessMode accessMode() = 0;
 };
+
+// --------------------------------------------------------------------------------------------------------------
 
 class LoadingProcess
 {
@@ -65,6 +67,8 @@ public:
     virtual void notifyNewLoadingProcess(LoadingProcess* process, LoadingDescription description) = 0;
 };
 
+// --------------------------------------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT LoadingCacheFileWatch
 {
 public:
@@ -76,7 +80,6 @@ public:
 
 protected:
 
-    friend class LoadingCache;
     /**
      * Convenience method.
      * Call this to tell the cache to remove stored images for filePath from the cache.
@@ -85,8 +88,14 @@ protected:
      */
     void notifyFileChanged(const QString& filePath);
 
+protected:
+
+    friend class LoadingCache;
+
     class LoadingCache* m_cache;
 };
+
+// --------------------------------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT ClassicLoadingCacheFileWatch : public QObject, public LoadingCacheFileWatch
 {
@@ -112,11 +121,11 @@ Q_SIGNALS:
 
 protected:
 
-    KDirWatch*   m_watch;
-    QStringList  m_watchedFiles;
+    KDirWatch*  m_watch;
+    QStringList m_watchedFiles;
 };
 
-class LoadingCachePriv;
+// --------------------------------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT LoadingCache : public QObject
 {
@@ -148,9 +157,11 @@ public:
      * Retrieves an image for the given string from the cache,
      * or 0 if no image is found.
      */
-    DImg* retrieveImage(const QString& cacheKey);
+    DImg* retrieveImage(const QString& cacheKey) const;
+
     /// Returns whether the given DImg fits in the cache.
-    bool isCacheable(const DImg* img);
+    bool isCacheable(const DImg* img) const;
+
     /** Put image into for given string into the cache.
      *  Returns true if image has been put in the cache, false otherwise.
      *  Ownership of the DImg instance is passed to the cache.
@@ -158,11 +169,13 @@ public:
      *  The third parameter specifies a file path that will be watched.
      *  If this file changes, the object will be removed from the cache.
      */
-    bool putImage(const QString& cacheKey, DImg* img, const QString& filePath);
+    bool putImage(const QString& cacheKey, DImg* img, const QString& filePath) const;
+
     /**
      *  Remove entries for the given cacheKey from the cache
      */
     void removeImage(const QString& cacheKey);
+
     /**
      *  Remove all entries from the cache
      */
@@ -173,16 +186,19 @@ public:
     /**
      *  Find the loading process for given cacheKey, or 0 if not found
      */
-    LoadingProcess* retrieveLoadingProcess(const QString& cacheKey);
+    LoadingProcess* retrieveLoadingProcess(const QString& cacheKey) const;
+
     /**
      *  Add a loading process to the list. Only one loading process
      *  for the same cache key is registered at a time.
      */
     void addLoadingProcess(LoadingProcess* process);
+
     /**
      *  Remove loading process for given cache key
      */
     void removeLoadingProcess(LoadingProcess* process);
+
     /**
      *  Notify all currently registered loading processes
      */
@@ -204,29 +220,32 @@ public:
      */
     const QImage* retrieveThumbnail(const QString& cacheKey) const;
     const QPixmap* retrieveThumbnailPixmap(const QString& cacheKey) const;
-    bool hasThumbnailPixmap(const QString& cacheKey) const;
+    bool  hasThumbnailPixmap(const QString& cacheKey) const;
 
     /**
      * Puts a thumbnail into the thumbnail cache.
      */
     void putThumbnail(const QString& cacheKey, const QImage& thumb, const QString& filePath);
     void putThumbnail(const QString& cacheKey, const QPixmap& thumb, const QString& filePath);
+
     /**
      * Remove the thumbnail for the given file path from the thumbnail cache
      */
     void removeThumbnail(const QString& cacheKey);
+
     /**
      * Remove all thumbnails
      */
     void removeThumbnails();
+
     /**
      * Sets the size of the thumbnail cache
-     *  @param numberOfQImages The maximum number of thumbnails of size 256 in QImage format
-                              that will be cached. If the size of the images is smaller, a larger
-                              number will be cached.
+     *  @param numberOfQImages  The maximum number of thumbnails of size 256 in QImage format
+                                that will be cached. If the size of the images is smaller, a larger
+                                number will be cached.
      *  @param numberOfQPixmaps The maximum number of thumbnails of size 256 in QPixmap format
-                              that will be cached. If the size of the images is smaller, a larger
-                              number will be cached.
+                                that will be cached. If the size of the images is smaller, a larger
+                                number will be cached.
      * Note: The main cache is unaffected by this method,
      *       and setCacheSize takes megabytes as parameter.
      * Note: A good caching strategy will be to set one of the numbers to 0
@@ -245,7 +264,7 @@ public:
     /**
      * Returns a list of all possible file paths in cache.
      */
-    QStringList imageFilePathsInCache() const;
+    QStringList imageFilePathsInCache()     const;
     QStringList thumbnailFilePathsInCache() const;
 
     /**
@@ -262,6 +281,7 @@ Q_SIGNALS:
      * The signal may be emitted under CacheLock. Strongly consider a queued connection.
      */
     void fileChanged(const QString& filePath);
+
     /**
      * This signal is emitted when the cache is notified that a file was changed,
      * and the given cache key was removed from the cache.
@@ -275,13 +295,16 @@ private Q_SLOTS:
 
 private:
 
-    static LoadingCache* m_instance;
-
     LoadingCache();
 
     friend class LoadingCacheFileWatch;
     friend class CacheLock;
 
+private:
+
+    static LoadingCache*    m_instance;
+
+    class LoadingCachePriv;
     LoadingCachePriv* const d;
 };
 

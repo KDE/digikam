@@ -6,7 +6,7 @@
  * Date        : 2006-01-11
  * Description : shared image loading and caching
  *
- * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,15 +44,24 @@
 namespace Digikam
 {
 
-class LoadingCachePriv
+class LoadingCache::LoadingCachePriv
 {
 public:
 
-    LoadingCachePriv(LoadingCache* q) : q(q)
+    LoadingCachePriv(LoadingCache* q)
+        : q(q)
     {
         // Note: Don't make the mutex recursive, we need to use a wait condition on it
         watch = 0;
     }
+
+    void mapImageFilePath(const QString& filePath, const QString& cacheKey);
+    void mapThumbnailFilePath(const QString& filePath, const QString& cacheKey);
+    void cleanUpImageFilePathHash();
+    void cleanUpThumbnailFilePathHash();
+    LoadingCacheFileWatch* fileWatch() const;
+
+public:
 
     QCache<QString, DImg>           imageCache;
     QCache<QString, QImage>         thumbnailImageCache;
@@ -63,15 +72,78 @@ public:
     QMutex                          mutex;
     QWaitCondition                  condVar;
     LoadingCacheFileWatch*          watch;
-
-    void mapImageFilePath(const QString& filePath, const QString& cacheKey);
-    void mapThumbnailFilePath(const QString& filePath, const QString& cacheKey);
-    void cleanUpImageFilePathHash();
-    void cleanUpThumbnailFilePathHash();
-    LoadingCacheFileWatch* fileWatch();
-
-    LoadingCache* q;
+    LoadingCache*                   q;
 };
+
+LoadingCacheFileWatch* LoadingCache::LoadingCachePriv::fileWatch() const
+{
+    // install default watch if no watch is set yet
+    if (!watch)
+    {
+        q->setFileWatch(new ClassicLoadingCacheFileWatch);
+    }
+
+    return watch;
+}
+
+void LoadingCache::LoadingCachePriv::mapImageFilePath(const QString& filePath, const QString& cacheKey)
+{
+    if (imageFilePathHash.size() > 5*imageCache.size())
+    {
+        cleanUpImageFilePathHash();
+    }
+
+    imageFilePathHash.insert(filePath, cacheKey);
+}
+
+void LoadingCache::LoadingCachePriv::mapThumbnailFilePath(const QString& filePath, const QString& cacheKey)
+{
+    if (thumbnailFilePathHash.size() > 5*(thumbnailImageCache.size() + thumbnailPixmapCache.size()))
+    {
+        cleanUpThumbnailFilePathHash();
+    }
+
+    thumbnailFilePathHash.insert(filePath, cacheKey);
+}
+
+void LoadingCache::LoadingCachePriv::cleanUpImageFilePathHash()
+{
+    // Remove all entries from hash whose value is no longer a key in the cache
+    QSet<QString> keys = imageCache.keys().toSet();
+    QMultiHash<QString, QString>::iterator it;
+
+    for (it = imageFilePathHash.begin(); it != imageFilePathHash.end(); )
+    {
+        if (!keys.contains(it.value()))
+        {
+            it = imageFilePathHash.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+
+void LoadingCache::LoadingCachePriv::cleanUpThumbnailFilePathHash()
+{
+    QSet<QString> keys;
+    keys += thumbnailImageCache.keys().toSet();
+    keys += thumbnailPixmapCache.keys().toSet();
+    QMultiHash<QString, QString>::iterator it;
+
+    for (it = thumbnailFilePathHash.begin(); it != thumbnailFilePathHash.end(); )
+    {
+        if (!keys.contains(it.value()))
+        {
+            it = thumbnailFilePathHash.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
 
 LoadingCache* LoadingCache::m_instance = 0;
 
@@ -112,12 +184,12 @@ LoadingCache::~LoadingCache()
     m_instance = 0;
 }
 
-DImg* LoadingCache::retrieveImage(const QString& cacheKey)
+DImg* LoadingCache::retrieveImage(const QString& cacheKey) const
 {
     return d->imageCache[cacheKey];
 }
 
-bool LoadingCache::putImage(const QString& cacheKey, DImg* img, const QString& filePath)
+bool LoadingCache::putImage(const QString& cacheKey, DImg* img, const QString& filePath) const
 {
     bool successfulyInserted;
 
@@ -144,7 +216,7 @@ void LoadingCache::removeImages()
     d->imageCache.clear();
 }
 
-bool LoadingCache::isCacheable(const DImg* img)
+bool LoadingCache::isCacheable(const DImg* img) const
 {
     // return whether image fits in cache
     return (uint)d->imageCache.maxCost() >= img->numBytes();
@@ -155,7 +227,7 @@ void LoadingCache::addLoadingProcess(LoadingProcess* process)
     d->loadingDict[process->cacheKey()] = process;
 }
 
-LoadingProcess* LoadingCache::retrieveLoadingProcess(const QString& cacheKey)
+LoadingProcess* LoadingCache::retrieveLoadingProcess(const QString& cacheKey) const
 {
     return d->loadingDict.value(cacheKey);
 }
@@ -206,7 +278,6 @@ void LoadingCache::putThumbnail(const QString& cacheKey, const QImage& thumb, co
         d->mapThumbnailFilePath(filePath, cacheKey);
         d->fileWatch()->addedThumbnail(filePath);
     }
-
 }
 
 void LoadingCache::putThumbnail(const QString& cacheKey, const QPixmap& thumb, const QString& filePath)
@@ -279,76 +350,6 @@ void LoadingCache::notifyFileChanged(const QString& filePath)
     }
 
     emit fileChanged(filePath);
-}
-
-LoadingCacheFileWatch* LoadingCachePriv::fileWatch()
-{
-    // install default watch if no watch is set yet
-    if (!watch)
-    {
-        q->setFileWatch(new ClassicLoadingCacheFileWatch);
-    }
-
-    return watch;
-}
-
-void LoadingCachePriv::mapImageFilePath(const QString& filePath, const QString& cacheKey)
-{
-    if (imageFilePathHash.size() > 5*imageCache.size())
-    {
-        cleanUpImageFilePathHash();
-    }
-
-    imageFilePathHash.insert(filePath, cacheKey);
-}
-
-void LoadingCachePriv::mapThumbnailFilePath(const QString& filePath, const QString& cacheKey)
-{
-    if (thumbnailFilePathHash.size() > 5*(thumbnailImageCache.size() + thumbnailPixmapCache.size()))
-    {
-        cleanUpThumbnailFilePathHash();
-    }
-
-    thumbnailFilePathHash.insert(filePath, cacheKey);
-}
-
-void LoadingCachePriv::cleanUpImageFilePathHash()
-{
-    // Remove all entries from hash whose value is no longer a key in the cache
-    QSet<QString> keys = imageCache.keys().toSet();
-    QMultiHash<QString, QString>::iterator it;
-
-    for (it = imageFilePathHash.begin(); it != imageFilePathHash.end(); )
-    {
-        if (!keys.contains(it.value()))
-        {
-            it = imageFilePathHash.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
-}
-
-void LoadingCachePriv::cleanUpThumbnailFilePathHash()
-{
-    QSet<QString> keys;
-    keys += thumbnailImageCache.keys().toSet();
-    keys += thumbnailPixmapCache.keys().toSet();
-    QMultiHash<QString, QString>::iterator it;
-
-    for (it = thumbnailFilePathHash.begin(); it != thumbnailFilePathHash.end(); )
-    {
-        if (!keys.contains(it.value()))
-        {
-            it = thumbnailFilePathHash.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
 }
 
 void LoadingCache::iccSettingsChanged(const ICCSettingsContainer& current, const ICCSettingsContainer& previous)
