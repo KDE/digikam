@@ -6,7 +6,7 @@
  * Date        : 2009-05-29
  * Description : PGF utils.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -111,7 +111,6 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
         }
 
         CPGFImage pgfImg;
-
         PGFHeader header;
         header.width    = img.width();
         header.height   = img.height();
@@ -218,7 +217,7 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 
         // Try to find the right PGF level to get reduced image accordingly
         // with preview size wanted.
-        int i=0;
+        int i = 0;
 
         if (pgf.Levels() > 0)
         {
@@ -231,27 +230,28 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
             }
         }
 
-        if (i<0)
+        if (i < 0)
         {
-            i=0;
+            i = 0;
         }
 
         pgf.Read(i);  // Read PGF image at reduced level i.
         img = QImage(pgf.Width(i), pgf.Height(i), QImage::Format_RGB32);
 
-        /*
-                const PGFHeader* header = pgf.GetHeader();
-                kDebug() << "PGF width    = " << header->width;
-                kDebug() << "PGF height   = " << header->height;
-                kDebug() << "PGF bbp      = " << header->bpp;
-                kDebug() << "PGF channels = " << header->channels;
-                kDebug() << "PGF quality  = " << header->quality;
-                kDebug() << "PGF mode     = " << header->mode;
-                kDebug() << "PGF levels   = " << header->nLevels;
-                kDebug() << "Level (w x h)= " << i << "(" << pgf.Width(i)
-                              << " x " << pgf.Height(i) << ")";
-                kDebug() << "QImage depth = " << img.depth();
-        */
+/*
+        const PGFHeader* header = pgf.GetHeader();
+        kDebug() << "PGF width    = " << header->width;
+        kDebug() << "PGF height   = " << header->height;
+        kDebug() << "PGF bbp      = " << header->bpp;
+        kDebug() << "PGF channels = " << header->channels;
+        kDebug() << "PGF quality  = " << header->quality;
+        kDebug() << "PGF mode     = " << header->mode;
+        kDebug() << "PGF levels   = " << header->nLevels;
+        kDebug() << "Level (w x h)= " << i << "(" << pgf.Width(i)
+                        << " x " << pgf.Height(i) << ")";
+        kDebug() << "QImage depth = " << img.depth();
+*/
+
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
         {
             int map[] = {3, 2, 1, 0};
