@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,7 +56,7 @@ void ManagedLoadSaveThread::shutDown()
         case TerminationPolicyTerminateLoading:
         {
             QMutexLocker lock(threadMutex());
-            LoadingTask* loadingTask;
+            LoadingTask* loadingTask = 0;
 
             if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterAll)) )
             {
@@ -69,7 +69,7 @@ void ManagedLoadSaveThread::shutDown()
         case TerminationPolicyTerminatePreloading:
         {
             QMutexLocker lock(threadMutex());
-            LoadingTask* loadingTask;
+            LoadingTask* loadingTask = 0;
 
             if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)) )
             {
@@ -91,7 +91,7 @@ void ManagedLoadSaveThread::shutDown()
     LoadSaveThread::shutDown();
 }
 
-LoadingTask* ManagedLoadSaveThread::checkLoadingTask(LoadSaveTask* task, LoadingTaskFilter filter)
+LoadingTask* ManagedLoadSaveThread::checkLoadingTask(LoadSaveTask* task, LoadingTaskFilter filter) const
 {
     if (task && task->type() == LoadSaveTask::TaskTypeLoading)
     {
@@ -102,24 +102,26 @@ LoadingTask* ManagedLoadSaveThread::checkLoadingTask(LoadSaveTask* task, Loading
             return loadingTask;
         }
         else if (filter == LoadingTaskFilterPreloading)
+        {
             if (loadingTask->status() == LoadingTask::LoadingTaskStatusPreloading)
             {
                 return loadingTask;
             }
+        }
     }
 
     return 0;
 }
 
-LoadingTask* ManagedLoadSaveThread::findExistingTask(const LoadingDescription& loadingDescription)
+LoadingTask* ManagedLoadSaveThread::findExistingTask(const LoadingDescription& loadingDescription) const
 {
-    LoadingTask* loadingTask;
+    LoadingTask* loadingTask = 0;
 
     if (m_currentTask)
     {
         if (m_currentTask->type() == LoadSaveTask::TaskTypeLoading)
         {
-            loadingTask = (LoadingTask*)m_currentTask;
+            loadingTask                               = (LoadingTask*)m_currentTask;
             const LoadingDescription& taskDescription = loadingTask->loadingDescription();
 
             if (taskDescription == loadingDescription)
@@ -383,8 +385,8 @@ void ManagedLoadSaveThread::preloadThumbnailGroup(const QList<LoadingDescription
     }
 
     QMutexLocker lock(threadMutex());
-
     QList<LoadSaveTask*> todo;
+
     foreach (const LoadingDescription& description, descriptions)
     {
         LoadingTask* existingTask = findExistingTask(description);
@@ -448,8 +450,8 @@ void ManagedLoadSaveThread::prependThumbnailGroup(const QList<LoadingDescription
 }
 
 LoadingTask* ManagedLoadSaveThread::createLoadingTask(const LoadingDescription& description,
-        bool preloading, LoadingMode loadingMode,
-        AccessMode accessMode)
+                                                      bool preloading, LoadingMode loadingMode,
+                                                      AccessMode accessMode)
 {
     if (description.previewParameters.type == LoadingDescription::PreviewParameters::PreviewImage)
     {
@@ -549,7 +551,7 @@ void ManagedLoadSaveThread::stopSaving(const QString& filePath)
 
 void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription& description, LoadingTaskFilter filter)
 {
-    LoadingTask* loadingTask;
+    LoadingTask* loadingTask = 0;
 
     // stop current task if it is matching the criteria
     if ( (loadingTask = checkLoadingTask(m_currentTask, filter)) )
@@ -579,7 +581,7 @@ void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription& descrip
 void ManagedLoadSaveThread::save(DImg& image, const QString& filePath, const QString& format)
 {
     QMutexLocker lock(threadMutex());
-    LoadingTask* loadingTask;
+    LoadingTask* loadingTask = 0;
 
     // stop and postpone current task if it is a preloading task
     if (m_currentTask && (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)))

@@ -6,8 +6,8 @@
  * Date        : 2006-01-16
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,16 +33,12 @@ namespace Digikam
 {
 
 class LoadingTask;
+class LoadSaveTask;
 
 class DIGIKAM_EXPORT ManagedLoadSaveThread : public LoadSaveThread
 {
 
 public:
-
-    /// Termination is controlled by setting the TerminationPolicy
-    /// Default is TerminationPolicyTerminateLoading
-    ManagedLoadSaveThread(QObject* parent = 0);
-    ~ManagedLoadSaveThread();
 
     enum LoadingPolicy
     {
@@ -99,6 +95,13 @@ public:
         LoadingModeShared
     };
 
+public:
+
+    /// Termination is controlled by setting the TerminationPolicy
+    /// Default is TerminationPolicyTerminateLoading
+    ManagedLoadSaveThread(QObject* parent = 0);
+    ~ManagedLoadSaveThread();
+
     /// Append a task to load the given file to the task list.
     /// If there is already a task for the given file, it will possibly be rescheduled,
     /// but no second task will be added.
@@ -123,7 +126,7 @@ public:
     /// Append a task to save the image to the task list
     void save(DImg& image, const QString& filePath, const QString& format);
 
-    void setTerminationPolicy(TerminationPolicy terminationPolicy);
+    void              setTerminationPolicy(TerminationPolicy terminationPolicy);
     TerminationPolicy terminationPolicy() const;
 
     /**
@@ -131,7 +134,7 @@ public:
      * Default is LoadingPolicyAppend.
      * You can override the default value for each operation.
      */
-    void setLoadingPolicy(LoadingPolicy policy);
+    void          setLoadingPolicy(LoadingPolicy policy);
     LoadingPolicy loadingPolicy() const;
 
 protected:
@@ -140,25 +143,30 @@ protected:
 
     void load(const LoadingDescription& description, LoadingMode loadingMode,
               AccessMode mode = AccessModeReadWrite);
+
     void load(const LoadingDescription& description, LoadingMode loadingMode,
               LoadingPolicy policy, AccessMode mode = AccessModeReadWrite);
+
     void loadPreview(const LoadingDescription& description, LoadingPolicy policy);
     void loadThumbnail(const LoadingDescription& description);
+
     void preloadThumbnail(const LoadingDescription& description);
     void preloadThumbnailGroup(const QList<LoadingDescription>& descriptions);
     void prependThumbnailGroup(const QList<LoadingDescription>& descriptions);
+
+protected:
 
     LoadingPolicy     m_loadingPolicy;
     TerminationPolicy m_terminationPolicy;
 
 private:
 
-    LoadingTask* checkLoadingTask(class LoadSaveTask* task, LoadingTaskFilter filter);
-    LoadingTask* findExistingTask(const LoadingDescription& description);
+    LoadingTask* checkLoadingTask(LoadSaveTask* task, LoadingTaskFilter filter) const;
+    LoadingTask* findExistingTask(const LoadingDescription& description) const;
     LoadingTask* createLoadingTask(const LoadingDescription& description, bool preloading,
                                    LoadingMode loadingMode, AccessMode accessMode);
-    void removeLoadingTasks(const LoadingDescription& description, LoadingTaskFilter filter);
 
+    void removeLoadingTasks(const LoadingDescription& description, LoadingTaskFilter filter);
 };
 
 }  // namespace Digikam
