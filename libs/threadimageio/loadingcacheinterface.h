@@ -6,7 +6,7 @@
  * Date        : 2006-02-06
  * Description : shared image loading and caching
  *
- * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,13 +41,16 @@ class DIGIKAM_EXPORT LoadingCacheInterface
 public:
 
     static void initialize();
+
     /** clean up cache at shutdown */
     static void cleanUp();
+
     /**
      * Remove an image from the cache
      * because it may have changed on disk
      */
     static void fileChanged(const QString& filePath);
+
     /**
      * Connect the given object/slot to the signal
      *  void fileChanged(const QString& filePath);
@@ -55,19 +58,23 @@ public:
      * change of this file on disk.
      */
     static void connectToSignalFileChanged(QObject* object, const char* slot);
+
     /**
      * remove all images from the cache
      * (e.g. when loading settings changed)
      * Does not affect thumbnails.
      */
     static void cleanCache();
+
     /**
      * Remove all thumbnails from the thumbnail cache.
      * Does not affect main image cache.
      */
     static void cleanThumbnailCache();
+
     /** add a copy of the image to cache */
     static void putImage(const QString& filePath, const DImg& img);
+
     /**
      * Set cache size in Megabytes.
      * Set to 0 to disable caching.

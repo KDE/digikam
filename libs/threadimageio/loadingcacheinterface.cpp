@@ -6,7 +6,7 @@
  * Date        : 2006-02-06
  * Description : shared image loading and caching
  *
- * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,13 +46,13 @@ void LoadingCacheInterface::fileChanged(const QString& filePath)
     LoadingCache::CacheLock lock(cache);
     cache->notifyFileChanged(filePath);
 
-    /* old implementation
+/*  NOTE: old implementation
     QStringList possibleCacheKeys = LoadingDescription::possibleCacheKeys(filePath);
     for (QStringList::iterator it = possibleCacheKeys.begin(); it != possibleCacheKeys.end(); ++it)
     {
         cache->removeImage(*it);
     }
-    */
+*/
 }
 
 void LoadingCacheInterface::connectToSignalFileChanged(QObject* object, const char* slot)
