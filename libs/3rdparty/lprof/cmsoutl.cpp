@@ -159,9 +159,7 @@ BOOL cmsxRegressionInterpolatorRGB(LPMEASUREMENT m,
 
 
 #ifdef DEBUG
-    printf("INTERPOLATED RGB %g,%g,%g Lab %g, %g, %g \n", r , g,  b,
-            Lab->L, Lab->a, Lab->b);
-
+    printf("INTERPOLATED RGB %g,%g,%g\n", r , g,  b);
 #endif
     return true;
 }

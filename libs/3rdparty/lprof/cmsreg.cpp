@@ -295,7 +295,7 @@ BOOL CreateRegressionMatrix(const LPMATN Input, const LPMATN Output,
 
 
 #ifdef DEBUG
-        MATNprintf("Variance-Covariance", vcov);
+        //MATNprintf("Variance-Covariance", vcov);
         printf("R2adj: %g, F: %g\n", PeakErrorMeas.R2adj, PeakErrorMeas.F);
 #endif
 
@@ -453,8 +453,8 @@ int cmsxRegressionCreateMatrix(LPMEASUREMENT m, SETOFPATCHES Allowed, int nterms
 
 
 #ifdef DEBUG
-        if (rc == true)
-            MATNprintf("tfm", *lpMat);
+        //if (rc == true)
+        //    MATNprintf("tfm", *lpMat);
 #endif
 
         return rc;

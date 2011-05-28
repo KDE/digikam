@@ -271,10 +271,9 @@ bool DatabaseConfigElementLoader::readConfig()
                             filepath);
         return false;
     }
-    //defaultDatabase = defaultDB.text();
 
 #ifdef DATABASEPARAMETERS_DEBUG
-    kDebug() << "Default DB Node contains: " << defaultDatabase;
+    kDebug() << "Default DB Node contains: " << defaultDB.text();
 #endif
 
     QDomElement databaseElement =  element.firstChildElement("database");
@@ -299,7 +298,7 @@ bool DatabaseConfigElementLoader::readConfig()
         kDebug() << "Database Server CMD: " << configElement.dbServerCmd;
         kDebug() << "Database Init CMD: " << configElement.dbInitCmd;
 
-
+        /*
         kDebug() << "Statements:";
 
         foreach (const QString actionKey, configElement.sqlStatements.keys())
@@ -311,6 +310,7 @@ bool DatabaseConfigElementLoader::readConfig()
                 kDebug() << "\tMode ["<< statement.mode <<"] Value ["<< statement.statement <<"]";
             }
         }
+        */
     }
 #endif
 
