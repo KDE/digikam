@@ -143,7 +143,8 @@ void StateSavingObjectTest::testPrefixUsage()
     const QString prefix = " _Pr efix_ ";
     saver.setEntryPrefix(prefix);
     QCOMPARE(saver.getEntryKey(""), prefix);
-    QCOMPARE(saver.getEntryKey("test"), prefix + QString("test"));
+    QString tmp = prefix + QString("test");
+    QCOMPARE(saver.getEntryKey("test"), tmp);
 
 }
 

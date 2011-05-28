@@ -253,7 +253,8 @@ void AdvancedRenameWidgetTest::testUppercaseModifier()
 
     QString parsed = manager.newName(filePath);
     QFileInfo fi(filePath);
-    QCOMPARE(parsed, fi.baseName().toUpper() + "." + fi.suffix());
+    QString tmp = fi.baseName().toUpper() + "." + fi.suffix();
+    QCOMPARE(parsed, tmp);
 }
 
 void AdvancedRenameWidgetTest::testUniqueModifier()
