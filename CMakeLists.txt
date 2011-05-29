@@ -17,7 +17,7 @@ SET(DIGIKAM_MINOR_VERSION "0")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2011-05-29")
+SET(DIGIKAM_RELEASE_DATE "2011-06-26")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -26,7 +26,7 @@ SET(DIGIKAM_RELEASE_DATE "2011-05-29")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "-beta6")
+SET(DIGIKAM_SUFFIX_VERSION "-rc")
 
 # ==================================================================================================
 # Set env. variables accordingly.
