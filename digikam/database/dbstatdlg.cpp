@@ -59,47 +59,27 @@ DBStatDlg::DBStatDlg(QWidget* parent)
     listView()->setHeaderLabels(QStringList() << i18n("Format") << i18n("Count"));
 
     // get image format statistics
-    int total                   = 0;
-    QMap<QString, int>     stat = DatabaseAccess().db()->getImageFormatStatistics();
-    QMap<QString, QString> map;
+    int totalImages = generateItemsList(DatabaseItem::Image, i18n("Images"));
+    int totalVideos = generateItemsList(DatabaseItem::Video, i18n("Videos"));
+    int totalAudio  = generateItemsList(DatabaseItem::Audio, i18n("Audio"));
+    int total       = totalImages + totalVideos + totalAudio;
 
-    for (QMap<QString, int>::const_iterator it = stat.constBegin(); it != stat.constEnd(); ++it)
-    {
-        total += it.value();
-        map.insert(it.key(), QString::number(it.value()));
-    }
-
-    setInfoMap(map);
+    // --------------------------------------------------------
 
     // To see total count of items at end of list.
-    QTreeWidgetItem* ti = new QTreeWidgetItem(listView(), QStringList()
-                                              << i18n("Total Items") << QString::number(total));
-    QFont ft = ti->font(0);
-    ft.setBold(true);
-    ti->setFont(0, ft);
-    ft = ti->font(1);
-    ft.setBold(true);
-    ti->setFont(1, ft);
-
-    // Add space.
-    new QTreeWidgetItem(listView(), QStringList());
+    new QTreeWidgetItem(listView(), QStringList() << i18n("Total Items") << QString::number(total));
 
     // get album statistics
-    int albums                 = DatabaseAccess().db()->scanAlbums().count();
+    int albums = DatabaseAccess().db()->scanAlbums().count();
     new QTreeWidgetItem(listView(), QStringList() << i18n("Albums") << QString::number(albums));
 
     // get tags statistics
-    int tags                  = DatabaseAccess().db()->scanTags().count();
+    int tags = DatabaseAccess().db()->scanTags().count();
     new QTreeWidgetItem(listView(), QStringList() << i18n("Tags") << QString::number(tags));
 
-    // Add space.
-    new QTreeWidgetItem(listView(), QStringList());
-
     // Database Backend information
-
     QString dbBe = AlbumSettings::instance()->getDatabaseType();
-    new QTreeWidgetItem(listView(), QStringList() << i18n("Database backend")
-                        << dbBe);
+    new QTreeWidgetItem(listView(), QStringList() << i18n("Database backend") << dbBe);
 
     if (dbBe != QString("QSQLITE"))
     {
@@ -112,6 +92,46 @@ DBStatDlg::DBStatDlg(QWidget* parent)
 
 DBStatDlg::~DBStatDlg()
 {
+}
+
+int DBStatDlg::generateItemsList(DatabaseItem::Category category, const QString& title)
+{
+    // get image format statistics
+    int total                   = 0;
+    QMap<QString, int>     stat = DatabaseAccess().db()->getFormatStatistics(category);
+    QMap<QString, QString> map;
+
+    for (QMap<QString, int>::const_iterator it = stat.constBegin(); it != stat.constEnd(); ++it)
+    {
+        total += it.value();
+        map.insert(it.key(), QString::number(it.value()));
+    }
+
+    // do not add items if the map is empty
+    if (map.isEmpty())
+    {
+        return 0;
+    }
+
+    // --------------------------------------------------------
+
+    QTreeWidgetItem* ti = new QTreeWidgetItem(listView(), QStringList() << title << QString());
+    QFont ft = ti->font(0);
+    ft.setBold(true);
+    ti->setFont(0, ft);
+    ti->setFont(1, ft);
+
+    setInfoMap(map);
+
+    ti = new QTreeWidgetItem(listView(), QStringList() << i18n("total") << QString::number(total));
+    ti->setFont(0, ft);
+    ti->setFont(1, ft);
+
+    // Add space.
+    new QTreeWidgetItem(listView(), QStringList());
+    new QTreeWidgetItem(listView(), QStringList());
+
+    return total;
 }
 
 }  // namespace Digikam

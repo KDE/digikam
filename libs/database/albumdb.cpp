@@ -3276,15 +3276,28 @@ QMap<int, int> AlbumDB::getNumberOfImagesInTagProperties(const QString& property
     return tagsStatMap;
 }
 
-QMap<QString,int> AlbumDB::getImageFormatStatistics()
+QMap<QString,int> AlbumDB::getFormatStatistics()
+{
+    return getFormatStatistics(DatabaseItem::UndefinedCategory);
+}
+
+QMap<QString,int> AlbumDB::getFormatStatistics(DatabaseItem::Category category)
 {
     QMap<QString, int>  map;
 
-    SqlQuery query = d->db->prepareQuery("SELECT COUNT(*), II.format "
-                                         "FROM ImageInformation AS II "
-                                         "   INNER JOIN Images ON II.imageid=Images.id "
-                                         "WHERE Images.status=1 "
-                                         "GROUP BY II.format;");
+    QString queryString = "SELECT COUNT(*), II.format "
+                          "  FROM ImageInformation AS II "
+                          "  INNER JOIN Images ON II.imageid=Images.id "
+                          "  WHERE Images.status=1 ";
+
+    if (category != DatabaseItem::UndefinedCategory)
+    {
+        queryString.append(QString("AND Images.category=%1").arg(category));
+    }
+    queryString.append(" GROUP BY II.format;");
+    kDebug() << queryString;
+
+    SqlQuery query = d->db->prepareQuery(queryString);
 
     if (d->db->exec(query))
     {

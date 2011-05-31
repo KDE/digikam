@@ -35,6 +35,7 @@
 // Local includes
 
 #include "infodlg.h"
+#include "databaseconstants.h"
 
 namespace Digikam
 {
@@ -45,6 +46,10 @@ public:
 
     DBStatDlg(QWidget* parent);
     ~DBStatDlg();
+
+private:
+
+    int generateItemsList(DatabaseItem::Category category, const QString& title);
 };
 
 }  // namespace Digikam

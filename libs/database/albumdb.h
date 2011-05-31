@@ -45,6 +45,7 @@
 #include "albuminfo.h"
 #include "databasefields.h"
 #include "databaseaccess.h"
+#include "databaseconstants.h"
 #include "digikam_export.h"
 #include "sqlquery.h"
 
@@ -1142,7 +1143,8 @@ public:
      * Returns a QMap<QString,int> of ImageInformation.format
      * -> count of items with that format.
      */
-    QMap<QString,int> getImageFormatStatistics();
+    QMap<QString,int> getFormatStatistics();
+    QMap<QString,int> getFormatStatistics(DatabaseItem::Category category);
 
     // ----------- Moving and Copying Items -----------
 
