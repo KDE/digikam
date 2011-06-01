@@ -97,20 +97,20 @@ DBStatDlg::~DBStatDlg()
 int DBStatDlg::generateItemsList(DatabaseItem::Category category, const QString& title)
 {
     // get image format statistics
-    int total                   = 0;
-    QMap<QString, int>     stat = DatabaseAccess().db()->getFormatStatistics(category);
-    QMap<QString, QString> map;
+    QMap<QString, int> stat = DatabaseAccess().db()->getFormatStatistics(category);
 
+    // do not add items if the map is empty
+    if (stat.isEmpty())
+    {
+        return 0;
+    }
+
+    int total = 0;
+    QMap<QString, QString> map;
     for (QMap<QString, int>::const_iterator it = stat.constBegin(); it != stat.constEnd(); ++it)
     {
         total += it.value();
         map.insert(it.key(), QString::number(it.value()));
-    }
-
-    // do not add items if the map is empty
-    if (map.isEmpty())
-    {
-        return 0;
     }
 
     // --------------------------------------------------------
