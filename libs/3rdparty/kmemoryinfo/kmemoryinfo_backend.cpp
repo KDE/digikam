@@ -203,7 +203,7 @@ bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
 #endif
 
 #ifdef Q_OS_HPUX
-    if((pagesize=sysconf(_SC_PAGESIZE)) == -1){
+    if((pagesize = sysconf(_SC_PAGESIZE)) == -1){
         //sg_set_error_with_errno(SG_ERROR_SYSCONF, "_SC_PAGESIZE");
         return false;
     }
@@ -219,16 +219,16 @@ bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
 
     /* FIXME Does this include swap? */
     data->totalRam = ((long long) pstat_static->physical_memory) * pagesize;
-    data->freeRam = ((long long) pstat_dynamic.psd_free) * pagesize;
-    data->usedRam = data->totalRam - data->freeRam;
+    data->freeRam  = ((long long) pstat_dynamic.psd_free) * pagesize;
+    data->usedRam  = data->totalRam - data->freeRam;
 #endif
 #ifdef Q_OS_SOLARIS
-    if((pagesize=sysconf(_SC_PAGESIZE)) == -1){
+    if((pagesize = sysconf(_SC_PAGESIZE)) == -1){
         //sg_set_error_with_errno(SG_ERROR_SYSCONF, "_SC_PAGESIZE");
         return false;
     }
 
-    if((totalmem=sysconf(_SC_PHYS_PAGES)) == -1){
+    if((totalmem = sysconf(_SC_PHYS_PAGES)) == -1){
         //sg_set_error_with_errno(SG_ERROR_SYSCONF, "_SC_PHYS_PAGES");
         return false;
     }
@@ -237,7 +237,7 @@ bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
         //sg_set_error(SG_ERROR_KSTAT_OPEN, NULL);
         return false;
     }
-    if((ksp=kstat_lookup(kc, "unix", 0, "system_pages")) == NULL){
+    if((ksp = kstat_lookup(kc, "unix", 0, "system_pages")) == NULL){
         //sg_set_error(SG_ERROR_KSTAT_LOOKUP, "unix,0,system_pages");
         return false;
     }
@@ -245,15 +245,15 @@ bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
         //sg_set_error(SG_ERROR_KSTAT_READ, NULL);
         return false;
     }
-    if((kn=kstat_data_lookup(ksp, "freemem")) == NULL){
+    if((kn = (kstat_named_t*)kstat_data_lookup(ksp, "freemem")) == NULL){
         //sg_set_error(SG_ERROR_KSTAT_DATA_LOOKUP, "freemem");
         return false;
     }
     kstat_close(kc);
 
     data->totalRam = (long long)totalmem * (long long)pagesize;
-    data->freeRam = ((long long)kn->value.ul) * (long long)pagesize;
-    data->usedRam = data->totalRam - data->freeRam;
+    data->freeRam  = ((long long)kn->value.ul) * (long long)pagesize;
+    data->usedRam  = data->totalRam - data->freeRam;
 #endif
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_CYGWIN)
@@ -285,7 +285,7 @@ bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
     /* Returns bytes */
     mib[0] = CTL_HW;
     mib[1] = HW_PHYSMEM;
-    size = sizeof physmem;
+    size   = sizeof physmem;
     if (sysctl(mib, 2, &physmem, &size, NULL, 0) < 0) {
         //sg_set_error_with_errno(SG_ERROR_SYSCTL, "CTL_HW.HW_PHYSMEM");
         return false;
@@ -321,8 +321,8 @@ bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
     /* Of couse nothing is ever that simple :) And I have inactive pages to
      * deal with too. So I'm going to add them to free memory :)
      */
-    data->freeRam=(free_count*pagesize)+(inactive_count*pagesize);
-    data->usedRam=physmem-data->freeRam;
+    data->freeRam = (free_count*pagesize)+(inactive_count*pagesize);
+    data->usedRam = physmem-data->freeRam;
 #endif
 
 #if defined(Q_OS_NETBSD)
@@ -332,8 +332,8 @@ bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
 
     data->totalRam = uvm->pagesize * uvm->npages;
     data->cacheRam = uvm->pagesize * (uvm->filepages + uvm->execpages);
-    data->freeRam = uvm->pagesize * (uvm->free + uvm->inactive);
-    data->usedRam = data->totalRam - data->freeRam;
+    data->freeRam  = uvm->pagesize * (uvm->free + uvm->inactive);
+    data->usedRam  = data->totalRam - data->freeRam;
 #endif
 
 #if defined(Q_OS_OPENBSD)
@@ -368,7 +368,7 @@ bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
      */
     mib[0] = CTL_VM;
     mib[1] = VM_METER;
-    size = sizeof(vmtotal);
+    size   = sizeof(vmtotal);
 
     if (sysctl(mib, 2, &vmtotal, &size, NULL, 0) < 0) {
         bzero(&vmtotal, sizeof(vmtotal));
@@ -378,9 +378,9 @@ bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
 
     /* Convert the raw stats to bytes, and return these to the caller
      */
-    data->usedRam = (vmtotal.t_rm << page_multiplier);   /* total real mem in use */
+    data->usedRam  = (vmtotal.t_rm << page_multiplier);   /* total real mem in use */
     data->cacheRam = 0;                                  /* no cache stats */
-    data->freeRam = (vmtotal.t_free << page_multiplier); /* free memory pages */
+    data->freeRam  = (vmtotal.t_free << page_multiplier); /* free memory pages */
     data->totalRam = (data->usedRam + data->freeRam);
 #endif
 
@@ -390,9 +390,9 @@ bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
         //sg_set_error_with_errno(SG_ERROR_MEMSTATUS, NULL);
         return false;
     }
-    data->freeRam = memstats.ullAvailPhys;
+    data->freeRam  = memstats.ullAvailPhys;
     data->totalRam = memstats.ullTotalPhys;
-    data->usedRam = data->totalRam - data->freeRam;
+    data->usedRam  = data->totalRam - data->freeRam;
     //if(read_counter_large(SG_WIN32_MEM_CACHE, &data->cacheRam)) {
         data->cacheRam = 0;
     //}
