@@ -165,7 +165,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 137 ==> 272586 : Crash when playing with databasebackend.
 138 ==> 269907 : Please consider attached patch for build system: make apidoc generation controllable.
 139 ==> 271323 : digiKam crashes when building thumbnails of grayscale DNGs.
-140 ==> 
-
+140 ==> 274455 : Build fails in kmemoryinfo - invalid conversion from 'void*' to 'kstat_named_t*'.
+141 ==> 
 
 
