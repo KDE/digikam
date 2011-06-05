@@ -6,8 +6,8 @@
  * Date        : 2006-12-26
  * Description : Multithreaded loader for previews
  *
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,11 +69,13 @@ void PreviewLoadingTask::execute()
         LoadingCache::CacheLock lock(cache);
 
         // find possible cached images
-        DImg* cachedImg = 0;
+        DImg* cachedImg        = 0;
         QStringList lookupKeys = m_loadingDescription.lookupCacheKeys();
+
         // lookupCacheKeys returns "best first". Prepend the cache key to make the list "fastest first":
         // Scaling a full version takes longer!
         lookupKeys.push_front(m_loadingDescription.cacheKey());
+
         foreach (const QString& key, lookupKeys)
         {
             if ( (cachedImg = cache->retrieveImage(key)) )
@@ -99,7 +101,6 @@ void PreviewLoadingTask::execute()
         if (cachedImg)
         {
             // image is found in image cache, loading is successful
-
             m_img = *cachedImg;
 
             if (accessMode() == LoadSaveThread::AccessModeReadWrite)
@@ -194,7 +195,7 @@ void PreviewLoadingTask::execute()
     int  size = m_loadingDescription.previewParameters.size;
 
     QImage qimage;
-    bool fromEmbeddedPreview = false;
+    bool   fromEmbeddedPreview = false;
 
     // -- Get the image preview --------------------------------
 
@@ -206,9 +207,9 @@ void PreviewLoadingTask::execute()
         // check embedded previews
         KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
 
-        int sizeLimit = -1;
+        int sizeLimit      = -1;
         QSize originalSize = previews.originalSize();
-        int bestSize = qMax(originalSize.width(), originalSize.height());
+        int bestSize       = qMax(originalSize.width(), originalSize.height());
 
         // for RAWs, the alternative is the half preview, so best size is already originalSize / 2
         if (format == DImg::RAW)
@@ -226,7 +227,7 @@ void PreviewLoadingTask::execute()
         else
         {
             int aBitSmallerThanSize = (int)lround(double(size) * 0.8);
-            sizeLimit = qMin(aBitSmallerThanSize, bestSize);
+            sizeLimit               = qMin(aBitSmallerThanSize, bestSize);
         }
 
         // Only check the first and largest preview
@@ -259,8 +260,7 @@ void PreviewLoadingTask::execute()
         if (!qimage.isNull() && continueQuery())
         {
             // convert from QImage
-            m_img = DImg(qimage);
-
+            m_img               = DImg(qimage);
             DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
             m_img.setAttribute("detectedFileFormat", format);
             m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
@@ -305,9 +305,9 @@ void PreviewLoadingTask::execute()
             // check embedded previews
             KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
 
-            QSize originalSize = previews.originalSize();
+            QSize originalSize   = previews.originalSize();
             // discard if smaller than half preview
-            int acceptableWidth  = lround(originalSize.width() * 0.48);
+            int acceptableWidth  = lround(originalSize.width()  * 0.48);
             int acceptableHeight = lround(originalSize.height() * 0.48);
 
             if (qimage.isNull() && !previews.isEmpty() && continueQuery())
@@ -332,8 +332,7 @@ void PreviewLoadingTask::execute()
         if (!qimage.isNull() && continueQuery())
         {
             // convert from QImage
-            m_img = DImg(qimage);
-
+            m_img               = DImg(qimage);
             DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
             m_img.setAttribute("detectedFileFormat", format);
             m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
@@ -424,7 +423,7 @@ void PreviewLoadingTask::execute()
         m_completed = true;
 
         // dispatch image to all listeners, including this
-        for (int i=0; i<m_listeners.count(); ++i)
+        for (int i = 0; i < m_listeners.count(); ++i)
         {
             LoadingProcessListener* l = m_listeners[i];
 
@@ -441,7 +440,7 @@ void PreviewLoadingTask::execute()
             }
         }
 
-        for (int i=0; i<m_listeners.count(); ++i)
+        for (int i = 0; i < m_listeners.count(); ++i)
         {
             m_listeners[i]->loadSaveNotifier()->imageLoaded(m_loadingDescription, m_img);
         }
@@ -478,9 +477,9 @@ bool PreviewLoadingTask::needToScale(const QSize& imageSize, int previewSize)
         return false;
     }
 
-    int maxSize = imageSize.width() > imageSize.height() ? imageSize.width() : imageSize.height();
+    int maxSize             = imageSize.width() > imageSize.height() ? imageSize.width() : imageSize.height();
     int acceptableUpperSize = lround(1.25 * (double)previewSize);
-    return  maxSize >= acceptableUpperSize;
+    return (maxSize >= acceptableUpperSize);
 }
 
 // -- Exif/IPTC preview extraction using Exiv2 --------------------------------------------------------

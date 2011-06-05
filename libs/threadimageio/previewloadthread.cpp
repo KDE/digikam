@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,7 +69,7 @@ void PreviewLoadThread::load(const QString& filePath, int size, bool exifRotate)
 
 void PreviewLoadThread::loadFastButLarge(const QString& filePath, int size, bool exifRotate)
 {
-    LoadingDescription description = createLoadingDescription(filePath, size, exifRotate);
+    LoadingDescription description      = createLoadingDescription(filePath, size, exifRotate);
     description.previewParameters.flags |= LoadingDescription::PreviewParameters::FastButLarge;
     load(description);
 }

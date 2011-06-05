@@ -7,8 +7,8 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -120,17 +120,14 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
     int          w, h;
     bool         has_alpha;
     bool         has_grey;
-    FILE*        f;
-    png_structp  png_ptr = NULL;
+    png_structp  png_ptr  = NULL;
     png_infop    info_ptr = NULL;
     int          bit_depth, color_type, interlace_type;
+    QImage       qimage;
 
     has_alpha = 0;
     has_grey  = 0;
-
-    QImage qimage;
-
-    f = fopen(path.toLatin1(), "rb");
+    FILE* f   = fopen(path.toLatin1(), "rb");
 
     if (!f)
     {
@@ -188,16 +185,14 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
                  (png_uint_32*) (&h32), &bit_depth, &color_type,
                  &interlace_type, NULL, NULL);
 
-    w = w32;
-    h = h32;
-
+    w      = w32;
+    h      = h32;
     qimage = QImage(w, h, QImage::Format_ARGB32);
 
     if (color_type == PNG_COLOR_TYPE_PALETTE)
     {
         png_set_expand(png_ptr);
     }
-
 
 #if PNG_LIBPNG_VER >= 10400
     png_byte info_color_type = png_get_color_type(png_ptr, info_ptr);
@@ -213,7 +208,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
     if (info_color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
     {
         has_alpha = 1;
-        has_grey = 1;
+        has_grey  = 1;
     }
 
     if (info_color_type == PNG_COLOR_TYPE_GRAY)
@@ -221,7 +216,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
         has_grey = 1;
     }
 
-    unsigned char** lines;
+    unsigned char** lines = 0;
     int             i;
 
     if (has_alpha)
@@ -289,7 +284,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
     free(lines);
 
     png_textp text_ptr;
-    int num_text=0;
+    int num_text = 0;
     png_get_text(png_ptr,info_ptr,&text_ptr,&num_text);
 
     while (num_text--)

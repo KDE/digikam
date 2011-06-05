@@ -7,8 +7,8 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,6 @@ class DImgLoaderObserver;
 class DMetadata;
 class ThumbnailImage;
 
-
 class DIGIKAM_EXPORT ThumbnailInfo
 {
 public:
@@ -59,25 +58,35 @@ public:
 
     /** The file path from which the thumbnail shall be generated */
     QString   filePath;
+
     /** The modification date of the original file.
      *  Thumbnail will be regenerated if thumb's modification date is older than this.
      */
     QDateTime modificationDate;
+
     /** If the original file is at all accessible on disk.
-     *  May be false if a file on a removable device is used. */
+     *  May be false if a file on a removable device is used.
+     */
     bool      isAccessible;
+
     /** If available, the uniqueHash + fileSize pair for identification
-     *  of the original file by content. */
+     *  of the original file by content.
+     */
     QString   uniqueHash;
     int       fileSize;
+
     /** Gives a hint at the orientation of the image.
      *  This can be used to supersede the Exif information in the file.
-     *  Will not be used if DMetadata::ORIENTATION_UNSPECIFIED (default value) */
+     *  Will not be used if DMetadata::ORIENTATION_UNSPECIFIED (default value)
+     */
     int       orientationHint;
 
-    /** A custom identifier, if neither filePath nor uniqueHash are applicable. */
+    /** A custom identifier, if neither filePath nor uniqueHash are applicable.
+     */
     QString   customIdentifier;
 };
+
+// ------------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT ThumbnailInfoProvider
 {
@@ -87,6 +96,8 @@ public:
     virtual ~ThumbnailInfoProvider() {};
     virtual ThumbnailInfo thumbnailInfo(const QString& path)=0;
 };
+
+// ------------------------------------------------------------------------------------------
 
 class DatabaseThumbnailInfo;
 
