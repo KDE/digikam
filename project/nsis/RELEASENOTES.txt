@@ -6,6 +6,8 @@ For example:
  - Sending items to the trash is currently broken:
    https://bugs.kde.org/show_bug.cgi?id=229465
  - Camera auto detection doesn't work under windows.
+ - Contextual menu doesn't work with WindowsVista widget style
+   https://bugs.kde.org/show_bug.cgi?id=274388
 
 To report new bugs, please use this url:
 
