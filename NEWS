@@ -166,6 +166,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 138 ==> 269907 : Please consider attached patch for build system: make apidoc generation controllable.
 139 ==> 271323 : digiKam crashes when building thumbnails of grayscale DNGs.
 140 ==> 274455 : Build fails in kmemoryinfo - invalid conversion from 'void*' to 'kstat_named_t*'.
-141 ==> 
-
-
+141 ==> 174828 : Missing HTML closing tag in some strings.
+142 ==> 
