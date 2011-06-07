@@ -7042,8 +7042,6 @@ namespace cimg_library {
                         const unsigned int normalization_type=3,
                         const bool fullscreen_flag=false, const bool closed_flag=false) {
       throw CImgDisplayException("CImgDisplay() : Display has been required but is not available (cimg_display=0)");
-      const char* avoid_warning = title + dimw + dimh + normalization_type + (int)fullscreen_flag + (int)closed_flag;
-      avoid_warning = 0;
       return *this;
     }
 
@@ -7053,8 +7051,6 @@ namespace cimg_library {
                         const unsigned int normalization_type=3,
                         const bool fullscreen_flag=false, const bool closed_flag=false) {
       throw CImgDisplayException("CImgDisplay()::assign() : Display has been required but is not available (cimg_display=0)");
-      const char* avoid_warning = title + img.width + normalization_type + (int)fullscreen_flag + (int)closed_flag;
-      avoid_warning = 0;
       return assign(0,0);
     }
 
@@ -7064,8 +7060,6 @@ namespace cimg_library {
                         const unsigned int normalization_type=3,
                         const bool fullscreen_flag=false, const bool closed_flag=false) {
       throw CImgDisplayException("CImgDisplay()::assign() : Display has been required but is not available (cimg_display=0)");
-      const char* avoid_warning = title + list.size + normalization_type + (int)fullscreen_flag + (int)closed_flag;
-      avoid_warning = 0;
       return assign(0,0);
     }
 
@@ -7076,15 +7070,11 @@ namespace cimg_library {
 
     //! Resize window.
     CImgDisplay& resize(const int width, const int height, const bool redraw=true) {
-      int avoid_warning = width | height | (int)redraw;
-      avoid_warning = 0;
       return *this;
     }
 
     //! Toggle fullscreen mode.
     CImgDisplay& toggle_fullscreen(const bool redraw=true) {
-      bool avoid_warning = redraw;
-      avoid_warning = false;
       return *this;
     }
 
@@ -7100,8 +7090,6 @@ namespace cimg_library {
 
     //! Move window.
     CImgDisplay& move(const int posx, const int posy) {
-      int avoid_warning = posx | posy;
-      avoid_warning = 0;
       return *this;
     }
 
@@ -7117,23 +7105,17 @@ namespace cimg_library {
 
     //! Move mouse pointer to a specific location.
     CImgDisplay& set_mouse(const int posx, const int posy) {
-      int avoid_warning = posx | posy;
-      avoid_warning = 0;
       return *this;
     }
 
     //! Set the window title.
     CImgDisplay& set_title(const char *format, ...) {
-      const char *avoid_warning = format;
-      avoid_warning = 0;
       return *this;
     }
 
     //! Display an image in a window.
     template<typename T>
     CImgDisplay& display(const CImg<T>& img) {
-      unsigned int avoid_warning = img.width;
-      avoid_warning = 0;
       return *this;
     }
 
@@ -7145,8 +7127,6 @@ namespace cimg_library {
     //! Render image buffer into GDI native image format.
     template<typename T>
     CImgDisplay& render(const CImg<T>& img) {
-      unsigned int avoid_warning = img.width;
-      avoid_warning = 0;
       return *this;
     }
 

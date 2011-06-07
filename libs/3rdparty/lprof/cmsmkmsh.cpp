@@ -117,13 +117,12 @@ BOOL ComputePrimary(LPMEASUREMENT Linearized,
     double Ones[3], lmax[3];
     cmsCIEXYZ PrimXYZ;
     SETOFPATCHES SetPrimary;
-    int nR;
 
 
     /* At first, try to see if primaries are already in measurement */
 
     SetPrimary = cmsxPCollBuildSet(Linearized, false);
-    nR = cmsxPCollPatchesNearPrimary(Linearized, Linearized->Allowed,
+    cmsxPCollPatchesNearPrimary(Linearized, Linearized->Allowed,
                                            n, 32, SetPrimary);
 
     Ones[0]  = Ones[1] = Ones[2] = 0;
