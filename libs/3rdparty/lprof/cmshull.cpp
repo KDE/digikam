@@ -693,19 +693,16 @@ static
 void ConstructHull(LPHULL hull)
 {
  LPVERTEX  v, vnext;
- BOOL     changed;    /* T if addition changes hull; not used. */
 
  v = hull->vertices;
 
  do {
         vnext = v->Next;
 
-        changed = false;
-
         if (!v->mark ) {
 
                 v->mark = PROCESSED;
-                changed = AddOne(hull,  v );
+                AddOne(hull,  v );
 
                 CleanEdges(hull);
                 CleanFaces(hull);
