@@ -1570,6 +1570,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/digikam.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam.lsm)
     ENDIF(NOT WIN32)
 
+    ADD_SUBDIRECTORY(playground)
+
 ENDIF(DIGIKAM_CAN_BE_COMPILED)
 
 # ==================================================================================================
