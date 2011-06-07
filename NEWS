@@ -168,4 +168,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 140 ==> 274455 : Build fails in kmemoryinfo - invalid conversion from 'void*' to 'kstat_named_t*'.
 141 ==> 174828 : Missing HTML closing tag in some strings.
 142 ==> 274432 - Build fails due to UINT32.
-143 ==> 
+143 ==> 274062 : possibility to store metadata templates.
+144 ==> 
