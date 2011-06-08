@@ -403,6 +403,9 @@ bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
 // ----------------------------------------------------------------------------
 
 #ifdef Q_OS_SOLARIS
+#ifdef _FILE_OFFSET_BITS
+#undef _FILE_OFFSET_BITS
+#endif
 #include <sys/stat.h>
 #include <sys/swap.h>
 #include <unistd.h>
