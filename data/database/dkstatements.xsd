@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2011-05-28
+ * Description : Database statements
+ *
+ * Copyright (C) 2011 by Francesco Riosa <francesco+kde at pnpitalia dot it>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================
+-->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+  <xs:element name="databaseconfig">
+   <xs:complexType>
+     <xs:sequence>
+       <xs:element name="defaultDB" type="xs:string"     minOccurs="1" maxOccurs="1" />
+       <xs:element name="version"   type="xs:integer"    minOccurs="1" maxOccurs="1" />
+       <!-- xs:element name="version"   type="versionType"   minOccurs="1" maxOccurs="1" / -->
+       <xs:element name="database"  type="databaseType"  minOccurs="1" maxOccurs="unbounded" />
+     </xs:sequence>
+   </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="databaseType">
+    <xs:sequence>
+      <xs:element name="hostName"       type="xs:string"    minOccurs="0" maxOccurs="1"/>
+      <xs:element name="databaseName"   type="xs:string"    minOccurs="1" maxOccurs="1"/>
+      <xs:element name="userName"       type="xs:string"    minOccurs="1" maxOccurs="1"/>
+      <xs:element name="password"       type="xs:string"    minOccurs="1" maxOccurs="1"/>
+      <xs:element name="port"           type="xs:integer"   minOccurs="1" maxOccurs="1"/>
+      <xs:element name="connectoptions" type="xs:string"    minOccurs="0" maxOccurs="1"/>
+      <xs:element name="dbservercmd"    type="xs:string"    minOccurs="0" maxOccurs="1"/>
+      <xs:element name="dbinitcmd"      type="xs:string"    minOccurs="0" maxOccurs="1"/>
+      <xs:element name="dbactions"      type="dbactionsType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="name"           type="xs:string"    use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="dbactionsType">
+    <xs:sequence>
+      <xs:element name="dbaction"       type="dbactionType"     minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dbactionType">
+    <xs:sequence>
+      <xs:element name="statement"      type="statementType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="name"           type="xs:string"    use="required"/>
+    <xs:attribute name="mode"           type="modeType"     use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="statementType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="backends"    type="xs:string"   use="required"/>
+        <xs:attribute name="prepare"     type="prepareType"/>
+        <xs:attribute name="file"        type="xs:string"/>
+        <xs:attribute name="mode"        type="modeType"    use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+
+  <xs:complexType name="versionType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="major"      type="xs:integer"  use="required"/>
+        <xs:attribute name="minor"      type="xs:integer"  use="required"/>
+        <xs:attribute name="revision"   type="xs:integer"  use="required"/>
+        <xs:attribute name="extra"      type="xs:string" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:simpleType name="prepareType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="no" />
+      <xs:enumeration value="keep" />
+      <xs:enumeration value="always" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="modeType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="plain" />
+      <xs:enumeration value="query" />
+      <xs:enumeration value="transaction" />
+    </xs:restriction>
+  </xs:simpleType>
+
+<!--
+kate: encoding utf-8; eol unix; syntax XML; eol unix;
+kate: indent-width 2; mixedindent off; replace-tabs on; remove-trailing-space on; space-indent on;
+kate: word-wrap-column 120; word-wrap on;
+ -->
+</xs:schema>
