@@ -1,0 +1,2638 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+ * ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2011-05-28
+ * Description : Database statements
+ *
+ * Copyright (C) 2011 by Francesco Riosa <francesco+kde at pnpitalia dot it>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; 
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================
+
+ verify this XML with:
+ xmllint -\-noout -\-schema dkstatements.xsd dkstatements.xml
+
+
+ ***************** notes and todos *****************
+ prepare => no, keep, always
+ UndefinedType == 0
+
+ table ImageScannedMatrix ????
+
+  <dbaction name="ImageLister::listFaces" mode="transaction">
+    <proposed-sql>
+      SELECT
+        img.id
+      FROM Images AS img
+      JOIN ImageInformation AS inf
+        ON img.id = inf.imageid
+      INNER JOIN Albums
+        ON alb.id = images.album
+      WHERE img.status = 1
+        ??? AND alb.id = QString::number(personId) ??? could not understand personId
+      ORDER BY alb.id
+      ;
+    </proposed-sql>
+  </dbaction>
+*/
+-->
+
+<databaseconfig>
+  <defaultDB>QMYSQL</defaultDB>
+  <version>2</version>
+  <database name="QMYSQL">
+    <hostName>localhost</hostName>
+    <databaseName>digikam</databaseName>
+    <userName>digikam</userName>
+    <password>digikam</password>
+    <port>3306</port>
+    <connectoptions>UNIX_SOCKET=$$DBMISCPATH$$/mysql.socket</connectoptions>
+    <dbservercmd>/usr/sbin/mysqld</dbservercmd>
+    <dbinitcmd>/usr/bin/mysql_install_db</dbinitcmd>
+    <dbactions>
+
+      <dbaction name="AlbumDB_Sqlite2::setDBPath" mode="transaction">
+        <statement
+        mode="plain"
+        backends="sqlite"
+        prepare="no"
+        file="libs/database/albumdb_sqlite2.cpp:86"><![CDATA[
+          SELECT * FROM sqlite_master
+        ]]></statement>
+      </dbaction>
+  
+      <dbaction name="ThumbnailDB::setSetting" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="keep"
+        file="libs/database/thumbnaildb.cpp:74"><![CDATA[
+          REPLACE INTO Settings
+          VALUES (?,?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::getSetting" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="keep"
+        file="libs/database/thumbnaildb.cpp:81"><![CDATA[
+          SELECT value
+          FROM Settings
+          WHERE keyword = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::findByHash" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="keep"
+        file="libs/database/thumbnaildb.cpp:111"><![CDATA[
+          SELECT
+            t.id,
+            t.type,
+            t.modificationDate,
+            t.orientationHint,
+            t.data
+          FROM Thumbnails AS t
+          JOIIN UniqueHashes AS h
+            ON t.id = h.thumbId
+          WHERE h.uniqueHash = ?
+          AND h.fileSize = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::findByFilePath+01" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/thumbnaildb.cpp:123"><![CDATA[
+          SELECT
+            t.id,
+            t.type,
+            t.modificationDate,
+            t.orientationHint,
+            t.data
+          FROM Thumbnails AS t
+          JOIN FilePaths AS f
+            ON t.id = f.thumbId
+          WHERE f.path = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::findByFilePath+02" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/thumbnaildb.cpp:154"><![CDATA[
+          SELECT
+            uniqueHash
+          FROM UniqueHashes
+          WHERE thumbId = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::findByCustomIdentifier" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/thumbnaildb.cpp:177"><![CDATA[
+          SELECT
+            t.id,
+            t.type,
+            t.modificationDate,
+            t.orientationHint,
+            t.data
+          FROM CustomIdentifiers AS c
+          JOIN Thumbnails AS t
+            ON t.id = c.thumbId
+          WHERE c.identifier = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::getFilePathsWithThumbnail" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/thumbnaildb.cpp:191"><![CDATA[
+          SELECT
+            f.path,
+            t.id
+          FROM FilePaths AS f
+          JOIN Thumbnails AS t
+            ON t.id = f.thumbId
+          WHERE t.type BETWEEN ? AND ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::insertUniqueHash" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/thumbnaildb.cpp:213"><![CDATA[
+          REPLACE INTO UniqueHashes (uniqueHash, fileSize, thumbId)
+          VALUES (?,?,?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::insertFilePath" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/thumbnaildb.cpp:221"><![CDATA[
+          REPLACE INTO FilePaths (path, thumbId)
+          VALUES (?,?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::insertCustomIdentifier" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/thumbnaildb.cpp:227"><![CDATA[
+          REPLACE INTO CustomIdentifiers (identifier, thumbId)
+          VALUES (?,?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::removeByUniqueHash" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/thumbnaildb.cpp:231"><![CDATA[
+          DELETE FROM Thumbnails
+          WHERE id IN
+          (
+            SELECT thumbId
+            FROM UniqueHashes
+            WHERE uniqueHash = :uniqueHash
+              AND fileSize = :filesize
+          );
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::removeByFilePath" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/thumbnaildb.cpp:240"><![CDATA[
+          DELETE FROM Thumbnails
+          WHERE id IN
+          (
+            SELECT thumbId
+            FROM UniqueHashes
+            WHERE uniqueHash = :uniqueHash
+              AND fileSize = :filesize
+          );
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::removeByCustomIdentifier" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/thumbnaildb.cpp:248"><![CDATA[
+          DELETE FROM Thumbnails
+          WHERE id IN
+          (
+            SELECT thumbId
+            FROM UniqueHashes
+            WHERE uniqueHash = :uniqueHash
+              AND fileSize = :filesize
+          );
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::insertThumbnail" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/thumbnaildb.cpp:260"><![CDATA[
+          INSERT INTO Thumbnails (type, modificationDate, orientationHint, data)
+          VALUES (?, ?, ?, ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::replaceThumbnail" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/thumbnaildb.cpp:278"><![CDATA[
+          REPLACE INTO Thumbnails
+            (id, type, modificationDate, orientationHint, data)
+          VALUES
+            (?, ?, ?, ?, ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ThumbnailDB::replaceUniqueHash" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/thumbnaildb.cpp:285"><![CDATA[
+          UPDATE UniqueHashes SET uniqueHash=?, fileSize=?
+          WHERE uniqueHash=?
+          AND fileSize=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+
+      <dbaction name="HaarIface::searchDatabase+01" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/haar/haariface.cpp:156:612"><![CDATA[
+          SELECT
+            m.imageid,
+            0,
+            m.matrix
+          FROM ImageHaarMatrix AS m
+          JOIN Images AS i
+            ON i.id = m.imageid
+          WHERE i.status = 1
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="HaarIface::searchDatabase+02" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/haar/haariface.cpp:161:608"><![CDATA[
+          SELECT
+            m.imageid,
+            a.albumRoot,
+            m.matrix
+          FROM ImageHaarMatrix AS m
+          JOIN Images AS i
+            ON i.id = m.imageid
+          JOIN Albums AS a
+            ON a.id = i.album
+          WHERE i.status = 1
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="HaarIface::indexImage" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/haar/haariface.cpp:377"><![CDATA[
+          REPLACE INTO ImageHaarMatrix
+          (imageid, modificationDate, uniqueHash, matrix)
+          SELECT
+            id, modificationDate, uniqueHash, ?
+          FROM Images
+          WHERE id = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="HaarIface::retrieveSignatureFromDB" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/haar/haariface.cpp:703"><![CDATA[
+          SELECT
+            matrix
+          FROM ImageHaarMatrix
+          WHERE imageid=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ImageLister::listAlbum" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/imagelister.cpp:168"><![CDATA[
+          SELECT DISTINCT
+            img.id,
+            img.name,
+            img.album,
+            inf.rating,
+            img.category,
+            inf.format,
+            inf.creationDate,
+            img.modificationDate,
+            img.fileSize,
+            inf.width,
+            inf.height
+          FROM Images AS i
+          JOIN ImageInformation AS inf
+            ON img.id = inf.imageid
+          WHERE img.status = 1
+            AND
+            (
+              (:enable_recursive AND img.album IN ( /* access.db()->addBoundValuePlaceholders(query, albumIds.size());
+*/  ))
+              OR
+              (NOT :enable_recursive AND img.album = :album)
+            )
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ImageLister::listFaces" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/imagelister.cpp:302"><![CDATA[
+          -- TODO: WTF? prodotto cartesiano
+          SELECT
+            img.id
+          FROM Images AS img
+          JOIN ImageInformation AS inf
+            ON img.id = inf.imageid
+          JOIN Albums
+            ON alb.id = ? /*  QString::number(personId)+ */
+          WHERE img.status = 1
+          ORDER BY alb.id
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ImageLister::listDateRange" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/imagelister.cpp:340"><![CDATA[
+          SELECT DISTINCT
+            img.id,
+            img.name,
+            img.album,
+            alb.albumRoot,
+            inf.rating,
+            img.category,
+            inf.format,
+            inf.creationDate,
+            img.modificationDate,
+            img.fileSize,
+            inf.width,
+            inf.height
+          FROM Images AS img
+          JOIN ImageInformation AS inf
+            ON img.id = inf.imageid
+          JOIN Albums AS alb
+            ON alb.id = img.album
+          WHERE img.status = 1
+            AND inf.creationDate < ?
+            AND inf.creationDate >= ?
+          ORDER BY alb.id
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ImageLister::listAreaRange" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/imagelister.cpp:415"><![CDATA[
+          -- 2011-06-02 changed bound to inclusive
+          SELECT DISTINCT
+            img.id,
+            alb.albumRoot,
+            inf.rating,
+            inf.creationDate,
+            pos.latitudeNumber,
+            pos.longitudeNumber
+          FROM Images AS img
+          JOIN ImageInformation AS inf
+            ON img.id = inf.imageid
+          JOIN Albums AS alb
+            ON alb.id = img.album
+          JOIN ImagePositions AS pos
+            ON img.id = pos.imageid
+          WHERE img.status = 1
+            AND (pos.latitudeNumber >= ? AND pos.latitudeNumber <= ?)
+            AND (pos.longitudeNumber >= ? AND pos.longitudeNumber <= ?);
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ImageLister::listSearch" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/imagelister.cpp:481"><![CDATA[
+          -- if :allAlbums is 0 <list name="albums"/> are searched otherwise all images are returned
+          SELECT DISTINCT
+            img.id,
+            img.name,
+            img.album,
+            alb.albumRoot,
+            inf.rating,
+            img.category,
+            inf.format,
+            inf.creationDate,
+            img.modificationDate,
+            img.fileSize,
+            inf.width,
+            inf.height,
+            ImagePositions.latitudeNumber,
+            ImagePositions.longitudeNumber
+          FROM Images AS img
+          JOIN ImageInformation AS inf
+            ON img.id = inf.imageid
+          JOIN Albums
+            ON alb.id=img.album
+          LEFT JOIN ImageMetadata
+            ON img.id = ImageMetadata.imageid
+          LEFT JOIN ImagePositions
+            ON img.id=ImagePositions.imageid
+          WHERE img.status = 1
+            AND (:allAlbums OR alb.id IN ( <list name="albums"/> ))
+          LIMIT <var name="limit" />
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ImageLister::listImageTagPropertySearch" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/imagelister.cpp:602"><![CDATA[
+          -- TODO: finish and check
+          -- :searchInTree is boolean,
+          SELECT
+          DISTINCT img.id,
+            img.name,
+            img.album,
+            alb.albumRoot,
+            inf.rating,
+            img.category,
+            inf.format,
+            inf.creationDate,
+            img.modificationDate,
+            img.fileSize,
+            inf.width,
+            inf.height,
+            itp.value,
+            itp.property,
+            itp.tagid
+          FROM Images AS img
+          JOIN ImageTagProperties AS itp
+            ON itp.imageid=img.id
+          JOIN ImageInformation AS inf
+            ON img.id=inf.imageid
+          JOIN Albums AS alb
+            ON alb.id=img.album
+          WHERE img.status = 1
+          AND (itp.tagid = :tagid OR (:searchInTree AND itp.tagid IN (SELECT id FROM TagsTree WHERE pid = :pid)))
+          AND itp.property = :property
+          AND itp.value BETWEEN <var name="value" default="-9223372036854775808"/>
+                            AND <var name="value" default="9223372036854775807"/>
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="ImageLister::listFromIdList" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/imagelister.cpp:796"><![CDATA[
+          SELECT DISTINCT
+            img.id,
+            img.name,
+            img.album,
+            alb.albumRoot,
+            inf.rating,
+            img.category,
+            inf.format,
+            inf.creationDate,
+            img.modificationDate,
+            img.fileSize,
+            inf.width,
+            inf.height
+          FROM Images AS img
+          LEFT JOIN ImageInformation AS inf
+            ON img.id=inf.imageid
+          LEFT JOIN Albums AS alb
+            ON alb.id=img.album
+          WHERE img.status = 1
+            AND img.id = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+    <!--
+    /*
+      <dbaction name="" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/imagequerybuilder.cpp"><![CDATA[
+    ++ subselect[0] SELECT DISTINCT id  FROM Albums WHERE
+
+    ++ subselect[1] SELECT imageid FROM ImageTags WHERE tagid = ?))
+
+    ++ subselect[2] (img.id NOT IN  (SELECT imageid FROM ImageTags WHERE tagid = ?))
+
+    ++ subselect[3] (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id WHERE
+    ++ subselect[3]    (SELECT imageid FROM ImageTags
+    ++ subselect[3]     WHERE tagid IN
+    ++ subselect[3]    (SELECT id FROM Tags WHERE name LIKE ?)))
+
+    ++ subselect[5]    (img.id NOT IN
+    ++ subselect[5]    (SELECT imageid FROM ImageTags WHERE tagid IN (SELECT id FROM Tags WHERE name LIKE ?)))
+
+    ++ subselect[6]    (img.id IN (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid =
+    ++                  TagsTree.id
+    ++ subselect[6]    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?)
+    ++ subselect[6]    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) ))
+
+    ++ subselect[7]    (img.id NOT IN
+    ++ subselect[7]    (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id
+    ++ subselect[7]    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?)
+    ++ subselect[7]    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) ))
+
+    ++ subselect[8]    (SELECT imageid FROM ImageTags))
+
+    ++ subselect[9]    (SELECT imageid FROM ImageComments WHERE type=? AND comment = ? )
+
+    ++ subselect[10]   (img.id IN  (SELECT imageid FROM ImageComments WHERE type=? AND author = ?))
+
+    ++ subselect[11]   (img.id IN (SELECT imageid FROM ImageComments WHERE type=? AND comment = ?))
+
+    ++ subselect[12]   (img.id IN (SELECT imageid FROM ImageComments  WHERE type=? AND comment = ?))
+
+    ++ subselect[13]   (%1tagid=? OR %1tagid IN (SELECT id FROM TagsTree WHERE pid=?))
+    ++ subselect[13]   AND  %1property=?
+    ++ subselect[13]   %1property=? AND %1value
+
+    ++ subselect[14]   (img.id IN (SELECT imageid FROM ImageTagProperties WHERE )) ";
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/imagelister.cpp"><![CDATA[
+
+
+    ++ subselect[15]   (SELECT id FROM Albums WHERE url $$##$$ ?))
+
+    ++ subselect[16]   (img.dirid IN (SELECT id FROM Albums WHERE caption $$##$$ ?))
+
+    ++ subselect[17]   (img.dirid IN (SELECT id FROM Albums WHERE collection $$##$$ ?))
+
+    ++ subselect[18]   (img.id IN (SELECT imageid FROM ImageTags WHERE tagid = ?))
+
+    ++ subselect[19]   (img.id NOT IN (SELECT imageid FROM ImageTags WHERE tagid = ?))
+
+    ++ subselect[20]   (img.id IN (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid =
+    TagsTree.id WHERE TagsTree.pid = ? or ImageTags.tagid = ? ))
+
+    ++ subselect[21]   (img.id NOT IN (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid =
+    TagsTree.id WHERE TagsTree.pid = ? or ImageTags.tagid = ? ))
+
+    ++ subselect[22]   (img.id IN (SELECT imageid FROM ImageTags WHERE tagid $$##$$ ?))
+
+    ++ subselect[23]   (img.id IN (SELECT imageid FROM ImageTags WHERE tagid IN (SELECT id FROM Tags WHERE name $$##$$
+    ?)))
+    ++ subselect[23]   (img.name $$##$$ ?)
+    ++ subselect[23]   (img.caption $$##$$ ?)
+    ++ subselect[23]   (img.datetime $$##$$ ?)
+    */
+    -->
+
+
+      <dbaction name="AlbumDB::getAlbumRoots" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:96"><![CDATA[
+          SELECT
+            id, label, status, type, identifier, specificPath
+          FROM AlbumRoots
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::addAlbumRoot" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:123"><![CDATA[
+          REPLACE INTO AlbumRoots
+          (
+            type, label, status, identifier, specificPath
+          )
+          VALUES(?, ?, 0, ?, ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::deleteAlbumRoot" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:133"><![CDATA[
+          DELETE
+          FROM AlbumRoots
+          WHERE id = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::migrateAlbumRoot" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:148"><![CDATA[
+          UPDATE AlbumRoots SET identifier=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::setAlbumRootLabel" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:155"><![CDATA[
+          UPDATE AlbumRoots SET label=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::changeAlbumRootType" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:162"><![CDATA[
+          UPDATE AlbumRoots SET type=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::scanAlbums" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          SELECT
+            a.albumRoot,
+            a.id,
+            a.relativePath,
+            a.date,
+            a.caption,
+            a.collection,
+            b.albumRoot,
+            b.relativePath,
+            i.name
+          FROM Albums AS a
+          LEFT JOIN Images AS i
+            ON A.icon = i.id
+          LEFT JOIN Albums AS b
+            ON B.id = i.album
+          WHERE a.albumRoot != 0
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::scanTags" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:220"><![CDATA[
+          SELECT
+            t.id,
+            t.pid,
+            t.name,
+            a.relativePath,
+            i.name,
+            t.iconkde,
+            a.albumRoot
+          FROM Tags AS t
+          LEFT JOIN Images AS i
+            ON i.id = t.icon
+          LEFT JOIN Albums AS
+            ON a.id = I.album
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getTagInfo" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:266"><![CDATA[
+          SELECT
+            t.id,
+            t.pid,
+            t.name,
+            a.relativePath,
+            i.name
+            t.iconkde,
+            a.albumRoot
+          FROM Tags AS t
+          LEFT JOIN Images AS i
+            ON i.id = t.icon
+          LEFT JOIN Albums AS a
+            ON a.id = i.album
+          WHERE t.id = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::scanSearches" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:316"><![CDATA[
+          SELECT
+            id, type, name, query
+          FROM Searches
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getAlbumShortInfos" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:340"><![CDATA[
+          SELECT
+            id, relativePath, albumRoot
+          FROM Albums
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getTagShortInfos" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:362"><![CDATA[
+          SELECT
+          id, pid, name
+          FROM Tags
+          ORDER BY id
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::addAlbum" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:448"><![CDATA[
+          REPLACE INTO Albums
+          (
+            albumRoot, relativePath, date, caption, collection
+          )
+          VALUES(?, ?, ?, ?, ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:458"><![CDATA[
+          UPDATE Albums SET caption=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::setAlbumCategory" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:466"><![CDATA[
+          UPDATE Albums SET collection=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::setAlbumDate" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:473"><![CDATA[
+          UPDATE Albums SET date=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::setAlbumIcon" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:481"><![CDATA[
+          UPDATE Albums SET icon=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getAlbumIcon" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:490"><![CDATA[
+          SELECT
+            b.relativePath,
+            i.name,
+            b.albumRoot
+          FROM Albums AS a
+          LEFT JOIN Images AS i
+            ON i.id = a.icon
+          LEFT JOIN Albums AS b
+            ON b.id = i.album
+          WHERE a.id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::makeStaleAlbum+01" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:534"><![CDATA[
+          SELECT
+            albumRoot, relativePath
+          FROM Albums
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::makeStaleAlbum+02" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:556"><![CDATA[
+          UPDATE Albums
+          SET albumRoot = 0, relativePath=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::addTag+01" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          UPDATE Tags SET iconkde = ?
+          WHERE id = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::addTag+02" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          UPDATE Tags SET icon = ?
+          WHERE id = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::setTagIcon" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:629"><![CDATA[
+        UPDATE Tags SET iconkde=?, icon=?
+        WHERE id=?
+        ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getTagIcon" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:638"><![CDATA[
+          SELECT
+            a.relativePath,
+            i.name,
+            t.iconkde,
+            a.albumRoot
+          FROM Tags AS t
+          LEFT JOIN Images AS i
+            ON i.id = t.icon
+          LEFT JOIN Albums AS a
+            ON a.id = i.album
+          WHERE t.id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::setTagParentID" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:680"><![CDATA[
+          UPDATE Tags SET pid=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getTagProperties" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:"><![CDATA[
+          SELECT
+            property, value
+          FROM TagProperties
+          WHERE tagid=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getTagProperties" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:720"><![CDATA[
+          SELECT
+            tagid, property, value
+          FROM TagProperties
+          ORDER BY tagid, property
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getTagsWithProperty" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:750"><![CDATA[
+          SELECT DISTINCT
+            tagid
+          FROM TagProperties
+          WHERE property = ?;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::addTagProperty" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:764"><![CDATA[
+        INSERT INTO TagProperties (tagid, property, value)
+        VALUES(?, ?, ?)
+        ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::removeTagProperties" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:779"><![CDATA[
+          DELETE FROM TagProperties
+          WHERE tagid = :tagid
+            AND (
+              :property IS NULL OR (
+                property = :property
+                AND (
+                  :value IS NULL OR ( value = :value)
+              )
+            )
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::addSearch" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:800"><![CDATA[
+          INSERT INTO Searches
+            (type, name, query)
+          VALUES
+            (?, ?, ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::updateSearch" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:813"><![CDATA[
+          UPDATE Searches SET type=?, name=?, query=? WHERE id=?
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::deleteSearch" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:820"><![CDATA[
+          DELETE FROM Searches WHERE id = ?;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::deleteSearches" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:827"><![CDATA[
+          DELETE FROM Searches WHERE type=?;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getSearchQuery" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:835"><![CDATA[
+          SELECT query FROM Searches WHERE id = ?;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getSearchInfo" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:853"><![CDATA[
+          SELECT id, type, name, query FROM Searches WHERE id = ?;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::setSetting" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:875"><![CDATA[
+          REPLACE into Settings VALUES (?, ?);
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getSetting" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:882"><![CDATA[
+          SELECT value FROM Settings WHERE keyword = ?;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getImageId" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1156"><![CDATA[
+          SELECT id FROM Images
+          WHERE album=?
+            AND name=?;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getItemTagNames" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1176"><![CDATA[
+          SELECT t.name
+          FROM Tags AS t
+          JOIN ImageTags AS i
+            ON t.id = i.tagid
+          WHERE i.imageid = ?
+          ORDER BY t.name;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          SELECT tagid FROM ImageTags
+          WHERE imageID=?;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getItemTagIDs" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1197"><![CDATA[
+          SELECT tagid, property, value
+          FROM ImageTagProperties
+          WHERE imageid = :imageid
+            AND (:tagid = -1  OR tagid = :tagid)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getTagIdsWithProperties" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1266"><![CDATA[
+          SELECT DISTINCT tagid
+          FROM ImageTagProperties
+          WHERE imageid = ?;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::addImageTagProperty" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1283"><![CDATA[
+          INSERT INTO ImageTagProperties
+            (imageid, tagid, property, value)
+          VALUES
+            (?, ?, ?, ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::removeImageTagProperties" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1298"><![CDATA[
+          DELETE FROM ImageTagProperties
+          WHERE imageid=?
+            AND (ISNULL(:tagid) OR tagid = :tagid)
+            AND (ISNULL(:property) OR property = :property)
+            AND (ISNULL(:value) OR value = :value)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getItemShortInfo" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1324"><![CDATA[
+          SELECT
+            i.name,
+            a.albumRoot,
+            a.relativePath,
+            a.id
+          FROM Images AS i
+          LEFT JOIN Albums AS a
+            ON a.id = i.album
+          WHERE i.id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getItemShortInfo" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1349"><![CDATA[
+          SELECT
+            i.id,
+            a.id
+          FROM Images AS i
+          JOIN Albums AS a
+            ON i.album = a.id
+          WHERE name = ?
+            AND albumRoot = ?
+            AND relativePath = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::hasTags" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1382"><![CDATA[
+          SELECT COUNT(tagid)
+          FROM ImageTags
+          WHERE imageid IN (<list name="imageid"/>)
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getItemCommonTagIDs" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1420"><![CDATA[
+          SELECT DISTINCT tagid
+          FROM ImageTags
+          WHERE imageid IN (<list name="imageid"/>)
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::removeImagePosition" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1818"><![CDATA[
+          DELETE FROM ImagePositions WHERE imageid = ?;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getImageComments" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1827"><![CDATA[
+          SELECT
+            id, type, language, author, date, comment
+          FROM ImageComments
+          WHERE imageid = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::setImageComment" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1861"><![CDATA[
+          REPLACE INTO ImageComments
+            ( imageid, type, language, author, date, comment )
+          VALUES
+            (?, ?, ?, ?, ?, ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::removeImageComment" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1891"><![CDATA[
+          DELETE
+          FROM ImageComments
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getImageProperty" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1899"><![CDATA[
+          SELECT
+            value
+          FROM ImageProperties
+          WHERE imageid=?
+            AND property=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::setImageProperty" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1920"><![CDATA[
+          REPLACE INTO ImageProperties
+            (imageid, property, value)
+          VALUES
+            (?, ?, ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::removeImageProperty" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1928"><![CDATA[
+          DELETE
+          FROM ImageProperties
+          WHERE imageid=?
+            AND property=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getImageCopyright" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1932"><![CDATA[
+          SELECT
+            property, value, extraValue
+          FROM ImageCopyright
+          WHERE imageid = :imageid
+            AND (ISNULL(:property) OR :property = ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::setImageCopyrightProperty+03" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:1986"><![CDATA[
+          REPLACE INTO ImageCopyright
+            (imageid, property, value, extraValue)
+          VALUES
+            (?, ?, ?, ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::findByNameAndCreationDate" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2039"><![CDATA[
+          SELECT
+            id
+          FROM Images
+          JOIN ImageInformation
+            ON id=imageid
+          WHERE name = ?
+            AND creationDate = ?
+            AND status != 3
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::hasImageHistory" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2056"><![CDATA[
+          SELECT 1
+          FROM ImageHistory
+          WHERE imageid = ?
+          LIMIT 1
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getImageHistory" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2066"><![CDATA[
+          SELECT
+            uuid, history
+          FROM ImageHistory
+          WHERE imageid = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getItemsForUuid" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2091"><![CDATA[
+          SELECT
+            imageid
+          FROM ImageHistory AS h
+          JOIN Images AS i
+            ON i.id = h.imageid
+          WHERE h.uuid = ?
+            AND i.status != 3
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getImageUuid" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2115"><![CDATA[
+          SELECT
+            uuid
+          FROM ImageHistory
+          WHERE imageid=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::addImageRelation" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2147"><![CDATA[
+          REPLACE INTO ImageRelations
+            (subject, object, type)
+          VALUES
+            (?, ?, ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getRelatedImages" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2249"><![CDATA[
+          SELECT r.subject, r.object
+          FROM ImageRelations AS r
+          JOIN Images AS i
+            ON r.object = i.id
+          WHERE ((:fromOrTo AND r.subject = :subject) OR (NOT :fromOrTo AND r.object = :object))
+            AND (:type = 0 OR r.type = :type)
+            AND status != 3
+          LIMIT <var name="limit" />
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getRelationCloud" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2308"><![CDATA[
+          SELECT
+            r.subject,
+            r.object
+          FROM ImageRelations AS r
+          JOIN Images AS sbj
+            ON r.subject = sbj.id
+          JOIN Images AS obj
+            ON r.object = obj.id
+          WHERE sbj.status != 3
+            AND obj.status != 3
+            AND (r.subject = :subject OR r.object = :object)
+            AND (:type = 0 OR r.type = :type)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getOneRelatedImageEach" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2368"><![CDATA[
+          SELECT
+            r.subject,
+            r.object
+          FROM ImageRelations AS r
+          JOIN Images AS sbj
+            ON r.subject = sbj.id
+          JOIN Images AS obj
+            ON r.object = obj.id
+          WHERE
+          (
+            (r.subject = :subject AND obj.status != 3)
+            OR
+            (r.object = :object AND obj.status != 3)
+          )
+          AND (:type = 0 OR r.type = :type)
+          LIMIT 1
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::hasHaarFingerprints" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2422"><![CDATA[
+          SELECT 1
+          FROM ImageHaarMatrix
+          WHERE matrix IS NOT NULL
+          LIMIT 1;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getDirtyOrMissingFingerprints" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2435"><![CDATA[
+          -- ERROR 1267 (HY000): Illegal mix of collations (utf8_unicode_ci,IMPLICIT) and (utf8_general_ci,IMPLICIT)
+          -- for operation '<>'
+          SELECT
+            i.id
+          FROM Images AS i
+          LEFT JOIN ImageHaarMatrix AS h
+            ON i.id = h.imageid
+          WHERE i.status=1
+            AND i.category=1
+            AND
+            (
+              h.imageid IS NULL
+              OR i.modificationDate != h.modificationDate
+              OR i.uniqueHash != h.uniqueHash
+            )
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getDirtyOrMissingFingerprintURLs" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2455"><![CDATA[
+          -- ERROR 1267 (HY000): Illegal mix of collations (utf8_unicode_ci,IMPLICIT) and (utf8_general_ci,IMPLICIT)
+          -- for operation '<>'
+          SELECT
+            a.albumRoot, a.relativePath, i.name
+          FROM Images AS i
+          LEFT JOIN ImageHaarMatrix AS h
+            ON i.id=h.imageid
+          LEFT JOIN Albums AS a
+            ON a.id=i.album
+          WHERE i.status=1
+            AND i.category=1
+            AND
+            (
+              h.imageid IS NULL
+              OR i.modificationDate != h.modificationDate
+              OR i.uniqueHash != h.uniqueHash
+            )
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getDirtyOrMissingFaceImageUrls" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2493"><![CDATA[
+          SELECT
+            alb.albumRoot,
+            alb.relativePath,
+            img.name
+          FROM Images AS img
+          LEFT JOIN ImageScannedMatrix AS ism
+            ON img.id=ism.imageid
+          LEFT JOIN Albums AS alb
+            ON alb.id=img.album
+          WHERE img.status=1
+            AND img.category=1
+            AND
+            (
+              ism.imageid IS NULL
+              OR img.modificationDate != ism.modificationDate
+              OR img.uniqueHash != ism.uniqueHash
+            )
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getIdenticalFiles+01" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2537"><![CDATA[
+          SELECT
+            uniqueHash, fileSize
+          FROM Images
+          WHERE id = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getIdenticalFiles+02" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2563"><![CDATA[
+          SELECT
+            id, album, name, status, category, modificationDate, fileSize
+          FROM Images
+          WHERE fileSize=?
+            AND uniqueHash=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::findInDownloadHistory" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2902"><![CDATA[
+          SELECT
+            id
+          FROM DownloadHistory
+          WHERE identifier=?
+            AND filename=?
+            AND filesize=?
+            AND filedate=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::addToDownloadHistory" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2917"><![CDATA[
+          REPLACE INTO DownloadHistory
+            (identifier, filename, filesize, filedate)
+          VALUES
+            (?,?,?,?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::addItemTag" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:2961:3001"><![CDATA[
+          REPLACE INTO ImageTags (imageid, tagid)
+          VALUES(?, ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getItemNamesInAlbum" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3079"><![CDATA[
+          SELECT DISTINCT Images.name
+          FROM Images AS i
+          WHERE i.album = :album
+          IN
+          (
+            SELECT
+            DISTINCT id
+            FROM Albums
+            WHERE albumRoot=?
+            AND (relativePath=? OR relativePath LIKE ?)
+          )
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getAllCreationDates" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3124:3144"><![CDATA[
+          SELECT
+            inf.creationDate
+          FROM ImageInformation AS inf
+          INNER JOIN Images AS i
+            ON i.id = inf.imageid
+          WHERE i.status = 1
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          SELECT
+            creationDate
+          FROM ImageInformation
+          INNER JOIN Images
+            ON Images.id=ImageInformation.imageid
+          WHERE Images.status=1
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getNumberOfImagesInAlbums" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3192"><![CDATA[
+          -- TODO: COUNT(DISTINCT ????)
+          SELECT album
+          FROM Images
+          WHERE status=1
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getNumberOfImagesInTags" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3230"><![CDATA[
+          -- TODO: COUNT(DISTINCT ????)
+          SELECT
+          id
+          from Tags
+          SELECT
+          tagid
+          FROM ImageTags
+          LEFT JOIN Images ON Images.id=ImageTags.imageid
+          WHERE Images.status=1
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getNumberOfImagesInTagProperties" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3260"><![CDATA[
+          SELECT
+            tagid, COUNT(*)
+          FROM ImageTagProperties AS itp
+          LEFT JOIN Images AS img
+            ON img.id = itp.imageid
+              WHERE itp.property = ?
+            AND img.status = 1
+          GROUP BY tagid
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getFormatStatistics" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3288"><![CDATA[
+          SELECT
+            COUNT(*),
+            ii.format
+          FROM ImageInformation AS ii
+          JOIN Images AS i
+            ON ii.imageid = i.id
+          WHERE i.status = 1
+            AND (:category = 0 OR category = :category)
+          GROUP BY ii.format
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getAlbumForPath" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3360"><![CDATA[
+          SELECT
+            id
+          FROM Albums
+          WHERE albumRoot = ?
+            AND relativePath = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getAlbumAndSubalbumsForPath" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3384"><![CDATA[
+          SELECT
+            id, relativePath
+          FROM Albums
+          WHERE albumRoot=?
+          AND (relativePath=? OR relativePath LIKE ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getAlbumsOnAlbumRoot" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3410"><![CDATA[
+          SELECT
+            id
+          FROM Albums
+          WHERE albumRoot=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::addItem" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3435"><![CDATA[
+          REPLACE INTO Images
+            (album, name, status, category, modificationDate, fileSize, uniqueHash)
+          VALUES
+            (?,?,?,?,?,?,?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::updateItem" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3457"><![CDATA[
+          UPDATE Images
+          SET category=?, modificationDate=?, fileSize=?, uniqueHash=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::setItemStatus" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3469"><![CDATA[
+          UPDATE Images SET status=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getItemAlbum" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3652"><![CDATA[
+          SELECT
+            name
+          FROM Images
+          WHERE id = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getItemIDsInAlbum" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3815"><![CDATA[
+          SELECT
+            id
+          FROM Images
+          WHERE album = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getItemIDsAndURLsInAlbum" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:3845"><![CDATA[
+          SELECT
+            i.id,
+            a.relativePath,
+            i.name
+          FROM Images
+          JOIN Albums
+            ON a.id = i.album
+          WHERE a.id = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getItemScanInfos+01" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="keep"
+        file="libs/database/albumdb.cpp:3882"><![CDATA[
+          SELECT
+            id, album, name, status, category, modificationDate, fileSize, uniqueHash
+          FROM Images
+          WHERE album = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getItemScanInfo+02" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="keep"
+        file="libs/database/albumdb.cpp:3921"><![CDATA[
+          SELECT
+            id, album, name, status, category, modificationDate, fileSize, uniqueHash
+          FROM Images
+          WHERE id = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getAlbumRelativePath" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4040"><![CDATA[
+          SELECT
+            relativePath
+          FROM Albums
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getAlbumRootId" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4056"><![CDATA[
+          SELECT
+            albumRoot
+          FROM Albums
+          WHERE id = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getAlbumLowestDate" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4072"><![CDATA[
+          SELECT
+            MIN(inf.creationDate)
+          FROM ImageInformation AS inf
+          JOIN Images AS img
+            ON img.id=inf.imageid
+          WHERE img.album = ?
+          GROUP BY img.album
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getAlbumHighestDate" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4090"><![CDATA[
+          SELECT
+            MAX(inf.creationDate)
+          FROM ImageInformation AS inf
+          JOIN Images AS img
+            ON img.id=inf.imageid
+          WHERE img.album = ?
+          GROUP BY img.album
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getAlbumAverageDate" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4108"><![CDATA[
+          -- TODO: database can do average
+          SELECT
+            inf.creationDate
+          FROM ImageInformation AS inf
+          JOIN Images AS img
+            ON img.id=inf.imageid
+          WHERE img.album = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::removeItemsFromAlbum" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4151"><![CDATA[
+          -- TODO: does not work with foreign keys
+          UPDATE Images
+          SET status=?, album=NULL
+          WHERE album=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::removeItems" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4159"><![CDATA[
+          UPDATE Images
+          SET status=?, album=NULL
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::renameAlbum" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4227"><![CDATA[
+          UPDATE Albums SET albumRoot=?, relativePath=?
+          WHERE id=?
+          AND albumRoot=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          SELECT
+            id, relativePath
+          FROM Albums
+          WHERE id=?
+            AND albumRoot=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::setTagName" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4258"><![CDATA[
+          UPDATE Tags SET name=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::moveItem" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4277"><![CDATA[
+          UPDATE Images SET album=?, name=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyItem" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4307"><![CDATA[
+          INSERT INTO Images
+          (album, name, status, category, modificationDate, fileSize, uniqueHash)
+          SELECT
+          ?, ?, status, category, modificationDate, fileSize, uniqueHash
+          FROM Images
+          WHERE id = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyImageAttributes+01" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4335"><![CDATA[
+          -- TODO: transaction
+          INSERT INTO ImageHaarMatrix
+          (imageid, modificationDate, uniqueHash, matrix)
+          SELECT
+            ?, modificationDate, uniqueHash, matrix
+          FROM ImageHaarMatrix
+          WHERE imageid = ?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyImageAttributes+02" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          INSERT INTO ImageInformation
+          (
+            imageid,
+            rating,
+            creationDate,
+            digitizationDate,
+            orientation,
+            width,
+            height,
+            format,
+            colorDepth,
+            colorModel
+          )
+          SELECT
+            ?,
+            rating,
+            creationDate,
+            digitizationDate,
+            orientation,
+            width,
+            height,
+            format,
+            colorDepth,
+            colorModel
+            FROM ImageInformation
+            WHERE imageid=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyImageAttributes+03" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          INSERT INTO ImageMetadata
+          (
+            imageid,
+            make,
+            model,
+            lens,
+            aperture,
+            focalLength,
+            focalLength35,
+            exposureTime,
+            exposureProgram,
+            exposureMode,
+            sensitivity,
+            flash,
+            whiteBalance,
+            whiteBalanceColorTemperature,
+            meteringMode,
+            subjectDistance,
+            subjectDistanceCategory
+          )
+          SELECT
+            ?,
+            make,
+            model,
+            lens,
+            aperture,
+            focalLength,
+            focalLength35,
+            exposureTime,
+            exposureProgram,
+            exposureMode,
+            sensitivity,
+            flash,
+            whiteBalance,
+            whiteBalanceColorTemperature,
+            meteringMode,
+            subjectDistance,
+            subjectDistanceCategory
+          FROM ImageMetadata
+          WHERE imageid=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyImageAttributes+04" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          INSERT INTO ImagePositions
+          (
+            imageid,
+            latitude,
+            latitudeNumber,
+            longitude,
+            longitudeNumber,
+            altitude,
+            orientation,
+            tilt,
+            roll,
+            accuracy,
+            description
+          )
+          SELECT
+            ?,
+            latitude,
+            latitudeNumber,
+            longitude,
+            longitudeNumber,
+            altitude,
+            orientation,
+            tilt,
+            roll,
+            accuracy,
+            description
+          FROM ImagePositions
+          WHERE imageid=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyImageAttributes+05" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          INSERT INTO ImageComments
+            (imageid, type, language, author, date, comment)
+          SELECT
+            ?, type, language, author, date, comment
+          FROM ImageComments
+          WHERE imageid=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyImageAttributes+06" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          INSERT INTO ImageCopyright
+            (imageid, property, value, extraValue)
+          SELECT
+            ?, property, value, extraValue
+          FROM ImageCopyright
+          WHERE imageid=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyImageAttributes+07" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          INSERT INTO ImageHistory
+          (imageid, uuid, history)
+          SELECT
+          ?, uuid, history
+          FROM ImageHistory
+          WHERE imageid=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyImageAttributes+08" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          INSERT INTO ImageRelations
+            (subject, object, type)
+          SELECT
+            ?, object, type
+          FROM ImageRelations
+          WHERE subject=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyImageAttributes+09" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp"><![CDATA[
+          INSERT INTO ImageRelations
+            (subject, object, type)
+          SELECT
+            subject, ?, type
+          FROM ImageRelations
+          WHERE object=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyImageProperties" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4410"><![CDATA[
+          INSERT INTO ImageProperties
+            (imageid, property, value)
+          SELECT
+            ?, property, value
+          FROM ImageProperties
+          WHERE imageid=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyImageTags" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4419"><![CDATA[
+          INSERT INTO ImageTags
+            (imageid, tagid)
+          SELECT
+            ?, tagid
+          FROM ImageTags
+          WHERE imageid=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyAlbumProperties+01" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4438"><![CDATA[
+          SELECT
+            date, caption, collection, icon
+          FROM Albums
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::copyAlbumProperties+02" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4453"><![CDATA[
+          UPDATE Albums SET date=?, caption=?,
+          collection=?, icon=?
+          WHERE id=?
+          ;
+        ]]></statement>
+      </dbaction>
+
+      <dbaction name="AlbumDB::getImageIdsFromArea" mode="transaction">
+        <statement
+        mode="plain"
+        backends="mysql,sqlite"
+        prepare="always"
+        file="libs/database/albumdb.cpp:4467"><![CDATA[
+          -- changed < to <= and > to >=
+          SELECT
+            inf.imageid,
+            inf.rating,
+            pos.latitudeNumber,
+            pos.longitudeNumber
+          FROM ImageInformation AS inf
+          JOIN ImagePositions AS pos
+            ON inf.imageid = pos.imageid
+          WHERE (pos.latitudeNumber => ? AND pos.latitudeNumber <= ?)
+          AND (pos.longitudeNumber >= ? AND pos.longitudeNumber <= ?)
+          ;
+        ]]></statement>
+      </dbaction>
+
+
+
+
+
+
+            <dbaction name="Delete_Thumbnail_ByPath" mode="query">
+                <statement mode="query">
+                    SELECT @thumbsId := thumbId FROM FilePaths WHERE path=:path
+                </statement>
+                <statement mode="query">
+                    DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
+                </statement>
+                <statement mode="query">
+                    DELETE FROM FilePaths WHERE FilePaths.thumbId = @thumbsId;
+                </statement>
+                <statement mode="query">
+                    DELETE FROM Thumbnails WHERE id = @thumbsId;
+                </statement>
+            </dbaction>
+
+            <dbaction name="Delete_Thumbnail_ByUniqueHashId" mode="query">
+                <statement mode="query">
+                    SELECT @thumbsId := thumbId FROM UniqueHashes WHERE uniqueHash=:uniqueHash AND fileSize=:filesize
+                </statement>
+                <statement mode="query">
+                    DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
+                </statement>
+                <statement mode="query">
+                    DELETE FROM FilePaths WHERE FilePaths.thumbId = @thumbsId;
+                </statement>
+                <statement mode="query">
+                    DELETE FROM Thumbnails WHERE id = @thumbsId;
+                </statement>
+            </dbaction>
+
+            <dbaction name="Delete_Thumbnail_ByCustomIdentifier" mode="query">
+                <statement mode="query">
+                    SELECT @thumbsId := thumbId FROM CustomIdentifiers WHERE identifier=:identifier
+                </statement>
+                <statement mode="query">
+                    DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
+                </statement>
+                <statement mode="query">
+                    DELETE FROM FilePaths WHERE FilePaths.thumbId = @thumbsId;
+                </statement>
+                <statement mode="query">
+                    DELETE FROM CustomIdentifiers WHERE CustomIdentifiers.thumbId = @thumbsId;
+                </statement>
+                <statement mode="query">
+                    DELETE FROM Thumbnails WHERE id = @thumbsId;
+                </statement>
+            </dbaction>
+
+
+
+    </dbactions>
+  </database>
+</databaseconfig>
+
+<!-- 
+kate: encoding utf-8; eol unix; syntax SQL (MySQL); eol unix;
+kate: indent-width 2; mixedindent off; replace-tabs on; remove-trailing-space on; space-indent on;
+kate: word-wrap-column 120; word-wrap on;
+ -->

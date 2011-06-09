@@ -35,6 +35,7 @@
 
 // Local includes
 
+#include "dbactiontype.h"
 #include "databaseconfigelement.h"
 #include "databasecorebackend.h" // getDBAction & DatabaseCoreBackend
 //#include "dbconfigversion.h"
@@ -50,41 +51,55 @@ QTextStream qout(stdout, QIODevice::WriteOnly);
 #define DATABASEPARAMETERS_DEBUG 1
 
 
+QMap<QString, Digikam::DatabaseConfigElement> databaseConfigs;
+QString errorMessage;
 
-
-namespace Digikam
+void readDBActions(QDomElement& sqlStatementElements, Digikam::DatabaseConfigElement& configElement)
 {
+    QDomElement dbActionElement =  sqlStatementElements.firstChildElement("dbaction");
 
-class DatabaseConfigElementLoader
-{
-public:
-
-    DatabaseConfigElementLoader();
-
-    QMap<QString, DatabaseConfigElement> databaseConfigs;
-
-    bool readConfig();
-    DatabaseConfigElement readDatabase(QDomElement& databaseElement);
-    void readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement);
-
-    bool isValid;
-    QString errorMessage;
-};
-
-K_GLOBAL_STATIC(DatabaseConfigElementLoader, loader)
-
-DatabaseConfigElementLoader::DatabaseConfigElementLoader()
-{
-    isValid = readConfig();
-    if (!isValid)
+    for ( ; !dbActionElement.isNull();  dbActionElement=dbActionElement.nextSiblingElement("dbaction"))
     {
-        kError() << errorMessage;
+        if (!dbActionElement.hasAttribute("name"))
+        {
+            kDebug() << "Missing statement attribute <name>.";
+        }
+
+        Digikam::DatabaseAction action;
+        action.name = dbActionElement.attribute("name");
+        //kDebug() << "Getting attribute " << dbActionElement.attribute("name");
+
+        if (dbActionElement.hasAttribute("mode"))
+        {
+            action.mode = dbActionElement.attribute("mode");
+        }
+
+
+        QDomElement databaseElement = dbActionElement.firstChildElement("statement");
+
+        for ( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement("statement"))
+        {
+            if (!databaseElement.hasAttribute("mode"))
+            {
+                kDebug() << "Missing statement attribute <mode>.";
+            }
+
+            Digikam::DatabaseActionElement actionElement;
+            actionElement.mode      = databaseElement.attribute("mode");
+            actionElement.statement = databaseElement.text();
+
+            action.dbActionElements.append(actionElement);
+        }
+
+        configElement.sqlStatements.insert(action.name, action);
     }
 }
 
-DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& databaseElement)
+
+
+Digikam::DatabaseConfigElement readDatabase(QDomElement& databaseElement)
 {
-    DatabaseConfigElement configElement;
+    Digikam::DatabaseConfigElement configElement;
     configElement.databaseID="Unidentified";
 
     if (!databaseElement.hasAttribute("name"))
@@ -178,7 +193,8 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     return configElement;
 }
 
-void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement)
+/*
+void readDBActions(QDomElement& sqlStatementElements, Digikam::DatabaseConfigElement& configElement)
 {
     QDomElement dbActionElement =  sqlStatementElements.firstChildElement("dbaction");
 
@@ -189,7 +205,7 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
             kDebug() << "Missing statement attribute <name>.";
         }
 
-        DatabaseAction action;
+        Digikam::DatabaseAction action;
         action.name = dbActionElement.attribute("name");
         //kDebug() << "Getting attribute " << dbActionElement.attribute("name");
 
@@ -218,17 +234,17 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
         configElement.sqlStatements.insert(action.name, action);
     }
 }
+*/
 
-bool DatabaseConfigElementLoader::readConfig()
+bool readConfig(QString filepath)
 {
-    //QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
-    QString filepath = "/home/vivo/digikam-devel/cppsrc/data/database/dkstatements.xml";
+    // QString filepath = KStandardDirs::locate("data", "digikam/database/dkstatements.xml");
     kDebug() << "Loading SQL code from config file" << filepath;
     QFile file(filepath);
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        errorMessage = i18n("Could not open dbconfig.xml file <filename>%1</filename>", filepath);
+        errorMessage = i18n("Could not open xml file <filename>%1</filename>", filepath);
         return false;
     }
 
@@ -237,7 +253,7 @@ bool DatabaseConfigElementLoader::readConfig()
     if (!doc.setContent(&file))
     {
         file.close();
-        errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> is invalid and cannot be read.", filepath);
+        errorMessage = i18n("The XML in file <filename>%1</filename> is invalid and cannot be read.", filepath);
         return false;
     }
 
@@ -247,7 +263,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (element.isNull())
     {
-        errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
+        errorMessage = i18n("The XML in file <filename>%1</filename> "
                             "is missing the required element <icode>%1</icode>",
                             filepath, element.tagName());
         return false;
@@ -257,7 +273,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (defaultDB.isNull())
     {
-        errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
+        errorMessage = i18n("The XML in file <filename>%1</filename> "
                             "is missing the required element <icode>%1</icode>",
                             filepath, element.tagName());
         return false;
@@ -274,7 +290,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (version < dbconfig_xml_version)
     {
-        errorMessage = i18n("An old version of the dbconfig.xml file <filename>%1</filename> "
+        errorMessage = i18n("An old version of the xml file <filename>%1</filename> "
                             "is found. Please ensure that the version released "
                             "with the running version of digiKam is installed. ",
                             filepath);
@@ -289,13 +305,13 @@ bool DatabaseConfigElementLoader::readConfig()
 
     for ( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement("database"))
     {
-        DatabaseConfigElement l_DBCfgElement = readDatabase(databaseElement);
+        Digikam::DatabaseConfigElement l_DBCfgElement = readDatabase(databaseElement);
         databaseConfigs.insert(l_DBCfgElement.databaseID, l_DBCfgElement);
     }
 
 #ifdef DATABASEPARAMETERS_DEBUG
     kDebug() << "Found entries: " << databaseConfigs.size();
-    foreach (const DatabaseConfigElement& configElement, databaseConfigs )
+    foreach (const Digikam::DatabaseConfigElement& configElement, databaseConfigs )
     {
         kDebug() << "DatabaseID: " << configElement.databaseID;
         kDebug() << "HostName: " << configElement.hostName;
@@ -326,34 +342,20 @@ bool DatabaseConfigElementLoader::readConfig()
     return true;
 }
 
-DatabaseConfigElement DatabaseConfigElement::element(const QString& databaseType)
+
+
+
+QString getDBActionQuery(const Digikam::DatabaseAction& action)
 {
-    // Unprotected read-only access? Usually accessed under DatabaseAccess protection anyway
-    return loader->databaseConfigs.value(databaseType);
+
+    QString result;
+
+    foreach (Digikam::DatabaseActionElement actionElement, action.dbActionElements)
+    {
+        result = result + actionElement.statement;
+    }
+    return result;
 }
-
-bool DatabaseConfigElement::checkReadyForUse()
-{
-    return loader->isValid;
-}
-
-QString DatabaseConfigElement::errorMessage()
-{
-    return loader->errorMessage;
-}
-
-} // namespace Digikam
-
-
-
-
-
-
-
-
-
-
-
 
 
 static QString DOC =
@@ -386,19 +388,18 @@ int main( int, char*[] )
     doc.setContent( DOC );
     printCDATA( doc.documentElement() );
 
-    Digikam::DatabaseConfigElementLoader config;
-    //DatabaseConfigElementLoader *c = new DatabaseConfigElementLoader();
-    //delete c;
+    QString filepath = KStandardDirs::locate("data", "digikam/database/dkstatements.xml");
+    readConfig(filepath);
 
-    Digikam::DatabaseLocking* locking = new Digikam::DatabaseLocking() ;
-    Digikam::DatabaseCoreBackend* backend = new Digikam::DatabaseCoreBackend("pippo", locking);
-    Digikam::DatabaseAction action = backend->getDBAction(QString("Delete_Thumbnail_ByUniqueHashId"));
+    qout << "Found entries: " << databaseConfigs.size() << endl;
+    foreach (const Digikam::DatabaseConfigElement& configElement, databaseConfigs )
+    {
+        qout << "DatabaseID: " << configElement.databaseID << endl;
+        Digikam::DatabaseAction action = configElement.sqlStatements.value(QString("ThumbnailDB::setSetting"));
+        qout << action.name << endl;
+        qout << action.mode << endl;
+        qout << getDBActionQuery(action) << endl;
+    }
 
-    qout << QString(action.name) << endl;
-
-    delete backend;
-    delete locking;
-    
     return 0;
 }
-
