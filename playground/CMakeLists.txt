@@ -19,6 +19,7 @@ SET(playground_SRCS
 #KDE4_ADD_APP_ICON(playground_SRCS "../data/icons/apps/hi*-app-showfoto.png")
 
 KDE4_ADD_EXECUTABLE(playground ${playground_SRCS})
+KDE4_ADD_EXECUTABLE(read_QXmlStram read_QXmlStream.cpp)
 
 TARGET_LINK_LIBRARIES(playground
                       digikamdatabase
@@ -33,6 +34,18 @@ TARGET_LINK_LIBRARIES(playground
                       ${KDE4_KDEUI_LIBS}
                       ${KDE4_KPARTS_LIBS}
                      )
+TARGET_LINK_LIBRARIES(read_QXmlStram
+                      ${QT_QTCORE_LIBRARY}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTSQL_LIBRARY}
+                      ${QT_QT3SUPPORT_LIBRARY}
+                      ${QT_LIBRARIES}
+                      ${KDE4_KIO_LIBS}
+                      ${KDE4_SOLID_LIBS}
+                      ${KDE4_KDEUI_LIBS}
+                      ${KDE4_KPARTS_LIBS}
+                     )
+
 
 #INSTALL(TARGETS showfoto ${INSTALL_TARGETS_DEFAULT_ARGS})
 
