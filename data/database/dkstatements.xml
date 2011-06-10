@@ -2575,55 +2575,53 @@
 
 
 
+      <dbaction name="Delete_Thumbnail_ByPath" mode="query">
+          <statement mode="query" backends="mysql,sqlite">
+              SELECT @thumbsId := thumbId FROM FilePaths WHERE path=:path
+          </statement>
+          <statement mode="query" backends="mysql,sqlite">
+              DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
+          </statement>
+          <statement mode="query" backends="mysql,sqlite">
+              DELETE FROM FilePaths WHERE FilePaths.thumbId = @thumbsId;
+          </statement>
+          <statement mode="query" backends="mysql,sqlite">
+              DELETE FROM Thumbnails WHERE id = @thumbsId;
+          </statement>
+      </dbaction>
 
+      <dbaction name="Delete_Thumbnail_ByUniqueHashId" mode="query">
+          <statement mode="query" backends="mysql,sqlite">
+              SELECT @thumbsId := thumbId FROM UniqueHashes WHERE uniqueHash=:uniqueHash AND fileSize=:filesize
+          </statement>
+          <statement mode="query" backends="mysql,sqlite">
+              DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
+          </statement>
+          <statement mode="query" backends="mysql,sqlite">
+              DELETE FROM FilePaths WHERE FilePaths.thumbId = @thumbsId;
+          </statement>
+          <statement mode="query" backends="mysql,sqlite">
+              DELETE FROM Thumbnails WHERE id = @thumbsId;
+          </statement>
+      </dbaction>
 
-            <dbaction name="Delete_Thumbnail_ByPath" mode="query">
-                <statement mode="query">
-                    SELECT @thumbsId := thumbId FROM FilePaths WHERE path=:path
-                </statement>
-                <statement mode="query">
-                    DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
-                </statement>
-                <statement mode="query">
-                    DELETE FROM FilePaths WHERE FilePaths.thumbId = @thumbsId;
-                </statement>
-                <statement mode="query">
-                    DELETE FROM Thumbnails WHERE id = @thumbsId;
-                </statement>
-            </dbaction>
-
-            <dbaction name="Delete_Thumbnail_ByUniqueHashId" mode="query">
-                <statement mode="query">
-                    SELECT @thumbsId := thumbId FROM UniqueHashes WHERE uniqueHash=:uniqueHash AND fileSize=:filesize
-                </statement>
-                <statement mode="query">
-                    DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
-                </statement>
-                <statement mode="query">
-                    DELETE FROM FilePaths WHERE FilePaths.thumbId = @thumbsId;
-                </statement>
-                <statement mode="query">
-                    DELETE FROM Thumbnails WHERE id = @thumbsId;
-                </statement>
-            </dbaction>
-
-            <dbaction name="Delete_Thumbnail_ByCustomIdentifier" mode="query">
-                <statement mode="query">
-                    SELECT @thumbsId := thumbId FROM CustomIdentifiers WHERE identifier=:identifier
-                </statement>
-                <statement mode="query">
-                    DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
-                </statement>
-                <statement mode="query">
-                    DELETE FROM FilePaths WHERE FilePaths.thumbId = @thumbsId;
-                </statement>
-                <statement mode="query">
-                    DELETE FROM CustomIdentifiers WHERE CustomIdentifiers.thumbId = @thumbsId;
-                </statement>
-                <statement mode="query">
-                    DELETE FROM Thumbnails WHERE id = @thumbsId;
-                </statement>
-            </dbaction>
+      <dbaction name="Delete_Thumbnail_ByCustomIdentifier" mode="query">
+          <statement mode="query" backends="mysql,sqlite">
+              SELECT @thumbsId := thumbId FROM CustomIdentifiers WHERE identifier=:identifier
+          </statement>
+          <statement mode="query" backends="mysql,sqlite">
+              DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
+          </statement>
+          <statement mode="query" backends="mysql,sqlite">
+              DELETE FROM FilePaths WHERE FilePaths.thumbId = @thumbsId;
+          </statement>
+          <statement mode="query" backends="mysql,sqlite">
+              DELETE FROM CustomIdentifiers WHERE CustomIdentifiers.thumbId = @thumbsId;
+          </statement>
+          <statement mode="query" backends="mysql,sqlite">
+              DELETE FROM Thumbnails WHERE id = @thumbsId;
+          </statement>
+      </dbaction>
 
 
 
