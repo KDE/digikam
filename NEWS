@@ -172,5 +172,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 144 ==> 275039 : [PATCH] switch to semantic internationalisation.
 145 ==> 274462 : Build failure in kmemoryinfo - swapctl.
 146 ==> 229571 : "Set As Thumbnail" is not working correctly for tags folder view. 
-147 ==> 
+147 ==> 274660 : Face regognition crashes DK.
+148 ==> 
 
