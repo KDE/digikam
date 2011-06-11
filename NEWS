@@ -175,4 +175,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 147 ==> 274660 : Face regognition crashes DK.
 148 ==> 274713 : digiKam crashed unexpectedly.
 149 ==> 274302 : Search for _two_ keywords with logical "and" fails.
-150 ==> 
+150 ==> 272180 : Camera Device Summary seems to use wrong encoding.
+151 ==> 

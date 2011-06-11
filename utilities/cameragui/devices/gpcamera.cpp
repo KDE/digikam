@@ -1408,7 +1408,7 @@ bool GPCamera::cameraSummary(QString& summary)
 
     // here we need to make sure whitespace and newlines
     // are converted to HTML properly
-    summary.append(Qt::convertFromPlainText(QString(sum.text), Qt::WhiteSpacePre));
+    summary.append(Qt::convertFromPlainText(QString::fromLocal8Bit(sum.text), Qt::WhiteSpacePre));
 
     delete d->status;
     d->status = 0;
@@ -1441,7 +1441,7 @@ bool GPCamera::cameraManual(QString& manual)
 
     // I guess manual is plain text and not HTML?
     // Can't test it. (Michael G. Hansen)
-    manual = Qt::convertFromPlainText(QString(man.text), Qt::WhiteSpacePre);
+    manual = Qt::convertFromPlainText(QString::fromLocal8Bit(man.text), Qt::WhiteSpacePre);
 
     delete d->status;
     d->status = 0;
@@ -1474,7 +1474,7 @@ bool GPCamera::cameraAbout(QString& about)
 
     // here we need to make sure whitespace and newlines
     // are converted to HTML properly
-    about = Qt::convertFromPlainText(QString(abt.text), Qt::WhiteSpacePre);
+    about = Qt::convertFromPlainText(QString::fromLocal8Bit(abt.text), Qt::WhiteSpacePre);
     about.append("<br/><br/>To report problems about this driver, please contact "
                  "the gphoto2 team at:<br/><br/>http://gphoto.org/bugs");
 
@@ -1529,7 +1529,7 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
         {
             gp_abilities_list_get_abilities( abilList, i, &abil );
             const char* cname = abil.model;
-            clist.append( QString( cname ) );
+            clist.append( QString::fromLocal8Bit( cname ) );
         }
     }
 
