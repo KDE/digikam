@@ -176,4 +176,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 148 ==> 274713 : digiKam crashed unexpectedly.
 149 ==> 274302 : Search for _two_ keywords with logical "and" fails.
 150 ==> 272180 : Camera Device Summary seems to use wrong encoding.
-151 ==> 
+151 ==> 274865 : TIFF files with Exif.Image.Orientation = 1 aren't decoded properly.
+152 ==>

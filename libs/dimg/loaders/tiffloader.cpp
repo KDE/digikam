@@ -567,7 +567,9 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 return false;
             }
 
-            img.req_orientation = ORIENTATION_TOPLEFT;
+            // libtiff cannot handle all possible orientations, it give weird results.
+            // We rotate ourselves. (Bug 274865)
+            img.req_orientation = img.orientation;
 
             // read strips from image: read rows_per_strip, so always start at beginning of a strip
             for (uint row = 0; row < h; row += rows_per_strip)
