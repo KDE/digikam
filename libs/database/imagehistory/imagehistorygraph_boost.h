@@ -354,7 +354,7 @@ public:
 
     void setProperties(const Edge& e, const EdgeProperties& props)
     {
-        return boost::put(edge_properties, graph, e, props);
+        boost::put(edge_properties, graph, e, props);
     }
 
     template <class T>

@@ -58,7 +58,6 @@
 #include "searchxml.h"
 #include "tagfolderview.h"
 #include "timelinewidget.h"
-#include "peoplewidget.h"
 
 namespace Digikam
 {
