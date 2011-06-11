@@ -173,5 +173,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 145 ==> 274462 : Build failure in kmemoryinfo - swapctl.
 146 ==> 229571 : "Set As Thumbnail" is not working correctly for tags folder view. 
 147 ==> 274660 : Face regognition crashes DK.
-148 ==> 
-
+148 ==> 274713 : digiKam crashed unexpectedly.
+149 ==> 
