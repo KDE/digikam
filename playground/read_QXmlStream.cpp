@@ -138,8 +138,9 @@ void DbactionsReader::readStatement()
 
 int main( int, char*[] )
 {
+    QString filepath = KStandardDirs::locate("data", "digikam/database/dkstatements.xml");
+    QFile* file = new QFile(filepath);
 
-    QFile* file = new QFile("/home/vivo/usr/share/apps/digikam/database/dkstatements.xml");
     if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) {
         qerr << "Could not open xml file <filename>%1</filename>" << endl;
         return 1;
@@ -148,61 +149,4 @@ int main( int, char*[] )
     dbr.read(file);
     file->close();
 
-
-    if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qerr << "Could not open xml file <filename>%1</filename>" << endl;
-        return 1;
-    }
-
-
-    /* QXmlStreamReader takes any QIODevice. */
-    QXmlStreamReader xml(file);
-    QList< QMap<QString,QString> > dbactions;
-    /* We'll parse the XML until we reach end of it.*/
-    while(!xml.atEnd() &&
-      !xml.hasError()) {
-        /* Read next element.*/
-        QXmlStreamReader::TokenType token = xml.readNext();
-        /* If token is just StartDocument, we'll go to next.*/
-        if(token == QXmlStreamReader::StartDocument) {
-                continue;
-        }
-        /* If token is StartElement, we'll see if we can read it.*/
-        if(token == QXmlStreamReader::StartElement) {
-            /* If it's named dbactions, we'll go to the next.*/
-            if(xml.name() == "dbactions") {
-                continue;
-            }
-            /* If it's named dbaction, we'll dig the information from there.*/
-            if(xml.name() == "dbaction") {
-                //TODO: dbactions.append(this->parseDbaction(xml));
-                QXmlStreamAttributes a = xml.attributes();
-                if (a.hasAttribute( QLatin1String("name") )) {
-                    QMap<QString, QString> map;
-                    map.insert(a.value(QLatin1String("name")).toString(), QString("%1").arg(xml.lineNumber()));
-                    //err: map.insert(a.value(QLatin1String("name")).toString(), xml.readElementText());
-                    dbactions.append(map);
-                }
-            }
-        }
-    }
-    /* Error handling. */
-    if(xml.hasError()) {
-        qerr << "XML has errors <error>" << xml.errorString() << "</error>" << endl;
-        return 2;
-    }
-    xml.clear();
-    //this->addDbActionsToUI(dbactions);
-
-    /* OK!
-    QMap<QString,QString> dbaction;
-    foreach ( dbaction, dbactions )
-    {
-        QMapIterator<QString, QString> i(dbaction);
-        while (i.hasNext()) {
-            i.next();
-            qout << i.key() << ": " << i.value() << endl;
-        }
-    }
-    */
 }
