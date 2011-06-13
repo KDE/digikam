@@ -456,6 +456,7 @@ Action=Popup
 [Event/batchfacedetectioncompleted]
 Name=Update of detected faces database complete
 Name[bs]=Ažuriranje baze prepoznatih lica završeno
+Name[ca]=Actualització completada de la base de dades de cares detectades
 Name[el]=Η ενημέρωση της βάσης δεδομένων ανιχνευθέντων φυσιογνωμιών ολοκληρώθηκε
 Name[et]=Näotuvastuse andmebaas on uuendatud
 Name[nb]=Databasen for oppdagede ansikter er oppdatert
@@ -468,6 +469,7 @@ Name[x-test]=xxUpdate of detected faces database completexx
 Name[zh_TW]=面部偵測資料庫更新完成
 Comment=The update of the detected faces database has completed.
 Comment[bs]=Ažuriranje baze prepoznatih lica je završeno.
+Comment[ca]=L'actualització de la base de dades de cares detectades ha finalitzat.
 Comment[el]=Η ενημέρωση της βάσης δεδομένων ανιχνευθέντων φυσιογνωμιών έχει ολοκληρωθεί.
 Comment[et]=Näotuvastuse andmebaas on uuendatud.
 Comment[nb]=Oppdatering av databasen for oppdagede ansikter er fullført.
