@@ -7,7 +7,9 @@
 
 #include <QFile>
 #include <QtXml/QXmlStreamReader>
-#include <QTextStream>
+#include <QTextStream> // for qout, remove later
+#include <QtSql>
+#include <QRegExp>
 
 // KDE includes
 
@@ -20,6 +22,56 @@
 QTextStream qout(stdout, QIODevice::WriteOnly);
 QTextStream qerr(stderr, QIODevice::WriteOnly);
 
+//////////////// database ////////////////////////////////////////////////////////////////
+
+QSqlDatabase dbDigikamConn() {
+    qout << "Starting connection" << endl;
+
+    QString conname = QString::fromLatin1("digikamtest") ;
+    QSqlDatabase db = QSqlDatabase::addDatabase(QString::fromLatin1("QMYSQL"));
+
+    db.setHostName(QString::fromLatin1("localhost"));
+    db.setPort(3306);
+    db.setDatabaseName(QString::fromLatin1("digikamtest"));
+    db.setUserName(QString::fromLatin1("digikam"));
+    db.setPassword(QString::fromLatin1("digikam"));
+    //db.setConnectOptions();
+    db.database(conname, true);
+    db.open();
+    return db;
+    /*
+    if ( db.isValid() ) {
+        return true;
+    }
+    return false;
+    */
+}
+
+/*
+qint64 dbDigikamGetId(QSqlDatabase db, QString iden) {
+    //QSqlQuery query = QSqlQuery::QSqlQuery(db); -fpermissive
+    QSqlQuery *query = new QSqlQuery(db);
+    query->exec( QString::fromLatin1("SELECT db_digikam_get_new_id(1, '") \
+        % iden \
+        % QString::fromLatin1("') AS id FROM DUAL;") );
+    query->first();
+
+    if(query->isValid()) {
+        qint64 ret = query->value(0).toLongLong();
+        delete query;
+        return ret;
+    } else {
+        qout << "Error: dbDigikamGetId()" << endl;
+        qout << "lastError():       " << query->lastError().text() << endl;
+        qout << "numRowsAffected(): " << query->numRowsAffected() << endl;
+        qout << "last sql:          " << query->lastQuery() << endl;
+    }
+    delete query;
+    return -1;
+}
+*/
+
+//////////////// XML ////////////////////////////////////////////////////////////////
 
 class DbactionsReader
 {
@@ -32,7 +84,6 @@ public:
 
 private:
     void readDbactions();
-    void readTitle();
     void readSeparator();
     void readDbaction();
     void readStatement();
@@ -138,15 +189,55 @@ void DbactionsReader::readStatement()
 
 int main( int, char*[] )
 {
+    // read xml
+
     QString filepath = KStandardDirs::locate("data", "digikam/database/dkstatements.xml");
     QFile* file = new QFile(filepath);
 
     if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qerr << "Could not open xml file <filename>%1</filename>" << endl;
+        qerr << "Could not open xml file <filename>" << filepath << "</filename>" << endl;
         return 1;
     }
     DbactionsReader dbr;
     dbr.read(file);
     file->close();
 
+    // test db
+
+    QSqlDatabase db;
+    db = dbDigikamConn();
+    QSqlQuery *query = new QSqlQuery(db);
+
+    query->exec("SET sql_mode = 'TRADITIONAL'");
+
+    QString sql = "SELECT * FROM imageinformation WHERE :imageid = 1 LIMIT 2";
+    qout << "sql\n" << sql << endl;
+
+    query->prepare( sql );
+    query->bindValue( ":imageid", 1 );
+    //query->bindValue( ":imageid[1]", 2 );
+    query->exec();
+    qout << "sql exec\n" << query->executedQuery() << endl;
+
+    //query->first();
+    while (query->next()) {
+        if ( query->isValid() ) {
+            qout << "   " << query->value( 0 ).toString() \
+                 << " - " << query->value( 1 ).toString() \
+                 << " - " << query->value( 2 ).toString() \
+                 << " - " << query->value( 3 ).toString() \
+                 << " - " << query->value( 4 ).toString() \
+                 << " - " << query->value( 5 ).toString() \
+                 << " - " << query->value( 6 ).toString() \
+                 << " - " << query->value( 7 ).toString() \
+                 << " - " << query->value( 8 ).toString() \
+                 << " - " << query->value( 9 ).toString() \
+                 << endl;
+        } else {
+            qout << "lastError():       " << query->lastError().text() << endl;
+            qout << "numRowsAffected(): " << query->numRowsAffected() << endl;
+            qout << "last sql:          " << query->lastQuery() << endl;
+            continue;
+        }
+    }
 }
