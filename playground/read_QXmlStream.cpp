@@ -1,7 +1,25 @@
-// kate: encoding utf-8; eol unix;
-// kate: indent-width 4; mixedindent off; replace-tabs on; remove-trailing-space on; space-indent on;
-// kate: word-wrap-column 120; word-wrap off;
-// uex: encoding=utf-8
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2011-06-01
+ * Description : Database element configuration
+ *
+ * Copyright (C) 2011 by Francesco Riosa <francesco+kde at pnpitalia it>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 // Qt includes
 
@@ -10,6 +28,7 @@
 #include <QTextStream> // for qout, remove later
 #include <QtSql>
 #include <QRegExp>
+#include <QListIterator>
 
 // KDE includes
 
@@ -18,6 +37,10 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <klocalizedstring.h>
+
+// local includes
+#include "read_QXmlStream.h"
+
 
 QTextStream qout(stdout, QIODevice::WriteOnly);
 QTextStream qerr(stderr, QIODevice::WriteOnly);
@@ -47,58 +70,15 @@ QSqlDatabase dbDigikamConn() {
     */
 }
 
-/*
-qint64 dbDigikamGetId(QSqlDatabase db, QString iden) {
-    //QSqlQuery query = QSqlQuery::QSqlQuery(db); -fpermissive
-    QSqlQuery *query = new QSqlQuery(db);
-    query->exec( QString::fromLatin1("SELECT db_digikam_get_new_id(1, '") \
-        % iden \
-        % QString::fromLatin1("') AS id FROM DUAL;") );
-    query->first();
-
-    if(query->isValid()) {
-        qint64 ret = query->value(0).toLongLong();
-        delete query;
-        return ret;
-    } else {
-        qout << "Error: dbDigikamGetId()" << endl;
-        qout << "lastError():       " << query->lastError().text() << endl;
-        qout << "numRowsAffected(): " << query->numRowsAffected() << endl;
-        qout << "last sql:          " << query->lastQuery() << endl;
-    }
-    delete query;
-    return -1;
-}
-*/
-
 //////////////// XML ////////////////////////////////////////////////////////////////
 
-class DbactionsReader
+Playground::DatabaseStatements::DatabaseStatements(const QString& databaseType)
 {
-public:
-    DbactionsReader();
-
-    bool read(QIODevice *device);
-
-    QString errorString() const;
-
-private:
-    void readDbactions();
-    void readSeparator();
-    void readDbaction();
-    void readStatement();
-
-    QXmlStreamReader xml;
-};
-
-
-DbactionsReader::DbactionsReader()
-{
+    wanted_backend = databaseType;
 }
 
-bool DbactionsReader::read(QIODevice *device)
+bool Playground::DatabaseStatements::read(QIODevice *device)
 {
-    //rm qout << "DbactionsReader::read" << endl;
     xml.setDevice(device);
 
     if (xml.readNextStartElement()) {
@@ -109,7 +89,27 @@ bool DbactionsReader::read(QIODevice *device)
             {
                 xml.readNextStartElement();
             }
+            //Playground::DatabaseStatements configElement = readDbactions();
             readDbactions();
+
+            //for (QMap<QString, Playground::DatabaseAction>::const_iterator i = configElement.sqlStatements.constBegin();
+            for (QMap<QString, Playground::DatabaseAction>::const_iterator i = sqlStatements.constBegin();
+            //     i != configElement.sqlStatements.constEnd();
+                 i != sqlStatements.constEnd();
+                 ++i)
+            {
+                qout << "key: " << i.key() << endl;
+                qout << "     " << i.value().name << endl;
+                qout << "     " << i.value().mode << endl;
+                QListIterator<Playground::DatabaseActionElement> j(i.value().dbActionElements);
+                while (j.hasNext()) {
+                    Playground::DatabaseActionElement dbe = j.next();
+                    qout << "         " << dbe.mode << endl;
+                    qout << "         " << dbe.prepare << endl;
+                    qout << "         " << dbe.statement << endl;
+                }
+            }
+
         }
         else
         {
@@ -125,7 +125,7 @@ bool DbactionsReader::read(QIODevice *device)
     return !xml.error();
 }
 
-QString DbactionsReader::errorString() const
+QString Playground::DatabaseStatements::errorString() const
 {
     return QObject::tr("%1\nLine %2, column %3")
             .arg(xml.errorString())
@@ -133,9 +133,8 @@ QString DbactionsReader::errorString() const
             .arg(xml.columnNumber());
 }
 
-void DbactionsReader::readDbactions()
+void Playground::DatabaseStatements::readDbactions()
 {
-    qout << "DbactionsReader::readDbactions -> ";
     Q_ASSERT(xml.isStartElement() && xml.name() == "dbactions");
 
     while(!xml.atEnd() &&
@@ -152,37 +151,70 @@ void DbactionsReader::readDbactions()
             /* If it's named dbaction, we'll dig the information from there.*/
             if(xml.name() == "dbaction") {
                 readDbaction();
-                token = xml.readNext();
-                while(!xml.atEnd() && !xml.hasError() && token != QXmlStreamReader::StartElement) {
-                    token = xml.readNext();
-                }
-                while(xml.name() == "statement") {
-                    readStatement();
-                    xml.readNextStartElement();
-                }
+                //sqlStatements.insert(action.name, action);
             }
         }
     }
 }
 
-void DbactionsReader::readDbaction()
+void Playground::DatabaseStatements::readDbaction()
 {
-    qout << "DbactionsReader::readDbaction -> ";
     Q_ASSERT(xml.isStartElement() && xml.name() == "dbaction");
     QXmlStreamAttributes a = xml.attributes();
     Q_ASSERT(a.hasAttribute( QLatin1String("name")));
     qout << a.value(QLatin1String("name")).toString() << endl;
-    //QString title = xml.readElementText();
+
+    // initialize the action
+    Playground::DatabaseAction action;
+    action.name = a.value(QLatin1String("name")).toString();
+    action.mode = a.value(QLatin1String("mode")).toString();
+
+    // read statements for this backend
+    QXmlStreamReader::TokenType token = xml.readNext();
+    while(!xml.atEnd() && !xml.hasError() && token != QXmlStreamReader::StartElement) {
+        token = xml.readNext();
+    }
+    while(xml.name() == "statement") {
+        readStatement(&action);
+        xml.readNextStartElement();
+    }
+
+    if ( action.dbActionElements.count() == 0) {
+        action.mode = QString("noop");
+    }
+
+    sqlStatements.insert(action.name, action);
+
 }
 
-void DbactionsReader::readStatement()
+void Playground::DatabaseStatements::readStatement(Playground::DatabaseAction* action)
 {
     Q_ASSERT(xml.isStartElement() && xml.name() == "statement");
+
     QXmlStreamAttributes a = xml.attributes();
     Q_ASSERT(a.hasAttribute( QLatin1String("backends")));
-    qout << "  " << a.value(QLatin1String("backends")).toString() << endl;
-    QString sql = xml.readElementText();
-    qout << "  " << sql << endl;
+
+    const QString backends = a.value(QLatin1String("backends")).toString();
+
+    QString sql = xml.readElementText(); // always read
+    
+    // search for desired backend
+    for (int i = 0; ! backends.section(',', i, i).isNull(); i++)
+    {
+        if(0 == backends.section(',', i, i).trimmed().compare(wanted_backend, Qt::CaseInsensitive)) {
+
+            // and populate action
+            Playground::DatabaseActionElement actionElement;
+            actionElement.mode      = a.value(QLatin1String("mode")).toString();
+            if (a.hasAttribute( QLatin1String("prepare"))) {
+                actionElement.prepare   = a.value(QLatin1String("prepare")).toString();
+            }
+            actionElement.statement = sql;
+            action->dbActionElements.append(actionElement);
+            
+            break;
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -198,7 +230,8 @@ int main( int, char*[] )
         qerr << "Could not open xml file <filename>" << filepath << "</filename>" << endl;
         return 1;
     }
-    DbactionsReader dbr;
+
+    Playground::DatabaseStatements dbr(QString("mysql"));
     dbr.read(file);
     file->close();
 
@@ -241,3 +274,8 @@ int main( int, char*[] )
         }
     }
 }
+
+// kate: encoding utf-8; eol unix;
+// kate: indent-width 4; mixedindent off; replace-tabs on; remove-trailing-space on; space-indent on;
+// kate: word-wrap-column 120; word-wrap off;
+// uex: encoding=utf-8
