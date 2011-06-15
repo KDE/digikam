@@ -37,8 +37,6 @@
     i.e.
     [[:keyword:]]
     [[:keyword, default="None":]]
-    
-  
 
 
  ***************** notes and todos *****************
@@ -95,8 +93,8 @@
         backends="mysql,sqlite"
         prepare="keep"
         file="libs/database/thumbnaildb.cpp:74"><![CDATA[
-          REPLACE INTO Settings
-          VALUES (?,?)
+          REPLACE INTO Settings (keyword, value)
+          VALUES ([[:keyword:]], [[:value:]])
           ;
         ]]></statement>
       </dbaction>
@@ -129,8 +127,8 @@
           FROM Thumbnails AS t
           JOIIN UniqueHashes AS h
             ON t.id = h.thumbId
-          WHERE h.uniqueHash = ?
-          AND h.fileSize = ?
+          WHERE h.uniqueHash = [[:uniqueHash:]]
+          AND h.fileSize = [[:fileSize:]]
           ;
         ]]></statement>
       </dbaction>
@@ -150,7 +148,7 @@
           FROM Thumbnails AS t
           JOIN FilePaths AS f
             ON t.id = f.thumbId
-          WHERE f.path = ?
+          WHERE f.path = [[:path:]]
           ;
         ]]></statement>
       </dbaction>
@@ -164,7 +162,7 @@
           SELECT
             uniqueHash
           FROM UniqueHashes
-          WHERE thumbId = ?
+          WHERE thumbId = [[:thumbId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -184,7 +182,7 @@
           FROM CustomIdentifiers AS c
           JOIN Thumbnails AS t
             ON t.id = c.thumbId
-          WHERE c.identifier = ?
+          WHERE c.identifier = [[:identifier:]]
           ;
         ]]></statement>
       </dbaction>
@@ -201,7 +199,7 @@
           FROM FilePaths AS f
           JOIN Thumbnails AS t
             ON t.id = f.thumbId
-          WHERE t.type BETWEEN ? AND ?
+          WHERE t.type BETWEEN [[:typemin:]] AND [[:typemax:]]
           ;
         ]]></statement>
       </dbaction>
@@ -213,7 +211,7 @@
         prepare="always"
         file="libs/database/thumbnaildb.cpp:213"><![CDATA[
           REPLACE INTO UniqueHashes (uniqueHash, fileSize, thumbId)
-          VALUES (?,?,?)
+          VALUES ([[:uniqueHash:]], [[:fileSize:]], [[:thumbId:]])
           ;
         ]]></statement>
       </dbaction>
@@ -225,7 +223,7 @@
         prepare="always"
         file="libs/database/thumbnaildb.cpp:221"><![CDATA[
           REPLACE INTO FilePaths (path, thumbId)
-          VALUES (?,?)
+          VALUES ([[:path:]], [[:thumbId:]])
           ;
         ]]></statement>
       </dbaction>
@@ -237,7 +235,7 @@
         prepare="always"
         file="libs/database/thumbnaildb.cpp:227"><![CDATA[
           REPLACE INTO CustomIdentifiers (identifier, thumbId)
-          VALUES (?,?)
+          VALUES ([[:identifier:]], [[:thumbId:]])
           ;
         ]]></statement>
       </dbaction>
@@ -253,8 +251,8 @@
           (
             SELECT thumbId
             FROM UniqueHashes
-            WHERE uniqueHash = :uniqueHash
-              AND fileSize = :filesize
+            WHERE uniqueHash = [[:uniqueHash:]]
+              AND fileSize = [[:filesize:]]
           );
         ]]></statement>
       </dbaction>
@@ -270,8 +268,8 @@
           (
             SELECT thumbId
             FROM UniqueHashes
-            WHERE uniqueHash = :uniqueHash
-              AND fileSize = :filesize
+            WHERE uniqueHash = [[:uniqueHash:]]
+              AND fileSize = [[:filesize:]]
           );
         ]]></statement>
       </dbaction>
@@ -287,8 +285,8 @@
           (
             SELECT thumbId
             FROM UniqueHashes
-            WHERE uniqueHash = :uniqueHash
-              AND fileSize = :filesize
+            WHERE uniqueHash = [[:uniqueHash:]]
+              AND fileSize = [[:filesize:]]
           );
         ]]></statement>
       </dbaction>
@@ -300,7 +298,7 @@
         prepare="always"
         file="libs/database/thumbnaildb.cpp:260"><![CDATA[
           INSERT INTO Thumbnails (type, modificationDate, orientationHint, data)
-          VALUES (?, ?, ?, ?)
+          VALUES ([[:type:]], [[:modificationDate:]], [[:orientationHint:]], [[:data:]])
           ;
         ]]></statement>
       </dbaction>
@@ -314,7 +312,7 @@
           REPLACE INTO Thumbnails
             (id, type, modificationDate, orientationHint, data)
           VALUES
-            (?, ?, ?, ?, ?)
+            ([[:id:]], [[:type:]], [[:modificationDate:]], [[:orientationHint:]], [[:data:]])
           ;
         ]]></statement>
       </dbaction>
@@ -325,9 +323,9 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/thumbnaildb.cpp:285"><![CDATA[
-          UPDATE UniqueHashes SET uniqueHash=?, fileSize=?
-          WHERE uniqueHash=?
-          AND fileSize=?
+          UPDATE UniqueHashes SET uniqueHash=[[:newUniqueHash:]], fileSize=[[:newFileSize:]]
+          WHERE uniqueHash=[[:oldUniqueHash:]]
+          AND fileSize=[[:oldFileSize:]]
           ;
         ]]></statement>
       </dbaction>
@@ -377,12 +375,13 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/haar/haariface.cpp:377"><![CDATA[
+          /* TODO: ImageHaarMatrix does not have a id field */
           REPLACE INTO ImageHaarMatrix
           (imageid, modificationDate, uniqueHash, matrix)
           SELECT
-            id, modificationDate, uniqueHash, ?
+            id, modificationDate, uniqueHash, [[:matrix:]]
           FROM Images
-          WHERE id = ?
+          WHERE id = [[:id:]]
           ;
         ]]></statement>
       </dbaction>
@@ -396,7 +395,7 @@
           SELECT
             matrix
           FROM ImageHaarMatrix
-          WHERE imageid=?
+          WHERE imageid = [[:imageid:]]
           ;
         ]]></statement>
       </dbaction>
@@ -425,10 +424,11 @@
           WHERE img.status = 1
             AND
             (
-              (:enable_recursive AND img.album IN ( /* access.db()->addBoundValuePlaceholders(query, albumIds.size());
+              ([[:enable_recursive, default="0":]] AND img.album IN ( /* access.db()->addBoundValuePlaceholders(query,
+albumIds.size());
 */  ))
               OR
-              (NOT :enable_recursive AND img.album = :album)
+              (NOT [[:enable_recursive:]] AND img.album = [[:album:]])
             )
           ;
         ]]></statement>
@@ -440,14 +440,14 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/imagelister.cpp:302"><![CDATA[
-          -- TODO: WTF? prodotto cartesiano
+          -- TODO: prodotto cartesiano
           SELECT
             img.id
           FROM Images AS img
           JOIN ImageInformation AS inf
             ON img.id = inf.imageid
           JOIN Albums
-            ON alb.id = ? /*  QString::number(personId)+ */
+            ON alb.id = [[:id:]] /*  QString::number(personId)+ */
           WHERE img.status = 1
           ORDER BY alb.id
           ;
@@ -479,8 +479,8 @@
           JOIN Albums AS alb
             ON alb.id = img.album
           WHERE img.status = 1
-            AND inf.creationDate < ?
-            AND inf.creationDate >= ?
+            AND inf.creationDate < [[maxCreationDate:]]
+            AND inf.creationDate >= [[:minCreationDate:]]
           ORDER BY alb.id
           ;
         ]]></statement>
@@ -508,8 +508,8 @@
           JOIN ImagePositions AS pos
             ON img.id = pos.imageid
           WHERE img.status = 1
-            AND (pos.latitudeNumber >= ? AND pos.latitudeNumber <= ?)
-            AND (pos.longitudeNumber >= ? AND pos.longitudeNumber <= ?);
+            AND (pos.latitudeNumber >= [[minLatitudeNumber:]] AND pos.latitudeNumber <= [[:maxLatitudeNumber:]])
+            AND (pos.longitudeNumber >= [[:minLongitudeNumber:]] AND pos.longitudeNumber <= [[:maxLongitudeNumber:]]);
         ]]></statement>
       </dbaction>
 
@@ -545,7 +545,7 @@
           LEFT JOIN ImagePositions
             ON img.id=ImagePositions.imageid
           WHERE img.status = 1
-            AND (:allAlbums OR alb.id IN ( <list name="albums"/> ))
+            AND ([[:allAlbums:, default="0"]] OR alb.id IN ( <list name="albums"/> ))
           LIMIT <var name="limit" />
           ;
         ]]></statement>
@@ -583,8 +583,17 @@
           JOIN Albums AS alb
             ON alb.id=img.album
           WHERE img.status = 1
-          AND (itp.tagid = :tagid OR (:searchInTree AND itp.tagid IN (SELECT id FROM TagsTree WHERE pid = :pid)))
-          AND itp.property = :property
+          AND
+          (
+            itp.tagid = [[:tagId:]]
+            OR
+            (
+              [[:searchInTree, default="0":]]
+              AND
+              itp.tagid IN (SELECT id FROM TagsTree WHERE pid = [[:pid, default="-1":]])
+            )
+          )
+          AND itp.property = [[:property:]]
           AND itp.value BETWEEN <var name="value" default="-9223372036854775808"/>
                             AND <var name="value" default="9223372036854775807"/>
           ;
@@ -616,7 +625,7 @@
           LEFT JOIN Albums AS alb
             ON alb.id=img.album
           WHERE img.status = 1
-            AND img.id = ?
+            AND img.id = [[:imageid:]]
           ;
         ]]></statement>
       </dbaction>
@@ -729,7 +738,7 @@
           (
             type, label, status, identifier, specificPath
           )
-          VALUES(?, ?, 0, ?, ?)
+          VALUES([[:type:]], [[:label:]], 0, [[:identifier:]], [[:specificPath:]])
           ;
         ]]></statement>
       </dbaction>
@@ -742,7 +751,7 @@
         file="libs/database/albumdb.cpp:133"><![CDATA[
           DELETE
           FROM AlbumRoots
-          WHERE id = ?
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -753,8 +762,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:148"><![CDATA[
-          UPDATE AlbumRoots SET identifier=?
-          WHERE id=?
+          UPDATE AlbumRoots SET identifier = [[:identifier:]]
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -765,8 +774,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:155"><![CDATA[
-          UPDATE AlbumRoots SET label=?
-          WHERE id=?
+          UPDATE AlbumRoots SET label=[[:label:]]
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -777,8 +786,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:162"><![CDATA[
-          UPDATE AlbumRoots SET type=?
-          WHERE id=?
+          UPDATE AlbumRoots SET type = [[:type:]]
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -851,7 +860,7 @@
             ON i.id = t.icon
           LEFT JOIN Albums AS a
             ON a.id = i.album
-          WHERE t.id = ?
+          WHERE t.id = [[:tagId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -903,10 +912,9 @@
         prepare="always"
         file="libs/database/albumdb.cpp:448"><![CDATA[
           REPLACE INTO Albums
-          (
-            albumRoot, relativePath, date, caption, collection
-          )
-          VALUES(?, ?, ?, ?, ?)
+          (albumRoot, relativePath, date, caption, collection)
+          VALUES
+          ([[:albumRoot:]], [[:relativePath:]], [[:date:]], [[:caption:]], [[:collection:]])
           ;
         ]]></statement>
       </dbaction>
@@ -917,8 +925,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:458"><![CDATA[
-          UPDATE Albums SET caption=?
-          WHERE id=?
+          UPDATE Albums SET caption = [[:caption:]]
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -929,8 +937,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:466"><![CDATA[
-          UPDATE Albums SET collection=?
-          WHERE id=?
+          UPDATE Albums SET collection = [[:collection:]]
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -941,8 +949,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:473"><![CDATA[
-          UPDATE Albums SET date=?
-          WHERE id=?
+          UPDATE Albums SET date = [[:date:]]
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -953,8 +961,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:481"><![CDATA[
-          UPDATE Albums SET icon=?
-          WHERE id=?
+          UPDATE Albums SET icon = [[:icon:]]
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -974,7 +982,7 @@
             ON i.id = a.icon
           LEFT JOIN Albums AS b
             ON b.id = i.album
-          WHERE a.id=?
+          WHERE a.id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -988,7 +996,7 @@
           SELECT
             albumRoot, relativePath
           FROM Albums
-          WHERE id=?
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1000,8 +1008,8 @@
         prepare="always"
         file="libs/database/albumdb.cpp:556"><![CDATA[
           UPDATE Albums
-          SET albumRoot = 0, relativePath=?
-          WHERE id=?
+          SET albumRoot = 0, relativePath = [[:path:]]
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1012,8 +1020,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp"><![CDATA[
-          UPDATE Tags SET iconkde = ?
-          WHERE id = ?
+          UPDATE Tags SET iconkde = [[:iconkde:]]
+          WHERE id = [[:tagId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1024,8 +1032,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp"><![CDATA[
-          UPDATE Tags SET icon = ?
-          WHERE id = ?
+          UPDATE Tags SET icon = [[:icon:]]
+          WHERE id = [[:tagId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1036,8 +1044,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:629"><![CDATA[
-        UPDATE Tags SET iconkde=?, icon=?
-        WHERE id=?
+        UPDATE Tags SET iconkde = [[:iconkde:]], icon = [[:icon:]]
+        WHERE id = [[:tagId:]]
         ;
         ]]></statement>
       </dbaction>
@@ -1058,7 +1066,7 @@
             ON i.id = t.icon
           LEFT JOIN Albums AS a
             ON a.id = i.album
-          WHERE t.id=?
+          WHERE t.id = [[:tagId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1069,8 +1077,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:680"><![CDATA[
-          UPDATE Tags SET pid=?
-          WHERE id=?
+          UPDATE Tags SET pid = [[:pid:]]
+          WHERE id = [[:tagId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1084,7 +1092,7 @@
           SELECT
             property, value
           FROM TagProperties
-          WHERE tagid=?
+          WHERE tagid = [[:tagId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1112,7 +1120,7 @@
           SELECT DISTINCT
             tagid
           FROM TagProperties
-          WHERE property = ?;
+          WHERE property = [[:property:]];
         ]]></statement>
       </dbaction>
 
@@ -1123,7 +1131,7 @@
         prepare="always"
         file="libs/database/albumdb.cpp:764"><![CDATA[
         INSERT INTO TagProperties (tagid, property, value)
-        VALUES(?, ?, ?)
+        VALUES([[:tagId:]], [[:property:]], [[:value:]])
         ;
         ]]></statement>
       </dbaction>
@@ -1135,12 +1143,12 @@
         prepare="always"
         file="libs/database/albumdb.cpp:779"><![CDATA[
           DELETE FROM TagProperties
-          WHERE tagid = :tagid
+          WHERE tagid = [[:tagId:]]
             AND (
-              :property IS NULL OR (
-                property = :property
+              [[:property:]] IS NULL OR (
+                property = [[:property:]]
                 AND (
-                  :value IS NULL OR ( value = :value)
+                  [[:value:]] IS NULL OR ( value = [[:value:]])
               )
             )
           ;
@@ -1156,7 +1164,7 @@
           INSERT INTO Searches
             (type, name, query)
           VALUES
-            (?, ?, ?)
+            ([[:type:]], [[:name:]], [[:query:]])
           ;
         ]]></statement>
       </dbaction>
@@ -1167,7 +1175,7 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:813"><![CDATA[
-          UPDATE Searches SET type=?, name=?, query=? WHERE id=?
+          UPDATE Searches SET type=[[:type:]], name=[[:name:]], query=[[:query:]] WHERE id=[[:searchId:]]
         ]]></statement>
       </dbaction>
 
@@ -1177,7 +1185,7 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:820"><![CDATA[
-          DELETE FROM Searches WHERE id = ?;
+          DELETE FROM Searches WHERE id = [[:searchId:]];
         ]]></statement>
       </dbaction>
 
@@ -1187,7 +1195,7 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:827"><![CDATA[
-          DELETE FROM Searches WHERE type=?;
+          DELETE FROM Searches WHERE type = [[:type:]];
         ]]></statement>
       </dbaction>
 
@@ -1197,7 +1205,7 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:835"><![CDATA[
-          SELECT query FROM Searches WHERE id = ?;
+          SELECT query FROM Searches WHERE id = [[:searchId:]];
         ]]></statement>
       </dbaction>
 
@@ -1207,7 +1215,7 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:853"><![CDATA[
-          SELECT id, type, name, query FROM Searches WHERE id = ?;
+          SELECT id, type, name, query FROM Searches WHERE id = [[:searchId:]];
         ]]></statement>
       </dbaction>
 
@@ -1217,7 +1225,7 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:875"><![CDATA[
-          REPLACE into Settings VALUES (?, ?);
+          REPLACE into Settings (keyword, value) VALUES ([[:keyword:]], [[:value:]]);
         ]]></statement>
       </dbaction>
 
@@ -1238,8 +1246,8 @@
         prepare="always"
         file="libs/database/albumdb.cpp:1156"><![CDATA[
           SELECT id FROM Images
-          WHERE album=?
-            AND name=?;
+          WHERE album = [[:album:]]
+            AND name = [[:name:]];
         ]]></statement>
       </dbaction>
 
@@ -1253,7 +1261,7 @@
           FROM Tags AS t
           JOIN ImageTags AS i
             ON t.id = i.tagid
-          WHERE i.imageid = ?
+          WHERE i.imageid = [[:imageId:]]
           ORDER BY t.name;
         ]]></statement>
       </dbaction>
@@ -1265,7 +1273,7 @@
         prepare="always"
         file="libs/database/albumdb.cpp"><![CDATA[
           SELECT tagid FROM ImageTags
-          WHERE imageID=?;
+          WHERE imageID = [[:imageId:]];
         ]]></statement>
       </dbaction>
 
@@ -1277,8 +1285,8 @@
         file="libs/database/albumdb.cpp:1197"><![CDATA[
           SELECT tagid, property, value
           FROM ImageTagProperties
-          WHERE imageid = :imageid
-            AND (:tagid = -1  OR tagid = :tagid)
+          WHERE imageid = [[:imageid:]]
+            AND ([[:tagid:]] = -1  OR tagid = [[:tagid:]])
           ;
         ]]></statement>
       </dbaction>
@@ -1291,7 +1299,7 @@
         file="libs/database/albumdb.cpp:1266"><![CDATA[
           SELECT DISTINCT tagid
           FROM ImageTagProperties
-          WHERE imageid = ?;
+          WHERE imageid = [[:imageId:]];
         ]]></statement>
       </dbaction>
 
@@ -1304,7 +1312,7 @@
           INSERT INTO ImageTagProperties
             (imageid, tagid, property, value)
           VALUES
-            (?, ?, ?, ?)
+            ([[:imageId:]], [[:tagId:]], [[:property:]], [[:value:]])
           ;
         ]]></statement>
       </dbaction>
@@ -1316,10 +1324,10 @@
         prepare="always"
         file="libs/database/albumdb.cpp:1298"><![CDATA[
           DELETE FROM ImageTagProperties
-          WHERE imageid=?
-            AND (ISNULL(:tagid) OR tagid = :tagid)
-            AND (ISNULL(:property) OR property = :property)
-            AND (ISNULL(:value) OR value = :value)
+          WHERE imageid = [[:imageId:]]
+            AND (ISNULL([[:tagid:]]) OR tagid = [[:tagid:]])
+            AND (ISNULL([[:property:]]) OR property = [[:property:]])
+            AND (ISNULL([[:value:]]) OR value = [[:value:]])
           ;
         ]]></statement>
       </dbaction>
@@ -1338,7 +1346,7 @@
           FROM Images AS i
           LEFT JOIN Albums AS a
             ON a.id = i.album
-          WHERE i.id=?
+          WHERE i.id = [[:imageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1355,9 +1363,9 @@
           FROM Images AS i
           JOIN Albums AS a
             ON i.album = a.id
-          WHERE name = ?
-            AND albumRoot = ?
-            AND relativePath = ?
+          WHERE name = [[:name:]]
+            AND albumRoot = [[:albumRoot:]]
+            AND relativePath = [[:relativePath:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1392,7 +1400,7 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:1818"><![CDATA[
-          DELETE FROM ImagePositions WHERE imageid = ?;
+          DELETE FROM ImagePositions WHERE imageid = [[:imageId:]];
         ]]></statement>
       </dbaction>
 
@@ -1405,7 +1413,7 @@
           SELECT
             id, type, language, author, date, comment
           FROM ImageComments
-          WHERE imageid = ?
+          WHERE imageid = [[:imageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1419,7 +1427,7 @@
           REPLACE INTO ImageComments
             ( imageid, type, language, author, date, comment )
           VALUES
-            (?, ?, ?, ?, ?, ?)
+            ( [[:imageid:]], [[:type:]], [[:language:]], [[:author:]], [[:date:]], [[:comment:]] )
           ;
         ]]></statement>
       </dbaction>
@@ -1432,7 +1440,7 @@
         file="libs/database/albumdb.cpp:1891"><![CDATA[
           DELETE
           FROM ImageComments
-          WHERE id=?
+          WHERE id = [[:id:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1446,8 +1454,8 @@
           SELECT
             value
           FROM ImageProperties
-          WHERE imageid=?
-            AND property=?
+          WHERE imageid = [[:imageId:]]
+            AND property = [[:property:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1461,7 +1469,7 @@
           REPLACE INTO ImageProperties
             (imageid, property, value)
           VALUES
-            (?, ?, ?)
+            ([[:imageId:]], [[:property:]], [[:value:]])
           ;
         ]]></statement>
       </dbaction>
@@ -1474,8 +1482,8 @@
         file="libs/database/albumdb.cpp:1928"><![CDATA[
           DELETE
           FROM ImageProperties
-          WHERE imageid=?
-            AND property=?
+          WHERE imageid = [[:imageId:]]
+            AND property = [[:property:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1489,8 +1497,8 @@
           SELECT
             property, value, extraValue
           FROM ImageCopyright
-          WHERE imageid = :imageid
-            AND (ISNULL(:property) OR :property = ?)
+          WHERE imageid = [[:imageid:]]
+            AND (ISNULL([[:property:]]) OR property = [[:property:]])
           ;
         ]]></statement>
       </dbaction>
@@ -1504,7 +1512,7 @@
           REPLACE INTO ImageCopyright
             (imageid, property, value, extraValue)
           VALUES
-            (?, ?, ?, ?)
+            ([[:imageId:]], [[:property:]], [[:value:]], [[:extraValue:]])
           ;
         ]]></statement>
       </dbaction>
@@ -1520,8 +1528,8 @@
           FROM Images
           JOIN ImageInformation
             ON id=imageid
-          WHERE name = ?
-            AND creationDate = ?
+          WHERE name = [[:name:]]
+            AND creationDate = [[:creationDate:]]
             AND status != 3
           ;
         ]]></statement>
@@ -1535,7 +1543,7 @@
         file="libs/database/albumdb.cpp:2056"><![CDATA[
           SELECT 1
           FROM ImageHistory
-          WHERE imageid = ?
+          WHERE imageid = [[:imageId:]]
           LIMIT 1
           ;
         ]]></statement>
@@ -1550,7 +1558,7 @@
           SELECT
             uuid, history
           FROM ImageHistory
-          WHERE imageid = ?
+          WHERE imageid = [[:imageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1566,7 +1574,7 @@
           FROM ImageHistory AS h
           JOIN Images AS i
             ON i.id = h.imageid
-          WHERE h.uuid = ?
+          WHERE h.uuid = [[:uuid:]]
             AND i.status != 3
           ;
         ]]></statement>
@@ -1581,7 +1589,7 @@
           SELECT
             uuid
           FROM ImageHistory
-          WHERE imageid=?
+          WHERE imageid = [[:imageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1595,7 +1603,7 @@
           REPLACE INTO ImageRelations
             (subject, object, type)
           VALUES
-            (?, ?, ?)
+            ([[:subject:]], [[:object:]], [[:type:]])
           ;
         ]]></statement>
       </dbaction>
@@ -1610,8 +1618,13 @@
           FROM ImageRelations AS r
           JOIN Images AS i
             ON r.object = i.id
-          WHERE ((:fromOrTo AND r.subject = :subject) OR (NOT :fromOrTo AND r.object = :object))
-            AND (:type = 0 OR r.type = :type)
+          WHERE
+            (
+              ([[:fromOrTo, default="0":]] AND (r.subject = [[:subject, default="-1":]]))
+              OR
+              (NOT [[:fromOrTo:]] AND r.object = [[:object:]])
+            )
+            AND ([[:type:]] = 0 OR r.type = [[:type:]])
             AND status != 3
           LIMIT <var name="limit" />
           ;
@@ -1634,8 +1647,8 @@
             ON r.object = obj.id
           WHERE sbj.status != 3
             AND obj.status != 3
-            AND (r.subject = :subject OR r.object = :object)
-            AND (:type = 0 OR r.type = :type)
+            AND (r.subject = [[:subject:]] OR r.object = [[:object:]])
+            AND ([[:type:]] = 0 OR r.type = [[:type:]])
           ;
         ]]></statement>
       </dbaction>
@@ -1656,11 +1669,11 @@
             ON r.object = obj.id
           WHERE
           (
-            (r.subject = :subject AND obj.status != 3)
+            (r.subject = [[:subject:]] AND obj.status != 3)
             OR
-            (r.object = :object AND obj.status != 3)
+            (r.object = [[:object:]] AND obj.status != 3)
           )
-          AND (:type = 0 OR r.type = :type)
+          AND ([[:type:]] = 0 OR r.type = [[:type:]])
           LIMIT 1
           ;
         ]]></statement>
@@ -1767,7 +1780,7 @@
           SELECT
             uniqueHash, fileSize
           FROM Images
-          WHERE id = ?
+          WHERE id = [[:imageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1781,8 +1794,8 @@
           SELECT
             id, album, name, status, category, modificationDate, fileSize
           FROM Images
-          WHERE fileSize=?
-            AND uniqueHash=?
+          WHERE fileSize = [[:fileSize:]]
+            AND uniqueHash = [[:uniqueHash:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1796,10 +1809,10 @@
           SELECT
             id
           FROM DownloadHistory
-          WHERE identifier=?
-            AND filename=?
-            AND filesize=?
-            AND filedate=?
+          WHERE identifier = [[:identifier:]]
+            AND filename = [[:filename:]]
+            AND filesize = [[:filesize:]]
+            AND filedate = [[:filedate:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1813,7 +1826,7 @@
           REPLACE INTO DownloadHistory
             (identifier, filename, filesize, filedate)
           VALUES
-            (?,?,?,?)
+            ([[:identifier:]], [[:filename:]], [[:filesize:]], [[:filedate:]])
           ;
         ]]></statement>
       </dbaction>
@@ -1825,7 +1838,7 @@
         prepare="always"
         file="libs/database/albumdb.cpp:2961:3001"><![CDATA[
           REPLACE INTO ImageTags (imageid, tagid)
-          VALUES(?, ?)
+          VALUES([[:imageId:]], [[:tagId:]])
           ;
         ]]></statement>
       </dbaction>
@@ -1838,14 +1851,14 @@
         file="libs/database/albumdb.cpp:3079"><![CDATA[
           SELECT DISTINCT Images.name
           FROM Images AS i
-          WHERE i.album = :album
+          WHERE i.album = [[:album:]]
           IN
           (
             SELECT
             DISTINCT id
             FROM Albums
-            WHERE albumRoot=?
-            AND (relativePath=? OR relativePath LIKE ?)
+            WHERE albumRoot = [[:albumRoot:]]
+              AND (relativePath = [[:relativePath:]] OR relativePath LIKE [[:relativePath2:]])
           )
           ;
         ]]></statement>
@@ -1927,7 +1940,7 @@
           FROM ImageTagProperties AS itp
           LEFT JOIN Images AS img
             ON img.id = itp.imageid
-              WHERE itp.property = ?
+              WHERE itp.property = [[:property:]]
             AND img.status = 1
           GROUP BY tagid
           ;
@@ -1947,7 +1960,7 @@
           JOIN Images AS i
             ON ii.imageid = i.id
           WHERE i.status = 1
-            AND (:category = 0 OR category = :category)
+            AND ([[:category:]] = 0 OR category = [[:category:]])
           GROUP BY ii.format
           ;
         ]]></statement>
@@ -1962,8 +1975,8 @@
           SELECT
             id
           FROM Albums
-          WHERE albumRoot = ?
-            AND relativePath = ?
+          WHERE albumRoot = [[:albumRoot:]]
+            AND relativePath = [[:relativePath:]]
           ;
         ]]></statement>
       </dbaction>
@@ -1977,8 +1990,8 @@
           SELECT
             id, relativePath
           FROM Albums
-          WHERE albumRoot=?
-          AND (relativePath=? OR relativePath LIKE ?)
+          WHERE albumRoot = [[:albumRoot:]]
+          AND (relativePath = [[:relativePath:]] OR relativePath LIKE [[:relativePath2:]])
           ;
         ]]></statement>
       </dbaction>
@@ -1992,7 +2005,7 @@
           SELECT
             id
           FROM Albums
-          WHERE albumRoot=?
+          WHERE albumRoot = [[:albumRoot:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2006,7 +2019,15 @@
           REPLACE INTO Images
             (album, name, status, category, modificationDate, fileSize, uniqueHash)
           VALUES
-            (?,?,?,?,?,?,?)
+            (
+            [[:album:]],
+            [[:name:]],
+            [[:status:]],
+            [[:category:]],
+            [[:modificationDate:]],
+            [[:fileSize:]],
+            [[:uniqueHash:]]
+            )
           ;
         ]]></statement>
       </dbaction>
@@ -2018,8 +2039,12 @@
         prepare="always"
         file="libs/database/albumdb.cpp:3457"><![CDATA[
           UPDATE Images
-          SET category=?, modificationDate=?, fileSize=?, uniqueHash=?
-          WHERE id=?
+          SET
+            category = [[:category:]],
+            modificationDate = [[:modificationDate:]],
+            fileSize = [[:fileSize:]],
+            uniqueHash = [[:uniqueHash:]]
+          WHERE id = [[:imageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2030,8 +2055,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:3469"><![CDATA[
-          UPDATE Images SET status=?
-          WHERE id=?
+          UPDATE Images SET status = [[:status:]]
+          WHERE id = [[:imageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2045,7 +2070,7 @@
           SELECT
             name
           FROM Images
-          WHERE id = ?
+          WHERE id = [[:imageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2059,7 +2084,7 @@
           SELECT
             id
           FROM Images
-          WHERE album = ?
+          WHERE album = [[:album:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2074,10 +2099,10 @@
             i.id,
             a.relativePath,
             i.name
-          FROM Images
-          JOIN Albums
+          FROM Images AS i
+          JOIN Albums AS a
             ON a.id = i.album
-          WHERE a.id = ?
+          WHERE a.id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2091,7 +2116,7 @@
           SELECT
             id, album, name, status, category, modificationDate, fileSize, uniqueHash
           FROM Images
-          WHERE album = ?
+          WHERE album = [[:album:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2105,7 +2130,7 @@
           SELECT
             id, album, name, status, category, modificationDate, fileSize, uniqueHash
           FROM Images
-          WHERE id = ?
+          WHERE id = [[:imageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2119,7 +2144,7 @@
           SELECT
             relativePath
           FROM Albums
-          WHERE id=?
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2133,7 +2158,7 @@
           SELECT
             albumRoot
           FROM Albums
-          WHERE id = ?
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2149,7 +2174,7 @@
           FROM ImageInformation AS inf
           JOIN Images AS img
             ON img.id=inf.imageid
-          WHERE img.album = ?
+          WHERE img.album = [[:album:]]
           GROUP BY img.album
           ;
         ]]></statement>
@@ -2166,7 +2191,7 @@
           FROM ImageInformation AS inf
           JOIN Images AS img
             ON img.id=inf.imageid
-          WHERE img.album = ?
+          WHERE img.album = [[:album:]]
           GROUP BY img.album
           ;
         ]]></statement>
@@ -2184,7 +2209,7 @@
           FROM ImageInformation AS inf
           JOIN Images AS img
             ON img.id=inf.imageid
-          WHERE img.album = ?
+          WHERE img.album = [[:album:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2197,8 +2222,8 @@
         file="libs/database/albumdb.cpp:4151"><![CDATA[
           -- TODO: does not work with foreign keys
           UPDATE Images
-          SET status=?, album=NULL
-          WHERE album=?
+          SET status = [[:status:]], album=NULL
+          WHERE album = [[:album:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2210,8 +2235,8 @@
         prepare="always"
         file="libs/database/albumdb.cpp:4159"><![CDATA[
           UPDATE Images
-          SET status=?, album=NULL
-          WHERE id=?
+          SET status = [[:status:]], album=NULL
+          WHERE id = [[:imageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2222,9 +2247,9 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:4227"><![CDATA[
-          UPDATE Albums SET albumRoot=?, relativePath=?
-          WHERE id=?
-          AND albumRoot=?
+          UPDATE Albums SET albumRoot = [[:newAlbumRoot:]], relativePath = [[:relativePath:]]
+          WHERE id = [[:albumId:]]
+          AND albumRoot = [[:oldAlbumRoot:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2238,8 +2263,8 @@
           SELECT
             id, relativePath
           FROM Albums
-          WHERE id=?
-            AND albumRoot=?
+          WHERE id = [[:albumId:]]
+            AND albumRoot = [[:albumRoot:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2250,8 +2275,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:4258"><![CDATA[
-          UPDATE Tags SET name=?
-          WHERE id=?
+          UPDATE Tags SET name = [[:name:]]
+          WHERE id = [[:tagId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2262,8 +2287,8 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:4277"><![CDATA[
-          UPDATE Images SET album=?, name=?
-          WHERE id=?
+          UPDATE Images SET album = [[:album:]], name = [[:name:]]
+          WHERE id = [[:imageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2277,9 +2302,9 @@
           INSERT INTO Images
           (album, name, status, category, modificationDate, fileSize, uniqueHash)
           SELECT
-          ?, ?, status, category, modificationDate, fileSize, uniqueHash
+          [[:album:]], [[:name:]], status, category, modificationDate, fileSize, uniqueHash
           FROM Images
-          WHERE id = ?
+          WHERE id = [[:imageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2294,9 +2319,9 @@
           INSERT INTO ImageHaarMatrix
           (imageid, modificationDate, uniqueHash, matrix)
           SELECT
-            ?, modificationDate, uniqueHash, matrix
+            [[:dstImageId:]], modificationDate, uniqueHash, matrix
           FROM ImageHaarMatrix
-          WHERE imageid = ?
+          WHERE imageid = [[:srcImageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2321,7 +2346,7 @@
             colorModel
           )
           SELECT
-            ?,
+            [[:newImageId:]],
             rating,
             creationDate,
             digitizationDate,
@@ -2332,7 +2357,7 @@
             colorDepth,
             colorModel
             FROM ImageInformation
-            WHERE imageid=?
+            WHERE imageid = [[:oldImageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2364,7 +2389,7 @@
             subjectDistanceCategory
           )
           SELECT
-            ?,
+            [[:newImageId:]],
             make,
             model,
             lens,
@@ -2382,7 +2407,7 @@
             subjectDistance,
             subjectDistanceCategory
           FROM ImageMetadata
-          WHERE imageid=?
+          WHERE imageid = [[:oldImageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2408,7 +2433,7 @@
             description
           )
           SELECT
-            ?,
+            [[:newImageId:]],
             latitude,
             latitudeNumber,
             longitude,
@@ -2420,7 +2445,7 @@
             accuracy,
             description
           FROM ImagePositions
-          WHERE imageid=?
+          WHERE imageid = [[:oldImageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2434,9 +2459,9 @@
           INSERT INTO ImageComments
             (imageid, type, language, author, date, comment)
           SELECT
-            ?, type, language, author, date, comment
+            [[:newImageId:]], type, language, author, date, comment
           FROM ImageComments
-          WHERE imageid=?
+          WHERE imageid = [[:oldImageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2450,9 +2475,9 @@
           INSERT INTO ImageCopyright
             (imageid, property, value, extraValue)
           SELECT
-            ?, property, value, extraValue
+            [[:newImageId:]], property, value, extraValue
           FROM ImageCopyright
-          WHERE imageid=?
+          WHERE imageid = [[:oldImageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2466,9 +2491,9 @@
           INSERT INTO ImageHistory
           (imageid, uuid, history)
           SELECT
-          ?, uuid, history
+          [[:newImageId:]], uuid, history
           FROM ImageHistory
-          WHERE imageid=?
+          WHERE imageid = [[:oldImageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2482,9 +2507,9 @@
           INSERT INTO ImageRelations
             (subject, object, type)
           SELECT
-            ?, object, type
+            [[:newImageId:]], object, type
           FROM ImageRelations
-          WHERE subject=?
+          WHERE subject = [[:oldImageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2498,9 +2523,9 @@
           INSERT INTO ImageRelations
             (subject, object, type)
           SELECT
-            subject, ?, type
+            subject, [[:newImageId:]], type
           FROM ImageRelations
-          WHERE object=?
+          WHERE object = [[:oldImageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2514,9 +2539,9 @@
           INSERT INTO ImageProperties
             (imageid, property, value)
           SELECT
-            ?, property, value
+            [[:newImageId:]], property, value
           FROM ImageProperties
-          WHERE imageid=?
+          WHERE imageid = [[:oldImageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2530,9 +2555,9 @@
           INSERT INTO ImageTags
             (imageid, tagid)
           SELECT
-            ?, tagid
+            [[:newImageId:]], tagid
           FROM ImageTags
-          WHERE imageid=?
+          WHERE imageid = [[:oldImageId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2546,7 +2571,7 @@
           SELECT
             date, caption, collection, icon
           FROM Albums
-          WHERE id=?
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2557,9 +2582,9 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:4453"><![CDATA[
-          UPDATE Albums SET date=?, caption=?,
-          collection=?, icon=?
-          WHERE id=?
+          UPDATE Albums SET date = [[:date:]], caption = [[:caption:]],
+          collection = [[:collection:]], icon = [[:icon:]]
+          WHERE id = [[:albumId:]]
           ;
         ]]></statement>
       </dbaction>
@@ -2570,7 +2595,7 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:4467"><![CDATA[
-          -- changed < to <= and > to >=
+          -- TODO: verify changed < to <= and > to >=
           SELECT
             inf.imageid,
             inf.rating,
@@ -2579,8 +2604,8 @@
           FROM ImageInformation AS inf
           JOIN ImagePositions AS pos
             ON inf.imageid = pos.imageid
-          WHERE (pos.latitudeNumber => ? AND pos.latitudeNumber <= ?)
-          AND (pos.longitudeNumber >= ? AND pos.longitudeNumber <= ?)
+          WHERE (pos.latitudeNumber >= [[:minLatitudeNumber:]] AND pos.latitudeNumber <= [[:maxLatitudeNumber:]])
+          AND (pos.longitudeNumber >= [[:minLongitudeNumber:]] AND pos.longitudeNumber <= [[:maxLongitudeNumber:]])
           ;
         ]]></statement>
       </dbaction>
@@ -2590,7 +2615,7 @@
 
       <dbaction name="Delete_Thumbnail_ByPath" mode="query">
           <statement mode="query" backends="mysql,sqlite">
-              SELECT @thumbsId := thumbId FROM FilePaths WHERE path=:path
+              SELECT @thumbsId := thumbId FROM FilePaths WHERE path=[[:path:]]
           </statement>
           <statement mode="query" backends="mysql,sqlite">
               DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
@@ -2605,7 +2630,10 @@
 
       <dbaction name="Delete_Thumbnail_ByUniqueHashId" mode="query">
           <statement mode="query" backends="mysql,sqlite">
-              SELECT @thumbsId := thumbId FROM UniqueHashes WHERE uniqueHash=:uniqueHash AND fileSize=:filesize
+              SELECT @thumbsId := thumbId
+              FROM UniqueHashes
+              WHERE uniqueHash=[[:uniqueHash:]]
+                AND fileSize=[[:filesize:]]
           </statement>
           <statement mode="query" backends="mysql,sqlite">
               DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
@@ -2620,7 +2648,7 @@
 
       <dbaction name="Delete_Thumbnail_ByCustomIdentifier" mode="query">
           <statement mode="query" backends="mysql,sqlite">
-              SELECT @thumbsId := thumbId FROM CustomIdentifiers WHERE identifier=:identifier
+              SELECT @thumbsId := thumbId FROM CustomIdentifiers WHERE identifier=[[:identifier:]]
           </statement>
           <statement mode="query" backends="mysql,sqlite">
               DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
