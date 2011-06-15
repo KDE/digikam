@@ -12,38 +12,34 @@ IF(NOT MSVC)
     ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 ENDIF(NOT MSVC)
 
-SET(playground_SRCS
-    read_xml.cpp
+SET(read_QXmlStream_SRCS
+    read_QXmlStream.cpp
    )
 
 #KDE4_ADD_APP_ICON(playground_SRCS "../data/icons/apps/hi*-app-showfoto.png")
 
-KDE4_ADD_EXECUTABLE(playground ${playground_SRCS})
-KDE4_ADD_EXECUTABLE(read_QXmlStream read_QXmlStream.cpp)
+KDE4_ADD_EXECUTABLE(read_QXmlStream ${read_QXmlStream_SRCS})
 
-TARGET_LINK_LIBRARIES(playground
-                      digikamdatabase
+#TARGET_LINK_LIBRARIES(playground
+#                      digikamdatabase
+#
+#                      ${QT_QTCORE_LIBRARY}
+#                      ${QT_QTGUI_LIBRARY}
+#                      ${QT_QTSQL_LIBRARY}
+#                      ${QT_QT3SUPPORT_LIBRARY}
+#                      ${QT_LIBRARIES}
+#                      ${KDE4_KIO_LIBS}
+#                      ${KDE4_SOLID_LIBS}
+#                      ${KDE4_KDEUI_LIBS}
+#                      ${KDE4_KPARTS_LIBS}
+#                     )
 
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTSQL_LIBRARY}
-                      ${QT_QT3SUPPORT_LIBRARY}
-                      ${QT_LIBRARIES}
-                      ${KDE4_KIO_LIBS}
-                      ${KDE4_SOLID_LIBS}
-                      ${KDE4_KDEUI_LIBS}
-                      ${KDE4_KPARTS_LIBS}
-                     )
 TARGET_LINK_LIBRARIES(read_QXmlStream
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTSQL_LIBRARY}
-                      ${QT_QT3SUPPORT_LIBRARY}
                       ${QT_LIBRARIES}
-                      ${KDE4_KIO_LIBS}
-                      ${KDE4_SOLID_LIBS}
                       ${KDE4_KDEUI_LIBS}
-                      ${KDE4_KPARTS_LIBS}
                      )
 
 
