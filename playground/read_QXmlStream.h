@@ -30,6 +30,7 @@
 #include <QtGlobal>
 #include <QMap>
 #include <QString>
+#include <QSharedData>
 
 // Local includes
 
@@ -38,16 +39,38 @@
 namespace Playground
 {
 
+class DIGIKAM_EXPORT DatabaseParam
+: public QSharedData
+{
+public:
+
+    inline void reset() { value = defaultValue; }
+
+    QList<int> positions;
+    QString defaultValue;
+    // TODO: check if this is the right place for value, provided these classes
+    // will be shared between threads, involve also all reset*() fx
+    QVariant value;
+};
+
+
 class DIGIKAM_EXPORT DatabaseActionElement
 {
 public:
 
     DatabaseActionElement() : order(0) {}
+    void resetParams();
+    void parse();
 
     QString mode;
     QString prepare;
     int     order;
     QString statement;
+
+    QMap<QString, QExplicitlySharedDataPointer<DatabaseParam> > paramsByName;
+    QMap<int, QString> paramsByPos;
+private:
+    void parse_params();
 };
 
 class DIGIKAM_EXPORT DatabaseAction
@@ -69,6 +92,7 @@ public:
     static bool                 checkReadyForUse();
     static QString              errorMessage();
     QString                     errorString() const;
+    QString                     getSqlStatement(const QString key);
 
 private:
 

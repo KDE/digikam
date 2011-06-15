@@ -29,6 +29,7 @@
 #include <QtSql>
 #include <QRegExp>
 #include <QListIterator>
+#include <QExplicitlySharedDataPointer>
 
 // KDE includes
 
@@ -72,6 +73,72 @@ QSqlDatabase dbDigikamConn() {
 
 //////////////// XML ////////////////////////////////////////////////////////////////
 
+void Playground::DatabaseActionElement::resetParams()
+{
+    /* LATER:
+    for (QMap<QString, DatabaseParam>::iterator i = paramsByName.begin();
+         i != paramsByName.constEnd();
+         ++i)
+    {
+        i.value().reset();
+    }
+    */
+}
+
+void Playground::DatabaseActionElement::parse()
+{
+    parse_params();
+    statement.squeeze();
+}
+
+void Playground::DatabaseActionElement::parse_params()
+{
+    // [[:param_name, default="123":]] -> [1:keyword, 2:default, 3:123]
+    // [[:param_name:]]
+    static const QString regexp = \
+            QString("(?:\\[\\[:)(\\w+)(?:,\\s*)(default)(?:=\")([^\"]*)(?:\")(?:.*:\\]\\])");
+    QRegExp rx(regexp, Qt::CaseSensitive, QRegExp::RegExp2);
+    rx.setMinimal(true); // we really need non-gredy operators
+    static const QString newparam = QString("?");
+
+    int count = 0;
+    int pos = 0;
+    while ((pos = rx.indexIn(statement, pos)) != -1) {
+
+        Q_ASSERT(rx.captureCount() == 1 || rx.captureCount() == 3);
+
+        QExplicitlySharedDataPointer<DatabaseParam> p;
+        if (paramsByName.contains(rx.cap(1))) {
+            p = paramsByName.value(rx.cap(1));
+        } else {
+            p = new DatabaseParam;
+            paramsByName.insert(rx.cap(1), p);
+        }
+
+        paramsByPos.insert(count, rx.cap(1));
+
+        if ( p->defaultValue.isEmpty() \
+                && rx.captureCount() == 3 \
+                && rx.cap(2) == QLatin1String("default"))
+        {
+             p->defaultValue = rx.cap(3);
+        }
+
+        p->positions.append(count);
+        //rm qout << "parse: -> rx0:" << rx.cap(0) << endl;
+        //rm qout << "parse: " << count << " -> rx1:" << rx.cap(1) << "  rx2:" << rx.cap(2) << "  rx3:" << rx.cap(3) << endl;
+        //rm qout << "def empty: " << p.defaultValue.isNull() << "'" << p.defaultValue << "'" << endl;
+        //rm qout << "def cc: " << rx.captureCount() << endl;
+        //rm qout << "def cc: " << rx.cap(2) << endl;
+
+        // transform reference in a positional parameter
+        statement.replace(statement.indexOf(rx.cap(0)), rx.cap(0).size(), newparam);
+
+        pos += rx.matchedLength() - rx.cap(0).size() + newparam.size();
+        count++;
+    }
+}
+
 Playground::DatabaseStatements::DatabaseStatements(const QString& databaseType)
 {
     wanted_backend = databaseType;
@@ -84,17 +151,14 @@ bool Playground::DatabaseStatements::read(QIODevice *device)
     if (xml.readNextStartElement()) {
         if (xml.name() == "databaseconfig") // && xml.attributes().value("version") == "1.0")
         {
-            //rm qout << "read: " << xml.name().toString() << endl;
             while (xml.name() != "dbactions")
             {
                 xml.readNextStartElement();
             }
-            //Playground::DatabaseStatements configElement = readDbactions();
+
             readDbactions();
 
-            //for (QMap<QString, Playground::DatabaseAction>::const_iterator i = configElement.sqlStatements.constBegin();
             for (QMap<QString, Playground::DatabaseAction>::const_iterator i = sqlStatements.constBegin();
-            //     i != configElement.sqlStatements.constEnd();
                  i != sqlStatements.constEnd();
                  ++i)
             {
@@ -107,6 +171,16 @@ bool Playground::DatabaseStatements::read(QIODevice *device)
                     qout << "         " << dbe.mode << endl;
                     qout << "         " << dbe.prepare << endl;
                     qout << "         " << dbe.statement << endl;
+
+                    for (QMap<QString, QExplicitlySharedDataPointer<DatabaseParam> >::iterator i
+                            = dbe.paramsByName.begin();
+                         i != dbe.paramsByName.constEnd();
+                         ++i)
+                    {
+                        qout << "       p:" << i.key() << endl;
+                        qout << "       p:" << i.value()->defaultValue << endl;
+                        qout << "       p:" << i.value()->positions[0] << endl;
+                    }
                 }
             }
 
@@ -162,7 +236,7 @@ void Playground::DatabaseStatements::readDbaction()
     Q_ASSERT(xml.isStartElement() && xml.name() == "dbaction");
     QXmlStreamAttributes a = xml.attributes();
     Q_ASSERT(a.hasAttribute( QLatin1String("name")));
-    qout << a.value(QLatin1String("name")).toString() << endl;
+    //rm qout << a.value(QLatin1String("name")).toString() << endl;
 
     // initialize the action
     Playground::DatabaseAction action;
@@ -210,6 +284,8 @@ void Playground::DatabaseStatements::readStatement(Playground::DatabaseAction* a
                 actionElement.prepare   = a.value(QLatin1String("prepare")).toString();
             }
             actionElement.statement = sql;
+            actionElement.parse();
+
             action->dbActionElements.append(actionElement);
             
             break;

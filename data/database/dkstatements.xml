@@ -27,6 +27,19 @@
  verify this XML with:
  xmllint -\-noout -\-schema dkstatements.xsd dkstatements.xml
 
+ SQL rules:
+  - parameters in statements are described as follow:
+    included in "[[:", ":]]" braces, opening brace is followed by the parameter
+    name avoiding spaces.
+    It's also possible to add a default value, it should be separated by a
+    comma "," identified by the word "default=" with the value surrounded by
+    double quotes '"', no single quotes allowed
+    i.e.
+    [[:keyword:]]
+    [[:keyword, default="None":]]
+    
+  
+
 
  ***************** notes and todos *****************
  prepare => no, keep, always
@@ -96,7 +109,7 @@
         file="libs/database/thumbnaildb.cpp:81"><![CDATA[
           SELECT value
           FROM Settings
-          WHERE keyword = ?
+          WHERE keyword = [[:keyword, default="None":]]
           ;
         ]]></statement>
       </dbaction>
@@ -1214,7 +1227,7 @@
         backends="mysql,sqlite"
         prepare="always"
         file="libs/database/albumdb.cpp:882"><![CDATA[
-          SELECT value FROM Settings WHERE keyword = ?;
+          SELECT value FROM Settings WHERE keyword = [[:keyword, default="None":]];
         ]]></statement>
       </dbaction>
 
