@@ -545,7 +545,7 @@ albumIds.size());
           LEFT JOIN ImagePositions
             ON img.id=ImagePositions.imageid
           WHERE img.status = 1
-            AND ([[:allAlbums:, default="0"]] OR alb.id IN ( <list name="albums"/> ))
+            AND ([[:allAlbums, default="0":]] OR alb.id IN ( <list name="albums"/> ))
           LIMIT <var name="limit" />
           ;
         ]]></statement>
@@ -594,8 +594,8 @@ albumIds.size());
             )
           )
           AND itp.property = [[:property:]]
-          AND itp.value BETWEEN <var name="value" default="-9223372036854775808"/>
-                            AND <var name="value" default="9223372036854775807"/>
+          AND itp.value BETWEEN [[:minvalue, default="-9223372036854775808":]]
+                            AND [[:maxvalue, default="9223372036854775807":]]
           ;
         ]]></statement>
       </dbaction>
