@@ -73,16 +73,52 @@ QSqlDatabase dbDigikamConn() {
 
 //////////////// XML ////////////////////////////////////////////////////////////////
 
+void Playground::DatabaseParam::debugPrint()
+{
+        qout << " def:" << defaultValue \
+             << " pos: " << positions[0];
+        for (int l = 1 ; l < positions.count() ; l++)
+        {
+            qout << ", " << positions[l];
+        }
+        qout << endl;
+}
+
 void Playground::DatabaseActionElement::resetParams()
 {
-    /* LATER:
-    for (QMap<QString, DatabaseParam>::iterator i = paramsByName.begin();
-         i != paramsByName.constEnd();
-         ++i)
+    for (Playground::paramsByName_t::iterator k
+            = paramsByName.begin();
+         k != paramsByName.constEnd();
+         ++k)
     {
-        i.value().reset();
+        k.value()->reset();
     }
-    */
+}
+
+void Playground::DatabaseActionElement::debugPrint()
+{
+    qout << "         " << mode << endl;
+    qout << "         " << prepare << endl;
+    qout << "         " << statement << endl;
+
+    qout << "    QMap<QString, QVariant> params;" << endl;
+    for (Playground::paramsByName_t::iterator k
+            = paramsByName.begin();
+         k != paramsByName.constEnd();
+         ++k)
+    {
+        qout << "       p:" << k.key() << "  "; k.value()->debugPrint();
+        /* // used to generate parameters bindings
+        QMap<QString, QVariant> params;
+        qout << "    params.insert(\"" << k.key() << "\", QVariant(\"" << k.value()->defaultValue << "\");";
+        qout << " // " << k.value()->positions[0];
+        for (int l = 1 ; l < k.value()->positions.count() ; l++)
+        {
+            qout << ", " << k.value()->positions[l];
+        }
+        qout << endl;
+        */
+    }
 }
 
 void Playground::DatabaseActionElement::parse()
@@ -96,40 +132,40 @@ void Playground::DatabaseActionElement::parse_params()
     // [[:param_name, default="123":]] -> [1:keyword, 2:default, 3:123]
     // [[:param_name:]]
     static const QString regexp = \
-            QString("(?:\\[\\[:)(\\w+)(?:,\\s*)(default)(?:=\")([^\"]*)(?:\")(?:.*:\\]\\])");
+            QString("(?:\\[\\[:)(\\w+)(?:(?:,\\s*)(default)(?:=\")([^\"]*)(?:\"))?(?:.*:\\]\\])");
     QRegExp rx(regexp, Qt::CaseSensitive, QRegExp::RegExp2);
     rx.setMinimal(true); // we really need non-gredy operators
     static const QString newparam = QString("?");
+    static const int paramName          = 1;
+    static const int paramDefaultValue  = 3;
 
     int count = 0;
     int pos = 0;
     while ((pos = rx.indexIn(statement, pos)) != -1) {
 
-        Q_ASSERT(rx.captureCount() == 1 || rx.captureCount() == 3);
+        Q_ASSERT(rx.captureCount() == paramDefaultValue);
 
         QExplicitlySharedDataPointer<DatabaseParam> p;
-        if (paramsByName.contains(rx.cap(1))) {
-            p = paramsByName.value(rx.cap(1));
+        if (paramsByName.contains(rx.cap(paramName))) {
+            p = paramsByName.value(rx.cap(paramName));
         } else {
             p = new DatabaseParam;
-            paramsByName.insert(rx.cap(1), p);
+            paramsByName.insert(rx.cap(paramName), p);
         }
 
-        paramsByPos.insert(count, rx.cap(1));
+        paramsByPos.insert(count, rx.cap(paramName));
 
-        if ( p->defaultValue.isEmpty() \
-                && rx.captureCount() == 3 \
-                && rx.cap(2) == QLatin1String("default"))
+        // the first parameter with a default win
+        if ( p->defaultValue.isEmpty() && rx.cap(paramDefaultValue -1) == QLatin1String("default"))
         {
-             p->defaultValue = rx.cap(3);
+             p->defaultValue = rx.cap(paramDefaultValue);
         }
 
         p->positions.append(count);
-        //rm qout << "parse: -> rx0:" << rx.cap(0) << endl;
-        //rm qout << "parse: " << count << " -> rx1:" << rx.cap(1) << "  rx2:" << rx.cap(2) << "  rx3:" << rx.cap(3) << endl;
-        //rm qout << "def empty: " << p.defaultValue.isNull() << "'" << p.defaultValue << "'" << endl;
-        //rm qout << "def cc: " << rx.captureCount() << endl;
-        //rm qout << "def cc: " << rx.cap(2) << endl;
+        // qout << "parse:"  << count << " -> rx0:" << rx.cap(0) << endl;
+        // qout << "rx1:" << rx.cap(paramName) << endl;
+        // qout << "rx2:" << rx.cap(paramDefaultValue -1) << endl;
+        // qout << "rx3:" << rx.cap(paramDefaultValue) << endl;
 
         // transform reference in a positional parameter
         statement.replace(statement.indexOf(rx.cap(0)), rx.cap(0).size(), newparam);
@@ -157,32 +193,7 @@ bool Playground::DatabaseStatements::read(QIODevice *device)
             }
 
             readDbactions();
-
-            for (QMap<QString, Playground::DatabaseAction>::const_iterator i = sqlStatements.constBegin();
-                 i != sqlStatements.constEnd();
-                 ++i)
-            {
-                qout << "key: " << i.key() << endl;
-                qout << "     " << i.value().name << endl;
-                qout << "     " << i.value().mode << endl;
-                QListIterator<Playground::DatabaseActionElement> j(i.value().dbActionElements);
-                while (j.hasNext()) {
-                    Playground::DatabaseActionElement dbe = j.next();
-                    qout << "         " << dbe.mode << endl;
-                    qout << "         " << dbe.prepare << endl;
-                    qout << "         " << dbe.statement << endl;
-
-                    for (QMap<QString, QExplicitlySharedDataPointer<DatabaseParam> >::iterator i
-                            = dbe.paramsByName.begin();
-                         i != dbe.paramsByName.constEnd();
-                         ++i)
-                    {
-                        qout << "       p:" << i.key() << endl;
-                        qout << "       p:" << i.value()->defaultValue << endl;
-                        qout << "       p:" << i.value()->positions[0] << endl;
-                    }
-                }
-            }
+            debugPrint();
 
         }
         else
@@ -197,6 +208,23 @@ bool Playground::DatabaseStatements::read(QIODevice *device)
     }
 
     return !xml.error();
+}
+
+void Playground::DatabaseStatements::debugPrint()
+{
+    for (QMap<QString, Playground::DatabaseAction>::const_iterator i = sqlStatements.constBegin();
+         i != sqlStatements.constEnd();
+         ++i)
+    {
+        qout << "key: " << i.key() << endl;
+        qout << "     " << i.value().name << endl;
+        qout << "     " << i.value().mode << endl;
+        QListIterator<Playground::DatabaseActionElement> j(i.value().dbActionElements);
+        while (j.hasNext()) {
+            Playground::DatabaseActionElement dbe = j.next();
+            dbe.debugPrint();
+        }
+    }
 }
 
 QString Playground::DatabaseStatements::errorString() const
@@ -349,6 +377,8 @@ int main( int, char*[] )
             continue;
         }
     }
+    delete query; query = 0;
+
 }
 
 // kate: encoding utf-8; eol unix;

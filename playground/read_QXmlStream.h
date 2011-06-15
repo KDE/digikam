@@ -31,6 +31,7 @@
 #include <QMap>
 #include <QString>
 #include <QSharedData>
+#include <QVariant>
 
 // Local includes
 
@@ -44,7 +45,8 @@ class DIGIKAM_EXPORT DatabaseParam
 {
 public:
 
-    inline void reset() { value = defaultValue; }
+    inline void                 reset() { value = defaultValue; }
+    void                        debugPrint();
 
     QList<int> positions;
     QString defaultValue;
@@ -53,21 +55,23 @@ public:
     QVariant value;
 };
 
+typedef QMap<QString, QExplicitlySharedDataPointer<DatabaseParam> > paramsByName_t;
 
 class DIGIKAM_EXPORT DatabaseActionElement
 {
 public:
 
     DatabaseActionElement() : order(0) {}
-    void resetParams();
-    void parse();
+    void                        resetParams();
+    void                        parse();
+    void                        debugPrint();
 
     QString mode;
     QString prepare;
     int     order;
     QString statement;
 
-    QMap<QString, QExplicitlySharedDataPointer<DatabaseParam> > paramsByName;
+    paramsByName_t paramsByName;
     QMap<int, QString> paramsByPos;
 private:
     void parse_params();
@@ -89,6 +93,7 @@ public:
     DatabaseStatements(const QString& databaseType);
 
     bool                        read(QIODevice *device);
+    void                        debugPrint();
     static bool                 checkReadyForUse();
     static QString              errorMessage();
     QString                     errorString() const;
