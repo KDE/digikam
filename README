@@ -9,7 +9,7 @@ DIGIKAM - MANAGE YOUR PHOTOGRAPHS LIKE A PROFESSIONAL WITH THE POWER OF OPEN SOU
  and/or delete them.
 
  The digiKam built-in image editor makes the common photo correction
- a simple task. The image editor is extensible via plugins and, 
+ a simple task. The image editor is extensible via plugins and,
  since the digikamimageplugins project has been merged to digiKam core
  since release 0.9.2, all useful image editor plugins are available
  in the base installation.
@@ -49,7 +49,7 @@ IRC channel from irc.freenode.org server: #digikam
 IMPORTANT : the bug reports and wishlist entries are hosted by the KDE bug report
 system which can be reached from the standard KDE help menu of digiKam.
 A mail will automatically be sent to the digiKam development mailing list.
-There is no need to contact directly the digiKam mailing list for a bug report 
+There is no need to contact directly the digiKam mailing list for a bug report
 or a devel wish.
 
 The current bugs and devel wishes reported to the bugzilla servers can be seen
@@ -104,8 +104,9 @@ Optional :
 
 libkdepimlibs   >= 4.4.x                      http://pim.kde.org                         To support KAddressBook entries.
 liblensfun      >= 0.2.5                      http://lensfun.berlios.de                  To support LensCorrection editor. If no external libray is found, internal version is used instead.  plugin.
-libgphoto2      >= 2.4.0                      http://www.gphoto.org                      To support Gphoto2 Cameras. 
-liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                  For Liquid Rescale tool. If no external libray is found, internal version is used instead. 
+libgphoto2      >= 2.4.0                      http://www.gphoto.org                      To support Gphoto2 Cameras.
+libusb          >= 1.0.0                      http://www.libusb.org                      Required by Gphoto2 as linking dependency. See details in B.K.O #268267
+liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                  For Liquid Rescale tool. If no external libray is found, internal version is used instead.
 
 Note : all library dependencies require development and binary packages installed on your
 computer to compile digiKam.
@@ -119,12 +120,12 @@ Video thumbs support under Linux : please install "mplayerthumbs" package.
 
 -- INSTALLATION --------------------------------------------------------
 
-In order to compile, especially when QT3/Qt4 are installed at the same time, 
+In order to compile, especially when QT3/Qt4 are installed at the same time,
 just use something like that:
 
 # export VERBOSE=1
 # export QTDIR=/usr/lib/qt4
-# export PATH=$QTDIR/bin:$PATH 
+# export PATH=$QTDIR/bin:$PATH
 # cmake .
 # make
 # sudo make install
@@ -152,7 +153,7 @@ Note: To know KDE install path on your computer, use 'kde-config --prefix' comma
 
 -- DONATE MONEY --------------------------------------------------------
 
-If you love digiKam, you can help developers to buy new photo devices to test 
+If you love digiKam, you can help developers to buy new photo devices to test
 and implement new features. Thanks in advance for your generous donations.
 
 For more information, look at this url : http://www.digikam.org/?q=donation

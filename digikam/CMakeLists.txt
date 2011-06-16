@@ -281,6 +281,12 @@ TARGET_LINK_LIBRARIES(digikam
         cameragui
 )
 
+IF (NOT WIN32 AND GPHOTO2_FOUND)
+    # See B.K.O #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
+    TARGET_LINK_LIBRARIES(digikam ${LIBUSB_LIBRARIES})
+ENDIF (NOT WIN32 AND GPHOTO2_FOUND)
+
+
 IF(USE_SCRIPT_IFACE)
     TARGET_LINK_LIBRARIES(digikam ${QT_QTSCRIPT_LIBRARY})
 ENDIF(USE_SCRIPT_IFACE)
