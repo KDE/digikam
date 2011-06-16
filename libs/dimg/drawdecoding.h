@@ -83,6 +83,9 @@ public:
     bool operator==(const DRawDecoding& other) const;
 
     void writeToFilterAction(FilterAction& action, const QString& prefix = QString()) const;
+
+public:
+
     static DRawDecoding fromFilterAction(const FilterAction& action, const QString& prefix = QString());
 
 public:

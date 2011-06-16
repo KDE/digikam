@@ -226,11 +226,11 @@ void RawDecodingSettingsWriter::write()
     AddParameterEnum(RAWQuality);
 
     AddParameterIfNotDefault(medianFilterPasses);
-    AddParameterIfNotDefaultEnumWithValue(noiseReductionType, NRType);
-    AddParameterIfNotDefaultWithValue(noiseReductionThreshold, NRThreshold);
+    AddParameterIfNotDefaultEnumWithValue(noiseReductionType,              NRType);
+    AddParameterIfNotDefaultWithValue(noiseReductionThreshold,             NRThreshold);
     AddParameterIfNotDefaultWithValue(enableChromaticAberrationCorrection, enableCACorrection);
-    AddParameterIfNotDefaultWithValue(redChromaticAberrationMultiplier, caMultiplier[0]);
-    AddParameterIfNotDefaultWithValue(blueChromaticAberrationMultiplier, caMultiplier[1]);
+    AddParameterIfNotDefaultWithValue(redChromaticAberrationMultiplier,    caMultiplier[0]);
+    AddParameterIfNotDefaultWithValue(blueChromaticAberrationMultiplier,   caMultiplier[1]);
     AddParameterIfNotDefault(brightness);
 
     AddParameter(enableBlackPoint);
@@ -276,8 +276,8 @@ void RawDecodingSettingsWriter::write()
     AddParameterIfNotDefault(esMedPasses);
     AddParameterIfNotDefaultWithValue(noiseReductionChrominanceThreshold, NRChroThreshold);
     AddParameterIfNotDefault(expoCorrection);
-    AddParameterIfNotDefaultWithValue(exposureCorrectionShift,     expoCorrectionShift);
-    AddParameterIfNotDefaultWithValue(exposureCorrectionHighlight, expoCorrectionHighlight);
+    AddParameterIfNotDefaultWithValue(exposureCorrectionShift,            expoCorrectionShift);
+    AddParameterIfNotDefaultWithValue(exposureCorrectionHighlight,        expoCorrectionHighlight);
 }
 
 void RawDecodingSettingsReader::read()
@@ -311,11 +311,11 @@ void RawDecodingSettingsReader::read()
     ReadParameterEnum(RAWQuality);
 
     ReadParameter(medianFilterPasses);
-    ReadParameterEnumWithValue(noiseReductionType, NRType);
-    ReadParameterWithValue(noiseReductionThreshold, NRThreshold);
+    ReadParameterEnumWithValue(noiseReductionType,              NRType);
+    ReadParameterWithValue(noiseReductionThreshold,             NRThreshold);
     ReadParameterWithValue(enableChromaticAberrationCorrection, enableCACorrection);
-    ReadParameterWithValue(redChromaticAberrationMultiplier, caMultiplier[0]);
-    ReadParameterWithValue(blueChromaticAberrationMultiplier, caMultiplier[1]);
+    ReadParameterWithValue(redChromaticAberrationMultiplier,    caMultiplier[0]);
+    ReadParameterWithValue(blueChromaticAberrationMultiplier,   caMultiplier[1]);
     ReadParameter(brightness);
 
     ReadParameter(enableBlackPoint);
@@ -346,9 +346,9 @@ void RawDecodingSettingsReader::read()
 
     if (!action.hasParameter("whiteBalanceAreaX"))
     {
-        int x      = action.parameter(prefix + "whiteBalanceAreaX", 0);
-        int y      = action.parameter(prefix + "whiteBalanceAreaY", 0);
-        int width  = action.parameter(prefix + "whiteBalanceAreaWidth", 0);
+        int x      = action.parameter(prefix + "whiteBalanceAreaX",      0);
+        int y      = action.parameter(prefix + "whiteBalanceAreaY",      0);
+        int width  = action.parameter(prefix + "whiteBalanceAreaWidth",  0);
         int height = action.parameter(prefix + "whiteBalanceAreaHeight", 0);
         QRect rect(x, y, width, height);
         if (rect.isValid())
