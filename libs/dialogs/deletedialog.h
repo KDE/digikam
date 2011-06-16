@@ -41,12 +41,6 @@
 
 #include "digikam_export.h"
 
-class QStackedWidget;
-class QLabel;
-class QCheckBox;
-
-class KListWidget;
-
 namespace Digikam
 {
 
