@@ -27,7 +27,7 @@
 /// @author C. Stamm, R. Spuler
 
 #include "Encoder.h"
-#include <omp.h>
+
 #ifdef TRACE
 	#include <stdio.h>
 #endif
@@ -87,7 +87,9 @@ CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header,
 #endif
 
 	if (useOMP && m_macroBlockLen > 1) {
+#ifdef _OPENMP
 		omp_set_num_threads(m_macroBlockLen);
+#endif
 
 		// create macro block array
 		m_macroBlocks = new CMacroBlock*[m_macroBlockLen];

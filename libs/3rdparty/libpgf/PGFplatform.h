@@ -608,5 +608,30 @@ __inline UINT64 ByteSwap(UINT64 ui64) {
 
 #endif //PGF_USE_BIG_ENDIAN
 
+// OpenMP rules (inspired from libraw project)
+#if defined (_OPENMP)
+
+#if defined(WIN32)
+# if defined (_MSC_VER) && (_MSC_VER >= 1600)
+/* VS2010+ : OpenMP works OK */
+#   define LIBPGF_USE_OPENMP
+#elif defined (__INTEL_COMPILER) && (__INTEL_COMPILER >=910)
+/*  Have not tested on 9.x and 10.x, but Intel documentation claims OpenMP 2.5 support in 9.1 */
+#   define LIBPGF_USE_OPENMP
+#else
+#  undef LIBPGF_USE_OPENMP
+#endif
+/* Not Win32 */
+# elif (defined(__APPLE__) || defined(__MACOSX__)) && defined(_REENTRANT)
+#   undef LIBPGF_USE_OPENMP
+# else
+#   define LIBPGF_USE_OPENMP
+# endif
+#endif
+
+#ifdef LIBPGF_USE_OPENMP
+#include <omp.h>
+#endif
+
 
 #endif //PGF_PGFPLATFORM_H

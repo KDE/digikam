@@ -27,7 +27,7 @@
 /// @author C. Stamm, R. Spuler
 
 #include "Decoder.h"
-#include <omp.h>
+
 #ifdef TRACE
 	#include <stdio.h>
 #endif
@@ -85,7 +85,9 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 #endif
 
 	if (useOMP && m_macroBlockLen > 1) {
+#ifdef _OPENMP
 		omp_set_num_threads(m_macroBlockLen);
+#endif
 
 		// create macro block array
 		m_macroBlocks = new CMacroBlock*[m_macroBlockLen];
