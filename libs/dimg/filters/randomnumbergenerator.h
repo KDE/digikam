@@ -6,7 +6,7 @@
  * Date        : 2010-11-03
  * Description : Generating random numbers
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,19 +51,18 @@ public:
 
 // --------------------------------------------------------------------
 
+/**
+ * This class differs from standard pseudo
+ * random number generators (rand()) in these points:
+ * - it uses a specified, independently implemented algorithm
+ *   identical across platforms
+ * - provides access to the used seed
+ * - it can thus guarantee replayable sequences
+ * - it provides convenient seeding of varying quality
+ */
 class DIGIKAM_EXPORT RandomNumberGenerator
 {
 public:
-
-    /**
-     * This class differs from standard pseudo
-     * random number generators (rand()) in these points:
-     * - it uses a specified, independently implemented algorithm
-     *   identical across platforms
-     * - provides access to the used seed
-     * - it can thus guarantee replayable sequences
-     * - it provides convenient seeding of varying quality
-     */
 
     /**
      * Constructs a random number generator that is seeded

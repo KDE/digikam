@@ -6,7 +6,7 @@
  * Date        : 2010-12-14
  * Description : Filter to manage and help with raw loading
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,8 +24,6 @@
 #ifndef RAWPROCESSINGFILTERS_H
 #define RAWPROCESSINGFILTERS_H
 
-// Qt includes
-
 // Local includes
 
 #include "digikam_export.h"
@@ -39,17 +37,16 @@ namespace Digikam
 class DImgLoaderObserver;
 class FilterAction;
 
+/**
+ * This is a special filter.
+ * It implements RAW post processing.
+ * Additionally, it provides some facilities for use from the DImg Raw loader.
+ *
+ * The original image shall come from libkdcraw without further modification.
+ */
 class DIGIKAM_EXPORT RawProcessingFilter : public DImgThreadedFilter
 {
 public:
-
-    /**
-     * This is a special filter.
-     * It implements RAW post processing.
-     * Additionally, it provides some facilities for use from the DImg Raw loader.
-     *
-     * The original image shall come from libkdcraw without further modification.
-     */
 
     /**
      * Default constructor. You need to call setSettings() and setOriginalImage()
@@ -94,18 +91,23 @@ public:
     {
         return "digikam:RawConverter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Raw Conversion");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
     }
+
+    void                    readParameters(const FilterAction& action);
 
     virtual QString         filterIdentifier() const
     {
@@ -113,19 +115,19 @@ public:
     }
 
     virtual FilterAction    filterAction();
-    void                    readParameters(const FilterAction& action);
 
 protected:
-
-    virtual void filterImage();
 
     void postProgress(int); // not virtual
     bool continueQuery() const; // not virtual
 
+    virtual void filterImage();
+
+protected:
+
     DRawDecoding        m_settings;
     IccProfile          m_customOutputProfile;
     DImgLoaderObserver* m_observer;
-
 };
 
 } // namespace Digikam
