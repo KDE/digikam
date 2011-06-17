@@ -6,7 +6,7 @@
  * Date        : 2010-06-24
  * Description : class for creating a particular filter
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,8 +48,10 @@ public:
 
     /// Returns a list with identifiers of supported filters
     virtual QStringList supportedFilters() = 0;
+
     /// Returns a list with the supported versions for the given identifier
     virtual QList<int>  supportedVersions(const QString& filterIdentifier) = 0;
+
     /// Returns a QString with filter name for displaying in views
     virtual QString displayableName(const QString& filterIdentifier) = 0;
 
