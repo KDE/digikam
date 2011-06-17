@@ -86,6 +86,7 @@ TARGET_LINK_LIBRARIES(digikamcore
         ${PNG_LIBRARIES}
         ${LCMS_LIBRARIES}
         ${JASPER_LIBRARIES}
+        ${OPENMP_LDFLAGS}
 
         # Required by CImg library which is using pthread internally.
         ${CMAKE_THREAD_LIBS_INIT}
@@ -162,6 +163,8 @@ TARGET_LINK_LIBRARIES(digikamdatabase
                       ${KDCRAW_LIBRARIES}
                       ${KFACE_LIBRARIES}
                       ${KMAP_LIBRARIES}
+
+                      ${OPENMP_LDFLAGS}
                      )
 
 IF(USE_SCRIPT_IFACE)

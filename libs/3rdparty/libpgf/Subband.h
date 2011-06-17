@@ -1,25 +1,30 @@
 /*
- * The Progressive Graphics File; http://www.libpgf.org 
- * 
+ * The Progressive Graphics File; http://www.libpgf.org
+ *
  * $Date: 2006-06-04 22:05:59 +0200 (So, 04 Jun 2006) $
  * $Revision: 229 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
+//////////////////////////////////////////////////////////////////////
+/// @file Subband.h
+/// @brief PGF wavelet subband class
+/// @author C. Stamm
 
 #ifndef PGF_SUBBAND_H
 #define PGF_SUBBAND_H
@@ -33,6 +38,7 @@ class CROIs;
 //////////////////////////////////////////////////////////////////////
 /// PGF wavelet channel subband class.
 /// @author C. Stamm, R. Spuler
+/// @brief Wavelet channel class
 class CSubband {
 	friend class CWaveletTransform;
 
@@ -87,8 +93,7 @@ public:
 	/// A scalar quantization (with dead-zone) is used. A large quantization value
 	/// results in strong quantization and therefore in big quality loss.
 	/// @param quantParam A quantization parameter (larger or equal to 0)
-	/// @level Level
-	void Dequantize(int quantParam, int level);
+	void Dequantize(int quantParam);
 
 	//////////////////////////////////////////////////////////////////////
 	/// Store wavelet coefficient in subband at given position.
@@ -121,7 +126,7 @@ public:
 	/// Return width of this subband.
 	/// @return Width of this subband (in pixels)
 	int GetWidth() const				{ return m_width; }
-	
+
 	//////////////////////////////////////////////////////////////////////
 	/// Return orientation of this subband.
 	/// LL LH

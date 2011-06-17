@@ -1,34 +1,38 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2006-06-04 22:05:59 +0200 (So, 04 Jun 2006) $
  * $Revision: 229 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+//////////////////////////////////////////////////////////////////////
+/// @file Encoder.h
+/// @brief PGF encoder class
+/// @author C. Stamm, R. Spuler
+
 #ifndef PGF_ENCODER_H
 #define PGF_ENCODER_H
 
-#include "PGFtypes.h"
+#include "PGFstream.h"
 #include "BitStream.h"
 #include "Subband.h"
 #include "WaveletTransform.h"
-#include "Stream.h"
 
 /////////////////////////////////////////////////////////////////////
 // Constants
@@ -36,8 +40,49 @@
 
 /////////////////////////////////////////////////////////////////////
 /// PGF encoder class.
-/// @author C. Stamm, R. Spuler
+/// @author C. Stamm
+/// @brief PGF encoder
 class CEncoder {
+	//////////////////////////////////////////////////////////////////////
+	/// PGF encoder macro block class.
+	/// @author C. Stamm, I. Bauersachs
+	/// @brief A macro block is an encoding unit of fixed size (uncoded)
+	class CMacroBlock {
+	public:
+		CMacroBlock(CEncoder *encoder)
+		: m_encoder(encoder)
+		, m_header(0)
+		{
+			ASSERT(m_encoder);
+			Init(-1);
+		}
+
+		DataT	m_value[BufferSize];				// input buffer of values with index m_valuePos
+		UINT32	m_codeBuffer[BufferSize];			// output buffer for encoded bitstream
+
+		ROIBlockHeader m_header;					// block header
+		UINT32	m_valuePos;							// current buffer position
+		UINT32	m_maxAbsValue;						// maximum absolute coefficient in each buffer
+		UINT32	m_codePos;							// current position in encoded bitstream
+		int		m_lastLevelIndex;					// index of last encoded level: [0, nLevels); used because a level-end can occur before a buffer is full
+
+		void Init(int lastLevelIndex) {				// initialize for reusage
+			m_valuePos = 0;
+			m_maxAbsValue = 0;
+			m_codePos = 0;
+			m_lastLevelIndex = lastLevelIndex;
+		}
+		void BitplaneEncode();						// several macro blocks can be encoded in parallel
+	private:
+		UINT32 RLESigns(UINT32 codePos, UINT32* signBits, UINT32 signLen);
+		UINT32 DecomposeBitplane(UINT32 bufferSize, UINT32 planeMask, UINT32 codePos, UINT32* sigBits, UINT32* refBits, UINT32* signBits, UINT32& signLen, UINT32& codeLen);
+		UINT8  NumberOfBitplanes();
+		bool   GetBitAtPos(UINT32 pos, UINT32 planeMask) const	{ return (abs(m_value[pos]) & planeMask) > 0; }
+
+		CEncoder *m_encoder;						// encoder instance
+		bool	m_sigFlagVector[BufferSize+1];		// see paper from Malvar, Fast Progressive Wavelet Coder
+	};
+
 public:
 	/////////////////////////////////////////////////////////////////////
 	/// Write pre-header, header, postHeader, and levelLength.
@@ -47,17 +92,27 @@ public:
 	/// @param header An already filled in PGF header
 	/// @param postHeader [in] A already filled in PGF post header (containing color table, user data, ...)
 	/// @param levelLength A reference to an integer array, large enough to save the relative file positions of all PGF levels
-	CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header, const PGFPostHeader& postHeader, UINT32*& levelLength) THROW_; // throws IOException
+	/// @param useOMP If true, then the encoder will use multi-threading based on openMP
+	CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header, const PGFPostHeader& postHeader, UINT32*& levelLength, bool useOMP = true) THROW_; // throws IOException
 
 	/////////////////////////////////////////////////////////////////////
 	/// Destructor
 	~CEncoder();
 
 	/////////////////////////////////////////////////////////////////////
-	/// Pad buffer with zeros, encode buffer, write levelLength into header
-	/// Return number of bytes written into stream
+	/// Encoder favors speed over compression size
+	void FavorSpeedOverSize() { m_favorSpeed = true; }
+
+	/////////////////////////////////////////////////////////////////////
+	/// Pad buffer with zeros and encode buffer.
 	/// It might throw an IOException.
-	UINT32 Flush() THROW_;
+	void Flush() THROW_;
+
+	/////////////////////////////////////////////////////////////////////
+	/// Write levelLength into header.
+	/// @return number of bytes written into stream
+	/// It might throw an IOException.
+	UINT32 WriteLevelLength() THROW_;
 
 	/////////////////////////////////////////////////////////////////////
 	/// Partitions a rectangular region of a given subband.
@@ -72,10 +127,9 @@ public:
 	void Partition(CSubband* band, int width, int height, int startPos, int pitch) THROW_;
 
 	/////////////////////////////////////////////////////////////////////
-	/// Set or clear flag. The flag must be set to true as soon a wavelet
-	/// transform level is encoded.
-	/// @param b A flag value
-	void SetLevelIsEncoded(bool b) { m_isLevelEncoded = b; }
+	/// Informs the encoder about the encoded level.
+	/// @param currentLevel encoded level [0, nLevels)
+	void SetEncodedLevel(int currentLevel) { ASSERT(currentLevel >= 0); m_currentBlock->m_lastLevelIndex = m_nLevels - currentLevel - 1; m_forceWriting = true; }
 
 	/////////////////////////////////////////////////////////////////////
 	/// Write a single value into subband at given position.
@@ -84,11 +138,25 @@ public:
 	/// @param bandPos A valid position in subband band
 	void WriteValue(CSubband* band, int bandPos) THROW_;
 
+	/////////////////////////////////////////////////////////////////////
+	/// Compute stream length of header.
+	/// @return header length
+	UINT32 ComputeHeaderLength() const { return UINT32(m_bufferStartPos - m_startPosition); }
+
+	/////////////////////////////////////////////////////////////////////
+	/// Compute stream length of encoded buffer.
+	/// @return encoded buffer length
+	UINT32 ComputeBufferLength() const { return UINT32(m_stream->GetPos() - m_bufferStartPos); }
+
+	/////////////////////////////////////////////////////////////////////
+	/// Save current stream position as beginning of current level.
+	void SetBufferStartPos() { m_bufferStartPos = m_stream->GetPos(); }
+
 #ifdef __PGFROISUPPORT__
 	/////////////////////////////////////////////////////////////////////
 	/// Encodes tile buffer and writes it into stream
 	/// It might throw an IOException.
-	void EncodeTileBuffer() THROW_	{ ASSERT(m_valuePos >= 0 && m_valuePos <= BufferSize); EncodeBuffer(ROIBlockHeader(m_valuePos, true)); }
+	void EncodeTileBuffer() THROW_	{ ASSERT(m_currentBlock && m_currentBlock->m_valuePos >= 0 && m_currentBlock->m_valuePos <= BufferSize); EncodeBuffer(ROIBlockHeader(m_currentBlock->m_valuePos, true)); }
 
 	/////////////////////////////////////////////////////////////////////
 	/// Enables region of interest (ROI) status.
@@ -100,32 +168,24 @@ public:
 #endif
 
 private:
-	UINT32 BitplaneEncode(UINT32 bufferSize);
-	UINT32 RLESigsAndSigns(UINT32* sigBits, UINT32 sigLen, UINT32* signBits, UINT32 signLen);
-	UINT32 RLESigns(UINT32* signBits, UINT32 signLen);
-	UINT32 DecomposeBitplane(UINT32 bufferSize, UINT32 planeMask, UINT32* sigBits, UINT32* refBits, UINT32* signBits, UINT32& signLen);
-	UINT8 NumberOfBitplanes();
-	bool  GetBitAtPos(UINT32 pos, UINT32 planeMask) const	{ return (abs(m_value[pos]) & planeMask) > 0; }	
-	void  EncodeBuffer(ROIBlockHeader h) THROW_; // throws IOException
+	void EncodeBuffer(ROIBlockHeader h) THROW_; // throws IOException
+	void WriteMacroBlock(CMacroBlock* block) THROW_; // throws IOException
 
-protected:
 	CPGFStream *m_stream;
 	UINT64	m_startPosition;					// file position of PGF start (PreHeader)
 	UINT64  m_levelLengthPos;					// file position of Metadata
-	UINT64  m_currPosition;						// Already accumulated size from lower levels
-	
-	DataT	m_value[BufferSize];				// buffer of values with index m_valuePos
-	UINT32	m_codeBuffer[BufferSize];			// buffer for encoded bitstream
+	UINT64  m_bufferStartPos;					// file position of encoded buffer
 
-	UINT32	m_sigFlagVector[BufferLen];			// see paper from Malvar, Fast Progressive Wavelet Coder
-
-	UINT32	m_valuePos;							// current buffer position
-	UINT32	m_codePos;							// current bit position in m_codeBuffer
-	UINT32	m_maxAbsValue;						// maximum absolute coefficient in each buffer
+	CMacroBlock **m_macroBlocks;				// array of macroblocks
+	int		m_macroBlockLen;					// array length
+	int		m_lastMacroBlock;					// array index of the last created macro block
+	CMacroBlock *m_currentBlock;				// current macro block (used by main thread)
 
 	UINT32* m_levelLength;						// temporary saves the level index
 	int     m_currLevelIndex;					// counts where (=index) to save next value
-	bool    m_isLevelEncoded;					// Already enough data available to set level-block-size
+	UINT8	m_nLevels;							// number of levels
+	bool	m_favorSpeed;						// favor speed over size
+	bool	m_forceWriting;						// all macro blocks have to be written into the stream
 #ifdef __PGFROISUPPORT__
 	bool	m_roi;								// true: ensures region of interest (ROI) encoding
 #endif

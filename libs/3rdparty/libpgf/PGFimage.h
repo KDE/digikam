@@ -1,41 +1,56 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2007-02-03 13:04:21 +0100 (Sa, 03 Feb 2007) $
  * $Revision: 280 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+//////////////////////////////////////////////////////////////////////
+/// @file PGFimage.h
+/// @brief PGF image class
+/// @author C. Stamm
+
 #ifndef PGF_PGFIMAGE_H
 #define PGF_PGFIMAGE_H
 
-#include "PGFtypes.h"
-#include "Stream.h"
+#include "PGFstream.h"
 
 class CDecoder;
+class CEncoder;
 class CWaveletTransform;
 
 //////////////////////////////////////////////////////////////////////
-/// PGF image class.
+/// PGF image class is the main class. You always need a PGF object
+/// for encoding or decoding image data.
+/// Decoding:
+///		pgf.Open(...)
+///		pgf.Read(...)
+///		pgf.GetBitmap(...)
+/// Encoding:
+///		pgf.SetHeader(...)
+///		pgf.ImportBitmap(...)
+///		pgf.Write(...)
 /// @author C. Stamm, R. Spuler
+/// @brief PGF main class
 class CPGFImage {
 public:
-	
+
 	//////////////////////////////////////////////////////////////////////
 	/// Standard constructor: It is used to create a PGF instance for opening and reading.
 	CPGFImage();
@@ -45,11 +60,25 @@ public:
 	virtual ~CPGFImage();
 
 	//////////////////////////////////////////////////////////////////////
+	/// Close PGF image after opening and reading.
+	/// Destructor calls this method during destruction.
+	virtual void Close();
+
+	//////////////////////////////////////////////////////////////////////
+	/// Destroy internal data structures.
+	/// Destructor calls this method during destruction.
+	virtual void Destroy();
+
+	//////////////////////////////////////////////////////////////////////
 	/// Open a PGF image at current stream position: read pre-header, header, and ckeck image type.
 	/// Precondition: The stream has been opened for reading.
 	/// It might throw an IOException.
 	/// @param stream A PGF stream
 	void Open(CPGFStream* stream) THROW_;
+
+	//////////////////////////////////////////////////////////////////////
+	/// Returns true if the PGF has been opened and not closed.
+	bool IsOpen() const	{ return m_decoder != NULL; }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Read and decode some levels of a PGF image at current stream position.
@@ -60,7 +89,7 @@ public:
 	/// The image at level 0 contains the original size.
 	/// Precondition: The PGF image has been opened with a call of Open(...).
 	/// It might throw an IOException.
-	/// @param level The image level of the resulting image in the internal image buffer.
+	/// @param level [0, nLevels) The image level of the resulting image in the internal image buffer.
 	/// @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
 	/// @param data Data Pointer to C++ class container to host callback procedure.
 	void Read(int level = 0, CallbackPtr cb = NULL, void *data = NULL) THROW_;
@@ -72,7 +101,7 @@ public:
 	/// All coordinates are measured in pixels.
 	/// It might throw an IOException.
 	/// @param rect [inout] Rectangular region of interest (ROI). The rect might be cropped.
-	/// @param level The image level of the resulting image in the internal image buffer.
+	/// @param level [0, nLevels) The image level of the resulting image in the internal image buffer.
 	/// @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
 	/// @param data Data Pointer to C++ class container to host callback procedure.
 	void Read(PGFRect& rect, int level = 0, CallbackPtr cb = NULL, void *data = NULL) THROW_;
@@ -88,28 +117,19 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	/// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
 	/// to get a quick reconstruction (coded -> decoded image).
-	void Reconstruct() THROW_;
-
-	//////////////////////////////////////////////////////////////////////
-	/// Close PGF image after opening and reading.
-	/// Destructor calls this method during destruction.
-	void Close();
-
-	//////////////////////////////////////////////////////////////////////
-	/// Destroy internal data structures.
-	/// Destructor calls this method during destruction.
-	void Destroy();
+	/// @param level The image level of the resulting image in the internal image buffer.
+	void Reconstruct(int level = 0);
 
 	//////////////////////////////////////////////////////////////////////
 	/// Get image data in interleaved format: (ordering of RGB data is BGR[A])
-	/// Upsampling, YUV to RGB transform and interleaving are done here to reduce the number 
+	/// Upsampling, YUV to RGB transform and interleaving are done here to reduce the number
 	/// of passes over the data.
 	/// The absolute value of pitch is the number of bytes of an image row of the given image buffer.
 	/// If pitch is negative, then the image buffer must point to the last row of a bottom-up image (first byte on last row).
 	/// if pitch is positive, then the image buffer must point to the first row of a top-down image (first byte).
 	/// The sequence of output channels in the output image buffer does not need to be the same as provided by PGF. In case of different sequences you have to
 	/// provide a channelMap of size of expected channels (depending on image mode). For example, PGF provides a channel sequence BGR in RGB color mode.
-	/// If your provided image buffer expects a channel sequence ARGB, then the channelMap looks like { 3, 2, 1 }.
+	/// If your provided image buffer expects a channel sequence ARGB, then the channelMap looks like { 3, 2, 1, 0 }.
 	/// It might throw an IOException.
 	/// @param pitch The number of bytes of a row of the image buffer.
 	/// @param buff An image buffer.
@@ -144,7 +164,7 @@ public:
 	/// If pitch is positive, then buff points to the first row of a top-down image (first byte).
 	/// The sequence of input channels in the input image buffer does not need to be the same as expected from PGF. In case of different sequences you have to
 	/// provide a channelMap of size of expected channels (depending on image mode). For example, PGF expects in RGB color mode a channel sequence BGR.
-	/// If your provided image buffer contains a channel sequence ARGB, then the channelMap looks like { 3, 2, 1 }.
+	/// If your provided image buffer contains a channel sequence ARGB, then the channelMap looks like { 3, 2, 1, 0 }.
 	/// It might throw an IOException.
 	/// @param pitch The number of bytes of a row of the image buffer.
 	/// @param buff An image buffer.
@@ -179,13 +199,53 @@ public:
 	/// The image size at level i is double the size (width, height) of the image at level i+1.
 	/// The image at level 0 contains the original size.
 	/// Precondition: the PGF image contains a valid header (see also SetHeader(...)).
+	/// Please note: the earlier parameter nLevels has now to be set with SetHeader. Either specify the number of levels
+	/// or use the value 0 for automatic setting.
 	/// It might throw an IOException.
 	/// @param stream A PGF stream
-	/// @param levels The positive number of levels used in layering or 0 meaning a useful number of levels is computed.
-	/// @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
 	/// @param nWrittenBytes [in-out] The number of bytes written into stream are added to the input value.
+	/// @param cb A pointer to a callback procedure. The procedure is called after writing a single level. If cb returns true, then it stops proceeding.
 	/// @param data Data Pointer to C++ class container to host callback procedure.
-	void Write(CPGFStream* stream, int levels = 0, CallbackPtr cb = NULL, UINT32* nWrittenBytes = NULL, void *data = NULL) THROW_;
+	void Write(CPGFStream* stream, UINT32* nWrittenBytes = NULL, CallbackPtr cb = NULL, void *data = NULL) THROW_;
+
+	//////////////////////////////////////////////////////////////////
+	/// Create wavelet transform channels and encoder.
+	/// Call this method before your first call of Write(int level), but after SetHeader().
+	/// Don't use this method when you call Write().
+	/// It might throw an IOException.
+	/// @param stream A PGF stream
+	/// @return The number of bytes written into stream.
+	UINT32 WriteHeader(CPGFStream* stream) THROW_;
+
+#ifdef __PGFROISUPPORT__
+	//////////////////////////////////////////////////////////////////
+	/// Encode and write down to given level at current stream position.
+	/// A PGF image is structered in levels, numbered between 0 and Levels() - 1.
+	/// Each level can be seen as a single image, containing the same content
+	/// as all other levels, but in a different size (width, height).
+	/// The image size at level i is double the size (width, height) of the image at level i+1.
+	/// The image at level 0 contains the original size.
+	/// Precondition: the PGF image contains a valid header (see also SetHeader(...)) and
+	/// WriteHeader() has been called before Write().
+	/// The ROI encoding scheme is used.
+	/// It might throw an IOException.
+	/// @param level [0, nLevels) The image level of the resulting image in the internal image buffer.
+	/// @param cb A pointer to a callback procedure. The procedure is called after writing a single level. If cb returns true, then it stops proceeding.
+	/// @param data Data Pointer to C++ class container to host callback procedure.
+	/// @return The number of bytes written into stream.
+	UINT32 Write(int level, CallbackPtr cb = NULL, void *data = NULL) THROW_;
+#endif
+
+	/////////////////////////////////////////////////////////////////////
+	/// Configures the encoder.
+	/// @param useOMP Use parallel threading with Open MP during encoding. Default value: true. Influences the encoding only if the codec has been compiled with OpenMP support.
+	/// @param favorSpeedOverSize Favors encoding speed over compression ratio. Default value: false
+	void ConfigureEncoder(bool useOMP = true, bool favorSpeedOverSize = false) { m_useOMPinEncoder = useOMP; m_favorSpeedOverSize = favorSpeedOverSize; }
+
+	/////////////////////////////////////////////////////////////////////
+	/// Configures the encoder.
+	/// @param useOMP Use parallel threading with Open MP during decoding. Default value: true. Influences the decoding only if the codec has been compiled with OpenMP support.
+	void ConfigureDecoder(bool useOMP = true) { m_useOMPinDecoder = useOMP; }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Set background of an RGB image with transparency channel or reset to default background.
@@ -285,17 +345,19 @@ public:
 
 	//////////////////////////////////////////////////////////////////////
 	/// Return the length of all encoded headers in bytes.
+	/// Precondition: The PGF image has been opened with a call of Open(...).
 	/// @return The length of all encoded headers in bytes
 	UINT32 GetEncodedHeaderLength() const;
 
 	//////////////////////////////////////////////////////////////////////
 	/// Return the length of an encoded PGF level in bytes.
+	/// Precondition: The PGF image has been opened with a call of Open(...).
 	/// @param level The image level
 	/// @return The length of a PGF level in bytes
 	UINT32 GetEncodedLevelLength(int level) const					{ ASSERT(level >= 0 && level < m_header.nLevels); return m_levelLength[m_header.nLevels - level - 1]; }
 
 	////////////////////////////////////////////////////////////////////
-	/// Reset stream position to beginning of PGF pre header
+	/// Reset stream position to start of PGF pre-header
 	void ResetStreamPos() THROW_;
 
 	//////////////////////////////////////////////////////////////////////
@@ -308,7 +370,7 @@ public:
 	UINT32 ReadEncodedHeader(UINT8* target, UINT32 targetLen) const THROW_;
 
 	//////////////////////////////////////////////////////////////////////
-	/// Reads the data of an encoded PGF level and copies it to a target buffer 
+	/// Reads the data of an encoded PGF level and copies it to a target buffer
 	/// without decoding.
 	/// Precondition: The PGF image has been opened with a call of Open(...).
 	/// It might throw an IOException.
@@ -335,7 +397,7 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	/// Return bits per channel.
 	/// @return Bits per channel
-	BYTE ChannelDepth() const										{ return sizeof(DataT)*8; }
+	BYTE ChannelDepth() const										{ return DataTSize*8; }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Return image width of channel 0 at given level in pixels.
@@ -352,14 +414,14 @@ public:
 	UINT32 Height(int level = 0) const								{ ASSERT(level >= 0); return LevelHeight(m_header.height, level); }
 
 	//////////////////////////////////////////////////////////////////////
-	/// Return current image level. 
+	/// Return current image level.
 	/// Since Read(...) can be used to read each image level separately, it is
 	/// helpful to know the current level. The current level immediately after Open(...) is Levels().
 	/// @return Current image level
-	BYTE Level() const												{ return m_currentLevel; }
+	BYTE Level() const												{ return (BYTE)m_currentLevel; }
 
 	//////////////////////////////////////////////////////////////////////
-	/// Return the number of image levels. 
+	/// Return the number of image levels.
 	/// @return Number of image levels
 	BYTE Levels() const												{ return m_header.nLevels; }
 
@@ -374,7 +436,7 @@ public:
 	/// An image of type RGB contains 3 image channels (B, G, R).
 	/// @return Number of image channels
 	BYTE Channels() const											{ return m_header.channels; }
-	
+
 	//////////////////////////////////////////////////////////////////////
 	/// Return the image mode.
 	/// An image mode is a predefined constant value (see also PGFtypes.h) compatible with Adobe Photoshop.
@@ -391,7 +453,7 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	/// Return true if the pgf image supports Region Of Interest (ROI).
 	/// @return true if the pgf image supports ROI.
-	bool ROIisSupported() const										{ return (m_preHeader.version & PGFROI) != 0; }
+	bool ROIisSupported() const										{ return (m_preHeader.version & PGFROI) == PGFROI; }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Returns highest supported version
@@ -419,44 +481,38 @@ public:
 	/// @return Image level height in pixels
 	static UINT32 LevelHeight(UINT32 height, int level)				{ ASSERT(level >= 0); UINT32 h = (height >> level); return ((h << level) == height) ? h : h + 1; }
 
-	//////////////////////////////////////////////////////////////////////
-	/// Compute and return number of levels. During PGF::Write the return
-	/// value of this method is used in case the parameter levels is not a
-	/// positive value. 
-	/// A PGF image is structered in levels, numbered between 0 and Levels() - 1.
-	/// Each level can be seen as a single image, containing the same content
-	/// as all other levels, but in a different size (width, height).
-	/// The image size at level i is double the size (width, height) of the image at level i+1.
-	/// The image at level 0 contains the original size.
-	/// @param width Original image width
-	/// @param height Original image height
-	/// @return Number of PGF levels
-	static BYTE ComputeLevels(UINT32 width, UINT32 height);
-
 protected:
 	CWaveletTransform* m_wtChannel[MaxChannels];	// wavelet transformed color channels
 	DataT* m_channel[MaxChannels];					// untransformed channels in YUV format
-	CDecoder* m_decoder;
+	CDecoder* m_decoder;			// PGF decoder
+	CEncoder* m_encoder;			// PGF encoder
 	UINT32* m_levelLength;			// length of each level in bytes; first level starts immediately after this array
 	UINT32 m_width[MaxChannels];	// width of each channel at current level
 	UINT32 m_height[MaxChannels];	// height of each channel at current level
 	PGFPreHeader m_preHeader;		// PGF pre header
 	PGFHeader m_header;				// PGF file header
 	PGFPostHeader m_postHeader;		// PGF post header
-	BYTE m_currentLevel;			// transform level of current image
+	int m_currentLevel;				// transform level of current image
 	BYTE m_quant;					// quantization parameter
 	bool m_downsample;				// chrominance channels are downsampled
+	bool m_favorSpeedOverSize;		// favor encoding speed over compression ratio
+	bool m_useOMPinEncoder;			// use Open MP in encoder
+	bool m_useOMPinDecoder;			// use Open MP in decoder
 #ifdef __PGFROISUPPORT__
+	bool m_levelwise;				// write level-wise (only used with WriteNextLevel)
+	bool m_streamReinitialized;		// stream has been reinitialized
 	PGFRect m_roi;					// region of interest
 #endif
 
-private:	
+private:
 	RefreshCB m_cb;					// pointer to refresh callback procedure
 	void *m_cbArg;					// refresh callback argument
 
+	void ComputeLevels();
+	void CompleteHeader();
 	void RgbToYuv(int pitch, UINT8* rgbBuff, BYTE bpp, int channelMap[], CallbackPtr cb, void *data) THROW_;
 	void Downsample(int nChannel);
-	void Init() THROW_;
+	void WriteLevel() THROW_;
 
 #ifdef __PGFROISUPPORT__
 	void SetROI(PGFRect rect);
@@ -468,16 +524,16 @@ private:
 	}
 	UINT8 Clamp4(DataT v) const {
 		if (v & 0xFFFFFFF0) return (v < 0) ? (UINT8)0: (UINT8)15; else return (UINT8)v;
-	}	
+	}
 	UINT16 Clamp6(DataT v) const {
 		if (v & 0xFFFFFFC0) return (v < 0) ? (UINT16)0: (UINT16)63; else return (UINT16)v;
-	}	
+	}
 	UINT16 Clamp16(DataT v) const {
 		if (v & 0xFFFF0000) return (v < 0) ? (UINT16)0: (UINT16)65535; else return (UINT16)v;
-	}	
+	}
 	UINT32 Clamp31(DataT v) const {
 		if (v < 0) return 0; else return (UINT32)v;
-	}	
+	}
 };
 
 #endif //PGF_PGFIMAGE_H

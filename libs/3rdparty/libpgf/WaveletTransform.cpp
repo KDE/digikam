@@ -1,25 +1,30 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2006-05-18 16:03:32 +0200 (Do, 18 Mai 2006) $
  * $Revision: 194 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
+//////////////////////////////////////////////////////////////////////
+/// @file WaveletTransform.cpp
+/// @brief PGF wavelet transform class implementation
+/// @author C. Stamm
 
 #include "WaveletTransform.h"
 
@@ -32,9 +37,9 @@
 // @param height The height of the original image (at level 0) in pixels
 // @param levels The number of levels (>= 0)
 // @param data Input data of subband LL at level 0
-CWaveletTransform::CWaveletTransform(UINT32 width, UINT32 height, int levels, DataT* data) : 
+CWaveletTransform::CWaveletTransform(UINT32 width, UINT32 height, int levels, DataT* data) :
 #ifdef __PGFROISUPPORT__
-m_ROIs(levels + 1), 
+m_ROIs(levels + 1),
 #endif
 m_nLevels(levels + 1), m_subband(0) {
 	ASSERT(m_nLevels > 0 && m_nLevels <= MaxLevel + 1);
@@ -167,7 +172,7 @@ void CWaveletTransform::ForwardRow(DataT* src, UINT32 width) {
 		// left border handling
 		src[1] -= ((src[0] + src[2] + c1) >> 1);
 		src[0] += ((src[1] + c1) >> 1);
-		
+
 		// middle part
 		for (; i < width-1; i += 2) {
 			src[i] -= ((src[i-1] + src[i+1] + c1) >> 1);
@@ -233,7 +238,7 @@ void CWaveletTransform::InverseTransform(int srcLevel, UINT32* w, UINT32* h, Dat
 	const UINT32 height = destBand->GetHeight();
 	UINT32 row0, row1, row2, row3, i, k, origin = 0;
 
-	// allocate memory for the results of the inverse transform 
+	// allocate memory for the results of the inverse transform
 	destBand->AllocMemory();
 	DataT* dest = destBand->GetBuffer();
 
@@ -345,7 +350,7 @@ void CWaveletTransform::InverseTransform(int srcLevel, UINT32* w, UINT32* h, Dat
 		if (destHeight & 1) {
 			MallatToLinear(srcLevel, &dest[row0], 0, destWidth);
 			InverseRow(&dest[row0], destWidth);
-		} 
+		}
 	}
 
 	// free memory of the current srcLevel
@@ -398,17 +403,18 @@ void CWaveletTransform::MallatToLinear(int srcLevel, DataT* loRow, DataT* hiRow,
 	UINT32 i;
 
 	if (hiRow) {
-		#ifdef __PGFROISUPPORT__
-			UINT32 llPos, hlPos, lhPos, hhPos;
+	#ifdef __PGFROISUPPORT__
+		const bool storePos = wquot < ll.BufferWidth();
+		UINT32 llPos = 0, hlPos = 0, lhPos = 0, hhPos = 0;
 
-			if (wquot < ll.BufferWidth()) {
-				// save current src buffer positions
-				llPos = ll.GetBuffPos(); 
-				hlPos = hl.GetBuffPos(); 
-				lhPos = lh.GetBuffPos(); 
-				hhPos = hh.GetBuffPos(); 
-			}
-		#endif
+		if (storePos) {
+			// save current src buffer positions
+			llPos = ll.GetBuffPos();
+			hlPos = hl.GetBuffPos();
+			lhPos = lh.GetBuffPos();
+			hhPos = hh.GetBuffPos();
+		}
+	#endif
 
 		for (i=0; i < wquot; i++) {
 			*loRow++ = ll.ReadBuffer();// first access, than increment
@@ -422,26 +428,27 @@ void CWaveletTransform::MallatToLinear(int srcLevel, DataT* loRow, DataT* hiRow,
 			*hiRow++ = lh.ReadBuffer();// first access, than increment
 		}
 
-		#ifdef __PGFROISUPPORT__
-			if (wquot < ll.BufferWidth()) {
-				// increment src buffer positions
-				ll.IncBuffRow(llPos); 
-				hl.IncBuffRow(hlPos); 
-				lh.IncBuffRow(lhPos); 
-				hh.IncBuffRow(hhPos); 
-			}
-		#endif
+	#ifdef __PGFROISUPPORT__
+		if (storePos) {
+			// increment src buffer positions
+			ll.IncBuffRow(llPos);
+			hl.IncBuffRow(hlPos);
+			lh.IncBuffRow(lhPos);
+			hh.IncBuffRow(hhPos);
+		}
+	#endif
 
 	} else {
-		#ifdef __PGFROISUPPORT__
-			UINT32 llPos, hlPos;
+	#ifdef __PGFROISUPPORT__
+		const bool storePos = wquot < ll.BufferWidth();
+		UINT32 llPos = 0, hlPos = 0;
 
-			if (wquot < ll.BufferWidth()) {
-				// save current src buffer positions
-				llPos = ll.GetBuffPos(); 
-				hlPos = hl.GetBuffPos(); 
-			}
-		#endif
+		if (storePos) {
+			// save current src buffer positions
+			llPos = ll.GetBuffPos();
+			hlPos = hl.GetBuffPos();
+		}
+	#endif
 
 		for (i=0; i < wquot; i++) {
 			*loRow++ = ll.ReadBuffer();// first access, than increment
@@ -449,13 +456,13 @@ void CWaveletTransform::MallatToLinear(int srcLevel, DataT* loRow, DataT* hiRow,
 		}
 		if (wrem) *loRow++ = ll.ReadBuffer();
 
-		#ifdef __PGFROISUPPORT__
-			if (wquot < ll.BufferWidth()) {
-				// increment src buffer positions
-				ll.IncBuffRow(llPos); 
-				hl.IncBuffRow(hlPos); 
-			}
-		#endif
+	#ifdef __PGFROISUPPORT__
+		if (storePos) {
+			// increment src buffer positions
+			ll.IncBuffRow(llPos);
+			hl.IncBuffRow(hlPos);
+		}
+	#endif
 	}
 }
 
@@ -510,7 +517,7 @@ void CWaveletTransform::SetROI() {
 /////////////////////////////////////////////////////////////////////
 void CROIs::CreateROIs() {
 	if (!m_ROIs) {
-		// create ROIs 
+		// create ROIs
 		m_ROIs = new PGFRect[m_nLevels];
 	}
 }
@@ -518,7 +525,7 @@ void CROIs::CreateROIs() {
 /////////////////////////////////////////////////////////////////////
 void CROIs::CreateIndices() {
 	if (!m_indices) {
-		// create tile indices 
+		// create tile indices
 		m_indices = new PGFRect[m_nLevels];
 	}
 }

@@ -160,6 +160,27 @@ ENDIF(Boost_FOUND)
 #-------------------------------------------------------------------------------------
 
 MACRO_BOOL_TO_01(PGF_FOUND USE_EXT_LIBPGF)
+
+# LibPGF need to be linked to OpenMP if necessary.
+# OpenMP detection (requires CMake >= 2.6.3)
+# NOTE: OpenMP under MacOSX do not support multithreading.
+
+IF(NOT APPLE AND NOT USE_EXT_LIBPGF)
+    MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
+
+    IF(OPENMP_FOUND)
+        ADD_DEFINITIONS(${OpenMP_CXX_FLAGS})
+        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp" )
+            SET(OPENMP_LDFLAGS "-lgomp")
+        ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp" )
+        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp" )
+            SET(OPENMP_LDFLAGS "-xopenmp")
+        ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp" )
+    ENDIF(OPENMP_FOUND)
+ENDIF(NOT APPLE AND NOT USE_EXT_LIBPGF)
+
+#-------------------------------------------------------------------------------------
+
 IF(NOT APPLE)
     MACRO_BOOL_TO_01(CLAPACK_FOUND USE_EXT_LIBCLAPACK)
 ELSE(NOT APPLE)
@@ -541,7 +562,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
           ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Decoder.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Encoder.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/PGFimage.cpp
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Stream.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/PGFstream.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Subband.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/WaveletTransform.cpp
        )
