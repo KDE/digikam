@@ -435,7 +435,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
                          CallbackForLibPGF, this);
 
         UINT32 nWrittenBytes = 0;
-        pgf.Write(&stream, 0, CallbackForLibPGF, &nWrittenBytes, this);
+        pgf.Write(&stream, &nWrittenBytes, CallbackForLibPGF, this);
 
 #ifdef ENABLE_DEBUG_MESSAGES
         kDebug() << "PGF width     = " << header.width;
