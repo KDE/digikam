@@ -6,7 +6,7 @@
  * Date        : 2010-11-10
  * Description : meta-filter to apply FilterActions
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -25,6 +25,8 @@
 #ifndef FILTERACTIONFILTER_H
 #define FILTERACTIONFILTER_H
 
+// Local includes
+
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
 #include "filteraction.h"
@@ -39,7 +41,6 @@ public:
     /**
      * A meta-filter applying other filter according to a list of FilterActions
      */
-
     FilterActionFilter(QObject* parent = 0);
     ~FilterActionFilter();
 
@@ -111,7 +112,9 @@ public:
     {
         return FilterAction();
     }
+
     virtual void readParameters(const FilterAction&) {}
+
     virtual QString filterIdentifier() const
     {
         return QString();

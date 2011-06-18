@@ -160,6 +160,27 @@ ENDIF(Boost_FOUND)
 #-------------------------------------------------------------------------------------
 
 MACRO_BOOL_TO_01(PGF_FOUND USE_EXT_LIBPGF)
+
+# LibPGF need to be linked to OpenMP if necessary.
+# OpenMP detection (requires CMake >= 2.6.3)
+# NOTE: OpenMP under MacOSX do not support multithreading.
+
+IF(NOT APPLE AND NOT USE_EXT_LIBPGF)
+    MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
+
+    IF(OPENMP_FOUND)
+        ADD_DEFINITIONS(${OpenMP_CXX_FLAGS})
+        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp" )
+            SET(OPENMP_LDFLAGS "-lgomp")
+        ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp" )
+        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp" )
+            SET(OPENMP_LDFLAGS "-xopenmp")
+        ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp" )
+    ENDIF(OPENMP_FOUND)
+ENDIF(NOT APPLE AND NOT USE_EXT_LIBPGF)
+
+#-------------------------------------------------------------------------------------
+
 IF(NOT APPLE)
     MACRO_BOOL_TO_01(CLAPACK_FOUND USE_EXT_LIBCLAPACK)
 ELSE(NOT APPLE)
@@ -205,7 +226,7 @@ IF (ENABLE_INTERNALMYSQL)
                         /opt/mysql/libexec /usr/mysql/bin /opt/mysql/bin ${MYSQL_TOOLS_PATH}
                        ENV MYSQL_TOOLS_PATH )
     MESSAGE(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
-    SET(DATABASESERVERDIR "${CMAKE_CURRENT_SOURCE_DIR}/databaseserver")    
+    SET(DATABASESERVERDIR "${CMAKE_CURRENT_SOURCE_DIR}/databaseserver")
 ELSE (ENABLE_INTERNALMYSQL)
     SET(DATABASESERVERDIR "")
 ENDIF (ENABLE_INTERNALMYSQL)
@@ -237,6 +258,11 @@ ENDIF (KMAP_VERSION)
 
 MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
 MACRO_BOOL_TO_01(GPHOTO2_FOUND HAVE_GPHOTO2)
+
+IF (NOT WIN32 AND HAVE_GPHOTO2)
+    # See B.K.O #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
+    MACRO_OPTIONAL_FIND_PACKAGE(USB)
+ENDIF (NOT WIN32 AND HAVE_GPHOTO2)
 
 MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
 MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
@@ -340,17 +366,17 @@ IF(GPHOTO2_FOUND)
     EXEC_PROGRAM(gphoto2-config ARGS --version RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
     STRING(REPLACE "libgphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
     MACRO_ENSURE_VERSION("2.4.0" "${GPHOTO2_VERSION}" VERSION_GPHOTO2)
-    IF(VERSION_GPHOTO2)
+    IF(VERSION_GPHOTO2 AND LIBUSB_FOUND)
         SET(GPHOTO2_FOUND true)
-    ELSE(VERSION_GPHOTO2)
+    ELSE(VERSION_GPHOTO2 AND LIBUSB_FOUND)
         SET(GPHOTO2_FOUND false)
-    ENDIF(VERSION_GPHOTO2)
+    ENDIF(VERSION_GPHOTO2 AND LIBUSB_FOUND)
 ENDIF(GPHOTO2_FOUND)
 
 IF(GPHOTO2_FOUND)
-    MESSAGE(STATUS " libgphoto2 library found................. YES (optional)")
+    MESSAGE(STATUS " libgphoto2 and libusb libraries found.... YES (optional)")
 ELSE(GPHOTO2_FOUND)
-    MESSAGE(STATUS " libgphoto2 library found................. NO  (optional)")
+    MESSAGE(STATUS " libgphoto2 and libusb libraries found.... NO  (optional)")
     MESSAGE(STATUS "")
     MESSAGE(STATUS " digiKam will be compiled without GPhoto2 support.")
     MESSAGE(STATUS "")
@@ -536,7 +562,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
           ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Decoder.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Encoder.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/PGFimage.cpp
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Stream.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/PGFstream.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Subband.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/WaveletTransform.cpp
        )

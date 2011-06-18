@@ -1,25 +1,30 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2006-05-18 16:03:32 +0200 (Do, 18 Mai 2006) $
  * $Revision: 194 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
+//////////////////////////////////////////////////////////////////////
+/// @file WaveletTransform.h
+/// @brief PGF wavelet transform class
+/// @author C. Stamm
 
 #ifndef PGF_WAVELETTRANSFORM_H
 #define PGF_WAVELETTRANSFORM_H
@@ -36,6 +41,7 @@
 //////////////////////////////////////////////////////////////////////
 /// PGF ROI and tile support. This is a helper class for CWaveletTransform.
 /// @author C. Stamm
+/// @brief ROI and tile support
 class CROIs {
 	friend class CWaveletTransform;
 
@@ -82,6 +88,7 @@ private:
 //////////////////////////////////////////////////////////////////////
 /// PGF wavelet transform class.
 /// @author C. Stamm, R. Spuler
+/// @brief PGF wavelet transform
 class CWaveletTransform {
 	friend class CSubband;
 
@@ -97,7 +104,7 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	/// Destructor
 	~CWaveletTransform() { Destroy(); }
-	
+
 	//////////////////////////////////////////////////////////////////////
 	/// Compute fast forward wavelet transform of LL subband at given level and
 	/// stores result on all 4 subbands of level + 1.
@@ -121,7 +128,7 @@ public:
 		ASSERT(level >= 0 && level < m_nLevels);
 		return &m_subband[level][orientation];
 	}
-	
+
 #ifdef __PGFROISUPPORT__
 	//////////////////////////////////////////////////////////////////////
 	/// Compute and store ROIs for each level
@@ -150,9 +157,9 @@ public:
 #endif // __PGFROISUPPORT__
 
 private:
-	void Destroy() { delete[] m_subband; m_subband = 0; 
+	void Destroy() { delete[] m_subband; m_subband = 0;
 		#ifdef __PGFROISUPPORT__
-		m_ROIs.Destroy(); 
+		m_ROIs.Destroy();
 		#endif
 	}
 	void InitSubbands(UINT32 width, UINT32 height, DataT* data);
@@ -166,7 +173,7 @@ private:
 #endif //__PGFROISUPPORT__
 
 	int			m_nLevels;						// number of transform levels: one more than the number of level in PGFimage
-	CSubband	(*m_subband)[NSubbands];		// quadtree of subbands: LL HL												
+	CSubband	(*m_subband)[NSubbands];		// quadtree of subbands: LL HL
 												//                       LH HH
 };
 

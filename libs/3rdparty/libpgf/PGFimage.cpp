@@ -1,30 +1,36 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2007-02-03 13:04:21 +0100 (Sa, 03 Feb 2007) $
  * $Revision: 280 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+//////////////////////////////////////////////////////////////////////
+/// @file PGFimage.cpp
+/// @brief PGF image class implementation
+/// @author C. Stamm
+
 #include "PGFimage.h"
 #include "Decoder.h"
 #include "Encoder.h"
 #include <cmath>
+#include <cstring>
 
 #define YUVoffset4		8				// 2^3
 #define YUVoffset6		32				// 2^5
@@ -47,8 +53,21 @@
 
 //////////////////////////////////////////////////////////////////////
 // Standard constructor: It is used to create a PGF instance for opening and reading.
-CPGFImage::CPGFImage() 
-: m_decoder(0), m_levelLength(0), m_quant(0), m_downsample(false), m_cb(0), m_cbArg(0)
+CPGFImage::CPGFImage()
+: m_decoder(0)
+, m_encoder(0)
+, m_levelLength(0)
+, m_quant(0)
+, m_downsample(false)
+, m_favorSpeedOverSize(false)
+, m_useOMPinEncoder(true)
+, m_useOMPinDecoder(true)
+, m_cb(0)
+, m_cbArg(0)
+#ifdef __PGFROISUPPORT__
+, m_levelwise(true)
+, m_streamReinitialized(false)
+#endif
 {
 
 	// init preHeader
@@ -89,6 +108,7 @@ void CPGFImage::Destroy() {
 	}
 	delete[] m_postHeader.userData; m_postHeader.userData = 0; m_postHeader.userDataLen = 0;
 	delete[] m_levelLength; m_levelLength = 0;
+	delete m_encoder; m_encoder = NULL;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -106,19 +126,12 @@ void CPGFImage::Close() {
 void CPGFImage::Open(CPGFStream *stream) THROW_ {
 	ASSERT(stream);
 
-	m_decoder = new CDecoder(stream, m_preHeader, m_header, m_postHeader, m_levelLength);
+	m_decoder = new CDecoder(stream, m_preHeader, m_header, m_postHeader, m_levelLength, m_useOMPinDecoder);
 	if (!m_decoder) ReturnWithError(InsufficientMemory);
+	ASSERT(m_decoder);
 
 	if (m_header.nLevels > MaxLevel) ReturnWithError(FormatCannotRead);
 
-	Init();
-
-	ASSERT(m_decoder);
-}
-
-////////////////////////////////////////////////////////////
-// Initialize an open pgf file
-void CPGFImage::Init() THROW_ {
 	// set current level
 	m_currentLevel = m_header.nLevels;
 
@@ -126,70 +139,17 @@ void CPGFImage::Init() THROW_ {
 	m_width[0] = m_header.width;
 	m_height[0] = m_header.height;
 
-	// set or correct image mode
-	if (m_header.mode == ImageModeUnknown) {
-		// undefined mode
-		switch(m_header.bpp) {
-		case 1: m_header.mode = ImageModeBitmap; break;
-		case 8: m_header.mode = ImageModeGrayScale; break;
-		case 12: m_header.mode = ImageModeRGB12; break;
-		case 16: m_header.mode = ImageModeRGB16; break;
-		case 24: m_header.mode = ImageModeRGBColor; break;
-		case 32: m_header.mode = ImageModeRGBA; break;
-		case 48: m_header.mode = ImageModeRGB48; break;
-		default: m_header.mode = ImageModeRGBColor; break;
-		}
-	} else if (m_header.mode == ImageModeRGBColor && m_header.bpp == 32) {
-		// change mode
-		m_header.mode = ImageModeRGBA;
-	}
-	ASSERT(m_header.mode != ImageModeBitmap || m_header.bpp == 1);
-	ASSERT(m_header.mode != ImageModeGrayScale || m_header.bpp == 8);
-	ASSERT(m_header.mode != ImageModeGray16 || m_header.bpp == 16);
-	ASSERT(m_header.mode != ImageModeRGBColor || m_header.bpp == 24);
-	ASSERT(m_header.mode != ImageModeRGBA || m_header.bpp == 32);
-	ASSERT(m_header.mode != ImageModeRGB12 || m_header.bpp == 12);
-	ASSERT(m_header.mode != ImageModeRGB16 || m_header.bpp == 16);
-	ASSERT(m_header.mode != ImageModeRGB48 || m_header.bpp == 48);
-	ASSERT(m_header.mode != ImageModeLabColor || m_header.bpp == 24);
-	ASSERT(m_header.mode != ImageModeLab48 || m_header.bpp == 48);
-	ASSERT(m_header.mode != ImageModeCMYKColor || m_header.bpp == 32);
-	ASSERT(m_header.mode != ImageModeCMYK64 || m_header.bpp == 64);
+	// complete header
+	CompleteHeader();
 
-	// set number of channels
-	if (!m_header.channels) {
-		switch(m_header.mode) {
-		case ImageModeBitmap: 
-		case ImageModeIndexedColor:
-		case ImageModeGrayScale:
-		case ImageModeGray16:
-		case ImageModeGray31:
-			m_header.channels = 1; 
-			break;
-		case ImageModeRGBColor:
-		case ImageModeRGB12:
-		case ImageModeRGB16:
-		case ImageModeRGB48:
-		case ImageModeLabColor:
-		case ImageModeLab48:
-			m_header.channels = 3;
-			break;
-		case ImageModeRGBA:
-		case ImageModeCMYKColor:
-		case ImageModeCMYK64:
-			m_header.channels = 4;
-			break;
-		}
-	}
-
-	// interprete quant parameter
-	if (m_header.quality > DownsampleThreshold && 
-		(m_header.mode == ImageModeRGBColor || 
-		 m_header.mode == ImageModeRGBA || 
-		 m_header.mode == ImageModeRGB48 || 
-		 m_header.mode == ImageModeCMYKColor || 
-		 m_header.mode == ImageModeCMYK64 || 
-		 m_header.mode == ImageModeLabColor || 
+	// interpret quant parameter
+	if (m_header.quality > DownsampleThreshold &&
+		(m_header.mode == ImageModeRGBColor ||
+		 m_header.mode == ImageModeRGBA ||
+		 m_header.mode == ImageModeRGB48 ||
+		 m_header.mode == ImageModeCMYKColor ||
+		 m_header.mode == ImageModeCMYK64 ||
+		 m_header.mode == ImageModeLabColor ||
 		 m_header.mode == ImageModeLab48)) {
 		m_downsample = true;
 		m_quant = m_header.quality - 1;
@@ -211,21 +171,132 @@ void CPGFImage::Init() THROW_ {
 		}
 	}
 
-	// init wavelet subbands
-	for (int i=0; i < m_header.channels; i++) {
-		m_wtChannel[i] = new CWaveletTransform(m_width[i], m_height[i], m_header.nLevels);
-		if (!m_wtChannel[i]) ReturnWithError(InsufficientMemory);
-	}
+	if (m_header.nLevels > 0) {
+		// init wavelet subbands
+		for (int i=0; i < m_header.channels; i++) {
+			m_wtChannel[i] = new CWaveletTransform(m_width[i], m_height[i], m_header.nLevels);
+			if (!m_wtChannel[i]) ReturnWithError(InsufficientMemory);
+		}
+	} else {
+		// very small image: we don't use DWT and encoding
 
-	// set background
-	/*
-	if (m_header.mode == ImageModeRGBA &&
-		(m_header.background.rgbtBlue != DefaultBGColor ||
-		m_header.background.rgbtGreen != DefaultBGColor ||
-		m_header.background.rgbtRed != DefaultBGColor)) {
-		m_backgroundSet = true;
+		// read channels
+		for (int c=0; c < m_header.channels; c++) {
+			const UINT32 size = m_width[c]*m_height[c];
+			m_channel[c] = new DataT[size];
+
+			// read channel data from stream
+			for (UINT32 i=0; i < size; i++) {
+				int count = DataTSize;
+				stream->Read(&count, &m_channel[c][i]);
+				if (count != DataTSize) ReturnWithError(MissingData);
+			}
+		}
 	}
-	*/
+}
+
+////////////////////////////////////////////////////////////
+void CPGFImage::CompleteHeader() {
+	if (m_header.mode == ImageModeUnknown) {
+		// undefined mode
+		switch(m_header.bpp) {
+		case 1: m_header.mode = ImageModeBitmap; break;
+		case 8: m_header.mode = ImageModeGrayScale; break;
+		case 12: m_header.mode = ImageModeRGB12; break;
+		case 16: m_header.mode = ImageModeRGB16; break;
+		case 24: m_header.mode = ImageModeRGBColor; break;
+		case 32: m_header.mode = ImageModeRGBA; break;
+		case 48: m_header.mode = ImageModeRGB48; break;
+		default: m_header.mode = ImageModeRGBColor; break;
+		}
+	}
+	if (!m_header.bpp) {
+		// undefined bpp
+		switch(m_header.mode) {
+		case ImageModeBitmap:
+			m_header.bpp = 1;
+			break;
+		case ImageModeIndexedColor:
+		case ImageModeGrayScale:
+			m_header.bpp = 8;
+			break;
+		case ImageModeRGB12:
+			m_header.bpp = 12;
+			break;
+		case ImageModeRGB16:
+		case ImageModeGray16:
+			m_header.bpp = 16;
+			break;
+		case ImageModeRGBColor:
+		case ImageModeLabColor:
+			m_header.bpp = 24;
+			break;
+		case ImageModeRGBA:
+		case ImageModeCMYKColor:
+	#ifdef __PGF32SUPPORT__
+		case ImageModeGray31:
+	#endif
+			m_header.bpp = 32;
+			break;
+		case ImageModeRGB48:
+		case ImageModeLab48:
+			m_header.bpp = 48;
+			break;
+		case ImageModeCMYK64:
+			m_header.bpp = 64;
+			break;
+		default:
+			ASSERT(false);
+			m_header.bpp = 24;
+		}
+	}
+	if (m_header.mode == ImageModeRGBColor && m_header.bpp == 32) {
+		// change mode
+		m_header.mode = ImageModeRGBA;
+	}
+	ASSERT(m_header.mode != ImageModeBitmap || m_header.bpp == 1);
+	ASSERT(m_header.mode != ImageModeGrayScale || m_header.bpp == 8);
+	ASSERT(m_header.mode != ImageModeGray16 || m_header.bpp == 16);
+	ASSERT(m_header.mode != ImageModeRGBColor || m_header.bpp == 24);
+	ASSERT(m_header.mode != ImageModeRGBA || m_header.bpp == 32);
+	ASSERT(m_header.mode != ImageModeRGB12 || m_header.bpp == 12);
+	ASSERT(m_header.mode != ImageModeRGB16 || m_header.bpp == 16);
+	ASSERT(m_header.mode != ImageModeRGB48 || m_header.bpp == 48);
+	ASSERT(m_header.mode != ImageModeLabColor || m_header.bpp == 24);
+	ASSERT(m_header.mode != ImageModeLab48 || m_header.bpp == 48);
+	ASSERT(m_header.mode != ImageModeCMYKColor || m_header.bpp == 32);
+	ASSERT(m_header.mode != ImageModeCMYK64 || m_header.bpp == 64);
+
+	// set number of channels
+	if (!m_header.channels) {
+		switch(m_header.mode) {
+		case ImageModeBitmap:
+		case ImageModeIndexedColor:
+		case ImageModeGrayScale:
+		case ImageModeGray16:
+	#ifdef __PGF32SUPPORT__
+		case ImageModeGray31:
+	#endif
+			m_header.channels = 1;
+			break;
+		case ImageModeRGBColor:
+		case ImageModeRGB12:
+		case ImageModeRGB16:
+		case ImageModeRGB48:
+		case ImageModeLabColor:
+		case ImageModeLab48:
+			m_header.channels = 3;
+			break;
+		case ImageModeRGBA:
+		case ImageModeCMYKColor:
+		case ImageModeCMYK64:
+			m_header.channels = 4;
+			break;
+		default:
+			ASSERT(false);
+			m_header.channels = 3;
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -235,6 +306,49 @@ void CPGFImage::Init() THROW_ {
 const UINT8* CPGFImage::GetUserData(UINT32& size) const {
 	size = m_postHeader.userDataLen;
 	return m_postHeader.userData;
+}
+
+//////////////////////////////////////////////////////////////////////
+/// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
+/// to get a quick reconstruction (coded -> decoded image).
+/// @param level The image level of the resulting image in the internal image buffer.
+void CPGFImage::Reconstruct(int level /*= 0*/) {
+	if (m_header.nLevels == 0) {
+		// image didn't use wavelet transform
+		if (level == 0) {
+			for (int i=0; i < m_header.channels; i++) {
+				ASSERT(m_wtChannel[i]);
+				m_channel[i] = m_wtChannel[i]->GetSubband(0, LL)->GetBuffer();
+			}
+		}
+	} else {
+		int currentLevel = m_header.nLevels;
+
+		if (ROIisSupported()) {
+			// enable ROI reading
+			SetROI(PGFRect(0, 0, m_header.width, m_header.height));
+		}
+
+		while (currentLevel > level) {
+			for (int i=0; i < m_header.channels; i++) {
+				ASSERT(m_wtChannel[i]);
+				// dequantize subbands
+				if (currentLevel == m_header.nLevels) {
+					// last level also has LL band
+					m_wtChannel[i]->GetSubband(currentLevel, LL)->Dequantize(m_quant);
+				}
+				m_wtChannel[i]->GetSubband(currentLevel, HL)->Dequantize(m_quant);
+				m_wtChannel[i]->GetSubband(currentLevel, LH)->Dequantize(m_quant);
+				m_wtChannel[i]->GetSubband(currentLevel, HH)->Dequantize(m_quant);
+
+				// inverse transform from m_wtChannel to m_channel
+				m_wtChannel[i]->InverseTransform(currentLevel, &m_width[i], &m_height[i], &m_channel[i]);
+				ASSERT(m_channel[i]);
+			}
+
+			currentLevel--;
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -252,7 +366,6 @@ const UINT8* CPGFImage::GetUserData(UINT32& size) const {
 void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) THROW_ {
 	ASSERT((level >= 0 && level < m_header.nLevels) || m_header.nLevels == 0); // m_header.nLevels == 0: image didn't use wavelet transform
 	ASSERT(m_decoder);
-	int i;
 
 #ifdef __PGFROISUPPORT__
 	if (ROIisSupported() && m_header.nLevels > 0) {
@@ -264,24 +377,23 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*
 #endif
 
 	if (m_header.nLevels == 0) {
-		// image didn't use wavelet transform
-		for (i=0; i < m_header.channels; i++) {
-			ASSERT(m_wtChannel[i]);
-			// decode file and write stream to m_channel
-			m_wtChannel[i]->GetSubband(0, LL)->PlaceTile(*m_decoder, m_quant);
-			m_channel[i] = m_wtChannel[i]->GetSubband(0, LL)->GetBuffer();
+		if (level == 0) {
+			// the data has already been read during open
+			// now update progress
+			if (cb) {
+				if ((*cb)(1.0, true, data)) ReturnWithError(EscapePressed);
+			}
 		}
 	} else {
 		const int levelDiff = m_currentLevel - level;
-		double p, percent = pow(0.25, levelDiff);
+		double percent = pow(0.25, levelDiff);
 
 		// encoding scheme without ROI
 		while (m_currentLevel > level) {
-			p = percent;
-			for (i=0; i < m_header.channels; i++) {
+			for (int i=0; i < m_header.channels; i++) {
 				ASSERT(m_wtChannel[i]);
 				// decode file and write stream to m_wtChannel
-				if (m_currentLevel == m_header.nLevels) { 
+				if (m_currentLevel == m_header.nLevels) {
 					// last level also has LL band
 					m_wtChannel[i]->GetSubband(m_currentLevel, LL)->PlaceTile(*m_decoder, m_quant);
 				}
@@ -294,17 +406,15 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*
 					m_decoder->DecodeInterleaved(m_wtChannel[i], m_currentLevel, m_quant);
 				}
 				m_wtChannel[i]->GetSubband(m_currentLevel, HH)->PlaceTile(*m_decoder, m_quant);
+			}
 
+			#pragma omp parallel for default(shared)
+			for (int i=0; i < m_header.channels; i++) {
 				// inverse transform from m_wtChannel to m_channel
 				m_wtChannel[i]->InverseTransform(m_currentLevel, &m_width[i], &m_height[i], &m_channel[i]);
 				ASSERT(m_channel[i]);
-
-				// now update progress
-				if (i < m_header.channels - 1 && cb) {
-					percent += 3*p/m_header.channels;
-					(*cb)(percent, false, data);
-				}
 			}
+
 			// set new level: must be done before refresh callback
 			m_currentLevel--;
 
@@ -313,54 +423,110 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*
 
 			// now update progress
 			if (cb) {
-				percent += 3*p/m_header.channels;
+				percent += 3*percent;
 				if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 			}
 		}
 	}
-}
 
-//////////////////////////////////////////////////////////////////////
-/// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
-/// to get a quick reconstruction (coded -> decoded image).
-void CPGFImage::Reconstruct() THROW_ {
-	int i;
-
-	if (m_header.nLevels == 0) {
-		// image didn't use wavelet transform
-		for (i=0; i < m_header.channels; i++) {
-			ASSERT(m_wtChannel[i]);
-			m_channel[i] = m_wtChannel[i]->GetSubband(0, LL)->GetBuffer();
-		}
-	} else {
-		int currentLevel = m_header.nLevels;
-
-		// old encoding scheme without ROI
-		while (currentLevel > 0) {
-			for (i=0; i < m_header.channels; i++) {
-				ASSERT(m_wtChannel[i]);
-				// dequantize subbands
-				if (currentLevel == m_header.nLevels) { 
-					// last level also has LL band
-					m_wtChannel[i]->GetSubband(currentLevel, LL)->Dequantize(m_quant, currentLevel);
-				}
-				m_wtChannel[i]->GetSubband(currentLevel, HL)->Dequantize(m_quant, currentLevel);
-				m_wtChannel[i]->GetSubband(currentLevel, LH)->Dequantize(m_quant, currentLevel);
-				m_wtChannel[i]->GetSubband(currentLevel, HH)->Dequantize(m_quant, currentLevel);
-
-				// inverse transform from m_wtChannel to m_channel
-				m_wtChannel[i]->InverseTransform(currentLevel, &m_width[i], &m_height[i], &m_channel[i]);
-				ASSERT(m_channel[i]);
-			}
-			// now we have to refresh the display
-			if (m_cb) m_cb(m_cbArg);
-
-			currentLevel--;
-		}
-	}
+	// automatically closing
+	if (m_currentLevel == 0) Close();
 }
 
 #ifdef __PGFROISUPPORT__
+//////////////////////////////////////////////////////////////////////
+/// Read a rectangular region of interest of a PGF image at current stream position.
+/// The origin of the coordinate axis is the top-left corner of the image.
+/// All coordinates are measured in pixels.
+/// It might throw an IOException.
+/// @param rect [inout] Rectangular region of interest (ROI). The rect might be cropped.
+/// @param level The image level of the resulting image in the internal image buffer.
+/// @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
+/// @param data Data Pointer to C++ class container to host callback procedure.
+void CPGFImage::Read(PGFRect& rect, int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) THROW_ {
+	ASSERT((level >= 0 && level < m_header.nLevels) || m_header.nLevels == 0); // m_header.nLevels == 0: image didn't use wavelet transform
+	ASSERT(m_decoder);
+
+	if (m_header.nLevels == 0 || !ROIisSupported()) {
+		rect.left = rect.top = 0;
+		rect.right = m_header.width; rect.bottom = m_header.height;
+		Read(level, cb, data);
+	} else {
+		ASSERT(ROIisSupported());
+		// new encoding scheme supporting ROI
+		ASSERT(rect.left < m_header.width && rect.top < m_header.height);
+		const int levelDiff = m_currentLevel - level;
+		double percent = pow(0.25, levelDiff);
+
+		// check level difference
+		if (levelDiff <= 0) {
+			// it is a new read call, probably with a new ROI
+			m_currentLevel = m_header.nLevels;
+			m_decoder->SetStreamPosToData();
+		}
+
+		// check rectangle
+		if (rect.right == 0 || rect.right > m_header.width) rect.right = m_header.width;
+		if (rect.bottom == 0 || rect.bottom > m_header.height) rect.bottom = m_header.height;
+
+		// enable ROI decoding and reading
+		SetROI(rect);
+
+		while (m_currentLevel > level) {
+			for (int i=0; i < m_header.channels; i++) {
+				ASSERT(m_wtChannel[i]);
+
+				// get number of tiles and tile indices
+				const UINT32 nTiles = m_wtChannel[i]->GetNofTiles(m_currentLevel);
+				const PGFRect& tileIndices = m_wtChannel[i]->GetTileIndices(m_currentLevel);
+
+				// decode file and write stream to m_wtChannel
+				if (m_currentLevel == m_header.nLevels) { // last level also has LL band
+					ASSERT(nTiles == 1);
+					m_decoder->DecodeTileBuffer();
+					m_wtChannel[i]->GetSubband(m_currentLevel, LL)->PlaceTile(*m_decoder, m_quant);
+				}
+				for (UINT32 tileY=0; tileY < nTiles; tileY++) {
+					for (UINT32 tileX=0; tileX < nTiles; tileX++) {
+						// check relevance of tile
+						if (tileIndices.IsInside(tileX, tileY)) {
+							m_decoder->DecodeTileBuffer();
+							m_wtChannel[i]->GetSubband(m_currentLevel, HL)->PlaceTile(*m_decoder, m_quant, true, tileX, tileY);
+							m_wtChannel[i]->GetSubband(m_currentLevel, LH)->PlaceTile(*m_decoder, m_quant, true, tileX, tileY);
+							m_wtChannel[i]->GetSubband(m_currentLevel, HH)->PlaceTile(*m_decoder, m_quant, true, tileX, tileY);
+						} else {
+							// skip tile
+							m_decoder->SkipTileBuffer();
+						}
+					}
+				}
+			}
+
+			#pragma omp parallel for default(shared)
+			for (int i=0; i < m_header.channels; i++) {
+				// inverse transform from m_wtChannel to m_channel
+				m_wtChannel[i]->InverseTransform(m_currentLevel, &m_width[i], &m_height[i], &m_channel[i]);
+				ASSERT(m_channel[i]);
+			}
+
+			// set new level: must be done before refresh callback
+			m_currentLevel--;
+
+			// now we have to refresh the display
+			if (m_cb) m_cb(m_cbArg);
+
+			// now update progress
+			if (cb) {
+				percent += 3*percent;
+				if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
+			}
+		}
+	}
+
+	// automatically closing
+	if (m_currentLevel == 0) Close();
+}
+
 //////////////////////////////////////////////////////////////////////
 /// Compute ROIs for each channel and each level
 /// @param rect rectangular region of interest (ROI)
@@ -403,107 +569,15 @@ void CPGFImage::SetROI(PGFRect rect) {
 	}
 }
 
-//////////////////////////////////////////////////////////////////////
-/// Read a rectangular region of interest of a PGF image at current stream position.
-/// The origin of the coordinate axis is the top-left corner of the image.
-/// All coordinates are measured in pixels.
-/// It might throw an IOException.
-/// @param rect [inout] Rectangular region of interest (ROI). The rect might be cropped.
-/// @param level The image level of the resulting image in the internal image buffer.
-/// @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
-/// @param data Data Pointer to C++ class container to host callback procedure.
-void CPGFImage::Read(PGFRect& rect, int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) THROW_ {
-	ASSERT((level >= 0 && level < m_header.nLevels) || m_header.nLevels == 0); // m_header.nLevels == 0: image didn't use wavelet transform
-	ASSERT(m_decoder);
-	int i;
-
-	if (m_header.nLevels == 0 || !ROIisSupported()) {
-		rect.left = rect.top = 0;
-		rect.right = m_header.width; rect.bottom = m_header.height;
-		Read(level, cb, data);
-	} else {
-		ASSERT(ROIisSupported());
-		// new encoding scheme supporting ROI
-		ASSERT(rect.left < m_header.width && rect.top < m_header.height);
-		const int levelDiff = m_currentLevel - level;
-		double p, percent = pow(0.25, levelDiff);
-		
-		// check level difference
-		if (levelDiff <= 0) {
-			// it is a new read call, probably with a new ROI
-			m_currentLevel = m_header.nLevels;
-			m_decoder->SetStreamPosToData();
-		}
-
-		// check rectangle
-		if (rect.right == 0 || rect.right > m_header.width) rect.right = m_header.width;
-		if (rect.bottom == 0 || rect.bottom > m_header.height) rect.bottom = m_header.height;
-		
-		// enable ROI decoding and reading
-		SetROI(rect);
-
-		while (m_currentLevel > level) {
-			p = percent;
-			for (i=0; i < m_header.channels; i++) {
-				ASSERT(m_wtChannel[i]);
-
-				// get number of tiles and tile indices
-				const UINT32 nTiles = m_wtChannel[i]->GetNofTiles(m_currentLevel);
-				const PGFRect& tileIndices = m_wtChannel[i]->GetTileIndices(m_currentLevel);
-
-				// decode file and write stream to m_wtChannel
-				if (m_currentLevel == m_header.nLevels) { // last level also has LL band
-					ASSERT(nTiles == 1);
-					m_decoder->DecodeTileBuffer();
-					m_wtChannel[i]->GetSubband(m_currentLevel, LL)->PlaceTile(*m_decoder, m_quant);
-				}
-				for (UINT32 tileY=0; tileY < nTiles; tileY++) {
-					for (UINT32 tileX=0; tileX < nTiles; tileX++) {
-						// check relevance of tile
-						if (tileIndices.IsInside(tileX, tileY)) {
-							m_decoder->DecodeTileBuffer();
-							m_wtChannel[i]->GetSubband(m_currentLevel, HL)->PlaceTile(*m_decoder, m_quant, true, tileX, tileY);
-							m_wtChannel[i]->GetSubband(m_currentLevel, LH)->PlaceTile(*m_decoder, m_quant, true, tileX, tileY);
-							m_wtChannel[i]->GetSubband(m_currentLevel, HH)->PlaceTile(*m_decoder, m_quant, true, tileX, tileY);
-						} else {
-							// skip tile
-							m_decoder->SkipTileBuffer();
-						}
-					}
-				}
-
-				// inverse transform from m_wtChannel to m_channel
-				m_wtChannel[i]->InverseTransform(m_currentLevel, &m_width[i], &m_height[i], &m_channel[i]);
-				ASSERT(m_channel[i]);
-
-				// now update progress
-				if (i < m_header.channels - 1 && cb) {
-					percent += 3*p/m_header.channels;
-					(*cb)(percent, false, data);
-				}
-			}
-			// set new level: must be done before refresh callback
-			m_currentLevel--;
-
-			// now we have to refresh the display
-			if (m_cb) m_cb(m_cbArg);
-
-			// now update progress
-			if (cb) {
-				percent += 3*p/m_header.channels;
-				if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
-			}
-		}
-	}
-}
-#endif
+#endif // __PGFROISUPPORT__
 
 //////////////////////////////////////////////////////////////////////
 /// Return the length of all encoded headers in bytes.
+/// Precondition: The PGF image has been opened with a call of Open(...).
 /// @return The length of all encoded headers in bytes
-UINT32 CPGFImage::GetEncodedHeaderLength() const { 
-	ASSERT(m_decoder); 
-	return m_decoder->GetEncodedHeaderLength(); 
+UINT32 CPGFImage::GetEncodedHeaderLength() const {
+	ASSERT(m_decoder);
+	return m_decoder->GetEncodedHeaderLength();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -532,14 +606,14 @@ UINT32 CPGFImage::ReadEncodedHeader(UINT8* target, UINT32 targetLen) const THROW
 }
 
 ////////////////////////////////////////////////////////////////////
-/// Reset stream position to beginning of PGF pre header
+/// Reset stream position to start of PGF pre-header
 void CPGFImage::ResetStreamPos() THROW_ {
 	ASSERT(m_decoder);
-	return m_decoder->SetStreamPosToStart(); 
+	return m_decoder->SetStreamPosToStart();
 }
 
 //////////////////////////////////////////////////////////////////////
-/// Reads the data of an encoded PGF level and copies it to a target buffer 
+/// Reads the data of an encoded PGF level and copies it to a target buffer
 /// without decoding.
 /// Precondition: The PGF image has been opened with a call of Open(...).
 /// It might throw an IOException.
@@ -577,82 +651,15 @@ UINT32 CPGFImage::ReadEncodedData(int level, UINT8* target, UINT32 targetLen) co
 //////////////////////////////////////////////////////////////////
 // Set background of an RGB image with transparency channel or reset to default background.
 // @param bg A pointer to a background color or NULL (reset to default background)
-void CPGFImage::SetBackground(const RGBTRIPLE* bg) { 
-	if (bg) { 
-		m_header.background = *bg; 
-//		m_backgroundSet = true; 
+void CPGFImage::SetBackground(const RGBTRIPLE* bg) {
+	if (bg) {
+		m_header.background = *bg;
+//		m_backgroundSet = true;
 	} else {
 		m_header.background.rgbtBlue = DefaultBGColor;
 		m_header.background.rgbtGreen = DefaultBGColor;
 		m_header.background.rgbtRed = DefaultBGColor;
 //		m_backgroundSet = false;
-	}
-}
-
-//////////////////////////////////////////////////////////////////////
-/// Set PGF header and user data.
-/// Precondition: The PGF image has been closed with Close(...) or never opened with Open(...).
-/// It might throw an IOException.
-/// @param header A valid and already filled in PGF header structure
-/// @param flags A combination of additional version flags
-/// @param userData A user-defined memory block
-/// @param userDataLength The size of user-defined memory block in bytes
-void CPGFImage::SetHeader(const PGFHeader& header, BYTE flags /*=0*/, UINT8* userData /*= 0*/, UINT32 userDataLength /*= 0*/) THROW_ {
-	ASSERT(!m_decoder);	// current image must be closed
-	ASSERT(header.quality <= MaxQuality);
-	int i;
-
-	// init preHeader
-	memcpy(m_preHeader.magic, Magic, 3);
-	m_preHeader.version = PGFVersion | flags;
-	m_preHeader.hSize = HeaderSize;
-
-	// copy header
-	memcpy(&m_header, &header, HeaderSize);
-
-	// misuse background value to store bits per channel
-	BYTE bpc = m_header.bpp/m_header.channels;
-	if (bpc > 8) {
-		if (bpc > 31) bpc = 31;
-		m_header.background.rgbtBlue = bpc;
-	}
-
-	// check for downsample
-	if (m_header.quality > DownsampleThreshold &&  (m_header.mode == ImageModeRGBColor || 
-													m_header.mode == ImageModeRGBA || 
-													m_header.mode == ImageModeRGB48 || 
-													m_header.mode == ImageModeCMYKColor || 
-													m_header.mode == ImageModeCMYK64 || 
-													m_header.mode == ImageModeLabColor || 
-													m_header.mode == ImageModeLab48)) {
-		m_downsample = true;
-		m_quant = m_header.quality - 1;
-	} else {
-		m_downsample = false;
-		m_quant = m_header.quality;
-	}
-
-	// update header size and copy user data
-	if (m_header.mode == ImageModeIndexedColor) {
-		m_preHeader.hSize += ColorTableSize;
-	}
-	if (userDataLength && userData) {
-		m_postHeader.userData = new UINT8[userDataLength];
-		m_postHeader.userDataLen = userDataLength;
-		memcpy(m_postHeader.userData, userData, userDataLength);
-		m_preHeader.hSize += userDataLength;
-	}
-
-	// allocate channels
-	for (i=0; i < m_header.channels; i++) {
-		// set current width and height
-		m_width[i] = m_header.width;
-		m_height[i] = m_header.height;
-
-		// allocate channels
-		ASSERT(!m_channel[i]);
-		m_channel[i] = new DataT[m_header.width*m_header.height];
-		if (!m_channel[i]) ReturnWithError(InsufficientMemory);
 	}
 }
 
@@ -680,6 +687,7 @@ BYTE CPGFImage::UsedBitsPerChannel() const {
 	BYTE bpc = m_header.bpp/m_header.channels;
 
 	if (bpc > 8) {
+		// see also GetMaxValue()
 		return m_header.background.rgbtBlue;
 	} else {
 		return bpc;
@@ -749,7 +757,7 @@ void CPGFImage::Downsample(int ch) {
 			loPos += 2; hiPos += 2;
 			sampledPos++;
 		}
-		if (oddW) { 
+		if (oddW) {
 			buff[sampledPos] = (buff[loPos] + buff[hiPos]) >> 1;
 			loPos++; hiPos++;
 			sampledPos++;
@@ -773,27 +781,21 @@ void CPGFImage::Downsample(int ch) {
 }
 
 //////////////////////////////////////////////////////////////////////
-/// Compute and return number of levels. During PGF::Write the return
-/// value of this method is used in case the parameter levels is not a
-/// positive value. 
-/// A PGF image is structered in levels, numbered between 0 and Levels() - 1.
-/// Each level can be seen as a single image, containing the same content
-/// as all other levels, but in a different size (width, height).
-/// The image size at level i is double the size (width, height) of the image at level i+1.
-/// The image at level 0 contains the original size.
-/// @param width Original image width
-/// @param height Original image height
-/// @return Number of PGF levels
-BYTE CPGFImage::ComputeLevels(UINT32 width, UINT32 height) {
+void CPGFImage::ComputeLevels() {
 	const int maxThumbnailWidth = 20*FilterWidth;
-	const int m = __min(width, height);
-	int s = m, levels = 1;
+	const int m = __min(m_header.width, m_header.height);
+	int s = m;
 
-	// compute a good value depending on the size of the image
-	while (s > maxThumbnailWidth) {
-		levels++;
-		s = s/2;
+	if (m_header.nLevels < 1 || m_header.nLevels > MaxLevel) {
+		m_header.nLevels = 1;
+		// compute a good value depending on the size of the image
+		while (s > maxThumbnailWidth) {
+			m_header.nLevels++;
+			s = s/2;
+		}
 	}
+
+	int levels = m_header.nLevels; // we need a signed value during level reduction
 
 	// reduce number of levels if the image size is smaller than FilterWidth*2^levels
 	s = FilterWidth*(1 << levels);	// must be at least the double filter size because of subsampling
@@ -801,11 +803,248 @@ BYTE CPGFImage::ComputeLevels(UINT32 width, UINT32 height) {
 		levels--;
 		s = s/2;
 	}
-	if (levels > MaxLevel) levels = MaxLevel;
-	if (levels < 0) levels = 0;
-	ASSERT(0 <= levels && levels <= MaxLevel);
-	
-	return (BYTE)levels;
+	if (levels > MaxLevel) m_header.nLevels = MaxLevel;
+	else if (levels < 0) m_header.nLevels = 0;
+	else m_header.nLevels = (UINT8)levels;
+
+	ASSERT(0 <= m_header.nLevels && m_header.nLevels <= MaxLevel);
+}
+
+//////////////////////////////////////////////////////////////////////
+/// Set PGF header and user data.
+/// Precondition: The PGF image has been closed with Close(...) or never opened with Open(...).
+/// It might throw an IOException.
+/// @param header A valid and already filled in PGF header structure
+/// @param flags A combination of additional version flags
+/// @param userData A user-defined memory block
+/// @param userDataLength The size of user-defined memory block in bytes
+void CPGFImage::SetHeader(const PGFHeader& header, BYTE flags /*=0*/, UINT8* userData /*= 0*/, UINT32 userDataLength /*= 0*/) THROW_ {
+	ASSERT(!m_decoder);	// current image must be closed
+	ASSERT(header.quality <= MaxQuality);
+	int i;
+
+	// init state
+#ifdef __PGFROISUPPORT__
+	m_levelwise = true;
+	m_streamReinitialized = false;
+#endif
+
+	// init preHeader
+	memcpy(m_preHeader.magic, Magic, 3);
+	m_preHeader.version = PGFVersion | flags;
+	m_preHeader.hSize = HeaderSize;
+
+	// copy header
+	memcpy(&m_header, &header, HeaderSize);
+
+	// complete header
+	CompleteHeader();
+
+	// check and set number of levels
+	ComputeLevels();
+
+	// misuse background value to store bits per channel
+	BYTE bpc = m_header.bpp/m_header.channels;
+	if (bpc > 8) {
+		if (bpc > 31) bpc = 31;
+		m_header.background.rgbtBlue = bpc;
+	}
+
+	// check for downsample
+	if (m_header.quality > DownsampleThreshold &&  (m_header.mode == ImageModeRGBColor ||
+													m_header.mode == ImageModeRGBA ||
+													m_header.mode == ImageModeRGB48 ||
+													m_header.mode == ImageModeCMYKColor ||
+													m_header.mode == ImageModeCMYK64 ||
+													m_header.mode == ImageModeLabColor ||
+													m_header.mode == ImageModeLab48)) {
+		m_downsample = true;
+		m_quant = m_header.quality - 1;
+	} else {
+		m_downsample = false;
+		m_quant = m_header.quality;
+	}
+
+	// update header size and copy user data
+	if (m_header.mode == ImageModeIndexedColor) {
+		m_preHeader.hSize += ColorTableSize;
+	}
+	if (userDataLength && userData) {
+		m_postHeader.userData = new UINT8[userDataLength];
+		m_postHeader.userDataLen = userDataLength;
+		memcpy(m_postHeader.userData, userData, userDataLength);
+		m_preHeader.hSize += userDataLength;
+	}
+
+	// allocate channels
+	for (i=0; i < m_header.channels; i++) {
+		// set current width and height
+		m_width[i] = m_header.width;
+		m_height[i] = m_header.height;
+
+		// allocate channels
+		ASSERT(!m_channel[i]);
+		m_channel[i] = new DataT[m_header.width*m_header.height];
+		if (!m_channel[i]) ReturnWithError(InsufficientMemory);
+	}
+}
+
+//////////////////////////////////////////////////////////////////
+// Create wavelet transform channels and encoder.
+// Call this method before your first call of Write(int level), but after SetHeader().
+// Don't use this method when you call Write().
+// It might throw an IOException.
+// @param stream A PGF stream
+// @return The number of bytes written into stream.
+UINT32 CPGFImage::WriteHeader(CPGFStream* stream) THROW_ {
+	ASSERT(m_header.nLevels <= MaxLevel);
+	ASSERT(m_header.quality <= MaxQuality); // quality is already initialized
+
+	if (m_header.nLevels > 0) {
+		volatile OSError error = NoError; // volatile prevents optimizations
+		// create new wt channels
+		#pragma omp parallel for default(shared)
+		for (int i=0; i < m_header.channels; i++) {
+			DataT *temp = NULL;
+			if (error == NoError) {
+				if (m_wtChannel[i]) {
+					ASSERT(m_channel[i]);
+					// copy m_channel to temp
+					int size = m_height[i]*m_width[i];
+					temp = new DataT[size];
+					if (temp) {
+						memcpy(temp, m_channel[i], size*DataTSize);
+						delete m_wtChannel[i];	// also deletes m_channel
+					} else {
+						error = InsufficientMemory;
+					}
+				}
+				if (temp) m_channel[i] = temp;
+				m_wtChannel[i] = new CWaveletTransform(m_width[i], m_height[i], m_header.nLevels, m_channel[i]);
+				if (m_wtChannel[i]) {
+					// wavelet subband decomposition
+					for (int l=0; l < m_header.nLevels; l++) {
+						m_wtChannel[i]->ForwardTransform(l);
+					}
+				} else {
+					delete temp;
+					error = InsufficientMemory;
+				}
+			}
+		}
+		if (error != NoError) ReturnWithError(error);
+
+		m_currentLevel = m_header.nLevels;
+
+	#ifdef __PGFROISUPPORT__
+		if (m_levelwise) {
+			m_preHeader.version |= PGFROI;
+		}
+	#endif
+
+		// create encoder and eventually write headers and levelLength
+		m_encoder = new CEncoder(stream, m_preHeader, m_header, m_postHeader, m_levelLength, m_useOMPinEncoder);
+		if (m_favorSpeedOverSize) m_encoder->FavorSpeedOverSize();
+
+	#ifdef __PGFROISUPPORT__
+		if (ROIisSupported()) {
+			// new encoding scheme supporting ROI
+			m_encoder->SetROI();
+		}
+	#endif
+
+		// return number of written bytes
+		return m_encoder->ComputeHeaderLength();
+
+	} else {
+		// very small image: we don't use DWT and encoding
+
+		// create encoder and eventually write headers and levelLength
+		m_encoder = new CEncoder(stream, m_preHeader, m_header, m_postHeader, m_levelLength, m_useOMPinEncoder);
+
+		// write channels
+		for (int c=0; c < m_header.channels; c++) {
+			const UINT32 size = m_width[c]*m_height[c];
+
+			// write channel data into stream
+			for (UINT32 i=0; i < size; i++) {
+				int count = DataTSize;
+				stream->Write(&count, &m_channel[c][i]);
+			}
+		}
+
+		// write level lengths
+		UINT32 nBytes = m_encoder->WriteLevelLength(); // return written bytes inclusive header
+
+		// delete encoder
+		delete m_encoder; m_encoder = NULL;
+
+		// return number of written bytes
+		return nBytes;
+	}
+}
+
+//////////////////////////////////////////////////////////////////
+// Encode and write next level of a PGF image at current stream position.
+// A PGF image is structered in levels, numbered between 0 and Levels() - 1.
+// Each level can be seen as a single image, containing the same content
+// as all other levels, but in a different size (width, height).
+// The image size at level i is double the size (width, height) of the image at level i+1.
+// The image at level 0 contains the original size.
+// It might throw an IOException.
+void CPGFImage::WriteLevel() THROW_ {
+	ASSERT(m_encoder);
+	ASSERT(m_currentLevel > 0);
+	ASSERT(m_header.nLevels > 0);
+
+#ifdef __PGFROISUPPORT__
+	if (ROIisSupported()) {
+		const int lastChannel = m_header.channels - 1;
+
+		for (int i=0; i < m_header.channels; i++) {
+			m_wtChannel[i]->SetROI();
+
+			// get number of tiles and tile indices
+			const UINT32 nTiles = m_wtChannel[i]->GetNofTiles(m_currentLevel);
+			const UINT32 lastTile = nTiles - 1;
+
+			if (m_currentLevel == m_header.nLevels) {
+				// last level also has LL band
+				ASSERT(nTiles == 1);
+				m_wtChannel[i]->GetSubband(m_currentLevel, LL)->ExtractTile(*m_encoder, m_quant);
+				m_encoder->EncodeTileBuffer();
+			}
+			for (UINT32 tileY=0; tileY < nTiles; tileY++) {
+				for (UINT32 tileX=0; tileX < nTiles; tileX++) {
+					m_wtChannel[i]->GetSubband(m_currentLevel, HL)->ExtractTile(*m_encoder, m_quant, true, tileX, tileY);
+					m_wtChannel[i]->GetSubband(m_currentLevel, LH)->ExtractTile(*m_encoder, m_quant, true, tileX, tileY);
+					m_wtChannel[i]->GetSubband(m_currentLevel, HH)->ExtractTile(*m_encoder, m_quant, true, tileX, tileY);
+					if (i == lastChannel && tileY == lastTile && tileX == lastTile) {
+						// all necessary data are buffered. next call of EncodeBuffer will write the last piece of data of the current level.
+						m_encoder->SetEncodedLevel(--m_currentLevel);
+					}
+					m_encoder->EncodeTileBuffer();
+				}
+			}
+		}
+	} else
+#endif
+	{
+		for (int i=0; i < m_header.channels; i++) {
+			ASSERT(m_wtChannel[i]);
+			if (m_currentLevel == m_header.nLevels) {
+				// last level also has LL band
+				m_wtChannel[i]->GetSubband(m_currentLevel, LL)->ExtractTile(*m_encoder, m_quant);
+			}
+			//encoder.EncodeInterleaved(m_wtChannel[i], m_currentLevel, m_quant); // until version 4
+			m_wtChannel[i]->GetSubband(m_currentLevel, HL)->ExtractTile(*m_encoder, m_quant); // since version 5
+			m_wtChannel[i]->GetSubband(m_currentLevel, LH)->ExtractTile(*m_encoder, m_quant); // since version 5
+			m_wtChannel[i]->GetSubband(m_currentLevel, HH)->ExtractTile(*m_encoder, m_quant);
+		}
+
+		// all necessary data are buffered. next call of EncodeBuffer will write the last piece of data of the current level.
+		m_encoder->SetEncodedLevel(--m_currentLevel);
+	}
 }
 
 //////////////////////////////////////////////////////////////////
@@ -818,148 +1057,129 @@ BYTE CPGFImage::ComputeLevels(UINT32 width, UINT32 height) {
 // Precondition: the PGF image contains a valid header (see also SetHeader(...)).
 // It might throw an IOException.
 // @param stream A PGF stream
-// @param levels The positive number of levels used in layering or 0 meaning a useful number of levels is computed.
-// @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
 // @param nWrittenBytes [in-out] The number of bytes written into stream are added to the input value.
+// @param cb A pointer to a callback procedure. The procedure is called after writing a single level. If cb returns true, then it stops proceeding.
 // @param data Data Pointer to C++ class container to host callback procedure.
-void CPGFImage::Write(CPGFStream* stream, int levels /* = 0*/, CallbackPtr cb /*= NULL*/, UINT32* nWrittenBytes /*= NULL*/, void *data /*=NULL*/) THROW_ {
+void CPGFImage::Write(CPGFStream* stream, UINT32* nWrittenBytes /*= NULL*/, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) THROW_ {
 	ASSERT(stream);
 	ASSERT(m_preHeader.hSize);
-	int i;
-	UINT32 nBytes = 0;
-	DataT *temp;
 
-	// check and set number of levels
-	if (levels < 1) {
-		levels = m_header.nLevels = ComputeLevels(m_header.width, m_header.height);
-	} else {
-		if (levels > MaxLevel) levels = MaxLevel;
-		m_header.nLevels = levels;
-	}
-	ASSERT(m_header.nLevels <= MaxLevel);
-	ASSERT(m_header.quality <= MaxQuality); // quality is already initialized
+#ifdef __PGFROISUPPORT__
+	// don't use level-wise writing
+	m_levelwise = false;
+#endif
 
-	// create new wt channels
-	for (i=0; i < m_header.channels; i++) {
-		temp = NULL;
-		if (m_wtChannel[i]) {
-			ASSERT(m_channel[i]);
-			// copy m_channel to temp
-			int size = m_height[i]*m_width[i];
-			temp = new DataT[size]; 
-			if (!temp) ReturnWithError(InsufficientMemory);
-			memcpy(temp, m_channel[i], size*sizeof(INT16));
-			delete m_wtChannel[i];	// also deletes m_channel
-		}
-		if (temp) m_channel[i] = temp;
-		m_wtChannel[i] = new CWaveletTransform(m_width[i], m_height[i], levels, m_channel[i]);
-		if (!m_wtChannel[i]) {
-			delete temp;
-			ReturnWithError(InsufficientMemory);
-		}
+	// create wavelet transform channels and encoder
+	WriteHeader(stream);
 
-		// wavelet subband decomposition 
-		for (m_currentLevel=0; m_currentLevel < levels; m_currentLevel++) {
-			m_wtChannel[i]->ForwardTransform(m_currentLevel);
-		}
-	}
+	int levels = m_header.nLevels;
 	double percent = pow(0.25, levels - 1);
 
-	// open encoder and eventually write headers and levelLength
-	CEncoder encoder(stream, m_preHeader, m_header, m_postHeader, m_levelLength);
-
-	if (levels > 0) {
+	if (levels == 0) {
+		// data has been written in WriteHeader
+		// now update progress
+		if (cb) {
+			if ((*cb)(1, true, data)) ReturnWithError(EscapePressed);
+		}
+	} else {
 		// encode quantized wavelet coefficients and write to PGF file
 		// encode subbands, higher levels first
 		// color channels are interleaved
 
-#ifdef __PGFROISUPPORT__
-		if (ROIisSupported()) {
-			// new encoding scheme supporting ROI
-			encoder.SetROI();
+		// encode all levels
+		for (m_currentLevel = levels; m_currentLevel > 0; ) {
+			WriteLevel(); // decrements m_currentLevel
 
-			for (m_currentLevel = (UINT8)levels; m_currentLevel > 0; m_currentLevel--) {
-				for (i=0; i < m_header.channels; i++) {
-					m_wtChannel[i]->SetROI();
-
-					// get number of tiles and tile indices
-					const UINT32 nTiles = m_wtChannel[i]->GetNofTiles(m_currentLevel);
-
-					if (m_currentLevel == levels) {
-						ASSERT(nTiles == 1);
-						m_wtChannel[i]->GetSubband(m_currentLevel, LL)->ExtractTile(encoder, m_quant);
-						encoder.EncodeTileBuffer();
-					}
-					for (UINT32 tileY=0; tileY < nTiles; tileY++) {
-						for (UINT32 tileX=0; tileX < nTiles; tileX++) {
-							m_wtChannel[i]->GetSubband(m_currentLevel, HL)->ExtractTile(encoder, m_quant, true, tileX, tileY);
-							m_wtChannel[i]->GetSubband(m_currentLevel, LH)->ExtractTile(encoder, m_quant, true, tileX, tileY);
-							m_wtChannel[i]->GetSubband(m_currentLevel, HH)->ExtractTile(encoder, m_quant, true, tileX, tileY);
-							encoder.EncodeTileBuffer();
-						}
-					}
-				}
-
-				// all necessary data of a level is buffered!
-				encoder.SetLevelIsEncoded(true);
-
-				// now update progress
-				if (cb) {
-					percent *= 4;
-					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
-				}
-			}
-		} else 
-#endif
-		{
-			// encoding scheme without ROI
-			m_currentLevel = (UINT8)levels;
-			for (i=0; i < m_header.channels; i++) {
-				m_wtChannel[i]->GetSubband(m_currentLevel, LL)->ExtractTile(encoder, m_quant);
-				//encoder.EncodeInterleaved(m_wtChannel[i], m_currentLevel, m_quant); // until version 4
-				m_wtChannel[i]->GetSubband(m_currentLevel, HL)->ExtractTile(encoder, m_quant); // since version 5
-				m_wtChannel[i]->GetSubband(m_currentLevel, LH)->ExtractTile(encoder, m_quant); // since version 5
-				m_wtChannel[i]->GetSubband(m_currentLevel, HH)->ExtractTile(encoder, m_quant);
-			}
-			// all necessary data buffered!
-			encoder.SetLevelIsEncoded(true);
-			m_currentLevel--;
-
-			for (; m_currentLevel > 0; m_currentLevel--) {
-				for (i=0; i < m_header.channels; i++) {
-					//encoder.EncodeInterleaved(m_wtChannel[i], m_currentLevel, m_quant); // until version 4
-					m_wtChannel[i]->GetSubband(m_currentLevel, HL)->ExtractTile(encoder, m_quant); // since version 5
-					m_wtChannel[i]->GetSubband(m_currentLevel, LH)->ExtractTile(encoder, m_quant); // since version 5
-					m_wtChannel[i]->GetSubband(m_currentLevel, HH)->ExtractTile(encoder, m_quant);
-				}
-				// all necessary data of a level buffered!
-				encoder.SetLevelIsEncoded(true);
-
-				// now update progress
-				if (cb) {
-					percent *= 4;
-					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
-				}
+			// now update progress
+			if (cb) {
+				percent *= 4;
+				if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 			}
 		}
-	} else {
-		// write untransformed m_channel
-		for (i=0; i < m_header.channels; i++) {
-			m_wtChannel[i]->GetSubband(0, LL)->ExtractTile(encoder, m_quant);
+
+		// flush encoder and write level lengths
+		m_encoder->Flush();
+		UINT32 nBytes = m_encoder->WriteLevelLength(); // inclusive header
+
+		// delete encoder
+		delete m_encoder; m_encoder = NULL;
+
+		// return written bytes
+		if (nWrittenBytes) *nWrittenBytes += nBytes;
+	}
+
+	ASSERT(!m_encoder);
+}
+
+#ifdef __PGFROISUPPORT__
+//////////////////////////////////////////////////////////////////
+// Encode and write down to given level at current stream position.
+// A PGF image is structered in levels, numbered between 0 and Levels() - 1.
+// Each level can be seen as a single image, containing the same content
+// as all other levels, but in a different size (width, height).
+// The image size at level i is double the size (width, height) of the image at level i+1.
+// The image at level 0 contains the original size.
+// Precondition: the PGF image contains a valid header (see also SetHeader(...)) and WriteHeader() has been called before Write().
+// The ROI encoding scheme is used.
+// It might throw an IOException.
+// @param level The image level of the resulting image in the internal image buffer.
+// @param cb A pointer to a callback procedure. The procedure is called after writing a single level. If cb returns true, then it stops proceeding.
+// @param data Data Pointer to C++ class container to host callback procedure.
+// @return The number of bytes written into stream.
+UINT32 CPGFImage::Write(int level, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) THROW_ {
+	ASSERT(m_header.nLevels > 0);
+	ASSERT(0 <= level && level < m_header.nLevels);
+	ASSERT(m_encoder);
+	ASSERT(ROIisSupported());
+
+	// prepare for next level: save current file position, because the stream might have been reinitialized
+	UINT32 diff = m_encoder->ComputeBufferLength();
+	if (diff) {
+		m_streamReinitialized = true;
+		m_encoder->SetBufferStartPos();
+	}
+
+	const int levelDiff = m_currentLevel - level;
+	double percent = pow(0.25, levelDiff);
+	UINT32 nWrittenBytes = 0;
+	int levelIndex = m_header.nLevels - 1 - m_currentLevel;
+
+	// encoding scheme with ROI
+	while (m_currentLevel > level) {
+		levelIndex++;
+
+		WriteLevel();
+
+		if (m_levelLength) nWrittenBytes += m_levelLength[levelIndex];
+
+		// now update progress
+		if (cb) {
+			percent *= 4;
+			if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 		}
 	}
-	
-	// flush encoder
-	nBytes = encoder.Flush();
-	if (nWrittenBytes) *nWrittenBytes += nBytes;
+
+	// automatically closing
+	if (m_currentLevel == 0) {
+		if (!m_streamReinitialized) {
+			// don't write level lengths, if the stream position changed inbetween two Write operations
+			m_encoder->WriteLevelLength();
+		}
+		// delete encoder
+		delete m_encoder; m_encoder = NULL;
+	}
+
+	return nWrittenBytes;
 }
+#endif // __PGFROISUPPORT__
+
 
 //////////////////////////////////////////////////////////////////
 // Check for valid import image mode.
 // @param mode Image mode
 // @return True if an image of given mode can be imported with ImportBitmap(...)
 bool CPGFImage::ImportIsSupported(BYTE mode) {
-	size_t size = sizeof(DataT);
+	size_t size = DataTSize;
 
 	if (size >= 2) {
 		switch(mode) {
@@ -1057,7 +1277,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			ASSERT(m_header.channels == 1);
 			ASSERT(m_header.bpp == 1);
 			ASSERT(bpp == 1);
-			
+
 			const UINT32 w2 = (m_header.width + 7)/8;
 			DataT* y = m_channel[0]; ASSERT(y);
 
@@ -1070,7 +1290,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 				for (UINT32 w=0; w < w2; w++) {
 					y[yPos++] = buff[w] - YUVoffset8;
 				}
-				buff += pitch;	
+				buff += pitch;
 			}
 		}
 		break;
@@ -1099,7 +1319,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					cnt += channels;
 					yPos++;
 				}
-				buff += pitch;	
+				buff += pitch;
 			}
 		}
 		break;
@@ -1113,7 +1333,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			UINT16 *buff16 = (UINT16 *)buff;
 			const int pitch16 = pitch/2;
 			const int channels = bpp/16; ASSERT(channels >= m_header.channels);
-			const int yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
+			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
 
 			for (UINT32 h=0; h < m_header.height; h++) {
 				if (cb) {
@@ -1164,7 +1384,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					cnt += channels;
 				}
 				buff += pitch;
-			}	
+			}
 		}
 		break;
 	case ImageModeRGB48:
@@ -1176,7 +1396,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			UINT16 *buff16 = (UINT16 *)buff;
 			const int pitch16 = pitch/2;
 			const int channels = bpp/16; ASSERT(channels >= m_header.channels);
-			const int yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
+			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
 
 			DataT* y = m_channel[0]; ASSERT(y);
 			DataT* u = m_channel[1]; ASSERT(u);
@@ -1202,7 +1422,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					cnt += channels;
 				}
 				buff16 += pitch16;
-			}	
+			}
 		}
 		break;
 	case ImageModeRGBA:
@@ -1238,7 +1458,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					cnt += channels;
 				}
 				buff += pitch;
-			}	
+			}
 		}
 		break;
 	case ImageModeCMYK64:
@@ -1250,8 +1470,8 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			UINT16 *buff16 = (UINT16 *)buff;
 			const int pitch16 = pitch/2;
 			const int channels = bpp/16; ASSERT(channels >= m_header.channels);
-			const int yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
-			
+			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
+
 			DataT* y = m_channel[0]; ASSERT(y);
 			DataT* u = m_channel[1]; ASSERT(u);
 			DataT* v = m_channel[2]; ASSERT(v);
@@ -1277,20 +1497,22 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					cnt += channels;
 				}
 				buff16 += pitch16;
-			}	
+			}
 		}
 		break;
+#ifdef __PGF32SUPPORT__
 	case ImageModeGray31:
 		{
 			ASSERT(m_header.channels == 1);
 			ASSERT(m_header.bpp == 32);
 			ASSERT(bpp == 32);
+			ASSERT(DataTSize == sizeof(UINT32));
 
 			DataT* y = m_channel[0]; ASSERT(y);
 
 			UINT32 *buff32 = (UINT32 *)buff;
 			const int pitch32 = pitch/4;
-			const int yuvOffset31 = 1 << (UsedBitsPerChannel() - 1);
+			const DataT yuvOffset31 = 1 << (UsedBitsPerChannel() - 1);
 
 			for (UINT32 h=0; h < m_header.height; h++) {
 				if (cb) {
@@ -1306,6 +1528,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			}
 		}
 		break;
+#endif
 	case ImageModeRGB12:
 		{
 			ASSERT(m_header.channels == 3);
@@ -1351,7 +1574,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					yPos++;
 				}
 				buff += pitch;
-			}	
+			}
 		}
 		break;
 	case ImageModeRGB16:
@@ -1359,7 +1582,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			ASSERT(m_header.channels == 3);
 			ASSERT(m_header.bpp == 16);
 			ASSERT(bpp == 16);
-			
+
 			DataT* y = m_channel[0]; ASSERT(y);
 			DataT* u = m_channel[1]; ASSERT(u);
 			DataT* v = m_channel[2]; ASSERT(v);
@@ -1374,7 +1597,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					percent += dP;
 				}
 				for (UINT32 w=0; w < m_header.width; w++) {
-					rgb = buff16[w]; 
+					rgb = buff16[w];
 					r = (rgb & 0xF800) >> 10;	// highest 5 bits
 					g = (rgb & 0x07E0) >> 5;	// middle 6 bits
 					b = (rgb & 0x001F) << 1;	// lowest 5 bits
@@ -1386,7 +1609,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 				}
 
 				buff16 += pitch16;
-			}	
+			}
 		}
 		break;
 	default:
@@ -1396,7 +1619,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 //////////////////////////////////////////////////////////////////
 // Get image data in interleaved format: (ordering of RGB data is BGR[A])
-// Upsampling, YUV to RGB transform and interleaving are done here to reduce the number 
+// Upsampling, YUV to RGB transform and interleaving are done here to reduce the number
 // of passes over the data.
 // The absolute value of pitch is the number of bytes of an image row of the given image buffer.
 // If pitch is negative, then the image buffer must point to the last row of a bottom-up image (first byte on last row).
@@ -1423,8 +1646,8 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 	const PGFRect& roi = (ROIisSupported()) ? m_wtChannel[0]->GetROI(m_currentLevel) : PGFRect(0, 0, w, h); // roi is usually larger than m_roi
 	const PGFRect levelRoi(LevelWidth(m_roi.left, m_currentLevel), LevelHeight(m_roi.top, m_currentLevel), LevelWidth(m_roi.Width(), m_currentLevel), LevelHeight(m_roi.Height(), m_currentLevel));
 	ASSERT(w == roi.Width() && h == roi.Height());
-	ASSERT(roi.left <= levelRoi.left && levelRoi.right <= roi.right); 
-	ASSERT(roi.top <= levelRoi.top && levelRoi.bottom <= roi.bottom); 
+	ASSERT(roi.left <= levelRoi.left && levelRoi.right <= roi.right);
+	ASSERT(roi.top <= levelRoi.top && levelRoi.bottom <= roi.bottom);
 
 	if (ROIisSupported() && (levelRoi.Width() < w || levelRoi.Height() < h)) {
 		// ROI is used -> create a temporary image buffer for roi
@@ -1505,7 +1728,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			ASSERT(m_header.channels >= 1);
 			ASSERT(m_header.bpp == m_header.channels*16);
 
-			const int yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
+			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
 			const int shift = UsedBitsPerChannel() - 8;
 			int cnt, channels;
 
@@ -1533,12 +1756,12 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			} else {
 				ASSERT(bpp%8 == 0);
 				channels = bpp/8; ASSERT(channels >= m_header.channels);
-				
+
 				for (i=0; i < h; i++) {
 					cnt = 0;
 					for (j=0; j < w; j++) {
 						for (int c=0; c < m_header.channels; c++) {
-							buff[cnt + channelMap[c]] = Clamp16(m_channel[c][yPos] + yuvOffset16) >> shift;
+							buff[cnt + channelMap[c]] = UINT8(Clamp16(m_channel[c][yPos] + yuvOffset16) >> shift);
 						}
 						cnt += channels;
 						yPos++;
@@ -1564,8 +1787,8 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			DataT* u = m_channel[1]; ASSERT(u);
 			DataT* v = m_channel[2]; ASSERT(v);
 			UINT8 *buffg = &buff[channelMap[1]],
-				*buffu = &buff[channelMap[2]],
-				*buffv = &buff[channelMap[0]];
+				  *buffr = &buff[channelMap[2]],
+				  *buffb = &buff[channelMap[0]];
 			UINT8 g;
 			int cnt, channels = bpp/8;
 			if(m_downsample){
@@ -1578,15 +1801,15 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						vAvg = v[sampledPos];
 						// Yuv
 						buffg[cnt] = g = Clamp(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
-						buffu[cnt] = Clamp(uAvg + g);
-						buffv[cnt] = Clamp(vAvg + g);
+						buffr[cnt] = Clamp(uAvg + g);
+						buffb[cnt] = Clamp(vAvg + g);
 						yPos++;
 						cnt += channels;
 						if (j%2) sampledPos++;
 					}
+					buffb += pitch;
 					buffg += pitch;
-					buffu += pitch;
-					buffv += pitch;
+					buffr += pitch;
 					if (wOdd) sampledPos++;
 					if (cb) {
 						percent += dP;
@@ -1601,14 +1824,14 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						vAvg = v[yPos];
 						// Yuv
 						buffg[cnt] = g = Clamp(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
-						buffu[cnt] = Clamp(uAvg + g);
-						buffv[cnt] = Clamp(vAvg + g);
+						buffr[cnt] = Clamp(uAvg + g);
+						buffb[cnt] = Clamp(vAvg + g);
 						yPos++;
 						cnt += channels;
 					}
+					buffb += pitch;
 					buffg += pitch;
-					buffu += pitch;
-					buffv += pitch;
+					buffr += pitch;
 
 					if (cb) {
 						percent += dP;
@@ -1623,7 +1846,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			ASSERT(m_header.channels == 3);
 			ASSERT(m_header.bpp == 48);
 
-			const int yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
+			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
 			const int shift = UsedBitsPerChannel() - 8;
 
 			DataT* y = m_channel[0]; ASSERT(y);
@@ -1653,7 +1876,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						buff16[cnt + channelMap[1]] = g = Clamp16(y[yPos] + yuvOffset16 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
 						buff16[cnt + channelMap[2]] = Clamp16(uAvg + g);
 						buff16[cnt + channelMap[0]] = Clamp16(vAvg + g);
-						yPos++; 
+						yPos++;
 						cnt += channels;
 						if (j%2) sampledPos++;
 					}
@@ -1683,10 +1906,10 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						}
 						// Yuv
 						g = Clamp16(y[yPos] + yuvOffset16 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
-						buff[cnt + channelMap[1]] = g >> shift; 
-						buff[cnt + channelMap[2]] = Clamp16(uAvg + g) >> shift;
-						buff[cnt + channelMap[0]] = Clamp16(vAvg + g) >> shift;
-						yPos++; 
+						buff[cnt + channelMap[1]] = UINT8(g >> shift);
+						buff[cnt + channelMap[2]] = UINT8(Clamp16(uAvg + g) >> shift);
+						buff[cnt + channelMap[0]] = UINT8(Clamp16(vAvg + g) >> shift);
+						yPos++;
 						cnt += channels;
 						if (j%2) sampledPos++;
 					}
@@ -1725,7 +1948,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						vAvg = b[yPos];
 					}
 					buff[cnt + channelMap[0]] = Clamp(l[yPos] + YUVoffset8);
-					buff[cnt + channelMap[1]] = Clamp(uAvg + YUVoffset8); 
+					buff[cnt + channelMap[1]] = Clamp(uAvg + YUVoffset8);
 					buff[cnt + channelMap[2]] = Clamp(vAvg + YUVoffset8);
 					cnt += channels;
 					yPos++;
@@ -1746,7 +1969,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			ASSERT(m_header.channels == 3);
 			ASSERT(m_header.bpp == m_header.channels*16);
 
-			const int yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
+			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
 			const int shift = UsedBitsPerChannel() - 8;
 
 			DataT* l = m_channel[0]; ASSERT(l);
@@ -1802,9 +2025,9 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 							uAvg = a[yPos];
 							vAvg = b[yPos];
 						}
-						buff[cnt + channelMap[0]] = Clamp16(l[yPos] + yuvOffset16) >> shift;
-						buff[cnt + channelMap[1]] = Clamp16(uAvg + yuvOffset16) >> shift;
-						buff[cnt + channelMap[2]] = Clamp16(vAvg + yuvOffset16) >> shift;
+						buff[cnt + channelMap[0]] = UINT8(Clamp16(l[yPos] + yuvOffset16) >> shift);
+						buff[cnt + channelMap[1]] = UINT8(Clamp16(uAvg + yuvOffset16) >> shift);
+						buff[cnt + channelMap[2]] = UINT8(Clamp16(vAvg + yuvOffset16) >> shift);
 						cnt += channels;
 						yPos++;
 						if (j%2) sampledPos++;
@@ -1853,7 +2076,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 					buff[cnt + channelMap[2]] = Clamp(uAvg + g);
 					buff[cnt + channelMap[0]] = Clamp(vAvg + g);
 					buff[cnt + channelMap[3]] = aAvg;
-					yPos++; 
+					yPos++;
 					cnt += channels;
 					if (j%2) sampledPos++;
 				}
@@ -1867,12 +2090,12 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			}
 			break;
 		}
-	case ImageModeCMYK64: 
+	case ImageModeCMYK64:
 		{
 			ASSERT(m_header.channels == 4);
 			ASSERT(m_header.bpp == 64);
 
-			const int yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
+			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
 			const int shift = UsedBitsPerChannel() - 8;
 
 			DataT* y = m_channel[0]; ASSERT(y);
@@ -1906,7 +2129,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						buff16[cnt + channelMap[2]] = Clamp16(uAvg + g);
 						buff16[cnt + channelMap[0]] = Clamp16(vAvg + g);
 						buff16[cnt + channelMap[3]] = aAvg;
-						yPos++; 
+						yPos++;
 						cnt += channels;
 						if (j%2) sampledPos++;
 					}
@@ -1938,11 +2161,11 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						}
 						// Yuv
 						g = Clamp16(y[yPos] + yuvOffset16 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
-						buff[cnt + channelMap[1]] = g >> shift; 
-						buff[cnt + channelMap[2]] = Clamp16(uAvg + g) >> shift;
-						buff[cnt + channelMap[0]] = Clamp16(vAvg + g) >> shift;
-						buff[cnt + channelMap[3]] = aAvg >> shift;
-						yPos++; 
+						buff[cnt + channelMap[1]] = UINT8(g >> shift);
+						buff[cnt + channelMap[2]] = UINT8(Clamp16(uAvg + g) >> shift);
+						buff[cnt + channelMap[0]] = UINT8(Clamp16(vAvg + g) >> shift);
+						buff[cnt + channelMap[3]] = UINT8(aAvg >> shift);
+						yPos++;
 						cnt += channels;
 						if (j%2) sampledPos++;
 					}
@@ -1957,6 +2180,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			}
 			break;
 		}
+#ifdef __PGF32SUPPORT__
 	case ImageModeGray31:
 		{
 			ASSERT(m_header.channels == 1);
@@ -1984,10 +2208,10 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 				}
 			} else {
 				ASSERT(bpp == 8);
-				
+
 				for (i=0; i < h; i++) {
 					for (j=0; j < w; j++) {
-						buff[j] = Clamp31(y[yPos++] + yuvOffset31) >> shift;
+						buff[j] = UINT8(Clamp31(y[yPos++] + yuvOffset31) >> shift);
 					}
 					buff += pitch;
 
@@ -1997,9 +2221,10 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 					}
 				}
 			}
-			break;	
+			break;
 		}
-	case ImageModeRGB12: 
+#endif
+	case ImageModeRGB12:
 		{
 			ASSERT(m_header.channels == 3);
 			ASSERT(m_header.bpp == m_header.channels*4);
@@ -2020,13 +2245,13 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 					vAvg = v[yPos];
 					yval = Clamp4(y[yPos++] + YUVoffset4 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
 					if (j%2 == 0) {
-						buff[cnt] = Clamp4(vAvg + yval) | (yval << 4);
+						buff[cnt] = UINT8(Clamp4(vAvg + yval) | (yval << 4));
 						cnt++;
 						buff[cnt] = Clamp4(uAvg + yval);
 					} else {
 						buff[cnt] |= Clamp4(vAvg + yval) << 4;
 						cnt++;
-						buff[cnt] = yval | (Clamp4(uAvg + yval) << 4);
+						buff[cnt] = UINT8(yval | (Clamp4(uAvg + yval) << 4));
 						cnt++;
 					}
 				}
@@ -2039,7 +2264,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			}
 			break;
 		}
-	case ImageModeRGB16: 
+	case ImageModeRGB16:
 		{
 			ASSERT(m_header.channels == 3);
 			ASSERT(m_header.bpp == 16);
@@ -2097,7 +2322,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 		delete[] buffStart;
 	}
 #endif
-}			
+}
 
 //////////////////////////////////////////////////////////////////////
 /// Get YUV image data in interleaved format: (ordering is YUV[A])
@@ -2118,12 +2343,11 @@ void CPGFImage::GetYUV(int pitch, DataT* buff, BYTE bpp, int channelMap[] /*= NU
 	const UINT32 w = m_width[0];
 	const UINT32 h = m_height[0];
 	const bool wOdd = (1 == w%2);
-	const int bits = m_header.bpp/m_header.channels;
-	const int dataBits = sizeof(DataT)*8; ASSERT(dataBits == 16 || dataBits == 32);
-	const int pitch2 = pitch/sizeof(DataT);
+	const int dataBits = DataTSize*8; ASSERT(dataBits == 16 || dataBits == 32);
+	const int pitch2 = pitch/DataTSize;
 	const int yuvOffset = (dataBits == 16) ? YUVoffset8 : YUVoffset16;
 	const double dP = 1.0/h;
-	
+
 	int defMap[] = { 0, 1, 2, 3, 4, 5, 6, 7 }; ASSERT(sizeof(defMap)/sizeof(defMap[0]) == MaxChannels);
 	if (channelMap == NULL) channelMap = defMap;
 	int sampledPos = 0, yPos = 0;
@@ -2131,8 +2355,7 @@ void CPGFImage::GetYUV(int pitch, DataT* buff, BYTE bpp, int channelMap[] /*= NU
 	double percent = 0;
 	UINT32 i, j;
 
-	if (m_header.channels == 3) { 
-		ASSERT(m_header.bpp == m_header.channels*bits);
+	if (m_header.channels == 3) {
 		ASSERT(bpp%dataBits == 0);
 
 		DataT* y = m_channel[0]; ASSERT(y);
@@ -2155,7 +2378,7 @@ void CPGFImage::GetYUV(int pitch, DataT* buff, BYTE bpp, int channelMap[] /*= NU
 				buff[cnt + channelMap[0]] = y[yPos];
 				buff[cnt + channelMap[1]] = uAvg;
 				buff[cnt + channelMap[2]] = vAvg;
-				yPos++; 
+				yPos++;
 				cnt += channels;
 				if (j%2) sampledPos++;
 			}
@@ -2197,7 +2420,7 @@ void CPGFImage::GetYUV(int pitch, DataT* buff, BYTE bpp, int channelMap[] /*= NU
 				buff[cnt + channelMap[1]] = uAvg;
 				buff[cnt + channelMap[2]] = vAvg;
 				buff[cnt + channelMap[3]] = aAvg;
-				yPos++; 
+				yPos++;
 				cnt += channels;
 				if (j%2) sampledPos++;
 			}
@@ -2229,9 +2452,8 @@ void CPGFImage::GetYUV(int pitch, DataT* buff, BYTE bpp, int channelMap[] /*= NU
 void CPGFImage::ImportYUV(int pitch, DataT *buff, BYTE bpp, int channelMap[] /*= NULL*/, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) THROW_ {
 	ASSERT(buff);
 	const double dP = 1.0/m_header.height;
-	const int bits = m_header.bpp/m_header.channels;
-	const int dataBits = sizeof(DataT)*8; ASSERT(dataBits == 16 || dataBits == 32);
-	const int pitch2 = pitch/sizeof(DataT);
+	const int dataBits = DataTSize*8; ASSERT(dataBits == 16 || dataBits == 32);
+	const int pitch2 = pitch/DataTSize;
 	const int yuvOffset = (dataBits == 16) ? YUVoffset8 : YUVoffset16;
 
 	int yPos = 0, cnt = 0;
@@ -2241,7 +2463,6 @@ void CPGFImage::ImportYUV(int pitch, DataT *buff, BYTE bpp, int channelMap[] /*=
 	if (channelMap == NULL) channelMap = defMap;
 
 	if (m_header.channels == 3)	{
-		ASSERT(m_header.bpp == m_header.channels*bits);
 		ASSERT(bpp%dataBits == 0);
 
 		DataT* y = m_channel[0]; ASSERT(y);
@@ -2264,9 +2485,8 @@ void CPGFImage::ImportYUV(int pitch, DataT *buff, BYTE bpp, int channelMap[] /*=
 				cnt += channels;
 			}
 			buff += pitch2;
-		}	
+		}
 	} else if (m_header.channels == 4) {
-		ASSERT(m_header.bpp == m_header.channels*bits);
 		ASSERT(bpp%dataBits == 0);
 
 		DataT* y = m_channel[0]; ASSERT(y);
@@ -2291,7 +2511,7 @@ void CPGFImage::ImportYUV(int pitch, DataT *buff, BYTE bpp, int channelMap[] /*=
 				cnt += channels;
 			}
 			buff += pitch2;
-		}	
+		}
 	}
 
 	if (m_downsample) {

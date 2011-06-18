@@ -1,27 +1,33 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2007-02-03 13:04:21 +0100 (Sa, 03 Feb 2007) $
  * $Revision: 280 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+//////////////////////////////////////////////////////////////////////
+/// @file Encoder.cpp
+/// @brief PGF encoder class implementation
+/// @author C. Stamm, R. Spuler
+
 #include "Encoder.h"
+
 #ifdef TRACE
 	#include <stdio.h>
 #endif
@@ -47,7 +53,7 @@
 //                m_codeBuffer  (for each plane: RLcodeLength (16 bit), RLcoded sigBits + m_sign, refBits)
 //                      |
 //                    file      (for each buffer: packedLength (16 bit), packed bits)
-//  
+//
 
 // Constants
 #define CodeBufferBitLen		(BufferSize*WordWidth)		// max number of bits in m_codeBuffer
@@ -56,13 +62,15 @@
 //////////////////////////////////////////////////////
 // Constructor
 // Write pre-header, header, postHeader, and levelLength.
-// Throws IOException
+// It might throw an IOException.
 // preHeader and header must not be references, because on BigEndian platforms they are modified
-CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header, const PGFPostHeader& postHeader, UINT32*& levelLength) THROW_
+CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header, const PGFPostHeader& postHeader, UINT32*& levelLength, bool useOMP /*= true*/) THROW_
 : m_stream(stream)
 , m_startPosition(0)
-, m_valuePos(0)
-, m_maxAbsValue(0)
+, m_currLevelIndex(0)
+, m_favorSpeed(false)
+, m_forceWriting(false)
+, m_nLevels(header.nLevels)
 #ifdef __PGFROISUPPORT__
 , m_roi(false)
 #endif
@@ -70,6 +78,28 @@ CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header,
 	ASSERT(m_stream);
 
 	int count;
+
+	// set number of threads
+#ifdef LIBPGF_USE_OPENMP
+	m_macroBlockLen = omp_get_num_procs();
+#else
+	m_macroBlockLen = 1;
+#endif
+
+	if (useOMP && m_macroBlockLen > 1) {
+#ifdef LIBPGF_USE_OPENMP
+		omp_set_num_threads(m_macroBlockLen);
+#endif
+
+		// create macro block array
+		m_macroBlocks = new CMacroBlock*[m_macroBlockLen];
+		for (int i=0; i < m_macroBlockLen; i++) m_macroBlocks[i] = new CMacroBlock(this);
+		m_lastMacroBlock = 0;
+		m_currentBlock = m_macroBlocks[m_lastMacroBlock++];
+	} else {
+		m_macroBlocks = 0;
+		m_currentBlock = new CMacroBlock(this);
+	}
 
 	// save file position
 	m_startPosition = m_stream->GetPos();
@@ -97,28 +127,27 @@ CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header,
 		m_stream->Write(&count, postHeader.userData);
 	}
 
-	m_currLevelIndex = 0;
-	m_isLevelEncoded = false;
-
 	// renew levelLength
 	delete[] levelLength;
-	levelLength = new UINT32[header.nLevels];
+	levelLength = new UINT32[m_nLevels];
 	if (!levelLength) ReturnWithError(InsufficientMemory);
-	for (UINT8 l = 0; l < header.nLevels; l++) levelLength[l] = 0;
+	for (UINT8 l = 0; l < m_nLevels; l++) levelLength[l] = 0;
 	m_levelLength = levelLength;
 
 	// write dummy levelLength
 	m_levelLengthPos = m_stream->GetPos();
-	count = header.nLevels*WordBytes;
+	count = m_nLevels*WordBytes;
 	m_stream->Write(&count, m_levelLength);
 
 	// save current file position
-	m_currPosition = m_stream->GetPos();
+	SetBufferStartPos();
 }
 
 //////////////////////////////////////////////////////
 // Destructor
-CEncoder::~CEncoder() {	
+CEncoder::~CEncoder() {
+	delete m_currentBlock;
+	delete[] m_macroBlocks;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -138,17 +167,16 @@ void CEncoder::Partition(CSubband* band, int width, int height, int startPos, in
 	const div_t ww = div(width, LinBlockSize);
 	const int ws = pitch - LinBlockSize;
 	const int wr = pitch - ww.rem;
-	int x, y, i, j;
 	int pos, base = startPos, base2;
 
 	// main height
-	for (i=0; i < hh.quot; i++) {
+	for (int i=0; i < hh.quot; i++) {
 		// main width
 		base2 = base;
-		for (j=0; j < ww.quot; j++) {
+		for (int j=0; j < ww.quot; j++) {
 			pos = base2;
-			for (y=0; y < LinBlockSize; y++) {
-				for (x=0; x < LinBlockSize; x++) {
+			for (int y=0; y < LinBlockSize; y++) {
+				for (int x=0; x < LinBlockSize; x++) {
 					WriteValue(band, pos);
 					pos++;
 				}
@@ -158,8 +186,8 @@ void CEncoder::Partition(CSubband* band, int width, int height, int startPos, in
 		}
 		// rest of width
 		pos = base2;
-		for (y=0; y < LinBlockSize; y++) {
-			for (x=0; x < ww.rem; x++) {
+		for (int y=0; y < LinBlockSize; y++) {
+			for (int x=0; x < ww.rem; x++) {
 				WriteValue(band, pos);
 				pos++;
 			}
@@ -167,13 +195,13 @@ void CEncoder::Partition(CSubband* band, int width, int height, int startPos, in
 			base += pitch;
 		}
 	}
-	// main width 
+	// main width
 	base2 = base;
-	for (j=0; j < ww.quot; j++) {
+	for (int j=0; j < ww.quot; j++) {
 		// rest of height
 		pos = base2;
-		for (y=0; y < hh.rem; y++) {
-			for (x=0; x < LinBlockSize; x++) {
+		for (int y=0; y < hh.rem; y++) {
+			for (int x=0; x < LinBlockSize; x++) {
 				WriteValue(band, pos);
 				pos++;
 			}
@@ -183,9 +211,9 @@ void CEncoder::Partition(CSubband* band, int width, int height, int startPos, in
 	}
 	// rest of height
 	pos = base2;
-	for (y=0; y < hh.rem; y++) {
+	for (int y=0; y < hh.rem; y++) {
 		// rest of width
-		for (x=0; x < ww.rem; x++) {
+		for (int x=0; x < ww.rem; x++) {
 			WriteValue(band, pos);
 			pos++;
 		}
@@ -194,48 +222,43 @@ void CEncoder::Partition(CSubband* band, int width, int height, int startPos, in
 }
 
 //////////////////////////////////////////////////////
-// Pad buffer with zeros, encode buffer, write levelLength into header
-// Return number of bytes written into stream
-// Throws IOException
-UINT32 CEncoder::Flush() THROW_ {
-	UINT32 retValue;
-
-#ifdef __PGFROISUPPORT__
-	if (!m_roi) {
-#endif
-		// pad buffer with zeros
-		while (m_valuePos < BufferSize) {
-			m_value[m_valuePos] = 0; 
-			m_valuePos++;
-		}
-#ifdef __PGFROISUPPORT__
-	}
-#endif
+/// Pad buffer with zeros and encode buffer.
+/// It might throw an IOException.
+void CEncoder::Flush() THROW_ {
+	// pad buffer with zeros
+	memset(&(m_currentBlock->m_value[m_currentBlock->m_valuePos]), 0, (BufferSize - m_currentBlock->m_valuePos)*DataTSize);
+	m_currentBlock->m_valuePos = BufferSize;
 
 	// encode buffer
-	EncodeBuffer(ROIBlockHeader(m_valuePos, true));
+	m_forceWriting = true;	// makes sure that the following EncodeBuffer is really written into the stream
+	EncodeBuffer(ROIBlockHeader(m_currentBlock->m_valuePos, true));
+}
 
-	retValue = UINT32(m_stream->GetPos() - m_startPosition);
+//////////////////////////////////////////////////////
+/// Write levelLength into header.
+/// @return number of bytes written into stream
+/// It might throw an IOException.
+UINT32 CEncoder::WriteLevelLength() THROW_ {
+	UINT64 curPos = m_stream->GetPos();
+	UINT32 retValue = UINT32(curPos - m_startPosition);
 
 	if (m_levelLength) {
 		// append levelLength to file, directly after post-header
-		UINT64 curPos = m_stream->GetPos();
-
 		// set file pos to levelLength
 		m_stream->SetPos(FSFromStart, m_levelLengthPos);
-#ifdef PGF_USE_BIG_ENDIAN 
+	#ifdef PGF_USE_BIG_ENDIAN
 		UINT32 levelLength;
 		int count = WordBytes;
-		
+
 		for (int i=0; i < m_currLevelIndex; i++) {
 			levelLength = __VAL(UINT32(m_levelLength[i]));
 			m_stream->Write(&count, &levelLength);
 		}
-#else
+	#else
 		int count = m_currLevelIndex*WordBytes;
-		
+
 		m_stream->Write(&count, m_levelLength);
-#endif //PGF_USE_BIG_ENDIAN 
+	#endif //PGF_USE_BIG_ENDIAN
 
 		// restore file position
 		m_stream->SetPos(FSFromStart, curPos);
@@ -247,48 +270,43 @@ UINT32 CEncoder::Flush() THROW_ {
 /////////////////////////////////////////////////////////////////////
 // Stores band value from given position bandPos into buffer m_value at position m_valuePos
 // If buffer is full encode it to file
-// Throws IOException
+// It might throw an IOException.
 void CEncoder::WriteValue(CSubband* band, int bandPos) THROW_ {
-	if (m_valuePos == BufferSize) {
+	if (m_currentBlock->m_valuePos == BufferSize) {
 		EncodeBuffer(ROIBlockHeader(BufferSize, false));
 	}
-	m_value[m_valuePos] = band->GetData(bandPos);
-	UINT32 v = abs(m_value[m_valuePos]);
-	if (v > m_maxAbsValue) m_maxAbsValue = v;
-	m_valuePos++;
+	DataT val = m_currentBlock->m_value[m_currentBlock->m_valuePos++] = band->GetData(bandPos);
+	UINT32 v = abs(val);
+	if (v > m_currentBlock->m_maxAbsValue) m_currentBlock->m_maxAbsValue = v;
 }
 
-///////////////////////////////////////////////////////
-// Encode buffer and write data into stream.
-// h contains buffer size and flag indicating end of tile.
-// Encoding scheme: <wordLen>(16 bits) [ ROI ] data
-//		ROI	  ::= <bufferSize>(15 bits) <eofTile>(1 bit)
-// Throws IOException
-void CEncoder::EncodeBuffer(ROIBlockHeader h) THROW_ {
-#ifdef __PGFROISUPPORT__
-	ASSERT(m_roi && h.bufferSize <= BufferSize || h.bufferSize == BufferSize);
-#else
-	ASSERT(h.bufferSize == BufferSize);
-#endif
+/////////////////////////////////////////////////////////////////////
+// Write encoded macro block into stream.
+// It might throw an IOException.
+void CEncoder::WriteMacroBlock(CMacroBlock* block) THROW_ {
+	ASSERT(block);
 
-	UINT32 codeLen = BitplaneEncode(h.bufferSize);
-	UINT16 wordLen = UINT16(AlignWordPos(codeLen)/WordWidth);
-	ASSERT(wordLen <= BufferSize);
-	
+	ROIBlockHeader h = block->m_header;
+	UINT16 wordLen = UINT16(NumberOfWords(block->m_codePos)); ASSERT(wordLen <= BufferSize);
 	int count = sizeof(UINT16);
 
-#ifdef PGF_USE_BIG_ENDIAN 
-	// write wordLen
-	UINT16 wordLen2 = __VAL(wordLen);
-	m_stream->Write(&count, &wordLen2);
+#ifdef TRACE
+	//UINT32 filePos = (UINT32)m_stream->GetPos();
+	//printf("EncodeBuffer: %d\n", filePos);
+#endif
 
-	#ifdef __PGFROISUPPORT__
-		// write ROIBlockHeader
-		if (m_roi) {
-			h.val = __VAL(h.val);
-			m_stream->Write(&count, &h.val); ASSERT(count == sizeof(UINT16));
-		}
-	#endif // __PGFROISUPPORT__
+#ifdef PGF_USE_BIG_ENDIAN
+	// write wordLen
+	UINT16 wl = __VAL(wordLen);
+	m_stream->Write(&count, &wl); ASSERT(count == sizeof(UINT16));
+
+#ifdef __PGFROISUPPORT__
+	// write ROIBlockHeader
+	if (m_roi) {
+		h.val = __VAL(h.val);
+		m_stream->Write(&count, &h.val); ASSERT(count == sizeof(UINT16));
+	}
+#endif // __PGFROISUPPORT__
 
 	// convert data
 	for (int i=0; i < wordLen; i++) {
@@ -298,262 +316,363 @@ void CEncoder::EncodeBuffer(ROIBlockHeader h) THROW_ {
 	// write wordLen
 	m_stream->Write(&count, &wordLen); ASSERT(count == sizeof(UINT16));
 
-	#ifdef __PGFROISUPPORT__
-		// write ROIBlockHeader
-		if (m_roi) {
-			m_stream->Write(&count, &h.val); ASSERT(count == sizeof(UINT16));
-		}
-	#endif // __PGFROISUPPORT__
-#endif // PGF_USE_BIG_ENDIAN 
+#ifdef __PGFROISUPPORT__
+	// write ROIBlockHeader
+	if (m_roi) {
+		m_stream->Write(&count, &h.val); ASSERT(count == sizeof(UINT16));
+	}
+#endif // __PGFROISUPPORT__
+#endif // PGF_USE_BIG_ENDIAN
 
-	// write data
+	// write encoded data into stream
 	count = wordLen*WordBytes;
-	m_stream->Write(&count, m_codeBuffer);
+	m_stream->Write(&count, block->m_codeBuffer);
 
 	// store levelLength
-	if (m_levelLength && m_isLevelEncoded) {
-		m_isLevelEncoded = false;
-		UINT64 streamPos = m_stream->GetPos();
-		ASSERT(streamPos - m_currPosition <= UINT_MAX);
-		m_levelLength[m_currLevelIndex++] = UINT32(streamPos - m_currPosition);
-		m_currPosition = streamPos;
+	if (m_levelLength) {
+		// store level length
+		// EncodeBuffer has been called after m_lastLevelIndex has been updated
+		m_levelLength[m_currLevelIndex] += ComputeBufferLength();
+		m_currLevelIndex = block->m_lastLevelIndex + 1;
+
 	}
 
+	// prepare for next buffer
+	SetBufferStartPos();
+
 	// reset values
-	m_valuePos = 0;
-	m_maxAbsValue = 0;
+	block->m_valuePos = 0;
+	block->m_maxAbsValue = 0;
+}
+
+/////////////////////////////////////////////////////////////////////
+// Encode buffer and write data into stream.
+// h contains buffer size and flag indicating end of tile.
+// Encoding scheme: <wordLen>(16 bits) [ ROI ] data
+//		ROI	  ::= <bufferSize>(15 bits) <eofTile>(1 bit)
+// It might throw an IOException.
+void CEncoder::EncodeBuffer(ROIBlockHeader h) THROW_ {
+	ASSERT(m_currentBlock);
+#ifdef __PGFROISUPPORT__
+	ASSERT(m_roi && h.rbh.bufferSize <= BufferSize || h.rbh.bufferSize == BufferSize);
+#else
+	ASSERT(h.rbh.bufferSize == BufferSize);
+#endif
+	m_currentBlock->m_header = h;
+
+	// macro block management
+	if (m_macroBlockLen == 1) {
+		m_currentBlock->BitplaneEncode();
+		WriteMacroBlock(m_currentBlock);
+	} else {
+		// save last level index
+		int lastLevelIndex = m_currentBlock->m_lastLevelIndex;
+
+		if (m_forceWriting || m_lastMacroBlock == m_macroBlockLen) {
+			// encode macro blocks
+			/*
+			volatile OSError error = NoError;
+			#pragma omp parallel for ordered default(shared)
+			for (int i=0; i < m_lastMacroBlock; i++) {
+				if (error == NoError) {
+					m_macroBlocks[i]->BitplaneEncode();
+					#pragma omp ordered
+					{
+						try {
+							WriteMacroBlock(m_macroBlocks[i]);
+						} catch (IOException& e) {
+							error = e.error;
+						}
+						delete m_macroBlocks[i]; m_macroBlocks[i] = 0;
+					}
+				}
+			}
+			if (error != NoError) ReturnWithError(error);
+			*/
+			#pragma omp parallel for default(shared) //no declared exceptions in next block
+			for (int i=0; i < m_lastMacroBlock; i++) {
+				m_macroBlocks[i]->BitplaneEncode();
+			}
+			for (int i=0; i < m_lastMacroBlock; i++) {
+				WriteMacroBlock(m_macroBlocks[i]);
+			}
+
+			// prepare for next round
+			m_forceWriting = false;
+			m_lastMacroBlock = 0;
+		}
+		// re-initialize macro block
+		m_currentBlock = m_macroBlocks[m_lastMacroBlock++];
+		m_currentBlock->Init(lastLevelIndex);
+	}
 }
 
 ////////////////////////////////////////////////////////
 // Encode buffer of given size using bit plane coding.
 // A buffer contains bufferLen UINT32 values, thus, bufferSize bits per bit plane.
-// Following coding scheme is used: 
-//		Buffer		::= <nPlanes>(5 bits) foreach(plane i): Plane[i]  
+// Following coding scheme is used:
+//		Buffer		::= <nPlanes>(5 bits) foreach(plane i): Plane[i]
 //		Plane[i]	::= [ Sig1 | Sig2 ] [DWORD alignment] refBits
-//		Sig1		::= 1 <codeLen>(15 bits) codedSigAndSignBits 
-//		Sig2		::= 0 <sigLen>(15 bits) [Sign1 | Sign2 ] sigBits 
+//		Sig1		::= 1 <codeLen>(15 bits) codedSigAndSignBits
+//		Sig2		::= 0 <sigLen>(15 bits) [Sign1 | Sign2 ] sigBits
 //		Sign1		::= 1 <codeLen>(15 bits) [DWORD alignment] codedSignBits
 //		Sign2		::= 0 <signLen>(15 bits) [DWORD alignment] signBits
-// returns number of bits in m_codeBuffer
-UINT32 CEncoder::BitplaneEncode(UINT32 bufferSize) {
-	ASSERT(bufferSize <= BufferSize);
-	const UINT32 bufferLen = AlignWordPos(bufferSize)/WordWidth;
-
+void CEncoder::CMacroBlock::BitplaneEncode() {
 	UINT8	nPlanes;
-	UINT32	sigLen, codeLen = 0, codePos = 0, wordPos, refLen, signLen, k;
-	int     plane;
-	UINT32  sigBits[BufferLen];
-	UINT32  refBits[BufferLen];
-	UINT32  signBits[BufferLen];
+	UINT32	sigLen, codeLen = 0, wordPos, refLen, signLen;
+	UINT32  sigBits[BufferLen] = { 0 };
+	UINT32  refBits[BufferLen] = { 0 };
+	UINT32  signBits[BufferLen] = { 0 };
 	UINT32  planeMask;
+	UINT32	bufferSize = m_header.rbh.bufferSize; ASSERT(bufferSize <= BufferSize);
 	bool	useRL;
+	//const UINT32 bufferLen = NumberOfWords(m_bufferSize);
+
+#ifdef TRACE
+	//printf("which thread: %d\n", omp_get_thread_num());
+#endif
 
 	// clear significance vector
-	for (k=0; k < bufferLen; k++) {
-		m_sigFlagVector[k] = 0;
+	for (UINT32 k=0; k < bufferSize; k++) {
+		m_sigFlagVector[k] = false;
 	}
+	m_sigFlagVector[bufferSize] = true; // sentinel
+
+	// clear output buffer
+	for (UINT32 k=0; k < bufferSize; k++) {
+		m_codeBuffer[k] = 0;
+	}
+	m_codePos = 0;
 
 	// compute number of bit planes and split buffer into separate bit planes
 	nPlanes = NumberOfBitplanes();
 
 	// write number of bit planes to m_codeBuffer
 	SetValueBlock(m_codeBuffer, 0, nPlanes, MaxBitPlanesLog);
-	codePos += MaxBitPlanesLog;
+	m_codePos += MaxBitPlanesLog;
 
 	// loop through all bit planes
 	if (nPlanes == 0) nPlanes = MaxBitPlanes + 1;
 	planeMask = 1 << (nPlanes - 1);
 
-	for (plane = nPlanes - 1; plane >= 0; plane--) {
+	for (int plane = nPlanes - 1; plane >= 0; plane--) {
 		// clear significant bitset
-		for (k=0; k < bufferLen; k++) {
+		for (UINT32 k=0; k < BufferLen; k++) {
 			sigBits[k] = 0;
 		}
 
 		// split bitplane in significant bitset and refinement bitset
-		sigLen = DecomposeBitplane(bufferSize, planeMask, sigBits, refBits, signBits, signLen);
+		sigLen = DecomposeBitplane(bufferSize, planeMask, m_codePos + RLblockSizeLen + 1, sigBits, refBits, signBits, signLen, codeLen);
 
-		if (sigLen > 0) {
-			useRL = true;
-			// run-length encode significant bits and signs and append them to the m_codeBuffer
-			m_codePos = codePos + RLblockSizeLen + 1; 
-			codeLen = RLESigsAndSigns(sigBits, sigLen, signBits, signLen);
-		} else {
-			useRL = false;
-		}
-
-		if (useRL && codeLen <= MaxCodeLen && codeLen < AlignWordPos(sigLen) + AlignWordPos(signLen) + 2*RLblockSizeLen) {
+		if (sigLen > 0 && codeLen <= MaxCodeLen && codeLen < AlignWordPos(sigLen) + AlignWordPos(signLen) + 2*RLblockSizeLen) {
 			// set RL code bit
-			SetBit(m_codeBuffer, codePos);
-			codePos++;
+			SetBit(m_codeBuffer, m_codePos++);
 
 			// write length codeLen to m_codeBuffer
-			SetValueBlock(m_codeBuffer, codePos, codeLen, RLblockSizeLen);
-			codePos += RLblockSizeLen + codeLen;
+			SetValueBlock(m_codeBuffer, m_codePos, codeLen, RLblockSizeLen);
+			m_codePos += RLblockSizeLen + codeLen;
 		} else {
-			#ifdef TRACE
-			printf("new\n");
-			for (UINT32 i=0; i < bufferSize; i++) {
-				printf("%s", (GetBit(sigBits, i)) ? "1" : "_");
-				if (i%120 == 119) printf("\n");
-			}
-			printf("\n");
-			#endif // TRACE
+		#ifdef TRACE
+			//printf("new\n");
+			//for (UINT32 i=0; i < bufferSize; i++) {
+			//	printf("%s", (GetBit(sigBits, i)) ? "1" : "_");
+			//	if (i%120 == 119) printf("\n");
+			//}
+			//printf("\n");
+		#endif // TRACE
 
 			// run-length coding wasn't efficient enough
 			// we don't use RL coding for sigBits
-			ClearBit(m_codeBuffer, codePos);
-			codePos++;
+			ClearBit(m_codeBuffer, m_codePos++);
 
 			// write length sigLen to m_codeBuffer
-			ASSERT(sigLen <= MaxCodeLen); 
-			SetValueBlock(m_codeBuffer, codePos, sigLen, RLblockSizeLen);
-			codePos += RLblockSizeLen;
+			ASSERT(sigLen <= MaxCodeLen);
+			SetValueBlock(m_codeBuffer, m_codePos, sigLen, RLblockSizeLen);
+			m_codePos += RLblockSizeLen;
 
-			// overwrite m_codeBuffer
-			if (signLen > 0) {
+			if (m_encoder->m_favorSpeed || signLen == 0) {
+				useRL = false;
+			} else {
+				// overwrite m_codeBuffer
 				useRL = true;
 				// run-length encode m_sign and append them to the m_codeBuffer
-				m_codePos = codePos + RLblockSizeLen + 1;
-				codeLen = RLESigns(signBits, signLen);
-			} else {
-				useRL = false;
+				codeLen = RLESigns(m_codePos + RLblockSizeLen + 1, signBits, signLen);
 			}
 
 			if (useRL && codeLen <= MaxCodeLen && codeLen < signLen) {
 				// RL encoding of m_sign was efficient
 				// write RL code bit
-				SetBit(m_codeBuffer, codePos);
-				codePos++;
-				
-				// write codeLen to m_codeBuffer
-				SetValueBlock(m_codeBuffer, codePos, codeLen, RLblockSizeLen);
+				SetBit(m_codeBuffer, m_codePos++);
 
-				// adjust code buffer position
-				codePos += codeLen + RLblockSizeLen;
-				codePos = AlignWordPos(codePos);
+				// write codeLen to m_codeBuffer
+				SetValueBlock(m_codeBuffer, m_codePos, codeLen, RLblockSizeLen);
 
 				// compute position of sigBits
-				wordPos = codePos >> WordWidthLog;
+				wordPos = NumberOfWords(m_codePos + codeLen + RLblockSizeLen);
 				ASSERT(0 <= wordPos && wordPos < BufferSize);
 			} else {
 				// RL encoding of signBits wasn't efficient
 				// clear RL code bit
-				ClearBit(m_codeBuffer, codePos);
-				codePos++;
+				ClearBit(m_codeBuffer, m_codePos++);
 
 				// write signLen to m_codeBuffer
-				ASSERT(signLen <= MaxCodeLen); 
-				SetValueBlock(m_codeBuffer, codePos, signLen, RLblockSizeLen);
-				codePos += RLblockSizeLen;
+				ASSERT(signLen <= MaxCodeLen);
+				SetValueBlock(m_codeBuffer, m_codePos, signLen, RLblockSizeLen);
 
 				// write signBits to m_codeBuffer
-				codePos = AlignWordPos(codePos);
-				wordPos = codePos >> WordWidthLog;
+				wordPos = NumberOfWords(m_codePos + RLblockSizeLen);
 				ASSERT(0 <= wordPos && wordPos < BufferSize);
-				codeLen = AlignWordPos(signLen) >> WordWidthLog;
+				codeLen = NumberOfWords(signLen);
 
-				for (k=0; k < codeLen; k++) {
-					m_codeBuffer[wordPos] = signBits[k];
-					wordPos++;
+				for (UINT32 k=0; k < codeLen; k++) {
+					m_codeBuffer[wordPos++] = signBits[k];
 				}
-				
+
 			}
 
 			// write sigBits
 			ASSERT(0 <= wordPos && wordPos < BufferSize);
-			refLen = AlignWordPos(sigLen) >> WordWidthLog;
+			refLen = NumberOfWords(sigLen);
 
-			for (k=0; k < refLen; k++) {
-				m_codeBuffer[wordPos] = sigBits[k];
-				wordPos++;
+			for (UINT32 k=0; k < refLen; k++) {
+				m_codeBuffer[wordPos++] = sigBits[k];
 			}
-			codePos = wordPos << WordWidthLog;
+			m_codePos = wordPos << WordWidthLog;
 		}
 
 		// append refinement bitset (aligned to word boundary)
-		codePos = AlignWordPos(codePos);
-		wordPos = codePos >> WordWidthLog;
+		wordPos = NumberOfWords(m_codePos);
 		ASSERT(0 <= wordPos && wordPos < BufferSize);
-		refLen = AlignWordPos(bufferSize - sigLen)/WordWidth;
+		refLen = NumberOfWords(bufferSize - sigLen);
 
-		for (k=0; k < refLen; k++) {
-			m_codeBuffer[wordPos] = refBits[k];
-			wordPos++;
+		for (UINT32 k=0; k < refLen; k++) {
+			m_codeBuffer[wordPos++] = refBits[k];
 		}
-		codePos = wordPos << WordWidthLog;
+		m_codePos = wordPos << WordWidthLog;
 		planeMask >>= 1;
 	}
-	ASSERT(0 <= codePos && codePos <= CodeBufferBitLen);
-	return codePos;
+	ASSERT(0 <= m_codePos && m_codePos <= CodeBufferBitLen);
 }
 
 //////////////////////////////////////////////////////////
 // Split bitplane of length bufferSize into significant and refinement bitset
 // returns length [bits] of significant bits
-// input:  m_value
-// output: sigBits, refBits, signBits, signLen [bits]
-UINT32 CEncoder::DecomposeBitplane(UINT32 bufferSize, UINT32 planeMask, UINT32* sigBits, UINT32* refBits, UINT32* signBits, UINT32& signLen) {
+// input:  bufferSize, planeMask, codePos
+// output: sigBits, refBits, signBits, signLen [bits], codeLen [bits]
+// RLE
+// - Encode run of 2^k zeros by a single 0.
+// - Encode run of count 0's followed by a 1 with codeword: 1<count>x
+// - x is 0: if a positive sign is stored, otherwise 1
+// - Store each bit in m_codeBuffer[codePos] and increment codePos.
+UINT32 CEncoder::CMacroBlock::DecomposeBitplane(UINT32 bufferSize, UINT32 planeMask, UINT32 codePos, UINT32* sigBits, UINT32* refBits, UINT32* signBits, UINT32& signLen, UINT32& codeLen) {
 	ASSERT(sigBits);
 	ASSERT(refBits);
 	ASSERT(signBits);
+	ASSERT(codePos < CodeBufferBitLen);
 
-	UINT32 sigRunLen;
 	UINT32 sigPos = 0;
 	UINT32 valuePos = 0, valueEnd;
 	UINT32 refPos = 0;
 
+	// set output value
 	signLen = 0;
 
-	while (valuePos < bufferSize) {
-		// search next 1 in m_sigFlagVector
-		sigRunLen = SeekBitRange(m_sigFlagVector, valuePos, bufferSize - valuePos);
+	// prepare RLE of Sigs and Signs
+	const UINT32 outStartPos = codePos;
+	UINT32 k = 3;
+	UINT32 runlen = 1 << k; // = 2^k
+	UINT32 count = 0;
 
-		// search 1's in m_value[plane][valuePos..valuePos+sigRunLen)
+	while (valuePos < bufferSize) {
+		// search next 1 in m_sigFlagVector using searching with sentinel
+		valueEnd = valuePos;
+		while(!m_sigFlagVector[valueEnd]) { valueEnd++; }
+
+		// search 1's in m_value[plane][valuePos..valueEnd)
 		// these 1's are significant bits
-		valueEnd = valuePos + sigRunLen;
 		while (valuePos < valueEnd) {
-			// search 0's
-			while (valuePos < valueEnd && !GetBitAtPos(valuePos, planeMask)) {
-				valuePos++;
+			if (GetBitAtPos(valuePos, planeMask)) {
+				// RLE encoding
+				// encode run of count 0's followed by a 1
+				// with codeword: 1<count>(signBits[signPos])
+				SetBit(m_codeBuffer, codePos++);
+				if (k > 0) {
+					SetValueBlock(m_codeBuffer, codePos, count, k);
+					codePos += k;
+
+					// adapt k (half the zero run-length)
+					k--;
+					runlen >>= 1;
+				}
+
+				// copy and write sign bit
+				if (m_value[valuePos] < 0) {
+					SetBit(signBits, signLen++);
+					SetBit(m_codeBuffer, codePos++);
+				} else {
+					ClearBit(signBits, signLen++);
+					ClearBit(m_codeBuffer, codePos++);
+				}
+
+				// write a 1 to sigBits
+				SetBit(sigBits, sigPos++);
+
+				// update m_sigFlagVector
+				m_sigFlagVector[valuePos] = true;
+
+				// prepare for next run
+				count = 0;
+			} else {
+				// RLE encoding
+				count++;
+				if (count == runlen) {
+					// encode run of 2^k zeros by a single 0
+					ClearBit(m_codeBuffer, codePos++);
+					// adapt k (double the zero run-length)
+					if (k < WordWidth) {
+						k++;
+						runlen <<= 1;
+					}
+
+					// prepare for next run
+					count = 0;
+				}
+
 				// write 0 to sigBits
 				sigPos++;
 			}
-			if (valuePos < valueEnd) {
-				// write a 1 to sigBits
-				SetBit(sigBits, sigPos); 
-				sigPos++;
-
-				// copy the sign bit
-				if (m_value[valuePos] < 0) {
-					SetBit(signBits, signLen);
-				} else {
-					ClearBit(signBits, signLen);
-				}
-				signLen++;
-
-				// update m_sigFlagVector
-				SetBit(m_sigFlagVector, valuePos);
-				valuePos++;
-			}
+			valuePos++;
 		}
 		// refinement bit
 		if (valuePos < bufferSize) {
 			// write one refinement bit
-			if (GetBitAtPos(valuePos, planeMask)) {
+			if (GetBitAtPos(valuePos++, planeMask)) {
 				SetBit(refBits, refPos);
 			} else {
 				ClearBit(refBits, refPos);
 			}
 			refPos++;
-			valuePos++;
 		}
 	}
+	// RLE encoding of the rest of the plane
+	// encode run of count 0's followed by a 1
+	// with codeword: 1<count>(signBits[signPos])
+	SetBit(m_codeBuffer, codePos++);
+	if (k > 0) {
+		SetValueBlock(m_codeBuffer, codePos, count, k);
+		codePos += k;
+	}
+	// write dmmy sign bit
+	SetBit(m_codeBuffer, codePos++);
+
+	// write word filler zeros
 
 	ASSERT(sigPos <= bufferSize);
 	ASSERT(refPos <= bufferSize);
 	ASSERT(signLen <= bufferSize);
 	ASSERT(valuePos == bufferSize);
+	ASSERT(codePos >= outStartPos && codePos < CodeBufferBitLen);
+	codeLen = codePos - outStartPos;
 
 	return sigPos;
 }
@@ -561,7 +680,7 @@ UINT32 CEncoder::DecomposeBitplane(UINT32 bufferSize, UINT32 planeMask, UINT32* 
 
 ///////////////////////////////////////////////////////
 // Compute number of bit planes needed
-UINT8 CEncoder::NumberOfBitplanes() {
+UINT8 CEncoder::CMacroBlock::NumberOfBitplanes() {
 	UINT8 cnt = 0;
 
 	// determine number of bitplanes for max value
@@ -579,84 +698,18 @@ UINT8 CEncoder::NumberOfBitplanes() {
 	}
 }
 
-////////////////////////////////////////////////////////
-// Adaptive run-Length encoder for significant bits with a lot of zeros and sign bits.
-// sigLen and signLen are in bits
-// Returns length of output in bits.
-// - Encode run of 2^k zeros by a single 0.
-// - Encode run of count 0's followed by a 1 with codeword: 1<count>x
-// - x is 0: if a positive sign is stored, otherwise 1
-// - Store each bit in m_codeBuffer[m_codePos] and increment m_codePos.
-UINT32 CEncoder::RLESigsAndSigns(UINT32* sigBits, UINT32 sigLen, UINT32* signBits, UINT32 signLen) {
-	ASSERT(sigBits);
-	ASSERT(signBits);
-	ASSERT(m_codePos < CodeBufferBitLen);
-	ASSERT(0 < sigLen && sigLen <= BufferSize);
-	ASSERT(signLen <= BufferSize);
-
-	const UINT32 outStartPos = m_codePos;
-
-	UINT32 k = 3;
-	UINT32 runlen = 1 << k; // = 2^k
-	UINT32 count = 0;
-	UINT32 sigPos = 0, signPos = 0;
-
-	while (sigPos < sigLen) {
-		// search next 1 in sigBits starting at position sigPos
-		count = SeekBitRange(sigBits, sigPos, __min(runlen, sigLen - sigPos));
-		// count 0's found
-		if (count == runlen) {
-			// encode run of 2^k zeros by a single 0
-			sigPos += count; 
-			ClearBit(m_codeBuffer, m_codePos); m_codePos++;
-			// adapt k (double the zero run-length)
-			if (k < WordWidth) {
-				k++;
-				runlen <<= 1;
-			}
-		} else {
-			// encode run of count 0's followed by a 1
-			// with codeword: 1<count>(signBits[signPos])
-			sigPos += count + 1;
-			SetBit(m_codeBuffer, m_codePos); 
-			m_codePos++;
-			if (k > 0) {
-				SetValueBlock(m_codeBuffer, m_codePos, count, k);
-				m_codePos += k;
-			}
-			// sign bit
-			if (GetBit(signBits, signPos)) {
-				SetBit(m_codeBuffer, m_codePos);
-			} else {
-				ClearBit(m_codeBuffer, m_codePos);
-			}
-			signPos++; m_codePos++;
-
-			// adapt k (half the zero run-length)
-			if (k > 0) {
-				k--; 
-				runlen >>= 1;
-			}
-		}
-	}
-	ASSERT(sigPos == sigLen || sigPos == sigLen + 1);
-	ASSERT(signPos == signLen || signPos == signLen + 1);
-	ASSERT(m_codePos >= outStartPos && m_codePos < CodeBufferBitLen);
-	return m_codePos - outStartPos;
-}
-
 //////////////////////////////////////////////////////
 // Adaptive Run-Length encoder for long sequences of ones.
 // Returns length of output in bits.
 // - Encode run of 2^k ones by a single 1.
 // - Encode run of count 1's followed by a 0 with codeword: 0<count>.
-// - Store each bit in m_codeBuffer[m_codePos] and increment m_codePos.
-UINT32 CEncoder::RLESigns(UINT32* signBits, UINT32 signLen) {
+// - Store each bit in m_codeBuffer[codePos] and increment codePos.
+UINT32 CEncoder::CMacroBlock::RLESigns(UINT32 codePos, UINT32* signBits, UINT32 signLen) {
 	ASSERT(signBits);
-	ASSERT(0 <= m_codePos && m_codePos < CodeBufferBitLen);
+	ASSERT(0 <= codePos && codePos < CodeBufferBitLen);
 	ASSERT(0 < signLen && signLen <= BufferSize);
-	
-	const UINT32  outStartPos = m_codePos;
+
+	const UINT32  outStartPos = codePos;
 	UINT32 k = 0;
 	UINT32 runlen = 1 << k; // = 2^k
 	UINT32 count = 0;
@@ -668,42 +721,42 @@ UINT32 CEncoder::RLESigns(UINT32* signBits, UINT32 signLen) {
 		// count 1's found
 		if (count == runlen) {
 			// encode run of 2^k ones by a single 1
-			signPos += count; 
-			SetBit(m_codeBuffer, m_codePos); m_codePos++;
+			signPos += count;
+			SetBit(m_codeBuffer, codePos++);
 			// adapt k (double the 1's run-length)
 			if (k < WordWidth) {
-				k++; 
+				k++;
 				runlen <<= 1;
 			}
 		} else {
 			// encode run of count 1's followed by a 0
 			// with codeword: 0(count)
 			signPos += count + 1;
-			ClearBit(m_codeBuffer, m_codePos); m_codePos++;
+			ClearBit(m_codeBuffer, codePos++);
 			if (k > 0) {
-				SetValueBlock(m_codeBuffer, m_codePos, count, k);
-				m_codePos += k;
+				SetValueBlock(m_codeBuffer, codePos, count, k);
+				codePos += k;
 			}
 			// adapt k (half the 1's run-length)
 			if (k > 0) {
-				k--; 
+				k--;
 				runlen >>= 1;
 			}
 		}
 	}
 	ASSERT(signPos == signLen || signPos == signLen + 1);
-	ASSERT(m_codePos >= outStartPos && m_codePos < CodeBufferBitLen);
-	return m_codePos - outStartPos;
+	ASSERT(codePos >= outStartPos && codePos < CodeBufferBitLen);
+	return codePos - outStartPos;
 }
 
 //////////////////////////////////////////////////////
 #ifdef TRACE
 void CEncoder::DumpBuffer() const {
-	printf("\nDump\n");
-	for (UINT32 i=0; i < BufferSize; i++) {
-		printf("%d", m_value[i]);
-	}
-	printf("\n");
+	//printf("\nDump\n");
+	//for (UINT32 i=0; i < BufferSize; i++) {
+	//	printf("%d", m_value[i]);
+	//}
+	//printf("\n");
 }
 #endif //TRACE
 

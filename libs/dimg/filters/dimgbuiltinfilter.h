@@ -6,7 +6,7 @@
  * Date        : 2010-11-10
  * Description : basic filter management for DImg builtin methods
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -52,19 +52,23 @@ public:
         Rotate270,
         FlipHorizontally,
         FlipVertically,
-        Crop, /// Argument: QRect
-        Resize, /// Argument: QSize
+        Crop,             /// Argument: QRect
+        Resize,           /// Argument: QSize
         ConvertTo8Bit,
         ConvertTo16Bit
     };
 
+public:
+
     /// Create a filter performing no operation
     DImgBuiltinFilter();
+
     /**
      * Create a filter for the given action. If the action is not supported,
      * the filter will perform no operation.
      */
     DImgBuiltinFilter(const FilterAction& action);
+
     /**
      * Create a filter of the given type.
      * See documentation of Type for required arguments.
@@ -92,12 +96,13 @@ public:
 
 
     /**
-     * Note: The following methods are also accessed by the more general
+     * NOTE: The following methods are also accessed by the more general
      * DImgFilterManager methods, so you usually do not need to call these directly.
      */
 
     /// Returns the FilterAction describing this filter.
     FilterAction filterAction() const;
+
     /// Returns a displayableName for this filter
     QString displayableName() const;
     QString i18nDisplayableName() const;
@@ -113,8 +118,10 @@ public:
     static QString filterIcon(const QString& filterIdentifier);
 
     static QStringList supportedFilters();
+
     /// Returns a list of supported versions of the given filter
     static QList<int> supportedVersions(const QString& filterIdentifier);
+
     /// Returns if the given filter and version are supported by DImgBuiltinFilter
     static bool isSupported(const QString& filterIdentifier);
     static bool isSupported(const QString& filterIdentifier, int version);
@@ -123,7 +130,6 @@ protected:
 
     Type     m_type;
     QVariant m_arg;
-
 };
 
 } // namespace Digikam

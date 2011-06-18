@@ -1,25 +1,30 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2007-06-11 10:56:17 +0200 (Mo, 11 Jun 2007) $
  * $Revision: 299 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
+//////////////////////////////////////////////////////////////////////
+/// @file PGFtypes.h
+/// @brief PGF definitions
+/// @author C. Stamm
 
 #ifndef PGF_PGFTYPES_H
 #define PGF_PGFTYPES_H
@@ -40,7 +45,7 @@
 // Version 6:	modified data structure PGFPreHeader: hSize (header size) is now a UINT32 instead of a UINT16 (backward compatibility assured)
 //
 //-------------------------------------------------------------------------------
-#define PGFCodecVersion		"6.09.44"			// Major number
+#define PGFCodecVersion		"6.11.24"			// Major number
 												// Minor number: Year (2) Week (2)
 
 //-------------------------------------------------------------------------------
@@ -56,27 +61,27 @@
 // version flags
 #define Version2			2					// data structure PGFHeader of major version 2
 #ifdef __PGF32SUPPORT__
-#define PGF32				4					// 32 bit values are used -> allows at maximum 31 bits
+	#define PGF32			4					// 32 bit values are used -> allows at maximum 31 bits
 #else
-#define PGF32				0					// 16 bit values are used -> allows at maximum 15 bits
+	#define PGF32			0					// 16 bit values are used -> allows at maximum 15 bits
 #endif
 #define PGFROI				8					// supports Regions Of Interest
 #define Version5			16					// new coding scheme since major version 5
-#define Version6			32					// new HeaderSize: 32 bits instead of 16 bits 
+#define Version6			32					// new HeaderSize: 32 bits instead of 16 bits
 // version numbers
 #define PGFVersion			(Version2 | Version5 | Version6 | PGF32)	// current standard version
 
 //-------------------------------------------------------------------------------
 //	Coder constants
 //-------------------------------------------------------------------------------
-#define BufferSize			16384				// must be a multiple of WordWidth: RLblockSizeLen = 15
+#define BufferSize			16384				// must be a multiple of WordWidth
 #define RLblockSizeLen		15					// block size length (< 16): ld(BufferSize) < RLblockSizeLen <= 2*ld(BufferSize)
 #define LinBlockSize		8					// side length of a coefficient block in a HH or LL subband
 #define InterBlockSize		4					// side length of a coefficient block in a HL or LH subband
 #ifdef __PGF32SUPPORT__
-#define MaxBitPlanes		31					// maximum number of bit planes of m_value: 32 minus sign bit
+	#define MaxBitPlanes	31					// maximum number of bit planes of m_value: 32 minus sign bit
 #else
-#define MaxBitPlanes		15					// maximum number of bit planes of m_value: 16 minus sign bit
+	#define MaxBitPlanes	15					// maximum number of bit planes of m_value: 16 minus sign bit
 #endif
 #define MaxBitPlanesLog		5					// number of bits to code the maximum number of bit planes (in 32 or 16 bit mode)
 #define MaxQuality			MaxBitPlanes		// maximum quality
@@ -95,6 +100,7 @@ enum Orientation { LL=0, HL=1, LH=2, HH=3 };
 /////////////////////////////////////////////////////////////////////
 /// PGF magic and version (part of PGF pre-header)
 /// @author C. Stamm
+/// @brief PGF identification and version
 struct PGFMagicVersion {
 	char magic[3];				// PGF identification = "PGF"
 	UINT8 version;				// PGF version
@@ -102,16 +108,18 @@ struct PGFMagicVersion {
 };
 
 /////////////////////////////////////////////////////////////////////
-/// PGF pre-header
+/// PGF pre-header defined header length and PGF identification and version
 /// @author C. Stamm
+/// @brief PGF pre-header
 struct PGFPreHeader : PGFMagicVersion {
 	UINT32 hSize;				// total size of PGFHeader, [ColorTable], and [UserData] in bytes
 	// total: 8 Bytes
 };
 
 /////////////////////////////////////////////////////////////////////
-/// PGF header
+/// PGF header contains image information
 /// @author C. Stamm
+/// @brief PGF header
 struct PGFHeader {
 	UINT32 width;
 	UINT32 height;
@@ -125,8 +133,9 @@ struct PGFHeader {
 };
 
 /////////////////////////////////////////////////////////////////////
-/// PGF post-header is optional
+/// PGF post-header is optional. It contains color table and user data
 /// @author C. Stamm
+/// @brief Optional PGF post-header
 struct PGFPostHeader {
 	RGBQUAD clut[ColorTableLen];// color table for indexed color images
 	UINT8 *userData;			// user data of size userDataLen
@@ -134,8 +143,9 @@ struct PGFPostHeader {
 };
 
 /////////////////////////////////////////////////////////////////////
-/// ROI block header (used in ROI coding scheme)
+/// ROI block header is used with ROI coding scheme. It contains block size and tile end flag
 /// @author C. Stamm
+/// @brief Block header used with ROI coding scheme
 union ROIBlockHeader {
 	/// Constructor
 	/// @param v Buffer size
@@ -143,10 +153,11 @@ union ROIBlockHeader {
 	/// Constructor
 	/// @param size Buffer size
 	/// @param end 0/1 Flag; 1: last part of a tile
-	ROIBlockHeader(UINT32 size, bool end)	{ ASSERT(size < (1 << RLblockSizeLen)); bufferSize = size; tileEnd = end; }
+	ROIBlockHeader(UINT32 size, bool end)	{ ASSERT(size < (1 << RLblockSizeLen)); rbh.bufferSize = size; rbh.tileEnd = end; }
 
 	UINT16 val;
-	struct {
+	/// @brief Named ROI block header (part of the union)
+	struct RBH {
 #ifdef PGF_USE_BIG_ENDIAN
 		UINT16 tileEnd   :				1;	// 1: last part of a tile
 		UINT16 bufferSize: RLblockSizeLen;	// number of uncoded UINT32 values in a block
@@ -154,15 +165,16 @@ union ROIBlockHeader {
 		UINT16 bufferSize: RLblockSizeLen;	// number of uncoded UINT32 values in a block
 		UINT16 tileEnd   :				1;	// 1: last part of a tile
 #endif // PGF_USE_BIG_ENDIAN
-	};
+	} rbh;
 	// total: 2 Bytes
 };
 
 #pragma pack()
 
 /////////////////////////////////////////////////////////////////////
-/// PGF i/o exception structure
+/// PGF I/O exception
 /// @author C. Stamm
+/// @brief PGF exception
 struct IOException {
 	/// Standard constructor
 	IOException() : error(NoError) {}
@@ -176,6 +188,7 @@ struct IOException {
 /////////////////////////////////////////////////////////////////////
 /// Rectangle
 /// @author C. Stamm
+/// @brief Rectangle
 struct PGFRect {
 	/// Standard constructor
 	PGFRect() : left(0), top(0), right(0), bottom(0) {}
@@ -190,7 +203,7 @@ struct PGFRect {
 	UINT32 Width() const					{ return right - left; }
 	/// @return Rectangle height
 	UINT32 Height() const					{ return bottom - top; }
-	
+
 	/// Test if point (x,y) is inside this rectangle
 	/// @param x Point coordinate x
 	/// @param y Point coordinate y
@@ -215,5 +228,6 @@ typedef void (*RefreshCB)(void *p);
 #define PreHeaderSize		sizeof(PGFPreHeader)
 #define HeaderSize			sizeof(PGFHeader)
 #define ColorTableSize		ColorTableLen*sizeof(RGBQUAD)
+#define DataTSize			sizeof(DataT)
 
 #endif //PGF_PGFTYPES_H

@@ -6,7 +6,7 @@
  * Date        : 2010-06-24
  * Description : manager for filters (registering, creating etc)
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -25,9 +25,13 @@
 #ifndef DIMGFILTERMANAGER_H
 #define DIMGFILTERMANAGER_H
 
+// Qt includes
+
 #include <QStringList>
 #include <QList>
 #include <QString>
+
+// Local includes
 
 #include "dimgfiltergenerator.h"
 #include "digikam_export.h"
@@ -45,14 +49,17 @@ public:
 
     /// Returns a list of the supported filter identifiers
     QStringList supportedFilters();
+
     /// Returns a list of supported versions of the given filter
     QList<int> supportedVersions(const QString& filterIdentifier);
+
     /**
      * Returns the (untranslated) displayable name for the given identifier.
      * This is only possible for supported filters. If you have a FilterAction,
      * it may already contain a displayable name.
      */
     QString displayableName(const QString& filterIdentifier);
+
     /**
      * Returns the translated displayable name
      */

@@ -96,7 +96,7 @@ DeleteWidget::DeleteWidget(QWidget* parent)
 
     d->checkBoxStack = new QStackedWidget(this);
 
-    QLabel* logo    = new QLabel(this);
+    QLabel* logo     = new QLabel(this);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
@@ -109,7 +109,7 @@ DeleteWidget::DeleteWidget(QWidget* parent)
     sizePolicy.setVerticalStretch(0);
     d->warningIcon->setSizePolicy(sizePolicy);
 
-    d->deleteText = new QLabel(this);
+    d->deleteText     = new QLabel(this);
     d->deleteText->setAlignment(Qt::AlignCenter);
     d->deleteText->setWordWrap(true);
 
@@ -120,16 +120,16 @@ DeleteWidget::DeleteWidget(QWidget* parent)
     hbox->addWidget(d->deleteText, 10);
     hbox->addWidget(d->warningIcon);
 
-    d->fileList = new KListWidget(this);
+    d->fileList       = new KListWidget(this);
     d->fileList->setSelectionMode(QAbstractItemView::SingleSelection);
     d->fileList->setToolTip(i18n("List of files that are about to be deleted."));
     d->fileList->setWhatsThis(i18n("This is the list of items that are about to be deleted."));
 
-    d->numFiles = new QLabel(this);
+    d->numFiles       = new QLabel(this);
     d->numFiles->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
     d->numFiles->setWordWrap(false);
 
-    d->shouldDelete = new QCheckBox(d->checkBoxStack);
+    d->shouldDelete   = new QCheckBox(d->checkBoxStack);
     d->shouldDelete->setGeometry(QRect(0, 0, 542, 32));
     d->shouldDelete->setToolTip(i18n("If checked, files will be permanently removed instead of being placed "
                                     "in the Trash."));
@@ -217,16 +217,16 @@ void DeleteWidget::updateText()
     if (d->deleteMode == DeleteDialogMode::DeletePermanently)
     {
         d->doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
-                                          "be directly and permanently deleted."));
+                                           "be directly and permanently deleted."));
         d->doNotShowAgain->setWhatsThis(i18n("If this box is checked, this dialog will no longer be shown, "
-                                            "and files will be directly and permanently deleted."));
+                                             "and files will be directly and permanently deleted."));
     }
     else
     {
         d->doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
-                                          "be directly moved to the Trash."));
+                                           "be directly moved to the Trash."));
         d->doNotShowAgain->setWhatsThis(i18n("If this box is checked, this dialog will no longer be shown, "
-                                            "and files will be directly moved to the Trash."));
+                                             "and files will be directly moved to the Trash."));
     }
 
     switch (d->listMode)
@@ -238,17 +238,17 @@ void DeleteWidget::updateText()
             if (d->deleteMode == DeleteDialogMode::DeletePermanently)
             {
                 d->deleteText->setText(i18n("These items will be <b>permanently "
-                                           "deleted</b> from your hard disk."));
+                                            "deleted</b> from your hard disk."));
                 d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
-                                         KIconLoader::Desktop, KIconLoader::SizeLarge));
+                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
             else
             {
                 d->deleteText->setText(i18n("These items will be moved to Trash."));
                 d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
-                                         KIconLoader::Desktop, KIconLoader::SizeLarge));
+                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
                 d->numFiles->setText(i18np("<b>1</b> file selected.", "<b>%1</b> files selected.",
-                                          d->fileList->count()));
+                                           d->fileList->count()));
             }
 
             break;
@@ -260,19 +260,19 @@ void DeleteWidget::updateText()
             if (d->deleteMode == DeleteDialogMode::DeletePermanently)
             {
                 d->deleteText->setText(i18n("These albums will be <b>permanently "
-                                           "deleted</b> from your hard disk."));
+                                            "deleted</b> from your hard disk."));
                 d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
-                                         KIconLoader::Desktop, KIconLoader::SizeLarge));
+                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
             else
             {
                 d->deleteText->setText(i18n("These albums will be moved to Trash."));
                 d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
-                                         KIconLoader::Desktop, KIconLoader::SizeLarge));
+                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
 
             d->numFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
-                                      d->fileList->count()));
+                                       d->fileList->count()));
             break;
         }
         case DeleteDialogMode::Subalbums:
@@ -282,25 +282,25 @@ void DeleteWidget::updateText()
             if (d->deleteMode == DeleteDialogMode::DeletePermanently)
             {
                 d->deleteText->setText(i18n("<p>These albums will be <b>permanently "
-                                           "deleted</b> from your hard disk.</p>"
-                                           "<p>Note that <b>all subalbums</b> "
-                                           "are included in this list and will "
-                                           "be deleted permanently as well.</p>"));
+                                            "deleted</b> from your hard disk.</p>"
+                                            "<p>Note that <b>all subalbums</b> "
+                                            "are included in this list and will "
+                                            "be deleted permanently as well.</p>"));
                 d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
-                                         KIconLoader::Desktop, KIconLoader::SizeLarge));
+                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
             else
             {
                 d->deleteText->setText(i18n("<p>These albums will be moved to Trash.</p>"
-                                           "<p>Note that <b>all subalbums</b> "
-                                           "are included in this list and will "
-                                           "be moved to Trash as well.</p>"));
+                                            "<p>Note that <b>all subalbums</b> "
+                                            "are included in this list and will "
+                                            "be moved to Trash as well.</p>"));
                 d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
-                                         KIconLoader::Desktop, KIconLoader::SizeLarge));
+                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
             }
 
             d->numFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
-                                      d->fileList->count()));
+                                       d->fileList->count()));
             break;
         }
     }
@@ -445,7 +445,7 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
             d->widget->d->shouldDelete->setChecked(true);
             d->widget->d->checkBoxStack->setCurrentWidget(d->widget->d->doNotShowAgain);
             d->saveDoNotShowAgainPermanent = true;
-            //            d->widget->d->checkBoxStack->hide();
+            //d->widget->d->checkBoxStack->hide();
             break;
         }
         case DeleteDialogMode::UserPreference:

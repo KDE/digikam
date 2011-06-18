@@ -12,6 +12,7 @@ General        : Pick Labels support to improve photograph selection.
 General        : Color Theme engine is now ported to KDE color theme manager.
 General        : MySQl support improvements. Dependency is now optional.
 General        : Added JPEGTurbo library support.
+General        : Update internal LibPGF to 6.11.24 with OpenMP support.
 
 AlbumGUI       : Re-designed Filters view on right sidebar to perform icon-view items filtering.
 AlbumGUI       : Add options to group/ungroup items from icon-view.
@@ -177,4 +178,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 149 ==> 274302 : Search for _two_ keywords with logical "and" fails.
 150 ==> 272180 : Camera Device Summary seems to use wrong encoding.
 151 ==> 274865 : TIFF files with Exif.Image.Orientation = 1 aren't decoded properly.
-152 ==>
+152 ==> 268267 : digiKam crashes on picture import : OpenCV and Gphoto2 libraries incompatibility through libdc1394.
+153 ==> 

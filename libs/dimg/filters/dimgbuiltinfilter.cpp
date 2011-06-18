@@ -6,7 +6,7 @@
  * Date        : 2010-11-10
  * Description : basic filter management for DImg builtin methods
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -88,19 +88,19 @@ void DImgBuiltinFilter::setAction(const FilterAction& action)
     }
     else if (action.identifier() == "transform:crop" && action.version() == 1)
     {
-        m_type = Crop;
+        m_type     = Crop;
         int x      = action.parameter("x").toInt();
         int y      = action.parameter("y").toInt();
         int width  = action.parameter("width").toInt();
         int height = action.parameter("height").toInt();
-        m_arg = QRect(x, y, width, height);
+        m_arg      = QRect(x, y, width, height);
     }
     else if (action.identifier() == "transform:resize" && action.version() == 1)
     {
-        m_type = Resize;
+        m_type     = Resize;
         int width  = action.parameter("width").toInt();
         int height = action.parameter("height").toInt();
-        m_arg = QSize(width, height);
+        m_arg      = QSize(width, height);
     }
     else if (action.identifier() == "transform:convertDepth" && action.version() == 1)
     {
@@ -217,7 +217,7 @@ FilterAction DImgBuiltinFilter::filterAction() const
         }
         case Crop:
         {
-            action = FilterAction("transform:crop", 1);
+            action  = FilterAction("transform:crop", 1);
             QRect r = m_arg.toRect();
             action.addParameter("x", r.x());
             action.addParameter("y", r.y());
@@ -227,7 +227,7 @@ FilterAction DImgBuiltinFilter::filterAction() const
         }
         case Resize:
         {
-            action = FilterAction("transform:resize", 1);
+            action  = FilterAction("transform:resize", 1);
             QSize s = m_arg.toSize();
             action.addParameter("width", s.width());
             action.addParameter("height", s.height());
@@ -277,10 +277,10 @@ bool DImgBuiltinFilter::isReversible() const
 QStringList DImgBuiltinFilter::supportedFilters()
 {
     return QStringList() << "transform:rotate"
-           << "transform:flip"
-           << "transform:crop"
-           << "transform:resize"
-           << "transform:convertDepth";
+                         << "transform:flip"
+                         << "transform:crop"
+                         << "transform:resize"
+                         << "transform:convertDepth";
 }
 
 QList<int> DImgBuiltinFilter::supportedVersions(const QString& filterIdentifier)
@@ -428,9 +428,10 @@ bool DImgBuiltinFilter::isSupported(const QString& filterIdentifier, int version
     return version == 1;
 }
 
+// -------------------------------------------------------------------------------------------------------------------
+
 class DImgBuiltinThreadedFilter : public DImgThreadedFilter
 {
-
 public:
 
     explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, DImg* orgImage, QObject* parent = 0)
@@ -447,10 +448,12 @@ public:
     {
         return m_filter.filterAction().identifier();
     }
+
     virtual FilterAction filterAction()
     {
         return m_filter.filterAction();
     }
+
     void readParameters(const FilterAction& action)
     {
         m_filter = DImgBuiltinFilter(action);
@@ -478,4 +481,3 @@ DImgThreadedFilter* DImgBuiltinFilter::createThreadedFilter(QObject* parent) con
 }
 
 } // namespace Digikam
-

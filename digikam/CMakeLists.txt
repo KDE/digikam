@@ -86,6 +86,7 @@ TARGET_LINK_LIBRARIES(digikamcore
         ${PNG_LIBRARIES}
         ${LCMS_LIBRARIES}
         ${JASPER_LIBRARIES}
+        ${OPENMP_LDFLAGS}
 
         # Required by CImg library which is using pthread internally.
         ${CMAKE_THREAD_LIBS_INIT}
@@ -162,6 +163,8 @@ TARGET_LINK_LIBRARIES(digikamdatabase
                       ${KDCRAW_LIBRARIES}
                       ${KFACE_LIBRARIES}
                       ${KMAP_LIBRARIES}
+
+                      ${OPENMP_LDFLAGS}
                      )
 
 IF(USE_SCRIPT_IFACE)
@@ -280,6 +283,12 @@ TARGET_LINK_LIBRARIES(digikam
         queuemanager
         cameragui
 )
+
+IF (NOT WIN32 AND GPHOTO2_FOUND)
+    # See B.K.O #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
+    TARGET_LINK_LIBRARIES(digikam ${LIBUSB_LIBRARIES})
+ENDIF (NOT WIN32 AND GPHOTO2_FOUND)
+
 
 IF(USE_SCRIPT_IFACE)
     TARGET_LINK_LIBRARIES(digikam ${QT_QTSCRIPT_LIBRARY})

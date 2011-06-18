@@ -7,7 +7,7 @@
  * Description : Shared data with reference counting and explicit sharing
  *
  * Copyright (C) 1992-2006 Trolltech ASA.
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This file may be used under the terms of the GNU General Public
  * License version 2.0 as published by the Free Software Foundation
@@ -52,7 +52,7 @@ public:
 
     QAtomicInt ref;
 
-    inline DSharedData() : ref(0) { }
+    inline DSharedData()                   : ref(0) { }
     inline DSharedData(const DSharedData&) : ref(0) { }
 
     /** Returns true if the reference count is not 0.
@@ -62,6 +62,7 @@ public:
     {
         return (int)ref > 0;
     }
+
     inline bool hasMoreReferences() const
     {
         return (int)ref != 1;
@@ -71,6 +72,8 @@ private:
     // using the assignment operator would lead to corruption in the ref-counting
     DSharedData& operator=(const DSharedData&);
 };
+
+// --------------------------------------------------------------------------------------
 
 template <class T> class DSharedDataPointer
 {
@@ -92,26 +95,32 @@ public:
     {
         return *d;
     }
+
     inline const T& operator*() const
     {
         return *d;
     }
+
     inline T* operator->()
     {
         return d;
     }
+
     inline const T* operator->() const
     {
         return d;
     }
+
     inline operator T* ()
     {
         return d;
     }
+
     inline operator const T* () const
     {
         return d;
     }
+
     inline T* data()
     {
         return d;
@@ -121,6 +130,7 @@ public:
     {
         return d;
     }
+
     inline const T* constData() const
     {
         return d;
@@ -140,6 +150,7 @@ public:
     {
         return d == other.d;
     }
+
     inline bool operator!=(const DSharedDataPointer<T>& other) const
     {
         return d != other.d;

@@ -6,7 +6,7 @@
  * Date        : 2010-06-24
  * Description : manager for filters (registering, creating etc)
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -104,6 +104,12 @@ public:
         qDeleteAll(coreGenerators);
     }
 
+    void setupCoreGenerators();
+    void setupFilterIcons();
+    void setupI18nStrings();
+
+public:
+
     QMap<QString, DImgFilterGenerator*> filterMap;
 
     QList<DImgFilterGenerator*>         coreGenerators;
@@ -112,10 +118,6 @@ public:
     QHash<QString, QString>             i18nFilterNames;
 
     QMutex                              mutex;
-
-    void setupCoreGenerators();
-    void setupFilterIcons();
-    void setupI18nStrings();
 };
 
 void DImgFilterManager::DImgFilterManagerPriv::setupCoreGenerators()
