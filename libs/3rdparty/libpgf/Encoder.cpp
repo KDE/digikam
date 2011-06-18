@@ -80,14 +80,14 @@ CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header,
 	int count;
 
 	// set number of threads
-#ifdef _OPENMP
+#ifdef LIBPGF_USE_OPENMP
 	m_macroBlockLen = omp_get_num_procs();
 #else
 	m_macroBlockLen = 1;
 #endif
 
 	if (useOMP && m_macroBlockLen > 1) {
-#ifdef _OPENMP
+#ifdef LIBPGF_USE_OPENMP
 		omp_set_num_threads(m_macroBlockLen);
 #endif
 
