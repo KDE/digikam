@@ -68,9 +68,9 @@ CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header,
 : m_stream(stream)
 , m_startPosition(0)
 , m_currLevelIndex(0)
+, m_nLevels(header.nLevels)
 , m_favorSpeed(false)
 , m_forceWriting(false)
-, m_nLevels(header.nLevels)
 #ifdef __PGFROISUPPORT__
 , m_roi(false)
 #endif

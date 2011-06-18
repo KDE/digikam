@@ -50,9 +50,9 @@ class CDecoder {
 	class CMacroBlock {
 	public:
 		CMacroBlock(CDecoder *decoder)
-		: m_decoder(decoder)
-		, m_header(0)
-		, m_valuePos(0)
+		: m_header(0)
+        , m_valuePos(0)
+		, m_decoder(decoder)
 		{
 			ASSERT(m_decoder);
 		}

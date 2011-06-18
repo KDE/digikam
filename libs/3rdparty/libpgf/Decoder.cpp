@@ -65,10 +65,10 @@
 CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& header, PGFPostHeader& postHeader, UINT32*& levelLength, bool useOMP /*= true*/) THROW_
 : m_stream(stream)
 , m_startPos(0)
-, m_encodedHeaderLength(0)
 , m_streamSizeEstimation(0)
-, m_macroBlocksAvailable(0)
+, m_encodedHeaderLength(0)
 , m_currentBlockIndex(0)
+, m_macroBlocksAvailable(0)
 #ifdef __PGFROISUPPORT__
 , m_roi(false)
 #endif
