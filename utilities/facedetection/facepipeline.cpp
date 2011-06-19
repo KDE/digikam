@@ -783,7 +783,11 @@ QString Benchmarker::result() const
 Trainer::Trainer(FacePipeline::FacePipelinePriv* d)
     : d(d)
 {
+    /*
+     * Disable recognition for stable release. See bug 269720 and 255520.
+     *
     database = KFaceIface::RecognitionDatabase::addDatabase();
+    */
     catcher  = 0;
 }
 
@@ -804,6 +808,9 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 
     if (!toTrain.isEmpty())
     {
+        /*
+        * Disable recognition for stable release. See bug 269720 and 255520.
+        *
         // Get KFaceIface faces
         package->faces = d->iface->toFaces(toTrain);
 
@@ -829,6 +836,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
         // Train
         kDebug() << "Training" << package->faces.size() << "faces";
         database.updateFaces(package->faces);
+        */
 
         // Remove the "FaceForTraining" entry in database (tagRegion entry remains, of course, untouched)
         d->iface->removeFaces(toTrain);

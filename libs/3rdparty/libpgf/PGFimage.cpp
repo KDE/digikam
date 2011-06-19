@@ -62,12 +62,12 @@ CPGFImage::CPGFImage()
 , m_favorSpeedOverSize(false)
 , m_useOMPinEncoder(true)
 , m_useOMPinDecoder(true)
-, m_cb(0)
-, m_cbArg(0)
 #ifdef __PGFROISUPPORT__
 , m_levelwise(true)
 , m_streamReinitialized(false)
 #endif
+, m_cb(0)
+, m_cbArg(0)
 {
 
 	// init preHeader

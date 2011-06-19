@@ -50,8 +50,8 @@ class CEncoder {
 	class CMacroBlock {
 	public:
 		CMacroBlock(CEncoder *encoder)
-		: m_encoder(encoder)
-		, m_header(0)
+		: m_header(0)
+        , m_encoder(encoder)
 		{
 			ASSERT(m_encoder);
 			Init(-1);

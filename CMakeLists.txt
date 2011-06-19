@@ -169,7 +169,7 @@ IF(NOT APPLE AND NOT USE_EXT_LIBPGF)
     MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
 
     IF(OPENMP_FOUND)
-        ADD_DEFINITIONS(${OpenMP_CXX_FLAGS})
+        # OpenMP defintions ${OpenMP_CXX_FLAGS} is set on right digiKam components through sub-cmake scripts.
         IF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp" )
             SET(OPENMP_LDFLAGS "-lgomp")
         ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp" )
