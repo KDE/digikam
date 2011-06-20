@@ -107,6 +107,7 @@ liblensfun      >= 0.2.5                      http://lensfun.berlios.de         
 libgphoto2      >= 2.4.0                      http://www.gphoto.org                      To support Gphoto2 Cameras.
 libusb          >= 1.0.0                      http://www.libusb.org                      Required by Gphoto2 as linking dependency. See details in B.K.O #268267
 liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                  For Liquid Rescale tool. If no external libray is found, internal version is used instead.
+libpgf          >= 6.11.24                    http://www.libpgf.org                      If no external libray is found, internal version is used instead.
 
 Note : all library dependencies require development and binary packages installed on your
 computer to compile digiKam.
