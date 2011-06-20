@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dimagefilteractiontest.h"
+#include "dimagefilteractiontest.moc"
 
 // Qt includes
 
