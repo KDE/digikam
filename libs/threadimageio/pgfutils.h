@@ -37,7 +37,8 @@
 namespace Digikam
 {
 
-/** PGF image data to QImage
+/** PGF image data to QImage.
+    NOTE: Only use this method to manage PGF thumbnails stored in database (256x256 pixels image)
  */
 bool readPGFImageData(const QByteArray& data, QImage& img);
 
@@ -48,6 +49,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img);
     3 =>
     4 => Same compression ratio near than JPEG quality=85. image quality is valid for thumbnails.
     >= 5 => provide artifacts due to down-sampling. Do not use it...
+    NOTE: Only use this method to manage PGF thumbnails stored in database (256x256 pixels image)
  */
 bool writePGFImageData(const QImage& img, QByteArray& data, int quality);
 
@@ -58,6 +60,10 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize);
 /** Return a libpgf version string
  */
 QString libPGFVersion();
+
+/** Return true if libpgf is compiled with OpenMP support
+ */
+bool libPGFUseOpenMP();
 
 }  // namespace Digikam
 

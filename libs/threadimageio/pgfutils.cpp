@@ -64,6 +64,9 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
 //        kDebug() << "image data stream size is : " << stream.GetSize();
 
         CPGFImage        pgfImg;
+        // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
+        // pgfImg.ConfigureDecoder(false);
+
         pgfImg.Open(&stream);
 
         if (pgfImg.Channels() != 4)
@@ -131,6 +134,8 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
         header.background.rgbtGreen = 0;
         header.background.rgbtRed   = 0;
         pgfImg.SetHeader(header);
+        // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
+        // pgfImg.ConfigureEncoder(false);
 
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
         {
@@ -265,7 +270,7 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
         kDebug() << "PGF mode     = " << header->mode;
         kDebug() << "PGF levels   = " << header->nLevels;
         kDebug() << "Level (w x h)= " << i << "(" << pgf.Width(i)
-                        << " x " << pgf.Height(i) << ")";
+                                      << " x " << pgf.Height(i) << ")";
         kDebug() << "QImage depth = " << img.depth();
 */
 
@@ -299,6 +304,15 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 QString libPGFVersion()
 {
     return (QString(PGFCodecVersion));
+}
+
+bool libPGFUseOpenMP()
+{
+#if defined LIBPGF_USE_OPENMP
+    return true;
+#else
+    return false;
+#endif
 }
 
 }  // namespace Digikam
