@@ -54,7 +54,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
 {
     try
     {
-        if (data.isNull())
+        if (data.isEmpty())
         {
             kDebug() << "PGF image data to decode : size is null";
             return false;
