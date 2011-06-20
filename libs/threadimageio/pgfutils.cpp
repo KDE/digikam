@@ -54,6 +54,12 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
 {
     try
     {
+        if (data.isNull())
+        {
+            kDebug() << "PGF image data to decode : size is null";
+            return false;
+        }
+
         CPGFMemoryStream stream((UINT8*)data.data(), (size_t)data.size());
         CPGFImage        pgfImg;
         pgfImg.Open(&stream);
@@ -144,7 +150,7 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
 
         if (!nWrittenBytes)
         {
-            kDebug() << "Encoded PGF image data size is null";
+            kDebug() << "Encoded PGF image : data size is null";
             return false;
         }
     }
