@@ -112,13 +112,15 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
 
         CPGFImage pgfImg;
         PGFHeader header;
-        header.width    = img.width();
-        header.height   = img.height();
-        header.bpp      = img.depth();
-        header.channels = 4;
-        header.quality  = quality;
-        header.mode     = ImageModeRGBA;
-        header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
+        header.width                = img.width();
+        header.height               = img.height();
+        header.bpp                  = img.depth();
+        header.channels             = 4;
+        header.quality              = quality;
+        header.mode                 = ImageModeRGBA;
+        header.background.rgbtBlue  = 0;
+        header.background.rgbtGreen = 0;
+        header.background.rgbtRed   = 0;
         pgfImg.SetHeader(header);
 
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
