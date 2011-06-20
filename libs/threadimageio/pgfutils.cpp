@@ -138,7 +138,7 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
         // TODO : optimize memory allocation...
         CPGFMemoryStream stream(256000);
         UINT32 nWrittenBytes = 0;
-        pgfImg.Write(&stream, 0, NULL, &nWrittenBytes);
+        pgfImg.Write(&stream, &nWrittenBytes);
 
         data = QByteArray((const char*)stream.GetBuffer(), nWrittenBytes);
 
