@@ -138,8 +138,12 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
         pgfImg.Write(&stream, 0, NULL, &nWrittenBytes);
 
         data = QByteArray((const char*)stream.GetBuffer(), nWrittenBytes);
+
         if (!nWrittenBytes)
+        {
             kDebug() << "Encoded PGF image data size is null";
+            return false;
+        }
     }
     catch (IOException& e)
     {
