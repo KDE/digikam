@@ -111,11 +111,14 @@ public:
         ThumbnailDatabase
     };
 
+public:
+
     /**
      * Create a thumbnail creator object.
      * You must call setThumbnailSize before load.
      */
     ThumbnailCreator(StorageMethod method);
+
     /**
      * Create a thumbnail creator object, and set the thumbnail size.
      */
@@ -184,6 +187,7 @@ public:
      * returned by load.
      */
     int thumbnailSize() const;
+
     /**
      * Return the stored image size, the size of the image that is stored on disk
      * (according to Storage Method).
@@ -212,7 +216,8 @@ public:
      */
     void deleteThumbnailsFromDisk(const QString& filePath) const;
 
-    /** Creates a default ThumbnailInfo for the given path using QFileInfo only */
+    /** Creates a default ThumbnailInfo for the given path using QFileInfo only 
+     */
     static ThumbnailInfo fileThumbnailInfo(const QString& path);
 
 private:
@@ -244,15 +249,16 @@ private:
     void storeFreedesktop(const ThumbnailInfo& info, const ThumbnailImage& image) const;
     ThumbnailImage loadFreedesktop(const ThumbnailInfo& info) const;
     void deleteFromDiskFreedesktop(const QString& filePath) const;
+
+    void initThumbnailDirs();
+    QString thumbnailPath(const QString& uri) const;
+
     // implementations in thumbnailbasic.cpp
     static QString normalThumbnailDir();
     static QString largeThumbnailDir();
     static QString thumbnailPath(const QString& filePath, const QString& basePath);
     static QString thumbnailUri(const QString& filePath);
     static QString thumbnailPathFromUri(const QString& uri, const QString& basePath);
-
-    void initThumbnailDirs();
-    QString thumbnailPath(const QString& uri) const;
 
 private:
 

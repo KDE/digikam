@@ -7,8 +7,8 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,25 +52,27 @@ public:
     int    exifOrientation;
 };
 
+// -------------------------------------------------------------------
+
 class ThumbnailCreator::ThumbnailCreatorPriv
 {
 public:
 
     ThumbnailCreatorPriv()
     {
-        thumbnailSize       = 0;
-        observer            = 0;
+        thumbnailSize                             = 0;
+        observer                                  = 0;
 
-        thumbnailStorage    = ThumbnailCreator::FreeDesktopStandard;
-        infoProvider        = 0;
-        dbIdForReplacement  = -1;
+        thumbnailStorage                          = ThumbnailCreator::FreeDesktopStandard;
+        infoProvider                              = 0;
+        dbIdForReplacement                        = -1;
 
-        exifRotate          = true;
-        removeAlphaChannel  = true;
-        onlyLargeThumbnails = false;
+        exifRotate                                = true;
+        removeAlphaChannel                        = true;
+        onlyLargeThumbnails                       = false;
 
         // Used internaly as PNG metadata. Do not use i18n.
-        digiKamFingerPrint  = QString("Digikam Thumbnail Generator");
+        digiKamFingerPrint                        = QString("Digikam Thumbnail Generator");
 
         fastRawSettings.optimizeTimeLoading();
         fastRawSettings.rawPrm.halfSizeColorImage = true;
