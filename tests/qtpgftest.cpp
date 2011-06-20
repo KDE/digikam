@@ -6,7 +6,7 @@
  * Date        : 2009-02-04
  * Description : a command line tool to test qt PGF interface
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,7 +58,7 @@ int main(int /*argc*/, char** /*argv*/)
         return -1;
     }
 
-    end = clock();
+    end   = clock();
 
     qDebug() << "PGF Encoding time: " << double(end - start)/CLOCKS_PER_SEC << " s" << endl;
 
@@ -86,7 +86,7 @@ int main(int /*argc*/, char** /*argv*/)
         return -1;
     }
 
-    end = clock();
+    end   = clock();
 
     img.save("test2.png", "PNG");
 
@@ -108,7 +108,7 @@ int main(int /*argc*/, char** /*argv*/)
         return -1;
     }
 
-    end = clock();
+    end   = clock();
 
     qDebug() << "JPG Encoding time: " << double(end - start)/CLOCKS_PER_SEC << " s" << endl;
 
@@ -123,7 +123,7 @@ int main(int /*argc*/, char** /*argv*/)
         return -1;
     }
 
-    end = clock();
+    end   = clock();
 
     qDebug() << "JPG Decoding time: " << double(end - start)/CLOCKS_PER_SEC << " s" << endl;
 
@@ -143,7 +143,7 @@ int main(int /*argc*/, char** /*argv*/)
         return -1;
     }
 
-    end = clock();
+    end   = clock();
 
     qDebug() << "PNG Encoding time: " << double(end - start)/CLOCKS_PER_SEC << " s" << endl;
 
@@ -158,7 +158,7 @@ int main(int /*argc*/, char** /*argv*/)
         return -1;
     }
 
-    end = clock();
+    end   = clock();
 
     qDebug() << "PNG Decoding time: " << double(end - start)/CLOCKS_PER_SEC << " s" << endl;
 
