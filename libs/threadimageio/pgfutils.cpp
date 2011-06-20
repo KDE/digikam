@@ -61,7 +61,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
         }
 
         CPGFMemoryStream stream((UINT8*)data.data(), (size_t)data.size());
-        kDebug() << "image data stream size is : " << stream.GetSize();
+//        kDebug() << "image data stream size is : " << stream.GetSize();
 
         CPGFImage        pgfImg;
         pgfImg.Open(&stream);
