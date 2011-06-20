@@ -6,8 +6,8 @@
  * Date        : 2005-03-02
  * Description : methods to access on pixels color
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,9 +28,10 @@
 namespace Digikam
 {
 
-// These methods are used in quite a few image effects,
-// typically in loops iterating the data.
-// Providing them as inline methods allows the compiler to optimize better.
+/** These methods are used in quite a few image effects,
+ * typically in loops iterating the data.
+ * Providing them as inline methods allows the compiler to optimize better.
+ */
 
 inline void DColor::setColor(const uchar* data, bool sixteenBit)
 {
