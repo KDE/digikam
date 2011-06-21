@@ -1,11 +1,11 @@
-Native DIMG Loaders status (Gilles Caulier - 2009-03-26)
+Native DIMG Loaders status (Gilles Caulier - 2011-06-21)
 --------------------------------------------------------
 
 Format  Read  Write  ICC   MetaData  Thumb  8bits    16bits  depency
 
-JPG     Done  Done   Done  Done      DONE    yes      N.A     libjpeg
+JPG     Done  Done   Done  Done      Done    yes      N.A     libjpeg
 PNG     Done  Done   Done  Done      N.A     yes      yes     libpng
-TIF/EP  Done  Done   Done  Done      DONE    yes      yes     libtiff
+TIF/EP  Done  Done   Done  Done      Done    yes      yes     libtiff
 RAW     Done  N.A    N.A   Done      Done    yes      yes     libkdcraw
 PPM     Done  TODO   N.A   N.A       N.A     yes      yes     none
 PGF     Done  DONE   TODO  DONE      N.A     yes      yes     libpgf (internally)
@@ -38,5 +38,5 @@ GIF      yes        no
 
 TODO :
 
-Add PCD support using http://linux.bytesex.org/fbida/libpcd.html
+Add WebP support using http://code.google.com/speed/webp
 
