@@ -180,6 +180,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 151 ==> 274865 : TIFF files with Exif.Image.Orientation = 1 aren't decoded properly.
 152 ==> 268267 : digiKam crashes on picture import : OpenCV and Gphoto2 libraries incompatibility through libdc1394.
 153 ==> 248494 : Deleted pictures still shown: Have to rescan collection always.
-154 ==> 273765 : Replacing pgf files with an open digikam lead to reproducible crash.
+154 ==> 275660 : Remove tag non-working when using face view.
 155 ==> 
-

@@ -777,6 +777,11 @@ void FaceGroup::applyItemGeometryChanges()
 {
     foreach (FaceItem* item, d->items)
     {
+        if (item->face().isNull())
+        {
+            continue;
+        }
+
         TagRegion currentRegion = TagRegion(item->originalRect());
         if (item->face().region() != currentRegion)
         {
