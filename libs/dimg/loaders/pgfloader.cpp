@@ -6,7 +6,7 @@
  * Date        : 2009-06-03
  * Description : A PGF IO file for DImg framework
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This implementation use LibPGF API <http://www.libpgf.org>
  *
@@ -435,7 +435,14 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
                          CallbackForLibPGF, this);
 
         UINT32 nWrittenBytes = 0;
+#ifdef PGFCodecVersionID
+#   if PGFCodecVersionID >= 0x061124
         pgf.Write(&stream, &nWrittenBytes, CallbackForLibPGF, this);
+#   endif
+#else
+        pgf.Write(&stream, 0, CallbackForLibPGF, &nWrittenBytes, this);
+#endif
+
 
 #ifdef ENABLE_DEBUG_MESSAGES
         kDebug() << "PGF width     = " << header.width;
