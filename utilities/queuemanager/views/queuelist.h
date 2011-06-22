@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager items list.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,13 +50,15 @@ public:
     QueueListViewItem(QTreeWidget* view, const ImageInfo& info);
     ~QueueListViewItem();
 
+    bool asValidThumbnail() const;
+
     void setInfo(const ImageInfo& info);
     ImageInfo info() const;
 
     void assignTool(int index, const BatchToolSet& set);
     void unassignTool(int index);
 
-    void setThumb(const QPixmap& pix);
+    void setThumb(const QPixmap& pix, bool asThumb=true);
 
     void setProgressIcon(const QPixmap& icon);
 
@@ -157,6 +159,8 @@ private:
     void focusOutEvent(QFocusEvent*);
     void leaveEvent(QEvent*);
     void resetQueue();
+
+    void drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const;
 
 private:
 

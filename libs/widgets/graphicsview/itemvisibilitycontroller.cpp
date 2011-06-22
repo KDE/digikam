@@ -219,7 +219,10 @@ AnimationControl::~AnimationControl()
 void AnimationControl::clear()
 {
     state = ItemVisibilityController::Hidden;
-    disconnect(animation);
+    if (animation)
+    {
+        disconnect(animation);
+    }
     delete animation;
     animation      = 0;
     animationGroup = 0; // the same pointer as animation

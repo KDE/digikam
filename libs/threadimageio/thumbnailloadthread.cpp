@@ -6,8 +6,8 @@
  * Date        : 2007-06-05
  * Description : Thumbnail loading
  *
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -91,7 +91,7 @@ public:
     ThumbnailInfoProvider*          provider;
     QWidget*                        displayingWidget;
 
-    bool firstThreadCreated;
+    bool                            firstThreadCreated;
 };
 
 K_GLOBAL_STATIC(ThumbnailLoadThreadStaticPriv, static_d)
@@ -139,7 +139,7 @@ public:
     bool                      exifRotate() const;
     LoadingDescription        createLoadingDescription(const QString& filePath, int size, bool setLastDescription = true);
     LoadingDescription        createLoadingDescription(const QString& filePath, int size,
-            const QRect& detailRect, bool setLastDescription = true);
+                                                       const QRect& detailRect, bool setLastDescription = true);
     bool                      checkDescription(const LoadingDescription& description);
     QList<LoadingDescription> makeDescriptions(const QStringList& filePaths, int size);
     QList<LoadingDescription> makeDescriptions(const QList<QPair<QString, QRect> >& filePathsAndRects, int size);
@@ -157,7 +157,7 @@ ThumbnailLoadThread::ThumbnailLoadThread(QObject* parent)
       d(new ThumbnailLoadThreadPriv)
 {
     static_d->firstThreadCreated = true;
-    d->creator = new ThumbnailCreator(static_d->storageMethod);
+    d->creator                   = new ThumbnailCreator(static_d->storageMethod);
 
     if (static_d->provider)
     {
@@ -215,7 +215,7 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& 
     {
         kDebug() << "Thumbnail db ready for use";
         static_d->storageMethod = ThumbnailCreator::ThumbnailDatabase;
-        static_d->provider = provider;
+        static_d->provider      = provider;
     }
     else
     {
@@ -335,7 +335,7 @@ int ThumbnailLoadThread::ThumbnailLoadThreadPriv::thumbnailSizeForPixmapSize(int
 // --- Creating loading descriptions ---
 
 LoadingDescription ThumbnailLoadThread::ThumbnailLoadThreadPriv
-::createLoadingDescription(const QString& filePath, int size, bool setLastDescription)
+     ::createLoadingDescription(const QString& filePath, int size, bool setLastDescription)
 {
     size = thumbnailSizeForPixmapSize(size);
 
@@ -359,7 +359,7 @@ LoadingDescription ThumbnailLoadThread::ThumbnailLoadThreadPriv
 }
 
 LoadingDescription ThumbnailLoadThread::ThumbnailLoadThreadPriv
-::createLoadingDescription(const QString& filePath, int size, const QRect& detailRect, bool setLastDescription)
+    ::createLoadingDescription(const QString& filePath, int size, const QRect& detailRect, bool setLastDescription)
 {
     size = thumbnailSizeForPixmapSize(size);
 
@@ -409,8 +409,7 @@ bool ThumbnailLoadThread::ThumbnailLoadThreadPriv::checkDescription(const Loadin
     return true;
 }
 
-QList<LoadingDescription> ThumbnailLoadThread::ThumbnailLoadThreadPriv::makeDescriptions(const QStringList& filePaths,
-        int size)
+QList<LoadingDescription> ThumbnailLoadThread::ThumbnailLoadThreadPriv::makeDescriptions(const QStringList& filePaths, int size)
 {
     QList<LoadingDescription> descriptions;
     {
@@ -473,7 +472,7 @@ bool ThumbnailLoadThread::find(const QString& filePath, int size, QPixmap* retPi
     {
         LoadingCache* cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
-        pix = cache->retrieveThumbnailPixmap(cacheKey);
+        pix                 = cache->retrieveThumbnailPixmap(cacheKey);
     }
 
     if (pix)
@@ -718,7 +717,7 @@ void ThumbnailLoadThread::slotThumbnailsAvailable()
     QList<ThumbnailResult> results;
     {
         QMutexLocker lock(&d->resultsMutex);
-        results = d->collectedResults.values();
+        results               = d->collectedResults.values();
         d->collectedResults.clear();
         // reset flag so that for next result, the signal is sent again
         d->notifiedForResults = false;
@@ -785,7 +784,7 @@ void ThumbnailLoadThread::startKdePreviewJob()
     KUrl::List list;
     foreach (const LoadingDescription& description, d->kdeTodo)
     {
-        KUrl url = KUrl::fromPath(description.filePath);
+        KUrl url           = KUrl::fromPath(description.filePath);
         list << url;
         d->kdeJobHash[url] = description;
     }
@@ -851,7 +850,7 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
         pix = DesktopIcon(mimeType->iconName(), KIconLoader::SizeEnormous);
     }
 
-    /*
+/*
     No dependency on AlbumSettings here please...
     QString ext = QFileInfo(url.toLocalFile()).suffix();
 
@@ -872,7 +871,7 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
             pix = DesktopIcon("sound", KIconLoader::SizeEnormous);
         }
     }
-    */
+*/
 
     if (pix.isNull())
     {

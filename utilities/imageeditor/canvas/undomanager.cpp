@@ -544,6 +544,27 @@ bool UndoManager::isAtOrigin() const
     return (d->origin == 0);
 }
 
+bool UndoManager::hasChangesToSave() const
+{
+    if (!isAtOrigin())
+    {
+        return true;
+    }
+    else
+    {
+        DImageHistory currentHistory = d->dimgiface->getImageHistory();
+        DImageHistory initialHistory = d->dimgiface->getInitialImageHistory();
+        if (currentHistory == initialHistory)
+        {
+            return false;
+        }
+        else
+        {
+            return currentHistory.actionCount() > initialHistory.actionCount();
+        }
+    }
+}
+
 void UndoManager::setOrigin() const
 {
     d->origin = 0;

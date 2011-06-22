@@ -48,6 +48,8 @@
 #define PGFCodecVersion		"6.11.24"			// Major number
 												// Minor number: Year (2) Week (2)
 
+#define PGFCodecVersionID   0x061124            // Codec version ID to use for API check in client implementation
+
 //-------------------------------------------------------------------------------
 //	Image constants
 //-------------------------------------------------------------------------------

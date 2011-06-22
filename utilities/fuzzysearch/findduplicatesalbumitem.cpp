@@ -6,7 +6,7 @@
  * Date        : 2008-06-17
  * Description : Find Duplicates tree-view search album item.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +31,7 @@
 
 #include <klocale.h>
 #include <kstringhandler.h>
+#include <kiconloader.h>
 
 // Local includes
 
@@ -46,9 +47,12 @@ class FindDuplicatesAlbumItem::FindDuplicatesAlbumItemPriv
 public:
 
     FindDuplicatesAlbumItemPriv() :
+        asThumb(false),
         album(0)
     {
     }
+
+    bool      asThumb;
 
     SAlbum*   album;
     ImageInfo refImgInfo;
@@ -70,6 +74,8 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* al
         list << reader.valueToIntList();
         setText(1, QString::number(list.count()));
     }
+
+    setThumb(SmallIcon("image-x-generic", parent->iconSize().width(), KIconLoader::DisabledState), false);
 }
 
 FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
@@ -77,7 +83,12 @@ FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
     delete d;
 }
 
-void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix)
+bool FindDuplicatesAlbumItem::asValidThumbnail() const
+{
+    return d->asThumb;
+}
+
+void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix, bool asThumb)
 {
     int iconSize = treeWidget()->iconSize().width();
     QPixmap pixmap(iconSize+2, iconSize+2);
@@ -95,6 +106,8 @@ void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix)
     icon.addPixmap(pixmap, QIcon::Normal,   QIcon::On);
     icon.addPixmap(pixmap, QIcon::Normal,   QIcon::Off);
     setIcon(0, icon);
+
+    d->asThumb = asThumb;
 }
 
 SAlbum* FindDuplicatesAlbumItem::album() const

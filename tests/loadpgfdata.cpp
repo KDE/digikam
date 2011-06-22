@@ -4,9 +4,9 @@
  * http://www.kipi-plugins.org
  *
  * Date        : 2009-02-04
- * Description : a command line tool to test PGF scaled to QImage
+ * Description : a command line tool to load PGF data and convert to QImage
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 {
     if (argc != 2)
     {
-        kDebug() << "pgfscaled - Load scaled version of PGF image and save to PNG";
+        kDebug() << "loadpgfdata - Load PGF data and save to PNG";
         kDebug() << "Usage: <pgffile>";
         return -1;
     }
@@ -58,15 +58,19 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    QByteArray data(file.size(), '\x00');
+    QDataStream stream(&file);
+    stream.readRawData(data.data(), data.size());
+
     // PGF => QImage conversion
 
-    if (!loadPGFScaled(img, file.fileName(), 1280))
+    if (!readPGFImageData(data, img))
     {
         kDebug() << "loadPGFScaled failed...";
         return -1;
     }
 
-    img.save(file.fileName() + QString("-scaled.png"), "PNG");
+    img.save(file.fileName() + QString("-converted.png"), "PNG");
 
     return 0;
 }
