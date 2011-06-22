@@ -6,8 +6,8 @@
  * Date        : 2008-05-19
  * Description : Find Duplicates View.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -31,7 +31,6 @@
 #include <QLayout>
 #include <QPainter>
 #include <QPushButton>
-#include <QTreeWidget>
 #include <QSpinBox>
 
 // KDE includes
@@ -57,19 +56,91 @@
 namespace Digikam
 {
 
+class FindDuplicatesAlbum::FindDuplicatesAlbumPriv
+{
+
+public:
+
+    FindDuplicatesAlbumPriv()
+        : iconSize(64)
+    {
+        thumbLoadThread = 0;
+    }
+
+    const int            iconSize;
+
+    ThumbnailLoadThread* thumbLoadThread;
+};
+
+FindDuplicatesAlbum::FindDuplicatesAlbum(QWidget* parent)
+    : QTreeWidget(parent), d(new FindDuplicatesAlbumPriv)
+{
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
+
+    setRootIsDecorated(false);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setAllColumnsShowFocus(true);
+    setIconSize(QSize(d->iconSize, d->iconSize));
+    setSortingEnabled(true);
+    setColumnCount(2);
+    setHeaderLabels(QStringList() << i18n("Ref. images") << i18n("Items"));
+    header()->setResizeMode(0, QHeaderView::Stretch);
+    header()->setResizeMode(1, QHeaderView::ResizeToContents);
+    setWhatsThis(i18n("This shows all found duplicate items."));
+
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+}
+
+FindDuplicatesAlbum::~FindDuplicatesAlbum()
+{
+    delete d;
+}
+
+void FindDuplicatesAlbum::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
+{
+    QTreeWidgetItemIterator it(this);
+
+    while (*it)
+    {
+        FindDuplicatesAlbumItem* item = dynamic_cast<FindDuplicatesAlbumItem*>(*it);
+
+        if (item->refUrl().toLocalFile() == desc.filePath)
+        {
+            if (!pix.isNull())
+            {
+                item->setThumb(pix.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio));
+            }
+        }
+
+        ++it;
+    }
+}
+
+void FindDuplicatesAlbum::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
+{
+    FindDuplicatesAlbumItem* item = dynamic_cast<FindDuplicatesAlbumItem*>(itemFromIndex(index));
+    if (item && !item->asValidThumbnail())
+    {
+        d->thumbLoadThread->find(item->refUrl().toLocalFile());
+    }
+    QTreeWidget::drawRow(p, opt, index);
+}
+
+// ------------------------------------------------------------------------------------------------------
+
 class FindDuplicatesView::FindDuplicatesViewPriv
 {
 
 public:
 
     FindDuplicatesViewPriv()
-        : iconSize(64)
     {
         listView           = 0;
         scanDuplicatesBtn  = 0;
         updateFingerPrtBtn = 0;
         progressBar        = 0;
-        thumbLoadThread    = 0;
         includeAlbumsLabel = 0;
         similarityLabel    = 0;
         similarity         = 0;
@@ -79,8 +150,6 @@ public:
         tagModel           = 0;
         searchJob          = NULL;
     }
-
-    const int                    iconSize;
 
     KIO::Job*                    searchJob;
 
@@ -92,11 +161,9 @@ public:
     QPushButton*                 scanDuplicatesBtn;
     QPushButton*                 updateFingerPrtBtn;
 
-    QTreeWidget*                 listView;
+    FindDuplicatesAlbum*         listView;
 
     StatusProgressBar*           progressBar;
-
-    ThumbnailLoadThread*         thumbLoadThread;
 
     AlbumSelectComboBox*         albumSelectCB;
     AlbumSelectComboBox*         tagSelectCB;
@@ -108,24 +175,11 @@ public:
 FindDuplicatesView::FindDuplicatesView(QWidget* parent)
     : QWidget(parent), d(new FindDuplicatesViewPriv)
 {
-    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
-
     setAttribute(Qt::WA_DeleteOnClose);
 
     // ---------------------------------------------------------------
 
-    d->listView = new QTreeWidget();
-    d->listView->setRootIsDecorated(false);
-    d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->listView->setAllColumnsShowFocus(true);
-    d->listView->setIconSize(QSize(d->iconSize, d->iconSize));
-    d->listView->setSortingEnabled(true);
-    d->listView->setColumnCount(2);
-    d->listView->setHeaderLabels(QStringList() << i18n("Ref. images") << i18n("Items"));
-    d->listView->header()->setResizeMode(0, QHeaderView::Stretch);
-    d->listView->header()->setResizeMode(1, QHeaderView::ResizeToContents);
-    d->listView->setWhatsThis(i18n("This shows all found duplicate items."));
+    d->listView           = new FindDuplicatesAlbum();
 
     d->updateFingerPrtBtn = new QPushButton(i18n("Update fingerprints"));
     d->updateFingerPrtBtn->setIcon(KIcon("run-build"));
@@ -198,9 +252,6 @@ FindDuplicatesView::FindDuplicatesView(QWidget* parent)
     connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
             this, SLOT(slotDuplicatesAlbumActived(QTreeWidgetItem*, int)));
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
-
     connect(d->progressBar, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotCancelButtonPressed()));
 
@@ -254,7 +305,6 @@ void FindDuplicatesView::populateTreeView()
         {
             FindDuplicatesAlbumItem* item = new FindDuplicatesAlbumItem(d->listView, salbum);
             salbum->setExtraData(this, item);
-            ThumbnailLoadThread::defaultThread()->find(item->refUrl().toLocalFile());
         }
     }
 
@@ -320,7 +370,6 @@ void FindDuplicatesView::slotAlbumAdded(Album* a)
     {
         FindDuplicatesAlbumItem* item = new FindDuplicatesAlbumItem(d->listView, salbum);
         salbum->setExtraData(this, item);
-        ThumbnailLoadThread::defaultThread()->find(item->refUrl().toLocalFile());
     }
 }
 
@@ -366,30 +415,6 @@ void FindDuplicatesView::slotClear()
     }
 
     d->listView->clear();
-}
-
-void FindDuplicatesView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
-{
-    QTreeWidgetItemIterator it(d->listView);
-
-    while (*it)
-    {
-        FindDuplicatesAlbumItem* item = dynamic_cast<FindDuplicatesAlbumItem*>(*it);
-
-        if (item->refUrl().toLocalFile() == desc.filePath)
-        {
-            if (pix.isNull())
-            {
-                item->setThumb(SmallIcon("image-x-generic", d->iconSize, KIconLoader::DisabledState));
-            }
-            else
-            {
-                item->setThumb(pix.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio));
-            }
-        }
-
-        ++it;
-    }
 }
 
 void FindDuplicatesView::enableControlWidgets(bool val)

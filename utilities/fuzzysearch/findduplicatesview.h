@@ -6,8 +6,8 @@
  * Date        : 2008-05-19
  * Description : Find Duplicates View.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -30,6 +30,7 @@
 
 #include <QWidget>
 #include <QPixmap>
+#include <QTreeWidget>
 
 // KDE includes
 
@@ -81,7 +82,6 @@ private Q_SLOTS:
     void slotDuplicatesSearchResult(KJob*);
 
     void slotCancelButtonPressed();
-    void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 
     void slotAlbumSelectionChanged(Album*, Qt::CheckState);
     void slotTagSelectionChanged(Album*, Qt::CheckState);
@@ -104,6 +104,31 @@ private:
 
     class FindDuplicatesViewPriv;
     FindDuplicatesViewPriv* const d;
+};
+
+// --------------------------------------------------------------------------------------------------------
+
+class FindDuplicatesAlbum : public QTreeWidget
+{
+    Q_OBJECT
+
+public:
+
+    FindDuplicatesAlbum(QWidget* parent=0);
+    virtual ~FindDuplicatesAlbum();
+
+private :
+
+    void drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const;
+
+private Q_SLOTS:
+
+    void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
+
+private:
+
+    class FindDuplicatesAlbumPriv;
+    FindDuplicatesAlbumPriv* const d;
 };
 
 }  // namespace Digikam
