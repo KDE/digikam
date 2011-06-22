@@ -609,7 +609,7 @@ __inline UINT64 ByteSwap(UINT64 ui64) {
 #endif //PGF_USE_BIG_ENDIAN
 
 // NOTE: Use LIBPGF_DISABLE_OPENMP to disable OpenMP support in whole libpgf
-#if not defined (LIBPGF_DISABLE_OPENMP)
+#ifndef LIBPGF_DISABLE_OPENMP
 
 // OpenMP rules (inspired from libraw project)
 #if defined (_OPENMP)
@@ -633,7 +633,7 @@ __inline UINT64 ByteSwap(UINT64 ui64) {
 
 #endif // defined (_OPENMP)
 
-#endif // not defined (LIBPGF_DISABLE_OPENMP)
+#endif // ifndef LIBPGF_DISABLE_OPENMP
 
 #ifdef LIBPGF_USE_OPENMP
 #include <omp.h>
