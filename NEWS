@@ -182,4 +182,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 153 ==> 248494 : Deleted pictures still shown: Have to rescan collection always.
 154 ==> 275660 : Remove tag non-working when using face view.
 155 ==> 274940 : digiKam freezes when using "sharpen: refocus" (cpu 100%).
-156 ==> 
+156 ==> 268549 : digiKam crashes everytime i try to start.
+157 ==> 
+
