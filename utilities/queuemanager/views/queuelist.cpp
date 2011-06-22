@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager items list.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,11 +62,13 @@ class QueueListViewItem::QueueListViewItemPriv
 public:
 
     QueueListViewItemPriv() :
-        done(false)
+        done(false),
+        asThumb(false)
     {
     }
 
     bool      done;
+    bool      asThumb;
 
     QString   destFileName;
 
@@ -78,13 +80,18 @@ public:
 QueueListViewItem::QueueListViewItem(QTreeWidget* view, const ImageInfo& info)
     : QTreeWidgetItem(view), d(new QueueListViewItemPriv)
 {
-    setThumb(SmallIcon("image-x-generic", KIconLoader::SizeLarge, KIconLoader::DisabledState));
+    setThumb(SmallIcon("image-x-generic", KIconLoader::SizeLarge, KIconLoader::DisabledState), false);
     setInfo(info);
 }
 
 QueueListViewItem::~QueueListViewItem()
 {
     delete d;
+}
+
+bool QueueListViewItem::asValidThumbnail() const
+{
+    return d->asThumb;
 }
 
 void QueueListViewItem::setInfo(const ImageInfo& info)
@@ -111,7 +118,7 @@ void QueueListViewItem::setPixmap(const QPixmap& pix)
     setIcon(0, icon);
 }
 
-void QueueListViewItem::setThumb(const QPixmap& pix)
+void QueueListViewItem::setThumb(const QPixmap& pix, bool asThumb)
 {
     QSize iSize = treeWidget()->iconSize();
     QPixmap pixmap(iSize.width()+2, iSize.height()+2);
@@ -120,6 +127,7 @@ void QueueListViewItem::setThumb(const QPixmap& pix)
     p.drawPixmap((pixmap.width()/2) - (pix.width()/2), (pixmap.height()/2) - (pix.height()/2), pix);
     d->preview = pixmap;
     setPixmap(d->preview);
+    d->asThumb = asThumb;
 }
 
 void QueueListViewItem::setProgressIcon(const QPixmap& icon)
@@ -624,12 +632,22 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
         if (!find)
         {
             item = new QueueListViewItem(this, info);
-            d->thumbLoadThread->find(info.fileUrl().toLocalFile());
         }
     }
 
     updateDestFileNames();
     emit signalQueueContentsChanged();
+}
+
+void QueueListView::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
+{
+    QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(itemFromIndex(index));
+    if (item && !item->asValidThumbnail())
+    {
+        ImageInfo info = item->info();
+        d->thumbLoadThread->find(info.fileUrl().toLocalFile());
+    }
+    QTreeWidget::drawRow(p, opt, index);
 }
 
 void QueueListView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
