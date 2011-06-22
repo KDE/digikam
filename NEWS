@@ -181,4 +181,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 152 ==> 268267 : digiKam crashes on picture import : OpenCV and Gphoto2 libraries incompatibility through libdc1394.
 153 ==> 248494 : Deleted pictures still shown: Have to rescan collection always.
 154 ==> 275660 : Remove tag non-working when using face view.
-155 ==> 
+155 ==> 274940 : digiKam freezes when using "sharpen: refocus" (cpu 100%).
+156 ==> 
