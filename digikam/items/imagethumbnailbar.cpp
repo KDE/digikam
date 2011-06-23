@@ -93,6 +93,7 @@ ImageThumbnailBar::ImageThumbnailBar(QWidget* parent)
             this, SLOT(slotSetupChanged()));
 
     slotSetupChanged();
+    setFlow(LeftToRight);
 }
 
 ImageThumbnailBar::~ImageThumbnailBar()
