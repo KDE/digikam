@@ -184,5 +184,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 155 ==> 274940 : digiKam freezes when using "sharpen: refocus" (cpu 100%).
 156 ==> 268549 : digiKam crashes everytime i try to start.
 157 ==> 272031 : BQM wastes a lot of memory when adding over 3000 files.
-158 ==> 
+158 ==> 275813 : digiKam hangs on startup (splash screen: reading database).
+159 ==> 
 
