@@ -186,5 +186,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 157 ==> 272031 : BQM wastes a lot of memory when adding over 3000 files.
 158 ==> 275813 : digiKam hangs on startup (splash screen: reading database).
 159 ==> 274729 : lighttable: the thumbnail slider does not work at all.
-160 ==> 
+160 ==> 274879 : Low resolution version of photo is displayed and portrait oriented photos are rotated 90 degrees.
+161 ==> 
 
