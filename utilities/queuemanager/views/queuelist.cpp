@@ -63,12 +63,12 @@ public:
 
     QueueListViewItemPriv() :
         done(false),
-        asThumb(false)
+        hasThumb(false)
     {
     }
 
     bool      done;
-    bool      asThumb;
+    bool      hasThumb;
 
     QString   destFileName;
 
@@ -89,9 +89,9 @@ QueueListViewItem::~QueueListViewItem()
     delete d;
 }
 
-bool QueueListViewItem::asValidThumbnail() const
+bool QueueListViewItem::hasValidThumbnail() const
 {
-    return d->asThumb;
+    return d->hasThumb;
 }
 
 void QueueListViewItem::setInfo(const ImageInfo& info)
@@ -118,16 +118,16 @@ void QueueListViewItem::setPixmap(const QPixmap& pix)
     setIcon(0, icon);
 }
 
-void QueueListViewItem::setThumb(const QPixmap& pix, bool asThumb)
+void QueueListViewItem::setThumb(const QPixmap& pix, bool hasThumb)
 {
     QSize iSize = treeWidget()->iconSize();
     QPixmap pixmap(iSize.width()+2, iSize.height()+2);
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
     p.drawPixmap((pixmap.width()/2) - (pix.width()/2), (pixmap.height()/2) - (pix.height()/2), pix);
-    d->preview = pixmap;
+    d->preview  = pixmap;
     setPixmap(d->preview);
-    d->asThumb = asThumb;
+    d->hasThumb = hasThumb;
 }
 
 void QueueListViewItem::setProgressIcon(const QPixmap& icon)
@@ -642,7 +642,7 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
 void QueueListView::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
     QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(itemFromIndex(index));
-    if (item && !item->asValidThumbnail())
+    if (item && !item->hasValidThumbnail())
     {
         ImageInfo info = item->info();
         d->thumbLoadThread->find(info.fileUrl().toLocalFile());

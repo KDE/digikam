@@ -537,7 +537,7 @@
             <dbaction name="Migrate_Read_ImageMetadata"><statement mode="query">
                 SELECT imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory FROM ImageMetadata;
             </statement></dbaction>
-            <dbaction name="Migrate_Write_ImageMetadate"><statement mode="query">
+            <dbaction name="Migrate_Write_ImageMetadata"><statement mode="query">
                 INSERT INTO ImageMetadate (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
             </statement></dbaction>
 
@@ -1195,7 +1195,7 @@
             <dbaction name="Migrate_Read_ImageMetadata"><statement mode="query">
                 SELECT imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory FROM ImageMetadata;
             </statement></dbaction>
-            <dbaction name="Migrate_Write_ImageMetadate" mode="transaction"><statement mode="query">
+            <dbaction name="Migrate_Write_ImageMetadata" mode="transaction"><statement mode="query">
                 INSERT INTO ImageMetadate (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
             </statement></dbaction>
 

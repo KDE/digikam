@@ -47,12 +47,12 @@ class FindDuplicatesAlbumItem::FindDuplicatesAlbumItemPriv
 public:
 
     FindDuplicatesAlbumItemPriv() :
-        asThumb(false),
+        hasThumb(false),
         album(0)
     {
     }
 
-    bool      asThumb;
+    bool      hasThumb;
 
     SAlbum*   album;
     ImageInfo refImgInfo;
@@ -83,12 +83,12 @@ FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
     delete d;
 }
 
-bool FindDuplicatesAlbumItem::asValidThumbnail() const
+bool FindDuplicatesAlbumItem::hasValidThumbnail() const
 {
-    return d->asThumb;
+    return d->hasThumb;
 }
 
-void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix, bool asThumb)
+void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix, bool hasThumb)
 {
     int iconSize = treeWidget()->iconSize().width();
     QPixmap pixmap(iconSize+2, iconSize+2);
@@ -107,7 +107,7 @@ void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix, bool asThumb)
     icon.addPixmap(pixmap, QIcon::Normal,   QIcon::Off);
     setIcon(0, icon);
 
-    d->asThumb = asThumb;
+    d->hasThumb = hasThumb;
 }
 
 SAlbum* FindDuplicatesAlbumItem::album() const
