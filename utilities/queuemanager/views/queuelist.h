@@ -50,7 +50,7 @@ public:
     QueueListViewItem(QTreeWidget* view, const ImageInfo& info);
     ~QueueListViewItem();
 
-    bool asValidThumbnail() const;
+    bool hasValidThumbnail() const;
 
     void setInfo(const ImageInfo& info);
     ImageInfo info() const;
@@ -58,7 +58,7 @@ public:
     void assignTool(int index, const BatchToolSet& set);
     void unassignTool(int index);
 
-    void setThumb(const QPixmap& pix, bool asThumb=true);
+    void setThumb(const QPixmap& pix, bool hasThumb=true);
 
     void setProgressIcon(const QPixmap& icon);
 
