@@ -121,7 +121,7 @@ void FindDuplicatesAlbum::slotThumbnailLoaded(const LoadingDescription& desc, co
 void FindDuplicatesAlbum::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
     FindDuplicatesAlbumItem* item = dynamic_cast<FindDuplicatesAlbumItem*>(itemFromIndex(index));
-    if (item && !item->asValidThumbnail())
+    if (item && !item->hasValidThumbnail())
     {
         d->thumbLoadThread->find(item->refUrl().toLocalFile());
     }

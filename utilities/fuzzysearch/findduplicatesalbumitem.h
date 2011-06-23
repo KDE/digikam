@@ -50,12 +50,12 @@ public:
     FindDuplicatesAlbumItem(QTreeWidget* parent, SAlbum* album);
     virtual ~FindDuplicatesAlbumItem();
 
-    bool asValidThumbnail() const;
+    bool hasValidThumbnail() const;
 
     SAlbum* album() const;
     KUrl    refUrl() const;
 
-    void setThumb(const QPixmap& pix, bool asThumb=true);
+    void setThumb(const QPixmap& pix, bool hasThumb=true);
 
     bool operator<(const QTreeWidgetItem& other) const;
 
