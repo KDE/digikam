@@ -870,10 +870,6 @@
                             lft INT NOT NULL,
                 rgt INT NOT NULL
                             );</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS TagsTree
-                            (id INTEGER NOT NULL NOT NULL AUTO_INCREMENT,
-                            pid INTEGER NOT NULL,
-                            UNIQUE (id, pid));</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTags
                             (imageid INTEGER NOT NULL,
                             tagid INTEGER NOT NULL,
@@ -965,19 +961,19 @@
                 DELETE FROM ImageTags          WHERE tagid=OLD.id;
                 DELETE FROM TagProperties      WHERE tagid=OLD.id;
                 DELETE FROM ImageTagProperties WHERE tagid=OLD.id;
-                DELETE FROM TagsTree WHERE lft BETWEEN OLD.lft AND OLD.rgt;
             END;
             </statement>
             <statement mode="plain">DROP TRIGGER IF EXISTS move_tagstree;</statement>
-            <statement mode="plain">CREATE TRIGGER move_tagstree AFTER UPDATE ON Tags
-            FOR EACH ROW BEGIN
-                DELETE FROM TagsTree WHERE lft BETWEEN OLD.lft AND OLD.rgt;
-                REPLACE INTO TagsTree
-                    SELECT node.id, parent.pid
-                    FROM Tags AS node, Tags AS parent
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                    ORDER BY parent.lft;
-            END;</statement>
+
+	    <statement mode="plain">SELECT @minLeft := MIN(lft) -1, @maxRight := MAX(rgt)+1 FROM Tags WHERE id >= 0 AND pid>=0;</statement>
+	    <statement mode="plain">SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';</statement>
+	    <statement mode="plain">
+	    REPLACE INTO Tags
+	    (id, pid, name, icon, iconkde, lft, rgt)
+	    VALUES
+	    (0, -1, '_Digikam_root_tag_', 0, NULL, @minLeft, @maxRight )
+	    </statement>
+	    <statement mode="plain">SET SQL_MODE=@OLD_SQL_MODE;</statement>
             </dbaction>
                        
             <dbaction name="checkIfDatabaseExists">
@@ -1054,24 +1050,57 @@
             </dbaction>
 
             <dbaction name="GetItemURLsInTagRecursive">
-            <statement mode="query">SELECT Albums.albumRoot, Albums.relativePath, Images.name
-                            FROM Images JOIN Albums ON Albums.id=Images.album
-                            WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID OR tagid IN (SELECT id FROM Tags WHERE lft BETWEEN (SELECT lft FROM Tags WHERE id=:tagID) AND (SELECT rgt FROM Tags WHERE id=:tagID)) );
+            <statement mode="query">
+SELECT DISTINCT alb.albumRoot, alb.relativePath, img.name
+FROM (
+       Images AS img
+  JOIN Albums AS alb
+    ON alb.id = img.album
+  JOIN ImageTags AS ita
+    ON ita.imageid = img.id
+) JOIN (
+  Tags As tp
+  JOIN Tags As tc
+    ON tc.lft BETWEEN tp.lft AND tp.rgt
+)
+ON tc.id = ita.tagID
+WHERE img.status = 1 
+  AND tp.id = :tagID
+ORDER BY img.name
+;
             </statement>
             </dbaction>
 
             <dbaction name="GetItemURLsInTag">
-            <statement mode="query">SELECT Albums.albumRoot, Albums.relativePath, Images.name
-                            FROM Images JOIN Albums ON Albums.id=Images.album
-                            WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID);
+            <statement mode="query">
+SELECT alb.albumRoot, alb.relativePath, img.name
+FROM Albums AS alb 
+JOIN Images AS img
+  ON alb.id = img.album
+JOIN ImageTags AS it
+  ON it.imageid = img.id
+WHERE img.status = 1 
+  AND it.tagid = :tagID
             </statement>
             </dbaction>
 
             <dbaction name="getItemIDsInTagRecursive">
-            <statement mode="query">SELECT imageid FROM ImageTags JOIN Images ON ImageTags.imageid=Images.id
-                                WHERE Images.status=1 AND
-                                ( tagid=:tagID
-                                OR tagid IN (SELECT id FROM Tags WHERE lft BETWEEN (SELECT lft FROM Tags WHERE id=:tagID) AND (SELECT rgt FROM Tags WHERE id=:tagID)) );
+            <statement mode="query">
+SELECT DISTINCT ita.imageid
+FROM (
+  Images AS img
+  JOIN ImageTags AS ita
+    ON ita.imageid = img.id
+) JOIN (
+  Tags As tp
+  JOIN Tags As tc
+    ON tc.lft BETWEEN tp.lft AND tp.rgt
+)
+ON tc.id = ita.tagID
+WHERE img.status = 1 
+  AND tp.id = :tagID
+ORDER BY img.name
+;
             </statement>
             </dbaction>
 
@@ -1082,34 +1111,56 @@
             </dbaction>
 
             <dbaction name="listTagRecursive">
-            <statement mode="query">  SELECT DISTINCT Images.id, Images.name, Images.album,
-                                    Albums.albumRoot,
-                                    ImageInformation.rating, Images.category,
-                                    ImageInformation.format, ImageInformation.creationDate,
-                                    Images.modificationDate, Images.fileSize,
-                                    ImageInformation.width, ImageInformation.height
-                            FROM Images
-                                    INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
-                                    INNER JOIN Albums ON Albums.id=Images.album
-                            WHERE Images.status=1 AND Images.id IN
-                                    (SELECT imageid FROM ImageTags
-                                    WHERE tagid=:tagID OR tagid IN (SELECT id FROM Tags WHERE lft BETWEEN (SELECT lft FROM Tags WHERE id=:tagID) AND (SELECT rgt FROM Tags WHERE id=:tagID)) );
+            <statement mode="query">
+SELECT DISTINCT 
+    img.id, img.name, img.album,
+    alb.albumRoot,
+    inf.rating, img.category,
+    inf.format, inf.creationDate,
+    img.modificationDate, img.fileSize,
+    inf.width, inf.height
+FROM (
+  Images AS img
+  JOIN ImageInformation AS inf 
+    ON img.id=inf.imageid
+  JOIN Albums AS alb
+    ON alb.id=img.album
+  JOIN ImageTags AS ita
+    ON ita.imageid = img.id
+) JOIN (
+  Tags As tp
+  JOIN Tags As tc
+    ON tc.lft BETWEEN tp.lft AND tp.rgt
+)
+ON tc.id = ita.tagID
+WHERE img.status = 1 
+  AND tp.id = :tagID
+ORDER BY inf.rating DESC, img.name ASC
+;
             </statement>
             </dbaction>
 
             <dbaction name="listTag">
-            <statement mode="query">  SELECT DISTINCT Images.id, Images.name, Images.album,
-                                    Albums.albumRoot,
-                                    ImageInformation.rating, Images.category,
-                                    ImageInformation.format, ImageInformation.creationDate,
-                                    Images.modificationDate, Images.fileSize,
-                                    ImageInformation.width, ImageInformation.height
-                            FROM Images
-                                    INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
-                                    INNER JOIN Albums ON Albums.id=Images.album
-                            WHERE Images.status=1 AND Images.id IN
-                                    (SELECT imageid FROM ImageTags
-                                    WHERE tagid=:tagID );
+            <statement mode="query">
+SELECT DISTINCT 
+    img.id, img.name, img.album,
+    alb.albumRoot,
+    inf.rating, img.category,
+    inf.format, inf.creationDate,
+    img.modificationDate, img.fileSize,
+    inf.width, inf.height
+FROM
+  Images AS img
+  JOIN ImageInformation AS inf 
+    ON img.id=inf.imageid
+  JOIN Albums AS alb
+    ON alb.id=img.album
+  JOIN ImageTags AS ita
+    ON ita.imageid = img.id
+WHERE img.status = 1 
+  AND ita.tagID = :tagID
+ORDER BY inf.rating DESC, img.name ASC
+;
             </statement>
             </dbaction>
 
@@ -1374,12 +1425,6 @@
                     DELETE FROM ImageTags          WHERE tagid=OLD.id;
                     DELETE FROM TagProperties      WHERE tagid=OLD.id;
                     DELETE FROM ImageTagProperties WHERE tagid=OLD.id;
-                    DELETE FROM TagsTree;
-                    REPLACE INTO TagsTree
-                    SELECT node.id, parent.pid
-                    FROM Tags AS node, Tags AS parent
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                    ORDER BY parent.lft;
                 END;
             </statement>
             </dbaction>
