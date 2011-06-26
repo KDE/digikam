@@ -3,7 +3,7 @@
     "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
 <!ENTITY product "<command>cleanup_digikamdb</command>">
-<!ENTITY version "1.0">
+<!ENTITY version "1.1">
 <!ENTITY digikam "digiKam">
 <!ENTITY vacuum  "<emphasis>VACUUM</emphasis>">
 ]>
