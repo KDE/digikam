@@ -74,7 +74,7 @@
                 <listitem>
                     <para>
                         Specify a different database <emphasis>path</emphasis>.
-                        If the specified <emphasis>path</emphasis> is invalid, the entry from the configuration file will be used.
+                        If this option is not set or the specified <emphasis>path</emphasis> is invalid, the entry from the configuration file will be used.
                     </para>
                 </listitem>
             </varlistentry>
