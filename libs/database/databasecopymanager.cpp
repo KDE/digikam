@@ -216,6 +216,22 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
         return;
     }
 
+    emit stepStarted(i18n("Copy ImageHistory..."));
+
+    if (isStopProcessing || !copyTable(fromDBbackend, QString("Migrate_Read_ImageHistory"), toDBbackend, QString("Migrate_Write_ImageHistory")))
+    {
+        handleClosing(isStopProcessing, fromDBbackend, toDBbackend);
+        return;
+    }
+
+    emit stepStarted(i18n("Copy ImageRelations..."));
+
+    if (isStopProcessing || !copyTable(fromDBbackend, QString("Migrate_Read_ImageRelations"), toDBbackend, QString("Migrate_Write_ImageRelations")))
+    {
+        handleClosing(isStopProcessing, fromDBbackend, toDBbackend);
+        return;
+    }
+
     emit stepStarted(i18n("Copy Searches..."));
 
     if (isStopProcessing || !copyTable(fromDBbackend, QString("Migrate_Read_Searches"), toDBbackend, QString("Migrate_Write_Searches")))

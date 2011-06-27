@@ -597,6 +597,20 @@
                 INSERT INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
             </statement></dbaction>
 
+            <dbaction name="Migrate_Read_ImageHistory"><statement mode="query">
+                SELECT  imageid, uuid, history FROM ImageHistory;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_ImageHistory"><statement mode="query">
+                INSERT INTO ImageHistory (imageid, uuid, history) VALUES (:imageid, :uuid, :history);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_ImageRelations"><statement mode="query">
+                SELECT  subject, object, type FROM ImageRelations;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_ImageRelations"><statement mode="query">
+                INSERT INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
+            </statement></dbaction>
+
             <dbaction name="Migrate_Read_Searches"><statement mode="query">
                 SELECT  id, type, name, query FROM Searches;
             </statement></dbaction>
@@ -1329,6 +1343,20 @@ ORDER BY inf.rating DESC, img.name ASC
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageProperties" mode="transaction"><statement mode="query">
                 INSERT INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_ImageHistory"><statement mode="query">
+                SELECT  imageid, uuid, history FROM ImageHistory;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_ImageHistory"><statement mode="query">
+                INSERT INTO ImageHistory (imageid, uuid, history) VALUES (:imageid, :uuid, :history);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_ImageRelations"><statement mode="query">
+                SELECT  subject, object, type FROM ImageRelations;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_ImageRelations"><statement mode="query">
+                INSERT INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Searches"><statement mode="query">
