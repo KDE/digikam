@@ -217,6 +217,8 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(QWidget* parent, Flags flags)
     {
         setAlbumFilterModel(new AlbumFilterModel(this));
     }
+
+    setSortingEnabled(true);
 }
 
 AbstractAlbumTreeView::~AbstractAlbumTreeView()
@@ -309,6 +311,8 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel* filterModel)
         {
             expand(m_albumFilterModel->rootAlbumIndex());
         }
+
+        m_albumFilterModel->setDynamicSortFilter(true);
     }
 }
 
