@@ -183,6 +183,22 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
         handleClosing(isStopProcessing, fromDBbackend, toDBbackend);
         return;
     }
+    
+    emit stepStarted(i18n("Copy TagProperties..."));
+
+    if (isStopProcessing || !copyTable(fromDBbackend, QString("Migrate_Read_TagProperties"), toDBbackend, QString("Migrate_Write_TagProperties")))
+    {
+        handleClosing(isStopProcessing, fromDBbackend, toDBbackend);
+        return;
+    }
+
+    emit stepStarted(i18n("Copy ImageTagProperties..."));
+
+    if (isStopProcessing || !copyTable(fromDBbackend, QString("Migrate_Read_ImageTagProperties"), toDBbackend, QString("Migrate_Write_ImageTagProperties")))
+    {
+        handleClosing(isStopProcessing, fromDBbackend, toDBbackend);
+        return;
+    }
 
     emit stepStarted(i18n("Copy ImageTags..."));
 
@@ -195,6 +211,22 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
     emit stepStarted(i18n("Copy ImageProperties..."));
 
     if (isStopProcessing || !copyTable(fromDBbackend, QString("Migrate_Read_ImageProperties"), toDBbackend, QString("Migrate_Write_ImageProperties")))
+    {
+        handleClosing(isStopProcessing, fromDBbackend, toDBbackend);
+        return;
+    }
+
+    emit stepStarted(i18n("Copy ImageHistory..."));
+
+    if (isStopProcessing || !copyTable(fromDBbackend, QString("Migrate_Read_ImageHistory"), toDBbackend, QString("Migrate_Write_ImageHistory")))
+    {
+        handleClosing(isStopProcessing, fromDBbackend, toDBbackend);
+        return;
+    }
+
+    emit stepStarted(i18n("Copy ImageRelations..."));
+
+    if (isStopProcessing || !copyTable(fromDBbackend, QString("Migrate_Read_ImageRelations"), toDBbackend, QString("Migrate_Write_ImageRelations")))
     {
         handleClosing(isStopProcessing, fromDBbackend, toDBbackend);
         return;
