@@ -59,6 +59,9 @@ public:
     void toIndex(const QModelIndex& index);
     void awayFromSelection();
 
+    /** Like scrollTo, but only scrolls if the index is not visible, regardless of hint. */
+    void scrollToRelaxed(const QModelIndex& index, ScrollHint hint = EnsureVisible);
+
     void invertSelection();
     void setSelectedIndexes(const QList<QModelIndex>& indexes);
 

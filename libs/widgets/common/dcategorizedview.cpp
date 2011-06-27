@@ -259,6 +259,16 @@ void DCategorizedView::awayFromSelection()
     }
 }
 
+void DCategorizedView::scrollToRelaxed(const QModelIndex& index, QAbstractItemView::ScrollHint hint)
+{
+    if (viewport()->rect().intersects(visualRect(index)))
+    {
+        return;
+    }
+
+    scrollTo(index, hint);
+}
+
 void DCategorizedView::invertSelection()
 {
     const QModelIndex topLeft     = model()->index(0, 0);
@@ -538,12 +548,12 @@ void DCategorizedView::layoutWasChanged()
 
     if (d->hintAtScrollPosition.isValid())
     {
-        scrollTo(d->hintAtScrollPosition, QAbstractItemView::PositionAtTop);
+        scrollToRelaxed(d->hintAtScrollPosition, QAbstractItemView::PositionAtTop);
         d->hintAtScrollPosition = QModelIndex();
     }
     else
     {
-        scrollTo(currentIndex());
+        scrollToRelaxed(currentIndex());
     }
 }
 
