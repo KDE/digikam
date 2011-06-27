@@ -240,6 +240,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
     QSqlQuery result = fromDBbackend.execDBActionQuery(fromDBbackend.getDBAction(fromActionName), bindingMap) ;
 
     int resultSize = -1;
+    bool isForwardOnly = result.isForwardOnly();
 
     if (result.driver()->hasFeature(QSqlDriver::QuerySize))
     {
@@ -254,7 +255,13 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
          * To not confuse the log reading user, we reset this value to 0.
          */
         resultSize = result.at()<0 ? 0 : result.at();
-        result.first();
+	/*
+	 * avoid a misleading error message, query is redone if isForwardOnly
+	 */
+	if ( ! isForwardOnly)
+	{
+            result.first();
+	}
     }
 
     kDebug(50003) << "Result size: ["<< resultSize << "]";
@@ -264,7 +271,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
      * This is not atomic, so it can be tend to different results between
      * real database entries copied and shown at the progressbar.
      */
-    if (result.isForwardOnly())
+    if (isForwardOnly)
     {
         result.finish();
         result = fromDBbackend.execDBActionQuery(fromDBbackend.getDBAction(fromActionName), bindingMap) ;
