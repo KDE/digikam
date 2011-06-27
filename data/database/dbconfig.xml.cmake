@@ -373,7 +373,7 @@
             <dbaction name="GetItemURLsInTagRecursive">
             <statement mode="query">SELECT Albums.albumRoot, Albums.relativePath, Images.name
                             FROM Images JOIN Albums ON Albums.id=Images.album
-                            WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagID)  );
+                            WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagID2)  );
             </statement>
             </dbaction>
 
@@ -1070,6 +1070,7 @@ FROM (
 ON tc.id = ita.tagID
 WHERE img.status = 1 
   AND tp.id = :tagID
+  /* AND tp.id = :tagID2 */
 ORDER BY img.name
 ;
             </statement>
