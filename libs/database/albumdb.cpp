@@ -3959,6 +3959,7 @@ QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
 
     QMap<QString, QVariant> bindingMap;
     bindingMap.insert(QString(":tagID"), tagID);
+    bindingMap.insert(QString(":tagID2"), tagID);
 
     if (recursive)
     {
