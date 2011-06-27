@@ -1,1 +1,2 @@
 *.kate-swp
+tests/databases/*/*.db
