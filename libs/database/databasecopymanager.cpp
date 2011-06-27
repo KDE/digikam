@@ -183,6 +183,22 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
         handleClosing(isStopProcessing, fromDBbackend, toDBbackend);
         return;
     }
+    
+    emit stepStarted(i18n("Copy TagProperties..."));
+
+    if (isStopProcessing || !copyTable(fromDBbackend, QString("Migrate_Read_TagProperties"), toDBbackend, QString("Migrate_Write_TagProperties")))
+    {
+        handleClosing(isStopProcessing, fromDBbackend, toDBbackend);
+        return;
+    }
+
+    emit stepStarted(i18n("Copy ImageTagProperties..."));
+
+    if (isStopProcessing || !copyTable(fromDBbackend, QString("Migrate_Read_ImageTagProperties"), toDBbackend, QString("Migrate_Write_ImageTagProperties")))
+    {
+        handleClosing(isStopProcessing, fromDBbackend, toDBbackend);
+        return;
+    }
 
     emit stepStarted(i18n("Copy ImageTags..."));
 

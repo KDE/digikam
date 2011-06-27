@@ -541,6 +541,20 @@
                 INSERT INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
             </statement></dbaction>
 
+            <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">
+                SELECT imageid, tagid, property, value FROM ImageTagProperties;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_ImageTagProperties"><statement mode="query">
+                INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES (:imageid, :tagid, :property, :value);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_TagProperties"><statement mode="query">
+                SELECT tagid, property, value FROM TagProperties;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_TagProperties"><statement mode="query">
+                INSERT INTO TagProperties (tagid, property, value) VALUES (:tagid, :property, :value);
+            </statement></dbaction>
+
             <dbaction name="Migrate_Read_ImagePositions"><statement mode="query">
                 SELECT  imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description FROM ImagePositions;
             </statement></dbaction>
@@ -1253,6 +1267,20 @@ ORDER BY inf.rating DESC, img.name ASC
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageMetadata" mode="transaction"><statement mode="query">
                 INSERT INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">
+                SELECT imageid, tagid, property, value FROM ImageTagProperties;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_ImageTagProperties"><statement mode="query">
+                INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES (:imageid, :tagid, :property, :value);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_TagProperties"><statement mode="query">
+                SELECT tagid, property, value FROM TagProperties;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_TagProperties"><statement mode="query">
+                INSERT INTO TagProperties (tagid, property, value) VALUES (:tagid, :property, :value);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImagePositions"><statement mode="query">
