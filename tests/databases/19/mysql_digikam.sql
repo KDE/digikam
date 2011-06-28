@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.1.56, for pc-linux-gnu (x86_64)
 --
--- Host: localhost    Database: digikam19
+-- Host: localhost    Database: digikam
 -- ------------------------------------------------------
 -- Server version	5.1.56-log
 
@@ -31,7 +31,7 @@ CREATE TABLE `albumroots` (
   `specificPath` longtext,
   PRIMARY KEY (`id`),
   UNIQUE KEY `identifier` (`identifier`(167),`specificPath`(166))
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,7 +51,7 @@ CREATE TABLE `albums` (
   `icon` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `albumRoot` (`albumRoot`,`relativePath`(332))
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,7 +89,7 @@ CREATE TABLE `imagecomments` (
   `comment` longtext,
   PRIMARY KEY (`id`),
   UNIQUE KEY `imageid` (`imageid`,`type`,`language`,`author`(202))
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,7 +235,7 @@ CREATE TABLE `images` (
   UNIQUE KEY `album` (`album`,`name`(332)),
   KEY `dir_index` (`album`),
   KEY `hash_index` (`uniqueHash`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -336,7 +336,7 @@ CREATE TABLE `tags` (
   `lft` int(11) NOT NULL,
   `rgt` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -397,11 +397,11 @@ CREATE TABLE `tagstree` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL,
   UNIQUE KEY `id` (`id`,`pid`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping routines for database 'digikam19'
+-- Dumping routines for database 'digikam'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -413,4 +413,3 @@ CREATE TABLE `tagstree` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-06-23 23:28:18
