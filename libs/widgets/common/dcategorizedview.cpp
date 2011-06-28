@@ -622,8 +622,8 @@ void DCategorizedView::ensureSelectionAfterChanges()
 
             if (index.isValid())
             {
-                selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
                 setCurrentIndex(index);
+                selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
             }
         }
     }
