@@ -780,7 +780,8 @@
                 set @Index_cnt = (
                     SELECT COUNT(1) cnt
                     FROM INFORMATION_SCHEMA.STATISTICS
-                    WHERE CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
+                    WHERE CONVERT(DATABASE() USING latin1) = CONVERT(TABLE_SCHEMA USING latin1)
+                      AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
                       AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
                 );
 
