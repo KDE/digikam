@@ -477,27 +477,7 @@
                 </dbaction>
 
             <!-- Migration Statements -->
-            <dbaction name="Migrate_Cleanup_DB" mode="query">
-                <statement mode="plain">DROP TABLE IF EXISTS AlbumRoots</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS Albums</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS DownloadHistory</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS FilePaths</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageComments</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageCopyright</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageHaarMatrix</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageInformation</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageMetadata</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImagePositions</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageProperties</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageTags</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS Images</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS Searches</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS Settings</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS Tags</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS TagsTree</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS Thumbnails</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS UniqueHashes</statement>
-            </dbaction>
+            <!-- Migrate_Cleanup_DB now it's done by the program -->
 
             <dbaction name="Migrate_Read_AlbumRoots"><statement mode="query">
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
@@ -780,7 +760,8 @@
                 set @Index_cnt = (
                     SELECT COUNT(1) cnt
                     FROM INFORMATION_SCHEMA.STATISTICS
-                    WHERE CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
+                    WHERE CONVERT(DATABASE() USING latin1) = CONVERT(TABLE_SCHEMA USING latin1)
+                      AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
                       AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
                 );
 
@@ -1239,9 +1220,7 @@ ORDER BY inf.rating DESC, img.name ASC
             <dbaction name="CreateThumbnailsDBTrigger" mode="transaction"></dbaction>
 
             <!-- Migration Statements -->
-            <dbaction name="Migrate_Cleanup_DB"><statement mode="plain">
-                DROP TABLE IF EXISTS AlbumRoots, Albums, DownloadHistory, FilePaths, ImageComments, ImageCopyright, ImageHaarMatrix, ImageInformation, ImageMetadata, ImagePositions, ImageProperties, ImageTags, Images, Searches, Settings, Tags, TagsTree, Thumbnails, UniqueHashes;
-            </statement></dbaction>
+            <!-- Migrate_Cleanup_DB now it's done by the program -->
 
             <dbaction name="Migrate_Read_AlbumRoots"><statement mode="query">
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
