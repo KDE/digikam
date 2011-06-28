@@ -7,9 +7,9 @@
  * Description : Haar Database interface
  *
  * Copyright (C) 2003 by Ricardo Niederberger Cabral <nieder at mail dot ru>
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -131,10 +131,12 @@ public:
 
         // write coefficients
         for (int i=0; i<3; ++i)
+        {
             for (int j=0; j<Haar::NumberOfCoefficients; ++j)
             {
                 stream << data->sig[i][j];
             }
+        }
 
         return array;
     }
@@ -153,10 +155,10 @@ public:
         signatureCache    = 0;
         useSignatureCache = false;
 
-        signatureQuery = QString("SELECT M.imageid, 0, M.matrix "
-                                 " FROM ImageHaarMatrix AS M "
-                                 "    INNER JOIN Images ON Images.id=M.imageid "
-                                 " WHERE Images.status=1; ");
+        signatureQuery    = QString("SELECT M.imageid, 0, M.matrix "
+                                    " FROM ImageHaarMatrix AS M "
+                                    "    INNER JOIN Images ON Images.id=M.imageid "
+                                    " WHERE Images.status=1; ");
 
         signatureByAlbumRootsQuery = QString("SELECT M.imageid, Albums.albumRoot, M.matrix "
                                              " FROM ImageHaarMatrix AS M "
@@ -443,7 +445,7 @@ QList<qlonglong> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, 
     {
         // reference for easier access
         SignatureCache& signatureCache = *d->signatureCache;
-        Haar::SignatureData& sig = signatureCache[imageid];
+        Haar::SignatureData& sig       = signatureCache[imageid];
         return bestMatchesWithThreshold(&sig, requiredPercentage, type);
     }
 }
@@ -527,8 +529,7 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData* querySig, int numbe
     return bestMatches.values();
 }
 
-QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData* querySig, double requiredPercentage,
-        SketchType type)
+QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData* querySig, double requiredPercentage, SketchType type)
 {
     QMap<qlonglong, double> scores = searchDatabase(querySig, type);
     double lowest, highest;
@@ -789,7 +790,8 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QLi
 }
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QList<int>& albums2Scan,
-        double requiredPercentage, HaarProgressObserver* observer)
+                                                                      double requiredPercentage,
+                                                                      HaarProgressObserver* observer)
 {
     QSet<qlonglong> idList;
 
@@ -803,8 +805,9 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QLis
 }
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbumsAndTags(const QList<int>& albums2Scan,
-        const QList<int>& tags2Scan,
-        double requiredPercentage, HaarProgressObserver* observer)
+                                                                             const QList<int>& tags2Scan,
+                                                                             double requiredPercentage,
+                                                                             HaarProgressObserver* observer)
 {
     QSet<qlonglong> idList;
 
@@ -824,16 +827,17 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbumsAndTags(con
 }
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QSet<qlonglong>& images2Scan,
-        double requiredPercentage, HaarProgressObserver* observer)
+                                                              double requiredPercentage,
+                                                              HaarProgressObserver* observer)
 {
-    QMap< qlonglong, QList<qlonglong> >  resultsMap;
-    QSet<qlonglong>::const_iterator      it;
-    QList<qlonglong>                     list;
-    QSet<qlonglong>                      resultsCandidates;
+    QMap< qlonglong, QList<qlonglong> > resultsMap;
+    QSet<qlonglong>::const_iterator     it;
+    QList<qlonglong>                    list;
+    QSet<qlonglong>                     resultsCandidates;
 
-    int                                  total        = 0;
-    int                                  progress     = 0;
-    int                                  progressStep = 20;
+    int                                 total        = 0;
+    int                                 progress     = 0;
+    int                                 progressStep = 20;
 
     if (observer)
     {
