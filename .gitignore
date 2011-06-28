@@ -1,2 +1,5 @@
 *.kate-swp
 tests/databases/*/*.db
+tests/databases/*/sqlite_thumbnails-digikam.db.data.sql
+tests/databases/testimages/a2/icc-test-farbkreis_v1.*
+
