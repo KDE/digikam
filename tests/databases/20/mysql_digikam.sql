@@ -31,7 +31,7 @@ CREATE TABLE `albumroots` (
   `specificPath` longtext,
   PRIMARY KEY (`id`),
   UNIQUE KEY `identifier` (`identifier`(127),`specificPath`(128))
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,7 +51,7 @@ CREATE TABLE `albums` (
   `icon` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `albumRoot` (`albumRoot`,`relativePath`(255))
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,8 +88,9 @@ CREATE TABLE `imagecomments` (
   `date` datetime DEFAULT NULL,
   `comment` longtext,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `imageid` (`imageid`,`type`,`language`,`author`(202))
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `imageid` (`imageid`,`type`,`language`,`author`(202)),
+  KEY `comments_imageid_index` (`imageid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,7 +107,8 @@ CREATE TABLE `imagecopyright` (
   `value` longtext,
   `extraValue` longtext,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `imageid` (`imageid`,`property`(110),`value`(111),`extraValue`(111))
+  UNIQUE KEY `imageid` (`imageid`,`property`(110),`value`(111),`extraValue`(111)),
+  KEY `copyright_imageid_index` (`imageid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -137,7 +139,8 @@ CREATE TABLE `imagehistory` (
   `imageid` int(11) NOT NULL,
   `uuid` varchar(128) DEFAULT NULL,
   `history` longtext,
-  PRIMARY KEY (`imageid`)
+  PRIMARY KEY (`imageid`),
+  KEY `uuid_index` (`uuid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -159,7 +162,8 @@ CREATE TABLE `imageinformation` (
   `format` longtext,
   `colorDepth` int(11) DEFAULT NULL,
   `colorModel` int(11) DEFAULT NULL,
-  PRIMARY KEY (`imageid`)
+  PRIMARY KEY (`imageid`),
+  KEY `creationdate_index` (`creationDate`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -241,7 +245,9 @@ CREATE TABLE `imagerelations` (
   `subject` int(11) DEFAULT NULL,
   `object` int(11) DEFAULT NULL,
   `type` int(11) DEFAULT NULL,
-  UNIQUE KEY `subject` (`subject`,`object`,`type`)
+  UNIQUE KEY `subject` (`subject`,`object`,`type`),
+  KEY `subject_relations_index` (`subject`),
+  KEY `object_relations_index` (`object`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -262,8 +268,11 @@ CREATE TABLE `images` (
   `fileSize` int(11) DEFAULT NULL,
   `uniqueHash` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `album` (`album`,`name`(255))
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `album` (`album`,`name`(255)),
+  KEY `dir_index` (`album`),
+  KEY `hash_index` (`uniqueHash`),
+  KEY `image_name_index` (`name`(333))
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -307,7 +316,10 @@ CREATE TABLE `imagetagproperties` (
   `imageid` int(11) DEFAULT NULL,
   `tagid` int(11) DEFAULT NULL,
   `property` text,
-  `value` longtext
+  `value` longtext,
+  KEY `imagetagproperties_index` (`imageid`,`tagid`),
+  KEY `imagetagproperties_imageid_index` (`imageid`),
+  KEY `imagetagproperties_tagid_index` (`tagid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -321,7 +333,9 @@ DROP TABLE IF EXISTS `imagetags`;
 CREATE TABLE `imagetags` (
   `imageid` int(11) NOT NULL,
   `tagid` int(11) NOT NULL,
-  UNIQUE KEY `imageid` (`imageid`,`tagid`)
+  UNIQUE KEY `imageid` (`imageid`,`tagid`),
+  KEY `tag_index` (`tagid`),
+  KEY `tag_id_index` (`imageid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -365,7 +379,8 @@ DROP TABLE IF EXISTS `tagproperties`;
 CREATE TABLE `tagproperties` (
   `tagid` int(11) DEFAULT NULL,
   `property` text,
-  `value` longtext
+  `value` longtext,
+  KEY `tagproperties_index` (`tagid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -385,7 +400,7 @@ CREATE TABLE `tags` (
   `lft` int(11) NOT NULL,
   `rgt` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -428,7 +443,8 @@ BEGIN
                 set @Index_cnt = (
                     SELECT COUNT(1) cnt
                     FROM INFORMATION_SCHEMA.STATISTICS
-                    WHERE CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
+                    WHERE CONVERT(DATABASE() USING latin1) = CONVERT(TABLE_SCHEMA USING latin1)
+                      AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
                       AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
                 );
 
@@ -462,4 +478,3 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-06-27 23:14:47
