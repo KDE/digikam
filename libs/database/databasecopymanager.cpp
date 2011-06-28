@@ -194,13 +194,13 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
          * To not confuse the log reading user, we reset this value to 0.
          */
         resultSize = result.at()<0 ? 0 : result.at();
-	/*
-	 * avoid a misleading error message, query is redone if isForwardOnly
-	 */
-	if ( ! isForwardOnly)
-	{
+        /*
+        * avoid a misleading error message, query is redone if isForwardOnly
+        */
+        if ( ! isForwardOnly)
+        {
             result.first();
-	}
+        }
     }
 
     kDebug(50003) << "Result size: ["<< resultSize << "]";
