@@ -105,7 +105,17 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
     QMap<QString, QVariant> bindingMap;
 
     // Delete all tables
-    if (toDBbackend.execDBAction(toDBbackend.getDBAction("Migrate_Cleanup_DB"), bindingMap) != DatabaseCoreBackend::NoErrors)
+    for (int i=0; m_isStopProcessing || i < tablesSize; i++)
+    {
+        if (toDBbackend.execDirectSql(QString("DROP TABLE IF EXISTS %1;").arg(tables[i])) != DatabaseCoreBackend::NoErrors)
+        {
+            emit finished(DatabaseCopyManager::failed, i18n("Error while scrubbing the target database."));
+            fromDBbackend.close();
+            toDBbackend.close();
+            return;
+        }
+    }
+    if (toDBbackend.execDirectSql(QString("DROP TABLE IF EXISTS Settings;")) != DatabaseCoreBackend::NoErrors)
     {
         emit finished(DatabaseCopyManager::failed, i18n("Error while scrubbing the target database."));
         fromDBbackend.close();
