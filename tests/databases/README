@@ -1,0 +1,129 @@
+--- phase 1 ---
+	010- start a fresh digikam with first album data/testimages/a1
+	020- rebuild all thumbnails
+	030- rebuild fingerprints
+	040+ create tag tree
+	050- add album data/testimages/a2
+	060+ add tags to images
+	065- rotate icc-test-farbkreis.jpg 90° right
+	070- rebuild all thumbnails
+	080- rebuild fingerprints
+	090+ dump data from sqlite database
+	100- convert to mysql
+	110+ dump data from mysql database
+
+--- phase 2 ---
+	120- reset
+	130- start a fresh digikam with first album data/testimages/a1
+	140- convert to mysql
+	150- rebuild all thumbnails
+	160- rebuild fingerprints
+	170+ create tag tree
+	175- rotate icc-test-farbkreis.jpg 90° right
+	180- add album data/testimages/a2
+	190- rebuild all thumbnails
+	200- rebuild fingerprints
+	210+ add tags to images
+	220+ dump data from mysql database
+
+--- image tree ---
+drwx   4096 .
+drwx   4096 ./a1
+drwx   4096 ./a1/png
+-rw- 173933 ./a1/png/snap001.png
+-rw-  71056 ./a1/png/snap002.png
+drwx   4096 ./a1/jpg
+-rw- 105505 ./a1/jpg/foto001bw.jpg
+-rw- 145538 ./a1/jpg/foto001.jpg								this image has geotags
+drwx   4096 ./a2
+-rw- 114493 ./a2/big-image.png									this image has some tags already defined
+-rw-  50331 ./a2/icc-test-no-profile.jpg
+-rw-  99416 ./a2/Martian_face_viking.jpg
+-rw-  75675 ./a2/icc-test-farbkreis.jpg
+drwx   4096 ./a2/pgf
+drwx   4096 ./a2/pgf/link
+lrwx     16 ./a2/pgf/link/otherlink.pgf -> ../foto001q5.pgf
+lrwx     16 ./a2/pgf/link/foto001q5.pgf -> ../foto001q5.pgf
+-rw-  89012 ./a2/pgf/foto001q5.pgf
+
+
+--- phase 1 --- step 040
+--- phase 2 --- step 170
+SELECT CONCAT(SPACE(COUNT(parent.name) - 1), " + ", node.name, "(",
+node.pid, ":", node.id, ")") AS node
+FROM tags AS node, tags AS parent
+WHERE node.lft BETWEEN parent.lft AND parent.rgt
+GROUP BY node.name
+ORDER BY node.lft;
+
++----------------------+
+| node                 |
++----------------------+
+|  + tagl0a(0:1)       |
+|   + tagl1c(1:4)      |
+|   + tagl1b(1:3)      |
+|    + tagl2d(3:8)     |
+|    + tagl2c(3:7)     |
+|    + tagl2b(3:6)     |
+|     + tagl3b(6:10)   |
+|     + tagl3a(6:9)    |
+|    + tagl2a(3:5)     |
+|   + tagl1a(1:2)      |
+|  + tl0(0:11)         |
+|   + tl0b(11:13)      |
+|   + tl0a(11:12)      |
+|    + tl0a1(12:15)    |
+|    + tl0a0(12:14)    |
+|   + tagl1c(11:16)    |
++----------------------+
+
+--- phase 1 --- step 060
+--- phase 2 --- step 210
+SELECT i.name AS image, GROUP_CONCAT(t.name) AS tag
+FROM imagetags AS it
+JOIN tags AS t
+  ON t.id = it.tagid
+JOIN images AS i
+  ON it.imageid = i.id
+GROUP BY i.id
+
+foto001.jpg	tl0a1
+snap001.png	tagl1a,tagl1b,tagl1c,tagl2c,tagl2d,tagl3b
+snap002.png	tagl2a,tl0a,tl0a0
+Martian_face_viking.jpg	LadyMars
+
+LadyMars tag is a "face tag"
+
+additional operations on big-image.png
+- rate 5 stars
+- color label blue
+- flag accepted (green flag)
+
+--- phase 1 --- step 090
+echo ".dump" | sqlite3 digikam4.db > sqlite_digikam4.db.data.sql
+
+cp digikam4.db t1.db
+for i in $(echo ".tables" | sqlite3 t1.db) ; do
+  echo "DELETE FROM $i;" | sqlite3 t1.db
+done
+echo ".dump" | sqlite3 t1.db > sqlite_digikam4.db.sql
+rm t1.db
+
+# echo ".dump" | sqlite3 thumbnails-digikam.db > sqlite_thumbnails-digikam.db.data.sql
+
+cp thumbnails-digikam.db t1.db
+for i in $(echo ".tables" | sqlite3 t1.db) ; do
+  echo "DELETE FROM $i;" | sqlite3 t1.db
+done
+echo ".dump" | sqlite3 t1.db > sqlite_thumbnails-digikam.db.sql
+rm t1.db
+
+--- phase 1 --- step 110
+db=digikam
+mysqldump -u"digikam" -p"digikam" -h"localhost" --no-data --routines $db > mysql_${db}.sql
+mysqldump -u"digikam" -p"digikam" -h"localhost" --routines $db > mysql_${db}_data.sql
+
+--- phase 2 --- step 210
+db=digikam
+# EQUAL! mysqldump -u"digikam" -p"digikam" -h"localhost" --no-data --routines $db > mysql0_${db}.sql
+mysqldump -u"digikam" -p"digikam" -h"localhost" --routines $db > mysql0_${db}_data.sql
