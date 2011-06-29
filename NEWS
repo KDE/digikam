@@ -189,7 +189,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 160 ==> 274879 : Low resolution version of photo is displayed and portrait oriented photos are rotated 90 degrees.
 161 ==> 262212 : Face recognition doesn't work.
 162 ==> 276592 : Crash while browsing through album in enlarged view.
-163 ==> 
-
-
+163 ==> 261521 : A creation or a deletion, of a tag, takes a very long time.
+164 ==> 276052 : Failed to update the database schema from version 5 to version 6.
+165 ==> 
 
