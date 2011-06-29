@@ -199,4 +199,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 170 ==> 267802 : Database connections not closed on exit.
 171 ==> 195006 : National charaters not accepted in database file path.
 172 ==> 145743 : Only include displayable files in database.
-173 ==> 
+173 ==> 163763 : digiKam hangs during operation and startup.
+174 ==> 
