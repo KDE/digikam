@@ -191,5 +191,12 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 162 ==> 276592 : Crash while browsing through album in enlarged view.
 163 ==> 261521 : A creation or a deletion, of a tag, takes a very long time.
 164 ==> 276052 : Failed to update the database schema from version 5 to version 6.
-165 ==> 
-
+165 ==> 265034 : Database corrupted after terminating frozen digiKam.
+166 ==> 267190 : digiKam crashes when other applications rename files it is loading.
+167 ==> 272332 : Moving a versioned file crashes digikam2.
+168 ==> 203196 : Multiple Albums for 1 Folder.
+169 ==> 229234 : Thumbnail mismatch for images with same name.
+170 ==> 267802 : Database connections not closed on exit.
+171 ==> 195006 : National charaters not accepted in database file path.
+172 ==> 145743 : Only include displayable files in database.
+173 ==> 
