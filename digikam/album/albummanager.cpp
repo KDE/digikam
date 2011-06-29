@@ -98,7 +98,6 @@ extern "C"
 #include "tagscache.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnailloadthread.h"
-#include "upgradedb_sqlite2tosqlite3.h"
 
 namespace Digikam
 {

@@ -48,7 +48,6 @@
 #include "databasebackend.h"
 #include "databasetransaction.h"
 #include "databasechecker.h"
-#include "upgradedb_sqlite2tosqlite3.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "collectionscanner.h"
@@ -291,6 +290,7 @@ bool SchemaUpdater::startUpdates()
                 // m_currentVersion is now 4;
                 return makeUpdates();
             }
+	    /* obsoleted
             else if (digikamDB.exists())
             {
                 if (!updateV2toV4(digikamDB.path()))
@@ -301,6 +301,7 @@ bool SchemaUpdater::startUpdates()
                 // m_currentVersion is now 4;
                 return makeUpdates();
             }
+	    */
 
             // no else, fall through!
         }
@@ -670,40 +671,6 @@ bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& cur
 
     m_currentVersion = 4;
     return true;
-}
-
-bool SchemaUpdater::updateV2toV4(const QString& sqlite2DBPath)
-{
-    if (m_observer)
-    {
-        m_observer->moreSchemaUpdateSteps(1);
-    }
-
-    if (upgradeDB_Sqlite2ToSqlite3(m_AlbumDB, m_Backend, sqlite2DBPath))
-    {
-        m_currentVersion = 4;
-        return true;
-    }
-    else
-    {
-        QString errorMsg = i18n("Could not update from the old SQLite2 file (\"%1\"). "
-                                "Please delete this file and try again, "
-                                "starting with an empty database. ", sqlite2DBPath);
-        m_LastErrorMessage=errorMsg;
-
-        if (m_observer)
-        {
-            m_observer->error(errorMsg);
-            m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
-        }
-
-        return false;
-    }
-
-    if (m_observer)
-    {
-        m_observer->schemaUpdateProgress(i18n("Updated from 0.7 database"));
-    }
 }
 
 static QStringList cleanUserFilterString(const QString& filterString)
