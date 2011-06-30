@@ -65,10 +65,8 @@ public:
 
     void setImageDimensions(const QString& str);
     void setImageMime(const QString& str);
-    void setImageCompression(const QString& str);
     void setImageBitDepth(const QString& str);
     void setImageColorMode(const QString& str);
-    void hideImageCompression();
 
     void setPhotoMake(const QString& str);
     void setPhotoModel(const QString& str);

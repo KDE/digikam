@@ -207,14 +207,13 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     // -- Image Properties --------------------------------------------------
 
     QSize   dims;
-    QString compression, bitDepth, colorMode;
+    QString bitDepth, colorMode;
     QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
     QString ext = fileInfo.suffix().toUpper();
 
     if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
     {
         m_propertiesTab->setImageMime(i18n("RAW Image"));
-        compression = i18n("None");
         bitDepth    = "48";
         dims        = metaData.getImageDimensions();
         colorMode   = i18n("Uncalibrated");
@@ -236,7 +235,6 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
             dims.width(), dims.height(), mpixels);
     m_propertiesTab->setImageDimensions(str);
-    m_propertiesTab->setImageCompression(compression.isEmpty() ? unavailable : compression);
     m_propertiesTab->setImageBitDepth(bitDepth.isEmpty() ? unavailable : i18n("%1 bpp", bitDepth));
     m_propertiesTab->setImageColorMode(colorMode.isEmpty() ? unavailable : colorMode);
 
