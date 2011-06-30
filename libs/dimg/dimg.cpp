@@ -1783,7 +1783,7 @@ QPixmap DImg::convertToPixmap() const
 
     if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
     {
-        QImage img(width(), height(), QImage::Format_ARGB32);
+        QImage img(width(), height(), hasAlpha() ? QImage::Format_ARGB32 : QImage::Format_RGB32);
 
         uchar* sptr = bits();
         uint*  dptr = (uint*)img.bits();
@@ -1803,7 +1803,7 @@ QPixmap DImg::convertToPixmap() const
     }
     else
     {
-        QImage img(bits(), width(), height(), QImage::Format_ARGB32);
+        QImage img(bits(), width(), height(), hasAlpha() ? QImage::Format_ARGB32 : QImage::Format_RGB32);
 
         // NOTE: Qt4 do not provide anymore QImage::setAlphaChannel() because
         // alpha channel is auto-detected during QImage->QPixmap conversion
