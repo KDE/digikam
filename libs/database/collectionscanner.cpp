@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -85,12 +85,16 @@ public:
     QString fileName;
 };
 
+// --------------------------------------------------------------------
+
 inline uint qHash(const NewlyAppearedFile& file)
 {
     return ::qHash(file.albumId) ^ ::qHash(file.fileName);
 }
 
-class CollectionScannerPriv
+// --------------------------------------------------------------------
+
+class CollectionScanner::CollectionScannerPriv
 {
 
 public:
@@ -104,30 +108,7 @@ public:
     {
     }
 
-    QSet<QString>     nameFilters;
-    QSet<QString>     imageFilterSet;
-    QSet<QString>     videoFilterSet;
-    QSet<QString>     audioFilterSet;
-    QList<int>        scannedAlbums;
-    bool              wantSignals;
-    bool              needTotalFiles;
-
-    QDateTime         removedItemsTime;
-
-    QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album>
-    albumHints;
-    QHash<NewlyAppearedFile, qlonglong>
-    itemHints;
-    QHash<int,int>    establishedSourceAlbums;
-    QSet<int>         modifiedItemHints;
-    QSet<int>         rescanItemHints;
-    bool              updatingHashHint;
-
-    bool              recordHistoryIds;
-    QSet<qlonglong>   needResolveHistorySet;
-    QSet<qlonglong>   needTaggingHistorySet;
-
-    CollectionScannerObserver* observer;
+public:
 
     void resetRemovedItemsTime()
     {
@@ -149,6 +130,31 @@ public:
     }
 
     void finishScanner(const ImageScanner& scanner);
+
+public:
+
+    QSet<QString>                                                         nameFilters;
+    QSet<QString>                                                         imageFilterSet;
+    QSet<QString>                                                         videoFilterSet;
+    QSet<QString>                                                         audioFilterSet;
+    QList<int>                                                            scannedAlbums;
+    bool                                                                  wantSignals;
+    bool                                                                  needTotalFiles;
+
+    QDateTime                                                             removedItemsTime;
+
+    QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album> albumHints;
+    QHash<NewlyAppearedFile, qlonglong>                                   itemHints;
+    QHash<int, int>                                                       establishedSourceAlbums;
+    QSet<int>                                                             modifiedItemHints;
+    QSet<int>                                                             rescanItemHints;
+    bool                                                                  updatingHashHint;
+
+    bool                                                                  recordHistoryIds;
+    QSet<qlonglong>                                                       needResolveHistorySet;
+    QSet<qlonglong>                                                       needTaggingHistorySet;
+
+    CollectionScannerObserver*                                            observer;
 };
 
 CollectionScanner::CollectionScanner()
@@ -356,7 +362,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
         return;
     }
 
-    /*
+/*
     if (DatabaseAccess().backend()->isInTransaction())
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
@@ -364,7 +370,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
                          "Please report this error.";
         return;
     }
-    */
+*/
 
     mainEntryPoint(false);
     d->resetRemovedItemsTime();
@@ -390,6 +396,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     QSet<int> locationIdsToScan;
     locationIdsToScan << location.id();
     QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album>::const_iterator it;
+
     for (it = d->albumHints.constBegin(); it != d->albumHints.constEnd(); ++it)
     {
         if (it.key().albumRootId == location.id())
@@ -440,7 +447,8 @@ qlonglong CollectionScanner::scanFile(const QString& filePath, FileScanMode mode
     return scanFile(albumRoot, album, info.fileName(), mode);
 }
 
-qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& album, const QString& fileName, FileScanMode mode)
+qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
+                                      const QString& fileName, FileScanMode mode)
 {
     if (album.isEmpty() || fileName.isEmpty())
     {
@@ -467,8 +475,8 @@ qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& a
 
     int albumId       = checkAlbum(location, album);
     qlonglong imageId = DatabaseAccess().db()->getImageId(albumId, fileName);
+    imageId           = scanFile(fi, albumId, imageId, mode);
 
-    imageId = scanFile(fi, albumId, imageId, mode);
     return imageId;
 }
 
@@ -535,14 +543,14 @@ void CollectionScanner::scanAlbumRoot(const CollectionLocation& location)
         emit startScanningAlbumRoot(location.albumRootPath());
     }
 
-    /*
+/*
     QDir dir(location.albumRootPath());
     QStringList fileList(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
     for (QStringList::iterator fileIt = fileList.begin(); fileIt != fileList.end(); ++fileIt)
     {
         scanAlbum(location, '/' + (*fileIt));
     }
-    */
+*/
 
     // scan album that covers the root directory of this album root,
     // all contained albums, and their subalbums recursively.
@@ -575,13 +583,14 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
     QList<AlbumShortInfo> albumList = DatabaseAccess().db()->getAlbumShortInfos();
     QList<int> toBeDeleted;
 
-    /* see #231598
+/*
+    // See B.K.O #231598
     QHash<int, CollectionLocation> albumRoots;
     foreach (const CollectionLocation& location, locations)
     {
         albumRoots[location.id()] = location;
     }
-    */
+*/
 
     QList<AlbumShortInfo>::const_iterator it;
 
@@ -894,7 +903,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
     }
 }
 
-void CollectionScannerPriv::finishScanner(const ImageScanner& scanner)
+void CollectionScanner::CollectionScannerPriv::finishScanner(const ImageScanner& scanner)
 {
     if (recordHistoryIds && scanner.hasHistoryToResolve())
     {
@@ -1531,7 +1540,7 @@ void CollectionScanner::updateItemsWithoutDate()
                 {
                     m_filesToBeDeleted << pair;
                 }
-            }
+            }see
         }
     }
 }
