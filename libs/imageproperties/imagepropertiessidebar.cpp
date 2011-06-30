@@ -225,34 +225,10 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
 
         dims = metaData.getPixelSize();
 
-        // TODO : find a way with Exiv2 to get these informations.
-        //        KFileMetaInfo crash into Strigi. See B.K.O #264945
-/*
-        KFileMetaInfo meta = fi.metaInfo();
-
-        if (meta.isValid())
-        {
-            if (meta.item("JPEG quality").isValid())
-            {
-                compression = i18n("JPEG quality %1", meta.item("JPEG quality").value().toString());
-            }
-
-            if (meta.item("Compression").isValid())
-            {
-                compression =  meta.item("Compression").value().toString();
-            }
-
-            if (meta.item("BitDepth").isValid())
-            {
-                bitDepth = meta.item("BitDepth").value().toString();
-            }
-
-            if (meta.item("ColorMode").isValid())
-            {
-                colorMode = meta.item("ColorMode").value().toString();
-            }
-        }
-*/
+        DImg img;
+        img.loadImageInfo(url.toLocalFile(), false, false, false, false);
+        bitDepth.number(img.originalBitDepth());
+        colorMode = DImg::colorModelToString(img.originalColorModel());
     }
 
     QString mpixels;

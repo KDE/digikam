@@ -1325,32 +1325,6 @@ QString ImageScanner::formatToString(const QString& format)
     }
 }
 
-QString ImageScanner::colorModelToString(DImg::COLORMODEL colorModel)
-{
-    switch (colorModel)
-    {
-        case DImg::RGB:
-            return i18nc("Color Model: RGB", "RGB");
-        case DImg::GRAYSCALE:
-            return i18nc("Color Model: Grayscale", "Grayscale");
-        case DImg::MONOCHROME:
-            return i18nc("Color Model: Monochrome", "Monochrome");
-        case DImg::INDEXED:
-            return i18nc("Color Model: Indexed", "Indexed");
-        case DImg::YCBCR:
-            return i18nc("Color Model: YCbCr", "YCbCr");
-        case DImg::CMYK:
-            return i18nc("Color Model: CMYK", "CMYK");
-        case DImg::CIELAB:
-            return i18nc("Color Model: CIE L*a*b*", "CIE L*a*b*");
-        case DImg::COLORMODELRAW:
-            return i18nc("Color Model: Uncalibrated (RAW)", "Uncalibrated (RAW)");
-        case DImg::COLORMODELUNKNOWN:
-        default:
-            return i18nc("Color Model: Unknown", "Unknown");
-    }
-}
-
 QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
 {
     // These strings are specified in DBSCHEMA.ods
@@ -1453,7 +1427,7 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
         container->height           = imageInformationFields[5].toInt();
         container->format           = formatToString(imageInformationFields[6].toString());
         container->colorDepth       = imageInformationFields[7].toInt();
-        container->colorModel       = colorModelToString((DImg::COLORMODEL)imageInformationFields[8].toInt());
+        container->colorModel       = DImg::colorModelToString((DImg::COLORMODEL)imageInformationFields[8].toInt());
     }
 }
 

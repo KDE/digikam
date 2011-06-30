@@ -279,15 +279,15 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* par
         field->setFieldName(name);
         field->setText(i18n("Color Model"), i18n("Find pictures with the color model"));
         QMap<int, QString> map;
-        map.insert(DImg::COLORMODELUNKNOWN, ImageScanner::colorModelToString(DImg::COLORMODELUNKNOWN));
-        map.insert(DImg::RGB, ImageScanner::colorModelToString(DImg::RGB));
-        map.insert(DImg::GRAYSCALE, ImageScanner::colorModelToString(DImg::GRAYSCALE));
-        map.insert(DImg::MONOCHROME, ImageScanner::colorModelToString(DImg::MONOCHROME));
-        map.insert(DImg::INDEXED, ImageScanner::colorModelToString(DImg::INDEXED));
-        map.insert(DImg::YCBCR, ImageScanner::colorModelToString(DImg::YCBCR));
-        map.insert(DImg::CMYK, ImageScanner::colorModelToString(DImg::CMYK));
-        map.insert(DImg::CIELAB, ImageScanner::colorModelToString(DImg::CIELAB));
-        map.insert(DImg::COLORMODELRAW, ImageScanner::colorModelToString(DImg::COLORMODELRAW));
+        map.insert(DImg::COLORMODELUNKNOWN, DImg::colorModelToString(DImg::COLORMODELUNKNOWN));
+        map.insert(DImg::RGB,               DImg::colorModelToString(DImg::RGB));
+        map.insert(DImg::GRAYSCALE,         DImg::colorModelToString(DImg::GRAYSCALE));
+        map.insert(DImg::MONOCHROME,        DImg::colorModelToString(DImg::MONOCHROME));
+        map.insert(DImg::INDEXED,           DImg::colorModelToString(DImg::INDEXED));
+        map.insert(DImg::YCBCR,             DImg::colorModelToString(DImg::YCBCR));
+        map.insert(DImg::CMYK,              DImg::colorModelToString(DImg::CMYK));
+        map.insert(DImg::CIELAB,            DImg::colorModelToString(DImg::CIELAB));
+        map.insert(DImg::COLORMODELRAW,     DImg::colorModelToString(DImg::COLORMODELRAW));
         field->setChoice(map);
         return field;
     }
