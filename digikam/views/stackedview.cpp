@@ -76,7 +76,6 @@ public:
         welcomePageView    = 0;
         mediaPlayerView    = 0;
         mapWidgetView      = 0;
-        thumbbarTimer      = 0;
         needUpdateBar      = false;
         syncingSelection   = false;
     }
@@ -86,7 +85,6 @@ public:
 
     QMainWindow*       dockArea;
     QSplitter*         splitter;
-    QTimer*            thumbbarTimer;
 
     DigikamImageView*  imageIconView;
     ImageThumbnailBar* thumbBar;
@@ -123,9 +121,6 @@ StackedView::StackedView(QWidget* parent)
 
     setPreviewMode(PreviewAlbumMode);
     setAttribute(Qt::WA_DeleteOnClose);
-
-    d->thumbbarTimer = new QTimer(this);
-    d->thumbbarTimer->setSingleShot(true);
 
     readSettings();
 
@@ -175,26 +170,6 @@ StackedView::StackedView(QWidget* parent)
 
     connect(d->imagePreviewView, SIGNAL(signalAddToExistingQueue(int)),
             this, SIGNAL(signalAddToExistingQueue(int)));
-
-    /*
-    connect(d->imageIconView->imageFilterModel(), SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-            this, SLOT(slotItemsAddedOrRemoved()));
-
-    connect(d->imageIconView->imageFilterModel(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-            this, SLOT(slotItemsAddedOrRemoved()));
-
-    connect(d->imageIconView->imageFilterModel(), SIGNAL(layoutChanged()),
-            this, SLOT(slotItemsAddedOrRemoved()));
-
-    connect(d->imageIconView->imageFilterModel(), SIGNAL(modelReset()),
-            this, SLOT(slotItemsAddedOrRemoved()));
-
-    connect(d->thumbbarTimer, SIGNAL(timeout()),
-            this, SLOT(updateThumbbar()));
-    */
-
-    //connect(d->thumbBar, SIGNAL(imageActivated(const ImageInfo&)),
-    //      d->imageIconView, SIGNAL(setCurrentInfo(const ImageInfo&)));
 
     connect(d->thumbBar, SIGNAL(selectionChanged()),
             this, SLOT(slotThumbBarSelectionChanged()));
@@ -279,13 +254,6 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
         {
             d->imagePreviewView->setImageInfo();
         }
-
-        /*
-        // Special case to cleanup thumbbar if Image Lister do not query item accordingly to
-        // IconView Filters.
-        if (d->imageIconView->imageModel()->isEmpty())
-            d->thumbBar->clear();
-        */
     }
     else
     {
@@ -439,47 +407,6 @@ void StackedView::slotZoomFactorChanged(double z)
         emit signalZoomFactorChanged(z);
     }
 }
-
-/*
-
-void StackedView::slotItemsAddedOrRemoved()
-{
-    // do this before the check in the next line, to store this state in any case,
-    // even if we do not trigger updateThumbbar immediately
-    d->needUpdateBar = true;
-
-    if (previewMode() != PreviewImageMode)
-        return;
-
-    d->thumbbarTimer->start(50);
-
-    KUrl currentUrl = d->imageIconView->currentUrl();
-    if (currentUrl != KUrl())
-    {
-        ThumbBarItem* item = d->thumbBar->findItemByUrl(currentUrl);
-        d->thumbBar->setSelected(item);
-    }
-}
-
-void StackedView::updateThumbbar()
-{
-    if (!d->needUpdateBar)
-        return;
-    d->needUpdateBar = false;
-
-    d->thumbBarDock->reInitialize();
-    d->thumbBar->clear();
-
-    ImageInfoList list = d->imageIconView->imageInfos();
-
-    d->thumbBar->blockSignals(true);
-    for (ImageInfoList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
-            new ImagePreviewBarItem(d->thumbBar, *it);
-    d->thumbBar->blockSignals(false);
-
-    d->thumbBar->slotUpdate();
-}
-*/
 
 void StackedView::increaseZoom()
 {
