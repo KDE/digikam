@@ -93,7 +93,24 @@ public:
     ThumbBarDock*      thumbBarDock;
     WelcomePageView*   welcomePageView;
     MapWidgetView*     mapWidgetView;
+
+    void addPageUpDownActions(StackedView* q, QWidget* w);
 };
+
+void StackedView::StackedViewPriv::addPageUpDownActions(StackedView* q, QWidget* w)
+{
+    KAction* nextImageAction = new KAction(q);
+    nextImageAction->setShortcut(KShortcut(Qt::Key_PageDown));
+    nextImageAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    w->addAction(nextImageAction);
+    QObject::connect(nextImageAction, SIGNAL(triggered()), q, SIGNAL(signalNextItem()));
+
+    KAction* previousImageAction = new KAction(q);
+    previousImageAction->setShortcut(KShortcut(Qt::Key_PageUp));
+    previousImageAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    w->addAction(previousImageAction);
+    QObject::connect(previousImageAction, SIGNAL(triggered()), q, SIGNAL(signalPrevItem()));
+}
 
 StackedView::StackedView(QWidget* parent)
     : QStackedWidget(parent), d(new StackedViewPriv)
@@ -118,6 +135,9 @@ StackedView::StackedView(QWidget* parent)
     insertWidget(WelcomePageMode,  d->welcomePageView->view());
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
     insertWidget(MapWidgetMode,    d->mapWidgetView);
+
+    d->addPageUpDownActions(this, d->imagePreviewView);
+    d->addPageUpDownActions(this, d->thumbBar);
 
     setPreviewMode(PreviewAlbumMode);
     setAttribute(Qt::WA_DeleteOnClose);

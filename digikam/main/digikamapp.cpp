@@ -610,13 +610,13 @@ void DigikamApp::setupAccelerators()
     KAction* nextImageAction = new KAction(i18n("Next Image"), this);
     nextImageAction->setIcon(SmallIcon("go-next"));
     actionCollection()->addAction("next_image", nextImageAction);
-    nextImageAction->setShortcut(KShortcut(Qt::Key_Space, Qt::Key_PageDown));
+    nextImageAction->setShortcut(KShortcut(Qt::Key_Space));
     connect(nextImageAction, SIGNAL(triggered()), this, SIGNAL(signalNextItem()));
 
     KAction* previousImageAction = new KAction(i18n("Previous Image"), this);
     previousImageAction->setIcon(SmallIcon("go-previous"));
     actionCollection()->addAction("previous_image", previousImageAction);
-    previousImageAction->setShortcut(KShortcut(Qt::Key_Backspace, Qt::Key_PageUp));
+    previousImageAction->setShortcut(KShortcut(Qt::Key_Backspace));
     connect(previousImageAction, SIGNAL(triggered()), this, SIGNAL(signalPrevItem()));
 
     KAction* altpreviousImageAction = new KAction(i18n("Previous Image"), this);
