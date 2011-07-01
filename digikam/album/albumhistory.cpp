@@ -386,11 +386,8 @@ void AlbumHistory::slotAlbumSelected()
 
     if (d->historyPos.contains(currentAlbum))
     {
-        if (currentAlbum->type() == Album::PHYSICAL || currentAlbum->type() == Album::TAG)
-        {
-            d->blockSelection = true;
-            emit signalSetCurrent(d->historyPos[currentAlbum].current.id());
-        }
+        d->blockSelection = true;
+        emit signalSetCurrent(d->historyPos[currentAlbum].current.id());
     }
 }
 
@@ -400,12 +397,9 @@ void AlbumHistory::slotAlbumCurrentChanged()
 
     if (d->historyPos.contains(currentAlbum))
     {
-        if (currentAlbum->type() == Album::PHYSICAL || currentAlbum->type() == Album::TAG)
+        if (d->historyPos[currentAlbum].select.size())
         {
-            if (d->historyPos[currentAlbum].select.size())
-            {
-                emit signalSetSelectedInfos(d->historyPos[currentAlbum].select);
-            }
+            emit signalSetSelectedInfos(d->historyPos[currentAlbum].select);
         }
     }
 
