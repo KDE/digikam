@@ -8,7 +8,7 @@
  *               DImg framework
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,12 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
-// This line must be commented to prevent any latency time
-// when we use threaded image loader interface for each image
-// files io. Uncomment this line only for debugging.
-//#define ENABLE_DEBUG_MESSAGES
-
 
 #include "ppmloader.h"
 
@@ -54,6 +48,7 @@ extern "C"
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 
@@ -152,7 +147,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         float fac = 65535.0 / rgbmax;
         int checkpoint = 0;
 
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
         kDebug() << "rgbmax=" << rgbmax << "  fac=" << fac;
 #endif
 

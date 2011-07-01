@@ -7,7 +7,7 @@
  * Description : A TIFF IO file for DImg framework
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Specifications & references:
  * - TIFF 6.0  : http://partners.adobe.com/public/developer/en/tiff/TIFF6.pdf
@@ -39,11 +39,6 @@
  *
  * ============================================================ */
 
-// This line must be commented to prevent any latency time
-// when we use threaded image loader interface for each image
-// files io. Uncomment this line only for debugging.
-//#define ENABLE_DEBUG_MESSAGES
-
 // C ANSI includes
 extern "C"
 {
@@ -65,6 +60,7 @@ extern "C"
 
 // Local includes
 
+#include "config-digikam.h"
 #include "version.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
@@ -78,7 +74,7 @@ namespace Digikam
 
 void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_list warnings)
 {
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
     char message[4096];
     vsnprintf(message, 4096, format, warnings);
     kDebug() << module <<  "::" <<  message;
@@ -91,7 +87,7 @@ void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_li
 
 void TIFFLoader::dimg_tiff_error(const char* module, const char* format, va_list errors)
 {
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
     char message[4096];
     vsnprintf(message, 4096, format, errors);
     kDebug() << module << "::" << message;
@@ -132,7 +128,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         return false;
     }
 
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
     TIFFPrintDirectory(tif, stdout, 0);
 #endif
 

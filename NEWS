@@ -203,5 +203,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 174 ==> 276795 : Showfoto crashes when open a pic.
 175 ==> 264945 : Showfoto 1.9 (strigi relevant), installed in /usr/local/bin along with digiKam 1.9, crashes when opening many, but not all, jpegs.
 176 ==> 276356 : tags should have a root (maybe hidden)
-177 ==>
-
+177 ==> 276154 : jpegutils.cpp contains debug output, but disabled by define.
+178 ==>

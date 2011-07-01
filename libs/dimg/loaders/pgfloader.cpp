@@ -23,11 +23,6 @@
  *
  * ============================================================ */
 
-// This line must be commented to prevent any latency time
-// when we use threaded image loader interface for each image
-// files io. Uncomment this line only for debugging.
-//#define ENABLE_DEBUG_MESSAGES
-
 #include "pgfloader.h"
 
 // C Ansi includes
@@ -63,7 +58,6 @@ extern "C"
 
 #include <libkexiv2/kexiv2.h>
 
-
 // Windows includes
 
 #ifdef WIN32
@@ -72,6 +66,7 @@ extern "C"
 
 // Local includes
 
+#include "config-digikam.h"
 #include "PGFimage.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
@@ -222,7 +217,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 break;
         }
 
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
         const PGFHeader* header = pgf.GetHeader();
         kDebug() << "PGF width    = " << header->width;
         kDebug() << "PGF height   = " << header->height;
@@ -444,7 +439,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 #endif
 
 
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
         kDebug() << "PGF width     = " << header.width;
         kDebug() << "PGF height    = " << header.height;
         kDebug() << "PGF bbp       = " << header.bpp;
