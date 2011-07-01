@@ -4,9 +4,10 @@ PROJECT(digikam)
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: digikam")
 
-OPTION(ENABLE_SCRIPTIFACE "Build digiKam with experimental scripting support (default=OFF)" OFF)
-OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
-OPTION(ENABLE_INTERNALMYSQL "Look for MySQL server executable at build time (default=ON)" ON)
+OPTION(ENABLE_SCRIPTIFACE      "Build digiKam with experimental scripting support (default=OFF)" OFF)
+OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (default=ON)"     ON)
+OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"     ON)
+OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"    OFF)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -287,6 +288,7 @@ MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
 
 MACRO_BOOL_TO_01(ENABLE_SCRIPTIFACE USE_SCRIPT_IFACE)
 MACRO_BOOL_TO_01(ENABLE_THUMBS_DB USE_THUMBS_DB)
+MACRO_BOOL_TO_01(ENABLE_ADVANCEDDEBUGMSG USE_ADVANCEDDEBUGMSG)
 
 # Win32 compilation with Nepomuk is broken. It's temporally disabled.
 IF (NOT WIN32)

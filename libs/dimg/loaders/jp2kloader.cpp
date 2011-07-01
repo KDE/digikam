@@ -6,7 +6,7 @@
  * Date        : 2006-06-14
  * Description : A JPEG2000 IO file for DImg framework
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This implementation use Jasper API
  * library : http://www.ece.uvic.ca/~mdadams/jasper
@@ -31,11 +31,6 @@
  *
  * ============================================================ */
 
-// This line must be commented to prevent any latency time
-// when we use threaded image loader interface for each image
-// files io. Uncomment this line only for debugging.
-//#define ENABLE_DEBUG_MESSAGES
-
 // Qt includes
 
 #include <QFile>
@@ -48,6 +43,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "dmetadata.h"

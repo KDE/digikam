@@ -51,6 +51,9 @@
 /* Define to 1 if script interface is used */
 #cmakedefine USE_SCRIPT_IFACE 1
 
+/* Define to 1 if advanced debug messages are enabled */
+#cmakedefine USE_ADVANCEDDEBUGMSG 1
+
 /* Define to 1 if you have Nepomuk shared libraries installed */
 #cmakedefine HAVE_NEPOMUK 1
 
