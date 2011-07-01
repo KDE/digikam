@@ -132,7 +132,7 @@ public Q_SLOTS:
      *                            name will be overwritten without prompting the
      *                            user for a new name
      */
-    void slotCreateTimeLineSearch(const QString& desiredName,
+    SAlbum* slotCreateTimeLineSearch(const QString& desiredName,
                                   const DateRangeList& dateRanges,
                                   bool overwriteIfExisting = false);
 
