@@ -26,6 +26,10 @@
 
 #include "digikamview.moc"
 
+// Qt includes
+
+#include <QShortcut>
+
 // KDE includes
 
 #include <kapplication.h>
@@ -45,14 +49,17 @@
 #include "digikamimageview.h"
 #include "dzoombar.h"
 #include "imagealbummodel.h"
+#include "imagedescedittab.h"
 #include "imageinfoalbumsjob.h"
 #include "imagepreviewview.h"
 #include "imagepropertiessidebardb.h"
+#include "imagethumbnailbar.h"
 #include "imageviewutilities.h"
 #include "filterstatusbar.h"
 #include "leftsidebarwidgets.h"
 #include "loadingcacheinterface.h"
 #include "mapwidgetview.h"
+#include "mediaplayerview.h"
 #include "metadatasettings.h"
 #include "globals.h"
 #include "metadatahub.h"
@@ -112,6 +119,7 @@ public:
     }
 
     QString                       userPresentableAlbumTitle(const QString& album);
+    void                          addPageUpDownActions(DigikamView* q, QWidget* w);
 
     bool                          needDispatchSelection;
     bool                          cancelSlideShow;
@@ -195,6 +203,10 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
     d->iconView = d->stackedview->imageIconView();
     d->mapView = d->stackedview->mapWidgetView();
 
+    d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
+    d->addPageUpDownActions(this, d->stackedview->thumbBar());
+    d->addPageUpDownActions(this, d->stackedview->mediaPlayerView());
+
     d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("Digikam Right Sidebar");
 
@@ -262,6 +274,8 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
     }
 
     // To the right.
+
+    d->addPageUpDownActions(this, d->rightSideBar->imageDescEditTab());
 
     // Tags Filter sidebar tab contents.
     d->filterWidget = new FilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
@@ -591,6 +605,19 @@ void DigikamView::connectIconViewFilter(FilterStatusBar* filterbar)
     connect(filterbar, SIGNAL(signalPopupFiltersView()),
             this, SLOT(slotPopupFiltersView()));
 
+}
+
+void DigikamView::DigikamViewPriv::addPageUpDownActions(DigikamView* q, QWidget* w)
+{
+    QShortcut *nextImageShortcut = new QShortcut(w);
+    nextImageShortcut->setKey(Qt::Key_PageDown);
+    nextImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+    QObject::connect(nextImageShortcut, SIGNAL(activated()), q, SLOT(slotNextItem()));
+
+    QShortcut *prevImageShortcut = new QShortcut(w);
+    prevImageShortcut->setKey(Qt::Key_PageUp);
+    prevImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+    QObject::connect(prevImageShortcut, SIGNAL(activated()), q, SLOT(slotPrevItem()));
 }
 
 void DigikamView::slotPopupFiltersView()

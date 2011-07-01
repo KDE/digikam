@@ -93,24 +93,7 @@ public:
     ThumbBarDock*      thumbBarDock;
     WelcomePageView*   welcomePageView;
     MapWidgetView*     mapWidgetView;
-
-    void addPageUpDownActions(StackedView* q, QWidget* w);
 };
-
-void StackedView::StackedViewPriv::addPageUpDownActions(StackedView* q, QWidget* w)
-{
-    KAction* nextImageAction = new KAction(q);
-    nextImageAction->setShortcut(KShortcut(Qt::Key_PageDown));
-    nextImageAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    w->addAction(nextImageAction);
-    QObject::connect(nextImageAction, SIGNAL(triggered()), q, SIGNAL(signalNextItem()));
-
-    KAction* previousImageAction = new KAction(q);
-    previousImageAction->setShortcut(KShortcut(Qt::Key_PageUp));
-    previousImageAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    w->addAction(previousImageAction);
-    QObject::connect(previousImageAction, SIGNAL(triggered()), q, SIGNAL(signalPrevItem()));
-}
 
 StackedView::StackedView(QWidget* parent)
     : QStackedWidget(parent), d(new StackedViewPriv)
@@ -135,9 +118,6 @@ StackedView::StackedView(QWidget* parent)
     insertWidget(WelcomePageMode,  d->welcomePageView->view());
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
     insertWidget(MapWidgetMode,    d->mapWidgetView);
-
-    d->addPageUpDownActions(this, d->imagePreviewView);
-    d->addPageUpDownActions(this, d->thumbBar);
 
     setPreviewMode(PreviewAlbumMode);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -239,6 +219,11 @@ ThumbBarDock* StackedView::thumbBarDock() const
     return d->thumbBarDock;
 }
 
+ImageThumbnailBar* StackedView::thumbBar() const
+{
+    return d->thumbBar;
+}
+
 void StackedView::slotEscapePreview()
 {
     if (previewMode() == MediaPlayerMode)
@@ -260,6 +245,11 @@ ImagePreviewView* StackedView::imagePreviewView() const
 MapWidgetView* StackedView::mapWidgetView() const
 {
     return d->mapWidgetView;
+}
+
+MediaPlayerView* StackedView::mediaPlayerView() const
+{
+    return d->mediaPlayerView;
 }
 
 void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
