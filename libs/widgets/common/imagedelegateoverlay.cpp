@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QEvent>
 #include <QMouseEvent>
 
@@ -253,10 +254,22 @@ void AbstractWidgetDelegateOverlay::slotEntered(const QModelIndex& index)
 {
     hide();
 
-    if (index.isValid() && checkIndex(index))
+    if (!index.isValid())
     {
-        m_widget->show();
+        return;
     }
+
+    if (QApplication::keyboardModifiers() & (Qt::ShiftModifier | Qt::ControlModifier))
+    {
+        return;
+    }
+
+    if (!checkIndex(index))
+    {
+        return;
+    }
+
+    m_widget->show();
 }
 
 bool AbstractWidgetDelegateOverlay::checkIndex(const QModelIndex& index) const
