@@ -547,11 +547,6 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             m_propertiesTab->setImageColorMode(commonInfo.colorModel.isEmpty() ? unavailable : commonInfo.colorModel);
             m_propertiesTab->setImageMime(commonInfo.format);
 
-            /* TODO : This info is not stored by DB
-            m_propertiesTab->setImageCompression(compression.isEmpty() ? unavailable : compression);
-            */
-            m_propertiesTab->hideImageCompression();
-
             // -- Photograph information ------------------------------------------
 
             m_propertiesTab->setPhotoInfoDisable(photoInfo.allFieldsNull);

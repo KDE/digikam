@@ -560,6 +560,11 @@ public:
      */
     QByteArray createImageUniqueId() const;
 
+    /**
+     * Helper method to translate enum values to user presentable strings
+     */
+    static QString colorModelToString(COLORMODEL colorModel);
+
 private:
 
     DSharedDataPointer<DImgPrivate> m_priv;

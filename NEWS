@@ -200,4 +200,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 171 ==> 195006 : National charaters not accepted in database file path.
 172 ==> 145743 : Only include displayable files in database.
 173 ==> 163763 : digiKam hangs during operation and startup.
-174 ==> 
+174 ==> 276795 : Showfoto crashes when open a pic.
+175 ==> 264945 : Showfoto 1.9 (strigi relevant), installed in /usr/local/bin along with digiKam 1.9, crashes when opening many, but not all, jpegs.
+176 ==> 
+

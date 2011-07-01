@@ -207,14 +207,13 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     // -- Image Properties --------------------------------------------------
 
     QSize   dims;
-    QString compression, bitDepth, colorMode;
+    QString bitDepth, colorMode;
     QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
     QString ext = fileInfo.suffix().toUpper();
 
     if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
     {
         m_propertiesTab->setImageMime(i18n("RAW Image"));
-        compression = i18n("None");
         bitDepth    = "48";
         dims        = metaData.getImageDimensions();
         colorMode   = i18n("Uncalibrated");
@@ -225,34 +224,10 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
 
         dims = metaData.getPixelSize();
 
-        // TODO : find a way with Exiv2 to get these informations.
-        //        KFileMetaInfo crash into Strigi. See B.K.O #264945
-/*
-        KFileMetaInfo meta = fi.metaInfo();
-
-        if (meta.isValid())
-        {
-            if (meta.item("JPEG quality").isValid())
-            {
-                compression = i18n("JPEG quality %1", meta.item("JPEG quality").value().toString());
-            }
-
-            if (meta.item("Compression").isValid())
-            {
-                compression =  meta.item("Compression").value().toString();
-            }
-
-            if (meta.item("BitDepth").isValid())
-            {
-                bitDepth = meta.item("BitDepth").value().toString();
-            }
-
-            if (meta.item("ColorMode").isValid())
-            {
-                colorMode = meta.item("ColorMode").value().toString();
-            }
-        }
-*/
+        DImg img;
+        img.loadImageInfo(url.toLocalFile(), false, false, false, false);
+        bitDepth.number(img.originalBitDepth());
+        colorMode = DImg::colorModelToString(img.originalColorModel());
     }
 
     QString mpixels;
@@ -260,7 +235,6 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
             dims.width(), dims.height(), mpixels);
     m_propertiesTab->setImageDimensions(str);
-    m_propertiesTab->setImageCompression(compression.isEmpty() ? unavailable : compression);
     m_propertiesTab->setImageBitDepth(bitDepth.isEmpty() ? unavailable : i18n("%1 bpp", bitDepth));
     m_propertiesTab->setImageColorMode(colorMode.isEmpty() ? unavailable : colorMode);
 

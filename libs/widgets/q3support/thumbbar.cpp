@@ -1454,8 +1454,7 @@ QString ThumbBarToolTip::tipContents()
         {
             tip += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
             str = i18n("%1 (%2)", KIO::convertSize(fi.size()),
-                       KGlobal::locale()->formatNumber(fi.size(),
-                               0));
+                       KGlobal::locale()->formatNumber(fi.size(), 0));
             tip += str + cnt.cellEnd;
         }
 
@@ -1466,32 +1465,13 @@ QString ThumbBarToolTip::tipContents()
 
         if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
         {
-            str = i18n("RAW Image");
+            str  = i18n("RAW Image");
             dims = metaData.getImageDimensions();
         }
         else
         {
-            str = fi.mimeComment();
-
-            KFileMetaInfo meta = fi.metaInfo();
-
-            /*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
-                                        Check if new method to search "Dimensions" information is enough.
-
-                        if (meta.isValid())
-                        {
-                            if (meta.containsGroup("Jpeg EXIF Data"))
-                                dims = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-                            else if (meta.containsGroup("General"))
-                                dims = meta.group("General").item("Dimensions").value().toSize();
-                            else if (meta.containsGroup("Technical"))
-                                dims = meta.group("Technical").item("Dimensions").value().toSize();
-                        }*/
-
-            if (meta.isValid() && meta.item("Dimensions").isValid())
-            {
-                dims = meta.item("Dimensions").value().toSize();
-            }
+            str  = fi.mimeComment();
+            dims = metaData.getPixelSize();
         }
 
         if (settings.showImageType)

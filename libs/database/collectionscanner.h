@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,6 @@ namespace Digikam
 class AlbumCopyMoveHint;
 class CollectionLocation;
 class CollectionScannerObserver;
-class CollectionScannerPriv;
 class ImageInfo;
 class ItemCopyMoveHint;
 class ItemChangeHint;
@@ -54,6 +53,27 @@ class ItemChangeHint;
 class DIGIKAM_DATABASE_EXPORT CollectionScanner : public QObject
 {
     Q_OBJECT
+
+public:
+
+    enum FileScanMode
+    {
+        /** The file will be scanned like it is done for any usual scan.
+         *  If it was not modified, no further action is taken.
+         *  If the file is not known yet, it will be fully scanned, or,
+         *  if an identical file is found, this data will be copied. */
+        NormalScan,
+        /** The file will scanned like a modified file. Only a selected portion
+         *  of the metadata will be updated into the database.
+         *  If the file is not known yet, it will be fully scanned, or,
+         *  if an identical file is found, this data will be copied.  */
+        ModifiedScan,
+        /** The file will be scanned like a completely new file.
+         *  The complete metadata is re-read into the database.
+         *  No search for identical files will be done. */
+        Rescan
+    };
+
 public:
 
     CollectionScanner();
@@ -79,24 +99,6 @@ public:
      * Same procedure as above, but albumRoot and album is provided.
      */
     void partialScan(const QString& albumRoot, const QString& album);
-
-    enum FileScanMode
-    {
-        /** The file will be scanned like it is done for any usual scan.
-         *  If it was not modified, no further action is taken.
-         *  If the file is not known yet, it will be fully scanned, or,
-         *  if an identical file is found, this data will be copied. */
-        NormalScan,
-        /** The file will scanned like a modified file. Only a selected portion
-         *  of the metadata will be updated into the database.
-         *  If the file is not known yet, it will be fully scanned, or,
-         *  if an identical file is found, this data will be copied.  */
-        ModifiedScan,
-        /** The file will be scanned like a completely new file.
-         *  The complete metadata is re-read into the database.
-         *  No search for identical files will be done. */
-        Rescan
-    };
 
     /**
      * The given file will be scanned according to the given mode.
@@ -211,6 +213,7 @@ Q_SIGNALS:
     void finishedScanningAlbum(const QString& albumRoot, const QString& album, int filesScanned);
     void finishedScanningForStaleAlbums();
     void finishedCompleteScan();
+
     /**
      * Emitted between startScanningAlbum and finishedScanningAlbum.
      * In between these two signals, the sum of filesScanned of all sent signals
@@ -235,6 +238,7 @@ protected:
 
 private:
 
+    class CollectionScannerPriv;
     CollectionScannerPriv* const d;
 };
 
