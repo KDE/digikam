@@ -341,6 +341,11 @@ bool exifTransform(const QString& file, const QString& documentName,
         transformoption.force_grayscale = false;
         transformoption.trim            = false;
         transformoption.transform       = JXFORM_NONE;
+        #if (JPEG_LIB_VERSION >= 80)
+        // we need to initialize a few more parameters, see bug 274947
+        transformoption.perfect         = false;
+        transformoption.crop            = false;
+        #endif
 
         switch (action)
         {
