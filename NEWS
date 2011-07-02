@@ -205,5 +205,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 176 ==> 276356 : tags should have a root (maybe hidden)
 177 ==> 276154 : jpegutils.cpp contains debug output, but disabled by define.
 178 ==> 276921 : Wrong i18n-Parameter in libs/database/databaseconfiglement.cpp.
-179 ==> 
+179 ==> 271610 : Crash when importing picutures from a Canon SX 200 IS.
+180 ==> 
 
