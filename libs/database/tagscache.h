@@ -216,6 +216,21 @@ public:
     static QLatin1String propertyNameDigikamInternalTag();
     static QLatin1String propertyNameExcludedFromWriting();
 
+    /**
+     * Utility method.
+     * Orders the given tag paths. If tags begin with the same path (parent tags),
+     * the relevant part is cut off in the second line.
+     * The second variant allows you to pass a list as return parameter.
+     * This list will contain, upon return, the tag id corresponding to each
+     * tag in the returned, sorted list of shortened paths.
+     */
+    QStringList shortenedTagPaths(const QList<int>& ids,
+                                  LeadingSlashPolicy slashPolicy = IncludeLeadingSlash,
+                                  HiddenTagsPolicy hiddenTagsPolicy = IncludeHiddenTags) const;
+    QStringList shortenedTagPaths(const QList<int>& ids, QList<int>* sortedIds,
+                                  LeadingSlashPolicy slashPolicy = IncludeLeadingSlash,
+                                  HiddenTagsPolicy hiddenTagsPolicy = IncludeHiddenTags) const;
+
 Q_SIGNALS:
 
     /** These signals are provided for convenience; for finer grained information

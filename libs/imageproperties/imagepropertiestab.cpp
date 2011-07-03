@@ -30,6 +30,8 @@
 #include <QFile>
 #include <QPixmap>
 #include <QPainter>
+#include <QPair>
+#include <QVariant>
 
 // KDE includes
 
@@ -42,6 +44,7 @@
 #include "imagepropertiestxtlabel.h"
 #include "picklabelwidget.h"
 #include "colorlabelwidget.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -559,21 +562,48 @@ void ImagePropertiesTab::setRating(int rating)
     d->labelRating->setText(str);
 }
 
-static bool naturalLessThan(const QString& a, const QString& b)
-{
-    return KStringHandler::naturalCompare(a,b) < 0;
-}
-
 void ImagePropertiesTab::setTags(const QStringList& tagPaths, const QStringList& tagNames)
 {
     Q_UNUSED(tagNames);
-    QStringList tagsSorted = tagPaths;
+    d->labelTags->setText(shortenedTagPaths(tagPaths).join("\n"));
+}
+
+typedef QPair<QString, QVariant> PathValuePair;
+
+static bool naturalLessThan(const PathValuePair& a, const PathValuePair& b)
+{
+    return KStringHandler::naturalCompare(a.first, b.first) < 0;
+}
+
+QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, QList<QVariant>* identifiers)
+{
+    QList<PathValuePair> tagsSorted;
+    if (identifiers)
+    {
+        for (int i=0; i<tagPaths.size(); i++)
+        {
+            tagsSorted << PathValuePair(tagPaths[i], (*identifiers)[i]);
+        }
+    }
+    else
+    {
+        for (int i=0; i<tagPaths.size(); i++)
+        {
+            tagsSorted << PathValuePair(tagPaths[i], QVariant());
+        }
+    }
     qStableSort(tagsSorted.begin(), tagsSorted.end(), naturalLessThan);
+
+    if (identifiers)
+    {
+        identifiers->clear();
+    }
 
     QStringList tagsShortened;
     QString previous;
-    foreach (const QString tagPath, tagsSorted)
+    foreach (const PathValuePair& pair, tagsSorted)
     {
+        const QString& tagPath = pair.first;
         QString shortenedPath = tagPath;
 
         QStringList currentPath  = tagPath.split('/', QString::SkipEmptyParts);
@@ -596,9 +626,14 @@ void ImagePropertiesTab::setTags(const QStringList& tagPaths, const QStringList&
         shortenedPath.replace("/", " / ");
         tagsShortened << shortenedPath;
         previous = tagPath;
+
+        if (identifiers)
+        {
+            (*identifiers) << pair.second;
+        }
     }
 
-    d->labelTags->setText(tagsShortened.join("\n"));
+    return tagsShortened;
 }
 
 }  // namespace Digikam

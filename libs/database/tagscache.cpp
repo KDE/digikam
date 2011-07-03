@@ -42,6 +42,7 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasewatch.h"
+#include "imagepropertiestab.h"
 #include "tagproperties.h"
 
 namespace Digikam
@@ -899,5 +900,39 @@ int TagsCache::getPickLabelForTag(int tagId)
     QReadLocker locker(&d->lock);
     return d->pickLabelsTags.key(tagId, (PickLabel)(-1));
 }
+
+QStringList TagsCache::shortenedTagPaths(const QList<int>& ids, QList<int>* sortedIds,
+                              LeadingSlashPolicy slashPolicy, HiddenTagsPolicy hiddenTagsPolicy) const
+{
+    QStringList paths;
+    QList<QVariant> variantIds;
+
+    // duplicates tagPath(), but we need the additional list of tag ids
+    foreach (int id, ids)
+    {
+        if (hiddenTagsPolicy == IncludeHiddenTags || !isInternalTag(id))
+        {
+            paths      << tagPath(id, slashPolicy);
+            variantIds << id;
+        }
+    }
+
+    // The code is needed in libdigikamcore, so it cannot be moved here. TODO: Find a good place
+    QStringList shortenedPaths = ImagePropertiesTab::shortenedTagPaths(paths, &variantIds);
+
+    foreach (const QVariant& var, variantIds)
+    {
+        (*sortedIds) << var.toInt();
+    }
+
+    return shortenedPaths;
+}
+
+QStringList TagsCache::shortenedTagPaths(const QList<int>& ids,
+                                         LeadingSlashPolicy slashPolicy, HiddenTagsPolicy hiddenTagsPolicy) const
+{
+    return ImagePropertiesTab::shortenedTagPaths(tagPaths(ids, slashPolicy, hiddenTagsPolicy));
+}
+
 
 } // namespace Digikam
