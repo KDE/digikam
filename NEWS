@@ -213,6 +213,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 184 ==> 210914 : Allow disabling the rating widget in the Light Table thumbbar or unrating an image.
 185 ==> 276745 : Crash while updating/generating fingerprints.
 186 ==> 240148 : If I change the theme to black, the color of the texts in menus remains black, and it can't be read 
-187 ==> 
+187 ==> 274529 : Crashes on startup in Mac OS X.
+188 ==> 
 
 
