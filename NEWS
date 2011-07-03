@@ -208,4 +208,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 179 ==> 271610 : Crash when importing picutures from a Canon SX 200 IS.
 180 ==> 271269 : crash occured when trying to import pictures from Finepix 6500fd.
 181 ==> 271909 : digiKam crashed when trying to switch map to google map in geolocation window.
-182 ==> 
+182 ==> 276969 : [2.0.0-rc] pgfutils.cpp:154:45: error: invalid conversion from 'UINT32*' to 'int'.
+183 ==> 
