@@ -202,11 +202,12 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 173 ==> 163763 : digiKam hangs during operation and startup.
 174 ==> 276795 : Showfoto crashes when open a pic.
 175 ==> 264945 : Showfoto 1.9 (strigi relevant), installed in /usr/local/bin along with digiKam 1.9, crashes when opening many, but not all, jpegs.
-176 ==> 276356 : tags should have a root (maybe hidden)
+176 ==> 276356 : Tags should have a root (maybe hidden).
 177 ==> 276154 : jpegutils.cpp contains debug output, but disabled by define.
 178 ==> 276921 : Wrong i18n-Parameter in libs/database/databaseconfiglement.cpp.
 179 ==> 271610 : Crash when importing picutures from a Canon SX 200 IS.
-180 ==> 271269 : crash occured when trying to import pictures from Finepix 6500fd.
+180 ==> 271269 : Crash occured when trying to import pictures from Finepix 6500fd.
 181 ==> 271909 : digiKam crashed when trying to switch map to google map in geolocation window.
 182 ==> 276969 : [2.0.0-rc] pgfutils.cpp:154:45: error: invalid conversion from 'UINT32*' to 'int'.
-183 ==> 
+183 ==> 146337 : Tag regions of an image.
+184 ==> 
