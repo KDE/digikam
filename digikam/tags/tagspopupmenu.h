@@ -77,6 +77,7 @@ private:
     void   clearPopup();
     KMenu* buildSubMenu(int tagid);
     void   iterateAndBuildMenu(KMenu* menu, TAlbum* album);
+    void   buildFlatMenu(KMenu* menu);
     void   setAlbumIcon(QAction* action, TAlbum* album);
 
 private:
