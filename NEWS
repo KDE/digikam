@@ -215,7 +215,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 186 ==> 240148 : If I change the theme to black, the color of the texts in menus remains black, and it can't be read 
 187 ==> 274529 : Crashes on startup in Mac OS X.
 188 ==> 268817 : DK 2.0 beta 4 - crash when starting sw conversion.
-189 ==> 
-
-
-
+189 ==> 264231 : CMakeList.txt opencv-check broken.
+190 ==> 
