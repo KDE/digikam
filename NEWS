@@ -210,4 +210,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 181 ==> 271909 : digiKam crashed when trying to switch map to google map in geolocation window.
 182 ==> 276969 : [2.0.0-rc] pgfutils.cpp:154:45: error: invalid conversion from 'UINT32*' to 'int'.
 183 ==> 146337 : Tag regions of an image.
-184 ==> 
+184 ==> 210914 : Allow disabling the rating widget in the Light Table thumbbar or unrating an image.
+185 ==> 
