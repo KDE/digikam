@@ -216,4 +216,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 187 ==> 274529 : Crashes on startup in Mac OS X.
 188 ==> 268817 : DK 2.0 beta 4 - crash when starting sw conversion.
 189 ==> 264231 : CMakeList.txt opencv-check broken.
-190 ==> 
+190 ==> 269084 : Crash when editing Geo-Location.
+191 ==> 
