@@ -60,7 +60,9 @@
 /* Define to 1 if we know how to start mysqld */
 #cmakedefine HAVE_INTERNALMYSQL 1
 
+#ifdef USE_EXT_LIBPGF
 #define PGFCodecVersionID 0x${PGF_CODEC_VERSION_ID}
+#endif
 
 #define LIBEXEC_INSTALL_DIR "${LIBEXEC_INSTALL_DIR}"
 
