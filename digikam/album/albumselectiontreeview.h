@@ -69,11 +69,10 @@ Q_SIGNALS:
      */
     void signalFindDuplicatesInAlbum(Album* album);
 
-protected:
+private Q_SLOTS:
 
-    virtual QString contextMenuTitle() const;
-    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
-    virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
+    void slotFindDuplicates();
+    void slotRebuildThumbs();
 
 private:
 
@@ -87,6 +86,7 @@ private:
 private:
 
     class AlbumSelectionTreeViewPriv;
+    class AlbumSelectionTreeViewContextMenuElement;
     AlbumSelectionTreeViewPriv* const d;
 
 };
