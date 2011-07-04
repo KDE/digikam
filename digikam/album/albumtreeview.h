@@ -49,6 +49,25 @@ class  TagModificationHelper;
 // NOTE: This structure name can be in conflict with QAbstractItemView::State.
 struct State;
 
+class AbstractAlbumTreeView;
+
+class ContextMenuElement
+{
+public:
+
+    virtual ~ContextMenuElement() {}
+
+    /**
+     * Add actions to the context menu being generated
+     *
+     * @param view The AbstractAlbumTreeView which generates the menu
+     * @param cmh helper object to create the context menu
+     * @param album album on which the context menu will be created. May be null if
+     *              it is requested on no tag entry
+     */
+    virtual void addActions(AbstractAlbumTreeView* view, ContextMenuHelper& cmh, Album* album) = 0;
+};
+
 /**
  * Base class for all tree views that display Album-based content provided by an
  * AbstractSpecificAlbumModel. This class enables various utility functions like
@@ -127,6 +146,14 @@ public:
     void setSelectOnContextMenu(bool select);
 
     /**
+     * Set the context menu title and icon.
+     * This is used by the default implementation of contextMenuIcon()
+     * and contextMenuTitle(). You can alternatively reimplement these methods.
+     */
+    void setContextMenuIcon(const QPixmap& pixmap);
+    void setContextMenuTitle(const QString& title);
+
+    /**
      * This is a combination of indexAt() checked with visualRect().
      * p must be in the viewport currently. Decoration will not be included.
      * Suitable for mouse click positions.
@@ -166,6 +193,16 @@ public:
      * Default: false
      */
     void setAlbumManagerCurrentAlbum(bool setCurrentAlbum);
+
+    /**
+     * Add a context menu element which can add actions to the context
+     * menu when the menu is generated.
+     * First, addCustomContextMenuActions is called, then
+     * all elements' addActions method is called in order of addition.
+     */
+    void addContextMenuElement(ContextMenuElement* element);
+    void removeContextMenuElement(ContextMenuElement* element);
+    QList<ContextMenuElement*> contextMenuElements() const;
 
     // for internal use: public viewportEvent
     virtual bool viewportEvent(QEvent* event);

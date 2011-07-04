@@ -177,6 +177,11 @@ public:
 
     AlbumPointer<Album>       lastSelectedAlbum;
 
+    QList<ContextMenuElement*> contextMenuElements;
+
+    QPixmap                   contextMenuIcon;
+    QString                   contextMenuTitle;
+
 };
 
 const QString AbstractAlbumTreeView::AbstractAlbumTreeViewPriv::configSelectionEntry("Selection");
@@ -203,6 +208,9 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(QWidget* parent, Flags flags)
     d->resizeColumnsTimer = new QTimer(this);
     d->resizeColumnsTimer->setInterval(200);
     d->resizeColumnsTimer->setSingleShot(true);
+
+    d->contextMenuIcon  = SmallIcon("digikam");
+    d->contextMenuTitle = i18n("Context menu");
 
     connect(d->resizeColumnsTimer, SIGNAL(timeout()),
             this, SLOT(adaptColumnsToContent()));
@@ -957,14 +965,39 @@ bool AbstractAlbumTreeView::showContextMenuAt(QContextMenuEvent* event, Album* a
     return albumForEvent;
 }
 
+void AbstractAlbumTreeView::setContextMenuIcon(const QPixmap& pixmap)
+{
+    d->contextMenuIcon = pixmap;
+}
+
+void AbstractAlbumTreeView::setContextMenuTitle(const QString& title)
+{
+    d->contextMenuTitle = title;
+}
+
 QPixmap AbstractAlbumTreeView::contextMenuIcon() const
 {
-    return SmallIcon("digikam");
+    return d->contextMenuIcon;
 }
 
 QString AbstractAlbumTreeView::contextMenuTitle() const
 {
-    return i18n("Context menu");
+    return d->contextMenuTitle;
+}
+
+void AbstractAlbumTreeView::addContextMenuElement(ContextMenuElement* element)
+{
+    d->contextMenuElements << element;
+}
+
+void AbstractAlbumTreeView::removeContextMenuElement(ContextMenuElement* element)
+{
+    d->contextMenuElements.removeAll(element);
+}
+
+QList<ContextMenuElement*> AbstractAlbumTreeView::contextMenuElements() const
+{
+    return d->contextMenuElements;
 }
 
 void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent* event)
@@ -994,9 +1027,13 @@ void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent* event)
     popmenu.addTitle(contextMenuIcon(), contextMenuTitle());
     ContextMenuHelper cmhelper(&popmenu);
 
-    AlbumPointer<Album> albumPointer(album);
     addCustomContextMenuActions(cmhelper, album);
+    foreach (ContextMenuElement* element, d->contextMenuElements)
+    {
+        element->addActions(this, cmhelper, album);
+    }
 
+    AlbumPointer<Album> albumPointer(album);
     QAction* choice = cmhelper.exec(QCursor::pos());
     handleCustomContextMenuAction(choice, albumPointer);
 }
