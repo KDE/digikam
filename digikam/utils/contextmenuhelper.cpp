@@ -66,6 +66,7 @@
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
+#include "abstractalbummodel.h"
 #include "config-digikam.h"
 #include "databaseaccess.h"
 #include "digikamapp.h"
@@ -91,6 +92,7 @@ public:
         gotoDateAction(0),
         setThumbnailAction(0),
         imageFilterModel(0),
+        albumModel(0),
         parent(0),
         ABCmenu(0),
         stdActionCollection(0)
@@ -107,11 +109,23 @@ public:
     QMap<QString, KService::Ptr> servicesMap;
 
     ImageFilterModel*            imageFilterModel;
+    AbstractCheckableAlbumModel* albumModel;
 
     QMenu*                       parent;
     QMenu*                       ABCmenu;
 
     KActionCollection*           stdActionCollection;
+
+    QModelIndex indexForAlbumFromAction(QObject* sender) const
+    {
+        QAction* action;
+        if ( (action = qobject_cast<QAction*>(sender)) )
+        {
+            Album* album = action->data().value<AlbumPointer<> >();
+            return albumModel->indexForAlbum(album);
+        }
+        return QModelIndex();
+    }
 };
 
 ContextMenuHelper::ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection)
@@ -738,6 +752,80 @@ void ContextMenuHelper::addQueueManagerMenu()
 
     // NOTE: see B.K.O #252130 : we need to disable new items to add on BQM is this one is running.
     bqmMenu->setDisabled(QueueMgrWindow::queueManagerWindow()->isBusy());
+}
+
+void ContextMenuHelper::setAlbumModel(AbstractCheckableAlbumModel* model)
+{
+    d->albumModel = model;
+}
+
+void ContextMenuHelper::addAlbumCheckUncheckActions(Album* album)
+{
+    QVariant albumData = QVariant::fromValue(AlbumPointer<>(album));
+    QString allString = album->type() == Album::TAG ? i18n("All Tags") : i18n("All Albums");
+
+    KMenu* selectTagsMenu = new KMenu(i18nc("select tags menu", "Select"));
+    addSubMenu(selectTagsMenu);
+
+    selectTagsMenu->addAction(allString, d->albumModel, SLOT(checkAllAlbums()));
+    selectTagsMenu->addSeparator();
+    QAction* selectChildrenAction = selectTagsMenu->addAction(i18n("Children"), this, SLOT(slotSelectChildren()));
+    QAction* selectParentsAction  = selectTagsMenu->addAction(i18n("Parents"), this, SLOT(slotSelectParents()));
+    selectChildrenAction->setData(albumData);
+    selectParentsAction->setData(albumData);
+
+    KMenu* deselectTagsMenu = new KMenu(i18nc("deselect tags menu", "Deselect"));
+    addSubMenu(deselectTagsMenu);
+
+    deselectTagsMenu->addAction(allString, d->albumModel, SLOT(resetAllCheckedAlbums()));
+    deselectTagsMenu->addSeparator();
+    QAction* deselectChildrenAction = deselectTagsMenu->addAction(i18n("Children"), this, SLOT(slotDeselectChildren()));
+    QAction* deselectParentsAction  = deselectTagsMenu->addAction(i18n("Parents"), this, SLOT(slotDeselectParents()));
+    deselectChildrenAction->setData(albumData);
+    deselectParentsAction->setData(albumData);
+
+    d->parent->addAction(i18n("Invert Selection"), d->albumModel, SLOT(invertCheckedAlbums()));
+
+    selectChildrenAction->setEnabled(album);
+    selectParentsAction->setEnabled(album);
+    deselectChildrenAction->setEnabled(album);
+    deselectParentsAction->setEnabled(album);
+}
+
+void ContextMenuHelper::slotSelectChildren()
+{
+    if (!d->albumModel)
+    {
+        return;
+    }
+    d->albumModel->checkAllAlbums(d->indexForAlbumFromAction(sender()));
+}
+
+void ContextMenuHelper::slotDeselectChildren()
+{
+    if (!d->albumModel)
+    {
+        return;
+    }
+    d->albumModel->resetCheckedAlbums(d->indexForAlbumFromAction(sender()));
+}
+
+void ContextMenuHelper::slotSelectParents()
+{
+    if (!d->albumModel)
+    {
+        return;
+    }
+    d->albumModel->checkAllParentAlbums(d->indexForAlbumFromAction(sender()));
+}
+
+void ContextMenuHelper::slotDeselectParents()
+{
+    if (!d->albumModel)
+    {
+        return;
+    }
+    d->albumModel->resetCheckedParentAlbums(d->indexForAlbumFromAction(sender()));
 }
 
 void ContextMenuHelper::addGroupMenu(imageIds& ids)
