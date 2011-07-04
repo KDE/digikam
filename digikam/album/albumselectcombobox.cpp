@@ -305,6 +305,16 @@ void AbstractAlbumTreeViewSelectComboBox::sendViewportEventToView(QEvent* e)
     m_treeView->viewportEvent(e);
 }
 
+void AbstractAlbumTreeViewSelectComboBox::setTreeView(AbstractAlbumTreeView* treeView)
+{
+    // this is independent from the installView mechanism, just to override
+    // the tree view created below without the need to subclass
+    if (!m_treeView)
+    {
+        m_treeView = treeView;
+    }
+}
+
 // ---------------------------------------------------------------------------------
 
 AlbumTreeViewSelectComboBox::AlbumTreeViewSelectComboBox(QWidget* parent)

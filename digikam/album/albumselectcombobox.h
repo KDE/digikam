@@ -122,6 +122,13 @@ public:
 
     AbstractAlbumTreeViewSelectComboBox(QWidget* parent = 0);
 
+    /**
+     * Set a tree view created by you instead of creating a default view
+     * (in the subclasses).
+     * Only takes effect before calling setModel.
+     */
+    void setTreeView(AbstractAlbumTreeView* treeView);
+
 protected:
 
     virtual void installView(QAbstractItemView* view = 0);
