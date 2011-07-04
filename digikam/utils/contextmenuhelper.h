@@ -52,8 +52,10 @@ namespace Digikam
 class AbstractCheckableAlbumModel;
 class Album;
 class AlbumIconItem;
+class AlbumModificationHelper;
 class ImageInfo;
 class ImageFilterModel;
+class PAlbum;
 class TagModificationHelper;
 class TAlbum;
 
@@ -247,6 +249,17 @@ public:
     void addActionNewTag(TagModificationHelper* helper, TAlbum* parentTag = 0);
     void addActionDeleteTag(TagModificationHelper* helper, TAlbum* tag);
     void addActionEditTag(TagModificationHelper* helper, TAlbum* tag);
+
+    /**
+     * Add actions to add, remove or edit a tag.
+     * The tag modification helper is used to execute the action.
+     * You must set the parent tag to use on modification helper.
+     */
+    void addActionNewAlbum(AlbumModificationHelper* helper, PAlbum* parentAlbum = 0);
+    void addActionDeleteAlbum(AlbumModificationHelper* helper, PAlbum* album);
+    void addActionEditAlbum(AlbumModificationHelper* helper, PAlbum* album);
+    void addActionRenameAlbum(AlbumModificationHelper* helper, PAlbum* album);
+    void addActionResetAlbumIcon(AlbumModificationHelper* helper, PAlbum* album);
 
     /**
      * Add "Assign Tags" menu.

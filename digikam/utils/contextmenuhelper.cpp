@@ -66,6 +66,7 @@
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
+#include "albummodificationhelper.h"
 #include "abstractalbummodel.h"
 #include "config-digikam.h"
 #include "databaseaccess.h"
@@ -87,7 +88,7 @@ class ContextMenuHelper::ContextMenuHelperPriv
 {
 public:
 
-    ContextMenuHelperPriv() :
+    ContextMenuHelperPriv(ContextMenuHelper* q) :
         gotoAlbumAction(0),
         gotoDateAction(0),
         setThumbnailAction(0),
@@ -95,7 +96,8 @@ public:
         albumModel(0),
         parent(0),
         ABCmenu(0),
-        stdActionCollection(0)
+        stdActionCollection(0),
+        q(q)
     {}
 
     QAction*                     gotoAlbumAction;
@@ -116,6 +118,8 @@ public:
 
     KActionCollection*           stdActionCollection;
 
+    ContextMenuHelper*           q;
+
     QModelIndex indexForAlbumFromAction(QObject* sender) const
     {
         QAction* action;
@@ -126,10 +130,22 @@ public:
         }
         return QModelIndex();
     }
+
+    QAction* copyFromMainCollection(const char *name)
+    {
+        QAction* mainAction = stdActionCollection->action(name);
+        if (!mainAction)
+        {
+            return 0;
+        }
+        QAction* action = new QAction(mainAction->icon(), mainAction->text(), q);
+        action->setToolTip(mainAction->toolTip());
+        return action;
+    }
 };
 
 ContextMenuHelper::ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection)
-    : QObject(parent), d(new ContextMenuHelperPriv)
+    : QObject(parent), d(new ContextMenuHelperPriv(this))
 {
     d->parent = parent;
 
@@ -454,6 +470,46 @@ void ContextMenuHelper::addActionEditTag(TagModificationHelper* helper, TAlbum* 
     helper->bindTag(editTagAction, tag);
     connect(editTagAction, SIGNAL(triggered()),
             helper, SLOT(slotTagEdit()));
+}
+
+void ContextMenuHelper::addActionNewAlbum(AlbumModificationHelper* helper, PAlbum* parentAlbum)
+{
+    QAction* action = d->copyFromMainCollection("album_new");
+    addAction(action);
+    helper->bindAlbum(action, parentAlbum);
+    connect(action, SIGNAL(triggered()), helper, SLOT(slotAlbumNew()));
+}
+
+void ContextMenuHelper::addActionDeleteAlbum(AlbumModificationHelper* helper, PAlbum* album)
+{
+    QAction* action = d->copyFromMainCollection("album_delete");
+    addAction(action, !(album->isRoot() || album->isAlbumRoot()) );
+    helper->bindAlbum(action, album);
+    connect(action, SIGNAL(triggered()), helper, SLOT(slotAlbumDelete()));
+}
+
+void ContextMenuHelper::addActionEditAlbum(AlbumModificationHelper* helper, PAlbum* album)
+{
+    QAction* action = d->copyFromMainCollection("album_propsEdit");
+    addAction(action, !album->isRoot());
+    helper->bindAlbum(action, album);
+    connect(action, SIGNAL(triggered()), helper, SLOT(slotAlbumEdit()));
+}
+
+void ContextMenuHelper::addActionRenameAlbum(AlbumModificationHelper* helper, PAlbum* album)
+{
+    QAction* action = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
+    addAction(action, !(album->isRoot() || album->isAlbumRoot()) );
+    helper->bindAlbum(action, album);
+    connect(action, SIGNAL(triggered()), helper, SLOT(slotAlbumRename()));
+}
+
+void ContextMenuHelper::addActionResetAlbumIcon(AlbumModificationHelper* helper, PAlbum* album)
+{
+    QAction* action = new QAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"), this);
+    addAction(action, !album->isRoot());
+    helper->bindAlbum(action, album);
+    connect(action, SIGNAL(triggered()), helper, SLOT(slotAlbumResetIcon()));
 }
 
 void ContextMenuHelper::addAssignTagsMenu(imageIds& ids)
