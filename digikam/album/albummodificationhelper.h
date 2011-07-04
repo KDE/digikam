@@ -65,6 +65,21 @@ public:
      */
     virtual ~AlbumModificationHelper();
 
+    /**
+     * Sets the album that the given action operates on.
+     * You must call bindTag and then connect the action's triggered
+     * to the desired slot, slotTagNew(), slotTagEdit() or slotTagDelete().
+     * Note: Changes the Action's user data.
+     */
+    void bindAlbum(QAction* action, PAlbum* parent) const;
+
+    /**
+     * Returns the album bound with bindAlbum. The given QObject shall be
+     * a QAction, but for convenience the given object
+     * will be checked with qobject_cast first, so you can pass QObject::sender().
+     */
+    PAlbum* boundAlbum(QObject* action) const;
+
 public Q_SLOTS:
 
     /**
@@ -75,6 +90,7 @@ public Q_SLOTS:
      * @return the new album or 0 if no album was created
      */
     PAlbum* slotAlbumNew(PAlbum* parentAlbum);
+    PAlbum* slotAlbumNew();
 
     /**
      * Deletes the given album after waiting for a graphical confirmation of the
@@ -83,6 +99,7 @@ public Q_SLOTS:
      * @param album album to delete
      */
     void slotAlbumDelete(PAlbum* album);
+    void slotAlbumDelete();
 
     /**
      * Renames the given album. The user will be prompted for a new name.
@@ -90,6 +107,7 @@ public Q_SLOTS:
      * @param album album to rename
      */
     void slotAlbumRename(PAlbum* album);
+    void slotAlbumRename();
 
     /**
      * Graphically edits the properties of the given album.
@@ -97,6 +115,10 @@ public Q_SLOTS:
      * @param album album to edit
      */
     void slotAlbumEdit(PAlbum* album);
+    void slotAlbumEdit();
+
+    void slotAlbumResetIcon(PAlbum* album);
+    void slotAlbumResetIcon();
 
 private Q_SLOTS:
 
