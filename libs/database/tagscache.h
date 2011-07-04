@@ -83,6 +83,13 @@ public:
     int parentTag(int id) const;
 
     /**
+     * Returns the parent tag ids of the given tag, starting with the toplevel tag,
+     * ending with the direct parent tag.
+     * If the tag is a toplevel tag or does not exist, an empty list is returned.
+     */
+    QList<int> parentTags(int id) const;
+
+    /**
      * Finds all tags with the given name.
      * For "Paris", this may give "Places/Cities/Paris" and "Places/USA/Texas/Paris".
      * If there is no tag with the given name at all, returns an empty list.

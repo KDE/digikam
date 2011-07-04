@@ -470,6 +470,24 @@ int TagsCache::parentTag(int id) const
     return 0;
 }
 
+QList<int> TagsCache::parentTags(int id) const
+{
+    d->checkInfos();
+
+    QList<int> ids;
+    QReadLocker locker(&d->lock);
+    QList<TagShortInfo>::const_iterator it;
+
+    for (it = d->find(id);
+         it != d->infos.constEnd() && it->pid;
+         it = d->find(it->pid))
+    {
+        ids.prepend(it->pid);
+    }
+
+    return ids;
+}
+
 int TagsCache::tagForPath(const QString& tagPath) const
 {
     // split full tag "url" into list of single tag names
