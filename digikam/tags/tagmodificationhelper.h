@@ -116,7 +116,14 @@ public Q_SLOTS:
      * to the desired slot, slotTagNew(), slotTagEdit() or slotTagDelete().
      * Note: Changes the Action's user data.
      */
-    void bindTag(QAction* action, TAlbum* parent);
+    void bindTag(QAction* action, TAlbum* parent) const;
+
+    /**
+     * Returns the tag bound with bindTag. The given QObject shall be
+     * a QAction, but for convenience the given object
+     * will be checked with qobject_cast first, so you can pass QObject::sender().
+     */
+    TAlbum* boundTag(QObject* action) const;
 
 Q_SIGNALS:
 
