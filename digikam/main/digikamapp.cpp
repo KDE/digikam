@@ -715,12 +715,10 @@ void DigikamApp::setupActions()
     connect(browseActionsMapper, SIGNAL(mapped(QWidget*)),
             d->view, SLOT(slotLeftSideBarActivate(QWidget*)));
 
-    kDebug() << d->view->leftSidebarWidgets();
     foreach (SidebarWidget* leftWidget, d->view->leftSidebarWidgets())
     {
         QString actionName = "browse_" +
                              leftWidget->objectName().remove(' ').remove("Sidebar").remove("FolderView").remove("View").toLower();
-        kDebug() << actionName << leftWidget->objectName();
         KAction* action = new KAction(KIcon(leftWidget->getIcon()), leftWidget->getCaption(), this);
         actionCollection()->addAction(actionName, action);
         connect(action, SIGNAL(triggered()), browseActionsMapper, SLOT(map()));
