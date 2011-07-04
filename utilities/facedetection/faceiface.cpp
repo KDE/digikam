@@ -63,7 +63,6 @@ public:
 
     FaceIfacePriv(FaceIface* q) : q(q)
     {
-        setupTags();
     }
 
     ~FaceIfacePriv()
@@ -76,7 +75,6 @@ public:
     int      peopleTagId() const;
     int      unknownPeopleTagId() const;
 
-    void     setupTags();
     QString  tagPath(const QString& name, int parentId) const;
     void     makeFaceTag(int tagId, const QString& fullName) const;
     int      findFirstTagWithProperty(const QString& property, const QString& value = QString()) const;
@@ -99,7 +97,34 @@ int FaceIface::FaceIfacePriv::scannedForFacesTagId() const
 
 int FaceIface::FaceIfacePriv::peopleTagId() const
 {
-    return TagsCache::instance()->getOrCreateTag(i18nc("People on your photos", "People"));
+    // check default
+    QString i18nName = i18nc("People on your photos", "People");
+    int tagId = TagsCache::instance()->tagForPath(i18nName);
+    if (tagId)
+    {
+        return tagId;
+    }
+
+    // employ a heuristic
+    QList<int> personTags = q->allPersonTags();
+    if (!personTags.isEmpty())
+    {
+        // we find the most toplevel parent tag of a person tag
+        QMultiMap<int,int> tiers;
+        foreach (int tagId, personTags)
+        {
+            tiers.insert(TagsCache::instance()->parentTags(tagId).size(), tagId);
+        }
+
+        QList<int> mosttoplevelTags = tiers.values(tiers.begin().key());
+
+        // as a pretty weak criterion, take the largest id which usually corresponds to the latest tag creation.
+        qSort(mosttoplevelTags);
+        return TagsCache::instance()->parentTag(mosttoplevelTags.last());
+    }
+
+    // create default
+    return TagsCache::instance()->getOrCreateTag(i18nName);
 }
 
 int FaceIface::FaceIfacePriv::unknownPeopleTagId() const
@@ -111,27 +136,14 @@ int FaceIface::FaceIfacePriv::unknownPeopleTagId() const
         return ids.first();
     }
 
-    return 0;
-}
+    int unknownPeopleTagId = TagsCache::instance()->getOrCreateTag(tagPath(i18nc(
+        "The list of detected faces from the collections but not recognized",
+        "Unknown"), peopleTagId()));
+    TagProperties props(unknownPeopleTagId);
+    props.setProperty(TagPropertyName::person(), QString()); // no name associated
+    props.setProperty(TagPropertyName::unknownPerson(), QString()); // special property
 
-void FaceIface::FaceIfacePriv::setupTags()
-{
-    // Internal tag
-    unknownPeopleTagId();
-
-    // Faces parent tag
-    peopleTagId();
-
-    // Unknown people tag
-    if (!unknownPeopleTagId())
-    {
-        int unknownPeopleTagId = TagsCache::instance()->getOrCreateTag(tagPath(i18nc(
-                                     "The list of detected faces from the collections but not recognized",
-                                     "Unknown"), peopleTagId()));
-        TagProperties props(unknownPeopleTagId);
-        props.setProperty(TagPropertyName::person(), QString()); // no name associated
-        props.setProperty(TagPropertyName::unknownPerson(), QString()); // special property
-    }
+    return unknownPeopleTagId;
 }
 
 int FaceIface::FaceIfacePriv::findFirstTagWithProperty(const QString& property, const QString& value) const
