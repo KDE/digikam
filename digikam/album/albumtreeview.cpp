@@ -995,7 +995,7 @@ void AbstractAlbumTreeView::removeContextMenuElement(ContextMenuElement* element
     d->contextMenuElements.removeAll(element);
 }
 
-QList<ContextMenuElement*> AbstractAlbumTreeView::contextMenuElements() const
+QList<AbstractAlbumTreeView::ContextMenuElement*> AbstractAlbumTreeView::contextMenuElements() const
 {
     return d->contextMenuElements;
 }

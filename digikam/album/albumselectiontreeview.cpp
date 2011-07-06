@@ -73,7 +73,8 @@ protected:
     }
 };
 
-class AlbumSelectionTreeView::AlbumSelectionTreeViewContextMenuElement : public ContextMenuElement
+class AlbumSelectionTreeView::AlbumSelectionTreeViewContextMenuElement
+      : public AbstractAlbumTreeView::ContextMenuElement
 {
 public:
     AlbumSelectionTreeViewContextMenuElement(AlbumSelectionTreeView::AlbumSelectionTreeViewPriv *d)

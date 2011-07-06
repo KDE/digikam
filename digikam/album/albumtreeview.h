@@ -51,23 +51,6 @@ struct State;
 
 class AbstractAlbumTreeView;
 
-class ContextMenuElement
-{
-public:
-
-    virtual ~ContextMenuElement() {}
-
-    /**
-     * Add actions to the context menu being generated
-     *
-     * @param view The AbstractAlbumTreeView which generates the menu
-     * @param cmh helper object to create the context menu
-     * @param album album on which the context menu will be created. May be null if
-     *              it is requested on no tag entry
-     */
-    virtual void addActions(AbstractAlbumTreeView* view, ContextMenuHelper& cmh, Album* album) = 0;
-};
-
 /**
  * Base class for all tree views that display Album-based content provided by an
  * AbstractSpecificAlbumModel. This class enables various utility functions like
@@ -200,6 +183,23 @@ public:
      * First, addCustomContextMenuActions is called, then
      * all elements' addActions method is called in order of addition.
      */
+    class ContextMenuElement
+    {
+    public:
+
+        virtual ~ContextMenuElement() {}
+
+        /**
+        * Add actions to the context menu being generated
+        *
+        * @param view The AbstractAlbumTreeView which generates the menu
+        * @param cmh helper object to create the context menu
+        * @param album album on which the context menu will be created. May be null if
+        *              it is requested on no tag entry
+        */
+        virtual void addActions(AbstractAlbumTreeView* view, ContextMenuHelper& cmh, Album* album) = 0;
+    };
+
     void addContextMenuElement(ContextMenuElement* element);
     void removeContextMenuElement(ContextMenuElement* element);
     QList<ContextMenuElement*> contextMenuElements() const;
