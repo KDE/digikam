@@ -218,5 +218,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 189 ==> 264231 : CMakeList.txt opencv-check broken.
 190 ==> 269084 : Crash when editing Geo-Location.
 191 ==> 277157 : Wish: Copy to Clipboard.
-192 ==> 
+192 ==> 262700 : Raw file will freeze with 16bit option enabled.
+193 ==> 
+
 
