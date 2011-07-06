@@ -129,6 +129,13 @@ public:
      */
     void setTreeView(AbstractAlbumTreeView* treeView);
 
+    /**
+     * Enables a context menu which contains options to
+     * check or uncheck groups of albums, given you have a checkable model.
+     * Call this method after setModel().
+     */
+    void addCheckUncheckContextMenuActions();
+
 protected:
 
     virtual void installView(QAbstractItemView* view = 0);

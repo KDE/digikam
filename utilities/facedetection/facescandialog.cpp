@@ -396,6 +396,7 @@ void FaceScanDialog::setupUi()
     d->albumSelectCB->setToolTip(i18nc("@info:tooltip", "Select all albums that should be included in the face scan."));
     d->albumSelectCB->setDefaultModel();
     d->albumSelectCB->setNoSelectionText(i18nc("@info:status", "Any albums"));
+    d->albumSelectCB->addCheckUncheckContextMenuActions();
 
     d->albumClearButton = new ModelClearButton(d->albumSelectCB->view()->albumModel());
     d->albumClearButton->setToolTip(i18nc("@info:tooltip", "Reset selected albums"));
@@ -405,6 +406,7 @@ void FaceScanDialog::setupUi()
     d->tagSelectCB->setToolTip(i18nc("@info:tooltip", "Select all tags that should be included in the face scan."));
     d->tagSelectCB->setDefaultModel();
     d->tagSelectCB->setNoSelectionText(i18nc("@info:status", "Any tags"));
+    d->tagSelectCB->addCheckUncheckContextMenuActions();
 
     d->tagClearButton = new ModelClearButton(d->tagSelectCB->view()->albumModel());
     d->tagClearButton->setToolTip(i18nc("@info:tooltip", "Reset selected tags"));
