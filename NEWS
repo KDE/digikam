@@ -220,4 +220,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 191 ==> 277157 : Wish: Copy to Clipboard.
 192 ==> 262700 : Raw file will freeze with 16bit option enabled.
 193 ==> 277133 : Additional patch needed to compile 2.0.0-rc with external libpgf.
-194 ==> 
+194 ==> 261656 : Object::connect error messages when using decorate/add border.
+195 ==> 
