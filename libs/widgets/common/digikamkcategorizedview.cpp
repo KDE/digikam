@@ -707,24 +707,6 @@ void DigikamKCategorizedView::setCategoryDrawer(KCategoryDrawer* categoryDrawer)
     d->categoriesPosition.clear();
     d->categories.clear();
     d->intersectedIndexes.clear();
-
-    if (!categoryDrawer && d->proxyModel)
-    {
-        QObject::disconnect(d->proxyModel, SIGNAL(layoutChanged()),
-                            this, SLOT(slotLayoutChanged()));
-
-        QObject::disconnect(d->proxyModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-                            this, SLOT(rowsRemoved(QModelIndex,int,int)));
-    }
-    else if (categoryDrawer && d->proxyModel)
-    {
-        QObject::connect(d->proxyModel, SIGNAL(layoutChanged()),
-                         this, SLOT(slotLayoutChanged()));
-
-        QObject::connect(d->proxyModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-                         this, SLOT(rowsRemoved(QModelIndex,int,int)));
-    }
-
     d->categoryDrawer = categoryDrawer;
 
     if (categoryDrawer)
