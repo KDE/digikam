@@ -772,6 +772,10 @@ void DCategorizedView::mousePressEvent(QMouseEvent* event)
     }
 
     DigikamKCategorizedView::mousePressEvent(event);
+    if (!index.isValid())
+    {
+        emit viewportClicked(event);
+    }
     d->currentMouseEvent = 0;
 }
 

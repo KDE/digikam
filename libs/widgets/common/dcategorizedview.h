@@ -105,11 +105,14 @@ Q_SIGNALS:
      */
     void clicked(const QMouseEvent* e, const QModelIndex& index);
     void entered(const QMouseEvent* e, const QModelIndex& index);
+    /// While clicked() is emitted with a valid index, this corresponds to clicking on empty space
+    void viewportClicked(const QMouseEvent* e);
 
     /**  Remember you may want to check if the event is accepted or ignored.
      *   This signal is emitted after being handled by this widget.
      *   You can accept it if ignored. */
     void keyPressed(QKeyEvent* e);
+
 
 protected Q_SLOTS:
 
