@@ -145,6 +145,13 @@ Q_SIGNALS:
      */
     void labelClicked(const ImageInfo& info, const QVariant& faceIdentifier);
 
+    /**
+     * An action has been selected. This purely signals user interaction,
+     * no fixed decision - mouse hover may be enough to emit this signal.
+     * The action may be invalid (user switched back to empty selection).
+     */
+    void selected(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier);
+
 protected:
 
     void keyPressEvent(QKeyEvent* e);
