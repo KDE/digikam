@@ -593,6 +593,23 @@ QList<int> ImageInfo::tagIds() const
     return m_data->tagIds;
 }
 
+int ImageInfo::orientation() const
+{
+    if (!m_data)
+    {
+        return 0; // ORIENTATION_UNSPECIFIED
+    }
+
+    QVariantList values = DatabaseAccess().db()->getImageInformation(m_data->id, DatabaseFields::Orientation);
+
+    if (values.isEmpty())
+    {
+        return 0;
+    }
+
+    return values.first().toInt();
+}
+
 DatabaseUrl ImageInfo::databaseUrl() const
 {
     if (!m_data)
