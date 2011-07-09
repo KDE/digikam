@@ -60,19 +60,6 @@ class SearchModificationHelper: public QObject
 
 public:
 
-    enum FaceSearchContentFlag
-    {
-        /// Faces found by autodetection
-        UnconfirmedFaces = 1 << 0,
-        /// Faces assigned or confirmed by user
-        AssignedFaces   = 1 << 1,
-        /// Tag assigned, but not tag region
-        TagAssigned      = 1 << 2,
-
-        AllFaces = UnconfirmedFaces | AssignedFaces
-    };
-    Q_DECLARE_FLAGS(FaceSearchContentFlags, FaceSearchContentFlag)
-
     /**
      * Constructor.
      *
@@ -180,7 +167,5 @@ private:
 };
 
 } // namespace Digikam
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::SearchModificationHelper::FaceSearchContentFlags)
 
 #endif /* SEARCHMODIFICATIONHELPER_H */

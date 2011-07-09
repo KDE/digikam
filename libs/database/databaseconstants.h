@@ -65,8 +65,7 @@ enum Type
     TimeLineSearch,
     HaarSearch,
     MapSearch,
-    DuplicatesSearch,
-    FaceSearch
+    DuplicatesSearch
 };
 
 enum HaarSearchType
