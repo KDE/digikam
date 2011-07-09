@@ -223,6 +223,11 @@ DigikamApp::DigikamApp()
     MetadataSettings::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
 
+    // creation of the engine on first use - when drawing -
+    // can take considerable time and cause a noticeable hang in the UI thread.
+    QFontMetrics fm(font());
+    fm.width("a");
+
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
