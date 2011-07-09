@@ -394,14 +394,14 @@ void FaceIface::ensureIsPerson(int tagId, const QString& fullName) const
     d->tagForName(QString(), tagId, 0, fullName, true, false);
 }
 
-bool FaceIface::isPerson(int tagId) const
+bool FaceIface::isPerson(int tagId)
 {
     return TagsCache::instance()->hasProperty(tagId, TagPropertyName::person());
 }
 
-bool FaceIface::isTheUnknownPerson(int tagId) const
+bool FaceIface::isTheUnknownPerson(int tagId)
 {
-    return d->unknownPeopleTagId() == tagId;
+    return TagsCache::instance()->hasProperty(tagId, TagPropertyName::unknownPerson());
 }
 
 // --- Read from database -----------------------------------------------------------------------------------
