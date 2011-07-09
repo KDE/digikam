@@ -70,6 +70,8 @@ public:
     ImageRotateOverlay*       rotateLeftOverlay;
     ImageRotateOverlay*       rotateRightOverlay;
 
+    bool                      faceMode;
+
 private:
 
     DigikamImageView* q_ptr;
