@@ -235,5 +235,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 206 ==> 277502 : All versions of version set always displayed in Album viewed.
 207 ==> 271557 : Tags: missing order, no sorting.
 208 ==> 265264 : Tag all images multiple Images are selected.
-209 ==>
+209 ==> 247659 : In big albums re-sorting thumbnails on opening right tab bar, move selected image out the screen [patch].
+210 ==> 
 
