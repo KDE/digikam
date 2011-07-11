@@ -119,6 +119,7 @@ public Q_SLOTS:
     void slotSlideShowAll();
     void slotSlideShowSelection();
     void slotSlideShowRecursive();
+	void slotSlideShowQml();
 
     // Album action slots
     void slotNewAlbum();

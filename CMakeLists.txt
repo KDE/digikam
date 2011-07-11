@@ -986,6 +986,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     ENDIF(USE_SCRIPT_IFACE)
 
+    SET(libpresentationview_SRCS
+	${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlShow/qmlShow.cpp
+	)
+
+
     SET(libslideshow_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/toolbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshow.cpp
@@ -1554,6 +1559,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk
+	${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlShow
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/main
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/manager
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/views

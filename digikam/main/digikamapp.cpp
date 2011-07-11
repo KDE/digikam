@@ -1166,6 +1166,12 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("slideshow_recursive", d->slideShowRecursiveAction);
     d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
+    d->slideShowQmlAction = new KAction(i18n("Presentation View"), this);
+    d->slideShowQmlAction->setShortcut(KShortcut(Qt::Key_F10));
+    connect(d->slideShowQmlAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowQml()));
+    actionCollection()->addAction("slideshow_qml", d->slideShowQmlAction);
+    d->slideShowAction->addAction(d->slideShowQmlAction);
+
     // -----------------------------------------------------------
 
     d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbbar"), this);
@@ -2856,13 +2862,13 @@ void DigikamApp::slotRebuildFingerPrints()
 void DigikamApp::slotScanForFaces()
 {
     // In first, we check if OpenCV Haar Cascade data file are available.
-    if (!KFaceIface::OpenCVCascadeDataDirExist())
+/*    if (!KFaceIface::OpenCVCascadeDataDirExist())
     {
         KMessageBox::error(this, i18n("OpenCV library Haar Cascade data files are not installed on your system. "
                                       "These files needs to be available to run face detection and recognition "
                                       "properly. Please check your OpenCV library installation..."));
         return;
-    }
+    }*/
 
     FaceScanDialog dialog;
 

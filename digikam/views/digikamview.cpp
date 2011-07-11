@@ -57,6 +57,7 @@
 #include "globals.h"
 #include "metadatahub.h"
 #include "metadatamanager.h"
+#include "qmlShow.h"
 #include "queuemgrwindow.h"
 #include "scancontroller.h"
 #include "sidebar.h"
@@ -1787,6 +1788,13 @@ void DigikamView::slotSlideShowRecursive()
                 this, SLOT(slotItemsInfoFromAlbums(const ImageInfoList&)));
         job->allItemsFromAlbums(albumList);
     }
+}
+
+void DigikamView::slotSlideShowQml()
+{
+	QmlShow* qmlShow = new QmlShow(d->iconView->imageInfos());
+	qmlShow->setWindowState(Qt::WindowFullScreen);
+	qmlShow->show();
 }
 
 void DigikamView::slotItemsInfoFromAlbums(const ImageInfoList& infoList)
