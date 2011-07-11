@@ -224,5 +224,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 195 ==> 270248 : digiKam crashes when clicking on a deleted folder.
 196 ==> 272175 : Picture orientation is "forgotten" in viewer and light table when using xmp sidecar [patch].
 197 ==> 275311 : XMP sidecars are not written for symbolic links [patch].
-198 ==> 
+198 ==> 276712 : Ignore certain file types.
+199 ==> 
+
 
