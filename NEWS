@@ -225,6 +225,16 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 196 ==> 272175 : Picture orientation is "forgotten" in viewer and light table when using xmp sidecar [patch].
 197 ==> 275311 : XMP sidecars are not written for symbolic links [patch].
 198 ==> 276712 : Ignore certain file types.
-199 ==> 
-
+199 ==> 276154 : jpegutils.cpp contains debug output, but disabled by define.
+200 ==> 141730 : page down/up goes to next/previous picture istead of scolling a page.
+201 ==> 229795 : Position in album lost when switching album forth and back.
+202 ==> 208506 : Switching between view does not hold the current image.
+203 ==> 252134 : when selecting multiple images, some controls should be disabled.
+204 ==> 270161 : Unclear how to get rid of tags.
+205 ==> 269446 : Keyword-Managing: Folder "People" und subfolder "Unknown" persistent?.
+206 ==> 269445 : Not possible to select only one album INCLUDING subfolders to scan for faces.
+207 ==> 277502 : All versions of version set always displayed in Album viewed.
+208 ==> 271557 : Tags: missing order, no sorting.
+209 ==> 265264 : Tag all images multiple Images are selected.
+210 ==>
 
