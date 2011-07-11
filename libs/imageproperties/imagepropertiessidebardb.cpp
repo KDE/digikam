@@ -192,7 +192,7 @@ void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rec
     d->dirtyDesceditTab  = false;
 
     // slotChangedTab only handles the active tab.
-    // Any tab that holds informations reset above shall be reset here,
+    // Any tab that holds information reset above shall be reset here,
     // unless it is the active tab
     if (getActiveTab() != d->desceditTab)
     {
