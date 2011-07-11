@@ -1166,6 +1166,12 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("slideshow_recursive", d->slideShowRecursiveAction);
     d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
+    d->slideShowQmlAction = new KAction(i18n("Presentation View"), this);
+    d->slideShowQmlAction->setShortcut(KShortcut(Qt::Key_F10));
+    connect(d->slideShowQmlAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowQml()));
+    actionCollection()->addAction("slideshow_qml", d->slideShowQmlAction);
+    d->slideShowAction->addAction(d->slideShowQmlAction);
+
     // -----------------------------------------------------------
 
     d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbbar"), this);

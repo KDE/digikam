@@ -58,6 +58,7 @@ SET(digikamcore_LIB_SRCS
         ${libdimgeditorprintiface_SRCS}
         ${libdimgeditor_SRCS}
         ${librawimport_SRCS}
+	${libpresentationview_SRCS}
 )
 
 KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
@@ -75,7 +76,7 @@ ADD_DEPENDENCIES(digikamcore digikam-gitversion)
 TARGET_LINK_LIBRARIES(digikamcore
         ${QT_QT3SUPPORT_LIBRARY}
         ${QT_QTSQL_LIBRARY}
-
+	${QT_QTDECLARATIVE_LIBRARY}
         ${KDE4_KDECORE_LIBS}
         ${KDE4_KIO_LIBS}
         ${KDE4_KFILE_LIBS}
@@ -247,6 +248,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libtemplate_SRCS}
                  ${libdatabaseui_SRCS}
                  ${libfacedetection_SRCS}
+		 ${libpresentationview_SRCS}
                  main/main.cpp
 )
 
