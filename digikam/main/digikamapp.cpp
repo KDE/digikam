@@ -2861,6 +2861,18 @@ void DigikamApp::slotRebuildFingerPrints()
 
 void DigikamApp::slotScanForFaces()
 {
+<<<<<<< HEAD
+=======
+    // In first, we check if OpenCV Haar Cascade data file are available.
+/*    if (!KFaceIface::OpenCVCascadeDataDirExist())
+    {
+        KMessageBox::error(this, i18n("OpenCV library Haar Cascade data files are not installed on your system. "
+                                      "These files needs to be available to run face detection and recognition "
+                                      "properly. Please check your OpenCV library installation..."));
+        return;
+    }*/
+
+>>>>>>> First commit. Just for testing purpose. Presentation view files are in utilities/qmlShow. You can see current presentation view tool progressed till now by clicking Presentation view named tab polaced in Slideshow dropdown tab.
     FaceScanDialog dialog;
 
     if (dialog.exec() == QDialog::Accepted)
