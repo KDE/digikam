@@ -118,6 +118,7 @@ Use CMake "-DENABLE_SCRIPTIFACE=yes"      flag to compile digiKam with experimen
 Use CMake "-DENABLE_THUMB_DB=no"          flag to compile digiKam without thumbnail database support                             (enabled by default).
 Use CMake "-DENABLE_INTERNALMYSQL=no"     flag to compile digiKam without internal MySQL server                                  (enabled by default).
 Use CMake "-DENABLE_ADVANCEDDEBUGMSG=yes" flag to compile digiKam with more internal debug messages, especially in image loaders (disabled by default).
+Use CMake "-DENABLE_NEPOMUKSUPPORT=no"    flag to compile digiKam without Nepomuk support                                        (enabled by default).
 
 To support Video thumbnails under Linux, please install "mplayerthumbs" package.
 

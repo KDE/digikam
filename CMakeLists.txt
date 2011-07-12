@@ -8,6 +8,7 @@ OPTION(ENABLE_SCRIPTIFACE      "Build digiKam with experimental scripting suppor
 OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (default=ON)"     ON)
 OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"     ON)
 OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"    OFF)
+OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                 ON)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -291,25 +292,25 @@ MACRO_BOOL_TO_01(ENABLE_THUMBS_DB USE_THUMBS_DB)
 MACRO_BOOL_TO_01(ENABLE_ADVANCEDDEBUGMSG USE_ADVANCEDDEBUGMSG)
 
 # Win32 compilation with Nepomuk is broken. It's temporally disabled.
-IF (NOT WIN32)
+IF (ENABLE_NEPOMUKSUPPORT)
     IF (${KDE_VERSION} VERSION_GREATER "4.3.99")
-    MACRO_OPTIONAL_FIND_PACKAGE(Nepomuk)
-    MACRO_LOG_FEATURE(NEPOMUK_FOUND "Nepomuk" "The Nepomuk libraries"
-              "http://www.kde.org" FALSE "" "Nepomuk extends the search and tagging")
+        MACRO_OPTIONAL_FIND_PACKAGE(Nepomuk)
+        MACRO_LOG_FEATURE(NEPOMUK_FOUND "Nepomuk" "The Nepomuk libraries"
+                "http://www.kde.org" FALSE "" "Nepomuk extends the search and tagging")
 
-    MACRO_OPTIONAL_FIND_PACKAGE(SharedDesktopOntologies 0.2)
-    MACRO_LOG_FEATURE(SHAREDDESKTOPONTOLOGIES_FOUND "Shared desktop ontologies" "Desktop ontologies"
-              "http://oscaf.sourceforge.net" TRUE "0.2" "Ontologies necessary for the Nepomuk semantic desktop.")
+        MACRO_OPTIONAL_FIND_PACKAGE(SharedDesktopOntologies 0.2)
+        MACRO_LOG_FEATURE(SHAREDDESKTOPONTOLOGIES_FOUND "Shared desktop ontologies" "Desktop ontologies"
+            "http://oscaf.sourceforge.net" TRUE "0.2" "Ontologies necessary for the Nepomuk semantic desktop.")
 
-    IF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
-        SET(NEPOMUK_FOUND TRUE)
-    ELSE (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
-        SET(NEPOMUK_FOUND FALSE)
-    ENDIF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+        IF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+            SET(NEPOMUK_FOUND TRUE)
+        ELSE (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+            SET(NEPOMUK_FOUND FALSE)
+        ENDIF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
 
-    MACRO_BOOL_TO_01(NEPOMUK_FOUND HAVE_NEPOMUK)
+        MACRO_BOOL_TO_01(NEPOMUK_FOUND HAVE_NEPOMUK)
     ENDIF (${KDE_VERSION} VERSION_GREATER "4.3.99")
-ENDIF (NOT WIN32)
+ENDIF (ENABLE_NEPOMUKSUPPORT)
 
 MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 
