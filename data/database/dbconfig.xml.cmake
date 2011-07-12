@@ -922,6 +922,11 @@
                              tagid INTEGER,
                              property TEXT CHARACTER SET utf8,
                              value LONGTEXT CHARACTER SET utf8);</statement>
+            <statement mode="plain">
+                            CREATE OR REPLACE VIEW TagsTree 
+                            AS
+                            SELECT id, pid
+                            FROM Tags;</statement>
             </dbaction>
 
 
