@@ -161,10 +161,11 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         return false;
     }
 
-    if (bits_per_sample == 0 ||
-        samples_per_pixel == 0 ||
-        rows_per_strip == 0 ||
-        rows_per_strip > h)
+    if (   bits_per_sample   == 0
+        || samples_per_pixel == 0
+        || rows_per_strip    == 0
+//        || rows_per_strip    >  h
+        )
     {
         kWarning() << "TIFF loader: Encountered invalid value in image." << endl
                    << " bits_per_sample   : " << bits_per_sample  << endl
