@@ -170,7 +170,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                    << " bits_per_sample   : " << bits_per_sample  << endl
                    << " samples_per_pixel : " << samples_per_pixel << endl
                    << " rows_per_strip    : " << rows_per_strip << endl
-                   << " h                 : " << rows_per_strip << endl
+                   << " h                 : " << h << endl
                    << " Loading file      : " << filePath;
         TIFFClose(tif);
         loadingFailed();
