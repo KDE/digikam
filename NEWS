@@ -239,5 +239,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 210 ==> 276923 : Crash during initial run of facial recognition.
 211 ==> 276646 : Crash while trying to switch database sqlite -> mysql.
 212 ==> 271622 : Local contrast settings are greyed out.
-213 ==> 
-
+213 ==> 274947 : Auto-rotate/flip image does not work at import.
+214 ==> 
