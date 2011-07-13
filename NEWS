@@ -237,5 +237,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 208 ==> 265264 : Tag all images multiple Images are selected.
 209 ==> 247659 : In big albums re-sorting thumbnails on opening right tab bar, move selected image out the screen [patch].
 210 ==> 276923 : Crash during initial run of facial recognition.
-211 ==> 
+211 ==> 276646 : Crash while trying to switch database sqlite -> mysql.
+212 ==> 
 
