@@ -521,6 +521,7 @@ void LocalContrastSettings::setSettings(const LocalContrastContainer& settings)
     slotStage4Enabled(d->stageFour->isChecked());
      */
 
+    d->expanderBox->setEnabled(true);
     blockSignals(false);
 }
 
