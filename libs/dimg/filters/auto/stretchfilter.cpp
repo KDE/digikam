@@ -89,12 +89,17 @@ void StretchFilter::stretchContrastImage()
     // Create an histogram of the reference image.
     ImageHistogram* histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(),
             m_refImage.height(), m_refImage.sixteenBit());
+    if ( !histogram )
+    {
+      kWarning() << ("Unable to allocate memory!");
+      return;
+    }
     histogram->calculate();
 
     // Memory allocation.
     normalize_map = new int_packet[histogram->getHistogramSegments()];
 
-    if ( !histogram || !normalize_map )
+    if ( !normalize_map )
     {
         if (histogram)
         {
