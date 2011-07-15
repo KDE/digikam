@@ -49,10 +49,13 @@ class KMenu;
 namespace Digikam
 {
 
+class AbstractCheckableAlbumModel;
 class Album;
 class AlbumIconItem;
+class AlbumModificationHelper;
 class ImageInfo;
 class ImageFilterModel;
+class PAlbum;
 class TagModificationHelper;
 class TAlbum;
 
@@ -248,6 +251,17 @@ public:
     void addActionEditTag(TagModificationHelper* helper, TAlbum* tag);
 
     /**
+     * Add actions to add, remove or edit a tag.
+     * The tag modification helper is used to execute the action.
+     * You must set the parent tag to use on modification helper.
+     */
+    void addActionNewAlbum(AlbumModificationHelper* helper, PAlbum* parentAlbum = 0);
+    void addActionDeleteAlbum(AlbumModificationHelper* helper, PAlbum* album);
+    void addActionEditAlbum(AlbumModificationHelper* helper, PAlbum* album);
+    void addActionRenameAlbum(AlbumModificationHelper* helper, PAlbum* album);
+    void addActionResetAlbumIcon(AlbumModificationHelper* helper, PAlbum* album);
+
+    /**
      * Add "Assign Tags" menu.
      *
      * This menu will provide a list of all tags available so that they can be assigned to the current
@@ -317,6 +331,18 @@ public:
     void setImageFilterModel(ImageFilterModel* model);
 
     /**
+     * Add a Select and Deselect menu to check and uncheck albums.
+     * Note: Call setAlbumModel before, or this will have no effect.
+     */
+    void addAlbumCheckUncheckActions(Album* album);
+
+    /**
+     * Set an album model.
+     * The check/uncheck actions will operate directly on the model.
+     */
+    void setAlbumModel(AbstractCheckableAlbumModel* model);
+
+    /**
      * Add some of the KIPI actions to the menu.
      *
      * This method will add some of the KIPI actions into the context menu, right now only the
@@ -378,6 +404,10 @@ private Q_SLOTS:
     void slotCloseGroups();
     void slotOpenAllGroups();
     void slotCloseAllGroups();
+    void slotSelectChildren();
+    void slotDeselectChildren();
+    void slotSelectParents();
+    void slotDeselectParents();
 
 private:
 

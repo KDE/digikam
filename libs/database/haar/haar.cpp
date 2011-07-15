@@ -11,8 +11,8 @@
  *               http://www.cs.washington.edu/homes/salesin/abstracts.html
  *
  * Copyright (C) 2003 by Ricardo Niederberger Cabral <nieder at mail dot ru>
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -77,7 +77,7 @@ typedef std::priority_queue<valStruct> valqueue;
 void ImageData::fillPixelData(const QImage& im)
 {
     QImage image = im.scaled(Haar::NumberOfPixels, Haar::NumberOfPixels, Qt::IgnoreAspectRatio);
-    int cn = 0;
+    int cn       = 0;
 
     for (int h = 0; h < Haar::NumberOfPixels; ++h)
     {
@@ -106,7 +106,7 @@ void ImageData::fillPixelData(const DImg& im)
     image = image.smoothScale(Haar::NumberOfPixels, Haar::NumberOfPixels, Qt::IgnoreAspectRatio);
 
     uchar* ptr = image.bits();
-    int cn = 0;
+    int cn     = 0;
 
     for (int h = 0; h < Haar::NumberOfPixels; ++h)
     {
@@ -217,7 +217,7 @@ void Calculator::haar2D(Unit a[])
     // Decompose columns:
     for (i = 0; i < NumberOfPixels; ++i)
     {
-        Unit C=1;
+        Unit C = 1;
         int  h, h1;
 
         for (h = NumberOfPixels; h > 1; h = h1)
@@ -321,7 +321,7 @@ void Calculator::getmLargests(Unit* cdata, Idx* sig)
     }
 
     // Empty the (non-empty) queue and fill-in sig:
-    cnt=0;
+    cnt = 0;
 
     do
     {

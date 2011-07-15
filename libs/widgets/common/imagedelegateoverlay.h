@@ -94,6 +94,11 @@ protected:
     QList<QModelIndex> affectedIndexes(const QModelIndex& index)         const;
     int                numberOfAffectedIndexes(const QModelIndex& index) const;
 
+    /**
+     * Utility method
+     */
+    bool viewHasMultiSelection() const;
+
 protected:
 
     QAbstractItemView*     m_view;
@@ -159,6 +164,11 @@ protected:
     void widgetLeaveNotifyMultiple();
     virtual QString notifyMultipleMessage(const QModelIndex&, int number);
 
+    /**
+     * Utility method called from slotEntered
+     */
+    bool checkIndexOnEnter(const QModelIndex& index) const;
+
 protected Q_SLOTS:
 
     /** Default implementation shows the widget iff the index is valid and checkIndex returns true. */
@@ -212,6 +222,74 @@ protected Q_SLOTS:
 
     virtual void slotEntered(const QModelIndex& index);
     virtual void slotReset();
+};
+
+// -------------------------------------------------------------------------------------------
+
+class DIGIKAM_EXPORT PersistentWidgetDelegateOverlay : public AbstractWidgetDelegateOverlay
+{
+    Q_OBJECT
+
+    /**
+     * This class offers additional / modified behavior:
+     * When a "persistent" mode is entered, it will not move
+     * by mouse hover, but stay and only move on mouse click.
+     * If the overlay widget had focus, it will be restored on show.
+     */
+
+public:
+
+    PersistentWidgetDelegateOverlay(QObject* parent);
+    ~PersistentWidgetDelegateOverlay();
+
+    virtual void setActive(bool active);
+
+public Q_SLOTS:
+
+    /**
+     * Enters persistent mode.
+     * The overlay is moved because of mouse hover.
+     */
+    void setPersistent(bool persistent);
+    void enterPersistentMode();
+    void leavePersistentMode();
+    bool isPersistent() const;
+
+    void storeFocus();
+
+protected:
+
+    QModelIndex index() const;
+
+    /**
+     * Most overlays reimplement this slot to get the starting point
+     * for repositioning a widget etc.
+     * This class instead provides showOnIndex() which you shall
+     * use for this purpose.
+     */
+    virtual void slotEntered(const QModelIndex& index);
+    virtual void slotReset();
+    virtual void slotViewportEntered();
+    virtual void slotRowsRemoved(const QModelIndex& parent, int start, int end);
+    virtual void slotLayoutChanged();
+    virtual void viewportLeaveEvent(QObject* obj, QEvent* event);
+    virtual void hide();
+
+    /**
+     * Reimplement to set the focus on the correct subwidget.
+     * Default implementation sets focus on widget()
+     */
+    virtual void setFocusOnWidget();
+
+    /// see slotEntered()
+    virtual void showOnIndex(const QModelIndex& index);
+
+    void restoreFocus();
+
+private:
+
+    class PersistentWidgetDelegateOverlayPriv;
+    PersistentWidgetDelegateOverlayPriv* const d;
 };
 
 // -------------------------------------------------------------------------------------------

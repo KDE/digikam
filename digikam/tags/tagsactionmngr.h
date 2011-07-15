@@ -36,9 +36,6 @@
 
 // Local includes
 
-#include "tagproperties.h"
-#include "albuminfo.h"
-
 class KActionCollection;
 
 namespace Digikam
@@ -96,9 +93,8 @@ private Q_SLOTS:
 
 private:
 
-    void tagRemoved(int tagId);
     bool createTagActionShortcut(int tagId);
-    void createTagActionShortcut(const TagInfo& tinfo, const TagProperties& tprop);
+    bool removeTagActionShortcut(int tagId);
 
     /** Create all actions relevant of whole tags from DB which have a keyboard shortcut.
       * This method is called by registerActionCollection() method.

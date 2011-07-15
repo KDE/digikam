@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 2.0.0-beta6 - Release date: 2011-06-26
+digiKam 2.0.0 - Release date: 2011-07-24
 
 NEW FEATURES:
 
@@ -186,5 +186,55 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 157 ==> 272031 : BQM wastes a lot of memory when adding over 3000 files.
 158 ==> 275813 : digiKam hangs on startup (splash screen: reading database).
 159 ==> 274729 : lighttable: the thumbnail slider does not work at all.
-160 ==> 
+160 ==> 274879 : Low resolution version of photo is displayed and portrait oriented photos are rotated 90 degrees.
+161 ==> 262212 : Face recognition doesn't work.
+162 ==> 276592 : Crash while browsing through album in enlarged view.
+163 ==> 261521 : A creation or a deletion, of a tag, takes a very long time.
+164 ==> 276052 : Failed to update the database schema from version 5 to version 6.
+165 ==> 265034 : Database corrupted after terminating frozen digiKam.
+166 ==> 267190 : digiKam crashes when other applications rename files it is loading.
+167 ==> 272332 : Moving a versioned file crashes digikam2.
+168 ==> 203196 : Multiple Albums for 1 Folder.
+169 ==> 229234 : Thumbnail mismatch for images with same name.
+170 ==> 267802 : Database connections not closed on exit.
+171 ==> 195006 : National charaters not accepted in database file path.
+172 ==> 145743 : Only include displayable files in database.
+173 ==> 163763 : digiKam hangs during operation and startup.
+174 ==> 276795 : Showfoto crashes when open a pic.
+175 ==> 264945 : Showfoto 1.9 (strigi relevant), installed in /usr/local/bin along with digiKam 1.9, crashes when opening many, but not all, jpegs.
+176 ==> 276356 : Tags should have a root (maybe hidden).
+177 ==> 276154 : jpegutils.cpp contains debug output, but disabled by define.
+178 ==> 276921 : Wrong i18n-Parameter in libs/database/databaseconfiglement.cpp.
+179 ==> 271610 : Crash when importing picutures from a Canon SX 200 IS.
+180 ==> 271269 : Crash occured when trying to import pictures from Finepix 6500fd.
+181 ==> 271909 : digiKam crashed when trying to switch map to google map in geolocation window.
+182 ==> 276969 : [2.0.0-rc] pgfutils.cpp:154:45: error: invalid conversion from 'UINT32*' to 'int'.
+183 ==> 146337 : Tag regions of an image.
+184 ==> 210914 : Allow disabling the rating widget in the Light Table thumbbar or unrating an image.
+185 ==> 276745 : Crash while updating/generating fingerprints.
+186 ==> 240148 : If I change the theme to black, the color of the texts in menus remains black, and it can't be read 
+187 ==> 274529 : Crashes on startup in Mac OS X.
+188 ==> 268817 : DK 2.0 beta 4 - crash when starting sw conversion.
+189 ==> 264231 : CMakeList.txt opencv-check broken.
+190 ==> 269084 : Crash when editing Geo-Location.
+191 ==> 277157 : Wish: Copy to Clipboard.
+192 ==> 262700 : Raw file will freeze with 16bit option enabled.
+193 ==> 277133 : Additional patch needed to compile 2.0.0-rc with external libpgf.
+194 ==> 261656 : Object::connect error messages when using decorate/add border.
+195 ==> 270248 : digiKam crashes when clicking on a deleted folder.
+196 ==> 272175 : Picture orientation is "forgotten" in viewer and light table when using xmp sidecar [patch].
+197 ==> 275311 : XMP sidecars are not written for symbolic links [patch].
+198 ==> 276712 : Ignore certain file types.
+199 ==> 276154 : jpegutils.cpp contains debug output, but disabled by define.
+200 ==> 141730 : page down/up goes to next/previous picture istead of scolling a page.
+201 ==> 229795 : Position in album lost when switching album forth and back.
+202 ==> 208506 : Switching between view does not hold the current image.
+203 ==> 252134 : when selecting multiple images, some controls should be disabled.
+204 ==> 270161 : Unclear how to get rid of tags.
+205 ==> 269446 : Keyword-Managing: Folder "People" und subfolder "Unknown" persistent?.
+206 ==> 269445 : Not possible to select only one album INCLUDING subfolders to scan for faces.
+207 ==> 277502 : All versions of version set always displayed in Album viewed.
+208 ==> 271557 : Tags: missing order, no sorting.
+209 ==> 265264 : Tag all images multiple Images are selected.
+210 ==>
 

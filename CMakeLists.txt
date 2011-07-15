@@ -4,9 +4,10 @@ PROJECT(digikam)
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: digikam")
 
-OPTION(ENABLE_SCRIPTIFACE "Build digiKam with experimental scripting support (default=OFF)" OFF)
-OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
-OPTION(ENABLE_INTERNALMYSQL "Look for MySQL server executable at build time (default=ON)" ON)
+OPTION(ENABLE_SCRIPTIFACE      "Build digiKam with experimental scripting support (default=OFF)" OFF)
+OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (default=ON)"     ON)
+OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"     ON)
+OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"    OFF)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -17,7 +18,7 @@ SET(DIGIKAM_MINOR_VERSION "0")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2011-06-26")
+SET(DIGIKAM_RELEASE_DATE "2011-07-24")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -26,7 +27,7 @@ SET(DIGIKAM_RELEASE_DATE "2011-06-26")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "-rc")
+SET(DIGIKAM_SUFFIX_VERSION "")
 
 # ==================================================================================================
 # Set env. variables accordingly.
@@ -287,6 +288,7 @@ MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
 
 MACRO_BOOL_TO_01(ENABLE_SCRIPTIFACE USE_SCRIPT_IFACE)
 MACRO_BOOL_TO_01(ENABLE_THUMBS_DB USE_THUMBS_DB)
+MACRO_BOOL_TO_01(ENABLE_ADVANCEDDEBUGMSG USE_ADVANCEDDEBUGMSG)
 
 # Win32 compilation with Nepomuk is broken. It's temporally disabled.
 IF (NOT WIN32)
@@ -314,8 +316,6 @@ MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 # Set config files accordingly with optional dependencies
 
 CONFIGURE_FILE(digikam/utils/config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/config-digikam.h)
-CONFIGURE_FILE(libs/3rdparty/lensfun/config-lensfun.h.cmake
-               ${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun/config-lensfun.h)
 
 # ==================================================================================================
 # Log messages
@@ -675,6 +675,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-parse.c
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-stack.c
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/xmalloc.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/config-lensfun.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/auxfun.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/camera.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/cpuid.cpp

@@ -30,6 +30,8 @@
 #include <QFile>
 #include <QPixmap>
 #include <QPainter>
+#include <QPair>
+#include <QVariant>
 
 // KDE includes
 
@@ -42,6 +44,7 @@
 #include "imagepropertiestxtlabel.h"
 #include "picklabelwidget.h"
 #include "colorlabelwidget.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -59,7 +62,6 @@ public:
         permissions(0),
         mime(0),
         dimensions(0),
-        compression(0),
         bitDepth(0),
         colorMode(0),
         make(0),
@@ -86,7 +88,6 @@ public:
         labelFilePermissions(0),
         labelImageMime(0),
         labelImageDimensions(0),
-        labelImageCompression(0),
         labelImageBitDepth(0),
         labelImageColorMode(0),
         labelPhotoMake(0),
@@ -117,7 +118,6 @@ public:
 
     DTextLabelName*  mime;
     DTextLabelName*  dimensions;
-    DTextLabelName*  compression;
     DTextLabelName*  bitDepth;
     DTextLabelName*  colorMode;
 
@@ -148,7 +148,6 @@ public:
 
     DTextLabelValue* labelImageMime;
     DTextLabelValue* labelImageDimensions;
-    DTextLabelValue* labelImageCompression;
     DTextLabelValue* labelImageBitDepth;
     DTextLabelValue* labelImageColorMode;
 
@@ -222,13 +221,11 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     d->mime                   = new DTextLabelName(i18n("Type: "),        w2);
     d->dimensions             = new DTextLabelName(i18n("Dimensions: "),  w2);
-    d->compression            = new DTextLabelName(i18n("Compression: "), w2);
     d->bitDepth               = new DTextLabelName(i18n("Bit depth: "),   w2);
     d->colorMode              = new DTextLabelName(i18n("Color mode: "),  w2);
 
     d->labelImageMime         = new DTextLabelValue(0, w2);
     d->labelImageDimensions   = new DTextLabelValue(0, w2);
-    d->labelImageCompression  = new DTextLabelValue(0, w2);
     d->labelImageBitDepth     = new DTextLabelValue(0, w2);
     d->labelImageColorMode    = new DTextLabelValue(0, w2);
 
@@ -236,12 +233,10 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     glay2->addWidget(d->labelImageMime,         0, 1, 1, 1);
     glay2->addWidget(d->dimensions,             1, 0, 1, 1);
     glay2->addWidget(d->labelImageDimensions,   1, 1, 1, 1);
-    glay2->addWidget(d->compression,            2, 0, 1, 1);
-    glay2->addWidget(d->labelImageCompression,  2, 1, 1, 1);
-    glay2->addWidget(d->bitDepth,               3, 0, 1, 1);
-    glay2->addWidget(d->labelImageBitDepth,     3, 1, 1, 1);
-    glay2->addWidget(d->colorMode,              4, 0, 1, 1);
-    glay2->addWidget(d->labelImageColorMode,    4, 1, 1, 1);
+    glay2->addWidget(d->bitDepth,               2, 0, 1, 1);
+    glay2->addWidget(d->labelImageBitDepth,     2, 1, 1, 1);
+    glay2->addWidget(d->colorMode,              3, 0, 1, 1);
+    glay2->addWidget(d->labelImageColorMode,    3, 1, 1, 1);
     glay2->setMargin(KDialog::spacingHint());
     glay2->setSpacing(0);
     glay2->setColumnStretch(1, 10);
@@ -363,7 +358,6 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
 
         d->labelImageMime->clear();
         d->labelImageDimensions->clear();
-        d->labelImageCompression->clear();
         d->labelImageBitDepth->clear();
         d->labelImageColorMode->clear();
 
@@ -435,20 +429,6 @@ void ImagePropertiesTab::setImageMime(const QString& str)
 void ImagePropertiesTab::setImageDimensions(const QString& str)
 {
     d->labelImageDimensions->setText(str);
-}
-
-void ImagePropertiesTab::setImageCompression(const QString& str)
-{
-    d->compression->show();
-    d->labelImageCompression->show();
-
-    d->labelImageCompression->setText(str);
-}
-
-void ImagePropertiesTab::hideImageCompression()
-{
-    d->compression->hide();
-    d->labelImageCompression->hide();
 }
 
 void ImagePropertiesTab::setImageBitDepth(const QString& str)
@@ -582,21 +562,48 @@ void ImagePropertiesTab::setRating(int rating)
     d->labelRating->setText(str);
 }
 
-static bool naturalLessThan(const QString& a, const QString& b)
-{
-    return KStringHandler::naturalCompare(a,b) < 0;
-}
-
 void ImagePropertiesTab::setTags(const QStringList& tagPaths, const QStringList& tagNames)
 {
     Q_UNUSED(tagNames);
-    QStringList tagsSorted = tagPaths;
+    d->labelTags->setText(shortenedTagPaths(tagPaths).join("\n"));
+}
+
+typedef QPair<QString, QVariant> PathValuePair;
+
+static bool naturalLessThan(const PathValuePair& a, const PathValuePair& b)
+{
+    return KStringHandler::naturalCompare(a.first, b.first) < 0;
+}
+
+QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, QList<QVariant>* identifiers)
+{
+    QList<PathValuePair> tagsSorted;
+    if (identifiers)
+    {
+        for (int i=0; i<tagPaths.size(); i++)
+        {
+            tagsSorted << PathValuePair(tagPaths[i], (*identifiers)[i]);
+        }
+    }
+    else
+    {
+        for (int i=0; i<tagPaths.size(); i++)
+        {
+            tagsSorted << PathValuePair(tagPaths[i], QVariant());
+        }
+    }
     qStableSort(tagsSorted.begin(), tagsSorted.end(), naturalLessThan);
+
+    if (identifiers)
+    {
+        identifiers->clear();
+    }
 
     QStringList tagsShortened;
     QString previous;
-    foreach (const QString tagPath, tagsSorted)
+    foreach (const PathValuePair& pair, tagsSorted)
     {
+        const QString& tagPath = pair.first;
         QString shortenedPath = tagPath;
 
         QStringList currentPath  = tagPath.split('/', QString::SkipEmptyParts);
@@ -619,9 +626,14 @@ void ImagePropertiesTab::setTags(const QStringList& tagPaths, const QStringList&
         shortenedPath.replace("/", " / ");
         tagsShortened << shortenedPath;
         previous = tagPath;
+
+        if (identifiers)
+        {
+            (*identifiers) << pair.second;
+        }
     }
 
-    d->labelTags->setText(tagsShortened.join("\n"));
+    return tagsShortened;
 }
 
 }  // namespace Digikam

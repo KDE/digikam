@@ -308,6 +308,7 @@ private:
     void appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void publiciseInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void cleanSituationChecks();
+    void removeRowPairsWithCheck(const QList<QPair<int, int> >& toRemove);
     void removeRowPairs(const QList<QPair<int, int> >& toRemove);
 
 public:

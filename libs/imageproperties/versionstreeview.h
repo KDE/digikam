@@ -36,7 +36,6 @@
 #include "digikam_export.h"
 #include "dragdropimplementations.h"
 
-
 namespace Digikam
 {
 

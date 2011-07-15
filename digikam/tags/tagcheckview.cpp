@@ -51,15 +51,6 @@ public:
     TagCheckViewPriv() :
         toggleAutoTags(TagCheckView::NoToggleAuto),
         checkNewTags(false),
-        selectTagsMenu(0),
-        selectAllTagsAction(0),
-        selectChildrenAction(0),
-        selectParentsAction(0),
-        deselectTagsMenu(0),
-        deselectAllTagsAction(0),
-        deselectChildrenAction(0),
-        deselectParentsAction(0),
-        invertAction(0),
         toggleAutoAction(0),
         toggleNoneAction(0),
         toggleChildrenAction(0),
@@ -73,15 +64,6 @@ public:
     TagCheckView::ToggleAutoTags toggleAutoTags;
     bool                         checkNewTags;
 
-    KMenu*                       selectTagsMenu;
-    QAction*                     selectAllTagsAction;
-    QAction*                     selectChildrenAction;
-    QAction*                     selectParentsAction;
-    KMenu*                       deselectTagsMenu;
-    QAction*                     deselectAllTagsAction;
-    QAction*                     deselectChildrenAction;
-    QAction*                     deselectParentsAction;
-    QAction*                     invertAction;
     KSelectAction*               toggleAutoAction;
     QAction*                     toggleNoneAction;
     QAction*                     toggleChildrenAction;
@@ -103,19 +85,6 @@ TagCheckView::TagCheckView(QWidget* parent, TagModel* tagModel)
     setShowFindDuplicateAction(false);
 
     // prepare custom menu action
-    d->selectTagsMenu       = new KMenu(i18nc("select tags menu", "Select"), this);
-    d->selectAllTagsAction  = d->selectTagsMenu->addAction(i18n("All Tags"));
-    d->selectTagsMenu->addSeparator();
-    d->selectChildrenAction = d->selectTagsMenu->addAction(i18n("Children"));
-    d->selectParentsAction  = d->selectTagsMenu->addAction(i18n("Parents"));
-
-    d->deselectTagsMenu       = new KMenu(i18nc("deselect tags menu", "Deselect"), this);
-    d->deselectAllTagsAction  = d->deselectTagsMenu->addAction(i18n("All Tags"));
-    d->deselectTagsMenu->addSeparator();
-    d->deselectChildrenAction = d->deselectTagsMenu->addAction(i18n("Children"));
-    d->deselectParentsAction  = d->deselectTagsMenu->addAction(i18n("Parents"));
-
-    d->invertAction         = new QAction(i18n("Invert Selection"), this);
     d->toggleAutoAction     = new KSelectAction(i18n("Toggle Auto"), this);
     d->toggleNoneAction     = d->toggleAutoAction->addAction(i18nc("no auto toggle", "None"));
     d->toggleAutoAction->menu()->addSeparator();
@@ -262,25 +231,11 @@ void TagCheckView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* al
 {
     TagFolderView::addCustomContextMenuActions(cmh, album);
 
-    TAlbum* tag = dynamic_cast<TAlbum*> (album);
-
-    if (!tag)
-    {
-        return;
-    }
-
     cmh.addSeparator();
 
     // selection (checked) modification
-    cmh.addSubMenu(d->selectTagsMenu);
-    cmh.addSubMenu(d->deselectTagsMenu);
-
-    d->selectChildrenAction->setEnabled(tag);
-    d->selectParentsAction->setEnabled(tag);
-    d->deselectChildrenAction->setEnabled(tag);
-    d->deselectParentsAction->setEnabled(tag);
-
-    cmh.addAction(d->invertAction);
+    cmh.setAlbumModel(albumModel());
+    cmh.addAlbumCheckUncheckActions(album);
 
     cmh.addSeparator();
 
@@ -298,51 +253,10 @@ void TagCheckView::handleCustomContextMenuAction(QAction* action, AlbumPointer<A
 {
     TagFolderView::handleCustomContextMenuAction(action, album);
 
-    Album*  a   = album;
-    TAlbum* tag = dynamic_cast<TAlbum*> (a);
-
-    if (!action || !tag)
-    {
-        return;
-    }
-
-    QModelIndex tagIndex = albumModel()->indexForAlbum(tag);
     ToggleAutoTags toggleRestore = d->toggleAutoTags;
     d->toggleAutoTags = NoToggleAuto;
 
-    if (action == d->selectAllTagsAction)     // Select All Tags.
-    {
-        albumModel()->checkAllAlbums();
-    }
-    else if (action == d->deselectAllTagsAction)    // Deselect All Tags.
-    {
-        albumModel()->resetAllCheckedAlbums();
-    }
-    else if (action == d->invertAction)             // Invert All Tags Selection.
-    {
-        albumModel()->invertCheckedAlbums();
-    }
-    else if (action == d->selectChildrenAction)     // Select Child Tags.
-    {
-        albumModel()->checkAllAlbums(tagIndex);
-    }
-    else if (action == d->deselectChildrenAction)   // Deselect Child Tags.
-    {
-        albumModel()->resetCheckedAlbums(tagIndex);
-    }
-    else if (action == d->selectParentsAction)     // Select Parent Tags.
-    {
-        albumModel()->checkAllParentAlbums(tagIndex);
-    }
-    else if (action == d->deselectParentsAction)   // Deselect Parent Tags.
-    {
-        albumModel()->resetCheckedParentAlbums(tagIndex);
-    }
-    else if (action == d->toggleNoneAction)        // No toggle auto tags.
-    {
-        toggleRestore = NoToggleAuto;
-    }
-    else if (action == d->toggleChildrenAction)    // Toggle auto Children tags.
+    if (action == d->toggleChildrenAction)    // Toggle auto Children tags.
     {
         toggleRestore = Children;
     }

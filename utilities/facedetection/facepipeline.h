@@ -85,6 +85,8 @@ public:
     TagRegion assignedRegion;
 };
 
+// ------------------------------------------------------------------------------------
+
 class FacePipelineDatabaseFaceList : public QList<FacePipelineDatabaseFace>
 {
 public:
@@ -102,6 +104,8 @@ public:
 
     FacePipelineDatabaseFaceList facesForRole(FacePipelineDatabaseFace::Roles role) const;
 };
+
+// ------------------------------------------------------------------------------------
 
 class FacePipelinePackage
 {
@@ -143,9 +147,6 @@ class FacePipeline : public QObject
 
 public:
 
-    FacePipeline();
-    ~FacePipeline();
-
     enum FilterMode
     {
         /// Will read any given image
@@ -167,6 +168,11 @@ public:
         /// Add new results. Previous unconfirmed results will be cleared.
         OverwriteUnconfirmed
     };
+
+public:
+
+    FacePipeline();
+    ~FacePipeline();
 
     /**
      * You can plug these four different steps in the working pipeline.

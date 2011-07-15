@@ -73,6 +73,18 @@ protected:
     }
 };
 
+class AlbumSelectionTreeView::AlbumSelectionTreeViewContextMenuElement
+      : public AbstractAlbumTreeView::ContextMenuElement
+{
+public:
+    AlbumSelectionTreeViewContextMenuElement(AlbumSelectionTreeView::AlbumSelectionTreeViewPriv *d)
+        : d(d)
+    {}
+
+    AlbumSelectionTreeView::AlbumSelectionTreeViewPriv* const d;
+    virtual void addActions(AbstractAlbumTreeView* view, ContextMenuHelper& cmh, Album* album);
+};
+
 class AlbumSelectionTreeView::AlbumSelectionTreeViewPriv
 {
 
@@ -98,6 +110,8 @@ public:
     QAction*                 resetIconAction;
     QAction*                 findDuplAction;
     QAction*                 rebuildThumbsAction;
+
+    AlbumSelectionTreeViewContextMenuElement* contextMenuElement;
 };
 
 AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* parent, AlbumModel* model,
@@ -107,18 +121,23 @@ AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* parent, AlbumModel* mode
     setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
     d->toolTip                 = new AlbumViewToolTip(this);
-    d->renameAction            = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
-    d->resetIconAction         = new QAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"), this);
     d->findDuplAction          = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
     d->rebuildThumbsAction     = new QAction(SmallIcon("view-process-all"), i18n("Rebuild Thumbnails..."), this);
+    connect(d->findDuplAction,      SIGNAL(triggered()), this, SLOT(slotFindDuplicates()));
+    connect(d->rebuildThumbsAction, SIGNAL(triggered()), this, SLOT(slotRebuildThumbs()));
 
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);
     setEnableContextMenu(true);
+    setContextMenuTitle(i18n("My Albums"));
+
+    d->contextMenuElement = new AlbumSelectionTreeViewContextMenuElement(d);
+    addContextMenuElement(d->contextMenuElement);
 }
 
 AlbumSelectionTreeView::~AlbumSelectionTreeView()
 {
+    delete d->contextMenuElement;
     delete d;
 }
 
@@ -127,12 +146,8 @@ void AlbumSelectionTreeView::setEnableToolTips(bool enable)
     d->enableToolTips = enable;
 }
 
-QString AlbumSelectionTreeView::contextMenuTitle() const
-{
-    return i18n("My Albums");
-}
-
-void AlbumSelectionTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a)
+void AlbumSelectionTreeView::AlbumSelectionTreeViewContextMenuElement::
+     addActions(AbstractAlbumTreeView*, ContextMenuHelper& cmh, Album* a)
 {
     PAlbum* album = dynamic_cast<PAlbum*> (a);
 
@@ -141,60 +156,44 @@ void AlbumSelectionTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh,
         return;
     }
 
-    d->renameAction->setEnabled(!album->isAlbumRoot());
-
     // --------------------------------------------------------
-
-    cmh.addAction("album_new");
-    cmh.addAction(d->renameAction);
-    cmh.addAction(d->resetIconAction);
+    cmh.addActionNewAlbum(d->albumModificationHelper, album);
+    cmh.addActionRenameAlbum(d->albumModificationHelper, album);
+    cmh.addActionResetAlbumIcon(d->albumModificationHelper, album);
     cmh.addAction("album_openinfilemanager");
     cmh.addAction("album_openinterminal");
     cmh.addSeparator();
     // --------------------------------------------------------
     cmh.addAction(d->findDuplAction);
+    d->albumModificationHelper->bindAlbum(d->findDuplAction, album);
     cmh.addAction(d->rebuildThumbsAction);
+    d->albumModificationHelper->bindAlbum(d->rebuildThumbsAction, album);
     cmh.addImportMenu();
     cmh.addExportMenu();
     cmh.addBatchMenu();
     cmh.addAlbumActions();
     cmh.addSeparator();
     // --------------------------------------------------------
-    cmh.addAction("album_delete");
+    cmh.addActionDeleteAlbum(d->albumModificationHelper, album);
     cmh.addSeparator();
     // --------------------------------------------------------
-    cmh.addAction("album_propsEdit");
+    cmh.addActionEditAlbum(d->albumModificationHelper, album);
 }
 
-void AlbumSelectionTreeView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> a)
+void AlbumSelectionTreeView::slotFindDuplicates()
 {
-    Album* alb    = a;
-    PAlbum* album = dynamic_cast<PAlbum*> (alb);
+    emit signalFindDuplicatesInAlbum(d->albumModificationHelper->boundAlbum(sender()));
+}
 
-    if (!action || !album)
+void AlbumSelectionTreeView::slotRebuildThumbs()
+{
+    PAlbum *album = d->albumModificationHelper->boundAlbum(sender());
+    if (!album)
     {
         return;
     }
-
-    if (action == d->resetIconAction)
-    {
-        QString err;
-        AlbumManager::instance()->updatePAlbumIcon(album, 0, err);
-    }
-    else if (action == d->renameAction)
-    {
-        d->albumModificationHelper->slotAlbumRename(album);
-    }
-    else if (action == d->findDuplAction)
-    {
-        kDebug() << "emitting signal for finding duplicates";
-        emit signalFindDuplicatesInAlbum(album);
-    }
-    else if (action == d->rebuildThumbsAction)
-    {
-        BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this, album->id());
-        thumbsGenerator->show();
-    }
+    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this, album->id());
+    thumbsGenerator->show();
 }
 
 bool AlbumSelectionTreeView::viewportEvent(QEvent* event)

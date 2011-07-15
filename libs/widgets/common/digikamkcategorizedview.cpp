@@ -707,24 +707,6 @@ void DigikamKCategorizedView::setCategoryDrawer(KCategoryDrawer* categoryDrawer)
     d->categoriesPosition.clear();
     d->categories.clear();
     d->intersectedIndexes.clear();
-
-    if (!categoryDrawer && d->proxyModel)
-    {
-        QObject::disconnect(d->proxyModel, SIGNAL(layoutChanged()),
-                            this, SLOT(slotLayoutChanged()));
-
-        QObject::disconnect(d->proxyModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-                            this, SLOT(rowsRemoved(QModelIndex,int,int)));
-    }
-    else if (categoryDrawer && d->proxyModel)
-    {
-        QObject::connect(d->proxyModel, SIGNAL(layoutChanged()),
-                         this, SLOT(slotLayoutChanged()));
-
-        QObject::connect(d->proxyModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-                         this, SLOT(rowsRemoved(QModelIndex,int,int)));
-    }
-
     d->categoryDrawer = categoryDrawer;
 
     if (categoryDrawer)
@@ -1564,6 +1546,19 @@ QModelIndex DigikamKCategorizedView::moveCursor(CursorAction cursorAction,
 
     switch (cursorAction)
     {
+        case QAbstractItemView::MovePageUp:
+        {
+            // We need to reimplemt PageUp/Down as well because
+            // default QListView implementation will not work properly with our custom layout
+            QModelIndexList visibleIndexes = d->intersectionSet(viewport()->rect());
+            if (!visibleIndexes.isEmpty())
+            {
+                int indexToMove = qMax(current.row() - visibleIndexes.size(), 0);
+                return d->proxyModel->index(indexToMove, 0);
+            }
+        }
+            // fall through
+
         case QAbstractItemView::MoveUp:
         {
             if (d->elementsInfo[current.row()].relativeOffsetToCategory >= elementsPerRow)
@@ -1593,6 +1588,17 @@ QModelIndex DigikamKCategorizedView::moveCursor(CursorAction cursorAction,
                 return d->proxyModel->index(indexToMove, 0);
             }
         }
+
+        case QAbstractItemView::MovePageDown:
+        {
+            QModelIndexList visibleIndexes = d->intersectionSet(viewport()->rect());
+            if (!visibleIndexes.isEmpty())
+            {
+                int indexToMove = qMin(current.row() + visibleIndexes.size(), d->elementsInfo.size() - 1);
+                return d->proxyModel->index(indexToMove, 0);
+            }
+        }
+            // fall through
 
         case QAbstractItemView::MoveDown:
         {
@@ -1633,17 +1639,6 @@ QModelIndex DigikamKCategorizedView::moveCursor(CursorAction cursorAction,
                     return current;
                 }
 
-                //d->forcedSelectionPosition = d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow;
-
-#if 0 //follow qt view behavior. lateral movements won't change visual row
-
-                if (d->forcedSelectionPosition < 0)
-                {
-                    d->forcedSelectionPosition = (d->categoriesIndexes[theCategory].count() - 1) % elementsPerRow;
-                }
-
-#endif
-
                 return d->proxyModel->index(current.row() + 1, 0);
             }
 
@@ -1652,17 +1647,6 @@ QModelIndex DigikamKCategorizedView::moveCursor(CursorAction cursorAction,
             {
                 return current;
             }
-
-            //d->forcedSelectionPosition = d->elementsInfo[current.row() - 1].relativeOffsetToCategory % elementsPerRow;
-
-#if 0 //follow qt view behavior. lateral movements won't change visual row
-
-            if (d->forcedSelectionPosition < 0)
-            {
-                d->forcedSelectionPosition = (d->categoriesIndexes[theCategory].count() - 1) % elementsPerRow;
-            }
-
-#endif
 
             return d->proxyModel->index(current.row() - 1, 0);
 
@@ -1676,17 +1660,6 @@ QModelIndex DigikamKCategorizedView::moveCursor(CursorAction cursorAction,
                     return current;
                 }
 
-                //d->forcedSelectionPosition = d->elementsInfo[current.row() - 1].relativeOffsetToCategory % elementsPerRow;
-
-#if 0 //follow qt view behavior. lateral movements won't change visual row
-
-                if (d->forcedSelectionPosition < 0)
-                {
-                    d->forcedSelectionPosition = (d->categoriesIndexes[theCategory].count() - 1) % elementsPerRow;
-                }
-
-#endif
-
                 return d->proxyModel->index(current.row() - 1, 0);
             }
 
@@ -1695,17 +1668,6 @@ QModelIndex DigikamKCategorizedView::moveCursor(CursorAction cursorAction,
             {
                 return current;
             }
-
-            //d->forcedSelectionPosition = d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow;
-
-#if 0 //follow qt view behavior. lateral movements won't change visual row
-
-            if (d->forcedSelectionPosition < 0)
-            {
-                d->forcedSelectionPosition = (d->categoriesIndexes[theCategory].count() - 1) % elementsPerRow;
-            }
-
-#endif
 
             return d->proxyModel->index(current.row() + 1, 0);
 

@@ -365,19 +365,19 @@ public Q_SLOTS:
     void resetAllCheckedAlbums();
 
     /// Resets the checked state of all albums under the given parent
-    void resetCheckedAlbums(QModelIndex parent = QModelIndex());
+    void resetCheckedAlbums(const QModelIndex& parent = QModelIndex());
 
     /// Resets the checked state of all parents of the child including it.
-    void resetCheckedParentAlbums(QModelIndex& child);
+    void resetCheckedParentAlbums(const QModelIndex& child);
 
     /// Checks all albums beneath the given parent
-    void checkAllAlbums(QModelIndex parent = QModelIndex());
+    void checkAllAlbums(const QModelIndex& parent = QModelIndex());
 
     /// Checks all parent albums starting at the child, including it.
-    void checkAllParentAlbums(QModelIndex& child);
+    void checkAllParentAlbums(const QModelIndex& child);
 
     /// Inverts the checked state of all albums under the given parent.
-    void invertCheckedAlbums(QModelIndex parent = QModelIndex());
+    void invertCheckedAlbums(const QModelIndex& parent = QModelIndex());
 
     /// Sets the checked state recursively for all children of and the given album.
     void setCheckStateForChildren(Album* album, Qt::CheckState state);
@@ -407,8 +407,8 @@ protected:
 
 private:
 
-    void setDataForParents(QModelIndex& child, const QVariant& value, int role = Qt::EditRole);
-    void setDataForChildren(QModelIndex& parent, const QVariant& value, int role = Qt::EditRole);
+    void setDataForParents(const QModelIndex& child, const QVariant& value, int role = Qt::EditRole);
+    void setDataForChildren(const QModelIndex& parent, const QVariant& value, int role = Qt::EditRole);
 
 private:
 

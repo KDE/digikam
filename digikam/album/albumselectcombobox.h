@@ -122,6 +122,20 @@ public:
 
     AbstractAlbumTreeViewSelectComboBox(QWidget* parent = 0);
 
+    /**
+     * Set a tree view created by you instead of creating a default view
+     * (in the subclasses).
+     * Only takes effect before calling setModel.
+     */
+    void setTreeView(AbstractAlbumTreeView* treeView);
+
+    /**
+     * Enables a context menu which contains options to
+     * check or uncheck groups of albums, given you have a checkable model.
+     * Call this method after setModel().
+     */
+    void addCheckUncheckContextMenuActions();
+
 protected:
 
     virtual void installView(QAbstractItemView* view = 0);

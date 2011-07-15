@@ -452,7 +452,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* mainRootAlbum, const QString& tagStr,
     }
 
     // Assign the keyboard shortcut to the last tag created from the hierarchy.
-    if (root)
+    if (root && !ks.isEmpty())
     {
         TagsActionMngr::defaultManager()->updateTagShortcut(root->id(), ks);
     }

@@ -182,7 +182,6 @@ void DPopupMenu::renderSidebarGradient(QPainter* p)
     p->setPen(Qt::white);
 
     int frameWidth = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, this);
-    kDebug() << frameWidth;
     QRect drawRect = QStyle::visualRect(layoutDirection(), rect(),
                                         QRect(frameWidth, frameWidth,
                                         d->gradientWidth, height() - 2*frameWidth));

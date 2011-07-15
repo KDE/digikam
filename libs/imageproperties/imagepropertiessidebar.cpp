@@ -32,7 +32,6 @@
 
 // KDE includes
 
-
 #include <kfileitem.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -208,14 +207,13 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     // -- Image Properties --------------------------------------------------
 
     QSize   dims;
-    QString compression, bitDepth, colorMode;
+    QString bitDepth, colorMode;
     QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
     QString ext = fileInfo.suffix().toUpper();
 
     if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
     {
         m_propertiesTab->setImageMime(i18n("RAW Image"));
-        compression = i18n("None");
         bitDepth    = "48";
         dims        = metaData.getImageDimensions();
         colorMode   = i18n("Uncalibrated");
@@ -223,76 +221,13 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     else
     {
         m_propertiesTab->setImageMime(fi.mimeComment());
-        KFileMetaInfo meta = fi.metaInfo();
 
-        if (meta.isValid())
-        {
-            if (meta.item("Dimensions").isValid())
-            {
-                dims = meta.item("Dimensions").value().toSize();
-            }
+        dims = metaData.getPixelSize();
 
-            if (meta.item("JPEG quality").isValid())
-            {
-                compression = i18n("JPEG quality %1", meta.item("JPEG quality").value().toString());
-            }
-
-            if (meta.item("Compression").isValid())
-            {
-                compression =  meta.item("Compression").value().toString();
-            }
-
-            if (meta.item("BitDepth").isValid())
-            {
-                bitDepth = meta.item("BitDepth").value().toString();
-            }
-
-            if (meta.item("ColorMode").isValid())
-            {
-                colorMode = meta.item("ColorMode").value().toString();
-            }
-        }
-
-        /*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
-                                    Check if new method to search information is enough.
-
-                if (meta.isValid())
-                {
-                    if (meta.containsGroup("Jpeg EXIF Data"))     // JPEG image ?
-                    {
-                        dims        = meta.group("Jpeg EXIF Data").item("Dimensions").value().toSize();
-
-                        QString quality = meta.group("Jpeg EXIF Data").item("JPEG quality").value().toString();
-                        quality.isEmpty() ? compression = unavailable :
-                                            compression = i18n("JPEG quality %1",quality);
-                        bitDepth    = meta.group("Jpeg EXIF Data").item("BitDepth").value().toString();
-                        colorMode   = meta.group("Jpeg EXIF Data").item("ColorMode").value().toString();
-                    }
-
-                    if (meta.containsGroup("General"))
-                    {
-                        if (dims.isEmpty() )
-                            dims = meta.group("General").item("Dimensions").value().toSize();
-                        if (compression.isEmpty())
-                            compression =  meta.group("General").item("Compression").value().toString();
-                        if (bitDepth.isEmpty())
-                            bitDepth = meta.group("General").item("BitDepth").value().toString();
-                        if (colorMode.isEmpty())
-                            colorMode = meta.group("General").item("ColorMode").value().toString();
-                    }
-
-                    if (meta.containsGroup("Technical"))
-                    {
-                        if (dims.isEmpty())
-                            dims = meta.group("Technical").item("Dimensions").value().toSize();
-                        if (compression.isEmpty())
-                            compression = meta.group("Technical").item("Compression").value().toString();
-                        if (bitDepth.isEmpty())
-                            bitDepth = meta.group("Technical").item("BitDepth").value().toString();
-                        if (colorMode.isEmpty())
-                            colorMode =  meta.group("Technical").item("ColorMode").value().toString();
-                    }
-                }*/
+        DImg img;
+        img.loadImageInfo(url.toLocalFile(), false, false, false, false);
+        bitDepth.number(img.originalBitDepth());
+        colorMode = DImg::colorModelToString(img.originalColorModel());
     }
 
     QString mpixels;
@@ -300,7 +235,6 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
             dims.width(), dims.height(), mpixels);
     m_propertiesTab->setImageDimensions(str);
-    m_propertiesTab->setImageCompression(compression.isEmpty() ? unavailable : compression);
     m_propertiesTab->setImageBitDepth(bitDepth.isEmpty() ? unavailable : i18n("%1 bpp", bitDepth));
     m_propertiesTab->setImageColorMode(colorMode.isEmpty() ? unavailable : colorMode);
 

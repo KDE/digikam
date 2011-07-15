@@ -49,6 +49,7 @@
 #include "picklabelwidget.h"
 #include "colorlabelwidget.h"
 #include "tagscache.h"
+#include "tagproperties.h"
 
 namespace Digikam
 {
@@ -142,16 +143,10 @@ void TagsActionMngr::createActions()
 {
     // Create Tags shortcuts.
 
-    TagInfo::List tList = DatabaseAccess().db()->scanTags();
-
-    for (TagInfo::List::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
+    QList<int> tagIds = TagsCache::instance()->tagsWithProperty(TagPropertyName::tagKeyboardShortcut());
+    foreach (int tagId, tagIds)
     {
-        TagProperties tprop((*it).id);
-
-        if (tprop.hasProperty(TagPropertyName::tagKeyboardShortcut()))
-        {
-            createTagActionShortcut(*it, tprop);
-        }
+        createTagActionShortcut(tagId);
     }
 
     // Create Rating shortcuts.
@@ -252,37 +247,37 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
         return false;
     }
 
-    TagInfo tinfo = DatabaseAccess().db()->getTagInfo(tagId);
+    TAlbum* talbum = AlbumManager::instance()->findTAlbum(tagId);
 
-    if (tinfo.isNull())
+    if (!talbum)
     {
         return false;
     }
 
-    TagProperties tprop(tinfo.id);
-    createTagActionShortcut(tinfo, tprop);
+    QString value = TagsCache::instance()->propertyValue(tagId, TagPropertyName::tagKeyboardShortcut());
 
-    return true;
-}
+    if (value.isEmpty())
+    {
+        return false;
+    }
 
-void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProperties& tprop)
-{
-    KShortcut ks(tprop.value(TagPropertyName::tagKeyboardShortcut()));
-    KIcon     icon(tinfo.icon);
+    KShortcut ks(value);
+    // FIXME: tag icons can be files on disk, or system icon names. Only the latter will work here.
+    KIcon     icon(talbum->icon());
 
     kDebug() << "Create Shortcut " << ks.toString()
-             << " to Tag " << tinfo.name << " (" << tinfo.id << ")";
+             << " to Tag " << talbum->title() << " (" << tagId << ")";
 
     foreach(KActionCollection* ac, d->actionCollectionList)
     {
-        KAction* action = ac->addAction(QString("%1-%2").arg(d->tagShortcutPrefix).arg(tinfo.id));
-        action->setText(i18n("Assign Tag \"%1\"", tinfo.name));
+        KAction* action = ac->addAction(QString("%1-%2").arg(d->tagShortcutPrefix).arg(tagId));
+        action->setText(i18n("Assign Tag \"%1\"", talbum->title()));
         action->setParent(this);
         action->setShortcut(ks);
         action->setShortcutConfigurable(true);
         action->forgetGlobalShortcut();
         action->setIcon(icon);
-        action->setData(tinfo.id);
+        action->setData(tagId);
 
         connect(action, SIGNAL(triggered()),
                 this, SLOT(slotAssignFromShortcut()));
@@ -290,8 +285,10 @@ void TagsActionMngr::createTagActionShortcut(const TagInfo& tinfo, const TagProp
         connect(action, SIGNAL(changed()),
                 this, SLOT(slotTagActionChanged()));
 
-        d->tagsActionMap.insert(tinfo.id, action);
+        d->tagsActionMap.insert(tagId, action);
     }
+
+    return true;
 }
 
 void TagsActionMngr::slotTagActionChanged()
@@ -317,8 +314,26 @@ void TagsActionMngr::updateTagShortcut(int tagId, const QKeySequence& ks)
 
     kDebug() << "Tag Shortcut " << tagId << "Changed to " << ks;
 
+    QString value = TagsCache::instance()->propertyValue(tagId, TagPropertyName::tagKeyboardShortcut());
+
+    if (value == ks.toString())
+    {
+        return;
+    }
+
     TagProperties tprop(tagId);
-    tprop.setProperty(TagPropertyName::tagKeyboardShortcut(), ks.toString());
+
+    if (ks.isEmpty())
+    {
+        removeTagActionShortcut(tagId);
+        tprop.removeProperties(TagPropertyName::tagKeyboardShortcut());
+    }
+    else
+    {
+        removeTagActionShortcut(tagId);
+        tprop.setProperty(TagPropertyName::tagKeyboardShortcut(), ks.toString());
+        createTagActionShortcut(tagId);
+    }
 }
 
 void TagsActionMngr::slotAlbumDeleted(Album* album)
@@ -330,36 +345,35 @@ void TagsActionMngr::slotAlbumDeleted(Album* album)
         return;
     }
 
-    tagRemoved(talbum->id());
+    removeTagActionShortcut(talbum->id());
+    kDebug() << "Delete Shortcut assigned to tag " << album->id();
 }
 
-void TagsActionMngr::tagRemoved(int tagId)
+bool TagsActionMngr::removeTagActionShortcut(int tagId)
 {
-    int count = d->tagsActionMap.count(tagId);
-
-    if (count)
+    if (!d->tagsActionMap.contains(tagId))
     {
-        foreach(KAction* act, d->tagsActionMap.values(tagId))
-        {
-            if (act)
-            {
-                KActionCollection* ac = dynamic_cast<KActionCollection*>(act->parent());
-
-                if (ac)
-                {
-                    // NOTE: Action is deleted by KActionCollection
-                    ac->takeAction(act);
-                }
-            }
-        }
-
-        for (int i =0 ; i < count ; ++i)
-        {
-            delete d->tagsActionMap.take(tagId);
-        }
-
-        kDebug() << "Delete Shortcut assigned to tag " << tagId;
+        return false;
     }
+
+    foreach(KAction* act, d->tagsActionMap.values(tagId))
+    {
+        if (act)
+        {
+            KActionCollection* ac = dynamic_cast<KActionCollection*>(act->parent());
+
+            if (ac)
+            {
+                ac->takeAction(act);
+            }
+
+            delete act;
+        }
+    }
+
+    d->tagsActionMap.remove(tagId);
+
+    return true;
 }
 
 void TagsActionMngr::slotAssignFromShortcut()
@@ -372,14 +386,14 @@ void TagsActionMngr::slotAssignFromShortcut()
     }
 
     int val = action->data().toInt();
-    kDebug() << "Shortcut value: " << val;
+    //kDebug() << "Shortcut value: " << val;
 
     QWidget* w      = kapp->activeWindow();
     DigikamApp* dkw = dynamic_cast<DigikamApp*>(w);
 
     if (dkw)
     {
-        kDebug() << "Handling by DigikamApp";
+        //kDebug() << "Handling by DigikamApp";
 
         if (action->objectName().startsWith(d->ratingShortcutPrefix))
         {
@@ -405,7 +419,7 @@ void TagsActionMngr::slotAssignFromShortcut()
 
     if (imw)
     {
-        kDebug() << "Handling by ImageWindow";
+        //kDebug() << "Handling by ImageWindow";
 
         if (action->objectName().startsWith(d->ratingShortcutPrefix))
         {
@@ -431,7 +445,7 @@ void TagsActionMngr::slotAssignFromShortcut()
 
     if (ltw)
     {
-        kDebug() << "Handling by LightTableWindow";
+        //kDebug() << "Handling by LightTableWindow";
 
         if (action->objectName().startsWith(d->ratingShortcutPrefix))
         {

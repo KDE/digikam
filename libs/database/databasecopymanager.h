@@ -68,9 +68,12 @@ public Q_SLOTS:
 
 private:
 
-    bool isStopProcessing;
     bool copyTable(DatabaseBackend& fromDBbackend, const QString& fromActionName, DatabaseBackend& toDBbackend, const QString &toActionName);
     void handleClosing(bool isstopThread, DatabaseBackend& fromDBbackend, DatabaseBackend& toDBbackend);
+
+private:
+
+    bool m_isStopProcessing;
 };
 
 } // namespace Digikam

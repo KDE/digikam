@@ -83,6 +83,13 @@ public:
     int parentTag(int id) const;
 
     /**
+     * Returns the parent tag ids of the given tag, starting with the toplevel tag,
+     * ending with the direct parent tag.
+     * If the tag is a toplevel tag or does not exist, an empty list is returned.
+     */
+    QList<int> parentTags(int id) const;
+
+    /**
      * Finds all tags with the given name.
      * For "Paris", this may give "Places/Cities/Paris" and "Places/USA/Texas/Paris".
      * If there is no tag with the given name at all, returns an empty list.
@@ -215,6 +222,21 @@ public:
     static QLatin1String tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
     static QLatin1String propertyNameDigikamInternalTag();
     static QLatin1String propertyNameExcludedFromWriting();
+
+    /**
+     * Utility method.
+     * Orders the given tag paths. If tags begin with the same path (parent tags),
+     * the relevant part is cut off in the second line.
+     * The second variant allows you to pass a list as return parameter.
+     * This list will contain, upon return, the tag id corresponding to each
+     * tag in the returned, sorted list of shortened paths.
+     */
+    QStringList shortenedTagPaths(const QList<int>& ids,
+                                  LeadingSlashPolicy slashPolicy = IncludeLeadingSlash,
+                                  HiddenTagsPolicy hiddenTagsPolicy = IncludeHiddenTags) const;
+    QStringList shortenedTagPaths(const QList<int>& ids, QList<int>* sortedIds,
+                                  LeadingSlashPolicy slashPolicy = IncludeLeadingSlash,
+                                  HiddenTagsPolicy hiddenTagsPolicy = IncludeHiddenTags) const;
 
 Q_SIGNALS:
 

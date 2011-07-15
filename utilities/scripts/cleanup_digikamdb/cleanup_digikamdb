@@ -14,36 +14,6 @@
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
-# VARIABLES
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-
-script_name="Cleanup Databases"
-script_version="1.0"
-
-digikam_name="digiKam"
-digikam_version=$(digikam -v | grep "$digikam_name" | cut -d: -f2 | sed 's/ //g')
-
-config_group="Album Settings"
-config_key="Database File Path"
-config_file="digikamrc"
-
-db_dir=$(kreadconfig --file "$config_file" --group "$config_group" --key "$config_key")
-db_digikam="digikam[34].db"
-db_thumbs="thumbnails-digikam.db"
-
-header_offset=20
-
-output_str_location="Location"
-output_str_database="Database"
-
-db_find_args="-type f"
-db_find_cmd="$db_find_args -name '$db_digikam'"
-
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
 # FUNCTIONS
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
@@ -53,6 +23,7 @@ db_find_cmd="$db_find_args -name '$db_digikam'"
 # $2: count (optional)
 repeat_char()
 {
+    local header_offset=20
     for i in $(seq ${2:-$header_offset}); do
         echo -n "$1"
     done
@@ -63,31 +34,56 @@ repeat_char()
 # $*: string
 pretty_header()
 {
-    # use an offset to center text (default = $header_offset)
-    offset=$(repeat_char " ")
-    offset_length=$(expr $(expr length "$offset") \* 2)
+    # use an offset to center text
+    local offset=$(repeat_char " ")
+    local offset_length=$(expr $(expr length "${offset}") \* 2)
 
     # calculate length
-    str_length=$(expr length "$*")
-    length=$(expr $str_length + $offset_length)
+    local str_length=$(expr length "$*")
+    local length=$(expr ${str_length} + ${offset_length})
 
     # delimiter line
-    delimiter=$(repeat_char "-" $length)
+    local delimiter=$(repeat_char "-" ${length})
 
     # print header
-    echo $delimiter
+    echo "${delimiter}"
     echo "${offset}$*${offset}"
-    echo $delimiter
+    echo "${delimiter}"
 }
+
+# -----------------------------------------------------------------------------
+
+# $1: config key
+readConfigValue()
+{
+    local config_file="digikamrc"
+    local config_group="Database Settings"
+    local db_dir=$(kreadconfig --file "${config_file}" --group "${config_group}" --key "$1")
+    echo "${db_dir}"
+}
+
 
 # -----------------------------------------------------------------------------
 
 checkForRunningProgram()
 {
-    proc=$(pgrep -u $USER -x digikam)
-    if [ "$proc" != "" ]
+    local proc=$(pgrep -u $USER -x digikam)
+    if [ "${proc}" != "" ]
     then
-        echo "Please shutdown $digikam_name before running this script."
+        echo "Please shutdown ${digikam_name} before running this script."
+        return 1
+    fi
+    return 0
+}
+
+# -----------------------------------------------------------------------------
+
+checkDatabaseType()
+{
+    local db_type=$(readConfigValue "Database Type")
+    if [ "${db_type}" != "QSQLITE" ]
+    then
+        echo "This program only handles SQLite databases."
         return 1
     fi
     return 0
@@ -111,6 +107,35 @@ EOF
 }
 
 # -----------------------------------------------------------------------------
+
+cleanupDB()
+{
+    cd "$1" 2&> /dev/null
+    if [ $? = 0 ]; then
+        local db_out="${output_str_database}:"
+        echo -e "${output_str_location}:\t$(pwd)"
+
+        for db in $(eval "find . ${db_find_cmd} 2> /dev/null")
+        do
+            echo -ne "${db_out}\t${db} ... "
+            sqlite3 ${db} "VACUUM;"
+            if [ $? = 0 ]
+            then
+                echo "done!"
+            else
+                echo "failed!"
+            fi
+        done
+        echo -e "\n=> Finished";
+    else
+        echo -e "\nI was not able to enter the database folder.\n"
+        echo "Make sure that the variable '${config_key}' in your 'digikamrc' config file"
+        echo "is set correctly and that you have permissions to access the database folder."
+    fi
+}
+
+
+# -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # MAIN
@@ -118,14 +143,32 @@ EOF
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 
+script_name="Cleanup Databases"
+script_version="1.1"
+
+digikam_name="digiKam"
+digikam_version=$(digikam -v | grep "${digikam_name}" | cut -d: -f2 | sed 's/ //g')
+
+db_dir=$(readConfigValue "Database Name")
+db_digikam="digikam[34].db"
+db_thumbs="thumbnails-digikam.db"
+
+output_str_location="Location"
+output_str_database="Database"
+
+db_find_args="-type f"
+db_find_cmd="${db_find_args} -name '${db_digikam}'"
+
+# -----------------------------------------------------------------------------
+
 while getopts "tTp:h" Option
 do
-    case $Option in
-        t)  db_find_cmd="$db_find_cmd -or -name '$db_thumbs'";;
-        T)  db_find_cmd="$db_find_args -name '$db_thumbs'";;
-        p)  if [ -n $OPTARG ]; then 
-                if [ -d $OPTARG ]; then
-                    db_dir=$OPTARG
+    case ${Option} in
+        t)  db_find_cmd="${db_find_cmd} -or -name '${db_thumbs}'";;
+        T)  db_find_cmd="${db_find_args} -name '${db_thumbs}'";;
+        p)  if [ -n ${OPTARG} ]; then 
+                if [ -d ${OPTARG} ]; then
+                    db_dir=${OPTARG}
                 fi
             fi;;
         h)  help;;
@@ -135,14 +178,17 @@ done
 
 # -----------------------------------------------------------------------------
 
+pretty_header "${script_name} v${script_version} (${digikam_name} ${digikam_version})"
+
 checkForRunningProgram
 if [ $? = 1 ]; then
     exit 1
 fi
 
-# -----------------------------------------------------------------------------
-
-pretty_header "$script_name v$script_version ($digikam_name $digikam_version)"
+checkDatabaseType
+if [ $? = 1 ]; then
+    exit 1
+fi
 
 # -----------------------------------------------------------------------------
 
@@ -152,32 +198,10 @@ curdir=$(pwd)
 # -----------------------------------------------------------------------------
 
 # try to enter the database directory
-cd "$db_dir" 2&> /dev/null
-if [ $? = 0 ]; then
-    db_out="$output_str_database:"
-    echo -e "$output_str_location:\t$(pwd)"
-
-    for db in $(eval "find . $db_find_cmd 2> /dev/null")
-    do
-        echo -ne "${db_out:-"\\t"}\t$db ... "
-        sqlite3 $db "VACUUM;"
-        if [ $? = 0 ]
-        then
-            echo "done!"
-        else
-            echo "failed!"
-        fi
-        unset db_out
-    done
-    echo -e "\n=> Finished";
-else
-    echo -e "\nI was not able to enter the database folder.\n"
-    echo "Make sure that the variable '$config_key' in your 'digikamrc' config file"
-    echo "is set correctly and that you have permissions to access the database folder."
-fi
+cleanupDB ${db_dir}
 
 # -----------------------------------------------------------------------------
 
 # restore old working dir
-cd $curdir
+cd ${curdir}
 

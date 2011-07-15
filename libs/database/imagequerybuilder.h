@@ -7,7 +7,7 @@
  * Description : Building complex database SQL queries from search descriptions
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +40,7 @@ class KUrl;
 
 namespace Digikam
 {
+
 class ImageQueryPostHook;
 
 class ImageQueryPostHooks
@@ -60,15 +61,17 @@ protected:
     QList<ImageQueryPostHook*> m_postHooks;
 };
 
+// ------------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT ImageQueryBuilder
 {
 public:
 
     ImageQueryBuilder();
 
-    QString buildQuery(const QString& q, QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const;
-    QString buildQueryFromUrl(const KUrl& url, QList<QVariant> *boundValues) const;
-    QString buildQueryFromXml(const QString& xml, QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const;
+    QString buildQuery(const QString& q, QList<QVariant>* boundValues, ImageQueryPostHooks* hooks) const;
+    QString buildQueryFromUrl(const KUrl& url, QList<QVariant>* boundValues) const;
+    QString buildQueryFromXml(const QString& xml, QList<QVariant>* boundValues, ImageQueryPostHooks* hooks) const;
     QString convertFromUrlToXml(const KUrl& url) const;
 
     /**
@@ -80,9 +83,9 @@ public:
 protected:
 
     void buildGroup(QString& sql, SearchXmlCachingReader& reader,
-                    QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const;
+                    QList<QVariant>* boundValues, ImageQueryPostHooks* hooks) const;
     bool buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
-                    QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const;
+                    QList<QVariant>* boundValues, ImageQueryPostHooks* hooks) const;
 
     QString possibleDate(const QString& str, bool& exact) const;
 
@@ -94,9 +97,9 @@ public:
 
 protected:
 
-    QString  m_longMonths[12];
-    QString  m_shortMonths[12];
-    bool     m_imageTagPropertiesJoined;
+    QString m_longMonths[12];
+    QString m_shortMonths[12];
+    bool    m_imageTagPropertiesJoined;
 };
 
 }  // namespace Digikam

@@ -373,7 +373,7 @@
             <dbaction name="GetItemURLsInTagRecursive">
             <statement mode="query">SELECT Albums.albumRoot, Albums.relativePath, Images.name
                             FROM Images JOIN Albums ON Albums.id=Images.album
-                            WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagID)  );
+                            WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagID2)  );
             </statement>
             </dbaction>
 
@@ -477,27 +477,7 @@
                 </dbaction>
 
             <!-- Migration Statements -->
-            <dbaction name="Migrate_Cleanup_DB" mode="query">
-                <statement mode="plain">DROP TABLE IF EXISTS AlbumRoots</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS Albums</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS DownloadHistory</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS FilePaths</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageComments</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageCopyright</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageHaarMatrix</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageInformation</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageMetadata</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImagePositions</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageProperties</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS ImageTags</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS Images</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS Searches</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS Settings</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS Tags</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS TagsTree</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS Thumbnails</statement>
-                <statement mode="plain">DROP TABLE IF EXISTS UniqueHashes</statement>
-            </dbaction>
+            <!-- Migrate_Cleanup_DB now it's done by the program -->
 
             <dbaction name="Migrate_Read_AlbumRoots"><statement mode="query">
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
@@ -538,7 +518,21 @@
                 SELECT imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory FROM ImageMetadata;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageMetadata"><statement mode="query">
-                INSERT INTO ImageMetadate (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
+                INSERT INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">
+                SELECT imageid, tagid, property, value FROM ImageTagProperties;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_ImageTagProperties"><statement mode="query">
+                INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES (:imageid, :tagid, :property, :value);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_TagProperties"><statement mode="query">
+                SELECT tagid, property, value FROM TagProperties;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_TagProperties"><statement mode="query">
+                INSERT INTO TagProperties (tagid, property, value) VALUES (:tagid, :property, :value);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImagePositions"><statement mode="query">
@@ -581,6 +575,20 @@
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageProperties"><statement mode="query">
                 INSERT INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_ImageHistory"><statement mode="query">
+                SELECT  imageid, uuid, history FROM ImageHistory;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_ImageHistory"><statement mode="query">
+                INSERT INTO ImageHistory (imageid, uuid, history) VALUES (:imageid, :uuid, :history);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_ImageRelations"><statement mode="query">
+                SELECT  subject, object, type FROM ImageRelations;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_ImageRelations"><statement mode="query">
+                INSERT INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Searches"><statement mode="query">
@@ -752,7 +760,8 @@
                 set @Index_cnt = (
                     SELECT COUNT(1) cnt
                     FROM INFORMATION_SCHEMA.STATISTICS
-                    WHERE CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
+                    WHERE CONVERT(DATABASE() USING latin1) = CONVERT(TABLE_SCHEMA USING latin1)
+                      AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
                       AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
                 );
 
@@ -870,10 +879,6 @@
                             lft INT NOT NULL,
                 rgt INT NOT NULL
                             );</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS TagsTree
-                            (id INTEGER NOT NULL NOT NULL AUTO_INCREMENT,
-                            pid INTEGER NOT NULL,
-                            UNIQUE (id, pid));</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTags
                             (imageid INTEGER NOT NULL,
                             tagid INTEGER NOT NULL,
@@ -965,19 +970,23 @@
                 DELETE FROM ImageTags          WHERE tagid=OLD.id;
                 DELETE FROM TagProperties      WHERE tagid=OLD.id;
                 DELETE FROM ImageTagProperties WHERE tagid=OLD.id;
-                DELETE FROM TagsTree WHERE lft BETWEEN OLD.lft AND OLD.rgt;
             END;
             </statement>
             <statement mode="plain">DROP TRIGGER IF EXISTS move_tagstree;</statement>
-            <statement mode="plain">CREATE TRIGGER move_tagstree AFTER UPDATE ON Tags
-            FOR EACH ROW BEGIN
-                DELETE FROM TagsTree WHERE lft BETWEEN OLD.lft AND OLD.rgt;
-                REPLACE INTO TagsTree
-                    SELECT node.id, parent.pid
-                    FROM Tags AS node, Tags AS parent
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                    ORDER BY parent.lft;
-            END;</statement>
+
+            <statement mode="plain">SELECT 
+                    @minLeft := IF(ISNULL(MIN(lft)), 1, MIN(lft)-1),
+                    @maxRight := IF(ISNULL(MAX(rgt)), 2, MAX(rgt)+1)
+                FROM Tags 
+                WHERE id >= 0 AND pid>=0;
+            </statement>
+            <statement mode="plain">SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';</statement>
+            <statement mode="plain">REPLACE INTO Tags
+                (id, pid, name, icon, iconkde, lft, rgt)
+                VALUES
+                (0, -1, '_Digikam_root_tag_', 0, NULL, @minLeft, @maxRight )
+            </statement>
+            <statement mode="plain">SET SQL_MODE=@OLD_SQL_MODE;</statement>
             </dbaction>
                        
             <dbaction name="checkIfDatabaseExists">
@@ -1054,24 +1063,58 @@
             </dbaction>
 
             <dbaction name="GetItemURLsInTagRecursive">
-            <statement mode="query">SELECT Albums.albumRoot, Albums.relativePath, Images.name
-                            FROM Images JOIN Albums ON Albums.id=Images.album
-                            WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID OR tagid IN (SELECT id FROM Tags WHERE lft BETWEEN (SELECT lft FROM Tags WHERE id=:tagID) AND (SELECT rgt FROM Tags WHERE id=:tagID)) );
+            <statement mode="query">
+SELECT DISTINCT alb.albumRoot, alb.relativePath, img.name
+FROM (
+       Images AS img
+  JOIN Albums AS alb
+    ON alb.id = img.album
+  JOIN ImageTags AS ita
+    ON ita.imageid = img.id
+) JOIN (
+  Tags As tp
+  JOIN Tags As tc
+    ON tc.lft BETWEEN tp.lft AND tp.rgt
+)
+ON tc.id = ita.tagID
+WHERE img.status = 1 
+  AND tp.id = :tagID
+  /* AND tp.id = :tagID2 */
+ORDER BY img.name
+;
             </statement>
             </dbaction>
 
             <dbaction name="GetItemURLsInTag">
-            <statement mode="query">SELECT Albums.albumRoot, Albums.relativePath, Images.name
-                            FROM Images JOIN Albums ON Albums.id=Images.album
-                            WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID);
+            <statement mode="query">
+SELECT alb.albumRoot, alb.relativePath, img.name
+FROM Albums AS alb 
+JOIN Images AS img
+  ON alb.id = img.album
+JOIN ImageTags AS it
+  ON it.imageid = img.id
+WHERE img.status = 1 
+  AND it.tagid = :tagID
             </statement>
             </dbaction>
 
             <dbaction name="getItemIDsInTagRecursive">
-            <statement mode="query">SELECT imageid FROM ImageTags JOIN Images ON ImageTags.imageid=Images.id
-                                WHERE Images.status=1 AND
-                                ( tagid=:tagID
-                                OR tagid IN (SELECT id FROM Tags WHERE lft BETWEEN (SELECT lft FROM Tags WHERE id=:tagID) AND (SELECT rgt FROM Tags WHERE id=:tagID)) );
+            <statement mode="query">
+SELECT DISTINCT ita.imageid
+FROM (
+  Images AS img
+  JOIN ImageTags AS ita
+    ON ita.imageid = img.id
+) JOIN (
+  Tags As tp
+  JOIN Tags As tc
+    ON tc.lft BETWEEN tp.lft AND tp.rgt
+)
+ON tc.id = ita.tagID
+WHERE img.status = 1 
+  AND tp.id = :tagID
+ORDER BY img.name
+;
             </statement>
             </dbaction>
 
@@ -1082,34 +1125,56 @@
             </dbaction>
 
             <dbaction name="listTagRecursive">
-            <statement mode="query">  SELECT DISTINCT Images.id, Images.name, Images.album,
-                                    Albums.albumRoot,
-                                    ImageInformation.rating, Images.category,
-                                    ImageInformation.format, ImageInformation.creationDate,
-                                    Images.modificationDate, Images.fileSize,
-                                    ImageInformation.width, ImageInformation.height
-                            FROM Images
-                                    INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
-                                    INNER JOIN Albums ON Albums.id=Images.album
-                            WHERE Images.status=1 AND Images.id IN
-                                    (SELECT imageid FROM ImageTags
-                                    WHERE tagid=:tagID OR tagid IN (SELECT id FROM Tags WHERE lft BETWEEN (SELECT lft FROM Tags WHERE id=:tagID) AND (SELECT rgt FROM Tags WHERE id=:tagID)) );
+            <statement mode="query">
+SELECT DISTINCT 
+    img.id, img.name, img.album,
+    alb.albumRoot,
+    inf.rating, img.category,
+    inf.format, inf.creationDate,
+    img.modificationDate, img.fileSize,
+    inf.width, inf.height
+FROM (
+  Images AS img
+  JOIN ImageInformation AS inf 
+    ON img.id=inf.imageid
+  JOIN Albums AS alb
+    ON alb.id=img.album
+  JOIN ImageTags AS ita
+    ON ita.imageid = img.id
+) JOIN (
+  Tags As tp
+  JOIN Tags As tc
+    ON tc.lft BETWEEN tp.lft AND tp.rgt
+)
+ON tc.id = ita.tagID
+WHERE img.status = 1 
+  AND tp.id = :tagID
+ORDER BY inf.rating DESC, img.name ASC
+;
             </statement>
             </dbaction>
 
             <dbaction name="listTag">
-            <statement mode="query">  SELECT DISTINCT Images.id, Images.name, Images.album,
-                                    Albums.albumRoot,
-                                    ImageInformation.rating, Images.category,
-                                    ImageInformation.format, ImageInformation.creationDate,
-                                    Images.modificationDate, Images.fileSize,
-                                    ImageInformation.width, ImageInformation.height
-                            FROM Images
-                                    INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
-                                    INNER JOIN Albums ON Albums.id=Images.album
-                            WHERE Images.status=1 AND Images.id IN
-                                    (SELECT imageid FROM ImageTags
-                                    WHERE tagid=:tagID );
+            <statement mode="query">
+SELECT DISTINCT 
+    img.id, img.name, img.album,
+    alb.albumRoot,
+    inf.rating, img.category,
+    inf.format, inf.creationDate,
+    img.modificationDate, img.fileSize,
+    inf.width, inf.height
+FROM
+  Images AS img
+  JOIN ImageInformation AS inf 
+    ON img.id=inf.imageid
+  JOIN Albums AS alb
+    ON alb.id=img.album
+  JOIN ImageTags AS ita
+    ON ita.imageid = img.id
+WHERE img.status = 1 
+  AND ita.tagID = :tagID
+ORDER BY inf.rating DESC, img.name ASC
+;
             </statement>
             </dbaction>
 
@@ -1155,9 +1220,7 @@
             <dbaction name="CreateThumbnailsDBTrigger" mode="transaction"></dbaction>
 
             <!-- Migration Statements -->
-            <dbaction name="Migrate_Cleanup_DB"><statement mode="plain">
-                DROP TABLE IF EXISTS AlbumRoots, Albums, DownloadHistory, FilePaths, ImageComments, ImageCopyright, ImageHaarMatrix, ImageInformation, ImageMetadata, ImagePositions, ImageProperties, ImageTags, Images, Searches, Settings, Tags, TagsTree, Thumbnails, UniqueHashes;
-            </statement></dbaction>
+            <!-- Migrate_Cleanup_DB now it's done by the program -->
 
             <dbaction name="Migrate_Read_AlbumRoots"><statement mode="query">
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
@@ -1196,7 +1259,21 @@
                 SELECT imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory FROM ImageMetadata;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageMetadata" mode="transaction"><statement mode="query">
-                INSERT INTO ImageMetadate (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
+                INSERT INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">
+                SELECT imageid, tagid, property, value FROM ImageTagProperties;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_ImageTagProperties"><statement mode="query">
+                INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES (:imageid, :tagid, :property, :value);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_TagProperties"><statement mode="query">
+                SELECT tagid, property, value FROM TagProperties;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_TagProperties"><statement mode="query">
+                INSERT INTO TagProperties (tagid, property, value) VALUES (:tagid, :property, :value);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImagePositions"><statement mode="query">
@@ -1245,6 +1322,20 @@
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageProperties" mode="transaction"><statement mode="query">
                 INSERT INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_ImageHistory"><statement mode="query">
+                SELECT  imageid, uuid, history FROM ImageHistory;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_ImageHistory"><statement mode="query">
+                INSERT INTO ImageHistory (imageid, uuid, history) VALUES (:imageid, :uuid, :history);
+            </statement></dbaction>
+
+            <dbaction name="Migrate_Read_ImageRelations"><statement mode="query">
+                SELECT  subject, object, type FROM ImageRelations;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_ImageRelations"><statement mode="query">
+                INSERT INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Searches"><statement mode="query">
@@ -1374,12 +1465,6 @@
                     DELETE FROM ImageTags          WHERE tagid=OLD.id;
                     DELETE FROM TagProperties      WHERE tagid=OLD.id;
                     DELETE FROM ImageTagProperties WHERE tagid=OLD.id;
-                    DELETE FROM TagsTree;
-                    REPLACE INTO TagsTree
-                    SELECT node.id, parent.pid
-                    FROM Tags AS node, Tags AS parent
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                    ORDER BY parent.lft;
                 END;
             </statement>
             </dbaction>

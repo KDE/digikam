@@ -191,9 +191,13 @@ void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rec
     m_dirtyHistoryTab    = false;
     d->dirtyDesceditTab  = false;
 
-    // All tabs that store the ImageInfo list and access it after selection change
-    // must release the image info here. slotChangedTab only handles the active tab!
-    d->desceditTab->setItem();
+    // slotChangedTab only handles the active tab.
+    // Any tab that holds informations reset above shall be reset here,
+    // unless it is the active tab
+    if (getActiveTab() != d->desceditTab)
+    {
+        d->desceditTab->setItem();
+    }
 
     slotChangedTab( getActiveTab() );
 }
@@ -547,11 +551,6 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             m_propertiesTab->setImageColorMode(commonInfo.colorModel.isEmpty() ? unavailable : commonInfo.colorModel);
             m_propertiesTab->setImageMime(commonInfo.format);
 
-            /* TODO : This info is not stored by DB
-            m_propertiesTab->setImageCompression(compression.isEmpty() ? unavailable : compression);
-            */
-            m_propertiesTab->hideImageCompression();
-
             // -- Photograph information ------------------------------------------
 
             m_propertiesTab->setPhotoInfoDisable(photoInfo.allFieldsNull);
@@ -625,6 +624,11 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
 ImagePropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab()
 {
     return d->versionsHistoryTab;
+}
+
+ImageDescEditTab* ImagePropertiesSideBarDB::imageDescEditTab() const
+{
+    return d->desceditTab;
 }
 
 void ImagePropertiesSideBarDB::doLoadState()

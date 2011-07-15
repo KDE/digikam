@@ -78,7 +78,7 @@ public:
 };
 
 AssignNameOverlay::AssignNameOverlay(QObject* parent)
-    : AbstractWidgetDelegateOverlay(parent), d(new AssignNameOverlayPriv)
+    : PersistentWidgetDelegateOverlay(parent), d(new AssignNameOverlayPriv)
 {
     d->filteredModel.setSourceAlbumModel(&d->tagModel);
     d->filterModel.setSourceFilterModel(&d->filteredModel);
@@ -109,13 +109,14 @@ QWidget* AssignNameOverlay::createWidget()
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget(d->assignNameWidget);
     container->setLayout(layout);
+    container->setFocusProxy(d->assignNameWidget);
 
     return container;
 }
 
 void AssignNameOverlay::setActive(bool active)
 {
-    AbstractWidgetDelegateOverlay::setActive(active);
+    PersistentWidgetDelegateOverlay::setActive(active);
 
     if (active)
     {
@@ -124,6 +125,22 @@ void AssignNameOverlay::setActive(bool active)
 
         connect(assignNameWidget(), SIGNAL(rejected(const ImageInfo&, const QVariant&)),
                 this, SLOT(slotRejected(const ImageInfo&, const QVariant&)));
+
+
+        connect(assignNameWidget(), SIGNAL(selected(const TaggingAction&, const ImageInfo&, const QVariant&)),
+                this, SLOT(enterPersistentMode()));
+
+        connect(assignNameWidget(), SIGNAL(assigned(const TaggingAction&, const ImageInfo&, const QVariant&)),
+                this, SLOT(leavePersistentMode()));
+
+        connect(assignNameWidget(), SIGNAL(rejected(const ImageInfo&, const QVariant&)),
+                this, SLOT(leavePersistentMode()));
+
+        connect(assignNameWidget(), SIGNAL(assigned(const TaggingAction&, const ImageInfo&, const QVariant&)),
+                this, SLOT(storeFocus()));
+
+        connect(assignNameWidget(), SIGNAL(rejected(const ImageInfo&, const QVariant&)),
+                this, SLOT(storeFocus()));
 
         /*
                 if (view()->model())
@@ -152,12 +169,12 @@ void AssignNameOverlay::visualChange()
 
 void AssignNameOverlay::hide()
 {
-    AbstractWidgetDelegateOverlay::hide();
+    PersistentWidgetDelegateOverlay::hide();
 }
 
 void AssignNameOverlay::updatePosition()
 {
-    if (!d->index.isValid())
+    if (!index().isValid())
     {
         return;
     }
@@ -170,7 +187,7 @@ void AssignNameOverlay::updatePosition()
         rect.adjust(-offset, 0, offset, 0);
     }
 
-    QRect visualRect = m_view->visualRect(d->index);
+    QRect visualRect = m_view->visualRect(index());
     rect.translate(visualRect.topLeft());
 
     m_widget->setFixedSize(rect.width(), rect.height());
@@ -179,20 +196,20 @@ void AssignNameOverlay::updatePosition()
 
 void AssignNameOverlay::updateFace()
 {
-    if (!d->index.isValid() || !assignNameWidget())
+    if (!index().isValid() || !assignNameWidget())
     {
         return;
     }
 
-    QVariant extraData = d->index.data(ImageModel::ExtraDataRole);
+    QVariant extraData = index().data(ImageModel::ExtraDataRole);
     assignNameWidget()->setCurrentFace(DatabaseFace::fromVariant(extraData));
-    assignNameWidget()->setUserData(ImageModel::retrieveImageInfo(d->index), extraData);
+    assignNameWidget()->setUserData(ImageModel::retrieveImageInfo(index()), extraData);
 }
 
 /*
 void AssignNameOverlay::slotDataChanged(const QModelIndex& / *topLeft* /, const QModelIndex& / *bottomRight* /)
 {
-    if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
+    if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(index()))
         updateTag();
 }
 */
@@ -209,23 +226,22 @@ bool AssignNameOverlay::checkIndex(const QModelIndex& index) const
     return DatabaseFace::fromVariant(extraData).isUnconfirmedType();
 }
 
-void AssignNameOverlay::slotEntered(const QModelIndex& index)
+void AssignNameOverlay::showOnIndex(const QModelIndex& index)
 {
-    AbstractWidgetDelegateOverlay::slotEntered(index);
+    PersistentWidgetDelegateOverlay::showOnIndex(index);
 
     /*
         // TODO: add again when fading in
         // see bug 228810, this is a small workaround
-        if (m_widget && m_widget->isVisible() && m_index.isValid() && index == m_index)
+        if (m_widget && m_widget->isVisible() && index().isValid() && index == index())
             addTagsLineEdit()->setVisibleImmediately;
     */
 
-    d->index = index;
     updatePosition();
     updateFace();
 }
 
-void AssignNameOverlay::viewportLeaveEvent(QObject*, QEvent*)
+void AssignNameOverlay::viewportLeaveEvent(QObject* o, QEvent* e)
 {
     // Dont hide when hovering the pop-up of the line edit.
     // isAncestorOf does not work: different window
@@ -242,7 +258,7 @@ void AssignNameOverlay::viewportLeaveEvent(QObject*, QEvent*)
         widget = widget->parentWidget();
     }
 
-    hide();
+    PersistentWidgetDelegateOverlay::viewportLeaveEvent(o, e);
 }
 
 void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier)
@@ -269,7 +285,7 @@ void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ImageInf
 
     if (tagId)
     {
-        emit confirmFaces(affectedIndexes(d->index), tagId);
+        emit confirmFaces(affectedIndexes(index()), tagId);
     }
 
     hide();
@@ -280,13 +296,13 @@ void AssignNameOverlay::slotRejected(const ImageInfo& info, const QVariant& face
     Q_UNUSED(info);
     Q_UNUSED(faceIdentifier);
     //DatabaseFace face = DatabaseFace::fromVariant(faceIdentifier);
-    emit removeFaces(affectedIndexes(d->index));
+    emit removeFaces(affectedIndexes(index()));
     hide();
 }
 
 void AssignNameOverlay::widgetEnterEvent()
 {
-    widgetEnterNotifyMultiple(d->index);
+    widgetEnterNotifyMultiple(index());
 }
 
 void AssignNameOverlay::widgetLeaveEvent()
@@ -294,5 +310,13 @@ void AssignNameOverlay::widgetLeaveEvent()
     widgetLeaveNotifyMultiple();
 }
 
+void AssignNameOverlay::setFocusOnWidget()
+{
+    if (assignNameWidget()->lineEdit())
+    {
+        assignNameWidget()->lineEdit()->selectAll();
+        assignNameWidget()->lineEdit()->setFocus();
+    }
+}
 
 } // namespace Digikam

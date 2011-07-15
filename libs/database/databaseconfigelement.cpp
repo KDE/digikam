@@ -239,7 +239,7 @@ bool DatabaseConfigElementLoader::readConfig()
     if (element.isNull())
     {
         errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
-                            "is missing the required element <icode>%1</icode>",
+                            "is missing the required element <icode>%2</icode>",
                             filepath, element.tagName());
         return false;
     }
@@ -249,7 +249,7 @@ bool DatabaseConfigElementLoader::readConfig()
     if (defaultDB.isNull())
     {
         errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
-                            "is missing the required element <icode>%1</icode>",
+                            "is missing the required element <icode>%2</icode>",
                             filepath, element.tagName());
         return false;
     }

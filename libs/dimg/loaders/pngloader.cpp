@@ -6,7 +6,7 @@
  * Date        : 2005-11-01
  * Description : a PNG image loader for DImg framework.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,11 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
-// This line must be commented to prevent any latency time
-// when we use threaded image loader interface for each image
-// files io. Uncomment this line only for debugging.
-//#define ENABLE_DEBUG_MESSAGES
 
 #define PNG_BYTES_TO_CHECK 4
 
@@ -58,6 +53,7 @@ extern "C"
 
 // Local includes
 
+#include "config-digikam.h"
 #include "version.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
@@ -75,7 +71,7 @@ namespace Digikam
 
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
 typedef png_bytep iCCP_data;
-#else 
+#else
 typedef png_charp iCCP_data;
 #endif
 
@@ -277,14 +273,14 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
         if (bit_depth == 16)
         {
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
             kDebug() << "PNG in 16 bits/color/pixel.";
 #endif
 
             switch (color_type)
             {
                 case PNG_COLOR_TYPE_RGB :            // RGB
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_RGB";
 #endif
 
@@ -300,13 +296,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     break;
 
                 case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_RGB_ALPHA";
 #endif
                     break;
 
                 case PNG_COLOR_TYPE_GRAY :          // Grayscale
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_GRAY";
 #endif
                     png_set_gray_to_rgb(png_ptr);
@@ -323,7 +319,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     break;
 
                 case PNG_COLOR_TYPE_GRAY_ALPHA :    // Grayscale + Alpha
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA";
 #endif
                     png_set_gray_to_rgb(png_ptr);
@@ -331,7 +327,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     break;
 
                 case PNG_COLOR_TYPE_PALETTE :       // Indexed
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_PALETTE";
 #endif
                     png_set_palette_to_rgb(png_ptr);
@@ -348,7 +344,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     break;
 
                 default:
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
                     kDebug() << "PNG color type unknown.";
 #endif
                     delete cleanupData;
@@ -358,7 +354,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         }
         else
         {
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
             kDebug() << "PNG in >=8 bits/color/pixel.";
 #endif
             png_set_packing(png_ptr);
@@ -366,7 +362,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             switch (color_type)
             {
                 case PNG_COLOR_TYPE_RGB :           // RGB
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_RGB";
 #endif
 
@@ -382,13 +378,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     break;
 
                 case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_RGB_ALPHA";
 #endif
                     break;
 
                 case PNG_COLOR_TYPE_GRAY :          // Grayscale
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_GRAY";
 #endif
 #if PNG_LIBPNG_VER >= 10400
@@ -410,14 +406,14 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     break;
 
                 case PNG_COLOR_TYPE_GRAY_ALPHA :    // Grayscale + alpha
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA";
 #endif
                     png_set_gray_to_rgb(png_ptr);
                     break;
 
                 case PNG_COLOR_TYPE_PALETTE :       // Indexed
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_PALETTE";
 #endif
                     png_set_packing(png_ptr);
@@ -435,7 +431,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     break;
 
                 default:
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
                     kDebug() << "PNG color type unknown.";
 #endif
                     delete cleanupData;
@@ -637,7 +633,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             {
                 imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
 
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
                 kDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key
                          << " text=" << text_ptr[i].text;
 #endif
@@ -879,7 +875,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
             png_text text;
             text.key  = key.data();
             text.text = value.data();
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
             kDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text;
 #endif
             text.compression = PNG_TEXT_COMPRESSION_zTXt;
@@ -897,7 +893,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     png_text text;
     text.key  = (png_charp)("Software");
     text.text = softwareAsAscii.data();
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
     kDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text;
 #endif
     text.compression = PNG_TEXT_COMPRESSION_zTXt;

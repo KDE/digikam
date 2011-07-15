@@ -7,7 +7,7 @@
  * Description : Building complex database SQL queries from search descriptions
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -92,6 +92,8 @@ bool ImageQueryPostHooks::checkPosition(double latitudeNumber, double longitudeN
     }
     return true;
 }
+
+// -----------------------------------------------------------------------------------------------
 
 ImageQueryBuilder::ImageQueryBuilder()
 {
@@ -216,21 +218,26 @@ void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
     sql += ") ";
 }
 
+// ---------------------------------------------------------------------------------------
 class FieldQueryBuilder
 {
 public:
 
     FieldQueryBuilder(QString& sql, SearchXmlCachingReader& reader,
-                      QList<QVariant> *boundValues, ImageQueryPostHooks* hooks, SearchXml::Relation relation)
+                      QList<QVariant>* boundValues, ImageQueryPostHooks* hooks, SearchXml::Relation relation)
         : sql(sql), reader(reader), boundValues(boundValues), hooks(hooks), relation(relation)
     {
     }
 
+public:
+
     QString&                sql;
     SearchXmlCachingReader& reader;
-    QList<QVariant>        *boundValues;
+    QList<QVariant>*        boundValues;
     ImageQueryPostHooks*    hooks;
     SearchXml::Relation     relation;
+
+public:
 
     inline QString prepareForLike(const QString& str) const
     {
@@ -334,7 +341,7 @@ public:
                 // day precision
                 QDate startDate, endDate;
                 startDate = date.date().addDays(-1);
-                endDate = date.date().addDays(1);
+                endDate   = date.date().addDays(1);
                 *boundValues << startDate.toString(Qt::ISODate)
                              << endDate.toString(Qt::ISODate);
             }
@@ -360,7 +367,7 @@ public:
                 // we spare microseconds for the future
 
                 startDate = date.addSecs(-diff);
-                endDate = date.addSecs(diff);
+                endDate   = date.addSecs(diff);
                 *boundValues << startDate.toString(Qt::ISODate)
                              << endDate.toString(Qt::ISODate);
             }
@@ -670,10 +677,10 @@ public:
 
                     HaversinePostHook(double lat1Deg, double lon1Deg, double radiusOfCurvature, double distance)
                     {
-                        lat1 = Coordinates::toRadians(lat1Deg);
-                        lon1 = Coordinates::toRadians(lon1Deg);
+                        lat1              = Coordinates::toRadians(lat1Deg);
+                        lon1              = Coordinates::toRadians(lon1Deg);
                         distanceInRadians = distance / radiusOfCurvature;
-                        cosLat1 = cos(lat1);
+                        cosLat1           = cos(lat1);
                     }
 
                     virtual bool checkPosition(double lat2Deg, double lon2Deg)
@@ -682,9 +689,9 @@ public:
                         double lon2 = Coordinates::toRadians(lon2Deg);
                         double dlon = lon2 - lon1;
                         double dlat = lat2 - lat1;
-                        double a = pow(sin(dlat/2), 2) + cosLat1 * cos(lat2) * pow(sin(dlon/2),2);
-                        double c = 2 * asin(qMin(1.0, sqrt(a)));
-                        return c < distanceInRadians;
+                        double a    = pow(sin(dlat/2), 2) + cosLat1 * cos(lat2) * pow(sin(dlon/2),2);
+                        double c    = 2 * asin(qMin(1.0, sqrt(a)));
+                        return (c < distanceInRadians);
                     }
 
                     double lat1, lon1;
@@ -758,9 +765,10 @@ public:
     }
 };
 
+// ----------------------------------------------------------------------------------------------------
 
 bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
-                                   QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const
+                                   QList<QVariant>* boundValues, ImageQueryPostHooks* hooks) const
 {
     SearchXml::Relation relation = reader.fieldRelation();
     FieldQueryBuilder fieldQuery(sql, reader, boundValues, hooks, relation);
@@ -792,7 +800,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 firstCondition = false;
 
                 DatabaseAccess access;
-                int rootId = access.db()->getAlbumRootId(albumID);
+                int rootId           = access.db()->getAlbumRootId(albumID);
                 QString relativePath = access.db()->getAlbumRelativePath(albumID);
 
                 QString childrenWildcard;
@@ -859,7 +867,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 sql += " (Images.id NOT IN ";
             }
 
-            sql += "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
+            sql += "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
                    "    WHERE ";
 
             bool firstCondition = true;
@@ -867,7 +875,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             {
                 addSqlOperator(sql, SearchXml::Or, firstCondition);
                 firstCondition = false;
-                sql += " (TagsTree.pid = ? OR ImageTags.tagid = ? ) ";
+                sql += " (Tags.pid = ? OR ImageTags.tagid = ? ) ";
                 *boundValues << tagID << tagID;
             }
 
@@ -897,16 +905,16 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         else if (relation == SearchXml::InTree)
         {
             sql += " (Images.id IN "
-                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
-                   "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
+                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
+                   "    WHERE Tags.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
                    "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ";
             *boundValues << tagname << tagname;
         }
         else if (relation == SearchXml::NotInTree)
         {
             sql += " (Images.id NOT IN "
-                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
-                   "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
+                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
+                   "    WHERE Tags.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
                    "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ";
             *boundValues << tagname << tagname;
         }
@@ -1182,7 +1190,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 }
                 else // InTree
                 {
-                    selectQuery += "(%1tagid=? OR %1tagid IN (SELECT id FROM TagsTree WHERE pid=?)) AND ";
+                    selectQuery += "(%1tagid=? OR %1tagid IN (SELECT id FROM Tags WHERE pid=?)) AND ";
                     *boundValues << tagId << tagId;
                 }
             }
@@ -1199,7 +1207,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 selectQuery += " ? ";
                 *boundValues << values[0] << fieldQuery.prepareForLike(values[1]);
             }
-            
+
             // This indicates that the ImageTagProperties is joined in the SELECT query,
             // so one entry is listed for each property entry (not for each image id)
             if (m_imageTagPropertiesJoined)
@@ -1451,7 +1459,6 @@ QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
 
     // set an attribute marking this search as converted from 0.9 style search
     writer.writeAttribute("convertedFrom09Url", "true");
-
     writer.writeGroup();
 
     QStringList strList = url.path().split(' ', QString::SkipEmptyParts);
@@ -1501,6 +1508,8 @@ QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
     return writer.xml();
 }
 
+// -------------------------------------------------------------------------
+
 enum SKey
 {
     ALBUM = 0,
@@ -1528,6 +1537,8 @@ enum SOperator
     GTE
 };
 
+// -------------------------------------------------------------------------
+
 class RuleType
 {
 public:
@@ -1537,6 +1548,8 @@ public:
     QString   val;
 };
 
+// -------------------------------------------------------------------------
+
 class SubQueryBuilder
 {
 public:
@@ -1544,6 +1557,8 @@ public:
     QString build(enum SKey key, enum SOperator op,
                   const QString& passedVal, QList<QVariant> *boundValues) const;
 };
+
+// -------------------------------------------------------------------------
 
 QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *boundValues) const
 {
@@ -1792,15 +1807,15 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
             else if (op == LIKE)
             {
                 query = " (Images.id IN "
-                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
-                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
+                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
+                        "    WHERE Tags.pid = ? or ImageTags.tagid = ? )) ";
                 *boundValues << val.toInt() << val.toInt();
             }
             else // op == NLIKE
             {
                 query = " (Images.id NOT IN "
-                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
-                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
+                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
+                        "    WHERE Tags.pid = ? or ImageTags.tagid = ? )) ";
                 *boundValues << val.toInt() << val.toInt();
             }
 

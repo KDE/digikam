@@ -317,7 +317,7 @@ void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QS
 {
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontReg);
-    p->drawText(nameRect, Qt::AlignCenter, squeezedTextCached(p, nameRect.width(), name));
+    p->drawText(nameRect, Qt::AlignCenter, name);//squeezedTextCached(p, nameRect.width(), name));
 }
 
 void ItemViewImageDelegate::drawComments(QPainter* p, const QRect& commentsRect, const QString& comments) const
@@ -332,8 +332,8 @@ void ItemViewImageDelegate::drawCreationDate(QPainter* p, const QRect& dateRect,
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
-    str         = i18nc("date of image creation", "created: %1", str);
-    p->drawText(dateRect, Qt::AlignCenter, squeezedTextCached(p, dateRect.width(), str));
+    //str         = i18nc("date of image creation", "created: %1", str);
+    p->drawText(dateRect, Qt::AlignCenter, str);//squeezedTextCached(p, dateRect.width(), str));
 }
 
 void ItemViewImageDelegate::drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
@@ -342,7 +342,7 @@ void ItemViewImageDelegate::drawModificationDate(QPainter* p, const QRect& dateR
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
     str         = i18nc("date of last image modification", "modified: %1",str);
-    p->drawText(dateRect, Qt::AlignCenter, squeezedTextCached(p, dateRect.width(), str));
+    p->drawText(dateRect, Qt::AlignCenter, str);//squeezedTextCached(p, dateRect.width(), str));
 }
 
 void ItemViewImageDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const
@@ -363,7 +363,7 @@ void ItemViewImageDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, co
             resolution = i18nc("unknown image resolution", "Unknown");
         }
 
-        p->drawText(dimsRect, Qt::AlignCenter, squeezedTextCached(p, dimsRect.width(), resolution));
+        p->drawText(dimsRect, Qt::AlignCenter, resolution);//squeezedTextCached(p, dimsRect.width(), resolution));
     }
 }
 
@@ -371,7 +371,7 @@ void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, int bytes)
 {
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontXtra);
-    p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
+    p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes));//squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
 }
 
 void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,

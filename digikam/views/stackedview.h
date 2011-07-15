@@ -50,6 +50,8 @@ class DigikamImageView;
 class ImageCategorizedView;
 class ImagePreviewView;
 class MapWidgetView;
+class MediaPlayerView;
+class ImageThumbnailBar;
 
 class StackedView : public QStackedWidget
 {
@@ -75,9 +77,11 @@ public:
     void setDockArea(QMainWindow*);
 
     ThumbBarDock*     thumbBarDock()     const;
+    ImageThumbnailBar*thumbBar()     const;
     DigikamImageView* imageIconView()    const;
     ImagePreviewView* imagePreviewView() const;
     MapWidgetView*    mapWidgetView()    const;
+    MediaPlayerView*  mediaPlayerView()  const;
 
     void setPreviewItem(const ImageInfo& info = ImageInfo(),
                         const ImageInfo& previous = ImageInfo(),

@@ -957,7 +957,7 @@ void AbstractCheckableAlbumModel::resetAllCheckedAlbums()
     }
 }
 
-void AbstractCheckableAlbumModel::setDataForChildren(QModelIndex& parent, const QVariant& value, int role)
+void AbstractCheckableAlbumModel::setDataForChildren(const QModelIndex& parent, const QVariant& value, int role)
 {
     setData(parent, value, role);
 
@@ -968,7 +968,7 @@ void AbstractCheckableAlbumModel::setDataForChildren(QModelIndex& parent, const 
     }
 }
 
-void AbstractCheckableAlbumModel::resetCheckedAlbums(QModelIndex parent)
+void AbstractCheckableAlbumModel::resetCheckedAlbums(const QModelIndex& parent)
 {
 
     if (parent == rootAlbumIndex())
@@ -980,7 +980,7 @@ void AbstractCheckableAlbumModel::resetCheckedAlbums(QModelIndex parent)
     setDataForChildren(parent, Qt::Unchecked, Qt::CheckStateRole);
 }
 
-void AbstractCheckableAlbumModel::setDataForParents(QModelIndex& child, const QVariant& value, int role)
+void AbstractCheckableAlbumModel::setDataForParents(const QModelIndex& child, const QVariant& value, int role)
 {
     QModelIndex current = child;
 
@@ -991,22 +991,22 @@ void AbstractCheckableAlbumModel::setDataForParents(QModelIndex& child, const QV
     }
 }
 
-void AbstractCheckableAlbumModel::resetCheckedParentAlbums(QModelIndex& child)
+void AbstractCheckableAlbumModel::resetCheckedParentAlbums(const QModelIndex& child)
 {
     setDataForParents(child, Qt::Unchecked, Qt::CheckStateRole);
 }
 
-void AbstractCheckableAlbumModel::checkAllParentAlbums(QModelIndex& child)
+void AbstractCheckableAlbumModel::checkAllParentAlbums(const QModelIndex& child)
 {
     setDataForParents(child, Qt::Checked, Qt::CheckStateRole);
 }
 
-void AbstractCheckableAlbumModel::checkAllAlbums(QModelIndex parent)
+void AbstractCheckableAlbumModel::checkAllAlbums(const QModelIndex& parent)
 {
     setDataForChildren(parent, Qt::Checked, Qt::CheckStateRole);
 }
 
-void AbstractCheckableAlbumModel::invertCheckedAlbums(QModelIndex parent)
+void AbstractCheckableAlbumModel::invertCheckedAlbums(const QModelIndex& parent)
 {
     Album* album = albumForIndex(parent);
 
@@ -1067,7 +1067,6 @@ void AbstractCheckableAlbumModel::prepareAddExcludeDecoration(Album* a, QPixmap&
 
     if (state != Qt::Unchecked)
     {
-        kDebug() << d->addExcludeTristate << state;
         int iconSize     = qMax(icon.width(), icon.height());
         int overlay_size = qMin(iconSize, qMax(16, iconSize * 2 / 3));
         QPainter p(&icon);

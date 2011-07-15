@@ -189,10 +189,9 @@ public:
     static void fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* container);
 
     /**
-     * Helper methods to translate enum values to user presentable strings
+     * Helper method to translate enum values to user presentable strings
      */
     static QString formatToString(const QString& format);
-    static QString colorModelToString(DImg::COLORMODEL colorModel);
 
     /**
      * Helper method to return official property name by which

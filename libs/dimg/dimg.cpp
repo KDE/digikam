@@ -1783,7 +1783,7 @@ QPixmap DImg::convertToPixmap() const
 
     if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
     {
-        QImage img(width(), height(), QImage::Format_ARGB32);
+        QImage img(width(), height(), hasAlpha() ? QImage::Format_ARGB32 : QImage::Format_RGB32);
 
         uchar* sptr = bits();
         uint*  dptr = (uint*)img.bits();
@@ -1803,7 +1803,7 @@ QPixmap DImg::convertToPixmap() const
     }
     else
     {
-        QImage img(bits(), width(), height(), QImage::Format_ARGB32);
+        QImage img(bits(), width(), height(), hasAlpha() ? QImage::Format_ARGB32 : QImage::Format_RGB32);
 
         // NOTE: Qt4 do not provide anymore QImage::setAlphaChannel() because
         // alpha channel is auto-detected during QImage->QPixmap conversion
@@ -2823,5 +2823,30 @@ DImageHistory DImg::getOriginalImageHistory() const
     return attribute("originalImageHistory").value<DImageHistory>();
 }
 
+QString DImg::colorModelToString(COLORMODEL colorModel)
+{
+    switch (colorModel)
+    {
+        case RGB:
+            return i18nc("Color Model: RGB", "RGB");
+        case GRAYSCALE:
+            return i18nc("Color Model: Grayscale", "Grayscale");
+        case MONOCHROME:
+            return i18nc("Color Model: Monochrome", "Monochrome");
+        case INDEXED:
+            return i18nc("Color Model: Indexed", "Indexed");
+        case YCBCR:
+            return i18nc("Color Model: YCbCr", "YCbCr");
+        case CMYK:
+            return i18nc("Color Model: CMYK", "CMYK");
+        case CIELAB:
+            return i18nc("Color Model: CIE L*a*b*", "CIE L*a*b*");
+        case COLORMODELRAW:
+            return i18nc("Color Model: Uncalibrated (RAW)", "Uncalibrated (RAW)");
+        case COLORMODELUNKNOWN:
+        default:
+            return i18nc("Color Model: Unknown", "Unknown");
+    }
+}
 
 }  // namespace Digikam

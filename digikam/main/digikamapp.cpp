@@ -223,6 +223,11 @@ DigikamApp::DigikamApp()
     MetadataSettings::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
 
+    // creation of the engine on first use - when drawing -
+    // can take considerable time and cause a noticeable hang in the UI thread.
+    QFontMetrics fm(font());
+    fm.width("a");
+
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
@@ -610,13 +615,13 @@ void DigikamApp::setupAccelerators()
     KAction* nextImageAction = new KAction(i18n("Next Image"), this);
     nextImageAction->setIcon(SmallIcon("go-next"));
     actionCollection()->addAction("next_image", nextImageAction);
-    nextImageAction->setShortcut(KShortcut(Qt::Key_Space, Qt::Key_PageDown));
+    nextImageAction->setShortcut(KShortcut(Qt::Key_Space));
     connect(nextImageAction, SIGNAL(triggered()), this, SIGNAL(signalNextItem()));
 
     KAction* previousImageAction = new KAction(i18n("Previous Image"), this);
     previousImageAction->setIcon(SmallIcon("go-previous"));
     actionCollection()->addAction("previous_image", previousImageAction);
-    previousImageAction->setShortcut(KShortcut(Qt::Key_Backspace, Qt::Key_PageUp));
+    previousImageAction->setShortcut(KShortcut(Qt::Key_Backspace));
     connect(previousImageAction, SIGNAL(triggered()), this, SIGNAL(signalPrevItem()));
 
     KAction* altpreviousImageAction = new KAction(i18n("Previous Image"), this);
@@ -715,12 +720,10 @@ void DigikamApp::setupActions()
     connect(browseActionsMapper, SIGNAL(mapped(QWidget*)),
             d->view, SLOT(slotLeftSideBarActivate(QWidget*)));
 
-    kDebug() << d->view->leftSidebarWidgets();
     foreach (SidebarWidget* leftWidget, d->view->leftSidebarWidgets())
     {
         QString actionName = "browse_" +
                              leftWidget->objectName().remove(' ').remove("Sidebar").remove("FolderView").remove("View").toLower();
-        kDebug() << actionName << leftWidget->objectName();
         KAction* action = new KAction(KIcon(leftWidget->getIcon()), leftWidget->getCaption(), this);
         actionCollection()->addAction(actionName, action);
         connect(action, SIGNAL(triggered()), browseActionsMapper, SLOT(map()));
@@ -3224,8 +3227,9 @@ void DigikamApp::slotResetExifOrientationActions()
 
 void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
 {
-    DMetadata meta(info.fileUrl().toLocalFile());
-    int orientation = (meta.isEmpty()) ? 0 : meta.getImageOrientation();
+    //DMetadata meta(info.fileUrl().toLocalFile());
+    //int orientation = (meta.isEmpty()) ? 0 : meta.getImageOrientation();
+    int orientation = info.orientation();
 
     switch (orientation)
     {
