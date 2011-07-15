@@ -1777,7 +1777,12 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success
     }
 }
 
-void EditorWindow::setOriginAfterSave()
+void EditorWindow::resetOrigin()
+{
+    m_canvas->interface()->setUndoManagerOrigin();
+}
+
+void EditorWindow::resetOriginSwitchFile()
 {
     DImageHistory resolved = resolvedImageHistory(m_canvas->interface()->getImageHistory());
     m_canvas->interface()->switchToLastSaved(resolved);

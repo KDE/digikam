@@ -241,4 +241,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 212 ==> 271622 : Local contrast settings are greyed out.
 213 ==> 274947 : Auto-rotate/flip image does not work at import.
 214 ==> 276450 : Versioning cuts image filenames after the first '.'.
-215 ==> 
+215 ==> 276525 : Image editor offers to save image when quitting even when it has just been saved.
+216 ==> 

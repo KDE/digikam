@@ -1074,6 +1074,8 @@ void ImageWindow::saveIsComplete()
     KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
                          this, windowTitle());
 
+    resetOrigin();
+
     QModelIndex next = d->nextIndex();
 
     if (next.isValid())
@@ -1132,7 +1134,7 @@ void ImageWindow::saveAsIsComplete()
     }
 
     // set origin of DImgInterface: "As if" the last saved image was loaded directly
-    setOriginAfterSave();
+    resetOriginSwitchFile();
 
     // If the DImg is put in the cache under the new name, this means the new file will not be reloaded.
     // This may irritate users who want to check for quality loss in lossy formats.
