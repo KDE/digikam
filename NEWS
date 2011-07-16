@@ -242,4 +242,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 213 ==> 274947 : Auto-rotate/flip image does not work at import.
 214 ==> 276450 : Versioning cuts image filenames after the first '.'.
 215 ==> 276525 : Image editor offers to save image when quitting even when it has just been saved.
-216 ==> 
+216 ==> 276526 : When deleting a picture with Image Editor, it then loads the second next picture.
+217 ==> 
