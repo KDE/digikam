@@ -403,6 +403,11 @@ void DCategorizedView::reset()
     emit selectionCleared();
 
     d->ensureInitialSelectedItem = true;
+    d->hintAtScrollPosition      = QModelIndex();
+    d->hintAtSelectionIndex      = QModelIndex();
+    d->hintAtSelectionRow        = -1;
+    verticalScrollBar()->setValue(verticalScrollBar()->minimum());
+    horizontalScrollBar()->setValue(horizontalScrollBar()->minimum());
 }
 
 void DCategorizedView::selectionChanged(const QItemSelection& selectedItems, const QItemSelection& deselectedItems)
@@ -431,6 +436,12 @@ void DCategorizedView::rowsInserted(const QModelIndex& parent, int start, int en
 
 QModelIndex DCategorizedView::DCategorizedViewPriv::scrollPositionHint() const
 {
+    if (!q->verticalScrollBar()->isVisible()
+        || q->verticalScrollBar()->value() == q->verticalScrollBar()->minimum())
+    {
+        return QModelIndex();
+    }
+
     QModelIndex hint = q->currentIndex();
 
     // If the user scrolled, dont take current item, but first visible
@@ -545,10 +556,9 @@ void DCategorizedView::layoutWasChanged()
 {
     // connected queued to layoutChanged()
     ensureSelectionAfterChanges();
-
     if (d->hintAtScrollPosition.isValid())
     {
-        scrollToRelaxed(d->hintAtScrollPosition, QAbstractItemView::PositionAtTop);
+        scrollToRelaxed(d->hintAtScrollPosition);
         d->hintAtScrollPosition = QModelIndex();
     }
     else
@@ -898,7 +908,10 @@ void DCategorizedView::resizeEvent(QResizeEvent* e)
     QModelIndex oldPosition = d->scrollPositionHint();
     DigikamKCategorizedView::resizeEvent(e);
     updateDelegateSizes();
-    scrollTo(oldPosition, QAbstractItemView::PositionAtTop);
+    if (oldPosition.isValid())
+    {
+        scrollTo(oldPosition, QAbstractItemView::PositionAtTop);
+    }
 }
 
 bool DCategorizedView::viewportEvent(QEvent* event)
