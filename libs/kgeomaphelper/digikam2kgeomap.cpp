@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-01-06
- * Description : Helper functions for libkmap interaction
+ * Description : Helper functions for libkgeomap interaction
  *
  * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "digikam2kmap.moc"
+#include "digikam2kgeomap.moc"
 
 // Qt includes
 
@@ -34,9 +34,9 @@
 #include <kaction.h>
 #include <klocale.h>
 
-// libkmap includes
+// libkgeomap includes
 
-#include <libkmap/kmap_widget.h>
+#include <libkgeomap/kgeomap_widget.h>
 
 // digiKam includes
 
@@ -60,7 +60,7 @@ public:
     {
     }
 
-    QList<QPointer<KMap::KMapWidget> > mapWidgets;
+    QList<QPointer<KGeoMap::KGeoMapWidget> > mapWidgets;
     GPSImageInfoSorter::SortOptions    sortOrder;
     QPointer<QMenu>                    sortMenu;
     KAction*                           sortActionOldestFirst;
@@ -84,9 +84,9 @@ GPSImageInfoSorter::~GPSImageInfoSorter()
     delete d;
 }
 
-bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const KMap::KMapGroupState oldState,
-                                    const GPSImageInfo& newInfo, const KMap::KMapGroupState newState,
-                                    const KMap::KMapGroupState globalGroupState, const SortOptions sortOptions)
+bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const KGeoMap::KGeoMapGroupState oldState,
+                                    const GPSImageInfo& newInfo, const KGeoMap::KGeoMapGroupState newState,
+                                    const KGeoMap::KGeoMapGroupState globalGroupState, const SortOptions sortOptions)
 {
     // the best index for a tile is determined like this:
     // region selected? -> prefer region selected markers
@@ -97,10 +97,10 @@ bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const KMap::KMa
     // next -> prefer the image with the higher image id
 
     // region selection part:
-    if (globalGroupState & KMap::KMapRegionSelectedMask)
+    if (globalGroupState & KGeoMap::KGeoMapRegionSelectedMask)
     {
-        const bool oldIsRegionSelected = oldState & KMap::KMapRegionSelectedMask;
-        const bool newIsRegionSelected = newState & KMap::KMapRegionSelectedMask;
+        const bool oldIsRegionSelected = oldState & KGeoMap::KGeoMapRegionSelectedMask;
+        const bool newIsRegionSelected = newState & KGeoMap::KGeoMapRegionSelectedMask;
 
         if (oldIsRegionSelected != newIsRegionSelected)
         {
@@ -109,10 +109,10 @@ bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const KMap::KMa
     }
 
     // positive filtering part:
-    if (globalGroupState & KMap::KMapFilteredPositiveMask)
+    if (globalGroupState & KGeoMap::KGeoMapFilteredPositiveMask)
     {
-        const bool oldIsFilteredPositive = oldState & KMap::KMapFilteredPositiveMask;
-        const bool newIsFilteredPositive = newState & KMap::KMapFilteredPositiveMask;
+        const bool oldIsFilteredPositive = oldState & KGeoMap::KGeoMapFilteredPositiveMask;
+        const bool newIsFilteredPositive = newState & KGeoMap::KGeoMapFilteredPositiveMask;
 
         if (oldIsFilteredPositive != newIsFilteredPositive)
         {
@@ -172,11 +172,11 @@ bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const KMap::KMa
     return oldInfo.id > newInfo.id;
 }
 
-void GPSImageInfoSorter::addToKMapWidget(KMap::KMapWidget* const mapWidget)
+void GPSImageInfoSorter::addToKGeoMapWidget(KGeoMap::KGeoMapWidget* const mapWidget)
 {
     initializeSortMenu();
 
-    d->mapWidgets << QPointer<KMap::KMapWidget>(mapWidget);
+    d->mapWidgets << QPointer<KGeoMap::KGeoMapWidget>(mapWidget);
     mapWidget->setSortOptionsMenu(d->sortMenu);
 }
 

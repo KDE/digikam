@@ -29,10 +29,10 @@
 #include <QWidget>
 #include <QSortFilterProxyModel>
 
-// libkmap includes
+// libkgeomap includes
 
-#include <libkmap/kmap_primitives.h>
-#include <libkmap/modelhelper.h>
+#include <libkgeomap/kgeomap_primitives.h>
+#include <libkgeomap/modelhelper.h>
 
 // KDE includes
 
@@ -52,7 +52,7 @@ namespace Digikam
 class AlbumWidgetStack;
 class ImageChangeset;
 
-class MapViewModelHelper : public KMap::ModelHelper
+class MapViewModelHelper : public KGeoMap::ModelHelper
 {
     Q_OBJECT
 
@@ -63,7 +63,7 @@ public:
 
     virtual QAbstractItemModel* model() const;
     virtual QItemSelectionModel* selectionModel() const;
-    virtual bool itemCoordinates(const QModelIndex& index, KMap::GeoCoordinates* const coordinates) const;
+    virtual bool itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const;
 
     virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size);
     virtual QPersistentModelIndex bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey);

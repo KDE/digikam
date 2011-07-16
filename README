@@ -93,7 +93,7 @@ libkipi         >= 2.0.0                      http://www.digikam.org/sharedlibs 
 libkexiv2       >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository. Exiv2 >= 0.20.0 shared library recommended.
 libkdcraw       >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository.
 libkface        >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository.
-libkmap         >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository.
+libkgeomap      >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository.
 liblcms         >= 1.17.x                     http://www.littlecms.com                   liblcms >= 2.x not yet compatible.
 libtiff         >= 3.8.2                      http://www.remotesensing.org/libtiff
 libpng          >= 1.2.x                      http://www.libpng.org/pub/png/libpng.html
