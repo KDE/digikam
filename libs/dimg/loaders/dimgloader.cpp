@@ -27,6 +27,8 @@
 // C++ includes
 
 #include <limits>
+#include <new>
+#include <cstddef>
 
 // Qt includes
 
