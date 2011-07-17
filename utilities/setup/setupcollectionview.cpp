@@ -753,6 +753,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                         case CategoryRemote:
                             return i18n("Collections on Network Shares");
                     }
+                    break;
 
                 case Qt::DecorationRole:
 
@@ -765,6 +766,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                         case CategoryRemote:
                             return SmallIcon("network-wired", KIconLoader::SizeMedium);
                     }
+                    break;
 
                 case IsCategoryRole:
                     return true;
