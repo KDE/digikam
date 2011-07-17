@@ -339,6 +339,7 @@ ImageWindow::ImageWindow()
 
     //-------------------------------------------------------------
 
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
     d->rightSideBar->loadState();
     d->rightSideBar->populateTags();
 
@@ -386,6 +387,9 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
     saveMainWindowSettings(group);
     saveSettings();
+
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
+    d->rightSideBar->saveState();
 
     e->accept();
 }
