@@ -1469,7 +1469,9 @@ SqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
                 continue;
             }
             else
-                { return query; }
+            {
+                return query;
+            }
         }
     }
 }
