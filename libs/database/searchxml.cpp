@@ -455,6 +455,7 @@ bool SearchXmlReader::readToStartOfElement(const QString& elementName)
         {
             case StartElement:
                 atStart = true;
+                break;
             default:
                 break;
             case EndDocument:
@@ -475,16 +476,19 @@ bool SearchXmlReader::readToStartOfElement(const QString& elementName)
                 }
 
                 ++stack;
+                break;
             }
             case EndElement:
-
+            {
                 if (!--stack)
                 {
                     return false;
                 }
-
+                break;
+            }
             case EndDocument:
                 return false;
+                break;
             default:
                 break;
         }
@@ -504,15 +508,18 @@ void SearchXmlReader::readToEndOfElement()
             {
                 case StartElement:
                     ++stack;
+                    break;
                 case EndElement:
-
+                {
                     if (!--stack)
                     {
                         return;
                     }
-
+                    break;
+                }
                 case EndDocument:
                     return;
+                    break;
                 default:
                     break;
             }

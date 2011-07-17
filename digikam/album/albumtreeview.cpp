@@ -445,6 +445,7 @@ bool AbstractAlbumTreeView::expandMatches(const QModelIndex& index)
             {
                 return false;
             }
+            break;
 
         case AlbumFilterModel::ParentMatch:
             // Does not rule out additional child match, return value is unknown

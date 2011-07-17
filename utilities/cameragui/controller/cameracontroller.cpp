@@ -757,6 +757,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
         default:
         {
             kWarning() << " unknown action specified";
+            break;
         }
     }
 }

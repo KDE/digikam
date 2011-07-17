@@ -120,11 +120,13 @@ void SharpenTool::slotSettingsChanged()
         {
             d->gboxSettings->enableButton(EditorToolSettings::Load, false);
             d->gboxSettings->enableButton(EditorToolSettings::SaveAs, false);
+            break;
         }
         case SharpContainer::UnsharpMask:
         {
             d->gboxSettings->enableButton(EditorToolSettings::Load, false);
             d->gboxSettings->enableButton(EditorToolSettings::SaveAs, false);
+            break;
         }
         case SharpContainer::Refocus:
         {

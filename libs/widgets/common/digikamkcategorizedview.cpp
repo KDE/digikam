@@ -1556,6 +1556,7 @@ QModelIndex DigikamKCategorizedView::moveCursor(CursorAction cursorAction,
                 int indexToMove = qMax(current.row() - visibleIndexes.size(), 0);
                 return d->proxyModel->index(indexToMove, 0);
             }
+            break;
         }
             // fall through
 
