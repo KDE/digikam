@@ -160,8 +160,6 @@ void DPopupMenu::setMaximumSize(int w, int h)
 
 void DPopupMenu::paintEvent(QPaintEvent* e)
 {
-    KMenu::paintEvent(e);
-
     {
         // scope for QPainter object
         QPainter p(this);
@@ -174,6 +172,8 @@ void DPopupMenu::paintEvent(QPaintEvent* e)
 
         renderSidebarGradient(&p);
     }
+
+    KMenu::paintEvent(e);
 }
 
 void DPopupMenu::renderSidebarGradient(QPainter* p)
