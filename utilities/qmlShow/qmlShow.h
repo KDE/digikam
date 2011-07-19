@@ -26,7 +26,7 @@
 
 #include<QtGui>
 #include<QtDeclarative/QDeclarativeView>
-
+#include<QObject>
 #include "digikam_export.h"
 #include "loadingdescription.h"
 #include"imageinfo.h"
@@ -36,9 +36,18 @@ namespace Digikam
 class Imageinfo;
 class QmlShow : public QMainWindow
 {
+	Q_OBJECT
 	public:
-	QmlShow(QList<ImageInfo>);
+	QmlShow(QList<QString>*);
 	~QmlShow();
+	int imageno;
+	QList<QString> *list;
+	public slots:
+        void nextImage();
+        void prevImage();
+        void pause();
+        void play();
+
 	private:
 	QDeclarativeView *ui;
 };
