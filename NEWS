@@ -244,5 +244,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 215 ==> 276525 : Image editor offers to save image when quitting even when it has just been saved.
 216 ==> 276526 : When deleting a picture with Image Editor, it then loads the second next picture.
 217 ==> 274388 : digiKam right click menu does not show any text.
-218 ==> 
+218 ==> 277927 : Demosaicing (GUI) makes Xorg take 30% CPU.
+219 ==> 
+
 
