@@ -436,8 +436,7 @@ void DCategorizedView::rowsInserted(const QModelIndex& parent, int start, int en
 
 QModelIndex DCategorizedView::DCategorizedViewPriv::scrollPositionHint() const
 {
-    if (!q->verticalScrollBar()->isVisible()
-        || q->verticalScrollBar()->value() == q->verticalScrollBar()->minimum())
+    if (q->verticalScrollBar()->value() == q->verticalScrollBar()->minimum())
     {
         return QModelIndex();
     }
@@ -908,10 +907,7 @@ void DCategorizedView::resizeEvent(QResizeEvent* e)
     QModelIndex oldPosition = d->scrollPositionHint();
     DigikamKCategorizedView::resizeEvent(e);
     updateDelegateSizes();
-    if (oldPosition.isValid())
-    {
-        scrollTo(oldPosition, QAbstractItemView::PositionAtTop);
-    }
+    scrollTo(oldPosition, QAbstractItemView::PositionAtTop);
 }
 
 bool DCategorizedView::viewportEvent(QEvent* event)
