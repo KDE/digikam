@@ -3,12 +3,15 @@ import QtWebKit 1.0
 
 
 Rectangle {
+	id:rect
     width: 500
-    height: 300
-
-
-
-
+    height: 30     
+property string text: "matrix.jpg"
+signal nextClicked;
+signal prevClicked;
+signal play;
+signal pause;
+property bool bool_pp: true;
     Image {
         id: circle_image
         x: 0
@@ -34,8 +37,8 @@ Rectangle {
             {
                 id: flip_icon
                 anchors.fill: parent
-                onClicked: { if (parent.src == "pause.png") parent.src = "play.png"
-                    else parent.src= "pause.png";
+                onClicked: { if (parent.src == "pause.png") {parent.src = "play.png"; rect.pause();}
+                    else {parent.src= "pause.png";rect.play();};
                 }
             }
         }
@@ -49,6 +52,11 @@ Rectangle {
             rotation: 0
             z: 12
             source: "next.png"
+		MouseArea
+		{
+			anchors.fill: parent;
+			onClicked: rect.nextClicked();
+		}
         }
 
         Image {
@@ -60,6 +68,11 @@ Rectangle {
             rotation: 0
             z: 12
             source: "previous.png"
+		MouseArea
+		{
+			anchors.fill:parent;
+			onClicked: rect.prevClicked();
+		}
         }
 
         Image {
@@ -127,30 +140,31 @@ Rectangle {
         y: 0
         width: parent.width
         height: parent.height
-        source: "./matrix.jpg"
+        source: parent.text
         focus: true
-        MouseArea {
+        Timer
+	{
+	id:timer
+	interval: 6000; running:rect.bool_pp; 
+	repeat: rect.bool_pp;
+         onTriggered: rect.nextClicked();
+	}
+	MouseArea {
             id: view_icons
-            x: 0
-            y: 0
-            anchors.rightMargin: 0
-            anchors.bottomMargin: 0
-            anchors.leftMargin: 0
-            anchors.topMargin: 0
-            hoverEnabled: true
+                hoverEnabled: true
             anchors.fill: parent
             z: 10
             onPositionChanged: { circle_image.visible = true; close.visible = true ; remove_icon.running = true;}
+        }
 
-            Timer
+        Timer
             {
                 id: remove_icon
                 interval: 4000; running: false;
                 onTriggered: {circle_image.visible = false; close.visible = false; }
             }
-        }
-    }
 
+    }
     WebView {
         id: openstreetmap
         x: 0
