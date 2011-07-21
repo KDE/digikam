@@ -6,7 +6,7 @@
  * Date        : 2008-12-17
  * Description : camera icon view tool tip
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class CameraIconViewToolTipPriv
+class CameraIconViewToolTip::CameraIconViewToolTipPriv
 {
 public:
 
@@ -118,7 +118,7 @@ QString CameraIconViewToolTip::tipContents()
     return fillTipContents(info);
 }
 
-QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info)
+QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info) const
 {
     QString            str;
     AlbumSettings*     settings = AlbumSettings::instance();
