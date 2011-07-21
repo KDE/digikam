@@ -661,21 +661,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
             INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun)
             INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex)
+
+            IF(WIN32)
+                INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex)
+            ENDIF(WIN32)
 
             SET(liblensfun_SRCS
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regcomp.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regerror.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regexec.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-ast.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-compile.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-approx.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-backtrack.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-parallel.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-mem.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-parse.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-stack.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/xmalloc.c
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/config-lensfun.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/auxfun.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/camera.cpp
@@ -687,7 +678,25 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mod-subpix.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/modifier.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mount.cpp
-            )
+               )
+
+            # We only need regex with lensfun code under windows where this library do not exist.
+            IF(WIN32)
+                SET(liblensfun_SRCS ${liblensfun_SRCS}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regcomp.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regerror.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regexec.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-ast.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-compile.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-approx.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-backtrack.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-parallel.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-mem.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-parse.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-stack.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/xmalloc.c
+                   )
+            ENDIF(WIN32)
 
         ENDIF(LENSFUN_FOUND)
 
