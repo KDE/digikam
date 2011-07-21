@@ -93,12 +93,12 @@ public:
     QString path()  const;
     QString uuid()  const;
 
-    bool    thumbnailSupport();
-    bool    deleteSupport();
-    bool    uploadSupport();
-    bool    mkDirSupport();
-    bool    delDirSupport();
-    bool    captureImageSupport();
+    bool    thumbnailSupport() const;
+    bool    deleteSupport() const;
+    bool    uploadSupport() const;
+    bool    mkDirSupport() const;
+    bool    delDirSupport() const;
+    bool    captureImageSupport() const;
 
     QString mimeType(const QString& fileext) const;
 
