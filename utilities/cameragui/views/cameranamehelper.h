@@ -59,12 +59,14 @@ private:
         Mode
     };
 
+private:
+
     static QString extractCameraNameToken(const QString& cameraName, int tokenID);
     static QString parseAndFormatCameraName(const QString& cameraName, bool parseMode, bool autoDetected);
     static QString autoDetectedString();
     static QString prepareStringForDeviceComparison(const QString& string, int tokenID);
 };
 
-}
+} // namespace Digikam
 
 #endif /* CAMERANAMEHELPER_H */
