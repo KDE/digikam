@@ -247,6 +247,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 218 ==> 277927 : Demosaicing (GUI) makes Xorg take 30% CPU.
 219 ==> 276059 : Tags are not written to files on export or save when editing TIFF files.
 220 ==> 271710 : Crash when starting after adding 1500 pic + thumbnails.db is 3.9 GB with 4 GB storage capacity.
-221 ==> 
-
+221 ==> 244529 : Crash when writing metadata in files.
+222 ==> 
 
