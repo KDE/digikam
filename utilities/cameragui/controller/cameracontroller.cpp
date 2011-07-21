@@ -96,8 +96,8 @@ public:
         gp_capture
     };
 
-    Action                 action;
-    QMap<QString,QVariant> map;
+    Action                  action;
+    QMap<QString, QVariant> map;
 };
 
 class CameraController::CameraControllerPriv
@@ -229,7 +229,7 @@ CameraController::~CameraController()
     delete d;
 }
 
-bool CameraController::cameraThumbnailSupport()
+bool CameraController::cameraThumbnailSupport() const
 {
     if (!d->camera)
     {
@@ -239,7 +239,7 @@ bool CameraController::cameraThumbnailSupport()
     return d->camera->thumbnailSupport();
 }
 
-bool CameraController::cameraDeleteSupport()
+bool CameraController::cameraDeleteSupport() const
 {
     if (!d->camera)
     {
@@ -249,7 +249,7 @@ bool CameraController::cameraDeleteSupport()
     return d->camera->deleteSupport();
 }
 
-bool CameraController::cameraUploadSupport()
+bool CameraController::cameraUploadSupport() const
 {
     if (!d->camera)
     {
@@ -259,7 +259,7 @@ bool CameraController::cameraUploadSupport()
     return d->camera->uploadSupport();
 }
 
-bool CameraController::cameraMkDirSupport()
+bool CameraController::cameraMkDirSupport() const
 {
     if (!d->camera)
     {
@@ -269,7 +269,7 @@ bool CameraController::cameraMkDirSupport()
     return d->camera->mkDirSupport();
 }
 
-bool CameraController::cameraDelDirSupport()
+bool CameraController::cameraDelDirSupport() const
 {
     if (!d->camera)
     {
@@ -279,7 +279,7 @@ bool CameraController::cameraDelDirSupport()
     return d->camera->delDirSupport();
 }
 
-bool CameraController::cameraCaptureImageSupport()
+bool CameraController::cameraCaptureImageSupport() const
 {
     if (!d->camera)
     {
@@ -289,7 +289,7 @@ bool CameraController::cameraCaptureImageSupport()
     return d->camera->captureImageSupport();
 }
 
-QString CameraController::cameraPath()
+QString CameraController::cameraPath() const
 {
     if (!d->camera)
     {
@@ -299,7 +299,7 @@ QString CameraController::cameraPath()
     return d->camera->path();
 }
 
-QString CameraController::cameraTitle()
+QString CameraController::cameraTitle() const
 {
     if (!d->camera)
     {
@@ -309,7 +309,7 @@ QString CameraController::cameraTitle()
     return d->camera->title();
 }
 
-DKCamera::CameraDriverType CameraController::cameraDriverType()
+DKCamera::CameraDriverType CameraController::cameraDriverType() const
 {
     if (!d->camera)
     {
@@ -319,7 +319,7 @@ DKCamera::CameraDriverType CameraController::cameraDriverType()
     return d->camera->cameraDriverType();
 }
 
-QByteArray CameraController::cameraMD5ID()
+QByteArray CameraController::cameraMD5ID() const
 {
     if (!d->camera)
     {
@@ -329,7 +329,7 @@ QByteArray CameraController::cameraMD5ID()
     return d->camera->cameraMD5ID();
 }
 
-QPixmap CameraController::mimeTypeThumbnail(const QString& itemName)
+QPixmap CameraController::mimeTypeThumbnail(const QString& itemName) const
 {
     if (!d->camera)
     {
@@ -570,7 +570,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
             emit signalDownloaded(folder, file, GPItemInfo::DownloadStarted);
 
             KUrl tempURL(dest);
-            tempURL = tempURL.upUrl();
+            tempURL      = tempURL.upUrl();
             tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()).append(file));
             kDebug() << "Downloading: " << file << " using (" << tempURL << ")";
             QString temp = tempURL.toLocalFile();
@@ -1023,7 +1023,7 @@ void CameraController::addCommand(CameraCommand* cmd)
     d->condVar.wakeAll();
 }
 
-bool CameraController::queueIsEmpty()
+bool CameraController::queueIsEmpty() const
 {
     QMutexLocker lock(&d->mutex);
     return d->commands.isEmpty();
