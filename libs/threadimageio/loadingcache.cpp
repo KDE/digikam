@@ -40,6 +40,7 @@
 
 #include "iccsettings.h"
 #include "kmemoryinfo.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -172,6 +173,7 @@ LoadingCache::LoadingCache()
     // good place to call it here as LoadingCache is a singleton
     qRegisterMetaType<LoadingDescription>("LoadingDescription");
     qRegisterMetaType<DImg>("DImg");
+    qRegisterMetaType<DMetadata>("DMetadata");
 
     connect(IccSettings::instance(), SIGNAL(settingsChanged(const ICCSettingsContainer&, const ICCSettingsContainer&)),
             this, SLOT(iccSettingsChanged(const ICCSettingsContainer&, const ICCSettingsContainer&)));
