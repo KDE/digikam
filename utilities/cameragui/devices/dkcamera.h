@@ -63,7 +63,7 @@ public:
 
     /// If getImageDimensions is false, the camera shall set width and height to -1
     /// if the values are not immediately available
-    virtual bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions = true) = 0;
+    virtual bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList) = 0;
 
     virtual bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) = 0;
     virtual bool getExif(const QString& folder, const QString& itemName, char** edata, int& esize) = 0;
@@ -73,8 +73,7 @@ public:
 
     virtual bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile) = 0;
     virtual bool deleteItem(const QString& folder, const QString& itemName) = 0;
-    virtual bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
-                            GPItemInfo& itemInfo, bool getImageDimensions=true) = 0;
+    virtual bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, GPItemInfo& itemInfo) = 0;
     virtual bool cameraSummary(QString& summary) = 0;
     virtual bool cameraManual(QString& manual) = 0;
     virtual bool cameraAbout(QString& about) = 0;

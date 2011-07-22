@@ -57,7 +57,7 @@ public:
     void getAllFolders(const QString& folder, QStringList& subFolderList);
     bool getSubFolders(const QString& folder, QStringList& subFolderList);
     bool getItemsList(const QString& folder, QStringList& itemsList);
-    bool getItemsInfoList(const QString& folder, GPItemInfoList& items, bool getImageDimensions = true);
+    bool getItemsInfoList(const QString& folder, GPItemInfoList& items);
     bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
     bool getExif(const QString& folder, const QString& itemName, char** edata, int& esize);
 
@@ -69,8 +69,7 @@ public:
     // recursively delete all items
     bool deleteAllItems(const QString& folder);
 
-    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
-                    GPItemInfo& itemInfo, bool getImageDimensions=true);
+    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, GPItemInfo& itemInfo);
 
     bool cameraSummary(QString& summary);
     bool cameraManual(QString& manual);
