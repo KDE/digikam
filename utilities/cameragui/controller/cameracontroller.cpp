@@ -478,7 +478,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             GPItemInfoList itemsList;
 
-            if (!d->camera->getItemsInfoList(folder, itemsList, true))
+            if (!d->camera->getItemsInfoList(folder, itemsList))
             {
                 sendLogMsg(i18n("Failed to list files in %1.", folder), DHistoryView::ErrorEntry);
             }
