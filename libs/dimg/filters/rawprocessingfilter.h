@@ -67,6 +67,8 @@ public:
                         DImgThreadedFilter* master, const DImg& orgImage, const DImg& destImage,
                         int progressBegin=0, int progressEnd=100, const QString& name=QString());
 
+    ~RawProcessingFilter();
+
     /**
      * Set the raw decoding settings. The post processing is carried out here,
      * the libraw settings are needed to construct the FilterAction.
