@@ -46,18 +46,20 @@
 namespace Digikam
 {
 
-class CameraIconItemPriv
+class CameraIconItem::CameraIconItemPriv
 {
 
 public:
 
     CameraIconItemPriv() :
+        hasThumb(false),
         progressCount(0),
         progressTimer(0),
         itemInfo(0)
     {
     }
 
+    bool        hasThumb;
     int         progressCount;         // Position of animation during downloading.
 
     QString     downloadName;
@@ -78,10 +80,11 @@ CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo
                                const QImage& thumbnail, const QString& downloadName)
     : IconItem(parent), d(new CameraIconItemPriv)
 {
-    d->itemInfo      = new GPItemInfo(itemInfo);
+    setItemInfo(itemInfo);
     d->downloadName  = downloadName;
     d->progressTimer = new QTimer(this);
     setThumbnail(thumbnail);
+    d->hasThumb      = false;
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
@@ -96,11 +99,22 @@ CameraIconItem::~CameraIconItem()
 void CameraIconItem::setThumbnail(const QImage& thumbnail)
 {
     d->thumbnail = QPixmap::fromImage(thumbnail);
+    d->hasThumb  = true;
+}
+
+bool CameraIconItem::hasValidThumbnail() const
+{
+    return d->hasThumb;
 }
 
 GPItemInfo* CameraIconItem::itemInfo() const
 {
     return d->itemInfo;
+}
+
+void CameraIconItem::setItemInfo(const GPItemInfo& itemInfo)
+{
+    d->itemInfo = new GPItemInfo(itemInfo);
 }
 
 void CameraIconItem::setDownloadName(const QString& downloadName)

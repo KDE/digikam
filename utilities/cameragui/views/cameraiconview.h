@@ -65,7 +65,9 @@ public:
 
     void addItem(const GPItemInfo& itemInfo);
     void removeItem(const QString& folder, const QString& file);
+
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
+    void setItemInfo(const QString& folder, const QString& filename, const GPItemInfo& itemInfo);
 
     void ensureItemVisible(CameraIconItem* item);
     void ensureItemVisible(const GPItemInfo& itemInfo);

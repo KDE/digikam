@@ -41,8 +41,6 @@
 
 #include "dmetadata.h"
 #include "gpiteminfo.h"
-#include "cameraiconview.h"
-#include "cameraiconitem.h"
 #include "cameraitempropertiestab.h"
 #include "imagepropertiesgpstab.h"
 #include "imagepropertiesmetadatatab.h"
@@ -62,8 +60,6 @@ public:
         itemInfo(0),
         metadataTab(0),
         gpsTab(0),
-        cameraView(0),
-        cameraItem(0),
         cameraItemTab(0)
     {
     }
@@ -72,7 +68,7 @@ public:
     bool                        dirtyCameraItemTab;
     bool                        dirtyGpsTab;
 
-    KUrl                        currentURL;
+    QString                     downloadName;
 
     DMetadata                   metaData;
 
@@ -81,15 +77,13 @@ public:
     ImagePropertiesMetaDataTab* metadataTab;
     ImagePropertiesGPSTab*      gpsTab;
 
-    CameraIconView*             cameraView;
-    CameraIconItem*             cameraItem;
     CameraItemPropertiesTab*    cameraItemTab;
 };
 
 ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* parent,
-        SidebarSplitter* splitter,
-        KMultiTabBarPosition side,
-        bool mimimizedDefault)
+                                                           SidebarSplitter* splitter,
+                                                           KMultiTabBarPosition side,
+                                                           bool mimimizedDefault)
     : Sidebar(parent, splitter, side, mimimizedDefault),
       d(new ImagePropertiesSideBarCamGuiPriv)
 {
@@ -119,38 +113,28 @@ void ImagePropertiesSideBarCamGui::applySettings()
     /// @todo Are load/saveState called by the creator?
 }
 
-void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KUrl& url,
-        const QByteArray& exifData,
-        CameraIconView* view, CameraIconItem* item)
+void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const DMetadata& meta, const QString& downloadName)
 {
     if (!itemInfo)
     {
         return;
     }
 
-    d->metaData.setExif(exifData);
+    d->downloadName       = downloadName;
+    d->metaData           = meta;
     d->itemInfo           = itemInfo;
-    d->currentURL         = url;
     d->dirtyMetadataTab   = false;
     d->dirtyCameraItemTab = false;
     d->dirtyGpsTab        = false;
-    d->cameraView         = view;
-    d->cameraItem         = item;
-
-    if (exifData.isEmpty())
-    {
-        d->metaData = DMetadata(d->currentURL.toLocalFile());
-    }
 
     slotChangedTab(getActiveTab());
 }
 
-void ImagePropertiesSideBarCamGui::slotNoCurrentItem(void)
+void ImagePropertiesSideBarCamGui::slotNoCurrentItem()
 {
     d->itemInfo           = 0;
-    d->cameraItem         = 0;
+    d->downloadName       = QString();
     d->metaData           = DMetadata();
-    d->currentURL         = KUrl();
     d->dirtyMetadataTab   = false;
     d->dirtyCameraItemTab = false;
     d->dirtyGpsTab        = false;
@@ -171,14 +155,7 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
 
     if (tab == d->cameraItemTab && !d->dirtyCameraItemTab)
     {
-        d->cameraItemTab->setCurrentItem(d->itemInfo,
-                                         d->cameraItem->getDownloadName(),
-#if KEXIV2_VERSION >= 0x010000
-                                         d->metaData.getExifEncoded(),
-#else
-                                         d->metaData.getExif(),
-#endif
-                                         d->currentURL);
+        d->cameraItemTab->setCurrentItem(d->itemInfo, d->downloadName, d->metaData);
 
         d->dirtyCameraItemTab = true;
     }
@@ -189,11 +166,11 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     }
     else if (tab == d->gpsTab && !d->dirtyGpsTab)
     {
-        d->gpsTab->setMetadata(d->metaData, d->currentURL);
+        d->gpsTab->setMetadata(d->metaData, d->itemInfo->url());
         d->dirtyGpsTab = true;
     }
 
-    d->gpsTab->setActive(tab==d->gpsTab);
+    d->gpsTab->setActive(tab == d->gpsTab);
 
     unsetCursor();
 }

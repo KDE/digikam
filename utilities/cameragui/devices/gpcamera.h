@@ -36,9 +36,10 @@ namespace Digikam
 {
 
 class GPStatus;
+class DMetadata;
 
-// Gphoto2 camera Implementation of abstract type DKCamera
-
+/** Gphoto2 camera Implementation of abstract type DKCamera
+ */
 class GPCamera : public DKCamera
 {
 
@@ -58,8 +59,10 @@ public:
     bool getSubFolders(const QString& folder, QStringList& subFolderList);
     bool getItemsList(const QString& folder, QStringList& itemsList);
     bool getItemsInfoList(const QString& folder, GPItemInfoList& items);
+    void getItemInfo(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata);
+
     bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
-    bool getExif(const QString& folder, const QString& itemName, char** edata, int& esize);
+    bool getMetadata(const QString& folder, const QString& itemName, DMetadata& meta);
 
     bool setLockItem(const QString& folder, const QString& itemName, bool lock);
 

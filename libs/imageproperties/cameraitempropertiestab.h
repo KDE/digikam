@@ -39,6 +39,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dmetadata.h"
 
 using namespace KDcrawIface;
 
@@ -58,8 +59,7 @@ public:
 
     void setCurrentItem(const GPItemInfo* itemInfo=0,
                         const QString& newFileName=QString(),
-                        const QByteArray& exifData=QByteArray(),
-                        const KUrl& currentURL = KUrl());
+                        const DMetadata& meta = DMetadata());
 
 private:
 

@@ -301,7 +301,6 @@ int CameraIconView::countItemsByFolder(QString folder)
 void CameraIconView::setThumbnail(const QString& folder, const QString& filename, const QImage& image)
 {
     CameraIconItem* item = d->itemDict.value(folder+filename);
-
     if (!item)
     {
         return;
@@ -309,6 +308,17 @@ void CameraIconView::setThumbnail(const QString& folder, const QString& filename
 
     item->setThumbnail(image);
     item->update();
+}
+
+void CameraIconView::setItemInfo(const QString& folder, const QString& filename, const GPItemInfo& itemInfo)
+{
+    CameraIconItem* item = d->itemDict.value(folder+filename);
+    if (!item)
+    {
+        return;
+    }
+
+    item->setItemInfo(itemInfo);
 }
 
 void CameraIconView::ensureItemVisible(CameraIconItem* item)

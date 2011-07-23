@@ -38,6 +38,7 @@
 
 #include "downloadsettingscontainer.h"
 #include "gpiteminfo.h"
+#include "dmetadata.h"
 #include "dkcamera.h"
 #include "dhistoryview.h"
 
@@ -75,14 +76,15 @@ public:
     void listFolders();
     void listFiles(const QString& folder);
     void getFreeSpace();
-    void getExif(const QString& folder, const QString& file);
+    void getMetadata(const QString& folder, const QString& file);
     void getCameraInformation();
     void getPreview();
     void getThumbnail(const QString& folder, const QString& file);
-    /** Get thumbnials for a list of camera item. 'list' is a list of QStringList composed of
-        2 values : item path and item filename.
+
+    /** Get thumbnails for a list of camera item plus advanced information from metadata.
+     *  'list' is a list of QStringList composed of 2 values : item path and item filename.
      */
-    void getThumbnails(const QList<QVariant>& list);
+    void getThumbsInfo(const QList<QVariant>& list);
 
     void downloadPrep();
     void download(const DownloadSettingsContainer& downloadSettings);
@@ -112,10 +114,9 @@ Q_SIGNALS:
     void signalSkipped(const QString& folder, const QString& file);
     void signalDeleted(const QString& folder, const QString& file, bool status);
     void signalLocked(const QString& folder, const QString& file, bool status);
-    void signalThumbnail(const QString& folder, const QString& file, const QImage& thumb);
-    void signalThumbnailFailed(const QString& folder, const QString& file);
-    void signalExifFromFile(const QString& folder, const QString& file);
-    void signalExifData(const QByteArray& exifData);
+    void signalThumbInfo(const QString& folder, const QString& file, const GPItemInfo& itemInfo, const QImage& thumb);
+    void signalThumbInfoFailed(const QString& folder, const QString& file, const GPItemInfo& itemInfo);
+    void signalMetadata(const QString& folder, const QString& file, const DMetadata& exifData);
 
     void signalInternalCheckRename(const QString& folder, const QString& file,
                                    const QString& destination, const QString& temp);

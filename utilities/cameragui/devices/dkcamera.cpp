@@ -27,6 +27,7 @@
 // Local includes
 
 #include "albumsettings.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -153,6 +154,15 @@ QString DKCamera::mimeType(const QString& fileext) const
     }
 
     return mime;
+}
+
+void DKCamera::fillItemInfoFromMetadata(GPItemInfo& info, const DMetadata& meta) const
+{
+    QSize dims     = meta.getImageDimensions();
+    info.mtime     = meta.getImageDateTime();
+    info.width     = dims.width();
+    info.height    = dims.height();
+    info.photoInfo = meta.getPhotographInformation();
 }
 
 }  // namespace Digikam

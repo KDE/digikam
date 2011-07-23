@@ -56,6 +56,7 @@ extern "C"
 // Local includes
 
 #include "config-digikam.h"
+#include "dmetadata.h"
 
 #ifdef HAVE_GPHOTO2
 
@@ -509,7 +510,6 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
 
     delete d->status;
     d->status = 0;
-
     d->status = new GPStatus;
 
     errorCode = gp_camera_capture(d->camera, GP_CAPTURE_IMAGE, &path, d->status->context);
@@ -646,6 +646,7 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
     gp_list_new(&clist);
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus();
 
     errorCode = gp_camera_folder_list_folders(d->camera, QFile::encodeName(folder), clist, d->status->context);
@@ -698,6 +699,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
     const char* cname = 0;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     gp_list_new(&clist);
@@ -754,6 +756,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items)
     const char* cname = 0;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     gp_list_new(&clist);
@@ -875,6 +878,18 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items)
 #endif /* HAVE_GPHOTO2 */
 }
 
+void GPCamera::getItemInfo(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata)
+{
+#ifdef HAVE_GPHOTO2
+
+#else
+    Q_UNUSED(folder);
+    Q_UNUSED(itemName);
+    Q_UNUSED(info);
+    Q_UNUSED(useMetadata);
+#endif /* HAVE_GPHOTO2 */
+}
+
 bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail)
 {
 #ifdef HAVE_GPHOTO2
@@ -886,6 +901,7 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
     gp_file_new(&cfile);
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder),
@@ -928,18 +944,18 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
 #endif /* HAVE_GPHOTO2 */
 }
 
-bool GPCamera::getExif(const QString& folder, const QString& itemName,
-                       char** edata, int& esize)
+bool GPCamera::getMetadata(const QString& folder, const QString& itemName, DMetadata& meta)
 {
 #ifdef HAVE_GPHOTO2
-    int                errorCode;
-    CameraFile*        cfile = 0;
-    const char*        data  = 0;
-    unsigned long int  size;
+    int               errorCode;
+    CameraFile*       cfile = 0;
+    const char*       data  = 0;
+    unsigned long int size;
 
     gp_file_new(&cfile);
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder),
@@ -970,17 +986,38 @@ bool GPCamera::getExif(const QString& folder, const QString& itemName,
         return false;
     }
 
-    *edata = new char[size];
-    esize  = size;
-    memcpy(*edata, data, size);
+    QByteArray exifData(data, size);
 
     gp_file_unref(cfile);
-    return true;
+
+    // Sometimes, GPhoto2 drivers return complete APP1 JFIF section. Exiv2 cannot
+    // decode (yet) exif metadata from APP1. We will find Exif header to get data at this place
+    // to please with Exiv2...
+
+    kDebug() << "Size of Exif metadata from camera = " << exifData.size();
+    char exifHeader[] = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
+
+    if (!exifData.isEmpty())
+    {
+        int i = exifData.indexOf(*exifHeader);
+
+        if (i != -1)
+        {
+            kDebug() << "Exif header found at position " << i;
+            i = i + sizeof(exifHeader);
+            QByteArray data;
+            data.resize(exifData.size()-i);
+            memcpy(data.data(), exifData.data()+i, data.size());
+            meta.setExif(data);
+            return true;
+        }
+    }
+
+    return false;
 #else
     Q_UNUSED(folder);
     Q_UNUSED(itemName);
-    Q_UNUSED(edata);
-    Q_UNUSED(esize);
+    Q_UNUSED(meta);
     return false;
 #endif /* HAVE_GPHOTO2 */
 }

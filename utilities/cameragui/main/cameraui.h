@@ -48,6 +48,7 @@
 
 #include "gpiteminfo.h"
 #include "dhistoryview.h"
+#include "dmetadata.h"
 #include "camerahistoryupdater.h"
 
 class KFileItem;
@@ -58,6 +59,7 @@ namespace Digikam
 
 class Album;
 class CameraIconItem;
+class IconItem;
 class CollectionLocation;
 class CameraHistoryUpdater;
 
@@ -147,8 +149,10 @@ private Q_SLOTS:
 
     void slotFolderList(const QStringList& folderList);
     void slotFileList(const GPItemInfoList& fileList);
-    void slotThumbnail(const QString&, const QString&, const QImage&);
-    void slotThumbnailFailed(const QString&, const QString&);
+
+    void slotRequestThumbnails(const QList<IconItem*>& list);
+    void slotThumbInfo(const QString&, const QString&, const GPItemInfo&, const QImage&);
+    void slotThumbInfoFailed(const QString&, const QString&, const GPItemInfo&);
     void slotGotKDEPreview(const KFileItem&, const QPixmap&);
     void slotFailedKDEPreview(const KFileItem&);
     void slotKdePreviewFinished(KJob*);
@@ -186,8 +190,7 @@ private Q_SLOTS:
     void slotNewSelection(bool);
     void slotItemsSelected(CameraIconItem* item, bool selected);
 
-    void slotExifFromFile(const QString& folder, const QString& file);
-    void slotExifFromData(const QByteArray& exifData);
+    void slotMetadata(const QString& folder, const QString& file, const DMetadata& meta);
 
     void slotlastPhotoFirst();
 

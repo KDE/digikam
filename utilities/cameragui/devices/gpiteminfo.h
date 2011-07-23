@@ -31,6 +31,10 @@
 #include <QByteArray>
 #include <QDateTime>
 
+// KDE includes
+
+#include <kurl.h>
+
 // Local includes
 
 #include "photoinfocontainer.h"
@@ -53,6 +57,28 @@ public:
         DownloadFailed   = 2,
         DownloadStarted  = 3,
         NewPicture       = 4
+    };
+
+public:
+
+    GPItemInfo()
+    {
+        size             = -1;
+        width            = -1;
+        height           = -1;
+        downloaded       = DownloadUnknown;
+        readPermissions  = -1;
+        writePermissions = -1;
+    };
+
+    ~GPItemInfo(){};
+
+    KUrl url() const
+    {
+        KUrl url;
+        url.addPath(folder);
+        url.setFileName(name);
+        return url;
     };
 
 public:

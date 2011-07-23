@@ -598,6 +598,9 @@ void CameraUI::setupConnections()
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
 
+    connect(d->view, SIGNAL(signalPrepareRepaint(const QList<IconItem*>&)),
+            this, SLOT(slotRequestThumbnails(const QList<IconItem*>&)));
+
     // -------------------------------------------------------------------------
 
     connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
@@ -695,11 +698,11 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalFileList(const GPItemInfoList&)),
             this, SLOT(slotFileList(const GPItemInfoList&)));
 
-    connect(d->controller, SIGNAL(signalThumbnail(const QString&, const QString&, const QImage&)),
-            this, SLOT(slotThumbnail(const QString&, const QString&, const QImage&)));
+    connect(d->controller, SIGNAL(signalThumbInfo(const QString&, const QString&, const GPItemInfo&, const QImage&)),
+            this, SLOT(slotThumbInfo(const QString&, const QString&, const GPItemInfo&, const QImage&)));
 
-    connect(d->controller, SIGNAL(signalThumbnailFailed(const QString&, const QString&)),
-            this, SLOT(slotThumbnailFailed(const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalThumbInfoFailed(const QString&, const QString&, const GPItemInfo&)),
+            this, SLOT(slotThumbInfoFailed(const QString&, const QString&, const GPItemInfo&)));
 
     connect(d->controller, SIGNAL(signalDownloaded(const QString&, const QString&, int)),
             this, SLOT(slotDownloaded(const QString&, const QString&, int)));
@@ -716,11 +719,8 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalLocked(const QString&, const QString&, bool)),
             this, SLOT(slotLocked(const QString&, const QString&, bool)));
 
-    connect(d->controller, SIGNAL(signalExifFromFile(const QString&, const QString&)),
-            this, SLOT(slotExifFromFile(const QString&, const QString&)));
-
-    connect(d->controller, SIGNAL(signalExifData(const QByteArray&)),
-            this, SLOT(slotExifFromData(const QByteArray&)));
+    connect(d->controller, SIGNAL(signalMetadata(const QString&, const QString&, const DMetadata&)),
+            this, SLOT(slotMetadata(const QString&, const QString&, const DMetadata&)));
 
     connect(d->controller, SIGNAL(signalUploaded(const GPItemInfo&)),
             this, SLOT(slotUploaded(const GPItemInfo&)));
@@ -1143,6 +1143,8 @@ void CameraUI::slotRefreshIconViewTimer()
         return;
     }
 
+    kDebug() << "filesToBeAdded count : " << d->filesToBeAdded.count();
+
     if (d->filesToBeAdded.isEmpty())
     {
         return;
@@ -1204,8 +1206,8 @@ void CameraUI::slotRefreshIconViewTimer()
     while (citem)
     {
         CameraIconItem* tempItem = citem;
-        citem = static_cast<CameraIconItem*>(tempItem->nextItem());
-        d->view->removeItem(tempItem->itemInfo()->folder,tempItem->itemInfo()->name);
+        citem                    = static_cast<CameraIconItem*>(tempItem->nextItem());
+        d->view->removeItem(tempItem->itemInfo()->folder, tempItem->itemInfo()->name);
     }
 
     d->historyUpdater->addItems(d->controller->cameraMD5ID(), map);
@@ -1220,13 +1222,9 @@ void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
 
     CHUpdateItemMap _map = map;
 
-    int curr = d->statusProgressBar->progressTotalSteps();
-    d->statusProgressBar->setProgressTotalSteps(curr + map.count());
-
     QMultiMap<QDateTime, GPItemInfo>::iterator it;
     bool lastPhotoFirst = d->lastPhotoFirstAction->isChecked();
     GPItemInfo item;
-    QList<QVariant> itemsList;
 
     it = lastPhotoFirst ? _map.end() : _map.begin();
 
@@ -1239,7 +1237,6 @@ void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
 
         item = *it;
         d->view->addItem(item);
-        itemsList.append(QStringList() << item.folder << item.name);
 
         if (!lastPhotoFirst)
         {
@@ -1247,8 +1244,6 @@ void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
         }
     }
     while ((lastPhotoFirst ? it != _map.begin() : it != _map.end()));
-
-    d->controller->getThumbnails(itemsList);
 }
 
 void CameraUI::slotlastPhotoFirst()
@@ -1277,9 +1272,35 @@ void CameraUI::slotlastPhotoFirst()
     slotRefreshIconView(map);
 }
 
-void CameraUI::slotThumbnail(const QString& folder, const QString& file,
-                             const QImage& thumbnail)
+void CameraUI::slotRequestThumbnails(const QList<IconItem*>& list)
 {
+    if (list.isEmpty()) return;
+
+    QList<QVariant> itemsList;
+    IconItem* item = list.first();
+
+    if (item)
+    {
+        do
+        {
+            CameraIconItem* citem = static_cast<CameraIconItem*>(item);
+            if (!citem->hasValidThumbnail())
+                itemsList.append(QStringList() << citem->itemInfo()->folder << citem->itemInfo()->name);
+
+            item = item->nextItem();
+        }
+        while(item != list.last()->nextItem());
+    }
+
+    d->statusProgressBar->setProgressValue(0);
+    d->statusProgressBar->setProgressTotalSteps(0);
+    d->controller->getThumbsInfo(itemsList);
+}
+
+void CameraUI::slotThumbInfo(const QString& folder, const QString& file, const GPItemInfo& info, const QImage& thumbnail)
+{
+    d->view->setItemInfo(folder, file, info);
+
     if (thumbnail.isNull())
     {
         // This call must be run outside Camera Controller thread.
@@ -1290,17 +1311,15 @@ void CameraUI::slotThumbnail(const QString& folder, const QString& file,
     {
         d->view->setThumbnail(folder, file, thumbnail);
     }
-
-    int curr = d->statusProgressBar->progressValue();
-    d->statusProgressBar->setProgressValue(curr+1);
 }
 
-void CameraUI::slotThumbnailFailed(const QString& folder, const QString& file)
+void CameraUI::slotThumbInfoFailed(const QString& folder, const QString& file, const GPItemInfo& info)
 {
+    d->view->setItemInfo(folder, file, info);
+
     if (d->controller->cameraDriverType() == DKCamera::UMSDriver)
     {
-        KUrl url = KUrl::fromPath(folder + QString("/") + file);
-        d->kdeTodo << url;
+        d->kdeTodo << info.url();
         startKdePreviewJob();
     }
     else
@@ -1309,9 +1328,6 @@ void CameraUI::slotThumbnailFailed(const QString& folder, const QString& file)
         QImage thumb = d->controller->mimeTypeThumbnail(file).toImage();
         d->view->setThumbnail(folder, file, thumb);
     }
-
-    int curr = d->statusProgressBar->progressValue();
-    d->statusProgressBar->setProgressValue(curr+1);
 }
 
 void CameraUI::startKdePreviewJob()
@@ -2102,54 +2118,13 @@ void CameraUI::slotFileView(CameraIconItem* item)
     d->controller->openFile(item->itemInfo()->folder, item->itemInfo()->name);
 }
 
-void CameraUI::slotExifFromFile(const QString& folder, const QString& file)
+void CameraUI::slotMetadata(const QString& folder, const QString& file, const DMetadata& meta)
 {
     CameraIconItem* item = d->view->findItem(folder, file);
-
-    if (!item)
+    if (item)
     {
-        return;
+        d->rightSideBar->itemChanged(item->itemInfo(), meta, item->getDownloadName());
     }
-
-    d->rightSideBar->itemChanged(item->itemInfo(), QString(folder + QLatin1String("/") + file),
-                                 QByteArray(), d->view, item);
-}
-
-void CameraUI::slotExifFromData(const QByteArray& exifData)
-{
-    CameraIconItem* item = dynamic_cast<CameraIconItem*>(d->view->currentItem());
-
-    if (!item)
-    {
-        return;
-    }
-
-    KUrl url(item->itemInfo()->folder + '/' + item->itemInfo()->name);
-
-    // Sometimes, GPhoto2 drivers return complete APP1 JFIF section. Exiv2 cannot
-    // decode (yet) exif metadata from APP1. We will find Exif header to get data at this place
-    // to please with Exiv2...
-
-    kDebug() << "Size of Exif metadata from camera = " << exifData.size();
-    char exifHeader[] = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
-
-    if (!exifData.isEmpty())
-    {
-        int i = exifData.indexOf(*exifHeader);
-
-        if (i != -1)
-        {
-            kDebug() << "Exif header found at position " << i;
-            i = i + sizeof(exifHeader);
-            QByteArray data;
-            data.resize(exifData.size()-i);
-            memcpy(data.data(), exifData.data()+i, data.size());
-            d->rightSideBar->itemChanged(item->itemInfo(), url, data, d->view, item);
-            return;
-        }
-    }
-
-    d->rightSideBar->itemChanged(item->itemInfo(), url, exifData, d->view, item);
 }
 
 void CameraUI::slotNewSelection(bool hasSelection)
@@ -2212,9 +2187,8 @@ void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
         // if selected item is in the list of item which will be deleted, set no current item
         if (!d->currentlyDeleting.contains(item->itemInfo()->folder + item->itemInfo()->name))
         {
-            KUrl url(item->itemInfo()->folder + '/' + item->itemInfo()->name);
-            d->rightSideBar->itemChanged(item->itemInfo(), url, QByteArray(), d->view, item);
-            d->controller->getExif(item->itemInfo()->folder, item->itemInfo()->name);
+            d->rightSideBar->itemChanged(item->itemInfo(), DMetadata(), item->getDownloadName());
+            d->controller->getMetadata(item->itemInfo()->folder, item->itemInfo()->name);
         }
         else
         {

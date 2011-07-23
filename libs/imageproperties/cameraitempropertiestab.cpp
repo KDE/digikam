@@ -41,7 +41,6 @@
 
 // Local includes
 
-#include "dmetadata.h"
 #include "gpiteminfo.h"
 #include "imagepropertiestxtlabel.h"
 
@@ -271,9 +270,7 @@ CameraItemPropertiesTab::~CameraItemPropertiesTab()
     delete d;
 }
 
-void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
-        const QString& newFileName, const QByteArray& exifData,
-        const KUrl& currentURL)
+void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, const QString& newFileName, const DMetadata& meta)
 {
     if (!itemInfo)
     {
@@ -345,15 +342,15 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     d->labelFileIsWritable->setText(str);
 
     if (itemInfo->mtime.isValid())
-        d->labelFileDate->setText(KGlobal::locale()->formatDateTime(itemInfo->mtime,
-                                  KLocale::ShortDate, true));
+    {
+        d->labelFileDate->setText(KGlobal::locale()->formatDateTime(itemInfo->mtime, KLocale::ShortDate, true));
+    }
     else
     {
         d->labelFileDate->setText(unknown);
     }
 
-    str = i18n("%1 (%2)", KIO::convertSize(itemInfo->size),
-               KGlobal::locale()->formatNumber(itemInfo->size, 0));
+    str = i18n("%1 (%2)", KIO::convertSize(itemInfo->size), KGlobal::locale()->formatNumber(itemInfo->size, 0));
     d->labelFileSize->setText(str);
 
     // -- Image Properties --------------------------------------------------
@@ -379,18 +376,16 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     QString mpixels;
     QSize dims;
 
-    if (itemInfo->width == -1 && itemInfo->height == -1 && !currentURL.isEmpty())
+    if (itemInfo->width == -1 && itemInfo->height == -1)
     {
-        DMetadata metaData(currentURL.toLocalFile());
-
         // delayed loading to list faster from UMSCamera
         if (itemInfo->mime == "image/x-raw")
         {
-            dims = metaData.getImageDimensions();
+            dims = meta.getImageDimensions();
         }
         else
         {
-            dims = metaData.getPixelSize();
+            dims = meta.getPixelSize();
         }
     }
     else
@@ -427,9 +422,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     // Note: If something is changed here, please updated albumfiletip section too.
 
     QString unavailable(i18n("<i>unavailable</i>"));
-    DMetadata metaData;
-    metaData.setExif(exifData);
-    PhotoInfoContainer photoInfo = metaData.getPhotographInformation();
+    PhotoInfoContainer photoInfo = meta.getPhotographInformation();
 
     if (photoInfo.isEmpty())
     {
@@ -462,8 +455,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     }
     else
     {
-        str = i18n("%1 (35mm: %2)", photoInfo.focalLength,
-                   photoInfo.focalLength35mm);
+        str = i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35mm);
         d->labelPhotoFocalLength->setText(str);
     }
 

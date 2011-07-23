@@ -66,7 +66,6 @@ extern "C"
 #include "imagewindow.h"
 #include "gpcamera.h"
 #include "umscamera.h"
-#include "dmetadata.h"
 #include "jpegutils.h"
 
 namespace Digikam
@@ -88,8 +87,8 @@ public:
         gp_upload,
         gp_delete,
         gp_lock,
-        gp_thumbnails,
-        gp_exif,
+        gp_thumbsinfo,
+        gp_metadata,
         gp_open,
         gp_freeSpace,
         gp_preview,
@@ -492,7 +491,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::gp_thumbnails):
+        case(CameraCommand::gp_thumbsinfo):
         {
             QList<QVariant> list = cmd->map["list"].toList();
 
@@ -506,49 +505,36 @@ void CameraController::executeCommand(CameraCommand* cmd)
                 QString folder = (*it).toStringList()[0];
                 QString file   = (*it).toStringList()[1];
 
-                sendLogMsg(i18n("Getting thumbnails for %1...", file), DHistoryView::StartingEntry, folder, file);
+                sendLogMsg(i18n("Getting thumbs info for %1...", file), DHistoryView::StartingEntry, folder, file);
+
+                GPItemInfo info;
+                d->camera->getItemInfo(folder, file, info, true);
+
                 QImage thumbnail;
 
                 if (d->camera->getThumbnail(folder, file, thumbnail))
                 {
                     thumbnail = thumbnail.scaled(ThumbnailSize::Huge, ThumbnailSize::Huge, Qt::KeepAspectRatio);
-                    emit signalThumbnail(folder, file, thumbnail);
+                    emit signalThumbInfo(folder, file, info, thumbnail);
                 }
                 else
                 {
-                    emit signalThumbnailFailed(folder, file);
+                    emit signalThumbInfoFailed(folder, file, info);
                 }
             }
 
             break;
         }
-        case(CameraCommand::gp_exif):
+        case(CameraCommand::gp_metadata):
         {
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
 
-            if ( typeid(*(d->camera)) == typeid(UMSCamera) )
-            {
-                emit signalExifFromFile(folder, file);
-            }
-            else
-            {
-                sendLogMsg(i18n("Getting EXIF information for %1...", file), DHistoryView::StartingEntry, folder, file);
+            sendLogMsg(i18n("Getting Metadata for %1...", file), DHistoryView::StartingEntry, folder, file);
 
-                char* edata = 0;
-                int   esize = 0;
-                d->camera->getExif(folder, file, &edata, esize);
-
-                if (edata || esize)
-                {
-                    QByteArray  ba;
-                    QDataStream ds(&ba, QIODevice::WriteOnly);
-                    ds.writeRawData(edata, esize);
-                    delete [] edata;
-
-                    emit signalExifData(ba);
-                }
-            }
+            DMetadata meta;
+            d->camera->getMetadata(folder, file, meta);
+            emit signalMetadata(folder, file, meta);
 
             break;
         }
@@ -1058,23 +1044,23 @@ void CameraController::getThumbnail(const QString& folder, const QString& file)
 {
     QList<QVariant> list;
     list.append(QStringList() << folder << file);
-    getThumbnails(list);
+    getThumbsInfo(list);
 }
 
-void CameraController::getThumbnails(const QList<QVariant>& list)
+void CameraController::getThumbsInfo(const QList<QVariant>& list)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_thumbnails;
+    cmd->action        = CameraCommand::gp_thumbsinfo;
     cmd->map.insert("list", QVariant(list));
     addCommand(cmd);
 }
 
-void CameraController::getExif(const QString& folder, const QString& file)
+void CameraController::getMetadata(const QString& folder, const QString& file)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_exif;
+    cmd->action        = CameraCommand::gp_metadata;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file",   QVariant(file));
     addCommand(cmd);
