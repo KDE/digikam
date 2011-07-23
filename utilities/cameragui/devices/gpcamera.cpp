@@ -529,8 +529,8 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     itemInfo.name   = QString(path.name);
 
     CameraFileInfo info;
-    errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(itemInfo.folder),
-                                        QFile::encodeName(itemInfo.name), &info,
+    errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(itemInfo.folder).constData(),
+                                        QFile::encodeName(itemInfo.name).constData(), &info,
                                         d->status->context);
 
     if (errorCode != GP_OK)
@@ -649,7 +649,7 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
     d->status = 0;
     d->status = new GPStatus();
 
-    errorCode = gp_camera_folder_list_folders(d->camera, QFile::encodeName(folder), clist, d->status->context);
+    errorCode = gp_camera_folder_list_folders(d->camera, QFile::encodeName(folder).constData(), clist, d->status->context);
 
     if (errorCode != GP_OK)
     {
@@ -704,7 +704,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
 
     gp_list_new(&clist);
 
-    errorCode = gp_camera_folder_list_files(d->camera, QFile::encodeName(folder), clist, d->status->context);
+    errorCode = gp_camera_folder_list_files(d->camera, QFile::encodeName(folder).constData(), clist, d->status->context);
 
     if (errorCode != GP_OK)
     {
@@ -928,8 +928,8 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
     d->status = 0;
     d->status = new GPStatus;
 
-    errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder),
-                                   QFile::encodeName(itemName),
+    errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder).constData(),
+                                   QFile::encodeName(itemName).constData(),
                                    GP_FILE_TYPE_PREVIEW,
                                    cfile, d->status->context);
 
@@ -982,8 +982,8 @@ bool GPCamera::getMetadata(const QString& folder, const QString& itemName, DMeta
     d->status = 0;
     d->status = new GPStatus;
 
-    errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder),
-                                   QFile::encodeName(itemName),
+    errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder).constData(),
+                                   QFile::encodeName(itemName).constData(),
                                    GP_FILE_TYPE_EXIF,
                                    cfile, d->status->context);
 
@@ -1084,8 +1084,8 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
 
     d->status = new GPStatus;
 
-    errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder),
-                                   QFile::encodeName(itemName),
+    errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder).constData(),
+                                   QFile::encodeName(itemName).constData(),
                                    GP_FILE_TYPE_NORMAL, cfile,
                                    d->status->context);
 
@@ -1107,7 +1107,7 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
         struct utimbuf ut;
         ut.modtime = mtime;
         ut.actime  = mtime;
-        ::utime(QFile::encodeName(saveFile), &ut);
+        ::utime(QFile::encodeName(saveFile).constData(), &ut);
     }
 
     file.close();
@@ -1134,8 +1134,8 @@ bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool 
     d->status = new GPStatus;
 
     CameraFileInfo info;
-    errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(folder),
-                                        QFile::encodeName(itemName), &info, d->status->context);
+    errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(folder).constData(),
+                                        QFile::encodeName(itemName).constData(), &info, d->status->context);
 
     if (errorCode != GP_OK)
     {
@@ -1165,8 +1165,8 @@ bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool 
     info.preview.fields = GP_FILE_INFO_NONE;
     info.audio.fields   = GP_FILE_INFO_NONE;
 
-    errorCode = gp_camera_file_set_info(d->camera, QFile::encodeName(folder),
-                                        QFile::encodeName(itemName), info, d->status->context);
+    errorCode = gp_camera_file_set_info(d->camera, QFile::encodeName(folder).constData(),
+                                        QFile::encodeName(itemName).constData(), info, d->status->context);
 
     if (errorCode != GP_OK)
     {
@@ -1196,8 +1196,8 @@ bool GPCamera::deleteItem(const QString& folder, const QString& itemName)
     delete d->status;
     d->status = new GPStatus;
 
-    errorCode = gp_camera_file_delete(d->camera, QFile::encodeName(folder),
-                                      QFile::encodeName(itemName),
+    errorCode = gp_camera_file_delete(d->camera, QFile::encodeName(folder).constData(),
+                                      QFile::encodeName(itemName).constData(),
                                       d->status->context);
 
     if (errorCode != GP_OK)
@@ -1248,7 +1248,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
     delete d->status;
     d->status = new GPStatus;
 
-    errorCode = gp_camera_folder_delete_all(d->camera, QFile::encodeName(folder),
+    errorCode = gp_camera_folder_delete_all(d->camera, QFile::encodeName(folder).constData(),
                                             d->status->context);
 
     if (errorCode != GP_OK)
@@ -1284,7 +1284,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
         return false;
     }
 
-    errorCode = gp_file_open(cfile, QFile::encodeName(localFile));
+    errorCode = gp_file_open(cfile, QFile::encodeName(localFile).constData());
 
     if (errorCode != GP_OK)
     {
@@ -1294,7 +1294,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
         return false;
     }
 
-    errorCode = gp_file_set_name(cfile, QFile::encodeName(itemName));
+    errorCode = gp_file_set_name(cfile, QFile::encodeName(itemName).constData());
 
     if (errorCode != GP_OK)
     {
@@ -1308,7 +1308,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     d->status = new GPStatus;
 
     errorCode = gp_camera_folder_put_file(d->camera,
-                                          QFile::encodeName(folder),
+                                          QFile::encodeName(folder).constData(),
                                           cfile,
                                           d->status->context);
 
@@ -1328,8 +1328,8 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     itemInfo.folder = folder;
 
     CameraFileInfo info;
-    errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(folder),
-                                        QFile::encodeName(itemName), &info, d->status->context);
+    errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(folder).constData(),
+                                        QFile::encodeName(itemName).constData(), &info, d->status->context);
 
     if (errorCode != GP_OK)
     {
