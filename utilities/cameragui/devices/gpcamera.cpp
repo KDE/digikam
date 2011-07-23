@@ -1131,6 +1131,7 @@ bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool 
     int errorCode;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     CameraFileInfo info;
@@ -1194,6 +1195,7 @@ bool GPCamera::deleteItem(const QString& folder, const QString& itemName)
     int errorCode;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     errorCode = gp_camera_file_delete(d->camera, QFile::encodeName(folder).constData(),
@@ -1246,6 +1248,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
     }
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     errorCode = gp_camera_folder_delete_all(d->camera, QFile::encodeName(folder).constData(),
@@ -1305,6 +1308,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     }
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     errorCode = gp_camera_folder_put_file(d->camera,
@@ -1429,6 +1433,7 @@ bool GPCamera::cameraSummary(QString& summary)
     CameraText sum;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     errorCode = gp_camera_get_summary(d->camera, &sum, d->status->context);
@@ -1486,6 +1491,7 @@ bool GPCamera::cameraManual(QString& manual)
     CameraText man;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     errorCode = gp_camera_get_manual(d->camera, &man, d->status->context);
@@ -1519,6 +1525,7 @@ bool GPCamera::cameraAbout(QString& about)
     CameraText abt;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     errorCode = gp_camera_get_about(d->camera, &abt, d->status->context);
