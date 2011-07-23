@@ -61,25 +61,11 @@ public:
 
 public:
 
-    GPItemInfo()
-    {
-        size             = -1;
-        width            = -1;
-        height           = -1;
-        downloaded       = DownloadUnknown;
-        readPermissions  = -1;
-        writePermissions = -1;
-    };
+    GPItemInfo();
+    ~GPItemInfo();
 
-    ~GPItemInfo(){};
-
-    KUrl url() const
-    {
-        KUrl url;
-        url.addPath(folder);
-        url.setFileName(name);
-        return url;
-    };
+    bool isNull() const;
+    KUrl url() const;
 
 public:
 

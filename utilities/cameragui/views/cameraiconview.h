@@ -140,8 +140,8 @@ protected:
 
 private:
 
-    QString getTemplatedName(const GPItemInfo* itemInfo);
-    QString getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo* itemInfo);
+    QString getTemplatedName(const GPItemInfo& itemInfo);
+    QString getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo& itemInfo);
     void    uploadItemPopupMenu(const KUrl::List& srcURLs);
 
 private:

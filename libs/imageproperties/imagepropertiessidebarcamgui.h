@@ -58,7 +58,7 @@ public:
 
     void applySettings();
 
-    void itemChanged(GPItemInfo* itemInfo, const DMetadata& meta, const QString& downloadName);
+    void itemChanged(const GPItemInfo& itemInfo, const DMetadata& meta, const QString& downloadName);
 
 public Q_SLOTS:
 

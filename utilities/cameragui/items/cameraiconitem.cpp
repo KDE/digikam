@@ -54,26 +54,25 @@ public:
     CameraIconItemPriv() :
         hasThumb(false),
         progressCount(0),
-        progressTimer(0),
-        itemInfo(0)
+        progressTimer(0)
     {
     }
 
-    bool        hasThumb;
-    int         progressCount;         // Position of animation during downloading.
+    bool       hasThumb;
+    int        progressCount;         // Position of animation during downloading.
 
-    QString     downloadName;
+    QString    downloadName;
 
-    QPixmap     thumbnail;             // Full image size pixmap
-    QPixmap     pixmap;                // Image pixmap adjusted to zoom level.
+    QPixmap    thumbnail;             // Full image size pixmap
+    QPixmap    pixmap;                // Image pixmap adjusted to zoom level.
 
-    QRect       pixRect;
-    QRect       textRect;
-    QRect       extraRect;
+    QRect      pixRect;
+    QRect      textRect;
+    QRect      extraRect;
 
-    QTimer*     progressTimer;
+    QTimer*    progressTimer;
 
-    GPItemInfo* itemInfo;
+    GPItemInfo itemInfo;
 };
 
 CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
@@ -92,7 +91,6 @@ CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo
 
 CameraIconItem::~CameraIconItem()
 {
-    delete d->itemInfo;
     delete d;
 }
 
@@ -107,14 +105,14 @@ bool CameraIconItem::hasValidThumbnail() const
     return d->hasThumb;
 }
 
-GPItemInfo* CameraIconItem::itemInfo() const
-{
-    return d->itemInfo;
-}
-
 void CameraIconItem::setItemInfo(const GPItemInfo& itemInfo)
 {
-    d->itemInfo = new GPItemInfo(itemInfo);
+    d->itemInfo = itemInfo;
+}
+
+GPItemInfo CameraIconItem::itemInfo() const
+{
+    return d->itemInfo;
 }
 
 void CameraIconItem::setDownloadName(const QString& downloadName)
@@ -130,10 +128,10 @@ QString CameraIconItem::getDownloadName() const
 
 void CameraIconItem::setDownloaded(int status)
 {
-    d->itemInfo->downloaded = status;
+    d->itemInfo.downloaded = status;
     d->progressCount        = 0;
 
-    if (d->itemInfo->downloaded == GPItemInfo::DownloadStarted)
+    if (d->itemInfo.downloaded == GPItemInfo::DownloadStarted)
     {
         d->progressTimer->start(500);
     }
@@ -147,18 +145,18 @@ void CameraIconItem::setDownloaded(int status)
 
 bool CameraIconItem::isDownloaded() const
 {
-    return (d->itemInfo->downloaded == GPItemInfo::DownloadedYes);
+    return (d->itemInfo.downloaded == GPItemInfo::DownloadedYes);
 }
 
 void CameraIconItem::toggleLock()
 {
-    if (d->itemInfo->writePermissions == 0)
+    if (d->itemInfo.writePermissions == 0)
     {
-        d->itemInfo->writePermissions = 1;
+        d->itemInfo.writePermissions = 1;
     }
     else
     {
-        d->itemInfo->writePermissions = 0;
+        d->itemInfo.writePermissions = 0;
     }
 
     update();
@@ -248,7 +246,7 @@ void CameraIconItem::paintItem(QPainter* p)
     QFont fn(view->font());
     QRect r(rect());
 
-    QString itemName     = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->itemInfo->name);
+    QString itemName     = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->itemInfo.name);
     QString downloadName = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->downloadName);
 
     calcRect(itemName, downloadName);
@@ -304,7 +302,7 @@ void CameraIconItem::paintItem(QPainter* p)
     // Draw download status icon.
     QPixmap downloaded;
 
-    switch (d->itemInfo->downloaded)
+    switch (d->itemInfo.downloaded)
     {
         case GPItemInfo::NewPicture:
         {
@@ -355,7 +353,7 @@ void CameraIconItem::paintItem(QPainter* p)
     }
 
     // If camera item is locked (read only), draw a "Lock" icon.
-    if (d->itemInfo->writePermissions == 0)
+    if (d->itemInfo.writePermissions == 0)
     {
         QPixmap locked = view->lockedPixmap();
         p->drawPixmap(rect().width() - downloaded.width() - locked.width() - 10, 5, locked);

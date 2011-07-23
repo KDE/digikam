@@ -55,13 +55,14 @@ public:
 
     void    setDownloadName(const QString& downloadName);
     QString getDownloadName() const;
+
     void    setDownloaded(int status);
     bool    isDownloaded() const;
 
-    void    toggleLock();
+    void       setItemInfo(const GPItemInfo& itemInfo);
+    GPItemInfo itemInfo() const;
 
-    void        setItemInfo(const GPItemInfo& itemInfo);
-    GPItemInfo* itemInfo() const;
+    void    toggleLock();
 
     // reimplemented from IconItem
     virtual QRect clickToOpenRect();

@@ -30,6 +30,55 @@
 namespace Digikam
 {
 
+PhotoInfoContainer::PhotoInfoContainer()
+{
+}
+
+PhotoInfoContainer::~PhotoInfoContainer()
+{
+}
+
+bool PhotoInfoContainer::isEmpty() const
+{
+    if (make.isEmpty()            &&
+        model.isEmpty()           &&
+        lens.isEmpty()            &&
+        exposureTime.isEmpty()    &&
+        exposureMode.isEmpty()    &&
+        exposureProgram.isEmpty() &&
+        aperture.isEmpty()        &&
+        focalLength.isEmpty()     &&
+        focalLength35mm.isEmpty() &&
+        sensitivity.isEmpty()     &&
+        flash.isEmpty()           &&
+        whiteBalance.isEmpty()    &&
+        !dateTime.isValid() )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool PhotoInfoContainer::isNull() const
+{
+    return(make.isNull()            &&
+           model.isNull()           &&
+           lens.isNull()            &&
+           exposureTime.isNull()    &&
+           exposureMode.isNull()    &&
+           exposureProgram.isNull() &&
+           aperture.isNull()        &&
+           focalLength.isNull()     &&
+           focalLength35mm.isNull() &&
+           sensitivity.isNull()     &&
+           flash.isNull()           &&
+           whiteBalance.isNull()    &&
+           dateTime.isNull());
+}
+
 QDataStream& operator<<(QDataStream& ds, const PhotoInfoContainer& info)
 {
     ds << info.make;

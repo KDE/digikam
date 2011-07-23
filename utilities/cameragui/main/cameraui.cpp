@@ -1180,8 +1180,8 @@ void CameraUI::slotRefreshIconViewTimer()
 
     while (citem)
     {
-        info.setFile(citem->itemInfo()->name);
-        map.insertMulti(citem->itemInfo()->mtime, *citem->itemInfo());
+        info.setFile(citem->itemInfo().name);
+        map.insertMulti(citem->itemInfo().mtime, citem->itemInfo());
         citem = static_cast<CameraIconItem*>(citem->nextItem());
     }
 
@@ -1207,7 +1207,7 @@ void CameraUI::slotRefreshIconViewTimer()
     {
         CameraIconItem* tempItem = citem;
         citem                    = static_cast<CameraIconItem*>(tempItem->nextItem());
-        d->view->removeItem(tempItem->itemInfo()->folder, tempItem->itemInfo()->name);
+        d->view->removeItem(tempItem->itemInfo().folder, tempItem->itemInfo().name);
     }
 
     d->historyUpdater->addItems(d->controller->cameraMD5ID(), map);
@@ -1256,8 +1256,8 @@ void CameraUI::slotlastPhotoFirst()
 
     while (item)
     {
-        info.setFile(item->itemInfo()->name);
-        map.insertMulti(item->itemInfo()->mtime, *item->itemInfo());
+        info.setFile(item->itemInfo().name);
+        map.insertMulti(item->itemInfo().mtime, item->itemInfo());
         item = dynamic_cast<CameraIconItem*>(item->nextItem());
     }
 
@@ -1265,7 +1265,7 @@ void CameraUI::slotlastPhotoFirst()
 
     while (item)
     {
-        d->view->removeItem(item->itemInfo()->folder,item->itemInfo()->name);
+        d->view->removeItem(item->itemInfo().folder,item->itemInfo().name);
         item = dynamic_cast<CameraIconItem*>(item->nextItem());
     }
 
@@ -1285,7 +1285,7 @@ void CameraUI::slotRequestThumbnails(const QList<IconItem*>& list)
         {
             CameraIconItem* citem = static_cast<CameraIconItem*>(item);
             if (!citem->hasValidThumbnail())
-                itemsList.append(QStringList() << citem->itemInfo()->folder << citem->itemInfo()->name);
+                itemsList.append(QStringList() << citem->itemInfo().folder << citem->itemInfo().name);
 
             item = item->nextItem();
         }
@@ -1583,7 +1583,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     {
         CameraIconItem* iconItem = static_cast<CameraIconItem*>(firstItem);
 
-        QDateTime dateTime = iconItem->itemInfo()->mtime;
+        QDateTime dateTime = iconItem->itemInfo().mtime;
 
         switch (d->folderDateFormat->currentIndex())
         {
@@ -1696,10 +1696,10 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         }
 
         CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
-        downloadSettings.folder  = iconItem->itemInfo()->folder;
-        downloadSettings.file    = iconItem->itemInfo()->name;
+        downloadSettings.folder  = iconItem->itemInfo().folder;
+        downloadSettings.file    = iconItem->itemInfo().name;
         downloadName             = iconItem->getDownloadName();
-        dateTime                 = iconItem->itemInfo()->mtime;
+        dateTime                 = iconItem->itemInfo().mtime;
 
         KUrl downloadUrl(url);
         QString errMsg;
@@ -1855,9 +1855,9 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
             d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
 
             DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
-                                           iconItem->itemInfo()->name,
-                                           iconItem->itemInfo()->size,
-                                           iconItem->itemInfo()->mtime);
+                                           iconItem->itemInfo().name,
+                                           iconItem->itemInfo().size,
+                                           iconItem->itemInfo().mtime);
         }
     }
 
@@ -1908,9 +1908,9 @@ void CameraUI::slotMarkAsDownloaded()
             iconItem->setDownloaded(GPItemInfo::DownloadedYes);
 
             DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
-                                           iconItem->itemInfo()->name,
-                                           iconItem->itemInfo()->size,
-                                           iconItem->itemInfo()->mtime);
+                                           iconItem->itemInfo().name,
+                                           iconItem->itemInfo().size,
+                                           iconItem->itemInfo().mtime);
         }
     }
 }
@@ -1927,9 +1927,9 @@ void CameraUI::slotToggleLock()
 
         if (iconItem->isSelected())
         {
-            QString folder = iconItem->itemInfo()->folder;
-            QString file   = iconItem->itemInfo()->name;
-            int writePerm  = iconItem->itemInfo()->writePermissions;
+            QString folder = iconItem->itemInfo().folder;
+            QString file   = iconItem->itemInfo().name;
+            int writePerm  = iconItem->itemInfo().writePermissions;
             bool lock      = true;
 
             // If item is currently locked, unlock it.
@@ -1973,17 +1973,17 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
 void CameraUI::checkItem4Deletion(CameraIconItem* iconItem, QStringList& folders, QStringList& files,
                                   QStringList& deleteList, QStringList& lockedList)
 {
-    if (iconItem->itemInfo()->writePermissions != 0)  // Item not locked ?
+    if (iconItem->itemInfo().writePermissions != 0)  // Item not locked ?
     {
-        QString folder = iconItem->itemInfo()->folder;
-        QString file   = iconItem->itemInfo()->name;
+        QString folder = iconItem->itemInfo().folder;
+        QString file   = iconItem->itemInfo().name;
         folders.append(folder);
         files.append(file);
         deleteList.append(folder + QString("/") + file);
     }
     else
     {
-        lockedList.append(iconItem->itemInfo()->name);
+        lockedList.append(iconItem->itemInfo().name);
     }
 }
 
@@ -2115,7 +2115,7 @@ void CameraUI::slotFileView()
 
 void CameraUI::slotFileView(CameraIconItem* item)
 {
-    d->controller->openFile(item->itemInfo()->folder, item->itemInfo()->name);
+    d->controller->openFile(item->itemInfo().folder, item->itemInfo().name);
 }
 
 void CameraUI::slotMetadata(const QString& folder, const QString& file, const DMetadata& meta)
@@ -2185,10 +2185,10 @@ void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
     if (selected)
     {
         // if selected item is in the list of item which will be deleted, set no current item
-        if (!d->currentlyDeleting.contains(item->itemInfo()->folder + item->itemInfo()->name))
+        if (!d->currentlyDeleting.contains(item->itemInfo().folder + item->itemInfo().name))
         {
             d->rightSideBar->itemChanged(item->itemInfo(), DMetadata(), item->getDownloadName());
-            d->controller->getMetadata(item->itemInfo()->folder, item->itemInfo()->name);
+            d->controller->getMetadata(item->itemInfo().folder, item->itemInfo().name);
         }
         else
         {

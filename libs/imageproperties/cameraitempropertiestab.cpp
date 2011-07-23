@@ -41,7 +41,6 @@
 
 // Local includes
 
-#include "gpiteminfo.h"
 #include "imagepropertiestxtlabel.h"
 
 namespace Digikam
@@ -270,9 +269,9 @@ CameraItemPropertiesTab::~CameraItemPropertiesTab()
     delete d;
 }
 
-void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, const QString& newFileName, const DMetadata& meta)
+void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo& itemInfo, const QString& newFileName, const DMetadata& meta)
 {
-    if (!itemInfo)
+    if (itemInfo.isNull())
     {
         d->labelFile->setText(QString());
         d->labelFolder->setText(QString());
@@ -308,14 +307,14 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, const Q
 
     // -- Camera file system information ------------------------------------------
 
-    d->labelFile->setText(itemInfo->name);
-    d->labelFolder->setText(itemInfo->folder);
+    d->labelFile->setText(itemInfo.name);
+    d->labelFolder->setText(itemInfo.folder);
 
-    if (itemInfo->readPermissions < 0)
+    if (itemInfo.readPermissions < 0)
     {
         str = unknown;
     }
-    else if (itemInfo->readPermissions == 0)
+    else if (itemInfo.readPermissions == 0)
     {
         str = i18n("No");
     }
@@ -326,11 +325,11 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, const Q
 
     d->labelFileIsReadable->setText(str);
 
-    if (itemInfo->writePermissions < 0)
+    if (itemInfo.writePermissions < 0)
     {
         str = unknown;
     }
-    else if (itemInfo->writePermissions == 0)
+    else if (itemInfo.writePermissions == 0)
     {
         str = i18n("No");
     }
@@ -341,27 +340,27 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, const Q
 
     d->labelFileIsWritable->setText(str);
 
-    if (itemInfo->mtime.isValid())
+    if (itemInfo.mtime.isValid())
     {
-        d->labelFileDate->setText(KGlobal::locale()->formatDateTime(itemInfo->mtime, KLocale::ShortDate, true));
+        d->labelFileDate->setText(KGlobal::locale()->formatDateTime(itemInfo.mtime, KLocale::ShortDate, true));
     }
     else
     {
         d->labelFileDate->setText(unknown);
     }
 
-    str = i18n("%1 (%2)", KIO::convertSize(itemInfo->size), KGlobal::locale()->formatNumber(itemInfo->size, 0));
+    str = i18n("%1 (%2)", KIO::convertSize(itemInfo.size), KGlobal::locale()->formatNumber(itemInfo.size, 0));
     d->labelFileSize->setText(str);
 
     // -- Image Properties --------------------------------------------------
 
-    if (itemInfo->mime == "image/x-raw")
+    if (itemInfo.mime == "image/x-raw")
     {
         d->labelImageMime->setText(i18n("RAW Image"));
     }
     else
     {
-        KMimeType::Ptr mimeType = KMimeType::mimeType(itemInfo->mime, KMimeType::ResolveAliases);
+        KMimeType::Ptr mimeType = KMimeType::mimeType(itemInfo.mime, KMimeType::ResolveAliases);
 
         if (mimeType)
         {
@@ -369,17 +368,17 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, const Q
         }
         else
         {
-            d->labelImageMime->setText(itemInfo->mime);    // last fallback
+            d->labelImageMime->setText(itemInfo.mime);    // last fallback
         }
     }
 
     QString mpixels;
     QSize dims;
 
-    if (itemInfo->width == -1 && itemInfo->height == -1)
+    if (itemInfo.width == -1 && itemInfo.height == -1)
     {
         // delayed loading to list faster from UMSCamera
-        if (itemInfo->mime == "image/x-raw")
+        if (itemInfo.mime == "image/x-raw")
         {
             dims = meta.getImageDimensions();
         }
@@ -391,7 +390,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, const Q
     else
     {
         // if available (GPCamera), take dimensions directly from itemInfo
-        dims = QSize(itemInfo->width, itemInfo->height);
+        dims = QSize(itemInfo.width, itemInfo.height);
     }
 
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
@@ -403,11 +402,11 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo, const Q
 
     d->labelNewFileName->setText(newFileName.isEmpty() ? i18n("<i>unchanged</i>") : newFileName);
 
-    if (itemInfo->downloaded == GPItemInfo::DownloadUnknown)
+    if (itemInfo.downloaded == GPItemInfo::DownloadUnknown)
     {
         str = unknown;
     }
-    else if (itemInfo->downloaded == GPItemInfo::DownloadedYes)
+    else if (itemInfo.downloaded == GPItemInfo::DownloadedYes)
     {
         str = i18n("Yes");
     }

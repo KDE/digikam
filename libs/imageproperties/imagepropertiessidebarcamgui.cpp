@@ -57,7 +57,6 @@ public:
         dirtyMetadataTab(false),
         dirtyCameraItemTab(false),
         dirtyGpsTab(false),
-        itemInfo(0),
         metadataTab(0),
         gpsTab(0),
         cameraItemTab(0)
@@ -72,7 +71,7 @@ public:
 
     DMetadata                   metaData;
 
-    GPItemInfo*                 itemInfo;
+    GPItemInfo                  itemInfo;
 
     ImagePropertiesMetaDataTab* metadataTab;
     ImagePropertiesGPSTab*      gpsTab;
@@ -113,9 +112,9 @@ void ImagePropertiesSideBarCamGui::applySettings()
     /// @todo Are load/saveState called by the creator?
 }
 
-void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const DMetadata& meta, const QString& downloadName)
+void ImagePropertiesSideBarCamGui::itemChanged(const GPItemInfo& itemInfo, const DMetadata& meta, const QString& downloadName)
 {
-    if (!itemInfo)
+    if (itemInfo.isNull())
     {
         return;
     }
@@ -132,7 +131,7 @@ void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const DMeta
 
 void ImagePropertiesSideBarCamGui::slotNoCurrentItem()
 {
-    d->itemInfo           = 0;
+    d->itemInfo           = GPItemInfo();
     d->downloadName       = QString();
     d->metaData           = DMetadata();
     d->dirtyMetadataTab   = false;
@@ -146,7 +145,7 @@ void ImagePropertiesSideBarCamGui::slotNoCurrentItem()
 
 void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
 {
-    if (!d->itemInfo)
+    if (d->itemInfo.isNull())
     {
         return;
     }
@@ -161,12 +160,12 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     }
     else if (tab == d->metadataTab && !d->dirtyMetadataTab)
     {
-        d->metadataTab->setCurrentData(d->metaData, d->itemInfo->name);
+        d->metadataTab->setCurrentData(d->metaData, d->itemInfo.name);
         d->dirtyMetadataTab = true;
     }
     else if (tab == d->gpsTab && !d->dirtyGpsTab)
     {
-        d->gpsTab->setMetadata(d->metaData, d->itemInfo->url());
+        d->gpsTab->setMetadata(d->metaData, d->itemInfo.url());
         d->dirtyGpsTab = true;
     }
 
