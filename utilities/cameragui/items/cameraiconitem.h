@@ -45,19 +45,15 @@ class CameraIconItem : public IconItem
 
 public:
 
-    CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
-                   const QImage& thumbnail,
-                   const QString& downloadName=QString());
+    CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo, const QImage& thumbnail);
     ~CameraIconItem();
 
-    void    setThumbnail(const QImage& thumbnail);
-    bool    hasValidThumbnail() const;
+    void       setThumbnail(const QImage& thumbnail);
+    bool       hasValidThumbnail() const;
 
-    void    setDownloadName(const QString& downloadName);
-    QString getDownloadName() const;
-
-    void    setDownloaded(int status);
-    bool    isDownloaded() const;
+    void       setDownloadName(const QString& downloadName);
+    void       setDownloaded(int status);
+    bool       isDownloaded() const;
 
     void       setItemInfo(const GPItemInfo& itemInfo);
     GPItemInfo itemInfo() const;
@@ -73,7 +69,7 @@ protected:
 
 private:
 
-    void calcRect(const QString& itemName, const QString& downloadName);
+    void calcRect(const QString& itemName, const QString& newName);
 
 private Q_SLOTS:
 

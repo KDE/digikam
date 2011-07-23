@@ -57,7 +57,6 @@ public:
     ~CameraItemPropertiesTab();
 
     void setCurrentItem(const GPItemInfo& itemInfo=GPItemInfo(),
-                        const QString& newFileName=QString(),
                         const DMetadata& meta=DMetadata());
 
 private:

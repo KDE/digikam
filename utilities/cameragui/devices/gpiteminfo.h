@@ -69,21 +69,22 @@ public:
 
 public:
 
-    qint64             size;
+    qint64             size;                 // Camera file size in bytes.
 
-    int                width;
-    int                height;
-    int                downloaded;           // See DownloadStatus enum.
-    int                readPermissions;
-    int                writePermissions;
+    int                width;                // Image width in pixels
+    int                height;               // Image height in pixels
+    int                downloaded;           // Download status of camera file. See DownloadStatus enum for details
+    int                readPermissions;      // Read permission of camera file
+    int                writePermissions;     // Write permission of camera file
 
-    QString            name;
-    QString            folder;
-    QString            mime;
+    QString            name;                 // File name in camera file-system
+    QString            folder;               // Folder path to acces to file in camera
+    QString            mime;                 // Type mime of camera file
+    QString            downloadName;         // New file-name to use during download from camera
 
-    QDateTime          mtime;
+    QDateTime          mtime;                // Modified time stamp of camera file
 
-    PhotoInfoContainer photoInfo;
+    PhotoInfoContainer photoInfo;            // Photo Info from camera file (get from file metadata)
 };
 
 QDataStream& operator<<(QDataStream&, const GPItemInfo&);

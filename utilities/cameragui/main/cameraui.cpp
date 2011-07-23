@@ -1698,7 +1698,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
         downloadSettings.folder  = iconItem->itemInfo().folder;
         downloadSettings.file    = iconItem->itemInfo().name;
-        downloadName             = iconItem->getDownloadName();
+        downloadName             = iconItem->itemInfo().downloadName;
         dateTime                 = iconItem->itemInfo().mtime;
 
         KUrl downloadUrl(url);
@@ -2123,7 +2123,7 @@ void CameraUI::slotMetadata(const QString& folder, const QString& file, const DM
     CameraIconItem* item = d->view->findItem(folder, file);
     if (item)
     {
-        d->rightSideBar->itemChanged(item->itemInfo(), meta, item->getDownloadName());
+        d->rightSideBar->itemChanged(item->itemInfo(), meta);
     }
 }
 
@@ -2187,7 +2187,7 @@ void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
         // if selected item is in the list of item which will be deleted, set no current item
         if (!d->currentlyDeleting.contains(item->itemInfo().folder + item->itemInfo().name))
         {
-            d->rightSideBar->itemChanged(item->itemInfo(), DMetadata(), item->getDownloadName());
+            d->rightSideBar->itemChanged(item->itemInfo(), DMetadata());
             d->controller->getMetadata(item->itemInfo().folder, item->itemInfo().name);
         }
         else

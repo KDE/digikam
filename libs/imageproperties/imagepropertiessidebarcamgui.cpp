@@ -67,8 +67,6 @@ public:
     bool                        dirtyCameraItemTab;
     bool                        dirtyGpsTab;
 
-    QString                     downloadName;
-
     DMetadata                   metaData;
 
     GPItemInfo                  itemInfo;
@@ -112,14 +110,13 @@ void ImagePropertiesSideBarCamGui::applySettings()
     /// @todo Are load/saveState called by the creator?
 }
 
-void ImagePropertiesSideBarCamGui::itemChanged(const GPItemInfo& itemInfo, const DMetadata& meta, const QString& downloadName)
+void ImagePropertiesSideBarCamGui::itemChanged(const GPItemInfo& itemInfo, const DMetadata& meta)
 {
     if (itemInfo.isNull())
     {
         return;
     }
 
-    d->downloadName       = downloadName;
     d->metaData           = meta;
     d->itemInfo           = itemInfo;
     d->dirtyMetadataTab   = false;
@@ -132,7 +129,6 @@ void ImagePropertiesSideBarCamGui::itemChanged(const GPItemInfo& itemInfo, const
 void ImagePropertiesSideBarCamGui::slotNoCurrentItem()
 {
     d->itemInfo           = GPItemInfo();
-    d->downloadName       = QString();
     d->metaData           = DMetadata();
     d->dirtyMetadataTab   = false;
     d->dirtyCameraItemTab = false;
@@ -154,7 +150,7 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
 
     if (tab == d->cameraItemTab && !d->dirtyCameraItemTab)
     {
-        d->cameraItemTab->setCurrentItem(d->itemInfo, d->downloadName, d->metaData);
+        d->cameraItemTab->setCurrentItem(d->itemInfo, d->metaData);
 
         d->dirtyCameraItemTab = true;
     }

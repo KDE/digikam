@@ -245,8 +245,10 @@ void CameraIconView::addItem(const GPItemInfo& info)
     //        }
     //    }
 
-    CameraIconItem* item = new CameraIconItem(d->groupItem, info, thumb, downloadName);
-    d->itemDict.insert(info.folder+info.name, item);
+    GPItemInfo newinfo   = info;
+    newinfo.downloadName = downloadName;
+    CameraIconItem* item = new CameraIconItem(d->groupItem, newinfo, thumb);
+    d->itemDict.insert(newinfo.folder + newinfo.name, item);
 }
 
 void CameraIconView::removeItem(const QString& folder, const QString& file)

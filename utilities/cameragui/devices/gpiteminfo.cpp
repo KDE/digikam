@@ -57,7 +57,8 @@ bool GPItemInfo::isNull() const
            folder.isNull()                       &&
            mime.isNull()                         &&
            mtime.isNull()                        &&
-           photoInfo.isNull();
+           photoInfo.isNull()                    &&
+           downloadName.isNull();
 }
 
 KUrl GPItemInfo::url() const
@@ -81,6 +82,7 @@ QDataStream& operator<<(QDataStream& ds, const GPItemInfo& info)
     ds << info.readPermissions;
     ds << info.writePermissions;
     ds << info.photoInfo;
+    ds << info.downloadName;
 
     return ds;
 }
@@ -98,6 +100,7 @@ QDataStream& operator>>(QDataStream& ds, GPItemInfo& info)
     ds >> info.readPermissions;
     ds >> info.writePermissions;
     ds >> info.photoInfo;
+    ds >> info.downloadName;
 
     return ds;
 }

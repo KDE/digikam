@@ -269,7 +269,7 @@ CameraItemPropertiesTab::~CameraItemPropertiesTab()
     delete d;
 }
 
-void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo& itemInfo, const QString& newFileName, const DMetadata& meta)
+void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo& itemInfo, const DMetadata& meta)
 {
     if (itemInfo.isNull())
     {
@@ -400,7 +400,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo& itemInfo, const Q
 
     // -- Download information ------------------------------------------
 
-    d->labelNewFileName->setText(newFileName.isEmpty() ? i18n("<i>unchanged</i>") : newFileName);
+    d->labelNewFileName->setText(itemInfo.downloadName.isEmpty() ? i18n("<i>unchanged</i>") : itemInfo.downloadName);
 
     if (itemInfo.downloaded == GPItemInfo::DownloadUnknown)
     {

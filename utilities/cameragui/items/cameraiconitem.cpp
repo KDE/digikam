@@ -61,8 +61,6 @@ public:
     bool       hasThumb;
     int        progressCount;         // Position of animation during downloading.
 
-    QString    downloadName;
-
     QPixmap    thumbnail;             // Full image size pixmap
     QPixmap    pixmap;                // Image pixmap adjusted to zoom level.
 
@@ -75,15 +73,14 @@ public:
     GPItemInfo itemInfo;
 };
 
-CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
-                               const QImage& thumbnail, const QString& downloadName)
+CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo, const QImage& thumbnail)
     : IconItem(parent), d(new CameraIconItemPriv)
 {
     setItemInfo(itemInfo);
-    d->downloadName  = downloadName;
-    d->progressTimer = new QTimer(this);
     setThumbnail(thumbnail);
+
     d->hasThumb      = false;
+    d->progressTimer = new QTimer(this);
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
@@ -117,19 +114,14 @@ GPItemInfo CameraIconItem::itemInfo() const
 
 void CameraIconItem::setDownloadName(const QString& downloadName)
 {
-    d->downloadName = downloadName;
+    d->itemInfo.downloadName = downloadName;
     update();
-}
-
-QString CameraIconItem::getDownloadName() const
-{
-    return d->downloadName;
 }
 
 void CameraIconItem::setDownloaded(int status)
 {
     d->itemInfo.downloaded = status;
-    d->progressCount        = 0;
+    d->progressCount       = 0;
 
     if (d->itemInfo.downloaded == GPItemInfo::DownloadStarted)
     {
@@ -162,7 +154,7 @@ void CameraIconItem::toggleLock()
     update();
 }
 
-void CameraIconItem::calcRect(const QString& itemName, const QString& downloadName)
+void CameraIconItem::calcRect(const QString& itemName, const QString& newName)
 {
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
     const int border     = 8;
@@ -184,7 +176,7 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& downloadNa
     d->textRect.setWidth(r.width());
     d->textRect.setHeight(r.height());
 
-    if (!d->downloadName.isEmpty())
+    if (!newName.isEmpty())
     {
         QFont fn(iconView()->font());
 
@@ -196,7 +188,7 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& downloadNa
         fm = QFontMetrics(fn);
         r  = QRect(fm.boundingRect(0, 0, thumbSize+(2*border), 0xFFFFFFFF,
                                    Qt::AlignHCenter | Qt::TextWordWrap,
-                                   downloadName));
+                                   newName));
         d->extraRect.setWidth(r.width());
         d->extraRect.setHeight(r.height());
 
@@ -247,7 +239,7 @@ void CameraIconItem::paintItem(QPainter* p)
     QRect r(rect());
 
     QString itemName     = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->itemInfo.name);
-    QString downloadName = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->downloadName);
+    QString downloadName = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->itemInfo.downloadName);
 
     calcRect(itemName, downloadName);
 
@@ -278,7 +270,7 @@ void CameraIconItem::paintItem(QPainter* p)
     p->restore();
     p->drawText(d->textRect, Qt::AlignHCenter|Qt::AlignTop, itemName);
 
-    if (!d->downloadName.isEmpty())
+    if (!downloadName.isEmpty())
     {
         if (fn.pointSize() > 0)
         {
