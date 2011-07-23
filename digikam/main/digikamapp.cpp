@@ -644,11 +644,11 @@ void DigikamApp::setupAccelerators()
     actionCollection()->addAction("cut_album_selection", d->cutItemsAction);
 
     d->copyItemsAction = KStandardAction::copy(this, SIGNAL(signalCopyAlbumItemsSelection()), this);
-    d->cutItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_C));
+    d->copyItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_C));
     actionCollection()->addAction("copy_album_selection", d->copyItemsAction);
 
     d->pasteItemsAction = KStandardAction::paste(this, SIGNAL(signalPasteAlbumItemsSelection()), this);
-    d->cutItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_V));
+    d->pasteItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_V));
     actionCollection()->addAction("paste_album_selection", d->pasteItemsAction);
 }
 
