@@ -761,7 +761,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items)
 
     gp_list_new(&clist);
 
-    errorCode = gp_camera_folder_list_files(d->camera, QFile::encodeName(folder), clist, d->status->context);
+    errorCode = gp_camera_folder_list_files(d->camera, QFile::encodeName(folder).constData(), clist, d->status->context);
 
     if (errorCode != GP_OK)
     {
@@ -789,80 +789,9 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items)
             return false;
         }
 
-        GPItemInfo itemInfo;
-
-        itemInfo.name   = QFile::decodeName(cname);
-        itemInfo.folder = folder;
-
-        CameraFileInfo info;
-        gp_camera_file_get_info(d->camera, QFile::encodeName(folder),
-                                cname, &info, d->status->context);
-
-        itemInfo.mtime            = QDateTime();
-        itemInfo.mime             = "";
-        itemInfo.size             = -1;
-        itemInfo.width            = -1;
-        itemInfo.height           = -1;
-        itemInfo.downloaded       = GPItemInfo::DownloadUnknown;
-        itemInfo.readPermissions  = -1;
-        itemInfo.writePermissions = -1;
-
-        /* The mime type returned by Gphoto2 is dummy with all RAW files.
-        if (info.file.fields & GP_FILE_INFO_TYPE)
-            itemInfo.mime = info.file.type;*/
-
-        itemInfo.mime = mimeType(itemInfo.name.section('.', -1).toLower());
-
-        if (info.file.fields & GP_FILE_INFO_MTIME)
-        {
-            itemInfo.mtime = QDateTime::fromTime_t(info.file.mtime);
-        }
-
-        if (info.file.fields & GP_FILE_INFO_SIZE)
-        {
-            itemInfo.size = info.file.size;
-        }
-
-        if (info.file.fields & GP_FILE_INFO_WIDTH)
-        {
-            itemInfo.width = info.file.width;
-        }
-
-        if (info.file.fields & GP_FILE_INFO_HEIGHT)
-        {
-            itemInfo.height = info.file.height;
-        }
-
-        if (info.file.fields & GP_FILE_INFO_STATUS)
-        {
-            if (info.file.status == GP_FILE_STATUS_DOWNLOADED)
-            {
-                itemInfo.downloaded = GPItemInfo::DownloadedYes;
-            }
-        }
-
-        if (info.file.fields & GP_FILE_INFO_PERMISSIONS)
-        {
-            if (info.file.permissions & GP_FILE_PERM_READ)
-            {
-                itemInfo.readPermissions = 1;
-            }
-            else
-            {
-                itemInfo.readPermissions = 0;
-            }
-
-            if (info.file.permissions & GP_FILE_PERM_DELETE)
-            {
-                itemInfo.writePermissions = 1;
-            }
-            else
-            {
-                itemInfo.writePermissions = 0;
-            }
-        }
-
-        items.append(itemInfo);
+        GPItemInfo info;
+        getItemInfoInternal(folder, QFile::decodeName(cname), info, false);
+        items.append(info);
     }
 
     gp_list_unref(clist);
@@ -881,6 +810,101 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items)
 void GPCamera::getItemInfo(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata)
 {
 #ifdef HAVE_GPHOTO2
+
+    delete d->status;
+    d->status = 0;
+    d->status = new GPStatus;
+
+    getItemInfoInternal(folder, itemName, info, useMetadata);
+
+    delete d->status;
+    d->status = 0;
+
+#else
+    Q_UNUSED(folder);
+    Q_UNUSED(itemName);
+    Q_UNUSED(info);
+    Q_UNUSED(useMetadata);
+#endif /* HAVE_GPHOTO2 */
+}
+
+void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata)
+{
+#ifdef HAVE_GPHOTO2
+    info.folder = folder;
+    info.name   = itemName;
+
+    CameraFileInfo cfinfo;
+    gp_camera_file_get_info(d->camera, QFile::encodeName(info.folder).constData(),
+                            QFile::encodeName(info.name).constData(), &cfinfo, d->status->context);
+
+    if (cfinfo.file.fields & GP_FILE_INFO_STATUS)
+    {
+        if (cfinfo.file.status == GP_FILE_STATUS_DOWNLOADED)
+        {
+            info.downloaded = GPItemInfo::DownloadedYes;
+        }
+    }
+
+    if (cfinfo.file.fields & GP_FILE_INFO_SIZE)
+    {
+        info.size = cfinfo.file.size;
+    }
+
+    if (cfinfo.file.fields & GP_FILE_INFO_PERMISSIONS)
+    {
+        if (cfinfo.file.permissions & GP_FILE_PERM_READ)
+        {
+            info.readPermissions = 1;
+        }
+        else
+        {
+            info.readPermissions = 0;
+        }
+
+        if (cfinfo.file.permissions & GP_FILE_PERM_DELETE)
+        {
+            info.writePermissions = 1;
+        }
+        else
+        {
+            info.writePermissions = 0;
+        }
+    }
+
+    /* The mime type returned by Gphoto2 is dummy with all RAW files.
+        if (cfinfo.file.fields & GP_FILE_INFO_TYPE)
+            info.mime = cfinfo.file.type;
+    */
+
+    info.mime = mimeType(info.name.section('.', -1).toLower());
+
+    if (!info.mime.isEmpty())
+    {
+        if (useMetadata)
+        {
+            DMetadata meta;
+            getMetadata(folder, itemName, meta);
+            fillItemInfoFromMetadata(info, meta);
+        }
+        else
+        {
+            if (cfinfo.file.fields & GP_FILE_INFO_MTIME)
+            {
+                info.mtime = QDateTime::fromTime_t(cfinfo.file.mtime);
+            }
+
+            if (cfinfo.file.fields & GP_FILE_INFO_WIDTH)
+            {
+                info.width = cfinfo.file.width;
+            }
+
+            if (cfinfo.file.fields & GP_FILE_INFO_HEIGHT)
+            {
+                info.height = cfinfo.file.height;
+            }
+        }
+    }
 
 #else
     Q_UNUSED(folder);

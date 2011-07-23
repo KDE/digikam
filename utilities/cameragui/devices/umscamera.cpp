@@ -157,7 +157,6 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
     }
 
     const QFileInfoList list = dir.entryInfoList();
-    kDebug() << "list count : " << list.count();
 
     if (list.isEmpty())
     {
@@ -176,8 +175,6 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
 
 void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata)
 {
-    kDebug() << folder << " :: " << itemName;
-
     info.folder = !folder.endsWith('/') ? folder + QString('/') : folder;
     info.name   = itemName;
 

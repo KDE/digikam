@@ -97,6 +97,10 @@ public:
 
 private:
 
+    /** Run getItemInfo implemenation whithout to be wrapped into GPhoto context
+     */
+    void getItemInfoInternal(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata);
+
     static void printGphotoErrorDescription(int errorCode);
 
 private:
