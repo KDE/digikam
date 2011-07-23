@@ -251,5 +251,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 222 ==> 267789 : Make face detection (kface) and geo tagging (kmap) optional features.
 223 ==> 278323 : Wrong Ctrl+V shortcut for "Cut".r  
 224 ==> 278321 : Please sort "Themes" (color themes) sub menu. 
-225 ==> 
+225 ==> 276827 : Digikam segfaults when autocompleting tags.
+226 ==> 
 
