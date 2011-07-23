@@ -255,5 +255,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 226 ==> 278038 : Digikam crashes while switching image in editor thumbbar.
 227 ==> 276096 : PGF images not shown if zoom is set to 100%.
 228 ==> 207944 : New renaming of pictures. 
-229 ==> 
+229 ==> 270554 : Import Wizard: Rename options filename with timestamp. 
+230 ==> 
 
