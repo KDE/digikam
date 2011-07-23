@@ -30,10 +30,10 @@
 
 #include <QWidget>
 
-// libkmap includes
+// libkgeomap includes
 
-#include <libkmap/modelhelper.h>
-#include <libkmap/kmap_widget.h>
+#include <libkgeomap/modelhelper.h>
+#include <libkgeomap/kgeomap_widget.h>
 
 // local includes
 

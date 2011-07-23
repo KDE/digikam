@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-01-06
- * Description : Helper functions for libkmap interaction
+ * Description : Helper functions for libkgeomap interaction
  *
  * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -21,10 +21,10 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM2KMAP_DATABASE_H
-#define DIGIKAM2KMAP_DATABASE_H
+#ifndef DIGIKAM2KGEOMAP_DATABASE_H
+#define DIGIKAM2KGEOMAP_DATABASE_H
 
-#include "digikam2kmap.h"
+#include "digikam2kgeomap.h"
 
 // local includes
 
@@ -60,4 +60,4 @@ inline bool GPSImageInfo::fromImageInfo(const ImageInfo& imageInfo, GPSImageInfo
 
 } /* namespace Digikam */
 
-#endif /* DIGIKAM2KMAP_DATABASE_H */
+#endif /* DIGIKAM2KGEOMAP_DATABASE_H */
