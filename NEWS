@@ -253,5 +253,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 224 ==> 278321 : Please sort "Themes" (color themes) sub menu. 
 225 ==> 276827 : Digikam segfaults when autocompleting tags.
 226 ==> 278038 : Digikam crashes while switching image in editor thumbbar.
-227 ==>
+227 ==> 276096 : PGF images not shown if zoom is set to 100%.
+228 ==> 
 
