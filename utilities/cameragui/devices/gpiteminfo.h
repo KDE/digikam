@@ -51,12 +51,12 @@ public:
 
     enum DownloadStatus
     {
-        DownloadUnknown  = -1,
-        DownloadedNo     = 0,
-        DownloadedYes    = 1,
-        DownloadFailed   = 2,
-        DownloadStarted  = 3,
-        NewPicture       = 4
+        DownloadUnknown  = -1,               // Donwload state is unknow
+        DownloadedNo     = 0,                // Is not yet downloaded on computer
+        DownloadedYes    = 1,                // Is already downloaded on computer
+        DownloadFailed   = 2,                // Download is failed or have been aborted by user
+        DownloadStarted  = 3,                // Download is under progress
+        NewPicture       = 4                 // This is a new item from camera
     };
 
 public:
@@ -64,8 +64,8 @@ public:
     GPItemInfo();
     ~GPItemInfo();
 
-    bool isNull() const;
-    KUrl url() const;
+    bool isNull() const;                     // Return true if all member in this container are null
+    KUrl url() const;                        // Return the local file system (mounted on computer) url to the camera file
 
 public:
 
