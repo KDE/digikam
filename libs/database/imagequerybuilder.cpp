@@ -867,7 +867,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 sql += " (Images.id NOT IN ";
             }
 
-            sql += "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
+            sql += "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
                    "    WHERE ";
 
             bool firstCondition = true;
@@ -875,7 +875,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             {
                 addSqlOperator(sql, SearchXml::Or, firstCondition);
                 firstCondition = false;
-                sql += " (Tags.pid = ? OR ImageTags.tagid = ? ) ";
+                sql += " (TagsTree.pid = ? OR ImageTags.tagid = ? ) ";
                 *boundValues << tagID << tagID;
             }
 
@@ -905,16 +905,16 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         else if (relation == SearchXml::InTree)
         {
             sql += " (Images.id IN "
-                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
-                   "    WHERE Tags.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
+                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
+                   "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
                    "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ";
             *boundValues << tagname << tagname;
         }
         else if (relation == SearchXml::NotInTree)
         {
             sql += " (Images.id NOT IN "
-                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
-                   "    WHERE Tags.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
+                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
+                   "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
                    "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ";
             *boundValues << tagname << tagname;
         }
@@ -1190,7 +1190,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 }
                 else // InTree
                 {
-                    selectQuery += "(%1tagid=? OR %1tagid IN (SELECT id FROM Tags WHERE pid=?)) AND ";
+                    selectQuery += "(%1tagid=? OR %1tagid IN (SELECT id FROM TagsTree WHERE pid=?)) AND ";
                     *boundValues << tagId << tagId;
                 }
             }
@@ -1807,15 +1807,15 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
             else if (op == LIKE)
             {
                 query = " (Images.id IN "
-                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
-                        "    WHERE Tags.pid = ? or ImageTags.tagid = ? )) ";
+                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
+                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
                 *boundValues << val.toInt() << val.toInt();
             }
             else // op == NLIKE
             {
                 query = " (Images.id NOT IN "
-                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
-                        "    WHERE Tags.pid = ? or ImageTags.tagid = ? )) ";
+                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
+                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
                 *boundValues << val.toInt() << val.toInt();
             }
 

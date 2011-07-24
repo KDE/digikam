@@ -6,7 +6,7 @@
  * Date        : 2009-01-19
  * Description : free space widget tool tip
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-class FreeSpaceToolTipPriv
+class FreeSpaceToolTip::FreeSpaceToolTipPriv
 {
 public:
 

@@ -7,7 +7,7 @@
  * Description : A widget to display a list of camera folders.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class CameraFolderViewPriv
+class CameraFolderView::CameraFolderViewPriv
 {
 public:
 
@@ -98,7 +98,7 @@ void CameraFolderView::addRootFolder(const QString& folder, int nbItems, const Q
 }
 
 CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QString& subFolder,
-                                              int nbItems, const QPixmap& pixmap)
+                                              int nbItems, const QPixmap& pixmap) const
 {
     CameraFolderItem* parentItem = findFolder(folder);
 
@@ -132,7 +132,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     }
 }
 
-CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
+CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath) const
 {
     int i                 = 0;
     QTreeWidgetItem* item = 0;
@@ -170,12 +170,12 @@ void CameraFolderView::slotCurrentChanged(QTreeWidgetItem* item, int)
     }
 }
 
-CameraFolderItem* CameraFolderView::virtualFolder()
+CameraFolderItem* CameraFolderView::virtualFolder() const
 {
     return d->virtualFolder;
 }
 
-CameraFolderItem* CameraFolderView::rootFolder()
+CameraFolderItem* CameraFolderView::rootFolder() const
 {
     return d->rootFolder;
 }

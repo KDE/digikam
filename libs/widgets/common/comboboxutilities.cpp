@@ -38,6 +38,7 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kdebug.h>
 
 namespace Digikam
 {
@@ -272,6 +273,20 @@ bool StayPoppedUpComboBox::eventFilter(QObject* o, QEvent* e)
                     // we have dispatched the event privately; we filter it out from the main dispatching
                     return true;
                 }
+                break;
+            }
+            case QEvent::ContextMenu:
+            {
+                if (o != m_view)
+                {
+                    // for whatever reason, the position of the event is slightly wrong
+                    QContextMenuEvent* m = static_cast<QContextMenuEvent*>(e);
+                    QPoint correctPos = m_view->viewport()->mapFromGlobal(m->globalPos());
+                    QContextMenuEvent corrected(m->reason(), correctPos, m->globalPos(), m->modifiers());
+                    sendViewportEventToView(&corrected);
+                    return true;
+                }
+                break;
             }
             default:
                 break;

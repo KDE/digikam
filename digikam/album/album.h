@@ -455,7 +455,6 @@ public:
     bool                 isHaarSearch() const;
     bool                 isMapSearch() const;
     bool                 isDuplicatesSearch() const;
-    bool                 isFaceSearch() const;
 
     /**
      * Indicates whether this album is a temporary search or not.

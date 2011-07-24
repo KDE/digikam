@@ -65,6 +65,7 @@
 #include "dio.h"
 #include "dpopupmenu.h"
 #include "facerejectionoverlay.h"
+#include "faceiface.h"
 #include "groupindicatoroverlay.h"
 #include "imagealbumfiltermodel.h"
 #include "imagealbummodel.h"
@@ -190,6 +191,8 @@ void DigikamImageView::slotSetupChanged()
 
 void DigikamImageView::setFaceMode(bool on)
 {
+    d->faceMode = on;
+
     if (on)
     {
         // See ImageLister, which creates a search the implements listing tag in the ioslave
@@ -243,7 +246,14 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
         ImageInfo info    = ImageModel::retrieveImageInfo(index);
         DatabaseFace face = d->faceDelegate->face(index);
         d->editPipeline.confirm(info, face, tagId);
-        //TODO fast-remove if filtered by unconfirmed face etc.
+
+        // fast-remove in the "unknown person" view
+        if (d->faceMode && imageAlbumModel()->currentAlbum()
+            && tagId != imageAlbumModel()->currentAlbum()->id())
+        {
+            QModelIndex sourceIndex = imageSortFilterModel()->mapToSourceImageModel(index);
+            imageAlbumModel()->removeIndex(sourceIndex);
+        }
     }
 }
 
@@ -254,6 +264,10 @@ void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
         ImageInfo info = ImageModel::retrieveImageInfo(index);
         DatabaseFace face = d->faceDelegate->face(index);
         d->editPipeline.remove(info, face);
+
+        // fast-remove
+        QModelIndex sourceIndex = imageSortFilterModel()->mapToSourceImageModel(index);
+        imageAlbumModel()->removeIndex(sourceIndex);
     }
 }
 

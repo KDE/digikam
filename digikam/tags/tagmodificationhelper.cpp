@@ -62,16 +62,6 @@ public:
 
     AlbumPointer<TAlbum>  parentTag;
     QWidget*              dialogParent;
-
-    TAlbum* tagFromAction(QObject* sender)
-    {
-        QAction* action;
-        if ( (action = qobject_cast<QAction*>(sender)) )
-        {
-            return action->data().value<AlbumPointer<TAlbum> >();
-        }
-        return 0;
-    }
 };
 
 TagModificationHelper::TagModificationHelper(QObject* parent, QWidget* dialogParent)
@@ -85,9 +75,19 @@ TagModificationHelper::~TagModificationHelper()
     delete d;
 }
 
-void TagModificationHelper::bindTag(QAction* action, TAlbum* album)
+void TagModificationHelper::bindTag(QAction* action, TAlbum* album) const
 {
     action->setData(QVariant::fromValue(AlbumPointer<TAlbum>(album)));
+}
+
+TAlbum* TagModificationHelper::boundTag(QObject* sender) const
+{
+    QAction* action;
+    if ( (action = qobject_cast<QAction*>(sender)) )
+    {
+        return action->data().value<AlbumPointer<TAlbum> >();
+    }
+    return 0;
 }
 
 TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, const QString& iconName)
@@ -138,7 +138,7 @@ TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, 
 
 TAlbum* TagModificationHelper::slotTagNew()
 {
-    return slotTagNew(d->tagFromAction(sender()));
+    return slotTagNew(boundTag(sender()));
 }
 
 void TagModificationHelper::slotTagEdit(TAlbum* t)
@@ -190,7 +190,7 @@ void TagModificationHelper::slotTagEdit(TAlbum* t)
 
 void TagModificationHelper::slotTagEdit()
 {
-    slotTagEdit(d->tagFromAction(sender()));
+    slotTagEdit(boundTag(sender()));
 }
 
 void TagModificationHelper::slotTagDelete(TAlbum* t)
@@ -268,7 +268,7 @@ void TagModificationHelper::slotTagDelete(TAlbum* t)
 
 void TagModificationHelper::slotTagDelete()
 {
-    slotTagDelete(d->tagFromAction(sender()));
+    slotTagDelete(boundTag(sender()));
 }
 
 } // namespace Digikam

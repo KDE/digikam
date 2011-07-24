@@ -188,6 +188,7 @@ void ClickDragReleaseItem::keyPressEvent(QKeyEvent* e)
             break;
         default:
             e->ignore();
+            break;
     }
 }
 

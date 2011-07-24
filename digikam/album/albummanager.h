@@ -778,14 +778,14 @@ public:
         AlbumManager::instance()->removeGuardedPointer(album, &album);
     }
 
-    AlbumPointer<T> operator=(T* a)
+    AlbumPointer<T>& operator=(T* a)
     {
         Album* oldAlbum = album;
         album           = a;
         AlbumManager::instance()->changeGuardedPointer(oldAlbum, album, &album);
         return *this;
     }
-    AlbumPointer<T> operator=(const AlbumPointer<T>& p)
+    AlbumPointer<T>& operator=(const AlbumPointer<T>& p)
     {
         Album* oldAlbum = album;
         album           = p.album;
@@ -844,6 +844,7 @@ public:
 
 }  // namespace Digikam
 
+Q_DECLARE_METATYPE(Digikam::AlbumPointer<>)
 Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::PAlbum>)
 Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::TAlbum>)
 Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::SAlbum>)

@@ -77,9 +77,9 @@ public:
     /**
      * Returns a boolean value indicating whether the given tagId represents a person
      */
-    bool                isPerson(int tagId) const;
+    static bool         isPerson(int tagId);
 
-    bool                isTheUnknownPerson(int tagId) const;
+    static bool         isTheUnknownPerson(int tagId);
 
     /**
      * A method to return a list of all person tags in the DB

@@ -50,6 +50,7 @@ class HistogramWidgetPriv;
 class DIGIKAM_EXPORT HistogramWidget : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(int animationState READ animationState WRITE setAnimationState)
 
 public:
 
@@ -75,10 +76,6 @@ public:
                     QWidget* parent=0, bool selectMode=true,
                     bool showProgress=true,
                     bool statisticsVisible=false);
-
-    void setup(int w, int h, bool selectMode=true,
-               bool showProgress=true,
-               bool statisticsVisible=false);
 
     ~HistogramWidget();
 
@@ -106,7 +103,7 @@ public:
 public:
 
     void setRenderingType(HistogramRenderingType type);
-    ImageHistogram* currentHistogram();    // Currently rendered histogram, depending on current rendering type
+    ImageHistogram* currentHistogram() const;    // Currently rendered histogram, depending on current rendering type
 
 Q_SIGNALS:
 
@@ -122,11 +119,14 @@ public Q_SLOTS:
     void setChannelType(ChannelType channel);
     void setScaleType(HistogramScale scale);
 
+    int animationState() const;
+    void setAnimationState(int animationState);
+
+
 protected Q_SLOTS:
 
-    void slotProgressTimerDone();
-    void slotCalculationStarted(const ImageHistogram* histogram);
-    void slotCalculationFinished(const ImageHistogram* histogram, bool success);
+    void slotCalculationAboutToStart();
+    void slotCalculationFinished(bool success);
 
 protected:
 
@@ -139,6 +139,10 @@ private:
 
     void notifyValuesChanged();
     void connectHistogram(const ImageHistogram* histogram);
+    void setup(int w, int h, bool selectMode, bool statisticsVisible);
+    void setState(int state);
+    void startWaitingAnimation();
+    void stopWaitingAnimation();
 
 private:
 

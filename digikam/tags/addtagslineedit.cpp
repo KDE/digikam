@@ -324,7 +324,7 @@ void AddTagsLineEdit::setCompletedItems(const QStringList& items, bool doAutoSug
             d->completionBox->popup();
         }
 
-        if ( autoSuggest() && doAutoSuggest )
+        if ( autoSuggest() && doAutoSuggest && !items.isEmpty())
         {
             const int index = items.first().indexOf( txt );
             const QString newText = items.first().mid( index );

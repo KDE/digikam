@@ -128,6 +128,7 @@ Q_SIGNALS:
     void signalDoubleClicked(IconItem* item);
     void signalReturnPressed(IconItem* item);
     void signalShowToolTip(IconItem* item);
+    void signalPrepareRepaint(const QList<IconItem*>&);
 
 public Q_SLOTS:
 

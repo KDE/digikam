@@ -1039,7 +1039,7 @@ void ShowFoto::saveIsComplete()
 
 void ShowFoto::saveAsIsComplete()
 {
-    setOriginAfterSave();
+    resetOriginSwitchFile();
     Digikam::LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
 
     // Add the file to the list of thumbbar images if it's not there already

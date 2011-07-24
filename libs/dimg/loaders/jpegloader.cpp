@@ -7,7 +7,7 @@
  * Description : A JPEG IO file for DImg framework
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,11 +23,6 @@
  * ============================================================ */
 
 #define XMD_H
-
-// This line must be commented to prevent any latency time
-// when we use threaded image loader interface for each image
-// files io. Uncomment this line only for debugging.
-//#define ENABLE_DEBUG_MESSAGES
 
 #include "jpegloader.h"
 
@@ -49,6 +44,7 @@ extern "C"
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 
@@ -68,9 +64,9 @@ void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-    //#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
     kError() << buffer;
-    //#endif
+#endif
 
     longjmp(myerr->setjmp_buffer, 1);
 }
@@ -80,7 +76,7 @@ void JPEGLoader::dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
     kDebug() << buffer << " (" << msg_level << ")";
 #else
     Q_UNUSED(msg_level);
@@ -92,7 +88,7 @@ void JPEGLoader::dimg_jpeg_output_message(j_common_ptr cinfo)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-#ifdef ENABLE_DEBUG_MESSAGES
+#ifdef USE_ADVANCEDDEBUGMSG
     kDebug() << buffer;
 #endif
 }

@@ -722,6 +722,7 @@ void AssignNameWidget::slotActionSelected(const TaggingAction& action)
     {
         d->confirmButton->setEnabled(action.isValid());
     }
+    emit selected(action, d->info, d->faceIdentifier);
 }
 
 void AssignNameWidget::slotLabelClicked()

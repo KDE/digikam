@@ -70,7 +70,7 @@ public:
 
 public Q_SLOTS:
 
-    void slotUpdateSpotInfo(const DColor& col, const QPoint& point);
+    void slotUpdateSpotInfo(const Digikam::DColor& col, const QPoint& point);
     virtual void slotCloseTool();
     virtual void slotApplyTool();
     void slotPreviewModeChanged();

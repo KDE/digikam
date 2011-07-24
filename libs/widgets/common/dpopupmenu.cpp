@@ -160,8 +160,6 @@ void DPopupMenu::setMaximumSize(int w, int h)
 
 void DPopupMenu::paintEvent(QPaintEvent* e)
 {
-    KMenu::paintEvent(e);
-
     {
         // scope for QPainter object
         QPainter p(this);
@@ -174,6 +172,8 @@ void DPopupMenu::paintEvent(QPaintEvent* e)
 
         renderSidebarGradient(&p);
     }
+
+    KMenu::paintEvent(e);
 }
 
 void DPopupMenu::renderSidebarGradient(QPainter* p)
@@ -182,7 +182,6 @@ void DPopupMenu::renderSidebarGradient(QPainter* p)
     p->setPen(Qt::white);
 
     int frameWidth = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, this);
-    kDebug() << frameWidth;
     QRect drawRect = QStyle::visualRect(layoutDirection(), rect(),
                                         QRect(frameWidth, frameWidth,
                                         d->gradientWidth, height() - 2*frameWidth));

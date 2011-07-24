@@ -379,6 +379,8 @@ public:
     SearchModel*              searchModel;
 
     SearchModificationHelper* searchModificationHelper;
+
+    AlbumPointer<SAlbum>      currentTimelineSearch;
 };
 const QString TimelineSideBarWidget::TimelineSideBarWidgetPriv::configHistogramTimeUnitEntry("Histogram TimeUnit");
 const QString TimelineSideBarWidget::TimelineSideBarWidgetPriv::configHistogramScaleEntry("Histogram Scale");
@@ -505,7 +507,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* parent, SearchModel* searc
     d->timeLineFolderView->setConfigGroup(getConfigGroup());
     d->timeLineFolderView->filteredModel()->listTimelineSearches();
     d->timeLineFolderView->filteredModel()->setListTemporarySearches(false);
-    d->timeLineFolderView->setAlbumManagerCurrentAlbum(true);
+    d->timeLineFolderView->setAlbumManagerCurrentAlbum(false);
     d->searchDateBar      = new SearchTextBar(this, "TimeLineViewSearchDateBar");
     d->searchDateBar->setModel(d->timeLineFolderView->filteredModel(),
                                AbstractAlbumModel::AlbumIdRole,
@@ -589,7 +591,18 @@ void TimelineSideBarWidget::setActive(bool active)
 {
     if (active)
     {
-        AlbumManager::instance()->setCurrentAlbum(d->timeLineFolderView->currentAlbum());
+        if (!d->currentTimelineSearch)
+        {
+            d->currentTimelineSearch = d->timeLineFolderView->currentAlbum();
+        }
+        if (d->currentTimelineSearch)
+        {
+            AlbumManager::instance()->setCurrentAlbum(d->currentTimelineSearch);
+        }
+        else
+        {
+            slotUpdateCurrentDateSearchAlbum();
+        }
     }
 }
 
@@ -693,8 +706,9 @@ void TimelineSideBarWidget::slotUpdateCurrentDateSearchAlbum()
     slotCheckAboutSelection();
     int totalCount           = 0;
     DateRangeList dateRanges = d->timeLineWidget->selectedDateRange(totalCount);
-    d->searchModificationHelper->slotCreateTimeLineSearch(SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch),
-                                                          dateRanges, true);
+    d->currentTimelineSearch = d->searchModificationHelper->
+        slotCreateTimeLineSearch(SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch), dateRanges, true);
+    d->timeLineFolderView->setCurrentAlbum(0); // "temporary" search is not listed in view
 }
 
 void TimelineSideBarWidget::slotSaveSelection()
@@ -702,18 +716,25 @@ void TimelineSideBarWidget::slotSaveSelection()
     QString name             = d->nameEdit->text();
     int totalCount           = 0;
     DateRangeList dateRanges = d->timeLineWidget->selectedDateRange(totalCount);
-    d->searchModificationHelper->slotCreateTimeLineSearch(name, dateRanges);
+    d->currentTimelineSearch = d->searchModificationHelper->slotCreateTimeLineSearch(name, dateRanges);
 }
 
 void TimelineSideBarWidget::slotAlbumSelected(Album* album)
 {
+    if (d->currentTimelineSearch == album)
+    {
+        return;
+    }
+
     SAlbum* salbum = dynamic_cast<SAlbum*>(album);
 
     if (!salbum)
     {
-        slotResetSelection();
         return;
     }
+
+    d->currentTimelineSearch = salbum;
+    AlbumManager::instance()->setCurrentAlbum(salbum);
 
     SearchXmlReader reader(salbum->query());
 

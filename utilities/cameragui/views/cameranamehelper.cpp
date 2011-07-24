@@ -25,12 +25,11 @@
 
 // Qt includes
 
-#include <qaction.h>
+#include <QAction>
 
 // KDE includes
 
 #include <klocale.h>
-
 
 namespace Digikam
 {

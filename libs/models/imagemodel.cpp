@@ -78,16 +78,20 @@ public:
     class ImageModelIncrementalUpdater* incrementalUpdater;
 };
 
+typedef QPair<int, int> IntPair; // to make foreach macro happy
+typedef QList<IntPair>  IntPairList;
+
 class ImageModelIncrementalUpdater
 {
 public:
 
     ImageModelIncrementalUpdater(ImageModel::ImageModelPriv* d);
 
-    void                           appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
-    QList<QPair<int, int> >        oldIndexes() const;
+    void                  appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void                  aboutToBeRemovedInModel(const IntPairList& aboutToBeRemoved);
+    QList<IntPair>        oldIndexes();
 
-    static QList<QPair<int, int> > toContiguousPairs(const QList<int>& ids);
+    static QList<IntPair> toContiguousPairs(const QList<int>& ids);
 
 public:
 
@@ -95,6 +99,7 @@ public:
     QList<QVariant>       oldExtraValues;
     QList<ImageInfo>      newInfos;
     QList<QVariant>       newExtraValues;
+    QList<IntPairList>    modelRemovals;
 };
 
 ImageModel::ImageModel(QObject* parent)
@@ -722,7 +727,7 @@ void ImageModel::removeIndexes(const QList<QModelIndex>& indexes)
         }
     }
     imageInfosDeleted(imageInfos(indexes));
-    removeRowPairs(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
+    removeRowPairsWithCheck(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
 
 void ImageModel::removeImageInfo(const ImageInfo& info)
@@ -740,7 +745,7 @@ void ImageModel::removeImageInfos(const QList<ImageInfo>& infos)
             listIndexes << index.row();
     }
     imageInfosDeleted(infos);
-    removeRowPairs(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
+    removeRowPairsWithCheck(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
 
 void ImageModel::removeImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
@@ -761,7 +766,7 @@ void ImageModel::removeImageInfos(const QList<ImageInfo>& infos, const QList<QVa
     }
 
     imageInfosDeleted(infos);
-    removeRowPairs(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
+    removeRowPairsWithCheck(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
 
 void ImageModel::setSendRemovalSignals(bool send)
@@ -801,12 +806,23 @@ static bool pairsContain(const List& list, T value)
     return false;
 }
 
+void ImageModel::removeRowPairsWithCheck(const QList<QPair<int, int> >& toRemove)
+{
+    if (d->incrementalUpdater)
+    {
+        d->incrementalUpdater->aboutToBeRemovedInModel(toRemove);
+    }
+
+    removeRowPairs(toRemove);
+}
+
 void ImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
 {
     if (toRemove.isEmpty())
     {
         return;
     }
+
     // Remove old indexes
     // Keep in mind that when calling beginRemoveRows all structures announced to be removed
     // must still be valid, and this includes our hashes as well, which limits what we can optimize
@@ -944,8 +960,54 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
     }
 }
 
-QList<QPair<int, int> > ImageModelIncrementalUpdater::oldIndexes() const
+void ImageModelIncrementalUpdater::aboutToBeRemovedInModel(const IntPairList& toRemove)
 {
+    modelRemovals << toRemove;
+}
+
+QList<QPair<int, int> > ImageModelIncrementalUpdater::oldIndexes()
+{
+    // first, apply all changes to indexes by direct removal in model
+    // while the updater was active
+    foreach (const IntPairList& list, modelRemovals)
+    {
+        int removedRows = 0, offset = 0;
+
+        foreach (const IntPair& pair, list)
+        {
+            const int begin = pair.first - offset;
+            const int end   = pair.second - offset; // inclusive
+            removedRows     = end - begin + 1;
+
+            // when removing from the list, all subsequent indexes are affected
+            offset += removedRows;
+
+            // update idHash - which points to indexes of d->infos, and these change now!
+            QHash<qlonglong, int>::iterator it;
+
+            for (it = oldIds.begin(); it != oldIds.end(); )
+            {
+                if (it.value() >= begin)
+                {
+                    if (it.value() > end)
+                    {
+                        // after the removed interval: adjust index
+                        it.value() -= removedRows;
+                    }
+                    else
+                    {
+                        // in the removed interval
+                        it = oldIds.erase(it);
+                        continue;
+                    }
+                }
+
+                ++it;
+            }
+        }
+    }
+    modelRemovals.clear();
+
     return toContiguousPairs(oldIds.values());
 }
 

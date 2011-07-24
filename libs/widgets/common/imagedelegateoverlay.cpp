@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QEvent>
 #include <QMouseEvent>
 
@@ -125,7 +126,12 @@ bool ImageDelegateOverlay::affectsMultiple(const QModelIndex& index) const
         return false;
     }
 
-    QItemSelection selection = selectionModel->selection();
+    return viewHasMultiSelection();
+}
+
+bool ImageDelegateOverlay::viewHasMultiSelection() const
+{
+    QItemSelection selection = view()->selectionModel()->selection();
 
     if (selection.size() > 1)
     {
@@ -253,10 +259,32 @@ void AbstractWidgetDelegateOverlay::slotEntered(const QModelIndex& index)
 {
     hide();
 
-    if (index.isValid() && checkIndex(index))
+    if (!checkIndexOnEnter(index))
     {
-        m_widget->show();
+        return;
     }
+
+    m_widget->show();
+}
+
+bool AbstractWidgetDelegateOverlay::checkIndexOnEnter(const QModelIndex& index) const
+{
+    if (!index.isValid())
+    {
+        return false;
+    }
+
+    if (QApplication::keyboardModifiers() & (Qt::ShiftModifier | Qt::ControlModifier))
+    {
+        return false;
+    }
+
+    if (!checkIndex(index))
+    {
+        return false;
+    }
+
+    return true;
 }
 
 bool AbstractWidgetDelegateOverlay::checkIndex(const QModelIndex& index) const
@@ -430,6 +458,193 @@ void HoverButtonDelegateOverlay::slotEntered(const QModelIndex& index)
     {
         button()->setIndex(index);
     }
+}
+
+// -----------------------------------------------------------------------------------
+
+class PersistentWidgetDelegateOverlay::PersistentWidgetDelegateOverlayPriv
+{
+public:
+
+    PersistentWidgetDelegateOverlayPriv()
+      : persistent(false),
+        restoreFocus(false)
+    {
+    }
+
+    bool                  persistent;
+    bool                  restoreFocus;
+
+    QPersistentModelIndex index;
+    QPersistentModelIndex enteredIndex;
+};
+
+PersistentWidgetDelegateOverlay::PersistentWidgetDelegateOverlay(QObject* parent)
+    : AbstractWidgetDelegateOverlay(parent),
+      d(new PersistentWidgetDelegateOverlayPriv)
+{
+}
+
+PersistentWidgetDelegateOverlay::~PersistentWidgetDelegateOverlay()
+{
+    delete d;
+}
+
+QModelIndex PersistentWidgetDelegateOverlay::index() const
+{
+    return d->index;
+}
+
+void PersistentWidgetDelegateOverlay::setActive(bool active)
+{
+    d->persistent = false;
+
+    AbstractWidgetDelegateOverlay::setActive(active);
+
+    if (active)
+    {
+        connect(m_view->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+                this, SLOT(leavePersistentMode()));
+
+        connect(m_view, SIGNAL(viewportClicked(const QMouseEvent*)),
+                this, SLOT(leavePersistentMode()));
+    }
+    else
+    {
+        if (m_view)
+        {
+            disconnect(m_view->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+                       this, SLOT(leavePersistentMode()));
+
+            disconnect(m_view, SIGNAL(viewportClicked(const QMouseEvent*)),
+                       this, SLOT(leavePersistentMode()));
+        }
+    }
+}
+
+void PersistentWidgetDelegateOverlay::setPersistent(bool persistent)
+{
+    if (d->persistent == persistent)
+    {
+        return;
+    }
+
+    d->persistent   = persistent;
+
+    if (d->persistent && d->index.isValid())
+    {
+        showOnIndex(d->index);
+    }
+    else if (!d->persistent && d->enteredIndex.isValid())
+    {
+        slotEntered(d->enteredIndex);
+    }
+}
+
+void PersistentWidgetDelegateOverlay::enterPersistentMode()
+{
+    setPersistent(true);
+}
+
+void PersistentWidgetDelegateOverlay::leavePersistentMode()
+{
+    setPersistent(false);
+}
+
+bool PersistentWidgetDelegateOverlay::isPersistent() const
+{
+    return d->persistent;
+}
+
+void PersistentWidgetDelegateOverlay::slotEntered(const QModelIndex& index)
+{
+    d->enteredIndex = index;
+
+    if (d->persistent && m_widget->isVisible())
+    {
+        return;
+    }
+
+    hide();
+
+    if (!checkIndexOnEnter(index))
+    {
+        return;
+    }
+
+    m_widget->show();
+
+    showOnIndex(index);
+}
+
+void PersistentWidgetDelegateOverlay::slotReset()
+{
+    setPersistent(false);
+    d->restoreFocus = false;
+    AbstractWidgetDelegateOverlay::slotReset();
+}
+
+void PersistentWidgetDelegateOverlay::slotViewportEntered()
+{
+    d->enteredIndex = QModelIndex();
+    if (!d->persistent)
+    {
+        AbstractWidgetDelegateOverlay::slotViewportEntered();
+    }
+}
+
+void PersistentWidgetDelegateOverlay::viewportLeaveEvent(QObject* obj, QEvent* event)
+{
+    setPersistent(false);
+    d->restoreFocus = false;
+    AbstractWidgetDelegateOverlay::viewportLeaveEvent(obj, event);
+}
+
+void PersistentWidgetDelegateOverlay::slotRowsRemoved(const QModelIndex& parent, int begin, int end)
+{
+    AbstractWidgetDelegateOverlay::slotRowsRemoved(parent, begin, end);
+    setPersistent(false);
+}
+
+void PersistentWidgetDelegateOverlay::slotLayoutChanged()
+{
+    AbstractWidgetDelegateOverlay::slotLayoutChanged();
+    setPersistent(false);
+}
+
+void PersistentWidgetDelegateOverlay::hide()
+{
+    if (!d->restoreFocus && m_widget->isVisible())
+    {
+        QWidget* f = QApplication::focusWidget();
+        d->restoreFocus = f && m_widget->isAncestorOf(f);
+    }
+    AbstractWidgetDelegateOverlay::hide();
+}
+
+void PersistentWidgetDelegateOverlay::showOnIndex(const QModelIndex& index)
+{
+    d->index = index;
+    restoreFocus();
+}
+
+void PersistentWidgetDelegateOverlay::storeFocus()
+{
+    d->restoreFocus = true;
+}
+
+void PersistentWidgetDelegateOverlay::restoreFocus()
+{
+    if (d->restoreFocus)
+    {
+        setFocusOnWidget();
+        d->restoreFocus = false;
+    }
+}
+
+void PersistentWidgetDelegateOverlay::setFocusOnWidget()
+{
+    m_widget->setFocus();
 }
 
 // -----------------------------------------------------------------------------------

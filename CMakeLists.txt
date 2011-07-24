@@ -4,9 +4,11 @@ PROJECT(digikam)
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: digikam")
 
-OPTION(ENABLE_SCRIPTIFACE "Build digiKam with experimental scripting support (default=OFF)" OFF)
-OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
-OPTION(ENABLE_INTERNALMYSQL "Look for MySQL server executable at build time (default=ON)" ON)
+OPTION(ENABLE_SCRIPTIFACE      "Build digiKam with experimental scripting support (default=OFF)" OFF)
+OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (default=ON)"     ON)
+OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"     ON)
+OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"    OFF)
+OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                 ON)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -148,7 +150,7 @@ FIND_PACKAGE(Kdcraw)
 FIND_PACKAGE(Kexiv2)
 FIND_PACKAGE(Kipi)
 FIND_PACKAGE(Kface)
-FIND_PACKAGE(Kmap)
+FIND_PACKAGE(KGeoMap)
 FIND_PACKAGE(PGF)
 FIND_PACKAGE(CLAPACK)
 FIND_PACKAGE(Boost) # 1.36.0)
@@ -249,13 +251,13 @@ ELSE (KDCRAW_VERSION)
   MESSAGE(WARNING "libkdcraw: Version information not found, your version is probably too old.")
 ENDIF (KDCRAW_VERSION)
 
-# check the libkmap version
+# check the libkgeomap version
 # note that old versions don't specify version information, so for now
 # just inform the user if version information was found
-IF (KMAP_VERSION)
-  MESSAGE(STATUS "libkmap: Found version ${KMAP_VERSION}")
+IF (KGEOMAP_VERSION)
+  MESSAGE(STATUS "libkgeomap: Found version ${KGEOMAP_VERSION}")
   # TODO: fail if the version is too low
-ENDIF (KMAP_VERSION)
+ENDIF (KGEOMAP_VERSION)
 
 # ==================================================================================================
 # Optional dependencies
@@ -287,27 +289,28 @@ MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
 
 MACRO_BOOL_TO_01(ENABLE_SCRIPTIFACE USE_SCRIPT_IFACE)
 MACRO_BOOL_TO_01(ENABLE_THUMBS_DB USE_THUMBS_DB)
+MACRO_BOOL_TO_01(ENABLE_ADVANCEDDEBUGMSG USE_ADVANCEDDEBUGMSG)
 
 # Win32 compilation with Nepomuk is broken. It's temporally disabled.
-IF (NOT WIN32)
+IF (ENABLE_NEPOMUKSUPPORT)
     IF (${KDE_VERSION} VERSION_GREATER "4.3.99")
-    MACRO_OPTIONAL_FIND_PACKAGE(Nepomuk)
-    MACRO_LOG_FEATURE(NEPOMUK_FOUND "Nepomuk" "The Nepomuk libraries"
-              "http://www.kde.org" FALSE "" "Nepomuk extends the search and tagging")
+        MACRO_OPTIONAL_FIND_PACKAGE(Nepomuk)
+        MACRO_LOG_FEATURE(NEPOMUK_FOUND "Nepomuk" "The Nepomuk libraries"
+                "http://www.kde.org" FALSE "" "Nepomuk extends the search and tagging")
 
-    MACRO_OPTIONAL_FIND_PACKAGE(SharedDesktopOntologies 0.2)
-    MACRO_LOG_FEATURE(SHAREDDESKTOPONTOLOGIES_FOUND "Shared desktop ontologies" "Desktop ontologies"
-              "http://oscaf.sourceforge.net" TRUE "0.2" "Ontologies necessary for the Nepomuk semantic desktop.")
+        MACRO_OPTIONAL_FIND_PACKAGE(SharedDesktopOntologies 0.2)
+        MACRO_LOG_FEATURE(SHAREDDESKTOPONTOLOGIES_FOUND "Shared desktop ontologies" "Desktop ontologies"
+            "http://oscaf.sourceforge.net" TRUE "0.2" "Ontologies necessary for the Nepomuk semantic desktop.")
 
-    IF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
-        SET(NEPOMUK_FOUND TRUE)
-    ELSE (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
-        SET(NEPOMUK_FOUND FALSE)
-    ENDIF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+        IF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+            SET(NEPOMUK_FOUND TRUE)
+        ELSE (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+            SET(NEPOMUK_FOUND FALSE)
+        ENDIF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
 
-    MACRO_BOOL_TO_01(NEPOMUK_FOUND HAVE_NEPOMUK)
+        MACRO_BOOL_TO_01(NEPOMUK_FOUND HAVE_NEPOMUK)
     ENDIF (${KDE_VERSION} VERSION_GREATER "4.3.99")
-ENDIF (NOT WIN32)
+ENDIF (ENABLE_NEPOMUKSUPPORT)
 
 MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 
@@ -348,7 +351,7 @@ PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >=
 PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KEXIV2_FOUND)
 PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
 PRINT_LIBRARY_STATUS("libkface" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KFACE_FOUND)
-PRINT_LIBRARY_STATUS("libkmap" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KMAP_FOUND)
+PRINT_LIBRARY_STATUS("libkgeomap" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KGEOMAP_FOUND)
 
 IF(PGF_FOUND)
     MESSAGE(STATUS " libpgf library found..................... YES (optional)")
@@ -441,13 +444,13 @@ ELSE(DOXYGEN_FOUND)
 
 ENDIF(DOXYGEN_FOUND)
 
-IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
+IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
     MESSAGE(STATUS " digiKam can be compiled.................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
-ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
+ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
+ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
 
 IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND) OR (NOT LENSFUN_FOUND)))
     MESSAGE(STATUS "")
@@ -525,7 +528,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                     ${KDCRAW_DEFINITIONS}
                     ${KEXIV2_DEFINITIONS}
                     ${KFACE_DEFINITIONS}
-                    ${KMAP_DEFINITIONS}
+                    ${KGEOMAP_DEFINITIONS}
                    )
 
     # QT3 support rules
@@ -540,7 +543,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${KEXIV2_INCLUDE_DIR}
                         ${KDCRAW_INCLUDE_DIR}
                         ${KFACE_INCLUDE_DIR}
-                        ${KMAP_INCLUDE_DIR}
+                        ${KGEOMAP_INCLUDE_DIR}
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
                         ${GPHOTO2_INCLUDE_DIRS}
@@ -658,21 +661,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
             INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun)
             INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex)
+
+            IF(WIN32)
+                INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex)
+            ENDIF(WIN32)
 
             SET(liblensfun_SRCS
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regcomp.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regerror.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regexec.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-ast.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-compile.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-approx.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-backtrack.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-parallel.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-mem.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-parse.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-stack.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/xmalloc.c
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/config-lensfun.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/auxfun.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/camera.cpp
@@ -684,7 +678,25 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mod-subpix.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/modifier.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mount.cpp
-            )
+               )
+
+            # We only need regex with lensfun code under windows where this library do not exist.
+            IF(WIN32)
+                SET(liblensfun_SRCS ${liblensfun_SRCS}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regcomp.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regerror.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regexec.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-ast.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-compile.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-approx.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-backtrack.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-parallel.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-mem.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-parse.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-stack.c
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/xmalloc.c
+                   )
+            ENDIF(WIN32)
 
         ENDIF(LENSFUN_FOUND)
 
@@ -846,8 +858,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagegpsmodelhelper.cpp
        )
 
-    SET(libkmaphelper_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/kmaphelper/digikam2kmap.cpp
+    SET(libkgeomaphelper_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/kgeomaphelper/digikam2kgeomap.cpp
        )
 
     # --enable-final triggers: http://bugs.kde.org/show_bug.cgi?id=126326
@@ -1466,7 +1478,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/kmaphelper
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/kgeomaphelper
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models

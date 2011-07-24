@@ -38,6 +38,7 @@
 #include "albummodel.h"
 #include "albumfiltermodel.h"
 #include "albumtreeview.h"
+#include "contextmenuhelper.h"
 
 namespace Digikam
 {
@@ -303,6 +304,41 @@ void AbstractAlbumTreeViewSelectComboBox::sendViewportEventToView(QEvent* e)
 {
     // needed for StayPoppedUpComboBox
     m_treeView->viewportEvent(e);
+}
+
+void AbstractAlbumTreeViewSelectComboBox::setTreeView(AbstractAlbumTreeView* treeView)
+{
+    // this is independent from the installView mechanism, just to override
+    // the tree view created below without the need to subclass
+    if (!m_treeView)
+    {
+        m_treeView = treeView;
+    }
+}
+
+class CheckUncheckContextMenuElement : public QObject, public AbstractAlbumTreeView::ContextMenuElement
+{
+public:
+    CheckUncheckContextMenuElement(QObject* parent) : QObject(parent) {}
+
+    void addActions(AbstractAlbumTreeView* view, ContextMenuHelper& cmh, Album* album)
+    {
+        AbstractCheckableAlbumModel *checkable = qobject_cast<AbstractCheckableAlbumModel*>(view->albumModel());
+        if (checkable)
+        {
+            cmh.setAlbumModel(checkable);
+            cmh.addAlbumCheckUncheckActions(album);
+        }
+    }
+};
+
+void AbstractAlbumTreeViewSelectComboBox::addCheckUncheckContextMenuActions()
+{
+    if (m_treeView)
+    {
+        m_treeView->setEnableContextMenu(true);
+        m_treeView->addContextMenuElement(new CheckUncheckContextMenuElement(this));
+    }
 }
 
 // ---------------------------------------------------------------------------------

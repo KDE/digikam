@@ -78,7 +78,7 @@ DatabaseServer::DatabaseServer(QCoreApplication* application=0)
 {
     d->app = application;
 
-    if (qDBusRegisterMetaType<DatabaseServerError>()<0)
+    if (qDBusRegisterMetaType<DatabaseServerError>() < 0)
     {
         kError()<<"Error while registering DatabaseServerError class.";
     }
@@ -125,14 +125,14 @@ bool DatabaseServer::startDatabaseProcess(const QString& dbType, QDBusVariant& e
     if (dbType == DatabaseParameters::MySQLDatabaseType())
     {
         //        return QVariant::fromValue(startMYSQLDatabaseProcess());
-        error=QDBusVariant(QVariant::fromValue(startMYSQLDatabaseProcess()));
+        error = QDBusVariant(QVariant::fromValue(startMYSQLDatabaseProcess()));
         return false;
     }
     else
     {
         kDebug() << "DBType ["<< dbType <<"] is not supported.";
         DatabaseServerError errorDetails(DatabaseServerError::NotSupported, QString("DBType [%0] is not supported.").arg(dbType));
-        error=QDBusVariant(QVariant::fromValue(errorDetails));
+        error = QDBusVariant(QVariant::fromValue(errorDetails));
         return false;
     }
 }
@@ -315,7 +315,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     arguments << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( miscDir );
 
     // init db
-    if (!QFile(dataDir+QDir::separator() + QString("mysql")).exists())
+    if (!QFile(dataDir + QDir::separator() + QString("mysql")).exists())
     {
         QProcess initProcess;
         initProcess.start( mysqlInitCmd );
@@ -341,8 +341,10 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         str                 += i18n("<p>Arguments: %1</p>", argumentStr);
         str                 += i18n("<p>Process error: %1</p>", d->databaseProcess->errorString());
         kDebug() << str;
-	delete d->databaseProcess;
-	d->databaseProcess = 0;
+
+        delete d->databaseProcess;
+        d->databaseProcess = 0;
+
         return DatabaseServerError(DatabaseServerError::StartError, str);
     }
 
@@ -415,6 +417,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
                     }
                 }
             } // make sure query is destroyed before we close the db
+
             db.close();
         }
     }

@@ -3288,6 +3288,7 @@ void AlbumManager::slotTagChange(const TagChangeset& changeset)
             {
                 emit signalTagPropertiesChanged(tag);
             }
+            break;
         }
         case TagChangeset::Unknown:
             break;

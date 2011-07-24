@@ -673,6 +673,43 @@ bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& cur
     return true;
 }
 
+/*
+bool SchemaUpdater::updateV2toV4(const QString& sqlite2DBPath)
+{
+    if (m_observer)
+    {
+        m_observer->moreSchemaUpdateSteps(1);
+    }
+
+    if (upgradeDB_Sqlite2ToSqlite3(m_AlbumDB, m_Backend, sqlite2DBPath))
+    {
+        m_currentVersion = 4;
+        return true;
+    }
+    else
+    {
+        QString errorMsg = i18n("Could not update from the old SQLite2 file (\"%1\"). "
+                                "Please delete this file and try again, "
+                                "starting with an empty database. ", sqlite2DBPath);
+        m_LastErrorMessage=errorMsg;
+
+        if (m_observer)
+        {
+            m_observer->error(errorMsg);
+            m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+        }
+
+        return false;
+    }
+
+    // FIXME: We are not returning anything, if we land in this section of the code!
+    if (m_observer)
+    {
+        m_observer->schemaUpdateProgress(i18n("Updated from 0.7 database"));
+    }
+}
+*/
+
 static QStringList cleanUserFilterString(const QString& filterString)
 {
     // splits by either ; or space, removes "*.", trims

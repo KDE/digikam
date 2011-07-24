@@ -23,6 +23,10 @@
 
 #include "albummodificationhelper.moc"
 
+// Qt includes
+
+#include <QAction>
+
 // KDE includes
 
 #include <kdebug.h>
@@ -64,6 +68,26 @@ AlbumModificationHelper::AlbumModificationHelper(QObject* parent, QWidget* dialo
 AlbumModificationHelper::~AlbumModificationHelper()
 {
     delete d;
+}
+
+void AlbumModificationHelper::bindAlbum(QAction* action, PAlbum* album) const
+{
+    action->setData(QVariant::fromValue(AlbumPointer<PAlbum>(album)));
+}
+
+PAlbum* AlbumModificationHelper::boundAlbum(QObject* sender) const
+{
+    QAction* action;
+    if ( (action = qobject_cast<QAction*>(sender)) )
+    {
+        return action->data().value<AlbumPointer<PAlbum> >();
+    }
+    return 0;
+}
+
+PAlbum* AlbumModificationHelper::slotAlbumNew()
+{
+    return slotAlbumNew(boundAlbum(sender()));
 }
 
 PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
@@ -146,6 +170,11 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
     return album;
 }
 
+void AlbumModificationHelper::slotAlbumDelete()
+{
+    slotAlbumDelete(boundAlbum(sender()));
+}
+
 void AlbumModificationHelper::slotAlbumDelete(PAlbum* album)
 {
     if (!album || album->isRoot() || album->isAlbumRoot())
@@ -180,6 +209,11 @@ void AlbumModificationHelper::slotAlbumDelete(PAlbum* album)
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDIOResult(KJob*)));
+}
+
+void AlbumModificationHelper::slotAlbumRename()
+{
+    slotAlbumRename(boundAlbum(sender()));
 }
 
 void AlbumModificationHelper::slotAlbumRename(PAlbum* album)
@@ -239,6 +273,11 @@ void AlbumModificationHelper::slotDIOResult(KJob* kjob)
     }
 }
 
+void AlbumModificationHelper::slotAlbumEdit()
+{
+    slotAlbumEdit(boundAlbum(sender()));
+}
+
 void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
 {
     if (!album || album->isRoot() || album->isAlbumRoot())
@@ -289,6 +328,22 @@ void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
             }
         }
     }
+}
+
+void AlbumModificationHelper::slotAlbumResetIcon(PAlbum* album)
+{
+    if (!album)
+    {
+        return;
+    }
+
+    QString err;
+    AlbumManager::instance()->updatePAlbumIcon(album, 0, err);
+}
+
+void AlbumModificationHelper::slotAlbumResetIcon()
+{
+    slotAlbumResetIcon(boundAlbum(sender()));
 }
 
 } // namespace Digikam

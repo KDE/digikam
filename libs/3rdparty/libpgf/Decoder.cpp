@@ -570,11 +570,11 @@ void CDecoder::DecodeBuffer() THROW_ {
 			try {
 				ReadMacroBlock(m_macroBlocks[i]);
 				m_macroBlocksAvailable++;
-			} catch(IOException& ex) {
+			} catch(const IOException &ex) {
 				if (ex.error == MissingData) {
 					break; // no further levels available
 				} else {
-					throw ex;
+					throw;
 				}
 			}
 		}

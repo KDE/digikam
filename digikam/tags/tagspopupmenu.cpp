@@ -57,6 +57,7 @@
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
 #include "tageditdlg.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -303,6 +304,11 @@ QSize TagToggleMenuWidget::menuItemSize(QStyleOptionMenuItem* opt) const
 
 QRect TagToggleMenuWidget::checkIndicatorSize(QStyleOption* option) const
 {
+    if (m_action->isCheckBoxHidden())
+    {
+        return QRect();
+    }
+
     QStyleOptionButton opt;
     opt.QStyleOption::operator=(*option);
     //opt.rect = bounding;
@@ -385,6 +391,7 @@ public:
     QPixmap              tagViewPix;
 
     QSet<int>            assignedTags;
+    QSet<int>            parentAssignedTags;
     QList<qlonglong>     selectedImageIDs;
 
     QActionGroup*        addTagActions;
@@ -444,6 +451,7 @@ TagsPopupMenu::~TagsPopupMenu()
 void TagsPopupMenu::clearPopup()
 {
     d->assignedTags.clear();
+    d->parentAssignedTags.clear();
     clear();
 }
 
@@ -468,7 +476,6 @@ void TagsPopupMenu::slotAboutToShow()
         }
 
         // also add the parents of the assigned tags
-        QSet<int> parents;
 
         for (QSet<int>::const_iterator it = d->assignedTags.constBegin(); it != d->assignedTags.constEnd(); ++it)
         {
@@ -480,13 +487,11 @@ void TagsPopupMenu::slotAboutToShow()
 
                 while (a)
                 {
-                    parents << a->id();
+                    d->parentAssignedTags << a->id();
                     a = a->parent();
                 }
             }
         }
-
-        d->assignedTags += parents;
     }
     else if (d->mode == ASSIGN)
     {
@@ -535,28 +540,36 @@ void TagsPopupMenu::slotAboutToShow()
         }
     }
 
-    TAlbum* album = man->findTAlbum(0);
-
-    if (!album)
+    if ( (d->mode == REMOVE || d->mode == DISPLAY) && d->assignedTags.count() < 10)
     {
-        return;
+        buildFlatMenu(this);
     }
-
-    iterateAndBuildMenu(this, album);
-
-    if (d->mode == ASSIGN || d->mode == RECENTLYASSIGNED)
+    else
     {
-        addSeparator();
-        TagToggleAction* addTag = new TagToggleAction(KIcon(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
-        addTag->setData(0);   // root id
-        addTag->setCheckBoxHidden(true);
-        addAction(addTag);
 
-        addSeparator();
-        TagToggleAction* moreTag = new TagToggleAction(KIcon(d->tagViewPix), i18n("More Tags..."), d->addTagActions);
-        moreTag->setData(-1); // special id to query tag view
-        moreTag->setCheckBoxHidden(true);
-        addAction(moreTag);
+        TAlbum* album = man->findTAlbum(0);
+
+        if (!album)
+        {
+            return;
+        }
+
+        iterateAndBuildMenu(this, album);
+
+        if (d->mode == ASSIGN || d->mode == RECENTLYASSIGNED)
+        {
+            addSeparator();
+            TagToggleAction* addTag = new TagToggleAction(KIcon(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
+            addTag->setData(0);   // root id
+            addTag->setCheckBoxHidden(true);
+            addAction(addTag);
+
+            addSeparator();
+            TagToggleAction* moreTag = new TagToggleAction(KIcon(d->tagViewPix), i18n("More Tags..."), d->addTagActions);
+            moreTag->setData(-1); // special id to query tag view
+            moreTag->setCheckBoxHidden(true);
+            addAction(moreTag);
+        }
     }
 }
 
@@ -592,7 +605,7 @@ void TagsPopupMenu::iterateAndBuildMenu(KMenu* menu, TAlbum* album)
         }
         else if (d->mode == REMOVE || d->mode == DISPLAY)
         {
-            if (!d->assignedTags.contains(a->id()))
+            if (!d->assignedTags.contains(a->id()) && !d->parentAssignedTags.contains(a->id()))
             {
                 continue;
             }
@@ -626,7 +639,11 @@ void TagsPopupMenu::iterateAndBuildMenu(KMenu* menu, TAlbum* album)
 
         if (a->firstChild())
         {
-            action->setMenu(buildSubMenu(a->id()));
+            if ( (d->mode != REMOVE && d->mode != DISPLAY)
+                || d->parentAssignedTags.contains(a->id()))
+            {
+                action->setMenu(buildSubMenu(a->id()));
+            }
         }
     }
 }
@@ -653,7 +670,7 @@ KMenu* TagsPopupMenu::buildSubMenu(int tagid)
         popup->addAction(action);
         popup->addSeparator();
     }
-    else if (d->mode == REMOVE)
+    else if (d->mode == REMOVE && d->assignedTags.contains(tagid))
     {
         TagToggleAction* action = new TagToggleAction(i18n("Remove this Tag"), d->toggleTagActions);
         action->setData(album->id());
@@ -663,7 +680,7 @@ KMenu* TagsPopupMenu::buildSubMenu(int tagid)
         popup->addSeparator();
         d->toggleTagActions->addAction(action);
     }
-    else    // DISPLAY
+    else if (d->mode == DISPLAY)
     {
         TagToggleAction* action = new TagToggleAction(i18n("Go to this Tag"), d->toggleTagActions);
         action->setData(album->id());
@@ -687,6 +704,45 @@ KMenu* TagsPopupMenu::buildSubMenu(int tagid)
     }
 
     return popup;
+}
+
+void TagsPopupMenu::buildFlatMenu(KMenu* menu)
+{
+    QList<int> ids;
+    QStringList shortenedPaths =
+        TagsCache::instance()->shortenedTagPaths(d->assignedTags.toList(), &ids,
+                                                 TagsCache::NoLeadingSlash, TagsCache::NoHiddenTags);
+
+    for (int i=0; i<shortenedPaths.size(); i++)
+    {
+        QString t = shortenedPaths[i];
+        t.replace('&', "&&");
+        TAlbum* a = AlbumManager::instance()->findTAlbum(ids[i]);
+        if (!a)
+        {
+            continue;
+        }
+
+        TagToggleAction* action = new TagToggleAction(t, d->toggleTagActions);
+
+        if (d->mode == ASSIGN)
+        {
+            if (d->assignedTags.contains(a->id()))
+            {
+                action->setSpecialChecked(true);
+            }
+        }
+        else     // REMOVE or DISPLAY mode
+        {
+            action->setCheckBoxHidden(true);
+        }
+
+        action->setData(a->id());
+        menu->addAction(action);
+
+        // get icon
+        setAlbumIcon(action, a);
+    }
 }
 
 void TagsPopupMenu::setAlbumIcon(QAction* action, TAlbum* album)

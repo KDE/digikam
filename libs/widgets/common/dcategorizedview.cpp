@@ -259,6 +259,16 @@ void DCategorizedView::awayFromSelection()
     }
 }
 
+void DCategorizedView::scrollToRelaxed(const QModelIndex& index, QAbstractItemView::ScrollHint hint)
+{
+    if (viewport()->rect().intersects(visualRect(index)))
+    {
+        return;
+    }
+
+    scrollTo(index, hint);
+}
+
 void DCategorizedView::invertSelection()
 {
     const QModelIndex topLeft     = model()->index(0, 0);
@@ -393,6 +403,11 @@ void DCategorizedView::reset()
     emit selectionCleared();
 
     d->ensureInitialSelectedItem = true;
+    d->hintAtScrollPosition      = QModelIndex();
+    d->hintAtSelectionIndex      = QModelIndex();
+    d->hintAtSelectionRow        = -1;
+    verticalScrollBar()->setValue(verticalScrollBar()->minimum());
+    horizontalScrollBar()->setValue(horizontalScrollBar()->minimum());
 }
 
 void DCategorizedView::selectionChanged(const QItemSelection& selectedItems, const QItemSelection& deselectedItems)
@@ -421,6 +436,11 @@ void DCategorizedView::rowsInserted(const QModelIndex& parent, int start, int en
 
 QModelIndex DCategorizedView::DCategorizedViewPriv::scrollPositionHint() const
 {
+    if (q->verticalScrollBar()->value() == q->verticalScrollBar()->minimum())
+    {
+        return QModelIndex();
+    }
+
     QModelIndex hint = q->currentIndex();
 
     // If the user scrolled, dont take current item, but first visible
@@ -535,15 +555,14 @@ void DCategorizedView::layoutWasChanged()
 {
     // connected queued to layoutChanged()
     ensureSelectionAfterChanges();
-
     if (d->hintAtScrollPosition.isValid())
     {
-        scrollTo(d->hintAtScrollPosition, QAbstractItemView::PositionAtTop);
+        scrollToRelaxed(d->hintAtScrollPosition);
         d->hintAtScrollPosition = QModelIndex();
     }
     else
     {
-        scrollTo(currentIndex());
+        scrollToRelaxed(currentIndex());
     }
 }
 
@@ -612,8 +631,8 @@ void DCategorizedView::ensureSelectionAfterChanges()
 
             if (index.isValid())
             {
-                selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
                 setCurrentIndex(index);
+                selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
             }
         }
     }
@@ -762,6 +781,10 @@ void DCategorizedView::mousePressEvent(QMouseEvent* event)
     }
 
     DigikamKCategorizedView::mousePressEvent(event);
+    if (!index.isValid())
+    {
+        emit viewportClicked(event);
+    }
     d->currentMouseEvent = 0;
 }
 

@@ -202,6 +202,10 @@ QString DItemDelegate::squeezedText(const QFontMetrics& fm, int width, const QSt
 {
     QString fullText(text);
     fullText.replace('\n',' ');
+    return fm.elidedText(text, Qt::ElideRight, width);
+
+    /*
+     * Home-brewn implementation
     int textWidth  = fm.width(fullText);
     QString result = fullText;
 
@@ -258,6 +262,7 @@ QString DItemDelegate::squeezedText(const QFontMetrics& fm, int width, const QSt
     }
 
     return result;
+    */
 }
 
 } // namespace Digikam

@@ -27,6 +27,8 @@
 // C++ includes
 
 #include <limits>
+#include <new>
+#include <cstddef>
 
 // Qt includes
 
@@ -179,7 +181,9 @@ unsigned char* DImgLoader::new_failureTolerant(size_t size)
 unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
 {
     if (!checkAllocation(size))
+    {
         return 0;
+    }
 
     try
     {

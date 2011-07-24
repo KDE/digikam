@@ -330,6 +330,9 @@ void ImagePropertiesSideBar::doLoadState()
     const KConfigGroup groupGPSTab = KConfigGroup(&group, entryName("GPS Properties Tab"));
     m_gpsTab->readSettings(groupGPSTab);
 
+    const KConfigGroup groupColorTab = KConfigGroup(&group, entryName("Color Properties Tab"));
+    m_colorTab->readSettings(groupColorTab);
+
     const KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
     m_metadataTab->readSettings(groupMetadataTab);
 }
@@ -348,6 +351,9 @@ void ImagePropertiesSideBar::doSaveState()
 
     KConfigGroup groupGPSTab = KConfigGroup(&group, entryName("GPS Properties Tab"));
     m_gpsTab->writeSettings(groupGPSTab);
+
+    KConfigGroup groupColorTab = KConfigGroup(&group, entryName("Color Properties Tab"));
+    m_colorTab->writeSettings(groupColorTab);
 
     KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
     m_metadataTab->writeSettings(groupMetadataTab);

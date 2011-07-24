@@ -48,7 +48,7 @@
 
 #include "databaseinfocontainers.h"
 #include "databasewatch.h"
-#include "digikam2kmap_database.h"
+#include "digikam2kgeomap_database.h"
 #include "dimg.h"
 #include "imageattributeswatch.h"
 #include "imagedescedittab.h"
@@ -191,9 +191,13 @@ void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rec
     m_dirtyHistoryTab    = false;
     d->dirtyDesceditTab  = false;
 
-    // All tabs that store the ImageInfo list and access it after selection change
-    // must release the image info here. slotChangedTab only handles the active tab!
-    d->desceditTab->setItem();
+    // slotChangedTab only handles the active tab.
+    // Any tab that holds information reset above shall be reset here,
+    // unless it is the active tab
+    if (getActiveTab() != d->desceditTab)
+    {
+        d->desceditTab->setItem();
+    }
 
     slotChangedTab( getActiveTab() );
 }
@@ -620,6 +624,11 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
 ImagePropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab()
 {
     return d->versionsHistoryTab;
+}
+
+ImageDescEditTab* ImagePropertiesSideBarDB::imageDescEditTab() const
+{
+    return d->desceditTab;
 }
 
 void ImagePropertiesSideBarDB::doLoadState()

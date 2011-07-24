@@ -130,8 +130,8 @@ public Q_SLOTS:
 protected Q_SLOTS:
 
     void slotProgressTimerDone();
-    void slotCalculationStarted(const ImageHistogram* histogram);
-    void slotCalculationFinished(const ImageHistogram* histogram, bool success);
+    void slotCalculationStarted();
+    void slotCalculationFinished(bool success);
 
 protected:
 

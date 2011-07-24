@@ -42,7 +42,7 @@ class DatabaseFace;
 class ImageInfo;
 class TaggingAction;
 
-class AssignNameOverlay : public AbstractWidgetDelegateOverlay
+class AssignNameOverlay : public PersistentWidgetDelegateOverlay
 {
     Q_OBJECT
     REQUIRE_DELEGATE(ItemViewImageDelegate)
@@ -69,12 +69,13 @@ protected:
     virtual QWidget* createWidget();
     virtual void setActive(bool);
     virtual void visualChange();
-    virtual void slotEntered(const QModelIndex& index);
+    virtual void showOnIndex(const QModelIndex& index);
     virtual void hide();
     virtual bool checkIndex(const QModelIndex& index) const;
     virtual void viewportLeaveEvent(QObject* obj, QEvent* event);
     virtual void widgetEnterEvent();
     virtual void widgetLeaveEvent();
+    virtual void setFocusOnWidget();
 
     void updatePosition();
     void updateFace();

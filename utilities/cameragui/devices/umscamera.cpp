@@ -143,7 +143,7 @@ void UMSCamera::getAllFolders(const QString& folder, QStringList& subFolderList)
     listFolders(folder, subFolderList);
 }
 
-bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions)
+bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList)
 {
     m_cancel = false;
     infoList.clear();
@@ -216,8 +216,8 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
             info.mime             = mime;
             info.mtime            = dt;
             info.size             = fi->size();
-            info.width            = getImageDimensions ? dims.width()  : -1;
-            info.height           = getImageDimensions ? dims.height() : -1;
+            info.width            = dims.width();
+            info.height           = dims.height();
             info.downloaded       = GPItemInfo::DownloadUnknown;
             info.readPermissions  = fi->isReadable();
             info.writePermissions = fi->isWritable();
@@ -402,8 +402,7 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
     return (::unlink(QFile::encodeName(folder + QString("/") + itemName)) == 0);
 }
 
-bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
-                           GPItemInfo& info, bool getImageDimensions)
+bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile, GPItemInfo& info)
 {
     m_cancel     = false;
     QString dest = folder + QString("/") + itemName;
@@ -485,8 +484,8 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         info.mime             = mime;
         info.mtime            = dt;
         info.size             = fi.size();
-        info.width            = getImageDimensions ? dims.width()  : -1;
-        info.height           = getImageDimensions ? dims.height() : -1;
+        info.width            = dims.width();
+        info.height           = dims.height();
         info.downloaded       = GPItemInfo::DownloadUnknown;
         info.readPermissions  = fi.isReadable();
         info.writePermissions = fi.isWritable();

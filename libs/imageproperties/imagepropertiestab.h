@@ -86,6 +86,15 @@ public:
     void setRating(int rating);
     void setTags(const QStringList& tagPaths, const QStringList& tagNames = QStringList());
 
+    /**
+     * Shortens the tag paths by sorting and then cutting identical paths from the second
+     * and following paths (only the first item gives the full path).
+     * If you want to retain information about which tag path is sorted where,
+     * you can optionally give a QVariant list. This list shall contain an identifier
+     * for the tag path at the same index and will be resorted as the returned list.
+     */
+    static QStringList shortenedTagPaths(const QStringList& tagPaths, QList<QVariant>* identifiers = 0);
+
 private:
 
     class ImagePropertiesTabPriv;

@@ -313,9 +313,9 @@ void ImageAlbumModel::slotResult(KJob* job)
     }
 }
 
-void ImageAlbumModel::slotData(KIO::Job*, const QByteArray& data)
+void ImageAlbumModel::slotData(KIO::Job* job, const QByteArray& data)
 {
-    if (data.isEmpty())
+    if (data.isEmpty() || job != d->job)
     {
         return;
     }
@@ -401,17 +401,43 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
         scheduleIncrementalRefresh();
     }
 
+    // If we list a search, a change to a property may alter the search result
     if (d->currentAlbum->type() == Album::SEARCH)
     {
-        // For searches any touched field can require a refresh.
-        // We cannot easily find out which fields are searched for, so we refresh for any change.
-        foreach (const qlonglong& id, changeset.ids())
+        SAlbum* salbum = static_cast<SAlbum*>(d->currentAlbum);
+
+        bool needCheckRefresh = false;
+        if (salbum->isNormalSearch())
         {
-            // if one matching image id is found, trigger a refresh
-            if (hasImage(id))
+            // For searches any touched field can require a refresh.
+            // We cannot easily find out which fields are searched for, so we refresh for any change.
+            needCheckRefresh = true;
+        }
+        else if (salbum->isTimelineSearch())
+        {
+            if (changeset.changes() & DatabaseFields::CreationDate)
             {
-                scheduleIncrementalRefresh();
-                return;
+                needCheckRefresh = true;
+            }
+        }
+        else if (salbum->isMapSearch())
+        {
+            if (changeset.changes() & DatabaseFields::ImagePositionsAll)
+            {
+                needCheckRefresh = true;
+            }
+        }
+
+        if (needCheckRefresh)
+        {
+            foreach (const qlonglong& id, changeset.ids())
+            {
+                // if one matching image id is found, trigger a refresh
+                if (hasImage(id))
+                {
+                    scheduleIncrementalRefresh();
+                    break;
+                }
             }
         }
     }

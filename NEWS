@@ -202,5 +202,59 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 173 ==> 163763 : digiKam hangs during operation and startup.
 174 ==> 276795 : Showfoto crashes when open a pic.
 175 ==> 264945 : Showfoto 1.9 (strigi relevant), installed in /usr/local/bin along with digiKam 1.9, crashes when opening many, but not all, jpegs.
-176 ==> 
-
+176 ==> 276356 : Tags should have a root (maybe hidden).
+177 ==> 276154 : jpegutils.cpp contains debug output, but disabled by define.
+178 ==> 276921 : Wrong i18n-Parameter in libs/database/databaseconfiglement.cpp.
+179 ==> 271610 : Crash when importing picutures from a Canon SX 200 IS.
+180 ==> 271269 : Crash occured when trying to import pictures from Finepix 6500fd.
+181 ==> 271909 : digiKam crashed when trying to switch map to google map in geolocation window.
+182 ==> 276969 : [2.0.0-rc] pgfutils.cpp:154:45: error: invalid conversion from 'UINT32*' to 'int'.
+183 ==> 146337 : Tag regions of an image.
+184 ==> 210914 : Allow disabling the rating widget in the Light Table thumbbar or unrating an image.
+185 ==> 276745 : Crash while updating/generating fingerprints.
+186 ==> 240148 : If I change the theme to black, the color of the texts in menus remains black, and it can't be read 
+187 ==> 274529 : Crashes on startup in Mac OS X.
+188 ==> 268817 : DK 2.0 beta 4 - crash when starting sw conversion.
+189 ==> 264231 : CMakeList.txt opencv-check broken.
+190 ==> 269084 : Crash when editing Geo-Location.
+191 ==> 277157 : Wish: Copy to Clipboard.
+192 ==> 262700 : Raw file will freeze with 16bit option enabled.
+193 ==> 277133 : Additional patch needed to compile 2.0.0-rc with external libpgf.
+194 ==> 261656 : Object::connect error messages when using decorate/add border.
+195 ==> 270248 : digiKam crashes when clicking on a deleted folder.
+196 ==> 272175 : Picture orientation is "forgotten" in viewer and light table when using xmp sidecar [patch].
+197 ==> 275311 : XMP sidecars are not written for symbolic links [patch].
+198 ==> 276712 : Ignore certain file types.
+199 ==> 141730 : Page down/up goes to next/previous picture istead of scolling a page.
+200 ==> 229795 : Position in album lost when switching album forth and back.
+201 ==> 208506 : Switching between view does not hold the current image.
+202 ==> 252134 : When selecting multiple images, some controls should be disabled.
+203 ==> 270161 : Unclear how to get rid of tags.
+204 ==> 269446 : Keyword-Managing: Folder "People" und subfolder "Unknown" persistent?
+205 ==> 269445 : Not possible to select only one album INCLUDING subfolders to scan for faces.
+206 ==> 277502 : All versions of version set always displayed in Album viewed.
+207 ==> 271557 : Tags: missing order, no sorting.
+208 ==> 265264 : Tag all images multiple Images are selected.
+209 ==> 247659 : In big albums re-sorting thumbnails on opening right tab bar, move selected image out the screen [patch].
+210 ==> 276923 : Crash during initial run of facial recognition.
+211 ==> 276646 : Crash while trying to switch database sqlite -> mysql.
+212 ==> 271622 : Local contrast settings are greyed out.
+213 ==> 274947 : Auto-rotate/flip image does not work at import.
+214 ==> 276450 : Versioning cuts image filenames after the first '.'.
+215 ==> 276525 : Image editor offers to save image when quitting even when it has just been saved.
+216 ==> 276526 : When deleting a picture with Image Editor, it then loads the second next picture.
+217 ==> 274388 : digiKam right click menu does not show any text.
+218 ==> 277927 : Demosaicing (GUI) makes Xorg take 30% CPU.
+219 ==> 276059 : Tags are not written to files on export or save when editing TIFF files.
+220 ==> 271710 : Crash when starting after adding 1500 pic + thumbnails.db is 3.9 GB with 4 GB storage capacity.
+221 ==> 244529 : Crash when writing metadata in files.
+222 ==> 267789 : Make face detection (kface) and geo tagging (kmap) optional features.
+223 ==> 278323 : Wrong Ctrl+V shortcut for "Cut".r  
+224 ==> 278321 : Please sort "Themes" (color themes) sub menu. 
+225 ==> 276827 : Digikam segfaults when autocompleting tags.
+226 ==> 278038 : Digikam crashes while switching image in editor thumbbar.
+227 ==> 276096 : PGF images not shown if zoom is set to 100%.
+228 ==> 207944 : New renaming of pictures. 
+229 ==> 270554 : Import Wizard: Rename options filename with timestamp. 
+230 ==> 251886 : Autohide scrollbars, please. 
+231 ==> 

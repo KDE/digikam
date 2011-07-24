@@ -49,7 +49,7 @@ public:
     void cancel();
 
     void getAllFolders(const QString& folder, QStringList& subFolderList);
-    bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions=true);
+    bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList);
     bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
     bool getExif(const QString& folder, const QString& itemName, char** edata, int& esize);
 
@@ -57,8 +57,7 @@ public:
 
     bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile);
     bool deleteItem(const QString& folder, const QString& itemName);
-    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
-                    GPItemInfo& info, bool getImageDimensions=true);
+    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, GPItemInfo& info);
 
     bool cameraSummary(QString& summary);
     bool cameraManual(QString& manual);

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-01-06
- * Description : Helper functions for libkmap interaction
+ * Description : Helper functions for libkgeomap interaction
  *
  * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM2KMAP_H
-#define DIGIKAM2KMAP_H
+#ifndef DIGIKAM2KGEOMAP_H
+#define DIGIKAM2KGEOMAP_H
 
 // Qt includes
 
@@ -34,13 +34,13 @@
 
 #include "kurl.h"
 
-// libkmap includes
+// libkgeomap includes
 
-#include <libkmap/kmap_primitives.h>
+#include <libkgeomap/kgeomap_primitives.h>
 
-namespace KMap
+namespace KGeoMap
 {
-    class KMapWidget;
+    class KGeoMapWidget;
 }
 
 namespace Digikam
@@ -67,7 +67,7 @@ public:
     {
     }
 
-    static GPSImageInfo fromIdCoordinatesRatingDateTime(const qlonglong p_id, const KMap::GeoCoordinates& p_coordinates,
+    static GPSImageInfo fromIdCoordinatesRatingDateTime(const qlonglong p_id, const KGeoMap::GeoCoordinates& p_coordinates,
                                                         const int p_rating, const QDateTime& p_creationDate)
     {
         GPSImageInfo info;
@@ -82,7 +82,7 @@ public:
     static bool fromImageInfo(const ImageInfo& imageInfo, GPSImageInfo* const gpsImageInfo);
 
     qlonglong                   id;
-    KMap::GeoCoordinates        coordinates;
+    KGeoMap::GeoCoordinates        coordinates;
     int                         rating;
     QDateTime                   dateTime;
     KUrl                        url;
@@ -111,13 +111,13 @@ public:
     GPSImageInfoSorter(QObject* const parent);
     ~GPSImageInfoSorter();
 
-    void addToKMapWidget(KMap::KMapWidget* const mapWidget);
+    void addToKGeoMapWidget(KGeoMap::KGeoMapWidget* const mapWidget);
     void setSortOptions(const SortOptions sortOptions);
     SortOptions getSortOptions() const;
 
-    static bool fitsBetter(const GPSImageInfo& oldInfo, const KMap::KMapGroupState oldState,
-                           const GPSImageInfo& newInfo, const KMap::KMapGroupState newState,
-                           const KMap::KMapGroupState globalGroupState, const SortOptions sortOptions);
+    static bool fitsBetter(const GPSImageInfo& oldInfo, const KGeoMap::KGeoMapGroupState oldState,
+                           const GPSImageInfo& newInfo, const KGeoMap::KGeoMapGroupState newState,
+                           const KGeoMap::KGeoMapGroupState globalGroupState, const SortOptions sortOptions);
 
 private Q_SLOTS:
 
@@ -136,4 +136,4 @@ private:
 Q_DECLARE_METATYPE(Digikam::GPSImageInfo)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSImageInfoSorter::SortOptions)
 
-#endif /* DIGIKAM2KMAP_H */
+#endif /* DIGIKAM2KGEOMAP_H */

@@ -158,7 +158,7 @@ void SearchModificationHelper::slotSearchRename(SAlbum* searchAlbum)
                                            name);
 }
 
-void SearchModificationHelper::slotCreateTimeLineSearch(const QString& desiredName,
+SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desiredName,
                                                         const DateRangeList& dateRanges,
                                                         bool overwriteIfExisting)
 {
@@ -166,12 +166,13 @@ void SearchModificationHelper::slotCreateTimeLineSearch(const QString& desiredNa
 
     if (!overwriteIfExisting && !checkName(name))
     {
-        return;
+        return 0;
     }
 
     if (dateRanges.isEmpty())
     {
-        return;
+        AlbumManager::instance()->setCurrentAlbum(0);
+        return 0;
     }
 
     // Create an XML search query for the list of date ranges
@@ -196,7 +197,7 @@ void SearchModificationHelper::slotCreateTimeLineSearch(const QString& desiredNa
 
     SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::TimeLineSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(album);
-
+    return album;
 }
 
 SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& proposedName,

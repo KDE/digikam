@@ -70,6 +70,11 @@ RawProcessingFilter::RawProcessingFilter(const DRawDecoding& settings,
     filterImage();
 }
 
+RawProcessingFilter::~RawProcessingFilter()
+{
+    cancelFilter();
+}
+
 void RawProcessingFilter::setSettings(const DRawDecoding& settings)
 {
     m_settings = settings;

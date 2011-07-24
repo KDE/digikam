@@ -1197,6 +1197,7 @@ QString ImageScanner::detectFormat()
             kWarning() << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath()
                        << "is null";
 
+            break;
         }
     }
 

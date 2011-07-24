@@ -338,7 +338,7 @@ void DatabaseCoreBackendPrivate::debugOutputFailedQuery(const QSqlQuery& query) 
     kDebug() << "Failure executing query:\n"
              << query.executedQuery()
              << "\nError messages:" << query.lastError().driverText() << query.lastError().databaseText()
-             << query.lastError().number() << query.lastError().type() << query.driver()->lastError()
+             << query.lastError().number() << query.lastError().type()
              << "\nBound values: " << query.boundValues().values();
 }
 
@@ -1469,7 +1469,9 @@ SqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
                 continue;
             }
             else
-                { return query; }
+            {
+                return query;
+            }
         }
     }
 }

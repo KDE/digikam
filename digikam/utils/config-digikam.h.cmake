@@ -51,11 +51,18 @@
 /* Define to 1 if script interface is used */
 #cmakedefine USE_SCRIPT_IFACE 1
 
+/* Define to 1 if advanced debug messages are enabled */
+#cmakedefine USE_ADVANCEDDEBUGMSG 1
+
 /* Define to 1 if you have Nepomuk shared libraries installed */
 #cmakedefine HAVE_NEPOMUK 1
 
 /* Define to 1 if we know how to start mysqld */
 #cmakedefine HAVE_INTERNALMYSQL 1
+
+#ifdef USE_EXT_LIBPGF
+#define PGFCodecVersionID 0x${PGF_CODEC_VERSION_ID}
+#endif
 
 #define LIBEXEC_INSTALL_DIR "${LIBEXEC_INSTALL_DIR}"
 
