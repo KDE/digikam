@@ -49,6 +49,7 @@ public:
     ~CameraIconItem();
 
     void       setThumbnail(const QImage& thumbnail);
+    /** thumbnail is valid when preview image is loaded from camera */
     bool       hasValidThumbnail() const;
 
     void       setDownloadName(const QString& downloadName);
@@ -58,7 +59,8 @@ public:
     void       setItemInfo(const GPItemInfo& itemInfo);
     GPItemInfo itemInfo() const;
 
-    void    toggleLock();
+    /** Lock on/off item (to prevent deletetion by error) */
+    void       toggleLock();
 
     // reimplemented from IconItem
     virtual QRect clickToOpenRect();

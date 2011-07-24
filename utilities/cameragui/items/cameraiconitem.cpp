@@ -62,7 +62,8 @@ public:
     int        progressCount;         // Position of animation during downloading.
 
     QPixmap    thumbnail;             // Full image size pixmap
-    QPixmap    pixmap;                // Image pixmap adjusted to zoom level.
+
+    QSize      pixSize;
 
     QRect      pixRect;
     QRect      textRect;
@@ -131,7 +132,6 @@ void CameraIconItem::setDownloaded(int status)
     {
         d->progressTimer->stop();
     }
-
     update();
 }
 
@@ -150,7 +150,6 @@ void CameraIconItem::toggleLock()
     {
         d->itemInfo.writePermissions = 0;
     }
-
     update();
 }
 
@@ -159,7 +158,8 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& newName)
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
     const int border     = 8;
     int thumbSize        = view->thumbnailSize() - (2*border);
-    d->pixmap            = d->thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    d->pixSize           = d->thumbnail.size();
+    d->pixSize.scale(thumbSize, thumbSize, Qt::KeepAspectRatio);
     d->pixRect           = QRect(0, 0, 0, 0);
     d->textRect          = QRect(0, 0, 0, 0);
     d->extraRect         = QRect(0, 0, 0, 0);
@@ -170,9 +170,7 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& newName)
     d->pixRect.setHeight(thumbSize);
 
     QFontMetrics fm(iconView()->font());
-    QRect r = QRect(fm.boundingRect(0, 0, thumbSize+(2*border), 0xFFFFFFFF,
-                                    Qt::AlignHCenter | Qt::AlignTop,
-                                    itemName));
+    QRect r = QRect(fm.boundingRect(0, 0, thumbSize+(2*border), 0xFFFFFFFF, Qt::AlignHCenter | Qt::AlignTop, itemName));
     d->textRect.setWidth(r.width());
     d->textRect.setHeight(r.height());
 
@@ -186,9 +184,7 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& newName)
         }
 
         fm = QFontMetrics(fn);
-        r  = QRect(fm.boundingRect(0, 0, thumbSize+(2*border), 0xFFFFFFFF,
-                                   Qt::AlignHCenter | Qt::TextWordWrap,
-                                   newName));
+        r  = QRect(fm.boundingRect(0, 0, thumbSize+(2*border), 0xFFFFFFFF, Qt::AlignHCenter | Qt::TextWordWrap, newName));
         d->extraRect.setWidth(r.width());
         d->extraRect.setHeight(r.height());
 
@@ -220,14 +216,14 @@ QRect CameraIconItem::clickToOpenRect()
 {
     QRect r(rect());
 
-    if (d->pixmap.isNull())
+    if (d->thumbnail.isNull())
     {
         return d->pixRect.translated(r.x(), r.y());
     }
 
-    QRect pixRect(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())/2,
-                  d->pixRect.y() + (d->pixRect.height() - d->pixmap.height())/2,
-                  d->pixmap.width(), d->pixmap.height());
+    QRect pixRect(d->pixRect.x() + (d->pixRect.width()  - d->pixSize.width())  / 2,
+                  d->pixRect.y() + (d->pixRect.height() - d->pixSize.height()) / 2,
+                  d->pixSize.width(), d->pixSize.height());
     return pixRect.translated(r.x(), r.y());
 }
 
@@ -246,10 +242,10 @@ void CameraIconItem::paintItem(QPainter* p)
     p->setPen(isSelected() ? kapp->palette().color(QPalette::HighlightedText)
                            : kapp->palette().color(QPalette::Text));
 
-    QRect pixmapDrawRect(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())  /2,
-                         d->pixRect.y() + (d->pixRect.height() - d->pixmap.height()) /2,
-                         d->pixmap.width(), d->pixmap.height());
-    p->drawPixmap(pixmapDrawRect.topLeft(), d->pixmap);
+    QRect pixmapDrawRect(d->pixRect.x() + (d->pixRect.width()  - d->pixSize.width())  / 2,
+                         d->pixRect.y() + (d->pixRect.height() - d->pixSize.height()) / 2,
+                         d->pixSize.width(), d->pixSize.height());
+    p->drawPixmap(pixmapDrawRect.topLeft(), d->thumbnail.scaled(d->pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     p->save();
 
     QRegion pixmapClipRegion = QRegion(0, 0, r.width(), r.height()) - QRegion(pixmapDrawRect);
@@ -308,7 +304,7 @@ void CameraIconItem::paintItem(QPainter* p)
         }
         case GPItemInfo::DownloadStarted:
         {
-            QPixmap mask(d->pixmap.size());
+            QPixmap mask(d->pixSize);
             mask.fill(QColor(128, 128, 128, 192));
             p->drawPixmap(pixmapDrawRect.topLeft(), mask);
 
@@ -321,8 +317,8 @@ void CameraIconItem::paintItem(QPainter* p)
             }
 
             p->save();
-            int x = pixmapDrawRect.x() + pixmapDrawRect.width()/2  - anim.width()/2;
-            int y = pixmapDrawRect.y() + pixmapDrawRect.height()/2 - anim.height()/2;
+            int x = pixmapDrawRect.x() + pixmapDrawRect.width()  / 2  - anim.width() / 2;
+            int y = pixmapDrawRect.y() + pixmapDrawRect.height() / 2 - anim.height() / 2;
             p->drawPixmap(x, y, anim);
             p->restore();
             break;
