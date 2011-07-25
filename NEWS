@@ -259,4 +259,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 230 ==> 251886 : Autohide scrollbars, please.
 231 ==> 226765 : Panning with arrow keys in preview mode is slow.
 232 ==> 278040 : Raw images disappear after being exported.
-233 ==> 
+233 ==> 255915 : Crash stopping slideshow.
+234 ==> 
