@@ -249,8 +249,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 220 ==> 271710 : Crash when starting after adding 1500 pic + thumbnails.db is 3.9 GB with 4 GB storage capacity.
 221 ==> 244529 : Crash when writing metadata in files.
 222 ==> 267789 : Make face detection (kface) and geo tagging (kmap) optional features.
-223 ==> 278323 : Wrong Ctrl+V shortcut for "Cut".r  
-224 ==> 278321 : Please sort "Themes" (color themes) sub menu. 
+223 ==> 278323 : Wrong Ctrl+V shortcut for "Cut".
+224 ==> 278321 : Please sort "Themes" (color themes) sub menu.
 225 ==> 276827 : digiKam segfaults when autocompleting tags.
 226 ==> 278038 : digiKam crashes while switching image in editor thumbbar.
 227 ==> 276096 : PGF images not shown if zoom is set to 100%.
@@ -260,4 +260,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 231 ==> 226765 : Panning with arrow keys in preview mode is slow.
 232 ==> 278040 : Raw images disappear after being exported.
 233 ==> 255915 : Crash stopping slideshow.
-234 ==> 
+234 ==> 278329 : Using DigiKam in Ubuntu 11.04 I cannot switch to another language.
+235 ==> 
