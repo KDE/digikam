@@ -38,7 +38,7 @@ SET(digikamcore_LIB_SRCS
         ${libdigikamhelpers_SRCS}
         ${libtthread_SRCS}
         ${libversionmanager_SRCS}
-        ${libkmaphelper_SRCS}
+        ${libkgeomaphelper_SRCS}
         ${libkmemoryinfo_SRCS}
 
         # widgets and dialogs
@@ -98,7 +98,7 @@ TARGET_LINK_LIBRARIES(digikamcore
         ${KEXIV2_LIBRARIES}
         ${KIPI_LIBRARIES}
         ${KFACE_LIBRARIES}
-        ${KMAP_LIBRARIES}
+        ${KGEOMAP_LIBRARIES}
 )
 
 IF(USE_SCRIPT_IFACE)
@@ -165,7 +165,7 @@ TARGET_LINK_LIBRARIES(digikamdatabase
                       ${KEXIV2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
                       ${KFACE_LIBRARIES}
-                      ${KMAP_LIBRARIES}
+                      ${KGEOMAP_LIBRARIES}
 
                       ${OPENMP_LDFLAGS}
                      )
@@ -238,7 +238,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libsearchwindow_SRCS}
                  ${libfuzzysearch_SRCS}
                  ${libgpssearch_SRCS}
-                 ${libkmaphelper_SRCS}
+                 ${libkgeomaphelper_SRCS}
                  ${libqueuemanager_SRCS}
                  ${libalbummodels_SRCS}
                  ${libdigikamgui_SRCS}
@@ -271,7 +271,7 @@ TARGET_LINK_LIBRARIES(digikam
         ${KDE4_SOLID_LIBS}
 
         ${KFACE_LIBRARIES}
-        ${KMAP_LIBRARIES}
+        ${KGEOMAP_LIBRARIES}
         ${KIPI_LIBRARIES}
         ${KEXIV2_LIBRARIES}
         ${KDCRAW_LIBRARIES}

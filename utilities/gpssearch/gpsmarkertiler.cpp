@@ -33,10 +33,10 @@
 
 // local includes
 
-#include "digikam2kmap_database.h"
+#include "digikam2kgeomap_database.h"
 
 /// @todo Actually use this definition!
-typedef QPair<KMap::TileIndex, int> MapPair;
+typedef QPair<KGeoMap::TileIndex, int> MapPair;
 Q_DECLARE_METATYPE(MapPair)
 
 namespace Digikam
@@ -109,8 +109,8 @@ public:
     ImageFilterModel*                      imageFilterModel;
     ImageAlbumModel*                       imageAlbumModel;
     QItemSelectionModel*                   selectionModel;
-    KMap::GeoCoordinates::Pair             currentRegionSelection;
-    KMap::KMapGroupState                   mapGlobalGroupState;
+    KGeoMap::GeoCoordinates::Pair             currentRegionSelection;
+    KGeoMap::KGeoMapGroupState                   mapGlobalGroupState;
 };
 
 /**
@@ -118,7 +118,7 @@ public:
  * @param parent Parent object
  */
 GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* const imageFilterModel, QItemSelectionModel* const selectionModel)
-    : KMap::AbstractMarkerTiler(parent), d(new GPSMarkerTilerPrivate())
+    : KGeoMap::AbstractMarkerTiler(parent), d(new GPSMarkerTilerPrivate())
 {
     resetRootTile();
 
@@ -167,7 +167,7 @@ void GPSMarkerTiler::regenerateTiles()
  * @param lowerRight The South-East point.
  * @param level The requested tiling level.
  */
-void GPSMarkerTiler::prepareTiles(const KMap::GeoCoordinates& upperLeft, const KMap::GeoCoordinates& lowerRight, int level)
+void GPSMarkerTiler::prepareTiles(const KGeoMap::GeoCoordinates& upperLeft, const KGeoMap::GeoCoordinates& lowerRight, int level)
 {
     qreal lat1 = upperLeft.lat();
     qreal lng1 = upperLeft.lon();
@@ -260,9 +260,9 @@ void GPSMarkerTiler::prepareTiles(const KMap::GeoCoordinates& upperLeft, const K
  * @param tileIndex The index of a tile.
  * @param stopIfEmpty Determines whether child tiles are also created for empty tiles.
  */
-KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::TileIndex& tileIndex, const bool stopIfEmpty)
+KGeoMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KGeoMap::TileIndex& tileIndex, const bool stopIfEmpty)
 {
-    KMAP_ASSERT(tileIndex.level()<=KMap::TileIndex::MaxLevel);
+    KGEOMAP_ASSERT(tileIndex.level()<=KGeoMap::TileIndex::MaxLevel);
 
     MyTile* tile = static_cast<MyTile*>(rootTile());
 
@@ -282,7 +282,7 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::TileIndex& 
             {
                 const int currentImageId = tile->imagesId.at(i);
                 const GPSImageInfo currentImageInfo = d->imagesHash[currentImageId];
-                const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinates, level);
+                const KGeoMap::TileIndex markerTileIndex = KGeoMap::TileIndex::fromCoordinates(currentImageInfo.coordinates, level);
                 const int newTileIndex = markerTileIndex.lastIndex();
 
                 MyTile* newTile = static_cast<MyTile*>(tile->getChild(newTileIndex));
@@ -323,7 +323,7 @@ KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KMap::TileIndex& 
     return tile;
 }
 
-int GPSMarkerTiler::getTileMarkerCount(const KMap::TileIndex& tileIndex)
+int GPSMarkerTiler::getTileMarkerCount(const KGeoMap::TileIndex& tileIndex)
 {
     MyTile* tile = static_cast<MyTile*>(getTile(tileIndex));
 
@@ -335,7 +335,7 @@ int GPSMarkerTiler::getTileMarkerCount(const KMap::TileIndex& tileIndex)
     return 0;
 }
 
-int GPSMarkerTiler::getTileSelectedCount(const KMap::TileIndex& tileIndex)
+int GPSMarkerTiler::getTileSelectedCount(const KGeoMap::TileIndex& tileIndex)
 {
     Q_UNUSED(tileIndex)
 
@@ -348,7 +348,7 @@ int GPSMarkerTiler::getTileSelectedCount(const KMap::TileIndex& tileIndex)
  * @param sortKey Sets the criteria for selecting the representative thumbnail, a combination of the SortOptions bits.
  * @return Returns the internally used index of the marker.
  */
-QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::TileIndex& tileIndex, const int sortKey)
+QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KGeoMap::TileIndex& tileIndex, const int sortKey)
 {
     MyTile* const tile = static_cast<MyTile*>(getTile(tileIndex, true));
 
@@ -363,12 +363,12 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::TileIndex& tile
     }
 
     GPSImageInfo bestMarkerInfo = d->imagesHash.value(tile->imagesId.first());
-    KMap::KMapGroupState bestMarkerGroupState = getImageState(bestMarkerInfo.id);
+    KGeoMap::KGeoMapGroupState bestMarkerGroupState = getImageState(bestMarkerInfo.id);
 
     for (int i=1; i<tile->imagesId.count(); ++i)
     {
         const GPSImageInfo currentMarkerInfo = d->imagesHash.value(tile->imagesId.at(i));
-        const KMap::KMapGroupState currentMarkerGroupState = getImageState(currentMarkerInfo.id);
+        const KGeoMap::KGeoMapGroupState currentMarkerGroupState = getImageState(currentMarkerInfo.id);
 
         if (GPSImageInfoSorter::fitsBetter(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, getGlobalGroupState(), GPSImageInfoSorter::SortOptions(sortKey)))
         {
@@ -377,7 +377,7 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const KMap::TileIndex& tile
         }
     }
 
-    const QPair<KMap::TileIndex, int> returnedMarker(tileIndex, bestMarkerInfo.id);
+    const QPair<KGeoMap::TileIndex, int> returnedMarker(tileIndex, bestMarkerInfo.id);
 
     return QVariant::fromValue(returnedMarker);
 }
@@ -395,20 +395,20 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
         return QVariant();
     }
 
-    const QPair<KMap::TileIndex, int> firstIndex = indices.first().value<QPair<KMap::TileIndex, int> >();
+    const QPair<KGeoMap::TileIndex, int> firstIndex = indices.first().value<QPair<KGeoMap::TileIndex, int> >();
 
     GPSImageInfo bestMarkerInfo = d->imagesHash.value(firstIndex.second);
 
-    KMap::KMapGroupState bestMarkerGroupState = getImageState(firstIndex.second);
+    KGeoMap::KGeoMapGroupState bestMarkerGroupState = getImageState(firstIndex.second);
 
-    KMap::TileIndex bestMarkerTileIndex = firstIndex.first;
+    KGeoMap::TileIndex bestMarkerTileIndex = firstIndex.first;
 
     for (int i=1; i<indices.count(); ++i)
     {
-        const QPair<KMap::TileIndex, int> currentIndex = indices.at(i).value<QPair<KMap::TileIndex, int> >();
+        const QPair<KGeoMap::TileIndex, int> currentIndex = indices.at(i).value<QPair<KGeoMap::TileIndex, int> >();
 
         GPSImageInfo currentMarkerInfo = d->imagesHash.value(currentIndex.second);
-        KMap::KMapGroupState currentMarkerGroupState = getImageState(currentIndex.second);
+        KGeoMap::KGeoMapGroupState currentMarkerGroupState = getImageState(currentIndex.second);
 
         if (GPSImageInfoSorter::fitsBetter(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, getGlobalGroupState(), GPSImageInfoSorter::SortOptions(sortKey)))
         {
@@ -418,7 +418,7 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
         }
     }
 
-    const QPair<KMap::TileIndex, int> returnedMarker(bestMarkerTileIndex, bestMarkerInfo.id);
+    const QPair<KGeoMap::TileIndex, int> returnedMarker(bestMarkerTileIndex, bestMarkerInfo.id);
 
     return QVariant::fromValue(returnedMarker);
 }
@@ -431,7 +431,7 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
  */
 QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size)
 {
-    QPair<KMap::TileIndex, int> indexForPixmap = index.value<QPair<KMap::TileIndex,int> >();
+    QPair<KGeoMap::TileIndex, int> indexForPixmap = index.value<QPair<KGeoMap::TileIndex,int> >();
 
     QPixmap thumbnail;
     ImageInfo info(indexForPixmap.second);
@@ -440,7 +440,7 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
 
     if (d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width()+2, size.height()+2)))
     {
-        // digikam returns thumbnails with a border around them, but libkmap expects them without a border
+        // digikam returns thumbnails with a border around them, but libkgeomap expects them without a border
         return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);
     }
     else
@@ -454,8 +454,8 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
  */
 bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
 {
-    QPair<KMap::TileIndex, int> firstIndex = a.value<QPair<KMap::TileIndex,int> >();
-    QPair<KMap::TileIndex, int> secondIndex = b.value<QPair<KMap::TileIndex,int> >();
+    QPair<KGeoMap::TileIndex, int> firstIndex = a.value<QPair<KGeoMap::TileIndex,int> >();
+    QPair<KGeoMap::TileIndex, int> secondIndex = b.value<QPair<KGeoMap::TileIndex,int> >();
 
     QList<int> aIndicesList = firstIndex.first.toIntList();
     QList<int> bIndicesList = secondIndex.first.toIntList();
@@ -468,22 +468,22 @@ bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
     return false;
 }
 
-KMap::KMapGroupState GPSMarkerTiler::getTileGroupState(const KMap::TileIndex& tileIndex)
+KGeoMap::KGeoMapGroupState GPSMarkerTiler::getTileGroupState(const KGeoMap::TileIndex& tileIndex)
 {
-    const bool haveGlobalSelection = (d->mapGlobalGroupState & (KMap::KMapFilteredPositiveMask | KMap::KMapRegionSelectedMask) );
+    const bool haveGlobalSelection = (d->mapGlobalGroupState & (KGeoMap::KGeoMapFilteredPositiveMask | KGeoMap::KGeoMapRegionSelectedMask) );
 
     if (!haveGlobalSelection)
     {
-        return KMap::KMapSelectedNone;
+        return KGeoMap::KGeoMapSelectedNone;
     }
 
     /// @todo Store this state in the tiles!
     MyTile* tile = static_cast<MyTile*>(getTile(tileIndex, true));
-    KMap::KMapGroupStateComputer tileStateComputer;
+    KGeoMap::KGeoMapGroupStateComputer tileStateComputer;
 
     for (int i=0; i<tile->imagesId.count(); ++i)
     {
-        const KMap::KMapGroupState imageState = getImageState(tile->imagesId.at(i));
+        const KGeoMap::KGeoMapGroupState imageState = getImageState(tile->imagesId.at(i));
 
         tileStateComputer.addState(imageState);
     }
@@ -606,7 +606,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 
         d->imagesHash.insert(currentImageInfo.id, currentImageInfo);
 
-        const KMap::TileIndex markerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinates, KMap::TileIndex::MaxLevel);
+        const KGeoMap::TileIndex markerTileIndex = KGeoMap::TileIndex::fromCoordinates(currentImageInfo.coordinates, KGeoMap::TileIndex::MaxLevel);
         addMarkerToTileAndChildren(currentImageInfo.id, markerTileIndex, static_cast<MyTile*>(rootTile()), 0);
     }
 
@@ -619,8 +619,8 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 void GPSMarkerTiler::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumbnail)
 {
     QVariant index = d->thumbnailMap.value(loadingDescription.filePath);
-//    QPair<KMap::TileIndex, int> indexForPixmap =
-//        index.value<QPair<KMap::TileIndex, int> >();
+//    QPair<KGeoMap::TileIndex, int> indexForPixmap =
+//        index.value<QPair<KGeoMap::TileIndex, int> >();
     emit signalThumbnailAvailableForIndex(index, thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2));
 }
 
@@ -633,12 +633,12 @@ void GPSMarkerTiler::setActive(const bool state)
     d->activeState = state;
 }
 
-KMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::tileNew()
+KGeoMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::tileNew()
 {
     return new MyTile();
 }
 
-void GPSMarkerTiler::tileDelete(KMap::AbstractMarkerTiler::Tile* const tile)
+void GPSMarkerTiler::tileDelete(KGeoMap::AbstractMarkerTiler::Tile* const tile)
 {
     delete static_cast<MyTile*>(tile);
 }
@@ -667,8 +667,8 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             // the image has no coordinates any more
             // remove it from the tiles and the image list
             const GPSImageInfo oldInfo = d->imagesHash.value(id);
-            const KMap::GeoCoordinates oldCoordinates = oldInfo.coordinates;
-            const KMap::TileIndex oldTileIndex = KMap::TileIndex::fromCoordinates(oldCoordinates, KMap::TileIndex::MaxLevel);
+            const KGeoMap::GeoCoordinates oldCoordinates = oldInfo.coordinates;
+            const KGeoMap::TileIndex oldTileIndex = KGeoMap::TileIndex::fromCoordinates(oldCoordinates, KGeoMap::TileIndex::MaxLevel);
 
             removeMarkerFromTileAndChildren(id, oldTileIndex, static_cast<MyTile*>(rootTile()), 0, 0);
 
@@ -677,7 +677,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             continue;
         }
 
-        KMap::GeoCoordinates newCoordinates(newImageInfo.latitudeNumber(), newImageInfo.longitudeNumber());
+        KGeoMap::GeoCoordinates newCoordinates(newImageInfo.latitudeNumber(), newImageInfo.longitudeNumber());
 
         if (newImageInfo.hasAltitude())
         {
@@ -690,18 +690,18 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             // We assume that the coordinates of the image have changed.
 
             const GPSImageInfo oldInfo = d->imagesHash.value(id);
-            const KMap::GeoCoordinates oldCoordinates = oldInfo.coordinates;
+            const KGeoMap::GeoCoordinates oldCoordinates = oldInfo.coordinates;
 
             const GPSImageInfo currentImageInfo = GPSImageInfo::fromIdCoordinatesRatingDateTime(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
             d->imagesHash.insert(id, currentImageInfo);
 
-            const KMap::TileIndex oldTileIndex = KMap::TileIndex::fromCoordinates(oldCoordinates, KMap::TileIndex::MaxLevel);
-            const KMap::TileIndex newTileIndex = KMap::TileIndex::fromCoordinates(newCoordinates, KMap::TileIndex::MaxLevel);
+            const KGeoMap::TileIndex oldTileIndex = KGeoMap::TileIndex::fromCoordinates(oldCoordinates, KGeoMap::TileIndex::MaxLevel);
+            const KGeoMap::TileIndex newTileIndex = KGeoMap::TileIndex::fromCoordinates(newCoordinates, KGeoMap::TileIndex::MaxLevel);
 
             // find out up to which level the tile indices are equal
             int separatorLevel = -1;
 
-            for (int i=0; i<KMap::TileIndex::MaxLevel; ++i)
+            for (int i=0; i<KGeoMap::TileIndex::MaxLevel; ++i)
             {
                 if (oldTileIndex.at(i) != newTileIndex.at(i))
                 {
@@ -758,7 +758,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             const GPSImageInfo currentImageInfo = GPSImageInfo::fromIdCoordinatesRatingDateTime(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
             d->imagesHash.insert(id, currentImageInfo);
 
-            const KMap::TileIndex newMarkerTileIndex = KMap::TileIndex::fromCoordinates(currentImageInfo.coordinates, KMap::TileIndex::MaxLevel);
+            const KGeoMap::TileIndex newMarkerTileIndex = KGeoMap::TileIndex::fromCoordinates(currentImageInfo.coordinates, KGeoMap::TileIndex::MaxLevel);
 
             addMarkerToTileAndChildren(id, newMarkerTileIndex, static_cast<MyTile*>(rootTile()), 0);
         }
@@ -780,17 +780,17 @@ void GPSMarkerTiler::slotNewModelData(const QList<ImageInfo>& infoList)
     emit(signalTilesOrSelectionChanged());
 }
 
-void GPSMarkerTiler::setRegionSelection(const KMap::GeoCoordinates::Pair& sel)
+void GPSMarkerTiler::setRegionSelection(const KGeoMap::GeoCoordinates::Pair& sel)
 {
     d->currentRegionSelection = sel;
 
     if (sel.first.hasCoordinates())
     {
-        d->mapGlobalGroupState|= KMap::KMapRegionSelectedMask;
+        d->mapGlobalGroupState|= KGeoMap::KGeoMapRegionSelectedMask;
     }
     else
     {
-        d->mapGlobalGroupState&= ~KMap::KMapRegionSelectedMask;
+        d->mapGlobalGroupState&= ~KGeoMap::KGeoMapRegionSelectedMask;
     }
 
     emit(signalTilesOrSelectionChanged());
@@ -800,7 +800,7 @@ void GPSMarkerTiler::removeCurrentRegionSelection()
 {
     d->currentRegionSelection.first.clear();
 
-    d->mapGlobalGroupState&= ~KMap::KMapRegionSelectedMask;
+    d->mapGlobalGroupState&= ~KGeoMap::KGeoMapRegionSelectedMask;
 
     emit(signalTilesOrSelectionChanged());
 }
@@ -810,25 +810,25 @@ void GPSMarkerTiler::onIndicesClicked(const ClickInfo& clickInfo)
     /// @todo Also handle the representative index
 
     QList<qlonglong> clickedImagesId;
-    Q_FOREACH(const KMap::TileIndex& tileIndex, clickInfo.tileIndicesList)
+    Q_FOREACH(const KGeoMap::TileIndex& tileIndex, clickInfo.tileIndicesList)
     {
         clickedImagesId << getTileMarkerIds(tileIndex);
     }
 
     int repImageId = -1;
 
-    if (clickInfo.representativeIndex.canConvert<QPair<KMap::TileIndex, int> >())
+    if (clickInfo.representativeIndex.canConvert<QPair<KGeoMap::TileIndex, int> >())
     {
-        repImageId = clickInfo.representativeIndex.value<QPair<KMap::TileIndex, int> >().second;
+        repImageId = clickInfo.representativeIndex.value<QPair<KGeoMap::TileIndex, int> >().second;
     }
 
-    if (clickInfo.currentMouseMode == KMap::MouseModeSelectThumbnail && d->selectionModel)
+    if (clickInfo.currentMouseMode == KGeoMap::MouseModeSelectThumbnail && d->selectionModel)
     {
         /**
          * @todo This does not work properly, because not all images in a tile
          * may be selectable because some of them are outside of the region selection
          */
-        const bool doSelect = (clickInfo.groupSelectionState & KMap::KMapSelectedMask) != KMap::KMapSelectedAll;
+        const bool doSelect = (clickInfo.groupSelectionState & KGeoMap::KGeoMapSelectedMask) != KGeoMap::KGeoMapSelectedAll;
 
         const QItemSelectionModel::SelectionFlags selectionFlags =
             (doSelect ? QItemSelectionModel::Select : QItemSelectionModel::Deselect)
@@ -854,16 +854,16 @@ void GPSMarkerTiler::onIndicesClicked(const ClickInfo& clickInfo)
             }
         }
     }
-    else if (clickInfo.currentMouseMode == KMap::MouseModeFilter)
+    else if (clickInfo.currentMouseMode == KGeoMap::MouseModeFilter)
     {
         setPositiveFilterIsActive(true);
         emit signalModelFilteredImages(clickedImagesId);
     }
 }
 
-QList<qlonglong> GPSMarkerTiler::getTileMarkerIds(const KMap::TileIndex& tileIndex)
+QList<qlonglong> GPSMarkerTiler::getTileMarkerIds(const KGeoMap::TileIndex& tileIndex)
 {
-    KMAP_ASSERT(tileIndex.level() <= KMap::TileIndex::MaxLevel);
+    KGEOMAP_ASSERT(tileIndex.level() <= KGeoMap::TileIndex::MaxLevel);
     const MyTile* const myTile = static_cast<MyTile*>(getTile(tileIndex, true));
 
     if (!myTile)
@@ -874,47 +874,47 @@ QList<qlonglong> GPSMarkerTiler::getTileMarkerIds(const KMap::TileIndex& tileInd
     return myTile->imagesId;
 }
 
-KMap::KMapGroupState GPSMarkerTiler::getGlobalGroupState()
+KGeoMap::KGeoMapGroupState GPSMarkerTiler::getGlobalGroupState()
 {
     return d->mapGlobalGroupState;
 }
 
-KMap::KMapGroupState GPSMarkerTiler::getImageState(const qlonglong imageId)
+KGeoMap::KGeoMapGroupState GPSMarkerTiler::getImageState(const qlonglong imageId)
 {
-    KMap::KMapGroupState imageState;
+    KGeoMap::KGeoMapGroupState imageState;
 
     // is the image inside the region selection?
-    if (d->mapGlobalGroupState&KMap::KMapRegionSelectedMask)
+    if (d->mapGlobalGroupState&KGeoMap::KGeoMapRegionSelectedMask)
     {
         const QModelIndex imageAlbumModelIndex = d->imageAlbumModel->indexForImageId(imageId);
 
         if (imageAlbumModelIndex.isValid())
         {
-            imageState|= KMap::KMapRegionSelectedAll;
+            imageState|= KGeoMap::KGeoMapRegionSelectedAll;
         }
         else
         {
             // not inside region selection, therefore
             // no other flags can apply
-            return KMap::KMapRegionSelectedNone;
+            return KGeoMap::KGeoMapRegionSelectedNone;
         }
     }
 
     // is the image positively filtered?
-    if (d->mapGlobalGroupState&KMap::KMapFilteredPositiveMask)
+    if (d->mapGlobalGroupState&KGeoMap::KGeoMapFilteredPositiveMask)
     {
         const QModelIndex imageIndexInFilterModel = d->imageFilterModel->indexForImageId(imageId);
 
         if (imageIndexInFilterModel.isValid())
         {
-            imageState|= KMap::KMapFilteredPositiveAll;
+            imageState|= KGeoMap::KGeoMapFilteredPositiveAll;
 
             // is the image selected?
             if (d->selectionModel->hasSelection())
             {
                 if (d->selectionModel->isSelected(imageIndexInFilterModel))
                 {
-                    imageState|= KMap::KMapSelectedAll;
+                    imageState|= KGeoMap::KGeoMapSelectedAll;
                 }
             }
         }
@@ -934,7 +934,7 @@ KMap::KMapGroupState GPSMarkerTiler::getImageState(const qlonglong imageId)
 
             if (d->selectionModel->isSelected(imageIndexInFilterModel))
             {
-                imageState|= KMap::KMapSelectedAll;
+                imageState|= KGeoMap::KGeoMapSelectedAll;
             }
         }
     }
@@ -946,11 +946,11 @@ void GPSMarkerTiler::setPositiveFilterIsActive(const bool state)
 {
     if (state)
     {
-        d->mapGlobalGroupState|= KMap::KMapFilteredPositiveMask;
+        d->mapGlobalGroupState|= KGeoMap::KGeoMapFilteredPositiveMask;
     }
     else
     {
-        d->mapGlobalGroupState&= ~KMap::KMapFilteredPositiveMask;
+        d->mapGlobalGroupState&= ~KGeoMap::KGeoMapFilteredPositiveMask;
     }
 
     /// @todo Somehow, a delay is necessary before emitting this signal - probably the order in which the filtering is propagated to other parts of digikam is wrong or just takes too long
@@ -967,7 +967,7 @@ void GPSMarkerTiler::slotSelectionChanged(const QItemSelection& selected, const 
     emit(signalTilesOrSelectionChanged());
 }
 
-void GPSMarkerTiler::removeMarkerFromTileAndChildren(const qlonglong imageId, const KMap::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel, MyTile* const parentTile)
+void GPSMarkerTiler::removeMarkerFromTileAndChildren(const qlonglong imageId, const KGeoMap::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel, MyTile* const parentTile)
 {
     MyTile* currentParentTile = parentTile;
     MyTile* currentTile = startTile;
@@ -1003,7 +1003,7 @@ void GPSMarkerTiler::removeMarkerFromTileAndChildren(const qlonglong imageId, co
     }
 }
 
-void GPSMarkerTiler::addMarkerToTileAndChildren(const qlonglong imageId, const KMap::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel)
+void GPSMarkerTiler::addMarkerToTileAndChildren(const qlonglong imageId, const KGeoMap::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel)
 {
     MyTile* currentTile = startTile;
 

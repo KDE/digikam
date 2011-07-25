@@ -249,5 +249,12 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 220 ==> 271710 : Crash when starting after adding 1500 pic + thumbnails.db is 3.9 GB with 4 GB storage capacity.
 221 ==> 244529 : Crash when writing metadata in files.
 222 ==> 267789 : Make face detection (kface) and geo tagging (kmap) optional features.
-223 ==> 
-
+223 ==> 278323 : Wrong Ctrl+V shortcut for "Cut".r  
+224 ==> 278321 : Please sort "Themes" (color themes) sub menu. 
+225 ==> 276827 : Digikam segfaults when autocompleting tags.
+226 ==> 278038 : Digikam crashes while switching image in editor thumbbar.
+227 ==> 276096 : PGF images not shown if zoom is set to 100%.
+228 ==> 207944 : New renaming of pictures. 
+229 ==> 270554 : Import Wizard: Rename options filename with timestamp. 
+230 ==> 251886 : Autohide scrollbars, please. 
+231 ==> 

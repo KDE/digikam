@@ -48,7 +48,7 @@
 
 #include "databaseinfocontainers.h"
 #include "databasewatch.h"
-#include "digikam2kmap_database.h"
+#include "digikam2kgeomap_database.h"
 #include "dimg.h"
 #include "imageattributeswatch.h"
 #include "imagedescedittab.h"
