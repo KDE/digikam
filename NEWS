@@ -258,4 +258,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 229 ==> 270554 : Import Wizard: Rename options filename with timestamp.
 230 ==> 251886 : Autohide scrollbars, please.
 231 ==> 226765 : Panning with arrow keys in preview mode is slow.
-232 ==> 
+232 ==> 278040 : Raw images disappear after being exported.
+233 ==> 
