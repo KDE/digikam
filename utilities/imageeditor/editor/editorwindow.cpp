@@ -2439,7 +2439,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     m_savingContext.abortingSaving = false;
 
     // in any case, destructive (Save as) or non (Export), mark as New Version
-    m_canvas->interface()->setHistoryIsBranch(fork);
+    m_canvas->interface()->setHistoryIsBranch(true);
 
     m_canvas->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
                      m_setExifOrientationTag && m_canvas->exifRotated(),
