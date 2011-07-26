@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QPixmap>
+#include <QSet>
 
 // Local includes
 
@@ -121,8 +122,8 @@ Q_SIGNALS:
 
 protected:
 
-    KDirWatch*  m_watch;
-    QStringList m_watchedFiles;
+    KDirWatch*    m_watch;
+    QSet<QString> m_watchedFiles;
 };
 
 // --------------------------------------------------------------------------------------------------------------
