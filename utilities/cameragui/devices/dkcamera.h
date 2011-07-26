@@ -67,7 +67,7 @@ public:
 
     /// If getImageDimensions is false, the camera shall set width and height to -1
     /// if the values are not immediately available
-    virtual bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList) = 0;
+    virtual bool getItemsInfoList(const QString& folder, bool useMetadata, GPItemInfoList& infoList) = 0;
     virtual void getItemInfo(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata) = 0;
 
     virtual bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) = 0;

@@ -471,13 +471,14 @@ void CameraController::executeCommand(CameraCommand* cmd)
         }
         case(CameraCommand::gp_listfiles):
         {
-            QString folder = cmd->map["folder"].toString();
+            QString folder   = cmd->map["folder"].toString();
+            bool useMetadata = cmd->map["useMetadata"].toBool();
 
             sendLogMsg(i18n("Listing files in %1...", folder));
 
             GPItemInfoList itemsList;
 
-            if (!d->camera->getItemsInfoList(folder, itemsList))
+            if (!d->camera->getItemsInfoList(folder, useMetadata, itemsList))
             {
                 sendLogMsg(i18n("Failed to list files in %1.", folder), DHistoryView::ErrorEntry);
             }
@@ -1031,12 +1032,13 @@ void CameraController::listFolders()
     addCommand(cmd);
 }
 
-void CameraController::listFiles(const QString& folder)
+void CameraController::listFiles(const QString& folder, bool useMetadata)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
     cmd->action        = CameraCommand::gp_listfiles;
-    cmd->map.insert("folder", QVariant(folder));
+    cmd->map.insert("folder",      QVariant(folder));
+    cmd->map.insert("useMetadata", QVariant(useMetadata));
     addCommand(cmd);
 }
 

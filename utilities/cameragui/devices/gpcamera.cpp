@@ -748,7 +748,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
 #endif /* HAVE_GPHOTO2 */
 }
 
-bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items)
+bool GPCamera::getItemsInfoList(const QString& folder, bool useMetadata, GPItemInfoList& items)
 {
 #ifdef HAVE_GPHOTO2
     int         errorCode;
@@ -790,7 +790,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items)
         }
 
         GPItemInfo info;
-        getItemInfoInternal(folder, QFile::decodeName(cname), info, false);
+        getItemInfoInternal(folder, QFile::decodeName(cname), info, useMetadata);
         items.append(info);
     }
 

@@ -74,7 +74,7 @@ public:
 
     void capture();
     void listFolders();
-    void listFiles(const QString& folder);
+    void listFiles(const QString& folder, bool useMetadata);
     void getFreeSpace();
     void getMetadata(const QString& folder, const QString& file);
     void getCameraInformation();

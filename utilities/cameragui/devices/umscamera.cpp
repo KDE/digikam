@@ -143,7 +143,7 @@ void UMSCamera::getAllFolders(const QString& folder, QStringList& subFolderList)
     listFolders(folder, subFolderList);
 }
 
-bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList)
+bool UMSCamera::getItemsInfoList(const QString& folder, bool useMetadata, GPItemInfoList& infoList)
 {
     m_cancel = false;
     infoList.clear();
@@ -166,7 +166,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
     for (QFileInfoList::const_iterator fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
     {
         GPItemInfo info;
-        getItemInfo(folder, fi->fileName(), info, false);
+        getItemInfo(folder, fi->fileName(), info, useMetadata);
         infoList.append(info);
     }
 

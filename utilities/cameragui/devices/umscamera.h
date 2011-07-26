@@ -53,7 +53,7 @@ public:
     void cancel();
 
     void getAllFolders(const QString& folder, QStringList& subFolderList);
-    bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList);
+    bool getItemsInfoList(const QString& folder, bool useMetadata, GPItemInfoList& infoList);
     void getItemInfo(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata);
 
     bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
