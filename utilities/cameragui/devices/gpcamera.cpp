@@ -883,12 +883,18 @@ void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemNam
     {
         if (useMetadata)
         {
+            // Try to use file metadata
             DMetadata meta;
             getMetadata(folder, itemName, meta);
             fillItemInfoFromMetadata(info, meta);
+
+            // Fall back to camera file system info
+            if (info.mtime.isNull())
+                info.mtime = QDateTime::fromTime_t(cfinfo.file.mtime);
         }
         else
         {
+            // Only use properties provided by camera.
             if (cfinfo.file.fields & GP_FILE_INFO_MTIME)
             {
                 info.mtime = QDateTime::fromTime_t(cfinfo.file.mtime);

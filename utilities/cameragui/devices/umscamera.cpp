@@ -188,13 +188,18 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, GPIt
     {
         if (useMetadata)
         {
+            // Try to use file metadata
             DMetadata meta;
             getMetadata(folder, itemName, meta);
             fillItemInfoFromMetadata(info, meta);
+
+            // Fall back to file system info
+            if (info.mtime.isNull())
+                info.mtime = ImageScanner::creationDateFromFilesystem(fi);
         }
         else
         {
-            // fall back to file system info
+            // Only use file system date
             info.mtime = ImageScanner::creationDateFromFilesystem(fi);
         }
     }
