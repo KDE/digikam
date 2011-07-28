@@ -263,4 +263,3 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 234 ==> 278329 : Using DigiKam in Ubuntu 11.04 I cannot switch to another language.
 235 ==> 277935 : Rename libkmap to libkgeomap and move it to extragear/libs.
 236 ==> 273077 : Generate Fingerprints gets slower and slower.
-237 ==> 
