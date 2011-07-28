@@ -23,6 +23,7 @@ SET(cameranamehelper_SRCS
     cameranamehelpertest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/views/cameranamehelper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/devices/gpcamera.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/devices/gpiteminfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/devices/dkcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/utils/albumsettings.cpp
 )
