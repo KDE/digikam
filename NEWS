@@ -6,4 +6,5 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 218365 : Show icon thumbs when loaded and not only after all were read.
+002 ==> 
