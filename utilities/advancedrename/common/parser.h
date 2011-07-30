@@ -61,7 +61,6 @@ public:
     Parser();
     virtual ~Parser();
 
-    //    void          init(const ParseSettings& settings);
     void          reset();
 
     QString       parse(ParseSettings& settings);
