@@ -77,6 +77,11 @@ public:
 
 private:
 
+    DateFormat(const DateFormat&);
+    DateFormat& operator=(const DateFormat&);
+
+private:
+
     DateFormatMap m_map;
 };
 
@@ -112,6 +117,9 @@ private Q_SLOTS:
 
 private:
 
+    DateOptionDialog(const DateOptionDialog&);
+    DateOptionDialog& operator=(const DateOptionDialog&);
+
     QString formattedDateTime(const QDateTime& date);
     void    updateExampleLabel();
 };
@@ -130,6 +138,11 @@ public:
 protected:
 
     virtual QString parseOperation(ParseSettings& settings);
+
+private:
+
+    DateOption(const DateOption&);
+    DateOption& operator=(const DateOption&);
 
 private Q_SLOTS:
 

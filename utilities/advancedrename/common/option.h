@@ -54,6 +54,11 @@ protected:
 
 private:
 
+    Option(const Option&);
+    Option& operator=(const Option&);
+
+private:
+
     OptionPriv* const d;
 };
 

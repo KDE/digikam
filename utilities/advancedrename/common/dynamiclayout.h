@@ -69,6 +69,9 @@ public:
 
 private:
 
+    DynamicLayout(const DynamicLayout&);
+    DynamicLayout& operator=(const DynamicLayout&);
+
     int reLayout(const QRect& rect, bool testOnly) const;
 
 private:

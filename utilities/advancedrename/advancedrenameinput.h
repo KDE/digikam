@@ -59,6 +59,11 @@ protected:
 
     virtual void mousePressEvent(QMouseEvent* event);
     virtual void mouseReleaseEvent(QMouseEvent* event);
+
+private:
+
+    AdvancedRenameLineEditProxy(const AdvancedRenameLineEditProxy&);
+    AdvancedRenameLineEditProxy& operator=(const AdvancedRenameLineEditProxy&);
 };
 
 // --------------------------------------------------------
@@ -98,6 +103,11 @@ private Q_SLOTS:
 
     void slotTextChanged();
     void slotParseTimer();
+
+private:
+
+    AdvancedRenameLineEdit(const AdvancedRenameLineEdit&);
+    AdvancedRenameLineEdit& operator=(const AdvancedRenameLineEdit&);
 
 private:
 
@@ -147,6 +157,9 @@ private Q_SLOTS:
     void slotClearButtonPressed();
 
 private:
+
+    AdvancedRenameInput(const AdvancedRenameInput&);
+    AdvancedRenameInput& operator=(const AdvancedRenameInput&);
 
     void readSettings();
     void writeSettings();

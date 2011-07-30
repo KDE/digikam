@@ -46,6 +46,11 @@ public:
 private Q_SLOTS:
 
     void slotThemeChanged();
+
+private:
+
+    DbHeaderListItem(const DbHeaderListItem&);
+    DbHeaderListItem& operator=(const DbHeaderListItem&);
 };
 
 }  // namespace Digikam

@@ -90,6 +90,9 @@ protected:
 
 private:
 
+    Parser(const Parser&);
+    Parser& operator=(const Parser&);
+
     ParseResults results(ParseSettings& settings);
 
     /**

@@ -48,6 +48,11 @@ public:
 protected:
 
     virtual QString parseOperation(ParseSettings& settings);
+
+private:
+
+    CameraNameOption(const CameraNameOption&);
+    CameraNameOption& operator=(const CameraNameOption&);
 };
 
 } // namespace Digikam

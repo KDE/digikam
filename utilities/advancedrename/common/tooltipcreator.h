@@ -49,7 +49,8 @@ public:
 private:
 
     TooltipCreator() {};
-    TooltipCreator(const TooltipCreator&) {};
+    TooltipCreator(const TooltipCreator&);
+    TooltipCreator& operator=(const TooltipCreator&);
 
     // common methods
     QString markOption(const QString& str);

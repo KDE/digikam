@@ -44,6 +44,11 @@ public:
     ~DefaultValueDialog();
 
     KLineEdit* valueInput;
+
+private:
+
+    DefaultValueDialog(const DefaultValueDialog&);
+    DefaultValueDialog& operator=(const DefaultValueDialog&);
 };
 
 // --------------------------------------------------------
@@ -60,6 +65,11 @@ public:
 private Q_SLOTS:
 
     void slotTokenTriggered(const QString& token);
+
+private:
+
+    DefaultValueModifier(const DefaultValueModifier&);
+    DefaultValueModifier& operator=(const DefaultValueModifier&);
 };
 
 } // namespace Digikam

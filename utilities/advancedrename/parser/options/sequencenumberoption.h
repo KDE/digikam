@@ -49,6 +49,11 @@ public:
     ~SequenceNumberDialog();
 
     Ui::SequenceNumberOptionDialogWidget* const ui;
+
+private:
+
+    SequenceNumberDialog(const SequenceNumberDialog&);
+    SequenceNumberDialog& operator=(const SequenceNumberDialog&);
 };
 
 // --------------------------------------------------------
@@ -70,6 +75,10 @@ private Q_SLOTS:
 
     void slotTokenTriggered(const QString& token);
 
+private:
+
+    SequenceNumberOption(const SequenceNumberOption&);
+    SequenceNumberOption& operator=(const SequenceNumberOption&);
 };
 
 } // namespace Digikam

@@ -51,6 +51,11 @@ public:
 private Q_SLOTS:
 
     void slotToTheEndChecked(bool checked);
+
+private:
+
+    RangeDialog(const RangeDialog&);
+    RangeDialog& operator=(const RangeDialog&);
 };
 
 // --------------------------------------------------------
@@ -67,6 +72,11 @@ public:
 private Q_SLOTS:
 
     void slotTokenTriggered(const QString& token);
+
+private:
+
+    RangeModifier(const RangeModifier&);
+    RangeModifier& operator=(const RangeModifier&);
 };
 
 } // namespace Digikam

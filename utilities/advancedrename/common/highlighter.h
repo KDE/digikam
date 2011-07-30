@@ -51,6 +51,9 @@ protected:
 
 private:
 
+    Highlighter(const Highlighter&);
+    Highlighter& operator=(const Highlighter&);
+
     void setupHighlightingGrammar();
 
 private:

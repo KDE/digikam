@@ -40,6 +40,9 @@ public:
 
 private:
 
+    CaseModifier(const CaseModifier&);
+    CaseModifier& operator=(const CaseModifier&);
+
     QString firstupper(const QString& str2Modify);
     QString lower(const QString& str2Modify);
     QString upper(const QString& str2Modify);
