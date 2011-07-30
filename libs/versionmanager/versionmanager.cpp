@@ -357,7 +357,7 @@ void VersionNameCreator::setSaveFileName()
 
         // To find the right number for the new version, go through all the items in the given dir,
         // the version number won't be bigger than count()
-        for (uint i = 0; i <= dirInfo.count(); i++)
+        for (uint i = 0; i <= dirInfo.count(); ++i)
         {
             QString suggestedName = scheme->versionFileName(m_result.path, m_baseName, m_version);
 
@@ -450,7 +450,7 @@ void VersionNameCreator::checkIntermediates()
     {
         int rawConversionStep = -1;
 
-        for (int i = firstStep; i <= lastStep; i++)
+        for (int i = firstStep; i <= lastStep; ++i)
         {
             if (DImgFilterManager::instance()->isRawConversion(m_currentHistory.action(i).identifier()))
             {
@@ -467,7 +467,7 @@ void VersionNameCreator::checkIntermediates()
 
     if (m_settings.saveIntermediateVersions & VersionManagerSettings::WhenNotReproducible)
     {
-        for (int i = firstStep; i <= lastStep; i++)
+        for (int i = firstStep; i <= lastStep; ++i)
         {
             kDebug() << "step" << i 
                      << "is reproducable" << (m_currentHistory.action(i).category() == FilterAction::ReproducibleFilter);
@@ -510,7 +510,7 @@ VersionFileInfo VersionNameCreator::nextIntermediate(const QString& format)
 
     QDir dirInfo(m_intermediatePath);
 
-    for (uint i = 0; i <= dirInfo.count(); i++)
+    for (uint i = 0; i <= dirInfo.count(); ++i)
     {
         QString suggestedName = scheme->intermediateFileName(m_intermediatePath, m_baseName,
                                                              m_version, m_intermediateCounter);

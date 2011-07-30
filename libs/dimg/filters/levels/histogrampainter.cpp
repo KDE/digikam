@@ -364,7 +364,7 @@ public:
 
     void renderXGrid(QPixmap& bufferPixmap, QPainter& p1)
     {
-        for (int x = 0; x < bufferPixmap.width(); x++)
+        for (int x = 0; x < bufferPixmap.width(); ++x)
         {
             if ((x == bufferPixmap.width() / 4) || (x == bufferPixmap.width() / 2) ||
                 (x == 3 * bufferPixmap.width() / 4))

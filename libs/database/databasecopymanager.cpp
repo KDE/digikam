@@ -105,7 +105,7 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
     QMap<QString, QVariant> bindingMap;
 
     // Delete all tables
-    for (int i=0; m_isStopProcessing || i < tablesSize; i++)
+    for (int i=0; m_isStopProcessing || i < tablesSize; ++i)
     {
         if (toDBbackend.execDirectSql(QString("DROP TABLE IF EXISTS %1;").arg(tables[i])) != DatabaseCoreBackend::NoErrors)
         {
@@ -140,7 +140,7 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
     /*
      * loop copying the tables, stop if an error is met
      */
-    for (int i=0; m_isStopProcessing || i < tablesSize; i++)
+    for (int i=0; m_isStopProcessing || i < tablesSize; ++i)
     {
         emit stepStarted(i18n(QString("Copy %1...").arg(tables[i]).toLatin1()));
 
@@ -218,7 +218,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
 
     int columnCount = result.record().count();
 
-    for (int i=0; i<columnCount; i++)
+    for (int i=0; i<columnCount; ++i)
     {
         //            kDebug(50003) << "Column: ["<< result.record().fieldName(i) << "]";
         columnNames.append(result.record().fieldName(i));
@@ -246,7 +246,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
         {
             kDebug(50003) << "Column: ["<< columnName << "] value ["<<result.value(i)<<"]";
             tempBindingMap.insert(columnName.insert(0, ':'), result.value(i));
-            i++;
+            ++i;
         }
 
         // insert the previous requested values to the toDB

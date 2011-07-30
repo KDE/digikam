@@ -418,7 +418,7 @@ bool UndoManager::putImageDataAndHistory(DImg* img, int stepsBack)
     int step = d->undoActions.size() - stepsBack;
     int snapshot;
 
-    for (snapshot = step; snapshot < d->undoActions.size(); snapshot++)
+    for (snapshot = step; snapshot < d->undoActions.size(); ++snapshot)
     {
         if (dynamic_cast<UndoActionIrreversible*>(d->undoActions[snapshot]))
         {

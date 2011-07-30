@@ -905,7 +905,7 @@ void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList
     QList<int> ratingsForInfos;
     const int size = fileUrls.size();
 
-    for (int i=0; i<size; i++)
+    for (int i=0; i<size; ++i)
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
@@ -926,7 +926,7 @@ void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();
 
-        for (int i=0; i<infosSize; i++)
+        for (int i=0; i<infosSize; ++i)
         {
             infos[i].setRating(ratingsForInfos[i]);
         }
@@ -944,7 +944,7 @@ void NepomukService::syncCommentToDigikam(const KUrl::List& fileUrls, const QStr
     QList<QString> commentsForInfos;
     const int size = fileUrls.size();
 
-    for (int i=0; i<size; i++)
+    for (int i=0; i<size; ++i)
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
@@ -965,7 +965,7 @@ void NepomukService::syncCommentToDigikam(const KUrl::List& fileUrls, const QStr
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();
 
-        for (int i=0; i<infosSize; i++)
+        for (int i=0; i<infosSize; ++i)
         {
             DatabaseAccess access;
             ImageComments comments = infos[i].imageComments(access);
@@ -985,7 +985,7 @@ void NepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList<Q
     QList<int> tagIdsForInfos;
     const int size = fileUrls.size();
 
-    for (int i=0; i<size; i++)
+    for (int i=0; i<size; ++i)
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
@@ -1010,7 +1010,7 @@ void NepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList<Q
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();
 
-        for (int i=0; i<infosSize; i++)
+        for (int i=0; i<infosSize; ++i)
         {
             infos[i].setTag(tagIdsForInfos[i]);
         }

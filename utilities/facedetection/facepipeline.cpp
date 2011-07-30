@@ -507,7 +507,7 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 
     QList<double> distances = database.recognizeFaces(package->faces);
 
-    for (int i=0; i<distances.size(); i++)
+    for (int i=0; i<distances.size(); ++i)
     {
         kDebug() << "Recognition:"  << package->info.id()     << package->faces[i].toRect()
                  << "recognized as" << package->faces[i].id() << package->faces[i].name()
@@ -658,13 +658,13 @@ void Benchmarker::process(FacePipelineExtendedPackage::Ptr package)
 
         kDebug() << "There are" << trueFaces << "faces to be detected. The detector found" << testedFaces.size();
 
-        totalImages++;
+        ++totalImages;
         faces += trueFaces;
         totalPixels += package->detectionImage.originalSize().width() * package->detectionImage.originalSize().height();
 
         foreach (const DatabaseFace& trueFace, groundTruth)
         {
-            faces++;
+            ++faces;
             QRect rect = trueFace.region().toRect();
             facePixels += rect.width() * rect.height();
 
@@ -694,12 +694,12 @@ void Benchmarker::process(FacePipelineExtendedPackage::Ptr package)
         {
             if (testedFaces.isEmpty())
             {
-                trueNegativeImages++;
+                ++trueNegativeImages;
             }
             else
             {
                 kDebug() << "The image, truely without faces, is false-positive";
-                falsePositiveImages++;
+                ++falsePositiveImages;
             }
         }
 
@@ -954,7 +954,7 @@ FacePipeline::FacePipelinePriv::buildPackage(const ImageInfo& info, const FacePi
 void FacePipeline::FacePipelinePriv::send(FacePipelineExtendedPackage::Ptr package)
 {
     start();
-    packagesOnTheRoad++;
+    ++packagesOnTheRoad;
     emit startProcess(package);
 }
 
@@ -1160,7 +1160,7 @@ void FacePipeline::plugParallelFaceDetectors()
     const int n          = qMin(3, QThread::idealThreadCount());
     d->parallelDetectors = new ParallelPipes;
 
-    for (int i=0; i<n; i++)
+    for (int i=0; i<n; ++i)
     {
         DetectionWorker* worker = new DetectionWorker(d);
 
@@ -1248,7 +1248,7 @@ void FacePipeline::construct()
     connect(d, SIGNAL(startProcess(FacePipelineExtendedPackage::Ptr)),
             d->pipeline.first(), SLOT(process(FacePipelineExtendedPackage::Ptr)));
 
-    for (int i = 0; i < d->pipeline.size()-1; i++)
+    for (int i = 0; i < d->pipeline.size()-1; ++i)
     {
         connect(d->pipeline[i], SIGNAL(processed(FacePipelineExtendedPackage::Ptr)),
                 d->pipeline[i+1], SLOT(process(FacePipelineExtendedPackage::Ptr)));

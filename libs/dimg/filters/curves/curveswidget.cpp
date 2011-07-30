@@ -163,7 +163,7 @@ public:
     {
 
         QPixmap anim(progressPix.frameAt(progressCount));
-        progressCount++;
+        ++progressCount;
 
         if (progressCount >= progressPix.frameCount())
         {

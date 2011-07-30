@@ -116,7 +116,7 @@ void RawCameraDlg::slotSearchTextChanged(const SearchTextSettings& settings)
 
         if (item->text(0).toLower().contains(search, settings.caseSensitive))
         {
-            results++;
+            ++results;
             query = true;
             item->setHidden(false);
         }

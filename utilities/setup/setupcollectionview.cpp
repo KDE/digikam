@@ -684,9 +684,9 @@ void SetupCollectionModel::emitDataChangedForChildren(const QModelIndex& parent)
     int rows = rowCount(parent);
     int columns = columnCount(parent);
     emit dataChanged(index(0, 0, parent), index(rows, columns, parent));
-    for (int r = 0; r < rows; r++)
+    for (int r = 0; r < rows; ++r)
     {
-        for (int c = 0; c < columns; c++)
+        for (int c = 0; c < columns; ++c)
         {
             QModelIndex i = index(r, c, parent);
             if (i.isValid())

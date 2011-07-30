@@ -386,7 +386,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildImagesTree()
         }
         else if (currentLevel < previousLevel)
         {
-            for (int level = currentLevel; level < previousLevel; level++)
+            for (int level = currentLevel; level < previousLevel; ++level)
             {
                 parent = parent->parent;
             }
@@ -409,7 +409,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildCombinedTree(const
 
     bool onePath = leavesFromRef.size() <= 1;
 
-    for (int i=0; i<path.size(); i++)
+    for (int i=0; i<path.size(); ++i)
     {
         const HistoryGraph::Vertex& v = path[i];
         HistoryGraph::Vertex previous = i ? path[i-1] : HistoryGraph::Vertex();
@@ -513,7 +513,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
         QList<HistoryGraph::Vertex> shortestPath = graph().shortestPath(showActionsFrom, v);
 
         // add all filter actions showActionsFrom -> v above item
-        for (int i=1; i<shortestPath.size(); i++)
+        for (int i=1; i<shortestPath.size(); ++i)
         {
             HistoryEdgeProperties props = graph().properties(shortestPath[i], shortestPath[i-1]);
             foreach (const FilterAction& action, props.actions)
@@ -560,7 +560,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
     VertexItem* item = 0;
     bool isFirst     = true;
 
-    for (int i=1; i<infos.size(); i++)
+    for (int i=1; i<infos.size(); ++i)
     {
         if (isFirst)
         {

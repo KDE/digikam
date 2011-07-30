@@ -69,7 +69,7 @@ CurvesContainer::CurvesContainer(int type, bool sixteenBit)
 
 bool CurvesContainer::isEmpty() const
 {
-    for (int i=0; i<ColorChannels; i++)
+    for (int i=0; i<ColorChannels; ++i)
     {
         if (!values[i].isEmpty())
             return false;
@@ -85,7 +85,7 @@ bool CurvesContainer::operator==(const CurvesContainer& other) const
     if (sixteenBit != other.sixteenBit || curvesType != other.curvesType)
         return false;
 
-    for (int i=0; i<ColorChannels; i++)
+    for (int i=0; i<ColorChannels; ++i)
     {
         if (values[i] != other.values[i])
             return false;
@@ -99,7 +99,7 @@ void CurvesContainer::initialize()
 
     if (curvesType == ImageCurves::CURVE_FREE)
     {
-        for (int i=0; i<ColorChannels; i++)
+        for (int i=0; i<ColorChannels; ++i)
         {
             values[i].resize(segmentMax);
 
@@ -113,7 +113,7 @@ void CurvesContainer::initialize()
     }
     else // SMOOTH
     {
-        for (int i=0; i<ColorChannels; i++)
+        for (int i=0; i<ColorChannels; ++i)
         {
             values[i].resize(ImageCurves::NUM_POINTS);
 
@@ -158,7 +158,7 @@ void CurvesContainer::writeToFilterAction(FilterAction& action, const QString& p
 
     action.addParameter(prefix + "curveBitDepth", 8);
 
-    for (int i=0; i<ColorChannels; i++)
+    for (int i=0; i<ColorChannels; ++i)
     {
         action.addParameter(prefix + QString("curveData[%1]").arg(i), curves.channelToBase64(i));
     }
@@ -173,7 +173,7 @@ CurvesContainer CurvesContainer::fromFilterAction(const FilterAction& action, co
 
     ImageCurves curves(action.parameter(prefix + "curveBitDepth", 8) == 16);
 
-    for (int i=0; i<ColorChannels; i++)
+    for (int i=0; i<ColorChannels; ++i)
     {
         QByteArray base64 = action.parameter(prefix + QString("curveData[%1]").arg(i), QByteArray());
         // check return value and set readParametersError?
@@ -975,7 +975,7 @@ CurvesContainer ImageCurves::getContainer() const
     // any free curve?
     CurveType type = CURVE_SMOOTH;
 
-    for (int i=0; i<ColorChannels; i++)
+    for (int i=0; i<ColorChannels; ++i)
     {
         if ( (type = getCurveType(i)) == CURVE_FREE)
         {
@@ -992,14 +992,14 @@ CurvesContainer ImageCurves::getContainer() const
 
     if (type == CURVE_FREE)
     {
-        for (int i=0; i<ColorChannels; i++)
+        for (int i=0; i<ColorChannels; ++i)
         {
             c.values[i] = getCurveValues(i);
         }
     }
     else
     {
-        for (int i=0; i<ColorChannels; i++)
+        for (int i=0; i<ColorChannels; ++i)
         {
             c.values[i] = getCurvePoints(i);
         }
@@ -1034,7 +1034,7 @@ void ImageCurves::setCurves(const CurvesContainer& container)
 {
     if (container.curvesType == CURVE_FREE)
     {
-        for (int i=0; i<ColorChannels; i++)
+        for (int i=0; i<ColorChannels; ++i)
         {
             setCurveType(i, CURVE_FREE);
             setCurveValues(i, container.values[i]);
@@ -1042,7 +1042,7 @@ void ImageCurves::setCurves(const CurvesContainer& container)
     }
     else
     {
-        for (int i=0; i<ColorChannels; i++)
+        for (int i=0; i<ColorChannels; ++i)
         {
             setCurveType(i, CURVE_SMOOTH);
             setCurvePoints(i, container.values[i]);
@@ -1363,7 +1363,7 @@ bool ImageCurves::isLinear(int channel) const
 
     if (d->curves->curve_type[channel] == CURVE_FREE)
     {
-        for (int j=0; j<d->segmentMax; j++)
+        for (int j=0; j<d->segmentMax; ++j)
             if (d->curves->curve[channel][j] != j)
             {
                 return false;
@@ -1377,7 +1377,7 @@ bool ImageCurves::isLinear(int channel) const
         bool hasLast  = false;
 
         // find out number of valid points
-        for (int j=0; j<NUM_POINTS; j++)
+        for (int j=0; j<NUM_POINTS; ++j)
         {
             int x = d->curves->points[channel][j][0];
             int y = d->curves->points[channel][j][1];
@@ -1469,7 +1469,7 @@ QByteArray ImageCurves::channelToBase64(int channel) const
         quint32 count = 0;
 
         // find out number of valid points
-        for (int j=0; j<NUM_POINTS; j++)
+        for (int j=0; j<NUM_POINTS; ++j)
         {
             if (d->curves->points[channel][j][0] > -1 && d->curves->points[channel][j][1] > -1)
             {
@@ -1479,7 +1479,7 @@ QByteArray ImageCurves::channelToBase64(int channel) const
 
         s << (quint32)count; // number of stored points,
 
-        for (int j=0; j<NUM_POINTS; j++)
+        for (int j=0; j<NUM_POINTS; ++j)
         {
             if (d->curves->points[channel][j][0] > -1 && d->curves->points[channel][j][1] > -1)
             {
@@ -1494,14 +1494,14 @@ QByteArray ImageCurves::channelToBase64(int channel) const
 
         if (isSixteenBits())
         {
-            for (int j=0; j<d->segmentMax; j++)
+            for (int j=0; j<d->segmentMax; ++j)
             {
                 s << (quint16)d->curves->curve[channel][j];
             }
         }
         else
         {
-            for (int j=0; j<d->segmentMax; j++)
+            for (int j=0; j<d->segmentMax; ++j)
             {
                 s << (quint8)d->curves->curve[channel][j];
             }
@@ -1574,7 +1574,7 @@ bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
         QPolygon p(usedCount);
         quint32 x,y;
 
-        for (uint j=0; j<usedCount; j++)
+        for (uint j=0; j<usedCount; ++j)
         {
             s >> x;
             s >> y;
@@ -1596,7 +1596,7 @@ bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
         {
             quint16 data;
 
-            for (int j=0; j<d->segmentMax; j++)
+            for (int j=0; j<d->segmentMax; ++j)
             {
                 s >> data;
                 d->curves->curve[channel][j] = data;
@@ -1606,7 +1606,7 @@ bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
         {
             quint8 data;
 
-            for (int j=0; j<d->segmentMax; j++)
+            for (int j=0; j<d->segmentMax; ++j)
             {
                 s >> data;
                 d->curves->curve[channel][j] = data;

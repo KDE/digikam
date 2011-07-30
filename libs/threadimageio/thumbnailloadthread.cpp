@@ -627,7 +627,7 @@ void ThumbnailLoadThread::pregenerateGroup(const QStringList& filePaths, int siz
 
     QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
 
-    for (int i=0; i<descriptions.size(); i++)
+    for (int i=0; i<descriptions.size(); ++i)
     {
         descriptions[i].previewParameters.flags |= LoadingDescription::PreviewParameters::OnlyPregenerate;
     }
@@ -1089,7 +1089,7 @@ void ThumbnailImageCatcher::ThumbnailImageCatcherPriv::harvest(const LoadingDesc
     // called under lock
     bool finished = true;
 
-    for (int i=0; i<tasks.size(); i++)
+    for (int i=0; i<tasks.size(); ++i)
     {
         ThumbnailImageCatcherResult& task = tasks[i];
 

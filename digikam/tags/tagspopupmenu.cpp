@@ -713,7 +713,7 @@ void TagsPopupMenu::buildFlatMenu(KMenu* menu)
         TagsCache::instance()->shortenedTagPaths(d->assignedTags.toList(), &ids,
                                                  TagsCache::NoLeadingSlash, TagsCache::NoHiddenTags);
 
-    for (int i=0; i<shortenedPaths.size(); i++)
+    for (int i=0; i<shortenedPaths.size(); ++i)
     {
         QString t = shortenedPaths[i];
         t.replace('&', "&&");

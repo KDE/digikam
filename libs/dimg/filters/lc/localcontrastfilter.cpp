@@ -103,9 +103,9 @@ void LocalContrastFilter::filterImage()
 
             process_16bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
-            for (uint x=0; runningFlag() && (x < m_orgImage.width()); x++)
+            for (uint x=0; runningFlag() && (x < m_orgImage.width()); ++x)
             {
-                for (uint y=0; runningFlag() && (y < m_orgImage.height()); y++)
+                for (uint y=0; runningFlag() && (y < m_orgImage.height()); ++y)
                 {
                     i = (m_orgImage.width() * y + x)*3;
                     m_destImage.setPixelColor(x, y, DColor((unsigned short)data[i+2],
@@ -134,9 +134,9 @@ void LocalContrastFilter::filterImage()
 
             process_8bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
-            for (uint x=0; runningFlag() && (x < m_orgImage.width()); x++)
+            for (uint x=0; runningFlag() && (x < m_orgImage.width()); ++x)
             {
-                for (uint y=0; runningFlag() && (y < m_orgImage.height()); y++)
+                for (uint y=0; runningFlag() && (y < m_orgImage.height()); ++y)
                 {
                     i = (m_orgImage.width() * y + x)*3;
                     m_destImage.setPixelColor(x, y, DColor(data[i+2], data[i+1], data[i], 255, false));
@@ -155,7 +155,7 @@ void LocalContrastFilter::process_8bit_rgb_image(unsigned char* img, int sizex, 
     int size            = sizex*sizey;
     float* tmpimage     = new float[size*3];
 
-    for (int i=0 ; runningFlag() && (i < size*3) ; i++)
+    for (int i=0 ; runningFlag() && (i < size*3) ; ++i)
     {
         // convert to floating point
         tmpimage[i] = (float)(img[i]/255.0);
@@ -166,7 +166,7 @@ void LocalContrastFilter::process_8bit_rgb_image(unsigned char* img, int sizex, 
     // convert back to 8 bits (with dithering)
     int pos=0;
 
-    for (int i=0 ; runningFlag() && (i < size) ; i++)
+    for (int i=0 ; runningFlag() && (i < size) ; ++i)
     {
         float dither = d->generator.number(0.0, 1.0);
         img[pos]     = (int)(tmpimage[pos]  *255.0+dither);
@@ -184,7 +184,7 @@ void LocalContrastFilter::process_16bit_rgb_image(unsigned short int* img, int s
     int size              = sizex*sizey;
     float* tmpimage       = new float[size*3];
 
-    for (int i=0 ; runningFlag() && (i < size*3) ; i++)
+    for (int i=0 ; runningFlag() && (i < size*3) ; ++i)
     {
         // convert to floating point
         tmpimage[i] = (float)(img[i]/65535.0);
@@ -195,7 +195,7 @@ void LocalContrastFilter::process_16bit_rgb_image(unsigned short int* img, int s
     // convert back to 16 bits (with dithering)
     int pos = 0;
 
-    for (int i=0 ; runningFlag() && (i < size) ; i++)
+    for (int i=0 ; runningFlag() && (i < size) ; ++i)
     {
         float dither = d->generator.number(0.0, 1.0);
         img[pos]     = (int)(tmpimage[pos]  *65535.0+dither);
@@ -270,7 +270,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
     float* blurimage = new float[size];
     float* srcimg    = new float[size*3];
 
-    for (int i=0 ; i < (size*3) ; i++)
+    for (int i=0 ; i < (size*3) ; ++i)
     {
         srcimg[i] = img[i];
     }
@@ -282,7 +282,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
     int pos = 0;
 
-    for (int nstage=0 ; runningFlag() && (nstage < TONEMAPPING_MAX_STAGES) ; nstage++)
+    for (int nstage=0 ; runningFlag() && (nstage < TONEMAPPING_MAX_STAGES) ; ++nstage)
     {
         if (d->par.stage[nstage].enabled)
         {
@@ -290,7 +290,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
             pos = 0;
 
-            for (int i=0 ; runningFlag() && (i < size) ; i++)
+            for (int i=0 ; runningFlag() && (i < size) ; ++i)
             {
                 blurimage[i] = (float)((img[pos]+img[pos+1]+img[pos+2])/3.0);
                 pos += 3;
@@ -304,7 +304,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
             pos = 0;
 
-            for (int i=0 ; runningFlag() && (i<size) ; i++)
+            for (int i=0 ; runningFlag() && (i<size) ; ++i)
             {
                 float src_r  = img[pos];
                 float src_g  = img[pos+1];
@@ -340,7 +340,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
         float dest_saturation, s1;
         int   pos = 0;
 
-        for (int i=0 ; runningFlag() && (i < size) ; i++)
+        for (int i=0 ; runningFlag() && (i < size) ; ++i)
         {
             rgb2hsv(srcimg[pos], srcimg[pos+1], srcimg[pos+2], src_h, src_s, src_v);
             rgb2hsv(img[pos], img[pos+1], img[pos+2], dest_h, dest_s, dest_v);
@@ -371,7 +371,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
         int pos = 0;
 
-        for (int i=0 ; runningFlag() && (i < size) ; i++)
+        for (int i=0 ; runningFlag() && (i < size) ; ++i)
         {
             val[i] = blurimage[i] = (float)((img[pos]+img[pos+1]+img[pos+2])/3.0);
             //val[i] = blurimage[i] = (float)(max3(img[pos],img[pos+1],img[pos+2]));
@@ -386,7 +386,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
         float threshold  = (float)(d->par.unsharp_mask.threshold*pow/250.0);
         float threshold2 = threshold/2;
 
-        for (int i=0 ; runningFlag() && (i < size) ; i++)
+        for (int i=0 ; runningFlag() && (i < size) ; ++i)
         {
             float dval     = (val[i]-blurimage[i])*pow;
             float abs_dval = fabs(dval);
@@ -476,24 +476,24 @@ void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float 
     a *= a;
     float denormal_remove = (float)(1e-15);
 
-    for (int stage=0 ; runningFlag() && (stage < 2) ; stage++)
+    for (int stage=0 ; runningFlag() && (stage < 2) ; ++stage)
     {
-        for (int y=0 ; runningFlag() && (y < sizey) ; y++)
+        for (int y=0 ; runningFlag() && (y < sizey) ; ++y)
         {
             int pos   = y*sizex;
             float old = data[pos];
-            pos++;
+            ++pos;
 
-            for (int x=1 ; runningFlag() && (x < sizex) ; x++)
+            for (int x=1 ; runningFlag() && (x < sizex) ; ++x)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
-                pos++;
+                ++pos;
             }
 
             pos = y*sizex+sizex-1;
 
-            for (int x=1 ; runningFlag() && (x < sizex) ; x++)
+            for (int x=1 ; runningFlag() && (x < sizex) ; ++x)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -501,12 +501,12 @@ void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float 
             }
         }
 
-        for (int x=0 ; runningFlag() && (x < sizex) ; x++)
+        for (int x=0 ; runningFlag() && (x < sizex) ; ++x)
         {
             int pos   = x;
             float old = data[pos];
 
-            for (int y=1 ; runningFlag() && (y < sizey) ; y++)
+            for (int y=1 ; runningFlag() && (y < sizey) ; ++y)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -515,7 +515,7 @@ void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float 
 
             pos = x+sizex*(sizey-1);
 
-            for (int y=1 ; runningFlag() && (y < sizey) ; y++)
+            for (int y=1 ; runningFlag() && (y < sizey) ; ++y)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -532,12 +532,12 @@ void LocalContrastFilter::stretch_contrast(float* data, int datasize)
     //first, we compute the histogram
     unsigned int histogram[histogram_size];
 
-    for (unsigned int i=0 ; i < histogram_size ; i++)
+    for (unsigned int i=0 ; i < histogram_size ; ++i)
     {
         histogram[i] = 0;
     }
 
-    for (unsigned int i=0 ; runningFlag() && (i < (unsigned int)datasize) ; i++)
+    for (unsigned int i=0 ; runningFlag() && (i < (unsigned int)datasize) ; ++i)
     {
         int m = (int)(data[i]*(histogram_size-1));
 
@@ -561,7 +561,7 @@ void LocalContrastFilter::stretch_contrast(float* data, int datasize)
     unsigned int sum_min     = 0;
     unsigned int sum_max     = 0;
 
-    for (unsigned int i=0 ; runningFlag() && (i < histogram_size) ; i++)
+    for (unsigned int i=0 ; runningFlag() && (i < histogram_size) ; ++i)
     {
         sum_min += histogram[i];
 
@@ -592,7 +592,7 @@ void LocalContrastFilter::stretch_contrast(float* data, int datasize)
     float min_src_val = (float)(min/255.0);
     float max_src_val = (float)(max/255.0);
 
-    for (int i=0 ; runningFlag() && (i < datasize) ; i++)
+    for (int i=0 ; runningFlag() && (i < datasize) ; ++i)
     {
         //stretch the contrast
         float x = data[i];
@@ -713,7 +713,7 @@ FilterAction LocalContrastFilter::filterAction()
     action.addParameter("low_saturation", d->par.low_saturation);
     action.addParameter("stretch_contrast", d->par.stretch_contrast);
 
-    for (int nstage=0 ; nstage < TONEMAPPING_MAX_STAGES ; nstage++)
+    for (int nstage=0 ; nstage < TONEMAPPING_MAX_STAGES ; ++nstage)
     {
         QString stage = QString("stage[%1]:").arg(nstage);
         action.addParameter(stage + "enabled", d->par.stage[nstage].enabled);
@@ -746,7 +746,7 @@ void LocalContrastFilter::readParameters(const Digikam::FilterAction& action)
     d->par.low_saturation = action.parameter("low_saturation").toInt();
     d->par.stretch_contrast = action.parameter("stretch_contrast").toBool();
 
-    for (int nstage=0 ; nstage < TONEMAPPING_MAX_STAGES ; nstage++)
+    for (int nstage=0 ; nstage < TONEMAPPING_MAX_STAGES ; ++nstage)
     {
         QString stage = QString("stage[%1]:").arg(nstage);
         d->par.stage[nstage].enabled = action.parameter(stage + "enabled").toBool();

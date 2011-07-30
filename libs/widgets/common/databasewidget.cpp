@@ -340,7 +340,7 @@ void DatabaseWidget::setParametersFromSettings(const AlbumSettings* settings)
     /* Now set the type according the database type from the settings.
      * If no item is found, ignore the setting.
      */
-    for (int i=0; i<databaseType->count(); i++)
+    for (int i=0; i<databaseType->count(); ++i)
     {
         //kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemData(i)
         //            << "] with ["<< settings->getDatabaseType() << "]";

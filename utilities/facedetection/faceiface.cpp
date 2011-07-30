@@ -565,7 +565,7 @@ int FaceIface::numberOfFaces(qlonglong imageid) const
 
 void FaceIface::fillImageInFaces(const DImg& image, QList<KFaceIface::Face>& faceList, const QSize& scaleSize) const
 {
-    for (int i = 0; i < faceList.size(); i++)
+    for (int i = 0; i < faceList.size(); ++i)
     {
         fillImageInFace(image, faceList[i], scaleSize);
     }
@@ -607,7 +607,7 @@ void FaceIface::fillImageInFaces(ThumbnailImageCatcher* catcher, const QString& 
     QList<QImage> details = catcher->waitForThumbnails();
     kDebug() << details.size();
 
-    for (int i=0; i<faces.size(); i++)
+    for (int i=0; i<faces.size(); ++i)
     {
         KFaceIface::Face& face = faces[i];
         QImage detail          = details[i];
@@ -687,7 +687,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
     QList<DatabaseFace> currentFaces = databaseFaces(imageid);
 
     // merge new with existing entries
-    for (int i=0; i<newFaces.size(); i++)
+    for (int i=0; i<newFaces.size(); ++i)
     {
         DatabaseFace& newFace = newFaces[i];
 
@@ -712,7 +712,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
             if (newFace.isUnknownName())
             {
                 // we have no name in the new face. Do we have one in the old faces?
-                for (int i=0; i<overlappingEntries.size(); i++)
+                for (int i=0; i<overlappingEntries.size(); ++i)
                 {
                     DatabaseFace& oldFace = overlappingEntries[i];
 
@@ -731,7 +731,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
             else
             {
                 // we have a name in the new face. Do we have names in overlapping faces?
-                for (int i=0; i<overlappingEntries.size(); i++)
+                for (int i=0; i<overlappingEntries.size(); ++i)
                 {
                     DatabaseFace& oldFace = overlappingEntries[i];
 
@@ -910,7 +910,7 @@ void FaceIface::removeFace(qlonglong imageid, const QRect& rect)
     QStringList attributes    = DatabaseFace::attributesForFlags(DatabaseFace::AllTypes);
     QList<ImageTagPair> pairs = faceImageTagPairs(imageid, DatabaseFace::AllTypes);
 
-    for (int i=0; i<pairs.size(); i++)
+    for (int i=0; i<pairs.size(); ++i)
     {
         ImageTagPair& pair = pairs[i];
         foreach (const QString& attribute, attributes)
@@ -1028,7 +1028,7 @@ QList< Face > FaceIface::findAndTagFaces(const DImg& image, qlonglong imageid, F
     if (d->database()->peopleCount() && todo >= DetectAndRecognize)
     {
         distances = d->database()->recognizeFaces(faceList);
-        for (int i=0; i<faceList.size(); i++)
+        for (int i=0; i<faceList.size(); ++i)
         {
             if (distances[i] > 100)
             {
@@ -1163,7 +1163,7 @@ void FaceIface::trainFaces(const QList<Face>& givenFaceList )
     readConfigSettings(); //TODO: do by signal
 
     QList<Face> faceList = givenFaceList;
-    for (int i = 0; i < faceList.size(); i++)
+    for (int i = 0; i < faceList.size(); ++i)
     {
         const Face& face = faceList[i];
         if (face.name().isEmpty() || face.image().isNull())

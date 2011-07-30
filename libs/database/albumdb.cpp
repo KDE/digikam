@@ -1996,15 +1996,15 @@ void AlbumDB::removeImageCopyrightProperties(qlonglong imageID, const QString& p
 
     if (!property.isNull())
     {
-        removeBy++;
+        ++removeBy;
     }
     else if (!extraValue.isNull())
     {
-        removeBy++;
+        ++removeBy;
     }
     else if (!value.isNull())
     {
-        removeBy++;
+        ++removeBy;
     }
 
     switch (removeBy)
@@ -2155,7 +2155,7 @@ void AlbumDB::addImageRelations(const QList<qlonglong>& subjectIds, const QList<
 
     QVariantList subjects, objects, types;
 
-    for (int i=0; i<subjectIds.size(); i++)
+    for (int i=0; i<subjectIds.size(); ++i)
     {
         subjects << subjectIds[i];
         objects  << objectIds[i];
