@@ -68,24 +68,34 @@ void CachedPixmaps::clear()
     keys.clear();
 }
 
-bool CachedPixmaps::find(const QRect& region, QPixmap* pix, QRect* source) const
+bool CachedPixmaps::find(const QRect& region, QPixmap* pix, QRect* source)
 {
-    foreach (const CachedPixmapKey& key, keys)
+    QQueue<CachedPixmapKey>::iterator key;
+    for (key = keys.begin(); key != keys.end(); )
     {
-        if (key.region.contains(region) && QPixmapCache::find(key.key, pix))
+        if (!key->region.contains(region))
         {
-            if (key.region == region)
-            {
-                *source = QRect();
-            }
-            else
-            {
-                QPoint startPoint = region.topLeft() - key.region.topLeft();
-                *source = QRect(startPoint, region.size());
-            }
-
-            return true;
+            ++key;
+            continue;
         }
+
+        if (!QPixmapCache::find(key->key, pix))
+        {
+            key = keys.erase(key);
+            continue;
+        }
+
+        if (key->region == region)
+        {
+            *source = QRect();
+        }
+        else
+        {
+            QPoint startPoint = region.topLeft() - key->region.topLeft();
+            *source = QRect(startPoint, region.size());
+        }
+
+        return true;
     }
     return false;
 }
