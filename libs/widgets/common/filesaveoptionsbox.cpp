@@ -193,7 +193,16 @@ void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
         disconnect(d->dialog->locationEdit(), SIGNAL(editTextChanged(const QString&)),
                    this, SLOT(slotImageFileFormatChanged(const QString&)));
 
-        slotImageFileFormatChanged(newFilter);
+        // newFilter is something like "*.jpeg *.jpg *.jpe *.jfif". Get first.
+        QStringList suffixes = newFilter.split("*.", QString::SkipEmptyParts);
+        if (!suffixes.isEmpty())
+        {
+            slotImageFileFormatChanged("*." + suffixes.first().trimmed());
+        }
+        else
+        {
+            slotImageFileFormatChanged(newFilter);
+        }
     }
 }
 
