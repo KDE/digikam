@@ -106,8 +106,8 @@ void ImageViewUtilities::rename(const KUrl& imageUrl, const QString& newName)
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDIOResult(KJob*)));
 
-    connect(job, SIGNAL(copyingDone(KIO::Job*, const KUrl&, const KUrl&, time_t, bool, bool)),
-            this, SLOT(slotRenamed(KIO::Job*, const KUrl&, const KUrl&)));
+    connect(job, SIGNAL(copyingDone(KIO::Job*,KUrl,KUrl,time_t,bool,bool)),
+            this, SLOT(slotRenamed(KIO::Job*,KUrl,KUrl)));
 }
 
 void ImageViewUtilities::slotRenamed(KIO::Job* job, const KUrl&, const KUrl& newURL)
@@ -382,8 +382,8 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
     ImageWindow* imview = ImageWindow::imageWindow();
 
     imview->disconnect(this);
-    connect(imview, SIGNAL(signalURLChanged(const KUrl&)),
-            this, SIGNAL(editorCurrentUrlChanged(const KUrl&)));
+    connect(imview, SIGNAL(signalURLChanged(KUrl)),
+            this, SIGNAL(editorCurrentUrlChanged(KUrl)));
 
     imview->loadImageInfos(allInfosToOpen, info,
                            currentAlbum ? i18n("Album \"%1\"", currentAlbum->title()) : QString());

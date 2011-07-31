@@ -61,13 +61,13 @@ QueuePool::QueuePool(QWidget* parent)
     connect(this, SIGNAL(closeRequest(QWidget*)),
             this, SLOT(slotCloseQueueRequest(QWidget*)));
 
-    connect(this, SIGNAL(testCanDecode(const QDragMoveEvent*, bool&)),
-            this, SLOT(slotTestCanDecode(const QDragMoveEvent*, bool&)));
+    connect(this, SIGNAL(testCanDecode(const QDragMoveEvent*,bool&)),
+            this, SLOT(slotTestCanDecode(const QDragMoveEvent*,bool&)));
 
     // -- FileWatch connections ------------------------------
 
     LoadingCacheInterface::connectToSignalFileChanged(this,
-            SLOT(slotFileChanged(const QString&)));
+            SLOT(slotFileChanged(QString)));
 }
 
 QueuePool::~QueuePool()

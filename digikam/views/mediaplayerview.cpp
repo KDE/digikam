@@ -200,8 +200,8 @@ MediaPlayerView::MediaPlayerView(StackedView* parent)
     connect(d->player->mediaObject(), SIGNAL(finished()),
             this, SLOT(slotPlayerFinished()));
 
-    connect(d->player->mediaObject(), SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-            this, SLOT(slotPlayerstateChanged(Phonon::State, Phonon::State)));
+    connect(d->player->mediaObject(), SIGNAL(stateChanged(Phonon::State,Phonon::State)),
+            this, SLOT(slotPlayerstateChanged(Phonon::State,Phonon::State)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));

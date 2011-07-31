@@ -189,16 +189,16 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->mainInput, SIGNAL(valueChanged (double)),
+    connect(d->mainInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(d->edgeInput, SIGNAL(valueChanged (double)),
+    connect(d->edgeInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(d->rescaleInput, SIGNAL(valueChanged (double)),
+    connect(d->rescaleInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(d->brightenInput, SIGNAL(valueChanged (double)),
+    connect(d->brightenInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
     connect(d->gboxSettings, SIGNAL(signalColorGuideChanged()),

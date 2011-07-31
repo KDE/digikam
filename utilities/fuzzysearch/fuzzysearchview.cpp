@@ -455,8 +455,8 @@ void FuzzySearchView::setupConnections()
     connect(d->searchTreeView, SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(slotAlbumSelected(Album*)));
 
-    connect(d->hsSelector, SIGNAL(valueChanged(int, int)),
-            this, SLOT(slotHSChanged(int, int)));
+    connect(d->hsSelector, SIGNAL(valueChanged(int,int)),
+            this, SLOT(slotHSChanged(int,int)));
 
     connect(d->vSelector, SIGNAL(valueChanged(int)),
             this, SLOT(slotVChanged(int)));
@@ -476,14 +476,14 @@ void FuzzySearchView::setupConnections()
     connect(d->sketchWidget, SIGNAL(signalPenSizeChanged(int)),
             d->penSize, SLOT(setValue(int)));
 
-    connect(d->sketchWidget, SIGNAL(signalPenColorChanged(const QColor&)),
-            this, SLOT(slotPenColorChanged(const QColor&)));
+    connect(d->sketchWidget, SIGNAL(signalPenColorChanged(QColor)),
+            this, SLOT(slotPenColorChanged(QColor)));
 
-    connect(d->sketchWidget, SIGNAL(signalSketchChanged(const QImage&)),
+    connect(d->sketchWidget, SIGNAL(signalSketchChanged(QImage)),
             this, SLOT(slotDirtySketch()));
 
-    connect(d->sketchWidget, SIGNAL(signalUndoRedoStateChanged(bool, bool)),
-            this, SLOT(slotUndoRedoStateChanged(bool, bool)));
+    connect(d->sketchWidget, SIGNAL(signalUndoRedoStateChanged(bool,bool)),
+            this, SLOT(slotUndoRedoStateChanged(bool,bool)));
 
     connect(d->undoBtnSketch, SIGNAL(clicked()),
             d->sketchWidget, SLOT(slotUndo()));
@@ -497,20 +497,20 @@ void FuzzySearchView::setupConnections()
     connect(d->saveBtnImage, SIGNAL(clicked()),
             this, SLOT(slotSaveImageSAlbum()));
 
-    connect(d->nameEditSketch, SIGNAL(textChanged(const QString&)),
+    connect(d->nameEditSketch, SIGNAL(textChanged(QString)),
             this, SLOT(slotCheckNameEditSketchConditions()));
 
-    connect(d->nameEditSketch, SIGNAL(returnPressed(const QString&)),
+    connect(d->nameEditSketch, SIGNAL(returnPressed(QString)),
             d->saveBtnSketch, SLOT(animateClick()));
 
-    connect(d->nameEditImage, SIGNAL(textChanged(const QString&)),
+    connect(d->nameEditImage, SIGNAL(textChanged(QString)),
             this, SLOT(slotCheckNameEditImageConditions()));
 
-    connect(d->nameEditImage, SIGNAL(returnPressed(const QString&)),
+    connect(d->nameEditImage, SIGNAL(returnPressed(QString)),
             d->saveBtnImage, SLOT(animateClick()));
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 
     connect(d->findDuplicatesPanel, SIGNAL(signalUpdateFingerPrints()),
             this, SIGNAL(signalUpdateFingerPrints()));

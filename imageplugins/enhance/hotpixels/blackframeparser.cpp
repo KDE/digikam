@@ -77,11 +77,11 @@ void BlackFrameParser::parseBlackFrame(const KUrl& url)
     {
         m_imageLoaderThread = new LoadSaveThread();
 
-        connect(m_imageLoaderThread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
-                this, SLOT(slotLoadingProgress(const LoadingDescription&, float)));
+        connect(m_imageLoaderThread, SIGNAL(signalLoadingProgress(LoadingDescription,float)),
+                this, SLOT(slotLoadingProgress(LoadingDescription,float)));
 
-        connect(m_imageLoaderThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-                this, SLOT(slotLoadImageFromUrlComplete(const LoadingDescription&, const DImg&)));
+        connect(m_imageLoaderThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+                this, SLOT(slotLoadImageFromUrlComplete(LoadingDescription,DImg)));
     }
 
     LoadingDescription desc = LoadingDescription(m_localFile, DRawDecoding());

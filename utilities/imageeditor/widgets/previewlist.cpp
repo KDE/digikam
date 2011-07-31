@@ -264,8 +264,8 @@ PreviewList::PreviewList(QObject* /*parent*/)
     connect(d->wrapper, SIGNAL(signalFilterStarted(int)),
             this, SLOT(slotFilterStarted(int)));
 
-    connect(d->wrapper, SIGNAL(signalFilterFinished(int, const QPixmap&)),
-            this, SLOT(slotFilterFinished(int, const QPixmap&)));
+    connect(d->wrapper, SIGNAL(signalFilterFinished(int,QPixmap)),
+            this, SLOT(slotFilterFinished(int,QPixmap)));
 }
 
 PreviewList::~PreviewList()

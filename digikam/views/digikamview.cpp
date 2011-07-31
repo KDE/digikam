@@ -354,8 +354,8 @@ void DigikamView::setupConnections()
     connect(d->parent, SIGNAL(signalPasteAlbumItemsSelection()),
             d->iconView, SLOT(paste()));
 
-    connect(this, SIGNAL(signalProgressBarMode(int, const QString&)),
-            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
+    connect(this, SIGNAL(signalProgressBarMode(int,QString)),
+            d->parent, SLOT(slotProgressBarMode(int,QString)));
 
     connect(this, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
@@ -376,10 +376,10 @@ void DigikamView::setupConnections()
 
     // -- IconView Connections -------------------------------------
 
-    connect(d->iconView->model(), SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+    connect(d->iconView->model(), SIGNAL(rowsInserted(QModelIndex,int,int)),
             this, SLOT(slotImageSelected()));
 
-    connect(d->iconView->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+    connect(d->iconView->model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
             this, SLOT(slotImageSelected()));
 
     connect(d->iconView->model(), SIGNAL(layoutChanged()),
@@ -388,14 +388,14 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(selectionChanged()),
             this, SLOT(slotImageSelected()));
 
-    connect(d->iconView, SIGNAL(previewRequested(const ImageInfo&)),
-            this, SLOT(slotTogglePreviewMode(const ImageInfo&)));
+    connect(d->iconView, SIGNAL(previewRequested(ImageInfo)),
+            this, SLOT(slotTogglePreviewMode(ImageInfo)));
 
-    connect(d->iconView, SIGNAL(gotoAlbumAndImageRequested(const ImageInfo&)),
-            this, SLOT(slotGotoAlbumAndItem(const ImageInfo&)));
+    connect(d->iconView, SIGNAL(gotoAlbumAndImageRequested(ImageInfo)),
+            this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
 
-    connect(d->iconView, SIGNAL(gotoDateAndImageRequested(const ImageInfo&)),
-            this, SLOT(slotGotoDateAndItem(const ImageInfo&)));
+    connect(d->iconView, SIGNAL(gotoDateAndImageRequested(ImageInfo)),
+            this, SLOT(slotGotoDateAndItem(ImageInfo)));
 
     connect(d->iconView, SIGNAL(gotoTagAndImageRequested(int)),
             this, SLOT(slotGotoTagAndItem(int)));
@@ -429,8 +429,8 @@ void DigikamView::setupConnections()
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
-    connect(d->rightSideBar, SIGNAL(signalProgressBarMode(int, const QString&)),
-            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
+    connect(d->rightSideBar, SIGNAL(signalProgressBarMode(int,QString)),
+            d->parent, SLOT(slotProgressBarMode(int,QString)));
 
     connect(d->rightSideBar, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
@@ -448,8 +448,8 @@ void DigikamView::setupConnections()
                 d->parent, SLOT(slotGenerateFingerPrintsFirstTime()));
     */
 
-    connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(const QList<qlonglong>&, const QString&)),
-            d->iconView->imageFilterModel(), SLOT(setIdWhitelist(const QList<qlonglong>&, const QString&)));
+    connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(QList<qlonglong>,QString)),
+            d->iconView->imageFilterModel(), SLOT(setIdWhitelist(QList<qlonglong>,QString)));
 
     // -- Filter Bars Connections ---------------------------------
 
@@ -462,11 +462,11 @@ void DigikamView::setupConnections()
             SLOT(setTagFilter(const QList<int>&, const QList<int>&,
                               ImageFilterSettings::MatchingCondition, bool, const QList<int>&, const QList<int>&)));
 
-    connect(d->filterWidget, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
-            model, SLOT(setRatingFilter(int, ImageFilterSettings::RatingCondition)));
+    connect(d->filterWidget, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition)),
+            model, SLOT(setRatingFilter(int,ImageFilterSettings::RatingCondition)));
 
-    connect(d->filterWidget, SIGNAL(signalSearchTextFilterChanged(const SearchTextFilterSettings&)),
-            model, SLOT(setTextFilter(const SearchTextFilterSettings&)));
+    connect(d->filterWidget, SIGNAL(signalSearchTextFilterChanged(SearchTextFilterSettings)),
+            model, SLOT(setTextFilter(SearchTextFilterSettings)));
 
     connect(model, SIGNAL(filterMatchesForText(bool)),
             d->filterWidget, SLOT(slotFilterMatchesForText(bool)));
@@ -512,19 +512,19 @@ void DigikamView::setupConnections()
     connect(d->stackedview, SIGNAL(signalAddToExistingQueue(int)),
             this, SLOT(slotImageAddToExistingQueue(int)));
 
-    connect(d->stackedview, SIGNAL(signalGotoAlbumAndItem(const ImageInfo&)),
-            this, SLOT(slotGotoAlbumAndItem(const ImageInfo&)));
+    connect(d->stackedview, SIGNAL(signalGotoAlbumAndItem(ImageInfo)),
+            this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
 
-    connect(d->stackedview, SIGNAL(signalGotoDateAndItem(const ImageInfo&)),
-            this, SLOT(slotGotoDateAndItem(const ImageInfo&)));
+    connect(d->stackedview, SIGNAL(signalGotoDateAndItem(ImageInfo)),
+            this, SLOT(slotGotoDateAndItem(ImageInfo)));
 
     connect(d->stackedview, SIGNAL(signalGotoTagAndItem(int)),
             this, SLOT(slotGotoTagAndItem(int)));
 
     // -- MetadataManager progress ---------------
 
-    connect(MetadataManager::instance(), SIGNAL(progressMessageChanged(const QString&)),
-            this, SLOT(slotProgressMessageChanged(const QString&)));
+    connect(MetadataManager::instance(), SIGNAL(progressMessageChanged(QString)),
+            this, SLOT(slotProgressMessageChanged(QString)));
 
     connect(MetadataManager::instance(), SIGNAL(progressValueChanged(float)),
             this, SLOT(slotProgressValueChanged(float)));
@@ -532,8 +532,8 @@ void DigikamView::setupConnections()
     connect(MetadataManager::instance(), SIGNAL(progressFinished()),
             this, SLOT(slotProgressFinished()));
 
-    connect(MetadataManager::instance(), SIGNAL(orientationChangeFailed(const QStringList&)),
-            this, SLOT(slotOrientationChangeFailed(const QStringList&)));
+    connect(MetadataManager::instance(), SIGNAL(orientationChangeFailed(QStringList)),
+            this, SLOT(slotOrientationChangeFailed(QStringList)));
 
     // -- timers ---------------
 
@@ -553,14 +553,14 @@ void DigikamView::setupConnections()
     connect(this, SIGNAL(signalAlbumSelected(bool)),
             d->albumHistory, SLOT(slotAlbumSelected()));
 
-    connect(this, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
-            d->albumHistory, SLOT(slotImageSelected(const ImageInfoList&)));
+    connect(this, SIGNAL(signalImageSelected(ImageInfoList,bool,bool,ImageInfoList)),
+            d->albumHistory, SLOT(slotImageSelected(ImageInfoList)));
 
-    connect(d->iconView, SIGNAL(currentChanged(const ImageInfo&)),
-            d->albumHistory, SLOT(slotCurrentChange(const ImageInfo&)));
+    connect(d->iconView, SIGNAL(currentChanged(ImageInfo)),
+            d->albumHistory, SLOT(slotCurrentChange(ImageInfo)));
 
-    connect(d->iconView, SIGNAL(gotoAlbumAndImageRequested(const ImageInfo&)),
-            d->albumHistory, SLOT(slotClearSelectPAlbum(const ImageInfo&)));
+    connect(d->iconView, SIGNAL(gotoAlbumAndImageRequested(ImageInfo)),
+            d->albumHistory, SLOT(slotClearSelectPAlbum(ImageInfo)));
 
     connect(d->iconView, SIGNAL(gotoTagAndImageRequested(int)),
             d->albumHistory, SLOT(slotClearSelectTAlbum(int)));
@@ -571,8 +571,8 @@ void DigikamView::setupConnections()
     connect(d->albumHistory, SIGNAL(signalSetCurrent(qlonglong)),
             d->iconView, SLOT(setCurrentWhenAvailable(qlonglong)));
 
-    connect(d->albumHistory, SIGNAL(signalSetSelectedInfos(const QList<ImageInfo>&)),
-            d->iconView, SLOT(setSelectedImageInfos(const QList<ImageInfo>&)));
+    connect(d->albumHistory, SIGNAL(signalSetSelectedInfos(QList<ImageInfo>)),
+            d->iconView, SLOT(setSelectedImageInfos(QList<ImageInfo>)));
 
     connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
             d->albumHistory, SLOT(slotAlbumDeleted(Album*)));
@@ -582,11 +582,11 @@ void DigikamView::setupConnections()
 
     // -- Image versions ----------------
 
-    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(imageSelected(const ImageInfo&)),
-            d->iconView, SLOT(hintAt(const ImageInfo&)));
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(imageSelected(ImageInfo)),
+            d->iconView, SLOT(hintAt(ImageInfo)));
 
-    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(const ImageInfo&)),
-            this, SLOT(slotGotoAlbumAndItem(const ImageInfo&)));
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(ImageInfo)),
+            this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
 }
 
 void DigikamView::connectIconViewFilter(FilterStatusBar* filterbar)
@@ -596,8 +596,8 @@ void DigikamView::connectIconViewFilter(FilterStatusBar* filterbar)
     connect(model, SIGNAL(filterMatches(bool)),
             filterbar, SLOT(slotFilterMatches(bool)));
 
-    connect(model, SIGNAL(filterSettingsChanged(const ImageFilterSettings&)),
-            filterbar, SLOT(slotFilterSettingsChanged(const ImageFilterSettings&)));
+    connect(model, SIGNAL(filterSettingsChanged(ImageFilterSettings)),
+            filterbar, SLOT(slotFilterSettingsChanged(ImageFilterSettings)));
 
     connect(filterbar, SIGNAL(signalResetFilters()),
             d->filterWidget, SLOT(slotResetFilters()));
@@ -1347,8 +1347,8 @@ void DigikamView::slotAlbumPropsEdit()
 
 void DigikamView::connectBatchSyncMetadata(BatchSyncMetadata* syncMetadata)
 {
-    connect(syncMetadata, SIGNAL(signalProgressBarMode(int, const QString&)),
-            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
+    connect(syncMetadata, SIGNAL(signalProgressBarMode(int,QString)),
+            d->parent, SLOT(slotProgressBarMode(int,QString)));
 
     connect(syncMetadata, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
@@ -1790,8 +1790,8 @@ void DigikamView::slotSlideShowRecursive()
         }
 
         ImageInfoAlbumsJob* job = new ImageInfoAlbumsJob;
-        connect(job, SIGNAL(signalCompleted(const ImageInfoList&)),
-                this, SLOT(slotItemsInfoFromAlbums(const ImageInfoList&)));
+        connect(job, SIGNAL(signalCompleted(ImageInfoList)),
+                this, SLOT(slotItemsInfoFromAlbums(ImageInfoList)));
         job->allItemsFromAlbums(albumList);
     }
 }
@@ -1842,14 +1842,14 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
             slide->setCurrent(d->iconView->currentUrl());
         }
 
-        connect(slide, SIGNAL(signalRatingChanged(const KUrl&, int)),
-                this, SLOT(slotRatingChanged(const KUrl&, int)));
+        connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
+                this, SLOT(slotRatingChanged(KUrl,int)));
 
-        connect(slide, SIGNAL(signalColorLabelChanged(const KUrl&, int)),
-                this, SLOT(slotColorLabelChanged(const KUrl&, int)));
+        connect(slide, SIGNAL(signalColorLabelChanged(KUrl,int)),
+                this, SLOT(slotColorLabelChanged(KUrl,int)));
 
-        connect(slide, SIGNAL(signalPickLabelChanged(const KUrl&, int)),
-                this, SLOT(slotPickLabelChanged(const KUrl&, int)));
+        connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
+                this, SLOT(slotPickLabelChanged(KUrl,int)));
 
         slide->show();
     }

@@ -168,8 +168,8 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     connect(d->blackFrameButton, SIGNAL(clicked()),
             this, SLOT(slotAddBlackFrame()));
 
-    connect(d->blackFrameListView, SIGNAL(signalBlackFrameSelected(const QList<HotPixel>&, const KUrl&)),
-            this, SLOT(slotBlackFrame(const QList<HotPixel>&, const KUrl&)));
+    connect(d->blackFrameListView, SIGNAL(signalBlackFrameSelected(QList<HotPixel>,KUrl)),
+            this, SLOT(slotBlackFrame(QList<HotPixel>,KUrl)));
 }
 
 HotPixelsTool::~HotPixelsTool()

@@ -91,8 +91,8 @@ CaptureDlg::CaptureDlg(QWidget* parent, CameraController* controller,
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotCapture()));
 
-    connect(d->controller, SIGNAL(signalPreview(const QImage&)),
-            this, SLOT(slotPreviewDone(const QImage&)));
+    connect(d->controller, SIGNAL(signalPreview(QImage)),
+            this, SLOT(slotPreviewDone(QImage)));
 
     // -------------------------------------------------------------
 
@@ -132,8 +132,8 @@ void CaptureDlg::slotCapture()
 {
     d->stopPreview = true;
     d->timer->stop();
-    disconnect(d->controller, SIGNAL(signalPreview(const QImage&)),
-               this, SLOT(slotPreviewDone(const QImage&)));
+    disconnect(d->controller, SIGNAL(signalPreview(QImage)),
+               this, SLOT(slotPreviewDone(QImage)));
     KConfigGroup group = KGlobal::config()->group("Capture Tool Dialog");
     saveDialogSize(group);
     d->controller->capture();

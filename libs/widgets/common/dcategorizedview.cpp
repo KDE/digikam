@@ -113,14 +113,14 @@ DCategorizedView::DCategorizedView(QWidget* parent)
     viewport()->setAcceptDrops(true);
     setMouseTracking(true);
 
-    connect(this, SIGNAL(activated(const QModelIndex&)),
-            this, SLOT(slotActivated(const QModelIndex&)));
+    connect(this, SIGNAL(activated(QModelIndex)),
+            this, SLOT(slotActivated(QModelIndex)));
 
-    connect(this, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(slotClicked(const QModelIndex&)));
+    connect(this, SIGNAL(clicked(QModelIndex)),
+            this, SLOT(slotClicked(QModelIndex)));
 
-    connect(this, SIGNAL(entered(const QModelIndex&)),
-            this, SLOT(slotEntered(const QModelIndex&)));
+    connect(this, SIGNAL(entered(QModelIndex)),
+            this, SLOT(slotEntered(QModelIndex)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -145,15 +145,15 @@ void DCategorizedView::setItemDelegate(DItemDelegate* delegate)
 
     if (d->delegate)
     {
-        disconnect(d->delegate, SIGNAL(gridSizeChanged(const QSize&)),
-                   this, SLOT(slotGridSizeChanged(const QSize&)));
+        disconnect(d->delegate, SIGNAL(gridSizeChanged(QSize)),
+                   this, SLOT(slotGridSizeChanged(QSize)));
     }
 
     d->delegate = delegate;
     DigikamKCategorizedView::setItemDelegate(d->delegate);
 
-    connect(d->delegate, SIGNAL(gridSizeChanged(const QSize&)),
-            this, SLOT(slotGridSizeChanged(const QSize&)));
+    connect(d->delegate, SIGNAL(gridSizeChanged(QSize)),
+            this, SLOT(slotGridSizeChanged(QSize)));
 }
 
 void DCategorizedView::setSpacing(int spacing)

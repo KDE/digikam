@@ -175,8 +175,8 @@ LoadingCache::LoadingCache()
     qRegisterMetaType<DImg>("DImg");
     qRegisterMetaType<DMetadata>("DMetadata");
 
-    connect(IccSettings::instance(), SIGNAL(settingsChanged(const ICCSettingsContainer&, const ICCSettingsContainer&)),
-            this, SLOT(iccSettingsChanged(const ICCSettingsContainer&, const ICCSettingsContainer&)));
+    connect(IccSettings::instance(), SIGNAL(settingsChanged(ICCSettingsContainer,ICCSettingsContainer)),
+            this, SLOT(iccSettingsChanged(ICCSettingsContainer,ICCSettingsContainer)));
 }
 
 LoadingCache::~LoadingCache()
@@ -411,8 +411,8 @@ ClassicLoadingCacheFileWatch::ClassicLoadingCacheFileWatch()
 
     m_watch = new KDirWatch;
 
-    connect(m_watch, SIGNAL(dirty(const QString&)),
-            this, SLOT(slotFileDirty(const QString&)));
+    connect(m_watch, SIGNAL(dirty(QString)),
+            this, SLOT(slotFileDirty(QString)));
 
     // Make sure the signal gets here directly from the event loop.
     // If putImage is called from the main thread, with CacheLock,

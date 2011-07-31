@@ -89,8 +89,8 @@ void SearchTextBarTest::testSearchTextSettings()
     QCOMPARE(textBar.searchTextSettings(), defaultSettings);
 
     callCount = 0;
-    connect(&textBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SLOT(newSearchTextSettings(const SearchTextSettings&)));
+    connect(&textBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
+            this, SLOT(newSearchTextSettings(SearchTextSettings)));
 
     const QString textEntered = "hello world";
     keyClicks(&textBar, textEntered);

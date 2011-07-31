@@ -157,8 +157,8 @@ DateOptionDialog::DateOptionDialog(Parseable* parent)
     connect(ui->dateFormatPicker, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotDateFormatChanged(int)));
 
-    connect(ui->customFormatInput, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotCustomFormatChanged(const QString&)));
+    connect(ui->customFormatInput, SIGNAL(textChanged(QString)),
+            this, SLOT(slotCustomFormatChanged(QString)));
 
     // --------------------------------------------------------
 

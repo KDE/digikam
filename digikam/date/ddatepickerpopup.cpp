@@ -94,11 +94,11 @@ DDatePickerPopup::DDatePickerPopup( Items items, const QDate& date, QWidget* par
     d->datePicker = new KDatePicker( this );
     d->datePicker->setCloseButton( false );
 
-    connect( d->datePicker, SIGNAL( dateEntered( const QDate& ) ),
-             this, SLOT( slotDateChanged( const QDate& ) ) );
+    connect( d->datePicker, SIGNAL(dateEntered(QDate)),
+             this, SLOT(slotDateChanged(QDate)) );
 
-    connect( d->datePicker, SIGNAL( dateSelected( const QDate& ) ),
-             this, SLOT( slotDateChanged( const QDate& ) ) );
+    connect( d->datePicker, SIGNAL(dateSelected(QDate)),
+             this, SLOT(slotDateChanged(QDate)) );
 
     d->datePicker->setDate( date );
 
@@ -131,16 +131,16 @@ void DDatePickerPopup::buildMenu()
 
     if ( d->items & Words )
     {
-        addAction( i18n("&Today"),       this, SLOT( slotToday() ) );
-        addAction( i18n("To&morrow"),    this, SLOT( slotTomorrow() ) );
-        addAction( i18n("Next &Week"),   this, SLOT( slotNextWeek() ) );
-        addAction( i18n("Next M&onth"),  this, SLOT( slotNextMonth() ) );
+        addAction( i18n("&Today"),       this, SLOT(slotToday()) );
+        addAction( i18n("To&morrow"),    this, SLOT(slotTomorrow()) );
+        addAction( i18n("Next &Week"),   this, SLOT(slotNextWeek()) );
+        addAction( i18n("Next M&onth"),  this, SLOT(slotNextMonth()) );
 
-        addAction( i18n("Y&esterday"),   this, SLOT( slotYesterday() ) );
-        addAction( i18n("Last &Monday"), this, SLOT( slotPrevMonday() ) );
-        addAction( i18n("Last &Friday"), this, SLOT( slotPrevFriday() ) );
-        addAction( i18n("Last &Week"),   this, SLOT( slotPrevWeek() ) );
-        addAction( i18n("Last M&onth"),  this, SLOT( slotPrevMonth() ) );
+        addAction( i18n("Y&esterday"),   this, SLOT(slotYesterday()) );
+        addAction( i18n("Last &Monday"), this, SLOT(slotPrevMonday()) );
+        addAction( i18n("Last &Friday"), this, SLOT(slotPrevFriday()) );
+        addAction( i18n("Last &Week"),   this, SLOT(slotPrevWeek()) );
+        addAction( i18n("Last M&onth"),  this, SLOT(slotPrevMonth()) );
 
         if ( d->items & NoDate )
         {
@@ -150,7 +150,7 @@ void DDatePickerPopup::buildMenu()
 
     if ( d->items & NoDate )
     {
-        addAction( i18n("No Date"), this, SLOT( slotNoDate() ) );
+        addAction( i18n("No Date"), this, SLOT(slotNoDate()) );
     }
 }
 

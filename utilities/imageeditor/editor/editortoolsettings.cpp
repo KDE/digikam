@@ -283,7 +283,7 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
     connect(d->loadBtn, SIGNAL(clicked()),
             this, SIGNAL(signalLoadClicked()));
 
-    connect(d->guideColorBt, SIGNAL(changed(const QColor&)),
+    connect(d->guideColorBt, SIGNAL(changed(QColor)),
             this, SIGNAL(signalColorGuideChanged()));
 
     connect(d->guideSize, SIGNAL(valueChanged(int)),

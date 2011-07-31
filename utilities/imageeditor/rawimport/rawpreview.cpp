@@ -97,11 +97,11 @@ RawPreview::RawPreview(const KUrl& url, QWidget* parent)
 
     // ------------------------------------------------------------
 
-    connect(d->thread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-            this, SLOT(slotImageLoaded(const LoadingDescription&, const DImg&)));
+    connect(d->thread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+            this, SLOT(slotImageLoaded(LoadingDescription,DImg)));
 
-    connect(d->thread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
-            this, SLOT(slotLoadingProgress(const LoadingDescription&, float)));
+    connect(d->thread, SIGNAL(signalLoadingProgress(LoadingDescription,float)),
+            this, SLOT(slotLoadingProgress(LoadingDescription,float)));
 }
 
 RawPreview::~RawPreview()

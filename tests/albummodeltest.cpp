@@ -87,8 +87,8 @@ void AlbumModelTest::initTestCase()
     AlbumManager::instance();
 
     // catch palbum counts for waiting
-    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
-            this, SLOT(setLastPAlbumCountMap(const QMap<int, int>&)));
+    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(QMap<int,int>)),
+            this, SLOT(setLastPAlbumCountMap(QMap<int,int>)));
 
     AlbumManager::checkDatabaseDirsAfterFirstRun(QDir::temp().absoluteFilePath(
                 tempSuffix), QDir::temp().absoluteFilePath(tempSuffix));
@@ -151,10 +151,10 @@ void AlbumModelTest::init()
     addedIds.clear();
     startModel = new AlbumModel;
     startModel->setShowCount(true);
-    connect(startModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-            this, SLOT(slotStartModelRowsInserted(const QModelIndex&, int, int)));
-    connect(startModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(slotStartModelDataChanged(const QModelIndex&, const QModelIndex&)));
+    connect(startModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            this, SLOT(slotStartModelRowsInserted(QModelIndex,int,int)));
+    connect(startModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+            this, SLOT(slotStartModelDataChanged(QModelIndex,QModelIndex)));
     kDebug() << "Created startModel" << startModel;
 
     // ensure that this model is empty in the beginning except for the root
@@ -304,7 +304,7 @@ void AlbumModelTest::ensureItemCounts()
     while (palbumCountMap.size() < 8)
     {
         QEventLoop pAlbumLoop;
-        connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
+        connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(QMap<int,int>)),
                 &pAlbumLoop, SLOT(quit()));
         kDebug() << "Waiting for first PAlbum count map";
         pAlbumLoop.exec();

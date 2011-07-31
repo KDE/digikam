@@ -70,10 +70,10 @@ void DImgPreviewItem::DImgPreviewItemPrivate::init(DImgPreviewItem* q)
     previewThread = new PreviewLoadThread;
     preloadThread = new PreviewLoadThread;
 
-    QObject::connect(previewThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-                     q, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
+    QObject::connect(previewThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+                     q, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
 
-    QObject::connect(preloadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
+    QObject::connect(preloadThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
                      q, SLOT(preloadNext()));
 
     // get preview size from screen size, but limit from VGA to WQXGA
@@ -90,7 +90,7 @@ void DImgPreviewItem::DImgPreviewItemPrivate::init(DImgPreviewItem* q)
         previewSize = 2560;
     }
 
-    LoadingCacheInterface::connectToSignalFileChanged(q, SLOT(slotFileChanged(const QString&)));
+    LoadingCacheInterface::connectToSignalFileChanged(q, SLOT(slotFileChanged(QString)));
 }
 
 DImgPreviewItem::~DImgPreviewItem()

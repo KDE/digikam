@@ -95,7 +95,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList
 
     d->aspectRatioCropAction = new KAction(KIcon("ratiocrop"), i18n("Aspect Ratio Crop..."), this);
     actionCollection()->addAction("imageplugin_ratiocrop", d->aspectRatioCropAction);
-    connect(d->aspectRatioCropAction, SIGNAL(triggered(bool) ),
+    connect(d->aspectRatioCropAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRatioCrop()));
 
 #ifdef HAVE_GLIB2
@@ -117,7 +117,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList
 
     d->freerotationAction = new KAction(KIcon("freerotation"), QString("%1...").arg(pluginName), this);
     actionCollection()->addAction("imageplugin_freerotation", d->freerotationAction );
-    connect(d->freerotationAction, SIGNAL(triggered(bool) ),
+    connect(d->freerotationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotFreeRotation()));
 
     KAction* point1Action = new KAction(i18n("Set Point 1"), this);

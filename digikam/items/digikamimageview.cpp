@@ -134,25 +134,25 @@ DigikamImageView::DigikamImageView(QWidget* parent)
     GroupIndicatorOverlay* groupOverlay = new GroupIndicatorOverlay(this);
     addOverlay(groupOverlay);
 
-    connect(ratingOverlay, SIGNAL(ratingEdited(const QList<QModelIndex>&, int)),
-            this, SLOT(assignRating(const QList<QModelIndex>&, int)));
+    connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
+            this, SLOT(assignRating(QList<QModelIndex>,int)));
 
-    connect(groupOverlay, SIGNAL(toggleGroupOpen(const QModelIndex&)),
-            this, SLOT(groupIndicatorClicked(const QModelIndex&)));
+    connect(groupOverlay, SIGNAL(toggleGroupOpen(QModelIndex)),
+            this, SLOT(groupIndicatorClicked(QModelIndex)));
 
-    connect(groupOverlay, SIGNAL(showButtonContextMenu(const QModelIndex&, QContextMenuEvent*)),
-            this, SLOT(showGroupContextMenu(const QModelIndex&, QContextMenuEvent*)));
+    connect(groupOverlay, SIGNAL(showButtonContextMenu(QModelIndex,QContextMenuEvent*)),
+            this, SLOT(showGroupContextMenu(QModelIndex,QContextMenuEvent*)));
 
     d->utilities = new ImageViewUtilities(this);
 
-    connect(d->utilities, SIGNAL(editorCurrentUrlChanged(const KUrl&)),
-            this, SLOT(setCurrentUrl(const KUrl&)));
+    connect(d->utilities, SIGNAL(editorCurrentUrlChanged(KUrl)),
+            this, SLOT(setCurrentUrl(KUrl)));
 
-    connect(imageModel()->dragDropHandler(), SIGNAL(assignTags(const QList<ImageInfo>&, const QList<int>&)),
-            MetadataManager::instance(), SLOT(assignTags(const QList<ImageInfo>&, const QList<int>&)));
+    connect(imageModel()->dragDropHandler(), SIGNAL(assignTags(QList<ImageInfo>,QList<int>)),
+            MetadataManager::instance(), SLOT(assignTags(QList<ImageInfo>,QList<int>)));
 
-    connect(imageModel()->dragDropHandler(), SIGNAL(addToGroup(const ImageInfo&, const QList<ImageInfo>&)),
-            MetadataManager::instance(), SLOT(addToGroup(const ImageInfo&, const QList<ImageInfo>&)));
+    connect(imageModel()->dragDropHandler(), SIGNAL(addToGroup(ImageInfo,QList<ImageInfo>)),
+            MetadataManager::instance(), SLOT(addToGroup(ImageInfo,QList<ImageInfo>)));
 
     connect(imageModel()->dragDropHandler(), SIGNAL(dioResult(KJob*)),
             d->utilities, SLOT(slotDIOResult(KJob*)));
@@ -210,8 +210,8 @@ void DigikamImageView::addRejectionOverlay(ImageDelegate* delegate)
 {
     FaceRejectionOverlay* rejectionOverlay = new FaceRejectionOverlay(this);
 
-    connect(rejectionOverlay, SIGNAL(rejectFaces(const QList<QModelIndex>&)),
-            this, SLOT(removeFaces(const QList<QModelIndex>&)));
+    connect(rejectionOverlay, SIGNAL(rejectFaces(QList<QModelIndex>)),
+            this, SLOT(removeFaces(QList<QModelIndex>)));
 
     addOverlay(rejectionOverlay, delegate);
 }
@@ -221,8 +221,8 @@ void DigikamImageView::addRejectionOverlay(ImageDelegate* delegate)
 {
     TagsLineEditOverlay* tagOverlay = new TagsLineEditOverlay(this);
 
-    connect(tagOverlay, SIGNAL(tagEdited(QModelIndex, QString)),
-            this, SLOT(assignTag(QModelIndex, QString)));
+    connect(tagOverlay, SIGNAL(tagEdited(QModelIndex,QString)),
+            this, SLOT(assignTag(QModelIndex,QString)));
 
     addOverlay(tagOverlay, delegate);
 }*/
@@ -232,11 +232,11 @@ void DigikamImageView::addAssignNameOverlay(ImageDelegate* delegate)
     AssignNameOverlay* nameOverlay = new AssignNameOverlay(this);
     addOverlay(nameOverlay, delegate);
 
-    connect(nameOverlay, SIGNAL(confirmFaces(const QList<QModelIndex>&, int)),
-            this, SLOT(confirmFaces(const QList<QModelIndex>&, int)));
+    connect(nameOverlay, SIGNAL(confirmFaces(QList<QModelIndex>,int)),
+            this, SLOT(confirmFaces(QList<QModelIndex>,int)));
 
-    connect(nameOverlay, SIGNAL(removeFaces(const QList<QModelIndex>&)),
-            this, SLOT(removeFaces(const QList<QModelIndex>&)));
+    connect(nameOverlay, SIGNAL(removeFaces(QList<QModelIndex>)),
+            this, SLOT(removeFaces(QList<QModelIndex>)));
 }
 
 void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId)
@@ -351,11 +351,11 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     connect(&cmhelper, SIGNAL(signalGotoTag(int)),
             this, SIGNAL(gotoTagAndImageRequested(int)));
 
-    connect(&cmhelper, SIGNAL(signalGotoAlbum(const ImageInfo&)),
-            this, SIGNAL(gotoAlbumAndImageRequested(const ImageInfo&)));
+    connect(&cmhelper, SIGNAL(signalGotoAlbum(ImageInfo)),
+            this, SIGNAL(gotoAlbumAndImageRequested(ImageInfo)));
 
-    connect(&cmhelper, SIGNAL(signalGotoDate(const ImageInfo&)),
-            this, SIGNAL(gotoDateAndImageRequested(const ImageInfo&)));
+    connect(&cmhelper, SIGNAL(signalGotoDate(ImageInfo)),
+            this, SIGNAL(gotoDateAndImageRequested(ImageInfo)));
 
     connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
             this, SLOT(assignPickLabelToSelected(int)));
@@ -366,8 +366,8 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     connect(&cmhelper, SIGNAL(signalAssignRating(int)),
             this, SLOT(assignRatingToSelected(int)));
 
-    connect(&cmhelper, SIGNAL(signalSetThumbnail(const ImageInfo&)),
-            this, SLOT(setAsAlbumThumbnail(const ImageInfo&)));
+    connect(&cmhelper, SIGNAL(signalSetThumbnail(ImageInfo)),
+            this, SLOT(setAsAlbumThumbnail(ImageInfo)));
 
     connect(&cmhelper, SIGNAL(signalAddToExistingQueue(int)),
             this, SLOT(insertSelectedToExistingQueue(int)));

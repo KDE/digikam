@@ -157,11 +157,11 @@ void EditorTool::setToolView(QWidget* view)
 
     if (wgt)
     {
-        connect(d->view, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
-                this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
+        connect(d->view, SIGNAL(spotPositionChangedFromOriginal(Digikam::DColor,QPoint)),
+                this, SLOT(slotUpdateSpotInfo(Digikam::DColor,QPoint)));
 
-        connect(d->view, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-                this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
+        connect(d->view, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
+                this, SLOT(slotUpdateSpotInfo(Digikam::DColor,QPoint)));
     }
 }
 

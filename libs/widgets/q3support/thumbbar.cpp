@@ -168,8 +168,8 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->thumbLoadThread->setExifRotate(exifRotate);
     d->maxTileSize     = d->thumbLoadThread->maximumThumbnailSize();
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotUpdate()));

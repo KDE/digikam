@@ -302,11 +302,11 @@ ScanController::ScanController()
             this, SLOT(slotRelaxedScanning()));
 
     // interthread connections
-    connect(this, SIGNAL(errorFromInitialization(const QString&)),
-            this, SLOT(slotErrorFromInitialization(const QString&)));
+    connect(this, SIGNAL(errorFromInitialization(QString)),
+            this, SLOT(slotErrorFromInitialization(QString)));
 
-    connect(this, SIGNAL(progressFromInitialization(const QString&, int)),
-            this, SLOT(slotProgressFromInitialization(const QString&, int)));
+    connect(this, SIGNAL(progressFromInitialization(QString,int)),
+            this, SLOT(slotProgressFromInitialization(QString,int)));
 
     // start thread
     d->running = true;
@@ -681,14 +681,14 @@ void ScanController::connectCollectionScanner(CollectionScanner* scanner)
     connect(scanner, SIGNAL(totalFilesToScan(int)),
             this, SLOT(slotTotalFilesToScan(int)));
 
-    connect(scanner, SIGNAL(startScanningAlbum(const QString&, const QString&)),
-            this, SLOT(slotStartScanningAlbum(const QString&, const QString&)));
+    connect(scanner, SIGNAL(startScanningAlbum(QString,QString)),
+            this, SLOT(slotStartScanningAlbum(QString,QString)));
 
     connect(scanner, SIGNAL(scannedFiles(int)),
             this, SLOT(slotScannedFiles(int)));
 
-    connect(scanner, SIGNAL(startScanningAlbumRoot(const QString&)),
-            this, SLOT(slotStartScanningAlbumRoot(const QString&)));
+    connect(scanner, SIGNAL(startScanningAlbumRoot(QString)),
+            this, SLOT(slotStartScanningAlbumRoot(QString)));
 
     connect(scanner, SIGNAL(startScanningForStaleAlbums()),
             this, SLOT(slotStartScanningForStaleAlbums()));
@@ -985,8 +985,8 @@ ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
     DatabaseWatch* dbwatch = DatabaseAccess::databaseWatch();
 
     // we opt for a queued connection to make stuff a bit relaxed
-    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset&)),
-            this, SLOT(slotImageChanged(const ImageChangeset&)),
+    connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
+            this, SLOT(slotImageChanged(ImageChangeset)),
             Qt::QueuedConnection);
 }
 

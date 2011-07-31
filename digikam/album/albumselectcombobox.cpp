@@ -158,12 +158,12 @@ void AlbumSelectComboBox::AlbumSelectComboBoxPriv::updateCheckable()
 
     if (isCheckable)
     {
-        connect(model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+        connect(model, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
                 q, SLOT(updateText()));
     }
     else
     {
-        disconnect(model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+        disconnect(model, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
                    q, SLOT(updateText()));
     }
 }
@@ -188,12 +188,12 @@ void AlbumSelectComboBox::AlbumSelectComboBoxPriv::updateCloseOnActivate()
 
     if (closeOnActivate)
     {
-        connect(q->view(), SIGNAL(activated(const QModelIndex&)),
+        connect(q->view(), SIGNAL(activated(QModelIndex)),
                 q, SLOT(hidePopup()));
     }
     else
     {
-        disconnect(q->view(), SIGNAL(activated(const QModelIndex&)),
+        disconnect(q->view(), SIGNAL(activated(QModelIndex)),
                    q, SLOT(hidePopup()));
     }
 }

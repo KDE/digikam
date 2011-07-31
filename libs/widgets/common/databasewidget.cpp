@@ -171,11 +171,11 @@ void DatabaseWidget::setupMainArea()
 
     // --------------------------------------------------------
 
-    connect(databasePathEdit, SIGNAL(urlSelected(const KUrl&)),
-            this, SLOT(slotChangeDatabasePath(const KUrl&)));
+    connect(databasePathEdit, SIGNAL(urlSelected(KUrl)),
+            this, SLOT(slotChangeDatabasePath(KUrl)));
 
-    connect(databasePathEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotDatabasePathEdited(const QString&)));
+    connect(databasePathEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(slotDatabasePathEdited(QString)));
 
     connect(databaseType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotHandleDBTypeIndexChanged(int)));

@@ -188,8 +188,8 @@ CameraUI::CameraUI(QWidget* const parent, const QString& cameraTitle,
 
     d->historyUpdater = new CameraHistoryUpdater(this);
 
-    connect (d->historyUpdater, SIGNAL(signalHistoryMap(const CHUpdateItemMap&)),
-             this, SLOT(slotRefreshIconView(const CHUpdateItemMap&)));
+    connect (d->historyUpdater, SIGNAL(signalHistoryMap(CHUpdateItemMap)),
+             this, SLOT(slotRefreshIconView(CHUpdateItemMap)));
 
     connect(d->historyUpdater, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
@@ -560,19 +560,19 @@ void CameraUI::setupConnections()
     connect(d->fixDateTimeCheck, SIGNAL(toggled(bool)),
             d->dateTimeEdit, SLOT(setEnabled(bool)));
 
-    connect(d->historyView, SIGNAL(signalEntryClicked(const QVariant&)),
-            this, SLOT(slotHistoryEntryClicked(const QVariant&)));
+    connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
+            this, SLOT(slotHistoryEntryClicked(QVariant)));
 
     // -------------------------------------------------------------------------
 
-    connect(d->view, SIGNAL(signalSelected(CameraIconItem*, bool)),
-            this, SLOT(slotItemsSelected(CameraIconItem*, bool)));
+    connect(d->view, SIGNAL(signalSelected(CameraIconItem*,bool)),
+            this, SLOT(slotItemsSelected(CameraIconItem*,bool)));
 
     connect(d->view, SIGNAL(signalFileView(CameraIconItem*)),
             this, SLOT(slotFileView(CameraIconItem*)));
 
-    connect(d->view, SIGNAL(signalUpload(const KUrl::List&)),
-            this, SLOT(slotUploadItems(const KUrl::List&)));
+    connect(d->view, SIGNAL(signalUpload(KUrl::List)),
+            this, SLOT(slotUploadItems(KUrl::List)));
 
     connect(d->view, SIGNAL(signalDownload()),
             this, SLOT(slotDownloadSelected()));
@@ -598,8 +598,8 @@ void CameraUI::setupConnections()
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
 
-    connect(d->view, SIGNAL(signalPrepareRepaint(const QList<IconItem*>&)),
-            this, SLOT(slotRequestThumbnails(const QList<IconItem*>&)));
+    connect(d->view, SIGNAL(signalPrepareRepaint(QList<IconItem*>)),
+            this, SLOT(slotRequestThumbnails(QList<IconItem*>)));
 
     // -------------------------------------------------------------------------
 
@@ -625,8 +625,8 @@ void CameraUI::setupConnections()
 
     // -------------------------------------------------------------------------
 
-    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation&, int)),
-            this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation&, int)));
+    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation,int)),
+            this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation,int)));
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
@@ -671,8 +671,8 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     if (d->controller->cameraDriverType() == DKCamera::GPhotoDriver)
     {
         d->cameraFreeSpace->setMode(FreeSpaceWidget::GPhotoCamera);
-        connect(d->controller, SIGNAL(signalFreeSpace(unsigned long, unsigned long)),
-                this, SLOT(slotCameraFreeSpaceInfo(unsigned long, unsigned long)));
+        connect(d->controller, SIGNAL(signalFreeSpace(ulong,ulong)),
+                this, SLOT(slotCameraFreeSpaceInfo(ulong,ulong)));
     }
     else
     {
@@ -683,47 +683,47 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));
 
-    connect(d->controller, SIGNAL(signalLogMsg(const QString&, DHistoryView::EntryType, const QString&, const QString&)),
-            this, SLOT(slotLogMsg(const QString&, DHistoryView::EntryType, const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalLogMsg(QString,DHistoryView::EntryType,QString,QString)),
+            this, SLOT(slotLogMsg(QString,DHistoryView::EntryType,QString,QString)));
 
-    connect(d->controller, SIGNAL(signalCameraInformation(const QString&, const QString&, const QString&)),
-            this, SLOT(slotCameraInformation(const QString&, const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalCameraInformation(QString,QString,QString)),
+            this, SLOT(slotCameraInformation(QString,QString,QString)));
 
     connect(d->controller, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
 
-    connect(d->controller, SIGNAL(signalFolderList(const QStringList&)),
-            this, SLOT(slotFolderList(const QStringList&)));
+    connect(d->controller, SIGNAL(signalFolderList(QStringList)),
+            this, SLOT(slotFolderList(QStringList)));
 
-    connect(d->controller, SIGNAL(signalFileList(const GPItemInfoList&)),
-            this, SLOT(slotFileList(const GPItemInfoList&)));
+    connect(d->controller, SIGNAL(signalFileList(GPItemInfoList)),
+            this, SLOT(slotFileList(GPItemInfoList)));
 
-    connect(d->controller, SIGNAL(signalThumbInfo(const QString&, const QString&, const GPItemInfo&, const QImage&)),
-            this, SLOT(slotThumbInfo(const QString&, const QString&, const GPItemInfo&, const QImage&)));
+    connect(d->controller, SIGNAL(signalThumbInfo(QString,QString,GPItemInfo,QImage)),
+            this, SLOT(slotThumbInfo(QString,QString,GPItemInfo,QImage)));
 
-    connect(d->controller, SIGNAL(signalThumbInfoFailed(const QString&, const QString&, const GPItemInfo&)),
-            this, SLOT(slotThumbInfoFailed(const QString&, const QString&, const GPItemInfo&)));
+    connect(d->controller, SIGNAL(signalThumbInfoFailed(QString,QString,GPItemInfo)),
+            this, SLOT(slotThumbInfoFailed(QString,QString,GPItemInfo)));
 
-    connect(d->controller, SIGNAL(signalDownloaded(const QString&, const QString&, int)),
-            this, SLOT(slotDownloaded(const QString&, const QString&, int)));
+    connect(d->controller, SIGNAL(signalDownloaded(QString,QString,int)),
+            this, SLOT(slotDownloaded(QString,QString,int)));
 
-    connect(d->controller, SIGNAL(signalDownloadComplete(const QString&, const QString&, const QString&, const QString&)),
-            this, SLOT(slotDownloadComplete(const QString&, const QString&, const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalDownloadComplete(QString,QString,QString,QString)),
+            this, SLOT(slotDownloadComplete(QString,QString,QString,QString)));
 
-    connect(d->controller, SIGNAL(signalSkipped(const QString&, const QString&)),
-            this, SLOT(slotSkipped(const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalSkipped(QString,QString)),
+            this, SLOT(slotSkipped(QString,QString)));
 
-    connect(d->controller, SIGNAL(signalDeleted(const QString&, const QString&, bool)),
-            this, SLOT(slotDeleted(const QString&, const QString&, bool)));
+    connect(d->controller, SIGNAL(signalDeleted(QString,QString,bool)),
+            this, SLOT(slotDeleted(QString,QString,bool)));
 
-    connect(d->controller, SIGNAL(signalLocked(const QString&, const QString&, bool)),
-            this, SLOT(slotLocked(const QString&, const QString&, bool)));
+    connect(d->controller, SIGNAL(signalLocked(QString,QString,bool)),
+            this, SLOT(slotLocked(QString,QString,bool)));
 
-    connect(d->controller, SIGNAL(signalMetadata(const QString&, const QString&, const DMetadata&)),
-            this, SLOT(slotMetadata(const QString&, const QString&, const DMetadata&)));
+    connect(d->controller, SIGNAL(signalMetadata(QString,QString,DMetadata)),
+            this, SLOT(slotMetadata(QString,QString,DMetadata)));
 
-    connect(d->controller, SIGNAL(signalUploaded(const GPItemInfo&)),
-            this, SLOT(slotUploaded(const GPItemInfo&)));
+    connect(d->controller, SIGNAL(signalUploaded(GPItemInfo)),
+            this, SLOT(slotUploaded(GPItemInfo)));
 }
 
 void CameraUI::setupAccelerators()
@@ -1345,11 +1345,11 @@ void CameraUI::startKdePreviewJob()
     d->kdeTodo.clear();
     d->kdeJob = KIO::filePreview(list, 256);
 
-    connect(d->kdeJob, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
-            this, SLOT(slotGotKDEPreview(const KFileItem&, const QPixmap&)));
+    connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
+            this, SLOT(slotGotKDEPreview(KFileItem,QPixmap)));
 
-    connect(d->kdeJob, SIGNAL(failed(const KFileItem&)),
-            this, SLOT(slotFailedKDEPreview(const KFileItem&)));
+    connect(d->kdeJob, SIGNAL(failed(KFileItem)),
+            this, SLOT(slotFailedKDEPreview(KFileItem)));
 
     connect(d->kdeJob, SIGNAL(finished(KJob*)),
             this, SLOT(slotKdePreviewFinished(KJob*)));

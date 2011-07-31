@@ -184,28 +184,28 @@ CameraController::CameraController(QWidget* parent,
     qRegisterMetaType<GPItemInfo>("GPItemInfo");
     qRegisterMetaType<GPItemInfoList>("GPItemInfoList");
 
-    connect(this, SIGNAL(signalInternalCheckRename(const QString&, const QString&, const QString&, const QString&)),
-            this, SLOT(slotCheckRename(const QString&, const QString&, const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalCheckRename(QString,QString,QString,QString)),
+            this, SLOT(slotCheckRename(QString,QString,QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalDownloadFailed(const QString&, const QString&)),
-            this, SLOT(slotDownloadFailed(const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalDownloadFailed(QString,QString)),
+            this, SLOT(slotDownloadFailed(QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalUploadFailed(const QString&, const QString&, const QString&)),
-            this, SLOT(slotUploadFailed(const QString&, const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalUploadFailed(QString,QString,QString)),
+            this, SLOT(slotUploadFailed(QString,QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalDeleteFailed(const QString&, const QString&)),
-            this, SLOT(slotDeleteFailed(const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalDeleteFailed(QString,QString)),
+            this, SLOT(slotDeleteFailed(QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalLockFailed(const QString&, const QString&)),
-            this, SLOT(slotLockFailed(const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalLockFailed(QString,QString)),
+            this, SLOT(slotLockFailed(QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalOpen(const QString&, const QString&, const QString&)),
-            this, SLOT(slotOpen(const QString&, const QString&, const QString&)));
+    connect(this, SIGNAL(signalInternalOpen(QString,QString,QString)),
+            this, SLOT(slotOpen(QString,QString,QString)));
 
     d->running = true;
     start();

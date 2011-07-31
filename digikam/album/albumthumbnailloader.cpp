@@ -93,8 +93,8 @@ AlbumThumbnailLoader* AlbumThumbnailLoader::instance()
 AlbumThumbnailLoader::AlbumThumbnailLoader()
     : d(new AlbumThumbnailLoaderPrivate)
 {
-    connect(this, SIGNAL(signalDispatchThumbnailInternal(int, const QPixmap&)),
-            this, SLOT(slotDispatchThumbnailInternal(int, const QPixmap&)));
+    connect(this, SIGNAL(signalDispatchThumbnailInternal(int,QPixmap)),
+            this, SLOT(slotDispatchThumbnailInternal(int,QPixmap)));
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotIconChanged(Album*)));
@@ -345,8 +345,8 @@ void AlbumThumbnailLoader::addUrl(Album* album, const KUrl& url)
                 d->iconTagThumbThread->setSendSurrogatePixmap(false);
                 d->iconTagThumbThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
                 connect(d->iconTagThumbThread,
-                        SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-                        SLOT(slotGotThumbnailFromIcon(const LoadingDescription&, const QPixmap&)),
+                        SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+                        SLOT(slotGotThumbnailFromIcon(LoadingDescription,QPixmap)),
                         Qt::QueuedConnection);
             }
 
@@ -362,8 +362,8 @@ void AlbumThumbnailLoader::addUrl(Album* album, const KUrl& url)
                 d->iconAlbumThumbThread->setSendSurrogatePixmap(false);
                 d->iconAlbumThumbThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
                 connect(d->iconAlbumThumbThread,
-                        SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-                        SLOT(slotGotThumbnailFromIcon(const LoadingDescription&, const QPixmap&)),
+                        SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+                        SLOT(slotGotThumbnailFromIcon(LoadingDescription,QPixmap)),
                         Qt::QueuedConnection);
             }
 

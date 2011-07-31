@@ -106,11 +106,11 @@ ImageModel::ImageModel(QObject* parent)
     : QAbstractListModel(parent),
       d(new ImageModelPriv)
 {
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
-            this, SLOT(slotImageChange(const ImageChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+            this, SLOT(slotImageChange(ImageChangeset)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset&)),
-            this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
+            this, SLOT(slotImageTagChange(ImageTagChangeset)));
 }
 
 ImageModel::~ImageModel()
@@ -566,8 +566,8 @@ void ImageModel::unsetPreprocessor(QObject* preprocessor)
 {
     if (preprocessor && d->preprocessor == preprocessor)
     {
-        disconnect(this, SIGNAL(preprocess(const QList<ImageInfo>&, const QList<QVariant>&)), 0, 0);
-        disconnect(d->preprocessor, 0, this, SLOT(reAddImageInfos(const QList<ImageInfo>&, const QList<QVariant>&)));
+        disconnect(this, SIGNAL(preprocess(QList<ImageInfo>,QList<QVariant>)), 0, 0);
+        disconnect(d->preprocessor, 0, this, SLOT(reAddImageInfos(QList<ImageInfo>,QList<QVariant>)));
         disconnect(d->preprocessor, 0, this, SLOT(reAddingFinished()));
     }
 }

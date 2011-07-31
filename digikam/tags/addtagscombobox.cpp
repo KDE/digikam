@@ -70,19 +70,19 @@ AddTagsComboBox::AddTagsComboBox(QWidget* parent)
     d->lineEdit = new AddTagsLineEdit(this);
     setLineEdit(d->lineEdit);
 
-    connect(d->lineEdit, SIGNAL(taggingActionActivated(const TaggingAction&)),
-            this, SLOT(slotLineEditActionActivated(const TaggingAction&)));
+    connect(d->lineEdit, SIGNAL(taggingActionActivated(TaggingAction)),
+            this, SLOT(slotLineEditActionActivated(TaggingAction)));
 
-    connect(d->lineEdit, SIGNAL(taggingActionSelected(const TaggingAction&)),
-            this, SLOT(slotLineEditActionSelected(const TaggingAction&)));
+    connect(d->lineEdit, SIGNAL(taggingActionSelected(TaggingAction)),
+            this, SLOT(slotLineEditActionSelected(TaggingAction)));
 
     d->lineEdit->setClearButtonShown(true);
 
     TagTreeView::Flags flags;
     m_treeView = new TagTreeView(this, flags);
 
-    connect(m_treeView, SIGNAL(activated(const QModelIndex&)),
-            this, SLOT(slotViewIndexActivated(const QModelIndex&)));
+    connect(m_treeView, SIGNAL(activated(QModelIndex)),
+            this, SLOT(slotViewIndexActivated(QModelIndex)));
 }
 
 AddTagsComboBox::~AddTagsComboBox()

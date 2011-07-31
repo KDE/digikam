@@ -191,11 +191,11 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
     connect(bGroup, SIGNAL(buttonReleased(int)),
             d->previewWidget, SLOT(slotEditModeChanged(int)));
 
-    connect(d->thumbnailsBar, SIGNAL(signalUrlSelected(const KUrl&)),
-            d->previewWidget, SLOT(slotSetCurrentTemplate(const KUrl&)));
+    connect(d->thumbnailsBar, SIGNAL(signalUrlSelected(KUrl)),
+            d->previewWidget, SLOT(slotSetCurrentTemplate(KUrl)));
 
-    connect(d->dirSelect, SIGNAL(folderItemSelected(const KUrl&)),
-            this, SLOT(slotTemplateDirChanged(const KUrl&)));
+    connect(d->dirSelect, SIGNAL(folderItemSelected(KUrl)),
+            this, SLOT(slotTemplateDirChanged(KUrl)));
 
     connect(templateDirButton, SIGNAL(clicked()),
             this, SLOT(slotRootTemplateDirChanged()));

@@ -218,8 +218,8 @@ RedEyeTool::RedEyeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
+            this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
@@ -230,8 +230,8 @@ RedEyeTool::RedEyeTool(QObject* parent)
     connect(d->smoothLevel, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(d->HSSelector, SIGNAL(valueChanged(int, int)),
-            this, SLOT(slotHSChanged(int, int)));
+    connect(d->HSSelector, SIGNAL(valueChanged(int,int)),
+            this, SLOT(slotHSChanged(int,int)));
 
     connect(d->VSelector, SIGNAL(valueChanged(int)),
             this, SLOT(slotVChanged(int)));

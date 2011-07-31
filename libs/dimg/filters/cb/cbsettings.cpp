@@ -142,13 +142,13 @@ CBSettings::CBSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->rInput, SIGNAL(valueChanged (int)),
+    connect(d->rInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->gInput, SIGNAL(valueChanged (int)),
+    connect(d->gInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->bInput, SIGNAL(valueChanged (int)),
+    connect(d->bInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 }
 

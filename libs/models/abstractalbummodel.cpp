@@ -53,8 +53,8 @@ AbstractAlbumModel::AbstractAlbumModel(Album::Type albumType, Album* rootAlbum, 
     d->rootAlbum    = rootAlbum;
     d->rootBehavior = rootBehavior;
 
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumAboutToBeAdded(Album*, Album*, Album*)),
-            this, SLOT(slotAlbumAboutToBeAdded(Album*, Album*, Album*)));
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumAboutToBeAdded(Album*,Album*,Album*)),
+            this, SLOT(slotAlbumAboutToBeAdded(Album*,Album*,Album*)));
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
@@ -536,8 +536,8 @@ void AbstractSpecificAlbumModel::setupThumbnailLoading()
 {
     AlbumThumbnailLoader* loader = AlbumThumbnailLoader::instance();
 
-    connect(loader, SIGNAL(signalThumbnail(Album*, const QPixmap&)),
-            this, SLOT(slotGotThumbnailFromIcon(Album*, const QPixmap&)));
+    connect(loader, SIGNAL(signalThumbnail(Album*,QPixmap)),
+            this, SLOT(slotGotThumbnailFromIcon(Album*,QPixmap)));
 
     connect(loader, SIGNAL(signalFailed(Album*)),
             this, SLOT(slotThumbnailLost(Album*)));

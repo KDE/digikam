@@ -118,8 +118,8 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
     cmh.addSeparator();
     cmh.addActionEditTag(tagModificationHelper(), tag);
 
-    connect(&cmh, SIGNAL(signalAddNewTagFromABCMenu(const QString&)),
-            this, SLOT(slotTagNewFromABCMenu(const QString&)));
+    connect(&cmh, SIGNAL(signalAddNewTagFromABCMenu(QString)),
+            this, SLOT(slotTagNewFromABCMenu(QString)));
 
     d->resetIconAction->setEnabled(!tag->isRoot());
 }

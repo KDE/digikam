@@ -64,14 +64,14 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
     d->utilities       = new ImageViewUtilities(this);
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
 
-    connect(d->utilities, SIGNAL(imageRenameSucceeded(const KUrl&)),
-            this, SLOT(slotRenameSuccess(const KUrl&)));
+    connect(d->utilities, SIGNAL(imageRenameSucceeded(KUrl)),
+            this, SLOT(slotRenameSuccess(KUrl)));
 
-    connect(d->utilities, SIGNAL(imageRenameFailed(const KUrl&)),
-            this, SLOT(slotRenameFailed(const KUrl&)));
+    connect(d->utilities, SIGNAL(imageRenameFailed(KUrl)),
+            this, SLOT(slotRenameFailed(KUrl)));
 
     connect(d->utilities, SIGNAL(renamingAborted()),
             this, SLOT(slotCancel()));

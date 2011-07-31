@@ -201,23 +201,23 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
 
     // --------------------------------------------------------------------------------------------------------
 
-    connect(d->expbox, SIGNAL(signalItemExpanded(int, bool)),
-            this, SLOT(slotItemExpanded(int, bool)));
+    connect(d->expbox, SIGNAL(signalItemExpanded(int,bool)),
+            this, SLOT(slotItemExpanded(int,bool)));
 
     connect(d->mimeFilter, SIGNAL(activated(int)),
             this, SIGNAL(signalMimeTypeFilterChanged(int)));
 
-    connect(d->textFilter, SIGNAL(signalSearchTextFilterSettings(const SearchTextFilterSettings&)),
-            this, SIGNAL(signalSearchTextFilterChanged(const SearchTextFilterSettings&)));
+    connect(d->textFilter, SIGNAL(signalSearchTextFilterSettings(SearchTextFilterSettings)),
+            this, SIGNAL(signalSearchTextFilterChanged(SearchTextFilterSettings)));
 
-    connect(d->tagFilterView, SIGNAL(checkedTagsChanged(const QList<TAlbum*>&, const QList<TAlbum*>&)),
-            this, SLOT(slotCheckedTagsChanged(const QList<TAlbum*>&, const QList<TAlbum*>&)));
+    connect(d->tagFilterView, SIGNAL(checkedTagsChanged(QList<TAlbum*>,QList<TAlbum*>)),
+            this, SLOT(slotCheckedTagsChanged(QList<TAlbum*>,QList<TAlbum*>)));
 
-    connect(d->colorLabelFilter, SIGNAL(signalColorLabelSelectionChanged(const QList<ColorLabel>&)),
-            this, SLOT(slotColorLabelFilterChanged(const QList<ColorLabel>&)));
+    connect(d->colorLabelFilter, SIGNAL(signalColorLabelSelectionChanged(QList<ColorLabel>)),
+            this, SLOT(slotColorLabelFilterChanged(QList<ColorLabel>)));
 
-    connect(d->pickLabelFilter, SIGNAL(signalPickLabelSelectionChanged(const QList<PickLabel>&)),
-            this, SLOT(slotPickLabelFilterChanged(const QList<PickLabel>&)));
+    connect(d->pickLabelFilter, SIGNAL(signalPickLabelSelectionChanged(QList<PickLabel>)),
+            this, SLOT(slotPickLabelFilterChanged(QList<PickLabel>)));
 
     connect(d->withoutTagCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(slotWithoutTagChanged(int)));
@@ -228,8 +228,8 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
     connect(d->tagOptionsMenu, SIGNAL(aboutToShow()),
             this, SLOT(slotTagOptionsMenu()));
 
-    connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
-            this, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)));
+    connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition)),
+            this, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition)));
 }
 
 FilterSideBarWidget::~FilterSideBarWidget()

@@ -211,8 +211,8 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     d->previewThread->setDisplayingWidget(this);
     d->previewPreloadThread->setDisplayingWidget(this);
-    connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-            this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
+    connect(d->previewThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+            this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));

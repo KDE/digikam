@@ -409,8 +409,8 @@ void FreeSpaceWidget::slotTimeout()
         if (mp)
         {
             KDiskFreeSpace* job = new KDiskFreeSpace(this);
-            connect(job, SIGNAL(foundMountPoint(const QString&, quint64, quint64, quint64)),
-                    this, SLOT(slotAvailableFreeSpace(const QString&, quint64, quint64, quint64)));
+            connect(job, SIGNAL(foundMountPoint(QString,quint64,quint64,quint64)),
+                    this, SLOT(slotAvailableFreeSpace(QString,quint64,quint64,quint64)));
             job->readDF(mp->mountPoint());
         }
     }

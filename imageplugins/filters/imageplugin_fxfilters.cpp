@@ -81,7 +81,7 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
 {
     d->colorEffectsAction = new KAction(KIcon("colorfx"), i18n("Color Effects..."), this);
     actionCollection()->addAction("imageplugin_colorfx", d->colorEffectsAction);
-    connect(d->colorEffectsAction, SIGNAL(triggered(bool) ),
+    connect(d->colorEffectsAction, SIGNAL(triggered(bool)),
             this, SLOT(slotColorEffects()));
 
     d->charcoalAction = new KAction(KIcon("charcoaltool"), i18n("Charcoal Drawing..."), this);
@@ -96,7 +96,7 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
 
     d->oilpaintAction = new KAction(KIcon("oilpaint"), i18n("Oil Paint..."), this);
     actionCollection()->addAction("imageplugin_oilpaint", d->oilpaintAction);
-    connect(d->oilpaintAction, SIGNAL(triggered(bool) ),
+    connect(d->oilpaintAction, SIGNAL(triggered(bool)),
             this ,SLOT(slotOilPaint()));
 
     d->blurfxAction = new KAction(KIcon("blurfx"), i18n("Blur Effects..."), this);
@@ -106,12 +106,12 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
 
     d->distortionfxAction = new KAction(KIcon("distortionfx"), i18n("Distortion Effects..."), this);
     actionCollection()->addAction("imageplugin_distortionfx", d->distortionfxAction );
-    connect(d->distortionfxAction, SIGNAL(triggered(bool) ),
+    connect(d->distortionfxAction, SIGNAL(triggered(bool)),
             this, SLOT(slotDistortionFX()));
 
     d->raindropAction = new KAction(KIcon("raindrop"), i18n("Raindrops..."), this);
     actionCollection()->addAction("imageplugin_raindrop", d->raindropAction);
-    connect(d->raindropAction, SIGNAL(triggered(bool) ),
+    connect(d->raindropAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRainDrop()));
 
     d->filmgrainAction  = new KAction(KIcon("filmgrain"), i18n("Add Film Grain..."), this);

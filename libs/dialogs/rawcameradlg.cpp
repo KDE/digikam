@@ -93,8 +93,8 @@ RawCameraDlg::RawCameraDlg(QWidget* parent)
 
     // --------------------------------------------------------
 
-    connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
+    connect(d->searchBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
+            this, SLOT(slotSearchTextChanged(SearchTextSettings)));
 }
 
 RawCameraDlg::~RawCameraDlg()

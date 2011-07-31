@@ -41,8 +41,8 @@ namespace Digikam
 ImageListModel::ImageListModel(QObject* parent)
     : ImageThumbnailModel(parent)
 {
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
-            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+            this, SLOT(slotCollectionImageChange(CollectionImageChangeset)));
 }
 
 ImageListModel::~ImageListModel()

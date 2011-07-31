@@ -288,8 +288,8 @@ ResizeTool::ResizeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->cimgLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
-            this, SLOT(processCImgUrl(const QString&)));
+    connect(d->cimgLogoLabel, SIGNAL(leftClickedUrl(QString)),
+            this, SLOT(processCImgUrl(QString)));
 
     connect(d->wInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotValuesChanged()));

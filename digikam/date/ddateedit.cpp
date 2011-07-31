@@ -132,18 +132,18 @@ DDateEdit::DDateEdit(QWidget* parent, const char* name)
     setCurrentIndex( 0 );
     setMinimumSize( sizeHint() );
 
-    connect( lineEdit(), SIGNAL( returnPressed() ),
-             this, SLOT( lineEnterPressed() ) );
+    connect( lineEdit(), SIGNAL(returnPressed()),
+             this, SLOT(lineEnterPressed()) );
 
-    connect( this, SIGNAL( textChanged( const QString& ) ),
-             SLOT( slotTextChanged( const QString& ) ) );
+    connect( this, SIGNAL(textChanged(QString)),
+             SLOT(slotTextChanged(QString)) );
 
     d->popup = new DDatePickerPopup( DDatePickerPopup::DatePicker | DDatePickerPopup::Words );
     d->popup->hide();
     d->popup->installEventFilter( this );
 
-    connect( d->popup, SIGNAL( dateChanged( const QDate& ) ),
-             this, SLOT( dateSelected( const QDate& ) ) );
+    connect( d->popup, SIGNAL(dateChanged(QDate)),
+             this, SLOT(dateSelected(QDate)) );
 
     // handle keyword entry
     setupKeywords();

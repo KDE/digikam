@@ -139,13 +139,13 @@ void ImageDelegate::setModel(QAbstractItemModel* model)
         connect(d->currentModel, SIGNAL(modelAboutToBeReset()),
                 this, SLOT(modelContentsChanged()));
 
-        connect(d->currentModel, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)),
+        connect(d->currentModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),
                 this, SLOT(modelContentsChanged()));
 
-        connect(d->currentModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
+        connect(d->currentModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
                 this, SLOT(modelContentsChanged()));
 
-        connect(d->currentModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+        connect(d->currentModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
                 this, SLOT(modelContentsChanged()));
     }
 }

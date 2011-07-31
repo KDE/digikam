@@ -218,7 +218,7 @@ ShearTool::ShearTool(QObject* parent)
     connect(d->fineVAngleInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(d->antialiasInput, SIGNAL(toggled (bool)),
+    connect(d->antialiasInput, SIGNAL(toggled(bool)),
             this, SLOT(slotEffect()));
 
     connect(d->gboxSettings, SIGNAL(signalColorGuideChanged()),

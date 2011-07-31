@@ -377,14 +377,14 @@ void ShowFoto::setupConnections()
 {
     setupStandardConnections();
 
-    connect(d->thumbBar, SIGNAL(signalUrlSelected(const KUrl&)),
-            this, SLOT(slotOpenUrl(const KUrl&)));
+    connect(d->thumbBar, SIGNAL(signalUrlSelected(KUrl)),
+            this, SLOT(slotOpenUrl(KUrl)));
 
     connect(d->thumbBar, SIGNAL(signalItemAdded()),
             this, SLOT(slotUpdateItemInfo()));
 
-    connect(this, SIGNAL(signalSelectionChanged(const QRect&)),
-            d->rightSideBar, SLOT(slotImageSelectionChanged(const QRect&)));
+    connect(this, SIGNAL(signalSelectionChanged(QRect)),
+            d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
@@ -1124,15 +1124,15 @@ void ShowFoto::slotDeleteCurrentItem()
         else
         {
             KIO::Job* job = KIO::del(urlCurrent);
-            connect(job, SIGNAL(result( KJob* )),
-                    this, SLOT(slotDeleteCurrentItemResult( KJob*)) );
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
         }
     }
     else
     {
         KIO::Job* job = KIO::trash(urlCurrent);
-        connect(job, SIGNAL(result( KJob* )),
-                this, SLOT(slotDeleteCurrentItemResult( KJob*)) );
+        connect(job, SIGNAL(result(KJob*)),
+                this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
     }
 }
 

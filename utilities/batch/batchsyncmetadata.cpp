@@ -107,8 +107,8 @@ void BatchSyncMetadata::parseAlbum()
     d->imageInfoJob = new ImageInfoJob;
     d->imageInfoJob->allItemsFromAlbum(d->album);
 
-    connect(d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
-            this, SLOT(slotAlbumParsed(const ImageInfoList&)));
+    connect(d->imageInfoJob, SIGNAL(signalItemsInfo(ImageInfoList)),
+            this, SLOT(slotAlbumParsed(ImageInfoList)));
 
     connect(d->imageInfoJob, SIGNAL(signalCompleted()),
             this, SLOT(slotComplete()));

@@ -203,8 +203,8 @@ bool Parseable::addToken(const QString& id, const QString& description, const QS
         token->action()->setText(actionName);
     }
 
-    connect(token, SIGNAL(signalTokenTriggered(const QString&)),
-            this, SLOT(slotTokenTriggered(const QString&)));
+    connect(token, SIGNAL(signalTokenTriggered(QString)),
+            this, SLOT(slotTokenTriggered(QString)));
 
     d->tokens << token;
     return true;

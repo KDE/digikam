@@ -231,13 +231,13 @@ SetupMime::SetupMime(QWidget* parent)
     connect(d->revertAudioFileFilterBtn, SIGNAL(clicked()),
             this, SLOT(slotRevertAudioFileFilter()));
 
-    connect(d->imageFileFilterLabel, SIGNAL(linkActivated(const QString&)),
+    connect(d->imageFileFilterLabel, SIGNAL(linkActivated(QString)),
             this, SLOT(slotShowCurrentImageSettings()));
 
-    connect(d->movieFileFilterLabel, SIGNAL(linkActivated(const QString&)),
+    connect(d->movieFileFilterLabel, SIGNAL(linkActivated(QString)),
             this, SLOT(slotShowCurrentMovieSettings()));
 
-    connect(d->audioFileFilterLabel, SIGNAL(linkActivated(const QString&)),
+    connect(d->audioFileFilterLabel, SIGNAL(linkActivated(QString)),
             this, SLOT(slotShowCurrentAudioSettings()));
 
     // --------------------------------------------------------

@@ -37,11 +37,11 @@ ImageAttributesWatch::ImageAttributesWatch()
 {
     DatabaseWatch* dbwatch = DatabaseAccess::databaseWatch();
 
-    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset&)),
-            this, SLOT(slotImageChange(const ImageChangeset&)));
+    connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
+            this, SLOT(slotImageChange(ImageChangeset)));
 
-    connect(dbwatch, SIGNAL(imageTagChange(const ImageTagChangeset&)),
-            this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
+    connect(dbwatch, SIGNAL(imageTagChange(ImageTagChangeset)),
+            this, SLOT(slotImageTagChange(ImageTagChangeset)));
 }
 
 ImageAttributesWatch::~ImageAttributesWatch()

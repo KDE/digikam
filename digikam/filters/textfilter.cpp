@@ -93,7 +93,7 @@ TextFilter::TextFilter(QWidget* parent)
     setMargin(0);
     setSpacing(0);
 
-    connect(d->searchTextBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+    connect(d->searchTextBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
             this, SLOT(slotSearchFieldsChanged()));
 
     connect(d->optionsMenu, SIGNAL(triggered(QAction*)),

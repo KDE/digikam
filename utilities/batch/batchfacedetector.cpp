@@ -167,8 +167,8 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings
         d->pipeline.setDetectionAccuracy(settings.accuracy);
     }
 
-    connect(&d->albumListing, SIGNAL(signalItemsInfo(const ImageInfoList&)),
-            this, SLOT(slotItemsInfo(const ImageInfoList&)));
+    connect(&d->albumListing, SIGNAL(signalItemsInfo(ImageInfoList)),
+            this, SLOT(slotItemsInfo(ImageInfoList)));
 
     connect(&d->albumListing, SIGNAL(signalCompleted()),
             this, SLOT(continueAlbumListing()));
@@ -176,11 +176,11 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings
     connect(&d->pipeline, SIGNAL(finished()),
             this, SLOT(continueAlbumListing()));
 
-    connect(&d->pipeline, SIGNAL(processed(const FacePipelinePackage&)),
-            this, SLOT(slotShowOneDetected(const FacePipelinePackage&)));
+    connect(&d->pipeline, SIGNAL(processed(FacePipelinePackage)),
+            this, SLOT(slotShowOneDetected(FacePipelinePackage)));
 
-    connect(&d->pipeline, SIGNAL(skipped(const QList<ImageInfo>&)),
-            this, SLOT(slotImagesSkipped(const QList<ImageInfo>&)));
+    connect(&d->pipeline, SIGNAL(skipped(QList<ImageInfo>)),
+            this, SLOT(slotImagesSkipped(QList<ImageInfo>)));
 
     if (settings.albums.isEmpty() || settings.task == FaceScanSettings::RetrainAll)
     {

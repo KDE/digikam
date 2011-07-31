@@ -437,8 +437,8 @@ void TagsPopupMenu::setup(Mode mode)
 
     AlbumThumbnailLoader* loader = AlbumThumbnailLoader::instance();
 
-    connect(loader, SIGNAL(signalThumbnail(Album*, const QPixmap&)),
-            this, SLOT(slotTagThumbnail(Album*, const QPixmap&)));
+    connect(loader, SIGNAL(signalThumbnail(Album*,QPixmap)),
+            this, SLOT(slotTagThumbnail(Album*,QPixmap)));
 
     // we are not interested in signalThumbnailFailed
 }

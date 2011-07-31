@@ -493,56 +493,56 @@ void kio_digikamalbums::connectJob(KIO::Job* job)
     // Forward metadata (e.g. modification time for put())
     job->setMetaData( allMetaData() );
 
-    connect( job, SIGNAL( result(KJob*) ),
-             this, SLOT( slotResult(KJob*) ) );
+    connect( job, SIGNAL(result(KJob*)),
+             this, SLOT(slotResult(KJob*)) );
 
-    connect( job, SIGNAL( warning(KJob*, const QString&, const QString&) ),
-             this, SLOT( slotWarning(KJob*, const QString&) ) );
+    connect( job, SIGNAL(warning(KJob*,QString,QString)),
+             this, SLOT(slotWarning(KJob*,QString)) );
 
-    connect( job, SIGNAL( infoMessage(KJob*, const QString&, const QString&) ),
-             this, SLOT( slotInfoMessage(KJob*, const QString&) ) );
+    connect( job, SIGNAL(infoMessage(KJob*,QString,QString)),
+             this, SLOT(slotInfoMessage(KJob*,QString)) );
 
-    connect( job, SIGNAL( totalSize(KJob*, qulonglong) ),
-             this, SLOT( slotTotalSize(KJob*, qulonglong) ) );
+    connect( job, SIGNAL(totalSize(KJob*,qulonglong)),
+             this, SLOT(slotTotalSize(KJob*,qulonglong)) );
 
-    connect( job, SIGNAL( processedSize(KJob*, qulonglong) ),
-             this, SLOT( slotProcessedSize(KJob*, qulonglong) ) );
+    connect( job, SIGNAL(processedSize(KJob*,qulonglong)),
+             this, SLOT(slotProcessedSize(KJob*,qulonglong)) );
 
-    connect( job, SIGNAL( speed(KJob*, unsigned long) ),
-             this, SLOT( slotSpeed(KJob*, unsigned long) ) );
+    connect( job, SIGNAL(speed(KJob*,ulong)),
+             this, SLOT(slotSpeed(KJob*,ulong)) );
 }
 
 void kio_digikamalbums::connectSimpleJob(KIO::SimpleJob* job)
 {
     connectJob(job);
 
-    connect( job, SIGNAL( redirection(KIO::Job*, const KUrl&) ),
-             this, SLOT( slotRedirection(KIO::Job*, const KUrl&) ) );
+    connect( job, SIGNAL(redirection(KIO::Job*,KUrl)),
+             this, SLOT(slotRedirection(KIO::Job*,KUrl)) );
 }
 
 void kio_digikamalbums::connectListJob(KIO::ListJob* job)
 {
     connectSimpleJob(job);
 
-    connect( job, SIGNAL( entries(KIO::Job*, const KIO::UDSEntryList&) ),
-             this, SLOT( slotEntries(KIO::Job*, const KIO::UDSEntryList&) ) );
+    connect( job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
+             this, SLOT(slotEntries(KIO::Job*,KIO::UDSEntryList)) );
 }
 
 void kio_digikamalbums::connectTransferJob(KIO::TransferJob* job)
 {
     connectSimpleJob(job);
 
-    connect( job, SIGNAL( data(KIO::Job*, const QByteArray&) ),
-             this, SLOT( slotData(KIO::Job*, const QByteArray&) ) );
+    connect( job, SIGNAL(data(KIO::Job*,QByteArray)),
+             this, SLOT(slotData(KIO::Job*,QByteArray)) );
 
-    connect( job, SIGNAL( dataReq(KIO::Job*, QByteArray&) ),
-             this, SLOT( slotDataReq(KIO::Job*, QByteArray&) ) );
+    connect( job, SIGNAL(dataReq(KIO::Job*,QByteArray&)),
+             this, SLOT(slotDataReq(KIO::Job*,QByteArray&)) );
 
-    connect( job, SIGNAL( mimetype(KIO::Job*, const QString&) ),
-             this, SLOT( slotMimetype(KIO::Job*, const QString&) ) );
+    connect( job, SIGNAL(mimetype(KIO::Job*,QString)),
+             this, SLOT(slotMimetype(KIO::Job*,QString)) );
 
-    connect( job, SIGNAL( canResume(KIO::Job*, KIO::filesize_t) ),
-             this, SLOT( slotCanResume(KIO::Job*, KIO::filesize_t) ) );
+    connect( job, SIGNAL(canResume(KIO::Job*,KIO::filesize_t)),
+             this, SLOT(slotCanResume(KIO::Job*,KIO::filesize_t)) );
 }
 
 void kio_digikamalbums::slotResult(KJob* job)

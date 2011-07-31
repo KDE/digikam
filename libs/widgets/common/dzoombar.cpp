@@ -155,8 +155,8 @@ DZoomBar::DZoomBar(QWidget* parent)
     connect(d->zoomCombo, SIGNAL(activated(int)),
             this, SLOT(slotZoomSelected(int)));
 
-    connect(d->zoomCombo, SIGNAL(returnPressed(const QString&)),
-            this, SLOT(slotZoomTextChanged(const QString&)));
+    connect(d->zoomCombo, SIGNAL(returnPressed(QString)),
+            this, SLOT(slotZoomTextChanged(QString)));
 
     // -------------------------------------------------------------
 

@@ -101,12 +101,12 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
 
     d->sharpenAction = new KAction(KIcon("sharpenimage"), i18n("Sharpen..."), this);
     actionCollection()->addAction("imageplugin_sharpen", d->sharpenAction);
-    connect(d->sharpenAction, SIGNAL(triggered(bool) ),
+    connect(d->sharpenAction, SIGNAL(triggered(bool)),
             this, SLOT(slotSharpen()));
 
     d->blurAction = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
     actionCollection()->addAction("imageplugin_blur", d->blurAction);
-    connect(d->blurAction, SIGNAL(triggered(bool) ),
+    connect(d->blurAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBlur()));
 
     d->noiseReductionAction = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
@@ -123,7 +123,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     d->redeyeAction->setWhatsThis(i18n("This filter can be used to correct red eyes in a photo. "
                                        "Select a region including the eyes to use this option."));
     actionCollection()->addAction("imageplugin_redeye", d->redeyeAction);
-    connect(d->redeyeAction, SIGNAL(triggered(bool) ),
+    connect(d->redeyeAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRedEye()));
 
     d->inPaintingAction = new KAction(KIcon("inpainting"), i18n("In-painting..."), this);
@@ -131,7 +131,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     d->inPaintingAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_E));
     d->inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
                                        "To use this option, select a region to in-paint.") );
-    connect(d->inPaintingAction, SIGNAL(triggered(bool) ),
+    connect(d->inPaintingAction, SIGNAL(triggered(bool)),
             this, SLOT(slotInPainting()));
 
     d->antivignettingAction = new KAction(KIcon("antivignetting"), i18n("Vignetting Correction..."), this);
@@ -146,7 +146,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
 
     d->hotpixelsAction  = new KAction(KIcon("hotpixels"), i18n("Hot Pixels..."), this);
     actionCollection()->addAction("imageplugin_hotpixels", d->hotpixelsAction);
-    connect(d->hotpixelsAction, SIGNAL(triggered(bool) ),
+    connect(d->hotpixelsAction, SIGNAL(triggered(bool)),
             this, SLOT(slotHotPixels()));
 
 #ifdef HAVE_GLIB2

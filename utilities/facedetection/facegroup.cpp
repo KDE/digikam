@@ -514,8 +514,8 @@ FaceItem* FaceGroup::FaceGroupPriv::createItem(const DatabaseFace& face)
     item->setOriginalRect(face.region().toRect());
     item->setVisible(false);
 
-    q->connect(view, SIGNAL(viewportRectChanged(const QRectF&)),
-               item, SLOT(setViewportRect(const QRectF&)));
+    q->connect(view, SIGNAL(viewportRectChanged(QRectF)),
+               item, SLOT(setViewportRect(QRectF)));
 
     return item;
 }
@@ -579,14 +579,14 @@ AssignNameWidget* FaceGroup::FaceGroupPriv::createAssignNameWidget(const Databas
     assignWidget->setModel(tagModel, filteredModel, filterModel);
     assignWidget->setParentTag(AlbumManager::instance()->findTAlbum(faceIface.personParentTag()));
 
-    q->connect(assignWidget, SIGNAL(assigned(const TaggingAction&, const ImageInfo&, const QVariant&)),
-               q, SLOT(slotAssigned(const TaggingAction&, const ImageInfo&, const QVariant&)));
+    q->connect(assignWidget, SIGNAL(assigned(TaggingAction,ImageInfo,QVariant)),
+               q, SLOT(slotAssigned(TaggingAction,ImageInfo,QVariant)));
 
-    q->connect(assignWidget, SIGNAL(rejected(const ImageInfo&, const QVariant&)),
-               q, SLOT(slotRejected(const ImageInfo&, const QVariant&)));
+    q->connect(assignWidget, SIGNAL(rejected(ImageInfo,QVariant)),
+               q, SLOT(slotRejected(ImageInfo,QVariant)));
 
-    q->connect(assignWidget, SIGNAL(labelClicked(const ImageInfo&, const QVariant&)),
-               q, SLOT(slotLabelClicked(const ImageInfo&, const QVariant&)));
+    q->connect(assignWidget, SIGNAL(labelClicked(ImageInfo,QVariant)),
+               q, SLOT(slotLabelClicked(ImageInfo,QVariant)));
 
     return assignWidget;
 }
@@ -714,14 +714,14 @@ void FaceGroup::addFace()
     d->manuallyAddWrapItem->setFocus();
     d->view->setFocus();
     
-    connect(d->manuallyAddWrapItem, SIGNAL(started(const QPointF&)),
-            this, SLOT(slotAddItemStarted(const QPointF&)));
+    connect(d->manuallyAddWrapItem, SIGNAL(started(QPointF)),
+            this, SLOT(slotAddItemStarted(QPointF)));
 
-    connect(d->manuallyAddWrapItem, SIGNAL(moving(const QRectF&)),
-            this, SLOT(slotAddItemMoving(const QRectF&)));
+    connect(d->manuallyAddWrapItem, SIGNAL(moving(QRectF)),
+            this, SLOT(slotAddItemMoving(QRectF)));
 
-    connect(d->manuallyAddWrapItem, SIGNAL(finished(const QRectF&)),
-            this, SLOT(slotAddItemFinished(const QRectF&)));
+    connect(d->manuallyAddWrapItem, SIGNAL(finished(QRectF)),
+            this, SLOT(slotAddItemFinished(QRectF)));
 
     connect(d->manuallyAddWrapItem, SIGNAL(cancelled()),
             this, SLOT(cancelAddItem()));

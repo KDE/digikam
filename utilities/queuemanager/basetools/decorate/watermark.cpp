@@ -282,16 +282,16 @@ WaterMark::WaterMark(QObject* parent)
     connect(d->useTextRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->imageFileUrlRequester, SIGNAL(textChanged(const QString&)),
+    connect(d->imageFileUrlRequester, SIGNAL(textChanged(QString)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->fontChooserWidget, SIGNAL(currentFontChanged(const QFont&)),
+    connect(d->fontChooserWidget, SIGNAL(currentFontChanged(QFont)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->fontColorButton, SIGNAL(changed(const QColor&)),
+    connect(d->fontColorButton, SIGNAL(changed(QColor)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->textEdit, SIGNAL(textChanged(const QString&)),
+    connect(d->textEdit, SIGNAL(textChanged(QString)),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->textOpacity, SIGNAL(valueChanged(int)),
@@ -300,7 +300,7 @@ WaterMark::WaterMark(QObject* parent)
     connect(d->useBackgroundCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->backgroundColorButton, SIGNAL(changed(const QColor&)),
+    connect(d->backgroundColorButton, SIGNAL(changed(QColor)),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->backgroundOpacity, SIGNAL(valueChanged(int)),

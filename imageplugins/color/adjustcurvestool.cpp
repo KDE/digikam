@@ -145,8 +145,8 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 
-    connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(const Digikam::DColor&, const QPoint&)),
-            d->settingsView, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
+    connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor,QPoint)),
+            d->settingsView, SLOT(slotSpotColorChanged(Digikam::DColor)));
 
     connect(d->settingsView, SIGNAL(signalSpotColorChanged()),
             this, SLOT(slotSpotColorChanged()));
@@ -158,8 +158,8 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
             this, SLOT(slotPickerColorButtonActived(int)));
 
     /*
-        connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-                this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
+        connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
+                this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
     */
 }
 

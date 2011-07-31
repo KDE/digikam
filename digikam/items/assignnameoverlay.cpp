@@ -120,32 +120,32 @@ void AssignNameOverlay::setActive(bool active)
 
     if (active)
     {
-        connect(assignNameWidget(), SIGNAL(assigned(const TaggingAction&, const ImageInfo&, const QVariant&)),
-                this, SLOT(slotAssigned(const TaggingAction&, const ImageInfo&, const QVariant&)));
+        connect(assignNameWidget(), SIGNAL(assigned(TaggingAction,ImageInfo,QVariant)),
+                this, SLOT(slotAssigned(TaggingAction,ImageInfo,QVariant)));
 
-        connect(assignNameWidget(), SIGNAL(rejected(const ImageInfo&, const QVariant&)),
-                this, SLOT(slotRejected(const ImageInfo&, const QVariant&)));
+        connect(assignNameWidget(), SIGNAL(rejected(ImageInfo,QVariant)),
+                this, SLOT(slotRejected(ImageInfo,QVariant)));
 
 
-        connect(assignNameWidget(), SIGNAL(selected(const TaggingAction&, const ImageInfo&, const QVariant&)),
+        connect(assignNameWidget(), SIGNAL(selected(TaggingAction,ImageInfo,QVariant)),
                 this, SLOT(enterPersistentMode()));
 
-        connect(assignNameWidget(), SIGNAL(assigned(const TaggingAction&, const ImageInfo&, const QVariant&)),
+        connect(assignNameWidget(), SIGNAL(assigned(TaggingAction,ImageInfo,QVariant)),
                 this, SLOT(leavePersistentMode()));
 
-        connect(assignNameWidget(), SIGNAL(rejected(const ImageInfo&, const QVariant&)),
+        connect(assignNameWidget(), SIGNAL(rejected(ImageInfo,QVariant)),
                 this, SLOT(leavePersistentMode()));
 
-        connect(assignNameWidget(), SIGNAL(assigned(const TaggingAction&, const ImageInfo&, const QVariant&)),
+        connect(assignNameWidget(), SIGNAL(assigned(TaggingAction,ImageInfo,QVariant)),
                 this, SLOT(storeFocus()));
 
-        connect(assignNameWidget(), SIGNAL(rejected(const ImageInfo&, const QVariant&)),
+        connect(assignNameWidget(), SIGNAL(rejected(ImageInfo,QVariant)),
                 this, SLOT(storeFocus()));
 
         /*
                 if (view()->model())
-                    connect(view()->model(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-                            this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)));
+                    connect(view()->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+                            this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
         */
     }
     else

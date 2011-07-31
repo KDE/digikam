@@ -129,11 +129,11 @@ StackedView::StackedView(QWidget* parent)
     connect(d->imagePreviewView, SIGNAL(signalPopupTagsView()),
             d->imageIconView, SIGNAL(signalPopupTagsView()));
 
-    connect(d->imagePreviewView, SIGNAL(signalGotoAlbumAndItem(const ImageInfo&)),
-            this, SIGNAL(signalGotoAlbumAndItem(const ImageInfo&)));
+    connect(d->imagePreviewView, SIGNAL(signalGotoAlbumAndItem(ImageInfo)),
+            this, SIGNAL(signalGotoAlbumAndItem(ImageInfo)));
 
-    connect(d->imagePreviewView, SIGNAL(signalGotoDateAndItem(const ImageInfo&)),
-            this, SIGNAL(signalGotoDateAndItem(const ImageInfo&)));
+    connect(d->imagePreviewView, SIGNAL(signalGotoDateAndItem(ImageInfo)),
+            this, SIGNAL(signalGotoDateAndItem(ImageInfo)));
 
     connect(d->imagePreviewView, SIGNAL(signalGotoTagAndItem(int)),
             this, SIGNAL(signalGotoTagAndItem(int)));

@@ -247,11 +247,11 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
 
     addStretch();
 
-    connect(d->labelContactWebUrl, SIGNAL(leftClickedUrl(const QString&)),
-            this, SLOT(slotProcessUrl(const QString&)));
+    connect(d->labelContactWebUrl, SIGNAL(leftClickedUrl(QString)),
+            this, SLOT(slotProcessUrl(QString)));
 
-    connect(d->labelContactEmail, SIGNAL(leftClickedUrl(const QString&)),
-            this, SLOT(slotProcessEmail(const QString&)));
+    connect(d->labelContactEmail, SIGNAL(leftClickedUrl(QString)),
+            this, SLOT(slotProcessEmail(QString)));
 }
 
 TemplateViewer::~TemplateViewer()

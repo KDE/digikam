@@ -243,10 +243,10 @@ SetupEditor::SetupEditor(QWidget* parent)
     connect(d->expoIndicatorMode, SIGNAL(toggled(bool)),
             this, SLOT(slotExpoSettingsChanged()));
 
-    connect(d->underExposureColor, SIGNAL(changed(const QColor&)),
+    connect(d->underExposureColor, SIGNAL(changed(QColor)),
             this, SLOT(slotExpoSettingsChanged()));
 
-    connect(d->overExposureColor, SIGNAL(changed(const QColor&)),
+    connect(d->overExposureColor, SIGNAL(changed(QColor)),
             this, SLOT(slotExpoSettingsChanged()));
 
     connect(d->underExposurePcents, SIGNAL(valueChanged(double)),

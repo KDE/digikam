@@ -203,8 +203,8 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     connect(saveMetadata, SIGNAL(clicked()),
             this, SLOT(slotSaveMetadataToFile()));
 
-    connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->view, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
+    connect(d->searchBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
+            d->view, SLOT(slotSearchTextChanged(SearchTextSettings)));
 
     connect(d->view, SIGNAL(signalTextFilterMatch(bool)),
             d->searchBar, SLOT(slotSearchResult(bool)));

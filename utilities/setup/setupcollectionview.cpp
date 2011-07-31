@@ -113,14 +113,14 @@ SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView* view, QObjec
     m_styledDelegate = new QStyledItemDelegate(parent);
 
     // forward all signals
-    connect(m_styledDelegate, SIGNAL(closeEditor(QWidget*, QAbstractItemDelegate::EndEditHint)),
-            this, SIGNAL(closeEditor(QWidget*, QAbstractItemDelegate::EndEditHint)));
+    connect(m_styledDelegate, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)),
+            this, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)));
 
     connect(m_styledDelegate, SIGNAL(commitData(QWidget*)),
             this, SIGNAL(commitData(QWidget*)));
 
-    connect(m_styledDelegate, SIGNAL(sizeHintChanged(const QModelIndex&)),
-            this, SIGNAL(sizeHintChanged(const QModelIndex&)));
+    connect(m_styledDelegate, SIGNAL(sizeHintChanged(QModelIndex)),
+            this, SIGNAL(sizeHintChanged(QModelIndex)));
 
     // For size hint. To get a valid size hint, the widgets seem to need a parent widget
     m_samplePushButton = new QPushButton(view);

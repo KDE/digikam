@@ -71,16 +71,16 @@ void ImageDelegateOverlay::setView(QAbstractItemView* view)
 {
     if (m_view)
     {
-        disconnect(this, SIGNAL(update(const QModelIndex&)),
-                   m_view, SLOT(update(const QModelIndex&)));
+        disconnect(this, SIGNAL(update(QModelIndex)),
+                   m_view, SLOT(update(QModelIndex)));
     }
 
     m_view = view;
 
     if (m_view)
     {
-        connect(this, SIGNAL(update(const QModelIndex&)),
-                m_view, SLOT(update(const QModelIndex&)));
+        connect(this, SIGNAL(update(QModelIndex)),
+                m_view, SLOT(update(QModelIndex)));
     }
 }
 
@@ -198,8 +198,8 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
 
         if (view()->model())
         {
-            connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-                    this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
+            connect(m_view->model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
+                    this, SLOT(slotRowsRemoved(QModelIndex,int,int)));
 
             connect(m_view->model(), SIGNAL(layoutChanged()),
                     this, SLOT(slotLayoutChanged()));
@@ -208,8 +208,8 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
                     this, SLOT(slotReset()));
         }
 
-        connect(m_view, SIGNAL(entered(const QModelIndex&)),
-                this, SLOT(slotEntered(const QModelIndex&)));
+        connect(m_view, SIGNAL(entered(QModelIndex)),
+                this, SLOT(slotEntered(QModelIndex)));
 
         connect(m_view, SIGNAL(viewportEntered()),
                 this, SLOT(slotViewportEntered()));
@@ -228,8 +228,8 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
                 disconnect(m_view->model(), 0, this, 0);
             }
 
-            disconnect(m_view, SIGNAL(entered(const QModelIndex&)),
-                       this, SLOT(slotEntered(const QModelIndex&)));
+            disconnect(m_view, SIGNAL(entered(QModelIndex)),
+                       this, SLOT(slotEntered(QModelIndex)));
 
             disconnect(m_view, SIGNAL(viewportEntered()),
                        this, SLOT(slotViewportEntered()));
@@ -503,7 +503,7 @@ void PersistentWidgetDelegateOverlay::setActive(bool active)
 
     if (active)
     {
-        connect(m_view->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+        connect(m_view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                 this, SLOT(leavePersistentMode()));
 
         connect(m_view, SIGNAL(viewportClicked(const QMouseEvent*)),
@@ -513,7 +513,7 @@ void PersistentWidgetDelegateOverlay::setActive(bool active)
     {
         if (m_view)
         {
-            disconnect(m_view->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+            disconnect(m_view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                        this, SLOT(leavePersistentMode()));
 
             disconnect(m_view, SIGNAL(viewportClicked(const QMouseEvent*)),
@@ -668,8 +668,8 @@ void ImageDelegateOverlayContainer::installOverlay(ImageDelegateOverlay* overlay
     QObject::connect(overlay, SIGNAL(destroyed(QObject*)),
                      asDelegate(), SLOT(overlayDestroyed(QObject*)));
 
-    QObject::connect(overlay, SIGNAL(requestNotification(const QModelIndex&, const QString&)),
-                     asDelegate(), SIGNAL(requestNotification(const QModelIndex&, const QString&)));
+    QObject::connect(overlay, SIGNAL(requestNotification(QModelIndex,QString)),
+                     asDelegate(), SIGNAL(requestNotification(QModelIndex,QString)));
 
     QObject::connect(overlay, SIGNAL(hideNotification()),
                      asDelegate(), SIGNAL(hideNotification()));

@@ -95,8 +95,8 @@ StatusProgressBar::StatusProgressBar(QWidget* parent)
     insertWidget(StatusProgressBarPriv::TextLabel,   d->textLabel);
     insertWidget(StatusProgressBarPriv::ProgressBar, d->progressWidget);
 
-    connect(d->cancelButton, SIGNAL( clicked() ),
-            this, SIGNAL( signalCancelButtonPressed() ) );
+    connect(d->cancelButton, SIGNAL(clicked()),
+            this, SIGNAL(signalCancelButtonPressed()) );
 
     progressBarMode(TextMode);
 }

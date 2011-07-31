@@ -285,14 +285,14 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
 
-    connect(m_stackView, SIGNAL(signalZoomChanged(bool, bool, double)),
-            this, SLOT(slotZoomChanged(bool, bool, double)));
+    connect(m_stackView, SIGNAL(signalZoomChanged(bool,bool,double)),
+            this, SLOT(slotZoomChanged(bool,bool,double)));
 
     connect(m_canvas, SIGNAL(signalChanged()),
             this, SLOT(slotChanged()));
 
-    connect(m_canvas, SIGNAL(signalUndoStateChanged(bool, bool, bool)),
-            this, SLOT(slotUndoStateChanged(bool, bool, bool)));
+    connect(m_canvas, SIGNAL(signalUndoStateChanged(bool,bool,bool)),
+            this, SLOT(slotUndoStateChanged(bool,bool,bool)));
 
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected(bool)));
@@ -300,29 +300,29 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalPrepareToLoad()),
             this, SLOT(slotPrepareToLoad()));
 
-    connect(m_canvas, SIGNAL(signalLoadingStarted(const QString&)),
-            this, SLOT(slotLoadingStarted(const QString&)));
+    connect(m_canvas, SIGNAL(signalLoadingStarted(QString)),
+            this, SLOT(slotLoadingStarted(QString)));
 
-    connect(m_canvas, SIGNAL(signalLoadingFinished(const QString&, bool)),
-            this, SLOT(slotLoadingFinished(const QString&, bool)));
+    connect(m_canvas, SIGNAL(signalLoadingFinished(QString,bool)),
+            this, SLOT(slotLoadingFinished(QString,bool)));
 
-    connect(m_canvas, SIGNAL(signalLoadingProgress(const QString&, float)),
-            this, SLOT(slotLoadingProgress(const QString&, float)));
+    connect(m_canvas, SIGNAL(signalLoadingProgress(QString,float)),
+            this, SLOT(slotLoadingProgress(QString,float)));
 
-    connect(m_canvas, SIGNAL(signalSavingStarted(const QString&)),
-            this, SLOT(slotSavingStarted(const QString&)));
+    connect(m_canvas, SIGNAL(signalSavingStarted(QString)),
+            this, SLOT(slotSavingStarted(QString)));
 
-    connect(m_canvas, SIGNAL(signalSavingFinished(const QString&, bool)),
-            this, SLOT(slotSavingFinished(const QString&, bool)));
+    connect(m_canvas, SIGNAL(signalSavingFinished(QString,bool)),
+            this, SLOT(slotSavingFinished(QString,bool)));
 
-    connect(m_canvas, SIGNAL(signalSavingProgress(const QString&, float)),
-            this, SLOT(slotSavingProgress(const QString&, float)));
+    connect(m_canvas, SIGNAL(signalSavingProgress(QString,float)),
+            this, SLOT(slotSavingProgress(QString,float)));
 
-    connect(m_canvas, SIGNAL(signalSelectionChanged(const QRect&)),
-            this, SLOT(slotSelectionChanged(const QRect&)));
+    connect(m_canvas, SIGNAL(signalSelectionChanged(QRect)),
+            this, SLOT(slotSelectionChanged(QRect)));
 
-    connect(m_canvas->interface(), SIGNAL(signalFileOriginChanged(const QString&)),
-            this, SLOT(slotFileOriginChanged(const QString&)));
+    connect(m_canvas->interface(), SIGNAL(signalFileOriginChanged(QString)),
+            this, SLOT(slotFileOriginChanged(QString)));
 
     // -- status bar connections --------------------------------------
 
@@ -674,8 +674,8 @@ void EditorWindow::EditorWindowPriv::plugNewVersionInFormatAction(EditorWindow* 
     if (!formatMenuActionMapper)
     {
         formatMenuActionMapper = new QSignalMapper(q);
-        connect(formatMenuActionMapper, SIGNAL(mapped(const QString&)),
-                q, SLOT(saveNewVersionInFormat(const QString&)));
+        connect(formatMenuActionMapper, SIGNAL(mapped(QString)),
+                q, SLOT(saveNewVersionInFormat(QString)));
     }
 
     KAction* action = new KAction(text, q);
@@ -2999,8 +2999,8 @@ KCategorizedView* EditorWindow::createToolSelectionView()
     d->selectToolsActionView->setModel(filterModel);
     d->selectToolsActionView->adjustGridSize();
 
-    connect(d->selectToolsActionView, SIGNAL(clicked(const QModelIndex&)),
-            actionModel, SLOT(trigger(const QModelIndex&)));
+    connect(d->selectToolsActionView, SIGNAL(clicked(QModelIndex)),
+            actionModel, SLOT(trigger(QModelIndex)));
 
     return d->selectToolsActionView;
 }
@@ -3016,7 +3016,7 @@ void EditorWindow::setupSelectToolsAction()
     connect(m_selectToolsAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotSelectToolsMenuAboutToShow()));
 
-    connect(d->selectToolsActionView, SIGNAL(clicked(const QModelIndex&)),
+    connect(d->selectToolsActionView, SIGNAL(clicked(QModelIndex)),
             m_selectToolsAction->menu(), SLOT(close()));
 }
 

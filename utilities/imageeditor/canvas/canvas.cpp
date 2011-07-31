@@ -204,26 +204,26 @@ Canvas::Canvas(QWidget* parent)
     connect(d->im, SIGNAL(signalModified()),
             this, SLOT(slotModified()));
 
-    connect(d->im, SIGNAL(signalUndoStateChanged(bool, bool, bool)),
-            this, SIGNAL(signalUndoStateChanged(bool, bool, bool)));
+    connect(d->im, SIGNAL(signalUndoStateChanged(bool,bool,bool)),
+            this, SIGNAL(signalUndoStateChanged(bool,bool,bool)));
 
-    connect(d->im, SIGNAL(signalLoadingStarted(const QString&)),
-            this, SIGNAL(signalLoadingStarted(const QString&)));
+    connect(d->im, SIGNAL(signalLoadingStarted(QString)),
+            this, SIGNAL(signalLoadingStarted(QString)));
 
-    connect(d->im, SIGNAL(signalImageLoaded(const QString&, bool)),
-            this, SLOT(slotImageLoaded(const QString&, bool)));
+    connect(d->im, SIGNAL(signalImageLoaded(QString,bool)),
+            this, SLOT(slotImageLoaded(QString,bool)));
 
-    connect(d->im, SIGNAL(signalImageSaved(const QString&, bool)),
-            this, SLOT(slotImageSaved(const QString&, bool)));
+    connect(d->im, SIGNAL(signalImageSaved(QString,bool)),
+            this, SLOT(slotImageSaved(QString,bool)));
 
-    connect(d->im, SIGNAL(signalLoadingProgress(const QString&, float)),
-            this, SIGNAL(signalLoadingProgress(const QString&, float)));
+    connect(d->im, SIGNAL(signalLoadingProgress(QString,float)),
+            this, SIGNAL(signalLoadingProgress(QString,float)));
 
-    connect(d->im, SIGNAL(signalSavingStarted(const QString&)),
-            this, SIGNAL(signalSavingStarted(const QString&)));
+    connect(d->im, SIGNAL(signalSavingStarted(QString)),
+            this, SIGNAL(signalSavingStarted(QString)));
 
-    connect(d->im, SIGNAL(signalSavingProgress(const QString&, float)),
-            this, SIGNAL(signalSavingProgress(const QString&, float)));
+    connect(d->im, SIGNAL(signalSavingProgress(QString,float)),
+            this, SIGNAL(signalSavingProgress(QString,float)));
 
     connect(this, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected()));
@@ -1515,8 +1515,8 @@ void Canvas::slotCornerButtonPressed()
     d->panIconPopup    = new KPopupFrame(this);
     PanIconWidget* pan = new PanIconWidget(d->panIconPopup);
 
-    connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
-            this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
+    connect(pan, SIGNAL(signalSelectionMoved(QRect,bool)),
+            this, SLOT(slotPanIconSelectionMoved(QRect,bool)));
 
     connect(pan, SIGNAL(signalHidden()),
             this, SLOT(slotPanIconHiden()));

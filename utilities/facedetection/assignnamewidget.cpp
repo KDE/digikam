@@ -194,11 +194,11 @@ void AssignNameWidget::AssignNameWidgetPriv::setupAddTagsWidget(T* widget)
         widget->setParentTag(parentTag);
     }
 
-    q->connect(widget, SIGNAL(taggingActionActivated(const TaggingAction&)),
-               q, SLOT(slotActionActivated(const TaggingAction&)));
+    q->connect(widget, SIGNAL(taggingActionActivated(TaggingAction)),
+               q, SLOT(slotActionActivated(TaggingAction)));
 
-    q->connect(widget, SIGNAL(taggingActionSelected(const TaggingAction&)),
-               q, SLOT(slotActionSelected(const TaggingAction&)));
+    q->connect(widget, SIGNAL(taggingActionSelected(TaggingAction)),
+               q, SLOT(slotActionSelected(TaggingAction)));
 }
 
 void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()

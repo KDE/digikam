@@ -145,7 +145,7 @@ ToolsListView::ToolsListView(QWidget* parent)
     setDragEnabled(true);
     header()->setResizeMode(QHeaderView::Stretch);
 
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotContextMenu()));
 }
 
@@ -346,7 +346,7 @@ void ToolsListView::slotContextMenu()
 {
     KMenu popmenu(this);
     KAction* action = new KAction(KIcon("bqm-add"), i18n("Assign tools"), this);
-    connect(action, SIGNAL(triggered(bool) ),
+    connect(action, SIGNAL(triggered(bool)),
             this, SLOT(slotAssignTools()));
 
     popmenu.addAction(action);

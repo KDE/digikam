@@ -133,11 +133,11 @@ CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)
     connect(this, SIGNAL(signalNewSelection(bool)),
             this, SLOT(slotUpdateDownloadNames(bool)));
 
-    connect(this, SIGNAL(signalRightButtonClicked(IconItem*, const QPoint&)),
-            this, SLOT(slotContextMenu(IconItem*, const QPoint&)));
+    connect(this, SIGNAL(signalRightButtonClicked(IconItem*,QPoint)),
+            this, SLOT(slotContextMenu(IconItem*,QPoint)));
 
-    connect(this, SIGNAL(signalRightButtonClicked(const QPoint&)),
-            this, SLOT(slotRightButtonClicked(const QPoint&)));
+    connect(this, SIGNAL(signalRightButtonClicked(QPoint)),
+            this, SLOT(slotRightButtonClicked(QPoint)));
 
     connect(this, SIGNAL(signalDoubleClicked(IconItem*)),
             this, SLOT(slotDoubleClicked(IconItem*)));
