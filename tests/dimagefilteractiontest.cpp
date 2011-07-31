@@ -101,9 +101,9 @@ void DImageFilterActionTest::testActions()
         DImg diff(ref.width(), ref.height(), ref.sixteenBit());
         diff.fill(DColor(Qt::black));
 
-        for (uint x=0; x<ref.width(); x++)
+        for (uint x=0; x<ref.width(); ++x)
         {
-            for (uint y=0; y<ref.height(); y++)
+            for (uint y=0; y<ref.height(); ++y)
             {
                 DColor cref = ref.getPixelColor(x,y);
                 DColor cres = img.getPixelColor(x,y);

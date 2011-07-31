@@ -574,7 +574,7 @@ void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription& descrip
                 continue;
             }
         }
-        it++;
+        ++it;
     }
 }
 

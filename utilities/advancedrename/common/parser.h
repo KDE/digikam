@@ -61,7 +61,6 @@ public:
     Parser();
     virtual ~Parser();
 
-    //    void          init(const ParseSettings& settings);
     void          reset();
 
     QString       parse(ParseSettings& settings);
@@ -90,6 +89,9 @@ protected:
     void unregisterModifier(Modifier* modifier);
 
 private:
+
+    Parser(const Parser&);
+    Parser& operator=(const Parser&);
 
     ParseResults results(ParseSettings& settings);
 

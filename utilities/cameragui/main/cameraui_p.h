@@ -146,6 +146,9 @@ public:
     {
     }
 
+    static const QString          configGroupName;
+    static const QString          configUseMetadataDateEntry;
+
     bool                          deleteAfter;
     bool                          busy;
     bool                          closed;
@@ -243,6 +246,9 @@ public:
 
     DAboutData*                   about;
 };
+
+const QString CameraUI::CameraUIPriv::configGroupName("Camera Interface Settings");
+const QString CameraUI::CameraUIPriv::configUseMetadataDateEntry("UseThemeBackgroundColor");
 
 }  // namespace Digikam
 

@@ -31,6 +31,7 @@
 #include <QGroupBox>
 #include <QHeaderView>
 #include <QPixmap>
+#include <QCheckBox>
 #include <QPushButton>
 #include <QTreeWidget>
 #include <QTreeWidgetItemIterator>
@@ -46,7 +47,9 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ktoolinvocation.h>
+#include <ktabwidget.h>
 #include <kurllabel.h>
+#include <kconfig.h>
 
 // Local includes
 
@@ -160,24 +163,38 @@ public:
         removeButton(0),
         editButton(0),
         autoDetectButton(0),
-        listView(0)
+        listView(0),
+        tab(0)
     {
     }
 
-    QPushButton* addButton;
-    QPushButton* removeButton;
-    QPushButton* editButton;
-    QPushButton* autoDetectButton;
+    static const QString configGroupName;
+    static const QString configUseMetadataDateEntry;
 
-    QTreeWidget* listView;
+    QPushButton*         addButton;
+    QPushButton*         removeButton;
+    QPushButton*         editButton;
+    QPushButton*         autoDetectButton;
+
+    QCheckBox*           useDateFromMetadata;
+
+    QTreeWidget*         listView;
+
+    KTabWidget*          tab;
 };
+
+const QString SetupCamera::SetupCameraPriv::configGroupName("Camera Interface Settings");
+const QString SetupCamera::SetupCameraPriv::configUseMetadataDateEntry("UseThemeBackgroundColor");
 
 SetupCamera::SetupCamera( QWidget* parent )
     : QScrollArea(parent), d(new SetupCameraPriv)
 {
-    QWidget* panel = new QWidget(viewport());
-    setWidget(panel);
+    d->tab = new KTabWidget(viewport());
+    setWidget(d->tab);
     setWidgetResizable(true);
+
+    QWidget* panel = new QWidget(d->tab);
+    panel->setAutoFillBackground(false);
 
     QGridLayout* grid = new QGridLayout(panel);
     d->listView       = new QTreeWidget(panel);
@@ -247,6 +264,28 @@ SetupCamera::SetupCamera( QWidget* parent )
     grid->addItem(spacer,                4, 1, 1, 1);
     grid->addWidget(gphotoLogoLabel,     5, 1, 1, 1);
 
+    d->tab->insertTab(0, panel, i18n("Devices"));
+
+    // -------------------------------------------------------------
+
+    QWidget* panel2        = new QWidget(d->tab);
+    panel2->setAutoFillBackground(false);
+
+    QVBoxLayout* layout    = new QVBoxLayout(panel2);
+    d->useDateFromMetadata = new QCheckBox(i18n("Use date from metadata to short items instead file-system date (makes connection slower)"), panel2);
+
+    d->tab->insertTab(1, panel2, i18n("Behavior"));
+
+    layout->setMargin(KDialog::spacingHint());
+    layout->setSpacing(KDialog::spacingHint());
+    layout->addWidget(d->useDateFromMetadata);
+    layout->addStretch();
+
+    // -------------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+
     adjustSize();
 
     // -------------------------------------------------------------
@@ -269,6 +308,18 @@ SetupCamera::SetupCamera( QWidget* parent )
     connect(d->autoDetectButton, SIGNAL(clicked()),
             this, SLOT(slotAutoDetectCamera()));
 
+    // -------------------------------------------------------------
+
+    readSettings();
+}
+
+SetupCamera::~SetupCamera()
+{
+    delete d;
+}
+
+void SetupCamera::readSettings()
+{
     // Populate cameras --------------------------------------
 
     CameraList* clist = CameraList::defaultList();
@@ -283,16 +334,53 @@ SetupCamera::SetupCamera( QWidget* parent )
         }
     }
 
-    // --------------------------------------------------------
+    // -------------------------------------------------------
 
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    d->useDateFromMetadata->setChecked(group.readEntry(d->configUseMetadataDateEntry, false));
 }
 
-SetupCamera::~SetupCamera()
+void SetupCamera::applySettings()
 {
-    delete d;
+    // Save camera devices -----------------------------------
+
+    CameraList* clist = CameraList::defaultList();
+
+    if (clist)
+    {
+        clist->clear();
+
+        QTreeWidgetItemIterator it(d->listView);
+
+        while (*it)
+        {
+            SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(*it);
+
+            if (item)
+            {
+                CameraType* ctype = item->cameraType();
+
+                if (ctype)
+                {
+                    clist->insert(new CameraType(*ctype));
+                }
+            }
+
+            ++it;
+        }
+
+        clist->save();
+    }
+
+    // -------------------------------------------------------
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configUseMetadataDateEntry, d->useDateFromMetadata->isChecked());
+    group.sync();
 }
 
 void SetupCamera::slotProcessGphotoUrl(const QString& url)
@@ -415,37 +503,6 @@ void SetupCamera::slotAutoDetectCamera()
     {
         KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.", model, port));
         slotAddedCamera(model, model, port, QString("/"));
-    }
-}
-
-void SetupCamera::applySettings()
-{
-    CameraList* clist = CameraList::defaultList();
-
-    if (clist)
-    {
-        clist->clear();
-
-        QTreeWidgetItemIterator it(d->listView);
-
-        while (*it)
-        {
-            SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(*it);
-
-            if (item)
-            {
-                CameraType* ctype = item->cameraType();
-
-                if (ctype)
-                {
-                    clist->insert(new CameraType(*ctype));
-                }
-            }
-
-            ++it;
-        }
-
-        clist->save();
     }
 }
 

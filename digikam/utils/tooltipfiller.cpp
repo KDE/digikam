@@ -306,7 +306,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 QString title = tags;
                 QString tagText;
 
-                for (int i = 0; i<tagPaths.size(); i++)
+                for (int i = 0; i<tagPaths.size(); ++i)
                 {
                     tagText = tagPaths[i];
 
@@ -338,7 +338,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
             if (rating > RatingMin && rating <= RatingMax)
             {
-                for (int i=0; i<rating; i++)
+                for (int i=0; i<rating; ++i)
                 {
                     str += QChar(0x2730);
                     str += ' ';

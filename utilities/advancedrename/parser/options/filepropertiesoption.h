@@ -48,6 +48,11 @@ public:
 protected:
 
     virtual QString parseOperation(ParseSettings& settings);
+
+private:
+
+    FilePropertiesOption(const FilePropertiesOption&);
+    FilePropertiesOption& operator=(const FilePropertiesOption&);
 };
 
 } // namespace Digikam

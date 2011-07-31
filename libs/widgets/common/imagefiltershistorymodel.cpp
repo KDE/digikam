@@ -266,7 +266,7 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
     QList<QVariant> itemData;
     d->filterStack.clear();
 
-    for (int i = 0; i < entries.count(); i++)
+    for (int i = 0; i < entries.count(); ++i)
     {
         // the first entry, for the original, may not have an Action
         if (entries.at(i).action.isNull())
@@ -327,7 +327,7 @@ bool ImageFiltersHistoryModel::removeRows(int row, int /*count*/, const QModelIn
 
 void ImageFiltersHistoryModel::setEnabledEntries(int count)
 {
-    for (int i=0; i<d->rootItem->childCount(); i++)
+    for (int i=0; i<d->rootItem->childCount(); ++i)
     {
         d->rootItem->child(i)->setDisabled(i >= count);
     }

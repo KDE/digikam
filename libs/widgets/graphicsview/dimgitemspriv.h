@@ -59,7 +59,7 @@ public:
 
     void setMaxCount(int);
     void clear();
-    bool find(const QRect& region, QPixmap* pix, QRect* source) const;
+    bool find(const QRect& region, QPixmap* pix, QRect* source);
     void insert(const QRect& region, const QPixmap& pixmap);
 
 protected:

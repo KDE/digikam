@@ -31,6 +31,44 @@
 namespace Digikam
 {
 
+GPItemInfo::GPItemInfo()
+{
+    size             = -1;
+    width            = -1;
+    height           = -1;
+    readPermissions  = -1;
+    writePermissions = -1;
+    downloaded       = DownloadUnknown;
+}
+
+GPItemInfo::~GPItemInfo()
+{
+}
+
+bool GPItemInfo::isNull() const
+{
+    return (size             == -1)              &&
+           (width            == -1)              &&
+           (height           == -1)              &&
+           (readPermissions  == -1)              &&
+           (writePermissions == -1)              &&
+           (downloaded       == DownloadUnknown) &&
+           name.isNull()                         &&
+           folder.isNull()                       &&
+           mime.isNull()                         &&
+           mtime.isNull()                        &&
+           photoInfo.isNull()                    &&
+           downloadName.isNull();
+}
+
+KUrl GPItemInfo::url() const
+{
+    KUrl url;
+    url.addPath(folder);
+    url.setFileName(name);
+    return url;
+}
+
 QDataStream& operator<<(QDataStream& ds, const GPItemInfo& info)
 {
     ds << info.name;
@@ -44,6 +82,7 @@ QDataStream& operator<<(QDataStream& ds, const GPItemInfo& info)
     ds << info.readPermissions;
     ds << info.writePermissions;
     ds << info.photoInfo;
+    ds << info.downloadName;
 
     return ds;
 }
@@ -61,6 +100,7 @@ QDataStream& operator>>(QDataStream& ds, GPItemInfo& info)
     ds >> info.readPermissions;
     ds >> info.writePermissions;
     ds >> info.photoInfo;
+    ds >> info.downloadName;
 
     return ds;
 }

@@ -758,7 +758,7 @@ void ImageModel::removeImageInfos(const QList<ImageInfo>& infos, const QList<QVa
 
     QList<int> listIndexes;
 
-    for (int i=0; i<infos.size(); i++)
+    for (int i=0; i<infos.size(); ++i)
     {
         QModelIndex index = indexForImageId(infos[i].id(), extraValues[i]);
         if (index.isValid())
@@ -930,7 +930,7 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
     }
     else
     {
-        for (int i=0; i<infos.size(); i++)
+        for (int i=0; i<infos.size(); ++i)
         {
             const ImageInfo& info = infos[i];
             bool found            = false;

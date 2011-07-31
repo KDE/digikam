@@ -57,6 +57,11 @@ protected:
 
 private:
 
+    Modifier(const Modifier&);
+    Modifier& operator=(const Modifier&);
+
+private:
+
     ModifierPriv* const d;
 };
 

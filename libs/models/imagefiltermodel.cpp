@@ -811,7 +811,7 @@ void ImageFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int start
 {
     QList<ImageInfo> infos;
 
-    for (int i=start; i>end; i++)
+    for (int i=start; i>end; ++i)
     {
         infos << imageInfo(index(i, 0));
     }
@@ -823,7 +823,7 @@ void ImageFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, i
 {
     QList<ImageInfo> infos;
 
-    for (int i=start; i>end; i++)
+    for (int i=start; i>end; ++i)
     {
         infos << imageInfo(index(i, 0));
     }
@@ -1081,11 +1081,11 @@ static inline QString fastNumberToString(int id)
     char* p    = c;
     int number = id;
 
-    for (int i=0; i<size; i++)
+    for (int i=0; i<size; ++i)
     {
         *p = 'a' + (number & 0xF);
         number >>= 4;
-        p++;
+        ++p;
     }
 
     return QString::fromLatin1(c);
@@ -1253,7 +1253,7 @@ void NoDuplicatesImageFilterModel::setSourceModel(QAbstractItemModel* model)
 void NoDuplicatesImageFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int begin, int end)
 {
     bool needInvalidate = false;
-    for (int i = begin; i<=end; i++)
+    for (int i = begin; i<=end; ++i)
     {
         QModelIndex index = sourceModel()->index(i, 0, parent);
         // filtered out by us?

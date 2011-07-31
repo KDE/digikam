@@ -231,7 +231,7 @@ QStandardItem* ActionItemModel::itemForAction(QAction *action) const
     if (!action)
         return 0;
 
-    for (int i = 0; i<rowCount(); i++)
+    for (int i = 0; i<rowCount(); ++i)
     {
         QStandardItem* it = item(i);
         if (static_cast<QAction*>(it->data(ItemActionRole).value<QObject*>()) == action)

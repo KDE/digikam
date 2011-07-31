@@ -1159,7 +1159,7 @@ void DImg::prepareSubPixelAccess()
     /* Precompute the Lanczos kernel */
     LANCZOS_DATA_TYPE* lanczos_func = new LANCZOS_DATA_TYPE[LANCZOS_SUPPORT * LANCZOS_SUPPORT * LANCZOS_TABLE_RES];
 
-    for (int i = 0; i < LANCZOS_SUPPORT * LANCZOS_SUPPORT * LANCZOS_TABLE_RES; i++)
+    for (int i = 0; i < LANCZOS_SUPPORT * LANCZOS_SUPPORT * LANCZOS_TABLE_RES; ++i)
     {
         if (i == 0)
         {

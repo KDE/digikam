@@ -110,7 +110,7 @@ const QModelIndexList& DigikamKCategorizedView::Private::intersectionSet(const Q
         }
     }
 
-    for (int i = middle; i < proxyModel->rowCount(); i++)
+    for (int i = middle; i < proxyModel->rowCount(); ++i)
     {
         index           = proxyModel->index(i, 0);
         indexVisualRect = visualRect(index);
@@ -190,14 +190,14 @@ QRect DigikamKCategorizedView::Private::visualRectInViewport(const QModelIndex& 
 
     if (!itemWidthPlusSeparation)
     {
-        itemWidthPlusSeparation++;
+        ++itemWidthPlusSeparation;
     }
 
     int elementsPerRow = viewportWidth / itemWidthPlusSeparation;
 
     if (!elementsPerRow)
     {
-        elementsPerRow++;
+        ++elementsPerRow;
     }
 
     int column;
@@ -243,7 +243,7 @@ QRect DigikamKCategorizedView::Private::visualRectInViewport(const QModelIndex& 
 
         if (rows - trunc(rows))
         {
-            rowsInt++;
+            ++rowsInt;
         }
 
         retRect.setTop(retRect.top() +
@@ -326,7 +326,7 @@ QRect DigikamKCategorizedView::Private::visualCategoryRectInViewport(const QStri
 
     if (!elementsPerRow)
     {
-        elementsPerRow++;
+        ++elementsPerRow;
     }
 
     if (listView->flow() == QListView::TopToBottom)
@@ -347,7 +347,7 @@ QRect DigikamKCategorizedView::Private::visualCategoryRectInViewport(const QStri
 
         if (rows - trunc(rows))
         {
-            rowsInt++;
+            ++rowsInt;
         }
 
         retRect.setTop(retRect.top() +
@@ -1489,14 +1489,14 @@ QModelIndex DigikamKCategorizedView::moveCursor(CursorAction cursorAction,
 
     if (!itemWidthPlusSeparation)
     {
-        itemWidthPlusSeparation++;
+        ++itemWidthPlusSeparation;
     }
 
     int elementsPerRow = viewportWidth / itemWidthPlusSeparation;
 
     if (!elementsPerRow)
     {
-        elementsPerRow++;
+        ++elementsPerRow;
     }
 
     QModelIndex current = selectionModel() ? selectionModel()->currentIndex()
@@ -1928,14 +1928,14 @@ void DigikamKCategorizedView::currentChanged(const QModelIndex& current, const Q
 
     if (!itemWidthPlusSeparation)
     {
-        itemWidthPlusSeparation++;
+        ++itemWidthPlusSeparation;
     }
 
     int elementsPerRow = viewportWidth / itemWidthPlusSeparation;
 
     if (!elementsPerRow)
     {
-        elementsPerRow++;
+        ++elementsPerRow;
     }
 
     if (current.isValid())

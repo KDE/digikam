@@ -712,7 +712,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
             HistoryImageId id = savedFile.image.addAsReferredImage(filePath);
 
             // for all images following in history, we need to insert the now saved file at the right place
-            for (int i = d->currentFileToSave + 1; i < d->filesToSave.size(); i++)
+            for (int i = d->currentFileToSave + 1; i < d->filesToSave.size(); ++i)
             {
                 d->filesToSave[i].image.insertAsReferredImage(savedFile.historyStep, id);
             }

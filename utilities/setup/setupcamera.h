@@ -66,6 +66,10 @@ private Q_SLOTS:
 
 private:
 
+    void readSettings();
+
+private:
+
     class SetupCameraPriv;
     SetupCameraPriv* const d;
 };

@@ -40,6 +40,8 @@ class QImage;
 namespace Digikam
 {
 
+class DMetadata;
+
 class DKCamera
 {
 
@@ -56,6 +58,8 @@ public:
     DKCamera(const QString& title, const QString& model, const QString& port, const QString& path);
     virtual ~DKCamera();
 
+public:
+
     virtual bool doConnect() = 0;
     virtual void cancel() = 0;
 
@@ -63,10 +67,11 @@ public:
 
     /// If getImageDimensions is false, the camera shall set width and height to -1
     /// if the values are not immediately available
-    virtual bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList) = 0;
+    virtual bool getItemsInfoList(const QString& folder, bool useMetadata, GPItemInfoList& infoList) = 0;
+    virtual void getItemInfo(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata) = 0;
 
     virtual bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) = 0;
-    virtual bool getExif(const QString& folder, const QString& itemName, char** edata, int& esize) = 0;
+    virtual bool getMetadata(const QString& folder, const QString& itemName, DMetadata& meta) = 0;
 
     virtual bool getPreview(QImage& preview) = 0;
     virtual bool capture(GPItemInfo& itemInfo) = 0;
@@ -86,6 +91,8 @@ public:
 
     virtual QByteArray cameraMD5ID() = 0;
 
+public:
+
     QString title() const;
     QString model() const;
     QString port()  const;
@@ -100,6 +107,10 @@ public:
     bool    captureImageSupport() const;
 
     QString mimeType(const QString& fileext) const;
+
+protected:
+
+    void    fillItemInfoFromMetadata(GPItemInfo& item, const DMetadata& meta) const;
 
 protected:
 

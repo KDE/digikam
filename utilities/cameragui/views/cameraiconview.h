@@ -65,7 +65,9 @@ public:
 
     void addItem(const GPItemInfo& itemInfo);
     void removeItem(const QString& folder, const QString& file);
+
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
+    void setItemInfo(const QString& folder, const QString& filename, const GPItemInfo& itemInfo);
 
     void ensureItemVisible(CameraIconItem* item);
     void ensureItemVisible(const GPItemInfo& itemInfo);
@@ -138,8 +140,8 @@ protected:
 
 private:
 
-    QString getTemplatedName(const GPItemInfo* itemInfo);
-    QString getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo* itemInfo);
+    QString getTemplatedName(const GPItemInfo& itemInfo);
+    QString getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo& itemInfo);
     void    uploadItemPopupMenu(const KUrl::List& srcURLs);
 
 private:

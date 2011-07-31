@@ -1230,7 +1230,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 
     SqlQuery query = prepareQuery(preparedString);
 
-    for (int i=0; i<valuesToBind.size(); i++)
+    for (int i=0; i<valuesToBind.size(); ++i)
     {
         query.bindValue(i, valuesToBind[i]);
     }
@@ -1246,7 +1246,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execUpsertDBAction(const Da
 
     QMap<QString, QVariant> fieldValueMap;
 
-    for (int i=0; i<fieldNames.size(); i++)
+    for (int i=0; i<fieldNames.size(); ++i)
     {
         fieldValueMap.insert(fieldNames[i], values[i]);
     }

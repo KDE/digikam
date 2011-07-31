@@ -471,7 +471,7 @@ void MonthWidget::updateDays()
 
     const int size = d->model->rowCount();
 
-    for (int i=0; i<size; i++)
+    for (int i=0; i<size; ++i)
     {
         QModelIndex index = d->model->index(i, 0);
 

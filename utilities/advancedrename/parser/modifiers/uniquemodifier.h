@@ -51,6 +51,11 @@ public:
 
 private:
 
+    UniqueModifier(const UniqueModifier&);
+    UniqueModifier& operator=(const UniqueModifier&);
+
+private:
+
     //    QStringList cache;
     QMap<ParseResults::ResultsKey, QStringList> cache;
 };

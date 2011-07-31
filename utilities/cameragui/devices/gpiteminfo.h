@@ -31,6 +31,10 @@
 #include <QByteArray>
 #include <QDateTime>
 
+// KDE includes
+
+#include <kurl.h>
+
 // Local includes
 
 #include "photoinfocontainer.h"
@@ -47,31 +51,40 @@ public:
 
     enum DownloadStatus
     {
-        DownloadUnknown  = -1,
-        DownloadedNo     = 0,
-        DownloadedYes    = 1,
-        DownloadFailed   = 2,
-        DownloadStarted  = 3,
-        NewPicture       = 4
+        DownloadUnknown  = -1,               // Donwload state is unknow
+        DownloadedNo     = 0,                // Is not yet downloaded on computer
+        DownloadedYes    = 1,                // Is already downloaded on computer
+        DownloadFailed   = 2,                // Download is failed or have been aborted by user
+        DownloadStarted  = 3,                // Download is under progress
+        NewPicture       = 4                 // This is a new item from camera
     };
 
 public:
 
-    qint64             size;
+    GPItemInfo();
+    ~GPItemInfo();
 
-    int                width;
-    int                height;
-    int                downloaded;           // See DownloadStatus enum.
-    int                readPermissions;
-    int                writePermissions;
+    bool isNull() const;                     // Return true if all member in this container are null
+    KUrl url() const;                        // Return the local file system (mounted on computer) url to the camera file
 
-    QString            name;
-    QString            folder;
-    QString            mime;
+public:
 
-    QDateTime          mtime;
+    qint64             size;                 // Camera file size in bytes.
 
-    PhotoInfoContainer photoInfo;
+    int                width;                // Image width in pixels
+    int                height;               // Image height in pixels
+    int                downloaded;           // Download status of camera file. See DownloadStatus enum for details
+    int                readPermissions;      // Read permission of camera file
+    int                writePermissions;     // Write permission of camera file
+
+    QString            name;                 // File name in camera file-system
+    QString            folder;               // Folder path to acces to file in camera
+    QString            mime;                 // Type mime of camera file
+    QString            downloadName;         // New file-name to use during download from camera
+
+    QDateTime          mtime;                // Modified time stamp of camera file
+
+    PhotoInfoContainer photoInfo;            // Photo Info from camera file (get from file metadata)
 };
 
 QDataStream& operator<<(QDataStream&, const GPItemInfo&);

@@ -79,6 +79,11 @@ public:
 
 private:
 
+    AdvancedRenameListItem(const AdvancedRenameListItem&);
+    AdvancedRenameListItem& operator=(const AdvancedRenameListItem&);
+
+private:
+
     class AdvancedRenameListItemPriv;
     AdvancedRenameListItemPriv* const d;
 };
@@ -109,6 +114,9 @@ private Q_SLOTS:
     void slotReturnPressed();
 
 private:
+
+    AdvancedRenameDialog(const AdvancedRenameDialog&);
+    AdvancedRenameDialog& operator=(const AdvancedRenameDialog&);
 
     void initDialog();
     void readSettings();

@@ -59,7 +59,7 @@ public:
         id = imageId;
         infos = access.db()->getImageComments(id);
 
-        for (int i=0; i<infos.size(); i++)
+        for (int i=0; i<infos.size(); ++i)
         {
             CommentInfo& info = infos[i];
 

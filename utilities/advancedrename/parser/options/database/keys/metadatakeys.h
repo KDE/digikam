@@ -43,6 +43,11 @@ public:
 protected:
 
     virtual QString getDbValue(const QString& key, ParseSettings& settings);
+
+private:
+
+    MetadataKeys(const MetadataKeys&);
+    MetadataKeys& operator=(const MetadataKeys&);
 };
 
 } // namespace Digikam

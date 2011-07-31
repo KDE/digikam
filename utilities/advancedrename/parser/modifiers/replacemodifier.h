@@ -50,6 +50,11 @@ public:
     ~ReplaceDialog();
 
     Ui::ReplaceModifierDialogWidget* const ui;
+
+private:
+
+    ReplaceDialog(const ReplaceDialog&);
+    ReplaceDialog& operator=(const ReplaceDialog&);
 };
 
 // --------------------------------------------------------
@@ -66,6 +71,11 @@ public:
 private Q_SLOTS:
 
     void slotTokenTriggered(const QString& token);
+
+private:
+
+    ReplaceModifier(const ReplaceModifier&);
+    ReplaceModifier& operator=(const ReplaceModifier&);
 };
 
 } // namespace Digikam

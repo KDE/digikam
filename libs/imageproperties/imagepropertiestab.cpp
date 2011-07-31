@@ -553,7 +553,7 @@ void ImagePropertiesTab::setRating(int rating)
     if (rating > RatingMin && rating <= RatingMax)
     {
         str = " ";
-        for (int i=0; i<rating; i++)
+        for (int i=0; i<rating; ++i)
         {
             str += QChar(0x2730);
             str += ' ';
@@ -580,14 +580,14 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
     QList<PathValuePair> tagsSorted;
     if (identifiers)
     {
-        for (int i=0; i<tagPaths.size(); i++)
+        for (int i=0; i<tagPaths.size(); ++i)
         {
             tagsSorted << PathValuePair(tagPaths[i], (*identifiers)[i]);
         }
     }
     else
     {
-        for (int i=0; i<tagPaths.size(); i++)
+        for (int i=0; i<tagPaths.size(); ++i)
         {
             tagsSorted << PathValuePair(tagPaths[i], QVariant());
         }
@@ -609,7 +609,7 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
         QStringList currentPath  = tagPath.split('/', QString::SkipEmptyParts);
         QStringList previousPath = previous.split('/', QString::SkipEmptyParts);
         int depth;
-        for (depth = 0; depth < currentPath.size() && depth < previousPath.size(); depth++)
+        for (depth = 0; depth < currentPath.size() && depth < previousPath.size(); ++depth)
         {
             if (currentPath[depth] != previousPath[depth])
                 break;

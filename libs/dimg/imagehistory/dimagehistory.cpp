@@ -265,7 +265,7 @@ int DImageHistory::actionCount() const
     {
         if (!entry.action.isNull())
         {
-            count++;
+            ++count;
         }
     }
 
@@ -486,7 +486,7 @@ QString DImageHistory::toXml() const
     stream.writeStartElement("history");
     stream.writeAttribute("version", QString::number(1));
 
-    for (int i = 0; i < entries().count(); i++)
+    for (int i = 0; i < entries().count(); ++i)
     {
         const Entry& step = entries().at(i);
 

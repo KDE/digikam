@@ -36,9 +36,10 @@ namespace Digikam
 {
 
 class GPStatus;
+class DMetadata;
 
-// Gphoto2 camera Implementation of abstract type DKCamera
-
+/** Gphoto2 camera Implementation of abstract type DKCamera
+ */
 class GPCamera : public DKCamera
 {
 
@@ -57,9 +58,11 @@ public:
     void getAllFolders(const QString& folder, QStringList& subFolderList);
     bool getSubFolders(const QString& folder, QStringList& subFolderList);
     bool getItemsList(const QString& folder, QStringList& itemsList);
-    bool getItemsInfoList(const QString& folder, GPItemInfoList& items);
+    bool getItemsInfoList(const QString& folder, bool useMetadata, GPItemInfoList& items);
+    void getItemInfo(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata);
+
     bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
-    bool getExif(const QString& folder, const QString& itemName, char** edata, int& esize);
+    bool getMetadata(const QString& folder, const QString& itemName, DMetadata& meta);
 
     bool setLockItem(const QString& folder, const QString& itemName, bool lock);
 
@@ -93,6 +96,10 @@ public:
     static bool findConnectedUsbCamera(int vendorId, int productId, QString& model, QString& port);
 
 private:
+
+    /** Run getItemInfo implemenation whithout to be wrapped into GPhoto context
+     */
+    void getItemInfoInternal(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata);
 
     static void printGphotoErrorDescription(int errorCode);
 

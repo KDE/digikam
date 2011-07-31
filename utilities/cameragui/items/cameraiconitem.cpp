@@ -46,42 +46,42 @@
 namespace Digikam
 {
 
-class CameraIconItemPriv
+class CameraIconItem::CameraIconItemPriv
 {
 
 public:
 
     CameraIconItemPriv() :
+        hasThumb(false),
         progressCount(0),
-        progressTimer(0),
-        itemInfo(0)
+        progressTimer(0)
     {
     }
 
-    int         progressCount;         // Position of animation during downloading.
+    bool       hasThumb;
+    int        progressCount;         // Position of animation during downloading.
 
-    QString     downloadName;
+    QPixmap    thumbnail;             // Full image size pixmap
 
-    QPixmap     thumbnail;             // Full image size pixmap
-    QPixmap     pixmap;                // Image pixmap adjusted to zoom level.
+    QSize      pixSize;
 
-    QRect       pixRect;
-    QRect       textRect;
-    QRect       extraRect;
+    QRect      pixRect;
+    QRect      textRect;
+    QRect      extraRect;
 
-    QTimer*     progressTimer;
+    QTimer*    progressTimer;
 
-    GPItemInfo* itemInfo;
+    GPItemInfo itemInfo;
 };
 
-CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
-                               const QImage& thumbnail, const QString& downloadName)
+CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo, const QImage& thumbnail)
     : IconItem(parent), d(new CameraIconItemPriv)
 {
-    d->itemInfo      = new GPItemInfo(itemInfo);
-    d->downloadName  = downloadName;
-    d->progressTimer = new QTimer(this);
+    setItemInfo(itemInfo);
     setThumbnail(thumbnail);
+
+    d->hasThumb      = false;
+    d->progressTimer = new QTimer(this);
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
@@ -89,37 +89,42 @@ CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo
 
 CameraIconItem::~CameraIconItem()
 {
-    delete d->itemInfo;
     delete d;
 }
 
 void CameraIconItem::setThumbnail(const QImage& thumbnail)
 {
     d->thumbnail = QPixmap::fromImage(thumbnail);
+    d->hasThumb  = true;
 }
 
-GPItemInfo* CameraIconItem::itemInfo() const
+bool CameraIconItem::hasValidThumbnail() const
+{
+    return d->hasThumb;
+}
+
+void CameraIconItem::setItemInfo(const GPItemInfo& itemInfo)
+{
+    d->itemInfo = itemInfo;
+}
+
+GPItemInfo CameraIconItem::itemInfo() const
 {
     return d->itemInfo;
 }
 
 void CameraIconItem::setDownloadName(const QString& downloadName)
 {
-    d->downloadName = downloadName;
+    d->itemInfo.downloadName = downloadName;
     update();
-}
-
-QString CameraIconItem::getDownloadName() const
-{
-    return d->downloadName;
 }
 
 void CameraIconItem::setDownloaded(int status)
 {
-    d->itemInfo->downloaded = status;
-    d->progressCount        = 0;
+    d->itemInfo.downloaded = status;
+    d->progressCount       = 0;
 
-    if (d->itemInfo->downloaded == GPItemInfo::DownloadStarted)
+    if (d->itemInfo.downloaded == GPItemInfo::DownloadStarted)
     {
         d->progressTimer->start(500);
     }
@@ -127,35 +132,34 @@ void CameraIconItem::setDownloaded(int status)
     {
         d->progressTimer->stop();
     }
-
     update();
 }
 
 bool CameraIconItem::isDownloaded() const
 {
-    return (d->itemInfo->downloaded == GPItemInfo::DownloadedYes);
+    return (d->itemInfo.downloaded == GPItemInfo::DownloadedYes);
 }
 
 void CameraIconItem::toggleLock()
 {
-    if (d->itemInfo->writePermissions == 0)
+    if (d->itemInfo.writePermissions == 0)
     {
-        d->itemInfo->writePermissions = 1;
+        d->itemInfo.writePermissions = 1;
     }
     else
     {
-        d->itemInfo->writePermissions = 0;
+        d->itemInfo.writePermissions = 0;
     }
-
     update();
 }
 
-void CameraIconItem::calcRect(const QString& itemName, const QString& downloadName)
+void CameraIconItem::calcRect(const QString& itemName, const QString& newName)
 {
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
     const int border     = 8;
     int thumbSize        = view->thumbnailSize() - (2*border);
-    d->pixmap            = d->thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    d->pixSize           = d->thumbnail.size();
+    d->pixSize.scale(thumbSize, thumbSize, Qt::KeepAspectRatio);
     d->pixRect           = QRect(0, 0, 0, 0);
     d->textRect          = QRect(0, 0, 0, 0);
     d->extraRect         = QRect(0, 0, 0, 0);
@@ -166,13 +170,11 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& downloadNa
     d->pixRect.setHeight(thumbSize);
 
     QFontMetrics fm(iconView()->font());
-    QRect r = QRect(fm.boundingRect(0, 0, thumbSize+(2*border), 0xFFFFFFFF,
-                                    Qt::AlignHCenter | Qt::AlignTop,
-                                    itemName));
+    QRect r = QRect(fm.boundingRect(0, 0, thumbSize+(2*border), 0xFFFFFFFF, Qt::AlignHCenter | Qt::AlignTop, itemName));
     d->textRect.setWidth(r.width());
     d->textRect.setHeight(r.height());
 
-    if (!d->downloadName.isEmpty())
+    if (!newName.isEmpty())
     {
         QFont fn(iconView()->font());
 
@@ -182,9 +184,7 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& downloadNa
         }
 
         fm = QFontMetrics(fn);
-        r  = QRect(fm.boundingRect(0, 0, thumbSize+(2*border), 0xFFFFFFFF,
-                                   Qt::AlignHCenter | Qt::TextWordWrap,
-                                   downloadName));
+        r  = QRect(fm.boundingRect(0, 0, thumbSize+(2*border), 0xFFFFFFFF, Qt::AlignHCenter | Qt::TextWordWrap, newName));
         d->extraRect.setWidth(r.width());
         d->extraRect.setHeight(r.height());
 
@@ -216,14 +216,14 @@ QRect CameraIconItem::clickToOpenRect()
 {
     QRect r(rect());
 
-    if (d->pixmap.isNull())
+    if (d->thumbnail.isNull())
     {
         return d->pixRect.translated(r.x(), r.y());
     }
 
-    QRect pixRect(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())/2,
-                  d->pixRect.y() + (d->pixRect.height() - d->pixmap.height())/2,
-                  d->pixmap.width(), d->pixmap.height());
+    QRect pixRect(d->pixRect.x() + (d->pixRect.width()  - d->pixSize.width())  / 2,
+                  d->pixRect.y() + (d->pixRect.height() - d->pixSize.height()) / 2,
+                  d->pixSize.width(), d->pixSize.height());
     return pixRect.translated(r.x(), r.y());
 }
 
@@ -234,18 +234,18 @@ void CameraIconItem::paintItem(QPainter* p)
     QFont fn(view->font());
     QRect r(rect());
 
-    QString itemName     = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->itemInfo->name);
-    QString downloadName = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->downloadName);
+    QString itemName     = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->itemInfo.name);
+    QString downloadName = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->itemInfo.downloadName);
 
     calcRect(itemName, downloadName);
 
     p->setPen(isSelected() ? kapp->palette().color(QPalette::HighlightedText)
                            : kapp->palette().color(QPalette::Text));
 
-    QRect pixmapDrawRect(d->pixRect.x() + (d->pixRect.width()  - d->pixmap.width())  /2,
-                         d->pixRect.y() + (d->pixRect.height() - d->pixmap.height()) /2,
-                         d->pixmap.width(), d->pixmap.height());
-    p->drawPixmap(pixmapDrawRect.topLeft(), d->pixmap);
+    QRect pixmapDrawRect(d->pixRect.x() + (d->pixRect.width()  - d->pixSize.width())  / 2,
+                         d->pixRect.y() + (d->pixRect.height() - d->pixSize.height()) / 2,
+                         d->pixSize.width(), d->pixSize.height());
+    p->drawPixmap(pixmapDrawRect.topLeft(), d->thumbnail.scaled(d->pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     p->save();
 
     QRegion pixmapClipRegion = QRegion(0, 0, r.width(), r.height()) - QRegion(pixmapDrawRect);
@@ -266,7 +266,7 @@ void CameraIconItem::paintItem(QPainter* p)
     p->restore();
     p->drawText(d->textRect, Qt::AlignHCenter|Qt::AlignTop, itemName);
 
-    if (!d->downloadName.isEmpty())
+    if (!downloadName.isEmpty())
     {
         if (fn.pointSize() > 0)
         {
@@ -290,7 +290,7 @@ void CameraIconItem::paintItem(QPainter* p)
     // Draw download status icon.
     QPixmap downloaded;
 
-    switch (d->itemInfo->downloaded)
+    switch (d->itemInfo.downloaded)
     {
         case GPItemInfo::NewPicture:
         {
@@ -304,7 +304,7 @@ void CameraIconItem::paintItem(QPainter* p)
         }
         case GPItemInfo::DownloadStarted:
         {
-            QPixmap mask(d->pixmap.size());
+            QPixmap mask(d->pixSize);
             mask.fill(QColor(128, 128, 128, 192));
             p->drawPixmap(pixmapDrawRect.topLeft(), mask);
 
@@ -317,8 +317,8 @@ void CameraIconItem::paintItem(QPainter* p)
             }
 
             p->save();
-            int x = pixmapDrawRect.x() + pixmapDrawRect.width()/2  - anim.width()/2;
-            int y = pixmapDrawRect.y() + pixmapDrawRect.height()/2 - anim.height()/2;
+            int x = pixmapDrawRect.x() + pixmapDrawRect.width()  / 2  - anim.width() / 2;
+            int y = pixmapDrawRect.y() + pixmapDrawRect.height() / 2 - anim.height() / 2;
             p->drawPixmap(x, y, anim);
             p->restore();
             break;
@@ -341,7 +341,7 @@ void CameraIconItem::paintItem(QPainter* p)
     }
 
     // If camera item is locked (read only), draw a "Lock" icon.
-    if (d->itemInfo->writePermissions == 0)
+    if (d->itemInfo.writePermissions == 0)
     {
         QPixmap locked = view->lockedPixmap();
         p->drawPixmap(rect().width() - downloaded.width() - locked.width() - 10, 5, locked);

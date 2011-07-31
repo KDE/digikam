@@ -37,6 +37,11 @@ public:
 
     TrimmedModifier();
     virtual QString parseOperation(ParseSettings& settings);
+
+private:
+
+    TrimmedModifier(const TrimmedModifier&);
+    TrimmedModifier& operator=(const TrimmedModifier&);
 };
 
 } // namespace Digikam

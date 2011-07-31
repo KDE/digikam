@@ -60,6 +60,9 @@ Q_SIGNALS:
 
 private:
 
+    AdvancedRenameProcessDialog(const AdvancedRenameProcessDialog&);
+    AdvancedRenameProcessDialog& operator=(const AdvancedRenameProcessDialog&);
+
     void abort();
     void complete();
     void processOne();

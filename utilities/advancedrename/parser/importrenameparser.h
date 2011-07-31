@@ -38,6 +38,11 @@ class ImportRenameParser : public Parser
 public:
 
     ImportRenameParser();
+
+private:
+
+    ImportRenameParser(const ImportRenameParser&);
+    ImportRenameParser& operator=(const ImportRenameParser&);
 };
 
 }  // namespace Digikam

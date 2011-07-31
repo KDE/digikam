@@ -157,7 +157,7 @@ void ThemeManager::slotChangePalette()
     // TT thinks tooltips shouldn't use active, so we use our active colors for all states
     KColorScheme schemeTooltip(QPalette::Active, KColorScheme::Tooltip, config);
 
-    for ( int i = 0; i < 3 ; i++ )
+    for ( int i = 0; i < 3 ; ++i )
     {
         QPalette::ColorGroup state = states[i];
         KColorScheme schemeView(state,      KColorScheme::View,      config);

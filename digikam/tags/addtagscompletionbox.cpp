@@ -482,7 +482,7 @@ QRect AddTagsCompletionBox::calculateGeometry() const
 
     if (d->allowExceedBounds)
     {
-        for (int i=0; i<count() && i<suggestedShownItems; i++)
+        for (int i=0; i<count() && i<suggestedShownItems; ++i)
         {
             if (item(i)->flags() & Qt::ItemIsSelectable)
             {
@@ -492,7 +492,7 @@ QRect AddTagsCompletionBox::calculateGeometry() const
     }
     else
     {
-        for (int i=0; i<count(); i++)
+        for (int i=0; i<count(); ++i)
         {
             if (item(i)->flags() & Qt::ItemIsSelectable)
             {

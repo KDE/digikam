@@ -7,7 +7,7 @@
  * Description : camera icon view item
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,7 +38,6 @@ namespace Digikam
 {
 
 class GPItemInfo;
-class CameraIconItemPriv;
 
 class CameraIconItem : public IconItem
 {
@@ -46,21 +45,22 @@ class CameraIconItem : public IconItem
 
 public:
 
-    CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo,
-                   const QImage& thumbnail,
-                   const QString& downloadName=QString());
+    CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo, const QImage& thumbnail);
     ~CameraIconItem();
 
-    void    setThumbnail(const QImage& thumbnail);
+    void       setThumbnail(const QImage& thumbnail);
+    /** thumbnail is valid when preview image is loaded from camera */
+    bool       hasValidThumbnail() const;
 
-    void    setDownloadName(const QString& downloadName);
-    QString getDownloadName() const;
-    void    setDownloaded(int status);
-    bool    isDownloaded() const;
+    void       setDownloadName(const QString& downloadName);
+    void       setDownloaded(int status);
+    bool       isDownloaded() const;
 
-    void    toggleLock();
+    void       setItemInfo(const GPItemInfo& itemInfo);
+    GPItemInfo itemInfo() const;
 
-    GPItemInfo* itemInfo() const;
+    /** Lock on/off item (to prevent deletetion by error) */
+    void       toggleLock();
 
     // reimplemented from IconItem
     virtual QRect clickToOpenRect();
@@ -71,7 +71,7 @@ protected:
 
 private:
 
-    void calcRect(const QString& itemName, const QString& downloadName);
+    void calcRect(const QString& itemName, const QString& newName);
 
 private Q_SLOTS:
 
@@ -79,6 +79,7 @@ private Q_SLOTS:
 
 private:
 
+    class CameraIconItemPriv;
     CameraIconItemPriv* const d;
 };
 

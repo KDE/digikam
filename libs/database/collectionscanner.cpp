@@ -762,7 +762,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             return; // return directly, do not go to cleanup code after loop!
         }
 
-        counter++;
+        ++counter;
 
         if (d->wantSignals && counter && (counter % 100 == 0))
         {

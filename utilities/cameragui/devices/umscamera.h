@@ -36,6 +36,10 @@
 namespace Digikam
 {
 
+class DMetadata;
+
+/** USB Mass Storage camera Implementation of abstract type DKCamera
+ */
 class UMSCamera : public DKCamera
 {
 public:
@@ -49,9 +53,11 @@ public:
     void cancel();
 
     void getAllFolders(const QString& folder, QStringList& subFolderList);
-    bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList);
+    bool getItemsInfoList(const QString& folder, bool useMetadata, GPItemInfoList& infoList);
+    void getItemInfo(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata);
+
     bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
-    bool getExif(const QString& folder, const QString& itemName, char** edata, int& esize);
+    bool getMetadata(const QString& folder, const QString& itemName, DMetadata& meta);
 
     bool setLockItem(const QString& folder, const QString& itemName, bool lock);
 

@@ -44,7 +44,7 @@ public:
 
     void setIconItem(CameraIconItem* iconItem);
 
-    QString fillTipContents(GPItemInfo* info) const;
+    QString fillTipContents(const GPItemInfo& info) const;
 
 private:
 

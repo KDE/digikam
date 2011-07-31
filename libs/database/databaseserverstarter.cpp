@@ -137,7 +137,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
 
     // wait until the server has successfully registered on DBUS
     // TODO Use another way for that! Sleep isn't good :-/
-    for (int i=0; i<30; i++)
+    for (int i=0; i<30; ++i)
     {
         if (!isServerRegistered())
         {

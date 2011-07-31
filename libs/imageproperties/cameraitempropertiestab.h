@@ -39,13 +39,13 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dmetadata.h"
+#include "gpiteminfo.h"
 
 using namespace KDcrawIface;
 
 namespace Digikam
 {
-
-class GPItemInfo;
 
 class CameraItemPropertiesTab : public RExpanderBox
 {
@@ -56,10 +56,8 @@ public:
     CameraItemPropertiesTab(QWidget* parent);
     ~CameraItemPropertiesTab();
 
-    void setCurrentItem(const GPItemInfo* itemInfo=0,
-                        const QString& newFileName=QString(),
-                        const QByteArray& exifData=QByteArray(),
-                        const KUrl& currentURL = KUrl());
+    void setCurrentItem(const GPItemInfo& itemInfo=GPItemInfo(),
+                        const DMetadata& meta=DMetadata());
 
 private:
 
