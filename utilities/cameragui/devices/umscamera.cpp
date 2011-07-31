@@ -209,19 +209,28 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 {
     m_cancel = false;
 
-    // JPEG files: try to get thumbnail from Exif data.
+    // Try to get preview from Exif data (good quality). Can work with Raw files
 
     DMetadata metadata(folder + QString("/") + itemName);
-    thumbnail = metadata.getExifThumbnail(true);
+    metadata.getImagePreview(thumbnail);
 
     if (!thumbnail.isNull())
     {
         return true;
     }
 
-    // RAW files : try to extract embedded thumbnail using dcraw
+    // RAW files : try to extract embedded thumbnail using libkdcraw
 
     KDcrawIface::KDcraw::loadDcrawPreview(thumbnail, QString(folder + QString("/") + itemName));
+
+    if (!thumbnail.isNull())
+    {
+        return true;
+    }
+
+    // Try to get thumbnail from Exif data (poor quality).
+
+    thumbnail = metadata.getExifThumbnail(true);
 
     if (!thumbnail.isNull())
     {
