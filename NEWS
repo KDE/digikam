@@ -8,4 +8,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 218365 : Show icon thumbs when loaded and not only after all were read.
 002 ==> 278526 : No picture is displayed in the Album View.
-003 ==> 
+003 ==> 245079 : Let the user download all before thumbnails are generated.
+004 ==> 
