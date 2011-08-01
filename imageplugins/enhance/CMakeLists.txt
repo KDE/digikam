@@ -13,6 +13,7 @@ SET(digikamimageplugin_enhance_PART_SRCS imageplugin_enhance.cpp
                                          hotpixels/blackframelistview.cpp
                                          hotpixels/hotpixelfixer.cpp
                                          hotpixels/hotpixelstool.cpp
+					      clonetool.cpp
    )
 
 IF(GLIB2_FOUND)
