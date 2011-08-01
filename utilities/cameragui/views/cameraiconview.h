@@ -100,7 +100,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalSelected(CameraIconItem*, bool);
+    void signalSelected(const CamItemInfo&, bool);
     void signalFileView(const CamItemInfo&);
     void signalThumbSizeChanged(int);
 

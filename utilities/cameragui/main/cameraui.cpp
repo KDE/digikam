@@ -565,8 +565,8 @@ void CameraUI::setupConnections()
 
     // -------------------------------------------------------------------------
 
-    connect(d->view, SIGNAL(signalSelected(CameraIconItem*,bool)),
-            this, SLOT(slotItemsSelected(CameraIconItem*,bool)));
+    connect(d->view, SIGNAL(signalSelected(const CamItemInfo&,bool)),
+            this, SLOT(slotItemsSelected(const CamItemInfo&,bool)));
 
     connect(d->view, SIGNAL(signalFileView(const CamItemInfo&)),
             this, SLOT(slotFileView(const CamItemInfo&)));
@@ -1850,7 +1850,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
         iconItem->setDownloaded(status);
 
         //if (iconItem->isSelected())
-        //  slotItemsSelected(iconItem, true);
+        //  slotItemsSelected(iconItem->itemInfo(), true);
 
         if (status == CamItemInfo::DownloadedYes)
         {
@@ -1965,7 +1965,7 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
         {
             iconItem->toggleLock();
             //if (iconItem->isSelected())
-            //  slotItemsSelected(iconItem, true);
+            //  slotItemsSelected(iconItem->itemInfo(), true);
         }
     }
 
@@ -2180,7 +2180,7 @@ void CameraUI::slotNewSelection(bool hasSelection)
     d->albumLibraryFreeSpace->setEstimatedDSizeKb(dSize);
 }
 
-void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
+void CameraUI::slotItemsSelected(const CamItemInfo& info, bool selected)
 {
     if (!d->controller)
     {
@@ -2190,10 +2190,10 @@ void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
     if (selected)
     {
         // if selected item is in the list of item which will be deleted, set no current item
-        if (!d->currentlyDeleting.contains(item->itemInfo().folder + item->itemInfo().name))
+        if (!d->currentlyDeleting.contains(info.folder + info.name))
         {
-            d->rightSideBar->itemChanged(item->itemInfo(), DMetadata());
-            d->controller->getMetadata(item->itemInfo().folder, item->itemInfo().name);
+            d->rightSideBar->itemChanged(info, DMetadata());
+            d->controller->getMetadata(info.folder, info.name);
         }
         else
         {
@@ -2206,7 +2206,7 @@ void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
     }
 
     // update availability of actions
-    slotNewSelection(d->view->countSelected()>0);
+    slotNewSelection(d->view->countSelected() > 0);
 }
 
 bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,

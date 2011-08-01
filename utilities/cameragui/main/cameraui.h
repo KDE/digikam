@@ -58,7 +58,6 @@ namespace Digikam
 {
 
 class Album;
-class CameraIconItem;
 class IconItem;
 class CollectionLocation;
 class CameraHistoryUpdater;
@@ -85,8 +84,9 @@ public:
 
     bool autoRotateJpegFiles() const;
     bool chronologicOrder() const;
+
     /** Get status of JPEG conversion files to lossless format during download.*/
-    bool convertLosslessJpegFiles() const;
+    bool    convertLosslessJpegFiles() const;
     QString losslessFormat();
 
     QString cameraTitle() const;
@@ -188,7 +188,7 @@ private Q_SLOTS:
     void slotLocked(const QString&, const QString&, bool);
 
     void slotNewSelection(bool);
-    void slotItemsSelected(CameraIconItem* item, bool selected);
+    void slotItemsSelected(const CamItemInfo&, bool selected);
 
     void slotMetadata(const QString& folder, const QString& file, const DMetadata& meta);
 

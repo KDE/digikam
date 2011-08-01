@@ -513,7 +513,7 @@ void CameraIconView::slotSelectionChanged()
     }
 
     emit signalNewSelection(selected);
-    emit signalSelected(camItem, selected);
+    emit signalSelected(camItem ? camItem->itemInfo() : CamItemInfo(), selected);
 
     viewport()->update();
 }
