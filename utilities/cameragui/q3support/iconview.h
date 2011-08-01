@@ -128,7 +128,6 @@ Q_SIGNALS:
     void signalDoubleClicked(IconItem* item);
     void signalReturnPressed(IconItem* item);
     void signalShowToolTip(IconItem* item);
-    void signalPrepareRepaint(const QList<IconItem*>&);
 
 public Q_SLOTS:
 
@@ -149,12 +148,12 @@ protected:
 
     virtual void startDrag();
 
-    virtual void prepareRepaint(const QList<IconItem*>& itemsToRepaint);
+    virtual void prepareRepaint(const QList<IconItem*>&) {};
 
     void drawFrameRaised(QPainter* p);
     void drawFrameSunken(QPainter* p);
 
-    virtual bool acceptToolTip(IconItem* , const QPoint&);
+    virtual bool acceptToolTip(IconItem*, const QPoint&);
 
 protected Q_SLOTS:
 

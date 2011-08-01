@@ -382,8 +382,8 @@ PreviewLoader::PreviewLoader(FacePipeline::FacePipelinePriv* d)
     // this is crucial! Per default, only the last added image will be loaded
     setLoadingPolicy(PreviewLoadThread::LoadingPolicySimpleAppend);
 
-    connect(this, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-            this, SLOT(slotImageLoaded(const LoadingDescription&, const DImg&)));
+    connect(this, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+            this, SLOT(slotImageLoaded(LoadingDescription,DImg)));
 }
 
 void PreviewLoader::cancel()

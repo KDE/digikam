@@ -127,17 +127,17 @@ GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* const im
     d->imageAlbumModel     = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel      = selectionModel;
 
-    connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+    connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
-            this, SLOT(slotImageChange(const ImageChangeset&)), Qt::QueuedConnection);
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+            this, SLOT(slotImageChange(ImageChangeset)), Qt::QueuedConnection);
 
-    connect(d->imageAlbumModel, SIGNAL(imageInfosAdded(const QList<ImageInfo>&)),
-            this, SLOT(slotNewModelData(const QList<ImageInfo>&)));
+    connect(d->imageAlbumModel, SIGNAL(imageInfosAdded(QList<ImageInfo>)),
+            this, SLOT(slotNewModelData(QList<ImageInfo>)));
 
-    connect(d->selectionModel, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-            this, SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
+    connect(d->selectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(slotSelectionChanged(QItemSelection,QItemSelection)));
 }
 
 /**
@@ -251,8 +251,8 @@ void GPSMarkerTiler::prepareTiles(const KGeoMap::GeoCoordinates& upperLeft, cons
     connect(currentJob, SIGNAL(result(KJob*)),
             this, SLOT(slotMapImagesJobResult(KJob*)));
 
-    connect(currentJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            this, SLOT(slotMapImagesJobData(KIO::Job*, const QByteArray&)));
+    connect(currentJob, SIGNAL(data(KIO::Job*,QByteArray)),
+            this, SLOT(slotMapImagesJobData(KIO::Job*,QByteArray)));
 }
 
 /**

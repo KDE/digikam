@@ -290,8 +290,8 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     // -------------------------------------------------------------
 
-    connect(gphotoLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
-            this, SLOT(slotProcessGphotoUrl(const QString&)));
+    connect(gphotoLogoLabel, SIGNAL(leftClickedUrl(QString)),
+            this, SLOT(slotProcessGphotoUrl(QString)));
 
     connect(d->listView, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));

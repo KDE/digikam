@@ -188,8 +188,8 @@ CameraUI::CameraUI(QWidget* const parent, const QString& cameraTitle,
 
     d->historyUpdater = new CameraHistoryUpdater(this);
 
-    connect (d->historyUpdater, SIGNAL(signalHistoryMap(const CHUpdateItemMap&)),
-             this, SLOT(slotRefreshIconView(const CHUpdateItemMap&)));
+    connect (d->historyUpdater, SIGNAL(signalHistoryMap(CHUpdateItemMap)),
+             this, SLOT(slotRefreshIconView(CHUpdateItemMap)));
 
     connect(d->historyUpdater, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
@@ -560,19 +560,19 @@ void CameraUI::setupConnections()
     connect(d->fixDateTimeCheck, SIGNAL(toggled(bool)),
             d->dateTimeEdit, SLOT(setEnabled(bool)));
 
-    connect(d->historyView, SIGNAL(signalEntryClicked(const QVariant&)),
-            this, SLOT(slotHistoryEntryClicked(const QVariant&)));
+    connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
+            this, SLOT(slotHistoryEntryClicked(QVariant)));
 
     // -------------------------------------------------------------------------
 
-    connect(d->view, SIGNAL(signalSelected(CameraIconItem*, bool)),
-            this, SLOT(slotItemsSelected(CameraIconItem*, bool)));
+    connect(d->view, SIGNAL(signalSelected(const CamItemInfo&,bool)),
+            this, SLOT(slotItemsSelected(const CamItemInfo&,bool)));
 
-    connect(d->view, SIGNAL(signalFileView(CameraIconItem*)),
-            this, SLOT(slotFileView(CameraIconItem*)));
+    connect(d->view, SIGNAL(signalFileView(const CamItemInfo&)),
+            this, SLOT(slotFileView(const CamItemInfo&)));
 
-    connect(d->view, SIGNAL(signalUpload(const KUrl::List&)),
-            this, SLOT(slotUploadItems(const KUrl::List&)));
+    connect(d->view, SIGNAL(signalUpload(KUrl::List)),
+            this, SLOT(slotUploadItems(KUrl::List)));
 
     connect(d->view, SIGNAL(signalDownload()),
             this, SLOT(slotDownloadSelected()));
@@ -598,8 +598,8 @@ void CameraUI::setupConnections()
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
 
-    connect(d->view, SIGNAL(signalPrepareRepaint(const QList<IconItem*>&)),
-            this, SLOT(slotRequestThumbnails(const QList<IconItem*>&)));
+    connect(d->view, SIGNAL(signalPrepareRepaint(const CamItemInfoList&)),
+            this, SLOT(slotRequestThumbnails(const CamItemInfoList&)));
 
     // -------------------------------------------------------------------------
 
@@ -625,8 +625,8 @@ void CameraUI::setupConnections()
 
     // -------------------------------------------------------------------------
 
-    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation&, int)),
-            this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation&, int)));
+    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation,int)),
+            this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation,int)));
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
@@ -671,8 +671,8 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     if (d->controller->cameraDriverType() == DKCamera::GPhotoDriver)
     {
         d->cameraFreeSpace->setMode(FreeSpaceWidget::GPhotoCamera);
-        connect(d->controller, SIGNAL(signalFreeSpace(unsigned long, unsigned long)),
-                this, SLOT(slotCameraFreeSpaceInfo(unsigned long, unsigned long)));
+        connect(d->controller, SIGNAL(signalFreeSpace(ulong,ulong)),
+                this, SLOT(slotCameraFreeSpaceInfo(ulong,ulong)));
     }
     else
     {
@@ -683,47 +683,47 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));
 
-    connect(d->controller, SIGNAL(signalLogMsg(const QString&, DHistoryView::EntryType, const QString&, const QString&)),
-            this, SLOT(slotLogMsg(const QString&, DHistoryView::EntryType, const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalLogMsg(QString,DHistoryView::EntryType,QString,QString)),
+            this, SLOT(slotLogMsg(QString,DHistoryView::EntryType,QString,QString)));
 
-    connect(d->controller, SIGNAL(signalCameraInformation(const QString&, const QString&, const QString&)),
-            this, SLOT(slotCameraInformation(const QString&, const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalCameraInformation(QString,QString,QString)),
+            this, SLOT(slotCameraInformation(QString,QString,QString)));
 
     connect(d->controller, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
 
-    connect(d->controller, SIGNAL(signalFolderList(const QStringList&)),
-            this, SLOT(slotFolderList(const QStringList&)));
+    connect(d->controller, SIGNAL(signalFolderList(QStringList)),
+            this, SLOT(slotFolderList(QStringList)));
 
-    connect(d->controller, SIGNAL(signalFileList(const GPItemInfoList&)),
-            this, SLOT(slotFileList(const GPItemInfoList&)));
+    connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
+            this, SLOT(slotFileList(CamItemInfoList)));
 
-    connect(d->controller, SIGNAL(signalThumbInfo(const QString&, const QString&, const GPItemInfo&, const QImage&)),
-            this, SLOT(slotThumbInfo(const QString&, const QString&, const GPItemInfo&, const QImage&)));
+    connect(d->controller, SIGNAL(signalThumbInfo(QString,QString,CamItemInfo,QImage)),
+            this, SLOT(slotThumbInfo(QString,QString,CamItemInfo,QImage)));
 
-    connect(d->controller, SIGNAL(signalThumbInfoFailed(const QString&, const QString&, const GPItemInfo&)),
-            this, SLOT(slotThumbInfoFailed(const QString&, const QString&, const GPItemInfo&)));
+    connect(d->controller, SIGNAL(signalThumbInfoFailed(QString,QString,CamItemInfo)),
+            this, SLOT(slotThumbInfoFailed(QString,QString,CamItemInfo)));
 
-    connect(d->controller, SIGNAL(signalDownloaded(const QString&, const QString&, int)),
-            this, SLOT(slotDownloaded(const QString&, const QString&, int)));
+    connect(d->controller, SIGNAL(signalDownloaded(QString,QString,int)),
+            this, SLOT(slotDownloaded(QString,QString,int)));
 
-    connect(d->controller, SIGNAL(signalDownloadComplete(const QString&, const QString&, const QString&, const QString&)),
-            this, SLOT(slotDownloadComplete(const QString&, const QString&, const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalDownloadComplete(QString,QString,QString,QString)),
+            this, SLOT(slotDownloadComplete(QString,QString,QString,QString)));
 
-    connect(d->controller, SIGNAL(signalSkipped(const QString&, const QString&)),
-            this, SLOT(slotSkipped(const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalSkipped(QString,QString)),
+            this, SLOT(slotSkipped(QString,QString)));
 
-    connect(d->controller, SIGNAL(signalDeleted(const QString&, const QString&, bool)),
-            this, SLOT(slotDeleted(const QString&, const QString&, bool)));
+    connect(d->controller, SIGNAL(signalDeleted(QString,QString,bool)),
+            this, SLOT(slotDeleted(QString,QString,bool)));
 
-    connect(d->controller, SIGNAL(signalLocked(const QString&, const QString&, bool)),
-            this, SLOT(slotLocked(const QString&, const QString&, bool)));
+    connect(d->controller, SIGNAL(signalLocked(QString,QString,bool)),
+            this, SLOT(slotLocked(QString,QString,bool)));
 
-    connect(d->controller, SIGNAL(signalMetadata(const QString&, const QString&, const DMetadata&)),
-            this, SLOT(slotMetadata(const QString&, const QString&, const DMetadata&)));
+    connect(d->controller, SIGNAL(signalMetadata(QString,QString,DMetadata)),
+            this, SLOT(slotMetadata(QString,QString,DMetadata)));
 
-    connect(d->controller, SIGNAL(signalUploaded(const GPItemInfo&)),
-            this, SLOT(slotUploaded(const GPItemInfo&)));
+    connect(d->controller, SIGNAL(signalUploaded(CamItemInfo)),
+            this, SLOT(slotUploaded(CamItemInfo)));
 }
 
 void CameraUI::setupAccelerators()
@@ -816,7 +816,7 @@ bool CameraUI::convertLosslessJpegFiles() const
     return d->convertJpegCheck->isChecked();
 }
 
-QString CameraUI::losslessFormat()
+QString CameraUI::losslessFormat() const
 {
     return d->losslessFormat->currentText();
 }
@@ -1123,7 +1123,7 @@ void CameraUI::slotFolderList(const QStringList& folderList)
     }
 }
 
-void CameraUI::slotFileList(const GPItemInfoList& fileList)
+void CameraUI::slotFileList(const CamItemInfoList& fileList)
 {
     if (d->closed)
     {
@@ -1179,7 +1179,7 @@ void CameraUI::slotRefreshIconViewTimer()
     // NOTE: see B.K.O #181726: list of accepted file extensions from Album Settings.
     QStringList list = settings->getAllFileFilter().toLower().split(' ');
 
-    QMultiMap<QDateTime, GPItemInfo> map;
+    QMultiMap<QDateTime, CamItemInfo> map;
     CameraIconItem* citem = static_cast<CameraIconItem*>(d->view->firstItem());
 
     while (citem)
@@ -1189,7 +1189,7 @@ void CameraUI::slotRefreshIconViewTimer()
         citem = static_cast<CameraIconItem*>(citem->nextItem());
     }
 
-    GPItemInfoList::iterator it = d->filesToBeAdded.begin();
+    CamItemInfoList::iterator it = d->filesToBeAdded.begin();
 
     while (it != d->filesToBeAdded.end())
     {
@@ -1211,7 +1211,7 @@ void CameraUI::slotRefreshIconViewTimer()
     {
         CameraIconItem* tempItem = citem;
         citem                    = static_cast<CameraIconItem*>(tempItem->nextItem());
-        d->view->removeItem(tempItem->itemInfo().folder, tempItem->itemInfo().name);
+        d->view->removeItem(tempItem->itemInfo());
     }
 
     d->historyUpdater->addItems(d->controller->cameraMD5ID(), map);
@@ -1226,9 +1226,9 @@ void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
 
     CHUpdateItemMap _map = map;
 
-    QMultiMap<QDateTime, GPItemInfo>::iterator it;
+    QMultiMap<QDateTime, CamItemInfo>::iterator it;
     bool lastPhotoFirst = d->lastPhotoFirstAction->isChecked();
-    GPItemInfo item;
+    CamItemInfo item;
 
     it = lastPhotoFirst ? _map.end() : _map.begin();
 
@@ -1254,7 +1254,7 @@ void CameraUI::slotlastPhotoFirst()
 {
     saveSettings();
 
-    QMultiMap<QDateTime, GPItemInfo> map;
+    QMultiMap<QDateTime, CamItemInfo> map;
     CameraIconItem* item = dynamic_cast<CameraIconItem*>(d->view->firstItem());
     QFileInfo info;
 
@@ -1269,31 +1269,24 @@ void CameraUI::slotlastPhotoFirst()
 
     while (item)
     {
-        d->view->removeItem(item->itemInfo().folder,item->itemInfo().name);
+        d->view->removeItem(item->itemInfo());
         item = dynamic_cast<CameraIconItem*>(item->nextItem());
     }
 
     slotRefreshIconView(map);
 }
 
-void CameraUI::slotRequestThumbnails(const QList<IconItem*>& list)
+void CameraUI::slotRequestThumbnails(const CamItemInfoList& list)
 {
     if (list.isEmpty()) return;
 
     QList<QVariant> itemsList;
-    IconItem* item = list.first();
 
-    if (item)
+    foreach(CamItemInfo info, list)
     {
-        do
-        {
-            CameraIconItem* citem = static_cast<CameraIconItem*>(item);
-            if (!citem->hasValidThumbnail())
-                itemsList.append(QStringList() << citem->itemInfo().folder << citem->itemInfo().name);
-
-            item = item->nextItem();
-        }
-        while(item != list.last()->nextItem());
+        CameraIconItem* citem = d->view->findItem(info.folder, info.name);
+        if (citem && !citem->hasValidThumbnail())
+            itemsList.append(QStringList() << citem->itemInfo().folder << citem->itemInfo().name);
     }
 
     d->statusProgressBar->setProgressValue(0);
@@ -1301,7 +1294,7 @@ void CameraUI::slotRequestThumbnails(const QList<IconItem*>& list)
     d->controller->getThumbsInfo(itemsList);
 }
 
-void CameraUI::slotThumbInfo(const QString& folder, const QString& file, const GPItemInfo& info, const QImage& thumbnail)
+void CameraUI::slotThumbInfo(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumbnail)
 {
     d->view->setItemInfo(folder, file, info);
 
@@ -1317,7 +1310,7 @@ void CameraUI::slotThumbInfo(const QString& folder, const QString& file, const G
     }
 }
 
-void CameraUI::slotThumbInfoFailed(const QString& folder, const QString& file, const GPItemInfo& info)
+void CameraUI::slotThumbInfoFailed(const QString& folder, const QString& file, const CamItemInfo& info)
 {
     d->view->setItemInfo(folder, file, info);
 
@@ -1345,11 +1338,11 @@ void CameraUI::startKdePreviewJob()
     d->kdeTodo.clear();
     d->kdeJob = KIO::filePreview(list, 256);
 
-    connect(d->kdeJob, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
-            this, SLOT(slotGotKDEPreview(const KFileItem&, const QPixmap&)));
+    connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
+            this, SLOT(slotGotKDEPreview(KFileItem,QPixmap)));
 
-    connect(d->kdeJob, SIGNAL(failed(const KFileItem&)),
-            this, SLOT(slotFailedKDEPreview(const KFileItem&)));
+    connect(d->kdeJob, SIGNAL(failed(KFileItem)),
+            this, SLOT(slotFailedKDEPreview(KFileItem)));
 
     connect(d->kdeJob, SIGNAL(finished(KJob*)),
             this, SLOT(slotKdePreviewFinished(KJob*)));
@@ -1538,7 +1531,7 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
     delete dlg;
 }
 
-void CameraUI::slotUploaded(const GPItemInfo& itemInfo)
+void CameraUI::slotUploaded(const CamItemInfo& itemInfo)
 {
     if (d->closed)
     {
@@ -1850,9 +1843,9 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
         iconItem->setDownloaded(status);
 
         //if (iconItem->isSelected())
-        //  slotItemsSelected(iconItem, true);
+        //  slotItemsSelected(iconItem->itemInfo(), true);
 
-        if (status == GPItemInfo::DownloadedYes)
+        if (status == CamItemInfo::DownloadedYes)
         {
             int curr = d->statusProgressBar->progressValue();
             d->statusProgressBar->setProgressValue(curr+1);
@@ -1893,7 +1886,7 @@ void CameraUI::slotSkipped(const QString& folder, const QString& file)
 
     if (iconItem)
     {
-        iconItem->setDownloaded(GPItemInfo::DownloadedNo);
+        iconItem->setDownloaded(CamItemInfo::DownloadedNo);
     }
 
     int curr = d->statusProgressBar->progressValue();
@@ -1909,7 +1902,7 @@ void CameraUI::slotMarkAsDownloaded()
 
         if (iconItem->isSelected())
         {
-            iconItem->setDownloaded(GPItemInfo::DownloadedYes);
+            iconItem->setDownloaded(CamItemInfo::DownloadedYes);
 
             DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
                                            iconItem->itemInfo().name,
@@ -1965,7 +1958,7 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
         {
             iconItem->toggleLock();
             //if (iconItem->isSelected())
-            //  slotItemsSelected(iconItem, true);
+            //  slotItemsSelected(iconItem->itemInfo(), true);
         }
     }
 
@@ -1974,20 +1967,20 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
 }
 
 
-void CameraUI::checkItem4Deletion(CameraIconItem* iconItem, QStringList& folders, QStringList& files,
+void CameraUI::checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
                                   QStringList& deleteList, QStringList& lockedList)
 {
-    if (iconItem->itemInfo().writePermissions != 0)  // Item not locked ?
+    if (info.writePermissions != 0)  // Item not locked ?
     {
-        QString folder = iconItem->itemInfo().folder;
-        QString file   = iconItem->itemInfo().name;
+        QString folder = info.folder;
+        QString file   = info.name;
         folders.append(folder);
         files.append(file);
         deleteList.append(folder + QString("/") + file);
     }
     else
     {
-        lockedList.append(iconItem->itemInfo().name);
+        lockedList.append(info.name);
     }
 }
 
@@ -2004,6 +1997,8 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
 
         if (iconItem)
         {
+            CamItemInfo info = iconItem->itemInfo();
+
             if (onlySelected)
             {
                 if (iconItem->isSelected())
@@ -2012,12 +2007,12 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                     {
                         if (iconItem->isDownloaded())
                         {
-                            checkItem4Deletion(iconItem, folders, files, deleteList, lockedList);
+                            checkItem4Deletion(info, folders, files, deleteList, lockedList);
                         }
                     }
                     else
                     {
-                        checkItem4Deletion(iconItem, folders, files, deleteList, lockedList);
+                        checkItem4Deletion(info, folders, files, deleteList, lockedList);
                     }
                 }
             }
@@ -2027,12 +2022,12 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                 {
                     if (iconItem->isDownloaded())
                     {
-                        checkItem4Deletion(iconItem, folders, files, deleteList, lockedList);
+                        checkItem4Deletion(info, folders, files, deleteList, lockedList);
                     }
                 }
                 else
                 {
-                    checkItem4Deletion(iconItem, folders, files, deleteList, lockedList);
+                    checkItem4Deletion(info, folders, files, deleteList, lockedList);
                 }
             }
         }
@@ -2097,7 +2092,7 @@ void CameraUI::slotDeleted(const QString& folder, const QString& file, bool stat
 {
     if (status)
     {
-        d->view->removeItem(folder, file);
+        d->view->removeItem(d->view->findItemInfo(folder, file));
         // do this after removeItem, which will signal to slotItemsSelected, which checks for the list
         d->currentlyDeleting.removeAll(folder + file);
     }
@@ -2109,25 +2104,24 @@ void CameraUI::slotDeleted(const QString& folder, const QString& file, bool stat
 
 void CameraUI::slotFileView()
 {
-    CameraIconItem* item = d->view->firstItemSelected();
-
-    if (item)
+    CamItemInfo info = d->view->firstItemSelected();
+    if (!info.isNull())
     {
-        slotFileView(item);
+        slotFileView(info);
     }
 }
 
-void CameraUI::slotFileView(CameraIconItem* item)
+void CameraUI::slotFileView(const CamItemInfo& info)
 {
-    d->controller->openFile(item->itemInfo().folder, item->itemInfo().name);
+    d->controller->openFile(info.folder, info.name);
 }
 
 void CameraUI::slotMetadata(const QString& folder, const QString& file, const DMetadata& meta)
 {
-    CameraIconItem* item = d->view->findItem(folder, file);
-    if (item)
+    CamItemInfo info = d->view->findItemInfo(folder, file);
+    if (!info.isNull())
     {
-        d->rightSideBar->itemChanged(item->itemInfo(), meta);
+        d->rightSideBar->itemChanged(info, meta);
     }
 }
 
@@ -2179,7 +2173,7 @@ void CameraUI::slotNewSelection(bool hasSelection)
     d->albumLibraryFreeSpace->setEstimatedDSizeKb(dSize);
 }
 
-void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
+void CameraUI::slotItemsSelected(const CamItemInfo& info, bool selected)
 {
     if (!d->controller)
     {
@@ -2189,10 +2183,10 @@ void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
     if (selected)
     {
         // if selected item is in the list of item which will be deleted, set no current item
-        if (!d->currentlyDeleting.contains(item->itemInfo().folder + item->itemInfo().name))
+        if (!d->currentlyDeleting.contains(info.folder + info.name))
         {
-            d->rightSideBar->itemChanged(item->itemInfo(), DMetadata());
-            d->controller->getMetadata(item->itemInfo().folder, item->itemInfo().name);
+            d->rightSideBar->itemChanged(info, DMetadata());
+            d->controller->getMetadata(info.folder, info.name);
         }
         else
         {
@@ -2205,11 +2199,11 @@ void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
     }
 
     // update availability of actions
-    slotNewSelection(d->view->countSelected()>0);
+    slotNewSelection(d->view->countSelected() > 0);
 }
 
 bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
-                               const QDate& date, QString& errMsg)
+                               const QDate& date, QString& errMsg) const
 {
     KUrl u(parentURL);
     u.addPath(sub);
@@ -2432,22 +2426,22 @@ void CameraUI::slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAva
     d->cameraFreeSpace->addInformation(kBSize, kBSize-kBAvail, kBAvail, QString());
 }
 
-bool CameraUI::cameraDeleteSupport()
+bool CameraUI::cameraDeleteSupport() const
 {
     return d->controller->cameraDeleteSupport();
 }
 
-bool CameraUI::cameraUploadSupport()
+bool CameraUI::cameraUploadSupport() const
 {
     return d->controller->cameraUploadSupport();
 }
 
-bool CameraUI::cameraMkDirSupport()
+bool CameraUI::cameraMkDirSupport() const
 {
     return d->controller->cameraMkDirSupport();
 }
 
-bool CameraUI::cameraDelDirSupport()
+bool CameraUI::cameraDelDirSupport() const
 {
     return d->controller->cameraDelDirSupport();
 }

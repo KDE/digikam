@@ -100,10 +100,10 @@ TemplateSelector::TemplateSelector(QWidget* parent=0)
 
     if (tm)
     {
-        connect(tm, SIGNAL(signalTemplateAdded(const Template&)),
+        connect(tm, SIGNAL(signalTemplateAdded(Template)),
                 this, SLOT(slotTemplateListChanged()));
 
-        connect(tm, SIGNAL(signalTemplateRemoved(const Template&)),
+        connect(tm, SIGNAL(signalTemplateRemoved(Template)),
                 this, SLOT(slotTemplateListChanged()));
     }
 

@@ -297,23 +297,23 @@ void ImageFilterModel::ImageFilterModelPrivate::setupWorkers()
     // If no preparation is needed, the first step is skipped.
     // If filter version changes, both will discard old package and send them to packageDiscarded.
 
-    connect(this, SIGNAL(packageToPrepare(const ImageFilterModelTodoPackage&)),
+    connect(this, SIGNAL(packageToPrepare(ImageFilterModelTodoPackage)),
             preparer, SLOT(process(ImageFilterModelTodoPackage)));
 
-    connect(this, SIGNAL(packageToFilter(const ImageFilterModelTodoPackage&)),
+    connect(this, SIGNAL(packageToFilter(ImageFilterModelTodoPackage)),
             filterer, SLOT(process(ImageFilterModelTodoPackage)));
 
-    connect(preparer, SIGNAL(processed(const ImageFilterModelTodoPackage&)),
+    connect(preparer, SIGNAL(processed(ImageFilterModelTodoPackage)),
             filterer, SLOT(process(ImageFilterModelTodoPackage)));
 
-    connect(filterer, SIGNAL(processed(const ImageFilterModelTodoPackage&)),
-            this, SLOT(packageFinished(const ImageFilterModelTodoPackage&)));
+    connect(filterer, SIGNAL(processed(ImageFilterModelTodoPackage)),
+            this, SLOT(packageFinished(ImageFilterModelTodoPackage)));
 
-    connect(preparer, SIGNAL(discarded(const ImageFilterModelTodoPackage&)),
-            this, SLOT(packageDiscarded(const ImageFilterModelTodoPackage&)));
+    connect(preparer, SIGNAL(discarded(ImageFilterModelTodoPackage)),
+            this, SLOT(packageDiscarded(ImageFilterModelTodoPackage)));
 
-    connect(filterer, SIGNAL(discarded(const ImageFilterModelTodoPackage&)),
-            this, SLOT(packageDiscarded(const ImageFilterModelTodoPackage&)));
+    connect(filterer, SIGNAL(discarded(ImageFilterModelTodoPackage)),
+            this, SLOT(packageDiscarded(ImageFilterModelTodoPackage)));
 }
 
 void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos)
@@ -493,14 +493,14 @@ void ImageFilterModel::setDirectSourceImageModel(ImageModel* sourceModel)
     {
         d->imageModel->setPreprocessor(d);
 
-        connect(d->imageModel, SIGNAL(preprocess(const QList<ImageInfo>&, const QList<QVariant>&)),
-                d, SLOT(preprocessInfos(const QList<ImageInfo>&, const QList<QVariant>&)));
+        connect(d->imageModel, SIGNAL(preprocess(QList<ImageInfo>,QList<QVariant>)),
+                d, SLOT(preprocessInfos(QList<ImageInfo>,QList<QVariant>)));
 
-        connect(d->imageModel, SIGNAL(processAdded(const QList<ImageInfo>&, const QList<QVariant>&)),
-                d, SLOT(processAddedInfos(const QList<ImageInfo>&, const QList<QVariant>&)));
+        connect(d->imageModel, SIGNAL(processAdded(QList<ImageInfo>,QList<QVariant>)),
+                d, SLOT(processAddedInfos(QList<ImageInfo>,QList<QVariant>)));
 
-        connect(d, SIGNAL(reAddImageInfos(const QList<ImageInfo>&, const QList<QVariant>&)),
-                d->imageModel, SLOT(reAddImageInfos(const QList<ImageInfo>&, const QList<QVariant>&)));
+        connect(d, SIGNAL(reAddImageInfos(QList<ImageInfo>,QList<QVariant>)),
+                d->imageModel, SLOT(reAddImageInfos(QList<ImageInfo>,QList<QVariant>)));
 
         connect(d, SIGNAL(reAddingFinished()),
                 d->imageModel, SLOT(reAddingFinished()));
@@ -508,11 +508,11 @@ void ImageFilterModel::setDirectSourceImageModel(ImageModel* sourceModel)
         connect(d->imageModel, SIGNAL(modelReset()),
                 this, SLOT(slotModelReset()));
 
-        connect(d->imageModel, SIGNAL(imageChange(const ImageChangeset&, const QItemSelection&)),
-                this, SLOT(slotImageChange(const ImageChangeset&)));
+        connect(d->imageModel, SIGNAL(imageChange(ImageChangeset,QItemSelection)),
+                this, SLOT(slotImageChange(ImageChangeset)));
 
-        connect(d->imageModel, SIGNAL(imageTagChange(const ImageTagChangeset&, const QItemSelection&)),
-                this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
+        connect(d->imageModel, SIGNAL(imageTagChange(ImageTagChangeset,QItemSelection)),
+                this, SLOT(slotImageTagChange(ImageTagChangeset)));
     }
 
     setSourceModel(d->imageModel);
@@ -791,19 +791,19 @@ void ImageFilterModel::setSendImageInfoSignals(bool sendSignals)
 {
     if (sendSignals)
     {
-        connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-                this, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
+        connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
+                this, SLOT(slotRowsInserted(QModelIndex,int,int)));
 
-        connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
-                this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
+        connect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+                this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
     }
     else
     {
-        disconnect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-                   this, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
+        disconnect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
+                   this, SLOT(slotRowsInserted(QModelIndex,int,int)));
 
-        disconnect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
-                   this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
+        disconnect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+                   this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
     }
 }
 
@@ -1245,8 +1245,8 @@ void NoDuplicatesImageFilterModel::setSourceModel(QAbstractItemModel* model)
 
     if (sourceModel())
     {
-        connect(sourceModel(), SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
-                this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
+        connect(sourceModel(), SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+                this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
     }
 }
 

@@ -151,8 +151,8 @@ HSLSettings::HSLSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->HSSelector, SIGNAL(valueChanged(int, int)),
-            this, SLOT(slotHSChanged(int, int)));
+    connect(d->HSSelector, SIGNAL(valueChanged(int,int)),
+            this, SLOT(slotHSChanged(int,int)));
 
     connect(d->hInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));

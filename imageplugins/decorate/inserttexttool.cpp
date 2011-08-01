@@ -248,10 +248,10 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->fontChooserWidget, SIGNAL(fontSelected(const QFont&)),
-            this, SLOT(slotFontPropertiesChanged(const QFont&)));
+    connect(d->fontChooserWidget, SIGNAL(fontSelected(QFont)),
+            this, SLOT(slotFontPropertiesChanged(QFont)));
 
-    connect(d->fontColorButton, SIGNAL(changed(const QColor&)),
+    connect(d->fontColorButton, SIGNAL(changed(QColor)),
             this, SLOT(slotUpdatePreview()));
 
     connect(d->textEdit, SIGNAL(textChanged()),

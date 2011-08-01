@@ -48,8 +48,8 @@ AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject* parent)
     m_columnHeader = i18n("My Albums");
     setupThumbnailLoading();
 
-    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
-            this, SLOT(setCountMap(const QMap<int, int>&)));
+    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(QMap<int,int>)),
+            this, SLOT(setCountMap(QMap<int,int>)));
 
     setCountMap(AlbumManager::instance()->getPAlbumsCount());
 }
@@ -113,23 +113,23 @@ Album* TagModel::albumForId(int id) const
 
 void TagModel::setTagCount(TagCountMode mode)
 {
-    disconnect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
-            this, SLOT(setCountMap(const QMap<int, int>&)));
+    disconnect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(QMap<int,int>)),
+            this, SLOT(setCountMap(QMap<int,int>)));
 
-    disconnect(AlbumManager::instance(), SIGNAL(signalFaceCountsDirty(const QMap<int, int>&)),
-            this, SLOT(setCountMap(const QMap<int, int>&)));
+    disconnect(AlbumManager::instance(), SIGNAL(signalFaceCountsDirty(QMap<int,int>)),
+            this, SLOT(setCountMap(QMap<int,int>)));
 
     if (mode == NormalTagCount)
     {
-        connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
-                this, SLOT(setCountMap(const QMap<int, int>&)));
+        connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(QMap<int,int>)),
+                this, SLOT(setCountMap(QMap<int,int>)));
 
         setCountMap(AlbumManager::instance()->getTAlbumsCount());
     }
     else
     {
-        connect(AlbumManager::instance(), SIGNAL(signalFaceCountsDirty(const QMap<int, int>&)),
-                this, SLOT(setCountMap(const QMap<int, int>&)));
+        connect(AlbumManager::instance(), SIGNAL(signalFaceCountsDirty(QMap<int,int>)),
+                this, SLOT(setCountMap(QMap<int,int>)));
 
         setCountMap(AlbumManager::instance()->getFaceCount());
     }
@@ -245,8 +245,8 @@ DateAlbumModel::DateAlbumModel(QObject* parent)
                                  AlbumManager::instance()->findDAlbum(0),
                                  IgnoreRootAlbum, parent)
 {
-    connect(AlbumManager::instance(), SIGNAL(signalDAlbumsDirty(const QMap<YearMonth, int>&)),
-            this, SLOT(setYearMonthMap(const QMap<YearMonth, int>&)));
+    connect(AlbumManager::instance(), SIGNAL(signalDAlbumsDirty(QMap<YearMonth,int>)),
+            this, SLOT(setYearMonthMap(QMap<YearMonth,int>)));
 
     setYearMonthMap(AlbumManager::instance()->getDAlbumsCount());
 }

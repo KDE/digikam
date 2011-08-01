@@ -91,8 +91,8 @@ void ImageInfoJob::allItemsFromAlbum(Album* album)
     connect(d->job, SIGNAL(finished(KJob*)),
             this, SLOT(slotResult(KJob*)));
 
-    connect(d->job, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            this, SLOT(slotData(KIO::Job*, const QByteArray&)));
+    connect(d->job, SIGNAL(data(KIO::Job*,QByteArray)),
+            this, SLOT(slotData(KIO::Job*,QByteArray)));
 }
 
 void ImageInfoJob::stop()

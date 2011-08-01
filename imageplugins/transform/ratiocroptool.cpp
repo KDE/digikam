@@ -508,8 +508,8 @@ RatioCropTool::RatioCropTool(QObject* parent)
     connect(d->flipVerBox, SIGNAL(toggled(bool)),
             this, SLOT(slotGoldenGuideTypeChanged()));
 
-    connect(d->guideColorBt, SIGNAL(changed(const QColor&)),
-            d->imageSelectionWidget, SLOT(slotChangeGuideColor(const QColor&)));
+    connect(d->guideColorBt, SIGNAL(changed(QColor)),
+            d->imageSelectionWidget, SLOT(slotChangeGuideColor(QColor)));
 
     connect(d->guideSize, SIGNAL(valueChanged(int)),
             d->imageSelectionWidget, SLOT(slotChangeGuideSize(int)));
@@ -520,11 +520,11 @@ RatioCropTool::RatioCropTool(QObject* parent)
     connect(d->heightInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotHeightChanged(int)));
 
-    connect(d->imageSelectionWidget, SIGNAL(signalSelectionChanged(const QRect&)),
-            this, SLOT(slotSelectionChanged(const QRect&)));
+    connect(d->imageSelectionWidget, SIGNAL(signalSelectionChanged(QRect)),
+            this, SLOT(slotSelectionChanged(QRect)));
 
-    connect(d->imageSelectionWidget, SIGNAL(signalSelectionMoved(const QRect&)),
-            this, SLOT(slotSelectionChanged(const QRect&)));
+    connect(d->imageSelectionWidget, SIGNAL(signalSelectionMoved(QRect)),
+            this, SLOT(slotSelectionChanged(QRect)));
 
     connect(d->imageSelectionWidget, SIGNAL(signalSelectionOrientationChanged(int)),
             this, SLOT(slotSelectionOrientationChanged(int)));

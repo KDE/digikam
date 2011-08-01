@@ -92,8 +92,8 @@ BatchAlbumsSyncMetadata::BatchAlbumsSyncMetadata(QWidget* /*parent*/)
     setButtonText(i18n("&Abort"));
     QTimer::singleShot(0, this, SLOT(slotStart()));
 
-    connect(d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
-            this, SLOT(slotAlbumItemsInfo(const ImageInfoList&)));
+    connect(d->imageInfoJob, SIGNAL(signalItemsInfo(ImageInfoList)),
+            this, SLOT(slotAlbumItemsInfo(ImageInfoList)));
 
     connect(d->imageInfoJob, SIGNAL(signalCompleted()),
             this, SLOT(slotComplete()));

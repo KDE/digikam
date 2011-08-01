@@ -332,11 +332,11 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     connect(proxy, SIGNAL(clearButtonClicked()),
             this, SLOT(slotClearButtonPressed()));
 
-    connect(d->lineEdit, SIGNAL(signalTextChanged(const QString&)),
-            proxy, SLOT(setText(const QString&)));
+    connect(d->lineEdit, SIGNAL(signalTextChanged(QString)),
+            proxy, SLOT(setText(QString)));
 
-    connect(d->lineEdit, SIGNAL(signalTextChanged(const QString&)),
-            this, SIGNAL(signalTextChanged(const QString&)));
+    connect(d->lineEdit, SIGNAL(signalTextChanged(QString)),
+            this, SIGNAL(signalTextChanged(QString)));
 
     connect(d->lineEdit, SIGNAL(signalTokenMarked(bool)),
             this, SIGNAL(signalTokenMarked(bool)));
@@ -344,8 +344,8 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     connect(d->lineEdit, SIGNAL(signalReturnPressed()),
             this, SIGNAL(signalReturnPressed()));
 
-    connect(this, SIGNAL(activated(const QString&)),
-            d->lineEdit, SLOT(slotSetText(const QString&)));
+    connect(this, SIGNAL(activated(QString)),
+            d->lineEdit, SLOT(slotSetText(QString)));
 
     // --------------------------------------------------------
 

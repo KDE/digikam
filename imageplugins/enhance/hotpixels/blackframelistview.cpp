@@ -63,11 +63,11 @@ BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, const
     m_parser        = new BlackFrameParser(parent);
     m_parser->parseBlackFrame(url);
 
-    connect(m_parser, SIGNAL(signalParsed(const QList<HotPixel>&)),
-            this, SLOT(slotParsed(const QList<HotPixel>&)));
+    connect(m_parser, SIGNAL(signalParsed(QList<HotPixel>)),
+            this, SLOT(slotParsed(QList<HotPixel>)));
 
-    connect(this, SIGNAL(signalParsed(const QList<HotPixel>&, const KUrl&)),
-            parent, SLOT(slotParsed(const QList<HotPixel>&, const KUrl&)));
+    connect(this, SIGNAL(signalParsed(QList<HotPixel>,KUrl)),
+            parent, SLOT(slotParsed(QList<HotPixel>,KUrl)));
 
     connect(m_parser, SIGNAL(signalLoadingProgress(float)),
             this, SIGNAL(signalLoadingProgress(float)));

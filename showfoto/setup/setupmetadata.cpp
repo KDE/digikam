@@ -170,8 +170,8 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     readSettings();
 
-    connect(exiv2LogoLabel, SIGNAL(leftClickedUrl(const QString&)),
-            this, SLOT(slotProcessExiv2Url(const QString&)));
+    connect(exiv2LogoLabel, SIGNAL(leftClickedUrl(QString)),
+            this, SLOT(slotProcessExiv2Url(QString)));
 
     // --------------------------------------------------------
 

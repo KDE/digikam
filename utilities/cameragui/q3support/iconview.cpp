@@ -977,11 +977,6 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
     painter.fillRect(pe->rect(), palette().color(QPalette::Base));
 }
 
-void IconView::prepareRepaint(const QList<IconItem*>& list)
-{
-    emit signalPrepareRepaint(list);
-}
-
 QRect IconView::contentsRectToViewport(const QRect& r) const
 {
     QRect vr = QRect(contentsToViewport(QPoint(r.x(), r.y())), r.size());

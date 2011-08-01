@@ -84,8 +84,8 @@ void TagsLineEditOverlay::setActive(bool active)
                 this, SLOT(slotTagChanged(QString)));
 
         if (view()->model())
-            connect(view()->model(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-                    this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)));
+            connect(view()->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+                    this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
     }
     else
     {

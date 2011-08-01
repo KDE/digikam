@@ -156,11 +156,11 @@ void FileSaveOptionsBox::setDialog(KFileDialog* dialog)
     kDebug() << "set dialog to " << dialog;
 
     // TODO handle these connections based on the selected filter
-    connect(d->dialog, SIGNAL(filterChanged(const QString&)),
-            this, SLOT(slotFilterChanged(const QString&)));
+    connect(d->dialog, SIGNAL(filterChanged(QString)),
+            this, SLOT(slotFilterChanged(QString)));
 
-    connect(d->dialog, SIGNAL(fileSelected(const QString&)),
-            this, SLOT(slotImageFileSelected(const QString&)));
+    connect(d->dialog, SIGNAL(fileSelected(QString)),
+            this, SLOT(slotImageFileSelected(QString)));
 }
 
 void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
@@ -180,8 +180,8 @@ void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
         kDebug() << "use automatic extension detection";
 
         // use the user provided file name for guessing the desired file format
-        connect(d->dialog->locationEdit(), SIGNAL(editTextChanged(const QString&)),
-                this, SLOT(slotImageFileFormatChanged(const QString&)));
+        connect(d->dialog->locationEdit(), SIGNAL(editTextChanged(QString)),
+                this, SLOT(slotImageFileFormatChanged(QString)));
 
         slotImageFileFormatChanged(d->dialog->locationEdit()->currentText());
     }
@@ -190,8 +190,8 @@ void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
         kDebug() << "use manual extension detection";
 
         // don't use the file name provided by the user any more
-        disconnect(d->dialog->locationEdit(), SIGNAL(editTextChanged(const QString&)),
-                   this, SLOT(slotImageFileFormatChanged(const QString&)));
+        disconnect(d->dialog->locationEdit(), SIGNAL(editTextChanged(QString)),
+                   this, SLOT(slotImageFileFormatChanged(QString)));
 
         // newFilter is something like "*.jpeg *.jpg *.jpe *.jfif". Get first.
         QStringList suffixes = newFilter.split("*.", QString::SkipEmptyParts);

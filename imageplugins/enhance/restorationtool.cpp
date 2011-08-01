@@ -184,8 +184,8 @@ RestorationTool::RestorationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(cimgLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
-            this, SLOT(processCImgUrl(const QString&)));
+    connect(cimgLogoLabel, SIGNAL(leftClickedUrl(QString)),
+            this, SLOT(processCImgUrl(QString)));
 
     connect(d->restorationTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotResetValues(int)));

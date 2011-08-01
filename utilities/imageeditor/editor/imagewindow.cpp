@@ -511,32 +511,32 @@ void ImageWindow::setupConnections()
     connect(d->rightSideBar, SIGNAL(signalPrevItem()),
             this, SLOT(slotBackward()));
 
-    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(const ImageInfo&)),
-            this, SLOT(openImage(const ImageInfo&)));
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(ImageInfo)),
+            this, SLOT(openImage(ImageInfo)));
 
-    connect(this, SIGNAL(signalSelectionChanged( const QRect&)),
-            d->rightSideBar, SLOT(slotImageSelectionChanged( const QRect&)));
+    connect(this, SIGNAL(signalSelectionChanged(QRect)),
+            d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
     ImageAttributesWatch* watch = ImageAttributesWatch::instance();
 
-    connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl&)),
-            this, SLOT(slotFileMetadataChanged(const KUrl&)));
+    connect(watch, SIGNAL(signalFileMetadataChanged(KUrl)),
+            this, SLOT(slotFileMetadataChanged(KUrl)));
 
-    /*connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
-            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)),
+    /*connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+            this, SLOT(slotCollectionImageChange(CollectionImageChangeset)),
             Qt::QueuedConnection);*/
 
-    /*connect(d->imageFilterModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
-            this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));*/
+    /*connect(d->imageFilterModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+            this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));*/
 
-    connect(d->thumbBar, SIGNAL(currentChanged(const ImageInfo&)),
-            this, SLOT(slotThumbBarImageSelected(const ImageInfo&)));
+    connect(d->thumbBar, SIGNAL(currentChanged(ImageInfo)),
+            this, SLOT(slotThumbBarImageSelected(ImageInfo)));
 
-    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(const QList<ImageInfo>&)),
-            this, SLOT(slotDroppedOnThumbbar(const QList<ImageInfo>&)));
+    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(QList<ImageInfo>)),
+            this, SLOT(slotDroppedOnThumbbar(QList<ImageInfo>)));
 
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
@@ -1546,14 +1546,14 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
             slide->setCurrent(d->currentUrl());
         }
 
-        connect(slide, SIGNAL(signalRatingChanged(const KUrl&, int)),
-                this, SLOT(slotRatingChanged(const KUrl&, int)));
+        connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
+                this, SLOT(slotRatingChanged(KUrl,int)));
 
-        connect(slide, SIGNAL(signalColorLabelChanged(const KUrl&, int)),
-                this, SLOT(slotColorLabelChanged(const KUrl&, int)));
+        connect(slide, SIGNAL(signalColorLabelChanged(KUrl,int)),
+                this, SLOT(slotColorLabelChanged(KUrl,int)));
 
-        connect(slide, SIGNAL(signalPickLabelChanged(const KUrl&, int)),
-                this, SLOT(slotPickLabelChanged(const KUrl&, int)));
+        connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
+                this, SLOT(slotPickLabelChanged(KUrl,int)));
 
         slide->show();
     }
@@ -1761,3 +1761,4 @@ void ImageWindow::slotDBStat()
 }
 
 }  // namespace Digikam
+

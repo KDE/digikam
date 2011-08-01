@@ -87,8 +87,8 @@ ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
     d->filtersHistoryWidget = new FiltersHistoryWidget(this);
     insertTab(1, d->filtersHistoryWidget, i18n("Used Filters"));
 
-    connect(d->versionsWidget, SIGNAL(imageSelected(const ImageInfo&)),
-            this, SIGNAL(imageSelected(const ImageInfo&)));
+    connect(d->versionsWidget, SIGNAL(imageSelected(ImageInfo)),
+            this, SIGNAL(imageSelected(ImageInfo)));
 }
 
 ImagePropertiesVersionsTab::~ImagePropertiesVersionsTab()
@@ -161,8 +161,8 @@ void ImagePropertiesVersionsTab::addOpenImageAction()
 {
     ActionVersionsOverlay* overlay = d->versionsWidget->addActionOverlay(KStandardGuiItem::open());
 
-    connect(overlay, SIGNAL(activated(const ImageInfo&)),
-            this, SIGNAL(actionTriggered(const ImageInfo&)));
+    connect(overlay, SIGNAL(activated(ImageInfo)),
+            this, SIGNAL(actionTriggered(ImageInfo)));
 }
 
 void ImagePropertiesVersionsTab::addOpenAlbumAction(const ImageModel* referenceModel)
@@ -172,8 +172,8 @@ void ImagePropertiesVersionsTab::addOpenAlbumAction(const ImageModel* referenceM
     ActionVersionsOverlay* overlay = d->versionsWidget->addActionOverlay(gui);
     overlay->setReferenceModel(referenceModel);
 
-    connect(overlay, SIGNAL(activated(const ImageInfo&)),
-            this, SIGNAL(actionTriggered(const ImageInfo&)));
+    connect(overlay, SIGNAL(activated(ImageInfo)),
+            this, SIGNAL(actionTriggered(ImageInfo)));
 }
 
 void ImagePropertiesVersionsTab::setEnabledHistorySteps(int count)

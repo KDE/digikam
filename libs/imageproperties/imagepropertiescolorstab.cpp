@@ -290,17 +290,17 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     // -------------------------------------------------------------
     // histogramBox connections
 
-    connect(d->histogramBox->histogram(), SIGNAL(signalIntervalChanged( int, int )),
-            this, SLOT(slotUpdateInterval(int, int)));
+    connect(d->histogramBox->histogram(), SIGNAL(signalIntervalChanged(int,int)),
+            this, SLOT(slotUpdateInterval(int,int)));
 
-    connect(d->histogramBox->histogram(), SIGNAL(signalMaximumValueChanged( int )),
+    connect(d->histogramBox->histogram(), SIGNAL(signalMaximumValueChanged(int)),
             this, SLOT(slotUpdateIntervRange(int)));
 
     connect(d->histogramBox->histogram(), SIGNAL(signalHistogramComputationDone(bool)),
             this, SLOT(slotRefreshOptions(bool)));
 
-    connect(d->histogramBox->histogram(), SIGNAL(signalHistogramComputationFailed(void)),
-            this, SLOT(slotHistogramComputationFailed(void)));
+    connect(d->histogramBox->histogram(), SIGNAL(signalHistogramComputationFailed()),
+            this, SLOT(slotHistogramComputationFailed()));
 
     connect(d->histogramBox, SIGNAL(signalChannelChanged(ChannelType)),
             this, SLOT(slotChannelChanged()));
@@ -310,10 +310,10 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->minInterv, SIGNAL(valueChanged (int)),
+    connect(d->minInterv, SIGNAL(valueChanged(int)),
             this, SLOT(slotMinValueChanged(int)));
 
-    connect(d->maxInterv, SIGNAL(valueChanged (int)),
+    connect(d->maxInterv, SIGNAL(valueChanged(int)),
             this, SLOT(slotMaxValueChanged(int)));
 }
 
@@ -447,11 +447,11 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KUrl& url)
     {
         d->imageLoaderThread = new SharedLoadSaveThread();
 
-        connect(d->imageLoaderThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-                this, SLOT(slotLoadImageFromUrlComplete(const LoadingDescription&, const DImg&)));
+        connect(d->imageLoaderThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+                this, SLOT(slotLoadImageFromUrlComplete(LoadingDescription,DImg)));
 
-        connect(d->imageLoaderThread, SIGNAL(signalMoreCompleteLoadingAvailable(const LoadingDescription&, const LoadingDescription&)),
-                this, SLOT(slotMoreCompleteLoadingAvailable(const LoadingDescription&, const LoadingDescription&)));
+        connect(d->imageLoaderThread, SIGNAL(signalMoreCompleteLoadingAvailable(LoadingDescription,LoadingDescription)),
+                this, SLOT(slotMoreCompleteLoadingAvailable(LoadingDescription,LoadingDescription)));
     }
 
     LoadingDescription desc = LoadingDescription(url.toLocalFile());

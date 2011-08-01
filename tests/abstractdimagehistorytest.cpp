@@ -207,10 +207,10 @@ void AbstractDImageHistoryTest::initBaseTestCase()
     m_im = new DImgInterface();
     DImgInterface::setDefaultInterface(m_im);
 
-    connect(m_im, SIGNAL(signalImageLoaded(const QString&,bool)),
-            this, SLOT(slotImageLoaded(const QString&,bool)));
-    connect(m_im, SIGNAL(signalImageSaved(const QString&,bool)),
-            this, SLOT(slotImageSaved(const QString&,bool)));
+    connect(m_im, SIGNAL(signalImageLoaded(QString,bool)),
+            this, SLOT(slotImageLoaded(QString,bool)));
+    connect(m_im, SIGNAL(signalImageSaved(QString,bool)),
+            this, SLOT(slotImageSaved(QString,bool)));
 
     m_tempFile = tempFilePath("tempfile");
 }

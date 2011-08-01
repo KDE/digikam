@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 #include "ditemtooltip.h"
 
 namespace Digikam
@@ -44,7 +44,7 @@ public:
 
     void setIconItem(CameraIconItem* iconItem);
 
-    QString fillTipContents(const GPItemInfo& info) const;
+    QString fillTipContents(const CamItemInfo& info) const;
 
 private:
 

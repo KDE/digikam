@@ -139,8 +139,8 @@ VersionsWidget::VersionsWidget(QWidget* parent)
     connect(d->view->delegate(), SIGNAL(animationStateChanged()),
             d->view->viewport(), SLOT(update()));
 
-    connect(d->view->selectionModel(), SIGNAL(currentChanged(const QModelIndex&,const QModelIndex&)),
-            this, SLOT(slotViewCurrentChanged(const QModelIndex&,const QModelIndex&)));
+    connect(d->view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(slotViewCurrentChanged(QModelIndex,QModelIndex)));
 
     connect(d->viewButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotViewModeChanged(int)));

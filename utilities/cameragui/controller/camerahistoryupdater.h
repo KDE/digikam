@@ -33,14 +33,14 @@
 
 // Local includes
 
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 
 class QWidget;
 
 namespace Digikam
 {
 
-typedef QMultiMap<QDateTime, GPItemInfo>   CHUpdateItemMap;
+typedef QMultiMap<QDateTime, CamItemInfo>  CHUpdateItemMap;
 typedef QPair<QByteArray, CHUpdateItemMap> CHUpdateItem;
 
 class CameraHistoryUpdater : public QThread

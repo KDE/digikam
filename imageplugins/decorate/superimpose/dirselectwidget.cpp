@@ -97,8 +97,8 @@ void DirSelectWidget::load()
 {
     if ( d->m_pendingPath.isEmpty() )
     {
-        disconnect( d->m_item, SIGNAL( populateFinished(K3FileTreeViewItem*) ),
-                    this, SLOT( load() ) );
+        disconnect( d->m_item, SIGNAL(populateFinished(K3FileTreeViewItem*)),
+                    this, SLOT(load()) );
 
         emit folderItemSelected(currentUrl());
         return;
@@ -145,8 +145,8 @@ void DirSelectWidget::setCurrentPath(const KUrl& currentUrl)
         d->m_pendingPath.prepend("");    // ensure we open the root first.
     }
 
-    connect( d->m_item, SIGNAL( populateFinished(K3FileTreeViewItem*) ),
-             this, SLOT( load() ) );
+    connect( d->m_item, SIGNAL(populateFinished(K3FileTreeViewItem*)),
+             this, SLOT(load()) );
     load();
 }
 
@@ -173,13 +173,13 @@ void DirSelectWidget::setRootPath(const KUrl& rootUrl, const KUrl& currentUrl)
         d->m_pendingPath.prepend( "" );    // ensure we open the root first.
     }
 
-    connect( d->m_item, SIGNAL( populateFinished(K3FileTreeViewItem*) ),
-             this, SLOT( load() ) );
+    connect( d->m_item, SIGNAL(populateFinished(K3FileTreeViewItem*)),
+             this, SLOT(load()) );
 
     load();
 
-    connect( this, SIGNAL( executed(Q3ListViewItem*) ),
-             this, SLOT( slotFolderSelected(Q3ListViewItem*) ) );
+    connect( this, SIGNAL(executed(Q3ListViewItem*)),
+             this, SLOT(slotFolderSelected(Q3ListViewItem*)) );
 }
 
 KUrl DirSelectWidget::rootPath() const

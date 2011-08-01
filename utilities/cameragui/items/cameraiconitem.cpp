@@ -40,7 +40,7 @@
 #include "iconview.h"
 #include "thumbnailsize.h"
 #include "imagedelegate.h"
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 #include "cameraiconview.h"
 
 namespace Digikam
@@ -58,23 +58,23 @@ public:
     {
     }
 
-    bool       hasThumb;
-    int        progressCount;         // Position of animation during downloading.
+    bool        hasThumb;
+    int         progressCount;         // Position of animation during downloading.
 
-    QPixmap    thumbnail;             // Full image size pixmap
+    QPixmap     thumbnail;             // Full image size pixmap
 
-    QSize      pixSize;
+    QSize       pixSize;
 
-    QRect      pixRect;
-    QRect      textRect;
-    QRect      extraRect;
+    QRect       pixRect;
+    QRect       textRect;
+    QRect       extraRect;
 
-    QTimer*    progressTimer;
+    QTimer*     progressTimer;
 
-    GPItemInfo itemInfo;
+    CamItemInfo itemInfo;
 };
 
-CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo, const QImage& thumbnail)
+CameraIconItem::CameraIconItem(IconGroupItem* parent, const CamItemInfo& itemInfo, const QImage& thumbnail)
     : IconItem(parent), d(new CameraIconItemPriv)
 {
     setItemInfo(itemInfo);
@@ -103,12 +103,12 @@ bool CameraIconItem::hasValidThumbnail() const
     return d->hasThumb;
 }
 
-void CameraIconItem::setItemInfo(const GPItemInfo& itemInfo)
+void CameraIconItem::setItemInfo(const CamItemInfo& itemInfo)
 {
     d->itemInfo = itemInfo;
 }
 
-GPItemInfo CameraIconItem::itemInfo() const
+CamItemInfo CameraIconItem::itemInfo() const
 {
     return d->itemInfo;
 }
@@ -124,7 +124,7 @@ void CameraIconItem::setDownloaded(int status)
     d->itemInfo.downloaded = status;
     d->progressCount       = 0;
 
-    if (d->itemInfo.downloaded == GPItemInfo::DownloadStarted)
+    if (d->itemInfo.downloaded == CamItemInfo::DownloadStarted)
     {
         d->progressTimer->start(500);
     }
@@ -137,7 +137,7 @@ void CameraIconItem::setDownloaded(int status)
 
 bool CameraIconItem::isDownloaded() const
 {
-    return (d->itemInfo.downloaded == GPItemInfo::DownloadedYes);
+    return (d->itemInfo.downloaded == CamItemInfo::DownloadedYes);
 }
 
 void CameraIconItem::toggleLock()
@@ -292,17 +292,17 @@ void CameraIconItem::paintItem(QPainter* p)
 
     switch (d->itemInfo.downloaded)
     {
-        case GPItemInfo::NewPicture:
+        case CamItemInfo::NewPicture:
         {
             downloaded = view->newPicturePixmap();
             break;
         }
-        case GPItemInfo::DownloadedYes:
+        case CamItemInfo::DownloadedYes:
         {
             downloaded = view->downloadedPixmap();
             break;
         }
-        case GPItemInfo::DownloadStarted:
+        case CamItemInfo::DownloadStarted:
         {
             QPixmap mask(d->pixSize);
             mask.fill(QColor(128, 128, 128, 192));
@@ -323,12 +323,12 @@ void CameraIconItem::paintItem(QPainter* p)
             p->restore();
             break;
         }
-        case GPItemInfo::DownloadFailed:
+        case CamItemInfo::DownloadFailed:
         {
             downloaded = view->downloadFailedPixmap();
             break;
         }
-        case GPItemInfo::DownloadUnknown:
+        case CamItemInfo::DownloadUnknown:
         {
             downloaded = view->downloadUnknownPixmap();
             break;

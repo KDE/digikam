@@ -281,8 +281,8 @@ void TagsCache::initialize()
         return;
     }
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(const TagChangeset&)),
-            this, SLOT(slotTagChanged(const TagChangeset&)),
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(TagChangeset)),
+            this, SLOT(slotTagChanged(TagChangeset)),
             Qt::DirectConnection);
 
     d->initialized = true;

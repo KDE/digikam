@@ -531,8 +531,8 @@ void DigikamApp::setupView()
     connect(d->view, SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
 
-    connect(d->view, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
-            this, SLOT(slotImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
+    connect(d->view, SIGNAL(signalImageSelected(ImageInfoList,bool,bool,ImageInfoList)),
+            this, SLOT(slotImageSelected(ImageInfoList,bool,bool,ImageInfoList)));
 
     connect(d->view, SIGNAL(signalSwitchedToPreview()),
             this, SLOT(slotSwitchedToPreview()));
@@ -1627,20 +1627,20 @@ void DigikamApp::loadCameras()
 
     fillSolidMenus();
 
-    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(const QString&)),
-            this, SLOT(slotSolidDeviceChanged(const QString&)));
+    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(QString)),
+            this, SLOT(slotSolidDeviceChanged(QString)));
 
-    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(const QString&)),
-            this, SLOT(slotSolidDeviceChanged(const QString&)));
+    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(QString)),
+            this, SLOT(slotSolidDeviceChanged(QString)));
 
     // -- queued connections -------------------------------------------
 
-    connect(this, SIGNAL(queuedOpenCameraUiFromPath(const QString&)),
-            this, SLOT(slotOpenCameraUiFromPath(const QString&)),
+    connect(this, SIGNAL(queuedOpenCameraUiFromPath(QString)),
+            this, SLOT(slotOpenCameraUiFromPath(QString)),
             Qt::QueuedConnection);
 
-    connect(this, SIGNAL(queuedOpenSolidDevice(const QString&)),
-            this, SLOT(slotOpenSolidDevice(const QString&)),
+    connect(this, SIGNAL(queuedOpenSolidDevice(QString)),
+            this, SLOT(slotOpenSolidDevice(QString)),
             Qt::QueuedConnection);
 }
 
@@ -1701,8 +1701,8 @@ void DigikamApp::slotOpenCameraUiFromPath(const QString& path)
                                   "directory browse", "Fixed", path, 1);
     cgui->show();
 
-    connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
-            d->view, SLOT(slotSelectAlbum(const KUrl&)));
+    connect(cgui, SIGNAL(signalLastDestination(KUrl)),
+            d->view, SLOT(slotSelectAlbum(KUrl)));
 }
 
 void DigikamApp::slotOpenManualCamera(QAction* action)
@@ -1732,8 +1732,8 @@ void DigikamApp::slotOpenManualCamera(QAction* action)
 
             cgui->show();
 
-            connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
-                    d->view, SLOT(slotSelectAlbum(const KUrl&)));
+            connect(cgui, SIGNAL(signalLastDestination(KUrl)),
+                    d->view, SLOT(slotSelectAlbum(KUrl)));
         }
     }
 }
@@ -1833,8 +1833,8 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
 
             cgui->show();
 
-            connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
-                    d->view, SLOT(slotSelectAlbum(const KUrl&)));
+            connect(cgui, SIGNAL(signalLastDestination(KUrl)),
+                    d->view, SLOT(slotSelectAlbum(KUrl)));
         }
         else
         {
@@ -1892,8 +1892,8 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
             }
 
             d->eventLoop = new QEventLoop(this);
-            connect(access, SIGNAL(setupDone(Solid::ErrorType, QVariant, const QString&)),
-                    this, SLOT(slotSolidSetupDone(Solid::ErrorType, QVariant, const QString&)));
+            connect(access, SIGNAL(setupDone(Solid::ErrorType,QVariant,QString)),
+                    this, SLOT(slotSolidSetupDone(Solid::ErrorType,QVariant,QString)));
 
             int returnCode = d->eventLoop->exec(QEventLoop::ExcludeUserInputEvents);
 
@@ -1924,8 +1924,8 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
 
         cgui->show();
 
-        connect(cgui, SIGNAL(signalLastDestination(const KUrl&)),
-                d->view, SLOT(slotSelectAlbum(const KUrl&)));
+        connect(cgui, SIGNAL(signalLastDestination(KUrl)),
+                d->view, SLOT(slotSelectAlbum(KUrl)));
     }
 }
 
@@ -2526,8 +2526,8 @@ void DigikamApp::loadPlugins()
 
     d->kipiPluginLoader = new KIPI::PluginLoader( ignores, d->kipiInterface );
 
-    connect( d->kipiPluginLoader, SIGNAL( replug() ),
-             this, SLOT( slotKipiPluginPlug() ) );
+    connect( d->kipiPluginLoader, SIGNAL(replug()),
+             this, SLOT(slotKipiPluginPlug()) );
 
     d->kipiPluginLoader->loadPlugins();
 

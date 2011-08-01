@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 
 class QStringList;
 class QImage;
@@ -67,18 +67,18 @@ public:
 
     /// If getImageDimensions is false, the camera shall set width and height to -1
     /// if the values are not immediately available
-    virtual bool getItemsInfoList(const QString& folder, bool useMetadata, GPItemInfoList& infoList) = 0;
-    virtual void getItemInfo(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata) = 0;
+    virtual bool getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& infoList) = 0;
+    virtual void getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata) = 0;
 
     virtual bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) = 0;
     virtual bool getMetadata(const QString& folder, const QString& itemName, DMetadata& meta) = 0;
 
     virtual bool getPreview(QImage& preview) = 0;
-    virtual bool capture(GPItemInfo& itemInfo) = 0;
+    virtual bool capture(CamItemInfo& itemInfo) = 0;
 
     virtual bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile) = 0;
     virtual bool deleteItem(const QString& folder, const QString& itemName) = 0;
-    virtual bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, GPItemInfo& itemInfo) = 0;
+    virtual bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& itemInfo) = 0;
     virtual bool cameraSummary(QString& summary) = 0;
     virtual bool cameraManual(QString& manual) = 0;
     virtual bool cameraAbout(QString& about) = 0;
@@ -110,7 +110,7 @@ public:
 
 protected:
 
-    void    fillItemInfoFromMetadata(GPItemInfo& item, const DMetadata& meta) const;
+    void    fillItemInfoFromMetadata(CamItemInfo& item, const DMetadata& meta) const;
 
 protected:
 

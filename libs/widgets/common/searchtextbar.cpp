@@ -102,8 +102,8 @@ SearchTextBar::SearchTextBar(QWidget* parent, const char* name, const QString& m
 
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
-    connect(this, SIGNAL(userTextChanged(const QString&)),
-            this, SLOT(slotTextChanged(const QString&)));
+    connect(this, SIGNAL(userTextChanged(QString)),
+            this, SLOT(slotTextChanged(QString)));
 
     loadState();
 }
@@ -184,8 +184,8 @@ void SearchTextBar::setFilterModel(AlbumFilterModel* filterModel)
     // connect to new model if desired
     if (d->filterModel)
     {
-        connect(this, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-                d->filterModel, SLOT(setSearchTextSettings(const SearchTextSettings&)));
+        connect(this, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
+                d->filterModel, SLOT(setSearchTextSettings(SearchTextSettings)));
 
         connect(d->filterModel, SIGNAL(hasSearchResult(bool)),
                 this, SLOT(slotSearchResult(bool)));

@@ -199,14 +199,14 @@ MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
     d->selectionModel      = selection;
     d->thumbnailLoadThread = new ThumbnailLoadThread(this);
 
-    connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+    connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 
     // Note: Here we only monitor changes to the database, because changes to the model
     //       are also sent when thumbnails are generated, and we don't want to update
     //       the marker tiler for that!
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
-            this, SLOT(slotImageChange(const ImageChangeset&)), Qt::QueuedConnection);
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+            this, SLOT(slotImageChange(ImageChangeset)), Qt::QueuedConnection);
 }
 
 /**

@@ -363,11 +363,11 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 
-    connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
+    connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor,QPoint)),
+            this, SLOT(slotSpotColorChanged(Digikam::DColor)));
     /*
-        connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-                this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
+        connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
+                this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
     */
 
     // -------------------------------------------------------------

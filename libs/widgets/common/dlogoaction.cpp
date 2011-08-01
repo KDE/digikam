@@ -167,8 +167,8 @@ QWidget* DLogoAction::createWidget(QWidget* parent)
 
     layout->addWidget(d->urlLabel);
 
-    connect(d->urlLabel, SIGNAL(leftClickedUrl(const QString&)),
-            this, SLOT(slotProcessUrl(const QString&)));
+    connect(d->urlLabel, SIGNAL(leftClickedUrl(QString)),
+            this, SLOT(slotProcessUrl(QString)));
 
     return container;
 }

@@ -156,7 +156,7 @@ QString DKCamera::mimeType(const QString& fileext) const
     return mime;
 }
 
-void DKCamera::fillItemInfoFromMetadata(GPItemInfo& info, const DMetadata& meta) const
+void DKCamera::fillItemInfoFromMetadata(CamItemInfo& info, const DMetadata& meta) const
 {
     QSize dims     = meta.getImageDimensions();
     info.mtime     = meta.getImageDateTime();

@@ -292,24 +292,24 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel* filterModel)
     {
         m_albumFilterModel->setSourceAlbumModel(m_albumModel);
 
-        connect(m_albumFilterModel, SIGNAL(searchTextSettingsAboutToChange(bool, bool)),
-                this, SLOT(slotSearchTextSettingsAboutToChange(bool, bool)));
-        connect(m_albumFilterModel, SIGNAL(searchTextSettingsChanged(bool, bool)),
-                this, SLOT(slotSearchTextSettingsChanged(bool, bool)));
+        connect(m_albumFilterModel, SIGNAL(searchTextSettingsAboutToChange(bool,bool)),
+                this, SLOT(slotSearchTextSettingsAboutToChange(bool,bool)));
+        connect(m_albumFilterModel, SIGNAL(searchTextSettingsChanged(bool,bool)),
+                this, SLOT(slotSearchTextSettingsChanged(bool,bool)));
 
 
-        connect(selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+        connect(selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                 this, SLOT(slotCurrentChanged()));
 
-        connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
                 this, SLOT(slotCurrentChanged()));
 
-        connect(m_albumFilterModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-                this, SLOT(adaptColumnsOnDataChange(const QModelIndex&, const QModelIndex&)));
-        connect(m_albumFilterModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-                this, SLOT(adaptColumnsOnRowChange(const QModelIndex&, int, int)));
-        connect(m_albumFilterModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-                this, SLOT(adaptColumnsOnRowChange(const QModelIndex&, int, int)));
+        connect(m_albumFilterModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+                this, SLOT(adaptColumnsOnDataChange(QModelIndex,QModelIndex)));
+        connect(m_albumFilterModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+                this, SLOT(adaptColumnsOnRowChange(QModelIndex,int,int)));
+        connect(m_albumFilterModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+                this, SLOT(adaptColumnsOnRowChange(QModelIndex,int,int)));
         connect(m_albumFilterModel, SIGNAL(layoutChanged()),
                 this, SLOT(adaptColumnsOnLayoutChange()));
 
@@ -1071,11 +1071,11 @@ AbstractCountingAlbumTreeView::AbstractCountingAlbumTreeView(QWidget* parent, Fl
         setAlbumFilterModel(new AlbumFilterModel(this));
     }
 
-    connect(this, SIGNAL(expanded(const QModelIndex&)),
-            this, SLOT(slotExpanded(const QModelIndex&)));
+    connect(this, SIGNAL(expanded(QModelIndex)),
+            this, SLOT(slotExpanded(QModelIndex)));
 
-    connect(this, SIGNAL(collapsed(const QModelIndex&)),
-            this, SLOT(slotCollapsed(const QModelIndex&)));
+    connect(this, SIGNAL(collapsed(QModelIndex)),
+            this, SLOT(slotCollapsed(QModelIndex)));
 
     if (flags & ShowCountAccordingToSettings)
     {
@@ -1525,8 +1525,8 @@ void TagTreeView::setAlbumModel(TagModel* model)
         m_dragDropHandler = new TagDragDropHandler(albumModel());
         albumModel()->setDragDropHandler(m_dragDropHandler);
 
-        connect(albumModel()->dragDropHandler(), SIGNAL(assignTags(const QList<qlonglong>&, const QList<int>&)),
-                MetadataManager::instance(), SLOT(assignTags(const QList<qlonglong>&, const QList<int>&)));
+        connect(albumModel()->dragDropHandler(), SIGNAL(assignTags(QList<qlonglong>,QList<int>)),
+                MetadataManager::instance(), SLOT(assignTags(QList<qlonglong>,QList<int>)));
     }
 
     if (m_albumModel->rootAlbumBehavior() == AbstractAlbumModel::IncludeRootAlbum)
@@ -1648,11 +1648,11 @@ DateAlbumTreeView::DateAlbumTreeView(QWidget* parent, Flags flags)
     : AbstractCountingAlbumTreeView(parent, flags)
 {
     // this view should always show the inclusive counts
-    disconnect(this, SIGNAL(expanded(const QModelIndex&)),
-               this, SLOT(slotExpanded(const QModelIndex&)));
+    disconnect(this, SIGNAL(expanded(QModelIndex)),
+               this, SLOT(slotExpanded(QModelIndex)));
 
-    disconnect(this, SIGNAL(collapsed(const QModelIndex&)),
-               this, SLOT(slotCollapsed(const QModelIndex&)));
+    disconnect(this, SIGNAL(collapsed(QModelIndex)),
+               this, SLOT(slotCollapsed(QModelIndex)));
 
     if (flags & CreateDefaultModel)
     {

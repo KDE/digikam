@@ -40,7 +40,7 @@
 
 #include "digikam_export.h"
 #include "dmetadata.h"
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 
 using namespace KDcrawIface;
 
@@ -56,7 +56,7 @@ public:
     CameraItemPropertiesTab(QWidget* parent);
     ~CameraItemPropertiesTab();
 
-    void setCurrentItem(const GPItemInfo& itemInfo=GPItemInfo(),
+    void setCurrentItem(const CamItemInfo& itemInfo=CamItemInfo(),
                         const DMetadata& meta=DMetadata());
 
 private:

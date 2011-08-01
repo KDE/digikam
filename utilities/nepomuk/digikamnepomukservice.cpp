@@ -239,14 +239,14 @@ void NepomukService::enableSyncToDigikam(bool syncToDigikam)
 
     if (d->syncToDigikam)
     {
-        connect(mainModel(), SIGNAL(statementAdded(const Soprano::Statement&)),
-                this, SLOT(slotStatementAdded(const Soprano::Statement&)));
+        connect(mainModel(), SIGNAL(statementAdded(Soprano::Statement)),
+                this, SLOT(slotStatementAdded(Soprano::Statement)));
 
-        connect(mainModel(), SIGNAL(statementRemoved(const Soprano::Statement&)),
-                this, SLOT(slotStatementRemoved(const Soprano::Statement&)));
+        connect(mainModel(), SIGNAL(statementRemoved(Soprano::Statement)),
+                this, SLOT(slotStatementRemoved(Soprano::Statement)));
 
-        /*connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
-                this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));*/
+        /*connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+                this, SLOT(slotCollectionImageChange(CollectionImageChangeset)));*/
 
         if (lastSyncToDigikam().isNull())
         {
@@ -255,14 +255,14 @@ void NepomukService::enableSyncToDigikam(bool syncToDigikam)
     }
     else
     {
-        disconnect(mainModel(), SIGNAL(statementAdded(const Soprano::Statement&)),
-                   this, SLOT(slotStatementAdded(const Soprano::Statement&)));
+        disconnect(mainModel(), SIGNAL(statementAdded(Soprano::Statement)),
+                   this, SLOT(slotStatementAdded(Soprano::Statement)));
 
-        disconnect(mainModel(), SIGNAL(statementRemoved(const Soprano::Statement&)),
-                   this, SLOT(slotStatementRemoved(const Soprano::Statement&)));
+        disconnect(mainModel(), SIGNAL(statementRemoved(Soprano::Statement)),
+                   this, SLOT(slotStatementRemoved(Soprano::Statement)));
 
-        /*disconnect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
-                   this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));*/
+        /*disconnect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+                   this, SLOT(slotCollectionImageChange(CollectionImageChangeset)));*/
     }
 }
 
@@ -292,14 +292,14 @@ void NepomukService::enableSyncToNepomuk(bool syncToNepomuk)
 
     if (d->syncToNepomuk)
     {
-        connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
-                this, SLOT(slotImageChange(const ImageChangeset&)));
+        connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+                this, SLOT(slotImageChange(ImageChangeset)));
 
-        connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset&)),
-                this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
+        connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
+                this, SLOT(slotImageTagChange(ImageTagChangeset)));
 
-        connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(const TagChangeset&)),
-                this, SLOT(slotTagChange(const TagChangeset&)));
+        connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(TagChangeset)),
+                this, SLOT(slotTagChange(TagChangeset)));
 
         // initial pushing to Nepomuk?
         if (!hasSyncToNepomuk())
@@ -309,14 +309,14 @@ void NepomukService::enableSyncToNepomuk(bool syncToNepomuk)
     }
     else
     {
-        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
-                   this, SLOT(slotImageChange(const ImageChangeset&)));
+        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+                   this, SLOT(slotImageChange(ImageChangeset)));
 
-        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset&)),
-                   this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
+        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
+                   this, SLOT(slotImageTagChange(ImageTagChangeset)));
 
-        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(const TagChangeset&)),
-                   this, SLOT(slotTagChange(const TagChangeset&)));
+        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(TagChangeset)),
+                   this, SLOT(slotTagChange(TagChangeset)));
     }
 }
 
@@ -446,8 +446,8 @@ void NepomukService::fullSyncDigikamToNepomuk()
         connect(job, SIGNAL(result(KJob*)),
                 this, SLOT(slotFullSyncJobResult(KJob*)));
 
-        connect(job, SIGNAL(data(KIO::Job*, const QByteArray&)),
-                this, SLOT(slotFullSyncJobData(KIO::Job*, const QByteArray&)));
+        connect(job, SIGNAL(data(KIO::Job*,QByteArray)),
+                this, SLOT(slotFullSyncJobData(KIO::Job*,QByteArray)));
 
         d->fullSyncJobs++;
     }

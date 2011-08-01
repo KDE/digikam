@@ -83,32 +83,32 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget* parent)
 
     setCompletionMode(KGlobalSettings::CompletionPopup);
 
-    connect(d->completionBox, SIGNAL(currentCompletionTextChanged( const QString& )),
-            this, SLOT(slotCompletionBoxTextChanged( const QString& )) );
+    connect(d->completionBox, SIGNAL(currentCompletionTextChanged(QString)),
+            this, SLOT(slotCompletionBoxTextChanged(QString)) );
 
-    connect(d->completionBox, SIGNAL(currentTaggingActionChanged(const TaggingAction&)),
-            this, SLOT(slotCompletionBoxTaggingActionChanged(const TaggingAction&)));
+    connect(d->completionBox, SIGNAL(currentTaggingActionChanged(TaggingAction)),
+            this, SLOT(slotCompletionBoxTaggingActionChanged(TaggingAction)));
 
-    connect(d->completionBox, SIGNAL(userCancelled( const QString& )),
+    connect(d->completionBox, SIGNAL(userCancelled(QString)),
             this, SLOT(slotCompletionBoxCancelled()));
 
     connect(d->completionBox, SIGNAL(completionActivated(QString)),
             this, SIGNAL(completionBoxActivated(QString)) );
 
-    connect(this, SIGNAL(completion(const QString&)),
-            this, SLOT(makeCompletion(const QString&)));
+    connect(this, SIGNAL(completion(QString)),
+            this, SLOT(makeCompletion(QString)));
 
-    connect(this, SIGNAL(substringCompletion(const QString&)),
-            this, SLOT(makeSubstringCompletion(const QString&)));
+    connect(this, SIGNAL(substringCompletion(QString)),
+            this, SLOT(makeSubstringCompletion(QString)));
 
     connect(this, SIGNAL(textRotation(KCompletionBase::KeyBindingType)),
             this, SLOT(rotateText(KCompletionBase::KeyBindingType)));
 
-    connect(this, SIGNAL(returnPressed(const QString&)),
-            this, SLOT(slotReturnPressed(const QString&)));
+    connect(this, SIGNAL(returnPressed(QString)),
+            this, SLOT(slotReturnPressed(QString)));
 
-    connect(this, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTextChanged(const QString&)));
+    connect(this, SIGNAL(textChanged(QString)),
+            this, SLOT(slotTextChanged(QString)));
 }
 
 AddTagsLineEdit::~AddTagsLineEdit()
@@ -147,16 +147,16 @@ void AddTagsLineEdit::setModel(TagModel* model, TagPropertiesFilterModel* filter
 void AddTagsLineEdit::setTagTreeView(TagTreeView* view)
 {
     if (d->tagView)
-        disconnect(d->tagView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-                   d->completionBox, SLOT(setParentTag(const QModelIndex&)));
+        disconnect(d->tagView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+                   d->completionBox, SLOT(setParentTag(QModelIndex)));
 
     d->tagView = view;
 
     if (d->tagView)
     {
         d->completionBox->setParentTag(d->tagView->currentIndex());
-        connect(d->tagView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-                d->completionBox, SLOT(setParentTag(const QModelIndex&)));
+        connect(d->tagView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+                d->completionBox, SLOT(setParentTag(QModelIndex)));
     }
 }
 
@@ -201,12 +201,12 @@ TaggingAction AddTagsLineEdit::currentTaggingAction() const
 void AddTagsLineEdit::setCompletionObject(KCompletion* comp, bool)
 {
     if (compObj())
-        disconnect(compObj(), SIGNAL( matches( const QStringList& )),
-                   this, SLOT( setCompletedItems( const QStringList& )));
+        disconnect(compObj(), SIGNAL(matches(QStringList)),
+                   this, SLOT(setCompletedItems(QStringList)));
 
     if (comp)
-        connect(comp, SIGNAL( matches( const QStringList& )),
-                this, SLOT( setCompletedItems( const QStringList& )));
+        connect(comp, SIGNAL(matches(QStringList)),
+                this, SLOT(setCompletedItems(QStringList)));
 
     KCompletionBase::setCompletionObject(comp, false);
 }

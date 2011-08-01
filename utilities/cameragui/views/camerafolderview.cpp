@@ -67,11 +67,11 @@ CameraFolderView::CameraFolderView(QWidget* parent)
     setAcceptDrops(false);
     setHeaderLabels(QStringList() << i18n("Camera Folders"));
 
-    connect(this, SIGNAL(itemActivated(QTreeWidgetItem*, int)),
-            this, SLOT(slotCurrentChanged(QTreeWidgetItem*, int)));
+    connect(this, SIGNAL(itemActivated(QTreeWidgetItem*,int)),
+            this, SLOT(slotCurrentChanged(QTreeWidgetItem*,int)));
 
-    connect(this, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
-            this, SLOT(slotCurrentChanged(QTreeWidgetItem*, int)));
+    connect(this, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
+            this, SLOT(slotCurrentChanged(QTreeWidgetItem*,int)));
 }
 
 CameraFolderView::~CameraFolderView()

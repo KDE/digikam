@@ -221,11 +221,11 @@ BorderSettings::BorderSettings(QWidget* parent)
     connect(d->borderWidth, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->firstColorButton, SIGNAL(changed(const QColor&)),
-            this, SLOT(slotColorForegroundChanged(const QColor&)));
+    connect(d->firstColorButton, SIGNAL(changed(QColor)),
+            this, SLOT(slotColorForegroundChanged(QColor)));
 
-    connect(d->secondColorButton, SIGNAL(changed(const QColor&)),
-            this, SLOT(slotColorBackgroundChanged(const QColor&)));
+    connect(d->secondColorButton, SIGNAL(changed(QColor)),
+            this, SLOT(slotColorBackgroundChanged(QColor)));
 }
 
 BorderSettings::~BorderSettings()

@@ -114,11 +114,11 @@ QString CameraIconViewToolTip::tipContents()
         return QString();
     }
 
-    GPItemInfo info = d->iconItem->itemInfo();
+    CamItemInfo info = d->iconItem->itemInfo();
     return fillTipContents(info);
 }
 
-QString CameraIconViewToolTip::fillTipContents(const GPItemInfo& info) const
+QString CameraIconViewToolTip::fillTipContents(const CamItemInfo& info) const
 {
     QString            str;
     AlbumSettings*     settings = AlbumSettings::instance();

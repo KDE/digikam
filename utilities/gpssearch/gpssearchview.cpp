@@ -251,17 +251,17 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     connect(d->saveBtn, SIGNAL(clicked()),
             this, SLOT(slotSaveGPSSAlbum()));
 
-    connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
+    connect(d->nameEdit, SIGNAL(textChanged(QString)),
             this, SLOT(slotCheckNameEditGPSConditions()));
 
-    connect(d->nameEdit, SIGNAL(returnPressed(const QString&)),
+    connect(d->nameEdit, SIGNAL(returnPressed(QString)),
             d->saveBtn, SLOT(animateClick()));
 
     connect(d->mapSearchWidget, SIGNAL(signalRegionSelectionChanged()),
             this, SLOT(slotRegionSelectionChanged()));
 
-    connect(d->gpsMarkerTiler, SIGNAL(signalModelFilteredImages(const QList<qlonglong>&)),
-            this, SLOT(slotMapSoloItems(const QList<qlonglong>&)));
+    connect(d->gpsMarkerTiler, SIGNAL(signalModelFilteredImages(QList<qlonglong>)),
+            this, SLOT(slotMapSoloItems(QList<qlonglong>)));
 
     connect(d->mapSearchWidget, SIGNAL(signalRemoveCurrentFilter()),
             this, SLOT(slotRemoveCurrentFilter()));

@@ -46,7 +46,7 @@
 
 // Local includes
 
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 #include "dhistoryview.h"
 #include "dmetadata.h"
 #include "camerahistoryupdater.h"
@@ -58,8 +58,6 @@ namespace Digikam
 {
 
 class Album;
-class CameraIconItem;
-class IconItem;
 class CollectionLocation;
 class CameraHistoryUpdater;
 
@@ -78,16 +76,17 @@ public:
     bool isBusy() const;
     bool isClosed() const;
 
-    bool cameraDeleteSupport();
-    bool cameraUploadSupport();
-    bool cameraMkDirSupport();
-    bool cameraDelDirSupport();
+    bool cameraDeleteSupport() const;
+    bool cameraUploadSupport() const;
+    bool cameraMkDirSupport() const;
+    bool cameraDelDirSupport() const;
 
     bool autoRotateJpegFiles() const;
     bool chronologicOrder() const;
+
     /** Get status of JPEG conversion files to lossless format during download.*/
-    bool convertLosslessJpegFiles() const;
-    QString losslessFormat();
+    bool    convertLosslessJpegFiles() const;
+    QString losslessFormat() const;
 
     QString cameraTitle() const;
 
@@ -117,7 +116,7 @@ private:
     void readSettings();
     void saveSettings();
     bool createAutoAlbum(const KUrl& parentURL, const QString& sub,
-                         const QDate& date, QString& errMsg);
+                         const QDate& date, QString& errMsg) const;
 
     bool dialogClosed();
     void finishDialog();
@@ -127,7 +126,7 @@ private:
     void refreshCollectionFreeSpace();
     void startKdePreviewJob();
     void deleteItems(bool onlySelected, bool onlyDownloaded);
-    void checkItem4Deletion(CameraIconItem* iconItem, QStringList& folders, QStringList& files,
+    void checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
                             QStringList& deleteList, QStringList& lockedList);
 
 private Q_SLOTS:
@@ -148,11 +147,11 @@ private Q_SLOTS:
     void slotHistoryEntryClicked(const QVariant&);
 
     void slotFolderList(const QStringList& folderList);
-    void slotFileList(const GPItemInfoList& fileList);
+    void slotFileList(const CamItemInfoList& fileList);
 
-    void slotRequestThumbnails(const QList<IconItem*>& list);
-    void slotThumbInfo(const QString&, const QString&, const GPItemInfo&, const QImage&);
-    void slotThumbInfoFailed(const QString&, const QString&, const GPItemInfo&);
+    void slotRequestThumbnails(const CamItemInfoList& list);
+    void slotThumbInfo(const QString&, const QString&, const CamItemInfo&, const QImage&);
+    void slotThumbInfoFailed(const QString&, const QString&, const CamItemInfo&);
     void slotGotKDEPreview(const KFileItem&, const QPixmap&);
     void slotFailedKDEPreview(const KFileItem&);
     void slotKdePreviewFinished(KJob*);
@@ -177,9 +176,9 @@ private Q_SLOTS:
     void slotMarkAsDownloaded();
 
     void slotFileView();
-    void slotFileView(CameraIconItem* item);
+    void slotFileView(const CamItemInfo&);
 
-    void slotUploaded(const GPItemInfo&);
+    void slotUploaded(const CamItemInfo&);
     void slotDownloaded(const QString&, const QString&, int);
     void slotDownloadComplete(const QString& sourceFolder, const QString& sourceFile,
                               const QString& destFolder, const QString& destFile);
@@ -188,7 +187,7 @@ private Q_SLOTS:
     void slotLocked(const QString&, const QString&, bool);
 
     void slotNewSelection(bool);
-    void slotItemsSelected(CameraIconItem* item, bool selected);
+    void slotItemsSelected(const CamItemInfo&, bool selected);
 
     void slotMetadata(const QString& folder, const QString& file, const DMetadata& meta);
 

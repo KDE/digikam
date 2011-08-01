@@ -96,8 +96,8 @@ void ImageThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread* thread)
 {
     d->thread = thread;
 
-    connect(d->thread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+    connect(d->thread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 }
 
 ThumbnailLoadThread* ImageThumbnailModel::thumbnailLoadThread() const

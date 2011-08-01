@@ -119,7 +119,7 @@ ImageCategorizedView::ImageCategorizedView(QWidget* parent)
     setToolTip(new ImageItemViewToolTip(this));
 
     LoadingCacheInterface::connectToSignalFileChanged(this,
-            SLOT(slotFileChanged(const QString&)));
+            SLOT(slotFileChanged(QString)));
 
     d->delayedEnterTimer = new QTimer(this);
     d->delayedEnterTimer->setInterval(10);
@@ -170,7 +170,7 @@ void ImageCategorizedView::setModels(ImageModel* model, ImageSortFilterModel* fi
 
     if (d->model)
     {
-        disconnect(d->model, SIGNAL(imageInfosAdded(const QList<ImageInfo> &)),
+        disconnect(d->model, SIGNAL(imageInfosAdded(QList<ImageInfo>)),
                    this, SLOT(slotImageInfosAdded()));
     }
 
@@ -186,7 +186,7 @@ void ImageCategorizedView::setModels(ImageModel* model, ImageSortFilterModel* fi
             this, SLOT(layoutWasChanged()),
             Qt::QueuedConnection);
 
-    connect(d->model, SIGNAL(imageInfosAdded(const QList<ImageInfo>&)),
+    connect(d->model, SIGNAL(imageInfosAdded(QList<ImageInfo>)),
             this, SLOT(slotImageInfosAdded()));
 
     emit modelChanged();
@@ -248,8 +248,8 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
         d->delegate->setAllOverlaysActive(false);
         d->delegate->setViewOnAllOverlays(0);
         // Note: Be precise, no wildcard disconnect!
-        disconnect(d->delegate, SIGNAL(requestNotification(const QModelIndex&, const QString&)),
-                   this, SLOT(showIndexNotification(const QModelIndex&, const QString&)));
+        disconnect(d->delegate, SIGNAL(requestNotification(QModelIndex,QString)),
+                   this, SLOT(showIndexNotification(QModelIndex,QString)));
         disconnect(d->delegate, SIGNAL(hideNotification()),
                    this, SLOT(hideIndexNotification()));
     }
@@ -269,8 +269,8 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
     d->delegate->setViewOnAllOverlays(this);
     d->delegate->setAllOverlaysActive(true);
 
-    connect(d->delegate, SIGNAL(requestNotification(const QModelIndex&, const QString&)),
-            this, SLOT(showIndexNotification(const QModelIndex&, const QString&)));
+    connect(d->delegate, SIGNAL(requestNotification(QModelIndex,QString)),
+            this, SLOT(showIndexNotification(QModelIndex,QString)));
 
     connect(d->delegate, SIGNAL(hideNotification()),
             this, SLOT(hideIndexNotification()));

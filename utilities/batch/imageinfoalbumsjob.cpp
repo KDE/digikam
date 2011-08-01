@@ -58,8 +58,8 @@ public:
 ImageInfoAlbumsJob::ImageInfoAlbumsJob()
     : d(new ImageInfoAlbumsJobPriv)
 {
-    connect(&d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
-            this, SLOT(slotItemsInfo(const ImageInfoList&)));
+    connect(&d->imageInfoJob, SIGNAL(signalItemsInfo(ImageInfoList)),
+            this, SLOT(slotItemsInfo(ImageInfoList)));
 
     connect(&d->imageInfoJob, SIGNAL(signalCompleted()),
             this, SLOT(slotComplete()));

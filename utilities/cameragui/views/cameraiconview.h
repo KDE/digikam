@@ -39,7 +39,7 @@
 
 #include "iconview.h"
 #include "renamecustomizer.h"
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 
 class QPixmap;
 class KPixmapSequence;
@@ -63,45 +63,43 @@ public:
 
     void setRenameCustomizer(RenameCustomizer* renamer);
 
-    void addItem(const GPItemInfo& itemInfo);
-    void removeItem(const QString& folder, const QString& file);
+    void addItem(const CamItemInfo& itemInfo);
+    void removeItem(const CamItemInfo& itemInfo);
 
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
-    void setItemInfo(const QString& folder, const QString& filename, const GPItemInfo& itemInfo);
+    void setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo);
 
-    void ensureItemVisible(CameraIconItem* item);
-    void ensureItemVisible(const GPItemInfo& itemInfo);
+    void ensureItemVisible(const CamItemInfo& itemInfo);
     void ensureItemVisible(const QString& folder, const QString& file);
 
     void setThumbnailSize(int thumbSize);
-    int  thumbnailSize();
+    int  thumbnailSize() const;
 
-    CameraIconItem* findItem(const QString& folder, const QString& file);
+    CameraIconItem* findItem(const QString& folder, const QString& file) const;
+    CamItemInfo     findItemInfo(const QString& folder, const QString& file) const;
+    CamItemInfo     firstItemSelected() const;
 
-    CameraIconItem* firstItemSelected();
+    int countItemsByFolder(const QString& folder) const;
+    int itemsDownloaded() const;
 
-    int countItemsByFolder(QString folder);
-    int itemsDownloaded();
-
-    QPixmap itemBaseRegPixmap()     const;
-    QPixmap itemBaseSelPixmap()     const;
-    QPixmap newPicturePixmap()      const;
-    QPixmap downloadUnknownPixmap() const;
-    QPixmap lockedPixmap()          const;
-    QPixmap downloadedPixmap()      const;
-    QPixmap downloadFailedPixmap()  const;
+    QPixmap itemBaseRegPixmap()      const;
+    QPixmap itemBaseSelPixmap()      const;
+    QPixmap newPicturePixmap()       const;
+    QPixmap downloadUnknownPixmap()  const;
+    QPixmap lockedPixmap()           const;
+    QPixmap downloadedPixmap()       const;
+    QPixmap downloadFailedPixmap()   const;
     KPixmapSequence progressPixmap() const;
 
-    QString defaultDownloadName(CameraIconItem* item);
-
     void itemsSelectionSizeInfo(unsigned long& fSize, unsigned long& dSize);
+    QString defaultDownloadName(const CamItemInfo& itemInfo) const;
 
     virtual QRect itemRect() const;
 
 Q_SIGNALS:
 
-    void signalSelected(CameraIconItem*, bool);
-    void signalFileView(CameraIconItem*);
+    void signalSelected(const CamItemInfo&, bool);
+    void signalFileView(const CamItemInfo&);
     void signalThumbSizeChanged(int);
 
     void signalUpload(const KUrl::List&);
@@ -110,6 +108,7 @@ Q_SIGNALS:
     void signalDelete();
     void signalToggleLock();
     void signalNewSelection(bool);
+    void signalPrepareRepaint(const CamItemInfoList&);
 
 public Q_SLOTS:
 
@@ -140,9 +139,11 @@ protected:
 
 private:
 
-    QString getTemplatedName(const GPItemInfo& itemInfo);
-    QString getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo& itemInfo);
+    QString getTemplatedName(const CamItemInfo& itemInfo) const;
+    QString getCasedName(const RenameCustomizer::Case ccase, const CamItemInfo& itemInfo) const;
     void    uploadItemPopupMenu(const KUrl::List& srcURLs);
+    void    prepareRepaint(const QList<IconItem*>& list);
+    void    ensureItemVisible(CameraIconItem* item);
 
 private:
 

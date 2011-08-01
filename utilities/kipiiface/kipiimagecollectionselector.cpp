@@ -204,13 +204,13 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     // ------------------------------------------------------------------------------------
 
-    connect(d->albumModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+    connect(d->albumModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SIGNAL(selectionChanged()));
 
-    connect(d->tagModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+    connect(d->tagModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SIGNAL(selectionChanged()));
 
-    connect(d->searchModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+    connect(d->searchModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SIGNAL(selectionChanged()));
 
     // ------------------------------------------------------------------------------------

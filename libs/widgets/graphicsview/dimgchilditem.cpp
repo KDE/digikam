@@ -88,13 +88,13 @@ void DImgChildItem::DImgChildItemPriv::connectParent(bool active)
     {
         if (active)
         {
-            q->connect(parent, SIGNAL(imageSizeChanged(const QSizeF&)),
-                       q, SLOT(imageSizeChanged(const QSizeF&)));
+            q->connect(parent, SIGNAL(imageSizeChanged(QSizeF)),
+                       q, SLOT(imageSizeChanged(QSizeF)));
         }
         else
         {
-            q->disconnect(parent, SIGNAL(imageSizeChanged(const QSizeF&)),
-                          q, SLOT(imageSizeChanged(const QSizeF&)));
+            q->disconnect(parent, SIGNAL(imageSizeChanged(QSizeF)),
+                          q, SLOT(imageSizeChanged(QSizeF)));
         }
     }
 }

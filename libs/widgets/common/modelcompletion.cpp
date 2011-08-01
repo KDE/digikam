@@ -102,14 +102,14 @@ void ModelCompletion::setModel(QAbstractItemModel* model, int uniqueIdRole, int 
 
 void ModelCompletion::connectToModel(QAbstractItemModel* model)
 {
-    connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-            this, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
+    connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            this, SLOT(slotRowsInserted(QModelIndex,int,int)));
 
-    connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
-            this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
+    connect(model, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+            this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
 
-    connect(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)));
+    connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+            this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
 
     connect(model, SIGNAL(modelReset()),
             this, SLOT(slotModelReset()));

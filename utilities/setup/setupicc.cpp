@@ -517,8 +517,8 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog)
     connect(d->enableColorManagement, SIGNAL(toggled(bool)),
             this, SLOT(slotToggledEnabled()));
 
-    connect(lcmsLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
-            this, SLOT(processLcmsUrl(const QString&)));
+    connect(lcmsLogoLabel, SIGNAL(leftClickedUrl(QString)),
+            this, SLOT(processLcmsUrl(QString)));
 
     connect(d->infoProofProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedProof()) );
@@ -532,10 +532,10 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog)
     connect(d->infoWorkProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedWork()));
 
-    connect(d->defaultPathKU, SIGNAL(urlSelected(const KUrl&)),
+    connect(d->defaultPathKU, SIGNAL(urlSelected(KUrl)),
             this, SLOT(slotUrlChanged()));
 
-    connect(d->iccFolderLabel, SIGNAL(linkActivated(const QString&)),
+    connect(d->iccFolderLabel, SIGNAL(linkActivated(QString)),
             this, SLOT(slotShowDefaultSearchPaths()));
 
     connect(d->defaultAskMissing, SIGNAL(toggled(bool)),

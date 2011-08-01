@@ -161,7 +161,7 @@ public:
     QStringList                   currentlyDeleting;
     QStringList                   cameraFolderList;
     QSet<QString>                 foldersToScan;
-    GPItemInfoList                filesToBeAdded;
+    CamItemInfoList               filesToBeAdded;
 
     QCheckBox*                    autoRotateCheck;
     QCheckBox*                    autoAlbumDateCheck;

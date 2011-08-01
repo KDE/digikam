@@ -279,8 +279,8 @@ MetadataSelectorView::MetadataSelectorView(QWidget* parent)
 
     setControlElements(SearchBar|SelectAllBtn|DefaultBtn|ClearBtn);
 
-    connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
+    connect(d->searchBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
+            this, SLOT(slotSearchTextChanged(SearchTextSettings)));
 
     connect(d->selectAllBtn, SIGNAL(clicked()),
             this, SLOT(slotSelectAll()));

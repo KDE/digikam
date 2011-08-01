@@ -374,8 +374,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     connect(d->photoDistribution, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->expanderBox, SIGNAL(signalItemToggled(int, bool)),
-            this, SLOT(slotItemToggled(int, bool)));
+    connect(d->expanderBox, SIGNAL(signalItemToggled(int,bool)),
+            this, SLOT(slotItemToggled(int,bool)));
 
     connect(d->intensityLumInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));

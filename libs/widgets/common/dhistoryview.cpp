@@ -118,10 +118,10 @@ DHistoryView::DHistoryView(QWidget* parent)
     header()->setResizeMode(1, QHeaderView::ResizeToContents);  // Time
     header()->setResizeMode(2, QHeaderView::Stretch);           // Message
 
-    connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
+    connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this, SLOT(slotItemDoubleClicked(QTreeWidgetItem*)));
 
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotContextMenu()));
 }
 
@@ -133,7 +133,7 @@ void DHistoryView::slotContextMenu()
 {
     KMenu popmenu(this);
     KAction* action = new KAction(KIcon("edit-copy"), i18n("Copy to Clipboard"), this);
-    connect(action, SIGNAL(triggered(bool) ),
+    connect(action, SIGNAL(triggered(bool)),
             this, SLOT(slotCopy2ClipBoard()));
 
     popmenu.addAction(action);

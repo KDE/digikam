@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 
 // Qt includes
 
@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-GPItemInfo::GPItemInfo()
+CamItemInfo::CamItemInfo()
 {
     size             = -1;
     width            = -1;
@@ -41,11 +41,11 @@ GPItemInfo::GPItemInfo()
     downloaded       = DownloadUnknown;
 }
 
-GPItemInfo::~GPItemInfo()
+CamItemInfo::~CamItemInfo()
 {
 }
 
-bool GPItemInfo::isNull() const
+bool CamItemInfo::isNull() const
 {
     return (size             == -1)              &&
            (width            == -1)              &&
@@ -61,7 +61,7 @@ bool GPItemInfo::isNull() const
            downloadName.isNull();
 }
 
-KUrl GPItemInfo::url() const
+KUrl CamItemInfo::url() const
 {
     KUrl url;
     url.addPath(folder);
@@ -69,7 +69,7 @@ KUrl GPItemInfo::url() const
     return url;
 }
 
-QDataStream& operator<<(QDataStream& ds, const GPItemInfo& info)
+QDataStream& operator<<(QDataStream& ds, const CamItemInfo& info)
 {
     ds << info.name;
     ds << info.folder;
@@ -87,7 +87,7 @@ QDataStream& operator<<(QDataStream& ds, const GPItemInfo& info)
     return ds;
 }
 
-QDataStream& operator>>(QDataStream& ds, GPItemInfo& info)
+QDataStream& operator>>(QDataStream& ds, CamItemInfo& info)
 {
     ds >> info.name;
     ds >> info.folder;

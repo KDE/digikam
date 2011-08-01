@@ -502,7 +502,7 @@ bool GPCamera::getPreview(QImage& preview)
 #endif /* HAVE_GPHOTO2 */
 }
 
-bool GPCamera::capture(GPItemInfo& itemInfo)
+bool GPCamera::capture(CamItemInfo& itemInfo)
 {
 #ifdef HAVE_GPHOTO2
     int            errorCode;
@@ -547,7 +547,7 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     itemInfo.size             = -1;
     itemInfo.width            = -1;
     itemInfo.height           = -1;
-    itemInfo.downloaded       = GPItemInfo::DownloadUnknown;
+    itemInfo.downloaded       = CamItemInfo::DownloadUnknown;
     itemInfo.readPermissions  = -1;
     itemInfo.writePermissions = -1;
 
@@ -581,11 +581,11 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     {
         if (info.file.status == GP_FILE_STATUS_DOWNLOADED)
         {
-            itemInfo.downloaded = GPItemInfo::DownloadedYes;
+            itemInfo.downloaded = CamItemInfo::DownloadedYes;
         }
         else
         {
-            itemInfo.downloaded = GPItemInfo::DownloadedNo;
+            itemInfo.downloaded = CamItemInfo::DownloadedNo;
         }
     }
 
@@ -748,7 +748,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
 #endif /* HAVE_GPHOTO2 */
 }
 
-bool GPCamera::getItemsInfoList(const QString& folder, bool useMetadata, GPItemInfoList& items)
+bool GPCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& items)
 {
 #ifdef HAVE_GPHOTO2
     int         errorCode;
@@ -789,7 +789,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, bool useMetadata, GPItemI
             return false;
         }
 
-        GPItemInfo info;
+        CamItemInfo info;
         getItemInfoInternal(folder, QFile::decodeName(cname), info, useMetadata);
         items.append(info);
     }
@@ -807,7 +807,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, bool useMetadata, GPItemI
 #endif /* HAVE_GPHOTO2 */
 }
 
-void GPCamera::getItemInfo(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata)
+void GPCamera::getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata)
 {
 #ifdef HAVE_GPHOTO2
 
@@ -828,7 +828,7 @@ void GPCamera::getItemInfo(const QString& folder, const QString& itemName, GPIte
 #endif /* HAVE_GPHOTO2 */
 }
 
-void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata)
+void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata)
 {
 #ifdef HAVE_GPHOTO2
     info.folder = folder;
@@ -842,7 +842,7 @@ void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemNam
     {
         if (cfinfo.file.status == GP_FILE_STATUS_DOWNLOADED)
         {
-            info.downloaded = GPItemInfo::DownloadedYes;
+            info.downloaded = CamItemInfo::DownloadedYes;
         }
     }
 
@@ -1278,7 +1278,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
 #endif /* HAVE_GPHOTO2 */
 }
 
-bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile, GPItemInfo& itemInfo)
+bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& itemInfo)
 {
 #ifdef HAVE_GPHOTO2
     int         errorCode;
@@ -1356,7 +1356,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     itemInfo.size             = -1;
     itemInfo.width            = -1;
     itemInfo.height           = -1;
-    itemInfo.downloaded       = GPItemInfo::DownloadUnknown;
+    itemInfo.downloaded       = CamItemInfo::DownloadUnknown;
     itemInfo.readPermissions  = -1;
     itemInfo.writePermissions = -1;
 
@@ -1390,11 +1390,11 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     {
         if (info.file.status == GP_FILE_STATUS_DOWNLOADED)
         {
-            itemInfo.downloaded = GPItemInfo::DownloadedYes;
+            itemInfo.downloaded = CamItemInfo::DownloadedYes;
         }
         else
         {
-            itemInfo.downloaded = GPItemInfo::DownloadedNo;
+            itemInfo.downloaded = CamItemInfo::DownloadedNo;
         }
     }
 

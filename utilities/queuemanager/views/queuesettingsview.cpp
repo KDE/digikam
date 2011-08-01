@@ -178,7 +178,7 @@ QueueSettingsView::QueueSettingsView(QWidget* parent)
     connect(d->renamingButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(const QString&)),
+    connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(QString)),
             this, SLOT(slotSettingsChanged()));
 
     // --------------------------------------------------------

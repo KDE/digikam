@@ -113,10 +113,10 @@ public:
 
         // DBus signals are received from within this thread and then sent with queued signals to the main thread
         d->connectWithDBus("imageTagChange", q,
-                           SLOT(slotImageTagChangeDBus(const QString&, const QString&, const Digikam::ImageTagChangeset&)),
+                           SLOT(slotImageTagChangeDBus(QString,QString,Digikam::ImageTagChangeset)),
                            threadConnection);
         d->connectWithDBus("albumRootChange", q,
-                           SLOT(slotAlbumRootChangeDBus(const QString&, const QString&, const Digikam::AlbumRootChangeset&)),
+                           SLOT(slotAlbumRootChangeDBus(QString,QString,Digikam::AlbumRootChangeset)),
                            threadConnection);
 
         // enter thread event loop
@@ -188,25 +188,25 @@ void DatabaseWatch::initializeRemote(DatabaseMode mode)
 
         // connect DBus signals from slave or peer to our application
         d->connectWithDBus("imageChange", this,
-                           SLOT(slotImageChangeDBus(const QString&, const QString&, const Digikam::ImageChangeset&)));
+                           SLOT(slotImageChangeDBus(QString,QString,Digikam::ImageChangeset)));
         d->connectWithDBus("imageTagChange", this,
-                           SLOT(slotImageTagChangeDBus(const QString&, const QString&, const Digikam::ImageTagChangeset&)));
+                           SLOT(slotImageTagChangeDBus(QString,QString,Digikam::ImageTagChangeset)));
         d->connectWithDBus("collectionImageChange", this,
                            SLOT(slotCollectionImageChangeDBus(const QString&,
                                    const QString&, const Digikam::CollectionImageChangeset&)));
         d->connectWithDBus("albumChange", this,
-                           SLOT(slotAlbumChangeDBus(const QString&, const QString&, const Digikam::AlbumChangeset&)));
+                           SLOT(slotAlbumChangeDBus(QString,QString,Digikam::AlbumChangeset)));
         d->connectWithDBus("tagChange", this,
-                           SLOT(slotTagChangeDBus(const QString&, const QString&, const Digikam::TagChangeset&)));
+                           SLOT(slotTagChangeDBus(QString,QString,Digikam::TagChangeset)));
         d->connectWithDBus("albumRootChange", this,
-                           SLOT(slotAlbumRootChangeDBus(const QString&, const QString&, const Digikam::AlbumRootChangeset&)));
+                           SLOT(slotAlbumRootChangeDBus(QString,QString,Digikam::AlbumRootChangeset)));
         d->connectWithDBus("searchChange", this,
-                           SLOT(slotSearchChangeDBus(const QString&, const QString&, const Digikam::SearchChangeset&)));
+                           SLOT(slotSearchChangeDBus(QString,QString,Digikam::SearchChangeset)));
     }
 
     // Do this as a favor for CollectionManager, we may not exist at time of its creation
-    connect(this, SIGNAL(albumRootChange(const AlbumRootChangeset&)),
-            CollectionManager::instance(), SLOT(slotAlbumRootChange(const AlbumRootChangeset&)));
+    connect(this, SIGNAL(albumRootChange(AlbumRootChangeset)),
+            CollectionManager::instance(), SLOT(slotAlbumRootChange(AlbumRootChangeset)));
 }
 
 void DatabaseWatch::doAnyProcessing()

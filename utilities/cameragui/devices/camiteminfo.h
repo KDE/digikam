@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GPITEMINFO_H
-#define GPITEMINFO_H
+#ifndef CamItemInfo_H
+#define CamItemInfo_H
 
 // Qt includes
 
@@ -44,7 +44,7 @@ class QDataStream;
 namespace Digikam
 {
 
-class GPItemInfo
+class CamItemInfo
 {
 
 public:
@@ -61,8 +61,8 @@ public:
 
 public:
 
-    GPItemInfo();
-    ~GPItemInfo();
+    CamItemInfo();
+    ~CamItemInfo();
 
     bool isNull() const;                     // Return true if all member in this container are null
     KUrl url() const;                        // Return the local file system (mounted on computer) url to the camera file
@@ -87,11 +87,11 @@ public:
     PhotoInfoContainer photoInfo;            // Photo Info from camera file (get from file metadata)
 };
 
-QDataStream& operator<<(QDataStream&, const GPItemInfo&);
-QDataStream& operator>>(QDataStream&, GPItemInfo&);
+QDataStream& operator<<(QDataStream&, const CamItemInfo&);
+QDataStream& operator>>(QDataStream&, CamItemInfo&);
 
-typedef QList<GPItemInfo> GPItemInfoList;
+typedef QList<CamItemInfo> CamItemInfoList;
 
 }  // namespace Digikam
 
-#endif /* GPITEMINFO_H */
+#endif /* CamItemInfo_H */

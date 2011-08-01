@@ -181,31 +181,31 @@ CameraController::CameraController(QWidget* parent,
 
     // setup inter-thread signals
 
-    qRegisterMetaType<GPItemInfo>("GPItemInfo");
-    qRegisterMetaType<GPItemInfoList>("GPItemInfoList");
+    qRegisterMetaType<CamItemInfo>("CamItemInfo");
+    qRegisterMetaType<CamItemInfoList>("CamItemInfoList");
 
-    connect(this, SIGNAL(signalInternalCheckRename(const QString&, const QString&, const QString&, const QString&)),
-            this, SLOT(slotCheckRename(const QString&, const QString&, const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalCheckRename(QString,QString,QString,QString)),
+            this, SLOT(slotCheckRename(QString,QString,QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalDownloadFailed(const QString&, const QString&)),
-            this, SLOT(slotDownloadFailed(const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalDownloadFailed(QString,QString)),
+            this, SLOT(slotDownloadFailed(QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalUploadFailed(const QString&, const QString&, const QString&)),
-            this, SLOT(slotUploadFailed(const QString&, const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalUploadFailed(QString,QString,QString)),
+            this, SLOT(slotUploadFailed(QString,QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalDeleteFailed(const QString&, const QString&)),
-            this, SLOT(slotDeleteFailed(const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalDeleteFailed(QString,QString)),
+            this, SLOT(slotDeleteFailed(QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalLockFailed(const QString&, const QString&)),
-            this, SLOT(slotLockFailed(const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalLockFailed(QString,QString)),
+            this, SLOT(slotLockFailed(QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalOpen(const QString&, const QString&, const QString&)),
-            this, SLOT(slotOpen(const QString&, const QString&, const QString&)));
+    connect(this, SIGNAL(signalInternalOpen(QString,QString,QString)),
+            this, SLOT(slotOpen(QString,QString,QString)));
 
     d->running = true;
     start();
@@ -451,7 +451,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
         case(CameraCommand::gp_capture):
         {
             sendLogMsg(i18n("Capture image..."));
-            GPItemInfo itemInfo;
+            CamItemInfo itemInfo;
             d->camera->capture(itemInfo);
             emit signalUploaded(itemInfo);
             break;
@@ -476,7 +476,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             sendLogMsg(i18n("Listing files in %1...", folder));
 
-            GPItemInfoList itemsList;
+            CamItemInfoList itemsList;
 
             if (!d->camera->getItemsInfoList(folder, useMetadata, itemsList))
             {
@@ -508,7 +508,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
                 sendLogMsg(i18n("Getting thumbs info for %1...", file), DHistoryView::StartingEntry, folder, file);
 
-                GPItemInfo info;
+                CamItemInfo info;
                 d->camera->getItemInfo(folder, file, info, true);
 
                 QImage thumbnail;
@@ -554,7 +554,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             // download to a temp file
 
-            emit signalDownloaded(folder, file, GPItemInfo::DownloadStarted);
+            emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted);
 
             KUrl tempURL(dest);
             tempURL      = tempURL.upUrl();
@@ -567,7 +567,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
             if (!result)
             {
                 unlink(QFile::encodeName(tempURL.toLocalFile()));
-                emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
+                emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
                 sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry, folder, file);
                 break;
             }
@@ -685,7 +685,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             sendLogMsg(i18n("Uploading file %1 to camera...", file), DHistoryView::StartingEntry, folder, file);
 
-            GPItemInfo itemsInfo;
+            CamItemInfo itemsInfo;
 
             bool result = d->camera->uploadItem(folder, file, src, itemsInfo);
 
@@ -860,12 +860,12 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     {
         // rename failed. delete the temp file
         unlink(QFile::encodeName(temp));
-        emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
+        emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
         sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry,  folder, file);
     }
     else
     {
-        emit signalDownloaded(folder, file, GPItemInfo::DownloadedYes);
+        emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
         sendLogMsg(i18n("Download successfully %1...", file), DHistoryView::StartingEntry, folder, file);
     }

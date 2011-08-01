@@ -61,11 +61,11 @@ void DigikamImageViewPriv::updateOverlays()
     {
         if (!settings->getIconShowOverlays())
         {
-            disconnect(rotateLeftOverlay, SIGNAL(signalRotate(const QList<QModelIndex>&)),
-                       q, SLOT(slotRotateLeft(const QList<QModelIndex>&)));
+            disconnect(rotateLeftOverlay, SIGNAL(signalRotate(QList<QModelIndex>)),
+                       q, SLOT(slotRotateLeft(QList<QModelIndex>)));
 
-            disconnect(rotateRightOverlay, SIGNAL(signalRotate(const QList<QModelIndex>&)),
-                       q, SLOT(slotRotateRight(const QList<QModelIndex>&)));
+            disconnect(rotateRightOverlay, SIGNAL(signalRotate(QList<QModelIndex>)),
+                       q, SLOT(slotRotateRight(QList<QModelIndex>)));
 
             q->removeOverlay(rotateLeftOverlay);
             q->removeOverlay(rotateRightOverlay);
@@ -80,11 +80,11 @@ void DigikamImageViewPriv::updateOverlays()
             q->addOverlay(rotateLeftOverlay, normalDelegate);
             q->addOverlay(rotateRightOverlay, normalDelegate);
 
-            connect(rotateLeftOverlay, SIGNAL(signalRotate(const QList<QModelIndex>&)),
-                    q, SLOT(slotRotateLeft(const QList<QModelIndex>&)));
+            connect(rotateLeftOverlay, SIGNAL(signalRotate(QList<QModelIndex>)),
+                    q, SLOT(slotRotateLeft(QList<QModelIndex>)));
 
-            connect(rotateRightOverlay, SIGNAL(signalRotate(const QList<QModelIndex>&)),
-                    q, SLOT(slotRotateRight(const QList<QModelIndex>&)));
+            connect(rotateRightOverlay, SIGNAL(signalRotate(QList<QModelIndex>)),
+                    q, SLOT(slotRotateRight(QList<QModelIndex>)));
 
             overlaysActive = true;
         }

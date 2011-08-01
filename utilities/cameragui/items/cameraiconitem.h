@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class GPItemInfo;
+class CamItemInfo;
 
 class CameraIconItem : public IconItem
 {
@@ -45,7 +45,7 @@ class CameraIconItem : public IconItem
 
 public:
 
-    CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo, const QImage& thumbnail);
+    CameraIconItem(IconGroupItem* parent, const CamItemInfo& itemInfo, const QImage& thumbnail);
     ~CameraIconItem();
 
     void       setThumbnail(const QImage& thumbnail);
@@ -56,8 +56,8 @@ public:
     void       setDownloaded(int status);
     bool       isDownloaded() const;
 
-    void       setItemInfo(const GPItemInfo& itemInfo);
-    GPItemInfo itemInfo() const;
+    void       setItemInfo(const CamItemInfo& itemInfo);
+    CamItemInfo itemInfo() const;
 
     /** Lock on/off item (to prevent deletetion by error) */
     void       toggleLock();

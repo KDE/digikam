@@ -184,17 +184,17 @@ DImgInterface::DImgInterface()
     d->undoMan = new UndoManager(this);
     d->thread  = new SharedLoadSaveThread;
 
-    connect( d->thread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-             this, SLOT(slotImageLoaded(const LoadingDescription&, const DImg&)) );
+    connect( d->thread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+             this, SLOT(slotImageLoaded(LoadingDescription,DImg)) );
 
-    connect( d->thread, SIGNAL(signalImageSaved(const QString&, bool)),
-             this, SLOT(slotImageSaved(const QString&, bool)) );
+    connect( d->thread, SIGNAL(signalImageSaved(QString,bool)),
+             this, SLOT(slotImageSaved(QString,bool)) );
 
-    connect( d->thread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
-             this, SLOT(slotLoadingProgress(const LoadingDescription&, float)) );
+    connect( d->thread, SIGNAL(signalLoadingProgress(LoadingDescription,float)),
+             this, SLOT(slotLoadingProgress(LoadingDescription,float)) );
 
-    connect( d->thread, SIGNAL(signalSavingProgress(const QString&, float)),
-             this, SLOT(slotSavingProgress(const QString&, float)) );
+    connect( d->thread, SIGNAL(signalSavingProgress(QString,float)),
+             this, SLOT(slotSavingProgress(QString,float)) );
 
     //readMetadataFromFile();
 }

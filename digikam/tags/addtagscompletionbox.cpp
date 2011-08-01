@@ -150,8 +150,8 @@ public:
 AddTagsCompletionBox::AddTagsCompletionBox(QWidget* parent)
     : KCompletionBox(parent), d(new AddTagsCompletionBoxPriv)
 {
-    connect(this, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
-            this, SLOT(slotCurrentItemChanged(QListWidgetItem*, QListWidgetItem*)));
+    connect(this, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+            this, SLOT(slotCurrentItemChanged(QListWidgetItem*,QListWidgetItem*)));
 
     connect(this, SIGNAL(itemActivated(QListWidgetItem*)),
             this, SLOT(slotItemActivated(QListWidgetItem*)));

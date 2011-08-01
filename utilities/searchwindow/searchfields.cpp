@@ -709,8 +709,8 @@ void SearchFieldText::setupValueWidgets(QGridLayout* layout, int row, int column
     m_edit = new KLineEdit;
     layout->addWidget(m_edit, row, column, 1, 3);
 
-    connect(m_edit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(valueChanged(const QString&)));
+    connect(m_edit, SIGNAL(textChanged(QString)),
+            this, SLOT(valueChanged(QString)));
 }
 
 void SearchFieldText::read(SearchXmlCachingReader& reader)
@@ -839,10 +839,10 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout* layout, int row, int c
         */
     }
 
-    connect(m_firstDateEdit, SIGNAL(dateChanged(const QDate&)),
+    connect(m_firstDateEdit, SIGNAL(dateChanged(QDate)),
             this, SLOT(valueChanged()));
 
-    connect(m_secondDateEdit, SIGNAL(dateChanged(const QDate&)),
+    connect(m_secondDateEdit, SIGNAL(dateChanged(QDate)),
             this, SLOT(valueChanged()));
 }
 
@@ -1660,7 +1660,7 @@ void SearchFieldChoice::setupValueWidgets(QGridLayout* layout, int row, int colu
     m_comboBox = new ChoiceSearchComboBox;
     m_comboBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
-    connect(m_model, SIGNAL(checkStateChanged(QVariant, bool)),
+    connect(m_model, SIGNAL(checkStateChanged(QVariant,bool)),
             this, SLOT(checkStateChanged()));
 
     m_comboBox->setModel(m_model);
@@ -2059,7 +2059,7 @@ void SearchFieldAlbum::setupValueWidgets(QGridLayout* layout, int row, int colum
 
     m_model = m_comboBox->model();
 
-    connect(m_model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+    connect(m_model, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SLOT(updateState()));
 
     updateState();
@@ -2539,10 +2539,10 @@ void SearchFieldLabels::setupValueWidgets(QGridLayout* layout, int row, int colu
     hbox->addStretch(10);
     hbox->addWidget(m_colorLabelFilter);
 
-    connect(m_pickLabelFilter, SIGNAL(signalPickLabelSelectionChanged(const QList<PickLabel>&)),
+    connect(m_pickLabelFilter, SIGNAL(signalPickLabelSelectionChanged(QList<PickLabel>)),
             this, SLOT(updateState()));
 
-    connect(m_colorLabelFilter, SIGNAL(signalColorLabelSelectionChanged(const QList<ColorLabel>&)),
+    connect(m_colorLabelFilter, SIGNAL(signalColorLabelSelectionChanged(QList<ColorLabel>)),
             this, SLOT(updateState()));
 
     updateState();
