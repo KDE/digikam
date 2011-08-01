@@ -2112,16 +2112,15 @@ void CameraUI::slotDeleted(const QString& folder, const QString& file, bool stat
 void CameraUI::slotFileView()
 {
     CameraIconItem* item = d->view->firstItemSelected();
-
     if (item)
     {
-        slotFileView(item);
+        slotFileView(item->itemInfo());
     }
 }
 
-void CameraUI::slotFileView(CameraIconItem* item)
+void CameraUI::slotFileView(const CamItemInfo& info)
 {
-    d->controller->openFile(item->itemInfo().folder, item->itemInfo().name);
+    d->controller->openFile(info.folder, info.name);
 }
 
 void CameraUI::slotMetadata(const QString& folder, const QString& file, const DMetadata& meta)

@@ -177,7 +177,7 @@ private Q_SLOTS:
     void slotMarkAsDownloaded();
 
     void slotFileView();
-    void slotFileView(CameraIconItem* item);
+    void slotFileView(const CamItemInfo&);
 
     void slotUploaded(const CamItemInfo&);
     void slotDownloaded(const QString&, const QString&, int);
