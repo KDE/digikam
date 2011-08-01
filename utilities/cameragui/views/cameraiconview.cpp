@@ -209,7 +209,7 @@ void CameraIconView::setRenameCustomizer(RenameCustomizer* renamer)
             this, SLOT(slotDownloadNameChanged()));
 }
 
-void CameraIconView::addItem(const GPItemInfo& info)
+void CameraIconView::addItem(const CamItemInfo& info)
 {
     KIconLoader* iconLoader = KIconLoader::global();
     QImage thumb;
@@ -245,7 +245,7 @@ void CameraIconView::addItem(const GPItemInfo& info)
     //        }
     //    }
 
-    GPItemInfo newinfo   = info;
+    CamItemInfo newinfo   = info;
     newinfo.downloadName = downloadName;
     CameraIconItem* item = new CameraIconItem(d->groupItem, newinfo, thumb);
     d->itemDict.insert(newinfo.folder + newinfo.name, item);
@@ -313,7 +313,7 @@ void CameraIconView::setThumbnail(const QString& folder, const QString& filename
     item->update();
 }
 
-void CameraIconView::setItemInfo(const QString& folder, const QString& filename, const GPItemInfo& itemInfo)
+void CameraIconView::setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo)
 {
     CameraIconItem* item = d->itemDict.value(folder+filename);
     if (!item)
@@ -329,7 +329,7 @@ void CameraIconView::ensureItemVisible(CameraIconItem* item)
     IconView::ensureItemVisible(item);
 }
 
-void CameraIconView::ensureItemVisible(const GPItemInfo& itemInfo)
+void CameraIconView::ensureItemVisible(const CamItemInfo& itemInfo)
 {
     ensureItemVisible(itemInfo.folder, itemInfo.name);
 }
@@ -463,7 +463,7 @@ QString CameraIconView::defaultDownloadName(CameraIconItem* viewItem) const
     return getCasedName( renamecase, viewItem->itemInfo() );
 }
 
-QString CameraIconView::getTemplatedName(const GPItemInfo& itemInfo) const
+QString CameraIconView::getTemplatedName(const CamItemInfo& itemInfo) const
 {
     QFileInfo fi;
     fi.setFile(QDir(itemInfo.folder), itemInfo.name);
@@ -471,7 +471,7 @@ QString CameraIconView::getTemplatedName(const GPItemInfo& itemInfo) const
     return d->renamer->newName(fi.absoluteFilePath(), itemInfo.mtime);
 }
 
-QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo& itemInfo) const
+QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase, const CamItemInfo& itemInfo) const
 {
     QString dname;
 
@@ -630,7 +630,7 @@ void CameraIconView::slotSelectNew()
     {
         CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
 
-        if (viewItem->itemInfo().downloaded == GPItemInfo::NewPicture)
+        if (viewItem->itemInfo().downloaded == CamItemInfo::NewPicture)
         {
             viewItem->setSelected(true, false);
         }
@@ -896,7 +896,7 @@ int CameraIconView::itemsDownloaded() const
     {
         CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
 
-        if (iconItem->itemInfo().downloaded == GPItemInfo::DownloadedYes)
+        if (iconItem->itemInfo().downloaded == CamItemInfo::DownloadedYes)
         {
             ++downloaded;
         }

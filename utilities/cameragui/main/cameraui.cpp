@@ -695,14 +695,14 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalFolderList(QStringList)),
             this, SLOT(slotFolderList(QStringList)));
 
-    connect(d->controller, SIGNAL(signalFileList(GPItemInfoList)),
-            this, SLOT(slotFileList(GPItemInfoList)));
+    connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
+            this, SLOT(slotFileList(CamItemInfoList)));
 
-    connect(d->controller, SIGNAL(signalThumbInfo(QString,QString,GPItemInfo,QImage)),
-            this, SLOT(slotThumbInfo(QString,QString,GPItemInfo,QImage)));
+    connect(d->controller, SIGNAL(signalThumbInfo(QString,QString,CamItemInfo,QImage)),
+            this, SLOT(slotThumbInfo(QString,QString,CamItemInfo,QImage)));
 
-    connect(d->controller, SIGNAL(signalThumbInfoFailed(QString,QString,GPItemInfo)),
-            this, SLOT(slotThumbInfoFailed(QString,QString,GPItemInfo)));
+    connect(d->controller, SIGNAL(signalThumbInfoFailed(QString,QString,CamItemInfo)),
+            this, SLOT(slotThumbInfoFailed(QString,QString,CamItemInfo)));
 
     connect(d->controller, SIGNAL(signalDownloaded(QString,QString,int)),
             this, SLOT(slotDownloaded(QString,QString,int)));
@@ -722,8 +722,8 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalMetadata(QString,QString,DMetadata)),
             this, SLOT(slotMetadata(QString,QString,DMetadata)));
 
-    connect(d->controller, SIGNAL(signalUploaded(GPItemInfo)),
-            this, SLOT(slotUploaded(GPItemInfo)));
+    connect(d->controller, SIGNAL(signalUploaded(CamItemInfo)),
+            this, SLOT(slotUploaded(CamItemInfo)));
 }
 
 void CameraUI::setupAccelerators()
@@ -1123,7 +1123,7 @@ void CameraUI::slotFolderList(const QStringList& folderList)
     }
 }
 
-void CameraUI::slotFileList(const GPItemInfoList& fileList)
+void CameraUI::slotFileList(const CamItemInfoList& fileList)
 {
     if (d->closed)
     {
@@ -1179,7 +1179,7 @@ void CameraUI::slotRefreshIconViewTimer()
     // NOTE: see B.K.O #181726: list of accepted file extensions from Album Settings.
     QStringList list = settings->getAllFileFilter().toLower().split(' ');
 
-    QMultiMap<QDateTime, GPItemInfo> map;
+    QMultiMap<QDateTime, CamItemInfo> map;
     CameraIconItem* citem = static_cast<CameraIconItem*>(d->view->firstItem());
 
     while (citem)
@@ -1189,7 +1189,7 @@ void CameraUI::slotRefreshIconViewTimer()
         citem = static_cast<CameraIconItem*>(citem->nextItem());
     }
 
-    GPItemInfoList::iterator it = d->filesToBeAdded.begin();
+    CamItemInfoList::iterator it = d->filesToBeAdded.begin();
 
     while (it != d->filesToBeAdded.end())
     {
@@ -1226,9 +1226,9 @@ void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
 
     CHUpdateItemMap _map = map;
 
-    QMultiMap<QDateTime, GPItemInfo>::iterator it;
+    QMultiMap<QDateTime, CamItemInfo>::iterator it;
     bool lastPhotoFirst = d->lastPhotoFirstAction->isChecked();
-    GPItemInfo item;
+    CamItemInfo item;
 
     it = lastPhotoFirst ? _map.end() : _map.begin();
 
@@ -1254,7 +1254,7 @@ void CameraUI::slotlastPhotoFirst()
 {
     saveSettings();
 
-    QMultiMap<QDateTime, GPItemInfo> map;
+    QMultiMap<QDateTime, CamItemInfo> map;
     CameraIconItem* item = dynamic_cast<CameraIconItem*>(d->view->firstItem());
     QFileInfo info;
 
@@ -1301,7 +1301,7 @@ void CameraUI::slotRequestThumbnails(const QList<IconItem*>& list)
     d->controller->getThumbsInfo(itemsList);
 }
 
-void CameraUI::slotThumbInfo(const QString& folder, const QString& file, const GPItemInfo& info, const QImage& thumbnail)
+void CameraUI::slotThumbInfo(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumbnail)
 {
     d->view->setItemInfo(folder, file, info);
 
@@ -1317,7 +1317,7 @@ void CameraUI::slotThumbInfo(const QString& folder, const QString& file, const G
     }
 }
 
-void CameraUI::slotThumbInfoFailed(const QString& folder, const QString& file, const GPItemInfo& info)
+void CameraUI::slotThumbInfoFailed(const QString& folder, const QString& file, const CamItemInfo& info)
 {
     d->view->setItemInfo(folder, file, info);
 
@@ -1538,7 +1538,7 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
     delete dlg;
 }
 
-void CameraUI::slotUploaded(const GPItemInfo& itemInfo)
+void CameraUI::slotUploaded(const CamItemInfo& itemInfo)
 {
     if (d->closed)
     {
@@ -1852,7 +1852,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
         //if (iconItem->isSelected())
         //  slotItemsSelected(iconItem, true);
 
-        if (status == GPItemInfo::DownloadedYes)
+        if (status == CamItemInfo::DownloadedYes)
         {
             int curr = d->statusProgressBar->progressValue();
             d->statusProgressBar->setProgressValue(curr+1);
@@ -1893,7 +1893,7 @@ void CameraUI::slotSkipped(const QString& folder, const QString& file)
 
     if (iconItem)
     {
-        iconItem->setDownloaded(GPItemInfo::DownloadedNo);
+        iconItem->setDownloaded(CamItemInfo::DownloadedNo);
     }
 
     int curr = d->statusProgressBar->progressValue();
@@ -1909,7 +1909,7 @@ void CameraUI::slotMarkAsDownloaded()
 
         if (iconItem->isSelected())
         {
-            iconItem->setDownloaded(GPItemInfo::DownloadedYes);
+            iconItem->setDownloaded(CamItemInfo::DownloadedYes);
 
             DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
                                            iconItem->itemInfo().name,

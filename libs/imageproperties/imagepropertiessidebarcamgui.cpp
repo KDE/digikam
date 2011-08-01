@@ -40,7 +40,7 @@
 // Local includes
 
 #include "dmetadata.h"
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 #include "cameraitempropertiestab.h"
 #include "imagepropertiesgpstab.h"
 #include "imagepropertiesmetadatatab.h"
@@ -69,7 +69,7 @@ public:
 
     DMetadata                   metaData;
 
-    GPItemInfo                  itemInfo;
+    CamItemInfo                 itemInfo;
 
     ImagePropertiesMetaDataTab* metadataTab;
     ImagePropertiesGPSTab*      gpsTab;
@@ -110,7 +110,7 @@ void ImagePropertiesSideBarCamGui::applySettings()
     /// @todo Are load/saveState called by the creator?
 }
 
-void ImagePropertiesSideBarCamGui::itemChanged(const GPItemInfo& itemInfo, const DMetadata& meta)
+void ImagePropertiesSideBarCamGui::itemChanged(const CamItemInfo& itemInfo, const DMetadata& meta)
 {
     if (itemInfo.isNull())
     {
@@ -128,7 +128,7 @@ void ImagePropertiesSideBarCamGui::itemChanged(const GPItemInfo& itemInfo, const
 
 void ImagePropertiesSideBarCamGui::slotNoCurrentItem()
 {
-    d->itemInfo           = GPItemInfo();
+    d->itemInfo           = CamItemInfo();
     d->metaData           = DMetadata();
     d->dirtyMetadataTab   = false;
     d->dirtyCameraItemTab = false;

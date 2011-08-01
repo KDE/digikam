@@ -143,7 +143,7 @@ void UMSCamera::getAllFolders(const QString& folder, QStringList& subFolderList)
     listFolders(folder, subFolderList);
 }
 
-bool UMSCamera::getItemsInfoList(const QString& folder, bool useMetadata, GPItemInfoList& infoList)
+bool UMSCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& infoList)
 {
     m_cancel = false;
     infoList.clear();
@@ -165,7 +165,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, bool useMetadata, GPItem
 
     for (QFileInfoList::const_iterator fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
     {
-        GPItemInfo info;
+        CamItemInfo info;
         getItemInfo(folder, fi->fileName(), info, useMetadata);
         infoList.append(info);
     }
@@ -173,7 +173,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, bool useMetadata, GPItem
     return true;
 }
 
-void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata)
+void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata)
 {
     info.folder = !folder.endsWith('/') ? folder + QString('/') : folder;
     info.name   = itemName;
@@ -406,7 +406,7 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
     return (::unlink(QFile::encodeName(folder + QString("/") + itemName)) == 0);
 }
 
-bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile, GPItemInfo& info)
+bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& info)
 {
     m_cancel     = false;
     QString dest = folder + QString("/") + itemName;
@@ -488,7 +488,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         info.size             = fi.size();
         info.width            = dims.width();
         info.height           = dims.height();
-        info.downloaded       = GPItemInfo::DownloadUnknown;
+        info.downloaded       = CamItemInfo::DownloadUnknown;
         info.readPermissions  = fi.isReadable();
         info.writePermissions = fi.isWritable();
         info.photoInfo        = pInfo;

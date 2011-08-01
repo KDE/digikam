@@ -269,7 +269,7 @@ CameraItemPropertiesTab::~CameraItemPropertiesTab()
     delete d;
 }
 
-void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo& itemInfo, const DMetadata& meta)
+void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const DMetadata& meta)
 {
     if (itemInfo.isNull())
     {
@@ -402,11 +402,11 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo& itemInfo, const D
 
     d->labelNewFileName->setText(itemInfo.downloadName.isEmpty() ? i18n("<i>unchanged</i>") : itemInfo.downloadName);
 
-    if (itemInfo.downloaded == GPItemInfo::DownloadUnknown)
+    if (itemInfo.downloaded == CamItemInfo::DownloadUnknown)
     {
         str = unknown;
     }
-    else if (itemInfo.downloaded == GPItemInfo::DownloadedYes)
+    else if (itemInfo.downloaded == CamItemInfo::DownloadedYes)
     {
         str = i18n("Yes");
     }

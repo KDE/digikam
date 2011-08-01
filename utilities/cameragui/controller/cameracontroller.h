@@ -37,7 +37,7 @@
 // Local includes
 
 #include "downloadsettingscontainer.h"
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 #include "dmetadata.h"
 #include "dkcamera.h"
 #include "dhistoryview.h"
@@ -106,16 +106,16 @@ Q_SIGNALS:
 
     void signalConnected(bool val);
     void signalFolderList(const QStringList& folderList);
-    void signalFileList(const GPItemInfoList& infoList);
-    void signalUploaded(const GPItemInfo& itemInfo);
+    void signalFileList(const CamItemInfoList& infoList);
+    void signalUploaded(const CamItemInfo& itemInfo);
     void signalDownloaded(const QString& folder, const QString& file, int status);
     void signalDownloadComplete(const QString& sourceFolder, const QString& sourceFile,
                                 const QString& destFolder, const QString& destFile);
     void signalSkipped(const QString& folder, const QString& file);
     void signalDeleted(const QString& folder, const QString& file, bool status);
     void signalLocked(const QString& folder, const QString& file, bool status);
-    void signalThumbInfo(const QString& folder, const QString& file, const GPItemInfo& itemInfo, const QImage& thumb);
-    void signalThumbInfoFailed(const QString& folder, const QString& file, const GPItemInfo& itemInfo);
+    void signalThumbInfo(const QString& folder, const QString& file, const CamItemInfo& itemInfo, const QImage& thumb);
+    void signalThumbInfoFailed(const QString& folder, const QString& file, const CamItemInfo& itemInfo);
     void signalMetadata(const QString& folder, const QString& file, const DMetadata& exifData);
 
     void signalInternalCheckRename(const QString& folder, const QString& file,

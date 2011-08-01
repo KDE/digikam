@@ -41,7 +41,7 @@ namespace Digikam
 {
 
 class SidebarSplitter;
-class GPItemInfo;
+class CamItemInfo;
 class DMetadata;
 class NavigateBarTab;
 
@@ -58,7 +58,7 @@ public:
 
     void applySettings();
 
-    void itemChanged(const GPItemInfo& itemInfo, const DMetadata& meta);
+    void itemChanged(const CamItemInfo& itemInfo, const DMetadata& meta);
 
 public Q_SLOTS:
 

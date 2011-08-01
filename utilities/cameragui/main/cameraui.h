@@ -46,7 +46,7 @@
 
 // Local includes
 
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 #include "dhistoryview.h"
 #include "dmetadata.h"
 #include "camerahistoryupdater.h"
@@ -148,11 +148,11 @@ private Q_SLOTS:
     void slotHistoryEntryClicked(const QVariant&);
 
     void slotFolderList(const QStringList& folderList);
-    void slotFileList(const GPItemInfoList& fileList);
+    void slotFileList(const CamItemInfoList& fileList);
 
     void slotRequestThumbnails(const QList<IconItem*>& list);
-    void slotThumbInfo(const QString&, const QString&, const GPItemInfo&, const QImage&);
-    void slotThumbInfoFailed(const QString&, const QString&, const GPItemInfo&);
+    void slotThumbInfo(const QString&, const QString&, const CamItemInfo&, const QImage&);
+    void slotThumbInfoFailed(const QString&, const QString&, const CamItemInfo&);
     void slotGotKDEPreview(const KFileItem&, const QPixmap&);
     void slotFailedKDEPreview(const KFileItem&);
     void slotKdePreviewFinished(KJob*);
@@ -179,7 +179,7 @@ private Q_SLOTS:
     void slotFileView();
     void slotFileView(CameraIconItem* item);
 
-    void slotUploaded(const GPItemInfo&);
+    void slotUploaded(const CamItemInfo&);
     void slotDownloaded(const QString&, const QString&, int);
     void slotDownloadComplete(const QString& sourceFolder, const QString& sourceFile,
                               const QString& destFolder, const QString& destFile);

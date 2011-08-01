@@ -157,13 +157,13 @@ void CameraHistoryUpdater::proccessMap(const QByteArray& id, CHUpdateItemMap& ma
         switch (DownloadHistory::status(id, (*it).name, (*it).size, (*it).mtime))
         {
             case DownloadHistory::NotDownloaded:
-                (*it).downloaded = GPItemInfo::NewPicture;
+                (*it).downloaded = CamItemInfo::NewPicture;
                 break;
             case DownloadHistory::Downloaded:
-                (*it).downloaded = GPItemInfo::DownloadedYes;
+                (*it).downloaded = CamItemInfo::DownloadedYes;
                 break;
             default: // DownloadHistory::StatusUnknown
-                (*it).downloaded = GPItemInfo::DownloadUnknown;
+                (*it).downloaded = CamItemInfo::DownloadUnknown;
                 break;
         }
 

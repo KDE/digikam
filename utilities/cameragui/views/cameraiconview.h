@@ -39,7 +39,7 @@
 
 #include "iconview.h"
 #include "renamecustomizer.h"
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 
 class QPixmap;
 class KPixmapSequence;
@@ -63,14 +63,14 @@ public:
 
     void setRenameCustomizer(RenameCustomizer* renamer);
 
-    void addItem(const GPItemInfo& itemInfo);
+    void addItem(const CamItemInfo& itemInfo);
     void removeItem(const QString& folder, const QString& file);
 
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
-    void setItemInfo(const QString& folder, const QString& filename, const GPItemInfo& itemInfo);
+    void setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo);
 
     void ensureItemVisible(CameraIconItem* item);
-    void ensureItemVisible(const GPItemInfo& itemInfo);
+    void ensureItemVisible(const CamItemInfo& itemInfo);
     void ensureItemVisible(const QString& folder, const QString& file);
 
     void setThumbnailSize(int thumbSize);
@@ -140,8 +140,8 @@ protected:
 
 private:
 
-    QString getTemplatedName(const GPItemInfo& itemInfo) const;
-    QString getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo& itemInfo) const;
+    QString getTemplatedName(const CamItemInfo& itemInfo) const;
+    QString getCasedName(const RenameCustomizer::Case ccase, const CamItemInfo& itemInfo) const;
     void    uploadItemPopupMenu(const KUrl::List& srcURLs);
 
 private:

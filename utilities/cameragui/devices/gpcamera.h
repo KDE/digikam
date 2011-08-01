@@ -58,8 +58,8 @@ public:
     void getAllFolders(const QString& folder, QStringList& subFolderList);
     bool getSubFolders(const QString& folder, QStringList& subFolderList);
     bool getItemsList(const QString& folder, QStringList& itemsList);
-    bool getItemsInfoList(const QString& folder, bool useMetadata, GPItemInfoList& items);
-    void getItemInfo(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata);
+    bool getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& items);
+    void getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata);
 
     bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
     bool getMetadata(const QString& folder, const QString& itemName, DMetadata& meta);
@@ -72,7 +72,7 @@ public:
     // recursively delete all items
     bool deleteAllItems(const QString& folder);
 
-    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, GPItemInfo& itemInfo);
+    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& itemInfo);
 
     bool cameraSummary(QString& summary);
     bool cameraManual(QString& manual);
@@ -85,7 +85,7 @@ public:
 
     bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail);
     bool getPreview(QImage& preview);
-    bool capture(GPItemInfo& itemInfo);
+    bool capture(CamItemInfo& itemInfo);
 
     // Public static methods shared with Setup Camera
 
@@ -99,7 +99,7 @@ private:
 
     /** Run getItemInfo implemenation whithout to be wrapped into GPhoto context
      */
-    void getItemInfoInternal(const QString& folder, const QString& itemName, GPItemInfo& info, bool useMetadata);
+    void getItemInfoInternal(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata);
 
     static void printGphotoErrorDescription(int errorCode);
 
