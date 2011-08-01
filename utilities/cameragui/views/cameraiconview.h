@@ -74,14 +74,14 @@ public:
     void ensureItemVisible(const QString& folder, const QString& file);
 
     void setThumbnailSize(int thumbSize);
-    int  thumbnailSize();
+    int  thumbnailSize() const;
 
-    CameraIconItem* findItem(const QString& folder, const QString& file);
+    CameraIconItem* findItem(const QString& folder, const QString& file) const;
 
-    CameraIconItem* firstItemSelected();
+    CameraIconItem* firstItemSelected() const;
 
-    int countItemsByFolder(const QString& folder);
-    int itemsDownloaded();
+    int countItemsByFolder(const QString& folder) const;
+    int itemsDownloaded() const;
 
     QPixmap itemBaseRegPixmap()      const;
     QPixmap itemBaseSelPixmap()      const;
@@ -92,7 +92,7 @@ public:
     QPixmap downloadFailedPixmap()   const;
     KPixmapSequence progressPixmap() const;
 
-    QString defaultDownloadName(CameraIconItem* item);
+    QString defaultDownloadName(CameraIconItem* item) const;
 
     void itemsSelectionSizeInfo(unsigned long& fSize, unsigned long& dSize);
 
@@ -140,8 +140,8 @@ protected:
 
 private:
 
-    QString getTemplatedName(const GPItemInfo& itemInfo);
-    QString getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo& itemInfo);
+    QString getTemplatedName(const GPItemInfo& itemInfo) const;
+    QString getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo& itemInfo) const;
     void    uploadItemPopupMenu(const KUrl::List& srcURLs);
 
 private:

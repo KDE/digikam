@@ -267,12 +267,12 @@ void CameraIconView::removeItem(const QString& folder, const QString& file)
     setDelayedRearrangement(false);
 }
 
-CameraIconItem* CameraIconView::findItem(const QString& folder, const QString& file)
+CameraIconItem* CameraIconView::findItem(const QString& folder, const QString& file) const
 {
     return d->itemDict.value(folder+file);
 }
 
-int CameraIconView::countItemsByFolder(const QString& folder)
+int CameraIconView::countItemsByFolder(const QString& folder) const
 {
     int count    = 0;
     QString path = folder;
@@ -451,7 +451,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     viewport()->update();
 }
 
-QString CameraIconView::defaultDownloadName(CameraIconItem* viewItem)
+QString CameraIconView::defaultDownloadName(CameraIconItem* viewItem) const
 {
     RenameCustomizer::Case renamecase = RenameCustomizer::NONE;
 
@@ -463,7 +463,7 @@ QString CameraIconView::defaultDownloadName(CameraIconItem* viewItem)
     return getCasedName( renamecase, viewItem->itemInfo() );
 }
 
-QString CameraIconView::getTemplatedName(const GPItemInfo& itemInfo)
+QString CameraIconView::getTemplatedName(const GPItemInfo& itemInfo) const
 {
     QFileInfo fi;
     fi.setFile(QDir(itemInfo.folder), itemInfo.name);
@@ -471,7 +471,7 @@ QString CameraIconView::getTemplatedName(const GPItemInfo& itemInfo)
     return d->renamer->newName(fi.absoluteFilePath(), itemInfo.mtime);
 }
 
-QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo& itemInfo)
+QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo& itemInfo) const
 {
     QString dname;
 
@@ -518,7 +518,7 @@ void CameraIconView::slotSelectionChanged()
     viewport()->update();
 }
 
-CameraIconItem* CameraIconView::firstItemSelected()
+CameraIconItem* CameraIconView::firstItemSelected() const
 {
     CameraIconItem* camItem = 0;
 
@@ -807,7 +807,7 @@ void CameraIconView::setThumbnailSize(int size)
     }
 }
 
-int CameraIconView::thumbnailSize()
+int CameraIconView::thumbnailSize() const
 {
     return d->thumbSize;
 }
@@ -888,7 +888,7 @@ void CameraIconView::slotShowToolTip(IconItem* item)
     d->toolTip->setIconItem(dynamic_cast<CameraIconItem*>(item));
 }
 
-int CameraIconView::itemsDownloaded()
+int CameraIconView::itemsDownloaded() const
 {
     int downloaded = 0;
 
