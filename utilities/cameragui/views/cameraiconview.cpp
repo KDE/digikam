@@ -954,4 +954,20 @@ void CameraIconView::itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned lon
     dSizeKB = dSize / 1024;
 }
 
+void CameraIconView::prepareRepaint(const QList<IconItem*>& list)
+{
+    CamItemInfoList infos;
+
+    foreach (IconItem* item, list)
+    {
+        if (item)
+        {
+            CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+            infos << iconItem->itemInfo();
+        }
+    }
+
+    emit signalPrepareRepaint(infos);
+}
+
 }  // namespace Digikam

@@ -110,6 +110,7 @@ Q_SIGNALS:
     void signalDelete();
     void signalToggleLock();
     void signalNewSelection(bool);
+    void signalPrepareRepaint(const CamItemInfoList&);
 
 public Q_SLOTS:
 
@@ -143,6 +144,7 @@ private:
     QString getTemplatedName(const CamItemInfo& itemInfo) const;
     QString getCasedName(const RenameCustomizer::Case ccase, const CamItemInfo& itemInfo) const;
     void    uploadItemPopupMenu(const KUrl::List& srcURLs);
+    void    prepareRepaint(const QList<IconItem*>& list);
 
 private:
 

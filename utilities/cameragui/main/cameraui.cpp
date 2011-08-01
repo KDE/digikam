@@ -598,8 +598,8 @@ void CameraUI::setupConnections()
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
 
-    connect(d->view, SIGNAL(signalPrepareRepaint(QList<IconItem*>)),
-            this, SLOT(slotRequestThumbnails(QList<IconItem*>)));
+    connect(d->view, SIGNAL(signalPrepareRepaint(const CamItemInfoList&)),
+            this, SLOT(slotRequestThumbnails(const CamItemInfoList&)));
 
     // -------------------------------------------------------------------------
 
@@ -1276,24 +1276,17 @@ void CameraUI::slotlastPhotoFirst()
     slotRefreshIconView(map);
 }
 
-void CameraUI::slotRequestThumbnails(const QList<IconItem*>& list)
+void CameraUI::slotRequestThumbnails(const CamItemInfoList& list)
 {
     if (list.isEmpty()) return;
 
     QList<QVariant> itemsList;
-    IconItem* item = list.first();
 
-    if (item)
+    foreach(CamItemInfo info, list)
     {
-        do
-        {
-            CameraIconItem* citem = static_cast<CameraIconItem*>(item);
-            if (!citem->hasValidThumbnail())
-                itemsList.append(QStringList() << citem->itemInfo().folder << citem->itemInfo().name);
-
-            item = item->nextItem();
-        }
-        while(item != list.last()->nextItem());
+        CameraIconItem* citem = d->view->findItem(info.folder, info.name);
+        if (citem && !citem->hasValidThumbnail())
+            itemsList.append(QStringList() << citem->itemInfo().folder << citem->itemInfo().name);
     }
 
     d->statusProgressBar->setProgressValue(0);

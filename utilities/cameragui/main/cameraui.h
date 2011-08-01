@@ -58,7 +58,6 @@ namespace Digikam
 {
 
 class Album;
-class IconItem;
 class CollectionLocation;
 class CameraHistoryUpdater;
 
@@ -150,7 +149,7 @@ private Q_SLOTS:
     void slotFolderList(const QStringList& folderList);
     void slotFileList(const CamItemInfoList& fileList);
 
-    void slotRequestThumbnails(const QList<IconItem*>& list);
+    void slotRequestThumbnails(const CamItemInfoList& list);
     void slotThumbInfo(const QString&, const QString&, const CamItemInfo&, const QImage&);
     void slotThumbInfoFailed(const QString&, const QString&, const CamItemInfo&);
     void slotGotKDEPreview(const KFileItem&, const QPixmap&);
