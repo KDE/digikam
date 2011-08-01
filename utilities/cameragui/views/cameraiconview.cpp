@@ -852,13 +852,13 @@ void CameraIconView::updateItemRectsPixmap()
     d->itemRegPixmap.fill(kapp->palette().color(QPalette::Base));
     QPainter p1(&d->itemRegPixmap);
     p1.setPen(kapp->palette().color(QPalette::Midlight));
-    p1.drawRect(0, 0, d->itemRect.width(), d->itemRect.height());
+    p1.drawRect(0, 0, d->itemRect.width()-1, d->itemRect.height()-1);
 
     d->itemSelPixmap = QPixmap(d->itemRect.width(), d->itemRect.height());
     d->itemSelPixmap.fill(kapp->palette().color(QPalette::Highlight));
     QPainter p2(&d->itemSelPixmap);
     p2.setPen(kapp->palette().color(QPalette::Midlight));
-    p2.drawRect(0, 0, d->itemRect.width(), d->itemRect.height());
+    p2.drawRect(0, 0, d->itemRect.width()-1, d->itemRect.height()-1);
 
     clearThumbnailBorderCache();
 }
