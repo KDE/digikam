@@ -272,26 +272,27 @@ CameraIconItem* CameraIconView::findItem(const QString& folder, const QString& f
     return d->itemDict.value(folder+file);
 }
 
-int CameraIconView::countItemsByFolder(QString folder)
+int CameraIconView::countItemsByFolder(const QString& folder)
 {
-    int count = 0;
+    int count    = 0;
+    QString path = folder;
 
-    if (folder.endsWith('/'))
+    if (path.endsWith('/'))
     {
-        folder.truncate(folder.length()-1);
+        path.truncate(path.length()-1);
     }
 
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
         CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
-        QString itemFolder = iconItem->itemInfo().folder;
+        QString itemFolder       = iconItem->itemInfo().folder;
 
         if (itemFolder.endsWith('/'))
         {
             itemFolder.truncate(itemFolder.length()-1);
         }
 
-        if (folder == itemFolder)
+        if (path == itemFolder)
         {
             ++count;
         }
