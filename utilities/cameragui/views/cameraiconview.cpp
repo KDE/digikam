@@ -245,26 +245,34 @@ void CameraIconView::addItem(const CamItemInfo& info)
     //        }
     //    }
 
-    CamItemInfo newinfo   = info;
+    CamItemInfo newinfo  = info;
     newinfo.downloadName = downloadName;
     CameraIconItem* item = new CameraIconItem(d->groupItem, newinfo, thumb);
     d->itemDict.insert(newinfo.folder + newinfo.name, item);
 }
 
-void CameraIconView::removeItem(const QString& folder, const QString& file)
+void CameraIconView::removeItem(const CamItemInfo& info)
 {
-    CameraIconItem* item = d->itemDict.value(folder+file);
+    CameraIconItem* item = d->itemDict.value(info.folder+info.name);
 
     if (!item)
     {
         return;
     }
 
-    d->itemDict.remove(folder+file);
+    d->itemDict.remove(info.folder+info.name);
 
     setDelayedRearrangement(true);
     delete item;
     setDelayedRearrangement(false);
+}
+
+CamItemInfo CameraIconView::findItemInfo(const QString& folder, const QString& file) const
+{
+    CamItemInfo     info;
+    CameraIconItem* item = findItem(folder, file);
+    if (item) info = item->itemInfo();
+    return info;
 }
 
 CameraIconItem* CameraIconView::findItem(const QString& folder, const QString& file) const

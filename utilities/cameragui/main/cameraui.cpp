@@ -1211,7 +1211,7 @@ void CameraUI::slotRefreshIconViewTimer()
     {
         CameraIconItem* tempItem = citem;
         citem                    = static_cast<CameraIconItem*>(tempItem->nextItem());
-        d->view->removeItem(tempItem->itemInfo().folder, tempItem->itemInfo().name);
+        d->view->removeItem(tempItem->itemInfo());
     }
 
     d->historyUpdater->addItems(d->controller->cameraMD5ID(), map);
@@ -1269,7 +1269,7 @@ void CameraUI::slotlastPhotoFirst()
 
     while (item)
     {
-        d->view->removeItem(item->itemInfo().folder,item->itemInfo().name);
+        d->view->removeItem(item->itemInfo());
         item = dynamic_cast<CameraIconItem*>(item->nextItem());
     }
 
@@ -2092,7 +2092,7 @@ void CameraUI::slotDeleted(const QString& folder, const QString& file, bool stat
 {
     if (status)
     {
-        d->view->removeItem(folder, file);
+        d->view->removeItem(d->view->findItemInfo(folder, file));
         // do this after removeItem, which will signal to slotItemsSelected, which checks for the list
         d->currentlyDeleting.removeAll(folder + file);
     }

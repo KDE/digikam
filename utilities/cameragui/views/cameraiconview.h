@@ -64,7 +64,7 @@ public:
     void setRenameCustomizer(RenameCustomizer* renamer);
 
     void addItem(const CamItemInfo& itemInfo);
-    void removeItem(const QString& folder, const QString& file);
+    void removeItem(const CamItemInfo& itemInfo);
 
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
     void setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo);
@@ -77,6 +77,7 @@ public:
     int  thumbnailSize() const;
 
     CameraIconItem* findItem(const QString& folder, const QString& file) const;
+    CamItemInfo     findItemInfo(const QString& folder, const QString& file) const;
 
     CameraIconItem* firstItemSelected() const;
 
