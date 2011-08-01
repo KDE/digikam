@@ -2104,10 +2104,10 @@ void CameraUI::slotDeleted(const QString& folder, const QString& file, bool stat
 
 void CameraUI::slotFileView()
 {
-    CameraIconItem* item = d->view->firstItemSelected();
-    if (item)
+    CamItemInfo info = d->view->firstItemSelected();
+    if (!info.isNull())
     {
-        slotFileView(item->itemInfo());
+        slotFileView(info);
     }
 }
 

@@ -69,7 +69,6 @@ public:
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
     void setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo);
 
-    void ensureItemVisible(CameraIconItem* item);
     void ensureItemVisible(const CamItemInfo& itemInfo);
     void ensureItemVisible(const QString& folder, const QString& file);
 
@@ -78,8 +77,7 @@ public:
 
     CameraIconItem* findItem(const QString& folder, const QString& file) const;
     CamItemInfo     findItemInfo(const QString& folder, const QString& file) const;
-
-    CameraIconItem* firstItemSelected() const;
+    CamItemInfo     firstItemSelected() const;
 
     int countItemsByFolder(const QString& folder) const;
     int itemsDownloaded() const;
@@ -93,9 +91,8 @@ public:
     QPixmap downloadFailedPixmap()   const;
     KPixmapSequence progressPixmap() const;
 
-    QString defaultDownloadName(CameraIconItem* item) const;
-
     void itemsSelectionSizeInfo(unsigned long& fSize, unsigned long& dSize);
+    QString defaultDownloadName(const CamItemInfo& itemInfo) const;
 
     virtual QRect itemRect() const;
 
@@ -146,6 +143,7 @@ private:
     QString getCasedName(const RenameCustomizer::Case ccase, const CamItemInfo& itemInfo) const;
     void    uploadItemPopupMenu(const KUrl::List& srcURLs);
     void    prepareRepaint(const QList<IconItem*>& list);
+    void    ensureItemVisible(CameraIconItem* item);
 
 private:
 

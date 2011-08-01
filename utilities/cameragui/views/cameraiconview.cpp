@@ -459,7 +459,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     viewport()->update();
 }
 
-QString CameraIconView::defaultDownloadName(CameraIconItem* viewItem) const
+QString CameraIconView::defaultDownloadName(const CamItemInfo& info) const
 {
     RenameCustomizer::Case renamecase = RenameCustomizer::NONE;
 
@@ -468,7 +468,7 @@ QString CameraIconView::defaultDownloadName(CameraIconItem* viewItem) const
         renamecase = d->renamer->changeCase();
     }
 
-    return getCasedName( renamecase, viewItem->itemInfo() );
+    return getCasedName(renamecase, info);
 }
 
 QString CameraIconView::getTemplatedName(const CamItemInfo& itemInfo) const
@@ -526,7 +526,7 @@ void CameraIconView::slotSelectionChanged()
     viewport()->update();
 }
 
-CameraIconItem* CameraIconView::firstItemSelected() const
+CamItemInfo CameraIconView::firstItemSelected() const
 {
     CameraIconItem* camItem = 0;
 
@@ -539,7 +539,7 @@ CameraIconItem* CameraIconView::firstItemSelected() const
         }
     }
 
-    return(camItem);
+    return(camItem ? camItem->itemInfo() : CamItemInfo());
 }
 
 
