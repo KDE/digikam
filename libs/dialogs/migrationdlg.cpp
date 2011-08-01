@@ -44,6 +44,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
 #include "databasewidget.h"
@@ -95,24 +96,51 @@ class MigrationDlg::MigrationDlgPriv
 public:
 
     MigrationDlgPriv() :
-        fromDatabaseWidget(0),
-        toDatabaseWidget(0),
-        migrateButton(0),
-        cancelButton(0),
+        // Img database
+        fromImgDatabaseWidget(0),
+        toImgDatabaseWidget(0),
+        migrateImgButton(0),
+        cancelImgButton(0),
+#ifdef USE_THUMBS_DB
+        // Thumb database
+        fromThumbDatabaseWidget(0),
+        toThumbDatabaseWidget(0),
+        migrateThumbButton(0),
+        cancelThumbButton(0),
+#endif
+        // Global
         overallStepTitle(0),
         progressBar(0),
         progressBarSmallStep(0),
+        sameDatabase(0),
+        internalFromServer(0),
+#ifdef HAVE_INTERNALMYSQL
+        internalToServer(0),
+#endif
         copyThread(0)
     {
     }
-
-    DatabaseWidget*     fromDatabaseWidget;
-    DatabaseWidget*     toDatabaseWidget;
-    QPushButton*        migrateButton;
-    QPushButton*        cancelButton;
+    // Img database
+    DatabaseWidget*     fromImgDatabaseWidget;
+    DatabaseWidget*     toImgDatabaseWidget;
+    QPushButton*        migrateImgButton;
+    QPushButton*        cancelImgButton;
+#ifdef USE_THUMBS_DB
+    // Thumb database
+    DatabaseWidget*     fromThumbDatabaseWidget;
+    DatabaseWidget*     toThumbDatabaseWidget;
+    QPushButton*        migrateThumbButton;
+    QPushButton*        cancelThumbButton;
+#endif
+    // Global
     QLabel*             overallStepTitle;
     QProgressBar*       progressBar;
     QProgressBar*       progressBarSmallStep;
+    QCheckBox*          sameDatabase;
+    QCheckBox*          internalFromServer;
+#ifdef HAVE_INTERNALMYSQL
+    QCheckBox*          internalToServer;
+#endif
     DatabaseCopyThread* copyThread;
 };
 
@@ -131,11 +159,23 @@ MigrationDlg::~MigrationDlg()
 void MigrationDlg::setupMainArea()
 {
     d->copyThread                      = new DatabaseCopyThread(this);
-    d->fromDatabaseWidget              = new DatabaseWidget(this);
-    d->toDatabaseWidget                = new DatabaseWidget(this);
-    d->migrateButton                   = new QPushButton(i18n("Migrate ->"), this);
-    d->cancelButton                    = new QPushButton(i18n("Cancel"), this);
-    d->cancelButton->setEnabled(false);
+    d->fromImgDatabaseWidget           = new DatabaseWidget(this, i18n("current images DB"));
+    d->toImgDatabaseWidget             = new DatabaseWidget(this, i18n("dest. images DB"));
+    d->migrateImgButton                = new QPushButton(i18n("Migrate ->"), this);
+    d->cancelImgButton                 = new QPushButton(i18n("Cancel"), this);
+    d->cancelImgButton->setEnabled(false);
+#ifdef USE_THUMBS_DB
+    d->fromThumbDatabaseWidget         = new DatabaseWidget(this, i18n("current thumbnail DB"));
+    d->toThumbDatabaseWidget           = new DatabaseWidget(this, i18n("dest. thumbnail DB"));
+    d->migrateThumbButton              = new QPushButton(i18n("Migrate ->"), this);
+    d->cancelThumbButton               = new QPushButton(i18n("Cancel"), this);
+    d->cancelThumbButton->setEnabled(false);
+#endif
+    d->sameDatabase                    = new QCheckBox(i18n("Same database"), this);
+    d->internalFromServer              = new QCheckBox(i18n("Internal server"), this);
+#ifdef HAVE_INTERNALMYSQL
+    d->internalToServer                = new QCheckBox(i18n("Internal server"), this);
+#endif
 
     QGroupBox* progressBox             = new QGroupBox(i18n("Progress Information"), this);
     QVBoxLayout* vlay                  = new QVBoxLayout(progressBox);
@@ -157,13 +197,26 @@ void MigrationDlg::setupMainArea()
     QGridLayout* layout = new QGridLayout;
     mainWidget->setLayout(layout);
 
-    layout->addWidget(d->fromDatabaseWidget,   0, 0, 4, 1);
-    layout->addWidget(d->migrateButton,        1, 1);
-    layout->addWidget(d->cancelButton,         2, 1);
-    layout->addWidget(d->toDatabaseWidget,     0, 2, 4, 1);
-    layout->addWidget(progressBox,             4, 0, 1, 3);
-//  layout->addWidget(d->progressBar,          4, 0, 1, 3);
-//  layout->addWidget(d->progressBarSmallStep, 5, 0, 1, 3);
+    layout->addWidget(d->internalFromServer,       0, 0);
+#ifdef HAVE_INTERNALMYSQL
+    layout->addWidget(d->internalToServer,         0, 2);
+#endif
+
+    layout->addWidget(d->fromImgDatabaseWidget,    1, 0, 3, 1);
+    layout->addWidget(d->migrateImgButton,         2, 1);
+    layout->addWidget(d->cancelImgButton,          3, 1);
+    layout->addWidget(d->toImgDatabaseWidget,      1, 2, 3, 1);
+
+    layout->addWidget(d->sameDatabase,             5, 2);
+
+#ifdef USE_THUMBS_DB
+    layout->addWidget(d->fromThumbDatabaseWidget,  6, 0, 3, 1);
+    layout->addWidget(d->migrateThumbButton,       7, 1);
+    layout->addWidget(d->cancelThumbButton,        8, 1);
+    layout->addWidget(d->toThumbDatabaseWidget,    6, 2, 3, 1);
+#endif
+
+    layout->addWidget(progressBox,                10, 0, 1, 3);
 
     setMainWidget(mainWidget);
     dataInit();
@@ -171,8 +224,19 @@ void MigrationDlg::setupMainArea()
     // setup dialog
     setButtons(Close);
 
-    connect(d->migrateButton, SIGNAL(clicked()),
-            this, SLOT(performCopy()));
+    connect(d->migrateImgButton, SIGNAL(clicked()),
+            this, SLOT(performImgCopy()));
+
+    connect(d->cancelImgButton, SIGNAL(clicked()),
+            &(d->copyThread->copyManager), SLOT(stopProcessing()));
+
+#ifdef USE_THUMBS_DB
+    connect(d->migrateThumbButton, SIGNAL(clicked()),
+            this, SLOT(performThumbCopy()));
+
+    connect(d->cancelThumbButton, SIGNAL(clicked()),
+            &(d->copyThread->copyManager), SLOT(stopProcessing()));
+#endif
 
     // connect signal handlers for copy d->copyThread
     connect(&(d->copyThread->copyManager), SIGNAL(finished(int, QString)),
@@ -187,43 +251,82 @@ void MigrationDlg::setupMainArea()
     connect(this, SIGNAL(closeClicked()),
             &(d->copyThread->copyManager), SLOT(stopProcessing()));
 
-    connect(d->cancelButton, SIGNAL(clicked()),
-            &(d->copyThread->copyManager), SLOT(stopProcessing()));
 }
 
-void MigrationDlg::performCopy()
+void MigrationDlg::performImgCopy()
 {
-    DatabaseParameters toDBParameters   = d->toDatabaseWidget->getDatabaseParameters();
-    DatabaseParameters fromDBParameters = d->fromDatabaseWidget->getDatabaseParameters();
+    KMessageBox::information(this, i18n("TODO: performImgCopy") );
+    return;
+    DatabaseParameters toDBParameters   = d->toImgDatabaseWidget->getDatabaseParameters();
+    DatabaseParameters fromDBParameters = d->fromImgDatabaseWidget->getDatabaseParameters();
     d->copyThread->init(fromDBParameters, toDBParameters);
 
     lockInputFields();
     d->copyThread->start();
 }
 
+#ifdef USE_THUMBS_DB
+void MigrationDlg::performThumbCopy()
+{
+    KMessageBox::information(this, i18n("TODO: performThumbCopy") );
+    return;
+    DatabaseParameters toDBParameters   = d->toThumbDatabaseWidget->getDatabaseParameters();
+    DatabaseParameters fromDBParameters = d->fromThumbDatabaseWidget->getDatabaseParameters();
+    d->copyThread->init(fromDBParameters, toDBParameters);
+
+    lockInputFields();
+    d->copyThread->start();
+}
+#endif
+
 void MigrationDlg::dataInit()
 {
-    d->fromDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
-    d->toDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
+    d->fromImgDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
+    d->toImgDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
+#ifdef USE_THUMBS_DB
+    //fr TODO: change database name
+    d->fromThumbDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
+    d->toThumbDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
+#endif
 }
 
 void MigrationDlg::unlockInputFields()
 {
-    d->fromDatabaseWidget->setEnabled(true);
-    d->toDatabaseWidget->setEnabled(true);
-    d->migrateButton->setEnabled(true);
+    d->fromImgDatabaseWidget->setEnabled(true);
+    d->toImgDatabaseWidget->setEnabled(true);
+    d->migrateImgButton->setEnabled(true);
+
+#ifdef USE_THUMBS_DB
+    d->fromThumbDatabaseWidget->setEnabled(true);
+    d->toThumbDatabaseWidget->setEnabled(true);
+    d->migrateThumbButton->setEnabled(true);
+#endif
+
     d->progressBar->setValue(0);
     d->progressBarSmallStep->setValue(0);
 
-    d->cancelButton->setEnabled(false);
+    d->cancelImgButton->setEnabled(false);
+#ifdef USE_THUMBS_DB
+    d->cancelThumbButton->setEnabled(false);
+#endif
 }
 
 void MigrationDlg::lockInputFields()
 {
-    d->fromDatabaseWidget->setEnabled(false);
-    d->toDatabaseWidget->setEnabled(false);
-    d->migrateButton->setEnabled(false);
-    d->cancelButton->setEnabled(true);
+    d->fromImgDatabaseWidget->setEnabled(false);
+    d->toImgDatabaseWidget->setEnabled(false);
+    d->migrateImgButton->setEnabled(false);
+
+#ifdef USE_THUMBS_DB
+    d->fromThumbDatabaseWidget->setEnabled(false);
+    d->toThumbDatabaseWidget->setEnabled(false);
+    d->migrateThumbButton->setEnabled(false);
+#endif
+
+    d->cancelImgButton->setEnabled(true);
+#ifdef USE_THUMBS_DB
+    d->cancelThumbButton->setEnabled(true);
+#endif
 }
 
 void MigrationDlg::handleFinish(int finishState, QString errorMsg)

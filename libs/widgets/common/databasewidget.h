@@ -53,7 +53,7 @@ class DatabaseWidget : public QWidget
 
 public:
 
-    DatabaseWidget(QWidget* parent = 0);
+    DatabaseWidget(QWidget* parent = 0, const QString & title = QString(""));
     ~DatabaseWidget();
 
 public:
@@ -65,7 +65,7 @@ public:
     QSpinBox*      hostPort;
 
     QLineEdit*     databaseName;
-    QLineEdit*     databaseNameThumbnails;
+    //fr QLineEdit*     databaseNameThumbnails;
     QLineEdit*     hostName;
     QLineEdit*     connectionOptions;
     QLineEdit*     userName;
@@ -86,13 +86,13 @@ public Q_SLOTS:
     void slotChangeDatabasePath(const KUrl&);
     void slotDatabasePathEdited(const QString&);
     void slotHandleDBTypeIndexChanged(int index);
-    void slotHandleInternalServerCheckbox(int enableFields);
+    //fr void slotHandleInternalServerCheckbox(int enableFields);
     void checkDatabaseConnection();
 
 private:
 
     void checkDBPath();
-    void setupMainArea();
+    void setupMainArea(const QString & title);
 
 private:
 

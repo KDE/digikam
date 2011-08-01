@@ -333,8 +333,8 @@ public:
     QString getDatabaseName() const;
     void setDatabaseName(const QString& databaseName);
 
-    QString getDatabaseNameThumbnails() const;
-    void setDatabaseNameThumbnails(const QString& databaseNameThumbnails);
+    //fr QString getDatabaseNameThumbnails() const;
+    //fr void setDatabaseNameThumbnails(const QString& databaseNameThumbnails);
 
     QString getDatabaseHostName() const;
     void setDatabaseHostName(const QString& hostName);

@@ -1544,10 +1544,10 @@ QString AlbumSettings::getDatabaseName() const
     return d->databaseParams.databaseName;
 }
 
-QString AlbumSettings::getDatabaseNameThumbnails() const
-{
-    return d->databaseParams.databaseNameThumbnails;
-}
+//fr QString AlbumSettings::getDatabaseNameThumbnails() const
+//fr {
+//fr     return d->databaseParams.databaseNameThumbnails;
+//fr }
 
 QString AlbumSettings::getDatabaseHostName() const
 {
@@ -1584,10 +1584,10 @@ void AlbumSettings::setDatabaseName(const QString& databaseName)
     d->databaseParams.databaseName = databaseName;
 }
 
-void AlbumSettings::setDatabaseNameThumbnails(const QString& databaseNameThumbnails)
-{
-    d->databaseParams.databaseNameThumbnails = databaseNameThumbnails;
-}
+//fr void AlbumSettings::setDatabaseNameThumbnails(const QString& databaseNameThumbnails)
+//fr {
+//fr     d->databaseParams.databaseNameThumbnails = databaseNameThumbnails;
+//fr }
 
 void AlbumSettings::setDatabaseHostName(const QString& hostName)
 {

@@ -67,10 +67,10 @@ public:
     QGroupBox* expertSettings;
 };
 
-DatabaseWidget::DatabaseWidget(QWidget* parent)
+DatabaseWidget::DatabaseWidget(QWidget* parent, const QString & title)
     : QWidget(parent), d(new DatabaseWidgetPriv)
 {
-    setupMainArea();
+    setupMainArea(title);
 }
 
 DatabaseWidget::~DatabaseWidget()
@@ -78,7 +78,7 @@ DatabaseWidget::~DatabaseWidget()
     delete d;
 }
 
-void DatabaseWidget::setupMainArea()
+void DatabaseWidget::setupMainArea(const QString & title)
 {
     setAutoFillBackground(false);
 
@@ -87,7 +87,7 @@ void DatabaseWidget::setupMainArea()
 
     // --------------------------------------------------------
 
-    QGroupBox* dbPathBox = new QGroupBox(i18n("Database File Path"), this);
+    QGroupBox* dbPathBox = new QGroupBox(title, this);
     QVBoxLayout* vlay    = new QVBoxLayout(dbPathBox);
     d->databasePathLabel = new QLabel(i18n("<p>The location where the database file will be stored on your system. "
                                            "There is one common database file for all root albums.<br/>"
@@ -102,12 +102,12 @@ void DatabaseWidget::setupMainArea()
 
     QLabel* databaseTypeLabel           = new QLabel(i18n("Type"));
     databaseType                        = new QComboBox();
-    QLabel* internalServerLabel         = new QLabel(i18n("Internal Server"));
-    internalServer                      = new QCheckBox();
+    //fr QLabel* internalServerLabel         = new QLabel(i18n("Internal Server"));
+    //fr internalServer                      = new QCheckBox();
     QLabel* databaseNameLabel           = new QLabel(i18n("Schema Name"));
     databaseName                        = new QLineEdit();
-    QLabel* databaseNameThumbnailsLabel = new QLabel(i18n("Thumbnails<br>Schema Name"));
-    databaseNameThumbnails              = new QLineEdit();
+    //fr QLabel* databaseNameThumbnailsLabel = new QLabel(i18n("Thumbnails<br>Schema Name"));
+    //fr databaseNameThumbnails              = new QLineEdit();
     QLabel* hostNameLabel               = new QLabel(i18n("Host Name"));
     hostName                            = new QLineEdit();
     QLabel* hostPortLabel               = new QLabel(i18n("Port"));
@@ -131,13 +131,13 @@ void DatabaseWidget::setupMainArea()
     QFormLayout* expertSettinglayout    = new QFormLayout();
     d->expertSettings->setLayout(expertSettinglayout);
 
-#ifdef HAVE_INTERNALMYSQL
-    expertSettinglayout->addRow(internalServerLabel, internalServer);
-#endif // HAVE_INTERNALMYSQL
+//fr #ifdef HAVE_INTERNALMYSQL
+//fr     expertSettinglayout->addRow(internalServerLabel, internalServer);
+//fr #endif // HAVE_INTERNALMYSQL
     expertSettinglayout->addRow(hostNameLabel, hostName);
     expertSettinglayout->addRow(hostPortLabel, hostPort);
     expertSettinglayout->addRow(databaseNameLabel, databaseName);
-    expertSettinglayout->addRow(databaseNameThumbnailsLabel, databaseNameThumbnails);
+    //fr expertSettinglayout->addRow(databaseNameThumbnailsLabel, databaseNameThumbnails);
     expertSettinglayout->addRow(userNameLabel, userName);
     expertSettinglayout->addRow(passwordLabel, password);
     expertSettinglayout->addRow(connectionOptionsLabel, connectionOptions);
@@ -180,10 +180,10 @@ void DatabaseWidget::setupMainArea()
     connect(databaseType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotHandleDBTypeIndexChanged(int)));
 
-#ifdef HAVE_INTERNALMYSQL
-    connect(internalServer, SIGNAL(stateChanged(int)),
-            this, SLOT(slotHandleInternalServerCheckbox(int)));
-#endif // HAVE_INTERNALMYSQL
+//fr #ifdef HAVE_INTERNALMYSQL
+//fr     connect(internalServer, SIGNAL(stateChanged(int)),
+//fr             this, SLOT(slotHandleInternalServerCheckbox(int)));
+//fr #endif // HAVE_INTERNALMYSQL
 
     connect(checkDatabaseConnectionButton, SIGNAL(clicked()),
             this, SLOT(checkDatabaseConnection()));
@@ -254,16 +254,16 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
     adjustSize();
 }
 
-void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
-{
-    hostName->setEnabled(enableFields == Qt::Unchecked);
-    hostPort->setEnabled(enableFields == Qt::Unchecked);
-    databaseName->setEnabled(enableFields == Qt::Unchecked);
-    databaseNameThumbnails->setEnabled(enableFields == Qt::Unchecked);
-    userName->setEnabled(enableFields == Qt::Unchecked);
-    password->setEnabled(enableFields == Qt::Unchecked);
-    connectionOptions->setEnabled(enableFields == Qt::Unchecked);
-}
+//fr void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
+//fr {
+//fr     hostName->setEnabled(enableFields == Qt::Unchecked);
+//fr     hostPort->setEnabled(enableFields == Qt::Unchecked);
+//fr     databaseName->setEnabled(enableFields == Qt::Unchecked);
+//fr     //fr databaseNameThumbnails->setEnabled(enableFields == Qt::Unchecked);
+//fr     userName->setEnabled(enableFields == Qt::Unchecked);
+//fr     password->setEnabled(enableFields == Qt::Unchecked);
+//fr     connectionOptions->setEnabled(enableFields == Qt::Unchecked);
+//fr }
 
 void DatabaseWidget::checkDatabaseConnection()
 {
@@ -322,13 +322,13 @@ void DatabaseWidget::setParametersFromSettings(const AlbumSettings* settings)
     originalDbType = settings->getDatabaseType();
     databasePathEdit->setUrl(settings->getDatabaseFilePath());
 
-#ifdef HAVE_INTERNALMYSQL
-    internalServer->setChecked(settings->getInternalDatabaseServer());
-#else
-    internalServer->setChecked(false);
-#endif // HAVE_INTERNALMYSQL
+//fr #ifdef HAVE_INTERNALMYSQL
+//fr     internalServer->setChecked(settings->getInternalDatabaseServer());
+//fr #else
+//fr     internalServer->setChecked(false);
+//fr #endif // HAVE_INTERNALMYSQL
     databaseName->setText(settings->getDatabaseName());
-    databaseNameThumbnails->setText(settings->getDatabaseNameThumbnails());
+    //fr databaseNameThumbnails->setText(settings->getDatabaseNameThumbnails());
     hostName->setText(settings->getDatabaseHostName());
     hostPort->setValue(settings->getDatabasePort());
     connectionOptions->setText(settings->getDatabaseConnectoptions());
@@ -355,7 +355,8 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
 {
     DatabaseParameters parameters;
 
-    if (currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()) || !internalServer->isChecked())
+    //fr if (currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()) || !internalServer->isChecked())
+    if (currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
     {
         parameters.connectOptions = connectionOptions->text();
         parameters.databaseType   = currentDatabaseType();
@@ -367,12 +368,14 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
         if (parameters.databaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
         {
             parameters.databaseName = QDir::cleanPath(databasePathEdit->url().toLocalFile() + '/' + "digikam4.db");
-            parameters.databaseNameThumbnails = parameters.databaseName;
+            //fr parameters.databaseNameThumbnails = parameters.databaseName;
+            parameters.databaseNameThumbnails = parameters.databaseName; //fr
         }
         else
         {
             parameters.databaseName = databaseName->text();
-            parameters.databaseNameThumbnails = databaseNameThumbnails->text();
+            //fr parameters.databaseNameThumbnails = databaseNameThumbnails->text();
+            parameters.databaseNameThumbnails = parameters.databaseName; //fr
         }
     }
     else

@@ -177,7 +177,7 @@ void SetupDatabase::applySettings()
             settings->setInternalDatabaseServer(true);
             settings->setDatabaseType(d->databaseWidget->currentDatabaseType());
             settings->setDatabaseName(internalServerParameters.databaseName);
-            settings->setDatabaseNameThumbnails(internalServerParameters.databaseName);
+            //fr settings->setDatabaseNameThumbnails(internalServerParameters.databaseName);
             settings->setDatabaseConnectoptions(internalServerParameters.connectOptions);
             settings->setDatabaseHostName(internalServerParameters.hostName);
             settings->setDatabasePort(internalServerParameters.port);
@@ -189,7 +189,7 @@ void SetupDatabase::applySettings()
             settings->setInternalDatabaseServer(d->databaseWidget->internalServer->isChecked());
             settings->setDatabaseType(d->databaseWidget->currentDatabaseType());
             settings->setDatabaseName(d->databaseWidget->databaseName->text());
-            settings->setDatabaseNameThumbnails(d->databaseWidget->databaseNameThumbnails->text());
+            //fr settings->setDatabaseNameThumbnails(d->databaseWidget->databaseNameThumbnails->text());
             settings->setDatabaseConnectoptions(d->databaseWidget->connectionOptions->text());
             settings->setDatabaseHostName(d->databaseWidget->hostName->text());
             settings->setDatabasePort(d->databaseWidget->hostPort->text().toInt());

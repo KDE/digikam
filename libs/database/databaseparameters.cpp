@@ -49,7 +49,7 @@ static const char* configGroupDatabase = "Database Settings";
 static const char* configInternalDatabaseServer = "Internal Database Server";
 static const char* configDatabaseType = "Database Type";
 static const char* configDatabaseName = "Database Name";
-static const char* configDatabaseNameThumbnails = "Database Name Thumbnails";
+//fr static const char* configDatabaseNameThumbnails = "Database Name Thumbnails";
 static const char* configDatabaseHostName = "Database Hostname";
 static const char* configDatabasePort = "Database Port";
 static const char* configDatabaseUsername = "Database Username";
@@ -206,7 +206,7 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
 
     databaseType             = group.readEntry(configDatabaseType, QString());
     databaseName             = group.readEntry(configDatabaseName, QString());
-    databaseNameThumbnails   = group.readEntry(configDatabaseNameThumbnails, QString());
+    //fr databaseNameThumbnails   = group.readEntry(configDatabaseNameThumbnails, QString());
     hostName                 = group.readEntry(configDatabaseHostName, QString());
     port                     = group.readEntry(configDatabasePort, -1);
     userName                 = group.readEntry(configDatabaseUsername, QString());
@@ -357,7 +357,7 @@ void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString&
 
     group.writeEntry(configDatabaseType, databaseType);
     group.writeEntry(configDatabaseName, dbName);
-    group.writeEntry(configDatabaseNameThumbnails, dbNameThumbs);
+    //fr group.writeEntry(configDatabaseNameThumbnails, dbNameThumbs);
     group.writeEntry(configDatabaseHostName, hostName);
     group.writeEntry(configDatabasePort, port);
     group.writeEntry(configDatabaseUsername, userName);
