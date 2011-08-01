@@ -816,7 +816,7 @@ bool CameraUI::convertLosslessJpegFiles() const
     return d->convertJpegCheck->isChecked();
 }
 
-QString CameraUI::losslessFormat()
+QString CameraUI::losslessFormat() const
 {
     return d->losslessFormat->currentText();
 }
@@ -2426,22 +2426,22 @@ void CameraUI::slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAva
     d->cameraFreeSpace->addInformation(kBSize, kBSize-kBAvail, kBAvail, QString());
 }
 
-bool CameraUI::cameraDeleteSupport()
+bool CameraUI::cameraDeleteSupport() const
 {
     return d->controller->cameraDeleteSupport();
 }
 
-bool CameraUI::cameraUploadSupport()
+bool CameraUI::cameraUploadSupport() const
 {
     return d->controller->cameraUploadSupport();
 }
 
-bool CameraUI::cameraMkDirSupport()
+bool CameraUI::cameraMkDirSupport() const
 {
     return d->controller->cameraMkDirSupport();
 }
 
-bool CameraUI::cameraDelDirSupport()
+bool CameraUI::cameraDelDirSupport() const
 {
     return d->controller->cameraDelDirSupport();
 }

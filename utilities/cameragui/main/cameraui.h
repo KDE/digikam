@@ -76,17 +76,17 @@ public:
     bool isBusy() const;
     bool isClosed() const;
 
-    bool cameraDeleteSupport();
-    bool cameraUploadSupport();
-    bool cameraMkDirSupport();
-    bool cameraDelDirSupport();
+    bool cameraDeleteSupport() const;
+    bool cameraUploadSupport() const;
+    bool cameraMkDirSupport() const;
+    bool cameraDelDirSupport() const;
 
     bool autoRotateJpegFiles() const;
     bool chronologicOrder() const;
 
     /** Get status of JPEG conversion files to lossless format during download.*/
     bool    convertLosslessJpegFiles() const;
-    QString losslessFormat();
+    QString losslessFormat() const;
 
     QString cameraTitle() const;
 
