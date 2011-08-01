@@ -805,7 +805,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/antivignettingsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensdistortionfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/pixelaccess.cpp
-       )
+	 ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone/
+clonebrush.cpp
+	 ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone/
+clonefilter.cpp
+	 ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone/
+clonesettings.cpp
+
+ 	 ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone/mulsymatrix.cpp
+	)
 
     IF(GLIB2_FOUND)
 
@@ -1007,6 +1015,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imagepreviewitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewtoolbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewlist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageclonewidget.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageclonewidget.cpp
+
+
        )
 
     SET(libdimgcanvas_SRCS
@@ -1479,6 +1491,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory
@@ -1497,6 +1510,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens
+	 ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp
