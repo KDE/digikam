@@ -1974,20 +1974,20 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
 }
 
 
-void CameraUI::checkItem4Deletion(CameraIconItem* iconItem, QStringList& folders, QStringList& files,
+void CameraUI::checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
                                   QStringList& deleteList, QStringList& lockedList)
 {
-    if (iconItem->itemInfo().writePermissions != 0)  // Item not locked ?
+    if (info.writePermissions != 0)  // Item not locked ?
     {
-        QString folder = iconItem->itemInfo().folder;
-        QString file   = iconItem->itemInfo().name;
+        QString folder = info.folder;
+        QString file   = info.name;
         folders.append(folder);
         files.append(file);
         deleteList.append(folder + QString("/") + file);
     }
     else
     {
-        lockedList.append(iconItem->itemInfo().name);
+        lockedList.append(info.name);
     }
 }
 
@@ -2004,6 +2004,8 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
 
         if (iconItem)
         {
+            CamItemInfo info = iconItem->itemInfo();
+
             if (onlySelected)
             {
                 if (iconItem->isSelected())
@@ -2012,12 +2014,12 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                     {
                         if (iconItem->isDownloaded())
                         {
-                            checkItem4Deletion(iconItem, folders, files, deleteList, lockedList);
+                            checkItem4Deletion(info, folders, files, deleteList, lockedList);
                         }
                     }
                     else
                     {
-                        checkItem4Deletion(iconItem, folders, files, deleteList, lockedList);
+                        checkItem4Deletion(info, folders, files, deleteList, lockedList);
                     }
                 }
             }
@@ -2027,12 +2029,12 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                 {
                     if (iconItem->isDownloaded())
                     {
-                        checkItem4Deletion(iconItem, folders, files, deleteList, lockedList);
+                        checkItem4Deletion(info, folders, files, deleteList, lockedList);
                     }
                 }
                 else
                 {
-                    checkItem4Deletion(iconItem, folders, files, deleteList, lockedList);
+                    checkItem4Deletion(info, folders, files, deleteList, lockedList);
                 }
             }
         }

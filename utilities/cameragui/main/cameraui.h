@@ -127,7 +127,7 @@ private:
     void refreshCollectionFreeSpace();
     void startKdePreviewJob();
     void deleteItems(bool onlySelected, bool onlyDownloaded);
-    void checkItem4Deletion(CameraIconItem* iconItem, QStringList& folders, QStringList& files,
+    void checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
                             QStringList& deleteList, QStringList& lockedList);
 
 private Q_SLOTS:
