@@ -116,7 +116,7 @@ private:
     void readSettings();
     void saveSettings();
     bool createAutoAlbum(const KUrl& parentURL, const QString& sub,
-                         const QDate& date, QString& errMsg);
+                         const QDate& date, QString& errMsg) const;
 
     bool dialogClosed();
     void finishDialog();

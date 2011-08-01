@@ -2118,10 +2118,10 @@ void CameraUI::slotFileView(const CamItemInfo& info)
 
 void CameraUI::slotMetadata(const QString& folder, const QString& file, const DMetadata& meta)
 {
-    CameraIconItem* item = d->view->findItem(folder, file);
-    if (item)
+    CamItemInfo info = d->view->findItemInfo(folder, file);
+    if (!info.isNull())
     {
-        d->rightSideBar->itemChanged(item->itemInfo(), meta);
+        d->rightSideBar->itemChanged(info, meta);
     }
 }
 
@@ -2203,7 +2203,7 @@ void CameraUI::slotItemsSelected(const CamItemInfo& info, bool selected)
 }
 
 bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
-                               const QDate& date, QString& errMsg)
+                               const QDate& date, QString& errMsg) const
 {
     KUrl u(parentURL);
     u.addPath(sub);
