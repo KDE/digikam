@@ -569,7 +569,7 @@ void CameraIconView::slotContextMenu(IconItem* item, const QPoint&)
     {
         if (choice == viewAction)
         {
-            emit signalFileView(camItem);
+            emit signalFileView(camItem->itemInfo());
         }
         else if (choice == downAction)
         {
@@ -602,7 +602,7 @@ void CameraIconView::slotDoubleClicked(IconItem* item)
         return;
     }
 
-    emit signalFileView(static_cast<CameraIconItem*>(item));
+    emit signalFileView(static_cast<CameraIconItem*>(item)->itemInfo());
 }
 
 void CameraIconView::slotSelectAll()

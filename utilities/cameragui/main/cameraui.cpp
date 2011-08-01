@@ -568,8 +568,8 @@ void CameraUI::setupConnections()
     connect(d->view, SIGNAL(signalSelected(CameraIconItem*,bool)),
             this, SLOT(slotItemsSelected(CameraIconItem*,bool)));
 
-    connect(d->view, SIGNAL(signalFileView(CameraIconItem*)),
-            this, SLOT(slotFileView(CameraIconItem*)));
+    connect(d->view, SIGNAL(signalFileView(const CamItemInfo&)),
+            this, SLOT(slotFileView(const CamItemInfo&)));
 
     connect(d->view, SIGNAL(signalUpload(KUrl::List)),
             this, SLOT(slotUploadItems(KUrl::List)));

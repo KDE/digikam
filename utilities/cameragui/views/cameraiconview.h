@@ -101,7 +101,7 @@ public:
 Q_SIGNALS:
 
     void signalSelected(CameraIconItem*, bool);
-    void signalFileView(CameraIconItem*);
+    void signalFileView(const CamItemInfo&);
     void signalThumbSizeChanged(int);
 
     void signalUpload(const KUrl::List&);
