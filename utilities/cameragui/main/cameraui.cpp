@@ -1484,8 +1484,6 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
             map.insert(*it, d->view->countItemsByFolder(*it));
     }
 
-    kDebug() << map;
-    
     QPointer<CameraFolderDialog> dlg = new CameraFolderDialog(this, map, d->controller->cameraTitle(), rootPath);
 
     if (dlg->exec() != QDialog::Accepted)

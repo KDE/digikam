@@ -139,8 +139,6 @@ CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
     while (*it)
     {
         CameraFolderItem* lvItem = dynamic_cast<CameraFolderItem*>(*it);
-        kDebug() << "Search for : " << folderPath << " :: " << lvItem->text(0) << " :: "
-                    << lvItem->folderName() << " :: " << lvItem->folderPath();
 
         if (lvItem && lvItem->folderPath() == folderPath)
         {
