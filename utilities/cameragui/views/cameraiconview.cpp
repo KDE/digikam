@@ -308,8 +308,6 @@ QMap<QString, int> CameraIconView::countItemsByFolders() const
         }
     }
 
-    kDebug() << map;
-
     return map;
 }
 
