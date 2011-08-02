@@ -44,58 +44,55 @@ class DIGIKAM_EXPORT CloneFilter : public DImgThreadedFilter
 
 public:
 
-        explicit CloneFilter(QObject* parent = 0);
-        explicit CloneFilter(const DImg* orgImage, constDImg *Mask, const QPoint dis, QObject *parent = 0 ) ;
-        ~CloneFilter();
+    explicit CloneFilter(QObject* parent = 0);
+    explicit CloneFilter(DImg* orgImage, DImg* Mask, const QPoint& dis, QObject* parent = 0 ) ;
+    ~CloneFilter();
 
-        static QString          FilterIdentifier()
-        {
-            return "digikam:CloneFilter";
-        }
+    static QString          FilterIdentifier()
+    {
+        return "digikam:CloneFilter";
+    }
 
-        static QString          DisplayableName()
-        {
-            return I18N_NOOP("Clone Tool");
-        }
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Clone Tool");
+    }
 
-        static QList<int>       SupportedVersions()
-        {
-            return QList<int>() << 1;
-        }
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
 
-        static int              CurrentVersion()
-        {
-            return 1;
-        }
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
 
-        virtual QString         filterIdentifier() const
-        {
-            return FilterIdentifier();
-        }
+    virtual QString         filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
 
-        virtual FilterAction    filterAction();
-        void    readParameters(const FilterAction& action);
-
-private:
-
-        void filterImage();
-        void divergents(float* I, float* O);
-        bool inimage(DImg* *img, int x, int y );
-
-public:
-
-        DImg* getResultImg;
+    virtual FilterAction    filterAction();
+    void    readParameters(const FilterAction& action);
 
 private:
 
-        QColor MASK_BG;
-        QPoint dis;
-        DImg*  originalImage; // original image
-        DImg*  maskImage;     // mask image
-        DImg*  resultImage;
-   };
+    void filterImage();
+    void divergents(float* I, float* O);
+    bool inimage(DImg* img, int x, int y );
+    bool inBrushpixmap(QPixmap* brushmap, int x, int y);
+    DImg* getResultImg() const;
+
+private:
+
+    QColor MASK_BG;
+    QPoint dis;
+    DImg*  originalImage; // original image
+    DImg*  maskImage;     // mask image
+    DImg*  resultImage;
+};
 
 } // namespace Digikam
 
 #endif // CLONEFILTER_H
-

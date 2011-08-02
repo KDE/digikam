@@ -324,7 +324,7 @@ CloneContainer CloneSettings::settings()const
 
 void CloneSettings::slotBrushIdChanged(int id)
 {
-    if(id >=0 )
+    if(id >= 0 )
         d->brushID = id;
 }
 
