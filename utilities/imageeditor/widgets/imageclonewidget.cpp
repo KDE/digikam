@@ -30,28 +30,24 @@
 //local includes
 
 #include "dcolor.h"
+#include "imageiface.h"
 
 namespace Digikam
 {
 
-class  ImageCloneWidget::ImageCloneWidgetPriv
+class ImageCloneWidget::ImageCloneWidgetPriv
 {
 public:
     ImageCloneWidgetPriv():
         sixteenBit(false),
         width(0),
         height(0),
-        rect(0),
         Border(0),
-        centerPoint(0),
-        startPoint(0),
-        dis(0),
         pixmap(0),
         preveiwMask(0),
         maskImage(0),
         preview(0),
-        iface(0),
-        settings(0)
+        iface(0)
     {
     }
 
@@ -60,13 +56,13 @@ public:
     int            height;
     QRect          rect;
     int            Border;
-    QColor         MASK_BG;//background color of maskimage
-    QColor         MASK_C;//forground color of maskimage
-    QColor         bgColor;//background color of the widget
+    QColor         MASK_BG;     // background color of maskimage
+    QColor         MASK_C;      // forground color of maskimage
+    QColor         bgColor;     // background color of the widget
     QPoint         centerPoint; // selected centerPoint of the source area
-    QPoint         startPoint; // the first point of a stroke
-    QPoint         dis;//dis means the distance between startPoit and centerPoint, the value can be negative
-                    // Current spot position in preview coordinates.
+    QPoint         startPoint;  // the first point of a stroke
+    QPoint         dis;         // dis means the distance between startPoit and centerPoint, the value can be negative
+                                // Current spot position in preview coordinates.
     QPoint         spot;
     QPixmap*       pixmap;
 
@@ -80,6 +76,7 @@ public:
 };
 
 ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settings)
+    : d(new ImageCloneWidgetPriv)
 {
       int w = 480, h = 320;
       setMinimumSize(w, h);
@@ -87,14 +84,14 @@ ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settin
       setAttribute(Qt::WA_DeleteOnClose);
 
       d->iface        = new ImageIface(w, h);
-      d->iface->setPreviewType(useImageSelection);
+//FIXME      d->iface->setPreviewType(useImageSelection);
       uchar* data     = d->iface->getPreviewImage();
       d->width        = d->iface->previewWidth();
       d->height       = d->iface->previewHeight();
       bool sixteenBit = d->iface->previewSixteenBit();
       bool hasAlpha   = d->iface->previewHasAlpha();
-      d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
-      d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+      d->preview      = new DImg(d->width, d->height, sixteenBit, hasAlpha, data);
+      d->preview->setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
       delete [] data;
 
       d->pixmap        = new QPixmap(w, h);
@@ -115,7 +112,7 @@ ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settin
       DColor* backColor  = new DColor(255,255,255,255,false);//fillt maskImage with white
 
       //origImage = DImg(&imageIface()->getOriginalImg()->copy());
-      d->maskImage = DImg(&imageIface()->getOriginalImg()->copy());
+      d->maskImage = new DImg(&imageIface()->getOriginalImg()->copy());
       d->maskImage->fill(d->MASK_BG);
 
       d->preview     = DImg(&imageIface()->getPreviewImg());
