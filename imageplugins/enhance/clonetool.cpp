@@ -21,8 +21,7 @@
  *
  * ============================================================ */
 
-
-#include "clonetool.h"
+#include "clonetool.moc"
 
 //Qt includes
 
@@ -121,7 +120,6 @@ CloneTool::CloneTool(QObject* parent)
     connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotTimer()));
     connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotSettingsChanged()));
     connect(d->previewWidget,SIGNAL(drawingComplete()),this, SLOT(slotDrawingComplete()));
-
 }
 
 CloneTool::~CloneTool()
@@ -132,14 +130,17 @@ CloneTool::~CloneTool()
         delete previewRImage;
     if(d->resultImage)
         delete resultImage;
+
     delete d;
+}
+
 CloneTool::slotSettingsChanged()
 {
     d->previewWidget->setContainer(settingsView->settings());
 }
 
 void CloneTool::slotDrawingComplete()
-{  
+{
     QPoint dis = previewWidget->settings().getDis();
     CloneFilter*  previewFilter = newCloneFilter(previewWidget->getPreview(),previewWidget->getPreviewMask(),dis,this);
     setFilter(previewFilter);
@@ -153,7 +154,6 @@ void CloneTool::slotDrawingComplete()
     d->previewWidget->setPreview();
     delete previewFilter;
 
-
     dis = previewWidget->settings().getOriDis();
     CloneFilter*  orignalFilter = newCloneFilter(previewWidget->getOrigImage(),previewWidget->getMaskImg(),dis,this);
     setFilter(previewFilter);
@@ -165,7 +165,7 @@ void CloneTool::slotDrawingComplete()
     d->previewWidget->imageIface()->putOriginalImage(i18n("Clone Toll"), filter()->filterAction(),d->resultImage.stripImageData());
     d->previewWidget->updatePreview();
     delete orignalFilter;
- }
+}
 
 void CloneTool::readSettings()
 {
@@ -204,11 +204,11 @@ void CloneTool::prepareEffect()
 
     DImg* imTemp = iface->getOriginalImg()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
     DImg* maskTemp =  previewWidget->getPreviewMask();
-    float ratio = maskTemp->width()/imTemp->width();//smooth processing keeps the height and width ratio, 
-							 //so only compute width ratio is OK.
+    float ratio = maskTemp->width()/imTemp->width();// smooth processing keeps the height and width ratio, 
+                                                    // so only compute width ratio is OK.
     if(ratio!=0)
     {
-	QPoint dis = QPoint(previewWidget->getDis().x()/ratio, previewWidget->getDis().y()/ratio);
+       QPoint dis = QPoint(previewWidget->getDis().x()/ratio, previewWidget->getDis().y()/ratio);
        maskTemp->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);   
        setFilter(new CloneFilter(imTemp,maskTemp,dis,this));
     }
@@ -243,5 +243,4 @@ void CLoneTool::putFinalData()
     iface.putOriginalImage(i18n("Clone Tool"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
-
-}
+} // namespace Digikam
