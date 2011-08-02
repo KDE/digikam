@@ -64,13 +64,13 @@ namespace Digikam
     QPoint      centerPoint; // selected centerPoint of the source area
     QPoint      startPoint; // the first point of a stroke
     QPoint      dis;//dis means the distance between startPoit and centerPoint, the value can be negative
-    // Current spot position in preview coordinates.
+                    // Current spot position in preview coordinates.
     QPoint      spot;
     QPixmap*    pixmap;
 
     DImg*       preveiwMask;
     DImg*       maskImage;
-  //  DImg*       origImage;
+//  DImg*       origImage;
     DImg*       preview;
     ImageIface* iface;
 
@@ -128,11 +128,6 @@ namespace Digikam
  ImageCloneWidget::~ImageCloneWidget()
  {
       delete d->iface;
-      if (d->timerID)
-      {
-         killTimer(d->timerID);
-      }
-
       if (d->pixmap)
       {
           delete d->pixmap;
@@ -160,6 +155,13 @@ namespace Digikam
  {
     return d->iface;
  }
+
+ void ImageGuideWidget::setBackgroundColor(const QColor& bg)
+ {
+    d->bgColor = bg;
+    updatePreview();
+ }
+
  void   ImageCloneWidget::setPreview()
  {
     uchar* data     = d->iface->getPreviewImage();
@@ -447,28 +449,7 @@ void ImageCloneWidget::resizeEvent(QResizeEvent *e)
     blockSignals(false);
     emit signalResized();
 }
-
-void ImageCloneWidget::timerEvent(QTimerEvent* e)
-{
-    if (e->timerId() == d->timerID)
-    {
-        if (d->flicker == 5)
-        {
-            d->flicker=0;
-        }
-        else
-        {
-            d->flicker++;
-        }
-
-        updatePreview();
-    }
-    else
-    {
-        QWidget::timerEvent(e);
-     }
-}
-//================================================================================
+//===============================================================
 
 void ImageCloneWidget::paintEvent(QPaintEvent *)
 {
