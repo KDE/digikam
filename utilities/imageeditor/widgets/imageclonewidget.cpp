@@ -24,7 +24,6 @@
 
 #include <QPainter>
 
-
 //local includes
 
 #include "imageclonewidget.h"
@@ -34,147 +33,149 @@
 
 namespace Digikam
 {
-    class  ImageCloneWidget::ImageCloneWidgetPriv
+ class  ImageCloneWidget::ImageCloneWidgetPriv
+ {
+  public:
+    ImageCloneWidgetPriv():
+    sixteenBit(false),
+    width(0),
+    height(0),
+    rect(0),
+    Border(0),
+    centerPoint(0),
+    startPoint(0),
+    dis(0),
+    pixmap(0),
+    preveiwMask(0),
+    maskImage(0),
+    preview(0),
+    iface(0),
+    m_settings(0)
     {
-    public:
-        ImageCloneWidgetPriv():
-        sixteenBit(false),
-        width(0),
-        height(0),
-        rect(0),
-        Border(0),
-        centerPoint(0),
-        startPoint(0),
-        dis(0),
-        pixmap(0),
-        preveiwMask(0),
-        maskImage(0),
-        preview(0),
-        iface(0),
-        m_settings(0)
-        {
-        }
-
-        bool        sixteenBit;
-        int         width;
-        int         height;
-        QRect       rect;
-        int         Border;
-        QPoint      centerPoint; // selected centerPoint of the source area
-        QPoint      startPoint; // the first point of a stroke
-        QPoint      dis;//dis means the distance between startPoit and centerPoint, the value can be negative
-        // Current spot position in preview coordinates.
-        QPoint      spot;
-
-        QPixmap*    pixmap;
-
-        DImg*       preveiwMask;
-        DImg*       maskImage;
-      //  DImg*       origImage;
-        DImg*       preview;
-
-        ImageIface* iface;
-
-        CloneContainer         m_settings;
-    };
-
-    ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settings)
-
-    {
-
-        int w = 480, h = 320;
-        setMinimumSize(w, h);
-        setMouseTracking(true);
-        setAttribute(Qt::WA_DeleteOnClose);
-
-        d->iface        = new ImageIface(w, h);
-        d->iface->setPreviewType(useImageSelection);
-        uchar* data     = d->iface->getPreviewImage();
-        d->width        = d->iface->previewWidth();
-        d->height       = d->iface->previewHeight();
-        bool sixteenBit = d->iface->previewSixteenBit();
-        bool hasAlpha   = d->iface->previewHasAlpha();
-        d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
-        d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
-        delete [] data;
-
-        d->pixmap        = new QPixmap(w, h);
-        d->rect          = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
-
-        d->paintColor.setRgb(255, 255, 255, 255);
-        d->spot.setX( d->width  / 2 );
-        d->spot.setY( d->height / 2 );
-
-        // setMouseTracking(true);//alreadhave in imageguidewidget
-        QPoint centerPoint = new QPoint(0,0);
-        QPoint startPoint = new QPoint(0,0);
-        QPoint dis = new QPoint(0,0);
-
-        d->Border =10;
-        DColor* backColor = new DColor(255,255,255,255,false);//fillt maskImage with white
-
-        //origImage = DImg(&imageIface()->getOriginalImg()->copy());
-        d->maskImage = DImg(&imageIface()->getOriginalImg()->copy());
-        d->maskImage->fill(backColor);
-
-        d->preview = DImg(&imageIface()->getPreviewImg());
-        d->preveiwMask = DImg(d->preview->copy());
-        d->preveiwMask->fill(backColor);
-
-        d->m_settings = settings;
     }
+    bool        sixteenBit;
+    int         width;
+    int         height;
+    QRect       rect;
+    int         Border;
+    QCOlor      MASK_BG;//background color of maskimage
+    QColor      MASK_C;//forground color of maskimage
+   QColor       bgColor;//background color of the widget
+    QPoint      centerPoint; // selected centerPoint of the source area
+    QPoint      startPoint; // the first point of a stroke
+    QPoint      dis;//dis means the distance between startPoit and centerPoint, the value can be negative
+    // Current spot position in preview coordinates.
+    QPoint      spot;
+    QPixmap*    pixmap;
 
-    ImageCloneWidget::~ImageCloneWidget()
-    {
-        delete d->iface;
+    DImg*       preveiwMask;
+    DImg*       maskImage;
+  //  DImg*       origImage;
+    DImg*       preview;
+    ImageIface* iface;
 
-        if (d->timerID)
-        {
-            killTimer(d->timerID);
-        }
+    CloneContainer         m_settings;
+  };
 
-        if (d->pixmap)
-        {
-            delete d->pixmap;
-        }
+ ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settings)
 
-        if (d->preveiwMask)
-        {
-            delete d->preveiwMask;
-        }
+ {
 
-        if (d->maskImage)
-        {
-            delete d->maskImage;
-        }
+      int w = 480, h = 320;
+      setMinimumSize(w, h);
+      setMouseTracking(true);
+      setAttribute(Qt::WA_DeleteOnClose);
 
-        if (d->preview)
-        {
-            delete d->preview;
-        }
+      d->iface        = new ImageIface(w, h);
+      d->iface->setPreviewType(useImageSelection);
+      uchar* data     = d->iface->getPreviewImage();
+      d->width        = d->iface->previewWidth();
+      d->height       = d->iface->previewHeight();
+      bool sixteenBit = d->iface->previewSixteenBit();
+      bool hasAlpha   = d->iface->previewHasAlpha();
+      d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
+      d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+      delete [] data;
 
-        delete d;
-    }
+      d->pixmap        = new QPixmap(w, h);
+      d->rect          = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
 
-    void   ImageCloneWidget::setPreview()
-    {
-        uchar* data     = d->iface->getPreviewImage();
-        d->preview->detach();
-        d->preview->putImageData(data);
-        d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+      d->paintColor.setRgb(255, 255, 255, 255);
+      d->spot.setX( d->width  / 2 );
+      d->spot.setY( d->height / 2 );
 
-        d->width        = d->iface->previewWidth();
-        d->height       = d->iface->previewHeight();
+      // setMouseTracking(true);//alreadhave in imageguidewidget
+      QPoint centerPoint = new QPoint(0,0);
+      QPoint startPoint = new QPoint(0,0);
+      QPoint dis = new QPoint(0,0);
+      d->MASK_BG= new QColor(255,255,255);
+      d->MASK_C = new QColor(0,0,0);
+      d->bgColor     = palette().color(QPalette::Base);
+      d->Border =10;
+      DColor* backColor = new DColor(255,255,255,255,false);//fillt maskImage with white
 
-        d->preveiwMask->detach();
-        d->preveiwMask = DImg(d->preview->copy());
-        d->preveiwMask->fill(backColor);
+      //origImage = DImg(&imageIface()->getOriginalImg()->copy());
+      d->maskImage = DImg(&imageIface()->getOriginalImg()->copy());
+      d->maskImage->fill(d->MASK_BG);
 
-        d->maskImage->detach();
-        d->maskImage = DImg(&imageIface()->getOriginalImg()->copy());
-        d->maskImage->fill(backColor);
+      d->preview = DImg(&imageIface()->getPreviewImg());
+      d->preveiwMask = DImg(d->preview->copy());
+      d->preveiwMask->fill(d->MASK_BG);
 
+      d->m_settings = settings;
+ }
+
+ ImageCloneWidget::~ImageCloneWidget()
+ {
+      delete d->iface;
+      if (d->timerID)
+      {
+         killTimer(d->timerID);
+      }
+
+      if (d->pixmap)
+      {
+          delete d->pixmap;
+      }
+
+      if (d->preveiwMask)
+      {
+          delete d->preveiwMask;
+      }
+
+      if (d->maskImage)
+      {
+         delete d->maskImage;
+      }
+
+     if (d->preview)
+     {
+        delete d->preview;
      }
+
+     delete d;
+  }
+
+ ImageIface* ImageCloneWidget::imageIface() const
+ {
+    return d->iface;
+ }
+ void   ImageCloneWidget::setPreview()
+ {
+    uchar* data     = d->iface->getPreviewImage();
+    d->preview->detach();
+    d->preview->putImageData(data);
+    d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+    d->width        = d->iface->previewWidth();
+    d->height       = d->iface->previewHeight();
+    d->preveiwMask->detach();
+    d->preveiwMask = DImg(d->preview->copy());
+    d->preveiwMask->fill(d->MSSK_BG);
+
+    d->maskImage->detach();
+    d->maskImage = DImg(&imageIface()->getOriginalImg()->copy());
+    d->maskImage->fill(d->MASK_BG);
+ }
 
 
   /*  void   ImageCloneWidget::setOriginalImage()
@@ -187,9 +188,9 @@ namespace Digikam
 */
 
  void ImageCloneWidget::setContainer(const CloneContainer& settings)
-    {
-        d->m_settings = settings;
-    }
+  {
+      d->m_settings = settings;
+  }
 
 
 
@@ -245,7 +246,7 @@ DImg*  ImageCloneWidget::getPreviewMask()
 
  }
 
- void ImageCloneWidget::TreateAsBordor(DImg *image,const int x,const int y,DColor color)
+ void ImageCloneWidget::TreateAsBordor(DImg *image,const int x,const int y)
  {
      float ratio = iface->originalWidth()/d->preview->width();
      float alpha = d->m_settings.opacity/100; // brush.alpha between 0 and 100
@@ -255,8 +256,6 @@ DImg*  ImageCloneWidget::getPreviewMask()
      if((-Border < (x-getOriDis().x()) && (x-getOriDis().x()) <= 0) && ((y-getOriDis().y()) < image->height && 0<= (y-getOriDis().y())))
      {
          forgcolor = d->preview.getPixelColor(0,y-getOriDis().y());
-
-
      }
 
       else if((image->width-1 <= x-getOriDis().x())  && (x-getOriDis().x()< (image->width+Border)) && (y-getOriDis().y() < image->height) && (0<= y-getOriDis().y()))
@@ -289,7 +288,7 @@ DImg*  ImageCloneWidget::getPreviewMask()
          d->preveiwMask->setPixelColor(pre.x(),pre.y(),color);
 
         // origImage.setPixelColor(x,y,newcolor);
-         d->maskImage.setPixelColor(x,y,color);
+         d->maskImage.setPixelColor(x,y,d->MASK_C);//08/02
  }
 
 
@@ -305,7 +304,7 @@ void ImageCloneWidget::addToMask(const QPoint point)
 
     int mapDisx = p.x - mainDia/2;
     int mapDisy = p.y - mainDia/2;
-    QColor bac = new QColor(255,255,255);
+   
     float alpha = d->m_settings.opacity/100; // alpha between 0 and 1
 
     QPixmap brushmap = d->m_settings.brush.getPixmap().scaled(QSize(d->m_settings.mainDia,d->m_settings.mainDia),Qt::KeepAspectRatio);
@@ -317,7 +316,7 @@ void ImageCloneWidget::addToMask(const QPoint point)
                  if(inBrushpixmap(brushmap,i,j))
                  {
 
-                        if(inimage(d->maskImage,i,j) && d->maskImage.getPixelColor(i,j)==bac)
+                        if(inimage(d->maskImage,i,j) && d->maskImage.getPixelColor(i,j)== d->MASK_BG)
                         {
                             DColor color = brushimg.getPixelColor(i-mapDisx,y-mapDisy);
                             if(color.alpha()!=0)
@@ -327,15 +326,15 @@ void ImageCloneWidget::addToMask(const QPoint point)
 
                                     if(inimage(d->maskImage ,i-getOriDis.x(),j-getOriDis.y()))
                                      {
-                                         d->maskImage.setPixelColor(i,j,color);
+                                         d->maskImage.setPixelColor(i,j,d->MASK_C);
                                          QPoint pre = new QPoint();
                                          pre.setX(i*width()/iface->originalWidth());
                                          pre.setY(j*height()/iface->originaHeight());
-                                         d->preveiwMask->setPixelColor(pre.x(),pre.y(),color);
+                                         d->preveiwMask->setPixelColor(pre.x(),pre.y(),d->MASK_C);
 
                                          DColor forgcolor = d->preview.getPixelColor(i/ratio-dis.x(),j/ratio-dis.y());
                                          DColor bacgcolor = origImage.getPixelColor(i/ratio,j/ratio);
-                                         DColor  newcolor = new DColor();
+                                         DColor newcolor = new DColor();
                                          newcolor.setRed(forgcolor.red()*alpha + bacgcolor.red()*(1-alpha)) ;
                                          newcolor.setGreen(forgcolor.green()*alpha + bacgcolor.green()*(1-alpha));
                                          newcolor.setBlue(forgcolor.blue()*alpha + bacgcolor.blue()*(1-alpha));
@@ -345,7 +344,7 @@ void ImageCloneWidget::addToMask(const QPoint point)
                                        //  origImage.setPixelColor(i,j,newcolor);
                                      }
                                      else
-                                         TreateAsBordor(image,i,j,color);
+                                         TreateAsBordor(image,i,j);
                             }
 
                          }
@@ -371,9 +370,8 @@ void ImageCloneWidget::mousePressEvent(QMouseEvent* e)
                   if(d->m_settings.drawMode)
                     {
                       centerPoint = spot;
-                      upDis();
-                      DColor* backColor = new DColor(255,255,255,255,false);//fillt maskImage with white
-                      d->maskImage->fill(backColor);
+                      upDis();                      
+                      d->maskImage->fill(d->MASK_BG);//fill maskImage with white
 
                    }
                   else if(d->m_settings.selectMode)
@@ -490,6 +488,7 @@ void ImageCloneWidget::updatePixmap()
     QPainter p(d->pixmap);
     p.setRenderHint(QPainter::Antialiasing, true);
     p.setBackgroundMode(Qt::TransparentMode);
+    d->pixmap->fill();
     d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(), d->rect.width(), d->rect.height(), &p);
 
 }
