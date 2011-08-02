@@ -1474,19 +1474,9 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
         }
     }
 
-    QString       rootPath = d->controller->cameraPath();
-    QMap<QString, int> map = d->view->countItemsByFolders();
-
-/*    QMap<QString, int> map;
-    map.insert(QString("/"), d->view->countItemsByFolder(rootPath));
-
-    for (QStringList::const_iterator it = d->cameraFolderList.constBegin();
-         it != d->cameraFolderList.constEnd(); ++it)
-    {
-            map.insert(*it, d->view->countItemsByFolder(*it));
-    }
-*/
-    QPointer<CameraFolderDialog> dlg = new CameraFolderDialog(this, map, d->controller->cameraTitle(), rootPath);
+    QMap<QString, int> map           = d->view->countItemsByFolders();
+    QPointer<CameraFolderDialog> dlg = new CameraFolderDialog(this, map, d->controller->cameraTitle(),
+                                                              d->controller->cameraPath());
 
     if (dlg->exec() != QDialog::Accepted)
     {
