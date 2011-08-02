@@ -32,41 +32,41 @@ namespace Digikam
 
 CloneBrush::CloneBrush()
 {
-    this->dia = 0;
+    m_dia = 0;
 }
 
 CloneBrush::~CloneBrush()
 {
 }
 
-int CloneBrush::getDia()
+int CloneBrush::getDia() const
 {
-    if(dia >=0 && dia <= 200)
-      return dia;
+    if(m_dia >= 0 && m_dia <= 200)
+      return m_dia;
     else
       return 0;
 }
 
-QPixmap CloneBrush::getPixmap()
+QPixmap CloneBrush::getPixmap() const
 {
-    if(!brushMap.isNull())
-        return brushMap;
+    if(!m_brushMap.isNull())
+        return m_brushMap;
     else
         return QPixmap();
 }
 
 /*
-void CloneBrush::setDia(int mdia)
+void CloneBrush::setDia(int dia)
 {
-    if(mdia>=0 && mdia<=200)
-        dia = mdia;
+    if(dia >= 0 && dia <= 200)
+        m_dia = dia;
 }
 */
 
-void CloneBrush::setPixmap(QPixmap brushmap)
+void CloneBrush::setPixmap(const QPixmap& brushmap)
 {
     if(!brushmap.isNull())
-        brushMap = brushmap;
+        m_brushMap = brushmap;
 }
 
 } // namespace Digikam

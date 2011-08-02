@@ -41,16 +41,16 @@ public:
 
 public:
 
-    QPixmap getPixmap();
-    void setPixmap(QPixmap brushmap);
-    int getDia();
+    QPixmap getPixmap() const;
+    void setPixmap(const QPixmap& brushmap);
 
+    int getDia() const;
 //  void setDia(int mdia);
 
 private:
 
-    QPixmap brushMap;
-    int     dia;
+    QPixmap m_brushMap;
+    int     m_dia;
 };
 
 } // namespace Digikam
