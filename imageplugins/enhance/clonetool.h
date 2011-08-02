@@ -21,9 +21,9 @@
  *
  * ============================================================ */
 
-
 #ifndef CLONETOOL_H
 #define CLONETOOL_H
+
 // Local includes
 
 #include "editortool.h"
@@ -32,20 +32,23 @@ using namespace Digikam;
 
 namespace DigikamFxFiltersImagePlugin
 {
- class CloneTool : public EditorToolThreaded
+
+class CloneTool : public EditorToolThreaded
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
 
-      CloneTool(QObject* parent);
-      ~CloneTool();
+    CloneTool(QObject* parent);
+    ~CloneTool();
+
 private Q_SLOTS:
 
     void slotResetSettings();
 
     void slotSettingsChanged();
     void slotDrawingComplete();
+
 private:
 
     void readSettings();
@@ -56,11 +59,11 @@ private:
     void putFinalData();
 
 private:
+
     class CloneToolPriv;
     CloneToolPriv* const d;
 };
+
 } // namespace DigikamFxFiltersImagePlugin
 
-
 #endif // CLONETOOL_H
-
