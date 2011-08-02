@@ -35,7 +35,6 @@
 namespace Digikam
 {
 
-class CameraIconView;
 class CameraFolderItem;
 
 class CameraFolderDialog : public KDialog
@@ -44,8 +43,7 @@ class CameraFolderDialog : public KDialog
 
 public:
 
-    CameraFolderDialog(QWidget* parent, CameraIconView* cameraView,
-                       const QStringList& cameraFolderList,
+    CameraFolderDialog(QWidget* parent,const QMap<QString, int>& map,
                        const QString& cameraName, const QString& rootPath);
     ~CameraFolderDialog();
 

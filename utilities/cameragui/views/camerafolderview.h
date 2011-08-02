@@ -53,9 +53,9 @@ public:
     void addRootFolder(const QString& folder, int nbItems, const QPixmap& pixmap=SmallIcon("folder"));
 
     CameraFolderItem* addFolder(const QString& folder, const QString& subFolder, int nbItems,
-                                const QPixmap& pixmap=SmallIcon("folder")) const;
+                                const QPixmap& pixmap=SmallIcon("folder"));
 
-    CameraFolderItem* findFolder(const QString& folderPath) const;
+    CameraFolderItem* findFolder(const QString& folderPath);
 
     CameraFolderItem* virtualFolder() const;
     CameraFolderItem* rootFolder() const;
