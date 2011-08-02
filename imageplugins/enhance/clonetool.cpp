@@ -62,7 +62,7 @@ class CloneTool::CloneToolPriv
 public:
 
     CloneToolPriv():
-      configGroupName("clone Tool"),
+      configGroupName("Clone Tool"),
       origImage(0),
       previewRImage(0),
       resultImage(0),
@@ -133,9 +133,7 @@ CloneTool::~CloneTool()
     if(d->resultImage)
         delete resultImage;
     delete d;
-}
-
-void CloneTool::slotSettingsChanged()
+CloneTool::slotSettingsChanged()
 {
     d->previewWidget->setContainer(settingsView->settings());
 }
@@ -206,7 +204,13 @@ void CloneTool::prepareEffect()
 
     DImg* imTemp = iface->getOriginalImg()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
     DImg* maskTemp =  previewWidget->getPreviewMask();
-    QPoint dis = previewWidget->getDis();
+    float ratio=0;
+    if( maskTemp->width()/imTemp->width() > maskTemp->height()/imTemp->height() )
+      ratio = maskTemp->width()/imTemp->width();
+    else
+      ratio = maskTemp->height()/imTemp->height();
+    QPoint dis = previewWidget->getDis()/ratio;
+    maskTemp->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);   
     setFilter(new CloneFilter(imTemp,maskTemp,dis));
     delete imTemp;
     delete maskTemp;
@@ -217,18 +221,20 @@ void CloneTool::prepareFinal()
 {
     d->previewWidget.m_settings = d->settingsView->settings();
     ImageIface iface(0, 0);
-    DImg* imTemp = previewWidget->getPreview();
-    DImg* maskTemp =  previewWidget->getPreviewMask();
+    // DImg* imTemp = previewWidget->getPreview();
+    // DImg* maskTemp =  previewWidget->getPreviewMask();
+    DImg* maskTemp = previewWidget->getMaskImg();
     QPoint dis = previewWidget->getOriDis();
-    setFilter(new CloneFilter(iface.getOriginalImg(), this, settings));
+    setFilter(new CloneFilter(iface.getOriginalImg(), maskTemp, dis));
 }
 
 void CloneTool::putPreviewData()
 {
-
-        DImg preview = filter()->getTargetImage();
-        d->previewWidget->setPreviewImage(preview);
-
+  ImageIface* iface = d->previewWidget->imageIface();
+  DImg previewImg = filter()->getTargetImage().smoothScale(iface->previewWidth(), ifaace->previewHeight());
+  iface->putPreviewImage(previewImg.bits());
+  d->previewWidget->setPreviewImage(preview);
+  d->previewWIdget->updatePreview();
 }
 
 void CLoneTool::putFinalData()
