@@ -21,14 +21,11 @@
  *
  * ============================================================ */
 
-
-
-#include "clonesettings.h"
+#include "clonesettings.moc"
 
 // Qt includes
 
 #include <QVariant>
-
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QHeaderView>
@@ -65,6 +62,7 @@
 
 #include "refocusfilter.h"
 #include "clonebrush.h"
+
 using namespace KDcrawIface;
 
 namespace Digikam
@@ -73,8 +71,11 @@ namespace Digikam
 class CloneSettingsPriv
 {
 public:
-    CloneSettingsPriv():diameterInput(0),opacityInput(0){}
 
+    CloneSettingsPriv()
+      : diameterInput(0),
+      opacityInput(0)
+      {}
 
     static const QString  configBrushID;
     static const QString  configBrushShape;
@@ -93,9 +94,7 @@ public:
     bool selectMode;
     bool drawMode;
     bool drawEnable;
-
 };
-
 
 const QString CloneSettingsPriv::configBrushID("BrushID");
 const QString CloneSettingsPriv::configBrushShape("BrushShape");
@@ -104,7 +103,6 @@ const QString CloneSettingsPriv::configMainDiameter("MainDiameter");
 const QString CloneSettingsPriv::configOpacity("BrushOpacity");
 const QString CloneSettingsPriv::configSelectMode("SelectMode");
 const QString CloneSettingsPriv::configDrawMode("DrawMode");
-
 
 // --------------------------------------------------------
 
@@ -350,44 +348,4 @@ void CloneSettings::blockWidgetSignals(bool b)
     d->drawEnable->blockSignals(b); 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
-
-
-
-
+} // namespace Digikam

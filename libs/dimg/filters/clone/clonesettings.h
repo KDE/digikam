@@ -26,17 +26,17 @@
 #define CLONESETTINGS_H
 
 //Qt includes
-#include<QWidget>
+
+#include <QWidget>
 
 //KDE includes
 
-#include<kconfig.h>
+#include <kconfig.h>
 
 //Local includes
 
 #include "digikam_export.h"
-#include"clonecontainer.h"
-
+#include "clonecontainer.h"
 
 namespace Digikam
 {
@@ -46,6 +46,7 @@ class CloneSettingsPriv;
 class DIGIKAM_EXPORT CloneSettings : public QWidget
 {
     Q_OBJECT
+
 public:
 
     CloneSettings(QWidget* parent);
@@ -60,21 +61,22 @@ public:
     void writeSettings(KConfigGroup& group);
 
     void blockWidgetSignals(bool b);
+
 Q_SIGNALS:
+
     void signalSettingsChanged();
-Q_SLOTS:
+
+public Q_SLOTS:
+
     void slotBrushIdChanged(int id);
     void slotSelectModeChanged();
     void slotDrawModeChanged();
 
 private:
+
     CloneSettingsPriv* const d;
-
-
 };
 
-
-}// namespace Digikam
-
+} // namespace Digikam
 
 #endif // CLONESETTINGS_H
