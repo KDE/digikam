@@ -806,8 +806,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensdistortionfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/pixelaccess.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone/clonebrush.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone/clonefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone/clonesettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone/clonefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone/mulsymatrix.cpp
        )
 
