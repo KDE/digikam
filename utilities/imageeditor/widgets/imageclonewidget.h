@@ -36,23 +36,16 @@
 #include "clonecontainer.h"
 #include "dimg.h"
 
-
-
-
-
 namespace Digikam
 {
 
-
 class ImageCloneWidget : public QWidget
-
 {
-
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    explicit ImageCloneWidget(QWidget* parent=0,const CloneContainer& settings =CloneContainer() );
+    explicit ImageCloneWidget(QWidget* parent=0, const CloneContainer& settings=CloneContainer());
     ~ImageCloneWidget();
 
     void    mousePressEvent(QMouseEvent*);
@@ -68,20 +61,17 @@ public:
     QPoint  getDis();
     QPoint  getOriDis();
 
-
 Q_SIGNALS:
-
 
     void    drawingComplete();
     void    signalResized();
-Q_SLOTS:
+
+public Q_SLOTS:
+
     void    setPreview();
 
 private:
-    class ImageCloneWidgetPriv;
-    ImageCloneWidgetPriv*  const d;
-    
-private:
+
     bool    inimage( DImg *img,const int x,const int y);
     bool    inBrushpixmap(QPixmap* brushmap, int x, int y);
 
@@ -94,7 +84,12 @@ private:
     void    timerEvent(QTimerEvent*);
     void    updatePixmap();
 
+private:
+
+    class ImageCloneWidgetPriv;
+    ImageCloneWidgetPriv*  const d;
 };
-}
+
+} // namespace Digikam
 
 #endif // IMAGECLONEWIDGET_H

@@ -20,16 +20,16 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+#include "imageclonewidget.moc"
+
 //QT includes
 
 #include <QPainter>
 
 //local includes
 
-#include "imageclonewidget.h"
 #include "dcolor.h"
-
-
 
 namespace Digikam
 {
@@ -493,4 +493,4 @@ void ImageCloneWidget::updatePixmap()
 
 }
 
-}
+} // namespace Digikam
