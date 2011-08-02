@@ -39,6 +39,8 @@
 namespace Digikam
 {
 
+class ImageIface;//08/02
+
 class ImageCloneWidget : public QWidget
 {
     Q_OBJECT
@@ -47,20 +49,22 @@ public:
 
     explicit ImageCloneWidget(QWidget* parent=0, const CloneContainer& settings=CloneContainer());
     ~ImageCloneWidget();
-
+    void    paintEvent(QPaintEvent*);
     void    mousePressEvent(QMouseEvent*);
     void    mouseReleaseEvent(QMouseEvent*);
     void    mouseMoveEvent(QMouseEvent*);
 
     void    updatePreview();
-   // DImg*   getOrigImage();
+ // DImg*   getOrigImage();
     DImg*   getMaskImg();
-    //DImg*   getPreview();
+  //DImg*   getPreview();
     DImg*   getPreviewMask();
-    void    setContainer(const CloneContainer& settings);
+
     QPoint  getDis();
     QPoint  getOriDis();
 
+    void    setContainer(const CloneContainer& settings);
+    void    setBackgroundColor(const QColor&);
 Q_SIGNALS:
 
     void    drawingComplete();
@@ -75,7 +79,7 @@ private:
     bool    inimage( DImg *img,const int x,const int y);
     bool    inBrushpixmap(QPixmap* brushmap, int x, int y);
 
-    void    TreateAsBordor(DImg *image,const int x,const int y, DColor color);
+    void    TreateAsBordor(DImg *image,const int x,const int y);
     void    addToMask(const QPoint point);
     void    upDis();
 
