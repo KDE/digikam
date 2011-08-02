@@ -272,6 +272,8 @@ void CloneSettings::readSettings(KCongifGroup& group)
 {
     CloneContainer prm;
     CloneContainer defaultPrm = defaultSettings();
+    
+    blockWidgetSignals(true);
 
     prm.brushID = group.readEntry(d->configBrushID,        defaultPrm.brushID);
     prm.brush = group.readEntry(d->configBrushShape,       defaultPrm.brush);
@@ -280,6 +282,8 @@ void CloneSettings::readSettings(KCongifGroup& group)
     prm.opacity = group.readEntry(d->configOpacity,        defaultPrm.opacity);
     prm.selectMode = group.readEntry(d->configSelectMode,  defaultPrm.selectMode);
     prm.drawMode = group.readEntry(d->configDrawMode,      defaultPrm.drawMode);
+
+blockWidgetSignals(false);
 
     setSettings(prm);
 
@@ -339,7 +343,12 @@ void CloneSettings::slotDrawModeChanged()
     }
 }
 
-
+void CloneSettings::blockWidgetSignals(bool b)
+{
+    d->selectMode->blockSignals(b);
+    d->drawMode->blockSignals(b);
+    d->drawEnable->blockSignals(b); 
+}
 
 
 
