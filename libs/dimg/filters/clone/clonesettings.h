@@ -58,6 +58,8 @@ public:
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
+
+    void blockWidgetSignals(bool b);
 Q_SIGNALS:
     void signalSettingsChanged();
 Q_SLOTS:
