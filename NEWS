@@ -11,4 +11,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 245079 : Let the user download all before thumbnails are generated.
 004 ==> 278033 : Cannot set jpeg compression ratio (or any other save options) when exporting image.
 005 ==> 278966 : Building the unittests fails when using external libpgf.
-006 ==> 
+006 ==> 199985 : digiKam, import, writing to sd card, bad folders.
+007 ==> 
