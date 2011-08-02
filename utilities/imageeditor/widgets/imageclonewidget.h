@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class ImageIface;//08/02
+class ImageIface;
 
 class ImageCloneWidget : public QWidget
 {
@@ -49,22 +49,24 @@ public:
 
     explicit ImageCloneWidget(QWidget* parent=0, const CloneContainer& settings=CloneContainer());
     ~ImageCloneWidget();
+
     void    paintEvent(QPaintEvent*);
     void    mousePressEvent(QMouseEvent*);
     void    mouseReleaseEvent(QMouseEvent*);
     void    mouseMoveEvent(QMouseEvent*);
 
     void    updatePreview();
- // DImg*   getOrigImage();
-    DImg*   getMaskImg();
-  //DImg*   getPreview();
-    DImg*   getPreviewMask();
+    //DImg*   getOrigImage();
+    DImg*   getMaskImg() const;
+    //DImg*   getPreview();
+    DImg*   getPreviewMask() const;
 
-    QPoint  getDis();
-    QPoint  getOriDis();
+    QPoint  getDis() const;
+    QPoint  getOriDis() const;
 
     void    setContainer(const CloneContainer& settings);
     void    setBackgroundColor(const QColor&);
+
 Q_SIGNALS:
 
     void    drawingComplete();
@@ -76,11 +78,11 @@ public Q_SLOTS:
 
 private:
 
-    bool    inimage( DImg *img,const int x,const int y);
+    bool    inimage(DImg* img, const int x, const int y);
     bool    inBrushpixmap(QPixmap* brushmap, int x, int y);
 
-    void    TreateAsBordor(DImg *image,const int x,const int y);
-    void    addToMask(const QPoint point);
+    void    TreateAsBordor(DImg* image, const int x, const int y);
+    void    addToMask(const QPoint& point);
     void    upDis();
 
     void    paintEvent(QPaintEvent*);
