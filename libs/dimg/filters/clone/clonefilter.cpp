@@ -23,19 +23,19 @@
 
 #include "clonefilter.h"
 
+// C++ includes
+
+#include <cmath>
+#include <cstdlib>
+#include <cassert>
+#include <map>
+#include <iostream>
+
 //Local includes
 
 #include "taucsaddon.h"
 #include "dimg.h"
 #include "dcolor.h"
-
-// C++ includes
-
-#include <cmath>
-#include <cstdlib>
-#include <map>
-#include <iostream>
-#include <assert>
 
 typedef unsigned int uint;
 

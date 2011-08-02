@@ -96,3 +96,6 @@ private:
    };
 
 } // namespace Digikam
+
+#endif // CLONEFILTER_H
+
