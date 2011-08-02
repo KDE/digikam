@@ -35,8 +35,21 @@ CloneBrush::CloneBrush()
     m_dia = 0;
 }
 
+CloneBrush::CloneBrush(const CloneBrush& cb)
+{
+    m_dia      = cb.m_dia;
+    m_brushMap = cb.m_brushMap;
+}
+
 CloneBrush::~CloneBrush()
 {
+}
+
+CloneBrush& CloneBrush::operator=(const CloneBrush& cb)
+{
+    m_dia      = cb.m_dia;
+    m_brushMap = cb.m_brushMap;
+    return *this;
 }
 
 int CloneBrush::getDia() const
@@ -55,13 +68,11 @@ QPixmap CloneBrush::getPixmap() const
         return QPixmap();
 }
 
-/*
 void CloneBrush::setDia(int dia)
 {
     if(dia >= 0 && dia <= 200)
         m_dia = dia;
 }
-*/
 
 void CloneBrush::setPixmap(const QPixmap& brushmap)
 {

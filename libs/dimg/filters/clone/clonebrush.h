@@ -37,15 +37,20 @@ class CloneBrush : public QObject
 public:
 
     CloneBrush();
+    CloneBrush(const CloneBrush& cb);
     ~CloneBrush();
+
+    /** Equivalent to the copy constructor
+     */
+    CloneBrush& operator=(const CloneBrush& cb);
 
 public:
 
     QPixmap getPixmap() const;
-    void setPixmap(const QPixmap& brushmap);
+    void    setPixmap(const QPixmap& brushmap);
 
-    int getDia() const;
-//  void setDia(int mdia);
+    int  getDia() const;
+    void setDia(int mdia);
 
 private:
 

@@ -40,8 +40,6 @@
 namespace Digikam
 {
 
-class CloneSettingsPriv;
-
 class DIGIKAM_EXPORT CloneSettings : public QWidget
 {
     Q_OBJECT
@@ -73,6 +71,7 @@ public Q_SLOTS:
 
 private:
 
+    class CloneSettingsPriv;
     CloneSettingsPriv* const d;
 };
 

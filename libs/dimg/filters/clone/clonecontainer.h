@@ -29,7 +29,7 @@
 namespace Digikam
 {
 
- class DIGIKAM_EXPORT CloneContainer
+class DIGIKAM_EXPORT CloneContainer
 {
 public:
 
