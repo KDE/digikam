@@ -159,7 +159,6 @@ public:
     QString                       cameraTitle;
 
     QStringList                   currentlyDeleting;
-    QStringList                   cameraFolderList;
     QSet<QString>                 foldersToScan;
     CamItemInfoList               filesToBeAdded;
 

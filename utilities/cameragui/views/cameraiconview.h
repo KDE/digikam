@@ -112,6 +112,10 @@ Q_SIGNALS:
     void signalDelete();
     void signalToggleLock();
     void signalNewSelection(bool);
+
+    /** This signal is emited if icon view item do not have a valid thumbnails.
+     *  By this way camera controller is called to get thumbs on the fly, to limit camera connection time.
+     */
     void signalPrepareRepaint(const CamItemInfoList&);
 
 public Q_SLOTS:

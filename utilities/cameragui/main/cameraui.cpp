@@ -1110,8 +1110,6 @@ void CameraUI::slotFolderList(const QStringList& folderList)
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->setProgressTotalSteps(0);
 
-    d->cameraFolderList = folderList;
-
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     bool useMetadata          = group.readEntry(d->configUseMetadataDateEntry, false);
@@ -1280,18 +1278,9 @@ void CameraUI::slotRequestThumbnails(const CamItemInfoList& list)
 {
     if (list.isEmpty()) return;
 
-    QList<QVariant> itemsList;
-
-    foreach(CamItemInfo info, list)
-    {
-        CameraIconItem* citem = d->view->findItem(info.folder, info.name);
-        if (citem && !citem->hasValidThumbnail())
-            itemsList.append(QStringList() << citem->itemInfo().folder << citem->itemInfo().name);
-    }
-
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->setProgressTotalSteps(0);
-    d->controller->getThumbsInfo(itemsList);
+    d->controller->getThumbsInfo(list);
 }
 
 void CameraUI::slotThumbInfo(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumbnail)
@@ -1539,7 +1528,7 @@ void CameraUI::slotUploaded(const CamItemInfo& itemInfo)
     }
 
     d->view->addItem(itemInfo);
-    d->controller->getThumbnail(itemInfo.folder, itemInfo.name);
+    d->controller->getThumbsInfo(CamItemInfoList() << itemInfo);
     refreshFreeSpace();
 }
 

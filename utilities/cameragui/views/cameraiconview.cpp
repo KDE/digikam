@@ -970,11 +970,9 @@ void CameraIconView::prepareRepaint(const QList<IconItem*>& list)
 
     foreach (IconItem* item, list)
     {
-        if (item)
-        {
-            CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+        if (iconItem && !iconItem->hasValidThumbnail())
             infos << iconItem->itemInfo();
-        }
     }
 
     emit signalPrepareRepaint(infos);

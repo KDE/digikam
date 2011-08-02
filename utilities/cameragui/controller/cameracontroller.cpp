@@ -1042,19 +1042,20 @@ void CameraController::listFiles(const QString& folder, bool useMetadata)
     addCommand(cmd);
 }
 
-void CameraController::getThumbnail(const QString& folder, const QString& file)
-{
-    QList<QVariant> list;
-    list.append(QStringList() << folder << file);
-    getThumbsInfo(list);
-}
-
-void CameraController::getThumbsInfo(const QList<QVariant>& list)
+void CameraController::getThumbsInfo(const CamItemInfoList& list)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
     cmd->action        = CameraCommand::gp_thumbsinfo;
-    cmd->map.insert("list", QVariant(list));
+
+    QList<QVariant> itemsList;
+
+    foreach(CamItemInfo info, list)
+    {
+        itemsList.append(QStringList() << info.folder << info.name);
+    }
+
+    cmd->map.insert("list", QVariant(itemsList));
     addCommand(cmd);
 }
 

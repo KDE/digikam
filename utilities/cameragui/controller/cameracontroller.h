@@ -79,12 +79,10 @@ public:
     void getMetadata(const QString& folder, const QString& file);
     void getCameraInformation();
     void getPreview();
-    void getThumbnail(const QString& folder, const QString& file);
 
-    /** Get thumbnails for a list of camera item plus advanced information from metadata.
-     *  'list' is a list of QStringList composed of 2 values : item path and item filename.
+    /** Get thumbnails for a list of camera items plus advanced information from metadata.
      */
-    void getThumbsInfo(const QList<QVariant>& list);
+    void getThumbsInfo(const CamItemInfoList& infoList);
 
     void downloadPrep();
     void download(const DownloadSettingsContainer& downloadSettings);
