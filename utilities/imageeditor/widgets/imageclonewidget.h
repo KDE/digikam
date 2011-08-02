@@ -50,11 +50,6 @@ public:
     explicit ImageCloneWidget(QWidget* parent=0, const CloneContainer& settings=CloneContainer());
     ~ImageCloneWidget();
 
-    void    paintEvent(QPaintEvent*);
-    void    mousePressEvent(QMouseEvent*);
-    void    mouseReleaseEvent(QMouseEvent*);
-    void    mouseMoveEvent(QMouseEvent*);
-
     void    updatePreview();
     //DImg*   getOrigImage();
     DImg*   getMaskImg() const;
@@ -89,6 +84,10 @@ private:
     void    resizeEvent(QResizeEvent*);
     void    timerEvent(QTimerEvent*);
     void    updatePixmap();
+
+    void    mousePressEvent(QMouseEvent*);
+    void    mouseReleaseEvent(QMouseEvent*);
+    void    mouseMoveEvent(QMouseEvent*);
 
 private:
 

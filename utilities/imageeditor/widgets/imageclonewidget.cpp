@@ -51,7 +51,7 @@ public:
         maskImage(0),
         preview(0),
         iface(0),
-        m_settings(0)
+        settings(0)
     {
     }
 
@@ -60,7 +60,7 @@ public:
     int            height;
     QRect          rect;
     int            Border;
-    QCOlor         MASK_BG;//background color of maskimage
+    QColor         MASK_BG;//background color of maskimage
     QColor         MASK_C;//forground color of maskimage
     QColor         bgColor;//background color of the widget
     QPoint         centerPoint; // selected centerPoint of the source area
@@ -192,7 +192,7 @@ void   ImageCloneWidget::setOriginalImage()
 
 void ImageCloneWidget::setContainer(const CloneContainer& settings)
 {
-    d->m_settings = settings;
+    d->settings = settings;
 }
 
 
@@ -249,7 +249,7 @@ bool ImageCloneWidget::inimage(DImg *img, const int x, const int y ) const
 void ImageCloneWidget::TreateAsBordor(DImg* image, const int x, const int y)
 {
     float ratio = iface->originalWidth()/d->preview->width();
-    float alpha = d->m_settings.opacity/100; // brush.alpha between 0 and 100
+    float alpha = d->settings.opacity/100; // brush.alpha between 0 and 100
     DColor forgcolor;
     DColor bacgcolor;
     DColor  newcolor = new DColor();
@@ -296,14 +296,14 @@ void ImageCloneWidget::addToMask(const QPoint& point)
     float ratio = iface->originalWidth()/d->preview->width();
     p.setX(point.x()*iface->originalWidth()/d->preview->width()) ;
     p.setY(point.y()*iface->originalHeight()/d->preview->height()) ;
-    int mainDia = d->m_settings.mainDia*ratio;
+    int mainDia = d->settings.mainDia*ratio;
 
     int mapDisx = p.x - mainDia/2;
     int mapDisy = p.y - mainDia/2;
 
-    float alpha = d->m_settings.opacity/100; // alpha between 0 and 1
+    float alpha = d->settings.opacity/100; // alpha between 0 and 1
 
-    QPixmap brushmap = d->m_settings.brush.getPixmap().scaled(QSize(d->m_settings.mainDia,d->m_settings.mainDia),Qt::KeepAspectRatio);
+    QPixmap brushmap = d->settings.brush.getPixmap().scaled(QSize(d->settings.mainDia, d->settings.mainDia), Qt::KeepAspectRatio);
     DImg* brushimg =  DImg(brushmap.toImage());
 
     for(int j = p.y-mainDia/2; j < p.y+mainDia/2 ; j++)
@@ -362,14 +362,14 @@ void ImageCloneWidget::mousePressEvent(QMouseEvent* e)
             //QPoint p = getSpotPosition();
             if(inimage(d->preview,spot.x(),spot.y()))
             {
-                if(d->m_settings.drawMode)
+                if(d->settings.drawMode)
                 {
                     centerPoint = spot;
                     upDis();
                     d->maskImage->fill(d->MASK_BG);//fill maskImage with white
 
                 }
-                else if(d->m_settings.selectMode)
+                else if(d->settings.selectMode)
                 {
                     QPainter p(&d->preview);
                     p.setRenderHint(QPainter::Antialiasing, true);
@@ -387,7 +387,7 @@ void ImageCloneWidget::mouseReleaseEvent(QMouseEvent* e)
 {
     if (d->rect.contains(e->x(), e->y()))
     {
-        if(d->m_settings.selectMode)
+        if(d->settings.selectMode)
             emit drawingComplete();
     }
 }
