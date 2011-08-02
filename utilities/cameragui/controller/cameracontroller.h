@@ -146,7 +146,6 @@ private Q_SLOTS:
 
 private:
 
-    void sendBusy(bool val);
     void sendLogMsg(const QString& msg, DHistoryView::EntryType type=DHistoryView::StartingEntry,
                     const QString& folder=QString(), const QString& file=QString());
 

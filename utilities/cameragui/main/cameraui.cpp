@@ -1277,9 +1277,6 @@ void CameraUI::slotlastPhotoFirst()
 void CameraUI::slotRequestThumbnails(const CamItemInfoList& list)
 {
     if (list.isEmpty()) return;
-
-    d->statusProgressBar->setProgressValue(0);
-    d->statusProgressBar->setProgressTotalSteps(0);
     d->controller->getThumbsInfo(list);
 }
 

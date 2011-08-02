@@ -370,7 +370,7 @@ void CameraController::run()
 {
     while (d->running)
     {
-        CameraCommand* command;
+        CameraCommand* command = 0;
 
         {
             QMutexLocker lock(&d->mutex);
@@ -381,22 +381,30 @@ void CameraController::run()
             }
             else
             {
-                sendBusy(false);
+                emit signalBusy(false);
                 d->condVar.wait(&d->mutex);
                 continue;
             }
         }
 
-        sendBusy(true);
-        executeCommand(command);
-        delete command;
+        if (command)
+        {
+            // Special case with thumbs handling. We don't need progress bar in gui.
+            if (command->action != CameraCommand::gp_thumbsinfo)
+                emit signalBusy(true);
+
+            executeCommand(command);
+            delete command;
+        }
     }
 
-    sendBusy(false);
+    emit signalBusy(false);
 }
 
 void CameraController::executeCommand(CameraCommand* cmd)
 {
+    if (!cmd) return;
+
     switch (cmd->action)
     {
         case(CameraCommand::gp_connect):
@@ -747,11 +755,6 @@ void CameraController::executeCommand(CameraCommand* cmd)
             break;
         }
     }
-}
-
-void CameraController::sendBusy(bool val)
-{
-    emit signalBusy(val);
 }
 
 void CameraController::sendLogMsg(const QString& msg, DHistoryView::EntryType type,
