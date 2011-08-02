@@ -24,7 +24,7 @@
 #ifndef CLONEFILTER_H
 #define CLONEFILTER_H
 
-//Qt includes
+// Qt includes
 
 #include <QSize>
 #include <QColor>
@@ -36,31 +36,33 @@
 #include "dimgthreadedfilter.h"
 #include "globals.h"
 
-
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT CloneFilter:public DImgThreadedFilter
-
+class DIGIKAM_EXPORT CloneFilter : public DImgThreadedFilter
 {
 
 public:
+
         explicit CloneFilter(QObject* parent = 0);
         explicit CloneFilter(const DImg* orgImage, constDImg *Mask, const QPoint dis, QObject *parent = 0 ) ;
-	~CloneFilter();
+        ~CloneFilter();
 
         static QString          FilterIdentifier()
         {
-            return "digikam:CLoneFilter";
+            return "digikam:CloneFilter";
         }
+
         static QString          DisplayableName()
         {
             return I18N_NOOP("Clone Tool");
         }
+
         static QList<int>       SupportedVersions()
         {
             return QList<int>() << 1;
         }
+
         static int              CurrentVersion()
         {
             return 1;
@@ -70,25 +72,27 @@ public:
         {
             return FilterIdentifier();
         }
+
         virtual FilterAction    filterAction();
         void    readParameters(const FilterAction& action);
 
-    private:
+private:
+
         void filterImage();
         void divergents(float* I, float* O);
         bool inimage(DImg* *img, int x, int y );
 
-
 public:
+
         DImg* getResultImg;
+
 private:
 
         QColor MASK_BG;
         QPoint dis;
-        DImg* originalImage; //original image
-        DImg* maskImage; // mask image
-        DImg* resultImage;
-
+        DImg*  originalImage; // original image
+        DImg*  maskImage;     // mask image
+        DImg*  resultImage;
    };
 
-}
+} // namespace Digikam

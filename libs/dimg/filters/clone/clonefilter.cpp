@@ -21,27 +21,27 @@
  *
  * ============================================================ */
 
-
-#include"clonefilter.h"
+#include "clonefilter.h"
 
 //Local includes
 
 #include "taucsaddon.h"
-#incldue"dimg.h"
-#include"dcolor.h"
+#include "dimg.h"
+#include "dcolor.h"
 
+// C++ includes
 
-//C++ includes
-#include<cmath>
-#include<cstdlib>
+#include <cmath>
+#include <cstdlib>
 #include <map>
 #include <iostream>
+#include <assert>
+
+typedef unsigned int uint;
+
 using std::cout;
 using std::endl;
 using std::map;
-#include <assert.h>
-typedef unsigned int uint;
-
 
 namespace Digikam
 {
@@ -369,4 +369,4 @@ void  CloneFilter::divergents(float* I, float* O)
 
 }
 
-
+} // namespace Digikam

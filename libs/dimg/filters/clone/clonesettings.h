@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #ifndef CLONESETTINGS_H
 #define CLONESETTINGS_H
 

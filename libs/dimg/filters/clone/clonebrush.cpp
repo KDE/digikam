@@ -21,9 +21,14 @@
  *
  * ============================================================ */
 
-#include"clonebrush.h"
-#include"iostream"
+#include "clonebrush.moc"
 
+// C++ includes
+
+#include <iostream>
+
+namespace Digikam
+{
 
 CloneBrush::CloneBrush()
 {
@@ -32,29 +37,36 @@ CloneBrush::CloneBrush()
 
 CloneBrush::~CloneBrush()
 {
-
 }
 
 int CloneBrush::getDia()
 {
-    if(dia>=0&&dia<=200)
+    if(dia >=0 && dia <= 200)
       return dia;
-    else return 0;
+    else
+      return 0;
 }
 
 QPixmap CloneBrush::getPixmap()
 {
     if(!brushMap.isNull())
         return brushMap;
-    else return NULL;
+    else
+        return QPixmap();
 }
-//void CloneBrush::setDia(int mdia)
-//{
-//    if(mdia>=0 && mdia<=200)
-//        dia = mdia;
-//}
+
+/*
+void CloneBrush::setDia(int mdia)
+{
+    if(mdia>=0 && mdia<=200)
+        dia = mdia;
+}
+*/
+
 void CloneBrush::setPixmap(QPixmap brushmap)
 {
     if(!brushmap.isNull())
         brushMap = brushmap;
 }
+
+} // namespace Digikam

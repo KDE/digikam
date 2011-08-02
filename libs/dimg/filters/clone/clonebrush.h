@@ -27,25 +27,32 @@
 #include <QPixmap>
 #include <QObject>
 
+namespace Digikam
+{
+
 class CloneBrush : public QObject
 {
     Q_OBJECT
 
 public:
-    CloneBrush() ;
+
+    CloneBrush();
     ~CloneBrush();
-private:
-    QPixmap brushMap;
-    int dia;
+
 public:
 
     QPixmap getPixmap();
     void setPixmap(QPixmap brushmap);
     int getDia();
-   // void setDia(int mdia);
 
+//  void setDia(int mdia);
+
+private:
+
+    QPixmap brushMap;
+    int     dia;
 };
 
-
+} // namespace Digikam
 
 #endif // CLONEBRUSH_H
