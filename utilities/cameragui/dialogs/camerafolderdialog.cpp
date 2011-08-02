@@ -95,7 +95,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget* parent, const QMap<QString, int>
     grid->setSpacing(KDialog::spacingHint());
 
     d->folderView->addVirtualFolder(cameraName);
-    d->folderView->addRootFolder(QString("/"), map[QString("/")]);
+    d->folderView->addRootFolder(QString("/"));
 
     for (QMap<QString, int>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {

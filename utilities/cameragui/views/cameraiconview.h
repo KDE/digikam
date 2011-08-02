@@ -28,6 +28,7 @@
 
 // Qt includes
 
+#include <QMap>
 #include <QRect>
 #include <QDropEvent>
 
@@ -79,7 +80,10 @@ public:
     CamItemInfo     findItemInfo(const QString& folder, const QString& file) const;
     CamItemInfo     firstItemSelected() const;
 
-    int countItemsByFolder(const QString& folder) const;
+    /** Return a map of folder and items counted
+     */
+    QMap<QString, int> countItemsByFolders() const;
+
     int itemsDownloaded() const;
 
     QPixmap itemBaseRegPixmap()      const;

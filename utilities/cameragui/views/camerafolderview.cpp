@@ -94,7 +94,8 @@ void CameraFolderView::addRootFolder(const QString& folder, int nbItems, const Q
 {
     d->rootFolder = new CameraFolderItem(d->virtualFolder, folder, folder, pixmap);
     d->rootFolder->setExpanded(true);
-    d->rootFolder->setCount(nbItems);
+    if (nbItems != -1)
+        d->rootFolder->setCount(nbItems);
 }
 
 CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QString& subFolder,

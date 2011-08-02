@@ -280,33 +280,37 @@ CameraIconItem* CameraIconView::findItem(const QString& folder, const QString& f
     return d->itemDict.value(folder+file);
 }
 
-int CameraIconView::countItemsByFolder(const QString& folder) const
+QMap<QString, int> CameraIconView::countItemsByFolders() const
 {
-    int count    = 0;
-    QString path = folder;
-
-    if (path.endsWith('/'))
-    {
-        path.truncate(path.length()-1);
-    }
+    QString                      path;
+    QMap<QString, int>           map;
+    QMap<QString, int>::iterator it;
+    CameraIconItem*              iconItem = 0;
 
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
-        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
-        QString itemFolder       = iconItem->itemInfo().folder;
-
-        if (itemFolder.endsWith('/'))
+        iconItem = static_cast<CameraIconItem*>(item);
+        path     = iconItem->itemInfo().folder;
+        if (path.endsWith('/'))
         {
-            itemFolder.truncate(itemFolder.length()-1);
+            path.truncate(path.length()-1);
         }
 
-        if (path == itemFolder)
+        it = map.find(path);
+
+        if (it == map.end())
         {
-            ++count;
+            map.insert(path, 1);
+        }
+        else
+        {
+            it.value() ++;
         }
     }
 
-    return count;
+    kDebug() << map;
+
+    return map;
 }
 
 void CameraIconView::setThumbnail(const QString& folder, const QString& filename, const QImage& image)
