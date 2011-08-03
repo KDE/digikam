@@ -136,6 +136,8 @@ void CameraHistoryUpdater::addItems(const QByteArray& id, CHUpdateItemMap& map)
         return;
     }
 
+    kDebug() << "Check download state from DB for " << map.count() << " items";
+
     QMutexLocker lock(&d->mutex);
     d->running  = true;
     d->canceled = false;

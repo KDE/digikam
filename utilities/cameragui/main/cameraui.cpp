@@ -1819,7 +1819,6 @@ void CameraUI::slotMarkAsDownloaded()
     }
 }
 
-
 void CameraUI::slotToggleLock()
 {
     int count = 0;
