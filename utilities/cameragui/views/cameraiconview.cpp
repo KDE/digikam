@@ -248,72 +248,81 @@ void CameraIconView::addItem(const CamItemInfo& info)
     CamItemInfo newinfo  = info;
     newinfo.downloadName = downloadName;
     CameraIconItem* item = new CameraIconItem(d->groupItem, newinfo, thumb);
-    d->itemDict.insert(newinfo.folder + newinfo.name, item);
+    QString sep;
+    if (!newinfo.folder.endsWith("/")) sep = QString("/");
+    d->itemDict.insert(newinfo.folder+sep+newinfo.name, item);
 }
 
 void CameraIconView::removeItem(const CamItemInfo& info)
 {
-    CameraIconItem* item = d->itemDict.value(info.folder+info.name);
-
+    CameraIconItem* item = findItem(info.folder, info.name);
     if (!item)
     {
         return;
     }
 
-    d->itemDict.remove(info.folder+info.name);
+    QString sep;
+    if (!info.folder.endsWith("/")) sep = QString("/");
+    d->itemDict.remove(info.folder+sep+info.name);
 
     setDelayedRearrangement(true);
     delete item;
     setDelayedRearrangement(false);
 }
 
-CamItemInfo CameraIconView::findItemInfo(const QString& folder, const QString& file) const
+CamItemInfo CameraIconView::findItemInfo(const QString& folder, const QString& filename) const
 {
     CamItemInfo     info;
-    CameraIconItem* item = findItem(folder, file);
+    CameraIconItem* item = findItem(folder, filename);
     if (item) info = item->itemInfo();
     return info;
 }
 
-CameraIconItem* CameraIconView::findItem(const QString& folder, const QString& file) const
+CameraIconItem* CameraIconView::findItem(const QString& folder, const QString& filename) const
 {
-    return d->itemDict.value(folder+file);
+    QString sep;
+    if (!folder.endsWith("/")) sep = QString("/");
+
+    return d->itemDict.value(folder+sep+filename);
 }
 
-int CameraIconView::countItemsByFolder(const QString& folder) const
+QMap<QString, int> CameraIconView::countItemsByFolders() const
 {
-    int count    = 0;
-    QString path = folder;
-
-    if (path.endsWith('/'))
-    {
-        path.truncate(path.length()-1);
-    }
+    QString                      path;
+    QMap<QString, int>           map;
+    QMap<QString, int>::iterator it;
+    CameraIconItem*              iconItem = 0;
 
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
-        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
-        QString itemFolder       = iconItem->itemInfo().folder;
-
-        if (itemFolder.endsWith('/'))
+        iconItem = static_cast<CameraIconItem*>(item);
+        path     = iconItem->itemInfo().folder;
+        if (path.endsWith('/'))
         {
-            itemFolder.truncate(itemFolder.length()-1);
+            path.truncate(path.length()-1);
         }
 
-        if (path == itemFolder)
+        it = map.find(path);
+
+        if (it == map.end())
         {
-            ++count;
+            map.insert(path, 1);
+        }
+        else
+        {
+            it.value() ++;
         }
     }
 
-    return count;
+    return map;
 }
 
 void CameraIconView::setThumbnail(const QString& folder, const QString& filename, const QImage& image)
 {
-    CameraIconItem* item = d->itemDict.value(folder+filename);
+    CameraIconItem* item = findItem(folder, filename);
     if (!item)
     {
+        kDebug() << "item not found : " << folder << " " << filename;
         return;
     }
 
@@ -323,13 +332,26 @@ void CameraIconView::setThumbnail(const QString& folder, const QString& filename
 
 void CameraIconView::setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo)
 {
-    CameraIconItem* item = d->itemDict.value(folder+filename);
+    CameraIconItem* item = findItem(folder, filename);
     if (!item)
     {
+        kDebug() << "item not found : " << folder << " " << filename;
         return;
     }
 
     item->setItemInfo(itemInfo);
+}
+
+void CameraIconView::setDownloaded(const CamItemInfo& itemInfo, int status)
+{
+    CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
+    if (iconItem) iconItem->setDownloaded(status);
+}
+
+void CameraIconView::toggleLock(const CamItemInfo& itemInfo)
+{
+    CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
+    if (iconItem) iconItem->toggleLock();
 }
 
 void CameraIconView::ensureItemVisible(CameraIconItem* item)
@@ -342,10 +364,9 @@ void CameraIconView::ensureItemVisible(const CamItemInfo& itemInfo)
     ensureItemVisible(itemInfo.folder, itemInfo.name);
 }
 
-void CameraIconView::ensureItemVisible(const QString& folder, const QString& file)
+void CameraIconView::ensureItemVisible(const QString& folder, const QString& filename)
 {
-    CameraIconItem* item = d->itemDict.value(folder+file);
-
+    CameraIconItem* item = findItem(folder, filename);
     if (!item)
     {
         return;
@@ -403,7 +424,8 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
 
     QList<ParseSettings> cameraFiles;
 
-    for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))
+    for (IconItem* item = (revOrder ? lastItem() : firstItem()); item;
+         (revOrder ? item = item->prevItem() : item=item->nextItem()))
     {
         CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
 
@@ -421,7 +443,8 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     d->renamer->renameManager()->addFiles(cameraFiles);
     d->renamer->renameManager()->parseFiles();
 
-    for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))
+    for (IconItem* item = (revOrder ? lastItem() : firstItem()); item;
+         (revOrder ? item = item->prevItem() : item=item->nextItem()))
     {
         QString downloadName;
         CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
@@ -968,11 +991,9 @@ void CameraIconView::prepareRepaint(const QList<IconItem*>& list)
 
     foreach (IconItem* item, list)
     {
-        if (item)
-        {
-            CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+        if (iconItem && !iconItem->hasValidThumbnail())
             infos << iconItem->itemInfo();
-        }
     }
 
     emit signalPrepareRepaint(infos);

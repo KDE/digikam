@@ -48,19 +48,19 @@ public:
     CameraIconItem(IconGroupItem* parent, const CamItemInfo& itemInfo, const QImage& thumbnail);
     ~CameraIconItem();
 
-    void       setThumbnail(const QImage& thumbnail);
+    void          setThumbnail(const QImage& thumbnail);
     /** thumbnail is valid when preview image is loaded from camera */
-    bool       hasValidThumbnail() const;
+    bool          hasValidThumbnail() const;
 
-    void       setDownloadName(const QString& downloadName);
-    void       setDownloaded(int status);
-    bool       isDownloaded() const;
+    void          setDownloadName(const QString& downloadName);
+    void          setDownloaded(int status);
+    bool          isDownloaded() const;
 
-    void       setItemInfo(const CamItemInfo& itemInfo);
-    CamItemInfo itemInfo() const;
+    void          setItemInfo(const CamItemInfo& itemInfo);
+    CamItemInfo   itemInfo() const;
 
     /** Lock on/off item (to prevent deletetion by error) */
-    void       toggleLock();
+    void          toggleLock();
 
     // reimplemented from IconItem
     virtual QRect clickToOpenRect();

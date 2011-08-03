@@ -44,6 +44,9 @@ namespace Digikam
 
 class CameraHistoryUpdater::CameraHistoryUpdaterPriv
 {
+
+public:
+
     typedef QList<CHUpdateItem> CHUpdateItemsList;
 
 public:

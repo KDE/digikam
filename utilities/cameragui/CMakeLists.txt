@@ -1,5 +1,6 @@
 SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/controller/cameracontroller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/controller/camerathumbsctrl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/controller/camerahistoryupdater.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/devices/dkcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/devices/gpcamera.cpp

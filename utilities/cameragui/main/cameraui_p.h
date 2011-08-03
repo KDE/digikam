@@ -37,7 +37,6 @@
 
 #include <kcombobox.h>
 #include <khelpmenu.h>
-#include <kio/previewjob.h>
 #include <kselectaction.h>
 #include <ktoggleaction.h>
 #include <kurl.h>
@@ -48,6 +47,7 @@
 
 // Local includes
 
+#include "camerathumbsctrl.h"
 #include "cameracontroller.h"
 #include "cameraiconview.h"
 #include "daboutdata.h"
@@ -126,9 +126,9 @@ public:
         folderDateFormat(0),
         helpMenu(0),
         dateTimeEdit(0),
-        kdeJob(0),
         advBox(0),
         splitter(0),
+        camThumbsCtrl(0),
         controller(0),
         historyUpdater(0),
         view(0),
@@ -159,7 +159,6 @@ public:
     QString                       cameraTitle;
 
     QStringList                   currentlyDeleting;
-    QStringList                   cameraFolderList;
     QSet<QString>                 foldersToScan;
     CamItemInfoList               filesToBeAdded;
 
@@ -177,8 +176,6 @@ public:
     KMenu*                        downloadMenu;
     KMenu*                        deleteMenu;
     KMenu*                        imageMenu;
-
-    KUrl::List                    kdeTodo;
 
     KAction*                      cameraCancelAction;
     KAction*                      cameraCaptureAction;
@@ -216,12 +213,11 @@ public:
 
     DDateTimeEdit*                dateTimeEdit;
 
-    KIO::PreviewJob*              kdeJob;
-
     RExpanderBox*                 advBox;
 
     SidebarSplitter*              splitter;
 
+    CameraThumbsCtrl*             camThumbsCtrl;
     CameraController*             controller;
     CameraHistoryUpdater*         historyUpdater;
 

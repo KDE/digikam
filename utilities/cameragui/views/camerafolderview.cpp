@@ -94,15 +94,16 @@ void CameraFolderView::addRootFolder(const QString& folder, int nbItems, const Q
 {
     d->rootFolder = new CameraFolderItem(d->virtualFolder, folder, folder, pixmap);
     d->rootFolder->setExpanded(true);
-    d->rootFolder->setCount(nbItems);
+    if (nbItems != -1)
+        d->rootFolder->setCount(nbItems);
 }
 
 CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QString& subFolder,
-                                              int nbItems, const QPixmap& pixmap) const
+                                              int nbItems, const QPixmap& pixmap)
 {
     CameraFolderItem* parentItem = findFolder(folder);
 
-    kDebug() << "CameraFolderView: Adding Subfolder " << subFolder
+    kDebug() << "Adding Subfolder " << subFolder
              << " of folder " << folder;
 
     if (parentItem)
@@ -117,7 +118,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         path += subFolder;
         CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, pixmap);
 
-        kDebug() << "CameraFolderView: Added ViewItem with path "
+        kDebug() << "Added ViewItem with path "
                  << item->folderPath();
 
         item->setCount(nbItems);
@@ -126,34 +127,27 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     }
     else
     {
-        kWarning() << "CameraFolderView: Could not find parent for subFolder "
+        kWarning() << "Could not find parent for subFolder "
                    << subFolder << " of folder " << folder;
         return 0;
     }
 }
 
-CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath) const
+CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
 {
-    int i                 = 0;
-    QTreeWidgetItem* item = 0;
-
-    do
+    QTreeWidgetItemIterator it(this);
+    
+    while (*it)
     {
-        item = topLevelItem(i);
+        CameraFolderItem* lvItem = dynamic_cast<CameraFolderItem*>(*it);
 
-        if (item)
+        if (lvItem && lvItem->folderPath() == folderPath)
         {
-            CameraFolderItem* lvItem = dynamic_cast<CameraFolderItem*>(item);
-
-            if (lvItem && lvItem->folderPath() == folderPath)
-            {
-                return lvItem;
-            }
+            return lvItem;
         }
 
-        ++i;
+        ++it;
     }
-    while (item);
 
     return 0;
 }

@@ -207,11 +207,12 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
 
 bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail)
 {
-    m_cancel = false;
+    m_cancel     = false;
+    QString path = folder + QString("/") + itemName;
 
     // Try to get preview from Exif data (good quality). Can work with Raw files
 
-    DMetadata metadata(folder + QString("/") + itemName);
+    DMetadata metadata(path);
     metadata.getImagePreview(thumbnail);
 
     if (!thumbnail.isNull())
@@ -221,7 +222,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     // RAW files : try to extract embedded thumbnail using libkdcraw
 
-    KDcrawIface::KDcraw::loadDcrawPreview(thumbnail, QString(folder + QString("/") + itemName));
+    KDcrawIface::KDcraw::loadDcrawPreview(thumbnail, path);
 
     if (!thumbnail.isNull())
     {
@@ -243,7 +244,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     // Note: the thumbnail extracted with this method can be in poor quality.
     // 2006/27/01 - Gilles - Tested with my Minolta Dynax 5D USM camera.
 
-    QFileInfo fi(folder + QString("/") + itemName);
+    QFileInfo fi(path);
 
     if (thumbnail.load(folder + QString("/") + fi.baseName() + QString(".thm")))        // Lowercase
     {
@@ -262,7 +263,9 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     // Finally, we trying to get thumbnail using DImg API (slow).
 
-    DImg dimgThumb(folder + QString("/") + itemName);
+    kDebug() << "Use DImg loader to get thumbnail from : " << path;
+
+    DImg dimgThumb(path);
 
     if (!dimgThumb.isNull())
     {

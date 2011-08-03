@@ -28,6 +28,7 @@
 
 // Qt includes
 
+#include <QMap>
 #include <QRect>
 #include <QDropEvent>
 
@@ -68,18 +69,22 @@ public:
 
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
     void setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo);
+    void setDownloaded(const CamItemInfo& itemInfo, int status);
+    void toggleLock(const CamItemInfo& itemInfo);
 
     void ensureItemVisible(const CamItemInfo& itemInfo);
-    void ensureItemVisible(const QString& folder, const QString& file);
+    void ensureItemVisible(const QString& folder, const QString& filename);
 
     void setThumbnailSize(int thumbSize);
     int  thumbnailSize() const;
 
-    CameraIconItem* findItem(const QString& folder, const QString& file) const;
     CamItemInfo     findItemInfo(const QString& folder, const QString& file) const;
     CamItemInfo     firstItemSelected() const;
 
-    int countItemsByFolder(const QString& folder) const;
+    /** Return a map of folder and items counted
+     */
+    QMap<QString, int> countItemsByFolders() const;
+
     int itemsDownloaded() const;
 
     QPixmap itemBaseRegPixmap()      const;
@@ -108,6 +113,10 @@ Q_SIGNALS:
     void signalDelete();
     void signalToggleLock();
     void signalNewSelection(bool);
+
+    /** This signal is emited if icon view item do not have a valid thumbnails.
+     *  By this way camera controller is called to get thumbs on the fly, to limit camera connection time.
+     */
     void signalPrepareRepaint(const CamItemInfoList&);
 
 public Q_SLOTS:
@@ -139,11 +148,12 @@ protected:
 
 private:
 
-    QString getTemplatedName(const CamItemInfo& itemInfo) const;
-    QString getCasedName(const RenameCustomizer::Case ccase, const CamItemInfo& itemInfo) const;
-    void    uploadItemPopupMenu(const KUrl::List& srcURLs);
-    void    prepareRepaint(const QList<IconItem*>& list);
-    void    ensureItemVisible(CameraIconItem* item);
+    QString         getTemplatedName(const CamItemInfo& itemInfo) const;
+    QString         getCasedName(const RenameCustomizer::Case ccase, const CamItemInfo& itemInfo) const;
+    void            uploadItemPopupMenu(const KUrl::List& srcURLs);
+    void            prepareRepaint(const QList<IconItem*>& list);
+    void            ensureItemVisible(CameraIconItem* item);
+    CameraIconItem* findItem(const QString& folder, const QString& file) const;
 
 private:
 
