@@ -1802,20 +1802,16 @@ void CameraUI::slotSkipped(const QString& folder, const QString& file)
 
 void CameraUI::slotMarkAsDownloaded()
 {
-    for (IconItem* item = d->view->firstItem(); item;
-         item = item->nextItem())
+    CamItemInfoList list = d->view->selectedItems();
+
+    foreach (CamItemInfo info, list)
     {
-        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+        d->view->setDownloaded(info, CamItemInfo::DownloadedYes);
 
-        if (iconItem->isSelected())
-        {
-            iconItem->setDownloaded(CamItemInfo::DownloadedYes);
-
-            DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
-                                           iconItem->itemInfo().name,
-                                           iconItem->itemInfo().size,
-                                           iconItem->itemInfo().mtime);
-        }
+        DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
+                                       info.name,
+                                       info.size,
+                                       info.mtime);
     }
 }
 

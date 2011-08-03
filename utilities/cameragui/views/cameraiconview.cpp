@@ -999,4 +999,21 @@ void CameraIconView::prepareRepaint(const QList<IconItem*>& list)
     emit signalPrepareRepaint(infos);
 }
 
+CamItemInfoList CameraIconView::selectedItems() const
+{
+    CamItemInfoList list;
+
+    for (IconItem* item = firstItem(); item; item = item->nextItem())
+    {
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+
+        if (iconItem->isSelected())
+        {
+            list.append(iconItem->itemInfo());
+        }
+    }
+
+    return list;
+}
+
 }  // namespace Digikam

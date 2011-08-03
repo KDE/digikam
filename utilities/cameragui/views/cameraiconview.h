@@ -80,6 +80,7 @@ public:
 
     CamItemInfo     findItemInfo(const QString& folder, const QString& file) const;
     CamItemInfo     firstItemSelected() const;
+    CamItemInfoList selectedItems() const;
 
     /** Return a map of folder and items counted
      */
