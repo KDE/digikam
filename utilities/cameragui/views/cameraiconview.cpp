@@ -76,7 +76,7 @@ public:
     CameraIconViewPriv() :
         thumbSize(ThumbnailSize::Large),
         pixmapNewPicture(SmallIcon("get-hot-new-stuff")),
-        pixmapDownloadUnknown(SmallIcon("status_unknown")),
+        pixmapDownloadUnknown(SmallIcon("svn_status")),
         progressPix(KPixmapSequence("process-working", KIconLoader::SizeSmallMedium)),
         pixmapLocked(SmallIcon("object-locked")),
         pixmapDownloaded(SmallIcon("dialog-ok")),
