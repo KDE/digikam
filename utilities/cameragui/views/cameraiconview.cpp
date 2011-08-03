@@ -313,9 +313,13 @@ QMap<QString, int> CameraIconView::countItemsByFolders() const
 
 void CameraIconView::setThumbnail(const QString& folder, const QString& filename, const QImage& image)
 {
-    CameraIconItem* item = d->itemDict.value(folder+filename);
+    QString sep;
+    if (!folder.endsWith("/")) sep = QString("/");
+
+    CameraIconItem* item = d->itemDict.value(folder+sep+filename);
     if (!item)
     {
+        kDebug() << "item not found : " << folder << " " << filename;
         return;
     }
 
@@ -325,9 +329,13 @@ void CameraIconView::setThumbnail(const QString& folder, const QString& filename
 
 void CameraIconView::setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo)
 {
-    CameraIconItem* item = d->itemDict.value(folder+filename);
+    QString sep;
+    if (!folder.endsWith("/")) sep = QString("/");
+
+    CameraIconItem* item = d->itemDict.value(folder+sep+filename);
     if (!item)
     {
+        kDebug() << "item not found : " << folder << " " << filename;
         return;
     }
 
@@ -405,7 +413,8 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
 
     QList<ParseSettings> cameraFiles;
 
-    for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))
+    for (IconItem* item = (revOrder ? lastItem() : firstItem()); item;
+         (revOrder ? item = item->prevItem() : item=item->nextItem()))
     {
         CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
 
@@ -423,7 +432,8 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     d->renamer->renameManager()->addFiles(cameraFiles);
     d->renamer->renameManager()->parseFiles();
 
-    for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))
+    for (IconItem* item = (revOrder ? lastItem() : firstItem()); item;
+         (revOrder ? item = item->prevItem() : item=item->nextItem()))
     {
         QString downloadName;
         CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);

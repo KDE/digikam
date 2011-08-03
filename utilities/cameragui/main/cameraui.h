@@ -40,19 +40,12 @@
 #include <kxmlguiwindow.h>
 #include <kurl.h>
 
-// Libkdcraw includes
-
-#include <libkdcraw/kdcraw.h>
-
 // Local includes
 
 #include "camiteminfo.h"
 #include "dhistoryview.h"
 #include "dmetadata.h"
 #include "camerahistoryupdater.h"
-
-class KFileItem;
-class KJob;
 
 namespace Digikam
 {
@@ -124,7 +117,6 @@ private:
     void hideToolBars();
     void refreshFreeSpace();
     void refreshCollectionFreeSpace();
-    void startKdePreviewJob();
     void deleteItems(bool onlySelected, bool onlyDownloaded);
     void checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
                             QStringList& deleteList, QStringList& lockedList);
@@ -150,11 +142,6 @@ private Q_SLOTS:
     void slotFileList(const CamItemInfoList& fileList);
 
     void slotRequestThumbnails(const CamItemInfoList& list);
-    void slotThumbInfo(const QString&, const QString&, const CamItemInfo&, const QImage&);
-    void slotThumbInfoFailed(const QString&, const QString&, const CamItemInfo&);
-    void slotGotKDEPreview(const KFileItem&, const QPixmap&);
-    void slotFailedKDEPreview(const KFileItem&);
-    void slotKdePreviewFinished(KJob*);
 
     void slotIncreaseThumbSize();
     void slotDecreaseThumbSize();
@@ -211,6 +198,10 @@ private Q_SLOTS:
 
     void slotRefreshIconViewTimer();
     void slotRefreshIconView(const CHUpdateItemMap& map);
+
+    void slotThumbInfo(const CamItemInfo&, const QImage&);
+    void slotThumb(const QString&, const QString&, const QImage&);
+    void slotInfo(const QString&, const QString&, const CamItemInfo&);
 
 private:
 

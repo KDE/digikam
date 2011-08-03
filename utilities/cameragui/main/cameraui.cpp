@@ -67,7 +67,6 @@
 #include <kimageio.h>
 #include <kinputdialog.h>
 #include <kio/global.h>
-#include <kio/previewjob.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmenubar.h>
@@ -698,12 +697,6 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
             this, SLOT(slotFileList(CamItemInfoList)));
 
-    connect(d->controller, SIGNAL(signalThumbInfo(QString,QString,CamItemInfo,QImage)),
-            this, SLOT(slotThumbInfo(QString,QString,CamItemInfo,QImage)));
-
-    connect(d->controller, SIGNAL(signalThumbInfoFailed(QString,QString,CamItemInfo)),
-            this, SLOT(slotThumbInfoFailed(QString,QString,CamItemInfo)));
-
     connect(d->controller, SIGNAL(signalDownloaded(QString,QString,int)),
             this, SLOT(slotDownloaded(QString,QString,int)));
 
@@ -724,6 +717,19 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
 
     connect(d->controller, SIGNAL(signalUploaded(CamItemInfo)),
             this, SLOT(slotUploaded(CamItemInfo)));
+
+    // Setup Thumbnails controller -------------------------------------------------------
+
+    d->camThumbsCtrl = new CameraThumbsCtrl(d->controller, this);
+
+    connect(d->camThumbsCtrl, SIGNAL(signalThumbInfo(CamItemInfo, QImage)),
+            this, SLOT(slotThumbInfo(CamItemInfo, QImage)));
+
+    connect(d->camThumbsCtrl, SIGNAL(signalThumb(QString, QString, QImage)),
+            this, SLOT(slotThumb(QString, QString, QImage)));
+
+    connect(d->camThumbsCtrl, SIGNAL(signalInfo(QString, QString, CamItemInfo)),
+            this, SLOT(slotInfo(QString, QString, CamItemInfo)));
 }
 
 void CameraUI::setupAccelerators()
@@ -1277,89 +1283,7 @@ void CameraUI::slotlastPhotoFirst()
 void CameraUI::slotRequestThumbnails(const CamItemInfoList& list)
 {
     if (list.isEmpty()) return;
-    d->controller->getThumbsInfo(list);
-}
-
-void CameraUI::slotThumbInfo(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumbnail)
-{
-    d->view->setItemInfo(folder, file, info);
-
-    if (thumbnail.isNull())
-    {
-        // This call must be run outside Camera Controller thread.
-        QImage thumb = d->controller->mimeTypeThumbnail(file).toImage();
-        d->view->setThumbnail(folder, file, thumb);
-    }
-    else
-    {
-        d->view->setThumbnail(folder, file, thumbnail);
-    }
-}
-
-void CameraUI::slotThumbInfoFailed(const QString& folder, const QString& file, const CamItemInfo& info)
-{
-    d->view->setItemInfo(folder, file, info);
-
-    if (d->controller->cameraDriverType() == DKCamera::UMSDriver)
-    {
-        d->kdeTodo << info.url();
-        startKdePreviewJob();
-    }
-    else
-    {
-        // This call must be run outside Camera Controller thread.
-        QImage thumb = d->controller->mimeTypeThumbnail(file).toImage();
-        d->view->setThumbnail(folder, file, thumb);
-    }
-}
-
-void CameraUI::startKdePreviewJob()
-{
-    if (d->kdeJob || d->kdeTodo.isEmpty())
-    {
-        return;
-    }
-
-    KUrl::List list = d->kdeTodo;
-    d->kdeTodo.clear();
-    d->kdeJob = KIO::filePreview(list, 256);
-
-    connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
-            this, SLOT(slotGotKDEPreview(KFileItem,QPixmap)));
-
-    connect(d->kdeJob, SIGNAL(failed(KFileItem)),
-            this, SLOT(slotFailedKDEPreview(KFileItem)));
-
-    connect(d->kdeJob, SIGNAL(finished(KJob*)),
-            this, SLOT(slotKdePreviewFinished(KJob*)));
-}
-
-void CameraUI::slotGotKDEPreview(const KFileItem& item, const QPixmap& pix)
-{
-    QString file   = item.url().fileName();
-    QString folder = item.url().toLocalFile().remove(QString("/") + file);
-    QImage thumb   = pix.toImage();
-
-    if (thumb.isNull())
-    {
-        // This call must be run outside Camera Controller thread.
-        thumb = d->controller->mimeTypeThumbnail(file).toImage();
-    }
-
-    d->view->setThumbnail(folder, file, thumb);
-}
-
-void CameraUI::slotFailedKDEPreview(const KFileItem& item)
-{
-    QString file   = item.url().fileName();
-    QString folder = item.url().toLocalFile().remove(QString("/") + file);
-    QImage thumb   = d->controller->mimeTypeThumbnail(file).toImage();
-    d->view->setThumbnail(folder, file, thumb);
-}
-
-void CameraUI::slotKdePreviewFinished(KJob*)
-{
-    d->kdeJob = 0;
+    d->camThumbsCtrl->getThumbsInfo(list);
 }
 
 void CameraUI::slotCapture()
@@ -1525,7 +1449,7 @@ void CameraUI::slotUploaded(const CamItemInfo& itemInfo)
     }
 
     d->view->addItem(itemInfo);
-    d->controller->getThumbsInfo(CamItemInfoList() << itemInfo);
+    d->camThumbsCtrl->getThumbsInfo(CamItemInfoList() << itemInfo);
     refreshFreeSpace();
 }
 
@@ -2488,6 +2412,22 @@ void CameraUI::slotHistoryEntryClicked(const QVariant& metadata)
 bool CameraUI::chronologicOrder() const
 {
     return !d->lastPhotoFirstAction->isChecked();
+}
+
+void CameraUI::slotThumbInfo(const CamItemInfo& info, const QImage& thumb)
+{
+    slotInfo(info.folder, info.name, info);
+    slotThumb(info.folder, info.name, thumb);
+}
+
+void CameraUI::slotThumb(const QString& folder, const QString& file, const QImage& thumb)
+{
+    d->view->setThumbnail(folder, file, thumb);
+}
+
+void CameraUI::slotInfo(const QString& folder, const QString& file, const CamItemInfo& info)
+{
+    d->view->setItemInfo(folder, file, info);
 }
 
 }  // namespace Digikam
