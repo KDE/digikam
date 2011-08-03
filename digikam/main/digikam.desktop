@@ -5,6 +5,7 @@ Categories=Qt;KDE;Graphics;Photography;
 Exec=digikam -caption "%c" %i
 Icon=digikam
 X-DocPath=digikam/index.html
+MimeType=x-content/image-dcf;x-content/image-picturecd;
 Name=digiKam
 Name[ast]=digiKam
 Name[be]=digiKam
