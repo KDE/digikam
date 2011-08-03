@@ -1817,29 +1817,23 @@ void CameraUI::slotMarkAsDownloaded()
 
 void CameraUI::slotToggleLock()
 {
-    int count = 0;
+    CamItemInfoList list = d->view->selectedItems();
+    int count            = list.count();
 
-    for (IconItem* item = d->view->firstItem(); item;
-         item = item->nextItem())
+    foreach (CamItemInfo info, list)
     {
-        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+        QString folder = info.folder;
+        QString file   = info.name;
+        int writePerm  = info.writePermissions;
+        bool lock      = true;
 
-        if (iconItem->isSelected())
+        // If item is currently locked, unlock it.
+        if (writePerm == 0)
         {
-            QString folder = iconItem->itemInfo().folder;
-            QString file   = iconItem->itemInfo().name;
-            int writePerm  = iconItem->itemInfo().writePermissions;
-            bool lock      = true;
-
-            // If item is currently locked, unlock it.
-            if (writePerm == 0)
-            {
-                lock = false;
-            }
-
-            d->controller->lockFile(folder, file, lock);
-            ++count;
+            lock = false;
         }
+
+        d->controller->lockFile(folder, file, lock);
     }
 
     if (count > 0)
