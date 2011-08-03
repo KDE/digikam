@@ -44,7 +44,6 @@ namespace Digikam
 
 class CameraHistoryUpdater::CameraHistoryUpdaterPriv
 {
-    typedef QList<CHUpdateItem> CHUpdateItemsList;
 
 public:
 
@@ -61,6 +60,10 @@ public:
     QMutex            mutex;
     QWaitCondition    condVar;
     CHUpdateItemsList updateItems;
+
+public:
+
+    typedef QList<CHUpdateItem> CHUpdateItemsList;
 };
 
 // --------------------------------------------------------
