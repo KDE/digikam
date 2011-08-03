@@ -29,6 +29,7 @@
 #include <QObject>
 #include <QString>
 #include <QImage>
+#include <QPixmap>
 
 // Local includes
 
@@ -36,6 +37,7 @@
 
 class KFileItem;
 class KJob;
+class KUrl;
 
 namespace Digikam
 {
@@ -68,7 +70,8 @@ private Q_SLOTS:
 
 private:
 
-    void startKdePreviewJob();
+    void startKdePreviewJob(const KUrl&);
+    void procressKDEPreview(const KFileItem& item, const QPixmap& pix=QPixmap());
 
 private:
 

@@ -51,7 +51,6 @@ public:
     {}
 
     KUrl::List        pendingItems;
-    KUrl::List        kdeTodo;
 
     CameraController* controller;
 };
@@ -97,15 +96,15 @@ void CameraThumbsCtrl::getThumbsInfo(const CamItemInfoList& list)
 
 void CameraThumbsCtrl::slotThumbInfo(const QString&, const QString& file, const CamItemInfo& info, const QImage& thumb)
 {
-    QImage img = thumb;
-
-    if (img.isNull())
+    if (thumb.isNull())
     {
-        // This call must be run outside Camera Controller thread.
-        img = d->controller->mimeTypeThumbnail(file).toImage();
+        emit signalThumbInfo(info, d->controller->mimeTypeThumbnail(file).toImage());
+    }
+    else
+    {
+        emit signalThumbInfo(info, thumb);
     }
 
-    emit signalThumbInfo(info, img);
     d->pendingItems.removeAll(info.url());
 }
 
@@ -114,29 +113,19 @@ void CameraThumbsCtrl::slotThumbInfoFailed(const QString& folder, const QString&
     if (d->controller->cameraDriverType() == DKCamera::UMSDriver)
     {
         emit signalInfo(folder, file, info);
-        d->kdeTodo << info.url();
-        startKdePreviewJob();
+        startKdePreviewJob(info.url());
     }
     else
     {
-        // This call must be run outside Camera Controller thread.
-        QImage thumb = d->controller->mimeTypeThumbnail(file).toImage();
-        emit signalThumbInfo(info, thumb);
+        emit signalThumbInfo(info, d->controller->mimeTypeThumbnail(file).toImage());
         d->pendingItems.removeAll(info.url());
     }
 }
 
-void CameraThumbsCtrl::startKdePreviewJob()
+void CameraThumbsCtrl::startKdePreviewJob(const KUrl& url)
 {
-    if (d->kdeTodo.isEmpty())
-    {
-        return;
-    }
 
-    KUrl::List list = d->kdeTodo;
-    d->kdeTodo.clear();
-
-    KIO::PreviewJob* job = KIO::filePreview(list, ThumbnailSize::Huge);
+    KIO::PreviewJob* job = KIO::filePreview(KUrl::List() << url, ThumbnailSize::Huge);
 
     connect(job, SIGNAL(gotPreview(KFileItem, QPixmap)),
             this, SLOT(slotGotKDEPreview(KFileItem, QPixmap)));
@@ -144,37 +133,39 @@ void CameraThumbsCtrl::startKdePreviewJob()
     connect(job, SIGNAL(failed(KFileItem)),
             this, SLOT(slotFailedKDEPreview(KFileItem)));
 
-    kDebug() << "pending thumbs from KDE Preview : " << list;
+    kDebug() << "pending thumbs from KDE Preview : " << url;
 }
 
 void CameraThumbsCtrl::slotGotKDEPreview(const KFileItem& item, const QPixmap& pix)
 {
-    QString file   = item.url().fileName();
-    QString folder = item.url().toLocalFile().remove(QString("/") + file);
-    QImage thumb   = pix.toImage();
-
-    if (thumb.isNull())
-    {
-        // This call must be run outside Camera Controller thread.
-        thumb = d->controller->mimeTypeThumbnail(file).toImage();
-    }
-
-    emit signalThumb(folder, file, thumb);
-    d->pendingItems.removeAll(item.url());
-
-    kDebug() << "Got thumb from KDE Preview : " << item.url();
+    procressKDEPreview(item, pix);
 }
 
 void CameraThumbsCtrl::slotFailedKDEPreview(const KFileItem& item)
 {
+    procressKDEPreview(item);
+}
+
+void CameraThumbsCtrl::procressKDEPreview(const KFileItem& item, const QPixmap& pix)
+{
     QString file   = item.url().fileName();
     QString folder = item.url().toLocalFile().remove(QString("/") + file);
-    QImage thumb   = d->controller->mimeTypeThumbnail(file).toImage();
+    QImage thumb;
+
+    if (pix.isNull())
+    {
+        // This call must be run outside Camera Controller thread.
+        thumb = d->controller->mimeTypeThumbnail(file).toImage();
+        kDebug() << "Failed thumb from KDE Preview : " << item.url();
+    }
+    else
+    {
+        thumb = pix.toImage();
+        kDebug() << "Got thumb from KDE Preview : " << item.url();
+    }
 
     emit signalThumb(folder, file, thumb);
     d->pendingItems.removeAll(item.url());
-
-    kDebug() << "Failed thumb from KDE Preview : " << item.url();
 }
 
 }  // namespace Digikam
