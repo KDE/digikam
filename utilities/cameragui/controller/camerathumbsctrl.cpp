@@ -47,11 +47,9 @@ class CameraThumbsCtrl::CameraThumbsCtrlPriv
 public:
 
     CameraThumbsCtrlPriv()
-      : kdeJob(0),
-        controller(0)
+      : controller(0)
     {}
 
-    KIO::PreviewJob*  kdeJob;
     KUrl::List        pendingItems;
     KUrl::List        kdeTodo;
 
@@ -130,23 +128,21 @@ void CameraThumbsCtrl::slotThumbInfoFailed(const QString& folder, const QString&
 
 void CameraThumbsCtrl::startKdePreviewJob()
 {
-    if (d->kdeJob || d->kdeTodo.isEmpty())
+    if (d->kdeTodo.isEmpty())
     {
         return;
     }
 
     KUrl::List list = d->kdeTodo;
     d->kdeTodo.clear();
-    d->kdeJob = KIO::filePreview(list, ThumbnailSize::Huge);
 
-    connect(d->kdeJob, SIGNAL(gotPreview(KFileItem, QPixmap)),
+    KIO::PreviewJob* job = KIO::filePreview(list, ThumbnailSize::Huge);
+
+    connect(job, SIGNAL(gotPreview(KFileItem, QPixmap)),
             this, SLOT(slotGotKDEPreview(KFileItem, QPixmap)));
 
-    connect(d->kdeJob, SIGNAL(failed(KFileItem)),
+    connect(job, SIGNAL(failed(KFileItem)),
             this, SLOT(slotFailedKDEPreview(KFileItem)));
-
-    connect(d->kdeJob, SIGNAL(finished(KJob*)),
-            this, SLOT(slotKdePreviewFinished(KJob*)));
 
     kDebug() << "pending thumbs from KDE Preview : " << list;
 }
@@ -179,11 +175,6 @@ void CameraThumbsCtrl::slotFailedKDEPreview(const KFileItem& item)
     d->pendingItems.removeAll(item.url());
 
     kDebug() << "Failed thumb from KDE Preview : " << item.url();
-}
-
-void CameraThumbsCtrl::slotKdePreviewFinished(KJob*)
-{
-    d->kdeJob = 0;
 }
 
 }  // namespace Digikam

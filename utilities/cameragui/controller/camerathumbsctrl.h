@@ -65,7 +65,6 @@ private Q_SLOTS:
     void slotThumbInfoFailed(const QString&, const QString&, const CamItemInfo&);
     void slotGotKDEPreview(const KFileItem&, const QPixmap&);
     void slotFailedKDEPreview(const KFileItem&);
-    void slotKdePreviewFinished(KJob*);
 
 private:
 
