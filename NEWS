@@ -12,4 +12,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 278033 : Cannot set jpeg compression ratio (or any other save options) when exporting image.
 005 ==> 278966 : Building the unittests fails when using external libpgf.
 006 ==> 199985 : digiKam, import, writing to sd card, bad folders.
-007 ==> 
+007 ==> 261627 : GNOME says "No applications found" ignoring digikam.
+008 ==> 
+
