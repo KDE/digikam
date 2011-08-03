@@ -69,14 +69,15 @@ public:
 
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
     void setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo);
+    void setDownloaded(const CamItemInfo& itemInfo, int status);
+    void toggleLock(const CamItemInfo& itemInfo);
 
     void ensureItemVisible(const CamItemInfo& itemInfo);
-    void ensureItemVisible(const QString& folder, const QString& file);
+    void ensureItemVisible(const QString& folder, const QString& filename);
 
     void setThumbnailSize(int thumbSize);
     int  thumbnailSize() const;
 
-    CameraIconItem* findItem(const QString& folder, const QString& file) const;
     CamItemInfo     findItemInfo(const QString& folder, const QString& file) const;
     CamItemInfo     firstItemSelected() const;
 
@@ -147,11 +148,12 @@ protected:
 
 private:
 
-    QString getTemplatedName(const CamItemInfo& itemInfo) const;
-    QString getCasedName(const RenameCustomizer::Case ccase, const CamItemInfo& itemInfo) const;
-    void    uploadItemPopupMenu(const KUrl::List& srcURLs);
-    void    prepareRepaint(const QList<IconItem*>& list);
-    void    ensureItemVisible(CameraIconItem* item);
+    QString         getTemplatedName(const CamItemInfo& itemInfo) const;
+    QString         getCasedName(const RenameCustomizer::Case ccase, const CamItemInfo& itemInfo) const;
+    void            uploadItemPopupMenu(const KUrl::List& srcURLs);
+    void            prepareRepaint(const QList<IconItem*>& list);
+    void            ensureItemVisible(CameraIconItem* item);
+    CameraIconItem* findItem(const QString& folder, const QString& file) const;
 
 private:
 

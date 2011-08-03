@@ -248,36 +248,42 @@ void CameraIconView::addItem(const CamItemInfo& info)
     CamItemInfo newinfo  = info;
     newinfo.downloadName = downloadName;
     CameraIconItem* item = new CameraIconItem(d->groupItem, newinfo, thumb);
-    d->itemDict.insert(newinfo.folder + newinfo.name, item);
+    QString sep;
+    if (!newinfo.folder.endsWith("/")) sep = QString("/");
+    d->itemDict.insert(newinfo.folder+sep+newinfo.name, item);
 }
 
 void CameraIconView::removeItem(const CamItemInfo& info)
 {
-    CameraIconItem* item = d->itemDict.value(info.folder+info.name);
-
+    CameraIconItem* item = findItem(info.folder, info.name);
     if (!item)
     {
         return;
     }
 
-    d->itemDict.remove(info.folder+info.name);
+    QString sep;
+    if (!info.folder.endsWith("/")) sep = QString("/");
+    d->itemDict.remove(info.folder+sep+info.name);
 
     setDelayedRearrangement(true);
     delete item;
     setDelayedRearrangement(false);
 }
 
-CamItemInfo CameraIconView::findItemInfo(const QString& folder, const QString& file) const
+CamItemInfo CameraIconView::findItemInfo(const QString& folder, const QString& filename) const
 {
     CamItemInfo     info;
-    CameraIconItem* item = findItem(folder, file);
+    CameraIconItem* item = findItem(folder, filename);
     if (item) info = item->itemInfo();
     return info;
 }
 
-CameraIconItem* CameraIconView::findItem(const QString& folder, const QString& file) const
+CameraIconItem* CameraIconView::findItem(const QString& folder, const QString& filename) const
 {
-    return d->itemDict.value(folder+file);
+    QString sep;
+    if (!folder.endsWith("/")) sep = QString("/");
+
+    return d->itemDict.value(folder+sep+filename);
 }
 
 QMap<QString, int> CameraIconView::countItemsByFolders() const
@@ -313,10 +319,7 @@ QMap<QString, int> CameraIconView::countItemsByFolders() const
 
 void CameraIconView::setThumbnail(const QString& folder, const QString& filename, const QImage& image)
 {
-    QString sep;
-    if (!folder.endsWith("/")) sep = QString("/");
-
-    CameraIconItem* item = d->itemDict.value(folder+sep+filename);
+    CameraIconItem* item = findItem(folder, filename);
     if (!item)
     {
         kDebug() << "item not found : " << folder << " " << filename;
@@ -329,10 +332,7 @@ void CameraIconView::setThumbnail(const QString& folder, const QString& filename
 
 void CameraIconView::setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo)
 {
-    QString sep;
-    if (!folder.endsWith("/")) sep = QString("/");
-
-    CameraIconItem* item = d->itemDict.value(folder+sep+filename);
+    CameraIconItem* item = findItem(folder, filename);
     if (!item)
     {
         kDebug() << "item not found : " << folder << " " << filename;
@@ -340,6 +340,18 @@ void CameraIconView::setItemInfo(const QString& folder, const QString& filename,
     }
 
     item->setItemInfo(itemInfo);
+}
+
+void CameraIconView::setDownloaded(const CamItemInfo& itemInfo, int status)
+{
+    CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
+    if (iconItem) iconItem->setDownloaded(status);
+}
+
+void CameraIconView::toggleLock(const CamItemInfo& itemInfo)
+{
+    CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
+    if (iconItem) iconItem->toggleLock();
 }
 
 void CameraIconView::ensureItemVisible(CameraIconItem* item)
@@ -352,10 +364,9 @@ void CameraIconView::ensureItemVisible(const CamItemInfo& itemInfo)
     ensureItemVisible(itemInfo.folder, itemInfo.name);
 }
 
-void CameraIconView::ensureItemVisible(const QString& folder, const QString& file)
+void CameraIconView::ensureItemVisible(const QString& folder, const QString& filename)
 {
-    CameraIconItem* item = d->itemDict.value(folder+file);
-
+    CameraIconItem* item = findItem(folder, filename);
     if (!item)
     {
         return;

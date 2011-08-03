@@ -1422,7 +1422,7 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
 
         bool ok;
 
-        while (d->view->findItem(cameraFolder, name + ext))
+        while (!d->view->findItemInfo(cameraFolder, name + ext).isNull())
         {
             QString msg(i18n("Camera Folder <b>%1</b> already contains the item <b>%2</b>.<br/>"
                              "Please enter a new filename (without extension):",
@@ -1746,14 +1746,11 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
 void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)
 {
-    CameraIconItem* iconItem = d->view->findItem(folder, file);
+    CamItemInfo info = d->view->findItemInfo(folder, file);
 
-    if (iconItem)
+    if (!info.isNull())
     {
-        iconItem->setDownloaded(status);
-
-        //if (iconItem->isSelected())
-        //  slotItemsSelected(iconItem->itemInfo(), true);
+        d->view->setDownloaded(info, status);
 
         if (status == CamItemInfo::DownloadedYes)
         {
@@ -1762,9 +1759,9 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
             d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
 
             DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
-                                           iconItem->itemInfo().name,
-                                           iconItem->itemInfo().size,
-                                           iconItem->itemInfo().mtime);
+                                           info.name,
+                                           info.size,
+                                           info.mtime);
         }
     }
 
@@ -1792,11 +1789,11 @@ void CameraUI::slotDownloadComplete(const QString&, const QString&,
 
 void CameraUI::slotSkipped(const QString& folder, const QString& file)
 {
-    CameraIconItem* iconItem = d->view->findItem(folder, file);
+    CamItemInfo info = d->view->findItemInfo(folder, file);
 
-    if (iconItem)
+    if (!info.isNull())
     {
-        iconItem->setDownloaded(CamItemInfo::DownloadedNo);
+        d->view->setDownloaded(info, CamItemInfo::DownloadedNo);
     }
 
     int curr = d->statusProgressBar->progressValue();
@@ -1862,13 +1859,10 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
 {
     if (status)
     {
-        CameraIconItem* iconItem = d->view->findItem(folder, file);
-
-        if (iconItem)
+        CamItemInfo info = d->view->findItemInfo(folder, file);
+        if (!info.isNull())
         {
-            iconItem->toggleLock();
-            //if (iconItem->isSelected())
-            //  slotItemsSelected(iconItem->itemInfo(), true);
+            d->view->toggleLock(info);
         }
     }
 
