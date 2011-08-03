@@ -47,6 +47,10 @@ class CameraHistoryUpdater::CameraHistoryUpdaterPriv
 
 public:
 
+    typedef QList<CHUpdateItem> CHUpdateItemsList;
+
+public:
+
     CameraHistoryUpdaterPriv() :
         close(false),
         canceled(false),
@@ -60,10 +64,6 @@ public:
     QMutex            mutex;
     QWaitCondition    condVar;
     CHUpdateItemsList updateItems;
-
-public:
-
-    typedef QList<CHUpdateItem> CHUpdateItemsList;
 };
 
 // --------------------------------------------------------
