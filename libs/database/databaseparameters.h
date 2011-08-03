@@ -55,29 +55,41 @@ public:
       * The values can be read from and written to a KUrl.
       */
 
-    DatabaseParameters(const QString& type,
-                       const QString& databaseName,
-                       const QString& connectOptions = QString(),
-                       const QString& hostName = QString(),
-                       int   port = -1,
-                       bool  internalServer = false,
-                       const QString& userName = QString(),
-                       const QString& password = QString(),
-                       const QString& databaseNameThumbnails = QString());
+    DatabaseParameters(const QString& imgType,
+                       const QString& tmbType,
+                       const QString& imgDatabaseName,
+                       const QString& tmbDatabaseName,
+                       const QString& imgConnectOptions = QString(),
+                       const QString& tmbConnectOptions = QString(),
+                       const QString& imgHostName = QString(),
+                       const QString& tmbHostName = QString(),
+                                  int imgPort = -1,
+                                  int tmbPort = -1,
+                       const QString& imgUserName = QString(),
+                       const QString& tmbUserName = QString(),
+                       const QString& imgPassword = QString(),
+                       const QString& tmbPassword = QString(),
+                       bool internalServer = false);
 
     DatabaseParameters(const KUrl& url);
     DatabaseParameters();
 
-    QString databaseType;
-    QString databaseName;
-    QString connectOptions;
-    QString hostName;
-    int     port;
-    bool    internalServer;
-    QString userName;
-    QString password;
+    QString imgDatabaseType;
+    QString tmbDatabaseType;
+    QString imgDatabaseName;
+    QString tmbDatabaseName;
+    QString imgConnectOptions;
+    QString tmbConnectOptions;
+    QString imgHostName;
+    QString tmbHostName;
+    int     imgPort;
+    int     tmbPort;
+    QString imgUserName;
+    QString tmbUserName;
+    QString imgPassword;
+    QString tmbPassword;
 
-    QString databaseNameThumbnails;
+    bool    internalServer;
 
     void insertInUrl(KUrl& url) const;
     bool operator==(const DatabaseParameters& other) const;
@@ -88,9 +100,12 @@ public:
      */
     bool isValid() const;
 
-    bool isSQLite() const;
-    bool isMySQL() const;
-    QString SQLiteDatabaseFile() const;
+    bool isImgSQLite() const;
+    bool isImgMySQL() const;
+    bool isTmbSQLite() const;
+    bool isTmbMySQL() const;
+    QString imgSQLiteDatabaseFile() const;
+    QString tmbSQLiteDatabaseFile() const;
 
     /**
      *  Returns the databaseType designating the said database.
@@ -121,21 +136,20 @@ public:
      * In case of SQLite, the databaseName typically is a file.
      * With getDatabasePath, you can get the folder.
      */
-    QString getDatabaseNameOrDir() const;
-    QString getThumbsDatabaseNameOrDir() const;
+    QString getImgDatabaseNameOrDir() const;
+    QString getTmbDatabaseNameOrDir() const;
 
     /**
      * In case of SQLite, the databaseName typically is a file.
      * Use this method if you set a file or a folder.
      * For non-SQLite, this simply sets the database name.
      */
-    void setDatabasePath(const QString& folderOrFileOrName);
-    void setThumbsDatabasePath(const QString& folderOrFileOrName);
+    void setImgDatabasePath(const QString& folderOrFileOrName);
+    void setTmbDatabasePath(const QString& folderOrFileOrName);
 
-    static QString databaseFileSQLite(const QString& folderOrFile);
-    static QString thumbnailDatabaseFileSQLite(const QString& folderOrFile);
-    static QString databaseDirectorySQLite(const QString& path);
-    static QString thumbnailDatabaseDirectorySQLite(const QString& path);
+    static QString databaseFileSQLite(const QString& folderOrFile, const QString& fileName);
+    static QString imgDatabaseDirectorySQLite(const QString& path);
+    static QString tmbDatabaseDirectorySQLite(const QString& path);
 
     /** Replaces databaseName with databaseNameThumbnails. */
     DatabaseParameters thumbnailParameters() const;

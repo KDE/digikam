@@ -97,57 +97,72 @@ void DatabaseWidget::setupMainArea(const QString & title)
     d->databasePathLabel->setWordWrap(true);
     d->databasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
 
-    databasePathEdit     = new KUrlRequester(dbPathBox);
-    databasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
+    imgDatabasePathEdit     = new KUrlRequester(dbPathBox);
+    imgDatabasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
+
+    internalServer                      = new QCheckBox(i18n("Internal Server"));
 
     QLabel* databaseTypeLabel           = new QLabel(i18n("Type"));
-    databaseType                        = new QComboBox();
-    //fr QLabel* internalServerLabel         = new QLabel(i18n("Internal Server"));
-    //fr internalServer                      = new QCheckBox();
     QLabel* databaseNameLabel           = new QLabel(i18n("Schema Name"));
-    databaseName                        = new QLineEdit();
-    //fr QLabel* databaseNameThumbnailsLabel = new QLabel(i18n("Thumbnails<br>Schema Name"));
-    //fr databaseNameThumbnails              = new QLineEdit();
     QLabel* hostNameLabel               = new QLabel(i18n("Host Name"));
-    hostName                            = new QLineEdit();
     QLabel* hostPortLabel               = new QLabel(i18n("Port"));
-    hostPort                            = new QSpinBox();
-    hostPort->setMaximum(65536);
-
     QLabel* connectionOptionsLabel      = new QLabel(i18n("Database<br>Connection<br>Options"));
-    connectionOptions                   = new QLineEdit();
-
     QLabel* userNameLabel               = new QLabel(i18n("User"));
-    userName                            = new QLineEdit();
-
     QLabel* passwordLabel               = new QLabel(i18n("Password"));
-    password                            = new QLineEdit();
-    password->setEchoMode(QLineEdit::Password);
 
-    QPushButton* checkDatabaseConnectionButton = new QPushButton(i18n("Check DB Connection"));
+    imgDatabaseType                        = new QComboBox();
+    imgDatabaseName                        = new QLineEdit();
+    imgHostName                            = new QLineEdit();
+    imgHostPort                            = new QSpinBox();
+    imgHostPort->setMaximum(65536);
+    imgConnectionOptions                   = new QLineEdit();
+    imgUserName                            = new QLineEdit();
+    imgPassword                            = new QLineEdit();
+    imgPassword->setEchoMode(QLineEdit::Password);
+    QPushButton* imgCheckDatabaseConnectionButton = new QPushButton(i18n("Check DB Connection"));
+
+    tmbDatabaseType                        = new QComboBox();
+    tmbDatabaseName                        = new QLineEdit();
+    tmbHostName                            = new QLineEdit();
+    tmbHostPort                            = new QSpinBox();
+    tmbHostPort->setMaximum(65536);
+    tmbConnectionOptions                   = new QLineEdit();
+    tmbUserName                            = new QLineEdit();
+    tmbPassword                            = new QLineEdit();
+    tmbPassword->setEchoMode(QLineEdit::Password);
+    QPushButton* tmbCheckDatabaseConnectionButton = new QPushButton(i18n("Check DB Connection"));
 
     d->expertSettings                   = new QGroupBox();
     d->expertSettings->setFlat(true);
     QFormLayout* expertSettinglayout    = new QFormLayout();
     d->expertSettings->setLayout(expertSettinglayout);
 
-//fr #ifdef HAVE_INTERNALMYSQL
-//fr     expertSettinglayout->addRow(internalServerLabel, internalServer);
-//fr #endif // HAVE_INTERNALMYSQL
-    expertSettinglayout->addRow(hostNameLabel, hostName);
-    expertSettinglayout->addRow(hostPortLabel, hostPort);
-    expertSettinglayout->addRow(databaseNameLabel, databaseName);
-    //fr expertSettinglayout->addRow(databaseNameThumbnailsLabel, databaseNameThumbnails);
-    expertSettinglayout->addRow(userNameLabel, userName);
-    expertSettinglayout->addRow(passwordLabel, password);
-    expertSettinglayout->addRow(connectionOptionsLabel, connectionOptions);
+// #ifdef HAVE_INTERNALMYSQL
+//     expertSettinglayout->addRow(internalServerLabel, internalServer);
+// #endif // HAVE_INTERNALMYSQL
+    expertSettinglayout->addRow(hostNameLabel, imgHostName);
+    expertSettinglayout->addRow(hostPortLabel, imgHostPort);
+    expertSettinglayout->addRow(databaseNameLabel, imgDatabaseName);
+    expertSettinglayout->addRow(userNameLabel, imgUserName);
+    expertSettinglayout->addRow(passwordLabel, imgPassword);
+    expertSettinglayout->addRow(connectionOptionsLabel, imgConnectionOptions);
+    expertSettinglayout->addWidget(imgCheckDatabaseConnectionButton);
 
-    expertSettinglayout->addWidget(checkDatabaseConnectionButton);
-
+    expertSettinglayout->addRow(hostNameLabel, tmbHostName);
+    expertSettinglayout->addRow(hostPortLabel, tmbHostPort);
+    expertSettinglayout->addRow(databaseNameLabel, tmbDatabaseName);
+    expertSettinglayout->addRow(userNameLabel, tmbUserName);
+    expertSettinglayout->addRow(passwordLabel, tmbPassword);
+    expertSettinglayout->addRow(connectionOptionsLabel, tmbConnectionOptions);
+    expertSettinglayout->addWidget(tmbCheckDatabaseConnectionButton);
+    
+    // FIXME:
     vlay->addWidget(databaseTypeLabel);
-    vlay->addWidget(databaseType);
+    vlay->addWidget(imgDatabaseType);
+    vlay->addWidget(tmbDatabaseType);
     vlay->addWidget(d->databasePathLabel);
-    vlay->addWidget(databasePathEdit);
+    vlay->addWidget(imgDatabasePathEdit);
+    vlay->addWidget(tmbDatabasePathEdit);
     vlay->addWidget(d->expertSettings);
     vlay->setSpacing(0);
     vlay->setMargin(KDialog::spacingHint());
@@ -161,8 +176,12 @@ void DatabaseWidget::setupMainArea(const QString & title)
 
     // --------- fill with default values ---------------------
 
-    databaseType->addItem(i18n("SQLite"), DatabaseParameters::SQLiteDatabaseType());
-    databaseType->addItem(i18n("MySQL"), DatabaseParameters::MySQLDatabaseType());
+    imgDatabaseType->addItem(i18n("SQLite"), DatabaseParameters::SQLiteDatabaseType());
+    imgDatabaseType->addItem(i18n("MySQL"), DatabaseParameters::MySQLDatabaseType());
+    setDatabaseInputFields(DatabaseParameters::SQLiteDatabaseType());
+
+    tmbDatabaseType->addItem(i18n("SQLite"), DatabaseParameters::SQLiteDatabaseType());
+    tmbDatabaseType->addItem(i18n("MySQL"), DatabaseParameters::MySQLDatabaseType());
     setDatabaseInputFields(DatabaseParameters::SQLiteDatabaseType());
 
     // --------------------------------------------------------
@@ -170,31 +189,50 @@ void DatabaseWidget::setupMainArea(const QString & title)
     adjustSize();
 
     // --------------------------------------------------------
+    //FIXME:
+    connect(imgDatabasePathEdit, SIGNAL(urlSelected(KUrl)),
+            this, SLOT(slotImgChangeDatabasePath(KUrl)));
 
-    connect(databasePathEdit, SIGNAL(urlSelected(KUrl)),
-            this, SLOT(slotChangeDatabasePath(KUrl)));
+    connect(imgDatabasePathEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(slotImgDatabasePathEdited(QString)));
 
-    connect(databasePathEdit, SIGNAL(textChanged(QString)),
-            this, SLOT(slotDatabasePathEdited(QString)));
+    connect(imgDatabaseType, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotImgHandleDBTypeIndexChanged(int)));
 
-    connect(databaseType, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotHandleDBTypeIndexChanged(int)));
+#ifdef HAVE_INTERNALMYSQL
+    connect(internalServer, SIGNAL(stateChanged(int)),
+            this, SLOT(slotHandleInternalServerCheckbox(int)));
+#endif
 
-//fr #ifdef HAVE_INTERNALMYSQL
-//fr     connect(internalServer, SIGNAL(stateChanged(int)),
-//fr             this, SLOT(slotHandleInternalServerCheckbox(int)));
-//fr #endif // HAVE_INTERNALMYSQL
+    connect(imgCheckDatabaseConnectionButton, SIGNAL(clicked()),
+            this, SLOT(slotImgCheckDatabaseConnection()));
 
-    connect(checkDatabaseConnectionButton, SIGNAL(clicked()),
-            this, SLOT(checkDatabaseConnection()));
+    // --------------------------------------------------------
+    //FIXME:
+    connect(imgDatabasePathEdit, SIGNAL(urlSelected(KUrl)),
+            this, SLOT(slotTmbChangeDatabasePath(KUrl)));
+
+    connect(imgDatabasePathEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(slotTmbDatabasePathEdited(QString)));
+
+    connect(imgDatabaseType, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotTmbHandleDBTypeIndexChanged(int)));
+
+    connect(imgCheckDatabaseConnectionButton, SIGNAL(clicked()),
+            this, SLOT(slotTmbCheckDatabaseConnection()));
 }
 
-QString DatabaseWidget::currentDatabaseType() const
+QString DatabaseWidget::imgCurrentDatabaseType() const
 {
-    return databaseType->itemData(databaseType->currentIndex()).toString();
+    return imgDatabaseType->itemData(imgDatabaseType->currentIndex()).toString();
 }
 
-void DatabaseWidget::slotChangeDatabasePath(const KUrl& result)
+QString DatabaseWidget::tmbCurrentDatabaseType() const
+{
+    return tmbDatabaseType->itemData(tmbDatabaseType->currentIndex()).toString();
+}
+
+void DatabaseWidget::slotImgChangeDatabasePath(const KUrl& result)
 {
 #ifdef _WIN32
     // Work around B.K.O #189168
@@ -216,13 +254,13 @@ void DatabaseWidget::slotChangeDatabasePath(const KUrl& result)
     checkDBPath();
 }
 
-void DatabaseWidget::slotDatabasePathEdited(const QString& newPath)
+void DatabaseWidget::slotImgDatabasePathEdited(const QString& newPath)
 {
 #ifndef _WIN32
 
     if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
     {
-        databasePathEdit->setUrl(QString(QDir::homePath() + QLatin1Char('/') + newPath));
+        imgDatabasePathEdit->setUrl(QString(QDir::homePath() + QLatin1Char('/') + newPath));
     }
 
 #endif
@@ -230,9 +268,51 @@ void DatabaseWidget::slotDatabasePathEdited(const QString& newPath)
     checkDBPath();
 }
 
-void DatabaseWidget::slotHandleDBTypeIndexChanged(int index)
+void DatabaseWidget::slotImgHandleDBTypeIndexChanged(int index)
 {
-    const QString& dbType = databaseType->itemData(index).toString();
+    const QString& dbType = imgDatabaseType->itemData(index).toString();
+    setDatabaseInputFields(dbType);
+}
+
+void DatabaseWidget::slotTmbChangeDatabasePath(const KUrl& result)
+{
+#ifdef _WIN32
+    // Work around B.K.O #189168
+    KTemporaryFile temp;
+    temp.setPrefix(result.toLocalFile(KUrl::AddTrailingSlash));
+    temp.open();
+
+    if (!result.isEmpty() && !temp.open())
+#else
+    QFileInfo targetPath(result.toLocalFile());
+
+    if (!result.isEmpty() && !targetPath.isWritable())
+#endif
+    {
+        KMessageBox::information(0, i18n("You do not seem to have write access to this database folder.\n"
+                                         "Without this access, the caption and tag features will not work."));
+    }
+
+    checkDBPath();
+}
+
+void DatabaseWidget::slotTmbDatabasePathEdited(const QString& newPath)
+{
+#ifndef _WIN32
+
+    if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
+    {
+        tmbDatabasePathEdit->setUrl(QString(QDir::homePath() + QLatin1Char('/') + newPath));
+    }
+
+#endif
+
+    checkDBPath();
+}
+
+void DatabaseWidget::slotTmbHandleDBTypeIndexChanged(int index)
+{
+    const QString& dbType = tmbDatabaseType->itemData(index).toString();
     setDatabaseInputFields(dbType);
 }
 
@@ -241,44 +321,46 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
     if (currentIndexStr == QString(DatabaseParameters::SQLiteDatabaseType()))
     {
         d->databasePathLabel->setVisible(true);
-        databasePathEdit->setVisible(true);
+        imgDatabasePathEdit->setVisible(true);
         d->expertSettings->setVisible(false);
     }
     else
     {
         d->databasePathLabel->setVisible(false);
-        databasePathEdit->setVisible(false);
+        imgDatabasePathEdit->setVisible(false);
         d->expertSettings->setVisible(true);
     }
 
     adjustSize();
 }
 
-//fr void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
-//fr {
-//fr     hostName->setEnabled(enableFields == Qt::Unchecked);
-//fr     hostPort->setEnabled(enableFields == Qt::Unchecked);
-//fr     databaseName->setEnabled(enableFields == Qt::Unchecked);
-//fr     //fr databaseNameThumbnails->setEnabled(enableFields == Qt::Unchecked);
-//fr     userName->setEnabled(enableFields == Qt::Unchecked);
-//fr     password->setEnabled(enableFields == Qt::Unchecked);
-//fr     connectionOptions->setEnabled(enableFields == Qt::Unchecked);
-//fr }
+void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
+{
+    //FIXME:
+    imgHostName->setEnabled(enableFields == Qt::Unchecked);
+    imgHostPort->setEnabled(enableFields == Qt::Unchecked);
+    imgDatabaseName->setEnabled(enableFields == Qt::Unchecked);
+    //fr databaseNameThumbnails->setEnabled(enableFields == Qt::Unchecked);
+    imgUserName->setEnabled(enableFields == Qt::Unchecked);
+    imgPassword->setEnabled(enableFields == Qt::Unchecked);
+    imgConnectionOptions->setEnabled(enableFields == Qt::Unchecked);
+}
 
-void DatabaseWidget::checkDatabaseConnection()
+void DatabaseWidget::slotImgCheckDatabaseConnection()
 {
     // TODO : if chek DB connection operations can be threaded, use DBusyDlg dialog there...
+    //FIXME:
 
     kapp->setOverrideCursor(Qt::WaitCursor);
 
     QString databaseID("ConnectionTest");
-    QSqlDatabase testDatabase     = QSqlDatabase::addDatabase(currentDatabaseType(), databaseID);
+    QSqlDatabase testDatabase     = QSqlDatabase::addDatabase(imgCurrentDatabaseType(), databaseID);
     DatabaseParameters parameters = getDatabaseParameters();
-    testDatabase.setHostName(parameters.hostName);
-    testDatabase.setPort(parameters.port);
-    testDatabase.setUserName(parameters.userName);
-    testDatabase.setPassword(parameters.password);
-    testDatabase.setConnectOptions(parameters.connectOptions);
+    testDatabase.setHostName(parameters.imgHostName);
+    testDatabase.setPort(parameters.imgPort);
+    testDatabase.setUserName(parameters.imgUserName);
+    testDatabase.setPassword(parameters.imgPassword);
+    testDatabase.setConnectOptions(parameters.imgConnectOptions);
 
     kapp->restoreOverrideCursor();
 
@@ -298,55 +380,93 @@ void DatabaseWidget::checkDatabaseConnection()
     QSqlDatabase::removeDatabase(databaseID);
 }
 
-void DatabaseWidget::checkDBPath()
-{
-//    bool dbOk          = false;
-//    bool pathUnchanged = true;
-    QString newPath    = databasePathEdit->url().toLocalFile();
 
-    if (!databasePathEdit->url().path().isEmpty())
+void DatabaseWidget::slotTmbCheckDatabaseConnection()
+{
+    // TODO : if chek DB connection operations can be threaded, use DBusyDlg dialog there...
+    //FIXME:
+
+    kapp->setOverrideCursor(Qt::WaitCursor);
+
+    QString databaseID("ConnectionTest");
+    QSqlDatabase testDatabase     = QSqlDatabase::addDatabase(tmbCurrentDatabaseType(), databaseID);
+    DatabaseParameters parameters = getDatabaseParameters();
+    testDatabase.setHostName(parameters.tmbHostName);
+    testDatabase.setPort(parameters.tmbPort);
+    testDatabase.setUserName(parameters.tmbUserName);
+    testDatabase.setPassword(parameters.tmbPassword);
+    testDatabase.setConnectOptions(parameters.tmbConnectOptions);
+
+    kapp->restoreOverrideCursor();
+
+    bool result = testDatabase.open();
+
+    if (result)
     {
-        QDir dbDir(newPath);
-        QDir oldDir(originalDbPath);
-//        dbOk          = dbDir.exists();
-//        pathUnchanged = (dbDir == oldDir);
+        KMessageBox::information(0, i18n("Database connection test successful."), i18n("Database connection test"));
+    }
+    else
+    {
+        KMessageBox::error(0, i18n("Database connection test was not successful. <p>Error was: %1</p>",
+                                   testDatabase.lastError().text()), i18n("Database connection test") );
     }
 
-    //TODO create an Enable button slot, if the path is vald
-    //d->mainDialog->enableButtonOk(dbOk);
+    testDatabase.close();
+    QSqlDatabase::removeDatabase(databaseID);
+}
+
+
+
+void DatabaseWidget::checkDBPath()
+{
+    QString newPath    = imgDatabasePathEdit->url().toLocalFile();
+
+    if (!imgDatabasePathEdit->url().path().isEmpty())
+    {
+        QDir dbDir(newPath);
+        QDir oldDir(imgOriginalDbPath);
+    }
+
+    if (!tmbDatabasePathEdit->url().path().isEmpty())
+    {
+        QDir dbDir(newPath);
+        QDir oldDir(tmbOriginalDbPath);
+    }
 }
 
 void DatabaseWidget::setParametersFromSettings(const AlbumSettings* settings)
 {
-    originalDbPath = settings->getDatabaseFilePath();
-    originalDbType = settings->getDatabaseType();
-    databasePathEdit->setUrl(settings->getDatabaseFilePath());
 
-//fr #ifdef HAVE_INTERNALMYSQL
-//fr     internalServer->setChecked(settings->getInternalDatabaseServer());
-//fr #else
-//fr     internalServer->setChecked(false);
-//fr #endif // HAVE_INTERNALMYSQL
-    databaseName->setText(settings->getDatabaseName());
+#ifdef HAVE_INTERNALMYSQL
+    internalServer->setChecked(settings->getInternalDatabaseServer());
+#else
+    internalServer->setChecked(false);
+#endif
+
+    imgOriginalDbPath = settings->getDatabaseFilePath();
+    imgOriginalDbType = settings->getDatabaseType();
+    imgDatabasePathEdit->setUrl(settings->getDatabaseFilePath());
+
+    imgDatabaseName->setText(settings->getDatabaseName());
     //fr databaseNameThumbnails->setText(settings->getDatabaseNameThumbnails());
-    hostName->setText(settings->getDatabaseHostName());
-    hostPort->setValue(settings->getDatabasePort());
-    connectionOptions->setText(settings->getDatabaseConnectoptions());
+    imgHostName->setText(settings->getDatabaseHostName());
+    imgHostPort->setValue(settings->getDatabasePort());
+    imgConnectionOptions->setText(settings->getDatabaseConnectoptions());
 
-    userName->setText(settings->getDatabaseUserName());
+    imgUserName->setText(settings->getDatabaseUserName());
 
-    password->setText(settings->getDatabasePassword());
+    imgPassword->setText(settings->getDatabasePassword());
 
     /* Now set the type according the database type from the settings.
      * If no item is found, ignore the setting.
      */
-    for (int i=0; i<databaseType->count(); ++i)
+    for (int i=0; i<imgDatabaseType->count(); ++i)
     {
-        //kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemData(i)
-        //            << "] with ["<< settings->getDatabaseType() << "]";
-        if (databaseType->itemData(i).toString() == settings->getDatabaseType())
+        //kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" << imgDatabaseType->itemData(i)
+        //            << "] with ["<< settings->getImgDatabaseType() << "]";
+        if (imgDatabaseType->itemData(i).toString() == settings->getDatabaseType())
         {
-            databaseType->setCurrentIndex(i);
+            imgDatabaseType->setCurrentIndex(i);
         }
     }
 }
@@ -356,32 +476,32 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
     DatabaseParameters parameters;
 
     //fr if (currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()) || !internalServer->isChecked())
-    if (currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
+    if (imgCurrentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
     {
-        parameters.connectOptions = connectionOptions->text();
-        parameters.databaseType   = currentDatabaseType();
-        parameters.hostName       = hostName->text();
-        parameters.password       = password->text();
-        parameters.port           = hostPort->text().toInt();
-        parameters.userName       = userName->text();
+        //FIXME:
+        parameters.imgConnectOptions = imgConnectionOptions->text();
+        parameters.imgDatabaseType   = imgCurrentDatabaseType();
+        parameters.imgHostName       = imgHostName->text();
+        parameters.imgPassword       = imgPassword->text();
+        parameters.imgPort           = imgHostPort->text().toInt();
+        parameters.imgUserName       = imgUserName->text();
 
-        if (parameters.databaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
+        if (parameters.imgDatabaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
         {
-            parameters.databaseName = QDir::cleanPath(databasePathEdit->url().toLocalFile() + '/' + "digikam4.db");
-            //fr parameters.databaseNameThumbnails = parameters.databaseName;
-            parameters.databaseNameThumbnails = parameters.databaseName; //fr
+            parameters.imgDatabaseName = QDir::cleanPath(imgDatabasePathEdit->url().toLocalFile() + '/' + "digikam4.db");
+            parameters.tmbDatabaseName = QDir::cleanPath(tmbDatabasePathEdit->url().toLocalFile() + '/' + "thumbnails-digikam.db");
         }
         else
         {
-            parameters.databaseName = databaseName->text();
-            //fr parameters.databaseNameThumbnails = databaseNameThumbnails->text();
-            parameters.databaseNameThumbnails = parameters.databaseName; //fr
+            parameters.imgDatabaseName = imgDatabaseName->text();
+            parameters.tmbDatabaseName = tmbDatabaseName->text();
         }
     }
     else
     {
-        parameters = DatabaseParameters::defaultParameters(currentDatabaseType());
-        DatabaseServerStarter::startServerManagerProcess(currentDatabaseType());
+        // FIXME:
+        parameters = DatabaseParameters::defaultParameters(imgCurrentDatabaseType());
+        DatabaseServerStarter::startServerManagerProcess(imgCurrentDatabaseType());
     }
 
     return parameters;

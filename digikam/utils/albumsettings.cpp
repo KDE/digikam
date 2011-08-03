@@ -749,13 +749,13 @@ void AlbumSettings::emitSetupChanged()
 
 QString AlbumSettings::getDatabaseFilePath() const
 {
-    return d->databaseParams.getDatabaseNameOrDir();
+    return d->databaseParams.getImgDatabaseNameOrDir();
 }
 
 void AlbumSettings::setDatabaseFilePath(const QString& path)
 {
-    d->databaseParams.setDatabasePath(path);
-    d->databaseParams.setThumbsDatabasePath(path);
+    d->databaseParams.setImgDatabasePath(path);
+    d->databaseParams.setTmbDatabasePath(path);
 }
 
 void AlbumSettings::setShowSplashScreen(bool val)
@@ -1526,22 +1526,22 @@ void AlbumSettings::setDatabaseParameters(const DatabaseParameters& params)
 
 QString AlbumSettings::getDatabaseType() const
 {
-    return d->databaseParams.databaseType;
+    return d->databaseParams.imgDatabaseType;
 }
 
 void AlbumSettings::setDatabaseType(const QString& databaseType)
 {
-    d->databaseParams.databaseType = databaseType;
+    d->databaseParams.imgDatabaseType = databaseType;
 }
 
 QString AlbumSettings::getDatabaseConnectoptions() const
 {
-    return d->databaseParams.connectOptions;
+    return d->databaseParams.imgConnectOptions;
 }
 
 QString AlbumSettings::getDatabaseName() const
 {
-    return d->databaseParams.databaseName;
+    return d->databaseParams.imgDatabaseName;
 }
 
 //fr QString AlbumSettings::getDatabaseNameThumbnails() const
@@ -1551,22 +1551,22 @@ QString AlbumSettings::getDatabaseName() const
 
 QString AlbumSettings::getDatabaseHostName() const
 {
-    return d->databaseParams.hostName;
+    return d->databaseParams.imgHostName;
 }
 
 QString AlbumSettings::getDatabasePassword() const
 {
-    return d->databaseParams.password;
+    return d->databaseParams.imgPassword;
 }
 
 int AlbumSettings::getDatabasePort() const
 {
-    return d->databaseParams.port;
+    return d->databaseParams.imgPort;
 }
 
 QString AlbumSettings::getDatabaseUserName() const
 {
-    return d->databaseParams.userName;
+    return d->databaseParams.imgUserName;
 }
 
 bool AlbumSettings::getInternalDatabaseServer() const
@@ -1576,12 +1576,12 @@ bool AlbumSettings::getInternalDatabaseServer() const
 
 void AlbumSettings::setDatabaseConnectoptions(const QString& connectoptions)
 {
-    d->databaseParams.connectOptions = connectoptions;
+    d->databaseParams.imgConnectOptions = connectoptions;
 }
 
 void AlbumSettings::setDatabaseName(const QString& databaseName)
 {
-    d->databaseParams.databaseName = databaseName;
+    d->databaseParams.imgDatabaseName = databaseName;
 }
 
 //fr void AlbumSettings::setDatabaseNameThumbnails(const QString& databaseNameThumbnails)
@@ -1591,22 +1591,22 @@ void AlbumSettings::setDatabaseName(const QString& databaseName)
 
 void AlbumSettings::setDatabaseHostName(const QString& hostName)
 {
-    d->databaseParams.hostName = hostName;
+    d->databaseParams.imgHostName = hostName;
 }
 
 void AlbumSettings::setDatabasePassword(const QString& password)
 {
-    d->databaseParams.password = password;
+    d->databaseParams.imgPassword = password;
 }
 
 void AlbumSettings::setDatabasePort(int port)
 {
-    d->databaseParams.port = port;
+    d->databaseParams.imgPort = port;
 }
 
 void AlbumSettings::setDatabaseUserName(const QString& userName)
 {
-    d->databaseParams.userName = userName;
+    d->databaseParams.imgUserName = userName;
 }
 
 void AlbumSettings::setInternalDatabaseServer(const bool useInternalDBServer)

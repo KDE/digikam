@@ -153,13 +153,13 @@ void SetupDatabase::applySettings()
         return;
     }
 
-    if (d->databaseWidget->currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
+    if (d->databaseWidget->imgCurrentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
     {
-        QString newPath = d->databaseWidget->databasePathEdit->url().path();
-        QDir oldDir(d->databaseWidget->originalDbPath);
+        QString newPath = d->databaseWidget->imgDatabasePathEdit->url().path();
+        QDir oldDir(d->databaseWidget->imgOriginalDbPath);
         QDir newDir(newPath);
 
-        if (oldDir != newDir || d->databaseWidget->currentDatabaseType() != d->databaseWidget->originalDbType)
+        if (oldDir != newDir || d->databaseWidget->imgCurrentDatabaseType() != d->databaseWidget->imgOriginalDbType)
         {
             settings->setDatabaseParameters(DatabaseParameters::parametersForSQLiteDefaultFile(newPath));
 
@@ -173,28 +173,45 @@ void SetupDatabase::applySettings()
     {
         if (d->databaseWidget->internalServer->isChecked())
         {
-            DatabaseParameters internalServerParameters = DatabaseParameters::defaultParameters(d->databaseWidget->currentDatabaseType());
+            //FIXME: thumb imgCurrentDatabaseType
+            DatabaseParameters internalServerParameters = DatabaseParameters::defaultParameters(d->databaseWidget->imgCurrentDatabaseType());
             settings->setInternalDatabaseServer(true);
-            settings->setDatabaseType(d->databaseWidget->currentDatabaseType());
-            settings->setDatabaseName(internalServerParameters.databaseName);
-            //fr settings->setDatabaseNameThumbnails(internalServerParameters.databaseName);
-            settings->setDatabaseConnectoptions(internalServerParameters.connectOptions);
-            settings->setDatabaseHostName(internalServerParameters.hostName);
-            settings->setDatabasePort(internalServerParameters.port);
-            settings->setDatabaseUserName(internalServerParameters.userName);
-            settings->setDatabasePassword(internalServerParameters.password);
+
+            settings->setDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
+            settings->setDatabaseName(internalServerParameters.imgDatabaseName);
+            settings->setDatabaseConnectoptions(internalServerParameters.imgConnectOptions);
+            settings->setDatabaseHostName(internalServerParameters.imgHostName);
+            settings->setDatabasePort(internalServerParameters.imgPort);
+            settings->setDatabaseUserName(internalServerParameters.imgUserName);
+            settings->setDatabasePassword(internalServerParameters.imgPassword);
+
+//             settings->setTmbDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
+//             settings->setTmbDatabaseName(internalServerParameters.tmbDatabaseName);
+//             settings->setTmbDatabaseConnectoptions(internalServerParameters.tmbConnectOptions);
+//             settings->setTmbDatabaseHostName(internalServerParameters.tmbHostName);
+//             settings->setTmbDatabasePort(internalServerParameters.tmbPort);
+//             settings->setTmbDatabaseUserName(internalServerParameters.tmbUserName);
+//             settings->setTmbDatabasePassword(internalServerParameters.tmbPassword);
         }
         else
         {
             settings->setInternalDatabaseServer(d->databaseWidget->internalServer->isChecked());
-            settings->setDatabaseType(d->databaseWidget->currentDatabaseType());
-            settings->setDatabaseName(d->databaseWidget->databaseName->text());
-            //fr settings->setDatabaseNameThumbnails(d->databaseWidget->databaseNameThumbnails->text());
-            settings->setDatabaseConnectoptions(d->databaseWidget->connectionOptions->text());
-            settings->setDatabaseHostName(d->databaseWidget->hostName->text());
-            settings->setDatabasePort(d->databaseWidget->hostPort->text().toInt());
-            settings->setDatabaseUserName(d->databaseWidget->userName->text());
-            settings->setDatabasePassword(d->databaseWidget->password->text());
+
+            settings->setDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
+            settings->setDatabaseName(d->databaseWidget->imgDatabaseName->text());
+            settings->setDatabaseConnectoptions(d->databaseWidget->imgConnectionOptions->text());
+            settings->setDatabaseHostName(d->databaseWidget->imgHostName->text());
+            settings->setDatabasePort(d->databaseWidget->imgHostPort->text().toInt());
+            settings->setDatabaseUserName(d->databaseWidget->imgUserName->text());
+            settings->setDatabasePassword(d->databaseWidget->imgPassword->text());
+
+//             settings->setTmbDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
+//             settings->setTmbDatabaseName(d->databaseWidget->tmbDatabaseName->text());
+//             settings->setTmbDatabaseConnectoptions(d->databaseWidget->tmbConnectionOptions->text());
+//             settings->setTmbDatabaseHostName(d->databaseWidget->tmbHostName->text());
+//             settings->setTmbDatabasePort(d->databaseWidget->tmbHostPort->text().toInt());
+//             settings->setTmbDatabaseUserName(d->databaseWidget->tmbUserName->text());
+//             settings->setTmbDatabasePassword(d->databaseWidget->tmbPassword->text());
         }
 
         settings->saveSettings();
