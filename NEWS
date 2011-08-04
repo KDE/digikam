@@ -16,6 +16,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 251900 : Preview of RAW images missing.
 009 ==> 260669 : Images on camera always marked as new.
 010 ==> 246336 : Ordering incorrect.
-011 ==> 
-
+011 ==> 264123 - digiKam freezes when creating thumbnails in the import dialog (from a memory stick).
+012 ==> 
 
