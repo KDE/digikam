@@ -20,5 +20,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 199197 : Can't import pictures from camera.
 013 ==> 181521 : NEF's in descending order, AVI in ascending order in import from SD-card.
 014 ==> 221457 : digiKam camera download - dates are not preserved.
-015 ==> 
+015 ==> 229543 : Video exif info not found during import and renaming.
+016 ==> 
 
