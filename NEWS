@@ -30,4 +30,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 233621 : Importing from Nikon Coolpix P90 ignores date/time of the images and uses 31-12-1969 instead.
 023 ==> 160496 : No disk space reported when importing pictures.
 024 ==> 184439 : Closing the "USB DISK DOWNLOAD from DISK" window updates the digikam folder view.
-025 ==> 
+025 ==> 253268 : digiKam crashes when starting to download pictures.
+026 ==> 
