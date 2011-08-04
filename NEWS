@@ -28,4 +28,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 256776 : digiKam leaves ".digikam-exifrotate" files etc. on harddisk.
 021 ==> 237810 : Wrong date when renaming downloaded pictures.
 022 ==> 233621 : Importing from Nikon Coolpix P90 ignores date/time of the images and uses 31-12-1969 instead.
-023 ==> 
+023 ==> 160496 : No disk space reported when importing pictures.
+024 ==> 
