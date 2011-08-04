@@ -2011,19 +2011,15 @@ void CameraUI::slotNewSelection(bool hasSelection)
         // selected image has not been downloaded
         bool haveNotDownloadedItem = false;
 
-        for (IconItem* item = d->view->firstItem(); item;
-             item = item->nextItem())
+        CamItemInfoList list = d->view->selectedItems();
+
+        foreach(CamItemInfo info, list)
         {
-            const CameraIconItem* const iconItem = static_cast<CameraIconItem*>(item);
+            haveNotDownloadedItem = !d->view->isDownloaded(info);
 
-            if (iconItem->isSelected())
+            if (haveNotDownloadedItem)
             {
-                haveNotDownloadedItem = !iconItem->isDownloaded();
-
-                if (haveNotDownloadedItem)
-                {
-                    break;
-                }
+                break;
             }
         }
 
