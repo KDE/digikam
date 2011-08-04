@@ -21,5 +21,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 181521 : NEF's in descending order, AVI in ascending order in import from SD-card.
 014 ==> 221457 : digiKam camera download - dates are not preserved.
 015 ==> 229543 : Video exif info not found during import and renaming.
-016 ==> 
+016 ==> 265243 : Series of AVIs imported with the same (incorrect) time.
+017 ==> 
 
