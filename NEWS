@@ -18,6 +18,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 246336 : Ordering incorrect.
 011 ==> 264123 : digiKam freezes when creating thumbnails in the import dialog (from a memory stick).
 012 ==> 199197 : Can't import pictures from camera.
-013 ==> 181521 - NEF's in descending order, AVI in ascending order in import from SD-card.
-014 ==>
+013 ==> 181521 : NEF's in descending order, AVI in ascending order in import from SD-card.
+014 ==> 221457 : digiKam camera download - dates are not preserved.
+015 ==> 
 
