@@ -76,6 +76,7 @@ public:
 
     void ensureItemVisible(const CamItemInfo& itemInfo);
     void ensureItemVisible(const QString& folder, const QString& filename);
+    bool isSelected(const CamItemInfo& itemInfo);
 
     void setThumbnailSize(int thumbSize);
     int  thumbnailSize() const;
@@ -83,7 +84,7 @@ public:
     CamItemInfo     findItemInfo(const QString& folder, const QString& file) const;
     CamItemInfo     firstItemSelected() const;
     CamItemInfoList selectedItems() const;
-    CamItemInfoList allItems() const;
+    CamItemInfoList allItems(bool lastPhotoFirst=false) const;
 
     /** Return a map of folder and items counted
      */

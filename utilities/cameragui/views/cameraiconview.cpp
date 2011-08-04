@@ -382,6 +382,13 @@ void CameraIconView::ensureItemVisible(const QString& folder, const QString& fil
     ensureItemVisible(item);
 }
 
+bool CameraIconView::isSelected(const CamItemInfo& itemInfo)
+{
+    CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
+    if (iconItem) return iconItem->isSelected();
+    return false;
+}
+
 void CameraIconView::slotDownloadNameChanged()
 {
     bool hasSelection = false;
@@ -1023,11 +1030,12 @@ CamItemInfoList CameraIconView::selectedItems() const
     return list;
 }
 
-CamItemInfoList CameraIconView::allItems() const
+CamItemInfoList CameraIconView::allItems(bool lastPhotoFirst) const
 {
     CamItemInfoList list;
 
-    for (IconItem* item = firstItem(); item; item = item->nextItem())
+    for (IconItem* item = (lastPhotoFirst ? lastItem() : firstItem()); item;
+         item = (lastPhotoFirst ? item->prevItem() : item->nextItem()))
     {
         CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
         list.append(iconItem->itemInfo());
