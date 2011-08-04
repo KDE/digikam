@@ -348,6 +348,13 @@ void CameraIconView::setDownloaded(const CamItemInfo& itemInfo, int status)
     if (iconItem) iconItem->setDownloaded(status);
 }
 
+bool CameraIconView::isDownloaded(const CamItemInfo& itemInfo)
+{
+    CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
+    if (iconItem) return iconItem->isDownloaded();
+    return false;
+}
+
 void CameraIconView::toggleLock(const CamItemInfo& itemInfo)
 {
     CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
@@ -1011,6 +1018,19 @@ CamItemInfoList CameraIconView::selectedItems() const
         {
             list.append(iconItem->itemInfo());
         }
+    }
+
+    return list;
+}
+
+CamItemInfoList CameraIconView::allItems() const
+{
+    CamItemInfoList list;
+
+    for (IconItem* item = firstItem(); item; item = item->nextItem())
+    {
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+        list.append(iconItem->itemInfo());
     }
 
     return list;

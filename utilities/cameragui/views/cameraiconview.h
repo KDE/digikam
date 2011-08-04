@@ -69,8 +69,10 @@ public:
 
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
     void setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo);
-    void setDownloaded(const CamItemInfo& itemInfo, int status);
     void toggleLock(const CamItemInfo& itemInfo);
+
+    void setDownloaded(const CamItemInfo& itemInfo, int status);
+    bool isDownloaded(const CamItemInfo& itemInfo);
 
     void ensureItemVisible(const CamItemInfo& itemInfo);
     void ensureItemVisible(const QString& folder, const QString& filename);
@@ -81,6 +83,7 @@ public:
     CamItemInfo     findItemInfo(const QString& folder, const QString& file) const;
     CamItemInfo     firstItemSelected() const;
     CamItemInfoList selectedItems() const;
+    CamItemInfoList allItems() const;
 
     /** Return a map of folder and items counted
      */

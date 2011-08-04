@@ -1883,46 +1883,20 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
     QStringList files;
     QStringList deleteList;
     QStringList lockedList;
+    CamItemInfoList list = onlySelected ? d->view->selectedItems() : d->view->allItems();
 
-    for (IconItem* item = d->view->firstItem(); item; item = item->nextItem())
+    foreach(CamItemInfo info, list)
     {
-        CameraIconItem* iconItem = dynamic_cast<CameraIconItem*>(item);
-
-        if (iconItem)
+        if (onlyDownloaded)
         {
-            CamItemInfo info = iconItem->itemInfo();
-
-            if (onlySelected)
+            if (d->view->isDownloaded(info))
             {
-                if (iconItem->isSelected())
-                {
-                    if (onlyDownloaded)
-                    {
-                        if (iconItem->isDownloaded())
-                        {
-                            checkItem4Deletion(info, folders, files, deleteList, lockedList);
-                        }
-                    }
-                    else
-                    {
-                        checkItem4Deletion(info, folders, files, deleteList, lockedList);
-                    }
-                }
+                checkItem4Deletion(info, folders, files, deleteList, lockedList);
             }
-            else    // All items
-            {
-                if (onlyDownloaded)
-                {
-                    if (iconItem->isDownloaded())
-                    {
-                        checkItem4Deletion(info, folders, files, deleteList, lockedList);
-                    }
-                }
-                else
-                {
-                    checkItem4Deletion(info, folders, files, deleteList, lockedList);
-                }
-            }
+        }
+        else
+        {
+            checkItem4Deletion(info, folders, files, deleteList, lockedList);
         }
     }
 
