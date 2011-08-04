@@ -1168,7 +1168,7 @@ void CameraUI::slotRefreshIconViewTimer()
     // We sort the map by time stamp
     // and we remove internal camera files which are not image/video/sounds.
     QStringList fileNames, fileExts;
-    QFileInfo   info;
+    QFileInfo   fi;
 
     // JVC camera (see B.K.O #133185).
     fileNames.append("mgr_data");
@@ -1184,24 +1184,23 @@ void CameraUI::slotRefreshIconViewTimer()
     QStringList list = settings->getAllFileFilter().toLower().split(' ');
 
     QMultiMap<QDateTime, CamItemInfo> map;
-    CameraIconItem* citem = static_cast<CameraIconItem*>(d->view->firstItem());
+    CamItemInfoList items = d->view->allItems();
 
-    while (citem)
+    foreach(CamItemInfo info, items)
     {
-        info.setFile(citem->itemInfo().name);
-        map.insertMulti(citem->itemInfo().mtime, citem->itemInfo());
-        citem = static_cast<CameraIconItem*>(citem->nextItem());
+        fi.setFile(info.name);
+        map.insertMulti(info.mtime, info);
     }
 
     CamItemInfoList::iterator it = d->filesToBeAdded.begin();
 
     while (it != d->filesToBeAdded.end())
     {
-        info.setFile((*it).name);
+        fi.setFile((*it).name);
 
-        if (!fileNames.contains(info.fileName().toLower()) &&
-            !fileExts.contains(info.suffix().toLower())    &&
-            list.contains(QString("*.%1").arg(info.suffix().toLower())))
+        if (!fileNames.contains(fi.fileName().toLower()) &&
+            !fileExts.contains(fi.suffix().toLower())    &&
+            list.contains(QString("*.%1").arg(fi.suffix().toLower())))
         {
             map.insertMulti((*it).mtime, *it);
         }
@@ -1209,13 +1208,11 @@ void CameraUI::slotRefreshIconViewTimer()
         it = d->filesToBeAdded.erase(it);
     }
 
-    citem = static_cast<CameraIconItem*>(d->view->firstItem());
+    items = d->view->allItems();
 
-    while (citem)
+    foreach(CamItemInfo info, items)
     {
-        CameraIconItem* tempItem = citem;
-        citem                    = static_cast<CameraIconItem*>(tempItem->nextItem());
-        d->view->removeItem(tempItem->itemInfo());
+        d->view->removeItem(info);
     }
 
     d->historyUpdater->addItems(d->controller->cameraMD5ID(), map);
