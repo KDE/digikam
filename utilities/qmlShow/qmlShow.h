@@ -47,7 +47,7 @@ class QmlShow : public QMainWindow
         void prevImage();
         void pause();
         void play();
-
+	void gridview();
 	private:
 	QDeclarativeView *ui;
 };

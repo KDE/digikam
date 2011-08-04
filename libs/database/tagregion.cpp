@@ -221,10 +221,13 @@ QDebug operator<<(QDebug dbg, const TagRegion& r)
     {
         case QVariant::Rect:
             dbg.nospace() << var.toRect();
+            break;
         case QVariant::String:
             dbg.nospace() << var.toString();
+            break;
         default:
             dbg.nospace() << var;
+            break;
     }
 
     return dbg;

@@ -448,7 +448,7 @@ void ClassicLoadingCacheFileWatch::slotFileDirty(const QString& path)
     notifyFileChanged(path);
     // No need for locking here, we are in main thread
     m_watch->removeFile(path);
-    m_watchedFiles.removeAll(path);
+    m_watchedFiles.remove(path);
 }
 
 void ClassicLoadingCacheFileWatch::slotUpdateDirWatch()
@@ -457,8 +457,8 @@ void ClassicLoadingCacheFileWatch::slotUpdateDirWatch()
     LoadingCache::CacheLock lock(m_cache);
 
     // get a list of files in cache that need m_watch
-    QStringList toBeAdded;
-    QStringList toBeRemoved = m_watchedFiles;
+    QSet<QString> toBeAdded;
+    QSet<QString> toBeRemoved = m_watchedFiles;
 
     QList<QString> filePaths = m_cache->imageFilePathsInCache();
     foreach(const QString& m_watchPath, filePaths)
@@ -467,25 +467,25 @@ void ClassicLoadingCacheFileWatch::slotUpdateDirWatch()
         {
             if (!m_watchedFiles.contains(m_watchPath))
             {
-                toBeAdded.append(m_watchPath);
+                toBeAdded.insert(m_watchPath);
             }
 
-            toBeRemoved.removeAll(m_watchPath);
+            toBeRemoved.remove(m_watchPath);
         }
     }
 
-    for (QStringList::const_iterator it = toBeRemoved.constBegin(); it != toBeRemoved.constEnd(); ++it)
+    foreach (const QString& watchedItem, toBeRemoved)
     {
         //kDebug() << "removing m_watch for " << *it;
-        m_watch->removeFile(*it);
-        m_watchedFiles.removeAll(*it);
+        m_watch->removeFile(watchedItem);
+        m_watchedFiles.remove(watchedItem);
     }
 
-    for (QStringList::const_iterator it = toBeAdded.constBegin(); it != toBeAdded.constEnd(); ++it)
+    foreach (const QString& watchedItem, toBeAdded)
     {
         //kDebug() << "adding m_watch for " << *it;
-        m_watch->addFile(*it);
-        m_watchedFiles.append(*it);
+        m_watch->addFile(watchedItem);
+        m_watchedFiles.insert(watchedItem);
     }
 }
 

@@ -232,7 +232,8 @@ protected:
     virtual void setupActions()=0;
     virtual void setupUserArea()=0;
 
-    void setOriginAfterSave();
+    void resetOrigin();
+    void resetOriginSwitchFile();
     virtual VersionManager* versionManager() const;
     VersionFileOperation saveVersionFileOperation(const KUrl& url, bool fork);
     VersionFileOperation saveAsVersionFileOperation(const KUrl& url, const KUrl& saveLocation, const QString& format);

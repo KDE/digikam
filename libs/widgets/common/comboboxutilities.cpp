@@ -273,6 +273,7 @@ bool StayPoppedUpComboBox::eventFilter(QObject* o, QEvent* e)
                     // we have dispatched the event privately; we filter it out from the main dispatching
                     return true;
                 }
+                break;
             }
             case QEvent::ContextMenu:
             {

@@ -280,7 +280,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             }
 
             // Fill all with 255 including alpha channel.
-            memset(data, sizeof(data), 0xFF);
+            memset(data, 0xFF, width * height * (m_sixteenBit ? 8 : 4));
 
             pgf.Read(level, CallbackForLibPGF, this);
             pgf.GetBitmap(m_sixteenBit ? width*8 : width*4,

@@ -746,7 +746,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
 #endif /* HAVE_GPHOTO2 */
 }
 
-bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bool /*getImageDimensions*/)
+bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items)
 {
 #ifdef HAVE_GPHOTO2
     int         errorCode;
@@ -1208,8 +1208,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
 #endif /* HAVE_GPHOTO2 */
 }
 
-bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
-                          GPItemInfo& itemInfo, bool /*getImageDimensions*/)
+bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile, GPItemInfo& itemInfo)
 {
 #ifdef HAVE_GPHOTO2
     int         errorCode;

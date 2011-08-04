@@ -39,6 +39,7 @@ class QWidget;
 
 namespace Digikam
 {
+
 typedef QMultiMap<QDateTime, GPItemInfo>   CHUpdateItemMap;
 typedef QPair<QByteArray, CHUpdateItemMap> CHUpdateItem;
 

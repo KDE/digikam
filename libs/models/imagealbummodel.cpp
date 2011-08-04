@@ -313,9 +313,9 @@ void ImageAlbumModel::slotResult(KJob* job)
     }
 }
 
-void ImageAlbumModel::slotData(KIO::Job*, const QByteArray& data)
+void ImageAlbumModel::slotData(KIO::Job* job, const QByteArray& data)
 {
-    if (data.isEmpty())
+    if (data.isEmpty() || job != d->job)
     {
         return;
     }

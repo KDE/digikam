@@ -44,9 +44,9 @@
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
-// Libkmap includes
+// Libkgeomap includes
 
-#include <libkmap/kmap_widget.h>
+#include <libkgeomap/kgeomap_widget.h>
 
 // C ANSI includes
 
@@ -140,8 +140,8 @@ LibsInfoDlg::LibsInfoDlg(QWidget* parent)
     list.insert(i18n("LibJasper"),                   QString(jas_getversion()));
     list.insert(i18n("LibCImg"),                     GreycstorationFilter::cimgVersionString());
     list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
-    list.insert(i18n("LibKMap"),                     KMap::KMapWidget::version());
-    list.insert(i18n("Marble Widget"),               KMap::KMapWidget::MarbleWidgetVersion());
+    list.insert(i18n("LibKGeoMap"),                     KGeoMap::KGeoMapWidget::version());
+    list.insert(i18n("Marble Widget"),               KGeoMap::KGeoMapWidget::MarbleWidgetVersion());
 
 #ifdef USE_EXT_LIBPGF
     list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(libPGFVersion()).arg(i18n("external shared library")));

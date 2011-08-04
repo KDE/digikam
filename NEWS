@@ -225,16 +225,42 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 196 ==> 272175 : Picture orientation is "forgotten" in viewer and light table when using xmp sidecar [patch].
 197 ==> 275311 : XMP sidecars are not written for symbolic links [patch].
 198 ==> 276712 : Ignore certain file types.
-199 ==> 276154 : jpegutils.cpp contains debug output, but disabled by define.
-200 ==> 141730 : page down/up goes to next/previous picture istead of scolling a page.
-201 ==> 229795 : Position in album lost when switching album forth and back.
-202 ==> 208506 : Switching between view does not hold the current image.
-203 ==> 252134 : when selecting multiple images, some controls should be disabled.
-204 ==> 270161 : Unclear how to get rid of tags.
-205 ==> 269446 : Keyword-Managing: Folder "People" und subfolder "Unknown" persistent?.
-206 ==> 269445 : Not possible to select only one album INCLUDING subfolders to scan for faces.
-207 ==> 277502 : All versions of version set always displayed in Album viewed.
-208 ==> 271557 : Tags: missing order, no sorting.
-209 ==> 265264 : Tag all images multiple Images are selected.
-210 ==>
-
+199 ==> 141730 : Page down/up goes to next/previous picture istead of scolling a page.
+200 ==> 229795 : Position in album lost when switching album forth and back.
+201 ==> 208506 : Switching between view does not hold the current image.
+202 ==> 252134 : When selecting multiple images, some controls should be disabled.
+203 ==> 270161 : Unclear how to get rid of tags.
+204 ==> 269446 : Keyword-Managing: Folder "People" und subfolder "Unknown" persistent?
+205 ==> 269445 : Not possible to select only one album INCLUDING subfolders to scan for faces.
+206 ==> 277502 : All versions of version set always displayed in Album viewed.
+207 ==> 271557 : Tags: missing order, no sorting.
+208 ==> 265264 : Tag all images multiple Images are selected.
+209 ==> 247659 : In big albums re-sorting thumbnails on opening right tab bar, move selected image out the screen [patch].
+210 ==> 276923 : Crash during initial run of facial recognition.
+211 ==> 276646 : Crash while trying to switch database sqlite -> mysql.
+212 ==> 271622 : Local contrast settings are greyed out.
+213 ==> 274947 : Auto-rotate/flip image does not work at import.
+214 ==> 276450 : Versioning cuts image filenames after the first '.'.
+215 ==> 276525 : Image editor offers to save image when quitting even when it has just been saved.
+216 ==> 276526 : When deleting a picture with Image Editor, it then loads the second next picture.
+217 ==> 274388 : digiKam right click menu does not show any text.
+218 ==> 277927 : Demosaicing (GUI) makes Xorg take 30% CPU.
+219 ==> 276059 : Tags are not written to files on export or save when editing TIFF files.
+220 ==> 271710 : Crash when starting after adding 1500 pic + thumbnails.db is 3.9 GB with 4 GB storage capacity.
+221 ==> 244529 : Crash when writing metadata in files.
+222 ==> 267789 : Make face detection (kface) and geo tagging (kmap) optional features.
+223 ==> 278323 : Wrong Ctrl+V shortcut for "Cut".
+224 ==> 278321 : Please sort "Themes" (color themes) sub menu.
+225 ==> 276827 : digiKam segfaults when autocompleting tags.
+226 ==> 278038 : digiKam crashes while switching image in editor thumbbar.
+227 ==> 276096 : PGF images not shown if zoom is set to 100%.
+228 ==> 207944 : New renaming of pictures.
+229 ==> 270554 : Import Wizard: Rename options filename with timestamp.
+230 ==> 251886 : Autohide scrollbars, please.
+231 ==> 226765 : Panning with arrow keys in preview mode is slow.
+232 ==> 278040 : Raw images disappear after being exported.
+233 ==> 255915 : Crash stopping slideshow.
+234 ==> 278329 : Using DigiKam in Ubuntu 11.04 I cannot switch to another language.
+235 ==> 277935 : Rename libkmap to libkgeomap and move it to extragear/libs.
+236 ==> 273077 : Generate Fingerprints gets slower and slower.
+237 ==> 

@@ -134,7 +134,7 @@ void CameraHistoryUpdater::addItems(const QByteArray& id, CHUpdateItemMap& map)
     }
 
     QMutexLocker lock(&d->mutex);
-    d->running = true;
+    d->running  = true;
     d->canceled = false;
     d->updateItems << CHUpdateItem(id, map);
 

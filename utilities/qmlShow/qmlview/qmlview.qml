@@ -5,13 +5,21 @@ import QtWebKit 1.0
 Rectangle {
 	id:rect
     width: 500
-    height: 30     
+    height: 300     
 property string text: "matrix.jpg"
 signal nextClicked;
 signal prevClicked;
 signal play;
 signal pause;
+signal grid_view;
 property bool bool_pp: true;
+Keys.onLeftPressed: {rect.prevClicked()}
+Keys.onRightPressed: {rect.nextClicked()}
+Keys.onEscapePressed: {Qt.quit()}
+Keys.onSpacePressed: { if (play_pause.src == "pause.png") {play_pause.src = "play.png"; rect.pause();}
+                    else {play_pause.src= "pause.png";rect.play();};
+}
+Keys.onTabPressed: {rect.grid_view();}
     Image {
         id: circle_image
         x: 0
@@ -105,7 +113,8 @@ property bool bool_pp: true;
             height: parent.height / 5
             source: "map_view.png"
 
-            MouseArea {
+
+    MouseArea {
                 id: show_map
                 anchors.fill: parent
                 onClicked: { if (openstreetmap.visible == false) openstreetmap.visible = true
@@ -175,4 +184,15 @@ property bool bool_pp: true;
         url: "./mapview.html"
     }
 
+    GridView {
+        id: grid_view1
+        x: rect.width/5
+        y: rect.height/5
+        width: 3*x
+        height: 3*y
+        highlightItem.z: 3
+        highlightMoveDuration: 152
+        cellHeight: 100
+	
+    }
 }

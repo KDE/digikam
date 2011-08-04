@@ -1777,7 +1777,12 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success
     }
 }
 
-void EditorWindow::setOriginAfterSave()
+void EditorWindow::resetOrigin()
+{
+    m_canvas->interface()->setUndoManagerOrigin();
+}
+
+void EditorWindow::resetOriginSwitchFile()
 {
     DImageHistory resolved = resolvedImageHistory(m_canvas->interface()->getImageHistory());
     m_canvas->interface()->switchToLastSaved(resolved);
@@ -2433,6 +2438,9 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     m_savingContext.executedOperation = SavingContextContainer::SavingStateNone;
     m_savingContext.abortingSaving = false;
 
+    // in any case, destructive (Save as) or non (Export), mark as New Version
+    m_canvas->interface()->setHistoryIsBranch(fork);
+
     m_canvas->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
                      m_setExifOrientationTag && m_canvas->exifRotated(),
                      m_savingContext.format.toLower());
@@ -2554,7 +2562,9 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, 
             return false;
         }*/
 
-        if (!checkOverwrite(newURL))
+        // check for overwrite, unless the operation explicitly tells us to overwrite
+        if (!(m_savingContext.versionFileOperation.tasks & VersionFileOperation::Replace)
+            && !checkOverwrite(newURL))
         {
             return false;
         }

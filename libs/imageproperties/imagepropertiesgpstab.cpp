@@ -52,10 +52,10 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <ktoolinvocation.h>
 #include <kdebug.h>
 
-// libkmap includes
+// libkgeomap includes
 
-#include <libkmap/kmap_widget.h>
-#include <libkmap/itemmarkertiler.h>
+#include <libkgeomap/kgeomap_widget.h>
+#include <libkgeomap/itemmarkertiler.h>
 
 // local includes
 
@@ -102,8 +102,8 @@ public:
     KSqueezedTextLabel*    longitude;
     KSqueezedTextLabel*    date;
 
-    KMap::KMapWidget*      map;
-    KMap::ItemMarkerTiler* itemMarkerTiler;
+    KGeoMap::KGeoMapWidget*      map;
+    KGeoMap::ItemMarkerTiler* itemMarkerTiler;
     GPSImageInfo::List     gpsInfoList;
 
     QStandardItemModel*    itemModel;
@@ -126,13 +126,13 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
     QVBoxLayout* const vlay2  = new QVBoxLayout(mapPanel);
-    d->map                    = new KMap::KMapWidget(mapPanel);
-    d->map->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup);
-    d->map->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup);
-    d->map->setEnabledExtraActions(KMap::ExtraActionSticky);
-    d->map->setVisibleExtraActions(KMap::ExtraActionSticky);
+    d->map                    = new KGeoMap::KGeoMapWidget(mapPanel);
+    d->map->setAvailableMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup);
+    d->map->setVisibleMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup);
+    d->map->setEnabledExtraActions(KGeoMap::ExtraActionSticky);
+    d->map->setVisibleExtraActions(KGeoMap::ExtraActionSticky);
     d->gpsImageInfoSorter = new GPSImageInfoSorter(this);
-    d->gpsImageInfoSorter->addToKMapWidget(d->map);
+    d->gpsImageInfoSorter->addToKGeoMapWidget(d->map);
     vlay2->addWidget(d->map);
     vlay2->setMargin(0);
     vlay2->setSpacing(0);
@@ -141,7 +141,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
     d->itemModel        = new QStandardItemModel(this);
     d->gpsModelHelper   = new ImageGPSModelHelper(d->itemModel, this);
-    d->itemMarkerTiler  = new KMap::ItemMarkerTiler(d->gpsModelHelper, this);
+    d->itemMarkerTiler  = new KGeoMap::ItemMarkerTiler(d->gpsModelHelper, this);
     d->map->setGroupedModel(d->itemMarkerTiler);
 
     d->altLabel         = new QLabel(i18n("<b>Altitude</b>:"),  this);
@@ -334,7 +334,7 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
         double alt;
         const bool haveAlt = meta.getGPSAltitude(&alt);
 
-        KMap::GeoCoordinates coordinates(lat, lng);
+        KGeoMap::GeoCoordinates coordinates(lat, lng);
         if (haveAlt)
         {
             coordinates.setAlt(alt);
@@ -384,7 +384,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
     if (list.count() == 1)
     {
         const GPSImageInfo info = list.first();
-        const KMap::GeoCoordinates& coordinates = info.coordinates;
+        const KGeoMap::GeoCoordinates& coordinates = info.coordinates;
 
         if (!coordinates.hasAltitude())
         {

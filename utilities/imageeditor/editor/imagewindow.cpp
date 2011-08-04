@@ -339,6 +339,7 @@ ImageWindow::ImageWindow()
 
     //-------------------------------------------------------------
 
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
     d->rightSideBar->loadState();
     d->rightSideBar->populateTags();
 
@@ -386,6 +387,9 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
     saveMainWindowSettings(group);
     saveSettings();
+
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
+    d->rightSideBar->saveState();
 
     e->accept();
 }
@@ -1074,6 +1078,8 @@ void ImageWindow::saveIsComplete()
     KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
                          this, windowTitle());
 
+    resetOrigin();
+
     QModelIndex next = d->nextIndex();
 
     if (next.isValid())
@@ -1132,7 +1138,7 @@ void ImageWindow::saveAsIsComplete()
     }
 
     // set origin of DImgInterface: "As if" the last saved image was loaded directly
-    setOriginAfterSave();
+    resetOriginSwitchFile();
 
     // If the DImg is put in the cache under the new name, this means the new file will not be reloaded.
     // This may irritate users who want to check for quality loss in lossy formats.
@@ -1328,11 +1334,11 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
     // We have database information, which means information will get through
     // everywhere. Just do it asynchronously.
 
+    removeCurrent();
+
     KIO::Job* job = DIO::del(kioURL, useTrash);
     job->ui()->setWindow(this);
     job->ui()->setAutoErrorHandlingEnabled(true);
-
-    removeCurrent();
 }
 
 void ImageWindow::removeCurrent()
@@ -1342,27 +1348,9 @@ void ImageWindow::removeCurrent()
         return;
     }
 
-    QModelIndex next = d->nextIndex();
-    QModelIndex prev = d->previousIndex();
-
     d->imageInfoModel->removeImageInfo(d->currentImageInfo);
 
-    QModelIndex newCurrent;
-
-    if (next.isValid())
-    {
-        newCurrent = next;
-    }
-    else if (prev.isValid())
-    {
-        newCurrent = prev;
-    }
-
-    if (newCurrent.isValid())
-    {
-        loadIndex(newCurrent);
-    }
-    else
+    if (d->imageInfoModel->isEmpty())
     {
         // No image in the current Album -> Quit ImageEditor...
 

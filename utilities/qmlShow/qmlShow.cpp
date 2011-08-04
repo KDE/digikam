@@ -24,8 +24,10 @@
 #include"qmlShow.h"
 #include"imageinfo.h"
 #include<QtGui>
+#include<QString>
 #include<QtDeclarative/QDeclarativeView>
 #include<QDeclarativeEngine>
+#include<stdio.h>
 namespace Digikam
 {
 class ImageInfo;
@@ -33,7 +35,7 @@ QmlShow::QmlShow(QList<QString> *list) : QMainWindow(0, Qt::FramelessWindowHint)
 {
 		this->ui=new QDeclarativeView;
 	this->list=list;
-        this->ui->setSource(QUrl::fromLocalFile("/home/dhruv/digikam/digikam-sc/core/utilities/qmlShow/qmlview/qmlview.qml"));
+        this->ui->setSource(QUrl::fromLocalFile("../core/utilities/qmlShow/qmlview/qmlview.qml"));
         setCentralWidget(this->ui);
 		connect(this->ui->engine(),SIGNAL(quit()),this,SLOT(close()),Qt::DirectConnection);
         this->ui->setResizeMode(QDeclarativeView::SizeRootObjectToView);
@@ -42,11 +44,14 @@ QmlShow::QmlShow(QList<QString> *list) : QMainWindow(0, Qt::FramelessWindowHint)
         connect(object,SIGNAL(prevClicked()),this,SLOT(prevImage()));
         connect(object,SIGNAL(play()),this,SLOT(play()));
         connect(object,SIGNAL(pause()),this,SLOT(pause()));
+	connect(object,SIGNAL(grid_view()),this,SLOT(gridview()));
 	imageno=0;
-	object->setProperty("text",list->at(imageno));
-//      this->ui->setFocus(Qt::OtherFocusReason);
+	QMessageBox* n=new QMessageBox(this);
+	n->setText(list->at(++imageno));
+	n->show();
 	this->ui->show();
         showMaximized();
+	object->setProperty("text",list->at(0));
 }
 
 QmlShow::~QmlShow()
@@ -73,5 +78,12 @@ void QmlShow::pause()
 {
         QObject *object=(QObject*)ui->rootObject();
         object->setProperty("bool_pp",false);
+}
+void QmlShow::gridview()
+{
+	QDeclarativeEngine engine;
+	QDeclarativeComponent component(&engine, "qmlview/ContactModel.qml");
+	QObject *object = component.create();
+	
 }
 }

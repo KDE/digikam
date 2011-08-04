@@ -79,6 +79,7 @@ public:
                 break;
             default:
                 setIcon(0, SmallIcon("dialog-information"));
+                break;
         }
 
         setText(1, QTime::currentTime().toString(Qt::ISODate));

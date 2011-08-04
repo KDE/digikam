@@ -60,6 +60,9 @@ public:
 
     void setSelection(const QRect& selectionArea);
 
+    void readSettings(const KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
+
 private:
 
     void loadImageFromUrl(const KUrl& url);

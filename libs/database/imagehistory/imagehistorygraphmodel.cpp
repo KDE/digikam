@@ -725,6 +725,7 @@ QVariant ImageHistoryGraphModel::data(const QModelIndex& index, int role) const
                     {
                         return i18nc("@item filename", "%1<nl/>(Source Image)", data.toString());
                     }
+                    break;
                 }
             }
             return data;

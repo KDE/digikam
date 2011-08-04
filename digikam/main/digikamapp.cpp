@@ -640,15 +640,12 @@ void DigikamApp::setupAccelerators()
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
 
     d->cutItemsAction = KStandardAction::cut(this, SIGNAL(signalCutAlbumItemsSelection()), this);
-    d->cutItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_X));
     actionCollection()->addAction("cut_album_selection", d->cutItemsAction);
 
     d->copyItemsAction = KStandardAction::copy(this, SIGNAL(signalCopyAlbumItemsSelection()), this);
-    d->cutItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_C));
     actionCollection()->addAction("copy_album_selection", d->copyItemsAction);
 
     d->pasteItemsAction = KStandardAction::paste(this, SIGNAL(signalPasteAlbumItemsSelection()), this);
-    d->cutItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_V));
     actionCollection()->addAction("paste_album_selection", d->pasteItemsAction);
 }
 
@@ -1169,7 +1166,7 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("slideshow_recursive", d->slideShowRecursiveAction);
     d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
-    d->slideShowQmlAction = new KAction(i18n("Presentation View"), this);
+	d->slideShowQmlAction = new KAction(i18n("Presentation View"), this);
     d->slideShowQmlAction->setShortcut(KShortcut(Qt::Key_F10));
     connect(d->slideShowQmlAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowQml()));
     actionCollection()->addAction("slideshow_qml", d->slideShowQmlAction);
@@ -2864,15 +2861,6 @@ void DigikamApp::slotRebuildFingerPrints()
 
 void DigikamApp::slotScanForFaces()
 {
-    // In first, we check if OpenCV Haar Cascade data file are available.
-/*    if (!KFaceIface::OpenCVCascadeDataDirExist())
-    {
-        KMessageBox::error(this, i18n("OpenCV library Haar Cascade data files are not installed on your system. "
-                                      "These files needs to be available to run face detection and recognition "
-                                      "properly. Please check your OpenCV library installation..."));
-        return;
-    }*/
-
     FaceScanDialog dialog;
 
     if (dialog.exec() == QDialog::Accepted)

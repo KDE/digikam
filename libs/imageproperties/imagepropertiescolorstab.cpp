@@ -282,25 +282,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     sv2->setWidget(d->iccProfileWidget);
     insertTab(ImagePropertiesColorsTabPriv::ICCPROFILE, sv2, i18n("ICC profile"));
 
-    // -- read config ---------------------------------------------------------
-
-    /// @todo Implement read/writeSettings functions with externally supplied groups
-
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("Image Properties SideBar"));
-
-    setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",
-                                    (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
-    d->iccProfileWidget->setMode(group.readEntry("ICC Level", (int)ICCProfileWidget::CUSTOM));
-    d->iccProfileWidget->setCurrentItemByKey(group.readEntry("Current ICC Item", QString()));
-
-    d->histogramBox->setChannel((ChannelType)group.readEntry("Histogram Channel",
-                                (int)Digikam::LuminosityChannel));
-    d->histogramBox->setScale((HistogramScale)group.readEntry("Histogram Scale",
-                              (int)LogScaleHistogram));
-    d->regionBG->button(group.readEntry("Histogram Rendering",
-                                        (int)FullImageHistogram))->setChecked(true);
-
     // -------------------------------------------------------------
 
     connect(d->regionBG, SIGNAL(buttonReleased(int)),
@@ -342,22 +323,38 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     // stop it before the d->image data are deleted automatically!
     d->histogramBox->histogram()->stopHistogramComputation();
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("Image Properties SideBar"));
-    group.writeEntry("ImagePropertiesColors Tab", currentIndex());
-    group.writeEntry("Histogram Channel", (int)d->histogramBox->channel());
-    group.writeEntry("Histogram Scale", (int)d->histogramBox->scale());
-    group.writeEntry("Histogram Rendering", d->regionBG->checkedId());
-    group.writeEntry("ICC Level", d->iccProfileWidget->getMode());
-    group.writeEntry("Current ICC Item", d->iccProfileWidget->getCurrentItemKey());
-    config->sync();
-
     if (d->imageLoaderThread)
     {
         delete d->imageLoaderThread;
     }
 
     delete d;
+}
+
+void ImagePropertiesColorsTab::readSettings(const KConfigGroup& group)
+{
+    setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",
+                                    (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
+    d->iccProfileWidget->setMode(group.readEntry("ICC Level", (int)ICCProfileWidget::CUSTOM));
+    d->iccProfileWidget->setCurrentItemByKey(group.readEntry("Current ICC Item", QString()));
+
+    d->histogramBox->setChannel((ChannelType)group.readEntry("Histogram Channel",
+                                (int)Digikam::LuminosityChannel));
+    d->histogramBox->setScale((HistogramScale)group.readEntry("Histogram Scale",
+                              (int)LogScaleHistogram));
+    d->regionBG->button(group.readEntry("Histogram Rendering",
+                                        (int)FullImageHistogram))->setChecked(true);
+
+}
+
+void ImagePropertiesColorsTab::writeSettings(KConfigGroup& group)
+{
+    group.writeEntry("ImagePropertiesColors Tab", currentIndex());
+    group.writeEntry("Histogram Channel", (int)d->histogramBox->channel());
+    group.writeEntry("Histogram Scale", (int)d->histogramBox->scale());
+    group.writeEntry("Histogram Rendering", d->regionBG->checkedId());
+    group.writeEntry("ICC Level", d->iccProfileWidget->getMode());
+    group.writeEntry("Current ICC Item", d->iccProfileWidget->getCurrentItemKey());
 }
 
 void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionArea,

@@ -233,6 +233,7 @@ protected:
 
     VersionFileInfo nextIntermediate(const QString& format);
     void setFileSuffix(QString& fileName, const QString& format) const;
+    void addFileSuffix(QString& baseName, const QString& format, const QString& originalName = QString()) const;
 
 public:
 
@@ -364,7 +365,7 @@ void VersionNameCreator::setSaveFileName()
             if (dirInfo.entryList(QStringList() << suggestedName + ".*", QDir::Files).isEmpty())
             {
                 m_result.fileName = suggestedName;
-                setFileSuffix(m_result.fileName, m_result.format);
+                addFileSuffix(m_result.fileName, m_result.format, m_loadedFile.fileName);
                 break;
             }
 
@@ -556,6 +557,29 @@ void VersionNameCreator::setFileSuffix(QString& fileName, const QString& format)
     {
         fileName.replace(suffixBegin, fileName.size() - suffixBegin, isLower ? format.toLower() : format);
     }
+}
+
+void VersionNameCreator::addFileSuffix(QString& fileName, const QString& format, const QString& originalName) const
+{
+    if (fileName.isEmpty())
+    {
+        return;
+    }
+
+    bool isLower = true;
+
+    if (!originalName.isEmpty())
+    {
+        // if original name had upper case suffix, continue using upper case
+        isLower = originalName.at(originalName.size() - 1).isLower();
+    }
+
+    if (!fileName.endsWith('.'))
+    {
+        fileName += '.';
+    }
+
+    fileName += (isLower ? format.toLower() : format);
 }
 
 // -----------------------------------------------------------------------------------------------------------

@@ -60,7 +60,6 @@
 #include "cameraui.h"
 #include "ddragobjects.h"
 #include "dpopupmenu.h"
-#include "gpiteminfo.h"
 #include "icongroupitem.h"
 #include "renamecustomizer.h"
 #include "thememanager.h"
@@ -69,7 +68,7 @@
 namespace Digikam
 {
 
-class CameraIconViewPriv
+class CameraIconView::CameraIconViewPriv
 {
 
 public:

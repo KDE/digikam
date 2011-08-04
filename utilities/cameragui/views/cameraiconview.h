@@ -7,7 +7,7 @@
  * Description : camera icon view
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -39,6 +39,7 @@
 
 #include "iconview.h"
 #include "renamecustomizer.h"
+#include "gpiteminfo.h"
 
 class QPixmap;
 class KPixmapSequence;
@@ -47,11 +48,9 @@ namespace Digikam
 {
 
 class ThumbnailSize;
-class GPItemInfo;
 class RenameCustomizer;
 class CameraUI;
 class CameraIconItem;
-class CameraIconViewPriv;
 
 class CameraIconView : public IconView
 {
@@ -145,6 +144,7 @@ private:
 
 private:
 
+    class CameraIconViewPriv;
     CameraIconViewPriv* const d;
 };
 

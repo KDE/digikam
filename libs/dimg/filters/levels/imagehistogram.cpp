@@ -142,11 +142,12 @@ void ImageHistogram::calculateInThread()
     // to allow to connect to the signals, which is only possible after construction
     if (d->imageData && d->imageWidth && d->imageHeight)
     {
+        emit calculationAboutToStart();
         start();
     }
     else
     {
-        emit calculationFinished(this, false);
+        emit calculationFinished(false);
     }
 }
 
@@ -177,21 +178,21 @@ void ImageHistogram::calculate()
 {
     if (!d->imageData || !d->imageWidth || !d->imageHeight)
     {
-        emit calculationFinished(this, false);
+        emit calculationFinished(false);
         return;
     }
 
     register uint  i;
     int            max;
 
-    emit calculationStarted(this);
+    emit calculationStarted();
 
     d->histogram = new ImageHistogramPriv::double_packet[d->histoSegments];
 
     if ( !d->histogram )
     {
         kWarning() << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!");
-        emit calculationFinished(this, false);
+        emit calculationFinished(false);
         return;
     }
 
@@ -259,7 +260,7 @@ void ImageHistogram::calculate()
     if (runningFlag())
     {
         d->valid = true;
-        emit calculationFinished(this, true);
+        emit calculationFinished(true);
     }
 }
 

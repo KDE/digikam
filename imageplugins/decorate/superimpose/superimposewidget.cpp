@@ -309,6 +309,7 @@ void SuperImposeWidget::mousePressEvent(QMouseEvent* e)
             case MOVE:
                 m_xpos = e->x();
                 m_ypos = e->y();
+                break;
         }
     }
 }
@@ -382,6 +383,7 @@ void SuperImposeWidget::setEditModeCursor()
 
         case MOVE:
             setCursor ( Qt::SizeAllCursor );
+            break;
     }
 }
 

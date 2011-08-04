@@ -161,16 +161,18 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         return false;
     }
 
-    if (bits_per_sample == 0 ||
-        samples_per_pixel == 0 ||
-        rows_per_strip == 0 ||
-        rows_per_strip > h)
+    if (   bits_per_sample   == 0
+        || samples_per_pixel == 0
+        || rows_per_strip    == 0
+//        || rows_per_strip    >  h
+        )
     {
-        kWarning() << "TIFF loader: Encountered invalid value 0 in image."
-                   << " bits_per_sample " << bits_per_sample
-                   << " samples_per_pixel " << samples_per_pixel
-                   << " rows_per_strip " << rows_per_strip
-                   << " Loading file " << filePath;
+        kWarning() << "TIFF loader: Encountered invalid value in image." << endl
+                   << " bits_per_sample   : " << bits_per_sample  << endl
+                   << " samples_per_pixel : " << samples_per_pixel << endl
+                   << " rows_per_strip    : " << rows_per_strip << endl
+                   << " h                 : " << h << endl
+                   << " Loading file      : " << filePath;
         TIFFClose(tif);
         loadingFailed();
         return false;

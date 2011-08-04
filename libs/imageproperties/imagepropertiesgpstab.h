@@ -37,7 +37,7 @@
 
 #include "dmetadata.h"
 #include "digikam_export.h"
-#include "digikam2kmap.h"
+#include "digikam2kgeomap.h"
 
 namespace Digikam
 {

@@ -48,7 +48,7 @@ Weights::Weights(const Weights& w)
     (*this) = w;
 }
 
-void Weights::operator=(const Weights& w)
+Weights& Weights::operator=(const Weights& w)
 {
     mHeight            = w.height();
     mWidth             = w.width();
@@ -62,7 +62,7 @@ void Weights::operator=(const Weights& w)
 
     if (!w.weightMatrices())
     {
-        return;
+        return *this;
     }
     else
     {
@@ -87,6 +87,7 @@ void Weights::operator=(const Weights& w)
             }
         }
     }
+    return *this;
 }
 
 void Weights::calculateWeights()

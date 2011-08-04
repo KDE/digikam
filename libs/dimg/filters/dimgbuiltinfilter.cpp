@@ -231,7 +231,7 @@ FilterAction DImgBuiltinFilter::filterAction() const
             QSize s = m_arg.toSize();
             action.addParameter("width", s.width());
             action.addParameter("height", s.height());
-            break;;
+            break;
         }
         case ConvertTo8Bit:
         case ConvertTo16Bit:

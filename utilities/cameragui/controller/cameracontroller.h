@@ -57,19 +57,19 @@ public:
                      const QString& port, const QString& path);
     ~CameraController();
 
-    bool cameraThumbnailSupport();
-    bool cameraDeleteSupport();
-    bool cameraUploadSupport();
-    bool cameraMkDirSupport();
-    bool cameraDelDirSupport();
-    bool cameraCaptureImageSupport();
+    bool cameraThumbnailSupport() const;
+    bool cameraDeleteSupport() const;
+    bool cameraUploadSupport() const;
+    bool cameraMkDirSupport() const;
+    bool cameraDelDirSupport() const;
+    bool cameraCaptureImageSupport() const;
 
-    QString cameraPath();
-    QString cameraTitle();
+    QString cameraPath() const;
+    QString cameraTitle() const;
 
-    DKCamera::CameraDriverType cameraDriverType();
+    DKCamera::CameraDriverType cameraDriverType() const;
 
-    QByteArray cameraMD5ID();
+    QByteArray cameraMD5ID() const;
 
     void capture();
     void listFolders();
@@ -91,7 +91,7 @@ public:
     void lockFile(const QString& folder, const QString& file, bool lock);
     void openFile(const QString& folder, const QString& file);
 
-    QPixmap mimeTypeThumbnail(const QString& itemName);
+    QPixmap mimeTypeThumbnail(const QString& itemName) const;
 
 Q_SIGNALS:
 
@@ -152,7 +152,7 @@ private:
                     const QString& folder=QString(), const QString& file=QString());
 
     void addCommand(CameraCommand* cmd);
-    bool queueIsEmpty();
+    bool queueIsEmpty() const;
 
 private:
 
