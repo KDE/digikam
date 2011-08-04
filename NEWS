@@ -23,5 +23,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 229543 : Video exif info not found during import and renaming.
 016 ==> 265243 : Series of AVIs imported with the same (incorrect) time.
 017 ==> 199913 : Creation date is changed when converting to png .
-018 ==> 
+018 ==> 190717 : Camera movie files dates not used for date based sub folder name.
+019 ==>
 
