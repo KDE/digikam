@@ -1483,29 +1483,6 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         d->view->slotSelectAll();
     }
 
-    QString   newDirName;
-    IconItem* firstItem = d->view->firstItem();
-
-    if (firstItem)
-    {
-        CameraIconItem* iconItem = static_cast<CameraIconItem*>(firstItem);
-
-        QDateTime dateTime = iconItem->itemInfo().mtime;
-
-        switch (d->folderDateFormat->currentIndex())
-        {
-            case CameraUIPriv::TextDateFormat:
-                newDirName = dateTime.date().toString(Qt::TextDate);
-                break;
-            case CameraUIPriv::LocalDateFormat:
-                newDirName = dateTime.date().toString(Qt::LocalDate);
-                break;
-            default:        // IsoDateFormat
-                newDirName = dateTime.date().toString(Qt::ISODate);
-                break;
-        }
-    }
-
     // -- Get the destination album from digiKam library ---------------
 
     if (!album)
@@ -1522,7 +1499,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         QString header(i18n("<p>Please select the destination album from the digiKam library to "
                             "import the camera pictures into.</p>"));
 
-        album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header, newDirName);
+        album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header);
 
         if (!album)
         {
