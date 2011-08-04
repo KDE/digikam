@@ -1151,8 +1151,6 @@ void CameraUI::slotRefreshIconViewTimer()
         return;
     }
 
-    kDebug() << "filesToBeAdded count : " << d->filesToBeAdded.count();
-
     if (d->filesToBeAdded.isEmpty())
     {
         return;
@@ -1183,30 +1181,27 @@ void CameraUI::slotRefreshIconViewTimer()
     // NOTE: see B.K.O #181726: list of accepted file extensions from Album Settings.
     QStringList list = settings->getAllFileFilter().toLower().split(' ');
 
-    QMultiMap<QDateTime, CamItemInfo> map;
+    CHUpdateItemMap map;
     CamItemInfoList items = d->view->allItems();
 
     foreach(CamItemInfo info, items)
     {
-        fi.setFile(info.name);
         map.insertMulti(info.mtime, info);
     }
 
-    CamItemInfoList::iterator it = d->filesToBeAdded.begin();
-
-    while (it != d->filesToBeAdded.end())
+    foreach(CamItemInfo info, d->filesToBeAdded)
     {
-        fi.setFile((*it).name);
+        fi.setFile(info.name);
 
         if (!fileNames.contains(fi.fileName().toLower()) &&
             !fileExts.contains(fi.suffix().toLower())    &&
             list.contains(QString("*.%1").arg(fi.suffix().toLower())))
         {
-            map.insertMulti((*it).mtime, *it);
+            map.insertMulti(info.mtime, info);
         }
-
-        it = d->filesToBeAdded.erase(it);
     }
+
+    d->filesToBeAdded.clear();
 
     items = d->view->allItems();
 
@@ -1225,13 +1220,8 @@ void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
         return;
     }
 
-    CHUpdateItemMap _map = map;
-
-    QMultiMap<QDateTime, CamItemInfo>::iterator it;
-    bool lastPhotoFirst = d->lastPhotoFirstAction->isChecked();
-    CamItemInfo item;
-
-    it = lastPhotoFirst ? _map.end() : _map.begin();
+    bool lastPhotoFirst                = d->lastPhotoFirstAction->isChecked();
+    CHUpdateItemMap::const_iterator it = lastPhotoFirst ? map.constEnd() : map.constBegin();
 
     do
     {
@@ -1240,38 +1230,33 @@ void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
             --it;
         }
 
-        item = *it;
-        d->view->addItem(item);
+        d->view->addItem(*it);
 
         if (!lastPhotoFirst)
         {
             ++it;
         }
     }
-    while ((lastPhotoFirst ? it != _map.begin() : it != _map.end()));
+    while ((lastPhotoFirst ? it != map.constBegin() : it != map.constEnd()));
 }
 
 void CameraUI::slotlastPhotoFirst()
 {
     saveSettings();
 
-    QMultiMap<QDateTime, CamItemInfo> map;
-    CameraIconItem* item = dynamic_cast<CameraIconItem*>(d->view->firstItem());
-    QFileInfo info;
+    CHUpdateItemMap map;
+    CamItemInfoList items = d->view->allItems();
 
-    while (item)
+    foreach(CamItemInfo info, items)
     {
-        info.setFile(item->itemInfo().name);
-        map.insertMulti(item->itemInfo().mtime, item->itemInfo());
-        item = dynamic_cast<CameraIconItem*>(item->nextItem());
+        map.insertMulti(info.mtime, info);
     }
 
-    item = dynamic_cast<CameraIconItem*>(d->view->firstItem());
+    items = d->view->allItems();
 
-    while (item)
+    foreach(CamItemInfo info, items)
     {
-        d->view->removeItem(item->itemInfo());
-        item = dynamic_cast<CameraIconItem*>(item->nextItem());
+        d->view->removeItem(info);
     }
 
     slotRefreshIconView(map);
@@ -2352,7 +2337,13 @@ void CameraUI::slotThumb(const QString& folder, const QString& file, const QImag
 
 void CameraUI::slotInfo(const QString& folder, const QString& file, const CamItemInfo& info)
 {
-    d->view->setItemInfo(folder, file, info);
+    CamItemInfo oldinf = d->view->findItemInfo(info.folder, info.name);
+    CamItemInfo newinf = info;
+    // NOTE: B.K.O #260669: do not overwrite downloaded information from DB which have been set before.
+    newinf.downloaded  = oldinf.downloaded;
+    // NOTE: B.K.O #246336: do not overwrite too the file mtime set previously at camera connection using cameragui settings.
+    newinf.mtime       = oldinf.mtime;
+    d->view->setItemInfo(folder, file, newinf);
 }
 
 }  // namespace Digikam

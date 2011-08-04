@@ -34,6 +34,7 @@
 
 #include <kpixmapsequence.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 

@@ -84,7 +84,7 @@ void CameraThumbsCtrl::getThumbsInfo(const CamItemInfoList& list)
         {
             toProcess.append(info);
             d->pendingItems << info.url();
-            kDebug() << "Request thumbs from camera : " << info.url();
+            //kDebug() << "Request thumbs from camera : " << info.url();
         }
     }
 
