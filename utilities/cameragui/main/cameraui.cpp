@@ -523,7 +523,7 @@ void CameraUI::setupActions()
     KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("cameraui_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
-    connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotPrevItem()));
+    connect(altBackwardAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
     // ---------------------------------------------------------------------------------
 
