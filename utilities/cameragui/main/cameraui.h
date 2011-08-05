@@ -180,11 +180,6 @@ private Q_SLOTS:
 
     void slotlastPhotoFirst();
 
-    void slotFirstItem();
-    void slotPrevItem();
-    void slotNextItem();
-    void slotLastItem();
-
     void slotEditKeys();
     void slotShowMenuBar();
     void slotConfToolbars();

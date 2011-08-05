@@ -133,6 +133,10 @@ public Q_SLOTS:
     void slotSelectInvert();
     void slotSelectNew();
     void slotSelectLocked();
+    void slotFirstItem();
+    void slotPrevItem();
+    void slotNextItem();
+    void slotLastItem();
 
 private Q_SLOTS:
 

@@ -1044,4 +1044,52 @@ CamItemInfoList CameraIconView::allItems(bool lastPhotoFirst) const
     return list;
 }
 
+void CameraIconView::slotFirstItem()
+{
+    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(firstItem());
+    clearSelection();
+    updateContents();
+
+    if (currItem)
+    {
+        setCurrentItem(currItem);
+    }
+}
+
+void CameraIconView::slotPrevItem()
+{
+    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(currentItem());
+    clearSelection();
+    updateContents();
+
+    if (currItem)
+    {
+        setCurrentItem(currItem->prevItem());
+    }
+}
+
+void CameraIconView::slotNextItem()
+{
+    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(currentItem());
+    clearSelection();
+    updateContents();
+
+    if (currItem)
+    {
+        setCurrentItem(currItem->nextItem());
+    }
+}
+
+void CameraIconView::slotLastItem()
+{
+    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(lastItem());
+    clearSelection();
+    updateContents();
+
+    if (currItem)
+    {
+        setCurrentItem(currItem);
+    }
+}
+
 }  // namespace Digikam

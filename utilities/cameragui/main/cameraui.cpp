@@ -117,7 +117,6 @@
 #include "camerafolderdialog.h"
 #include "camerainfodialog.h"
 #include "cameraiconview.h"
-#include "cameraiconitem.h"
 #include "cameracontroller.h"
 #include "cameralist.h"
 #include "cameratype.h"
@@ -600,19 +599,17 @@ void CameraUI::setupConnections()
     connect(d->view, SIGNAL(signalPrepareRepaint(const CamItemInfoList&)),
             this, SLOT(slotRequestThumbnails(const CamItemInfoList&)));
 
-    // -------------------------------------------------------------------------
-
     connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
-            this, SLOT(slotFirstItem()));
+            d->view, SLOT(slotFirstItem()));
 
     connect(d->statusNavigateBar, SIGNAL(signalNextItem()),
-            this, SLOT(slotNextItem()));
+            d->view, SLOT(slotNextItem()));
 
     connect(d->statusNavigateBar, SIGNAL(signalPrevItem()),
-            this, SLOT(slotPrevItem()));
+            d->view, SLOT(slotPrevItem()));
 
     connect(d->statusNavigateBar, SIGNAL(signalLastItem()),
-            this, SLOT(slotLastItem()));
+            d->view, SLOT(slotLastItem()));
 
     // -------------------------------------------------------------------------
 
@@ -2057,54 +2054,6 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
     }
 
     return AlbumManager::instance()->createPAlbum(parent, sub, QString(), date, QString(), errMsg);
-}
-
-void CameraUI::slotFirstItem()
-{
-    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(d->view->firstItem());
-    d->view->clearSelection();
-    d->view->updateContents();
-
-    if (currItem)
-    {
-        d->view->setCurrentItem(currItem);
-    }
-}
-
-void CameraUI::slotPrevItem()
-{
-    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(d->view->currentItem());
-    d->view->clearSelection();
-    d->view->updateContents();
-
-    if (currItem)
-    {
-        d->view->setCurrentItem(currItem->prevItem());
-    }
-}
-
-void CameraUI::slotNextItem()
-{
-    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(d->view->currentItem());
-    d->view->clearSelection();
-    d->view->updateContents();
-
-    if (currItem)
-    {
-        d->view->setCurrentItem(currItem->nextItem());
-    }
-}
-
-void CameraUI::slotLastItem()
-{
-    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(d->view->lastItem());
-    d->view->clearSelection();
-    d->view->updateContents();
-
-    if (currItem)
-    {
-        d->view->setCurrentItem(currItem);
-    }
 }
 
 void CameraUI::slotEditKeys()
