@@ -221,6 +221,8 @@ void CameraThumbsCtrl::clearCache()
     d->cache.clear();
 }
 
+// NOTE: Marcel, how to compute cost for CamItemInfo container. I set 2 Kb : it's fine ?
+
 void CameraThumbsCtrl::setCacheSize(int numberOfItems)
 {
     d->cache.setMaxCost( (numberOfItems * 256 * 256 * QPixmap::defaultDepth() / 8) +
