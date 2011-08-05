@@ -67,24 +67,31 @@ public:
     bool isNull() const;                     // Return true if all member in this container are null
     KUrl url() const;                        // Return the local file system (mounted on computer) url to the camera file
 
+    /** Compare for camera inforation equality, not including variable values.
+     */
+    bool operator==(const CamItemInfo& t) const;
+
 public:
 
+    /// Static values taken from camera.
     qint64             size;                 // Camera file size in bytes.
 
     int                width;                // Image width in pixels
     int                height;               // Image height in pixels
-    int                downloaded;           // Download status of camera file. See DownloadStatus enum for details
     int                readPermissions;      // Read permission of camera file
     int                writePermissions;     // Write permission of camera file
 
     QString            name;                 // File name in camera file-system
     QString            folder;               // Folder path to acces to file in camera
     QString            mime;                 // Type mime of camera file
-    QString            downloadName;         // New file-name to use during download from camera
 
     QDateTime          mtime;                // Modified time stamp of camera file
 
     PhotoInfoContainer photoInfo;            // Photo Info from camera file (get from file metadata)
+
+    /// Variable values depending of user actions.
+    int                downloaded;           // Download status of camera file. See DownloadStatus enum for details
+    QString            downloadName;         // New file-name to use during download from camera
 };
 
 QDataStream& operator<<(QDataStream&, const CamItemInfo&);

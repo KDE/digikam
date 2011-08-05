@@ -50,10 +50,17 @@ class CameraThumbsCtrl : public QObject
 
 public:
 
+    typedef QPair<CamItemInfo, QPixmap> CacheItem;
+
+public:
+
     CameraThumbsCtrl(CameraController* ctrl, QObject* parent);
     ~CameraThumbsCtrl();
 
     void getThumbsInfo(const CamItemInfoList& list);
+
+    void setCacheSize(int numberOfItems);
+    void clearCache();
 
 Q_SIGNALS:
 
@@ -72,6 +79,12 @@ private:
 
     void startKdePreviewJob(const KUrl&);
     void procressKDEPreview(const KFileItem& item, const QPixmap& pix=QPixmap());
+
+    /// Cache management methods.
+    void removeItemFromCache(const KUrl& url);
+    void putItemToCache(const KUrl& url, const CamItemInfo&, const QPixmap& thumb);
+    bool hasItemFromCache(const KUrl& url) const;
+    const CacheItem* retrieveItemFromCache(const KUrl& url) const;
 
 private:
 
