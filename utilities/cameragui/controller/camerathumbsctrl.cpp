@@ -25,7 +25,8 @@
 
 // Qt includes
 
-#include <QList>
+#include <QCache>
+#include <QPair>
 
 // KDE includes
 
@@ -50,10 +51,11 @@ public:
       : controller(0)
     {}
 
-    KUrl::List        pendingItems;
-    KUrl::List        kdeTodo;
+    QCache<KUrl, CameraThumbsCtrl::CacheItem> cache;  // Camera info/thumb cache based on item url keys.
 
-    CameraController* controller;
+    KUrl::List                                pendingItems;
+
+    CameraController*                         controller;
 };
 
 // --------------------------------------------------------
@@ -68,10 +70,13 @@ CameraThumbsCtrl::CameraThumbsCtrl(CameraController* ctrl, QObject* parent)
 
     connect(d->controller, SIGNAL(signalThumbInfoFailed(QString, QString, CamItemInfo)),
             this, SLOT(slotThumbInfoFailed(QString, QString, CamItemInfo)));
+
+    setCacheSize(200);
 }
 
 CameraThumbsCtrl::~CameraThumbsCtrl()
 {
+    clearCache();
     delete d;
 }
 
@@ -81,13 +86,26 @@ void CameraThumbsCtrl::getThumbsInfo(const CamItemInfoList& list)
 
     foreach (CamItemInfo info, list)
     {
-        if (!d->pendingItems.contains(info.url()))
+        // We look if items are not in cache.
+
+        if (hasItemFromCache(info.url()))
+        {
+            const CacheItem* item = retrieveItemFromCache(info.url());
+            emit signalThumbInfo(item->first, item->second.toImage());
+            // kDebug() << "Found in cache: " << info.url();
+        }
+
+        // We look if items are not in pending list.
+
+        else if (!d->pendingItems.contains(info.url()))
         {
             toProcess.append(info);
             d->pendingItems << info.url();
-            kDebug() << "Request thumbs from camera : " << info.url();
+            // kDebug() << "Request thumbs from camera : " << info.url();
         }
     }
+
+    // Finally, We get items from camera device...
 
     if (!toProcess.isEmpty())
     {
@@ -97,15 +115,15 @@ void CameraThumbsCtrl::getThumbsInfo(const CamItemInfoList& list)
 
 void CameraThumbsCtrl::slotThumbInfo(const QString&, const QString& file, const CamItemInfo& info, const QImage& thumb)
 {
-    QImage img = thumb;
+    QImage thumbnail = thumb;
 
-    if (img.isNull())
+    if (thumb.isNull())
     {
-        // This call must be run outside Camera Controller thread.
-        img = d->controller->mimeTypeThumbnail(file).toImage();
+        thumbnail = d->controller->mimeTypeThumbnail(file).toImage();
     }
 
-    emit signalThumbInfo(info, img);
+    emit signalThumbInfo(info, thumbnail);
+    putItemToCache(info.url(), info, QPixmap::fromImage(thumbnail));
     d->pendingItems.removeAll(info.url());
 }
 
@@ -113,30 +131,23 @@ void CameraThumbsCtrl::slotThumbInfoFailed(const QString& folder, const QString&
 {
     if (d->controller->cameraDriverType() == DKCamera::UMSDriver)
     {
+        putItemToCache(info.url(), info, QPixmap());
         emit signalInfo(folder, file, info);
-        d->kdeTodo << info.url();
-        startKdePreviewJob();
+        startKdePreviewJob(info.url());
     }
     else
     {
-        // This call must be run outside Camera Controller thread.
-        QImage thumb = d->controller->mimeTypeThumbnail(file).toImage();
-        emit signalThumbInfo(info, thumb);
+        QPixmap pix = d->controller->mimeTypeThumbnail(file);
+        putItemToCache(info.url(), info, pix);
+        emit signalThumbInfo(info, pix.toImage());
         d->pendingItems.removeAll(info.url());
     }
 }
 
-void CameraThumbsCtrl::startKdePreviewJob()
+void CameraThumbsCtrl::startKdePreviewJob(const KUrl& url)
 {
-    if (d->kdeTodo.isEmpty())
-    {
-        return;
-    }
 
-    KUrl::List list = d->kdeTodo;
-    d->kdeTodo.clear();
-
-    KIO::PreviewJob* job = KIO::filePreview(list, ThumbnailSize::Huge);
+    KIO::PreviewJob* job = KIO::filePreview(KUrl::List() << url, ThumbnailSize::Huge);
 
     connect(job, SIGNAL(gotPreview(KFileItem, QPixmap)),
             this, SLOT(slotGotKDEPreview(KFileItem, QPixmap)));
@@ -144,37 +155,78 @@ void CameraThumbsCtrl::startKdePreviewJob()
     connect(job, SIGNAL(failed(KFileItem)),
             this, SLOT(slotFailedKDEPreview(KFileItem)));
 
-    kDebug() << "pending thumbs from KDE Preview : " << list;
+    kDebug() << "pending thumbs from KDE Preview : " << url;
 }
 
 void CameraThumbsCtrl::slotGotKDEPreview(const KFileItem& item, const QPixmap& pix)
 {
-    QString file   = item.url().fileName();
-    QString folder = item.url().toLocalFile().remove(QString("/") + file);
-    QImage thumb   = pix.toImage();
-
-    if (thumb.isNull())
-    {
-        // This call must be run outside Camera Controller thread.
-        thumb = d->controller->mimeTypeThumbnail(file).toImage();
-    }
-
-    emit signalThumb(folder, file, thumb);
-    d->pendingItems.removeAll(item.url());
-
-    kDebug() << "Got thumb from KDE Preview : " << item.url();
+    procressKDEPreview(item, pix);
 }
 
 void CameraThumbsCtrl::slotFailedKDEPreview(const KFileItem& item)
 {
+    procressKDEPreview(item);
+}
+
+void CameraThumbsCtrl::procressKDEPreview(const KFileItem& item, const QPixmap& pix)
+{
     QString file   = item.url().fileName();
     QString folder = item.url().toLocalFile().remove(QString("/") + file);
-    QImage thumb   = d->controller->mimeTypeThumbnail(file).toImage();
+    QImage thumb;
 
+    if (pix.isNull())
+    {
+        // This call must be run outside Camera Controller thread.
+        thumb = d->controller->mimeTypeThumbnail(file).toImage();
+        kDebug() << "Failed thumb from KDE Preview : " << item.url();
+    }
+    else
+    {
+        thumb = pix.toImage();
+        kDebug() << "Got thumb from KDE Preview : " << item.url();
+    }
+
+    const CacheItem* cit = retrieveItemFromCache(item.url());
+    putItemToCache(item.url(), cit->first, QPixmap::fromImage(thumb));
     emit signalThumb(folder, file, thumb);
     d->pendingItems.removeAll(item.url());
+}
 
-    kDebug() << "Failed thumb from KDE Preview : " << item.url();
+const CameraThumbsCtrl::CacheItem* CameraThumbsCtrl::retrieveItemFromCache(const KUrl& url) const
+{
+    return d->cache[url];
+}
+
+bool CameraThumbsCtrl::hasItemFromCache(const KUrl& url) const
+{
+    return d->cache.contains(url);
+}
+
+void CameraThumbsCtrl::putItemToCache(const KUrl& url, const CamItemInfo& info, const QPixmap& thumb)
+{
+    int infoCost = sizeof(info);
+    int thumbCost = thumb.width() * thumb.height() * thumb.depth() / 8;
+    d->cache.insert(url,
+                    new CacheItem(info, thumb),
+                    infoCost + thumbCost);
+}
+
+void CameraThumbsCtrl::removeItemFromCache(const KUrl& url)
+{
+    d->cache.remove(url);
+}
+
+void CameraThumbsCtrl::clearCache()
+{
+    d->cache.clear();
+}
+
+// NOTE: Marcel, how to compute cost for CamItemInfo container. I set 2 Kb : it's fine ?
+
+void CameraThumbsCtrl::setCacheSize(int numberOfItems)
+{
+    d->cache.setMaxCost( (numberOfItems * 256 * 256 * QPixmap::defaultDepth() / 8) +
+                         (numberOfItems * 1024 * 2));
 }
 
 }  // namespace Digikam

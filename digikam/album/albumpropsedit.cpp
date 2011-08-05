@@ -249,9 +249,6 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // -- slots connections -------------------------------------------
 
-    connect(d->datePicker, SIGNAL(dateEntered(QDate)),
-            this, SLOT(slotDateEntered(QDate)));
-
     connect(d->titleEdit, SIGNAL(textChanged(QString)),
             this, SLOT(slotTitleChanged(QString)));
 

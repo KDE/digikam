@@ -47,6 +47,8 @@ public:
     bool isEmpty() const;
     bool isNull() const;
 
+    bool operator==(const PhotoInfoContainer& t) const;
+
 public:
 
     QString   make;

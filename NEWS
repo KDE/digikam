@@ -12,4 +12,24 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 278033 : Cannot set jpeg compression ratio (or any other save options) when exporting image.
 005 ==> 278966 : Building the unittests fails when using external libpgf.
 006 ==> 199985 : digiKam, import, writing to sd card, bad folders.
-007 ==> 
+007 ==> 261627 : GNOME says "No applications found" ignoring digikam.
+008 ==> 251900 : Preview of RAW images missing.
+009 ==> 260669 : Images on camera always marked as new.
+010 ==> 246336 : Ordering incorrect.
+011 ==> 264123 : digiKam freezes when creating thumbnails in the import dialog (from a memory stick).
+012 ==> 199197 : Can't import pictures from camera.
+013 ==> 181521 : NEF's in descending order, AVI in ascending order in import from SD-card.
+014 ==> 221457 : digiKam camera download - dates are not preserved.
+015 ==> 229543 : Video exif info not found during import and renaming.
+016 ==> 265243 : Series of AVIs imported with the same (incorrect) time.
+017 ==> 199913 : Creation date is changed when converting to png .
+018 ==> 190717 : Camera movie files dates not used for date based sub folder name.
+019 ==> 246337 : Changing sort order forces thumbnail regeneration.
+020 ==> 256776 : digiKam leaves ".digikam-exifrotate" files etc. on harddisk.
+021 ==> 237810 : Wrong date when renaming downloaded pictures.
+022 ==> 233621 : Importing from Nikon Coolpix P90 ignores date/time of the images and uses 31-12-1969 instead.
+023 ==> 160496 : No disk space reported when importing pictures.
+024 ==> 184439 : Closing the "USB DISK DOWNLOAD from DISK" window updates the digikam folder view.
+025 ==> 253268 : digiKam crashes when starting to download pictures.
+026 ==> 216492 : Camera interface upload can't select a movie only image.
+027 ==> 

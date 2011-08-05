@@ -136,6 +136,8 @@ void CameraHistoryUpdater::addItems(const QByteArray& id, CHUpdateItemMap& map)
         return;
     }
 
+    kDebug() << "Check download state from DB for " << map.count() << " items";
+
     QMutexLocker lock(&d->mutex);
     d->running  = true;
     d->canceled = false;
@@ -151,8 +153,7 @@ void CameraHistoryUpdater::addItems(const QByteArray& id, CHUpdateItemMap& map)
 
 void CameraHistoryUpdater::proccessMap(const QByteArray& id, CHUpdateItemMap& map)
 {
-    CHUpdateItemMap& _map        = map;
-    CHUpdateItemMap::iterator it = _map.begin();
+    CHUpdateItemMap::iterator it = map.begin();
 
     do
     {
@@ -171,11 +172,10 @@ void CameraHistoryUpdater::proccessMap(const QByteArray& id, CHUpdateItemMap& ma
         }
 
         ++it;
-
     }
     while (it != map.end() && !d->canceled);
 
-    emit signalHistoryMap(_map);
+    emit signalHistoryMap(map);
 }
 
 }  // namespace Digikam

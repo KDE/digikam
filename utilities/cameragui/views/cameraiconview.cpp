@@ -76,7 +76,7 @@ public:
     CameraIconViewPriv() :
         thumbSize(ThumbnailSize::Large),
         pixmapNewPicture(SmallIcon("get-hot-new-stuff")),
-        pixmapDownloadUnknown(SmallIcon("status_unknown")),
+        pixmapDownloadUnknown(SmallIcon("svn_status")),
         progressPix(KPixmapSequence("process-working", KIconLoader::SizeSmallMedium)),
         pixmapLocked(SmallIcon("object-locked")),
         pixmapDownloaded(SmallIcon("dialog-ok")),
@@ -348,6 +348,13 @@ void CameraIconView::setDownloaded(const CamItemInfo& itemInfo, int status)
     if (iconItem) iconItem->setDownloaded(status);
 }
 
+bool CameraIconView::isDownloaded(const CamItemInfo& itemInfo)
+{
+    CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
+    if (iconItem) return iconItem->isDownloaded();
+    return false;
+}
+
 void CameraIconView::toggleLock(const CamItemInfo& itemInfo)
 {
     CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
@@ -373,6 +380,13 @@ void CameraIconView::ensureItemVisible(const QString& folder, const QString& fil
     }
 
     ensureItemVisible(item);
+}
+
+bool CameraIconView::isSelected(const CamItemInfo& itemInfo)
+{
+    CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
+    if (iconItem) return iconItem->isSelected();
+    return false;
 }
 
 void CameraIconView::slotDownloadNameChanged()
@@ -997,6 +1011,85 @@ void CameraIconView::prepareRepaint(const QList<IconItem*>& list)
     }
 
     emit signalPrepareRepaint(infos);
+}
+
+CamItemInfoList CameraIconView::selectedItems() const
+{
+    CamItemInfoList list;
+
+    for (IconItem* item = firstItem(); item; item = item->nextItem())
+    {
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+
+        if (iconItem->isSelected())
+        {
+            list.append(iconItem->itemInfo());
+        }
+    }
+
+    return list;
+}
+
+CamItemInfoList CameraIconView::allItems(bool lastPhotoFirst) const
+{
+    CamItemInfoList list;
+
+    for (IconItem* item = (lastPhotoFirst ? lastItem() : firstItem()); item;
+         item = (lastPhotoFirst ? item->prevItem() : item->nextItem()))
+    {
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+        list.append(iconItem->itemInfo());
+    }
+
+    return list;
+}
+
+void CameraIconView::slotFirstItem()
+{
+    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(firstItem());
+    clearSelection();
+    updateContents();
+
+    if (currItem)
+    {
+        setCurrentItem(currItem);
+    }
+}
+
+void CameraIconView::slotPrevItem()
+{
+    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(currentItem());
+    clearSelection();
+    updateContents();
+
+    if (currItem)
+    {
+        setCurrentItem(currItem->prevItem());
+    }
+}
+
+void CameraIconView::slotNextItem()
+{
+    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(currentItem());
+    clearSelection();
+    updateContents();
+
+    if (currItem)
+    {
+        setCurrentItem(currItem->nextItem());
+    }
+}
+
+void CameraIconView::slotLastItem()
+{
+    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(lastItem());
+    clearSelection();
+    updateContents();
+
+    if (currItem)
+    {
+        setCurrentItem(currItem);
+    }
 }
 
 }  // namespace Digikam

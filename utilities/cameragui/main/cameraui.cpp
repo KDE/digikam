@@ -117,7 +117,6 @@
 #include "camerafolderdialog.h"
 #include "camerainfodialog.h"
 #include "cameraiconview.h"
-#include "cameraiconitem.h"
 #include "cameracontroller.h"
 #include "cameralist.h"
 #include "cameratype.h"
@@ -524,7 +523,7 @@ void CameraUI::setupActions()
     KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("cameraui_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
-    connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotPrevItem()));
+    connect(altBackwardAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
     // ---------------------------------------------------------------------------------
 
@@ -600,19 +599,17 @@ void CameraUI::setupConnections()
     connect(d->view, SIGNAL(signalPrepareRepaint(const CamItemInfoList&)),
             this, SLOT(slotRequestThumbnails(const CamItemInfoList&)));
 
-    // -------------------------------------------------------------------------
-
     connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
-            this, SLOT(slotFirstItem()));
+            d->view, SLOT(slotFirstItem()));
 
     connect(d->statusNavigateBar, SIGNAL(signalNextItem()),
-            this, SLOT(slotNextItem()));
+            d->view, SLOT(slotNextItem()));
 
     connect(d->statusNavigateBar, SIGNAL(signalPrevItem()),
-            this, SLOT(slotPrevItem()));
+            d->view, SLOT(slotPrevItem()));
 
     connect(d->statusNavigateBar, SIGNAL(signalLastItem()),
-            this, SLOT(slotLastItem()));
+            d->view, SLOT(slotLastItem()));
 
     // -------------------------------------------------------------------------
 
@@ -1151,8 +1148,6 @@ void CameraUI::slotRefreshIconViewTimer()
         return;
     }
 
-    kDebug() << "filesToBeAdded count : " << d->filesToBeAdded.count();
-
     if (d->filesToBeAdded.isEmpty())
     {
         return;
@@ -1168,7 +1163,7 @@ void CameraUI::slotRefreshIconViewTimer()
     // We sort the map by time stamp
     // and we remove internal camera files which are not image/video/sounds.
     QStringList fileNames, fileExts;
-    QFileInfo   info;
+    QFileInfo   fi;
 
     // JVC camera (see B.K.O #133185).
     fileNames.append("mgr_data");
@@ -1183,39 +1178,33 @@ void CameraUI::slotRefreshIconViewTimer()
     // NOTE: see B.K.O #181726: list of accepted file extensions from Album Settings.
     QStringList list = settings->getAllFileFilter().toLower().split(' ');
 
-    QMultiMap<QDateTime, CamItemInfo> map;
-    CameraIconItem* citem = static_cast<CameraIconItem*>(d->view->firstItem());
+    CHUpdateItemMap map;
+    CamItemInfoList items = d->view->allItems();
 
-    while (citem)
+    foreach(CamItemInfo info, items)
     {
-        info.setFile(citem->itemInfo().name);
-        map.insertMulti(citem->itemInfo().mtime, citem->itemInfo());
-        citem = static_cast<CameraIconItem*>(citem->nextItem());
+        map.insertMulti(info.mtime, info);
     }
 
-    CamItemInfoList::iterator it = d->filesToBeAdded.begin();
-
-    while (it != d->filesToBeAdded.end())
+    foreach(CamItemInfo info, d->filesToBeAdded)
     {
-        info.setFile((*it).name);
+        fi.setFile(info.name);
 
-        if (!fileNames.contains(info.fileName().toLower()) &&
-            !fileExts.contains(info.suffix().toLower())    &&
-            list.contains(QString("*.%1").arg(info.suffix().toLower())))
+        if (!fileNames.contains(fi.fileName().toLower()) &&
+            !fileExts.contains(fi.suffix().toLower())    &&
+            list.contains(QString("*.%1").arg(fi.suffix().toLower())))
         {
-            map.insertMulti((*it).mtime, *it);
+            map.insertMulti(info.mtime, info);
         }
-
-        it = d->filesToBeAdded.erase(it);
     }
 
-    citem = static_cast<CameraIconItem*>(d->view->firstItem());
+    d->filesToBeAdded.clear();
 
-    while (citem)
+    items = d->view->allItems();
+
+    foreach(CamItemInfo info, items)
     {
-        CameraIconItem* tempItem = citem;
-        citem                    = static_cast<CameraIconItem*>(tempItem->nextItem());
-        d->view->removeItem(tempItem->itemInfo());
+        d->view->removeItem(info);
     }
 
     d->historyUpdater->addItems(d->controller->cameraMD5ID(), map);
@@ -1228,13 +1217,8 @@ void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
         return;
     }
 
-    CHUpdateItemMap _map = map;
-
-    QMultiMap<QDateTime, CamItemInfo>::iterator it;
-    bool lastPhotoFirst = d->lastPhotoFirstAction->isChecked();
-    CamItemInfo item;
-
-    it = lastPhotoFirst ? _map.end() : _map.begin();
+    bool lastPhotoFirst                = d->lastPhotoFirstAction->isChecked();
+    CHUpdateItemMap::const_iterator it = lastPhotoFirst ? map.constEnd() : map.constBegin();
 
     do
     {
@@ -1243,38 +1227,33 @@ void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
             --it;
         }
 
-        item = *it;
-        d->view->addItem(item);
+        d->view->addItem(*it);
 
         if (!lastPhotoFirst)
         {
             ++it;
         }
     }
-    while ((lastPhotoFirst ? it != _map.begin() : it != _map.end()));
+    while ((lastPhotoFirst ? it != map.constBegin() : it != map.constEnd()));
 }
 
 void CameraUI::slotlastPhotoFirst()
 {
     saveSettings();
 
-    QMultiMap<QDateTime, CamItemInfo> map;
-    CameraIconItem* item = dynamic_cast<CameraIconItem*>(d->view->firstItem());
-    QFileInfo info;
+    CHUpdateItemMap map;
+    CamItemInfoList items = d->view->allItems();
 
-    while (item)
+    foreach(CamItemInfo info, items)
     {
-        info.setFile(item->itemInfo().name);
-        map.insertMulti(item->itemInfo().mtime, item->itemInfo());
-        item = dynamic_cast<CameraIconItem*>(item->nextItem());
+        map.insertMulti(info.mtime, info);
     }
 
-    item = dynamic_cast<CameraIconItem*>(d->view->firstItem());
+    items = d->view->allItems();
 
-    while (item)
+    foreach(CamItemInfo info, items)
     {
-        d->view->removeItem(item->itemInfo());
-        item = dynamic_cast<CameraIconItem*>(item->nextItem());
+        d->view->removeItem(info);
     }
 
     slotRefreshIconView(map);
@@ -1483,29 +1462,6 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         d->view->slotSelectAll();
     }
 
-    QString   newDirName;
-    IconItem* firstItem = d->view->firstItem();
-
-    if (firstItem)
-    {
-        CameraIconItem* iconItem = static_cast<CameraIconItem*>(firstItem);
-
-        QDateTime dateTime = iconItem->itemInfo().mtime;
-
-        switch (d->folderDateFormat->currentIndex())
-        {
-            case CameraUIPriv::TextDateFormat:
-                newDirName = dateTime.date().toString(Qt::TextDate);
-                break;
-            case CameraUIPriv::LocalDateFormat:
-                newDirName = dateTime.date().toString(Qt::LocalDate);
-                break;
-            default:        // IsoDateFormat
-                newDirName = dateTime.date().toString(Qt::ISODate);
-                break;
-        }
-    }
-
     // -- Get the destination album from digiKam library ---------------
 
     if (!album)
@@ -1522,7 +1478,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         QString header(i18n("<p>Please select the destination album from the digiKam library to "
                             "import the camera pictures into.</p>"));
 
-        album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header, newDirName);
+        album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header);
 
         if (!album)
         {
@@ -1592,21 +1548,19 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     // Since we show camera items in reverse order, downloading need to be done also in reverse order.
 
     QSet<QString> usedDownloadPaths;
-    bool lastPhotoFirst = d->lastPhotoFirstAction->isChecked();
+    CamItemInfoList list = d->view->allItems(d->lastPhotoFirstAction->isChecked());
 
-    for (IconItem* item = (lastPhotoFirst ? d->view->lastItem() : d->view->firstItem()); item;
-         item = (lastPhotoFirst ? item->prevItem() : item->nextItem()))
+    foreach(CamItemInfo info, list)
     {
-        if (onlySelected && !(item->isSelected()))
+        if (onlySelected && !(d->view->isSelected(info)))
         {
             continue;
         }
 
-        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
-        downloadSettings.folder  = iconItem->itemInfo().folder;
-        downloadSettings.file    = iconItem->itemInfo().name;
-        downloadName             = iconItem->itemInfo().downloadName;
-        dateTime                 = iconItem->itemInfo().mtime;
+        downloadSettings.folder  = info.folder;
+        downloadSettings.file    = info.name;
+        downloadName             = info.downloadName;
+        dateTime                 = info.mtime;
 
         KUrl downloadUrl(url);
         QString errMsg;
@@ -1802,49 +1756,38 @@ void CameraUI::slotSkipped(const QString& folder, const QString& file)
 
 void CameraUI::slotMarkAsDownloaded()
 {
-    for (IconItem* item = d->view->firstItem(); item;
-         item = item->nextItem())
+    CamItemInfoList list = d->view->selectedItems();
+
+    foreach (CamItemInfo info, list)
     {
-        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+        d->view->setDownloaded(info, CamItemInfo::DownloadedYes);
 
-        if (iconItem->isSelected())
-        {
-            iconItem->setDownloaded(CamItemInfo::DownloadedYes);
-
-            DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
-                                           iconItem->itemInfo().name,
-                                           iconItem->itemInfo().size,
-                                           iconItem->itemInfo().mtime);
-        }
+        DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
+                                       info.name,
+                                       info.size,
+                                       info.mtime);
     }
 }
 
-
 void CameraUI::slotToggleLock()
 {
-    int count = 0;
+    CamItemInfoList list = d->view->selectedItems();
+    int count            = list.count();
 
-    for (IconItem* item = d->view->firstItem(); item;
-         item = item->nextItem())
+    foreach (CamItemInfo info, list)
     {
-        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+        QString folder = info.folder;
+        QString file   = info.name;
+        int writePerm  = info.writePermissions;
+        bool lock      = true;
 
-        if (iconItem->isSelected())
+        // If item is currently locked, unlock it.
+        if (writePerm == 0)
         {
-            QString folder = iconItem->itemInfo().folder;
-            QString file   = iconItem->itemInfo().name;
-            int writePerm  = iconItem->itemInfo().writePermissions;
-            bool lock      = true;
-
-            // If item is currently locked, unlock it.
-            if (writePerm == 0)
-            {
-                lock = false;
-            }
-
-            d->controller->lockFile(folder, file, lock);
-            ++count;
+            lock = false;
         }
+
+        d->controller->lockFile(folder, file, lock);
     }
 
     if (count > 0)
@@ -1894,46 +1837,20 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
     QStringList files;
     QStringList deleteList;
     QStringList lockedList;
+    CamItemInfoList list = onlySelected ? d->view->selectedItems() : d->view->allItems();
 
-    for (IconItem* item = d->view->firstItem(); item; item = item->nextItem())
+    foreach(CamItemInfo info, list)
     {
-        CameraIconItem* iconItem = dynamic_cast<CameraIconItem*>(item);
-
-        if (iconItem)
+        if (onlyDownloaded)
         {
-            CamItemInfo info = iconItem->itemInfo();
-
-            if (onlySelected)
+            if (d->view->isDownloaded(info))
             {
-                if (iconItem->isSelected())
-                {
-                    if (onlyDownloaded)
-                    {
-                        if (iconItem->isDownloaded())
-                        {
-                            checkItem4Deletion(info, folders, files, deleteList, lockedList);
-                        }
-                    }
-                    else
-                    {
-                        checkItem4Deletion(info, folders, files, deleteList, lockedList);
-                    }
-                }
+                checkItem4Deletion(info, folders, files, deleteList, lockedList);
             }
-            else    // All items
-            {
-                if (onlyDownloaded)
-                {
-                    if (iconItem->isDownloaded())
-                    {
-                        checkItem4Deletion(info, folders, files, deleteList, lockedList);
-                    }
-                }
-                else
-                {
-                    checkItem4Deletion(info, folders, files, deleteList, lockedList);
-                }
-            }
+        }
+        else
+        {
+            checkItem4Deletion(info, folders, files, deleteList, lockedList);
         }
     }
 
@@ -2048,19 +1965,15 @@ void CameraUI::slotNewSelection(bool hasSelection)
         // selected image has not been downloaded
         bool haveNotDownloadedItem = false;
 
-        for (IconItem* item = d->view->firstItem(); item;
-             item = item->nextItem())
+        CamItemInfoList list = d->view->selectedItems();
+
+        foreach(CamItemInfo info, list)
         {
-            const CameraIconItem* const iconItem = static_cast<CameraIconItem*>(item);
+            haveNotDownloadedItem = !d->view->isDownloaded(info);
 
-            if (iconItem->isSelected())
+            if (haveNotDownloadedItem)
             {
-                haveNotDownloadedItem = !iconItem->isDownloaded();
-
-                if (haveNotDownloadedItem)
-                {
-                    break;
-                }
+                break;
             }
         }
 
@@ -2141,54 +2054,6 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
     }
 
     return AlbumManager::instance()->createPAlbum(parent, sub, QString(), date, QString(), errMsg);
-}
-
-void CameraUI::slotFirstItem()
-{
-    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(d->view->firstItem());
-    d->view->clearSelection();
-    d->view->updateContents();
-
-    if (currItem)
-    {
-        d->view->setCurrentItem(currItem);
-    }
-}
-
-void CameraUI::slotPrevItem()
-{
-    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(d->view->currentItem());
-    d->view->clearSelection();
-    d->view->updateContents();
-
-    if (currItem)
-    {
-        d->view->setCurrentItem(currItem->prevItem());
-    }
-}
-
-void CameraUI::slotNextItem()
-{
-    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(d->view->currentItem());
-    d->view->clearSelection();
-    d->view->updateContents();
-
-    if (currItem)
-    {
-        d->view->setCurrentItem(currItem->nextItem());
-    }
-}
-
-void CameraUI::slotLastItem()
-{
-    CameraIconItem* currItem = dynamic_cast<CameraIconItem*>(d->view->lastItem());
-    d->view->clearSelection();
-    d->view->updateContents();
-
-    if (currItem)
-    {
-        d->view->setCurrentItem(currItem);
-    }
 }
 
 void CameraUI::slotEditKeys()
@@ -2421,7 +2286,13 @@ void CameraUI::slotThumb(const QString& folder, const QString& file, const QImag
 
 void CameraUI::slotInfo(const QString& folder, const QString& file, const CamItemInfo& info)
 {
-    d->view->setItemInfo(folder, file, info);
+    CamItemInfo oldinf = d->view->findItemInfo(info.folder, info.name);
+    CamItemInfo newinf = info;
+    // NOTE: B.K.O #260669: do not overwrite downloaded information from DB which have been set before.
+    newinf.downloaded  = oldinf.downloaded;
+    // NOTE: B.K.O #246336: do not overwrite too the file mtime set previously at camera connection using cameragui settings.
+    newinf.mtime       = oldinf.mtime;
+    d->view->setItemInfo(folder, file, newinf);
 }
 
 }  // namespace Digikam

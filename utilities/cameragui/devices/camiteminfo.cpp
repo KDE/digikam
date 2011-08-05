@@ -69,6 +69,22 @@ KUrl CamItemInfo::url() const
     return url;
 }
 
+bool CamItemInfo::operator==(const CamItemInfo& t) const
+{
+    bool b1  = size             == t.size;
+    bool b2  = width            == t.width;
+    bool b3  = height           == t.height;
+    bool b4  = readPermissions  == t.readPermissions;
+    bool b5  = writePermissions == t.writePermissions;
+    bool b6  = name             == t.name;
+    bool b7  = folder           == t.folder;
+    bool b8  = mime             == t.mime;
+    bool b9  = mtime            == t.mtime;
+    bool b10 = photoInfo        == t.photoInfo;
+
+    return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10;
+}
+
 QDataStream& operator<<(QDataStream& ds, const CamItemInfo& info)
 {
     ds << info.name;

@@ -69,17 +69,22 @@ public:
 
     void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
     void setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo);
-    void setDownloaded(const CamItemInfo& itemInfo, int status);
     void toggleLock(const CamItemInfo& itemInfo);
+
+    void setDownloaded(const CamItemInfo& itemInfo, int status);
+    bool isDownloaded(const CamItemInfo& itemInfo);
 
     void ensureItemVisible(const CamItemInfo& itemInfo);
     void ensureItemVisible(const QString& folder, const QString& filename);
+    bool isSelected(const CamItemInfo& itemInfo);
 
     void setThumbnailSize(int thumbSize);
     int  thumbnailSize() const;
 
     CamItemInfo     findItemInfo(const QString& folder, const QString& file) const;
     CamItemInfo     firstItemSelected() const;
+    CamItemInfoList selectedItems() const;
+    CamItemInfoList allItems(bool lastPhotoFirst=false) const;
 
     /** Return a map of folder and items counted
      */
@@ -128,6 +133,10 @@ public Q_SLOTS:
     void slotSelectInvert();
     void slotSelectNew();
     void slotSelectLocked();
+    void slotFirstItem();
+    void slotPrevItem();
+    void slotNextItem();
+    void slotLastItem();
 
 private Q_SLOTS:
 
