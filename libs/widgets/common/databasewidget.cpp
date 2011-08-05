@@ -234,6 +234,7 @@ QString DatabaseWidget::tmbCurrentDatabaseType() const
 
 void DatabaseWidget::slotImgChangeDatabasePath(const KUrl& result)
 {
+    return; //FIXME:
 #ifdef _WIN32
     // Work around B.K.O #189168
     KTemporaryFile temp;
@@ -298,6 +299,7 @@ void DatabaseWidget::slotTmbChangeDatabasePath(const KUrl& result)
 
 void DatabaseWidget::slotTmbDatabasePathEdited(const QString& newPath)
 {
+    return; //FIXME:
 #ifndef _WIN32
 
     if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
@@ -312,12 +314,14 @@ void DatabaseWidget::slotTmbDatabasePathEdited(const QString& newPath)
 
 void DatabaseWidget::slotTmbHandleDBTypeIndexChanged(int index)
 {
+    return; //FIXME:
     const QString& dbType = tmbDatabaseType->itemData(index).toString();
     setDatabaseInputFields(dbType);
 }
 
 void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
 {
+    return; //FIXME:
     if (currentIndexStr == QString(DatabaseParameters::SQLiteDatabaseType()))
     {
         d->databasePathLabel->setVisible(true);
@@ -336,7 +340,7 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
 
 void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
 {
-    //FIXME:
+    return; //FIXME:
     imgHostName->setEnabled(enableFields == Qt::Unchecked);
     imgHostPort->setEnabled(enableFields == Qt::Unchecked);
     imgDatabaseName->setEnabled(enableFields == Qt::Unchecked);
@@ -349,7 +353,7 @@ void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
 void DatabaseWidget::slotImgCheckDatabaseConnection()
 {
     // TODO : if chek DB connection operations can be threaded, use DBusyDlg dialog there...
-    //FIXME:
+    return; //FIXME:
 
     kapp->setOverrideCursor(Qt::WaitCursor);
 
@@ -384,7 +388,7 @@ void DatabaseWidget::slotImgCheckDatabaseConnection()
 void DatabaseWidget::slotTmbCheckDatabaseConnection()
 {
     // TODO : if chek DB connection operations can be threaded, use DBusyDlg dialog there...
-    //FIXME:
+    return; //FIXME:
 
     kapp->setOverrideCursor(Qt::WaitCursor);
 
@@ -419,6 +423,8 @@ void DatabaseWidget::slotTmbCheckDatabaseConnection()
 
 void DatabaseWidget::checkDBPath()
 {
+    return; //FIXME:
+    
     QString newPath    = imgDatabasePathEdit->url().toLocalFile();
 
     if (!imgDatabasePathEdit->url().path().isEmpty())
