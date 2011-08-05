@@ -78,10 +78,7 @@ public:
 
 private Q_SLOTS:
 
-    void performImgCopy();
-#ifdef USE_THUMBS_DB
-    void performThumbCopy();
-#endif
+    void performCopy();
     void unlockInputFields();
     void lockInputFields();
 

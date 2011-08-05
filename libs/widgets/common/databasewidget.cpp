@@ -100,6 +100,9 @@ void DatabaseWidget::setupMainArea(const QString & title)
     imgDatabasePathEdit     = new KUrlRequester(dbPathBox);
     imgDatabasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
 
+    tmbDatabasePathEdit     = new KUrlRequester(dbPathBox);
+    tmbDatabasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
+
     internalServer                      = new QCheckBox(i18n("Internal Server"));
 
     QLabel* databaseTypeLabel           = new QLabel(i18n("Type"));
