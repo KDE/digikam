@@ -114,6 +114,7 @@ public:
 
     DImg                    originalImage;
     DImg                    cropImage;
+    FilterAction            lastFilterAction;
 
     GreycstorationSettings* settingsWidget;
 
@@ -444,11 +445,14 @@ void InPaintingTool::putPreviewData()
                             iface->previewHeight())).bits());
     d->previewWidget->updatePreview();
     d->isComputed = true;
+    d->lastFilterAction = filter()->filterAction();
 }
 
 void InPaintingTool::putFinalData()
 {
     ImageIface iface(0, 0);
+
+    // Note: if d->isComputed, filter() will be deleted but results stored
 
     if (!d->isComputed)
     {
@@ -457,7 +461,9 @@ void InPaintingTool::putFinalData()
 
     d->originalImage.bitBltImage(&d->cropImage, d->maskRect.left(), d->maskRect.top());
 
-    iface.putOriginalImage(i18n("In-Painting"), filter()->filterAction(), d->originalImage.bits());
+    iface.putOriginalImage(i18n("In-Painting"),
+                           filter() ? filter()->filterAction() : d->lastFilterAction,
+                           d->originalImage.bits());
 }
 
 void InPaintingTool::slotLoadSettings()
