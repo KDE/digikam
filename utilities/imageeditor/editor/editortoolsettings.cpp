@@ -79,8 +79,6 @@ public:
         plainPage(0),
         toolName(0),
         toolIcon(0),
-        btnBox1(0),
-        btnBox2(0),
         guideBox(0),
         channelCB(0),
         colorsCB(0),
@@ -108,8 +106,6 @@ public:
     QLabel*              toolName;
     QLabel*              toolIcon;
 
-    KHBox*               btnBox1;
-    KHBox*               btnBox2;
     KHBox*               guideBox;
 
     KComboBox*           channelCB;
@@ -145,8 +141,6 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
 
     d->plainPage      = new QWidget;
     d->guideBox       = new KHBox;
-    d->btnBox1        = new KHBox;
-    d->btnBox2        = new KHBox;
     d->histogramBox   = new HistogramBox;
 
     // ---------------------------------------------------------------
@@ -203,46 +197,45 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
 
     // ---------------------------------------------------------------
 
-    d->defaultBtn = new KPushButton(d->btnBox1);
+    d->defaultBtn = new KPushButton;
     d->defaultBtn->setGuiItem(KStandardGuiItem::defaults());
     d->defaultBtn->setIcon(KIcon(SmallIcon("document-revert")));
     d->defaultBtn->setToolTip(i18n("Reset all settings to their default values."));
 
-    QLabel* space2 = new QLabel(d->btnBox1);
-
-    d->okBtn = new KPushButton(d->btnBox1);
+    d->okBtn = new KPushButton;
     d->okBtn->setGuiItem(KStandardGuiItem::ok());
     d->okBtn->setDefault(true);
 
-    d->cancelBtn = new KPushButton(d->btnBox1);
+    d->cancelBtn = new KPushButton;
     d->cancelBtn->setGuiItem(KStandardGuiItem::cancel());
 
-    d->btnBox1->setStretchFactor(space2, 10);
-    d->btnBox1->setSpacing(spacingHint());
-    d->btnBox1->setMargin(0);
+    QHBoxLayout* hbox1 = new QHBoxLayout;
+    hbox1->addWidget(d->defaultBtn);
+    hbox1->addStretch(1);
+    hbox1->addWidget(d->okBtn);
+    hbox1->addWidget(d->cancelBtn);
 
     // ---------------------------------------------------------------
 
-    d->loadBtn = new KPushButton(d->btnBox2);
+    d->loadBtn = new KPushButton;
     d->loadBtn->setGuiItem(KStandardGuiItem::open());
     d->loadBtn->setText(i18n("Load..."));
     d->loadBtn->setToolTip(i18n("Load all parameters from settings text file."));
 
-    d->saveAsBtn = new KPushButton(d->btnBox2);
+    d->saveAsBtn = new KPushButton;
     d->saveAsBtn->setGuiItem(KStandardGuiItem::saveAs());
     d->saveAsBtn->setToolTip(i18n("Save all parameters to settings text file."));
 
-
-    QLabel* space3 = new QLabel(d->btnBox2);
-
-    d->tryBtn = new KPushButton(d->btnBox2);
+    d->tryBtn = new KPushButton;
     d->tryBtn->setGuiItem(KStandardGuiItem::apply());
     d->tryBtn->setText(i18n("Try"));
     d->tryBtn->setToolTip(i18n("Try all settings."));
 
-    d->btnBox2->setStretchFactor(space3, 10);
-    d->btnBox2->setSpacing(spacingHint());
-    d->btnBox2->setMargin(0);
+    QHBoxLayout* hbox2 = new QHBoxLayout;
+    hbox2->addWidget(d->loadBtn);
+    hbox2->addWidget(d->saveAsBtn);
+    hbox2->addStretch(1);
+    hbox2->addWidget(d->tryBtn);
 
     // ---------------------------------------------------------------
 
@@ -250,8 +243,8 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
     gridSettings->addWidget(d->histogramBox,   1, 0, 2, 2);
     gridSettings->addWidget(d->plainPage,      4, 0, 1, 2);
     gridSettings->addWidget(d->guideBox,       5, 0, 1, 2);
-    gridSettings->addWidget(d->btnBox2,        6, 0, 1, 2);
-    gridSettings->addWidget(d->btnBox1,        7, 0, 1, 2);
+    gridSettings->addLayout(hbox2,             6, 0, 1, 2);
+    gridSettings->addLayout(hbox1,             7, 0, 1, 2);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(spacingHint());
 
@@ -300,7 +293,8 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
     setTabOrder(d->tryBtn, d->okBtn);
     setTabOrder(d->okBtn, d->cancelBtn);
     setTabOrder(d->cancelBtn, d->defaultBtn);
-    setTabOrder(d->defaultBtn, d->saveAsBtn);
+    setTabOrder(d->defaultBtn, d->loadBtn);
+    setTabOrder(d->loadBtn, d->saveAsBtn);
 
     // ---------------------------------------------------------------
 
@@ -416,12 +410,10 @@ void EditorToolSettings::setButtons(Buttons buttonMask)
     d->okBtn->setVisible(buttonMask & Ok);
     d->cancelBtn->setVisible(buttonMask & Cancel);
     d->defaultBtn->setVisible(buttonMask & Default);
-    d->btnBox1->setVisible((buttonMask & Ok) || (buttonMask & Cancel) || (buttonMask & Default));
 
     d->loadBtn->setVisible(buttonMask & Load);
     d->saveAsBtn->setVisible(buttonMask & SaveAs);
     d->tryBtn->setVisible(buttonMask & Try);
-    d->btnBox2->setVisible((buttonMask & Load) || (buttonMask & SaveAs) || (buttonMask & Try));
 }
 
 void EditorToolSettings::setTools(Tools toolMask)
