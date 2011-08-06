@@ -76,7 +76,7 @@ void SearchModificationHelper::slotSearchDelete(SAlbum* searchAlbum)
     // Make sure that a complicated search is not deleted accidentally
     int result = KMessageBox::warningYesNo(d->dialogParent,
                                            i18n("Are you sure you want to "
-                                                "delete the selected Search "
+                                                "delete the selected search "
                                                 "\"%1\"?", searchAlbum->title()),
                                            i18n("Delete Search?"),
                                            KGuiItem(i18n("Delete")),
