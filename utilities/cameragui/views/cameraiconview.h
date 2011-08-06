@@ -40,6 +40,7 @@
 
 #include "iconview.h"
 #include "renamecustomizer.h"
+#include "camerathumbsctrl.h"
 #include "camiteminfo.h"
 
 class QPixmap;
@@ -63,12 +64,13 @@ public:
     ~CameraIconView();
 
     void setRenameCustomizer(RenameCustomizer* renamer);
+    void setThumbControler(CameraThumbsCtrl* controler);
 
     void addItem(const CamItemInfo& itemInfo);
     void removeItem(const CamItemInfo& itemInfo);
 
-    void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
-    void setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo);
+    CachedItem getThumbInfo(const CamItemInfo& itemInfo) const;
+
     void toggleLock(const CamItemInfo& itemInfo);
 
     void setDownloaded(const CamItemInfo& itemInfo, int status);
@@ -119,11 +121,6 @@ Q_SIGNALS:
     void signalToggleLock();
     void signalNewSelection(bool);
 
-    /** This signal is emited if icon view item do not have a valid thumbnails.
-     *  By this way camera controller is called to get thumbs on the fly, to limit camera connection time.
-     */
-    void signalPrepareRepaint(const CamItemInfoList&);
-
 public Q_SLOTS:
 
     void slotDownloadNameChanged();
@@ -146,6 +143,7 @@ private Q_SLOTS:
     void slotThemeChanged();
     void slotUpdateDownloadNames(bool hasSelection);
     void slotShowToolTip(IconItem* item);
+    void slotThumbInfoReady(const CamItemInfo& info);
 
 protected:
 
@@ -160,7 +158,6 @@ private:
     QString         getTemplatedName(const CamItemInfo& itemInfo) const;
     QString         getCasedName(const RenameCustomizer::Case ccase, const CamItemInfo& itemInfo) const;
     void            uploadItemPopupMenu(const KUrl::List& srcURLs);
-    void            prepareRepaint(const QList<IconItem*>& list);
     void            ensureItemVisible(CameraIconItem* item);
     CameraIconItem* findItem(const QString& folder, const QString& file) const;
 

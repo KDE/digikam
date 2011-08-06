@@ -960,8 +960,6 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
         }
     }
 
-    prepareRepaint(itemsToRepaint);
-
     foreach (IconItem* item, itemsToRepaint)
     {
         QRect viewportRect = contentsRectToViewport(item->rect());

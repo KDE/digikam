@@ -141,8 +141,6 @@ private Q_SLOTS:
     void slotFolderList(const QStringList& folderList);
     void slotFileList(const CamItemInfoList& fileList);
 
-    void slotRequestThumbnails(const CamItemInfoList& list);
-
     void slotIncreaseThumbSize();
     void slotDecreaseThumbSize();
     void slotZoomSliderChanged(int size);
@@ -193,10 +191,6 @@ private Q_SLOTS:
 
     void slotRefreshIconViewTimer();
     void slotRefreshIconView(const CHUpdateItemMap& map);
-
-    void slotThumbInfo(const CamItemInfo&, const QImage&);
-    void slotThumb(const QString&, const QString&, const QImage&);
-    void slotInfo(const QString&, const QString&, const CamItemInfo&);
 
 private:
 

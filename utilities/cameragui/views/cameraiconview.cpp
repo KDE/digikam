@@ -84,6 +84,7 @@ public:
         renamer(0),
         groupItem(0),
         cameraUI(0),
+        thumbCtrl(0),
         toolTip(0)
     {
     }
@@ -108,7 +109,7 @@ public:
     IconGroupItem*                   groupItem;
 
     CameraUI*                        cameraUI;
-
+    CameraThumbsCtrl*                thumbCtrl;
     CameraIconViewToolTip*           toolTip;
 };
 
@@ -209,28 +210,33 @@ void CameraIconView::setRenameCustomizer(RenameCustomizer* renamer)
             this, SLOT(slotDownloadNameChanged()));
 }
 
+void CameraIconView::setThumbControler(CameraThumbsCtrl* controler)
+{
+    d->thumbCtrl = controler;
+
+    connect(d->thumbCtrl, SIGNAL(signalThumbInfoReady(const CamItemInfo&)),
+            this, SLOT(slotThumbInfoReady(const CamItemInfo&)));
+}
+
+CachedItem CameraIconView::getThumbInfo(const CamItemInfo& itemInfo) const
+{
+    // If thumb/Info are not yet in cache, there will arrive later with slotThumbInfoReady()
+    return d->thumbCtrl->getThumbInfo(itemInfo);
+}
+
+void CameraIconView::slotThumbInfoReady(const CamItemInfo& info)
+{
+    CameraIconItem* item = findItem(info.folder, info.name);
+    if (!item)
+    {
+        // Updating item, thumb controller will be called to refresh icon item. See repaint() method for details.
+        item->update();
+    }
+    viewport()->update();
+}
+
 void CameraIconView::addItem(const CamItemInfo& info)
 {
-    KIconLoader* iconLoader = KIconLoader::global();
-    QImage thumb;
-
-    // Just to have a generic image thumb from desktop with KDE < 3.5.0
-    KMimeType::Ptr mime = KMimeType::mimeType(info.mime == QString("image/x-raw") ?
-                                              QString("image/tiff") : info.mime);
-
-    if (mime)
-    {
-        thumb = iconLoader->loadIcon(mime->iconName(), KIconLoader::Desktop,
-                                     ThumbnailSize::Huge, KIconLoader::DefaultState)
-                .toImage();
-    }
-    else
-    {
-        thumb = iconLoader->loadIcon("empty", KIconLoader::Desktop,
-                                     ThumbnailSize::Huge, KIconLoader::DefaultState)
-                .toImage();
-    }
-
     QString downloadName;
 
     //    if (d->renamer)
@@ -247,7 +253,7 @@ void CameraIconView::addItem(const CamItemInfo& info)
 
     CamItemInfo newinfo  = info;
     newinfo.downloadName = downloadName;
-    CameraIconItem* item = new CameraIconItem(d->groupItem, newinfo, thumb);
+    CameraIconItem* item = new CameraIconItem(d->groupItem, newinfo);
     QString sep;
     if (!newinfo.folder.endsWith("/")) sep = QString("/");
     d->itemDict.insert(newinfo.folder+sep+newinfo.name, item);
@@ -315,31 +321,6 @@ QMap<QString, int> CameraIconView::countItemsByFolders() const
     }
 
     return map;
-}
-
-void CameraIconView::setThumbnail(const QString& folder, const QString& filename, const QImage& image)
-{
-    CameraIconItem* item = findItem(folder, filename);
-    if (!item)
-    {
-        kDebug() << "item not found : " << folder << " " << filename;
-        return;
-    }
-
-    item->setThumbnail(image);
-    item->update();
-}
-
-void CameraIconView::setItemInfo(const QString& folder, const QString& filename, const CamItemInfo& itemInfo)
-{
-    CameraIconItem* item = findItem(folder, filename);
-    if (!item)
-    {
-        kDebug() << "item not found : " << folder << " " << filename;
-        return;
-    }
-
-    item->setItemInfo(itemInfo);
 }
 
 void CameraIconView::setDownloaded(const CamItemInfo& itemInfo, int status)
@@ -997,20 +978,6 @@ void CameraIconView::itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned lon
 
     fSizeKB = fSize / 1024;
     dSizeKB = dSize / 1024;
-}
-
-void CameraIconView::prepareRepaint(const QList<IconItem*>& list)
-{
-    CamItemInfoList infos;
-
-    foreach (IconItem* item, list)
-    {
-        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
-        if (iconItem && !iconItem->hasValidThumbnail())
-            infos << iconItem->itemInfo();
-    }
-
-    emit signalPrepareRepaint(infos);
 }
 
 CamItemInfoList CameraIconView::selectedItems() const

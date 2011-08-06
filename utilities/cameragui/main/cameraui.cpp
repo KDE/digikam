@@ -596,9 +596,6 @@ void CameraUI::setupConnections()
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
 
-    connect(d->view, SIGNAL(signalPrepareRepaint(const CamItemInfoList&)),
-            this, SLOT(slotRequestThumbnails(const CamItemInfoList&)));
-
     connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
             d->view, SLOT(slotFirstItem()));
 
@@ -718,15 +715,7 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     // Setup Thumbnails controller -------------------------------------------------------
 
     d->camThumbsCtrl = new CameraThumbsCtrl(d->controller, this);
-
-    connect(d->camThumbsCtrl, SIGNAL(signalThumbInfo(CamItemInfo, QImage)),
-            this, SLOT(slotThumbInfo(CamItemInfo, QImage)));
-
-    connect(d->camThumbsCtrl, SIGNAL(signalThumb(QString, QString, QImage)),
-            this, SLOT(slotThumb(QString, QString, QImage)));
-
-    connect(d->camThumbsCtrl, SIGNAL(signalInfo(QString, QString, CamItemInfo)),
-            this, SLOT(slotInfo(QString, QString, CamItemInfo)));
+    d->view->setThumbControler(d->camThumbsCtrl);
 }
 
 void CameraUI::setupAccelerators()
@@ -1259,12 +1248,6 @@ void CameraUI::slotlastPhotoFirst()
     slotRefreshIconView(map);
 }
 
-void CameraUI::slotRequestThumbnails(const CamItemInfoList& list)
-{
-    if (list.isEmpty()) return;
-    d->camThumbsCtrl->getThumbsInfo(list);
-}
-
 void CameraUI::slotCapture()
 {
     if (d->busy)
@@ -1428,7 +1411,6 @@ void CameraUI::slotUploaded(const CamItemInfo& itemInfo)
     }
 
     d->view->addItem(itemInfo);
-    d->camThumbsCtrl->getThumbsInfo(CamItemInfoList() << itemInfo);
     refreshFreeSpace();
 }
 
@@ -2271,28 +2253,6 @@ void CameraUI::slotHistoryEntryClicked(const QVariant& metadata)
 bool CameraUI::chronologicOrder() const
 {
     return !d->lastPhotoFirstAction->isChecked();
-}
-
-void CameraUI::slotThumbInfo(const CamItemInfo& info, const QImage& thumb)
-{
-    slotInfo(info.folder, info.name, info);
-    slotThumb(info.folder, info.name, thumb);
-}
-
-void CameraUI::slotThumb(const QString& folder, const QString& file, const QImage& thumb)
-{
-    d->view->setThumbnail(folder, file, thumb);
-}
-
-void CameraUI::slotInfo(const QString& folder, const QString& file, const CamItemInfo& info)
-{
-    CamItemInfo oldinf = d->view->findItemInfo(info.folder, info.name);
-    CamItemInfo newinf = info;
-    // NOTE: B.K.O #260669: do not overwrite downloaded information from DB which have been set before.
-    newinf.downloaded  = oldinf.downloaded;
-    // NOTE: B.K.O #246336: do not overwrite too the file mtime set previously at camera connection using cameragui settings.
-    newinf.mtime       = oldinf.mtime;
-    d->view->setItemInfo(folder, file, newinf);
 }
 
 }  // namespace Digikam
