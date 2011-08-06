@@ -33,4 +33,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 253268 : digiKam crashes when starting to download pictures.
 026 ==> 216492 : Camera interface upload can't select a movie only image.
 027 ==> 274199 : Digikam crashed when using "inpainting" tool.
-028 ==> 
+028 ==> 278320 : Crash with "-graphicssystem raster".
+029 ==> 
