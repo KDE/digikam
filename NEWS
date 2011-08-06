@@ -34,4 +34,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 026 ==> 216492 : Camera interface upload can't select a movie only image.
 027 ==> 274199 : Digikam crashed when using "inpainting" tool.
 028 ==> 278320 : Crash with "-graphicssystem raster".
-029 ==> 
+029 ==> 279551 : Wrong window title when deleting a search. 
+030 ==> 
