@@ -143,15 +143,15 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
 
     QGridLayout* gridSettings = new QGridLayout(d->settingsArea);
 
-    d->plainPage      = new QWidget(d->settingsArea);
-    d->guideBox       = new KHBox(d->settingsArea);
-    d->btnBox1        = new KHBox(d->settingsArea);
-    d->btnBox2        = new KHBox(d->settingsArea);
-    d->histogramBox   = new HistogramBox(d->settingsArea);
+    d->plainPage      = new QWidget;
+    d->guideBox       = new KHBox;
+    d->btnBox1        = new KHBox;
+    d->btnBox2        = new KHBox;
+    d->histogramBox   = new HistogramBox;
 
     // ---------------------------------------------------------------
 
-    QFrame* toolDescriptor = new QFrame(d->settingsArea);
+    QFrame* toolDescriptor = new QFrame;
 
     d->toolName = new QLabel();
     d->toolIcon = new QLabel();
@@ -296,6 +296,13 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
             this, SIGNAL(signalScaleChanged()));
 
     // --------------------------------------------------------
+
+    setTabOrder(d->tryBtn, d->okBtn);
+    setTabOrder(d->okBtn, d->cancelBtn);
+    setTabOrder(d->cancelBtn, d->defaultBtn);
+    setTabOrder(d->defaultBtn, d->saveAsBtn);
+
+    // ---------------------------------------------------------------
 
     setButtons(Default|Ok|Cancel);
     setTools(NoTool);
