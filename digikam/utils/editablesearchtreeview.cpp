@@ -79,7 +79,7 @@ EditableSearchTreeView::~EditableSearchTreeView()
 
 QString EditableSearchTreeView::contextMenuTitle() const
 {
-    return i18n("My Date Searches");
+    return i18n("My Searches");
 }
 
 void EditableSearchTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album)
