@@ -146,7 +146,7 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& newName, c
     const int border     = 8;
     int thumbSize        = view->thumbnailSize() - (2*border);
     d->pixSize           = thumb.size();
-    d->pixSize.scale(thumbSize, thumbSize, Qt::KeepAspectRatio);
+    d->pixSize.scale(thumbSize+1, thumbSize+1, Qt::KeepAspectRatio);
     d->pixRect           = QRect(0, 0, 0, 0);
     d->textRect          = QRect(0, 0, 0, 0);
     d->extraRect         = QRect(0, 0, 0, 0);
@@ -213,11 +213,11 @@ void CameraIconItem::paintItem(QPainter* p)
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
     CachedItem item      = view->getThumbInfo(itemInfo());
 
-    CamItemInfo newinf = item.first;
+    CamItemInfo newinf   = item.first;
     // NOTE: B.K.O #260669: do not overwrite downloaded information from DB which have been set before.
-    newinf.downloaded  = itemInfo().downloaded;
+    newinf.downloaded    = itemInfo().downloaded;
     // NOTE: B.K.O #246336: do not overwrite too the file mtime set previously at camera connection using cameragui settings.
-    newinf.mtime       = itemInfo().mtime;
+    newinf.mtime         = itemInfo().mtime;
     setItemInfo(newinf);
 
     QFont fn(view->font());
@@ -234,6 +234,7 @@ void CameraIconItem::paintItem(QPainter* p)
     QRect pixmapDrawRect(d->pixRect.x() + (d->pixRect.width()  - d->pixSize.width())  / 2,
                          d->pixRect.y() + (d->pixRect.height() - d->pixSize.height()) / 2,
                          d->pixSize.width(), d->pixSize.height());
+
     p->drawPixmap(pixmapDrawRect.topLeft(), item.second.scaled(d->pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     p->save();
 
