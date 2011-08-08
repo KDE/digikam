@@ -86,6 +86,8 @@ public:
     bool getImageTagsPath(QStringList& tagsPath) const;
     bool setImageTagsPath(const QStringList& tagsPath) const;
 
+    bool getImageFacesMap(QMap<QString,QVariant>& facesPath) const;
+
     bool     setMetadataTemplate(const Template& t) const;
     Template getMetadataTemplate() const;
     bool     removeMetadataTemplate() const;

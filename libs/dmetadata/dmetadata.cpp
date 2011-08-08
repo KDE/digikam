@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011 by Leif Huhn <leif@dkstat.com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1043,6 +1044,50 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
     return true;
 }
 
+bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
+{
+    faces.clear();
+
+    // The example code for Exiv2 says:
+    // > There are no specialized values for structures, qualifiers and nested
+    // > types. However, these can be added by using an XmpTextValue and a path as
+    // > the key.
+    // I think that means I have to iterate over the WLPG face tags in the clunky
+    // way below (guess numbers and look them up as strings). (Leif)
+    const QString personPathTemplate = "Xmp.MP.RegionInfo/MPRI:Regions[%1]/MPReg:PersonDisplayName";
+    const QString rectPathTemplate   = "Xmp.MP.RegionInfo/MPRI:Regions[%1]/MPReg:Rectangle";
+
+    for (int i=1; ; i++)
+    {
+        QString person = getXmpTagString(personPathTemplate.arg(i).toLatin1(), false);
+
+        if (person.isEmpty())
+            break;
+
+        // The WLPG tags have the format X.XX, Y.YY, W.WW, H.HH
+        // That is, four decimal numbers ranging from 0-1.
+        // The top left position is indicated by X.XX, Y.YY (as a
+        // percentage of the width/height of the entire image).
+        // Similarly the width and height of the face's box are
+        // indicated by W.WW and H.HH.
+        QString rectString = getXmpTagString(rectPathTemplate.arg(i).toLatin1(), false);
+        QStringList list   = rectString.split(",");
+        if (list.size() < 4)
+        {
+            kDebug() << "Cannot parse WLPG rectangle string" << rectString;
+            continue;
+        }
+        QRectF rect(list[0].toFloat(),
+                    list[1].toFloat(),
+                    list[2].toFloat(),
+                    list[3].toFloat());
+
+        faces[person] = rect;
+    }
+
+    return !faces.isEmpty();
+}
+
 bool DMetadata::setMetadataTemplate(const Template& t) const
 {
     if (t.isNull())
@@ -1747,6 +1792,14 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
             QStringList list;
             getImageTagsPath(list);
             return toStringListVariant(list);
+        }
+
+        case MetadataInfo::Faces:
+        {
+            QMap<QString,QVariant> faceMap;
+            getImageFacesMap(faceMap);
+            QVariant var(faceMap);
+            return var;
         }
 
         case MetadataInfo::Rating:
