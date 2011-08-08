@@ -211,7 +211,6 @@ public:
     CheckableAlbumFilterModel* filterModel;
     TagPropertiesFilterModel*  filteredModel;
 
-    FaceIface                  faceIface;
     FacePipeline               editPipeline;
 
     FaceGroup* const           q;
@@ -577,7 +576,7 @@ AssignNameWidget* FaceGroup::FaceGroupPriv::createAssignNameWidget(const Databas
     assignWidget->setUserData(info, identifier);
     checkModels();
     assignWidget->setModel(tagModel, filteredModel, filterModel);
-    assignWidget->setParentTag(AlbumManager::instance()->findTAlbum(faceIface.personParentTag()));
+    assignWidget->setParentTag(AlbumManager::instance()->findTAlbum(FaceTags::personParentTag()));
 
     q->connect(assignWidget, SIGNAL(assigned(TaggingAction,ImageInfo,QVariant)),
                q, SLOT(slotAssigned(TaggingAction,ImageInfo,QVariant)));
@@ -606,7 +605,7 @@ void FaceGroup::load()
         return;
     }
 
-    QList<DatabaseFace> faces = d->faceIface.databaseFaces(d->info.id());
+    QList<DatabaseFace> faces = FaceTagsEditor().databaseFaces(d->info.id());
 
     foreach (const DatabaseFace& face, faces)
     {
@@ -655,10 +654,10 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, cons
         }
         else if (action.shallCreateNewTag())
         {
-            tagId = d->faceIface.getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
+            tagId = FaceTags::getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
         }
 
-        if (d->faceIface.isTheUnknownPerson(tagId))
+        if (FaceTags::isTheUnknownPerson(tagId))
         {
             kDebug() << "Refusing to assign the unknown person to an image";
             return;

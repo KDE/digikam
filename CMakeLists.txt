@@ -1135,7 +1135,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libfacedetection_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/databaseface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/faceiface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facegroup.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facepipeline.cpp
@@ -1244,6 +1243,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseservererror.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory/imagehistorygraph.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory/imagehistorygraphmodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces/databaseface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces/facetags.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces/facetagseditor.cpp
        )
 
     SET(libdatabaseui_SRCS
@@ -1495,6 +1497,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters

@@ -280,7 +280,7 @@ void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ImageInf
     }
     else if (action.shallCreateNewTag())
     {
-        tagId = d->faceIface.getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
+        tagId = FaceTags::getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
     }
 
     if (tagId)

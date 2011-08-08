@@ -375,7 +375,6 @@ public:
     QList<QObject*>      pipeline;
     QThread::Priority    priority;
 
-    FaceIface*           iface;
     ThumbnailLoadThread* thumbnailLoadThread;
     bool                 started;
     int                  infosForFiltering;
