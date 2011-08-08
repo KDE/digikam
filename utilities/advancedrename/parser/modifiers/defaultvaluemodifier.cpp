@@ -107,8 +107,6 @@ void DefaultValueModifier::slotTokenTriggered(const QString& token)
 
 QString DefaultValueModifier::parseOperation(ParseSettings& settings)
 {
-    Q_UNUSED(settings);
-
     if (!settings.str2Modify.isEmpty())
     {
         return settings.str2Modify;
