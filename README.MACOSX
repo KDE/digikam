@@ -5,7 +5,7 @@ digiKam can be installed through MacPort project. Current version avaialble can 
 
 http://www.macports.org/ports.php?by=name&substr=digikam
 
-To install it, please follow these instructions:
+To install it, please follow these instructions to enter in a console:
 
 1/ Install Xcode from apple (http://developer.apple.com/xcode).
    It's free, you just need to create an acount on apple.com to download it.
@@ -13,8 +13,8 @@ To install it, please follow these instructions:
 
 3/ Init macport on your computer and install digiKam. This stage require some hours to compile whole env.
 
->sudo port selfupdate
->sudo port install digikam
+>sudo port -v selfupdate
+>sudo port -v install digikam
 
 4/ With username "foo", init KDE and Dbus service.
 
