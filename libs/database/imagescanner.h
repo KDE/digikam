@@ -226,6 +226,7 @@ protected:
     void scanImageCopyright();
     void scanIPTCCore();
     void scanTags();
+    void scanFaces();
     void scanImageHistory();
     void scanImageHistoryIfModified();
     void scanVideoFile();

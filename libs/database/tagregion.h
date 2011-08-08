@@ -102,6 +102,9 @@ public:
     static QRect mapToOriginalSize(const DImg& reducedSizeImage, const QRect& reducedSizeDetail);
     static QRect mapFromOriginalSize(const DImg& reducedSizeImage, const QRect& fullSizeDetail);
 
+    /// Takes a relative region and a full size and returns the absolute region
+    static QRect relativeToAbsolute(const QRectF& region, const QSize& fullSize);
+
 protected:
 
     QVariant m_value;

@@ -42,11 +42,13 @@
 #include "albumdb.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
+#include "facetagseditor.h"
 #include "imagecomments.h"
 #include "imagecopyright.h"
 #include "imageextendedproperties.h"
 #include "imagehistorygraph.h"
 #include "metadatasettings.h"
+#include "tagregion.h"
 #include "tagscache.h"
 
 namespace Digikam
@@ -257,6 +259,7 @@ void ImageScanner::scanFile(ScanMode mode)
         if (m_scanInfo.category == DatabaseItem::Image)
         {
             scanImageInformation();
+            scanFaces();
             scanImageHistoryIfModified();
         }
     }
@@ -274,6 +277,7 @@ void ImageScanner::scanFile(ScanMode mode)
                 scanImageCopyright();
                 scanIPTCCore();
                 scanTags();
+                scanFaces();
                 scanImageHistory();
             }
         }
@@ -574,6 +578,44 @@ void ImageScanner::scanTags()
         {
             kDebug() << "Cannot find Color Label Tag for : " << colorId;
         }
+    }
+}
+
+void ImageScanner::scanFaces()
+{
+    QSize size = m_img.size();
+    if (!size.isValid())
+    {
+        return;
+    }
+
+    QMap<QString,QVariant> metadataFacesMap;
+    if (!m_metadata.getImageFacesMap(metadataFacesMap))
+    {
+        return;
+    }
+
+    QMap<QString,QVariant>::iterator it;
+    for (it = metadataFacesMap.begin(); it != metadataFacesMap.end(); ++it)
+    {
+        QString name = it.key();
+        QRectF rect  = it.value().toRectF();
+
+        if (name.isEmpty() || !rect.isValid())
+        {
+            continue;
+        }
+
+        int tagId = FaceTags::getOrCreateTagForPerson(name);
+        if (!tagId)
+        {
+            kDebug() << "Failed to create a person tag for name" << name;
+        }
+
+        TagRegion region(TagRegion::relativeToAbsolute(rect, size));
+
+        FaceTagsEditor editor;
+        editor.add(m_scanInfo.id, tagId, region, false);
     }
 }
 

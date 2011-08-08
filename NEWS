@@ -35,4 +35,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 274199 : Digikam crashed when using "inpainting" tool.
 028 ==> 278320 : Crash with "-graphicssystem raster".
 029 ==> 279551 : Wrong window title when deleting a search. 
-030 ==> 
+030 ==> 271030 : Windows Live Photo Gallery people tagging Compatibility.
+031 ==> 
