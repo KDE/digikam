@@ -116,7 +116,7 @@ void CameraThumbsCtrl::slotThumbInfo(const QString&, const QString& file, const 
     emit signalThumbInfoReady(info);
 }
 
-void CameraThumbsCtrl::slotThumbInfoFailed(const QString& folder, const QString& file, const CamItemInfo& info)
+void CameraThumbsCtrl::slotThumbInfoFailed(const QString& /*folder*/, const QString& file, const CamItemInfo& info)
 {
     if (d->controller->cameraDriverType() == DKCamera::UMSDriver)
     {
