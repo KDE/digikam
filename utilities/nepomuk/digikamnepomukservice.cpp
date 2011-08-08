@@ -322,6 +322,11 @@ void NepomukService::enableSyncToNepomuk(bool syncToNepomuk)
 
 void NepomukService::triggerResync()
 {
+    if (!d->isConnected)
+    {
+        return;
+    }
+
     clearSyncedToDigikam();
     clearSyncedToNepomuk();
 
