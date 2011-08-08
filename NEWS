@@ -36,4 +36,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 278320 : Crash with "-graphicssystem raster".
 029 ==> 279551 : Wrong window title when deleting a search. 
 030 ==> 271030 : Windows Live Photo Gallery people tagging Compatibility.
-031 ==> 
+031 ==> 279549 : Lighttable gets automatically filled on digiKam start.
+032 ==> 
