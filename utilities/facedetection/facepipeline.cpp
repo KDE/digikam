@@ -880,6 +880,7 @@ FacePipeline::FacePipelinePriv::FacePipelinePriv(FacePipeline* q)
     started              = false;
     infosForFiltering    = 0;
     packagesOnTheRoad    = 0;
+    maxPackagesOnTheRoad = 50;
 }
 
 void FacePipeline::FacePipelinePriv::processBatch(const QList<ImageInfo>& infos)
@@ -959,8 +960,11 @@ FacePipeline::FacePipelinePriv::buildPackage(const ImageInfo& info, const FacePi
 void FacePipeline::FacePipelinePriv::send(FacePipelineExtendedPackage::Ptr package)
 {
     start();
-    ++packagesOnTheRoad;
-    emit startProcess(package);
+    if (senderFlowControl(package))
+    {
+        ++packagesOnTheRoad;
+        emit startProcess(package);
+    }
 }
 
 void FacePipeline::FacePipelinePriv::finishProcess(FacePipelineExtendedPackage::Ptr package)
@@ -974,7 +978,27 @@ void FacePipeline::FacePipelinePriv::finishProcess(FacePipelineExtendedPackage::
         previewThread->checkRestart();
     }
 
+    receiverFlowControl();
+
     checkFinished();
+}
+
+bool FacePipeline::FacePipelinePriv::senderFlowControl(FacePipelineExtendedPackage::Ptr package)
+{
+    if (packagesOnTheRoad > maxPackagesOnTheRoad)
+    {
+        delayedPackages << package;
+        return false;
+    }
+    return true;
+}
+
+void FacePipeline::FacePipelinePriv::receiverFlowControl()
+{
+    if (!delayedPackages.isEmpty() && packagesOnTheRoad <= maxPackagesOnTheRoad)
+    {
+        send(delayedPackages.takeFirst());
+    }
 }
 
 bool FacePipeline::FacePipelinePriv::hasFinished()
