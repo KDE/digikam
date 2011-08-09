@@ -178,14 +178,13 @@ void SplashScreen::drawContents(QPainter* p)
     QRect r = rect();
     r.setCoords(r.x() + 60, r.y() + 4, r.width() - 10, r.height() - 10);
 
-    // Draw message at given position, limited to 43 chars
+    // Draw message at given position, limited to 49 chars
     // If message is too long, string is truncated
     if (d->message.length() > 50)
     {
         d->message.truncate(49);
     }
 
-    d->message += "...";
     p->setPen(d->messageColor);
     p->drawText(r, d->messageAlign, d->message);
 

@@ -195,7 +195,7 @@ DigikamApp::DigikamApp()
 
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Scan Albums"));
+        d->splashScreen->message(i18n("Scanning Albums..."));
     }
 
     new DigikamAdaptor(this);
@@ -261,7 +261,7 @@ DigikamApp::DigikamApp()
 
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Checking ICC repository"));
+        d->splashScreen->message(i18n("Checking ICC repository..."));
     }
 
     d->validIccPath = SetupICC::iccRepositoryIsValid();
@@ -269,7 +269,7 @@ DigikamApp::DigikamApp()
     // Read albums from database
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Reading database"));
+        d->splashScreen->message(i18n("Reading database..."));
     }
 
     AlbumManager::instance()->startScan();
@@ -450,7 +450,7 @@ void DigikamApp::autoDetect()
 
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Auto Detect Camera"));
+        d->splashScreen->message(i18n("Auto-Detecting Camera..."));
     }
 
     QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
@@ -464,7 +464,7 @@ void DigikamApp::downloadFrom(const QString& cameraGuiPath)
     {
         if (d->splashScreen)
         {
-            d->splashScreen->message(i18n("Opening Download Dialog"));
+            d->splashScreen->message(i18n("Opening Download Dialog..."));
         }
 
         emit queuedOpenCameraUiFromPath(cameraGuiPath);
@@ -479,7 +479,7 @@ void DigikamApp::downloadFromUdi(const QString& udi)
     {
         if (d->splashScreen)
         {
-            d->splashScreen->message(i18n("Opening Download Dialog"));
+            d->splashScreen->message(i18n("Opening Download Dialog..."));
         }
 
         emit queuedOpenSolidDevice(udi);
@@ -515,7 +515,7 @@ void DigikamApp::setupView()
 {
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Initializing Main View"));
+        d->splashScreen->message(i18n("Initializing Main View..."));
     }
 
     d->view = new DigikamView(this, d->modelCollection);
@@ -1280,7 +1280,7 @@ void DigikamApp::setupActions()
     // are plugged into the toolbar at startup
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Loading cameras"));
+        d->splashScreen->message(i18n("Loading cameras..."));
     }
     loadCameras();
 
@@ -2507,7 +2507,7 @@ void DigikamApp::loadPlugins()
 
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Loading Kipi Plugins"));
+        d->splashScreen->message(i18n("Loading KIPI Plugins..."));
     }
 
     QStringList ignores;
@@ -2731,7 +2731,7 @@ void DigikamApp::populateThemes()
 {
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Loading themes"));
+        d->splashScreen->message(i18n("Loading themes..."));
     }
     ThemeManager::instance()->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
     ThemeManager::instance()->registerThemeActions(this);
@@ -2750,7 +2750,7 @@ void DigikamApp::preloadWindows()
 {
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Loading tools"));
+        d->splashScreen->message(i18n("Loading tools..."));
     }
 
     QueueMgrWindow::queueManagerWindow();
