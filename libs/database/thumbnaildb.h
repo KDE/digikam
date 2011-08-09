@@ -89,7 +89,7 @@ public:
     bool setSetting(const QString& keyword, const QString& value);
     QString getSetting(const QString& keyword);
 
-    DatabaseThumbnailInfo findByHash(const QString& uniqueHash, int fileSize);
+    DatabaseThumbnailInfo findByHash(const QString& uniqueHash, qlonglong fileSize);
     DatabaseThumbnailInfo findByFilePath(const QString& path);
     DatabaseThumbnailInfo findByCustomIdentifier(const QString& id);
 
@@ -100,12 +100,12 @@ public:
      */
     DatabaseThumbnailInfo findByFilePath(const QString& path, const QString& uniqueHash);
 
-    DatabaseCoreBackend::QueryState insertUniqueHash(const QString& uniqueHash, int fileSize, int thumbId);
+    DatabaseCoreBackend::QueryState insertUniqueHash(const QString& uniqueHash, qlonglong fileSize, int thumbId);
     DatabaseCoreBackend::QueryState insertFilePath(const QString& path, int thumbId);
     DatabaseCoreBackend::QueryState insertCustomIdentifier(const QString& id, int thumbId);
 
     /** Removes thumbnail data associated to the given uniqueHash/fileSize */
-    DatabaseCoreBackend::QueryState removeByUniqueHash(const QString& uniqueHash, int fileSize);
+    DatabaseCoreBackend::QueryState removeByUniqueHash(const QString& uniqueHash, qlonglong fileSize);
     /** Removes thumbnail data associated to the given file path */
     DatabaseCoreBackend::QueryState removeByFilePath(const QString& path);
     DatabaseCoreBackend::QueryState removeByCustomIdentifier(const QString& id);

@@ -883,7 +883,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
     {
         // if the file need not be scanned because of modification, update the hash
         if (modificationDateEquals(fi.lastModified(), scanInfo.modificationDate)
-            && (int)fi.size() == scanInfo.fileSize)
+            && fi.size() == scanInfo.fileSize)
         {
             QString oldHash = scanInfo.uniqueHash;
             QString newHash = scanFileUpdateHash(fi, scanInfo);
@@ -897,7 +897,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
     }
 
     if (!modificationDateEquals(fi.lastModified(), scanInfo.modificationDate)
-        || (int)fi.size() != scanInfo.fileSize)
+        || fi.size() != scanInfo.fileSize)
     {
         scanModifiedFile(fi, scanInfo);
     }

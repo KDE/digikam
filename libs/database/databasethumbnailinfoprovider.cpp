@@ -62,7 +62,7 @@ ThumbnailInfo DatabaseThumbnailInfoProvider::thumbnailInfo(const QString& path)
     if (!values.isEmpty())
     {
         thumbinfo.modificationDate = values[0].toDateTime();
-        thumbinfo.fileSize = values[1].toInt();
+        thumbinfo.fileSize = values[1].toLongLong();
         thumbinfo.uniqueHash = values[2].toString();
     }
 

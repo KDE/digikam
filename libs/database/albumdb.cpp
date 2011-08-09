@@ -2544,12 +2544,12 @@ QList<ItemScanInfo> AlbumDB::getIdenticalFiles(qlonglong id)
     }
 
     QString uniqueHash = values[0].toString();
-    int fileSize       = values[1].toInt();
+    qlonglong fileSize = values[1].toLongLong();
 
     return getIdenticalFiles(uniqueHash, fileSize, id);
 }
 
-QList<ItemScanInfo> AlbumDB::getIdenticalFiles(const QString& uniqueHash, int fileSize, qlonglong sourceId)
+QList<ItemScanInfo> AlbumDB::getIdenticalFiles(const QString& uniqueHash, qlonglong fileSize, qlonglong sourceId)
 {
     // enforce validity
     if (uniqueHash.isEmpty() || fileSize <= 0)
@@ -2584,7 +2584,7 @@ QList<ItemScanInfo> AlbumDB::getIdenticalFiles(const QString& uniqueHash, int fi
         info.modificationDate = ((*it).isNull() ? QDateTime()
                                  : QDateTime::fromString( (*it).toString(), Qt::ISODate ));
         ++it;
-        info.fileSize         = (*it).toInt();
+        info.fileSize         = (*it).toLongLong();
         ++it;
 
         // exclude one source id from list
@@ -2896,7 +2896,7 @@ void AlbumDB::addBoundValuePlaceholders(QString& query, int count)
     query += questionMarks;
 }
 
-int AlbumDB::findInDownloadHistory(const QString& identifier, const QString& name, int fileSize, const QDateTime& date)
+int AlbumDB::findInDownloadHistory(const QString& identifier, const QString& name, qlonglong fileSize, const QDateTime& date)
 {
     QList<QVariant> values;
     d->db->execSql( QString("SELECT id FROM DownloadHistory WHERE "
@@ -2911,7 +2911,7 @@ int AlbumDB::findInDownloadHistory(const QString& identifier, const QString& nam
     return values.first().toInt();
 }
 
-int AlbumDB::addToDownloadHistory(const QString& identifier, const QString& name, int fileSize, const QDateTime& date)
+int AlbumDB::addToDownloadHistory(const QString& identifier, const QString& name, qlonglong fileSize, const QDateTime& date)
 {
     QVariant id;
     d->db->execSql( QString("REPLACE INTO DownloadHistory "
@@ -3424,7 +3424,7 @@ qlonglong AlbumDB::addItem(int albumID, const QString& name,
                            DatabaseItem::Status status,
                            DatabaseItem::Category category,
                            const QDateTime& modificationDate,
-                           int fileSize,
+                           qlonglong fileSize,
                            const QString& uniqueHash)
 {
     QVariantList boundValues;
@@ -3450,7 +3450,7 @@ qlonglong AlbumDB::addItem(int albumID, const QString& name,
 
 void AlbumDB::updateItem(qlonglong imageID, DatabaseItem::Category category,
                          const QDateTime& modificationDate,
-                         int fileSize, const QString& uniqueHash)
+                         qlonglong fileSize, const QString& uniqueHash)
 {
     QVariantList boundValues;
     boundValues << category << modificationDate << fileSize << uniqueHash << imageID;
@@ -3903,7 +3903,7 @@ QList<ItemScanInfo> AlbumDB::getItemScanInfos(int albumID)
         info.modificationDate = ((*it).isNull() ? QDateTime()
                                  : QDateTime::fromString( (*it).toString(), Qt::ISODate ));
         ++it;
-        info.fileSize         = (*it).toInt();
+        info.fileSize         = (*it).toLongLong();
         ++it;
         info.uniqueHash       = (*it).toString();
         ++it;
@@ -3942,7 +3942,7 @@ ItemScanInfo AlbumDB::getItemScanInfo(qlonglong imageID)
         info.modificationDate = ((*it).isNull() ? QDateTime()
                                  : QDateTime::fromString( (*it).toString(), Qt::ISODate ));
         ++it;
-        info.fileSize         = (*it).toInt();
+        info.fileSize         = (*it).toLongLong();
         ++it;
         info.uniqueHash       = (*it).toString();
         ++it;

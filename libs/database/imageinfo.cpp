@@ -330,7 +330,7 @@ QString ImageInfo::name() const
     return m_data->name;
 }
 
-uint ImageInfo::fileSize() const
+qlonglong ImageInfo::fileSize() const
 {
     if (!m_data)
     {

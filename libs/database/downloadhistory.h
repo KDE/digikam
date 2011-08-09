@@ -53,13 +53,13 @@ public:
      * if available, and the directory path (though you are free to use all four parameters as you want)
      */
     static Status status(const QString& identifier, const QString& name,
-                         int fileSize, const QDateTime& date);
+                         qlonglong fileSize, const QDateTime& date);
 
     /**
      * Sets the status of the item to Downloaded
      */
     static void setDownloaded(const QString& identifier, const QString& name,
-                              int fileSize, const QDateTime& date);
+                              qlonglong fileSize, const QDateTime& date);
 };
 
 } // namespace Digikam

@@ -220,8 +220,7 @@ void ImageScanner::prepareImage()
 {
     m_scanInfo.itemName         = m_fileInfo.fileName();
     m_scanInfo.modificationDate = m_fileInfo.lastModified();
-    // there is a limit here for file size <2TB
-    m_scanInfo.fileSize         = (int)m_fileInfo.size();
+    m_scanInfo.fileSize         = m_fileInfo.size();
     // category is set by setCategory
 
     // the QByteArray is an ASCII hex string
@@ -1457,7 +1456,7 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
     {
         container->fileName             = imagesFields[0].toString();
         container->fileModificationDate = imagesFields[1].toDateTime();
-        container->fileSize             = imagesFields[2].toInt();
+        container->fileSize             = imagesFields[2].toLongLong();
     }
 
     if (!imageInformationFields.isEmpty())
