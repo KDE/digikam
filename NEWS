@@ -39,4 +39,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 279549 : Lighttable gets automatically filled on digiKam start.
 032 ==> 279696 : Building the unittests of libkgeomap fails.
 033 ==> 279713 : Libmediawiki tries to install test files (patch attached).
-034 ==> 
+034 ==> 236394 : Import from camera using cable is slow and previously imported video files are not flagged.
+035 ==> 261871 : Digikam import of Nikon D7000 images very slow.
+036 ==> 243760 : Import *listing* from "Canon PowerShot G5 (normal mode)" takes very long.
+037 ==> 
