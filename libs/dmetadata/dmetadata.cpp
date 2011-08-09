@@ -191,6 +191,41 @@ bool DMetadata::setProgramId(bool on) const
     return true;
 }
 
+int DMetadata::getMSecsInfo() const
+{
+    int ms  = 0;
+    bool ok = mSecTimeStamp("Exif.Photo.SubSecTime", ms);
+    if (ok) return ms;
+
+    ok      = mSecTimeStamp("Exif.Photo.SubSecTimeOriginal", ms);
+    if (ok) return ms;
+
+    ok = mSecTimeStamp("Exif.Photo.SubSecTimeDigitized", ms);
+    if (ok) return ms;
+
+    return 0;
+}
+
+bool DMetadata::mSecTimeStamp(const char* exifTagName, int& ms) const
+{
+    bool ok     = false;
+    QString val = getExifTagString(exifTagName);
+    if (!val.isEmpty())
+    {
+        int sub = val.toUInt(&ok);
+        if (ok)
+        {
+            int _ms = (int)(QString("0.%1").arg(sub).toFloat(&ok) * 1000.0);
+            if (ok)
+            {
+                ms = _ms;
+                kDebug() << "msec timestamp: " << ms;
+            }
+        }
+    }
+    return ok;
+}
+
 CaptionsMap DMetadata::getImageComments() const
 {
     if (getFilePath().isEmpty())

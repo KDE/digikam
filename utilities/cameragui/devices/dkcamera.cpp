@@ -160,6 +160,8 @@ void DKCamera::fillItemInfoFromMetadata(CamItemInfo& info, const DMetadata& meta
 {
     QSize dims     = meta.getImageDimensions();
     info.mtime     = meta.getImageDateTime();
+    //NOTE: see B.K.O #246401 to sort based on milliseconds for items  taken quickly.
+    info.mtime.setTime(info.mtime.time().addMSecs(meta.getMSecsInfo()));
     info.width     = dims.width();
     info.height    = dims.height();
     info.photoInfo = meta.getPhotographInformation();
