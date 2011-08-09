@@ -43,4 +43,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 261871 : Digikam import of Nikon D7000 images very slow.
 036 ==> 243760 : Import *listing* from "Canon PowerShot G5 (normal mode)" takes very long.
 037 ==> 246401 : Improve date based sort of camera interface: use more time precision from Exif when shots are taken with less than 1s.
-038 ==> 
+038 ==> 266317 : Nepomuk Service Stub (nepomukservicestub) crashes in libdigikamdatabase.so.1 when syncing tags to nepomuk.
+039 ==> 
