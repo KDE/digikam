@@ -22,7 +22,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 221457 : digiKam camera download - dates are not preserved.
 015 ==> 229543 : Video exif info not found during import and renaming.
 016 ==> 265243 : Series of AVIs imported with the same (incorrect) time.
-017 ==> 199913 : Creation date is changed when converting to png .
+017 ==> 199913 : Creation date is changed when converting to png.
 018 ==> 190717 : Camera movie files dates not used for date based sub folder name.
 019 ==> 246337 : Changing sort order forces thumbnail regeneration.
 020 ==> 256776 : digiKam leaves ".digikam-exifrotate" files etc. on harddisk.
