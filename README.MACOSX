@@ -20,7 +20,6 @@ To install it, please follow these instructions to enter in a console:
 
 > sudo chown -R foo ~/Library/Preferences/KDE
 > sudo chown -R foo /Library/LaunchAgents/org.freedesktop.dbus-session.plist
-> sudo launchctl load -w
-> /Library/LaunchAgents/org.freedesktop.dbus-session.plist
+> sudo launchctl load -w /Library/LaunchAgents/org.freedesktop.dbus-session.plist
 
 5/ digiKam icon must be available on Applications/Macport menu entry.
