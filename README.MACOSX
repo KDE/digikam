@@ -7,16 +7,16 @@ http://www.macports.org/ports.php?by=name&substr=digikam
 
 To install it, please follow these instructions to enter in a console:
 
-1/ Install Xcode from apple (http://developer.apple.com/xcode).
+1/ Install XCode compiler from apple (http://developer.apple.com/xcode).
    It's free, you just need to create an acount on apple.com to download it.
 2/ Install "macport" using DMG package (http://www.macports.org/install.php).
 
-3/ Init macport on your computer and install digiKam. This stage require some hours to compile whole env.
+3/ Initialize macport on your computer and install digiKam. This stage require some hours to compile whole environement.
 
 >sudo port -v selfupdate
 >sudo port -v install digikam
 
-4/ With username "foo", init KDE and Dbus service.
+4/ Using your account user-name (here replace "foo" by you account), initialize KDE and Dbus services.
 
 > sudo chown -R foo ~/Library/Preferences/KDE
 > sudo chown -R foo /Library/LaunchAgents/org.freedesktop.dbus-session.plist
