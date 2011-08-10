@@ -100,12 +100,15 @@ public:
         cameraCaptureAction(0),
         cameraInfoAction(0),
         decreaseThumbsAction(0),
+        deleteNewAction(0),
         deleteAllAction(0),
         deleteSelectedAction(0),
+        downloadNewAction(0),
         downloadAllAction(0),
+        downloadSelectedAction(0),
+        downloadDelNewAction(0),
         downloadDelAllAction(0),
         downloadDelSelectedAction(0),
-        downloadSelectedAction(0),
         fullScreenAction(0),
         imageViewAction(0),
         increaseThumbsAction(0),
@@ -183,12 +186,15 @@ public:
     KAction*                      cameraCaptureAction;
     KAction*                      cameraInfoAction;
     KAction*                      decreaseThumbsAction;
+    KAction*                      deleteNewAction;
     KAction*                      deleteAllAction;
     KAction*                      deleteSelectedAction;
+    KAction*                      downloadNewAction;
     KAction*                      downloadAllAction;
+    KAction*                      downloadSelectedAction;
+    KAction*                      downloadDelNewAction;
     KAction*                      downloadDelAllAction;
     KAction*                      downloadDelSelectedAction;
-    KAction*                      downloadSelectedAction;
     KAction*                      fullScreenAction;
     KAction*                      imageViewAction;
     KAction*                      increaseThumbsAction;

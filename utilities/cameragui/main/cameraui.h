@@ -151,12 +151,19 @@ private Q_SLOTS:
 
     void slotUpload();
     void slotUploadItems(const KUrl::List&);
+
+    void slotDownloadNew();
     void slotDownloadSelected();
     void slotDownloadAll();
-    void slotDownloadAndDeleteAll();
-    void slotDeleteSelected();
+
+    void slotDownloadAndDeleteNew();
     void slotDownloadAndDeleteSelected();
+    void slotDownloadAndDeleteAll();
+
+    void slotDeleteNew();
+    void slotDeleteSelected();
     void slotDeleteAll();
+
     void slotToggleLock();
     void slotMarkAsDownloaded();
 

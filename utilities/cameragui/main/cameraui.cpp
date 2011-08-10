@@ -400,7 +400,13 @@ void CameraUI::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->downloadSelectedAction = new KAction(KIcon("computer"), i18n("Download Selected"), this);
+    d->downloadNewAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Download New"), this);
+    connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
+    actionCollection()->addAction("cameraui_imagedownloadnew", d->downloadNewAction);
+
+    // -----------------------------------------------------------------
+
+    d->downloadSelectedAction = new KAction(i18n("Download Selected"), this);
     connect(d->downloadSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadSelected()));
     actionCollection()->addAction("cameraui_imagedownloadselected", d->downloadSelectedAction);
     d->downloadSelectedAction->setEnabled(false);
@@ -410,6 +416,12 @@ void CameraUI::setupActions()
     d->downloadAllAction = new KAction(i18n("Download All"), this);
     connect(d->downloadAllAction, SIGNAL(triggered()), this, SLOT(slotDownloadAll()));
     actionCollection()->addAction("cameraui_imagedownloadall", d->downloadAllAction);
+
+    // -------------------------------------------------------------------------
+
+    d->downloadDelNewAction = new KAction(i18n("Download/Delete New"), this);
+    connect(d->downloadDelNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteNew()));
+    actionCollection()->addAction("cameraui_imagedownloaddeletenew", d->downloadDelNewAction);
 
     // -----------------------------------------------------------------
 
@@ -455,6 +467,12 @@ void CameraUI::setupActions()
     d->deleteAllAction = new KAction(i18n("Delete All"), this);
     connect(d->deleteAllAction, SIGNAL(triggered()), this, SLOT(slotDeleteAll()));
     actionCollection()->addAction("cameraui_imagedeleteall", d->deleteAllAction);
+
+    // -------------------------------------------------------------------------
+
+    d->deleteNewAction = new KAction(i18n("Delete New"), this);
+    connect(d->deleteNewAction, SIGNAL(triggered()), this, SLOT(slotDeleteNew()));
+    actionCollection()->addAction("cameraui_imagedeletenew", d->deleteNewAction);
 
     // -- Last Photo First menu actions --------------------------------------------
 
@@ -960,20 +978,32 @@ void CameraUI::slotBusy(bool val)
         // d->renameCustomizer->restoreFocus();
 
         d->uploadAction->setEnabled(d->controller->cameraUploadSupport());
+
+        d->downloadSelectedAction->setEnabled(true);
+        d->downloadDelSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->downloadNewAction->setEnabled(true);
         d->downloadAllAction->setEnabled(true);
         d->downloadDelAllAction->setEnabled(d->controller->cameraDeleteSupport());
+
+        d->deleteNewAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->deleteSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
         d->deleteAllAction->setEnabled(d->controller->cameraDeleteSupport());
-        d->selectAllAction->setEnabled(true);
-        d->selectNoneAction->setEnabled(true);
-        d->selectInvertAction->setEnabled(true);
+
         d->selectNewItemsAction->setEnabled(true);
+        d->selectAllAction->setEnabled(true);
+        d->selectInvertAction->setEnabled(true);
         d->selectLockedItemsAction->setEnabled(true);
+        d->selectNoneAction->setEnabled(true);
+
+        d->lockAction->setEnabled(true);
+        d->markAsDownloadedAction->setEnabled(true);
         d->cameraInfoAction->setEnabled(true);
         d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
+        d->imageViewAction->setEnabled(true);
 
         // selection-dependent update of lockAction, markAsDownloadedAction,
         // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
-        slotNewSelection(d->view->countSelected()>0);
+        slotNewSelection(d->view->countSelected() > 0);
 
         d->anim->stop();
         d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
@@ -1010,17 +1040,23 @@ void CameraUI::slotBusy(bool val)
         //d->advBox->setEnabled(false);
 
         d->uploadAction->setEnabled(false);
+
         d->downloadSelectedAction->setEnabled(false);
         d->downloadDelSelectedAction->setEnabled(false);
+        d->downloadNewAction->setEnabled(false);
         d->downloadAllAction->setEnabled(false);
         d->downloadDelAllAction->setEnabled(false);
+
+        d->deleteNewAction->setEnabled(false);
         d->deleteSelectedAction->setEnabled(false);
         d->deleteAllAction->setEnabled(false);
-        d->selectAllAction->setEnabled(false);
-        d->selectNoneAction->setEnabled(false);
-        d->selectInvertAction->setEnabled(false);
+
         d->selectNewItemsAction->setEnabled(false);
+        d->selectAllAction->setEnabled(false);
+        d->selectInvertAction->setEnabled(false);
         d->selectLockedItemsAction->setEnabled(false);
+        d->selectNoneAction->setEnabled(false);
+
         d->lockAction->setEnabled(false);
         d->markAsDownloadedAction->setEnabled(false);
         d->cameraInfoAction->setEnabled(false);
@@ -1414,6 +1450,18 @@ void CameraUI::slotUploaded(const CamItemInfo& itemInfo)
     refreshFreeSpace();
 }
 
+void CameraUI::slotDownloadNew()
+{
+    d->view->slotSelectNew();
+    QTimer::singleShot(0, this, SLOT(slotDownloadSelected()));
+}
+
+void CameraUI::slotDownloadAndDeleteNew()
+{
+    d->view->slotSelectNew();
+    QTimer::singleShot(0, this, SLOT(slotDownloadAndDeleteSelected()));
+}
+
 void CameraUI::slotDownloadSelected()
 {
     slotDownload(true, false);
@@ -1465,7 +1513,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             if (pa)
             {
                 CollectionLocation cl = CollectionManager::instance()->locationForAlbumRootId(pa->albumRootId());
-                if (!cl.isAvailable() || !cl.isNull())
+                if (!cl.isAvailable() || cl.isNull())
                 {
                     KMessageBox::information(this, i18n("Collection which host your default target album set to process "
                                             "download from camera device is not available. Please select another one from "
@@ -1915,6 +1963,12 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
             d->currentlyDeleting.append(*itFolder + *itFile);
         }
     }
+}
+
+void CameraUI::slotDeleteNew()
+{
+    d->view->slotSelectNew();
+    QTimer::singleShot(0, this, SLOT(slotDeleteSelected()));
 }
 
 void CameraUI::slotDeleteSelected()
