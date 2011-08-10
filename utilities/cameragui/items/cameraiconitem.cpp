@@ -214,8 +214,9 @@ void CameraIconItem::paintItem(QPainter* p)
     CachedItem item      = view->getThumbInfo(itemInfo());
 
     CamItemInfo newinf   = item.first;
-    // NOTE: B.K.O #260669: do not overwrite downloaded information from DB which have been set before.
+    // NOTE: B.K.O #260669: do not overwrite download information have been set before.
     newinf.downloaded    = itemInfo().downloaded;
+    newinf.downloadName  = itemInfo().downloadName;
     // NOTE: B.K.O #246336: do not overwrite too the file mtime set previously at camera connection using cameragui settings.
     newinf.mtime         = itemInfo().mtime;
     setItemInfo(newinf);
