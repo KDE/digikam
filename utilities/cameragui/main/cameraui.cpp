@@ -1446,29 +1446,65 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
     // -- Get the destination album from digiKam library ---------------
 
+    PAlbum* pAlbum = 0;
+
     if (!album)
     {
         AlbumManager* man = AlbumManager::instance();
 
-        album = man->currentAlbum();
+        // Check if default target album option is enabled.
 
-        if (album && album->type() != Album::PHYSICAL)
+        KSharedConfig::Ptr config = KGlobal::config();
+        KConfigGroup group        = config->group(d->configGroupName);
+        bool useDefaultTarget     = group.readEntry(d->configUseDefaultTargetAlbum, false);
+
+        if (useDefaultTarget)
         {
-            album = 0;
+            PAlbum* pa = man->findPAlbum(group.readEntry(d->configDefaultTargetAlbumId, 0));
+
+            if (pa)
+            {
+                CollectionLocation cl = CollectionManager::instance()->locationForAlbumRootId(pa->albumRootId());
+                if (!cl.isAvailable() || !cl.isNull())
+                {
+                    KMessageBox::information(this, i18n("Collection which host your default target album set to process "
+                                            "download from camera device is not available. Please select another one from "
+                                            "camera configuration dialog."));
+                    return;
+                }
+            }
+            else
+            {
+                KMessageBox::information(this, i18n("Your default target album set to process download "
+                                         "from camera device is not available. Please select another one from "
+                                         "camera configuration dialog."));
+                return;
+            }
+
+            pAlbum = pa;
         }
-
-        QString header(i18n("<p>Please select the destination album from the digiKam library to "
-                            "import the camera pictures into.</p>"));
-
-        album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header);
-
-        if (!album)
+        else
         {
-            return;
+            album = man->currentAlbum();
+
+            if (album && album->type() != Album::PHYSICAL)
+            {
+                album = 0;
+            }
+
+            QString header(i18n("<p>Please select the destination album from the digiKam library to "
+                                "import the camera pictures into.</p>"));
+
+            album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header);
+
+            if (!album)
+            {
+                return;
+            }
+
+            pAlbum = dynamic_cast<PAlbum*>(album);
         }
     }
-
-    PAlbum* pAlbum = dynamic_cast<PAlbum*>(album);
 
     if (!pAlbum)
     {
