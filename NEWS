@@ -3,6 +3,9 @@ digiKam 2.1.0 - Release date: 2011-09-04
 
 NEW FEATURES:
 
+CameraGUI : camera items thumbnails are processed on the fly. Connection to camera device is faster.
+CameraGUI : Sort of items by date is possible with photo taken quickly (less than 1s).
+CameraGUI : New option to setup a default target album to download items from camera device.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -47,4 +50,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 269373 : Adding face tag to large amount of pictures fails.
 040 ==> 225759 : JPG image size = 0 byte, when transfer occurs from my camera to my NAS.
 041 ==> 202641 : Import images - always increase renaming counter by number of images imported.
-042 ==> 
+042 ==> 189903 : Allow default Target Album for Image Download.
+043 ==> 
+
