@@ -16,10 +16,14 @@ To install it, please follow these instructions to enter in a console:
 >sudo port -v selfupdate
 >sudo port -v install digikam
 
-4/ Using your account user-name (here replace "foo" by you account), initialize KDE and Dbus services.
+4/ Using your account user-name (here replace "foo" by your account), initialize KDE and Dbus services.
 
 > sudo chown -R foo ~/Library/Preferences/KDE
 > sudo chown -R foo /Library/LaunchAgents/org.freedesktop.dbus-session.plist
 > sudo launchctl load -w /Library/LaunchAgents/org.freedesktop.dbus-session.plist
 
-5/ digiKam icon must be available on Applications/Macport menu entry.
+5/ Make sure that all run-time dependencies are installed :
+
+> sudo port -v install oxygen-icons
+
+5/ digiKam icon must be available to run on Applications/Macport menu entry.
