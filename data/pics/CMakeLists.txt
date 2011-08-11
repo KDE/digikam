@@ -1,5 +1,6 @@
 ADD_SUBDIRECTORY(borderpatterns)
 ADD_SUBDIRECTORY(texturepatterns)
+ADD_SUBDIRECTORY(brushshapes)
 
 # digiKam files ######################################################
 
@@ -21,6 +22,9 @@ INSTALL(FILES tag.png
               albumfolder-importdir.png
               underexposure.png
               overexposure.png
+              clone_brushshape.png
+              clone_drawButton.png
+              clone_selectButton.png
         DESTINATION ${DATA_INSTALL_DIR}/digikam/icons/hicolor/32x32/actions
        )
 
