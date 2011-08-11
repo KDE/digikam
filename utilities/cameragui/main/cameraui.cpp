@@ -1447,6 +1447,12 @@ void CameraUI::slotDownloadAndDeleteAll()
 
 void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 {
+    if (!d->albumCustomizer->customDateFormatIsValid())
+    {
+        KMessageBox::information(this, i18n("Your custom target album date format is not valid. Please check your settings..."));
+        return;
+    }
+
     // See B.K.O #143934: force to select all items to prevent problem
     // when !renameCustomizer->useDefault() ==> iconItem->getDownloadName()
     // can return an empty string in this case because it depends on selection.
@@ -1608,8 +1614,11 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
                 case AlbumCustomizer::LocalDateFormat:
                     dirName = dateTime.date().toString(Qt::LocalDate);
                     break;
-                default:        // IsoDateFormat
+                case AlbumCustomizer::IsoDateFormat:
                     dirName = dateTime.date().toString(Qt::ISODate);
+                    break;
+                default:        // Custom
+                    dirName = dateTime.date().toString(d->albumCustomizer->customDateFormat());
                     break;
             }
 

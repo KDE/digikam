@@ -46,7 +46,8 @@ public:
     {
         IsoDateFormat=0,
         TextDateFormat,
-        LocalDateFormat
+        LocalDateFormat,
+        CustomDateFormat
     };
 
 public:
@@ -57,9 +58,17 @@ public:
     void readSettings(KConfigGroup& group);
     void saveSettings(KConfigGroup& group);
 
-    bool autoAlbumDateEnabled() const;
-    bool autoAlbumExtEnabled() const;
-    int  folderDateFormat() const;
+    bool    autoAlbumDateEnabled() const;
+    bool    autoAlbumExtEnabled() const;
+    int     folderDateFormat() const;
+    bool    customDateFormatIsValid() const;
+    QString customDateFormat() const;
+
+private Q_SLOTS:
+
+    void slotFolderDateFormatChanged(int);
+    void slotToolTipButtonToggled(bool);
+    void slotCustomizerChanged();
 
 private:
 
