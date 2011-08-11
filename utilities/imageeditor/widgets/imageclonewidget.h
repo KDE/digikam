@@ -35,6 +35,7 @@
 #include "imageguidewidget.h"
 #include "clonecontainer.h"
 #include "dimg.h"
+#include "dcolor.h"
 
 namespace Digikam
 {
@@ -49,7 +50,7 @@ public:
 
     explicit ImageCloneWidget(QWidget* parent=0, const CloneContainer& settings=CloneContainer());
     ~ImageCloneWidget();
-
+    ImageIface* imageIface() const;
     void    updatePreview();
     //DImg*   getOrigImage();
     DImg*   getMaskImg() const;
@@ -57,10 +58,10 @@ public:
     DImg*   getPreviewMask() const;
 
     QPoint  getDis() const;
-    QPoint  getOriDis() const;
+    QPoint  getOriDis();
 
     void    setContainer(const CloneContainer& settings);
-    void    setBackgroundColor(const QColor&);
+    void    setBackgroundColor(const QColor& bg);
 
 Q_SIGNALS:
 
@@ -74,7 +75,7 @@ public Q_SLOTS:
 private:
 
     bool    inimage(DImg* img, const int x, const int y);
-    bool    inBrushpixmap(QPixmap* brushmap, int x, int y);
+    bool    inBrushpixmap(QPixmap* brushmap, const int x, const int y);
 
     void    TreateAsBordor(DImg* image, const int x, const int y);
     void    addToMask(const QPoint& point);
@@ -82,7 +83,7 @@ private:
 
     void    paintEvent(QPaintEvent*);
     void    resizeEvent(QResizeEvent*);
-    void    timerEvent(QTimerEvent*);
+    //void    timerEvent(QTimerEvent*);
     void    updatePixmap();
 
     void    mousePressEvent(QMouseEvent*);
@@ -92,7 +93,7 @@ private:
 private:
 
     class ImageCloneWidgetPriv;
-    ImageCloneWidgetPriv*  const d;
+    ImageCloneWidgetPriv* const d;
 };
 
 } // namespace Digikam
