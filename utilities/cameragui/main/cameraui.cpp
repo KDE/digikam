@@ -388,6 +388,7 @@ void CameraUI::setupActions()
     // -----------------------------------------------------------
 
     d->selectLockedItemsAction = new KAction(KIcon("object-locked"), i18n("Select Locked Items"), this);
+    d->selectLockedItemsAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
     connect(d->selectLockedItemsAction, SIGNAL(triggered()), d->view, SLOT(slotSelectLocked()));
     actionCollection()->addAction("cameraui_selectlockeditems", d->selectLockedItemsAction);
 
@@ -401,6 +402,7 @@ void CameraUI::setupActions()
     // -----------------------------------------------------------------
 
     d->downloadNewAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Download New"), this);
+    d->downloadNewAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_N));
     connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
     actionCollection()->addAction("cameraui_imagedownloadnew", d->downloadNewAction);
 
@@ -420,6 +422,7 @@ void CameraUI::setupActions()
     // -------------------------------------------------------------------------
 
     d->downloadDelNewAction = new KAction(i18n("Download/Delete New"), this);
+    d->downloadDelNewAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
     connect(d->downloadDelNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteNew()));
     actionCollection()->addAction("cameraui_imagedownloaddeletenew", d->downloadDelNewAction);
 
@@ -439,12 +442,14 @@ void CameraUI::setupActions()
     // -------------------------------------------------------------------------
 
     d->uploadAction = new KAction(KIcon("media-flash-smart-media"), i18n("Upload..."), this);
+    d->uploadAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_U));
     connect(d->uploadAction, SIGNAL(triggered()), this, SLOT(slotUpload()));
     actionCollection()->addAction("cameraui_imageupload", d->uploadAction);
 
     // -------------------------------------------------------------------------
 
     d->lockAction = new KAction(KIcon("object-locked"), i18n("Toggle Lock"), this);
+    d->lockAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
     connect(d->lockAction, SIGNAL(triggered()), this, SLOT(slotToggleLock()));
     actionCollection()->addAction("cameraui_imagelock", d->lockAction);
 
@@ -500,7 +505,7 @@ void CameraUI::setupActions()
                                                         "cameraui_fullscreen", this, SLOT(slotToggleFullScreen()));
 
     d->showLogAction = new KToggleAction(KIcon("view-history"), i18n("Show History"), this);
-    d->showLogAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
+    d->showLogAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_H));
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     actionCollection()->addAction("cameraui_showlog", d->showLogAction);
 
@@ -878,10 +883,10 @@ void CameraUI::moveEvent(QMoveEvent* e)
 
 void CameraUI::slotClose()
 {
-    /*FIXME
-        if (dialogClosed())
-            reject();
-    */
+/*FIXME
+    if (dialogClosed())
+        reject();
+*/
 }
 
 bool CameraUI::dialogClosed()
@@ -984,6 +989,7 @@ void CameraUI::slotBusy(bool val)
         d->downloadNewAction->setEnabled(true);
         d->downloadAllAction->setEnabled(true);
         d->downloadDelAllAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->downloadDelNewAction->setEnabled(d->controller->cameraDeleteSupport());
 
         d->deleteNewAction->setEnabled(d->controller->cameraDeleteSupport());
         d->deleteSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
@@ -1046,6 +1052,7 @@ void CameraUI::slotBusy(bool val)
         d->downloadNewAction->setEnabled(false);
         d->downloadAllAction->setEnabled(false);
         d->downloadDelAllAction->setEnabled(false);
+        d->downloadDelNewAction->setEnabled(false);
 
         d->deleteNewAction->setEnabled(false);
         d->deleteSelectedAction->setEnabled(false);
