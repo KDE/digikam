@@ -53,4 +53,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 041 ==> 202641 : Import images - always increase renaming counter by number of images imported.
 042 ==> 189903 : Allow default Target Album for Image Download.
 043 ==> 259861 : One-click "Download New Items".
-044 ==> 
+044 ==> 144227 : Allow for fully customized album names when importing.
+045 ==> 
+
