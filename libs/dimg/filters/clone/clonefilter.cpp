@@ -50,12 +50,12 @@ CloneFilter::CloneFilter(QObject* parent)
     initFilter();
 }
 
-CloneFilter::CloneFilter(DImg* orgImage, DImg* Mask, const QPoint& disP, QObject* parent)
-    :DImgThreadedFilter(orgImage, parent, "CloneFilter")
+CloneFilter::CloneFilter(DImg* originalImage, DImg* maskImage, const QPoint& dis, QObject* parent)
+    :DImgThreadedFilter(originalImage, parent, "CloneFilter")
 {
-    dis           = disP;
-    originalImage = orgImage;
-    maskImage     = Mask;
+    m_dis           = dis;
+    m_originalImage = originalImage;
+    m_maskImage     = maskImage;
     MASK_BG       = QColor(255,255,255);
 
     initFilter();
@@ -108,9 +108,9 @@ void CloneFilter::filterImage()
 
     }
 
-    int width  = originalImage->width();
-    int height = originalImage->height();
-    float clip = originalImage->sixteenBit() ? 65535.0 : 255.0;
+    int width  = m_originalImage->width();
+    int height = m_originalImage->height();
+    float clip = m_originalImage->sixteenBit() ? 65535.0 : 255.0;
 
     for(int c = 0; c < 3; c++)
     {
@@ -126,7 +126,7 @@ void CloneFilter::filterImage()
     {
         for(int x = 0; x < width; x++)
         {
-            col  = originalImage->getPixelColor(x,y);
+            col  = m_originalImage->getPixelColor(x,y);
 
             OriImg[0][j] = col.red();
             OriImg[1][j] = col.green();
@@ -136,7 +136,7 @@ void CloneFilter::filterImage()
             desImg[1][j] = col.green();
             desImg[2][j] = col.blue();
 
-            colM    = maskImage->getPixelColor(x,y);
+            colM    = m_maskImage->getPixelColor(x,y);
             M[0][j] = colM.red();
             M[1][j] = colM.green();
             M[2][j] = colM.blue();
@@ -149,11 +149,11 @@ void CloneFilter::filterImage()
     {
         for(int x = 0; x < width; x++)
         {
-            if(inimage(originalImage, x-dis.x(), y-dis.y()))
+            if(inimage(m_originalImage, x-m_dis.x(), y-m_dis.y()))
             {
-                desImg[0][y*width + x] = (float)OriImg[0][(y-dis.y())*width + x-dis.x()];
-                desImg[1][y*width + x] = (float)OriImg[1][(y-dis.y())*width + x-dis.x()];
-                desImg[2][y*width + x] = (float)OriImg[2][(y-dis.y())*width + x-dis.x()];
+                desImg[0][y*width + x] = (float)OriImg[0][(y-m_dis.y())*width + x-m_dis.x()];
+                desImg[1][y*width + x] = (float)OriImg[1][(y-m_dis.y())*width + x-m_dis.x()];
+                desImg[2][y*width + x] = (float)OriImg[2][(y-m_dis.y())*width + x-m_dis.x()];
             }
         }
 
@@ -337,7 +337,7 @@ void CloneFilter::filterImage()
         col.setGreen((int)(I[1][y*width+x ]* clip));
         col.setBlue((int)(I[2][y*width+x]*clip));
         col.setAlpha(255);
-        resultImage->setPixelColor(x,y,col);
+        m_resultImage->setPixelColor(x,y,col);
     }
 
     // Free buffers.
@@ -363,17 +363,36 @@ void CloneFilter::filterImage()
     delete [] colind ;
 */
 }
+/*FIXME
+FilterAction CloneFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("distancePoint", m_dis);
+    action.addParameter("originalImage", m_originalImage);  //need fixed, maybe parameters cannot be transfered !!!!
+    action.addParameter("maskImage", m_maskImage);
+
+    return action;
+}
+
+void CloneFilter::readParameters(const FilterAction& action)
+{
+    m_dis = action.parameter("distancePoint").toPoint();
+    m_originalImage = action.parameter("originalImage");  //need fixed, maybe parameters cannot be transfered !!!!
+    m_maskImage = action.parameter("maskImage");          // T parameter(const QString& key) const
+}*/
 
 DImg* CloneFilter::getResultImg() const
 {
-    return resultImage;
+    return m_resultImage;
 }
 
-void CloneFilter::divergents(float* I, float* O)
+void CloneFilter::divergents(float* I[3], float* O[3])
 {
-/*FIXME
-    int h = originalImage->height();
-    int w = originalImage->width();
+
+    int h = m_originalImage->height();
+    int w = m_originalImage->width();
 
     for (int y = 1; y < h-1; y++)
     {
@@ -384,7 +403,7 @@ void CloneFilter::divergents(float* I, float* O)
             O[2][y*w+x] = I[2][y*w+x+1] + I[2][y*w+x-1] + I[2][(y-1)*w+x] + I[2][(y+1)+x] - 4*I[2][y*w+x];
         }
     }
-*/
+
 }
 
 } // namespace Digikam
