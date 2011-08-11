@@ -191,7 +191,7 @@ public:
     KTabWidget*          tab;
 };
 
-const QString SetupCamera::SetupCameraPriv::configGroupName("Camera Interface Settings");
+const QString SetupCamera::SetupCameraPriv::configGroupName("Camera Settings");
 const QString SetupCamera::SetupCameraPriv::configUseMetadataDateEntry("UseThemeBackgroundColor");
 const QString SetupCamera::SetupCameraPriv::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
 const QString SetupCamera::SetupCameraPriv::configDefaultTargetAlbumId("DefaultTargetAlbumId");
