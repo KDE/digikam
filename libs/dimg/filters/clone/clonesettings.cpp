@@ -123,7 +123,7 @@ CloneSettings::CloneSettings(QWidget* parent)
     BrushShapeEdit->setGeometry(QRect(100, 50, 151, 20));
 
     QLabel* label2            = new QLabel();
-    label2->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/clone_brushshape.png"));
+    label2->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/clone_brushshape.png")));
 
     //----------------Brushshape selection------------------------------
 
@@ -200,14 +200,14 @@ CloneSettings::CloneSettings(QWidget* parent)
     // KHBox*  modeBox = new KHBox(parent);
 
     KPushButton* pushButton1 = new KPushButton(parent);
-    pushButton1->setIcon(QIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/clone_selectButton.png")));
+    pushButton1->setIcon(QIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/clone_selectButton.png"))));
     pushButton1->setToolTip(i18n("Select a source point of the source area."));
     pushButton1->setVisible(true);
     pushButton1->setIconSize(QSize(46, 48));
     pushButton1->setFixedSize(31, 31);
 
     KPushButton* pushButton2 = new KPushButton(parent);
-    pushButton2->setIcon(QIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/clone_drawButton.png")));
+    pushButton2->setIcon(QIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/clone_drawButton.png"))));
     pushButton2->setToolTip(i18n("Start to draw a stroke. To use this you should first click the left button to select a point"));
     pushButton2->setVisible(true);
     pushButton2->setIconSize(QSize(46, 48));
