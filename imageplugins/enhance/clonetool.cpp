@@ -48,27 +48,29 @@
 
 //Local includes
 
-#incldue "clonesettings.h"
+#include "clonesettings.h"
 #include "clonefilter.h"
 #include "editortoolsettings.h"
-#include "CloneGuiWidget.h"
+#include "imageiface.h"
+#include "imageclonewidget.h"
 
 namespace DigikamEnhanceImagePlugin
 {
 
 class CloneTool::CloneToolPriv
 {
-public:
 
+public:
     CloneToolPriv():
-      configGroupName("Clone Tool"),
-      origImage(0),
-      previewRImage(0),
-      resultImage(0),
-      settingsView(0),
-      previewWidget(0),
-      gboxSettings(0)
-    {}
+        configGroupName("Clone Tool"),
+        origImage(0),
+        previewRImage(0),
+        resultImage(0),
+        settingsView(0),
+        previewWidget(0),
+        gboxSettings(0)
+    {
+    }
 
     const QString configGroupName;
 
@@ -243,4 +245,4 @@ void CLoneTool::putFinalData()
     iface.putOriginalImage(i18n("Clone Tool"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
-} // namespace Digikam
+} // namespace DigikamEnhanceImagePlugin

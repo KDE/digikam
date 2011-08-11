@@ -67,3 +67,4 @@ private:
 } // namespace DigikamFxFiltersImagePlugin
 
 #endif // CLONETOOL_H
+
