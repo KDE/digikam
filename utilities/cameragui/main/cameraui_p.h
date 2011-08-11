@@ -57,6 +57,7 @@
 #include "imagepropertiessidebarcamgui.h"
 #include "ddatetimeedit.h"
 #include "renamecustomizer.h"
+#include "albumcustomizer.h"
 #include "sidebar.h"
 #include "statusnavigatebar.h"
 #include "statusprogressbar.h"
@@ -71,13 +72,6 @@ class CameraUI::CameraUIPriv
 {
 public:
 
-    enum DateFormatOptions
-    {
-        IsoDateFormat=0,
-        TextDateFormat,
-        LocalDateFormat
-    };
-
     CameraUIPriv() :
         deleteAfter(false),
         busy(false),
@@ -86,12 +80,9 @@ public:
         removeFullScreenButton(false),
         fullScreenHideToolBar(false),
         autoRotateCheck(0),
-        autoAlbumDateCheck(0),
-        autoAlbumExtCheck(0),
         fixDateTimeCheck(0),
         convertJpegCheck(0),
         formatLabel(0),
-        folderDateLabel(0),
         refreshIconViewTimer(0),
         downloadMenu(0),
         deleteMenu(0),
@@ -126,7 +117,6 @@ public:
         showMenuBarAction(0),
         showLogAction(0),
         losslessFormat(0),
-        folderDateFormat(0),
         helpMenu(0),
         dateTimeEdit(0),
         advBox(0),
@@ -136,6 +126,7 @@ public:
         historyUpdater(0),
         view(0),
         renameCustomizer(0),
+        albumCustomizer(0),
         anim(0),
         templateSelector(0),
         rightSideBar(0),
@@ -168,13 +159,10 @@ public:
     CamItemInfoList               filesToBeAdded;
 
     QCheckBox*                    autoRotateCheck;
-    QCheckBox*                    autoAlbumDateCheck;
-    QCheckBox*                    autoAlbumExtCheck;
     QCheckBox*                    fixDateTimeCheck;
     QCheckBox*                    convertJpegCheck;
 
     QLabel*                       formatLabel;
-    QLabel*                       folderDateLabel;
 
     QTimer*                       refreshIconViewTimer;
 
@@ -213,7 +201,6 @@ public:
     KToggleAction*                showLogAction;
 
     KComboBox*                    losslessFormat;
-    KComboBox*                    folderDateFormat;
 
     KUrl                          lastDestURL;
 
@@ -232,6 +219,7 @@ public:
     CameraIconView*               view;
 
     RenameCustomizer*             renameCustomizer;
+    AlbumCustomizer*              albumCustomizer;
 
     DLogoAction*                  anim;
 

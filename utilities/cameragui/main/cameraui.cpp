@@ -241,40 +241,8 @@ void CameraUI::setupUserArea()
 
     // -- Albums Auto-creation options -----------------------------------------
 
-    QWidget* albumBox      = new QWidget(d->advBox);
-    QVBoxLayout* albumVlay = new QVBoxLayout(albumBox);
-    d->autoAlbumExtCheck   = new QCheckBox(i18n("Extension-based sub-albums"), albumBox);
-    d->autoAlbumDateCheck  = new QCheckBox(i18n("Date-based sub-albums"), albumBox);
-    KHBox* hbox1           = new KHBox(albumBox);
-    d->folderDateLabel     = new QLabel(i18n("Date format:"), hbox1);
-    d->folderDateFormat    = new KComboBox(hbox1);
-    d->folderDateFormat->insertItem(CameraUIPriv::IsoDateFormat,   i18n("ISO"));
-    d->folderDateFormat->insertItem(CameraUIPriv::TextDateFormat,  i18n("Full Text"));
-    d->folderDateFormat->insertItem(CameraUIPriv::LocalDateFormat, i18n("Local Settings"));
-
-    albumVlay->addWidget(d->autoAlbumExtCheck);
-    albumVlay->addWidget(d->autoAlbumDateCheck);
-    albumVlay->addWidget(hbox1);
-    albumVlay->addStretch();
-    albumVlay->setMargin(KDialog::spacingHint());
-    albumVlay->setSpacing(KDialog::spacingHint());
-
-    albumBox->setWhatsThis( i18n("Set how digiKam creates albums automatically when downloading."));
-    d->autoAlbumExtCheck->setWhatsThis( i18n("Enable this option if you want to download your "
-                                             "pictures into automatically created file extension-based sub-albums of the destination "
-                                             "album. This way, you can separate JPEG and RAW files as they are downloaded from your camera."));
-    d->autoAlbumDateCheck->setWhatsThis( i18n("Enable this option if you want to "
-                                              "download your pictures into automatically created file date-based sub-albums "
-                                              "of the destination album."));
-    d->folderDateFormat->setWhatsThis( i18n("<p>Select your preferred date format used to "
-                                            "create new albums. The options available are:</p>"
-                                            "<p><b>ISO</b>: the date format is in accordance with ISO 8601 "
-                                            "(YYYY-MM-DD). E.g.: <i>2006-08-24</i></p>"
-                                            "<p><b>Full Text</b>: the date format is in a user-readable string. "
-                                            "E.g.: <i>Thu Aug 24 2006</i></p>"
-                                            "<p><b>Local Settings</b>: the date format depending on KDE control panel settings.</p>"));
-
-    d->advBox->addItem(albumBox, SmallIcon("folder-new"), i18n("Auto-creation of Albums"),
+    d->albumCustomizer = new AlbumCustomizer(d->advBox);
+    d->advBox->addItem(d->albumCustomizer, SmallIcon("folder-new"), i18n("Auto-creation of Albums"),
                        QString("AlbumBox"), false);
 
     // -- On the Fly options ---------------------------------------------------
@@ -560,12 +528,6 @@ void CameraUI::setupActions()
 
 void CameraUI::setupConnections()
 {
-    connect(d->autoAlbumDateCheck, SIGNAL(toggled(bool)),
-            d->folderDateFormat, SLOT(setEnabled(bool)));
-
-    connect(d->autoAlbumDateCheck, SIGNAL(toggled(bool)),
-            d->folderDateLabel, SLOT(setEnabled(bool)));
-
     connect(d->convertJpegCheck, SIGNAL(toggled(bool)),
             d->losslessFormat, SLOT(setEnabled(bool)));
 
@@ -748,19 +710,17 @@ void CameraUI::setupAccelerators()
 void CameraUI::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Camera Settings");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     d->autoRotateCheck->setChecked(group.readEntry("AutoRotate",             true));
-    d->autoAlbumDateCheck->setChecked(group.readEntry("AutoAlbumDate",       false));
-    d->autoAlbumExtCheck->setChecked(group.readEntry("AutoAlbumExt",         false));
     d->fixDateTimeCheck->setChecked(group.readEntry("FixDateTime",           false));
     d->templateSelector->setTemplateIndex(group.readEntry("Template",        0));
     d->convertJpegCheck->setChecked(group.readEntry("ConvertJpeg",           false));
     d->losslessFormat->setCurrentIndex(group.readEntry("LossLessFormat",     0));   // PNG by default
-    d->folderDateFormat->setCurrentIndex(group.readEntry("FolderDateFormat", (int)CameraUIPriv::IsoDateFormat));
     d->view->setThumbnailSize(group.readEntry("ThumbnailSize",               (int)ThumbnailSize::Large));
     d->showLogAction->setChecked(group.readEntry("ShowLog",                  false));
     d->lastPhotoFirstAction->setChecked(group.readEntry("LastPhotoFirst",    true));
+    d->albumCustomizer->readSettings(group);
 
 #if KDCRAW_VERSION >= 0x020000
     d->advBox->readSettings(group);
@@ -773,27 +733,23 @@ void CameraUI::readSettings()
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
     d->losslessFormat->setEnabled(convertLosslessJpegFiles());
     d->formatLabel->setEnabled(convertLosslessJpegFiles());
-    d->folderDateFormat->setEnabled(d->autoAlbumDateCheck->isChecked());
-    d->folderDateLabel->setEnabled(d->autoAlbumDateCheck->isChecked());
     slotShowLog();
 }
 
 void CameraUI::saveSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Camera Settings");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry("AutoRotate",          d->autoRotateCheck->isChecked());
-    group.writeEntry("AutoAlbumDate",       d->autoAlbumDateCheck->isChecked());
-    group.writeEntry("AutoAlbumExt",        d->autoAlbumExtCheck->isChecked());
     group.writeEntry("FixDateTime",         d->fixDateTimeCheck->isChecked());
     group.writeEntry("Template",            d->templateSelector->getTemplateIndex());
     group.writeEntry("ConvertJpeg",         convertLosslessJpegFiles());
     group.writeEntry("LossLessFormat",      d->losslessFormat->currentIndex());
     group.writeEntry("ThumbnailSize",       d->view->thumbnailSize());
-    group.writeEntry("FolderDateFormat",    d->folderDateFormat->currentIndex());
     group.writeEntry("ShowLog",             d->showLogAction->isChecked());
     group.writeEntry("LastPhotoFirst",      d->lastPhotoFirstAction->isChecked());
+    d->albumCustomizer->saveSettings(group);
 
 #if KDCRAW_VERSION >= 0x020000
     d->advBox->writeSettings(group);
@@ -1640,16 +1596,16 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
         // Auto sub-albums creation based on file date.
 
-        if (d->autoAlbumDateCheck->isChecked())
+        if (d->albumCustomizer->autoAlbumDateEnabled())
         {
             QString dirName;
 
-            switch (d->folderDateFormat->currentIndex())
+            switch (d->albumCustomizer->folderDateFormat())
             {
-                case CameraUIPriv::TextDateFormat:
+                case AlbumCustomizer::TextDateFormat:
                     dirName = dateTime.date().toString(Qt::TextDate);
                     break;
-                case CameraUIPriv::LocalDateFormat:
+                case AlbumCustomizer::LocalDateFormat:
                     dirName = dateTime.date().toString(Qt::LocalDate);
                     break;
                 default:        // IsoDateFormat
@@ -1672,7 +1628,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
         // Auto sub-albums creation based on file extensions.
 
-        if (d->autoAlbumExtCheck->isChecked())
+        if (d->albumCustomizer->autoAlbumExtEnabled())
         {
             // We use the target file name to compute sub-albums name to take a care about
             // conversion on the fly option.
