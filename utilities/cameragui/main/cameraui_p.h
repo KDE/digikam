@@ -239,7 +239,7 @@ public:
     DAboutData*                   about;
 };
 
-const QString CameraUI::CameraUIPriv::configGroupName("Camera Interface Settings");
+const QString CameraUI::CameraUIPriv::configGroupName("Camera Settings");
 const QString CameraUI::CameraUIPriv::configUseMetadataDateEntry("UseThemeBackgroundColor");
 const QString CameraUI::CameraUIPriv::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
 const QString CameraUI::CameraUIPriv::configDefaultTargetAlbumId("DefaultTargetAlbumId");
