@@ -72,16 +72,15 @@ public:
     {
     }
 
-    const QString configGroupName;
+    const QString       configGroupName;
 
-    DImg* origImage;
-    DImg* previewRImage; //result of filter preview
-    DImg* resultImage;   //result of filter originalImage
+    DImg*               origImage;
+    DImg*               previewRImage; //result of filter preview
+    DImg*               resultImage;   //result of filter originalImage
 
-    CloneSettings* settingsView;
-    CloneGuideWidget* previewWidget;
+    CloneSettings*      settingsView;
+    CloneGuideWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
-
 };
 
 CloneTool::CloneTool(QObject* parent)
