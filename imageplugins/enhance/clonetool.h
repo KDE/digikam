@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace DigikamFxFiltersImagePlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 class CloneTool : public EditorToolThreaded
@@ -64,7 +64,6 @@ private:
     CloneToolPriv* const d;
 };
 
-} // namespace DigikamFxFiltersImagePlugin
+} // namespace DigikamEnhanceImagePlugin
 
 #endif // CLONETOOL_H
-
