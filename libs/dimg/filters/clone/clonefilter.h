@@ -73,8 +73,9 @@ public:
         return FilterIdentifier();
     }
 
- /*FIXME   virtual FilterAction    filterAction();
-    void    readParameters(const FilterAction& action);*/
+ ///*FIXME  
+    virtual FilterAction    filterAction();
+    void    readParameters(const FilterAction& action);
 
 private:
 

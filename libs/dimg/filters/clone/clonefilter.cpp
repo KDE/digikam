@@ -23,6 +23,10 @@
 
 #include "clonefilter.h"
 
+//Qt includes
+
+#include <QVariant>
+
 // C++ includes
 
 #include <cmath>
@@ -165,7 +169,7 @@ void CloneFilter::filterImage()
         }
     }
 
-//FIXME    divergents(I, div);
+    divergents(I, div);
 
     for(int i=0; i < height*width; i++)
     {
@@ -363,25 +367,35 @@ void CloneFilter::filterImage()
     delete [] colind ;
 */
 }
-/*FIXME
+///*FIXME
 FilterAction CloneFilter::filterAction()
 {
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
+    QImage m_oriImage = m_originalImage->copyQImage();
+    QImage m_mask     = m_maskImage->copyQImage();
+
     action.addParameter("distancePoint", m_dis);
-    action.addParameter("originalImage", m_originalImage);  //need fixed, maybe parameters cannot be transfered !!!!
-    action.addParameter("maskImage", m_maskImage);
+    action.addParameter("originalImage", m_oriImage);  //need fixed, maybe parameters cannot be transfered !!!!
+    action.addParameter("maskImage",     m_mask);
 
     return action;
 }
 
 void CloneFilter::readParameters(const FilterAction& action)
 {
-    m_dis = action.parameter("distancePoint").toPoint();
-    m_originalImage = action.parameter("originalImage");  //need fixed, maybe parameters cannot be transfered !!!!
-    m_maskImage = action.parameter("maskImage");          // T parameter(const QString& key) const
-}*/
+    m_dis           = action.parameter("distancePoint").toPoint();
+    m_originalImage = new DImg(action.parameter("originalImage").value<QImage>());
+    m_maskImage     = new DImg(action.parameter("maskImage").value<QImage>());   
+ /*   QVariant tempImg = action.parameter("originalImage").value<QImage>();
+    tempImg.convert(QVariant::Image);
+    m_originalImage = new DImg(tempImg);
+
+    tempImg = action.parameter("maskImage");
+    tempImg.convert(QVariant::Image);*/
+
+}
 
 DImg* CloneFilter::getResultImg() const
 {
