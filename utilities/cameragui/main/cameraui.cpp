@@ -97,7 +97,6 @@
 #include "thumbnailsize.h"
 #include "sidebar.h"
 #include "thememanager.h"
-#include "templateselector.h"
 #include "setup.h"
 #include "downloadsettingscontainer.h"
 #include "downloadhistory.h"
@@ -247,48 +246,8 @@ void CameraUI::setupUserArea()
 
     // -- On the Fly options ---------------------------------------------------
 
-    QWidget* onFlyBox      = new QWidget(d->advBox);
-    QVBoxLayout* onFlyVlay = new QVBoxLayout(onFlyBox);
-    d->templateSelector    = new TemplateSelector(onFlyBox);
-    d->fixDateTimeCheck    = new QCheckBox(i18n("Fix internal date && time"), onFlyBox);
-    d->dateTimeEdit        = new DDateTimeEdit(onFlyBox, "datepicker");
-    d->autoRotateCheck     = new QCheckBox(i18n("Auto-rotate/flip image"), onFlyBox);
-    d->convertJpegCheck    = new QCheckBox(i18n("Convert to lossless file format"), onFlyBox);
-    KHBox* hbox2           = new KHBox(onFlyBox);
-    d->formatLabel         = new QLabel(i18n("New image format:"), hbox2);
-    d->losslessFormat      = new KComboBox(hbox2);
-    d->losslessFormat->insertItem(0, "PNG");
-    d->losslessFormat->insertItem(1, "TIF");
-    d->losslessFormat->insertItem(2, "JP2");
-    d->losslessFormat->insertItem(3, "PGF");
-
-    onFlyVlay->addWidget(d->templateSelector);
-    onFlyVlay->addWidget(d->fixDateTimeCheck);
-    onFlyVlay->addWidget(d->dateTimeEdit);
-    onFlyVlay->addWidget(d->autoRotateCheck);
-    onFlyVlay->addWidget(d->convertJpegCheck);
-    onFlyVlay->addWidget(hbox2);
-    onFlyVlay->addStretch();
-    onFlyVlay->setMargin(KDialog::spacingHint());
-    onFlyVlay->setSpacing(KDialog::spacingHint());
-
-    onFlyBox->setWhatsThis( i18n("Set here all options to fix/transform JPEG files automatically "
-                                 "as they are downloaded."));
-    d->autoRotateCheck->setWhatsThis( i18n("Enable this option if you want images automatically "
-                                           "rotated or flipped using EXIF information provided by the camera."));
-    d->templateSelector->setWhatsThis( i18n("Select here which metadata template you want to apply "
-                                            "to images."));
-    d->fixDateTimeCheck->setWhatsThis( i18n("Enable this option to set date and time metadata "
-                                            "tags to the right values if your camera does not set "
-                                            "these tags correctly when pictures are taken. The values will "
-                                            "be saved in the DateTimeDigitized and DateTimeCreated EXIF, XMP, and IPTC tags."));
-    d->convertJpegCheck->setWhatsThis( i18n("Enable this option to automatically convert "
-                                            "all JPEG files to a lossless image format. <b>Note:</b> Image conversion can take a "
-                                            "while on a slow computer."));
-    d->losslessFormat->setWhatsThis( i18n("Select your preferred lossless image file format to "
-                                          "convert to. <b>Note:</b> All metadata will be preserved during the conversion."));
-
-    d->advBox->addItem(onFlyBox, SmallIcon("system-run"), i18n("On the Fly Operations (JPEG only)"),
+    d->advancedSettings = new AdvancedSettings(d->advBox);
+    d->advBox->addItem(d->advancedSettings, SmallIcon("system-run"), i18n("On the Fly Operations (JPEG only)"),
                        QString("OnFlyBox"), true);
     d->advBox->addStretch();
 
@@ -528,20 +487,8 @@ void CameraUI::setupActions()
 
 void CameraUI::setupConnections()
 {
-    connect(d->convertJpegCheck, SIGNAL(toggled(bool)),
-            d->losslessFormat, SLOT(setEnabled(bool)));
-
-    connect(d->convertJpegCheck, SIGNAL(toggled(bool)),
-            d->formatLabel, SLOT(setEnabled(bool)));
-
-    connect(d->convertJpegCheck, SIGNAL(toggled(bool)),
+    connect(d->advancedSettings, SIGNAL(signalDownloadNameChanged()),
             d->view, SLOT(slotDownloadNameChanged()));
-
-    connect(d->losslessFormat, SIGNAL(activated(int)),
-            d->view, SLOT(slotDownloadNameChanged()));
-
-    connect(d->fixDateTimeCheck, SIGNAL(toggled(bool)),
-            d->dateTimeEdit, SLOT(setEnabled(bool)));
 
     connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
             this, SLOT(slotHistoryEntryClicked(QVariant)));
@@ -712,15 +659,11 @@ void CameraUI::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->autoRotateCheck->setChecked(group.readEntry("AutoRotate",             true));
-    d->fixDateTimeCheck->setChecked(group.readEntry("FixDateTime",           false));
-    d->templateSelector->setTemplateIndex(group.readEntry("Template",        0));
-    d->convertJpegCheck->setChecked(group.readEntry("ConvertJpeg",           false));
-    d->losslessFormat->setCurrentIndex(group.readEntry("LossLessFormat",     0));   // PNG by default
-    d->view->setThumbnailSize(group.readEntry("ThumbnailSize",               (int)ThumbnailSize::Large));
-    d->showLogAction->setChecked(group.readEntry("ShowLog",                  false));
-    d->lastPhotoFirstAction->setChecked(group.readEntry("LastPhotoFirst",    true));
+    d->view->setThumbnailSize(group.readEntry("ThumbnailSize",            (int)ThumbnailSize::Large));
+    d->showLogAction->setChecked(group.readEntry("ShowLog",               false));
+    d->lastPhotoFirstAction->setChecked(group.readEntry("LastPhotoFirst", true));
     d->albumCustomizer->readSettings(group);
+    d->advancedSettings->readSettings(group);
 
 #if KDCRAW_VERSION >= 0x020000
     d->advBox->readSettings(group);
@@ -730,9 +673,6 @@ void CameraUI::readSettings()
 
     d->splitter->restoreState(group);
 
-    d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
-    d->losslessFormat->setEnabled(convertLosslessJpegFiles());
-    d->formatLabel->setEnabled(convertLosslessJpegFiles());
     slotShowLog();
 }
 
@@ -741,15 +681,11 @@ void CameraUI::saveSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry("AutoRotate",          d->autoRotateCheck->isChecked());
-    group.writeEntry("FixDateTime",         d->fixDateTimeCheck->isChecked());
-    group.writeEntry("Template",            d->templateSelector->getTemplateIndex());
-    group.writeEntry("ConvertJpeg",         convertLosslessJpegFiles());
-    group.writeEntry("LossLessFormat",      d->losslessFormat->currentIndex());
-    group.writeEntry("ThumbnailSize",       d->view->thumbnailSize());
-    group.writeEntry("ShowLog",             d->showLogAction->isChecked());
-    group.writeEntry("LastPhotoFirst",      d->lastPhotoFirstAction->isChecked());
+    group.writeEntry("ThumbnailSize",  d->view->thumbnailSize());
+    group.writeEntry("ShowLog",        d->showLogAction->isChecked());
+    group.writeEntry("LastPhotoFirst", d->lastPhotoFirstAction->isChecked());
     d->albumCustomizer->saveSettings(group);
+    d->advancedSettings->saveSettings(group);
 
 #if KDCRAW_VERSION >= 0x020000
     d->advBox->writeSettings(group);
@@ -777,24 +713,14 @@ bool CameraUI::isClosed() const
     return d->closed;
 }
 
-bool CameraUI::autoRotateJpegFiles() const
-{
-    return d->autoRotateCheck->isChecked();
-}
-
-bool CameraUI::convertLosslessJpegFiles() const
-{
-    return d->convertJpegCheck->isChecked();
-}
-
-QString CameraUI::losslessFormat() const
-{
-    return d->losslessFormat->currentText();
-}
-
 QString CameraUI::cameraTitle() const
 {
     return d->cameraTitle;
+}
+
+AdvancedSettings* CameraUI::advancedSettings() const
+{
+    return d->advancedSettings;
 }
 
 void CameraUI::slotCancelButton()
@@ -1572,12 +1498,12 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     QDateTime dateTime;
     int       total = 0;
 
-    downloadSettings.autoRotate     = d->autoRotateCheck->isChecked();
-    downloadSettings.fixDateTime    = d->fixDateTimeCheck->isChecked();
-    downloadSettings.newDateTime    = d->dateTimeEdit->dateTime();
-    downloadSettings.templateTitle  = d->templateSelector->getTemplate().templateTitle();
-    downloadSettings.convertJpeg    = convertLosslessJpegFiles();
-    downloadSettings.losslessFormat = losslessFormat();
+    downloadSettings.autoRotate     = d->advancedSettings->autoRotateJpegFiles();
+    downloadSettings.fixDateTime    = d->advancedSettings->fixDateTime();
+    downloadSettings.newDateTime    = d->advancedSettings->newDateTime();
+    downloadSettings.templateTitle  = d->advancedSettings->templateTitle();
+    downloadSettings.convertJpeg    = d->advancedSettings->convertLosslessJpegFiles();
+    downloadSettings.losslessFormat = d->advancedSettings->losslessFormat();
 
     // -- Download camera items -------------------------------
     // Since we show camera items in reverse order, downloading need to be done also in reverse order.

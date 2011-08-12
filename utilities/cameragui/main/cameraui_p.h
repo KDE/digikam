@@ -30,12 +30,10 @@
 
 #include <QCheckBox>
 #include <QDateTime>
-#include <QLabel>
 #include <QString>
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <khelpmenu.h>
 #include <kselectaction.h>
 #include <ktoggleaction.h>
@@ -55,13 +53,12 @@
 #include "dzoombar.h"
 #include "freespacewidget.h"
 #include "imagepropertiessidebarcamgui.h"
-#include "ddatetimeedit.h"
 #include "renamecustomizer.h"
 #include "albumcustomizer.h"
+#include "advancedsettings.h"
 #include "sidebar.h"
 #include "statusnavigatebar.h"
 #include "statusprogressbar.h"
-#include "templateselector.h"
 
 using namespace KDcrawIface;
 
@@ -79,10 +76,6 @@ public:
         fullScreen(false),
         removeFullScreenButton(false),
         fullScreenHideToolBar(false),
-        autoRotateCheck(0),
-        fixDateTimeCheck(0),
-        convertJpegCheck(0),
-        formatLabel(0),
         refreshIconViewTimer(0),
         downloadMenu(0),
         deleteMenu(0),
@@ -116,9 +109,7 @@ public:
         lastPhotoFirstAction(0),
         showMenuBarAction(0),
         showLogAction(0),
-        losslessFormat(0),
         helpMenu(0),
-        dateTimeEdit(0),
         advBox(0),
         splitter(0),
         camThumbsCtrl(0),
@@ -127,8 +118,8 @@ public:
         view(0),
         renameCustomizer(0),
         albumCustomizer(0),
+        advancedSettings(0),
         anim(0),
-        templateSelector(0),
         rightSideBar(0),
         zoomBar(0),
         statusProgressBar(0),
@@ -157,12 +148,6 @@ public:
     QStringList                   currentlyDeleting;
     QSet<QString>                 foldersToScan;
     CamItemInfoList               filesToBeAdded;
-
-    QCheckBox*                    autoRotateCheck;
-    QCheckBox*                    fixDateTimeCheck;
-    QCheckBox*                    convertJpegCheck;
-
-    QLabel*                       formatLabel;
 
     QTimer*                       refreshIconViewTimer;
 
@@ -200,13 +185,9 @@ public:
     KToggleAction*                showMenuBarAction;
     KToggleAction*                showLogAction;
 
-    KComboBox*                    losslessFormat;
-
     KUrl                          lastDestURL;
 
     KHelpMenu*                    helpMenu;
-
-    DDateTimeEdit*                dateTimeEdit;
 
     RExpanderBox*                 advBox;
 
@@ -220,10 +201,9 @@ public:
 
     RenameCustomizer*             renameCustomizer;
     AlbumCustomizer*              albumCustomizer;
+    AdvancedSettings*             advancedSettings;
 
     DLogoAction*                  anim;
-
-    TemplateSelector*             templateSelector;
 
     ImagePropertiesSideBarCamGui* rightSideBar;
 

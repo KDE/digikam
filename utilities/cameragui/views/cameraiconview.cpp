@@ -54,6 +54,7 @@
 // Local includes
 
 #include "advancedrenamemanager.h"
+#include "advancedsettings.h"
 #include "parsesettings.h"
 #include "cameraiconitem.h"
 #include "cameraiconviewtooltip.h"
@@ -403,8 +404,8 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
         startIndex = d->renamer->startIndex();
     }
 
-    bool convertLossLessJpeg = d->cameraUI->convertLosslessJpegFiles();
-    QString losslessFormat   = d->cameraUI->losslessFormat();
+    bool convertLossLessJpeg = d->cameraUI->advancedSettings()->convertLosslessJpegFiles();
+    QString losslessFormat   = d->cameraUI->advancedSettings()->losslessFormat();
 
     viewport()->setUpdatesEnabled(false);
 
@@ -952,12 +953,12 @@ void CameraIconView::itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned lon
 
             if (iconItem->itemInfo().mime == QString("image/jpeg"))
             {
-                if (d->cameraUI->convertLosslessJpegFiles())
+                if (d->cameraUI->advancedSettings()->convertLosslessJpegFiles())
                 {
                     // Estimated size is around 5 x original size when JPEG=>PNG.
                     dSize += size*5;
                 }
-                else if (d->cameraUI->autoRotateJpegFiles())
+                else if (d->cameraUI->advancedSettings()->autoRotateJpegFiles())
                 {
                     // We need a double size to perform rotation.
                     dSize += size*2;

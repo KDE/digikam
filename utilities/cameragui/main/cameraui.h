@@ -53,6 +53,7 @@ namespace Digikam
 class Album;
 class CollectionLocation;
 class CameraHistoryUpdater;
+class AdvancedSettings;
 
 class CameraUI : public KXmlGuiWindow
 {
@@ -74,14 +75,11 @@ public:
     bool cameraMkDirSupport() const;
     bool cameraDelDirSupport() const;
 
-    bool autoRotateJpegFiles() const;
     bool chronologicOrder() const;
 
-    /** Get status of JPEG conversion files to lossless format during download.*/
-    bool    convertLosslessJpegFiles() const;
-    QString losslessFormat() const;
-
     QString cameraTitle() const;
+
+    AdvancedSettings* advancedSettings() const;
 
 Q_SIGNALS:
 
