@@ -23,10 +23,11 @@
 
 #include "imageclonewidget.moc"
 
+// Qt includes
 
 #include <QPainter>
 
-//local includes
+// local includes
 
 #include "dcolor.h"
 #include "imageiface.h"
@@ -211,6 +212,10 @@ void ImageCloneWidget::setContainer(const CloneContainer& settings)
     d->settings = settings;
 }
 
+CloneContainer ImageCloneWidget::container() const
+{
+    return d->settings;
+}
 
 void ImageCloneWidget:: upDis()
 {

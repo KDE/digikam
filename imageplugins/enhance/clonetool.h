@@ -45,7 +45,6 @@ public:
 private Q_SLOTS:
 
     void slotResetSettings();
-
     void slotSettingsChanged();
     void slotDrawingComplete();
 

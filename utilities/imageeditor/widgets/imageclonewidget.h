@@ -50,6 +50,7 @@ public:
 
     explicit ImageCloneWidget(QWidget* parent=0, const CloneContainer& settings=CloneContainer());
     ~ImageCloneWidget();
+
     ImageIface* imageIface() const;
     void    updatePreview();
     //DImg*   getOrigImage();
@@ -60,7 +61,9 @@ public:
     QPoint  getDis() const;
     QPoint  getOriDis();
 
-    void    setContainer(const CloneContainer& settings);
+    void           setContainer(const CloneContainer& settings);
+    CloneContainer container() const;
+
     void    setBackgroundColor(const QColor& bg);
 
 Q_SIGNALS:
