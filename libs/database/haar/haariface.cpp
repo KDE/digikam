@@ -832,7 +832,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QSet<qlonglo
 {
     QMap< qlonglong, QList<qlonglong> > resultsMap;
     QSet<qlonglong>::const_iterator     it;
-    QList<qlonglong>                    list;
+    QList<qlonglong>                    bestMatchesList;
     QSet<qlonglong>                     resultsCandidates;
 
     int                                 total        = 0;
@@ -855,16 +855,16 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QSet<qlonglo
         {
             //list = bestMatchesForImage(*it, 20, ScannedSketch);
             // find images with at least 90% similarity
-            list = bestMatchesForImageWithThreshold(*it, requiredPercentage, ScannedSketch);
+            bestMatchesList = bestMatchesForImageWithThreshold(*it, requiredPercentage, ScannedSketch);
 
-            if (!list.isEmpty())
+            if (!bestMatchesList.isEmpty())
             {
                 // the list will usually contain one image: the original. Filter out.
-                if (!(list.count() == 1 && list.first() == *it))
+                if (!(bestMatchesList.count() == 1 && bestMatchesList.first() == *it))
                 {
-                    resultsMap.insert(*it, list);
+                    resultsMap.insert(*it, bestMatchesList);
                     resultsCandidates << *it;
-                    resultsCandidates.unite(list.toSet());
+                    resultsCandidates.unite(bestMatchesList.toSet());
                 }
             }
         }
