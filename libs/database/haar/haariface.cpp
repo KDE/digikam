@@ -202,11 +202,6 @@ public:
 
         // Remove all ids from the fully created signatureCache that are not needed for the duplicates search.
         // This is usually faster then starting a query for every single id in imageIds.
-        //
-        // It might look like a waste of resources, but I tested this quite intense.
-        // Getting all signatures and removing the not wanted ones is really more efficient
-        // then doing X queries (where X = imageIds.count())
-
         for (SignatureCache::iterator it = signatureCache->begin();
              it != signatureCache->end(); )
         {
