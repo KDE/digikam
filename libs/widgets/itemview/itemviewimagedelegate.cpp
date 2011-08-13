@@ -682,11 +682,11 @@ QPixmap ItemViewImageDelegate::ratingPixmap(int rating, bool selected) const
 
     if (selected)
     {
-        return d->ratingPixmaps[5 + rating];
+        return d->ratingPixmaps.at(5 + rating);
     }
     else
     {
-        return d->ratingPixmaps[rating];
+        return d->ratingPixmaps.at(rating);
     }
 }
 
