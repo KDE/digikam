@@ -675,9 +675,9 @@ void DImgInterface::saveNext()
         d->undoMan->putImageDataAndHistory(&file.image, currentStep - file.historyStep);
     }
 
-    QMap<QString,QVariant>::iterator it;
+    QMap<QString,QVariant>::const_iterator it;
 
-    for (it = file.ioAttributes.begin(); it != file.ioAttributes.end(); ++it)
+    for (it = file.ioAttributes.constBegin(); it != file.ioAttributes.constEnd(); ++it)
     {
         file.image.setAttribute(it.key(), it.value());
     }

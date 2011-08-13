@@ -141,8 +141,8 @@ void BatchThumbsGenerator::slotRebuildThumbs()
         palbumList.append(AlbumManager::instance()->findPAlbum(d->albumId));
     }
 
-    for (AlbumList::Iterator it = palbumList.begin();
-         !d->cancel && (it != palbumList.end()); ++it )
+    for (AlbumList::const_iterator it = palbumList.constBegin();
+         !d->cancel && (it != palbumList.constEnd()); ++it )
     {
         if (!(*it))
         {

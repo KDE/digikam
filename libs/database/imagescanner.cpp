@@ -594,8 +594,8 @@ void ImageScanner::scanFaces()
         return;
     }
 
-    QMap<QString,QVariant>::iterator it;
-    for (it = metadataFacesMap.begin(); it != metadataFacesMap.end(); ++it)
+    QMap<QString,QVariant>::const_iterator it;
+    for (it = metadataFacesMap.constBegin(); it != metadataFacesMap.constEnd(); ++it)
     {
         QString name = it.key();
         QRectF rect  = it.value().toRectF();
@@ -744,9 +744,9 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
     // get category info
     QList<qlonglong> originals, intermediates, currents;
     QHash<ImageInfo, HistoryImageId::Types> types = graph.categorize();
-    QHash<ImageInfo, HistoryImageId::Types>::iterator it;
+    QHash<ImageInfo, HistoryImageId::Types>::const_iterator it;
 
-    for (it = types.begin(); it != types.end(); ++it)
+    for (it = types.constBegin(); it != types.constEnd(); ++it)
     {
         kDebug() << "Image" << it.key().id() << "type" << it.value();
         HistoryImageId::Types types = it.value();

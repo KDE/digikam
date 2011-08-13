@@ -1596,7 +1596,7 @@ QString DMetadata::getLensDescription() const
     // -------------------------------------------------------------------
     // Try to get Lens Data information from Exif.
 
-    for (QStringList::Iterator it = lensExifTags.begin(); it != lensExifTags.end(); ++it)
+    for (QStringList::const_iterator it = lensExifTags.constBegin(); it != lensExifTags.constEnd(); ++it)
     {
         lens = getExifTagString((*it).toAscii());
 

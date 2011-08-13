@@ -1648,7 +1648,7 @@ void AlbumManager::scanTAlbums()
         }
 
         // Its a new album. Find the parent of the album
-        TagMap::iterator iter = tmap.find(info.pid);
+        TagMap::const_iterator iter = tmap.constFind(info.pid);
 
         if (iter == tmap.end())
         {

@@ -1838,14 +1838,14 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                                                KGuiItem(i18n("Delete")))
         ==  KMessageBox::Continue)
     {
-        QStringList::iterator itFolder = folders.begin();
-        QStringList::iterator itFile   = files.begin();
+        QStringList::const_iterator itFolder = folders.constBegin();
+        QStringList::const_iterator itFile   = files.constBegin();
 
         d->statusProgressBar->setProgressValue(0);
         d->statusProgressBar->setProgressTotalSteps(deleteList.count());
         d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
 
-        for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
+        for ( ; itFolder != folders.constEnd(); ++itFolder, ++itFile)
         {
             d->controller->deleteFile(*itFolder, *itFile);
             // the currentlyDeleting list is used to prevent loading items which

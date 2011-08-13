@@ -251,7 +251,7 @@ void HotPixelsTool::prepareEffect()
     QList<HotPixel> hotPixelsRegion;
     QRect area = d->previewWidget->getOriginalImageRegionToRender();
 
-    for (QList<HotPixel>::Iterator it = d->hotPixelsList.begin() ; it != d->hotPixelsList.end() ; ++it)
+    for (QList<HotPixel>::const_iterator it = d->hotPixelsList.constBegin() ; it != d->hotPixelsList.constEnd() ; ++it)
     {
         HotPixel hp = (*it);
 
@@ -290,10 +290,10 @@ void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const KUrl& bl
     d->hotPixelsList = hpList;
 
     QPolygon pointList(d->hotPixelsList.size());
-    QList <HotPixel>::Iterator it;
+    QList <HotPixel>::const_iterator it;
     int i = 0;
 
-    for (it = d->hotPixelsList.begin() ; it != d->hotPixelsList.end() ; ++it, ++i)
+    for (it = d->hotPixelsList.constBegin() ; it != d->hotPixelsList.constEnd() ; ++it, ++i)
     {
         pointList.setPoint(i, (*it).rect.center());
     }

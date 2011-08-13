@@ -847,9 +847,9 @@ MetadataHub::Status MetadataHub::templateStatus() const
 
 MetadataHub::TagStatus MetadataHub::tagStatus(int tagId) const
 {
-    QMap<int, TagStatus>::iterator mapIt = d->tags.find(tagId);
+    QMap<int, TagStatus>::const_iterator mapIt = d->tags.constFind(tagId);
 
-    if (mapIt == d->tags.end())
+    if (mapIt == d->tags.constEnd())
     {
         return TagStatus(MetadataInvalid);
     }

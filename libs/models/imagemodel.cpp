@@ -243,8 +243,8 @@ QModelIndex ImageModel::indexForImageId(qlonglong id, const QVariant& extraValue
     if (d->extraValues.isEmpty())
         return indexForImageId(id);
 
-    QHash<qlonglong, int>::iterator it;
-    for (it = d->idHash.find(id); it != d->idHash.end() && it.key() == id; ++it)
+    QHash<qlonglong, int>::const_iterator it;
+    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
     {
         if (d->extraValues.at(it.value()) == extraValue)
             return createIndex(it.value(), 0);
@@ -257,8 +257,8 @@ QList<QModelIndex> ImageModel::indexesForImageId(qlonglong id) const
 {
     QList<QModelIndex> indexes;
 
-    QHash<qlonglong, int>::iterator it;
-    for (it = d->idHash.find(id); it != d->idHash.end() && it.key() == id; ++it)
+    QHash<qlonglong, int>::const_iterator it;
+    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
     {
         indexes << createIndex(it.value(), 0);
     }
@@ -279,8 +279,8 @@ int ImageModel::numberOfIndexesForImageId(qlonglong id) const
     }
 
     int count = 0;
-    QHash<qlonglong,int>::iterator it;
-    for (it = d->idHash.find(id); it != d->idHash.end() && it.key() == id; ++it)
+    QHash<qlonglong,int>::const_iterator it;
+    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
     {
         ++count;
     }

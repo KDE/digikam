@@ -1463,7 +1463,7 @@ QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
 
     QStringList strList = url.path().split(' ', QString::SkipEmptyParts);
 
-    for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it )
+    for ( QStringList::const_iterator it = strList.constBegin(); it != strList.constEnd(); ++it )
     {
         bool ok;
         int  num = (*it).toInt(&ok);
@@ -1676,7 +1676,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
 
     QStringList strList = url.path().split(' ', QString::SkipEmptyParts);
 
-    for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it )
+    for ( QStringList::const_iterator it = strList.constBegin(); it != strList.constEnd(); ++it )
     {
         bool ok;
         int  num = (*it).toInt(&ok);

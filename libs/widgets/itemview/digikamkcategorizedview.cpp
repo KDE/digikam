@@ -960,9 +960,9 @@ QItemSelection DigikamKCategorizedView::Private::selectionForRect(const QRect& r
     QItemSelection selection;
     QModelIndex    tl, br;
     QModelIndexList intersectedIndexes = intersectionSet(rect);
-    QList<QModelIndex>::iterator it    = intersectedIndexes.begin();
+    QList<QModelIndex>::const_iterator it    = intersectedIndexes.constBegin();
 
-    for (; it != intersectedIndexes.end(); ++it)
+    for (; it != intersectedIndexes.constEnd(); ++it)
     {
         if (!tl.isValid() && !br.isValid())
         {

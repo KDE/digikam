@@ -478,9 +478,9 @@ void UndoManager::clear(bool clearCache)
 void UndoManager::clearUndoActions()
 {
     UndoAction* action = 0;
-    QList<UndoAction*>::iterator it;
+    QList<UndoAction*>::const_iterator it;
 
-    for (it = d->undoActions.begin(); it != d->undoActions.end(); ++it)
+    for (it = d->undoActions.constBegin(); it != d->undoActions.constEnd(); ++it)
     {
         action = *it;
         delete action;

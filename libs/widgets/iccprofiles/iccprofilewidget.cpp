@@ -480,9 +480,9 @@ void ICCProfileWidget::buildView()
 
 QString ICCProfileWidget::getTagTitle(const QString& key)
 {
-    ICCTagInfoMap::Iterator it = d->iccTagsDescription.find(key);
+    ICCTagInfoMap::const_iterator it = d->iccTagsDescription.constFind(key);
 
-    if (it != d->iccTagsDescription.end())
+    if (it != d->iccTagsDescription.constEnd())
     {
         return(it.value().title());
     }
@@ -499,9 +499,9 @@ void ICCProfileWidget::slotSaveMetadataToFile()
 
 QString ICCProfileWidget::getTagDescription(const QString& key)
 {
-    ICCTagInfoMap::Iterator it = d->iccTagsDescription.find(key);
+    ICCTagInfoMap::const_iterator it = d->iccTagsDescription.constFind(key);
 
-    if (it != d->iccTagsDescription.end())
+    if (it != d->iccTagsDescription.constEnd())
     {
         return(it.value().description());
     }

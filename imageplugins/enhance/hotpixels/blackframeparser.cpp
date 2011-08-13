@@ -194,7 +194,7 @@ void BlackFrameParser::consolidatePixels(QList<HotPixel>& list)
             point = (*it);
             tmp   = point;
 
-            QList<HotPixel>::Iterator point_below_it;
+            QList<HotPixel>::iterator point_below_it;
 
             //find any intersecting hotpixels below tmp
             int i = list.indexOf(tmp);
