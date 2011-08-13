@@ -44,7 +44,6 @@
 #include "albumdb.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
-#include "dpopupmenu.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
 #include "metadatamanager.h"
@@ -146,7 +145,7 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
 
     // ----------------------------------------------------
 
-    DPopupMenu popmenu(this);
+    KMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
     cmhelper.addAction(leftPanelAction, true);
     cmhelper.addAction(rightPanelAction, true);

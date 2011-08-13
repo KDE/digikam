@@ -74,6 +74,7 @@ extern "C"
 #include <kio/deletejob.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
+#include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kmultitabbar.h>
@@ -96,7 +97,6 @@ extern "C"
 #include "canvas.h"
 #include "dimginterface.h"
 #include "dmetadata.h"
-#include "dpopupmenu.h"
 #include "editorstackview.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"

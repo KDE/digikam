@@ -60,7 +60,6 @@
 #include "cameraiconviewtooltip.h"
 #include "cameraui.h"
 #include "ddragobjects.h"
-#include "dpopupmenu.h"
 #include "icongroupitem.h"
 #include "renamecustomizer.h"
 #include "thememanager.h"
@@ -576,7 +575,7 @@ void CameraIconView::slotContextMenu(IconItem* item, const QPoint&)
 
     CameraIconItem* camItem = static_cast<CameraIconItem*>(item);
 
-    DPopupMenu menu(this);
+    KMenu menu(this);
     QAction* viewAction      = menu.addAction(SmallIcon("editimage"),
                                               i18nc("View the selected image", "&View"));
     menu.addSeparator();

@@ -77,6 +77,7 @@
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <klocale.h>
+#include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
@@ -120,7 +121,6 @@
 #include "colorcorrectiondlg.h"
 #include "dimginterface.h"
 #include "dlogoaction.h"
-#include "dpopupmenu.h"
 #include "dzoombar.h"
 #include "editorstackview.h"
 #include "editortool.h"
@@ -226,7 +226,7 @@ ExposureSettingsContainer* EditorWindow::exposureSettings() const
 
 void EditorWindow::setupContextMenu()
 {
-    m_contextMenu         = new DPopupMenu(this);
+    m_contextMenu         = new KMenu(this);
     KActionCollection* ac = actionCollection();
 
     if (ac->action("editorwindow_backward"))

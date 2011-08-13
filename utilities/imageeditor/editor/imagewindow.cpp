@@ -60,6 +60,7 @@
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <klocale.h>
+#include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kselectaction.h>
@@ -96,7 +97,6 @@
 #include "dimagehistory.h"
 #include "dio.h"
 #include "dmetadata.h"
-#include "dpopupmenu.h"
 #include "editorstackview.h"
 #include "globals.h"
 #include "iccsettingscontainer.h"
