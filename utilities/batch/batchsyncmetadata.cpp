@@ -173,7 +173,7 @@ void BatchSyncMetadata::parseList()
 
 void BatchSyncMetadata::parsePicture()
 {
-    ImageInfo info = d->imageInfoList[d->imageInfoIndex];
+    ImageInfo info = d->imageInfoList.at(d->imageInfoIndex);
 
     if (d->direction == WriteFromDatabaseToFile)
     {

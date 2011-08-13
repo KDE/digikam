@@ -296,7 +296,7 @@ QStringList AdvancedRenameManager::fileList()
 
             for (int i = sortedList.size() - 1; i >= 0; --i)
             {
-                tmpFiles << sortedList[i];
+                tmpFiles << sortedList.at(i);
             }
 
             break;

@@ -61,9 +61,9 @@ ThumbnailInfo DatabaseThumbnailInfoProvider::thumbnailInfo(const QString& path)
 
     if (!values.isEmpty())
     {
-        thumbinfo.modificationDate = values[0].toDateTime();
-        thumbinfo.fileSize = values[1].toLongLong();
-        thumbinfo.uniqueHash = values[2].toString();
+        thumbinfo.modificationDate = values.at(0).toDateTime();
+        thumbinfo.fileSize = values.at(1).toLongLong();
+        thumbinfo.uniqueHash = values.at(2).toString();
     }
 
     values = access.db()->getImageInformation(imageinfo.id(), DatabaseFields::Orientation);

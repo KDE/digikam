@@ -79,7 +79,7 @@ public:
 
     HistoryTreeItem* child(int index) const
     {
-        return children[index];
+        return children.at(index);
     }
 
 public:
@@ -411,8 +411,8 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildCombinedTree(const
 
     for (int i=0; i<path.size(); ++i)
     {
-        const HistoryGraph::Vertex& v = path[i];
-        HistoryGraph::Vertex previous = i ? path[i-1] : HistoryGraph::Vertex();
+        const HistoryGraph::Vertex& v = path.at(i);
+        HistoryGraph::Vertex previous = i ? path.at(i-1) : HistoryGraph::Vertex();
 //        HistoryGraph::Vertex next     = i < path.size() - 1 ? path[i+1] : HistoryGraph::Vertex();
         //kDebug() << "Vertex on path" << path[i];
         // create new item
@@ -515,7 +515,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
         // add all filter actions showActionsFrom -> v above item
         for (int i=1; i<shortestPath.size(); ++i)
         {
-            HistoryEdgeProperties props = graph().properties(shortestPath[i], shortestPath[i-1]);
+            HistoryEdgeProperties props = graph().properties(shortestPath.at(i), shortestPath.at(i-1));
             foreach (const FilterAction& action, props.actions)
             {
                 parentItem->addItem(createFilterActionItem(action));
@@ -571,7 +571,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
             parentItem->addItem(new SeparatorItem);
         }
 
-        item = createVertexItem(vertex, infos[i]);
+        item = createVertexItem(vertex, infos.at(i));
         parentItem->addItem(item);
     }
 }

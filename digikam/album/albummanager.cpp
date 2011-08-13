@@ -905,7 +905,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
             for (int i=0; i<candidateIds.size(); ++i)
             {
-                migrateChoices->addItem(candidateDescriptions[i], candidateIds[i]);
+                migrateChoices->addItem(candidateDescriptions.at(i), candidateIds.at(i));
             }
 
             layout->addWidget(migrateButton,  0, 0, Qt::AlignTop);

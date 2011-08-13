@@ -140,7 +140,7 @@ void ChoiceSearchModel::setChecked(const T& value, SearchXml::Relation relation)
 {
     for (int i=0; i<m_entries.size(); ++i)
     {
-        setChecked(i, SearchXml::testRelation(m_entries[i].key.value<T>(), value, relation));
+        setChecked(i, SearchXml::testRelation(m_entries.at(i).key.value<T>(), value, relation));
     }
 }
 

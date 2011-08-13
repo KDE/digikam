@@ -1211,11 +1211,11 @@ void CameraUI::slotUpload()
     QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n');
 
     // All Images from list must been always the first entry given by KDE API
-    QString allPictures = patternList[0];
+    QString allPictures = patternList.at(0);
 
     // Add RAW file format to All Images" type mime and replace current.
     allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::KDcraw::rawFiles()));
-    patternList.removeAll(patternList[0]);
+    patternList.removeAll(patternList.at(0));
     patternList.prepend(allPictures);
 
     // Added RAW file formats supported by dcraw program like a type mime.
@@ -2225,8 +2225,8 @@ void CameraUI::slotShowLog()
 void CameraUI::slotHistoryEntryClicked(const QVariant& metadata)
 {
     QStringList meta = metadata.toStringList();
-    QString folder   = meta[0];
-    QString file     = meta[1];
+    QString folder   = meta.at(0);
+    QString file     = meta.at(1);
     d->view->ensureItemVisible(folder, file);
 }
 

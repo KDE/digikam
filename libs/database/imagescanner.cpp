@@ -310,7 +310,7 @@ void ImageScanner::scanImageInformation()
         QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
 
         // creation date: fall back to file system property
-        if (metadataInfos[1].isNull() || !metadataInfos[1].toDateTime().isValid())
+        if (metadataInfos.at(1).isNull() || !metadataInfos.at(1).toDateTime().isValid())
         {
             metadataInfos[1] = creationDateFromFilesystem(m_fileInfo);
         }
@@ -318,7 +318,7 @@ void ImageScanner::scanImageInformation()
         // Some fields should only be overwritten if set in metadata
         if (m_scanMode == Rescan)
         {
-            if (metadataInfos[0].isNull() || metadataInfos[0].toInt() == -1)
+            if (metadataInfos.at(0).isNull() || metadataInfos.at(0).toInt() == -1)
             {
                 dbFields &= ~DatabaseFields::Rating;
                 metadataInfos.removeAt(0);
@@ -451,15 +451,15 @@ void ImageScanner::scanImageComments()
     }
 
     // Headline
-    if (!metadataInfos[0].isNull())
+    if (!metadataInfos.at(0).isNull())
     {
-        comments.addHeadline(metadataInfos[0].toString());
+        comments.addHeadline(metadataInfos.at(0).toString());
     }
 
     // Title
-    if (!metadataInfos[1].isNull())
+    if (!metadataInfos.at(1).isNull())
     {
-        comments.addTitle(metadataInfos[1].toString());
+        comments.addTitle(metadataInfos.at(1).toString());
     }
 }
 
@@ -496,9 +496,9 @@ void ImageScanner::scanIPTCCore()
 
     ImageExtendedProperties props(m_scanInfo.id);
 
-    if (!metadataInfos[0].isNull())
+    if (!metadataInfos.at(0).isNull())
     {
-        IptcCoreLocationInfo loc = metadataInfos[0].value<IptcCoreLocationInfo>();
+        IptcCoreLocationInfo loc = metadataInfos.at(0).value<IptcCoreLocationInfo>();
 
         if (!loc.isNull())
         {
@@ -506,24 +506,24 @@ void ImageScanner::scanIPTCCore()
         }
     }
 
-    if (!metadataInfos[1].isNull())
+    if (!metadataInfos.at(1).isNull())
     {
-        props.setIntellectualGenre(metadataInfos[1].toString());
+        props.setIntellectualGenre(metadataInfos.at(1).toString());
     }
 
-    if (!metadataInfos[2].isNull())
+    if (!metadataInfos.at(2).isNull())
     {
-        props.setJobId(metadataInfos[2].toString());
+        props.setJobId(metadataInfos.at(2).toString());
     }
 
-    if (!metadataInfos[3].isNull())
+    if (!metadataInfos.at(3).isNull())
     {
-        props.setScene(metadataInfos[3].toStringList());
+        props.setScene(metadataInfos.at(3).toStringList());
     }
 
-    if (!metadataInfos[4].isNull())
+    if (!metadataInfos.at(4).isNull())
     {
-        props.setSubjectCode(metadataInfos[4].toStringList());
+        props.setSubjectCode(metadataInfos.at(4).toStringList());
     }
 }
 
@@ -1041,13 +1041,13 @@ void ImageScanner::scanVideoFile()
         metadataInfos = m_metadata.getMetadataFields(fields);
 
         // if invalid, start with -1 rating
-        if (metadataInfos[0].isNull())
+        if (metadataInfos.at(0).isNull())
         {
             metadataInfos[0] = -1;
         }
 
         // creation date: fall back to file system property
-        if (metadataInfos[1].isNull() || !metadataInfos[1].toDateTime().isValid())
+        if (metadataInfos.at(1).isNull() || !metadataInfos.at(1).toDateTime().isValid())
         {
             metadataInfos[1] = creationDateFromFilesystem(m_fileInfo);
         }
@@ -1454,22 +1454,22 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
 
     if (!imagesFields.isEmpty())
     {
-        container->fileName             = imagesFields[0].toString();
-        container->fileModificationDate = imagesFields[1].toDateTime();
-        container->fileSize             = imagesFields[2].toLongLong();
+        container->fileName             = imagesFields.at(0).toString();
+        container->fileModificationDate = imagesFields.at(1).toDateTime();
+        container->fileSize             = imagesFields.at(2).toLongLong();
     }
 
     if (!imageInformationFields.isEmpty())
     {
-        container->rating           = imageInformationFields[0].toInt();
-        container->creationDate     = imageInformationFields[1].toDateTime();
-        container->digitizationDate = imageInformationFields[2].toDateTime();
-        container->orientation      = DMetadata::valueToString(imageInformationFields[3], MetadataInfo::Orientation);
-        container->width            = imageInformationFields[4].toInt();
-        container->height           = imageInformationFields[5].toInt();
-        container->format           = formatToString(imageInformationFields[6].toString());
-        container->colorDepth       = imageInformationFields[7].toInt();
-        container->colorModel       = DImg::colorModelToString((DImg::COLORMODEL)imageInformationFields[8].toInt());
+        container->rating           = imageInformationFields.at(0).toInt();
+        container->creationDate     = imageInformationFields.at(1).toDateTime();
+        container->digitizationDate = imageInformationFields.at(2).toDateTime();
+        container->orientation      = DMetadata::valueToString(imageInformationFields.at(3), MetadataInfo::Orientation);
+        container->width            = imageInformationFields.at(4).toInt();
+        container->height           = imageInformationFields.at(5).toInt();
+        container->format           = formatToString(imageInformationFields.at(6).toString());
+        container->colorDepth       = imageInformationFields.at(7).toInt();
+        container->colorModel       = DImg::colorModelToString((DImg::COLORMODEL)imageInformationFields.at(8).toInt());
     }
 }
 
@@ -1490,22 +1490,22 @@ void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContain
     QStringList strings = DMetadata::valuesToString(fields, allImageMetadataFields());
 
     // associate with hard-coded variables
-    container->make                         = strings[0];
-    container->model                        = strings[1];
-    container->lens                         = strings[2];
-    container->aperture                     = strings[3];
-    container->focalLength                  = strings[4];
-    container->focalLength35                = strings[5];
-    container->exposureTime                 = strings[6];
-    container->exposureProgram              = strings[7];
-    container->exposureMode                 = strings[8];
-    container->sensitivity                  = strings[9];
-    container->flashMode                    = strings[10];
-    container->whiteBalance                 = strings[11];
-    container->whiteBalanceColorTemperature = strings[12];
-    container->meteringMode                 = strings[13];
-    container->subjectDistance              = strings[14];
-    container->subjectDistanceCategory      = strings[15];
+    container->make                         = strings.at(0);
+    container->model                        = strings.at(1);
+    container->lens                         = strings.at(2);
+    container->aperture                     = strings.at(3);
+    container->focalLength                  = strings.at(4);
+    container->focalLength35                = strings.at(5);
+    container->exposureTime                 = strings.at(6);
+    container->exposureProgram              = strings.at(7);
+    container->exposureMode                 = strings.at(8);
+    container->sensitivity                  = strings.at(9);
+    container->flashMode                    = strings.at(10);
+    container->whiteBalance                 = strings.at(11);
+    container->whiteBalanceColorTemperature = strings.at(12);
+    container->meteringMode                 = strings.at(13);
+    container->subjectDistance              = strings.at(14);
+    container->subjectDistanceCategory      = strings.at(15);
 }
 
 } // namespace Digikam

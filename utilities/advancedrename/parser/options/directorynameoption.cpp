@@ -76,7 +76,7 @@ QString DirectoryNameOption::parseOperation(ParseSettings& settings)
     }
     else
     {
-        result = folders[folderCount - matchedLength - 1];
+        result = folders.at(folderCount - matchedLength - 1);
     }
 
     return result;

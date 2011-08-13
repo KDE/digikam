@@ -540,7 +540,7 @@ void AlbumDB::makeStaleAlbum(int albumID)
     }
 
     // prepend albumRootId to relativePath. relativePath is unused and officially undefined after this call.
-    QString newRelativePath = values[0].toString() + '-' + values[1].toString();
+    QString newRelativePath = values.at(0).toString() + '-' + values.at(1).toString();
 
     // delete older stale albums
     QMap<QString, QVariant> parameters;
@@ -1333,10 +1333,10 @@ ItemShortInfo AlbumDB::getItemShortInfo(qlonglong imageID)
     if (!values.isEmpty())
     {
         info.id          = imageID;
-        info.itemName    = values[0].toString();
-        info.albumRootID = values[1].toInt();
-        info.album       = values[2].toString();
-        info.albumID     = values[3].toInt();
+        info.itemName    = values.at(0).toString();
+        info.albumRootID = values.at(1).toInt();
+        info.album       = values.at(2).toString();
+        info.albumID     = values.at(3).toInt();
     }
 
     return info;
@@ -1357,11 +1357,11 @@ ItemShortInfo AlbumDB::getItemShortInfo(int albumRootId, const QString& relative
 
     if (!values.isEmpty())
     {
-        info.id          = values[0].toLongLong();
+        info.id          = values.at(0).toLongLong();
         info.itemName    = name;
         info.albumRootID = albumRootId;
         info.album       = relativePath;
-        info.albumID     = values[1].toInt();
+        info.albumID     = values.at(1).toInt();
     }
 
     return info;
@@ -1465,8 +1465,8 @@ QVariantList AlbumDB::getImagesFields(qlonglong imageID, DatabaseFields::Images 
         if ((fields & DatabaseFields::ModificationDate) && !values.isEmpty())
         {
             int index = fieldNames.indexOf("modificationDate");
-            values[index] = (values[index].isNull() ? QDateTime()
-                             : QDateTime::fromString(values[index].toString(), Qt::ISODate));
+            values[index] = (values.at(index).isNull() ? QDateTime()
+                             : QDateTime::fromString(values.at(index).toString(), Qt::ISODate));
         }
     }
 
@@ -1490,15 +1490,15 @@ QVariantList AlbumDB::getImageInformation(qlonglong imageID, DatabaseFields::Ima
         if ((fields & DatabaseFields::CreationDate) && !values.isEmpty())
         {
             int index = fieldNames.indexOf("creationDate");
-            values[index] = (values[index].isNull() ? QDateTime()
-                             : QDateTime::fromString(values[index].toString(), Qt::ISODate));
+            values[index] = (values.at(index).isNull() ? QDateTime()
+                             : QDateTime::fromString(values.at(index).toString(), Qt::ISODate));
         }
 
         if ((fields & DatabaseFields::DigitizationDate) && !values.isEmpty())
         {
             int index = fieldNames.indexOf("digitizationDate");
-            values[index] = (values[index].isNull() ? QDateTime()
-                             : QDateTime::fromString(values[index].toString(), Qt::ISODate));
+            values[index] = (values.at(index).isNull() ? QDateTime()
+                             : QDateTime::fromString(values.at(index).toString(), Qt::ISODate));
         }
     }
 
@@ -1529,15 +1529,15 @@ QVariantList AlbumDB::getImageMetadata(qlonglong imageID, DatabaseFields::ImageM
         {
             for (int i=0; i<values.size(); ++i)
             {
-                if (values[i].type() == QVariant::String &&
-                    (fieldNames[i] == "aperture" ||
-                     fieldNames[i] == "focalLength" ||
-                     fieldNames[i] == "focalLength35" ||
-                     fieldNames[i] == "exposureTime" ||
-                     fieldNames[i] == "subjectDistance")
+                if (values.at(i).type() == QVariant::String &&
+                    (fieldNames.at(i) == "aperture" ||
+                     fieldNames.at(i) == "focalLength" ||
+                     fieldNames.at(i) == "focalLength35" ||
+                     fieldNames.at(i) == "exposureTime" ||
+                     fieldNames.at(i) == "subjectDistance")
                    )
                 {
-                    values[i] = values[i].toDouble();
+                    values[i] = values.at(i).toDouble();
                 }
             }
         }
@@ -1572,17 +1572,17 @@ QVariantList AlbumDB::getImagePosition(qlonglong imageID, DatabaseFields::ImageP
         {
             for (int i=0; i<values.size(); ++i)
             {
-                if (values[i].type() == QVariant::String &&
-                    (fieldNames[i] == "latitudeNumber" ||
-                     fieldNames[i] == "longitudeNumber" ||
-                     fieldNames[i] == "altitude" ||
-                     fieldNames[i] == "orientation" ||
-                     fieldNames[i] == "tilt" ||
-                     fieldNames[i] == "roll" ||
-                     fieldNames[i] == "accuracy")
+                if (values.at(i).type() == QVariant::String &&
+                    (fieldNames.at(i) == "latitudeNumber" ||
+                     fieldNames.at(i) == "longitudeNumber" ||
+                     fieldNames.at(i) == "altitude" ||
+                     fieldNames.at(i) == "orientation" ||
+                     fieldNames.at(i) == "tilt" ||
+                     fieldNames.at(i) == "roll" ||
+                     fieldNames.at(i) == "accuracy")
                    )
                 {
-                    values[i] = values[i].toDouble();
+                    values[i] = values.at(i).toDouble();
                 }
             }
         }
@@ -1624,17 +1624,17 @@ QVariantList AlbumDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseField
         {
             for (int i=0; i<values.size(); ++i)
             {
-                if (values[i].type() == QVariant::String &&
-                    (fieldNames[i] == "latitudeNumber" ||
-                     fieldNames[i] == "longitudeNumber" ||
-                     fieldNames[i] == "altitude" ||
-                     fieldNames[i] == "orientation" ||
-                     fieldNames[i] == "tilt" ||
-                     fieldNames[i] == "roll" ||
-                     fieldNames[i] == "accuracy")
+                if (values.at(i).type() == QVariant::String &&
+                    (fieldNames.at(i) == "latitudeNumber" ||
+                     fieldNames.at(i) == "longitudeNumber" ||
+                     fieldNames.at(i) == "altitude" ||
+                     fieldNames.at(i) == "orientation" ||
+                     fieldNames.at(i) == "tilt" ||
+                     fieldNames.at(i) == "roll" ||
+                     fieldNames.at(i) == "accuracy")
                    )
                 {
-                    values[i] = values[i].toDouble();
+                    values[i] = values.at(i).toDouble();
                 }
             }
         }
@@ -2157,8 +2157,8 @@ void AlbumDB::addImageRelations(const QList<qlonglong>& subjectIds, const QList<
 
     for (int i=0; i<subjectIds.size(); ++i)
     {
-        subjects << subjectIds[i];
-        objects  << objectIds[i];
+        subjects << subjectIds.at(i);
+        objects  << objectIds.at(i);
         types    << type;
     }
 
@@ -2543,8 +2543,8 @@ QList<ItemScanInfo> AlbumDB::getIdenticalFiles(qlonglong id)
         return QList<ItemScanInfo>();
     }
 
-    QString uniqueHash = values[0].toString();
-    qlonglong fileSize = values[1].toLongLong();
+    QString uniqueHash = values.at(0).toString();
+    qlonglong fileSize = values.at(1).toLongLong();
 
     return getIdenticalFiles(uniqueHash, fileSize, id);
 }
@@ -4447,7 +4447,7 @@ bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
     }
 
     QList<QVariant> boundValues;
-    boundValues << values[0] << values[1] << values[2] << values[3];
+    boundValues << values.at(0) << values.at(1) << values.at(2) << values.at(3);
     boundValues << dstAlbumID;
 
     //shouldn't we have a ; at the end of the query?

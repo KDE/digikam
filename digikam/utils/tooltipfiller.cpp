@@ -308,16 +308,16 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 for (int i = 0; i<tagPaths.size(); ++i)
                 {
-                    tagText = tagPaths[i];
+                    tagText = tagPaths.at(i);
 
                     if (tagText.size() > cnt.maxStringLength)
                     {
-                        tagText = tagNames[i];
+                        tagText = tagNames.at(i);
                     }
 
                     if (tagText.size() > cnt.maxStringLength)
                     {
-                        tagText = cnt.elidedText(tagPaths[i], Qt::ElideLeft);
+                        tagText = cnt.elidedText(tagPaths.at(i), Qt::ElideLeft);
                     }
 
                     tip += cnt.cellSpecBeg + title + cnt.cellSpecMid + tagText + cnt.cellSpecEnd;

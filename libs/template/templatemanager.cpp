@@ -569,7 +569,7 @@ Template TemplateManager::fromIndex(int index) const
 
     if (index >= 0 && index < d->pList.size())
     {
-        return d->pList[index];
+        return d->pList.at(index);
     }
 
     return Template();

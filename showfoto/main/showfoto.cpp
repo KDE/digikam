@@ -772,7 +772,7 @@ void ShowFoto::openFolder(const KUrl& url)
 
     for (QStringList::ConstIterator it = mimeTypes.constBegin() ; it != mimeTypes.constEnd() ; ++it)
     {
-        QString format = KImageIO::typeForMime(*it)[0].toUpper();
+        QString format = KImageIO::typeForMime(*it).at(0).toUpper();
         filter.append ("*.");
         filter.append (format);
         filter.append (" ");

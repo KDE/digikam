@@ -1081,7 +1081,7 @@ void DatabaseCoreBackend::execQuery(SqlQuery& query, const QList<QVariant>& boun
 {
     for (int i=0; i<boundValues.size(); ++i)
     {
-        query.bindValue(i, boundValues[i]);
+        query.bindValue(i, boundValues.at(i));
     }
 
     exec(query);
@@ -1232,7 +1232,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 
     for (int i=0; i<valuesToBind.size(); ++i)
     {
-        query.bindValue(i, valuesToBind[i]);
+        query.bindValue(i, valuesToBind.at(i));
     }
 
     exec(query);
@@ -1248,7 +1248,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execUpsertDBAction(const Da
 
     for (int i=0; i<fieldNames.size(); ++i)
     {
-        fieldValueMap.insert(fieldNames[i], values[i]);
+        fieldValueMap.insert(fieldNames.at(i), values.at(i));
     }
 
     DBActionType fieldValueList = DBActionType::value(fieldValueMap);

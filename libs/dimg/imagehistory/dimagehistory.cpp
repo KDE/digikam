@@ -180,7 +180,7 @@ DImageHistory::Entry& DImageHistory::operator[](int i)
 
 const DImageHistory::Entry& DImageHistory::operator[](int i) const
 {
-    return d->entries[i];
+    return d->entries.at(i);
 }
 
 DImageHistory& DImageHistory::operator<<(const FilterAction& action)
@@ -242,7 +242,7 @@ void DImageHistory::removeLast()
 
 const FilterAction& DImageHistory::action(int i) const
 {
-    return d->entries[i].action;
+    return d->entries.at(i).action;
 }
 
 QList<FilterAction> DImageHistory::allActions() const
@@ -292,7 +292,7 @@ QList<HistoryImageId> &DImageHistory::referredImages(int i)
 
 const QList<HistoryImageId> &DImageHistory::referredImages(int i) const
 {
-    return d->entries[i].referredImages;
+    return d->entries.at(i).referredImages;
 }
 
 QList<HistoryImageId> DImageHistory::allReferredImages() const

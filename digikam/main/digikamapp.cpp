@@ -1350,7 +1350,7 @@ void DigikamApp::slotAboutToShowBackwardMenu()
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        QAction* action = d->backwardActionMenu->menu()->addAction(titles[i], d->backwardSignalMapper, SLOT(map()));
+        QAction* action = d->backwardActionMenu->menu()->addAction(titles.at(i), d->backwardSignalMapper, SLOT(map()));
         d->backwardSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -1363,7 +1363,7 @@ void DigikamApp::slotAboutToShowForwardMenu()
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        QAction* action = d->forwardActionMenu->menu()->addAction(titles[i], d->forwardSignalMapper, SLOT(map()));
+        QAction* action = d->forwardActionMenu->menu()->addAction(titles.at(i), d->forwardSignalMapper, SLOT(map()));
         d->forwardSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -1814,11 +1814,11 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
         // and product id in hexadecimal strings.
 #if KDE_IS_VERSION(4,5,90)
         bool ok;
-        int vendorId  = list[1].toString().toInt(&ok, 16);
-        int productId = list[2].toString().toInt(&ok, 16);
+        int vendorId  = list.at(1).toString().toInt(&ok, 16);
+        int productId = list.at(2).toString().toInt(&ok, 16);
 #else
-        int vendorId  = list[1].toInt();
-        int productId = list[2].toInt();
+        int vendorId  = list.at(1).toInt();
+        int productId = list.at(2).toInt();
 #endif
         QString model, port;
 
@@ -1983,9 +1983,9 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 
     QList<QVariant> driverHandleList = driverHandle.toList();
 
-    if (driverHandleList.size() < 3 || driverHandleList[0].toString() != "usb"
-        || !driverHandleList[1].canConvert(QVariant::Int)
-        || !driverHandleList[2].canConvert(QVariant::Int)
+    if (driverHandleList.size() < 3 || driverHandleList.at(0).toString() != "usb"
+        || !driverHandleList.at(1).canConvert(QVariant::Int)
+        || !driverHandleList.at(2).canConvert(QVariant::Int)
        )
     {
         kWarning() << "Solid returns unsupported driver handle for gphoto2";

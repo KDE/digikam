@@ -92,16 +92,16 @@ void ImagePositionPriv::init(DatabaseAccess& access, qlonglong id)
     if (values.size() == 10)
     {
         empty           = false;
-        latitude        = values[0].toString();
-        latitudeNumber  = values[1];
-        longitude       = values[2].toString();
-        longitudeNumber = values[3];
-        altitude        = values[4];
-        orientation     = values[5];
-        tilt            = values[6];
-        roll            = values[7];
-        accuracy        = values[8];
-        description     = values[9].toString();
+        latitude        = values.at(0).toString();
+        latitudeNumber  = values.at(1);
+        longitude       = values.at(2).toString();
+        longitudeNumber = values.at(3);
+        altitude        = values.at(4);
+        orientation     = values.at(5);
+        tilt            = values.at(6);
+        roll            = values.at(7);
+        accuracy        = values.at(8);
+        description     = values.at(9).toString();
     }
 }
 

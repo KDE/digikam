@@ -215,10 +215,10 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
         // undoing from an origin: need to switch to previous origin?
         for (lastOrigin = d->undoActions.size() - 1; lastOrigin >= 0; lastOrigin--)
         {
-            if (d->undoActions[lastOrigin]->hasFileOriginData())
+            if (d->undoActions.at(lastOrigin)->hasFileOriginData())
             {
-                originDataBeforeStep    = d->undoActions[lastOrigin]->fileOriginData();
-                originHistoryBeforeStep = d->undoActions[lastOrigin]->fileOriginResolvedHistory();
+                originDataBeforeStep    = d->undoActions.at(lastOrigin)->fileOriginData();
+                originHistoryBeforeStep = d->undoActions.at(lastOrigin)->fileOriginResolvedHistory();
                 break;
             }
         }
@@ -420,7 +420,7 @@ bool UndoManager::putImageDataAndHistory(DImg* img, int stepsBack)
 
     for (snapshot = step; snapshot < d->undoActions.size(); ++snapshot)
     {
-        if (dynamic_cast<UndoActionIrreversible*>(d->undoActions[snapshot]))
+        if (dynamic_cast<UndoActionIrreversible*>(d->undoActions.at(snapshot)))
         {
             break;
         }
@@ -447,7 +447,7 @@ bool UndoManager::putImageDataAndHistory(DImg* img, int stepsBack)
         // revert reversible actions, until reaching desired step
         for (; snapshot > step; snapshot--)
         {
-            UndoActionReversible* reversible = dynamic_cast<UndoActionReversible*>(d->undoActions[snapshot - 1]);
+            UndoActionReversible* reversible = dynamic_cast<UndoActionReversible*>(d->undoActions.at(snapshot - 1));
             reversible->getReverseFilter().apply(reverting);
         }
 
@@ -456,7 +456,7 @@ bool UndoManager::putImageDataAndHistory(DImg* img, int stepsBack)
     }
 
     // adjust history
-    UndoAction* action = d->undoActions[step];
+    UndoAction* action = d->undoActions.at(step);
     DImageHistory historyBeforeStep = action->getHistory();
     img->setImageHistory(historyBeforeStep);
 

@@ -195,7 +195,7 @@ void CollectionScanner::recordHints(const QList<ItemCopyMoveHint>& hints)
 
         for (int i=0; i<ids.size(); ++i)
         {
-            d->itemHints[NewlyAppearedFile(hint.albumIdDst(), dstNames[i])] = ids[i];
+            d->itemHints[NewlyAppearedFile(hint.albumIdDst(), dstNames.at(i))] = ids.at(i);
         }
     }
 }
@@ -210,11 +210,11 @@ void CollectionScanner::recordHints(const QList<ItemChangeHint>& hints)
         {
             if (hint.isModified())
             {
-                d->modifiedItemHints << ids[i];
+                d->modifiedItemHints << ids.at(i);
             }
             else
             {
-                d->rescanItemHints << ids[i];
+                d->rescanItemHints << ids.at(i);
             }
         }
     }
@@ -745,8 +745,8 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
 
     for (int i = 0; i < scanInfos.size(); ++i)
     {
-        fileNameIndexHash[scanInfos[i].itemName] = i;
-        itemIdSet << scanInfos[i].id;
+        fileNameIndexHash[scanInfos.at(i).itemName] = i;
+        itemIdSet << scanInfos.at(i).id;
     }
 
     const QFileInfoList list = dir.entryInfoList(QDir::AllDirs | QDir::Files  | QDir::NoDotAndDotDot);
@@ -785,9 +785,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             if (index != -1)
             {
                 // mark item as "seen"
-                itemIdSet.remove(scanInfos[index].id);
+                itemIdSet.remove(scanInfos.at(index).id);
 
-                scanFileNormal(*fi, scanInfos[index]);
+                scanFileNormal(*fi, scanInfos.at(index));
             }
             // ignore temp files we created ourselves
             else if (fi->completeSuffix() == "digikamtempfile.tmp")

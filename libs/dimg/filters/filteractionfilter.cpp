@@ -156,7 +156,7 @@ FilterAction FilterActionFilter::failedAction() const
         return FilterAction();
     }
 
-    return d->actions[d->appliedActions.size()];
+    return d->actions.at(d->appliedActions.size());
 }
 
 int FilterActionFilter::failedActionIndex() const

@@ -511,8 +511,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
                     break;
                 }
 
-                QString folder = (*it).toStringList()[0];
-                QString file   = (*it).toStringList()[1];
+                QString folder = (*it).toStringList().at(0);
+                QString file   = (*it).toStringList().at(1);
 
                 sendLogMsg(i18n("Getting thumbs info for %1...", file), DHistoryView::StartingEntry, folder, file);
 

@@ -225,7 +225,7 @@ QModelIndex RatingComboBoxModel::index(int row, int column, const QModelIndex& p
     }
 
     // third argument: RatingValue as internal data
-    return createIndex(row, column, m_entries[row]);
+    return createIndex(row, column, m_entries.at(row));
 }
 
 QModelIndex RatingComboBoxModel::indexForRatingValue(RatingComboBox::RatingValue value) const

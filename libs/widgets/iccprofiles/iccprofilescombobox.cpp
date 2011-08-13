@@ -119,7 +119,7 @@ void IccProfilesComboBox::addProfilesSqueezed(const QList<IccProfile>& givenProf
 
     for (int i=0; i<profiles.size(); ++i)
     {
-        addSqueezedItem(userDescription[i], QVariant::fromValue(profiles[i]));
+        addSqueezedItem(userDescription.at(i), QVariant::fromValue(profiles.at(i)));
     }
 }
 
@@ -219,7 +219,7 @@ void IccProfilesMenuAction::addProfiles(const QList<IccProfile>& givenProfiles)
 
     for (int i=0; i<profiles.size(); ++i)
     {
-        addProfile(profiles[i], userDescription[i]);
+        addProfile(profiles.at(i), userDescription.at(i));
     }
 }
 

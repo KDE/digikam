@@ -582,14 +582,14 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
     {
         for (int i=0; i<tagPaths.size(); ++i)
         {
-            tagsSorted << PathValuePair(tagPaths[i], (*identifiers)[i]);
+            tagsSorted << PathValuePair(tagPaths.at(i), (*identifiers).at(i));
         }
     }
     else
     {
         for (int i=0; i<tagPaths.size(); ++i)
         {
-            tagsSorted << PathValuePair(tagPaths[i], QVariant());
+            tagsSorted << PathValuePair(tagPaths.at(i), QVariant());
         }
     }
     qStableSort(tagsSorted.begin(), tagsSorted.end(), naturalLessThan);
@@ -611,7 +611,7 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
         int depth;
         for (depth = 0; depth < currentPath.size() && depth < previousPath.size(); ++depth)
         {
-            if (currentPath[depth] != previousPath[depth])
+            if (currentPath.at(depth) != previousPath.at(depth))
                 break;
         }
 

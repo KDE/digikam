@@ -788,7 +788,7 @@ void EditorWindow::slotAboutToShowUndoMenu()
 
     for (int i=0; i<titles.size(); ++i)
     {
-        QAction* action = m_undoAction->menu()->addAction(titles[i], d->undoSignalMapper, SLOT(map()));
+        QAction* action = m_undoAction->menu()->addAction(titles.at(i), d->undoSignalMapper, SLOT(map()));
         d->undoSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -800,7 +800,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
 
     for (int i=0; i<titles.size(); ++i)
     {
-        QAction* action = m_redoAction->menu()->addAction(titles[i], d->redoSignalMapper, SLOT(map()));
+        QAction* action = m_redoAction->menu()->addAction(titles.at(i), d->redoSignalMapper, SLOT(map()));
         d->redoSignalMapper->setMapping(action, i + 1);
     }
 }

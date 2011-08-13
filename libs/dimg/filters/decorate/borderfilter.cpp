@@ -502,11 +502,11 @@ static QColor stringToColor(const QString& s)
 
         if (colors.size() >= 3)
         {
-            QColor c(colors[0].toInt(), colors[1].toInt(), colors[2].toInt());
+            QColor c(colors.at(0).toInt(), colors.at(1).toInt(), colors.at(2).toInt());
 
             if (regexp.cap(0) == "rgba" && colors.size() == 4)
             {
-                c.setAlpha(colors[4].toInt());
+                c.setAlpha(colors.at(4).toInt());
             }
 
             return c;

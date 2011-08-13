@@ -234,7 +234,7 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
             // find the next value in m_values after current value
             for (nextStep=0; nextStep<m_values.count(); ++nextStep)
             {
-                if (v <= m_values[nextStep])
+                if (v <= m_values.at(nextStep))
                 {
                     ++nextStep;
                     break;
@@ -246,7 +246,7 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
 
             for ( ; stepsToGo > 0 && nextStep < m_values.count(); --stepsToGo)
             {
-                v = m_values[nextStep++];
+                v = m_values.at(nextStep++);
             }
 
             // set the new value
@@ -262,7 +262,7 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
         {
             for (nextStep=m_values.count() - 1; nextStep>= 0; --nextStep)
             {
-                if (v >= m_values[nextStep])
+                if (v >= m_values.at(nextStep))
                 {
                     --nextStep;
                     break;
@@ -273,7 +273,7 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
 
             for ( ; stepsToGo > 0 && nextStep >= 0; --stepsToGo)
             {
-                v = m_values[nextStep--];
+                v = m_values.at(nextStep--);
             }
 
             setValue(v);
@@ -383,7 +383,7 @@ void CustomStepsIntSpinBox::stepBy(int steps)
             // find the next value in m_values after current value
             for (nextStep=0; nextStep<m_values.count(); ++nextStep)
             {
-                if (v <= m_values[nextStep])
+                if (v <= m_values.at(nextStep))
                 {
                     ++nextStep;
                     break;
@@ -395,7 +395,7 @@ void CustomStepsIntSpinBox::stepBy(int steps)
 
             for ( ; stepsToGo > 0 && nextStep < m_values.count(); --stepsToGo)
             {
-                v = m_values[nextStep++];
+                v = m_values.at(nextStep++);
             }
 
             // set the new value
@@ -411,7 +411,7 @@ void CustomStepsIntSpinBox::stepBy(int steps)
         {
             for (nextStep=m_values.count() - 1; nextStep>= 0; --nextStep)
             {
-                if (v >= m_values[nextStep])
+                if (v >= m_values.at(nextStep))
                 {
                     --nextStep;
                     break;
@@ -422,7 +422,7 @@ void CustomStepsIntSpinBox::stepBy(int steps)
 
             for ( ; stepsToGo > 0 && nextStep >= 0; --stepsToGo)
             {
-                v = m_values[nextStep--];
+                v = m_values.at(nextStep--);
             }
 
             setValue(v);

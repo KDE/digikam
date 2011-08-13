@@ -738,7 +738,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
 
 void DImgInterface::slotSavingProgress(const QString& filePath, float progress)
 {
-    if (!d->filesToSave.isEmpty() && d->filesToSave[d->currentFileToSave].filePath == filePath)
+    if (!d->filesToSave.isEmpty() && d->filesToSave.at(d->currentFileToSave).filePath == filePath)
     {
         emit signalSavingProgress(filePath, progress);
     }
@@ -749,7 +749,7 @@ void DImgInterface::abortSaving()
     // failure will be reported by a signal
     if (!d->filesToSave.isEmpty())
     {
-        d->thread->stopSaving(d->filesToSave[d->currentFileToSave].filePath);
+        d->thread->stopSaving(d->filesToSave.at(d->currentFileToSave).filePath);
         d->filesToSave.clear();
     }
 }

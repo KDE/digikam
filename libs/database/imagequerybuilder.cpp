@@ -617,8 +617,8 @@ public:
                 return;
             }
 
-            double lon = list[0];
-            double lat = list[1];
+            double lon = list.at(0);
+            double lat = list.at(1);
 
             sql += " ( ";
 
@@ -734,10 +734,10 @@ public:
             // where the searched region contains any lon,lat
             //  where lon1 < lon < lon2 and lat1 < lat < lat2.
             double lon1,lat1,lon2,lat2;
-            lon1 = list[0];
-            lat1 = list[1];
-            lon2 = list[2];
-            lat2 = list[3];
+            lon1 = list.at(0);
+            lat1 = list.at(1);
+            lon2 = list.at(2);
+            lat2 = list.at(3);
 
             sql += " ( ";
             addRectanglePositionSearch(lon1, lat1, lon2, lat2);
@@ -1205,7 +1205,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 selectQuery += "%1property=? AND %1value ";
                 ImageQueryBuilder::addSqlRelation(selectQuery, relation);
                 selectQuery += " ? ";
-                *boundValues << values[0] << fieldQuery.prepareForLike(values[1]);
+                *boundValues << values.at(0) << fieldQuery.prepareForLike(values.at(1));
             }
 
             // This indicates that the ImageTagProperties is joined in the SELECT query,

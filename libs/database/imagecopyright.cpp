@@ -414,7 +414,7 @@ QString ImageCopyright::readLanguageProperty(const QString& property, const QStr
     }
     else
     {
-        return infos[index].value;
+        return infos.at(index).value;
     }
 }
 
@@ -524,7 +524,7 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
 
     for (int i=0; i<infos.size(); ++i)
     {
-        const CopyrightInfo& info = infos[i];
+        const CopyrightInfo& info = infos.at(i);
 
         if (info.extraValue == fullCode)
         {

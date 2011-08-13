@@ -183,10 +183,10 @@ SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desire
     {
         writer.writeGroup();
         writer.writeField("creationdate", SearchXml::GreaterThan);
-        writer.writeValue(dateRanges[i].first);
+        writer.writeValue(dateRanges.at(i).first);
         writer.finishField();
         writer.writeField("creationdate", SearchXml::LessThan);
-        writer.writeValue(dateRanges[i].second);
+        writer.writeValue(dateRanges.at(i).second);
         writer.finishField();
         writer.finishGroup();
     }

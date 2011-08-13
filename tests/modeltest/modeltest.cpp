@@ -551,7 +551,7 @@ void ModelTest::layoutChanged()
 {
     for (int i = 0; i < changing.count(); ++i)
     {
-        QPersistentModelIndex p = changing[i];
+        QPersistentModelIndex p = changing.at(i);
         QVERIFY(p == model->index(p.row(), p.column(), p.parent()));
     }
 

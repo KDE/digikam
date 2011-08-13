@@ -203,8 +203,8 @@ void ToolsView::slotHistoryEntryClicked(const QVariant& metadata)
 
     if (!list.isEmpty())
     {
-        int queueId      = list[0].toInt();
-        qlonglong itemId = list[1].toLongLong();
+        int queueId      = list.at(0).toInt();
+        qlonglong itemId = list.at(1).toLongLong();
         emit signalHistoryEntryClicked(queueId, itemId);
     }
 }

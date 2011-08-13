@@ -286,7 +286,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
                 // we have no name in the new face. Do we have one in the old faces?
                 for (int i=0; i<overlappingEntries.size(); ++i)
                 {
-                    DatabaseFace& oldFace = overlappingEntries[i];
+                    const DatabaseFace& oldFace = overlappingEntries.at(i);
 
                     if (oldFace.isUnknownName())
                     {

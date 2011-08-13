@@ -274,7 +274,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
                 if (!lensList.isEmpty())
                 {
-                    bestMatches.insert(lensList.count(), lensList[0]);
+                    bestMatches.insert(lensList.count(), lensList.at(0));
                 }
 
                 // STAGE 2, Adapt exiv2 strings to lensfun strings for Nikon.
@@ -290,7 +290,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
                     if (!lensList.isEmpty())
                     {
-                        bestMatches.insert(lensList.count(), lensList[0]);
+                        bestMatches.insert(lensList.count(), lensList.at(0));
                     }
                 }
 
@@ -307,7 +307,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
                 if (!lensList.isEmpty())
                 {
-                    bestMatches.insert(lensList.count(), lensList[0]);
+                    bestMatches.insert(lensList.count(), lensList.at(0));
                 }
 
                 // Display the results.

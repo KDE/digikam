@@ -204,7 +204,7 @@ void ParallelPipes::add(WorkerObject* worker)
 void ParallelPipes::process(FacePipelineExtendedPackage::Ptr package)
 {
     // Here, we send the package to one of the workers, in turn
-    m_methods[m_currentIndex].invoke(m_workers[m_currentIndex], Qt::QueuedConnection,
+    m_methods.at(m_currentIndex).invoke(m_workers.at(m_currentIndex), Qt::QueuedConnection,
                                      Q_ARG(FacePipelineExtendedPackage::Ptr, package));
 
     if (++m_currentIndex == m_workers.size())
@@ -1276,8 +1276,8 @@ void FacePipeline::construct()
 
     for (int i = 0; i < d->pipeline.size()-1; ++i)
     {
-        connect(d->pipeline[i], SIGNAL(processed(FacePipelineExtendedPackage::Ptr)),
-                d->pipeline[i+1], SLOT(process(FacePipelineExtendedPackage::Ptr)));
+        connect(d->pipeline.at(i), SIGNAL(processed(FacePipelineExtendedPackage::Ptr)),
+                d->pipeline.at(i+1), SLOT(process(FacePipelineExtendedPackage::Ptr)));
     }
 
     connect(d->pipeline.last(), SIGNAL(processed(FacePipelineExtendedPackage::Ptr)),

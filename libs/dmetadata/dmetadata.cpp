@@ -1112,10 +1112,10 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
             kDebug() << "Cannot parse WLPG rectangle string" << rectString;
             continue;
         }
-        QRectF rect(list[0].toFloat(),
-                    list[1].toFloat(),
-                    list[2].toFloat(),
-                    list[3].toFloat());
+        QRectF rect(list.at(0).toFloat(),
+                    list.at(1).toFloat(),
+                    list.at(2).toFloat(),
+                    list.at(3).toFloat());
 
         faces[person] = rect;
     }
@@ -1373,13 +1373,13 @@ bool DMetadata::getCopyrightInformation(Template& t) const
         return false;
     }
 
-    t.setCopyright(toAltLangMap(metadataInfos[0]));
-    t.setAuthors(metadataInfos[1].toStringList());
-    t.setCredit(metadataInfos[2].toString());
-    t.setRightUsageTerms(toAltLangMap(metadataInfos[3]));
-    t.setSource(metadataInfos[4].toString());
-    t.setAuthorsPosition(metadataInfos[5].toString());
-    t.setInstructions(metadataInfos[6].toString());
+    t.setCopyright(toAltLangMap(metadataInfos.at(0)));
+    t.setAuthors(metadataInfos.at(1).toStringList());
+    t.setCredit(metadataInfos.at(2).toString());
+    t.setRightUsageTerms(toAltLangMap(metadataInfos.at(3)));
+    t.setSource(metadataInfos.at(4).toString());
+    t.setAuthorsPosition(metadataInfos.at(5).toString());
+    t.setInstructions(metadataInfos.at(6).toString());
 
     t.setContactInfo(contactInfo);
 
@@ -1404,14 +1404,14 @@ IptcCoreContactInfo DMetadata::getCreatorContactInfo() const
 
     if (metadataInfos.size() == 8)
     {
-        info.city          = metadataInfos[0].toString();
-        info.country       = metadataInfos[1].toString();
-        info.address       = metadataInfos[2].toString();
-        info.postalCode    = metadataInfos[3].toString();
-        info.provinceState = metadataInfos[4].toString();
-        info.email         = metadataInfos[5].toString();
-        info.phone         = metadataInfos[6].toString();
-        info.webUrl        = metadataInfos[7].toString();
+        info.city          = metadataInfos.at(0).toString();
+        info.country       = metadataInfos.at(1).toString();
+        info.address       = metadataInfos.at(2).toString();
+        info.postalCode    = metadataInfos.at(3).toString();
+        info.provinceState = metadataInfos.at(4).toString();
+        info.email         = metadataInfos.at(5).toString();
+        info.phone         = metadataInfos.at(6).toString();
+        info.webUrl        = metadataInfos.at(7).toString();
     }
 
     return info;
@@ -1482,11 +1482,11 @@ IptcCoreLocationInfo DMetadata::getIptcCoreLocation() const
 
     if (fields.size() == 5)
     {
-        location.country       = metadataInfos[0].toString();
-        location.countryCode   = metadataInfos[1].toString();
-        location.city          = metadataInfos[2].toString();
-        location.location      = metadataInfos[3].toString();
-        location.provinceState = metadataInfos[4].toString();
+        location.country       = metadataInfos.at(0).toString();
+        location.countryCode   = metadataInfos.at(1).toString();
+        location.city          = metadataInfos.at(2).toString();
+        location.location      = metadataInfos.at(3).toString();
+        location.provinceState = metadataInfos.at(4).toString();
     }
 
     return location;
@@ -2326,7 +2326,7 @@ QStringList DMetadata::valuesToString(const QVariantList& values, const Metadata
 
     for (int i=0; i<size; ++i)
     {
-        list << valueToString(values[i], fields[i]);
+        list << valueToString(values.at(i), fields.at(i));
     }
 
     return list;

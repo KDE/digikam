@@ -148,14 +148,14 @@ void ChoiceSearchModel::setChecked(int i, bool checked)
     m_entries[i].checkState = checked;
     QModelIndex modelIndex  = index(i);
     emit dataChanged(modelIndex, modelIndex);
-    emit checkStateChanged(m_entries[i].key, checked);
+    emit checkStateChanged(m_entries.at(i).key, checked);
 }
 
 void ChoiceSearchModel::resetChecked()
 {
     for (int i=0; i<m_entries.size(); ++i)
     {
-        if (m_entries[i].checkState)
+        if (m_entries.at(i).checkState)
         {
             setChecked(i, false);
         }
@@ -178,15 +178,15 @@ QVariant ChoiceSearchModel::data(const QModelIndex& index, int role) const
     {
         if (role == Qt::DisplayRole)
         {
-            return m_entries[index.row()].display;
+            return m_entries.at(index.row()).display;
         }
         else if (role == Qt::CheckStateRole)
         {
-            return m_entries[index.row()].checkState ? Qt::Checked : Qt::Unchecked;
+            return m_entries.at(index.row()).checkState ? Qt::Checked : Qt::Unchecked;
         }
         else if (role == IdRole)
         {
-            return m_entries[index.row()].key;
+            return m_entries.at(index.row()).key;
         }
     }
 
