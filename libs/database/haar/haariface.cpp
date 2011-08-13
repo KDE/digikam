@@ -853,8 +853,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QSet<qlonglo
     {
         if (!resultsCandidates.contains(*it))
         {
-            //list = bestMatchesForImage(*it, 20, ScannedSketch);
-            // find images with at least 90% similarity
+            // find images with required similarity
             bestMatchesList = bestMatchesForImageWithThreshold(*it, requiredPercentage, ScannedSketch);
 
             if (!bestMatchesList.isEmpty())
