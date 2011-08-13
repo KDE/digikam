@@ -404,14 +404,13 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
         startIndex = d->renamer->startIndex();
     }
 
-    bool convertLossLessJpeg = d->cameraUI->advancedSettings()->convertLosslessJpegFiles();
-    QString losslessFormat   = d->cameraUI->advancedSettings()->losslessFormat();
+    DownloadSettings settings = d->cameraUI->downloadSettings();
 
     viewport()->setUpdatesEnabled(false);
 
     // NOTE: see B.K.O #182352: ordering of item count must be adapted sort of icon view,
     // since items are ordered from the most recent to the older one.
-    bool revOrder=!d->cameraUI->chronologicOrder();
+    bool revOrder = !d->cameraUI->chronologicOrder();
     // Camera items selection.
 
     // reset the start index
@@ -459,7 +458,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
             }
         }
 
-        if (convertLossLessJpeg && !downloadName.isEmpty())
+        if (settings.convertJpeg && !downloadName.isEmpty())
         {
             QFileInfo fi(downloadName);
             QString ext = fi.suffix().toUpper();
@@ -467,7 +466,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
             if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
             {
                 downloadName.truncate(downloadName.length() - ext.length());
-                downloadName.append(losslessFormat.toLower());
+                downloadName.append(settings.losslessFormat.toLower());
             }
         }
 
@@ -936,6 +935,7 @@ void CameraIconView::itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned lon
 {
     qint64 fSize = 0;  // Files size
     qint64 dSize = 0;  // Estimated space requires to download and process files.
+    DownloadSettings settings = d->cameraUI->downloadSettings();
 
     for (IconItem* item = firstItem(); item; item = item->nextItem())
     {
@@ -953,12 +953,12 @@ void CameraIconView::itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned lon
 
             if (iconItem->itemInfo().mime == QString("image/jpeg"))
             {
-                if (d->cameraUI->advancedSettings()->convertLosslessJpegFiles())
+                if (settings.convertJpeg)
                 {
                     // Estimated size is around 5 x original size when JPEG=>PNG.
                     dSize += size*5;
                 }
-                else if (d->cameraUI->advancedSettings()->autoRotateJpegFiles())
+                else if (settings.autoRotate)
                 {
                     // We need a double size to perform rotation.
                     dSize += size*2;

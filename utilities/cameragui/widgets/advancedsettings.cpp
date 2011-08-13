@@ -150,8 +150,8 @@ void AdvancedSettings::readSettings(KConfigGroup& group)
     d->losslessFormat->setCurrentIndex(group.readEntry("LossLessFormat", 0));   // PNG by default
 
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
-    d->losslessFormat->setEnabled(convertLosslessJpegFiles());
-    d->formatLabel->setEnabled(convertLosslessJpegFiles());
+    d->losslessFormat->setEnabled(d->convertJpegCheck->isChecked());
+    d->formatLabel->setEnabled(d->convertJpegCheck->isChecked());
 }
 
 void AdvancedSettings::saveSettings(KConfigGroup& group)
@@ -159,38 +159,22 @@ void AdvancedSettings::saveSettings(KConfigGroup& group)
     group.writeEntry("AutoRotate",     d->autoRotateCheck->isChecked());
     group.writeEntry("FixDateTime",    d->fixDateTimeCheck->isChecked());
     group.writeEntry("Template",       d->templateSelector->getTemplateIndex());
-    group.writeEntry("ConvertJpeg",    convertLosslessJpegFiles());
+    group.writeEntry("ConvertJpeg",    d->convertJpegCheck->isChecked());
     group.writeEntry("LossLessFormat", d->losslessFormat->currentIndex());
 }
 
-bool AdvancedSettings::autoRotateJpegFiles() const
+DownloadSettings AdvancedSettings::settings() const
 {
-    return d->autoRotateCheck->isChecked();
-}
+    DownloadSettings settings;
 
-bool AdvancedSettings::convertLosslessJpegFiles() const
-{
-    return d->convertJpegCheck->isChecked();
-}
+    settings.autoRotate     = d->autoRotateCheck->isChecked();
+    settings.fixDateTime    = d->fixDateTimeCheck->isChecked();
+    settings.convertJpeg    = d->convertJpegCheck->isChecked();
+    settings.newDateTime    = d->dateTimeEdit->dateTime();
+    settings.losslessFormat = d->losslessFormat->currentText();
+    settings.templateTitle  = d->templateSelector->getTemplate().templateTitle();
 
-QString AdvancedSettings::losslessFormat() const
-{
-    return d->losslessFormat->currentText();
-}
-
-bool AdvancedSettings::fixDateTime() const
-{
-    return d->fixDateTimeCheck->isChecked();
-}
-
-QDateTime AdvancedSettings::newDateTime() const
-{
-    return d->dateTimeEdit->dateTime();
-}
-
-QString AdvancedSettings::templateTitle() const
-{
-    return d->templateSelector->getTemplate().templateTitle();
+    return settings;
 }
 
 }  // namespace Digikam

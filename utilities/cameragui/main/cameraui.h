@@ -46,6 +46,7 @@
 #include "dhistoryview.h"
 #include "dmetadata.h"
 #include "camerahistoryupdater.h"
+#include "downloadsettings.h"
 
 namespace Digikam
 {
@@ -53,7 +54,6 @@ namespace Digikam
 class Album;
 class CollectionLocation;
 class CameraHistoryUpdater;
-class AdvancedSettings;
 
 class CameraUI : public KXmlGuiWindow
 {
@@ -79,7 +79,7 @@ public:
 
     QString cameraTitle() const;
 
-    AdvancedSettings* advancedSettings() const;
+    DownloadSettings downloadSettings() const;
 
 Q_SIGNALS:
 

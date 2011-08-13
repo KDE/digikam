@@ -98,7 +98,6 @@
 #include "sidebar.h"
 #include "thememanager.h"
 #include "setup.h"
-#include "downloadsettingscontainer.h"
 #include "downloadhistory.h"
 #include "dzoombar.h"
 #include "imagepropertiessidebarcamgui.h"
@@ -718,9 +717,9 @@ QString CameraUI::cameraTitle() const
     return d->cameraTitle;
 }
 
-AdvancedSettings* CameraUI::advancedSettings() const
+DownloadSettings CameraUI::downloadSettings() const
 {
-    return d->advancedSettings;
+    return d->advancedSettings->settings();
 }
 
 void CameraUI::slotCancelButton()
@@ -1493,17 +1492,10 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
     d->controller->downloadPrep();
 
-    DownloadSettingsContainer downloadSettings;
+    DownloadSettings settings = downloadSettings();
     QString   downloadName;
     QDateTime dateTime;
     int       total = 0;
-
-    downloadSettings.autoRotate     = d->advancedSettings->autoRotateJpegFiles();
-    downloadSettings.fixDateTime    = d->advancedSettings->fixDateTime();
-    downloadSettings.newDateTime    = d->advancedSettings->newDateTime();
-    downloadSettings.templateTitle  = d->advancedSettings->templateTitle();
-    downloadSettings.convertJpeg    = d->advancedSettings->convertLosslessJpegFiles();
-    downloadSettings.losslessFormat = d->advancedSettings->losslessFormat();
 
     // -- Download camera items -------------------------------
     // Since we show camera items in reverse order, downloading need to be done also in reverse order.
@@ -1518,10 +1510,10 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             continue;
         }
 
-        downloadSettings.folder  = info.folder;
-        downloadSettings.file    = info.name;
-        downloadName             = info.downloadName;
-        dateTime                 = info.mtime;
+        settings.folder = info.folder;
+        settings.file   = info.name;
+        downloadName    = info.downloadName;
+        dateTime        = info.mtime;
 
         KUrl downloadUrl(url);
         QString errMsg;
@@ -1606,7 +1598,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
         if (downloadName.isEmpty())
         {
-            downloadUrl.addPath(downloadSettings.file);
+            downloadUrl.addPath(settings.file);
         }
         else
         {
@@ -1639,9 +1631,9 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             }
         }
 
-        downloadSettings.dest = downloadUrl.toLocalFile();
+        settings.dest = downloadUrl.toLocalFile();
 
-        d->controller->download(downloadSettings);
+        d->controller->download(settings);
         ++total;
     }
 

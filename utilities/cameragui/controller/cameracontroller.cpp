@@ -1124,7 +1124,7 @@ void CameraController::downloadPrep()
     d->downloadTotal = 0;
 }
 
-void CameraController::download(const DownloadSettingsContainer& downloadSettings)
+void CameraController::download(const DownloadSettings& downloadSettings)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;

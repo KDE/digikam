@@ -33,6 +33,10 @@
 
 #include <kconfig.h>
 
+// Local settings
+
+#include "downloadsettings.h"
+
 namespace Digikam
 {
 
@@ -48,16 +52,7 @@ public:
     void readSettings(KConfigGroup& group);
     void saveSettings(KConfigGroup& group);
 
-    bool      autoRotateJpegFiles() const;
-
-    QString   templateTitle() const;
-
-    bool      fixDateTime() const;
-    QDateTime newDateTime() const;
-
-    /** Get status of JPEG conversion files to lossless format during download.*/
-    bool      convertLosslessJpegFiles() const;
-    QString   losslessFormat() const;
+    DownloadSettings settings() const;
 
 Q_SIGNALS:
 
