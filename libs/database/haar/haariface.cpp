@@ -223,14 +223,16 @@ public:
 
     void setSignatureCacheEnabled(bool cache)
     {
-        delete signatureCache;
-        signatureCache = 0;
+        if (signatureCache)
+        {
+            delete signatureCache;
+            signatureCache = 0;
+        }
 
         if (cache)
         {
             signatureCache = new SignatureCache();
         }
-
         useSignatureCache = cache;
 
         // stop here if we disable cached signatures
