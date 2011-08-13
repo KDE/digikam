@@ -864,11 +864,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QSet<qlonglo
                 {
                     resultsMap.insert(*it, list);
                     resultsCandidates << *it;
-
-                    foreach (const qlonglong& id, list)
-                    {
-                        resultsCandidates << id;
-                    }
+                    resultsCandidates.unite(list.toSet());
                 }
             }
         }
