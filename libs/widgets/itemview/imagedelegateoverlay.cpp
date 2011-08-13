@@ -535,9 +535,16 @@ void PersistentWidgetDelegateOverlay::setPersistent(bool persistent)
     {
         showOnIndex(d->index);
     }
-    else if (!d->persistent && d->enteredIndex.isValid())
+    else if (!d->persistent)
     {
-        slotEntered(d->enteredIndex);
+        if (d->enteredIndex.isValid())
+        {
+            slotEntered(d->enteredIndex);
+        }
+        else
+        {
+            hide();
+        }
     }
 }
 
