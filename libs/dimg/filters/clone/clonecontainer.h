@@ -24,7 +24,9 @@
 #ifndef CLONECONTAINER_H
 #define CLONECONTAINER_H
 
+// Local includes
 #include"clonebrush.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
