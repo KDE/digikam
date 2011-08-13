@@ -25,11 +25,23 @@
 
 // Qt includes
 
+#include <QRegion>
 #include <QPainter>
+#include <QPen>
+#include <QTimer>
+#include <QRect>
+#include <QBrush>
+#include <QFont>
+#include <QFontMetrics>
 
-// local includes
+// KDE includes
 
-#include "dcolor.h"
+#include <kstandarddirs.h>
+#include <kcursor.h>
+#include <kdebug.h>
+
+//local includes
+
 #include "imageiface.h"
 
 namespace Digikam
@@ -212,7 +224,7 @@ void ImageCloneWidget::setContainer(const CloneContainer& settings)
     d->settings = settings;
 }
 
-CloneContainer ImageCloneWidget::container() const
+CloneContainer ImageCloneWidget::getContainer() const
 {
     return d->settings;
 }

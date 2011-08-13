@@ -26,23 +26,30 @@
 
 //QT includes
 
-#include <QMouseEvent>
-#include <QPoint>
-#include <QWidget>
+#include <QtGui/QWidget>
+#include <QtGui/QColor>
+#include <QtGui/QPixmap>
+#include <QtGui/QResizeEvent>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPaintEvent>
+#include <QtCore/QPoint>
+#include <QtCore/QEvent>
+#include <QtCore/QTimerEvent>
 
 //local includes
 
-#include "imageguidewidget.h"
 #include "clonecontainer.h"
 #include "dimg.h"
 #include "dcolor.h"
+
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
 class ImageIface;
 
-class ImageCloneWidget : public QWidget
+class DIGIKAM_EXPORT ImageCloneWidget : public QWidget
 {
     Q_OBJECT
 
@@ -50,7 +57,6 @@ public:
 
     explicit ImageCloneWidget(QWidget* parent=0, const CloneContainer& settings=CloneContainer());
     ~ImageCloneWidget();
-
     ImageIface* imageIface() const;
     void    updatePreview();
     //DImg*   getOrigImage();
@@ -61,11 +67,10 @@ public:
     QPoint  getDis() const;
     QPoint  getOriDis();
 
-    void           setContainer(const CloneContainer& settings);
-    CloneContainer container() const;
-
+    void    setContainer(const CloneContainer& settings);
     void    setBackgroundColor(const QColor& bg);
 
+    CloneContainer getContainer() const;
 Q_SIGNALS:
 
     void    drawingComplete();
