@@ -218,11 +218,8 @@ public:
 
     void setSignatureCacheEnabled(bool cache)
     {
-        if (signatureCache)
-        {
-            delete signatureCache;
-            signatureCache = 0;
-        }
+        delete signatureCache;
+        signatureCache = 0;
 
         if (cache)
         {
