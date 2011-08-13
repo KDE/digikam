@@ -24,13 +24,19 @@
 #ifndef CLONEBRUSH_H
 #define CLONEBRUSH_H
 
+//Qt includes
+
 #include <QPixmap>
 #include <QObject>
+
+//Local includes
+
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class CloneBrush : public QObject
+class DIGIKAM_EXPORT CloneBrush : public QObject
 {
     Q_OBJECT
 
