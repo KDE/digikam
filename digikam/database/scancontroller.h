@@ -79,8 +79,12 @@ public:
      * Carries out a complete collection scan, providing progress feedback.
      * Synchronous, returns when ready.
      * The database will be locked while the scan is running.
+     * With the DeferFiles variant, deep files scanning (new files), the part
+     * which can take long, will be done during the time after the method returns,
+     * shortening the synchronous wait.
      */
     void completeCollectionScan(SplashScreen* splash=0);
+    void completeCollectionScanDeferFiles(SplashScreen* splash=0);
 
     /**
      * Carries out a complete collection scan, at the same time updating
@@ -175,6 +179,8 @@ Q_SIGNALS:
     void incrementProgressDialog(int);
     void errorFromInitialization(const QString&);
     void progressFromInitialization(const QString&, int);
+
+    void scanningProgress(double progress);
 
 private Q_SLOTS:
 
