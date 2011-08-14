@@ -38,6 +38,7 @@
 
 #include "restorationtool.h"
 #include "blurtool.h"
+#include "clonetool.h"
 #include "sharpentool.h"
 #include "noisereductiontool.h"
 #include "localcontrasttool.h"
@@ -70,6 +71,7 @@ public:
         redeyeAction(0),
         restorationAction(0),
         blurAction(0),
+        cloneAction(0),
         sharpenAction(0),
         noiseReductionAction(0),
         localContrastAction(0),
@@ -84,6 +86,7 @@ public:
     KAction* redeyeAction;
     KAction* restorationAction;
     KAction* blurAction;
+    KAction* cloneAction;
     KAction* sharpenAction;
     KAction* noiseReductionAction;
     KAction* localContrastAction;
@@ -108,6 +111,11 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     actionCollection()->addAction("imageplugin_blur", d->blurAction);
     connect(d->blurAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotBlur()));
+
+    d->cloneAction = new KAction(KIcon("clone"), i18n("Clone..."), this);// fix me
+    actionCollection()->addAction("imageplugin_clone", d->cloneAction);
+    connect(d->cloneAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotClone()));
 
     d->noiseReductionAction = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
     actionCollection()->addAction("imageplugin_noisereduction", d->noiseReductionAction);
@@ -174,6 +182,7 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
 {
     d->restorationAction->setEnabled(b);
     d->blurAction->setEnabled(b);
+    d->cloneAction->setEnabled(b);// fix me
     d->sharpenAction->setEnabled(b);
     d->noiseReductionAction->setEnabled(b);
     d->localContrastAction->setEnabled(b);
@@ -209,6 +218,12 @@ void ImagePlugin_Enhance::slotRestoration()
 void ImagePlugin_Enhance::slotBlur()
 {
     BlurTool* tool = new BlurTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Enhance::slotClone()// fix me
+{
+    CloneTool* tool = new CloneTool(this);
     loadTool(tool);
 }
 

@@ -50,6 +50,7 @@ private Q_SLOTS:
 
     void slotRestoration();
     void slotBlur();
+    void slotClone();
     void slotSharpen();
     void slotNoiseReduction();
     void slotLocalContrast();
