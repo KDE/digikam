@@ -74,21 +74,25 @@ class SlideShow::SlideShowPriv
 public:
 
     SlideShowPriv()
-        : maxStringLen(80)
-    {
-        labelsBox         = 0;
-        clWidget          = 0;
-        ratingWidget      = 0;
-        plWidget          = 0;
-        previewThread     = 0;
-        mouseMoveTimer    = 0;
-        timer             = 0;
-        toolBar           = 0;
-        fileIndex         = -1;
-        endOfShow         = false;
-        pause             = false;
-        screenSaverCookie = -1;
-    }
+        : endOfShow(false)
+        , pause(false)
+        , maxStringLen(80)
+        , deskX(0)
+        , deskY(0)
+        , deskWidth(0)
+        , deskHeight(0)
+        , fileIndex(-1)
+        , screenSaverCookie(-1)
+        , mouseMoveTimer(0)
+        , timer(0)
+        , labelsBox(0)
+        , previewThread(0)
+        , previewPreloadThread(0)
+        , toolBar(0)
+        , ratingWidget(0)
+        , clWidget(0)
+        , plWidget(0)
+    {}
 
     bool                endOfShow;
     bool                pause;
