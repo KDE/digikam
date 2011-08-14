@@ -180,7 +180,7 @@ QString ParseResults::replaceTokens(const QString& markedString)
         }
         else
         {
-            result.append(markedString[i]);
+            result.append(markedString.at(i));
             ++i;
         }
     }

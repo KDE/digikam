@@ -617,7 +617,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
         for (currIndex = commentsIndex ;
              currIndex < (uint)comments.length() && !breakLine ; ++currIndex )
         {
-            if ( comments[currIndex] == QChar('\n') || comments[currIndex].isSpace() )
+            if ( comments.at(currIndex) == QChar('\n') || comments.at(currIndex).isSpace() )
             {
                 breakLine = true;
             }
@@ -635,7 +635,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
              currIndex < (uint)comments.length() && !breakLine ;
              ++currIndex )
         {
-            breakLine = (comments[currIndex] == QChar('\n')) ? true : false;
+            breakLine = (comments.at(currIndex) == QChar('\n')) ? true : false;
 
             if (breakLine)
             {
@@ -643,7 +643,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
             }
             else
             {
-                newLine.append(comments[currIndex]);
+                newLine.append(comments.at(currIndex));
             }
         }
 
