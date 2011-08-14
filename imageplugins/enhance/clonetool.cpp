@@ -90,10 +90,10 @@ CloneTool::CloneTool(QObject* parent)
     :EditorToolThreaded(parent),
     d(new CloneToolPriv)
 {
-    setObjectName("Clone");
-    setToolName(i18n("Clone Toll"));
+    setObjectName("clonetool");
+    setToolName(i18n("Clone Tool"));
     setToolIcon(SmallIcon("clone"));
-
+    //setToolHelp("clonetool.anchor");
    // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
