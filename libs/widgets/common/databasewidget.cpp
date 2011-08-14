@@ -112,7 +112,7 @@ void DatabaseWidget::setupMainArea()
     hostName                            = new QLineEdit();
     QLabel* hostPortLabel               = new QLabel(i18n("Port"));
     hostPort                            = new QSpinBox();
-    hostPort->setMaximum(65536);
+    hostPort->setMaximum(65535);
 
     QLabel* connectionOptionsLabel      = new QLabel(i18n("Database<br>Connection<br>Options"));
     connectionOptions                   = new QLineEdit();
