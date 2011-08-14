@@ -53,6 +53,7 @@
 
 // Local includes
 
+#include "albumselectwidget.h"
 #include "cameralist.h"
 #include "cameraselection.h"
 #include "cameratype.h"
@@ -163,6 +164,8 @@ public:
         removeButton(0),
         editButton(0),
         autoDetectButton(0),
+        useDefaultTargetAlbum(0),
+        target1AlbumSelector(0),
         listView(0),
         tab(0)
     {
@@ -170,6 +173,8 @@ public:
 
     static const QString configGroupName;
     static const QString configUseMetadataDateEntry;
+    static const QString configUseDefaultTargetAlbum;
+    static const QString configDefaultTargetAlbumId;
 
     QPushButton*         addButton;
     QPushButton*         removeButton;
@@ -177,14 +182,19 @@ public:
     QPushButton*         autoDetectButton;
 
     QCheckBox*           useDateFromMetadata;
+    QCheckBox*           useDefaultTargetAlbum;
+
+    AlbumSelectWidget*   target1AlbumSelector;
 
     QTreeWidget*         listView;
 
     KTabWidget*          tab;
 };
 
-const QString SetupCamera::SetupCameraPriv::configGroupName("Camera Interface Settings");
+const QString SetupCamera::SetupCameraPriv::configGroupName("Camera Settings");
 const QString SetupCamera::SetupCameraPriv::configUseMetadataDateEntry("UseThemeBackgroundColor");
+const QString SetupCamera::SetupCameraPriv::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
+const QString SetupCamera::SetupCameraPriv::configDefaultTargetAlbumId("DefaultTargetAlbumId");
 
 SetupCamera::SetupCamera( QWidget* parent )
     : QScrollArea(parent), d(new SetupCameraPriv)
@@ -268,17 +278,21 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     // -------------------------------------------------------------
 
-    QWidget* panel2        = new QWidget(d->tab);
+    QWidget* panel2          = new QWidget(d->tab);
     panel2->setAutoFillBackground(false);
 
-    QVBoxLayout* layout    = new QVBoxLayout(panel2);
-    d->useDateFromMetadata = new QCheckBox(i18n("Use date from metadata to short items instead file-system date (makes connection slower)"), panel2);
+    QVBoxLayout* layout      = new QVBoxLayout(panel2);
+    d->useDateFromMetadata   = new QCheckBox(i18n("Use date from metadata to short items instead file-system date (makes connection slower)"), panel2);
+    d->useDefaultTargetAlbum = new QCheckBox(i18n("Use a default target album to download from camera"), panel2);
+    d->target1AlbumSelector  = new AlbumSelectWidget(panel2);
 
     d->tab->insertTab(1, panel2, i18n("Behavior"));
 
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
     layout->addWidget(d->useDateFromMetadata);
+    layout->addWidget(d->useDefaultTargetAlbum);
+    layout->addWidget(d->target1AlbumSelector);
     layout->addStretch();
 
     // -------------------------------------------------------------
@@ -307,6 +321,9 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     connect(d->autoDetectButton, SIGNAL(clicked()),
             this, SLOT(slotAutoDetectCamera()));
+
+    connect(d->useDefaultTargetAlbum, SIGNAL(toggled(bool)),
+            d->target1AlbumSelector, SLOT(setEnabled(bool)));
 
     // -------------------------------------------------------------
 
@@ -340,6 +357,10 @@ void SetupCamera::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->useDateFromMetadata->setChecked(group.readEntry(d->configUseMetadataDateEntry, false));
+    d->useDefaultTargetAlbum->setChecked(group.readEntry(d->configUseDefaultTargetAlbum, false));
+    PAlbum* album = AlbumManager::instance()->findPAlbum(group.readEntry(d->configDefaultTargetAlbumId, 0));
+    d->target1AlbumSelector->setCurrentAlbum(album);
+    d->target1AlbumSelector->setEnabled(d->useDefaultTargetAlbum->isChecked());
 }
 
 void SetupCamera::applySettings()
@@ -380,7 +401,22 @@ void SetupCamera::applySettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configUseMetadataDateEntry, d->useDateFromMetadata->isChecked());
+    group.writeEntry(d->configUseDefaultTargetAlbum, d->useDefaultTargetAlbum->isChecked());
+    PAlbum* album = d->target1AlbumSelector->currentAlbum();
+    group.writeEntry(d->configDefaultTargetAlbumId, album ? album->id() : 0);
     group.sync();
+}
+
+bool SetupCamera::checkSettings()
+{
+    if (d->useDefaultTargetAlbum->isChecked() && !d->target1AlbumSelector->currentAlbum())
+    {
+         d->tab->setCurrentIndex(1);
+         KMessageBox::information(this, i18n("No default target album have been selected to process download "
+                                             "from camera device. Please select one."));
+         return false;
+    }
+    return true;
 }
 
 void SetupCamera::slotProcessGphotoUrl(const QString& url)

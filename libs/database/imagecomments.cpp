@@ -97,7 +97,7 @@ public:
 
         for (int i=0; i<infos.size(); ++i)
         {
-            const CommentInfo& info = infos[i];
+            const CommentInfo& info = infos.at(i);
 
             if (info.type == DatabaseComment::Comment)
             {
@@ -226,7 +226,7 @@ QString ImageComments::defaultComment(int* index) const
     }
     else
     {
-        return d->infos[chosen].comment;
+        return d->infos.at(chosen).comment;
     }
 }
 
@@ -282,7 +282,7 @@ QString ImageComments::commentForLanguage(const QString& languageCode, int* inde
     }
     else
     {
-        return d->infos[chosen].comment;
+        return d->infos.at(chosen).comment;
     }
 }
 
@@ -303,7 +303,7 @@ DatabaseComment::Type ImageComments::type(int index) const
         return DatabaseComment::UndefinedType;
     }
 
-    return d->infos[index].type;
+    return d->infos.at(index).type;
 }
 
 QString ImageComments::language(int index) const
@@ -313,7 +313,7 @@ QString ImageComments::language(int index) const
         return QString();
     }
 
-    return d->infos[index].language;
+    return d->infos.at(index).language;
 }
 
 QString ImageComments::author(int index) const
@@ -323,7 +323,7 @@ QString ImageComments::author(int index) const
         return QString();
     }
 
-    return d->infos[index].author;
+    return d->infos.at(index).author;
 }
 
 QDateTime ImageComments::date(int index) const
@@ -333,7 +333,7 @@ QDateTime ImageComments::date(int index) const
         return QDateTime();
     }
 
-    return d->infos[index].date;
+    return d->infos.at(index).date;
 }
 
 QString ImageComments::comment(int index) const
@@ -343,7 +343,7 @@ QString ImageComments::comment(int index) const
         return QString();
     }
 
-    return d->infos[index].comment;
+    return d->infos.at(index).comment;
 }
 
 void ImageComments::setUniqueBehavior(UniqueBehavior behavior)
@@ -506,7 +506,7 @@ void ImageComments::remove(int index)
         return;
     }
 
-    d->idsToRemove << d->infos[index].id;
+    d->idsToRemove << d->infos.at(index).id;
     d->infos.removeAt(index);
     d->adjustStoredIndexes(index);
 }
@@ -520,7 +520,7 @@ void ImageComments::removeAll(DatabaseComment::Type type)
 
     for (int i=0; i<d->infos.size() /* changing! */; )
     {
-        if (d->infos[i].type == type)
+        if (d->infos.at(i).type == type)
         {
             remove(i);
         }

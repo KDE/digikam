@@ -46,8 +46,6 @@
 namespace Digikam
 {
 
-class FaceIface;
-
 class FacePipelineDatabaseFace : public DatabaseFace
 {
 public:

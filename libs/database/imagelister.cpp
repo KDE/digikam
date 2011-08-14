@@ -212,7 +212,7 @@ void ImageLister::listAlbum(ImageListerReceiver* receiver,
         record.modificationDate  = (*it).isNull() ? QDateTime()
                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.fileSize          = (*it).toInt();
+        record.fileSize          = (*it).toInt(); // TODO: Change to longlong when protocol is changed
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -273,7 +273,7 @@ void ImageLister::listTag(ImageListerReceiver* receiver, int tagId)
         record.modificationDate  = (*it).isNull() ? QDateTime()
                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.fileSize          = (*it).toInt();
+        record.fileSize          = (*it).toInt(); // TODO: Change to longlong when protocol is changed
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -383,7 +383,7 @@ void ImageLister::listDateRange(ImageListerReceiver* receiver, const QDate& star
         record.modificationDate  = (*it).isNull() ? QDateTime()
                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.fileSize          = (*it).toInt();
+        record.fileSize          = (*it).toInt(); // TODO: Change to longlong when protocol is changed
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -556,7 +556,7 @@ void ImageLister::listSearch(ImageListerReceiver* receiver,
         record.modificationDate  = (*it).isNull() ? QDateTime()
                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.fileSize          = (*it).toInt();
+        record.fileSize          = (*it).toInt(); // TODO: Change to longlong when protocol is changed
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -668,7 +668,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* receiver, cons
         record.modificationDate  = (*it).isNull() ? QDateTime()
                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.fileSize          = (*it).toInt();
+        record.fileSize          = (*it).toInt(); // TODO: Change to longlong when protocol is changed
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -854,7 +854,7 @@ void ImageLister::listFromIdList(ImageListerReceiver* receiver, QList<qlonglong>
         record.modificationDate  = (*it).isNull() ? QDateTime()
                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.fileSize          = (*it).toInt();
+        record.fileSize          = (*it).toInt(); // TODO: Change to longlong when protocol is changed
         ++it;
         width                    = (*it).toInt();
         ++it;

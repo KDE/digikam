@@ -3,6 +3,10 @@ digiKam 2.1.0 - Release date: 2011-09-04
 
 NEW FEATURES:
 
+CameraGUI : camera items thumbnails are processed on the fly. Connection to camera device is faster.
+CameraGUI : Sort of items by date is possible with photo taken quickly (less than 1s).
+CameraGUI : New option to setup a default target album to download items from camera device.
+CameraGUI : New option to download new items in just one click.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -22,7 +26,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 221457 : digiKam camera download - dates are not preserved.
 015 ==> 229543 : Video exif info not found during import and renaming.
 016 ==> 265243 : Series of AVIs imported with the same (incorrect) time.
-017 ==> 199913 : Creation date is changed when converting to png .
+017 ==> 199913 : Creation date is changed when converting to png.
 018 ==> 190717 : Camera movie files dates not used for date based sub folder name.
 019 ==> 246337 : Changing sort order forces thumbnail regeneration.
 020 ==> 256776 : digiKam leaves ".digikam-exifrotate" files etc. on harddisk.
@@ -32,4 +36,24 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 184439 : Closing the "USB DISK DOWNLOAD from DISK" window updates the digikam folder view.
 025 ==> 253268 : digiKam crashes when starting to download pictures.
 026 ==> 216492 : Camera interface upload can't select a movie only image.
-027 ==> 
+027 ==> 274199 : Digikam crashed when using "inpainting" tool.
+028 ==> 278320 : Crash with "-graphicssystem raster".
+029 ==> 279551 : Wrong window title when deleting a search.
+030 ==> 271030 : Windows Live Photo Gallery people tagging Compatibility.
+031 ==> 279549 : Lighttable gets automatically filled on digiKam start.
+032 ==> 279696 : Building the unittests of libkgeomap fails.
+033 ==> 279713 : Libmediawiki tries to install test files (patch attached).
+034 ==> 236394 : Import from camera using cable is slow and previously imported video files are not flagged.
+035 ==> 261871 : digiKam import of Nikon D7000 images very slow.
+036 ==> 243760 : Import *listing* from "Canon PowerShot G5 (normal mode)" takes very long.
+037 ==> 246401 : Improve date based sort of camera interface: use more time precision from Exif when shots are taken with less than 1s.
+038 ==> 266317 : Nepomuk Service Stub (nepomukservicestub) crashes in libdigikamdatabase.so.1 when syncing tags to nepomuk.
+039 ==> 269373 : Adding face tag to large amount of pictures fails.
+040 ==> 225759 : JPG image size = 0 byte, when transfer occurs from my camera to my NAS.
+041 ==> 202641 : Import images - always increase renaming counter by number of images imported.
+042 ==> 189903 : Allow default Target Album for Image Download.
+043 ==> 259861 : One-click "Download New Items".
+044 ==> 144227 : Allow for fully customized album names when importing.
+045 ==> 279402 : focus textbox for identifying faces gets lost too easily (and other issues).
+046 ==> 
+

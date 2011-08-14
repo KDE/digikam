@@ -330,7 +330,7 @@ QString ImageInfo::name() const
     return m_data->name;
 }
 
-uint ImageInfo::fileSize() const
+qlonglong ImageInfo::fileSize() const
 {
     if (!m_data)
     {
@@ -566,7 +566,7 @@ QSize ImageInfo::dimensions() const
 
         if (values.size() == 2)
         {
-            m_data.constCastData()->imageSize = QSize(values[0].toInt(), values[1].toInt());
+            m_data.constCastData()->imageSize = QSize(values.at(0).toInt(), values.at(1).toInt());
         }
 
         m_data.constCastData()->imageSizeCached = true;

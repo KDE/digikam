@@ -874,7 +874,7 @@ void DigikamView::getBackwardHistory(QStringList& titles)
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        titles[i] = d->userPresentableAlbumTitle(titles[i]);
+        titles[i] = d->userPresentableAlbumTitle(titles.at(i));
     }
 }
 
@@ -884,7 +884,7 @@ void DigikamView::getForwardHistory(QStringList& titles)
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        titles[i] = d->userPresentableAlbumTitle(titles[i]);
+        titles[i] = d->userPresentableAlbumTitle(titles.at(i));
     }
 }
 
@@ -1909,7 +1909,7 @@ void DigikamView::slotOrientationChangeFailed(const QStringList& failedFileNames
     if (failedFileNames.count() == 1)
     {
         KMessageBox::error(0, i18n("Failed to revise Exif orientation for file %1.",
-                                   failedFileNames[0]));
+                                   failedFileNames.at(0)));
     }
     else
     {

@@ -336,8 +336,8 @@ protected:
 
 protected:
 
-    QStringList        m_propertiesBlackList;
-    QStringList        m_propertiesWhiteList;
+    QSet<QString>        m_propertiesBlackList;
+    QSet<QString>        m_propertiesWhiteList;
 };
 
 } // namespace Digikam

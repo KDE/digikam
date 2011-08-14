@@ -101,6 +101,7 @@ public:
         needsUpdateUniqueHash(false),
         idle(false),
         scanSuspended(0),
+        deferFileScanning(false),
         continueInitialization(false),
         continueScan(false),
         continuePartialScan(false),
@@ -111,7 +112,8 @@ public:
         progressDialog(0),
         splash(0),
         advice(ScanController::Success),
-        needTotalFiles(false)
+        needTotalFiles(false),
+        totalFilesToScan(0)
     {
     }
 
@@ -124,6 +126,9 @@ public:
     int                       scanSuspended;
 
     QStringList               scanTasks;
+
+    QStringList               completeScanDeferredAlbums;
+    bool                      deferFileScanning;
 
     QMutex                    mutex;
     QWaitCondition            condVar;
@@ -157,6 +162,7 @@ public:
     ScanController::Advice    advice;
 
     bool                      needTotalFiles;
+    int                       totalFilesToScan;
 
 public:
 
@@ -416,6 +422,13 @@ ScanController::Advice ScanController::databaseInitialization()
     return d->advice;
 }
 
+void ScanController::completeCollectionScanDeferFiles(SplashScreen* splash)
+{
+    d->deferFileScanning = true;
+    completeCollectionScan(splash);
+    d->deferFileScanning = false;
+}
+
 void ScanController::completeCollectionScan(SplashScreen* splash)
 {
     d->splash         = splash;
@@ -585,6 +598,7 @@ void ScanController::run()
     {
         bool doInit             = false;
         bool doScan             = false;
+        bool doFinishScan       = false;
         bool doPartialScan      = false;
         bool doUpdateUniqueHash = false;
 
@@ -606,6 +620,11 @@ void ScanController::run()
             {
                 d->needsUpdateUniqueHash = false;
                 doUpdateUniqueHash       = true;
+            }
+            else if (!d->completeScanDeferredAlbums.isEmpty() && !d->scanSuspended)
+            {
+                // d->completeScanDeferredAlbums is only accessed from the thread, no need to copy
+                doFinishScan             = true;
             }
             else if (!d->scanTasks.isEmpty() && !d->scanSuspended)
             {
@@ -638,13 +657,43 @@ void ScanController::run()
         {
             CollectionScanner scanner;
             connectCollectionScanner(&scanner);
+
             scanner.setNeedFileCount(d->needTotalFiles);
+            scanner.setDeferredFileScanning(d->deferFileScanning);
+
             scanner.recordHints(d->albumHints);
             scanner.recordHints(d->itemHints);
             scanner.recordHints(d->itemChangeHints);
+
             SimpleCollectionScannerObserver observer(&d->continueScan);
             scanner.setObserver(&observer);
+
             scanner.completeScan();
+
+            emit completeScanDone();
+            d->completeScanDeferredAlbums = scanner.deferredAlbumPaths();
+        }
+        else if (doFinishScan)
+        {
+            if (d->completeScanDeferredAlbums.isEmpty())
+            {
+                continue;
+            }
+            CollectionScanner scanner;
+            connectCollectionScanner(&scanner);
+
+            scanner.setNeedFileCount(d->needTotalFiles);
+
+            scanner.recordHints(d->albumHints);
+            scanner.recordHints(d->itemHints);
+            scanner.recordHints(d->itemChangeHints);
+
+            SimpleCollectionScannerObserver observer(&d->continueScan);
+            scanner.setObserver(&observer);
+
+            scanner.finishCompleteScan(d->completeScanDeferredAlbums);
+
+            d->completeScanDeferredAlbums.clear();
             emit completeScanDone();
         }
         else if (doPartialScan)
@@ -703,10 +752,12 @@ void ScanController::slotTotalFilesToScan(int count)
     {
         d->progressDialog->incrementMaximum(count);
     }
+    d->totalFilesToScan = count;
 }
 
 void ScanController::slotStartCompleteScan()
 {
+    d->totalFilesToScan = 0;
     slotTriggerShowProgressDialog();
 
     QString message = i18n("Preparing collection scan");
@@ -737,6 +788,10 @@ void ScanController::slotScannedFiles(int filesScanned)
     if (d->progressDialog)
     {
         d->progressDialog->advance(filesScanned);
+    }
+    if (d->totalFilesToScan)
+    {
+        emit scanningProgress(double(filesScanned) / double(d->totalFilesToScan));
     }
 }
 

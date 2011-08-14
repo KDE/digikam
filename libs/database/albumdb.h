@@ -522,7 +522,7 @@ public:
                       DatabaseItem::Status status,
                       DatabaseItem::Category category,
                       const QDateTime& modificationDate,
-                      int fileSize,
+                      qlonglong fileSize,
                       const QString& uniqueHash);
 
     /**
@@ -689,7 +689,7 @@ public:
     void updateItem(qlonglong imageID,
                     DatabaseItem::Category category,
                     const QDateTime& modificationDate,
-                    int fileSize,
+                    qlonglong fileSize,
                     const QString& uniqueHash);
 
     /**
@@ -1023,7 +1023,7 @@ public:
      * If this is -1, no id is excluded.
      */
     QList<ItemScanInfo> getIdenticalFiles(qlonglong id);
-    QList<ItemScanInfo> getIdenticalFiles(const QString& uniqueHash, int fileSize, qlonglong sourceId = -1);
+    QList<ItemScanInfo> getIdenticalFiles(const QString& uniqueHash, qlonglong fileSize, qlonglong sourceId = -1);
 
     // ----------- Items and their tags -----------
 
@@ -1188,13 +1188,13 @@ public:
      * Search for the specified fingerprint in the download history table.
      * Returns the id of the entry, or -1 if not found.
      */
-    int findInDownloadHistory(const QString& identifier, const QString& name, int fileSize, const QDateTime& date);
+    int findInDownloadHistory(const QString& identifier, const QString& name, qlonglong fileSize, const QDateTime& date);
 
     /**
      * Add the specified fingerprint to the download history table.
      * Returns the id of the entry.
      */
-    int addToDownloadHistory(const QString& identifier, const QString& name, int fileSize, const QDateTime& date);
+    int addToDownloadHistory(const QString& identifier, const QString& name, qlonglong fileSize, const QDateTime& date);
 
     QList<QVariant> getImageIdsFromArea(qreal lat1, qreal lng1, qreal lat2, qreal lng2, int sortMode, const QString& sortBy);
 

@@ -158,7 +158,9 @@ enum Field
     IptcCoreContactInfoProvinceState, /// String
     IptcCoreContactInfoEmail,         /// String
     IptcCoreContactInfoPhone,         /// String
-    IptcCoreContactInfoWebUrl         /// String
+    IptcCoreContactInfoWebUrl,        /// String
+
+    Faces                             /// QMap<QString, QVariant>
 
     // Description, DescriptionWriter, Headline, Title: see above
     // DateCreated: see above, CreationDate

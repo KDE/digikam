@@ -195,7 +195,7 @@ DigikamApp::DigikamApp()
 
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Scan Albums"));
+        d->splashScreen->message(i18n("Scanning Albums..."));
     }
 
     new DigikamAdaptor(this);
@@ -207,7 +207,7 @@ DigikamApp::DigikamApp()
     if (d->config->group("General Settings").readEntry("Scan At Start", true) ||
         !CollectionScanner::databaseInitialScanDone())
     {
-        Digikam::ScanController::instance()->completeCollectionScan(d->splashScreen);
+        ScanController::instance()->completeCollectionScan(d->splashScreen);
     }
 
     if (d->splashScreen)
@@ -261,7 +261,7 @@ DigikamApp::DigikamApp()
 
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Checking ICC repository"));
+        d->splashScreen->message(i18n("Checking ICC repository..."));
     }
 
     d->validIccPath = SetupICC::iccRepositoryIsValid();
@@ -269,7 +269,7 @@ DigikamApp::DigikamApp()
     // Read albums from database
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Reading database"));
+        d->splashScreen->message(i18n("Reading database..."));
     }
 
     AlbumManager::instance()->startScan();
@@ -450,7 +450,7 @@ void DigikamApp::autoDetect()
 
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Auto Detect Camera"));
+        d->splashScreen->message(i18n("Auto-Detecting Camera..."));
     }
 
     QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
@@ -464,7 +464,7 @@ void DigikamApp::downloadFrom(const QString& cameraGuiPath)
     {
         if (d->splashScreen)
         {
-            d->splashScreen->message(i18n("Opening Download Dialog"));
+            d->splashScreen->message(i18n("Opening Download Dialog..."));
         }
 
         emit queuedOpenCameraUiFromPath(cameraGuiPath);
@@ -479,7 +479,7 @@ void DigikamApp::downloadFromUdi(const QString& udi)
     {
         if (d->splashScreen)
         {
-            d->splashScreen->message(i18n("Opening Download Dialog"));
+            d->splashScreen->message(i18n("Opening Download Dialog..."));
         }
 
         emit queuedOpenSolidDevice(udi);
@@ -515,7 +515,7 @@ void DigikamApp::setupView()
 {
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Initializing Main View"));
+        d->splashScreen->message(i18n("Initializing Main View..."));
     }
 
     d->view = new DigikamView(this, d->modelCollection);
@@ -1280,7 +1280,7 @@ void DigikamApp::setupActions()
     // are plugged into the toolbar at startup
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Loading cameras"));
+        d->splashScreen->message(i18n("Loading cameras..."));
     }
     loadCameras();
 
@@ -1350,7 +1350,7 @@ void DigikamApp::slotAboutToShowBackwardMenu()
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        QAction* action = d->backwardActionMenu->menu()->addAction(titles[i], d->backwardSignalMapper, SLOT(map()));
+        QAction* action = d->backwardActionMenu->menu()->addAction(titles.at(i), d->backwardSignalMapper, SLOT(map()));
         d->backwardSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -1363,7 +1363,7 @@ void DigikamApp::slotAboutToShowForwardMenu()
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        QAction* action = d->forwardActionMenu->menu()->addAction(titles[i], d->forwardSignalMapper, SLOT(map()));
+        QAction* action = d->forwardActionMenu->menu()->addAction(titles.at(i), d->forwardSignalMapper, SLOT(map()));
         d->forwardSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -1814,11 +1814,11 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
         // and product id in hexadecimal strings.
 #if KDE_IS_VERSION(4,5,90)
         bool ok;
-        int vendorId  = list[1].toString().toInt(&ok, 16);
-        int productId = list[2].toString().toInt(&ok, 16);
+        int vendorId  = list.at(1).toString().toInt(&ok, 16);
+        int productId = list.at(2).toString().toInt(&ok, 16);
 #else
-        int vendorId  = list[1].toInt();
-        int productId = list[2].toInt();
+        int vendorId  = list.at(1).toInt();
+        int productId = list.at(2).toInt();
 #endif
         QString model, port;
 
@@ -1983,9 +1983,9 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 
     QList<QVariant> driverHandleList = driverHandle.toList();
 
-    if (driverHandleList.size() < 3 || driverHandleList[0].toString() != "usb"
-        || !driverHandleList[1].canConvert(QVariant::Int)
-        || !driverHandleList[2].canConvert(QVariant::Int)
+    if (driverHandleList.size() < 3 || driverHandleList.at(0).toString() != "usb"
+        || !driverHandleList.at(1).canConvert(QVariant::Int)
+        || !driverHandleList.at(2).canConvert(QVariant::Int)
        )
     {
         kWarning() << "Solid returns unsupported driver handle for gphoto2";
@@ -2507,7 +2507,7 @@ void DigikamApp::loadPlugins()
 
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Loading Kipi Plugins"));
+        d->splashScreen->message(i18n("Loading KIPI Plugins..."));
     }
 
     QStringList ignores;
@@ -2731,7 +2731,7 @@ void DigikamApp::populateThemes()
 {
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Loading themes"));
+        d->splashScreen->message(i18n("Loading themes..."));
     }
     ThemeManager::instance()->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
     ThemeManager::instance()->registerThemeActions(this);
@@ -2750,7 +2750,7 @@ void DigikamApp::preloadWindows()
 {
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Loading tools"));
+        d->splashScreen->message(i18n("Loading tools..."));
     }
 
     QueueMgrWindow::queueManagerWindow();

@@ -77,6 +77,7 @@
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <klocale.h>
+#include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
@@ -120,7 +121,6 @@
 #include "colorcorrectiondlg.h"
 #include "dimginterface.h"
 #include "dlogoaction.h"
-#include "dpopupmenu.h"
 #include "dzoombar.h"
 #include "editorstackview.h"
 #include "editortool.h"
@@ -226,7 +226,7 @@ ExposureSettingsContainer* EditorWindow::exposureSettings() const
 
 void EditorWindow::setupContextMenu()
 {
-    m_contextMenu         = new DPopupMenu(this);
+    m_contextMenu         = new KMenu(this);
     KActionCollection* ac = actionCollection();
 
     if (ac->action("editorwindow_backward"))
@@ -788,7 +788,7 @@ void EditorWindow::slotAboutToShowUndoMenu()
 
     for (int i=0; i<titles.size(); ++i)
     {
-        QAction* action = m_undoAction->menu()->addAction(titles[i], d->undoSignalMapper, SLOT(map()));
+        QAction* action = m_undoAction->menu()->addAction(titles.at(i), d->undoSignalMapper, SLOT(map()));
         d->undoSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -800,7 +800,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
 
     for (int i=0; i<titles.size(); ++i)
     {
-        QAction* action = m_redoAction->menu()->addAction(titles[i], d->redoSignalMapper, SLOT(map()));
+        QAction* action = m_redoAction->menu()->addAction(titles.at(i), d->redoSignalMapper, SLOT(map()));
         d->redoSignalMapper->setMapping(action, i + 1);
     }
 }

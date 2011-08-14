@@ -921,19 +921,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dfontselect.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dhistoryview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dgradientslider.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dcategorizedview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ditemdelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ditemtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dlogoaction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dpopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dragdropimplementations.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dzoombar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagedelegateoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewhoverbutton.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewimagedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewtooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/digikamkcategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/knotificationwrapper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/modelcompletion.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/paniconwidget.cpp
@@ -953,6 +945,16 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support/previewwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support/drubberband.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support/thumbbar.cpp
+       )
+
+    SET(libitemview_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/digikamkcategorizedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/dcategorizedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/ditemdelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/imagedelegateoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/itemviewhoverbutton.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/itemviewimagedelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/itemviewtooltip.cpp
        )
 
     SET(libgraphicsviewwidgets_SRCS
@@ -1132,7 +1134,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libfacedetection_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/databaseface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/faceiface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facegroup.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facepipeline.cpp
@@ -1239,6 +1240,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseservererror.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory/imagehistorygraph.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory/imagehistorygraphmodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces/databaseface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces/facetags.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces/facetagseditor.cpp
        )
 
     SET(libdatabaseui_SRCS
@@ -1454,6 +1458,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters
@@ -1491,6 +1496,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
         ${CMAKE_CURRENT_SOURCE_DIR}/tests

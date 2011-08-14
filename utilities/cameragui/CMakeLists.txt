@@ -19,6 +19,8 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/capturewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/freespacewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/renamecustomizer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/albumcustomizer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/advancedsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/main/cameraui.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/q3support/icongroupitem.cpp

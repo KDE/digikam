@@ -1611,9 +1611,9 @@ void CollectionManager::updateLocations()
         int i=0;
         foreach (AlbumRootLocation* location, d->locations)
         {
-            if (oldStatus[i] != location->status())
+            if (oldStatus.at(i) != location->status())
             {
-                emit locationStatusChanged(*location, oldStatus[i]);
+                emit locationStatusChanged(*location, oldStatus.at(i));
             }
 
             ++i;

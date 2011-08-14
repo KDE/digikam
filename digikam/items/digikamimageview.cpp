@@ -63,7 +63,6 @@
 #include "digikamimagedelegate.h"
 #include "digikamimagefacedelegate.h"
 #include "dio.h"
-#include "dpopupmenu.h"
 #include "facerejectionoverlay.h"
 #include "faceiface.h"
 #include "groupindicatoroverlay.h"
@@ -304,7 +303,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     // --------------------------------------------------------
 
-    DPopupMenu popmenu(this);
+    KMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
     cmhelper.setImageFilterModel(imageFilterModel());
 
@@ -401,7 +400,7 @@ void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMe
         selectedImageIDs << info.id();
     }
 
-    DPopupMenu popmenu(this);
+    KMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
     cmhelper.setImageFilterModel(imageFilterModel());
 

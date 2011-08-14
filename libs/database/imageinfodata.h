@@ -69,7 +69,7 @@ public:
     QString                format;
     QDateTime              creationDate;
     QDateTime              modificationDate;
-    uint                   fileSize;
+    qlonglong              fileSize;
     QSize                  imageSize;
     QList<int>             tagIds;
 

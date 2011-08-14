@@ -80,7 +80,7 @@ RawCameraDlg::RawCameraDlg(QWidget* parent)
     listView()->setHeaderLabels(QStringList() << "Camera Model"); // Header is hidden. No i18n here.
     listView()->header()->hide();
 
-    for (QStringList::Iterator it = list.begin() ; it != list.end() ; ++it)
+    for (QStringList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
         new QTreeWidgetItem(listView(), QStringList() << *it);
     }

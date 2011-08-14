@@ -28,7 +28,7 @@
 
 // KDE includes
 
-#include "kcategorizedsortfilterproxymodel.h"
+#include <kcategorizedsortfilterproxymodel.h>
 
 // Local includes
 

@@ -95,7 +95,7 @@ void AbstractSearchGroupContainer::readGroup(SearchXmlCachingReader& reader)
     }
     else
     {
-        group = m_groups[m_groupIndex];
+        group = m_groups.at(m_groupIndex);
     }
 
     group->read(reader);

@@ -81,7 +81,7 @@ void HistoryImageId::setPath(const QString& path)
     }
 }
 
-void HistoryImageId::setUniqueHash(const QString& uniqueHash, int fileSize)
+void HistoryImageId::setUniqueHash(const QString& uniqueHash, qlonglong fileSize)
 {
     m_uniqueHash = uniqueHash;
     m_fileSize   = fileSize;
@@ -153,7 +153,7 @@ QString HistoryImageId::uniqueHash() const
     return m_uniqueHash;
 }
 
-int HistoryImageId::fileSize() const
+qlonglong HistoryImageId::fileSize() const
 {
     return m_fileSize;
 }

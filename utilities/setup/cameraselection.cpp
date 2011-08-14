@@ -386,7 +386,7 @@ void CameraSelection::getCameraList()
 
     for (int i = 0 ; i < count ; ++i)
     {
-        cname = clist[i];
+        cname = clist.at(i);
 
         if (cname == d->UMSCameraNameActual)
         {
@@ -409,9 +409,9 @@ void CameraSelection::getSerialPortList()
 
     for (int i = 0; i < plist.count() ; ++i)
     {
-        if ((plist[i]).startsWith(QLatin1String("serial:")))
+        if ((plist.at(i)).startsWith(QLatin1String("serial:")))
         {
-            d->serialPortList.append(plist[i]);
+            d->serialPortList.append(plist.at(i));
         }
     }
 }

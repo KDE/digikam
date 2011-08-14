@@ -46,6 +46,7 @@
 #include "dhistoryview.h"
 #include "dmetadata.h"
 #include "camerahistoryupdater.h"
+#include "downloadsettings.h"
 
 namespace Digikam
 {
@@ -74,14 +75,11 @@ public:
     bool cameraMkDirSupport() const;
     bool cameraDelDirSupport() const;
 
-    bool autoRotateJpegFiles() const;
     bool chronologicOrder() const;
 
-    /** Get status of JPEG conversion files to lossless format during download.*/
-    bool    convertLosslessJpegFiles() const;
-    QString losslessFormat() const;
-
     QString cameraTitle() const;
+
+    DownloadSettings downloadSettings() const;
 
 Q_SIGNALS:
 
@@ -141,8 +139,6 @@ private Q_SLOTS:
     void slotFolderList(const QStringList& folderList);
     void slotFileList(const CamItemInfoList& fileList);
 
-    void slotRequestThumbnails(const CamItemInfoList& list);
-
     void slotIncreaseThumbSize();
     void slotDecreaseThumbSize();
     void slotZoomSliderChanged(int size);
@@ -153,12 +149,19 @@ private Q_SLOTS:
 
     void slotUpload();
     void slotUploadItems(const KUrl::List&);
+
+    void slotDownloadNew();
     void slotDownloadSelected();
     void slotDownloadAll();
-    void slotDownloadAndDeleteAll();
-    void slotDeleteSelected();
+
+    void slotDownloadAndDeleteNew();
     void slotDownloadAndDeleteSelected();
+    void slotDownloadAndDeleteAll();
+
+    void slotDeleteNew();
+    void slotDeleteSelected();
     void slotDeleteAll();
+
     void slotToggleLock();
     void slotMarkAsDownloaded();
 
@@ -193,10 +196,6 @@ private Q_SLOTS:
 
     void slotRefreshIconViewTimer();
     void slotRefreshIconView(const CHUpdateItemMap& map);
-
-    void slotThumbInfo(const CamItemInfo&, const QImage&);
-    void slotThumb(const QString&, const QString&, const QImage&);
-    void slotInfo(const QString&, const QString&, const CamItemInfo&);
 
 private:
 

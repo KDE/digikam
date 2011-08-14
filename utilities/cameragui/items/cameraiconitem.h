@@ -45,12 +45,8 @@ class CameraIconItem : public IconItem
 
 public:
 
-    CameraIconItem(IconGroupItem* parent, const CamItemInfo& itemInfo, const QImage& thumbnail);
+    CameraIconItem(IconGroupItem* parent, const CamItemInfo& itemInfo);
     ~CameraIconItem();
-
-    void          setThumbnail(const QImage& thumbnail);
-    /** thumbnail is valid when preview image is loaded from camera */
-    bool          hasValidThumbnail() const;
 
     void          setDownloadName(const QString& downloadName);
     void          setDownloaded(int status);
@@ -71,7 +67,7 @@ protected:
 
 private:
 
-    void calcRect(const QString& itemName, const QString& newName);
+    void calcRect(const QString& itemName, const QString& newName, const QPixmap& thumb);
 
 private Q_SLOTS:
 

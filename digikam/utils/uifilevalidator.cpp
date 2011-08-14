@@ -191,7 +191,7 @@ QByteArray UiFileValidator::getFixedContent()
                 QXmlStreamAttributes attrs;
                 QXmlStreamAttributes _a = reader.attributes();
 
-                for (QXmlStreamAttributes::iterator it = _a.begin(); it != _a.end(); ++it)
+                for (QXmlStreamAttributes::const_iterator it = _a.constBegin(); it != _a.constEnd(); ++it)
                 {
                     if (it->qualifiedName() == TOOLBARATTRIBUTE && it->value() != TOOLBARVALUE)
                     {

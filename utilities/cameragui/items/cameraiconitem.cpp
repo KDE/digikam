@@ -62,8 +62,6 @@ public:
     bool        hasThumb;
     int         progressCount;         // Position of animation during downloading.
 
-    QPixmap     thumbnail;             // Full image size pixmap
-
     QSize       pixSize;
 
     QRect       pixRect;
@@ -75,11 +73,10 @@ public:
     CamItemInfo itemInfo;
 };
 
-CameraIconItem::CameraIconItem(IconGroupItem* parent, const CamItemInfo& itemInfo, const QImage& thumbnail)
+CameraIconItem::CameraIconItem(IconGroupItem* parent, const CamItemInfo& itemInfo)
     : IconItem(parent), d(new CameraIconItemPriv)
 {
     setItemInfo(itemInfo);
-    setThumbnail(thumbnail);
 
     d->hasThumb      = false;
     d->progressTimer = new QTimer(this);
@@ -91,17 +88,6 @@ CameraIconItem::CameraIconItem(IconGroupItem* parent, const CamItemInfo& itemInf
 CameraIconItem::~CameraIconItem()
 {
     delete d;
-}
-
-void CameraIconItem::setThumbnail(const QImage& thumbnail)
-{
-    d->thumbnail = QPixmap::fromImage(thumbnail);
-    d->hasThumb  = true;
-}
-
-bool CameraIconItem::hasValidThumbnail() const
-{
-    return d->hasThumb;
 }
 
 void CameraIconItem::setItemInfo(const CamItemInfo& itemInfo)
@@ -154,13 +140,13 @@ void CameraIconItem::toggleLock()
     update();
 }
 
-void CameraIconItem::calcRect(const QString& itemName, const QString& newName)
+void CameraIconItem::calcRect(const QString& itemName, const QString& newName, const QPixmap& thumb)
 {
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
     const int border     = 8;
     int thumbSize        = view->thumbnailSize() - (2*border);
-    d->pixSize           = d->thumbnail.size();
-    d->pixSize.scale(thumbSize, thumbSize, Qt::KeepAspectRatio);
+    d->pixSize           = thumb.size();
+    d->pixSize.scale(thumbSize+1, thumbSize+1, Qt::KeepAspectRatio);
     d->pixRect           = QRect(0, 0, 0, 0);
     d->textRect          = QRect(0, 0, 0, 0);
     d->extraRect         = QRect(0, 0, 0, 0);
@@ -216,12 +202,6 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& newName)
 QRect CameraIconItem::clickToOpenRect()
 {
     QRect r(rect());
-
-    if (d->thumbnail.isNull())
-    {
-        return d->pixRect.translated(r.x(), r.y());
-    }
-
     QRect pixRect(d->pixRect.x() + (d->pixRect.width()  - d->pixSize.width())  / 2,
                   d->pixRect.y() + (d->pixRect.height() - d->pixSize.height()) / 2,
                   d->pixSize.width(), d->pixSize.height());
@@ -231,6 +211,15 @@ QRect CameraIconItem::clickToOpenRect()
 void CameraIconItem::paintItem(QPainter* p)
 {
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
+    CachedItem item      = view->getThumbInfo(itemInfo());
+
+    CamItemInfo newinf   = item.first;
+    // NOTE: B.K.O #260669: do not overwrite download information have been set before.
+    newinf.downloaded    = itemInfo().downloaded;
+    newinf.downloadName  = itemInfo().downloadName;
+    // NOTE: B.K.O #246336: do not overwrite too the file mtime set previously at camera connection using cameragui settings.
+    newinf.mtime         = itemInfo().mtime;
+    setItemInfo(newinf);
 
     QFont fn(view->font());
     QRect r(rect());
@@ -238,7 +227,7 @@ void CameraIconItem::paintItem(QPainter* p)
     QString itemName     = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->itemInfo.name);
     QString downloadName = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->itemInfo.downloadName);
 
-    calcRect(itemName, downloadName);
+    calcRect(itemName, downloadName, item.second);
 
     p->setPen(isSelected() ? kapp->palette().color(QPalette::HighlightedText)
                            : kapp->palette().color(QPalette::Text));
@@ -246,7 +235,8 @@ void CameraIconItem::paintItem(QPainter* p)
     QRect pixmapDrawRect(d->pixRect.x() + (d->pixRect.width()  - d->pixSize.width())  / 2,
                          d->pixRect.y() + (d->pixRect.height() - d->pixSize.height()) / 2,
                          d->pixSize.width(), d->pixSize.height());
-    p->drawPixmap(pixmapDrawRect.topLeft(), d->thumbnail.scaled(d->pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    p->drawPixmap(pixmapDrawRect.topLeft(), item.second.scaled(d->pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     p->save();
 
     QRegion pixmapClipRegion = QRegion(0, 0, r.width(), r.height()) - QRegion(pixmapDrawRect);

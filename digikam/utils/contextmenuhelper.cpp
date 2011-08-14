@@ -1128,8 +1128,8 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
         }
 
         // check if a BQM action has been triggered
-        for (QMap<int, QAction*>::iterator it = d->queueActions.begin();
-             it != d->queueActions.end(); ++it)
+        for (QMap<int, QAction*>::const_iterator it = d->queueActions.constBegin();
+             it != d->queueActions.constEnd(); ++it)
         {
             if (choice == it.value())
             {

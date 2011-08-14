@@ -197,7 +197,7 @@ void ThumbnailLoadingTask::execute()
         // dispatch image to all listeners, including this
         for (int i=0; i<m_listeners.count(); ++i)
         {
-            ThumbnailLoadingTask* task = dynamic_cast<ThumbnailLoadingTask*>(m_listeners[i]);
+            ThumbnailLoadingTask* task = dynamic_cast<ThumbnailLoadingTask*>(m_listeners.at(i));
 
             if (task)
             {

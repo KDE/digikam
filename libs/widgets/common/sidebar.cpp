@@ -221,7 +221,7 @@ void Sidebar::restore(const QList<QWidget*> thirdWidgetsToRestore, const QList<i
     {
         for (int i=0; i<thirdWidgetsToRestore.size(); ++i)
         {
-            d->splitter->setSize(thirdWidgetsToRestore[i], sizes[i]);
+            d->splitter->setSize(thirdWidgetsToRestore.at(i), sizes.at(i));
         }
     }
 }
@@ -541,7 +541,7 @@ int SidebarSplitter::size(QWidget* widget) const
         return -1;
     }
 
-    return sizes()[index];
+    return sizes().at(index);
 }
 
 void SidebarSplitter::setSize(Sidebar* bar, int size)
@@ -594,7 +594,7 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
     QList<int> sizeList = sizes();
 
     // Is there a sidebar with size 0 before index
-    if (index > 0 && sizeList[index-1] == 0)
+    if (index > 0 && sizeList.at(index-1) == 0)
     {
         QWidget* w = widget(index-1);
         foreach (Sidebar* sidebar, d->sidebars)
@@ -613,7 +613,7 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
     }
 
     // Is there a sidebar with size 0 after index?
-    if (sizeList[index] == 0)
+    if (sizeList.at(index) == 0)
     {
         QWidget* w = widget(index);
         foreach (Sidebar* sidebar, d->sidebars)

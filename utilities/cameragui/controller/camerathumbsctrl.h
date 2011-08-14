@@ -44,29 +44,25 @@ namespace Digikam
 
 class CameraController;
 
+typedef QPair<CamItemInfo, QPixmap> CachedItem;
+
 class CameraThumbsCtrl : public QObject
 {
     Q_OBJECT
 
 public:
 
-    typedef QPair<CamItemInfo, QPixmap> CacheItem;
-
-public:
-
     CameraThumbsCtrl(CameraController* ctrl, QObject* parent);
     ~CameraThumbsCtrl();
 
-    void getThumbsInfo(const CamItemInfoList& list);
+    CachedItem getThumbInfo(const CamItemInfo& info) const;
 
     void setCacheSize(int numberOfItems);
     void clearCache();
 
 Q_SIGNALS:
 
-    void signalInfo(const QString& folder, const QString& file, const CamItemInfo&);
-    void signalThumb(const QString& folder, const QString& file, const QImage&);
-    void signalThumbInfo(const CamItemInfo&, const QImage&);
+    void signalThumbInfoReady(const CamItemInfo&);
 
 private Q_SLOTS:
 
@@ -84,7 +80,7 @@ private:
     void removeItemFromCache(const KUrl& url);
     void putItemToCache(const KUrl& url, const CamItemInfo&, const QPixmap& thumb);
     bool hasItemFromCache(const KUrl& url) const;
-    const CacheItem* retrieveItemFromCache(const KUrl& url) const;
+    const CachedItem* retrieveItemFromCache(const KUrl& url) const;
 
 private:
 

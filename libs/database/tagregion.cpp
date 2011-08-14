@@ -213,6 +213,14 @@ QRect TagRegion::mapFromOriginalSize(const DImg& reducedSizeImage, const QRect& 
     return mapFromOriginalSize(reducedSizeImage.originalSize(), reducedSizeImage.size(), fullSizeDetail);
 }
 
+QRect TagRegion::relativeToAbsolute(const QRectF& region, const QSize& fullSize)
+{
+    return QRectF(region.x() * fullSize.width(),
+                  region.y() * fullSize.height(),
+                  region.width() * fullSize.width(),
+                  region.height() * fullSize.height()).toRect();
+}
+
 QDebug operator<<(QDebug dbg, const TagRegion& r)
 {
     QVariant var = r.toVariant();

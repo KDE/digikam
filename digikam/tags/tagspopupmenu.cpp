@@ -715,9 +715,9 @@ void TagsPopupMenu::buildFlatMenu(KMenu* menu)
 
     for (int i=0; i<shortenedPaths.size(); ++i)
     {
-        QString t = shortenedPaths[i];
+        QString t = shortenedPaths.at(i);
         t.replace('&', "&&");
-        TAlbum* a = AlbumManager::instance()->findTAlbum(ids[i]);
+        TAlbum* a = AlbumManager::instance()->findTAlbum(ids.at(i));
         if (!a)
         {
             continue;

@@ -247,7 +247,7 @@ public:
     DatabaseItem::Status   status;
     DatabaseItem::Category category;
     QDateTime              modificationDate;
-    int                    fileSize;
+    qlonglong              fileSize;
     QString                uniqueHash;
 };
 

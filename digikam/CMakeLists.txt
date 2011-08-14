@@ -43,6 +43,7 @@ SET(digikamcore_LIB_SRCS
 
         # widgets and dialogs
         ${libcommonwidgets_SRCS}
+        ${libitemview_SRCS}
         ${libeditorwidgets_SRCS}
         ${libiccprofileswidgets_SRCS}
         ${libmetadatawidgets_SRCS}

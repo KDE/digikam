@@ -117,7 +117,7 @@ public:
     void setCreationDate(const QDateTime& creationDate);
     void setPathOnDisk(const QString& filePath);
     void setPath(const QString& path);
-    void setUniqueHash(const QString& uniqueHash, int fileSize);
+    void setUniqueHash(const QString& uniqueHash, qlonglong fileSize);
 
     bool hasFileOnDisk() const;
     ///If a file on disk is referenced: Returns the path, without filename, with a trailing slash
@@ -133,7 +133,7 @@ public:
     QDateTime creationDate() const;
     bool hasUniqueHashIdentifier() const;
     QString uniqueHash() const;
-    int fileSize() const;
+    qlonglong fileSize() const;
     QString originalUuid() const;
 
 public:
@@ -156,7 +156,7 @@ public:
     /// The uniqueHash of the referred file
     QString   m_uniqueHash;
     /// The file size of the referred file
-    int       m_fileSize;
+    qlonglong m_fileSize;
     /**
      * A unique identifier designating the _original image_ from which the referred
      * image was created. Typically, this is a RAW or JPEG created by the camera in

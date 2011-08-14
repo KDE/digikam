@@ -244,7 +244,7 @@ void SketchWidget::replayEvents(int index)
 
     for (int i = 0; i <= index; ++i)
     {
-        const DrawEvent& drawEvent = d->drawEventList[i];
+        const DrawEvent& drawEvent = d->drawEventList.at(i);
         drawPath(drawEvent.penWidth, drawEvent.penColor, drawEvent.path);
     }
 
@@ -257,7 +257,7 @@ void SketchWidget::sketchImageToXML(QXmlStreamWriter& writer)
 
     for (int i=0; i<=d->eventIndex; ++i)
     {
-        const DrawEvent& event = d->drawEventList[i];
+        const DrawEvent& event = d->drawEventList.at(i);
 
         // Write the pen size and color
         writer.writeStartElement("Path");

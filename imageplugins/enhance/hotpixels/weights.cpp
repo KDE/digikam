@@ -160,12 +160,12 @@ void Weights::calculateWeights()
 
         for (j = 0; j < (size_t)mPositions.count(); ++j)
         {
-            vector0 [iy * mPositions.count() + j] = polyTerm (iy, mPositions [j].x(),
-                                                    mPositions [j].y(), mPolynomeOrder);
+            vector0 [iy * mPositions.count() + j] = polyTerm (iy, mPositions.at(j).x(),
+                                                    mPositions.at(j).y(), mPolynomeOrder);
 
             for (ix = 0; ix < mCoefficientNumber; ++ix)
                 matrix [iy* mCoefficientNumber + ix] += (vector0 [iy * mPositions.count() + j]
-                                                        * polyTerm (ix, mPositions [j].x(), mPositions[j].y(), mPolynomeOrder));
+                                                        * polyTerm (ix, mPositions.at(j).x(), mPositions.at(j).y(), mPolynomeOrder));
         }
     }
 

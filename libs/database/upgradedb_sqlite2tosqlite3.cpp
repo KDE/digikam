@@ -328,9 +328,9 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
         QString url  = fi.absolutePath();
         QString name = fi.fileName();
 
-        AlbumMap::iterator it1 = albumMap.find(url);
+        AlbumMap::const_iterator it1 = albumMap.constFind(url);
 
-        if (it1 == albumMap.end())
+        if (it1 == albumMap.constEnd())
         {
             kDebug() << "Could not find album with url: " << url;
             kDebug() << "Most likely an external directory. Rejecting.";

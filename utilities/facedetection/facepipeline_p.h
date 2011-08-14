@@ -346,6 +346,8 @@ public:
     void sendFromFilter(const QList<FacePipelineExtendedPackage::Ptr>& packages);
     void skipFromFilter(const QList<ImageInfo>& infosForSkipping);
     void send(FacePipelineExtendedPackage::Ptr package);
+    bool senderFlowControl(FacePipelineExtendedPackage::Ptr package);
+    void receiverFlowControl();
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info);
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info,
                                                   const FacePipelineDatabaseFace&, const DImg& image);
@@ -375,11 +377,13 @@ public:
     QList<QObject*>      pipeline;
     QThread::Priority    priority;
 
-    FaceIface*           iface;
     ThumbnailLoadThread* thumbnailLoadThread;
     bool                 started;
     int                  infosForFiltering;
     int                  packagesOnTheRoad;
+    int                  maxPackagesOnTheRoad;
+
+    QList<FacePipelineExtendedPackage::Ptr> delayedPackages;
 
 public Q_SLOTS:
 

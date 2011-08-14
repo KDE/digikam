@@ -522,9 +522,9 @@ int TagsCache::tagForPath(const QString& tagPath) const
 
         // Check hierarchy, from bottom to top
         bool foundParentTag                 = true;
-        QStringList::iterator parentTagName = tagHierarchy.end();
+        QStringList::const_iterator parentTagName = tagHierarchy.constEnd();
 
-        while (foundParentTag && parentTagName != tagHierarchy.begin())
+        while (foundParentTag && parentTagName != tagHierarchy.constBegin())
         {
             --parentTagName;
 
@@ -816,10 +816,10 @@ QList<int> TagsCache::tagsWithPropertyCached(const QString& property) const
     d->checkProperties();
     {
         QReadLocker locker(&d->lock);
-        QHash<QString, QList<int> >::iterator it;
-        it = d->tagsWithProperty.find(property);
+        QHash<QString, QList<int> >::const_iterator it;
+        it = d->tagsWithProperty.constFind(property);
 
-        if (it != d->tagsWithProperty.end())
+        if (it != d->tagsWithProperty.constEnd())
         {
             return it.value();
         }

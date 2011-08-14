@@ -322,6 +322,11 @@ void NepomukService::enableSyncToNepomuk(bool syncToNepomuk)
 
 void NepomukService::triggerResync()
 {
+    if (!d->isConnected)
+    {
+        return;
+    }
+
     clearSyncedToDigikam();
     clearSyncedToNepomuk();
 
@@ -909,12 +914,12 @@ void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
-        ImageInfo info(fileUrls[i]);
+        ImageInfo info(fileUrls.at(i));
 
         if (!info.isNull())
         {
             infos << info;
-            ratingsForInfos << nepomukToDigikamRating(ratings[i]);
+            ratingsForInfos << nepomukToDigikamRating(ratings.at(i));
         }
     }
 
@@ -928,7 +933,7 @@ void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList
 
         for (int i=0; i<infosSize; ++i)
         {
-            infos[i].setRating(ratingsForInfos[i]);
+            infos[i].setRating(ratingsForInfos.at(i));
         }
     }
 }
@@ -948,12 +953,12 @@ void NepomukService::syncCommentToDigikam(const KUrl::List& fileUrls, const QStr
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
-        ImageInfo info(fileUrls[i]);
+        ImageInfo info(fileUrls.at(i));
 
         if (!info.isNull())
         {
             infos << info;
-            commentsForInfos << comments[i];
+            commentsForInfos << comments.at(i);
         }
     }
 
@@ -968,8 +973,8 @@ void NepomukService::syncCommentToDigikam(const KUrl::List& fileUrls, const QStr
         for (int i=0; i<infosSize; ++i)
         {
             DatabaseAccess access;
-            ImageComments comments = infos[i].imageComments(access);
-            comments.addComment(commentsForInfos[i]);
+            ImageComments comments = infos.at(i).imageComments(access);
+            comments.addComment(commentsForInfos.at(i));
         }
     }
 }
@@ -989,12 +994,12 @@ void NepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList<Q
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
-        ImageInfo info(fileUrls[i]);
+        ImageInfo info(fileUrls.at(i));
 
         if (!info.isNull())
         {
             infos << info;
-            QString tagName = tagnameForNepomukTag(tags[i]);
+            QString tagName = tagnameForNepomukTag(tags.at(i));
             int tagId = bestDigikamTagForTagName(info, tagName);
 
             if (tagId)
@@ -1012,7 +1017,7 @@ void NepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList<Q
 
         for (int i=0; i<infosSize; ++i)
         {
-            infos[i].setTag(tagIdsForInfos[i]);
+            infos[i].setTag(tagIdsForInfos.at(i));
         }
     }
 }

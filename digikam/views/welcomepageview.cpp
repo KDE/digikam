@@ -117,7 +117,7 @@ QString WelcomePageView::infoPage() const
 
     for (int i = 0 ; i < newFeatures.count() ; ++i)
     {
-        featureItems += i18n("<li>%1</li>\n", newFeatures[i] );
+        featureItems += i18n("<li>%1</li>\n", newFeatures.at(i) );
     }
 
     QString info =

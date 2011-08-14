@@ -589,7 +589,7 @@ void TagPropertiesFilterModel::removeListOnlyProperty(const QString& property)
         return;
     }
 
-    m_propertiesWhiteList.removeAll(property);
+    m_propertiesWhiteList.remove(property);
     invalidateFilter();
     emit filterChanged();
 }
@@ -613,7 +613,7 @@ void TagPropertiesFilterModel::removeDoNotListProperty(const QString& property)
         return;
     }
 
-    m_propertiesBlackList.removeAll(property);
+    m_propertiesBlackList.remove(property);
     invalidateFilter();
     emit filterChanged();
 }

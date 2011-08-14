@@ -207,8 +207,8 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
 void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
                                                 const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const
 {
-    QPushButton* pushButton = static_cast<QPushButton*>(widgets[0]);
-    QToolButton* toolButton = static_cast<QToolButton*>(widgets[1]);
+    QPushButton* pushButton = static_cast<QPushButton*>(widgets.at(0));
+    QToolButton* toolButton = static_cast<QToolButton*>(widgets.at(1));
 
     if (index.data(SetupCollectionModel::IsCategoryRole).toBool())
     {
@@ -411,7 +411,7 @@ void SetupCollectionModel::apply()
 
     for (int i=0; i<m_collections.count(); ++i)
     {
-        const Item& item = m_collections[i];
+        const Item& item = m_collections.at(i);
 
         if (item.deleted && !item.location.isNull())
             // if item was deleted and had a valid location, i.e. exists in DB
@@ -781,7 +781,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
     }
     else
     {
-        const Item& item = m_collections[index.internalId()];
+        const Item& item = m_collections.at(index.internalId());
 
         switch (index.column())
         {
@@ -999,7 +999,7 @@ QModelIndex SetupCollectionModel::index(int row, int column, const QModelIndex& 
 
         for (int i=0; i<m_collections.count(); ++i)
         {
-            const Item& item = m_collections[i];
+            const Item& item = m_collections.at(i);
 
             if (!item.deleted && item.parentId == parentId)
             {
@@ -1028,7 +1028,7 @@ QModelIndex SetupCollectionModel::parent(const QModelIndex& index) const
         return QModelIndex();    // one of the three toplevel items
     }
 
-    const Item& item = m_collections[index.internalId()];
+    const Item& item = m_collections.at(index.internalId());
 
     return createIndex(item.parentId, 0, -1);
 }
@@ -1053,11 +1053,11 @@ QList<QModelIndex> SetupCollectionModel::categoryIndexes() const
 QModelIndex SetupCollectionModel::indexForId(int id, int column) const
 {
     int row = 0;
-    const Item& indexItem = m_collections[id];
+    const Item& indexItem = m_collections.at(id);
 
     for (int i=0; i<m_collections.count(); ++i)
     {
-        const Item& item = m_collections[i];
+        const Item& item = m_collections.at(i);
 
         if (!item.deleted && item.parentId == indexItem.parentId)
         {

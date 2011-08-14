@@ -1248,7 +1248,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
                 subFolder += '/';
             }
 
-            subFolder += folderList[i];
+            subFolder += folderList.at(i);
             deleteAllItems(subFolder);
         }
     }

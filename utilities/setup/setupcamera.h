@@ -47,6 +47,7 @@ public:
     ~SetupCamera();
 
     void applySettings();
+    bool checkSettings();
 
 private Q_SLOTS:
 

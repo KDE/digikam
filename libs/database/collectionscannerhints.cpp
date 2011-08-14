@@ -220,7 +220,7 @@ QString ItemCopyMoveHint::dstName(qlonglong id) const
     }
 
     int index = m_srcIds.indexOf(id);
-    return m_dstNames[index];
+    return m_dstNames.at(index);
 }
 
 ItemCopyMoveHint& ItemCopyMoveHint::operator<<(const QDBusArgument& argument)

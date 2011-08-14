@@ -202,11 +202,6 @@ public:
 
         // Remove all ids from the fully created signatureCache that are not needed for the duplicates search.
         // This is usually faster then starting a query for every single id in imageIds.
-        //
-        // It might look like a waste of resources, but I tested this quite intense.
-        // Getting all signatures and removing the not wanted ones is really more efficient
-        // then doing X queries (where X = imageIds.count())
-
         for (SignatureCache::iterator it = signatureCache->begin();
              it != signatureCache->end(); )
         {
@@ -230,7 +225,6 @@ public:
         {
             signatureCache = new SignatureCache();
         }
-
         useSignatureCache = cache;
 
         // stop here if we disable cached signatures
@@ -832,7 +826,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QSet<qlonglo
 {
     QMap< qlonglong, QList<qlonglong> > resultsMap;
     QSet<qlonglong>::const_iterator     it;
-    QList<qlonglong>                    list;
+    QList<qlonglong>                    bestMatchesList;
     QSet<qlonglong>                     resultsCandidates;
 
     int                                 total        = 0;
@@ -853,22 +847,17 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QSet<qlonglo
     {
         if (!resultsCandidates.contains(*it))
         {
-            //list = bestMatchesForImage(*it, 20, ScannedSketch);
-            // find images with at least 90% similarity
-            list = bestMatchesForImageWithThreshold(*it, requiredPercentage, ScannedSketch);
+            // find images with required similarity
+            bestMatchesList = bestMatchesForImageWithThreshold(*it, requiredPercentage, ScannedSketch);
 
-            if (!list.isEmpty())
+            if (!bestMatchesList.isEmpty())
             {
                 // the list will usually contain one image: the original. Filter out.
-                if (!(list.count() == 1 && list.first() == *it))
+                if (!(bestMatchesList.count() == 1 && bestMatchesList.first() == *it))
                 {
-                    resultsMap.insert(*it, list);
+                    resultsMap.insert(*it, bestMatchesList);
                     resultsCandidates << *it;
-
-                    foreach (const qlonglong& id, list)
-                    {
-                        resultsCandidates << id;
-                    }
+                    resultsCandidates.unite(bestMatchesList.toSet());
                 }
             }
         }

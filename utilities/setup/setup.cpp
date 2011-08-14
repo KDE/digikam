@@ -37,6 +37,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kvbox.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -323,9 +324,6 @@ Setup::Setup(QWidget* parent)
         }
     }
 
-    connect(this, SIGNAL(okClicked()),
-            this, SLOT(slotOkClicked()) );
-
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
     restoreDialogSize(group);
@@ -442,10 +440,25 @@ bool Setup::execTemplateEditor(QWidget* parent, const Template& t)
     return success;
 }
 
-void Setup::slotOkClicked()
+void Setup::slotButtonClicked(int button)
 {
+    if (button == KDialog::Ok)
+        okClicked();
+    else
+        KDialog::slotButtonClicked(button);
+}
+
+void Setup::okClicked()
+{
+    if (!d->cameraPage->checkSettings())
+    {
+        showPage(CameraPage);
+        return;
+    }
+
     kapp->setOverrideCursor(Qt::WaitCursor);
 
+    d->cameraPage->applySettings();
     d->databasePage->applySettings();
     d->collectionsPage->applySettings();
     d->albumViewPage->applySettings();
@@ -454,7 +467,6 @@ void Setup::slotOkClicked()
     d->templatePage->applySettings();
     d->categoryPage->applySettings();
     d->mimePage->applySettings();
-    d->cameraPage->applySettings();
     d->lighttablePage->applySettings();
     d->editorPage->applySettings();
     d->dcrawPage->applySettings();
@@ -491,7 +503,7 @@ void Setup::slotOkClicked()
         thumbsGenerator->show();
     }
 
-    close();
+    accept();
 }
 
 void Setup::showPage(Setup::Page page)

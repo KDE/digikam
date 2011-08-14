@@ -88,6 +88,18 @@ public:
     void completeScan();
 
     /**
+     * If you enable deferred file scanning for a completeScan(), new files
+     * will not be scanned. The relevant albums are available from
+     * deferredAlbumPaths() when completeScan() has finished.
+     * You need to call finishCompleteScan() afterwards with the list
+     * to get the same complete scan than undeferred completeScan().
+     */
+    void finishCompleteScan(const QStringList& albumPaths);
+
+    void setDeferredFileScanning(bool defer);
+    QStringList deferredAlbumPaths() const;
+
+    /**
      * Carries out a partial scan on the specified path of the collection.
      * The includes scanning for new files + albums and updating modified file data.
      * Files no longer found in the specified path however are not completely
@@ -167,6 +179,7 @@ public:
 
 protected:
 
+    void completeScanCleanupPart();
     void mainEntryPoint(bool complete);
     void scanForStaleAlbums(const QList<CollectionLocation>& locations);
     void scanForStaleAlbums(const QList<int>& locationIdsToScan);

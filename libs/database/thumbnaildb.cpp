@@ -98,14 +98,14 @@ static void fillThumbnailInfo(const QList<QVariant> &values, DatabaseThumbnailIn
         return;
     }
 
-    info.id               = values[0].toInt();
-    info.type             = (DatabaseThumbnail::Type)values[1].toInt();
-    info.modificationDate = values[2].isNull() ? QDateTime() : QDateTime::fromString(values[2].toString(), Qt::ISODate);
-    info.orientationHint  = values[3].toInt();
-    info.data             = values[4].toByteArray();
+    info.id               = values.at(0).toInt();
+    info.type             = (DatabaseThumbnail::Type)values.at(1).toInt();
+    info.modificationDate = values.at(2).isNull() ? QDateTime() : QDateTime::fromString(values.at(2).toString(), Qt::ISODate);
+    info.orientationHint  = values.at(3).toInt();
+    info.data             = values.at(4).toByteArray();
 }
 
-DatabaseThumbnailInfo ThumbnailDB::findByHash(const QString& uniqueHash, int fileSize)
+DatabaseThumbnailInfo ThumbnailDB::findByHash(const QString& uniqueHash, qlonglong fileSize)
 {
     QList<QVariant> values;
     d->db->execSql( QString("SELECT id, type, modificationDate, orientationHint, data "
@@ -210,7 +210,7 @@ QHash<QString, int> ThumbnailDB::getFilePathsWithThumbnail()
     return filePaths;
 }
 
-DatabaseCoreBackend::QueryState ThumbnailDB::insertUniqueHash(const QString& uniqueHash, int fileSize, int thumbId)
+DatabaseCoreBackend::QueryState ThumbnailDB::insertUniqueHash(const QString& uniqueHash, qlonglong fileSize, int thumbId)
 {
     return d->db->execSql("REPLACE INTO UniqueHashes (uniqueHash, fileSize, thumbId) VALUES (?,?,?)",
                           uniqueHash, fileSize, thumbId);
@@ -228,7 +228,7 @@ DatabaseCoreBackend::QueryState ThumbnailDB::insertCustomIdentifier(const QStrin
                           path, thumbId);
 }
 
-DatabaseCoreBackend::QueryState ThumbnailDB::removeByUniqueHash(const QString& uniqueHash, int fileSize)
+DatabaseCoreBackend::QueryState ThumbnailDB::removeByUniqueHash(const QString& uniqueHash, qlonglong fileSize)
 {
     // UniqueHashes + FilePaths entries are removed by trigger
     QMap<QString, QVariant> parameters;

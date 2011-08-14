@@ -659,7 +659,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
 
     for (int i = 0 ; i < (int)commentsByLines.count() ; ++i )
     {
-        printInfoText(p, offset, commentsByLines[i]);
+        printInfoText(p, offset, commentsByLines.at(i));
     }
 }
 

@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "downloadsettingscontainer.h"
+#include "downloadsettings.h"
 #include "camiteminfo.h"
 #include "dmetadata.h"
 #include "dkcamera.h"
@@ -85,7 +85,7 @@ public:
     void getThumbsInfo(const CamItemInfoList& infoList);
 
     void downloadPrep();
-    void download(const DownloadSettingsContainer& downloadSettings);
+    void download(const DownloadSettings& downloadSettings);
     void upload(const QFileInfo& srcFileInfo, const QString& destFile, const QString& destFolder);
     void deleteFile(const QString& folder, const QString& file);
     void lockFile(const QString& folder, const QString& file, bool lock);

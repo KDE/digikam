@@ -29,6 +29,8 @@
 // Qt includes
 
 #include <QApplication>
+#include <QFocusEvent>
+#include <QMouseEvent>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -75,6 +77,25 @@ public:
 
     AssignNameWidget*         assignNameWidget;
     QPersistentModelIndex     index;
+
+    bool isChildWidget(QWidget* widget, QWidget* parent)
+    {
+        if (!parent)
+        {
+            return false;
+        }
+        // isAncestorOf may not work if widgets are located in different windows
+        while (widget)
+        {
+            if (widget == parent)
+            {
+                return true;
+            }
+
+            widget = widget->parentWidget();
+        }
+        return false;
+    }
 };
 
 AssignNameOverlay::AssignNameOverlay(QObject* parent)
@@ -102,6 +123,7 @@ QWidget* AssignNameOverlay::createWidget()
     d->assignNameWidget->setTagEntryWidgetMode(AssignNameWidget::AddTagsLineEditMode);
     d->assignNameWidget->setLayoutMode(AssignNameWidget::Compact);
     d->assignNameWidget->setModel(&d->tagModel, &d->filteredModel, &d->filterModel);
+    d->assignNameWidget->lineEdit()->installEventFilter(this);
 
     //new StyleSheetDebugger(d->assignNameWidget);
 
@@ -243,19 +265,15 @@ void AssignNameOverlay::showOnIndex(const QModelIndex& index)
 
 void AssignNameOverlay::viewportLeaveEvent(QObject* o, QEvent* e)
 {
-    // Dont hide when hovering the pop-up of the line edit.
-    // isAncestorOf does not work: different window
-    QWidget* widget = qApp->widgetAt(QCursor::pos());
-    QWidget* parent = assignNameWidget();
-
-    while (widget)
+    if (isPersistent() && m_widget->isVisible())
     {
-        if (widget == parent)
-        {
-            return;
-        }
+        return;
+    }
 
-        widget = widget->parentWidget();
+    // Dont hide when hovering the pop-up of the line edit.
+    if (d->isChildWidget(qApp->widgetAt(QCursor::pos()), assignNameWidget()))
+    {
+        return;
     }
 
     PersistentWidgetDelegateOverlay::viewportLeaveEvent(o, e);
@@ -280,7 +298,7 @@ void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ImageInf
     }
     else if (action.shallCreateNewTag())
     {
-        tagId = d->faceIface.getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
+        tagId = FaceTags::getOrCreateTagForPerson(action.newTagName(), action.parentTagId());
     }
 
     if (tagId)
@@ -317,6 +335,26 @@ void AssignNameOverlay::setFocusOnWidget()
         assignNameWidget()->lineEdit()->selectAll();
         assignNameWidget()->lineEdit()->setFocus();
     }
+}
+
+bool AssignNameOverlay::eventFilter(QObject* o, QEvent* e)
+{
+    switch (e->type())
+    {
+        case QEvent::MouseButtonPress:
+            enterPersistentMode();
+            break;
+        case QEvent::FocusOut:
+        {
+            if (!d->isChildWidget(QApplication::focusWidget(), assignNameWidget()))
+            {
+                leavePersistentMode();
+            }
+        }
+        default: break;
+    }
+
+    return PersistentWidgetDelegateOverlay::eventFilter(o, e);
 }
 
 } // namespace Digikam

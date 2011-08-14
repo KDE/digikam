@@ -173,7 +173,7 @@ void SetupCategory::slotRepCategory()
 
     if (!d->albumCategoryBox->selectedItems().isEmpty())
     {
-        d->albumCategoryBox->selectedItems()[0]->setText(newCategory);
+        d->albumCategoryBox->selectedItems().at(0)->setText(newCategory);
         d->categoryEdit->clear();
     }
 }
@@ -182,7 +182,7 @@ void SetupCategory::slotCategorySelectionChanged()
 {
     if (!d->albumCategoryBox->selectedItems().isEmpty())
     {
-        d->categoryEdit->setText(d->albumCategoryBox->selectedItems()[0]->text());
+        d->categoryEdit->setText(d->albumCategoryBox->selectedItems().at(0)->text());
         d->delCategoryButton->setEnabled(true);
         d->repCategoryButton->setEnabled(true);
     }

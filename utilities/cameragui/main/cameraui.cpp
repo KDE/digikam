@@ -97,9 +97,7 @@
 #include "thumbnailsize.h"
 #include "sidebar.h"
 #include "thememanager.h"
-#include "templateselector.h"
 #include "setup.h"
-#include "downloadsettingscontainer.h"
 #include "downloadhistory.h"
 #include "dzoombar.h"
 #include "imagepropertiessidebarcamgui.h"
@@ -241,86 +239,14 @@ void CameraUI::setupUserArea()
 
     // -- Albums Auto-creation options -----------------------------------------
 
-    QWidget* albumBox      = new QWidget(d->advBox);
-    QVBoxLayout* albumVlay = new QVBoxLayout(albumBox);
-    d->autoAlbumExtCheck   = new QCheckBox(i18n("Extension-based sub-albums"), albumBox);
-    d->autoAlbumDateCheck  = new QCheckBox(i18n("Date-based sub-albums"), albumBox);
-    KHBox* hbox1           = new KHBox(albumBox);
-    d->folderDateLabel     = new QLabel(i18n("Date format:"), hbox1);
-    d->folderDateFormat    = new KComboBox(hbox1);
-    d->folderDateFormat->insertItem(CameraUIPriv::IsoDateFormat,   i18n("ISO"));
-    d->folderDateFormat->insertItem(CameraUIPriv::TextDateFormat,  i18n("Full Text"));
-    d->folderDateFormat->insertItem(CameraUIPriv::LocalDateFormat, i18n("Local Settings"));
-
-    albumVlay->addWidget(d->autoAlbumExtCheck);
-    albumVlay->addWidget(d->autoAlbumDateCheck);
-    albumVlay->addWidget(hbox1);
-    albumVlay->addStretch();
-    albumVlay->setMargin(KDialog::spacingHint());
-    albumVlay->setSpacing(KDialog::spacingHint());
-
-    albumBox->setWhatsThis( i18n("Set how digiKam creates albums automatically when downloading."));
-    d->autoAlbumExtCheck->setWhatsThis( i18n("Enable this option if you want to download your "
-                                             "pictures into automatically created file extension-based sub-albums of the destination "
-                                             "album. This way, you can separate JPEG and RAW files as they are downloaded from your camera."));
-    d->autoAlbumDateCheck->setWhatsThis( i18n("Enable this option if you want to "
-                                              "download your pictures into automatically created file date-based sub-albums "
-                                              "of the destination album."));
-    d->folderDateFormat->setWhatsThis( i18n("<p>Select your preferred date format used to "
-                                            "create new albums. The options available are:</p>"
-                                            "<p><b>ISO</b>: the date format is in accordance with ISO 8601 "
-                                            "(YYYY-MM-DD). E.g.: <i>2006-08-24</i></p>"
-                                            "<p><b>Full Text</b>: the date format is in a user-readable string. "
-                                            "E.g.: <i>Thu Aug 24 2006</i></p>"
-                                            "<p><b>Local Settings</b>: the date format depending on KDE control panel settings.</p>"));
-
-    d->advBox->addItem(albumBox, SmallIcon("folder-new"), i18n("Auto-creation of Albums"),
+    d->albumCustomizer = new AlbumCustomizer(d->advBox);
+    d->advBox->addItem(d->albumCustomizer, SmallIcon("folder-new"), i18n("Auto-creation of Albums"),
                        QString("AlbumBox"), false);
 
     // -- On the Fly options ---------------------------------------------------
 
-    QWidget* onFlyBox      = new QWidget(d->advBox);
-    QVBoxLayout* onFlyVlay = new QVBoxLayout(onFlyBox);
-    d->templateSelector    = new TemplateSelector(onFlyBox);
-    d->fixDateTimeCheck    = new QCheckBox(i18n("Fix internal date && time"), onFlyBox);
-    d->dateTimeEdit        = new DDateTimeEdit(onFlyBox, "datepicker");
-    d->autoRotateCheck     = new QCheckBox(i18n("Auto-rotate/flip image"), onFlyBox);
-    d->convertJpegCheck    = new QCheckBox(i18n("Convert to lossless file format"), onFlyBox);
-    KHBox* hbox2           = new KHBox(onFlyBox);
-    d->formatLabel         = new QLabel(i18n("New image format:"), hbox2);
-    d->losslessFormat      = new KComboBox(hbox2);
-    d->losslessFormat->insertItem(0, "PNG");
-    d->losslessFormat->insertItem(1, "TIF");
-    d->losslessFormat->insertItem(2, "JP2");
-    d->losslessFormat->insertItem(3, "PGF");
-
-    onFlyVlay->addWidget(d->templateSelector);
-    onFlyVlay->addWidget(d->fixDateTimeCheck);
-    onFlyVlay->addWidget(d->dateTimeEdit);
-    onFlyVlay->addWidget(d->autoRotateCheck);
-    onFlyVlay->addWidget(d->convertJpegCheck);
-    onFlyVlay->addWidget(hbox2);
-    onFlyVlay->addStretch();
-    onFlyVlay->setMargin(KDialog::spacingHint());
-    onFlyVlay->setSpacing(KDialog::spacingHint());
-
-    onFlyBox->setWhatsThis( i18n("Set here all options to fix/transform JPEG files automatically "
-                                 "as they are downloaded."));
-    d->autoRotateCheck->setWhatsThis( i18n("Enable this option if you want images automatically "
-                                           "rotated or flipped using EXIF information provided by the camera."));
-    d->templateSelector->setWhatsThis( i18n("Select here which metadata template you want to apply "
-                                            "to images."));
-    d->fixDateTimeCheck->setWhatsThis( i18n("Enable this option to set date and time metadata "
-                                            "tags to the right values if your camera does not set "
-                                            "these tags correctly when pictures are taken. The values will "
-                                            "be saved in the DateTimeDigitized and DateTimeCreated EXIF, XMP, and IPTC tags."));
-    d->convertJpegCheck->setWhatsThis( i18n("Enable this option to automatically convert "
-                                            "all JPEG files to a lossless image format. <b>Note:</b> Image conversion can take a "
-                                            "while on a slow computer."));
-    d->losslessFormat->setWhatsThis( i18n("Select your preferred lossless image file format to "
-                                          "convert to. <b>Note:</b> All metadata will be preserved during the conversion."));
-
-    d->advBox->addItem(onFlyBox, SmallIcon("system-run"), i18n("On the Fly Operations (JPEG only)"),
+    d->advancedSettings = new AdvancedSettings(d->advBox);
+    d->advBox->addItem(d->advancedSettings, SmallIcon("system-run"), i18n("On the Fly Operations (JPEG only)"),
                        QString("OnFlyBox"), true);
     d->advBox->addStretch();
 
@@ -388,6 +314,7 @@ void CameraUI::setupActions()
     // -----------------------------------------------------------
 
     d->selectLockedItemsAction = new KAction(KIcon("object-locked"), i18n("Select Locked Items"), this);
+    d->selectLockedItemsAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
     connect(d->selectLockedItemsAction, SIGNAL(triggered()), d->view, SLOT(slotSelectLocked()));
     actionCollection()->addAction("cameraui_selectlockeditems", d->selectLockedItemsAction);
 
@@ -400,7 +327,14 @@ void CameraUI::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->downloadSelectedAction = new KAction(KIcon("computer"), i18n("Download Selected"), this);
+    d->downloadNewAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Download New"), this);
+    d->downloadNewAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_N));
+    connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
+    actionCollection()->addAction("cameraui_imagedownloadnew", d->downloadNewAction);
+
+    // -----------------------------------------------------------------
+
+    d->downloadSelectedAction = new KAction(i18n("Download Selected"), this);
     connect(d->downloadSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadSelected()));
     actionCollection()->addAction("cameraui_imagedownloadselected", d->downloadSelectedAction);
     d->downloadSelectedAction->setEnabled(false);
@@ -410,6 +344,13 @@ void CameraUI::setupActions()
     d->downloadAllAction = new KAction(i18n("Download All"), this);
     connect(d->downloadAllAction, SIGNAL(triggered()), this, SLOT(slotDownloadAll()));
     actionCollection()->addAction("cameraui_imagedownloadall", d->downloadAllAction);
+
+    // -------------------------------------------------------------------------
+
+    d->downloadDelNewAction = new KAction(i18n("Download/Delete New"), this);
+    d->downloadDelNewAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
+    connect(d->downloadDelNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteNew()));
+    actionCollection()->addAction("cameraui_imagedownloaddeletenew", d->downloadDelNewAction);
 
     // -----------------------------------------------------------------
 
@@ -427,12 +368,14 @@ void CameraUI::setupActions()
     // -------------------------------------------------------------------------
 
     d->uploadAction = new KAction(KIcon("media-flash-smart-media"), i18n("Upload..."), this);
+    d->uploadAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_U));
     connect(d->uploadAction, SIGNAL(triggered()), this, SLOT(slotUpload()));
     actionCollection()->addAction("cameraui_imageupload", d->uploadAction);
 
     // -------------------------------------------------------------------------
 
     d->lockAction = new KAction(KIcon("object-locked"), i18n("Toggle Lock"), this);
+    d->lockAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
     connect(d->lockAction, SIGNAL(triggered()), this, SLOT(slotToggleLock()));
     actionCollection()->addAction("cameraui_imagelock", d->lockAction);
 
@@ -455,6 +398,12 @@ void CameraUI::setupActions()
     d->deleteAllAction = new KAction(i18n("Delete All"), this);
     connect(d->deleteAllAction, SIGNAL(triggered()), this, SLOT(slotDeleteAll()));
     actionCollection()->addAction("cameraui_imagedeleteall", d->deleteAllAction);
+
+    // -------------------------------------------------------------------------
+
+    d->deleteNewAction = new KAction(i18n("Delete New"), this);
+    connect(d->deleteNewAction, SIGNAL(triggered()), this, SLOT(slotDeleteNew()));
+    actionCollection()->addAction("cameraui_imagedeletenew", d->deleteNewAction);
 
     // -- Last Photo First menu actions --------------------------------------------
 
@@ -482,7 +431,7 @@ void CameraUI::setupActions()
                                                         "cameraui_fullscreen", this, SLOT(slotToggleFullScreen()));
 
     d->showLogAction = new KToggleAction(KIcon("view-history"), i18n("Show History"), this);
-    d->showLogAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
+    d->showLogAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_H));
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     actionCollection()->addAction("cameraui_showlog", d->showLogAction);
 
@@ -537,26 +486,8 @@ void CameraUI::setupActions()
 
 void CameraUI::setupConnections()
 {
-    connect(d->autoAlbumDateCheck, SIGNAL(toggled(bool)),
-            d->folderDateFormat, SLOT(setEnabled(bool)));
-
-    connect(d->autoAlbumDateCheck, SIGNAL(toggled(bool)),
-            d->folderDateLabel, SLOT(setEnabled(bool)));
-
-    connect(d->convertJpegCheck, SIGNAL(toggled(bool)),
-            d->losslessFormat, SLOT(setEnabled(bool)));
-
-    connect(d->convertJpegCheck, SIGNAL(toggled(bool)),
-            d->formatLabel, SLOT(setEnabled(bool)));
-
-    connect(d->convertJpegCheck, SIGNAL(toggled(bool)),
+    connect(d->advancedSettings, SIGNAL(signalDownloadNameChanged()),
             d->view, SLOT(slotDownloadNameChanged()));
-
-    connect(d->losslessFormat, SIGNAL(activated(int)),
-            d->view, SLOT(slotDownloadNameChanged()));
-
-    connect(d->fixDateTimeCheck, SIGNAL(toggled(bool)),
-            d->dateTimeEdit, SLOT(setEnabled(bool)));
 
     connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
             this, SLOT(slotHistoryEntryClicked(QVariant)));
@@ -595,9 +526,6 @@ void CameraUI::setupConnections()
 
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
-
-    connect(d->view, SIGNAL(signalPrepareRepaint(const CamItemInfoList&)),
-            this, SLOT(slotRequestThumbnails(const CamItemInfoList&)));
 
     connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
             d->view, SLOT(slotFirstItem()));
@@ -718,15 +646,7 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     // Setup Thumbnails controller -------------------------------------------------------
 
     d->camThumbsCtrl = new CameraThumbsCtrl(d->controller, this);
-
-    connect(d->camThumbsCtrl, SIGNAL(signalThumbInfo(CamItemInfo, QImage)),
-            this, SLOT(slotThumbInfo(CamItemInfo, QImage)));
-
-    connect(d->camThumbsCtrl, SIGNAL(signalThumb(QString, QString, QImage)),
-            this, SLOT(slotThumb(QString, QString, QImage)));
-
-    connect(d->camThumbsCtrl, SIGNAL(signalInfo(QString, QString, CamItemInfo)),
-            this, SLOT(slotInfo(QString, QString, CamItemInfo)));
+    d->view->setThumbControler(d->camThumbsCtrl);
 }
 
 void CameraUI::setupAccelerators()
@@ -736,19 +656,13 @@ void CameraUI::setupAccelerators()
 void CameraUI::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Camera Settings");
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    d->autoRotateCheck->setChecked(group.readEntry("AutoRotate",             true));
-    d->autoAlbumDateCheck->setChecked(group.readEntry("AutoAlbumDate",       false));
-    d->autoAlbumExtCheck->setChecked(group.readEntry("AutoAlbumExt",         false));
-    d->fixDateTimeCheck->setChecked(group.readEntry("FixDateTime",           false));
-    d->templateSelector->setTemplateIndex(group.readEntry("Template",        0));
-    d->convertJpegCheck->setChecked(group.readEntry("ConvertJpeg",           false));
-    d->losslessFormat->setCurrentIndex(group.readEntry("LossLessFormat",     0));   // PNG by default
-    d->folderDateFormat->setCurrentIndex(group.readEntry("FolderDateFormat", (int)CameraUIPriv::IsoDateFormat));
-    d->view->setThumbnailSize(group.readEntry("ThumbnailSize",               (int)ThumbnailSize::Large));
-    d->showLogAction->setChecked(group.readEntry("ShowLog",                  false));
-    d->lastPhotoFirstAction->setChecked(group.readEntry("LastPhotoFirst",    true));
+    d->view->setThumbnailSize(group.readEntry("ThumbnailSize",            (int)ThumbnailSize::Large));
+    d->showLogAction->setChecked(group.readEntry("ShowLog",               false));
+    d->lastPhotoFirstAction->setChecked(group.readEntry("LastPhotoFirst", true));
+    d->albumCustomizer->readSettings(group);
+    d->advancedSettings->readSettings(group);
 
 #if KDCRAW_VERSION >= 0x020000
     d->advBox->readSettings(group);
@@ -758,30 +672,19 @@ void CameraUI::readSettings()
 
     d->splitter->restoreState(group);
 
-    d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
-    d->losslessFormat->setEnabled(convertLosslessJpegFiles());
-    d->formatLabel->setEnabled(convertLosslessJpegFiles());
-    d->folderDateFormat->setEnabled(d->autoAlbumDateCheck->isChecked());
-    d->folderDateLabel->setEnabled(d->autoAlbumDateCheck->isChecked());
     slotShowLog();
 }
 
 void CameraUI::saveSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Camera Settings");
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry("AutoRotate",          d->autoRotateCheck->isChecked());
-    group.writeEntry("AutoAlbumDate",       d->autoAlbumDateCheck->isChecked());
-    group.writeEntry("AutoAlbumExt",        d->autoAlbumExtCheck->isChecked());
-    group.writeEntry("FixDateTime",         d->fixDateTimeCheck->isChecked());
-    group.writeEntry("Template",            d->templateSelector->getTemplateIndex());
-    group.writeEntry("ConvertJpeg",         convertLosslessJpegFiles());
-    group.writeEntry("LossLessFormat",      d->losslessFormat->currentIndex());
-    group.writeEntry("ThumbnailSize",       d->view->thumbnailSize());
-    group.writeEntry("FolderDateFormat",    d->folderDateFormat->currentIndex());
-    group.writeEntry("ShowLog",             d->showLogAction->isChecked());
-    group.writeEntry("LastPhotoFirst",      d->lastPhotoFirstAction->isChecked());
+    group.writeEntry("ThumbnailSize",  d->view->thumbnailSize());
+    group.writeEntry("ShowLog",        d->showLogAction->isChecked());
+    group.writeEntry("LastPhotoFirst", d->lastPhotoFirstAction->isChecked());
+    d->albumCustomizer->saveSettings(group);
+    d->advancedSettings->saveSettings(group);
 
 #if KDCRAW_VERSION >= 0x020000
     d->advBox->writeSettings(group);
@@ -809,24 +712,14 @@ bool CameraUI::isClosed() const
     return d->closed;
 }
 
-bool CameraUI::autoRotateJpegFiles() const
-{
-    return d->autoRotateCheck->isChecked();
-}
-
-bool CameraUI::convertLosslessJpegFiles() const
-{
-    return d->convertJpegCheck->isChecked();
-}
-
-QString CameraUI::losslessFormat() const
-{
-    return d->losslessFormat->currentText();
-}
-
 QString CameraUI::cameraTitle() const
 {
     return d->cameraTitle;
+}
+
+DownloadSettings CameraUI::downloadSettings() const
+{
+    return d->advancedSettings->settings();
 }
 
 void CameraUI::slotCancelButton()
@@ -871,10 +764,10 @@ void CameraUI::moveEvent(QMoveEvent* e)
 
 void CameraUI::slotClose()
 {
-    /*FIXME
-        if (dialogClosed())
-            reject();
-    */
+/*FIXME
+    if (dialogClosed())
+        reject();
+*/
 }
 
 bool CameraUI::dialogClosed()
@@ -971,20 +864,33 @@ void CameraUI::slotBusy(bool val)
         // d->renameCustomizer->restoreFocus();
 
         d->uploadAction->setEnabled(d->controller->cameraUploadSupport());
+
+        d->downloadSelectedAction->setEnabled(true);
+        d->downloadDelSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->downloadNewAction->setEnabled(true);
         d->downloadAllAction->setEnabled(true);
         d->downloadDelAllAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->downloadDelNewAction->setEnabled(d->controller->cameraDeleteSupport());
+
+        d->deleteNewAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->deleteSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
         d->deleteAllAction->setEnabled(d->controller->cameraDeleteSupport());
-        d->selectAllAction->setEnabled(true);
-        d->selectNoneAction->setEnabled(true);
-        d->selectInvertAction->setEnabled(true);
+
         d->selectNewItemsAction->setEnabled(true);
+        d->selectAllAction->setEnabled(true);
+        d->selectInvertAction->setEnabled(true);
         d->selectLockedItemsAction->setEnabled(true);
+        d->selectNoneAction->setEnabled(true);
+
+        d->lockAction->setEnabled(true);
+        d->markAsDownloadedAction->setEnabled(true);
         d->cameraInfoAction->setEnabled(true);
         d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
+        d->imageViewAction->setEnabled(true);
 
         // selection-dependent update of lockAction, markAsDownloadedAction,
         // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
-        slotNewSelection(d->view->countSelected()>0);
+        slotNewSelection(d->view->countSelected() > 0);
 
         d->anim->stop();
         d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
@@ -1021,17 +927,24 @@ void CameraUI::slotBusy(bool val)
         //d->advBox->setEnabled(false);
 
         d->uploadAction->setEnabled(false);
+
         d->downloadSelectedAction->setEnabled(false);
         d->downloadDelSelectedAction->setEnabled(false);
+        d->downloadNewAction->setEnabled(false);
         d->downloadAllAction->setEnabled(false);
         d->downloadDelAllAction->setEnabled(false);
+        d->downloadDelNewAction->setEnabled(false);
+
+        d->deleteNewAction->setEnabled(false);
         d->deleteSelectedAction->setEnabled(false);
         d->deleteAllAction->setEnabled(false);
-        d->selectAllAction->setEnabled(false);
-        d->selectNoneAction->setEnabled(false);
-        d->selectInvertAction->setEnabled(false);
+
         d->selectNewItemsAction->setEnabled(false);
+        d->selectAllAction->setEnabled(false);
+        d->selectInvertAction->setEnabled(false);
         d->selectLockedItemsAction->setEnabled(false);
+        d->selectNoneAction->setEnabled(false);
+
         d->lockAction->setEnabled(false);
         d->markAsDownloadedAction->setEnabled(false);
         d->cameraInfoAction->setEnabled(false);
@@ -1259,12 +1172,6 @@ void CameraUI::slotlastPhotoFirst()
     slotRefreshIconView(map);
 }
 
-void CameraUI::slotRequestThumbnails(const CamItemInfoList& list)
-{
-    if (list.isEmpty()) return;
-    d->camThumbsCtrl->getThumbsInfo(list);
-}
-
 void CameraUI::slotCapture()
 {
     if (d->busy)
@@ -1304,11 +1211,11 @@ void CameraUI::slotUpload()
     QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n');
 
     // All Images from list must been always the first entry given by KDE API
-    QString allPictures = patternList[0];
+    QString allPictures = patternList.at(0);
 
     // Add RAW file format to All Images" type mime and replace current.
     allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::KDcraw::rawFiles()));
-    patternList.removeAll(patternList[0]);
+    patternList.removeAll(patternList.at(0));
     patternList.prepend(allPictures);
 
     // Added RAW file formats supported by dcraw program like a type mime.
@@ -1428,8 +1335,19 @@ void CameraUI::slotUploaded(const CamItemInfo& itemInfo)
     }
 
     d->view->addItem(itemInfo);
-    d->camThumbsCtrl->getThumbsInfo(CamItemInfoList() << itemInfo);
     refreshFreeSpace();
+}
+
+void CameraUI::slotDownloadNew()
+{
+    d->view->slotSelectNew();
+    QTimer::singleShot(0, this, SLOT(slotDownloadSelected()));
+}
+
+void CameraUI::slotDownloadAndDeleteNew()
+{
+    d->view->slotSelectNew();
+    QTimer::singleShot(0, this, SLOT(slotDownloadAndDeleteSelected()));
 }
 
 void CameraUI::slotDownloadSelected()
@@ -1454,6 +1372,12 @@ void CameraUI::slotDownloadAndDeleteAll()
 
 void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 {
+    if (!d->albumCustomizer->customDateFormatIsValid())
+    {
+        KMessageBox::information(this, i18n("Your custom target album date format is not valid. Please check your settings..."));
+        return;
+    }
+
     // See B.K.O #143934: force to select all items to prevent problem
     // when !renameCustomizer->useDefault() ==> iconItem->getDownloadName()
     // can return an empty string in this case because it depends on selection.
@@ -1464,29 +1388,65 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
     // -- Get the destination album from digiKam library ---------------
 
+    PAlbum* pAlbum = 0;
+
     if (!album)
     {
         AlbumManager* man = AlbumManager::instance();
 
-        album = man->currentAlbum();
+        // Check if default target album option is enabled.
 
-        if (album && album->type() != Album::PHYSICAL)
+        KSharedConfig::Ptr config = KGlobal::config();
+        KConfigGroup group        = config->group(d->configGroupName);
+        bool useDefaultTarget     = group.readEntry(d->configUseDefaultTargetAlbum, false);
+
+        if (useDefaultTarget)
         {
-            album = 0;
+            PAlbum* pa = man->findPAlbum(group.readEntry(d->configDefaultTargetAlbumId, 0));
+
+            if (pa)
+            {
+                CollectionLocation cl = CollectionManager::instance()->locationForAlbumRootId(pa->albumRootId());
+                if (!cl.isAvailable() || cl.isNull())
+                {
+                    KMessageBox::information(this, i18n("Collection which host your default target album set to process "
+                                            "download from camera device is not available. Please select another one from "
+                                            "camera configuration dialog."));
+                    return;
+                }
+            }
+            else
+            {
+                KMessageBox::information(this, i18n("Your default target album set to process download "
+                                         "from camera device is not available. Please select another one from "
+                                         "camera configuration dialog."));
+                return;
+            }
+
+            pAlbum = pa;
         }
-
-        QString header(i18n("<p>Please select the destination album from the digiKam library to "
-                            "import the camera pictures into.</p>"));
-
-        album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header);
-
-        if (!album)
+        else
         {
-            return;
+            album = man->currentAlbum();
+
+            if (album && album->type() != Album::PHYSICAL)
+            {
+                album = 0;
+            }
+
+            QString header(i18n("<p>Please select the destination album from the digiKam library to "
+                                "import the camera pictures into.</p>"));
+
+            album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header);
+
+            if (!album)
+            {
+                return;
+            }
+
+            pAlbum = dynamic_cast<PAlbum*>(album);
         }
     }
-
-    PAlbum* pAlbum = dynamic_cast<PAlbum*>(album);
 
     if (!pAlbum)
     {
@@ -1532,17 +1492,10 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
     d->controller->downloadPrep();
 
-    DownloadSettingsContainer downloadSettings;
+    DownloadSettings settings = downloadSettings();
     QString   downloadName;
     QDateTime dateTime;
     int       total = 0;
-
-    downloadSettings.autoRotate     = d->autoRotateCheck->isChecked();
-    downloadSettings.fixDateTime    = d->fixDateTimeCheck->isChecked();
-    downloadSettings.newDateTime    = d->dateTimeEdit->dateTime();
-    downloadSettings.templateTitle  = d->templateSelector->getTemplate().templateTitle();
-    downloadSettings.convertJpeg    = convertLosslessJpegFiles();
-    downloadSettings.losslessFormat = losslessFormat();
 
     // -- Download camera items -------------------------------
     // Since we show camera items in reverse order, downloading need to be done also in reverse order.
@@ -1557,30 +1510,33 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             continue;
         }
 
-        downloadSettings.folder  = info.folder;
-        downloadSettings.file    = info.name;
-        downloadName             = info.downloadName;
-        dateTime                 = info.mtime;
+        settings.folder = info.folder;
+        settings.file   = info.name;
+        downloadName    = info.downloadName;
+        dateTime        = info.mtime;
 
         KUrl downloadUrl(url);
         QString errMsg;
 
         // Auto sub-albums creation based on file date.
 
-        if (d->autoAlbumDateCheck->isChecked())
+        if (d->albumCustomizer->autoAlbumDateEnabled())
         {
             QString dirName;
 
-            switch (d->folderDateFormat->currentIndex())
+            switch (d->albumCustomizer->folderDateFormat())
             {
-                case CameraUIPriv::TextDateFormat:
+                case AlbumCustomizer::TextDateFormat:
                     dirName = dateTime.date().toString(Qt::TextDate);
                     break;
-                case CameraUIPriv::LocalDateFormat:
+                case AlbumCustomizer::LocalDateFormat:
                     dirName = dateTime.date().toString(Qt::LocalDate);
                     break;
-                default:        // IsoDateFormat
+                case AlbumCustomizer::IsoDateFormat:
                     dirName = dateTime.date().toString(Qt::ISODate);
+                    break;
+                default:        // Custom
+                    dirName = dateTime.date().toString(d->albumCustomizer->customDateFormat());
                     break;
             }
 
@@ -1599,7 +1555,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
         // Auto sub-albums creation based on file extensions.
 
-        if (d->autoAlbumExtCheck->isChecked())
+        if (d->albumCustomizer->autoAlbumExtEnabled())
         {
             // We use the target file name to compute sub-albums name to take a care about
             // conversion on the fly option.
@@ -1642,7 +1598,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
         if (downloadName.isEmpty())
         {
-            downloadUrl.addPath(downloadSettings.file);
+            downloadUrl.addPath(settings.file);
         }
         else
         {
@@ -1675,9 +1631,9 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             }
         }
 
-        downloadSettings.dest = downloadUrl.toLocalFile();
+        settings.dest = downloadUrl.toLocalFile();
 
-        d->controller->download(downloadSettings);
+        d->controller->download(settings);
         ++total;
     }
 
@@ -1882,14 +1838,14 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                                                KGuiItem(i18n("Delete")))
         ==  KMessageBox::Continue)
     {
-        QStringList::iterator itFolder = folders.begin();
-        QStringList::iterator itFile   = files.begin();
+        QStringList::const_iterator itFolder = folders.constBegin();
+        QStringList::const_iterator itFile   = files.constBegin();
 
         d->statusProgressBar->setProgressValue(0);
         d->statusProgressBar->setProgressTotalSteps(deleteList.count());
         d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
 
-        for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
+        for ( ; itFolder != folders.constEnd(); ++itFolder, ++itFile)
         {
             d->controller->deleteFile(*itFolder, *itFile);
             // the currentlyDeleting list is used to prevent loading items which
@@ -1897,6 +1853,12 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
             d->currentlyDeleting.append(*itFolder + *itFile);
         }
     }
+}
+
+void CameraUI::slotDeleteNew()
+{
+    d->view->slotSelectNew();
+    QTimer::singleShot(0, this, SLOT(slotDeleteSelected()));
 }
 
 void CameraUI::slotDeleteSelected()
@@ -2263,36 +2225,14 @@ void CameraUI::slotShowLog()
 void CameraUI::slotHistoryEntryClicked(const QVariant& metadata)
 {
     QStringList meta = metadata.toStringList();
-    QString folder   = meta[0];
-    QString file     = meta[1];
+    QString folder   = meta.at(0);
+    QString file     = meta.at(1);
     d->view->ensureItemVisible(folder, file);
 }
 
 bool CameraUI::chronologicOrder() const
 {
     return !d->lastPhotoFirstAction->isChecked();
-}
-
-void CameraUI::slotThumbInfo(const CamItemInfo& info, const QImage& thumb)
-{
-    slotInfo(info.folder, info.name, info);
-    slotThumb(info.folder, info.name, thumb);
-}
-
-void CameraUI::slotThumb(const QString& folder, const QString& file, const QImage& thumb)
-{
-    d->view->setThumbnail(folder, file, thumb);
-}
-
-void CameraUI::slotInfo(const QString& folder, const QString& file, const CamItemInfo& info)
-{
-    CamItemInfo oldinf = d->view->findItemInfo(info.folder, info.name);
-    CamItemInfo newinf = info;
-    // NOTE: B.K.O #260669: do not overwrite downloaded information from DB which have been set before.
-    newinf.downloaded  = oldinf.downloaded;
-    // NOTE: B.K.O #246336: do not overwrite too the file mtime set previously at camera connection using cameragui settings.
-    newinf.mtime       = oldinf.mtime;
-    d->view->setItemInfo(folder, file, newinf);
 }
 
 }  // namespace Digikam

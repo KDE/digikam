@@ -675,9 +675,9 @@ void DImgInterface::saveNext()
         d->undoMan->putImageDataAndHistory(&file.image, currentStep - file.historyStep);
     }
 
-    QMap<QString,QVariant>::iterator it;
+    QMap<QString,QVariant>::const_iterator it;
 
-    for (it = file.ioAttributes.begin(); it != file.ioAttributes.end(); ++it)
+    for (it = file.ioAttributes.constBegin(); it != file.ioAttributes.constEnd(); ++it)
     {
         file.image.setAttribute(it.key(), it.value());
     }
@@ -738,7 +738,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
 
 void DImgInterface::slotSavingProgress(const QString& filePath, float progress)
 {
-    if (!d->filesToSave.isEmpty() && d->filesToSave[d->currentFileToSave].filePath == filePath)
+    if (!d->filesToSave.isEmpty() && d->filesToSave.at(d->currentFileToSave).filePath == filePath)
     {
         emit signalSavingProgress(filePath, progress);
     }
@@ -749,7 +749,7 @@ void DImgInterface::abortSaving()
     // failure will be reported by a signal
     if (!d->filesToSave.isEmpty())
     {
-        d->thread->stopSaving(d->filesToSave[d->currentFileToSave].filePath);
+        d->thread->stopSaving(d->filesToSave.at(d->currentFileToSave).filePath);
         d->filesToSave.clear();
     }
 }

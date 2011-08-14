@@ -178,10 +178,10 @@ DatabaseFace DatabaseFace::fromVariant(const QVariant& var)
 
         if (list.size() == 4)
         {
-            return DatabaseFace((Type)list[0].toInt(),
-                                list[1].toLongLong(),
-                                list[2].toInt(),
-                                TagRegion::fromVariant(list[3]));
+            return DatabaseFace((Type)list.at(0).toInt(),
+                                list.at(1).toLongLong(),
+                                list.at(2).toInt(),
+                                TagRegion::fromVariant(list.at(3)));
         }
     }
 
@@ -208,9 +208,9 @@ DatabaseFace DatabaseFace::fromListing(qlonglong imageId, const QList<QVariant>&
     }
 
     // See imagelister.cpp: value - property - tagId
-    int tagId         = extraValues[2].toInt();
-    QString attribute = extraValues[1].toString();
-    QString value     = extraValues[0].toString();
+    int tagId         = extraValues.at(2).toInt();
+    QString attribute = extraValues.at(1).toString();
+    QString value     = extraValues.at(0).toString();
     //kDebug() << tagId << attribute << value;
 
     return DatabaseFace(attribute,
