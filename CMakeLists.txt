@@ -195,6 +195,17 @@ ENDIF(NOT APPLE)
 
 #-------------------------------------------------------------------------------------
 
+#-------------------------------------------------------------------------------------
+
+IF(NOT APPLE)
+    MACRO_BOOL_TO_01(TAUCS_FOUND USE_EXT_LIBTAUCS)
+ELSE(NOT APPLE)
+    # Under MACOS-X Taucs exist in standard, but it's not suitable as well. Need investiguation here.
+    SET(TAUCS_FOUND FALSE)
+ENDIF(NOT APPLE)
+
+#-------------------------------------------------------------------------------------
+
 # check version of libjpeg so that we can use the appropriate dir
 # See bug #227313
 SET(_jpeglib_version_source "#include <stddef.h>\n#include<stdio.h>\n#include <jpeglib.h>\n int main()\n {\n #if (JPEG_LIB_VERSION >= 80) \n #error JPEG_LIB_VERSION >= 80 found \n #endif \n }\n")
@@ -364,6 +375,11 @@ ELSE(CLAPACK_FOUND)
     MESSAGE(STATUS " libclapack library found................. NO  (optional - internal version used instead)")
 ENDIF(CLAPACK_FOUND)
 
+IF(TAUCS_FOUND)
+    MESSAGE(STATUS " libtaucs library found................. YES (optional)")
+ELSE(TAUCS_FOUND)
+    MESSAGE(STATUS " libtaucs library found................. NO  (optional - internal version used instead)")
+ENDIF(TAUCS_FOUND)
 # ================================================================
 
 IF(GPHOTO2_FOUND)
@@ -611,6 +627,19 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         )
     ENDIF(CLAPACK_FOUND)
 
+    IF(TAUCS_FOUND)
+        INCLUDE_DIRECTORIES(${TAUCS_INCLUDE_DIR})
+    ELSE(TAUCS_FOUND)
+        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs)
+        SET(libtaucs_SRCS
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/abort_.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/dgesv.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/dlaswp.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/dgesv.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/dlaswp.c
+        )
+    ENDIF(TAUCS_FOUND)
+
     # ==================================================================================================
     # Lensfun and LibLqr-1 library rules
     # NOTE: both libraries needs GLIB2.
@@ -808,7 +837,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone/clonebrush.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone/clonesettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone/clonefilter.cpp
-#FIXME        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clone/mulsymatrix.cpp
        )
 
     IF(GLIB2_FOUND)
