@@ -632,11 +632,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ELSE(TAUCS_FOUND)
         INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs)
         SET(libtaucs_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/abort_.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/dgesv.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/dlaswp.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/dgesv.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/dlaswp.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/mulsymatrix.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_ccs_base.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_linsolve.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_logging.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_malloc.c
         )
     ENDIF(TAUCS_FOUND)
 
