@@ -18,4 +18,4 @@ INSTALL(FILES shape3.png
               shapec13.png
               shapec15.png
               shapec19.png
-        DESTINATION ${DATA_INSTALL_DIR}/digikam/data)
+        DESTINATION ${DATA_INSTALL_DIR}/digikam/data/brushshapes)
