@@ -154,14 +154,15 @@ CloneSettings::CloneSettings(QWidget* parent)
     QStringList nameFilters;
     nameFilters << "*.png" ;
     QString path;
-    path.append("../img");//need to be fixed, the path may cannot be found!!!!
+    path.append(KStandardDirs::locate("data",QString("digikam/data/brushshapes/")));//need to be fixed, the path may cannot be found!!!!
+    kDebug() << path;//debug info
     QDirIterator dirIterator(path, nameFilters, QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
     while(dirIterator.hasNext())
     {
         nameFilters << dirIterator.fileName();
         dirIterator.next();
     }
-
+    kDebug() << nameFilters;//debug info
     KPushButton* buttons[4];
     if(nameFilters.size()>0)
     {
@@ -176,24 +177,42 @@ CloneSettings::CloneSettings(QWidget* parent)
         QString filename = nameFilters.at(i).toLocal8Bit().constData();
         QPixmap iconMap;
         iconMap.load(filename);
-        CloneBrush brush;
-
-        brush.setPixmap(iconMap);
-        brush.setDia(iconMap.size().width());
-
-        d->brushMap.insert(i+1,brush);
-        buttons[i%4][i/4].setParent(parent);
-        buttons[i%4][i/4].setFixedSize(30,23);
-        if(!iconMap.isNull())
+//------------------------------debug info---------------------
+       /* int map_width = 0;
+        map_width = iconMap.width();
+        QString load_map;
+        load_map.append("is");
+        if(map_width==0)
+            load_map.append(" not ");
+        load_map.append("successful!");
+        printf("%s",load_map);
+        printf("%d",map_width);
+       // KDebug() << load_map;*/
+//==========================================================================
+        KPushButton* buttons[4];
+        if(nameFilters.size()>0)
         {
+          for(int c = 0; c<4 ; c++)
+          {
+          CloneBrush brush;
+
+          brush.setPixmap(iconMap);
+          brush.setDia(iconMap.size().width());
+
+          d->brushMap.insert(i+1,brush);
+          buttons[i%4][i/4].setParent(parent);
+          buttons[i%4][i/4].setFixedSize(30,23);
+          if(!iconMap.isNull())
+           {
             buttons[i%4][i/4].setIcon(QIcon(iconMap));
-        }
+           }
 
-        brushGroup->addButton(&buttons[i%4][i/4],i+1);
-        gridLayout->addWidget(&buttons[i%4][i/4],i/4,i%4,1,1);
-    }
-
-    //=============================================================================
+          brushGroup->addButton(&buttons[i%4][i/4],i+1);
+          gridLayout->addWidget(&buttons[i%4][i/4],i/4,i%4,1,1);
+          }
+       }
+   }
+   //=============================================================================
 
     QLabel* label3 = new QLabel(i18n("Select source/Draw stroke:"));
 
@@ -250,11 +269,17 @@ CloneSettings::CloneSettings(QWidget* parent)
     connect(pushButton2, SIGNAL(pressed()),
             this,SLOT(slotDrawModeChanged()));
 
-//for (int j = 0; j < nameFilters.size(); ++j)
     connect(brushGroup, SIGNAL(buttonClicked (int)),
             this, SLOT(slotBrushIdChanged(int)));
 
+    connect(pushButton1, SIGNAL(pressed()),
+            this,SIGNAL(signalSettingsChanged()));
 
+    connect(pushButton2, SIGNAL(pressed()),
+            this,SIGNAL(signalSettingsChanged()));
+
+    connect(brushGroup, SIGNAL(buttonClicked (int)),
+            this, SIGNAL(signalSettingsChanged(int)));
 }
 
 CloneSettings::~CloneSettings()
