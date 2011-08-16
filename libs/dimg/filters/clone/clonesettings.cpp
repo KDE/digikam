@@ -244,15 +244,17 @@ CloneSettings::CloneSettings(QWidget* parent)
     connect(d->horizontalSlider_MainDiameter, SIGNAL(valueChanged(int)),
             d->spinBox_MainDiameter, SLOT(setValue(int)));
 */
+    connect(pushButton1, SIGNAL(pressed()),
+            this,SLOT(slotSelectModeChanged()));
 
-    connect(brushGroup, SIGNAL(buttonClicked(int)),
-            this, SIGNAL(slotBrushIdChanged(int)));
+    connect(pushButton2, SIGNAL(pressed()),
+            this,SLOT(slotDrawModeChanged()));
 
-    connect(pushButton1, SIGNAL(clicked()),
-            this,SIGNAL(slotSelectModeChanged()));
+//for (int j = 0; j < nameFilters.size(); ++j)
+    connect(brushGroup, SIGNAL(buttonClicked (int)),
+            this, SLOT(slotBrushIdChanged(int)));
 
-    connect(pushButton2, SIGNAL(clicked()),
-            this,SIGNAL(slotDrawModeChanged()));
+
 }
 
 CloneSettings::~CloneSettings()
