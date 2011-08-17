@@ -27,10 +27,11 @@
 
 // Qt includes
 
-#include <QtGui>
-#include <QString>
-#include <QtDeclarative/QDeclarativeView>
+#include <QDeclarativeComponent>
 #include <QDeclarativeEngine>
+#include <QDeclarativeView>
+#include <QGraphicsObject>
+#include <QMessageBox>
 
 // Local includes
 
@@ -40,7 +41,7 @@
 namespace Digikam
 {
 
-class QmlShowPriv
+class QmlShow::QmlShowPriv
 {
 public:
 
@@ -61,7 +62,7 @@ QmlShow::QmlShow(const QStringList& list)
 {
     d->list = list;
 
-    ui   = new QDeclarativeView;
+    d->ui   = new QDeclarativeView;
     // FIXME: Use KStandardDirs and install qml file properly (see data/database/dbconfig.xml as example)
     d->ui->setSource(QUrl::fromLocalFile("../core/utilities/qmlShow/qmlview/qmlview.qml"));
     setCentralWidget(d->ui);
@@ -82,11 +83,11 @@ QmlShow::QmlShow(const QStringList& list)
             this, SLOT(pause()));
     connect(object, SIGNAL(grid_view()),
             this, SLOT(gridview()));
-    imageno=0;
+    d->imageno=0;
 
     // FIXME: This is for debugging?
     QMessageBox* n = new QMessageBox(this);
-    n->setText(d->list[++imageno]);
+    n->setText(d->list[++d->imageno]);
     n->show();
 
     d->ui->show();
@@ -103,21 +104,24 @@ QmlShow::~QmlShow()
 
 void QmlShow::nextImage()
 {
-    if (imageno == d->list.count()-1)
+    if (d->imageno == d->list.count()-1)
     {
         return;
     }
 
     QObject *object = d->ui->rootObject();
-    object->setProperty("text", d->list[++imageno]);
+    object->setProperty("text", d->list[++d->imageno]);
 }
 
 void QmlShow::prevImage()
 {
-    if(imageno==0) return;
+    if (d->imageno==0)
+    {
+        return;
+    }
 
     QObject *object = d->ui->rootObject();
-    object->setProperty("text", d->list[--imageno]);
+    object->setProperty("text", d->list[--d->imageno]);
 }
 
 void QmlShow::play()

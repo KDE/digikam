@@ -38,7 +38,7 @@ class QmlShow : public QMainWindow
     Q_OBJECT
 public:
 
-    QmlShow(const QList<QString>&);
+    QmlShow(const QStringList&);
     ~QmlShow();
 
 public slots:
