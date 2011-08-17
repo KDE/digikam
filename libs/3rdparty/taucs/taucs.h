@@ -3,6 +3,7 @@
 /* Author: Sivan Toledo                                  */
 /*********************************************************/
 
+//FIXME
 //#include <taucs_config_tests.h>
 //#include <taucs_config_build.h>
 
