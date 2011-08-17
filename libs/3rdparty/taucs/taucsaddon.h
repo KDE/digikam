@@ -7,13 +7,16 @@
 #include <unistd.h>
 #include <pthread.h>
 #endif
+
+#include <map>
+#include <vector>
+
 #define TAUCS_CORE_DOUBLE
+ 
 extern "C" {
 #include "taucs.h"
 }
 
-#include <vector>
-#include <map>
 
 typedef double taucsType;
 /****************************************************************/
