@@ -15,6 +15,7 @@
  
 extern "C" {
 #include "taucs.h"
+#include "taucs_private.h"
 }
 
 
