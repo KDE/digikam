@@ -163,12 +163,12 @@ CloneSettings::CloneSettings(QWidget* parent)
         dirIterator.next();
     }
     kDebug() << nameFilters;//debug info
-    KPushButton* buttons[4];
+    QPushButton* buttons[4];
     if(nameFilters.size()>0)
     {
         for(int c = 0; c<4 ; c++)
         {
-            buttons[c] = new KPushButton[(nameFilters.size()+3)/4];
+            buttons[c] = new QPushButton[(nameFilters.size()+3)/4];
         }
     }
 
@@ -211,14 +211,14 @@ CloneSettings::CloneSettings(QWidget* parent)
 
     // KHBox*  modeBox = new KHBox(parent);
 
-    KPushButton* pushButton1 = new KPushButton(parent);
+    QPushButton* pushButton1 = new QPushButton(parent);
     pushButton1->setIcon(QIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/clone_selectButton.png"))));
     pushButton1->setToolTip(i18n("Select a source point of the source area."));
     pushButton1->setVisible(true);
     pushButton1->setIconSize(QSize(46, 48));
     pushButton1->setFixedSize(31, 31);
 
-    KPushButton* pushButton2 = new KPushButton(parent);
+    QPushButton* pushButton2 = new QPushButton(parent);
     pushButton2->setIcon(QIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/clone_drawButton.png"))));
     pushButton2->setToolTip(i18n("Start to draw a stroke. To use this you should first click the left button to select a point"));
     pushButton2->setVisible(true);

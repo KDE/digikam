@@ -73,7 +73,7 @@ CloneFilter::~CloneFilter()
 
 bool CloneFilter::inimage( DImg *img, int x, int y )
 {
-    if ( x >= 0 && x < img->width() && y >= 0 && y < img->height() )
+    if ( x >= 0 && (uint)x < img->width() && y >= 0 && (uint)y < img->height() )
         return true;
     else
         return false;
@@ -81,7 +81,7 @@ bool CloneFilter::inimage( DImg *img, int x, int y )
 
 bool CloneFilter::inBrushpixmap(QPixmap* brushmap, int x, int y)
 {
-    if ( x >= 0 && x < brushmap->width() && y >= 0 && y < brushmap->height() )
+    if ( x >= 0 && (uint)x < brushmap->width() && y >= 0 && (uint)y < brushmap->height() )
         return true;
     else
         return false;
@@ -306,7 +306,8 @@ void CloneFilter::filterImage()
 
     double* u = new double[3*N];
 
-    char* options[] = { "taucs.factor.LU=true", NULL };
+    QByteArray option = "taucs.factor.LU=true";
+    char* options[] = { option.data(), NULL };
 
     //Solve the Linear Equations
     if (taucs_linsolve(pA, NULL, 3, u, b, options, NULL) != TAUCS_SUCCESS)

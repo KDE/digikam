@@ -36,10 +36,8 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT CloneBrush : public QObject
+class DIGIKAM_EXPORT CloneBrush
 {
-    Q_OBJECT
-
 public:
 
     CloneBrush();

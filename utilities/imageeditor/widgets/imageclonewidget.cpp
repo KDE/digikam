@@ -273,7 +273,7 @@ DImg*  ImageCloneWidget::getPreviewMask() const
 
 bool ImageCloneWidget::inimage(DImg *img, const int x, const int y ) 
 {
-    if ( x >= 0 && x < img->width() && y >= 0 && y < img->height())
+    if ( x >= 0 && (uint)x < img->width() && y >= 0 && (uint)y < img->height())
         return true;
     else
         return false;
@@ -295,21 +295,30 @@ void ImageCloneWidget::TreateAsBordor(DImg* image, const int x, const int y)
     DColor bacgcolor;
     DColor newcolor;
 
-    if((-d->Border < (x-getOriDis().x()) && (x-getOriDis().x()) <= 0) && ((y-getOriDis().y()) < image->height() && 0<= (y-getOriDis().y())))
+    if ( (-d->Border < (x-getOriDis().x()) && (x-getOriDis().x()) <= 0) &&
+         ((y-getOriDis().y()) < image->height() && 0<= (y-getOriDis().y()))
+       )
     {
         forgcolor = d->preview->getPixelColor(0,y-getOriDis().y());
     }
-
-    else if((image->width()-1 <= x-getOriDis().x())  && (x-getOriDis().x()< (image->width()+d->Border)) && (y-getOriDis().y() < image->height()) && (0<= y-getOriDis().y()))
+    else if ( ((int)image->width()-1 <= x-getOriDis().x()) &&
+              (x-getOriDis().x()< (image->width()+d->Border)) &&
+              (y-getOriDis().y() < image->height()) &&
+              (0<= y-getOriDis().y())
+            )
     {
         forgcolor = d->preview->getPixelColor(d->preview->width()-1,(y-getOriDis().y())/ratio);
 
     }
-    else if((0 <= x-getOriDis().x() && x-getOriDis().x()< image->width()) && (-d->Border< y-getOriDis().y() && y-getOriDis().y() <= 0))
+    else if ( (0 <= x-getOriDis().x() && x-getOriDis().x()< image->width()) &&
+              (-d->Border< y-getOriDis().y() && y-getOriDis().y() <= 0)
+            )
     {
         forgcolor = d->preview->getPixelColor((x-getOriDis().x())/ratio,0);
     }
-    else if((0 <= x-getOriDis().x() && x-getOriDis().x()< image->width()) && (image->height()-1< y-getOriDis().y() &&  y-getOriDis().y()< (image->height()+d->Border)))
+    else if ( (0 <= x-getOriDis().x() && x-getOriDis().x()< image->width()) &&
+              (image->height()-1< y-getOriDis().y() &&  y-getOriDis().y()< (image->height()+d->Border))
+            )
     {
         forgcolor = d->preview->getPixelColor((x-getOriDis().x())/ratio,d->preview->height()-1);
     }

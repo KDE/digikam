@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "clonebrush.moc"
+#include "clonebrush.h"
 
 // C++ includes
 
