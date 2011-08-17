@@ -113,8 +113,11 @@ CloneTool::CloneTool(QObject* parent)
     setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
 
     //-------------------save the original image, if cancel button is clicked, this will be used--------------
-    uchar* data     = d->previewWidget->imageIface()->getOriginalImg()->stripImageData();
-    d->origImage->putImageData(data);
+    d->resultImage   = new DImg();
+    d->previewRImage = new DImg();
+    d->origImage     = new DImg();
+    uchar* data      = d->previewWidget->imageIface()->getOriginalImg()->stripImageData();
+    d->origImage->putImageData(data);  //FIXME
     d->origImage->setIccProfile( d->previewWidget->imageIface()->getOriginalImg()->getIccProfile());
 
     //==========================================================================================================
