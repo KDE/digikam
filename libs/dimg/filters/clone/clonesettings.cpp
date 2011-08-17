@@ -172,11 +172,12 @@ CloneSettings::CloneSettings(QWidget* parent)
         }
     }
 
-    for (int i = 0; i < nameFilters.size(); ++i)
+    for (int i = 2; i < nameFilters.size(); ++i)
     {
         QString filename = nameFilters.at(i).toLocal8Bit().constData();
+        kDebug() << filename;
         QPixmap iconMap;
-        iconMap.load(filename);
+        iconMap.load(filename);        
 //------------------------------debug info---------------------
        /* int map_width = 0;
         map_width = iconMap.width();
@@ -189,28 +190,20 @@ CloneSettings::CloneSettings(QWidget* parent)
         printf("%d",map_width);
        // KDebug() << load_map;*/
 //==========================================================================
-        KPushButton* buttons[4];
-        if(nameFilters.size()>0)
-        {
-          for(int c = 0; c<4 ; c++)
-          {
-          CloneBrush brush;
+        if(!iconMap.isNull())
+         {      
+            CloneBrush brush;
+            brush.setPixmap(iconMap);
+            brush.setDia(iconMap.size().width());
+            d->brushMap.insert(i-1,brush);
+            buttons[(i-2)%4][(i-2)/4].setParent(parent);
+            buttons[(i-2)%4][(i-2)/4].setFixedSize(30,23);
+            buttons[(i-2)%4][(i-2)/4].setIcon(QIcon(iconMap));
+         }
 
-          brush.setPixmap(iconMap);
-          brush.setDia(iconMap.size().width());
-
-          d->brushMap.insert(i+1,brush);
-          buttons[i%4][i/4].setParent(parent);
-          buttons[i%4][i/4].setFixedSize(30,23);
-          if(!iconMap.isNull())
-           {
-            buttons[i%4][i/4].setIcon(QIcon(iconMap));
-           }
-
-          brushGroup->addButton(&buttons[i%4][i/4],i+1);
-          gridLayout->addWidget(&buttons[i%4][i/4],i/4,i%4,1,1);
-          }
-       }
+        brushGroup->addButton(&buttons[(i-2)%4][(i-2)/4],i-1);
+        gridLayout->addWidget(&buttons[(i-2)%4][(i-2)/4],(i-2)/4,(i-2)%4,1,1);
+        
    }
    //=============================================================================
 
@@ -279,7 +272,7 @@ CloneSettings::CloneSettings(QWidget* parent)
             this,SIGNAL(signalSettingsChanged()));
 
     connect(brushGroup, SIGNAL(buttonClicked (int)),
-            this, SIGNAL(signalSettingsChanged(int)));
+            this, SIGNAL(signalSettingsChanged()));
 }
 
 CloneSettings::~CloneSettings()
