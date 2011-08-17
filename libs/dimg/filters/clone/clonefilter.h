@@ -46,7 +46,9 @@ public:
 
     explicit CloneFilter(QObject* parent = 0);
     explicit CloneFilter(DImg* originalImage, DImg* maskImage, const QPoint& dis, QObject* parent=0);
+
     ~CloneFilter();
+
     static QString          FilterIdentifier()
     {
         return "digikam:CloneFilter";

@@ -40,10 +40,9 @@
 
 #include "dimg.h"
 #include "dcolor.h"
+#include "taucsaddon.h"
 
-//FIXME #include "taucsaddon.h"
-
-using std::map;
+//using std::map;
 
 namespace Digikam
 {
@@ -64,6 +63,8 @@ CloneFilter::CloneFilter(DImg* originalImage, DImg* maskImage, const QPoint& dis
 
     initFilter();
 }
+
+
 
 CloneFilter::~CloneFilter()
 {
@@ -182,7 +183,7 @@ void CloneFilter::filterImage()
 
     // Build mapping from (x,y) to variables
     int           N = 0; // variable indexer
-    map<int, int> mp;
+    std::map<int, int> mp;
 
     for (y = 1; y < height-1; y++)
     {
@@ -204,9 +205,9 @@ void CloneFilter::filterImage()
             return;
     }
 
-    /* FIXME : this code do not compile yet
+  ///* FIXME : this code do not compile yet
 
-    kDebug() << "Solver::solve: Solving " << w << "x" << h << " with " << N << " unknowns" << endl;
+    kDebug() << "Solver::solve: Solving " << width << "x" << height << " with " << N << " unknowns" << endl;
 
     // Build the matrix
     // ----------------
@@ -225,7 +226,7 @@ void CloneFilter::filterImage()
     int* colind  = pAt->rowind;
 
     // Populate matrix
-    for (y = 1; y < heiht-1; y++)
+    for (y = 1; y < height-1; y++)
     {
             for (x = 1; x < width-1; x++)
             {
@@ -330,8 +331,6 @@ void CloneFilter::filterImage()
             }
     }
 
-*/
-
     for(int y =0; y < height; y++)
         for(int x=0; x < width; x++)
 
@@ -355,7 +354,7 @@ void CloneFilter::filterImage()
         delete [] desImg[c];
     }
 
-/*FIXME
+///*FIXME
     delete [] u;
     delete [] b;
     pA = NULL;
@@ -365,7 +364,7 @@ void CloneFilter::filterImage()
     delete [] vals;
     delete [] rowptr ;
     delete [] colind ;
-*/
+
 }
 ///*FIXME
 FilterAction CloneFilter::filterAction()
