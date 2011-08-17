@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Dhruv Patel <dhruvkumarr dot patel51 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,69 +21,106 @@
  *
  * ============================================================ */
 
+
+// C++ includes
+
+#include <stdio.h>
+
+// Qt includes
+
+#include <QtGui>
+#include <QString>
+#include <QtDeclarative/QDeclarativeView>
+#include <QDeclarativeEngine>
+#include <QGraphicsObject>
+#include<QDeclarativeContext>
+
 #include"qmlShow.h"
 #include"imageinfo.h"
-#include<QtGui>
-#include<QString>
-#include<QtDeclarative/QDeclarativeView>
-#include<QDeclarativeEngine>
-#include<stdio.h>
 namespace Digikam
 {
-class ImageInfo;
-QmlShow::QmlShow(QList<QString> *list) : QMainWindow(0, Qt::FramelessWindowHint)
+
+class QmlShow::QmlShowPriv
 {
-		this->ui=new QDeclarativeView;
-	this->list=list;
-        this->ui->setSource(QUrl::fromLocalFile("../core/utilities/qmlShow/qmlview/qmlview.qml"));
-        setCentralWidget(this->ui);
-		connect(this->ui->engine(),SIGNAL(quit()),this,SLOT(close()),Qt::DirectConnection);
-        this->ui->setResizeMode(QDeclarativeView::SizeRootObjectToView);
-	QObject *object=ui->rootObject();
-	connect(object,SIGNAL(nextClicked()),this,SLOT(nextImage()));
-        connect(object,SIGNAL(prevClicked()),this,SLOT(prevImage()));
-        connect(object,SIGNAL(play()),this,SLOT(play()));
-        connect(object,SIGNAL(pause()),this,SLOT(pause()));
-	connect(object,SIGNAL(grid_view()),this,SLOT(gridview()));
-	imageno=0;
-	QMessageBox* n=new QMessageBox(this);
-	n->setText(list->at(++imageno));
-	n->show();
-	this->ui->show();
-        showMaximized();
-	object->setProperty("text",list->at(0));
+public:
+
+    QmlShowPriv()
+        : ui(0),
+          imageno(0)
+    {
+    }
+
+    QDeclarativeView *ui;
+    int imageno;
+    QStringList list;
+};
+
+QmlShow::QmlShow(const QStringList& list)
+    : QMainWindow(0, Qt::FramelessWindowHint),
+      d(new QmlShowPriv)
+{
+    d->ui   = new QDeclarativeView;
+    d->list=list;
+    QDeclarativeContext *ctxt = d->ui->rootContext();
+    ctxt->setContextProperty("myModel", QVariant::fromValue(d->list));
+
+    // FIXME: Use KStandardDirs and install qml file properly (see data/database/dbconfig.xml as example)
+    d->ui->setSource(QUrl::fromLocalFile("../core/utilities/qmlShow/qmlview/qmlview.qml"));
+    setCentralWidget(d->ui);
+
+    connect(d->ui->engine(), SIGNAL(quit()),
+            this, SLOT(close()));
+
+    d->ui->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+
+    QObject *object=d->ui->rootObject();
+    connect(object, SIGNAL(nextClicked()),
+            this, SLOT(nextImage()));
+    connect(object, SIGNAL(prevClicked()),
+            this, SLOT(prevImage()));
+    connect(object, SIGNAL(play()),
+            this, SLOT(play()));
+    connect(object, SIGNAL(pause()),
+            this, SLOT(pause()));
+    d->imageno=0;
+
+    d->ui->show();
+
+    showMaximized();
+    if(&list!=NULL)
+	{
+	    object->setProperty("text", d->list[0]);
+	}
+    else
+	{
+		close();
+	}
 }
 
 QmlShow::~QmlShow()
 {
+	delete d;
 }
 void QmlShow::nextImage()
 {
-	if(imageno==(list->count()-1)) return;
-        QObject *object=(QObject*)ui->rootObject();
-        object->setProperty("text",list->at(++imageno));
+	if(d->imageno==(d->list.count()-1)) return;
+        QObject *object=(QObject*)d->ui->rootObject();
+        object->setProperty("text",d->list[++(d->imageno)]);
 }
 void QmlShow::prevImage()
 {
-	if(imageno==0) return;
-         QObject *object=(QObject*)ui->rootObject();
-        object->setProperty("text",list->at(--imageno));
+	if(d->imageno==0) return;
+         QObject *object=(QObject*)d->ui->rootObject();
+        object->setProperty("text",d->list[--(d->imageno)]);
 }
 void QmlShow::play()
 {
-        QObject *object=(QObject*)ui->rootObject();
+        QObject *object=(QObject*)d->ui->rootObject();
         object->setProperty("bool_pp",true);
 }
 void QmlShow::pause()
 {
-        QObject *object=(QObject*)ui->rootObject();
+        QObject *object=(QObject*)d->ui->rootObject();
         object->setProperty("bool_pp",false);
-}
-void QmlShow::gridview()
-{
-	QDeclarativeEngine engine;
-	QDeclarativeComponent component(&engine, "qmlview/ContactModel.qml");
-	QObject *object = component.create();
-	
 }
 }

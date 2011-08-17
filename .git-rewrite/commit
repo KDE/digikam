@@ -1,0 +1,9 @@
+tree bc29137e28b011d345233809c0c7f81368322dc6
+parent 4c1655da393750163849077c51b7ec39f295199e
+author Gilles Caulier <caulier.gilles@gmail.com> 1094130518 -0000
+committer Gilles Caulier <caulier.gilles@gmail.com> 1094130518 -0000
+
+CVS_SILENT
+Fixed typo
+
+svn path=/trunk/kdeextragear-3/digikamimageplugins/; revision=343477

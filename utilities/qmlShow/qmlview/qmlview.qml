@@ -11,7 +11,7 @@ signal nextClicked;
 signal prevClicked;
 signal play;
 signal pause;
-signal grid_view;
+signal gridItem;
 property bool bool_pp: true;
 Keys.onLeftPressed: {rect.prevClicked()}
 Keys.onRightPressed: {rect.nextClicked()}
@@ -19,14 +19,13 @@ Keys.onEscapePressed: {Qt.quit()}
 Keys.onSpacePressed: { if (play_pause.src == "pause.png") {play_pause.src = "play.png"; rect.pause();}
                     else {play_pause.src= "pause.png";rect.play();};
 }
-Keys.onTabPressed: {rect.grid_view();}
     Image {
         id: circle_image
         x: 0
         y: 0
         width: parent.height / 3
         height: parent.height / 3
-        visible: false
+        visible: true
         rotation: 0
         opacity: 0.7
         source: "circle.png"
@@ -121,6 +120,23 @@ Keys.onTabPressed: {rect.grid_view();}
                             else openstreetmap.visible=false;}
             }
         }
+
+	Image
+	{
+		id: gridviewicon
+		height:parent.height/5
+		width:parent.width/5
+		x: parent.width*3/4
+		source: "./gridview.png"
+		y:0
+		MouseArea
+		{
+			id:show_gridview
+			anchors.fill: parent
+			onClicked: { rect2.visible=true; grid.focus= true;play_pause.src = "play.png"; rect.pause();
+			}
+		}
+	}
     }
 
     Image {
@@ -129,7 +145,7 @@ Keys.onTabPressed: {rect.grid_view();}
         y: 0
         width: parent.height/8
         height: parent.height/8
-        visible: false
+        visible: true
         z: 5
         opacity: 0.5
         rotation: 0
@@ -151,6 +167,7 @@ Keys.onTabPressed: {rect.grid_view();}
         height: parent.height
         source: parent.text
         focus: true
+        visible:true
         Timer
 	{
 	id:timer
@@ -184,15 +201,60 @@ Keys.onTabPressed: {rect.grid_view();}
         url: "./mapview.html"
     }
 
-    GridView {
-        id: grid_view1
-        x: rect.width/5
-        y: rect.height/5
-        width: 3*x
-        height: 3*y
-        highlightItem.z: 3
-        highlightMoveDuration: 152
-        cellHeight: 100
-	
-    }
+Rectangle
+{
+	id:rect2
+	visible: false
+	anchors.verticalCenter: parent.verticalCenter
+	anchors.horizontalCenter: parent.horizontalCenter
+	height:(parent.height/3)*2
+	width:(parent.width/3)*2
+	radius: 15
+        opacity:0.7
+	color: "black"
+	GridView{
+		id: grid;
+		visible: true
+		anchors.verticalCenter: parent.verticalCenter
+		anchors.horizontalCenter: parent.horizontalCenter
+     		height: rect2.height -50
+		width: rect2.width - 40;
+	        cellHeight: grid.height/3 
+	        cellWidth: grid.width/3
+		clip: true
+		model: myModel
+		cacheBuffer: 0
+		highlightFollowsCurrentItem: true
+		highlight:	Rectangle{ 
+					id: highlight_rect;
+					color: "white"; 
+					border.width: 10;
+					border.color: "white";
+					clip: true
+					height: grid.cellHeight;
+					width: grid.cellWidth;
+
+				}
+		focus: parent.visible
+		Keys.onEscapePressed: { rect2.visible=false; rect.focus=true}
+		delegate: Component {
+        		Rectangle { 
+				id:image;
+				width:grid.cellWidth-20;
+				height:grid.cellHeight-20;
+				radius: 10;
+				clip: true
+				Image{anchors.fill:parent;clip:true;source: modelData; }
+				MouseArea 
+				{
+					anchors.fill:parent;
+					clip: true;
+					onClicked: {
+						grid.currentIndex=grid.indexAt(parent.x,parent.y);
+					}
+				}
+			}
+		}
+	}
+}
 }

@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Dhruv Patel <dhruvkumarr dot patel51 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,32 +24,34 @@
 #ifndef QML_SHOW_H
 #define QML_SHOW_H
 
-#include<QtGui>
-#include<QtDeclarative/QDeclarativeView>
-#include<QObject>
-#include "digikam_export.h"
-#include "loadingdescription.h"
-#include"imageinfo.h"
+// Qt includes
+
+#include <QMainWindow>
+
 
 namespace Digikam
 {
 class Imageinfo;
 class QmlShow : public QMainWindow
 {
-	Q_OBJECT
-	public:
-	QmlShow(QList<QString>*);
-	~QmlShow();
-	int imageno;
-	QList<QString> *list;
-	public slots:
-        void nextImage();
-        void prevImage();
-        void pause();
-        void play();
-	void gridview();
-	private:
-	QDeclarativeView *ui;
+    Q_OBJECT
+
+public:
+
+    QmlShow(const QStringList&);
+    ~QmlShow();
+
+public slots:
+
+    void nextImage();
+    void prevImage();
+    void pause();
+    void play();
+
+private:
+
+    class QmlShowPriv;
+    QmlShowPriv* const d;
 };
 }
 #endif
