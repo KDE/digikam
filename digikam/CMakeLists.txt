@@ -8,6 +8,11 @@ IF(NOT CLAPACK_FOUND)
    SET_SOURCE_FILES_PROPERTIES(${libclapack_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 ENDIF(NOT CLAPACK_FOUND)
 
+IF(NOT TAUCS_FOUND)
+   # Disable Clapack C code warnings.
+   SET_SOURCE_FILES_PROPERTIES(${libtaucs_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+ENDIF(NOT TAUCS_FOUND)
+
 IF(NOT PGF_FOUND)
    # Disable libpgf warnings.
    SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
@@ -34,6 +39,7 @@ SET(digikamcore_LIB_SRCS
         ${libthreadimageio_SRCS}
         ${libthememanager_SRCS}
         ${libpgf_SRCS}
+        ${libtaucs_SRCS}
         ${pgfutils_SRCS}
         ${libdigikamhelpers_SRCS}
         ${libtthread_SRCS}

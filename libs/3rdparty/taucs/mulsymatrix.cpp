@@ -1,10 +1,11 @@
 #pragma warning( disable : 4786 )
 #pragma warning( disable : 4503 )
 
-#include <map>
 #include <algorithm>
-#include <vector>
+#include <cstring>
 #include <iostream>
+#include <map>
+#include <vector>
 
 #include "taucsaddon.h"
 

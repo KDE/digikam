@@ -6,7 +6,7 @@
 //FIXME
 //#include <taucs_config_tests.h>
 //#include <taucs_config_build.h>
-
+#define TAUCS_CORE_GENERAL
 /*********************************************************/
 /* Cilk-related stuff                                    */
 /*********************************************************/
@@ -72,13 +72,15 @@
 #define TAUCS_SCOMPLEX_IN_BUILD
 #endif
 
+/*
 #if   defined(TAUCS_BLAS_UNDERSCORE)
 #define taucs_blas_name(x) (x##_)
 #elif defined(TAUCS_BLAS_NOUNDERSCORE)
 #define taucs_blas_name(x) (x)
 #else
 #error "taucs_blas_[no]underscore_test: linking with the BLAS failed both attempts"
-#endif 
+#endif
+*/
 
 #ifdef OSTYPE_win32
 typedef unsigned long ssize_t;
@@ -460,6 +462,7 @@ extern taucs_scomplex taucs_cminusone_const;
 #define taucs_isnan(x) (isnan((double)(taucs_re(x))) || isnan((double)(taucs_im(x))))
 #define taucs_isinf(x) (isinf((double)(taucs_re(x))) || isinf((double)(taucs_im(x))))
 
+
 #ifdef TAUCS_CORE_SINGLE
 #define taucs_zero_const     taucs_szero_const
 #define taucs_one_const      taucs_sone_const
@@ -469,10 +472,12 @@ extern taucs_scomplex taucs_cminusone_const;
 #define taucs_one_real_const      taucs_sone_const
 #define taucs_minusone_real_const taucs_sminusone_const
 
+/*
 #define taucs_gemm  taucs_blas_name(sgemm)
 #define taucs_potrf taucs_blas_name(spotrf)
 #define taucs_herk  taucs_blas_name(ssyrk)
 #define taucs_trsm  taucs_blas_name(strsm)
+*/
 #endif
 
 #ifdef TAUCS_CORE_DOUBLE
@@ -484,10 +489,12 @@ extern taucs_scomplex taucs_cminusone_const;
 #define taucs_one_real_const      taucs_done_const
 #define taucs_minusone_real_const taucs_dminusone_const
 
+/*
 #define taucs_gemm  taucs_blas_name(dgemm)
 #define taucs_potrf taucs_blas_name(dpotrf)
 #define taucs_herk  taucs_blas_name(dsyrk)
 #define taucs_trsm  taucs_blas_name(dtrsm)
+*/
 #endif
 
 /*
@@ -510,10 +517,12 @@ extern taucs_scomplex taucs_cminusone_const;
 #define taucs_one_real_const      taucs_sone_const
 #define taucs_minusone_real_const taucs_sminusone_const
 
+/*
 #define taucs_gemm  taucs_blas_name(cgemm)
 #define taucs_potrf taucs_blas_name(cpotrf)
 #define taucs_herk  taucs_blas_name(cherk)
 #define taucs_trsm  taucs_blas_name(ctrsm)
+*/
 #endif
 
 #ifdef TAUCS_CORE_DCOMPLEX
@@ -525,10 +534,12 @@ extern taucs_scomplex taucs_cminusone_const;
 #define taucs_one_real_const      taucs_done_const
 #define taucs_minusone_real_const taucs_dminusone_const
 
+/*
 #define taucs_gemm  taucs_blas_name(zgemm)
 #define taucs_potrf taucs_blas_name(zpotrf)
 #define taucs_herk  taucs_blas_name(zherk)
 #define taucs_trsm  taucs_blas_name(ztrsm)
+*/
 #endif
 
 /*********************************************************/
@@ -826,10 +837,12 @@ extern int taucs_herk(char *, char *,
 		      taucs_real_datatype*, 
 		      taucs_datatype*, int *);
 
+/*
 taucs_double taucs_blas_name(dnrm2)(int*, taucs_double*, int*);
 taucs_single taucs_blas_name(snrm2)(int*, taucs_single*, int*);
 taucs_double taucs_blas_name(dznrm2)(int*, taucs_dcomplex*, int*);
 taucs_single taucs_blas_name(scnrm2)(int*, taucs_scomplex*, int*);
+*/
 
 /*********************************************************/
 /*                                                       */

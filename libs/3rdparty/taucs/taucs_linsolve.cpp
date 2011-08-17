@@ -180,7 +180,7 @@ static void taucs_linsolve_free(void* vF)
   if (F->type == TAUCS_FACTORTYPE_LLT_SUPERNODAL)
     taucs_supernodal_factor_free(F->L);
   if (F->type == TAUCS_FACTORTYPE_LLT_CCS)
-    taucs_ccs_free(F->L);
+    taucs_ccs_free((taucs_ccs_matrix*)F->L);
   taucs_free(F->rowperm);
   taucs_free(F->colperm);
   taucs_free(F);
@@ -316,7 +316,8 @@ int taucs_linsolve(taucs_ccs_matrix* A,
 
     /* decide on ordering and order */  
 
-    if (!opt_ordering)
+    //FIXME!! Does not compile, and I dont know which one to choose.
+    /*if (!opt_ordering)
       opt_ordering = opt_lu ? 
 	"colamd" : 
 #if defined(TAUCS_CONFIG_METIS)
@@ -326,7 +327,7 @@ int taucs_linsolve(taucs_ccs_matrix* A,
 #elif defined(TAUCS_CONFIG_AMD)
 	"amd"
 #endif
-	;
+	;*/
   
     taucs_printf("taucs_linsolve: ordering (llt=%d, lu=%d, ordering=%s)\n",
 		 opt_llt,opt_lu,opt_ordering);
@@ -392,7 +393,7 @@ int taucs_linsolve(taucs_ccs_matrix* A,
 		     local_handle_create,local_handle_open);
 	if (opt_ooc_memory < 0.0) opt_ooc_memory = taucs_available_memory_size();
 	if (taucs_ooc_factor_llt(PMPT ? PMPT : PAPT, 
-				 opt_ooc_handle, opt_ooc_memory) == TAUCS_SUCCESS)
+				 (taucs_io_handle*)opt_ooc_handle, opt_ooc_memory) == TAUCS_SUCCESS)
 	  f->type = TAUCS_FACTORTYPE_LLT_OOC;
 	else {
 	  retcode = TAUCS_ERROR;
@@ -587,14 +588,14 @@ int taucs_linsolve(taucs_ccs_matrix* A,
   }
 
   if (F) {
-    if (local_handle_open)   taucs_io_close(opt_ooc_handle);
-    if (local_handle_create) taucs_io_close(opt_ooc_handle);
+    if (local_handle_open)   taucs_io_close((taucs_io_handle*)opt_ooc_handle);
+    if (local_handle_create) taucs_io_close((taucs_io_handle*)opt_ooc_handle);
     
     *F = f;
   } else {
     if (f->type == TAUCS_FACTORTYPE_LLT_OOC) {
-      if (local_handle_open)   taucs_io_close(opt_ooc_handle);
-      if (local_handle_create) taucs_io_delete(opt_ooc_handle);
+      if (local_handle_open)   taucs_io_close((taucs_io_handle*)opt_ooc_handle);
+      if (local_handle_create) taucs_io_delete((taucs_io_handle*)opt_ooc_handle);
     }
     taucs_linsolve_free(f);
   }

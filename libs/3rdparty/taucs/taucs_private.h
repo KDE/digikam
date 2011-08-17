@@ -3,9 +3,10 @@
 /* Author: Sivan Toledo                                  */
 /*********************************************************/
 
-#if defined(TAUCS_CORE_CILK) && defined(TAUCS_CILK)
+/*#if defined(TAUCS_CORE_CILK) && defined(TAUCS_CILK)
 #pragma lang -C
 #endif
+*/
 
 /*** taucs_ccs_factor.c ***/
 int taucs_getopt_boolean(char* cmd, void* args[], char* name, int*    x);
@@ -13,7 +14,7 @@ int taucs_getopt_double (char* cmd, void* args[], char* name, double* x);
 int taucs_getopt_pointer(char* cmd, void* args[], char* name, void**  x);
 int taucs_getopt_string (char* cmd, void* args[], char* name, char**  x);
 
-int taucs_linsolve(taucs_ccs_matrix* A, 
+extern "C" int taucs_linsolve(taucs_ccs_matrix* A, 
 		   void**            F,
 		   int               nrhs,
 		   void*             X,
@@ -42,7 +43,7 @@ double         taucs_dtl(abs_fn)(taucs_datatype a);
 /*** taucs_ccs_base.c ***/
 
 taucs_ccs_matrix* taucs_dtl(ccs_create)          (int m, int n, int nnz);
-taucs_ccs_matrix* taucs_ccs_create               (int m, int n, int nnz, int flags);
+extern "C" taucs_ccs_matrix* taucs_ccs_create               (int m, int n, int nnz, int flags);
 void              taucs_dtl(ccs_free)            (taucs_ccs_matrix* matrix);
 void              taucs_ccs_free                 (taucs_ccs_matrix* matrix);
 
@@ -378,6 +379,5 @@ double taucs_ctime(void);
 /*********************************************************/
 /*                                                       */
 /*********************************************************/
-
 
 
