@@ -3,8 +3,8 @@
 /* Author: Sivan Toledo                                  */
 /*********************************************************/
 
-#include <taucs_config_tests.h>
-#include <taucs_config_build.h>
+//#include <taucs_config_tests.h>
+//#include <taucs_config_build.h>
 
 /*********************************************************/
 /* Cilk-related stuff                                    */
