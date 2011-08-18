@@ -178,9 +178,13 @@ static void taucs_linsolve_free(void* vF)
   if (!F) return;
 
   if (F->type == TAUCS_FACTORTYPE_LLT_SUPERNODAL)
-    taucs_supernodal_factor_free(F->L);
+    taucs_dtl(supernodal_factor_free)(F->L);
   if (F->type == TAUCS_FACTORTYPE_LLT_CCS)
+<<<<<<< HEAD:libs/3rdparty/taucs/taucs_linsolve.c
+    taucs_free(F->L);
+=======
     taucs_ccs_free((taucs_ccs_matrix*)F->L);
+>>>>>>> 594b29498695ab0d05bd26529c53062e7b364d79:libs/3rdparty/taucs/taucs_linsolve.cpp
   taucs_free(F->rowperm);
   taucs_free(F->colperm);
   taucs_free(F);
@@ -348,7 +352,8 @@ int taucs_linsolve(taucs_ccs_matrix* A,
       taucs_printf("taucs_linsolve: starting LLT factorization\n");
       if (M) {
 	taucs_printf("taucs_linsolve: pre-factorization permuting of M\n");
-	PMPT = taucs_ccs_permute_symmetrically(M,rowperm,colperm);
+	//PMPT = taucs_ccs_permute_symmetrically(M,rowperm,colperm);
+	PMPT = taucs_dtl(ccs_permute_symmetrically)(M,rowperm,colperm);
 	if (!PMPT) {
 	  taucs_printf("taucs_factor: permute rows and columns failed\n");
 	  retcode = TAUCS_ERROR_NOMEM;
@@ -356,7 +361,8 @@ int taucs_linsolve(taucs_ccs_matrix* A,
 	}
       } else {
 	taucs_printf("taucs_linsolve: pre-factorization permuting of A\n");
-	PAPT = taucs_ccs_permute_symmetrically(A,rowperm,colperm);
+	//PAPT = taucs_ccs_permute_symmetrically(A,rowperm,colperm);
+    PAPT = taucs_dtl(ccs_permute_symmetrically)(A,rowperm,colperm);
 	if (!PAPT) {
 	  taucs_printf("taucs_factor: permute rows and columns failed\n");
 	  retcode = TAUCS_ERROR_NOMEM;
@@ -392,8 +398,13 @@ int taucs_linsolve(taucs_ccs_matrix* A,
 	taucs_printf("taucs_linsolve: ooc file created?=%d opened?=%d\n",
 		     local_handle_create,local_handle_open);
 	if (opt_ooc_memory < 0.0) opt_ooc_memory = taucs_available_memory_size();
+<<<<<<< HEAD:libs/3rdparty/taucs/taucs_linsolve.c
+	if (taucs_dtl(ooc_factor_llt)(PMPT ? PMPT : PAPT, 
+				 opt_ooc_handle, opt_ooc_memory) == TAUCS_SUCCESS)
+=======
 	if (taucs_ooc_factor_llt(PMPT ? PMPT : PAPT, 
 				 (taucs_io_handle*)opt_ooc_handle, opt_ooc_memory) == TAUCS_SUCCESS)
+>>>>>>> 594b29498695ab0d05bd26529c53062e7b364d79:libs/3rdparty/taucs/taucs_linsolve.cpp
 	  f->type = TAUCS_FACTORTYPE_LLT_OOC;
 	else {
 	  retcode = TAUCS_ERROR;
@@ -447,9 +458,9 @@ int taucs_linsolve(taucs_ccs_matrix* A,
 	    taucs_supernodal_factor_free_numeric(f->L);
 
 #ifdef TAUCS_CILK	  
-	    rc = EXPORT(taucs_ccs_factor_llt_numeric)(opt_context, PMPT ? PMPT : PAPT, f->L);
+	    rc = EXPORT(taucs_dtl(ccs_factor_llt_numeric))(opt_context, PMPT ? PMPT : PAPT, f->L);
 #else
-	    rc = taucs_ccs_factor_llt_numeric(PMPT ? PMPT : PAPT, f->L);
+	    rc = taucs_dtl(ccs_factor_llt_numeric)(PMPT ? PMPT : PAPT, f->L);
 #endif
 	  }
 
@@ -476,7 +487,7 @@ int taucs_linsolve(taucs_ccs_matrix* A,
 #endif
 	} else if (opt_ll || TRUE) { /* this will be the default LLT */
 	  taucs_printf("taucs_linsolve: starting IC LLT LL factorization\n");
-	  f->L = taucs_ccs_factor_llt_ll_maxdepth(PMPT ? PMPT : PAPT,(int) opt_maxdepth);
+	  f->L = taucs_dtl(ccs_factor_llt_symbolic_maxdepth)(PMPT ? PMPT : PAPT,(int) opt_maxdepth);
 	  if (! (f->L) ) {
 	    taucs_printf("taucs_factor: factorization failed\n");
 	    retcode = TAUCS_ERROR;
@@ -547,7 +558,8 @@ int taucs_linsolve(taucs_ccs_matrix* A,
     }
     
     taucs_printf("taucs_linsolve: pre-solve permuting of A\n");
-    if (!PAPT) PAPT = taucs_ccs_permute_symmetrically(A,f->rowperm,f->colperm);
+    //if (!PAPT) PAPT = taucs_ccs_permute_symmetrically(A,f->rowperm,f->colperm);
+    if (!PAPT) PAPT = taucs_dtl(ccs_permute_symmetrically)(A,f->rowperm,f->colperm);
     if (!PAPT) {
       taucs_printf("taucs_factor: permute rows and columns failed\n");
       retcode = TAUCS_ERROR_NOMEM;
@@ -580,7 +592,7 @@ int taucs_linsolve(taucs_ccs_matrix* A,
 	goto release_and_return;
       }
    
-      taucs_vec_ipermute(A->n,A->flags,(char*)PX+j*ld,(char*)X+j*ld,f->rowperm);
+      taucs_dtl(vec_ipermute)(A->n,A->flags,(char*)PX+j*ld,(char*)X+j*ld,f->rowperm);
     }
 
     taucs_free(PB);

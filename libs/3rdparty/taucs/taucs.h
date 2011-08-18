@@ -6,7 +6,8 @@
 //FIXME
 //#include <taucs_config_tests.h>
 //#include <taucs_config_build.h>
-#define TAUCS_CORE_GENERAL
+//#define TAUCS_CORE_GENERAL
+
 /*********************************************************/
 /* Cilk-related stuff                                    */
 /*********************************************************/
@@ -221,12 +222,14 @@ typedef _Complex float  taucs_scomplex;
 #define taucs_abs(x)   (fabs(x))
 #define taucs_sqrt(x)  (sqrt(x))
 
+/*
 #elif defined(TAUCS_CORE_GENERAL)
 #define taucs_im(x)    0.0
 #define taucs_re(x)    (x)
 #define taucs_minusone -1.0
 #define taucs_one      1.0
 #define taucs_zero     0.0
+*/
 /*
 #define taucs_conj(x)  (x)
 #define taucs_abs(x)   (fabs(x))
@@ -367,8 +370,9 @@ typedef struct {float  r,i;} taucs_scomplex;
 #define taucs_one     1.0
 #define taucs_zero    0.0
 
+/*FIXME
 #elif defined(TAUCS_CORE_GENERAL)
-/*
+//---------------------------------------
 #define taucs_add(x,y) ((x)+(y))
 #define taucs_sub(x,y) ((x)-(y))
 #define taucs_mul(x,y) ((x)*(y))
@@ -377,13 +381,13 @@ typedef struct {float  r,i;} taucs_scomplex;
 #define taucs_conj(x)  (x)
 #define taucs_abs(x)   (fabs(x))
 #define taucs_sqrt(x)  (sqrt(x))
-*/
+//-------------------------------------
 #define taucs_im(x)   0.0
 #define taucs_re(x)   (x)
 #define taucs_minusone -1.0
 #define taucs_one     1.0
 #define taucs_zero    0.0
-
+*/
 #elif defined(TAUCS_CORE_SINGLE)
 
 #define taucs_add(x,y) ((x)+(y))
@@ -497,7 +501,7 @@ extern taucs_scomplex taucs_cminusone_const;
 */
 #endif
 
-/*
+/*FIXME
 #ifdef TAUCS_CORE_GENERAL
 #define taucs_zero_const     taucs_dzero_const
 #define taucs_one_const      taucs_done_const
@@ -575,7 +579,7 @@ typedef struct {
 } taucs_io_handle;
 
 /* generate all the prototypes */
-
+/*FIXME
 #define taucs_datatype taucs_double
 #define taucs_real_datatype taucs_double
 #define taucs_dtl(X) taucs_d##X
@@ -607,7 +611,7 @@ typedef struct {
 #undef taucs_real_datatype
 #undef taucs_datatype
 #undef taucs_dtl
-
+*/
 /*********************************************************/
 /*                                                       */
 /*********************************************************/
@@ -617,34 +621,43 @@ typedef struct {
 #ifdef TAUCS_CORE_DOUBLE
 #define TAUCS_CORE
 #define TAUCS_CORE_REAL
-#define TAUCS_CORE_DATATYPE TAUCS_DOUBLE
+//#define TAUCS_CORE_DATATYPE TAUCS_DOUBLE
+#define taucs_datatype taucs_double
+#define taucs_real_datatype taucs_double
 typedef taucs_double taucs_datatype;
 #define taucs_dtl(X) taucs_d##X
+#include "taucs_private.h"
 #define taucs_values values.d
 #define taucs_iszero(x) ((x) == 0.0)
 typedef double taucs_real_datatype; /* omer: this is the datatype of the real and imaginary part of the datatype*/
 #endif
 
+/*FIXME
 #ifdef TAUCS_CORE_GENERAL
 #define TAUCS_CORE
 #define TAUCS_CORE_DATATYPE TAUCS_DOUBLE
 typedef taucs_double taucs_datatype;
 typedef double taucs_real_datatype; 
-/*
-#define TAUCS_CORE_REAL
-#define TAUCS_CORE_DATATYPE TAUCS_DOUBLE
-#define taucs_values values.d
-#define taucs_dtl(X) taucs_g##X
-#define taucs_iszero(x) ((x) == 0.0)
+
+//#define TAUCS_CORE_REAL
+//#define TAUCS_CORE_DATATYPE TAUCS_DOUBLE
+//#define taucs_values values.d
+//#define taucs_dtl(X) taucs_g##X
+//#include "taucs_private.h"
+//#define taucs_iszero(x) ((x) == 0.0)
+
+//#endif
 */
-#endif
 
 #ifdef  TAUCS_CORE_SINGLE
 #define TAUCS_CORE
 #define TAUCS_CORE_REAL
-#define TAUCS_CORE_DATATYPE TAUCS_SINGLE
+//#define TAUCS_CORE_DATATYPE TAUCS_SINGLE
+#define taucs_datatype taucs_single
+#define taucs_real_datatype taucs_single
 typedef taucs_single taucs_datatype;
 #define taucs_dtl(X) taucs_s##X
+#include "taucs_private.h"
 #define taucs_values values.s
 #define taucs_iszero(x) ((x) == 0.0f)
 typedef float taucs_real_datatype; /* omer: this is the datatype of the real and imaginary part of the datatype*/
@@ -653,9 +666,12 @@ typedef float taucs_real_datatype; /* omer: this is the datatype of the real and
 #ifdef  TAUCS_CORE_DCOMPLEX
 #define TAUCS_CORE
 #define TAUCS_CORE_COMPLEX
-#define TAUCS_CORE_DATATYPE TAUCS_DCOMPLEX
+//#define TAUCS_CORE_DATATYPE TAUCS_DCOMPLEX
+#define taucs_datatype taucs_dcomplex
+#define taucs_real_datatype taucs_double
 typedef taucs_dcomplex taucs_datatype;
 #define taucs_dtl(X) taucs_z##X
+#include "taucs_private.h"
 #define taucs_values values.z
 #define taucs_iszero(x) (taucs_re(x) == 0.0 && taucs_im(x) == 0.0)
 typedef double taucs_real_datatype; /* omer: this is the datatype of the real and imaginary part of the datatype*/
@@ -664,9 +680,12 @@ typedef double taucs_real_datatype; /* omer: this is the datatype of the real an
 #ifdef  TAUCS_CORE_SCOMPLEX
 #define TAUCS_CORE
 #define TAUCS_CORE_COMPLEX
-#define TAUCS_CORE_DATATYPE TAUCS_SCOMPLEX
+//#define TAUCS_CORE_DATATYPE TAUCS_SCOMPLEX
+#define taucs_datatype taucs_scomplex
+#define taucs_real_datatype taucs_single
 typedef taucs_scomplex taucs_datatype;
 #define taucs_dtl(X) taucs_c##X
+#include "taucs_private.h"
 #define taucs_values values.c
 #define taucs_iszero(x) (taucs_re(x) == 0.0f && taucs_im(x) == 0.0f)
 typedef float taucs_real_datatype; /* omer: this is the datatype of the real and imaginary part of the datatype*/

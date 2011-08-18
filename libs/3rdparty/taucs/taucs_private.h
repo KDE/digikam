@@ -45,7 +45,7 @@ double         taucs_dtl(abs_fn)(taucs_datatype a);
 taucs_ccs_matrix* taucs_dtl(ccs_create)          (int m, int n, int nnz);
 extern "C" taucs_ccs_matrix* taucs_ccs_create               (int m, int n, int nnz, int flags);
 void              taucs_dtl(ccs_free)            (taucs_ccs_matrix* matrix);
-void              taucs_ccs_free                 (taucs_ccs_matrix* matrix);
+void              taucs_ccs_free                 (taucs_ccs_matrix* matrix);//--FIXME
 
 /*** taucs_ccs_ops.c ***/
 
@@ -61,14 +61,14 @@ void              taucs_ccs_split                (taucs_ccs_matrix* A,
 taucs_ccs_matrix* taucs_dtl(ccs_permute_symmetrically)(taucs_ccs_matrix* A, 
 						       int* perm, int* invperm);
 taucs_ccs_matrix*     taucs_ccs_permute_symmetrically (taucs_ccs_matrix* A, 
-						       int* perm, int* invperm);
+						       int* perm, int* invperm);//--FIXME
 
 void              taucs_dtl(ccs_times_vec)       (taucs_ccs_matrix* m, 
 						  taucs_datatype* X,
 						  taucs_datatype* B);
 void                        taucs_ccs_times_vec  (taucs_ccs_matrix* m, 
 						  void* X,
-						  void* B);
+						  void* B);//-taucs_dtl(ccs_times_vec)-FIXME
 
 /* matrix-vector with double-precision accumulator for iterative refinement */
 void              taucs_sccs_times_vec_dacc      (taucs_ccs_matrix* m, 
@@ -99,7 +99,7 @@ taucs_ccs_matrix* taucs_ccs_read_hb              (char* filename,int flags);
 
 void              taucs_ccs_order                (taucs_ccs_matrix* matrix, 
 						  int** perm, int** invperm,
-						  char* which);
+						  char* which);//--FIXME
 
 /*** taucs_ccs_factor_llt.c ***/
 
@@ -160,7 +160,7 @@ int taucs_conjugate_gradients                    (taucs_ccs_matrix*  A,
 						  void*             X,
 						  void*             B,
 						  int               itermax,
-						  double            convergetol);
+						  double            convergetol);//--FIXME
 
 int taucs_minres                                 (taucs_ccs_matrix*  A,
 						  int               (*precond_fn)(void*,void* x,void* b),
@@ -168,7 +168,7 @@ int taucs_minres                                 (taucs_ccs_matrix*  A,
 						  void*             X,
 						  void*             B,
 						  int               itermax,
-						  double            convergetol);
+						  double            convergetol);//--FIXME
 
 int taucs_sg_preconditioner_solve                (void*   P,
 						  double* z, 
@@ -185,7 +185,7 @@ taucs_ccs_matrix*
 taucs_amwb_preconditioner_create                 (taucs_ccs_matrix *symccs_mtxA, 
 						  int rnd,
 						  double subgraphs,
-						  int stretch_flag);
+						  int stretch_flag);//--FIXME
 
 void* 
 taucs_recursive_amwb_preconditioner_create       (taucs_ccs_matrix* A, 
@@ -244,16 +244,16 @@ taucs_ccs_symbolic_elimination                   (taucs_ccs_matrix* A,
 						  );
 
 void* taucs_ccs_factor_llt_symbolic              (taucs_ccs_matrix* A);
-void* taucs_ccs_factor_llt_symbolic_maxdepth     (taucs_ccs_matrix* A,int max_depth);
-taucs_cilk int   taucs_ccs_factor_llt_numeric               (taucs_ccs_matrix* A,void* L);
+void* taucs_ccs_factor_llt_symbolic_maxdepth     (taucs_ccs_matrix* A,int max_depth);//--FIXME
+taucs_cilk int   taucs_ccs_factor_llt_numeric               (taucs_ccs_matrix* A,void* L);//--FIXME
 
 taucs_cilk void* taucs_ccs_factor_llt_mf                    (taucs_ccs_matrix* A);
-taucs_cilk void* taucs_ccs_factor_llt_mf_maxdepth           (taucs_ccs_matrix* A,int max_depth);
+taucs_cilk void* taucs_ccs_factor_llt_mf_maxdepth           (taucs_ccs_matrix* A,int max_depth);//FIXME
 void* taucs_ccs_factor_llt_ll                    (taucs_ccs_matrix* A);
-void* taucs_ccs_factor_llt_ll_maxdepth           (taucs_ccs_matrix* A,int max_depth);
+void* taucs_ccs_factor_llt_ll_maxdepth           (taucs_ccs_matrix* A,int max_depth);//--FIXME
 int   taucs_supernodal_solve_llt                 (void* vL, void* x, void* b);
-void taucs_supernodal_factor_free                (void* L);
-void taucs_supernodal_factor_free_numeric        (void* L);
+void taucs_supernodal_factor_free                (void* L);//--FIXME
+void taucs_supernodal_factor_free_numeric        (void* L);//--FIXME
 taucs_ccs_matrix* taucs_supernodal_factor_to_ccs (void* L);
 void* taucs_supernodal_factor_get_diag           (void* L);
 
@@ -271,7 +271,7 @@ void  taucs_vec_axpby        (int n,int flags,
 void taucs_dtl(vec_permute)  (int n, taucs_datatype v[],  taucs_datatype pv[], int p[]);
 void taucs_dtl(vec_ipermute) (int n, taucs_datatype pv[], taucs_datatype v[],  int invp[]);
 void taucs_vec_permute(int n, int flags, void* v, void* pv, int p[]);
-void taucs_vec_ipermute(int n, int flags, void* v, void* pv, int p[]);
+void taucs_vec_ipermute(int n, int flags, void* v, void* pv, int p[]);//--FIXME
 
 
 /*********************************************************/
@@ -279,12 +279,12 @@ void taucs_vec_ipermute(int n, int flags, void* v, void* pv, int p[]);
 /*********************************************************/
 
 void   taucs_logfile(char* file_prefix);
-int    taucs_printf(char *fmt, ...);
+int    taucs_printf(char *fmt, ...);//--FIXME
 int    taucs_maximize_stacksize(void);
 double taucs_system_memory_size(void);
 double taucs_available_memory_size(void);
-double taucs_wtime(void);
-double taucs_ctime(void);
+double taucs_wtime(void);//--FIXME
+double taucs_ctime(void);//--FIXME
 
 /*********************************************************/
 /* Out-of-core IO routines                               */
@@ -293,11 +293,11 @@ double taucs_ctime(void);
 taucs_io_handle* taucs_io_create_singlefile(char* filename);
 taucs_io_handle* taucs_io_open_singlefile(char* filename);
 
-taucs_io_handle* taucs_io_create_multifile(char* filename);
-taucs_io_handle* taucs_io_open_multifile(char* filename);
+taucs_io_handle* taucs_io_create_multifile(char* filename);//--FIXME
+taucs_io_handle* taucs_io_open_multifile(char* filename);//--FIXME
 
-int              taucs_io_close (taucs_io_handle* f);
-int              taucs_io_delete(taucs_io_handle* f);
+int              taucs_io_close (taucs_io_handle* f);//--FIXME
+int              taucs_io_delete(taucs_io_handle* f);//--FIXME
 
 int              taucs_io_append(taucs_io_handle* f,
 				 int   index,
@@ -338,7 +338,7 @@ int taucs_dtl(ooc_solve_llt) (void* L /* actual type: taucs_io_handle* */,
 
 int taucs_ooc_factor_llt(taucs_ccs_matrix* A, 
 			 taucs_io_handle*  L,
-			 double memory);
+			 double memory);//--FIXME
 int taucs_ooc_solve_llt (void* L /* actual type: taucs_io_handle* */,
 			 void* x, void* b);
 
@@ -372,7 +372,7 @@ int taucs_ooc_solve_lu     (taucs_io_handle*   LU,
 void   taucs_logfile(char* file_prefix);
 int    taucs_printf(char *fmt, ...);
 double taucs_system_memory_size(void);
-double taucs_available_memory_size(void);
+double taucs_available_memory_size(void);//--FIXME
 double taucs_wtime(void);
 double taucs_ctime(void);
 
