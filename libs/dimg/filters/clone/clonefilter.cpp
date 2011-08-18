@@ -216,7 +216,8 @@ void CloneFilter::filterImage()
     // Create the sparse matrix, we have at least 5 non-zero elements
     // per column
 
-    taucs_ccs_matrix* pAt = taucs_ccs_create(N,N,5*N,TAUCS_DOUBLE);
+    //NOTE taucs_ccs_matrix is definded in taucs.h
+    taucs_ccs_matrix* pAt = taucs_dtl(ccs_create)(N,N,5*N);
     double* b             = new double[3*N];// All 3 channels at once
     uint n                = 0;
     int index             = 0;
