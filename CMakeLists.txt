@@ -633,12 +633,24 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ELSE(TAUCS_FOUND)
         INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs)
         SET(libtaucs_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/mulsymatrix.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_ccs_base.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_linsolve.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/amdbar.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/amdexa.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/amdtru.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/cilk.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/genmmd.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/mulsymatrix.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_ccs_order.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_iter.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_logging.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_malloc.cpp
-        )
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_memory.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_ooc_io.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_sn_llt.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_timer.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_vaidya.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_linsolve.cpp
+           ) 
     ENDIF(TAUCS_FOUND)
 
     # ==================================================================================================
