@@ -640,10 +640,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/cilk.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/genmmd.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/mulsymatrix.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_ccs_io.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_ccs_order.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_ccs_ooc_llt.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/mulsymatrix.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_iter.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_logging.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_malloc.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_memory.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_ooc_io.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_sn_llt.cpp
