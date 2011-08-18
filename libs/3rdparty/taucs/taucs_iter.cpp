@@ -122,7 +122,7 @@ taucs_conjugate_gradients(taucs_ccs_matrix* A,
   for (i=0; i<n; i++) R[i] = B[i];
   */
 
-  taucs_dtl(ccs_times_vec)(A,X,R);
+  taucs_ccs_times_vec(A,X,R);
   for (i=0; i<n; i++) R[i] = B[i] - R[i];
 
   Res_norm = Init_norm = twonorm(n,R);
@@ -153,7 +153,7 @@ taucs_conjugate_gradients(taucs_ccs_matrix* A,
       for (i=0; i<n; i++) P[i] = Z[i] + Beta * P[i];
     };
  
-    taucs_dtl(ccs_times_vec)(A,P,Q); /* Q = A*P */
+    taucs_ccs_times_vec(A,P,Q); /* Q = A*P */
 
     for (i=0,Rtmp=0.0; i<n; i++) Rtmp += P[i] * Q[i];
 
@@ -177,7 +177,7 @@ taucs_conjugate_gradients(taucs_ccs_matrix* A,
     Res_norm = twonorm(n,R);
 
 #if 0
-    taucs_dtl(ccs_times_vec)(A,X,R);
+    taucs_ccs_times_vec(A,X,R);
     for (i=0; i<n; i++) R[i] -= B[i];
     Res_norm = twonorm(n,R);
 #endif
@@ -194,7 +194,7 @@ taucs_conjugate_gradients(taucs_ccs_matrix* A,
   if (Iter > 0) {
     taucs_printf("cg: n=%d iterations = %d Reduction in residual norm %.2e, Rnorm %.2e\n", 
 		 A->n,Iter,ratio,Res_norm) ;
-    taucs_dtl(ccs_times_vec)(A,X,R);
+    taucs_ccs_times_vec(A,X,R);
     for (i=0; i<n; i++) R[i] = B[i] - R[i];
     taucs_printf("cg: true residual norm %.2e\n",twonorm(n,R));
   }
@@ -294,7 +294,7 @@ taucs_minres(taucs_ccs_matrix*  A,
 
   for (i=0; i<n; i++) VV[i] = V[i] / beta1;
   
-  taucs_dtl(ccs_times_vec)(A,VV,V); /* V = A*VV */
+  taucs_ccs_times_vec(A,VV,V); /* V = A*VV */
   
   alpha = dotprod(n,VV,V);
   
@@ -344,7 +344,7 @@ taucs_minres(taucs_ccs_matrix*  A,
 
   /* compute residual again */
   
-  taucs_dtl(ccs_times_vec)(A,X,R); 
+  taucs_ccs_times_vec(A,X,R); 
   for (i=0; i<n; i++) R[i] = B[i] - R[i];  /* r = b - A*x */
   normr = twonorm(n,R);
 
@@ -353,7 +353,7 @@ taucs_minres(taucs_ccs_matrix*  A,
   for ( Iter=1; Iter <= itermax; Iter++ ) {
 
     for (i=0; i<n; i++) VV[i] = V[i] / beta;
-    taucs_dtl(ccs_times_vec)(A,VV,V); 
+    taucs_ccs_times_vec(A,VV,V); 
     for (i=0; i<n; i++) V[i] -= (beta/betaold) * Volder[i];
     alpha = dotprod(n,VV,V);
     for (i=0; i<n; i++) V[i] -= (alpha/beta) * Vold[i];
@@ -393,14 +393,14 @@ taucs_minres(taucs_ccs_matrix*  A,
     for (i=0; i<n; i++) Xcg[i] = X[i] + snprod*(sn/cs)*M[i];
     
     if (precond_fn) {
-      taucs_dtl(ccs_times_vec)(A,X,R); 
+      taucs_ccs_times_vec(A,X,R); 
       for (i=0; i<n; i++) R[i] = B[i] - R[i];  /* r = b - A*x */
       normr = twonorm(n,R);
     } else {
       normr = fabs(snprod); 
       if (normr <= tolb) {
 	/* double check */
-	taucs_dtl(ccs_times_vec)(A,X,R); 
+	taucs_ccs_times_vec(A,X,R); 
 	for (i=0; i<n; i++) R[i] = B[i] - R[i];  /* r = b - A*x */
 	normr = twonorm(n,R);
       }

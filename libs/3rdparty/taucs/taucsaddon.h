@@ -12,7 +12,7 @@
 #include <vector>
 
 #define TAUCS_CORE_DOUBLE
-#define TAUCS_CONFIG_DREAL
+//#define TAUCS_CONFIG_DREAL
 //#define TAUCS_CORE_GENERAL
 extern "C" {
 #include "taucs.h"

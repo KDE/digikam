@@ -6,7 +6,7 @@
 //FIXME
 //#include <taucs_config_tests.h>
 //#include <taucs_config_build.h>
-//#define TAUCS_CORE_GENERAL
+#define TAUCS_CORE_GENERAL
 
 /*********************************************************/
 /* Cilk-related stuff                                    */
@@ -579,7 +579,7 @@ typedef struct {
 } taucs_io_handle;
 
 /* generate all the prototypes */
-/*FIXME
+///*FIXME
 #define taucs_datatype taucs_double
 #define taucs_real_datatype taucs_double
 #define taucs_dtl(X) taucs_d##X
@@ -611,7 +611,7 @@ typedef struct {
 #undef taucs_real_datatype
 #undef taucs_datatype
 #undef taucs_dtl
-*/
+
 /*********************************************************/
 /*                                                       */
 /*********************************************************/

@@ -138,8 +138,7 @@ taucs_dtl(ccs_split)(taucs_ccs_matrix*  A,
 /*********************************************************/
 /* permute symmetrically                                 */
 /*********************************************************/
-//---------FIXME--------------------------
-/*
+
 #ifdef TAUCS_CORE_GENERAL
 taucs_ccs_matrix* 
 taucs_ccs_permute_symmetrically(taucs_ccs_matrix* A, int* perm, int* invperm)
@@ -169,7 +168,7 @@ taucs_ccs_permute_symmetrically(taucs_ccs_matrix* A, int* perm, int* invperm)
   return NULL;
 }
 #endif /*TAUCS_CORE_GENERAL*/
-*/
+
 #ifndef TAUCS_CORE_GENERAL
 
 taucs_ccs_matrix* 
@@ -199,8 +198,7 @@ taucs_dtl(ccs_permute_symmetrically)(taucs_ccs_matrix* A, int* perm, int* invper
   /*colptr = (int*) taucs_malloc(n * sizeof(int));*/
   if (!len) {
     taucs_printf("taucs_ccs_permute_symmetrically: out of memory\n");
-    //taucs_ccs_free(PAPT);
-	taucs_free(PAPT);
+    taucs_ccs_free(PAPT);
     return NULL;
   }
 
@@ -264,11 +262,10 @@ taucs_dtl(ccs_permute_symmetrically)(taucs_ccs_matrix* A, int* perm, int* invper
 /* compute B = A*X                                       */
 /* current restrictions: A must be square, real          */
 /*********************************************************/
-//---------------FIXME----------------
-/*
+
 #ifdef TAUCS_CORE_GENERAL
 void 
-taucs_dtl(ccs_times_vec)(taucs_ccs_matrix* m, 
+taucs_ccs_times_vec(taucs_ccs_matrix* m, 
 		    void* X,
 		    void* B)
 {
@@ -296,7 +293,7 @@ taucs_dtl(ccs_times_vec)(taucs_ccs_matrix* m,
   
 }
 #endif /*TAUCS_CORE_GENERAL*/
-*/
+
 #ifndef TAUCS_CORE_GENERAL
 
 void 
