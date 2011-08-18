@@ -56,4 +56,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 144227 : Allow for fully customized album names when importing.
 045 ==> 279402 : Focus textbox for identifying faces gets lost too easily (and other issues).
 046 ==> 277796 : Build failure in the dcraw_emu sample.
-047 ==> 
+047 ==> 280240 : digiKam crash when attempting to view slideshow.
+048 ==> 
+
