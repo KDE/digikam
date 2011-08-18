@@ -9,9 +9,9 @@
 #include <math.h>
 #include "taucs.h"
 
-#ifndef TAUCS_CORE
-#error "You must define TAUCS_CORE to compile this file"
-#endif
+//#ifndef TAUCS_CORE
+//#error "You must define TAUCS_CORE to compile this file"
+//#endif
 
 /*********************************************************/
 /* CCS                                                   */
