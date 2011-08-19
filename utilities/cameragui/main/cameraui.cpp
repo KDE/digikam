@@ -1372,7 +1372,8 @@ void CameraUI::slotDownloadAndDeleteAll()
 
 void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 {
-    if (!d->albumCustomizer->customDateFormatIsValid())
+    if (d->albumCustomizer->folderDateFormat() == AlbumCustomizer::CustomDateFormat &&
+        !d->albumCustomizer->customDateFormatIsValid())
     {
         KMessageBox::information(this, i18n("Your custom target album date format is not valid. Please check your settings..."));
         return;
