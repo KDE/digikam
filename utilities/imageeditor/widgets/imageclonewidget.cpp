@@ -130,6 +130,7 @@ ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settin
 
       w       = imageIface()->getOriginalImg()->width();
       h       = imageIface()->getOriginalImg()->height();
+      
       bool sixteen = imageIface()->getOriginalImg()->sixteenBit();
       bool alpha   = imageIface()->getOriginalImg()->hasAlpha();
       d->maskImage = new DImg(w, h, sixteen, alpha);
@@ -438,7 +439,7 @@ void ImageCloneWidget::mouseReleaseEvent(QMouseEvent* e)
     if (d->rect.contains(e->x(), e->y()))
     {
         if(d->settings.selectMode)
-            emit drawingComplete();
+            emit signalDrawingComplete();
     }
 }
 

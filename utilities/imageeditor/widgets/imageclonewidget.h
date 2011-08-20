@@ -73,7 +73,7 @@ public:
     CloneContainer getContainer() const;
 Q_SIGNALS:
 
-    void    drawingComplete();
+    void    signalDrawingComplete();
     void    signalResized();
 
 public Q_SLOTS:
