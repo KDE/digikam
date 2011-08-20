@@ -60,7 +60,7 @@ QmlShow::QmlShow(const QStringList& list)
       d(new QmlShowPriv)
 {
     d->ui   = new QDeclarativeView;
-    d->list=list;
+    d->list = list;
     QDeclarativeContext *ctxt = d->ui->rootContext();
     ctxt->setContextProperty("myModel", QVariant::fromValue(d->list));
 
@@ -85,42 +85,55 @@ QmlShow::QmlShow(const QStringList& list)
     d->imageno=0;
 
     d->ui->show();
-
     showMaximized();
-    if(&list!=NULL)
-	{
-	    object->setProperty("text", d->list[0]);
-	}
+
+    if(!list.isEmpty())
+    {
+        object->setProperty("text", d->list[0]);
+    }
     else
-	{
-		close();
-	}
+    {
+        close();
+    }
 }
 
 QmlShow::~QmlShow()
 {
-	delete d;
+    delete d;
 }
+
 void QmlShow::nextImage()
 {
-	if(d->imageno==(d->list.count()-1)) return;
-        QObject *object=(QObject*)d->ui->rootObject();
-        object->setProperty("text",d->list[++(d->imageno)]);
+    if (d->imageno == (d->list.count()-1))
+    {
+        return;
+    }
+
+    QObject* object = d->ui->rootObject();
+    object->setProperty("text", d->list[++(d->imageno)]);
 }
+
 void QmlShow::prevImage()
 {
-	if(d->imageno==0) return;
-         QObject *object=(QObject*)d->ui->rootObject();
-        object->setProperty("text",d->list[--(d->imageno)]);
+    if (d->imageno == 0)
+    {
+        return;
+    }
+
+    QObject* object = d->ui->rootObject();
+    object->setProperty("text", d->list[--(d->imageno)]);
 }
+
 void QmlShow::play()
 {
-        QObject *object=(QObject*)d->ui->rootObject();
-        object->setProperty("bool_pp",true);
+    QObject* object = d->ui->rootObject();
+    object->setProperty("bool_pp", true);
 }
+
 void QmlShow::pause()
 {
-        QObject *object=(QObject*)d->ui->rootObject();
-        object->setProperty("bool_pp",false);
+    QObject* object = d->ui->rootObject();
+    object->setProperty("bool_pp", false);
 }
+
 }
