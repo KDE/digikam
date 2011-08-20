@@ -30,6 +30,7 @@
 // C++ includes
 
 #include <cmath>
+#include <assert.h>
 #include <map>
 
 // KDE includes
@@ -40,7 +41,7 @@
 
 #include "dimg.h"
 #include "dcolor.h"
-#include "taucsaddon.h"
+//#include "taucsaddon.h"
 
 //using std::map;
 
@@ -93,6 +94,54 @@ float static inline clamp01(float f)
     else if (f > 1.0f) return 1.0f;
     else return f;
 }
+
+bool CloneFilter::SOR(double **A, double *b, double *x, int N, double w, int maxstep, double e)
+{
+	double temp1, temp2;
+	double *x0 = new double[N];
+	for(int i = 0; i < N; i++)
+		x0[i] = 0;
+	int k = 0;
+	while(k < maxstep)
+	{
+		for(int i=0; i < N; i++)
+		{
+			temp1=0;
+			temp2=0;
+			for(int j=0; j<5; j++)
+			{
+				int adr = A[i][j];
+				if(adr >= 0)
+				{
+					if(adr < i)
+				        temp1+=x[adr];
+			        else 
+						if(adr > i)
+				         temp2+=x0[adr];
+				}
+			}
+            temp1 = 0 - temp1;
+			temp2 = 0 - temp2;
+            x[i] = (1-w) * x0[i] + w * (temp1 + temp2 + b[i])/(-4.0);
+			//cout<<x[i]<<" ";
+		}
+		//cout<<endl;
+		temp1=0;
+		for(int i=0; i<N; i++)
+			temp1 += sqrt((x[i]-x0[i])*(x[i]-x0[i]));
+
+		k++;
+		for(int i=0;i<N;i++)		
+			x0[i]=x[i];		
+		if(temp1<e)
+		{
+			delete []x0;
+			return true;
+		}
+	}
+	return false;
+}
+
 
 void CloneFilter::filterImage()
 {
@@ -209,7 +258,131 @@ void CloneFilter::filterImage()
 
     kDebug() << "Solver::solve: Solving " << width << "x" << height << " with " << N << " unknowns" << endl;
 
-    // Build the matrix
+    double **Arr;	
+    Arr = new double*[N];
+    for(int i=0; i < N; i++)
+        Arr[i] = new double[5];
+    for(int i =0 ;i <N; i++)
+        for(int j=0; j<5;j++)
+            Arr[i][j] = -1;
+    double* Br  = new double[N];
+    double* Bg  = new double[N];
+    double* Bb  = new double[N];
+    int index = 0, n = 0;
+    for (y = 1; y < height-1; y++) {
+        for (x = 1; x < width-1; x++) {
+            if (QColor(M[0][y*width+x],M[1][y*width+x],M[2][y*width+x]) != MASK_BG) 
+              {
+                int id = y*width+x;
+                float br =  div[0][y*width + x];
+                float bg =  div[1][y*width + x];
+                float bb =  div[2][y*width + x];                
+                if (QColor(M[0][(y-1)*width+x],M[1][(y-1)*width+x],M[2][(y-1)*width+x]) != MASK_BG) 
+                  {
+                          Arr[index][0] =mp[id-width] ;				
+                } else {
+                           // pixel, update right hand side
+                          br -= I[0][(y-1)*width + x];
+                          bg -= I[1][(y-1)*width + x];
+                          bb -= I[2][(y-1)*width + x];
+                          }
+
+              if (QColor(M[0][y*width+x-1],M[1][y*width+x-1],M[2][y*width+x-1]) != MASK_BG) 
+                {
+                          Arr[index][1] = mp[id-1];				
+               } else {
+                          br -= I[0][y*width + x-1];
+                          bg -= I[1][y*width + x-1];
+                          bb -= I[2][y*width + x-1];
+                         }
+              Arr[index][2] = mp[id];				
+              if (QColor(M[0][y*width+x+1],M[1][y*width+x+1],M[2][y*width+x+1]) != MASK_BG) 
+                {
+                          Arr[index][3] = mp[id+1];
+              } else  {				
+                          br -= I[0][y*width + x+1];
+                          bg -= I[1][y*width + x+1];
+                          bb -= I[2][y*width + x+1];
+                          }
+              if (QColor(M[0][(y+1)*width+x],M[1][(y+1)*width+x],M[2][(y+1)*width+x]) != MASK_BG) 
+                {					
+                          Arr[index][4] = mp[id+width];	
+              } else  {
+                          br -= I[0][(y+1)*width + x];
+                          bg -= I[1][(y+1)*width + x];
+                          bb -= I[2][(y+1)*width + x];;
+                          }
+              int k = mp[id];//Record the location of the last mask point
+              // Spread the right hand side so we can solve using TAUCS for
+              Br[k] = br;
+              Bg[k] = bg;
+              Bb[k] = bb;
+              index++;
+              n++;
+           }
+         }
+      }
+
+    assert(n == N);
+    double wv = 1.5;
+    double e  = 0;
+    if(N < 5000)
+        e = 0.1;
+        else if(N < 1000)
+                e = 1;
+            else if(N<20000)
+                e = 2.5;
+                else if(e < 30000)
+                    e = 5;
+                    else if(e < 50000)
+                        e = 10;
+                        else 
+                            kDebug() << "Clone area is too large";
+    int maxstep = 1000;
+    double *Xr = new double[N];
+    double *Xg = new double[N];
+    double *Xb = new double[N];
+    for(int i=0;i<N;i++)
+    {
+        Xr[i]=0;
+        Xg[i]=0;
+        Xb[i]=0;
+    }
+    bool SorR = SOR(Arr, Bb, Xb, N, wv, maxstep, e);
+    bool SorG = SOR(Arr, Bg, Xg, N, wv, maxstep, e);
+    bool SorB = SOR(Arr, Br, Xr, N, wv, maxstep, e);	
+    delete []Br;
+    delete []Bg;
+    delete []Bb;
+    if(SorR && SorG && SorB)
+    {
+        for (y = 1; y < height-1; y++) 
+         {
+            for (x = 1; x < width-1; x++) 
+              {
+                if (QColor(M[0][y*width+x],M[1][y*width+x],M[2][y*width+x]) != MASK_BG) 
+                  {
+                    int id = y * width + x;
+                    int ii = mp[id];
+                    I[0][y*width+x] = clamp01((float)Xr[ii]);
+                    I[1][y*width+x] = clamp01((float)Xg[ii]);
+                    I[2][y*width+x] = clamp01((float)Xb[ii]);
+                }
+            }
+        }
+    }
+
+    for(int i=0; i < height*width; i++)
+    {
+        col.setRed((int)(I[0][y*width+x] * clip));
+        col.setGreen((int)(I[1][y*width+x ]* clip));
+        col.setBlue((int)(I[2][y*width+x]*clip));
+        col.setAlpha(255);
+        m_resultImage->setPixelColor(x,y,col);
+    }
+}
+
+ // Build the matrix
     // ----------------
     // We solve Ax = b for all 3 channels at once
 
@@ -217,7 +390,8 @@ void CloneFilter::filterImage()
     // per column
 
     //NOTE taucs_ccs_matrix is definded in taucs.h
-    taucs_ccs_matrix* pAt = taucs_dtl(ccs_create)(N,N,5*N);
+  /*
+  taucs_ccs_matrix* pAt = taucs_dtl(ccs_create)(N,N,5*N);
     double* b             = new double[3*N];// All 3 channels at once
     uint n                = 0;
     int index             = 0;
@@ -356,7 +530,7 @@ void CloneFilter::filterImage()
         delete [] desImg[c];
     }
 
-///*FIXME
+//FIXME
     delete [] u;
     delete [] b;
     pA = NULL;
@@ -367,7 +541,8 @@ void CloneFilter::filterImage()
     delete [] rowptr ;
     delete [] colind ;
 
-}
+}*/
+
 ///*FIXME
 FilterAction CloneFilter::filterAction()
 {

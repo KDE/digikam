@@ -84,7 +84,7 @@ private:
     void divergents(float* I[3], float* O[3]);
     bool inimage(DImg* img, int x, int y );
     bool inBrushpixmap(QPixmap* brushmap, int x, int y);
-
+    bool SOR(double **A, double *b, double *x, int N, double w, int maxstep, double e); 
 
 private:
 
