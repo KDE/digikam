@@ -152,7 +152,7 @@ FIND_PACKAGE(Kface)
 FIND_PACKAGE(Kmap)
 FIND_PACKAGE(PGF)
 FIND_PACKAGE(CLAPACK)
-FIND_PACKAGE(TAUCS)
+#FIND_PACKAGE(TAUCS)
 FIND_PACKAGE(Boost) # 1.36.0)
 
 IF(Boost_FOUND)
@@ -192,17 +192,6 @@ IF(NOT APPLE)
 ELSE(NOT APPLE)
     # Under MACOS-X Clapack exist in standard, but it's not suitable as well. Need investiguation here.
     SET(CLAPACK_FOUND FALSE)
-ENDIF(NOT APPLE)
-
-#-------------------------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------------
-
-IF(NOT APPLE)
-    MACRO_BOOL_TO_01(TAUCS_FOUND USE_EXT_LIBTAUCS)
-ELSE(NOT APPLE)
-    # Under MACOS-X Taucs exist in standard, but it's not suitable as well. Need investiguation here.
-    SET(TAUCS_FOUND FALSE)
 ENDIF(NOT APPLE)
 
 #-------------------------------------------------------------------------------------
@@ -376,11 +365,6 @@ ELSE(CLAPACK_FOUND)
     MESSAGE(STATUS " libclapack library found................. NO  (optional - internal version used instead)")
 ENDIF(CLAPACK_FOUND)
 
-IF(TAUCS_FOUND)
-    MESSAGE(STATUS " libtaucs library found................. YES (optional)")
-ELSE(TAUCS_FOUND)
-    MESSAGE(STATUS " libtaucs library found................. NO  (optional - internal version used instead)")
-ENDIF(TAUCS_FOUND)
 # ================================================================
 
 IF(GPHOTO2_FOUND)
@@ -468,11 +452,11 @@ ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND 
     SET(DIGIKAM_CAN_BE_COMPILED false)
 ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
 
-IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND) OR (NOT TAUCS_FOUND) OR (NOT LENSFUN_FOUND)))
+IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND) OR (NOT LENSFUN_FOUND)))
     MESSAGE(STATUS "")
     MESSAGE(FATAL_ERROR " BUNDLED LIBRARIES HAVE BEEN FORCE-DISABLED IN THIS BUILD. Aborting.")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND) OR (NOT TAUCS_FOUND) OR (NOT LENSFUN_FOUND)))
+ENDIF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND) OR (NOT LENSFUN_FOUND)))
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")
@@ -627,33 +611,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/xerbla.c
         )
     ENDIF(CLAPACK_FOUND)
-
-    IF(TAUCS_FOUND)
-        INCLUDE_DIRECTORIES(${TAUCS_INCLUDE_DIR})
-    ELSE(TAUCS_FOUND)
-        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs)
-        SET(libtaucs_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_ccs_base.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/amdbar.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/amdexa.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/amdtru.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/cilk.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/genmmd.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/mulsymatrix.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_ccs_io.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_ccs_order.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_ccs_ooc_llt.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/mulsymatrix.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_iter.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_logging.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_memory.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_ooc_io.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_sn_llt.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_timer.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_vaidya.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs/taucs_linsolve.cpp
-           ) 
-    ENDIF(TAUCS_FOUND)
 
     # ==================================================================================================
     # Lensfun and LibLqr-1 library rules
@@ -1530,7 +1487,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs
+ #       ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/taucs
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory
