@@ -134,7 +134,7 @@ public:
     /**
      * @return the filesize of the image
      */
-    uint      fileSize() const;
+    qlonglong fileSize() const;
 
     /**
      * @return the dimensions of the image (valid only if dimensions

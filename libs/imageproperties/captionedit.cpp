@@ -75,20 +75,20 @@ CaptionEdit::CaptionEdit(QWidget* parent)
     setMargin(0);
     setSpacing(0);
 
-    connect(d->altLangStrEdit, SIGNAL(signalSelectionChanged(const QString&)),
-            this, SLOT(slotSelectionChanged(const QString&)));
+    connect(d->altLangStrEdit, SIGNAL(signalSelectionChanged(QString)),
+            this, SLOT(slotSelectionChanged(QString)));
 
-    connect(d->altLangStrEdit, SIGNAL(signalModified(const QString&, const QString&)),
-            this, SLOT(slotCaptionModified(const QString&, const QString&)));
+    connect(d->altLangStrEdit, SIGNAL(signalModified(QString,QString)),
+            this, SLOT(slotCaptionModified(QString,QString)));
 
-    connect(d->altLangStrEdit, SIGNAL(signalValueAdded(const QString&, const QString&)),
-            this, SLOT(slotAddValue(const QString&, const QString&)));
+    connect(d->altLangStrEdit, SIGNAL(signalValueAdded(QString,QString)),
+            this, SLOT(slotAddValue(QString,QString)));
 
-    connect(d->altLangStrEdit, SIGNAL(signalValueDeleted(const QString&)),
-            this, SLOT(slotDeleteValue(const QString&)));
+    connect(d->altLangStrEdit, SIGNAL(signalValueDeleted(QString)),
+            this, SLOT(slotDeleteValue(QString)));
 
-    connect(d->authorEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotAuthorChanged(const QString&)));
+    connect(d->authorEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(slotAuthorChanged(QString)));
 }
 
 CaptionEdit::~CaptionEdit()

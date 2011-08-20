@@ -332,7 +332,7 @@ QList<int> DatabaseUrl::tagIds() const
 
     for (int i=0; i<stringIds.count(); ++i)
     {
-        ids << stringIds[i].toInt();
+        ids << stringIds.at(i).toInt();
     }
 
     return ids;
@@ -346,7 +346,7 @@ QDate DatabaseUrl::startDate() const
 
     if (dates.size() >= 1)
     {
-        return QDate::fromString(dates[0], Qt::ISODate);
+        return QDate::fromString(dates.at(0), Qt::ISODate);
     }
     else
     {
@@ -360,7 +360,7 @@ QDate DatabaseUrl::endDate() const
 
     if (dates.size() >= 2)
     {
-        return QDate::fromString(dates[1], Qt::ISODate);
+        return QDate::fromString(dates.at(1), Qt::ISODate);
     }
     else
     {

@@ -749,38 +749,7 @@
             </statement>
             </dbaction>
         
-            <dbaction name="CreateDB" mode="transaction"><statement mode="plain">
-                DROP PROCEDURE IF EXISTS create_index_if_not_exists;
-            </statement>
-            <statement mode="plain">
-                CREATE PROCEDURE create_index_if_not_exists(table_name_vc varchar(50), index_name_vc varchar(50), field_list_vc varchar(1024))
-                SQL SECURITY INVOKER
-                BEGIN
-
-                set @Index_cnt = (
-                    SELECT COUNT(1) cnt
-                    FROM INFORMATION_SCHEMA.STATISTICS
-                    WHERE CONVERT(DATABASE() USING latin1) = CONVERT(TABLE_SCHEMA USING latin1)
-                      AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
-                      AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
-                );
-
-                IF IFNULL(@Index_cnt, 0) = 0 THEN
-                    set @index_sql = CONCAT( 
-                        CONVERT( 'ALTER TABLE ' USING latin1),
-                        CONVERT( table_name_vc USING latin1),
-                        CONVERT( ' ADD INDEX ' USING latin1),
-                        CONVERT( index_name_vc USING latin1),
-                        CONVERT( '(' USING latin1),
-                        CONVERT( field_list_vc USING latin1),
-                        CONVERT( ');' USING latin1)
-                    );
-                    PREPARE stmt FROM @index_sql;
-                    EXECUTE stmt;
-                    DEALLOCATE PREPARE stmt;
-                END IF;
-                END;
-            </statement>
+            <dbaction name="CreateDB" mode="transaction">
             <statement mode="plain">  CREATE TABLE IF NOT EXISTS AlbumRoots
             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
             label LONGTEXT,
@@ -922,11 +891,48 @@
                              tagid INTEGER,
                              property TEXT CHARACTER SET utf8,
                              value LONGTEXT CHARACTER SET utf8);</statement>
+            <statement mode="plain">
+                            CREATE OR REPLACE VIEW TagsTree 
+                            AS
+                            SELECT id, pid
+                            FROM Tags;</statement>
             </dbaction>
 
 
             <!-- Indices -->
             <dbaction name="CreateIndices" mode="transaction">
+                <statement mode="plain">
+                    DROP PROCEDURE IF EXISTS create_index_if_not_exists;
+                </statement>
+                <statement mode="plain">
+                    CREATE PROCEDURE create_index_if_not_exists(table_name_vc varchar(50), index_name_vc varchar(50), field_list_vc varchar(1024))
+                    SQL SECURITY INVOKER
+                    BEGIN
+
+                    set @Index_cnt = (
+                        SELECT COUNT(1) cnt
+                        FROM INFORMATION_SCHEMA.STATISTICS
+                        WHERE CONVERT(DATABASE() USING latin1) = CONVERT(TABLE_SCHEMA USING latin1)
+                        AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
+                        AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
+                    );
+
+                    IF IFNULL(@Index_cnt, 0) = 0 THEN
+                        set @index_sql = CONCAT( 
+                            CONVERT( 'ALTER TABLE ' USING latin1),
+                            CONVERT( table_name_vc USING latin1),
+                            CONVERT( ' ADD INDEX ' USING latin1),
+                            CONVERT( index_name_vc USING latin1),
+                            CONVERT( '(' USING latin1),
+                            CONVERT( field_list_vc USING latin1),
+                            CONVERT( ');' USING latin1)
+                        );
+                        PREPARE stmt FROM @index_sql;
+                        EXECUTE stmt;
+                        DEALLOCATE PREPARE stmt;
+                    END IF;
+                    END;
+                </statement>
                 <statement mode="plain">CALL create_index_if_not_exists('Images','dir_index','album');</statement>
                 <statement mode="plain">CALL create_index_if_not_exists('Images','hash_index','uniqueHash');</statement>
                 <statement mode="plain">CALL create_index_if_not_exists('ImageTags','tag_index','tagid');</statement>
@@ -1208,9 +1214,53 @@ ORDER BY inf.rating DESC, img.name ASC
                             value LONGTEXT CHARACTER SET utf8,
                             UNIQUE(keyword(255)))
                 </statement>
+                    <statement mode="plain">
+                            INSERT INTO Settings (keyword, value)
+                            VALUES('DBThumbnailsVersionRequired','1')
+                            ON DUPLICATE KEY
+                            UPDATE value = GREATEST(VALUES(value), 1)
+                    </statement>
+                    <statement mode="plain">
+                            INSERT INTO Settings (keyword, value)
+                            VALUES('DBThumbnailsVersion','2')
+                            ON DUPLICATE KEY
+                            UPDATE value = GREATEST(VALUES(value), 2)
+                    </statement>
             </dbaction>
             <!-- Thumbnails Indexes DB -->
             <dbaction name="CreateThumbnailsDBIndices" mode="transaction">
+                <statement mode="plain">
+                    DROP PROCEDURE IF EXISTS create_index_if_not_exists;
+                </statement>
+                <statement mode="plain">
+                    CREATE PROCEDURE create_index_if_not_exists(table_name_vc varchar(50), index_name_vc varchar(50), field_list_vc varchar(1024))
+                    SQL SECURITY INVOKER
+                    BEGIN
+
+                    set @Index_cnt = (
+                        SELECT COUNT(1) cnt
+                        FROM INFORMATION_SCHEMA.STATISTICS
+                        WHERE CONVERT(DATABASE() USING latin1) = CONVERT(TABLE_SCHEMA USING latin1)
+                        AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
+                        AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
+                    );
+
+                    IF IFNULL(@Index_cnt, 0) = 0 THEN
+                        set @index_sql = CONCAT( 
+                            CONVERT( 'ALTER TABLE ' USING latin1),
+                            CONVERT( table_name_vc USING latin1),
+                            CONVERT( ' ADD INDEX ' USING latin1),
+                            CONVERT( index_name_vc USING latin1),
+                            CONVERT( '(' USING latin1),
+                            CONVERT( field_list_vc USING latin1),
+                            CONVERT( ');' USING latin1)
+                        );
+                        PREPARE stmt FROM @index_sql;
+                        EXECUTE stmt;
+                        DEALLOCATE PREPARE stmt;
+                    END IF;
+                    END;
+                </statement>
                 <statement mode="plain">CALL create_index_if_not_exists('UniqueHashes','id_uniqueHashes','thumbId');</statement>
                 <statement mode="plain">CALL create_index_if_not_exists('FilePaths','id_filePaths','thumbId');</statement>
                 <statement mode="plain">CALL create_index_if_not_exists('CustomIdentifiers','id_customIdentifiers','thumbId');</statement>

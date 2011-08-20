@@ -286,9 +286,9 @@ void HotPixelFixer::weightPixels (Digikam::DImg& img, HotPixel& px, int method, 
                     {
                         // In the one-dimensional case, only the y coordinate is used.
                         const int xx = px.x()+(dir == VERTICAL_DIRECTION ? x :
-                                               dir== HORIZONTAL_DIRECTION ? w.positions()[i].y() : w.positions()[i].x());
+                                               dir== HORIZONTAL_DIRECTION ? w.positions().at(i).y() : w.positions().at(i).x());
                         const int yy = px.y()+(dir == HORIZONTAL_DIRECTION ? y :
-                                               w.positions()[i].y());
+                                               w.positions().at(i).y());
 
                         if (validPoint (img,QPoint(xx, yy)))
                         {

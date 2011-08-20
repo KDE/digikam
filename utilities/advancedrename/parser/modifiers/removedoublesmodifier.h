@@ -42,6 +42,11 @@ public:
 
     RemoveDoublesModifier();
     virtual QString parseOperation(ParseSettings& settings);
+
+private:
+
+    RemoveDoublesModifier(const RemoveDoublesModifier&);
+    RemoveDoublesModifier& operator=(const RemoveDoublesModifier&);
 };
 
 } // namespace Digikam

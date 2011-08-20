@@ -89,7 +89,7 @@ FilterAction LevelsFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 5; ++i)
     {
         action.addParameter(QString("gamma[%1]").arg(i), m_settings.gamma[i]);
         action.addParameter(QString("hInput[%1]").arg(i), m_settings.hInput[i]);
@@ -103,7 +103,7 @@ FilterAction LevelsFilter::filterAction()
 
 void LevelsFilter::readParameters(const Digikam::FilterAction& action)
 {
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 5; ++i)
     {
         m_settings.gamma[i] = action.parameter(QString("gamma[%1]").arg(i)).toDouble();
         m_settings.hInput[i] = action.parameter(QString("hInput[%1]").arg(i)).toInt();

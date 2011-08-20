@@ -71,7 +71,7 @@ ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* parent, const QVariantList&)
     d->insertTextAction = new KAction(KIcon("insert-text"), i18n("Insert Text..."), this);
     d->insertTextAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_T));
     actionCollection()->addAction("imageplugin_inserttext", d->insertTextAction );
-    connect(d->insertTextAction, SIGNAL(triggered(bool) ),
+    connect(d->insertTextAction, SIGNAL(triggered(bool)),
             this, SLOT(slotInsertText()));
 
     d->borderAction = new KAction(KIcon("bordertool"), i18n("Add Border..."), this);

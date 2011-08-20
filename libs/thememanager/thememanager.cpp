@@ -157,7 +157,7 @@ void ThemeManager::slotChangePalette()
     // TT thinks tooltips shouldn't use active, so we use our active colors for all states
     KColorScheme schemeTooltip(QPalette::Active, KColorScheme::Tooltip, config);
 
-    for ( int i = 0; i < 3 ; i++ )
+    for ( int i = 0; i < 3 ; ++i )
     {
         QPalette::ColorGroup state = states[i];
         KColorScheme schemeView(state,      KColorScheme::View,      config);
@@ -222,6 +222,7 @@ void ThemeManager::populateThemeMenu()
 
     const QStringList schemeFiles = KGlobal::dirs()->findAllResources("data", "color-schemes/*.colors", KStandardDirs::NoDuplicates);
 
+    QMap<QString, QAction*> actionMap;
     for (int i = 0; i < schemeFiles.size(); ++i)
     {
         const QString filename  = schemeFiles.at(i);
@@ -234,8 +235,18 @@ void ThemeManager::populateThemeMenu()
         d->themeMap.insert(name, filename);
         action->setIcon(icon);
         action->setCheckable(true);
-        d->themeMenuAction->addAction(action);
+        actionMap.insert(name, action);
     }
+
+    // sort the list
+    QStringList actionMapKeys = actionMap.keys();
+    actionMapKeys.sort();
+
+    foreach (const QString& name, actionMapKeys)
+    {
+        d->themeMenuAction->addAction(actionMap.value(name));
+    }
+
     updateCurrentKDEdefaultThemePreview();
     setCurrentTheme(theme);
 

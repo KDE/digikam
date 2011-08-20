@@ -52,7 +52,7 @@
 #include "imageinfojob.h"
 #include "searchxml.h"
 #include "gpsmarkertiler.h"
-#include "digikam2kmap.h"
+#include "digikam2kgeomap.h"
 
 namespace Digikam
 {
@@ -86,7 +86,7 @@ public:
     SearchTextBar*              searchGPSBar;
     EditableSearchTreeView*     searchTreeView;
     QSplitter*                  splitter;
-    KMap::KMapWidget*           mapSearchWidget;
+    KGeoMap::KGeoMapWidget*           mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;
     ImageAlbumModel*            imageAlbumModel;
     ImageFilterModel*           imageFilterModel;
@@ -127,7 +127,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     mapPanel->setMinimumWidth(256);
     mapPanel->setMinimumHeight(256);
     QVBoxLayout* vlay2 = new QVBoxLayout(mapPanel);
-    d->mapSearchWidget = new KMap::KMapWidget(mapPanel);
+    d->mapSearchWidget = new KGeoMap::KGeoMapWidget(mapPanel);
     d->mapSearchWidget->setBackend("marble");
     d->mapSearchWidget->setShowThumbnails(true);
 
@@ -138,7 +138,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
     d->sortOrderOptionsHelper = new GPSImageInfoSorter(this);
-    d->sortOrderOptionsHelper->addToKMapWidget(d->mapSearchWidget);
+    d->sortOrderOptionsHelper->addToKGeoMapWidget(d->mapSearchWidget);
 
     vlay2->addWidget(d->mapSearchWidget);
     vlay2->setMargin(0);
@@ -184,18 +184,18 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     vlayTop->addWidget(mapPanel);
     vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
     d->mapSearchWidget->setAvailableMouseModes(
-        KMap::MouseModePan |
-        KMap::MouseModeRegionSelection |
-        KMap::MouseModeZoomIntoGroup |
-        KMap::MouseModeRegionSelectionFromIcon |
-        KMap::MouseModeFilter |
-        KMap::MouseModeSelectThumbnail
+        KGeoMap::MouseModePan |
+        KGeoMap::MouseModeRegionSelection |
+        KGeoMap::MouseModeZoomIntoGroup |
+        KGeoMap::MouseModeRegionSelectionFromIcon |
+        KGeoMap::MouseModeFilter |
+        KGeoMap::MouseModeSelectThumbnail
     );
     d->mapSearchWidget->setVisibleMouseModes(
-        KMap::MouseModePan |
-        KMap::MouseModeZoomIntoGroup |
-        KMap::MouseModeFilter |
-        KMap::MouseModeSelectThumbnail
+        KGeoMap::MouseModePan |
+        KGeoMap::MouseModeZoomIntoGroup |
+        KGeoMap::MouseModeFilter |
+        KGeoMap::MouseModeSelectThumbnail
     );
 
     // construct a second row of control actions below the control widget
@@ -251,17 +251,17 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     connect(d->saveBtn, SIGNAL(clicked()),
             this, SLOT(slotSaveGPSSAlbum()));
 
-    connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
+    connect(d->nameEdit, SIGNAL(textChanged(QString)),
             this, SLOT(slotCheckNameEditGPSConditions()));
 
-    connect(d->nameEdit, SIGNAL(returnPressed(const QString&)),
+    connect(d->nameEdit, SIGNAL(returnPressed(QString)),
             d->saveBtn, SLOT(animateClick()));
 
     connect(d->mapSearchWidget, SIGNAL(signalRegionSelectionChanged()),
             this, SLOT(slotRegionSelectionChanged()));
 
-    connect(d->gpsMarkerTiler, SIGNAL(signalModelFilteredImages(const QList<qlonglong>&)),
-            this, SLOT(slotMapSoloItems(const QList<qlonglong>&)));
+    connect(d->gpsMarkerTiler, SIGNAL(signalModelFilteredImages(QList<qlonglong>)),
+            this, SLOT(slotMapSoloItems(QList<qlonglong>)));
 
     connect(d->mapSearchWidget, SIGNAL(signalRemoveCurrentFilter()),
             this, SLOT(slotRemoveCurrentFilter()));
@@ -379,7 +379,7 @@ void GPSSearchView::slotSaveGPSSAlbum()
  */
 void GPSSearchView::slotRegionSelectionChanged()
 {
-    const KMap::GeoCoordinates::Pair newRegionSelection = d->mapSearchWidget->getRegionSelection();
+    const KGeoMap::GeoCoordinates::Pair newRegionSelection = d->mapSearchWidget->getRegionSelection();
     const bool haveRegionSelection = newRegionSelection.first.hasCoordinates();
 
     if (haveRegionSelection)
@@ -412,7 +412,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 
     // We query the database here
 
-    const KMap::GeoCoordinates::Pair coordinates = d->mapSearchWidget->getRegionSelection();
+    const KGeoMap::GeoCoordinates::Pair coordinates = d->mapSearchWidget->getRegionSelection();
     const bool haveCoordinates = coordinates.first.hasCoordinates();
 
     if (haveCoordinates)
@@ -473,9 +473,9 @@ void GPSSearchView::slotAlbumSelected(Album* a)
     {
         const QList<double> list = reader.valueToDoubleList();
 
-        const KMap::GeoCoordinates::Pair coordinates(
-            KMap::GeoCoordinates(list.at(1), list.at(0)),
-            KMap::GeoCoordinates(list.at(3), list.at(2))
+        const KGeoMap::GeoCoordinates::Pair coordinates(
+            KGeoMap::GeoCoordinates(list.at(1), list.at(0)),
+            KGeoMap::GeoCoordinates(list.at(3), list.at(2))
         );
 
         /// @todo Currently, invalid coordinates are stored as -200:

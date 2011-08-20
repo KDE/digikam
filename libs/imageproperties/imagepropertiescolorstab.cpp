@@ -282,13 +282,57 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     sv2->setWidget(d->iccProfileWidget);
     insertTab(ImagePropertiesColorsTabPriv::ICCPROFILE, sv2, i18n("ICC profile"));
 
-    // -- read config ---------------------------------------------------------
+    // -------------------------------------------------------------
 
-    /// @todo Implement read/writeSettings functions with externally supplied groups
+    connect(d->regionBG, SIGNAL(buttonReleased(int)),
+            this, SLOT(slotRenderingChanged(int)));
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("Image Properties SideBar"));
+    // -------------------------------------------------------------
+    // histogramBox connections
 
+    connect(d->histogramBox->histogram(), SIGNAL(signalIntervalChanged(int,int)),
+            this, SLOT(slotUpdateInterval(int,int)));
+
+    connect(d->histogramBox->histogram(), SIGNAL(signalMaximumValueChanged(int)),
+            this, SLOT(slotUpdateIntervRange(int)));
+
+    connect(d->histogramBox->histogram(), SIGNAL(signalHistogramComputationDone(bool)),
+            this, SLOT(slotRefreshOptions(bool)));
+
+    connect(d->histogramBox->histogram(), SIGNAL(signalHistogramComputationFailed()),
+            this, SLOT(slotHistogramComputationFailed()));
+
+    connect(d->histogramBox, SIGNAL(signalChannelChanged(ChannelType)),
+            this, SLOT(slotChannelChanged()));
+
+    connect(d->histogramBox, SIGNAL(signalScaleChanged(HistogramScale)),
+            this, SLOT(slotScaleChanged()));
+
+    // -------------------------------------------------------------
+
+    connect(d->minInterv, SIGNAL(valueChanged(int)),
+            this, SLOT(slotMinValueChanged(int)));
+
+    connect(d->maxInterv, SIGNAL(valueChanged(int)),
+            this, SLOT(slotMaxValueChanged(int)));
+}
+
+ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
+{
+    // If there is a currently histogram computation when dialog is closed,
+    // stop it before the d->image data are deleted automatically!
+    d->histogramBox->histogram()->stopHistogramComputation();
+
+    if (d->imageLoaderThread)
+    {
+        delete d->imageLoaderThread;
+    }
+
+    delete d;
+}
+
+void ImagePropertiesColorsTab::readSettings(const KConfigGroup& group)
+{
     setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",
                                     (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
     d->iccProfileWidget->setMode(group.readEntry("ICC Level", (int)ICCProfileWidget::CUSTOM));
@@ -301,63 +345,16 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     d->regionBG->button(group.readEntry("Histogram Rendering",
                                         (int)FullImageHistogram))->setChecked(true);
 
-    // -------------------------------------------------------------
-
-    connect(d->regionBG, SIGNAL(buttonReleased(int)),
-            this, SLOT(slotRenderingChanged(int)));
-
-    // -------------------------------------------------------------
-    // histogramBox connections
-
-    connect(d->histogramBox->histogram(), SIGNAL(signalIntervalChanged( int, int )),
-            this, SLOT(slotUpdateInterval(int, int)));
-
-    connect(d->histogramBox->histogram(), SIGNAL(signalMaximumValueChanged( int )),
-            this, SLOT(slotUpdateIntervRange(int)));
-
-    connect(d->histogramBox->histogram(), SIGNAL(signalHistogramComputationDone(bool)),
-            this, SLOT(slotRefreshOptions(bool)));
-
-    connect(d->histogramBox->histogram(), SIGNAL(signalHistogramComputationFailed(void)),
-            this, SLOT(slotHistogramComputationFailed(void)));
-
-    connect(d->histogramBox, SIGNAL(signalChannelChanged(ChannelType)),
-            this, SLOT(slotChannelChanged()));
-
-    connect(d->histogramBox, SIGNAL(signalScaleChanged(HistogramScale)),
-            this, SLOT(slotScaleChanged()));
-
-    // -------------------------------------------------------------
-
-    connect(d->minInterv, SIGNAL(valueChanged (int)),
-            this, SLOT(slotMinValueChanged(int)));
-
-    connect(d->maxInterv, SIGNAL(valueChanged (int)),
-            this, SLOT(slotMaxValueChanged(int)));
 }
 
-ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
+void ImagePropertiesColorsTab::writeSettings(KConfigGroup& group)
 {
-    // If there is a currently histogram computation when dialog is closed,
-    // stop it before the d->image data are deleted automatically!
-    d->histogramBox->histogram()->stopHistogramComputation();
-
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("Image Properties SideBar"));
     group.writeEntry("ImagePropertiesColors Tab", currentIndex());
     group.writeEntry("Histogram Channel", (int)d->histogramBox->channel());
     group.writeEntry("Histogram Scale", (int)d->histogramBox->scale());
     group.writeEntry("Histogram Rendering", d->regionBG->checkedId());
     group.writeEntry("ICC Level", d->iccProfileWidget->getMode());
     group.writeEntry("Current ICC Item", d->iccProfileWidget->getCurrentItemKey());
-    config->sync();
-
-    if (d->imageLoaderThread)
-    {
-        delete d->imageLoaderThread;
-    }
-
-    delete d;
 }
 
 void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionArea,
@@ -450,11 +447,11 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KUrl& url)
     {
         d->imageLoaderThread = new SharedLoadSaveThread();
 
-        connect(d->imageLoaderThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-                this, SLOT(slotLoadImageFromUrlComplete(const LoadingDescription&, const DImg&)));
+        connect(d->imageLoaderThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+                this, SLOT(slotLoadImageFromUrlComplete(LoadingDescription,DImg)));
 
-        connect(d->imageLoaderThread, SIGNAL(signalMoreCompleteLoadingAvailable(const LoadingDescription&, const LoadingDescription&)),
-                this, SLOT(slotMoreCompleteLoadingAvailable(const LoadingDescription&, const LoadingDescription&)));
+        connect(d->imageLoaderThread, SIGNAL(signalMoreCompleteLoadingAvailable(LoadingDescription,LoadingDescription)),
+                this, SLOT(slotMoreCompleteLoadingAvailable(LoadingDescription,LoadingDescription)));
     }
 
     LoadingDescription desc = LoadingDescription(url.toLocalFile());

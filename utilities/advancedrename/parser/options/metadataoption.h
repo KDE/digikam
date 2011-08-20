@@ -51,6 +51,11 @@ public:
 
     MetadataPanel* metadataPanel;
     KLineEdit*     separatorLineEdit;
+
+private:
+
+    MetadataOptionDialog(const MetadataOptionDialog&);
+    MetadataOptionDialog& operator=(const MetadataOptionDialog&);
 };
 
 // --------------------------------------------------------
@@ -73,6 +78,9 @@ private Q_SLOTS:
     void slotTokenTriggered(const QString& token);
 
 private:
+
+    MetadataOption(const MetadataOption&);
+    MetadataOption& operator=(const MetadataOption&);
 
     QString parseMetadata(const QString& token, ParseSettings& settings);
 };

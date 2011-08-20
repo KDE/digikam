@@ -227,8 +227,8 @@ QMenu* AdvancedRenameWidget::createControlsMenu(QWidget* parent, QList<T*>& list
             continue;
         }
 
-        connect(ctrl, SIGNAL(signalTokenTriggered(const QString&)),
-                d->renameInput, SLOT(slotAddToken(const QString&)));
+        connect(ctrl, SIGNAL(signalTokenTriggered(QString)),
+                d->renameInput, SLOT(slotAddToken(QString)));
     }
 
     return menu;
@@ -262,8 +262,8 @@ void AdvancedRenameWidget::registerParserControls()
 
                 layout->addWidget(btn);
 
-                connect(p, SIGNAL(signalTokenTriggered(const QString&)),
-                        d->renameInput, SLOT(slotAddToken(const QString&)));
+                connect(p, SIGNAL(signalTokenTriggered(QString)),
+                        d->renameInput, SLOT(slotAddToken(QString)));
             }
             d->btnContainer->setLayout(layout);
             setMinimumWidth(d->btnContainer->layout()->sizeHint().width());
@@ -409,8 +409,8 @@ void AdvancedRenameWidget::setupWidgets()
     connect(d->tooltipToggleButton, SIGNAL(clicked(bool)),
             this, SLOT(slotToolTipButtonToggled(bool)));
 
-    connect(d->renameInput, SIGNAL(signalTextChanged(const QString&)),
-            this, SIGNAL(signalTextChanged(const QString&)));
+    connect(d->renameInput, SIGNAL(signalTextChanged(QString)),
+            this, SIGNAL(signalTextChanged(QString)));
 
     connect(d->renameInput, SIGNAL(signalTokenMarked(bool)),
             this, SLOT(slotTokenMarked(bool)));

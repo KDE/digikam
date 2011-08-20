@@ -92,11 +92,11 @@ ImageAlbumModel::ImageAlbumModel(QObject* parent)
     connect(this, SIGNAL(readyForIncrementalRefresh()),
             this, SLOT(incrementalRefresh()));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
-            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+            this, SLOT(slotCollectionImageChange(CollectionImageChangeset)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(const SearchChangeset&)),
-            this, SLOT(slotSearchChange(const SearchChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(SearchChangeset)),
+            this, SLOT(slotSearchChange(SearchChangeset)));
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
@@ -289,8 +289,8 @@ void ImageAlbumModel::startListJob(Album* album)
     connect(d->job, SIGNAL(result(KJob*)),
             this, SLOT(slotResult(KJob*)));
 
-    connect(d->job, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            this, SLOT(slotData(KIO::Job*, const QByteArray&)));
+    connect(d->job, SIGNAL(data(KIO::Job*,QByteArray)),
+            this, SLOT(slotData(KIO::Job*,QByteArray)));
 }
 
 void ImageAlbumModel::slotResult(KJob* job)
@@ -313,9 +313,9 @@ void ImageAlbumModel::slotResult(KJob* job)
     }
 }
 
-void ImageAlbumModel::slotData(KIO::Job*, const QByteArray& data)
+void ImageAlbumModel::slotData(KIO::Job* job, const QByteArray& data)
 {
-    if (data.isEmpty())
+    if (data.isEmpty() || job != d->job)
     {
         return;
     }

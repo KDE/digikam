@@ -180,7 +180,7 @@ DImageHistory::Entry& DImageHistory::operator[](int i)
 
 const DImageHistory::Entry& DImageHistory::operator[](int i) const
 {
-    return d->entries[i];
+    return d->entries.at(i);
 }
 
 DImageHistory& DImageHistory::operator<<(const FilterAction& action)
@@ -242,7 +242,7 @@ void DImageHistory::removeLast()
 
 const FilterAction& DImageHistory::action(int i) const
 {
-    return d->entries[i].action;
+    return d->entries.at(i).action;
 }
 
 QList<FilterAction> DImageHistory::allActions() const
@@ -265,7 +265,7 @@ int DImageHistory::actionCount() const
     {
         if (!entry.action.isNull())
         {
-            count++;
+            ++count;
         }
     }
 
@@ -292,7 +292,7 @@ QList<HistoryImageId> &DImageHistory::referredImages(int i)
 
 const QList<HistoryImageId> &DImageHistory::referredImages(int i) const
 {
-    return d->entries[i].referredImages;
+    return d->entries.at(i).referredImages;
 }
 
 QList<HistoryImageId> DImageHistory::allReferredImages() const
@@ -486,7 +486,7 @@ QString DImageHistory::toXml() const
     stream.writeStartElement("history");
     stream.writeAttribute("version", QString::number(1));
 
-    for (int i = 0; i < entries().count(); i++)
+    for (int i = 0; i < entries().count(); ++i)
     {
         const Entry& step = entries().at(i);
 

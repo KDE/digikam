@@ -94,14 +94,14 @@ ToolsView::ToolsView(QWidget* parent)
 
     // --------------------------------------------------------
 
-    connect(d->baseTools, SIGNAL(signalAssignTools(const QMap<int, QString>&)),
-            this, SIGNAL(signalAssignTools(const QMap<int, QString>&)));
+    connect(d->baseTools, SIGNAL(signalAssignTools(QMap<int,QString>)),
+            this, SIGNAL(signalAssignTools(QMap<int,QString>)));
 
-    //    connect(d->customTools, SIGNAL(signalAssignTools(const QMap<int, QString>&)),
-    //            this, SIGNAL(signalAssignTools(const QMap<int, QString>&)));
+    //    connect(d->customTools, SIGNAL(signalAssignTools(QMap<int,QString>)),
+    //            this, SIGNAL(signalAssignTools(QMap<int,QString>)));
 
-    connect(d->historyView, SIGNAL(signalEntryClicked(const QVariant&)),
-            this, SLOT(slotHistoryEntryClicked(const QVariant&)));
+    connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
+            this, SLOT(slotHistoryEntryClicked(QVariant)));
 }
 
 ToolsView::~ToolsView()
@@ -203,8 +203,8 @@ void ToolsView::slotHistoryEntryClicked(const QVariant& metadata)
 
     if (!list.isEmpty())
     {
-        int queueId      = list[0].toInt();
-        qlonglong itemId = list[1].toLongLong();
+        int queueId      = list.at(0).toInt();
+        qlonglong itemId = list.at(1).toLongLong();
         emit signalHistoryEntryClicked(queueId, itemId);
     }
 }

@@ -73,7 +73,7 @@ public:
      *  of the original file by content.
      */
     QString   uniqueHash;
-    int       fileSize;
+    qlonglong fileSize;
 
     /** Gives a hint at the orientation of the image.
      *  This can be used to supersede the Exif information in the file.

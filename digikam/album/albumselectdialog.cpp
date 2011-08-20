@@ -64,20 +64,14 @@ public:
         searchBar = 0;
     }
 
-    QString            newAlbumString;
-
     AlbumSelectWidget* albumSel;
 
     SearchTextBar*     searchBar;
 };
 
-AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
-                                     const QString& header,
-                                     const QString& newAlbumString)
+AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect, const QString& header)
     : KDialog(parent), d(new AlbumSelectDialogPrivate)
 {
-    d->newAlbumString = newAlbumString;
-
     setCaption(i18n("Select Album"));
     setButtons(Help|Ok|Cancel);
     setDefaultButton(Ok);
@@ -141,12 +135,9 @@ void AlbumSelectDialog::slotSelectionChanged()
     enableButtonOk(true);
 }
 
-PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
-                                       PAlbum* albumToSelect,
-                                       const QString& header,
-                                       const QString& newAlbumString)
+PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent, PAlbum* albumToSelect, const QString& header)
 {
-    QPointer<AlbumSelectDialog> dlg = new AlbumSelectDialog(parent, albumToSelect, header, newAlbumString);
+    QPointer<AlbumSelectDialog> dlg = new AlbumSelectDialog(parent, albumToSelect, header);
 
     if (dlg->exec() != KDialog::Accepted)
     {

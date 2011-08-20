@@ -86,6 +86,8 @@ public:
     bool getImageTagsPath(QStringList& tagsPath) const;
     bool setImageTagsPath(const QStringList& tagsPath) const;
 
+    bool getImageFacesMap(QMap<QString,QVariant>& facesPath) const;
+
     bool     setMetadataTemplate(const Template& t) const;
     Template getMetadataTemplate() const;
     bool     removeMetadataTemplate() const;
@@ -128,6 +130,15 @@ public:
     bool removeExifColorSpace() const;
 
     PhotoInfoContainer getPhotographInformation() const;
+
+    /** Returns millisecond time-stamp from Exif tags or 0 if not found.
+     */
+    int  getMSecsInfo() const;
+
+    /** Extract milliseconds time-stamp of photo from an Exif tag and store it to 'ms'.
+     *  Returns true if data are extracted.
+     */
+    bool mSecTimeStamp(const char* exifTagName, int& ms) const;
 
     /** Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
         of the format of the QVariant.

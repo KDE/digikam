@@ -503,10 +503,10 @@ void FaceScanDialog::setupConnections()
     connect(d->parametersResetButton, SIGNAL(clicked()),
             this, SLOT(setDetectionDefaultParameters()));
 
-    connect(d->albumSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+    connect(d->albumSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SLOT(updateClearButtons()));
 
-    connect(d->tagSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+    connect(d->tagSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SLOT(updateClearButtons()));
 
     connect(d->retrainAllButton, SIGNAL(toggled(bool)),

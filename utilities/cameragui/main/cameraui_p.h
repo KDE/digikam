@@ -30,14 +30,11 @@
 
 #include <QCheckBox>
 #include <QDateTime>
-#include <QLabel>
 #include <QString>
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <khelpmenu.h>
-#include <kio/previewjob.h>
 #include <kselectaction.h>
 #include <ktoggleaction.h>
 #include <kurl.h>
@@ -48,6 +45,7 @@
 
 // Local includes
 
+#include "camerathumbsctrl.h"
 #include "cameracontroller.h"
 #include "cameraiconview.h"
 #include "daboutdata.h"
@@ -55,12 +53,12 @@
 #include "dzoombar.h"
 #include "freespacewidget.h"
 #include "imagepropertiessidebarcamgui.h"
-#include "ddatetimeedit.h"
 #include "renamecustomizer.h"
+#include "albumcustomizer.h"
+#include "advancedsettings.h"
 #include "sidebar.h"
 #include "statusnavigatebar.h"
 #include "statusprogressbar.h"
-#include "templateselector.h"
 
 using namespace KDcrawIface;
 
@@ -71,13 +69,6 @@ class CameraUI::CameraUIPriv
 {
 public:
 
-    enum DateFormatOptions
-    {
-        IsoDateFormat=0,
-        TextDateFormat,
-        LocalDateFormat
-    };
-
     CameraUIPriv() :
         deleteAfter(false),
         busy(false),
@@ -85,13 +76,6 @@ public:
         fullScreen(false),
         removeFullScreenButton(false),
         fullScreenHideToolBar(false),
-        autoRotateCheck(0),
-        autoAlbumDateCheck(0),
-        autoAlbumExtCheck(0),
-        fixDateTimeCheck(0),
-        convertJpegCheck(0),
-        formatLabel(0),
-        folderDateLabel(0),
         refreshIconViewTimer(0),
         downloadMenu(0),
         deleteMenu(0),
@@ -100,12 +84,15 @@ public:
         cameraCaptureAction(0),
         cameraInfoAction(0),
         decreaseThumbsAction(0),
+        deleteNewAction(0),
         deleteAllAction(0),
         deleteSelectedAction(0),
+        downloadNewAction(0),
         downloadAllAction(0),
+        downloadSelectedAction(0),
+        downloadDelNewAction(0),
         downloadDelAllAction(0),
         downloadDelSelectedAction(0),
-        downloadSelectedAction(0),
         fullScreenAction(0),
         imageViewAction(0),
         increaseThumbsAction(0),
@@ -122,19 +109,17 @@ public:
         lastPhotoFirstAction(0),
         showMenuBarAction(0),
         showLogAction(0),
-        losslessFormat(0),
-        folderDateFormat(0),
         helpMenu(0),
-        dateTimeEdit(0),
-        kdeJob(0),
         advBox(0),
         splitter(0),
+        camThumbsCtrl(0),
         controller(0),
         historyUpdater(0),
         view(0),
         renameCustomizer(0),
+        albumCustomizer(0),
+        advancedSettings(0),
         anim(0),
-        templateSelector(0),
         rightSideBar(0),
         zoomBar(0),
         statusProgressBar(0),
@@ -146,6 +131,11 @@ public:
     {
     }
 
+    static const QString          configGroupName;
+    static const QString          configUseMetadataDateEntry;
+    static const QString          configUseDefaultTargetAlbum;
+    static const QString          configDefaultTargetAlbumId;
+
     bool                          deleteAfter;
     bool                          busy;
     bool                          closed;
@@ -156,18 +146,8 @@ public:
     QString                       cameraTitle;
 
     QStringList                   currentlyDeleting;
-    QStringList                   cameraFolderList;
     QSet<QString>                 foldersToScan;
-    GPItemInfoList                filesToBeAdded;
-
-    QCheckBox*                    autoRotateCheck;
-    QCheckBox*                    autoAlbumDateCheck;
-    QCheckBox*                    autoAlbumExtCheck;
-    QCheckBox*                    fixDateTimeCheck;
-    QCheckBox*                    convertJpegCheck;
-
-    QLabel*                       formatLabel;
-    QLabel*                       folderDateLabel;
+    CamItemInfoList               filesToBeAdded;
 
     QTimer*                       refreshIconViewTimer;
 
@@ -175,18 +155,19 @@ public:
     KMenu*                        deleteMenu;
     KMenu*                        imageMenu;
 
-    KUrl::List                    kdeTodo;
-
     KAction*                      cameraCancelAction;
     KAction*                      cameraCaptureAction;
     KAction*                      cameraInfoAction;
     KAction*                      decreaseThumbsAction;
+    KAction*                      deleteNewAction;
     KAction*                      deleteAllAction;
     KAction*                      deleteSelectedAction;
+    KAction*                      downloadNewAction;
     KAction*                      downloadAllAction;
+    KAction*                      downloadSelectedAction;
+    KAction*                      downloadDelNewAction;
     KAction*                      downloadDelAllAction;
     KAction*                      downloadDelSelectedAction;
-    KAction*                      downloadSelectedAction;
     KAction*                      fullScreenAction;
     KAction*                      imageViewAction;
     KAction*                      increaseThumbsAction;
@@ -204,31 +185,25 @@ public:
     KToggleAction*                showMenuBarAction;
     KToggleAction*                showLogAction;
 
-    KComboBox*                    losslessFormat;
-    KComboBox*                    folderDateFormat;
-
     KUrl                          lastDestURL;
 
     KHelpMenu*                    helpMenu;
-
-    DDateTimeEdit*                dateTimeEdit;
-
-    KIO::PreviewJob*              kdeJob;
 
     RExpanderBox*                 advBox;
 
     SidebarSplitter*              splitter;
 
+    CameraThumbsCtrl*             camThumbsCtrl;
     CameraController*             controller;
     CameraHistoryUpdater*         historyUpdater;
 
     CameraIconView*               view;
 
     RenameCustomizer*             renameCustomizer;
+    AlbumCustomizer*              albumCustomizer;
+    AdvancedSettings*             advancedSettings;
 
     DLogoAction*                  anim;
-
-    TemplateSelector*             templateSelector;
 
     ImagePropertiesSideBarCamGui* rightSideBar;
 
@@ -243,6 +218,11 @@ public:
 
     DAboutData*                   about;
 };
+
+const QString CameraUI::CameraUIPriv::configGroupName("Camera Settings");
+const QString CameraUI::CameraUIPriv::configUseMetadataDateEntry("UseThemeBackgroundColor");
+const QString CameraUI::CameraUIPriv::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
+const QString CameraUI::CameraUIPriv::configDefaultTargetAlbumId("DefaultTargetAlbumId");
 
 }  // namespace Digikam
 

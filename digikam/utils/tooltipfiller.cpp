@@ -306,18 +306,18 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 QString title = tags;
                 QString tagText;
 
-                for (int i = 0; i<tagPaths.size(); i++)
+                for (int i = 0; i<tagPaths.size(); ++i)
                 {
-                    tagText = tagPaths[i];
+                    tagText = tagPaths.at(i);
 
                     if (tagText.size() > cnt.maxStringLength)
                     {
-                        tagText = tagNames[i];
+                        tagText = tagNames.at(i);
                     }
 
                     if (tagText.size() > cnt.maxStringLength)
                     {
-                        tagText = cnt.elidedText(tagPaths[i], Qt::ElideLeft);
+                        tagText = cnt.elidedText(tagPaths.at(i), Qt::ElideLeft);
                     }
 
                     tip += cnt.cellSpecBeg + title + cnt.cellSpecMid + tagText + cnt.cellSpecEnd;
@@ -338,7 +338,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
             if (rating > RatingMin && rating <= RatingMax)
             {
-                for (int i=0; i<rating; i++)
+                for (int i=0; i<rating; ++i)
                 {
                     str += QChar(0x2730);
                     str += ' ';

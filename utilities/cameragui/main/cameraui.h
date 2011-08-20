@@ -40,24 +40,18 @@
 #include <kxmlguiwindow.h>
 #include <kurl.h>
 
-// Libkdcraw includes
-
-#include <libkdcraw/kdcraw.h>
-
 // Local includes
 
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 #include "dhistoryview.h"
+#include "dmetadata.h"
 #include "camerahistoryupdater.h"
-
-class KFileItem;
-class KJob;
+#include "downloadsettings.h"
 
 namespace Digikam
 {
 
 class Album;
-class CameraIconItem;
 class CollectionLocation;
 class CameraHistoryUpdater;
 
@@ -76,18 +70,16 @@ public:
     bool isBusy() const;
     bool isClosed() const;
 
-    bool cameraDeleteSupport();
-    bool cameraUploadSupport();
-    bool cameraMkDirSupport();
-    bool cameraDelDirSupport();
+    bool cameraDeleteSupport() const;
+    bool cameraUploadSupport() const;
+    bool cameraMkDirSupport() const;
+    bool cameraDelDirSupport() const;
 
-    bool autoRotateJpegFiles() const;
     bool chronologicOrder() const;
-    /** Get status of JPEG conversion files to lossless format during download.*/
-    bool convertLosslessJpegFiles() const;
-    QString losslessFormat();
 
     QString cameraTitle() const;
+
+    DownloadSettings downloadSettings() const;
 
 Q_SIGNALS:
 
@@ -115,7 +107,7 @@ private:
     void readSettings();
     void saveSettings();
     bool createAutoAlbum(const KUrl& parentURL, const QString& sub,
-                         const QDate& date, QString& errMsg);
+                         const QDate& date, QString& errMsg) const;
 
     bool dialogClosed();
     void finishDialog();
@@ -123,9 +115,8 @@ private:
     void hideToolBars();
     void refreshFreeSpace();
     void refreshCollectionFreeSpace();
-    void startKdePreviewJob();
     void deleteItems(bool onlySelected, bool onlyDownloaded);
-    void checkItem4Deletion(CameraIconItem* iconItem, QStringList& folders, QStringList& files,
+    void checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
                             QStringList& deleteList, QStringList& lockedList);
 
 private Q_SLOTS:
@@ -146,12 +137,7 @@ private Q_SLOTS:
     void slotHistoryEntryClicked(const QVariant&);
 
     void slotFolderList(const QStringList& folderList);
-    void slotFileList(const GPItemInfoList& fileList);
-    void slotThumbnail(const QString&, const QString&, const QImage&);
-    void slotThumbnailFailed(const QString&, const QString&);
-    void slotGotKDEPreview(const KFileItem&, const QPixmap&);
-    void slotFailedKDEPreview(const KFileItem&);
-    void slotKdePreviewFinished(KJob*);
+    void slotFileList(const CamItemInfoList& fileList);
 
     void slotIncreaseThumbSize();
     void slotDecreaseThumbSize();
@@ -163,19 +149,26 @@ private Q_SLOTS:
 
     void slotUpload();
     void slotUploadItems(const KUrl::List&);
+
+    void slotDownloadNew();
     void slotDownloadSelected();
     void slotDownloadAll();
-    void slotDownloadAndDeleteAll();
-    void slotDeleteSelected();
+
+    void slotDownloadAndDeleteNew();
     void slotDownloadAndDeleteSelected();
+    void slotDownloadAndDeleteAll();
+
+    void slotDeleteNew();
+    void slotDeleteSelected();
     void slotDeleteAll();
+
     void slotToggleLock();
     void slotMarkAsDownloaded();
 
     void slotFileView();
-    void slotFileView(CameraIconItem* item);
+    void slotFileView(const CamItemInfo&);
 
-    void slotUploaded(const GPItemInfo&);
+    void slotUploaded(const CamItemInfo&);
     void slotDownloaded(const QString&, const QString&, int);
     void slotDownloadComplete(const QString& sourceFolder, const QString& sourceFile,
                               const QString& destFolder, const QString& destFile);
@@ -184,17 +177,11 @@ private Q_SLOTS:
     void slotLocked(const QString&, const QString&, bool);
 
     void slotNewSelection(bool);
-    void slotItemsSelected(CameraIconItem* item, bool selected);
+    void slotItemsSelected(const CamItemInfo&, bool selected);
 
-    void slotExifFromFile(const QString& folder, const QString& file);
-    void slotExifFromData(const QByteArray& exifData);
+    void slotMetadata(const QString& folder, const QString& file, const DMetadata& meta);
 
     void slotlastPhotoFirst();
-
-    void slotFirstItem();
-    void slotPrevItem();
-    void slotNextItem();
-    void slotLastItem();
 
     void slotEditKeys();
     void slotShowMenuBar();

@@ -49,16 +49,10 @@ class AlbumSelectDialog : public KDialog
 
 public:
 
-    AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
-                      const QString& header=QString(),
-                      const QString& newAlbumString=QString());
+    AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect, const QString& header=QString());
     ~AlbumSelectDialog();
 
-
-    static PAlbum* selectAlbum(QWidget* parent,
-                               PAlbum* albumToSelect,
-                               const QString& header=QString(),
-                               const QString& newAlbumString=QString());
+    static PAlbum* selectAlbum(QWidget* parent, PAlbum* albumToSelect, const QString& header=QString());
 
 private Q_SLOTS:
 

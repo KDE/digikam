@@ -44,7 +44,6 @@
 #include "albumdb.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
-#include "dpopupmenu.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
 #include "metadatamanager.h"
@@ -96,10 +95,10 @@ LightTableThumbBar::LightTableThumbBar(QWidget* parent)
     setModels(d->imageInfoModel, d->imageFilterModel);
     setSelectionMode(QAbstractItemView::SingleSelection);
 
-    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(const QList<ImageInfo>&)),
-            this, SIGNAL(signalDroppedItems(const QList<ImageInfo>&)));
+    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(QList<ImageInfo>)),
+            this, SIGNAL(signalDroppedItems(QList<ImageInfo>)));
 
-    connect(d->imageInfoModel, SIGNAL(imageInfosAdded(const QList<ImageInfo>&)),
+    connect(d->imageInfoModel, SIGNAL(imageInfosAdded(QList<ImageInfo>)),
             this, SIGNAL(signalContentChanged()));
 }
 
@@ -146,7 +145,7 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
 
     // ----------------------------------------------------
 
-    DPopupMenu popmenu(this);
+    KMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
     cmhelper.addAction(leftPanelAction, true);
     cmhelper.addAction(rightPanelAction, true);

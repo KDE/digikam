@@ -308,8 +308,8 @@ AlbumManager::AlbumManager()
     internalInstance = this;
     d->dirWatch      = new KDirWatch(this);
 
-    connect(d->dirWatch, SIGNAL(dirty(const QString&)),
-            this, SLOT(slotDirWatchDirty(const QString&)));
+    connect(d->dirWatch, SIGNAL(dirty(QString)),
+            this, SLOT(slotDirWatchDirty(QString)));
 
     // these operations are pretty fast, no need for long queuing
     d->scanPAlbumsTimer = new QTimer(this);
@@ -905,7 +905,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
             for (int i=0; i<candidateIds.size(); ++i)
             {
-                migrateChoices->addItem(candidateDescriptions[i], candidateIds[i]);
+                migrateChoices->addItem(candidateDescriptions.at(i), candidateIds.at(i));
             }
 
             layout->addWidget(migrateButton,  0, 0, Qt::AlignTop);
@@ -1071,7 +1071,7 @@ bool AlbumManager::checkNepomukService()
 /*
     QEventLoop loop;
 
-    if (!connect(&nepomukInterface, SIGNAL(serviceInitialized(const QString &)),
+    if (!connect(&nepomukInterface, SIGNAL(serviceInitialized(QString)),
                  &loop, SLOT(quit())))
     {
         kDebug() << "Could not connect to Nepomuk server signal";
@@ -1125,11 +1125,11 @@ void AlbumManager::startScan()
     // connect to KDirNotify
 
     QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify", "FileMoved",
-                                          this, SLOT(slotKioFileMoved(const QString&, const QString&)));
+                                          this, SLOT(slotKioFileMoved(QString,QString)));
     QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify", "FilesAdded",
-                                          this, SLOT(slotKioFilesAdded(const QString&)));
+                                          this, SLOT(slotKioFilesAdded(QString)));
     QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify", "FilesRemoved",
-                                          this, SLOT(slotKioFilesDeleted(const QStringList&)));
+                                          this, SLOT(slotKioFilesDeleted(QStringList)));
 
     // create root albums
     d->rootPAlbum = new PAlbum(i18n("My Albums"));
@@ -1156,31 +1156,31 @@ void AlbumManager::startScan()
     }
 
     // listen to location status changes
-    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation&, int)),
-            this, SLOT(slotCollectionLocationStatusChanged(const CollectionLocation&, int)));
+    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation,int)),
+            this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation,int)));
 
-    connect(CollectionManager::instance(), SIGNAL(locationPropertiesChanged(const CollectionLocation&)),
-            this, SLOT(slotCollectionLocationPropertiesChanged(const CollectionLocation&)));
+    connect(CollectionManager::instance(), SIGNAL(locationPropertiesChanged(CollectionLocation)),
+            this, SLOT(slotCollectionLocationPropertiesChanged(CollectionLocation)));
 
     // reload albums
     refresh();
 
     // listen to album database changes
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(albumChange(const AlbumChangeset&)),
-            this, SLOT(slotAlbumChange(const AlbumChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(albumChange(AlbumChangeset)),
+            this, SLOT(slotAlbumChange(AlbumChangeset)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(const TagChangeset&)),
-            this, SLOT(slotTagChange(const TagChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(TagChangeset)),
+            this, SLOT(slotTagChange(TagChangeset)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(const SearchChangeset&)),
-            this, SLOT(slotSearchChange(const SearchChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(SearchChangeset)),
+            this, SLOT(slotSearchChange(SearchChangeset)));
 
     // listen to collection image changes
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
-            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+            this, SLOT(slotCollectionImageChange(CollectionImageChangeset)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset&)),
-            this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
+            this, SLOT(slotImageTagChange(ImageTagChangeset)));
 
     emit signalAllAlbumsLoaded();
 }
@@ -1525,8 +1525,8 @@ void AlbumManager::getAlbumItemsCount()
     connect(d->albumListJob, SIGNAL(result(KJob*)),
             this, SLOT(slotAlbumsJobResult(KJob*)));
 
-    connect(d->albumListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            this, SLOT(slotAlbumsJobData(KIO::Job*, const QByteArray&)));
+    connect(d->albumListJob, SIGNAL(data(KIO::Job*,QByteArray)),
+            this, SLOT(slotAlbumsJobData(KIO::Job*,QByteArray)));
 }
 
 void AlbumManager::scanTAlbums()
@@ -1648,7 +1648,7 @@ void AlbumManager::scanTAlbums()
         }
 
         // Its a new album. Find the parent of the album
-        TagMap::iterator iter = tmap.find(info.pid);
+        TagMap::const_iterator iter = tmap.constFind(info.pid);
 
         if (iter == tmap.end())
         {
@@ -1702,8 +1702,8 @@ void AlbumManager::getTagItemsCount()
     connect(d->tagListJob, SIGNAL(result(KJob*)),
             this, SLOT(slotTagsJobResult(KJob*)));
 
-    connect(d->tagListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            this, SLOT(slotTagsJobData(KIO::Job*, const QByteArray&)));
+    connect(d->tagListJob, SIGNAL(data(KIO::Job*,QByteArray)),
+            this, SLOT(slotTagsJobData(KIO::Job*,QByteArray)));
 
     if (d->personListJob)
     {
@@ -1717,8 +1717,8 @@ void AlbumManager::getTagItemsCount()
     connect(d->personListJob, SIGNAL(result(KJob*)),
             this, SLOT(slotPeopleJobResult(KJob*)));
 
-    connect(d->personListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            this, SLOT(slotPeopleJobData(KIO::Job*, const QByteArray&)));
+    connect(d->personListJob, SIGNAL(data(KIO::Job*,QByteArray)),
+            this, SLOT(slotPeopleJobData(KIO::Job*,QByteArray)));
 }
 
 void AlbumManager::scanSAlbums()
@@ -1818,8 +1818,8 @@ void AlbumManager::scanDAlbums()
     connect(d->dateListJob, SIGNAL(result(KJob*)),
             this, SLOT(slotDatesJobResult(KJob*)));
 
-    connect(d->dateListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-            this, SLOT(slotDatesJobData(KIO::Job*, const QByteArray&)));
+    connect(d->dateListJob, SIGNAL(data(KIO::Job*,QByteArray)),
+            this, SLOT(slotDatesJobData(KIO::Job*,QByteArray)));
 }
 
 AlbumList AlbumManager::allPAlbums() const
@@ -3289,6 +3289,7 @@ void AlbumManager::slotTagChange(const TagChangeset& changeset)
             {
                 emit signalTagPropertiesChanged(tag);
             }
+            break;
         }
         case TagChangeset::Unknown:
             break;

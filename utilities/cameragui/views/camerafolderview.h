@@ -7,7 +7,7 @@
  * Description : A widget to display a list of camera folders.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,6 @@ namespace Digikam
 {
 
 class CameraFolderItem;
-class CameraFolderViewPriv;
 
 class CameraFolderView : public QTreeWidget
 {
@@ -51,15 +50,15 @@ public:
     ~CameraFolderView();
 
     void addVirtualFolder(const QString& name, const QPixmap& pixmap=SmallIcon("camera-photo"));
-    void addRootFolder(const QString& folder, int nbItems, const QPixmap& pixmap=SmallIcon("folder"));
+    void addRootFolder(const QString& folder, int nbItems=-1, const QPixmap& pixmap=SmallIcon("folder"));
 
     CameraFolderItem* addFolder(const QString& folder, const QString& subFolder, int nbItems,
                                 const QPixmap& pixmap=SmallIcon("folder"));
 
     CameraFolderItem* findFolder(const QString& folderPath);
 
-    CameraFolderItem* virtualFolder();
-    CameraFolderItem* rootFolder();
+    CameraFolderItem* virtualFolder() const;
+    CameraFolderItem* rootFolder() const;
 
     virtual void clear();
 
@@ -74,8 +73,8 @@ private Q_SLOTS:
 
 private:
 
+    class CameraFolderViewPriv;
     CameraFolderViewPriv* const d;
-
 };
 
 } // namespace Digikam

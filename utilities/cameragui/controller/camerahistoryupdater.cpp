@@ -44,6 +44,9 @@ namespace Digikam
 
 class CameraHistoryUpdater::CameraHistoryUpdaterPriv
 {
+
+public:
+
     typedef QList<CHUpdateItem> CHUpdateItemsList;
 
 public:
@@ -133,8 +136,10 @@ void CameraHistoryUpdater::addItems(const QByteArray& id, CHUpdateItemMap& map)
         return;
     }
 
+    kDebug() << "Check download state from DB for " << map.count() << " items";
+
     QMutexLocker lock(&d->mutex);
-    d->running = true;
+    d->running  = true;
     d->canceled = false;
     d->updateItems << CHUpdateItem(id, map);
 
@@ -148,8 +153,7 @@ void CameraHistoryUpdater::addItems(const QByteArray& id, CHUpdateItemMap& map)
 
 void CameraHistoryUpdater::proccessMap(const QByteArray& id, CHUpdateItemMap& map)
 {
-    CHUpdateItemMap& _map        = map;
-    CHUpdateItemMap::iterator it = _map.begin();
+    CHUpdateItemMap::iterator it = map.begin();
 
     do
     {
@@ -157,22 +161,21 @@ void CameraHistoryUpdater::proccessMap(const QByteArray& id, CHUpdateItemMap& ma
         switch (DownloadHistory::status(id, (*it).name, (*it).size, (*it).mtime))
         {
             case DownloadHistory::NotDownloaded:
-                (*it).downloaded = GPItemInfo::NewPicture;
+                (*it).downloaded = CamItemInfo::NewPicture;
                 break;
             case DownloadHistory::Downloaded:
-                (*it).downloaded = GPItemInfo::DownloadedYes;
+                (*it).downloaded = CamItemInfo::DownloadedYes;
                 break;
             default: // DownloadHistory::StatusUnknown
-                (*it).downloaded = GPItemInfo::DownloadUnknown;
+                (*it).downloaded = CamItemInfo::DownloadUnknown;
                 break;
         }
 
         ++it;
-
     }
     while (it != map.end() && !d->canceled);
 
-    emit signalHistoryMap(_map);
+    emit signalHistoryMap(map);
 }
 
 }  // namespace Digikam

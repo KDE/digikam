@@ -342,26 +342,26 @@ void LightTableWindow::setupConnections()
 
     // Thumbs bar connections ---------------------------------------
 
-    connect(d->thumbView, SIGNAL(signalSetItemOnLeftPanel(const ImageInfo&)),
-            this, SLOT(slotSetItemOnLeftPanel(const ImageInfo&)));
+    connect(d->thumbView, SIGNAL(signalSetItemOnLeftPanel(ImageInfo)),
+            this, SLOT(slotSetItemOnLeftPanel(ImageInfo)));
 
-    connect(d->thumbView, SIGNAL(signalSetItemOnRightPanel(const ImageInfo&)),
-            this, SLOT(slotSetItemOnRightPanel(const ImageInfo&)));
+    connect(d->thumbView, SIGNAL(signalSetItemOnRightPanel(ImageInfo)),
+            this, SLOT(slotSetItemOnRightPanel(ImageInfo)));
 
-    connect(d->thumbView, SIGNAL(signalRemoveItem(const ImageInfo&)),
-            this, SLOT(slotRemoveItem(const ImageInfo&)));
+    connect(d->thumbView, SIGNAL(signalRemoveItem(ImageInfo)),
+            this, SLOT(slotRemoveItem(ImageInfo)));
 
-    connect(d->thumbView, SIGNAL(signalEditItem(const ImageInfo&)),
-            this, SLOT(slotEditItem(const ImageInfo&)));
+    connect(d->thumbView, SIGNAL(signalEditItem(ImageInfo)),
+            this, SLOT(slotEditItem(ImageInfo)));
 
     connect(d->thumbView, SIGNAL(signalClearAll()),
             this, SLOT(slotClearItemsList()));
 
-    connect(d->thumbView, SIGNAL(signalDroppedItems(const QList<ImageInfo>&)),
-            this, SLOT(slotThumbbarDroppedItems(const QList<ImageInfo>&)));
+    connect(d->thumbView, SIGNAL(signalDroppedItems(QList<ImageInfo>)),
+            this, SLOT(slotThumbbarDroppedItems(QList<ImageInfo>)));
 
-    connect(d->thumbView, SIGNAL(imageActivated(const ImageInfo&)),
-            this, SLOT(slotItemSelected(const ImageInfo&)));
+    connect(d->thumbView, SIGNAL(imageActivated(ImageInfo)),
+            this, SLOT(slotItemSelected(ImageInfo)));
 
     connect(d->thumbView, SIGNAL(signalContentChanged()),
             this, SLOT(slotRefreshStatusBar()));
@@ -394,20 +394,20 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalRightZoomFactorChanged(double)),
             this, SLOT(slotRightZoomFactorChanged(double)));
 
-    connect(d->previewView, SIGNAL(signalEditItem(const ImageInfo&)),
-            this, SLOT(slotEditItem(const ImageInfo&)));
+    connect(d->previewView, SIGNAL(signalEditItem(ImageInfo)),
+            this, SLOT(slotEditItem(ImageInfo)));
 
-    connect(d->previewView, SIGNAL(signalDeleteItem(const ImageInfo&)),
-            this, SLOT(slotDeleteItem(const ImageInfo&)));
+    connect(d->previewView, SIGNAL(signalDeleteItem(ImageInfo)),
+            this, SLOT(slotDeleteItem(ImageInfo)));
 
     connect(d->previewView, SIGNAL(signalSlideShow()),
             this, SLOT(slotToggleSlideShow()));
 
-    connect(d->previewView, SIGNAL(signalLeftDroppedItems(const ImageInfoList&)),
-            this, SLOT(slotLeftDroppedItems(const ImageInfoList&)));
+    connect(d->previewView, SIGNAL(signalLeftDroppedItems(ImageInfoList)),
+            this, SLOT(slotLeftDroppedItems(ImageInfoList)));
 
-    connect(d->previewView, SIGNAL(signalRightDroppedItems(const ImageInfoList&)),
-            this, SLOT(slotRightDroppedItems(const ImageInfoList&)));
+    connect(d->previewView, SIGNAL(signalRightDroppedItems(ImageInfoList)),
+            this, SLOT(slotRightDroppedItems(ImageInfoList)));
 
     connect(d->previewView, SIGNAL(signalToggleOnSyncPreview(bool)),
             this, SLOT(slotToggleOnSyncPreview(bool)));
@@ -432,7 +432,7 @@ void LightTableWindow::setupConnections()
 
     // -- FileWatch connections ------------------------------
 
-    LoadingCacheInterface::connectToSignalFileChanged(this, SLOT(slotFileChanged(const QString&)));
+    LoadingCacheInterface::connectToSignalFileChanged(this, SLOT(slotFileChanged(QString)));
 }
 
 void LightTableWindow::setupActions()
@@ -1426,14 +1426,14 @@ void LightTableWindow::slideShow(SlideShowSettings& settings)
             slide->setCurrent(d->thumbView->currentInfo().fileUrl());
         }
 
-        connect(slide, SIGNAL(signalRatingChanged(const KUrl&, int)),
-                d->thumbView, SLOT(slotRatingChanged(const KUrl&, int)));
+        connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
+                d->thumbView, SLOT(slotRatingChanged(KUrl,int)));
 
-        connect(slide, SIGNAL(signalColorLabelChanged(const KUrl&, int)),
-                d->thumbView, SLOT(slotColorLabelChanged(const KUrl&, int)));
+        connect(slide, SIGNAL(signalColorLabelChanged(KUrl,int)),
+                d->thumbView, SLOT(slotColorLabelChanged(KUrl,int)));
 
-        connect(slide, SIGNAL(signalPickLabelChanged(const KUrl&, int)),
-                d->thumbView, SLOT(slotPickLabelChanged(const KUrl&, int)));
+        connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
+                d->thumbView, SLOT(slotPickLabelChanged(KUrl,int)));
 
         slide->show();
     }

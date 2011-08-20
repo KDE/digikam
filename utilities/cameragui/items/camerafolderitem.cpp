@@ -7,7 +7,7 @@
  * Description : A widget to display a camera folder.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,7 +27,7 @@
 namespace Digikam
 {
 
-class CameraFolderItemPriv
+class CameraFolderItem::CameraFolderItemPriv
 {
 public:
 
@@ -70,17 +70,17 @@ CameraFolderItem::~CameraFolderItem()
     delete d;
 }
 
-bool CameraFolderItem::isVirtualFolder()
+bool CameraFolderItem::isVirtualFolder() const
 {
     return d->virtualFolder;
 }
 
-QString CameraFolderItem::folderName()
+QString CameraFolderItem::folderName() const
 {
     return d->folderName;
 }
 
-QString CameraFolderItem::folderPath()
+QString CameraFolderItem::folderPath() const
 {
     return d->folderPath;
 }
@@ -97,7 +97,7 @@ void CameraFolderItem::setCount(int val)
     setText(0, QString("%1 (%2)").arg(d->name).arg(QString::number(d->count)));
 }
 
-int CameraFolderItem::count()
+int CameraFolderItem::count() const
 {
     return d->count;
 }

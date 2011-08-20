@@ -168,7 +168,7 @@ void ImageVersionsModel::setPaintTree(bool paint)
 
 int ImageVersionsModel::listIndexOf(const QString& item) const
 {
-    for (int i = 0; i < d->data->size(); i++)
+    for (int i = 0; i < d->data->size(); ++i)
     {
         if (d->data->at(i).first == item)
         {

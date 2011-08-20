@@ -77,6 +77,7 @@
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <klocale.h>
+#include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
@@ -120,7 +121,6 @@
 #include "colorcorrectiondlg.h"
 #include "dimginterface.h"
 #include "dlogoaction.h"
-#include "dpopupmenu.h"
 #include "dzoombar.h"
 #include "editorstackview.h"
 #include "editortool.h"
@@ -226,7 +226,7 @@ ExposureSettingsContainer* EditorWindow::exposureSettings() const
 
 void EditorWindow::setupContextMenu()
 {
-    m_contextMenu         = new DPopupMenu(this);
+    m_contextMenu         = new KMenu(this);
     KActionCollection* ac = actionCollection();
 
     if (ac->action("editorwindow_backward"))
@@ -285,14 +285,14 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
 
-    connect(m_stackView, SIGNAL(signalZoomChanged(bool, bool, double)),
-            this, SLOT(slotZoomChanged(bool, bool, double)));
+    connect(m_stackView, SIGNAL(signalZoomChanged(bool,bool,double)),
+            this, SLOT(slotZoomChanged(bool,bool,double)));
 
     connect(m_canvas, SIGNAL(signalChanged()),
             this, SLOT(slotChanged()));
 
-    connect(m_canvas, SIGNAL(signalUndoStateChanged(bool, bool, bool)),
-            this, SLOT(slotUndoStateChanged(bool, bool, bool)));
+    connect(m_canvas, SIGNAL(signalUndoStateChanged(bool,bool,bool)),
+            this, SLOT(slotUndoStateChanged(bool,bool,bool)));
 
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected(bool)));
@@ -300,29 +300,29 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalPrepareToLoad()),
             this, SLOT(slotPrepareToLoad()));
 
-    connect(m_canvas, SIGNAL(signalLoadingStarted(const QString&)),
-            this, SLOT(slotLoadingStarted(const QString&)));
+    connect(m_canvas, SIGNAL(signalLoadingStarted(QString)),
+            this, SLOT(slotLoadingStarted(QString)));
 
-    connect(m_canvas, SIGNAL(signalLoadingFinished(const QString&, bool)),
-            this, SLOT(slotLoadingFinished(const QString&, bool)));
+    connect(m_canvas, SIGNAL(signalLoadingFinished(QString,bool)),
+            this, SLOT(slotLoadingFinished(QString,bool)));
 
-    connect(m_canvas, SIGNAL(signalLoadingProgress(const QString&, float)),
-            this, SLOT(slotLoadingProgress(const QString&, float)));
+    connect(m_canvas, SIGNAL(signalLoadingProgress(QString,float)),
+            this, SLOT(slotLoadingProgress(QString,float)));
 
-    connect(m_canvas, SIGNAL(signalSavingStarted(const QString&)),
-            this, SLOT(slotSavingStarted(const QString&)));
+    connect(m_canvas, SIGNAL(signalSavingStarted(QString)),
+            this, SLOT(slotSavingStarted(QString)));
 
-    connect(m_canvas, SIGNAL(signalSavingFinished(const QString&, bool)),
-            this, SLOT(slotSavingFinished(const QString&, bool)));
+    connect(m_canvas, SIGNAL(signalSavingFinished(QString,bool)),
+            this, SLOT(slotSavingFinished(QString,bool)));
 
-    connect(m_canvas, SIGNAL(signalSavingProgress(const QString&, float)),
-            this, SLOT(slotSavingProgress(const QString&, float)));
+    connect(m_canvas, SIGNAL(signalSavingProgress(QString,float)),
+            this, SLOT(slotSavingProgress(QString,float)));
 
-    connect(m_canvas, SIGNAL(signalSelectionChanged(const QRect&)),
-            this, SLOT(slotSelectionChanged(const QRect&)));
+    connect(m_canvas, SIGNAL(signalSelectionChanged(QRect)),
+            this, SLOT(slotSelectionChanged(QRect)));
 
-    connect(m_canvas->interface(), SIGNAL(signalFileOriginChanged(const QString&)),
-            this, SLOT(slotFileOriginChanged(const QString&)));
+    connect(m_canvas->interface(), SIGNAL(signalFileOriginChanged(QString)),
+            this, SLOT(slotFileOriginChanged(QString)));
 
     // -- status bar connections --------------------------------------
 
@@ -674,8 +674,8 @@ void EditorWindow::EditorWindowPriv::plugNewVersionInFormatAction(EditorWindow* 
     if (!formatMenuActionMapper)
     {
         formatMenuActionMapper = new QSignalMapper(q);
-        connect(formatMenuActionMapper, SIGNAL(mapped(const QString&)),
-                q, SLOT(saveNewVersionInFormat(const QString&)));
+        connect(formatMenuActionMapper, SIGNAL(mapped(QString)),
+                q, SLOT(saveNewVersionInFormat(QString)));
     }
 
     KAction* action = new KAction(text, q);
@@ -788,7 +788,7 @@ void EditorWindow::slotAboutToShowUndoMenu()
 
     for (int i=0; i<titles.size(); ++i)
     {
-        QAction* action = m_undoAction->menu()->addAction(titles[i], d->undoSignalMapper, SLOT(map()));
+        QAction* action = m_undoAction->menu()->addAction(titles.at(i), d->undoSignalMapper, SLOT(map()));
         d->undoSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -800,7 +800,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
 
     for (int i=0; i<titles.size(); ++i)
     {
-        QAction* action = m_redoAction->menu()->addAction(titles[i], d->redoSignalMapper, SLOT(map()));
+        QAction* action = m_redoAction->menu()->addAction(titles.at(i), d->redoSignalMapper, SLOT(map()));
         d->redoSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -1777,7 +1777,12 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success
     }
 }
 
-void EditorWindow::setOriginAfterSave()
+void EditorWindow::resetOrigin()
+{
+    m_canvas->interface()->setUndoManagerOrigin();
+}
+
+void EditorWindow::resetOriginSwitchFile()
 {
     DImageHistory resolved = resolvedImageHistory(m_canvas->interface()->getImageHistory());
     m_canvas->interface()->switchToLastSaved(resolved);
@@ -2433,6 +2438,9 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     m_savingContext.executedOperation = SavingContextContainer::SavingStateNone;
     m_savingContext.abortingSaving = false;
 
+    // in any case, destructive (Save as) or non (Export), mark as New Version
+    m_canvas->interface()->setHistoryIsBranch(true);
+
     m_canvas->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
                      m_setExifOrientationTag && m_canvas->exifRotated(),
                      m_savingContext.format.toLower());
@@ -2554,7 +2562,9 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, 
             return false;
         }*/
 
-        if (!checkOverwrite(newURL))
+        // check for overwrite, unless the operation explicitly tells us to overwrite
+        if (!(m_savingContext.versionFileOperation.tasks & VersionFileOperation::Replace)
+            && !checkOverwrite(newURL))
         {
             return false;
         }
@@ -2989,8 +2999,8 @@ KCategorizedView* EditorWindow::createToolSelectionView()
     d->selectToolsActionView->setModel(filterModel);
     d->selectToolsActionView->adjustGridSize();
 
-    connect(d->selectToolsActionView, SIGNAL(clicked(const QModelIndex&)),
-            actionModel, SLOT(trigger(const QModelIndex&)));
+    connect(d->selectToolsActionView, SIGNAL(clicked(QModelIndex)),
+            actionModel, SLOT(trigger(QModelIndex)));
 
     return d->selectToolsActionView;
 }
@@ -3006,7 +3016,7 @@ void EditorWindow::setupSelectToolsAction()
     connect(m_selectToolsAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotSelectToolsMenuAboutToShow()));
 
-    connect(d->selectToolsActionView, SIGNAL(clicked(const QModelIndex&)),
+    connect(d->selectToolsActionView, SIGNAL(clicked(QModelIndex)),
             m_selectToolsAction->menu(), SLOT(close()));
 }
 

@@ -308,14 +308,14 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    connect(d->tagCheckView->checkableModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
-            this, SLOT(slotTagStateChanged(Album*, Qt::CheckState)));
+    connect(d->tagCheckView->checkableModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+            this, SLOT(slotTagStateChanged(Album*,Qt::CheckState)));
 
     connect(d->captionsEdit, SIGNAL(signalModified()),
             this, SLOT(slotCommentChanged()));
 
-    connect(d->dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime&)),
-            this, SLOT(slotDateTimeChanged(const QDateTime&)));
+    connect(d->dateTimeEdit, SIGNAL(dateTimeChanged(QDateTime)),
+            this, SLOT(slotDateTimeChanged(QDateTime)));
 
     connect(d->pickLabelSelector, SIGNAL(signalPickLabelChanged(int)),
             this, SLOT(slotPickLabelChanged(int)));
@@ -329,14 +329,14 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     connect(d->templateSelector, SIGNAL(signalTemplateSelected()),
             this, SLOT(slotTemplateSelected()));
 
-    connect(d->tagsSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SLOT(slotTagsSearchChanged(const SearchTextSettings&)));
+    connect(d->tagsSearchBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
+            this, SLOT(slotTagsSearchChanged(SearchTextSettings)));
 
     connect(d->assignedTagsBtn, SIGNAL(toggled(bool)),
             this, SLOT(slotAssignedTagsToggled(bool)));
 
-    connect(d->newTagEdit, SIGNAL(taggingActionActivated(const TaggingAction&)),
-            this, SLOT(slotTaggingActionActivated(const TaggingAction&)));
+    connect(d->newTagEdit, SIGNAL(taggingActionActivated(TaggingAction)),
+            this, SLOT(slotTaggingActionActivated(TaggingAction)));
 
     connect(d->applyBtn, SIGNAL(clicked()),
             this, SLOT(slotApplyAllChanges()));
@@ -1340,7 +1340,7 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
         relations.append(info.relationCloud());
     }
 
-    for(int i = 0; i < relations.size(); i++)
+    for(int i = 0; i < relations.size(); ++i)
     {
         // Use QSet to prevent duplicates
         tmpSet.insert(relations.at(i).first);

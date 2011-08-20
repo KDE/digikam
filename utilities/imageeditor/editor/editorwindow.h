@@ -55,13 +55,13 @@ class KCategorizedView;
 class KSelectAction;
 class KToggleAction;
 class KToolBarPopupAction;
+class KMenu;
 
 namespace Digikam
 {
 
 class Canvas;
 class DImageHistory;
-class DPopupMenu;
 class DLogoAction;
 class EditorTool;
 class EditorStackView;
@@ -145,7 +145,7 @@ protected:
     KActionMenu*              m_selectToolsAction;
 
     DLogoAction*              m_animLogo;
-    DPopupMenu*               m_contextMenu;
+    KMenu*                    m_contextMenu;
     EditorStackView*          m_stackView;
     Canvas*                   m_canvas;
     ImagePluginLoader*        m_imagePluginLoader;
@@ -232,7 +232,8 @@ protected:
     virtual void setupActions()=0;
     virtual void setupUserArea()=0;
 
-    void setOriginAfterSave();
+    void resetOrigin();
+    void resetOriginSwitchFile();
     virtual VersionManager* versionManager() const;
     VersionFileOperation saveVersionFileOperation(const KUrl& url, bool fork);
     VersionFileOperation saveAsVersionFileOperation(const KUrl& url, const KUrl& saveLocation, const QString& format);

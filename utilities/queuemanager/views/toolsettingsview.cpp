@@ -223,8 +223,8 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
 {
     if (d->tool)
     {
-        disconnect(d->tool, SIGNAL(signalSettingsChanged(const BatchToolSettings&)),
-                   this, SLOT(slotSettingsChanged(const BatchToolSettings&)));
+        disconnect(d->tool, SIGNAL(signalSettingsChanged(BatchToolSettings)),
+                   this, SLOT(slotSettingsChanged(BatchToolSettings)));
 
         disconnect(d->settingsViewReset, SIGNAL(clicked()),
                    d->tool, SLOT(slotResetSettingsToDefault()));
@@ -243,8 +243,8 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
 
         setToolSettingsWidget(d->tool->settingsWidget());
 
-        connect(d->tool, SIGNAL(signalSettingsChanged(const BatchToolSettings&)),
-                this, SLOT(slotSettingsChanged(const BatchToolSettings&)));
+        connect(d->tool, SIGNAL(signalSettingsChanged(BatchToolSettings)),
+                this, SLOT(slotSettingsChanged(BatchToolSettings)));
 
         connect(d->settingsViewReset, SIGNAL(clicked()),
                 d->tool, SLOT(slotResetSettingsToDefault()));

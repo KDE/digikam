@@ -47,6 +47,8 @@ extern "C"
 #include <QFile>
 #include <QFileInfo>
 #include <QMap>
+#include <QPaintEngine>
+#include <QPainter>
 #include <QPixmap>
 #include <QSysInfo>
 #include <QDebug>
@@ -55,6 +57,7 @@ extern "C"
 // KDE includes
 
 #include <kdebug.h>
+#include <kglobal.h>
 
 // LibKDcraw includes
 
@@ -1159,7 +1162,7 @@ void DImg::prepareSubPixelAccess()
     /* Precompute the Lanczos kernel */
     LANCZOS_DATA_TYPE* lanczos_func = new LANCZOS_DATA_TYPE[LANCZOS_SUPPORT * LANCZOS_SUPPORT * LANCZOS_TABLE_RES];
 
-    for (int i = 0; i < LANCZOS_SUPPORT * LANCZOS_SUPPORT * LANCZOS_TABLE_RES; i++)
+    for (int i = 0; i < LANCZOS_SUPPORT * LANCZOS_SUPPORT * LANCZOS_TABLE_RES; ++i)
     {
         if (i == 0)
         {
@@ -1768,6 +1771,34 @@ QImage DImg::copyQImage(int x, int y, int w, int h) const
     return img.copyQImage();
 }
 
+class PixmapPaintEngineDetector
+{
+public:
+
+    PixmapPaintEngineDetector()
+        : m_isRaster(detectRasterFromPixmap())
+    {
+    }
+
+    bool isRaster() const
+    {
+        return m_isRaster;
+    }
+
+private:
+
+    static bool detectRasterFromPixmap()
+    {
+        QPixmap pix(1,1);
+        QPainter p(&pix);
+        return p.paintEngine() && p.paintEngine()->type() == QPaintEngine::Raster;
+    }
+
+    const bool m_isRaster;
+};
+
+K_GLOBAL_STATIC(PixmapPaintEngineDetector, pixmapPaintEngineDetector)
+
 QPixmap DImg::convertToPixmap() const
 {
     if (isNull())
@@ -1796,18 +1827,21 @@ QPixmap DImg::convertToPixmap() const
             sptr += 4;
         }
 
-        // NOTE: Qt4 do not provide anymore QImage::setAlphaChannel() because
         // alpha channel is auto-detected during QImage->QPixmap conversion
-
         return QPixmap::fromImage(img);
     }
     else
     {
+        // This is a temporary image operating on the DImg buffer
         QImage img(bits(), width(), height(), hasAlpha() ? QImage::Format_ARGB32 : QImage::Format_RGB32);
 
-        // NOTE: Qt4 do not provide anymore QImage::setAlphaChannel() because
-        // alpha channel is auto-detected during QImage->QPixmap conversion
+        // For paint engines which base the QPixmap internally on a QImage, we must use a persistent QImage
+        if (pixmapPaintEngineDetector->isRaster())
+        {
+            img = img.copy();
+        }
 
+        // alpha channel is auto-detected during QImage->QPixmap conversion
         return QPixmap::fromImage(img);
     }
 }

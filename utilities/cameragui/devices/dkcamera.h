@@ -32,13 +32,15 @@
 
 // Local includes
 
-#include "gpiteminfo.h"
+#include "camiteminfo.h"
 
 class QStringList;
 class QImage;
 
 namespace Digikam
 {
+
+class DMetadata;
 
 class DKCamera
 {
@@ -56,6 +58,8 @@ public:
     DKCamera(const QString& title, const QString& model, const QString& port, const QString& path);
     virtual ~DKCamera();
 
+public:
+
     virtual bool doConnect() = 0;
     virtual void cancel() = 0;
 
@@ -63,18 +67,18 @@ public:
 
     /// If getImageDimensions is false, the camera shall set width and height to -1
     /// if the values are not immediately available
-    virtual bool getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions = true) = 0;
+    virtual bool getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& infoList) = 0;
+    virtual void getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata) = 0;
 
     virtual bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) = 0;
-    virtual bool getExif(const QString& folder, const QString& itemName, char** edata, int& esize) = 0;
+    virtual bool getMetadata(const QString& folder, const QString& itemName, DMetadata& meta) = 0;
 
     virtual bool getPreview(QImage& preview) = 0;
-    virtual bool capture(GPItemInfo& itemInfo) = 0;
+    virtual bool capture(CamItemInfo& itemInfo) = 0;
 
     virtual bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile) = 0;
     virtual bool deleteItem(const QString& folder, const QString& itemName) = 0;
-    virtual bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
-                            GPItemInfo& itemInfo, bool getImageDimensions=true) = 0;
+    virtual bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& itemInfo) = 0;
     virtual bool cameraSummary(QString& summary) = 0;
     virtual bool cameraManual(QString& manual) = 0;
     virtual bool cameraAbout(QString& about) = 0;
@@ -87,20 +91,26 @@ public:
 
     virtual QByteArray cameraMD5ID() = 0;
 
+public:
+
     QString title() const;
     QString model() const;
     QString port()  const;
     QString path()  const;
     QString uuid()  const;
 
-    bool    thumbnailSupport();
-    bool    deleteSupport();
-    bool    uploadSupport();
-    bool    mkDirSupport();
-    bool    delDirSupport();
-    bool    captureImageSupport();
+    bool    thumbnailSupport() const;
+    bool    deleteSupport() const;
+    bool    uploadSupport() const;
+    bool    mkDirSupport() const;
+    bool    delDirSupport() const;
+    bool    captureImageSupport() const;
 
     QString mimeType(const QString& fileext) const;
+
+protected:
+
+    void    fillItemInfoFromMetadata(CamItemInfo& item, const DMetadata& meta) const;
 
 protected:
 

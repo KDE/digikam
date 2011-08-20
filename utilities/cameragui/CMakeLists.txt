@@ -1,9 +1,10 @@
 SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/controller/cameracontroller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/controller/camerathumbsctrl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/controller/camerahistoryupdater.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/devices/dkcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/devices/gpcamera.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/devices/gpiteminfo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/devices/camiteminfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/devices/umscamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/camerafolderdialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/camerainfodialog.cpp
@@ -18,6 +19,8 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/capturewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/freespacewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/renamecustomizer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/albumcustomizer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/advancedsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/main/cameraui.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/q3support/icongroupitem.cpp

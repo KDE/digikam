@@ -89,8 +89,8 @@ FindDuplicatesAlbum::FindDuplicatesAlbum(QWidget* parent)
     header()->setResizeMode(1, QHeaderView::ResizeToContents);
     setWhatsThis(i18n("This shows all found duplicate items."));
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 }
 
 FindDuplicatesAlbum::~FindDuplicatesAlbum()
@@ -249,8 +249,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget* parent)
     connect(d->scanDuplicatesBtn, SIGNAL(clicked()),
             this, SLOT(slotFindDuplicates()));
 
-    connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
-            this, SLOT(slotDuplicatesAlbumActived(QTreeWidgetItem*, int)));
+    connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
+            this, SLOT(slotDuplicatesAlbumActived(QTreeWidgetItem*,int)));
 
     connect(d->progressBar, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotCancelButtonPressed()));
@@ -331,8 +331,8 @@ void FindDuplicatesView::updateAlbumsBox()
     d->albumSelectCB->view()->expandToDepth(0);
     d->albumSelectCB->setNoSelectionText(i18n("No albums selected"));
 
-    connect(d->albumModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
-            this, SLOT(slotAlbumSelectionChanged(Album*, Qt::CheckState)));
+    connect(d->albumModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+            this, SLOT(slotAlbumSelectionChanged(Album*,Qt::CheckState)));
 }
 
 void FindDuplicatesView::updateTagsBox()
@@ -348,8 +348,8 @@ void FindDuplicatesView::updateTagsBox()
     d->tagSelectCB->view()->expandToDepth(0);
     d->tagSelectCB->setNoSelectionText(i18n("No tags selected"));
 
-    connect(d->tagModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
-            this, SLOT(slotTagSelectionChanged(Album*, Qt::CheckState)));
+    connect(d->tagModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+            this, SLOT(slotTagSelectionChanged(Album*,Qt::CheckState)));
 }
 
 void FindDuplicatesView::slotAlbumAdded(Album* a)
@@ -463,11 +463,11 @@ void FindDuplicatesView::slotFindDuplicates()
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDuplicatesSearchResult(KJob*)));
 
-    connect(job, SIGNAL(totalAmount(KJob*, KJob::Unit, qulonglong)),
-            this, SLOT(slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong)));
+    connect(job, SIGNAL(totalAmount(KJob*,KJob::Unit,qulonglong)),
+            this, SLOT(slotDuplicatesSearchTotalAmount(KJob*,KJob::Unit,qulonglong)));
 
-    connect(job, SIGNAL(processedAmount(KJob*, KJob::Unit, qulonglong)),
-            this, SLOT(slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong)));
+    connect(job, SIGNAL(processedAmount(KJob*,KJob::Unit,qulonglong)),
+            this, SLOT(slotDuplicatesSearchProcessedAmount(KJob*,KJob::Unit,qulonglong)));
 }
 
 void FindDuplicatesView::slotCancelButtonPressed()

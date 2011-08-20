@@ -236,8 +236,8 @@ RatingFilter::RatingFilter(QWidget* parent)
     connect(d->optionsMenu, SIGNAL(aboutToShow()),
             this, SLOT(slotOptionsMenu()));
 
-    connect(d->ratingWidget, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
-            this, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)));
+    connect(d->ratingWidget, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition)),
+            this, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition)));
 }
 
 RatingFilter::~RatingFilter()

@@ -110,13 +110,7 @@ void RangeModifier::slotTokenTriggered(const QString& token)
 
 QString RangeModifier::parseOperation(ParseSettings& settings)
 {
-    Q_UNUSED(settings);
-
     const QRegExp& reg = regExp();
-
-    /*
-     * extract range parameters
-     */
     bool ok = false;
 
     // if the start parameter can not be extracted, set it to 1
@@ -149,9 +143,7 @@ QString RangeModifier::parseOperation(ParseSettings& settings)
 
     // --------------------------------------------------------
 
-    /*
-     * replace the string according to the given range
-     */
+    // replace the string according to the given range
     if (start > settings.str2Modify.count())
     {
         return QString();

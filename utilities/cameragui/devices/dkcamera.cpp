@@ -27,6 +27,7 @@
 // Local includes
 
 #include "albumsettings.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -85,32 +86,32 @@ QString DKCamera::uuid() const
     return m_uuid;
 }
 
-bool DKCamera::thumbnailSupport()
+bool DKCamera::thumbnailSupport() const
 {
     return m_thumbnailSupport;
 }
 
-bool DKCamera::deleteSupport()
+bool DKCamera::deleteSupport() const
 {
     return m_deleteSupport;
 }
 
-bool DKCamera::uploadSupport()
+bool DKCamera::uploadSupport() const
 {
     return m_uploadSupport;
 }
 
-bool DKCamera::mkDirSupport()
+bool DKCamera::mkDirSupport() const
 {
     return m_mkDirSupport;
 }
 
-bool DKCamera::delDirSupport()
+bool DKCamera::delDirSupport() const
 {
     return m_delDirSupport;
 }
 
-bool DKCamera::captureImageSupport()
+bool DKCamera::captureImageSupport() const
 {
     return m_captureImageSupport;
 }
@@ -153,6 +154,17 @@ QString DKCamera::mimeType(const QString& fileext) const
     }
 
     return mime;
+}
+
+void DKCamera::fillItemInfoFromMetadata(CamItemInfo& info, const DMetadata& meta) const
+{
+    QSize dims     = meta.getImageDimensions();
+    info.mtime     = meta.getImageDateTime();
+    //NOTE: see B.K.O #246401 to sort based on milliseconds for items  taken quickly.
+    info.mtime.setTime(info.mtime.time().addMSecs(meta.getMSecsInfo()));
+    info.width     = dims.width();
+    info.height    = dims.height();
+    info.photoInfo = meta.getPhotographInformation();
 }
 
 }  // namespace Digikam

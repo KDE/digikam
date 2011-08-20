@@ -208,6 +208,10 @@ ResizeTool::ResizeTool(QObject* parent)
 
     d->mainTab->addTab(firstPage, i18n("New Size"));
 
+    d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
+    d->preserveRatioBox->setWhatsThis( i18n("Enable this option to maintain aspect "
+                                            "ratio with new image sizes."));
+
     QLabel* label1 = new QLabel(i18n("Width:"), firstPage);
     d->wInput      = new RIntNumInput(firstPage);
     d->wInput->setRange(1, qMax(d->orgWidth * 10, 9999), 1);
@@ -237,10 +241,6 @@ ResizeTool::ResizeTool(QObject* parent)
     d->hpInput->setDefaultValue(100.0);
     d->hpInput->setObjectName("hpInput");
     d->hpInput->setWhatsThis( i18n("New image height in percent (%)."));
-
-    d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
-    d->preserveRatioBox->setWhatsThis( i18n("Enable this option to maintain aspect "
-                                            "ratio with new image sizes."));
 
     d->cimgLogoLabel = new KUrlLabel(firstPage);
     d->cimgLogoLabel->setText(QString());
@@ -288,8 +288,8 @@ ResizeTool::ResizeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->cimgLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
-            this, SLOT(processCImgUrl(const QString&)));
+    connect(d->cimgLogoLabel, SIGNAL(leftClickedUrl(QString)),
+            this, SLOT(processCImgUrl(QString)));
 
     connect(d->wInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotValuesChanged()));

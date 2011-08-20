@@ -7,7 +7,7 @@
  * Description : camera icon view
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -28,6 +28,7 @@
 
 // Qt includes
 
+#include <QMap>
 #include <QRect>
 #include <QDropEvent>
 
@@ -39,6 +40,8 @@
 
 #include "iconview.h"
 #include "renamecustomizer.h"
+#include "camerathumbsctrl.h"
+#include "camiteminfo.h"
 
 class QPixmap;
 class KPixmapSequence;
@@ -47,11 +50,9 @@ namespace Digikam
 {
 
 class ThumbnailSize;
-class GPItemInfo;
 class RenameCustomizer;
 class CameraUI;
 class CameraIconItem;
-class CameraIconViewPriv;
 
 class CameraIconView : public IconView
 {
@@ -63,44 +64,54 @@ public:
     ~CameraIconView();
 
     void setRenameCustomizer(RenameCustomizer* renamer);
+    void setThumbControler(CameraThumbsCtrl* controler);
 
-    void addItem(const GPItemInfo& itemInfo);
-    void removeItem(const QString& folder, const QString& file);
-    void setThumbnail(const QString& folder, const QString& filename, const QImage& image);
+    void addItem(const CamItemInfo& itemInfo);
+    void removeItem(const CamItemInfo& itemInfo);
 
-    void ensureItemVisible(CameraIconItem* item);
-    void ensureItemVisible(const GPItemInfo& itemInfo);
-    void ensureItemVisible(const QString& folder, const QString& file);
+    CachedItem getThumbInfo(const CamItemInfo& itemInfo) const;
+
+    void toggleLock(const CamItemInfo& itemInfo);
+
+    void setDownloaded(const CamItemInfo& itemInfo, int status);
+    bool isDownloaded(const CamItemInfo& itemInfo);
+
+    void ensureItemVisible(const CamItemInfo& itemInfo);
+    void ensureItemVisible(const QString& folder, const QString& filename);
+    bool isSelected(const CamItemInfo& itemInfo);
 
     void setThumbnailSize(int thumbSize);
-    int  thumbnailSize();
+    int  thumbnailSize() const;
 
-    CameraIconItem* findItem(const QString& folder, const QString& file);
+    CamItemInfo     findItemInfo(const QString& folder, const QString& file) const;
+    CamItemInfo     firstItemSelected() const;
+    CamItemInfoList selectedItems() const;
+    CamItemInfoList allItems(bool lastPhotoFirst=false) const;
 
-    CameraIconItem* firstItemSelected();
+    /** Return a map of folder and items counted
+     */
+    QMap<QString, int> countItemsByFolders() const;
 
-    int countItemsByFolder(QString folder);
-    int itemsDownloaded();
+    int itemsDownloaded() const;
 
-    QPixmap itemBaseRegPixmap()     const;
-    QPixmap itemBaseSelPixmap()     const;
-    QPixmap newPicturePixmap()      const;
-    QPixmap downloadUnknownPixmap() const;
-    QPixmap lockedPixmap()          const;
-    QPixmap downloadedPixmap()      const;
-    QPixmap downloadFailedPixmap()  const;
+    QPixmap itemBaseRegPixmap()      const;
+    QPixmap itemBaseSelPixmap()      const;
+    QPixmap newPicturePixmap()       const;
+    QPixmap downloadUnknownPixmap()  const;
+    QPixmap lockedPixmap()           const;
+    QPixmap downloadedPixmap()       const;
+    QPixmap downloadFailedPixmap()   const;
     KPixmapSequence progressPixmap() const;
 
-    QString defaultDownloadName(CameraIconItem* item);
-
     void itemsSelectionSizeInfo(unsigned long& fSize, unsigned long& dSize);
+    QString defaultDownloadName(const CamItemInfo& itemInfo) const;
 
     virtual QRect itemRect() const;
 
 Q_SIGNALS:
 
-    void signalSelected(CameraIconItem*, bool);
-    void signalFileView(CameraIconItem*);
+    void signalSelected(const CamItemInfo&, bool);
+    void signalFileView(const CamItemInfo&);
     void signalThumbSizeChanged(int);
 
     void signalUpload(const KUrl::List&);
@@ -119,6 +130,10 @@ public Q_SLOTS:
     void slotSelectInvert();
     void slotSelectNew();
     void slotSelectLocked();
+    void slotFirstItem();
+    void slotPrevItem();
+    void slotNextItem();
+    void slotLastItem();
 
 private Q_SLOTS:
 
@@ -128,6 +143,7 @@ private Q_SLOTS:
     void slotThemeChanged();
     void slotUpdateDownloadNames(bool hasSelection);
     void slotShowToolTip(IconItem* item);
+    void slotThumbInfoReady(const CamItemInfo& info);
 
 protected:
 
@@ -139,12 +155,15 @@ protected:
 
 private:
 
-    QString getTemplatedName(const GPItemInfo* itemInfo);
-    QString getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo* itemInfo);
-    void    uploadItemPopupMenu(const KUrl::List& srcURLs);
+    QString         getTemplatedName(const CamItemInfo& itemInfo) const;
+    QString         getCasedName(const RenameCustomizer::Case ccase, const CamItemInfo& itemInfo) const;
+    void            uploadItemPopupMenu(const KUrl::List& srcURLs);
+    void            ensureItemVisible(CameraIconItem* item);
+    CameraIconItem* findItem(const QString& folder, const QString& file) const;
 
 private:
 
+    class CameraIconViewPriv;
     CameraIconViewPriv* const d;
 };
 

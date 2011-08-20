@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DOWNLOADSETTINGSCONTAINER_H
-#define DOWNLOADSETTINGSCONTAINER_H
+#ifndef DOWNLOADSETTINGS_H
+#define DOWNLOADSETTINGS_H
 
 // Qt includes
 
@@ -36,40 +36,42 @@
 namespace Digikam
 {
 
-class DownloadSettingsContainer
+class DownloadSettings
 {
 
 public:
 
-    DownloadSettingsContainer()
+    DownloadSettings()
     {
         autoRotate  = true;
         fixDateTime = false;
         convertJpeg = false;
     };
 
-    ~DownloadSettingsContainer() {};
+    ~DownloadSettings() {};
 
 public:
 
+    // -- Settings from AdvancedSettings widget ---------------
     bool      autoRotate;
     bool      fixDateTime;
     bool      convertJpeg;
 
     QDateTime newDateTime;
 
-    // File path to download.
-    QString   folder;
-    QString   file;
-    QString   dest;
-
     // New format to convert Jpeg files.
     QString   losslessFormat;
 
     // Metadata template title.
     QString   templateTitle;
+
+    // -- File path to download ------------------------------
+
+    QString   folder;
+    QString   file;
+    QString   dest;
 };
 
 }  // namespace Digikam
 
-#endif  // DOWNLOADSETTINGSCONTAINER_H
+#endif  // DownloadSettings_H

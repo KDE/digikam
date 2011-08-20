@@ -148,12 +148,10 @@ protected:
 
     virtual void startDrag();
 
-    virtual void prepareRepaint(const QList<IconItem*>& itemsToRepaint);
-
     void drawFrameRaised(QPainter* p);
     void drawFrameSunken(QPainter* p);
 
-    virtual bool acceptToolTip(IconItem* , const QPoint&);
+    virtual bool acceptToolTip(IconItem*, const QPoint&);
 
 protected Q_SLOTS:
 

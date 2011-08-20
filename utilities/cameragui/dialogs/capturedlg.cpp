@@ -6,7 +6,7 @@
  * Date        : 2007-09-06
  * Description : a dialog to control camera capture.
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class CaptureDlgPriv
+class CaptureDlg::CaptureDlgPriv
 {
 public:
 
@@ -91,8 +91,8 @@ CaptureDlg::CaptureDlg(QWidget* parent, CameraController* controller,
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotCapture()));
 
-    connect(d->controller, SIGNAL(signalPreview(const QImage&)),
-            this, SLOT(slotPreviewDone(const QImage&)));
+    connect(d->controller, SIGNAL(signalPreview(QImage)),
+            this, SLOT(slotPreviewDone(QImage)));
 
     // -------------------------------------------------------------
 
@@ -132,8 +132,8 @@ void CaptureDlg::slotCapture()
 {
     d->stopPreview = true;
     d->timer->stop();
-    disconnect(d->controller, SIGNAL(signalPreview(const QImage&)),
-               this, SLOT(slotPreviewDone(const QImage&)));
+    disconnect(d->controller, SIGNAL(signalPreview(QImage)),
+               this, SLOT(slotPreviewDone(QImage)));
     KConfigGroup group = KGlobal::config()->group("Capture Tool Dialog");
     saveDialogSize(group);
     d->controller->capture();

@@ -74,6 +74,7 @@ extern "C"
 #include <kio/deletejob.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
+#include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kmultitabbar.h>
@@ -96,7 +97,6 @@ extern "C"
 #include "canvas.h"
 #include "dimginterface.h"
 #include "dmetadata.h"
-#include "dpopupmenu.h"
 #include "editorstackview.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"
@@ -377,14 +377,14 @@ void ShowFoto::setupConnections()
 {
     setupStandardConnections();
 
-    connect(d->thumbBar, SIGNAL(signalUrlSelected(const KUrl&)),
-            this, SLOT(slotOpenUrl(const KUrl&)));
+    connect(d->thumbBar, SIGNAL(signalUrlSelected(KUrl)),
+            this, SLOT(slotOpenUrl(KUrl)));
 
     connect(d->thumbBar, SIGNAL(signalItemAdded()),
             this, SLOT(slotUpdateItemInfo()));
 
-    connect(this, SIGNAL(signalSelectionChanged(const QRect&)),
-            d->rightSideBar, SLOT(slotImageSelectionChanged(const QRect&)));
+    connect(this, SIGNAL(signalSelectionChanged(QRect)),
+            d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
@@ -772,7 +772,7 @@ void ShowFoto::openFolder(const KUrl& url)
 
     for (QStringList::ConstIterator it = mimeTypes.constBegin() ; it != mimeTypes.constEnd() ; ++it)
     {
-        QString format = KImageIO::typeForMime(*it)[0].toUpper();
+        QString format = KImageIO::typeForMime(*it).at(0).toUpper();
         filter.append ("*.");
         filter.append (format);
         filter.append (" ");
@@ -1039,7 +1039,7 @@ void ShowFoto::saveIsComplete()
 
 void ShowFoto::saveAsIsComplete()
 {
-    setOriginAfterSave();
+    resetOriginSwitchFile();
     Digikam::LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
 
     // Add the file to the list of thumbbar images if it's not there already
@@ -1124,15 +1124,15 @@ void ShowFoto::slotDeleteCurrentItem()
         else
         {
             KIO::Job* job = KIO::del(urlCurrent);
-            connect(job, SIGNAL(result( KJob* )),
-                    this, SLOT(slotDeleteCurrentItemResult( KJob*)) );
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
         }
     }
     else
     {
         KIO::Job* job = KIO::trash(urlCurrent);
-        connect(job, SIGNAL(result( KJob* )),
-                this, SLOT(slotDeleteCurrentItemResult( KJob*)) );
+        connect(job, SIGNAL(result(KJob*)),
+                this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
     }
 }
 

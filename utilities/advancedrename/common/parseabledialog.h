@@ -48,6 +48,9 @@ public:
 
 private:
 
+    ParseableDialog(const ParseableDialog&);
+    ParseableDialog& operator=(const ParseableDialog&);
+
     void setDialogTitle(const QString& title);
     void setDialogDescription(const QString& description);
     void setDialogIcon(const QPixmap& pixmap);

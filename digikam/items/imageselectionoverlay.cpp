@@ -76,8 +76,8 @@ void ImageSelectionOverlay::setActive(bool active)
         connect(button(), SIGNAL(clicked(bool)),
                 this, SLOT(slotClicked(bool)));
 
-        connect(m_view->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                this, SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
+        connect(m_view->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+                this, SLOT(slotSelectionChanged(QItemSelection,QItemSelection)));
     }
     else
     {
@@ -85,8 +85,8 @@ void ImageSelectionOverlay::setActive(bool active)
 
         if (m_view)
         {
-            disconnect(m_view->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                       this, SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
+            disconnect(m_view->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+                       this, SLOT(slotSelectionChanged(QItemSelection,QItemSelection)));
         }
     }
 }

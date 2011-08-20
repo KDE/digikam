@@ -120,8 +120,8 @@ bool SyncJob::delPriv(const KUrl::List& urls)
 {
     KIO::Job* job = KIO::del( urls );
 
-    connect( job, SIGNAL(result( KJob* )),
-             this, SLOT(slotResult( KJob* )) );
+    connect( job, SIGNAL(result(KJob*)),
+             this, SLOT(slotResult(KJob*)) );
 
     enterWaitingLoop();
     return d->result;
@@ -131,8 +131,8 @@ bool SyncJob::trashPriv(const KUrl::List& urls)
 {
     KIO::Job* job = KIO::trash( urls );
 
-    connect( job, SIGNAL(result( KJob* )),
-             this, SLOT(slotResult( KJob* )) );
+    connect( job, SIGNAL(result(KJob*)),
+             this, SLOT(slotResult(KJob*)) );
 
     enterWaitingLoop();
     return d->result;
@@ -157,8 +157,8 @@ QPixmap SyncJob::getTagThumbnailPriv(TAlbum* album)
     d->thumbnail                 = new QPixmap();
     AlbumThumbnailLoader* loader = AlbumThumbnailLoader::instance();
 
-    connect(loader, SIGNAL(signalThumbnail(Album*, const QPixmap&)),
-            this, SLOT(slotGotThumbnailFromIcon(Album*, const QPixmap&)),
+    connect(loader, SIGNAL(signalThumbnail(Album*,QPixmap)),
+            this, SLOT(slotGotThumbnailFromIcon(Album*,QPixmap)),
             Qt::QueuedConnection);
 
     connect(loader, SIGNAL(signalFailed(Album*)),

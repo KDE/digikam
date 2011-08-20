@@ -43,16 +43,16 @@ ImageInfoCache::ImageInfoCache()
 
     DatabaseWatch* dbwatch = DatabaseAccess::databaseWatch();
 
-    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset&)),
-            this, SLOT(slotImageChanged(const ImageChangeset&)),
+    connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
+            this, SLOT(slotImageChanged(ImageChangeset)),
             Qt::DirectConnection);
 
-    connect(dbwatch, SIGNAL(imageTagChange(const ImageTagChangeset&)),
-            this, SLOT(slotImageTagChanged(const ImageTagChangeset&)),
+    connect(dbwatch, SIGNAL(imageTagChange(ImageTagChangeset)),
+            this, SLOT(slotImageTagChanged(ImageTagChangeset)),
             Qt::DirectConnection);
 
-    connect(dbwatch, SIGNAL(albumChange(const AlbumChangeset&)),
-            this, SLOT(slotAlbumChange(const AlbumChangeset&)),
+    connect(dbwatch, SIGNAL(albumChange(AlbumChangeset)),
+            this, SLOT(slotAlbumChange(AlbumChangeset)),
             Qt::DirectConnection);
 }
 
@@ -62,9 +62,9 @@ ImageInfoCache::~ImageInfoCache()
 
 ImageInfoData* ImageInfoCache::infoForId(qlonglong id)
 {
-    QHash<qlonglong, ImageInfoData*>::iterator it = m_infos.find(id);
+    QHash<qlonglong, ImageInfoData*>::const_iterator it = m_infos.constFind(id);
 
-    if (it == m_infos.end())
+    if (it == m_infos.constEnd())
     {
         ImageInfoData* data = new ImageInfoData();
         data->id            = id;
@@ -96,9 +96,9 @@ void ImageInfoCache::dropInfo(ImageInfoData* infodata)
 
 QString ImageInfoCache::albumName(DatabaseAccess& access, int albumId)
 {
-    QHash<int, QString>::iterator it = m_albums.find(albumId);
+    QHash<int, QString>::const_iterator it = m_albums.constFind(albumId);
 
-    if (it == m_albums.end())
+    if (it == m_albums.constEnd())
     {
         QString album = access.db()->getAlbumRelativePath(albumId);
         m_albums[albumId] = album;

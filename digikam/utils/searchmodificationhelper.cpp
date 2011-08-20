@@ -76,9 +76,9 @@ void SearchModificationHelper::slotSearchDelete(SAlbum* searchAlbum)
     // Make sure that a complicated search is not deleted accidentally
     int result = KMessageBox::warningYesNo(d->dialogParent,
                                            i18n("Are you sure you want to "
-                                                "delete the selected Date Search "
+                                                "delete the selected search "
                                                 "\"%1\"?", searchAlbum->title()),
-                                           i18n("Delete Date Search?"),
+                                           i18n("Delete Search?"),
                                            KGuiItem(i18n("Delete")),
                                            KStandardGuiItem::cancel());
 
@@ -183,10 +183,10 @@ SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desire
     {
         writer.writeGroup();
         writer.writeField("creationdate", SearchXml::GreaterThan);
-        writer.writeValue(dateRanges[i].first);
+        writer.writeValue(dateRanges.at(i).first);
         writer.finishField();
         writer.writeField("creationdate", SearchXml::LessThan);
-        writer.writeValue(dateRanges[i].second);
+        writer.writeValue(dateRanges.at(i).second);
         writer.finishField();
         writer.finishGroup();
     }

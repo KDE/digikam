@@ -627,7 +627,7 @@ void ThumbnailLoadThread::pregenerateGroup(const QStringList& filePaths, int siz
 
     QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
 
-    for (int i=0; i<descriptions.size(); i++)
+    for (int i=0; i<descriptions.size(); ++i)
     {
         descriptions[i].previewParameters.flags |= LoadingDescription::PreviewParameters::OnlyPregenerate;
     }
@@ -791,11 +791,11 @@ void ThumbnailLoadThread::startKdePreviewJob()
     d->kdeTodo.clear();
     d->kdeJob = KIO::filePreview(list, d->creator->storedSize()); // dont know if size 0 is allowed
 
-    connect(d->kdeJob, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
-            this, SLOT(gotKDEPreview(const KFileItem&, const QPixmap&)));
+    connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
+            this, SLOT(gotKDEPreview(KFileItem,QPixmap)));
 
-    connect(d->kdeJob, SIGNAL(failed(const KFileItem&)),
-            this, SLOT(failedKDEPreview(const KFileItem&)));
+    connect(d->kdeJob, SIGNAL(failed(KFileItem)),
+            this, SLOT(failedKDEPreview(KFileItem)));
 
     connect(d->kdeJob, SIGNAL(finished(KJob*)),
             this, SLOT(kdePreviewFinished(KJob*)));
@@ -1020,8 +1020,8 @@ void ThumbnailImageCatcher::setThumbnailLoadThread(ThumbnailLoadThread* thread)
 
     if (d->thread)
     {
-        disconnect(thread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QImage&)),
-                   this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QImage&)));
+        disconnect(thread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QImage)),
+                   this, SLOT(slotThumbnailLoaded(LoadingDescription,QImage)));
     }
 
     d->thread = thread;
@@ -1033,8 +1033,8 @@ void ThumbnailImageCatcher::setThumbnailLoadThread(ThumbnailLoadThread* thread)
 
     if (d->thread)
     {
-        connect(thread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QImage&)),
-                this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QImage&)),
+        connect(thread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QImage)),
+                this, SLOT(slotThumbnailLoaded(LoadingDescription,QImage)),
                 Qt::DirectConnection
                );
     }
@@ -1089,7 +1089,7 @@ void ThumbnailImageCatcher::ThumbnailImageCatcherPriv::harvest(const LoadingDesc
     // called under lock
     bool finished = true;
 
-    for (int i=0; i<tasks.size(); i++)
+    for (int i=0; i<tasks.size(); ++i)
     {
         ThumbnailImageCatcherResult& task = tasks[i];
 

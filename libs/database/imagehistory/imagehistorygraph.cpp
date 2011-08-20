@@ -340,7 +340,7 @@ void ImageHistoryGraphData::applyProperties(Vertex& v, const QList<ImageInfo>& i
 int ImageHistoryGraphData::removeNextUnresolvedVertex(int index)
 {
     QList<Vertex> vs = vertices();
-    for (; index<vs.size(); index++)
+    for (; index<vs.size(); ++index)
     {
         Vertex& v = vs[index];
         const HistoryVertexProperties& props = properties(v);

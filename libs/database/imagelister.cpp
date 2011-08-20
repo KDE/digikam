@@ -30,6 +30,7 @@
 #include <cstdio>
 #include <ctime>
 #include <cerrno>
+#include <limits>
 
 // Qt includes
 
@@ -63,6 +64,21 @@
 
 namespace Digikam
 {
+
+/*
+ * The binary field for file size is only 32 bit.
+ * If the value fits, we pass it. If it does not, we pass -1,
+ * and the receiver shall get the full number itself
+ */
+static inline int toInt32BitSafe(const QList<QVariant>::const_iterator& it)
+{
+    qlonglong v = (*it).toLongLong();
+    if (v > std::numeric_limits<int>::max() || v < 0)
+    {
+        return -1;
+    }
+    return (int)v;
+}
 
 ImageLister::ImageLister()
 {
@@ -212,7 +228,7 @@ void ImageLister::listAlbum(ImageListerReceiver* receiver,
         record.modificationDate  = (*it).isNull() ? QDateTime()
                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.fileSize          = (*it).toInt();
+        record.fileSize          = toInt32BitSafe(it);
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -273,7 +289,7 @@ void ImageLister::listTag(ImageListerReceiver* receiver, int tagId)
         record.modificationDate  = (*it).isNull() ? QDateTime()
                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.fileSize          = (*it).toInt();
+        record.fileSize          = toInt32BitSafe(it);
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -383,7 +399,7 @@ void ImageLister::listDateRange(ImageListerReceiver* receiver, const QDate& star
         record.modificationDate  = (*it).isNull() ? QDateTime()
                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.fileSize          = (*it).toInt();
+        record.fileSize          = toInt32BitSafe(it);
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -556,7 +572,7 @@ void ImageLister::listSearch(ImageListerReceiver* receiver,
         record.modificationDate  = (*it).isNull() ? QDateTime()
                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.fileSize          = (*it).toInt();
+        record.fileSize          = toInt32BitSafe(it);
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -668,7 +684,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* receiver, cons
         record.modificationDate  = (*it).isNull() ? QDateTime()
                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.fileSize          = (*it).toInt();
+        record.fileSize          = toInt32BitSafe(it);
         ++it;
         width                    = (*it).toInt();
         ++it;
@@ -854,7 +870,7 @@ void ImageLister::listFromIdList(ImageListerReceiver* receiver, QList<qlonglong>
         record.modificationDate  = (*it).isNull() ? QDateTime()
                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        record.fileSize          = (*it).toInt();
+        record.fileSize          = toInt32BitSafe(it);
         ++it;
         width                    = (*it).toInt();
         ++it;

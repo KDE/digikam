@@ -233,6 +233,7 @@ protected:
 
     VersionFileInfo nextIntermediate(const QString& format);
     void setFileSuffix(QString& fileName, const QString& format) const;
+    void addFileSuffix(QString& baseName, const QString& format, const QString& originalName = QString()) const;
 
 public:
 
@@ -356,7 +357,7 @@ void VersionNameCreator::setSaveFileName()
 
         // To find the right number for the new version, go through all the items in the given dir,
         // the version number won't be bigger than count()
-        for (uint i = 0; i <= dirInfo.count(); i++)
+        for (uint i = 0; i <= dirInfo.count(); ++i)
         {
             QString suggestedName = scheme->versionFileName(m_result.path, m_baseName, m_version);
 
@@ -364,7 +365,7 @@ void VersionNameCreator::setSaveFileName()
             if (dirInfo.entryList(QStringList() << suggestedName + ".*", QDir::Files).isEmpty())
             {
                 m_result.fileName = suggestedName;
-                setFileSuffix(m_result.fileName, m_result.format);
+                addFileSuffix(m_result.fileName, m_result.format, m_loadedFile.fileName);
                 break;
             }
 
@@ -449,7 +450,7 @@ void VersionNameCreator::checkIntermediates()
     {
         int rawConversionStep = -1;
 
-        for (int i = firstStep; i <= lastStep; i++)
+        for (int i = firstStep; i <= lastStep; ++i)
         {
             if (DImgFilterManager::instance()->isRawConversion(m_currentHistory.action(i).identifier()))
             {
@@ -466,7 +467,7 @@ void VersionNameCreator::checkIntermediates()
 
     if (m_settings.saveIntermediateVersions & VersionManagerSettings::WhenNotReproducible)
     {
-        for (int i = firstStep; i <= lastStep; i++)
+        for (int i = firstStep; i <= lastStep; ++i)
         {
             kDebug() << "step" << i 
                      << "is reproducable" << (m_currentHistory.action(i).category() == FilterAction::ReproducibleFilter);
@@ -509,7 +510,7 @@ VersionFileInfo VersionNameCreator::nextIntermediate(const QString& format)
 
     QDir dirInfo(m_intermediatePath);
 
-    for (uint i = 0; i <= dirInfo.count(); i++)
+    for (uint i = 0; i <= dirInfo.count(); ++i)
     {
         QString suggestedName = scheme->intermediateFileName(m_intermediatePath, m_baseName,
                                                              m_version, m_intermediateCounter);
@@ -556,6 +557,29 @@ void VersionNameCreator::setFileSuffix(QString& fileName, const QString& format)
     {
         fileName.replace(suffixBegin, fileName.size() - suffixBegin, isLower ? format.toLower() : format);
     }
+}
+
+void VersionNameCreator::addFileSuffix(QString& fileName, const QString& format, const QString& originalName) const
+{
+    if (fileName.isEmpty())
+    {
+        return;
+    }
+
+    bool isLower = true;
+
+    if (!originalName.isEmpty())
+    {
+        // if original name had upper case suffix, continue using upper case
+        isLower = originalName.at(originalName.size() - 1).isLower();
+    }
+
+    if (!fileName.endsWith('.'))
+    {
+        fileName += '.';
+    }
+
+    fileName += (isLower ? format.toLower() : format);
 }
 
 // -----------------------------------------------------------------------------------------------------------

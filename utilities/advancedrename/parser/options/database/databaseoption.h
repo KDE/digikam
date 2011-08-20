@@ -52,6 +52,11 @@ public:
 
     DbKeySelectorView* dbkeySelectorView;
     KLineEdit*         separatorLineEdit;
+
+private:
+
+    DatabaseOptionDialog(const DatabaseOptionDialog&);
+    DatabaseOptionDialog& operator=(const DatabaseOptionDialog&);
 };
 
 // --------------------------------------------------------
@@ -78,6 +83,9 @@ private Q_SLOTS:
     void slotTokenTriggered(const QString& token);
 
 private:
+
+    DatabaseOption(const DatabaseOption&);
+    DatabaseOption& operator=(const DatabaseOption&);
 
     QString parseDatabase(const QString& keyword, ParseSettings& settings);
     void addDbKeysCollection(DbKeysCollection* key);

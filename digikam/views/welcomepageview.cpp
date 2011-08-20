@@ -76,8 +76,8 @@ WelcomePageView::WelcomePageView(QWidget* parent)
 
     // ------------------------------------------------------------
 
-    connect(browserExtension(), SIGNAL(openUrlRequest(const KUrl&, const KParts::OpenUrlArguments&, const KParts::BrowserArguments&)),
-            this, SLOT(slotUrlOpen(const KUrl&)));
+    connect(browserExtension(), SIGNAL(openUrlRequest(KUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)),
+            this, SLOT(slotUrlOpen(KUrl)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -117,7 +117,7 @@ QString WelcomePageView::infoPage() const
 
     for (int i = 0 ; i < newFeatures.count() ; ++i)
     {
-        featureItems += i18n("<li>%1</li>\n", newFeatures[i] );
+        featureItems += i18n("<li>%1</li>\n", newFeatures.at(i) );
     }
 
     QString info =

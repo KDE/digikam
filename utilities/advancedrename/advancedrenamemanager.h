@@ -90,6 +90,9 @@ public:
 
 private:
 
+    AdvancedRenameManager(const AdvancedRenameManager&);
+    AdvancedRenameManager& operator=(const AdvancedRenameManager&);
+
     void addFile(const QString& filename);
     void addFile(const QString& filename, const QDateTime& datetime);
     bool initialize();

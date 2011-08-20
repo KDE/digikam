@@ -480,7 +480,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* parent, SearchModel* searc
     d->nameEdit    = new KLineEdit(hbox2);
     d->nameEdit->setClearButtonShown(true);
     d->nameEdit->setWhatsThis(i18n("Enter the name of the current dates search to save in the "
-                                   "\"My Date Searches\" view"));
+                                   "\"My Searches\" view"));
 
     d->saveButton  = new QToolButton(hbox2);
     d->saveButton->setIcon(SmallIcon("document-save"));
@@ -524,8 +524,8 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* parent, SearchModel* searc
 
     // ---------------------------------------------------------------
 
-    connect(AlbumManager::instance(), SIGNAL(signalDatesMapDirty(const QMap<QDateTime, int>&)),
-            d->timeLineWidget, SLOT(slotDatesMap(const QMap<QDateTime, int>&)));
+    connect(AlbumManager::instance(), SIGNAL(signalDatesMapDirty(QMap<QDateTime,int>)),
+            d->timeLineWidget, SLOT(slotDatesMap(QMap<QDateTime,int>)));
 
     connect(d->timeLineFolderView, SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(slotAlbumSelected(Album*)));
@@ -560,10 +560,10 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* parent, SearchModel* searc
     connect(d->scrollBar, SIGNAL(valueChanged(int)),
             this, SLOT(slotScrollBarValueChanged(int)));
 
-    connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
+    connect(d->nameEdit, SIGNAL(textChanged(QString)),
             this, SLOT(slotCheckAboutSelection()));
 
-    connect(d->nameEdit, SIGNAL(returnPressed(const QString&)),
+    connect(d->nameEdit, SIGNAL(returnPressed(QString)),
             d->saveButton, SLOT(animateClick()));
 }
 
@@ -1057,8 +1057,8 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* parent, SearchModel* sea
     scrollArea->setWidget(d->gpsSearchView);
     scrollArea->setWidgetResizable(true);
 
-    connect(d->gpsSearchView, SIGNAL(signalMapSoloItems(const QList<qlonglong>&, const QString&)),
-            this, SIGNAL(signalMapSoloItems(const QList<qlonglong>&, const QString&)));
+    connect(d->gpsSearchView, SIGNAL(signalMapSoloItems(QList<qlonglong>,QString)),
+            this, SIGNAL(signalMapSoloItems(QList<qlonglong>,QString)));
 }
 
 GPSSearchSideBarWidget::~GPSSearchSideBarWidget()
@@ -1170,7 +1170,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
 
     connect(d->rescanButton, SIGNAL(pressed()),
-            this, SIGNAL( signalDetectFaces() ) );
+            this, SIGNAL(signalDetectFaces()) );
 }
 
 QPixmap PeopleSideBarWidget::getIcon()

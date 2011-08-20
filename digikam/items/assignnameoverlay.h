@@ -76,6 +76,7 @@ protected:
     virtual void widgetEnterEvent();
     virtual void widgetLeaveEvent();
     virtual void setFocusOnWidget();
+    virtual bool eventFilter(QObject* o, QEvent* e);
 
     void updatePosition();
     void updateFace();

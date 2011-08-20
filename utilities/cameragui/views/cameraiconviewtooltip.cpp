@@ -6,7 +6,7 @@
  * Date        : 2008-12-17
  * Description : camera icon view tool tip
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class CameraIconViewToolTipPriv
+class CameraIconViewToolTip::CameraIconViewToolTipPriv
 {
 public:
 
@@ -114,18 +114,18 @@ QString CameraIconViewToolTip::tipContents()
         return QString();
     }
 
-    GPItemInfo* info = d->iconItem->itemInfo();
+    CamItemInfo info = d->iconItem->itemInfo();
     return fillTipContents(info);
 }
 
-QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info)
+QString CameraIconViewToolTip::fillTipContents(const CamItemInfo& info) const
 {
     QString            str;
     AlbumSettings*     settings = AlbumSettings::instance();
     DToolTipStyleSheet cnt(settings->getToolTipsFont());
 
     QString tip                  = cnt.tipHeader;
-    PhotoInfoContainer photoInfo = info->photoInfo;
+    PhotoInfoContainer photoInfo = info.photoInfo;
 
     // -- File properties ----------------------------------------------
 
@@ -140,12 +140,12 @@ QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info)
         if (settings->getToolTipsShowFileName())
         {
             tip += cnt.cellBeg + i18n("Name:") + cnt.cellMid;
-            tip += info->name + cnt.cellEnd;
+            tip += info.name + cnt.cellEnd;
         }
 
         if (settings->getToolTipsShowFileDate())
         {
-            QDateTime creatededDate = info->mtime;
+            QDateTime creatededDate = info.mtime;
             str = KGlobal::locale()->formatDateTime(creatededDate, KLocale::ShortDate, true);
             tip += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
@@ -153,14 +153,14 @@ QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info)
         if (settings->getToolTipsShowFileSize())
         {
             tip += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
-            str = i18n("%1 (%2)", KIO::convertSize(info->size),
-                       KGlobal::locale()->formatNumber(info->size, 0));
+            str = i18n("%1 (%2)", KIO::convertSize(info.size),
+                       KGlobal::locale()->formatNumber(info.size, 0));
             tip += str + cnt.cellEnd;
         }
 
         if (settings->getToolTipsShowImageType())
         {
-            KMimeType::Ptr mt = KMimeType::mimeType(info->mime);
+            KMimeType::Ptr mt = KMimeType::mimeType(info.mime);
 
             if (mt)
             {
@@ -170,16 +170,16 @@ QString CameraIconViewToolTip::fillTipContents(GPItemInfo* info)
 
         if (settings->getToolTipsShowImageDim())
         {
-            if (info->width == -1 || info->height == -1)
+            if (info.width == -1 || info.height == -1)
             {
                 str = i18n("Unknown");
             }
             else
             {
                 QString mpixels;
-                mpixels.setNum(info->width*info->height/1000000.0, 'f', 2);
+                mpixels.setNum(info.width*info.height/1000000.0, 'f', 2);
                 str = i18nc("width x height (megapixels Mpx)", "%1x%2 (%3Mpx)",
-                            info->width, info->height, mpixels);
+                            info.width, info.height, mpixels);
             }
 
             tip += cnt.cellBeg + i18n("Dimensions:") + cnt.cellMid + str + cnt.cellEnd;

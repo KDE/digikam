@@ -152,7 +152,7 @@ void SharedLoadingTask::execute()
             // find possible running loading process
             m_usedProcess = 0;
 
-            for ( QStringList::Iterator it = lookupKeys.begin(); it != lookupKeys.end(); ++it )
+            for ( QStringList::const_iterator it = lookupKeys.constBegin(); it != lookupKeys.constEnd(); ++it )
             {
                 if ( (m_usedProcess = cache->retrieveLoadingProcess(*it)) )
                 {

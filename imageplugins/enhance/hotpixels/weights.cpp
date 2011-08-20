@@ -48,7 +48,7 @@ Weights::Weights(const Weights& w)
     (*this) = w;
 }
 
-void Weights::operator=(const Weights& w)
+Weights& Weights::operator=(const Weights& w)
 {
     mHeight            = w.height();
     mWidth             = w.width();
@@ -62,7 +62,7 @@ void Weights::operator=(const Weights& w)
 
     if (!w.weightMatrices())
     {
-        return;
+        return *this;
     }
     else
     {
@@ -87,6 +87,7 @@ void Weights::operator=(const Weights& w)
             }
         }
     }
+    return *this;
 }
 
 void Weights::calculateWeights()
@@ -159,12 +160,12 @@ void Weights::calculateWeights()
 
         for (j = 0; j < (size_t)mPositions.count(); ++j)
         {
-            vector0 [iy * mPositions.count() + j] = polyTerm (iy, mPositions [j].x(),
-                                                    mPositions [j].y(), mPolynomeOrder);
+            vector0 [iy * mPositions.count() + j] = polyTerm (iy, mPositions.at(j).x(),
+                                                    mPositions.at(j).y(), mPolynomeOrder);
 
             for (ix = 0; ix < mCoefficientNumber; ++ix)
                 matrix [iy* mCoefficientNumber + ix] += (vector0 [iy * mPositions.count() + j]
-                                                        * polyTerm (ix, mPositions [j].x(), mPositions[j].y(), mPolynomeOrder));
+                                                        * polyTerm (ix, mPositions.at(j).x(), mPositions.at(j).y(), mPolynomeOrder));
         }
     }
 

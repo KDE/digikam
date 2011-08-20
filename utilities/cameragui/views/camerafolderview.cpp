@@ -7,7 +7,7 @@
  * Description : A widget to display a list of camera folders.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class CameraFolderViewPriv
+class CameraFolderView::CameraFolderViewPriv
 {
 public:
 
@@ -67,11 +67,11 @@ CameraFolderView::CameraFolderView(QWidget* parent)
     setAcceptDrops(false);
     setHeaderLabels(QStringList() << i18n("Camera Folders"));
 
-    connect(this, SIGNAL(itemActivated(QTreeWidgetItem*, int)),
-            this, SLOT(slotCurrentChanged(QTreeWidgetItem*, int)));
+    connect(this, SIGNAL(itemActivated(QTreeWidgetItem*,int)),
+            this, SLOT(slotCurrentChanged(QTreeWidgetItem*,int)));
 
-    connect(this, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
-            this, SLOT(slotCurrentChanged(QTreeWidgetItem*, int)));
+    connect(this, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
+            this, SLOT(slotCurrentChanged(QTreeWidgetItem*,int)));
 }
 
 CameraFolderView::~CameraFolderView()
@@ -94,7 +94,8 @@ void CameraFolderView::addRootFolder(const QString& folder, int nbItems, const Q
 {
     d->rootFolder = new CameraFolderItem(d->virtualFolder, folder, folder, pixmap);
     d->rootFolder->setExpanded(true);
-    d->rootFolder->setCount(nbItems);
+    if (nbItems != -1)
+        d->rootFolder->setCount(nbItems);
 }
 
 CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QString& subFolder,
@@ -102,7 +103,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
 {
     CameraFolderItem* parentItem = findFolder(folder);
 
-    kDebug() << "CameraFolderView: Adding Subfolder " << subFolder
+    kDebug() << "Adding Subfolder " << subFolder
              << " of folder " << folder;
 
     if (parentItem)
@@ -117,7 +118,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         path += subFolder;
         CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, pixmap);
 
-        kDebug() << "CameraFolderView: Added ViewItem with path "
+        kDebug() << "Added ViewItem with path "
                  << item->folderPath();
 
         item->setCount(nbItems);
@@ -126,7 +127,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     }
     else
     {
-        kWarning() << "CameraFolderView: Could not find parent for subFolder "
+        kWarning() << "Could not find parent for subFolder "
                    << subFolder << " of folder " << folder;
         return 0;
     }
@@ -134,26 +135,19 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
 
 CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
 {
-    int i                 = 0;
-    QTreeWidgetItem* item = 0;
-
-    do
+    QTreeWidgetItemIterator it(this);
+    
+    while (*it)
     {
-        item = topLevelItem(i);
+        CameraFolderItem* lvItem = dynamic_cast<CameraFolderItem*>(*it);
 
-        if (item)
+        if (lvItem && lvItem->folderPath() == folderPath)
         {
-            CameraFolderItem* lvItem = dynamic_cast<CameraFolderItem*>(item);
-
-            if (lvItem && lvItem->folderPath() == folderPath)
-            {
-                return lvItem;
-            }
+            return lvItem;
         }
 
-        ++i;
+        ++it;
     }
-    while (item);
 
     return 0;
 }
@@ -170,12 +164,12 @@ void CameraFolderView::slotCurrentChanged(QTreeWidgetItem* item, int)
     }
 }
 
-CameraFolderItem* CameraFolderView::virtualFolder()
+CameraFolderItem* CameraFolderView::virtualFolder() const
 {
     return d->virtualFolder;
 }
 
-CameraFolderItem* CameraFolderView::rootFolder()
+CameraFolderItem* CameraFolderView::rootFolder() const
 {
     return d->rootFolder;
 }

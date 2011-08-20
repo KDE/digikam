@@ -112,7 +112,7 @@ void DatabaseWidget::setupMainArea()
     hostName                            = new QLineEdit();
     QLabel* hostPortLabel               = new QLabel(i18n("Port"));
     hostPort                            = new QSpinBox();
-    hostPort->setMaximum(65536);
+    hostPort->setMaximum(65535);
 
     QLabel* connectionOptionsLabel      = new QLabel(i18n("Database<br>Connection<br>Options"));
     connectionOptions                   = new QLineEdit();
@@ -171,11 +171,11 @@ void DatabaseWidget::setupMainArea()
 
     // --------------------------------------------------------
 
-    connect(databasePathEdit, SIGNAL(urlSelected(const KUrl&)),
-            this, SLOT(slotChangeDatabasePath(const KUrl&)));
+    connect(databasePathEdit, SIGNAL(urlSelected(KUrl)),
+            this, SLOT(slotChangeDatabasePath(KUrl)));
 
-    connect(databasePathEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotDatabasePathEdited(const QString&)));
+    connect(databasePathEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(slotDatabasePathEdited(QString)));
 
     connect(databaseType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotHandleDBTypeIndexChanged(int)));
@@ -340,7 +340,7 @@ void DatabaseWidget::setParametersFromSettings(const AlbumSettings* settings)
     /* Now set the type according the database type from the settings.
      * If no item is found, ignore the setting.
      */
-    for (int i=0; i<databaseType->count(); i++)
+    for (int i=0; i<databaseType->count(); ++i)
     {
         //kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemData(i)
         //            << "] with ["<< settings->getDatabaseType() << "]";

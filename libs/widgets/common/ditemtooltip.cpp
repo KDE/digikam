@@ -98,14 +98,14 @@ QString DToolTipStyleSheet::breakString(const QString& input)
 
     while (i < str.length())
     {
-        if (count >= maxStringLength && str[i].isSpace())
+        if (count >= maxStringLength && str.at(i).isSpace())
         {
             count = 0;
             br.append("<br/>");
         }
         else
         {
-            br.append(str[i]);
+            br.append(str.at(i));
         }
 
         ++i;

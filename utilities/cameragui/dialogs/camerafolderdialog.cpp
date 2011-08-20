@@ -6,7 +6,7 @@
  * Date        : 2006-07-24
  * Description : a dialog to select a camera folders.
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,8 +60,7 @@ public:
     CameraFolderView* folderView;
 };
 
-CameraFolderDialog::CameraFolderDialog(QWidget* parent, CameraIconView* cameraView,
-                                       const QStringList& cameraFolderList,
+CameraFolderDialog::CameraFolderDialog(QWidget* parent, const QMap<QString, int>& map,
                                        const QString& cameraName, const QString& rootPath)
     : KDialog(parent), d(new CameraFolderDialogPriv)
 {
@@ -72,13 +71,12 @@ CameraFolderDialog::CameraFolderDialog(QWidget* parent, CameraIconView* cameraVi
     enableButtonOk(false);
     setModal(true);
 
-    d->rootPath = rootPath;
-
-    QFrame* page = new QFrame(this);
+    d->rootPath       = rootPath;
+    QFrame* page      = new QFrame(this);
     setMainWidget(page);
 
     QGridLayout* grid = new QGridLayout(page);
-    d->folderView      = new CameraFolderView(page);
+    d->folderView     = new CameraFolderView(page);
     QLabel* logo      = new QLabel(page);
     QLabel* message   = new QLabel(page);
 
@@ -89,38 +87,40 @@ CameraFolderDialog::CameraFolderDialog(QWidget* parent, CameraIconView* cameraVi
                           "where you want to upload the images.</p>"));
     message->setWordWrap(true);
 
-    grid->addWidget(logo,           0, 0, 1, 1);
-    grid->addWidget(message,        1, 0, 1, 1);
-    grid->addWidget(d->folderView,   0, 1, 3, 1);
+    grid->addWidget(logo,          0, 0, 1, 1);
+    grid->addWidget(message,       1, 0, 1, 1);
+    grid->addWidget(d->folderView, 0, 1, 3, 1);
     grid->setRowStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
     d->folderView->addVirtualFolder(cameraName);
-    d->folderView->addRootFolder("/", cameraView->countItemsByFolder(rootPath));
+    d->folderView->addRootFolder(QString("/"));
 
-    for (QStringList::const_iterator it = cameraFolderList.constBegin();
-         it != cameraFolderList.constEnd(); ++it)
+    for (QMap<QString, int>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
-        QString folder(*it);
+        QString folder(it.key());
 
-        if (folder.startsWith(rootPath) && rootPath != QString("/"))
+        if (folder != QString("/"))
         {
-            folder.remove(0, rootPath.length());
-        }
-
-        if (folder != QString("/") && !folder.isEmpty())
-        {
-            QString root = folder.section( '/', 0, -2 );
-
-            if (root.isEmpty())
+            if (folder.startsWith(rootPath) && rootPath != QString("/"))
             {
-                root = QString("/");
+                folder.remove(0, rootPath.length());
             }
 
-            QString sub = folder.section( '/', -1 );
-            d->folderView->addFolder(root, sub, cameraView->countItemsByFolder(*it));
-            kDebug() << "Camera folder: '" << folder << "' (root='" << root << "', sub='" <<sub <<"')";
+            if (folder != QString("/") && !folder.isEmpty())
+            {
+                QString root = folder.section( '/', 0, -2 );
+
+                if (root.isEmpty())
+                {
+                    root = QString("/");
+                }
+
+                QString sub = folder.section( '/', -1 );
+                kDebug() << "Camera folder: '" << folder << "' (root='" << root << "', sub='" << sub << "')";
+                d->folderView->addFolder(root, sub, it.value());
+            }
         }
     }
 

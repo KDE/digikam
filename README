@@ -93,7 +93,7 @@ libkipi         >= 2.0.0                      http://www.digikam.org/sharedlibs 
 libkexiv2       >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository. Exiv2 >= 0.20.0 shared library recommended.
 libkdcraw       >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository.
 libkface        >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository.
-libkmap         >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository.
+libkgeomap      >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository.
 liblcms         >= 1.17.x                     http://www.littlecms.com                   liblcms >= 2.x not yet compatible.
 libtiff         >= 3.8.2                      http://www.remotesensing.org/libtiff
 libpng          >= 1.2.x                      http://www.libpng.org/pub/png/libpng.html
@@ -115,9 +115,11 @@ computer to compile digiKam.
 CMake compilation option de customized for digiKam:
 
 Use CMake "-DENABLE_SCRIPTIFACE=yes"      flag to compile digiKam with experimental scripting interface                          (disabled by default).
-Use CMake "-DENABLE_THUMB_DB=no"          flag to compile digiKam without thumbnail database support                             (enabled by default).
-Use CMake "-DENABLE_INTERNALMYSQL=no"     flag to compile digiKam without internal MySQL server                                  (enabled by default).
+Use CMake "-DENABLE_THUMB_DB=no"          flag to compile digiKam without thumbnail database support                             (enabled by default ).
+Use CMake "-DENABLE_INTERNALMYSQL=no"     flag to compile digiKam without internal MySQL server                                  (enabled by default ).
 Use CMake "-DENABLE_ADVANCEDDEBUGMSG=yes" flag to compile digiKam with more internal debug messages, especially in image loaders (disabled by default).
+Use CMake "-DENABLE_NEPOMUKSUPPORT=no"    flag to compile digiKam without Nepomuk support                                        (enabled by default ).
+Use CMake "-DKDE4_BUILD_TESTS=yes"        flag to compile digiKam source code unit tests                                         (disabled by default).
 
 To support Video thumbnails under Linux, please install "mplayerthumbs" package.
 

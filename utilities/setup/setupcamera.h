@@ -47,6 +47,7 @@ public:
     ~SetupCamera();
 
     void applySettings();
+    bool checkSettings();
 
 private Q_SLOTS:
 
@@ -63,6 +64,10 @@ private Q_SLOTS:
                          const QString& port,  const QString& path);
     void slotEditedCamera(const QString& title, const QString& model,
                           const QString& port,  const QString& path);
+
+private:
+
+    void readSettings();
 
 private:
 

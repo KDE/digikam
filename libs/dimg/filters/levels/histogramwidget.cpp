@@ -25,18 +25,19 @@
 
 // Qt includes
 
-#include <QPixmap>
-#include <QPainter>
-#include <QPen>
-#include <QEvent>
-#include <QTimer>
-#include <QColor>
 #include <QBrush>
-#include <QRect>
+#include <QColor>
+#include <QEvent>
 #include <QFont>
 #include <QFontMetrics>
-#include <QPaintEvent>
 #include <QMouseEvent>
+#include <QPixmap>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QPen>
+#include <QPropertyAnimation>
+#include <QRect>
+#include <QTimer>
 
 // KDE includes
 
@@ -56,49 +57,55 @@
 namespace Digikam
 {
 
+enum HistogramState
+{
+    HistogramNone = 0,        // No current histogram values calculation.
+    HistogramDataLoading,     // The image is being loaded
+    HistogramStarted,         // Histogram values calculation started.
+    HistogramCompleted,       // Histogram values calculation completed.
+    HistogramFailed           // Histogram values calculation failed.
+};
+
 class HistogramWidgetPriv
 {
 public:
 
-    enum RepaintType
-    {
-        HistogramNone = 0,        // No current histogram values calculation.
-        HistogramDataLoading,     // The image is being loaded
-        HistogramStarted,         // Histogram values calculation started.
-        HistogramCompleted,       // Histogram values calculation completed.
-        HistogramFailed           // Histogram values calculation failed.
-    };
-
     HistogramWidgetPriv()
+        : sixteenBits(false),
+          guideVisible(false),
+          statisticsVisible(false),
+          inSelected(false),
+          selectMode(false),
+          showProgress(false),
+          renderingType(FullImageHistogram),
+          range(255),
+          state(HistogramNone),
+          channelType(LuminosityChannel),
+          scaleType(LogScaleHistogram),
+          imageHistogram(0),
+          selectionHistogram(0),
+          xmin(0),
+          xminOrg(0),
+          xmax(0),
+          animationState(0),
+          animation(0),
+          histogramPainter(0)
     {
-        renderingType        = FullImageHistogram;
-        sixteenBits          = false;
-        inSelected           = false;
-        clearFlag            = HistogramNone;
-        xmin                 = 0.0;
-        xmax                 = 0.0;
-        range                = 255;
-        guideVisible         = false;
-        inInitialRepaintWait = false;
-        progressCount        = 0;
-        progressTimer        = 0;
-        progressPix          = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
+        progressPix = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
     }
 
-    bool    inInitialRepaintWait;
     bool    sixteenBits;
     bool    guideVisible;       // Display color guide.
     bool    statisticsVisible;  // Display tooltip histogram statistics.
     bool    inSelected;
     bool    selectMode;         // If true, a part of the histogram can be selected !
     bool    showProgress;       // If true, a message will be displayed during histogram computation,
-    // else nothing (limit flicker effect in widget especially for small
-    // image/computation time).
-
+                                // else nothing (limit flicker effect in widget especially for small
+                                // image/computation time).
     int     renderingType;      // Using full image or image selection for histogram rendering.
-    int     range;
-    int     clearFlag;          // Clear drawing zone with message.
-    int     progressCount;      // Position of animation during loading/calculation.
+    int            range;
+    HistogramState state;       // Clear drawing zone with message.
+
     ChannelType channelType;    // Channel type to draw
     HistogramScale scaleType;   // Scale to use for drawing
     ImageHistogram* imageHistogram;      // Full image
@@ -109,14 +116,13 @@ public:
     double  xminOrg;
     double  xmax;
 
-    QTimer* progressTimer;
-
-    KPixmapSequence progressPix;
+    int                 animationState;
+    QPropertyAnimation* animation;
+    KPixmapSequence     progressPix;
 
     DColor  colorGuide;
 
     HistogramPainter* histogramPainter;
-
 };
 
 // Constructor without image data (needed to use updateData() method after instance created).
@@ -126,12 +132,8 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  bool showProgress, bool statisticsVisible)
     : QWidget(parent), d(new HistogramWidgetPriv)
 {
-    setup(w, h, selectMode, showProgress, statisticsVisible);
-    setAttribute(Qt::WA_DeleteOnClose);
-
-    d->imageHistogram     = 0;
-    d->selectionHistogram = 0;
-    d->histogramPainter  = new HistogramPainter(this);
+    setup(w, h, selectMode, statisticsVisible);
+    d->showProgress = showProgress;
 }
 
 // Constructor without image selection.
@@ -143,17 +145,8 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  bool showProgress, bool statisticsVisible)
     : QWidget(parent), d(new HistogramWidgetPriv)
 {
-    d->sixteenBits = i_sixteenBits;
-    setup(w, h, selectMode, showProgress, statisticsVisible);
-    setAttribute(Qt::WA_DeleteOnClose);
-
-    d->imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
-    d->selectionHistogram = 0L;
-    d->histogramPainter  = new HistogramPainter(this);
-
-    connectHistogram(d->imageHistogram);
-
-    d->imageHistogram->calculateInThread();
+    setup(w, h, selectMode, statisticsVisible);
+    updateData(i_data, i_w, i_h, i_sixteenBits, 0, 0, 0, showProgress);
 }
 
 // Constructor with image selection.
@@ -166,23 +159,13 @@ HistogramWidget::HistogramWidget(int w, int h,
                                  bool showProgress, bool statisticsVisible)
     : QWidget(parent), d(new HistogramWidgetPriv)
 {
-    d->sixteenBits = i_sixteenBits;
-    setup(w, h, selectMode, showProgress, statisticsVisible);
-    setAttribute(Qt::WA_DeleteOnClose);
-
-    d->imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
-    d->selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits);
-    d->histogramPainter  = new HistogramPainter(this);
-
-    connectHistogram(d->imageHistogram);
-    connectHistogram(d->selectionHistogram);
-
-    d->imageHistogram->calculateInThread();
+    setup(w, h, selectMode, statisticsVisible);
+    updateData(i_data, i_w, i_h, i_sixteenBits, s_data, s_w, s_h, showProgress);
 }
 
 HistogramWidget::~HistogramWidget()
 {
-    d->progressTimer->stop();
+    d->animation->stop();
 
     delete d->imageHistogram;
     delete d->selectionHistogram;
@@ -190,37 +173,98 @@ HistogramWidget::~HistogramWidget()
     delete d;
 }
 
-void HistogramWidget::setup(int w, int h, bool selectMode, bool showProgress, bool statisticsVisible)
+void HistogramWidget::setup(int w, int h, bool selectMode, bool statisticsVisible)
 {
-    d->channelType       = LuminosityChannel;
-    d->scaleType         = LogScaleHistogram;
     d->statisticsVisible = statisticsVisible;
     d->selectMode        = selectMode;
-    d->showProgress      = showProgress;
+
+    d->histogramPainter  = new HistogramPainter(this);
+
+    d->animation         = new QPropertyAnimation(this, "animationState", this);
+    d->animation->setStartValue(0);
+    d->animation->setEndValue(d->progressPix.frameCount() - 1);
+    d->animation->setDuration(200 * d->progressPix.frameCount());
+    d->animation->setLoopCount(-1);
 
     setMouseTracking(true);
+    setAttribute(Qt::WA_DeleteOnClose);
     setMinimumSize(w, h);
-
-    d->progressTimer = new QTimer( this );
-
-    connect(d->progressTimer, SIGNAL(timeout()),
-            this, SLOT(slotProgressTimerDone()));
 }
 
 void HistogramWidget::connectHistogram(const ImageHistogram* histogram)
 {
-    connect(histogram, SIGNAL(calculationStarted(const ImageHistogram*)),
-            this, SLOT(slotCalculationStarted(const ImageHistogram*)));
+    connect(histogram, SIGNAL(calculationAboutToStart()),
+            this, SLOT(slotCalculationAboutToStart()));
 
-    connect(histogram, SIGNAL(calculationFinished(const ImageHistogram*, bool)),
-            this, SLOT(slotCalculationFinished(const ImageHistogram*, bool)));
+    connect(histogram, SIGNAL(calculationFinished(bool)),
+            this, SLOT(slotCalculationFinished(bool)));
+}
+
+void HistogramWidget::updateData(uchar* i_data, uint i_w, uint i_h,
+                                 bool i_sixteenBits,
+                                 uchar* s_data, uint s_w, uint s_h,
+                                 bool showProgress)
+{
+    d->showProgress = showProgress;
+    d->sixteenBits  = i_sixteenBits;
+
+    // We are deleting the histogram data, so we must not use it to draw any more.
+    d->state = HistogramNone;
+
+    // Do not using ImageHistogram::getHistogramSegments()
+    // method here because histogram hasn't yet been computed.
+    int range = d->sixteenBits ? MAX_SEGMENT_16BIT : MAX_SEGMENT_8BIT;
+    if (d->range != range)
+    {
+        d->range = range;
+        emit signalMaximumValueChanged( d->range );
+    }
+
+    if (i_data || (!i_data && !s_data))
+    {
+        // dont delete main histogram if only the selection is reset
+        delete d->imageHistogram;
+        d->imageHistogram = 0;
+    }
+
+    // Calc new histogram data
+    if (i_data && i_w && i_h)
+    {
+        d->imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
+        connectHistogram(d->imageHistogram);
+    }
+
+    delete d->selectionHistogram;
+    d->selectionHistogram = 0;
+
+    if (s_data && s_w && s_h)
+    {
+        d->selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits);
+        connectHistogram(d->selectionHistogram);
+    }
+    else
+    {
+        if (d->renderingType == ImageSelectionHistogram)
+        {
+            setRenderingType(FullImageHistogram);
+        }
+    }
+
+    currentHistogram()->calculateInThread();
+}
+
+void HistogramWidget::updateSelectionData(uchar* s_data, uint s_w, uint s_h,
+        bool i_sixteenBits,
+        bool showProgress)
+{
+    updateData(0,0,0, i_sixteenBits, s_data, s_w, s_h, showProgress);
 }
 
 void HistogramWidget::setHistogramGuideByColor(const DColor& color)
 {
     d->guideVisible = true;
     d->colorGuide   = color;
-    repaint();
+    update();
 }
 
 void HistogramWidget::setRenderingType(HistogramRenderingType type)
@@ -229,16 +273,7 @@ void HistogramWidget::setRenderingType(HistogramRenderingType type)
     {
         d->renderingType = type;
 
-        ImageHistogram* nowUsedHistogram;
-
-        if (d->renderingType == ImageSelectionHistogram && d->selectionHistogram)
-        {
-            nowUsedHistogram = d->selectionHistogram;
-        }
-        else
-        {
-            nowUsedHistogram = d->imageHistogram;
-        }
+        ImageHistogram* nowUsedHistogram = currentHistogram();
 
         // already calculated?
         if (!nowUsedHistogram->isValid())
@@ -246,7 +281,7 @@ void HistogramWidget::setRenderingType(HistogramRenderingType type)
             // still computing, or need to start it?
             if (nowUsedHistogram->isCalculating())
             {
-                slotCalculationStarted(nowUsedHistogram);
+                setState(HistogramStarted);
             }
             else
             {
@@ -260,7 +295,7 @@ void HistogramWidget::setRenderingType(HistogramRenderingType type)
     }
 }
 
-ImageHistogram* HistogramWidget::currentHistogram()
+ImageHistogram* HistogramWidget::currentHistogram() const
 {
     if (d->renderingType == ImageSelectionHistogram && d->selectionHistogram)
     {
@@ -275,134 +310,111 @@ ImageHistogram* HistogramWidget::currentHistogram()
 void HistogramWidget::reset()
 {
     d->histogramPainter->disableHistogramGuide();
-    repaint();
+    update();
 }
 
-void HistogramWidget::slotCalculationStarted(const ImageHistogram* histogram)
+void HistogramWidget::startWaitingAnimation()
 {
-    if (histogram != d->imageHistogram && histogram != d->selectionHistogram)
+    if (d->showProgress)
     {
-        return;
+        d->animation->start();
     }
-
-    // only react to the histogram that the user is currently waiting for
-    if (d->renderingType == ImageSelectionHistogram && d->selectionHistogram)
-    {
-        if (histogram == d->imageHistogram)
-        {
-            return;
-        }
-    }
-    else
-    {
-        if (histogram == d->selectionHistogram)
-        {
-            return;
-        }
-    }
-
     setCursor( Qt::WaitCursor );
-    d->clearFlag = HistogramWidgetPriv::HistogramStarted;
-
-    if (!d->inInitialRepaintWait)
-    {
-        if (d->clearFlag != HistogramWidgetPriv::HistogramDataLoading)
-        {
-            // enter initial repaint wait, repaint only after waiting
-            // a short time so that very fast computation does not create flicker
-            d->inInitialRepaintWait = true;
-            d->progressTimer->start( 100 );
-        }
-        else
-        {
-            // For data loading, the initial wait has been set in setDataLoading.
-            // After the initial repaint, we can repaint immediately.
-            repaint();
-            d->progressTimer->start( 200 );
-        }
-    }
 }
 
-void HistogramWidget::slotCalculationFinished(const ImageHistogram* histogram, bool success)
+void HistogramWidget::stopWaitingAnimation()
 {
-    if (histogram != d->imageHistogram && histogram != d->selectionHistogram)
+    d->animation->stop();
+    unsetCursor();
+}
+
+void HistogramWidget::setState(int state)
+{
+    if (d->state == state)
     {
         return;
     }
 
-    if (d->renderingType == ImageSelectionHistogram && d->selectionHistogram)
+    d->state = (HistogramState)state;
+
+    switch (state)
     {
-        if (histogram == d->imageHistogram)
+        case HistogramNone:
+            break;
+        case HistogramDataLoading:
         {
-            return;
+            startWaitingAnimation();
+            break;
+        }
+        case HistogramStarted:
+        {
+            startWaitingAnimation();
+            break;
+        }
+        case HistogramCompleted:
+        {
+            notifyValuesChanged();
+            emit signalHistogramComputationDone(d->sixteenBits);
+
+            stopWaitingAnimation();
+            update();
+            break;
+        }
+        case HistogramFailed:
+        {
+            emit signalHistogramComputationFailed();
+
+            // Remove old histogram data from memory.
+            delete d->imageHistogram;
+            d->imageHistogram = 0;
+            delete d->selectionHistogram;
+            d->selectionHistogram = 0;
+
+            stopWaitingAnimation();
+            update();
+            break;
         }
     }
-    else
+}
+
+void HistogramWidget::slotCalculationAboutToStart()
+{
+    // only react to the histogram that the user is currently waiting for
+    if (QObject::sender() != currentHistogram())
     {
-        if (histogram == d->selectionHistogram)
-        {
-            return;
-        }
+        return;
+    }
+
+    setState(HistogramStarted);
+}
+
+void HistogramWidget::slotCalculationFinished(bool success)
+{
+    // only react to the histogram that the user is currently waiting for
+    if (QObject::sender() != currentHistogram())
+    {
+        return;
     }
 
     if (success)
     {
-        // Repaint histogram
-        d->clearFlag = HistogramWidgetPriv::HistogramCompleted;
-        d->progressTimer->stop();
-        d->inInitialRepaintWait = false;
-        setCursor( Qt::ArrowCursor );
-
-        // Send signals to refresh information if necessary.
-        // The signals may trigger multiple repaints, avoid this,
-        // we repaint once afterwards.
-        setUpdatesEnabled(false);
-
-        notifyValuesChanged();
-        emit signalHistogramComputationDone(d->sixteenBits);
-
-        setUpdatesEnabled(true);
-        repaint();
+        setState(HistogramCompleted);
     }
     else
     {
-        d->clearFlag = HistogramWidgetPriv::HistogramFailed;
-        d->progressTimer->stop();
-        d->inInitialRepaintWait = false;
-        repaint();
-        setCursor( Qt::ArrowCursor );
-
-        // Remove old histogram data from memory.
-        delete d->imageHistogram;
-        d->imageHistogram = 0;
-        delete d->selectionHistogram;
-        d->selectionHistogram = 0;
-        emit signalHistogramComputationFailed();
+        setState(HistogramFailed);
     }
+
 }
 
 void HistogramWidget::setDataLoading()
 {
-    if (d->clearFlag != HistogramWidgetPriv::HistogramDataLoading)
-    {
-        setCursor( Qt::WaitCursor );
-        d->clearFlag = HistogramWidgetPriv::HistogramDataLoading;
-        // enter initial repaint wait, repaint only after waiting
-        // a short time so that very fast computation does not create flicker
-        d->inInitialRepaintWait = true;
-        d->progressCount        = 0;
-        d->progressTimer->start( 100 );
-    }
+    setState(HistogramDataLoading);
 }
 
 void HistogramWidget::setLoadingFailed()
 {
-    d->clearFlag     = HistogramWidgetPriv::HistogramFailed;
-    d->progressCount = 0;
-    d->progressTimer->stop();
-    d->inInitialRepaintWait = false;
-    repaint();
-    setCursor( Qt::ArrowCursor );
+    setState(HistogramFailed);
 }
 
 void HistogramWidget::stopHistogramComputation()
@@ -417,86 +429,20 @@ void HistogramWidget::stopHistogramComputation()
         d->selectionHistogram->stopCalculation();
     }
 
-    d->progressTimer->stop();
-    d->progressCount = 0;
+    stopWaitingAnimation();
 }
 
-void HistogramWidget::updateData(uchar* i_data, uint i_w, uint i_h,
-                                 bool i_sixteenBits,
-                                 uchar* s_data, uint s_w, uint s_h,
-                                 bool showProgress)
+int HistogramWidget::animationState() const
 {
-    d->showProgress = showProgress;
-    d->sixteenBits  = i_sixteenBits;
-
-    // We are deleting the histogram data, so we must not use it to draw any more.
-    d->clearFlag = HistogramWidgetPriv::HistogramNone;
-
-    // Do not using ImageHistogram::getHistogramSegments()
-    // method here because histogram hasn't yet been computed.
-    d->range = d->sixteenBits ? MAX_SEGMENT_16BIT : MAX_SEGMENT_8BIT;
-    emit signalMaximumValueChanged( d->range );
-
-
-    // Remove old histogram data from memory.
-    if (d->imageHistogram)
-    {
-        delete d->imageHistogram;
-    }
-
-    if (d->selectionHistogram)
-    {
-        delete d->selectionHistogram;
-    }
-
-    // Calc new histogram data
-    d->imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
-    connectHistogram(d->imageHistogram);
-
-    if (s_data && s_w && s_h)
-    {
-        d->selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits);
-        connectHistogram(d->selectionHistogram);
-    }
-    else
-    {
-        d->selectionHistogram = 0L;
-    }
-
-    if (d->renderingType == ImageSelectionHistogram && d->selectionHistogram)
-    {
-        d->selectionHistogram->calculateInThread();
-    }
-    else
-    {
-        d->imageHistogram->calculateInThread();
-    }
+    return d->animationState;
 }
 
-void HistogramWidget::updateSelectionData(uchar* s_data, uint s_w, uint s_h,
-        bool i_sixteenBits,
-        bool showProgress)
+void HistogramWidget::setAnimationState(int animationState)
 {
-    d->showProgress = showProgress;
-
-    // Remove old histogram data from memory.
-
-    delete d->selectionHistogram;
-    // Calc new histogram data
-    d->selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits);
-    connectHistogram(d->selectionHistogram);
-
-    if (d->renderingType == ImageSelectionHistogram)
-    {
-        d->selectionHistogram->calculateInThread();
-    }
-}
-
-void HistogramWidget::slotProgressTimerDone()
-{
-    d->inInitialRepaintWait = false;
-    repaint();
-    d->progressTimer->start( 200 );
+    if (d->animationState == animationState)
+        return;
+    d->animationState = animationState;
+    update();
 }
 
 void HistogramWidget::paintEvent(QPaintEvent*)
@@ -505,9 +451,9 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     // or loading, but no message shall be drawn:
     // Drawing grayed frame.
     if ( !isEnabled() ||
-         d->clearFlag == HistogramWidgetPriv::HistogramNone ||
-         (!d->showProgress && (d->clearFlag == HistogramWidgetPriv::HistogramStarted ||
-                               d->clearFlag == HistogramWidgetPriv::HistogramDataLoading))
+         d->state == HistogramNone ||
+         (!d->showProgress && (d->state == HistogramStarted ||
+                               d->state == HistogramDataLoading))
        )
     {
         QPainter p1(this);
@@ -527,19 +473,13 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     // Image data is loading or histogram is being computed:
     // Draw message.
     else if (  d->showProgress &&
-               (d->clearFlag == HistogramWidgetPriv::HistogramStarted ||
-                d->clearFlag == HistogramWidgetPriv::HistogramDataLoading)
+               (d->state == HistogramStarted ||
+                d->state == HistogramDataLoading)
             )
     {
         // In first, we draw an animation.
 
-        QPixmap anim(d->progressPix.frameAt(d->progressCount));
-        d->progressCount++;
-
-        if (d->progressCount >= d->progressPix.frameCount())
-        {
-            d->progressCount = 0;
-        }
+        QPixmap anim = d->progressPix.frameAt(d->animationState);
 
         // ... and we render busy text.
 
@@ -550,7 +490,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
         p1.drawPixmap(width()/2 - anim.width() /2, anim.height(), anim);
         p1.setPen(palette().color(QPalette::Active, QPalette::Text));
 
-        if (d->clearFlag == HistogramWidgetPriv::HistogramDataLoading)
+        if (d->state == HistogramDataLoading)
             p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                         i18n("Loading image..."));
         else
@@ -563,7 +503,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     }
     // Histogram computation failed:
     // Draw message.
-    else if (d->clearFlag == HistogramWidgetPriv::HistogramFailed)
+    else if (d->state == HistogramFailed)
     {
         QPainter p1(this);
         p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
@@ -661,12 +601,12 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
 void HistogramWidget::mousePressEvent ( QMouseEvent* e )
 {
-    if ( d->selectMode == true && d->clearFlag == HistogramWidgetPriv::HistogramCompleted )
+    if ( d->selectMode == true && d->state == HistogramCompleted )
     {
         if (!d->inSelected)
         {
             d->inSelected = true;
-            repaint();
+            update();
         }
 
         d->xmin = ((double)e->pos().x()) / ((double)width());
@@ -679,7 +619,7 @@ void HistogramWidget::mousePressEvent ( QMouseEvent* e )
 
 void HistogramWidget::mouseReleaseEvent ( QMouseEvent* )
 {
-    if ( d->selectMode == true  && d->clearFlag == HistogramWidgetPriv::HistogramCompleted )
+    if ( d->selectMode == true  && d->state == HistogramCompleted )
     {
         d->inSelected = false;
 
@@ -690,14 +630,14 @@ void HistogramWidget::mouseReleaseEvent ( QMouseEvent* )
             //emit signalMinValueChanged( 0 );
             //emit signalMaxValueChanged( d->range );
             notifyValuesChanged();
-            repaint();
+            update();
         }
     }
 }
 
 void HistogramWidget::mouseMoveEvent ( QMouseEvent* e )
 {
-    if ( d->selectMode == true && d->clearFlag == HistogramWidgetPriv::HistogramCompleted )
+    if ( d->selectMode == true && d->state == HistogramCompleted )
     {
         setCursor( Qt::CrossCursor );
 
@@ -721,7 +661,7 @@ void HistogramWidget::mouseMoveEvent ( QMouseEvent* e )
             notifyValuesChanged();
             //emit signalMaxValueChanged( d->xmax == 0.0 ? d->range : (int)(d->xmax * d->range) );
 
-            repaint();
+            update();
         }
     }
 }
@@ -733,7 +673,7 @@ void HistogramWidget::notifyValuesChanged()
 
 void HistogramWidget::slotMinValueChanged(int min)
 {
-    if ( d->selectMode == true && d->clearFlag == HistogramWidgetPriv::HistogramCompleted )
+    if ( d->selectMode == true && d->state == HistogramCompleted )
     {
         if (min == 0 && d->xmax == 1.0)
         {
@@ -747,13 +687,13 @@ void HistogramWidget::slotMinValueChanged(int min)
             d->xmin = ((double)min)/d->range;
         }
 
-        repaint();
+        update();
     }
 }
 
 void HistogramWidget::slotMaxValueChanged(int max)
 {
-    if ( d->selectMode == true && d->clearFlag == HistogramWidgetPriv::HistogramCompleted )
+    if ( d->selectMode == true && d->state == HistogramCompleted )
     {
         if (d->xmin == 0.0 && max == d->range)
         {
@@ -766,7 +706,7 @@ void HistogramWidget::slotMaxValueChanged(int max)
             d->xmax = ((double)max)/d->range;
         }
 
-        repaint();
+        update();
     }
 }
 

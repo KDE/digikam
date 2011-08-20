@@ -374,8 +374,8 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->expanderBox, SIGNAL(signalItemToggled(int, bool)),
-            this, SLOT(slotStageEnabled(int, bool)));
+    connect(d->expanderBox, SIGNAL(signalItemToggled(int,bool)),
+            this, SLOT(slotStageEnabled(int,bool)));
 
     connect(d->lowSaturationInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
@@ -521,6 +521,7 @@ void LocalContrastSettings::setSettings(const LocalContrastContainer& settings)
     slotStage4Enabled(d->stageFour->isChecked());
      */
 
+    d->expanderBox->setEnabled(true);
     blockSignals(false);
 }
 

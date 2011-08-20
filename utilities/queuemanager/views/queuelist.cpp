@@ -274,14 +274,14 @@ QueueListView::QueueListView(QWidget* parent)
 
     // -----------------------------------------------------------
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
-            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)),
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+            this, SLOT(slotCollectionImageChange(CollectionImageChangeset)),
             Qt::QueuedConnection);
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotContextMenu()));
 
     connect(d->toolTipTimer, SIGNAL(timeout()),

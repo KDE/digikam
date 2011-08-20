@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011 by Leif Huhn <leif@dkstat.com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -188,6 +189,41 @@ bool DMetadata::setProgramId(bool on) const
     }
 
     return true;
+}
+
+int DMetadata::getMSecsInfo() const
+{
+    int ms  = 0;
+    bool ok = mSecTimeStamp("Exif.Photo.SubSecTime", ms);
+    if (ok) return ms;
+
+    ok      = mSecTimeStamp("Exif.Photo.SubSecTimeOriginal", ms);
+    if (ok) return ms;
+
+    ok = mSecTimeStamp("Exif.Photo.SubSecTimeDigitized", ms);
+    if (ok) return ms;
+
+    return 0;
+}
+
+bool DMetadata::mSecTimeStamp(const char* exifTagName, int& ms) const
+{
+    bool ok     = false;
+    QString val = getExifTagString(exifTagName);
+    if (!val.isEmpty())
+    {
+        int sub = val.toUInt(&ok);
+        if (ok)
+        {
+            int _ms = (int)(QString("0.%1").arg(sub).toFloat(&ok) * 1000.0);
+            if (ok)
+            {
+                ms = _ms;
+                kDebug() << "msec timestamp: " << ms;
+            }
+        }
+    }
+    return ok;
 }
 
 CaptionsMap DMetadata::getImageComments() const
@@ -1043,6 +1079,50 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
     return true;
 }
 
+bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
+{
+    faces.clear();
+
+    // The example code for Exiv2 says:
+    // > There are no specialized values for structures, qualifiers and nested
+    // > types. However, these can be added by using an XmpTextValue and a path as
+    // > the key.
+    // I think that means I have to iterate over the WLPG face tags in the clunky
+    // way below (guess numbers and look them up as strings). (Leif)
+    const QString personPathTemplate = "Xmp.MP.RegionInfo/MPRI:Regions[%1]/MPReg:PersonDisplayName";
+    const QString rectPathTemplate   = "Xmp.MP.RegionInfo/MPRI:Regions[%1]/MPReg:Rectangle";
+
+    for (int i=1; ; i++)
+    {
+        QString person = getXmpTagString(personPathTemplate.arg(i).toLatin1(), false);
+
+        if (person.isEmpty())
+            break;
+
+        // The WLPG tags have the format X.XX, Y.YY, W.WW, H.HH
+        // That is, four decimal numbers ranging from 0-1.
+        // The top left position is indicated by X.XX, Y.YY (as a
+        // percentage of the width/height of the entire image).
+        // Similarly the width and height of the face's box are
+        // indicated by W.WW and H.HH.
+        QString rectString = getXmpTagString(rectPathTemplate.arg(i).toLatin1(), false);
+        QStringList list   = rectString.split(",");
+        if (list.size() < 4)
+        {
+            kDebug() << "Cannot parse WLPG rectangle string" << rectString;
+            continue;
+        }
+        QRectF rect(list.at(0).toFloat(),
+                    list.at(1).toFloat(),
+                    list.at(2).toFloat(),
+                    list.at(3).toFloat());
+
+        faces[person] = rect;
+    }
+
+    return !faces.isEmpty();
+}
+
 bool DMetadata::setMetadataTemplate(const Template& t) const
 {
     if (t.isNull())
@@ -1293,13 +1373,13 @@ bool DMetadata::getCopyrightInformation(Template& t) const
         return false;
     }
 
-    t.setCopyright(toAltLangMap(metadataInfos[0]));
-    t.setAuthors(metadataInfos[1].toStringList());
-    t.setCredit(metadataInfos[2].toString());
-    t.setRightUsageTerms(toAltLangMap(metadataInfos[3]));
-    t.setSource(metadataInfos[4].toString());
-    t.setAuthorsPosition(metadataInfos[5].toString());
-    t.setInstructions(metadataInfos[6].toString());
+    t.setCopyright(toAltLangMap(metadataInfos.at(0)));
+    t.setAuthors(metadataInfos.at(1).toStringList());
+    t.setCredit(metadataInfos.at(2).toString());
+    t.setRightUsageTerms(toAltLangMap(metadataInfos.at(3)));
+    t.setSource(metadataInfos.at(4).toString());
+    t.setAuthorsPosition(metadataInfos.at(5).toString());
+    t.setInstructions(metadataInfos.at(6).toString());
 
     t.setContactInfo(contactInfo);
 
@@ -1324,14 +1404,14 @@ IptcCoreContactInfo DMetadata::getCreatorContactInfo() const
 
     if (metadataInfos.size() == 8)
     {
-        info.city          = metadataInfos[0].toString();
-        info.country       = metadataInfos[1].toString();
-        info.address       = metadataInfos[2].toString();
-        info.postalCode    = metadataInfos[3].toString();
-        info.provinceState = metadataInfos[4].toString();
-        info.email         = metadataInfos[5].toString();
-        info.phone         = metadataInfos[6].toString();
-        info.webUrl        = metadataInfos[7].toString();
+        info.city          = metadataInfos.at(0).toString();
+        info.country       = metadataInfos.at(1).toString();
+        info.address       = metadataInfos.at(2).toString();
+        info.postalCode    = metadataInfos.at(3).toString();
+        info.provinceState = metadataInfos.at(4).toString();
+        info.email         = metadataInfos.at(5).toString();
+        info.phone         = metadataInfos.at(6).toString();
+        info.webUrl        = metadataInfos.at(7).toString();
     }
 
     return info;
@@ -1402,11 +1482,11 @@ IptcCoreLocationInfo DMetadata::getIptcCoreLocation() const
 
     if (fields.size() == 5)
     {
-        location.country       = metadataInfos[0].toString();
-        location.countryCode   = metadataInfos[1].toString();
-        location.city          = metadataInfos[2].toString();
-        location.location      = metadataInfos[3].toString();
-        location.provinceState = metadataInfos[4].toString();
+        location.country       = metadataInfos.at(0).toString();
+        location.countryCode   = metadataInfos.at(1).toString();
+        location.city          = metadataInfos.at(2).toString();
+        location.location      = metadataInfos.at(3).toString();
+        location.provinceState = metadataInfos.at(4).toString();
     }
 
     return location;
@@ -1516,7 +1596,7 @@ QString DMetadata::getLensDescription() const
     // -------------------------------------------------------------------
     // Try to get Lens Data information from Exif.
 
-    for (QStringList::Iterator it = lensExifTags.begin(); it != lensExifTags.end(); ++it)
+    for (QStringList::const_iterator it = lensExifTags.constBegin(); it != lensExifTags.constEnd(); ++it)
     {
         lens = getExifTagString((*it).toAscii());
 
@@ -1747,6 +1827,14 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
             QStringList list;
             getImageTagsPath(list);
             return toStringListVariant(list);
+        }
+
+        case MetadataInfo::Faces:
+        {
+            QMap<QString,QVariant> faceMap;
+            getImageFacesMap(faceMap);
+            QVariant var(faceMap);
+            return var;
         }
 
         case MetadataInfo::Rating:
@@ -2238,7 +2326,7 @@ QStringList DMetadata::valuesToString(const QVariantList& values, const Metadata
 
     for (int i=0; i<size; ++i)
     {
-        list << valueToString(values[i], fields[i]);
+        list << valueToString(values.at(i), fields.at(i));
     }
 
     return list;

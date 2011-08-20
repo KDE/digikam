@@ -129,7 +129,8 @@ ImageInfo::ImageInfo(const ImageListerRecord& record)
     m_data->formatCached           = true;
     m_data->creationDateCached     = true;
     m_data->modificationDateCached = true;
-    m_data->fileSizeCached         = true;
+    // field is only signed 32 bit in the protocol. -1 indicates value is larger, reread
+    m_data->fileSizeCached         = m_data->fileSize != -1;
     m_data->imageSizeCached        = true;
 }
 
@@ -330,7 +331,7 @@ QString ImageInfo::name() const
     return m_data->name;
 }
 
-uint ImageInfo::fileSize() const
+qlonglong ImageInfo::fileSize() const
 {
     if (!m_data)
     {
@@ -345,7 +346,7 @@ uint ImageInfo::fileSize() const
 
         if (!values.isEmpty())
         {
-            m_data.constCastData()->fileSize = values.first().toUInt();
+            //m_data.constCastData()->fileSize = values.first().toLongLong();
         }
 
         m_data.constCastData()->fileSizeCached = true;
@@ -566,7 +567,7 @@ QSize ImageInfo::dimensions() const
 
         if (values.size() == 2)
         {
-            m_data.constCastData()->imageSize = QSize(values[0].toInt(), values[1].toInt());
+            m_data.constCastData()->imageSize = QSize(values.at(0).toInt(), values.at(1).toInt());
         }
 
         m_data.constCastData()->imageSizeCached = true;

@@ -52,6 +52,11 @@ public:
 
 private:
 
+    DbKeySelectorItem(const DbKeySelectorItem&);
+    DbKeySelectorItem& operator=(const DbKeySelectorItem&);
+
+private:
+
     QString m_key;
     QString m_description;
 };
@@ -68,6 +73,11 @@ public:
 
     void setKeysMap(const DbOptionKeysMap& map);
     QStringList checkedKeysList();
+
+private:
+
+    DbKeySelector(const DbKeySelector&);
+    DbKeySelector& operator=(const DbKeySelector&);
 };
 
 // ------------------------------------------------------------------------------------
@@ -91,6 +101,9 @@ private Q_SLOTS:
     void slotSearchTextChanged(const SearchTextSettings&);
 
 private:
+
+    DbKeySelectorView(const DbKeySelectorView&);
+    DbKeySelectorView& operator=(const DbKeySelectorView&);
 
     void removeChildlessHeaders();
 

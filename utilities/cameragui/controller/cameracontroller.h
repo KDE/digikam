@@ -36,8 +36,9 @@
 
 // Local includes
 
-#include "downloadsettingscontainer.h"
-#include "gpiteminfo.h"
+#include "downloadsettings.h"
+#include "camiteminfo.h"
+#include "dmetadata.h"
 #include "dkcamera.h"
 #include "dhistoryview.h"
 
@@ -57,41 +58,40 @@ public:
                      const QString& port, const QString& path);
     ~CameraController();
 
-    bool cameraThumbnailSupport();
-    bool cameraDeleteSupport();
-    bool cameraUploadSupport();
-    bool cameraMkDirSupport();
-    bool cameraDelDirSupport();
-    bool cameraCaptureImageSupport();
+    bool cameraThumbnailSupport() const;
+    bool cameraDeleteSupport() const;
+    bool cameraUploadSupport() const;
+    bool cameraMkDirSupport() const;
+    bool cameraDelDirSupport() const;
+    bool cameraCaptureImageSupport() const;
 
-    QString cameraPath();
-    QString cameraTitle();
+    QString cameraPath() const;
+    QString cameraTitle() const;
 
-    DKCamera::CameraDriverType cameraDriverType();
+    DKCamera::CameraDriverType cameraDriverType() const;
 
-    QByteArray cameraMD5ID();
+    QByteArray cameraMD5ID() const;
 
     void capture();
     void listFolders();
-    void listFiles(const QString& folder);
+    void listFiles(const QString& folder, bool useMetadata);
     void getFreeSpace();
-    void getExif(const QString& folder, const QString& file);
+    void getMetadata(const QString& folder, const QString& file);
     void getCameraInformation();
     void getPreview();
-    void getThumbnail(const QString& folder, const QString& file);
-    /** Get thumbnials for a list of camera item. 'list' is a list of QStringList composed of
-        2 values : item path and item filename.
+
+    /** Get thumbnails for a list of camera items plus advanced information from metadata.
      */
-    void getThumbnails(const QList<QVariant>& list);
+    void getThumbsInfo(const CamItemInfoList& infoList);
 
     void downloadPrep();
-    void download(const DownloadSettingsContainer& downloadSettings);
+    void download(const DownloadSettings& downloadSettings);
     void upload(const QFileInfo& srcFileInfo, const QString& destFile, const QString& destFolder);
     void deleteFile(const QString& folder, const QString& file);
     void lockFile(const QString& folder, const QString& file, bool lock);
     void openFile(const QString& folder, const QString& file);
 
-    QPixmap mimeTypeThumbnail(const QString& itemName);
+    QPixmap mimeTypeThumbnail(const QString& itemName) const;
 
 Q_SIGNALS:
 
@@ -104,18 +104,17 @@ Q_SIGNALS:
 
     void signalConnected(bool val);
     void signalFolderList(const QStringList& folderList);
-    void signalFileList(const GPItemInfoList& infoList);
-    void signalUploaded(const GPItemInfo& itemInfo);
+    void signalFileList(const CamItemInfoList& infoList);
+    void signalUploaded(const CamItemInfo& itemInfo);
     void signalDownloaded(const QString& folder, const QString& file, int status);
     void signalDownloadComplete(const QString& sourceFolder, const QString& sourceFile,
                                 const QString& destFolder, const QString& destFile);
     void signalSkipped(const QString& folder, const QString& file);
     void signalDeleted(const QString& folder, const QString& file, bool status);
     void signalLocked(const QString& folder, const QString& file, bool status);
-    void signalThumbnail(const QString& folder, const QString& file, const QImage& thumb);
-    void signalThumbnailFailed(const QString& folder, const QString& file);
-    void signalExifFromFile(const QString& folder, const QString& file);
-    void signalExifData(const QByteArray& exifData);
+    void signalThumbInfo(const QString& folder, const QString& file, const CamItemInfo& itemInfo, const QImage& thumb);
+    void signalThumbInfoFailed(const QString& folder, const QString& file, const CamItemInfo& itemInfo);
+    void signalMetadata(const QString& folder, const QString& file, const DMetadata& exifData);
 
     void signalInternalCheckRename(const QString& folder, const QString& file,
                                    const QString& destination, const QString& temp);
@@ -147,12 +146,11 @@ private Q_SLOTS:
 
 private:
 
-    void sendBusy(bool val);
     void sendLogMsg(const QString& msg, DHistoryView::EntryType type=DHistoryView::StartingEntry,
                     const QString& folder=QString(), const QString& file=QString());
 
     void addCommand(CameraCommand* cmd);
-    bool queueIsEmpty();
+    bool queueIsEmpty() const;
 
 private:
 

@@ -132,7 +132,7 @@ AssignedListView::AssignedListView(QWidget* parent)
     connect(this, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
 
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotContextMenu()));
 }
 

@@ -239,8 +239,8 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
     connect(d->resetIconButton, SIGNAL(clicked()),
             this, SLOT(slotIconResetClicked()));
 
-    connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTitleChanged(const QString&)));
+    connect(d->titleEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(slotTitleChanged(QString)));
 
     // --------------------------------------------------------
 

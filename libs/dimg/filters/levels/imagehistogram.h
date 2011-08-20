@@ -75,8 +75,11 @@ public:
 
 Q_SIGNALS:
 
-    void calculationStarted(const ImageHistogram* histogram);
-    void calculationFinished(const ImageHistogram* histogram, bool success);
+    void calculationFinished(bool success);
+    /// when calculation in thread is initiated, from other thread
+    void calculationAboutToStart();
+    /// emitted from calculation thread
+    void calculationStarted();
 
 protected:
 

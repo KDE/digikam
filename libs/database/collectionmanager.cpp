@@ -310,10 +310,10 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
         const Solid::StorageAccess* access = accessDevice.as<Solid::StorageAccess>();
 
         // watch mount status (remove previous connections)
-        QObject::disconnect(access, SIGNAL(accessibilityChanged(bool, const QString&)),
-                            s, SLOT(accessibilityChanged(bool, const QString&)));
-        QObject::connect(access, SIGNAL(accessibilityChanged(bool, const QString&)),
-                         s, SLOT(accessibilityChanged(bool, const QString&)));
+        QObject::disconnect(access, SIGNAL(accessibilityChanged(bool,QString)),
+                            s, SLOT(accessibilityChanged(bool,QString)));
+        QObject::connect(access, SIGNAL(accessibilityChanged(bool,QString)),
+                         s, SLOT(accessibilityChanged(bool,QString)));
 
         if (!access->isAccessible())
         {
@@ -725,14 +725,14 @@ CollectionManager::CollectionManager()
     qRegisterMetaType<CollectionLocation>("CollectionLocation");
 
     connect(Solid::DeviceNotifier::instance(),
-            SIGNAL(deviceAdded(const QString&)),
+            SIGNAL(deviceAdded(QString)),
             this,
-            SLOT(deviceAdded(const QString&)));
+            SLOT(deviceAdded(QString)));
 
     connect(Solid::DeviceNotifier::instance(),
-            SIGNAL(deviceRemoved(const QString&)),
+            SIGNAL(deviceRemoved(QString)),
             this,
-            SLOT(deviceRemoved(const QString&)));
+            SLOT(deviceRemoved(QString)));
 
     // DatabaseWatch slot is connected at construction of DatabaseWatch, which may be later.
 }
@@ -1611,9 +1611,9 @@ void CollectionManager::updateLocations()
         int i=0;
         foreach (AlbumRootLocation* location, d->locations)
         {
-            if (oldStatus[i] != location->status())
+            if (oldStatus.at(i) != location->status())
             {
-                emit locationStatusChanged(*location, oldStatus[i]);
+                emit locationStatusChanged(*location, oldStatus.at(i));
             }
 
             ++i;

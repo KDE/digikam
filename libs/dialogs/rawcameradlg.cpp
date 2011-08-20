@@ -80,7 +80,7 @@ RawCameraDlg::RawCameraDlg(QWidget* parent)
     listView()->setHeaderLabels(QStringList() << "Camera Model"); // Header is hidden. No i18n here.
     listView()->header()->hide();
 
-    for (QStringList::Iterator it = list.begin() ; it != list.end() ; ++it)
+    for (QStringList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
         new QTreeWidgetItem(listView(), QStringList() << *it);
     }
@@ -93,8 +93,8 @@ RawCameraDlg::RawCameraDlg(QWidget* parent)
 
     // --------------------------------------------------------
 
-    connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
+    connect(d->searchBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
+            this, SLOT(slotSearchTextChanged(SearchTextSettings)));
 }
 
 RawCameraDlg::~RawCameraDlg()
@@ -116,7 +116,7 @@ void RawCameraDlg::slotSearchTextChanged(const SearchTextSettings& settings)
 
         if (item->text(0).toLower().contains(search, settings.caseSensitive))
         {
-            results++;
+            ++results;
             query = true;
             item->setHidden(false);
         }

@@ -29,6 +29,7 @@
 
 #include <QCursor>
 #include <QGraphicsSceneContextMenuEvent>
+#include <QMouseEvent>
 #include <QToolBar>
 
 // KDE includes
@@ -60,7 +61,6 @@
 #include "digikamapp.h"
 #include "dimg.h"
 #include "dimgpreviewitem.h"
-#include "dpopupmenu.h"
 #include "facegroup.h"
 #include "imageinfo.h"
 #include "metadatamanager.h"
@@ -354,7 +354,7 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
 
     // --------------------------------------------------------
 
-    DPopupMenu popmenu(this);
+    KMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
     cmhelper.addAction(d->peopleToggleAction, true);
@@ -431,11 +431,11 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
     connect(&cmhelper, SIGNAL(signalGotoTag(int)),
             this, SIGNAL(signalGotoTagAndItem(int)));
 
-    connect(&cmhelper, SIGNAL(signalGotoAlbum(const ImageInfo&)),
-            this, SIGNAL(signalGotoAlbumAndItem(const ImageInfo&)));
+    connect(&cmhelper, SIGNAL(signalGotoAlbum(ImageInfo)),
+            this, SIGNAL(signalGotoAlbumAndItem(ImageInfo)));
 
-    connect(&cmhelper, SIGNAL(signalGotoDate(const ImageInfo&)),
-            this, SIGNAL(signalGotoDateAndItem(const ImageInfo&)));
+    connect(&cmhelper, SIGNAL(signalGotoDate(ImageInfo)),
+            this, SIGNAL(signalGotoDateAndItem(ImageInfo)));
 
     cmhelper.exec(event->screenPos());
 }

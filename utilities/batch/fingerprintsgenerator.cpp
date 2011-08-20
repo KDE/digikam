@@ -85,8 +85,8 @@ FingerPrintsGenerator::FingerPrintsGenerator(QWidget* /*parent*/, bool rebuildAl
     d->rebuildAll        = rebuildAll;
     d->previewLoadThread = new PreviewLoadThread();
 
-    connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-            this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
+    connect(d->previewLoadThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+            this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
 
     setModal(false);
     setValue(0);

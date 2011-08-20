@@ -163,7 +163,7 @@ public:
     {
 
         QPixmap anim(progressPix.frameAt(progressCount));
-        progressCount++;
+        ++progressCount;
 
         if (progressCount >= progressPix.frameCount())
         {
@@ -450,11 +450,11 @@ void CurvesWidget::updateData(uchar* i_data, uint i_w, uint i_h, bool i_sixteenB
     delete d->imageHistogram;
     d->imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
 
-    connect(d->imageHistogram, SIGNAL(calculationStarted(const ImageHistogram*)),
-            this, SLOT(slotCalculationStarted(const ImageHistogram*)));
+    connect(d->imageHistogram, SIGNAL(calculationStarted()),
+            this, SLOT(slotCalculationStarted()));
 
-    connect(d->imageHistogram, SIGNAL(calculationFinished(const ImageHistogram*, bool)),
-            this, SLOT(slotCalculationFinished(const ImageHistogram*, bool)));
+    connect(d->imageHistogram, SIGNAL(calculationFinished(bool)),
+            this, SLOT(slotCalculationFinished(bool)));
 
     d->imageHistogram->calculateInThread();
 
@@ -553,7 +553,7 @@ void CurvesWidget::curveTypeChanged()
     emit signalCurvesChanged();
 }
 
-void CurvesWidget::slotCalculationStarted(const ImageHistogram*)
+void CurvesWidget::slotCalculationStarted()
 {
     setCursor(Qt::WaitCursor);
     d->clearFlag = CurvesWidgetPriv::HistogramStarted;
@@ -561,7 +561,7 @@ void CurvesWidget::slotCalculationStarted(const ImageHistogram*)
     update();
 }
 
-void CurvesWidget::slotCalculationFinished(const ImageHistogram*, bool success)
+void CurvesWidget::slotCalculationFinished(bool success)
 {
     if (success)
     {

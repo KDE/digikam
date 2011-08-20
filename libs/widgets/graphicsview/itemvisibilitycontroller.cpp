@@ -438,7 +438,7 @@ void AnimationControl::setEasingCurve(const QEasingCurve& easing)
 {
     if (animationGroup)
     {
-        for (int i=0; i<animationGroup->animationCount(); i++)
+        for (int i=0; i<animationGroup->animationCount(); ++i)
         {
             QVariantAnimation* anim = /*qobject*/static_cast<QVariantAnimation*>(animationGroup->animationAt(i));
             anim->setEasingCurve(easing);
@@ -459,7 +459,7 @@ void AnimationControl::setAnimationDuration(int msecs)
 {
     if (animationGroup)
     {
-        for (int i=0; i<animationGroup->animationCount(); i++)
+        for (int i=0; i<animationGroup->animationCount(); ++i)
         {
             QVariantAnimation* anim = /*qobject*/static_cast<QVariantAnimation*>(animationGroup->animationAt(i));
             anim->setDuration(msecs);

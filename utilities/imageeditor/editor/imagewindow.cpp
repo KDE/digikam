@@ -60,6 +60,7 @@
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <klocale.h>
+#include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kselectaction.h>
@@ -96,7 +97,6 @@
 #include "dimagehistory.h"
 #include "dio.h"
 #include "dmetadata.h"
-#include "dpopupmenu.h"
 #include "editorstackview.h"
 #include "globals.h"
 #include "iccsettingscontainer.h"
@@ -339,6 +339,7 @@ ImageWindow::ImageWindow()
 
     //-------------------------------------------------------------
 
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
     d->rightSideBar->loadState();
     d->rightSideBar->populateTags();
 
@@ -386,6 +387,9 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
     saveMainWindowSettings(group);
     saveSettings();
+
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
+    d->rightSideBar->saveState();
 
     e->accept();
 }
@@ -507,32 +511,32 @@ void ImageWindow::setupConnections()
     connect(d->rightSideBar, SIGNAL(signalPrevItem()),
             this, SLOT(slotBackward()));
 
-    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(const ImageInfo&)),
-            this, SLOT(openImage(const ImageInfo&)));
+    connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(ImageInfo)),
+            this, SLOT(openImage(ImageInfo)));
 
-    connect(this, SIGNAL(signalSelectionChanged( const QRect&)),
-            d->rightSideBar, SLOT(slotImageSelectionChanged( const QRect&)));
+    connect(this, SIGNAL(signalSelectionChanged(QRect)),
+            d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
     ImageAttributesWatch* watch = ImageAttributesWatch::instance();
 
-    connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl&)),
-            this, SLOT(slotFileMetadataChanged(const KUrl&)));
+    connect(watch, SIGNAL(signalFileMetadataChanged(KUrl)),
+            this, SLOT(slotFileMetadataChanged(KUrl)));
 
-    /*connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
-            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)),
+    /*connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+            this, SLOT(slotCollectionImageChange(CollectionImageChangeset)),
             Qt::QueuedConnection);*/
 
-    /*connect(d->imageFilterModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
-            this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));*/
+    /*connect(d->imageFilterModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+            this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));*/
 
-    connect(d->thumbBar, SIGNAL(currentChanged(const ImageInfo&)),
-            this, SLOT(slotThumbBarImageSelected(const ImageInfo&)));
+    connect(d->thumbBar, SIGNAL(currentChanged(ImageInfo)),
+            this, SLOT(slotThumbBarImageSelected(ImageInfo)));
 
-    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(const QList<ImageInfo>&)),
-            this, SLOT(slotDroppedOnThumbbar(const QList<ImageInfo>&)));
+    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(QList<ImageInfo>)),
+            this, SLOT(slotDroppedOnThumbbar(QList<ImageInfo>)));
 
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
@@ -1074,6 +1078,8 @@ void ImageWindow::saveIsComplete()
     KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
                          this, windowTitle());
 
+    resetOrigin();
+
     QModelIndex next = d->nextIndex();
 
     if (next.isValid())
@@ -1132,7 +1138,7 @@ void ImageWindow::saveAsIsComplete()
     }
 
     // set origin of DImgInterface: "As if" the last saved image was loaded directly
-    setOriginAfterSave();
+    resetOriginSwitchFile();
 
     // If the DImg is put in the cache under the new name, this means the new file will not be reloaded.
     // This may irritate users who want to check for quality loss in lossy formats.
@@ -1328,11 +1334,11 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
     // We have database information, which means information will get through
     // everywhere. Just do it asynchronously.
 
+    removeCurrent();
+
     KIO::Job* job = DIO::del(kioURL, useTrash);
     job->ui()->setWindow(this);
     job->ui()->setAutoErrorHandlingEnabled(true);
-
-    removeCurrent();
 }
 
 void ImageWindow::removeCurrent()
@@ -1342,27 +1348,9 @@ void ImageWindow::removeCurrent()
         return;
     }
 
-    QModelIndex next = d->nextIndex();
-    QModelIndex prev = d->previousIndex();
-
     d->imageInfoModel->removeImageInfo(d->currentImageInfo);
 
-    QModelIndex newCurrent;
-
-    if (next.isValid())
-    {
-        newCurrent = next;
-    }
-    else if (prev.isValid())
-    {
-        newCurrent = prev;
-    }
-
-    if (newCurrent.isValid())
-    {
-        loadIndex(newCurrent);
-    }
-    else
+    if (d->imageInfoModel->isEmpty())
     {
         // No image in the current Album -> Quit ImageEditor...
 
@@ -1558,14 +1546,14 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
             slide->setCurrent(d->currentUrl());
         }
 
-        connect(slide, SIGNAL(signalRatingChanged(const KUrl&, int)),
-                this, SLOT(slotRatingChanged(const KUrl&, int)));
+        connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
+                this, SLOT(slotRatingChanged(KUrl,int)));
 
-        connect(slide, SIGNAL(signalColorLabelChanged(const KUrl&, int)),
-                this, SLOT(slotColorLabelChanged(const KUrl&, int)));
+        connect(slide, SIGNAL(signalColorLabelChanged(KUrl,int)),
+                this, SLOT(slotColorLabelChanged(KUrl,int)));
 
-        connect(slide, SIGNAL(signalPickLabelChanged(const KUrl&, int)),
-                this, SLOT(slotPickLabelChanged(const KUrl&, int)));
+        connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
+                this, SLOT(slotPickLabelChanged(KUrl,int)));
 
         slide->show();
     }
@@ -1773,3 +1761,4 @@ void ImageWindow::slotDBStat()
 }
 
 }  // namespace Digikam
+

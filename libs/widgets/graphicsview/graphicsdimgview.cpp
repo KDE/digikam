@@ -420,8 +420,8 @@ void GraphicsDImgView::slotCornerButtonPressed()
     //connect(pan, SIGNAL(signalSelectionTakeFocus()),
     //      this, SIGNAL(signalContentTakeFocus()));
 
-    connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
-            this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
+    connect(pan, SIGNAL(signalSelectionMoved(QRect,bool)),
+            this, SLOT(slotPanIconSelectionMoved(QRect,bool)));
 
     connect(pan, SIGNAL(signalHidden()),
             this, SLOT(slotPanIconHiden()));

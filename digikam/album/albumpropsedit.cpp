@@ -249,20 +249,17 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // -- slots connections -------------------------------------------
 
-    connect(d->datePicker, SIGNAL(dateEntered(const QDate&)),
-            this, SLOT(slotDateEntered(const QDate&)));
-
-    connect(d->titleEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTitleChanged(const QString&)));
+    connect(d->titleEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(slotTitleChanged(QString)));
 
     connect(dateLowButton, SIGNAL(clicked()),
-            this, SLOT( slotDateLowButtonClicked()));
+            this, SLOT(slotDateLowButtonClicked()));
 
     connect(dateAvgButton, SIGNAL(clicked()),
-            this, SLOT( slotDateAverageButtonClicked()));
+            this, SLOT(slotDateAverageButtonClicked()));
 
     connect(dateHighButton, SIGNAL(clicked()),
-            this, SLOT( slotDateHighButtonClicked()));
+            this, SLOT(slotDateHighButtonClicked()));
 
     // --------------------------------------------------------
 

@@ -66,7 +66,6 @@ extern "C"
 #include "imagewindow.h"
 #include "gpcamera.h"
 #include "umscamera.h"
-#include "dmetadata.h"
 #include "jpegutils.h"
 
 namespace Digikam
@@ -78,26 +77,26 @@ public:
 
     enum Action
     {
-        gp_none = 0,
-        gp_connect,
-        gp_cancel,
-        gp_cameraInformation,
-        gp_listfolders,
-        gp_listfiles,
-        gp_download,
-        gp_upload,
-        gp_delete,
-        gp_lock,
-        gp_thumbnails,
-        gp_exif,
-        gp_open,
-        gp_freeSpace,
-        gp_preview,
-        gp_capture
+        cam_none = 0,
+        cam_connect,
+        cam_cancel,
+        cam_cameraInformation,
+        cam_listfolders,
+        cam_listfiles,
+        cam_download,
+        cam_upload,
+        cam_delete,
+        cam_lock,
+        cam_thumbsinfo,
+        cam_metadata,
+        cam_open,
+        cam_freeSpace,
+        cam_preview,
+        cam_capture
     };
 
-    Action                 action;
-    QMap<QString,QVariant> map;
+    Action                  action;
+    QMap<QString, QVariant> map;
 };
 
 class CameraController::CameraControllerPriv
@@ -182,31 +181,31 @@ CameraController::CameraController(QWidget* parent,
 
     // setup inter-thread signals
 
-    qRegisterMetaType<GPItemInfo>("GPItemInfo");
-    qRegisterMetaType<GPItemInfoList>("GPItemInfoList");
+    qRegisterMetaType<CamItemInfo>("CamItemInfo");
+    qRegisterMetaType<CamItemInfoList>("CamItemInfoList");
 
-    connect(this, SIGNAL(signalInternalCheckRename(const QString&, const QString&, const QString&, const QString&)),
-            this, SLOT(slotCheckRename(const QString&, const QString&, const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalCheckRename(QString,QString,QString,QString)),
+            this, SLOT(slotCheckRename(QString,QString,QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalDownloadFailed(const QString&, const QString&)),
-            this, SLOT(slotDownloadFailed(const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalDownloadFailed(QString,QString)),
+            this, SLOT(slotDownloadFailed(QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalUploadFailed(const QString&, const QString&, const QString&)),
-            this, SLOT(slotUploadFailed(const QString&, const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalUploadFailed(QString,QString,QString)),
+            this, SLOT(slotUploadFailed(QString,QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalDeleteFailed(const QString&, const QString&)),
-            this, SLOT(slotDeleteFailed(const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalDeleteFailed(QString,QString)),
+            this, SLOT(slotDeleteFailed(QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalLockFailed(const QString&, const QString&)),
-            this, SLOT(slotLockFailed(const QString&, const QString&)),
+    connect(this, SIGNAL(signalInternalLockFailed(QString,QString)),
+            this, SLOT(slotLockFailed(QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalOpen(const QString&, const QString&, const QString&)),
-            this, SLOT(slotOpen(const QString&, const QString&, const QString&)));
+    connect(this, SIGNAL(signalInternalOpen(QString,QString,QString)),
+            this, SLOT(slotOpen(QString,QString,QString)));
 
     d->running = true;
     start();
@@ -229,7 +228,7 @@ CameraController::~CameraController()
     delete d;
 }
 
-bool CameraController::cameraThumbnailSupport()
+bool CameraController::cameraThumbnailSupport() const
 {
     if (!d->camera)
     {
@@ -239,7 +238,7 @@ bool CameraController::cameraThumbnailSupport()
     return d->camera->thumbnailSupport();
 }
 
-bool CameraController::cameraDeleteSupport()
+bool CameraController::cameraDeleteSupport() const
 {
     if (!d->camera)
     {
@@ -249,7 +248,7 @@ bool CameraController::cameraDeleteSupport()
     return d->camera->deleteSupport();
 }
 
-bool CameraController::cameraUploadSupport()
+bool CameraController::cameraUploadSupport() const
 {
     if (!d->camera)
     {
@@ -259,7 +258,7 @@ bool CameraController::cameraUploadSupport()
     return d->camera->uploadSupport();
 }
 
-bool CameraController::cameraMkDirSupport()
+bool CameraController::cameraMkDirSupport() const
 {
     if (!d->camera)
     {
@@ -269,7 +268,7 @@ bool CameraController::cameraMkDirSupport()
     return d->camera->mkDirSupport();
 }
 
-bool CameraController::cameraDelDirSupport()
+bool CameraController::cameraDelDirSupport() const
 {
     if (!d->camera)
     {
@@ -279,7 +278,7 @@ bool CameraController::cameraDelDirSupport()
     return d->camera->delDirSupport();
 }
 
-bool CameraController::cameraCaptureImageSupport()
+bool CameraController::cameraCaptureImageSupport() const
 {
     if (!d->camera)
     {
@@ -289,7 +288,7 @@ bool CameraController::cameraCaptureImageSupport()
     return d->camera->captureImageSupport();
 }
 
-QString CameraController::cameraPath()
+QString CameraController::cameraPath() const
 {
     if (!d->camera)
     {
@@ -299,7 +298,7 @@ QString CameraController::cameraPath()
     return d->camera->path();
 }
 
-QString CameraController::cameraTitle()
+QString CameraController::cameraTitle() const
 {
     if (!d->camera)
     {
@@ -309,7 +308,7 @@ QString CameraController::cameraTitle()
     return d->camera->title();
 }
 
-DKCamera::CameraDriverType CameraController::cameraDriverType()
+DKCamera::CameraDriverType CameraController::cameraDriverType() const
 {
     if (!d->camera)
     {
@@ -319,7 +318,7 @@ DKCamera::CameraDriverType CameraController::cameraDriverType()
     return d->camera->cameraDriverType();
 }
 
-QByteArray CameraController::cameraMD5ID()
+QByteArray CameraController::cameraMD5ID() const
 {
     if (!d->camera)
     {
@@ -329,7 +328,7 @@ QByteArray CameraController::cameraMD5ID()
     return d->camera->cameraMD5ID();
 }
 
-QPixmap CameraController::mimeTypeThumbnail(const QString& itemName)
+QPixmap CameraController::mimeTypeThumbnail(const QString& itemName) const
 {
     if (!d->camera)
     {
@@ -371,7 +370,7 @@ void CameraController::run()
 {
     while (d->running)
     {
-        CameraCommand* command;
+        CameraCommand* command = 0;
 
         {
             QMutexLocker lock(&d->mutex);
@@ -382,25 +381,33 @@ void CameraController::run()
             }
             else
             {
-                sendBusy(false);
+                emit signalBusy(false);
                 d->condVar.wait(&d->mutex);
                 continue;
             }
         }
 
-        sendBusy(true);
-        executeCommand(command);
-        delete command;
+        if (command)
+        {
+            // Special case with thumbs handling. We don't need progress bar in gui.
+            if (command->action != CameraCommand::cam_thumbsinfo)
+                emit signalBusy(true);
+
+            executeCommand(command);
+            delete command;
+        }
     }
 
-    sendBusy(false);
+    emit signalBusy(false);
 }
 
 void CameraController::executeCommand(CameraCommand* cmd)
 {
+    if (!cmd) return;
+
     switch (cmd->action)
     {
-        case(CameraCommand::gp_connect):
+        case(CameraCommand::cam_connect):
         {
             sendLogMsg(i18n("Connecting to camera..."));
 
@@ -419,7 +426,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::gp_cameraInformation):
+        case(CameraCommand::cam_cameraInformation):
         {
             sendLogMsg(i18n("Getting camera information..."));
 
@@ -432,7 +439,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
             emit signalCameraInformation(summary, manual, about);
             break;
         }
-        case(CameraCommand::gp_freeSpace):
+        case(CameraCommand::cam_freeSpace):
         {
             sendLogMsg(i18n("Getting available free space on camera..."));
             unsigned long kBSize  = 0;
@@ -441,7 +448,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
             emit signalFreeSpace(kBSize, kBAvail);
             break;
         }
-        case(CameraCommand::gp_preview):
+        case(CameraCommand::cam_preview):
         {
             sendLogMsg(i18n("Getting preview..."));
             QImage preview;
@@ -449,15 +456,15 @@ void CameraController::executeCommand(CameraCommand* cmd)
             emit signalPreview(preview);
             break;
         }
-        case(CameraCommand::gp_capture):
+        case(CameraCommand::cam_capture):
         {
             sendLogMsg(i18n("Capture image..."));
-            GPItemInfo itemInfo;
+            CamItemInfo itemInfo;
             d->camera->capture(itemInfo);
             emit signalUploaded(itemInfo);
             break;
         }
-        case(CameraCommand::gp_listfolders):
+        case(CameraCommand::cam_listfolders):
         {
             sendLogMsg(i18n("Listing folders..."));
 
@@ -470,15 +477,16 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::gp_listfiles):
+        case(CameraCommand::cam_listfiles):
         {
-            QString folder = cmd->map["folder"].toString();
+            QString folder   = cmd->map["folder"].toString();
+            bool useMetadata = cmd->map["useMetadata"].toBool();
 
             sendLogMsg(i18n("Listing files in %1...", folder));
 
-            GPItemInfoList itemsList;
+            CamItemInfoList itemsList;
 
-            if (!d->camera->getItemsInfoList(folder, itemsList, true))
+            if (!d->camera->getItemsInfoList(folder, useMetadata, itemsList))
             {
                 sendLogMsg(i18n("Failed to list files in %1.", folder), DHistoryView::ErrorEntry);
             }
@@ -492,7 +500,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::gp_thumbnails):
+        case(CameraCommand::cam_thumbsinfo):
         {
             QList<QVariant> list = cmd->map["list"].toList();
 
@@ -503,56 +511,43 @@ void CameraController::executeCommand(CameraCommand* cmd)
                     break;
                 }
 
-                QString folder = (*it).toStringList()[0];
-                QString file   = (*it).toStringList()[1];
+                QString folder = (*it).toStringList().at(0);
+                QString file   = (*it).toStringList().at(1);
 
-                sendLogMsg(i18n("Getting thumbnails for %1...", file), DHistoryView::StartingEntry, folder, file);
+                sendLogMsg(i18n("Getting thumbs info for %1...", file), DHistoryView::StartingEntry, folder, file);
+
+                CamItemInfo info;
+                d->camera->getItemInfo(folder, file, info, true);
+
                 QImage thumbnail;
 
                 if (d->camera->getThumbnail(folder, file, thumbnail))
                 {
                     thumbnail = thumbnail.scaled(ThumbnailSize::Huge, ThumbnailSize::Huge, Qt::KeepAspectRatio);
-                    emit signalThumbnail(folder, file, thumbnail);
+                    emit signalThumbInfo(folder, file, info, thumbnail);
                 }
                 else
                 {
-                    emit signalThumbnailFailed(folder, file);
+                    emit signalThumbInfoFailed(folder, file, info);
                 }
             }
 
             break;
         }
-        case(CameraCommand::gp_exif):
+        case(CameraCommand::cam_metadata):
         {
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
 
-            if ( typeid(*(d->camera)) == typeid(UMSCamera) )
-            {
-                emit signalExifFromFile(folder, file);
-            }
-            else
-            {
-                sendLogMsg(i18n("Getting EXIF information for %1...", file), DHistoryView::StartingEntry, folder, file);
+            sendLogMsg(i18n("Getting Metadata for %1...", file), DHistoryView::StartingEntry, folder, file);
 
-                char* edata = 0;
-                int   esize = 0;
-                d->camera->getExif(folder, file, &edata, esize);
-
-                if (edata || esize)
-                {
-                    QByteArray  ba;
-                    QDataStream ds(&ba, QIODevice::WriteOnly);
-                    ds.writeRawData(edata, esize);
-                    delete [] edata;
-
-                    emit signalExifData(ba);
-                }
-            }
+            DMetadata meta;
+            d->camera->getMetadata(folder, file, meta);
+            emit signalMetadata(folder, file, meta);
 
             break;
         }
-        case(CameraCommand::gp_download):
+        case(CameraCommand::cam_download):
         {
             QString   folder         = cmd->map["folder"].toString();
             QString   file           = cmd->map["file"].toString();
@@ -567,10 +562,10 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             // download to a temp file
 
-            emit signalDownloaded(folder, file, GPItemInfo::DownloadStarted);
+            emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted);
 
             KUrl tempURL(dest);
-            tempURL = tempURL.upUrl();
+            tempURL      = tempURL.upUrl();
             tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()).append(file));
             kDebug() << "Downloading: " << file << " using (" << tempURL << ")";
             QString temp = tempURL.toLocalFile();
@@ -580,7 +575,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
             if (!result)
             {
                 unlink(QFile::encodeName(tempURL.toLocalFile()));
-                emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
+                emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
                 sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry, folder, file);
                 break;
             }
@@ -664,7 +659,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
             emit signalInternalCheckRename(folder, file, dest, temp);
             break;
         }
-        case(CameraCommand::gp_open):
+        case(CameraCommand::cam_open):
         {
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
@@ -685,7 +680,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::gp_upload):
+        case(CameraCommand::cam_upload):
         {
             QString folder = cmd->map["destFolder"].toString();
 
@@ -698,7 +693,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             sendLogMsg(i18n("Uploading file %1 to camera...", file), DHistoryView::StartingEntry, folder, file);
 
-            GPItemInfo itemsInfo;
+            CamItemInfo itemsInfo;
 
             bool result = d->camera->uploadItem(folder, file, src, itemsInfo);
 
@@ -713,7 +708,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::gp_delete):
+        case(CameraCommand::cam_delete):
         {
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
@@ -733,7 +728,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::gp_lock):
+        case(CameraCommand::cam_lock):
         {
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
@@ -757,13 +752,9 @@ void CameraController::executeCommand(CameraCommand* cmd)
         default:
         {
             kWarning() << " unknown action specified";
+            break;
         }
     }
-}
-
-void CameraController::sendBusy(bool val)
-{
-    emit signalBusy(val);
 }
 
 void CameraController::sendLogMsg(const QString& msg, DHistoryView::EntryType type,
@@ -778,7 +769,7 @@ void CameraController::sendLogMsg(const QString& msg, DHistoryView::EntryType ty
 void CameraController::slotCheckRename(const QString& folder, const QString& file,
                                        const QString& destination, const QString& temp)
 {
-    // this is the direct continuation of executeCommand, case CameraCommand::gp_download
+    // this is the direct continuation of executeCommand, case CameraCommand::cam_download
 
     bool skip      = false;
     bool cancel    = false;
@@ -872,12 +863,12 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     {
         // rename failed. delete the temp file
         unlink(QFile::encodeName(temp));
-        emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
+        emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
         sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry,  folder, file);
     }
     else
     {
-        emit signalDownloaded(folder, file, GPItemInfo::DownloadedYes);
+        emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
         sendLogMsg(i18n("Download successfully %1...", file), DHistoryView::StartingEntry, folder, file);
     }
@@ -994,7 +985,7 @@ void CameraController::slotOpen(const QString& folder, const QString& file, cons
 
     //TODO: Provide a preview window
 
-    /*
+/*
     KUrl url = KUrl::fromPath(dest);
     KUrl::List urlList;
     urlList << url;
@@ -1012,7 +1003,7 @@ void CameraController::slotOpen(const QString& folder, const QString& file, cons
     }
 
     im->setFocus();
-    */
+*/
 }
 
 void CameraController::addCommand(CameraCommand* cmd)
@@ -1022,7 +1013,7 @@ void CameraController::addCommand(CameraCommand* cmd)
     d->condVar.wakeAll();
 }
 
-bool CameraController::queueIsEmpty()
+bool CameraController::queueIsEmpty() const
 {
     QMutexLocker lock(&d->mutex);
     return d->commands.isEmpty();
@@ -1032,7 +1023,7 @@ void CameraController::slotConnect()
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_connect;
+    cmd->action        = CameraCommand::cam_connect;
     addCommand(cmd);
 }
 
@@ -1040,40 +1031,42 @@ void CameraController::listFolders()
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_listfolders;
+    cmd->action        = CameraCommand::cam_listfolders;
     addCommand(cmd);
 }
 
-void CameraController::listFiles(const QString& folder)
+void CameraController::listFiles(const QString& folder, bool useMetadata)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_listfiles;
-    cmd->map.insert("folder", QVariant(folder));
+    cmd->action        = CameraCommand::cam_listfiles;
+    cmd->map.insert("folder",      QVariant(folder));
+    cmd->map.insert("useMetadata", QVariant(useMetadata));
     addCommand(cmd);
 }
 
-void CameraController::getThumbnail(const QString& folder, const QString& file)
-{
-    QList<QVariant> list;
-    list.append(QStringList() << folder << file);
-    getThumbnails(list);
-}
-
-void CameraController::getThumbnails(const QList<QVariant>& list)
+void CameraController::getThumbsInfo(const CamItemInfoList& list)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_thumbnails;
-    cmd->map.insert("list", QVariant(list));
+    cmd->action        = CameraCommand::cam_thumbsinfo;
+
+    QList<QVariant> itemsList;
+
+    foreach(CamItemInfo info, list)
+    {
+        itemsList.append(QStringList() << info.folder << info.name);
+    }
+
+    cmd->map.insert("list", QVariant(itemsList));
     addCommand(cmd);
 }
 
-void CameraController::getExif(const QString& folder, const QString& file)
+void CameraController::getMetadata(const QString& folder, const QString& file)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_exif;
+    cmd->action        = CameraCommand::cam_metadata;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file",   QVariant(file));
     addCommand(cmd);
@@ -1083,7 +1076,7 @@ void CameraController::getCameraInformation()
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_cameraInformation;
+    cmd->action        = CameraCommand::cam_cameraInformation;
     addCommand(cmd);
 }
 
@@ -1091,7 +1084,7 @@ void CameraController::getFreeSpace()
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_freeSpace;
+    cmd->action        = CameraCommand::cam_freeSpace;
     addCommand(cmd);
 }
 
@@ -1099,7 +1092,7 @@ void CameraController::getPreview()
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_preview;
+    cmd->action        = CameraCommand::cam_preview;
     addCommand(cmd);
 }
 
@@ -1107,7 +1100,7 @@ void CameraController::capture()
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_capture;
+    cmd->action        = CameraCommand::cam_capture;
     addCommand(cmd);
 }
 
@@ -1115,7 +1108,7 @@ void CameraController::upload(const QFileInfo& srcFileInfo, const QString& destF
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_upload;
+    cmd->action        = CameraCommand::cam_upload;
     cmd->map.insert("srcFilePath", QVariant(srcFileInfo.filePath()));
     cmd->map.insert("destFile",    QVariant(destFile));
     cmd->map.insert("destFolder",  QVariant(destFolder));
@@ -1131,11 +1124,11 @@ void CameraController::downloadPrep()
     d->downloadTotal = 0;
 }
 
-void CameraController::download(const DownloadSettingsContainer& downloadSettings)
+void CameraController::download(const DownloadSettings& downloadSettings)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_download;
+    cmd->action        = CameraCommand::cam_download;
     cmd->map.insert("folder",            QVariant(downloadSettings.folder));
     cmd->map.insert("file",              QVariant(downloadSettings.file));
     cmd->map.insert("dest",              QVariant(downloadSettings.dest));
@@ -1152,7 +1145,7 @@ void CameraController::deleteFile(const QString& folder, const QString& file)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_delete;
+    cmd->action        = CameraCommand::cam_delete;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file",   QVariant(file));
     addCommand(cmd);
@@ -1162,7 +1155,7 @@ void CameraController::lockFile(const QString& folder, const QString& file, bool
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_lock;
+    cmd->action        = CameraCommand::cam_lock;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file",   QVariant(file));
     cmd->map.insert("lock",   QVariant(locked));
@@ -1173,7 +1166,7 @@ void CameraController::openFile(const QString& folder, const QString& file)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_open;
+    cmd->action        = CameraCommand::cam_open;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file",   QVariant(file));
     cmd->map.insert("dest",   QVariant(KStandardDirs::locateLocal("tmp", file)));

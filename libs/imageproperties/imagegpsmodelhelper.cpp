@@ -25,7 +25,7 @@
 
 // local includes
 
-#include "digikam2kmap.h"
+#include "digikam2kgeomap.h"
 
 namespace Digikam
 {
@@ -47,17 +47,17 @@ public:
 };
 
 ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent)
-    : KMap::ModelHelper(parent), d(new ImageGPSModelHelperPriv())
+    : KGeoMap::ModelHelper(parent), d(new ImageGPSModelHelperPriv())
 {
 
     d->itemModel           = itemModel;
     d->itemSelectionModel  = new QItemSelectionModel(d->itemModel);
     d->thumbnailLoadThread = new ThumbnailLoadThread(this);
 
-    connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+    connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 
-    connect(d->itemModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+    connect(d->itemModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             this, SIGNAL(signalModelChangedDrastically()));
 }
 
@@ -76,7 +76,7 @@ QItemSelectionModel* ImageGPSModelHelper::selectionModel() const
     return d->itemSelectionModel;
 }
 
-bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoordinates* const coordinates) const
+bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const
 {
     const GPSImageInfo currentGPSImageInfo = index.data(RoleGPSImageInfo).value<GPSImageInfo>();
 
@@ -105,7 +105,7 @@ QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentMode
     QPixmap thumbnail;
     if (d->thumbnailLoadThread->find(currentGPSImageInfo.url.path(), thumbnail, qMax(size.width(), size.height())))
     {
-        // digikam returns thumbnails with a border around them, but libkmap expects them without a border
+        // digikam returns thumbnails with a border around them, but libkgeomap expects them without a border
         return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);
     }
     else
@@ -125,9 +125,9 @@ QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const
         const GPSImageInfo currentGPSImageInfo = currentIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
 
         const bool currentFitsBetter = GPSImageInfoSorter::fitsBetter(
-                bestGPSImageInfo, KMap::KMapSelectedNone,
-                currentGPSImageInfo, KMap::KMapSelectedNone,
-                KMap::KMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)
+                bestGPSImageInfo, KGeoMap::KGeoMapSelectedNone,
+                currentGPSImageInfo, KGeoMap::KGeoMapSelectedNone,
+                KGeoMap::KGeoMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)
             );
 
         if (currentFitsBetter)

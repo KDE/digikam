@@ -184,17 +184,17 @@ DImgInterface::DImgInterface()
     d->undoMan = new UndoManager(this);
     d->thread  = new SharedLoadSaveThread;
 
-    connect( d->thread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-             this, SLOT(slotImageLoaded(const LoadingDescription&, const DImg&)) );
+    connect( d->thread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+             this, SLOT(slotImageLoaded(LoadingDescription,DImg)) );
 
-    connect( d->thread, SIGNAL(signalImageSaved(const QString&, bool)),
-             this, SLOT(slotImageSaved(const QString&, bool)) );
+    connect( d->thread, SIGNAL(signalImageSaved(QString,bool)),
+             this, SLOT(slotImageSaved(QString,bool)) );
 
-    connect( d->thread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
-             this, SLOT(slotLoadingProgress(const LoadingDescription&, float)) );
+    connect( d->thread, SIGNAL(signalLoadingProgress(LoadingDescription,float)),
+             this, SLOT(slotLoadingProgress(LoadingDescription,float)) );
 
-    connect( d->thread, SIGNAL(signalSavingProgress(const QString&, float)),
-             this, SLOT(slotSavingProgress(const QString&, float)) );
+    connect( d->thread, SIGNAL(signalSavingProgress(QString,float)),
+             this, SLOT(slotSavingProgress(QString,float)) );
 
     //readMetadataFromFile();
 }
@@ -675,9 +675,9 @@ void DImgInterface::saveNext()
         d->undoMan->putImageDataAndHistory(&file.image, currentStep - file.historyStep);
     }
 
-    QMap<QString,QVariant>::iterator it;
+    QMap<QString,QVariant>::const_iterator it;
 
-    for (it = file.ioAttributes.begin(); it != file.ioAttributes.end(); ++it)
+    for (it = file.ioAttributes.constBegin(); it != file.ioAttributes.constEnd(); ++it)
     {
         file.image.setAttribute(it.key(), it.value());
     }
@@ -712,7 +712,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
             HistoryImageId id = savedFile.image.addAsReferredImage(filePath);
 
             // for all images following in history, we need to insert the now saved file at the right place
-            for (int i = d->currentFileToSave + 1; i < d->filesToSave.size(); i++)
+            for (int i = d->currentFileToSave + 1; i < d->filesToSave.size(); ++i)
             {
                 d->filesToSave[i].image.insertAsReferredImage(savedFile.historyStep, id);
             }
@@ -738,7 +738,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
 
 void DImgInterface::slotSavingProgress(const QString& filePath, float progress)
 {
-    if (!d->filesToSave.isEmpty() && d->filesToSave[d->currentFileToSave].filePath == filePath)
+    if (!d->filesToSave.isEmpty() && d->filesToSave.at(d->currentFileToSave).filePath == filePath)
     {
         emit signalSavingProgress(filePath, progress);
     }
@@ -749,7 +749,7 @@ void DImgInterface::abortSaving()
     // failure will be reported by a signal
     if (!d->filesToSave.isEmpty())
     {
-        d->thread->stopSaving(d->filesToSave[d->currentFileToSave].filePath);
+        d->thread->stopSaving(d->filesToSave.at(d->currentFileToSave).filePath);
         d->filesToSave.clear();
     }
 }

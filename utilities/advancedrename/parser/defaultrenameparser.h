@@ -38,6 +38,11 @@ class DefaultRenameParser : public Parser
 public:
 
     DefaultRenameParser();
+
+private:
+
+    DefaultRenameParser(const DefaultRenameParser&);
+    DefaultRenameParser& operator=(const DefaultRenameParser&);
 };
 
 }  // namespace Digikam

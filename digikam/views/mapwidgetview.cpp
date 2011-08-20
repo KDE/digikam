@@ -38,10 +38,10 @@
 #include <kvbox.h>
 #include <kconfig.h>
 
-// libkmap includes
+// libkgeomap includes
 
-#include <libkmap/kmap_widget.h>
-#include <libkmap/itemmarkertiler.h>
+#include <libkgeomap/kgeomap_widget.h>
+#include <libkgeomap/itemmarkertiler.h>
 
 //local includes
 
@@ -50,7 +50,7 @@
 #include "imagemodel.h"
 #include "databasewatch.h"
 #include "databasefields.h"
-#include "digikam2kmap_database.h"
+#include "digikam2kgeomap_database.h"
 
 namespace Digikam
 {
@@ -80,7 +80,7 @@ public:
     }
 
     KVBox*               vbox;
-    KMap::KMapWidget*    mapWidget;
+    KGeoMap::KGeoMapWidget*    mapWidget;
     ImageFilterModel*    imageFilterModel;
     ImageAlbumModel*     imageModel;
     QItemSelectionModel* selectionModel;
@@ -104,14 +104,14 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
     d->mapViewModelHelper   = new MapViewModelHelper(d->selectionModel, imageFilterModel, this);
     QVBoxLayout* const vBoxLayout = new QVBoxLayout(this);
 
-    d->mapWidget = new KMap::KMapWidget(this);
-    d->mapWidget->setAvailableMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup|KMap::MouseModeSelectThumbnail);
-    d->mapWidget->setVisibleMouseModes(KMap::MouseModePan|KMap::MouseModeZoomIntoGroup|KMap::MouseModeSelectThumbnail);
-    KMap::ItemMarkerTiler* const kmapMarkerModel = new KMap::ItemMarkerTiler(d->mapViewModelHelper, this);
-    d->mapWidget->setGroupedModel(kmapMarkerModel);
+    d->mapWidget = new KGeoMap::KGeoMapWidget(this);
+    d->mapWidget->setAvailableMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup|KGeoMap::MouseModeSelectThumbnail);
+    d->mapWidget->setVisibleMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup|KGeoMap::MouseModeSelectThumbnail);
+    KGeoMap::ItemMarkerTiler* const kgeomapMarkerModel = new KGeoMap::ItemMarkerTiler(d->mapViewModelHelper, this);
+    d->mapWidget->setGroupedModel(kgeomapMarkerModel);
     d->mapWidget->setBackend("marble");
     d->gpsImageInfoSorter = new GPSImageInfoSorter(this);
-    d->gpsImageInfoSorter->addToKMapWidget(d->mapWidget);
+    d->gpsImageInfoSorter->addToKGeoMapWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget->getControlWidget());
 }
@@ -193,20 +193,20 @@ public:
 
 MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
                                        ImageFilterModel* const filterModel, QObject* const parent)
-    : KMap::ModelHelper(parent), d(new MapViewModelHelperPrivate())
+    : KGeoMap::ModelHelper(parent), d(new MapViewModelHelperPrivate())
 {
     d->model               = filterModel;
     d->selectionModel      = selection;
     d->thumbnailLoadThread = new ThumbnailLoadThread(this);
 
-    connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+    connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 
     // Note: Here we only monitor changes to the database, because changes to the model
     //       are also sent when thumbnails are generated, and we don't want to update
     //       the marker tiler for that!
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
-            this, SLOT(slotImageChange(const ImageChangeset&)), Qt::QueuedConnection);
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+            this, SLOT(slotImageChange(ImageChangeset)), Qt::QueuedConnection);
 }
 
 /**
@@ -239,7 +239,7 @@ QItemSelectionModel* MapViewModelHelper::selectionModel() const
  * @param coordinates Here will be returned the coordinates of the current marker.
  * @return True, if the marker has coordinates.
  */
-bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoordinates* const coordinates) const
+bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const
 {
     const ImageInfo info = d->model->imageInfo(index);
 
@@ -248,7 +248,7 @@ bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMap::GeoCoor
         return false;
     }
 
-    *coordinates = KMap::GeoCoordinates(info.latitudeNumber(), info.longitudeNumber());
+    *coordinates = KGeoMap::GeoCoordinates(info.latitudeNumber(), info.longitudeNumber());
 
     return true;
 }
@@ -336,9 +336,9 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
     {
         const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
 
-        if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, KMap::KMapSelectedNone,
-                                           currentInfo, KMap::KMapSelectedNone,
-                                           KMap::KMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
+        if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, KGeoMap::KGeoMapSelectedNone,
+                                           currentInfo, KGeoMap::KGeoMapSelectedNone,
+                                           KGeoMap::KGeoMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
         {
             bestIndex = indexList.at(i);
             bestGPSImageInfo = currentInfo;
@@ -435,13 +435,13 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
  */
 ImageInfo MapWidgetView::currentInfo()
 {
-    /// @todo Have kmapwidget honor the 'current index'
+    /// @todo Have kgeomapwidget honor the 'current index'
     QModelIndex currentIndex = d->selectionModel->currentIndex();
     kDebug()<<currentIndex;
 
     if (!currentIndex.isValid())
     {
-        /// @todo This is temporary until kmapwidget marks a 'current index'
+        /// @todo This is temporary until kgeomapwidget marks a 'current index'
         if (!d->selectionModel->hasSelection())
         {
             return ImageInfo();

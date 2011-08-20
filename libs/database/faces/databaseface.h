@@ -40,7 +40,7 @@ class QDebug;
 namespace Digikam
 {
 
-class DatabaseFace
+class DIGIKAM_DATABASE_EXPORT DatabaseFace
 {
 public:
 
@@ -131,7 +131,7 @@ protected:
     TagRegion m_region;
 };
 
-QDebug operator<<(QDebug dbg, const DatabaseFace& f);
+DIGIKAM_DATABASE_EXPORT QDebug operator<<(QDebug dbg, const DatabaseFace& f);
 
 }  // Namespace Digikam
 

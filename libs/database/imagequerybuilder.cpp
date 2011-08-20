@@ -617,8 +617,8 @@ public:
                 return;
             }
 
-            double lon = list[0];
-            double lat = list[1];
+            double lon = list.at(0);
+            double lat = list.at(1);
 
             sql += " ( ";
 
@@ -734,10 +734,10 @@ public:
             // where the searched region contains any lon,lat
             //  where lon1 < lon < lon2 and lat1 < lat < lat2.
             double lon1,lat1,lon2,lat2;
-            lon1 = list[0];
-            lat1 = list[1];
-            lon2 = list[2];
-            lat2 = list[3];
+            lon1 = list.at(0);
+            lat1 = list.at(1);
+            lon2 = list.at(2);
+            lat2 = list.at(3);
 
             sql += " ( ";
             addRectanglePositionSearch(lon1, lat1, lon2, lat2);
@@ -867,7 +867,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 sql += " (Images.id NOT IN ";
             }
 
-            sql += "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
+            sql += "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
                    "    WHERE ";
 
             bool firstCondition = true;
@@ -875,7 +875,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             {
                 addSqlOperator(sql, SearchXml::Or, firstCondition);
                 firstCondition = false;
-                sql += " (Tags.pid = ? OR ImageTags.tagid = ? ) ";
+                sql += " (TagsTree.pid = ? OR ImageTags.tagid = ? ) ";
                 *boundValues << tagID << tagID;
             }
 
@@ -905,16 +905,16 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         else if (relation == SearchXml::InTree)
         {
             sql += " (Images.id IN "
-                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
-                   "    WHERE Tags.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
+                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
+                   "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
                    "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ";
             *boundValues << tagname << tagname;
         }
         else if (relation == SearchXml::NotInTree)
         {
             sql += " (Images.id NOT IN "
-                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
-                   "    WHERE Tags.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
+                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
+                   "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
                    "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ";
             *boundValues << tagname << tagname;
         }
@@ -1190,7 +1190,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 }
                 else // InTree
                 {
-                    selectQuery += "(%1tagid=? OR %1tagid IN (SELECT id FROM Tags WHERE pid=?)) AND ";
+                    selectQuery += "(%1tagid=? OR %1tagid IN (SELECT id FROM TagsTree WHERE pid=?)) AND ";
                     *boundValues << tagId << tagId;
                 }
             }
@@ -1205,7 +1205,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 selectQuery += "%1property=? AND %1value ";
                 ImageQueryBuilder::addSqlRelation(selectQuery, relation);
                 selectQuery += " ? ";
-                *boundValues << values[0] << fieldQuery.prepareForLike(values[1]);
+                *boundValues << values.at(0) << fieldQuery.prepareForLike(values.at(1));
             }
 
             // This indicates that the ImageTagProperties is joined in the SELECT query,
@@ -1463,7 +1463,7 @@ QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
 
     QStringList strList = url.path().split(' ', QString::SkipEmptyParts);
 
-    for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it )
+    for ( QStringList::const_iterator it = strList.constBegin(); it != strList.constEnd(); ++it )
     {
         bool ok;
         int  num = (*it).toInt(&ok);
@@ -1676,7 +1676,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
 
     QStringList strList = url.path().split(' ', QString::SkipEmptyParts);
 
-    for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it )
+    for ( QStringList::const_iterator it = strList.constBegin(); it != strList.constEnd(); ++it )
     {
         bool ok;
         int  num = (*it).toInt(&ok);
@@ -1807,15 +1807,15 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
             else if (op == LIKE)
             {
                 query = " (Images.id IN "
-                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
-                        "    WHERE Tags.pid = ? or ImageTags.tagid = ? )) ";
+                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
+                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
                 *boundValues << val.toInt() << val.toInt();
             }
             else // op == NLIKE
             {
                 query = " (Images.id NOT IN "
-                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN Tags ON ImageTags.tagid = Tags.id "
-                        "    WHERE Tags.pid = ? or ImageTags.tagid = ? )) ";
+                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
+                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
                 *boundValues << val.toInt() << val.toInt();
             }
 

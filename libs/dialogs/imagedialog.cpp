@@ -96,8 +96,8 @@ ImageDialogPreview::ImageDialogPreview(QWidget* parent)
 
     setSupportedMimeTypes(KImageIO::mimeTypes());
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotThumbnail(const LoadingDescription&, const QPixmap&)));
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnail(LoadingDescription,QPixmap)));
 }
 
 ImageDialogPreview::~ImageDialogPreview()

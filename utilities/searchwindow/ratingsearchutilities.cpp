@@ -225,7 +225,7 @@ QModelIndex RatingComboBoxModel::index(int row, int column, const QModelIndex& p
     }
 
     // third argument: RatingValue as internal data
-    return createIndex(row, column, m_entries[row]);
+    return createIndex(row, column, m_entries.at(row));
 }
 
 QModelIndex RatingComboBoxModel::indexForRatingValue(RatingComboBox::RatingValue value) const
@@ -382,8 +382,8 @@ RatingComboBox::RatingComboBox(QWidget* parent)
     lineEdit->setWidget(m_ratingWidget);
     setLineEdit(lineEdit);
 
-    connect(view()->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(currentValueChanged(const QModelIndex&, const QModelIndex&)));
+    connect(view()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(currentValueChanged(QModelIndex,QModelIndex)));
 
     connect(m_ratingWidget, SIGNAL(ratingValueChanged(int)),
             this, SLOT(ratingWidgetChanged(int)));

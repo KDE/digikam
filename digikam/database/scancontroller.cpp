@@ -101,6 +101,7 @@ public:
         needsUpdateUniqueHash(false),
         idle(false),
         scanSuspended(0),
+        deferFileScanning(false),
         continueInitialization(false),
         continueScan(false),
         continuePartialScan(false),
@@ -111,7 +112,8 @@ public:
         progressDialog(0),
         splash(0),
         advice(ScanController::Success),
-        needTotalFiles(false)
+        needTotalFiles(false),
+        totalFilesToScan(0)
     {
     }
 
@@ -124,6 +126,9 @@ public:
     int                       scanSuspended;
 
     QStringList               scanTasks;
+
+    QStringList               completeScanDeferredAlbums;
+    bool                      deferFileScanning;
 
     QMutex                    mutex;
     QWaitCondition            condVar;
@@ -157,6 +162,7 @@ public:
     ScanController::Advice    advice;
 
     bool                      needTotalFiles;
+    int                       totalFilesToScan;
 
 public:
 
@@ -302,11 +308,11 @@ ScanController::ScanController()
             this, SLOT(slotRelaxedScanning()));
 
     // interthread connections
-    connect(this, SIGNAL(errorFromInitialization(const QString&)),
-            this, SLOT(slotErrorFromInitialization(const QString&)));
+    connect(this, SIGNAL(errorFromInitialization(QString)),
+            this, SLOT(slotErrorFromInitialization(QString)));
 
-    connect(this, SIGNAL(progressFromInitialization(const QString&, int)),
-            this, SLOT(slotProgressFromInitialization(const QString&, int)));
+    connect(this, SIGNAL(progressFromInitialization(QString,int)),
+            this, SLOT(slotProgressFromInitialization(QString,int)));
 
     // start thread
     d->running = true;
@@ -414,6 +420,13 @@ ScanController::Advice ScanController::databaseInitialization()
     d->progressDialog = 0;
 
     return d->advice;
+}
+
+void ScanController::completeCollectionScanDeferFiles(SplashScreen* splash)
+{
+    d->deferFileScanning = true;
+    completeCollectionScan(splash);
+    d->deferFileScanning = false;
 }
 
 void ScanController::completeCollectionScan(SplashScreen* splash)
@@ -585,6 +598,7 @@ void ScanController::run()
     {
         bool doInit             = false;
         bool doScan             = false;
+        bool doFinishScan       = false;
         bool doPartialScan      = false;
         bool doUpdateUniqueHash = false;
 
@@ -606,6 +620,11 @@ void ScanController::run()
             {
                 d->needsUpdateUniqueHash = false;
                 doUpdateUniqueHash       = true;
+            }
+            else if (!d->completeScanDeferredAlbums.isEmpty() && !d->scanSuspended)
+            {
+                // d->completeScanDeferredAlbums is only accessed from the thread, no need to copy
+                doFinishScan             = true;
             }
             else if (!d->scanTasks.isEmpty() && !d->scanSuspended)
             {
@@ -638,13 +657,43 @@ void ScanController::run()
         {
             CollectionScanner scanner;
             connectCollectionScanner(&scanner);
+
             scanner.setNeedFileCount(d->needTotalFiles);
+            scanner.setDeferredFileScanning(d->deferFileScanning);
+
             scanner.recordHints(d->albumHints);
             scanner.recordHints(d->itemHints);
             scanner.recordHints(d->itemChangeHints);
+
             SimpleCollectionScannerObserver observer(&d->continueScan);
             scanner.setObserver(&observer);
+
             scanner.completeScan();
+
+            emit completeScanDone();
+            d->completeScanDeferredAlbums = scanner.deferredAlbumPaths();
+        }
+        else if (doFinishScan)
+        {
+            if (d->completeScanDeferredAlbums.isEmpty())
+            {
+                continue;
+            }
+            CollectionScanner scanner;
+            connectCollectionScanner(&scanner);
+
+            scanner.setNeedFileCount(d->needTotalFiles);
+
+            scanner.recordHints(d->albumHints);
+            scanner.recordHints(d->itemHints);
+            scanner.recordHints(d->itemChangeHints);
+
+            SimpleCollectionScannerObserver observer(&d->continueScan);
+            scanner.setObserver(&observer);
+
+            scanner.finishCompleteScan(d->completeScanDeferredAlbums);
+
+            d->completeScanDeferredAlbums.clear();
             emit completeScanDone();
         }
         else if (doPartialScan)
@@ -681,14 +730,14 @@ void ScanController::connectCollectionScanner(CollectionScanner* scanner)
     connect(scanner, SIGNAL(totalFilesToScan(int)),
             this, SLOT(slotTotalFilesToScan(int)));
 
-    connect(scanner, SIGNAL(startScanningAlbum(const QString&, const QString&)),
-            this, SLOT(slotStartScanningAlbum(const QString&, const QString&)));
+    connect(scanner, SIGNAL(startScanningAlbum(QString,QString)),
+            this, SLOT(slotStartScanningAlbum(QString,QString)));
 
     connect(scanner, SIGNAL(scannedFiles(int)),
             this, SLOT(slotScannedFiles(int)));
 
-    connect(scanner, SIGNAL(startScanningAlbumRoot(const QString&)),
-            this, SLOT(slotStartScanningAlbumRoot(const QString&)));
+    connect(scanner, SIGNAL(startScanningAlbumRoot(QString)),
+            this, SLOT(slotStartScanningAlbumRoot(QString)));
 
     connect(scanner, SIGNAL(startScanningForStaleAlbums()),
             this, SLOT(slotStartScanningForStaleAlbums()));
@@ -703,10 +752,12 @@ void ScanController::slotTotalFilesToScan(int count)
     {
         d->progressDialog->incrementMaximum(count);
     }
+    d->totalFilesToScan = count;
 }
 
 void ScanController::slotStartCompleteScan()
 {
+    d->totalFilesToScan = 0;
     slotTriggerShowProgressDialog();
 
     QString message = i18n("Preparing collection scan");
@@ -737,6 +788,10 @@ void ScanController::slotScannedFiles(int filesScanned)
     if (d->progressDialog)
     {
         d->progressDialog->advance(filesScanned);
+    }
+    if (d->totalFilesToScan)
+    {
+        emit scanningProgress(double(filesScanned) / double(d->totalFilesToScan));
     }
 }
 
@@ -985,8 +1040,8 @@ ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
     DatabaseWatch* dbwatch = DatabaseAccess::databaseWatch();
 
     // we opt for a queued connection to make stuff a bit relaxed
-    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset&)),
-            this, SLOT(slotImageChanged(const ImageChangeset&)),
+    connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
+            this, SLOT(slotImageChanged(ImageChangeset)),
             Qt::QueuedConnection);
 }
 

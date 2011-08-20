@@ -175,14 +175,14 @@ void MigrationDlg::setupMainArea()
             this, SLOT(performCopy()));
 
     // connect signal handlers for copy d->copyThread
-    connect(&(d->copyThread->copyManager), SIGNAL(finished(int, QString)),
-            this, SLOT(handleFinish(int, QString)));
+    connect(&(d->copyThread->copyManager), SIGNAL(finished(int,QString)),
+            this, SLOT(handleFinish(int,QString)));
 
     connect(&(d->copyThread->copyManager), SIGNAL(stepStarted(QString)),
             this, SLOT(handleStepStarted(QString)));
 
-    connect(&(d->copyThread->copyManager), SIGNAL(smallStepStarted(int, int)),
-            this, SLOT(handleSmallStepStarted(int, int)));
+    connect(&(d->copyThread->copyManager), SIGNAL(smallStepStarted(int,int)),
+            this, SLOT(handleSmallStepStarted(int,int)));
 
     connect(this, SIGNAL(closeClicked()),
             &(d->copyThread->copyManager), SLOT(stopProcessing()));

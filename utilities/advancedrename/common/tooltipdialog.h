@@ -46,6 +46,11 @@ public:
 
 private:
 
+    TooltipDialog(const TooltipDialog&);
+    TooltipDialog& operator=(const TooltipDialog&);
+
+private:
+
     TooltipDialogPriv* const d;
 };
 

@@ -41,31 +41,15 @@ class DIGIKAM_EXPORT PhotoInfoContainer
 
 public:
 
-    PhotoInfoContainer() {};
+    PhotoInfoContainer();
+    ~PhotoInfoContainer();
 
-    bool isEmpty()
-    {
-        if ( make.isEmpty()            &&
-             model.isEmpty()           &&
-             lens.isEmpty()            &&
-             exposureTime.isEmpty()    &&
-             exposureMode.isEmpty()    &&
-             exposureProgram.isEmpty() &&
-             aperture.isEmpty()        &&
-             focalLength.isEmpty()     &&
-             focalLength35mm.isEmpty() &&
-             sensitivity.isEmpty()     &&
-             flash.isEmpty()           &&
-             whiteBalance.isEmpty()    &&
-             !dateTime.isValid() )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    };
+    bool isEmpty() const;
+    bool isNull() const;
+
+    bool operator==(const PhotoInfoContainer& t) const;
+
+public:
 
     QString   make;
     QString   model;

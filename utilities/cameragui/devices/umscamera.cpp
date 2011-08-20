@@ -143,7 +143,7 @@ void UMSCamera::getAllFolders(const QString& folder, QStringList& subFolderList)
     listFolders(folder, subFolderList);
 }
 
-bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList, bool getImageDimensions)
+bool UMSCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& infoList)
 {
     m_cancel = false;
     infoList.clear();
@@ -163,90 +163,75 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
         return true;    // Nothing to do.
     }
 
-    QFileInfoList::const_iterator fi;
-    QFileInfo                     thmlo, thmup;
-    DMetadata                     meta;
-    PhotoInfoContainer            pInfo;
-    QSize                         dims;
-    QDateTime                     dt;
-    GPItemInfo                    info;
-    QString                       mime;
-
-    for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
+    for (QFileInfoList::const_iterator fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
     {
-        mime = mimeType(fi->suffix().toLower());
-
-        if (!mime.isEmpty())
-        {
-            thmlo.setFile(folder + QString("/") + fi->baseName() + QString(".thm"));
-            thmup.setFile(folder + QString("/") + fi->baseName() + QString(".THM"));
-
-            if (thmlo.exists())
-            {
-                // Try thumbnail sidecar files with lowercase extension.
-                meta.load(thmlo.filePath());
-                dt    = meta.getImageDateTime();
-                dims  = meta.getImageDimensions();
-                pInfo = meta.getPhotographInformation();
-            }
-            else if (thmup.exists())
-            {
-                // Try thumbnail sidecar files with uppercase extension.
-                meta.load(thmup.filePath());
-                dt    = meta.getImageDateTime();
-                dims  = meta.getImageDimensions();
-                pInfo = meta.getPhotographInformation();
-            }
-            else
-            {
-                // If no thumbnail sidecar file available, try to load image metadata for files.
-                meta.load(fi->filePath());
-                dt    = meta.getImageDateTime();
-                dims  = meta.getImageDimensions();
-                pInfo = meta.getPhotographInformation();
-            }
-
-            if (dt.isNull()) // fall back to file system info
-            {
-                ImageScanner::creationDateFromFilesystem(*fi);
-            }
-
-            info.name             = fi->fileName();
-            info.folder           = !folder.endsWith('/') ? folder + QString('/') : folder;
-            info.mime             = mime;
-            info.mtime            = dt;
-            info.size             = fi->size();
-            info.width            = getImageDimensions ? dims.width()  : -1;
-            info.height           = getImageDimensions ? dims.height() : -1;
-            info.downloaded       = GPItemInfo::DownloadUnknown;
-            info.readPermissions  = fi->isReadable();
-            info.writePermissions = fi->isWritable();
-            info.photoInfo        = pInfo;
-
-            infoList.append(info);
-        }
+        CamItemInfo info;
+        getItemInfo(folder, fi->fileName(), info, useMetadata);
+        infoList.append(info);
     }
 
     return true;
 }
 
+void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata)
+{
+    info.folder = !folder.endsWith('/') ? folder + QString('/') : folder;
+    info.name   = itemName;
+
+    QFileInfo fi(info.folder + info.name);
+    info.size             = fi.size();
+    info.readPermissions  = fi.isReadable();
+    info.writePermissions = fi.isWritable();
+    info.mime             = mimeType(fi.suffix().toLower());
+
+    if (!info.mime.isEmpty())
+    {
+        if (useMetadata)
+        {
+            // Try to use file metadata
+            DMetadata meta;
+            getMetadata(folder, itemName, meta);
+            fillItemInfoFromMetadata(info, meta);
+
+            // Fall back to file system info
+            if (info.mtime.isNull())
+                info.mtime = ImageScanner::creationDateFromFilesystem(fi);
+        }
+        else
+        {
+            // Only use file system date
+            info.mtime = ImageScanner::creationDateFromFilesystem(fi);
+        }
+    }
+}
+
 bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail)
 {
-    m_cancel = false;
+    m_cancel     = false;
+    QString path = folder + QString("/") + itemName;
 
-    // JPEG files: try to get thumbnail from Exif data.
+    // Try to get preview from Exif data (good quality). Can work with Raw files
 
-    DMetadata metadata(folder + QString("/") + itemName);
-    thumbnail = metadata.getExifThumbnail(true);
+    DMetadata metadata(path);
+    metadata.getImagePreview(thumbnail);
 
     if (!thumbnail.isNull())
     {
         return true;
     }
 
-    // RAW files : try to extract embedded thumbnail using dcraw
+    // RAW files : try to extract embedded thumbnail using libkdcraw
 
-    KDcrawIface::KDcraw::loadDcrawPreview(thumbnail, QString(folder + QString("/") + itemName));
+    KDcrawIface::KDcraw::loadDcrawPreview(thumbnail, path);
+
+    if (!thumbnail.isNull())
+    {
+        return true;
+    }
+
+    // Try to get thumbnail from Exif data (poor quality).
+
+    thumbnail = metadata.getExifThumbnail(true);
 
     if (!thumbnail.isNull())
     {
@@ -259,7 +244,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     // Note: the thumbnail extracted with this method can be in poor quality.
     // 2006/27/01 - Gilles - Tested with my Minolta Dynax 5D USM camera.
 
-    QFileInfo fi(folder + QString("/") + itemName);
+    QFileInfo fi(path);
 
     if (thumbnail.load(folder + QString("/") + fi.baseName() + QString(".thm")))        // Lowercase
     {
@@ -278,7 +263,9 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     // Finally, we trying to get thumbnail using DImg API (slow).
 
-    DImg dimgThumb(folder + QString("/") + itemName);
+    kDebug() << "Use DImg loader to get thumbnail from : " << path;
+
+    DImg dimgThumb(path);
 
     if (!dimgThumb.isNull())
     {
@@ -289,12 +276,32 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     return false;
 }
 
-bool UMSCamera::getExif(const QString&, const QString&, char**, int&)
+bool UMSCamera::getMetadata(const QString& folder, const QString& itemName, DMetadata& meta)
 {
-    // Not necessary to implement this. read data directly from the file
-    // (done in camera controller)
-    kWarning() << "Exif implemented yet in camera controller";
-    return false;
+    QFileInfo fi, thmlo, thmup;
+    bool ret = false;
+
+    fi.setFile(folder + QString("/") + itemName);
+    thmlo.setFile(folder + QString("/") + fi.baseName() + QString(".thm"));
+    thmup.setFile(folder + QString("/") + fi.baseName() + QString(".THM"));
+
+    if (thmlo.exists())
+    {
+        // Try thumbnail sidecar files with lowercase extension.
+        ret = meta.load(thmlo.filePath());
+    }
+    else if (thmup.exists())
+    {
+        // Try thumbnail sidecar files with uppercase extension.
+        ret = meta.load(thmup.filePath());
+    }
+    else
+    {
+        // If no thumbnail sidecar file available, try to load image metadata for files.
+        ret = meta.load(fi.filePath());
+    }
+
+    return ret;
 }
 
 bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, const QString& saveFile)
@@ -402,8 +409,7 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
     return (::unlink(QFile::encodeName(folder + QString("/") + itemName)) == 0);
 }
 
-bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
-                           GPItemInfo& info, bool getImageDimensions)
+bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& info)
 {
     m_cancel     = false;
     QString dest = folder + QString("/") + itemName;
@@ -414,16 +420,14 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
     if ( !sFile.open(QIODevice::ReadOnly) )
     {
-        kWarning() << "Failed to open source file for reading: "
-                   << src;
+        kWarning() << "Failed to open source file for reading: " << src;
         return false;
     }
 
     if ( !dFile.open(QIODevice::WriteOnly) )
     {
         sFile.close();
-        kWarning() << "Failed to open dest file for writing: "
-                   << dest;
+        kWarning() << "Failed to open dest file for writing: " << dest;
         return false;
     }
 
@@ -485,9 +489,9 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         info.mime             = mime;
         info.mtime            = dt;
         info.size             = fi.size();
-        info.width            = getImageDimensions ? dims.width()  : -1;
-        info.height           = getImageDimensions ? dims.height() : -1;
-        info.downloaded       = GPItemInfo::DownloadUnknown;
+        info.width            = dims.width();
+        info.height           = dims.height();
+        info.downloaded       = CamItemInfo::DownloadUnknown;
         info.readPermissions  = fi.isReadable();
         info.writePermissions = fi.isWritable();
         info.photoInfo        = pInfo;

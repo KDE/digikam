@@ -106,11 +106,11 @@ ImageModel::ImageModel(QObject* parent)
     : QAbstractListModel(parent),
       d(new ImageModelPriv)
 {
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
-            this, SLOT(slotImageChange(const ImageChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+            this, SLOT(slotImageChange(ImageChangeset)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset&)),
-            this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
+            this, SLOT(slotImageTagChange(ImageTagChangeset)));
 }
 
 ImageModel::~ImageModel()
@@ -148,7 +148,7 @@ ImageInfo ImageModel::imageInfo(const QModelIndex& index) const
         return ImageInfo();
     }
 
-    return d->infos[index.row()];
+    return d->infos.at(index.row());
 }
 
 ImageInfo& ImageModel::imageInfoRef(const QModelIndex& index) const
@@ -163,7 +163,7 @@ qlonglong ImageModel::imageId(const QModelIndex& index) const
         return 0;
     }
 
-    return d->infos[index.row()].id();
+    return d->infos.at(index.row()).id();
 }
 
 QList<ImageInfo> ImageModel::imageInfos(const QList<QModelIndex>& indexes) const
@@ -193,7 +193,7 @@ ImageInfo ImageModel::imageInfo(int row) const
         return ImageInfo();
     }
 
-    return d->infos[row];
+    return d->infos.at(row);
 }
 
 ImageInfo& ImageModel::imageInfoRef(int row) const
@@ -208,7 +208,7 @@ qlonglong ImageModel::imageId(int row) const
         return -1;
     }
 
-    return d->infos[row].id();
+    return d->infos.at(row).id();
 }
 
 QModelIndex ImageModel::indexForImageInfo(const ImageInfo& info) const
@@ -243,10 +243,10 @@ QModelIndex ImageModel::indexForImageId(qlonglong id, const QVariant& extraValue
     if (d->extraValues.isEmpty())
         return indexForImageId(id);
 
-    QHash<qlonglong, int>::iterator it;
-    for (it = d->idHash.find(id); it != d->idHash.end() && it.key() == id; ++it)
+    QHash<qlonglong, int>::const_iterator it;
+    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
     {
-        if (d->extraValues[it.value()] == extraValue)
+        if (d->extraValues.at(it.value()) == extraValue)
             return createIndex(it.value(), 0);
     }
 
@@ -257,8 +257,8 @@ QList<QModelIndex> ImageModel::indexesForImageId(qlonglong id) const
 {
     QList<QModelIndex> indexes;
 
-    QHash<qlonglong, int>::iterator it;
-    for (it = d->idHash.find(id); it != d->idHash.end() && it.key() == id; ++it)
+    QHash<qlonglong, int>::const_iterator it;
+    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
     {
         indexes << createIndex(it.value(), 0);
     }
@@ -279,8 +279,8 @@ int ImageModel::numberOfIndexesForImageId(qlonglong id) const
     }
 
     int count = 0;
-    QHash<qlonglong,int>::iterator it;
-    for (it = d->idHash.find(id); it != d->idHash.end() && it.key() == id; ++it)
+    QHash<qlonglong,int>::const_iterator it;
+    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
     {
         ++count;
     }
@@ -328,7 +328,7 @@ QModelIndex ImageModel::indexForPath(const QString& filePath) const
 
         for (int i=0; i<size; ++i)
         {
-            if (d->infos[i].filePath() == filePath)
+            if (d->infos.at(i).filePath() == filePath)
             {
                 return createIndex(i, 0);
             }
@@ -351,7 +351,7 @@ QList<QModelIndex> ImageModel::indexesForPath(const QString& filePath) const
 
         for (int i=0; i<size; ++i)
         {
-            if (d->infos[i].filePath() == filePath)
+            if (d->infos.at(i).filePath() == filePath)
             {
                 indexes << createIndex(i, 0);
             }
@@ -373,7 +373,7 @@ ImageInfo ImageModel::imageInfo(const QString& filePath) const
 
             if (index != -1)
             {
-                return d->infos[index];
+                return d->infos.at(index);
             }
         }
     }
@@ -403,7 +403,7 @@ QList<ImageInfo> ImageModel::imageInfos(const QString& filePath) const
         {
             foreach (int index, d->idHash.values(id))
             {
-                infos << d->infos[index];
+                infos << d->infos.at(index);
             }
         }
     }
@@ -521,7 +521,7 @@ QList<ImageInfo> ImageModel::uniqueImageInfos() const
     const int size = d->infos.size();
     for (int i=0; i<size; ++i)
     {
-        const ImageInfo& info = d->infos[i];
+        const ImageInfo& info = d->infos.at(i);
         if (d->idHash.value(info.id()) == i)
         {
             uniqueInfos << info;
@@ -566,8 +566,8 @@ void ImageModel::unsetPreprocessor(QObject* preprocessor)
 {
     if (preprocessor && d->preprocessor == preprocessor)
     {
-        disconnect(this, SIGNAL(preprocess(const QList<ImageInfo>&, const QList<QVariant>&)), 0, 0);
-        disconnect(d->preprocessor, 0, this, SLOT(reAddImageInfos(const QList<ImageInfo>&, const QList<QVariant>&)));
+        disconnect(this, SIGNAL(preprocess(QList<ImageInfo>,QList<QVariant>)), 0, 0);
+        disconnect(d->preprocessor, 0, this, SLOT(reAddImageInfos(QList<ImageInfo>,QList<QVariant>)));
         disconnect(d->preprocessor, 0, this, SLOT(reAddingFinished()));
     }
 }
@@ -655,7 +655,7 @@ void ImageModel::publiciseInfos(const QList<ImageInfo>& infos, const QList<QVari
 
     for (int i=firstNewIndex; i<=lastNewIndex; ++i)
     {
-        const ImageInfo& info = d->infos[i];
+        const ImageInfo& info = d->infos.at(i);
         qlonglong id          = info.id();
         d->idHash.insertMulti(id, i);
 
@@ -758,9 +758,9 @@ void ImageModel::removeImageInfos(const QList<ImageInfo>& infos, const QList<QVa
 
     QList<int> listIndexes;
 
-    for (int i=0; i<infos.size(); i++)
+    for (int i=0; i<infos.size(); ++i)
     {
-        QModelIndex index = indexForImageId(infos[i].id(), extraValues[i]);
+        QModelIndex index = indexForImageId(infos.at(i).id(), extraValues.at(i));
         if (index.isValid())
             listIndexes << index.row();
     }
@@ -930,16 +930,16 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
     }
     else
     {
-        for (int i=0; i<infos.size(); i++)
+        for (int i=0; i<infos.size(); ++i)
         {
-            const ImageInfo& info = infos[i];
+            const ImageInfo& info = infos.at(i);
             bool found            = false;
             QHash<qlonglong,int>::iterator it;
 
             for (it = oldIds.find(info.id()); it != oldIds.end() && it.key() == info.id(); ++it)
             {
                 // first check is for bug #262596. Not sure if needed.
-                if (it.value() < oldExtraValues.size() && extraValues[i] == oldExtraValues[it.value()])
+                if (it.value() < oldExtraValues.size() && extraValues.at(i) == oldExtraValues.at(it.value()))
                 {
                     found = true;
                     break;
@@ -954,7 +954,7 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
             else
             {
                 newInfos << info;
-                newExtraValues << extraValues[i];
+                newExtraValues << extraValues.at(i);
             }
         }
     }
@@ -1029,7 +1029,7 @@ QList<QPair<int, int> > ImageModelIncrementalUpdater::toContiguousPairs(const QL
 
     for (int i=1; i<indices.size(); ++i)
     {
-        int index = indices[i];
+        const int &index = indices.at(i);
 
         if (index == pair.second + 1)
         {
@@ -1060,7 +1060,7 @@ QVariant ImageModel::data(const QModelIndex& index, int role) const
     {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
-            return d->infos[index.row()].name();
+            return d->infos.at(index.row()).name();
 
         case ImageModelPointerRole:
             return QVariant::fromValue(const_cast<ImageModel*>(this));
@@ -1069,13 +1069,13 @@ QVariant ImageModel::data(const QModelIndex& index, int role) const
             return index.row();
 
         case CreationDateRole:
-            return d->infos[index.row()].dateTime();
+            return d->infos.at(index.row()).dateTime();
 
         case ExtraDataRole:
 
             if (!d->extraValues.isEmpty())
             {
-                return d->extraValues[index.row()];
+                return d->extraValues.at(index.row());
             }
             else
             {
@@ -1084,7 +1084,7 @@ QVariant ImageModel::data(const QModelIndex& index, int role) const
 
         case ExtraDataDuplicateCount:
         {
-            qlonglong id = d->infos[index.row()].id();
+            qlonglong id = d->infos.at(index.row()).id();
             return numberOfIndexesForImageId(id);
         }
     }

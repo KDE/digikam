@@ -89,8 +89,8 @@ BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/, bool rebuildAll)
     d->rebuildAll      = rebuildAll;
     d->albumId         = -1;
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
 
     setModal(false);
     setValue(0);
@@ -108,8 +108,8 @@ BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/, int albumId)
     d->rebuildAll      = true;
     d->albumId         = albumId;
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
 
     setModal(false);
     setValue(0);
@@ -141,8 +141,8 @@ void BatchThumbsGenerator::slotRebuildThumbs()
         palbumList.append(AlbumManager::instance()->findPAlbum(d->albumId));
     }
 
-    for (AlbumList::Iterator it = palbumList.begin();
-         !d->cancel && (it != palbumList.end()); ++it )
+    for (AlbumList::const_iterator it = palbumList.constBegin();
+         !d->cancel && (it != palbumList.constEnd()); ++it )
     {
         if (!(*it))
         {

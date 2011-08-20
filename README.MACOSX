@@ -1,0 +1,29 @@
+TUTORIAL HOW TO INSTALL DIGIKAM UNDER MACOSX
+--------------------------------------------
+
+digiKam can be installed through MacPort project. Current version avaialble can be found here:
+
+http://www.macports.org/ports.php?by=name&substr=digikam
+
+To install it, please follow these instructions to enter in a console:
+
+1/ Install XCode compiler from apple (http://developer.apple.com/xcode).
+   It's free, you just need to create an acount on apple.com to download it.
+2/ Install "macport" using DMG package (http://www.macports.org/install.php).
+
+3/ From a terminal, initialize Macport on your computer and install digiKam. This stage require some hours to compile whole environement.
+
+> sudo port -v selfupdate
+> sudo port -v install digikam
+
+4/ Always from a terminal, using your account user-name (here replace "foo" by your account), initialize KDE and Dbus services.
+
+> sudo chown -R foo ~/Library/Preferences/KDE
+> sudo chown -R foo /Library/LaunchAgents/org.freedesktop.dbus-session.plist
+> sudo launchctl load -w /Library/LaunchAgents/org.freedesktop.dbus-session.plist
+
+5/ Make sure that all run-time dependencies are installed :
+
+> sudo port -v install oxygen-icons
+
+6/ digiKam icon must be available to run on Applications/Macport menu entry.

@@ -117,8 +117,8 @@ void ImageThumbnailBar::installRatingOverlay()
     ImageRatingOverlay* ratingOverlay = new ImageRatingOverlay(this);
     addOverlay(ratingOverlay);
 
-    connect(ratingOverlay, SIGNAL(ratingEdited(const QList<QModelIndex>&, int)),
-            this, SLOT(assignRating(const QList<QModelIndex>&, int)));
+    connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
+            this, SLOT(assignRating(QList<QModelIndex>,int)));
 }
 
 void ImageThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)

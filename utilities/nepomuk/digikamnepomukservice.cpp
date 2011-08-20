@@ -239,14 +239,14 @@ void NepomukService::enableSyncToDigikam(bool syncToDigikam)
 
     if (d->syncToDigikam)
     {
-        connect(mainModel(), SIGNAL(statementAdded(const Soprano::Statement&)),
-                this, SLOT(slotStatementAdded(const Soprano::Statement&)));
+        connect(mainModel(), SIGNAL(statementAdded(Soprano::Statement)),
+                this, SLOT(slotStatementAdded(Soprano::Statement)));
 
-        connect(mainModel(), SIGNAL(statementRemoved(const Soprano::Statement&)),
-                this, SLOT(slotStatementRemoved(const Soprano::Statement&)));
+        connect(mainModel(), SIGNAL(statementRemoved(Soprano::Statement)),
+                this, SLOT(slotStatementRemoved(Soprano::Statement)));
 
-        /*connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
-                this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));*/
+        /*connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+                this, SLOT(slotCollectionImageChange(CollectionImageChangeset)));*/
 
         if (lastSyncToDigikam().isNull())
         {
@@ -255,14 +255,14 @@ void NepomukService::enableSyncToDigikam(bool syncToDigikam)
     }
     else
     {
-        disconnect(mainModel(), SIGNAL(statementAdded(const Soprano::Statement&)),
-                   this, SLOT(slotStatementAdded(const Soprano::Statement&)));
+        disconnect(mainModel(), SIGNAL(statementAdded(Soprano::Statement)),
+                   this, SLOT(slotStatementAdded(Soprano::Statement)));
 
-        disconnect(mainModel(), SIGNAL(statementRemoved(const Soprano::Statement&)),
-                   this, SLOT(slotStatementRemoved(const Soprano::Statement&)));
+        disconnect(mainModel(), SIGNAL(statementRemoved(Soprano::Statement)),
+                   this, SLOT(slotStatementRemoved(Soprano::Statement)));
 
-        /*disconnect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
-                   this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));*/
+        /*disconnect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+                   this, SLOT(slotCollectionImageChange(CollectionImageChangeset)));*/
     }
 }
 
@@ -292,14 +292,14 @@ void NepomukService::enableSyncToNepomuk(bool syncToNepomuk)
 
     if (d->syncToNepomuk)
     {
-        connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
-                this, SLOT(slotImageChange(const ImageChangeset&)));
+        connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+                this, SLOT(slotImageChange(ImageChangeset)));
 
-        connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset&)),
-                this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
+        connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
+                this, SLOT(slotImageTagChange(ImageTagChangeset)));
 
-        connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(const TagChangeset&)),
-                this, SLOT(slotTagChange(const TagChangeset&)));
+        connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(TagChangeset)),
+                this, SLOT(slotTagChange(TagChangeset)));
 
         // initial pushing to Nepomuk?
         if (!hasSyncToNepomuk())
@@ -309,19 +309,24 @@ void NepomukService::enableSyncToNepomuk(bool syncToNepomuk)
     }
     else
     {
-        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
-                   this, SLOT(slotImageChange(const ImageChangeset&)));
+        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+                   this, SLOT(slotImageChange(ImageChangeset)));
 
-        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset&)),
-                   this, SLOT(slotImageTagChange(const ImageTagChangeset&)));
+        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
+                   this, SLOT(slotImageTagChange(ImageTagChangeset)));
 
-        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(const TagChangeset&)),
-                   this, SLOT(slotTagChange(const TagChangeset&)));
+        disconnect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(TagChangeset)),
+                   this, SLOT(slotTagChange(TagChangeset)));
     }
 }
 
 void NepomukService::triggerResync()
 {
+    if (!d->isConnected)
+    {
+        return;
+    }
+
     clearSyncedToDigikam();
     clearSyncedToNepomuk();
 
@@ -446,8 +451,8 @@ void NepomukService::fullSyncDigikamToNepomuk()
         connect(job, SIGNAL(result(KJob*)),
                 this, SLOT(slotFullSyncJobResult(KJob*)));
 
-        connect(job, SIGNAL(data(KIO::Job*, const QByteArray&)),
-                this, SLOT(slotFullSyncJobData(KIO::Job*, const QByteArray&)));
+        connect(job, SIGNAL(data(KIO::Job*,QByteArray)),
+                this, SLOT(slotFullSyncJobData(KIO::Job*,QByteArray)));
 
         d->fullSyncJobs++;
     }
@@ -905,16 +910,16 @@ void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList
     QList<int> ratingsForInfos;
     const int size = fileUrls.size();
 
-    for (int i=0; i<size; i++)
+    for (int i=0; i<size; ++i)
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
-        ImageInfo info(fileUrls[i]);
+        ImageInfo info(fileUrls.at(i));
 
         if (!info.isNull())
         {
             infos << info;
-            ratingsForInfos << nepomukToDigikamRating(ratings[i]);
+            ratingsForInfos << nepomukToDigikamRating(ratings.at(i));
         }
     }
 
@@ -926,9 +931,9 @@ void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();
 
-        for (int i=0; i<infosSize; i++)
+        for (int i=0; i<infosSize; ++i)
         {
-            infos[i].setRating(ratingsForInfos[i]);
+            infos[i].setRating(ratingsForInfos.at(i));
         }
     }
 }
@@ -944,16 +949,16 @@ void NepomukService::syncCommentToDigikam(const KUrl::List& fileUrls, const QStr
     QList<QString> commentsForInfos;
     const int size = fileUrls.size();
 
-    for (int i=0; i<size; i++)
+    for (int i=0; i<size; ++i)
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
-        ImageInfo info(fileUrls[i]);
+        ImageInfo info(fileUrls.at(i));
 
         if (!info.isNull())
         {
             infos << info;
-            commentsForInfos << comments[i];
+            commentsForInfos << comments.at(i);
         }
     }
 
@@ -965,11 +970,11 @@ void NepomukService::syncCommentToDigikam(const KUrl::List& fileUrls, const QStr
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();
 
-        for (int i=0; i<infosSize; i++)
+        for (int i=0; i<infosSize; ++i)
         {
             DatabaseAccess access;
-            ImageComments comments = infos[i].imageComments(access);
-            comments.addComment(commentsForInfos[i]);
+            ImageComments comments = infos.at(i).imageComments(access);
+            comments.addComment(commentsForInfos.at(i));
         }
     }
 }
@@ -985,16 +990,16 @@ void NepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList<Q
     QList<int> tagIdsForInfos;
     const int size = fileUrls.size();
 
-    for (int i=0; i<size; i++)
+    for (int i=0; i<size; ++i)
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
-        ImageInfo info(fileUrls[i]);
+        ImageInfo info(fileUrls.at(i));
 
         if (!info.isNull())
         {
             infos << info;
-            QString tagName = tagnameForNepomukTag(tags[i]);
+            QString tagName = tagnameForNepomukTag(tags.at(i));
             int tagId = bestDigikamTagForTagName(info, tagName);
 
             if (tagId)
@@ -1010,9 +1015,9 @@ void NepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList<Q
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();
 
-        for (int i=0; i<infosSize; i++)
+        for (int i=0; i<infosSize; ++i)
         {
-            infos[i].setTag(tagIdsForInfos[i]);
+            infos[i].setTag(tagIdsForInfos.at(i));
         }
     }
 }

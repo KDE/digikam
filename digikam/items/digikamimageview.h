@@ -29,13 +29,10 @@
 
 #include "imagecategorizedview.h"
 
-class QMimeData;
-
 namespace Digikam
 {
 
 class ImageViewUtilities;
-class DigikamImageViewPriv;
 
 class DigikamImageView : public ImageCategorizedView
 {
@@ -121,6 +118,7 @@ private Q_SLOTS:
 
 private:
 
+    class DigikamImageViewPriv;
     DigikamImageViewPriv* const d;
 };
 

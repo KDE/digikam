@@ -137,7 +137,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
 
     // wait until the server has successfully registered on DBUS
     // TODO Use another way for that! Sleep isn't good :-/
-    for (int i=0; i<30; i++)
+    for (int i=0; i<30; ++i)
     {
         if (!isServerRegistered())
         {
@@ -173,7 +173,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
         {
             arguments = reply.arguments();
 
-            QDBusVariant dbusVariant = qvariant_cast<QDBusVariant>(arguments[1]);
+            QDBusVariant dbusVariant = qvariant_cast<QDBusVariant>(arguments.at(1));
             // retrieve the actual value stored in the D-Bus variant
             QVariant dbusArgument = dbusVariant.variant();
             DatabaseServerError item = qdbus_cast<DatabaseServerError>(dbusArgument);

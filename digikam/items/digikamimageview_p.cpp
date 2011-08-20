@@ -6,8 +6,8 @@
  * Date        : 2009-10-03
  * Description : Private Qt item view for images
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol do de>
  *
  * This program is free software you can redistribute it
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-DigikamImageViewPriv::DigikamImageViewPriv(DigikamImageView* qq)
+DigikamImageView::DigikamImageViewPriv::DigikamImageViewPriv(DigikamImageView* qq)
     : overlaysActive(false), q_ptr(qq)
 {
     utilities          = 0;
@@ -48,11 +48,11 @@ DigikamImageViewPriv::DigikamImageViewPriv(DigikamImageView* qq)
     faceMode           = false;
 }
 
-DigikamImageViewPriv::~DigikamImageViewPriv()
+DigikamImageView::DigikamImageViewPriv::~DigikamImageViewPriv()
 {
 }
 
-void DigikamImageViewPriv::updateOverlays()
+void DigikamImageView::DigikamImageViewPriv::updateOverlays()
 {
     Q_Q(DigikamImageView);
     AlbumSettings* settings = AlbumSettings::instance();
@@ -61,11 +61,11 @@ void DigikamImageViewPriv::updateOverlays()
     {
         if (!settings->getIconShowOverlays())
         {
-            disconnect(rotateLeftOverlay, SIGNAL(signalRotate(const QList<QModelIndex>&)),
-                       q, SLOT(slotRotateLeft(const QList<QModelIndex>&)));
+            disconnect(rotateLeftOverlay, SIGNAL(signalRotate(QList<QModelIndex>)),
+                       q, SLOT(slotRotateLeft(QList<QModelIndex>)));
 
-            disconnect(rotateRightOverlay, SIGNAL(signalRotate(const QList<QModelIndex>&)),
-                       q, SLOT(slotRotateRight(const QList<QModelIndex>&)));
+            disconnect(rotateRightOverlay, SIGNAL(signalRotate(QList<QModelIndex>)),
+                       q, SLOT(slotRotateRight(QList<QModelIndex>)));
 
             q->removeOverlay(rotateLeftOverlay);
             q->removeOverlay(rotateRightOverlay);
@@ -80,18 +80,18 @@ void DigikamImageViewPriv::updateOverlays()
             q->addOverlay(rotateLeftOverlay, normalDelegate);
             q->addOverlay(rotateRightOverlay, normalDelegate);
 
-            connect(rotateLeftOverlay, SIGNAL(signalRotate(const QList<QModelIndex>&)),
-                    q, SLOT(slotRotateLeft(const QList<QModelIndex>&)));
+            connect(rotateLeftOverlay, SIGNAL(signalRotate(QList<QModelIndex>)),
+                    q, SLOT(slotRotateLeft(QList<QModelIndex>)));
 
-            connect(rotateRightOverlay, SIGNAL(signalRotate(const QList<QModelIndex>&)),
-                    q, SLOT(slotRotateRight(const QList<QModelIndex>&)));
+            connect(rotateRightOverlay, SIGNAL(signalRotate(QList<QModelIndex>)),
+                    q, SLOT(slotRotateRight(QList<QModelIndex>)));
 
             overlaysActive = true;
         }
     }
 }
 
-void DigikamImageViewPriv::triggerRotateAction(const char* actionName)
+void DigikamImageView::DigikamImageViewPriv::triggerRotateAction(const char* actionName)
 {
     KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
 

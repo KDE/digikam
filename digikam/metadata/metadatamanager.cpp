@@ -67,8 +67,8 @@ MetadataManager* MetadataManager::instance()
 MetadataManager::MetadataManager()
     : d(new MetadataManagerPriv(this))
 {
-    connect(d, SIGNAL(progressMessageChanged(const QString&)),
-            this, SIGNAL(progressMessageChanged(const QString&)));
+    connect(d, SIGNAL(progressMessageChanged(QString)),
+            this, SIGNAL(progressMessageChanged(QString)));
 
     connect(d, SIGNAL(progressValueChanged(float)),
             this, SIGNAL(progressValueChanged(float)));
@@ -76,8 +76,8 @@ MetadataManager::MetadataManager()
     connect(d, SIGNAL(progressFinished()),
             this, SIGNAL(progressFinished()));
 
-    connect(d->fileWorker, SIGNAL(orientationChangeFailed(const QStringList&)),
-            this, SIGNAL(orientationChangeFailed(const QStringList&)));
+    connect(d->fileWorker, SIGNAL(orientationChangeFailed(QStringList)),
+            this, SIGNAL(orientationChangeFailed(QStringList)));
 }
 
 MetadataManager::~MetadataManager()
@@ -241,41 +241,41 @@ MetadataManager::MetadataManagerPriv::MetadataManagerPriv(MetadataManager* q)
     writerTodo = 0;
     writerDone = 0;
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAddTags(const QList<ImageInfo>&, const QList<int>&)),
-                                     dbWorker, SLOT(assignTags(const QList<ImageInfo>&, const QList<int>&)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAddTags(QList<ImageInfo>,QList<int>)),
+                                     dbWorker, SLOT(assignTags(QList<ImageInfo>,QList<int>)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalRemoveTags(const QList<ImageInfo>&, const QList<int>&)),
-                                     dbWorker, SLOT(removeTags(const QList<ImageInfo>&, const QList<int>&)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalRemoveTags(QList<ImageInfo>,QList<int>)),
+                                     dbWorker, SLOT(removeTags(QList<ImageInfo>,QList<int>)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignPickLabel(const QList<ImageInfo>&, int)),
-                                     dbWorker, SLOT(assignPickLabel(const QList<ImageInfo>&, int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignPickLabel(QList<ImageInfo>,int)),
+                                     dbWorker, SLOT(assignPickLabel(QList<ImageInfo>,int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignColorLabel(const QList<ImageInfo>&, int)),
-                                     dbWorker, SLOT(assignColorLabel(const QList<ImageInfo>&, int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignColorLabel(QList<ImageInfo>,int)),
+                                     dbWorker, SLOT(assignColorLabel(QList<ImageInfo>,int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignRating(const QList<ImageInfo>&, int)),
-                                     dbWorker, SLOT(assignRating(const QList<ImageInfo>&, int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignRating(QList<ImageInfo>,int)),
+                                     dbWorker, SLOT(assignRating(QList<ImageInfo>,int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalEditGroup(int, const ImageInfo&, const QList<ImageInfo>&)),
-                                     dbWorker, SLOT(editGroup(int, const ImageInfo&, const QList<ImageInfo>&)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalEditGroup(int,ImageInfo,QList<ImageInfo>)),
+                                     dbWorker, SLOT(editGroup(int,ImageInfo,QList<ImageInfo>)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalSetExifOrientation(const QList<ImageInfo>&, int)),
-                                     dbWorker, SLOT(setExifOrientation(const QList<ImageInfo>&, int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalSetExifOrientation(QList<ImageInfo>,int)),
+                                     dbWorker, SLOT(setExifOrientation(QList<ImageInfo>,int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalApplyMetadata(const QList<ImageInfo>&, MetadataHub*)),
-                                     dbWorker, SLOT(applyMetadata(const QList<ImageInfo>&, MetadataHub*)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalApplyMetadata(QList<ImageInfo>,MetadataHub*)),
+                                     dbWorker, SLOT(applyMetadata(QList<ImageInfo>,MetadataHub*)));
 
-    WorkerObject::connectAndSchedule(dbWorker, SIGNAL(writeMetadataToFiles(const QList<ImageInfo>&)),
-                                     fileWorker, SLOT(writeMetadataToFiles(const QList<ImageInfo>&)));
+    WorkerObject::connectAndSchedule(dbWorker, SIGNAL(writeMetadataToFiles(QList<ImageInfo>)),
+                                     fileWorker, SLOT(writeMetadataToFiles(QList<ImageInfo>)));
 
-    WorkerObject::connectAndSchedule(dbWorker, SIGNAL(writeOrientationToFiles(const QList<ImageInfo>&, int)),
-                                     fileWorker, SLOT(writeOrientationToFiles(const QList<ImageInfo>&, int)));
+    WorkerObject::connectAndSchedule(dbWorker, SIGNAL(writeOrientationToFiles(QList<ImageInfo>,int)),
+                                     fileWorker, SLOT(writeOrientationToFiles(QList<ImageInfo>,int)));
 
-    WorkerObject::connectAndSchedule(dbWorker, SIGNAL(writeMetadata(const QList<ImageInfo>&, MetadataHub*)),
-                                     fileWorker, SLOT(writeMetadata(const QList<ImageInfo>&, MetadataHub*)));
+    WorkerObject::connectAndSchedule(dbWorker, SIGNAL(writeMetadata(QList<ImageInfo>,MetadataHub*)),
+                                     fileWorker, SLOT(writeMetadata(QList<ImageInfo>,MetadataHub*)));
 
-    connect(fileWorker, SIGNAL(imageDataChanged(const QString&, bool, bool)),
-            this, SLOT(slotImageDataChanged(const QString&, bool, bool)));
+    connect(fileWorker, SIGNAL(imageDataChanged(QString,bool,bool)),
+            this, SLOT(slotImageDataChanged(QString,bool,bool)));
 
     connect(this, SIGNAL(progressFinished()),
             sleepTimer, SLOT(start()));

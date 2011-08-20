@@ -700,6 +700,7 @@ bool SchemaUpdater::updateV2toV4(const QString& sqlite2DBPath)
         return false;
     }
 
+    // FIXME: We are not returning anything, if we land in this section of the code!
     if (m_observer)
     {
         m_observer->schemaUpdateProgress(i18n("Updated from 0.7 database"));

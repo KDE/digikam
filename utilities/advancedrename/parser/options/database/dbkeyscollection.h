@@ -100,6 +100,11 @@ protected:
 
 private:
 
+    DbKeysCollection(const DbKeysCollection&);
+    DbKeysCollection& operator=(const DbKeysCollection&);
+
+private:
+
     DbKeyIdsMap idsMap;
     QString     name;
 };

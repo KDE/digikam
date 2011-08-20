@@ -299,7 +299,7 @@ void ManagedLoadSaveThread::load(const LoadingDescription& description, LoadingM
 
             for (i = 0; i<m_todo.count(); ++i)
             {
-                if (checkLoadingTask(m_todo[i], LoadingTaskFilterPreloading))
+                if (checkLoadingTask(m_todo.at(i), LoadingTaskFilterPreloading))
                 {
                     break;
                 }
@@ -428,7 +428,7 @@ void ManagedLoadSaveThread::prependThumbnailGroup(const QList<LoadingDescription
 
     for (int i=0; i<descriptions.size(); ++i)
     {
-        LoadingTask* existingTask = findExistingTask(descriptions[i]);
+        LoadingTask* existingTask = findExistingTask(descriptions.at(i));
 
         // remove task, if not the current task
         if (existingTask)
@@ -443,7 +443,7 @@ void ManagedLoadSaveThread::prependThumbnailGroup(const QList<LoadingDescription
         }
 
         // insert new loading task, in the order given by descriptions list
-        m_todo.insert(index++, new ThumbnailLoadingTask(this, descriptions[i]));
+        m_todo.insert(index++, new ThumbnailLoadingTask(this, descriptions.at(i)));
     }
 
     start(lock);
@@ -574,7 +574,7 @@ void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription& descrip
                 continue;
             }
         }
-        it++;
+        ++it;
     }
 }
 

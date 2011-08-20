@@ -138,7 +138,7 @@ public:
 
     ~SignatureMap()
     {
-        delete m_indexList;
+        delete[] m_indexList;
     }
 
     /// Load a set of coefficients

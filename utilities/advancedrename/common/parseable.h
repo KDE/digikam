@@ -172,6 +172,9 @@ protected Q_SLOTS:
 
 private:
 
+    Parseable(const Parseable&);
+    Parseable& operator=(const Parseable&);
+
     QPushButton* createButton(const QString& name, const QIcon& icon);
     bool         tokenAtPosition(ParseResults& results, int pos);
     bool         tokenAtPosition(ParseResults& results, int pos, int& start, int& length);

@@ -63,11 +63,11 @@ BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, const
     m_parser        = new BlackFrameParser(parent);
     m_parser->parseBlackFrame(url);
 
-    connect(m_parser, SIGNAL(signalParsed(const QList<HotPixel>&)),
-            this, SLOT(slotParsed(const QList<HotPixel>&)));
+    connect(m_parser, SIGNAL(signalParsed(QList<HotPixel>)),
+            this, SLOT(slotParsed(QList<HotPixel>)));
 
-    connect(this, SIGNAL(signalParsed(const QList<HotPixel>&, const KUrl&)),
-            parent, SLOT(slotParsed(const QList<HotPixel>&, const KUrl&)));
+    connect(this, SIGNAL(signalParsed(QList<HotPixel>,KUrl)),
+            parent, SLOT(slotParsed(QList<HotPixel>,KUrl)));
 
     connect(m_parser, SIGNAL(signalLoadingProgress(float)),
             this, SIGNAL(signalLoadingProgress(float)));
@@ -99,7 +99,7 @@ void BlackFrameListViewItem::slotParsed(const QList<HotPixel>& hotPixels)
 
     m_blackFrameDesc = QString("<p><b>" + m_blackFrameURL.fileName() + "</b>:<p>");
 
-    for (QList <HotPixel>::Iterator it = m_hotPixels.begin() ; it != m_hotPixels.end() ; ++it)
+    for (QList <HotPixel>::const_iterator it = m_hotPixels.constBegin() ; it != m_hotPixels.constEnd() ; ++it)
     {
         m_blackFrameDesc.append( QString("[%1,%2] ").arg((*it).x()).arg((*it).y()) );
     }
@@ -124,9 +124,9 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
     yRatio = (float)size.height()/(float)m_image.height();
 
     //Draw hot pixels one by one
-    QList<HotPixel>::Iterator it;
+    QList<HotPixel>::const_iterator it;
 
-    for (it = m_hotPixels.begin(); it != m_hotPixels.end(); ++it)
+    for (it = m_hotPixels.constBegin(); it != m_hotPixels.constEnd(); ++it)
     {
         hpRect = (*it).rect;
         hpThumbX = (hpRect.x() + hpRect.width() / 2) * xRatio;

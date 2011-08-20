@@ -117,9 +117,9 @@ void IccProfilesComboBox::addProfilesSqueezed(const QList<IccProfile>& givenProf
     QStringList       userDescription;
     formatProfiles(givenProfiles, &profiles, &userDescription);
 
-    for (int i=0; i<profiles.size(); i++)
+    for (int i=0; i<profiles.size(); ++i)
     {
-        addSqueezedItem(userDescription[i], QVariant::fromValue(profiles[i]));
+        addSqueezedItem(userDescription.at(i), QVariant::fromValue(profiles.at(i)));
     }
 }
 
@@ -168,7 +168,7 @@ void IccProfilesComboBox::setCurrentProfile(const IccProfile& profile)
 
     const int size = count();
 
-    for (int i=0; i<size; i++)
+    for (int i=0; i<size; ++i)
     {
         if (itemData(i).value<IccProfile>() == profile)
         {
@@ -217,9 +217,9 @@ void IccProfilesMenuAction::addProfiles(const QList<IccProfile>& givenProfiles)
     QStringList userDescription;
     formatProfiles(givenProfiles, &profiles, &userDescription);
 
-    for (int i=0; i<profiles.size(); i++)
+    for (int i=0; i<profiles.size(); ++i)
     {
-        addProfile(profiles[i], userDescription[i]);
+        addProfile(profiles.at(i), userDescription.at(i));
     }
 }
 
@@ -298,7 +298,7 @@ void IccRenderingIntentComboBox::setIntent(int intent)
 {
     const int size = count();
 
-    for (int i=0; i<size; i++)
+    for (int i=0; i<size; ++i)
     {
         if (itemData(i).toInt() == intent)
         {

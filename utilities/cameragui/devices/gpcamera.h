@@ -36,9 +36,10 @@ namespace Digikam
 {
 
 class GPStatus;
+class DMetadata;
 
-// Gphoto2 camera Implementation of abstract type DKCamera
-
+/** Gphoto2 camera Implementation of abstract type DKCamera
+ */
 class GPCamera : public DKCamera
 {
 
@@ -57,9 +58,11 @@ public:
     void getAllFolders(const QString& folder, QStringList& subFolderList);
     bool getSubFolders(const QString& folder, QStringList& subFolderList);
     bool getItemsList(const QString& folder, QStringList& itemsList);
-    bool getItemsInfoList(const QString& folder, GPItemInfoList& items, bool getImageDimensions = true);
+    bool getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& items);
+    void getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata);
+
     bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
-    bool getExif(const QString& folder, const QString& itemName, char** edata, int& esize);
+    bool getMetadata(const QString& folder, const QString& itemName, DMetadata& meta);
 
     bool setLockItem(const QString& folder, const QString& itemName, bool lock);
 
@@ -69,8 +72,7 @@ public:
     // recursively delete all items
     bool deleteAllItems(const QString& folder);
 
-    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
-                    GPItemInfo& itemInfo, bool getImageDimensions=true);
+    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& itemInfo);
 
     bool cameraSummary(QString& summary);
     bool cameraManual(QString& manual);
@@ -83,7 +85,7 @@ public:
 
     bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail);
     bool getPreview(QImage& preview);
-    bool capture(GPItemInfo& itemInfo);
+    bool capture(CamItemInfo& itemInfo);
 
     // Public static methods shared with Setup Camera
 
@@ -95,7 +97,10 @@ public:
 
 private:
 
-    int setup();
+    /** Run getItemInfo implemenation whithout to be wrapped into GPhoto context
+     */
+    void getItemInfoInternal(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata);
+
     static void printGphotoErrorDescription(int errorCode);
 
 private:

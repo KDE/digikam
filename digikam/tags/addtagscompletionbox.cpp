@@ -150,8 +150,8 @@ public:
 AddTagsCompletionBox::AddTagsCompletionBox(QWidget* parent)
     : KCompletionBox(parent), d(new AddTagsCompletionBoxPriv)
 {
-    connect(this, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
-            this, SLOT(slotCurrentItemChanged(QListWidgetItem*, QListWidgetItem*)));
+    connect(this, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+            this, SLOT(slotCurrentItemChanged(QListWidgetItem*,QListWidgetItem*)));
 
     connect(this, SIGNAL(itemActivated(QListWidgetItem*)),
             this, SLOT(slotItemActivated(QListWidgetItem*)));
@@ -482,7 +482,7 @@ QRect AddTagsCompletionBox::calculateGeometry() const
 
     if (d->allowExceedBounds)
     {
-        for (int i=0; i<count() && i<suggestedShownItems; i++)
+        for (int i=0; i<count() && i<suggestedShownItems; ++i)
         {
             if (item(i)->flags() & Qt::ItemIsSelectable)
             {
@@ -492,7 +492,7 @@ QRect AddTagsCompletionBox::calculateGeometry() const
     }
     else
     {
-        for (int i=0; i<count(); i++)
+        for (int i=0; i<count(); ++i)
         {
             if (item(i)->flags() & Qt::ItemIsSelectable)
             {

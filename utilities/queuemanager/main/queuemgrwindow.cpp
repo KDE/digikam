@@ -289,36 +289,36 @@ void QueueMgrWindow::setupConnections()
 {
     // -- Assigned tools list connections -----------------------------------
 
-    connect(d->assignedList, SIGNAL(signalToolSelected(const BatchToolSet&)),
-            d->toolSettings, SLOT(slotToolSelected(const BatchToolSet&)));
+    connect(d->assignedList, SIGNAL(signalToolSelected(BatchToolSet)),
+            d->toolSettings, SLOT(slotToolSelected(BatchToolSet)));
 
-    connect(d->assignedList, SIGNAL(signalAssignedToolsChanged(const AssignedBatchTools&)),
-            d->queuePool, SLOT(slotAssignedToolsChanged(const AssignedBatchTools&)));
+    connect(d->assignedList, SIGNAL(signalAssignedToolsChanged(AssignedBatchTools)),
+            d->queuePool, SLOT(slotAssignedToolsChanged(AssignedBatchTools)));
 
-    connect(d->toolSettings, SIGNAL(signalSettingsChanged(const BatchToolSet&)),
-            d->assignedList, SLOT(slotSettingsChanged(const BatchToolSet&)));
+    connect(d->toolSettings, SIGNAL(signalSettingsChanged(BatchToolSet)),
+            d->assignedList, SLOT(slotSettingsChanged(BatchToolSet)));
 
-    connect(d->assignedList, SIGNAL(signalAssignedToolsChanged(const AssignedBatchTools&)),
-            this, SLOT(slotAssignedToolsChanged(const AssignedBatchTools&)));
+    connect(d->assignedList, SIGNAL(signalAssignedToolsChanged(AssignedBatchTools)),
+            this, SLOT(slotAssignedToolsChanged(AssignedBatchTools)));
 
-    connect(d->toolsView, SIGNAL(signalAssignTools(const QMap<int, QString>&)),
-            d->assignedList, SLOT(slotAssignTools(const QMap<int, QString>&)));
+    connect(d->toolsView, SIGNAL(signalAssignTools(QMap<int,QString>)),
+            d->assignedList, SLOT(slotAssignTools(QMap<int,QString>)));
 
     // -- Queued Items list connections -------------------------------------
 
-    connect(d->queuePool, SIGNAL(signalQueueSelected(int, const QueueSettings&, const AssignedBatchTools&)),
-            d->queueSettingsView, SLOT(slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools&)));
+    connect(d->queuePool, SIGNAL(signalQueueSelected(int,QueueSettings,AssignedBatchTools)),
+            d->queueSettingsView, SLOT(slotQueueSelected(int,QueueSettings,AssignedBatchTools)));
 
-    connect(d->queuePool, SIGNAL(signalQueueSelected(int, const QueueSettings&, const AssignedBatchTools&)),
-            d->assignedList, SLOT(slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools&)));
+    connect(d->queuePool, SIGNAL(signalQueueSelected(int,QueueSettings,AssignedBatchTools)),
+            d->assignedList, SLOT(slotQueueSelected(int,QueueSettings,AssignedBatchTools)));
 
-    connect(d->queueSettingsView, SIGNAL(signalSettingsChanged(const QueueSettings&)),
-            d->queuePool, SLOT(slotSettingsChanged(const QueueSettings&)));
+    connect(d->queueSettingsView, SIGNAL(signalSettingsChanged(QueueSettings)),
+            d->queuePool, SLOT(slotSettingsChanged(QueueSettings)));
 
-    connect(d->queueSettingsView, SIGNAL(signalSettingsChanged(const QueueSettings&)),
+    connect(d->queueSettingsView, SIGNAL(signalSettingsChanged(QueueSettings)),
             this, SLOT(slotQueueContentsChanged()));
 
-    connect(d->queuePool, SIGNAL(signalQueueSelected(int, const QueueSettings&, const AssignedBatchTools&)),
+    connect(d->queuePool, SIGNAL(signalQueueSelected(int,QueueSettings,AssignedBatchTools)),
             this, SLOT(slotQueueContentsChanged()));
 
     connect(d->queuePool, SIGNAL(signalQueuePoolChanged()),
@@ -332,19 +332,19 @@ void QueueMgrWindow::setupConnections()
 
     // -- Multithreaded interface connections -------------------------------
 
-    connect(d->thread, SIGNAL(starting(const Digikam::ActionData&)),
-            this, SLOT(slotAction(const Digikam::ActionData&)));
+    connect(d->thread, SIGNAL(starting(Digikam::ActionData)),
+            this, SLOT(slotAction(Digikam::ActionData)));
 
-    connect(d->thread, SIGNAL(finished(const Digikam::ActionData&)),
-            this, SLOT(slotAction(const Digikam::ActionData&)));
+    connect(d->thread, SIGNAL(finished(Digikam::ActionData)),
+            this, SLOT(slotAction(Digikam::ActionData)));
 
     // -- GUI connections ---------------------------------------------------
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
 
-    connect(d->toolsView, SIGNAL(signalHistoryEntryClicked(int, qlonglong)),
-            this, SLOT(slotHistoryEntryClicked(int, qlonglong)));
+    connect(d->toolsView, SIGNAL(signalHistoryEntryClicked(int,qlonglong)),
+            this, SLOT(slotHistoryEntryClicked(int,qlonglong)));
 }
 
 void QueueMgrWindow::setupActions()

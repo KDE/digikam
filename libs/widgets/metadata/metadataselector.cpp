@@ -138,7 +138,7 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
         // We ignore all unknown tags if necessary.
         if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
         {
-            new MetadataSelectorItem(parentifDItem, it.key(), it.value()[0], it.value()[2]);
+            new MetadataSelectorItem(parentifDItem, it.key(), it.value().at(0), it.value().at(2));
             ++subItems;
         }
     }
@@ -279,8 +279,8 @@ MetadataSelectorView::MetadataSelectorView(QWidget* parent)
 
     setControlElements(SearchBar|SelectAllBtn|DefaultBtn|ClearBtn);
 
-    connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
+    connect(d->searchBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
+            this, SLOT(slotSearchTextChanged(SearchTextSettings)));
 
     connect(d->selectAllBtn, SIGNAL(clicked()),
             this, SLOT(slotSelectAll()));

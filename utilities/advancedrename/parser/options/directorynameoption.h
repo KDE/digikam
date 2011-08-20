@@ -49,6 +49,11 @@ public:
 protected:
 
     virtual QString parseOperation(ParseSettings& settings);
+
+private:
+
+    DirectoryNameOption(const DirectoryNameOption&);
+    DirectoryNameOption& operator=(const DirectoryNameOption&);
 };
 
 } // namespace Digikam

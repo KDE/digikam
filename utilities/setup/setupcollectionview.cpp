@@ -113,14 +113,14 @@ SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView* view, QObjec
     m_styledDelegate = new QStyledItemDelegate(parent);
 
     // forward all signals
-    connect(m_styledDelegate, SIGNAL(closeEditor(QWidget*, QAbstractItemDelegate::EndEditHint)),
-            this, SIGNAL(closeEditor(QWidget*, QAbstractItemDelegate::EndEditHint)));
+    connect(m_styledDelegate, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)),
+            this, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)));
 
     connect(m_styledDelegate, SIGNAL(commitData(QWidget*)),
             this, SIGNAL(commitData(QWidget*)));
 
-    connect(m_styledDelegate, SIGNAL(sizeHintChanged(const QModelIndex&)),
-            this, SIGNAL(sizeHintChanged(const QModelIndex&)));
+    connect(m_styledDelegate, SIGNAL(sizeHintChanged(QModelIndex)),
+            this, SIGNAL(sizeHintChanged(QModelIndex)));
 
     // For size hint. To get a valid size hint, the widgets seem to need a parent widget
     m_samplePushButton = new QPushButton(view);
@@ -207,8 +207,8 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
 void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
                                                 const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const
 {
-    QPushButton* pushButton = static_cast<QPushButton*>(widgets[0]);
-    QToolButton* toolButton = static_cast<QToolButton*>(widgets[1]);
+    QPushButton* pushButton = static_cast<QPushButton*>(widgets.at(0));
+    QToolButton* toolButton = static_cast<QToolButton*>(widgets.at(1));
 
     if (index.data(SetupCollectionModel::IsCategoryRole).toBool())
     {
@@ -411,7 +411,7 @@ void SetupCollectionModel::apply()
 
     for (int i=0; i<m_collections.count(); ++i)
     {
-        const Item& item = m_collections[i];
+        const Item& item = m_collections.at(i);
 
         if (item.deleted && !item.location.isNull())
             // if item was deleted and had a valid location, i.e. exists in DB
@@ -684,9 +684,9 @@ void SetupCollectionModel::emitDataChangedForChildren(const QModelIndex& parent)
     int rows = rowCount(parent);
     int columns = columnCount(parent);
     emit dataChanged(index(0, 0, parent), index(rows, columns, parent));
-    for (int r = 0; r < rows; r++)
+    for (int r = 0; r < rows; ++r)
     {
-        for (int c = 0; c < columns; c++)
+        for (int c = 0; c < columns; ++c)
         {
             QModelIndex i = index(r, c, parent);
             if (i.isValid())
@@ -753,6 +753,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                         case CategoryRemote:
                             return i18n("Collections on Network Shares");
                     }
+                    break;
 
                 case Qt::DecorationRole:
 
@@ -765,6 +766,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                         case CategoryRemote:
                             return SmallIcon("network-wired", KIconLoader::SizeMedium);
                     }
+                    break;
 
                 case IsCategoryRole:
                     return true;
@@ -779,7 +781,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
     }
     else
     {
-        const Item& item = m_collections[index.internalId()];
+        const Item& item = m_collections.at(index.internalId());
 
         switch (index.column())
         {
@@ -997,7 +999,7 @@ QModelIndex SetupCollectionModel::index(int row, int column, const QModelIndex& 
 
         for (int i=0; i<m_collections.count(); ++i)
         {
-            const Item& item = m_collections[i];
+            const Item& item = m_collections.at(i);
 
             if (!item.deleted && item.parentId == parentId)
             {
@@ -1026,7 +1028,7 @@ QModelIndex SetupCollectionModel::parent(const QModelIndex& index) const
         return QModelIndex();    // one of the three toplevel items
     }
 
-    const Item& item = m_collections[index.internalId()];
+    const Item& item = m_collections.at(index.internalId());
 
     return createIndex(item.parentId, 0, -1);
 }
@@ -1051,11 +1053,11 @@ QList<QModelIndex> SetupCollectionModel::categoryIndexes() const
 QModelIndex SetupCollectionModel::indexForId(int id, int column) const
 {
     int row = 0;
-    const Item& indexItem = m_collections[id];
+    const Item& indexItem = m_collections.at(id);
 
     for (int i=0; i<m_collections.count(); ++i)
     {
-        const Item& item = m_collections[i];
+        const Item& item = m_collections.at(i);
 
         if (!item.deleted && item.parentId == indexItem.parentId)
         {

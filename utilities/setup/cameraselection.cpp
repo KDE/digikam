@@ -254,14 +254,14 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     // Connections --------------------------------------------------
 
-    connect(link, SIGNAL(linkActivated(const QString&)),
+    connect(link, SIGNAL(linkActivated(QString)),
             this, SLOT(slotUMSCameraLinkUsed()));
 
-    connect(link2, SIGNAL(linkActivated(const QString&)),
+    connect(link2, SIGNAL(linkActivated(QString)),
             this, SLOT(slotPTPCameraLinkUsed()));
 
-    connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
-            this, SLOT(slotSelectionChanged(QTreeWidgetItem*, int)));
+    connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
+            this, SLOT(slotSelectionChanged(QTreeWidgetItem*,int)));
 
     connect(d->portButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotPortChanged()));
@@ -269,8 +269,8 @@ CameraSelection::CameraSelection( QWidget* parent )
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()));
 
-    connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
+    connect(d->searchBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
+            this, SLOT(slotSearchTextChanged(SearchTextSettings)));
 
     // Initialize  --------------------------------------------------
 
@@ -386,7 +386,7 @@ void CameraSelection::getCameraList()
 
     for (int i = 0 ; i < count ; ++i)
     {
-        cname = clist[i];
+        cname = clist.at(i);
 
         if (cname == d->UMSCameraNameActual)
         {
@@ -409,9 +409,9 @@ void CameraSelection::getSerialPortList()
 
     for (int i = 0; i < plist.count() ; ++i)
     {
-        if ((plist[i]).startsWith(QLatin1String("serial:")))
+        if ((plist.at(i)).startsWith(QLatin1String("serial:")))
         {
-            d->serialPortList.append(plist[i]);
+            d->serialPortList.append(plist.at(i));
         }
     }
 }

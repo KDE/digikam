@@ -74,21 +74,25 @@ class SlideShow::SlideShowPriv
 public:
 
     SlideShowPriv()
-        : maxStringLen(80)
-    {
-        labelsBox         = 0;
-        clWidget          = 0;
-        ratingWidget      = 0;
-        plWidget          = 0;
-        previewThread     = 0;
-        mouseMoveTimer    = 0;
-        timer             = 0;
-        toolBar           = 0;
-        fileIndex         = -1;
-        endOfShow         = false;
-        pause             = false;
-        screenSaverCookie = -1;
-    }
+        : endOfShow(false)
+        , pause(false)
+        , maxStringLen(80)
+        , deskX(0)
+        , deskY(0)
+        , deskWidth(0)
+        , deskHeight(0)
+        , fileIndex(-1)
+        , screenSaverCookie(-1)
+        , mouseMoveTimer(0)
+        , timer(0)
+        , labelsBox(0)
+        , previewThread(0)
+        , previewPreloadThread(0)
+        , toolBar(0)
+        , ratingWidget(0)
+        , clWidget(0)
+        , plWidget(0)
+    {}
 
     bool                endOfShow;
     bool                pause;
@@ -211,8 +215,8 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     d->previewThread->setDisplayingWidget(this);
     d->previewPreloadThread->setDisplayingWidget(this);
-    connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
-            this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
+    connect(d->previewThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+            this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
@@ -613,7 +617,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
         for (currIndex = commentsIndex ;
              currIndex < (uint)comments.length() && !breakLine ; ++currIndex )
         {
-            if ( comments[currIndex] == QChar('\n') || comments[currIndex].isSpace() )
+            if ( comments.at(currIndex) == QChar('\n') || comments.at(currIndex).isSpace() )
             {
                 breakLine = true;
             }
@@ -631,7 +635,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
              currIndex < (uint)comments.length() && !breakLine ;
              ++currIndex )
         {
-            breakLine = (comments[currIndex] == QChar('\n')) ? true : false;
+            breakLine = (comments.at(currIndex) == QChar('\n')) ? true : false;
 
             if (breakLine)
             {
@@ -639,7 +643,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
             }
             else
             {
-                newLine.append(comments[currIndex]);
+                newLine.append(comments.at(currIndex));
             }
         }
 
@@ -659,7 +663,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
 
     for (int i = 0 ; i < (int)commentsByLines.count() ; ++i )
     {
-        printInfoText(p, offset, commentsByLines[i]);
+        printInfoText(p, offset, commentsByLines.at(i));
     }
 }
 

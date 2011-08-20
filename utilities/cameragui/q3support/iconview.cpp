@@ -960,8 +960,6 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
         }
     }
 
-    prepareRepaint(itemsToRepaint);
-
     foreach (IconItem* item, itemsToRepaint)
     {
         QRect viewportRect = contentsRectToViewport(item->rect());
@@ -975,10 +973,6 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
 
     painter.setClipRegion(unpaintedRegion);
     painter.fillRect(pe->rect(), palette().color(QPalette::Base));
-}
-
-void IconView::prepareRepaint(const QList<IconItem*> &)
-{
 }
 
 QRect IconView::contentsRectToViewport(const QRect& r) const

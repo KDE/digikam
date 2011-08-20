@@ -45,7 +45,7 @@ LocalContrastContainer::LocalContrastContainer()
     low_saturation   = 100;
     function_id      = 0;
 
-    for (int i = 0 ; i < TONEMAPPING_MAX_STAGES ; i++)
+    for (int i = 0 ; i < TONEMAPPING_MAX_STAGES ; ++i)
     {
         stage[i].enabled = (i == 0);
         stage[i].power   = 30.0;

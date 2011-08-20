@@ -94,7 +94,7 @@ public:
 
 private Q_SLOTS:
 
-    void slotOkClicked();
+    void slotButtonClicked(int button);
 
 private:
 
@@ -103,6 +103,7 @@ private:
 
     Setup::Page activePageIndex();
     void showPage(Setup::Page page);
+    void okClicked();
 
 private:
 

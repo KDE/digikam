@@ -114,6 +114,11 @@ private Q_SLOTS:
 
 private:
 
+    Token(const Token&);
+    Token& operator=(const Token&);
+
+private:
+
     QString  m_id;
     QString  m_description;
     QAction* m_action;

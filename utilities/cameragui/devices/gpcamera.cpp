@@ -56,6 +56,7 @@ extern "C"
 // Local includes
 
 #include "config-digikam.h"
+#include "dmetadata.h"
 
 #ifdef HAVE_GPHOTO2
 
@@ -501,7 +502,7 @@ bool GPCamera::getPreview(QImage& preview)
 #endif /* HAVE_GPHOTO2 */
 }
 
-bool GPCamera::capture(GPItemInfo& itemInfo)
+bool GPCamera::capture(CamItemInfo& itemInfo)
 {
 #ifdef HAVE_GPHOTO2
     int            errorCode;
@@ -509,7 +510,6 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
 
     delete d->status;
     d->status = 0;
-
     d->status = new GPStatus;
 
     errorCode = gp_camera_capture(d->camera, GP_CAPTURE_IMAGE, &path, d->status->context);
@@ -529,8 +529,8 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     itemInfo.name   = QString(path.name);
 
     CameraFileInfo info;
-    errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(itemInfo.folder),
-                                        QFile::encodeName(itemInfo.name), &info,
+    errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(itemInfo.folder).constData(),
+                                        QFile::encodeName(itemInfo.name).constData(), &info,
                                         d->status->context);
 
     if (errorCode != GP_OK)
@@ -547,7 +547,7 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     itemInfo.size             = -1;
     itemInfo.width            = -1;
     itemInfo.height           = -1;
-    itemInfo.downloaded       = GPItemInfo::DownloadUnknown;
+    itemInfo.downloaded       = CamItemInfo::DownloadUnknown;
     itemInfo.readPermissions  = -1;
     itemInfo.writePermissions = -1;
 
@@ -581,11 +581,11 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     {
         if (info.file.status == GP_FILE_STATUS_DOWNLOADED)
         {
-            itemInfo.downloaded = GPItemInfo::DownloadedYes;
+            itemInfo.downloaded = CamItemInfo::DownloadedYes;
         }
         else
         {
-            itemInfo.downloaded = GPItemInfo::DownloadedNo;
+            itemInfo.downloaded = CamItemInfo::DownloadedNo;
         }
     }
 
@@ -646,9 +646,10 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
     gp_list_new(&clist);
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus();
 
-    errorCode = gp_camera_folder_list_folders(d->camera, QFile::encodeName(folder), clist, d->status->context);
+    errorCode = gp_camera_folder_list_folders(d->camera, QFile::encodeName(folder).constData(), clist, d->status->context);
 
     if (errorCode != GP_OK)
     {
@@ -698,11 +699,12 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
     const char* cname = 0;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     gp_list_new(&clist);
 
-    errorCode = gp_camera_folder_list_files(d->camera, QFile::encodeName(folder), clist, d->status->context);
+    errorCode = gp_camera_folder_list_files(d->camera, QFile::encodeName(folder).constData(), clist, d->status->context);
 
     if (errorCode != GP_OK)
     {
@@ -746,7 +748,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
 #endif /* HAVE_GPHOTO2 */
 }
 
-bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bool /*getImageDimensions*/)
+bool GPCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& items)
 {
 #ifdef HAVE_GPHOTO2
     int         errorCode;
@@ -754,11 +756,12 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
     const char* cname = 0;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     gp_list_new(&clist);
 
-    errorCode = gp_camera_folder_list_files(d->camera, QFile::encodeName(folder), clist, d->status->context);
+    errorCode = gp_camera_folder_list_files(d->camera, QFile::encodeName(folder).constData(), clist, d->status->context);
 
     if (errorCode != GP_OK)
     {
@@ -786,80 +789,9 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
             return false;
         }
 
-        GPItemInfo itemInfo;
-
-        itemInfo.name   = QFile::decodeName(cname);
-        itemInfo.folder = folder;
-
-        CameraFileInfo info;
-        gp_camera_file_get_info(d->camera, QFile::encodeName(folder),
-                                cname, &info, d->status->context);
-
-        itemInfo.mtime            = QDateTime();
-        itemInfo.mime             = "";
-        itemInfo.size             = -1;
-        itemInfo.width            = -1;
-        itemInfo.height           = -1;
-        itemInfo.downloaded       = GPItemInfo::DownloadUnknown;
-        itemInfo.readPermissions  = -1;
-        itemInfo.writePermissions = -1;
-
-        /* The mime type returned by Gphoto2 is dummy with all RAW files.
-        if (info.file.fields & GP_FILE_INFO_TYPE)
-            itemInfo.mime = info.file.type;*/
-
-        itemInfo.mime = mimeType(itemInfo.name.section('.', -1).toLower());
-
-        if (info.file.fields & GP_FILE_INFO_MTIME)
-        {
-            itemInfo.mtime = QDateTime::fromTime_t(info.file.mtime);
-        }
-
-        if (info.file.fields & GP_FILE_INFO_SIZE)
-        {
-            itemInfo.size = info.file.size;
-        }
-
-        if (info.file.fields & GP_FILE_INFO_WIDTH)
-        {
-            itemInfo.width = info.file.width;
-        }
-
-        if (info.file.fields & GP_FILE_INFO_HEIGHT)
-        {
-            itemInfo.height = info.file.height;
-        }
-
-        if (info.file.fields & GP_FILE_INFO_STATUS)
-        {
-            if (info.file.status == GP_FILE_STATUS_DOWNLOADED)
-            {
-                itemInfo.downloaded = GPItemInfo::DownloadedYes;
-            }
-        }
-
-        if (info.file.fields & GP_FILE_INFO_PERMISSIONS)
-        {
-            if (info.file.permissions & GP_FILE_PERM_READ)
-            {
-                itemInfo.readPermissions = 1;
-            }
-            else
-            {
-                itemInfo.readPermissions = 0;
-            }
-
-            if (info.file.permissions & GP_FILE_PERM_DELETE)
-            {
-                itemInfo.writePermissions = 1;
-            }
-            else
-            {
-                itemInfo.writePermissions = 0;
-            }
-        }
-
-        items.append(itemInfo);
+        CamItemInfo info;
+        getItemInfoInternal(folder, QFile::decodeName(cname), info, useMetadata);
+        items.append(info);
     }
 
     gp_list_unref(clist);
@@ -875,6 +807,119 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
 #endif /* HAVE_GPHOTO2 */
 }
 
+void GPCamera::getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata)
+{
+#ifdef HAVE_GPHOTO2
+
+    delete d->status;
+    d->status = 0;
+    d->status = new GPStatus;
+
+    getItemInfoInternal(folder, itemName, info, useMetadata);
+
+    delete d->status;
+    d->status = 0;
+
+#else
+    Q_UNUSED(folder);
+    Q_UNUSED(itemName);
+    Q_UNUSED(info);
+    Q_UNUSED(useMetadata);
+#endif /* HAVE_GPHOTO2 */
+}
+
+void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata)
+{
+#ifdef HAVE_GPHOTO2
+    info.folder = folder;
+    info.name   = itemName;
+
+    CameraFileInfo cfinfo;
+    gp_camera_file_get_info(d->camera, QFile::encodeName(info.folder).constData(),
+                            QFile::encodeName(info.name).constData(), &cfinfo, d->status->context);
+
+    if (cfinfo.file.fields & GP_FILE_INFO_STATUS)
+    {
+        if (cfinfo.file.status == GP_FILE_STATUS_DOWNLOADED)
+        {
+            info.downloaded = CamItemInfo::DownloadedYes;
+        }
+    }
+
+    if (cfinfo.file.fields & GP_FILE_INFO_SIZE)
+    {
+        info.size = cfinfo.file.size;
+    }
+
+    if (cfinfo.file.fields & GP_FILE_INFO_PERMISSIONS)
+    {
+        if (cfinfo.file.permissions & GP_FILE_PERM_READ)
+        {
+            info.readPermissions = 1;
+        }
+        else
+        {
+            info.readPermissions = 0;
+        }
+
+        if (cfinfo.file.permissions & GP_FILE_PERM_DELETE)
+        {
+            info.writePermissions = 1;
+        }
+        else
+        {
+            info.writePermissions = 0;
+        }
+    }
+
+    /* The mime type returned by Gphoto2 is dummy with all RAW files.
+        if (cfinfo.file.fields & GP_FILE_INFO_TYPE)
+            info.mime = cfinfo.file.type;
+    */
+
+    info.mime = mimeType(info.name.section('.', -1).toLower());
+
+    if (!info.mime.isEmpty())
+    {
+        if (useMetadata)
+        {
+            // Try to use file metadata
+            DMetadata meta;
+            getMetadata(folder, itemName, meta);
+            fillItemInfoFromMetadata(info, meta);
+
+            // Fall back to camera file system info
+            if (info.mtime.isNull())
+                info.mtime = QDateTime::fromTime_t(cfinfo.file.mtime);
+        }
+        else
+        {
+            // Only use properties provided by camera.
+            if (cfinfo.file.fields & GP_FILE_INFO_MTIME)
+            {
+                info.mtime = QDateTime::fromTime_t(cfinfo.file.mtime);
+            }
+
+            if (cfinfo.file.fields & GP_FILE_INFO_WIDTH)
+            {
+                info.width = cfinfo.file.width;
+            }
+
+            if (cfinfo.file.fields & GP_FILE_INFO_HEIGHT)
+            {
+                info.height = cfinfo.file.height;
+            }
+        }
+    }
+
+#else
+    Q_UNUSED(folder);
+    Q_UNUSED(itemName);
+    Q_UNUSED(info);
+    Q_UNUSED(useMetadata);
+#endif /* HAVE_GPHOTO2 */
+}
+
 bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail)
 {
 #ifdef HAVE_GPHOTO2
@@ -886,10 +931,11 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
     gp_file_new(&cfile);
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
-    errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder),
-                                   QFile::encodeName(itemName),
+    errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder).constData(),
+                                   QFile::encodeName(itemName).constData(),
                                    GP_FILE_TYPE_PREVIEW,
                                    cfile, d->status->context);
 
@@ -928,22 +974,22 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
 #endif /* HAVE_GPHOTO2 */
 }
 
-bool GPCamera::getExif(const QString& folder, const QString& itemName,
-                       char** edata, int& esize)
+bool GPCamera::getMetadata(const QString& folder, const QString& itemName, DMetadata& meta)
 {
 #ifdef HAVE_GPHOTO2
-    int                errorCode;
-    CameraFile*        cfile = 0;
-    const char*        data  = 0;
-    unsigned long int  size;
+    int               errorCode;
+    CameraFile*       cfile = 0;
+    const char*       data  = 0;
+    unsigned long int size;
 
     gp_file_new(&cfile);
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
-    errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder),
-                                   QFile::encodeName(itemName),
+    errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder).constData(),
+                                   QFile::encodeName(itemName).constData(),
                                    GP_FILE_TYPE_EXIF,
                                    cfile, d->status->context);
 
@@ -970,17 +1016,38 @@ bool GPCamera::getExif(const QString& folder, const QString& itemName,
         return false;
     }
 
-    *edata = new char[size];
-    esize  = size;
-    memcpy(*edata, data, size);
+    QByteArray exifData(data, size);
 
     gp_file_unref(cfile);
-    return true;
+
+    // Sometimes, GPhoto2 drivers return complete APP1 JFIF section. Exiv2 cannot
+    // decode (yet) exif metadata from APP1. We will find Exif header to get data at this place
+    // to please with Exiv2...
+
+    kDebug() << "Size of Exif metadata from camera = " << exifData.size();
+    char exifHeader[] = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
+
+    if (!exifData.isEmpty())
+    {
+        int i = exifData.indexOf(*exifHeader);
+
+        if (i != -1)
+        {
+            kDebug() << "Exif header found at position " << i;
+            i = i + sizeof(exifHeader);
+            QByteArray data;
+            data.resize(exifData.size()-i);
+            memcpy(data.data(), exifData.data()+i, data.size());
+            meta.setExif(data);
+            return true;
+        }
+    }
+
+    return false;
 #else
     Q_UNUSED(folder);
     Q_UNUSED(itemName);
-    Q_UNUSED(edata);
-    Q_UNUSED(esize);
+    Q_UNUSED(meta);
     return false;
 #endif /* HAVE_GPHOTO2 */
 }
@@ -1023,8 +1090,8 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
 
     d->status = new GPStatus;
 
-    errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder),
-                                   QFile::encodeName(itemName),
+    errorCode = gp_camera_file_get(d->camera, QFile::encodeName(folder).constData(),
+                                   QFile::encodeName(itemName).constData(),
                                    GP_FILE_TYPE_NORMAL, cfile,
                                    d->status->context);
 
@@ -1046,7 +1113,7 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
         struct utimbuf ut;
         ut.modtime = mtime;
         ut.actime  = mtime;
-        ::utime(QFile::encodeName(saveFile), &ut);
+        ::utime(QFile::encodeName(saveFile).constData(), &ut);
     }
 
     file.close();
@@ -1070,11 +1137,12 @@ bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool 
     int errorCode;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     CameraFileInfo info;
-    errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(folder),
-                                        QFile::encodeName(itemName), &info, d->status->context);
+    errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(folder).constData(),
+                                        QFile::encodeName(itemName).constData(), &info, d->status->context);
 
     if (errorCode != GP_OK)
     {
@@ -1104,8 +1172,8 @@ bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool 
     info.preview.fields = GP_FILE_INFO_NONE;
     info.audio.fields   = GP_FILE_INFO_NONE;
 
-    errorCode = gp_camera_file_set_info(d->camera, QFile::encodeName(folder),
-                                        QFile::encodeName(itemName), info, d->status->context);
+    errorCode = gp_camera_file_set_info(d->camera, QFile::encodeName(folder).constData(),
+                                        QFile::encodeName(itemName).constData(), info, d->status->context);
 
     if (errorCode != GP_OK)
     {
@@ -1133,10 +1201,11 @@ bool GPCamera::deleteItem(const QString& folder, const QString& itemName)
     int errorCode;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
-    errorCode = gp_camera_file_delete(d->camera, QFile::encodeName(folder),
-                                      QFile::encodeName(itemName),
+    errorCode = gp_camera_file_delete(d->camera, QFile::encodeName(folder).constData(),
+                                      QFile::encodeName(itemName).constData(),
                                       d->status->context);
 
     if (errorCode != GP_OK)
@@ -1179,15 +1248,16 @@ bool GPCamera::deleteAllItems(const QString& folder)
                 subFolder += '/';
             }
 
-            subFolder += folderList[i];
+            subFolder += folderList.at(i);
             deleteAllItems(subFolder);
         }
     }
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
-    errorCode = gp_camera_folder_delete_all(d->camera, QFile::encodeName(folder),
+    errorCode = gp_camera_folder_delete_all(d->camera, QFile::encodeName(folder).constData(),
                                             d->status->context);
 
     if (errorCode != GP_OK)
@@ -1208,8 +1278,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
 #endif /* HAVE_GPHOTO2 */
 }
 
-bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile,
-                          GPItemInfo& itemInfo, bool /*getImageDimensions*/)
+bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& itemInfo)
 {
 #ifdef HAVE_GPHOTO2
     int         errorCode;
@@ -1224,7 +1293,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
         return false;
     }
 
-    errorCode = gp_file_open(cfile, QFile::encodeName(localFile));
+    errorCode = gp_file_open(cfile, QFile::encodeName(localFile).constData());
 
     if (errorCode != GP_OK)
     {
@@ -1234,7 +1303,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
         return false;
     }
 
-    errorCode = gp_file_set_name(cfile, QFile::encodeName(itemName));
+    errorCode = gp_file_set_name(cfile, QFile::encodeName(itemName).constData());
 
     if (errorCode != GP_OK)
     {
@@ -1245,10 +1314,11 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     }
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     errorCode = gp_camera_folder_put_file(d->camera,
-                                          QFile::encodeName(folder),
+                                          QFile::encodeName(folder).constData(),
                                           cfile,
                                           d->status->context);
 
@@ -1268,8 +1338,8 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     itemInfo.folder = folder;
 
     CameraFileInfo info;
-    errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(folder),
-                                        QFile::encodeName(itemName), &info, d->status->context);
+    errorCode = gp_camera_file_get_info(d->camera, QFile::encodeName(folder).constData(),
+                                        QFile::encodeName(itemName).constData(), &info, d->status->context);
 
     if (errorCode != GP_OK)
     {
@@ -1286,7 +1356,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     itemInfo.size             = -1;
     itemInfo.width            = -1;
     itemInfo.height           = -1;
-    itemInfo.downloaded       = GPItemInfo::DownloadUnknown;
+    itemInfo.downloaded       = CamItemInfo::DownloadUnknown;
     itemInfo.readPermissions  = -1;
     itemInfo.writePermissions = -1;
 
@@ -1320,11 +1390,11 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     {
         if (info.file.status == GP_FILE_STATUS_DOWNLOADED)
         {
-            itemInfo.downloaded = GPItemInfo::DownloadedYes;
+            itemInfo.downloaded = CamItemInfo::DownloadedYes;
         }
         else
         {
-            itemInfo.downloaded = GPItemInfo::DownloadedNo;
+            itemInfo.downloaded = CamItemInfo::DownloadedNo;
         }
     }
 
@@ -1369,6 +1439,7 @@ bool GPCamera::cameraSummary(QString& summary)
     CameraText sum;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     errorCode = gp_camera_get_summary(d->camera, &sum, d->status->context);
@@ -1426,6 +1497,7 @@ bool GPCamera::cameraManual(QString& manual)
     CameraText man;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     errorCode = gp_camera_get_manual(d->camera, &man, d->status->context);
@@ -1459,6 +1531,7 @@ bool GPCamera::cameraAbout(QString& about)
     CameraText abt;
 
     delete d->status;
+    d->status = 0;
     d->status = new GPStatus;
 
     errorCode = gp_camera_get_about(d->camera, &abt, d->status->context);

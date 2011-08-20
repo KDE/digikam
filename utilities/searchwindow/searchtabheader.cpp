@@ -290,7 +290,7 @@ SearchTabHeader::SearchTabHeader(QWidget* parent)
 
     // ------------------- //
 
-    connect(d->keywordEdit, SIGNAL(textEdited(const QString&)),
+    connect(d->keywordEdit, SIGNAL(textEdited(QString)),
             d->keywordEditTimer, SLOT(start()));
 
     connect(d->keywordEditTimer, SIGNAL(timeout()),
@@ -332,8 +332,8 @@ SearchWindow* SearchTabHeader::searchWindow()
         // Create the advanced search edit window, deferred from constructor
         d->searchWindow = new SearchWindow;
 
-        connect(d->searchWindow, SIGNAL(searchEdited(int, const QString&)),
-                this, SLOT(advancedSearchEdited(int, const QString&)),
+        connect(d->searchWindow, SIGNAL(searchEdited(int,QString)),
+                this, SLOT(advancedSearchEdited(int,QString)),
                 Qt::QueuedConnection);
     }
 

@@ -93,8 +93,8 @@ AlbumThumbnailLoader* AlbumThumbnailLoader::instance()
 AlbumThumbnailLoader::AlbumThumbnailLoader()
     : d(new AlbumThumbnailLoaderPrivate)
 {
-    connect(this, SIGNAL(signalDispatchThumbnailInternal(int, const QPixmap&)),
-            this, SLOT(slotDispatchThumbnailInternal(int, const QPixmap&)));
+    connect(this, SIGNAL(signalDispatchThumbnailInternal(int,QPixmap)),
+            this, SLOT(slotDispatchThumbnailInternal(int,QPixmap)));
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumIconChanged(Album*)),
             this, SLOT(slotIconChanged(Album*)));
@@ -235,9 +235,9 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* album, bool blendI
     if (!album->icon().isEmpty())
     {
         // icon cached?
-        AlbumThumbnailMap::iterator it = d->thumbnailMap.find(album->globalID());
+        AlbumThumbnailMap::const_iterator it = d->thumbnailMap.constFind(album->globalID());
 
-        if (it != d->thumbnailMap.end())
+        if (it != d->thumbnailMap.constEnd())
         {
             if (blendIcon)
             {
@@ -292,9 +292,9 @@ QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum* album)
     if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
     {
         // icon cached?
-        AlbumThumbnailMap::iterator it = d->thumbnailMap.find(album->globalID());
+        AlbumThumbnailMap::const_iterator it = d->thumbnailMap.constFind(album->globalID());
 
-        if (it != d->thumbnailMap.end())
+        if (it != d->thumbnailMap.constEnd())
         {
             return *it;
         }
@@ -318,9 +318,9 @@ void AlbumThumbnailLoader::addUrl(Album* album, const KUrl& url)
     // We use a private cache which is actually a map to be sure to cache _all_ album thumbnails.
     // At startup, this is not relevant, as the views will add their requests in a row.
     // This is to speed up context menu and IE imagedescedit
-    AlbumThumbnailMap::iterator ttit = d->thumbnailMap.find(album->globalID());
+    AlbumThumbnailMap::const_iterator ttit = d->thumbnailMap.constFind(album->globalID());
 
-    if (ttit != d->thumbnailMap.end())
+    if (ttit != d->thumbnailMap.constEnd())
     {
         // It is not necessary to return cached icon asynchronously - they could be
         // returned by getTagThumbnail already - but this would make the API
@@ -345,8 +345,8 @@ void AlbumThumbnailLoader::addUrl(Album* album, const KUrl& url)
                 d->iconTagThumbThread->setSendSurrogatePixmap(false);
                 d->iconTagThumbThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
                 connect(d->iconTagThumbThread,
-                        SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-                        SLOT(slotGotThumbnailFromIcon(const LoadingDescription&, const QPixmap&)),
+                        SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+                        SLOT(slotGotThumbnailFromIcon(LoadingDescription,QPixmap)),
                         Qt::QueuedConnection);
             }
 
@@ -362,8 +362,8 @@ void AlbumThumbnailLoader::addUrl(Album* album, const KUrl& url)
                 d->iconAlbumThumbThread->setSendSurrogatePixmap(false);
                 d->iconAlbumThumbThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
                 connect(d->iconAlbumThumbThread,
-                        SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-                        SLOT(slotGotThumbnailFromIcon(const LoadingDescription&, const QPixmap&)),
+                        SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+                        SLOT(slotGotThumbnailFromIcon(LoadingDescription,QPixmap)),
                         Qt::QueuedConnection);
             }
 

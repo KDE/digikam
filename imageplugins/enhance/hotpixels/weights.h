@@ -39,7 +39,7 @@ public:
 
     Weights();
     Weights(const Weights& w);
-    void operator=(const Weights& w);
+    Weights& operator=(const Weights& w);
 
     ~Weights()
     {

@@ -437,8 +437,8 @@ void TagsPopupMenu::setup(Mode mode)
 
     AlbumThumbnailLoader* loader = AlbumThumbnailLoader::instance();
 
-    connect(loader, SIGNAL(signalThumbnail(Album*, const QPixmap&)),
-            this, SLOT(slotTagThumbnail(Album*, const QPixmap&)));
+    connect(loader, SIGNAL(signalThumbnail(Album*,QPixmap)),
+            this, SLOT(slotTagThumbnail(Album*,QPixmap)));
 
     // we are not interested in signalThumbnailFailed
 }
@@ -713,11 +713,11 @@ void TagsPopupMenu::buildFlatMenu(KMenu* menu)
         TagsCache::instance()->shortenedTagPaths(d->assignedTags.toList(), &ids,
                                                  TagsCache::NoLeadingSlash, TagsCache::NoHiddenTags);
 
-    for (int i=0; i<shortenedPaths.size(); i++)
+    for (int i=0; i<shortenedPaths.size(); ++i)
     {
-        QString t = shortenedPaths[i];
+        QString t = shortenedPaths.at(i);
         t.replace('&', "&&");
-        TAlbum* a = AlbumManager::instance()->findTAlbum(ids[i]);
+        TAlbum* a = AlbumManager::instance()->findTAlbum(ids.at(i));
         if (!a)
         {
             continue;

@@ -48,7 +48,7 @@
 
 #include "databaseinfocontainers.h"
 #include "databasewatch.h"
-#include "digikam2kmap_database.h"
+#include "digikam2kgeomap_database.h"
 #include "dimg.h"
 #include "imageattributeswatch.h"
 #include "imagedescedittab.h"
@@ -107,8 +107,8 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* parent, SidebarSplit
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
 
-    connect(d->desceditTab, SIGNAL(signalProgressBarMode(int, const QString&)),
-            this, SIGNAL(signalProgressBarMode(int, const QString&)));
+    connect(d->desceditTab, SIGNAL(signalProgressBarMode(int,QString)),
+            this, SIGNAL(signalProgressBarMode(int,QString)));
 
     connect(d->desceditTab, SIGNAL(signalProgressValue(int)),
             this, SIGNAL(signalProgressValue(int)));
@@ -120,14 +120,14 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* parent, SidebarSplit
             this, SIGNAL(signalPrevItem()));
 
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset&)),
-            this, SLOT(slotImageChangeDatabase(const ImageChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+            this, SLOT(slotImageChangeDatabase(ImageChangeset)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset&)),
-            this, SLOT(slotImageTagChanged(const ImageTagChangeset&)));
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
+            this, SLOT(slotImageTagChanged(ImageTagChangeset)));
 
-    connect(ImageAttributesWatch::instance(), SIGNAL(signalFileMetadataChanged(const KUrl&)),
-            this, SLOT(slotFileMetadataChanged(const KUrl&)));
+    connect(ImageAttributesWatch::instance(), SIGNAL(signalFileMetadataChanged(KUrl)),
+            this, SLOT(slotFileMetadataChanged(KUrl)));
 }
 
 ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
@@ -192,7 +192,7 @@ void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rec
     d->dirtyDesceditTab  = false;
 
     // slotChangedTab only handles the active tab.
-    // Any tab that holds informations reset above shall be reset here,
+    // Any tab that holds information reset above shall be reset here,
     // unless it is the active tab
     if (getActiveTab() != d->desceditTab)
     {
