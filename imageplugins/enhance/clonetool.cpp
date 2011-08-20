@@ -93,10 +93,17 @@ CloneTool::CloneTool(QObject* parent)
     setObjectName("clonetool");
     setToolName(i18n("Clone Tool"));
     setToolIcon(SmallIcon("clone"));
-    //setToolHelp("clonetool.anchor");
+    //setToolHelp("clonetool.anchor");    
+
+    d->previewWidget = new ImageCloneWidget;//(0,d->settingsView->settings())
+    setToolView(d->previewWidget);
+    d->previewWidget->setWhatsThis(i18n("The image preview with clone applied "
+                                        "is shown here."));
+    setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
    // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
@@ -106,20 +113,16 @@ CloneTool::CloneTool(QObject* parent)
     d->settingsView = new CloneSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
 
-    d->previewWidget = new ImageCloneWidget(0,d->settingsView->settings());
-    d->previewWidget->setWhatsThis(i18n("The image preview with clone applied "
-                                        "is shown here."));
-    setToolView(d->previewWidget);
-    setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
-
     //-------------------save the original image, if cancel button is clicked, this will be used--------------
     d->resultImage   = new DImg();
     d->previewRImage = new DImg();
     d->origImage     = new DImg();
-    uchar* data      = d->previewWidget->imageIface()->getOriginalImg()->stripImageData();
-    d->origImage->putImageData(data);  //FIXME
-    d->origImage->setIccProfile( d->previewWidget->imageIface()->getOriginalImg()->getIccProfile());
-
+    uchar* data      = d->previewWidget->imageIface()->getOriginalImg()->bits();
+    if(!data)
+    {
+        d->origImage->putImageData(data);  //FIXME
+        d->origImage->setIccProfile( d->previewWidget->imageIface()->getOriginalImg()->getIccProfile());
+    }
     //==========================================================================================================
 
     init();
@@ -127,7 +130,7 @@ CloneTool::CloneTool(QObject* parent)
     // -------------------------------------------------------------
     connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotTimer()));
     connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotSettingsChanged()));
-    connect(d->previewWidget,SIGNAL(drawingComplete()),this, SLOT(slotDrawingComplete()));
+    connect(d->previewWidget,SIGNAL(d->previewWidget->signalDrawingComplete()),this,SLOT(slotDrawingComplete()));
 }
 
 CloneTool::~CloneTool()
@@ -158,7 +161,7 @@ void CloneTool::slotDrawingComplete()
     d->previewRImage->detach();
     d->previewRImage->putImageData(data);
 
-    d->previewWidget->imageIface()->putPreviewImage(d->previewRImage->stripImageData());
+    d->previewWidget->imageIface()->putPreviewImage(d->previewRImage->bits());
     d->previewWidget->setPreview();
     delete previewFilter;
 
@@ -170,7 +173,7 @@ void CloneTool::slotDrawingComplete()
         return;
     d->resultImage->detach();
     d->resultImage->putImageData(data);
-    d->previewWidget->imageIface()->putOriginalImage(i18n("Clone Toll"), filter()->filterAction(),d->resultImage->stripImageData());
+    d->previewWidget->imageIface()->putOriginalImage(i18n("Clone Toll"), filter()->filterAction(),d->resultImage->bits());
     d->previewWidget->updatePreview();
     delete orignalFilter;
 }
@@ -241,7 +244,7 @@ void CloneTool::putPreviewData()
   ImageIface* iface = d->previewWidget->imageIface();
   DImg previewImg   = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
   //iface->putPreviewImage(previewImg.bits());
-  uchar* data       = previewImg.stripImageData();
+  uchar* data       = previewImg.bits();
   iface->putPreviewImage(data);
   delete []data;
   d->previewWidget->updatePreview();
