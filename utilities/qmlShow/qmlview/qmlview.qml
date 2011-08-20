@@ -3,22 +3,37 @@ import QtWebKit 1.0
 
 
 Rectangle {
-	id:rect
+
+    id:rect
     width: 500
-    height: 300     
-property string text: "matrix.jpg"
-signal nextClicked;
-signal prevClicked;
-signal play;
-signal pause;
-signal gridItem;
-property bool bool_pp: true;
-Keys.onLeftPressed: {rect.prevClicked()}
-Keys.onRightPressed: {rect.nextClicked()}
-Keys.onEscapePressed: {Qt.quit()}
-Keys.onSpacePressed: { if (play_pause.src == "pause.png") {play_pause.src = "play.png"; rect.pause();}
-                    else {play_pause.src= "pause.png";rect.play();};
-}
+    height: 300
+    property string text: "matrix.jpg"
+
+    signal nextClicked;
+    signal prevClicked;
+    signal play;
+    signal pause;
+    signal gridItem;
+    property bool bool_pp: true;
+
+    Keys.onLeftPressed:
+    { rect.prevClicked() }
+    Keys.onRightPressed:
+    { rect.nextClicked() }
+    Keys.onEscapePressed:
+    { Qt.quit() }
+    Keys.onSpacePressed:
+    {
+        if (play_pause.src == "pause.png")
+        {
+            play_pause.src = "play.png"; rect.pause();
+        }
+        else
+        {
+            play_pause.src= "pause.png";rect.play();
+        };
+    }
+
     Image {
         id: circle_image
         x: 0
@@ -45,7 +60,7 @@ Keys.onSpacePressed: { if (play_pause.src == "pause.png") {play_pause.src = "pla
                 id: flip_icon
                 anchors.fill: parent
                 onClicked: { if (parent.src == "pause.png") {parent.src = "play.png"; rect.pause();}
-                    else {parent.src= "pause.png";rect.play();};
+                else {parent.src= "pause.png";rect.play();};
                 }
             }
         }
@@ -59,11 +74,11 @@ Keys.onSpacePressed: { if (play_pause.src == "pause.png") {play_pause.src = "pla
             rotation: 0
             z: 12
             source: "next.png"
-		MouseArea
-		{
-			anchors.fill: parent;
-			onClicked: rect.nextClicked();
-		}
+            MouseArea
+            {
+                anchors.fill: parent;
+                onClicked: rect.nextClicked();
+            }
         }
 
         Image {
@@ -75,11 +90,11 @@ Keys.onSpacePressed: { if (play_pause.src == "pause.png") {play_pause.src = "pla
             rotation: 0
             z: 12
             source: "previous.png"
-		MouseArea
-		{
-			anchors.fill:parent;
-			onClicked: rect.prevClicked();
-		}
+            MouseArea
+            {
+                anchors.fill:parent;
+                onClicked: rect.prevClicked();
+            }
         }
 
         Image {
@@ -113,30 +128,35 @@ Keys.onSpacePressed: { if (play_pause.src == "pause.png") {play_pause.src = "pla
             source: "map_view.png"
 
 
-    MouseArea {
+            MouseArea {
                 id: show_map
                 anchors.fill: parent
                 onClicked: { if (openstreetmap.visible == false) openstreetmap.visible = true
-                            else openstreetmap.visible=false;}
+                else openstreetmap.visible=false;}
             }
         }
 
-	Image
-	{
-		id: gridviewicon
-		height:parent.height/5
-		width:parent.width/5
-		x: parent.width*3/4
-		source: "./gridview.png"
-		y:0
-		MouseArea
-		{
-			id:show_gridview
-			anchors.fill: parent
-			onClicked: { rect2.visible=true; grid.focus= true;play_pause.src = "play.png"; rect.pause();
-			}
-		}
-	}
+        Image
+        {
+            id: gridviewicon
+            height:parent.height/5
+            width:parent.width/5
+            x: parent.width*3/4
+            source: "./gridview.png"
+            y:0
+            MouseArea
+            {
+                id:show_gridview
+                anchors.fill: parent
+                onClicked:
+                {
+                    rect2.visible=true;
+                    grid.focus= true;
+                    play_pause.src = "play.png";
+                    rect.pause();
+                }
+            }
+        }
     }
 
     Image {
@@ -168,29 +188,43 @@ Keys.onSpacePressed: { if (play_pause.src == "pause.png") {play_pause.src = "pla
         source: parent.text
         focus: true
         visible:true
+
         Timer
-	{
-	id:timer
-	interval: 6000; running:rect.bool_pp; 
-	repeat: rect.bool_pp;
-         onTriggered: rect.nextClicked();
-	}
-	MouseArea {
+        {
+            id:timer
+            interval: 6000; running:rect.bool_pp;
+            repeat: rect.bool_pp;
+            onTriggered: rect.nextClicked();
+        }
+
+
+        MouseArea
+        {
             id: view_icons
-                hoverEnabled: true
+            hoverEnabled: true
             anchors.fill: parent
             z: 10
-            onPositionChanged: { circle_image.visible = true; close.visible = true ; remove_icon.running = true;}
+            onPositionChanged:
+            {
+                circle_image.visible = true;
+                close.visible = true ;
+                remove_icon.running = true;
+            }
         }
 
         Timer
+        {
+            id: remove_icon
+            interval: 4000; running: false;
+            onTriggered:
             {
-                id: remove_icon
-                interval: 4000; running: false;
-                onTriggered: {circle_image.visible = false; close.visible = false; }
+                circle_image.visible = false;
+                close.visible = false;
             }
+        }
 
     }
+
     WebView {
         id: openstreetmap
         x: 0
@@ -201,60 +235,66 @@ Keys.onSpacePressed: { if (play_pause.src == "pause.png") {play_pause.src = "pla
         url: "./mapview.html"
     }
 
-Rectangle
-{
-	id:rect2
-	visible: false
-	anchors.verticalCenter: parent.verticalCenter
-	anchors.horizontalCenter: parent.horizontalCenter
-	height:(parent.height/3)*2
-	width:(parent.width/3)*2
-	radius: 15
+    Rectangle
+    {
+        id:rect2
+        visible: false
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        height:(parent.height/3)*2
+        width:(parent.width/3)*2
+        radius: 15
         opacity:0.7
-	color: "black"
-	GridView{
-		id: grid;
-		visible: true
-		anchors.verticalCenter: parent.verticalCenter
-		anchors.horizontalCenter: parent.horizontalCenter
-     		height: rect2.height -50
-		width: rect2.width - 40;
-	        cellHeight: grid.height/3 
-	        cellWidth: grid.width/3
-		clip: true
-		model: myModel
-		cacheBuffer: 0
-		highlightFollowsCurrentItem: true
-		highlight:	Rectangle{ 
-					id: highlight_rect;
-					color: "white"; 
-					border.width: 10;
-					border.color: "white";
-					clip: true
-					height: grid.cellHeight;
-					width: grid.cellWidth;
+        color: "black"
+        GridView
+        {
+            id: grid;
+            visible: true
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            height: rect2.height -50
+            width: rect2.width - 40;
+            cellHeight: grid.height/3
+            cellWidth: grid.width/3
+            clip: true
+            model: myModel
+            cacheBuffer: 0
+            highlightFollowsCurrentItem: true
+            highlight:	Rectangle{
+                id: highlight_rect;
+                color: "white";
+                border.width: 10;
+                border.color: "white";
+                clip: true
+                height: grid.cellHeight;
+                width: grid.cellWidth;
 
-				}
-		focus: parent.visible
-		Keys.onEscapePressed: { rect2.visible=false; rect.focus=true}
-		delegate: Component {
-        		Rectangle { 
-				id:image;
-				width:grid.cellWidth-20;
-				height:grid.cellHeight-20;
-				radius: 10;
-				clip: true
-				Image{anchors.fill:parent;clip:true;source: modelData; }
-				MouseArea 
-				{
-					anchors.fill:parent;
-					clip: true;
-					onClicked: {
-						grid.currentIndex=grid.indexAt(parent.x,parent.y);
-					}
-				}
-			}
-		}
-	}
-}
+            }
+            focus: parent.visible
+
+            Keys.onEscapePressed:
+            {
+                rect2.visible=false; rect.focus=true
+            }
+
+            delegate: Component {
+                Rectangle {
+                    id:image;
+                    width:grid.cellWidth-20;
+                    height:grid.cellHeight-20;
+                    radius: 10;
+                    clip: true
+                    Image{anchors.fill:parent;clip:true;source: modelData; }
+                    MouseArea
+                    {
+                        anchors.fill:parent;
+                        clip: true;
+                        onClicked: {
+                            grid.currentIndex = grid.indexAt(parent.x,parent.y);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
