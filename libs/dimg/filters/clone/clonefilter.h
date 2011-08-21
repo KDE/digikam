@@ -74,10 +74,12 @@ public:
         return FilterIdentifier();
     }
 
- ///*FIXME  
-    virtual FilterAction    filterAction();
+    //FIXME
+
+    virtual FilterAction filterAction();
     void    readParameters(const FilterAction& action);
     DImg* getResultImg() const;
+
 private:
 
     void filterImage();

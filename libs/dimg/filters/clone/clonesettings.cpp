@@ -127,8 +127,7 @@ CloneSettings::CloneSettings(QWidget* parent)
 
     //----------------Brushshape selection------------------------------
 
-    QScrollArea* scrollAreaBrushShape;
-    scrollAreaBrushShape = new QScrollArea(parent);
+    QScrollArea* scrollAreaBrushShape = new QScrollArea(parent);
     scrollAreaBrushShape->setMouseTracking(true);
     scrollAreaBrushShape->setFocusPolicy(Qt::ClickFocus);
     scrollAreaBrushShape->setStyleSheet(QString::fromUtf8("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(150, 203, 255, 255), stop:1 rgba(255, 255, 255, 255));"));
@@ -142,7 +141,7 @@ CloneSettings::CloneSettings(QWidget* parent)
 
     QButtonGroup* brushGroup = new QButtonGroup(scrollAreaBrushShape);
 
-    QGridLayout *   gridLayout = new QGridLayout(scrollAreaBrushShape);
+    QGridLayout* gridLayout  = new QGridLayout(scrollAreaBrushShape);
     gridLayout->setSpacing(0);
     gridLayout->setContentsMargins(11, 11, 11, 11);
     gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
@@ -157,13 +156,16 @@ CloneSettings::CloneSettings(QWidget* parent)
     path.append(KStandardDirs::locate("data",QString("digikam/data/brushshapes/")));//need to be fixed, the path may cannot be found!!!!
     kDebug() << path;//debug info
     QDirIterator dirIterator(path, nameFilters, QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
+
     while(dirIterator.hasNext())
     {
         nameFilters << dirIterator.fileName();
         dirIterator.next();
     }
+
     kDebug() << nameFilters;//debug info
     QPushButton* buttons[4];
+
     if(nameFilters.size()>0)
     {
         for(int c = 0; c<4 ; c++)
@@ -177,9 +179,10 @@ CloneSettings::CloneSettings(QWidget* parent)
         QString filename = nameFilters.at(i).toLocal8Bit().constData();
         kDebug() << filename;
         QPixmap iconMap;
-        iconMap.load(filename);        
-//------------------------------debug info---------------------
-       /* int map_width = 0;
+        iconMap.load(filename);
+
+        //------------------------------debug info---------------------
+        /* int map_width = 0;
         map_width = iconMap.width();
         QString load_map;
         load_map.append("is");
@@ -188,10 +191,11 @@ CloneSettings::CloneSettings(QWidget* parent)
         load_map.append("successful!");
         printf("%s",load_map);
         printf("%d",map_width);
-       // KDebug() << load_map;*/
-//==========================================================================
+        // KDebug() << load_map;*/
+        //==========================================================================
+
         if(!iconMap.isNull())
-         {      
+        {
             CloneBrush brush;
             brush.setPixmap(iconMap);
             brush.setDia(iconMap.size().width());
@@ -199,13 +203,13 @@ CloneSettings::CloneSettings(QWidget* parent)
             buttons[(i-2)%4][(i-2)/4].setParent(parent);
             buttons[(i-2)%4][(i-2)/4].setFixedSize(30,23);
             buttons[(i-2)%4][(i-2)/4].setIcon(QIcon(iconMap));
-         }
+        }
 
         brushGroup->addButton(&buttons[(i-2)%4][(i-2)/4],i-1);
         gridLayout->addWidget(&buttons[(i-2)%4][(i-2)/4],(i-2)/4,(i-2)%4,1,1);
-        
-   }
-   //=============================================================================
+    }
+
+    //=============================================================================
 
     QLabel* label3 = new QLabel(i18n("Select source/Draw stroke:"));
 
@@ -240,7 +244,7 @@ CloneSettings::CloneSettings(QWidget* parent)
     d->opacityInput->setDefaultValue(100);
     d->opacityInput->setWhatsThis(i18n("Set the opacity of the brush"));
 
-    globalLayout-> addWidget(label1,              0,  0, 1, 2);
+    globalLayout->addWidget(label1,               0,  0, 1, 2);
     globalLayout->addWidget(BrushShapeEdit,       0,  2, 1, 4);
     globalLayout->addWidget(label2,               1,  0, 2, 2);
     globalLayout->addWidget(scrollAreaBrushShape, 1,  2, 4, 4);
@@ -251,11 +255,13 @@ CloneSettings::CloneSettings(QWidget* parent)
     globalLayout->addWidget(d->diameterInput,     8,  2, 1, 5);
     globalLayout->addWidget(label5,               9,  0, 1, 2);
     globalLayout->addWidget(d->opacityInput,      10, 2, 1, 5);
+    globalLayout->setRowStretch(11, 10);
 
-/*
+    /*
     connect(d->horizontalSlider_MainDiameter, SIGNAL(valueChanged(int)),
             d->spinBox_MainDiameter, SLOT(setValue(int)));
-*/
+    */
+
     connect(pushButton1, SIGNAL(pressed()),
             this,SLOT(slotSelectModeChanged()));
 
@@ -286,7 +292,7 @@ void CloneSettings::setSettings(const CloneContainer& settings)
 
     d->diameterInput->setValue(settings.mainDia);
     d->opacityInput->setValue(settings.opacity);
-    
+
     blockSignals(false);
 }
 
@@ -300,7 +306,7 @@ CloneContainer CloneSettings::defaultSettings() const
    CloneContainer prm;
 
    prm.brushID    = d->brushID;
-//FIXME   prm.brush      = d->brushMap.find(prm.brushID);
+   //FIXME   prm.brush      = d->brushMap.find(prm.brushID);
    prm.brushDia   = prm.brush.getDia();
    prm.mainDia    = prm.brush.getDia();
    prm.selectMode = d->selectMode;
@@ -317,7 +323,7 @@ void CloneSettings::readSettings(KConfigGroup& group)
     blockWidgetSignals(true);
 
     prm.brushID    = group.readEntry(d->configBrushID,      defaultPrm.brushID);
-//FIXME    prm.brush      = group.readEntry(d->configBrushShape,   defaultPrm.brush);
+    //FIXME    prm.brush      = group.readEntry(d->configBrushShape,   defaultPrm.brush);
     prm.brushDia   = group.readEntry(d->configDiameter,     defaultPrm.brushDia);
     prm.mainDia    = group.readEntry(d->configMainDiameter, defaultPrm.mainDia);
     prm.opacity    = group.readEntry(d->configOpacity,      defaultPrm.opacity);
@@ -334,7 +340,7 @@ void CloneSettings::writeSettings(KConfigGroup& group)
    CloneContainer prm = settings();
 
    group.writeEntry(d->configBrushID,       prm.brushID);
-//FIXME   group.writeEntry(d->configBrushShape,    prm.brush);
+   //FIXME   group.writeEntry(d->configBrushShape,    prm.brush);
    group.writeEntry(d->configDiameter,      prm.brushDia);
    group.writeEntry(d->configMainDiameter,  prm.mainDia);
    group.writeEntry(d->configOpacity,       prm.opacity);
@@ -347,7 +353,7 @@ CloneContainer CloneSettings::settings()const
     CloneContainer prm;
 
     prm.brushID    = d->brushID;
-//FIXME    prm.brush      = d->brushMap.find(prm.brushID);
+    //FIXME    prm.brush      = d->brushMap.find(prm.brushID);
     prm.brushDia   = prm.brush.getDia();
     prm.mainDia    = d->diameterInput->value();
     prm.opacity    = d->opacityInput->value();
