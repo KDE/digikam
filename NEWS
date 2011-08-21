@@ -57,5 +57,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 045 ==> 279402 : Focus textbox for identifying faces gets lost too easily (and other issues).
 046 ==> 277796 : Build failure in the dcraw_emu sample.
 047 ==> 280240 : digiKam crash when attempting to view slideshow.
-048 ==> 
-
+048 ==> 280517 : Moving photo from an album to another leads to loose face tags.
+049 ==> 
