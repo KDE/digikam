@@ -137,7 +137,7 @@ CloneTool::CloneTool(QObject* parent)
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->previewWidget, SIGNAL(d->previewWidget->signalDrawingComplete()),
+    connect(d->previewWidget, SIGNAL(signalDrawingComplete()),
             this, SLOT(slotDrawingComplete()));
 }
 
