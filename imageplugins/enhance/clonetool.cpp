@@ -93,7 +93,7 @@ CloneTool::CloneTool(QObject* parent)
     setObjectName("clonetool");
     setToolName(i18n("Clone Tool"));
     setToolIcon(SmallIcon("clone"));
-    //setToolHelp("clonetool.anchor");    
+    //setToolHelp("clonetool.anchor");
 
     d->previewWidget = new ImageCloneWidget;//(0,d->settingsView->settings())
     setToolView(d->previewWidget);
@@ -113,7 +113,8 @@ CloneTool::CloneTool(QObject* parent)
     d->settingsView = new CloneSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
 
-    //-------------------save the original image, if cancel button is clicked, this will be used--------------
+    //------------------- save the original image, if cancel button is clicked, this will be used --------------
+
     d->resultImage   = new DImg();
     d->previewRImage = new DImg();
     d->origImage     = new DImg();
@@ -123,14 +124,21 @@ CloneTool::CloneTool(QObject* parent)
         d->origImage->putImageData(data);  //FIXME
         d->origImage->setIccProfile( d->previewWidget->imageIface()->getOriginalImg()->getIccProfile());
     }
+
     //==========================================================================================================
 
     init();
 
     // -------------------------------------------------------------
-    connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotTimer()));
-    connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotSettingsChanged()));
-    connect(d->previewWidget,SIGNAL(d->previewWidget->signalDrawingComplete()),this,SLOT(slotDrawingComplete()));
+
+    connect(d->settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotTimer()));
+
+    connect(d->settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    connect(d->previewWidget, SIGNAL(d->previewWidget->signalDrawingComplete()),
+            this, SLOT(slotDrawingComplete()));
 }
 
 CloneTool::~CloneTool()
