@@ -105,19 +105,27 @@ void DatabaseWidget::setupMainArea(const QString & title)
 
     internalServer                      = new QCheckBox(i18n("Internal Server"));
 
-    QLabel* databaseTypeLabel           = new QLabel(i18n("Type"));
-    QLabel* databaseNameLabel           = new QLabel(i18n("Schema Name"));
-    QLabel* hostNameLabel               = new QLabel(i18n("Host Name"));
-    QLabel* hostPortLabel               = new QLabel(i18n("Port"));
-    QLabel* connectionOptionsLabel      = new QLabel(i18n("Database<br>Connection<br>Options"));
-    QLabel* userNameLabel               = new QLabel(i18n("User"));
-    QLabel* passwordLabel               = new QLabel(i18n("Password"));
+    QLabel* imgDatabaseTypeLabel           = new QLabel(i18n("Type"));
+    QLabel* imgDatabaseNameLabel           = new QLabel(i18n("Schema Name"));
+    QLabel* imgHostNameLabel               = new QLabel(i18n("Host Name"));
+    QLabel* imgHostPortLabel               = new QLabel(i18n("Port"));
+    QLabel* imgConnectionOptionsLabel      = new QLabel(i18n("Database<br>Connection<br>Options"));
+    QLabel* imgUserNameLabel               = new QLabel(i18n("User"));
+    QLabel* imgPasswordLabel               = new QLabel(i18n("Password"));
+
+    QLabel* tmbDatabaseTypeLabel           = new QLabel(i18n("Type"));
+    QLabel* tmbDatabaseNameLabel           = new QLabel(i18n("Schema Name"));
+    QLabel* tmbHostNameLabel               = new QLabel(i18n("Host Name"));
+    QLabel* tmbHostPortLabel               = new QLabel(i18n("Port"));
+    QLabel* tmbConnectionOptionsLabel      = new QLabel(i18n("Database<br>Connection<br>Options"));
+    QLabel* tmbUserNameLabel               = new QLabel(i18n("User"));
+    QLabel* tmbPasswordLabel               = new QLabel(i18n("Password"));
 
     imgDatabaseType                        = new QComboBox();
     imgDatabaseName                        = new QLineEdit();
     imgHostName                            = new QLineEdit();
     imgHostPort                            = new QSpinBox();
-    imgHostPort->setMaximum(65536);
+    imgHostPort->setMaximum(65535);
     imgConnectionOptions                   = new QLineEdit();
     imgUserName                            = new QLineEdit();
     imgPassword                            = new QLineEdit();
@@ -128,7 +136,7 @@ void DatabaseWidget::setupMainArea(const QString & title)
     tmbDatabaseName                        = new QLineEdit();
     tmbHostName                            = new QLineEdit();
     tmbHostPort                            = new QSpinBox();
-    tmbHostPort->setMaximum(65536);
+    tmbHostPort->setMaximum(65535);
     tmbConnectionOptions                   = new QLineEdit();
     tmbUserName                            = new QLineEdit();
     tmbPassword                            = new QLineEdit();
@@ -143,28 +151,29 @@ void DatabaseWidget::setupMainArea(const QString & title)
 // #ifdef HAVE_INTERNALMYSQL
 //     expertSettinglayout->addRow(internalServerLabel, internalServer);
 // #endif // HAVE_INTERNALMYSQL
-    expertSettinglayout->addRow(hostNameLabel, imgHostName);
-    expertSettinglayout->addRow(hostPortLabel, imgHostPort);
-    expertSettinglayout->addRow(databaseNameLabel, imgDatabaseName);
-    expertSettinglayout->addRow(userNameLabel, imgUserName);
-    expertSettinglayout->addRow(passwordLabel, imgPassword);
-    expertSettinglayout->addRow(connectionOptionsLabel, imgConnectionOptions);
+    expertSettinglayout->addRow(imgHostNameLabel, imgHostName);
+    expertSettinglayout->addRow(imgHostPortLabel, imgHostPort);
+    expertSettinglayout->addRow(imgDatabaseNameLabel, imgDatabaseName);
+    expertSettinglayout->addRow(imgUserNameLabel, imgUserName);
+    expertSettinglayout->addRow(imgPasswordLabel, imgPassword);
+    expertSettinglayout->addRow(imgConnectionOptionsLabel, imgConnectionOptions);
     expertSettinglayout->addWidget(imgCheckDatabaseConnectionButton);
 
-    expertSettinglayout->addRow(hostNameLabel, tmbHostName);
-    expertSettinglayout->addRow(hostPortLabel, tmbHostPort);
-    expertSettinglayout->addRow(databaseNameLabel, tmbDatabaseName);
-    expertSettinglayout->addRow(userNameLabel, tmbUserName);
-    expertSettinglayout->addRow(passwordLabel, tmbPassword);
-    expertSettinglayout->addRow(connectionOptionsLabel, tmbConnectionOptions);
+    expertSettinglayout->addRow(tmbHostNameLabel, tmbHostName);
+    expertSettinglayout->addRow(tmbHostPortLabel, tmbHostPort);
+    expertSettinglayout->addRow(tmbDatabaseNameLabel, tmbDatabaseName);
+    expertSettinglayout->addRow(tmbUserNameLabel, tmbUserName);
+    expertSettinglayout->addRow(tmbPasswordLabel, tmbPassword);
+    expertSettinglayout->addRow(tmbConnectionOptionsLabel, tmbConnectionOptions);
     expertSettinglayout->addWidget(tmbCheckDatabaseConnectionButton);
     
     // FIXME:
-    vlay->addWidget(databaseTypeLabel);
+    vlay->addWidget(imgDatabaseTypeLabel);
     vlay->addWidget(imgDatabaseType);
-    vlay->addWidget(tmbDatabaseType);
     vlay->addWidget(d->databasePathLabel);
     vlay->addWidget(imgDatabasePathEdit);
+    vlay->addWidget(tmbDatabaseTypeLabel);
+    vlay->addWidget(tmbDatabaseType);
     vlay->addWidget(tmbDatabasePathEdit);
     vlay->addWidget(d->expertSettings);
     vlay->setSpacing(0);
