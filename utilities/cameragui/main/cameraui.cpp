@@ -494,11 +494,11 @@ void CameraUI::setupConnections()
 
     // -------------------------------------------------------------------------
 
-    connect(d->view, SIGNAL(signalSelected(const CamItemInfo&,bool)),
-            this, SLOT(slotItemsSelected(const CamItemInfo&,bool)));
+    connect(d->view, SIGNAL(signalSelected(CamItemInfo,bool)),
+            this, SLOT(slotItemsSelected(CamItemInfo,bool)));
 
-    connect(d->view, SIGNAL(signalFileView(const CamItemInfo&)),
-            this, SLOT(slotFileView(const CamItemInfo&)));
+    connect(d->view, SIGNAL(signalFileView(CamItemInfo)),
+            this, SLOT(slotFileView(CamItemInfo)));
 
     connect(d->view, SIGNAL(signalUpload(KUrl::List)),
             this, SLOT(slotUploadItems(KUrl::List)));
@@ -1372,7 +1372,8 @@ void CameraUI::slotDownloadAndDeleteAll()
 
 void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 {
-    if (!d->albumCustomizer->customDateFormatIsValid())
+    if (d->albumCustomizer->folderDateFormat() == AlbumCustomizer::CustomDateFormat &&
+        !d->albumCustomizer->customDateFormatIsValid())
     {
         KMessageBox::information(this, i18n("Your custom target album date format is not valid. Please check your settings..."));
         return;

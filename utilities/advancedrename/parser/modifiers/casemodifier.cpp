@@ -78,21 +78,21 @@ QString CaseModifier::firstupper(const QString& str2Modify)
 {
     QString result = str2Modify.toLower();
 
-    if (result[0].isLetter())
+    if (result.at(0).isLetter())
     {
-        result[0] = result[0].toUpper();
+        result[0] = result.at(0).toUpper();
     }
 
     for (int i = 0; i < result.length(); ++i)
     {
-        if ( result[i + 1].isLetter() &&
-             !result[i].isLetter()    &&
-             result[i] != '\''        &&
-             result[i] != '?'         &&
-             result[i] != '`'
+        if ( result.at(i + 1).isLetter() &&
+             !result.at(i).isLetter()    &&
+             result.at(i) != '\''        &&
+             result.at(i) != '?'         &&
+             result.at(i) != '`'
            )
         {
-            result[i + 1] = result[i + 1].toUpper();
+            result[i + 1] = result.at(i + 1).toUpper();
         }
     }
 

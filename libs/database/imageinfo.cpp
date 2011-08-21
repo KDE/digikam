@@ -129,7 +129,8 @@ ImageInfo::ImageInfo(const ImageListerRecord& record)
     m_data->formatCached           = true;
     m_data->creationDateCached     = true;
     m_data->modificationDateCached = true;
-    m_data->fileSizeCached         = true;
+    // field is only signed 32 bit in the protocol. -1 indicates value is larger, reread
+    m_data->fileSizeCached         = m_data->fileSize != -1;
     m_data->imageSizeCached        = true;
 }
 
@@ -345,7 +346,7 @@ qlonglong ImageInfo::fileSize() const
 
         if (!values.isEmpty())
         {
-            m_data.constCastData()->fileSize = values.first().toUInt();
+            //m_data.constCastData()->fileSize = values.first().toLongLong();
         }
 
         m_data.constCastData()->fileSizeCached = true;

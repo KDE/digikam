@@ -4422,9 +4422,19 @@ void AlbumDB::copyImageTags(qlonglong srcId, qlonglong dstId)
                             "SELECT ?, tagid "
                             "FROM ImageTags WHERE imageid=?;"),
                     dstId, srcId );
-    // leave empty tag list for now
-    d->db->recordChangeset(ImageTagChangeset(dstId, QList<int>(), ImageTagChangeset::Added));
 
+    d->db->execSql( QString("INSERT INTO ImageTagProperties "
+                            " (imageid, tagid, property, value) "
+                            "SELECT ?, tagid, property, value "
+                            "FROM ImageTagProperties WHERE imageid=?;"),
+                    dstId, srcId );
+
+    // leave empty tag list for now
+    d->db->recordChangeset(ImageTagChangeset(dstId, QList<int>(),
+                                             ImageTagChangeset::Added));
+
+    d->db->recordChangeset(ImageTagChangeset(dstId, QList<int>(),
+                                             ImageTagChangeset::PropertiesChanged));
 }
 
 bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)

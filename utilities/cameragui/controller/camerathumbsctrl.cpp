@@ -65,11 +65,11 @@ CameraThumbsCtrl::CameraThumbsCtrl(CameraController* ctrl, QObject* parent)
 {
     d->controller = ctrl;
 
-    connect(d->controller, SIGNAL(signalThumbInfo(QString, QString, CamItemInfo, QImage)),
-            this, SLOT(slotThumbInfo(QString, QString, CamItemInfo, QImage)));
+    connect(d->controller, SIGNAL(signalThumbInfo(QString,QString,CamItemInfo,QImage)),
+            this, SLOT(slotThumbInfo(QString,QString,CamItemInfo,QImage)));
 
-    connect(d->controller, SIGNAL(signalThumbInfoFailed(QString, QString, CamItemInfo)),
-            this, SLOT(slotThumbInfoFailed(QString, QString, CamItemInfo)));
+    connect(d->controller, SIGNAL(signalThumbInfoFailed(QString,QString,CamItemInfo)),
+            this, SLOT(slotThumbInfoFailed(QString,QString,CamItemInfo)));
 
     setCacheSize(200);
 }
@@ -137,8 +137,8 @@ void CameraThumbsCtrl::startKdePreviewJob(const KUrl& url)
 
     KIO::PreviewJob* job = KIO::filePreview(KUrl::List() << url, ThumbnailSize::Huge);
 
-    connect(job, SIGNAL(gotPreview(KFileItem, QPixmap)),
-            this, SLOT(slotGotKDEPreview(KFileItem, QPixmap)));
+    connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
+            this, SLOT(slotGotKDEPreview(KFileItem,QPixmap)));
 
     connect(job, SIGNAL(failed(KFileItem)),
             this, SLOT(slotFailedKDEPreview(KFileItem)));

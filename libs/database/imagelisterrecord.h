@@ -72,7 +72,6 @@ public:
     int                    albumID;
     int                    albumRootID;
     int                    rating;
-    //TODO: Change to qlonglong. Breaks binary protocol.
     int                    fileSize;
 
     qlonglong              imageID;

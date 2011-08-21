@@ -749,7 +749,7 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
                 fnt.setPointSize(fnt.pointSize()-4);
                 p.setFont(fnt);
                 p.setPen(subDateColor);
-                QString txt = QString(d->calendar->weekDayName(ref.date(), KCalendarSystem::ShortDayName)[0]);
+                QString txt = QString(d->calendar->weekDayName(ref.date(), KCalendarSystem::ShortDayName).at(0));
                 QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
                 p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
                            barRect.bottom()+br.height(), txt);
@@ -814,7 +814,7 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
                 fnt.setPointSize(fnt.pointSize()-4);
                 p.setFont(fnt);
                 p.setPen(subDateColor);
-                QString txt = QString(d->calendar->monthName(ref.date(), KCalendarSystem::ShortName)[0]);
+                QString txt = QString(d->calendar->monthName(ref.date(), KCalendarSystem::ShortName).at(0));
                 QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
                 p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
                            barRect.bottom()+br.height(), txt);

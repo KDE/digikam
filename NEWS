@@ -36,7 +36,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 184439 : Closing the "USB DISK DOWNLOAD from DISK" window updates the digikam folder view.
 025 ==> 253268 : digiKam crashes when starting to download pictures.
 026 ==> 216492 : Camera interface upload can't select a movie only image.
-027 ==> 274199 : Digikam crashed when using "inpainting" tool.
+027 ==> 274199 : digiKam crashed when using "inpainting" tool.
 028 ==> 278320 : Crash with "-graphicssystem raster".
 029 ==> 279551 : Wrong window title when deleting a search.
 030 ==> 271030 : Windows Live Photo Gallery people tagging Compatibility.
@@ -54,6 +54,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 042 ==> 189903 : Allow default Target Album for Image Download.
 043 ==> 259861 : One-click "Download New Items".
 044 ==> 144227 : Allow for fully customized album names when importing.
-045 ==> 279402 : focus textbox for identifying faces gets lost too easily (and other issues).
-046 ==> 
-
+045 ==> 279402 : Focus textbox for identifying faces gets lost too easily (and other issues).
+046 ==> 277796 : Build failure in the dcraw_emu sample.
+047 ==> 280240 : digiKam crash when attempting to view slideshow.
+048 ==> 280517 : Moving photo from an album to another leads to loose face tags.
+049 ==> 

@@ -214,8 +214,8 @@ void CameraIconView::setThumbControler(CameraThumbsCtrl* controler)
 {
     d->thumbCtrl = controler;
 
-    connect(d->thumbCtrl, SIGNAL(signalThumbInfoReady(const CamItemInfo&)),
-            this, SLOT(slotThumbInfoReady(const CamItemInfo&)));
+    connect(d->thumbCtrl, SIGNAL(signalThumbInfoReady(CamItemInfo)),
+            this, SLOT(slotThumbInfoReady(CamItemInfo)));
 }
 
 CachedItem CameraIconView::getThumbInfo(const CamItemInfo& itemInfo) const
