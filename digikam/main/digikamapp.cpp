@@ -207,7 +207,7 @@ DigikamApp::DigikamApp()
     if (d->config->group("General Settings").readEntry("Scan At Start", true) ||
         !CollectionScanner::databaseInitialScanDone())
     {
-        ScanController::instance()->completeCollectionScan(d->splashScreen);
+        ScanController::instance()->completeCollectionScanDeferFiles(d->splashScreen);
     }
 
     if (d->splashScreen)
