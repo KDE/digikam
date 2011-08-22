@@ -66,6 +66,7 @@ public:
         iconShowRatingBox(0),
         iconShowFormatBox(0),
         previewLoadFullImageSize(0),
+        previewShowIcons(0),
         showFolderTreeViewItemsCount(0),
         iconTreeThumbSize(0),
         leftClickActionComboBox(0),
@@ -87,6 +88,7 @@ public:
     QCheckBox*   iconShowRatingBox;
     QCheckBox*   iconShowFormatBox;
     QCheckBox*   previewLoadFullImageSize;
+    QCheckBox*   previewShowIcons;
     QCheckBox*   showFolderTreeViewItemsCount;
 
     KComboBox*   iconTreeThumbSize;
@@ -200,7 +202,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Misc Options"), panel);
+    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel);
     QGridLayout* grid3               = new QGridLayout(interfaceOptionsGroup);
 
     d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full-sized images."), interfaceOptionsGroup);
@@ -211,9 +213,13 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
                                                    "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
                                                    "is used instead of the embedded JPEG preview.</p>"));
 
+    d->previewShowIcons              = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
+    d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you don't want to see icons and text in the image preview."));
+
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(KDialog::spacingHint());
     grid3->addWidget(d->previewLoadFullImageSize, 0, 0, 1, 2);
+    grid3->addWidget(d->previewShowIcons,         1, 0, 1, 2);
 
     // --------------------------------------------------------
 
@@ -268,6 +274,7 @@ void SetupAlbumView::applySettings()
                                      d->leftClickActionComboBox->currentIndex());
 
     settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
+    settings->setPreviewShowIcons(d->previewShowIcons->isChecked());
     settings->setShowFolderTreeViewItemsCount(d->showFolderTreeViewItemsCount->isChecked());
     settings->saveSettings();
 }
@@ -314,6 +321,7 @@ void SetupAlbumView::readSettings()
     d->leftClickActionComboBox->setCurrentIndex((int)settings->getItemLeftClickAction());
 
     d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
+    d->previewShowIcons->setChecked(settings->getPreviewShowIcons());
     d->showFolderTreeViewItemsCount->setChecked(settings->getShowFolderTreeViewItemsCount());
 }
 

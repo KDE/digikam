@@ -106,6 +106,7 @@ public:
         tooltipShowAlbumCategory(false),
         tooltipShowAlbumCaption(false),
         previewLoadFullImageSize(false),
+        previewShowIcons(true),
         showThumbbar(false),
         showFolderTreeViewItemsCount(false),
         treeThumbnailSize(0),
@@ -177,6 +178,7 @@ public:
     static const QString                configToolTipsShowAlbumCategoryEntry;
     static const QString                configToolTipsShowAlbumCaptionEntry;
     static const QString                configPreviewLoadFullImageSizeEntry;
+    static const QString                configPreviewShowIconsEntry;
     static const QString                configShowThumbbarEntry;
     static const QString                configShowFolderTreeViewItemsCountEntry;
     static const QString                configEXIFRotateEntry;
@@ -256,6 +258,7 @@ public:
 
     // preview settings
     bool                                previewLoadFullImageSize;
+    bool                                previewShowIcons;
     bool                                showThumbbar;
 
     bool                                showFolderTreeViewItemsCount;
@@ -365,6 +368,7 @@ const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowAlbumCollec
 const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowAlbumCategoryEntry("ToolTips Show Album Category");
 const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowAlbumCaptionEntry("ToolTips Show Album Caption");
 const QString AlbumSettings::AlbumSettingsPrivate::configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size");
+const QString AlbumSettings::AlbumSettingsPrivate::configPreviewShowIconsEntry("Preview Show Icons");
 const QString AlbumSettings::AlbumSettingsPrivate::configShowThumbbarEntry("Show Thumbbar");
 const QString AlbumSettings::AlbumSettingsPrivate::configShowFolderTreeViewItemsCountEntry("Show Folder Tree View Items Count");
 const QString AlbumSettings::AlbumSettingsPrivate::configEXIFRotateEntry("EXIF Rotate");
@@ -490,6 +494,7 @@ void AlbumSettings::init()
     d->tooltipShowAlbumCaption      = true;
 
     d->previewLoadFullImageSize     = false;
+    d->previewShowIcons             = true;
     d->showThumbbar                 = true;
 
     d->recursiveAlbums              = false;
@@ -589,6 +594,7 @@ void AlbumSettings::readSettings()
     d->tooltipShowAlbumCaption      = group.readEntry(d->configToolTipsShowAlbumCaptionEntry,     true);
 
     d->previewLoadFullImageSize     = group.readEntry(d->configPreviewLoadFullImageSizeEntry,     false);
+    d->previewShowIcons             = group.readEntry(d->configPreviewShowIconsEntry,             true);
     d->showThumbbar                 = group.readEntry(d->configShowThumbbarEntry,                 true);
 
     d->showFolderTreeViewItemsCount = group.readEntry(d->configShowFolderTreeViewItemsCountEntry, false);
@@ -698,6 +704,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowAlbumCaptionEntry,     d->tooltipShowAlbumCaption);
 
     group.writeEntry(d->configPreviewLoadFullImageSizeEntry,     d->previewLoadFullImageSize);
+    group.writeEntry(d->configPreviewShowIconsEntry,             d->previewShowIcons);
     group.writeEntry(d->configShowThumbbarEntry,                 d->showThumbbar);
 
     group.writeEntry(d->configShowFolderTreeViewItemsCountEntry, d->showFolderTreeViewItemsCount);
@@ -1448,6 +1455,16 @@ void AlbumSettings::setPreviewLoadFullImageSize(bool val)
 bool AlbumSettings::getPreviewLoadFullImageSize() const
 {
     return d->previewLoadFullImageSize;
+}
+
+void AlbumSettings::setPreviewShowIcons(bool val)
+{
+    d->previewShowIcons = val;
+}
+
+bool AlbumSettings::getPreviewShowIcons() const
+{
+    return d->previewShowIcons;
 }
 
 void AlbumSettings::setRecurseAlbums(bool val)

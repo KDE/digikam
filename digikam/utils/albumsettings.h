@@ -290,6 +290,9 @@ public:
     void setPreviewLoadFullImageSize(bool val);
     bool getPreviewLoadFullImageSize() const;
 
+    void setPreviewShowIcons(bool val);
+    bool getPreviewShowIcons() const;
+
     void setShowFolderTreeViewItemsCount(bool val);
     bool getShowFolderTreeViewItemsCount() const;
 
