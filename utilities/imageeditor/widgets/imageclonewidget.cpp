@@ -54,11 +54,12 @@ public:
         sixteenBit(false),
         width(0),
         height(0),
+        timerID(0),
+        flicker(0),
         Border(0),
         pixmap(0),
         preveiwMask(0),
         maskImage(0),
-        preview(0),
         iface(0)
     {
     }
@@ -66,6 +67,8 @@ public:
     bool           sixteenBit;
     int            width;
     int            height;
+    int            timerID;
+    int            flicker;
     QRect          rect;
     int            Border;
     QColor         MASK_BG;     // background color of maskimage
@@ -81,7 +84,7 @@ public:
     DImg*          preveiwMask;
     DImg*          maskImage;
 //  DImg*          origImage;
-    DImg*          preview;
+    DImg           preview;
     ImageIface*    iface;
 
     CloneContainer settings;
@@ -90,59 +93,57 @@ public:
 ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settings)
     : QWidget(parent), d(new ImageCloneWidgetPriv)
 {
-      int w = 480, h = 320;
-      setMinimumSize(w, h);
-      setMouseTracking(true);
-      setAttribute(Qt::WA_DeleteOnClose);
+    int w = 480, h = 320;
+    setMinimumSize(w, h);
+    setMouseTracking(true);
+    setAttribute(Qt::WA_DeleteOnClose);
 
-      d->iface        = new ImageIface(w, h);
-//FIXME      d->iface->setPreviewType(useImageSelection);
-      uchar* data     = d->iface->getPreviewImage();
-      d->width        = d->iface->previewWidth();
-      d->height       = d->iface->previewHeight();
-      bool sixteenBit = d->iface->previewSixteenBit();
-      bool hasAlpha   = d->iface->previewHasAlpha();
-      d->preview      = new DImg(d->width, d->height, sixteenBit, hasAlpha, data);
-      d->preview->setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
-      delete [] data;
+    d->iface        = new ImageIface(w, h);
+//FIXME      
+    d->iface->setPreviewType(useImageSelection);
+    uchar* data     = d->iface->getPreviewImage();
+    d->width        = d->iface->previewWidth();
+    d->height       = d->iface->previewHeight();
+    bool sixteenBit = d->iface->previewSixteenBit();
+    bool hasAlpha   = d->iface->previewHasAlpha();
+    d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
+    d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+    delete [] data;
 
-      d->pixmap        = new QPixmap(w, h);
-      d->rect          = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
+    d->pixmap        = new QPixmap(w, h);
+    d->rect          = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
+    d->spot.setX( d->width  / 2 );
+    d->spot.setY( d->height / 2 );
+    // setMouseTracking(true);//alreadhave in imageguidewidget
+    d->centerPoint.setX(0);
+    d->centerPoint.setY(0);
+    d->startPoint.setX(0);
+    d->startPoint.setY(0);
+    d->dis.setX(0);
+    d->dis.setY(0);
+    //d->MASK_BG         = new QColor(255,255,255);
+    //d->MASK_C          = new QColor(0,0,0);
+    d->bgColor         = palette().color(QPalette::Base);
+    d->Border          = 10;
+    d->MASK_BG.setRgb(255,255,255,255);
+    d->MASK_C.setRgb(0,0,0,255);
+    //DColor* backColor  = new DColor(255,255,255,255,false);//fillt maskImage with white
+    //origImage = DImg(&imageIface()->getOriginalImg()->copy());
 
-      d->spot.setX( d->width  / 2 );
-      d->spot.setY( d->height / 2 );
+    w       = imageIface()->getOriginalImg()->width();
+    h       = imageIface()->getOriginalImg()->height();      
+    bool sixteen = imageIface()->getOriginalImg()->sixteenBit();
+    bool alpha   = imageIface()->getOriginalImg()->hasAlpha();
+    d->maskImage = new DImg(w, h, sixteen, alpha);
+    d->maskImage->fill(DColor(d->MASK_BG));
 
-      // setMouseTracking(true);//alreadhave in imageguidewidget
-      d->centerPoint.setX(0);
-      d->centerPoint.setY(0);
-      d->startPoint.setX(0);
-      d->startPoint.setY(0);
-      d->dis.setX(0);
-      d->dis.setY(0);
-//      d->MASK_BG         = new QColor(255,255,255);
-//      d->MASK_C          = new QColor(0,0,0);
-      d->bgColor         = palette().color(QPalette::Base);
-      d->Border          = 10;
-      d->MASK_BG.setRgb(255,255,255,255);
-      d->MASK_C.setRgb(0,0,0,255);
-      //DColor* backColor  = new DColor(255,255,255,255,false);//fillt maskImage with white
-      //origImage = DImg(&imageIface()->getOriginalImg()->copy());
-
-      w       = imageIface()->getOriginalImg()->width();
-      h       = imageIface()->getOriginalImg()->height();
-      
-      bool sixteen = imageIface()->getOriginalImg()->sixteenBit();
-      bool alpha   = imageIface()->getOriginalImg()->hasAlpha();
-      d->maskImage = new DImg(w, h, sixteen, alpha);
-      d->maskImage->fill(DColor(d->MASK_BG));
-
-      w       = d->preview->width();
-      h       = d->preview->height();
-      sixteen = d->preview->sixteenBit();
-      alpha   = d->preview->hasAlpha();
-      d->preveiwMask = new DImg(w, h, sixteen, alpha);
-      d->preveiwMask->fill(DColor(d->MASK_BG));
-      d->settings    = settings;
+    w       = d->preview.width();
+    h       = d->preview.height();
+    sixteen = d->preview.sixteenBit();
+    alpha   = d->preview.hasAlpha();
+    d->preveiwMask = new DImg(w, h, sixteen, alpha);
+    d->preveiwMask->fill(DColor(d->MASK_BG));
+    d->settings    = settings;
  }
 
 ImageCloneWidget::~ImageCloneWidget()
@@ -161,12 +162,7 @@ ImageCloneWidget::~ImageCloneWidget()
     if (d->maskImage)
     {
         delete d->maskImage;
-    }
-
-    if (d->preview)
-    {
-    delete d->preview;
-    }
+    } 
 
     delete d;
 }
@@ -185,17 +181,17 @@ void ImageCloneWidget::setBackgroundColor(const QColor& bg)
 void   ImageCloneWidget::setPreview()
 {
     uchar* data     = d->iface->getPreviewImage();
-    d->preview->detach();
-    d->preview->putImageData(data);
+    d->preview.detach();
+    d->preview.putImageData(data);
     delete [] data;
-    d->preview->setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+    d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
     d->width        = d->iface->previewWidth();
     d->height       = d->iface->previewHeight();
 
-    int  w       = d->preview->width();
-    int  h       = d->preview->height();
-    bool sixteen = d->preview->sixteenBit();
-    bool alpha   = d->preview->hasAlpha();
+    int  w       = d->preview.width();
+    int  h       = d->preview.height();
+    bool sixteen = d->preview.sixteenBit();
+    bool alpha   = d->preview.hasAlpha();
     d->preveiwMask->detach();
     d->preveiwMask = new DImg(w, h, sixteen, alpha);
     d->preveiwMask->fill(DColor(d->MASK_BG));
@@ -243,7 +239,7 @@ QPoint ImageCloneWidget::getDis() const
 
 QPoint ImageCloneWidget::getOriDis() 
 {
-    float ratio = d->iface->originalWidth()/d->preview->width();
+    float ratio = d->iface->originalWidth()/d->preview.width();
     QPoint p;
     p.setX(d->dis.x()*ratio);
     p.setY(d->dis.y()*ratio);
@@ -256,7 +252,7 @@ DImg* ImageCloneWidget::getOrigImage()
     return d->origImage;
 }
 
-DImg* ImageCloneWidget::getPreview()
+DImg ImageCloneWidget::getPreview()
 {
     return d->preview;
 }
@@ -272,14 +268,21 @@ DImg*  ImageCloneWidget::getPreviewMask() const
     return d->preveiwMask;
 }
 
-bool ImageCloneWidget::inimage(DImg *img, const int x, const int y ) 
+bool ImageCloneWidget::inimage(const DImg img, const int x, const int y ) 
+{
+    if ( x >= 0 && (uint)x < img.width() && y >= 0 && (uint)y < img.height())
+        return true;
+    else
+        return false;
+}
+
+bool ImageCloneWidget::inimage(DImg *img, const int x, const int y)
 {
     if ( x >= 0 && (uint)x < img->width() && y >= 0 && (uint)y < img->height())
         return true;
     else
         return false;
 }
-
 bool ImageCloneWidget::inBrushpixmap(QPixmap* brushmap, const int x, const int y)
 {
     if ( x >= 0 && x < brushmap->width() && y >= 0 && y < brushmap->height())
@@ -290,7 +293,7 @@ bool ImageCloneWidget::inBrushpixmap(QPixmap* brushmap, const int x, const int y
 
 void ImageCloneWidget::TreateAsBordor(DImg* image, const int x, const int y)
 {
-    float ratio = d->iface->originalWidth()/d->preview->width();
+    float ratio = d->iface->originalWidth()/d->preview.width();
     float alpha = d->settings.opacity/100; // brush.alpha between 0 and 100
     DColor forgcolor;
     DColor bacgcolor;
@@ -300,7 +303,7 @@ void ImageCloneWidget::TreateAsBordor(DImg* image, const int x, const int y)
          ((y-getOriDis().y()) < image->height() && 0<= (y-getOriDis().y()))
        )
     {
-        forgcolor = d->preview->getPixelColor(0,y-getOriDis().y());
+        forgcolor = d->preview.getPixelColor(0,y-getOriDis().y());
     }
     else if ( ((int)image->width()-1 <= x-getOriDis().x()) &&
               (x-getOriDis().x()< (image->width()+d->Border)) &&
@@ -308,23 +311,23 @@ void ImageCloneWidget::TreateAsBordor(DImg* image, const int x, const int y)
               (0<= y-getOriDis().y())
             )
     {
-        forgcolor = d->preview->getPixelColor(d->preview->width()-1,(y-getOriDis().y())/ratio);
+        forgcolor = d->preview.getPixelColor(d->preview.width()-1,(y-getOriDis().y())/ratio);
 
     }
     else if ( (0 <= x-getOriDis().x() && x-getOriDis().x()< image->width()) &&
               (-d->Border< y-getOriDis().y() && y-getOriDis().y() <= 0)
             )
     {
-        forgcolor = d->preview->getPixelColor((x-getOriDis().x())/ratio,0);
+        forgcolor = d->preview.getPixelColor((x-getOriDis().x())/ratio,0);
     }
     else if ( (0 <= x-getOriDis().x() && x-getOriDis().x()< image->width()) &&
               (image->height()-1< y-getOriDis().y() &&  y-getOriDis().y()< (image->height()+d->Border))
             )
     {
-        forgcolor = d->preview->getPixelColor((x-getOriDis().x())/ratio,d->preview->height()-1);
+        forgcolor = d->preview.getPixelColor((x-getOriDis().x())/ratio,d->preview.height()-1);
     }
 
-    bacgcolor = d->preview->getPixelColor(x/ratio,y/ratio);
+    bacgcolor = d->preview.getPixelColor(x/ratio,y/ratio);
     newcolor.setRed(forgcolor.red()*alpha + bacgcolor.red()*(1-alpha)) ;
     newcolor.setGreen(forgcolor.green()*alpha + bacgcolor.green()*(1-alpha));
     newcolor.setBlue(forgcolor.blue()*alpha + bacgcolor.blue()*(1-alpha));
@@ -334,7 +337,7 @@ void ImageCloneWidget::TreateAsBordor(DImg* image, const int x, const int y)
     pre.setX(x*width()/d->iface->originalWidth());
     pre.setY(y*height()/d->iface->originalHeight());
 
-    d->preview->setPixelColor(pre.x(),pre.y(),newcolor);
+    d->preview.setPixelColor(pre.x(),pre.y(),newcolor);
     d->preveiwMask->setPixelColor(pre.x(),pre.y(),DColor(d->MASK_C));
 
     // origImage.setPixelColor(x,y,newcolor);
@@ -344,9 +347,9 @@ void ImageCloneWidget::TreateAsBordor(DImg* image, const int x, const int y)
 void ImageCloneWidget::addToMask(const QPoint& point)
 {
     QPoint p;
-    float ratio = d->iface->originalWidth()/d->preview->width();
-    p.setX(point.x()*d->iface->originalWidth()/d->preview->width()) ;
-    p.setY(point.y()*d->iface->originalHeight()/d->preview->height()) ;
+    float ratio = d->iface->originalWidth()/d->preview.width();
+    p.setX(point.x()*d->iface->originalWidth()/d->preview.width()) ;
+    p.setY(point.y()*d->iface->originalHeight()/d->preview.height()) ;
     int mainDia = d->settings.mainDia*ratio;
 
     int mapDisx = p.x() - mainDia/2;
@@ -380,7 +383,7 @@ void ImageCloneWidget::addToMask(const QPoint& point)
                             pre.setY(j*height()/d->iface->originalHeight());
                             d->preveiwMask->setPixelColor(pre.x(),pre.y(),DColor(d->MASK_C));
 
-                            DColor forgcolor = d->preview->getPixelColor(i/ratio-d->dis.x(),j/ratio-d->dis.y());
+                            DColor forgcolor = d->preview.getPixelColor(i/ratio-d->dis.x(),j/ratio-d->dis.y());
                             DColor bacgcolor = d->iface->getOriginalImg()->getPixelColor(i/ratio, j/ratio);
                             DColor newcolor;
                             newcolor.setRed(forgcolor.red()*alpha + bacgcolor.red()*(1-alpha)) ;
@@ -388,7 +391,7 @@ void ImageCloneWidget::addToMask(const QPoint& point)
                             newcolor.setBlue(forgcolor.blue()*alpha + bacgcolor.blue()*(1-alpha));
                             newcolor.setAlpha(forgcolor.alpha());
 
-                            d->preview->setPixelColor(pre.x(),pre.y(),newcolor);
+                            d->preview.setPixelColor(pre.x(),pre.y(),newcolor);
                         //  origImage.setPixelColor(i,j,newcolor);
                         }
                         else
@@ -411,6 +414,7 @@ void ImageCloneWidget::mousePressEvent(QMouseEvent* e)
             d->spot.setX(e->x()-d->rect.x());
             d->spot.setY(e->y()-d->rect.y());
             //QPoint p = getSpotPosition();
+            kDebug()<<"mousePressEvent is called";
             if(inimage(d->preview, d->spot.x(), d->spot.y()))
             {
                 if(d->settings.drawMode)
@@ -447,6 +451,7 @@ void ImageCloneWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if (e->button() == Qt::LeftButton)
     {
+        kDebug()<<"mousePressEvent is called";
         if (d->rect.contains(e->x(), e->y()))
         {
             d->spot.setX(e->x()-d->rect.x());
@@ -459,12 +464,54 @@ void ImageCloneWidget::mouseMoveEvent(QMouseEvent* e)
 }
 
 //---------------Same as ImageGuideWidget-----------
+
+void ImageCloneWidget::timerEvent(QTimerEvent* e)
+{
+    if (e->timerId() == d->timerID)
+    {
+        if (d->flicker == 5)
+        {
+            d->flicker=0;
+        }
+        else
+        {
+            d->flicker++;
+        }
+
+        updatePreview();
+    }
+    else
+    {
+        QWidget::timerEvent(e);
+    }
+}
+
+void ImageCloneWidget::timerEvent(QTimerEvent* e)
+{
+    if (e->timerId() == d->timerID)
+    {
+        if (d->flicker == 5)
+        {
+            d->flicker=0;
+        }
+        else
+        {
+            d->flicker++;
+        }
+
+        updatePreview();
+    }
+    else
+    {
+        QWidget::timerEvent(e);
+    }
+}
+
 void ImageCloneWidget::resizeEvent(QResizeEvent *e)
 {
     blockSignals(true);
     delete d->pixmap;
-    delete d->preview;
-
+    
     int w     = e->size().width();
     int h     = e->size().height();
     //old_w = d->width;
@@ -475,8 +522,9 @@ void ImageCloneWidget::resizeEvent(QResizeEvent *e)
     d->height       = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = new DImg(d->width, d->height, sixteenBit, hasAlpha, data);
-    d->preview->setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+    d->preview.detach();
+    d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
+    d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
     delete [] data;
 
     d->pixmap         = new QPixmap(w, h);

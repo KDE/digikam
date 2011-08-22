@@ -82,7 +82,8 @@ public Q_SLOTS:
 
 private:
 
-    bool    inimage(DImg* img, const int x, const int y);
+    bool    inimage(DImg img, const int x, const int y);
+    bool    inimage(DImg *img, const int x, const int y);
     bool    inBrushpixmap(QPixmap* brushmap, const int x, const int y);
 
     void    TreateAsBordor(DImg* image, const int x, const int y);
@@ -91,9 +92,10 @@ private:
 
     void    paintEvent(QPaintEvent*);
     void    resizeEvent(QResizeEvent*);
+    void    timerEvent(QTimerEvent*);
     //void    timerEvent(QTimerEvent*);
     void    updatePixmap();
-
+    void    timerEvent(QTimerEvent*);
     void    mousePressEvent(QMouseEvent*);
     void    mouseReleaseEvent(QMouseEvent*);
     void    mouseMoveEvent(QMouseEvent*);
