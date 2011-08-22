@@ -281,7 +281,6 @@ CloneSettings::CloneSettings(QWidget* parent)
     connect(d->horizontalSlider_MainDiameter, SIGNAL(valueChanged(int)),
             d->spinBox_MainDiameter, SLOT(setValue(int)));
     */
-
     connect(pushButton1, SIGNAL(pressed()),
             this,SLOT(slotSelectModeChanged()));
 
