@@ -149,7 +149,8 @@ void CloneTool::slotDrawingComplete()
     CloneFilter*  previewFilter = new CloneFilter(orimg, desimg, d->previewWidget->getPreviewMask(), dis);
     setFilter(previewFilter);    
     d->previewRImage.detach();
-    d->previewRImage = previewFilter->getTargetImage();
+    //d->previewRImage = previewFilter->getTargetImage(); //FIXME
+    d->previewRImage = filter()->getTargetImage();
     //if(!data)
     //    return;    
     //d->previewRImage->putImageData(data);
@@ -165,7 +166,8 @@ void CloneTool::slotDrawingComplete()
     setFilter(orignalFilter);
     // uchar* data1 = previewFilter->getResultImg()->bits();
     d->resultImage.detach();
-    d->resultImage = previewFilter->getTargetImage ();
+    //d->resultImage = previewFilter->getTargetImage (); //FIXME
+    d->resultImage = filter()->getTargetImage();
     // if(!data)
     //    return;    
     // d->resultImage->putImageData(data);
