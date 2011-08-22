@@ -201,6 +201,8 @@ void CloneTool::slotResetSettings()
     slotEffect();
 }
 
+//FIXME
+/*
 void CloneTool::prepareEffect()
 {
 ///*  
@@ -227,6 +229,7 @@ if(d->settingsView->getDrawEnable())
 }
 
 }
+*/
 
 void CloneTool::prepareFinal()
 {

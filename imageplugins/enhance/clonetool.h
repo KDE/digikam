@@ -52,7 +52,7 @@ private:
 
     void readSettings();
     void writeSettings();
-    void prepareEffect();
+    //void prepareEffect();//FIXME
     void prepareFinal();
     void putPreviewData();
     void putFinalData();
