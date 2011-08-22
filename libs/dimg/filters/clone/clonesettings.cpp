@@ -123,8 +123,9 @@ CloneSettings::CloneSettings(QWidget* parent)
     BrushShapeEdit->setGeometry(QRect(100, 50, 151, 20));
 
     QLabel* label2            = new QLabel();
-    label2->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/clone_brushshape.png")));
-
+    QPixmap Brushmap;
+    Brushmap.load(KStandardDirs::locate("data", QString("digikam/icons/hicolor/32x32/actions/clone_brushshape.png"))); 
+    label2->setPixmap(Brushmap);
     //----------------Brushshape selection------------------------------
 
     QScrollArea* scrollAreaBrushShape = new QScrollArea(parent);
@@ -140,7 +141,8 @@ CloneSettings::CloneSettings(QWidget* parent)
     scrollAreaBrushShape->setFixedHeight(130);
 
     QButtonGroup* brushGroup = new QButtonGroup(scrollAreaBrushShape);
-
+    brushGroup->setExclusive(true);
+    brushGroup->hide();
     QGridLayout* gridLayout  = new QGridLayout(scrollAreaBrushShape);
     gridLayout->setSpacing(0);
     gridLayout->setContentsMargins(11, 11, 11, 11);
@@ -179,7 +181,7 @@ CloneSettings::CloneSettings(QWidget* parent)
         QString filename = nameFilters.at(i).toLocal8Bit().constData();
         kDebug() << filename;
         QPixmap iconMap;
-        iconMap.load(filename);
+        iconMap.load(path+filename);
 
         //------------------------------debug info---------------------
         /* int map_width = 0;
@@ -216,14 +218,18 @@ CloneSettings::CloneSettings(QWidget* parent)
     // KHBox*  modeBox = new KHBox(parent);
 
     QPushButton* pushButton1 = new QPushButton(parent);
-    pushButton1->setIcon(QIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/clone_selectButton.png"))));
+    QPixmap pushBt_Map1;
+    pushBt_Map1.load(KStandardDirs::locate("data", QString("digikam/icons/hicolor/32x32/actions/clone_selectButton.png"))); 
+    pushButton1->setIcon(QIcon(pushBt_Map1));
     pushButton1->setToolTip(i18n("Select a source point of the source area."));
     pushButton1->setVisible(true);
     pushButton1->setIconSize(QSize(46, 48));
     pushButton1->setFixedSize(31, 31);
 
     QPushButton* pushButton2 = new QPushButton(parent);
-    pushButton2->setIcon(QIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/clone_drawButton.png"))));
+    QPixmap pushBt_Map2;
+    pushBt_Map2.load(KStandardDirs::locate("data", QString("digikam/icons/hicolor/32x32/actions/clone_drawButton.png")));
+    pushButton2->setIcon(QIcon(pushBt_Map2));
     pushButton2->setToolTip(i18n("Start to draw a stroke. To use this you should first click the left button to select a point"));
     pushButton2->setVisible(true);
     pushButton2->setIconSize(QSize(46, 48));
@@ -244,7 +250,8 @@ CloneSettings::CloneSettings(QWidget* parent)
     d->opacityInput->setDefaultValue(100);
     d->opacityInput->setWhatsThis(i18n("Set the opacity of the brush"));
 
-    globalLayout->addWidget(label1,               0,  0, 1, 2);
+/*
+    globalLayout-> addWidget(label1,              0,  0, 1, 2);
     globalLayout->addWidget(BrushShapeEdit,       0,  2, 1, 4);
     globalLayout->addWidget(label2,               1,  0, 2, 2);
     globalLayout->addWidget(scrollAreaBrushShape, 1,  2, 4, 4);
@@ -255,6 +262,19 @@ CloneSettings::CloneSettings(QWidget* parent)
     globalLayout->addWidget(d->diameterInput,     8,  2, 1, 5);
     globalLayout->addWidget(label5,               9,  0, 1, 2);
     globalLayout->addWidget(d->opacityInput,      10, 2, 1, 5);
+*/
+    globalLayout->addWidget(label1,              0,  0, 1, 1);
+    globalLayout->addWidget(BrushShapeEdit,       0,  1, 1, 2);
+    globalLayout->addWidget(label2,               1,  0, 2, 1);
+    globalLayout->addWidget(scrollAreaBrushShape, 1,  1, 4, 2);
+    globalLayout->addWidget(label3,               5,  0, 1, 1);
+    globalLayout->addWidget(pushButton1,          6,  1, 1, 1);
+    globalLayout->addWidget(pushButton2,          6,  2, 1, 1);
+    globalLayout->addWidget(label4,               7,  0, 1, 1);
+    globalLayout->addWidget(d->diameterInput,     8,  1, 1, 2);
+    globalLayout->addWidget(label5,               9,  0, 1, 1);
+    globalLayout->addWidget(d->opacityInput,      10, 1, 1, 2);
+
     globalLayout->setRowStretch(11, 10);
 
     /*
