@@ -120,7 +120,7 @@ CloneSettings::CloneSettings(QWidget* parent)
 
     QLabel* label1            = new QLabel(i18n("BrushShape:"));
     QLineEdit* BrushShapeEdit = new QLineEdit(parent);
-    BrushShapeEdit->setGeometry(QRect(100, 50, 151, 20));
+    BrushShapeEdit->setGeometry(QRect(100, 50, 130, 20));
 
     QLabel* label2            = new QLabel();
     QPixmap Brushmap;
@@ -304,6 +304,11 @@ CloneSettings::CloneSettings(QWidget* parent)
 CloneSettings::~CloneSettings()
 {
     delete d;
+}
+
+bool CloneSettings::getDrawEnable()  const
+{
+    return d->drawEnable;
 }
 
 void CloneSettings::setSettings(const CloneContainer& settings)

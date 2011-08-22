@@ -58,6 +58,7 @@ public:
     void writeSettings(KConfigGroup& group);
 
     void blockWidgetSignals(bool b);
+    bool getDrawEnable() const;
 
 Q_SIGNALS:
 
