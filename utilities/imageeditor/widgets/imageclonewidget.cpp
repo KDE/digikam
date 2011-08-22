@@ -442,7 +442,7 @@ void ImageCloneWidget::mouseReleaseEvent(QMouseEvent* e)
 {
     if (d->rect.contains(e->x(), e->y()))
     {
-        if(d->settings.selectMode)
+        if(d->settings.drawMode)
             emit signalDrawingComplete();
     }
 }
