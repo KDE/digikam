@@ -54,13 +54,14 @@ CloneFilter::CloneFilter(QObject* parent)
     initFilter();
 }
 
-CloneFilter::CloneFilter(DImg* originalImage, DImg* maskImage, const QPoint& dis, QObject* parent)
-    :DImgThreadedFilter(originalImage, parent, "CloneFilter")
+CloneFilter::CloneFilter(const DImg & orgImage,const DImg & destImage, DImg* maskImage, const QPoint& dis, QObject* parent)
+    :DImgThreadedFilter(parent, "CloneFilter")
 {
     m_dis           = dis;
-    m_originalImage = originalImage;
+    setOriginalImage (orgImage);  
+    m_destImage     = destImage;
     m_maskImage     = maskImage;
-    MASK_BG       = QColor(255,255,255);
+    MASK_BG         = QColor(255,255,255);
 
     initFilter();
 }
@@ -72,9 +73,9 @@ CloneFilter::~CloneFilter()
     cancelFilter();
 }
 
-bool CloneFilter::inimage( DImg *img, int x, int y )
+bool CloneFilter::inimage( DImg img, int x, int y )
 {
-    if ( x >= 0 && (uint)x < img->width() && y >= 0 && (uint)y < img->height() )
+    if ( x >= 0 && (uint)x < img.width() && y >= 0 && (uint)y < img.height() )
         return true;
     else
         return false;
@@ -162,9 +163,9 @@ void CloneFilter::filterImage()
 
     }
 
-    int width  = m_originalImage->width();
-    int height = m_originalImage->height();
-    float clip = m_originalImage->sixteenBit() ? 65535.0 : 255.0;
+    int width  = m_orgImage.width();
+    int height = m_orgImage.height();
+    float clip = m_orgImage.sixteenBit() ? 65535.0 : 255.0;
 
     for(int c = 0; c < 3; c++)
     {
@@ -180,7 +181,7 @@ void CloneFilter::filterImage()
     {
         for(int x = 0; x < width; x++)
         {
-            col  = m_originalImage->getPixelColor(x,y);
+            col  = m_orgImage.getPixelColor(x,y);
 
             OriImg[0][j] = col.red();
             OriImg[1][j] = col.green();
@@ -203,7 +204,7 @@ void CloneFilter::filterImage()
     {
         for(int x = 0; x < width; x++)
         {
-            if(inimage(m_originalImage, x-m_dis.x(), y-m_dis.y()))
+            if(inimage(m_orgImage, x-m_dis.x(), y-m_dis.y()))
             {
                 desImg[0][y*width + x] = (float)OriImg[0][(y-m_dis.y())*width + x-m_dis.x()];
                 desImg[1][y*width + x] = (float)OriImg[1][(y-m_dis.y())*width + x-m_dis.x()];
@@ -378,7 +379,7 @@ void CloneFilter::filterImage()
         col.setGreen((int)(I[1][y*width+x ]* clip));
         col.setBlue((int)(I[2][y*width+x]*clip));
         col.setAlpha(255);
-        m_resultImage->setPixelColor(x,y,col);
+        m_destImage.setPixelColor(x,y,col);
     }
 }
 
@@ -516,7 +517,7 @@ void CloneFilter::filterImage()
         col.setGreen((int)(I[1][y*width+x ]* clip));
         col.setBlue((int)(I[2][y*width+x]*clip));
         col.setAlpha(255);
-        m_resultImage->setPixelColor(x,y,col);
+        m_destImage->setPixelColor(x,y,col);
     }
 
     // Free buffers.
@@ -549,11 +550,11 @@ FilterAction CloneFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    QImage m_oriImage = m_originalImage->copyQImage();
+    //FIXME QImage m_oriImage = m_orgImage.copyQImage();
     QImage m_mask     = m_maskImage->copyQImage();
 
     action.addParameter("distancePoint", m_dis);
-    action.addParameter("originalImage", m_oriImage);  //need fixed, maybe parameters cannot be transfered !!!!
+    action.addParameter("originalImage", m_orgImage.copyQImage());  //need fixed, maybe parameters cannot be transfered !!!!
     action.addParameter("maskImage",     m_mask);
 
     return action;
@@ -562,7 +563,7 @@ FilterAction CloneFilter::filterAction()
 void CloneFilter::readParameters(const FilterAction& action)
 {
     m_dis           = action.parameter("distancePoint").toPoint();
-    m_originalImage = new DImg(action.parameter("originalImage").value<QImage>());
+    m_orgImage      = DImg(action.parameter("originalImage").value<QImage>());
     m_maskImage     = new DImg(action.parameter("maskImage").value<QImage>());   
  /*   QVariant tempImg = action.parameter("originalImage").value<QImage>();
     tempImg.convert(QVariant::Image);
@@ -572,17 +573,19 @@ void CloneFilter::readParameters(const FilterAction& action)
     tempImg.convert(QVariant::Image);*/
 
 }
-
+//---------use getTargetImage () frome DImgThreadedFilter instead-----
+/*
 DImg* CloneFilter::getResultImg() const
 {
     return m_resultImage;
 }
-
+*/
+//===================================================================================
 void CloneFilter::divergents(float* I[3], float* O[3])
 {
 
-    int h = m_originalImage->height();
-    int w = m_originalImage->width();
+    int h = m_orgImage.height();
+    int w = m_orgImage.width();
 
     for (int y = 1; y < h-1; y++)
     {

@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT CloneFilter : public DImgThreadedFilter
 public:
 
     explicit CloneFilter(QObject* parent = 0);
-    explicit CloneFilter(DImg* originalImage, DImg* maskImage, const QPoint& dis, QObject* parent=0);
+    explicit CloneFilter(const DImg & orgImage,const DImg & destImage, DImg* maskImage, const QPoint& dis, QObject* parent=0);
 
     ~CloneFilter();
 
@@ -74,17 +74,15 @@ public:
         return FilterIdentifier();
     }
 
-    //FIXME
-
-    virtual FilterAction filterAction();
+ ///*FIXME  
+    virtual FilterAction    filterAction();
     void    readParameters(const FilterAction& action);
-    DImg* getResultImg() const;
-
+    //FIXME DImg* getResultImg() const; //use getTargetImage () frome DImgThreadedFilter instead
 private:
 
     void filterImage();
     void divergents(float* I[3], float* O[3]);
-    bool inimage(DImg* img, int x, int y );
+    bool inimage(DImg img, int x, int y );
     bool inBrushpixmap(QPixmap* brushmap, int x, int y);
     bool SOR(double **A, double *b, double *x, int N, double w, int maxstep, double e); 
 
@@ -92,9 +90,11 @@ private:
 
     QColor MASK_BG;
     QPoint m_dis;
-    DImg*  m_originalImage; // original image
     DImg*  m_maskImage;     // mask image
-    DImg*  m_resultImage;
+    //-----use m_orgImage and m_destImage from DImgThreadedFilter instead
+    //DImg*  m_originalImage; // original image
+    //DImg*  m_resultImage;
+    //------------------------------------------------------------
 };
 
 } // namespace Digikam
