@@ -117,17 +117,18 @@ CloneTool::CloneTool(QObject* parent)
     //uchar* data      = d->previewWidget->imageIface()->getOriginalImg()->bits();
     //if(!data)
     //{
-        d->origImage = d->previewWidget->imageIface()->getOriginalImg()->copyImageData();
-        d->origImage.setIccProfile( d->previewWidget->imageIface()->getOriginalImg()->getIccProfile());
+    d->origImage = d->previewWidget->imageIface()->getOriginalImg()->copyImageData();
+    d->origImage.setIccProfile( d->previewWidget->imageIface()->getOriginalImg()->getIccProfile());
   
     //==========================================================================================================
-
-    init();
-
     // -------------------------------------------------------------
     connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotTimer()));
     connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotSettingsChanged()));
     connect(d->previewWidget,SIGNAL(signalDrawingComplete()),this,SLOT(slotDrawingComplete()));
+    
+    init();
+
+
 }
 
 CloneTool::~CloneTool()
@@ -205,7 +206,7 @@ void CloneTool::slotResetSettings()
 /*
 void CloneTool::prepareEffect()
 {
-///*  
+
 if(d->settingsView->getDrawEnable())
 {
   d->previewWidget->setContainer(d->settingsView->settings());
@@ -250,9 +251,9 @@ void CloneTool::putPreviewData()
   ImageIface* iface = d->previewWidget->imageIface();
   DImg previewImg   = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
   //iface->putPreviewImage(previewImg.bits());
-  uchar* data       = previewImg.stripImageData();
-  iface->putPreviewImage(data);
-  delete []data;
+  //uchar* data       = previewImg.stripImageData();
+  iface->putPreviewImage(previewImg.bits());
+  //delete []data;
   d->previewWidget->updatePreview();
 }
 
