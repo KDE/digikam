@@ -177,41 +177,41 @@ void SetupDatabase::applySettings()
             DatabaseParameters internalServerParameters = DatabaseParameters::defaultParameters(d->databaseWidget->imgCurrentDatabaseType());
             settings->setInternalDatabaseServer(true);
 
-            settings->setDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
-            settings->setDatabaseName(internalServerParameters.imgDatabaseName);
-            settings->setDatabaseConnectoptions(internalServerParameters.imgConnectOptions);
-            settings->setDatabaseHostName(internalServerParameters.imgHostName);
-            settings->setDatabasePort(internalServerParameters.imgPort);
-            settings->setDatabaseUserName(internalServerParameters.imgUserName);
-            settings->setDatabasePassword(internalServerParameters.imgPassword);
+            settings->setImgDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
+            settings->setImgDatabaseName(internalServerParameters.imgDatabaseName);
+            settings->setImgDatabaseConnectoptions(internalServerParameters.imgConnectOptions);
+            settings->setImgDatabaseHostName(internalServerParameters.imgHostName);
+            settings->setImgDatabasePort(internalServerParameters.imgPort);
+            settings->setImgDatabaseUserName(internalServerParameters.imgUserName);
+            settings->setImgDatabasePassword(internalServerParameters.imgPassword);
 
-//             settings->setTmbDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
-//             settings->setTmbDatabaseName(internalServerParameters.tmbDatabaseName);
-//             settings->setTmbDatabaseConnectoptions(internalServerParameters.tmbConnectOptions);
-//             settings->setTmbDatabaseHostName(internalServerParameters.tmbHostName);
-//             settings->setTmbDatabasePort(internalServerParameters.tmbPort);
-//             settings->setTmbDatabaseUserName(internalServerParameters.tmbUserName);
-//             settings->setTmbDatabasePassword(internalServerParameters.tmbPassword);
+            settings->setTmbDatabaseType(d->databaseWidget->tmbCurrentDatabaseType());
+            settings->setTmbDatabaseName(internalServerParameters.tmbDatabaseName);
+            settings->setTmbDatabaseConnectoptions(internalServerParameters.tmbConnectOptions);
+            settings->setTmbDatabaseHostName(internalServerParameters.tmbHostName);
+            settings->setTmbDatabasePort(internalServerParameters.tmbPort);
+            settings->setTmbDatabaseUserName(internalServerParameters.tmbUserName);
+            settings->setTmbDatabasePassword(internalServerParameters.tmbPassword);
         }
         else
         {
             settings->setInternalDatabaseServer(d->databaseWidget->internalServer->isChecked());
 
-            settings->setDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
-            settings->setDatabaseName(d->databaseWidget->imgDatabaseName->text());
-            settings->setDatabaseConnectoptions(d->databaseWidget->imgConnectionOptions->text());
-            settings->setDatabaseHostName(d->databaseWidget->imgHostName->text());
-            settings->setDatabasePort(d->databaseWidget->imgHostPort->text().toInt());
-            settings->setDatabaseUserName(d->databaseWidget->imgUserName->text());
-            settings->setDatabasePassword(d->databaseWidget->imgPassword->text());
+            settings->setImgDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
+            settings->setImgDatabaseName(d->databaseWidget->imgDatabaseName->text());
+            settings->setImgDatabaseConnectoptions(d->databaseWidget->imgConnectionOptions->text());
+            settings->setImgDatabaseHostName(d->databaseWidget->imgHostName->text());
+            settings->setImgDatabasePort(d->databaseWidget->imgHostPort->text().toInt());
+            settings->setImgDatabaseUserName(d->databaseWidget->imgUserName->text());
+            settings->setImgDatabasePassword(d->databaseWidget->imgPassword->text());
 
-//             settings->setTmbDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
-//             settings->setTmbDatabaseName(d->databaseWidget->tmbDatabaseName->text());
-//             settings->setTmbDatabaseConnectoptions(d->databaseWidget->tmbConnectionOptions->text());
-//             settings->setTmbDatabaseHostName(d->databaseWidget->tmbHostName->text());
-//             settings->setTmbDatabasePort(d->databaseWidget->tmbHostPort->text().toInt());
-//             settings->setTmbDatabaseUserName(d->databaseWidget->tmbUserName->text());
-//             settings->setTmbDatabasePassword(d->databaseWidget->tmbPassword->text());
+            settings->setTmbDatabaseType(d->databaseWidget->tmbCurrentDatabaseType());
+            settings->setTmbDatabaseName(d->databaseWidget->tmbDatabaseName->text());
+            settings->setTmbDatabaseConnectoptions(d->databaseWidget->tmbConnectionOptions->text());
+            settings->setTmbDatabaseHostName(d->databaseWidget->tmbHostName->text());
+            settings->setTmbDatabasePort(d->databaseWidget->tmbHostPort->text().toInt());
+            settings->setTmbDatabaseUserName(d->databaseWidget->tmbUserName->text());
+            settings->setTmbDatabasePassword(d->databaseWidget->tmbPassword->text());
         }
 
         settings->saveSettings();

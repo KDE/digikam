@@ -404,7 +404,7 @@ void AlbumManager::cleanUp()
     }
 }
 
-bool AlbumManager::databaseEqual(const QString& dbType, const QString& dbName,
+bool AlbumManager::imgDatabaseEqual(const QString& dbType, const QString& dbName,
                                  const QString& dbHostName, int dbPort, bool dbInternalServer) const
 {
     DatabaseParameters params = DatabaseAccess::parameters();
@@ -414,6 +414,18 @@ bool AlbumManager::databaseEqual(const QString& dbType, const QString& dbName,
            params.imgHostName       == dbHostName      &&
            params.imgPort           == dbPort          &&
            params.internalServer == dbInternalServer;
+	   //FIXME: dbInternalServer
+}
+
+bool AlbumManager::tmbDatabaseEqual(const QString& dbType, const QString& dbName,
+                                 const QString& dbHostName, int dbPort) const
+{
+    DatabaseParameters params = DatabaseAccess::parameters();
+
+    return params.tmbDatabaseType   == dbType          &&
+           params.tmbDatabaseName   == dbName          &&
+           params.tmbHostName       == dbHostName      &&
+           params.tmbPort           == dbPort;
 }
 
 static bool moveToBackup(const QFileInfo& info)

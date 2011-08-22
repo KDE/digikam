@@ -2372,12 +2372,27 @@ void DigikamApp::slotSetupChanged()
     //if(AlbumSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
     //  d->view->clearHistory();
 
-    if (!AlbumManager::instance()->databaseEqual(AlbumSettings::instance()->getDatabaseType(),
-                                                 AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseHostName(),
-                                                 AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getInternalDatabaseServer()))
+    //FIXME: getInternalDatabaseServer
+    if (!AlbumManager::instance()->imgDatabaseEqual(AlbumSettings::instance()->getImgDatabaseType(),
+                                                 AlbumSettings::instance()->getImgDatabaseName(),
+						 AlbumSettings::instance()->getImgDatabaseHostName(),
+                                                 AlbumSettings::instance()->getImgDatabasePort(),
+						 AlbumSettings::instance()->getInternalDatabaseServer()))
     {
         AlbumManager::instance()->changeDatabase(AlbumSettings::instance()->getDatabaseParameters());
     }
+
+    if (!AlbumManager::instance()->tmbDatabaseEqual(AlbumSettings::instance()->getTmbDatabaseType(),
+                                                 AlbumSettings::instance()->getTmbDatabaseName(),
+						 AlbumSettings::instance()->getTmbDatabaseHostName(),
+                                                 AlbumSettings::instance()->getTmbDatabasePort()))
+    {
+        AlbumManager::instance()->changeDatabase(AlbumSettings::instance()->getDatabaseParameters());
+    }
+
+
+
+
 
     if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
     {

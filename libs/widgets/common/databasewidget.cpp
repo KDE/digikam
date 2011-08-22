@@ -60,11 +60,13 @@ public:
     DatabaseWidgetPriv()
     {
         databasePathLabel = 0;
-        expertSettings    = 0;
+        imgExpertSettings = 0;
+        tmbExpertSettings = 0;
     }
 
     QLabel*    databasePathLabel;
-    QGroupBox* expertSettings;
+    QGroupBox* imgExpertSettings;
+    QGroupBox* tmbExpertSettings;
 };
 
 DatabaseWidget::DatabaseWidget(QWidget* parent, const QString & title)
@@ -143,39 +145,46 @@ void DatabaseWidget::setupMainArea(const QString & title)
     tmbPassword->setEchoMode(QLineEdit::Password);
     QPushButton* tmbCheckDatabaseConnectionButton = new QPushButton(i18n("Check DB Connection"));
 
-    d->expertSettings                   = new QGroupBox();
-    d->expertSettings->setFlat(true);
-    QFormLayout* expertSettinglayout    = new QFormLayout();
-    d->expertSettings->setLayout(expertSettinglayout);
+    d->imgExpertSettings                   = new QGroupBox();
+    d->imgExpertSettings->setFlat(true);
+    QFormLayout* imgExpertSettinglayout    = new QFormLayout();
+    d->imgExpertSettings->setLayout(imgExpertSettinglayout);
+
+    d->tmbExpertSettings                   = new QGroupBox();
+    d->tmbExpertSettings->setFlat(true);
+    QFormLayout* tmbExpertSettinglayout    = new QFormLayout();
+    d->tmbExpertSettings->setLayout(tmbExpertSettinglayout);
 
 // #ifdef HAVE_INTERNALMYSQL
 //     expertSettinglayout->addRow(internalServerLabel, internalServer);
 // #endif // HAVE_INTERNALMYSQL
-    expertSettinglayout->addRow(imgHostNameLabel, imgHostName);
-    expertSettinglayout->addRow(imgHostPortLabel, imgHostPort);
-    expertSettinglayout->addRow(imgDatabaseNameLabel, imgDatabaseName);
-    expertSettinglayout->addRow(imgUserNameLabel, imgUserName);
-    expertSettinglayout->addRow(imgPasswordLabel, imgPassword);
-    expertSettinglayout->addRow(imgConnectionOptionsLabel, imgConnectionOptions);
-    expertSettinglayout->addWidget(imgCheckDatabaseConnectionButton);
+    imgExpertSettinglayout->addRow(imgHostNameLabel, imgHostName);
+    imgExpertSettinglayout->addRow(imgHostPortLabel, imgHostPort);
+    imgExpertSettinglayout->addRow(imgDatabaseNameLabel, imgDatabaseName);
+    imgExpertSettinglayout->addRow(imgUserNameLabel, imgUserName);
+    imgExpertSettinglayout->addRow(imgPasswordLabel, imgPassword);
+    imgExpertSettinglayout->addRow(imgConnectionOptionsLabel, imgConnectionOptions);
+    imgExpertSettinglayout->addWidget(imgCheckDatabaseConnectionButton);
 
-    expertSettinglayout->addRow(tmbHostNameLabel, tmbHostName);
-    expertSettinglayout->addRow(tmbHostPortLabel, tmbHostPort);
-    expertSettinglayout->addRow(tmbDatabaseNameLabel, tmbDatabaseName);
-    expertSettinglayout->addRow(tmbUserNameLabel, tmbUserName);
-    expertSettinglayout->addRow(tmbPasswordLabel, tmbPassword);
-    expertSettinglayout->addRow(tmbConnectionOptionsLabel, tmbConnectionOptions);
-    expertSettinglayout->addWidget(tmbCheckDatabaseConnectionButton);
-    
-    // FIXME:
+    tmbExpertSettinglayout->addRow(tmbHostNameLabel, tmbHostName);
+    tmbExpertSettinglayout->addRow(tmbHostPortLabel, tmbHostPort);
+    tmbExpertSettinglayout->addRow(tmbDatabaseNameLabel, tmbDatabaseName);
+    tmbExpertSettinglayout->addRow(tmbUserNameLabel, tmbUserName);
+    tmbExpertSettinglayout->addRow(tmbPasswordLabel, tmbPassword);
+    tmbExpertSettinglayout->addRow(tmbConnectionOptionsLabel, tmbConnectionOptions);
+    tmbExpertSettinglayout->addWidget(tmbCheckDatabaseConnectionButton);
+
     vlay->addWidget(imgDatabaseTypeLabel);
     vlay->addWidget(imgDatabaseType);
     vlay->addWidget(d->databasePathLabel);
     vlay->addWidget(imgDatabasePathEdit);
+    vlay->addWidget(d->imgExpertSettings);
+
     vlay->addWidget(tmbDatabaseTypeLabel);
     vlay->addWidget(tmbDatabaseType);
     vlay->addWidget(tmbDatabasePathEdit);
-    vlay->addWidget(d->expertSettings);
+    vlay->addWidget(d->tmbExpertSettings);
+
     vlay->setSpacing(0);
     vlay->setMargin(KDialog::spacingHint());
 
@@ -190,18 +199,23 @@ void DatabaseWidget::setupMainArea(const QString & title)
 
     imgDatabaseType->addItem(i18n("SQLite"), DatabaseParameters::SQLiteDatabaseType());
     imgDatabaseType->addItem(i18n("MySQL"), DatabaseParameters::MySQLDatabaseType());
-    setDatabaseInputFields(DatabaseParameters::SQLiteDatabaseType());
+    setImgDatabaseInputFields(DatabaseParameters::SQLiteDatabaseType());
 
     tmbDatabaseType->addItem(i18n("SQLite"), DatabaseParameters::SQLiteDatabaseType());
     tmbDatabaseType->addItem(i18n("MySQL"), DatabaseParameters::MySQLDatabaseType());
-    setDatabaseInputFields(DatabaseParameters::SQLiteDatabaseType());
+    setTmbDatabaseInputFields(DatabaseParameters::SQLiteDatabaseType());
 
     // --------------------------------------------------------
 
     adjustSize();
 
     // --------------------------------------------------------
-    //FIXME:
+
+#ifdef HAVE_INTERNALMYSQL
+    connect(internalServer, SIGNAL(stateChanged(int)),
+            this, SLOT(slotHandleInternalServerCheckbox(int)));
+#endif
+
     connect(imgDatabasePathEdit, SIGNAL(urlSelected(KUrl)),
             this, SLOT(slotImgChangeDatabasePath(KUrl)));
 
@@ -211,26 +225,19 @@ void DatabaseWidget::setupMainArea(const QString & title)
     connect(imgDatabaseType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotImgHandleDBTypeIndexChanged(int)));
 
-#ifdef HAVE_INTERNALMYSQL
-    connect(internalServer, SIGNAL(stateChanged(int)),
-            this, SLOT(slotHandleInternalServerCheckbox(int)));
-#endif
-
     connect(imgCheckDatabaseConnectionButton, SIGNAL(clicked()),
             this, SLOT(slotImgCheckDatabaseConnection()));
 
-    // --------------------------------------------------------
-    //FIXME:
-    connect(imgDatabasePathEdit, SIGNAL(urlSelected(KUrl)),
+    connect(tmbDatabasePathEdit, SIGNAL(urlSelected(KUrl)),
             this, SLOT(slotTmbChangeDatabasePath(KUrl)));
 
-    connect(imgDatabasePathEdit, SIGNAL(textChanged(QString)),
+    connect(tmbDatabasePathEdit, SIGNAL(textChanged(QString)),
             this, SLOT(slotTmbDatabasePathEdited(QString)));
 
-    connect(imgDatabaseType, SIGNAL(currentIndexChanged(int)),
+    connect(tmbDatabaseType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotTmbHandleDBTypeIndexChanged(int)));
 
-    connect(imgCheckDatabaseConnectionButton, SIGNAL(clicked()),
+    connect(tmbCheckDatabaseConnectionButton, SIGNAL(clicked()),
             this, SLOT(slotTmbCheckDatabaseConnection()));
 }
 
@@ -246,7 +253,6 @@ QString DatabaseWidget::tmbCurrentDatabaseType() const
 
 void DatabaseWidget::slotImgChangeDatabasePath(const KUrl& result)
 {
-    return; //FIXME:
 #ifdef _WIN32
     // Work around B.K.O #189168
     KTemporaryFile temp;
@@ -284,7 +290,7 @@ void DatabaseWidget::slotImgDatabasePathEdited(const QString& newPath)
 void DatabaseWidget::slotImgHandleDBTypeIndexChanged(int index)
 {
     const QString& dbType = imgDatabaseType->itemData(index).toString();
-    setDatabaseInputFields(dbType);
+    setImgDatabaseInputFields(dbType);
 }
 
 void DatabaseWidget::slotTmbChangeDatabasePath(const KUrl& result)
@@ -311,7 +317,6 @@ void DatabaseWidget::slotTmbChangeDatabasePath(const KUrl& result)
 
 void DatabaseWidget::slotTmbDatabasePathEdited(const QString& newPath)
 {
-    return; //FIXME:
 #ifndef _WIN32
 
     if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
@@ -326,25 +331,41 @@ void DatabaseWidget::slotTmbDatabasePathEdited(const QString& newPath)
 
 void DatabaseWidget::slotTmbHandleDBTypeIndexChanged(int index)
 {
-    return; //FIXME:
     const QString& dbType = tmbDatabaseType->itemData(index).toString();
-    setDatabaseInputFields(dbType);
+    setTmbDatabaseInputFields(dbType);
 }
 
-void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
+void DatabaseWidget::setImgDatabaseInputFields(const QString& currentIndexStr)
 {
-    return; //FIXME:
     if (currentIndexStr == QString(DatabaseParameters::SQLiteDatabaseType()))
     {
         d->databasePathLabel->setVisible(true);
         imgDatabasePathEdit->setVisible(true);
-        d->expertSettings->setVisible(false);
+        d->imgExpertSettings->setVisible(false);
     }
     else
     {
         d->databasePathLabel->setVisible(false);
         imgDatabasePathEdit->setVisible(false);
-        d->expertSettings->setVisible(true);
+        d->imgExpertSettings->setVisible(true);
+    }
+
+    adjustSize();
+}
+
+void DatabaseWidget::setTmbDatabaseInputFields(const QString& currentIndexStr)
+{
+    if (currentIndexStr == QString(DatabaseParameters::SQLiteDatabaseType()))
+    {
+        //FIXME: d->databasePathLabel->setVisible(true);
+        tmbDatabasePathEdit->setVisible(true);
+        d->tmbExpertSettings->setVisible(false);
+    }
+    else
+    {
+        //FIXME: d->databasePathLabel->setVisible(false);
+        tmbDatabasePathEdit->setVisible(false);
+        d->tmbExpertSettings->setVisible(true);
     }
 
     adjustSize();
@@ -352,20 +373,24 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
 
 void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
 {
-    return; //FIXME:
     imgHostName->setEnabled(enableFields == Qt::Unchecked);
     imgHostPort->setEnabled(enableFields == Qt::Unchecked);
     imgDatabaseName->setEnabled(enableFields == Qt::Unchecked);
-    //fr databaseNameThumbnails->setEnabled(enableFields == Qt::Unchecked);
     imgUserName->setEnabled(enableFields == Qt::Unchecked);
     imgPassword->setEnabled(enableFields == Qt::Unchecked);
     imgConnectionOptions->setEnabled(enableFields == Qt::Unchecked);
+
+    tmbHostName->setEnabled(enableFields == Qt::Unchecked);
+    tmbHostPort->setEnabled(enableFields == Qt::Unchecked);
+    tmbDatabaseName->setEnabled(enableFields == Qt::Unchecked);
+    tmbUserName->setEnabled(enableFields == Qt::Unchecked);
+    tmbPassword->setEnabled(enableFields == Qt::Unchecked);
+    tmbConnectionOptions->setEnabled(enableFields == Qt::Unchecked);
 }
 
 void DatabaseWidget::slotImgCheckDatabaseConnection()
 {
     // TODO : if chek DB connection operations can be threaded, use DBusyDlg dialog there...
-    return; //FIXME:
 
     kapp->setOverrideCursor(Qt::WaitCursor);
 
@@ -461,19 +486,33 @@ void DatabaseWidget::setParametersFromSettings(const AlbumSettings* settings)
     internalServer->setChecked(false);
 #endif
 
-    imgOriginalDbPath = settings->getDatabaseFilePath();
-    imgOriginalDbType = settings->getDatabaseType();
-    imgDatabasePathEdit->setUrl(settings->getDatabaseFilePath());
+    imgOriginalDbPath = settings->getImgDatabaseFilePath();
+    imgOriginalDbType = settings->getImgDatabaseType();
+    imgDatabasePathEdit->setUrl(settings->getImgDatabaseFilePath());
 
-    imgDatabaseName->setText(settings->getDatabaseName());
-    //fr databaseNameThumbnails->setText(settings->getDatabaseNameThumbnails());
-    imgHostName->setText(settings->getDatabaseHostName());
-    imgHostPort->setValue(settings->getDatabasePort());
-    imgConnectionOptions->setText(settings->getDatabaseConnectoptions());
+    imgDatabaseName->setText(settings->getImgDatabaseName());
+    imgHostName->setText(settings->getImgDatabaseHostName());
+    imgHostPort->setValue(settings->getImgDatabasePort());
+    imgConnectionOptions->setText(settings->getImgDatabaseConnectoptions());
 
-    imgUserName->setText(settings->getDatabaseUserName());
+    imgUserName->setText(settings->getImgDatabaseUserName());
 
-    imgPassword->setText(settings->getDatabasePassword());
+    imgPassword->setText(settings->getImgDatabasePassword());
+
+
+    tmbOriginalDbPath = settings->getTmbDatabaseFilePath();
+    tmbOriginalDbType = settings->getTmbDatabaseType();
+    tmbDatabasePathEdit->setUrl(settings->getTmbDatabaseFilePath());
+
+    tmbDatabaseName->setText(settings->getTmbDatabaseName());
+    tmbHostName->setText(settings->getTmbDatabaseHostName());
+    tmbHostPort->setValue(settings->getTmbDatabasePort());
+    tmbConnectionOptions->setText(settings->getTmbDatabaseConnectoptions());
+
+    tmbUserName->setText(settings->getTmbDatabaseUserName());
+
+    tmbPassword->setText(settings->getTmbDatabasePassword());
+
 
     /* Now set the type according the database type from the settings.
      * If no item is found, ignore the setting.
@@ -482,9 +521,16 @@ void DatabaseWidget::setParametersFromSettings(const AlbumSettings* settings)
     {
         //kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" << imgDatabaseType->itemData(i)
         //            << "] with ["<< settings->getImgDatabaseType() << "]";
-        if (imgDatabaseType->itemData(i).toString() == settings->getDatabaseType())
+        if (imgDatabaseType->itemData(i).toString() == settings->getImgDatabaseType())
         {
             imgDatabaseType->setCurrentIndex(i);
+        }
+    }
+    for (int i=0; i<tmbDatabaseType->count(); ++i)
+    {
+        if (tmbDatabaseType->itemData(i).toString() == settings->getTmbDatabaseType())
+        {
+            tmbDatabaseType->setCurrentIndex(i);
         }
     }
 }
@@ -507,20 +553,45 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
         if (parameters.imgDatabaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
         {
             parameters.imgDatabaseName = QDir::cleanPath(imgDatabasePathEdit->url().toLocalFile() + '/' + "digikam4.db");
-            parameters.tmbDatabaseName = QDir::cleanPath(tmbDatabasePathEdit->url().toLocalFile() + '/' + "thumbnails-digikam.db");
         }
         else
         {
             parameters.imgDatabaseName = imgDatabaseName->text();
-            parameters.tmbDatabaseName = tmbDatabaseName->text();
         }
     }
     else
     {
         // FIXME:
         parameters = DatabaseParameters::defaultParameters(imgCurrentDatabaseType());
-        DatabaseServerStarter::startServerManagerProcess(imgCurrentDatabaseType());
+        // FIXME: DatabaseServerStarter::startServerManagerProcess(imgCurrentDatabaseType());
     }
+    
+    //fr if (currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()) || !internalServer->isChecked())
+    if (tmbCurrentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
+    {
+        parameters.tmbConnectOptions = tmbConnectionOptions->text();
+        parameters.tmbDatabaseType   = tmbCurrentDatabaseType();
+        parameters.tmbHostName       = tmbHostName->text();
+        parameters.tmbPassword       = tmbPassword->text();
+        parameters.tmbPort           = tmbHostPort->text().toInt();
+        parameters.tmbUserName       = tmbUserName->text();
+
+        if (parameters.tmbDatabaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
+        {
+            parameters.tmbDatabaseName = QDir::cleanPath(tmbDatabasePathEdit->url().toLocalFile() + '/' + "thumbnails-digikam.db");
+        }
+        else
+        {
+            parameters.tmbDatabaseName = tmbDatabaseName->text();
+        }
+    }
+    else
+    {
+        // FIXME:
+        parameters = DatabaseParameters::defaultParameters(tmbCurrentDatabaseType());
+        // FIXME: DatabaseServerStarter::startServerManagerProcess(tmbCurrentDatabaseType());
+    }
+
 
     return parameters;
 }

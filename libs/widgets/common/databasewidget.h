@@ -93,7 +93,8 @@ public:
 
     QString imgCurrentDatabaseType() const;
     QString tmbCurrentDatabaseType() const;
-    void setDatabaseInputFields(const QString&);
+    void setImgDatabaseInputFields(const QString&);
+    void setTmbDatabaseInputFields(const QString&);
 
 public Q_SLOTS:
 

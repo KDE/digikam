@@ -747,12 +747,23 @@ void AlbumSettings::emitSetupChanged()
     emit setupChanged();
 }
 
-QString AlbumSettings::getDatabaseFilePath() const
+QString AlbumSettings::getImgDatabaseFilePath() const
 {
     return d->databaseParams.getImgDatabaseNameOrDir();
 }
 
-void AlbumSettings::setDatabaseFilePath(const QString& path)
+QString AlbumSettings::getTmbDatabaseFilePath() const
+{
+    return d->databaseParams.getImgDatabaseNameOrDir();
+}
+
+void AlbumSettings::setImgDatabaseFilePath(const QString& path)
+{
+    d->databaseParams.setImgDatabasePath(path);
+    d->databaseParams.setTmbDatabasePath(path);
+}
+
+void AlbumSettings::setTmbDatabaseFilePath(const QString& path)
 {
     d->databaseParams.setImgDatabasePath(path);
     d->databaseParams.setTmbDatabasePath(path);
@@ -1524,89 +1535,149 @@ void AlbumSettings::setDatabaseParameters(const DatabaseParameters& params)
     d->databaseParams = params;
 }
 
-QString AlbumSettings::getDatabaseType() const
+QString AlbumSettings::getImgDatabaseType() const
 {
     return d->databaseParams.imgDatabaseType;
 }
 
-void AlbumSettings::setDatabaseType(const QString& databaseType)
+void AlbumSettings::setImgDatabaseType(const QString& databaseType)
 {
     d->databaseParams.imgDatabaseType = databaseType;
 }
 
-QString AlbumSettings::getDatabaseConnectoptions() const
+QString AlbumSettings::getImgDatabaseConnectoptions() const
 {
     return d->databaseParams.imgConnectOptions;
 }
 
-QString AlbumSettings::getDatabaseName() const
+QString AlbumSettings::getImgDatabaseName() const
 {
     return d->databaseParams.imgDatabaseName;
 }
 
-//fr QString AlbumSettings::getDatabaseNameThumbnails() const
-//fr {
-//fr     return d->databaseParams.databaseNameThumbnails;
-//fr }
-
-QString AlbumSettings::getDatabaseHostName() const
+QString AlbumSettings::getImgDatabaseHostName() const
 {
     return d->databaseParams.imgHostName;
 }
 
-QString AlbumSettings::getDatabasePassword() const
+QString AlbumSettings::getImgDatabasePassword() const
 {
     return d->databaseParams.imgPassword;
 }
 
-int AlbumSettings::getDatabasePort() const
+int AlbumSettings::getImgDatabasePort() const
 {
     return d->databaseParams.imgPort;
 }
 
-QString AlbumSettings::getDatabaseUserName() const
+QString AlbumSettings::getImgDatabaseUserName() const
 {
     return d->databaseParams.imgUserName;
+}
+
+void AlbumSettings::setImgDatabaseConnectoptions(const QString& connectoptions)
+{
+    d->databaseParams.imgConnectOptions = connectoptions;
+}
+
+void AlbumSettings::setImgDatabaseName(const QString& databaseName)
+{
+    d->databaseParams.imgDatabaseName = databaseName;
+}
+
+void AlbumSettings::setImgDatabaseHostName(const QString& hostName)
+{
+    d->databaseParams.imgHostName = hostName;
+}
+
+void AlbumSettings::setImgDatabasePassword(const QString& password)
+{
+    d->databaseParams.imgPassword = password;
+}
+
+void AlbumSettings::setImgDatabasePort(int port)
+{
+    d->databaseParams.imgPort = port;
+}
+
+void AlbumSettings::setImgDatabaseUserName(const QString& userName)
+{
+    d->databaseParams.imgUserName = userName;
+}
+
+QString AlbumSettings::getTmbDatabaseType() const
+{
+    return d->databaseParams.tmbDatabaseType;
+}
+
+void AlbumSettings::setTmbDatabaseType(const QString& databaseType)
+{
+    d->databaseParams.tmbDatabaseType = databaseType;
+}
+
+QString AlbumSettings::getTmbDatabaseConnectoptions() const
+{
+    return d->databaseParams.tmbConnectOptions;
+}
+
+QString AlbumSettings::getTmbDatabaseName() const
+{
+    return d->databaseParams.tmbDatabaseName;
+}
+
+QString AlbumSettings::getTmbDatabaseHostName() const
+{
+    return d->databaseParams.tmbHostName;
+}
+
+QString AlbumSettings::getTmbDatabasePassword() const
+{
+    return d->databaseParams.tmbPassword;
+}
+
+int AlbumSettings::getTmbDatabasePort() const
+{
+    return d->databaseParams.tmbPort;
+}
+
+QString AlbumSettings::getTmbDatabaseUserName() const
+{
+    return d->databaseParams.tmbUserName;
+}
+
+void AlbumSettings::setTmbDatabaseConnectoptions(const QString& connectoptions)
+{
+    d->databaseParams.tmbConnectOptions = connectoptions;
+}
+
+void AlbumSettings::setTmbDatabaseName(const QString& databaseName)
+{
+    d->databaseParams.tmbDatabaseName = databaseName;
+}
+
+void AlbumSettings::setTmbDatabaseHostName(const QString& hostName)
+{
+    d->databaseParams.tmbHostName = hostName;
+}
+
+void AlbumSettings::setTmbDatabasePassword(const QString& password)
+{
+    d->databaseParams.tmbPassword = password;
+}
+
+void AlbumSettings::setTmbDatabasePort(int port)
+{
+    d->databaseParams.tmbPort = port;
+}
+
+void AlbumSettings::setTmbDatabaseUserName(const QString& userName)
+{
+    d->databaseParams.tmbUserName = userName;
 }
 
 bool AlbumSettings::getInternalDatabaseServer() const
 {
     return d->databaseParams.internalServer;
-}
-
-void AlbumSettings::setDatabaseConnectoptions(const QString& connectoptions)
-{
-    d->databaseParams.imgConnectOptions = connectoptions;
-}
-
-void AlbumSettings::setDatabaseName(const QString& databaseName)
-{
-    d->databaseParams.imgDatabaseName = databaseName;
-}
-
-//fr void AlbumSettings::setDatabaseNameThumbnails(const QString& databaseNameThumbnails)
-//fr {
-//fr     d->databaseParams.databaseNameThumbnails = databaseNameThumbnails;
-//fr }
-
-void AlbumSettings::setDatabaseHostName(const QString& hostName)
-{
-    d->databaseParams.imgHostName = hostName;
-}
-
-void AlbumSettings::setDatabasePassword(const QString& password)
-{
-    d->databaseParams.imgPassword = password;
-}
-
-void AlbumSettings::setDatabasePort(int port)
-{
-    d->databaseParams.imgPort = port;
-}
-
-void AlbumSettings::setDatabaseUserName(const QString& userName)
-{
-    d->databaseParams.imgUserName = userName;
 }
 
 void AlbumSettings::setInternalDatabaseServer(const bool useInternalDBServer)

@@ -125,7 +125,12 @@ public:
     /**
     * Checks if the given database path is equal to the current one
     */
-    bool databaseEqual(const QString& dbType, const QString& dbName, const QString& dbHostName, int dbPort, bool dbInternalServer) const;
+    bool imgDatabaseEqual(const QString& dbType, const QString& dbName, const QString& dbHostName, int dbPort, bool dbInternalServer) const;
+
+    /**
+    * Checks if the given database path is equal to the current one
+    */
+    bool tmbDatabaseEqual(const QString& dbType, const QString& dbName, const QString& dbHostName, int dbPort) const;
 
     /**
     * starts scanning the libraryPath and listing the albums. If the
