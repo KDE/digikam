@@ -58,6 +58,7 @@ private:
     void contentAwareResizeCore(DImg* image, int target_width, int target_height, const QImage& mask);
     void enableMaskSettings(bool b);
     void enableContentAwareSettings(bool b);
+    bool eventFilter(QObject*, QEvent*);
 
 private Q_SLOTS:
 
