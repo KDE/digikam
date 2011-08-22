@@ -477,6 +477,9 @@ void ImagePreviewView::slotSetupChanged()
     previewItem()->setLoadFullImageSize(AlbumSettings::instance()->getPreviewLoadFullImageSize());
     previewItem()->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
 
+    d->toolBar->setVisible(AlbumSettings::instance()->getPreviewShowIcons());
+    setShowText(AlbumSettings::instance()->getPreviewShowIcons());
+
     // pass auto-suggest?
 }
 

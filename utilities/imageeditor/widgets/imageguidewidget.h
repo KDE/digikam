@@ -89,6 +89,7 @@ public:
     void   setEraseMode(bool erase);
     void   setMaskEnabled(bool enabled);
     void   setMaskPenSize(int size);
+    void   setMaskCursor();
 
     QImage getMask() const;
 

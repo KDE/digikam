@@ -60,6 +60,7 @@ public:
         cornerButton     = 0;
         panIconPopup     = 0;
         movingInProgress = false;
+        showText         = true;
     }
 
     QGraphicsScene*           scene;
@@ -72,6 +73,7 @@ public:
     QPoint                    mousePressPos;
     QPoint                    panningScrollPos;
     bool                      movingInProgress;
+    bool                      showText;
 };
 
 GraphicsDImgView::GraphicsDImgView(QWidget* parent)
@@ -142,7 +144,7 @@ void GraphicsDImgView::drawForeground(QPainter* p, const QRectF& rect)
     {
         QString text = d->item->userLoadingHint();
 
-        if (text.isNull())
+        if (text.isNull() || !d->showText)
         {
             return;
         }
@@ -484,6 +486,11 @@ void GraphicsDImgView::setContentsPos(int x, int y)
 {
     horizontalScrollBar()->setValue(x);
     verticalScrollBar()->setValue(y);
+}
+
+void GraphicsDImgView::setShowText(bool val)
+{
+    d->showText = val;
 }
 
 } // namespace Digikam

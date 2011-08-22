@@ -110,6 +110,8 @@ protected:
 
     virtual void scrollContentsBy(int dx, int dy);
 
+    void setShowText(bool value);
+
 protected Q_SLOTS:
 
     void         slotContentsMoved();

@@ -179,6 +179,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
     setToolIcon(SmallIcon("transform-scale"));
 
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget->installEventFilter(this);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::PreviewToggleOnMouseOver);
 
@@ -313,7 +314,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
 
     QLabel* labelMaskPenSize = new QLabel(i18n("Brush size:"), d->gboxSettings->plainPage());
     d->maskPenSize           = new RIntNumInput(d->gboxSettings->plainPage());
-    d->maskPenSize->setRange(1, 100, 1);
+    d->maskPenSize->setRange(3, 64, 1);
     d->maskPenSize->setDefaultValue(10);
     d->maskPenSize->setSliderEnabled(true);
     d->maskPenSize->setObjectName("maskPenSize");
@@ -855,6 +856,29 @@ void ContentAwareResizeTool::slotWeightMaskBoxStateChanged(int state)
 void ContentAwareResizeTool::slotMaskPenSizeChanged(int size)
 {
     d->previewWidget->setMaskPenSize(size);
+}
+
+bool ContentAwareResizeTool::eventFilter(QObject *obj, QEvent *ev)
+{
+    if (d->weightMaskBox->isChecked())
+    {
+        if (obj == d->previewWidget)
+        {
+            if (ev->type() == QEvent::Wheel)
+            {
+                QWheelEvent *wheel = static_cast<QWheelEvent *>(ev);
+
+                if (wheel->delta() >= 0)
+                    d->maskPenSize->setValue(d->maskPenSize->value() + (wheel->delta()/8/15)*(wheel->delta()/8/15));
+                else
+                    d->maskPenSize->setValue(d->maskPenSize->value() - (wheel->delta()/8/15)*(wheel->delta()/8/15));
+                
+                d->previewWidget->setMaskCursor();
+            }
+        }
+    }
+    
+    return false;
 }
 
 } // namespace DigikamTransformImagePlugin

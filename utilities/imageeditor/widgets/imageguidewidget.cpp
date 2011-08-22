@@ -799,7 +799,7 @@ void ImageGuideWidget::setPaintColor(const QColor& color)
 void ImageGuideWidget::setMaskEnabled(bool enabled)
 {
     d->enableDrawMask = enabled;
-    updateMaskCursor();
+    unsetCursor();
     updatePreview();
 }
 
@@ -852,6 +852,16 @@ void ImageGuideWidget::updateMaskCursor()
     p.drawEllipse(1, 1, size-2, size-2);
 
     d->maskCursor = QCursor(pix);
+}
+
+void ImageGuideWidget::setMaskCursor()
+{
+    if (d->enableDrawMask)
+    {
+        updateMaskCursor();
+        setCursor(d->maskCursor);
+        updatePreview();
+    }
 }
 
 }  // namespace Digikam
