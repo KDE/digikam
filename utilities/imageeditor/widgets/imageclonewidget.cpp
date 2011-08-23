@@ -44,6 +44,7 @@
 
 #include "imageiface.h"
 
+
 namespace Digikam
 {
 
@@ -100,7 +101,7 @@ ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settin
 
     d->iface        = new ImageIface(w, h);
 //FIXME      
-    d->iface->setPreviewType(useImageSelection);
+    //d->iface->setPreviewType(true);
     uchar* data     = d->iface->getPreviewImage();
     d->width        = d->iface->previewWidth();
     d->height       = d->iface->previewHeight();
@@ -464,27 +465,6 @@ void ImageCloneWidget::mouseMoveEvent(QMouseEvent* e)
 }
 
 //---------------Same as ImageGuideWidget-----------
-
-void ImageCloneWidget::timerEvent(QTimerEvent* e)
-{
-    if (e->timerId() == d->timerID)
-    {
-        if (d->flicker == 5)
-        {
-            d->flicker=0;
-        }
-        else
-        {
-            d->flicker++;
-        }
-
-        updatePreview();
-    }
-    else
-    {
-        QWidget::timerEvent(e);
-    }
-}
 
 void ImageCloneWidget::timerEvent(QTimerEvent* e)
 {

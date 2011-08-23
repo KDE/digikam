@@ -92,7 +92,6 @@ private:
 
     void    paintEvent(QPaintEvent*);
     void    resizeEvent(QResizeEvent*);
-    void    timerEvent(QTimerEvent*);
     //void    timerEvent(QTimerEvent*);
     void    updatePixmap();
     void    timerEvent(QTimerEvent*);
