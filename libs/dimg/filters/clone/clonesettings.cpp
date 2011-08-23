@@ -142,7 +142,7 @@ CloneSettings::CloneSettings(QWidget* parent)
 
     QButtonGroup* brushGroup = new QButtonGroup(scrollAreaBrushShape);
     brushGroup->setExclusive(true);
-    brushGroup->hide();
+    //brushGroup->hide();
     QGridLayout* gridLayout  = new QGridLayout(scrollAreaBrushShape);
     gridLayout->setSpacing(0);
     gridLayout->setContentsMargins(11, 11, 11, 11);
