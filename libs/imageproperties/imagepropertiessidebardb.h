@@ -82,8 +82,6 @@ Q_SIGNALS:
     void signalPrevItem();
     void signalNextItem();
     void signalLastItem();
-    void signalProgressBarMode(int, const QString&);
-    void signalProgressValue(int);
 
 public Q_SLOTS:
 

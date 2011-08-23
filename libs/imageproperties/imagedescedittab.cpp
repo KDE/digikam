@@ -687,8 +687,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
 
 void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 {
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                               i18n("Reading metadata from files. Please wait..."));
+    emit progressEntered(i18n("Reading metadata from files. Please wait..."));
 
     d->ignoreImageAttributesWatch = true;
     int i                         = 0;
@@ -710,14 +709,14 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
         fileHub.write(info);
         */
 
-        emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
+        emit progressValueChanged(i++/(float)d->currInfos.count());
         kapp->processEvents();
     }
 
     ScanController::instance()->resumeCollectionScan();
     d->ignoreImageAttributesWatch = false;
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
+    emit progressFinished();
 
     // reload everything
     setInfos(d->currInfos);
@@ -725,8 +724,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 
 void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
 {
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                               i18n("Writing metadata to files. Please wait..."));
+    emit progressEntered(i18n("Writing metadata to files. Please wait..."));
 
     int i = 0;
     foreach(const ImageInfo& info, d->currInfos)
@@ -737,11 +735,11 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
         // write out to file DMetadata
         fileHub.write(info.filePath());
 
-        emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
+        emit progressValueChanged(i++/(float)d->currInfos.count());
         kapp->processEvents();
     }
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
+    emit progressFinished();
 }
 
 bool ImageDescEditTab::eventFilter(QObject* o, QEvent* e)

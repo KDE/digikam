@@ -147,7 +147,7 @@ void BatchSyncMetadata::parseList()
             message = i18n("Updating database from image metadata. Please wait...");
         }
 
-        emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode, message);
+        emit signalBegin(message);
 
         d->everStarted = true;
     }
@@ -188,7 +188,7 @@ void BatchSyncMetadata::parsePicture()
         d->scanner.scanFile(info, CollectionScanner::Rescan);
     }
 
-    emit signalProgressValue((int)((d->count++/(float)d->imageInfoList.count())*100.0));
+    emit signalProgressValue(d->count++/(float)d->imageInfoList.count());
 
     d->imageInfoIndex++;
 }
@@ -205,7 +205,6 @@ void BatchSyncMetadata::slotAbort()
 
 void BatchSyncMetadata::complete()
 {
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
     emit signalComplete();
 }
 

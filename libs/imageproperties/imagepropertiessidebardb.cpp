@@ -107,18 +107,11 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* parent, SidebarSplit
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
 
-    connect(d->desceditTab, SIGNAL(signalProgressBarMode(int,QString)),
-            this, SIGNAL(signalProgressBarMode(int,QString)));
-
-    connect(d->desceditTab, SIGNAL(signalProgressValue(int)),
-            this, SIGNAL(signalProgressValue(int)));
-
     connect(d->desceditTab, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
     connect(d->desceditTab, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
-
 
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotImageChangeDatabase(ImageChangeset)));

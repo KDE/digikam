@@ -115,6 +115,26 @@ Q_SIGNALS:
     void queuedOpenCameraUiFromPath(const QString& path);
     void queuedOpenSolidDevice(const QString& udi);
 
+public Q_SLOTS:
+
+    /** Progress info: Connect a signal directly to these slots. */
+    void enterProgress(const QString& message);
+    void enterCancellableProgress(const QString& message);
+    void progressValue(float progress);
+    void finishProgress();
+
+    /** Progress info: Provide a QObject as id */
+    void enterProgress(QObject* object, const QString& message);
+    void enterCancellableProgress(QObject* object, const QString& message);
+    void progressValue(QObject* object, float progress);
+    void finishProgress(QObject* object);
+
+    /** Progress info: Provide an integer id */
+    void enterProgress(quintptr id, const QString& message);
+    void enterProgress(quintptr id, const QString& message, bool canCancel);
+    void progressValue(quintptr id, float progress);
+    void finishProgress(quintptr id);
+
 protected:
 
     bool queryClose();
@@ -202,9 +222,6 @@ private Q_SLOTS:
 
     void slotScanForFaces();
     void slotScanForFacesDone();
-
-    void slotProgressBarMode(int, const QString&);
-    void slotProgressValue(int);
 
     void slotZoomSliderChanged(int);
     void slotThumbSizeChanged(int);
