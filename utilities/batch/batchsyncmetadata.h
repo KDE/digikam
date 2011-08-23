@@ -63,8 +63,8 @@ public:
 Q_SIGNALS:
 
     void signalComplete();
-    void signalProgressValue(int);
-    void signalProgressBarMode(int, const QString&);
+    void signalProgressValue(float);
+    void signalBegin(const QString&);
 
 public Q_SLOTS:
 

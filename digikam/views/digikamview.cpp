@@ -354,12 +354,6 @@ void DigikamView::setupConnections()
     connect(d->parent, SIGNAL(signalPasteAlbumItemsSelection()),
             d->iconView, SLOT(paste()));
 
-    connect(this, SIGNAL(signalProgressBarMode(int,QString)),
-            d->parent, SLOT(slotProgressBarMode(int,QString)));
-
-    connect(this, SIGNAL(signalProgressValue(int)),
-            d->parent, SLOT(slotProgressValue(int)));
-
     connect(d->parent, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotCancelSlideShow()));
 
@@ -429,11 +423,14 @@ void DigikamView::setupConnections()
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
-    connect(d->rightSideBar, SIGNAL(signalProgressBarMode(int,QString)),
-            d->parent, SLOT(slotProgressBarMode(int,QString)));
+    connect(d->rightSideBar->imageDescEditTab(), SIGNAL(progressEntered(QString)),
+            d->parent, SLOT(enterProgress(QString)));
 
-    connect(d->rightSideBar, SIGNAL(signalProgressValue(int)),
-            d->parent, SLOT(slotProgressValue(int)));
+    connect(d->rightSideBar->imageDescEditTab(), SIGNAL(progressValueChanged(float)),
+            d->parent, SLOT(progressValue(float)));
+
+    connect(d->rightSideBar->imageDescEditTab(), SIGNAL(progressFinished()),
+            d->parent, SLOT(finishProgress()));
 
     connect(d->fuzzySearchSideBar, SIGNAL(signalUpdateFingerPrints()),
             d->parent, SLOT(slotRebuildFingerPrints()));
@@ -524,13 +521,13 @@ void DigikamView::setupConnections()
     // -- MetadataManager progress ---------------
 
     connect(MetadataManager::instance(), SIGNAL(progressMessageChanged(QString)),
-            this, SLOT(slotProgressMessageChanged(QString)));
+            d->parent, SLOT(enterProgress(QString)));
 
     connect(MetadataManager::instance(), SIGNAL(progressValueChanged(float)),
-            this, SLOT(slotProgressValueChanged(float)));
+            d->parent, SLOT(progressValue(float)));
 
     connect(MetadataManager::instance(), SIGNAL(progressFinished()),
-            this, SLOT(slotProgressFinished()));
+            d->parent, SLOT(finishProgress()));
 
     connect(MetadataManager::instance(), SIGNAL(orientationChangeFailed(QStringList)),
             this, SLOT(slotOrientationChangeFailed(QStringList)));
@@ -1347,14 +1344,14 @@ void DigikamView::slotAlbumPropsEdit()
 
 void DigikamView::connectBatchSyncMetadata(BatchSyncMetadata* syncMetadata)
 {
-    connect(syncMetadata, SIGNAL(signalProgressBarMode(int,QString)),
-            d->parent, SLOT(slotProgressBarMode(int,QString)));
+    connect(syncMetadata, SIGNAL(signalBegin(QString)),
+            d->parent, SLOT(enterCancellableProgress(QString)));
 
-    connect(syncMetadata, SIGNAL(signalProgressValue(int)),
-            d->parent, SLOT(slotProgressValue(int)));
+    connect(syncMetadata, SIGNAL(signalProgressValue(float)),
+            d->parent, SLOT(progressValue(float)));
 
-    //connect(syncMetadata, SIGNAL(signalComplete()),
-    //      this, SLOT(slotAlbumSyncPicturesMetadataDone()));
+    connect(syncMetadata, SIGNAL(signalComplete()),
+            this, SLOT(finishProgress()));
 
     connect(d->parent, SIGNAL(signalCancelButtonPressed()),
             syncMetadata, SLOT(slotAbort()));
@@ -1806,8 +1803,8 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
 {
     int     i = 0;
     float cnt = (float)infoList.count();
-    emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode,
-                               i18np("Preparing slideshow of 1 image. Please wait...","Preparing slideshow of %1 images. Please wait...", infoList.count()));
+    d->parent->enterProgress(this,
+                             i18np("Preparing slideshow of 1 image. Please wait...","Preparing slideshow of %1 images. Please wait...", infoList.count()));
 
     SlideShowSettings settings;
     settings.readFromConfig();
@@ -1827,11 +1824,11 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
         pictInfo.photoInfo  = info.photoInfoContainer();
         settings.pictInfoMap.insert(info.fileUrl(), pictInfo);
 
-        emit signalProgressValue((int)((i++/cnt)*100.0));
+        d->parent->progressValue(this, (int)((i++/cnt)*100.0));
         kapp->processEvents();
     }
 
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
+    d->parent->finishProgress(this);
 
     if (!d->cancelSlideShow)
     {
@@ -1882,21 +1879,6 @@ void DigikamView::slotSidebarTabTitleStyleChanged()
 
     /// @todo Which settings actually have to be reloaded?
     //     d->rightSideBar->applySettings();
-}
-
-void DigikamView::slotProgressMessageChanged(const QString& descriptionOfAction)
-{
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, descriptionOfAction);
-}
-
-void DigikamView::slotProgressValueChanged(float percent)
-{
-    emit signalProgressValue(lround(percent * 100));
-}
-
-void DigikamView::slotProgressFinished()
-{
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
 }
 
 void DigikamView::slotOrientationChangeFailed(const QStringList& failedFileNames)

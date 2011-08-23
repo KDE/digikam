@@ -1541,20 +1541,129 @@ void DigikamApp::slotSwitchedToMapView()
     d->showBarAction->setEnabled(false);
 }
 
-void DigikamApp::slotProgressBarMode(int mode, const QString& text)
+void DigikamApp::enterProgress(const QString& message)
 {
-    d->statusProgressBar->progressBarMode((StatusProgressBar::StatusProgressBarMode)mode, text);
-
-    // Restore the text that we set for selection
-    if (mode == StatusProgressBar::TextMode && text.isNull() && !d->statusBarSelectionText.isNull())
-    {
-        d->statusProgressBar->setText(d->statusBarSelectionText);
-    }
+    enterProgress((quintptr)sender(), message, false);
 }
 
-void DigikamApp::slotProgressValue(int count)
+void DigikamApp::enterCancellableProgress(const QString& message)
 {
-    d->statusProgressBar->setProgressValue(count);
+    enterProgress((quintptr)sender(), message, true);
+}
+
+void DigikamApp::progressValue(float progress)
+{
+    progressValue((quintptr)sender(), progress);
+}
+
+void DigikamApp::finishProgress()
+{
+    finishProgress((quintptr)sender());
+}
+
+void DigikamApp::enterProgress(QObject* sender, const QString& message)
+{
+    enterProgress((quintptr)sender, message, false);
+}
+
+void DigikamApp::enterCancellableProgress(QObject* sender, const QString& message)
+{
+    enterProgress((quintptr)sender, message, true);
+}
+
+void DigikamApp::progressValue(QObject* sender, float progress)
+{
+    progressValue((quintptr)sender, progress);
+}
+
+void DigikamApp::finishProgress(QObject* sender)
+{
+    finishProgress((quintptr)sender);
+}
+
+void DigikamApp::DigikamAppPriv::updateProgressBar()
+{
+    if (progressEntries.isEmpty())
+    {
+        statusProgressBar->progressBarMode(StatusProgressBar::TextMode, QString());
+        // Restore the text that we set for selection
+        if (!statusBarSelectionText.isNull())
+        {
+            statusProgressBar->setText(statusBarSelectionText);
+        }
+    }
+    else
+    {
+        bool canCancelOne = false;
+        foreach (const ProgressEntry& entry, progressEntries)
+        {
+            if (entry.canCancel)
+            {
+                canCancelOne = true;
+                break;
+            }
+        }
+        QString message;
+        if (progressEntries.size() == 1)
+        {
+            message = progressEntries.constBegin().value().message;
+        }
+        else
+        {
+            message = i18nc("@info:status Background tasks/actions", "%1 Tasks", progressEntries.size());
+        }
+
+        statusProgressBar->progressBarMode(canCancelOne ? StatusProgressBar::ProgressBarMode
+                                                        : StatusProgressBar::CancelProgressBarMode,
+                                           message);
+    }
+
+    updateProgressValue();
+}
+
+void DigikamApp::DigikamAppPriv::updateProgressValue()
+{
+    if (progressEntries.isEmpty())
+    {
+        return;
+    }
+
+    float progress = 0;
+    foreach (const ProgressEntry& entry, progressEntries)
+    {
+        progress += entry.progress;
+    }
+    statusProgressBar->setProgressValue( lround(progress / progressEntries.size() * 100) );
+}
+
+void DigikamApp::enterProgress(quintptr id, const QString& message)
+{
+    enterProgress(id, message, false);
+}
+
+void DigikamApp::enterProgress(quintptr id, const QString& message, bool canCancel)
+{
+    ProgressEntry entry;
+    entry.message = message;
+    entry.canCancel = canCancel;
+    d->progressEntries[id] = entry;
+    d->updateProgressBar();
+}
+
+void DigikamApp::progressValue(quintptr id, float progress)
+{
+    if (!d->progressEntries.contains(id))
+    {
+        return;
+    }
+    d->progressEntries[id].progress = progress;
+    d->updateProgressValue();
+}
+
+void DigikamApp::finishProgress(quintptr id)
+{
+    d->progressEntries.remove(id);
+    d->updateProgressBar();
 }
 
 void DigikamApp::slotExit()

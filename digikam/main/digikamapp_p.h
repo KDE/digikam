@@ -77,6 +77,17 @@ class SearchTextBar;
 class FilterStatusBar;
 class TagsActionMngr;
 
+class ProgressEntry
+{
+public:
+
+    ProgressEntry() : progress(0), canCancel(false) {}
+
+    QString message;
+    float   progress;
+    bool    canCancel;
+};
+
 class DigikamApp::DigikamAppPriv
 {
 public:
@@ -338,6 +349,10 @@ public:
     KIPI::PluginLoader*                 kipiPluginLoader;
 
     DigikamModelCollection*             modelCollection;
+
+    QHash<quintptr, ProgressEntry>      progressEntries;
+    void updateProgressBar();
+    void updateProgressValue();
 };
 
 }  // namespace Digikam

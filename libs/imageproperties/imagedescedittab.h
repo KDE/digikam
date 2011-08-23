@@ -69,8 +69,9 @@ public:
 
 Q_SIGNALS:
 
-    void signalProgressBarMode(int, const QString&);
-    void signalProgressValue(int);
+    void progressEntered(const QString&);
+    void progressValueChanged(float);
+    void progressFinished();
     void signalTagFilterMatch(bool);
     void signalPrevItem();
     void signalNextItem();

@@ -94,8 +94,6 @@ Q_SIGNALS:
                              const ImageInfoList& allImages);
     void signalNoCurrentItem();
     void signalSelectionChanged(int numberOfSelectedItems);
-    void signalProgressBarMode(int, const QString&);
-    void signalProgressValue(int);
     void signalThumbSizeChanged(int);
     void signalZoomChanged(double);
     void signalSwitchedToPreview();
@@ -229,9 +227,6 @@ private Q_SLOTS:
 
     void slotSidebarTabTitleStyleChanged();
 
-    void slotProgressMessageChanged(const QString& descriptionOfAction);
-    void slotProgressValueChanged(float percent);
-    void slotProgressFinished();
     void slotOrientationChangeFailed(const QStringList& failedFileNames);
 
     void slotRatingChanged(const KUrl&, int);
