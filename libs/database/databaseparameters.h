@@ -121,7 +121,7 @@ public:
     QByteArray hash() const;
 
     /** Return a set of default parameters for the give type */
-    static DatabaseParameters defaultParameters(const QString databaseType);
+    static DatabaseParameters defaultParameters(const QString databaseType, const bool isInternal=false);
 
     static DatabaseParameters parametersFromConfig(KSharedConfig::Ptr config = KGlobal::config(),
             const QString& configGroup = QString());

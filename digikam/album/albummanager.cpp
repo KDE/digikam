@@ -77,6 +77,7 @@ extern "C"
 
 // Local includes
 
+#include "config-digikam.h"
 #include "albumdb.h"
 #include "album.h"
 #include "albumsettings.h"
@@ -238,7 +239,7 @@ public:
         // build list
         foreach (const QFileInfo& info, fileInfoList)
         {
-            // ignore digikam4.db and journal and other temporary files
+            // ignore DIGIKAM4DB and journal and other temporary files
             if (!dirWatchBlackList.contains(info.fileName()))
             {
                 modList << info.lastModified();
@@ -524,7 +525,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
     if (newParams.isImgSQLite())
     {
         QDir newDir(newParams.getImgDatabaseNameOrDir());
-        QFileInfo newFile(newDir, QString("digikam4.db"));
+        QFileInfo newFile(newDir, QString(DIGIKAM4DB));
 
         if (!newFile.exists())
         {
@@ -999,7 +1000,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
     if (params.isTmbSQLite())
     {
-        d->dirWatchBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
+        d->dirWatchBlackList << THUMBNAILS_DIGIKAMDB << "thumbnails-digikam.db-journal";
     }
 
     ThumbnailLoadThread::initializeThumbnailDatabase(DatabaseAccess::parameters().thumbnailParameters(),

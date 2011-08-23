@@ -42,6 +42,10 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
+// Local includes
+
+#include "config-digikam.h"
+
 namespace Digikam
 {
 
@@ -75,10 +79,6 @@ static const char* configDatabasePassword = "Database Password";
 static const char* configDatabaseConnectOptions = "Database Connectoptions";
 static const char* configDatabaseFilePathEntry = "Database File Path";
 static const char* configAlbumPathEntry = "Album Path";
-
-// default sqlite database names
-static const char* digikam4db = "digikam4.db";
-static const char* thumbnails_digikamdb = "thumbnails-digikam.db";
 
 DatabaseParameters::DatabaseParameters()
     : imgPort(-1), tmbPort(-1)
@@ -189,7 +189,7 @@ DatabaseParameters::DatabaseParameters(const KUrl& url)
 
 bool DatabaseParameters::operator==(const DatabaseParameters& other) const
 {
-    return internalServer == other.internalServer &&
+    return internalServer    == other.internalServer &&
            imgDatabaseType   == other.imgDatabaseType &&
            imgDatabaseName   == other.imgDatabaseName &&
            imgConnectOptions == other.imgConnectOptions &&
@@ -234,12 +234,12 @@ bool DatabaseParameters::isImgMySQL() const
 
 bool DatabaseParameters::isTmbSQLite() const
 {
-    return imgDatabaseType == "QSQLITE";
+    return tmbDatabaseType == "QSQLITE";
 }
 
 bool DatabaseParameters::isTmbMySQL() const
 {
-    return imgDatabaseType == "QMYSQL";
+    return tmbDatabaseType == "QMYSQL";
 }
 
 QString DatabaseParameters::SQLiteDatabaseType()
@@ -264,7 +264,7 @@ QString DatabaseParameters::imgSQLiteDatabaseFile() const
 
 QString DatabaseParameters::tmbSQLiteDatabaseFile() const
 {
-    if (isImgSQLite())
+    if (isTmbSQLite())
     {
         return tmbDatabaseName;
     }
@@ -373,7 +373,7 @@ void DatabaseParameters::setImgDatabasePath(const QString& folderOrFileOrName)
 {
     if (isImgSQLite())
     {
-        imgDatabaseName = databaseFileSQLite(folderOrFileOrName, QString(digikam4db));
+        imgDatabaseName = databaseFileSQLite(folderOrFileOrName, QString(DIGIKAM4DB));
     }
     else
     {
@@ -385,7 +385,7 @@ void DatabaseParameters::setTmbDatabasePath(const QString& folderOrFileOrName)
 {
     if (isImgSQLite())
     {
-        tmbDatabaseName = databaseFileSQLite(folderOrFileOrName, QString(thumbnails_digikamdb));
+        tmbDatabaseName = databaseFileSQLite(folderOrFileOrName, QString(THUMBNAILS_DIGIKAMDB));
     }
     else
     {
@@ -470,7 +470,7 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
 
             if (!databaseFilePath.isEmpty())
             {
-                *this = parametersForSQLite(databaseFileSQLite(databaseFilePath, QString(digikam4db)));
+                *this = parametersForSQLite(databaseFileSQLite(databaseFilePath, QString(DIGIKAM4DB)));
             }
 
             // Be aware that schema updating from  <= 0.9 requires reading the "Album Path", so dont remove it here
@@ -536,7 +536,7 @@ QString DatabaseParameters::getImgDatabaseNameOrDir() const
         return imgDatabaseDirectorySQLite(imgDatabaseName);
     }
 
-    return configImgDatabaseName;
+    return imgDatabaseName;
 }
 
 QString DatabaseParameters::getTmbDatabaseNameOrDir() const
@@ -546,15 +546,15 @@ QString DatabaseParameters::getTmbDatabaseNameOrDir() const
         return tmbDatabaseDirectorySQLite(tmbDatabaseName);
     }
 
-    return configTmbDatabaseName;
+    return tmbDatabaseName;
 }
 
 QString DatabaseParameters::imgDatabaseDirectorySQLite(const QString& path)
 {
-    if (path.endsWith(digikam4db))
+    if (path.endsWith(DIGIKAM4DB))
     {
         QString chopped(path);
-        chopped.chop(QString(digikam4db).length());
+        chopped.chop(QString(DIGIKAM4DB).length());
         return chopped;
     }
 
@@ -563,17 +563,17 @@ QString DatabaseParameters::imgDatabaseDirectorySQLite(const QString& path)
 
 QString DatabaseParameters::tmbDatabaseDirectorySQLite(const QString& path)
 {
-    if (path.endsWith(thumbnails_digikamdb))
+    if (path.endsWith(THUMBNAILS_DIGIKAMDB))
     {
         QString chopped(path);
-        chopped.chop(QString(thumbnails_digikamdb).length());
+        chopped.chop(QString(THUMBNAILS_DIGIKAMDB).length());
         return chopped;
     }
 
     return path;
 }
 
-DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseType)
+DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseType, const bool isInternal)
 {
     DatabaseParameters parameters;
 
@@ -587,11 +587,14 @@ DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseT
     parameters.tmbPassword     = parameters.imgPassword     = config.password;
     parameters.tmbPort         = parameters.imgPort         = config.port.toInt();
 
-    const QString miscDir      = KStandardDirs::locateLocal("data", "digikam/db_misc");
-    QString connectOptions = config.connectOptions;
-    connectOptions.replace(QString("$$DBMISCPATH$$"), miscDir);
-
-    parameters.tmbConnectOptions = parameters.imgConnectOptions = connectOptions;
+    if(isInternal) 
+    {
+        const QString miscDir      = KStandardDirs::locateLocal("data", "digikam/db_misc");
+        QString connectOptions = config.connectOptions;
+        connectOptions.replace(QString("$$DBMISCPATH$$"), miscDir);
+        parameters.tmbConnectOptions = parameters.imgConnectOptions = connectOptions;
+    }
+    parameters.tmbConnectOptions = parameters.imgConnectOptions = QLatin1String("");
 
     kDebug(50003) << "ConnectOptions "<< parameters.imgConnectOptions;
     return parameters;
@@ -605,9 +608,9 @@ DatabaseParameters DatabaseParameters::thumbnailParameters() const
     return params;
 }
 
-//FIXME: I'm wrong!
 DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databaseFile)
 {
+    // this function should only be used on first run, empty settings
     // only the database name is needed
     DatabaseParameters params("QSQLITE", "QSQLITE", databaseFile, databaseFile);
     params.setImgDatabasePath(databaseFile);
@@ -617,7 +620,8 @@ DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databa
 
 DatabaseParameters DatabaseParameters::parametersForSQLiteDefaultFile(const QString& directory)
 {
-    return parametersForSQLite(QDir::cleanPath(directory + QDir::separator() + digikam4db));
+    // this function should only be used on first run, empty settings
+    return parametersForSQLite(QDir::cleanPath(directory + QDir::separator() + DIGIKAM4DB));
 }
 
 void DatabaseParameters::insertInUrl(KUrl& url) const

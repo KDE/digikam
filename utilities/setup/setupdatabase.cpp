@@ -152,6 +152,37 @@ void SetupDatabase::applySettings()
     {
         return;
     }
+    
+    if (d->databaseWidget->internalServer->isChecked())
+    {
+        DatabaseParameters internalServerParameters = \
+            DatabaseParameters::defaultParameters(d->databaseWidget->imgCurrentDatabaseType(), true);
+        settings->setInternalDatabaseServer(true);
+
+        settings->setImgDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
+        settings->setImgDatabaseName(internalServerParameters.imgDatabaseName);
+        settings->setImgDatabaseConnectoptions(internalServerParameters.imgConnectOptions);
+        settings->setImgDatabaseHostName(internalServerParameters.imgHostName);
+        settings->setImgDatabasePort(internalServerParameters.imgPort);
+        settings->setImgDatabaseUserName(internalServerParameters.imgUserName);
+        settings->setImgDatabasePassword(internalServerParameters.imgPassword);
+
+        settings->setTmbDatabaseType(d->databaseWidget->tmbCurrentDatabaseType());
+        settings->setTmbDatabaseName(internalServerParameters.tmbDatabaseName);
+        settings->setTmbDatabaseConnectoptions(internalServerParameters.tmbConnectOptions);
+        settings->setTmbDatabaseHostName(internalServerParameters.tmbHostName);
+        settings->setTmbDatabasePort(internalServerParameters.tmbPort);
+        settings->setTmbDatabaseUserName(internalServerParameters.tmbUserName);
+        settings->setTmbDatabasePassword(internalServerParameters.tmbPassword);
+
+        settings->saveSettings();
+
+        return;
+    }
+
+    // clear internal database server
+    settings->setInternalDatabaseServer(false);
+    d->databaseWidget->internalServer->setChecked(false);
 
     if (d->databaseWidget->imgCurrentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
     {
@@ -162,60 +193,43 @@ void SetupDatabase::applySettings()
         if (oldDir != newDir || d->databaseWidget->imgCurrentDatabaseType() != d->databaseWidget->imgOriginalDbType)
         {
             settings->setDatabaseParameters(DatabaseParameters::parametersForSQLiteDefaultFile(newPath));
-
-            // clear other fields
-            d->databaseWidget->internalServer->setChecked(false);
-
-            settings->saveSettings();
         }
     }
     else
     {
-        if (d->databaseWidget->internalServer->isChecked())
-        {
-            //FIXME: thumb imgCurrentDatabaseType
-            DatabaseParameters internalServerParameters = DatabaseParameters::defaultParameters(d->databaseWidget->imgCurrentDatabaseType());
-            settings->setInternalDatabaseServer(true);
-
-            settings->setImgDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
-            settings->setImgDatabaseName(internalServerParameters.imgDatabaseName);
-            settings->setImgDatabaseConnectoptions(internalServerParameters.imgConnectOptions);
-            settings->setImgDatabaseHostName(internalServerParameters.imgHostName);
-            settings->setImgDatabasePort(internalServerParameters.imgPort);
-            settings->setImgDatabaseUserName(internalServerParameters.imgUserName);
-            settings->setImgDatabasePassword(internalServerParameters.imgPassword);
-
-            settings->setTmbDatabaseType(d->databaseWidget->tmbCurrentDatabaseType());
-            settings->setTmbDatabaseName(internalServerParameters.tmbDatabaseName);
-            settings->setTmbDatabaseConnectoptions(internalServerParameters.tmbConnectOptions);
-            settings->setTmbDatabaseHostName(internalServerParameters.tmbHostName);
-            settings->setTmbDatabasePort(internalServerParameters.tmbPort);
-            settings->setTmbDatabaseUserName(internalServerParameters.tmbUserName);
-            settings->setTmbDatabasePassword(internalServerParameters.tmbPassword);
-        }
-        else
-        {
-            settings->setInternalDatabaseServer(d->databaseWidget->internalServer->isChecked());
-
-            settings->setImgDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
-            settings->setImgDatabaseName(d->databaseWidget->imgDatabaseName->text());
-            settings->setImgDatabaseConnectoptions(d->databaseWidget->imgConnectionOptions->text());
-            settings->setImgDatabaseHostName(d->databaseWidget->imgHostName->text());
-            settings->setImgDatabasePort(d->databaseWidget->imgHostPort->text().toInt());
-            settings->setImgDatabaseUserName(d->databaseWidget->imgUserName->text());
-            settings->setImgDatabasePassword(d->databaseWidget->imgPassword->text());
-
-            settings->setTmbDatabaseType(d->databaseWidget->tmbCurrentDatabaseType());
-            settings->setTmbDatabaseName(d->databaseWidget->tmbDatabaseName->text());
-            settings->setTmbDatabaseConnectoptions(d->databaseWidget->tmbConnectionOptions->text());
-            settings->setTmbDatabaseHostName(d->databaseWidget->tmbHostName->text());
-            settings->setTmbDatabasePort(d->databaseWidget->tmbHostPort->text().toInt());
-            settings->setTmbDatabaseUserName(d->databaseWidget->tmbUserName->text());
-            settings->setTmbDatabasePassword(d->databaseWidget->tmbPassword->text());
-        }
-
-        settings->saveSettings();
+        settings->setImgDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
+        settings->setImgDatabaseName(d->databaseWidget->imgDatabaseName->text());
+        settings->setImgDatabaseConnectoptions(d->databaseWidget->imgConnectionOptions->text());
+        settings->setImgDatabaseHostName(d->databaseWidget->imgHostName->text());
+        settings->setImgDatabasePort(d->databaseWidget->imgHostPort->text().toInt());
+        settings->setImgDatabaseUserName(d->databaseWidget->imgUserName->text());
+        settings->setImgDatabasePassword(d->databaseWidget->imgPassword->text());
     }
+
+    if (d->databaseWidget->tmbCurrentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
+    {
+        QString newPath = d->databaseWidget->tmbDatabasePathEdit->url().path();
+        QDir oldDir(d->databaseWidget->tmbOriginalDbPath);
+        QDir newDir(newPath);
+
+        if (oldDir != newDir || d->databaseWidget->tmbCurrentDatabaseType() != d->databaseWidget->tmbOriginalDbType)
+        {
+            settings->setDatabaseParameters(DatabaseParameters::parametersForSQLiteDefaultFile(newPath));
+        }
+    }
+    else
+    {
+        settings->setTmbDatabaseType(d->databaseWidget->tmbCurrentDatabaseType());
+        settings->setTmbDatabaseName(d->databaseWidget->tmbDatabaseName->text());
+        settings->setTmbDatabaseConnectoptions(d->databaseWidget->tmbConnectionOptions->text());
+        settings->setTmbDatabaseHostName(d->databaseWidget->tmbHostName->text());
+        settings->setTmbDatabasePort(d->databaseWidget->tmbHostPort->text().toInt());
+        settings->setTmbDatabaseUserName(d->databaseWidget->tmbUserName->text());
+        settings->setTmbDatabasePassword(d->databaseWidget->tmbPassword->text());
+    }
+
+
+    settings->saveSettings();
 }
 
 void SetupDatabase::readSettings()
@@ -232,12 +246,13 @@ void SetupDatabase::readSettings()
 
 void SetupDatabase::upgradeUniqueHashes()
 {
-    int result = KMessageBox::warningContinueCancel(this, i18nc("@info",
-                                                                "<para>The process of updating the file hashes takes a few minutes.</para> "
-                                                                "<para>Please ensure that any important collections on removable media are connected. "
-                                                                "<note>After the upgrade you cannot use your database with a digiKam version "
-                                                                "prior to 2.0.</note></para> "
-                                                                "<para>Do you want to begin the update?</para>"));
+    int result = KMessageBox::warningContinueCancel(this, 
+        i18nc("@info",
+              "<para>The process of updating the file hashes takes a few minutes.</para> "
+              "<para>Please ensure that any important collections on removable media are connected. "
+              "<note>After the upgrade you cannot use your database with a digiKam version "
+              "prior to 2.0.</note></para> "
+              "<para>Do you want to begin the update?</para>"));
 
     if (result == KMessageBox::Continue)
     {

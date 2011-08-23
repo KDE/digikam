@@ -59,12 +59,14 @@ public:
 
     DatabaseWidgetPriv()
     {
-        databasePathLabel = 0;
+        imgDatabasePathLabel = 0;
+        tmbDatabasePathLabel = 0;
         imgExpertSettings = 0;
         tmbExpertSettings = 0;
     }
 
-    QLabel*    databasePathLabel;
+    QLabel*    imgDatabasePathLabel;
+    QLabel*    tmbDatabasePathLabel;
     QGroupBox* imgExpertSettings;
     QGroupBox* tmbExpertSettings;
 };
@@ -91,13 +93,20 @@ void DatabaseWidget::setupMainArea(const QString & title)
 
     QGroupBox* dbPathBox = new QGroupBox(title, this);
     QVBoxLayout* vlay    = new QVBoxLayout(dbPathBox);
-    d->databasePathLabel = new QLabel(i18n("<p>The location where the database file will be stored on your system. "
+    d->imgDatabasePathLabel = new QLabel(i18n("<p>The location where the database file will be stored on your system. "
                                            "There is one common database file for all root albums.<br/>"
                                            "Write access is required to be able to edit image properties.</p>"
                                            "<p>Note: a remote file system, such as NFS, cannot be used here.</p><p></p>"),
                                       dbPathBox);
-    d->databasePathLabel->setWordWrap(true);
-    d->databasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
+    d->imgDatabasePathLabel->setWordWrap(true);
+    d->imgDatabasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
+
+    d->tmbDatabasePathLabel = new QLabel(i18n("<p>The location where the database file will be stored on your system. "
+                                           "This file can grow quite big</p>"
+                                           "<p>Note: a remote file system, such as NFS, cannot be used here.</p><p></p>"),
+                                      dbPathBox);
+    d->tmbDatabasePathLabel->setWordWrap(true);
+    d->tmbDatabasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
 
     imgDatabasePathEdit     = new KUrlRequester(dbPathBox);
     imgDatabasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
@@ -176,13 +185,14 @@ void DatabaseWidget::setupMainArea(const QString & title)
 
     vlay->addWidget(imgDatabaseTypeLabel);
     vlay->addWidget(imgDatabaseType);
-    vlay->addWidget(d->databasePathLabel);
+    vlay->addWidget(d->imgDatabasePathLabel);
     vlay->addWidget(imgDatabasePathEdit);
     vlay->addWidget(d->imgExpertSettings);
 
     vlay->addWidget(tmbDatabaseTypeLabel);
     vlay->addWidget(tmbDatabaseType);
     vlay->addWidget(tmbDatabasePathEdit);
+    vlay->addWidget(d->tmbDatabasePathLabel);
     vlay->addWidget(d->tmbExpertSettings);
 
     vlay->setSpacing(0);
@@ -339,13 +349,13 @@ void DatabaseWidget::setImgDatabaseInputFields(const QString& currentIndexStr)
 {
     if (currentIndexStr == QString(DatabaseParameters::SQLiteDatabaseType()))
     {
-        d->databasePathLabel->setVisible(true);
+        d->imgDatabasePathLabel->setVisible(true);
         imgDatabasePathEdit->setVisible(true);
         d->imgExpertSettings->setVisible(false);
     }
     else
     {
-        d->databasePathLabel->setVisible(false);
+        d->imgDatabasePathLabel->setVisible(false);
         imgDatabasePathEdit->setVisible(false);
         d->imgExpertSettings->setVisible(true);
     }
@@ -357,13 +367,13 @@ void DatabaseWidget::setTmbDatabaseInputFields(const QString& currentIndexStr)
 {
     if (currentIndexStr == QString(DatabaseParameters::SQLiteDatabaseType()))
     {
-        //FIXME: d->databasePathLabel->setVisible(true);
+        d->tmbDatabasePathLabel->setVisible(true);
         tmbDatabasePathEdit->setVisible(true);
         d->tmbExpertSettings->setVisible(false);
     }
     else
     {
-        //FIXME: d->databasePathLabel->setVisible(false);
+        d->tmbDatabasePathLabel->setVisible(false);
         tmbDatabasePathEdit->setVisible(false);
         d->tmbExpertSettings->setVisible(true);
     }
@@ -425,7 +435,6 @@ void DatabaseWidget::slotImgCheckDatabaseConnection()
 void DatabaseWidget::slotTmbCheckDatabaseConnection()
 {
     // TODO : if chek DB connection operations can be threaded, use DBusyDlg dialog there...
-    return; //FIXME:
 
     kapp->setOverrideCursor(Qt::WaitCursor);
 
@@ -460,15 +469,15 @@ void DatabaseWidget::slotTmbCheckDatabaseConnection()
 
 void DatabaseWidget::checkDBPath()
 {
-    return; //FIXME:
-    
-    QString newPath    = imgDatabasePathEdit->url().toLocalFile();
+    QString newPath = imgDatabasePathEdit->url().toLocalFile();
 
     if (!imgDatabasePathEdit->url().path().isEmpty())
     {
         QDir dbDir(newPath);
         QDir oldDir(imgOriginalDbPath);
     }
+
+    newPath = tmbDatabasePathEdit->url().toLocalFile();
 
     if (!tmbDatabasePathEdit->url().path().isEmpty())
     {
@@ -539,59 +548,47 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
 {
     DatabaseParameters parameters;
 
-    //fr if (currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()) || !internalServer->isChecked())
-    if (imgCurrentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
-    {
-        //FIXME:
-        parameters.imgConnectOptions = imgConnectionOptions->text();
-        parameters.imgDatabaseType   = imgCurrentDatabaseType();
-        parameters.imgHostName       = imgHostName->text();
-        parameters.imgPassword       = imgPassword->text();
-        parameters.imgPort           = imgHostPort->text().toInt();
-        parameters.imgUserName       = imgUserName->text();
+#ifdef HAVE_INTERNALMYSQL
+    if (!internalServer->isChecked()) {
+        parameters = DatabaseParameters::defaultParameters(imgCurrentDatabaseType(), true);
+        DatabaseServerStarter::startServerManagerProcess(imgCurrentDatabaseType());
+        return parameters;
+    }
+#endif // HAVE_INTERNALMYSQL
 
-        if (parameters.imgDatabaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
-        {
-            parameters.imgDatabaseName = QDir::cleanPath(imgDatabasePathEdit->url().toLocalFile() + '/' + "digikam4.db");
-        }
-        else
-        {
-            parameters.imgDatabaseName = imgDatabaseName->text();
-        }
+    parameters = DatabaseParameters::defaultParameters(imgCurrentDatabaseType(), false);
+
+    parameters.imgConnectOptions = imgConnectionOptions->text();
+    parameters.imgDatabaseType   = imgCurrentDatabaseType();
+    parameters.imgHostName       = imgHostName->text();
+    parameters.imgPassword       = imgPassword->text();
+    parameters.imgPort           = imgHostPort->text().toInt();
+    parameters.imgUserName       = imgUserName->text();
+
+    if (parameters.imgDatabaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
+    {
+        parameters.imgDatabaseName = QDir::cleanPath(imgDatabasePathEdit->url().toLocalFile() + '/' + DIGIKAM4DB);
     }
     else
     {
-        // FIXME:
-        parameters = DatabaseParameters::defaultParameters(imgCurrentDatabaseType());
-        // FIXME: DatabaseServerStarter::startServerManagerProcess(imgCurrentDatabaseType());
+        parameters.imgDatabaseName = imgDatabaseName->text();
     }
-    
-    //fr if (currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()) || !internalServer->isChecked())
-    if (tmbCurrentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
-    {
-        parameters.tmbConnectOptions = tmbConnectionOptions->text();
-        parameters.tmbDatabaseType   = tmbCurrentDatabaseType();
-        parameters.tmbHostName       = tmbHostName->text();
-        parameters.tmbPassword       = tmbPassword->text();
-        parameters.tmbPort           = tmbHostPort->text().toInt();
-        parameters.tmbUserName       = tmbUserName->text();
 
-        if (parameters.tmbDatabaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
-        {
-            parameters.tmbDatabaseName = QDir::cleanPath(tmbDatabasePathEdit->url().toLocalFile() + '/' + "thumbnails-digikam.db");
-        }
-        else
-        {
-            parameters.tmbDatabaseName = tmbDatabaseName->text();
-        }
+    parameters.tmbConnectOptions = tmbConnectionOptions->text();
+    parameters.tmbDatabaseType   = tmbCurrentDatabaseType();
+    parameters.tmbHostName       = tmbHostName->text();
+    parameters.tmbPassword       = tmbPassword->text();
+    parameters.tmbPort           = tmbHostPort->text().toInt();
+    parameters.tmbUserName       = tmbUserName->text();
+
+    if (parameters.tmbDatabaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
+    {
+        parameters.tmbDatabaseName = QDir::cleanPath(tmbDatabasePathEdit->url().toLocalFile() + '/' + THUMBNAILS_DIGIKAMDB);
     }
     else
     {
-        // FIXME:
-        parameters = DatabaseParameters::defaultParameters(tmbCurrentDatabaseType());
-        // FIXME: DatabaseServerStarter::startServerManagerProcess(tmbCurrentDatabaseType());
+        parameters.tmbDatabaseName = tmbDatabaseName->text();
     }
-
 
     return parameters;
 }

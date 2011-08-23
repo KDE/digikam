@@ -172,8 +172,6 @@ void MigrationDlg::setupMainArea()
     // setup dialog
     setButtons(Close);
 
-    /* FIXME:
-    
     connect(d->migrateButton, SIGNAL(clicked()),
             this, SLOT(performCopy()));
 
@@ -192,8 +190,7 @@ void MigrationDlg::setupMainArea()
 
     connect(d->cancelButton, SIGNAL(clicked()),
             &(d->copyThread->copyManager), SLOT(stopProcessing()));
-            
-    */
+
 }
 
 void MigrationDlg::performCopy()
@@ -214,7 +211,6 @@ void MigrationDlg::dataInit()
 
 void MigrationDlg::unlockInputFields()
 {
-    return; // FIXME:
     d->fromDatabaseWidget->setEnabled(true);
     d->toDatabaseWidget->setEnabled(true);
     d->migrateButton->setEnabled(true);
