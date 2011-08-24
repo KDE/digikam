@@ -36,6 +36,7 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -73,7 +74,7 @@ public:
     }
 
     const QString       configGroupName;
-
+    bool                strokeOver;    //be set true whenever a stroke is over
     DImg                origImage;
     DImg                previewRImage; //result of filter preview
     DImg                resultImage;   //result of filter originalImage
@@ -97,6 +98,7 @@ CloneTool::CloneTool(QObject* parent)
     d->previewWidget->setWhatsThis(i18n("The image preview with clone applied "
                                         "is shown here."));
     setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
+    init();
    // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -110,6 +112,8 @@ CloneTool::CloneTool(QObject* parent)
     d->settingsView = new CloneSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
 
+    d->strokeOver    = false;
+
     //-------------------save the original image, if cancel button is clicked, this will be used--------------
     d->resultImage   = DImg();
     d->previewRImage = DImg();
@@ -122,12 +126,11 @@ CloneTool::CloneTool(QObject* parent)
   
     //==========================================================================================================
     // -------------------------------------------------------------
-    connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotTimer()));
+    //connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotTimer()));
     connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotSettingsChanged()));
-    connect(d->previewWidget,SIGNAL(signalDrawingComplete()),this,SLOT(slotDrawingComplete()));
+    connect(d->previewWidget,SIGNAL(signalResized()),this,SLOT(slotEffect()));
+    connect(d->previewWidget,SIGNAL(signalStrokeOver()),this,SLOT(slotStrokeOver()));//FIXME
     
-    init();
-
 
 }
 
@@ -139,10 +142,19 @@ CloneTool::~CloneTool()
 void CloneTool::slotSettingsChanged()
 {
     d->previewWidget->setContainer(d->settingsView->settings());
+    kDebug()<<"slotSettingsChanged is called";
 }
 
+void CloneTool::slotStrokeOver()
+{
+    d->strokeOver = true;
+}
+
+//FIXME
+/*
 void CloneTool::slotDrawingComplete()
 {
+    kDebug()<<"slotDrawingComplete is called";
     QPoint dis  = d->previewWidget->getDis();
     DImg orimg  = d->previewWidget->imageIface()->getPreviewImg();
     DImg desimg = DImg(orimg.width(), orimg.height(), orimg.sixteenBit(), orimg.hasAlpha());
@@ -175,9 +187,12 @@ void CloneTool::slotDrawingComplete()
     d->previewWidget->updatePreview();
     delete orignalFilter;
 }
+*/
 
+//FIXME
 void CloneTool::readSettings()
 {
+    kDebug()<<"readSettings is called";
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
@@ -186,11 +201,12 @@ void CloneTool::readSettings()
 
     d->previewWidget->setContainer(prm);  // get current container
 
-    slotEffect();
+    //slotEffect();
 }
 
 void CloneTool::writeSettings()
 {
+    kDebug()<<"writeSettings is called";
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
@@ -200,42 +216,82 @@ void CloneTool::writeSettings()
 
 void CloneTool::slotResetSettings()
 {
+    kDebug()<<"slotResetSettings is called";
     d->settingsView->resetToDefault();
-    slotEffect();
+    //slotEffect();
 }
 
 //FIXME
-/*
+
 void CloneTool::prepareEffect()
 {
-
-if(d->settingsView->getDrawEnable())
-{
-  d->previewWidget->setContainer(d->settingsView->settings());
-    ImageIface* iface = d->previewWidget->imageIface();
-    int previewWidth = iface->previewWidth();
-    int previewHeight = iface->previewHeight();
-
-    DImg  imTemp   = iface->getOriginalImg()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
-    DImg desTemg   = DImg(imTemp.width(), imTemp.height(), imTemp.sixteenBit(), imTemp.hasAlpha());
-    DImg* maskTemp =  d->previewWidget->getPreviewMask();
-    float ratio    = maskTemp->width()/imTemp.width();// smooth processing keeps the height and width ratio, 
-                                                    // so only compute width ratio is OK.
-    if(ratio!=0)
+    if(d->strokeOver)
     {
-       QPoint dis = QPoint(d->previewWidget->getDis().x()/ratio, d->previewWidget->getDis().y()/ratio);
-       maskTemp->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);   
-       setFilter(new CloneFilter(imTemp, desTemg, maskTemp, dis, this));
-    }
+        if(d->settingsView->getDrawEnable())
+        {
+            kDebug()<<"prepareEffect is called";
+            d->previewWidget->setContainer(d->settingsView->settings());
+            QPoint dis  = d->previewWidget->getDis();
+            DImg orimg  = d->previewWidget->imageIface()->getPreviewImg();
+            DImg desimg = DImg(orimg.width(), orimg.height(), orimg.sixteenBit(), orimg.hasAlpha());
+            CloneFilter*  previewFilter = new CloneFilter(orimg, desimg, d->previewWidget->getPreviewMask(), dis);
+            setFilter(previewFilter);    
+            d->previewRImage.detach();
+            //d->previewRImage = previewFilter->getTargetImage(); //FIXME
+            d->previewRImage = filter()->getTargetImage();
+            //if(!data)
+            //    return;    
+            //d->previewRImage->putImageData(data);
+            d->previewWidget->imageIface()->putPreviewImage(d->previewRImage.bits());
+            d->previewWidget->setPreview();
+            delete previewFilter;
 
-    delete maskTemp;
-}
+            dis = d->previewWidget->getOriDis();
+            DImg orimg1  = d->previewWidget->imageIface()->getOriginalImg()->copyImageData();
+            DImg desimg1 = DImg(orimg1.width(), orimg1.height(), orimg1.sixteenBit(), orimg1.hasAlpha());
+            CloneFilter*  orignalFilter = new CloneFilter(orimg1, desimg1, d->previewWidget->getMaskImg(), dis);
+            //CloneFilter*  orignalFilter = new CloneFilter(d->previewWidget->imageIface()->getOriginalImg()->copyImageData(),d->previewWidget->getMaskImg(),dis);
+            setFilter(orignalFilter);
+            // uchar* data1 = previewFilter->getResultImg()->bits();
+            d->resultImage.detach();
+            //d->resultImage = previewFilter->getTargetImage (); //FIXME
+            d->resultImage = filter()->getTargetImage();
+            // if(!data)
+            //    return;    
+            // d->resultImage->putImageData(data);
+            d->previewWidget->imageIface()->putOriginalImage(i18n("Clone Toll"), filter()->filterAction(),d->resultImage.bits());
+            d->previewWidget->updatePreview();
+            delete orignalFilter;
+            d->strokeOver = false;
 
-}
+/*
+            ImageIface* iface = d->previewWidget->imageIface();
+            int previewWidth = iface->previewWidth();
+            int previewHeight = iface->previewHeight();
+
+            DImg  imTemp   = iface->getOriginalImg()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
+            DImg desTemg   = DImg(imTemp.width(), imTemp.height(), imTemp.sixteenBit(), imTemp.hasAlpha());
+            DImg* maskTemp =  d->previewWidget->getPreviewMask();
+            float ratio    = maskTemp->width()/imTemp.width();// smooth processing keeps the height and width ratio, 
+                                                        // so only compute width ratio is OK.
+            if(ratio!=0)
+            {
+               QPoint dis = QPoint(d->previewWidget->getDis().x()/ratio, d->previewWidget->getDis().y()/ratio);
+               maskTemp->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);   
+               setFilter(new CloneFilter(imTemp, desTemg, maskTemp, dis, this));
+            }
+
+          delete maskTemp;
 */
+        }
+    
+    }
+}
+
 
 void CloneTool::prepareFinal()
 {
+    kDebug()<<"prepareFinal is called";
     d->previewWidget->setContainer(d->settingsView->settings());
     ImageIface iface(0, 0);
     // DImg* imTemp = previewWidget->getPreview();
@@ -250,17 +306,19 @@ void CloneTool::prepareFinal()
 
 void CloneTool::putPreviewData()
 {
-  ImageIface* iface = d->previewWidget->imageIface();
-  DImg previewImg   = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
-  //iface->putPreviewImage(previewImg.bits());
-  //uchar* data       = previewImg.stripImageData();
-  iface->putPreviewImage(previewImg.bits());
-  //delete []data;
-  d->previewWidget->updatePreview();
+    kDebug()<<"putPreviewData is called";
+    ImageIface* iface = d->previewWidget->imageIface();
+    DImg previewImg   = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
+    //iface->putPreviewImage(previewImg.bits());
+    //uchar* data       = previewImg.stripImageData();
+    iface->putPreviewImage(previewImg.bits());
+    //delete []data;
+    d->previewWidget->updatePreview();
 }
 
 void CloneTool::putFinalData()
-{
+{    
+    kDebug()<<"putFinalData is called";
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Clone Tool"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
