@@ -63,12 +63,14 @@ public:
 Q_SIGNALS:
 
     void signalSettingsChanged();
+    //void signalChanged();
 
 public Q_SLOTS:
 
     void slotBrushIdChanged(int id);
     void slotSelectModeChanged();
     void slotDrawModeChanged();
+    
 
 private:
 

@@ -96,10 +96,11 @@ public:
     RIntNumInput*         opacityInput;
 
     QMap<int, CloneBrush> brushMap;
-    int                   brushID;
+    int                   brushID;    
     bool                  selectMode;
     bool                  drawMode;
     bool                  drawEnable;
+    CloneBrush            brush; 
 };
 
 const QString CloneSettings::CloneSettingsPriv::configBrushID("BrushID");
@@ -181,7 +182,7 @@ CloneSettings::CloneSettings(QWidget* parent)
         QString filename = nameFilters.at(i).toLocal8Bit().constData();
         kDebug() << filename;
         QPixmap iconMap;
-        iconMap.load(path+filename);
+        if(iconMap.load(path+filename));
 
         //------------------------------debug info---------------------
         /* int map_width = 0;
@@ -196,12 +197,15 @@ CloneSettings::CloneSettings(QWidget* parent)
         // KDebug() << load_map;*/
         //==========================================================================
 
-        if(!iconMap.isNull())
+       // if(!iconMap.isNull())
         {
+            kDebug()<<"load iconMap successfully";
             CloneBrush brush;
             brush.setPixmap(iconMap);
+            //if(iconMap.size().width()!=0)
+            //      kDebug()<<"iconMap's size is not 0";
             brush.setDia(iconMap.size().width());
-            d->brushMap.insert(i-1,brush);
+            d->brushMap.insert(i-2,brush);
             buttons[(i-2)%4][(i-2)/4].setParent(parent);
             buttons[(i-2)%4][(i-2)/4].setFixedSize(30,23);
             buttons[(i-2)%4][(i-2)/4].setIcon(QIcon(iconMap));
@@ -290,14 +294,16 @@ CloneSettings::CloneSettings(QWidget* parent)
     connect(brushGroup, SIGNAL(buttonClicked (int)),
             this, SLOT(slotBrushIdChanged(int)));
 
-    connect(pushButton1, SIGNAL(pressed()),
-            this,SIGNAL(signalSettingsChanged()));
+/* 
+   connect(d->opacityInput, SIGNAL(valueChanged (int)),
+           this,SLOT(slotValueChanged(int)));
 
-    connect(pushButton2, SIGNAL(pressed()),
-            this,SIGNAL(signalSettingsChanged()));
+    connect(d->diameterInput, SIGNAL(valueChanged (int)),
+            this,SLOT(slotValueChanged(int)));
 
-    connect(brushGroup, SIGNAL(buttonClicked (int)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(this, SIGNAL(signalChanged()),
+           this, SLOT(slotChanged()));
+*/  
 }
 
 CloneSettings::~CloneSettings()
@@ -314,9 +320,14 @@ void CloneSettings::setSettings(const CloneContainer& settings)
 {
     blockSignals(true);
 
+    d->brushID    = settings.brushID;
+    d->brush      = settings.brush;
+    d->selectMode = settings.selectMode;
+    d->drawMode   = settings.drawMode;
+
     d->diameterInput->setValue(settings.mainDia);
     d->opacityInput->setValue(settings.opacity);
-
+    
     blockSignals(false);
 }
 
@@ -327,14 +338,19 @@ void CloneSettings::resetToDefault()
 
 CloneContainer CloneSettings::defaultSettings() const
 {
-   CloneContainer prm;
+    //blockWidgetSignals(true);   
+
+    CloneContainer prm;
 
    prm.brushID    = d->brushID;
-   //FIXME   prm.brush      = d->brushMap.find(prm.brushID);
+   //FIXME   
+   prm.brush      = *d->brushMap.find(prm.brushID);
    prm.brushDia   = prm.brush.getDia();
    prm.mainDia    = prm.brush.getDia();
    prm.selectMode = d->selectMode;
    prm.drawMode   = d->drawMode;
+
+   //blockWidgetSignals(false);
 
    return prm;
 }
@@ -374,15 +390,21 @@ void CloneSettings::writeSettings(KConfigGroup& group)
 
 CloneContainer CloneSettings::settings()const
 {
+    //blockWidgetSignals(true);
+
     CloneContainer prm;
 
+
     prm.brushID    = d->brushID;
-    //FIXME    prm.brush      = d->brushMap.find(prm.brushID);
-    prm.brushDia   = prm.brush.getDia();
+    //FIXME
+    prm.brush      = d->brush;
+    prm.brushDia   = d->brush.getDia();
     prm.mainDia    = d->diameterInput->value();
     prm.opacity    = d->opacityInput->value();
     prm.selectMode = d->selectMode;
     prm.drawMode   = d->drawMode;
+
+    //blockWidgetSignals(false);
 
     return prm;
 }
@@ -390,24 +412,34 @@ CloneContainer CloneSettings::settings()const
 void CloneSettings::slotBrushIdChanged(int id)
 {
     if(id >= 0 )
+    {
         d->brushID = id;
+        d->brush  = *d->brushMap.find(d->brushID);
+        kDebug()<<"slotBrushIdChanged is called";   
+        signalSettingsChanged();   
+    }
 }
 
 void CloneSettings::slotSelectModeChanged()
 {
-      d->selectMode = true;
-      d->drawMode   = false;
-      d->drawEnable = true;
+    d->selectMode = true;
+    d->drawMode   = false;
+    d->drawEnable = true; 
+    kDebug()<<"slotSelectModeChanged is called"; 
+    signalSettingsChanged();   
 }
 
 void CloneSettings::slotDrawModeChanged()
 {
     if(d->drawEnable)
     {
-          d->drawMode   = true;
-          d->selectMode = false;
+        d->drawMode   = true;
+        d->selectMode = false; 
+        kDebug()<<"slotDrawModeChanged is called";
+        signalSettingsChanged(); 
     }
 }
+
 
 void CloneSettings::blockWidgetSignals(bool b)
 {
