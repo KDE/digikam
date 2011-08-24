@@ -75,12 +75,15 @@ public:
     }
 
     bool           sixteenBit;
+    bool           hasDrawEllipse;
     int            width;
     int            height;
     int            timerID;
     int            flicker;
     QRect          rect;
+    QRect          oldRect;
     int            Border;
+    int            CircleR;
     QColor         MASK_BG;     // background color of maskimage
     QColor         MASK_C;      // forground color of maskimage
     QColor         bgColor;     // background color of the widget
@@ -88,6 +91,8 @@ public:
     QPoint         startPoint;  // the first point of a stroke
     QPoint         dis;         // dis means the distance between startPoit and centerPoint, the value can be negative
                                 // Current spot position in preview coordinates.
+
+
     QPoint         spot;
     QPixmap*       pixmap;
     QPixmap*       previewPixmap;
@@ -95,6 +100,7 @@ public:
     DImg*          maskImage;
 //  DImg*          origImage;
     DImg           preview;
+    DImg           oldArea;
     ImageIface*    iface;
 
     CloneContainer settings;
@@ -118,6 +124,7 @@ ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settin
     bool hasAlpha   = d->iface->previewHasAlpha();
     d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
     d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+    d->oldArea      =DImg(d->CircleR,d->CircleR,sixteenBit, hasAlpha);
     delete [] data;
 
     d->pixmap        = new QPixmap(w, h);
@@ -129,7 +136,7 @@ ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settin
     d->spot.setY( d->height / 2 );
     // setMouseTracking(true);//alreadhave in imageguidewidget
     d->centerPoint.setX(0);
-    d->centerPoint.setY(0);
+    d->centerPoint.setY(0); 
     d->startPoint.setX(0);
     d->startPoint.setY(0);
     d->dis.setX(0);
@@ -138,6 +145,7 @@ ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settin
     //d->MASK_C          = new QColor(0,0,0);
     d->bgColor         = palette().color(QPalette::Base);
     d->Border          = 10;
+    d->CircleR         = 6;
     d->MASK_BG.setRgb(255,255,255,255);
     d->MASK_C.setRgb(0,0,0,255);
     //DColor* backColor  = new DColor(255,255,255,255,false);//fillt maskImage with white
@@ -157,6 +165,9 @@ ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settin
     d->preveiwMask = new DImg(w, h, sixteen, alpha);
     d->preveiwMask->fill(DColor(d->MASK_BG));
     d->settings    = settings;
+
+    d->hasDrawEllipse = false;
+
  }
 
 ImageCloneWidget::~ImageCloneWidget()
@@ -296,8 +307,8 @@ bool ImageCloneWidget::inBrushpixmap(QImage brushimg, const int x, const int y)
     if ( x >= 0 && x < brushimg.width() && y >= 0 && y < brushimg.height())
     { 
         kDebug()<<"in brushpixmap is called";
-        QColor color = QColor(brushimg.pixel(x,y));        
-        if(color != d->MASK_BG)
+        int alpha = DImg(brushimg).getPixelColor(x,y).alpha();  //brushpixmap is a .png file
+        if(alpha != 0)
             return true;
         else
             return false;
@@ -525,8 +536,8 @@ void ImageCloneWidget::addToMask(const QPoint& point)
                             pre.setY(j-getDis().y());
                             d->preveiwMask->setPixelColor(i,j,DColor(d->MASK_C));
 
-                            DColor forgcolor = d->preview.getPixelColor(i,j);
-                            DColor bacgcolor = d->preview.getPixelColor(pre.x(),pre.y());
+                            DColor forgcolor = d->preview.getPixelColor(pre.x(),pre.y());
+                            DColor bacgcolor = d->preview.getPixelColor(i,j);
 
                             DColor newcolor;
                             newcolor.setRed(forgcolor.red()*alpha + bacgcolor.red()*(1-alpha)) ;
@@ -535,6 +546,9 @@ void ImageCloneWidget::addToMask(const QPoint& point)
                             newcolor.setAlpha(forgcolor.alpha());
 
                             d->preview.setPixelColor(i,j,newcolor);
+                            QPainter painter(d->previewPixmap);
+                            painter.setPen(newcolor.getQColor());
+                            painter.drawPoint(i,j);
                             updatePreview();
                         //  origImage.setPixelColor(i,j,newcolor);
                         }
@@ -564,19 +578,25 @@ void ImageCloneWidget::mousePressEvent(QMouseEvent* e)
             {
                 if(d->settings.drawMode)
                 {
-                    d->centerPoint = d->spot;
+      
+                    d->centerPoint    = d->spot;
                     upDis();
 
                 }
                 else if(d->settings.selectMode)
                 {
-                    QPainter p(d->pixmap);//or d->preview
-                    p.setRenderHint(QPainter::Antialiasing, true);
+                    QPainter p(d->previewPixmap);//or d->preview
+                    p.setRenderHint(QPainter::Antialiasing, true);                
+                    if(d->hasDrawEllipse)
+                        p.drawImage(d->oldRect,d->oldArea.copyQImage());
+                    d->startPoint = d->spot;                    
+                    d->oldRect = QRect(d->startPoint.x()- d->CircleR, d->startPoint.y()- d->CircleR, 2*d->CircleR, 2*d->CircleR);  
+                    d->oldArea = d->preview.copy(d->oldRect); 
                     p.setPen(QColor(255,0,0));
-                    p.drawEllipse(d->spot, 3, 3);
-
-                    d->startPoint = d->spot;
+                    p.drawEllipse(d->spot, 6, 6);
+                    d->hasDrawEllipse = true;
                     d->preveiwMask->fill(DColor(d->MASK_BG));//fill maskImage with white
+
                 }
             }
         }
@@ -608,6 +628,12 @@ void ImageCloneWidget::mouseMoveEvent(QMouseEvent* e)
             if(inimage(d->preview, d->spot.x(), d->spot.y()))
               {
                  addToMask(d->spot);
+                 int maindia = d->settings.mainDia;
+                 QRect rec   = QRect(d->spot.x()-maindia, d->spot.y()-maindia, 2*maindia, 2*maindia);
+                 QImage area = d->preview.copy(rec).copyQImage();
+                 QPainter p(d->previewPixmap);
+                 p.setRenderHint(QPainter::Antialiasing, true);                
+                 p.drawImage(rec,area);
                  
               }
         
