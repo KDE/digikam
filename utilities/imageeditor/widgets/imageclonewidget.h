@@ -41,7 +41,6 @@
 #include "clonecontainer.h"
 #include "dimg.h"
 #include "dcolor.h"
-
 #include "digikam_export.h"
 
 namespace Digikam
@@ -57,23 +56,25 @@ public:
 
     explicit ImageCloneWidget(QWidget* parent=0, const CloneContainer& settings=CloneContainer());
     ~ImageCloneWidget();
-    ImageIface* imageIface() const;
-    void    updatePreview();
-    //DImg*   getOrigImage();
-    DImg*   getMaskImg() const;
-    //DImg*   getPreview();
-    DImg*   getPreviewMask() const;
 
+    ImageIface* imageIface() const;
+
+    //DImg*   getPreview();
+    //DImg*   getOrigImage();
+    DImg*   getMaskImg() const; 
+    DImg*   getPreviewMask() const;
     QPoint  getDis() const;
     QPoint  getOriDis();
 
     void    setContainer(const CloneContainer& settings);
     void    setBackgroundColor(const QColor& bg);
+    void    updatePreview();
 
     CloneContainer getContainer() const;
+
 Q_SIGNALS:
 
-    void    signalDrawingComplete();
+    void    signalStrokeOver();
     void    signalResized();
 
 public Q_SLOTS:
@@ -82,22 +83,24 @@ public Q_SLOTS:
 
 private:
 
-    bool    inimage(DImg img, const int x, const int y);
-    bool    inimage(DImg *img, const int x, const int y);
-    bool    inBrushpixmap(QPixmap* brushmap, const int x, const int y);
-
-    void    TreateAsBordor(DImg* image, const int x, const int y);
-    void    addToMask(const QPoint& point);
-    void    upDis();
-
     void    paintEvent(QPaintEvent*);
     void    resizeEvent(QResizeEvent*);
-    //void    timerEvent(QTimerEvent*);
-    void    updatePixmap();
     void    timerEvent(QTimerEvent*);
     void    mousePressEvent(QMouseEvent*);
     void    mouseReleaseEvent(QMouseEvent*);
     void    mouseMoveEvent(QMouseEvent*);
+
+    bool    inimage(DImg img, const int x, const int y);
+    bool    inimage(DImg *img, const int x, const int y);
+    bool    inBrushpixmap(QImage brushimg, const int x, const int y);
+
+    double  Max(double a, double b);
+    double  Min(double a, double b);
+
+    void    TreateAsBordor(DImg image, const int x, const int y);
+    void    addToMask(const QPoint& point);
+    void    upDis();
+    void    updatePixmap();
 
 private:
 
