@@ -27,6 +27,11 @@
 
 #include <iostream>
 
+// KDE includes
+
+#include <kdebug.h>
+
+
 namespace Digikam
 {
 
@@ -74,8 +79,9 @@ void CloneBrush::setDia(int dia)
         m_dia = dia;
 }
 
-void CloneBrush::setPixmap(const QPixmap& brushmap)
-{
+void CloneBrush::setPixmap(const QPixmap brushmap)
+{    
+    kDebug()<<"set Pixmap is called";
     if(!brushmap.isNull())
         m_brushMap = brushmap;
 }

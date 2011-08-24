@@ -51,7 +51,7 @@ public:
 public:
 
     QPixmap getPixmap() const;
-    void    setPixmap(const QPixmap& brushmap);
+    void    setPixmap(const QPixmap brushmap);
 
     int  getDia() const;
     void setDia(int mdia);
