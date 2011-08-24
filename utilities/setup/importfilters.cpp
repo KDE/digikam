@@ -28,6 +28,7 @@
 #include <KComboBox>
 #include <KLocale>
 #include <KDebug>
+#include <KSqueezedTextLabel>
 
 // Qt includes
 
@@ -46,35 +47,6 @@
 
 namespace Digikam
 {
-
-class ElidedLabel : public QLabel
-{
-public:
-
-    ElidedLabel(QWidget* parent = 0)
-      : QLabel(parent)
-    {
-        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    }
-
-    QString text() const { return txt; };
-    void setText(const QString& t) { txt = t; update(); };
-
-protected:
-
-    virtual void paintEvent(QPaintEvent* e)
-    {
-        QPainter painter(this);
-        QFontMetrics fontMetrics = painter.fontMetrics();
-        QString elided           = fontMetrics.elidedText(txt, Qt::ElideRight, width());
-        QLabel::setText(elided);
-        QLabel::paintEvent(e);
-    }
-
-private:
-
-    QString txt;
-};
 
 // ----------------------------------------------------------------------------------------
 
@@ -103,7 +75,7 @@ ImportFilters::ImportFilters(QWidget* parent)
     horizontalLayout = new QHBoxLayout();
     spacer           = new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
     horizontalLayout->addItem(spacer);
-    mimeLabel        = new ElidedLabel(this);
+    mimeLabel        = new KSqueezedTextLabel(this);
     horizontalLayout->addWidget(mimeLabel);
     mimeButton       = new QToolButton(this);
     mimeButton->setText("...");

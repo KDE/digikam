@@ -33,14 +33,13 @@
 
 #include "filtercombo.h"
 
+class KSqueezedTextLabel;
 class QCloseEvent;
 class QCheckBox;
 class QToolButton;
 
 namespace Digikam
 {
-
-class ElidedLabel;
 
 class ImportFilters : public KDialog
 {
@@ -65,7 +64,7 @@ private:
 
     QLineEdit*   filterName;
     QCheckBox*   mimeCheckBox;
-    ElidedLabel* mimeLabel;
+    KSqueezedTextLabel* mimeLabel;
     QToolButton* mimeButton;
     QCheckBox*   fileNameCheckBox;
     QLineEdit*   fileNameEdit;
