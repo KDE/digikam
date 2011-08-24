@@ -182,6 +182,7 @@ private Q_SLOTS:
     void slotMetadata(const QString& folder, const QString& file, const DMetadata& meta);
 
     void slotlastPhotoFirst();
+    void slotFilterChanged();
 
     void slotEditKeys();
     void slotShowMenuBar();

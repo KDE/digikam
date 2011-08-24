@@ -21,6 +21,7 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/renamecustomizer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/albumcustomizer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/advancedsettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/filtercombo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/main/cameraui.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/q3support/icongroupitem.cpp
