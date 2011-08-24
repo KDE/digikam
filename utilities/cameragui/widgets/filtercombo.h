@@ -27,9 +27,6 @@
 // KDE includes
 
 #include <KComboBox>
-#include <KDialog>
-
-class QCloseEvent;
 
 namespace Digikam
 {
@@ -91,8 +88,6 @@ private:
 
     class FilterComboBoxPriv;
     FilterComboBoxPriv* const   d;
-    QHash<QString, QRegExp>     filters;
-    QHash<QString, QStringList> mimeHash;
 };
 
 }  // namespace Digikam

@@ -29,6 +29,7 @@
 #include <KLocale>
 #include <KDebug>
 #include <KSqueezedTextLabel>
+#include <KMimeTypeChooserDialog>
 
 // Qt includes
 
@@ -48,10 +49,33 @@
 namespace Digikam
 {
 
+class ImportFilters::ImportFiltersPriv
+{
+public:
+
+    ImportFiltersPriv()
+    {
+    }
+
+    ~ImportFiltersPriv()
+    {
+    }
+
+    QLineEdit*          filterName;
+    QCheckBox*          mimeCheckBox;
+    KSqueezedTextLabel* mimeLabel;
+    QToolButton*        mimeButton;
+    QCheckBox*          fileNameCheckBox;
+    QLineEdit*          fileNameEdit;
+    QCheckBox*          pathCheckBox;
+    QLineEdit*          pathEdit;
+    QCheckBox*          newFilesCheckBox;
+};
+
 // ----------------------------------------------------------------------------------------
 
 ImportFilters::ImportFilters(QWidget* parent) 
-    : KDialog(parent) 
+    : KDialog(parent), d(new ImportFiltersPriv)
 {
     setButtons(KDialog::Cancel | KDialog::Ok);
     setDefaultButton(KDialog::Ok);
@@ -66,67 +90,67 @@ ImportFilters::ImportFilters(QWidget* parent)
     label            = new QLabel(this);
     label->setText(i18n("Name:"));
     verticalLayout->addWidget(label);
-    filterName       = new QLineEdit(this);
-    verticalLayout->addWidget(filterName);
+    d->filterName    = new QLineEdit(this);
+    verticalLayout->addWidget(d->filterName);
 
-    mimeCheckBox     = new QCheckBox(this);
-    mimeCheckBox->setText(i18n("Mime filter:"));
-    verticalLayout->addWidget(mimeCheckBox);
+    d->mimeCheckBox  = new QCheckBox(this);
+    d->mimeCheckBox->setText(i18n("Mime filter:"));
+    verticalLayout->addWidget(d->mimeCheckBox);
     horizontalLayout = new QHBoxLayout();
     spacer           = new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
     horizontalLayout->addItem(spacer);
-    mimeLabel        = new KSqueezedTextLabel(this);
-    horizontalLayout->addWidget(mimeLabel);
-    mimeButton       = new QToolButton(this);
-    mimeButton->setText("...");
-    horizontalLayout->addWidget(mimeButton);
+    d->mimeLabel     = new KSqueezedTextLabel(this);
+    horizontalLayout->addWidget(d->mimeLabel);
+    d->mimeButton    = new QToolButton(this);
+    d->mimeButton->setText("...");
+    horizontalLayout->addWidget(d->mimeButton);
     verticalLayout->addLayout(horizontalLayout);
 
-    fileNameCheckBox = new QCheckBox(this);
-    fileNameCheckBox->setText(i18n("File name filter:"));
-    verticalLayout->addWidget(fileNameCheckBox);
+    d->fileNameCheckBox = new QCheckBox(this);
+    d->fileNameCheckBox->setText(i18n("File name filter:"));
+    verticalLayout->addWidget(d->fileNameCheckBox);
     horizontalLayout = new QHBoxLayout();
     spacer           = new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
     horizontalLayout->addItem(spacer);
-    fileNameEdit     = new QLineEdit(this);
-    horizontalLayout->addWidget(fileNameEdit);
+    d->fileNameEdit  = new QLineEdit(this);
+    horizontalLayout->addWidget(d->fileNameEdit);
     verticalLayout->addLayout(horizontalLayout);
 
-    pathCheckBox     = new QCheckBox(this);
-    pathCheckBox->setText(i18n("Path filter:"));
-    verticalLayout->addWidget(pathCheckBox);
+    d->pathCheckBox  = new QCheckBox(this);
+    d->pathCheckBox->setText(i18n("Path filter:"));
+    verticalLayout->addWidget(d->pathCheckBox);
     horizontalLayout = new QHBoxLayout();
     spacer           = new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
     horizontalLayout->addItem(spacer);
-    pathEdit         = new QLineEdit(this);
-    horizontalLayout->addWidget(pathEdit);
+    d->pathEdit      = new QLineEdit(this);
+    horizontalLayout->addWidget(d->pathEdit);
     verticalLayout->addLayout(horizontalLayout);
 
-    newFilesCheckBox = new QCheckBox(this);
-    newFilesCheckBox->setText(i18n("Show only new files"));
-    verticalLayout->addWidget(newFilesCheckBox);
+    d->newFilesCheckBox = new QCheckBox(this);
+    d->newFilesCheckBox->setText(i18n("Show only new files"));
+    verticalLayout->addWidget(d->newFilesCheckBox);
     spacer           = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     verticalLayout->addItem(spacer);
 
-    connect(mimeCheckBox, SIGNAL(clicked(bool)), 
-            mimeButton, SLOT(setEnabled(bool)));
+    connect(d->mimeCheckBox, SIGNAL(clicked(bool)), 
+            d->mimeButton, SLOT(setEnabled(bool)));
 
-    connect(mimeButton, SIGNAL(clicked(bool)),
+    connect(d->mimeButton, SIGNAL(clicked(bool)),
             this, SLOT(mimeButtonClicked()));
 
-    connect(fileNameCheckBox, SIGNAL(clicked(bool)),
-            fileNameEdit, SLOT(setEnabled(bool)));
+    connect(d->fileNameCheckBox, SIGNAL(clicked(bool)),
+            d->fileNameEdit, SLOT(setEnabled(bool)));
 
-    connect(pathCheckBox, SIGNAL(clicked(bool)),
-            pathEdit, SLOT(setEnabled(bool)));
+    connect(d->pathCheckBox, SIGNAL(clicked(bool)),
+            d->pathEdit, SLOT(setEnabled(bool)));
 
-    connect(mimeCheckBox, SIGNAL(clicked(bool)),
+    connect(d->mimeCheckBox, SIGNAL(clicked(bool)),
             this, SLOT(mimeCheckBoxClicked()));
 
-    connect(fileNameCheckBox, SIGNAL(clicked()),
+    connect(d->fileNameCheckBox, SIGNAL(clicked()),
             this, SLOT(fileNameCheckBoxClicked()));
 
-    connect(pathCheckBox, SIGNAL(clicked()),
+    connect(d->pathCheckBox, SIGNAL(clicked()),
             this, SLOT(pathCheckBoxClicked()));
 }
 
@@ -136,62 +160,62 @@ ImportFilters::~ImportFilters()
 
 void ImportFilters::fileNameCheckBoxClicked()
 {
-    if (!fileNameCheckBox->isChecked())
+    if (!d->fileNameCheckBox->isChecked())
     {
-        fileNameEdit->clear();
+        d->fileNameEdit->clear();
     }
 }
 
 void ImportFilters::pathCheckBoxClicked()
 {
-    if (!pathCheckBox->isChecked())
+    if (!d->pathCheckBox->isChecked())
     {
-        pathEdit->clear();
+        d->pathEdit->clear();
     }
 }
 
 void ImportFilters::mimeCheckBoxClicked()
 {
-    if (!mimeCheckBox->isChecked())
+    if (!d->mimeCheckBox->isChecked())
     {
-        mimeLabel->clear();
+        d->mimeLabel->clear();
     }
 }
 
 void ImportFilters::mimeButtonClicked()
 {
     QString text     = i18n("Select the MimeTypes you want for this filter.");
-    QStringList list = mimeLabel->text().split(';', QString::SkipEmptyParts);
+    QStringList list = d->mimeLabel->text().split(';', QString::SkipEmptyParts);
     KMimeTypeChooserDialog dlg(i18n("Select Mime Types"), text, list, "image", this);
 
     if (dlg.exec() == KDialog::Accepted)
     {
-        mimeLabel->setText(dlg.chooser()->mimeTypes().join(";"));
+        d->mimeLabel->setText(dlg.chooser()->mimeTypes().join(";"));
     }
 }
 
 void ImportFilters::setData(const Filter& filter)
 {
-    filterName->setText(filter.name);
-    mimeCheckBox->setChecked(!filter.mimeFilter.isEmpty());
-    mimeLabel->setText(filter.mimeFilter);
-    mimeButton->setEnabled(!filter.mimeFilter.isEmpty());
-    fileNameCheckBox->setChecked(!filter.fileFilter.isEmpty());
-    fileNameEdit->setText(filter.fileFilter.join(";"));
-    fileNameEdit->setEnabled(!filter.fileFilter.isEmpty());
-    pathCheckBox->setChecked(!filter.pathFilter.isEmpty());
-    pathEdit->setText(filter.pathFilter.join(";"));
-    pathEdit->setEnabled(!filter.pathFilter.isEmpty());
-    newFilesCheckBox->setChecked(filter.onlyNew);
+    d->filterName->setText(filter.name);
+    d->mimeCheckBox->setChecked(!filter.mimeFilter.isEmpty());
+    d->mimeLabel->setText(filter.mimeFilter);
+    d->mimeButton->setEnabled(!filter.mimeFilter.isEmpty());
+    d->fileNameCheckBox->setChecked(!filter.fileFilter.isEmpty());
+    d->fileNameEdit->setText(filter.fileFilter.join(";"));
+    d->fileNameEdit->setEnabled(!filter.fileFilter.isEmpty());
+    d->pathCheckBox->setChecked(!filter.pathFilter.isEmpty());
+    d->pathEdit->setText(filter.pathFilter.join(";"));
+    d->pathEdit->setEnabled(!filter.pathFilter.isEmpty());
+    d->newFilesCheckBox->setChecked(filter.onlyNew);
 }
 
 void ImportFilters::getData(Filter* filter)
 {
-    filter->name       = filterName->text();
-    filter->mimeFilter = mimeLabel->text();
-    filter->fileFilter = fileNameEdit->text().split(';', QString::SkipEmptyParts);
-    filter->pathFilter = pathEdit->text().split(';', QString::SkipEmptyParts);
-    filter->onlyNew    = newFilesCheckBox->isChecked();
+    filter->name       = d->filterName->text();
+    filter->mimeFilter = d->mimeLabel->text();
+    filter->fileFilter = d->fileNameEdit->text().split(';', QString::SkipEmptyParts);
+    filter->pathFilter = d->pathEdit->text().split(';', QString::SkipEmptyParts);
+    filter->onlyNew    = d->newFilesCheckBox->isChecked();
 }
 
 }  // namespace Digikam
