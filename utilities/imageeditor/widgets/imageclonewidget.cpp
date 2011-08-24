@@ -509,7 +509,7 @@ void ImageCloneWidget::addToMask(const QPoint& point)
 
     float alpha = d->settings.opacity/100; // alpha between 0 and 1
 
-    QPixmap brushmap = d->settings.brush.getPixmap().scaled(QSize(d->settings.mainDia, d->settings.mainDia), Qt::KeepAspectRatio);
+    QPixmap brushmap = d->settings.brush.getPixmap().scaled(QSize(d->settings.mainDia, d->settings.mainDia), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     if(!brushmap.isNull())
         kDebug()<<"brushmap is not null";
     QImage brushimg = brushmap.toImage();
@@ -546,11 +546,13 @@ void ImageCloneWidget::addToMask(const QPoint& point)
                             newcolor.setAlpha(forgcolor.alpha());
 
                             d->preview.setPixelColor(i,j,newcolor);
-                            QPainter painter(d->previewPixmap);
-                            painter.setPen(newcolor.getQColor());
-                            painter.drawPoint(i,j);
-                            updatePreview();
-                        //  origImage.setPixelColor(i,j,newcolor);
+                            //QPainter painter(d->previewPixmap);
+                            //painter.setRenderHint(QPainter::Antialiasing, true);  
+                            //painter.setPen(newcolor.getQColor());
+                            //painter.drawPoint(i,j);
+                            //update();
+                            
+//origImage.setPixelColor(i,j,newcolor);
                         }
                         else
                         {
@@ -590,7 +592,7 @@ void ImageCloneWidget::mousePressEvent(QMouseEvent* e)
                     if(d->hasDrawEllipse)
                         p.drawImage(d->oldRect,d->oldArea.copyQImage());
                     d->startPoint = d->spot;                    
-                    d->oldRect = QRect(d->startPoint.x()- d->CircleR, d->startPoint.y()- d->CircleR, 2*d->CircleR, 2*d->CircleR);  
+                    d->oldRect = QRect(d->startPoint.x()- d->CircleR, d->startPoint.y()- d->CircleR, 2*(d->CircleR+1), 2*(d->CircleR+1));  
                     d->oldArea = d->preview.copy(d->oldRect); 
                     p.setPen(QColor(255,0,0));
                     p.drawEllipse(d->spot, 6, 6);
@@ -615,6 +617,9 @@ void ImageCloneWidget::mouseReleaseEvent(QMouseEvent* e)
               {
                   d->maskImage->detach();
                   d->maskImage = new DImg(d->preveiwMask->smoothScale(d->iface->getOriginalImg()->width(), d->iface->getOriginalImg()->height(), Qt::KeepAspectRatio));//FIXME
+                  d->preveiwMask->save(QString("../preveiwMask"),DImg::PNG);                  
+                  d->maskImage->save(QString("../maskImage"),DImg::PNG);
+                  d->preview.save("../mpreview",DImg::PNG);
                   emit signalStrokeOver();
                }
         }
@@ -625,19 +630,21 @@ void ImageCloneWidget::mouseMoveEvent(QMouseEvent* e)
 {    
     if (e->buttons() & Qt::LeftButton)
     {
+        kDebug()<<"mouseMoveEvent is called";
             if(inimage(d->preview, d->spot.x(), d->spot.y()))
               {
                  addToMask(d->spot);
+/*
                  int maindia = d->settings.mainDia;
                  QRect rec   = QRect(d->spot.x()-maindia, d->spot.y()-maindia, 2*maindia, 2*maindia);
                  QImage area = d->preview.copy(rec).copyQImage();
                  QPainter p(d->previewPixmap);
                  p.setRenderHint(QPainter::Antialiasing, true);                
                  p.drawImage(rec,area);
-                 
+*/           
               }
         
-    QWidget::mouseMoveEvent(e); 
+    //QWidget::mouseMoveEvent(e); 
     
     }
 }
@@ -700,6 +707,14 @@ void ImageCloneWidget::paintEvent(QPaintEvent *)
     p.drawPixmap(0, 0, *d->pixmap);
     p.end();
 }
+
+void ImageCloneWidget::updateResult()
+{
+    d->preview = d->iface->getPreviewImg();
+    *d->previewPixmap = d->iface->convertToPixmap(d->preview);
+    updatePreview();
+}
+
 
 void ImageCloneWidget::updatePreview()
 {
