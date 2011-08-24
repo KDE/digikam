@@ -114,7 +114,7 @@ void DatabaseWidget::setupMainArea(const QString & title)
     tmbDatabasePathEdit     = new KUrlRequester(dbPathBox);
     tmbDatabasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
 
-    internalServer                      = new QCheckBox(i18n("Internal Server"));
+    internalServer                         = new QCheckBox(i18n("Internal Server"));
 
     QLabel* imgDatabaseTypeLabel           = new QLabel(i18n("Type"));
     QLabel* imgDatabaseNameLabel           = new QLabel(i18n("Schema Name"));
@@ -182,6 +182,8 @@ void DatabaseWidget::setupMainArea(const QString & title)
     tmbExpertSettinglayout->addRow(tmbPasswordLabel, tmbPassword);
     tmbExpertSettinglayout->addRow(tmbConnectionOptionsLabel, tmbConnectionOptions);
     tmbExpertSettinglayout->addWidget(tmbCheckDatabaseConnectionButton);
+
+    vlay->addWidget(internalServer);
 
     vlay->addWidget(imgDatabaseTypeLabel);
     vlay->addWidget(imgDatabaseType);
@@ -549,7 +551,7 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
     DatabaseParameters parameters;
 
 #ifdef HAVE_INTERNALMYSQL
-    if (!internalServer->isChecked()) {
+    if (internalServer->isChecked()) {
         parameters = DatabaseParameters::defaultParameters(imgCurrentDatabaseType(), true);
         DatabaseServerStarter::startServerManagerProcess(imgCurrentDatabaseType());
         return parameters;
