@@ -130,9 +130,7 @@ CloneTool::CloneTool(QObject* parent)
     connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotSettingsChanged()));
     connect(d->previewWidget,SIGNAL(signalResized()),this,SLOT(slotEffect()));
     connect(d->previewWidget,SIGNAL(signalStrokeOver()),this,SLOT(slotStrokeOver()));//FIXME
-    
-
-}
+ }
 
 CloneTool::~CloneTool()
 {
@@ -147,7 +145,46 @@ void CloneTool::slotSettingsChanged()
 
 void CloneTool::slotStrokeOver()
 {
-    d->strokeOver = true;
+    //d->strokeOver = true;
+        if(d->settingsView->getDrawEnable())
+        {
+            kDebug()<<"slotStrokeOver is called";
+            d->previewWidget->setContainer(d->settingsView->settings());
+            QPoint dis  = d->previewWidget->getDis();
+            DImg orimg  = d->previewWidget->imageIface()->getPreviewImg();
+            DImg desimg = DImg(orimg.width(), orimg.height(), orimg.sixteenBit(), orimg.hasAlpha());
+            CloneFilter*  previewFilter = new CloneFilter(orimg, desimg, d->previewWidget->getPreviewMask(), dis);
+            setFilter(previewFilter); 
+  
+            d->previewRImage.detach();
+            //d->previewRImage = previewFilter->getTargetImage(); //FIXME
+            d->previewRImage = filter()->getTargetImage();
+            deleteFilterInstance(true);
+            //if(!data)
+            //    return;    
+            //d->previewRImage->putImageData(data);
+            d->previewWidget->imageIface()->putPreviewImage(d->previewRImage.bits());
+            d->previewWidget->updateResult();
+            delete previewFilter;
+
+            dis = d->previewWidget->getOriDis();
+            DImg orimg1  = d->previewWidget->imageIface()->getOriginalImg()->copyImageData();
+            DImg desimg1 = DImg(orimg1.width(), orimg1.height(), orimg1.sixteenBit(), orimg1.hasAlpha());
+            CloneFilter*  orignalFilter = new CloneFilter(orimg1, desimg1, d->previewWidget->getMaskImg(), dis);
+            //CloneFilter*  orignalFilter = new CloneFilter(d->previewWidget->imageIface()->getOriginalImg()->copyImageData(),d->previewWidget->getMaskImg(),dis);
+            setFilter(orignalFilter);
+            // uchar* data1 = previewFilter->getResultImg()->bits();
+            d->resultImage.detach();
+            //d->resultImage = previewFilter->getTargetImage (); //FIXME
+            d->resultImage = filter()->getTargetImage();
+            // if(!data)
+            //    return;    
+            // d->resultImage->putImageData(data);
+            d->previewWidget->imageIface()->putOriginalImage(i18n("Clone Toll"), filter()->filterAction(),d->resultImage.bits());
+            d->previewWidget->updatePreview();
+            delete orignalFilter;
+
+    }
 }
 
 //FIXME
@@ -222,7 +259,7 @@ void CloneTool::slotResetSettings()
 }
 
 //FIXME
-
+/*
 void CloneTool::prepareEffect()
 {
     if(d->strokeOver)
@@ -263,6 +300,7 @@ void CloneTool::prepareEffect()
             d->previewWidget->updatePreview();
             delete orignalFilter;
             d->strokeOver = false;
+*/
 
 /*
             ImageIface* iface = d->previewWidget->imageIface();
@@ -283,10 +321,10 @@ void CloneTool::prepareEffect()
 
           delete maskTemp;
 */
-        }
+//        }
     
-    }
-}
+//    }
+//}
 
 
 void CloneTool::prepareFinal()
