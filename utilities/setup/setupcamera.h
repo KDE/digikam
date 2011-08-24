@@ -65,6 +65,11 @@ private Q_SLOTS:
     void slotEditedCamera(const QString& title, const QString& model,
                           const QString& port,  const QString& path);
 
+    void slotImportSelectionChanged();
+    void slotAddFilter();
+    void slotRemoveFilter();
+    void slotEditFilter();
+
 private:
 
     void readSettings();

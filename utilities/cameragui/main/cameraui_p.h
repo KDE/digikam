@@ -48,6 +48,7 @@
 #include "camerathumbsctrl.h"
 #include "cameracontroller.h"
 #include "cameraiconview.h"
+#include "filtercombo.h"
 #include "daboutdata.h"
 #include "dlogoaction.h"
 #include "dzoombar.h"
@@ -127,6 +128,7 @@ public:
         albumLibraryFreeSpace(0),
         cameraFreeSpace(0),
         historyView(0),
+        filterComboBox(0),
         about(0)
     {
     }
@@ -215,6 +217,9 @@ public:
     FreeSpaceWidget*              cameraFreeSpace;
 
     DHistoryView*                 historyView;
+    FilterComboBox*               filterComboBox;
+
+    CHUpdateItemMap               map;
 
     DAboutData*                   about;
 };

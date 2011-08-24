@@ -576,6 +576,12 @@ void CameraUI::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
+    d->filterComboBox = new FilterComboBox(statusBar());
+    statusBar()->addWidget(d->filterComboBox, 1);
+    connect(d->filterComboBox, SIGNAL(filterChanged()), this, SLOT(slotFilterChanged()));
+
+    //------------------------------------------------------------------------------
+
     d->zoomBar = new DZoomBar(statusBar());
     d->zoomBar->setZoomPlusAction(d->increaseThumbsAction);
     d->zoomBar->setZoomMinusAction(d->decreaseThumbsAction);
@@ -694,6 +700,7 @@ void CameraUI::saveSettings()
 
     d->rightSideBar->saveState();
     d->splitter->saveState(group);
+    d->filterComboBox->saveSettings();
     config->sync();
 }
 
@@ -887,6 +894,7 @@ void CameraUI::slotBusy(bool val)
         d->cameraInfoAction->setEnabled(true);
         d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
         d->imageViewAction->setEnabled(true);
+        d->filterComboBox->setEnabled(true);
 
         // selection-dependent update of lockAction, markAsDownloadedAction,
         // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
@@ -950,6 +958,7 @@ void CameraUI::slotBusy(bool val)
         d->cameraInfoAction->setEnabled(false);
         d->cameraCaptureAction->setEnabled(false);
         d->imageViewAction->setEnabled(false);
+        d->filterComboBox->setEnabled(false);
     }
 }
 
@@ -1130,8 +1139,9 @@ void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
         return;
     }
 
+    d->map = map;
     bool lastPhotoFirst                = d->lastPhotoFirstAction->isChecked();
-    CHUpdateItemMap::const_iterator it = lastPhotoFirst ? map.constEnd() : map.constBegin();
+    CHUpdateItemMap::const_iterator it = lastPhotoFirst ? d->map.constEnd() : d->map.constBegin();
 
     do
     {
@@ -1140,36 +1150,36 @@ void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
             --it;
         }
 
-        d->view->addItem(*it);
+        if (d->filterComboBox->matchesCurrentFilter(*it))
+        {
+            d->view->addItem(*it);
+        }
 
         if (!lastPhotoFirst)
         {
             ++it;
         }
     }
-    while ((lastPhotoFirst ? it != map.constBegin() : it != map.constEnd()));
+
+    while ((lastPhotoFirst ? it != d->map.constBegin() : it != d->map.constEnd()));
 }
 
 void CameraUI::slotlastPhotoFirst()
 {
     saveSettings();
 
-    CHUpdateItemMap map;
+    slotFilterChanged();
+}
+
+void CameraUI::slotFilterChanged()
+{
     CamItemInfoList items = d->view->allItems();
-
-    foreach(CamItemInfo info, items)
-    {
-        map.insertMulti(info.mtime, info);
-    }
-
-    items = d->view->allItems();
 
     foreach(CamItemInfo info, items)
     {
         d->view->removeItem(info);
     }
-
-    slotRefreshIconView(map);
+    d->historyUpdater->addItems(d->controller->cameraMD5ID(), d->map);
 }
 
 void CameraUI::slotCapture()

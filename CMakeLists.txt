@@ -1119,6 +1119,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdatabase.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupfacetags.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupversioning.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/importfilters.cpp
        )
 
     SET(libkipiiface_SRCS

@@ -36,6 +36,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItemIterator>
 #include <QVBoxLayout>
+#include <QListWidget>
 
 // KDE includes
 
@@ -59,6 +60,8 @@
 #include "cameratype.h"
 #include "config-digikam.h"
 #include "gpcamera.h"
+#include "filtercombo.h"
+#include "importfilters.h"
 
 namespace Digikam
 {
@@ -175,11 +178,15 @@ public:
     static const QString configUseMetadataDateEntry;
     static const QString configUseDefaultTargetAlbum;
     static const QString configDefaultTargetAlbumId;
+    static const QString importFiltersConfigGroupName;
 
     QPushButton*         addButton;
     QPushButton*         removeButton;
     QPushButton*         editButton;
     QPushButton*         autoDetectButton;
+    QPushButton*         importAddButton;
+    QPushButton*         importRemoveButton;
+    QPushButton*         importEditButton;
 
     QCheckBox*           useDateFromMetadata;
     QCheckBox*           useDefaultTargetAlbum;
@@ -187,14 +194,18 @@ public:
     AlbumSelectWidget*   target1AlbumSelector;
 
     QTreeWidget*         listView;
+    QListWidget*         importListView;
 
     KTabWidget*          tab;
+
+    FilterList           filters;
 };
 
 const QString SetupCamera::SetupCameraPriv::configGroupName("Camera Settings");
 const QString SetupCamera::SetupCameraPriv::configUseMetadataDateEntry("UseThemeBackgroundColor");
 const QString SetupCamera::SetupCameraPriv::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
 const QString SetupCamera::SetupCameraPriv::configDefaultTargetAlbumId("DefaultTargetAlbumId");
+const QString SetupCamera::SetupCameraPriv::importFiltersConfigGroupName("Import Filters");
 
 SetupCamera::SetupCamera( QWidget* parent )
     : QScrollArea(parent), d(new SetupCameraPriv)
@@ -297,6 +308,43 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     // -------------------------------------------------------------
 
+    QWidget* panel3 = new QWidget(d->tab);
+    panel3->setAutoFillBackground(false);
+
+    QGridLayout* importGrid = new QGridLayout(panel3);
+    d->importListView       = new QListWidget(panel3);
+    d->importListView->setSelectionMode(QAbstractItemView::SingleSelection);
+    d->importListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->importListView->setWhatsThis(i18n("Here you can see filters that can be used to filter "
+                                   "files in import dialog."));
+
+    d->importAddButton        = new QPushButton(panel3);
+    d->importRemoveButton     = new QPushButton(panel3);
+    d->importEditButton       = new QPushButton(panel3);
+    QSpacerItem* spacer2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+    d->importAddButton->setText( i18n( "&Add..." ) );
+    d->importAddButton->setIcon(SmallIcon("list-add"));
+    d->importRemoveButton->setText( i18n( "&Remove" ) );
+    d->importRemoveButton->setIcon(SmallIcon("list-remove"));
+    d->importEditButton->setText( i18n( "&Edit..." ) );
+    d->importEditButton->setIcon(SmallIcon("configure"));
+    d->importRemoveButton->setEnabled(false);
+    d->importEditButton->setEnabled(false);
+
+    importGrid->setMargin(KDialog::spacingHint());
+    importGrid->setSpacing(KDialog::spacingHint());
+    importGrid->setAlignment(Qt::AlignTop);
+    importGrid->addWidget(d->importListView,         0, 0, 4, 1);
+    importGrid->addWidget(d->importAddButton,        0, 1, 1, 1);
+    importGrid->addWidget(d->importRemoveButton,     1, 1, 1, 1);
+    importGrid->addWidget(d->importEditButton,       2, 1, 1, 1);
+    importGrid->addItem(spacer2,                     3, 1, 1, 1);
+
+    d->tab->insertTab(2, panel3, i18n("Import Filters"));
+
+    // -------------------------------------------------------------
+
     setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
 
@@ -324,6 +372,20 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     connect(d->useDefaultTargetAlbum, SIGNAL(toggled(bool)),
             d->target1AlbumSelector, SLOT(setEnabled(bool)));
+
+    // -------------------------------------------------------------
+
+    connect(d->importListView, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotImportSelectionChanged()));
+
+    connect(d->importAddButton, SIGNAL(clicked()),
+            this, SLOT(slotAddFilter()));
+
+    connect(d->importRemoveButton, SIGNAL(clicked()),
+            this, SLOT(slotRemoveFilter()));
+
+    connect(d->importEditButton, SIGNAL(clicked()),
+            this, SLOT(slotEditFilter()));
 
     // -------------------------------------------------------------
 
@@ -361,6 +423,27 @@ void SetupCamera::readSettings()
     PAlbum* album = AlbumManager::instance()->findPAlbum(group.readEntry(d->configDefaultTargetAlbumId, 0));
     d->target1AlbumSelector->setCurrentAlbum(album);
     d->target1AlbumSelector->setEnabled(d->useDefaultTargetAlbum->isChecked());
+
+    // -------------------------------------------------------
+
+    KSharedConfig::Ptr importConfig = KGlobal::config();
+    KConfigGroup importGroup = importConfig->group(d->importFiltersConfigGroupName);
+    for (int i = 0; true; ++i)
+    {
+        QString filter = importGroup.readEntry(QString("Filter%1").arg(i), QString());
+        if (filter.isEmpty())
+        {
+            break;
+        }
+        Filter* f = new Filter;
+        f->fromString(filter);
+        d->filters.append(f);
+    }
+    FilterComboBox::defaultFilters(&d->filters);
+    foreach (Filter* f, d->filters)
+    {
+        new QListWidgetItem(f->name, d->importListView);
+    }
 }
 
 void SetupCamera::applySettings()
@@ -405,6 +488,18 @@ void SetupCamera::applySettings()
     PAlbum* album = d->target1AlbumSelector->currentAlbum();
     group.writeEntry(d->configDefaultTargetAlbumId, album ? album->id() : 0);
     group.sync();
+
+    // -------------------------------------------------------
+
+    KSharedConfig::Ptr importConfig = KGlobal::config();
+    KConfigGroup importGroup = importConfig->group(d->importFiltersConfigGroupName);
+
+    importGroup.deleteGroup();
+    for (int i = 0; i < d->filters.count(); ++i)
+    {
+        importGroup.writeEntry(QString("Filter%1").arg(i), d->filters[i]->toString());
+    }
+    importGroup.sync();
 }
 
 bool SetupCamera::checkSettings()
@@ -539,6 +634,52 @@ void SetupCamera::slotAutoDetectCamera()
     {
         KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.", model, port));
         slotAddedCamera(model, model, port, QString("/"));
+    }
+}
+
+void SetupCamera::slotImportSelectionChanged()
+{
+    QListWidgetItem* item = d->importListView->currentItem();
+
+    d->importRemoveButton->setEnabled(item);
+    d->importEditButton->setEnabled(item);
+}
+
+void SetupCamera::slotAddFilter()
+{
+    Filter filter;
+    filter.name = i18n("Untitled");
+    ImportFilters dlg(this);
+    dlg.setData(filter);
+    if (dlg.exec() == QDialog::Accepted)
+    {
+        Filter* f = new Filter;
+        dlg.getData(f);
+        d->filters.append(f);
+        new QListWidgetItem(f->name, d->importListView);
+    }
+    slotImportSelectionChanged();
+}
+
+void SetupCamera::slotRemoveFilter()
+{
+    int i = d->importListView->currentRow();
+    delete d->filters.takeAt(i);
+    delete d->importListView->takeItem(i);
+    slotImportSelectionChanged();
+}
+
+void SetupCamera::slotEditFilter()
+{
+    int i = d->importListView->currentRow();
+    Filter filter = *d->filters.at(i);
+    ImportFilters dlg(this);
+    dlg.setData(filter);
+    if (dlg.exec() == QDialog::Accepted)
+    {
+        Filter* f = d->filters.at(i);
+        dlg.getData(f);
+        d->importListView->currentItem()->setText(f->name);
     }
 }
 

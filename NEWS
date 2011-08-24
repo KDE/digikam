@@ -60,6 +60,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 046 ==> 277796 : Build failure in the dcraw_emu sample.
 047 ==> 280240 : digiKam crash when attempting to view slideshow.
 048 ==> 280517 : Moving photo from an album to another leads to loose face tags.
-049 ==> 280101 - Patch: Add option to hide icons and text in preview.
-050 ==> 
+049 ==> 280101 : Patch: Add option to hide icons and text in preview.
+050 ==> 279183 : Themes configuration dialogue does not open.
+051 ==> 
+
 
