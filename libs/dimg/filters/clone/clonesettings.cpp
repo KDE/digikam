@@ -242,9 +242,9 @@ CloneSettings::CloneSettings(QWidget* parent)
     QLabel* label4   = new QLabel(i18n("Main diameter(px):"));
 
     d->diameterInput = new RIntNumInput(parent);
-    d->diameterInput->setRange(1, 200, 1);
+    d->diameterInput->setRange(1, 50, 1);
     d->diameterInput->setSliderEnabled(true);
-    d->diameterInput->setDefaultValue(1);
+    d->diameterInput->setDefaultValue(5);
     d->diameterInput->setWhatsThis(i18n("Set the main diameter of the brush"));
 
     QLabel* label5   = new QLabel(i18n("Opacity(%):"));
