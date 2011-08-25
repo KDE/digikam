@@ -48,6 +48,13 @@ private Q_SLOTS:
     void slotSettingsChanged();
     void slotStrokeOver();
 
+/*
+protected Q_SLOTS:
+
+    virtual void slotOk();
+    virtual void slotCancel();
+*/
+
 private:
 
     void readSettings();
