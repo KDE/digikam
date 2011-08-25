@@ -29,7 +29,7 @@
 
 // C++ includes
 
-#include <cmath>
+#include <math.h>
 #include <assert.h>
 #include <map>
 
@@ -58,10 +58,11 @@ CloneFilter::CloneFilter(const DImg & orgImage,const DImg & destImage, DImg* mas
     :DImgThreadedFilter(parent, "CloneFilter")
 {
     m_dis           = dis;
+    kDebug()<<"dis is"<<dis;
     setOriginalImage (orgImage);  
     m_destImage     = destImage;
     m_maskImage     = maskImage;
-    MASK_BG         = QColor(255,255,255);
+    MASK_C          = QColor(0,0,0);
 
     initFilter();
 }
@@ -75,7 +76,7 @@ CloneFilter::~CloneFilter()
 
 bool CloneFilter::inimage( DImg img, int x, int y )
 {
-    if ( x >= 0 && (uint)x < img.width() && y >= 0 && (uint)y < img.height() )
+    if ( x >= 0 && x < img.width() && y >= 0 && y < img.height() )
         return true;
     else
         return false;
@@ -98,49 +99,49 @@ float static inline clamp01(float f)
 
 bool CloneFilter::SOR(double **A, double *b, double *x, int N, double w, int maxstep, double e)
 {
-	double temp1, temp2;
-	double *x0 = new double[N];
-	for(int i = 0; i < N; i++)
-		x0[i] = 0;
-	int k = 0;
-	while(k < maxstep)
-	{
-		for(int i=0; i < N; i++)
-		{
-			temp1=0;
-			temp2=0;
-			for(int j=0; j<5; j++)
-			{
-				int adr = A[i][j];
-				if(adr >= 0)
-				{
-					if(adr < i)
-				        temp1+=x[adr];
-			        else 
-						if(adr > i)
-				         temp2+=x0[adr];
-				}
-			}
+    double temp1, temp2;
+    double *x0 = new double[N];
+    for(int i = 0; i < N; i++)
+        x0[i] = 0;
+    int k = 0;
+    while(k < maxstep)
+    {
+        for(int i=0; i < N; i++)
+        {
+            temp1=0;
+            temp2=0;
+            for(int j=0; j<5; j++)
+             {
+                int adr = A[i][j];
+                if(adr >= 0)
+                 {
+                    if(adr < i)
+                        temp1+=x[adr];
+                    else 
+                        if(adr > i)
+                            temp2+=x0[adr];
+                 }
+               }
             temp1 = 0 - temp1;
-			temp2 = 0 - temp2;
+            temp2 = 0 - temp2;
             x[i] = (1-w) * x0[i] + w * (temp1 + temp2 + b[i])/(-4.0);
-			//cout<<x[i]<<" ";
-		}
-		//cout<<endl;
-		temp1=0;
-		for(int i=0; i<N; i++)
-			temp1 += sqrt((x[i]-x0[i])*(x[i]-x0[i]));
+            //cout<<x[i]<<" ";
+           }
+        //cout<<endl;
+        temp1=0;
+        for(int i=0; i<N; i++)
+            temp1 += sqrt((x[i]-x0[i])*(x[i]-x0[i]));
 
-		k++;
-		for(int i=0;i<N;i++)		
-			x0[i]=x[i];		
-		if(temp1<e)
-		{
-			delete []x0;
-			return true;
-		}
-	}
-	return false;
+        k++;
+        for(int i=0;i<N;i++)		
+            x0[i]=x[i];		
+        if(temp1<e)
+        {
+            delete []x0;
+            return true;
+        }
+    }
+        return false;
 }
 
 
@@ -165,7 +166,7 @@ void CloneFilter::filterImage()
 
     int width  = m_orgImage.width();
     int height = m_orgImage.height();
-    float clip = m_orgImage.sixteenBit() ? 65535.0 : 255.0;
+    float clip = 255.0;
 
     for(int c = 0; c < 3; c++)
     {
@@ -176,27 +177,27 @@ void CloneFilter::filterImage()
         desImg[c] = new int  [width * height];
     }
 
-    int j = 0;
+    //int j = 0;
     for(int y = 0; y < height; y++)
     {
         for(int x = 0; x < width; x++)
         {
             col  = m_orgImage.getPixelColor(x,y);
 
-            OriImg[0][j] = col.red();
-            OriImg[1][j] = col.green();
-            OriImg[2][j] = col.blue();
+            OriImg[0][y*width + x] = col.red();
+            OriImg[1][y*width + x] = col.green();
+            OriImg[2][y*width + x] = col.blue();
 
-            desImg[0][j] = col.red();
-            desImg[1][j] = col.green();
-            desImg[2][j] = col.blue();
+            desImg[0][y*width + x] = col.red();
+            desImg[1][y*width + x] = col.green();
+            desImg[2][y*width + x] = col.blue();
 
             colM    = m_maskImage->getPixelColor(x,y);
-            M[0][j] = colM.red();
-            M[1][j] = colM.green();
-            M[2][j] = colM.blue();
 
-            j++;
+            M[0][y*width + x]      = colM.red();
+            M[1][y*width + x]      = colM.green();
+            M[2][y*width + x]      = colM.blue();
+            //j++;
         }
     }
 
@@ -211,14 +212,15 @@ void CloneFilter::filterImage()
                 desImg[2][y*width + x] = (float)OriImg[2][(y-m_dis.y())*width + x-m_dis.x()];
             }
         }
-
-        for(int i=0; i < height*width; i++)
-        {
-            I[0][i] = desImg[0][i]/clip;
-            I[1][i] = desImg[1][i]/clip;
-            I[2][i] = desImg[2][i]/clip;
-        }
     }
+
+    for(int i=0; i < height*width; i++)
+    {
+        I[0][i] = desImg[0][i]/clip;
+        I[1][i] = desImg[1][i]/clip;
+        I[2][i] = desImg[2][i]/clip;
+    }
+    
 
     divergents(I, div);
 
@@ -232,7 +234,7 @@ void CloneFilter::filterImage()
     int x, y;
 
     // Build mapping from (x,y) to variables
-    int           N = 0; // variable indexer
+    int N = 0; // variable indexer
     std::map<int, int> mp;
 
     for (y = 1; y < height-1; y++)
@@ -240,14 +242,14 @@ void CloneFilter::filterImage()
         for (x = 1; x < width-1; x++)
         {
             int id = y*width+x;
-            if (QColor(M[0][y*width+x],M[1][y*width+x],M[2][y*width+x])!= MASK_BG)
+            if (QColor(M[0][y*width+x],M[1][y*width+x],M[2][y*width+x]) == MASK_C)
             {
                 // Masked pixel
                 mp[id] = N;
                 N++;
             }
         }
-    }
+     }
 
     if (N == 0)
     {
@@ -272,13 +274,13 @@ void CloneFilter::filterImage()
     int index = 0, n = 0;
     for (y = 1; y < height-1; y++) {
         for (x = 1; x < width-1; x++) {
-            if (QColor(M[0][y*width+x],M[1][y*width+x],M[2][y*width+x]) != MASK_BG) 
+            if (QColor(M[0][y*width+x],M[1][y*width+x],M[2][y*width+x]) == MASK_C) 
               {
-                int id = y*width+x;
+                int   id =  y*width+x;
                 float br =  div[0][y*width + x];
                 float bg =  div[1][y*width + x];
                 float bb =  div[2][y*width + x];                
-                if (QColor(M[0][(y-1)*width+x],M[1][(y-1)*width+x],M[2][(y-1)*width+x]) != MASK_BG) 
+                if (QColor(M[0][(y-1)*width+x],M[1][(y-1)*width+x],M[2][(y-1)*width+x]) == MASK_C) 
                   {
                           Arr[index][0] =mp[id-width] ;				
                 } else {
@@ -287,8 +289,7 @@ void CloneFilter::filterImage()
                           bg -= I[1][(y-1)*width + x];
                           bb -= I[2][(y-1)*width + x];
                           }
-
-              if (QColor(M[0][y*width+x-1],M[1][y*width+x-1],M[2][y*width+x-1]) != MASK_BG) 
+               if (QColor(M[0][y*width+x-1],M[1][y*width+x-1],M[2][y*width+x-1]) == MASK_C) 
                 {
                           Arr[index][1] = mp[id-1];				
                } else {
@@ -297,7 +298,7 @@ void CloneFilter::filterImage()
                           bb -= I[2][y*width + x-1];
                          }
               Arr[index][2] = mp[id];				
-              if (QColor(M[0][y*width+x+1],M[1][y*width+x+1],M[2][y*width+x+1]) != MASK_BG) 
+              if (QColor(M[0][y*width+x+1],M[1][y*width+x+1],M[2][y*width+x+1]) == MASK_C) 
                 {
                           Arr[index][3] = mp[id+1];
               } else  {				
@@ -305,7 +306,7 @@ void CloneFilter::filterImage()
                           bg -= I[1][y*width + x+1];
                           bb -= I[2][y*width + x+1];
                           }
-              if (QColor(M[0][(y+1)*width+x],M[1][(y+1)*width+x],M[2][(y+1)*width+x]) != MASK_BG) 
+              if (QColor(M[0][(y+1)*width+x],M[1][(y+1)*width+x],M[2][(y+1)*width+x]) == MASK_C) 
                 {					
                           Arr[index][4] = mp[id+width];	
               } else  {
@@ -329,7 +330,7 @@ void CloneFilter::filterImage()
     double e  = 0;
     if(N < 5000)
         e = 0.1;
-        else if(N < 1000)
+        else if(N < 10000)
                 e = 1;
             else if(N<20000)
                 e = 2.5;
@@ -340,18 +341,18 @@ void CloneFilter::filterImage()
                         else 
                             kDebug() << "Clone area is too large";
     int maxstep = 1000;
-    double *Xr = new double[N];
-    double *Xg = new double[N];
-    double *Xb = new double[N];
+    double *Xr  = new double[N];
+    double *Xg  = new double[N];
+    double *Xb  = new double[N];
     for(int i=0;i<N;i++)
     {
         Xr[i]=0;
         Xg[i]=0;
         Xb[i]=0;
     }
-    bool SorR = SOR(Arr, Bb, Xb, N, wv, maxstep, e);
+    bool SorR = SOR(Arr, Br, Xr, N, wv, maxstep, e);
     bool SorG = SOR(Arr, Bg, Xg, N, wv, maxstep, e);
-    bool SorB = SOR(Arr, Br, Xr, N, wv, maxstep, e);	
+    bool SorB = SOR(Arr, Bb, Xb, N, wv, maxstep, e);	
     delete []Br;
     delete []Bg;
     delete []Bb;
@@ -361,26 +362,35 @@ void CloneFilter::filterImage()
          {
             for (x = 1; x < width-1; x++) 
               {
-                if (QColor(M[0][y*width+x],M[1][y*width+x],M[2][y*width+x]) != MASK_BG) 
+                if (QColor(M[0][y*width+x],M[1][y*width+x],M[2][y*width+x]) == MASK_C) 
                   {
                     int id = y * width + x;
                     int ii = mp[id];
                     I[0][y*width+x] = clamp01((float)Xr[ii]);
                     I[1][y*width+x] = clamp01((float)Xg[ii]);
                     I[2][y*width+x] = clamp01((float)Xb[ii]);
-                }
-            }
-        }
-    }
+                  }
+              }
+         }
 
-    for(int i=0; i < height*width; i++)
-    {
-        col.setRed((int)(I[0][y*width+x] * clip));
-        col.setGreen((int)(I[1][y*width+x ]* clip));
-        col.setBlue((int)(I[2][y*width+x]*clip));
-        col.setAlpha(255);
-        m_destImage.setPixelColor(x,y,col);
-    }
+   // for(int i=0; i < height*width; i++)
+   //{
+        for (y = 0; y < height; y++) 
+         {
+            for (x = 0; x < width; x++) 
+              {
+                col.setRed((int)(I[0][y*width+x]  * clip));
+                col.setGreen((int)(I[1][y*width+x]* clip));
+                col.setBlue((int)(I[2][y*width+x] * clip));
+                col.setAlpha(255);
+                m_destImage.setPixelColor(x,y,col);
+               }      
+         } 
+        m_destImage.save("../destImage", DImg::PNG);
+     }
+    else 
+        kDebug()<<"not resolved";
+
 }
 
  // Build the matrix

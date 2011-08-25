@@ -78,6 +78,7 @@ public:
     virtual FilterAction    filterAction();
     void    readParameters(const FilterAction& action);
     //FIXME DImg* getResultImg() const; //use getTargetImage () frome DImgThreadedFilter instead
+    DImg    getTargetImg() const;
 private:
 
     void filterImage();
@@ -88,7 +89,7 @@ private:
 
 private:
 
-    QColor MASK_BG;
+    QColor MASK_C;
     QPoint m_dis;
     DImg*  m_maskImage;     // mask image
     //-----use m_orgImage and m_destImage from DImgThreadedFilter instead
