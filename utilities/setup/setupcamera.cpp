@@ -198,6 +198,9 @@ public:
 
     KTabWidget*          tab;
 
+    QLineEdit*           ignoreNamesEdit;
+    QLineEdit*           ignoreExtensionsEdit;
+
     FilterList           filters;
 };
 
@@ -323,6 +326,20 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->importEditButton       = new QPushButton(panel3);
     QSpacerItem* spacer2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
+    QGroupBox* groupBox = new QGroupBox(panel3);
+    QVBoxLayout* verticalLayout = new QVBoxLayout(groupBox);
+    QLabel* label = new QLabel(groupBox);
+    verticalLayout->addWidget(label);
+    d->ignoreNamesEdit = new QLineEdit(groupBox);
+    verticalLayout->addWidget(d->ignoreNamesEdit);
+    QLabel* label2 = new QLabel(groupBox);
+    verticalLayout->addWidget(label2);
+    d->ignoreExtensionsEdit = new QLineEdit(groupBox);
+    verticalLayout->addWidget(d->ignoreExtensionsEdit);
+
+    groupBox->setTitle(i18n("Always ignore"));
+    label->setText(i18n("Ignored file names:"));
+    label2->setText(i18n("Ignored file extensions:"));
     d->importAddButton->setText( i18n( "&Add..." ) );
     d->importAddButton->setIcon(SmallIcon("list-add"));
     d->importRemoveButton->setText( i18n( "&Remove" ) );
@@ -336,6 +353,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     importGrid->setSpacing(KDialog::spacingHint());
     importGrid->setAlignment(Qt::AlignTop);
     importGrid->addWidget(d->importListView,         0, 0, 4, 1);
+    importGrid->addWidget(groupBox,                  5, 0, 1, 1);
     importGrid->addWidget(d->importAddButton,        0, 1, 1, 1);
     importGrid->addWidget(d->importRemoveButton,     1, 1, 1, 1);
     importGrid->addWidget(d->importEditButton,       2, 1, 1, 1);
@@ -426,8 +444,7 @@ void SetupCamera::readSettings()
 
     // -------------------------------------------------------
 
-    KSharedConfig::Ptr importConfig = KGlobal::config();
-    KConfigGroup importGroup = importConfig->group(d->importFiltersConfigGroupName);
+    KConfigGroup importGroup = config->group(d->importFiltersConfigGroupName);
     for (int i = 0; true; ++i)
     {
         QString filter = importGroup.readEntry(QString("Filter%1").arg(i), QString());
@@ -444,6 +461,8 @@ void SetupCamera::readSettings()
     {
         new QListWidgetItem(f->name, d->importListView);
     }
+    d->ignoreNamesEdit->setText(importGroup.readEntry("IgnoreNames", FilterComboBox::defaultIgnoreNames));
+    d->ignoreExtensionsEdit->setText(importGroup.readEntry("IgnoreExtensions", FilterComboBox::defaultIgnoreExtensions));
 }
 
 void SetupCamera::applySettings()
@@ -491,14 +510,15 @@ void SetupCamera::applySettings()
 
     // -------------------------------------------------------
 
-    KSharedConfig::Ptr importConfig = KGlobal::config();
-    KConfigGroup importGroup = importConfig->group(d->importFiltersConfigGroupName);
+    KConfigGroup importGroup = config->group(d->importFiltersConfigGroupName);
 
     importGroup.deleteGroup();
     for (int i = 0; i < d->filters.count(); ++i)
     {
         importGroup.writeEntry(QString("Filter%1").arg(i), d->filters[i]->toString());
     }
+    importGroup.writeEntry("IgnoreNames", d->ignoreNamesEdit->text());
+    importGroup.writeEntry("IgnoreExtensions", d->ignoreExtensionsEdit->text());
     importGroup.sync();
 }
 

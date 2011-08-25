@@ -137,6 +137,7 @@ public:
     static const QString          configUseMetadataDateEntry;
     static const QString          configUseDefaultTargetAlbum;
     static const QString          configDefaultTargetAlbumId;
+    static const QString          importFiltersConfigGroupName;
 
     bool                          deleteAfter;
     bool                          busy;
@@ -228,6 +229,7 @@ const QString CameraUI::CameraUIPriv::configGroupName("Camera Settings");
 const QString CameraUI::CameraUIPriv::configUseMetadataDateEntry("UseThemeBackgroundColor");
 const QString CameraUI::CameraUIPriv::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
 const QString CameraUI::CameraUIPriv::configDefaultTargetAlbumId("DefaultTargetAlbumId");
+const QString CameraUI::CameraUIPriv::importFiltersConfigGroupName("Import Filters");
 
 }  // namespace Digikam
 

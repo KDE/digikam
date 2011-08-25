@@ -68,6 +68,8 @@ public:
     void saveSettings();
 
     static void defaultFilters(FilterList* filters);
+    static const QString defaultIgnoreNames;
+    static const QString defaultIgnoreExtensions;
 
 Q_SIGNALS:
 

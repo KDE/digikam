@@ -45,6 +45,12 @@
 namespace Digikam
 {
 
+// JVC camera (see B.K.O #133185).
+const QString FilterComboBox::defaultIgnoreNames("mgr_data pgr_mgr");
+// HP Photosmart camera (see B.K.O #156338).
+// Minolta camera in PTP mode
+const QString FilterComboBox::defaultIgnoreExtensions("dsp dps");
+
 Filter::Filter()
     : onlyNew(false)
 {
