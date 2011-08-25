@@ -81,10 +81,12 @@ public:
      * The database will be locked while the scan is running.
      * With the DeferFiles variant, deep files scanning (new files), the part
      * which can take long, will be done during the time after the method returns,
-     * shortening the synchronous wait.
+     * shortening the synchronous wait. After completeCollectionScanDeferFiles, you
+     * need to call allowToScanDeferredFiles() once to enable scanning the deferred files.
      */
-    void completeCollectionScan(SplashScreen* splash=0);
+    void completeCollectionScan(SplashScreen* splash=0, bool defer = false);
     void completeCollectionScanDeferFiles(SplashScreen* splash=0);
+    void allowToScanDeferredFiles();
 
     /**
      * Carries out a complete collection scan, at the same time updating
@@ -180,7 +182,9 @@ Q_SIGNALS:
     void errorFromInitialization(const QString&);
     void progressFromInitialization(const QString&, int);
 
+    void collectionScanStarted(const QString& message);
     void scanningProgress(double progress);
+    void collectionScanFinished();
 
 private Q_SLOTS:
 

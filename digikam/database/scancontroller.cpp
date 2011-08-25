@@ -102,6 +102,7 @@ public:
         idle(false),
         scanSuspended(0),
         deferFileScanning(false),
+        finishScanAllowed(true),
         continueInitialization(false),
         continueScan(false),
         continuePartialScan(false),
@@ -129,6 +130,7 @@ public:
 
     QStringList               completeScanDeferredAlbums;
     bool                      deferFileScanning;
+    bool                      finishScanAllowed;
 
     QMutex                    mutex;
     QWaitCondition            condVar;
@@ -424,12 +426,17 @@ ScanController::Advice ScanController::databaseInitialization()
 
 void ScanController::completeCollectionScanDeferFiles(SplashScreen* splash)
 {
-    d->deferFileScanning = true;
-    completeCollectionScan(splash);
-    d->deferFileScanning = false;
+    completeCollectionScan(splash, true);
 }
 
-void ScanController::completeCollectionScan(SplashScreen* splash)
+void ScanController::allowToScanDeferredFiles()
+{
+    QMutexLocker lock(&d->mutex);
+    d->finishScanAllowed = true;
+    d->condVar.wakeAll();
+}
+
+void ScanController::completeCollectionScan(SplashScreen* splash, bool defer)
 {
     d->splash         = splash;
     createProgressDialog();
@@ -440,6 +447,7 @@ void ScanController::completeCollectionScan(SplashScreen* splash)
     {
         QMutexLocker lock(&d->mutex);
         d->needsCompleteScan = true;
+        d->deferFileScanning = defer;
         d->condVar.wakeAll();
     }
     // loop is quit by signal
@@ -598,6 +606,7 @@ void ScanController::run()
     {
         bool doInit             = false;
         bool doScan             = false;
+        bool doScanDeferred     = false;
         bool doFinishScan       = false;
         bool doPartialScan      = false;
         bool doUpdateUniqueHash = false;
@@ -615,13 +624,14 @@ void ScanController::run()
             {
                 d->needsCompleteScan = false;
                 doScan               = true;
+                doScanDeferred       = d->deferFileScanning;
             }
             else if (d->needsUpdateUniqueHash)
             {
                 d->needsUpdateUniqueHash = false;
                 doUpdateUniqueHash       = true;
             }
-            else if (!d->completeScanDeferredAlbums.isEmpty() && !d->scanSuspended)
+            else if (!d->completeScanDeferredAlbums.isEmpty() && d->finishScanAllowed && !d->scanSuspended)
             {
                 // d->completeScanDeferredAlbums is only accessed from the thread, no need to copy
                 doFinishScan             = true;
@@ -659,7 +669,7 @@ void ScanController::run()
             connectCollectionScanner(&scanner);
 
             scanner.setNeedFileCount(d->needTotalFiles);
-            scanner.setDeferredFileScanning(d->deferFileScanning);
+            scanner.setDeferredFileScanning(doScanDeferred);
 
             scanner.recordHints(d->albumHints);
             scanner.recordHints(d->itemHints);
@@ -671,7 +681,11 @@ void ScanController::run()
             scanner.completeScan();
 
             emit completeScanDone();
-            d->completeScanDeferredAlbums = scanner.deferredAlbumPaths();
+            if (doScanDeferred)
+            {
+                d->completeScanDeferredAlbums = scanner.deferredAlbumPaths();
+                d->finishScanAllowed = false;
+            }
         }
         else if (doFinishScan)
         {
@@ -682,7 +696,9 @@ void ScanController::run()
             CollectionScanner scanner;
             connectCollectionScanner(&scanner);
 
-            scanner.setNeedFileCount(d->needTotalFiles);
+            emit collectionScanStarted(i18nc("@info:status", "Scanning collection"));
+            //TODO: reconsider performance
+            scanner.setNeedFileCount(true);//d->needTotalFiles);
 
             scanner.recordHints(d->albumHints);
             scanner.recordHints(d->itemHints);
@@ -695,6 +711,7 @@ void ScanController::run()
 
             d->completeScanDeferredAlbums.clear();
             emit completeScanDone();
+            emit collectionScanFinished();
         }
         else if (doPartialScan)
         {

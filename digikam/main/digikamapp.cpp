@@ -281,6 +281,18 @@ DigikamApp::DigikamApp()
     preloadWindows();
 
     setAutoSaveSettings("General Settings", true);
+
+    // now, enable finished the collection scan
+    connect(ScanController::instance(), SIGNAL(collectionScanStarted(QString)),
+            this, SLOT(enterProgress(QString)));
+
+    connect(ScanController::instance(), SIGNAL(scanningProgress(float)),
+            this, SLOT(progressValue(float)));
+
+    connect(ScanController::instance(), SIGNAL(collectionScanFinished()),
+            this, SLOT(finishProgress()));
+
+    ScanController::instance()->allowToScanDeferredFiles();
 }
 
 DigikamApp::~DigikamApp()
