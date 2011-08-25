@@ -128,7 +128,7 @@ CloneTool::CloneTool(QObject* parent)
     // -------------------------------------------------------------
     //connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotTimer()));
     connect(d->settingsView,SIGNAL(signalSettingsChanged()),this,SLOT(slotSettingsChanged()));
-    connect(d->previewWidget,SIGNAL(signalResized()),this,SLOT(slotEffect()));
+    //connect(d->previewWidget,SIGNAL(signalResized()),this,SLOT(slotEffect()));
     connect(d->previewWidget,SIGNAL(signalStrokeOver()),this,SLOT(slotStrokeOver()));//FIXME
  }
 
@@ -143,30 +143,35 @@ void CloneTool::slotSettingsChanged()
     kDebug()<<"slotSettingsChanged is called";
 }
 
-void CloneTool::slotStrokeOver()
+void CloneTool::slotStrokeOver()  //only a stroke operation will be stored, use once operation mode
 {
     //d->strokeOver = true;
         if(d->settingsView->getDrawEnable())
         {
             kDebug()<<"slotStrokeOver is called";
-            d->previewWidget->setContainer(d->settingsView->settings());
+            //d->previewWidget->setContainer(d->settingsView->settings());
             QPoint dis  = d->previewWidget->getDis();
+            //DImg orimg  = d->previewWidget->getPreview();
             DImg orimg  = d->previewWidget->imageIface()->getPreviewImg();
+            orimg.save("../orimg", DImg::PNG);
             DImg desimg = DImg(orimg.width(), orimg.height(), orimg.sixteenBit(), orimg.hasAlpha());
             CloneFilter*  previewFilter = new CloneFilter(orimg, desimg, d->previewWidget->getPreviewMask(), dis);
             setFilter(previewFilter); 
   
-            d->previewRImage.detach();
+            //d->previewRImage.detach();
             //d->previewRImage = previewFilter->getTargetImage(); //FIXME
-            d->previewRImage = filter()->getTargetImage();
-            deleteFilterInstance(true);
+            //d->previewRImage = filter()->getTargetImage();
+            //d->previewRImage.save("../previewRImage", DImg::PNG);
+            //previewFilter->cancelFilter();
+            //deleteFilterInstance(true);
             //if(!data)
             //    return;    
             //d->previewRImage->putImageData(data);
-            d->previewWidget->imageIface()->putPreviewImage(d->previewRImage.bits());
-            d->previewWidget->updateResult();
-            delete previewFilter;
+            //d->previewWidget->imageIface()->putPreviewImage(d->previewRImage.bits());
+            //d->previewWidget->updateResult();
+            //delete previewFilter;
 
+ /*
             dis = d->previewWidget->getOriDis();
             DImg orimg1  = d->previewWidget->imageIface()->getOriginalImg()->copyImageData();
             DImg desimg1 = DImg(orimg1.width(), orimg1.height(), orimg1.sixteenBit(), orimg1.hasAlpha());
@@ -182,8 +187,9 @@ void CloneTool::slotStrokeOver()
             // d->resultImage->putImageData(data);
             d->previewWidget->imageIface()->putOriginalImage(i18n("Clone Toll"), filter()->filterAction(),d->resultImage.bits());
             d->previewWidget->updatePreview();
+            orignalFilter->cancelFilter();
             delete orignalFilter;
-
+*/
     }
 }
 
@@ -238,7 +244,7 @@ void CloneTool::readSettings()
 
     d->previewWidget->setContainer(prm);  // get current container
 
-    //slotEffect();
+    slotEffect();
 }
 
 void CloneTool::writeSettings()
@@ -255,7 +261,7 @@ void CloneTool::slotResetSettings()
 {
     kDebug()<<"slotResetSettings is called";
     d->settingsView->resetToDefault();
-    //slotEffect();
+    slotEffect();
 }
 
 //FIXME
@@ -342,6 +348,7 @@ void CloneTool::prepareFinal()
     setFilter(new CloneFilter(orimg, desimg, d->previewWidget->getMaskImg(), dis, this));
 }
 
+
 void CloneTool::putPreviewData()
 {
     kDebug()<<"putPreviewData is called";
@@ -360,5 +367,24 @@ void CloneTool::putFinalData()
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Clone Tool"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
+
+/*
+void CloneTool::slotOk()
+{
+    writeSettings();
+    toolSettings()->enableButton(EditorToolSettings::Ok,      false);
+    toolSettings()->enableButton(EditorToolSettings::Default, false);
+    toolView()->setEnabled(false);
+    prepareFinal();
+}
+
+void CloneTool::slotCancel()
+{
+    writeSettings();
+    d->previewWidget->imageIface()->putOriginalImage(i18n("Clone Tool"), filter()->filterAction(),d->origImage.bits());
+    slotAbort();
+    emit cancelClicked();
+}
+*/
 
 } // namespace DigikamEnhanceImagePlugin
