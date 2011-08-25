@@ -59,7 +59,7 @@ public:
 
     ImageIface* imageIface() const;
 
-    //DImg*   getPreview();
+    DImg    getPreview() const;
     //DImg*   getOrigImage();
     DImg*   getMaskImg() const; 
     DImg*   getPreviewMask() const;
@@ -69,7 +69,7 @@ public:
     void    setContainer(const CloneContainer& settings);
     void    setBackgroundColor(const QColor& bg);
     void    updatePreview();
-    void    updateResult();  // show the result image of filter()
+    //void    updateResult();  // show the result image of filter()
     CloneContainer getContainer() const;
 
 Q_SIGNALS:
