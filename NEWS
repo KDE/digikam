@@ -7,6 +7,7 @@ CameraGUI : camera items thumbnails are processed on the fly. Connection to came
 CameraGUI : Sort of items by date is possible with photo taken quickly (less than 1s).
 CameraGUI : New option to setup a default target album to download items from camera device.
 CameraGUI : New option to download new items in just one click.
+CameraGUI : New option to filter icon-view by type mime.
 
 Preview   : New option to show/hide information over preview canvas.
 
@@ -62,6 +63,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 048 ==> 280517 : Moving photo from an album to another leads to loose face tags.
 049 ==> 280101 : Patch: Add option to hide icons and text in preview.
 050 ==> 279183 : Themes configuration dialogue does not open.
-051 ==> 
+051 ==> 257806 : Images imported from backup card + filtering icon-view [patch].
+052 ==> 
 
 
