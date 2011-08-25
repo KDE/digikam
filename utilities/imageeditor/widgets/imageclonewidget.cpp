@@ -100,7 +100,8 @@ public:
     DImg*          maskImage;
 //  DImg*          origImage;
     DImg           preview;
-    DImg           oldArea;
+    QImage         previewImg;
+    QImage         oldArea;
     ImageIface*    iface;
 
     CloneContainer settings;
@@ -111,7 +112,7 @@ ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settin
 {
     int w = 480, h = 320;
     setMinimumSize(w, h);
-    setMouseTracking(true);
+    //this->setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->iface        = new ImageIface(w, h);
@@ -124,7 +125,8 @@ ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settin
     bool hasAlpha   = d->iface->previewHasAlpha();
     d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
     d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
-    d->oldArea      =DImg(d->CircleR,d->CircleR,sixteenBit, hasAlpha);
+    d->previewImg   = d->preview.copyQImage();//FIXME
+    d->oldArea      = QImage(2*(d->CircleR+1),2*(d->CircleR+1),sixteenBit, hasAlpha);
     delete [] data;
 
     d->pixmap        = new QPixmap(w, h);
@@ -414,8 +416,9 @@ void ImageCloneWidget::TreateAsBordor(DImg image, const int x, const int y)
     newcolor.setAlpha(forgcolor.alpha());
 
     d->preview.setPixelColor(x,y,newcolor);
+    d->previewImg.setPixel(x,y, newcolor.getQColor().rgba());
     d->preveiwMask->setPixelColor(x,y,DColor(d->MASK_C));
-    updatePreview();
+    //updatePreview();
 }
 
 //FIXME
@@ -499,7 +502,7 @@ double ImageCloneWidget::Min(double a, double b)
 
 void ImageCloneWidget::addToMask(const QPoint& point)
 {
-    kDebug()<<"addToMask is called";
+    //kDebug()<<"addToMask is called";
     int mainDia = d->settings.mainDia;
 
     int LBorderX = (int)Max(point.x() - mainDia/2, 0);
@@ -508,18 +511,20 @@ void ImageCloneWidget::addToMask(const QPoint& point)
     int RBorderY = (int)Min(point.y() + mainDia/2, d->preview.height());
 
     float alpha = d->settings.opacity/100; // alpha between 0 and 1
-
+/*
     QPixmap brushmap = d->settings.brush.getPixmap().scaled(QSize(d->settings.mainDia, d->settings.mainDia), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     if(!brushmap.isNull())
-        kDebug()<<"brushmap is not null";
+        //kDebug()<<"brushmap is not null";
     QImage brushimg = brushmap.toImage();
-
+*/
     for(int j = LBorderY; j < RBorderY ; j++)
     {
         for(int i = LBorderX; i < RBorderX ; i++)
         {
-            if(inBrushpixmap(brushimg, i-LBorderX, j-LBorderY))
-            {
+           // if(inBrushpixmap(brushimg, i-LBorderX, j-LBorderY))
+            // {
+            if((i-point.x())*(i-point.x()) +( j-point.y())*(j-point.y()) <= mainDia*mainDia/4)
+             {
                 if(inimage(d->preveiwMask,i,j) && d->preveiwMask->getPixelColor(i,j).getQColor() == d->MASK_BG)
                 {
                    // DColor color = brushimg->getPixelColor(i-mapDisx,j-mapDisy);
@@ -531,10 +536,12 @@ void ImageCloneWidget::addToMask(const QPoint& point)
                      if(inimage(d->preview, i-getDis().x(), j-getDis().y()))
                         {
                             d->preveiwMask->setPixelColor(i,j,DColor(d->MASK_C));
+                           
+
                             QPoint pre;
                             pre.setX(i-getDis().x());
                             pre.setY(j-getDis().y());
-                            d->preveiwMask->setPixelColor(i,j,DColor(d->MASK_C));
+                            //d->preveiwMask->setPixelColor(i,j,DColor(d->MASK_C));
 
                             DColor forgcolor = d->preview.getPixelColor(pre.x(),pre.y());
                             DColor bacgcolor = d->preview.getPixelColor(i,j);
@@ -546,11 +553,13 @@ void ImageCloneWidget::addToMask(const QPoint& point)
                             newcolor.setAlpha(forgcolor.alpha());
 
                             d->preview.setPixelColor(i,j,newcolor);
-                            //QPainter painter(d->previewPixmap);
+                            d->previewImg.setPixel(i,j, newcolor.getQColor().rgba());
+                            update(i-1,j-1,2,2);
+                           // QPainter painter(&d->preview.copyQImage());
                             //painter.setRenderHint(QPainter::Antialiasing, true);  
-                            //painter.setPen(newcolor.getQColor());
-                            //painter.drawPoint(i,j);
-                            //update();
+                           // painter.setPen(newcolor.getQColor());
+                           // painter.drawPoint(i,j);
+                            //updatePreview();
                             
 //origImage.setPixelColor(i,j,newcolor);
                         }
@@ -560,8 +569,10 @@ void ImageCloneWidget::addToMask(const QPoint& point)
                         }
                     }
                 }
-            }
+
+             }
         }
+        
     
 }
 
@@ -575,7 +586,7 @@ void ImageCloneWidget::mousePressEvent(QMouseEvent* e)
             d->spot.setX(e->x()-d->rect.x());
             d->spot.setY(e->y()-d->rect.y());
             //QPoint p = getSpotPosition();
-            kDebug()<<"mousePressEvent is called";
+            //kDebug()<<"mousePressEvent is called";
             if(inimage(d->preview, d->spot.x(), d->spot.y()))
             {
                 if(d->settings.drawMode)
@@ -587,22 +598,23 @@ void ImageCloneWidget::mousePressEvent(QMouseEvent* e)
                 }
                 else if(d->settings.selectMode)
                 {
-                    QPainter p(d->previewPixmap);//or d->preview
+                    QPainter p(&d->previewImg);//or d->preview
                     p.setRenderHint(QPainter::Antialiasing, true);                
                     if(d->hasDrawEllipse)
-                        p.drawImage(d->oldRect,d->oldArea.copyQImage());
+                        p.drawImage(d->oldRect,d->oldArea);
                     d->startPoint = d->spot;                    
-                    d->oldRect = QRect(d->startPoint.x()- d->CircleR, d->startPoint.y()- d->CircleR, 2*(d->CircleR+1), 2*(d->CircleR+1));  
-                    d->oldArea = d->preview.copy(d->oldRect); 
+                    d->oldRect = QRect(d->startPoint.x()- d->CircleR-1, d->startPoint.y()- d->CircleR -1, 2*(d->CircleR+1), 2*(d->CircleR+1));  
+                    d->oldArea = d->previewImg.copy(d->oldRect); 
                     p.setPen(QColor(255,0,0));
-                    p.drawEllipse(d->spot, 6, 6);
+                    p.drawEllipse(d->spot, d->CircleR, d->CircleR);
+                    update(d->oldRect);
                     d->hasDrawEllipse = true;
                     d->preveiwMask->fill(DColor(d->MASK_BG));//fill maskImage with white
 
                 }
             }
         }
-        updatePreview();
+        //updatePreview();
     }
 }
 
@@ -610,7 +622,7 @@ void ImageCloneWidget::mouseReleaseEvent(QMouseEvent* e)
 {    
     if (e->button() == Qt::LeftButton && d->settings.drawMode)  //FIXME 
     {
-        kDebug()<<"mouse ReleaseEvent is called";
+        //kDebug()<<"mouse ReleaseEvent is called";
         if (d->rect.contains(e->x(), e->y()))
         {
             if(d->settings.drawMode)
@@ -630,7 +642,11 @@ void ImageCloneWidget::mouseMoveEvent(QMouseEvent* e)
 {    
     if (e->buttons() & Qt::LeftButton)
     {
-        kDebug()<<"mouseMoveEvent is called";
+        if (d->rect.contains(e->x(), e->y()))
+        {
+            d->spot.setX(e->x()-d->rect.x());
+            d->spot.setY(e->y()-d->rect.y());
+        //kDebug()<<"mouseMoveEvent is called";
             if(inimage(d->preview, d->spot.x(), d->spot.y()))
               {
                  addToMask(d->spot);
@@ -643,6 +659,7 @@ void ImageCloneWidget::mouseMoveEvent(QMouseEvent* e)
                  p.drawImage(rec,area);
 */           
               }
+         }
         
     //QWidget::mouseMoveEvent(e); 
     
@@ -701,10 +718,12 @@ void ImageCloneWidget::resizeEvent(QResizeEvent *e)
     emit signalResized();
 }
 
-void ImageCloneWidget::paintEvent(QPaintEvent *)
+void ImageCloneWidget::paintEvent(QPaintEvent *event)
 {
     QPainter p(this);
-    p.drawPixmap(0, 0, *d->pixmap);
+    //p.drawImage(0, 0, *d->pixmap);
+    QRect dirtyRect = event->rect();
+    p.drawImage(dirtyRect, d->previewImg, dirtyRect);
     p.end();
 }
 
