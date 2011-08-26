@@ -176,7 +176,15 @@ void CloneFilter::filterImage()
         OriImg[c] = new int  [width * height];
         desImg[c] = new int  [width * height];
     }
-
+    for(int c=0; c<3;c++)
+        for (int i = 0 ; i < width * height; i++)
+        {
+            I[c][i]      = 0;
+            M[c][i]      = 0;
+            div[c][i]    = 0;
+            OriImg[c][i] = 0;
+            desImg[c][i] = 0;
+        }
     //int j = 0;
     for(int y = 0; y < height; y++)
     {
@@ -601,9 +609,9 @@ void CloneFilter::divergents(float* I[3], float* O[3])
     {
         for (int x = 1; x < w-1; x++)
         {
-            O[0][y*w+x] = I[0][y*w+x+1] + I[0][y*w+x-1] + I[0][(y-1)*w+x] + I[0][(y+1)+x] - 4*I[0][y*w+x];
-            O[1][y*w+x] = I[1][y*w+x+1] + I[1][y*w+x-1] + I[1][(y-1)*w+x] + I[1][(y+1)+x] - 4*I[1][y*w+x];
-            O[2][y*w+x] = I[2][y*w+x+1] + I[2][y*w+x-1] + I[2][(y-1)*w+x] + I[2][(y+1)+x] - 4*I[2][y*w+x];
+            O[0][y*w+x] = I[0][y*w+x+1] + I[0][y*w+x-1] + I[0][(y-1)*w+x] + I[0][(y+1)*w+x] - 4*I[0][y*w+x];
+            O[1][y*w+x] = I[1][y*w+x+1] + I[1][y*w+x-1] + I[1][(y-1)*w+x] + I[1][(y+1)*w+x] - 4*I[1][y*w+x];
+            O[2][y*w+x] = I[2][y*w+x+1] + I[2][y*w+x-1] + I[2][(y-1)*w+x] + I[2][(y+1)*w+x] - 4*I[2][y*w+x];
         }
     }
 
