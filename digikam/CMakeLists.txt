@@ -279,13 +279,15 @@ TARGET_LINK_LIBRARIES(digikam
 
         ${STRIGI_LIBRARIES}
         ${LCMS_LIBRARIES}
-        ${GPHOTO2_LIBRARIES}
 
         digikamcore
         digikamdatabase
         advancedrename
         queuemanager
         cameragui
+
+        # See B.K.O #258931: libgphoto2 library must be the last arg for linker.
+        ${GPHOTO2_LIBRARIES}
 )
 
 IF (NOT WIN32 AND GPHOTO2_FOUND)
