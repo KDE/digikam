@@ -42,6 +42,7 @@
 #include <kiconloader.h>
 #include <knuminput.h>
 #include <kstandarddirs.h>
+#include <kstandarddirs.h>
 
 //LibDKcraw includes
 
@@ -151,45 +152,15 @@ void CloneTool::slotStrokeOver()  //only a stroke operation will be stored, use 
             kDebug()<<"slotStrokeOver is called";
             //d->previewWidget->setContainer(d->settingsView->settings());
             QPoint dis  = d->previewWidget->getDis();
-            //DImg orimg  = d->previewWidget->getPreview();
-            DImg orimg  = d->previewWidget->imageIface()->getPreviewImg();
-            orimg.save("../orimg", DImg::PNG);
+            DImg orimg  = d->previewWidget->imageIface()->getPreviewImg();            
             DImg desimg = DImg(orimg.width(), orimg.height(), orimg.sixteenBit(), orimg.hasAlpha());
             CloneFilter*  previewFilter = new CloneFilter(orimg, desimg, d->previewWidget->getPreviewMask(), dis);
             setFilter(previewFilter); 
-  
-            //d->previewRImage.detach();
-            //d->previewRImage = previewFilter->getTargetImage(); //FIXME
-            //d->previewRImage = filter()->getTargetImage();
-            //d->previewRImage.save("../previewRImage", DImg::PNG);
-            //previewFilter->cancelFilter();
-            //deleteFilterInstance(true);
-            //if(!data)
-            //    return;    
-            //d->previewRImage->putImageData(data);
-            //d->previewWidget->imageIface()->putPreviewImage(d->previewRImage.bits());
-            //d->previewWidget->updateResult();
-            //delete previewFilter;
-
- /*
-            dis = d->previewWidget->getOriDis();
-            DImg orimg1  = d->previewWidget->imageIface()->getOriginalImg()->copyImageData();
-            DImg desimg1 = DImg(orimg1.width(), orimg1.height(), orimg1.sixteenBit(), orimg1.hasAlpha());
-            CloneFilter*  orignalFilter = new CloneFilter(orimg1, desimg1, d->previewWidget->getMaskImg(), dis);
-            //CloneFilter*  orignalFilter = new CloneFilter(d->previewWidget->imageIface()->getOriginalImg()->copyImageData(),d->previewWidget->getMaskImg(),dis);
-            setFilter(orignalFilter);
-            // uchar* data1 = previewFilter->getResultImg()->bits();
-            d->resultImage.detach();
-            //d->resultImage = previewFilter->getTargetImage (); //FIXME
-            d->resultImage = filter()->getTargetImage();
-            // if(!data)
-            //    return;    
-            // d->resultImage->putImageData(data);
-            d->previewWidget->imageIface()->putOriginalImage(i18n("Clone Toll"), filter()->filterAction(),d->resultImage.bits());
-            d->previewWidget->updatePreview();
-            orignalFilter->cancelFilter();
-            delete orignalFilter;
-*/
+            ImageIface* iface = d->previewWidget->imageIface();            
+            DImg previewImg   = previewFilter->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());    
+            iface->putPreviewImage(previewImg.bits());
+            d->previewWidget->updateResult(); 
+ 
     }
 }
 
@@ -387,4 +358,5 @@ void CloneTool::slotCancel()
 }
 */
 
-} // namespace DigikamEnhanceImagePlugin
+} // namespace DigikamEnhanceImagePlugin  
+            //d->previewRImage.detach();
