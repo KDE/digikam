@@ -730,14 +730,14 @@ void ImageCloneWidget::paintEvent(QPaintEvent *event)
     p.end();
 }
 
-/*
+
 void ImageCloneWidget::updateResult()
 {
     d->preview    = d->iface->getPreviewImg();
     d->previewImg = d->preview.copyQImage();
     update();
 }
-*/
+
 
 //FIXME
 void ImageCloneWidget::updatePreview()
