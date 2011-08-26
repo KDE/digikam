@@ -591,13 +591,13 @@ void CloneFilter::readParameters(const FilterAction& action)
     tempImg.convert(QVariant::Image);*/
 
 }
-//---------use getTargetImage () frome DImgThreadedFilter instead-----
-/*
-DImg* CloneFilter::getResultImg() const
+//---------getTargetImage () frome DImgThreadedFilter return nothing-----
+
+DImg CloneFilter::getTargetImage() const
 {
-    return m_resultImage;
+    return m_destImage;
 }
-*/
+
 //===================================================================================
 void CloneFilter::divergents(float* I[3], float* O[3])
 {

@@ -74,11 +74,10 @@ public:
         return FilterIdentifier();
     }
 
- ///*FIXME  
     virtual FilterAction    filterAction();
     void    readParameters(const FilterAction& action);
-    //FIXME DImg* getResultImg() const; //use getTargetImage () frome DImgThreadedFilter instead
-    DImg    getTargetImg() const;
+    DImg    getTargetImage() const; //getTargetImage () frome DImgThreadedFilter return nothing 
+
 private:
 
     void filterImage();
