@@ -157,7 +157,9 @@ void CloneTool::slotStrokeOver()  //only a stroke operation will be stored, use 
             CloneFilter*  previewFilter = new CloneFilter(orimg, desimg, d->previewWidget->getPreviewMask(), dis);
             setFilter(previewFilter); 
             ImageIface* iface = d->previewWidget->imageIface();            
-            DImg previewImg   = previewFilter->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());    
+            DImg previewImg   = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());           
+            previewImg.save("../previewImg", DImg::PNG);
+            //resultImg.save("../resultImg", DImg::PNG);
             iface->putPreviewImage(previewImg.bits());
             d->previewWidget->updateResult(); 
  
