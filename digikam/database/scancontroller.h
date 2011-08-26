@@ -183,7 +183,7 @@ Q_SIGNALS:
     void progressFromInitialization(const QString&, int);
 
     void collectionScanStarted(const QString& message);
-    void scanningProgress(double progress);
+    void scanningProgress(float progress);
     void collectionScanFinished();
 
 private Q_SLOTS:
