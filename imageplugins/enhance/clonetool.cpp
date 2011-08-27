@@ -56,6 +56,7 @@
 #include "imageclonewidget.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
+//#include "editortooliface.h"
 
 
 
@@ -153,16 +154,12 @@ void CloneTool::slotStrokeOver()  //only a stroke operation will be stored, use 
             //d->previewWidget->setContainer(d->settingsView->settings());
             QPoint dis  = d->previewWidget->getDis();
             DImg orimg  = d->previewWidget->imageIface()->getPreviewImg();            
-            DImg desimg = DImg(orimg.width(), orimg.height(), orimg.sixteenBit(), orimg.hasAlpha());
-            CloneFilter*  previewFilter = new CloneFilter(orimg, desimg, d->previewWidget->getPreviewMask(), dis);
+            //DImg desimg = DImg(orimg.width(), orimg.height(), orimg.sixteenBit(), orimg.hasAlpha());
+            CloneFilter*  previewFilter = new CloneFilter(&orimg, d->previewWidget->getPreviewMask(), dis, this);
+            slotEffect();//FIXME            
             setFilter(previewFilter); 
-            ImageIface* iface = d->previewWidget->imageIface();            
-            DImg previewImg   = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());           
-            previewImg.save("../previewImg", DImg::PNG);
-            //resultImg.save("../resultImg", DImg::PNG);
-            iface->putPreviewImage(previewImg.bits());
-            d->previewWidget->updateResult(); 
- 
+            //ImageIface* iface = d->previewWidget->imageIface();            
+
     }
 }
 
@@ -217,7 +214,7 @@ void CloneTool::readSettings()
 
     d->previewWidget->setContainer(prm);  // get current container
 
-    slotEffect();
+    EditorToolThreaded::slotEffect();
 }
 
 void CloneTool::writeSettings()
@@ -234,9 +231,13 @@ void CloneTool::slotResetSettings()
 {
     kDebug()<<"slotResetSettings is called";
     d->settingsView->resetToDefault();
-    slotEffect();
+    EditorToolThreaded::slotEffect();
 }
 
+
+void CloneTool::prepareEffect()
+{
+}
 //FIXME
 /*
 void CloneTool::prepareEffect()
@@ -306,32 +307,83 @@ void CloneTool::prepareEffect()
 //}
 
 
+void CloneTool::slotEffect()
+{
+
+    // Computation already in process.
+    if (renderingMode() != EditorToolThreaded::NoneRendering)
+    {
+        return;
+    }
+
+    setRenderingMode(EditorToolThreaded::PreviewRendering);
+    kDebug() << "Preview " << toolName() << " started...";
+
+    toolSettings()->enableButton(EditorToolSettings::Ok,      false);
+    toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);
+    toolSettings()->enableButton(EditorToolSettings::Load,    false);
+    toolSettings()->enableButton(EditorToolSettings::Default, false);
+    toolSettings()->enableButton(EditorToolSettings::Try,     false);
+    toolView()->setEnabled(false);
+
+    //EditorToolIface::editorToolIface()->setToolStartProgress(d->progressMess.isEmpty() ? toolName() : d->progressMess);
+    kapp->setOverrideCursor(Qt::WaitCursor);
+}
+
+void CloneTool::slotOk()
+{
+    writeSettings();
+
+    setRenderingMode(EditorToolThreaded::FinalRendering);
+    kDebug() << "Final " << toolName() << " started...";
+
+    toolSettings()->enableButton(EditorToolSettings::Ok,      false);
+    toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);
+    toolSettings()->enableButton(EditorToolSettings::Load,    false);
+    toolSettings()->enableButton(EditorToolSettings::Default, false);
+    toolSettings()->enableButton(EditorToolSettings::Try,     false);
+    toolView()->setEnabled(false);
+
+    //EditorToolIface::editorToolIface()->setToolStartProgress(d->progressMess.isEmpty() ? toolName() : d->progressMess);
+    kapp->setOverrideCursor( Qt::WaitCursor );
+
+    //if (d->delFilter && d->threadedFilter)
+    //{
+   //     delete d->threadedFilter;
+   //     d->threadedFilter = 0;
+   // }
+
+    prepareFinal();
+}
+
 void CloneTool::prepareFinal()
 {
     kDebug()<<"prepareFinal is called";
     d->previewWidget->setContainer(d->settingsView->settings());
     ImageIface iface(0, 0);
-    // DImg* imTemp = previewWidget->getPreview();
-    // DImg* maskTemp =  previewWidget->getPreviewMask();
     QPoint dis = d->previewWidget->getOriDis();
-    DImg orimg  = d->previewWidget->imageIface()->getOriginalImg()->copyImageData();
-    DImg desimg = DImg(orimg.width(), orimg.height(), orimg.sixteenBit(), orimg.hasAlpha());
-    //CloneFilter*  previewFilter = new CloneFilter(orimg, desimg, d->previewWidget->getMaskImg(), dis);
-
-    setFilter(new CloneFilter(orimg, desimg, d->previewWidget->getMaskImg(), dis, this));
+    DImg* orimg  = d->previewWidget->imageIface()->getOriginalImg();
+    setFilter(new CloneFilter(orimg, d->previewWidget->getMaskImg(), dis, this));
 }
-
 
 void CloneTool::putPreviewData()
 {
     kDebug()<<"putPreviewData is called";
     ImageIface* iface = d->previewWidget->imageIface();
-    DImg previewImg   = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
-    //iface->putPreviewImage(previewImg.bits());
-    //uchar* data       = previewImg.stripImageData();
-    iface->putPreviewImage(previewImg.bits());
-    //delete []data;
-    d->previewWidget->updatePreview();
+    if(!filter()->getTargetImage().isNull())
+    {
+        DImg imDest   = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
+        d->previewWidget->setPreviewImage(imDest);
+/*
+        imDest.save("../imDest", DImg::PNG);
+        iface->putPreviewImage(imDest.bits());
+        DImg previewImage = iface->getPreviewImg();
+        previewImage.save("../previewImage", DImg::PNG);
+        //d->previewWidget->updateResult();  
+        d->previewWidget->updatePreview();
+*/
+    }                  
+
 }
 
 void CloneTool::putFinalData()

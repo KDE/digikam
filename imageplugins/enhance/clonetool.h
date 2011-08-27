@@ -48,18 +48,19 @@ private Q_SLOTS:
     void slotSettingsChanged();
     void slotStrokeOver();
 
-/*
+
 protected Q_SLOTS:
 
+    virtual void slotEffect();
     virtual void slotOk();
-    virtual void slotCancel();
-*/
+    //virtual void slotCancel();
+
 
 private:
 
     void readSettings();
     void writeSettings();
-    //void prepareEffect();//FIXME
+    void prepareEffect();//FIXME
     void prepareFinal();
     void putPreviewData();
     void putFinalData();
