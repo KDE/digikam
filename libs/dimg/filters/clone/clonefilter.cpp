@@ -54,13 +54,11 @@ CloneFilter::CloneFilter(QObject* parent)
     initFilter();
 }
 
-CloneFilter::CloneFilter(const DImg & orgImage,const DImg & destImage, DImg* maskImage, const QPoint& dis, QObject* parent)
-    :DImgThreadedFilter(parent, "CloneFilter")
+CloneFilter::CloneFilter(DImg* orgImage, DImg* maskImage, const QPoint& dis, QObject* parent)
+    :DImgThreadedFilter(orgImage, parent, "CloneFilter")
 {
     m_dis           = dis;
-    kDebug()<<"dis is"<<dis;
-    setOriginalImage (orgImage);  
-    m_destImage     = destImage;
+    kDebug()<<"dis is"<<dis;    
     m_maskImage     = maskImage;
     MASK_C          = QColor(0,0,0);
 
@@ -147,260 +145,272 @@ bool CloneFilter::SOR(double **A, double *b, double *x, int N, double w, int max
 
 void CloneFilter::filterImage()
 {
-    float* I[3];
-    float* div[3];
-    int*   OriImg[3];
-    int*   M[3];
-    int*   desImg[3];
-    DColor col, colM;
-
-    for (int c = 0 ; c < 3; c++)
-    {
-        I[c]      = 0;
-        M[c]      = 0;
-        div[c]    = 0;
-        OriImg[c] = 0;
-        desImg[c] = 0;
-
-    }
-
-    int width  = m_orgImage.width();
-    int height = m_orgImage.height();
-    float clip = 255.0;
-
-    for(int c = 0; c < 3; c++)
-    {
-        I[c]      = new float[width * height];
-        M[c]      = new int  [width * height];
-        div[c]    = new float[width * height];
-        OriImg[c] = new int  [width * height];
-        desImg[c] = new int  [width * height];
-    }
-    for(int c=0; c<3;c++)
-        for (int i = 0 ; i < width * height; i++)
+    if (!m_orgImage.isNull() && !m_maskImage->isNull() && m_dis!= QPoint(0,0))
+    {    
+        float* I[3];
+        float* div[3];
+        int*   OriImg[3];
+        int*   M[3];
+        int*   desImg[3];
+        DColor col, colM;
+    
+        for (int c = 0 ; c < 3; c++)
         {
-            I[c][i]      = 0;
-            M[c][i]      = 0;
-            div[c][i]    = 0;
-            OriImg[c][i] = 0;
-            desImg[c][i] = 0;
+            I[c]      = 0;
+            M[c]      = 0;
+            div[c]    = 0;
+            OriImg[c] = 0;
+            desImg[c] = 0;
+    
         }
-    //int j = 0;
-    for(int y = 0; y < height; y++)
-    {
-        for(int x = 0; x < width; x++)
+    
+        int width  = m_orgImage.width();
+        int height = m_orgImage.height();
+        float clip = 255.0;
+    
+        for(int c = 0; c < 3; c++)
         {
-            col  = m_orgImage.getPixelColor(x,y);
-
-            OriImg[0][y*width + x] = col.red();
-            OriImg[1][y*width + x] = col.green();
-            OriImg[2][y*width + x] = col.blue();
-
-            desImg[0][y*width + x] = col.red();
-            desImg[1][y*width + x] = col.green();
-            desImg[2][y*width + x] = col.blue();
-
-            colM    = m_maskImage->getPixelColor(x,y);
-
-            M[0][y*width + x]      = colM.red();
-            M[1][y*width + x]      = colM.green();
-            M[2][y*width + x]      = colM.blue();
-            //j++;
+            I[c]      = new float[width * height];
+            M[c]      = new int  [width * height];
+            div[c]    = new float[width * height];
+            OriImg[c] = new int  [width * height];
+            desImg[c] = new int  [width * height];
         }
-    }
-
-    for(int y = 0; y < height; y++)
-    {
-        for(int x = 0; x < width; x++)
-        {
-            if(inimage(m_orgImage, x-m_dis.x(), y-m_dis.y()))
+        for(int c=0; c<3;c++)
+            for (int i = 0 ; i < width * height; i++)
             {
-                desImg[0][y*width + x] = (float)OriImg[0][(y-m_dis.y())*width + x-m_dis.x()];
-                desImg[1][y*width + x] = (float)OriImg[1][(y-m_dis.y())*width + x-m_dis.x()];
-                desImg[2][y*width + x] = (float)OriImg[2][(y-m_dis.y())*width + x-m_dis.x()];
+                I[c][i]      = 0;
+                M[c][i]      = 0;
+                div[c][i]    = 0;
+                OriImg[c][i] = 0;
+                desImg[c][i] = 0;
+            }
+        //int j = 0;
+        for(int y = 0; y < height; y++)
+        {
+            for(int x = 0; x < width; x++)
+            {
+                col  = m_orgImage.getPixelColor(x,y);
+    
+                OriImg[0][y*width + x] = col.red();
+                OriImg[1][y*width + x] = col.green();
+                OriImg[2][y*width + x] = col.blue();
+    
+                desImg[0][y*width + x] = col.red();
+                desImg[1][y*width + x] = col.green();
+                desImg[2][y*width + x] = col.blue();
+    
+                colM    = m_maskImage->getPixelColor(x,y);
+    
+                M[0][y*width + x]      = colM.red();
+                M[1][y*width + x]      = colM.green();
+                M[2][y*width + x]      = colM.blue();
+                //j++;
             }
         }
-    }
-
-    for(int i=0; i < height*width; i++)
-    {
-        I[0][i] = desImg[0][i]/clip;
-        I[1][i] = desImg[1][i]/clip;
-        I[2][i] = desImg[2][i]/clip;
-    }
+    
+        for(int y = 0; y < height; y++)
+        {
+            for(int x = 0; x < width; x++)
+            {
+                if(inimage(m_orgImage, x-m_dis.x(), y-m_dis.y()))
+                {
+                    desImg[0][y*width + x] = (float)OriImg[0][(y-m_dis.y())*width + x-m_dis.x()];
+                    desImg[1][y*width + x] = (float)OriImg[1][(y-m_dis.y())*width + x-m_dis.x()];
+                    desImg[2][y*width + x] = (float)OriImg[2][(y-m_dis.y())*width + x-m_dis.x()];
+                }
+            }
+        }
+    
+        for(int i=0; i < height*width; i++)
+        {
+            I[0][i] = desImg[0][i]/clip;
+            I[1][i] = desImg[1][i]/clip;
+            I[2][i] = desImg[2][i]/clip;
+        }
     
 
-    divergents(I, div);
+        divergents(I, div);
 
-    for(int i=0; i < height*width; i++)
-    {
-        I[0][i] = OriImg[0][i]/clip;
-        I[1][i] = OriImg[1][i]/clip;
-        I[2][i] = OriImg[2][i]/clip;
-    }
-
-    int x, y;
-
-    // Build mapping from (x,y) to variables
-    int N = 0; // variable indexer
-    std::map<int, int> mp;
-
-    for (y = 1; y < height-1; y++)
-    {
-        for (x = 1; x < width-1; x++)
-        {
-            int id = y*width+x;
-            if (QColor(M[0][y*width+x],M[1][y*width+x],M[2][y*width+x]) == MASK_C)
-            {
-                // Masked pixel
-                mp[id] = N;
-                N++;
-            }
+        for(int i=0; i < height*width; i++)
+       {
+            I[0][i] = OriImg[0][i]/clip;
+            I[1][i] = OriImg[1][i]/clip;
+            I[2][i] = OriImg[2][i]/clip;
         }
-     }
+    
+        int x, y;
 
-    if (N == 0)
-    {
-            kDebug() << "Solver::solve: No masked pixels found (mask color is non-black)";
-            return;
-    }
-
-  ///* FIXME : this code do not compile yet
-
-    kDebug() << "Solver::solve: Solving " << width << "x" << height << " with " << N << " unknowns" << endl;
-
-    double **Arr;	
-    Arr = new double*[N];
-    for(int i=0; i < N; i++)
-        Arr[i] = new double[5];
-    for(int i =0 ;i <N; i++)
-        for(int j=0; j<5;j++)
-            Arr[i][j] = -1;
-    double* Br  = new double[N];
-    double* Bg  = new double[N];
-    double* Bb  = new double[N];
-    int index = 0, n = 0;
-    for (y = 1; y < height-1; y++) {
-        for (x = 1; x < width-1; x++) {
-            if (QColor(M[0][y*width+x],M[1][y*width+x],M[2][y*width+x]) == MASK_C) 
-              {
-                int   id =  y*width+x;
-                float br =  div[0][y*width + x];
-                float bg =  div[1][y*width + x];
-                float bb =  div[2][y*width + x];                
-                if (QColor(M[0][(y-1)*width+x],M[1][(y-1)*width+x],M[2][(y-1)*width+x]) == MASK_C) 
-                  {
-                          Arr[index][0] =mp[id-width] ;				
-                } else {
-                           // pixel, update right hand side
-                          br -= I[0][(y-1)*width + x];
-                          bg -= I[1][(y-1)*width + x];
-                          bb -= I[2][(y-1)*width + x];
-                          }
-               if (QColor(M[0][y*width+x-1],M[1][y*width+x-1],M[2][y*width+x-1]) == MASK_C) 
+        // Build mapping from (x,y) to variables
+        int N = 0; // variable indexer
+        std::map<int, int> mp;
+    
+        for (y = 1; y < height-1; y++)
+        {
+            for (x = 1; x < width-1; x++)
+            {
+                int id = y*width+x;
+                if (QColor(M[0][y*width+x],M[1][y*width+x],M[2][y*width+x]) == MASK_C)
                 {
-                          Arr[index][1] = mp[id-1];				
-               } else {
-                          br -= I[0][y*width + x-1];
-                          bg -= I[1][y*width + x-1];
-                          bb -= I[2][y*width + x-1];
-                         }
-              Arr[index][2] = mp[id];				
-              if (QColor(M[0][y*width+x+1],M[1][y*width+x+1],M[2][y*width+x+1]) == MASK_C) 
-                {
-                          Arr[index][3] = mp[id+1];
-              } else  {				
-                          br -= I[0][y*width + x+1];
-                          bg -= I[1][y*width + x+1];
-                          bb -= I[2][y*width + x+1];
-                          }
-              if (QColor(M[0][(y+1)*width+x],M[1][(y+1)*width+x],M[2][(y+1)*width+x]) == MASK_C) 
-                {					
-                          Arr[index][4] = mp[id+width];	
-              } else  {
-                          br -= I[0][(y+1)*width + x];
-                          bg -= I[1][(y+1)*width + x];
-                          bb -= I[2][(y+1)*width + x];;
-                          }
-              int k = mp[id];//Record the location of the last mask point
-              // Spread the right hand side so we can solve using TAUCS for
-              Br[k] = br;
-              Bg[k] = bg;
-              Bb[k] = bb;
-              index++;
-              n++;
-           }
+                    // Masked pixel
+                    mp[id] = N;
+                    N++;
+                }
+            }
          }
-      }
+    
+        if (N == 0)
+        {
+                kDebug() << "Solver::solve: No masked pixels found (mask color is non-black)";
+                return;
+        }
 
-    assert(n == N);
-    double wv = 1.5;
-    double e  = 0;
-    if(N < 5000)
-        e = 0.1;
-        else if(N < 10000)
-                e = 1;
-            else if(N<20000)
-                e = 2.5;
-                else if(e < 30000)
-                    e = 5;
-                    else if(e < 50000)
-                        e = 10;
-                        else 
-                            kDebug() << "Clone area is too large";
-    int maxstep = 1000;
-    double *Xr  = new double[N];
-    double *Xg  = new double[N];
-    double *Xb  = new double[N];
-    for(int i=0;i<N;i++)
-    {
-        Xr[i]=0;
-        Xg[i]=0;
-        Xb[i]=0;
-    }
-    bool SorR = SOR(Arr, Br, Xr, N, wv, maxstep, e);
-    bool SorG = SOR(Arr, Bg, Xg, N, wv, maxstep, e);
-    bool SorB = SOR(Arr, Bb, Xb, N, wv, maxstep, e);	
-    delete []Br;
-    delete []Bg;
-    delete []Bb;
-    if(SorR && SorG && SorB)
-    {
-        for (y = 1; y < height-1; y++) 
-         {
-            for (x = 1; x < width-1; x++) 
-              {
+        //* FIXME : this code do not compile yet
+
+        kDebug() << "Solver::solve: Solving " << width << "x" << height << " with " << N << " unknowns" << endl;
+        postProgress(20);
+    
+        double **Arr;	
+        Arr = new double*[N];
+        for(int i=0; i < N; i++)
+            Arr[i] = new double[5];
+        for(int i =0 ;i <N; i++)
+            for(int j=0; j<5;j++)
+                Arr[i][j] = -1;
+        double* Br  = new double[N];
+        double* Bg  = new double[N];
+        double* Bb  = new double[N];
+        int index = 0, n = 0;
+        for (y = 1; y < height-1; y++) {
+            for (x = 1; x < width-1; x++) {
                 if (QColor(M[0][y*width+x],M[1][y*width+x],M[2][y*width+x]) == MASK_C) 
                   {
-                    int id = y * width + x;
-                    int ii = mp[id];
-                    I[0][y*width+x] = clamp01((float)Xr[ii]);
-                    I[1][y*width+x] = clamp01((float)Xg[ii]);
-                    I[2][y*width+x] = clamp01((float)Xb[ii]);
+                    int   id =  y*width+x;
+                    float br =  div[0][y*width + x];
+                    float bg =  div[1][y*width + x];
+                    float bb =  div[2][y*width + x];                
+                    if (QColor(M[0][(y-1)*width+x],M[1][(y-1)*width+x],M[2][(y-1)*width+x]) == MASK_C) 
+                      {
+                              Arr[index][0] =mp[id-width] ;				
+                    } else {
+                               // pixel, update right hand side
+                              br -= I[0][(y-1)*width + x];
+                              bg -= I[1][(y-1)*width + x];
+                              bb -= I[2][(y-1)*width + x];
+                              }
+                   if (QColor(M[0][y*width+x-1],M[1][y*width+x-1],M[2][y*width+x-1]) == MASK_C) 
+                    {
+                              Arr[index][1] = mp[id-1];				
+                   } else {
+                              br -= I[0][y*width + x-1];
+                              bg -= I[1][y*width + x-1];
+                              bb -= I[2][y*width + x-1];
+                             }
+                  Arr[index][2] = mp[id];				
+                  if (QColor(M[0][y*width+x+1],M[1][y*width+x+1],M[2][y*width+x+1]) == MASK_C) 
+                    {
+                              Arr[index][3] = mp[id+1];
+                  } else  {				
+                              br -= I[0][y*width + x+1];
+                              bg -= I[1][y*width + x+1];
+                              bb -= I[2][y*width + x+1];
+                              }
+                  if (QColor(M[0][(y+1)*width+x],M[1][(y+1)*width+x],M[2][(y+1)*width+x]) == MASK_C) 
+                    {					
+                              Arr[index][4] = mp[id+width];	
+                  } else  {
+                              br -= I[0][(y+1)*width + x];
+                              bg -= I[1][(y+1)*width + x];
+                              bb -= I[2][(y+1)*width + x];;
+                              }
+                  int k = mp[id];//Record the location of the last mask point
+                  // Spread the right hand side so we can solve using TAUCS for
+                  Br[k] = br;
+                  Bg[k] = bg;
+                  Bb[k] = bb;
+                  index++;
+                  n++;
+                }
+             }
+          }
+    
+        assert(n == N);
+    
+        postProgress(40);
+    
+        double wv = 1.5;
+        double e  = 0;
+        int maxstep = 1000;
+        if(N < 5000)
+            e = 0.1;
+            else if(N < 10000)
+                    e = 1;
+                else if(N<20000)
+                    e = 2.5;
+                    else if(e < 30000)
+                        e = 5;
+                        else if(e < 50000)
+                            {e = 10; maxstep = 1500;}    
+                             else
+                                {e = 20; maxstep = 2000;}                   
+
+        double *Xr  = new double[N];
+        double *Xg  = new double[N];
+        double *Xb  = new double[N];
+        for(int i=0;i<N;i++)
+        {
+            Xr[i]=0;
+            Xg[i]=0;
+            Xb[i]=0;
+        }
+        bool SorR = SOR(Arr, Br, Xr, N, wv, maxstep, e);
+        bool SorG = SOR(Arr, Bg, Xg, N, wv, maxstep, e);
+        bool SorB = SOR(Arr, Bb, Xb, N, wv, maxstep, e);	
+        delete []Br;
+        delete []Bg;
+        delete []Bb;
+
+        postProgress(90);
+
+        if(SorR && SorG && SorB)
+        {    
+            for (y = 1; y < height-1; y++) 
+             {
+                for (x = 1; x < width-1; x++) 
+                  {
+                    if (QColor(M[0][y*width+x],M[1][y*width+x],M[2][y*width+x]) == MASK_C) 
+                      {
+                        int id = y * width + x;
+                        int ii = mp[id];
+                        I[0][y*width+x] = clamp01((float)Xr[ii]);
+                        I[1][y*width+x] = clamp01((float)Xg[ii]);
+                        I[2][y*width+x] = clamp01((float)Xb[ii]);
+                      }
                   }
-              }
+             }
+    
+       // for(int i=0; i < height*width; i++)
+       //{
+            for (y = 0; y < height; y++) 
+             {
+                for (x = 0; x < width; x++) 
+                  {
+                    col.setRed((int)(I[0][y*width+x]  * clip));
+                    col.setGreen((int)(I[1][y*width+x]* clip));
+                    col.setBlue((int)(I[2][y*width+x] * clip));
+                    col.setAlpha(255);
+                    m_destImage.setPixelColor(x,y,col);
+                   }      
+             } 
+        //m_destImage.save("../destImage", DImg::PNG);
+        postProgress(100);
+
          }
+        else 
+            kDebug()<<"Image is too large, can not be resolved";
 
-   // for(int i=0; i < height*width; i++)
-   //{
-        for (y = 0; y < height; y++) 
-         {
-            for (x = 0; x < width; x++) 
-              {
-                col.setRed((int)(I[0][y*width+x]  * clip));
-                col.setGreen((int)(I[1][y*width+x]* clip));
-                col.setBlue((int)(I[2][y*width+x] * clip));
-                col.setAlpha(255);
-                m_destImage.setPixelColor(x,y,col);
-               }      
-         } 
-        m_destImage.save("../destImage", DImg::PNG);
-     }
-    else 
-        kDebug()<<"not resolved";
-
+    }
 }
-
  // Build the matrix
     // ----------------
     // We solve Ax = b for all 3 channels at once

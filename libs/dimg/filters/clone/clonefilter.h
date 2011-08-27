@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT CloneFilter : public DImgThreadedFilter
 public:
 
     explicit CloneFilter(QObject* parent = 0);
-    explicit CloneFilter(const DImg & orgImage,const DImg & destImage, DImg* maskImage, const QPoint& dis, QObject* parent=0);
+    explicit CloneFilter(DImg* orgImage, DImg* maskImage, const QPoint& dis, QObject* parent=0);
 
     ~CloneFilter();
 
