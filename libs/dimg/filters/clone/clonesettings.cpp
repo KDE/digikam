@@ -121,7 +121,7 @@ CloneSettings::CloneSettings(QWidget* parent)
 
     QLabel* label1            = new QLabel(i18n("BrushShape:"));
     QLineEdit* BrushShapeEdit = new QLineEdit(parent);
-    BrushShapeEdit->setGeometry(QRect(100, 50, 130, 20));
+    //BrushShapeEdit->setGeometry(QRect(100, 50, 130, 20));
 
     QLabel* label2            = new QLabel();
     QPixmap Brushmap;
@@ -138,8 +138,8 @@ CloneSettings::CloneSettings(QWidget* parent)
     scrollAreaBrushShape->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollAreaBrushShape->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollAreaBrushShape->setWidgetResizable(true);
-    scrollAreaBrushShape->setFixedSize(135,130);
-    scrollAreaBrushShape->setFixedHeight(130);
+    //scrollAreaBrushShape->setFixedSize(135,130);
+    //scrollAreaBrushShape->setFixedHeight(130);
 
     QButtonGroup* brushGroup = new QButtonGroup(scrollAreaBrushShape);
     brushGroup->setExclusive(true);

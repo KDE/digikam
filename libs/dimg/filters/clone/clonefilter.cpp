@@ -402,7 +402,7 @@ void CloneFilter::filterImage()
                     m_destImage.setPixelColor(x,y,col);
                    }      
              } 
-        //m_destImage.save("../destImage", DImg::PNG);
+        m_destImage.save("../destImage", DImg::PNG);
         postProgress(100);
 
          }

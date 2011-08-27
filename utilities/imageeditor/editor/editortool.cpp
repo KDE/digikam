@@ -578,6 +578,7 @@ void EditorToolThreaded::slotEffect()
     prepareEffect();
 }
 
+
 void EditorToolThreaded::slotCancel()
 {
     writeSettings();
