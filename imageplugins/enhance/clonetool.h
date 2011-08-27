@@ -51,7 +51,6 @@ private Q_SLOTS:
 
 protected Q_SLOTS:
 
-    //virtual void slotEffect();
     //virtual void slotOk();
     //virtual void slotCancel();
 
