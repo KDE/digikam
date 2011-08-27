@@ -228,6 +228,12 @@ void   ImageCloneWidget::setPreview()
     update();
 }
 
+void    ImageCloneWidget::setPreviewImage(DImg previewImage)
+{
+    d->previewImg = previewImage.copyQImage();
+    update();
+}
+
 
 /*
 void   ImageCloneWidget::setOriginalImage()
@@ -631,9 +637,9 @@ void ImageCloneWidget::mouseReleaseEvent(QMouseEvent* e)
               {
                   d->maskImage->detach();
                   d->maskImage = new DImg(d->preveiwMask->smoothScale(d->iface->getOriginalImg()->width(), d->iface->getOriginalImg()->height(), Qt::KeepAspectRatio));//FIXME
-                  d->preveiwMask->save(QString("../preveiwMask"),DImg::PNG);                  
-                  d->maskImage->save(QString("../maskImage"),DImg::PNG);
-                  d->preview.save("../preview",DImg::PNG);
+                  //d->preveiwMask->save(QString("../preveiwMask"),DImg::PNG);                  
+                  //d->maskImage->save(QString("../maskImage"),DImg::PNG);
+                  //d->preview.save("../preview",DImg::PNG);
                   emit signalStrokeOver();
                }
         }
@@ -734,7 +740,9 @@ void ImageCloneWidget::paintEvent(QPaintEvent *event)
 void ImageCloneWidget::updateResult()
 {
     d->preview    = d->iface->getPreviewImg();
+    //d->preview.save("../Dpreview", DImg::PNG);
     d->previewImg = d->preview.copyQImage();
+    //d->previewImg.save("smth.jpg","JPG");
     update();
 }
 

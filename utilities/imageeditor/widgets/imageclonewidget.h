@@ -80,6 +80,7 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void    setPreview();
+    void    setPreviewImage(DImg previewImage);
 
 private:
 
