@@ -214,7 +214,7 @@ void CloneTool::readSettings()
 
     d->previewWidget->setContainer(prm);  // get current container
 
-    EditorToolThreaded::slotEffect();
+    slotEffect();
 }
 
 void CloneTool::writeSettings()
@@ -231,7 +231,7 @@ void CloneTool::slotResetSettings()
 {
     kDebug()<<"slotResetSettings is called";
     d->settingsView->resetToDefault();
-    EditorToolThreaded::slotEffect();
+    slotEffect();
 }
 
 
@@ -306,29 +306,7 @@ void CloneTool::prepareEffect()
 //    }
 //}
 
-
-void CloneTool::slotEffect()
-{
-
-    // Computation already in process.
-    if (renderingMode() != EditorToolThreaded::NoneRendering)
-    {
-        return;
-    }
-
-    setRenderingMode(EditorToolThreaded::PreviewRendering);
-    kDebug() << "Preview " << toolName() << " started...";
-
-    toolSettings()->enableButton(EditorToolSettings::Ok,      false);
-    toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);
-    toolSettings()->enableButton(EditorToolSettings::Load,    false);
-    toolSettings()->enableButton(EditorToolSettings::Default, false);
-    toolSettings()->enableButton(EditorToolSettings::Try,     false);
-    toolView()->setEnabled(false);
-
-    //EditorToolIface::editorToolIface()->setToolStartProgress(d->progressMess.isEmpty() ? toolName() : d->progressMess);
-    kapp->setOverrideCursor(Qt::WaitCursor);
-}
+/*
 
 void CloneTool::slotOk()
 {
@@ -355,7 +333,7 @@ void CloneTool::slotOk()
 
     prepareFinal();
 }
-
+*/
 void CloneTool::prepareFinal()
 {
     kDebug()<<"prepareFinal is called";
