@@ -701,6 +701,14 @@ int TagsCache::getOrCreateTag(const QString& tagPath)
     if (!id)
     {
         id = createTag(tagPath);
+
+        // There is a weakness when createTag is called concurrently.
+        // The attempt coming second to DatabaseAccess will fail, but the tag was created
+        // So at least try again finding the tag read-only.
+        if (id == -1)
+        {
+            id = tagForPath(tagPath);
+        }
     }
 
     return id;
