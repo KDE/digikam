@@ -28,6 +28,10 @@
 #include <QSharedData>
 #include <QMultiMap>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "albumdb.h"
@@ -37,14 +41,19 @@
 namespace Digikam
 {
 
+typedef QExplicitlySharedDataPointer<TagProperties::TagPropertiesPriv> TagPropertiesPrivSharedPointer;
 class TagProperties::TagPropertiesPriv : public QSharedData
 {
 public:
+
+    static TagPropertiesPrivSharedPointer createGuarded(int tagId);
 
     TagPropertiesPriv()
     {
         tagId = -1;
     }
+
+    bool isNull() const;
 
     int                         tagId;
     QMultiMap<QString, QString> properties;
@@ -52,17 +61,32 @@ public:
 
 // ------------------------------------------------------------------------------------------------
 
-class TagPropertiesPrivSharedNull : public QSharedDataPointer<TagProperties::TagPropertiesPriv>
+class TagPropertiesPrivSharedNull : public TagPropertiesPrivSharedPointer
 {
 public:
 
     TagPropertiesPrivSharedNull() 
-        : QSharedDataPointer<TagProperties::TagPropertiesPriv>(new TagProperties::TagPropertiesPriv)
+        : TagPropertiesPrivSharedPointer(new TagProperties::TagPropertiesPriv)
     {
     }
 };
 
 K_GLOBAL_STATIC(TagPropertiesPrivSharedNull, tagPropertiesPrivSharedNull)
+
+TagPropertiesPrivSharedPointer TagProperties::TagPropertiesPriv::createGuarded(int tagId)
+{
+    if (tagId <= 0)
+    {
+        kDebug() << "Attempt to create tag properties for tag id" << tagId;
+        return *tagPropertiesPrivSharedNull;
+    }
+    return TagPropertiesPrivSharedPointer(new TagPropertiesPriv);
+}
+
+bool TagProperties::TagPropertiesPriv::isNull() const
+{
+    return this == tagPropertiesPrivSharedNull->constData();
+}
 
 // ------------------------------------------------------------------------------------------------
 
@@ -72,8 +96,13 @@ TagProperties::TagProperties()
 }
 
 TagProperties::TagProperties(int tagId)
-    : d(new TagPropertiesPriv)
+    : d(TagPropertiesPriv::createGuarded(tagId))
 {
+    if (d->isNull())
+    {
+        return;
+    }
+
     d->tagId                      = tagId;
     QList<TagProperty> properties = DatabaseAccess().db()->getTagProperties(tagId);
     foreach (const TagProperty& p, properties)
@@ -140,6 +169,10 @@ QMap<QString, QString> TagProperties::properties() const
 
 void TagProperties::setProperty(const QString& key, const QString& value)
 {
+    if (d->isNull())
+    {
+        return;
+    }
     if (d->properties.contains(key, value) && d->properties.count(key) == 1)
     {
         return;
@@ -153,7 +186,7 @@ void TagProperties::setProperty(const QString& key, const QString& value)
 
 void TagProperties::addProperty(const QString& key, const QString& value)
 {
-    if (d->properties.contains(key, value))
+    if (d->isNull() || d->properties.contains(key, value))
     {
         return;
     }
@@ -164,7 +197,7 @@ void TagProperties::addProperty(const QString& key, const QString& value)
 
 void TagProperties::removeProperty(const QString& key, const QString& value)
 {
-    if (d->properties.contains(key, value))
+    if (!d->isNull() && d->properties.contains(key, value))
     {
         DatabaseAccess().db()->removeTagProperties(d->tagId, key, value);
         d->properties.remove(key, value);
@@ -173,7 +206,7 @@ void TagProperties::removeProperty(const QString& key, const QString& value)
 
 void TagProperties::removeProperties(const QString& key)
 {
-    if (d->properties.contains(key))
+    if (!d->isNull() && d->properties.contains(key))
     {
         DatabaseAccess().db()->removeTagProperties(d->tagId, key);
         d->properties.remove(key);
