@@ -93,7 +93,7 @@ private:
 
     bool    inimage(DImg img, const int x, const int y);
     bool    inimage(DImg *img, const int x, const int y);
-    bool    inBrushpixmap(QImage brushimg, const int x, const int y);
+    bool    inBrushpixmap(const int x, const int y, const int w);
 
     double  Max(double a, double b);
     double  Min(double a, double b);
@@ -102,7 +102,7 @@ private:
     void    addToMask(const QPoint& point);
     void    upDis();
     void    updatePixmap();
-
+    void    updateBrushmap();
 private:
 
     class ImageCloneWidgetPriv;

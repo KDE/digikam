@@ -25,6 +25,7 @@
 
 //C++ includes
 
+#include <map>
 //#include <algorithm>
 
 // Qt includes
@@ -84,15 +85,15 @@ public:
     QRect          oldRect;
     int            Border;
     int            CircleR;
-    QColor         MASK_BG;     // background color of maskimage
-    QColor         MASK_C;      // forground color of maskimage
-    QColor         bgColor;     // background color of the widget
-    QPoint         centerPoint; // selected centerPoint of the source area
-    QPoint         startPoint;  // the first point of a stroke
-    QPoint         dis;         // dis means the distance between startPoit and centerPoint, the value can be negative
-                                // Current spot position in preview coordinates.
-
-
+    QColor         MASK_BG;       // background color of maskimage
+    QColor         MASK_C;        // forground color of maskimage
+    QColor         bgColor;       // background color of the widget
+    QPoint         centerPoint;   // selected centerPoint of the source area
+    QPoint         startPoint;    // the first point of a stroke
+    QPoint         dis;           // dis means the distance between startPoit and centerPoint, the value can be negative
+                                  // Current spot position in preview coordinates.
+    std::map<int, int> Brushmap; // instore black pixels in brushmap, so as to judge weather a pixel is covered by a brushmap.
+    int            curBrushID;
     QPoint         spot;
     QPixmap*       pixmap;
     QPixmap*       previewPixmap;
@@ -165,10 +166,10 @@ ImageCloneWidget::ImageCloneWidget(QWidget* parent, const CloneContainer& settin
     h       = d->preview.height();
     sixteen = d->preview.sixteenBit();
     alpha   = d->preview.hasAlpha();
-    d->preveiwMask = new DImg(w, h, sixteen, alpha);
+    d->preveiwMask    = new DImg(w, h, sixteen, alpha);
     d->preveiwMask->fill(DColor(d->MASK_BG));
-    d->settings    = settings;
-
+    d->settings       = settings;
+    d->curBrushID     = d->settings.brushID;
     d->hasDrawEllipse = false;
 
  }
@@ -248,6 +249,7 @@ void   ImageCloneWidget::setOriginalImage()
 void ImageCloneWidget::setContainer(const CloneContainer& settings)
 {
     d->settings = settings;
+    updateBrushmap();
 }
 
 CloneContainer ImageCloneWidget::getContainer() const
@@ -311,9 +313,15 @@ bool ImageCloneWidget::inimage(DImg *img, const int x, const int y)
     else
         return false;
 }
-bool ImageCloneWidget::inBrushpixmap(QImage brushimg, const int x, const int y)
-{
-    if ( x >= 0 && x < brushimg.width() && y >= 0 && y < brushimg.height())
+
+bool ImageCloneWidget::inBrushpixmap(const int x, const int y, const int w)
+{   
+    int id = y*w+x;
+    if(d->Brushmap[id]!=0)
+        return true;
+    else return false;
+/*
+ if ( x >= 0 && x < brushimg.width() && y >= 0 && y < brushimg.height())
     { 
         kDebug()<<"in brushpixmap is called";
         int alpha = DImg(brushimg).getPixelColor(x,y).alpha();  //brushpixmap is a .png file
@@ -322,7 +330,7 @@ bool ImageCloneWidget::inBrushpixmap(QImage brushimg, const int x, const int y)
         else
             return false;
     }
-    return false;
+    return false;*/
 }
 
 //FIXME
@@ -528,8 +536,8 @@ void ImageCloneWidget::addToMask(const QPoint& point)
     {
         for(int i = LBorderX; i < RBorderX ; i++)
         {
-           // if(inBrushpixmap(brushimg, i-LBorderX, j-LBorderY))
-            // {
+            //if(inBrushpixmap(i-LBorderX, j-LBorderY, mainDia))//FIXME
+             //{
             if((i-point.x())*(i-point.x()) +( j-point.y())*(j-point.y()) <= mainDia*mainDia/4)
              {
                 if(inimage(d->preveiwMask,i,j) && d->preveiwMask->getPixelColor(i,j).getQColor() == d->MASK_BG)
@@ -637,8 +645,8 @@ void ImageCloneWidget::mouseReleaseEvent(QMouseEvent* e)
               {
                   d->maskImage->detach();
                   d->maskImage = new DImg(d->preveiwMask->smoothScale(d->iface->getOriginalImg()->width(), d->iface->getOriginalImg()->height(), Qt::KeepAspectRatio));//FIXME
-                  //d->preveiwMask->save(QString("../preveiwMask"),DImg::PNG);                  
-                  //d->maskImage->save(QString("../maskImage"),DImg::PNG);
+                  d->preveiwMask->save(QString("../preveiwMask"),DImg::PNG);                  
+                  d->maskImage->save(QString("../maskImage"),DImg::PNG);
                   //d->preview.save("../preview",DImg::PNG);
                   emit signalStrokeOver();
                }
@@ -736,6 +744,38 @@ void ImageCloneWidget::paintEvent(QPaintEvent *event)
     p.end();
 }
 
+void ImageCloneWidget::updateBrushmap()
+{
+    if(d->curBrushID  != d->settings.brushID)
+    {
+        d->curBrushID = d->settings.brushID;
+        if(!d->Brushmap.empty())
+            d->Brushmap.clear();
+        QPixmap shape    = d->settings.brushmap;
+        QImage  curShape = (shape.scaledToWidth(d->settings.mainDia,
+                                                       Qt::SmoothTransformation)).toImage();
+        int w = curShape.width();
+        int h = curShape.height();
+        int n = 1;
+        for(int y=0; y<h; y++)
+        for(int x=0; x<w; x++)
+         {
+            int id = y*w+x;
+            d->Brushmap[y*w+x] = 0;
+            if(curShape.pixel(x,y) != QColor(255,255,255).rgb())
+              {
+                d->Brushmap[y*w+x] = n;
+                n++;
+              }
+        }
+      if (n == 0)
+       {
+         kDebug() << "No nonwhite pixels found in brushshape";
+         return;
+       }
+
+    }
+}
 
 void ImageCloneWidget::updateResult()
 {
