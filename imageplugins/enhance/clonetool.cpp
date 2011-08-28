@@ -338,10 +338,10 @@ void CloneTool::prepareFinal()
 {
     kDebug()<<"prepareFinal is called";
     d->previewWidget->setContainer(d->settingsView->settings());
-    ImageIface iface(0, 0);
     QPoint dis = d->previewWidget->getOriDis();
-    DImg* orimg  = d->previewWidget->imageIface()->getOriginalImg();
-    setFilter(new CloneFilter(orimg, d->previewWidget->getMaskImg(), dis, this));
+    ImageIface iface(0, 0);
+    setFilter(new CloneFilter(iface.getOriginalImg(), d->previewWidget->getMaskImg(), dis, this));
+
 }
 
 void CloneTool::putPreviewData()

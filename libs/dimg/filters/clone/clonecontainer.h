@@ -24,7 +24,12 @@
 #ifndef CLONECONTAINER_H
 #define CLONECONTAINER_H
 
+// Qt includes
+
+#include <QPixmap>
+
 // Local includes
+
 #include"clonebrush.h"
 #include "digikam_export.h"
 
@@ -51,6 +56,7 @@ public:
     int        brushDia;   // diameter of the brush shape
     int        mainDia;
     int        opacity;
+    QPixmap    brushmap;
     bool       selectMode; // set to true if the left button is clicked ,in this mode, click on the image to select a center point of the source area
     bool       drawMode;   // set to true if the right button is clicked ,in this mode, when move the mouse, a stroke will be draw on the image
 };

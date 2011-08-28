@@ -101,10 +101,11 @@ public:
     bool                  drawMode;
     bool                  drawEnable;
     CloneBrush            brush; 
+    QPixmap               brushmap;
 };
 
 const QString CloneSettings::CloneSettingsPriv::configBrushID("BrushID");
-const QString CloneSettings::CloneSettingsPriv::configBrushShape("BrushShape");
+//const QString CloneSettings::CloneSettingsPriv::configBrushShape("BrushShape");
 const QString CloneSettings::CloneSettingsPriv::configDiameter("BrushDiameter");
 const QString CloneSettings::CloneSettingsPriv::configMainDiameter("MainDiameter");
 const QString CloneSettings::CloneSettingsPriv::configOpacity("BrushOpacity");
@@ -182,7 +183,7 @@ CloneSettings::CloneSettings(QWidget* parent)
         QString filename = nameFilters.at(i).toLocal8Bit().constData();
         kDebug() << filename;
         QPixmap iconMap;
-        if(iconMap.load(path+filename));
+        if(iconMap.load(path+filename))
 
         //------------------------------debug info---------------------
         /* int map_width = 0;
@@ -321,10 +322,10 @@ void CloneSettings::setSettings(const CloneContainer& settings)
     blockSignals(true);
 
     d->brushID    = settings.brushID;
-    d->brush      = settings.brush;
+    //d->brush      = settings.brush;
     d->selectMode = settings.selectMode;
     d->drawMode   = settings.drawMode;
-
+    d->brushmap   = settings.brush.getPixmap();
     d->diameterInput->setValue(settings.mainDia);
     d->opacityInput->setValue(settings.opacity);
     
@@ -342,13 +343,14 @@ CloneContainer CloneSettings::defaultSettings() const
 
     CloneContainer prm;
 
-   prm.brushID    = d->brushID;
-   //FIXME   
-   prm.brush      = *d->brushMap.find(prm.brushID);
-   prm.brushDia   = prm.brush.getDia();
-   prm.mainDia    = prm.brush.getDia();
-   prm.selectMode = d->selectMode;
-   prm.drawMode   = d->drawMode;
+    prm.brushID    = 1;
+    //FIXME 
+    prm.brush      = (*d->brushMap.find(prm.brushID));
+    prm.brushmap   = (*d->brushMap.find(prm.brushID)).getPixmap();
+    prm.brushDia   = prm.brush.getDia();
+    prm.mainDia    = prm.brush.getDia();
+    prm.selectMode = d->selectMode;
+    prm.drawMode   = d->drawMode;
 
    //blockWidgetSignals(false);
 
@@ -363,7 +365,9 @@ void CloneSettings::readSettings(KConfigGroup& group)
     blockWidgetSignals(true);
 
     prm.brushID    = group.readEntry(d->configBrushID,      defaultPrm.brushID);
-    //FIXME    prm.brush      = group.readEntry(d->configBrushShape,   defaultPrm.brush);
+    prm.brushmap   = (*d->brushMap.find(prm.brushID)).getPixmap();
+    prm.brush      = *d->brushMap.find(prm.brushID);
+
     prm.brushDia   = group.readEntry(d->configDiameter,     defaultPrm.brushDia);
     prm.mainDia    = group.readEntry(d->configMainDiameter, defaultPrm.mainDia);
     prm.opacity    = group.readEntry(d->configOpacity,      defaultPrm.opacity);
@@ -380,7 +384,6 @@ void CloneSettings::writeSettings(KConfigGroup& group)
    CloneContainer prm = settings();
 
    group.writeEntry(d->configBrushID,       prm.brushID);
-   //FIXME   group.writeEntry(d->configBrushShape,    prm.brush);
    group.writeEntry(d->configDiameter,      prm.brushDia);
    group.writeEntry(d->configMainDiameter,  prm.mainDia);
    group.writeEntry(d->configOpacity,       prm.opacity);
@@ -397,7 +400,8 @@ CloneContainer CloneSettings::settings()const
 
     prm.brushID    = d->brushID;
     //FIXME
-    prm.brush      = d->brush;
+    prm.brush      = *d->brushMap.find(d->brushID);
+    prm.brushmap   = d->brush.getPixmap();
     prm.brushDia   = d->brush.getDia();
     prm.mainDia    = d->diameterInput->value();
     prm.opacity    = d->opacityInput->value();
@@ -414,7 +418,7 @@ void CloneSettings::slotBrushIdChanged(int id)
     if(id >= 0 )
     {
         d->brushID = id;
-        d->brush  = *d->brushMap.find(d->brushID);
+        d->brush   = *d->brushMap.find(d->brushID);
         kDebug()<<"slotBrushIdChanged is called";   
         signalSettingsChanged();   
     }
