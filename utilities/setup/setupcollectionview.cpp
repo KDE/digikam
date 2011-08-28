@@ -884,6 +884,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                     case ButtonMapId:
                         return buttonMapId(index);
                 }
+                break;
         }
     }
 
