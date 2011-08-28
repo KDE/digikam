@@ -27,6 +27,10 @@
 
 #include <QSharedData>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "albumdb.h"
@@ -40,6 +44,8 @@ namespace Digikam
 class ImageTagPairPriv : public QSharedData
 {
 public:
+
+    static ImageTagPairPriv* createGuarded(qlonglong imageId, int tagId);
 
     ImageTagPairPriv()
     {
@@ -66,8 +72,22 @@ public:
 };
 K_GLOBAL_STATIC(ImageTagPairPrivSharedNull, imageTagPairPrivSharedNull)
 
+ImageTagPairPriv* ImageTagPairPriv::createGuarded(qlonglong imageId, int tagId)
+{
+    if (imageId <= 0 || tagId <= 0)
+    {
+        kDebug() << "Attempt to create invalid tag pair image id" << imageId << "tag id" << tagId;
+        return *imageTagPairPrivSharedNull;
+    }
+    return new ImageTagPairPriv;
+}
+
 void ImageTagPairPriv::init(const ImageInfo& i, int t)
 {
+    if (this == *imageTagPairPrivSharedNull)
+    {
+        return;
+    }
     tagId = t;
     info  = i;
     isAssigned = info.tagIds().contains(tagId);
@@ -92,13 +112,13 @@ ImageTagPair::ImageTagPair()
 }
 
 ImageTagPair::ImageTagPair(qlonglong imageId, int tagId)
-    : d(new ImageTagPairPriv)
+    : d(ImageTagPairPriv::createGuarded(imageId, tagId))
 {
     d->init(ImageInfo(imageId), tagId);
 }
 
 ImageTagPair::ImageTagPair(const ImageInfo& info, int tagId)
-    : d(new ImageTagPairPriv)
+    : d(ImageTagPairPriv::createGuarded(info.id(), tagId))
 {
     d->init(info, tagId);
 }
