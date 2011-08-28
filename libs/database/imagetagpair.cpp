@@ -27,6 +27,10 @@
 
 #include <QSharedData>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "albumdb.h"
@@ -37,9 +41,12 @@
 namespace Digikam
 {
 
+typedef QSharedDataPointer<ImageTagPairPriv> ImageTagPairPrivSharedPointer;
 class ImageTagPairPriv : public QSharedData
 {
 public:
+
+    static ImageTagPairPrivSharedPointer createGuarded(qlonglong imageId, int tagId);
 
     ImageTagPairPriv()
     {
@@ -48,6 +55,7 @@ public:
         propertiesLoaded = false;
     }
 
+    bool isNull() const;
     void init(const ImageInfo& info, int tagId);
     void checkProperties();
 
@@ -59,15 +67,29 @@ public:
     QMultiMap<QString, QString> properties;
 };
 
-class ImageTagPairPrivSharedNull : public QSharedDataPointer<ImageTagPairPriv>
+class ImageTagPairPrivSharedNull : public ImageTagPairPrivSharedPointer
 {
 public:
     ImageTagPairPrivSharedNull() : QSharedDataPointer<ImageTagPairPriv>(new ImageTagPairPriv) {}
 };
 K_GLOBAL_STATIC(ImageTagPairPrivSharedNull, imageTagPairPrivSharedNull)
 
+ImageTagPairPrivSharedPointer ImageTagPairPriv::createGuarded(qlonglong imageId, int tagId)
+{
+    if (imageId <= 0 || tagId <= 0)
+    {
+        kDebug() << "Attempt to create invalid tag pair image id" << imageId << "tag id" << tagId;
+        return *imageTagPairPrivSharedNull;
+    }
+    return ImageTagPairPrivSharedPointer(new ImageTagPairPriv);
+}
+
 void ImageTagPairPriv::init(const ImageInfo& i, int t)
 {
+    if (isNull())
+    {
+        return;
+    }
     tagId = t;
     info  = i;
     isAssigned = info.tagIds().contains(tagId);
@@ -75,7 +97,7 @@ void ImageTagPairPriv::init(const ImageInfo& i, int t)
 
 void ImageTagPairPriv::checkProperties()
 {
-    if (!propertiesLoaded)
+    if (!isNull() && !propertiesLoaded)
     {
         QList<ImageTagProperty> props = DatabaseAccess().db()->getImageTagProperties(info.id(), tagId);
         foreach (const ImageTagProperty& p, props)
@@ -86,19 +108,24 @@ void ImageTagPairPriv::checkProperties()
     }
 }
 
+bool ImageTagPairPriv::isNull() const
+{
+    return this == imageTagPairPrivSharedNull->constData();
+}
+
 ImageTagPair::ImageTagPair()
     : d(*imageTagPairPrivSharedNull)
 {
 }
 
 ImageTagPair::ImageTagPair(qlonglong imageId, int tagId)
-    : d(new ImageTagPairPriv)
+    : d(ImageTagPairPriv::createGuarded(imageId, tagId))
 {
     d->init(ImageInfo(imageId), tagId);
 }
 
 ImageTagPair::ImageTagPair(const ImageInfo& info, int tagId)
-    : d(new ImageTagPairPriv)
+    : d(ImageTagPairPriv::createGuarded(info.id(), tagId))
 {
     d->init(info, tagId);
 }
@@ -162,7 +189,7 @@ bool ImageTagPair::isAssigned() const
 
 void ImageTagPair::assignTag()
 {
-    if (!d->isAssigned)
+    if (!d->isNull() && !d->isAssigned)
     {
         d->info.setTag(d->tagId);
         d->isAssigned = true;
@@ -171,7 +198,7 @@ void ImageTagPair::assignTag()
 
 void ImageTagPair::unAssignTag()
 {
-    if (d->isAssigned)
+    if (!d->isNull() && d->isAssigned)
     {
         d->info.removeTag(d->tagId);
         d->isAssigned = false;
@@ -241,7 +268,7 @@ QMap<QString, QString> ImageTagPair::properties() const
 
 void ImageTagPair::setProperty(const QString& key, const QString& value)
 {
-    if (d->info.isNull())
+    if (d->isNull() || d->info.isNull())
     {
         return;
     }
@@ -256,7 +283,7 @@ void ImageTagPair::setProperty(const QString& key, const QString& value)
 
 void ImageTagPair::addProperty(const QString& key, const QString& value)
 {
-    if (d->info.isNull())
+    if (d->isNull() || d->info.isNull())
     {
         return;
     }
@@ -272,7 +299,7 @@ void ImageTagPair::addProperty(const QString& key, const QString& value)
 
 void ImageTagPair::removeProperty(const QString& key, const QString& value)
 {
-    if (d->info.isNull())
+    if (d->isNull() || d->info.isNull())
     {
         return;
     }
@@ -288,7 +315,7 @@ void ImageTagPair::removeProperty(const QString& key, const QString& value)
 
 void ImageTagPair::removeProperties(const QString& key)
 {
-    if (d->info.isNull())
+    if (d->isNull() || d->info.isNull())
     {
         return;
     }
@@ -304,7 +331,7 @@ void ImageTagPair::removeProperties(const QString& key)
 
 void ImageTagPair::clearProperties()
 {
-    if (d->info.isNull())
+    if (d->isNull() || d->info.isNull())
     {
         return;
     }

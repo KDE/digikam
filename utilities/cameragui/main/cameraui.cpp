@@ -1084,18 +1084,13 @@ void CameraUI::slotRefreshIconViewTimer()
 
     // We sort the map by time stamp
     // and we remove internal camera files which are not image/video/sounds.
-    QStringList fileNames, fileExts;
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = config->group(d->importFiltersConfigGroupName);
+    QStringList fileNames = group.readEntry("IgnoreNames",
+            FilterComboBox::defaultIgnoreNames).toLower().split(' ');
+    QStringList fileExts = group.readEntry("IgnoreExtensions",
+            FilterComboBox::defaultIgnoreExtensions).toLower().split(' ');
     QFileInfo   fi;
-
-    // JVC camera (see B.K.O #133185).
-    fileNames.append("mgr_data");
-    fileNames.append("pgr_mgr");
-
-    // HP Photosmart camera (see B.K.O #156338).
-    fileExts.append("dsp");
-
-    // Minolta camera in PTP mode
-    fileExts.append("dps");
 
     // NOTE: see B.K.O #181726: list of accepted file extensions from Album Settings.
     QStringList list = settings->getAllFileFilter().toLower().split(' ');

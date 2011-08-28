@@ -27,20 +27,13 @@
 // KDE includes
 
 #include <KDialog>
-#include <KMimeTypeChooser>
 
 // local includes
 
 #include "filtercombo.h"
 
-class QCloseEvent;
-class QCheckBox;
-class QToolButton;
-
 namespace Digikam
 {
-
-class ElidedLabel;
 
 class ImportFilters : public KDialog
 {
@@ -63,15 +56,8 @@ protected Q_SLOTS:
 
 private:
 
-    QLineEdit*   filterName;
-    QCheckBox*   mimeCheckBox;
-    ElidedLabel* mimeLabel;
-    QToolButton* mimeButton;
-    QCheckBox*   fileNameCheckBox;
-    QLineEdit*   fileNameEdit;
-    QCheckBox*   pathCheckBox;
-    QLineEdit*   pathEdit;
-    QCheckBox*   newFilesCheckBox;
+    class ImportFiltersPriv;
+    ImportFiltersPriv* const   d;
 };
 
 } // namespace Digikam

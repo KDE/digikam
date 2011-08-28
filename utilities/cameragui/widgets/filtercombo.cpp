@@ -45,6 +45,12 @@
 namespace Digikam
 {
 
+// JVC camera (see B.K.O #133185).
+const QString FilterComboBox::defaultIgnoreNames("mgr_data pgr_mgr");
+// HP Photosmart camera (see B.K.O #156338).
+// Minolta camera in PTP mode
+const QString FilterComboBox::defaultIgnoreExtensions("dsp dps");
+
 Filter::Filter()
     : onlyNew(false)
 {
@@ -116,6 +122,8 @@ public:
 
     int            currentFilter;
     QList<Filter*> filters;
+    QHash<QString, QRegExp>     filterHash;
+    QHash<QString, QStringList> mimeHash;
 };
 
 FilterComboBox::FilterComboBox(QWidget* const parent)
@@ -198,14 +206,14 @@ void FilterComboBox::saveSettings()
 
 const QRegExp& FilterComboBox::regexp(const QString& wildcard)
 {
-   if (!filters.contains(wildcard))
+   if (!d->filterHash.contains(wildcard))
    {
       QRegExp rx(wildcard.toLower());
       rx.setPatternSyntax(QRegExp::Wildcard);
-      filters[wildcard] = rx;
+      d->filterHash[wildcard] = rx;
    }
 
-   return filters[wildcard];
+   return d->filterHash[wildcard];
 }
 
 bool FilterComboBox::match(const QStringList& wildcards, const QString& name)
@@ -227,9 +235,9 @@ bool FilterComboBox::match(const QStringList& wildcards, const QString& name)
 
 const QStringList& FilterComboBox::mimeWildcards(const QString& mime)
 {
-    if (!mimeHash.contains(mime))
+    if (!d->mimeHash.contains(mime))
     {
-        QStringList& wc  = mimeHash[mime];
+        QStringList& wc  = d->mimeHash[mime];
         QStringList list = mime.split(';');
         foreach (const QString& m, list)
         {
@@ -241,7 +249,7 @@ const QStringList& FilterComboBox::mimeWildcards(const QString& mime)
         }
     }
 
-    return mimeHash[mime];
+    return d->mimeHash[mime];
 }
 
 bool FilterComboBox::matchesCurrentFilter(const CamItemInfo& item)

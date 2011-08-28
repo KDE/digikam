@@ -338,6 +338,7 @@ void CollectionScanner::completeScan()
     }
     if (d->deferredFileScanning)
     {
+        kDebug() << "Complete scan (file scanning deferred) took:" << time.elapsed() << "msecs.";
         emit finishedCompleteScan();
         return;
     }
