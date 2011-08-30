@@ -24,13 +24,13 @@ Rectangle {
     { Qt.quit() }
     Keys.onSpacePressed:
     {
-        if (play_pause.src == "pause.png")
+        if (play_pause.src == "pause.svg")
         {
-            play_pause.src = "play.png"; rect.pause();
+            play_pause.src = "play.svg"; rect.pause();
         }
         else
         {
-            play_pause.src= "pause.png";rect.play();
+            play_pause.src= "pause.svg";rect.play();
         };
     }
 
@@ -43,7 +43,7 @@ Rectangle {
         visible: true
         rotation: 0
         opacity: 0.7
-        source: "circle.png"
+        source: "Menu.svg"
         z: 5
 
         Image {
@@ -53,14 +53,14 @@ Rectangle {
             width: parent.height / 3
             height: parent.height / 3
             z: 12
-            property string src: "pause.png"
+            property string src: "pause.svg"
             source: src
             MouseArea
             {
                 id: flip_icon
                 anchors.fill: parent
-                onClicked: { if (parent.src == "pause.png") {parent.src = "play.png"; rect.pause();}
-                else {parent.src= "pause.png";rect.play();};
+                onClicked: { if (parent.src == "pause.svg") {parent.src = "play.svg"; rect.pause();}
+                else {parent.src= "pause.svg";rect.play();};
                 }
             }
         }
@@ -73,7 +73,7 @@ Rectangle {
             height: parent.height / 5
             rotation: 0
             z: 12
-            source: "next.png"
+            source: "Next.svg"
             MouseArea
             {
                 anchors.fill: parent;
@@ -89,7 +89,7 @@ Rectangle {
             height: parent.height / 5
             rotation: 0
             z: 12
-            source: "previous.png"
+            source: "previous.svg"
             MouseArea
             {
                 anchors.fill:parent;
@@ -105,7 +105,7 @@ Rectangle {
             height: parent.height / 5
             rotation: 0
             z: 12
-            source: "zoom-out.png"
+            source: "ZoomOut.svg"
         }
 
         Image {
@@ -116,7 +116,7 @@ Rectangle {
             height: parent.height / 5
             rotation: 0
             z: 12
-            source: "zoom-in.png"
+            source: "ZoomIn.svg"
         }
 
         Image {
@@ -152,7 +152,7 @@ Rectangle {
                 {
                     rect2.visible=true;
                     grid.focus= true;
-                    play_pause.src = "play.png";
+                    play_pause.src = "play.svg";
                     rect.pause();
                 }
             }
