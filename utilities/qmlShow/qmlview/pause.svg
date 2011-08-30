@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.0"
+   width="1000"
+   height="1000"
+   id="svg5496">
+  <metadata
+     id="metadata5594">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs5498">
+    <filter
+       x="-0.35791525"
+       y="-0.36209866"
+       width="1.7158304"
+       height="1.7241973"
+       color-interpolation-filters="sRGB"
+       id="filter3778">
+      <feGaussianBlur
+         stdDeviation="255.88839"
+         id="feGaussianBlur3780" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3788">
+      <feGaussianBlur
+         stdDeviation="27.670704"
+         id="feGaussianBlur3790" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3799">
+      <feGaussianBlur
+         stdDeviation="38.667111"
+         id="feGaussianBlur3801" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3793">
+      <feGaussianBlur
+         id="feGaussianBlur3795"
+         stdDeviation="9.9656342" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3801">
+      <feGaussianBlur
+         id="feGaussianBlur3803"
+         stdDeviation="16.994255" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3807">
+      <feGaussianBlur
+         id="feGaussianBlur3809"
+         stdDeviation="17.130938" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3813">
+      <feGaussianBlur
+         id="feGaussianBlur3815"
+         stdDeviation="17.07019" />
+    </filter>
+  </defs>
+  <g
+     id="layer1" />
+  <rect
+     width="989.69073"
+     height="982.81787"
+     x="6.8728523"
+     y="10.309278"
+     id="rect3797"
+     style="fill:#000000;fill-opacity:1;stroke:none" />
+  <rect
+     width="996.56348"
+     height="996.56335"
+     x="3.4364254"
+     y="3.4364274"
+     id="rect2994"
+     style="fill:#ffffff;fill-opacity:1;stroke:none;filter:url(#filter3793)" />
+  <rect
+     width="261.1684"
+     height="312.71478"
+     x="-254.29553"
+     y="-309.27835"
+     id="rect3764"
+     style="fill:#ffffff;fill-opacity:1;stroke:none" />
+  <rect
+     width="450.17181"
+     height="917.52576"
+     x="27.491407"
+     y="37.800686"
+     id="rect3784"
+     style="fill:#000000;fill-opacity:1;stroke:none" />
+  <rect
+     width="457.04468"
+     height="910.65295"
+     x="522.33679"
+     y="41.237114"
+     id="rect3786"
+     style="fill:#000000;fill-opacity:1;stroke:none" />
+  <rect
+     width="447.10532"
+     height="912.43506"
+     x="27.944082"
+     y="38.966557"
+     id="rect3799"
+     style="fill:#edebed;fill-opacity:0.45502642;stroke:none;filter:url(#filter3801)" />
+  <rect
+     width="456.82501"
+     height="908.79016"
+     x="521.2179"
+     y="41.396477"
+     id="rect3811"
+     style="fill:#edebed;fill-opacity:0.45502642;stroke:none;filter:url(#filter3813)" />
+</svg>
