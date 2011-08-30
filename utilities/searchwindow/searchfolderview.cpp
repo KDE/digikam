@@ -29,7 +29,7 @@
 
 // Qt includes
 
-#include <qaction.h>
+#include <QAction>
 
 // KDE includes
 
