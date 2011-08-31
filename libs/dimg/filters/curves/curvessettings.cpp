@@ -122,6 +122,12 @@ CurvesSettings::CurvesSettings(QWidget* parent, DImg* img)
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->curvesBox, SIGNAL(signalChannelReset(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->curvesBox, SIGNAL(signalCurveTypeChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->curvesBox, SIGNAL(signalChannelReset(int)),
             this, SIGNAL(signalChannelReset(int)));
 
     connect(d->curvesBox, SIGNAL(signalPickerChanged(int)),
