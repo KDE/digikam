@@ -65,4 +65,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 050 ==> 279183 : Themes configuration dialogue does not open.
 051 ==> 257806 : Images imported from backup card + filtering icon-view [patch].
 052 ==> 281095 : Batch process curves adjustment doesn't work.
-053 ==> 
+053 ==> 272143 : Remove the "a tool to" prefix in the BQM tools description.
+054 ==> 
