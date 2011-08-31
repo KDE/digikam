@@ -132,14 +132,22 @@ bool BWConvert::toolOperations()
 
     BWSepiaContainer prm;
 
-    prm.filmType                            = settings()["filmType"].toInt();
-    prm.filterType                          = settings()["filterType"].toInt();
-    prm.toneType                            = settings()["toneType"].toInt();
-    prm.bcgPrm.contrast                     = settings()["contrast"].toDouble();
-    prm.strength                            = settings()["strength"].toDouble();
-    prm.curvesPrm                           = CurvesContainer((ImageCurves::CurveType)settings()["curvesType"].toInt(), true);
-    prm.curvesPrm.initialize();
-    prm.curvesPrm.values[LuminosityChannel] = settings()["curves"].value<QPolygon>();
+    prm.filmType                     = settings()["filmType"].toInt();
+    prm.filterType                   = settings()["filterType"].toInt();
+    prm.toneType                     = settings()["toneType"].toInt();
+    prm.bcgPrm.contrast              = settings()["contrast"].toDouble();
+    prm.strength                     = settings()["strength"].toDouble();
+
+    CurvesContainer curves((ImageCurves::CurveType)settings()["curvesType"].toInt(), true);
+    curves.initialize();
+    curves.values[LuminosityChannel] = settings()["curves"].value<QPolygon>();
+    prm.curvesPrm                    = curves;
+
+/*
+    CurvesFilter bw(&image(), 0L, prm.curvesPrm);
+    bw.startFilterDirectly();
+    image().putImageData(bw.getTargetImage().bits());
+*/
 
     BWSepiaFilter bw(&image(), 0L, prm);
     bw.startFilterDirectly();
