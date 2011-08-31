@@ -47,7 +47,7 @@ NoiseReduction::NoiseReduction(QObject* parent)
       m_settingsView(0)
 {
     setToolTitle(i18n("Noise Reduction"));
-    setToolDescription(i18n("A tool to remove photograph noise using wavelets."));
+    setToolDescription(i18n("Remove photograph noise using wavelets."));
     setToolIcon(KIcon(SmallIcon("noisereduction")));
 }
 

@@ -45,7 +45,7 @@ Invert::Invert(QObject* parent)
     : BatchTool("Invert", ColorTool, parent)
 {
     setToolTitle(i18n("Invert Colors"));
-    setToolDescription(i18n("A tool to invert image colors."));
+    setToolDescription(i18n("Invert image colors."));
     setToolIcon(KIcon(SmallIcon("invertimage")));
     setNoSettingsWidget();
 }

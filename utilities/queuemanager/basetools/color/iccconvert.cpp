@@ -53,7 +53,7 @@ IccConvert::IccConvert(QObject* parent)
       m_settingsView(0)
 {
     setToolTitle(i18n("ICC Convert"));
-    setToolDescription(i18n("A tool to convert image to a color space."));
+    setToolDescription(i18n("Convert image to a color space."));
     setToolIcon(KIcon(SmallIcon("colormanagement")));
 }
 

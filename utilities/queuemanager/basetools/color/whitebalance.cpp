@@ -46,7 +46,7 @@ WhiteBalance::WhiteBalance(QObject* parent)
     : BatchTool("WhiteBalance", ColorTool, parent)
 {
     setToolTitle(i18n("White Balance"));
-    setToolDescription(i18n("A tool to adjust White Balance."));
+    setToolDescription(i18n("Adjust White Balance."));
     setToolIcon(KIcon(SmallIcon("whitebalance")));
 
     QWidget* box   = new QWidget;

@@ -48,7 +48,7 @@ FilmGrain::FilmGrain(QObject* parent)
     : BatchTool("FilmGrain", FiltersTool, parent)
 {
     setToolTitle(i18n("Film Grain"));
-    setToolDescription(i18n("A tool to add film grain"));
+    setToolDescription(i18n("Add film grain"));
     setToolIcon(KIcon(SmallIcon("filmgrain")));
 
     QWidget* box   = new QWidget;

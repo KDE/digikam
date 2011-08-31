@@ -47,7 +47,7 @@ Convert2PNG::Convert2PNG(QObject* parent)
     : BatchTool("Convert2PNG", ConvertTool, parent)
 {
     setToolTitle(i18n("Convert To PNG"));
-    setToolDescription(i18n("A tool to convert images to PNG format."));
+    setToolDescription(i18n("Convert images to PNG format."));
     setToolIcon(KIcon(SmallIcon("image-png")));
 
     m_settings = new PNGSettings();

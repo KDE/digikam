@@ -51,7 +51,7 @@ CurvesAdjust::CurvesAdjust(QObject* parent)
       m_settingsView(0)
 {
     setToolTitle(i18n("Curves Adjust"));
-    setToolDescription(i18n("A tool to perform curves adjustments."));
+    setToolDescription(i18n("Perform curves adjustments."));
     setToolIcon(KIcon(SmallIcon("adjustcurves")));
 }
 
@@ -132,12 +132,12 @@ void CurvesAdjust::slotSettingsChanged()
     BatchToolSettings prm;
     CurvesContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("curvesType",     (int)currentPrm.curvesType);
-    prm.insert("values[LuminosityChannel]",   currentPrm.values[LuminosityChannel]);
-    prm.insert("values[RedChannel]",          currentPrm.values[RedChannel]);
-    prm.insert("values[GreenChannel]",        currentPrm.values[GreenChannel]);
-    prm.insert("values[BlueChannel]",         currentPrm.values[BlueChannel]);
-    prm.insert("values[AlphaChannel]",        currentPrm.values[AlphaChannel]);
+    prm.insert("curvesType",                (int)currentPrm.curvesType);
+    prm.insert("values[LuminosityChannel]", currentPrm.values[LuminosityChannel]);
+    prm.insert("values[RedChannel]",        currentPrm.values[RedChannel]);
+    prm.insert("values[GreenChannel]",      currentPrm.values[GreenChannel]);
+    prm.insert("values[BlueChannel]",       currentPrm.values[BlueChannel]);
+    prm.insert("values[AlphaChannel]",      currentPrm.values[AlphaChannel]);
 
     BatchTool::slotSettingsChanged(prm);
 }

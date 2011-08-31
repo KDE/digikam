@@ -47,7 +47,7 @@ Convert2PGF::Convert2PGF(QObject* parent)
     : BatchTool("Convert2PGF", ConvertTool, parent)
 {
     setToolTitle(i18n("Convert To PGF"));
-    setToolDescription(i18n("A tool to convert images to PGF format."));
+    setToolDescription(i18n("Convert images to PGF format."));
     setToolIcon(KIcon(SmallIcon("image-jp2")));
 
     m_settings = new PGFSettings();

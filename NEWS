@@ -64,6 +64,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 049 ==> 280101 : Patch: Add option to hide icons and text in preview.
 050 ==> 279183 : Themes configuration dialogue does not open.
 051 ==> 257806 : Images imported from backup card + filtering icon-view [patch].
-052 ==> 
-
-
+052 ==> 281095 : Batch process curves adjustment doesn't work.
+053 ==> 

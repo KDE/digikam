@@ -48,7 +48,7 @@ Blur::Blur(QObject* parent)
       m_radiusInput(0)
 {
     setToolTitle(i18n("Blur Image"));
-    setToolDescription(i18n("A tool to blur images"));
+    setToolDescription(i18n("Blur images"));
     setToolIcon(KIcon(SmallIcon("blurimage")));
 }
 

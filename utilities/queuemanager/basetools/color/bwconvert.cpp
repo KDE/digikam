@@ -6,7 +6,7 @@
  * Date        : 2010-02-23
  * Description : Black and White conversion batch tool.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@ BWConvert::BWConvert(QObject* parent)
       m_settingsView(0)
 {
     setToolTitle(i18n("B&W Convert"));
-    setToolDescription(i18n("A tool to convert to black and white."));
+    setToolDescription(i18n("Convert to black and white."));
     setToolIcon(KIcon(SmallIcon("bwtonal")));
 }
 
@@ -86,6 +86,7 @@ BatchToolSettings BWConvert::defaultSettings()
     prm.insert("toneType",   (int)defaultPrm.toneType);
     prm.insert("contrast",   (double)defaultPrm.bcgPrm.contrast);
     prm.insert("strength",   (double)defaultPrm.strength);
+    prm.insert("curvesType", defaultPrm.curvesPrm.curvesType);
     prm.insert("curves",     defaultPrm.curvesPrm.values[LuminosityChannel]);
 
     return prm;
@@ -95,11 +96,12 @@ void BWConvert::slotAssignSettings2Widget()
 {
     BWSepiaContainer prm;
 
-    prm.filmType               = settings()["filmType"].toInt();
-    prm.filterType             = settings()["filterType"].toInt();
-    prm.toneType               = settings()["toneType"].toInt();
-    prm.bcgPrm.contrast        = settings()["contrast"].toDouble();
-    prm.strength               = settings()["strength"].toDouble();
+    prm.filmType                            = settings()["filmType"].toInt();
+    prm.filterType                          = settings()["filterType"].toInt();
+    prm.toneType                            = settings()["toneType"].toInt();
+    prm.bcgPrm.contrast                     = settings()["contrast"].toDouble();
+    prm.strength                            = settings()["strength"].toDouble();
+    prm.curvesPrm.curvesType                = (ImageCurves::CurveType)settings()["curvesType"].toInt();
     prm.curvesPrm.values[LuminosityChannel] = settings()["curves"].value<QPolygon>();
 
     m_settingsView->setSettings(prm);
@@ -115,6 +117,7 @@ void BWConvert::slotSettingsChanged()
     prm.insert("toneType",   (int)currentPrm.toneType);
     prm.insert("contrast",   (double)currentPrm.bcgPrm.contrast);
     prm.insert("strength",   (double)currentPrm.strength);
+    prm.insert("curvesType", (int)currentPrm.curvesPrm.curvesType);
     prm.insert("curves",     currentPrm.curvesPrm.values[LuminosityChannel]);
 
     BatchTool::slotSettingsChanged(prm);
@@ -129,11 +132,13 @@ bool BWConvert::toolOperations()
 
     BWSepiaContainer prm;
 
-    prm.filmType               = settings()["filmType"].toInt();
-    prm.filterType             = settings()["filterType"].toInt();
-    prm.toneType               = settings()["toneType"].toInt();
-    prm.bcgPrm.contrast        = settings()["contrast"].toDouble();
-    prm.strength               = settings()["strength"].toDouble();
+    prm.filmType                            = settings()["filmType"].toInt();
+    prm.filterType                          = settings()["filterType"].toInt();
+    prm.toneType                            = settings()["toneType"].toInt();
+    prm.bcgPrm.contrast                     = settings()["contrast"].toDouble();
+    prm.strength                            = settings()["strength"].toDouble();
+    prm.curvesPrm                           = CurvesContainer((ImageCurves::CurveType)settings()["curvesType"].toInt(), true);
+    prm.curvesPrm.initialize();
     prm.curvesPrm.values[LuminosityChannel] = settings()["curves"].value<QPolygon>();
 
     BWSepiaFilter bw(&image(), 0L, prm);

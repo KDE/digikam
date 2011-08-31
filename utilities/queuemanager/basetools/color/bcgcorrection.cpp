@@ -46,7 +46,7 @@ BCGCorrection::BCGCorrection(QObject* parent)
     : BatchTool("BCGCorrection", ColorTool, parent)
 {
     setToolTitle(i18n("BCG Correction"));
-    setToolDescription(i18n("A tool to fix Brightness/Contrast/Gamma."));
+    setToolDescription(i18n("Fix Brightness/Contrast/Gamma."));
     setToolIcon(KIcon(SmallIcon("contrast")));
 
     QWidget* box   = new QWidget;
