@@ -68,4 +68,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 053 ==> 272143 : Remove the "a tool to" prefix in the BQM tools description.
 054 ==> 281116 : Wish: Customisable date format in auto creation of albums.
 055 ==> 277935 : Rename libkmap to libkgeomap and move it to extragear/libs.
-056 ==> 
+056 ==> 264412 : Crash when opening a directory.
+057 ==> 
