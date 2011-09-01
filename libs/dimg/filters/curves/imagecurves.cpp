@@ -103,7 +103,7 @@ void CurvesContainer::initialize()
         {
             values[i].resize(segmentMax);
 
-            for (int j = 0 ; j <= segmentMax ; ++j)
+            for (int j = 0 ; j < segmentMax ; ++j)
             {
                 values[i].setPoint(j, j, j);
             }
