@@ -45,6 +45,27 @@ Rectangle {
         opacity: 0.7
         source: "Menu.svg"
         z: 5
+        
+        states: [
+          State {
+            name: "Enable"
+            PropertyChanges { target: circle_image; opacity: 1; }
+          },
+          State {
+            name: "Disable"
+            PropertyChanges { target: circle_image; opacity: 0; }
+          }
+        ]
+
+        transitions: [
+            Transition {
+                from: "*"; to: "*"
+                PropertyAnimation {
+                    target: circle_image
+                    properties: "opacity"; duration: 500 ;
+                }
+            }
+        ]
 
         Image {
             id: play_pause
@@ -136,16 +157,14 @@ Rectangle {
             }
         }
 
-        Image
-        {
+        Image {
             id: gridviewicon
             height:parent.height/5
             width:parent.width/5
             x: parent.width*3/4
             source: "./gridview.png"
             y:0
-            MouseArea
-            {
+            MouseArea {
                 id:show_gridview
                 anchors.fill: parent
                 onClicked:
@@ -197,16 +216,14 @@ Rectangle {
             onTriggered: rect.nextClicked();
         }
 
-
-        MouseArea
-        {
+	 MouseArea {
             id: view_icons
             hoverEnabled: true
             anchors.fill: parent
             z: 10
             onPositionChanged:
             {
-                circle_image.visible = true;
+                circle_image.state = "Enable";
                 close.visible = true ;
                 remove_icon.running = true;
             }
@@ -218,10 +235,10 @@ Rectangle {
             interval: 4000; running: false;
             onTriggered:
             {
-                circle_image.visible = false;
+                circle_image.state = "Disable";
                 close.visible = false;
             }
-        }
+         }
 
     }
 
