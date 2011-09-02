@@ -209,6 +209,7 @@ void CurvesSettings::slotSpotColorChanged(const DColor& color)
 
 CurvesContainer CurvesSettings::settings() const
 {
+    d->curvesBox->curves()->curvesCalculateAllCurves();
     return d->curvesBox->curves()->getContainer();
 }
 

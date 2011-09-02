@@ -609,10 +609,7 @@ void BWSepiaSettings::loadSettings()
             d->curvesBox->curves()->setCurvePoint(LuminosityChannel, j, p);
         }
 
-        for (int i = 0 ; i < ImageCurves::NUM_CHANNELS ; ++i)
-        {
-            d->curvesBox->curves()->curvesCalculateCurve(i);
-        }
+        d->curvesBox->curves()->curvesCalculateAllCurves();
 
         blockSignals(false);
     }

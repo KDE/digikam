@@ -79,6 +79,7 @@ public:
     ImageCurves(const CurvesContainer& container);
     ImageCurves(const ImageCurves& other);
     ~ImageCurves();
+
     ImageCurves& operator=(const ImageCurves& other);
 
     /**
@@ -96,6 +97,7 @@ public:
     void   curvesReset();
     void   curvesChannelReset(int channel);
     void   curvesCalculateCurve(int channel);
+    void   curvesCalculateAllCurves();
     float  curvesLutFunc(int n_channels, int channel, float value);
     void   curvesLutSetup(int nchannels);
     void   curvesLutProcess(uchar* srcPR, uchar* destPR, int w, int h);
@@ -115,14 +117,15 @@ public:
     void   setCurvePoints(int channel, const QPolygon& vals);
     void   setCurveValues(int channel, const QPolygon& vals);
 
-    int    getCurveValue(int channel, int bin) const;
-    int    getCurvePointX(int channel, int point) const;
-    int    getCurvePointY(int channel, int point) const;
+    int       getCurveValue(int channel, int bin) const;
+    int       getCurvePointX(int channel, int point) const;
+    int       getCurvePointY(int channel, int point) const;
     CurveType getCurveType(int channel) const;
 
     static QPoint getDisabledValue();
-    bool isCurvePointEnabled(int channel, int point) const;
-    QPoint getCurvePoint(int channel, int point) const;
+
+    bool     isCurvePointEnabled(int channel, int point) const;
+    QPoint   getCurvePoint(int channel, int point) const;
     QPolygon getCurvePoints(int channel) const;
     QPolygon getCurveValues(int channel) const;
 
