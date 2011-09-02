@@ -104,9 +104,6 @@ public:
 
     // Methods for to set manually the curves values.
 
-    /// Note that bits depth must match
-    void   setContainer(const CurvesContainer& container);
-
     void   setCurveValue(int channel, int bin, int val);
     void   setCurvePointX(int channel, int point, int x);
     void   setCurvePointY(int channel, int point, int y);
@@ -128,6 +125,9 @@ public:
     QPoint   getCurvePoint(int channel, int point) const;
     QPolygon getCurvePoints(int channel) const;
     QPolygon getCurveValues(int channel) const;
+
+    /// Note that bits depth must match
+    void   setContainer(const CurvesContainer& container);
 
     /**
      * Returns a container with the settings for all channels of this Curves object
