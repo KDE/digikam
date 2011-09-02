@@ -213,7 +213,7 @@ CurvesContainer CurvesSettings::settings() const
 void CurvesSettings::setSettings(const CurvesContainer& settings)
 {
     blockSignals(true);
-    d->curvesBox->curves()->setCurves(settings);
+    d->curvesBox->curves()->setContainer(settings);
     blockSignals(false);
 }
 

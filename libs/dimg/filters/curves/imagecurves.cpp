@@ -294,7 +294,7 @@ ImageCurves::ImageCurves(const CurvesContainer& container)
 {
     d->init(container.sixteenBit);
     curvesReset();
-    setCurves(container);
+    setContainer(container);
 }
 
 ImageCurves::ImageCurves(const ImageCurves& other)
@@ -1068,7 +1068,7 @@ CurvesContainer ImageCurves::getContainer(int channel) const
     return c;
 }
 
-void ImageCurves::setCurves(const CurvesContainer& container)
+void ImageCurves::setContainer(const CurvesContainer& container)
 {
     if (container.curvesType == CURVE_FREE)
     {

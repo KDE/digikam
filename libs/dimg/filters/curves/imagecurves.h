@@ -105,7 +105,7 @@ public:
     // Methods for to set manually the curves values.
 
     /// Note that bits depth must match
-    void   setCurves(const CurvesContainer& container);
+    void   setContainer(const CurvesContainer& container);
 
     void   setCurveValue(int channel, int bin, int val);
     void   setCurvePointX(int channel, int point, int x);
