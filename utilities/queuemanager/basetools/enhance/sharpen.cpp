@@ -50,7 +50,7 @@ Sharpen::Sharpen(QObject* parent)
     : BatchTool("Sharpen", EnhanceTool, parent)
 {
     setToolTitle(i18n("Sharpen Image"));
-    setToolDescription(i18n("A tool to sharpen images"));
+    setToolDescription(i18n("Sharpen images"));
     setToolIcon(KIcon(SmallIcon("sharpenimage")));
 }
 

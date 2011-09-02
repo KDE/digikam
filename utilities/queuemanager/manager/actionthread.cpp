@@ -99,6 +99,8 @@ ActionThread::~ActionThread()
 {
     cancel();
 
+    wait();
+
     delete d;
 }
 
@@ -129,6 +131,7 @@ void ActionThread::processFile(const AssignedBatchTools& item)
 
 void ActionThread::cancel()
 {
+    QMutexLocker lock(&d->mutex);
     d->cancel  = true;
 
     if (d->tool)
@@ -136,13 +139,9 @@ void ActionThread::cancel()
         d->tool->cancel();
     }
 
-    QMutexLocker lock(&d->mutex);
     d->todo.clear();
     d->running = false;
     d->condVar.wakeAll();
-
-    // wait for the thread to finish
-    wait();
 }
 
 void ActionThread::run()

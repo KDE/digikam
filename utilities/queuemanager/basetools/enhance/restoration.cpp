@@ -50,7 +50,7 @@ Restoration::Restoration(QObject* parent)
       m_cimgIface(0)
 {
     setToolTitle(i18n("Restoration"));
-    setToolDescription(i18n("A tool to restore photographs based on Greystoration."));
+    setToolDescription(i18n("Restore photographs based on Greystoration."));
     setToolIcon(KIcon(SmallIcon("restoration")));
 }
 

@@ -47,7 +47,7 @@ Convert2JP2::Convert2JP2(QObject* parent)
     : BatchTool("Convert2JP2", ConvertTool, parent)
 {
     setToolTitle(i18n("Convert To JP2"));
-    setToolDescription(i18n("A tool to convert images to JPEG-2000 format."));
+    setToolDescription(i18n("Convert images to JPEG-2000 format."));
     setToolIcon(KIcon(SmallIcon("image-jp2")));
 
     m_settings = new JP2KSettings();

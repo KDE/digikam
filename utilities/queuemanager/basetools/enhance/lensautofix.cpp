@@ -64,7 +64,7 @@ LensAutoFix::LensAutoFix(QObject* parent)
       d(new LensAutoFixPriv)
 {
     setToolTitle(i18n("Lens Auto-Correction"));
-    setToolDescription(i18n("A tool to fix automatically lens distortions"));
+    setToolDescription(i18n("Fix automatically lens distortions"));
     setToolIcon(KIcon(SmallIcon("lensautofix")));
 }
 

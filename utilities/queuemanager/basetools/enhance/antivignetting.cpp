@@ -50,7 +50,7 @@ AntiVignetting::AntiVignetting(QObject* parent)
       m_settingsView(0)
 {
     setToolTitle(i18n("Anti-Vignetting"));
-    setToolDescription(i18n("A tool to remove/add vignetting to photograph."));
+    setToolDescription(i18n("Remove/add vignetting to photograph."));
     setToolIcon(KIcon(SmallIcon("antivignetting")));
 }
 

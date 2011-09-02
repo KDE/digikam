@@ -79,6 +79,7 @@ public:
     ImageCurves(const CurvesContainer& container);
     ImageCurves(const ImageCurves& other);
     ~ImageCurves();
+
     ImageCurves& operator=(const ImageCurves& other);
 
     /**
@@ -96,14 +97,12 @@ public:
     void   curvesReset();
     void   curvesChannelReset(int channel);
     void   curvesCalculateCurve(int channel);
+    void   curvesCalculateAllCurves();
     float  curvesLutFunc(int n_channels, int channel, float value);
     void   curvesLutSetup(int nchannels);
     void   curvesLutProcess(uchar* srcPR, uchar* destPR, int w, int h);
 
     // Methods for to set manually the curves values.
-
-    /// Note that bits depth must match
-    void   setCurves(const CurvesContainer& container);
 
     void   setCurveValue(int channel, int bin, int val);
     void   setCurvePointX(int channel, int point, int x);
@@ -115,16 +114,20 @@ public:
     void   setCurvePoints(int channel, const QPolygon& vals);
     void   setCurveValues(int channel, const QPolygon& vals);
 
-    int    getCurveValue(int channel, int bin) const;
-    int    getCurvePointX(int channel, int point) const;
-    int    getCurvePointY(int channel, int point) const;
+    int       getCurveValue(int channel, int bin) const;
+    int       getCurvePointX(int channel, int point) const;
+    int       getCurvePointY(int channel, int point) const;
     CurveType getCurveType(int channel) const;
 
     static QPoint getDisabledValue();
-    bool isCurvePointEnabled(int channel, int point) const;
-    QPoint getCurvePoint(int channel, int point) const;
+
+    bool     isCurvePointEnabled(int channel, int point) const;
+    QPoint   getCurvePoint(int channel, int point) const;
     QPolygon getCurvePoints(int channel) const;
     QPolygon getCurveValues(int channel) const;
+
+    /// Note that bits depth must match
+    void   setContainer(const CurvesContainer& container);
 
     /**
      * Returns a container with the settings for all channels of this Curves object
@@ -150,6 +153,7 @@ public:
      * while all other forms take less than 400 bytes.
      */
     QByteArray channelToBase64(int channel) const;
+
     /**
      * Set the channel from the given base64 representation.
      * The data is checked for validity, only on valid data true is returned.
@@ -158,7 +162,7 @@ public:
      */
     bool setChannelFromBase64(int channel, const QByteArray& array);
 
-    // Methods for to save/load the curves values to/from a Gimp curves text file.
+    /// Methods for to save/load the curves values to/from a Gimp curves text file.
 
     bool   saveCurvesToGimpCurvesFile(const KUrl& fileUrl) const;
     bool   loadCurvesFromGimpCurvesFile(const KUrl& fileUrl);

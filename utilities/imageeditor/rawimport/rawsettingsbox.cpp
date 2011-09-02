@@ -516,6 +516,7 @@ DRawDecoding RawSettingsBox::settings() const
 
     if (d->curveWidget->curves()->isDirty())
     {
+        d->curveWidget->curves()->curvesCalculateAllCurves();
         settings.curvesAdjust = d->curveWidget->curves()->getContainer();
     }
 

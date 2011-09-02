@@ -97,23 +97,23 @@ void CurvesContainer::initialize()
 {
     int segmentMax = sixteenBit ? MAX_SEGMENT_16BIT : MAX_SEGMENT_8BIT;
 
+    // Construct linear curves.
+
     if (curvesType == ImageCurves::CURVE_FREE)
     {
-        for (int i=0; i<ColorChannels; ++i)
+        for (int i = 0; i < ColorChannels; ++i)
         {
-            values[i].resize(segmentMax);
+            values[i].resize(segmentMax+1);
 
             for (int j = 0 ; j <= segmentMax ; ++j)
             {
                 values[i].setPoint(j, j, j);
             }
         }
-
-        // Construct linear curves.
     }
     else // SMOOTH
     {
-        for (int i=0; i<ColorChannels; ++i)
+        for (int i = 0; i < ColorChannels; ++i)
         {
             values[i].resize(ImageCurves::NUM_POINTS);
 
@@ -180,8 +180,11 @@ CurvesContainer CurvesContainer::fromFilterAction(const FilterAction& action, co
         curves.setChannelFromBase64(i, base64);
     }
 
+    // We don't need to call curves.curvesCalculateAllCurves() here ???
     return curves.getContainer();
 }
+
+// ---------------------------------------------------------------------------------------------------------------
 
 class ImageCurves::ImageCurvesPriv : public QSharedData
 {
@@ -291,7 +294,7 @@ ImageCurves::ImageCurves(const CurvesContainer& container)
 {
     d->init(container.sixteenBit);
     curvesReset();
-    setCurves(container);
+    setContainer(container);
 }
 
 ImageCurves::ImageCurves(const ImageCurves& other)
@@ -311,24 +314,40 @@ ImageCurves& ImageCurves::operator=(const ImageCurves& other)
 
 void ImageCurves::fillFromOtherCurves(ImageCurves* otherCurves)
 {
-
-    //kDebug() << "Filling this curve from other curve " << otherCurves;
+    kDebug() << "Filling this curve from other curve " << otherCurves;
 
     curvesReset();
 
     // if the other curves have the same bit depth, simply copy their data
     if (isSixteenBits() == otherCurves->isSixteenBits())
     {
-        //kDebug() << "Both curves have same type: isSixteenBits = " << isSixteenBits();
+        kDebug() << "Both curves have same type: isSixteenBits = " << isSixteenBits();
+
         for (int channel = 0; channel < NUM_CHANNELS; ++channel)
         {
-            for (int point = 0; point < NUM_POINTS; ++point)
+            if (otherCurves->getCurveType(channel) == CURVE_SMOOTH)
             {
-                QPoint p = otherCurves->getCurvePoint(channel, point);
+                kDebug() << "Other is CURVE_SMOOTH";
+                setCurveType(channel, CURVE_SMOOTH);
 
-                if (d->isPointEnabled(p))
+                for (int point = 0; point < NUM_POINTS; ++point)
                 {
-                    setCurvePoint(channel, point, p);
+                    QPoint p = otherCurves->getCurvePoint(channel, point);
+
+                    if (d->isPointEnabled(p))
+                    {
+                        setCurvePoint(channel, point, p);
+                    }
+                }
+            }
+            else
+            {
+                kDebug() << "Other is CURVE_FREE";
+                setCurveType(channel, CURVE_FREE);
+
+                for (int i = 0 ; i <= d->segmentMax ; ++i)
+                {
+                    setCurveValue(channel, i, otherCurves->getCurveValue(channel, i));
                 }
             }
         }
@@ -336,18 +355,35 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* otherCurves)
     // other curve is 8 bit and this curve is 16 bit
     else if (isSixteenBits() && !otherCurves->isSixteenBits())
     {
-        //kDebug() << "This curve is 16 bit and the other is 8 bit";
+        kDebug() << "This curve is 16 bit and the other is 8 bit";
+
         for (int channel = 0; channel < NUM_CHANNELS; ++channel)
         {
-            for (int point = 0; point < NUM_POINTS; ++point)
+            if (otherCurves->getCurveType(channel) == CURVE_SMOOTH)
             {
-                QPoint p = otherCurves->getCurvePoint(channel, point);
+                kDebug() << "Other is CURVE_SMOOTH";
+                setCurveType(channel, CURVE_SMOOTH);
 
-                if (d->isPointEnabled(p))
+                for (int point = 0; point < NUM_POINTS; ++point)
                 {
-                    p.setX(p.x() * MULTIPLIER_16BIT);
-                    p.setY(p.y() * MULTIPLIER_16BIT);
-                    setCurvePoint(channel, point, p);
+                    QPoint p = otherCurves->getCurvePoint(channel, point);
+
+                    if (d->isPointEnabled(p))
+                    {
+                        p.setX(p.x() * MULTIPLIER_16BIT);
+                        p.setY(p.y() * MULTIPLIER_16BIT);
+                        setCurvePoint(channel, point, p);
+                    }
+                }
+            }
+            else
+            {
+                kDebug() << "Other is CURVE_FREE";
+                setCurveType(channel, CURVE_FREE);
+
+                for (int i = 0 ; i <= d->segmentMax ; ++i)
+                {
+                    setCurveValue(channel, i * MULTIPLIER_16BIT, otherCurves->getCurveValue(channel, i) * MULTIPLIER_16BIT);
                 }
             }
         }
@@ -355,25 +391,42 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* otherCurves)
     // other curve is 16 bit and this is 8 bit
     else if (!isSixteenBits() && otherCurves->isSixteenBits())
     {
-        //kDebug() << "This curve is 8 bit and the other is 16 bit";
+        kDebug() << "This curve is 8 bit and the other is 16 bit";
+
         for (int channel = 0; channel < NUM_CHANNELS; ++channel)
         {
-            //kDebug() << "Adopting points of channel " << channel;
-            for (int point = 0; point < NUM_POINTS; ++point)
+            if (otherCurves->getCurveType(channel) == CURVE_SMOOTH)
             {
-                QPoint p = otherCurves->getCurvePoint(channel, point);
+                kDebug() << "Other is CURVE_SMOOTH";
+                setCurveType(channel, CURVE_SMOOTH);
 
-                //kDebug() << "Point " << point << " in original is " << p;
-                if (d->isPointEnabled(p))
+                //kDebug() << "Adopting points of channel " << channel;
+                for (int point = 0; point < NUM_POINTS; ++point)
                 {
-                    p.setX(p.x() / MULTIPLIER_16BIT);
-                    p.setY(p.y() / MULTIPLIER_16BIT);
-                    //kDebug() << "Setting curve point " << point << " to " << p;
-                    setCurvePoint(channel, point, p);
+                    QPoint p = otherCurves->getCurvePoint(channel, point);
+
+                    //kDebug() << "Point " << point << " in original is " << p;
+                    if (d->isPointEnabled(p))
+                    {
+                        p.setX(p.x() / MULTIPLIER_16BIT);
+                        p.setY(p.y() / MULTIPLIER_16BIT);
+                        //kDebug() << "Setting curve point " << point << " to " << p;
+                        setCurvePoint(channel, point, p);
+                    }
+                    else
+                    {
+                        //kDebug() << "ignoring this point";
+                    }
                 }
-                else
+            }
+            else
+            {
+                kDebug() << "Other is CURVE_FREE";
+                setCurveType(channel, CURVE_FREE);
+
+                for (int i = 0 ; i <= d->segmentMax ; ++i)
                 {
-                    //kDebug() << "ignoring this point";
+                    setCurveValue(channel, i / MULTIPLIER_16BIT, otherCurves->getCurveValue(channel, i) / MULTIPLIER_16BIT);
                 }
             }
         }
@@ -383,21 +436,8 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* otherCurves)
         kError() << "Bad logic error, could not fill one curve into another";
     }
 
-    //kDebug() << "Updating curve types";
-
-    // adopt channel types
-    for (int channel = 0; channel < NUM_CHANNELS; ++channel)
-    {
-        //kDebug() << "Curve type for channel " << channel
-        //       << " is " << (int) otherCurves->getCurveType(channel);
-        setCurveType(channel, otherCurves->getCurveType(channel));
-    }
-
     // invoke calculations once
-    for (int channel = 0; channel < NUM_CHANNELS; ++channel)
-    {
-        curvesCalculateCurve(channel);
-    }
+    curvesCalculateAllCurves();
 }
 
 bool ImageCurves::isDirty() const
@@ -443,7 +483,7 @@ void ImageCurves::curvesChannelReset(int channel)
 
     // Init coordinates points to null.
 
-    for (j = 0 ; j < ImageCurves::NUM_POINTS ; ++j)
+    for (j = 0 ; j < NUM_POINTS ; ++j)
     {
         d->curves->points[channel][j][0] = -1;
         d->curves->points[channel][j][1] = -1;
@@ -725,10 +765,7 @@ void ImageCurves::curvesLutSetup(int nchannels)
     uint   v;
     double val;
 
-    for (i = 0 ; i < NUM_CHANNELS ; ++i)
-    {
-        curvesCalculateCurve(i);
-    }
+    curvesCalculateAllCurves();
 
     d->freeLutData();
 
@@ -972,18 +1009,19 @@ ImageCurves::CurveType ImageCurves::getCurveType(int channel) const
 
 CurvesContainer ImageCurves::getContainer() const
 {
-    // any free curve?
     CurveType type = CURVE_SMOOTH;
 
-    for (int i=0; i<ColorChannels; ++i)
+    for (int i = 0; i < ColorChannels; ++i)
     {
         if ( (type = getCurveType(i)) == CURVE_FREE)
         {
+            type = CURVE_FREE;
             break;
         }
     }
 
     CurvesContainer c(type, isSixteenBits());
+    c.initialize();
 
     if (isLinear())
     {
@@ -992,14 +1030,14 @@ CurvesContainer ImageCurves::getContainer() const
 
     if (type == CURVE_FREE)
     {
-        for (int i=0; i<ColorChannels; ++i)
+        for (int i = 0; i < ColorChannels; ++i)
         {
             c.values[i] = getCurveValues(i);
         }
     }
     else
     {
-        for (int i=0; i<ColorChannels; ++i)
+        for (int i = 0; i < ColorChannels; ++i)
         {
             c.values[i] = getCurvePoints(i);
         }
@@ -1030,11 +1068,11 @@ CurvesContainer ImageCurves::getContainer(int channel) const
     return c;
 }
 
-void ImageCurves::setCurves(const CurvesContainer& container)
+void ImageCurves::setContainer(const CurvesContainer& container)
 {
     if (container.curvesType == CURVE_FREE)
     {
-        for (int i=0; i<ColorChannels; ++i)
+        for (int i = 0; i < ColorChannels; ++i)
         {
             setCurveType(i, CURVE_FREE);
             setCurveValues(i, container.values[i]);
@@ -1042,7 +1080,7 @@ void ImageCurves::setCurves(const CurvesContainer& container)
     }
     else
     {
-        for (int i=0; i<ColorChannels; ++i)
+        for (int i = 0; i < ColorChannels; ++i)
         {
             setCurveType(i, CURVE_SMOOTH);
             setCurvePoints(i, container.values[i]);
@@ -1064,11 +1102,14 @@ void ImageCurves::setCurveValue(int channel, int bin, int val)
 void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
 {
     int index;
+    kDebug() << "vals size: " << vals.size();
+    kDebug() << "segmentMax: " << d->segmentMax+1;
 
     if (d->curves && channel >= 0 && channel < NUM_CHANNELS)
     {
         if (vals.isEmpty())
         {
+            kDebug() << "No curves values to assign: reset";
             curvesChannelReset(channel);
         }
         // Bits depth are different ?
@@ -1076,6 +1117,8 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
         {
             if (vals.size() == 256)
             {
+                kDebug() << "8 to 16 bits curves transform";
+
                 // 8 to 16 bits.
                 ImageCurves curve8(false);
                 ImageCurves curve16(true);
@@ -1096,6 +1139,8 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
             }
             else
             {
+                kDebug() << "16 to 8 bits curves transform";
+
                 // 16 to 8 bits.
                 ImageCurves curve8(false);
                 ImageCurves curve16(true);
@@ -1117,6 +1162,7 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
         }
         else
         {
+            kDebug() << "Assign curves values directly";
             for (int j = 0 ; j <= d->segmentMax ; ++j)
             {
                 setCurveValue(channel, j, vals.point(j).y());
@@ -1283,13 +1329,18 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
         }
     }
 
-    for (i = 0 ; i < NUM_CHANNELS ; ++i)
-    {
-        curvesCalculateCurve(i);
-    }
+    curvesCalculateAllCurves();
 
     fclose(file);
     return true;
+}
+
+void ImageCurves::curvesCalculateAllCurves()
+{
+    for (int i = 0 ; i < NUM_CHANNELS ; ++i)
+    {
+        curvesCalculateCurve(i);
+    }
 }
 
 bool ImageCurves::saveCurvesToGimpCurvesFile(const KUrl& fileUrl) const

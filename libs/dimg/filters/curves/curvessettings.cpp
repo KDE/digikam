@@ -118,6 +118,9 @@ CurvesSettings::CurvesSettings(QWidget* parent, DImg* img)
 
     // -------------------------------------------------------------
 
+    // NOTE: no need to emit signalSettingsChanged() at CurveBox::signalChannelReset()
+    // and CurveBox::signalCurveTypeChanged(), it's managed with CurveBox::signalCurvesChanged()
+
     connect(d->curvesBox, SIGNAL(signalCurvesChanged()),
             this, SIGNAL(signalSettingsChanged()));
 
@@ -203,13 +206,14 @@ void CurvesSettings::slotSpotColorChanged(const DColor& color)
 
 CurvesContainer CurvesSettings::settings() const
 {
+    d->curvesBox->curves()->curvesCalculateAllCurves();
     return d->curvesBox->curves()->getContainer();
 }
 
 void CurvesSettings::setSettings(const CurvesContainer& settings)
 {
     blockSignals(true);
-    d->curvesBox->curves()->setCurves(settings);
+    d->curvesBox->curves()->setContainer(settings);
     blockSignals(false);
 }
 

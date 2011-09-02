@@ -49,7 +49,7 @@ Resize::Resize(QObject* parent)
     : BatchTool("Resize", TransformTool, parent)
 {
     setToolTitle(i18n("Resize"));
-    setToolDescription(i18n("A tool to resize images with a customized length."));
+    setToolDescription(i18n("Resize images with a customized length."));
     setToolIcon(KIcon(SmallIcon("transform-scale")));
 
     KVBox* vbox   = new KVBox;

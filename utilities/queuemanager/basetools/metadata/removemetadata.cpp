@@ -47,7 +47,7 @@ RemoveMetadata::RemoveMetadata(QObject* parent)
     : BatchTool("RemoveMetadata", MetadataTool, parent)
 {
     setToolTitle(i18n("Remove Metadata"));
-    setToolDescription(i18n("A tool to remove Exif, Iptc, or Xmp metadata from images."));
+    setToolDescription(i18n("Remove Exif, Iptc, or Xmp metadata from images."));
     setToolIcon(KIcon(SmallIcon("exifinfo")));
 
     KVBox* vbox  = new KVBox;

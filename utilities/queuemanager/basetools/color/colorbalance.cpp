@@ -46,7 +46,7 @@ ColorBalance::ColorBalance(QObject* parent)
     : BatchTool("ColorBalance", ColorTool, parent)
 {
     setToolTitle(i18n("Color Balance"));
-    setToolDescription(i18n("A tool to adjust color balance."));
+    setToolDescription(i18n("Adjust color balance."));
     setToolIcon(KIcon(SmallIcon("adjustrgb")));
 
     QWidget* box   = new QWidget;

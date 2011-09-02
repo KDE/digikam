@@ -474,7 +474,7 @@ void BWSepiaSettings::setSettings(const BWSepiaContainer& settings)
     d->bwTone->setCurrentId(settings.toneType);
     d->cInput->setValue((int)((settings.bcgPrm.contrast - 1.00) * 100.0));
     d->strengthInput->setValue((int)(1.0 + (settings.strength-1.0) * 3.0));
-    d->curvesBox->curves()->setCurves(settings.curvesPrm);
+    d->curvesBox->curves()->setContainer(settings.curvesPrm);
     d->curvesBox->update();
 
     slotFilterSelected();
@@ -609,10 +609,7 @@ void BWSepiaSettings::loadSettings()
             d->curvesBox->curves()->setCurvePoint(LuminosityChannel, j, p);
         }
 
-        for (int i = 0 ; i < ImageCurves::NUM_CHANNELS ; ++i)
-        {
-            d->curvesBox->curves()->curvesCalculateCurve(i);
-        }
+        d->curvesBox->curves()->curvesCalculateAllCurves();
 
         blockSignals(false);
     }

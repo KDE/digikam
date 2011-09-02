@@ -64,6 +64,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 049 ==> 280101 : Patch: Add option to hide icons and text in preview.
 050 ==> 279183 : Themes configuration dialogue does not open.
 051 ==> 257806 : Images imported from backup card + filtering icon-view [patch].
-052 ==> 
-
-
+052 ==> 281095 : Batch process curves adjustment doesn't work.
+053 ==> 272143 : Remove the "a tool to" prefix in the BQM tools description.
+054 ==> 281116 : Wish: Customisable date format in auto creation of albums.
+055 ==> 277935 : Rename libkmap to libkgeomap and move it to extragear/libs.
+056 ==> 264412 : Crash when opening a directory.
+057 ==> 264638 : Stuck when cancelling rename/overwrite dialog in batch queue manager.
+058 ==> 

@@ -46,7 +46,7 @@ Border::Border(QObject* parent)
     : BatchTool("Border", DecorateTool, parent)
 {
     setToolTitle(i18n("Add Border"));
-    setToolDescription(i18n("A tool to add a border around images"));
+    setToolDescription(i18n("Add a border around images"));
     setToolIcon(KIcon(SmallIcon("bordertool")));
 
     QWidget* box   = new QWidget;

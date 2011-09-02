@@ -50,7 +50,7 @@ AssignTemplate::AssignTemplate(QObject* parent)
     : BatchTool("AssignTemplate", MetadataTool, parent)
 {
     setToolTitle(i18n("Apply Metadata Template"));
-    setToolDescription(i18n("A tool to apply template metadata"));
+    setToolDescription(i18n("Apply template metadata"));
     setToolIcon(KIcon(SmallIcon("application-xml")));
 
     KVBox* vbox        = new KVBox;

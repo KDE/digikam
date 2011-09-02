@@ -81,7 +81,7 @@ Rotate::Rotate(QObject* parent)
       d(new RotatePriv)
 {
     setToolTitle(i18n("Rotate"));
-    setToolDescription(i18n("A tool to rotate images."));
+    setToolDescription(i18n("Rotate images."));
     setToolIcon(KIcon(SmallIcon("object-rotate-right")));
 
     KVBox* vbox  = new KVBox;

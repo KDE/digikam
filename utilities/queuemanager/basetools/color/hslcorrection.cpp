@@ -46,7 +46,7 @@ HSLCorrection::HSLCorrection(QObject* parent)
     : BatchTool("HSLCorrection", ColorTool, parent)
 {
     setToolTitle(i18n("HSL Correction"));
-    setToolDescription(i18n("A tool to fix Hue/Saturation/Lightness."));
+    setToolDescription(i18n("Fix Hue/Saturation/Lightness."));
     setToolIcon(KIcon(SmallIcon("adjusthsl")));
 
     QWidget* box   = new QWidget;

@@ -77,6 +77,9 @@ void CurvesFilter::filterImage()
         curves = depthCurve;
     }
 
+    kDebug() << "Image 16 bits: " << m_orgImage.sixteenBit();
+    kDebug() << "Curve 16 bits: " << curves.isSixteenBits();
+
     postProgress(50);
 
     // Process all channels curves

@@ -48,7 +48,7 @@ ChannelMixer::ChannelMixer(QObject* parent)
     : BatchTool("ChannelMixer", ColorTool, parent)
 {
     setToolTitle(i18n("Channel Mixer"));
-    setToolDescription(i18n("A tool to mix color channel."));
+    setToolDescription(i18n("Mix color channel."));
     setToolIcon(KIcon(SmallIcon("channelmixer")));
 
     KVBox* vbox          = new KVBox;

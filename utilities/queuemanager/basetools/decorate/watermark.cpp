@@ -125,7 +125,7 @@ WaterMark::WaterMark(QObject* parent)
       d(new WaterMarkPriv)
 {
     setToolTitle(i18n("Add Watermark"));
-    setToolDescription(i18n("A tool to overlay an image or text as a visible watermark"));
+    setToolDescription(i18n("Overlay an image or text as a visible watermark"));
     setToolIcon(KIcon(SmallIcon("insert-text")));
 
     KVBox* vbox = new KVBox;
