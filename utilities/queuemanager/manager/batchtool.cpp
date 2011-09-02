@@ -414,6 +414,7 @@ bool BatchTool::apply()
             QPolygon pol = it.value().value<QPolygon>();
             int size     = pol.size() > 20 ? 20 : pol.size();
             QString tmp;
+            tmp.append(QString("[%1 items] : ").arg(pol.size()));
 
             for (int i=0 ; i<size ; ++i)
             {
