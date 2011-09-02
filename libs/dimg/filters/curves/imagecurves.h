@@ -153,6 +153,7 @@ public:
      * while all other forms take less than 400 bytes.
      */
     QByteArray channelToBase64(int channel) const;
+
     /**
      * Set the channel from the given base64 representation.
      * The data is checked for validity, only on valid data true is returned.
@@ -161,7 +162,7 @@ public:
      */
     bool setChannelFromBase64(int channel, const QByteArray& array);
 
-    // Methods for to save/load the curves values to/from a Gimp curves text file.
+    /// Methods for to save/load the curves values to/from a Gimp curves text file.
 
     bool   saveCurvesToGimpCurvesFile(const KUrl& fileUrl) const;
     bool   loadCurvesFromGimpCurvesFile(const KUrl& fileUrl);
