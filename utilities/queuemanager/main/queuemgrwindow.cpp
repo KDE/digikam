@@ -1050,8 +1050,8 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
             {
                 case KIO::R_CANCEL:
                 {
+                    slotStop();
                     addHistoryMessage(i18n("Process Cancelled..."), DHistoryView::CancelEntry);
-                    QTimer::singleShot(0, this, SLOT(slotStop()));
                     return;
                     break;
                 }
