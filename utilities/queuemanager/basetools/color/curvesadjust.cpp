@@ -35,6 +35,7 @@
 #include <kstandarddirs.h>
 #include <kcombobox.h>
 #include <kvbox.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -104,6 +105,7 @@ BatchToolSettings CurvesAdjust::defaultSettings()
     BatchToolSettings prm;
     CurvesContainer defaultPrm = m_settingsView->defaultSettings();
     prm.insert("curvesType",                (int)defaultPrm.curvesType);
+    prm.insert("curvesDepth",               defaultPrm.sixteenBit);
     prm.insert("values[LuminosityChannel]", defaultPrm.values[LuminosityChannel]);
     prm.insert("values[RedChannel]",        defaultPrm.values[RedChannel]);
     prm.insert("values[GreenChannel]",      defaultPrm.values[GreenChannel]);
@@ -118,6 +120,7 @@ void CurvesAdjust::slotAssignSettings2Widget()
     CurvesContainer prm;
 
     prm.curvesType                = (ImageCurves::CurveType)settings()["curvesType"].toInt();
+    prm.sixteenBit                = settings()["curvesDepth"].toBool();
     prm.values[LuminosityChannel] = settings()["values[LuminosityChannel]"].value<QPolygon>();
     prm.values[RedChannel]        = settings()["values[RedChannel]"].value<QPolygon>();
     prm.values[GreenChannel]      = settings()["values[GreenChannel]"].value<QPolygon>();
@@ -133,6 +136,7 @@ void CurvesAdjust::slotSettingsChanged()
     CurvesContainer currentPrm = m_settingsView->settings();
 
     prm.insert("curvesType",                (int)currentPrm.curvesType);
+    prm.insert("curvesDepth",               currentPrm.sixteenBit);
     prm.insert("values[LuminosityChannel]", currentPrm.values[LuminosityChannel]);
     prm.insert("values[RedChannel]",        currentPrm.values[RedChannel]);
     prm.insert("values[GreenChannel]",      currentPrm.values[GreenChannel]);
@@ -149,7 +153,8 @@ bool CurvesAdjust::toolOperations()
         return false;
     }
 
-    CurvesContainer prm((ImageCurves::CurveType)settings()["curvesType"].toInt(), true);
+    CurvesContainer prm((ImageCurves::CurveType)settings()["curvesType"].toInt(),
+                        settings()["curvesDepth"].toBool());
     prm.initialize();
     prm.values[LuminosityChannel] = settings()["values[LuminosityChannel]"].value<QPolygon>();
     prm.values[RedChannel]        = settings()["values[RedChannel]"].value<QPolygon>();
