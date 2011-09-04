@@ -557,7 +557,7 @@
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Tags"><statement mode="query">
-                SELECT  id, pid, name, icon, iconkde FROM Tags;
+                SELECT  id, pid, name, icon, iconkde FROM Tags WHERE id != 0;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Tags"><statement mode="query">
                 INSERT INTO Tags (id, pid, name, icon, iconkde) VALUES (:id, :pid, :name, :icon, :iconkde);
@@ -1348,7 +1348,7 @@ ORDER BY inf.rating DESC, img.name ASC
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Tags"><statement mode="query">
-                SELECT  id, pid, name, icon, iconkde FROM Tags;
+                SELECT  id, IF(Tags.pid = 0, -1, Tags.pid) AS pid, name, icon, iconkde FROM Tags WHERE id != 0;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Tags" mode="transaction">
                 <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
