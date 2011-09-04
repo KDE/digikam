@@ -508,30 +508,30 @@ void DImgInterface::undo()
 {
     if (!d->undoMan->anyMoreUndo())
     {
-        emit signalUndoStateChanged(false, d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+        emit signalUndoStateChanged();
         return;
     }
 
     d->undoMan->undo();
-    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+    emit signalUndoStateChanged();
 }
 
 void DImgInterface::redo()
 {
     if (!d->undoMan->anyMoreRedo())
     {
-        emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), false, !d->undoMan->isAtOrigin());
+        emit signalUndoStateChanged();
         return;
     }
 
     d->undoMan->redo();
-    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+    emit signalUndoStateChanged();
 }
 
 void DImgInterface::rollbackToOrigin()
 {
     d->undoMan->rollbackToOrigin();
-    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+    emit signalUndoStateChanged();
 }
 
 QMap<QString, QVariant> DImgInterface::ioAttributes(IOFileSettingsContainer* iofileSettings,
@@ -839,12 +839,24 @@ void DImgInterface::setHistoryIsBranch(bool isBranching)
 void DImgInterface::setModified()
 {
     emit signalModified();
-    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+    emit signalUndoStateChanged();
 }
 
-bool DImgInterface::hasChangesToSave() const
+DImgInterface::UndoState::UndoState()
+    : hasUndo(false), hasRedo(false), hasChanges(false), hasUndoableChanges(false)
 {
-    return !d->undoMan->isAtOrigin();
+}
+
+DImgInterface::UndoState DImgInterface::undoState() const
+{
+    UndoState state;
+    state.hasUndo = d->undoMan->anyMoreUndo();
+    state.hasRedo = d->undoMan->anyMoreRedo();
+    state.hasUndoableChanges = !d->undoMan->isAtOrigin();
+    // Includes the edit step performed by RAW import, which is not undoable
+    state.hasChanges = d->undoMan->hasChanges();
+
+    return state;
 }
 
 void DImgInterface::readMetadataFromFile(const QString& file)
@@ -858,19 +870,14 @@ void DImgInterface::clearUndoManager()
 {
     d->undoMan->clear();
     d->undoMan->setOrigin();
-    emit signalUndoStateChanged(false, false, false);
+    emit signalUndoStateChanged();
 }
 
 void DImgInterface::setUndoManagerOrigin()
 {
     d->undoMan->setOrigin();
-    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+    emit signalUndoStateChanged();
     emit signalFileOriginChanged(getImageFilePath());
-}
-
-void DImgInterface::updateUndoState()
-{
-    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
 bool DImgInterface::imageValid() const

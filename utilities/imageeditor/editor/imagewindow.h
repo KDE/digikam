@@ -104,7 +104,6 @@ private:
     bool saveNewVersionInFormat(const QString& format);
 
     KUrl saveDestinationUrl();
-    bool hasChangesToSave();
     bool hasOriginalToRestore();
     DImageHistory resolvedImageHistory(const DImageHistory& history);
 

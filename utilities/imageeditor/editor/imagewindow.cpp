@@ -883,11 +883,6 @@ void ImageWindow::slotChanged()
     }*/
 }
 
-bool ImageWindow::hasChangesToSave()
-{
-    return EditorWindow::hasChangesToSave();// && d->allowSaving;
-}
-
 void ImageWindow::toggleTag(int tagID)
 {
     if (!d->currentImageInfo.isNull())
@@ -1677,7 +1672,7 @@ void ImageWindow::slotRevert()
         return;
     }
 
-    if (hasChangesToSave())
+    if (m_canvas->interface()->undoState().hasChanges)
     {
         m_canvas->slotRestore();
     }

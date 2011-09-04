@@ -66,7 +66,7 @@ public:
     QStringList getRedoHistory() const;
     bool isAtOrigin() const;
     void setOrigin() const;
-    bool hasChangesToSave() const;
+    bool hasChanges() const;
 
     void clearPreviousOriginData();
 

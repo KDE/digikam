@@ -193,7 +193,6 @@ protected:
     void loadImagePlugins();
 
     bool promptForOverWrite();
-    virtual bool hasChangesToSave();
     virtual bool hasOriginalToRestore();
     virtual DImageHistory resolvedImageHistory(const DImageHistory& history);
 
@@ -327,7 +326,7 @@ private Q_SLOTS:
     void slotCloseTool();
     void slotApplyTool();
     void slotKioMoveFinished(KJob* job);
-    void slotUndoStateChanged(bool, bool, bool);
+    void slotUndoStateChanged();
     void slotSelectToolsMenuAboutToShow();
     void slotThemeChanged();
 

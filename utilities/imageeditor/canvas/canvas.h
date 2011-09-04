@@ -81,7 +81,6 @@ public:
     QString ensureHasCurrentUuid() const;
     void    clearUndoHistory();
     void    setUndoHistoryOrigin();
-    void    updateUndoState();
     DImg    currentImage() const;
     QString currentImageFileFormat() const;
     QString currentImageFilePath() const;
@@ -113,7 +112,6 @@ public:
     // If current image file format is only available in read only,
     // typically all RAW image file formats.
     bool  isReadOnly()        const;
-    bool  hasChangesToSave()  const;
 
     void  resizeImage(int w, int h);
 
@@ -133,7 +131,6 @@ Q_SIGNALS:
     void signalMaxZoom();
     void signalMinZoom();
     void signalChanged();
-    void signalUndoStateChanged(bool, bool, bool);
     void signalSelected(bool);
     void signalRightButtonClicked();
     void signalShowNextImage();

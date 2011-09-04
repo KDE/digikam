@@ -291,8 +291,8 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalChanged()),
             this, SLOT(slotChanged()));
 
-    connect(m_canvas, SIGNAL(signalUndoStateChanged(bool,bool,bool)),
-            this, SLOT(slotUndoStateChanged(bool,bool,bool)));
+    connect(m_canvas->interface(), SIGNAL(signalUndoStateChanged()),
+            this, SLOT(slotUndoStateChanged()));
 
     connect(m_canvas, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected(bool)));
@@ -1165,10 +1165,8 @@ void EditorWindow::toggleStandardActions(bool val)
     // but if val is true, they may be turned on or off.
     if (val)
     {
-        // Trigger sending of signalUndoStateChanged
-        // Note that for saving and loading, this is not necessary
-        // because the signal will be sent later anyway.
-        m_canvas->updateUndoState();
+        // Update actions by retrieving current values
+        slotUndoStateChanged();
     }
     else
     {
@@ -1358,28 +1356,22 @@ bool EditorWindow::promptForOverWrite()
 
 }
 
-void EditorWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
+void EditorWindow::slotUndoStateChanged()
 {
-    Q_UNUSED(canSave);
+    DImgInterface::UndoState state = m_canvas->interface()->undoState();
 
-    bool hasChanges = hasChangesToSave();
+    // RAW conversion qualifies as a "non-undoable" action
+    // You can save as new version, but cannot undo or revert
+    m_undoAction->setEnabled(state.hasUndo);
+    m_redoAction->setEnabled(state.hasRedo);
+    m_revertAction->setEnabled(state.hasUndoableChanges);
 
-    m_undoAction->setEnabled(moreUndo);
-    m_redoAction->setEnabled(moreRedo);
-    m_revertAction->setEnabled(hasChanges);
-
-    m_saveAction->setEnabled(hasChanges);
-    m_saveCurrentVersionAction->setEnabled(hasChanges);
-    m_saveNewVersionAction->setEnabled(hasChanges);
-    m_discardChangesAction->setEnabled(hasChanges);
+    m_saveAction->setEnabled(state.hasChanges);
+    m_saveCurrentVersionAction->setEnabled(state.hasChanges);
+    m_saveNewVersionAction->setEnabled(state.hasChanges);
+    m_discardChangesAction->setEnabled(state.hasUndoableChanges);
 
     m_openVersionAction->setEnabled(hasOriginalToRestore());
-}
-
-bool EditorWindow::hasChangesToSave()
-{
-    // virtual, can be extended by subclasses
-    return m_canvas->hasChangesToSave();
 }
 
 bool EditorWindow::hasOriginalToRestore()
@@ -1491,7 +1483,7 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
         d->currentWindowModalDialog->reject();
     }
 
-    if (hasChangesToSave())
+    if (m_canvas->interface()->undoState().hasUndoableChanges)
     {
         // if window is minimized, show it
         if (isMinimized())
