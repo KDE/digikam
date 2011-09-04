@@ -763,7 +763,7 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
 
         QModelIndex index = d->thumbView->findItemByInfo(d->previewView->leftImageInfo());
 
-        if (d->navigateByPairAction->isChecked() && !index.isValid())
+        if (d->navigateByPairAction->isChecked() && index.isValid())
         {
             QModelIndex next = d->thumbView->nextIndex(index);
 
