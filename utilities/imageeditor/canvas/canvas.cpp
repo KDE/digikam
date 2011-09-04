@@ -204,9 +204,6 @@ Canvas::Canvas(QWidget* parent)
     connect(d->im, SIGNAL(signalModified()),
             this, SLOT(slotModified()));
 
-    connect(d->im, SIGNAL(signalUndoStateChanged(bool,bool,bool)),
-            this, SIGNAL(signalUndoStateChanged(bool,bool,bool)));
-
     connect(d->im, SIGNAL(signalLoadingStarted(QString)),
             this, SIGNAL(signalLoadingStarted(QString)));
 
@@ -376,11 +373,6 @@ void Canvas::setUndoHistoryOrigin()
     d->im->setUndoManagerOrigin();
 }
 
-void Canvas::updateUndoState()
-{
-    d->im->updateUndoState();
-}
-
 DImg Canvas::currentImage() const
 {
     DImg* image = d->im->getImg();
@@ -416,11 +408,6 @@ int Canvas::imageHeight() const
 bool Canvas::isReadOnly() const
 {
     return d->im->isReadOnly();
-}
-
-bool Canvas::hasChangesToSave() const
-{
-    return d->im->hasChangesToSave();
 }
 
 QRect Canvas::getSelectedArea() const

@@ -544,7 +544,7 @@ bool UndoManager::isAtOrigin() const
     return (d->origin == 0);
 }
 
-bool UndoManager::hasChangesToSave() const
+bool UndoManager::hasChanges() const
 {
     if (!isAtOrigin())
     {

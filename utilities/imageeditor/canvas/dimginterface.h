@@ -97,9 +97,20 @@ public:
     void    readMetadataFromFile(const QString& file);
     void    clearUndoManager();
     void    setUndoManagerOrigin();
-    void    updateUndoState();
     void    resetImage();
-    bool    hasChangesToSave() const;
+
+    class UndoState
+    {
+    public:
+        UndoState();
+        bool hasUndo;
+        bool hasRedo;
+        bool hasChanges;
+        bool hasUndoableChanges;
+    };
+
+    UndoState undoState() const;
+
     QString ensureHasCurrentUuid() const;
     void    provideCurrentUuid(const QString& uuid);
 
@@ -191,7 +202,7 @@ protected Q_SLOTS:
 Q_SIGNALS:
 
     void   signalModified();
-    void   signalUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave);
+    void   signalUndoStateChanged();
     void   signalFileOriginChanged(const QString& filePath);
 
     void   signalLoadingStarted(const QString& filename);
