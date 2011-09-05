@@ -1,0 +1,72 @@
+*****************************************************************************************************
+digiKam 2.1.0 - Release date: 2011-09-04
+
+NEW FEATURES:
+
+CameraGUI : camera items thumbnails are processed on the fly. Connection to camera device is faster.
+CameraGUI : Sort of items by date is possible with photo taken quickly (less than 1s).
+CameraGUI : New option to setup a default target album to download items from camera device.
+CameraGUI : New option to download new items in just one click.
+CameraGUI : New option to filter icon-view by type mime.
+
+Preview   : New option to show/hide information over preview canvas.
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 218365 : Show icon thumbs when loaded and not only after all were read.
+002 ==> 278526 : No picture is displayed in the Album View.
+003 ==> 245079 : Let the user download all before thumbnails are generated.
+004 ==> 278033 : Cannot set jpeg compression ratio (or any other save options) when exporting image.
+005 ==> 278966 : Building the unittests fails when using external libpgf.
+006 ==> 199985 : digiKam, import, writing to sd card, bad folders.
+007 ==> 261627 : GNOME says "No applications found" ignoring digikam.
+008 ==> 251900 : Preview of RAW images missing.
+009 ==> 260669 : Images on camera always marked as new.
+010 ==> 246336 : Ordering incorrect.
+011 ==> 264123 : digiKam freezes when creating thumbnails in the import dialog (from a memory stick).
+012 ==> 199197 : Can't import pictures from camera.
+013 ==> 181521 : NEF's in descending order, AVI in ascending order in import from SD-card.
+014 ==> 221457 : digiKam camera download - dates are not preserved.
+015 ==> 229543 : Video exif info not found during import and renaming.
+016 ==> 265243 : Series of AVIs imported with the same (incorrect) time.
+017 ==> 199913 : Creation date is changed when converting to png.
+018 ==> 190717 : Camera movie files dates not used for date based sub folder name.
+019 ==> 246337 : Changing sort order forces thumbnail regeneration.
+020 ==> 256776 : digiKam leaves ".digikam-exifrotate" files etc. on harddisk.
+021 ==> 237810 : Wrong date when renaming downloaded pictures.
+022 ==> 233621 : Importing from Nikon Coolpix P90 ignores date/time of the images and uses 31-12-1969 instead.
+023 ==> 160496 : No disk space reported when importing pictures.
+024 ==> 184439 : Closing the "USB DISK DOWNLOAD from DISK" window updates the digikam folder view.
+025 ==> 253268 : digiKam crashes when starting to download pictures.
+026 ==> 216492 : Camera interface upload can't select a movie only image.
+027 ==> 274199 : digiKam crashed when using "inpainting" tool.
+028 ==> 278320 : Crash with "-graphicssystem raster".
+029 ==> 279551 : Wrong window title when deleting a search.
+030 ==> 271030 : Windows Live Photo Gallery people tagging Compatibility.
+031 ==> 279549 : Lighttable gets automatically filled on digiKam start.
+032 ==> 279696 : Building the unittests of libkgeomap fails.
+033 ==> 279713 : Libmediawiki tries to install test files (patch attached).
+034 ==> 236394 : Import from camera using cable is slow and previously imported video files are not flagged.
+035 ==> 261871 : digiKam import of Nikon D7000 images very slow.
+036 ==> 243760 : Import *listing* from "Canon PowerShot G5 (normal mode)" takes very long.
+037 ==> 246401 : Improve date based sort of camera interface: use more time precision from Exif when shots are taken with less than 1s.
+038 ==> 266317 : Nepomuk Service Stub (nepomukservicestub) crashes in libdigikamdatabase.so.1 when syncing tags to nepomuk.
+039 ==> 269373 : Adding face tag to large amount of pictures fails.
+040 ==> 225759 : JPG image size = 0 byte, when transfer occurs from my camera to my NAS.
+041 ==> 202641 : Import images - always increase renaming counter by number of images imported.
+042 ==> 189903 : Allow default Target Album for Image Download.
+043 ==> 259861 : One-click "Download New Items".
+044 ==> 144227 : Allow for fully customized album names when importing.
+045 ==> 279402 : Focus textbox for identifying faces gets lost too easily (and other issues).
+046 ==> 277796 : Build failure in the dcraw_emu sample.
+047 ==> 280240 : digiKam crash when attempting to view slideshow.
+048 ==> 280517 : Moving photo from an album to another leads to loose face tags.
+049 ==> 280101 : Patch: Add option to hide icons and text in preview.
+050 ==> 279183 : Themes configuration dialogue does not open.
+051 ==> 257806 : Images imported from backup card + filtering icon-view [patch].
+052 ==> 272143 : Remove the "a tool to" prefix in the BQM tools description.
+053 ==> 281116 : Wish: Customisable date format in auto creation of albums.
+054 ==> 277935 : Rename libkmap to libkgeomap and move it to extragear/libs.
+055 ==> 264412 : Crash when opening a directory.
+056 ==> 264638 : Stuck when cancelling rename/overwrite dialog in batch queue manager.
+057 ==> 276061 : "Save (as new version)" is not enabled right after importing a RAW picture.
