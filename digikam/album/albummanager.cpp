@@ -77,6 +77,7 @@ extern "C"
 
 // Local includes
 
+#include "config-digikam.h"
 #include "albumdb.h"
 #include "album.h"
 #include "albumsettings.h"
@@ -239,7 +240,7 @@ public:
         // build list
         foreach (const QFileInfo& info, fileInfoList)
         {
-            // ignore digikam4.db and journal and other temporary files
+            // ignore DIGIKAM4DB and journal and other temporary files
             if (!dirWatchBlackList.contains(info.fileName()))
             {
                 modList << info.lastModified();
@@ -405,16 +406,28 @@ void AlbumManager::cleanUp()
     }
 }
 
-bool AlbumManager::databaseEqual(const QString& dbType, const QString& dbName,
+bool AlbumManager::imgDatabaseEqual(const QString& dbType, const QString& dbName,
                                  const QString& dbHostName, int dbPort, bool dbInternalServer) const
 {
     DatabaseParameters params = DatabaseAccess::parameters();
 
-    return params.databaseType   == dbType          &&
-           params.databaseName   == dbName          &&
-           params.hostName       == dbHostName      &&
-           params.port           == dbPort          &&
+    return params.imgDatabaseType   == dbType          &&
+           params.imgDatabaseName   == dbName          &&
+           params.imgHostName       == dbHostName      &&
+           params.imgPort           == dbPort          &&
            params.internalServer == dbInternalServer;
+	   //FIXME: dbInternalServer
+}
+
+bool AlbumManager::tmbDatabaseEqual(const QString& dbType, const QString& dbName,
+                                 const QString& dbHostName, int dbPort) const
+{
+    DatabaseParameters params = DatabaseAccess::parameters();
+
+    return params.tmbDatabaseType   == dbType          &&
+           params.tmbDatabaseName   == dbName          &&
+           params.tmbHostName       == dbHostName      &&
+           params.tmbPort           == dbPort;
 }
 
 static bool moveToBackup(const QFileInfo& info)
@@ -465,7 +478,7 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
     QDir               newDir(dbPath);
     QDir               albumDir(albumPath);
     DatabaseParameters newParams = DatabaseParameters::parametersForSQLiteDefaultFile(newDir.path());
-    QFileInfo          digikam4DB(newParams.SQLiteDatabaseFile());
+    QFileInfo          digikam4DB(newParams.imgSQLiteDatabaseFile());
 
     if (!digikam4DB.exists())
     {
@@ -510,10 +523,10 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
     DatabaseParameters params = DatabaseAccess::parameters();
 
     // New database type SQLITE
-    if (newParams.isSQLite())
+    if (newParams.isImgSQLite())
     {
-        QDir newDir(newParams.getDatabaseNameOrDir());
-        QFileInfo newFile(newDir, QString("digikam4.db"));
+        QDir newDir(newParams.getImgDatabaseNameOrDir());
+        QFileInfo newFile(newDir, QString(DIGIKAM4DB));
 
         if (!newFile.exists())
         {
@@ -527,7 +540,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                 KGuiItem upgrade(i18n("Upgrade Database"), "view-refresh");
                 int result = -1;
 
-                if (params.isSQLite())
+                if (params.isImgSQLite())
                 {
                     result = KMessageBox::warningYesNoCancel(0,
                                                              i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
@@ -566,7 +579,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                 else if (result == KMessageBox::Cancel)
                 {
                     QDir oldDir(d->dbName);
-                    QFileInfo oldFile(params.SQLiteDatabaseFile());
+                    QFileInfo oldFile(params.imgSQLiteDatabaseFile());
                     copyToNewLocation(oldFile, newFile, i18n("Failed to copy the old database file (\"%1\") "
                                                              "to its new location (\"%2\"). "
                                                              "Trying to upgrade old databases.",
@@ -577,7 +590,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
             {
                 int result = KMessageBox::Yes;
 
-                if (params.isSQLite())
+                if (params.isImgSQLite())
                 {
                     KGuiItem copyCurrent(i18n("Copy Current Database"), "edit-copy");
                     KGuiItem startFresh(i18n("Create New Database"), "document-new");
@@ -593,7 +606,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                 if (result == KMessageBox::No)
                 {
                     QDir oldDir(d->dbName);
-                    QFileInfo oldFile(params.SQLiteDatabaseFile());
+                    QFileInfo oldFile(params.imgSQLiteDatabaseFile());
                     copyToNewLocation(oldFile, newFile);
                 }
             }
@@ -602,7 +615,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
         {
             int result = KMessageBox::No;
 
-            if (params.isSQLite())
+            if (params.isImgSQLite())
             {
                 KGuiItem replaceItem(i18n("Copy Current Database"), "edit-copy");
                 KGuiItem useExistingItem(i18n("Use Existing File"), "document-open");
@@ -622,7 +635,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                 if (moveToBackup(newFile))
                 {
                     QDir oldDir(d->dbName);
-                    QFileInfo oldFile(params.SQLiteDatabaseFile());
+                    QFileInfo oldFile(params.imgSQLiteDatabaseFile());
 
                     // then copy
                     copyToNewLocation(oldFile, newFile);
@@ -986,9 +999,9 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 #ifdef USE_THUMBS_DB
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    if (params.isSQLite())
+    if (params.isTmbSQLite())
     {
-        d->dirWatchBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
+        d->dirWatchBlackList << THUMBNAILS_DIGIKAMDB << "thumbnails-digikam.db-journal";
     }
 
     ThumbnailLoadThread::initializeThumbnailDatabase(DatabaseAccess::parameters().thumbnailParameters(),
@@ -1003,9 +1016,9 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     // -- ---------------------------------------------------------
 
     // measures to filter out KDirWatch signals caused by database operations
-    if (params.isSQLite())
+    if (params.isImgSQLite())
     {
-        QFileInfo dbFile(params.SQLiteDatabaseFile());
+        QFileInfo dbFile(params.imgSQLiteDatabaseFile());
         d->dirWatchBlackList << dbFile.fileName() << dbFile.fileName() + "-journal";
 
         // ensure this is done after setting up the black list
@@ -3401,7 +3414,7 @@ void AlbumManager::slotDirWatchDirty(const QString& path)
 
     DatabaseParameters params = DatabaseAccess::parameters();
 
-    if (params.isSQLite())
+    if (params.isImgSQLite())
     {
         QFileInfo info(path);
         QDir dir;
@@ -3415,7 +3428,7 @@ void AlbumManager::slotDirWatchDirty(const QString& path)
             dir = info.dir();
         }
 
-        QFileInfo dbFile(params.SQLiteDatabaseFile());
+        QFileInfo dbFile(params.imgSQLiteDatabaseFile());
 
         // Workaround for broken KDirWatch in KDE 4.2.4
         if (path.startsWith(dbFile.filePath()))

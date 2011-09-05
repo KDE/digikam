@@ -36,6 +36,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "databasewidget.h"
 #include "databasebackend.h"
 #include "databasecopymanager.h"
