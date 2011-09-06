@@ -3,6 +3,9 @@ digiKam 2.2.0 - Release date: 2011-10-02
 
 NEW FEATURES:
 
+General : Add image title metadata support.
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 155374 : Allow setting Image titles different than image file name [patch].
+002 ==> 
