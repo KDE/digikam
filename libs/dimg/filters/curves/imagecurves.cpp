@@ -47,144 +47,16 @@
 
 // Local includes
 
+#include "curvescontainer.h"
 #include "filteraction.h"
 #include "globals.h"
 
 namespace Digikam
 {
 
-const int ImageCurves::NUM_POINTS = 17;
-const int ImageCurves::NUM_CHANNELS = 5;
+const int ImageCurves::NUM_POINTS       = 17;
+const int ImageCurves::NUM_CHANNELS     = 5;
 const int ImageCurves::MULTIPLIER_16BIT = 255;
-
-CurvesContainer::CurvesContainer()
-    : curvesType(ImageCurves::CURVE_SMOOTH), sixteenBit(false)
-{
-}
-
-CurvesContainer::CurvesContainer(int type, bool sixteenBit)
-    : curvesType((ImageCurves::CurveType)type), sixteenBit(sixteenBit)
-{
-}
-
-bool CurvesContainer::isEmpty() const
-{
-    for (int i=0; i<ColorChannels; ++i)
-    {
-        if (!values[i].isEmpty())
-            return false;
-    }
-    return true;
-}
-
-bool CurvesContainer::operator==(const CurvesContainer& other) const
-{
-    if (isEmpty() && other.isEmpty())
-        return true;
-
-    if (sixteenBit != other.sixteenBit || curvesType != other.curvesType)
-        return false;
-
-    for (int i=0; i<ColorChannels; ++i)
-    {
-        if (values[i] != other.values[i])
-            return false;
-    }
-    return true;
-}
-
-void CurvesContainer::initialize()
-{
-    int segmentMax = sixteenBit ? MAX_SEGMENT_16BIT : MAX_SEGMENT_8BIT;
-
-    // Construct linear curves.
-
-    if (curvesType == ImageCurves::CURVE_FREE)
-    {
-        for (int i = 0; i < ColorChannels; ++i)
-        {
-            values[i].resize(segmentMax+1);
-
-            for (int j = 0 ; j <= segmentMax ; ++j)
-            {
-                values[i].setPoint(j, j, j);
-            }
-        }
-    }
-    else // SMOOTH
-    {
-        for (int i = 0; i < ColorChannels; ++i)
-        {
-            values[i].resize(ImageCurves::NUM_POINTS);
-
-            for (int j = 1 ; j < ImageCurves::NUM_POINTS - 1 ; ++j)
-            {
-                values[i].setPoint(j, -1, -1);
-            }
-
-            // First and last points init.
-            values[i].setPoint(0, 0, 0);
-            values[i].setPoint(0, segmentMax, segmentMax);
-        }
-    }
-}
-
-bool CurvesContainer::isStoredLosslessly() const
-{
-    return !(sixteenBit && curvesType == ImageCurves::CURVE_FREE);
-}
-
-void CurvesContainer::writeToFilterAction(FilterAction& action, const QString& prefix) const
-{
-    if (isEmpty())
-    {
-        return;
-    }
-
-    ImageCurves curves(*this);
-
-    if (curves.isLinear())
-    {
-        return;
-    }
-
-    // Convert to 8bit: 16 bits curves takes 85kb, 8 bits only 400 bytes.
-    if (curves.isSixteenBits())
-    {
-        ImageCurves depthCurve(false);
-        depthCurve.fillFromOtherCurves(&curves);
-        curves = depthCurve;
-    }
-
-    action.addParameter(prefix + "curveBitDepth", 8);
-
-    for (int i=0; i<ColorChannels; ++i)
-    {
-        action.addParameter(prefix + QString("curveData[%1]").arg(i), curves.channelToBase64(i));
-    }
-}
-
-CurvesContainer CurvesContainer::fromFilterAction(const FilterAction& action, const QString& prefix)
-{
-    if (!action.hasParameter(prefix + "curveBitDepth"))
-    {
-        return CurvesContainer();
-    }
-
-    ImageCurves curves(action.parameter(prefix + "curveBitDepth", 8) == 16);
-
-    for (int i=0; i<ColorChannels; ++i)
-    {
-        QByteArray base64 = action.parameter(prefix + QString("curveData[%1]").arg(i), QByteArray());
-        // check return value and set readParametersError?
-        curves.setChannelFromBase64(i, base64);
-    }
-
-    // We don't need to call curves.curvesCalculateAllCurves() here ???
-    return curves.getContainer();
-}
-
-// ---------------------------------------------------------------------------------------------------------------
 
 class ImageCurves::ImageCurvesPriv : public QSharedData
 {
