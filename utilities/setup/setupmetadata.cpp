@@ -164,8 +164,8 @@ SetupMetadata::SetupMetadata(QWidget* parent)
                                            "You can set template values to Template setup page."));
 
     d->saveCommentsBox = new QCheckBox(commonGroup);
-    d->saveCommentsBox->setText(i18n("&Save image captions in metadata embedded in files "));
-    d->saveCommentsBox->setWhatsThis( i18n("Turn on this option to store image captions "
+    d->saveCommentsBox->setText(i18n("&Save image captions and title in metadata embedded in files "));
+    d->saveCommentsBox->setWhatsThis( i18n("Turn on this option to store image caption and title "
                                            "in the JFIF Comment section, the EXIF tag, the XMP tag, "
                                            "and the IPTC tag."));
 

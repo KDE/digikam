@@ -61,6 +61,7 @@ public:
     QString                name;
 
     QString                defaultComment;
+    QString                defaultTitle;
     quint8                 pickLabel;
     quint8                 colorLabel;
     quint8                 groupingFlags;
@@ -85,6 +86,7 @@ public:
     bool                   hasCoordinates         : 1;
     bool                   hasAltitude            : 1;
 
+    bool                   defaultTitleCached     : 1;
     bool                   defaultCommentCached   : 1;
     bool                   pickLabelCached        : 1;
     bool                   colorLabelCached       : 1;

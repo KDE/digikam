@@ -145,6 +145,7 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
             if (changes & DatabaseFields::ImageCommentsAll)
             {
                 (*it)->defaultCommentCached = false;
+                (*it)->defaultTitleCached = false;
             }
 
             if (changes & DatabaseFields::Category)

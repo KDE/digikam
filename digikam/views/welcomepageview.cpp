@@ -104,6 +104,7 @@ QString WelcomePageView::infoPage() const
     newFeatures << i18n("Tag keyboard shortcuts support;");
     newFeatures << i18n("Pick Labels support to improve photograph selection;");
     newFeatures << i18n("Color Labels support to improve photograph workflow;");
+    newFeatures << i18n("Image title metadata support;");
     newFeatures << i18n("Re-designed Filters view on right sidebar to perform icon-view items filtering;");
     newFeatures << i18n("New options to group/ungroup items from icon-view;");
     newFeatures << i18n("New option to show file format over icon-view items;");

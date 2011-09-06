@@ -147,6 +147,7 @@ public:
     static const QString                configIconShowSizeEntry;
     static const QString                configIconShowDateEntry;
     static const QString                configIconShowModificationDateEntry;
+    static const QString                configIconShowTitleEntry;
     static const QString                configIconShowCommentsEntry;
     static const QString                configIconShowTagsEntry;
     static const QString                configIconShowOverlaysEntry;
@@ -218,6 +219,7 @@ public:
     bool                                iconShowSize;
     bool                                iconShowDate;
     bool                                iconShowModDate;
+    bool                                iconShowTitle;
     bool                                iconShowComments;
     bool                                iconShowResolution;
     bool                                iconShowTags;
@@ -337,6 +339,7 @@ const QString AlbumSettings::AlbumSettingsPrivate::configIconShowResolutionEntry
 const QString AlbumSettings::AlbumSettingsPrivate::configIconShowSizeEntry("Icon Show Size");
 const QString AlbumSettings::AlbumSettingsPrivate::configIconShowDateEntry("Icon Show Date");
 const QString AlbumSettings::AlbumSettingsPrivate::configIconShowModificationDateEntry("Icon Show Modification Date");
+const QString AlbumSettings::AlbumSettingsPrivate::configIconShowTitleEntry("Icon Show Title");
 const QString AlbumSettings::AlbumSettingsPrivate::configIconShowCommentsEntry("Icon Show Comments");
 const QString AlbumSettings::AlbumSettingsPrivate::configIconShowTagsEntry("Icon Show Tags");
 const QString AlbumSettings::AlbumSettingsPrivate::configIconShowRatingEntry("Icon Show Rating");
@@ -459,6 +462,7 @@ void AlbumSettings::init()
     d->iconShowSize                 = false;
     d->iconShowDate                 = true;
     d->iconShowModDate              = true;
+    d->iconShowTitle                = true;
     d->iconShowComments             = true;
     d->iconShowResolution           = false;
     d->iconShowTags                 = true;
@@ -560,6 +564,7 @@ void AlbumSettings::readSettings()
     d->iconShowSize                 = group.readEntry(d->configIconShowSizeEntry,                 false);
     d->iconShowDate                 = group.readEntry(d->configIconShowDateEntry,                 true);
     d->iconShowModDate              = group.readEntry(d->configIconShowModificationDateEntry,     true);
+    d->iconShowTitle                = group.readEntry(d->configIconShowTitleEntry,                true);
     d->iconShowComments             = group.readEntry(d->configIconShowCommentsEntry,             true);
     d->iconShowTags                 = group.readEntry(d->configIconShowTagsEntry,                 true);
     d->iconShowOverlays             = group.readEntry(d->configIconShowOverlaysEntry,             true);
@@ -670,6 +675,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configIconShowSizeEntry,                 d->iconShowSize);
     group.writeEntry(d->configIconShowDateEntry,                 d->iconShowDate);
     group.writeEntry(d->configIconShowModificationDateEntry,     d->iconShowModDate);
+    group.writeEntry(d->configIconShowTitleEntry,                d->iconShowTitle);
     group.writeEntry(d->configIconShowCommentsEntry,             d->iconShowComments);
     group.writeEntry(d->configIconShowTagsEntry,                 d->iconShowTags);
     group.writeEntry(d->configIconShowOverlaysEntry,             d->iconShowOverlays);
@@ -1029,6 +1035,16 @@ void AlbumSettings::setIconShowSize(bool val)
 bool AlbumSettings::getIconShowSize() const
 {
     return d->iconShowSize;
+}
+
+void AlbumSettings::setIconShowTitle(bool val)
+{
+    d->iconShowTitle = val;
+}
+
+bool AlbumSettings::getIconShowTitle() const
+{
+    return d->iconShowTitle;
 }
 
 void AlbumSettings::setIconShowComments(bool val)

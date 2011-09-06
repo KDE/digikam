@@ -177,7 +177,12 @@ public:
     int albumRootId() const;
 
     /**
-     * @return the caption for this item
+     * @return the default title for this item
+     */
+    QString   title() const;
+
+    /**
+     * @return the default comment for this item
      */
     QString   comment() const;
 
@@ -258,10 +263,10 @@ public:
      * Returns 0 if hasCoordinates(), or hasAltitude resp, is false.
      */
     double longitudeNumber() const;
-    double latitudeNumber() const;
-    double altitudeNumber() const;
-    bool hasCoordinates() const;
-    bool hasAltitude() const;
+    double latitudeNumber()  const;
+    double altitudeNumber()  const;
+    bool   hasCoordinates()  const;
+    bool   hasAltitude()     const;
 
     /**
      * Retrieve an ImageTagPair object for a single tag, or for all
@@ -428,7 +433,6 @@ public:
      * Set the visibility flag - triggers between Visible and Hidden
      */
     void        setVisible(bool isVisible);
-
 
     /**
      * Copy database information of this item to a newly created item

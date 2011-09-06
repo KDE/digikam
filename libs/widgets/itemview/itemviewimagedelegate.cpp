@@ -320,6 +320,13 @@ void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QS
     p->drawText(nameRect, Qt::AlignCenter, name);//squeezedTextCached(p, nameRect.width(), name));
 }
 
+void ItemViewImageDelegate::drawTitle(QPainter *p, const QRect& titleRect, const QString& title) const
+{
+    Q_D(const ItemViewImageDelegate);
+    p->setFont(d->fontReg);
+    p->drawText(titleRect, Qt::AlignCenter, squeezedTextCached(p, titleRect.width(), title));
+}
+
 void ItemViewImageDelegate::drawComments(QPainter* p, const QRect& commentsRect, const QString& comments) const
 {
     Q_D(const ItemViewImageDelegate);

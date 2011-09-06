@@ -6,8 +6,8 @@
  * Date        : 2007-09-19
  * Description : Access to comments of an image in the database
  *
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,7 +25,6 @@
 #include "imagecomments.h"
 
 // KDE includes
-
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -71,7 +70,8 @@ public:
     }
 
     void languageMatch(const QString& fullCode, const QString& langCode,
-                       int& fullCodeMatch, int& langCodeMatch, int& defaultCodeMatch, int& firstMatch) const
+                       int& fullCodeMatch, int& langCodeMatch, int& defaultCodeMatch, int& firstMatch,
+                       DatabaseComment::Type type = DatabaseComment::Comment) const
     {
         // if you change the algorithm, please take a look at ImageCopyright as well
         fullCodeMatch    = -1;
@@ -82,10 +82,6 @@ public:
         if (infos.isEmpty())
         {
             return;
-        }
-        else
-        {
-            firstMatch = 0; // index of first entry - at least we have one
         }
 
         // First we search for a full match
@@ -99,8 +95,12 @@ public:
         {
             const CommentInfo& info = infos.at(i);
 
-            if (info.type == DatabaseComment::Comment)
+            if (info.type == type)
             {
+                if (firstMatch == -1)
+                {
+                    firstMatch = i;
+                }
                 if (info.language == fullCode)
                 {
                     fullCodeMatch = i;
@@ -183,7 +183,7 @@ bool ImageComments::isNull() const
     return !d;
 }
 
-QString ImageComments::defaultComment(int* index) const
+QString ImageComments::defaultComment(int *index, DatabaseComment::Type type) const
 {
     if (!d)
     {
@@ -196,7 +196,7 @@ QString ImageComments::defaultComment(int* index) const
 
     int fullCodeMatch, langCodeMatch, defaultCodeMatch, firstMatch;
 
-    d->languageMatch(fullCode, langCode, fullCodeMatch, langCodeMatch, defaultCodeMatch, firstMatch);
+    d->languageMatch(fullCode, langCode, fullCodeMatch, langCodeMatch, defaultCodeMatch, firstMatch, type);
 
     int chosen = fullCodeMatch;
 
@@ -379,15 +379,14 @@ void ImageComments::addComment(const QString& comment, const QString& lang, cons
         author = QString();
     }
 
-    for (int i=0; i<d->infos.size(); ++i)
+    for (int i=0; i < d->infos.size(); ++i)
     {
         CommentInfo& info = d->infos[i];
 
         // some extra considerations on replacing
         if (info.type == type && info.type == DatabaseComment::Comment && info.language == language)
         {
-            if ( !multipleCommentsPerLanguage
-                 || (multipleCommentsPerLanguage && info.author == author) )
+            if ( !multipleCommentsPerLanguage || (multipleCommentsPerLanguage && info.author == author) )
             {
                 info.comment = comment;
                 info.date    = date;
@@ -412,16 +411,16 @@ void ImageComments::addComment(const QString& comment, const QString& lang, cons
     return addCommentDirectly(comment, language, author, type, date);
 }
 
-void ImageComments::addHeadline(const QString& comment, const QString& lang,
+void ImageComments::addHeadline(const QString& headline, const QString& lang,
                                 const QString& author, const QDateTime& date)
 {
-    return addComment(comment, lang, author, date, DatabaseComment::Headline);
+    return addComment(headline, lang, author, date, DatabaseComment::Headline);
 }
 
-void ImageComments::addTitle(const QString& comment, const QString& lang,
+void ImageComments::addTitle(const QString& title, const QString& lang,
                              const QString& author, const QDateTime& date)
 {
-    return addComment(comment, lang, author, date, DatabaseComment::Title);
+    return addComment(title, lang, author, date, DatabaseComment::Title);
 }
 
 void ImageComments::replaceComments(const CaptionsMap& map, DatabaseComment::Type type)
@@ -439,10 +438,10 @@ void ImageComments::replaceComments(const CaptionsMap& map, DatabaseComment::Typ
         addComment(val.caption, it.key(), val.author, val.date, type);
     }
 
-    // remove all that have not been touched above
+    // remove all comments of this type that have not been touched above
     for (int i=0; i<d->infos.size() /* changing! */; )
     {
-        if (!d->dirtyIndices.contains(i) && !d->newIndices.contains(i))
+        if (!d->dirtyIndices.contains(i) && !d->newIndices.contains(i) && d->infos[i].type == type)
         {
             remove(i);
         }

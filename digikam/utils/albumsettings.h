@@ -170,6 +170,9 @@ public:
     void setIconShowSize(bool val);
     bool getIconShowSize() const;
 
+    void setIconShowTitle(bool val);
+    bool getIconShowTitle() const;
+
     void setIconShowComments(bool val);
     bool getIconShowComments() const;
 

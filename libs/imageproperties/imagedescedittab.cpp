@@ -45,6 +45,7 @@
 #include <kdialog.h>
 #include <ktabwidget.h>
 #include <kdebug.h>
+#include <libkexiv2/altlangstredit.h>
 
 // Libkdcraw includes
 
@@ -95,6 +96,7 @@ public:
         ignoreTagChanges           = false;
         togglingSearchSettings     = false;
         recentTagsBtn              = 0;
+        titleEdit                  = 0;
         captionsEdit               = 0;
         tagsSearchBar              = 0;
         dateTimeEdit               = 0;
@@ -135,6 +137,8 @@ public:
 
     QWidget*             lastSelectedWidget;
 
+    AltLangStrEdit*      titleEdit;
+
     CaptionEdit*         captionsEdit;
 
     DDateTimeEdit*       dateTimeEdit;
@@ -168,7 +172,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 {
     setMargin(0);
     setSpacing(KDialog::spacingHint());
-    d->tabWidget = new KTabWidget(this);
+    d->tabWidget           = new KTabWidget(this);
 
     d->metadataChangeTimer = new QTimer(this);
     d->metadataChangeTimer->setSingleShot(true);
@@ -176,7 +180,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     // Captions/Date/Rating view -----------------------------------
 
-    QScrollArea* sv = new QScrollArea(d->tabWidget);
+    QScrollArea* sv        = new QScrollArea(d->tabWidget);
     sv->setFrameStyle(QFrame::NoFrame);
     sv->setWidgetResizable(true);
 
@@ -185,6 +189,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     sv->setWidget(captionTagsArea);
     sv->viewport()->setAutoFillBackground(false);
     captionTagsArea->setAutoFillBackground(false);
+
+    d->titleEdit = new AltLangStrEdit(captionTagsArea);
+    d->titleEdit->setTitle(i18n("Title:"));
+    d->titleEdit->setClickMessage(i18n("Enter title here."));
+#if KEXIV2_VERSION >= 0x020100
+    d->titleEdit->setLinesVisible(2);
+#endif
 
     d->captionsEdit = new CaptionEdit(captionTagsArea);
 
@@ -201,13 +212,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     // Tags view ---------------------------------------------------
 
-    d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
+    d->tagModel     = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
     d->tagModel->setCheckable(true);
     d->tagModel->setRootCheckable(false);
     d->tagCheckView = new TagCheckView(captionTagsArea, d->tagModel);
     d->tagCheckView->setCheckNewTags(true);
 
-    d->newTagEdit = new AddTagsLineEdit(captionTagsArea);
+    d->newTagEdit   = new AddTagsLineEdit(captionTagsArea);
     d->newTagEdit->setModel(d->tagModel);
     d->newTagEdit->setTagTreeView(d->tagCheckView);
     //, "ImageDescEditTabNewTagEdit",
@@ -239,23 +250,23 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->recentTagsBtn->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
     d->recentTagsBtn->setMenu(recentTagsMenu);
     d->recentTagsBtn->setPopupMode(QToolButton::InstantPopup);
-    d->recentTagsMapper = new QSignalMapper(this);
+    d->recentTagsMapper   = new QSignalMapper(this);
 
     // Buttons -----------------------------------------
 
     KHBox* applyButtonBox = new KHBox(this);
     applyButtonBox->setSpacing(KDialog::spacingHint());
 
-    d->applyBtn = new QPushButton(i18n("Apply"), applyButtonBox);
+    d->applyBtn           = new QPushButton(i18n("Apply"), applyButtonBox);
     d->applyBtn->setIcon(SmallIcon("dialog-ok-apply"));
     d->applyBtn->setEnabled(false);
     d->applyBtn->setToolTip( i18n("Apply all changes to images"));
     //buttonsBox->setStretchFactor(d->applyBtn, 10);
 
-    KHBox* buttonsBox = new KHBox(this);
+    KHBox* buttonsBox     = new KHBox(this);
     buttonsBox->setSpacing(KDialog::spacingHint());
 
-    d->revertBtn = new QToolButton(buttonsBox);
+    d->revertBtn          = new QToolButton(buttonsBox);
     d->revertBtn->setIcon(SmallIcon("document-revert"));
     d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
@@ -271,13 +282,14 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    grid1->addWidget(d->captionsEdit, 0, 0, 1, 2);
-    grid1->addWidget(dateBox,         1, 0, 1, 2);
-    grid1->addWidget(labelsBox,       2, 0, 1, 2);
-    grid1->addWidget(d->newTagEdit,   3, 0, 1, 2);
-    grid1->addWidget(d->tagCheckView, 4, 0, 1, 2);
-    grid1->addWidget(tagsSearch,      5, 0, 1, 2);
-    grid1->setRowStretch(4, 10);
+    grid1->addWidget(d->titleEdit,    0, 0, 1, 2);
+    grid1->addWidget(d->captionsEdit, 1, 0, 1, 2);
+    grid1->addWidget(dateBox,         2, 0, 1, 2);
+    grid1->addWidget(labelsBox,       3, 0, 1, 2);
+    grid1->addWidget(d->newTagEdit,   4, 0, 1, 2);
+    grid1->addWidget(d->tagCheckView, 5, 0, 1, 2);
+    grid1->addWidget(tagsSearch,      6, 0, 1, 2);
+    grid1->setRowStretch(5, 10);
     grid1->setMargin(KDialog::spacingHint());
     grid1->setSpacing(KDialog::spacingHint());
 
@@ -285,12 +297,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     // Information Managament View --------------------------------------
 
-    QScrollArea* sv2 = new QScrollArea(d->tabWidget);
+    QScrollArea* sv2    = new QScrollArea(d->tabWidget);
     sv2->setFrameStyle(QFrame::NoFrame);
     sv2->setWidgetResizable(true);
 
-    QWidget* infoArea = new QWidget(sv->viewport());
-    QGridLayout* grid2 = new QGridLayout(infoArea);
+    QWidget* infoArea   = new QWidget(sv->viewport());
+    QGridLayout* grid2  = new QGridLayout(infoArea);
     sv2->setWidget(infoArea);
     sv2->viewport()->setAutoFillBackground(false);
     infoArea->setAutoFillBackground(false);
@@ -310,6 +322,15 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     connect(d->tagCheckView->checkableModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SLOT(slotTagStateChanged(Album*,Qt::CheckState)));
+
+    connect(d->titleEdit, SIGNAL(signalModified(const QString&, const QString&)),
+            this, SLOT(slotTitleChanged()));
+
+    connect(d->titleEdit, SIGNAL(signalValueAdded(const QString&, const QString&)),
+            this, SLOT(slotTitleChanged()));
+
+    connect(d->titleEdit, SIGNAL(signalValueDeleted(const QString&)),
+            this, SLOT(slotTitleChanged()));
 
     connect(d->captionsEdit, SIGNAL(signalModified()),
             this, SLOT(slotCommentChanged()));
@@ -358,6 +379,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     // Initialize ---------------------------------------------
 
+    d->titleEdit->installEventFilter(this);
     d->captionsEdit->installEventFilter(this);
     d->dateTimeEdit->installEventFilter(this);
     d->pickLabelSelector->installEventFilter(this);
@@ -467,6 +489,11 @@ void ImageDescEditTab::slotChangingItems()
 
         int changedFields = 0;
 
+        if (d->hub.titlesChanged())
+        {
+            ++changedFields;
+        }
+
         if (d->hub.commentsChanged())
         {
             ++changedFields;
@@ -505,6 +532,10 @@ void ImageDescEditTab::slotChangingItems()
                 text = i18np("You have edited the image caption. ",
                              "You have edited the captions of %1 images. ",
                              d->currInfos.count());
+            else if (d->hub.titlesChanged())
+                text = i18np("You have edited the image title. ",
+                             "You have edited the titles of %1 images. ",
+                             d->currInfos.count());
             else if (d->hub.dateTimeChanged())
                 text = i18np("You have edited the date of the image. ",
                              "You have edited the date of %1 images. ",
@@ -534,6 +565,8 @@ void ImageDescEditTab::slotChangingItems()
                          "<p>You have edited the metadata of %1 images: </p><p><ul>",
                          d->currInfos.count());
 
+            if (d->hub.titlesChanged())
+                text += i18n("<li>title</li>");
             if (d->hub.commentsChanged())
             {
                 text += i18n("<li>caption</li>");
@@ -655,6 +688,9 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
         d->captionsEdit->blockSignals(true);
         d->captionsEdit->reset();
         d->captionsEdit->blockSignals(false);
+        d->titleEdit->blockSignals(true);
+        d->titleEdit->reset();
+        d->titleEdit->blockSignals(false);
         d->currInfos.clear();
         resetMetadataChangeInfo();
         setEnabled(false);
@@ -804,6 +840,16 @@ void ImageDescEditTab::slotCommentChanged()
 {
     d->hub.setComments(d->captionsEdit->values());
     setMetadataWidgetStatus(d->hub.commentsStatus(), d->captionsEdit);
+    slotModified();
+}
+
+void ImageDescEditTab::slotTitleChanged()
+{
+    CaptionsMap titles;
+    
+    titles.fromAltLangMap(d->titleEdit->values());
+    d->hub.setTitles(titles);
+    setMetadataWidgetStatus(d->hub.titlesStatus(), d->titleEdit);
     slotModified();
 }
 
@@ -992,6 +1038,11 @@ void ImageDescEditTab::updateComments()
     d->captionsEdit->setValues(d->hub.comments());
     setMetadataWidgetStatus(d->hub.commentsStatus(), d->captionsEdit);
     d->captionsEdit->blockSignals(false);
+
+    d->titleEdit->blockSignals(true);
+    d->titleEdit->setValues(d->hub.titles().toAltLangMap());
+    setMetadataWidgetStatus(d->hub.titlesStatus(), d->titleEdit);
+    d->titleEdit->blockSignals(false);
 }
 
 void ImageDescEditTab::updatePickLabel()

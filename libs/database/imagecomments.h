@@ -6,8 +6,8 @@
  * Date        : 2007-09-19
  * Description : Access to comments of an image in the database
  *
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Patrick Spendrin <ps_ml at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -93,6 +93,7 @@ public:
      * Create a ImageComments object for the image with the specified id.
      */
     ImageComments(qlonglong imageid);
+
     /**
      * Create a ImageComments object for the image with the specified id.
      * The existing DatabaseAccess object will be used to access the database.
@@ -119,7 +120,7 @@ public:
      * as the default value, when you just want to have one string.
      * Optionally also returns the index with which you can access further information about the comment.
      */
-    QString defaultComment(int* index = 0) const;
+    QString defaultComment(int* index = 0, Digikam::DatabaseComment::Type type = DatabaseComment::Comment) const;
 
     /**
      * Returns a comment for the specified language.
@@ -133,7 +134,6 @@ public:
     int numberOfComments() const;
 
     /// Access individual properties. Please ensure that the specified index is a valid index
-
     DatabaseComment::Type type(int index) const;
     QString language(int index) const; /// RFC 3066 notation, or "x-default"
     QString author(int index) const;
@@ -154,12 +154,13 @@ public:
                     DatabaseComment::Type type = DatabaseComment::Comment);
 
     /** Convenience method to add a comment of type Headline. Calls addComment, see above for more info. */
-    void addHeadline(const QString& comment,
+    void addHeadline(const QString& headline,
                      const QString& language = QString(),
                      const QString& author = QString(),
                      const QDateTime& date = QDateTime());
+
     /** Convenience method to add a comment of type Headline. Calls addComment, see above for more info. */
-    void addTitle(const QString& comment,
+    void addTitle(const QString& title,
                   const QString& language = QString(),
                   const QString& author = QString(),
                   const QDateTime& date = QDateTime());
@@ -195,7 +196,6 @@ public:
      * Access individual properties.
      * Please ensure that the specified index is a valid index
      */
-
     void changeComment(int index, const QString& comment);
     void changeLanguage(int index, const QString& language);
     void changeAuthor(int index, const QString& author);

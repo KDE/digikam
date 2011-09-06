@@ -60,6 +60,7 @@ public:
         iconShowDateBox(0),
         iconShowModDateBox(0),
         iconShowResolutionBox(0),
+        iconShowTitleBox(0),
         iconShowCommentsBox(0),
         iconShowTagsBox(0),
         iconShowOverlaysBox(0),
@@ -82,6 +83,7 @@ public:
     QCheckBox*   iconShowDateBox;
     QCheckBox*   iconShowModDateBox;
     QCheckBox*   iconShowResolutionBox;
+    QCheckBox*   iconShowTitleBox;
     QCheckBox*   iconShowCommentsBox;
     QCheckBox*   iconShowTagsBox;
     QCheckBox*   iconShowOverlaysBox;
@@ -130,6 +132,13 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
                                                 "below the image thumbnail."));
 
+    d->iconShowFormatBox     = new QCheckBox(i18n("Show image Format"), iconViewGroup);
+    d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
+
+    d->iconShowTitleBox      = new QCheckBox(i18n("Show digiKam tit&le"), iconViewGroup);
+    d->iconShowTitleBox->setWhatsThis(i18n("Set this option to show the digiKam title "
+                                              "below the image thumbnail."));
+
     d->iconShowCommentsBox   = new QCheckBox(i18n("Show digiKam &captions"), iconViewGroup);
     d->iconShowCommentsBox->setWhatsThis(i18n("Set this option to show the digiKam captions "
                                               "below the image thumbnail."));
@@ -138,16 +147,13 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->iconShowTagsBox->setWhatsThis(i18n("Set this option to show the digiKam tags "
                                           "below the image thumbnail."));
 
-    d->iconShowOverlaysBox   = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
-    d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
-                                              "the image thumbnail for image rotation."));
-
     d->iconShowRatingBox     = new QCheckBox(i18n("Show digiKam &rating"), iconViewGroup);
     d->iconShowRatingBox->setWhatsThis(i18n("Set this option to show the digiKam rating "
                                             "below the image thumbnail."));
 
-    d->iconShowFormatBox     = new QCheckBox(i18n("Show image Format"), iconViewGroup);
-    d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
+    d->iconShowOverlaysBox   = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
+    d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
+                                              "the image thumbnail for image rotation."));
 
     QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
     d->leftClickActionComboBox = new KComboBox(iconViewGroup);
@@ -163,14 +169,17 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     grid->addWidget(d->iconShowDateBox,          2, 0, 1, 1);
     grid->addWidget(d->iconShowModDateBox,       3, 0, 1, 1);
     grid->addWidget(d->iconShowResolutionBox,    4, 0, 1, 1);
-    grid->addWidget(d->iconShowCommentsBox,      0, 1, 1, 1);
-    grid->addWidget(d->iconShowTagsBox,          1, 1, 1, 1);
-    grid->addWidget(d->iconShowOverlaysBox,      2, 1, 1, 1);
+    grid->addWidget(d->iconShowFormatBox,        5, 0, 1, 1);
+
+    grid->addWidget(d->iconShowTitleBox,         0, 1, 1, 1);
+    grid->addWidget(d->iconShowCommentsBox,      1, 1, 1, 1);
+    grid->addWidget(d->iconShowTagsBox,          2, 1, 1, 1);
     grid->addWidget(d->iconShowRatingBox,        3, 1, 1, 1);
-    grid->addWidget(d->iconShowFormatBox,        4, 1, 1, 1);
-    grid->addWidget(leftClickLabel,              5, 0, 1, 1);
-    grid->addWidget(d->leftClickActionComboBox,  5, 1, 1, 1);
-    grid->addWidget(d->iconViewFontSelect,       6, 0, 1, 2);
+    grid->addWidget(d->iconShowOverlaysBox,      4, 1, 1, 1);
+
+    grid->addWidget(leftClickLabel,              6, 0, 1, 1);
+    grid->addWidget(d->leftClickActionComboBox,  6, 1, 1, 1);
+    grid->addWidget(d->iconViewFontSelect,       7, 0, 1, 2);
     grid->setSpacing(KDialog::spacingHint());
     grid->setMargin(KDialog::spacingHint());
 
@@ -264,6 +273,7 @@ void SetupAlbumView::applySettings()
     settings->setIconShowDate(d->iconShowDateBox->isChecked());
     settings->setIconShowModDate(d->iconShowModDateBox->isChecked());
     settings->setIconShowResolution(d->iconShowResolutionBox->isChecked());
+    settings->setIconShowTitle(d->iconShowTitleBox->isChecked());
     settings->setIconShowComments(d->iconShowCommentsBox->isChecked());
     settings->setIconShowOverlays(d->iconShowOverlaysBox->isChecked());
     settings->setIconShowRating(d->iconShowRatingBox->isChecked());
@@ -312,6 +322,7 @@ void SetupAlbumView::readSettings()
     d->iconShowDateBox->setChecked(settings->getIconShowDate());
     d->iconShowModDateBox->setChecked(settings->getIconShowModDate());
     d->iconShowResolutionBox->setChecked(settings->getIconShowResolution());
+    d->iconShowTitleBox->setChecked(settings->getIconShowTitle());
     d->iconShowCommentsBox->setChecked(settings->getIconShowComments());
     d->iconShowOverlaysBox->setChecked(settings->getIconShowOverlays());
     d->iconShowRatingBox->setChecked(settings->getIconShowRating());

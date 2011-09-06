@@ -15,11 +15,11 @@ OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"
 
 # digiKam version
 SET(DIGIKAM_MAJOR_VERSION "2")
-SET(DIGIKAM_MINOR_VERSION "1")
+SET(DIGIKAM_MINOR_VERSION "2")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2011-09-04")
+SET(DIGIKAM_RELEASE_DATE "2011-10-02")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -799,6 +799,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogrambox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogramwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogrampainter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvescontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/imagecurves.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvesfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvessettings.cpp
