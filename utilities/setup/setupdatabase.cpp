@@ -246,13 +246,12 @@ void SetupDatabase::readSettings()
 
 void SetupDatabase::upgradeUniqueHashes()
 {
-    int result = KMessageBox::warningContinueCancel(this, 
-        i18nc("@info",
-              "<para>The process of updating the file hashes takes a few minutes.</para> "
-              "<para>Please ensure that any important collections on removable media are connected. "
-              "<note>After the upgrade you cannot use your database with a digiKam version "
-              "prior to 2.0.</note></para> "
-              "<para>Do you want to begin the update?</para>"));
+    int result = KMessageBox::warningContinueCancel(this, i18nc("@info",
+                                                                "<para>The process of updating the file hashes takes a few minutes.</para> "
+                                                                "<para>Please ensure that any important collections on removable media are connected. "
+                                                                "<note>After the upgrade you cannot use your database with a digiKam version "
+                                                                "prior to 2.0.</note></para> "
+                                                                "<para>Do you want to begin the update?</para>"));
 
     if (result == KMessageBox::Continue)
     {

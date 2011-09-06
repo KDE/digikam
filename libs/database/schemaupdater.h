@@ -75,6 +75,7 @@ private:
     bool copyV3toV4(const QString& digikam3DBPath, const QString& currentDBPath);
     bool updateV5toV6();
     bool updateV4toV6();
+    bool updateV2toV4(const QString& sqlite2DBPath);
     void setLegacySettingEntries();
     void readVersionSettings();
     void setVersionSettings();

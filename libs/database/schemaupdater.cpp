@@ -48,6 +48,7 @@
 #include "databasebackend.h"
 #include "databasetransaction.h"
 #include "databasechecker.h"
+#include "upgradedb_sqlite2tosqlite3.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "collectionscanner.h"
@@ -290,7 +291,6 @@ bool SchemaUpdater::startUpdates()
                 // m_currentVersion is now 4;
                 return makeUpdates();
             }
-	    /* obsoleted
             else if (digikamDB.exists())
             {
                 if (!updateV2toV4(digikamDB.path()))
@@ -301,7 +301,6 @@ bool SchemaUpdater::startUpdates()
                 // m_currentVersion is now 4;
                 return makeUpdates();
             }
-	    */
 
             // no else, fall through!
         }
@@ -673,7 +672,6 @@ bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& cur
     return true;
 }
 
-/*
 bool SchemaUpdater::updateV2toV4(const QString& sqlite2DBPath)
 {
     if (m_observer)
@@ -708,7 +706,6 @@ bool SchemaUpdater::updateV2toV4(const QString& sqlite2DBPath)
         m_observer->schemaUpdateProgress(i18n("Updated from 0.7 database"));
     }
 }
-*/
 
 static QStringList cleanUserFilterString(const QString& filterString)
 {
