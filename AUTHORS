@@ -3,23 +3,22 @@ MAIN DEVELOPERS :
 
 Gilles Caulier <caulier dot gilles at gmail dot com>                      : Coordinator, lead developer, French translations.
 Marcel Wiesweg <marcel dot wiesweg at gmx dot de>                         : Lead developer.
-Andi Clemens <andi dot clemens at gmx dot net>                            : Lead Developer.
+Andi Clemens <andi dot clemens at gmx dot net>                            : Lead developer.
+Franscesco Riosa <francesco at pnpitalia dot it>                          : Lead developer.
+Michael G. Hansen <mike at mghansen dot de>                               : Lead developer.
 
 CURRENT CONTRIBUTORS :
 --------------------
 
 Pieter Edelman <p dot edelman at gmx dot net>                             : Developer.
-Michael G. Hansen <mike at mghansen dot de>                               : Developer.
 Johannes Wienke <languitar at semipol dot de>                             : Developer.
 Holger Foerster <hamsi2k at freenet dot de>                               : Developer.
 Matthias Welwarsky <matze at welwarsky dot de>                            : Developer.
 Patrick Spendrin <patrick_spendrin at gmx dot de>                         : Developer, Windows port, Marble support.
 Angelo Naselli <anaselli at linux dot it>                                 : Developer, Mandriva packages.
-Arnd Baecker <arnd dot baecker at web dot de>                             : Developer.
 Guillaume Castagnino <casta at xwing dot info>                            : Developer.
 Achim Bohnet <ach at mpe dot mpg dot de>                                  : Bug reports, patches, Debian packages.
 Gerhard Kulzer <gerhard at kulzer dot net>                                : Bug reports, patches, and handbook writer.
-Oliver Doerr <oliver at doerr-privat dot de>                              : Beta tester, German translations.
 Risto Saukonpaa <paristo at gmail dot com>                                : Design, icons, logo, banner, mocup, beta tester.
 Luka Renko <lure at kubuntu dot org>                                      : Developer, Kubuntu packages.
 Julien Narboux <Julien at narboux dot fr>                                 : Developer.
@@ -35,6 +34,8 @@ Tom Albers <tomalbers at kde dot nl>                                      : Deve
 OLD CONTRIBUTORS :
 ----------------
 
+Oliver Doerr <oliver at doerr-privat dot de>                              : Beta tester, German translations.
+Arnd Baecker <arnd dot baecker at web dot de>                             : Developer.
 Ralf Holzer <kde at ralfhoelzer dot com>                                  : Developer (0.7.x).
 Todd Shoemaker <todd at theshoemakers dot net>                            : Developer (0.6.x).
 Unai Garro <ugarro at sourceforge dot net>                                : Developer (Hot Pixels Fixer tools - 0.9.x).
