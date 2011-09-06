@@ -529,6 +529,13 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
             textMatch = true;
         }
 
+        // Image title
+        if (m_textFilterSettings.textFields & SearchTextFilterSettings::ImageTitle &&
+            info.title().contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
+        {
+            textMatch = true;
+        }
+
         // Image comment
         if (m_textFilterSettings.textFields & SearchTextFilterSettings::ImageComment &&
             info.comment().contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))

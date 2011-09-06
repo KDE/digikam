@@ -106,6 +106,7 @@ protected:
     QRect drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
     void drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected) const;
     void drawName(QPainter* p,const QRect& nameRect, const QString& name) const;
+    void drawTitle(QPainter *p, const QRect& titleRect, const QString& title) const;
     void drawComments(QPainter* p, const QRect& commentsRect, const QString& comments) const;
     void drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
     void drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;

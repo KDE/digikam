@@ -80,6 +80,9 @@ public:
     int  getImageColorLabel() const;
     bool setImageColorLabel(int colorId) const;
 
+    CaptionsMap getImageTitles() const;
+    bool setImageTitles(const CaptionsMap& title) const;
+
     int  getImageRating() const;
     bool setImageRating(int rating) const;
 

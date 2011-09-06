@@ -467,6 +467,95 @@ int DMetadata::getImageColorLabel() const
     return -1;
 }
 
+CaptionsMap DMetadata::getImageTitles() const
+{
+    if (getFilePath().isEmpty())
+        return CaptionsMap();
+
+    CaptionsMap        captionsMap;
+    KExiv2::AltLangMap authorsMap;
+    KExiv2::AltLangMap datesMap;
+    KExiv2::AltLangMap titlesMap;
+    QString            commonAuthor;
+
+    // Get author name from IPTC DescriptionWriter. Private namespace above gets precedence.
+    QVariant descriptionWriter = getMetadataField(MetadataInfo::DescriptionWriter);
+    if (!descriptionWriter.isNull())
+        commonAuthor = descriptionWriter.toString();
+
+    // In first, we check XMP alternative language tags to create map of values.
+
+    if (hasXmp())
+    {
+        titlesMap = getXmpTagStringListLangAlt("Xmp.dc.title", false);
+        if (!titlesMap.isEmpty())
+        {
+            captionsMap.setData(titlesMap, authorsMap, commonAuthor, datesMap);
+            return captionsMap;
+        }
+    }
+
+    // We trying to get IPTC title
+
+    if (hasIptc())
+    {
+        QString iptcTitle = getIptcTagString("Iptc.Application2.ObjectName", false);
+        if (!iptcTitle.isEmpty() && !iptcTitle.trimmed().isEmpty())
+        {
+            titlesMap.insert(QString("x-default"), iptcTitle);
+            captionsMap.setData(titlesMap, authorsMap, commonAuthor, datesMap);
+            return captionsMap;
+        }
+    }
+
+    return captionsMap;
+}
+
+bool DMetadata::setImageTitles(const CaptionsMap& titles) const
+{
+    kDebug() << getFilePath() << " ==> Title: " << titles;
+
+    QString defaultTitle = titles[QString("x-default")].caption;
+
+
+    // In First we write comments into XMP. Language Alternative rule is not yet used.
+
+    if (supportXmp())
+    {
+        // NOTE : setXmpTagStringListLangAlt remove xmp tag before to add new values
+        if (!setXmpTagStringListLangAlt("Xmp.dc.title", titles.toAltLangMap(), false))
+            return false;
+    }
+    // In Second we write comments into IPTC.
+    // Note that Caption IPTC tag is limited to 64 char and ASCII charset.
+
+    removeIptcTag("Iptc.Application2.ObjectName");
+
+    if (!defaultTitle.isNull())
+    {
+        defaultTitle.truncate(64);
+
+        // See if we have any non printable chars in there. If so, skip IPTC
+        // to avoid confusing other apps and web services with invalid tags.
+        bool hasInvalidChar = false;
+        for (QString::const_iterator c = defaultTitle.constBegin(); c != defaultTitle.constEnd(); ++c)
+        {
+            if (!(*c).isPrint())
+            {
+                hasInvalidChar = true;
+                break;
+            }
+        }
+        if (!hasInvalidChar)
+        {
+            if (!setIptcTagString("Iptc.Application2.ObjectName", defaultTitle))
+                return false;
+        }
+    }
+
+    return true;
+}
+
 int DMetadata::getImageRating() const
 {
     if (getFilePath().isEmpty())

@@ -63,6 +63,7 @@ void ImageDelegate::ImageDelegatePrivate::clearRects()
     modDateRect          = QRect(0, 0, 0, 0);
     pixmapRect           = QRect(0, 0, 0, 0);
     nameRect             = QRect(0, 0, 0, 0);
+    titleRect            = QRect(0, 0, 0, 0);
     commentsRect         = QRect(0, 0, 0, 0);
     resolutionRect       = QRect(0, 0, 0, 0);
     sizeRect             = QRect(0, 0, 0, 0);
@@ -281,6 +282,11 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     if (!d->nameRect.isNull())
     {
         drawName(p, d->nameRect, info.name());
+    }
+
+    if (!d->titleRect.isNull())
+    {
+        drawTitle(p, d->titleRect, info.title());
     }
 
     if (!d->commentsRect.isNull())

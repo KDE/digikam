@@ -459,7 +459,7 @@ void ImageScanner::scanImageComments()
     // Title
     if (!metadataInfos.at(1).isNull())
     {
-        comments.addTitle(metadataInfos.at(1).toString());
+        comments.addTitle(metadataInfos.at(1).toMap()["x-default"].toString());
     }
 }
 

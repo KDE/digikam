@@ -84,6 +84,7 @@ ImageInfoData::ImageInfoData()
     groupedImages          = 0;
     groupImage             = -1;
 
+    defaultTitleCached     = false;
     defaultCommentCached   = false;
     pickLabelCached        = false;
     colorLabelCached       = false;
@@ -353,6 +354,21 @@ qlonglong ImageInfo::fileSize() const
     }
 
     return m_data->fileSize;
+}
+
+QString ImageInfo::title() const
+{
+    if (!m_data)
+        return QString();
+
+    DatabaseAccess access;
+    if (!m_data->defaultTitleCached)
+    {
+        ImageComments comments(access, m_data->id);
+        m_data.constCastData()->defaultTitle       = comments.defaultComment(NULL, DatabaseComment::Title);
+        m_data.constCastData()->defaultTitleCached = true;
+    }
+    return m_data->defaultTitle;
 }
 
 QString ImageInfo::comment() const

@@ -63,6 +63,7 @@ public:
         pickLabelStatus   = MetadataHub::MetadataInvalid;
         colorLabelStatus  = MetadataHub::MetadataInvalid;
         ratingStatus      = MetadataHub::MetadataInvalid;
+        titlesStatus      = MetadataHub::MetadataInvalid;
         commentsStatus    = MetadataHub::MetadataInvalid;
         templateStatus    = MetadataHub::MetadataInvalid;
 
@@ -77,6 +78,7 @@ public:
         count             = 0;
 
         dateTimeChanged   = false;
+        titlesChanged     = false;
         commentsChanged   = false;
         pickLabelChanged  = false;
         colorLabelChanged = false;
@@ -86,6 +88,7 @@ public:
     }
 
     bool                              dateTimeChanged;
+    bool                              titlesChanged;
     bool                              commentsChanged;
     bool                              pickLabelChanged;
     bool                              colorLabelChanged;
@@ -104,6 +107,7 @@ public:
     QDateTime                         dateTime;
     QDateTime                         lastDateTime;
 
+    CaptionsMap                       titles;
     CaptionsMap                       comments;
 
     Template                          metadataTemplate;
@@ -113,6 +117,7 @@ public:
     QStringList                       tagList;
 
     MetadataHub::Status               dateTimeStatus;
+    MetadataHub::Status               titlesStatus;
     MetadataHub::Status               commentsStatus;
     MetadataHub::Status               pickLabelStatus;
     MetadataHub::Status               colorLabelStatus;
@@ -158,10 +163,12 @@ void MetadataHub::load(const ImageInfo& info)
     d->count++;
 
     CaptionsMap commentMap;
+    CaptionsMap titleMap;
     {
         DatabaseAccess access;
         ImageComments comments = info.imageComments(access);
         commentMap             = comments.toCaptionsMap();
+        titleMap               = comments.toCaptionsMap(DatabaseComment::Title);
     }
 
     Template tref = info.metadataTemplate();
@@ -169,6 +176,7 @@ void MetadataHub::load(const ImageInfo& info)
     //kDebug() << "Found Metadata Template: " << t.templateTitle();
 
     load(info.dateTime(),
+         titleMap,
          commentMap,
          info.colorLabel(),
          info.pickLabel(),
@@ -184,11 +192,14 @@ void MetadataHub::load(const DMetadata& metadata)
     d->count++;
 
     CaptionsMap comments;
+    CaptionsMap titles;
     QStringList keywords;
     QDateTime   datetime;
     int         pickLabel;
     int         colorLabel;
     int         rating;
+
+    titles = metadata.getImageTitles();
 
     // Try to get comments from image :
     // In first, from Xmp comments tag,
@@ -224,7 +235,7 @@ void MetadataHub::load(const DMetadata& metadata)
 
     kDebug() << "Found Metadata Template: " << t.templateTitle();
 
-    load(datetime, comments, colorLabel, pickLabel, rating, t.isNull() ? tref : t);
+    load(datetime, titles, comments, colorLabel, pickLabel, rating, t.isNull() ? tref : t);
 
     // Try to get image tags from Xmp using digiKam namespace tags.
 
@@ -329,7 +340,8 @@ void MetadataHub::loadTags(const QStringList& loadedTagPaths)
 */
 
 // private common code to load dateTime, comment, color label, pick label, rating
-void MetadataHub::load(const QDateTime& dateTime, const CaptionsMap& comments,
+void MetadataHub::load(const QDateTime& dateTime, 
+                       const CaptionsMap& titles, const CaptionsMap& comments,
                        int colorLabel, int pickLabel,
                        int rating, const Template& t)
 {
@@ -343,6 +355,8 @@ void MetadataHub::load(const QDateTime& dateTime, const CaptionsMap& comments,
     d->loadWithInterval<int>(colorLabel, d->colorLabel, d->highestColorLabel, d->colorLabelStatus);
 
     d->loadWithInterval<int>(rating, d->rating, d->highestRating, d->ratingStatus);
+
+    d->loadSingleValue<CaptionsMap>(titles, d->titles, d->titlesStatus);
 
     d->loadSingleValue<CaptionsMap>(comments, d->comments, d->commentsStatus);
 
@@ -435,6 +449,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     bool changed = false;
 
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
+    bool saveTitle      = (d->titlesStatus     == MetadataAvailable);
     bool saveComment    = (d->commentsStatus   == MetadataAvailable);
     bool saveDateTime   = (d->dateTimeStatus   == MetadataAvailable);
     bool savePickLabel  = (d->pickLabelStatus  == MetadataAvailable);
@@ -460,6 +475,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     }
     else if (writeMode == FullWriteIfChanged)
         writeAllFields = (
+                             (saveTitle      && d->titlesChanged)     ||
                              (saveComment    && d->commentsChanged)   ||
                              (saveDateTime   && d->dateTimeChanged)   ||
                              (savePickLabel  && d->pickLabelChanged)  ||
@@ -473,6 +489,13 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
         writeAllFields = false;
     }
 
+    if (saveTitle && (writeAllFields || d->titlesChanged))
+    {
+        DatabaseAccess access;
+        ImageComments comments = info.imageComments(access);
+        comments.replaceComments(d->titles, DatabaseComment::Title);
+        changed = true;
+    }
     if (saveComment && (writeAllFields || d->commentsChanged))
     {
         DatabaseAccess access;
@@ -558,6 +581,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     metadata.setSettings(settings);
 
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
+    bool saveTitle      = (settings.saveComments   && d->titlesStatus     == MetadataAvailable);
     bool saveComment    = (settings.saveComments   && d->commentsStatus   == MetadataAvailable);
     bool saveDateTime   = (settings.saveDateTime   && d->dateTimeStatus   == MetadataAvailable);
     bool savePickLabel  = (settings.savePickLabel  && d->pickLabelStatus  == MetadataAvailable);
@@ -589,6 +613,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     }
     else if (writeMode == FullWriteIfChanged)
         writeAllFields = (
+                             (saveTitle      && d->titlesChanged)     ||
                              (saveComment    && d->commentsChanged)   ||
                              (saveDateTime   && d->dateTimeChanged)   ||
                              (savePickLabel  && d->pickLabelChanged)  ||
@@ -600,6 +625,12 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     else // PartialWrite
     {
         writeAllFields = false;
+    }
+
+    if (saveTitle && (writeAllFields || d->titlesChanged))
+    {
+        // Store titles in image as Iptc Object name and Xmp.
+        dirty |= metadata.setImageTitles(d->titles);
     }
 
     if (saveComment && (writeAllFields || d->commentsChanged))
@@ -757,7 +788,7 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
 {
     // This is the same logic as in write(DMetadata) but without actually writing.
     // Adapt if the method above changes
-
+    bool saveTitle      = (settings.saveComments   && d->titlesStatus     == MetadataAvailable);
     bool saveComment    = (settings.saveComments   && d->commentsStatus   == MetadataAvailable);
     bool saveDateTime   = (settings.saveDateTime   && d->dateTimeStatus   == MetadataAvailable);
     bool savePickLabel  = (settings.savePickLabel  && d->pickLabelStatus  == MetadataAvailable);
@@ -789,6 +820,7 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
     }
     else if (writeMode == FullWriteIfChanged)
         writeAllFields = (
+                             (saveTitle      && d->titlesChanged)     ||
                              (saveComment    && d->commentsChanged)   ||
                              (saveDateTime   && d->dateTimeChanged)   ||
                              (savePickLabel  && d->pickLabelChanged)  ||
@@ -803,6 +835,7 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
     }
 
     return (
+               (saveTitle      && (writeAllFields || d->titlesChanged))     ||
                (saveComment    && (writeAllFields || d->commentsChanged))   ||
                (saveDateTime   && (writeAllFields || d->dateTimeChanged))   ||
                (savePickLabel  && (writeAllFields || d->pickLabelChanged))  ||
@@ -818,6 +851,11 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
 MetadataHub::Status MetadataHub::dateTimeStatus() const
 {
     return d->dateTimeStatus;
+}
+
+MetadataHub::Status MetadataHub::titlesStatus() const
+{
+    return d->titlesStatus;
 }
 
 MetadataHub::Status MetadataHub::commentsStatus() const
@@ -867,6 +905,11 @@ bool MetadataHub::dateTimeChanged() const
     return d->dateTimeChanged;
 }
 
+bool MetadataHub::titlesChanged() const
+{
+    return d->titlesChanged;
+}
+
 bool MetadataHub::commentsChanged() const
 {
     return d->commentsChanged;
@@ -900,6 +943,11 @@ bool MetadataHub::tagsChanged() const
 QDateTime MetadataHub::dateTime() const
 {
     return d->dateTime;
+}
+
+CaptionsMap MetadataHub::titles() const
+{
+    return d->titles;
 }
 
 CaptionsMap MetadataHub::comments() const
@@ -1043,6 +1091,13 @@ void MetadataHub::setDateTime(const QDateTime& dateTime, Status status)
     d->dateTimeChanged = true;
 }
 
+void MetadataHub::setTitles(const CaptionsMap& titles, Status status)
+{
+    d->titlesStatus  = status;
+    d->titles        = titles;
+    d->titlesChanged = true;
+}
+
 void MetadataHub::setComments(const CaptionsMap& comments, Status status)
 {
     d->commentsStatus  = status;
@@ -1088,6 +1143,7 @@ void MetadataHub::setTag(int tagId, bool hasTag, Status status)
 void MetadataHub::resetChanged()
 {
     d->dateTimeChanged   = false;
+    d->titlesChanged     = false;
     d->commentsChanged   = false;
     d->pickLabelChanged  = false;
     d->colorLabelChanged = false;

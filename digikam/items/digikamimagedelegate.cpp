@@ -102,6 +102,12 @@ void DigikamImageDelegate::updateRects()
         y           = d->nameRect.bottom();
     }
 
+    if (albumSettings->getIconShowTitle())
+    {
+        d->titleRect = QRect(d->margin, y, d->contentWidth, d->oneRowRegRect.height());
+        y = d->titleRect.bottom();
+    }
+
     if (albumSettings->getIconShowComments())
     {
         d->commentsRect = QRect(d->margin, y, d->contentWidth, d->oneRowComRect.height());

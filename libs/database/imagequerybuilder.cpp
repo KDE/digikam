@@ -1155,7 +1155,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                "  WHERE type=? AND comment ";
         ImageQueryBuilder::addSqlRelation(sql, relation);
         sql += " ?)) ";
-        *boundValues << DatabaseComment::Comment << fieldQuery.prepareForLike(reader.value());
+        *boundValues << DatabaseComment::Title << fieldQuery.prepareForLike(reader.value());
     }
     else if (name == "imagetagproperty")
     {
@@ -1248,6 +1248,9 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
         addSqlOperator(sql, SearchXml::Or, false);
         buildField(sql, reader, "comment", boundValues, hooks);
+
+        addSqlOperator(sql, SearchXml::Or, false);
+        buildField(sql, reader, "title", boundValues, hooks);
 
         sql += " ) ";
     }

@@ -9,7 +9,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,17 +65,13 @@ PAlbum* KipiImageInfo::parentAlbum() const
     return AlbumManager::instance()->findPAlbum(m_info.albumId());
 }
 
-QString KipiImageInfo::title()
+#if KIPI_VERSION >= 0x010300
+QString KipiImageInfo::name()
 {
     return m_info.name();
 }
 
-QString KipiImageInfo::description()
-{
-    return m_info.comment();
-}
-
-void KipiImageInfo::setTitle( const QString& newName )
+void KipiImageInfo::setName(const QString& newName)
 {
     // Here we get informed that a plugin has renamed the file
 
@@ -87,6 +83,31 @@ void KipiImageInfo::setTitle( const QString& newName )
         _url = _url.upUrl();
         _url.addPath(newName);
     }
+}
+#else
+QString KipiImageInfo::title()
+{
+    return m_info.name();
+}
+
+void KipiImageInfo::setTitle(const QString& newName)
+{
+    // Here we get informed that a plugin has renamed the file
+
+    PAlbum* p = parentAlbum();
+
+    if ( p && !newName.isEmpty() )
+    {
+        DatabaseAccess().db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
+        _url = _url.upUrl();
+        _url.addPath(newName);
+    }
+}
+#endif // KIPI_VERSION >= 0x010300
+
+QString KipiImageInfo::description()
+{
+    return m_info.comment();
 }
 
 void KipiImageInfo::setDescription( const QString& description )
@@ -114,6 +135,37 @@ void KipiImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
     //AlbumManager::instance()->refreshItemHandler( _url );
 }
 
+int KipiImageInfo::angle()
+{
+    if (MetadataSettings::instance()->settings().exifRotate)
+    {
+        //TODO: read from DB
+        DMetadata metadata(_url.toLocalFile());
+        DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
+
+        switch (orientation)
+        {
+            case DMetadata::ORIENTATION_ROT_180:
+                return 180;
+            case DMetadata::ORIENTATION_ROT_90:
+            case DMetadata::ORIENTATION_ROT_90_HFLIP:
+            case DMetadata::ORIENTATION_ROT_90_VFLIP:
+                return 90;
+            case DMetadata::ORIENTATION_ROT_270:
+                return 270;
+            default:
+                return 0;
+        }
+    }
+
+    return 0;
+}
+
+void KipiImageInfo::setAngle(int /*angle*/)
+{
+    // TODO: set digiKam database with this information.
+}
+
 #if KIPI_VERSION >= 0x010200
 void KipiImageInfo::cloneData( ImageInfoShared* const other )
 #else
@@ -133,7 +185,19 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
 
     if (p)
     {
-        QList<int> tagIds = m_info.tagIds();
+        // Get default title property from database
+        res["comment"]       = description();
+
+        // Get default title property from database
+        res["title"]         = m_info.title();
+
+        // Get date property from database
+        res["date"]          = time(KIPI::FromInfo);
+
+        // Get angle property from database
+        res["angle"]          = angle();
+
+        QList<int> tagIds    = m_info.tagIds();
         // Get digiKam Tags Path list of picture from database.
         // Ex.: "City/Paris/Monuments/Notre Dame"
 
@@ -158,19 +222,19 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
         res["picklabel"]     = pick;
 
         // Get GPS location of picture from database.
-        ImagePosition pos = m_info.imagePosition();
+        ImagePosition pos    = m_info.imagePosition();
 
         if (!pos.isEmpty())
         {
-            double lat           = pos.latitudeNumber();
-            double lng           = pos.longitudeNumber();
-            double alt           = pos.altitude();
-            res["latitude"]      = lat;
-            res["longitude"]     = lng;
-            res["altitude"]      = alt;
+            double lat       = pos.latitudeNumber();
+            double lng       = pos.longitudeNumber();
+            double alt       = pos.altitude();
+            res["latitude"]  = lat;
+            res["longitude"] = lng;
+            res["altitude"]  = alt;
         }
 
-        // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
+        // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
 
     return res;
@@ -184,13 +248,44 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
     {
         QMap<QString, QVariant> attributes = res;
 
+        // Set digiKam default Title of picture into database.
+        if (attributes.contains("comment"))
+        {
+            QString comment = attributes["comment"].toString();
+            setDescription(comment);
+        }
+
+        // Set digiKam date of picture into database.
+        if (attributes.contains("date"))
+        {
+            QDateTime date = attributes["date"].toDateTime();
+            setTime(date);
+        }
+
+        // Set digiKam angle of picture into database.
+        if (attributes.contains("angle"))
+        {
+            int angle = attributes["angle"].toInt();
+            setAngle(angle);
+        }
+
+        // Set digiKam default Title of picture into database.
+        if (attributes.contains("title"))
+        {
+            QString title          = attributes["title"].toString();
+            DatabaseAccess access;
+            ImageComments comments = m_info.imageComments(access);
+            // we set a comment with default language, author and date null
+            comments.addTitle(title);
+        }
+
         // Set digiKam Tags Path list of picture into database.
         // Ex.: "City/Paris/Monuments/Notre Dame"
         if (attributes.find("tagspath") != attributes.end())
         {
             QStringList tagspaths = attributes["tagspath"].toStringList();
 
-            QList<int> tagIds = TagsCache::instance()->getOrCreateTags(tagspaths);
+            QList<int> tagIds     = TagsCache::instance()->getOrCreateTags(tagspaths);
             DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_info.id(), tagIds);
         }
 
@@ -229,7 +324,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
         // GPS location management from plugins.
 
-        if (attributes.contains("latitude") ||
+        if (attributes.contains("latitude")  ||
             attributes.contains("longitude") ||
             attributes.contains("altitude"))
         {
@@ -267,7 +362,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             position.apply();
         }
 
-        // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
+        // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
 
     // To update sidebar content. Some kipi-plugins use this way to refresh sidebar
@@ -277,11 +372,38 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
 void KipiImageInfo::delAttributes(const QStringList& res)
 {
-
     PAlbum* p = parentAlbum();
 
     if (p)
     {
+        // Remove all Comments.
+        if (res.contains("comment"))
+        {
+            DatabaseAccess access;
+            ImageComments comments = m_info.imageComments(access);
+            comments.removeAll(DatabaseComment::Comment);
+        }
+
+        // Remove date.
+        if (res.contains("date"))
+        {
+            m_info.setDateTime(QDateTime());
+        }
+
+        // Remove angle.
+        if (res.contains("angle"))
+        {
+            setAngle(0);
+        }
+
+        // Remove all Titles.
+        if (res.contains("title"))
+        {
+            DatabaseAccess access;
+            ImageComments comments = m_info.imageComments(access);
+            comments.removeAll(DatabaseComment::Title);
+        }
+
         // Remove all tags of a picture from database.
         if (res.contains("tags"))
         {
@@ -294,6 +416,18 @@ void KipiImageInfo::delAttributes(const QStringList& res)
             m_info.setRating(RatingMin);
         }
 
+        // Remove digiKam Color Label of picture from database.
+        if (res.contains("colorlabel"))
+        {
+            m_info.setColorLabel(NoColorLabel);
+        }
+
+        // Remove digiKam Pick Label of picture from database.
+        if (res.contains("picklabel"))
+        {
+            m_info.setPickLabel(NoPickLabel);
+        }
+
         // GPS location management from plugins.
 
         if (res.contains("gpslocation"))
@@ -303,7 +437,7 @@ void KipiImageInfo::delAttributes(const QStringList& res)
             position.apply();
         }
 
-        // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
+        // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
 
     // To update sidebar content. Some kipi-plugins use this way to refresh sidebar
@@ -314,43 +448,19 @@ void KipiImageInfo::delAttributes(const QStringList& res)
 void KipiImageInfo::clearAttributes()
 {
     QStringList attr;
+    attr.append("comment");
+    attr.append("date");
+    attr.append("title");
+    attr.append("angle");
     attr.append("tags");
     attr.append("rating");
+    attr.append("colorlabel");
+    attr.append("picklabel");
     attr.append("gpslocation");
-    // TODO: add here a kipi-plugins access to future picture attributes stored by digiKam database
+
+    // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
 
     delAttributes(attr);
-}
-
-int KipiImageInfo::angle()
-{
-    if (MetadataSettings::instance()->settings().exifRotate)
-    {
-        //TODO: read from DB
-        DMetadata metadata(_url.toLocalFile());
-        DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-
-        switch (orientation)
-        {
-            case DMetadata::ORIENTATION_ROT_180:
-                return 180;
-            case DMetadata::ORIENTATION_ROT_90:
-            case DMetadata::ORIENTATION_ROT_90_HFLIP:
-            case DMetadata::ORIENTATION_ROT_90_VFLIP:
-                return 90;
-            case DMetadata::ORIENTATION_ROT_270:
-                return 270;
-            default:
-                return 0;
-        }
-    }
-
-    return 0;
-}
-
-void KipiImageInfo::setAngle(int /*angle*/)
-{
-    // TODO: set digiKam database with this information.
 }
 
 }  // namespace Digikam

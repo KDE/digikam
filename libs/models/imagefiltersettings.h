@@ -66,10 +66,11 @@ public:
     {
         None         = 0x00,
         ImageName    = 0x01,
-        ImageComment = 0x02,
-        TagName      = 0x04,
-        AlbumName    = 0x08,
-        All          = ImageName | ImageComment | TagName | AlbumName
+        ImageTitle   = 0x02,
+        ImageComment = 0x04,
+        TagName      = 0x08,
+        AlbumName    = 0x10,
+        All          = ImageName | ImageTitle | ImageComment | TagName | AlbumName
     };
 
 public:

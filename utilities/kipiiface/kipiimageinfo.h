@@ -9,7 +9,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,28 +62,35 @@ public:
     KipiImageInfo(KIPI::Interface* const interface, const KUrl& url);
     ~KipiImageInfo();
 
-    virtual QString title();
-    virtual void setTitle(const QString&);
+#if KIPI_VERSION >= 0x010300
+    QString   name();
+    void      setName(const QString&);
+#else
+    /// Deprecated methods: for KIPI title here want mean "filename", not comment Title property.
+    QString   title();
+    void      setTitle(const QString&);
+#endif // KIPI_VERSION >= 0x010300
 
-    virtual QString description();
-    virtual void setDescription(const QString&);
+    /// Manage default comment property
+    QString   description();
+    void      setDescription(const QString&);
+
+    QDateTime time(KIPI::TimeSpec);
+    void      setTime(const QDateTime& time, KIPI::TimeSpec spec = KIPI::FromInfo );
+
+    int       angle();
+    void      setAngle(int angle);
 
 #if KIPI_VERSION >= 0x010200
-    virtual void cloneData(ImageInfoShared* const other);
+    void cloneData(ImageInfoShared* const other);
 #else
-    virtual void cloneData(ImageInfoShared* other);
-#endif
+    void cloneData(ImageInfoShared* other);
+#endif // KIPI_VERSION >= 0x010200
 
-    virtual QDateTime time(KIPI::TimeSpec spec);
-    virtual void setTime(const QDateTime& time, KIPI::TimeSpec spec = KIPI::FromInfo );
-
-    virtual QMap<QString, QVariant> attributes();
-    virtual void addAttributes(const QMap<QString, QVariant>& res);
-    virtual void delAttributes(const QStringList& res);
-    virtual void clearAttributes();
-
-    virtual int  angle();
-    virtual void setAngle(int angle);
+    QMap<QString, QVariant> attributes();
+    void addAttributes(const QMap<QString, QVariant>& res);
+    void delAttributes(const QStringList& res);
+    void clearAttributes();
 
 private:
 

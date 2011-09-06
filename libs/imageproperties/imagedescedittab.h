@@ -111,6 +111,7 @@ private Q_SLOTS:
     void slotTagsSearchChanged(const SearchTextSettings& settings);
     void slotTagStateChanged(Album* album, Qt::CheckState checkState);
     void slotCommentChanged();
+    void slotTitleChanged();
     void slotDateTimeChanged(const QDateTime& dateTime);
     void slotPickLabelChanged(int pickId);
     void slotColorLabelChanged(int colorId);

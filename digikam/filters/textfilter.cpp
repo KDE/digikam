@@ -44,6 +44,7 @@ public:
     TextFilterPriv()
     {
         imageNameAction    = 0;
+        imageTitleAction   = 0;
         imageCommentAction = 0;
         tagNameAction      = 0;
         albumNameAction    = 0;
@@ -53,6 +54,7 @@ public:
     }
 
     QAction*       imageNameAction;
+    QAction*       imageTitleAction;
     QAction*       imageCommentAction;
     QAction*       tagNameAction;
     QAction*       albumNameAction;
@@ -82,6 +84,8 @@ TextFilter::TextFilter(QWidget* parent)
     d->optionsMenu        = new KMenu(d->optionsBtn);
     d->imageNameAction    = d->optionsMenu->addAction(i18n("Image Name"));
     d->imageNameAction->setCheckable(true);
+    d->imageTitleAction    = d->optionsMenu->addAction(i18n("Image Title"));
+    d->imageTitleAction->setCheckable(true);
     d->imageCommentAction = d->optionsMenu->addAction(i18n("Image Comment"));
     d->imageCommentAction->setCheckable(true);
     d->tagNameAction      = d->optionsMenu->addAction(i18n("Tag Name"));
@@ -118,6 +122,10 @@ SearchTextFilterSettings::TextFilterFields TextFilter::searchTextFields()
     {
         fields |= SearchTextFilterSettings::ImageName;
     }
+    if (d->imageTitleAction->isChecked())
+    {
+        fields |= SearchTextFilterSettings::ImageTitle;
+    }
     if (d->imageCommentAction->isChecked())
     {
         fields |= SearchTextFilterSettings::ImageComment;
@@ -137,6 +145,7 @@ SearchTextFilterSettings::TextFilterFields TextFilter::searchTextFields()
 void TextFilter::setsearchTextFields(SearchTextFilterSettings::TextFilterFields fields)
 {
     d->imageNameAction->setChecked(fields & SearchTextFilterSettings::ImageName);
+    d->imageTitleAction->setChecked(fields & SearchTextFilterSettings::ImageTitle);
     d->imageCommentAction->setChecked(fields & SearchTextFilterSettings::ImageComment);
     d->tagNameAction->setChecked(fields & SearchTextFilterSettings::TagName);
     d->albumNameAction->setChecked(fields & SearchTextFilterSettings::AlbumName);
