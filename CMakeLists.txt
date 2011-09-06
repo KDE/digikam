@@ -15,11 +15,11 @@ OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"
 
 # digiKam version
 SET(DIGIKAM_MAJOR_VERSION "2")
-SET(DIGIKAM_MINOR_VERSION "1")
+SET(DIGIKAM_MINOR_VERSION "2")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2011-09-04")
+SET(DIGIKAM_RELEASE_DATE "2011-10-02")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
