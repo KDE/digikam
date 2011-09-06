@@ -72,8 +72,7 @@ void DImageHistoryGraphTest::initTestCase()
 
     qDebug() << "Using database path for test: " << dbFile;
 
-    DatabaseParameters params("QSQLITE", dbFile,
-                              QString(), QString(), -1, false, QString(), QString());
+    DatabaseParameters params("QSQLITE", dbFile, "QSQLITE", dbFile);
     DatabaseAccess::setParameters(params, DatabaseAccess::MainApplication);
     QVERIFY(DatabaseAccess::checkReadyForUse(0));
     QVERIFY(QFile(dbFile).exists());
