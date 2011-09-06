@@ -36,7 +36,6 @@
 
 // Local includes
 
-#include "curvescontainer.h"
 #include "globals.h"
 #include "digikam_export.h"
 
@@ -119,8 +118,6 @@ public:
     int       getCurvePointY(int channel, int point) const;
     CurveType getCurveType(int channel) const;
 
-    static QPoint getDisabledValue();
-
     bool     isCurvePointEnabled(int channel, int point) const;
     QPoint   getCurvePoint(int channel, int point) const;
     QPolygon getCurvePoints(int channel) const;
@@ -164,8 +161,10 @@ public:
 
     /// Methods for to save/load the curves values to/from a Gimp curves text file.
 
-    bool   saveCurvesToGimpCurvesFile(const KUrl& fileUrl) const;
-    bool   loadCurvesFromGimpCurvesFile(const KUrl& fileUrl);
+    bool saveCurvesToGimpCurvesFile(const KUrl& fileUrl) const;
+    bool loadCurvesFromGimpCurvesFile(const KUrl& fileUrl);
+
+    static QPoint getDisabledValue();
 
 private:
 
