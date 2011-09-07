@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- *
+ * 
  * $Date: 2007-06-12 19:27:47 +0200 (Di, 12 Jun 2007) $
  * $Revision: 307 $
- *
+ * 
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- *
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -142,10 +142,10 @@
 #include <windows.h>
 #include <ole2.h>
 
-#endif // _MFC_VER
+#endif // _MFC_VER 
 //-------------------------------------------------------------------------------
 
-#define DllExport   __declspec( dllexport )
+#define DllExport   __declspec( dllexport ) 
 
 //-------------------------------------------------------------------------------
 // unsigned number type definitions
@@ -157,8 +157,8 @@ typedef unsigned short      WORD;
 typedef	unsigned int		UINT32;
 typedef unsigned long       DWORD;
 typedef unsigned long       ULONG;
-typedef unsigned __int64	UINT64;
-typedef unsigned __int64	ULONGLONG;
+typedef unsigned __int64	UINT64; 
+typedef unsigned __int64	ULONGLONG; 
 
 //-------------------------------------------------------------------------------
 // signed number type definitions
@@ -188,9 +188,9 @@ typedef bool (__cdecl *CallbackPtr)(double percent, bool escapeAllowed, void *da
 	#ifdef _DEBUG
 		#define ASSERT(x)	assert(x)
 	#else
-		#if defined(__GNUC__)
-			#define ASSERT(ignore)((void) 0)
-		#elif _MSC_VER >= 1300
+		#if defined(__GNUC__) 
+			#define ASSERT(ignore)((void) 0) 
+		#elif _MSC_VER >= 1300 
 			#define ASSERT		__noop
 		#else
 			#define ASSERT ((void)0)
@@ -235,9 +235,9 @@ typedef bool (__cdecl *CallbackPtr)(double percent, bool escapeAllowed, void *da
 #define NoError				ERROR_SUCCESS		// no error
 #define AppError			0x20000000			// all application error messages must be larger than this value
 #define InsufficientMemory	0x20000001			// memory allocation wasn't successfull
-#define EndOfMemory			0x20000002			// like end-of-file (EOF) for memory stream
+#define InvalidStreamPos	0x20000002			// invalid memory stream position
 #define EscapePressed		0x20000003			// user break by ESC
-#define WrongVersion		0x20000004			// wrong pgf version
+#define WrongVersion		0x20000004			// wrong pgf version 
 #define FormatCannotRead	0x20000005			// wrong data file format
 #define ImageTooSmall		0x20000006			// image is too small
 #define ZlibError			0x20000007			// error in zlib functions
@@ -318,7 +318,7 @@ inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 // Apple OSX
 //-------------------------------------------------------------------------------
 #ifdef __APPLE__
-#define __POSIX__
+#define __POSIX__ 
 #endif // __APPLE__
 
 
@@ -342,17 +342,17 @@ inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 // NetBSD
 //-------------------------------------------------------------------------------
 #ifdef __NetBSD__
-#ifndef __POSIX__
-#define __POSIX__
-#endif
+#ifndef __POSIX__ 
+#define __POSIX__ 
+#endif 
 
-#ifndef off64_t
-#define off64_t off_t
-#endif
+#ifndef off64_t 
+#define off64_t off_t 
+#endif 
 
-#ifndef lseek64
-#define lseek64 lseek
-#endif
+#ifndef lseek64 
+#define lseek64 lseek 
+#endif 
 
 #endif // __NetBSD__
 
@@ -397,7 +397,7 @@ typedef int64_t				LONGLONG;
 // other types
 //-------------------------------------------------------------------------------
 typedef int					OSError;
-typedef int					HANDLE;
+typedef int					HANDLE;	
 typedef unsigned long		ULONG_PTR;
 typedef void*				PVOID;
 typedef char*				LPTSTR;
@@ -444,8 +444,8 @@ typedef union _LARGE_INTEGER {
 //-------------------------------------------------------------------------------
 // methods
 //-------------------------------------------------------------------------------
-/* The MulDiv function multiplies two 32-bit values and then divides the 64-bit
- * result by a third 32-bit value. The return value is rounded up or down to
+/* The MulDiv function multiplies two 32-bit values and then divides the 64-bit 
+ * result by a third 32-bit value. The return value is rounded up or down to 
  * the nearest integer.
  * http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winprog/winprog/muldiv.asp
  * */
@@ -465,7 +465,7 @@ __inline int MulDiv(int nNumber, int nNumerator, int nDenominator) {
 	#ifdef _DEBUG
 		#define ASSERT(x)	assert(x)
 	#else
-		#define ASSERT(x)
+		#define ASSERT(x)	
 	#endif //_DEBUG
 #endif //ASSERT
 
@@ -499,9 +499,9 @@ __inline int MulDiv(int nNumber, int nNumerator, int nDenominator) {
 #define NoError					0x0000
 #define AppError				0x2000			// all application error messages must be larger than this value
 #define InsufficientMemory		0x2001			// memory allocation wasn't successfull
-#define EndOfMemory				0x2002			// like end-of-file (EOF) for memory stream
+#define InvalidStreamPos		0x2002			// invalid memory stream position
 #define EscapePressed			0x2003			// user break by ESC
-#define WrongVersion			0x2004			// wrong pgf version
+#define WrongVersion			0x2004			// wrong pgf version 
 #define FormatCannotRead		0x2005			// wrong data file format
 #define ImageTooSmall			0x2006			// image is too small
 #define ZlibError				0x2007			// error in zlib functions
@@ -573,7 +573,7 @@ __inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 //-------------------------------------------------------------------------------
 //	Big Endian
 //-------------------------------------------------------------------------------
-#ifdef PGF_USE_BIG_ENDIAN
+#ifdef PGF_USE_BIG_ENDIAN 
 
 #ifndef _lrotl
 	#define _lrotl(x,n)	(((x) << ((UINT32)(n))) | ((x) >> (32 - (UINT32)(n))))
@@ -583,19 +583,19 @@ __inline UINT16 ByteSwap(UINT16 wX) {
 	return ((wX & 0xFF00) >> 8) | ((wX & 0x00FF) << 8);
 }
 
-__inline UINT32 ByteSwap(UINT32 dwX) {
-#ifdef _X86_
-	_asm mov eax, dwX
+__inline UINT32 ByteSwap(UINT32 dwX) { 
+#ifdef _X86_     
+	_asm mov eax, dwX     
 	_asm bswap eax
-	_asm mov dwX, eax
-	return dwX;
-#else
-	return _lrotl(((dwX & 0xFF00FF00) >> 8) | ((dwX & 0x00FF00FF) << 8), 16);
-#endif
+	_asm mov dwX, eax      
+	return dwX; 
+#else     
+	return _lrotl(((dwX & 0xFF00FF00) >> 8) | ((dwX & 0x00FF00FF) << 8), 16); 
+#endif 
 }
 
 #if defined WIN32
-__inline UINT64 ByteSwap(UINT64 ui64) {
+__inline UINT64 ByteSwap(UINT64 ui64) { 
 	return _byteswap_uint64(ui64);
 }
 #endif
@@ -607,37 +607,31 @@ __inline UINT64 ByteSwap(UINT64 ui64) {
 	#define __VAL(x) (x)
 
 #endif //PGF_USE_BIG_ENDIAN
-
+ 
+// OpenMP rules (inspired from libraw project)
 // NOTE: Use LIBPGF_DISABLE_OPENMP to disable OpenMP support in whole libpgf
 #ifndef LIBPGF_DISABLE_OPENMP
-
-// OpenMP rules (inspired from libraw project)
 #if defined (_OPENMP)
-
-#if defined(WIN32)
-# if defined (_MSC_VER) && (_MSC_VER >= 1500)
-// VS2008 SP1 and VS2010+ : OpenMP works OK
+# if defined (WIN32)
+#  if defined (_MSC_VER) && (_MSC_VER >= 1500)
+//  VS2008 SP1 and VS2010+ : OpenMP works OK
 #   define LIBPGF_USE_OPENMP
-#elif defined (__INTEL_COMPILER) && (__INTEL_COMPILER >=910)
-//  Have not tested on 9.x and 10.x, but Intel documentation claims OpenMP 2.5 support in 9.1
+#  elif defined (__INTEL_COMPILER) && (__INTEL_COMPILER >=910)
+//  untested on 9.x and 10.x, Intel documentation claims OpenMP 2.5 support in 9.1
 #   define LIBPGF_USE_OPENMP
-#else
-#  undef LIBPGF_USE_OPENMP
-#endif
+#  else
+#   undef LIBPGF_USE_OPENMP
+#  endif
 // Not Win32
 # elif (defined(__APPLE__) || defined(__MACOSX__)) && defined(_REENTRANT)
-#   undef LIBPGF_USE_OPENMP
+#  undef LIBPGF_USE_OPENMP
 # else
-#   define LIBPGF_USE_OPENMP
+#  define LIBPGF_USE_OPENMP
 # endif
-
 #endif // defined (_OPENMP)
-
 #endif // ifndef LIBPGF_DISABLE_OPENMP
-
 #ifdef LIBPGF_USE_OPENMP
 #include <omp.h>
 #endif
-
 
 #endif //PGF_PGFPLATFORM_H

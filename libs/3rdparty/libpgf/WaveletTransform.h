@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- *
+ * 
  * $Date: 2006-05-18 16:03:32 +0200 (Do, 18 Mai 2006) $
  * $Revision: 194 $
- *
+ * 
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- *
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -104,12 +104,14 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	/// Destructor
 	~CWaveletTransform() { Destroy(); }
-
+	
 	//////////////////////////////////////////////////////////////////////
 	/// Compute fast forward wavelet transform of LL subband at given level and
 	/// stores result on all 4 subbands of level + 1.
 	/// @param level A wavelet transform pyramid level (>= 0 && < Levels())
-	void ForwardTransform(int level);
+	/// @param quant A quantization value (linear scalar quantization)
+	/// @return error in case of a memory allocation problem
+	OSError ForwardTransform(int level, int quant);
 
 	//////////////////////////////////////////////////////////////////////
 	/// Compute fast inverse wavelet transform of all 4 subbands of given level and
@@ -118,7 +120,8 @@ public:
 	/// @param width A pointer to the returned width of subband LL (in pixels)
 	/// @param height A pointer to the returned height of subband LL (in pixels)
 	/// @param data A pointer to the returned array of image data
-	void InverseTransform(int level, UINT32* width, UINT32* height, DataT** data);
+	/// @return error in case of a memory allocation problem
+	OSError InverseTransform(int level, UINT32* width, UINT32* height, DataT** data);
 
 	//////////////////////////////////////////////////////////////////////
 	/// Get pointer to one of the 4 subband at a given level.
@@ -128,7 +131,7 @@ public:
 		ASSERT(level >= 0 && level < m_nLevels);
 		return &m_subband[level][orientation];
 	}
-
+	
 #ifdef __PGFROISUPPORT__
 	//////////////////////////////////////////////////////////////////////
 	/// Compute and store ROIs for each level
@@ -157,9 +160,9 @@ public:
 #endif // __PGFROISUPPORT__
 
 private:
-	void Destroy() { delete[] m_subband; m_subband = 0;
+	void Destroy() { delete[] m_subband; m_subband = 0; 
 		#ifdef __PGFROISUPPORT__
-		m_ROIs.Destroy();
+		m_ROIs.Destroy(); 
 		#endif
 	}
 	void InitSubbands(UINT32 width, UINT32 height, DataT* data);
@@ -173,7 +176,7 @@ private:
 #endif //__PGFROISUPPORT__
 
 	int			m_nLevels;						// number of transform levels: one more than the number of level in PGFimage
-	CSubband	(*m_subband)[NSubbands];		// quadtree of subbands: LL HL
+	CSubband	(*m_subband)[NSubbands];		// quadtree of subbands: LL HL												
 												//                       LH HH
 };
 

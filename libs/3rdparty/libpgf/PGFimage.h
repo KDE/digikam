@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- *
+ * 
  * $Date: 2007-02-03 13:04:21 +0100 (Sa, 03 Feb 2007) $
  * $Revision: 280 $
- *
+ * 
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- *
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -50,7 +50,7 @@ class CWaveletTransform;
 /// @brief PGF main class
 class CPGFImage {
 public:
-
+	
 	//////////////////////////////////////////////////////////////////////
 	/// Standard constructor: It is used to create a PGF instance for opening and reading.
 	CPGFImage();
@@ -117,12 +117,13 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	/// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
 	/// to get a quick reconstruction (coded -> decoded image).
+	/// It might throw an IOException.
 	/// @param level The image level of the resulting image in the internal image buffer.
-	void Reconstruct(int level = 0);
+	void Reconstruct(int level = 0) THROW_;
 
 	//////////////////////////////////////////////////////////////////////
 	/// Get image data in interleaved format: (ordering of RGB data is BGR[A])
-	/// Upsampling, YUV to RGB transform and interleaving are done here to reduce the number
+	/// Upsampling, YUV to RGB transform and interleaving are done here to reduce the number 
 	/// of passes over the data.
 	/// The absolute value of pitch is the number of bytes of an image row of the given image buffer.
 	/// If pitch is negative, then the image buffer must point to the last row of a bottom-up image (first byte on last row).
@@ -198,7 +199,7 @@ public:
 	/// as all other levels, but in a different size (width, height).
 	/// The image size at level i is double the size (width, height) of the image at level i+1.
 	/// The image at level 0 contains the original size.
-	/// Precondition: the PGF image contains a valid header (see also SetHeader(...)).
+	/// Precondition: the PGF image contains a valid header (see also SetHeader(...)). 
 	/// Please note: the earlier parameter nLevels has now to be set with SetHeader. Either specify the number of levels
 	/// or use the value 0 for automatic setting.
 	/// It might throw an IOException.
@@ -225,7 +226,7 @@ public:
 	/// as all other levels, but in a different size (width, height).
 	/// The image size at level i is double the size (width, height) of the image at level i+1.
 	/// The image at level 0 contains the original size.
-	/// Precondition: the PGF image contains a valid header (see also SetHeader(...)) and
+	/// Precondition: the PGF image contains a valid header (see also SetHeader(...)) and 
 	/// WriteHeader() has been called before Write().
 	/// The ROI encoding scheme is used.
 	/// It might throw an IOException.
@@ -370,7 +371,7 @@ public:
 	UINT32 ReadEncodedHeader(UINT8* target, UINT32 targetLen) const THROW_;
 
 	//////////////////////////////////////////////////////////////////////
-	/// Reads the data of an encoded PGF level and copies it to a target buffer
+	/// Reads the data of an encoded PGF level and copies it to a target buffer 
 	/// without decoding.
 	/// Precondition: The PGF image has been opened with a call of Open(...).
 	/// It might throw an IOException.
@@ -397,7 +398,7 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	/// Return bits per channel.
 	/// @return Bits per channel
-	BYTE ChannelDepth() const										{ return DataTSize*8; }
+	BYTE ChannelDepth() const										{ return (m_preHeader.version & PGF32) ? 32 : 16; }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Return image width of channel 0 at given level in pixels.
@@ -414,14 +415,14 @@ public:
 	UINT32 Height(int level = 0) const								{ ASSERT(level >= 0); return LevelHeight(m_header.height, level); }
 
 	//////////////////////////////////////////////////////////////////////
-	/// Return current image level.
+	/// Return current image level. 
 	/// Since Read(...) can be used to read each image level separately, it is
 	/// helpful to know the current level. The current level immediately after Open(...) is Levels().
 	/// @return Current image level
 	BYTE Level() const												{ return (BYTE)m_currentLevel; }
 
 	//////////////////////////////////////////////////////////////////////
-	/// Return the number of image levels.
+	/// Return the number of image levels. 
 	/// @return Number of image levels
 	BYTE Levels() const												{ return m_header.nLevels; }
 
@@ -436,7 +437,7 @@ public:
 	/// An image of type RGB contains 3 image channels (B, G, R).
 	/// @return Number of image channels
 	BYTE Channels() const											{ return m_header.channels; }
-
+	
 	//////////////////////////////////////////////////////////////////////
 	/// Return the image mode.
 	/// An image mode is a predefined constant value (see also PGFtypes.h) compatible with Adobe Photoshop.
@@ -504,7 +505,7 @@ protected:
 	PGFRect m_roi;					// region of interest
 #endif
 
-private:
+private:	
 	RefreshCB m_cb;					// pointer to refresh callback procedure
 	void *m_cbArg;					// refresh callback argument
 
@@ -524,16 +525,16 @@ private:
 	}
 	UINT8 Clamp4(DataT v) const {
 		if (v & 0xFFFFFFF0) return (v < 0) ? (UINT8)0: (UINT8)15; else return (UINT8)v;
-	}
+	}	
 	UINT16 Clamp6(DataT v) const {
 		if (v & 0xFFFFFFC0) return (v < 0) ? (UINT16)0: (UINT16)63; else return (UINT16)v;
-	}
+	}	
 	UINT16 Clamp16(DataT v) const {
 		if (v & 0xFFFF0000) return (v < 0) ? (UINT16)0: (UINT16)65535; else return (UINT16)v;
-	}
+	}	
 	UINT32 Clamp31(DataT v) const {
 		if (v < 0) return 0; else return (UINT32)v;
-	}
+	}	
 };
 
 #endif //PGF_PGFIMAGE_H

@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- *
+ * 
  * $Date: 2006-06-04 22:05:59 +0200 (So, 04 Jun 2006) $
  * $Revision: 229 $
- *
+ * 
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- *
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -34,7 +34,7 @@
 // Default constructor
 CSubband::CSubband() : m_size(0), m_data(0)
 #ifdef __PGFROISUPPORT__
-, m_ROIs(0), m_dataWidth(0)
+, m_ROIs(0), m_dataWidth(0) 
 #endif
 {
 }
@@ -81,14 +81,14 @@ bool CSubband::AllocMemory() {
 
 	if (m_data) {
 		if (oldSize >= m_size) {
-			return false;
+			return true;
 		} else {
 			delete[] m_data;
-			m_data = new DataT[m_size];
+			m_data = new(std::nothrow) DataT[m_size];
 			return (m_data != 0);
 		}
 	} else {
-		m_data = new DataT[m_size];
+		m_data = new(std::nothrow) DataT[m_size];
 		return (m_data != 0);
 	}
 }
@@ -168,14 +168,10 @@ void CSubband::Dequantize(int quantParam) {
 /// Write wavelet coefficients into buffer.
 /// It might throw an IOException.
 /// @param encoder An encoder instance
-/// @param quant A quantization value (linear scalar quantization)
 /// @param tile True if just a rectangular region is extracted, false if the entire subband is extracted.
 /// @param tileX Tile index in x-direction
 /// @param tileY Tile index in y-direction
-void CSubband::ExtractTile(CEncoder& encoder, int quant, bool tile /*= false*/, UINT32 tileX /*= 0*/, UINT32 tileY /*= 0*/) THROW_ {
-	// quantize subband
-	if (tileX == 0 && tileY == 0) Quantize(quant);
-
+void CSubband::ExtractTile(CEncoder& encoder, bool tile /*= false*/, UINT32 tileX /*= 0*/, UINT32 tileY /*= 0*/) THROW_ {
 #ifdef __PGFROISUPPORT__
 	if (tile) {
 		// compute tile position and size
@@ -184,7 +180,7 @@ void CSubband::ExtractTile(CEncoder& encoder, int quant, bool tile /*= false*/, 
 
 		// write values into buffer using partitiong scheme
 		encoder.Partition(this, w, h, xPos + yPos*m_width, m_width);
-	} else
+	} else 
 #endif
 	{
 		// write values into buffer using partitiong scheme
@@ -202,7 +198,7 @@ void CSubband::ExtractTile(CEncoder& encoder, int quant, bool tile /*= false*/, 
 /// @param tileY Tile index in y-direction
 void CSubband::PlaceTile(CDecoder& decoder, int quantParam, bool tile /*= false*/, UINT32 tileX /*= 0*/, UINT32 tileY /*= 0*/) THROW_ {
 	// allocate memory
-	AllocMemory();
+	if (!AllocMemory()) ReturnWithError(InsufficientMemory);
 
 	// correct quantParam with normalization factor
 	if (m_orientation == LL) {
@@ -223,7 +219,7 @@ void CSubband::PlaceTile(CDecoder& decoder, int quantParam, bool tile /*= false*
 
 		// read values into buffer using partitiong scheme
 		decoder.Partition(this, quantParam, w, h, (xPos - roi.left) + (yPos - roi.top)*m_dataWidth, m_dataWidth);
-	} else
+	} else 
 #endif
 	{
 		// read values into buffer using partitiong scheme
@@ -247,7 +243,7 @@ void CSubband::TilePosition(UINT32 tileX, UINT32 tileY, UINT32& xPos, UINT32& yP
 	// band = HH, w = 30, ldTiles = 2 -> 4 tiles in a row/column
 	// --> tile widths
 	// 8 7 8 7
-	//
+	// 
 	// tile partitioning scheme
 	// 0 1 2 3
 	// 4 5 6 7
