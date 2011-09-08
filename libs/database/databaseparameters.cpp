@@ -412,13 +412,20 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
     if (imgDatabaseType == "QMYSQL" && internalServer)
     {
         const QString miscDir = KStandardDirs::locateLocal("data", "digikam/db_misc");
-        tmbDatabaseType=    imgDatabaseType= "QMYSQL";
-        tmbDatabaseName =   imgDatabaseName = "digikam";
-        tmbHostName =       imgHostName = QString();
-        tmbPort =           imgPort = -1;
-        tmbUserName =       imgUserName = "root";
-        tmbPassword =       imgPassword = QString();
-        tmbConnectOptions = imgConnectOptions = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
+        imgDatabaseType= "QMYSQL";
+        imgDatabaseName = "digikam";
+        imgHostName = QString();
+        imgPort = -1;
+        imgUserName = "root";
+        imgPassword = QString();
+        imgConnectOptions = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
+        tmbDatabaseType=    "QMYSQL";
+        tmbDatabaseName =   "digikam";
+        tmbHostName =       QString();
+        tmbPort =           -1;
+        tmbUserName =       "root";
+        tmbPassword =       QString();
+        tmbConnectOptions = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
     }
 
     if (imgDatabaseType.isEmpty())
@@ -433,6 +440,9 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
             kDebug(50003) << configDatabaseType << " Found.";
             imgDatabaseType         = group.readEntry(configDatabaseType, QString());
             imgDatabaseName         = group.readEntry(configDatabaseName, QString());
+            if (imgDatabaseType == QString::fromLatin1("QSQLITE")) {
+                imgDatabaseName = databaseFileSQLite(imgDatabaseName, QString::fromLatin1(DIGIKAM4DB));
+            }
             imgHostName             = group.readEntry(configDatabaseHostName, QString());
             imgPort                 = group.readEntry(configDatabasePort, -1);
             imgUserName             = group.readEntry(configDatabaseUsername, QString());
@@ -441,6 +451,9 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
 
             tmbDatabaseType         = group.readEntry(configDatabaseType, QString());
             tmbDatabaseName         = group.readEntry(configDatabaseNameThumbnails, QString());
+            if (tmbDatabaseType == QString::fromLatin1("QSQLITE")) {
+                tmbDatabaseName = databaseFileSQLite(tmbDatabaseName, QString::fromLatin1(THUMBNAILS_DIGIKAMDB));
+            }
             tmbHostName             = group.readEntry(configDatabaseHostName, QString());
             tmbPort                 = group.readEntry(configDatabasePort, -1);
             tmbUserName             = group.readEntry(configDatabaseUsername, QString());
