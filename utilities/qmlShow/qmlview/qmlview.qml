@@ -5,16 +5,17 @@ import QtWebKit 1.0
 Rectangle {
 
     id:rect
-    width: 500
-    height: 300
+	height: 300
+	width: 500
     property string text: "matrix.jpg"
-
     signal nextClicked;
     signal prevClicked;
     signal play;
+	color: "black"
     signal pause;
     signal gridItem;
     property bool bool_pp: true;
+    property real source_scale: 1;
 
     Keys.onLeftPressed:
     { rect.prevClicked() }
@@ -44,7 +45,7 @@ Rectangle {
         rotation: 0
         opacity: 0.7
         source: "Menu.svg"
-        z: 5
+        z: 50
         
         states: [
           State {
@@ -98,7 +99,7 @@ Rectangle {
             MouseArea
             {
                 anchors.fill: parent;
-                onClicked: rect.nextClicked();
+                onClicked: {rect.nextClicked();}
             }
         }
 
@@ -127,6 +128,12 @@ Rectangle {
             rotation: 0
             z: 12
             source: "ZoomOut.svg"
+		MouseArea
+		{
+			id:zoomout
+			anchors.fill: parent
+			onClicked: {rect.source_scale = rect.source_scale / 2;}
+		}
         }
 
         Image {
@@ -138,6 +145,12 @@ Rectangle {
             rotation: 0
             z: 12
             source: "ZoomIn.svg"
+		MouseArea
+		{
+			id:zoomin
+			anchors.fill: parent
+			onClicked: {rect.source_scale = rect.source_scale * 2;}
+		}
         }
 
         Image {
@@ -169,10 +182,15 @@ Rectangle {
                 anchors.fill: parent
                 onClicked:
                 {
+		if(rect2.visible==false){
                     rect2.visible=true;
                     grid.focus= true;
                     play_pause.src = "play.svg";
-                    rect.pause();
+                    rect.pause();}
+		else
+		{ rect2.visible = false;
+			rect.focus = true;
+		}
                 }
             }
         }
@@ -198,14 +216,21 @@ Rectangle {
         }
     }
 
+	Flickable
+	{
+	id:flickable
+	anchors.fill: parent
+	contentWidth: source.width
+	contentHeight: source.height;
+	contentX: (source.width - rect.width) / 2;
+	contentY: (source.height - rect.height) / 2;
+	boundsBehavior: Flickable.StopAtBounds;
     Image {
         id: source
-        x: 0
-        y: 0
-        width: parent.width
-        height: parent.height
-        source: parent.text
-        focus: true
+        anchors.centerIn: rect
+        width: rect.width * rect.source_scale
+        height: rect.height * rect.source_scale
+        source: rect.text
         visible:true
 
         Timer
@@ -216,7 +241,7 @@ Rectangle {
             onTriggered: rect.nextClicked();
         }
 
-	 MouseArea {
+	MouseArea {
             id: view_icons
             hoverEnabled: true
             anchors.fill: parent
@@ -227,7 +252,7 @@ Rectangle {
                 close.visible = true ;
                 remove_icon.running = true;
             }
-        }
+	}
 
         Timer
         {
@@ -241,6 +266,7 @@ Rectangle {
          }
 
     }
+}
 
     WebView {
         id: openstreetmap
