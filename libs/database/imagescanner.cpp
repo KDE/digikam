@@ -869,17 +869,60 @@ bool ImageScanner::sameReferredImage(const HistoryImageId& id1, const HistoryIma
     return false;
 }
 
+// Returns true if both have the same UUID, or at least one of the two has no UUID
+// Returns false iff both have a UUID and the UUIDs differ
+static bool uuidDoesNotDiffer(const HistoryImageId& referenceId, qlonglong id)
+{
+    if (referenceId.hasUuid())
+    {
+        QString uuid = DatabaseAccess().db()->getImageUuid(id);
+        if (!uuid.isEmpty())
+        {
+            return referenceId.m_uuid == uuid;
+        }
+    }
+    return true;
+}
+
+static QList<qlonglong> mergedIdLists(const HistoryImageId& referenceId,
+                         const QList<qlonglong>& uuidList, const QList<qlonglong>& candidates)
+{
+    QList<qlonglong> results;
+    // uuidList are definite results
+    results = uuidList;
+
+    // Add a candidate if it has the same UUID, or either reference or candidate  have a UUID
+    // (other way round: do not add a candidate which positively has a different UUID)
+    foreach (qlonglong candidate, candidates)
+    {
+        if (results.contains(candidate))
+        {
+            continue; // already in list, skip
+        }
+
+        if (uuidDoesNotDiffer(referenceId, candidate))
+        {
+            results << candidate;
+        }
+    }
+
+    return results;
+}
+
 QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& historyId)
 {
     // first and foremost: UUID
+    QList<qlonglong> uuidList;
     if (historyId.hasUuid())
     {
-        QList<qlonglong> uuidList = DatabaseAccess().db()->getItemsForUuid(historyId.m_uuid);
+        uuidList = DatabaseAccess().db()->getItemsForUuid(historyId.m_uuid);
 
-        if (!uuidList.isEmpty())
+        // If all images had a UUID, we would be finished and could return here with a result:
+        /*if (!uuidList.isEmpty())
         {
             return uuidList;
-        }
+        }*/
+        // But as identical images may have no UUID yet, we need to continue
     }
 
     // Second: uniqueHash + fileSize. Sufficient to assume that a file is identical, but subject to frequent change.
@@ -897,7 +940,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
                     ids << info.id;
                 }
             }
-            return ids;
+            return mergedIdLists(historyId, uuidList, ids);
         }
     }
 
@@ -909,7 +952,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
 
         if (!ids.isEmpty())
         {
-            return ids;
+            return mergedIdLists(historyId, uuidList, ids);
         }
     }
 
@@ -933,7 +976,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
 
                 if (info.id)
                 {
-                    return QList<qlonglong>() << info.id;
+                    return mergedIdLists(historyId, uuidList, QList<qlonglong>() << info.id);
                 }
             }
         }
