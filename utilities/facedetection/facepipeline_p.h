@@ -382,6 +382,7 @@ public:
     int                  infosForFiltering;
     int                  packagesOnTheRoad;
     int                  maxPackagesOnTheRoad;
+    int                  totalPackagesAdded;
 
     QList<FacePipelineExtendedPackage::Ptr> delayedPackages;
 

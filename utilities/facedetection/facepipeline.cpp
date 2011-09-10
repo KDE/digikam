@@ -32,6 +32,7 @@
 // KDE includes
 
 #include <kdebug.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -881,6 +882,7 @@ FacePipeline::FacePipelinePriv::FacePipelinePriv(FacePipeline* q)
     infosForFiltering    = 0;
     packagesOnTheRoad    = 0;
     maxPackagesOnTheRoad = 50;
+    totalPackagesAdded   = 0;
 }
 
 void FacePipeline::FacePipelinePriv::processBatch(const QList<ImageInfo>& infos)
@@ -960,6 +962,7 @@ FacePipeline::FacePipelinePriv::buildPackage(const ImageInfo& info, const FacePi
 void FacePipeline::FacePipelinePriv::send(FacePipelineExtendedPackage::Ptr package)
 {
     start();
+    ++totalPackagesAdded;
     if (senderFlowControl(package))
     {
         ++packagesOnTheRoad;
@@ -971,6 +974,7 @@ void FacePipeline::FacePipelinePriv::finishProcess(FacePipelineExtendedPackage::
 {
     packagesOnTheRoad--;
     emit q->processed(*package);
+    emit q->progressValueChanged(float(packagesOnTheRoad + delayedPackages.size()) / totalPackagesAdded);
     package = 0;
 
     if (previewThread)
@@ -997,6 +1001,7 @@ void FacePipeline::FacePipelinePriv::receiverFlowControl()
 {
     if (!delayedPackages.isEmpty() && packagesOnTheRoad <= maxPackagesOnTheRoad)
     {
+        --totalPackagesAdded; // dont add twice
         send(delayedPackages.takeFirst());
     }
 }
@@ -1013,6 +1018,7 @@ void FacePipeline::FacePipelinePriv::checkFinished()
 
     if (hasFinished())
     {
+        totalPackagesAdded = 0;
         emit q->finished();
         // stop threads
         stop();
@@ -1041,6 +1047,7 @@ void FacePipeline::FacePipelinePriv::start()
     }
 
     started = true;
+    emit q->started(i18n("Applying face changes"));
 }
 
 void FacePipeline::FacePipelinePriv::stop()
