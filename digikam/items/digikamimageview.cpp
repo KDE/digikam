@@ -178,6 +178,18 @@ void DigikamImageView::setThumbnailSize(const ThumbnailSize& size)
     ImageCategorizedView::setThumbnailSize(size);
 }
 
+void DigikamImageView::connectProgressSignals(QObject* progressManager)
+{
+    connect(&d->editPipeline, SIGNAL(started(QString)),
+            progressManager, SLOT(enterProgress(QString)));
+
+    connect(&d->editPipeline, SIGNAL(progressValueChanged(float)),
+            progressManager, SLOT(progressValue(float)));
+
+    connect(&d->editPipeline, SIGNAL(finished()),
+            progressManager, SLOT(finishProgress()));
+}
+
 void DigikamImageView::slotSetupChanged()
 {
     setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());

@@ -49,6 +49,8 @@ public:
 
     void toggleTagToSelected(int tagID);
 
+    void connectProgressSignals(QObject* progressManager);
+
 public Q_SLOTS:
 
     void openEditor();
