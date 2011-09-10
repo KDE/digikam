@@ -615,12 +615,19 @@ DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseT
     return parameters;
 }
 
-//FIXME:
 DatabaseParameters DatabaseParameters::thumbnailParameters() const
 {
-    DatabaseParameters params = *this;
-    params.tmbDatabaseName = tmbDatabaseName;
-    return params;
+    DatabaseParameters parameters = *this;
+
+    parameters.imgDatabaseType = tmbDatabaseType;
+    parameters.imgDatabaseName = tmbDatabaseName;
+    parameters.imgHostName     = tmbHostName;
+    parameters.imgUserName     = tmbUserName;
+    parameters.imgPassword     = tmbPassword;
+    parameters.imgPort         = tmbPort;
+    parameters.imgConnectOptions = tmbConnectOptions;
+
+    return parameters;
 }
 
 DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databaseFile)
