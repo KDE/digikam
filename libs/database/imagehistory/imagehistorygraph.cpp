@@ -296,9 +296,15 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const ImageInfo& info)
         //kDebug() << "Find by uuid" << uuid << ": found" << v.isNull();
         if (v.isNull())
         {
-            HistoryImageId id = info.historyImageId();
-            v = findVertexByProperties(id);
+            id = info.historyImageId();
+            v  = findVertexByProperties(id);
             //kDebug() << "Find by h-i-m" << ": found" << v.isNull();
+        }
+
+        // Need to add new vertex. Do this through the method which will resolve the history id
+        if (v.isNull())
+        {
+            v = addVertex(id);
         }
     }
 

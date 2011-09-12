@@ -195,7 +195,7 @@ bool SchemaUpdater::startUpdates()
     // First step: do we have an empty database?
     QStringList tables = m_Backend->tables();
 
-    if (tables.contains("Albums"))
+    if (tables.contains("Albums", Qt::CaseInsensitive))
     {
         // Find out schema version of db file
         readVersionSettings();

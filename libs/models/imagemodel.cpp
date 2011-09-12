@@ -203,7 +203,7 @@ ImageInfo& ImageModel::imageInfoRef(int row) const
 
 qlonglong ImageModel::imageId(int row) const
 {
-    if (row >= d->infos.size())
+    if (row < 0 || row >= d->infos.size())
     {
         return -1;
     }
@@ -299,6 +299,11 @@ ImageInfo ImageModel::retrieveImageInfo(const QModelIndex& index)
     ImageModel* model = index.data(ImageModelPointerRole).value<ImageModel*>();
     int row           = index.data(ImageModelInternalId).toInt();
 
+    if (!model)
+    {
+        return ImageInfo();
+    }
+
     return model->imageInfo(row);
 }
 
@@ -312,6 +317,11 @@ qlonglong ImageModel::retrieveImageId(const QModelIndex& index)
 
     ImageModel* model = index.data(ImageModelPointerRole).value<ImageModel*>();
     int row           = index.data(ImageModelInternalId).toInt();
+
+    if (!model)
+    {
+        return 0;
+    }
 
     return model->imageId(row);
 }
@@ -726,6 +736,12 @@ void ImageModel::removeIndexes(const QList<QModelIndex>& indexes)
             listIndexes << index.row();
         }
     }
+
+    if (listIndexes.isEmpty())
+    {
+        return;
+    }
+
     imageInfosDeleted(imageInfos(indexes));
     removeRowPairsWithCheck(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }

@@ -532,6 +532,10 @@ void DigikamView::setupConnections()
     connect(MetadataManager::instance(), SIGNAL(orientationChangeFailed(QStringList)),
             this, SLOT(slotOrientationChangeFailed(QStringList)));
 
+    // -- Icon view progress
+
+    d->iconView->connectProgressSignals(d->parent);
+
     // -- timers ---------------
 
     connect(d->selectionTimer, SIGNAL(timeout()),

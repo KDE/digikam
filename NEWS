@@ -8,4 +8,8 @@ General : Add image title metadata support.
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 155374 : Allow setting Image titles different than image file name [patch].
-002 ==> 
+002 ==> 279581 : Can't compile digiKam with provided libpgf on PowerPC machine (BigEndian).
+003 ==> 280540 : Image editor puts saved new versions into the wrong place of the thumbbar.
+004 ==> 281801 : Setting TAGs from the menu does not respect "auto tag" setting (set parent).
+005 ==> 281790 : Unable to set a tag on multiple selected images (In view mode).
+006 ==> 

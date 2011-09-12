@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- *
+ * 
  * $Date: 2006-06-04 22:05:59 +0200 (So, 04 Jun 2006) $
  * $Revision: 229 $
- *
+ * 
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- *
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -49,15 +49,27 @@ class CDecoder {
 	/// @brief A macro block is a decoding unit of fixed size (uncoded)
 	class CMacroBlock {
 	public:
+		//////////////////////////////////////////////////////////////////////
+		/// Constructor: Initializes new macro block.
+		/// @param decoder Pointer to outer class.
 		CMacroBlock(CDecoder *decoder)
-		: m_header(0)
-        , m_valuePos(0)
+		: m_header(0)								// makes sure that IsCompletelyRead() returns true for an empty macro block
+		, m_valuePos(0)
 		, m_decoder(decoder)
 		{
 			ASSERT(m_decoder);
 		}
 
-		void  BitplaneDecode();						// several macro blocks can be encoded in parallel
+		//////////////////////////////////////////////////////////////////////
+		/// Returns true if this macro block has been completely read.
+		/// @return true if current value position is at block end
+		bool IsCompletelyRead() const	{ return m_valuePos >= m_header.rbh.bufferSize; }
+
+		//////////////////////////////////////////////////////////////////////
+		/// Decodes already read input data into this macro block.
+		/// Several macro blocks can be decoded in parallel.
+		/// Call CDecoder::ReadMacroBlock before this method.
+		void BitplaneDecode();
 
 		ROIBlockHeader m_header;					// block header
 		DataT  m_value[BufferSize];					// output buffer of values with index m_valuePos
@@ -133,10 +145,11 @@ public:
 
 	/////////////////////////////////////////////////////////////////////
 	/// Dequantization of a single value at given position in subband.
+	/// It might throw an IOException.
 	/// @param band A subband
 	/// @param bandPos A valid position in subband band
 	/// @param quantParam The quantization parameter
-	void DequantizeValue(CSubband* band, UINT32 bandPos, int quantParam);
+	void DequantizeValue(CSubband* band, UINT32 bandPos, int quantParam) THROW_;
 
 	//////////////////////////////////////////////////////////////////////
 	/// Copies data from the open stream to a target buffer.
@@ -182,7 +195,7 @@ private:
 	CMacroBlock **m_macroBlocks;				// array of macroblocks
 	int m_currentBlockIndex;					// index of current macro block
 	int	m_macroBlockLen;						// array length
-	int	m_macroBlocksAvailable;					// number of decoded macro blocks
+	int	m_macroBlocksAvailable;					// number of decoded macro blocks (including currently used macro block)
 	CMacroBlock *m_currentBlock;				// current macro block (used by main thread)
 
 #ifdef __PGFROISUPPORT__

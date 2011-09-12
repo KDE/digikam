@@ -27,3 +27,8 @@ To install it, please follow these instructions to enter in a console:
 > sudo port -v install oxygen-icons
 
 6/ digiKam icon must be available to run on Applications/Macport menu entry.
+
+
+REFERENCES:
+
+http://guide.macports.org/

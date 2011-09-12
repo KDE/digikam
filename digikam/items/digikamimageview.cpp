@@ -178,6 +178,18 @@ void DigikamImageView::setThumbnailSize(const ThumbnailSize& size)
     ImageCategorizedView::setThumbnailSize(size);
 }
 
+void DigikamImageView::connectProgressSignals(QObject* progressManager)
+{
+    connect(&d->editPipeline, SIGNAL(started(QString)),
+            progressManager, SLOT(enterProgress(QString)));
+
+    connect(&d->editPipeline, SIGNAL(progressValueChanged(float)),
+            progressManager, SLOT(progressValue(float)));
+
+    connect(&d->editPipeline, SIGNAL(finished()),
+            progressManager, SLOT(finishProgress()));
+}
+
 void DigikamImageView::slotSetupChanged()
 {
     setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
@@ -240,33 +252,51 @@ void DigikamImageView::addAssignNameOverlay(ImageDelegate* delegate)
 
 void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId)
 {
+    QList<ImageInfo> infos;
+    QList<DatabaseFace> faces;
+    QList<QModelIndex> sourceIndexes;
+
+    // fast-remove in the "unknown person" view
+    const bool needFastRemove = d->faceMode
+                                && imageAlbumModel()->currentAlbum()
+                                && tagId != imageAlbumModel()->currentAlbum()->id();
+
     foreach (const QModelIndex& index, indexes)
     {
-        ImageInfo info    = ImageModel::retrieveImageInfo(index);
-        DatabaseFace face = d->faceDelegate->face(index);
-        d->editPipeline.confirm(info, face, tagId);
-
-        // fast-remove in the "unknown person" view
-        if (d->faceMode && imageAlbumModel()->currentAlbum()
-            && tagId != imageAlbumModel()->currentAlbum()->id())
+        infos << ImageModel::retrieveImageInfo(index);
+        faces << d->faceDelegate->face(index);
+        if (needFastRemove)
         {
-            QModelIndex sourceIndex = imageSortFilterModel()->mapToSourceImageModel(index);
-            imageAlbumModel()->removeIndex(sourceIndex);
+            sourceIndexes << imageSortFilterModel()->mapToSourceImageModel(index);
         }
+    }
+
+    imageAlbumModel()->removeIndexes(sourceIndexes);
+
+    for (int i=0; i<infos.size(); i++)
+    {
+        d->editPipeline.confirm(infos[i], faces[i], tagId);
     }
 }
 
 void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
 {
+    QList<ImageInfo> infos;
+    QList<DatabaseFace> faces;
+    QList<QModelIndex> sourceIndexes;
+
     foreach (const QModelIndex& index, indexes)
     {
-        ImageInfo info = ImageModel::retrieveImageInfo(index);
-        DatabaseFace face = d->faceDelegate->face(index);
-        d->editPipeline.remove(info, face);
+        infos << ImageModel::retrieveImageInfo(index);
+        faces << d->faceDelegate->face(index);
+        sourceIndexes << imageSortFilterModel()->mapToSourceImageModel(index);
+    }
 
-        // fast-remove
-        QModelIndex sourceIndex = imageSortFilterModel()->mapToSourceImageModel(index);
-        imageAlbumModel()->removeIndex(sourceIndex);
+    imageAlbumModel()->removeIndexes(sourceIndexes);
+
+    for (int i=0; i<infos.size(); i++)
+    {
+        d->editPipeline.remove(infos[i], faces[i]);
     }
 }
 

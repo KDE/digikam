@@ -91,12 +91,12 @@ bool ThumbnailSchemaUpdater::startUpdates()
     // First step: do we have an empty database?
     QStringList tables = m_access->backend()->tables();
 
-    if (tables.contains("Thumbnails"))
+    if (tables.contains("Thumbnails", Qt::CaseInsensitive))
     {
         // Find out schema version of db file
         QString version = m_access->db()->getSetting("DBThumbnailsVersion");
         QString versionRequired = m_access->db()->getSetting("DBThumbnailsVersionRequired");
-        kDebug(50003) << "Have a database structure version " << version;
+        kDebug(50003) << "Have a thumbnail database structure version " << version;
 
         // mini schema update
         if (version.isEmpty() && m_access->parameters().isTmbSQLite())

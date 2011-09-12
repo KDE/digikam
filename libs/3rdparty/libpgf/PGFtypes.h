@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- *
+ * 
  * $Date: 2007-06-11 10:56:17 +0200 (Mo, 11 Jun 2007) $
  * $Revision: 299 $
- *
+ * 
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- *
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -45,10 +45,9 @@
 // Version 6:	modified data structure PGFPreHeader: hSize (header size) is now a UINT32 instead of a UINT16 (backward compatibility assured)
 //
 //-------------------------------------------------------------------------------
-#define PGFCodecVersion		"6.11.24"			// Major number
+#define PGFCodecVersion		"6.11.32"			// Major number
 												// Minor number: Year (2) Week (2)
-
-#define PGFCodecVersionID   0x061124            // Codec version ID to use for API check in client implementation
+#define PGFCodecVersionID   0x061132            // Codec version ID to use for API check in client implementation
 
 //-------------------------------------------------------------------------------
 //	Image constants
@@ -62,16 +61,16 @@
 #define ColorTableLen		256					// size of color lookup table (clut)
 // version flags
 #define Version2			2					// data structure PGFHeader of major version 2
-#ifdef __PGF32SUPPORT__
-	#define PGF32			4					// 32 bit values are used -> allows at maximum 31 bits
-#else
-	#define PGF32			0					// 16 bit values are used -> allows at maximum 15 bits
-#endif
+#define PGF32				4					// 32 bit values are used -> allows at maximum 31 bits, otherwise 16 bit values are used -> allows at maximum 15 bits
 #define PGFROI				8					// supports Regions Of Interest
 #define Version5			16					// new coding scheme since major version 5
-#define Version6			32					// new HeaderSize: 32 bits instead of 16 bits
+#define Version6			32					// new HeaderSize: 32 bits instead of 16 bits 
 // version numbers
-#define PGFVersion			(Version2 | Version5 | Version6 | PGF32)	// current standard version
+#ifdef __PGF32SUPPORT__
+#define PGFVersion			(Version2 | PGF32 | Version5 | Version6)	// current standard version
+#else
+#define PGFVersion			(Version2 |         Version5 | Version6)	// current standard version
+#endif
 
 //-------------------------------------------------------------------------------
 //	Coder constants
@@ -147,7 +146,7 @@ struct PGFPostHeader {
 /////////////////////////////////////////////////////////////////////
 /// ROI block header is used with ROI coding scheme. It contains block size and tile end flag
 /// @author C. Stamm
-/// @brief Block header used with ROI coding scheme
+/// @brief Block header used with ROI coding scheme 
 union ROIBlockHeader {
 	/// Constructor
 	/// @param v Buffer size
@@ -156,7 +155,7 @@ union ROIBlockHeader {
 	/// @param size Buffer size
 	/// @param end 0/1 Flag; 1: last part of a tile
 	ROIBlockHeader(UINT32 size, bool end)	{ ASSERT(size < (1 << RLblockSizeLen)); rbh.bufferSize = size; rbh.tileEnd = end; }
-
+	
 	UINT16 val;
 	/// @brief Named ROI block header (part of the union)
 	struct RBH {
@@ -174,7 +173,7 @@ union ROIBlockHeader {
 #pragma pack()
 
 /////////////////////////////////////////////////////////////////////
-/// PGF I/O exception
+/// PGF I/O exception 
 /// @author C. Stamm
 /// @brief PGF exception
 struct IOException {
@@ -205,7 +204,7 @@ struct PGFRect {
 	UINT32 Width() const					{ return right - left; }
 	/// @return Rectangle height
 	UINT32 Height() const					{ return bottom - top; }
-
+	
 	/// Test if point (x,y) is inside this rectangle
 	/// @param x Point coordinate x
 	/// @param y Point coordinate y
