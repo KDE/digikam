@@ -619,12 +619,12 @@ DatabaseParameters DatabaseParameters::thumbnailParameters() const
 {
     DatabaseParameters parameters = *this;
 
-    parameters.imgDatabaseType = tmbDatabaseType;
-    parameters.imgDatabaseName = tmbDatabaseName;
-    parameters.imgHostName     = tmbHostName;
-    parameters.imgUserName     = tmbUserName;
-    parameters.imgPassword     = tmbPassword;
-    parameters.imgPort         = tmbPort;
+    parameters.imgDatabaseType   = tmbDatabaseType;
+    parameters.imgDatabaseName   = tmbDatabaseName;
+    parameters.imgHostName       = tmbHostName;
+    parameters.imgUserName       = tmbUserName;
+    parameters.imgPassword       = tmbPassword;
+    parameters.imgPort           = tmbPort;
     parameters.imgConnectOptions = tmbConnectOptions;
 
     return parameters;
