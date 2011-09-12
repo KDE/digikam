@@ -12,4 +12,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 280540 : Image editor puts saved new versions into the wrong place of the thumbbar.
 004 ==> 281801 : Setting TAGs from the menu does not respect "auto tag" setting (set parent).
 005 ==> 281790 : Unable to set a tag on multiple selected images (In view mode).
-006 ==> 
+006 ==> 277808 : digiKam crashes while scanning for faces.
+007 ==> 
+
