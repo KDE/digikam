@@ -13,5 +13,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 281801 : Setting TAGs from the menu does not respect "auto tag" setting (set parent).
 005 ==> 281790 : Unable to set a tag on multiple selected images (In view mode).
 006 ==> 277808 : digiKam crashes while scanning for faces.
-007 ==> 
-
+007 ==> 279977 : In the facial recognition view, when trying to remove multiple tags, tags outside of the selection are removed but not the entire selection.
+008 ==> 
