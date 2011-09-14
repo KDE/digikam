@@ -84,30 +84,30 @@ http://dev.robotbattle.com/bugs/main_page.php
 
 -- DEPENDENCIES -------------------------------------------------------
 
-Name            Version                       URL                                        Remarks
+Name            Version                       URL                                                               Remarks
 
 CMake           >= 2.8.x                      http://www.cmake.org
-libqt           >= 4.6.x                      http://www.qtsoftware.com                  Including run-time SQLite3 and Mysql database plugin.
-kdelibs         >= 4.4.x                      http://www.kde.org                         Nepomuk support introduced with KDE 4.3.x.
-libkipi         >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository.
-libkexiv2       >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository. Exiv2 >= 0.20.0 shared library recommended.
-libkdcraw       >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository.
-libkface        >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository.
-libkgeomap      >= 2.0.0                      http://www.digikam.org/sharedlibs          Version from master KDE git repository.
-liblcms         >= 1.17.x                     http://www.littlecms.com                   liblcms >= 2.x not yet compatible.
+libqt           >= 4.6.x                      http://www.qtsoftware.com                                         Including run-time SQLite3 and Mysql database plugin.
+kdelibs         >= 4.4.x                      http://www.kde.org                                                Nepomuk support introduced with KDE 4.3.x.
+liblcms         >= 1.17.x                     http://www.littlecms.com                                          liblcms >= 2.x not yet compatible.
 libtiff         >= 3.8.2                      http://www.remotesensing.org/libtiff
 libpng          >= 1.2.x                      http://www.libpng.org/pub/png/libpng.html
 libjpeg         >= 6b                         http://www.ijg.org
 libjasper       >= 1.7.x                      http://www.ece.uvic.ca/~mdadams/jasper
+libkipi         >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi
+libkexiv2       >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2
+libkdcraw       >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw
+libkface        >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkface
+libkgeomap      >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkgeomap
 
 Optional :
 
-libkdepimlibs   >= 4.4.x                      http://pim.kde.org                         To support KAddressBook entries.
-liblensfun      >= 0.2.5                      http://lensfun.berlios.de                  To support LensCorrection editor. If no external libray is found, internal version is used instead.  plugin.
-libgphoto2      >= 2.4.0                      http://www.gphoto.org                      To support Gphoto2 Cameras.
-libusb          >= 1.0.0                      http://www.libusb.org                      Required by Gphoto2 as linking dependency. See details in B.K.O #268267
-liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                  For Liquid Rescale tool. If no external libray is found, internal version is used instead.
-libpgf          >= 6.11.24                    http://www.libpgf.org                      If no external libray is found, internal version is used instead.
+libkdepimlibs   >= 4.4.x                      http://pim.kde.org                                                To support KAddressBook entries.
+liblensfun      >= 0.2.5                      http://lensfun.berlios.de                                         To support LensCorrection editor. If no external libray is found, internal version is used instead.  plugin.
+libgphoto2      >= 2.4.0                      http://www.gphoto.org                                             To support Gphoto2 Cameras.
+libusb          >= 1.0.0                      http://www.libusb.org                                             Required by Gphoto2 as linking dependency. See details in B.K.O #268267
+liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                                         For Liquid Rescale tool. If no external libray is found, internal version is used instead.
+libpgf          >= 6.11.24                    http://www.libpgf.org                                             If no external libray is found, internal version is used instead.
 
 Note : all library dependencies require development and binary packages installed on your
 computer to compile digiKam.
