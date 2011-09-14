@@ -15,4 +15,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 277808 : digiKam crashes while scanning for faces.
 007 ==> 279977 : In the facial recognition view, when trying to remove multiple tags, tags outside of the selection are removed but not the entire selection.
 008 ==> 277094 : digiKam 2.0 RC won't start.
-009 ==> 
+009 ==> 281767 : digikam 2.1 will not start.
+010 ==> 
+
