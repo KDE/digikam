@@ -360,7 +360,7 @@ void LightTableWindow::setupConnections()
     connect(d->thumbView, SIGNAL(signalDroppedItems(QList<ImageInfo>)),
             this, SLOT(slotThumbbarDroppedItems(QList<ImageInfo>)));
 
-    connect(d->thumbView, SIGNAL(imageActivated(ImageInfo)),
+    connect(d->thumbView, SIGNAL(currentChanged(ImageInfo)),
             this, SLOT(slotItemSelected(ImageInfo)));
 
     connect(d->thumbView, SIGNAL(signalContentChanged()),
