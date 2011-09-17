@@ -68,10 +68,13 @@ public:
         ExtraDataRole           = Qt::UserRole + 5,
         /// Returns the number of duplicate indexes for the same image id
         ExtraDataDuplicateCount = Qt::UserRole + 6,
+
+        // Roles which are defined here but not implemented by ImageModel
         /// Returns position of item in Left Light Table preview.
-        LTLeftPanelRole         = Qt::UserRole + 7,
+        LTLeftPanelRole         = Qt::UserRole + 50,
         /// Returns position of item in Right Light Table preview.
-        LTRightPanelRole        = Qt::UserRole + 8,
+        LTRightPanelRole        = Qt::UserRole + 51,
+
         // For use by subclasses
         SubclassRoles           = Qt::UserRole + 100,
         // For use by filter models
@@ -295,8 +298,8 @@ protected:
     // Called when the internal storage is cleared
     virtual void imageInfosCleared() {};
 
-    // Called when items are deleted from the internal storage
-    virtual void imageInfosDeleted(const QList<ImageInfo>&) {};
+    // Called before rowsAboutToBeRemoved
+    virtual void imageInfosAboutToBeRemoved(int /*begin*/, int /*end*/) {};
 
 protected Q_SLOTS:
 
