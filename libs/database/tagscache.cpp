@@ -805,6 +805,12 @@ QList<int> TagsCache::tagsWithProperty(const QString& property, const QString& v
 
     for (TagPropertiesConstIterator it = d->tagProperties.begin(); it != d->tagProperties.end(); )
     {
+        // sort out invalid entries, see bug #277169
+        if (it->tagId <= 0)
+        {
+            continue;
+        }
+
         if (d->compareProperty(it, property, value))
         {
             ids << it->tagId;

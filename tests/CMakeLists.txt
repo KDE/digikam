@@ -38,6 +38,7 @@ TARGET_LINK_LIBRARIES(cameranamehelpertest
                       ${QT_QTTEST_LIBRARY}
                       ${GPHOTO2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
+                      ${KEXIV2_LIBRARIES}
                       digikamcore
                       digikamdatabase
                      )
@@ -201,6 +202,7 @@ TARGET_LINK_LIBRARIES(dimagehistorytest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
+                      ${KEXIV2_LIBRARIES}
                       digikamcore
                      )
 
@@ -216,8 +218,10 @@ KDE4_ADD_UNIT_TEST(dimagehistorygraphtest ${dimagehistorygraphtest_SRCS})
 
 TARGET_LINK_LIBRARIES(dimagehistorygraphtest
                       ${KDE4_KDECORE_LIBS}
+                      ${KDE4_KIO_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
+                      ${KEXIV2_LIBRARIES}
                       digikamdatabase
                       digikamcore
                      )
@@ -234,6 +238,7 @@ TARGET_LINK_LIBRARIES(dimagefilteractiontest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
+                      ${KEXIV2_LIBRARIES}
                       digikamcore
                      )
 
