@@ -17,5 +17,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 277094 : digiKam 2.0 RC won't start.
 009 ==> 281767 : digikam 2.1 will not start.
 010 ==> 282088 : Missing entries in tag list.
-011 ==> 
+011 ==> 282241 : Page down broken after viewing a video.
+012 ==> 
 
