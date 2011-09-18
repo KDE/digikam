@@ -254,7 +254,7 @@ MediaPlayerView* StackedView::mediaPlayerView() const
 
 bool StackedView::isInSingleFileMode() const
 {
-    return currentIndex() == PreviewImageMode || currentIndex() == MediaPlayerMode
+    return currentIndex() == PreviewImageMode || currentIndex() == MediaPlayerMode;
 }
 
 bool StackedView::isInMultipleFileMode() const
