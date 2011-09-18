@@ -252,6 +252,21 @@ MediaPlayerView* StackedView::mediaPlayerView() const
     return d->mediaPlayerView;
 }
 
+bool StackedView::isInSingleFileMode() const
+{
+    return currentIndex() == PreviewImageMode || currentIndex() == MediaPlayerMode
+}
+
+bool StackedView::isInMultipleFileMode() const
+{
+    return currentIndex() == PreviewAlbumMode || currentIndex() == MapWidgetMode;
+}
+
+bool StackedView::isInAbstractMode() const
+{
+    return currentIndex() == WelcomePageMode;
+}
+
 void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
     if (info.isNull())
