@@ -808,6 +808,7 @@ QList<int> TagsCache::tagsWithProperty(const QString& property, const QString& v
         // sort out invalid entries, see bug #277169
         if (it->tagId <= 0)
         {
+            ++it;
             continue;
         }
 
