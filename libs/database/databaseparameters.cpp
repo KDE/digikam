@@ -430,7 +430,6 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
 
         if (group.hasKey(configDatabaseType))
         {
-            kDebug(50003) << configDatabaseType << " Found.";
             imgDatabaseType         = group.readEntry(configDatabaseType, QString());
             imgDatabaseName         = group.readEntry(configDatabaseName, QString());
             imgHostName             = group.readEntry(configDatabaseHostName, QString());
@@ -449,7 +448,6 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
         }
         else
         {
-            kDebug(50003) << "Empty 1.3 config";
             // Empty 1.3 config
             group  = config->group("Album Settings");
 
