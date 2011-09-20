@@ -63,9 +63,6 @@ public:
     ThumbnailSize          preloadThumbSize;
     QRect                  detailRect;
 
-    QHash<int, bool>       leftSideMap;       // Map of <image ID, side> to store LT Left Panel indicator.
-    QHash<int, bool>       rightSideMap;      // Map of <image ID, side> to store LT Right Panel indicator.
-
     bool                   emitDataChanged;
     bool                   exifRotate;
 
@@ -228,18 +225,6 @@ void ImageThumbnailModel::imageInfosCleared()
     {
         d->preloadThread->stopAllTasks();
     }
-
-    d->leftSideMap.clear();
-    d->rightSideMap.clear();
-}
-
-void ImageThumbnailModel::imageInfosDeleted(const QList<ImageInfo>& infos)
-{
-    foreach(ImageInfo inf, infos)
-    {
-        d->leftSideMap.remove(inf.id());
-        d->rightSideMap.remove(inf.id());
-    }
 }
 
 QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
@@ -266,14 +251,6 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
         }
 
         return QVariant(QVariant::Pixmap);
-    }
-    else if (role == LTLeftPanelRole)
-    {
-        return d->leftSideMap.value(imageInfoRef(index).id());
-    }
-    else if (role == LTRightPanelRole)
-    {
-        return d->rightSideMap.value(imageInfoRef(index).id());
     }
 
     return ImageModel::data(index, role);
@@ -317,14 +294,6 @@ bool ImageThumbnailModel::setData(const QModelIndex& index, const QVariant& valu
             default:
                 break;
         }
-    }
-    else if (role == LTLeftPanelRole)
-    {
-        d->leftSideMap[imageInfoRef(index).id()] = value.toBool();
-    }
-    else if (role == LTRightPanelRole)
-    {
-        d->rightSideMap[imageInfoRef(index).id()] = value.toBool();
     }
 
     return ImageModel::setData(index, value, role);

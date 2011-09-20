@@ -310,7 +310,16 @@ void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& prev
     d->prevAction->setEnabled(!previous.isNull());
     d->nextAction->setEnabled(!next.isNull());
 
-    d->item->setPreloadPaths(QStringList() << next.filePath() << previous.filePath());
+    QStringList previewPaths;
+    if (next.category() == DatabaseItem::Image)
+    {
+        previewPaths << next.filePath();
+    }
+    if (previous.category() == DatabaseItem::Image)
+    {
+        previewPaths << previous.filePath();
+    }
+    d->item->setPreloadPaths(previewPaths);
 }
 
 ImageInfo ImagePreviewView::getImageInfo() const

@@ -83,6 +83,15 @@ public:
     MapWidgetView*    mapWidgetView()    const;
     MediaPlayerView*  mediaPlayerView()  const;
 
+    /**
+     * Single-file mode is image preview or media player,
+     * multi-file is icon view or map,
+     * abstract modes do not handle files (welcome page)
+     */
+    bool isInSingleFileMode() const;
+    bool isInMultipleFileMode() const;
+    bool isInAbstractMode() const;
+
     void setPreviewItem(const ImageInfo& info = ImageInfo(),
                         const ImageInfo& previous = ImageInfo(),
                         const ImageInfo& next = ImageInfo());

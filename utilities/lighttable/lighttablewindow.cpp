@@ -736,7 +736,7 @@ void LightTableWindow::slotLeftPanelLeftButtonClicked()
         return;
     }
 
-    d->thumbView->setSelectedIndexes(QList<QModelIndex>() << d->thumbView->findItemByInfo(d->previewView->leftImageInfo()));
+    d->thumbView->setCurrentInfo(d->previewView->leftImageInfo());
 }
 
 void LightTableWindow::slotRightPanelLeftButtonClicked()
@@ -747,7 +747,7 @@ void LightTableWindow::slotRightPanelLeftButtonClicked()
         return;
     }
 
-    d->thumbView->setSelectedIndexes(QList<QModelIndex>() << d->thumbView->findItemByInfo(d->previewView->rightImageInfo()));
+    d->thumbView->setCurrentInfo(d->previewView->rightImageInfo());
 }
 
 void LightTableWindow::slotLeftPreviewLoaded(bool b)
@@ -886,7 +886,7 @@ void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
     {
         slotSetItemOnRightPanel(info);
         // Make this item the current one.
-        d->thumbView->setSelectedItem(info);
+        d->thumbView->setCurrentInfo(info);
     }
 }
 
@@ -908,8 +908,7 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList& list, bool addTo)
         // Just one item; this is used for the left panel.
         d->thumbView->setOnLeftPanel(info);
         slotSetItemOnLeftPanel(info);
-        d->thumbView->setSelectedItem(info);
-        d->thumbView->ensureItemVisible(info);
+        d->thumbView->setCurrentInfo(info);
         return;
     }
 
@@ -933,9 +932,7 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList& list, bool addTo)
 
             if (!d->navigateByPairAction->isChecked())
             {
-                d->thumbView->setSelectedItem(nextInf);
-                // ensure that the selected item is visible
-                d->thumbView->ensureItemVisible(nextInf);
+                d->thumbView->setCurrentInfo(nextInf);
             }
         }
 
@@ -943,8 +940,7 @@ void LightTableWindow::setLeftRightItems(const ImageInfoList& list, bool addTo)
         // (Fixes parts of bug #150296)
         if (d->navigateByPairAction->isChecked())
         {
-            d->thumbView->setSelectedItem(info);
-            d->thumbView->ensureItemVisible(info);
+            d->thumbView->setCurrentInfo(info);
         }
     }
 }
@@ -1321,7 +1317,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
         //  make this the selected item if the left was active before
         if ( leftPanelActive)
         {
-            d->thumbView->setSelectedItem(new_linfo);
+            d->thumbView->setCurrentInfo(new_linfo);
         }
     }
     else
@@ -1339,7 +1335,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
         //  make this the selected item if the left was active before
         if (!leftPanelActive)
         {
-            d->thumbView->setSelectedItem(new_rinfo);
+            d->thumbView->setCurrentInfo(new_rinfo);
         }
     }
     else
@@ -1624,50 +1620,22 @@ void LightTableWindow::slotToggleOnSyncPreview(bool t)
 
 void LightTableWindow::slotBackward()
 {
-    QModelIndex curr = d->thumbView->currentIndex();
-    QModelIndex last = d->thumbView->lastIndex();
-
-    if (curr.isValid())
-    {
-        QModelIndex prev = d->thumbView->previousIndex(curr);
-        if (prev.isValid())
-        {
-            d->thumbView->setSelectedIndex(prev);
-        }
-        else
-        {
-            d->thumbView->setSelectedIndex(last);
-        }
-    }
+    d->thumbView->toPreviousIndex();
 }
 
 void LightTableWindow::slotForward()
 {
-    QModelIndex curr  = d->thumbView->currentIndex();
-    QModelIndex first = d->thumbView->firstIndex();
-
-    if (curr.isValid())
-    {
-        QModelIndex next = d->thumbView->nextIndex(curr);
-        if (next.isValid())
-        {
-            d->thumbView->setSelectedIndex(next);
-        }
-        else
-        {
-            d->thumbView->setSelectedIndex(first);
-        }
-    }
+    d->thumbView->toNextIndex();
 }
 
 void LightTableWindow::slotFirst()
 {
-    d->thumbView->setSelectedIndex( d->thumbView->firstIndex() );
+    d->thumbView->toFirstIndex();
 }
 
 void LightTableWindow::slotLast()
 {
-    d->thumbView->setSelectedIndex( d->thumbView->lastIndex() );
+    d->thumbView->toLastIndex();
 }
 
 void LightTableWindow::slotToggleNavigateByPair()

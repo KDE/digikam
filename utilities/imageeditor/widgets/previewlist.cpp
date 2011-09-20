@@ -132,8 +132,7 @@ void PreviewThreadWrapper::slotFilterProgress(int /*progress*/)
 
 void PreviewThreadWrapper::startFilters()
 {
-    QList<DImgThreadedFilter*> list = d->map.values();
-    foreach(DImgThreadedFilter* filter, list)
+    foreach(DImgThreadedFilter* filter, d->map)
     {
         filter->startFilter();
     }
@@ -141,8 +140,7 @@ void PreviewThreadWrapper::startFilters()
 
 void PreviewThreadWrapper::stopFilters()
 {
-    QList<DImgThreadedFilter*> list = d->map.values();
-    foreach(DImgThreadedFilter* filter, list)
+    foreach(DImgThreadedFilter* filter, d->map)
     {
         filter->cancelFilter();
         filter->deleteLater();

@@ -52,6 +52,103 @@
 namespace Digikam
 {
 
+template <typename T, class Container>
+void removeAnyInInterval(Container& list, const T& begin, const T& end)
+{
+    typename Container::iterator it;
+    for (it = list.begin(); it != list.end(); )
+    {
+        if ((*it) >= begin && (*it) <= end)
+        {
+            it = list.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+
+class LightTableImageListModel : public ImageListModel
+{
+public:
+
+    LightTableImageListModel(QObject *parent = 0)
+       : ImageListModel(parent), m_exclusive(false)
+    {
+    }
+
+    void clearLightTableState()
+    {
+        m_leftIndexes.clear();
+        m_rightIndexes.clear();
+    }
+
+    void setExclusiveLightTableState(bool exclusive)
+    {
+        m_exclusive = exclusive;
+    }
+
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const
+    {
+        if (role == LTLeftPanelRole)
+        {
+            return m_leftIndexes.contains(index.row());
+        }
+        else if (role == LTRightPanelRole)
+        {
+            return m_rightIndexes.contains(index.row());
+        }
+        return ImageListModel::data(index, role);
+    }
+
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::DisplayRole)
+    {
+        if (!index.isValid())
+        {
+            return false;
+        }
+
+        if (role == LTLeftPanelRole)
+        {
+            if (m_exclusive)
+            {
+                m_leftIndexes.clear();
+            }
+            m_leftIndexes << index.row();
+            return true;
+        }
+        else if (role == LTRightPanelRole)
+        {
+            if (m_exclusive)
+            {
+                m_rightIndexes.clear();
+            }
+            m_rightIndexes << index.row();
+            return true;
+        }
+
+        return ImageListModel::setData(index, value, role);
+    }
+
+    virtual void imageInfosAboutToBeRemoved(int begin, int end)
+    {
+        removeAnyInInterval(m_leftIndexes, begin, end);
+        removeAnyInInterval(m_rightIndexes, begin, end);
+    }
+
+    virtual void imageInfosCleared()
+    {
+        clearLightTableState();
+    }
+
+protected:
+
+    QSet<int> m_leftIndexes;
+    QSet<int> m_rightIndexes;
+    bool      m_exclusive;
+};
+
 class LightTableThumbBar::LightTableThumbBarPriv
 {
 
@@ -67,7 +164,7 @@ public:
 
     bool                  navigateByPair;
 
-    ImageListModel*       imageInfoModel;
+    LightTableImageListModel* imageInfoModel;
     ImageFilterModel*     imageFilterModel;
     ImageDragDropHandler* dragDropHandler;
 };
@@ -76,7 +173,9 @@ LightTableThumbBar::LightTableThumbBar(QWidget* parent)
     : ImageThumbnailBar(parent),
       d(new LightTableThumbBarPriv)
 {
-    d->imageInfoModel   = new ImageListModel(this);
+    d->imageInfoModel   = new LightTableImageListModel(this);
+    // only one is left, only one is right at a time
+    d->imageInfoModel->setExclusiveLightTableState(true);
 
     d->imageFilterModel = new ImageFilterModel(this);
     d->imageFilterModel->setSourceImageModel(d->imageInfoModel);
@@ -246,66 +345,28 @@ void LightTableThumbBar::toggleTag(int tagID)
 
 void LightTableThumbBar::setOnLeftPanel(const ImageInfo& info)
 {
-    for (QModelIndex index = firstIndex(); index.isValid(); index = nextIndex(index))
-    {
-        if (!info.isNull())
-        {
-            if (findItemByIndex(index) == info)
-            {
-                d->imageInfoModel->setData(index, true, ImageModel::LTLeftPanelRole);
-            }
-            else if (isOnLeftPanel(findItemByIndex(index)))
-            {
-                d->imageInfoModel->setData(index, false, ImageModel::LTLeftPanelRole);
-            }
-        }
-        else if (isOnLeftPanel(findItemByIndex(index)))
-        {
-            d->imageInfoModel->setData(index, false, ImageModel::LTLeftPanelRole);
-        }
-    }
+    QModelIndex index = d->imageInfoModel->indexForImageInfo(info);
+    // model has exclusiveLightTableState, so any previous index will be reset
+    d->imageInfoModel->setData(index, true, ImageModel::LTLeftPanelRole);
     viewport()->update();
 }
 
 void LightTableThumbBar::setOnRightPanel(const ImageInfo& info)
 {
-    for (QModelIndex index = firstIndex(); index.isValid(); index = nextIndex(index))
-    {
-        if (!info.isNull())
-        {
-            if (findItemByIndex(index) == info)
-            {
-                d->imageInfoModel->setData(index, true, ImageModel::LTRightPanelRole);
-            }
-            else if (isOnRightPanel(findItemByIndex(index)))
-            {
-                d->imageInfoModel->setData(index, false, ImageModel::LTRightPanelRole);
-            }
-        }
-        else if (isOnRightPanel(findItemByIndex(index)))
-        {
-            d->imageInfoModel->setData(index, false, ImageModel::LTRightPanelRole);
-        }
-    }
+    QModelIndex index = d->imageInfoModel->indexForImageInfo(info);
+    // model has exclusiveLightTableState, so any previous index will be reset
+    d->imageInfoModel->setData(index, true, ImageModel::LTRightPanelRole);
     viewport()->update();
 }
 
 bool LightTableThumbBar::isOnLeftPanel(const ImageInfo& info) const
 {
-    QModelIndex index = findItemByInfo(info);
-    if (index.isValid())
-        return (d->imageInfoModel->data(index, ImageModel::LTLeftPanelRole).toBool());
-
-    return false;
+    return d->imageInfoModel->indexForImageInfo(info).data(ImageModel::LTLeftPanelRole).toBool();
 }
 
 bool LightTableThumbBar::isOnRightPanel(const ImageInfo& info) const
 {
-    QModelIndex index = findItemByInfo(info);
-    if (index.isValid())
-        return (d->imageInfoModel->data(index, ImageModel::LTRightPanelRole).toBool());
-
-    return false;
+    return d->imageInfoModel->indexForImageInfo(info).data(ImageModel::LTRightPanelRole).toBool();
 }
 
 QModelIndex LightTableThumbBar::findItemByInfo(const ImageInfo& info) const
@@ -335,23 +396,7 @@ void LightTableThumbBar::removeItemByInfo(const ImageInfo& info)
 
 int LightTableThumbBar::countItems() const
 {
-    return d->imageInfoModel->imageInfos().count();
-}
-
-void LightTableThumbBar::setSelectedItem(const ImageInfo& info)
-{
-    setSelectedImageInfos(QList<ImageInfo>() << info);
-}
-
-void LightTableThumbBar::setSelectedIndex(const QModelIndex& index)
-{
-    setSelectedItem(findItemByIndex(index));
-}
-
-void LightTableThumbBar::ensureItemVisible(const ImageInfo& info)
-{
-    if (!info.isNull())
-        scrollTo(findItemByInfo(info), QAbstractItemView::PositionAtCenter);
+    return d->imageInfoModel->rowCount();
 }
 
 void LightTableThumbBar::paintEvent(QPaintEvent* e)

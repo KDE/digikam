@@ -252,6 +252,21 @@ MediaPlayerView* StackedView::mediaPlayerView() const
     return d->mediaPlayerView;
 }
 
+bool StackedView::isInSingleFileMode() const
+{
+    return currentIndex() == PreviewImageMode || currentIndex() == MediaPlayerMode;
+}
+
+bool StackedView::isInMultipleFileMode() const
+{
+    return currentIndex() == PreviewAlbumMode || currentIndex() == MapWidgetMode;
+}
+
+bool StackedView::isInAbstractMode() const
+{
+    return currentIndex() == WelcomePageMode;
+}
+
 void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
     if (info.isNull())
@@ -267,15 +282,14 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
     }
     else
     {
-        AlbumSettings* settings      = AlbumSettings::instance();
-        QString currentFileExtension = QFileInfo(info.fileUrl().toLocalFile()).suffix();
-        QString mediaplayerfilter    = settings->getMovieFileFilter().toLower() +
-                                       settings->getMovieFileFilter().toUpper() +
-                                       settings->getAudioFileFilter().toLower() +
-                                       settings->getAudioFileFilter().toUpper();
-
-        if (mediaplayerfilter.contains(currentFileExtension) )
+        if (info.category() == DatabaseItem::Audio || info.category() == DatabaseItem::Video)
         {
+            // Stop image viewer
+            if (previewMode() == PreviewImageMode)
+            {
+                d->imagePreviewView->setImageInfo();
+            }
+
             setPreviewMode(MediaPlayerMode);
             d->mediaPlayerView->setImageInfo(info, previous, next);
         }
@@ -284,13 +298,8 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
             // Stop media player if running...
             if (previewMode() == MediaPlayerMode)
             {
-                setPreviewItem();
+                d->mediaPlayerView->setImageInfo();
             }
-
-            /*
-            if (previewMode() != PreviewImageMode)
-                updateThumbbar();
-            */
 
             d->imagePreviewView->setImageInfo(info, previous, next);
 
@@ -318,7 +327,7 @@ void StackedView::setPreviewMode(const int mode)
         return;
     }
 
-    if (mode == PreviewImageMode)
+    if (mode == PreviewImageMode || mode == MediaPlayerMode)
     {
         d->thumbBarDock->restoreVisibility();
         syncSelection(d->imageIconView, d->thumbBar);
@@ -377,7 +386,7 @@ void StackedView::syncSelection(ImageCategorizedView* from, ImageCategorizedView
 
 void StackedView::slotThumbBarSelectionChanged()
 {
-    if (currentIndex() != PreviewImageMode)
+    if (currentIndex() != PreviewImageMode && currentIndex() != MediaPlayerMode)
     {
         return;
     }

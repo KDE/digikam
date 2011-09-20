@@ -742,7 +742,6 @@ void ImageModel::removeIndexes(const QList<QModelIndex>& indexes)
         return;
     }
 
-    imageInfosDeleted(imageInfos(indexes));
     removeRowPairsWithCheck(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
 
@@ -760,7 +759,6 @@ void ImageModel::removeImageInfos(const QList<ImageInfo>& infos)
         if (index.isValid())
             listIndexes << index.row();
     }
-    imageInfosDeleted(infos);
     removeRowPairsWithCheck(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
 
@@ -781,7 +779,6 @@ void ImageModel::removeImageInfos(const QList<ImageInfo>& infos, const QList<QVa
             listIndexes << index.row();
     }
 
-    imageInfosDeleted(infos);
     removeRowPairsWithCheck(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
 
@@ -861,6 +858,7 @@ void ImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
             qCopy(d->infos.begin() + begin, d->infos.begin() + end, removedInfos.begin());
             emit imageInfosAboutToBeRemoved(removedInfos);
         }
+        imageInfosAboutToBeRemoved(begin, end);
         beginRemoveRows(QModelIndex(), begin, end);
 
         // update idHash - which points to indexes of d->infos, and these change now!
