@@ -62,7 +62,7 @@ public:
 
     bool needsTransaction() const
     {
-        return DatabaseAccess::parameters().isImgSQLite();
+        return DatabaseAccess::parameters().isSQLite();
     }
 
     void acquire()

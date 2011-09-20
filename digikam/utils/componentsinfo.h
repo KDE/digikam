@@ -80,7 +80,7 @@ static inline void showDigikamComponentsInfo()
 
     // Database Backend information
 
-    QString dbBe = AlbumSettings::instance()->getImgDatabaseType();
+    QString dbBe = AlbumSettings::instance()->getDatabaseType();
     list.insert(i18n("Database backend"), dbBe);
 
     if (dbBe != QString("QSQLITE"))

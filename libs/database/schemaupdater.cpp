@@ -164,7 +164,7 @@ void SchemaUpdater::setObserver(InitializationObserver* observer)
 
 bool SchemaUpdater::startUpdates()
 {
-    if (!m_Parameters.isImgSQLite())
+    if (!m_Parameters.isSQLite())
     {
         // Do we have sufficient privileges
         QStringList insufficientRights;
@@ -275,9 +275,9 @@ bool SchemaUpdater::startUpdates()
         // Version 4 writes "4", and from now on version x writes "x".
         // Version 5 includes the schema changes from 0.9 to 0.10
 
-        if (m_Parameters.isImgSQLite())
+        if (m_Parameters.isSQLite())
         {
-            QFileInfo currentDBFile(m_Parameters.imgDatabaseName);
+            QFileInfo currentDBFile(m_Parameters.databaseName);
             QFileInfo digikam3DB(currentDBFile.dir(), "digikam3.db");
             QFileInfo digikamDB(currentDBFile.dir(), "digikam.db");
 
@@ -329,7 +329,7 @@ bool SchemaUpdater::beginWrapSchemaUpdateStep()
 {
     if (!m_Backend->beginTransaction())
     {
-        QFileInfo currentDBFile(m_Parameters.imgDatabaseName);
+        QFileInfo currentDBFile(m_Parameters.databaseName);
         QString errorMsg = i18n("Failed to open a database transaction on your database file \"%1\". "
                                 "This is unusual. Please check that you can access the file and no "
                                 "other process has currently locked the file. "
@@ -386,7 +386,7 @@ bool SchemaUpdater::makeUpdates()
             }
 
             // v4 was always SQLite
-            QFileInfo currentDBFile(m_Parameters.imgDatabaseName);
+            QFileInfo currentDBFile(m_Parameters.databaseName);
             QString errorMsg = i18n("The schema updating process from version 4 to 6 failed, "
                                     "caused by an error that we did not expect. "
                                     "You can try to discard your old database and start with an empty one. "

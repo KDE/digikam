@@ -78,7 +78,7 @@ DBStatDlg::DBStatDlg(QWidget* parent)
     new QTreeWidgetItem(listView(), QStringList() << i18n("Tags") << QString::number(tags));
 
     // Database Backend information
-    QString dbBe = AlbumSettings::instance()->getImgDatabaseType();
+    QString dbBe = AlbumSettings::instance()->getDatabaseType();
     new QTreeWidgetItem(listView(), QStringList() << i18n("Database backend") << dbBe);
 
     if (dbBe != QString("QSQLITE"))

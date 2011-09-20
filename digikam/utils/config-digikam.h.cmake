@@ -24,9 +24,6 @@
 #ifndef CONFIG_DIGIKAM_H
 #define CONFIG_DIGIKAM_H
 
-#define DIGIKAM4DB "digikam4.db"
-#define THUMBNAILS_DIGIKAMDB "thumbnails-digikam.db"
-
 /* Define to 1 if you have KDEPIM shared library installed */
 #cmakedefine HAVE_KDEPIMLIBS 1
 

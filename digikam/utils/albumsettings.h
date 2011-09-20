@@ -103,11 +103,8 @@ public:
     bool showToolTipsIsValid()      const;
     bool showAlbumToolTipsIsValid() const;
 
-    void setImgDatabaseFilePath(const QString& path);
-    QString getImgDatabaseFilePath() const;
-
-    void setTmbDatabaseFilePath(const QString& path);
-    QString getTmbDatabaseFilePath() const;
+    void setDatabaseFilePath(const QString& path);
+    QString getDatabaseFilePath() const;
 
     void setShowSplashScreen(bool val);
     bool getShowSplashScreen() const;
@@ -333,47 +330,29 @@ public:
     DatabaseParameters getDatabaseParameters() const;
     void setDatabaseParameters(const DatabaseParameters& params);
 
-    QString getImgDatabaseType() const;
-    void setImgDatabaseType(const QString& databaseType);
+    QString getDatabaseType() const;
+    void setDatabaseType(const QString& databaseType);
 
-    QString getImgDatabaseConnectoptions() const;
-    void setImgDatabaseConnectoptions(const QString& connectoptions);
+    QString getDatabaseConnectoptions() const;
+    void setDatabaseConnectoptions(const QString& connectoptions);
 
-    QString getImgDatabaseName() const;
-    void setImgDatabaseName(const QString& databaseName);
+    QString getDatabaseName() const;
+    void setDatabaseName(const QString& databaseName);
 
-    QString getImgDatabaseHostName() const;
-    void setImgDatabaseHostName(const QString& hostName);
+    QString getDatabaseNameThumbnails() const;
+    void setDatabaseNameThumbnails(const QString& databaseNameThumbnails);
 
-    QString getImgDatabasePassword() const;
-    void setImgDatabasePassword(const QString& password);
+    QString getDatabaseHostName() const;
+    void setDatabaseHostName(const QString& hostName);
 
-    int getImgDatabasePort() const;
-    void setImgDatabasePort(int port);
+    QString getDatabasePassword() const;
+    void setDatabasePassword(const QString& password);
 
-    QString getImgDatabaseUserName() const;
-    void setImgDatabaseUserName(const QString& userName);
+    int getDatabasePort() const;
+    void setDatabasePort(int port);
 
-    QString getTmbDatabaseType() const;
-    void setTmbDatabaseType(const QString& databaseType);
-
-    QString getTmbDatabaseConnectoptions() const;
-    void setTmbDatabaseConnectoptions(const QString& connectoptions);
-
-    QString getTmbDatabaseName() const;
-    void setTmbDatabaseName(const QString& databaseName);
-
-    QString getTmbDatabaseHostName() const;
-    void setTmbDatabaseHostName(const QString& hostName);
-
-    QString getTmbDatabasePassword() const;
-    void setTmbDatabasePassword(const QString& password);
-
-    int getTmbDatabasePort() const;
-    void setTmbDatabasePort(int port);
-
-    QString getTmbDatabaseUserName() const;
-    void setTmbDatabaseUserName(const QString& userName);
+    QString getDatabaseUserName() const;
+    void setDatabaseUserName(const QString& userName);
 
     bool getInternalDatabaseServer() const;
     void setInternalDatabaseServer(const bool useInternalDBServer);
