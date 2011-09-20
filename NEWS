@@ -18,5 +18,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 281767 : digikam 2.1 will not start.
 010 ==> 282088 : Missing entries in tag list.
 011 ==> 282241 : Page down broken after viewing a video.
-012 ==> 
+012 ==> 282070 : When choosing Google Maps with the geolocation tools an error says "Malformed URL".
+013 ==> 281937 : digiKam 2.10 failed - Reinstalling 1.90 is failing too - Database issue.
+014 ==> 
 
