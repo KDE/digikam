@@ -317,7 +317,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
     }
     else if (m_untaggedFilter)
     {
-        match = info.tagIds().isEmpty();
+        match = !TagsCache::instance()->containsPublicTags(info.tagIds());
     }
     else
     {
