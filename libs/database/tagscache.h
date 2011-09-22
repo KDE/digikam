@@ -183,6 +183,18 @@ public:
     bool isInternalTag(int tagId) const;
 
     /**
+     * From the given list of tag ids, filter out any internal tags
+     * and return only public tags.
+     */
+    QList<int> publicTags(const QList<int>& tagIds) const;
+
+    /**
+     * Returns true if the given list of tag ids contains at
+     * least one non-internal tag
+     */
+    bool  containsPublicTags(const QList<int>& tagIds) const;
+
+    /**
      * Returns if a tag shall be written to the metadata of a file.
      * Always returns false if the tag is a program-internal tag.
      */
