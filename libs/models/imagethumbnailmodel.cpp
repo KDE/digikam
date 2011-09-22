@@ -232,8 +232,13 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
     if (role == ThumbnailRole && d->thread && index.isValid())
     {
         QPixmap   thumbnail;
-        ImageInfo info = imageInfoRef(index);
+        ImageInfo info = imageInfo(index);
         QString   path = info.filePath();
+
+        if (info.isNull() || path.isEmpty())
+        {
+            return QVariant(QVariant::Pixmap);
+        }
 
         if (!d->detailRect.isNull())
         {
