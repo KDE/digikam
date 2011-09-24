@@ -338,9 +338,11 @@ bool AdvancedRenameManager::initialize()
     {
         int counter = 1;
         foreach (const QString& file, fileList())
-        if (!d->fileGroupIndexMap.contains(fileGroupKey(file)))
         {
-            d->fileGroupIndexMap[fileGroupKey(file)] = counter++;
+            if (!d->fileGroupIndexMap.contains(fileGroupKey(file)))
+            {
+                d->fileGroupIndexMap[fileGroupKey(file)] = counter++;
+            }
         }
     }
 
