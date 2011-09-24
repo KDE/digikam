@@ -227,7 +227,7 @@ CachedItem CameraIconView::getThumbInfo(const CamItemInfo& itemInfo) const
 void CameraIconView::slotThumbInfoReady(const CamItemInfo& info)
 {
     CameraIconItem* item = findItem(info.folder, info.name);
-    if (!item)
+    if (item)
     {
         // Updating item, thumb controller will be called to refresh icon item. See repaint() method for details.
         item->update();
