@@ -24,6 +24,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 280082 : Light Table doesn't change right image properly.
 016 ==> 282319 : Empty Unremovable Keyword.
 017 ==> 282194 : digikam 2.1.1 crashes when displaying thumbnails in import screen.
-018 ==> 
+018 ==> 255520 : digiKam crashed while assigning tags to pictures.
+019 ==> 271473 : digiKam crashes reproducably when scanning collection after re-organising underlying picture folders.
+020 ==> 265893 : Seg. Fault. when importing PNG files with .JPG extension.
+021 ==> 
 
 
