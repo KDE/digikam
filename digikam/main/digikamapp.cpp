@@ -968,6 +968,10 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     // Pop up dialog to ask user whether to permanently delete
+    // FIXME: This action is never used?? How can someone delete a album directly, without moving it to the trash first?
+    //        This is especially important when deleting from a different partiton or from a net source.
+    //        Also note that we use the wrong icon for the default album delete action, which should have a thrashcan icon instead
+    //        of a red cross, it confuses users.
     d->imageDeletePermanentlyAction = new KAction(KIcon("edit-delete"), i18n("Delete Permanently"), this);
     d->imageDeletePermanentlyAction->setShortcut(KShortcut(Qt::SHIFT+Qt::Key_Delete));
     connect(d->imageDeletePermanentlyAction, SIGNAL(triggered()), d->view, SLOT(slotImageDeletePermanently()));
