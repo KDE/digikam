@@ -323,13 +323,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     connect(d->tagCheckView->checkableModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SLOT(slotTagStateChanged(Album*,Qt::CheckState)));
 
-    connect(d->titleEdit, SIGNAL(signalModified(const QString&, const QString&)),
+    connect(d->titleEdit, SIGNAL(signalModified(QString,QString)),
             this, SLOT(slotTitleChanged()));
 
-    connect(d->titleEdit, SIGNAL(signalValueAdded(const QString&, const QString&)),
+    connect(d->titleEdit, SIGNAL(signalValueAdded(QString,QString)),
             this, SLOT(slotTitleChanged()));
 
-    connect(d->titleEdit, SIGNAL(signalValueDeleted(const QString&)),
+    connect(d->titleEdit, SIGNAL(signalValueDeleted(QString)),
             this, SLOT(slotTitleChanged()));
 
     connect(d->captionsEdit, SIGNAL(signalModified()),
