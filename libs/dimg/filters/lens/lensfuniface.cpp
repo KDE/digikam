@@ -215,7 +215,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     d->settings        = LensFunContainer();
     d->usedCamera      = 0;
     d->usedLens        = 0;
-    d->lensDescription = QString();
+    d->lensDescription.clear();
 
     if (meta.isEmpty())
     {

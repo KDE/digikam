@@ -374,6 +374,7 @@ void ImageComments::addComment(const QString& comment, const QString& lang, cons
 
     QString author = author_;
 
+    /// @todo This makes no sense - is another variable supposed to be used instead? - Michael Hansen
     if (author.isEmpty())
     {
         author = QString();

@@ -448,8 +448,8 @@ void DImageHistory::purgePathFromReferredImages(const QString& path, const QStri
             {
                 if (id.m_filePath == path && id.m_fileName == fileName)
                 {
-                    id.m_filePath = QString();
-                    id.m_fileName = QString();
+                    id.m_filePath.clear();
+                    id.m_fileName.clear();
                 }
             }
         }

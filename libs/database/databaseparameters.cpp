@@ -285,10 +285,10 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
         databaseName = "digikam";
         internalServer = true;
         databaseNameThumbnails = "digikam";
-        hostName = QString();
+        hostName.clear();
         port = -1;
         userName = "root";
-        password = QString();
+        password.clear();
         connectOptions = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
     }
 
