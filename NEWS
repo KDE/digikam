@@ -19,10 +19,11 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 282088 : Missing entries in tag list.
 011 ==> 282241 : Page down broken after viewing a video.
 012 ==> 282070 : When choosing Google Maps with the geolocation tools an error says "Malformed URL".
-013 ==> 281937 : digiKam 2.10 failed - Reinstalling 1.90 is failing too - Database issue.
+013 ==> 281937 : digiKam 2.1.0 failed - Reinstalling 1.9.0 is failing too - Database issue.
 014 ==> 282298 : digiKam crash during startup (Digikam::ThumbnailCreator::loadFromDatabase fail).
 015 ==> 280082 : Light Table doesn't change right image properly.
 016 ==> 282319 : Empty Unremovable Keyword.
-017 ==> 
+017 ==> 282194 : digikam 2.1.1 crashes when displaying thumbnails in import screen.
+018 ==> 
 
 
