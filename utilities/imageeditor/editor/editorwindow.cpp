@@ -1391,7 +1391,7 @@ DImageHistory EditorWindow::resolvedImageHistory(const DImageHistory& history)
 
         for (hit = it->referredImages.begin(); hit != it->referredImages.end(); )
         {
-            QFileInfo info(hit->m_filePath + "/" + hit->m_fileName);
+            QFileInfo info(hit->m_filePath + '/' + hit->m_fileName);
 
             if (!info.exists())
             {

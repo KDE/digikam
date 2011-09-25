@@ -115,7 +115,7 @@ QString ThemeManager::currentThemeName() const
 {
     if (!d->themeMenuAction || !d->themeMenuActionGroup) return defaultThemeName();
     QAction* action = d->themeMenuActionGroup->checkedAction();
-    return !action ? defaultThemeName() : action->text().remove("&");
+    return !action ? defaultThemeName() : action->text().remove('&');
 }
 
 void ThemeManager::setCurrentTheme(const QString& name)
@@ -124,7 +124,7 @@ void ThemeManager::setCurrentTheme(const QString& name)
     QList<QAction*> list = d->themeMenuActionGroup->actions();
     foreach(QAction* action, list)
     {
-        if (action->text().remove("&") == name)
+        if (action->text().remove('&') == name)
         {
             action->setChecked(true);
             slotChangePalette();
@@ -274,7 +274,7 @@ void ThemeManager::updateCurrentKDEdefaultThemePreview()
     QList<QAction*> list = d->themeMenuActionGroup->actions();
     foreach(QAction* action, list)
     {
-        if (action->text().remove("&") == defaultThemeName())
+        if (action->text().remove('&') == defaultThemeName())
         {
             KSharedConfigPtr config = KSharedConfig::openConfig(d->themeMap.value(currentKDEdefaultTheme()));
             QIcon icon              = createSchemePreviewIcon(config);

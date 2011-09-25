@@ -803,7 +803,7 @@ static QString toString(const HistoryVertexProperties& props)
         }
         else
         {
-            return QString("Ids: (") + ids.join(",") + ")";
+            return QString("Ids: (") + ids.join(",") + ')';
         }
     }
     else

@@ -282,8 +282,8 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
                 if (lensCutted.contains("Nikon"))
                 {
-                    lensCutted.replace("Nikon ", "");
-                    lensCutted.replace("Zoom-", "");
+                    lensCutted.remove("Nikon ");
+                    lensCutted.remove("Zoom-");
                     lensCutted.replace("IF-ID", "ED-IF");
                     lensList = findLenses(d->usedCamera, lensCutted);
                     kDebug() << "* Check for Nikon lens (" << lensCutted << " : " << lensList.count() << ")";
@@ -414,7 +414,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     }
     else
     {
-        temp                        = temp.replace(" m", "");
+        temp                        = temp.remove(" m");
         d->settings.subjectDistance = temp.toDouble();
         kDebug() << "Subject dist.  : " << d->settings.subjectDistance;
     }

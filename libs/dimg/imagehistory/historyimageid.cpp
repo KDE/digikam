@@ -75,9 +75,9 @@ void HistoryImageId::setPath(const QString& path)
 {
     m_filePath = path;
 
-    if (!m_filePath.endsWith("/"))
+    if (!m_filePath.endsWith('/'))
     {
-        m_filePath += "/";
+        m_filePath += '/';
     }
 }
 

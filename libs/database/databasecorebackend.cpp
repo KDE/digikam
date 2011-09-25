@@ -1200,7 +1200,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
                 {
                     if (isValue)
                     {
-                        replaceStr = "?";
+                        replaceStr = '?';
                         valuesToBind.append(value);
                     }
                     else
@@ -1216,7 +1216,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 #endif
 
                 valuesToBind.append(placeHolderValue);
-                replaceStr = "?";
+                replaceStr = '?';
             }
 
             preparedString = preparedString.replace(pos, identifierRegExp.matchedLength(), replaceStr);

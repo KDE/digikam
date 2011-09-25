@@ -591,7 +591,7 @@ bool VersionFileInfo::isNull() const
 
 QString VersionFileInfo::filePath() const
 {
-    return path + "/" + fileName;
+    return path + '/' + fileName;
 }
 
 KUrl VersionFileInfo::fileUrl() const

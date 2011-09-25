@@ -1195,7 +1195,7 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
         // Similarly the width and height of the face's box are
         // indicated by W.WW and H.HH.
         QString rectString = getXmpTagString(rectPathTemplate.arg(i).toLatin1(), false);
-        QStringList list   = rectString.split(",");
+        QStringList list   = rectString.split(',');
         if (list.size() < 4)
         {
             kDebug() << "Cannot parse WLPG rectangle string" << rectString;

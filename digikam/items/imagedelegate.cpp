@@ -338,7 +338,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     if (d->drawImageFormat)
     {
         QString frm = info.format();
-        if (frm.contains("-")) frm = frm.section("-", -1);   // For RAW format annoted as "RAW-xxx" => "xxx"
+        if (frm.contains("-")) frm = frm.section('-', -1);   // For RAW format annoted as "RAW-xxx" => "xxx"
         drawImageFormat(p, actualPixmapRect, frm);
     }
 

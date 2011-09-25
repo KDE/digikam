@@ -552,7 +552,7 @@ void ImagePropertiesTab::setRating(int rating)
     QString str;
     if (rating > RatingMin && rating <= RatingMax)
     {
-        str = " ";
+        str = ' ';
         for (int i=0; i<rating; ++i)
         {
             str += QChar(0x2730);
@@ -623,7 +623,7 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
             shortenedPath = indent + tagPath.section('/', depth);
         }
 
-        shortenedPath.replace("/", " / ");
+        shortenedPath.replace('/', " / ");
         tagsShortened << shortenedPath;
         previous = tagPath;
 

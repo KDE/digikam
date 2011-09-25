@@ -369,7 +369,7 @@ QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy) const
         }
         else
         {
-            path = it->name + "/" + path;
+            path = it->name + '/' + path;
         }
     }
 
