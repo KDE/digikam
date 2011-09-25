@@ -27,6 +27,13 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 255520 : digiKam crashed while assigning tags to pictures.
 019 ==> 271473 : digiKam crashes reproducably when scanning collection after re-organising underlying picture folders.
 020 ==> 265893 : Seg. Fault. when importing PNG files with .JPG extension.
-021 ==> 
-
-
+021 ==> 242171 : digiKam hangs at 0% in editor when using the "Sharpen" tool.
+022 ==> 241585 : digiKam hangs at 0% in editor when calling "Save as".
+023 ==> 265247 : Improve dialog when scanning a folder with only a avi in it.
+024 ==> 252796 : "Save as" doesn't reuse previously selected dialog.
+025 ==> 192430 : Tags disabled even though images are selected.
+026 ==> 242833 : Compressed TIFF from digikam broken.
+027 ==> 273199 : digiKam fails to start.
+028 ==> 211764 : Assigning a color profile to TIFF-16 does not work when using exiv2 versions greater than 0.17.
+029 ==> 282573 : digiKam crashes when assigning a date manually to a scanned tif file.
+030 ==> 
