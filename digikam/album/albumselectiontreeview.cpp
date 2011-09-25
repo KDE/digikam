@@ -158,10 +158,12 @@ void AlbumSelectionTreeView::AlbumSelectionTreeViewContextMenuElement::
 
     // --------------------------------------------------------
     cmh.addActionNewAlbum(d->albumModificationHelper, album);
-    cmh.addActionRenameAlbum(d->albumModificationHelper, album);
-    cmh.addActionResetAlbumIcon(d->albumModificationHelper, album);
     cmh.addAction("album_openinfilemanager");
     cmh.addAction("album_openinterminal");
+    cmh.addSeparator();
+    // --------------------------------------------------------
+    cmh.addActionRenameAlbum(d->albumModificationHelper, album);
+    cmh.addActionResetAlbumIcon(d->albumModificationHelper, album);
     cmh.addSeparator();
     // --------------------------------------------------------
     cmh.addAction(d->findDuplAction);
