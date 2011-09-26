@@ -187,12 +187,12 @@ void AbstractDImageHistoryTest::applyFilters4()
 
 QString AbstractDImageHistoryTest::tempFileName(const QString& purpose) const
 {
-    return QString("digikamtests-") + metaObject()->className() + "-" + purpose + "-" + QTime::currentTime().toString();
+    return QString("digikamtests-") + metaObject()->className() + '-' + purpose + '-' + QTime::currentTime().toString();
 }
 
 QString AbstractDImageHistoryTest::tempFilePath(const QString& purpose) const
 {
-    return QDir::tempPath() + "/" + tempFileName(purpose);
+    return QDir::tempPath() + '/' + tempFileName(purpose);
 }
 
 void AbstractDImageHistoryTest::initBaseTestCase()

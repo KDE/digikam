@@ -55,7 +55,7 @@ QString CameraNameOption::parseOperation(ParseSettings& settings)
 
     if (!info.isNull())
     {
-        result = info.photoInfoContainer().make + " " + info.photoInfoContainer().model;
+        result = info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model;
     }
     else
     {
@@ -83,7 +83,7 @@ QString CameraNameOption::parseOperation(ParseSettings& settings)
             }
         }
 
-        result = make + " " + model;
+        result = make + ' ' + model;
     }
 
     return result.simplified();

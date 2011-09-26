@@ -174,16 +174,16 @@ void SearchTextBarTest::testModelParsing()
     QStandardItemModel newModel(2, 1);
     // use the same ids by purpose
     index = newModel.index(0, 0, QModelIndex());
-    newModel.setData(index, QVariant(parent0 + "x"), Qt::DisplayRole);
+    newModel.setData(index, QVariant(parent0 + 'x'), Qt::DisplayRole);
     newModel.setData(index, QVariant(0), idRole);
     index = newModel.index(1, 0, QModelIndex());
-    newModel.setData(index, QVariant(parent1 + "x"), Qt::DisplayRole);
+    newModel.setData(index, QVariant(parent1 + 'x'), Qt::DisplayRole);
     newModel.setData(index, QVariant(1), idRole);
 
     textBar.setModel(&newModel, idRole, Qt::DisplayRole);
 
     QCOMPARE(textBar.completionObject()->items().size(), 2);
-    QVERIFY(textBar.completionObject()->items().contains(parent0 + "x"));
-    QVERIFY(textBar.completionObject()->items().contains(parent1 + "x"));
+    QVERIFY(textBar.completionObject()->items().contains(parent0 + 'x'));
+    QVERIFY(textBar.completionObject()->items().contains(parent1 + 'x'));
 
 }

@@ -233,8 +233,8 @@ void AlbumModelTest::init()
 
     foreach (const QString& imageFile, imageFiles)
     {
-        QString src = IMAGE_PATH + "/" + imageFile;
-        QString dst = palbumChild0Root0->fileUrl().toLocalFile() + "/" + imageFile;
+        QString src = IMAGE_PATH + '/' + imageFile;
+        QString dst = palbumChild0Root0->fileUrl().toLocalFile() + '/' + imageFile;
         bool copied = QFile::copy(src, dst);
         QVERIFY2(copied, "Test images must be copied");
     }
@@ -453,13 +453,13 @@ void AlbumModelTest::testDisablePAlbumCount()
     {
         QModelIndex collectionIndex = albumModel.index(collectionRow, 0, rootIndex);
         QString collectionTitle = albumModel.data(collectionIndex, Qt::DisplayRole).toString();
-        QVERIFY2(countRegEx.exactMatch(collectionTitle), QString("'" + collectionTitle + "' matching error").toAscii().data());
+        QVERIFY2(countRegEx.exactMatch(collectionTitle), QString('\'' + collectionTitle + "' matching error").toAscii().data());
 
         for (int albumRow = 0; albumRow < albumModel.rowCount(collectionIndex); ++albumRow)
         {
             QModelIndex albumIndex = albumModel.index(albumRow, 0, collectionIndex);
             QString albumTitle = albumModel.data(albumIndex, Qt::DisplayRole).toString();
-            QVERIFY2(countRegEx.exactMatch(albumTitle), QString("'" + albumTitle + "' matching error").toAscii().data());
+            QVERIFY2(countRegEx.exactMatch(albumTitle), QString('\'' + albumTitle + "' matching error").toAscii().data());
         }
 
     }
@@ -475,13 +475,13 @@ void AlbumModelTest::testDisablePAlbumCount()
     {
         QModelIndex collectionIndex = albumModel.index(collectionRow, 0, rootIndex);
         QString collectionTitle = albumModel.data(collectionIndex, Qt::DisplayRole).toString();
-        QVERIFY2(!countRegEx.exactMatch(collectionTitle), QString("'" + collectionTitle + "' matching error").toAscii().data());
+        QVERIFY2(!countRegEx.exactMatch(collectionTitle), QString('\'' + collectionTitle + "' matching error").toAscii().data());
 
         for (int albumRow = 0; albumRow < albumModel.rowCount(collectionIndex); ++albumRow)
         {
             QModelIndex albumIndex = albumModel.index(albumRow, 0, collectionIndex);
             QString albumTitle = albumModel.data(albumIndex, Qt::DisplayRole).toString();
-            QVERIFY2(!countRegEx.exactMatch(albumTitle), QString("'" + albumTitle + "' matching error").toAscii().data());
+            QVERIFY2(!countRegEx.exactMatch(albumTitle), QString('\'' + albumTitle + "' matching error").toAscii().data());
         }
 
     }

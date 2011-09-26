@@ -299,7 +299,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                 // LAST STAGE, Adapt exiv2 strings to lensfun strings. Some lens description use something like that :
                 // "10.0 - 20.0 mm". This must be adapted like this : "10-20mm"
                 lensCutted = d->lensDescription;
-                lensCutted.replace(QRegExp("\\.[0-9]"), "");
+                lensCutted.replace(QRegExp("\\.[0-9]"), ""); //krazy:exclude=doublequote_chars
                 lensCutted.replace(" - ", "-");
                 lensCutted.replace(" mm", "mn");
                 lensList = findLenses(d->usedCamera, lensCutted);
