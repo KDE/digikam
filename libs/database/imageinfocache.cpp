@@ -83,15 +83,13 @@ bool ImageInfoCache::hasInfoForId(qlonglong id) const
 void ImageInfoCache::dropInfo(ImageInfoData* infodata)
 {
     // check again ref count, now in mutex-protected context
-    if (infodata->isReferenced())
+    if (!infodata || infodata->isReferenced())
     {
         return;
     }
 
-    if (infodata->invalid || m_infos.remove(infodata->id))
-    {
-        delete infodata;
-    }
+    m_infos.remove(infodata->id);
+    delete infodata;
 }
 
 QString ImageInfoCache::albumName(DatabaseAccess& access, int albumId)
