@@ -641,7 +641,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
         beginTransaction();
     }
 
-    foreach (DatabaseActionElement actionElement, action.dbActionElements)
+    foreach (const DatabaseActionElement& actionElement, action.dbActionElements)
     {
         DatabaseCoreBackend::QueryState result;
 
@@ -701,7 +701,7 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction& action, c
 #endif
 
     QSqlQuery result;
-    foreach (DatabaseActionElement actionElement, action.dbActionElements)
+    foreach (const DatabaseActionElement& actionElement, action.dbActionElements)
     {
         if (actionElement.mode==QString("query"))
         {

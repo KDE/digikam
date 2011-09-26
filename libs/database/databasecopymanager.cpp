@@ -242,7 +242,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
         QMap<QString, QVariant> tempBindingMap;
         int i = 0;
 
-        foreach (QString columnName, columnNames)
+        foreach (QString columnName, columnNames) // krazy:exclude=foreach
         {
             kDebug(50003) << "Column: ["<< columnName << "] value ["<<result.value(i)<<"]";
             tempBindingMap.insert(columnName.insert(0, ':'), result.value(i));

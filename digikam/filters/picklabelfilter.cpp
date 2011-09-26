@@ -63,12 +63,14 @@ QList<TAlbum*> PickLabelFilter::getCheckedPickLabelTags()
     int tagId   = 0;
     TAlbum* tag = 0;
 
-    foreach(PickLabel pl, colorLabels())
+    foreach(const PickLabel& pl, colorLabels())
     {
         tagId = TagsCache::instance()->getTagForPickLabel(pl);
         tag   = AlbumManager::instance()->findTAlbum(tagId);
         if (tagId)
+        {
             list.append(tag);
+        }
     }
 
     return list;
