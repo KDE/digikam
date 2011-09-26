@@ -36,4 +36,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 273199 : digiKam fails to start.
 028 ==> 211764 : Assigning a color profile to TIFF-16 does not work when using exiv2 versions greater than 0.17.
 029 ==> 282573 : digiKam crashes when assigning a date manually to a scanned tif file.
-030 ==> 
+030 ==> 267414 : Working on albums with viewer and editor.
+031 ==> 
