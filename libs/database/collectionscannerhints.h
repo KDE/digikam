@@ -134,11 +134,11 @@ public:
 
     uint qHash() const;
 
-    bool operator==(const CollectionScannerHints::Album& src)
+    bool operator==(const CollectionScannerHints::Album& src) const
     {
         return src == m_src;
     }
-    bool operator==(const CollectionScannerHints::DstPath& dst)
+    bool operator==(const CollectionScannerHints::DstPath& dst) const
     {
         return dst == m_dst;
     }
@@ -188,7 +188,7 @@ public:
     QStringList dstNames() const;
     QString dstName(qlonglong id) const;
 
-    bool operator==(const CollectionScannerHints::Album& dst)
+    bool operator==(const CollectionScannerHints::Album& dst) const
     {
         return dst == m_dst;
     }

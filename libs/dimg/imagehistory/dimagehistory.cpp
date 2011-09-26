@@ -143,7 +143,7 @@ bool DImageHistory::operator==(const DImageHistory& other) const
     return d->entries == other.d->entries;
 }
 
-bool DImageHistory::operator<(const Digikam::DImageHistory& other)
+bool DImageHistory::operator<(const Digikam::DImageHistory& other) const
 {
     if (d->entries.size() < other.size())
     {
@@ -153,7 +153,7 @@ bool DImageHistory::operator<(const Digikam::DImageHistory& other)
     return false;
 }
 
-bool DImageHistory::operator>(const Digikam::DImageHistory& other)
+bool DImageHistory::operator>(const Digikam::DImageHistory& other) const
 {
     if (d->entries.size() > other.size())
     {

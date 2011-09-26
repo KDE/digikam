@@ -49,7 +49,7 @@ ChoiceSearchModel::Entry::Entry(QVariant key, const QString userDisplay)
 {
 }
 
-bool ChoiceSearchModel::Entry::operator==(const Entry& other)
+bool ChoiceSearchModel::Entry::operator==(const Entry& other) const
 {
     return key == other.key;
 }

@@ -114,8 +114,9 @@ protected:
         QString      display;
         bool         checkState;
 
-        bool operator==(const Entry& other);
-        bool operator==(const QVariant& other);
+        bool operator==(const Entry& other) const;
+        /// @todo This function has no definition.
+        bool operator==(const QVariant& other) const;
     };
 
     QList<Entry> m_entries;

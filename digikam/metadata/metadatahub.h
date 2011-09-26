@@ -78,12 +78,12 @@ public:
         Status status;
         bool   hasTag;
 
-        bool operator==(TagStatus otherstatus)
+        bool operator==(const TagStatus& otherstatus) const
         {
             return otherstatus.status == status &&
                    otherstatus.hasTag == hasTag;
         }
-        bool operator==(Status otherstatus)
+        bool operator==(const Status& otherstatus) const
         {
             return otherstatus == status;
         }
