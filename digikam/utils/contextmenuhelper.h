@@ -103,6 +103,7 @@ Q_SIGNALS:
     void signalAddNewTagFromABCMenu(const QString&);
     void signalPopupTagsView();
     void signalCreateGroup();
+    void signalCreateGroupByTime();
     void signalUngroup();
     void signalRemoveFromGroup();
 

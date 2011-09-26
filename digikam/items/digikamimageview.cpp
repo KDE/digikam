@@ -404,6 +404,9 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     connect(&cmhelper, SIGNAL(signalCreateGroup()),
             this, SLOT(createGroupFromSelection()));
 
+    connect(&cmhelper, SIGNAL(signalCreateGroupByTime()),
+            this, SLOT(createGroupByTimeFromSelection()));
+
     connect(&cmhelper, SIGNAL(signalUngroup()),
             this, SLOT(ungroupSelected()));
 
@@ -440,6 +443,9 @@ void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMe
 
     connect(&cmhelper, SIGNAL(signalCreateGroup()),
             this, SLOT(createGroupFromSelection()));
+
+    connect(&cmhelper, SIGNAL(signalCreateGroupByTime()),
+            this, SLOT(createGroupByTimeFromSelection()));
 
     connect(&cmhelper, SIGNAL(signalUngroup()),
             this, SLOT(ungroupSelected()));
@@ -681,6 +687,20 @@ void DigikamImageView::createGroupFromSelection()
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
     ImageInfo groupLeader = selectedInfos.takeFirst();
     MetadataManager::instance()->addToGroup(groupLeader, selectedInfos);
+}
+
+void DigikamImageView::createGroupByTimeFromSelection()
+{
+    QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
+    while (selectedInfos.size() > 0) {
+        QList<ImageInfo> group;
+        ImageInfo groupLeader = selectedInfos.takeFirst();
+        QDateTime dateTime = groupLeader.dateTime();
+        while (selectedInfos.size()>0 && abs(dateTime.secsTo(selectedInfos.first().dateTime()))<2) {
+            group.push_back(selectedInfos.takeFirst());
+        }
+        MetadataManager::instance()->addToGroup(groupLeader, group);
+    }
 }
 
 void DigikamImageView::ungroupSelected()
