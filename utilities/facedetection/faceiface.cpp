@@ -294,7 +294,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
                     }
                     else
                     {
-                        // skip new entry if any overlapping face has a name, and we dont
+                        // skip new entry if any overlapping face has a name, and we do not
                         newFace = DatabaseFace();
                         break;
                     }
@@ -375,7 +375,7 @@ void FaceIface::removeNormalTags(qlonglong imageId, QList<int> tagIds)
 int FaceIface::faceRectDisplayMargin()
 {
     /*
-     * Dont change that value unless you know what you do.
+     * Do not change that value unless you know what you do.
      * There are a lot of pregenerated thumbnails in user's databases,
      * expensive to regenerate, depending on this very value.
      */

@@ -222,7 +222,7 @@ void HistogramWidget::updateData(uchar* i_data, uint i_w, uint i_h,
 
     if (i_data || (!i_data && !s_data))
     {
-        // dont delete main histogram if only the selection is reset
+        // do not delete main histogram if only the selection is reset
         delete d->imageHistogram;
         d->imageHistogram = 0;
     }

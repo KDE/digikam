@@ -77,7 +77,7 @@ public:
 
 protected:
 
-    // quick & dirty workaround the fact that QRadioButton doesnt provide a decent label
+    // quick & dirty workaround the fact that QRadioButton does not provide a decent label
     void mouseReleaseEvent(QMouseEvent*)
     {
         if (m_button)
@@ -249,7 +249,7 @@ void FaceScanDialog::doLoadState()
 
     d->useFullCpuButton->setChecked(group.readEntry(entryName(d->configUseFullCpu), true));
 
-    // dont load retrainAllButton and benchmarkButton state from config, dangerous
+    // do not load retrainAllButton and benchmarkButton state from config, dangerous
 
     setDetailsWidgetVisible(group.readEntry(entryName(d->configSettingsVisible), false));
 }

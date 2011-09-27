@@ -55,7 +55,7 @@ public:
      * If counter is given, and the given file name has a version number, write it to counter.
      * If intermediateCounter is given, and the given file name has an intermediate counter number,
      * write it to counter. If not available, do not touch the given counters.
-     * See initialCounter() for the valied counter formats.
+     * See initialCounter() for the valid counter formats.
      */
     virtual QString baseName(const QString& path, const QString& filename,
                              QVariant* counter = 0, QVariant* intermediateCounter = 0) = 0;

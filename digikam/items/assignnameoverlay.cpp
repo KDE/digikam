@@ -270,7 +270,7 @@ void AssignNameOverlay::viewportLeaveEvent(QObject* o, QEvent* e)
         return;
     }
 
-    // Dont hide when hovering the pop-up of the line edit.
+    // Do not hide when hovering the pop-up of the line edit.
     if (d->isChildWidget(qApp->widgetAt(QCursor::pos()), assignNameWidget()))
     {
         return;

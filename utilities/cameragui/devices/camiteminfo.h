@@ -82,7 +82,7 @@ public:
     int                writePermissions;     // Write permission of camera file
 
     QString            name;                 // File name in camera file-system
-    QString            folder;               // Folder path to acces to file in camera
+    QString            folder;               // Folder path to access to file in camera
     QString            mime;                 // Type mime of camera file
 
     QDateTime          mtime;                // Modified time stamp of camera file

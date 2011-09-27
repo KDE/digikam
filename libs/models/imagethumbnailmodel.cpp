@@ -311,7 +311,7 @@ void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingD
         return;
     }
 
-    // In case of multiple occurrence, we currently dont know which thumbnail is this. Signal change on all.
+    // In case of multiple occurrence, we currently do not know which thumbnail is this. Signal change on all.
     foreach (const QModelIndex& index, indexesForPath(loadingDescription.filePath))
     {
         if (thumb.isNull())

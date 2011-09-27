@@ -74,7 +74,7 @@ void DragHandle::paintEvent(QPaintEvent*)
     opt.initFrom(d->parent);
     opt.features = QStyleOptionToolBar::Movable;
 
-    // If the thumbnail bar is layed out horizontally, the state should be set
+    // If the thumbnail bar is laid out horizontally, the state should be set
     // to horizontal to draw the handle in the proper orientation.
     if (d->currentArea == Qt::LeftDockWidgetArea || d->currentArea == Qt::RightDockWidgetArea)
     {

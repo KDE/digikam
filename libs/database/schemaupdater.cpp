@@ -598,7 +598,7 @@ bool SchemaUpdater::updateV5toV6()
 
     m_currentVersion = 6;
     // Digikam for database version 5 can work with version 6, though not using the new features
-    // Note: We dont upgrade the uniqueHash
+    // Note: We do not upgrade the uniqueHash
     m_currentRequiredVersion = 5;
     return true;
 }

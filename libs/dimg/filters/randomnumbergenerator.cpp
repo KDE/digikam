@@ -112,7 +112,7 @@ class RandomNumberGenerator::RandomNumberGeneratorPriv
 {
 public:
 
-    enum { InitialSeed = 5489 }; // guaranteed constant initial seed, dont change
+    enum { InitialSeed = 5489 }; // guaranteed constant initial seed, do not change
 
     RandomNumberGeneratorPriv()
         : seed(InitialSeed),

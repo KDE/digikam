@@ -1344,7 +1344,7 @@ QPixmap DImgInterface::convertToPixmap(DImg& img) const
 
     if (d->cmSettings.enableCM && (d->cmSettings.useManagedView || d->doSoftProofing))
     {
-        // dont use d->monitorICCtrans here, because img may have a different embedded profile
+        // do not use d->monitorICCtrans here, because img may have a different embedded profile
         IccManager manager(img);
         IccTransform transform;
 

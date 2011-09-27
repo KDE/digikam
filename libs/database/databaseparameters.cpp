@@ -320,7 +320,7 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
             *this = parametersForSQLite(databaseFileSQLite(databaseFilePath));
         }
 
-        // Be aware that schema updating from  <= 0.9 requires reading the "Album Path", so dont remove it here
+        // Be aware that schema updating from  <= 0.9 requires reading the "Album Path", so do not remove it here
     }
 }
 

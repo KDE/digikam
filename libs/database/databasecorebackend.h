@@ -110,7 +110,7 @@ public:
         SQLError,
 
         /**
-         * An connection error has occured while executing the query.
+         * An connection error has occurred while executing the query.
          */
         ConnectionError
     };

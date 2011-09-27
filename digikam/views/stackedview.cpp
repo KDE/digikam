@@ -308,7 +308,7 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
             // This will prevent a flicker effect with the old image preview loaded in stack.
         }
 
-        // dont touch the selection, only adjust current info
+        // do not touch the selection, only adjust current info
         QModelIndex currentIndex = d->thumbBar->imageSortFilterModel()->indexForImageInfo(info);
         d->thumbBar->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::NoUpdate);
     }

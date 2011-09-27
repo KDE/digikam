@@ -180,7 +180,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
                                                      DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
     d->decodingSettingsBox->setObjectName("RawSettingsBox Expander");
 
-    // Note: dont touch the url edit's fileDialog() here.
+    // Note: do not touch the url edit's fileDialog() here.
     // This creates the file dialog, which involved an event loop, which is evil.
     // Adjust file dialog in fileDialogAboutToOpen
 

@@ -195,7 +195,7 @@ void DynamicThread::start(QMutexLocker& locker)
 
     if (!d->threadRequested)
     {
-        // avoid issueing multiple thread requests after very fast start/stop/start calls
+        // avoid issuing multiple thread requests after very fast start/stop/start calls
         d->threadRequested = true;
 
         locker.unlock();

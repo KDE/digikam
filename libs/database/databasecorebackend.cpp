@@ -420,7 +420,7 @@ DatabaseCoreBackendPrivate::BusyWaiter::BusyWaiter(DatabaseCoreBackendPrivate* d
 void DatabaseCoreBackendPrivate::transactionFinished()
 {
     // wakes up any BusyWaiter waiting on the busyWaitCondVar.
-    // Possibly called under d->lock->mutex lock, so we dont lock the busyWaitMutex
+    // Possibly called under d->lock->mutex lock, so we do not lock the busyWaitMutex
     busyWaitCondVar.wakeOne();
 }
 
@@ -537,7 +537,7 @@ bool DatabaseCoreBackendPrivate::handleWithErrorHandler(const SqlQuery* query)
     {
         //TODO check if it's better to use an own error handler for kio slaves.
         // But for now, close only the database in the hope, that the next
-        // access will be successfull.
+        // access will be successful.
         closeDatabaseForThread();
 
     }

@@ -972,7 +972,7 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
             if (found)
             {
                 oldIds.erase(it);
-                // dont erase from oldExtraValues - oldIds is a hash id -> index.
+                // do not erase from oldExtraValues - oldIds is a hash id -> index.
             }
             else
             {

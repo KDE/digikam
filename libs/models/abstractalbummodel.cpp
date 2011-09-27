@@ -1046,7 +1046,7 @@ QVariant AbstractCheckableAlbumModel::albumData(Album* a, int role) const
 
             if (d->addExcludeTristate)
             {
-                // Use Qt::PartiallyChecked only internally, dont't expose it to the TreeView
+                // Use Qt::PartiallyChecked only internally, do not expose it to the TreeView
                 return (state == Qt::Unchecked) ? Qt::Unchecked : Qt::Checked;
             }
             return state;
