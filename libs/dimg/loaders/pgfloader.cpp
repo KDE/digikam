@@ -66,7 +66,7 @@ extern "C"
 
 // Local includes
 
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "PGFimage.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"

@@ -45,7 +45,7 @@
 #include "albumdb.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
-#include "config-digikam.h"
+#include <config-digikam.h>
 
 namespace Digikam
 {

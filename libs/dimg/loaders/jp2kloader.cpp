@@ -47,6 +47,7 @@
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "dmetadata.h"
+/// @todo According to krazy2, this include directive should be the first one, but moving it to the top breaks the build. Should be checked later. MH
 #include "jp2kloader.h"
 
 namespace Digikam

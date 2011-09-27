@@ -45,7 +45,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "databaseparameters.h"
 #include "databaseserverstarter.h"
 

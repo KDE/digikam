@@ -43,7 +43,6 @@
 
 // Local includes
 
-#include "importfilters.h"
 #include "filtercombo.h"
 
 namespace Digikam

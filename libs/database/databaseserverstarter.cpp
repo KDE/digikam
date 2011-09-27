@@ -33,7 +33,6 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QDir>
-#include <QProcess>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -58,7 +57,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include <config-digikam.h>
 
 namespace Digikam
 {

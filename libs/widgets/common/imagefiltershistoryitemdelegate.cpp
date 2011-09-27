@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "imagefiltershistoryitemdelegate.h"
+
 // Qt includes
 
 #include <QPainter>
@@ -38,7 +40,6 @@
 
 // Local includes
 
-#include "imagefiltershistoryitemdelegate.h"
 #include "dimgfiltermanager.h"
 
 namespace Digikam

@@ -36,10 +36,6 @@
 #include <kiconloader.h>
 #include <kpixmapsequence.h>
 
-// Local includes
-
-#include "workingwidget.h"
-
 namespace Digikam
 {
 

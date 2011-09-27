@@ -36,7 +36,6 @@
 #include <QPainter>
 #include <QPen>
 #include <QBrush>
-#include <QPixmap>
 #include <QImage>
 #include <QResizeEvent>
 #include <QMouseEvent>

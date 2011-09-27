@@ -41,7 +41,6 @@
 
 //local includes
 
-#include "setupscriptmanager.h"
 #include "scriptplugintype.h"
 
 namespace Digikam

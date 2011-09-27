@@ -68,7 +68,7 @@
 #include "albummanager.h"
 #include "albummodificationhelper.h"
 #include "abstractalbummodel.h"
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "databaseaccess.h"
 #include "digikamapp.h"
 #include "imageinfo.h"

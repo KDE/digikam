@@ -33,8 +33,6 @@
 
 // KDE includes
 
-#include <qtest_kde.h>
-
 #include <kio/netaccess.h>
 #include <qtest_kde.h>
 

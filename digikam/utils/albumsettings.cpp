@@ -47,7 +47,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databaseparameters.h"

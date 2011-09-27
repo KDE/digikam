@@ -39,7 +39,7 @@
 // Local includes
 
 #include "collectionmanager.h"
-#include "config-digikam.h"
+#include <config-digikam.h>
 
 Digikam_DatabaseWatchAdaptor::Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch* watch)
     : QDBusAbstractAdaptor(watch)

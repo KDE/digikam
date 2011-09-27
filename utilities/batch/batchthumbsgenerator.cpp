@@ -53,7 +53,7 @@
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
 #include "knotificationwrapper.h"
-#include "config-digikam.h"
+#include <config-digikam.h>
 
 namespace Digikam
 {

@@ -82,7 +82,7 @@ extern "C"
 #include "albumsettings.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "databaseaccess.h"
 #include "databaseguierrorhandler.h"
 #include "databaseparameters.h"

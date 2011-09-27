@@ -25,6 +25,7 @@
  * ============================================================ */
 
 #include "digikamapp.moc"
+/// @todo Order should be changed according to krazy2, but compilation fails. Try again later. MH
 #include "digikamapp_p.h"
 
 // Qt includes

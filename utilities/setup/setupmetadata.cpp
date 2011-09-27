@@ -59,7 +59,7 @@
 // Local includes
 
 #include "albumsettings.h"
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "metadatapanel.h"
 #include "metadatasettings.h"
 

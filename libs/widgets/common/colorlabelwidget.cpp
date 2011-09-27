@@ -25,7 +25,6 @@
 
 // Qt includes
 
-#include <QFont>
 #include <QPainter>
 #include <QPixmap>
 #include <QIcon>

@@ -30,7 +30,7 @@
 // Local includes
 
 #include "cameranamehelper.h"
-#include "config-digikam.h"
+#include <config-digikam.h>
 
 #ifdef HAVE_GPHOTO2
 #include "gpcamera.h"

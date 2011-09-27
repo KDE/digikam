@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "dcolor.h"
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"

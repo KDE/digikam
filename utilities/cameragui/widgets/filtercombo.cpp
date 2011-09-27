@@ -37,7 +37,6 @@
 
 // Local includes
 
-#include "filtercombo.h"
 #include "importfilters.h"
 #include "cameraiconitem.h"
 #include "camiteminfo.h"

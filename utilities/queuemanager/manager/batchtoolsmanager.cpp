@@ -25,7 +25,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "assigntemplate.h"
 #include "autocorrection.h"
 #include "convert2jp2.h"
