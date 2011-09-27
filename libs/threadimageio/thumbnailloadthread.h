@@ -301,7 +301,7 @@ public:
      */
 
     ThumbnailImageCatcher(QObject* parent = 0);
-    ThumbnailImageCatcher(ThumbnailLoadThread* thread, QObject* parent = 0);
+    explicit ThumbnailImageCatcher(ThumbnailLoadThread* thread, QObject* parent = 0);
     ~ThumbnailImageCatcher();
 
     ThumbnailLoadThread* thread() const;

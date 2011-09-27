@@ -60,7 +60,7 @@ public:
 public:
 
     AdvancedRenameManager();
-    AdvancedRenameManager(const QList<ParseSettings>& files, SortType sort = SortCustom);
+    explicit AdvancedRenameManager(const QList<ParseSettings>& files, SortType sort = SortCustom);
     virtual ~AdvancedRenameManager();
 
     void addFiles(const QList<ParseSettings>& files, SortType sort = SortCustom);

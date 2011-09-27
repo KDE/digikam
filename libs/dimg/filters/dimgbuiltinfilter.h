@@ -73,7 +73,7 @@ public:
      * Create a filter of the given type.
      * See documentation of Type for required arguments.
      */
-    DImgBuiltinFilter(Type type, const QVariant& arg = QVariant());
+    explicit DImgBuiltinFilter(Type type, const QVariant& arg = QVariant());
 
     /// same as constructor
     void setAction(const FilterAction& action);

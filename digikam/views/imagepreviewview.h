@@ -53,7 +53,7 @@ public:
 
 public:
 
-    ImagePreviewView(QWidget* parent, Mode mode=IconViewPreview);
+    explicit ImagePreviewView(QWidget* parent, Mode mode=IconViewPreview);
     ~ImagePreviewView();
 
     void setImageInfo(const ImageInfo& info     = ImageInfo(),

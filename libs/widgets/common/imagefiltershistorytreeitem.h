@@ -40,8 +40,8 @@ class ImageFiltersHistoryTreeItem
 {
 public:
 
-    ImageFiltersHistoryTreeItem(const QList<QVariant>& data, ImageFiltersHistoryTreeItem* parent = 0);
-    ImageFiltersHistoryTreeItem(const QString& data, ImageFiltersHistoryTreeItem* parent = 0);
+    explicit ImageFiltersHistoryTreeItem(const QList<QVariant>& data, ImageFiltersHistoryTreeItem* parent = 0);
+    explicit ImageFiltersHistoryTreeItem(const QString& data, ImageFiltersHistoryTreeItem* parent = 0);
     ~ImageFiltersHistoryTreeItem();
 
     void appendChild(ImageFiltersHistoryTreeItem* child);

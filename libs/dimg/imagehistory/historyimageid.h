@@ -86,7 +86,7 @@ public:
     HistoryImageId();
 
     /// Creates an id with the given UUID and type
-    HistoryImageId(const QString& uuid, Type type = Current);
+    explicit HistoryImageId(const QString& uuid, Type type = Current);
 
     /// A valid id needs at least a valid type and a UUID or a filename
     bool isValid() const;

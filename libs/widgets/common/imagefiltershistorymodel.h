@@ -49,7 +49,7 @@ class ImageFiltersHistoryModel : public QAbstractItemModel
 
 public:
 
-    ImageFiltersHistoryModel(QObject* parent = 0, const KUrl& url = KUrl());
+    explicit ImageFiltersHistoryModel(QObject* parent = 0, const KUrl& url = KUrl());
     ~ImageFiltersHistoryModel();
 
     Qt::ItemFlags flags(const QModelIndex& index) const;
