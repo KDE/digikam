@@ -38,4 +38,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 282573 : digiKam crashes when assigning a date manually to a scanned tif file.
 030 ==> 267414 : Working on albums with viewer and editor.
 031 ==> 282568 : Group By Time feature [patch].
-032 ==> 
+032 ==> 237357 : Thumbnail's album can't be displayed.
+033 ==> 282869 : List of cmake configuration options.
+034 ==> 
+
