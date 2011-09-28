@@ -40,5 +40,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 282568 : Group By Time feature [patch].
 032 ==> 237357 : Thumbnail's album can't be displayed.
 033 ==> 282869 : List of cmake configuration options.
-034 ==> 
+034 ==> 282925 : Not able to write Matadata to pictures.
+035 ==> 
 
