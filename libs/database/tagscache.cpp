@@ -369,7 +369,7 @@ QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy) const
         }
         else
         {
-            path = it->name + "/" + path;
+            path = it->name + '/' + path;
         }
     }
 
@@ -855,6 +855,58 @@ bool TagsCache::isInternalTag(int tagId) const
     d->checkProperties();
     QReadLocker locker(&d->lock);
     return d->internalTags.contains(tagId);
+}
+
+QList<int> TagsCache::publicTags(const QList<int>& tagIds) const
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+
+    QList<int>::const_iterator it, it2;
+    for (it = tagIds.begin(); it != tagIds.end(); ++it)
+    {
+        if (d->internalTags.contains(*it))
+        {
+            break;
+        }
+    }
+
+    if (it == tagIds.end())
+    {
+        return tagIds;
+    }
+
+    QList<int> publicIds;
+    publicIds.reserve(it - tagIds.begin());
+    // copy to the point of the first internal tag
+    for (it2 = tagIds.begin(); it2 != it; ++it2)
+    {
+        publicIds << *it2;
+    }
+    // continue filtering
+    for (; it2 != tagIds.end(); ++it2)
+    {
+        if (!d->internalTags.contains(*it2))
+        {
+            publicIds << *it2;
+        }
+    }
+    return publicIds;
+}
+
+bool TagsCache::containsPublicTags(const QList<int>& tagIds) const
+{
+    d->checkProperties();
+    QReadLocker locker(&d->lock);
+
+    foreach (int id, tagIds)
+    {
+        if (!d->internalTags.contains(id))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool TagsCache::canBeWrittenToMetadata(int tagId) const

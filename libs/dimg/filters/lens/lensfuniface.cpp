@@ -215,7 +215,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     d->settings        = LensFunContainer();
     d->usedCamera      = 0;
     d->usedLens        = 0;
-    d->lensDescription = QString();
+    d->lensDescription.clear();
 
     if (meta.isEmpty())
     {
@@ -236,7 +236,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     else
     {
         // NOTE: see B.K.O #184156:
-        // Some rules to wrap unkown camera device from Lensfun database, which have equivalent in fact.
+        // Some rules to wrap unknown camera device from Lensfun database, which have equivalent in fact.
         if (d->makeDescription == QString("Canon"))
         {
             if (d->modelDescription == QString("Canon EOS Kiss Digital X"))
@@ -282,8 +282,8 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
                 if (lensCutted.contains("Nikon"))
                 {
-                    lensCutted.replace("Nikon ", "");
-                    lensCutted.replace("Zoom-", "");
+                    lensCutted.remove("Nikon ");
+                    lensCutted.remove("Zoom-");
                     lensCutted.replace("IF-ID", "ED-IF");
                     lensList = findLenses(d->usedCamera, lensCutted);
                     kDebug() << "* Check for Nikon lens (" << lensCutted << " : " << lensList.count() << ")";
@@ -299,7 +299,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                 // LAST STAGE, Adapt exiv2 strings to lensfun strings. Some lens description use something like that :
                 // "10.0 - 20.0 mm". This must be adapted like this : "10-20mm"
                 lensCutted = d->lensDescription;
-                lensCutted.replace(QRegExp("\\.[0-9]"), "");
+                lensCutted.replace(QRegExp("\\.[0-9]"), ""); //krazy:exclude=doublequote_chars
                 lensCutted.replace(" - ", "-");
                 lensCutted.replace(" mm", "mn");
                 lensList = findLenses(d->usedCamera, lensCutted);
@@ -414,7 +414,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     }
     else
     {
-        temp                        = temp.replace(" m", "");
+        temp                        = temp.remove(" m");
         d->settings.subjectDistance = temp.toDouble();
         kDebug() << "Subject dist.  : " << d->settings.subjectDistance;
     }

@@ -94,7 +94,7 @@ QString FilePropertiesOption::parseOperation(ParseSettings& settings)
     {
         result = fi.suffix();
     }
-    else if (token == QString("." + KEY_EXT))
+    else if (token == QString('.' + KEY_EXT))
     {
         result = '.' + fi.suffix();
         settings.useOriginalFileExtension = false;

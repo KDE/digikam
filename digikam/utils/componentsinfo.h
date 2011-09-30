@@ -44,7 +44,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "libsinfodlg.h"
 #include "rawcameradlg.h"
 #include "dbstatdlg.h"
@@ -80,7 +80,7 @@ static inline void showDigikamComponentsInfo()
 
     // Database Backend information
 
-    QString dbBe = AlbumSettings::instance()->getImgDatabaseType();
+    QString dbBe = AlbumSettings::instance()->getDatabaseType();
     list.insert(i18n("Database backend"), dbBe);
 
     if (dbBe != QString("QSQLITE"))

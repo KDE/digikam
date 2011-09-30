@@ -1391,7 +1391,7 @@ DImageHistory EditorWindow::resolvedImageHistory(const DImageHistory& history)
 
         for (hit = it->referredImages.begin(); hit != it->referredImages.end(); )
         {
-            QFileInfo info(hit->m_filePath + "/" + hit->m_fileName);
+            QFileInfo info(hit->m_filePath + '/' + hit->m_fileName);
 
             if (!info.exists())
             {
@@ -2739,7 +2739,7 @@ void EditorWindow::moveFile()
     else
     {
         // for remote destinations use kio to move the temp file over there
-        // dont care for versioning here, atm not supported
+        // do not care for versioning here, atm not supported
 
         kDebug() << "moving a remote file via KIO";
 

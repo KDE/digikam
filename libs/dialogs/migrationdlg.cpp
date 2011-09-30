@@ -44,7 +44,6 @@
 
 // Local includes
 
-#include "config-digikam.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
 #include "databasewidget.h"
@@ -190,7 +189,6 @@ void MigrationDlg::setupMainArea()
 
     connect(d->cancelButton, SIGNAL(clicked()),
             &(d->copyThread->copyManager), SLOT(stopProcessing()));
-
 }
 
 void MigrationDlg::performCopy()

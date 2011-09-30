@@ -59,7 +59,7 @@
 // Local includes
 
 #include "albumsettings.h"
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "metadatapanel.h"
 #include "metadatasettings.h"
 
@@ -201,7 +201,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->updateFileTimeStampBox->setWhatsThis( i18n("Turn on this option to update file timestamps when metadata are saved."));
 
     d->useXMPSidecarBox = new QCheckBox(commonGroup);
-    d->useXMPSidecarBox->setText(i18n("&Read metadata from XMP sidecar files"));
+    d->useXMPSidecarBox->setText(i18n("&Read metadata from XMP sidecar files (experimental)"));
     d->useXMPSidecarBox->setWhatsThis( i18n("Turn on this option to prefer metadata from XMP sidecar files when reading metadata."));
     d->useXMPSidecarBox->setEnabled(KExiv2::supportXmp());
 

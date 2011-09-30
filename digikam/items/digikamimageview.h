@@ -83,6 +83,7 @@ public Q_SLOTS:
     void assignRating(const QList<QModelIndex>& index, int rating);
 
     void createGroupFromSelection();
+    void createGroupByTimeFromSelection();
     void ungroupSelected();
     void removeSelectedFromGroup();
 

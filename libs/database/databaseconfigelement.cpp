@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "databaseconfigelement.h"
+
 // Qt includes
 
 #include <QDir>
@@ -41,7 +43,6 @@
 
 // Local includes
 
-#include "databaseconfigelement.h"
 #include "dbconfigversion.h"
 
 namespace Digikam

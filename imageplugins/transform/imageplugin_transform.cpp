@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "perspectivetool.h"
 #include "freerotationtool.h"
 #include "sheartool.h"

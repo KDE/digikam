@@ -51,7 +51,7 @@ public:
 public:
 
     ImageZoomSettings();
-    ImageZoomSettings(const QSize& imageSize, const QSize& originalSize = QSize());
+    explicit ImageZoomSettings(const QSize& imageSize, const QSize& originalSize = QSize());
 
     /**
      * Sets the size of the (available) image data.

@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "setuptemplate.h"
 #include "template.h"
 

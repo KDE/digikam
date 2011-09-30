@@ -242,7 +242,7 @@ void BatchFaceDetector::startAlbumListing()
             d->total += palbumCounts.value(album->id());
         }
         else
-            // this is possibly broken of course because we dont know if images have multiple tags,
+            // this is possibly broken of course because we do not know if images have multiple tags,
             // but there's no better solution without expensive operation
         {
             d->total += talbumCounts.value(album->id());

@@ -587,7 +587,7 @@ QImage ThumbnailCreator::loadImageDetail(const QString& path, const DMetadata& m
     *profile = img.getIccProfile();
 
     // We must rotate before clipping because the rect refers to the oriented image.
-    // I dont know currently how to back-rotate the rect for clipping before rotation.
+    // I do not know currently how to back-rotate the rect for clipping before rotation.
     // If someone has the mathematics, have a go.
     img.rotateAndFlip(exifOrientation(path, metadata, false, false));
 

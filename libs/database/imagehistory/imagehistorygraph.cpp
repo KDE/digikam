@@ -315,7 +315,7 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const ImageInfo& info)
 
 HistoryGraph::Vertex ImageHistoryGraphData::addVertexScanned(qlonglong id)
 {
-    // short version where we dont read information about id from an ImageInfo
+    // short version where we do not read information about id from an ImageInfo
     Vertex v = findVertexByProperties(id);
 
     applyProperties(v, QList<ImageInfo>() << ImageInfo(id), QList<HistoryImageId>());
@@ -803,7 +803,7 @@ static QString toString(const HistoryVertexProperties& props)
         }
         else
         {
-            return QString("Ids: (") + ids.join(",") + ")";
+            return QString("Ids: (") + ids.join(",") + ')';
         }
     }
     else

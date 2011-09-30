@@ -1453,9 +1453,14 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             pAlbum = dynamic_cast<PAlbum*>(album);
         }
     }
+    else
+    {
+        pAlbum = dynamic_cast<PAlbum*>(album);
+    }
 
     if (!pAlbum)
     {
+        kDebug() << "Destination Album is null";
         return;
     }
 

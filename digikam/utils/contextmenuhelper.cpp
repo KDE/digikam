@@ -68,7 +68,7 @@
 #include "albummanager.h"
 #include "albummodificationhelper.h"
 #include "abstractalbummodel.h"
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "databaseaccess.h"
 #include "digikamapp.h"
 #include "imageinfo.h"
@@ -985,6 +985,10 @@ QList<QAction*> ContextMenuHelper::groupMenuActions(imageIds& ids)
         QAction* closeAction = new QAction(i18nc("@action:inmenu", "Group Selected Here"), this);
         connect(closeAction, SIGNAL(triggered()), this, SIGNAL(signalCreateGroup()));
         actions << closeAction;
+
+        QAction* closeActionDate = new QAction(i18nc("@action:inmenu", "Group Selected By Time"), this);
+        connect(closeActionDate, SIGNAL(triggered()), this, SIGNAL(signalCreateGroupByTime()));
+        actions << closeActionDate;
 
         QAction* separator = new QAction(this);
         separator->setSeparator(true);

@@ -73,7 +73,7 @@ KCategorizedSortFilterProxyModel* CategorizedItemModel::createFilterModel()
 static QString adjustedActionText(const QAction* action)
 {
     QString text = action->text();
-    text.remove("&");
+    text.remove('&');
     text.remove(" ...");
     text.remove("...");
     int slashPos = -1;

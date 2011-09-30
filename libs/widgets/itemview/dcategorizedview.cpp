@@ -443,7 +443,7 @@ QModelIndex DCategorizedView::DCategorizedViewPriv::scrollPositionHint() const
 
     QModelIndex hint = q->currentIndex();
 
-    // If the user scrolled, dont take current item, but first visible
+    // If the user scrolled, do not take current item, but first visible
     if (!hint.isValid() || !q->viewport()->rect().intersects(q->visualRect(hint)))
     {
         QList<QModelIndex> visibleIndexes = q->categorizedIndexesIn(q->viewport()->rect());
@@ -508,7 +508,7 @@ void DCategorizedView::layoutAboutToBeChanged()
     d->ensureOneSelectedItem = selectionModel()->hasSelection();
     QModelIndex current      = currentIndex();
 
-    // store some hints so that if all selected items were removed dont need to default to 0,0.
+    // store some hints so that if all selected items were removed do not need to default to 0,0.
     if (d->ensureOneSelectedItem)
     {
         QItemSelection currentSelection = selectionModel()->selection();

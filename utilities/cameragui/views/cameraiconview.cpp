@@ -227,7 +227,7 @@ CachedItem CameraIconView::getThumbInfo(const CamItemInfo& itemInfo) const
 void CameraIconView::slotThumbInfoReady(const CamItemInfo& info)
 {
     CameraIconItem* item = findItem(info.folder, info.name);
-    if (!item)
+    if (item)
     {
         // Updating item, thumb controller will be called to refresh icon item. See repaint() method for details.
         item->update();
@@ -255,7 +255,10 @@ void CameraIconView::addItem(const CamItemInfo& info)
     newinfo.downloadName = downloadName;
     CameraIconItem* item = new CameraIconItem(d->groupItem, newinfo);
     QString sep;
-    if (!newinfo.folder.endsWith("/")) sep = QString("/");
+    if (!newinfo.folder.endsWith('/'))
+    {
+        sep = '/';
+    }
     d->itemDict.insert(newinfo.folder+sep+newinfo.name, item);
 }
 
@@ -268,7 +271,10 @@ void CameraIconView::removeItem(const CamItemInfo& info)
     }
 
     QString sep;
-    if (!info.folder.endsWith("/")) sep = QString("/");
+    if (!info.folder.endsWith('/'))
+    {
+        sep = '/';
+    }
     d->itemDict.remove(info.folder+sep+info.name);
 
     setDelayedRearrangement(true);
@@ -287,7 +293,10 @@ CamItemInfo CameraIconView::findItemInfo(const QString& folder, const QString& f
 CameraIconItem* CameraIconView::findItem(const QString& folder, const QString& filename) const
 {
     QString sep;
-    if (!folder.endsWith("/")) sep = QString("/");
+    if (!folder.endsWith('/'))
+    {
+        sep = '/';
+    }
 
     return d->itemDict.value(folder+sep+filename);
 }

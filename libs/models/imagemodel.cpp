@@ -76,6 +76,11 @@ public:
     DatabaseFields::Set                 watchFlags;
 
     class ImageModelIncrementalUpdater* incrementalUpdater;
+
+    inline bool isValid(const QModelIndex& index)
+    {
+        return index.isValid() && index.row() >= 0 && index.row() < infos.size();
+    }
 };
 
 typedef QPair<int, int> IntPair; // to make foreach macro happy
@@ -143,7 +148,7 @@ void ImageModel::setWatchFlags(const DatabaseFields::Set& set)
 
 ImageInfo ImageModel::imageInfo(const QModelIndex& index) const
 {
-    if (!index.isValid())
+    if (!d->isValid(index))
     {
         return ImageInfo();
     }
@@ -158,7 +163,7 @@ ImageInfo& ImageModel::imageInfoRef(const QModelIndex& index) const
 
 qlonglong ImageModel::imageId(const QModelIndex& index) const
 {
-    if (!index.isValid())
+    if (!d->isValid(index))
     {
         return 0;
     }
@@ -731,7 +736,7 @@ void ImageModel::removeIndexes(const QList<QModelIndex>& indexes)
     QList<int> listIndexes;
     foreach (const QModelIndex& index, indexes)
     {
-        if (index.isValid())
+        if (d->isValid(index))
         {
             listIndexes << index.row();
         }
@@ -757,7 +762,9 @@ void ImageModel::removeImageInfos(const QList<ImageInfo>& infos)
     {
         QModelIndex index = indexForImageId(info.id());
         if (index.isValid())
+        {
             listIndexes << index.row();
+        }
     }
     removeRowPairsWithCheck(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
 }
@@ -776,7 +783,9 @@ void ImageModel::removeImageInfos(const QList<ImageInfo>& infos, const QList<QVa
     {
         QModelIndex index = indexForImageId(infos.at(i).id(), extraValues.at(i));
         if (index.isValid())
+        {
             listIndexes << index.row();
+        }
     }
 
     removeRowPairsWithCheck(ImageModelIncrementalUpdater::toContiguousPairs(listIndexes));
@@ -963,7 +972,7 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
             if (found)
             {
                 oldIds.erase(it);
-                // dont erase from oldExtraValues - oldIds is a hash id -> index.
+                // do not erase from oldExtraValues - oldIds is a hash id -> index.
             }
             else
             {
@@ -1065,7 +1074,7 @@ QList<QPair<int, int> > ImageModelIncrementalUpdater::toContiguousPairs(const QL
 
 QVariant ImageModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid() || index.row() < 0 || index.row() >= d->infos.size())
+    if (!d->isValid(index))
     {
         return QVariant();
     }
@@ -1126,7 +1135,7 @@ int ImageModel::rowCount(const QModelIndex& parent) const
 
 Qt::ItemFlags ImageModel::flags(const QModelIndex& index) const
 {
-    if (!index.isValid())
+    if (!d->isValid(index))
     {
         return 0;
     }

@@ -264,7 +264,7 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
     }
     else
     {
-        // if we dont copy the data (fast roll-back), we at least set the history for subsequent steps
+        // if we do not copy the data (fast roll-back), we at least set the history for subsequent steps
         d->dimgiface->imageUndoChanged(historyBeforeStep);
     }
 
@@ -322,7 +322,7 @@ void UndoManager::redoStep(bool execute, bool flyingRollback)
     }
     else
     {
-        // if we dont copy the data (fast roll-back), we at least set the history for subsequent steps
+        // if we do not copy the data (fast roll-back), we at least set the history for subsequent steps
         d->dimgiface->imageUndoChanged(historyAfterStep);
     }
 
@@ -412,7 +412,7 @@ bool UndoManager::putImageDataAndHistory(DImg* img, int stepsBack)
      * 0 steps back is the current state of the DImgInterface.
      * 1 step back is the snapshot of the last undo action, at d->undoActions.size() - 1.
      * The next problem is that if the corresponding action is reversible,
-     * we dont have a snapshot, but need to walk forward to the first snapshot (or current
+     * we do not have a snapshot, but need to walk forward to the first snapshot (or current
      * state), then apply the reversible steps.
      */
     int step = d->undoActions.size() - stepsBack;

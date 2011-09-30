@@ -27,10 +27,6 @@
 
 #include <QByteArray>
 
-// KDE includes
-
-
-
 namespace Digikam
 {
 

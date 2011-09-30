@@ -21,6 +21,7 @@
   */
 
 #include "digikamkcategorizedview.moc"
+/// @todo Order should be changed according to krazy2, but compilation fails. Try again later. MH
 #include "digikamkcategorizedview_p.h"
 
 // C++ includes

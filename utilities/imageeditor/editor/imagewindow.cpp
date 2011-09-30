@@ -1129,7 +1129,7 @@ void ImageWindow::saveAsIsComplete()
     if (!d->imageInfoModel->hasImage(d->currentImageInfo))
     {
         d->imageInfoModel->addImageInfoSynchronously(d->currentImageInfo);
-        // Note: Due to the asynchronous process, we dont yet have an index for the just added info!
+        // Note: Due to the asynchronous process, we do not yet have an index for the just added info!
         //d->imageInfoModel->addImageInfo(d->currentImageInfo);
     }
 

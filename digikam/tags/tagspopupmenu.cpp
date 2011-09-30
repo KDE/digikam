@@ -465,6 +465,7 @@ void TagsPopupMenu::slotAboutToShow()
     {
         if (d->selectedImageIDs.isEmpty())
         {
+            menuAction()->setEnabled(false);
             return;
         }
 
@@ -472,25 +473,36 @@ void TagsPopupMenu::slotAboutToShow()
 
         if (d->assignedTags.isEmpty())
         {
+            menuAction()->setEnabled(false);
             return;
         }
 
         // also add the parents of the assigned tags
 
+        bool hasValidTag = false;
         for (QSet<int>::const_iterator it = d->assignedTags.constBegin(); it != d->assignedTags.constEnd(); ++it)
         {
             TAlbum* album = man->findTAlbum(*it);
 
-            if (album)
+            if (!album || album->isInternalTag())
             {
-                Album* a = album->parent();
-
-                while (a)
-                {
-                    d->parentAssignedTags << a->id();
-                    a = a->parent();
-                }
+                continue;
             }
+            hasValidTag = true;
+
+            Album* a = album->parent();
+
+            while (a)
+            {
+                d->parentAssignedTags << a->id();
+                a = a->parent();
+            }
+        }
+
+        if (!hasValidTag)
+        {
+            menuAction()->setEnabled(false);
+            return;
         }
     }
     else if (d->mode == ASSIGN)

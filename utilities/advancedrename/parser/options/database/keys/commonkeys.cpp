@@ -96,11 +96,11 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
         {
             foreach (const QString& author, authors)
             {
-                result += author + ",";
+                result += author + ',';
             }
         }
 
-        if (result.endsWith(","))
+        if (result.endsWith(','))
         {
             result.chop(1);
         }

@@ -22,6 +22,8 @@
  *
  * ============================================================ */
 
+#include "versionmanager.h"
+
 // Qt includes
 
 #include <QDir>
@@ -37,7 +39,6 @@
 // Local includes
 
 #include "dimgfiltermanager.h"
-#include "versionmanager.h"
 
 namespace Digikam
 {
@@ -591,7 +592,7 @@ bool VersionFileInfo::isNull() const
 
 QString VersionFileInfo::filePath() const
 {
-    return path + "/" + fileName;
+    return path + '/' + fileName;
 }
 
 KUrl VersionFileInfo::fileUrl() const

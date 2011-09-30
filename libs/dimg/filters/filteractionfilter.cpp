@@ -172,7 +172,7 @@ QString FilterActionFilter::failedActionMessage() const
 void FilterActionFilter::filterImage()
 {
     d->appliedActions.clear();
-    d->errorMessage               = QString();
+    d->errorMessage.clear();
     const float progressIncrement = 1.0 / qMax(1,d->actions.size());
     float progress                = 0;
 

@@ -89,7 +89,7 @@ public:
     {
         /// In addition to items visible or fading in, return those fading out
         IncludeFadingOut,
-        /// Dont return those items currently fading out (soon to be hidden)
+        /// Do not return those items currently fading out (soon to be hidden)
         ExcludeFadingOut
     };
 

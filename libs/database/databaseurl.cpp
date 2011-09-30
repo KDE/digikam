@@ -213,7 +213,7 @@ DatabaseUrl& DatabaseUrl::operator=(const DatabaseUrl& url)
     return *this;
 }
 
-bool DatabaseUrl::operator==(const KUrl& digikamalbumsUrl)
+bool DatabaseUrl::operator==(const KUrl& digikamalbumsUrl) const
 {
     return KUrl::operator==(digikamalbumsUrl);
 }

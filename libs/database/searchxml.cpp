@@ -1226,7 +1226,7 @@ QList<QString> SearchXmlCachingReader::valueToStringOrStringList()
     {
         QList<QString> QStringList = SearchXmlReader::valueToStringOrStringList();
         QList<QVariant> varList;
-        foreach(QString v, QStringList)
+        foreach(const QString& v, QStringList)
         {
             varList << v;
         }

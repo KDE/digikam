@@ -89,7 +89,7 @@ public:
                 statefulChild->setStateSavingDepth(oldState);
             }
 
-            // recurse children everytime
+            // recurse children every time
             recurse((*childIt)->children(), save);
         }
     }

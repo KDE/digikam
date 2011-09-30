@@ -144,7 +144,7 @@ QString LoadingDescription::cacheKey() const
     }
     else
     {
-        // Assumption: Size-limited previews are always eight bit and dont care for raw settings.
+        // Assumption: Size-limited previews are always eight bit and do not care for raw settings.
         if (previewParameters.size)
         {
             return filePath + "-previewImage-" + QString::number(previewParameters.size);

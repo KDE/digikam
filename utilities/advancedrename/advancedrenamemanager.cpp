@@ -99,7 +99,7 @@ void AdvancedRenameManager::setSortType(SortType type)
     d->sortType = type;
 }
 
-void AdvancedRenameManager::setStartIndex(int index)
+void AdvancedRenameManager::setStartIndex(int index) const
 {
     d->startIndex = index;
 }
@@ -310,7 +310,7 @@ QStringList AdvancedRenameManager::fileList()
     return tmpFiles;
 }
 
-QMap<QString, QString> AdvancedRenameManager::newFileList()
+QMap<QString, QString> AdvancedRenameManager::newFileList() const
 {
     return d->renamedFiles;
 }
@@ -338,9 +338,11 @@ bool AdvancedRenameManager::initialize()
     {
         int counter = 1;
         foreach (const QString& file, fileList())
-        if (!d->fileGroupIndexMap.contains(fileGroupKey(file)))
         {
-            d->fileGroupIndexMap[fileGroupKey(file)] = counter++;
+            if (!d->fileGroupIndexMap.contains(fileGroupKey(file)))
+            {
+                d->fileGroupIndexMap[fileGroupKey(file)] = counter++;
+            }
         }
     }
 
@@ -432,12 +434,12 @@ QString AdvancedRenameManager::newName(const QString& filename)
     return d->renamedFiles.value(filename);
 }
 
-void AdvancedRenameManager::addFile(const QString& filename)
+void AdvancedRenameManager::addFile(const QString& filename) const
 {
     d->files << filename;
 }
 
-void AdvancedRenameManager::addFile(const QString& filename, const QDateTime& datetime)
+void AdvancedRenameManager::addFile(const QString& filename, const QDateTime& datetime) const
 {
     d->files << filename;
     d->fileDatesMap[filename] = datetime;

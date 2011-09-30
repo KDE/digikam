@@ -263,7 +263,7 @@ void FilmGrainFilter::computeNoiseSettings(const DColor& col,
 
 /** This method apply grain adjustement on a pixel color channel from YCrCb color space.
     NRand is the lead uniform noise set from matrix used to scan whole image step by step.
-    Additionaly noise is applied on pixel using Poisson or Gausian distribution.
+    Additionally noise is applied on pixel using Poisson or Gausian distribution.
  */
 void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int channel)
 {

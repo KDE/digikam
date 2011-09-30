@@ -98,8 +98,8 @@ public:
 
     bool operator==(const DImageHistory& other) const;
     bool operator!=(const DImageHistory& other) const { return !operator==(other); }
-    bool operator<(const DImageHistory& other);
-    bool operator>(const DImageHistory& other);
+    bool operator<(const DImageHistory& other) const;
+    bool operator>(const DImageHistory& other) const;
 
     /**
      * Appends a new filter action to the history.

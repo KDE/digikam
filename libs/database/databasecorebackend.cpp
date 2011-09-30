@@ -188,11 +188,11 @@ bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
 
     QThread* thread = QThread::currentThread();
 
-    db = QSqlDatabase::addDatabase(parameters.imgDatabaseType, connectionName(thread));
+    db = QSqlDatabase::addDatabase(parameters.databaseType, connectionName(thread));
 
-    QString connectOptions = parameters.imgConnectOptions;
+    QString connectOptions = parameters.connectOptions;
 
-    if (parameters.isImgSQLite())
+    if (parameters.isSQLite())
     {
         QStringList toAdd;
         // enable shared cache, especially useful with SQLite >= 3.5.0
@@ -208,25 +208,18 @@ bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
         connectOptions += toAdd.join(";");
     }
 
-    db.setDatabaseName(parameters.imgDatabaseName);
+    db.setDatabaseName(parameters.databaseName);
     db.setConnectOptions(connectOptions);
-    db.setHostName(parameters.imgHostName);
-    db.setPort(parameters.imgPort);
-    db.setUserName(parameters.imgUserName);
-    db.setPassword(parameters.imgPassword);
+    db.setHostName(parameters.hostName);
+    db.setPort(parameters.port);
+    db.setUserName(parameters.userName);
+    db.setPassword(parameters.password);
 
     bool success = db.open();
 
     if (success==false)
     {
         kDebug() << "Error while opening the database. Error was <" << db.lastError() << ">";
-        kDebug() << "parameters.imgDatabaseType <" << parameters.imgDatabaseType << ">";
-        kDebug() << "parameters.imgDatabaseName <" << parameters.imgDatabaseName << ">";
-        kDebug() << "connectOptions             <" << connectOptions << ">";
-        kDebug() << "parameters.imgHostName     <" << parameters.imgHostName << ">";
-        kDebug() << "parameters.imgPort         <" << parameters.imgPort << ">";
-        kDebug() << "parameters.imgUserName     <" << parameters.imgUserName << ">";
-        kDebug() << "parameters.imgPassword     <" << parameters.imgPassword << ">";
     }
 
     threadDatabases[thread]  = db;
@@ -281,18 +274,18 @@ bool DatabaseCoreBackendPrivate::isInUIThread() const
 
 bool DatabaseCoreBackendPrivate::reconnectOnError() const
 {
-    return parameters.isImgMySQL();
+    return parameters.isMySQL();
 }
 
 bool DatabaseCoreBackendPrivate::isSQLiteLockError(const SqlQuery& query) const
 {
-    return parameters.isImgSQLite()
+    return parameters.isSQLite()
            && (query.lastError().number() == 5 /*SQLITE_BUSY*/ || query.lastError().number() == 6/*SQLITE_LOCKED*/);
 }
 
 bool DatabaseCoreBackendPrivate::isSQLiteLockTransactionError(const QSqlError& lastError) const
 {
-    return parameters.isImgSQLite()
+    return parameters.isSQLite()
            && lastError.type() == QSqlError::TransactionError
            && lastError.databaseText() == QLatin1String("database is locked");
     // wouldnt it be great if they gave us the database error number...
@@ -301,7 +294,7 @@ bool DatabaseCoreBackendPrivate::isSQLiteLockTransactionError(const QSqlError& l
 bool DatabaseCoreBackendPrivate::isConnectionError(const SqlQuery& query) const
 {
     // the backend returns connection error e.g. for Constraint Failed errors.
-    if (parameters.isImgSQLite())
+    if (parameters.isSQLite())
     {
         return false;
     }
@@ -427,7 +420,7 @@ DatabaseCoreBackendPrivate::BusyWaiter::BusyWaiter(DatabaseCoreBackendPrivate* d
 void DatabaseCoreBackendPrivate::transactionFinished()
 {
     // wakes up any BusyWaiter waiting on the busyWaitCondVar.
-    // Possibly called under d->lock->mutex lock, so we dont lock the busyWaitMutex
+    // Possibly called under d->lock->mutex lock, so we do not lock the busyWaitMutex
     busyWaitCondVar.wakeOne();
 }
 
@@ -544,7 +537,7 @@ bool DatabaseCoreBackendPrivate::handleWithErrorHandler(const SqlQuery* query)
     {
         //TODO check if it's better to use an own error handler for kio slaves.
         // But for now, close only the database in the hope, that the next
-        // access will be successfull.
+        // access will be successful.
         closeDatabaseForThread();
 
     }
@@ -590,7 +583,7 @@ DatabaseCoreBackend::~DatabaseCoreBackend()
 DatabaseConfigElement DatabaseCoreBackend::configElement() const
 {
     Q_D(const DatabaseCoreBackend);
-    return DatabaseConfigElement::element(d->parameters.imgDatabaseType);
+    return DatabaseConfigElement::element(d->parameters.databaseType);
 }
 
 DatabaseAction DatabaseCoreBackend::getDBAction(const QString& actionName) const
@@ -648,7 +641,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
         beginTransaction();
     }
 
-    foreach (DatabaseActionElement actionElement, action.dbActionElements)
+    foreach (const DatabaseActionElement& actionElement, action.dbActionElements)
     {
         DatabaseCoreBackend::QueryState result;
 
@@ -708,7 +701,7 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction& action, c
 #endif
 
     QSqlQuery result;
-    foreach (DatabaseActionElement actionElement, action.dbActionElements)
+    foreach (const DatabaseActionElement& actionElement, action.dbActionElements)
     {
         if (actionElement.mode==QString("query"))
         {
@@ -752,7 +745,7 @@ void DatabaseCoreBackend::slotMainThreadFinished()
 
 bool DatabaseCoreBackend::isCompatible(const DatabaseParameters& parameters)
 {
-    return QSqlDatabase::drivers().contains(parameters.imgDatabaseType);
+    return QSqlDatabase::drivers().contains(parameters.databaseType);
 }
 
 bool DatabaseCoreBackend::open(const DatabaseParameters& parameters)
@@ -1207,7 +1200,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
                 {
                     if (isValue)
                     {
-                        replaceStr = "?";
+                        replaceStr = '?';
                         valuesToBind.append(value);
                     }
                     else
@@ -1223,7 +1216,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 #endif
 
                 valuesToBind.append(placeHolderValue);
-                replaceStr = "?";
+                replaceStr = '?';
             }
 
             preparedString = preparedString.replace(pos, identifierRegExp.matchedLength(), replaceStr);

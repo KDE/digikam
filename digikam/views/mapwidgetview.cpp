@@ -257,7 +257,7 @@ bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KGeoMap::GeoC
  * @brief This function retrieves the thumbnail for an index.
  * @param index The marker's index.
  * @param size The size of the thumbnail.
- * @return If the thumbnail has been loaded in the ThumbnailLoadThread instance, it is returned. If not, a QPixmap is returned and ThumbnailLoadThread's signal named signalThumbnailLoaded is emited when the thumbnail becomes available.
+ * @return If the thumbnail has been loaded in the ThumbnailLoadThread instance, it is returned. If not, a QPixmap is returned and ThumbnailLoadThread's signal named signalThumbnailLoaded is emitted when the thumbnail becomes available.
  */
 QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
 {

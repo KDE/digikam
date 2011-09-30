@@ -704,7 +704,7 @@ void Benchmarker::process(FacePipelineExtendedPackage::Ptr package)
             }
             else
             {
-                kDebug() << "The image, truely without faces, is false-positive";
+                kDebug() << "The image, truly without faces, is false-positive";
                 ++falsePositiveImages;
             }
         }
@@ -773,7 +773,7 @@ QString Benchmarker::result() const
                    "</p>"
                    "<p>"
                    "In other words, if a face is detected as face, it will "
-                   "with a probability of %7% truely be a face. "
+                   "with a probability of %7% truly be a face. "
                    "Of all true faces, %6% will be detected. "
                    "Given face with no images on it, the detector will with a probability "
                    "of %5% falsely find a face on it. "
@@ -1001,7 +1001,7 @@ void FacePipeline::FacePipelinePriv::receiverFlowControl()
 {
     if (!delayedPackages.isEmpty() && packagesOnTheRoad <= maxPackagesOnTheRoad)
     {
-        --totalPackagesAdded; // dont add twice
+        --totalPackagesAdded; // do not add twice
         send(delayedPackages.takeFirst());
     }
 }

@@ -99,7 +99,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
         kDebug(50003) << "Have a thumbnail database structure version " << version;
 
         // mini schema update
-        if (version.isEmpty() && m_access->parameters().isTmbSQLite())
+        if (version.isEmpty() && m_access->parameters().isSQLite())
         {
             version = m_access->db()->getSetting("DBVersion");
         }

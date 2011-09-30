@@ -60,7 +60,7 @@ public:
 public:
 
     AdvancedRenameManager();
-    AdvancedRenameManager(const QList<ParseSettings>& files, SortType sort = SortCustom);
+    explicit AdvancedRenameManager(const QList<ParseSettings>& files, SortType sort = SortCustom);
     virtual ~AdvancedRenameManager();
 
     void addFiles(const QList<ParseSettings>& files, SortType sort = SortCustom);
@@ -76,7 +76,7 @@ public:
 
     void setSortType(SortType type);
 
-    void setStartIndex(int index);
+    void setStartIndex(int index) const;
 
     void setWidget(AdvancedRenameWidget* widget);
 
@@ -86,15 +86,15 @@ public:
     QString newName(const QString& filename);
 
     QStringList            fileList();
-    QMap<QString, QString> newFileList();
+    QMap<QString, QString> newFileList() const;
 
 private:
 
     AdvancedRenameManager(const AdvancedRenameManager&);
     AdvancedRenameManager& operator=(const AdvancedRenameManager&);
 
-    void addFile(const QString& filename);
-    void addFile(const QString& filename, const QDateTime& datetime);
+    void addFile(const QString& filename) const;
+    void addFile(const QString& filename, const QDateTime& datetime) const;
     bool initialize();
     void resetState();
 

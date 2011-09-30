@@ -330,7 +330,7 @@ bool LensFunFilter::registerSettingsToXmp(KExiv2Data& data) const
 
     DMetadata meta(data);
     bool ret = meta.setXmpTagString("Xmp.digiKam.LensCorrectionSettings",
-                                    str.replace("\n", " ; "), false);
+                                    str.replace('\n', " ; "), false);
     data = meta.data();
 
     return ret;

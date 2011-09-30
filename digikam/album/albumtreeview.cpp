@@ -473,7 +473,7 @@ bool AbstractAlbumTreeView::expandMatches(const QModelIndex& index)
         if (childResult)
         {
             anyMatch = true;
-            // if there is a direct match _and_ a child match, dont forget to expand the parent
+            // if there is a direct match _and_ a child match, do not forget to expand the parent
             expand(index);
         }
     }

@@ -559,7 +559,7 @@ class SearchTreeView : public AbstractCheckableAlbumTreeView
 
 public:
 
-    SearchTreeView(QWidget* parent = 0, Flags flags = DefaultFlags);
+    explicit SearchTreeView(QWidget* parent = 0, Flags flags = DefaultFlags);
     ~SearchTreeView();
     /// Note: not filtered by search type
     SearchModel* albumModel() const;
@@ -588,7 +588,7 @@ class DateAlbumTreeView : public AbstractCountingAlbumTreeView
 
 public:
 
-    DateAlbumTreeView(QWidget* parent = 0, Flags flags = DefaultFlags);
+    explicit DateAlbumTreeView(QWidget* parent = 0, Flags flags = DefaultFlags);
     DateAlbumModel* albumModel() const;
     DAlbum* currentAlbum() const;
     DAlbum* albumForIndex(const QModelIndex& index) const;

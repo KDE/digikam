@@ -76,7 +76,7 @@ public:
 
 private:
 
-    ResultsKey createInvalidKey();
+    ResultsKey createInvalidKey() const;
     bool       keyIsValid(const ResultsKey& key);
 
     ResultsMap  m_results;

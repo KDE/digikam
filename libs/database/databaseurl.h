@@ -250,7 +250,7 @@ public:
     DatabaseUrl& operator=(const KUrl& digikamalbumsUrl);
     DatabaseUrl& operator=(const DatabaseUrl& url);
 
-    bool operator==(const KUrl& digikamalbumsUrl);
+    bool operator==(const KUrl& digikamalbumsUrl) const;
 };
 
 }  // namespace Digikam

@@ -155,7 +155,7 @@ bool ParseResults::isEmpty()
     return m_results.isEmpty();
 }
 
-ParseResults::ResultsKey ParseResults::createInvalidKey()
+ParseResults::ResultsKey ParseResults::createInvalidKey() const
 {
     return ResultsKey(INVALID_KEY_ID, INVALID_KEY_ID);
 }

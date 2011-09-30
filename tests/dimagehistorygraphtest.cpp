@@ -33,8 +33,6 @@
 
 // KDE includes
 
-#include <qtest_kde.h>
-
 #include <kio/netaccess.h>
 #include <qtest_kde.h>
 
@@ -416,7 +414,7 @@ void DImageHistoryGraphTest::testGraph()
 
     QMap<qlonglong,HistoryGraph::Vertex> idToVertex;
     QMap<HistoryGraph::Vertex, qlonglong> vertexToId;
-    foreach (HistoryGraph::Vertex v, graph.data().vertices())
+    foreach (const HistoryGraph::Vertex& v, graph.data().vertices())
     {
         HistoryVertexProperties props = graph.data().properties(v);
         idToVertex[props.infos.first().id()] = v;

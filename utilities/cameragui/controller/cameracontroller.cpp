@@ -60,7 +60,7 @@ extern "C"
 
 // Local includes
 
-#include "config-digikam.h"
+#include <config-digikam.h>
 #include "templatemanager.h"
 #include "thumbnailsize.h"
 #include "imagewindow.h"

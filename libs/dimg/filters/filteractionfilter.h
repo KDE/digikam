@@ -106,7 +106,7 @@ public:
     QString failedActionMessage() const;
 
     /**
-     * These methods dont make sense here. Use filterActions.
+     * These methods do not make sense here. Use filterActions.
      */
     virtual FilterAction filterAction()
     {

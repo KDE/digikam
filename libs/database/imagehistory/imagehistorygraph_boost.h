@@ -25,7 +25,7 @@
 #define IMAGEHISTORYGRAPH_BOOST_H
 
 // To include pragma directives for MSVC
-#include "config-digikam.h"
+#include <config-digikam.h>
 
 // boost includes
 

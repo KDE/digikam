@@ -152,84 +152,53 @@ void SetupDatabase::applySettings()
     {
         return;
     }
-    
-    if (d->databaseWidget->internalServer->isChecked())
+
+    if (d->databaseWidget->currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
     {
-        DatabaseParameters internalServerParameters = \
-            DatabaseParameters::defaultParameters(d->databaseWidget->imgCurrentDatabaseType(), true);
-        settings->setInternalDatabaseServer(true);
+        QString newPath = d->databaseWidget->databasePathEdit->url().path();
+        QDir oldDir(d->databaseWidget->originalDbPath);
+        QDir newDir(newPath);
 
-        settings->setImgDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
-        settings->setImgDatabaseName(internalServerParameters.imgDatabaseName);
-        settings->setImgDatabaseConnectoptions(internalServerParameters.imgConnectOptions);
-        settings->setImgDatabaseHostName(internalServerParameters.imgHostName);
-        settings->setImgDatabasePort(internalServerParameters.imgPort);
-        settings->setImgDatabaseUserName(internalServerParameters.imgUserName);
-        settings->setImgDatabasePassword(internalServerParameters.imgPassword);
+        if (oldDir != newDir || d->databaseWidget->currentDatabaseType() != d->databaseWidget->originalDbType)
+        {
+            settings->setDatabaseParameters(DatabaseParameters::parametersForSQLiteDefaultFile(newPath));
 
-        settings->setTmbDatabaseType(d->databaseWidget->tmbCurrentDatabaseType());
-        settings->setTmbDatabaseName(internalServerParameters.tmbDatabaseName);
-        settings->setTmbDatabaseConnectoptions(internalServerParameters.tmbConnectOptions);
-        settings->setTmbDatabaseHostName(internalServerParameters.tmbHostName);
-        settings->setTmbDatabasePort(internalServerParameters.tmbPort);
-        settings->setTmbDatabaseUserName(internalServerParameters.tmbUserName);
-        settings->setTmbDatabasePassword(internalServerParameters.tmbPassword);
+            // clear other fields
+            d->databaseWidget->internalServer->setChecked(false);
+
+            settings->saveSettings();
+        }
+    }
+    else
+    {
+        if (d->databaseWidget->internalServer->isChecked())
+        {
+            DatabaseParameters internalServerParameters = DatabaseParameters::defaultParameters(d->databaseWidget->currentDatabaseType());
+            settings->setInternalDatabaseServer(true);
+            settings->setDatabaseType(d->databaseWidget->currentDatabaseType());
+            settings->setDatabaseName(internalServerParameters.databaseName);
+            settings->setDatabaseNameThumbnails(internalServerParameters.databaseName);
+            settings->setDatabaseConnectoptions(internalServerParameters.connectOptions);
+            settings->setDatabaseHostName(internalServerParameters.hostName);
+            settings->setDatabasePort(internalServerParameters.port);
+            settings->setDatabaseUserName(internalServerParameters.userName);
+            settings->setDatabasePassword(internalServerParameters.password);
+        }
+        else
+        {
+            settings->setInternalDatabaseServer(d->databaseWidget->internalServer->isChecked());
+            settings->setDatabaseType(d->databaseWidget->currentDatabaseType());
+            settings->setDatabaseName(d->databaseWidget->databaseName->text());
+            settings->setDatabaseNameThumbnails(d->databaseWidget->databaseNameThumbnails->text());
+            settings->setDatabaseConnectoptions(d->databaseWidget->connectionOptions->text());
+            settings->setDatabaseHostName(d->databaseWidget->hostName->text());
+            settings->setDatabasePort(d->databaseWidget->hostPort->text().toInt());
+            settings->setDatabaseUserName(d->databaseWidget->userName->text());
+            settings->setDatabasePassword(d->databaseWidget->password->text());
+        }
 
         settings->saveSettings();
-
-        return;
     }
-
-    // clear internal database server
-    settings->setInternalDatabaseServer(false);
-    d->databaseWidget->internalServer->setChecked(false);
-
-    if (d->databaseWidget->imgCurrentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
-    {
-        QString newPath = d->databaseWidget->imgDatabasePathEdit->url().path();
-        QDir oldDir(d->databaseWidget->imgOriginalDbPath);
-        QDir newDir(newPath);
-
-        if (oldDir != newDir || d->databaseWidget->imgCurrentDatabaseType() != d->databaseWidget->imgOriginalDbType)
-        {
-            settings->setDatabaseParameters(DatabaseParameters::parametersForSQLiteDefaultFile(newPath));
-        }
-    }
-    else
-    {
-        settings->setImgDatabaseType(d->databaseWidget->imgCurrentDatabaseType());
-        settings->setImgDatabaseName(d->databaseWidget->imgDatabaseName->text());
-        settings->setImgDatabaseConnectoptions(d->databaseWidget->imgConnectionOptions->text());
-        settings->setImgDatabaseHostName(d->databaseWidget->imgHostName->text());
-        settings->setImgDatabasePort(d->databaseWidget->imgHostPort->text().toInt());
-        settings->setImgDatabaseUserName(d->databaseWidget->imgUserName->text());
-        settings->setImgDatabasePassword(d->databaseWidget->imgPassword->text());
-    }
-
-    if (d->databaseWidget->tmbCurrentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
-    {
-        QString newPath = d->databaseWidget->tmbDatabasePathEdit->url().path();
-        QDir oldDir(d->databaseWidget->tmbOriginalDbPath);
-        QDir newDir(newPath);
-
-        if (oldDir != newDir || d->databaseWidget->tmbCurrentDatabaseType() != d->databaseWidget->tmbOriginalDbType)
-        {
-            settings->setDatabaseParameters(DatabaseParameters::parametersForSQLiteDefaultFile(newPath));
-        }
-    }
-    else
-    {
-        settings->setTmbDatabaseType(d->databaseWidget->tmbCurrentDatabaseType());
-        settings->setTmbDatabaseName(d->databaseWidget->tmbDatabaseName->text());
-        settings->setTmbDatabaseConnectoptions(d->databaseWidget->tmbConnectionOptions->text());
-        settings->setTmbDatabaseHostName(d->databaseWidget->tmbHostName->text());
-        settings->setTmbDatabasePort(d->databaseWidget->tmbHostPort->text().toInt());
-        settings->setTmbDatabaseUserName(d->databaseWidget->tmbUserName->text());
-        settings->setTmbDatabasePassword(d->databaseWidget->tmbPassword->text());
-    }
-
-
-    settings->saveSettings();
 }
 
 void SetupDatabase::readSettings()

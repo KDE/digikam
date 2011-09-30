@@ -273,7 +273,7 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
 {
     QGraphicsView::mouseReleaseEvent(e);
 
-    // Dont call acceptsMouseClick() here, only on press. Seems that release event are accepted per default.
+    // Do not call acceptsMouseClick() here, only on press. Seems that release event are accepted per default.
 
     if ((e->button() == Qt::LeftButton || e->button() == Qt::MidButton) && !d->mousePressPos.isNull())
     {

@@ -1355,7 +1355,7 @@ void DigikamView::connectBatchSyncMetadata(BatchSyncMetadata* syncMetadata)
             d->parent, SLOT(progressValue(float)));
 
     connect(syncMetadata, SIGNAL(signalComplete()),
-            this, SLOT(finishProgress()));
+            d->parent, SLOT(finishProgress()));
 
     connect(d->parent, SIGNAL(signalCancelButtonPressed()),
             syncMetadata, SLOT(slotAbort()));

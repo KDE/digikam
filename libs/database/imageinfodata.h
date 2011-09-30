@@ -49,12 +49,6 @@ public:
 
 public:
 
-#if QT_VERSION < 0x040400
-    QAtomic                ref;
-#else
-    QAtomicInt             ref;
-#endif
-
     qlonglong              id;
     int                    albumId;
     int                    albumRootId;
