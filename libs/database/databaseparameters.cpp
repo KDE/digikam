@@ -436,6 +436,9 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
             kDebug(50003) << configDatabaseType << " Found.";
             imgDatabaseType         = group.readEntry(configDatabaseType, QString());
             imgDatabaseName         = group.readEntry(configDatabaseName, QString());
+            if (imgDatabaseType == QString::fromLatin1("QSQLITE")) {
+                imgDatabaseName = databaseFileSQLite(imgDatabaseName, QString::fromLatin1(DIGIKAM4DB));
+            }
             imgHostName             = group.readEntry(configDatabaseHostName, QString());
             imgPort                 = group.readEntry(configDatabasePort, -1);
             imgUserName             = group.readEntry(configDatabaseUsername, QString());
@@ -444,6 +447,9 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
 
             tmbDatabaseType         = group.readEntry(configDatabaseType, QString());
             tmbDatabaseName         = group.readEntry(configDatabaseNameThumbnails, QString());
+            if (tmbDatabaseType == QString::fromLatin1("QSQLITE")) {
+                tmbDatabaseName = databaseFileSQLite(tmbDatabaseName, QString::fromLatin1(THUMBNAILS_DIGIKAMDB));
+            }
             tmbHostName             = group.readEntry(configDatabaseHostName, QString());
             tmbPort                 = group.readEntry(configDatabasePort, -1);
             tmbUserName             = group.readEntry(configDatabaseUsername, QString());
