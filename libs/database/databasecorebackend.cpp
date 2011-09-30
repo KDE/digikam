@@ -188,11 +188,11 @@ bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
 
     QThread* thread = QThread::currentThread();
 
-    db = QSqlDatabase::addDatabase(parameters.databaseType, connectionName(thread));
+    db = QSqlDatabase::addDatabase(parameters.imgDatabaseType, connectionName(thread));
 
-    QString connectOptions = parameters.connectOptions;
+    QString connectOptions = parameters.imgConnectOptions;
 
-    if (parameters.isSQLite())
+    if (parameters.isImgSQLite())
     {
         QStringList toAdd;
         // enable shared cache, especially useful with SQLite >= 3.5.0
@@ -208,12 +208,12 @@ bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
         connectOptions += toAdd.join(";");
     }
 
-    db.setDatabaseName(parameters.databaseName);
+    db.setDatabaseName(parameters.imgDatabaseName);
     db.setConnectOptions(connectOptions);
-    db.setHostName(parameters.hostName);
-    db.setPort(parameters.port);
-    db.setUserName(parameters.userName);
-    db.setPassword(parameters.password);
+    db.setHostName(parameters.imgHostName);
+    db.setPort(parameters.imgPort);
+    db.setUserName(parameters.imgUserName);
+    db.setPassword(parameters.imgPassword);
 
     bool success = db.open();
 
@@ -274,18 +274,18 @@ bool DatabaseCoreBackendPrivate::isInUIThread() const
 
 bool DatabaseCoreBackendPrivate::reconnectOnError() const
 {
-    return parameters.isMySQL();
+    return parameters.isImgMySQL();
 }
 
 bool DatabaseCoreBackendPrivate::isSQLiteLockError(const SqlQuery& query) const
 {
-    return parameters.isSQLite()
+    return parameters.isImgSQLite()
            && (query.lastError().number() == 5 /*SQLITE_BUSY*/ || query.lastError().number() == 6/*SQLITE_LOCKED*/);
 }
 
 bool DatabaseCoreBackendPrivate::isSQLiteLockTransactionError(const QSqlError& lastError) const
 {
-    return parameters.isSQLite()
+    return parameters.isImgSQLite()
            && lastError.type() == QSqlError::TransactionError
            && lastError.databaseText() == QLatin1String("database is locked");
     // wouldnt it be great if they gave us the database error number...
@@ -294,7 +294,7 @@ bool DatabaseCoreBackendPrivate::isSQLiteLockTransactionError(const QSqlError& l
 bool DatabaseCoreBackendPrivate::isConnectionError(const SqlQuery& query) const
 {
     // the backend returns connection error e.g. for Constraint Failed errors.
-    if (parameters.isSQLite())
+    if (parameters.isImgSQLite())
     {
         return false;
     }
@@ -583,7 +583,7 @@ DatabaseCoreBackend::~DatabaseCoreBackend()
 DatabaseConfigElement DatabaseCoreBackend::configElement() const
 {
     Q_D(const DatabaseCoreBackend);
-    return DatabaseConfigElement::element(d->parameters.databaseType);
+    return DatabaseConfigElement::element(d->parameters.imgDatabaseType);
 }
 
 DatabaseAction DatabaseCoreBackend::getDBAction(const QString& actionName) const
@@ -745,7 +745,7 @@ void DatabaseCoreBackend::slotMainThreadFinished()
 
 bool DatabaseCoreBackend::isCompatible(const DatabaseParameters& parameters)
 {
-    return QSqlDatabase::drivers().contains(parameters.databaseType);
+    return QSqlDatabase::drivers().contains(parameters.imgDatabaseType);
 }
 
 bool DatabaseCoreBackend::open(const DatabaseParameters& parameters)

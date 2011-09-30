@@ -41,6 +41,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "albumsettings.h"
 #include "databaseparameters.h"
 
@@ -53,46 +54,66 @@ class DatabaseWidget : public QWidget
 
 public:
 
-    DatabaseWidget(QWidget* parent = 0);
+    DatabaseWidget(QWidget* parent = 0, const QString & title = QString(""));
     ~DatabaseWidget();
 
 public:
 
-    QString        originalDbPath;
-    QString        originalDbType;
-    QComboBox*     databaseType;
     QCheckBox*     internalServer;
-    QSpinBox*      hostPort;
 
-    QLineEdit*     databaseName;
-    QLineEdit*     databaseNameThumbnails;
-    QLineEdit*     hostName;
-    QLineEdit*     connectionOptions;
-    QLineEdit*     userName;
-    QLineEdit*     password;
+    QString        imgOriginalDbPath;
+    QString        imgOriginalDbType;
+    QComboBox*     imgDatabaseType;
+    QSpinBox*      imgHostPort;
 
-    KUrlRequester* databasePathEdit;
+    QLineEdit*     imgDatabaseName;
+    QLineEdit*     imgHostName;
+    QLineEdit*     imgConnectionOptions;
+    QLineEdit*     imgUserName;
+    QLineEdit*     imgPassword;
+
+    QString        tmbOriginalDbPath;
+    QString        tmbOriginalDbType;
+    QComboBox*     tmbDatabaseType;
+    QSpinBox*      tmbHostPort;
+
+    QLineEdit*     tmbDatabaseName;
+    QLineEdit*     tmbHostName;
+    QLineEdit*     tmbConnectionOptions;
+    QLineEdit*     tmbUserName;
+    QLineEdit*     tmbPassword;
+
+    KUrlRequester* imgDatabasePathEdit;
+    KUrlRequester* tmbDatabasePathEdit;
 
 public:
 
     void setParametersFromSettings(const AlbumSettings* settings);
     DatabaseParameters getDatabaseParameters();
 
-    QString currentDatabaseType() const;
-    void setDatabaseInputFields(const QString&);
+    QString imgCurrentDatabaseType() const;
+    QString tmbCurrentDatabaseType() const;
+    void setImgDatabaseInputFields(const QString&);
+    void setTmbDatabaseInputFields(const QString&);
 
 public Q_SLOTS:
 
-    void slotChangeDatabasePath(const KUrl&);
-    void slotDatabasePathEdited(const QString&);
-    void slotHandleDBTypeIndexChanged(int index);
     void slotHandleInternalServerCheckbox(int enableFields);
-    void checkDatabaseConnection();
+
+    void slotImgChangeDatabasePath(const KUrl&);
+    void slotImgDatabasePathEdited(const QString&);
+    void slotImgHandleDBTypeIndexChanged(int index);
+    void slotImgCheckDatabaseConnection();
+
+    void slotTmbChangeDatabasePath(const KUrl&);
+    void slotTmbDatabasePathEdited(const QString&);
+    void slotTmbHandleDBTypeIndexChanged(int index);
+    void slotTmbCheckDatabaseConnection();
 
 private:
 
     void checkDBPath();
-    void setupMainArea();
+    void setupMainArea(const QString & title);
 
 private:
 

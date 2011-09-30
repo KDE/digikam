@@ -81,16 +81,16 @@ DatabaseConnectionChecker::~DatabaseConnectionChecker()
 void DatabaseConnectionChecker::run()
 {
     QString databaseID("ConnectionTest");
-    QSqlDatabase databaseHandler = QSqlDatabase::addDatabase(d->parameters.databaseType, databaseID);
-    databaseHandler.setHostName(d->parameters.hostName);
-    databaseHandler.setPort(d->parameters.port);
+    QSqlDatabase databaseHandler = QSqlDatabase::addDatabase(d->parameters.imgDatabaseType, databaseID);
+    databaseHandler.setHostName(d->parameters.imgHostName);
+    databaseHandler.setPort(d->parameters.imgPort);
 
-    databaseHandler.setDatabaseName(d->parameters.databaseName);
+    databaseHandler.setDatabaseName(d->parameters.imgDatabaseName);
 
-    databaseHandler.setUserName(d->parameters.userName);
-    databaseHandler.setPassword(d->parameters.password);
+    databaseHandler.setUserName(d->parameters.imgUserName);
+    databaseHandler.setPassword(d->parameters.imgPassword);
 
-    databaseHandler.setConnectOptions(d->parameters.connectOptions);
+    databaseHandler.setConnectOptions(d->parameters.imgConnectOptions);
 
     int iteration = 1;
 

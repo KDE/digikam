@@ -373,7 +373,7 @@ void NepomukService::connectToDatabase(const DatabaseParameters& params)
         if (!d->isConnected)
         {
             QString errorMsg = DatabaseAccess().lastError();
-            kDebug() << "Failed to initialize database" << params.databaseName;
+            kDebug() << "Failed to initialize database" << params.imgDatabaseName;
             return;
         }
     }
@@ -1203,7 +1203,7 @@ DatabaseParameters NepomukService::databaseParameters() const
     KSharedConfig::Ptr config = digikamConfig();
     DatabaseParameters params = DatabaseParameters::parametersFromConfig(config);
 
-    if (!params.databaseName.isEmpty())
+    if (!params.imgDatabaseName.isEmpty())
     {
         kDebug() << "Using database path from config file:" << params;
         return params;
