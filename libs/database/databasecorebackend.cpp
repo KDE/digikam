@@ -220,6 +220,13 @@ bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
     if (success==false)
     {
         kDebug() << "Error while opening the database. Error was <" << db.lastError() << ">";
+        kDebug() << "parameters.imgDatabaseType <" << parameters.imgDatabaseType << ">";
+        kDebug() << "parameters.imgDatabaseName <" << parameters.imgDatabaseName << ">";
+        kDebug() << "connectOptions             <" << connectOptions << ">";
+        kDebug() << "parameters.imgHostName     <" << parameters.imgHostName << ">";
+        kDebug() << "parameters.imgPort         <" << parameters.imgPort << ">";
+        kDebug() << "parameters.imgUserName     <" << parameters.imgUserName << ">";
+        kDebug() << "parameters.imgPassword     <" << parameters.imgPassword << ">";
     }
 
     threadDatabases[thread]  = db;
