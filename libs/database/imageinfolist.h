@@ -50,6 +50,9 @@ public:
         : QList<ImageInfo>(list) {}
 
     QList<qlonglong> toImageIdList() const;
+
+    void loadGroupImageIds() const;
+    void loadTagIds() const;
 };
 
 typedef ImageInfoList::iterator ImageInfoListIterator;

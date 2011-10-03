@@ -881,22 +881,23 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
         return;
     }
 
-    //TODO: Make efficient!!
-    if (needPrepareTags)
+    // The downside of QVector: At some point, we may need a QList for an API.
+    // Nonetheless, QList and ImageInfo is fast. We could as well
+    // reimplement ImageInfoList to ImageInfoVector (internally with templates?)
+    ImageInfoList infoList;
+    if (needPrepareTags || needPrepareGroups)
     {
-        foreach(const ImageInfo& info, package.infos)
-        {
-            info.tagIds();
-        }
+        infoList = package.infos.toList();
     }
 
-    //TODO: Make efficient!!
+    if (needPrepareTags)
+    {
+        infoList.loadTagIds();
+    }
+
     if (needPrepareGroups)
     {
-        foreach(const ImageInfo& info, package.infos)
-        {
-            info.isGrouped();
-        }
+        infoList.loadGroupImageIds();
     }
 
     foreach (ImageFilterModelPrepareHook* hook, prepareHooks)

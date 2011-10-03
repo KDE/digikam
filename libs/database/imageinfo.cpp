@@ -561,6 +561,24 @@ QList<int> ImageInfo::tagIds() const
     return ids;
 }
 
+void ImageInfoList::loadTagIds() const
+{
+    QVector<QList<int> > allTagIds = DatabaseAccess().db()->getItemsTagIDs(toImageIdList());
+
+    ImageInfoWriteLocker lock;
+    for (int i=0; i<size(); i++)
+    {
+        const ImageInfo& info = at(i);
+        const QList<int>& ids = allTagIds.at(i);
+        if (!info.m_data)
+        {
+            continue;
+        }
+        info.m_data.constCastData()->tagIds = ids;
+        info.m_data.constCastData()->tagIdsCached = true;
+    }
+}
+
 int ImageInfo::orientation() const
 {
     if (!m_data)
@@ -756,6 +774,23 @@ qlonglong ImageInfo::groupImageId() const
     m_data.constCastData()->groupImage = groupImage;
     m_data.constCastData()->groupImageCached = true;
     return m_data->groupImage;
+}
+
+void ImageInfoList::loadGroupImageIds() const
+{
+    QVector<QList<qlonglong> > allGroupIds = DatabaseAccess().db()->getImagesRelatedFrom(toImageIdList(), DatabaseRelation::Grouped);
+    ImageInfoWriteLocker lock;
+    for (int i=0; i<size(); i++)
+    {
+        const ImageInfo& info = at(i);
+        const QList<qlonglong>& groupIds = allGroupIds.at(i);
+        if (!info.m_data)
+        {
+            continue;
+        }
+        info.m_data.constCastData()->groupImage = groupIds.isEmpty() ? -1 : groupIds.first();
+        info.m_data.constCastData()->groupImageCached = true;
+    }
 }
 
 bool ImageInfo::isGrouped() const
