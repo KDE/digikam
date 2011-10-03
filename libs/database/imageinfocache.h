@@ -27,17 +27,21 @@
 
 // Qt includes
 
-#include <QObject>
+#include <QMultiHash>
 #include <QHash>
+#include <QObject>
 
 // Local includes
 
 #include "databasewatch.h"
+#include "dshareddata.h"
 
 namespace Digikam
 {
 
+class AlbumShortInfo;
 class ImageInfoData;
+class ImageInfoReadLocker;
 class DatabaseAccess;
 
 // No EXPORT class
@@ -55,24 +59,36 @@ public:
      * A new object is created, or an existing object is returned.
      * If a new object is created, the id field will be initialized.
      */
-    ImageInfoData* infoForId(qlonglong id);
-    /**
-     * Returns whether an ImageInfoObject for the given image id
-     * is contained in the cache.
-     */
-    bool hasInfoForId(qlonglong id) const;
+    DSharedDataPointer<ImageInfoData> infoForId(qlonglong id);
 
     /**
-     * Call this when the reference count is dropped to 1.
-     * This method is called under mutex lock, and will check
-     * again the reference count. A count of 1 means the info is only
-     * left here in the cache, all ImageInfo containers are gone.
-     * The cache will delete this object when it wants.
+     * Call this when the data has been dereferenced,
+     * before deletion.
      */
     void dropInfo(ImageInfoData* infodata);
 
-    QString albumName(DatabaseAccess& access, int albumId);
+    /**
+     * Call this to put data in the hash by file name if you have newly created data
+     * and the name is filled.
+     * Call under write lock.
+     */
+    void cacheByName(ImageInfoData* data);
 
+    /**
+     * Return an ImageInfoData object for the given album root, relativePath and file name triple.
+     * Works if previously cached with cacheByName.
+     * Returns 0 if not found.
+     */
+    DSharedDataPointer<ImageInfoData> infoForPath(int albumRootId, const QString& relativePath, const QString& name);
+
+    /**
+     * Returns the cached relativePath for the given album id.
+     */
+    QString albumRelativePath(int albumId);
+
+    /**
+     * Invalidate the cache and all its cached data
+     */
     void invalidate();
 
 private Q_SLOTS:
@@ -83,8 +99,13 @@ private Q_SLOTS:
 
 private:
 
-    QHash<qlonglong, ImageInfoData*> m_infos;
-    QHash<int, QString>              m_albums;
+    QHash<qlonglong, ImageInfoData*>      m_infos;
+    QMultiHash<QString, ImageInfoData*>   m_nameHash;
+    volatile bool                         m_needUpdateAlbums;
+    QList<AlbumShortInfo>                 m_albums;
+
+    QList<AlbumShortInfo>::const_iterator findAlbum(int id);
+    void                                  checkAlbums();
 };
 
 }  // namespace Digikam

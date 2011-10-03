@@ -62,6 +62,27 @@
 namespace Digikam
 {
 
+ImageInfoStatic* ImageInfoStatic::m_instance = 0;
+
+void ImageInfoStatic::create()
+{
+    if (!m_instance)
+    {
+        m_instance = new ImageInfoStatic;
+    }
+}
+
+void ImageInfoStatic::destroy()
+{
+    delete m_instance;
+    m_instance = 0;
+}
+
+ImageInfoCache* ImageInfoStatic::cache()
+{
+    return &m_instance->m_cache;
+}
+
 ImageInfoData::ImageInfoData()
 {
     id                     = -1;
@@ -97,10 +118,14 @@ ImageInfoData::ImageInfoData()
     imageSizeCached        = false;
     tagIdsCached           = false;
     positionsCached        = false;
-    groupedImagesIsCached  = false;
-    groupImageIsCached     = false;
+    groupedImagesCached    = false;
+    groupImageCached       = false;
 
     invalid                = false;
+}
+
+ImageInfoData::~ImageInfoData()
+{
 }
 
 ImageInfo::ImageInfo()
@@ -110,8 +135,10 @@ ImageInfo::ImageInfo()
 
 ImageInfo::ImageInfo(const ImageListerRecord& record)
 {
-    DatabaseAccess access;
-    m_data                         = access.imageInfoCache()->infoForId(record.imageID);
+    m_data                         = ImageInfoStatic::cache()->infoForId(record.imageID);
+
+    ImageInfoWriteLocker lock;
+    bool newlyCreated              = m_data->albumId == -1;
 
     m_data->albumId                = record.albumID;
     m_data->albumRootId            = record.albumRootID;
@@ -133,24 +160,30 @@ ImageInfo::ImageInfo(const ImageListerRecord& record)
     // field is only signed 32 bit in the protocol. -1 indicates value is larger, reread
     m_data->fileSizeCached         = m_data->fileSize != -1;
     m_data->imageSizeCached        = true;
+
+    if (newlyCreated)
+    {
+        ImageInfoStatic::cache()->cacheByName(m_data);
+    }
 }
 
 ImageInfo::ImageInfo(qlonglong ID)
 {
-    DatabaseAccess access;
-    m_data = access.imageInfoCache()->infoForId(ID);
+    m_data = ImageInfoStatic::cache()->infoForId(ID);
 
     // is this a newly created structure, need to populate?
     if (m_data->albumId == -1)
     {
         // retrieve immutable values now, the rest on demand
-        ItemShortInfo info  = access.db()->getItemShortInfo(ID);
+        ItemShortInfo info  = DatabaseAccess().db()->getItemShortInfo(ID);
 
         if (info.id)
         {
+            ImageInfoWriteLocker lock;
             m_data->albumId     = info.albumID;
             m_data->albumRootId = info.albumRootID;
             m_data->name        = info.itemName;
+            ImageInfoStatic::cache()->cacheByName(m_data);
         }
         else
         {
@@ -159,7 +192,7 @@ ImageInfo::ImageInfo(qlonglong ID)
 
             if (olddata)
             {
-                access.imageInfoCache()->dropInfo(olddata);
+                ImageInfoStatic::cache()->dropInfo(olddata);
             }
 
             m_data = 0;
@@ -169,8 +202,6 @@ ImageInfo::ImageInfo(qlonglong ID)
 
 ImageInfo::ImageInfo(const KUrl& url)
 {
-    DatabaseAccess access;
-
     CollectionLocation location = CollectionManager::instance()->locationForUrl(url);
 
     if (location.isNull())
@@ -184,35 +215,29 @@ ImageInfo::ImageInfo(const KUrl& url)
     QString album = CollectionManager::instance()->album(_url.toLocalFile());
     QString name  = url.fileName();
 
-    /*
-    // if needed, the two SQL calls can be consolidated into one by adding a method to AlbumDB
-    int albumId = access.db()->getAlbumForPath(location.id(), album, false);
-    if (albumId == -1)
-    {
-        m_data = 0;
-        return;
-    }
+    // Cached?
+    m_data = ImageInfoStatic::cache()->infoForPath(location.id(), album, name);
 
-    int imageId = access.db()->getImageId(albumId, name);
-    if (imageId == -1)
+    if (!m_data)
     {
-        m_data = 0;
-        return;
-    }
-    */
-    ItemShortInfo info = access.db()->getItemShortInfo(location.id(), album, name);
 
-    if (!info.id)
-    {
-        m_data = 0;
-        qWarning() << "No itemShortInfo could be retrieved from the database for image" << name;
-        return;
-    }
+        ItemShortInfo info = DatabaseAccess().db()->getItemShortInfo(location.id(), album, name);
 
-    m_data = access.imageInfoCache()->infoForId(info.id);
-    m_data->albumId     = info.albumID;
-    m_data->albumRootId = info.albumRootID;
-    m_data->name        = info.itemName;
+        if (!info.id)
+        {
+            m_data = 0;
+            qWarning() << "No itemShortInfo could be retrieved from the database for image" << name;
+            return;
+        }
+
+        m_data = ImageInfoStatic::cache()->infoForId(info.id);
+
+        ImageInfoWriteLocker lock;
+        m_data->albumId     = info.albumID;
+        m_data->albumRootId = info.albumRootID;
+        m_data->name        = info.itemName;
+        ImageInfoStatic::cache()->cacheByName(m_data);
+    }
 }
 
 ImageInfo::~ImageInfo()
@@ -221,7 +246,7 @@ ImageInfo::~ImageInfo()
 
     if (olddata)
     {
-        DatabaseAccess().imageInfoCache()->dropInfo(olddata);
+        ImageInfoStatic::cache()->dropInfo(olddata);
     }
 }
 
@@ -241,7 +266,7 @@ ImageInfo& ImageInfo::operator=(const ImageInfo& info)
 
     if (olddata)
     {
-        DatabaseAccess().imageInfoCache()->dropInfo(olddata);
+        ImageInfoStatic::cache()->dropInfo(olddata);
     }
 
     return *this;
@@ -328,9 +353,28 @@ QString ImageInfo::name() const
         return QString();
     }
 
-    DatabaseAccess access;
+    ImageInfoReadLocker lock;
     return m_data->name;
 }
+
+#define RETURN_IF_CACHED(x) \
+    if (m_data->x##Cached) \
+    { \
+        ImageInfoReadLocker lock; \
+        if (m_data->x##Cached) \
+        { \
+            return m_data->x; \
+        } \
+    }
+
+#define STORE_IN_CACHE_AND_RETURN(x, retrieveMethod) \
+    ImageInfoWriteLocker lock; \
+    m_data.constCastData()->x##Cached = true; \
+    if (!values.isEmpty()) \
+    { \
+        m_data.constCastData()->x = retrieveMethod; \
+    } \
+    return m_data->x;
 
 qlonglong ImageInfo::fileSize() const
 {
@@ -339,35 +383,31 @@ qlonglong ImageInfo::fileSize() const
         return 0;
     }
 
-    DatabaseAccess access;
+    RETURN_IF_CACHED(fileSize)
 
-    if (!m_data->fileSizeCached)
-    {
-        QVariantList values = access.db()->getImagesFields(m_data->id, DatabaseFields::FileSize);
+    QVariantList values = DatabaseAccess().db()->getImagesFields(m_data->id, DatabaseFields::FileSize);
 
-        if (!values.isEmpty())
-        {
-            //m_data.constCastData()->fileSize = values.first().toLongLong();
-        }
-
-        m_data.constCastData()->fileSizeCached = true;
-    }
-
-    return m_data->fileSize;
+    STORE_IN_CACHE_AND_RETURN(fileSize, values.first().toLongLong())
 }
 
 QString ImageInfo::title() const
 {
     if (!m_data)
-        return QString();
-
-    DatabaseAccess access;
-    if (!m_data->defaultTitleCached)
     {
-        ImageComments comments(access, m_data->id);
-        m_data.constCastData()->defaultTitle       = comments.defaultComment(NULL, DatabaseComment::Title);
-        m_data.constCastData()->defaultTitleCached = true;
+        return QString();
     }
+
+    RETURN_IF_CACHED(defaultTitle)
+
+    QString title;
+    {
+        DatabaseAccess access;
+        ImageComments comments(access, m_data->id);
+        title = comments.defaultComment(DatabaseComment::Title);
+    }
+    ImageInfoWriteLocker lock;
+    m_data.constCastData()->defaultTitle       = title;
+    m_data.constCastData()->defaultTitleCached = true;
     return m_data->defaultTitle;
 }
 
@@ -378,15 +418,17 @@ QString ImageInfo::comment() const
         return QString();
     }
 
-    DatabaseAccess access;
+    RETURN_IF_CACHED(defaultComment)
 
-    if (!m_data->defaultCommentCached)
+    QString comment;
     {
+        DatabaseAccess access;
         ImageComments comments(access, m_data->id);
-        m_data.constCastData()->defaultComment       = comments.defaultComment();
-        m_data.constCastData()->defaultCommentCached = true;
+        comment = comments.defaultComment();
     }
-
+    ImageInfoWriteLocker lock;
+    m_data.constCastData()->defaultComment       = comment;
+    m_data.constCastData()->defaultCommentCached = true;
     return m_data->defaultComment;
 }
 
@@ -394,28 +436,16 @@ int ImageInfo::pickLabel() const
 {
     if (!m_data)
     {
-        return 0;
+        return NoPickLabel;
     }
 
-    if (!m_data->pickLabelCached)
-    {
-        QList<int> tags = tagIds();
+    RETURN_IF_CACHED(pickLabel)
 
-        foreach(int tagId, tags)
-        {
-            for (int i = NoPickLabel ; i <= AcceptedLabel; ++i)
-            {
-                if (tagId == TagsCache::instance()->getTagForPickLabel((PickLabel)i))
-                {
-                    m_data.constCastData()->pickLabel = i;
-                    break;
-                }
-            }
-        }
+    int pickLabel = TagsCache::instance()->pickLabelFromTags(tagIds());
 
-        m_data.constCastData()->pickLabelCached = true;
-    }
-
+    ImageInfoWriteLocker lock;
+    m_data.constCastData()->pickLabel = pickLabel = -1 ? NoPickLabel : pickLabel;
+    m_data.constCastData()->pickLabelCached = true;
     return m_data->pickLabel;
 }
 
@@ -423,28 +453,16 @@ int ImageInfo::colorLabel() const
 {
     if (!m_data)
     {
-        return 0;
+        return NoColorLabel;
     }
 
-    if (!m_data->colorLabelCached)
-    {
-        QList<int> tags = tagIds();
+    RETURN_IF_CACHED(colorLabel)
 
-        foreach(int tagId, tags)
-        {
-            for (int i = NoColorLabel ; i <= WhiteLabel; ++i)
-            {
-                if (tagId == TagsCache::instance()->getTagForColorLabel((ColorLabel)i))
-                {
-                    m_data.constCastData()->colorLabel = i;
-                    break;
-                }
-            }
-        }
+    int colorLabel = TagsCache::instance()->colorLabelFromTags(tagIds());
 
-        m_data.constCastData()->colorLabelCached = true;
-    }
-
+    ImageInfoWriteLocker lock;
+    m_data.constCastData()->colorLabel = colorLabel == -1 ? NoColorLabel : colorLabel;
+    m_data.constCastData()->colorLabelCached = true;
     return m_data->colorLabel;
 }
 
@@ -455,21 +473,10 @@ int ImageInfo::rating() const
         return 0;
     }
 
-    DatabaseAccess access;
+    RETURN_IF_CACHED(rating)
 
-    if (!m_data->ratingCached)
-    {
-        QVariantList values = access.db()->getImageInformation(m_data->id, DatabaseFields::Rating);
-
-        if (!values.isEmpty())
-        {
-            m_data.constCastData()->rating = values.first().toInt();
-        }
-
-        m_data.constCastData()->ratingCached = true;
-    }
-
-    return m_data->rating;
+    QVariantList values = DatabaseAccess().db()->getImageInformation(m_data->id, DatabaseFields::Rating);
+    STORE_IN_CACHE_AND_RETURN(rating, values.first().toLongLong())
 }
 
 QString ImageInfo::format() const
@@ -479,21 +486,9 @@ QString ImageInfo::format() const
         return 0;
     }
 
-    DatabaseAccess access;
-
-    if (!m_data->formatCached)
-    {
-        QVariantList values = access.db()->getImageInformation(m_data->id, DatabaseFields::Format);
-
-        if (!values.isEmpty())
-        {
-            m_data.constCastData()->format = values.first().toString();
-        }
-
-        m_data.constCastData()->formatCached = true;
-    }
-
-    return m_data->format;
+    RETURN_IF_CACHED(format)
+    QVariantList values = DatabaseAccess().db()->getImageInformation(m_data->id, DatabaseFields::Format);
+    STORE_IN_CACHE_AND_RETURN(format, values.first().toString())
 }
 
 DatabaseItem::Category ImageInfo::category() const
@@ -503,21 +498,9 @@ DatabaseItem::Category ImageInfo::category() const
         return DatabaseItem::UndefinedCategory;
     }
 
-    DatabaseAccess access;
-
-    if (!m_data->categoryCached)
-    {
-        QVariantList values = access.db()->getImagesFields(m_data->id, DatabaseFields::Category);
-
-        if (!values.isEmpty())
-        {
-            m_data.constCastData()->category = (DatabaseItem::Category)values.first().toInt();
-        }
-
-        m_data.constCastData()->categoryCached = true;
-    }
-
-    return m_data->category;
+    RETURN_IF_CACHED(category)
+    QVariantList values = DatabaseAccess().db()->getImagesFields(m_data->id, DatabaseFields::Category);
+    STORE_IN_CACHE_AND_RETURN(category, (DatabaseItem::Category)values.first().toInt())
 }
 
 QDateTime ImageInfo::dateTime() const
@@ -527,21 +510,9 @@ QDateTime ImageInfo::dateTime() const
         return QDateTime();
     }
 
-    DatabaseAccess access;
-
-    if (!m_data->creationDateCached)
-    {
-        QVariantList values = access.db()->getImageInformation(m_data->id, DatabaseFields::CreationDate);
-
-        if (!values.isEmpty())
-        {
-            m_data.constCastData()->creationDate = values.first().toDateTime();
-        }
-
-        m_data.constCastData()->creationDateCached = true;
-    }
-
-    return m_data->creationDate;
+    RETURN_IF_CACHED(creationDate)
+    QVariantList values = DatabaseAccess().db()->getImageInformation(m_data->id, DatabaseFields::CreationDate);
+    STORE_IN_CACHE_AND_RETURN(creationDate, values.first().toDateTime())
 }
 
 QDateTime ImageInfo::modDateTime() const
@@ -551,21 +522,9 @@ QDateTime ImageInfo::modDateTime() const
         return QDateTime();
     }
 
-    DatabaseAccess access;
-
-    if (!m_data->modificationDateCached)
-    {
-        QVariantList values = access.db()->getImagesFields(m_data->id, DatabaseFields::ModificationDate);
-
-        if (!values.isEmpty())
-        {
-            m_data.constCastData()->modificationDate = values.first().toDateTime();
-        }
-
-        m_data.constCastData()->modificationDateCached = true;
-    }
-
-    return m_data->modificationDate;
+    RETURN_IF_CACHED(modificationDate)
+    QVariantList values = DatabaseAccess().db()->getImagesFields(m_data->id, DatabaseFields::ModificationDate);
+    STORE_IN_CACHE_AND_RETURN(modificationDate, values.first().toDateTime())
 }
 
 QSize ImageInfo::dimensions() const
@@ -575,20 +534,14 @@ QSize ImageInfo::dimensions() const
         return QSize();
     }
 
-    DatabaseAccess access;
-
-    if (!m_data->imageSizeCached)
+    RETURN_IF_CACHED(imageSize)
+    QVariantList values = DatabaseAccess().db()->getImageInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
+    ImageInfoWriteLocker lock;
+    m_data.constCastData()->imageSizeCached= true;
+    if (values.size() == 2)
     {
-        QVariantList values = access.db()->getImageInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
-
-        if (values.size() == 2)
-        {
-            m_data.constCastData()->imageSize = QSize(values.at(0).toInt(), values.at(1).toInt());
-        }
-
-        m_data.constCastData()->imageSizeCached = true;
+        m_data.constCastData()->imageSize = QSize(values.at(0).toInt(), values.at(1).toInt());
     }
-
     return m_data->imageSize;
 }
 
@@ -599,15 +552,13 @@ QList<int> ImageInfo::tagIds() const
         return QList<int>();
     }
 
-    DatabaseAccess access;
+    RETURN_IF_CACHED(tagIds)
 
-    if (!m_data->tagIdsCached)
-    {
-        m_data.constCastData()->tagIds       = access.db()->getItemTagIDs(m_data->id);
-        m_data.constCastData()->tagIdsCached = true;
-    }
-
-    return m_data->tagIds;
+    QList<int> ids = DatabaseAccess().db()->getItemTagIDs(m_data->id);
+    ImageInfoWriteLocker lock;
+    m_data.constCastData()->tagIds = ids;
+    m_data.constCastData()->tagIdsCached = true;
+    return ids;
 }
 
 int ImageInfo::orientation() const
@@ -634,11 +585,10 @@ DatabaseUrl ImageInfo::databaseUrl() const
         return DatabaseUrl();
     }
 
-    DatabaseAccess access;
-
-    QString album     = access.imageInfoCache()->albumName(access, m_data->albumId);
+    QString album = ImageInfoStatic::cache()->albumRelativePath(m_data->albumId);
     QString albumRoot = CollectionManager::instance()->albumRootPath(m_data->albumRootId);
 
+    ImageInfoReadLocker lock;
     return DatabaseUrl::fromAlbumAndName(m_data->name, album, albumRoot, m_data->albumRootId);
 }
 
@@ -654,8 +604,6 @@ QString ImageInfo::filePath() const
         return QString();
     }
 
-    DatabaseAccess access;
-
     QString albumRoot = CollectionManager::instance()->albumRootPath(m_data->albumRootId);
 
     if (albumRoot.isNull())
@@ -663,8 +611,9 @@ QString ImageInfo::filePath() const
         return QString();
     }
 
-    QString album = access.imageInfoCache()->albumName(access, m_data->albumId);
+    QString album = ImageInfoStatic::cache()->albumRelativePath(m_data->albumId);
 
+    ImageInfoReadLocker lock;
     if (album == "/")
     {
         return albumRoot + album + m_data->name;
@@ -780,47 +729,53 @@ int ImageInfo::numberOfGroupedImages() const
         return false;
     }
 
-    if (!m_data->groupedImagesIsCached)
+    RETURN_IF_CACHED(groupedImages)
+
+    int groupedImages = DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped).size();
+
+    ImageInfoWriteLocker lock;
+    m_data.constCastData()->groupedImages = groupedImages;
+    m_data.constCastData()->groupedImagesCached = true;
+    return m_data->groupedImages;
+}
+
+qlonglong ImageInfo::groupImageId() const
+{
+    if (!m_data)
     {
-        m_data.constCastData()->groupedImages
-          = DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped).size();
-        m_data.constCastData()->groupedImagesIsCached = true;
+        return -1;
     }
 
-    return m_data->groupedImages;
+    RETURN_IF_CACHED(groupImage)
+
+    QList<qlonglong> ids = DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::Grouped);
+    // list size should be 0 or 1
+    int groupImage = ids.isEmpty() ? -1 : ids.first();
+
+    ImageInfoWriteLocker lock;
+    m_data.constCastData()->groupImage = groupImage;
+    m_data.constCastData()->groupImageCached = true;
+    return m_data->groupImage;
 }
 
 bool ImageInfo::isGrouped() const
 {
-    if (!m_data)
-    {
-        return false;
-    }
-
-    if (!m_data->groupImageIsCached)
-    {
-        QList<qlonglong> ids = DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::Grouped);
-        // list size should be 0 or 1
-        m_data.constCastData()->groupImage = ids.isEmpty() ? -1 : ids.first();
-        m_data.constCastData()->groupImageIsCached = true;
-    }
-
-    return m_data->groupImage != -1;
+    return groupImageId() != -1;
 }
 
 ImageInfo ImageInfo::groupImage() const
 {
-    // isGrouped() will cache the value
-    if (!m_data || !isGrouped())
+    qlonglong id = groupImageId();
+    if (id == -1)
     {
         return ImageInfo();
     }
-    return ImageInfo(m_data->groupImage);
+    return ImageInfo(id);
 }
 
 QList<ImageInfo> ImageInfo::groupedImages() const
 {
-    if (!m_data || (m_data->groupedImagesIsCached && !m_data->groupedImages) || !hasGroupedImages())
+    if (!m_data || !hasGroupedImages())
     {
         return QList<ImageInfo>();
     }
@@ -912,11 +867,11 @@ ImagePosition ImageInfo::imagePosition() const
         return ImagePosition();
     }
 
-    DatabaseAccess access;
-    ImagePosition pos(access, m_data->id);
+    ImagePosition pos(m_data->id);
 
     if (!m_data->positionsCached)
     {
+        ImageInfoWriteLocker lock;
         m_data.constCastData()->longitude      = pos.longitudeNumber();
         m_data.constCastData()->latitude       = pos.latitudeNumber();
         m_data.constCastData()->altitude       = pos.altitude();
@@ -1195,46 +1150,60 @@ void ImageInfo::removeMetadataTemplate()
 
 void ImageInfo::setPickLabel(int pickId)
 {
-    if (!m_data)
+    if (!m_data || pickId < FirstPickLabel || pickId > LastPickLabel)
     {
         return;
     }
 
-    TagsCache* tc = TagsCache::instance();
-    int tagId     = tc->getTagForPickLabel((PickLabel)pickId);
-    if (!tagId) return;
+    QList<int> currentTagIds   = tagIds();
+    QVector<int> pickLabelTags = TagsCache::instance()->pickLabelTags();
 
-    // Color Label is an exclusive tags.
+    // Pick Label is an exclusive tag.
+    // Perform "switch" operation atomic
+    {
+        DatabaseAccess access;
+        foreach (int tagId, currentTagIds)
+        {
+            if (pickLabelTags.contains(tagId))
+            {
+                removeTag(tagId);
+            }
+        }
+        setTag(pickLabelTags[pickId]);
+    }
 
-    for (int i = NoPickLabel ; i <= AcceptedLabel ; ++i)
-        removeTag(tc->getTagForPickLabel((PickLabel)i));
-
-    setTag(tagId);
-
-    m_data->pickLabel                       = pickId;
-    m_data.constCastData()->pickLabelCached = true;
+    ImageInfoWriteLocker lock;
+    m_data->pickLabel       = pickId;
+    m_data->pickLabelCached = true;
 }
 
 void ImageInfo::setColorLabel(int colorId)
 {
-    if (!m_data)
+    if (!m_data || colorId < FirstColorLabel || colorId > LastColorLabel)
     {
         return;
     }
 
-    TagsCache* tc = TagsCache::instance();
-    int tagId     = tc->getTagForColorLabel((ColorLabel)colorId);
-    if (!tagId) return;
+    QList<int> currentTagIds   = tagIds();
+    QVector<int> colorLabelTags = TagsCache::instance()->colorLabelTags();
 
-    // Color Label is an exclusive tags.
+    // Color Label is an exclusive tag.
+    // Perform "switch" operation atomic
+    {
+        DatabaseAccess access;
+        foreach (int tagId, currentTagIds)
+        {
+            if (colorLabelTags.contains(tagId))
+            {
+                removeTag(tagId);
+            }
+        }
+        setTag(colorLabelTags[colorId]);
+    }
 
-    for (int i = NoColorLabel ; i <= WhiteLabel ; ++i)
-        removeTag(tc->getTagForColorLabel((ColorLabel)i));
-
-    setTag(tagId);
-
-    m_data->colorLabel                       = colorId;
-    m_data.constCastData()->colorLabelCached = true;
+    ImageInfoWriteLocker lock;
+    m_data->colorLabel       = colorId;
+    m_data->colorLabelCached = true;
 }
 
 void ImageInfo::setRating(int value)
@@ -1244,28 +1213,25 @@ void ImageInfo::setRating(int value)
         return;
     }
 
-    DatabaseAccess access;
-    access.db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Rating);
+    DatabaseAccess().db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Rating);
 
+    ImageInfoWriteLocker lock;
     m_data->rating = value;
-    m_data.constCastData()->ratingCached = true;
+    m_data->ratingCached = true;
 }
 
 void ImageInfo::setDateTime(const QDateTime& dateTime)
 {
-    if (!m_data)
+    if (!m_data || !dateTime.isValid())
     {
         return;
     }
 
-    if (dateTime.isValid())
-    {
-        DatabaseAccess access;
-        access.db()->changeImageInformation(m_data->id, QVariantList() << dateTime, DatabaseFields::CreationDate);
+    DatabaseAccess().db()->changeImageInformation(m_data->id, QVariantList() << dateTime, DatabaseFields::CreationDate);
 
-        m_data->creationDate = dateTime;
-        m_data.constCastData()->creationDateCached = true;
-    }
+    ImageInfoWriteLocker lock;
+    m_data->creationDate = dateTime;
+    m_data->creationDateCached = true;
 }
 
 void ImageInfo::setTag(int tagID)
@@ -1275,8 +1241,7 @@ void ImageInfo::setTag(int tagID)
         return;
     }
 
-    DatabaseAccess access;
-    access.db()->addItemTag(m_data->id, tagID);
+    DatabaseAccess().db()->addItemTag(m_data->id, tagID);
 }
 
 void ImageInfo::removeTag(int tagID)
@@ -1298,8 +1263,7 @@ void ImageInfo::removeAllTags()
         return;
     }
 
-    DatabaseAccess access;
-    access.db()->removeItemAllTags(m_data->id, tagIds());
+    DatabaseAccess().db()->removeItemAllTags(m_data->id, tagIds());
 }
 
 void ImageInfo::addTagPaths(const QStringList& tagPaths)
@@ -1320,15 +1284,16 @@ ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
         return ImageInfo();
     }
 
-    DatabaseAccess access;
-    //kDebug() << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName;
-
-    if (dstAlbumID == m_data->albumId && dstFileName == m_data->name)
     {
-        return (*this);
+        ImageInfoReadLocker lock;
+
+        if (dstAlbumID == m_data->albumId && dstFileName == m_data->name)
+        {
+            return (*this);
+        }
     }
 
-    int id = access.db()->copyItem(m_data->albumId, m_data->name, dstAlbumID, dstFileName);
+    int id = DatabaseAccess().db()->copyItem(m_data->albumId, m_data->name, dstAlbumID, dstFileName);
 
     if (id == -1)
     {

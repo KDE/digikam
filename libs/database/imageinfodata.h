@@ -28,24 +28,57 @@
 // Qt includes
 
 #include <QDateTime>
-#include <QSize>
 #include <QList>
-#include <qatomic.h>
+#include <QSize>
+#include <QReadWriteLock>
+#include <QReadLocker>
+#include <QWriteLocker>
 
 // Local includes
 
 #include "databaseurl.h"
 #include "dshareddata.h"
 #include "albuminfo.h"
+#include "imageinfocache.h"
 
 namespace Digikam
 {
+
+class ImageInfoStatic
+{
+public:
+
+    static void create();
+    static void destroy();
+
+    static ImageInfoCache* cache();
+
+    ImageInfoCache m_cache;
+    QReadWriteLock m_lock;
+
+    static ImageInfoStatic* m_instance;
+};
+
+class ImageInfoReadLocker : public QReadLocker
+{
+public:
+
+    ImageInfoReadLocker() : QReadLocker(&ImageInfoStatic::m_instance->m_lock) {}
+};
+
+class ImageInfoWriteLocker : public QWriteLocker
+{
+public:
+
+    ImageInfoWriteLocker() : QWriteLocker(&ImageInfoStatic::m_instance->m_lock) {}
+};
 
 class ImageInfoData : public DSharedData
 {
 public:
 
     ImageInfoData();
+    ~ImageInfoData();
 
 public:
 
@@ -93,8 +126,8 @@ public:
     bool                   imageSizeCached        : 1;
     bool                   tagIdsCached           : 1;
     bool                   positionsCached        : 1;
-    bool                   groupedImagesIsCached  : 1;
-    bool                   groupImageIsCached     : 1;
+    bool                   groupedImagesCached    : 1;
+    bool                   groupImageCached       : 1;
 
     bool                   invalid                : 1;
 };

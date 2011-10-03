@@ -38,6 +38,7 @@
 // Local includes
 
 #include "albumdb.h"
+#include "imageinfodata.h"
 #include "imageinfocache.h"
 #include "schemaupdater.h"
 #include "collectionmanager.h"
@@ -54,7 +55,7 @@ class DatabaseAccessStaticPriv
 public:
 
     DatabaseAccessStaticPriv()
-        : backend(0), db(0), infoCache(0), databaseWatch(0),
+        : backend(0), db(0), databaseWatch(0),
           initializing(false)
     {
         // create a unique identifier for this application (as an application accessing a database
@@ -64,7 +65,6 @@ public:
 
     DatabaseBackend*    backend;
     AlbumDB*            db;
-    ImageInfoCache*     infoCache;
     DatabaseWatch*      databaseWatch;
     DatabaseParameters  parameters;
     DatabaseLocking     lock;
@@ -137,11 +137,6 @@ DatabaseBackend* DatabaseAccess::backend() const
     return d->backend;
 }
 
-ImageInfoCache* DatabaseAccess::imageInfoCache() const
-{
-    return d->infoCache;
-}
-
 DatabaseWatch* DatabaseAccess::databaseWatch()
 {
     if (d)
@@ -154,12 +149,12 @@ DatabaseWatch* DatabaseAccess::databaseWatch()
 
 void DatabaseAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler)
 {
-    if (!d)
+    if (!d || !d->backend)
     {
-        d = new DatabaseAccessStaticPriv();
+        kError() << "Please set parameters before setting a database error handler";
+        return;
     }
 
-    //DatabaseErrorHandler *errorhandler = new DatabaseGUIErrorHandler(d->parameters);
     d->backend->setDatabaseErrorHandler(errorhandler);
 }
 
@@ -226,10 +221,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
         }
     }
 
-    if (!d->infoCache)
-    {
-        d->infoCache = new ImageInfoCache();
-    }
+    ImageInfoStatic::create();
 
     if (!d->backend || !d->backend->isCompatible(parameters))
     {
@@ -242,7 +234,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
     }
 
     d->databaseWatch->sendDatabaseChanged();
-    d->infoCache->invalidate();
+    ImageInfoStatic::cache()->invalidate();
     TagsCache::instance()->invalidate();
     d->databaseWatch->setDatabaseIdentifier(QString());
     CollectionManager::instance()->clear_locked();
@@ -339,6 +331,7 @@ void DatabaseAccess::cleanUpDatabase()
         delete d->backend;
     }
 
+    ImageInfoStatic::destroy();
     delete d;
     d = 0;
 }

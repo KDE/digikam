@@ -27,6 +27,7 @@
 // Local includes
 
 #include "albumdb.h"
+#include "albuminfo.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "imageinfodata.h"
@@ -36,6 +37,7 @@ namespace Digikam
 {
 
 ImageInfoCache::ImageInfoCache()
+    : m_needUpdateAlbums(true)
 {
     qRegisterMetaType<ImageInfo>("ImageInfo");
     qRegisterMetaType<ImageInfoList>("ImageInfoList");
@@ -60,54 +62,153 @@ ImageInfoCache::~ImageInfoCache()
 {
 }
 
-ImageInfoData* ImageInfoCache::infoForId(qlonglong id)
+template <class T>
+DSharedDataPointer<T> toStrongRef(T* weakRef)
 {
-    QHash<qlonglong, ImageInfoData*>::const_iterator it = m_infos.constFind(id);
-
-    if (it == m_infos.constEnd())
+    // Called under read lock
+    if (!weakRef)
     {
-        ImageInfoData* data = new ImageInfoData();
-        data->id            = id;
-        m_infos[id]         = data;
-        return data;
+        return DSharedDataPointer<T>();
+    }
+    // The weak ref is a data object which is not deleted
+    // (because deletion is done under mutex protection)
+    // but may have a ref count of 0.
+    // If the ref count is 0 and we gave the object away to another
+    // thread, it might get deleted by this thread before the mutex
+    // is acquired in the first thread which initially dropped the ref
+    // count to 0 and also intends to delete it, then operating
+    // on deleted data and crashing.
+    // That means if the weakRef had a ref count of 0 before we incremented,
+    // we need to drop it.
+    int previousRef = weakRef->ref.fetchAndAddOrdered(1);
+    if (previousRef == 0)
+    {
+        // drop weakRef
+        weakRef->ref.deref();
+        return DSharedDataPointer<T>();
     }
 
-    return (*it);
+    // Convert to a strong reference. Will ref() the weakRef once again
+    DSharedDataPointer<ImageInfoData> ptr(weakRef);
+    // decrease counter, which we incremented twice now
+    weakRef->ref.deref();
+    return ptr;
 }
 
-bool ImageInfoCache::hasInfoForId(qlonglong id) const
+static bool lessThanForAlbumShortInfo(const AlbumShortInfo& first, const AlbumShortInfo& second)
 {
-    return m_infos.contains(id);
+    return first.id < second.id;
 }
 
-void ImageInfoCache::dropInfo(ImageInfoData* infodata)
+void ImageInfoCache::checkAlbums()
 {
-    // check again ref count, now in mutex-protected context
-    if (!infodata || infodata->isReferenced())
+    if (m_needUpdateAlbums)
+    {
+        // list comes sorted from db
+        QList<AlbumShortInfo> infos = DatabaseAccess().db()->getAlbumShortInfos();
+        ImageInfoWriteLocker lock;
+        m_albums = infos;
+        m_needUpdateAlbums = false;
+    }
+}
+
+DSharedDataPointer<ImageInfoData> ImageInfoCache::infoForId(qlonglong id)
+{
+    {
+        ImageInfoReadLocker lock;
+        DSharedDataPointer<ImageInfoData> ptr = toStrongRef(m_infos.value(id));
+        if (ptr)
+        {
+            return ptr;
+        }
+    }
+
+    ImageInfoWriteLocker lock;
+    ImageInfoData* data = new ImageInfoData();
+    data->id            = id;
+    m_infos[id]         = data;
+    return DSharedDataPointer<ImageInfoData>(data);
+}
+
+void ImageInfoCache::cacheByName(ImageInfoData* data)
+{
+    // Called with Write lock
+
+    if (!data || data->id == -1 || data->name.isEmpty())
     {
         return;
     }
 
+    // Called in a context where we can assume that the entry is not yet cached by name (newly created data)
+    m_nameHash.insert(data->name, data);
+}
+
+
+
+DSharedDataPointer<ImageInfoData> ImageInfoCache::infoForPath(int albumRootId, const QString& relativePath, const QString& name)
+{
+    ImageInfoReadLocker lock;
+    // We check all entries in the multi hash with matching file name
+    QMultiHash<QString, ImageInfoData*>::const_iterator it;
+    for (it = m_nameHash.constFind(name); it != m_nameHash.constEnd() && it.key() == name; ++it)
+    {
+        // first check that album root matches
+        if (it.value()->albumRootId != albumRootId)
+        {
+            continue;
+        }
+        // check that relativePath matches. We get relativePath from entry's id and compare to given name.
+        QList<AlbumShortInfo>::const_iterator albumIt = findAlbum(it.value()->albumId);
+        if (albumIt == m_albums.constEnd() || albumIt->relativePath != relativePath)
+        {
+            continue;
+        }
+        // we have now a match by name, albumRootId and relativePath
+        return toStrongRef(it.value());
+    }
+
+    return DSharedDataPointer<ImageInfoData>();
+}
+
+void ImageInfoCache::dropInfo(ImageInfoData* infodata)
+{
+    if (!infodata)
+    {
+        return;
+    }
+
+    ImageInfoWriteLocker lock;
     m_infos.remove(infodata->id);
+    m_nameHash.remove(infodata->name, infodata);
     delete infodata;
 }
 
-QString ImageInfoCache::albumName(DatabaseAccess& access, int albumId)
+QList<AlbumShortInfo>::const_iterator ImageInfoCache::findAlbum(int id)
 {
-    QHash<int, QString>::const_iterator it = m_albums.constFind(albumId);
+    // Called with read lock
+    AlbumShortInfo info;
+    info.id = id;
+    // we use the fact that d->infos is sorted by id
+    return qBinaryFind(m_albums.constBegin(), m_albums.constEnd(), info, lessThanForAlbumShortInfo);
+}
 
-    if (it == m_albums.constEnd())
+QString ImageInfoCache::albumRelativePath(int albumId)
+{
+    checkAlbums();
+    ImageInfoReadLocker lock;
+    QList<AlbumShortInfo>::const_iterator it = findAlbum(albumId);
+
+    if (it != m_albums.constEnd())
     {
-        QString album = access.db()->getAlbumRelativePath(albumId);
-        m_albums[albumId] = album;
-        return album;
+        return it->relativePath;
     }
 
-    return (*it);
+    return QString();
 }
 
 void ImageInfoCache::invalidate()
 {
+    ImageInfoWriteLocker lock;
     QHash<qlonglong, ImageInfoData*>::iterator it;
     for (it = m_infos.begin(); it != m_infos.end(); ++it)
     {
@@ -128,9 +229,7 @@ void ImageInfoCache::invalidate()
 
 void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
 {
-    // we cannot know if we have databaseaccess lock here as well
-    DatabaseAccess access;
-
+    ImageInfoWriteLocker lock;
     foreach (const qlonglong& imageId, changeset.ids())
     {
         QHash<qlonglong, ImageInfoData*>::iterator it = m_infos.find(imageId);
@@ -200,8 +299,8 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
 
             if (changes & DatabaseFields::ImageRelations)
             {
-                (*it)->groupedImagesIsCached = false;
-                (*it)->groupImageIsCached    = false;
+                (*it)->groupedImagesCached = false;
+                (*it)->groupImageCached    = false;
             }
         }
     }
@@ -214,8 +313,7 @@ void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset& changeset)
         return;
     }
 
-    DatabaseAccess access;
-
+    ImageInfoWriteLocker lock;
     foreach (const qlonglong& imageId, changeset.ids())
     {
         QHash<qlonglong, ImageInfoData*>::iterator it = m_infos.find(imageId);
@@ -231,15 +329,13 @@ void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset& changeset)
 
 void ImageInfoCache::slotAlbumChange(const AlbumChangeset& changeset)
 {
-    DatabaseAccess access;
-
     switch (changeset.operation())
     {
         case AlbumChangeset::Added:
         case AlbumChangeset::Deleted:
         case AlbumChangeset::Renamed:
         case AlbumChangeset::PropertiesChanged:
-            m_albums.remove(changeset.albumId());
+            m_needUpdateAlbums = true;
             break;
         case AlbumChangeset::Unknown:
             break;

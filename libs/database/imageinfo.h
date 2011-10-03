@@ -337,6 +337,7 @@ public:
      * Returns a null image if this image is not grouped (isGrouped())
      */
     ImageInfo groupImage() const;
+    qlonglong groupImageId() const;
 
     /**
      * Returns the list of images grouped behind this image,
