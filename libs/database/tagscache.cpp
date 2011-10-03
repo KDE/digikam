@@ -78,12 +78,12 @@ public:
     {
     }
 
-    bool                        initialized;
-    bool                        needUpdateInfos;
-    bool                        needUpdateHash;
-    bool                        needUpdateProperties;
-    bool                        needUpdateLabelTags;
-    bool                        changingDB;
+    volatile bool               initialized;
+    volatile bool               needUpdateInfos;
+    volatile bool               needUpdateHash;
+    volatile bool               needUpdateProperties;
+    volatile bool               needUpdateLabelTags;
+    volatile bool               changingDB;
 
     QReadWriteLock              lock;
     QList<TagShortInfo>         infos;
