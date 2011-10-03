@@ -296,7 +296,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     panel2->setAutoFillBackground(false);
 
     QVBoxLayout* layout      = new QVBoxLayout(panel2);
-    d->useDateFromMetadata   = new QCheckBox(i18n("Use date from metadata to short items instead file-system date (makes connection slower)"), panel2);
+    d->useDateFromMetadata   = new QCheckBox(i18n("Use date from metadata to sort items instead file-system date (makes connection slower)"), panel2);
     d->useDefaultTargetAlbum = new QCheckBox(i18n("Use a default target album to download from camera"), panel2);
     d->target1AlbumSelector  = new AlbumSelectWidget(panel2);
 
@@ -319,22 +319,22 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->importListView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->importListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->importListView->setWhatsThis(i18n("Here you can see filters that can be used to filter "
-                                   "files in import dialog."));
+                                         "files in import dialog."));
 
-    d->importAddButton        = new QPushButton(panel3);
-    d->importRemoveButton     = new QPushButton(panel3);
-    d->importEditButton       = new QPushButton(panel3);
-    QSpacerItem* spacer2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    d->importAddButton    = new QPushButton(panel3);
+    d->importRemoveButton = new QPushButton(panel3);
+    d->importEditButton   = new QPushButton(panel3);
+    QSpacerItem* spacer2  = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    QGroupBox* groupBox = new QGroupBox(panel3);
+    QGroupBox* groupBox         = new QGroupBox(panel3);
     QVBoxLayout* verticalLayout = new QVBoxLayout(groupBox);
-    QLabel* label = new QLabel(groupBox);
+    QLabel* label               = new QLabel(groupBox);
     verticalLayout->addWidget(label);
-    d->ignoreNamesEdit = new QLineEdit(groupBox);
+    d->ignoreNamesEdit          = new QLineEdit(groupBox);
     verticalLayout->addWidget(d->ignoreNamesEdit);
-    QLabel* label2 = new QLabel(groupBox);
+    QLabel* label2              = new QLabel(groupBox);
     verticalLayout->addWidget(label2);
-    d->ignoreExtensionsEdit = new QLineEdit(groupBox);
+    d->ignoreExtensionsEdit     = new QLineEdit(groupBox);
     verticalLayout->addWidget(d->ignoreExtensionsEdit);
 
     groupBox->setTitle(i18n("Always ignore"));
@@ -352,12 +352,12 @@ SetupCamera::SetupCamera( QWidget* parent )
     importGrid->setMargin(KDialog::spacingHint());
     importGrid->setSpacing(KDialog::spacingHint());
     importGrid->setAlignment(Qt::AlignTop);
-    importGrid->addWidget(d->importListView,         0, 0, 4, 1);
-    importGrid->addWidget(groupBox,                  5, 0, 1, 1);
-    importGrid->addWidget(d->importAddButton,        0, 1, 1, 1);
-    importGrid->addWidget(d->importRemoveButton,     1, 1, 1, 1);
-    importGrid->addWidget(d->importEditButton,       2, 1, 1, 1);
-    importGrid->addItem(spacer2,                     3, 1, 1, 1);
+    importGrid->addWidget(d->importListView,     0, 0, 4, 1);
+    importGrid->addWidget(groupBox,              5, 0, 1, 1);
+    importGrid->addWidget(d->importAddButton,    0, 1, 1, 1);
+    importGrid->addWidget(d->importRemoveButton, 1, 1, 1, 1);
+    importGrid->addWidget(d->importEditButton,   2, 1, 1, 1);
+    importGrid->addItem(spacer2,                 3, 1, 1, 1);
 
     d->tab->insertTab(2, panel3, i18n("Import Filters"));
 
