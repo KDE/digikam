@@ -192,7 +192,8 @@ public:
     SearchInfo::List scanSearches();
 
     /**
-     * Returns all albums in the database with their albumRoot and ID.
+     * Returns all albums in the database with their albumRoot and ID,
+     * ordered by id.
      */
     QList<AlbumShortInfo> getAlbumShortInfos();
 

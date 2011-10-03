@@ -337,7 +337,7 @@ SearchInfo::List AlbumDB::scanSearches()
 QList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
 {
     QList<QVariant> values;
-    d->db->execSql( QString("SELECT Albums.id, Albums.relativePath, Albums.albumRoot from Albums; "),
+    d->db->execSql( QString("SELECT Albums.id, Albums.relativePath, Albums.albumRoot from Albums ORDER BY Albums.id; "),
                     &values);
 
     QList<AlbumShortInfo> albumList;
