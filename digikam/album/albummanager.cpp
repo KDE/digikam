@@ -135,6 +135,8 @@ public:
         return other.albumRootId == albumRootId && other.albumPath == albumPath;
     }
 
+public:
+
     int     albumRootId;
     QString albumPath;
 };
@@ -2467,7 +2469,7 @@ bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
     if (hasDirectChildAlbumWithTitle(album->m_parent, name))
     {
         errMsg = i18n("Another tag with the same name already exists.\n"
-                      "Please rename the tag another name.");
+                      "Please choose another name.");
         return false;
     }
 
