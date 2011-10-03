@@ -1,46 +1,9 @@
 *****************************************************************************************************
-digiKam 2.2.0 - Release date: 2011-10-02
+digiKam 2.3.0 - Release date: 2011-11-06
 
 NEW FEATURES:
 
-General : Add image title metadata support.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 155374 : Allow setting Image titles different than image file name [patch].
-002 ==> 279581 : Can't compile digiKam with provided libpgf on PowerPC machine (BigEndian).
-003 ==> 280540 : Image editor puts saved new versions into the wrong place of the thumbbar.
-004 ==> 281801 : Setting TAGs from the menu does not respect "auto tag" setting (set parent).
-005 ==> 281790 : Unable to set a tag on multiple selected images (In view mode).
-006 ==> 277808 : digiKam crashes while scanning for faces.
-007 ==> 279977 : In the facial recognition view, when trying to remove multiple tags, tags outside of the selection are removed but not the entire selection.
-008 ==> 277094 : digiKam 2.0 RC won't start.
-009 ==> 281767 : digikam 2.1 will not start.
-010 ==> 282088 : Missing entries in tag list.
-011 ==> 282241 : Page down broken after viewing a video.
-012 ==> 282070 : When choosing Google Maps with the geolocation tools an error says "Malformed URL".
-013 ==> 281937 : digiKam 2.1.0 failed - Reinstalling 1.9.0 is failing too - Database issue.
-014 ==> 282298 : digiKam crash during startup (Digikam::ThumbnailCreator::loadFromDatabase fail).
-015 ==> 280082 : Light Table doesn't change right image properly.
-016 ==> 282319 : Empty Unremovable Keyword.
-017 ==> 282194 : digikam 2.1.1 crashes when displaying thumbnails in import screen.
-018 ==> 255520 : digiKam crashed while assigning tags to pictures.
-019 ==> 271473 : digiKam crashes reproducably when scanning collection after re-organising underlying picture folders.
-020 ==> 265893 : Seg. Fault. when importing PNG files with .JPG extension.
-021 ==> 242171 : digiKam hangs at 0% in editor when using the "Sharpen" tool.
-022 ==> 241585 : digiKam hangs at 0% in editor when calling "Save as".
-023 ==> 265247 : Improve dialog when scanning a folder with only a avi in it.
-024 ==> 252796 : "Save as" doesn't reuse previously selected dialog.
-025 ==> 192430 : Tags disabled even though images are selected.
-026 ==> 242833 : Compressed TIFF from digikam broken.
-027 ==> 273199 : digiKam fails to start.
-028 ==> 211764 : Assigning a color profile to TIFF-16 does not work when using exiv2 versions greater than 0.17.
-029 ==> 282573 : digiKam crashes when assigning a date manually to a scanned tif file.
-030 ==> 267414 : Working on albums with viewer and editor.
-031 ==> 282568 : Group By Time feature [patch].
-032 ==> 237357 : Thumbnail's album can't be displayed.
-033 ==> 282869 : List of cmake configuration options.
-034 ==> 282925 : Not able to write Matadata to pictures.
-035 ==> 282948 : Face recognition crashes digiKam (again).
-036 ==> 283052 : Light table always displays reduced size preview.
-037 ==>
+001 ==> 
