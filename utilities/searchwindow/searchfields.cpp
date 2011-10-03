@@ -2572,7 +2572,7 @@ void SearchFieldLabels::read(SearchXmlCachingReader& reader)
         }
         else
         {
-            int cl = TagsCache::instance()->getColorLabelForTag(a->id());
+            int cl = TagsCache::instance()->colorLabelForTag(a->id());
 
             if (cl != -1)
             {
@@ -2580,7 +2580,7 @@ void SearchFieldLabels::read(SearchXmlCachingReader& reader)
             }
             else
             {
-                int pl = TagsCache::instance()->getPickLabelForTag(a->id());
+                int pl = TagsCache::instance()->pickLabelForTag(a->id());
 
                 if (pl != -1)
                 {
