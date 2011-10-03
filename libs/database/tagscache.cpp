@@ -42,6 +42,7 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasewatch.h"
+#include "globals.h"
 #include "imagepropertiestab.h"
 #include "tagproperties.h"
 
@@ -91,8 +92,8 @@ public:
     QList<TagProperty>          tagProperties;
     QHash<QString, QList<int> > tagsWithProperty;
     QSet<int>                   internalTags;
-    QMap<ColorLabel, int>       colorLabelsTags;              // Map between color Id and tag label Id created in DB.
-    QMap<PickLabel, int>        pickLabelsTags;               // Map between pick Id and tag label Id created in DB.
+    QVector<int>                colorLabelsTags; // index = Label enum, value = tagId
+    QVector<int>                pickLabelsTags;
 
     TagsCache* const            q;
 
@@ -203,28 +204,28 @@ public:
     {
         if (needUpdateLabelTags && initialized)
         {
-            QMap<ColorLabel, int> map;
-            map.insert(NoColorLabel, q->getOrCreateInternalTag(InternalTagName::colorLabelNone()));
-            map.insert(RedLabel,     q->getOrCreateInternalTag(InternalTagName::colorLabelRed()));
-            map.insert(OrangeLabel,  q->getOrCreateInternalTag(InternalTagName::colorLabelOrange()));
-            map.insert(YellowLabel,  q->getOrCreateInternalTag(InternalTagName::colorLabelYellow()));
-            map.insert(GreenLabel,   q->getOrCreateInternalTag(InternalTagName::colorLabelGreen()));
-            map.insert(BlueLabel,    q->getOrCreateInternalTag(InternalTagName::colorLabelBlue()));
-            map.insert(MagentaLabel, q->getOrCreateInternalTag(InternalTagName::colorLabelMagenta()));
-            map.insert(GrayLabel,    q->getOrCreateInternalTag(InternalTagName::colorLabelGray()));
-            map.insert(BlackLabel,   q->getOrCreateInternalTag(InternalTagName::colorLabelBlack()));
-            map.insert(WhiteLabel,   q->getOrCreateInternalTag(InternalTagName::colorLabelWhite()));
+            QVector<int> colorTags(NumberOfColorLabels);
+            colorTags[NoColorLabel] = q->getOrCreateInternalTag(InternalTagName::colorLabelNone());
+            colorTags[RedLabel]     = q->getOrCreateInternalTag(InternalTagName::colorLabelRed());
+            colorTags[OrangeLabel]  = q->getOrCreateInternalTag(InternalTagName::colorLabelOrange());
+            colorTags[YellowLabel]  = q->getOrCreateInternalTag(InternalTagName::colorLabelYellow());
+            colorTags[GreenLabel]   = q->getOrCreateInternalTag(InternalTagName::colorLabelGreen());
+            colorTags[BlueLabel]    = q->getOrCreateInternalTag(InternalTagName::colorLabelBlue());
+            colorTags[MagentaLabel] = q->getOrCreateInternalTag(InternalTagName::colorLabelMagenta());
+            colorTags[GrayLabel]    = q->getOrCreateInternalTag(InternalTagName::colorLabelGray());
+            colorTags[BlackLabel]   = q->getOrCreateInternalTag(InternalTagName::colorLabelBlack());
+            colorTags[WhiteLabel]   = q->getOrCreateInternalTag(InternalTagName::colorLabelWhite());
 
-            QMap<PickLabel, int> map2;
-            map2.insert(NoPickLabel,   q->getOrCreateInternalTag(InternalTagName::pickLabelNone()));
-            map2.insert(RejectedLabel, q->getOrCreateInternalTag(InternalTagName::pickLabelRejected()));
-            map2.insert(PendingLabel,  q->getOrCreateInternalTag(InternalTagName::pickLabelPending()));
-            map2.insert(AcceptedLabel, q->getOrCreateInternalTag(InternalTagName::pickLabelAccepted()));
+            QVector<int> pickTags(NumberOfPickLabels);
+            pickTags[NoPickLabel]   = q->getOrCreateInternalTag(InternalTagName::pickLabelNone());
+            pickTags[RejectedLabel] = q->getOrCreateInternalTag(InternalTagName::pickLabelRejected());
+            pickTags[PendingLabel]  = q->getOrCreateInternalTag(InternalTagName::pickLabelPending());
+            pickTags[AcceptedLabel] = q->getOrCreateInternalTag(InternalTagName::pickLabelAccepted());
 
             QWriteLocker locker(&lock);
             needUpdateLabelTags = false;
-            colorLabelsTags     = map;
-            pickLabelsTags      = map2;
+            colorLabelsTags     = colorTags;
+            pickLabelsTags      = pickLabelsTags;
         }
     }
 };
@@ -293,7 +294,7 @@ void TagsCache::invalidate()
     d->needUpdateInfos          = true;
     d->needUpdateHash           = true;
     d->needUpdateProperties     = true;
-    d->needUpdateLabelTags = true;
+    d->needUpdateLabelTags      = true;
 }
 
 QLatin1String TagsCache::tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy)
@@ -952,38 +953,86 @@ void TagsCache::slotTagChanged(const TagChangeset& changeset)
     }
 }
 
-int TagsCache::getTagForColorLabel(int label)
+int TagsCache::tagForColorLabel(int label)
 {
-    if (label < NoColorLabel || label > WhiteLabel)
+    if (label < FirstColorLabel || label > LastColorLabel)
         return 0;
 
     d->checkLabelTags();
     QReadLocker locker(&d->lock);
-    return d->colorLabelsTags[(ColorLabel)label];
+    return d->colorLabelsTags[label];
 }
 
-int TagsCache::getColorLabelForTag(int tagId)
+QVector<int> TagsCache::colorLabelTags()
 {
     d->checkLabelTags();
     QReadLocker locker(&d->lock);
-    return d->colorLabelsTags.key(tagId, (ColorLabel)(-1));
+    return d->colorLabelsTags;
 }
 
-int TagsCache::getTagForPickLabel(int label)
+int TagsCache::colorLabelForTag(int tagId)
 {
-    if (label < NoPickLabel || label > AcceptedLabel)
+    d->checkLabelTags();
+    QReadLocker locker(&d->lock);
+    return d->colorLabelsTags.indexOf(tagId);
+}
+
+int TagsCache::colorLabelFromTags(QList<int> tagIds)
+{
+    d->checkLabelTags();
+    QReadLocker locker(&d->lock);
+    foreach (int tagId, tagIds)
+    {
+        for (int i=FirstColorLabel; i<=LastColorLabel; i++)
+        {
+            if (d->colorLabelsTags[i] == tagId)
+            {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+int TagsCache::tagForPickLabel(int label)
+{
+    if (label < FirstPickLabel || label > LastPickLabel)
         return 0;
 
     d->checkLabelTags();
     QReadLocker locker(&d->lock);
-    return d->pickLabelsTags[(PickLabel)label];
+    return d->pickLabelsTags[label];
 }
 
-int TagsCache::getPickLabelForTag(int tagId)
+QVector<int> TagsCache::pickLabelTags()
 {
     d->checkLabelTags();
     QReadLocker locker(&d->lock);
-    return d->pickLabelsTags.key(tagId, (PickLabel)(-1));
+    return d->pickLabelsTags;
+}
+
+int TagsCache::pickLabelForTag(int tagId)
+{
+    d->checkLabelTags();
+    QReadLocker locker(&d->lock);
+    return d->pickLabelsTags.indexOf(tagId);
+}
+
+int TagsCache::pickLabelFromTags(QList<int> tagIds)
+{
+    d->checkLabelTags();
+    QReadLocker locker(&d->lock);
+    foreach (int tagId, tagIds)
+    {
+        for (int i=FirstPickLabel; i<=LastPickLabel; i++)
+        {
+            if (d->pickLabelsTags[i] == tagId)
+            {
+                return i;
+            }
+        }
+    }
+    return -1;
 }
 
 QStringList TagsCache::shortenedTagPaths(const QList<int>& ids, QList<int>* sortedIds,
