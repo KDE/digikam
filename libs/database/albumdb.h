@@ -968,6 +968,8 @@ public:
      */
     QList<qlonglong> getImagesRelatedFrom(qlonglong subjectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
     bool hasImagesRelatedFrom(qlonglong subjectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
+    QVector<QList<qlonglong> > getImagesRelatedFrom(QList<qlonglong> subjectIds,
+                                                    DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
     /**
      * Retrieves all images that relate to the given image (retrieves subject, given image is object)
      * If type is given, filters by type, otherwise returns all types.
@@ -975,6 +977,8 @@ public:
      */
     QList<qlonglong> getImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
     bool hasImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
+    QVector<QList<qlonglong> > getImagesRelatingTo(QList<qlonglong> objectIds,
+                                                   DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
 
     /**
      * For the given image id, retrieves all relations of all related images:
@@ -1082,6 +1086,12 @@ public:
      * @return the list of IDs of all tags for the item
      */
     QList<int> getItemTagIDs(qlonglong imageID);
+
+    /**
+     * For a list of items, return the tag ids associated with the item.
+     * Amounts to calling getItemTagIDs for each id in imageIds, but is optimized.
+     */
+    QVector<QList<int> > getItemsTagIDs(const QList<qlonglong> imageIds);
 
     /**
      * Get the properties for the given image/tag pair.
@@ -1225,6 +1235,7 @@ public:
 protected:
 
     QList<qlonglong> getRelatedImages(qlonglong id, bool fromOrTo, DatabaseRelation::Type type, bool boolean);
+    QVector<QList<qlonglong> > getRelatedImages(QList<qlonglong> ids, bool fromOrTo, DatabaseRelation::Type type, bool boolean);
 
 private:
 

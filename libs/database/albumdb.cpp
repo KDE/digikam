@@ -75,6 +75,11 @@ public:
     QList<int>       recentlyAssignedTags;
 
     int              uniqueHashVersion;
+
+public:
+
+    QString constructRelatedImagesSQL(bool fromOrTo, DatabaseRelation::Type type, bool boolean);
+    QList<qlonglong> execRelatedImagesQuery(SqlQuery& query, qlonglong id, DatabaseRelation::Type type);
 };
 
 AlbumDB::AlbumDB(DatabaseBackend* backend)
@@ -1194,8 +1199,7 @@ QList<int> AlbumDB::getItemTagIDs(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql( QString("SELECT tagid FROM ImageTags \n "
-                            "WHERE imageID=?;"),
+    d->db->execSql( QString("SELECT tagid FROM ImageTags WHERE imageID=?;"),
                     imageID,
                     &values );
 
@@ -1212,6 +1216,30 @@ QList<int> AlbumDB::getItemTagIDs(qlonglong imageID)
     }
 
     return ids;
+}
+
+QVector<QList<int> > AlbumDB::getItemsTagIDs(const QList<qlonglong> imageIds)
+{
+    if (imageIds.isEmpty())
+    {
+        return QVector<QList<int> >();
+    }
+    QVector<QList<int> > results(imageIds.size());
+
+    SqlQuery query = d->db->prepareQuery("SELECT tagid FROM ImageTags WHERE imageID=?;");
+
+    QVariantList values;
+    for (int i=0; i<imageIds.size(); i++)
+    {
+        d->db->execSql(query, imageIds[i], &values);
+        QList<int>& tagIds = results[i];
+        foreach (const QVariant& v, values)
+        {
+            tagIds << v.toInt();
+        }
+    }
+
+    return results;
 }
 
 QList<ImageTagProperty> AlbumDB::getImageTagProperties(qlonglong imageId, int tagId)
@@ -2222,6 +2250,11 @@ QList<qlonglong> AlbumDB::getImagesRelatedFrom(qlonglong subjectId, DatabaseRela
     return getRelatedImages(subjectId, true, type, false);
 }
 
+QVector<QList<qlonglong> > AlbumDB::getImagesRelatedFrom(QList<qlonglong> subjectIds, DatabaseRelation::Type type)
+{
+    return getRelatedImages(subjectIds, true, type, false);
+}
+
 bool AlbumDB::hasImagesRelatedFrom(qlonglong subjectId, DatabaseRelation::Type type)
 {
     // returns 0 or 1 item in list
@@ -2233,16 +2266,19 @@ QList<qlonglong> AlbumDB::getImagesRelatingTo(qlonglong objectId, DatabaseRelati
     return getRelatedImages(objectId, false, type, false);
 }
 
+QVector<QList<qlonglong> > AlbumDB::getImagesRelatingTo(QList<qlonglong> objectIds, DatabaseRelation::Type type)
+{
+    return getRelatedImages(objectIds, false, type, false);
+}
+
 bool AlbumDB::hasImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type)
 {
     // returns 0 or 1 item in list
     return !getRelatedImages(objectId, false, type, true).isEmpty();
 }
 
-QList<qlonglong> AlbumDB::getRelatedImages(qlonglong id, bool fromOrTo, DatabaseRelation::Type type, bool boolean)
+QString AlbumDB::AlbumDBPriv::constructRelatedImagesSQL(bool fromOrTo, DatabaseRelation::Type type, bool boolean)
 {
-    QList<QVariant> values;
-
     QString sql;
     if (fromOrTo)
     {
@@ -2274,14 +2310,19 @@ QList<qlonglong> AlbumDB::getRelatedImages(qlonglong id, bool fromOrTo, Database
     {
         sql = sql.arg(QString());
     }
+    return sql;
+}
 
+QList<qlonglong> AlbumDB::AlbumDBPriv::execRelatedImagesQuery(SqlQuery& query, qlonglong id, DatabaseRelation::Type type)
+{
+    QVariantList values;
     if (type == DatabaseRelation::UndefinedType)
     {
-        d->db->execSql(sql, id, &values);
+        db->execSql(query, id, &values);
     }
     else
     {
-        d->db->execSql(sql, id, type, &values);
+        db->execSql(query, id, type, &values);
     }
 
     QList<qlonglong> imageIds;
@@ -2297,6 +2338,33 @@ QList<qlonglong> AlbumDB::getRelatedImages(qlonglong id, bool fromOrTo, Database
     }
 
     return imageIds;
+}
+
+QList<qlonglong> AlbumDB::getRelatedImages(qlonglong id, bool fromOrTo, DatabaseRelation::Type type, bool boolean)
+{
+    QString sql = d->constructRelatedImagesSQL(fromOrTo, type, boolean);
+    SqlQuery query = d->db->prepareQuery(sql);
+    return d->execRelatedImagesQuery(query, id, type);
+}
+
+QVector<QList<qlonglong> > AlbumDB::getRelatedImages(QList<qlonglong> ids,
+                                                     bool fromOrTo, DatabaseRelation::Type type, bool boolean)
+{
+    if (ids.isEmpty())
+    {
+        return QVector<QList<qlonglong> >();
+    }
+
+    QVector<QList<qlonglong> > result(ids.size());
+
+    QString sql = d->constructRelatedImagesSQL(fromOrTo, type, boolean);
+    SqlQuery query = d->db->prepareQuery(sql);
+
+    for (int i=0; i<ids.size(); i++)
+    {
+        result[i] = d->execRelatedImagesQuery(query, ids[i], type);
+    }
+    return result;
 }
 
 QList<QPair<qlonglong, qlonglong> > AlbumDB::getRelationCloud(qlonglong imageId, DatabaseRelation::Type type)
