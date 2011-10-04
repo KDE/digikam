@@ -444,7 +444,7 @@ int ImageInfo::pickLabel() const
     int pickLabel = TagsCache::instance()->pickLabelFromTags(tagIds());
 
     ImageInfoWriteLocker lock;
-    m_data.constCastData()->pickLabel = pickLabel = -1 ? NoPickLabel : pickLabel;
+    m_data.constCastData()->pickLabel = pickLabel == -1 ? NoPickLabel : pickLabel;
     m_data.constCastData()->pickLabelCached = true;
     return m_data->pickLabel;
 }
@@ -1271,7 +1271,7 @@ void ImageInfo::setDateTime(const QDateTime& dateTime)
 
 void ImageInfo::setTag(int tagID)
 {
-    if (!m_data)
+    if (!m_data || tagID <= 0)
     {
         return;
     }

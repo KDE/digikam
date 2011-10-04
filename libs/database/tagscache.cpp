@@ -225,7 +225,7 @@ public:
             QWriteLocker locker(&lock);
             needUpdateLabelTags = false;
             colorLabelsTags     = colorTags;
-            pickLabelsTags      = pickLabelsTags;
+            pickLabelsTags      = pickTags;
         }
     }
 };
