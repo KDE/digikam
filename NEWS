@@ -7,6 +7,6 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 262077 : Crash while trying to select a range of dates in timeline view.
-002 ==> 283304 : digikam from git crashes after splash screen.
+002 ==> 283304 : digiKam from git crashes after splash screen.
 003 ==> 
 
