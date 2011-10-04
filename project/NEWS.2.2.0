@@ -43,4 +43,3 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 282925 : Not able to write Matadata to pictures.
 035 ==> 282948 : Face recognition crashes digiKam (again).
 036 ==> 283052 : Light table always displays reduced size preview.
-037 ==>
