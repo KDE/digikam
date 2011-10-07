@@ -573,38 +573,49 @@ void NepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukS
 
 static Nepomuk::Tag nepomukForDigikamTag(int tagId)
 {
-    if (tagId)
+    if (tagId <= 0)
     {
-        QString tagName = TagsCache::instance()->tagName(tagId);
-        Nepomuk::Tag tag(tagName);
-
-        if (!tag.exists())
-        {
-            // from dolphin's panels/information/newtagdialog.cpp
-            tag.setLabel(tagName);
-            tag.addIdentifier(tagName);
-
-            TagInfo info = DatabaseAccess().db()->getTagInfo(tagId);
-
-            if (info.icon.isNull())
-            {
-                // Don't think we can use actual large files for tag icon
-                /*
-                // album image icon
-                QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
-                album->m_icon         = albumRootPath + info.iconRelativePath;
-                */
-            }
-            else
-            {
-                tag.addSymbol(info.icon);
-            }
-        }
-
-        return tag;
+        return Nepomuk::Tag();
     }
 
-    return Nepomuk::Tag();
+    if (TagsCache::instance()->isInternalTag(tagId))
+    {
+        return Nepomuk::Tag();
+    }
+
+    QString tagName = TagsCache::instance()->tagName(tagId);
+
+    if (tagName.isEmpty())
+    {
+        return Nepomuk::Tag();
+    }
+
+    Nepomuk::Tag tag(tagName);
+
+    if (!tag.exists())
+    {
+        // from dolphin's panels/information/newtagdialog.cpp
+        tag.setLabel(tagName);
+        tag.addIdentifier(tagName);
+
+        TagInfo info = DatabaseAccess().db()->getTagInfo(tagId);
+
+        if (info.icon.isNull())
+        {
+            // Don't think we can use actual large files for tag icon
+            /*
+             / / *album image icon
+             QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
+             album->m_icon         = albumRootPath + info.iconRelativePath;
+             */
+        }
+        else
+        {
+            tag.addSymbol(info.icon);
+        }
+    }
+
+    return tag;
 }
 
 void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const QList<int>& tagIds, bool addOrRemove)
