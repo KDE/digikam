@@ -1493,7 +1493,7 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
 
         bool shallSave    = true;
         bool shallDiscard = false;
-//        bool newVersion   = false;
+        bool newVersion   = false;
 
         if (mode == AskIfNeeded)
         {
@@ -1513,9 +1513,9 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
                         return false;
                     }
 
-                    shallSave    = dialog->shallSave();
+                    shallSave    = dialog->shallSave() || dialog->newVersion();
                     shallDiscard = dialog->shallDiscard();
-//                    newVersion   = dialog->newVersion();
+                    newVersion   = dialog->newVersion();
                 }
             }
             else
@@ -1559,8 +1559,15 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
 
                     if (m_nonDestructive)
                     {
-                        // will know on its own if new version is required
-                        saving = saveCurrentVersion();
+                        if (newVersion)
+                        {
+                            saving = saveNewVersion();
+                        }
+                        else
+                        {
+                            // will know on its own if new version is required
+                            saving = saveCurrentVersion();
+                        }
                     }
                     else
                     {
@@ -1579,7 +1586,15 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
 
                     if (m_nonDestructive)
                     {
-                        saving = saveCurrentVersion();
+                        if (newVersion)
+                        {
+                            saving = saveNewVersion();
+                        }
+                        else
+                        {
+                            // will know on its own if new version is required
+                            saving = saveCurrentVersion();
+                        }
                     }
                     else
                     {
