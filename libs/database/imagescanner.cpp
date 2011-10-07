@@ -982,7 +982,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
         }
     }
 
-    return QList<qlonglong>();
+    return uuidList;
 }
 
 class lessThanByProximityToSubject
