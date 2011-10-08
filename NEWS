@@ -10,5 +10,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 283304 : digiKam from git crashes after splash screen.
 003 ==> 282880 : Cannot save new version without from window close.
 004 ==> 282885 : When synchronizing meta-data with Nepomuk, the tag "Scanned for Faces" show up in Dolphin.
-005 ==> 
+005 ==> 281320 : Errors in subtag handling in Peoples-Browser.
+006 ==> 
 

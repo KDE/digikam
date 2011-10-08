@@ -91,6 +91,7 @@ extern "C"
 #include "databaseurl.h"
 #include "databasewatch.h"
 #include "dio.h"
+#include "facetags.h"
 #include "imagelister.h"
 #include "scancontroller.h"
 #include "setupcollections.h"
@@ -2367,6 +2368,13 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     album->m_icon = iconkde;
 
     insertTAlbum(album, parent);
+
+    TAlbum* personParentTag = findTAlbum(FaceTags::personParentTag());
+    if (personParentTag && personParentTag->isAncestorOf(album))
+    {
+        FaceTags::ensureIsPerson(album->id());
+    }
+
     emit signalAlbumsUpdated(Album::TAG);
 
     return album;
@@ -2525,6 +2533,12 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
     emit signalAlbumMoved(album);
     emit signalAlbumsUpdated(Album::TAG);
     d->currentlyMovingAlbum = 0;
+
+    TAlbum* personParentTag = findTAlbum(FaceTags::personParentTag());
+    if (personParentTag && personParentTag->isAncestorOf(album))
+    {
+        FaceTags::ensureIsPerson(album->id());
+    }
 
     return true;
 }
