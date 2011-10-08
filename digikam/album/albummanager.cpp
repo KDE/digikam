@@ -2523,6 +2523,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
     emit signalAlbumAdded(album);
 
     emit signalAlbumMoved(album);
+    emit signalAlbumsUpdated(Album::TAG);
     d->currentlyMovingAlbum = 0;
 
     return true;
