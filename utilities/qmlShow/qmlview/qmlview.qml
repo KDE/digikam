@@ -5,13 +5,13 @@ import QtWebKit 1.0
 Rectangle {
 
     id:rect
-	height: 300
-	width: 500
-    property string text: "matrix.jpg"
+    width: 500
+    height: 300
+    property string text: " "
+
     signal nextClicked;
     signal prevClicked;
     signal play;
-	color: "black"
     signal pause;
     signal gridItem;
     property bool bool_pp: true;
@@ -25,13 +25,13 @@ Rectangle {
     { Qt.quit() }
     Keys.onSpacePressed:
     {
-        if (play_pause.src == "pause.svg")
+        if (play_pause.src == "Def/pause.svg")
         {
-            play_pause.src = "play.svg"; rect.pause();
+            play_pause.src = "Def/play.svg"; rect.pause();
         }
         else
         {
-            play_pause.src= "pause.svg";rect.play();
+            play_pause.src= "Def/pause.svg";rect.play();
         };
     }
 
@@ -45,8 +45,8 @@ Rectangle {
         rotation: 0
         opacity: 0.7
         source: "Menu.svg"
-        z: 50
-        
+        z: 5
+
         states: [
           State {
             name: "Enable"
@@ -70,19 +70,19 @@ Rectangle {
 
         Image {
             id: play_pause
-            x: 0
-            y: 0
-            width: parent.height / 3
-            height: parent.height / 3
+            x: next.x - 2/3*prev.width
+            y: next.height + 6/5*zoom_in.height
+            width: parent.height / 5
+            height: parent.height / 5
             z: 12
-            property string src: "pause.svg"
+            property string src: "Def/pause.svg"
             source: src
             MouseArea
             {
                 id: flip_icon
                 anchors.fill: parent
-                onClicked: { if (parent.src == "pause.svg") {parent.src = "play.svg"; rect.pause();}
-                else {parent.src= "pause.svg";rect.play();};
+                onClicked: { if (parent.src == "Def/pause.svg") {parent.src = "Def/play.svg"; rect.pause();}
+                else {parent.src= "Def/pause.svg";rect.play();};
                 }
             }
         }
@@ -95,23 +95,23 @@ Rectangle {
             height: parent.height / 5
             rotation: 0
             z: 12
-            source: "Next.svg"
+            source: "Def/next.svg"
             MouseArea
             {
                 anchors.fill: parent;
-                onClicked: {rect.nextClicked();}
+                onClicked: rect.nextClicked();
             }
         }
 
         Image {
             id: prev
-            x: next.x - prev.width
-            y: next.height + zoom_in.height
+            x: zoom_out.x + 4/3*zoom_out.width
+            y: parent.height * 3/4 - 1/2 *zoom_out.height
             width: parent.width / 5
             height: parent.height / 5
             rotation: 0
             z: 12
-            source: "previous.svg"
+            source: "Def/back.svg"
             MouseArea
             {
                 anchors.fill:parent;
@@ -122,12 +122,12 @@ Rectangle {
         Image {
             id: zoom_out
             x: 0
-            y: prev.y + prev.height/2
+            y: parent.height*3 / 4
             width: parent.width / 5
             height: parent.height / 5
             rotation: 0
             z: 12
-            source: "ZoomOut.svg"
+            source: "Def/Zoom-.svg"
 		MouseArea
 		{
 			id:zoomout
@@ -138,29 +138,28 @@ Rectangle {
 
         Image {
             id: zoom_in
-            x: parent.width / 2
+            x: 3/4 * parent.width
             y: 0
             width: parent.width / 5
             height: parent.height / 5
             rotation: 0
             z: 12
-            source: "ZoomIn.svg"
+            source: "Def/Zoom+.svg"
 		MouseArea
 		{
 			id:zoomin
 			anchors.fill: parent
 			onClicked: {rect.source_scale = rect.source_scale * 2;}
-		}
+		}    
         }
 
-        Image {
+        /*Image {
             id: map_view
             x: 0
             y: parent.height*3 / 4
             width: parent.width / 5
             height: parent.height / 5
             source: "map_view.png"
-
 
             MouseArea {
                 id: show_map
@@ -169,15 +168,16 @@ Rectangle {
                 else openstreetmap.visible=false;}
             }
         }
+*/
 
         Image {
             id: gridviewicon
             height:parent.height/5
             width:parent.width/5
-            x: parent.width*3/4
-            source: "./gridview.png"
-            y:0
-            MouseArea {
+            x:5
+            source: "Def/grid.svg"
+            y:5            
+	    MouseArea {
                 id:show_gridview
                 anchors.fill: parent
                 onClicked:
@@ -185,7 +185,7 @@ Rectangle {
 		if(rect2.visible==false){
                     rect2.visible=true;
                     grid.focus= true;
-                    play_pause.src = "play.svg";
+                    play_pause.src = "Def/play.svg";
                     rect.pause();}
 		else
 		{ rect2.visible = false;
@@ -206,7 +206,7 @@ Rectangle {
         z: 5
         opacity: 0.5
         rotation: 0
-        source: "close.png"
+        source: "Def/close.svg"
         MouseArea
         {
             id:quit

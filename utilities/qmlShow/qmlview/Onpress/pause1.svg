@@ -78,30 +78,27 @@
          id="feGaussianBlur3815"
          stdDeviation="17.07019" />
     </filter>
+    <filter
+       x="-1.019349"
+       y="-0.42511311"
+       width="3.038698"
+       height="1.8502262"
+       color-interpolation-filters="sRGB"
+       id="filter3794">
+      <feGaussianBlur
+         stdDeviation="126.88747"
+         id="feGaussianBlur3796" />
+    </filter>
   </defs>
   <g
      id="layer1" />
   <rect
-     width="989.69073"
-     height="982.81787"
-     x="6.8728523"
-     y="10.309278"
-     id="rect3797"
-     style="fill:#000000;fill-opacity:1;stroke:none" />
-  <rect
-     width="996.56348"
-     height="996.56335"
-     x="3.4364254"
-     y="3.4364274"
-     id="rect2994"
-     style="fill:#ffffff;fill-opacity:1;stroke:none;filter:url(#filter3793)" />
-  <rect
-     width="261.1684"
-     height="312.71478"
-     x="-254.29553"
-     y="-309.27835"
-     id="rect3764"
-     style="fill:#ffffff;fill-opacity:1;stroke:none" />
+     width="457.04468"
+     height="910.65295"
+     x="522.33679"
+     y="41.237114"
+     id="rect3786"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
   <rect
      width="450.17181"
      height="917.52576"
@@ -109,25 +106,4 @@
      y="37.800686"
      id="rect3784"
      style="fill:#000000;fill-opacity:1;stroke:none" />
-  <rect
-     width="457.04468"
-     height="910.65295"
-     x="522.33679"
-     y="41.237114"
-     id="rect3786"
-     style="fill:#000000;fill-opacity:1;stroke:none" />
-  <rect
-     width="447.10532"
-     height="912.43506"
-     x="27.944082"
-     y="38.966557"
-     id="rect3799"
-     style="fill:#edebed;fill-opacity:0.45502642;stroke:none;filter:url(#filter3801)" />
-  <rect
-     width="456.82501"
-     height="908.79016"
-     x="521.2179"
-     y="41.396477"
-     id="rect3811"
-     style="fill:#edebed;fill-opacity:0.45502642;stroke:none;filter:url(#filter3813)" />
 </svg>

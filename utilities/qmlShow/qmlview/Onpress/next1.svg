@@ -33,71 +33,71 @@
        color-interpolation-filters="sRGB"
        id="filter3778">
       <feGaussianBlur
-         stdDeviation="255.88839"
-         id="feGaussianBlur3780" />
+         id="feGaussianBlur3780"
+         stdDeviation="255.88839" />
     </filter>
     <filter
        color-interpolation-filters="sRGB"
        id="filter3788">
       <feGaussianBlur
-         stdDeviation="27.670704"
-         id="feGaussianBlur3790" />
+         id="feGaussianBlur3790"
+         stdDeviation="27.670704" />
     </filter>
     <filter
        color-interpolation-filters="sRGB"
        id="filter3799">
       <feGaussianBlur
-         stdDeviation="38.667111"
-         id="feGaussianBlur3801" />
+         id="feGaussianBlur3801"
+         stdDeviation="38.667111" />
     </filter>
     <filter
        color-interpolation-filters="sRGB"
        id="filter3793">
       <feGaussianBlur
-         id="feGaussianBlur3795"
-         stdDeviation="9.9656342" />
+         stdDeviation="9.9656342"
+         id="feGaussianBlur3795" />
     </filter>
     <filter
        color-interpolation-filters="sRGB"
        id="filter3801">
       <feGaussianBlur
-         id="feGaussianBlur3803"
-         stdDeviation="16.994255" />
+         stdDeviation="16.994255"
+         id="feGaussianBlur3803" />
     </filter>
     <filter
        color-interpolation-filters="sRGB"
        id="filter3807">
       <feGaussianBlur
-         id="feGaussianBlur3809"
-         stdDeviation="17.130938" />
+         stdDeviation="17.130938"
+         id="feGaussianBlur3809" />
     </filter>
     <filter
        color-interpolation-filters="sRGB"
        id="filter3813">
       <feGaussianBlur
-         id="feGaussianBlur3815"
-         stdDeviation="17.07019" />
+         stdDeviation="17.07019"
+         id="feGaussianBlur3815" />
     </filter>
     <filter
        color-interpolation-filters="sRGB"
        id="filter3833">
       <feGaussianBlur
-         id="feGaussianBlur3835"
-         stdDeviation="20.798373" />
+         stdDeviation="20.798373"
+         id="feGaussianBlur3835" />
     </filter>
     <filter
        color-interpolation-filters="sRGB"
        id="filter3859">
       <feGaussianBlur
-         id="feGaussianBlur3861"
-         stdDeviation="7.5147822" />
+         stdDeviation="7.5147822"
+         id="feGaussianBlur3861" />
     </filter>
     <filter
        color-interpolation-filters="sRGB"
        id="filter3867">
       <feGaussianBlur
-         id="feGaussianBlur3869"
-         stdDeviation="6.8938222" />
+         stdDeviation="6.8938222"
+         id="feGaussianBlur3869" />
     </filter>
     <filter
        x="-0.48003486"
@@ -107,15 +107,15 @@
        color-interpolation-filters="sRGB"
        id="filter3879">
       <feGaussianBlur
-         id="feGaussianBlur3881"
-         stdDeviation="199.32717" />
+         stdDeviation="199.32717"
+         id="feGaussianBlur3881" />
     </filter>
     <filter
        color-interpolation-filters="sRGB"
        id="filter3907">
       <feGaussianBlur
-         id="feGaussianBlur3909"
-         stdDeviation="9.9663585" />
+         stdDeviation="9.9663585"
+         id="feGaussianBlur3909" />
     </filter>
     <filter
        x="-0.36002615"
@@ -125,20 +125,12 @@
        color-interpolation-filters="sRGB"
        id="filter3919">
       <feGaussianBlur
-         id="feGaussianBlur3921"
-         stdDeviation="149.49538" />
+         stdDeviation="149.49538"
+         id="feGaussianBlur3921" />
     </filter>
   </defs>
   <g
      id="layer1" />
-  <rect
-     width="996.56348"
-     height="996.56335"
-     x="3.4364254"
-     y="3.4364274"
-     transform="matrix(1,0,0,0.97617539,0,0.08187153)"
-     id="rect2994"
-     style="opacity:0.6;fill:#ffffff;fill-opacity:1;stroke:none;filter:url(#filter3919)" />
   <rect
      width="261.1684"
      height="312.71478"
@@ -149,22 +141,9 @@
   <path
      d="m 76.32474,454.42875 0,-164.01961 105.70153,0 105.70153,0 0,164.01961 0,164.01962 -105.70153,0 -105.70153,0 0,-164.01962 z"
      id="path3843"
-     style="fill:#000000;fill-opacity:0.45502642;stroke:none" />
-  <path
-     d="m 286.88944,798.67861 c -3.70144,-4.09004 -4.02149,-31.32709 -4.02149,-342.24213 0,-324.16768 0.17932,-337.96073 4.4437,-341.81995 2.44403,-2.21181 5.35713,-4.02148 6.47356,-4.02148 1.11643,0 36.02118,16.81777 77.56612,37.37282 41.54493,20.55505 91.9382,45.27021 111.98504,54.92256 34.35123,16.53978 151.98794,74.69295 378.0977,186.91088 54.26131,26.92981 101.04332,51.5035 103.96005,54.60821 7.43247,7.9115 8.90707,6.79971 -47.10203,35.51289 -18.71039,9.59192 -39.4862,20.53188 -46.16848,24.31104 -6.68229,3.77913 -31.83196,16.90461 -55.88817,29.16771 -24.05621,12.26311 -49.20588,25.38327 -55.88816,29.15591 -6.68228,3.77265 -34.01889,17.99704 -60.74801,31.60979 -26.72912,13.61275 -56.25265,28.91328 -65.60785,34.00119 -9.35519,5.08791 -38.87872,20.38844 -65.60784,34.0012 -26.72912,13.61275 -54.06573,27.83573 -60.74801,31.60665 -6.68228,3.77092 -34.01888,17.99805 -60.748,31.61586 -26.72912,13.61781 -58.43958,30.01576 -70.46769,36.43988 -35.70776,19.07128 -80.39469,41.29067 -83.04248,41.29067 -1.35656,0 -4.27614,-1.99966 -6.48796,-4.4437 z"
-     transform="matrix(1.0481949,0,0,1.0334876,-34.719613,-12.869187)"
-     id="path3837"
-     style="fill:#000000;fill-opacity:0.45502642;stroke:none;filter:url(#filter3867)" />
+     style="fill:#000000;fill-opacity:1;stroke:none" />
   <path
      d="m 287.90963,796.38909 c -2.2176,-4.31274 -3.28596,-198.16116 -2.84296,-515.84268 0.18221,-130.66709 0.79629,-160.12007 3.4162,-163.84923 3.10314,-4.41701 3.54427,-4.38959 15.49972,0.96341 39.24943,17.57377 609.13233,311.77396 626.55537,323.45718 9.68992,6.49768 10.91275,8.14284 8.17124,10.99323 -3.64694,3.79174 -93.53132,52.98234 -360.42347,197.24727 -238.20698,128.75955 -280.68899,151.33411 -284.78835,151.33411 -1.85625,0 -4.37075,-1.93647 -5.58775,-4.30329 z"
      id="path3845"
-     style="fill:#000000;fill-opacity:0.45502642;stroke:none" />
-  <rect
-     width="238.1322"
-     height="359.6282"
-     x="46.168488"
-     y="273.45383"
-     transform="matrix(0.93937118,0,0,0.96023706,24.047098,22.78989)"
-     id="rect3841"
-     style="fill:#000000;fill-opacity:0.45502642;stroke:none;filter:url(#filter3859)" />
+     style="fill:#000000;fill-opacity:1;stroke:none" />
 </svg>

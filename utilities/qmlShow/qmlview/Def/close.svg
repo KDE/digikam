@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.2"
+   width="1000"
+   height="1000"
+   id="svg5496">
+  <metadata
+     id="metadata5594">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs5498">
+    <linearGradient
+       id="linearGradient5312">
+      <stop
+         id="stop5314"
+         style="stop-color:#baffff;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop5316"
+         style="stop-color:#baffff;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5298">
+      <stop
+         id="stop5300"
+         style="stop-color:#baffff;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop5302"
+         style="stop-color:#baffff;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5243">
+      <stop
+         id="stop5245"
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop5247"
+         style="stop-color:#000000;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5237">
+      <stop
+         id="stop5239"
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0" />
+    </linearGradient>
+    <filter
+       x="-0.35791525"
+       y="-0.36209866"
+       width="1.7158304"
+       height="1.7241973"
+       color-interpolation-filters="sRGB"
+       id="filter3778">
+      <feGaussianBlur
+         id="feGaussianBlur3780"
+         stdDeviation="255.88839" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3788">
+      <feGaussianBlur
+         id="feGaussianBlur3790"
+         stdDeviation="27.670704" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3799">
+      <feGaussianBlur
+         id="feGaussianBlur3801"
+         stdDeviation="38.667111" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3793">
+      <feGaussianBlur
+         stdDeviation="9.9656342"
+         id="feGaussianBlur3795" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3801">
+      <feGaussianBlur
+         stdDeviation="16.994255"
+         id="feGaussianBlur3803" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3807">
+      <feGaussianBlur
+         stdDeviation="17.130938"
+         id="feGaussianBlur3809" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3813">
+      <feGaussianBlur
+         stdDeviation="17.07019"
+         id="feGaussianBlur3815" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3833">
+      <feGaussianBlur
+         stdDeviation="20.798373"
+         id="feGaussianBlur3835" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3775">
+      <feGaussianBlur
+         id="feGaussianBlur3777"
+         stdDeviation="43.900343" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3781">
+      <feGaussianBlur
+         id="feGaussianBlur3783"
+         stdDeviation="19.692155" />
+    </filter>
+    <linearGradient
+       x1="124.5625"
+       y1="127.70818"
+       x2="214.71875"
+       y2="127.70818"
+       id="linearGradient5249"
+       xlink:href="#linearGradient5243"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       x1="124.5625"
+       y1="127.70818"
+       x2="214.71875"
+       y2="127.70818"
+       id="linearGradient5249-4"
+       xlink:href="#linearGradient5243-7"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient5243-7">
+      <stop
+         id="stop5245-6"
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop5247-4"
+         style="stop-color:#000000;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter5290">
+      <feGaussianBlur
+         id="feGaussianBlur5292"
+         stdDeviation="2.4413872" />
+    </filter>
+    <radialGradient
+       cx="598.65167"
+       cy="324.26382"
+       r="384.6203"
+       fx="598.65167"
+       fy="324.26382"
+       id="radialGradient5318"
+       xlink:href="#linearGradient5312"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.2501686,0.01786919,-0.01282349,0.89716056,-136.0099,26.564556)" />
+    <filter
+       x="-0.11916279"
+       y="-0.12084906"
+       width="1.2383256"
+       height="1.2416981"
+       color-interpolation-filters="sRGB"
+       id="filter5326">
+      <feGaussianBlur
+         id="feGaussianBlur5328"
+         stdDeviation="36.683849" />
+    </filter>
+    <filter
+       x="-0.60265225"
+       y="-0.5984599"
+       width="2.2053044"
+       height="2.1969199"
+       color-interpolation-filters="sRGB"
+       id="filter5340">
+      <feGaussianBlur
+         id="feGaussianBlur5342"
+         stdDeviation="492.71829" />
+    </filter>
+    <filter
+       x="-0.12053045"
+       y="-0.11969198"
+       width="1.2410609"
+       height="1.2393841"
+       color-interpolation-filters="sRGB"
+       id="filter5344">
+      <feGaussianBlur
+         id="feGaussianBlur5346"
+         stdDeviation="98.543658" />
+    </filter>
+    <filter
+       x="-0.11651786"
+       y="-0.12369668"
+       width="1.2330357"
+       height="1.2473934"
+       color-interpolation-filters="sRGB"
+       id="filter5348">
+      <feGaussianBlur
+         id="feGaussianBlur5350"
+         stdDeviation="37.371135" />
+    </filter>
+  </defs>
+  <g
+     id="layer1" />
+  <rect
+     width="769.75946"
+     height="725.08594"
+     x="240.54984"
+     y="-6.8728523"
+     id="rect5330"
+     style="fill:#e8ffff;fill-opacity:1;stroke:#000000;stroke-width:6.35400009;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter5348)" />
+  <flowRoot
+     transform="matrix(7.08993,0,0,5.6937052,-600.10985,-388.08436)"
+     id="flowRoot3785"
+     xml:space="preserve"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.00006616;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Sans"><flowRegion
+       id="flowRegion3787"
+       style="stroke:url(#linearGradient5249)"><rect
+         width="872.85223"
+         height="797.25085"
+         x="120.27492"
+         y="51.546391"
+         id="rect3789"
+         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.00006616;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" /></flowRegion><flowPara
+       id="flowPara3791"
+       style="font-size:144px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.00006616;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Verdana;-inkscape-font-specification:Verdana">X</flowPara></flowRoot>  <flowRoot
+     transform="matrix(7.1582528,0,0,5.6053131,-609.51951,-380.79283)"
+     id="flowRoot3785-7"
+     xml:space="preserve"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#baffff;fill-opacity:0.39682539;stroke:#000000;stroke-width:1.00006616;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter5290);font-family:Sans"><flowRegion
+       id="flowRegion3787-9"
+       style="stroke:url(#linearGradient5249-4)"><rect
+         width="872.85223"
+         height="797.25085"
+         x="120.27492"
+         y="51.546391"
+         id="rect3789-5"
+         style="fill:#baffff;fill-opacity:0.39682539;stroke:#000000;stroke-width:1.00006616;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" /></flowRegion><flowPara
+       id="flowPara3791-3"
+       style="font-size:144px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#baffff;fill-opacity:0.39682539;stroke:#000000;stroke-width:1.00006616;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Verdana;-inkscape-font-specification:Verdana">X</flowPara></flowRoot>  <rect
+     width="697.59448"
+     height="673.53949"
+     x="254.29553"
+     y="6.8728523"
+     id="rect5354"
+     style="opacity:0.86371669;fill:none;stroke:#000000;stroke-width:6.35400009;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+</svg>
