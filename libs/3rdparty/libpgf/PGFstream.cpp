@@ -64,7 +64,7 @@ void CPGFFileStream::SetPos(short posMode, INT64 posOff) THROW_ {
 UINT64 CPGFFileStream::GetPos() const THROW_ {
 	ASSERT(IsValid());
 	OSError err;
-	UINT64 pos;
+	UINT64 pos = 0;
 	if ((err = GetFPos(m_hFile, &pos)) != NoError) ReturnWithError2(err, pos);
 	return pos;
 }
