@@ -13,4 +13,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 281320 : Errors in subtag handling in Peoples-Browser.
 006 ==> 283631 : Symbol lookup error cause crash after splash screen on Gnome 3.
 007 ==> 283580 : UI problem: Captions/Tags too big and non-scrollable, makes Tags Tree unusable.
-008 ==> 
+008 ==> 283708 : digiKam don't start after update to package 2.2.0-14.2 (undefined symbol: _ZN4KIPI21ImageCollectionSharedD2Ev).
+009 ==> 
