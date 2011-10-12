@@ -84,6 +84,7 @@ Rectangle {
                 onClicked: { if (parent.src == "Def/pause.svg") {parent.src = "Def/play.svg"; rect.pause();}
                 else {parent.src= "Def/pause.svg";rect.play();};
                 }
+
             }
         }
 
@@ -100,6 +101,8 @@ Rectangle {
             {
                 anchors.fill: parent;
                 onClicked: rect.nextClicked();
+                onPressed: parent.source = "Onpress/next1.svg";
+                onReleased: parent.source = "Def/next.svg";
             }
         }
 
@@ -116,6 +119,8 @@ Rectangle {
             {
                 anchors.fill:parent;
                 onClicked: rect.prevClicked();
+                onPressed: parent.source = "Onpress/back1.svg";
+                onReleased: parent.source = "Def/back.svg";
             }
         }
 
@@ -128,12 +133,14 @@ Rectangle {
             rotation: 0
             z: 12
             source: "Def/Zoom-.svg"
-		MouseArea
-		{
-			id:zoomout
-			anchors.fill: parent
-			onClicked: {rect.source_scale = rect.source_scale / 2;}
-		}
+                MouseArea
+                {
+                        id:zoomout
+                        anchors.fill: parent
+                        onClicked: {rect.source_scale = rect.source_scale / 2;}
+                        onPressed: parent.source = "Onpress/Zoom-1.svg";
+                        onReleased: parent.source = "Def/Zoom-.svg";
+                }
         }
 
         Image {
@@ -145,12 +152,14 @@ Rectangle {
             rotation: 0
             z: 12
             source: "Def/Zoom+.svg"
-		MouseArea
-		{
-			id:zoomin
-			anchors.fill: parent
-			onClicked: {rect.source_scale = rect.source_scale * 2;}
-		}    
+                MouseArea
+                {
+                        id:zoomin
+                        anchors.fill: parent
+                        onClicked: {rect.source_scale = rect.source_scale * 2;}
+                        onPressed: parent.source = "Onpress/Zoom+1.svg";
+                        onReleased: parent.source = "Def/Zoom+.svg";
+                }
         }
 
         /*Image {
@@ -176,22 +185,25 @@ Rectangle {
             width:parent.width/5
             x:5
             source: "Def/grid.svg"
-            y:5            
-	    MouseArea {
+            y:5
+            MouseArea {
                 id:show_gridview
                 anchors.fill: parent
                 onClicked:
                 {
-		if(rect2.visible==false){
+                if(rect2.visible==false){
                     rect2.visible=true;
                     grid.focus= true;
                     play_pause.src = "Def/play.svg";
                     rect.pause();}
-		else
-		{ rect2.visible = false;
-			rect.focus = true;
-		}
+                else
+                { rect2.visible = false;
+                        rect.focus = true;
                 }
+                }
+
+                onPressed: parent.source = "Onpress/grid1.svg";
+                onReleased: parent.source = "Def/grid.svg";
             }
         }
     }
@@ -213,18 +225,20 @@ Rectangle {
             hoverEnabled: true
             anchors.fill: parent
             onClicked:{Qt.quit()}
+            onPressed: parent.source = "Onpress/close1.svg";
+            onReleased: parent.source = "Def/close.svg";
         }
     }
 
-	Flickable
-	{
-	id:flickable
-	anchors.fill: parent
-	contentWidth: source.width
-	contentHeight: source.height;
-	contentX: (source.width - rect.width) / 2;
-	contentY: (source.height - rect.height) / 2;
-	boundsBehavior: Flickable.StopAtBounds;
+        Flickable
+        {
+        id:flickable
+        anchors.fill: parent
+        contentWidth: source.width
+        contentHeight: source.height;
+        contentX: (source.width - rect.width) / 2;
+        contentY: (source.height - rect.height) / 2;
+        boundsBehavior: Flickable.StopAtBounds;
     Image {
         id: source
         anchors.centerIn: rect
@@ -241,7 +255,7 @@ Rectangle {
             onTriggered: rect.nextClicked();
         }
 
-	MouseArea {
+        MouseArea {
             id: view_icons
             hoverEnabled: true
             anchors.fill: parent
@@ -252,7 +266,7 @@ Rectangle {
                 close.visible = true ;
                 remove_icon.running = true;
             }
-	}
+        }
 
         Timer
         {
@@ -341,3 +355,4 @@ Rectangle {
         }
     }
 }
+
