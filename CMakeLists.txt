@@ -1405,6 +1405,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filterstatusbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filtersidebarwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/geolocationfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/textfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/mimefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/colorlabelfilter.cpp

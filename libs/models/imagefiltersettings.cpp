@@ -9,6 +9,7 @@
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,11 +46,12 @@ namespace Digikam
 
 ImageFilterSettings::ImageFilterSettings()
 {
-    m_untaggedFilter = false;
-    m_ratingFilter   = 0;
-    m_mimeTypeFilter = MimeFilter::AllFiles;
-    m_ratingCond     = GreaterEqualCondition;
-    m_matchingCond   = OrCondition;
+    m_untaggedFilter       = false;
+    m_ratingFilter         = 0;
+    m_mimeTypeFilter       = MimeFilter::AllFiles;
+    m_ratingCond           = GreaterEqualCondition;
+    m_matchingCond         = OrCondition;
+    m_geolocationCondition = GeolocationNoFilter;
 }
 
 DatabaseFields::Set ImageFilterSettings::watchFlags() const
@@ -76,6 +78,11 @@ DatabaseFields::Set ImageFilterSettings::watchFlags() const
     {
         set |= DatabaseFields::Category;
         set |= DatabaseFields::Format;
+    }
+    
+    if (isFilteringByGeolocation())
+    {
+        set |= DatabaseFields::ImagePositionsAll;
     }
 
     if (isFilteringByColorLabels())
@@ -151,6 +158,11 @@ bool ImageFilterSettings::isFilteringByTypeMime() const
     return false;
 }
 
+bool ImageFilterSettings::isFilteringByGeolocation() const
+{
+    return (m_geolocationCondition != GeolocationNoFilter);
+}
+
 bool ImageFilterSettings::isFilteringByRating() const
 {
     if (m_ratingFilter != 0 || m_ratingCond != GreaterEqualCondition)
@@ -174,7 +186,8 @@ bool ImageFilterSettings::isFiltering() const
            isFilteringByRating()      ||
            isFilteringByTypeMime()    ||
            isFilteringByColorLabels() ||
-           isFilteringByPickLabels();
+           isFilteringByPickLabels()  ||
+           isFilteringByGeolocation();
 }
 
 void ImageFilterSettings::setDayFilter(const QList<QDateTime>& days)
@@ -211,6 +224,11 @@ void ImageFilterSettings::setRatingFilter(int rating, RatingCondition ratingCond
 void ImageFilterSettings::setMimeTypeFilter(int mime)
 {
     m_mimeTypeFilter = (MimeFilter::TypeMimeFilter)mime;
+}
+
+void ImageFilterSettings::setGeolocationFilter(const GeolocationCondition& condition)
+{
+    m_geolocationCondition = condition;
 }
 
 void ImageFilterSettings::setTextFilter(const SearchTextFilterSettings& settings)
@@ -513,6 +531,25 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
         {
             // All Files: do nothing...
             break;
+        }
+    }
+    
+    //-- Filter by geolocation ----------------------------------------------------
+    if (m_geolocationCondition!=GeolocationNoFilter)
+    {
+        if (m_geolocationCondition==GeolocationNoCoordinates)
+        {
+            if (info.hasCoordinates())
+            {
+                match = false;
+            }
+        }
+        else if (m_geolocationCondition==GeolocationHasCoordinates)
+        {
+            if (!info.hasCoordinates())
+            {
+                match = false;
+            }
         }
     }
 

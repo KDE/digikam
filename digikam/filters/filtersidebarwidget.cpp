@@ -9,6 +9,7 @@
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,6 +49,7 @@
 
 #include "albumsettings.h"
 #include "colorlabelfilter.h"
+#include "geolocationfilter.h"
 #include "picklabelfilter.h"
 #include "ratingfilter.h"
 #include "mimefilter.h"
@@ -99,6 +101,7 @@ public:
     ImageFilterSettings::MatchingCondition tagMatchCond;
 
     ColorLabelFilter*                      colorLabelFilter;
+    GeolocationFilter*                     geolocationFilter;
     PickLabelFilter*                       pickLabelFilter;
     RatingFilter*                          ratingFilter;
     MimeFilter*                            mimeFilter;
@@ -136,6 +139,13 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
                        i18n("MIME Type Filter"), QString("TypeMimeFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
+
+    d->geolocationFilter = new GeolocationFilter(d->expbox);
+    d->expbox->addItem(d->geolocationFilter, SmallIcon("applications-internet"),
+                       i18n("Geolocation Filter"), QString("TypeGeolocationFilter"), true);
+
+    // --------------------------------------------------------------------------------------------------------
+
 
     QWidget* box3         = new QWidget(d->expbox);
     d->tagFilterModel     = tagFilterModel;
@@ -206,6 +216,9 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterMod
 
     connect(d->mimeFilter, SIGNAL(activated(int)),
             this, SIGNAL(signalMimeTypeFilterChanged(int)));
+    
+    connect(d->geolocationFilter, SIGNAL(signalFilterChanged(ImageFilterSettings::GeolocationCondition)),
+            this, SIGNAL(signalGeolocationFilterChanged(ImageFilterSettings::GeolocationCondition)));
 
     connect(d->textFilter, SIGNAL(signalSearchTextFilterSettings(SearchTextFilterSettings)),
             this, SIGNAL(signalSearchTextFilterChanged(SearchTextFilterSettings)));
@@ -275,6 +288,7 @@ void FilterSideBarWidget::slotResetFilters()
 {
     d->textFilter->reset();
     d->mimeFilter->setMimeFilter(MimeFilter::AllFiles);
+    d->geolocationFilter->setGeolocationFilter(ImageFilterSettings::GeolocationNoFilter);
     d->tagFilterView->slotResetCheckState();
     d->withoutTagCheckBox->setChecked(false);
     d->colorLabelFilter->reset();
@@ -379,6 +393,8 @@ void FilterSideBarWidget::setConfigGroup(const KConfigGroup& group)
 
 void FilterSideBarWidget::doLoadState()
 {
+    /// @todo mime type and geolocation filter states are not loaded/saved
+
     KConfigGroup group = getConfigGroup();
 
 #if KDCRAW_VERSION >= 0x020000
