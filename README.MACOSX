@@ -42,9 +42,28 @@ digiKam icon must be available to run on Applications/Macport menu entry.
 4 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
 ----------------------------------------------------------------
 
+* Install KDE/Qt and all shared components:
+
 > sudo port -v install kde4-baseapps
 
 TODO
+
+* In you prefered directory dedicated to store and compile source code, checkout digiKam Software Compilation 
+* from KDE git/master repository, and start cmake configuration:
+
+> git clone git://anongit.kde.org/digikam-software-compilation ./2.x
+> cd 2.x
+> ./download-repos
+> bootstrap.macports
+
+* If all is fine digiKam software compilation can be compiled as well into "build" sub-folder:
+
+> cd build
+> make
+
+* If compilation is complete, you can install digiKam sofware compilation on your computer:
+
+> sudo make install/fast
 
 5 - REFERENCES
 --------------
