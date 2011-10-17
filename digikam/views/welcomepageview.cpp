@@ -203,7 +203,7 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName) const
     unsigned int len = info.size();
     QFile        file(aFileName);
 
-    if (aFileName.isEmpty() || len <= 0 ||
+    if (aFileName.isEmpty() || len == 0 ||
         !info.exists() || info.isDir() || !info.isReadable() ||
         !file.open(QIODevice::Unbuffered|QIODevice::ReadOnly))
     {
