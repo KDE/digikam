@@ -301,6 +301,7 @@ bool ImageSortSettings::lessThan(const QVariant& left, const QVariant& right) co
             {
                 return result < 0;
             }
+            // FIXME: fall through?? If not, add "break" here
         }
         default:
             return naturalCompare(left.toString(), right.toString(), currentSortOrder, sortCaseSensitivity);

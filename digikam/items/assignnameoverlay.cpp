@@ -350,6 +350,7 @@ bool AssignNameOverlay::eventFilter(QObject* o, QEvent* e)
             {
                 leavePersistentMode();
             }
+            break;
         }
         default: break;
     }

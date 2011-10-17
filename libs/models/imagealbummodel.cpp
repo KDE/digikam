@@ -499,7 +499,7 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& 
     switch (changeset.operation())
     {
         case CollectionImageChangeset::Added:
-
+        {
             switch (d->currentAlbum->type())
             {
                 case Album::PHYSICAL:
@@ -526,7 +526,8 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& 
                     doRefresh = true;
                     break;
             }
-
+            break;
+        }
         case CollectionImageChangeset::Removed:
         case CollectionImageChangeset::RemovedAll:
             // is one of our images affected?
