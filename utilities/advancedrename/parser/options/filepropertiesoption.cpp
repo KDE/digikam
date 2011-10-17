@@ -29,7 +29,6 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 
 static const QString KEY_FILE("[file]");

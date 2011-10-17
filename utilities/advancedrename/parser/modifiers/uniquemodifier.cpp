@@ -27,7 +27,6 @@
 // KDE includes
 
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <klocale.h>
 
 namespace Digikam

@@ -31,7 +31,6 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <knuminput.h>
 
