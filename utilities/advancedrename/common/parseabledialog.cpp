@@ -96,6 +96,7 @@ ParseableDialog::ParseableDialog(Parseable* parent)
     containerLayout->setRowStretch(1, 10);
     container->setLayout(containerLayout);
     setMainWidget(container);
+    setMinimumWidth(300);
 }
 
 ParseableDialog::~ParseableDialog()
