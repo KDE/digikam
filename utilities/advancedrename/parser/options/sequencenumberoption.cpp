@@ -61,7 +61,7 @@ SequenceNumberDialog::~SequenceNumberDialog()
 
 SequenceNumberOption::SequenceNumberOption()
     : Option(i18nc("Sequence Number", "Number..."), i18n("Add a sequence number"),
-             SmallIcon("accessories-calculator"))
+             "accessories-calculator")
 {
     addToken("#",                                 i18n("Sequence number"));
     addToken("#[||options||]",                    i18n("Sequence number (||options||: ||e|| = extension aware, ||f|| = folder aware)"));

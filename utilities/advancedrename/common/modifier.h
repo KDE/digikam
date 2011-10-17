@@ -46,7 +46,7 @@ class Modifier : public Parseable
 public:
 
     Modifier(const QString& name, const QString& description);
-    Modifier(const QString& name, const QString& description, const QPixmap& icon);
+    Modifier(const QString& name, const QString& description, const QString& icon);
     virtual ~Modifier();
 
     virtual ParseResults parse(ParseSettings& settings);

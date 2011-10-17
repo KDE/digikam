@@ -50,7 +50,7 @@ class Parseable : public QObject
 public:
 
     Parseable(const QString& name);
-    Parseable(const QString& name, const QPixmap& icon);
+    Parseable(const QString& name, const QString& icon);
     virtual ~Parseable();
 
     /**
@@ -79,7 +79,7 @@ public:
     void    setDescription(const QString& desc);
 
     QPixmap icon() const;
-    void    setIcon(const QPixmap& pixmap);
+    void    setIcon(const QString& pixmap);
 
     /**
      * @return a list of all registered tokens

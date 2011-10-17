@@ -42,7 +42,7 @@ Modifier::Modifier(const QString& name, const QString& description)
     setDescription(description);
 }
 
-Modifier::Modifier(const QString& name, const QString& description, const QPixmap& icon)
+Modifier::Modifier(const QString& name, const QString& description, const QString& icon)
     : Parseable(name, icon), d(new ModifierPriv)
 {
     setDescription(description);

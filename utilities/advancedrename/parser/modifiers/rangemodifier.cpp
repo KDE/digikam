@@ -69,8 +69,7 @@ void RangeDialog::slotToTheEndChecked(bool checked)
 // --------------------------------------------------------
 
 RangeModifier::RangeModifier()
-    : Modifier(i18n("Range..."), i18n("Add only a specific range of a renaming option"),
-               SmallIcon("measure"))
+    : Modifier(i18n("Range..."), i18n("Add only a specific range of a renaming option"), "measure")
 {
     addToken("{range:||from||,||to||}", i18n("Extract a specific range (if '||to||' is omitted, go to the end of string)"));
 

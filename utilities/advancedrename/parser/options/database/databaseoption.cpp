@@ -79,7 +79,7 @@ DatabaseOptionDialog::~DatabaseOptionDialog()
 // --------------------------------------------------------
 
 DatabaseOption::DatabaseOption()
-    : Option(i18n("Database..."), i18n("Add information from the database"), SmallIcon("server-database"))
+    : Option(i18n("Database..."), i18n("Add information from the database"), "server-database")
 {
     addToken("[db:||key||]", i18n("Add database information"));
     QRegExp reg("\\[db(:(.*))\\]");

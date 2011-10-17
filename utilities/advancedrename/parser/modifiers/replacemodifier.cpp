@@ -60,7 +60,7 @@ ReplaceDialog::~ReplaceDialog()
 
 ReplaceModifier::ReplaceModifier()
     : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in a renaming option"),
-               SmallIcon("document-edit"))
+               "document-edit")
 {
     addToken("{replace:\"||old||\", \"||new||\",||options||}",
              i18n("Replace text (||options||: ||r|| = regular expression, ||i|| = ignore case)"));

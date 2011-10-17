@@ -41,7 +41,7 @@ namespace Digikam
 {
 
 FilePropertiesOption::FilePropertiesOption()
-    : Option(i18n("File"), i18n("Add file properties"), SmallIcon("folder-image"))
+    : Option(i18n("File"), i18n("Add file properties"), "folder-image")
 {
     setUseTokenMenu(true);
 

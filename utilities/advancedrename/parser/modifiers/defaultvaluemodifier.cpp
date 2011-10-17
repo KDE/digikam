@@ -73,7 +73,7 @@ DefaultValueDialog::~DefaultValueDialog()
 DefaultValueModifier::DefaultValueModifier()
     : Modifier(i18nc("default value for empty strings", "Default Value..."),
                i18n("Set a default value for empty strings"),
-               SmallIcon("edit-undo"))
+               "edit-undo")
 {
     addToken("{default:\"||value||\"}", description());
 

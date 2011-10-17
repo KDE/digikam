@@ -43,7 +43,7 @@ class Option : public Parseable
 public:
 
     Option(const QString& name, const QString& description);
-    Option(const QString& name, const QString& description, const QPixmap& icon);
+    Option(const QString& name, const QString& description, const QString& icon);
     virtual ~Option();
 
     virtual ParseResults parse(ParseSettings& settings);

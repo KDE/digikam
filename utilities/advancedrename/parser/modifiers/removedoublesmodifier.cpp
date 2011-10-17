@@ -41,7 +41,7 @@ namespace Digikam
 RemoveDoublesModifier::RemoveDoublesModifier()
     : Modifier(i18n("Remove Doubles"),
                i18n("Remove duplicate words"),
-               SmallIcon("edit-copy"))
+               "edit-copy")
 {
     addToken("{removedoubles}", description());
 
