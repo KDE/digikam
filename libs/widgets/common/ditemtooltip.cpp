@@ -328,6 +328,7 @@ bool DItemToolTip::event(QEvent* e)
         case QEvent::FocusOut:
         case QEvent::Wheel:
             hide();
+            break;
         default:
             break;
     }

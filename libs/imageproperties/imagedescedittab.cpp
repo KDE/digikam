@@ -1031,6 +1031,7 @@ void ImageDescEditTab::setTagState(TAlbum* tag, MetadataHub::TagStatus status)
         default:
             kWarning() << "Untreated tag status enum value " << status.status;
             d->tagModel->setCheckState(tag, Qt::PartiallyChecked);
+            break;
     }
 }
 

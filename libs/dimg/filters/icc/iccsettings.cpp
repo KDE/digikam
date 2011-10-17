@@ -465,6 +465,7 @@ QList<IccProfile> IccSettings::workspaceProfiles()
             case IccProfile::Display:
             case IccProfile::ColorSpace:
                 profiles << profile;
+                break;
             default:
                 break;
         }
@@ -495,6 +496,7 @@ QList<IccProfile> IccSettings::inputProfiles()
             case IccProfile::Input:
             case IccProfile::ColorSpace:
                 profiles << profile;
+                break;
             default:
                 break;
         }
