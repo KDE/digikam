@@ -1143,6 +1143,7 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader& reader)
 
                 m_secondBox->setFractionMagicValue(list.first());
                 m_firstBox->setFractionMagicValue(list.last());
+                break;
             }
             default:
                 break;
@@ -1180,6 +1181,7 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader& reader)
 
                 m_firstBox->setValue(list.first());
                 m_secondBox->setValue(list.last());
+                break;
             }
             default:
                 break;
@@ -2207,6 +2209,7 @@ void SearchFieldRating::read(SearchXmlCachingReader& reader)
 
             m_firstBox->setRatingValue((RatingComboBox::RatingValue)list.first());
             m_secondBox->setRatingValue((RatingComboBox::RatingValue)list.last());
+            break;
         }
         default:
             break;
