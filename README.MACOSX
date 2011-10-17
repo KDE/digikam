@@ -43,7 +43,8 @@ Install all compilation and run-time dependencies:
 > sudo port -v install marble
 > sudo port -v install oxygen-icons
 > sudo port -v install sane-backends
-
+> sudo port -v install libgpod
+> sudo port -v install libgphoto2
 
 5 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
 ----------------------------------------------------------------
