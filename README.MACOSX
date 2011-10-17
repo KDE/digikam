@@ -33,20 +33,21 @@ From a terminal, using your account user-name (here replace "foo" by your accoun
 > sudo chown -R foo /Library/LaunchAgents/org.freedesktop.dbus-session.plist
 > sudo launchctl load -w /Library/LaunchAgents/org.freedesktop.dbus-session.plist
 
-Make sure that all run-time dependencies are installed :
+4 - DEPENDENCIES
+----------------
 
-> sudo port -v install oxygen-icons
-
-digiKam icon must be available to run on Applications/Macport menu entry.
-
-4 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
-----------------------------------------------------------------
-
-* Install KDE/Qt and all shared components:
+Install all compilation and run-time dependencies:
 
 > sudo port -v install kde4-baseapps
+> sudo port -v install opencv
+> sudo port -v install oxygen-icons
 
-TODO
+5 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
+----------------------------------------------------------------
+
+* Process stage 4 of this tutorial to install all dependencies:
+
+* Process Stage 3 of this tutorial to setup system for KDE Applications.
 
 * In you prefered directory dedicated to store and compile source code, checkout digiKam Software Compilation 
 * from KDE git/master repository, and start cmake configuration:
@@ -65,7 +66,7 @@ TODO
 
 > sudo make install/fast
 
-5 - REFERENCES
+6 - REFERENCES
 --------------
 
 http://guide.macports.org/
