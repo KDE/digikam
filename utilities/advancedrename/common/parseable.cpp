@@ -51,7 +51,6 @@ public:
 
     QString      description;
     QString      iconName;
-    QPixmap      icon;
     QRegExp      regExp;
 
     TokenList    tokens;

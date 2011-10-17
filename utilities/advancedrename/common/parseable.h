@@ -24,10 +24,6 @@
 #ifndef PARSEABLE_H
 #define PARSEABLE_H
 
-// Qt includes
-
-#include <QPixmap>
-
 // Local includes
 
 #include "parseresults.h"
