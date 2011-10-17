@@ -2192,7 +2192,7 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         case MetadataInfo::DigitizationDate:
             return value.toDateTime().toString(Qt::LocaleDate);
         case MetadataInfo::Orientation:
-
+        {
             switch (value.toInt())
             {
                     // Example why the English text differs from the enum names: ORIENTATION_ROT_90.
@@ -2218,8 +2218,11 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
                     return i18n("Flipped Vertically and Rotated Left");
                 case ORIENTATION_ROT_270:
                     return i18n("Rotated Right");
+                default:
+                    return i18n("Unknown");
             }
-
+            break;
+        }
         case MetadataInfo::Make:
             return exiv2Iface.createExifUserStringFromValue("Exif.Image.Make", value);
         case MetadataInfo::Model:

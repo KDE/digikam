@@ -166,15 +166,15 @@ bool ItemViewToolTip::eventFilter(QObject* o, QEvent* e)
         case QEvent::Wheel:
             hide();
             break;
-
         case QEvent::MouseMove:
-
+        {
             // needs mouse tracking, obviously
             if (o == d->view->viewport() && !d->rect.isNull() && !d->rect.contains(static_cast<QMouseEvent*>(e)->globalPos()))
             {
                 hide();
             }
-
+            break;
+        }
         default:
             break;
     }

@@ -1600,8 +1600,7 @@ QModelIndex DigikamKCategorizedView::moveCursor(CursorAction cursorAction,
                 return d->proxyModel->index(indexToMove, 0);
             }
         }
-            // fall through
-
+        // fall through
         case QAbstractItemView::MoveDown:
         {
             if (d->elementsInfo[current.row()].relativeOffsetToCategory < (d->categoriesIndexes[theCategory].count() - 1 - ((d->categoriesIndexes[theCategory].count() - 1) % elementsPerRow)))
