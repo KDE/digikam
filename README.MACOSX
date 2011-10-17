@@ -42,7 +42,7 @@ digiKam icon must be available to run on Applications/Macport menu entry.
 4 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
 ----------------------------------------------------------------
 
-> sudo port -v install kdebase4
+> sudo port -v install kde4-baseapps
 
 TODO
 
