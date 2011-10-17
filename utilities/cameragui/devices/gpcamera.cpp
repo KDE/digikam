@@ -802,6 +802,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamItem
     return true;
 #else
     Q_UNUSED(folder);
+    Q_UNUSED(useMetadata);
     Q_UNUSED(items);
     return false;
 #endif /* HAVE_GPHOTO2 */

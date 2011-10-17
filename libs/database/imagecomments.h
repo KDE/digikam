@@ -120,7 +120,9 @@ public:
      * as the default value, when you just want to have one string.
      * Optionally also returns the index with which you can access further information about the comment.
      */
-    QString defaultComment(int* index = 0, Digikam::DatabaseComment::Type type = DatabaseComment::Comment) const;
+    QString defaultComment(Digikam::DatabaseComment::Type type = DatabaseComment::Comment) const
+    { return defaultComment(0, type); }
+    QString defaultComment(int* index, Digikam::DatabaseComment::Type type = DatabaseComment::Comment) const;
 
     /**
      * Returns a comment for the specified language.

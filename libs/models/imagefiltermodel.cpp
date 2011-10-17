@@ -9,6 +9,7 @@
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -615,6 +616,13 @@ void ImageFilterModel::setMimeTypeFilter(int mimeTypeFilter)
     setImageFilterSettings(d->filter);
 }
 
+void ImageFilterModel::setGeolocationFilter(const ImageFilterSettings::GeolocationCondition& condition)
+{
+    Q_D(ImageFilterModel);
+    d->filter.setGeolocationFilter(condition);
+    setImageFilterSettings(d->filter);
+}
+
 void ImageFilterModel::setTextFilter(const SearchTextFilterSettings& settings)
 {
     Q_D(ImageFilterModel);
@@ -881,22 +889,23 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
         return;
     }
 
-    //TODO: Make efficient!!
-    if (needPrepareTags)
+    // The downside of QVector: At some point, we may need a QList for an API.
+    // Nonetheless, QList and ImageInfo is fast. We could as well
+    // reimplement ImageInfoList to ImageInfoVector (internally with templates?)
+    ImageInfoList infoList;
+    if (needPrepareTags || needPrepareGroups)
     {
-        foreach(const ImageInfo& info, package.infos)
-        {
-            info.tagIds();
-        }
+        infoList = package.infos.toList();
     }
 
-    //TODO: Make efficient!!
+    if (needPrepareTags)
+    {
+        infoList.loadTagIds();
+    }
+
     if (needPrepareGroups)
     {
-        foreach(const ImageInfo& info, package.infos)
-        {
-            info.isGrouped();
-        }
+        infoList.loadGroupImageIds();
     }
 
     foreach (ImageFilterModelPrepareHook* hook, prepareHooks)

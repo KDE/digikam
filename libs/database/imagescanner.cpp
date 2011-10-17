@@ -548,7 +548,7 @@ void ImageScanner::scanTags()
     {
         kDebug() << "Pick Label found : " << pickId;
 
-        int tagId = TagsCache::instance()->getTagForPickLabel((PickLabel)pickId);
+        int tagId = TagsCache::instance()->tagForPickLabel((PickLabel)pickId);
         if (tagId)
         {
             DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_scanInfo.id, QList<int>() << tagId);
@@ -567,7 +567,7 @@ void ImageScanner::scanTags()
     {
         kDebug() << "Color Label found : " << colorId;
 
-        int tagId = TagsCache::instance()->getTagForColorLabel((ColorLabel)colorId);
+        int tagId = TagsCache::instance()->tagForColorLabel((ColorLabel)colorId);
         if (tagId)
         {
             DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_scanInfo.id, QList<int>() << tagId);
@@ -982,7 +982,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
         }
     }
 
-    return QList<qlonglong>();
+    return uuidList;
 }
 
 class lessThanByProximityToSubject

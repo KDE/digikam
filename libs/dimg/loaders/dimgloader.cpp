@@ -291,7 +291,7 @@ HistoryImageId DImgLoader::createHistoryImageId(const QString& filePath, const D
 
     id.setCreationDate(dt);
     id.setFileName(file.fileName());
-    id.setPathOnDisk(file.path());
+    id.setPath(file.path());
     id.setUniqueHash(uniqueHashV2(filePath, &image), file.size());
 
     return id;

@@ -31,7 +31,6 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <ktabwidget.h>
@@ -107,16 +106,18 @@ MetadataOptionDialog::~MetadataOptionDialog()
 MetadataOption::MetadataOption()
     : Option(i18n("Metadata..."), i18n("Add metadata information"))
 {
+    QString iconName("metadataedit");
+
     // metadataedit icon can be missing if KIPI plugins are not installed, load different icon in this case
-    QPixmap icon = KIconLoader::global()->loadIcon("metadataedit", KIconLoader::Small, 0,
+    QPixmap icon = KIconLoader::global()->loadIcon(iconName, KIconLoader::Small, 0,
                                                    KIconLoader::DefaultState, QStringList(), 0L, true);
 
     if (icon.isNull())
     {
-        icon = SmallIcon("editimage");
+        iconName = QString("editimage");
     }
 
-    setIcon(icon);
+    setIcon(iconName);
 
     // --------------------------------------------------------
 

@@ -48,4 +48,6 @@ QList<qlonglong> ImageInfoList::toImageIdList() const
     return idList;
 }
 
+// Implementations of batch loading methods: See imageinfo.cpp (next to the corresponding single-item implementation)
+
 } // namespace Digikam

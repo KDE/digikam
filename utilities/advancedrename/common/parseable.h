@@ -24,10 +24,6 @@
 #ifndef PARSEABLE_H
 #define PARSEABLE_H
 
-// Qt includes
-
-#include <QPixmap>
-
 // Local includes
 
 #include "parseresults.h"
@@ -49,8 +45,16 @@ class Parseable : public QObject
 
 public:
 
+    enum IconType
+    {
+        Action = 0,
+        Dialog
+    };
+
+public:
+
     Parseable(const QString& name);
-    Parseable(const QString& name, const QPixmap& icon);
+    Parseable(const QString& name, const QString& icon);
     virtual ~Parseable();
 
     /**
@@ -78,8 +82,8 @@ public:
     QString description() const;
     void    setDescription(const QString& desc);
 
-    QPixmap icon() const;
-    void    setIcon(const QPixmap& pixmap);
+    QPixmap icon(Parseable::IconType type = Parseable::Action) const;
+    void    setIcon(const QString& pixmap);
 
     /**
      * @return a list of all registered tokens

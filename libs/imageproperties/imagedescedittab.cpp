@@ -29,6 +29,8 @@
 
 // Qt includes
 
+#include <QTextEdit>
+#include <QStyle>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QScrollArea>
@@ -195,6 +197,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->titleEdit->setClickMessage(i18n("Enter title here."));
 #if KEXIV2_VERSION >= 0x020100
     d->titleEdit->setLinesVisible(2);
+#else
+    adjustTitleWidgetHeight();
 #endif
 
     d->captionsEdit = new CaptionEdit(captionTagsArea);
@@ -801,7 +805,52 @@ bool ImageDescEditTab::eventFilter(QObject* o, QEvent* e)
         }
     }
 
+    if ( e->type() == QEvent::FontChange)
+    {
+        if (qobject_cast<QWidget*>(o) == d->titleEdit)
+        {
+            adjustTitleWidgetHeight();
+            return true;
+        }
+    }
+
     return KVBox::eventFilter(o, e);
+}
+
+// NOTE: Method to fix B.K.O #283580
+void ImageDescEditTab::adjustTitleWidgetHeight()
+{
+#if KEXIV2_VERSION >= 0x020100
+    // Nothing to do, all is managed in libkexiv2 widget.
+#else
+    int size          = d->titleEdit->layout()->margin()*2;
+    size             += d->titleEdit->layout()->spacing();
+    
+    QObjectList oList = d->titleEdit->children();
+
+    foreach(QObject* w, oList)
+    {
+        QLabel* label = qobject_cast<QLabel*>(w);
+        if (label)
+        {
+            size += label->height();
+        }
+        
+        QTextEdit* tedit = qobject_cast<QTextEdit*>(w);
+        if (tedit)
+        {
+            size += tedit->fontMetrics().lineSpacing() * 2                       +
+                    tedit->contentsMargins().top()                               +
+                    tedit->contentsMargins().bottom()                            +
+                    1                                                            +
+                    2*(tedit->style()->pixelMetric(QStyle::PM_DefaultFrameWidth) +
+                    tedit->style()->pixelMetric(QStyle::PM_FocusFrameVMargin));
+        }
+    }
+    
+    d->titleEdit->setFixedHeight(size);
+    kDebug() << "size adjusted to : " << size;
+#endif
 }
 
 void ImageDescEditTab::populateTags()

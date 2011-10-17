@@ -62,7 +62,10 @@ enum ColorLabel
     MagentaLabel,
     GrayLabel,
     BlackLabel,
-    WhiteLabel
+    WhiteLabel,
+    FirstColorLabel     = NoColorLabel,
+    LastColorLabel      = WhiteLabel,
+    NumberOfColorLabels = LastColorLabel + 1
 };
 
 // --------------------------------------------------------
@@ -72,7 +75,10 @@ enum PickLabel
     NoPickLabel = 0,
     RejectedLabel,
     PendingLabel,
-    AcceptedLabel
+    AcceptedLabel,
+    FirstPickLabel     = NoPickLabel,
+    LastPickLabel      = AcceptedLabel,
+    NumberOfPickLabels = LastPickLabel + 1
 };
 
 // --------------------------------------------------------

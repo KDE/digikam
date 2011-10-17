@@ -92,6 +92,7 @@ extern "C"
 #include "databaseurl.h"
 #include "databasewatch.h"
 #include "dio.h"
+#include "facetags.h"
 #include "imagelister.h"
 #include "scancontroller.h"
 #include "setupcollections.h"
@@ -135,6 +136,8 @@ public:
     {
         return other.albumRootId == albumRootId && other.albumPath == albumPath;
     }
+
+public:
 
     int     albumRootId;
     QString albumPath;
@@ -2378,6 +2381,13 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     album->m_icon = iconkde;
 
     insertTAlbum(album, parent);
+
+    TAlbum* personParentTag = findTAlbum(FaceTags::personParentTag());
+    if (personParentTag && personParentTag->isAncestorOf(album))
+    {
+        FaceTags::ensureIsPerson(album->id());
+    }
+
     emit signalAlbumsUpdated(Album::TAG);
 
     return album;
@@ -2480,7 +2490,7 @@ bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
     if (hasDirectChildAlbumWithTitle(album->m_parent, name))
     {
         errMsg = i18n("Another tag with the same name already exists.\n"
-                      "Please rename the tag another name.");
+                      "Please choose another name.");
         return false;
     }
 
@@ -2534,7 +2544,14 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
     emit signalAlbumAdded(album);
 
     emit signalAlbumMoved(album);
+    emit signalAlbumsUpdated(Album::TAG);
     d->currentlyMovingAlbum = 0;
+
+    TAlbum* personParentTag = findTAlbum(FaceTags::personParentTag());
+    if (personParentTag && personParentTag->isAncestorOf(album))
+    {
+        FaceTags::ensureIsPerson(album->id());
+    }
 
     return true;
 }

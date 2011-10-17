@@ -1,34 +1,75 @@
 TUTORIAL HOW TO INSTALL DIGIKAM UNDER MACOSX
 --------------------------------------------
 
+1 - FAST INSTALL USING DIGIKAM PORT FILE
+----------------------------------------
+
 digiKam can be installed through MacPort project. Current version avaialble can be found here:
 
 http://www.macports.org/ports.php?by=name&substr=digikam
 
 To install it, please follow these instructions to enter in a console:
 
-1/ Install XCode compiler from apple (http://developer.apple.com/xcode).
-   It's free, you just need to create an acount on apple.com to download it.
-2/ Install "macport" using DMG package (http://www.macports.org/install.php).
+* Install development environnement from apple (http://developer.apple.com/xcode).
+  It's free, you just need to create an acount on apple.com to download it.
 
-3/ From a terminal, initialize Macport on your computer and install digiKam. This stage require some hours to compile whole environement.
+* Install "macport" using DMG package (http://www.macports.org/install.php).
+
+* From a terminal, initialize Macport on your computer and install digiKam. This stage require some hours to compile whole environement.
 
 > sudo port -v selfupdate
+
+2 - FAST INSTALL USING DIGIKAM PORT FILE
+----------------------------------------
+
 > sudo port -v install digikam
 
-4/ Always from a terminal, using your account user-name (here replace "foo" by your account), initialize KDE and Dbus services.
+3 - COMMON SETUP FOR KDE APPLICATIONS
+-------------------------------------
+
+From a terminal, using your account user-name (here replace "foo" by your account), initialize KDE and Dbus services.
 
 > sudo chown -R foo ~/Library/Preferences/KDE
 > sudo chown -R foo /Library/LaunchAgents/org.freedesktop.dbus-session.plist
 > sudo launchctl load -w /Library/LaunchAgents/org.freedesktop.dbus-session.plist
 
-5/ Make sure that all run-time dependencies are installed :
+4 - DEPENDENCIES
+----------------
 
+Install all compilation and run-time dependencies:
+
+> sudo port -v install kde4-baseapps
+> sudo port -v install opencv
+> sudo port -v install marble
 > sudo port -v install oxygen-icons
+> sudo port -v install sane-backends
 
-6/ digiKam icon must be available to run on Applications/Macport menu entry.
 
+5 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
+----------------------------------------------------------------
 
-REFERENCES:
+* Process stage 4 of this tutorial to install all dependencies:
+
+* Process Stage 3 of this tutorial to setup system for KDE Applications.
+
+* In you prefered directory dedicated to store and compile source code, checkout digiKam Software Compilation 
+* from KDE git/master repository, and start cmake configuration:
+
+> git clone git://anongit.kde.org/digikam-software-compilation ./2.x
+> cd 2.x
+> ./download-repos
+> bootstrap.macports
+
+* If all is fine digiKam software compilation can be compiled as well into "build" sub-folder:
+
+> cd build
+> make
+
+* If compilation is complete, you can install digiKam sofware compilation on your computer:
+
+> sudo make install/fast
+
+6 - REFERENCES
+--------------
 
 http://guide.macports.org/

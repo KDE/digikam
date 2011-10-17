@@ -32,7 +32,6 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -250,7 +249,7 @@ void DateOptionDialog::updateExampleLabel()
 DateOption::DateOption()
     : Option(i18n("Date && Time..."),
              i18n("Add date and time information"),
-             SmallIcon("view-pim-calendar"))
+             "view-pim-calendar")
 {
     addToken("[date]",            i18n("Date and time (standard format)"));
 #if QT_VERSION >= 0x040700

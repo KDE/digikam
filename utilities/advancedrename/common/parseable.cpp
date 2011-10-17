@@ -50,7 +50,7 @@ public:
     bool         useTokenMenu;
 
     QString      description;
-    QPixmap      icon;
+    QString      iconName;
     QRegExp      regExp;
 
     TokenList    tokens;
@@ -62,7 +62,7 @@ Parseable::Parseable(const QString& name)
     setObjectName(name);
 }
 
-Parseable::Parseable(const QString& name, const QPixmap& icon)
+Parseable::Parseable(const QString& name, const QString& icon)
     : QObject(0), d(new ParseablePriv)
 {
     setObjectName(name);
@@ -77,14 +77,26 @@ Parseable::~Parseable()
     delete d;
 }
 
-void Parseable::setIcon(const QPixmap& pixmap)
+void Parseable::setIcon(const QString& iconName)
 {
-    d->icon = pixmap;
+    d->iconName = iconName;
 }
 
-QPixmap Parseable::icon() const
+QPixmap Parseable::icon(Parseable::IconType type) const
 {
-    return d->icon;
+    QPixmap icon;
+
+    switch (type)
+    {
+        case Dialog:
+            icon = DesktopIcon(d->iconName);
+            break;
+        default:
+            icon = SmallIcon(d->iconName);
+            break;
+    }
+
+    return icon;
 }
 
 void Parseable::setDescription(const QString& desc)
@@ -123,7 +135,7 @@ QPushButton* Parseable::createButton(const QString& name, const QIcon& icon)
 QPushButton* Parseable::registerButton(QWidget* parent)
 {
     QPushButton* button = 0;
-    button = createButton(objectName(), d->icon);
+    button = createButton(objectName(), icon());
 
     QList<QAction*> actions;
 
@@ -178,7 +190,7 @@ QAction* Parseable::registerMenu(QMenu* parent)
     if (action)
     {
         action->setText(objectName());
-        action->setIcon(d->icon);
+        action->setIcon(icon());
     }
 
     return action;

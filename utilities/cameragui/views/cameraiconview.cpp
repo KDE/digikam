@@ -255,7 +255,7 @@ void CameraIconView::addItem(const CamItemInfo& info)
     newinfo.downloadName = downloadName;
     CameraIconItem* item = new CameraIconItem(d->groupItem, newinfo);
     QString sep;
-    if (!newinfo.folder.endsWith('/'))
+    if (!newinfo.folder.isEmpty() && !newinfo.folder.endsWith('/'))
     {
         sep = '/';
     }
@@ -271,7 +271,7 @@ void CameraIconView::removeItem(const CamItemInfo& info)
     }
 
     QString sep;
-    if (!info.folder.endsWith('/'))
+    if (!info.folder.isEmpty() && !info.folder.endsWith('/'))
     {
         sep = '/';
     }
@@ -293,7 +293,7 @@ CamItemInfo CameraIconView::findItemInfo(const QString& folder, const QString& f
 CameraIconItem* CameraIconView::findItem(const QString& folder, const QString& filename) const
 {
     QString sep;
-    if (!folder.endsWith('/'))
+    if (!folder.isEmpty() && !folder.endsWith('/'))
     {
         sep = '/';
     }
@@ -312,7 +312,7 @@ QMap<QString, int> CameraIconView::countItemsByFolders() const
     {
         iconItem = static_cast<CameraIconItem*>(item);
         path     = iconItem->itemInfo().folder;
-        if (path.endsWith('/'))
+        if (!path.isEmpty() && path.endsWith('/'))
         {
             path.truncate(path.length()-1);
         }

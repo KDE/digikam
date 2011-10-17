@@ -29,7 +29,6 @@
 
 #include "databasechangesets.h"
 #include "digikam_export.h"
-#include "globals.h"
 
 namespace Digikam
 {
@@ -211,25 +210,49 @@ public:
      * Return internal tags ID corresponding of color label id. see ColorLabel values from globals.h.
      * Return 0 if not it's found.
      */
-    int getTagForColorLabel(int label);
+    int tagForColorLabel(int label);
+
+    /**
+     * Returns all color label tags, where index is the label id and value the tag id.
+     */
+    QVector<int> colorLabelTags();
 
     /**
      * Return color label id corresponding of internal tags ID. see ColorLabel values from globals.h.
      * Return -1 if not it's found.
      */
-    int getColorLabelForTag(int tagId);
+    int colorLabelForTag(int tagId);
+
+    /**
+     * From the given list of tags, returns the color label corresponding to the first encountered
+     * tag which is a color label tag.
+     * Returns -1 if no tag in the list is a color label tag.
+     */
+    int colorLabelFromTags(QList<int> tagIds);
 
     /**
      * Return internal tags ID corresponding of pick label id. see PickLabel values from globals.h.
      * Return 0 if not it's found.
      */
-    int getTagForPickLabel(int label);
+    int tagForPickLabel(int label);
+
+    /**
+     * Returns all pick label tags, where index is the label id and value the tag id.
+     */
+    QVector<int> pickLabelTags();
 
     /**
      * Return pick label id corresponding of internal tags ID. see PickLabel values from globals.h.
      * Return -1 if not it's found.
      */
-    int getPickLabelForTag(int tagId);
+    int pickLabelForTag(int tagId);
+
+    /**
+     * From the given list of tags, returns the pick label corresponding to the first encountered
+     * tag which is a pick label tag.
+     * Returns -1 if no tag in the list is a pick label tag.
+     */
+    int pickLabelFromTags(QList<int> tagIds);
 
     static QLatin1String tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
     static QLatin1String propertyNameDigikamInternalTag();

@@ -65,7 +65,7 @@ QList<TAlbum*> PickLabelFilter::getCheckedPickLabelTags()
 
     foreach(const PickLabel& pl, colorLabels())
     {
-        tagId = TagsCache::instance()->getTagForPickLabel(pl);
+        tagId = TagsCache::instance()->tagForPickLabel(pl);
         tag   = AlbumManager::instance()->findTAlbum(tagId);
         if (tagId)
         {

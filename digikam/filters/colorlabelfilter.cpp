@@ -65,7 +65,7 @@ QList<TAlbum*> ColorLabelFilter::getCheckedColorLabelTags()
 
     foreach(const ColorLabel& cl, colorLabels())
     {
-        tagId = TagsCache::instance()->getTagForColorLabel(cl);
+        tagId = TagsCache::instance()->tagForColorLabel(cl);
         tag   = AlbumManager::instance()->findTAlbum(tagId);
 
         if (tagId)

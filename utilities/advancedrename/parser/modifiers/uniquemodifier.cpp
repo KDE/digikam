@@ -27,7 +27,6 @@
 // KDE includes
 
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <klocale.h>
 
 namespace Digikam
@@ -35,8 +34,7 @@ namespace Digikam
 
 UniqueModifier::UniqueModifier()
     : Modifier(i18nc("unique value for duplicate strings", "Unique"),
-               i18n("Add a suffix number to have unique strings in duplicate values"),
-               SmallIcon("button_more"))
+               i18n("Add a suffix number to have unique strings in duplicate values"), "button_more")
 {
     addToken("{unique}", description());
     addToken("{unique:||n||}", i18n("Add a suffix number, ||n|| specifies the number of digits to use"));

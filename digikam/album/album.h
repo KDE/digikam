@@ -370,7 +370,7 @@ class TAlbum : public Album
 {
 public:
 
-    TAlbum(const QString& title, int id, bool root=false, bool person = false);
+    TAlbum(const QString& title, int id, bool root=false);
     ~TAlbum();
 
     /**
@@ -390,8 +390,6 @@ public:
     QMap<QString, QString> properties() const;
 
 private:
-
-    bool    m_person;
 
     int     m_pid;
 

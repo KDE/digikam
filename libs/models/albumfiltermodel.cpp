@@ -350,16 +350,9 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
 
 void AlbumFilterModel::slotAlbumRenamed(Album* album)
 {
-    if (!isFiltering())
+    if (album)
     {
-        return;
-    }
-
-    QModelIndex index = indexForAlbum(album);
-
-    if (index.isValid())
-    {
-        invalidateFilter();
+        slotAlbumsHaveBeenUpdated(album->type());
     }
 }
 

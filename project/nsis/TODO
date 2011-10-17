@@ -1,4 +1,4 @@
-
+- Uninstall previous version installed. Look Clementine or vlc NSIS installer for ex.
 - Register digiKam so that it can be run when one plug a usb mass storage or a camera.
 - Install only the needed files not the whole kde4. Set a list of unnecessary files provided by KDE-windows installer.
 

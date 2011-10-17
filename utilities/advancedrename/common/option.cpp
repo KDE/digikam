@@ -51,7 +51,7 @@ Option::Option(const QString& name, const QString& description)
     setDescription(description);
 }
 
-Option::Option(const QString& name, const QString& description, const QPixmap& icon)
+Option::Option(const QString& name, const QString& description, const QString& icon)
     : Parseable(name, icon), d(new OptionPriv)
 {
     setDescription(description);

@@ -37,7 +37,6 @@ namespace Digikam
 
 class DatabaseBackend;
 class AlbumDB;
-class ImageInfoCache;
 class DatabaseWatch;
 class InitializationObserver;
 class DatabaseAccessStaticPriv;
@@ -122,11 +121,6 @@ public:
       * Construction a database access object otherwise after calling this method will crash.
       */
     static void cleanUpDatabase();
-
-    /**
-      * Return the ImageInfoCache. This object is not for public use outside libs/database/
-      */
-    ImageInfoCache* imageInfoCache() const;
 
     /**
       * Return the DatabaseWatch.
