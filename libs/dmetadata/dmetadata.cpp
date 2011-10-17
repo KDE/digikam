@@ -2218,6 +2218,8 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
                     return i18n("Flipped Vertically and Rotated Left");
                 case ORIENTATION_ROT_270:
                     return i18n("Rotated Right");
+                default:
+                    return i18n("Unknown");
             }
             break;
         }
