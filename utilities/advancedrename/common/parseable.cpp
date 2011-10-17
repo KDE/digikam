@@ -82,9 +82,21 @@ void Parseable::setIcon(const QString& iconName)
     d->iconName = iconName;
 }
 
-QPixmap Parseable::icon() const
+QPixmap Parseable::icon(Parseable::IconType type) const
 {
-    return SmallIcon(d->iconName);
+    QPixmap icon;
+
+    switch (type)
+    {
+        case Dialog:
+            icon = DesktopIcon(d->iconName);
+            break;
+        default:
+            icon = SmallIcon(d->iconName);
+            break;
+    }
+
+    return icon;
 }
 
 void Parseable::setDescription(const QString& desc)

@@ -70,7 +70,7 @@ ParseableDialog::ParseableDialog(Parseable* parent)
 
     setDialogTitle(parent->objectName());
     setDialogDescription(parent->description());
-    setDialogIcon(parent->icon());
+    setDialogIcon(parent->icon(Parseable::Dialog));
 
     d->dialogTitle->setAlignment(Qt::AlignHCenter);
     d->dialogDescription->setAlignment(Qt::AlignHCenter);
@@ -82,9 +82,9 @@ ParseableDialog::ParseableDialog(Parseable* parent)
 
     QWidget* header           = new QWidget(this);
     QGridLayout* headerLayout = new QGridLayout(this);
-    headerLayout->addWidget(d->dialogIcon,        0, 0, 1, 1);
+    headerLayout->addWidget(d->dialogIcon,        0, 0, 2, 1);
     headerLayout->addWidget(d->dialogTitle,       0, 1, 1, 1);
-    headerLayout->addWidget(d->dialogDescription, 1, 0, 1,-1);
+    headerLayout->addWidget(d->dialogDescription, 1, 1, 1, 1);
     headerLayout->addWidget(line,                 2, 0, 1,-1);
     headerLayout->setColumnStretch(1, 10);
     header->setLayout(headerLayout);

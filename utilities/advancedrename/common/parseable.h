@@ -45,6 +45,14 @@ class Parseable : public QObject
 
 public:
 
+    enum IconType
+    {
+        Action = 0,
+        Dialog
+    };
+
+public:
+
     Parseable(const QString& name);
     Parseable(const QString& name, const QString& icon);
     virtual ~Parseable();
@@ -74,7 +82,7 @@ public:
     QString description() const;
     void    setDescription(const QString& desc);
 
-    QPixmap icon() const;
+    QPixmap icon(Parseable::IconType type = Parseable::Action) const;
     void    setIcon(const QString& pixmap);
 
     /**
