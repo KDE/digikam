@@ -40,7 +40,10 @@ Install all compilation and run-time dependencies:
 
 > sudo port -v install kde4-baseapps
 > sudo port -v install opencv
+> sudo port -v install marble
 > sudo port -v install oxygen-icons
+> sudo port -v install sane-backends
+
 
 5 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
 ----------------------------------------------------------------
