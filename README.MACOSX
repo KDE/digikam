@@ -1,8 +1,8 @@
 TUTORIAL HOW TO INSTALL DIGIKAM UNDER MACOSX
 --------------------------------------------
 
-1 - FAST INSTALL USING DIGIKAM PORT FILE
-----------------------------------------
+1 - INSTALLING MACPORT
+----------------------
 
 digiKam can be installed through MacPort project. Current version avaialble can be found here:
 
@@ -18,6 +18,8 @@ To install it, please follow these instructions to enter in a console:
 * From a terminal, initialize Macport on your computer and install digiKam. This stage require some hours to compile whole environement.
 
 > sudo port -v selfupdate
+
+More information: http://guide.macports.org
 
 2 - FAST INSTALL USING DIGIKAM PORT FILE
 ----------------------------------------
@@ -49,7 +51,9 @@ Install all compilation and run-time dependencies:
 5 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
 ----------------------------------------------------------------
 
-* Process stage 4 of this tutorial to install all dependencies:
+* Process stage 1 to install Macports on your computer.
+
+* Process stage 4 of this tutorial to install all dependencies.
 
 * Process Stage 3 of this tutorial to setup system for KDE Applications.
 
@@ -70,7 +74,4 @@ Install all compilation and run-time dependencies:
 
 > sudo make install/fast
 
-6 - REFERENCES
---------------
-
-http://guide.macports.org/
+* digiKam must be avaialble on Applications/Macports/KDE menu of you computer.
