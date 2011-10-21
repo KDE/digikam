@@ -371,9 +371,9 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
     // --------------------------------------------------------
 
     cmhelper.addAction(d->peopleToggleAction, true);
-    popmenu.addSeparator();
     cmhelper.addAction(d->addPersonAction, true);
     cmhelper.addAction(d->forgetFacesAction, true);
+    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
@@ -383,7 +383,7 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
         cmhelper.addAction(d->nextAction, true);
         cmhelper.addAction(d->back2AlbumAction);
         cmhelper.addGotoMenu(idList);
-        popmenu.addSeparator();
+        cmhelper.addSeparator();
     }
 
     // --------------------------------------------------------
