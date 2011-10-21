@@ -391,7 +391,7 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedItems);
     cmhelper.addKipiActions(idList);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
@@ -401,18 +401,18 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
         cmhelper.addStandardActionLightTable();
 
     cmhelper.addQueueManagerMenu();
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
     cmhelper.addStandardActionItemDelete(this, SLOT(slotDeleteItem()));
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
     cmhelper.addAssignTagsMenu(idList);
     cmhelper.addRemoveTagsMenu(idList);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
