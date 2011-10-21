@@ -164,6 +164,8 @@ private:
     void updateCameraMenu();
     void updateQuickImportAction();
     void initGui();
+    void showToolBars(bool show=true);
+    void showThumbBar(bool show=true);
 
 private Q_SLOTS:
 

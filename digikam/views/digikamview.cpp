@@ -1870,6 +1870,11 @@ void DigikamView::toggleShowBar(bool b)
     d->stackedview->thumbBarDock()->showThumbBar(b);
 }
 
+bool DigikamView::isThumbBarVisible()
+{
+    return d->stackedview->thumbBarDock()->isVisible();
+}
+
 void DigikamView::setRecurseAlbums(bool recursive)
 {
     d->iconView->imageAlbumModel()->setRecurseAlbums(recursive);
