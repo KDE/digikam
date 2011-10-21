@@ -1,1 +1,1 @@
-*.txt -crlf
+*.txt eol=crlf
