@@ -1091,7 +1091,7 @@ void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
         paste->setEnabled(false);
     }
 
-    addAction(paste);
+    addAction(paste, true);
 }
 
 void ContextMenuHelper::addStandardActionItemDelete(QObject* recv, const char* slot, int quantity)

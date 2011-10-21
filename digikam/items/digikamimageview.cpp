@@ -472,20 +472,16 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
     }
 
     KMenu popmenu(this);
-    KAction* paste        = KStandardAction::paste(this, SLOT(paste()), 0);
-    const QMimeData* data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
+    ContextMenuHelper cmhelper(&popmenu);
+    cmhelper.setImageFilterModel(imageFilterModel());
 
-    /**
-    * @todo
-    */
-    if (!data || !KUrl::List::canDecode(data))
-    {
-        paste->setEnabled(false);
-    }
+    cmhelper.addAction("full_screen");
+    cmhelper.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addStandardActionPaste(this, SLOT(paste()));
+    // --------------------------------------------------------
 
-    popmenu.addAction(paste);
-    popmenu.exec(event->globalPos());
-    delete paste;
+    cmhelper.exec(event->globalPos());
 }
 
 void DigikamImageView::openInEditor(const ImageInfo& info)
