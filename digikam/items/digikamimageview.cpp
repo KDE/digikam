@@ -337,6 +337,9 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     ContextMenuHelper cmhelper(&popmenu);
     cmhelper.setImageFilterModel(imageFilterModel());
 
+    cmhelper.addAction("full_screen");
+    cmhelper.addSeparator();
+    // --------------------------------------------------------
     cmhelper.addAction("move_selection_to_album");
     cmhelper.addAction(viewAction);
     cmhelper.addAction("image_edit");

@@ -366,6 +366,10 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
     KMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
+    cmhelper.addAction("full_screen");
+    cmhelper.addSeparator();
+    // --------------------------------------------------------
+
     cmhelper.addAction(d->peopleToggleAction, true);
     popmenu.addSeparator();
     cmhelper.addAction(d->addPersonAction, true);
