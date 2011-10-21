@@ -1,8 +1,11 @@
-- Uninstall previous version installed. Look Clementine or vlc NSIS installer for ex.
+
 - Register digiKam so that it can be run when one plug a usb mass storage or a camera.
 - Install only the needed files not the whole kde4. Set a list of unnecessary files provided by KDE-windows installer.
 
-- Add digiKam's logo in the uninstaller welcome page.
+- Replace digikam/showphoto program icons with high-quality versions
+- Support multiple user install (non-administrator install)
+  see: http://nsis.sourceforge.net/Add_uninstall_information_to_Add/Remove_Programs
+- Support quiet install/uninstall
 
 Remark: To fix the warning when running the installer/uninstaller one need to sign the .exe, this would require to buy a 900$ certificate !
 
