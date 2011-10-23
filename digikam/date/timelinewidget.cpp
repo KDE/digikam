@@ -311,7 +311,7 @@ int TimeLineWidget::cursorInfo(QString& infoDate)
                              "Week #%1 - %2 %3",
                              d->calendar->week(dt.date()),
                              d->calendar->monthName(dt.date()),
-                             d->calendar->yearString(dt.date()));
+                             d->calendar->formatDate(dt.date(), "%Y"));
             break;
         }
         case Month:
@@ -319,12 +319,12 @@ int TimeLineWidget::cursorInfo(QString& infoDate)
             infoDate = i18nc("month-name year-string",
                              "%1 %2",
                              d->calendar->monthName(dt.date()),
-                             d->calendar->yearString(dt.date()));
+                             d->calendar->formatDate(dt.date(), "%Y"));
             break;
         }
         case Year:
         {
-            infoDate = d->calendar->yearString(dt.date());
+            infoDate = d->calendar->formatDate(dt.date(), "%Y");
             break;
         }
     }
