@@ -236,7 +236,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
 
                 if (!weekvisible)
                 {
-                    int weeknr = KGlobal::locale()->calendar()->weekNumber(QDate(d->year,
+                    int weeknr = KGlobal::locale()->calendar()->week(QDate(d->year,
                                  d->month, d->days[index].day));
                     p.setPen(d->active ? Qt::black : Qt::gray);
                     p.setFont(fnBold);
