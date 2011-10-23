@@ -2407,6 +2407,7 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         default:
             return QString();
     }
+    return QString(); // silence -Werror=return-type
 }
 
 QStringList DMetadata::valuesToString(const QVariantList& values, const MetadataFields& fields)
