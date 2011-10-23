@@ -258,7 +258,6 @@ void TimeLineWidget::setCursorDateTime(const QDateTime& dateTime)
         {
             // Go to the first day of week.
             int weekYear = dt.date().year(); // Changed for week shared between 2 years (Dec/Jan).
-            QDateTime odt = dt;
             int weekNb   = d->calendar->weekNumber(dt.date(), &weekYear);
             dt           = firstDayOfWeek(weekYear, weekNb);
             break;
