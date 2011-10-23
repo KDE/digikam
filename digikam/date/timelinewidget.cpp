@@ -250,6 +250,7 @@ void TimeLineWidget::setCurrentIndex(int index)
 void TimeLineWidget::setCursorDateTime(const QDateTime& dateTime)
 {
     QDateTime dt = dateTime;
+    QDate date   = dt.date();
     dt.setTime(QTime(0, 0, 0, 0));
 
     switch (d->timeUnit)
@@ -257,21 +258,21 @@ void TimeLineWidget::setCursorDateTime(const QDateTime& dateTime)
         case Week:
         {
             // Go to the first day of week.
-            int weekYear = dt.date().year(); // Changed for week shared between 2 years (Dec/Jan).
-            int weekNb   = d->calendar->week(dt.date(), &weekYear);
+            int weekYear = date.year(); // Changed for week shared between 2 years (Dec/Jan).
+            int weekNb   = d->calendar->week(date, &weekYear);
             dt           = firstDayOfWeek(weekYear, weekNb);
             break;
         }
         case Month:
         {
             // Go to the first day of month.
-            dt.setDate(QDate(dt.date().year(), dt.date().month(), 1));
+            dt.setDate(QDate(date.year(), date.month(), 1));
             break;
         }
         case Year:
         {
             // Go to the first day of year.
-            dt.setDate(QDate(dt.date().year(), 1, 1));
+            dt.setDate(QDate(date.year(), 1, 1));
             break;
         }
         default:
@@ -297,34 +298,35 @@ int TimeLineWidget::cursorInfo(QString& infoDate)
 {
     SelectionMode selected;
     QDateTime dt = cursorDateTime();
+    QDate date   = dt.date();
 
     switch (d->timeUnit)
     {
         case Day:
         {
-            infoDate = KGlobal::locale()->formatDate(dt.date());
+            infoDate = KGlobal::locale()->formatDate(date);
             break;
         }
         case Week:
         {
             infoDate = i18nc("Week #weeknumber - month name - year string",
                              "Week #%1 - %2 %3",
-                             d->calendar->week(dt.date()),
-                             d->calendar->monthName(dt.date()),
-                             d->calendar->formatDate(dt.date(), "%Y"));
+                             d->calendar->week(date),
+                             d->calendar->monthName(date),
+                             d->calendar->formatDate(date, "%Y"));
             break;
         }
         case Month:
         {
             infoDate = i18nc("month-name year-string",
                              "%1 %2",
-                             d->calendar->monthName(dt.date()),
-                             d->calendar->formatDate(dt.date(), "%Y"));
+                             d->calendar->monthName(date),
+                             d->calendar->formatDate(date, "%Y"));
             break;
         }
         case Year:
         {
-            infoDate = d->calendar->formatDate(dt.date(), "%Y");
+            infoDate = d->calendar->formatDate(date, "%Y");
             break;
         }
     }
@@ -335,6 +337,7 @@ int TimeLineWidget::cursorInfo(QString& infoDate)
 void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
 {
     QDateTime dt = dateTime;
+    QDate date   = dt.date();
     dt.setTime(QTime(0, 0, 0, 0));
 
     switch (d->timeUnit)
@@ -342,20 +345,20 @@ void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
         case Week:
         {
             // Go to the first day of week.
-            int dayWeekOffset = (-1) * (d->calendar->dayOfWeek(dt.date()) - 1);
+            int dayWeekOffset = (-1) * (d->calendar->dayOfWeek(date) - 1);
             dt = dt.addDays(dayWeekOffset);
             break;
         }
         case Month:
         {
             // Go to the first day of month.
-            dt.setDate(QDate(dt.date().year(), dt.date().month(), 1));
+            dt.setDate(QDate(date.year(), date.month(), 1));
             break;
         }
         case Year:
         {
             // Go to the first day of year.
-            dt.setDate(QDate(dt.date().year(), 1, 1));
+            dt.setDate(QDate(date.year(), 1, 1));
             break;
         }
         default:
