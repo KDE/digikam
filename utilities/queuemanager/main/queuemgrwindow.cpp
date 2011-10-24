@@ -962,23 +962,32 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
         }
         case ActionData::TaskDone:
         {
-            d->currentTaskItem->setDone();
-            d->currentTaskItem = 0;
-            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue()+1);
+            if (d->currentTaskItem)
+            {
+                d->currentTaskItem->setDone();
+                d->currentTaskItem = 0;
+                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue()+1);
+            }
             break;
         }
         case ActionData::TaskFailed:
         {
-            d->currentTaskItem->setCanceled();
-            d->currentTaskItem = 0;
-            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue()+1);
+            if (d->currentTaskItem)
+            {
+                d->currentTaskItem->setCanceled();
+                d->currentTaskItem = 0;
+                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue()+1);
+            }
             break;
         }
         case ActionData::TaskCanceled:
         {
-            d->currentTaskItem->setCanceled();
-            d->currentTaskItem = 0;
-            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue()+1);
+            if (d->currentTaskItem)
+            {
+                d->currentTaskItem->setCanceled();
+                d->currentTaskItem = 0;
+                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue()+1);
+            }
             break;
         }
         default:    // NONE
