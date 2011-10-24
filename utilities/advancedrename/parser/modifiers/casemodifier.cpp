@@ -51,8 +51,6 @@ CaseModifier::CaseModifier()
 
 QString CaseModifier::parseOperation(ParseSettings& settings)
 {
-    Q_UNUSED(settings);
-
     const QRegExp& reg   = regExp();
     const QString& token = reg.cap(1);
 

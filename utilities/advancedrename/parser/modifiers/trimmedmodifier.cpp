@@ -43,7 +43,6 @@ TrimmedModifier::TrimmedModifier()
 
 QString TrimmedModifier::parseOperation(ParseSettings& settings)
 {
-    Q_UNUSED(settings);
     return settings.str2Modify.simplified();
 }
 

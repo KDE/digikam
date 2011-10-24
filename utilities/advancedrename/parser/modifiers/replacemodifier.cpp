@@ -112,8 +112,6 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
 
 QString ReplaceModifier::parseOperation(ParseSettings& settings)
 {
-    Q_UNUSED(settings);
-
     const QRegExp& reg  = regExp();
     QString original    = reg.cap(2);
     QString replacement = reg.cap(3);
