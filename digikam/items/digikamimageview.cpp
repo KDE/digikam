@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -337,6 +338,9 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     ContextMenuHelper cmhelper(&popmenu);
     cmhelper.setImageFilterModel(imageFilterModel());
 
+    cmhelper.addAction("full_screen");
+    cmhelper.addSeparator();
+    // --------------------------------------------------------
     cmhelper.addAction("move_selection_to_album");
     cmhelper.addAction(viewAction);
     cmhelper.addAction("image_edit");
@@ -469,20 +473,16 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
     }
 
     KMenu popmenu(this);
-    KAction* paste        = KStandardAction::paste(this, SLOT(paste()), 0);
-    const QMimeData* data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
+    ContextMenuHelper cmhelper(&popmenu);
+    cmhelper.setImageFilterModel(imageFilterModel());
 
-    /**
-    * @todo
-    */
-    if (!data || !KUrl::List::canDecode(data))
-    {
-        paste->setEnabled(false);
-    }
+    cmhelper.addAction("full_screen");
+    cmhelper.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addStandardActionPaste(this, SLOT(paste()));
+    // --------------------------------------------------------
 
-    popmenu.addAction(paste);
-    popmenu.exec(event->globalPos());
-    delete paste;
+    cmhelper.exec(event->globalPos());
 }
 
 void DigikamImageView::openInEditor(const ImageInfo& info)

@@ -6,7 +6,7 @@
  * Date        : 2009-11-11
  * Description : a modifier for setting a default value if option parsing failed
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

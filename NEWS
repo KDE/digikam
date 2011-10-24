@@ -16,4 +16,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 283708 : digiKam don't start after update to package 2.2.0-14.2 (undefined symbol: _ZN4KIPI21ImageCollectionSharedD2Ev).
 009 ==> 283856 : Libkexiv2 from kdegraphics-libs cannot be compiled with exiv2 0.22.
 010 ==> 284269 : Tamron SP AF 17-50 show wrong lens ID.
-011 ==> 
+011 ==> 284720 : Build fails with error
+012 ==> 283088 : Crash after long startup - NFSed images.
+013 ==> 284604 : Import from EOS 350D does nothing (solid interface relevant).
+014 ==> 284731 : Crashed when work batch convert.
+015 ==> 
+

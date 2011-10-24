@@ -7,7 +7,7 @@
  * Description : a embedded view to show the image preview widget.
  *
  * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -366,10 +366,14 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
     KMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
+    cmhelper.addAction("full_screen");
+    cmhelper.addSeparator();
+    // --------------------------------------------------------
+
     cmhelper.addAction(d->peopleToggleAction, true);
-    popmenu.addSeparator();
     cmhelper.addAction(d->addPersonAction, true);
     cmhelper.addAction(d->forgetFacesAction, true);
+    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
@@ -379,7 +383,7 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
         cmhelper.addAction(d->nextAction, true);
         cmhelper.addAction(d->back2AlbumAction);
         cmhelper.addGotoMenu(idList);
-        popmenu.addSeparator();
+        cmhelper.addSeparator();
     }
 
     // --------------------------------------------------------
@@ -387,28 +391,30 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedItems);
     cmhelper.addKipiActions(idList);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
     cmhelper.addAction("image_find_similar");
 
     if (d->mode == IconViewPreview)
+    {
         cmhelper.addStandardActionLightTable();
+    }
 
     cmhelper.addQueueManagerMenu();
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
     cmhelper.addStandardActionItemDelete(this, SLOT(slotDeleteItem()));
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
     cmhelper.addAssignTagsMenu(idList);
     cmhelper.addRemoveTagsMenu(idList);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 

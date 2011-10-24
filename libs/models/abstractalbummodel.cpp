@@ -7,7 +7,7 @@
  * Description : Qt Model for Albums
  *
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

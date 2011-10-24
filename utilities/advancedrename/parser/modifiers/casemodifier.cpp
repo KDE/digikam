@@ -6,7 +6,7 @@
  * Date        : 2009-09-14
  * Description : modifier to change the case of a renaming option
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,6 +75,11 @@ QString CaseModifier::parseOperation(ParseSettings& settings)
 
 QString CaseModifier::firstupper(const QString& str2Modify)
 {
+    if (str2Modify.isNull() || str2Modify.isEmpty())
+    {
+        return QString();
+    }
+
     QString result = str2Modify.toLower();
 
     if (result.at(0).isLetter())
@@ -82,14 +87,9 @@ QString CaseModifier::firstupper(const QString& str2Modify)
         result[0] = result.at(0).toUpper();
     }
 
-    for (int i = 0; i < result.length(); ++i)
+    for (int i = 0; i < result.length() - 1; ++i)
     {
-        if ( result.at(i + 1).isLetter() &&
-             !result.at(i).isLetter()    &&
-             result.at(i) != '\''        &&
-             result.at(i) != '?'         &&
-             result.at(i) != '`'
-           )
+        if (result.at(i + 1).isLetter() && !result.at(i).isLetter())
         {
             result[i + 1] = result.at(i + 1).toUpper();
         }
