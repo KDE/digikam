@@ -8,7 +8,6 @@
  ;
  ; Copyright (C) 2010 by Julien Narboux <julien at narboux dot fr>
  ; Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- ; Copyright (C) 2011 by Ananta Palani  <anantapalani at gmail dot com>
  ;
  ; Script arguments:
  ; VERSION  : the digiKam version string.
@@ -51,6 +50,7 @@ SetCompressorDictSize 96
   !define ABOUT_HOMEPAGE "http://www.digikam.org/about"
   !define OUTFILE "${MY_PRODUCT}-installer-${VERSION}-win32.exe"
   !define MSVCRuntimePath "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\redist\x86\Microsoft.VC100.CRT"
+  !define MSVCOpenMPPath "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\redist\x86\Microsoft.VC100.OPENMP"
 
 ;-------------------------------------------------------------------------------
 ;General
@@ -203,6 +203,7 @@ Section "digiKam" SecDigiKam
   SetOutPath "$INSTDIR\bin"
   File "${MSVCRuntimePath}\msvcp100.dll"
   File "${MSVCRuntimePath}\msvcr100.dll"
+  File "${MSVCOpenMPPath}\vcomp100.dll"
   File /r "${KDE4PATH}\bin\*.*"
   SetOutPath "$INSTDIR\certs"
   File /r "${KDE4PATH}\certs\*.*"
