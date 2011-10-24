@@ -205,29 +205,35 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier_data()
     QTest::addColumn<QString>("file");
     QTest::addColumn<QString>("result");
 
-    QTest::newRow("myfile") << QString("[file]{firstupper}")
-                            << QString("myfile.jpg")
-                            << QString("Myfile.jpg");
+    QTest::newRow("myfile")
+        << QString("[file]{firstupper}")
+        << QString("myfile.jpg")
+        << QString("Myfile.jpg");
 
-    QTest::newRow("my_file") << QString("[file]{firstupper}")
-                             << QString("my_file.jpg")
-                             << QString("My_File.jpg");
+    QTest::newRow("my_file")
+        << QString("[file]{firstupper}")
+        << QString("my_file.jpg")
+        << QString("My_File.jpg");
 
-    QTest::newRow("holiday_spain_2011_img001")   << QString("[file]{firstupper}")
-                                                 << QString("holiday_spain_2011_img001.jpg")
-                                                 << QString("Holiday_Spain_2011_Img001.jpg");
+    QTest::newRow("holiday_spain_2011_img001")
+        << QString("[file]{firstupper}")
+        << QString("holiday_spain_2011_img001.jpg")
+        << QString("Holiday_Spain_2011_Img001.jpg");
 
-    QTest::newRow("holiday_spain_2011_001img")   << QString("[file]{firstupper}")
-                                                 << QString("holiday_spain_2011_001img.jpg")
-                                                 << QString("Holiday_Spain_2011_001Img.jpg");
+    QTest::newRow("holiday_spain_2011_001img")
+        << QString("[file]{firstupper}")
+        << QString("holiday_spain_2011_001img.jpg")
+        << QString("Holiday_Spain_2011_001Img.jpg");
 
-    QTest::newRow("001a")   << QString("[file]{firstupper}")
-                            << QString("001a.jpg")
-                            << QString("001A.jpg");
+    QTest::newRow("001a")
+        << QString("[file]{firstupper}")
+        << QString("001a.jpg")
+        << QString("001A.jpg");
 
-    QTest::newRow(fileName.toAscii())   << QString("[file]{firstupper}")
-                                        << fileName
-                                        << QString("Advancedrename_Testimage.jpg");
+    QTest::newRow(fileName.toAscii())
+        << QString("[file]{firstupper}")
+        << fileName
+        << QString("Advancedrename_Testimage.jpg");
 }
 
 void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier()
