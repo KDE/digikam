@@ -87,7 +87,7 @@ QString CaseModifier::firstupper(const QString& str2Modify)
         result[0] = result.at(0).toUpper();
     }
 
-    for (int i = 0; i < result.length(); ++i)
+    for (int i = 0; i < result.length() - 1; ++i)
     {
         if ( result.at(i + 1).isLetter() &&
              !result.at(i).isLetter()    &&
