@@ -229,6 +229,13 @@ void EditorWindow::setupContextMenu()
     m_contextMenu         = new KMenu(this);
     KActionCollection* ac = actionCollection();
 
+    if (ac->action("editorwindow_fullscreen"))
+    {
+        m_contextMenu->addAction(ac->action("editorwindow_fullscreen"));
+    }
+
+    m_contextMenu->addSeparator();
+
     if (ac->action("editorwindow_backward"))
     {
         m_contextMenu->addAction(ac->action("editorwindow_backward"));
