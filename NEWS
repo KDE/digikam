@@ -19,4 +19,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 284720 : Build fails with error
 012 ==> 283088 : Crash after long startup - NFSed images.
 013 ==> 284604 : Import from EOS 350D does nothing (solid interface relevant).
-014 ==> 
+014 ==> 284731 : Crashed when work batch convert.
+015 ==> 
+
