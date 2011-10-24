@@ -55,22 +55,20 @@ QString CaseModifier::parseOperation(ParseSettings& settings)
 
     const QRegExp& reg   = regExp();
     const QString& token = reg.cap(1);
-    QString result       = settings.str2Modify;
 
-    if (token == QString("upper"))
+    if (token == QString("firstupper"))
     {
-        result = settings.str2Modify.toUpper();
+        return firstupper(settings.str2Modify);
     }
-    else if (token == QString("firstupper"))
+    else if (token == QString("upper"))
     {
-        result = firstupper(settings.str2Modify);
+        return settings.str2Modify.toUpper();
     }
     else if (token == QString("lower"))
     {
-        result = settings.str2Modify.toLower();
+        return settings.str2Modify.toLower();
     }
-
-    return result;
+    return settings.str2Modify;
 }
 
 QString CaseModifier::firstupper(const QString& str2Modify)
