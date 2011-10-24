@@ -6,7 +6,7 @@
  * Date        : 2009-06-09
  * Description : a test for the AdvancedRename utility
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
