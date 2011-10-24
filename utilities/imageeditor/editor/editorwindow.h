@@ -403,6 +403,8 @@ private:
 
     void movingSaveFileFinished(bool successful);
 
+    void addAction2ContextMenu(const QString& actionName, bool addDisabled = false);
+
 private:
 
     class EditorWindowPriv;
