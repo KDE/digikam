@@ -59,7 +59,7 @@ QString CaseModifier::parseOperation(ParseSettings& settings)
 
     if (token == QString("upper"))
     {
-        result = upper(settings.str2Modify);
+        result = settings.str2Modify.toUpper();
     }
     else if (token == QString("firstupper"))
     {
@@ -67,7 +67,7 @@ QString CaseModifier::parseOperation(ParseSettings& settings)
     }
     else if (token == QString("lower"))
     {
-        result = lower(settings.str2Modify);
+        result = settings.str2Modify.toLower();
     }
 
     return result;
@@ -95,18 +95,6 @@ QString CaseModifier::firstupper(const QString& str2Modify)
         }
     }
 
-    return result;
-}
-
-QString CaseModifier::lower(const QString& str2Modify)
-{
-    QString result = str2Modify.toLower();
-    return result;
-}
-
-QString CaseModifier::upper(const QString& str2Modify)
-{
-    QString result = str2Modify.toUpper();
     return result;
 }
 
