@@ -75,6 +75,11 @@ QString CaseModifier::parseOperation(ParseSettings& settings)
 
 QString CaseModifier::firstupper(const QString& str2Modify)
 {
+    if (str2Modify.isNull() || str2Modify.isEmpty())
+    {
+        return QString();
+    }
+
     QString result = str2Modify.toLower();
 
     if (result.at(0).isLetter())
