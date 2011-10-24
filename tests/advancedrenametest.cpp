@@ -230,6 +230,16 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier_data()
         << QString("001a.jpg")
         << QString("001A.jpg");
 
+    QTest::newRow("my images")
+        << QString("[file]{firstupper}")
+        << QString("my images.jpg")
+        << QString("My Images.jpg");
+
+    QTest::newRow("<empty>")
+        << QString("[file]{firstupper}")
+        << QString("")
+        << QString("");
+
     QTest::newRow(fileName.toAscii())
         << QString("[file]{firstupper}")
         << fileName
