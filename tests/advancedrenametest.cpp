@@ -199,18 +199,28 @@ void AdvancedRenameWidgetTest::testNumberToken()
     QCOMPARE(parsed, result);
 }
 
+void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("[file]{firstupper}") << QString("[file]{firstupper}") << QString("Advancedrename_Testimage.jpg");
+}
+
 void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier()
 {
+    QFETCH(QString, parseString);
+    QFETCH(QString, result);
+
     QList<ParseSettings> files;
     ParseSettings ps;
-    KUrl url(filePath);
     ps.fileUrl = KUrl(filePath);
     files << ps;
     AdvancedRenameManager manager(files);
-    manager.parseFiles("[file]{firstupper}");
+    manager.parseFiles(parseString);
 
     QString parsed = manager.newName(filePath);
-    QCOMPARE(parsed, QString("Advancedrename_Testimage.jpg"));
+    QCOMPARE(parsed, result);
 }
 
 void AdvancedRenameWidgetTest::testChainedModifiers_data()
