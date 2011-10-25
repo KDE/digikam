@@ -88,8 +88,9 @@ def get_files(path, file_ext):
 
     if os.path.isfile(path):
         for ext in file_ext:
-            if os.path.isfile(path + ext):
-                files2check.add(path + ext)
+            if ext in file_backup:
+                if os.path.isfile(path + ext):
+                    files2check.add(path + ext)
             elif os.path.isfile(path):
                 files2check.add(path)
     elif os.path.isdir(path):
