@@ -66,6 +66,7 @@ QString CaseModifier::parseOperation(ParseSettings& settings)
     {
         return settings.str2Modify.toLower();
     }
+
     return settings.str2Modify;
 }
 

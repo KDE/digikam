@@ -270,10 +270,12 @@ bool Parser::tokenAtPosition(TokenType type, ParseSettings& settings, int pos, i
             settings.applyModifiers = false;
             r = results(settings);
             break;
+
         case OptionModifiersToken:
             settings.applyModifiers = true;
             r = results(settings);
             break;
+
         default:
             break;
     }

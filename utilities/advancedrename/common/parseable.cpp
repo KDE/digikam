@@ -91,6 +91,7 @@ QPixmap Parseable::icon(Parseable::IconType type) const
         case Dialog:
             icon = DesktopIcon(d->iconName);
             break;
+
         default:
             icon = SmallIcon(d->iconName);
             break;

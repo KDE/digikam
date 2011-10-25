@@ -86,8 +86,10 @@ void Highlighter::highlightBlock(const QString& text)
                             }
                         }
                     }
+
                     break;
                 }
+
                 default:
                     break;
             }

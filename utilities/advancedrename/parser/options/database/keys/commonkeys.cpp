@@ -154,15 +154,19 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
             case DatabaseItem::UndefinedCategory:
                 result = QString("Undefined");
                 break;
+
             case DatabaseItem::Image:
                 result = QString("Image");
                 break;
+
             case DatabaseItem::Video:
                 result = QString("Video");
                 break;
+
             case DatabaseItem::Audio:
                 result = QString("Audio");
                 break;
+
             case DatabaseItem::Other:
             default:
                 result = QString("Other");

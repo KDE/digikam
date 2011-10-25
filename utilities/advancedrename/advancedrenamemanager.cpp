@@ -290,6 +290,7 @@ QStringList AdvancedRenameManager::fileList()
             tmpFiles = sortListCaseInsensitive(d->files);
             break;
         }
+
         case SortDescending:
         {
             QStringList sortedList = sortListCaseInsensitive(d->files);
@@ -301,6 +302,7 @@ QStringList AdvancedRenameManager::fileList()
 
             break;
         }
+
         case SortCustom:
         default:
             tmpFiles = d->files;

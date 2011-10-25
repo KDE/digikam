@@ -79,6 +79,7 @@ DateFormat::Type DateFormat::type(const QString& identifier)
             return (Type)i;
         }
     }
+
     return Standard;
 }
 
@@ -191,10 +192,12 @@ QString DateOptionDialog::formattedDateTime(const QDateTime& date)
             return date.toString(ui->customFormatInput->text());
             break;
 #if QT_VERSION >= 0x040700
+
         case DateFormat::UnixTimeStamp:
             return QString("%1").arg(date.toMSecsSinceEpoch());
             break;
 #endif
+
         default:
             break;
     }
@@ -272,6 +275,7 @@ QString DateOption::parseOperation(ParseSettings& settings)
 
     // search for quoted token parameters (indicates custom formatting)
     const int MIN_TOKEN_SIZE = 2;
+
     if ( (token.size() > MIN_TOKEN_SIZE) &&
          (token.startsWith('"') && token.endsWith('"')) )
     {
@@ -320,10 +324,12 @@ QString DateOption::parseOperation(ParseSettings& settings)
         switch (df.type(token))
         {
 #if QT_VERSION >= 0x040700
+
             case DateFormat::UnixTimeStamp:
                 result = QString("%1").arg(dateTime.toMSecsSinceEpoch());
                 break;
 #endif
+
             default:
                 result = dateTime.toString(token);
                 break;
@@ -374,10 +380,12 @@ void DateOption::slotTokenTriggered(const QString& token)
                 switch (index)
                 {
 #if QT_VERSION >= 0x040700
+
                     case DateFormat::UnixTimeStamp:
                         dateString = QString("%1").arg(date.toMSecsSinceEpoch());
                         break;
 #endif
+
                     default:
                         break;
                 }
@@ -405,9 +413,11 @@ void DateOption::slotTokenTriggered(const QString& token)
                     dateString = tokenStr.arg(QString(""));
                     dateString.remove(':');
                     break;
+
                 case DateFormat::Custom:
                     dateString = tokenStr.arg(QString("\"%1\"").arg(dlg->ui->customFormatInput->text()));
                     break;
+
                 default:
                     QString identifier = df.identifier((DateFormat::Type) index);
                     dateString         = tokenStr.arg(identifier);
