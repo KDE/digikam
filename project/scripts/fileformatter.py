@@ -84,9 +84,17 @@ def format_file(f, verbose=False):
 # ---------------------------------------------------
 
 def get_files(path, file_ext):
-    files2check = [os.path.join(r,f) for r,dirs,files in os.walk(path) for f in
-            files if os.path.splitext(os.path.join(r,f))[1] in file_ext]
+    files2check = set()
 
+    if os.path.isfile(path):
+        for ext in file_ext:
+            if os.path.isfile(path + ext):
+                files2check.add(path + ext)
+            elif os.path.isfile(path):
+                files2check.add(path)
+    elif os.path.isdir(path):
+        files2check.update([os.path.join(r,f) for r,dirs,files in os.walk(path) for f in
+                files if os.path.splitext(os.path.join(r,f))[1] in file_ext])
     return files2check
 
 # ---------------------------------------------------
