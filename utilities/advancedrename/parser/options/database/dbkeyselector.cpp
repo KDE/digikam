@@ -95,8 +95,8 @@ DbKeySelector::DbKeySelector(QWidget* parent)
     setColumnCount(2);
 
     QStringList labels;
-    labels.append( i18n("Key") );
-    labels.append( i18n("Description") );
+    labels.append(i18n("Key"));
+    labels.append(i18n("Description"));
     setHeaderLabels(labels);
     header()->setResizeMode(0, QHeaderView::Stretch);
     header()->setResizeMode(1, QHeaderView::Stretch);

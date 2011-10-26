@@ -107,13 +107,13 @@ void AdvancedRenameManager::setStartIndex(int index) const
 QStringList AdvancedRenameManager::sortListCaseInsensitive(const QStringList& list)
 {
     QMap<QString, QString> tmpMap;
-    foreach (const QString& item, list)
+    foreach(const QString& item, list)
     {
         tmpMap[item.toLower()] = item;
     }
 
     QStringList tmpList;
-    foreach (const QString& item, tmpMap)
+    foreach(const QString& item, tmpMap)
     {
         tmpList << item;
     }
@@ -207,7 +207,7 @@ void AdvancedRenameManager::parseFiles(const QString& parseString)
 
     d->parser->reset();
 
-    foreach (const QString& file, fileList())
+    foreach(const QString& file, fileList())
     {
         KUrl url(file);
         ParseSettings settings;
@@ -229,7 +229,7 @@ void AdvancedRenameManager::parseFiles(const QString& parseString, ParseSettings
 
     d->parser->reset();
 
-    foreach (const QString& file, fileList())
+    foreach(const QString& file, fileList())
     {
         KUrl url(file);
         ParseSettings settings = _settings;
@@ -244,7 +244,7 @@ void AdvancedRenameManager::parseFiles(const QString& parseString, ParseSettings
 
 void AdvancedRenameManager::addFiles(const QList<ParseSettings>& files, SortType type)
 {
-    foreach (const ParseSettings& ps, files)
+    foreach(const ParseSettings& ps, files)
     {
         addFile(ps.fileUrl.toLocalFile(), ps.creationTime);
     }
@@ -330,7 +330,7 @@ bool AdvancedRenameManager::initialize()
     // fill normal index map
     {
         int counter = 1;
-        foreach (const QString& file, fileList())
+        foreach(const QString& file, fileList())
         {
             d->fileIndexMap[file] = counter++;
         }
@@ -339,7 +339,7 @@ bool AdvancedRenameManager::initialize()
     // fill file group index map
     {
         int counter = 1;
-        foreach (const QString& file, fileList())
+        foreach(const QString& file, fileList())
         {
             if (!d->fileGroupIndexMap.contains(fileGroupKey(file)))
             {
@@ -351,7 +351,7 @@ bool AdvancedRenameManager::initialize()
     // fill folder group index map
     {
         QMap<QString, QList<QString> > dirMap;
-        foreach (const QString& file, fileList())
+        foreach(const QString& file, fileList())
         {
             QFileInfo fi(file);
             QString path = fi.absolutePath();
@@ -367,10 +367,10 @@ bool AdvancedRenameManager::initialize()
             }
         }
 
-        foreach (const QString& dir, dirMap.keys())
+        foreach(const QString& dir, dirMap.keys())
         {
             int index = 0;
-            foreach (const QString& f, dirMap[dir])
+            foreach(const QString& f, dirMap[dir])
             {
                 if (!d->folderIndexMap.contains(f))
                 {

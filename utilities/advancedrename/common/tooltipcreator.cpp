@@ -66,7 +66,7 @@ QString TooltipCreator::additionalInformation()
     information += tableStart(90);
     information += "<tr><td style='vertical-align:top;'><img src='" + getInfoIconResourceName() + "' /></td>";
     information += "<td><ol>";
-    foreach (const QString& infoItem, infoItems)
+    foreach(const QString& infoItem, infoItems)
     {
         information += "<li>" + infoItem + "</li>";
 
@@ -162,9 +162,9 @@ QString TooltipCreator::createEntries(const QList<T*> &data)
 {
     QString result;
 
-    foreach (T* t, data)
+    foreach(T* t, data)
     {
-        foreach (Token* token, t->tokens())
+        foreach(Token* token, t->tokens())
         {
             result += QString("<tr>"
                               "<td style=\"background-color: %1;\">"

@@ -218,7 +218,7 @@ QMenu* AdvancedRenameWidget::createControlsMenu(QWidget* parent, QList<T*>& list
     QMenu* menu     = new QMenu(parent);
     QAction* action = 0;
 
-    foreach (T* ctrl, list)
+    foreach(T* ctrl, list)
     {
         action = ctrl->registerMenu(menu);
 
@@ -248,7 +248,7 @@ void AdvancedRenameWidget::registerParserControls()
             // register options
             QPushButton* btn      = 0;
             DynamicLayout* layout = new DynamicLayout(KDialog::marginHint(), KDialog::marginHint());
-            foreach (Parseable* p, d->parser->options())
+            foreach(Parseable* p, d->parser->options())
             {
                 btn = p->registerButton(this);
 

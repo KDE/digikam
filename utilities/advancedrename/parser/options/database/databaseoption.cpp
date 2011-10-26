@@ -104,7 +104,7 @@ void DatabaseOption::unregisterKeysCollection()
 {
     QSet<DbKeysCollection*> alreadyDeleted;
 
-    foreach (DbKeysCollection* key, m_map)
+    foreach(DbKeysCollection* key, m_map)
     {
         if (key && !alreadyDeleted.contains(key))
         {
@@ -127,7 +127,7 @@ void DatabaseOption::slotTokenTriggered(const QString& token)
     {
         QStringList checkedKeys = dlg->dbkeySelectorView->checkedKeysList();
 
-        foreach (const QString& key, checkedKeys)
+        foreach(const QString& key, checkedKeys)
         {
             QString keyStr = QString("[db:%1]").arg(key);
             keys << keyStr;

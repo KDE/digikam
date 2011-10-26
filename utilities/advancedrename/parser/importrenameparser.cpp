@@ -37,7 +37,7 @@ ImportRenameParser::ImportRenameParser()
     // unregister options that are not suitable during import
     OptionsList oplist = options();
 
-    foreach (Option* option, oplist)
+    foreach(Option* option, oplist)
     {
         Option* toBeRemoved = 0;
         toBeRemoved = dynamic_cast<DatabaseOption*>(option);

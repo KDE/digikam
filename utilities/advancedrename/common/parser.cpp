@@ -103,11 +103,11 @@ Parser::~Parser()
 
 void Parser::reset()
 {
-    foreach (Option* option, d->options)
+    foreach(Option* option, d->options)
     {
         option->reset();
     }
-    foreach (Modifier* modifier, d->modifiers)
+    foreach(Modifier* modifier, d->modifiers)
     {
         modifier->reset();
     }
@@ -147,7 +147,7 @@ void Parser::unregisterOption(Option* option)
     }
 
     for (OptionsList::iterator it = d->options.begin();
-         it != d->options.end(); )
+         it != d->options.end();)
     {
         if (*it == option)
         {
@@ -179,7 +179,7 @@ void Parser::unregisterModifier(Modifier* modifier)
     }
 
     for (ModifierList::iterator it = d->modifiers.begin();
-         it != d->modifiers.end(); )
+         it != d->modifiers.end();)
     {
         if (*it == modifier)
         {
@@ -216,7 +216,7 @@ QString Parser::parse(ParseSettings& settings)
 
     ParseResults results;
 
-    foreach (Option* option, d->options)
+    foreach(Option* option, d->options)
     {
         ParseResults r = option->parse(settings);
         results.append(r);
@@ -233,7 +233,7 @@ QString Parser::parse(ParseSettings& settings)
     settings.results = results;
 
     // remove invalid modifiers from the new name
-    foreach (const Modifier* mod, d->modifiers)
+    foreach(const Modifier* mod, d->modifiers)
     {
         newName.remove(mod->regExp());
     }
@@ -311,7 +311,7 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
     // modifierMap maps the actual modifier objects to the entries in the modifierResults structure
     QMap<ParseResults::ResultsKey, Modifier*> modifierMap;
 
-    foreach (Modifier* modifier, d->modifiers)
+    foreach(Modifier* modifier, d->modifiers)
     {
         QRegExp regExp = modifier->regExp();
         int pos = 0;
@@ -338,7 +338,7 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
     // We need to create a second ParseResults object with modified keys, otherwise the final parsing step will not
     // remove the modifier tokens from the result.
 
-    foreach (const ParseResults::ResultsKey& key, results.keys())
+    foreach(const ParseResults::ResultsKey& key, results.keys())
     {
         int off  = results.offset(key);
         int diff = 0;

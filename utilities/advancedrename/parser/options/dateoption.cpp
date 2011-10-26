@@ -100,7 +100,7 @@ QVariant DateFormat::format(const QString& identifier)
         return m_map.at(Standard).second;
     }
 
-    foreach (const DateFormatDescriptor& desc, m_map)
+    foreach(const DateFormatDescriptor& desc, m_map)
     {
         if (desc.first == identifier)
         {
@@ -130,7 +130,7 @@ DateOptionDialog::DateOptionDialog(Parseable* parent)
 
     // fill the date format combobox
     DateFormat df;
-    foreach (const DateFormat::DateFormatDescriptor& desc, df.map())
+    foreach(const DateFormat::DateFormatDescriptor& desc, df.map())
     {
         ui->dateFormatPicker->addItem(desc.first);
     }
@@ -276,8 +276,8 @@ QString DateOption::parseOperation(ParseSettings& settings)
     // search for quoted token parameters (indicates custom formatting)
     const int MIN_TOKEN_SIZE = 2;
 
-    if ( (token.size() > MIN_TOKEN_SIZE) &&
-         (token.startsWith('"') && token.endsWith('"')) )
+    if ((token.size() > MIN_TOKEN_SIZE) &&
+        (token.startsWith('"') && token.endsWith('"')))
     {
         token = token.remove(0, 1);
         token.chop(1);
@@ -286,7 +286,7 @@ QString DateOption::parseOperation(ParseSettings& settings)
     // check if the datetime was already set in the parseSettings objects (most likely during the camera import)
     QDateTime dateTime;
 
-    if ( !(settings.creationTime.isNull()) && (settings.creationTime.isValid()) )
+    if (!(settings.creationTime.isNull()) && (settings.creationTime.isValid()))
     {
         dateTime = settings.creationTime;
     }

@@ -94,7 +94,7 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
 
         if (!authors.isEmpty())
         {
-            foreach (const QString& author, authors)
+            foreach(const QString& author, authors)
             {
                 result += author + ',';
             }

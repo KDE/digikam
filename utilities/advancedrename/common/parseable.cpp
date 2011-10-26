@@ -144,7 +144,7 @@ QPushButton* Parseable::registerButton(QWidget* parent)
     {
         QMenu* menu = new QMenu(button);
 
-        foreach (Token* token, d->tokens)
+        foreach(Token* token, d->tokens)
         {
             actions << token->action();
         }
@@ -174,7 +174,7 @@ QAction* Parseable::registerMenu(QMenu* parent)
         QMenu* menu = new QMenu(parent);
         QList<QAction*> actions;
 
-        foreach (Token* token, d->tokens)
+        foreach(Token* token, d->tokens)
         {
             actions << token->action();
         }
