@@ -60,6 +60,7 @@ file_backup = [
 def format_file(f, verbose=False):
     args = list()
     args.append(astyle)
+    args.append("--mode=c")
     args.append("--brackets=break")
     args.append("--indent=spaces=4")
     args.append("--convert-tabs")
