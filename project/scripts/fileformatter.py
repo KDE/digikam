@@ -66,6 +66,7 @@ def format_file(f, verbose=False):
     args.append("--indent-switches")
     args.append("--break-blocks")
     args.append("--break-closing-brackets")
+    args.append("--pad-oper")
     args.append("--pad-header")
     args.append("--unpad-paren")
     args.append("--align-pointer=type")
