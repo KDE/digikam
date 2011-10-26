@@ -67,6 +67,7 @@ def format_file(f, verbose=False):
     args.append("--break-blocks")
     args.append("--break-closing-brackets")
     args.append("--pad-header")
+    args.append("--unpad-paren")
     args.append("--align-pointer=type")
     args.append("--indent-col1-comments")
     args.append("--add-brackets")
