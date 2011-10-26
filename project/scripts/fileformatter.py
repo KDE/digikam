@@ -71,6 +71,7 @@ def format_file(f, verbose=False):
     args.append("--pad-header")
     args.append("--unpad-paren")
     args.append("--align-pointer=type")
+    args.append("--align-reference=type")
     args.append("--indent-col1-comments")
     args.append("--add-brackets")
     args.append("--min-conditional-indent=0")
