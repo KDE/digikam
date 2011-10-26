@@ -141,7 +141,7 @@ DateOptionDialog::DateOptionDialog(Parseable* parent)
     ui->timePicker->setTime(currentDateTime.time());
 
     ui->dateFormatLink->setOpenExternalLinks(true);
-    ui->dateFormatLink->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::LinksAccessibleByKeyboard);
+    ui->dateFormatLink->setTextInteractionFlags(Qt::LinksAccessibleByMouse | Qt::LinksAccessibleByKeyboard);
     ui->dateFormatLink->setText(getDateFormatLinkText());
 
     QRegExp validRegExp("[^/]+");
