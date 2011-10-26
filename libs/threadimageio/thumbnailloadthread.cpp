@@ -784,7 +784,7 @@ void ThumbnailLoadThread::startKdePreviewJob()
     KUrl::List list;
     foreach (const LoadingDescription& description, d->kdeTodo)
     {
-        KUrl url           = KUrl::fromPath(description.filePath);
+        KUrl url = KUrl::fromPath(description.filePath);
         list << url;
         d->kdeJobHash[url] = description;
     }
