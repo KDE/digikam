@@ -262,7 +262,7 @@ void TimeLineWidget::setCursorDateTime(const QDateTime& dateTime)
             // Go to the first day of week.
             int weekYear = date.year(); // Changed for week shared between 2 years (Dec/Jan).
 
-// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it
+// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
 #if KDE_IS_VERSION(4,7,0)
             int weekNb   = d->calendar->week(date, &weekYear);
 #else
@@ -318,7 +318,7 @@ int TimeLineWidget::cursorInfo(QString& infoDate)
         }
         case Week:
         {
-// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it
+// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
 #if KDE_IS_VERSION(4,7,0)
             int weekNb = d->calendar->week(date);
 #else
@@ -589,7 +589,7 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         int month = it.key().date().month();
         int day   = d->calendar->dayOfYear(it.key().date());
         int yearForWeek = year;  // Used with week shared between 2 years decade (Dec/Jan).
-// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it
+// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
 #if KDE_IS_VERSION(4,7,0)
         int week  = d->calendar->week(it.key().date(), &yearForWeek);
 #else
@@ -792,7 +792,7 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
         }
         case Week:
         {
-// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it
+// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
 #if KDE_IS_VERSION(4,7,0)
             int week = d->calendar->week(ref.date());
 #else
@@ -1234,7 +1234,7 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode* selected
     int month        = dt.date().month();
     int day          = d->calendar->dayOfYear(dt.date());
     int yearForWeek  = year;  // Used with week shared between 2 years decade (Dec/Jan).
-// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it
+// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
 #if KDE_IS_VERSION(4,7,0)
     int week         = d->calendar->week(dt.date(), &yearForWeek);
 #else
@@ -1306,7 +1306,7 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
     int year        = dt.date().year();
     int month       = dt.date().month();
     int yearForWeek = year;  // Used with week shared between 2 years decade (Dec/Jan).
-// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it
+// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
 #if KDE_IS_VERSION(4,7,0)
     int week        = d->calendar->week(dt.date(), &yearForWeek);
 #else
@@ -1362,7 +1362,7 @@ void TimeLineWidget::updateWeekSelection(const QDateTime& dts, const QDateTime& 
     do
     {
         yearForWeek = dt.date().year();
-// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it
+// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
 #if KDE_IS_VERSION(4,7,0)
         week        = d->calendar->week(dt.date(), &yearForWeek);
 #else
@@ -1934,7 +1934,7 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
     do
     {
         dt      = dt.addDays(1);
-// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it
+// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
 #if KDE_IS_VERSION(4,7,0)
         weekNum = d->calendar->week(dt.date(), &weekYear);
 #else

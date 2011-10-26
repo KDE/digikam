@@ -238,7 +238,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
 
                 if (!weekvisible)
                 {
-// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it
+// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
 #if KDE_IS_VERSION(4,7,0)
                     int weeknr = KGlobal::locale()->calendar()->week(QDate(d->year,
                                  d->month, d->days[index].day));
