@@ -21,4 +21,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 284604 : Import from EOS 350D does nothing (solid interface relevant).
 014 ==> 284731 : Crashed when work batch convert.
 015 ==> 284740 : Can't change theme.
-016 ==> 
+016 ==> 285056 : Differently sort files before renaming. 
+017 ==> 
