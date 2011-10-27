@@ -22,4 +22,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 284731 : Crashed when work batch convert.
 015 ==> 284740 : Can't change theme.
 016 ==> 285056 : Differently sort files before renaming. 
-017 ==> 
+017 ==> 237806 : Rename using database entries. 
+018 ==> 
