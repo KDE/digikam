@@ -292,20 +292,18 @@ void AdvancedRenameManager::resetState()
 
 QStringList AdvancedRenameManager::fileList()
 {
-    QStringList tmpFiles;
+    QStringList tmpFiles = d->files;
 
     switch (d->sortType)
     {
         case SortNameAscending:
         {
-            tmpFiles = d->files;
             qSort(tmpFiles.begin(), tmpFiles.end(), sortByNameCaseInsensitive);
             break;
         }
 
         case SortNameDescending:
         {
-            tmpFiles = d->files;
             qSort(tmpFiles.begin(), tmpFiles.end(), sortByNameCaseInsensitive);
             std::reverse(tmpFiles.begin(), tmpFiles.end());
             break;
@@ -313,14 +311,12 @@ QStringList AdvancedRenameManager::fileList()
 
         case SortDateAscending:
         {
-            tmpFiles = d->files;
             qSort(tmpFiles.begin(), tmpFiles.end(), sortByDate);
             break;
         }
 
         case SortDateDescending:
         {
-            tmpFiles = d->files;
             qSort(tmpFiles.begin(), tmpFiles.end(), sortByDate);
             std::reverse(tmpFiles.begin(), tmpFiles.end());
             break;
@@ -328,14 +324,12 @@ QStringList AdvancedRenameManager::fileList()
 
         case SortSizeAscending:
         {
-            tmpFiles = d->files;
             qSort(tmpFiles.begin(), tmpFiles.end(), sortBySize);
             break;
         }
 
         case SortSizeDescending:
         {
-            tmpFiles = d->files;
             qSort(tmpFiles.begin(), tmpFiles.end(), sortBySize);
             std::reverse(tmpFiles.begin(), tmpFiles.end());
             break;
@@ -343,7 +337,6 @@ QStringList AdvancedRenameManager::fileList()
 
         case SortCustom:
         default:
-            tmpFiles = d->files;
             break;
     }
 
