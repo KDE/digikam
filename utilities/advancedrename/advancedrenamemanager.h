@@ -40,8 +40,10 @@ class AdvancedRenameWidget;
 class Parser;
 class ParseSettings;
 
-class AdvancedRenameManager
+class AdvancedRenameManager : public QObject
 {
+    Q_OBJECT
+
 public:
 
     enum ParserType
@@ -52,8 +54,10 @@ public:
 
     enum SortType
     {
-        SortAscending = 0,
-        SortDescending,
+        SortNameAscending = 0,
+        SortNameDescending,
+        SortDateAscending,
+        SortDateDescending,
         SortCustom
     };
 
@@ -75,6 +79,7 @@ public:
     Parser* getParser();
 
     void setSortType(SortType type);
+    SortType sortType() const;
 
     void setStartIndex(int index) const;
 
@@ -87,6 +92,10 @@ public:
 
     QStringList            fileList();
     QMap<QString, QString> newFileList() const;
+
+Q_SIGNALS:
+
+    void signalSortingChanged(KUrl::List);
 
 private:
 
@@ -102,8 +111,6 @@ private:
 
     void clearMappings();
     void clearAll();
-
-    QStringList sortListCaseInsensitive(const QStringList& list);
 
 private:
 

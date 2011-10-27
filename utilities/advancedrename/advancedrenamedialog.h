@@ -113,6 +113,13 @@ private Q_SLOTS:
     void slotParseStringChanged(const QString&);
     void slotReturnPressed();
 
+    void slotSortAscending();
+    void slotSortDescending();
+    void slotSortDateAscending();
+    void slotSortDateDescending();
+
+    void slotShowContextMenu(const QPoint&);
+
 private:
 
     AdvancedRenameDialog(const AdvancedRenameDialog&);

@@ -40,8 +40,24 @@
 #include "importrenameparser.h"
 #include "imageinfo.h"
 
+// C++ includes
+
+#include <algorithm>
+
 namespace Digikam
 {
+
+bool sortByNameCaseInsensitive(const QString& s1, const QString& s2)
+{
+    return s1.toLower() < s2.toLower();
+}
+
+bool sortByDate(const QString& s1, const QString& s2)
+{
+    ImageInfo i1 = ImageInfo(KUrl(s1));
+    ImageInfo i2 = ImageInfo(KUrl(s2));
+    return i1.dateTime() < i2.dateTime();
+}
 
 class AdvancedRenameManager::ParseManagerPriv
 {
@@ -51,7 +67,7 @@ public:
         parser(0),
         widget(0),
         parserType(AdvancedRenameManager::DefaultParser),
-        sortType(AdvancedRenameManager::SortAscending),
+        sortType(AdvancedRenameManager::SortNameAscending),
         startIndex(1)
     {
     }
@@ -75,14 +91,13 @@ AdvancedRenameManager::AdvancedRenameManager()
     : d(new ParseManagerPriv)
 {
     setParserType(DefaultParser);
-    setSortType(SortAscending);
 }
 
 AdvancedRenameManager::AdvancedRenameManager(const QList<ParseSettings>& files, SortType type)
     : d(new ParseManagerPriv)
 {
     setParserType(DefaultParser);
-    setSortType(type);
+    d->sortType = type;
     addFiles(files);
 }
 
@@ -97,28 +112,17 @@ AdvancedRenameManager::~AdvancedRenameManager()
 void AdvancedRenameManager::setSortType(SortType type)
 {
     d->sortType = type;
+    emit signalSortingChanged(fileList());
+}
+
+AdvancedRenameManager::SortType AdvancedRenameManager::sortType() const
+{
+    return d->sortType;
 }
 
 void AdvancedRenameManager::setStartIndex(int index) const
 {
     d->startIndex = index;
-}
-
-QStringList AdvancedRenameManager::sortListCaseInsensitive(const QStringList& list)
-{
-    QMap<QString, QString> tmpMap;
-    foreach(const QString& item, list)
-    {
-        tmpMap[item.toLower()] = item;
-    }
-
-    QStringList tmpList;
-    foreach(const QString& item, tmpMap)
-    {
-        tmpList << item;
-    }
-
-    return tmpList;
 }
 
 void AdvancedRenameManager::setWidget(AdvancedRenameWidget* widget)
@@ -248,7 +252,7 @@ void AdvancedRenameManager::addFiles(const QList<ParseSettings>& files, SortType
     {
         addFile(ps.fileUrl.toLocalFile(), ps.creationTime);
     }
-    setSortType(type);
+    d->sortType = type;
     initialize();
 }
 
@@ -285,21 +289,33 @@ QStringList AdvancedRenameManager::fileList()
 
     switch (d->sortType)
     {
-        case SortAscending:
+        case SortNameAscending:
         {
-            tmpFiles = sortListCaseInsensitive(d->files);
+            tmpFiles = d->files;
+            qSort(tmpFiles.begin(), tmpFiles.end(), sortByNameCaseInsensitive);
             break;
         }
 
-        case SortDescending:
+        case SortNameDescending:
         {
-            QStringList sortedList = sortListCaseInsensitive(d->files);
+            tmpFiles = d->files;
+            qSort(tmpFiles.begin(), tmpFiles.end(), sortByNameCaseInsensitive);
+            std::reverse(tmpFiles.begin(), tmpFiles.end());
+            break;
+        }
 
-            for (int i = sortedList.size() - 1; i >= 0; --i)
-            {
-                tmpFiles << sortedList.at(i);
-            }
+        case SortDateAscending:
+        {
+            tmpFiles = d->files;
+            qSort(tmpFiles.begin(), tmpFiles.end(), sortByDate);
+            break;
+        }
 
+        case SortDateDescending:
+        {
+            tmpFiles = d->files;
+            qSort(tmpFiles.begin(), tmpFiles.end(), sortByDate);
+            std::reverse(tmpFiles.begin(), tmpFiles.end());
             break;
         }
 
@@ -327,10 +343,12 @@ bool AdvancedRenameManager::initialize()
     // clear mappings
     clearMappings();
 
+    QStringList filelist = fileList();
+
     // fill normal index map
     {
         int counter = 1;
-        foreach(const QString& file, fileList())
+        foreach(const QString& file, filelist)
         {
             d->fileIndexMap[file] = counter++;
         }
@@ -339,7 +357,7 @@ bool AdvancedRenameManager::initialize()
     // fill file group index map
     {
         int counter = 1;
-        foreach(const QString& file, fileList())
+        foreach(const QString& file, filelist)
         {
             if (!d->fileGroupIndexMap.contains(fileGroupKey(file)))
             {
@@ -351,7 +369,7 @@ bool AdvancedRenameManager::initialize()
     // fill folder group index map
     {
         QMap<QString, QList<QString> > dirMap;
-        foreach(const QString& file, fileList())
+        foreach(const QString& file, filelist)
         {
             QFileInfo fi(file);
             QString path = fi.absolutePath();

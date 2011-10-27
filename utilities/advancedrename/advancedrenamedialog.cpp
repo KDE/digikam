@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QAction>
 #include <QEvent>
 #include <QFileInfo>
 #include <QGridLayout>
@@ -38,10 +39,13 @@
 
 #include <kapplication.h>
 #include <klocale.h>
+#include <kurl.h>
+#include <kmenu.h>
 
 // Local includes
 
 #include "advancedrenamewidget.h"
+#include "contextmenuhelper.h"
 #include "parser.h"
 #include "parsesettings.h"
 #include "advancedrenamemanager.h"
@@ -179,6 +183,7 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     d->listView->setSortingEnabled(false);
     d->listView->setColumnCount(2);
     d->listView->setHeaderLabels(QStringList() << i18n("Current Name") << i18n("New Name"));
+    d->listView->setContextMenuPolicy(Qt::CustomContextMenu);
     d->listView->header()->setResizeMode(0, QHeaderView::Stretch);
     d->listView->header()->setResizeMode(1, QHeaderView::Stretch);
     d->listView->setWhatsThis(i18n("This list shows the results for your renaming pattern. Red items indicate a "
@@ -212,6 +217,12 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 
     connect(d->advancedRenameWidget, SIGNAL(signalReturnPressed()),
             this, SLOT(slotReturnPressed()));
+
+    connect(d->advancedRenameManager, SIGNAL(signalSortingChanged(KUrl::List)),
+            this, SLOT(slotAddImages(KUrl::List)));
+
+    connect(d->listView, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(slotShowContextMenu(QPoint)));
 }
 
 AdvancedRenameDialog::~AdvancedRenameDialog()
@@ -227,6 +238,50 @@ void AdvancedRenameDialog::slotReturnPressed()
     {
         accept();
     }
+}
+
+void AdvancedRenameDialog::slotSortAscending()
+{
+    d->advancedRenameManager->setSortType(AdvancedRenameManager::SortNameAscending);
+}
+
+void AdvancedRenameDialog::slotSortDescending()
+{
+    d->advancedRenameManager->setSortType(AdvancedRenameManager::SortNameDescending);
+}
+
+void AdvancedRenameDialog::slotSortDateAscending()
+{
+    d->advancedRenameManager->setSortType(AdvancedRenameManager::SortDateAscending);
+}
+
+void AdvancedRenameDialog::slotSortDateDescending()
+{
+    d->advancedRenameManager->setSortType(AdvancedRenameManager::SortDateDescending);
+}
+
+void AdvancedRenameDialog::slotShowContextMenu(const QPoint& pos)
+{
+    QAction* sortAscending      = new QAction(i18n("By Name - Ascending"), this);
+    QAction* sortDescending     = new QAction(i18n("By Name - Descending"), this);
+    QAction* sortDateAscending  = new QAction(i18n("By Date - Ascending"), this);
+    QAction* sortDateDescending = new QAction(i18n("By Date - Descending"), this);
+
+    // --------------------------------------------------------
+
+    KMenu menu(this);
+    menu.addTitle(i18n("Sort Images"));
+
+    ContextMenuHelper cmhelper(&menu);
+    cmhelper.addAction(sortAscending, this, SLOT(slotSortAscending()));
+    cmhelper.addAction(sortDescending, this, SLOT(slotSortDescending()));
+    cmhelper.addSeparator();
+    cmhelper.addAction(sortDateAscending, this, SLOT(slotSortDateAscending()));
+    cmhelper.addAction(sortDateDescending, this, SLOT(slotSortDateDescending()));
+
+    // --------------------------------------------------------
+
+    cmhelper.exec(d->listView->viewport()->mapToGlobal(pos));
 }
 
 void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
@@ -300,7 +355,8 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
 
 void AdvancedRenameDialog::initDialog()
 {
-    int count = d->advancedRenameManager->fileList().size();
+    QStringList fileList = d->advancedRenameManager->fileList();
+    int count            = fileList.size();
 
     QString title = i18np("Rename", "Rename (%1 images)", count);
     setWindowTitle(title);
@@ -313,7 +369,7 @@ void AdvancedRenameDialog::initDialog()
 
     d->singleFileMode = count == 1;
 
-    foreach(const QString& file, d->advancedRenameManager->fileList())
+    foreach(const QString& file, fileList)
     {
         KUrl url(file);
         new AdvancedRenameListItem(d->listView, url);
@@ -322,7 +378,7 @@ void AdvancedRenameDialog::initDialog()
     // set current filename if only one image has been added
     if (d->singleFileMode)
     {
-        QFileInfo info(d->advancedRenameManager->fileList().first());
+        QFileInfo info(fileList.first());
         d->advancedRenameWidget->setParseString(info.fileName());
         d->advancedRenameWidget->focusLineEdit();
         d->advancedRenameWidget->highlightLineEdit(info.completeBaseName());

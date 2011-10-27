@@ -58,6 +58,7 @@ QString TooltipCreator::additionalInformation()
                       "they are applied in the order you assign them.");
     infoItems << i18n("Be sure to use the quick access buttons: They might provide "
                       "additional information about renaming and modifier options.");
+    infoItems << i18n("The file list can be sorted, just right-click on it to see the sort criteria.");
 
     QString information;
 
