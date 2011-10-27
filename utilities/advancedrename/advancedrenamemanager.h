@@ -58,6 +58,8 @@ public:
         SortNameDescending,
         SortDateAscending,
         SortDateDescending,
+        SortSizeAscending,
+        SortSizeDescending,
         SortCustom
     };
 

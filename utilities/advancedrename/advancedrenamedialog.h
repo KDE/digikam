@@ -117,6 +117,8 @@ private Q_SLOTS:
     void slotSortDescending();
     void slotSortDateAscending();
     void slotSortDateDescending();
+    void slotSortSizeAscending();
+    void slotSortSizeDescending();
 
     void slotShowContextMenu(const QPoint&);
 

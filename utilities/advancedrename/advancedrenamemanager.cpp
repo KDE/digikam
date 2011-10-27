@@ -59,6 +59,13 @@ bool sortByDate(const QString& s1, const QString& s2)
     return i1.dateTime() < i2.dateTime();
 }
 
+bool sortBySize(const QString& s1, const QString& s2)
+{
+    ImageInfo i1 = ImageInfo(KUrl(s1));
+    ImageInfo i2 = ImageInfo(KUrl(s2));
+    return i1.fileSize() < i2.fileSize();
+}
+
 class AdvancedRenameManager::ParseManagerPriv
 {
 public:
@@ -315,6 +322,21 @@ QStringList AdvancedRenameManager::fileList()
         {
             tmpFiles = d->files;
             qSort(tmpFiles.begin(), tmpFiles.end(), sortByDate);
+            std::reverse(tmpFiles.begin(), tmpFiles.end());
+            break;
+        }
+
+        case SortSizeAscending:
+        {
+            tmpFiles = d->files;
+            qSort(tmpFiles.begin(), tmpFiles.end(), sortBySize);
+            break;
+        }
+
+        case SortSizeDescending:
+        {
+            tmpFiles = d->files;
+            qSort(tmpFiles.begin(), tmpFiles.end(), sortBySize);
             std::reverse(tmpFiles.begin(), tmpFiles.end());
             break;
         }

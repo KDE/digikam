@@ -260,12 +260,24 @@ void AdvancedRenameDialog::slotSortDateDescending()
     d->advancedRenameManager->setSortType(AdvancedRenameManager::SortDateDescending);
 }
 
+void AdvancedRenameDialog::slotSortSizeAscending()
+{
+    d->advancedRenameManager->setSortType(AdvancedRenameManager::SortSizeAscending);
+}
+
+void AdvancedRenameDialog::slotSortSizeDescending()
+{
+    d->advancedRenameManager->setSortType(AdvancedRenameManager::SortSizeDescending);
+}
+
 void AdvancedRenameDialog::slotShowContextMenu(const QPoint& pos)
 {
     QAction* sortAscending      = new QAction(i18n("By Name - Ascending"), this);
     QAction* sortDescending     = new QAction(i18n("By Name - Descending"), this);
     QAction* sortDateAscending  = new QAction(i18n("By Date - Ascending"), this);
     QAction* sortDateDescending = new QAction(i18n("By Date - Descending"), this);
+    QAction* sortSizeAscending  = new QAction(i18n("By File Size - Ascending"), this);
+    QAction* sortSizeDescending = new QAction(i18n("By File Size - Descending"), this);
 
     // --------------------------------------------------------
 
@@ -278,6 +290,9 @@ void AdvancedRenameDialog::slotShowContextMenu(const QPoint& pos)
     cmhelper.addSeparator();
     cmhelper.addAction(sortDateAscending, this, SLOT(slotSortDateAscending()));
     cmhelper.addAction(sortDateDescending, this, SLOT(slotSortDateDescending()));
+    cmhelper.addSeparator();
+    cmhelper.addAction(sortSizeAscending, this, SLOT(slotSortSizeAscending()));
+    cmhelper.addAction(sortSizeDescending, this, SLOT(slotSortSizeDescending()));
 
     // --------------------------------------------------------
 
