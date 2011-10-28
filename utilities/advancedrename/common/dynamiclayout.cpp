@@ -6,7 +6,7 @@
  * Date        : 2009-10-22
  * Description : a dynamic layout manager
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -90,7 +90,7 @@ void DynamicLayout::addItem(QLayoutItem* item)
     d->minItemWidth = 0;
     d->itemList.append(item);
 
-    foreach (QLayoutItem* item, d->itemList)
+    foreach(QLayoutItem* item, d->itemList)
     {
         QWidget* wid    = item->widget();
         d->spaceX       = qMax<int>(wid->style()->layoutSpacing(QSizePolicy::PushButton, QSizePolicy::PushButton,
@@ -100,7 +100,7 @@ void DynamicLayout::addItem(QLayoutItem* item)
         d->minItemWidth = qMax<int>(wid->sizeHint().width(), d->minItemWidth);
     }
 
-    foreach (QLayoutItem* item, d->itemList)
+    foreach(QLayoutItem* item, d->itemList)
     {
         QWidget* wid = item->widget();
         wid->setMinimumWidth(d->minItemWidth);
@@ -169,7 +169,7 @@ QSize DynamicLayout::sizeHint() const
 QSize DynamicLayout::minimumSize() const
 {
     QSize size;
-    foreach (QLayoutItem* item, d->itemList)
+    foreach(QLayoutItem* item, d->itemList)
     {
         size = size.expandedTo(item->minimumSize());
     }
@@ -207,17 +207,17 @@ int DynamicLayout::reLayout(const QRect& rect, bool testOnly) const
 
     maxButtonsInRow     = (maxButtonsInRow == 0) ? d->minColumns : maxButtonsInRow;
     int maxButtonWidth  = d->minItemWidth + (
-                              (effectiveRect.width() - (maxButtonsInRow * buttonWidth)) / maxButtonsInRow );
+                              (effectiveRect.width() - (maxButtonsInRow * buttonWidth)) / maxButtonsInRow);
 
     int currentBtnWidth = (maxButtonsInRow >= d->itemList.count()) ? buttonWidth : maxButtonWidth;
 
     // --------------------------------------------------------
 
-    foreach (QLayoutItem* item, d->itemList)
+    foreach(QLayoutItem* item, d->itemList)
     {
         int nextX = x + currentBtnWidth + d->spaceX;
 
-        if ( (nextX - d->spaceX) > effectiveRect.right() && (lineHeight > 0) )
+        if ((nextX - d->spaceX) > effectiveRect.right() && (lineHeight > 0))
         {
             x          = effectiveRect.x();
             y          = y + lineHeight + d->spaceY;

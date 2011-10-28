@@ -1846,7 +1846,9 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
     if (KMessageBox::warningContinueCancelList(this, warnMsg,
                                                deleteList,
                                                i18n("Warning"),
-                                               KGuiItem(i18n("Delete")))
+                                               KGuiItem(i18n("Delete")),
+                                               KStandardGuiItem::cancel(),
+                                               QString("DontAskAgainToDeleteItemsFromCamera"))
         ==  KMessageBox::Continue)
     {
         QStringList::const_iterator itFolder = folders.constBegin();

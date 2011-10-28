@@ -6,7 +6,7 @@
  * Date        : 2010-05-22
  * Description : database key selector.
  *
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -95,8 +95,8 @@ DbKeySelector::DbKeySelector(QWidget* parent)
     setColumnCount(2);
 
     QStringList labels;
-    labels.append( i18n("Key") );
-    labels.append( i18n("Description") );
+    labels.append(i18n("Key"));
+    labels.append(i18n("Description"));
     setHeaderLabels(labels);
     header()->setResizeMode(0, QHeaderView::Stretch);
     header()->setResizeMode(1, QHeaderView::Stretch);

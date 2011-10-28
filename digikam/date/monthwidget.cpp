@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,6 +39,7 @@
 
 // KDE includes
 
+#include <kdeversion.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kcalendarsystem.h>
@@ -236,8 +238,14 @@ void MonthWidget::paintEvent(QPaintEvent*)
 
                 if (!weekvisible)
                 {
+// FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
+#if KDE_IS_VERSION(4,7,0)
+                    int weeknr = KGlobal::locale()->calendar()->week(QDate(d->year,
+                                 d->month, d->days[index].day));
+#else
                     int weeknr = KGlobal::locale()->calendar()->weekNumber(QDate(d->year,
                                  d->month, d->days[index].day));
+#endif
                     p.setPen(d->active ? Qt::black : Qt::gray);
                     p.setFont(fnBold);
                     p.fillRect(1, sy, d->currw-1, d->currh-1, QColor(210,210,210));

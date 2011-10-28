@@ -6,7 +6,7 @@
  * Date        : 2010-08-08
  * Description : a class that manages the files to be renamed
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,8 +40,10 @@ class AdvancedRenameWidget;
 class Parser;
 class ParseSettings;
 
-class AdvancedRenameManager
+class AdvancedRenameManager : public QObject
 {
+    Q_OBJECT
+
 public:
 
     enum ParserType
@@ -52,8 +54,12 @@ public:
 
     enum SortType
     {
-        SortAscending = 0,
-        SortDescending,
+        SortNameAscending = 0,
+        SortNameDescending,
+        SortDateAscending,
+        SortDateDescending,
+        SortSizeAscending,
+        SortSizeDescending,
         SortCustom
     };
 
@@ -75,6 +81,7 @@ public:
     Parser* getParser();
 
     void setSortType(SortType type);
+    SortType sortType() const;
 
     void setStartIndex(int index) const;
 
@@ -87,6 +94,10 @@ public:
 
     QStringList            fileList();
     QMap<QString, QString> newFileList() const;
+
+Q_SIGNALS:
+
+    void signalSortingChanged(KUrl::List);
 
 private:
 
@@ -102,8 +113,6 @@ private:
 
     void clearMappings();
     void clearAll();
-
-    QStringList sortListCaseInsensitive(const QStringList& list);
 
 private:
 

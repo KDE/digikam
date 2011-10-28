@@ -7,7 +7,7 @@
  * Description : main image editor GUI implementation
  *
  * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -226,47 +226,22 @@ ExposureSettingsContainer* EditorWindow::exposureSettings() const
 
 void EditorWindow::setupContextMenu()
 {
-    m_contextMenu         = new KMenu(this);
-    KActionCollection* ac = actionCollection();
+    m_contextMenu = new KMenu(this);
 
-    if (ac->action("editorwindow_backward"))
-    {
-        m_contextMenu->addAction(ac->action("editorwindow_backward"));
-    }
-
-    if (ac->action("editorwindow_forward"))
-    {
-        m_contextMenu->addAction(ac->action("editorwindow_forward"));
-    }
-
+    addAction2ContextMenu("editorwindow_fullscreen", true);
     m_contextMenu->addSeparator();
-
-    if (ac->action("editorwindow_slideshow"))
-    {
-        m_contextMenu->addAction(ac->action("editorwindow_slideshow"));
-    }
-
-    if (ac->action("editorwindow_rotate_left"))
-    {
-        m_contextMenu->addAction(ac->action("editorwindow_rotate_left"));
-    }
-
-    if (ac->action("editorwindow_rotate_right"))
-    {
-        m_contextMenu->addAction(ac->action("editorwindow_rotate_right"));
-    }
-
-    if (ac->action("editorwindow_crop"))
-    {
-        m_contextMenu->addAction(ac->action("editorwindow_crop"));
-    }
-
+    // --------------------------------------------------------
+    addAction2ContextMenu("editorwindow_backward", true);
+    addAction2ContextMenu("editorwindow_forward", true);
     m_contextMenu->addSeparator();
-
-    if (ac->action("editorwindow_delete"))
-    {
-        m_contextMenu->addAction(ac->action("editorwindow_delete"));
-    }
+    // --------------------------------------------------------
+    addAction2ContextMenu("editorwindow_slideshow", true);
+    addAction2ContextMenu("editorwindow_rotate_left", true);
+    addAction2ContextMenu("editorwindow_rotate_right", true);
+    addAction2ContextMenu("editorwindow_crop", true);
+    m_contextMenu->addSeparator();
+    // --------------------------------------------------------
+    addAction2ContextMenu("editorwindow_delete", true);
 }
 
 void EditorWindow::setupStandardConnections()
@@ -3051,6 +3026,20 @@ void EditorWindow::slotThemeChanged()
 
     m_canvas->setBackgroundColor(m_bgColor);
     d->toolIface->themeChanged();
+}
+
+void EditorWindow::addAction2ContextMenu(const QString& actionName, bool addDisabled)
+{
+    if (!m_contextMenu)
+    {
+        return;
+    }
+
+    QAction* action = actionCollection()->action(actionName);
+    if (action && (action->isEnabled() || addDisabled))
+    {
+        m_contextMenu->addAction(action);
+    }
 }
 
 }  // namespace Digikam

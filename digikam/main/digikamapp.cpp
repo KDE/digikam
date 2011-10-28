@@ -9,7 +9,7 @@
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -2582,6 +2582,9 @@ void DigikamApp::slotConfNotifications()
 
 void DigikamApp::slotToggleFullScreen()
 {
+    static bool wasThumbBarVisible = true;
+    static bool wasToolbBarVisible = true;
+
     if (d->fullScreen)
     {
         setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
@@ -2589,11 +2592,21 @@ void DigikamApp::slotToggleFullScreen()
         slotShowMenuBar();
         statusBar()->show();
 
-        QList<KToolBar*> toolbars = toolBars();
-        foreach (KToolBar* toolbar, toolbars)
+        showToolBars();
+        KToolBar* mainToolBar = toolBar("mainToolBar");
+        if (mainToolBar)
         {
-            toolbar->show();
+            if (wasToolbBarVisible)
+            {
+                mainToolBar->show();
+            }
+            else
+            {
+                mainToolBar->hide();
+            }
         }
+
+        showThumbBar(wasThumbBarVisible);
 
         d->view->showSideBars();
 
@@ -2601,8 +2614,17 @@ void DigikamApp::slotToggleFullScreen()
     }
     else
     {
-        KConfigGroup group         = d->config->group("ImageViewer Settings");
-        bool fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
+        wasThumbBarVisible = d->view->isThumbBarVisible();
+        wasToolbBarVisible = true;
+        KToolBar* mainToolBar = toolBar("mainToolBar");
+        if (mainToolBar)
+        {
+            wasToolbBarVisible = mainToolBar->isVisible();
+        }
+
+        KConfigGroup group          = d->config->group("ImageViewer Settings");
+        bool fullScreenHideToolBar  = group.readEntry("FullScreen Hide ToolBar", false);
+        bool fullScreenHideThumbBar = group.readEntry("FullScreenHideThumbBar", true);
 
         setWindowState( windowState() | Qt::WindowFullScreen ); // set
 
@@ -2611,11 +2633,12 @@ void DigikamApp::slotToggleFullScreen()
 
         if (fullScreenHideToolBar)
         {
-            QList<KToolBar*> toolbars = toolBars();
-            foreach (KToolBar* toolbar, toolbars)
-            {
-                toolbar->hide();
-            }
+            showToolBars(false);
+        }
+
+        if (fullScreenHideThumbBar)
+        {
+            showThumbBar(false);
         }
 
         d->view->hideSideBars();
@@ -3389,6 +3412,20 @@ void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
 void DigikamApp::slotComponentsInfo()
 {
     showDigikamComponentsInfo();
+}
+
+void DigikamApp::showToolBars(bool show)
+{
+    QList<KToolBar*> toolbars = toolBars();
+    foreach (KToolBar* toolbar, toolbars)
+    {
+        show ? toolbar->show() : toolbar->hide();
+    }
+}
+
+void DigikamApp::showThumbBar(bool show)
+{
+    d->view->toggleShowBar(show);
 }
 
 #ifdef USE_SCRIPT_IFACE

@@ -8,7 +8,7 @@
 # Date        : 2011-03-09
 # Description : a helper script for formatting the digiKam source code
 # 
-# Copyright (C) 2011 by Andi Clemens <andi dot clemens at gmx dot net>
+# Copyright (C) 2011 by Andi Clemens <andi dot clemens at googlemail dot com>
 # 
 # This program is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General
@@ -60,14 +60,18 @@ file_backup = [
 def format_file(f, verbose=False):
     args = list()
     args.append(astyle)
+    args.append("--mode=c")
     args.append("--brackets=break")
     args.append("--indent=spaces=4")
     args.append("--convert-tabs")
     args.append("--indent-switches")
     args.append("--break-blocks")
     args.append("--break-closing-brackets")
+    args.append("--pad-oper")
     args.append("--pad-header")
+    args.append("--unpad-paren")
     args.append("--align-pointer=type")
+    args.append("--align-reference=type")
     args.append("--indent-col1-comments")
     args.append("--add-brackets")
     args.append("--min-conditional-indent=0")
@@ -84,9 +88,18 @@ def format_file(f, verbose=False):
 # ---------------------------------------------------
 
 def get_files(path, file_ext):
-    files2check = [os.path.join(r,f) for r,dirs,files in os.walk(path) for f in
-            files if os.path.splitext(os.path.join(r,f))[1] in file_ext]
+    files2check = set()
 
+    if os.path.isfile(path):
+        for ext in file_ext:
+            if ext in file_backup:
+                if os.path.isfile(path + ext):
+                    files2check.add(path + ext)
+            elif os.path.isfile(path):
+                files2check.add(path)
+    elif os.path.isdir(path):
+        files2check.update([os.path.join(r,f) for r,dirs,files in os.walk(path) for f in
+                files if os.path.splitext(os.path.join(r,f))[1] in file_ext])
     return files2check
 
 # ---------------------------------------------------

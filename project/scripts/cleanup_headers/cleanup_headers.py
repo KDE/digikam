@@ -36,7 +36,7 @@ def intro(dir, pattern):
     print "*"
     print "* digiKam code cleaner"
     print "*"
-    print "* Copyright 2008, Andi Clemens <andi dot clemens at gmx dot net>"
+    print "* Copyright 2008-2011, Andi Clemens <andi dot clemens at googlemail dot com>"
     print "*"
     print "*"*80
     print

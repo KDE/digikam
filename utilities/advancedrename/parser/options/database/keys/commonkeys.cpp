@@ -6,7 +6,7 @@
  * Date        : 2010-05-22
  * Description : common information keys
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -94,7 +94,7 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
 
         if (!authors.isEmpty())
         {
-            foreach (const QString& author, authors)
+            foreach(const QString& author, authors)
             {
                 result += author + ',';
             }
@@ -154,15 +154,19 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
             case DatabaseItem::UndefinedCategory:
                 result = QString("Undefined");
                 break;
+
             case DatabaseItem::Image:
                 result = QString("Image");
                 break;
+
             case DatabaseItem::Video:
                 result = QString("Video");
                 break;
+
             case DatabaseItem::Audio:
                 result = QString("Audio");
                 break;
+
             case DatabaseItem::Other:
             default:
                 result = QString("Other");

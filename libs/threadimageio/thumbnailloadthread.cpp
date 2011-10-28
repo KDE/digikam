@@ -784,12 +784,12 @@ void ThumbnailLoadThread::startKdePreviewJob()
     KUrl::List list;
     foreach (const LoadingDescription& description, d->kdeTodo)
     {
-        KUrl url           = KUrl::fromPath(description.filePath);
+        KUrl url = KUrl::fromPath(description.filePath);
         list << url;
         d->kdeJobHash[url] = description;
     }
     d->kdeTodo.clear();
-    d->kdeJob = KIO::filePreview(list, d->creator->storedSize()); // do not know if size 0 is allowed
+    d->kdeJob = KIO::filePreview(list, d->creator->storedSize()); // FIXME: do not know if size 0 is allowed
 
     connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
             this, SLOT(gotKDEPreview(KFileItem,QPixmap)));

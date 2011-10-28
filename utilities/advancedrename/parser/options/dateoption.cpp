@@ -6,7 +6,7 @@
  * Date        : 2009-08-08
  * Description : an option to provide date information to the parser
  *
- * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -79,6 +79,7 @@ DateFormat::Type DateFormat::type(const QString& identifier)
             return (Type)i;
         }
     }
+
     return Standard;
 }
 
@@ -99,7 +100,7 @@ QVariant DateFormat::format(const QString& identifier)
         return m_map.at(Standard).second;
     }
 
-    foreach (const DateFormatDescriptor& desc, m_map)
+    foreach(const DateFormatDescriptor& desc, m_map)
     {
         if (desc.first == identifier)
         {
@@ -129,7 +130,7 @@ DateOptionDialog::DateOptionDialog(Parseable* parent)
 
     // fill the date format combobox
     DateFormat df;
-    foreach (const DateFormat::DateFormatDescriptor& desc, df.map())
+    foreach(const DateFormat::DateFormatDescriptor& desc, df.map())
     {
         ui->dateFormatPicker->addItem(desc.first);
     }
@@ -140,7 +141,7 @@ DateOptionDialog::DateOptionDialog(Parseable* parent)
     ui->timePicker->setTime(currentDateTime.time());
 
     ui->dateFormatLink->setOpenExternalLinks(true);
-    ui->dateFormatLink->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::LinksAccessibleByKeyboard);
+    ui->dateFormatLink->setTextInteractionFlags(Qt::LinksAccessibleByMouse | Qt::LinksAccessibleByKeyboard);
     ui->dateFormatLink->setText(getDateFormatLinkText());
 
     QRegExp validRegExp("[^/]+");
@@ -191,10 +192,12 @@ QString DateOptionDialog::formattedDateTime(const QDateTime& date)
             return date.toString(ui->customFormatInput->text());
             break;
 #if QT_VERSION >= 0x040700
+
         case DateFormat::UnixTimeStamp:
             return QString("%1").arg(date.toMSecsSinceEpoch());
             break;
 #endif
+
         default:
             break;
     }
@@ -272,8 +275,9 @@ QString DateOption::parseOperation(ParseSettings& settings)
 
     // search for quoted token parameters (indicates custom formatting)
     const int MIN_TOKEN_SIZE = 2;
-    if ( (token.size() > MIN_TOKEN_SIZE) &&
-         (token.startsWith('"') && token.endsWith('"')) )
+
+    if ((token.size() > MIN_TOKEN_SIZE) &&
+        (token.startsWith('"') && token.endsWith('"')))
     {
         token = token.remove(0, 1);
         token.chop(1);
@@ -282,7 +286,7 @@ QString DateOption::parseOperation(ParseSettings& settings)
     // check if the datetime was already set in the parseSettings objects (most likely during the camera import)
     QDateTime dateTime;
 
-    if ( !(settings.creationTime.isNull()) && (settings.creationTime.isValid()) )
+    if (!(settings.creationTime.isNull()) && (settings.creationTime.isValid()))
     {
         dateTime = settings.creationTime;
     }
@@ -320,10 +324,12 @@ QString DateOption::parseOperation(ParseSettings& settings)
         switch (df.type(token))
         {
 #if QT_VERSION >= 0x040700
+
             case DateFormat::UnixTimeStamp:
                 result = QString("%1").arg(dateTime.toMSecsSinceEpoch());
                 break;
 #endif
+
             default:
                 result = dateTime.toString(token);
                 break;
@@ -374,10 +380,12 @@ void DateOption::slotTokenTriggered(const QString& token)
                 switch (index)
                 {
 #if QT_VERSION >= 0x040700
+
                     case DateFormat::UnixTimeStamp:
                         dateString = QString("%1").arg(date.toMSecsSinceEpoch());
                         break;
 #endif
+
                     default:
                         break;
                 }
@@ -405,9 +413,11 @@ void DateOption::slotTokenTriggered(const QString& token)
                     dateString = tokenStr.arg(QString(""));
                     dateString.remove(':');
                     break;
+
                 case DateFormat::Custom:
                     dateString = tokenStr.arg(QString("\"%1\"").arg(dlg->ui->customFormatInput->text()));
                     break;
+
                 default:
                     QString identifier = df.identifier((DateFormat::Type) index);
                     dateString         = tokenStr.arg(identifier);

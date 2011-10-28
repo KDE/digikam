@@ -6,7 +6,7 @@
  * Date        : 2009-09-14
  * Description : modifier to change the case of a renaming option
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,8 +44,6 @@ private:
     CaseModifier& operator=(const CaseModifier&);
 
     QString firstupper(const QString& str2Modify);
-    QString lower(const QString& str2Modify);
-    QString upper(const QString& str2Modify);
 };
 
 } // namespace Digikam

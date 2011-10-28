@@ -6,7 +6,7 @@
  * Date        : 2010-05-01
  * Description : an abstract parseable class
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -91,6 +91,7 @@ QPixmap Parseable::icon(Parseable::IconType type) const
         case Dialog:
             icon = DesktopIcon(d->iconName);
             break;
+
         default:
             icon = SmallIcon(d->iconName);
             break;
@@ -143,7 +144,7 @@ QPushButton* Parseable::registerButton(QWidget* parent)
     {
         QMenu* menu = new QMenu(button);
 
-        foreach (Token* token, d->tokens)
+        foreach(Token* token, d->tokens)
         {
             actions << token->action();
         }
@@ -173,7 +174,7 @@ QAction* Parseable::registerMenu(QMenu* parent)
         QMenu* menu = new QMenu(parent);
         QList<QAction*> actions;
 
-        foreach (Token* token, d->tokens)
+        foreach(Token* token, d->tokens)
         {
             actions << token->action();
         }

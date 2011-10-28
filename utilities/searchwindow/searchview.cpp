@@ -279,13 +279,8 @@ void SearchView::slotResetButton()
         delete m_groups.takeLast();
     }
 
-    // FIXME: remove the comments again
-    // What if the above while loop is never executed, due to a m_groups size of zero?
-    // I guess we need to check for an empty list to be sure...
     if (!m_groups.isEmpty())
     {
-        // FIXME: remove the comments again
-        // also we are calling a pointer here, we should make sure it is valid
         if (m_groups.first())
         {
             m_groups.first()->reset();

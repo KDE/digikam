@@ -6,7 +6,7 @@
  * Date        : 2010-05-19
  * Description : an option to provide database information to the parser
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -104,7 +104,7 @@ void DatabaseOption::unregisterKeysCollection()
 {
     QSet<DbKeysCollection*> alreadyDeleted;
 
-    foreach (DbKeysCollection* key, m_map)
+    foreach(DbKeysCollection* key, m_map)
     {
         if (key && !alreadyDeleted.contains(key))
         {
@@ -127,7 +127,7 @@ void DatabaseOption::slotTokenTriggered(const QString& token)
     {
         QStringList checkedKeys = dlg->dbkeySelectorView->checkedKeysList();
 
-        foreach (const QString& key, checkedKeys)
+        foreach(const QString& key, checkedKeys)
         {
             QString keyStr = QString("[db:%1]").arg(key);
             keys << keyStr;

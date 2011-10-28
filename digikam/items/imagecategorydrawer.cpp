@@ -7,6 +7,7 @@
  * Description : Qt item view for images - category drawer
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -338,7 +339,7 @@ void ImageCategoryDrawer::textForDAlbum(DAlbum* album, int count, QString* heade
     {
         *header = i18nc("Month String - Year String", "%1 %2",
                         KGlobal::locale()->calendar()->monthName(album->date(), KCalendarSystem::LongName),
-                        KGlobal::locale()->calendar()->yearString(album->date()));
+                        KGlobal::locale()->calendar()->formatDate(album->date(), "%Y"));
     }
     else
     {

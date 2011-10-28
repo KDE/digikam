@@ -6,7 +6,7 @@
  * Date        : 2009-06-09
  * Description : a test for the AdvancedRename utility
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -199,18 +199,68 @@ void AdvancedRenameWidgetTest::testNumberToken()
     QCOMPARE(parsed, result);
 }
 
+void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("file");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("myfile")
+        << QString("[file]{firstupper}")
+        << QString("myfile.jpg")
+        << QString("Myfile.jpg");
+
+    QTest::newRow("my_file")
+        << QString("[file]{firstupper}")
+        << QString("my_file.jpg")
+        << QString("My_File.jpg");
+
+    QTest::newRow("holiday_spain_2011_img001")
+        << QString("[file]{firstupper}")
+        << QString("holiday_spain_2011_img001.jpg")
+        << QString("Holiday_Spain_2011_Img001.jpg");
+
+    QTest::newRow("holiday_spain_2011_001img")
+        << QString("[file]{firstupper}")
+        << QString("holiday_spain_2011_001img.jpg")
+        << QString("Holiday_Spain_2011_001Img.jpg");
+
+    QTest::newRow("001a")
+        << QString("[file]{firstupper}")
+        << QString("001a.jpg")
+        << QString("001A.jpg");
+
+    QTest::newRow("my images")
+        << QString("[file]{firstupper}")
+        << QString("my images.jpg")
+        << QString("My Images.jpg");
+
+    QTest::newRow("<empty>")
+        << QString("[file]{firstupper}")
+        << QString("")
+        << QString("");
+
+    QTest::newRow(fileName.toAscii())
+        << QString("[file]{firstupper}")
+        << fileName
+        << QString("Advancedrename_Testimage.jpg");
+}
+
 void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier()
 {
+    QFETCH(QString, parseString);
+    QFETCH(QString, file);
+    QFETCH(QString, result);
+
     QList<ParseSettings> files;
     ParseSettings ps;
-    KUrl url(filePath);
-    ps.fileUrl = KUrl(filePath);
+    ps.fileUrl = KUrl(file);
     files << ps;
     AdvancedRenameManager manager(files);
-    manager.parseFiles("[file]{firstupper}");
+    manager.parseFiles(parseString);
 
-    QString parsed = manager.newName(filePath);
-    QCOMPARE(parsed, QString("Advancedrename_Testimage.jpg"));
+    QString parsed = manager.newName(file);
+    QCOMPARE(parsed, result);
 }
 
 void AdvancedRenameWidgetTest::testChainedModifiers_data()

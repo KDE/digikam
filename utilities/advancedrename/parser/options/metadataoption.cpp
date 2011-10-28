@@ -6,7 +6,7 @@
  * Date        : 2009-08-08
  * Description : an option to provide metadata information to the parser
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,7 +65,7 @@ MetadataOptionDialog::MetadataOptionDialog(Parseable* parent) :
 
     // We only need the "SearchBar" control element.
     // We also need to reset the default selections.
-    foreach (MetadataSelectorView* viewer, metadataPanel->viewers())
+    foreach(MetadataSelectorView* viewer, metadataPanel->viewers())
     {
         viewer->setControlElements(MetadataSelectorView::SearchBar);
         viewer->clearSelection();
@@ -140,7 +140,7 @@ void MetadataOption::slotTokenTriggered(const QString& token)
     {
         QStringList checkedTags = dlg->metadataPanel->getAllCheckedTags();
 
-        foreach (const QString& tag, checkedTags)
+        foreach(const QString& tag, checkedTags)
         {
             tags << QString("[meta:%1]").arg(tag);
         }
@@ -198,7 +198,7 @@ QString MetadataOption::parseMetadata(const QString& token, ParseSettings& setti
             dataMap = meta.getXmpTagsDataList(QStringList(), true);
         }
 
-        foreach (const QString& key, dataMap.keys())
+        foreach(const QString& key, dataMap.keys())
         {
             if (key.toLower().contains(keyword))
             {

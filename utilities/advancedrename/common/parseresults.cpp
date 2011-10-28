@@ -6,7 +6,7 @@
  * Date        : 2009-09-14
  * Description : a parse results map for token management
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -102,7 +102,7 @@ int ParseResults::offset(const ResultsKey& key)
 
 ParseResults::ResultsKey ParseResults::keyAtPosition(int pos)
 {
-    foreach (const ResultsKey& key, m_results.keys())
+    foreach(const ResultsKey& key, m_results.keys())
     {
         if (pos == key.first)
         {
@@ -121,7 +121,7 @@ bool ParseResults::hasKeyAtPosition(int pos)
 
 ParseResults::ResultsKey ParseResults::keyAtApproximatePosition(int pos)
 {
-    foreach (const ResultsKey& key, m_results.keys())
+    foreach(const ResultsKey& key, m_results.keys())
     {
         int start  = key.first;
         int length = key.second;
@@ -190,7 +190,7 @@ QString ParseResults::replaceTokens(const QString& markedString)
 
 void ParseResults::debug()
 {
-    foreach (const ResultsKey& key, m_results.keys())
+    foreach(const ResultsKey& key, m_results.keys())
     {
         QString _token  = token(key);
         QString _result = result(key);

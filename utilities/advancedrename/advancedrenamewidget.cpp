@@ -6,7 +6,7 @@
  * Date        : 2009-05-22
  * Description : a control widget for the AdvancedRename utility
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -218,7 +218,7 @@ QMenu* AdvancedRenameWidget::createControlsMenu(QWidget* parent, QList<T*>& list
     QMenu* menu     = new QMenu(parent);
     QAction* action = 0;
 
-    foreach (T* ctrl, list)
+    foreach(T* ctrl, list)
     {
         action = ctrl->registerMenu(menu);
 
@@ -248,7 +248,7 @@ void AdvancedRenameWidget::registerParserControls()
             // register options
             QPushButton* btn      = 0;
             DynamicLayout* layout = new DynamicLayout(KDialog::marginHint(), KDialog::marginHint());
-            foreach (Parseable* p, d->parser->options())
+            foreach(Parseable* p, d->parser->options())
             {
                 btn = p->registerButton(this);
 

@@ -6,7 +6,7 @@
  * Date        : 2009-09-14
  * Description : trimmed token modifier
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,6 @@ TrimmedModifier::TrimmedModifier()
 
 QString TrimmedModifier::parseOperation(ParseSettings& settings)
 {
-    Q_UNUSED(settings);
     return settings.str2Modify.simplified();
 }
 

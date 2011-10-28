@@ -6,7 +6,7 @@
  * Date        : 2009-09-18
  * Description : a modifier for replacing text in a token result
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -112,8 +112,6 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
 
 QString ReplaceModifier::parseOperation(ParseSettings& settings)
 {
-    Q_UNUSED(settings);
-
     const QRegExp& reg  = regExp();
     QString original    = reg.cap(2);
     QString replacement = reg.cap(3);

@@ -6,7 +6,7 @@
  * Date        : 2009-09-03
  * Description : an input widget for the AdvancedRename utility
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -258,13 +258,13 @@ void AdvancedRenameLineEdit::slotCursorPositionChanged()
         int pos              = textCursor().position();
         found                = d->parser->tokenAtPosition(Parser::OptionToken,
                                                           settings, pos, start, length);
-        found                = found && ( (start + length) == pos );
+        found                = found && ((start + length) == pos);
 
         if (!found)
         {
             found = d->parser->tokenAtPosition(Parser::OptionModifiersToken,
                                                settings, pos, start, length);
-            found = found && ( (start + length) == pos );
+            found = found && ((start + length) == pos);
         }
     }
 

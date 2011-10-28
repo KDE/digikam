@@ -16,7 +16,7 @@
                 <contrib>Developer</contrib>
                 <firstname>Andi</firstname>
                 <surname>Clemens</surname>
-                <email>andi dot clemens at gmx dot net</email>
+                <email>andi dot clemens at googlemail dot com</email>
             </author>
         </authorgroup>
     </refentryinfo>
@@ -124,7 +124,7 @@
     <refsect1>
         <title>Author</title>
         <para>
-            &product; was written by Andi Clemens &lt;andi dot clemens at gmx dot net&gt;
+            &product; was written by Andi Clemens &lt;andi dot clemens at googlemail dot com&gt;
         </para>
     </refsect1>
 
