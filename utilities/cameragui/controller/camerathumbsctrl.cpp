@@ -56,6 +56,11 @@ public:
     KUrl::List               pendingItems;
 
     CameraController*        controller;
+
+    QList<CamItemInfo>       kdeTodo;
+    QHash<KUrl, CamItemInfo> kdeJobHash;
+    KIO::PreviewJob*         kdeJob;
+
 };
 
 // --------------------------------------------------------
@@ -121,7 +126,7 @@ void CameraThumbsCtrl::slotThumbInfoFailed(const QString& /*folder*/, const QStr
     if (d->controller->cameraDriverType() == DKCamera::UMSDriver)
     {
         putItemToCache(info.url(), info, QPixmap());
-        startKdePreviewJob(info.url());
+        loadWithKDE(info);
     }
     else
     {
@@ -132,18 +137,38 @@ void CameraThumbsCtrl::slotThumbInfoFailed(const QString& /*folder*/, const QStr
     }
 }
 
-void CameraThumbsCtrl::startKdePreviewJob(const KUrl& url)
+void CameraThumbsCtrl::loadWithKDE(const CamItemInfo& info)
 {
+    d->kdeTodo << info;
+    startKdePreviewJob();
+}
 
-    KIO::PreviewJob* job = KIO::filePreview(KUrl::List() << url, ThumbnailSize::Huge);
+void CameraThumbsCtrl::startKdePreviewJob()
+{
+    if (d->kdeJob || d->kdeTodo.isEmpty())
+    {
+        return;
+    }
 
-    connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
+    d->kdeJobHash.clear();
+    KUrl::List list;
+    foreach (const CamItemInfo& info, d->kdeTodo)
+    {
+        KUrl url           = info.url();
+        list << url;
+        d->kdeJobHash[url] = info;
+    }
+    d->kdeTodo.clear();
+    d->kdeJob = KIO::filePreview(list, ThumbnailSize::Huge);
+
+    connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
             this, SLOT(slotGotKDEPreview(KFileItem,QPixmap)));
 
-    connect(job, SIGNAL(failed(KFileItem)),
+    connect(d->kdeJob, SIGNAL(failed(KFileItem)),
             this, SLOT(slotFailedKDEPreview(KFileItem)));
 
-    kDebug() << "pending thumbs from KDE Preview : " << url;
+    connect(d->kdeJob, SIGNAL(finished(KJob*)),
+            this, SLOT(slotKdePreviewFinished(KJob*)));
 }
 
 void CameraThumbsCtrl::slotGotKDEPreview(const KFileItem& item, const QPixmap& pix)
@@ -153,11 +178,18 @@ void CameraThumbsCtrl::slotGotKDEPreview(const KFileItem& item, const QPixmap& p
 
 void CameraThumbsCtrl::slotFailedKDEPreview(const KFileItem& item)
 {
-    procressKDEPreview(item);
+    procressKDEPreview(item, QPixmap());
 }
 
 void CameraThumbsCtrl::procressKDEPreview(const KFileItem& item, const QPixmap& pix)
 {
+    CamItemInfo info = d->kdeJobHash.value(item.url());
+    QUrl url         = info.url();
+
+    if (info.isNull())
+    {
+        return;
+    }
     QString file   = item.url().fileName();
     QString folder = item.url().toLocalFile().remove(QString("/") + file);
     QPixmap thumb;
@@ -174,10 +206,15 @@ void CameraThumbsCtrl::procressKDEPreview(const KFileItem& item, const QPixmap& 
         kDebug() << "Got thumb from KDE Preview : " << item.url();
     }
 
-    const CachedItem* cit = retrieveItemFromCache(item.url());
-    putItemToCache(item.url(), cit->first, thumb);
-    d->pendingItems.removeAll(item.url());
-    emit signalThumbInfoReady(cit->first);
+    putItemToCache(url, info, thumb);
+    d->pendingItems.removeAll(url);
+    emit signalThumbInfoReady(info);
+}
+
+void CameraThumbsCtrl::slotKdePreviewFinished(KJob*)
+{
+    d->kdeJob = 0;
+    startKdePreviewJob();
 }
 
 // -- Cache management methods ------------------------------------------------------------
