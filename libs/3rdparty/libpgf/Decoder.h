@@ -36,7 +36,7 @@
 
 /////////////////////////////////////////////////////////////////////
 // Constants
-#define BufferLen			(BufferSize/WordWidth)	// number of words per buffer
+#define BufferLen			(BufferSize/WordWidth)	///< number of words per buffer
 
 /////////////////////////////////////////////////////////////////////
 /// PGF decoder class.
@@ -71,15 +71,15 @@ class CDecoder {
 		/// Call CDecoder::ReadMacroBlock before this method.
 		void BitplaneDecode();
 
-		ROIBlockHeader m_header;					// block header
-		DataT  m_value[BufferSize];					// output buffer of values with index m_valuePos
-		UINT32 m_codeBuffer[BufferSize];			// input buffer for encoded bitstream
-		UINT32 m_valuePos;							// current position in m_value
+		ROIBlockHeader m_header;					///< block header
+		DataT  m_value[BufferSize];					///< output buffer of values with index m_valuePos
+		UINT32 m_codeBuffer[BufferSize];			///< input buffer for encoded bitstream
+		UINT32 m_valuePos;							///< current position in m_value
 
 	private:
 		UINT32 ComposeBitplane(UINT32 bufferSize, DataT planeMask, UINT32* sigBits, UINT32* refBits, UINT32* signBits);
 		UINT32 ComposeBitplaneRLD(UINT32 bufferSize, DataT planeMask, UINT32 sigPos, UINT32* refBits);
-		UINT32 ComposeBitplaneRLD(UINT32 bufferSize, DataT planeMask, UINT32* sigBits, UINT32* refBits, UINT32* signBits);
+		UINT32 ComposeBitplaneRLD(UINT32 bufferSize, DataT planeMask, UINT32* sigBits, UINT32* refBits, UINT32 signPos);
 		void  SetBitAtPos(UINT32 pos, DataT planeMask)			{ (m_value[pos] >= 0) ? m_value[pos] |= planeMask : m_value[pos] -= planeMask; }
 		void  SetSign(UINT32 pos, bool sign)					{ m_value[pos] = -m_value[pos]*sign + m_value[pos]*(!sign); }
 
@@ -185,21 +185,21 @@ public:
 #endif
 
 private:
-	void ReadMacroBlock(CMacroBlock* block) THROW_; // throws IOException
+	void ReadMacroBlock(CMacroBlock* block) THROW_; ///< throws IOException
 
-	CPGFStream *m_stream;						// input pgf stream
-	UINT64 m_startPos;							// stream position at the beginning of the PGF pre header
-	UINT64 m_streamSizeEstimation;				// estimation of stream size
-	UINT32 m_encodedHeaderLength;				// stream offset from startPos to the beginning of the data part (highest level)
+	CPGFStream *m_stream;						///< input pgf stream
+	UINT64 m_startPos;							///< stream position at the beginning of the PGF pre header
+	UINT64 m_streamSizeEstimation;				///< estimation of stream size
+	UINT32 m_encodedHeaderLength;				///< stream offset from startPos to the beginning of the data part (highest level)
 
-	CMacroBlock **m_macroBlocks;				// array of macroblocks
-	int m_currentBlockIndex;					// index of current macro block
-	int	m_macroBlockLen;						// array length
-	int	m_macroBlocksAvailable;					// number of decoded macro blocks (including currently used macro block)
-	CMacroBlock *m_currentBlock;				// current macro block (used by main thread)
+	CMacroBlock **m_macroBlocks;				///< array of macroblocks
+	int m_currentBlockIndex;					///< index of current macro block
+	int	m_macroBlockLen;						///< array length
+	int	m_macroBlocksAvailable;					///< number of decoded macro blocks (including currently used macro block)
+	CMacroBlock *m_currentBlock;				///< current macro block (used by main thread)
 
 #ifdef __PGFROISUPPORT__
-	bool   m_roi;								// true: ensures region of interest (ROI) decoding
+	bool   m_roi;								///< true: ensures region of interest (ROI) decoding
 #endif
 };
 

@@ -259,7 +259,7 @@ inline UINT32 SeekBit1Range(UINT32* stream, UINT32 pos, UINT32 len) {
 /// @return bit position of next 32-bit word
 inline UINT32 AlignWordPos(UINT32 pos) {
 //	return ((pos + WordWidth - 1) >> WordWidthLog) << WordWidthLog;
-	return (pos + WordWidth - 1) & WordMask;
+	return DWWIDTHBITS(pos);
 }
 
 //////////////////////////////////////////////////////////////////////

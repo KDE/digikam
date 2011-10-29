@@ -36,7 +36,7 @@
 
 /////////////////////////////////////////////////////////////////////
 // Constants
-#define BufferLen			(BufferSize/WordWidth)	// number of words per buffer
+#define BufferLen			(BufferSize/WordWidth)	///< number of words per buffer
 
 /////////////////////////////////////////////////////////////////////
 /// PGF encoder class.
@@ -76,14 +76,14 @@ class CEncoder {
 		/// Call CEncoder::WriteMacroBlock after this method.
 		void BitplaneEncode();
 
-		DataT	m_value[BufferSize];				// input buffer of values with index m_valuePos
-		UINT32	m_codeBuffer[BufferSize];			// output buffer for encoded bitstream
+		DataT	m_value[BufferSize];				///< input buffer of values with index m_valuePos
+		UINT32	m_codeBuffer[BufferSize];			///< output buffer for encoded bitstream
 
-		ROIBlockHeader m_header;					// block header
-		UINT32	m_valuePos;							// current buffer position
-		UINT32	m_maxAbsValue;						// maximum absolute coefficient in each buffer
-		UINT32	m_codePos;							// current position in encoded bitstream
-		int		m_lastLevelIndex;					// index of last encoded level: [0, nLevels); used because a level-end can occur before a buffer is full
+		ROIBlockHeader m_header;					///< block header
+		UINT32	m_valuePos;							///< current buffer position
+		UINT32	m_maxAbsValue;						///< maximum absolute coefficient in each buffer
+		UINT32	m_codePos;							///< current position in encoded bitstream
+		int		m_lastLevelIndex;					///< index of last encoded level: [0, nLevels); used because a level-end can occur before a buffer is full
 
 	private:
 		UINT32 RLESigns(UINT32 codePos, UINT32* signBits, UINT32 signLen);
@@ -184,22 +184,22 @@ private:
 	void WriteMacroBlock(CMacroBlock* block) THROW_; // throws IOException
 
 	CPGFStream *m_stream;
-	UINT64	m_startPosition;					// file position of PGF start (PreHeader)
-	UINT64  m_levelLengthPos;					// file position of Metadata
-	UINT64  m_bufferStartPos;					// file position of encoded buffer
+	UINT64	m_startPosition;					///< file position of PGF start (PreHeader)
+	UINT64  m_levelLengthPos;					///< file position of Metadata
+	UINT64  m_bufferStartPos;					///< file position of encoded buffer
 
-	CMacroBlock **m_macroBlocks;				// array of macroblocks
-	int		m_macroBlockLen;					// array length
-	int		m_lastMacroBlock;					// array index of the last created macro block
-	CMacroBlock *m_currentBlock;				// current macro block (used by main thread)
+	CMacroBlock **m_macroBlocks;				///< array of macroblocks
+	int		m_macroBlockLen;					///< array length
+	int		m_lastMacroBlock;					///< array index of the last created macro block
+	CMacroBlock *m_currentBlock;				///< current macro block (used by main thread)
 
-	UINT32* m_levelLength;						// temporary saves the level index
-	int     m_currLevelIndex;					// counts where (=index) to save next value
-	UINT8	m_nLevels;							// number of levels
-	bool	m_favorSpeed;						// favor speed over size
-	bool	m_forceWriting;						// all macro blocks have to be written into the stream
+	UINT32* m_levelLength;						///< temporary saves the level index
+	int     m_currLevelIndex;					///< counts where (=index) to save next value
+	UINT8	m_nLevels;							///< number of levels
+	bool	m_favorSpeed;						///< favor speed over size
+	bool	m_forceWriting;						///< all macro blocks have to be written into the stream
 #ifdef __PGFROISUPPORT__
-	bool	m_roi;								// true: ensures region of interest (ROI) encoding
+	bool	m_roi;								///< true: ensures region of interest (ROI) encoding
 #endif
 };
 

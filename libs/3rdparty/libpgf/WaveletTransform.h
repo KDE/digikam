@@ -34,8 +34,8 @@
 
 //////////////////////////////////////////////////////////////////////
 // Constants
-#define FilterWidth			5					// number of coefficients of the row wavelet filter
-#define FilterHeight		3					// number of coefficients of the column wavelet filter
+#define FilterWidth			5					///< number of coefficients of the row wavelet filter
+#define FilterHeight		3					///< number of coefficients of the column wavelet filter
 
 #ifdef __PGFROISUPPORT__
 //////////////////////////////////////////////////////////////////////
@@ -77,9 +77,9 @@ public:
 	const PGFRect& GetROI(int level) const		{ ASSERT(m_ROIs); ASSERT(level >= 0 && level < m_nLevels); return m_ROIs[level]; }
 
 private:
-	int      m_nLevels;			// number of levels of the image
-	PGFRect	*m_ROIs;			// array of region of interests (ROI)
-	PGFRect *m_indices;			// array of tile indices
+	int      m_nLevels;			///< number of levels of the image
+	PGFRect	*m_ROIs;			///< array of region of interests (ROI)
+	PGFRect *m_indices;			///< array of tile indices
 
 };
 #endif //__PGFROISUPPORT__
@@ -172,12 +172,11 @@ private:
 	void MallatToLinear(int srcLevel, DataT* loRow, DataT* hiRow, UINT32 width);
 
 #ifdef __PGFROISUPPORT__
-	CROIs		m_ROIs;							// ROI information
+	CROIs		m_ROIs;							///< ROI information
 #endif //__PGFROISUPPORT__
 
-	int			m_nLevels;						// number of transform levels: one more than the number of level in PGFimage
-	CSubband	(*m_subband)[NSubbands];		// quadtree of subbands: LL HL												
-												//                       LH HH
+	int			m_nLevels;						///< number of transform levels: one more than the number of level in PGFimage
+	CSubband	(*m_subband)[NSubbands];		///< quadtree of subbands: LL HL LH HH
 };
 
 #endif //PGF_WAVELETTRANSFORM_H

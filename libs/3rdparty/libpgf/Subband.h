@@ -173,17 +173,17 @@ private:
 //	void SetOrientation(Orientation o)	{ m_orientation = o; }
 
 private:
-	UINT32 m_width;
-	UINT32 m_height;
-	UINT32 m_size;					// size of data buffer m_data
-	int m_level;					// recursion level
-	Orientation m_orientation;		// 0=LL, 1=HL, 2=LH, 3=HH L=lowpass filtered , H=highpass filterd
-	UINT32 m_dataPos;				// current position in m_data
-	DataT* m_data;					// buffer
+	UINT32 m_width;					///< width in pixels
+	UINT32 m_height;				///< height in pixels
+	UINT32 m_size;					///< size of data buffer m_data
+	int m_level;					///< recursion level
+	Orientation m_orientation;		///< 0=LL, 1=HL, 2=LH, 3=HH L=lowpass filtered , H=highpass filterd
+	UINT32 m_dataPos;				///< current position in m_data
+	DataT* m_data;					///< buffer
 
 #ifdef __PGFROISUPPORT__
-	CROIs*	 m_ROIs;				// ROI information
-	UINT32   m_dataWidth;			// row width of the data buffer
+	CROIs*	 m_ROIs;				///< ROI information
+	UINT32   m_dataWidth;			///< row width of the data buffer
 #endif
 };
 /*

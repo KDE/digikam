@@ -251,14 +251,14 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	/// Set background of an RGB image with transparency channel or reset to default background.
 	/// @param bg A pointer to a background color or NULL (reset to default background)
-	void SetBackground(const RGBTRIPLE* bg);
+	//void SetBackground(const RGBTRIPLE* bg);
 
 	//////////////////////////////////////////////////////////////////////
 	/// Set background of an RGB image with transparency channel.
 	/// @param red A red value (0..255)
 	/// @param green A green value (0..255)
 	/// @param blue A blue value (0..255)
-	void SetBackground(BYTE red, BYTE green, BYTE blue)				{ /*m_backgroundSet = true;*/ m_header.background.rgbtRed = red; m_header.background.rgbtGreen = green; m_header.background.rgbtBlue = blue; }
+	//void SetBackground(BYTE red, BYTE green, BYTE blue)				{ /*m_backgroundSet = true;*/ m_header.background.rgbtRed = red; m_header.background.rgbtGreen = green; m_header.background.rgbtBlue = blue; }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Set internal PGF image buffer channel.
@@ -278,7 +278,7 @@ public:
 
 	//////////////////////////////////////////////////////////////////////
 	/// Set maximum intensity value for image modes with more than eight bits per channel.
-	/// Don't call this method before SetHeader.
+	/// Call this method after SetHeader, but before ImportBitmap.
 	/// @param maxValue The maximum intensity value.
 	void SetMaxValue(UINT32 maxValue);
 
@@ -306,7 +306,7 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	/// Return the background color of an RGB image with transparency channel.
 	/// @return Background color in RGB
-	RGBTRIPLE Background() const									{ return m_header.background; }
+	//RGBTRIPLE Background() const									{ return m_header.background; }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Return an internal YUV image channel.
@@ -336,7 +336,7 @@ public:
 	/// Get maximum intensity value for image modes with more than eight bits per channel.
 	/// Don't call this method before the PGF header has been read.
 	/// @return The maximum intensity value.
-	UINT32 GetMaxValue() const										{ return (1 << m_header.background.rgbtBlue) - 1; }
+	UINT32 GetMaxValue() const										{ return (1 << m_header.usedBitsPerChannel) - 1; }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Return user data and size of user data.
@@ -396,9 +396,9 @@ public:
 	UINT32 ChannelHeight(int c = 0) const							{ ASSERT(c >= 0 && c < MaxChannels); return m_height[c]; }
 
 	//////////////////////////////////////////////////////////////////////
-	/// Return bits per channel.
+	/// Return bits per channel of the image's encoder.
 	/// @return Bits per channel
-	BYTE ChannelDepth() const										{ return (m_preHeader.version & PGF32) ? 32 : 16; }
+	BYTE ChannelDepth() const										{ return CurrentChannelDepth(m_preHeader.version); }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Return image width of channel 0 at given level in pixels.
@@ -457,8 +457,9 @@ public:
 	bool ROIisSupported() const										{ return (m_preHeader.version & PGFROI) == PGFROI; }
 
 	//////////////////////////////////////////////////////////////////////
-	/// Returns highest supported version
-	BYTE Version() const;
+	/// Returns images' PGF version
+	/// @return PGF codec version of the image
+	BYTE Version() const											{ return CurrentVersion(m_preHeader.version); }
 
 	//class methods
 
@@ -482,32 +483,42 @@ public:
 	/// @return Image level height in pixels
 	static UINT32 LevelHeight(UINT32 height, int level)				{ ASSERT(level >= 0); UINT32 h = (height >> level); return ((h << level) == height) ? h : h + 1; }
 
+	//////////////////////////////////////////////////////////////////////
+	/// Compute and return codec version.
+	/// @return current PGF codec version
+	static BYTE CurrentVersion(BYTE version = PGFVersion);
+
+	//////////////////////////////////////////////////////////////////////
+	/// Compute and return codec version.
+	/// @return current PGF codec version
+	static BYTE CurrentChannelDepth(BYTE version = PGFVersion)		{ return (version & PGF32) ? 32 : 16; }
+
 protected:
-	CWaveletTransform* m_wtChannel[MaxChannels];	// wavelet transformed color channels
-	DataT* m_channel[MaxChannels];					// untransformed channels in YUV format
-	CDecoder* m_decoder;			// PGF decoder
-	CEncoder* m_encoder;			// PGF encoder
-	UINT32* m_levelLength;			// length of each level in bytes; first level starts immediately after this array
-	UINT32 m_width[MaxChannels];	// width of each channel at current level
-	UINT32 m_height[MaxChannels];	// height of each channel at current level
-	PGFPreHeader m_preHeader;		// PGF pre header
-	PGFHeader m_header;				// PGF file header
-	PGFPostHeader m_postHeader;		// PGF post header
-	int m_currentLevel;				// transform level of current image
-	BYTE m_quant;					// quantization parameter
-	bool m_downsample;				// chrominance channels are downsampled
-	bool m_favorSpeedOverSize;		// favor encoding speed over compression ratio
-	bool m_useOMPinEncoder;			// use Open MP in encoder
-	bool m_useOMPinDecoder;			// use Open MP in decoder
+	CWaveletTransform* m_wtChannel[MaxChannels];	///< wavelet transformed color channels
+	DataT* m_channel[MaxChannels];					///< untransformed channels in YUV format
+	CDecoder* m_decoder;			///< PGF decoder
+	CEncoder* m_encoder;			///< PGF encoder
+	UINT32* m_levelLength;			///< length of each level in bytes; first level starts immediately after this array
+	UINT32 m_width[MaxChannels];	///< width of each channel at current level
+	UINT32 m_height[MaxChannels];	///< height of each channel at current level
+	PGFPreHeader m_preHeader;		///< PGF pre header
+	PGFHeader m_header;				///< PGF file header
+	PGFPostHeader m_postHeader;		///< PGF post header
+	int m_currentLevel;				///< transform level of current image
+	BYTE m_quant;					///< quantization parameter
+	bool m_downsample;				///< chrominance channels are downsampled
+	bool m_favorSpeedOverSize;		///< favor encoding speed over compression ratio
+	bool m_useOMPinEncoder;			///< use Open MP in encoder
+	bool m_useOMPinDecoder;			///< use Open MP in decoder
 #ifdef __PGFROISUPPORT__
-	bool m_levelwise;				// write level-wise (only used with WriteNextLevel)
-	bool m_streamReinitialized;		// stream has been reinitialized
-	PGFRect m_roi;					// region of interest
+	bool m_levelwise;				///< write level-wise (only used with WriteNextLevel)
+	bool m_streamReinitialized;		///< stream has been reinitialized
+	PGFRect m_roi;					///< region of interest
 #endif
 
 private:	
-	RefreshCB m_cb;					// pointer to refresh callback procedure
-	void *m_cbArg;					// refresh callback argument
+	RefreshCB m_cb;					///< pointer to refresh callback procedure
+	void *m_cbArg;					///< refresh callback argument
 
 	void ComputeLevels();
 	void CompleteHeader();
@@ -519,21 +530,21 @@ private:
 	void SetROI(PGFRect rect);
 #endif
 
-	UINT8 Clamp(DataT v) const {
-		// needs only one test in the normal case
-		if (v & 0xFFFFFF00) return (v < 0) ? (UINT8)0 : (UINT8)255; else return (UINT8)v;
-	}
 	UINT8 Clamp4(DataT v) const {
 		if (v & 0xFFFFFFF0) return (v < 0) ? (UINT8)0: (UINT8)15; else return (UINT8)v;
 	}	
 	UINT16 Clamp6(DataT v) const {
 		if (v & 0xFFFFFFC0) return (v < 0) ? (UINT16)0: (UINT16)63; else return (UINT16)v;
 	}	
+	UINT8 Clamp8(DataT v) const {
+		// needs only one test in the normal case
+		if (v & 0xFFFFFF00) return (v < 0) ? (UINT8)0 : (UINT8)255; else return (UINT8)v;
+	}
 	UINT16 Clamp16(DataT v) const {
 		if (v & 0xFFFF0000) return (v < 0) ? (UINT16)0: (UINT16)65535; else return (UINT16)v;
 	}	
 	UINT32 Clamp31(DataT v) const {
-		if (v < 0) return 0; else return (UINT32)v;
+		return (v < 0) ? 0 : (UINT32)v;
 	}	
 };
 

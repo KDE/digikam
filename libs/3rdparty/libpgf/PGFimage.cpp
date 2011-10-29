@@ -36,8 +36,7 @@
 #define YUVoffset6		32				// 2^5
 #define YUVoffset8		128				// 2^7
 #define YUVoffset16		32768			// 2^15
-#define YUVoffset31		1073741824		// 2^30
-#define MaxValue		2147483648		// 2^MaxBitPlanes = 2^31
+//#define YUVoffset31		1073741824		// 2^30
 
 //////////////////////////////////////////////////////////////////////
 // global methods and variables
@@ -231,7 +230,7 @@ void CPGFImage::CompleteHeader() {
 		case ImageModeRGBA:
 		case ImageModeCMYKColor:
 	#ifdef __PGF32SUPPORT__
-		case ImageModeGray31:
+		case ImageModeGray32:
 	#endif			
 			m_header.bpp = 32;
 			break;
@@ -272,7 +271,7 @@ void CPGFImage::CompleteHeader() {
 		case ImageModeGrayScale:
 		case ImageModeGray16:
 	#ifdef __PGF32SUPPORT__
-		case ImageModeGray31:
+		case ImageModeGray32:
 	#endif
 			m_header.channels = 1; 
 			break;
@@ -293,6 +292,13 @@ void CPGFImage::CompleteHeader() {
 			ASSERT(false);
 			m_header.channels = 3;
 		}
+	}
+
+	// store used bits per channel
+	UINT8 bpc = m_header.bpp/m_header.channels;
+	if (bpc > 31) bpc = 31;
+	if (!m_header.usedBitsPerChannel || m_header.usedBitsPerChannel > bpc) {
+		m_header.usedBitsPerChannel = bpc;
 	}
 }
 
@@ -659,23 +665,24 @@ UINT32 CPGFImage::ReadEncodedData(int level, UINT8* target, UINT32 targetLen) co
 //////////////////////////////////////////////////////////////////
 // Set background of an RGB image with transparency channel or reset to default background.
 // @param bg A pointer to a background color or NULL (reset to default background)
-void CPGFImage::SetBackground(const RGBTRIPLE* bg) { 
-	if (bg) { 
-		m_header.background = *bg; 
-//		m_backgroundSet = true; 
-	} else {
-		m_header.background.rgbtBlue = DefaultBGColor;
-		m_header.background.rgbtGreen = DefaultBGColor;
-		m_header.background.rgbtRed = DefaultBGColor;
-//		m_backgroundSet = false;
-	}
-}
+//void CPGFImage::SetBackground(const RGBTRIPLE* bg) { 
+//	if (bg) { 
+//		m_header.background = *bg; 
+////		m_backgroundSet = true; 
+//	} else {
+//		m_header.background.rgbtBlue = DefaultBGColor;
+//		m_header.background.rgbtGreen = DefaultBGColor;
+//		m_header.background.rgbtRed = DefaultBGColor;
+////		m_backgroundSet = false;
+//	}
+//}
 
 //////////////////////////////////////////////////////////////////////
 /// Set maximum intensity value for image modes with more than eight bits per channel.
-/// Don't call this method before SetHeader.
+/// Call this method after SetHeader, but before ImportBitmap.
 /// @param maxValue The maximum intensity value.
 void CPGFImage::SetMaxValue(UINT32 maxValue) {
+	const BYTE bpc = m_header.bpp/m_header.channels;
 	BYTE pot = 0;
 
 	while(maxValue > 0) {
@@ -683,8 +690,9 @@ void CPGFImage::SetMaxValue(UINT32 maxValue) {
 		maxValue >>= 1;
 	}
 	// store bits per channel
+	if (pot > bpc) pot = bpc;
 	if (pot > 31) pot = 31;
-	m_header.background.rgbtBlue = pot;
+	m_header.usedBitsPerChannel = pot;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -692,22 +700,21 @@ void CPGFImage::SetMaxValue(UINT32 maxValue) {
 /// Precondition: header must be initialized.
 /// @return number of used bits per input/output image channel.
 BYTE CPGFImage::UsedBitsPerChannel() const {
-	BYTE bpc = m_header.bpp/m_header.channels;
+	const BYTE bpc = m_header.bpp/m_header.channels;
 
 	if (bpc > 8) {
-		// see also GetMaxValue()
-		return m_header.background.rgbtBlue;
+		return m_header.usedBitsPerChannel;
 	} else {
 		return bpc;
 	}
 }
 
 //////////////////////////////////////////////////////////////////////
-/// Returns highest supported version
-BYTE CPGFImage::Version() const {
-	if (m_preHeader.version & Version6) return 6;
-	if (m_preHeader.version & Version5) return 5;
-	if (m_preHeader.version & Version2) return 2;
+/// Return version
+BYTE CPGFImage::CurrentVersion(BYTE version) {
+	if (version & Version6) return 6;
+	if (version & Version5) return 5;
+	if (version & Version2) return 2;
 	return 1;
 }
 
@@ -849,13 +856,6 @@ void CPGFImage::SetHeader(const PGFHeader& header, BYTE flags /*=0*/, UINT8* use
 
 	// check and set number of levels
 	ComputeLevels();
-
-	// misuse background value to store bits per channel
-	BYTE bpc = m_header.bpp/m_header.channels;
-	if (bpc > 8) {
-		if (bpc > 31) bpc = 31;
-		m_header.background.rgbtBlue = bpc;
-	}
 
 	// check for downsample
 	if (m_header.quality > DownsampleThreshold &&  (m_header.mode == ImageModeRGBColor || 
@@ -1224,7 +1224,7 @@ bool CPGFImage::ImportIsSupported(BYTE mode) {
 	}
 	if (size >=4) {
 		switch(mode) {
-			case ImageModeGray31:
+			case ImageModeGray32:
 				return true;
 		}
 	}
@@ -1292,6 +1292,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			ASSERT(m_header.bpp == 1);
 			ASSERT(bpp == 1);
 			
+			const UINT32 w = m_header.width;
 			const UINT32 w2 = (m_header.width + 7)/8;
 			DataT* y = m_channel[0]; ASSERT(y);
 
@@ -1300,10 +1301,23 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					percent += dP;
 				}
-
-				for (UINT32 w=0; w < w2; w++) {
-					y[yPos++] = buff[w] - YUVoffset8;
+				
+				for (UINT32 j=0; j < w2; j++) {
+					y[yPos++] = buff[j] - YUVoffset8;
 				}
+				for (UINT32 j=w2; j < w; j++) {
+					y[yPos++] = YUVoffset8;
+				}
+				
+				//UINT cnt = w;
+				//for (UINT32 j=0; j < w2; j++) {
+				//	for (int k=7; k >= 0; k--) {
+				//		if (cnt) { 
+				//			y[yPos++] = YUVoffset8 + (1 & (buff[j] >> k));
+				//			cnt--;
+				//		}
+				//	}
+				//}
 				buff += pitch;	
 			}
 		}
@@ -1347,6 +1361,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			UINT16 *buff16 = (UINT16 *)buff;
 			const int pitch16 = pitch/2;
 			const int channels = bpp/16; ASSERT(channels >= m_header.channels);
+			const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
 			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
 
 			for (UINT32 h=0; h < m_header.height; h++) {
@@ -1358,7 +1373,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 				cnt = 0;
 				for (UINT32 w=0; w < m_header.width; w++) {
 					for (int c=0; c < m_header.channels; c++) {
-						m_channel[c][yPos] = buff16[cnt + channelMap[c]] - yuvOffset16;
+						m_channel[c][yPos] = (buff16[cnt + channelMap[c]] >> shift) - yuvOffset16;
 					}
 					cnt += channels;
 					yPos++;
@@ -1410,6 +1425,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			UINT16 *buff16 = (UINT16 *)buff;
 			const int pitch16 = pitch/2;
 			const int channels = bpp/16; ASSERT(channels >= m_header.channels);
+			const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
 			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
 
 			DataT* y = m_channel[0]; ASSERT(y);
@@ -1425,9 +1441,9 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 				cnt = 0;
 				for (UINT32 w=0; w < m_header.width; w++) {
-					b = buff16[cnt + channelMap[0]];
-					g = buff16[cnt + channelMap[1]];
-					r = buff16[cnt + channelMap[2]];
+					b = buff16[cnt + channelMap[0]] >> shift;
+					g = buff16[cnt + channelMap[1]] >> shift;
+					r = buff16[cnt + channelMap[2]] >> shift;
 					// Yuv
 					y[yPos] = ((b + (g << 1) + r) >> 2) - yuvOffset16;
 					u[yPos] = r - g;
@@ -1484,6 +1500,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			UINT16 *buff16 = (UINT16 *)buff;
 			const int pitch16 = pitch/2;
 			const int channels = bpp/16; ASSERT(channels >= m_header.channels);
+			const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
 			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
 			
 			DataT* y = m_channel[0]; ASSERT(y);
@@ -1500,14 +1517,14 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 				cnt = 0;
 				for (UINT32 w=0; w < m_header.width; w++) {
-					b = buff16[cnt + channelMap[0]];
-					g = buff16[cnt + channelMap[1]];
-					r = buff16[cnt + channelMap[2]];
+					b = buff16[cnt + channelMap[0]] >> shift;
+					g = buff16[cnt + channelMap[1]] >> shift;
+					r = buff16[cnt + channelMap[2]] >> shift;
 					// Yuv
 					y[yPos] = ((b + (g << 1) + r) >> 2) - yuvOffset16;
 					u[yPos] = r - g;
 					v[yPos] = b - g;
-					a[yPos++] = buff16[cnt + channelMap[3]] - yuvOffset16;
+					a[yPos++] = (buff16[cnt + channelMap[3]] >> shift) - yuvOffset16;
 					cnt += channels;
 				}
 				buff16 += pitch16;
@@ -1515,7 +1532,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 		}
 		break;
 #ifdef __PGF32SUPPORT__
-	case ImageModeGray31:
+	case ImageModeGray32:
 		{
 			ASSERT(m_header.channels == 1);
 			ASSERT(m_header.bpp == 32);
@@ -1526,7 +1543,8 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 			UINT32 *buff32 = (UINT32 *)buff;
 			const int pitch32 = pitch/4;
-			const DataT yuvOffset31 = 1 << (UsedBitsPerChannel() - 1);
+			const int shift = 32 - UsedBitsPerChannel(); ASSERT(shift >= 0);
+			const DataT yuvOffset32 = 1 << (UsedBitsPerChannel() - 1);
 
 			for (UINT32 h=0; h < m_header.height; h++) {
 				if (cb) {
@@ -1535,8 +1553,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 				}
 
 				for (UINT32 w=0; w < m_header.width; w++) {
-					ASSERT(buff32[cnt] < MaxValue);
-					y[yPos++] = buff32[w] - yuvOffset31;
+					y[yPos++] = (buff32[w] >> shift) - yuvOffset32;
 				}
 				buff32 += pitch32;
 			}
@@ -1697,9 +1714,23 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			DataT* y = m_channel[0]; ASSERT(y);
 
 			for (i=0; i < h; i++) {
+				
 				for (j=0; j < w2; j++) {
-					buff[j] = Clamp(y[yPos++] + YUVoffset8);
+					buff[j] = Clamp8(y[yPos++] + YUVoffset8);
 				}
+				yPos += w - w2;
+				
+				//UINT32 cnt = w;
+				//for (j=0; j < w2; j++) {
+				//	buff[j] = 0;
+				//	for (int k=0; k < 8; k++) {
+				//		if (cnt) {
+				//			buff[j] <<= 1;
+				//			buff[j] |= (1 & (y[yPos++] - YUVoffset8)); 
+				//			cnt--;
+				//		}
+				//	}
+				//}
 				buff += pitch;
 
 				if (cb) {
@@ -1724,7 +1755,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 				cnt = 0;
 				for (j=0; j < w; j++) {
 					for (int c=0; c < m_header.channels; c++) {
-						buff[cnt + channelMap[c]] = Clamp(m_channel[c][yPos] + YUVoffset8);
+						buff[cnt + channelMap[c]] = Clamp8(m_channel[c][yPos] + YUVoffset8);
 					}
 					cnt += channels;
 					yPos++;
@@ -1744,10 +1775,10 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			ASSERT(m_header.bpp == m_header.channels*16);
 
 			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
-			const int shift = UsedBitsPerChannel() - 8;
 			int cnt, channels;
 
 			if (bpp%16 == 0) {
+				const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
 				UINT16 *buff16 = (UINT16 *)buff;
 				int pitch16 = pitch/2;
 				channels = bpp/16; ASSERT(channels >= m_header.channels);
@@ -1756,7 +1787,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 					cnt = 0;
 					for (j=0; j < w; j++) {
 						for (int c=0; c < m_header.channels; c++) {
-							buff16[cnt + channelMap[c]] = Clamp16(m_channel[c][yPos] + yuvOffset16);
+							buff16[cnt + channelMap[c]] = Clamp16(m_channel[c][yPos] + yuvOffset16) << shift;
 						}
 						cnt += channels;
 						yPos++;
@@ -1770,6 +1801,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 				}
 			} else {
 				ASSERT(bpp%8 == 0);
+				const int shift = __max(0, UsedBitsPerChannel() - 8);
 				channels = bpp/8; ASSERT(channels >= m_header.channels);
 				
 				for (i=0; i < h; i++) {
@@ -1815,9 +1847,9 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						uAvg = u[sampledPos];
 						vAvg = v[sampledPos];
 						// Yuv
-						buffg[cnt] = g = Clamp(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
-						buffr[cnt] = Clamp(uAvg + g);
-						buffb[cnt] = Clamp(vAvg + g);
+						buffg[cnt] = g = Clamp8(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
+						buffr[cnt] = Clamp8(uAvg + g);
+						buffb[cnt] = Clamp8(vAvg + g);
 						yPos++;
 						cnt += channels;
 						if (j%2) sampledPos++;
@@ -1838,9 +1870,9 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						uAvg = u[yPos];
 						vAvg = v[yPos];
 						// Yuv
-						buffg[cnt] = g = Clamp(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
-						buffr[cnt] = Clamp(uAvg + g);
-						buffb[cnt] = Clamp(vAvg + g);
+						buffg[cnt] = g = Clamp8(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
+						buffr[cnt] = Clamp8(uAvg + g);
+						buffb[cnt] = Clamp8(vAvg + g);
 						yPos++;
 						cnt += channels;
 					}
@@ -1862,7 +1894,6 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			ASSERT(m_header.bpp == 48);
 
 			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
-			const int shift = UsedBitsPerChannel() - 8;
 
 			DataT* y = m_channel[0]; ASSERT(y);
 			DataT* u = m_channel[1]; ASSERT(u);
@@ -1871,6 +1902,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			int cnt, channels;
 
 			if (bpp >= 48 && bpp%16 == 0) {
+				const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
 				UINT16 *buff16 = (UINT16 *)buff;
 				int pitch16 = pitch/2;
 				channels = bpp/16; ASSERT(channels >= m_header.channels);
@@ -1888,9 +1920,10 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 							vAvg = v[yPos];
 						}
 						// Yuv
-						buff16[cnt + channelMap[1]] = g = Clamp16(y[yPos] + yuvOffset16 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
-						buff16[cnt + channelMap[2]] = Clamp16(uAvg + g);
-						buff16[cnt + channelMap[0]] = Clamp16(vAvg + g);
+						g = Clamp16(y[yPos] + yuvOffset16 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
+						buff16[cnt + channelMap[1]] = g << shift;
+						buff16[cnt + channelMap[2]] = Clamp16(uAvg + g) << shift;
+						buff16[cnt + channelMap[0]] = Clamp16(vAvg + g) << shift;
 						yPos++; 
 						cnt += channels;
 						if (j%2) sampledPos++;
@@ -1905,6 +1938,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 				}
 			} else {
 				ASSERT(bpp%8 == 0);
+				const int shift = __max(0, UsedBitsPerChannel() - 8);
 				channels = bpp/8; ASSERT(channels >= m_header.channels);
 
 				for (i=0; i < h; i++) {
@@ -1962,9 +1996,9 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						uAvg = a[yPos];
 						vAvg = b[yPos];
 					}
-					buff[cnt + channelMap[0]] = Clamp(l[yPos] + YUVoffset8);
-					buff[cnt + channelMap[1]] = Clamp(uAvg + YUVoffset8); 
-					buff[cnt + channelMap[2]] = Clamp(vAvg + YUVoffset8);
+					buff[cnt + channelMap[0]] = Clamp8(l[yPos] + YUVoffset8);
+					buff[cnt + channelMap[1]] = Clamp8(uAvg + YUVoffset8); 
+					buff[cnt + channelMap[2]] = Clamp8(vAvg + YUVoffset8);
 					cnt += channels;
 					yPos++;
 					if (j%2) sampledPos++;
@@ -1985,7 +2019,6 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			ASSERT(m_header.bpp == m_header.channels*16);
 
 			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
-			const int shift = UsedBitsPerChannel() - 8;
 
 			DataT* l = m_channel[0]; ASSERT(l);
 			DataT* a = m_channel[1]; ASSERT(a);
@@ -1993,6 +2026,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			int cnt, channels;
 
 			if (bpp%16 == 0) {
+				const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
 				UINT16 *buff16 = (UINT16 *)buff;
 				int pitch16 = pitch/2;
 				channels = bpp/16; ASSERT(channels >= m_header.channels);
@@ -2009,9 +2043,9 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 							uAvg = a[yPos];
 							vAvg = b[yPos];
 						}
-						buff16[cnt + channelMap[0]] = Clamp16(l[yPos] + yuvOffset16);
-						buff16[cnt + channelMap[1]] = Clamp16(uAvg + yuvOffset16);
-						buff16[cnt + channelMap[2]] = Clamp16(vAvg + yuvOffset16);
+						buff16[cnt + channelMap[0]] = Clamp16(l[yPos] + yuvOffset16) << shift;
+						buff16[cnt + channelMap[1]] = Clamp16(uAvg + yuvOffset16) << shift;
+						buff16[cnt + channelMap[2]] = Clamp16(vAvg + yuvOffset16) << shift;
 						cnt += channels;
 						yPos++;
 						if (j%2) sampledPos++;
@@ -2026,6 +2060,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 				}
 			} else {
 				ASSERT(bpp%8 == 0);
+				const int shift = __max(0, UsedBitsPerChannel() - 8);
 				channels = bpp/8; ASSERT(channels >= m_header.channels);
 
 				for (i=0; i < h; i++) {
@@ -2080,16 +2115,16 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						// image was downsampled
 						uAvg = u[sampledPos];
 						vAvg = v[sampledPos];
-						aAvg = Clamp(a[sampledPos] + YUVoffset8);
+						aAvg = Clamp8(a[sampledPos] + YUVoffset8);
 					} else {
 						uAvg = u[yPos];
 						vAvg = v[yPos];
-						aAvg = Clamp(a[yPos] + YUVoffset8);
+						aAvg = Clamp8(a[yPos] + YUVoffset8);
 					}
 					// Yuv
-					buff[cnt + channelMap[1]] = g = Clamp(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
-					buff[cnt + channelMap[2]] = Clamp(uAvg + g);
-					buff[cnt + channelMap[0]] = Clamp(vAvg + g);
+					buff[cnt + channelMap[1]] = g = Clamp8(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
+					buff[cnt + channelMap[2]] = Clamp8(uAvg + g);
+					buff[cnt + channelMap[0]] = Clamp8(vAvg + g);
 					buff[cnt + channelMap[3]] = aAvg;
 					yPos++; 
 					cnt += channels;
@@ -2111,7 +2146,6 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			ASSERT(m_header.bpp == 64);
 
 			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
-			const int shift = UsedBitsPerChannel() - 8;
 
 			DataT* y = m_channel[0]; ASSERT(y);
 			DataT* u = m_channel[1]; ASSERT(u);
@@ -2121,6 +2155,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			int cnt, channels;
 
 			if (bpp%16 == 0) {
+				const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
 				UINT16 *buff16 = (UINT16 *)buff;
 				int pitch16 = pitch/2;
 				channels = bpp/16; ASSERT(channels >= m_header.channels);
@@ -2140,10 +2175,11 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 							aAvg = Clamp16(a[yPos] + yuvOffset16);
 						}
 						// Yuv
-						buff16[cnt + channelMap[1]] = g = Clamp16(y[yPos] + yuvOffset16 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
-						buff16[cnt + channelMap[2]] = Clamp16(uAvg + g);
-						buff16[cnt + channelMap[0]] = Clamp16(vAvg + g);
-						buff16[cnt + channelMap[3]] = aAvg;
+						g = Clamp16(y[yPos] + yuvOffset16 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
+						buff16[cnt + channelMap[1]] = g << shift;
+						buff16[cnt + channelMap[2]] = Clamp16(uAvg + g) << shift;
+						buff16[cnt + channelMap[0]] = Clamp16(vAvg + g) << shift;
+						buff16[cnt + channelMap[3]] = aAvg << shift;
 						yPos++; 
 						cnt += channels;
 						if (j%2) sampledPos++;
@@ -2158,6 +2194,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 				}
 			} else {
 				ASSERT(bpp%8 == 0);
+				const int shift = __max(0, UsedBitsPerChannel() - 8);
 				channels = bpp/8; ASSERT(channels >= m_header.channels);
 
 				for (i=0; i < h; i++) {
@@ -2196,23 +2233,23 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			break;
 		}
 #ifdef __PGF32SUPPORT__
-	case ImageModeGray31:
+	case ImageModeGray32:
 		{
 			ASSERT(m_header.channels == 1);
 			ASSERT(m_header.bpp == 32);
 
-			const int yuvOffset31 = 1 << (UsedBitsPerChannel() - 1);
-			const int shift = UsedBitsPerChannel() - 8;
+			const int yuvOffset32 = 1 << (UsedBitsPerChannel() - 1);
 
 			DataT* y = m_channel[0]; ASSERT(y);
 
 			if (bpp == 32) {
+				const int shift = 32 - UsedBitsPerChannel(); ASSERT(shift >= 0);
 				UINT32 *buff32 = (UINT32 *)buff;
 				int pitch32 = pitch/4;
 
 				for (i=0; i < h; i++) {
 					for (j=0; j < w; j++) {
-						buff32[j] = Clamp31(y[yPos++] + yuvOffset31);
+						buff32[j] = Clamp31(y[yPos++] + yuvOffset32) << shift;
 					}
 					buff32 += pitch32;
 
@@ -2221,12 +2258,45 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					}
 				}
+			} else if (bpp == 16) {
+				const int usedBits = UsedBitsPerChannel();
+				UINT16 *buff16 = (UINT16 *)buff;
+				int pitch16 = pitch/2;
+
+				if (usedBits < 16) {
+					const int shift = 16 - usedBits;
+					for (i=0; i < h; i++) {
+						for (j=0; j < w; j++) {
+							buff16[j] = Clamp16(y[yPos++] + yuvOffset32) << shift;
+						}
+						buff16 += pitch16;
+
+						if (cb) {
+							percent += dP;
+							if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
+						}
+					}
+				} else {
+					const int shift = __max(0, usedBits - 16);
+					for (i=0; i < h; i++) {
+						for (j=0; j < w; j++) {
+							buff16[j] = UINT16(Clamp31(y[yPos++] + yuvOffset32) >> shift);
+						}
+						buff16 += pitch16;
+
+						if (cb) {
+							percent += dP;
+							if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
+						}
+					}
+				}
 			} else {
 				ASSERT(bpp == 8);
+				const int shift = __max(0, UsedBitsPerChannel() - 8);
 				
 				for (i=0; i < h; i++) {
 					for (j=0; j < w; j++) {
-						buff[j] = UINT8(Clamp31(y[yPos++] + yuvOffset31) >> shift);
+						buff[j] = UINT8(Clamp31(y[yPos++] + yuvOffset32) >> shift);
 					}
 					buff += pitch;
 
@@ -2424,11 +2494,11 @@ void CPGFImage::GetYUV(int pitch, DataT* buff, BYTE bpp, int channelMap[] /*= NU
 					// image was downsampled
 					uAvg = u[sampledPos];
 					vAvg = v[sampledPos];
-					aAvg = Clamp(a[sampledPos] + yuvOffset);
+					aAvg = Clamp8(a[sampledPos] + yuvOffset);
 				} else {
 					uAvg = u[yPos];
 					vAvg = v[yPos];
-					aAvg = Clamp(a[yPos] + yuvOffset);
+					aAvg = Clamp8(a[yPos] + yuvOffset);
 				}
 				// Yuv
 				buff[cnt + channelMap[0]] = y[yPos];
