@@ -61,17 +61,18 @@ QString TooltipCreator::additionalInformation()
     infoItems << i18n("The file list can be sorted, just right-click on it to see the sort criteria (album UI only).");
 
     QString information;
-
     information += "<div style='margin-top:20px;'";
 
     information += tableStart(90);
     information += "<tr><td style='vertical-align:top;'><img src='" + getInfoIconResourceName() + "' /></td>";
     information += "<td><ol>";
+
     foreach(const QString& infoItem, infoItems)
     {
         information += "<li>" + infoItem + "</li>";
 
     }
+
     information += "</ol></td></tr>";
     information += tableEnd();
 
