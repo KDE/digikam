@@ -907,7 +907,7 @@ void DCategorizedView::resizeEvent(QResizeEvent* e)
     QModelIndex oldPosition = d->scrollPositionHint();
     DigikamKCategorizedView::resizeEvent(e);
     updateDelegateSizes();
-    scrollTo(oldPosition, QAbstractItemView::PositionAtTop);
+    scrollToRelaxed(oldPosition, QAbstractItemView::PositionAtTop);
 }
 
 bool DCategorizedView::viewportEvent(QEvent* event)
