@@ -72,9 +72,19 @@ void MixerFilter::filterImage()
     int  progress;
 
     register uint i;
+    double   rnorm;
 
-    double rnorm = CalculateNorm (m_settings.redRedGain, m_settings.redGreenGain,
-                                  m_settings.redBlueGain, m_settings.bPreserveLum);
+    if (m_settings.bMonochrome)
+    {
+        rnorm = CalculateNorm (m_settings.blackRedGain, m_settings.blackGreenGain,
+                               m_settings.blackBlueGain, m_settings.bPreserveLum);
+    }
+    else
+    {
+        rnorm = CalculateNorm (m_settings.redRedGain, m_settings.redGreenGain,
+                               m_settings.redBlueGain, m_settings.bPreserveLum);
+    }
+
     double gnorm = CalculateNorm (m_settings.greenRedGain, m_settings.greenGreenGain,
                                   m_settings.greenBlueGain, m_settings.bPreserveLum);
     double bnorm = CalculateNorm (m_settings.blueRedGain, m_settings.blueGreenGain,
