@@ -52,24 +52,27 @@ public:
         ImportParser
     };
 
-    enum SortType
+    enum SortAction
     {
-        SortNameAscending = 0,
-        SortNameDescending,
-        SortDateAscending,
-        SortDateDescending,
-        SortSizeAscending,
-        SortSizeDescending,
+        SortName = 0,
+        SortDate,
+        SortSize,
         SortCustom
+    };
+
+    enum SortDirection
+    {
+        SortAscending = 0,
+        SortDescending
     };
 
 public:
 
     AdvancedRenameManager();
-    explicit AdvancedRenameManager(const QList<ParseSettings>& files, SortType sort = SortCustom);
+    explicit AdvancedRenameManager(const QList<ParseSettings>& files);
     virtual ~AdvancedRenameManager();
 
-    void addFiles(const QList<ParseSettings>& files, SortType sort = SortCustom);
+    void addFiles(const QList<ParseSettings>& files);
     void reset();
 
     void parseFiles();
@@ -80,8 +83,11 @@ public:
     void setParserType(ParserType type);
     Parser* getParser();
 
-    void setSortType(SortType type);
-    SortType sortType() const;
+    void setSortAction(SortAction action);
+    SortAction sortAction() const;
+
+    void setSortDirection(SortDirection direction);
+    SortDirection sortDirection() const;
 
     void setStartIndex(int index) const;
 

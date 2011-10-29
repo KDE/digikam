@@ -74,24 +74,26 @@ public:
         parser(0),
         widget(0),
         parserType(AdvancedRenameManager::DefaultParser),
-        sortType(AdvancedRenameManager::SortNameAscending),
+        sortAction(AdvancedRenameManager::SortCustom),
+        sortDirection(AdvancedRenameManager::SortAscending),
         startIndex(1)
     {
     }
 
-    QStringList                       files;
-    QMap<QString, int>                fileIndexMap;
-    QMap<QString, int>                folderIndexMap;
-    QMap<QString, int>                fileGroupIndexMap;
-    QMap<QString, QDateTime>          fileDatesMap;
-    QMap<QString, QString>            renamedFiles;
+    QStringList                          files;
+    QMap<QString, int>                   fileIndexMap;
+    QMap<QString, int>                   folderIndexMap;
+    QMap<QString, int>                   fileGroupIndexMap;
+    QMap<QString, QDateTime>             fileDatesMap;
+    QMap<QString, QString>               renamedFiles;
 
-    Parser*                           parser;
-    AdvancedRenameWidget*             widget;
-    AdvancedRenameManager::ParserType parserType;
-    AdvancedRenameManager::SortType   sortType;
+    Parser*                              parser;
+    AdvancedRenameWidget*                widget;
+    AdvancedRenameManager::ParserType    parserType;
+    AdvancedRenameManager::SortAction    sortAction;
+    AdvancedRenameManager::SortDirection sortDirection;
 
-    int                               startIndex;
+    int                                  startIndex;
 };
 
 AdvancedRenameManager::AdvancedRenameManager()
@@ -100,11 +102,10 @@ AdvancedRenameManager::AdvancedRenameManager()
     setParserType(DefaultParser);
 }
 
-AdvancedRenameManager::AdvancedRenameManager(const QList<ParseSettings>& files, SortType type)
+AdvancedRenameManager::AdvancedRenameManager(const QList<ParseSettings>& files)
     : d(new ParseManagerPriv)
 {
     setParserType(DefaultParser);
-    d->sortType = type;
     addFiles(files);
 }
 
@@ -116,15 +117,26 @@ AdvancedRenameManager::~AdvancedRenameManager()
     delete d;
 }
 
-void AdvancedRenameManager::setSortType(SortType type)
+void AdvancedRenameManager::setSortAction(SortAction action)
 {
-    d->sortType = type;
+    d->sortAction = action;
     emit signalSortingChanged(fileList());
 }
 
-AdvancedRenameManager::SortType AdvancedRenameManager::sortType() const
+AdvancedRenameManager::SortAction AdvancedRenameManager::sortAction() const
 {
-    return d->sortType;
+    return d->sortAction;
+}
+
+void AdvancedRenameManager::setSortDirection(SortDirection direction)
+{
+    d->sortDirection = direction;
+    emit signalSortingChanged(fileList());
+}
+
+AdvancedRenameManager::SortDirection AdvancedRenameManager::sortDirection() const
+{
+    return d->sortDirection;
 }
 
 void AdvancedRenameManager::setStartIndex(int index) const
@@ -253,13 +265,12 @@ void AdvancedRenameManager::parseFiles(const QString& parseString, ParseSettings
     }
 }
 
-void AdvancedRenameManager::addFiles(const QList<ParseSettings>& files, SortType type)
+void AdvancedRenameManager::addFiles(const QList<ParseSettings>& files)
 {
     foreach(const ParseSettings& ps, files)
     {
         addFile(ps.fileUrl.toLocalFile(), ps.creationTime);
     }
-    d->sortType = type;
     initialize();
 }
 
@@ -294,48 +305,37 @@ QStringList AdvancedRenameManager::fileList()
 {
     QStringList tmpFiles = d->files;
 
-    switch (d->sortType)
+    switch (d->sortAction)
     {
-        case SortNameAscending:
+        case SortName:
         {
             qSort(tmpFiles.begin(), tmpFiles.end(), sortByNameCaseInsensitive);
             break;
         }
 
-        case SortNameDescending:
-        {
-            qSort(tmpFiles.begin(), tmpFiles.end(), sortByNameCaseInsensitive);
-            std::reverse(tmpFiles.begin(), tmpFiles.end());
-            break;
-        }
-
-        case SortDateAscending:
+        case SortDate:
         {
             qSort(tmpFiles.begin(), tmpFiles.end(), sortByDate);
             break;
         }
 
-        case SortDateDescending:
-        {
-            qSort(tmpFiles.begin(), tmpFiles.end(), sortByDate);
-            std::reverse(tmpFiles.begin(), tmpFiles.end());
-            break;
-        }
-
-        case SortSizeAscending:
+        case SortSize:
         {
             qSort(tmpFiles.begin(), tmpFiles.end(), sortBySize);
-            break;
-        }
-
-        case SortSizeDescending:
-        {
-            qSort(tmpFiles.begin(), tmpFiles.end(), sortBySize);
-            std::reverse(tmpFiles.begin(), tmpFiles.end());
             break;
         }
 
         case SortCustom:
+        default:
+            break;
+    }
+
+    switch (d->sortDirection)
+    {
+        case SortDescending:
+            std::reverse(tmpFiles.begin(), tmpFiles.end());
+            break;
+        case SortAscending:
         default:
             break;
     }

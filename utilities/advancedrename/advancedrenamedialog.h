@@ -113,12 +113,8 @@ private Q_SLOTS:
     void slotParseStringChanged(const QString&);
     void slotReturnPressed();
 
-    void slotSortAscending();
-    void slotSortDescending();
-    void slotSortDateAscending();
-    void slotSortDateDescending();
-    void slotSortSizeAscending();
-    void slotSortSizeDescending();
+    void slotSortActionTriggered(QAction*);
+    void slotSortDirectionTriggered(QAction*);
 
     void slotShowContextMenu(const QPoint&);
 
@@ -131,6 +127,7 @@ private:
     void readSettings();
     void writeSettings();
     bool checkNewNames();
+
     NewNamesList filterNewNames();
 
 private:
