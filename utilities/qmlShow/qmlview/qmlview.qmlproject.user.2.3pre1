@@ -1,0 +1,92 @@
+<!DOCTYPE QtCreatorProject>
+<qtcreator>
+ <data>
+  <variable>ProjectExplorer.Project.ActiveTarget</variable>
+  <value type="int">0</value>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.EditorSettings</variable>
+  <valuemap type="QVariantMap">
+   <value key="EditorConfiguration.AutoIndent" type="bool">true</value>
+   <value key="EditorConfiguration.AutoSpacesForTabs" type="bool">false</value>
+   <value key="EditorConfiguration.Codec" type="QByteArray">UTF-8</value>
+   <value key="EditorConfiguration.DoubleIndentBlocks" type="bool">false</value>
+   <value key="EditorConfiguration.IndentBraces" type="bool">false</value>
+   <value key="EditorConfiguration.IndentSize" type="int">4</value>
+   <value key="EditorConfiguration.MouseNavigation" type="bool">true</value>
+   <value key="EditorConfiguration.PaddingMode" type="int">1</value>
+   <value key="EditorConfiguration.ScrollWheelZooming" type="bool">true</value>
+   <value key="EditorConfiguration.SmartBackspace" type="bool">false</value>
+   <value key="EditorConfiguration.SpacesForTabs" type="bool">true</value>
+   <value key="EditorConfiguration.TabKeyBehavior" type="int">0</value>
+   <value key="EditorConfiguration.TabSize" type="int">8</value>
+   <value key="EditorConfiguration.UseGlobal" type="bool">true</value>
+   <value key="EditorConfiguration.Utf8BomBehavior" type="int">1</value>
+   <value key="EditorConfiguration.addFinalNewLine" type="bool">true</value>
+   <value key="EditorConfiguration.cleanIndentation" type="bool">true</value>
+   <value key="EditorConfiguration.cleanWhitespace" type="bool">true</value>
+   <value key="EditorConfiguration.inEntireDocument" type="bool">false</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.Target.0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">QML Viewer</value>
+   <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString">QML Viewer</value>
+   <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">QmlProjectManager.QmlTarget</value>
+   <value key="ProjectExplorer.Target.ActiveBuildConfiguration" type="int">-1</value>
+   <value key="ProjectExplorer.Target.ActiveDeployConfiguration" type="int">-1</value>
+   <value key="ProjectExplorer.Target.ActiveRunConfiguration" type="int">0</value>
+   <value key="ProjectExplorer.Target.BuildConfigurationCount" type="int">0</value>
+   <value key="ProjectExplorer.Target.DeployConfigurationCount" type="int">0</value>
+   <valuemap key="ProjectExplorer.Target.RunConfiguration.0" type="QVariantMap">
+    <valuelist key="Analyzer.Valgrind.AddedSupressionFiles" type="QVariantList"/>
+    <value key="Analyzer.Valgrind.FilterExternalIssues" type="bool">true</value>
+    <value key="Analyzer.Valgrind.NumCallers" type="int">25</value>
+    <valuelist key="Analyzer.Valgrind.RemovedSupressionFiles" type="QVariantList"/>
+    <value key="Analyzer.Valgrind.TrackOrigins" type="bool">true</value>
+    <value key="Analyzer.Valgrind.ValgrindExecutable" type="QString">valgrind</value>
+    <valuelist key="Analyzer.Valgrind.VisibleErrorKinds" type="QVariantList">
+     <value type="int">0</value>
+     <value type="int">1</value>
+     <value type="int">2</value>
+     <value type="int">3</value>
+     <value type="int">4</value>
+     <value type="int">5</value>
+     <value type="int">6</value>
+     <value type="int">7</value>
+     <value type="int">8</value>
+     <value type="int">9</value>
+     <value type="int">10</value>
+     <value type="int">11</value>
+     <value type="int">12</value>
+     <value type="int">13</value>
+     <value type="int">14</value>
+    </valuelist>
+    <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString"></value>
+    <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString">QML Viewer</value>
+    <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">QmlProjectManager.QmlRunConfiguration</value>
+    <value key="QmlProjectManager.QmlRunConfiguration.MainScript" type="QString">CurrentFile</value>
+    <value key="QmlProjectManager.QmlRunConfiguration.QDeclarativeViewerArguments" type="QString"></value>
+    <value key="QmlProjectManager.QmlRunConfiguration.QtVersion" type="int">2</value>
+    <valuelist key="QmlProjectManager.QmlRunConfiguration.UserEnvironmentChanges" type="QVariantList"/>
+    <value key="RunConfiguration.QmlDebugServerPort" type="uint">3768</value>
+    <value key="RunConfiguration.UseCppDebugger" type="bool">false</value>
+    <value key="RunConfiguration.UseQmlDebugger" type="bool">true</value>
+   </valuemap>
+   <value key="ProjectExplorer.Target.RunConfigurationCount" type="int">1</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.TargetCount</variable>
+  <value type="int">1</value>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.Updater.EnvironmentId</variable>
+  <value type="QString">{6a608e0f-611b-4818-9dff-d258c7bd7fa8}</value>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.Updater.FileVersion</variable>
+  <value type="int">9</value>
+ </data>
+</qtcreator>
