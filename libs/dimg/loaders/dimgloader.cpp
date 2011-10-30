@@ -100,22 +100,22 @@ unsigned int& DImgLoader::imageHeight()
     return m_image->m_priv->height;
 }
 
-bool DImgLoader::imageHasAlpha()
+bool DImgLoader::imageHasAlpha() const
 {
     return m_image->hasAlpha();
 }
 
-bool DImgLoader::imageSixteenBit()
+bool DImgLoader::imageSixteenBit() const
 {
     return m_image->sixteenBit();
 }
 
-int DImgLoader::imageBitsDepth()
+int DImgLoader::imageBitsDepth() const
 {
     return m_image->bitsDepth();
 }
 
-int DImgLoader::imageBytesDepth()
+int DImgLoader::imageBytesDepth() const
 {
     return m_image->bytesDepth();
 }

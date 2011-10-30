@@ -88,11 +88,11 @@ protected:
     unsigned int&           imageWidth();
     unsigned int&           imageHeight();
 
-    bool                    imageHasAlpha();
-    bool                    imageSixteenBit();
+    bool                    imageHasAlpha() const;
+    bool                    imageSixteenBit() const;
 
-    int                     imageBitsDepth();
-    int                     imageBytesDepth();
+    int                     imageBitsDepth() const;
+    int                     imageBytesDepth() const;
 
     void                    imageSetIccProfile(const IccProfile& profile);
     QVariant                imageGetAttribute(const QString& key);
