@@ -88,6 +88,7 @@ public:
     enum DescEditTab
     {
         DESCRIPTIONS=0,
+        TAGS,
         INFOS
     };
 
@@ -192,14 +193,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     sv->viewport()->setAutoFillBackground(false);
     captionTagsArea->setAutoFillBackground(false);
 
-    d->titleEdit = new AltLangStrEdit(captionTagsArea);
+    d->titleEdit    = new AltLangStrEdit(captionTagsArea);
     d->titleEdit->setTitle(i18n("Title:"));
     d->titleEdit->setClickMessage(i18n("Enter title here."));
-#if KEXIV2_VERSION >= 0x020100
-    d->titleEdit->setLinesVisible(2);
-#else
-    adjustTitleWidgetHeight();
-#endif
 
     d->captionsEdit = new CaptionEdit(captionTagsArea);
 
@@ -213,48 +209,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->colorLabelSelector = new ColorLabelSelector(labelsBox);
     d->ratingWidget       = new RatingWidget(labelsBox);
     labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
-
-    // Tags view ---------------------------------------------------
-
-    d->tagModel     = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
-    d->tagModel->setCheckable(true);
-    d->tagModel->setRootCheckable(false);
-    d->tagCheckView = new TagCheckView(captionTagsArea, d->tagModel);
-    d->tagCheckView->setCheckNewTags(true);
-
-    d->newTagEdit   = new AddTagsLineEdit(captionTagsArea);
-    d->newTagEdit->setModel(d->tagModel);
-    d->newTagEdit->setTagTreeView(d->tagCheckView);
-    //, "ImageDescEditTabNewTagEdit",
-    //d->newTagEdit->setCaseSensitive(false);
-    d->newTagEdit->setClickMessage(i18n("Enter new tag here..."));
-    //d->newTagEdit->setWhatsThis(i18n("Enter the text used to create new tags here. "
-    //                                 "'/' can be used to create a hierarchy of tags. "
-    //                                 "',' can be used to create more than one hierarchy at the same time."));
-
-    KHBox* tagsSearch  = new KHBox(captionTagsArea);
-    tagsSearch->setSpacing(KDialog::spacingHint());
-
-    d->tagsSearchBar   = new SearchTextBar(tagsSearch, "ImageDescEditTabTagsSearchBar");
-    d->tagsSearchBar->setModel(d->tagCheckView->filteredModel(),
-                               AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
-    d->tagsSearchBar->setFilterModel(d->tagCheckView->albumFilterModel());
-
-    d->assignedTagsBtn = new QToolButton(tagsSearch);
-    d->assignedTagsBtn->setToolTip( i18n("Tags already assigned"));
-    d->assignedTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-assigned",
-                                KIconLoader::NoGroup, KIconLoader::SizeSmall));
-    d->assignedTagsBtn->setCheckable(true);
-
-    d->recentTagsBtn      = new QToolButton(tagsSearch);
-    KMenu* recentTagsMenu = new KMenu(d->recentTagsBtn);
-    d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
-    d->recentTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-recents",
-                              KIconLoader::NoGroup, KIconLoader::SizeSmall));
-    d->recentTagsBtn->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
-    d->recentTagsBtn->setMenu(recentTagsMenu);
-    d->recentTagsBtn->setPopupMode(QToolButton::InstantPopup);
-    d->recentTagsMapper   = new QSignalMapper(this);
 
     // Buttons -----------------------------------------
 
@@ -290,14 +244,70 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     grid1->addWidget(d->captionsEdit, 1, 0, 1, 2);
     grid1->addWidget(dateBox,         2, 0, 1, 2);
     grid1->addWidget(labelsBox,       3, 0, 1, 2);
-    grid1->addWidget(d->newTagEdit,   4, 0, 1, 2);
-    grid1->addWidget(d->tagCheckView, 5, 0, 1, 2);
-    grid1->addWidget(tagsSearch,      6, 0, 1, 2);
-    grid1->setRowStretch(5, 10);
+    grid1->setRowStretch(1, 10);
     grid1->setMargin(KDialog::spacingHint());
     grid1->setSpacing(KDialog::spacingHint());
 
     d->tabWidget->insertTab(ImageDescEditTabPriv::DESCRIPTIONS, sv, i18n("Description"));
+
+    // Tags view ---------------------------------------------------
+
+    QScrollArea* sv3    = new QScrollArea(d->tabWidget);
+    sv3->setFrameStyle(QFrame::NoFrame);
+    sv3->setWidgetResizable(true);
+
+    QWidget* tagsArea   = new QWidget(sv3->viewport());
+    QGridLayout* grid3  = new QGridLayout(tagsArea);
+    sv3->setWidget(tagsArea);
+    sv3->viewport()->setAutoFillBackground(false);
+    tagsArea->setAutoFillBackground(false);
+
+    d->tagModel     = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
+    d->tagModel->setCheckable(true);
+    d->tagModel->setRootCheckable(false);
+    d->tagCheckView = new TagCheckView(tagsArea, d->tagModel);
+    d->tagCheckView->setCheckNewTags(true);
+
+    d->newTagEdit   = new AddTagsLineEdit(tagsArea);
+    d->newTagEdit->setModel(d->tagModel);
+    d->newTagEdit->setTagTreeView(d->tagCheckView);
+    //, "ImageDescEditTabNewTagEdit",
+    //d->newTagEdit->setCaseSensitive(false);
+    d->newTagEdit->setClickMessage(i18n("Enter new tag here..."));
+    //d->newTagEdit->setWhatsThis(i18n("Enter the text used to create new tags here. "
+    //                                 "'/' can be used to create a hierarchy of tags. "
+    //                                 "',' can be used to create more than one hierarchy at the same time."));
+
+    KHBox* tagsSearch  = new KHBox(tagsArea);
+    tagsSearch->setSpacing(KDialog::spacingHint());
+
+    d->tagsSearchBar   = new SearchTextBar(tagsSearch, "ImageDescEditTabTagsSearchBar");
+    d->tagsSearchBar->setModel(d->tagCheckView->filteredModel(),
+                               AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->tagsSearchBar->setFilterModel(d->tagCheckView->albumFilterModel());
+
+    d->assignedTagsBtn = new QToolButton(tagsSearch);
+    d->assignedTagsBtn->setToolTip( i18n("Tags already assigned"));
+    d->assignedTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-assigned",
+                                KIconLoader::NoGroup, KIconLoader::SizeSmall));
+    d->assignedTagsBtn->setCheckable(true);
+
+    d->recentTagsBtn      = new QToolButton(tagsSearch);
+    KMenu* recentTagsMenu = new KMenu(d->recentTagsBtn);
+    d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
+    d->recentTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-recents",
+                              KIconLoader::NoGroup, KIconLoader::SizeSmall));
+    d->recentTagsBtn->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
+    d->recentTagsBtn->setMenu(recentTagsMenu);
+    d->recentTagsBtn->setPopupMode(QToolButton::InstantPopup);
+    d->recentTagsMapper   = new QSignalMapper(this);    
+
+    grid3->addWidget(d->newTagEdit,   0, 0, 1, 2);
+    grid3->addWidget(d->tagCheckView, 1, 0, 1, 2);
+    grid3->addWidget(tagsSearch,      2, 0, 1, 2);
+    grid3->setRowStretch(1, 10);
+
+    d->tabWidget->insertTab(ImageDescEditTabPriv::TAGS, sv3, i18n("Tags"));
 
     // Information Managament View --------------------------------------
 
@@ -305,7 +315,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     sv2->setFrameStyle(QFrame::NoFrame);
     sv2->setWidgetResizable(true);
 
-    QWidget* infoArea   = new QWidget(sv->viewport());
+    QWidget* infoArea   = new QWidget(sv2->viewport());
     QGridLayout* grid2  = new QGridLayout(infoArea);
     sv2->setWidget(infoArea);
     sv2->viewport()->setAutoFillBackground(false);
@@ -805,52 +815,7 @@ bool ImageDescEditTab::eventFilter(QObject* o, QEvent* e)
         }
     }
 
-    if ( e->type() == QEvent::FontChange)
-    {
-        if (qobject_cast<QWidget*>(o) == d->titleEdit)
-        {
-            adjustTitleWidgetHeight();
-            return true;
-        }
-    }
-
     return KVBox::eventFilter(o, e);
-}
-
-// NOTE: Method to fix B.K.O #283580
-void ImageDescEditTab::adjustTitleWidgetHeight()
-{
-#if KEXIV2_VERSION >= 0x020100
-    // Nothing to do, all is managed in libkexiv2 widget.
-#else
-    int size          = d->titleEdit->layout()->margin()*2;
-    size             += d->titleEdit->layout()->spacing();
-    
-    QObjectList oList = d->titleEdit->children();
-
-    foreach(QObject* w, oList)
-    {
-        QLabel* label = qobject_cast<QLabel*>(w);
-        if (label)
-        {
-            size += label->height();
-        }
-        
-        QTextEdit* tedit = qobject_cast<QTextEdit*>(w);
-        if (tedit)
-        {
-            size += tedit->fontMetrics().lineSpacing() * 2                       +
-                    tedit->contentsMargins().top()                               +
-                    tedit->contentsMargins().bottom()                            +
-                    1                                                            +
-                    2*(tedit->style()->pixelMetric(QStyle::PM_DefaultFrameWidth) +
-                    tedit->style()->pixelMetric(QStyle::PM_FocusFrameVMargin));
-        }
-    }
-    
-    d->titleEdit->setFixedHeight(size);
-    kDebug() << "size adjusted to : " << size;
-#endif
 }
 
 void ImageDescEditTab::populateTags()
