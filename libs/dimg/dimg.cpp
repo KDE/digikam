@@ -783,6 +783,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         char nl;
         FILE* file = fopen(QFile::encodeName(filePath), "rb");
 
+        // FIXME: scanf without field width limits can crash with huge input data
         if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) == 4)
         {
             if (rgbmax > 255)

@@ -502,6 +502,7 @@ void MixerSettings::loadSettings()
 
         fgets(buf1, 1023, fp);
 
+        // FIXME: scanf without field width limits can crash with huge input data
         fscanf (fp, "%*s %s", buf1);
 
 //        // Get the current output channel in dialog.
@@ -519,8 +520,10 @@ void MixerSettings::loadSettings()
 //            currentOutputChannel = BlueChannel;
 //        }
 
+        // FIXME: scanf without field width limits can crash with huge input data
         fscanf (fp, "%*s %s", buf1); // preview flag, preserved for compatibility
 
+        // FIXME: scanf without field width limits can crash with huge input data
         fscanf (fp, "%*s %s", buf1);
 
         if (strcmp (buf1, "true") == 0)
@@ -532,6 +535,7 @@ void MixerSettings::loadSettings()
             settings.bMonochrome = false;
         }
 
+        // FIXME: scanf without field width limits can crash with huge input data
         fscanf (fp, "%*s %s", buf1);
 
         if (strcmp (buf1, "true") == 0)
@@ -543,21 +547,25 @@ void MixerSettings::loadSettings()
             settings.bPreserveLum = false;
         }
 
+        // FIXME: scanf without field width limits can crash with huge input data
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
         settings.redRedGain   = atof(buf1);
         settings.redGreenGain = atof(buf2);
         settings.redBlueGain  = atof(buf3);
 
+        // FIXME: scanf without field width limits can crash with huge input data
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
         settings.greenRedGain   = atof(buf1);
         settings.greenGreenGain = atof(buf2);
         settings.greenBlueGain  = atof(buf3);
 
+        // FIXME: scanf without field width limits can crash with huge input data
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
         settings.blueRedGain   = atof(buf1);
         settings.blueGreenGain = atof(buf2);
         settings.blueBlueGain  = atof(buf3);
 
+        // FIXME: scanf without field width limits can crash with huge input data
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
         settings.blackRedGain   = atof(buf1);
         settings.blackGreenGain = atof(buf2);
