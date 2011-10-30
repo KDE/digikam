@@ -201,7 +201,9 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* kernel
 
             for (mcy=0 ; runningFlag() && (mcy < kernelWidth) ; ++mcy, ++sy)
             {
+                // FIXME: ugly!!!
                 my = sy < 0 ? 0 : sy > (int)m_destImage.height()-1 ? m_destImage.height()-1 : sy;
+                // FIXME: ugly!!!
                 sx = x+(-halfKernelWidth);
 
                 for (mcx=0 ; runningFlag() && (mcx < kernelWidth) ; ++mcx, ++sx)
