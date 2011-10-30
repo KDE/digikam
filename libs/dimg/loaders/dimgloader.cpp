@@ -169,15 +169,19 @@ unsigned char* DImgLoader::new_failureTolerant(size_t size)
         return 0;
     }
 
+    unsigned char* reserved = 0;
+
     try
     {
-        return new uchar[size];
+        reserved = new uchar[size];
     }
     catch (std::bad_alloc& ex)
     {
         kError() << "Failed to allocate chunk of memory of size" << size << ex.what();
-        return 0;
+        reserved = 0;
     }
+
+    return reserved;
 }
 
 unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
@@ -187,15 +191,19 @@ unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
         return 0;
     }
 
+    unsigned short* reserved = 0;
+
     try
     {
-        return new unsigned short[size];
+        reserved = new unsigned short[size];
     }
     catch (std::bad_alloc& ex)
     {
         kError() << "Failed to allocate chunk of memory of size" << size << ex.what();
-        return 0;
+        reserved = 0;
     }
+
+    return reserved;
 }
 
 int DImgLoader::checkAllocation(qint64 fullSize)
