@@ -26,4 +26,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 285240 : digiKam fails to build with external libpgf-6.11.42.
 019 ==> 284625 : Channel Mixer Preserve Luminosity does not work.
 020 ==> 285250 : digiKam crashed after saving changed file.
-021 ==> 
+021 ==> 250187 : Error message "trashbin full" - while trash _is_ definitely empty.
+022 ==> 
