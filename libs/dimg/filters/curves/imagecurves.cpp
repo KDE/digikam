@@ -1175,6 +1175,7 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
     {
         for (j = 0 ; j < NUM_POINTS ; ++j)
         {
+            // FIXME: scanf without field width limits can crash with huge input data
             fields = fscanf (file, "%d %d ", &index[i][j], &value[i][j]);
 
             if (fields != 2)

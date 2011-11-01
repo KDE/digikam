@@ -56,6 +56,7 @@
 
 // Constants
 #define CodeBufferBitLen		(BufferSize*WordWidth)	// max number of bits in m_codeBuffer
+#define MaxCodeLen				((1 << RLblockSizeLen) - 1)	// max length of RL encoded block
 
 /////////////////////////////////////////////////////////////////////
 // Constructor
@@ -594,8 +595,8 @@ void CDecoder::SkipTileBuffer() THROW_ {
 //		Buffer		::= <nPlanes>(5 bits) foreach(plane i): Plane[i]  
 //		Plane[i]	::= [ Sig1 | Sig2 ] [DWORD alignment] refBits
 //		Sig1		::= 1 <codeLen>(15 bits) codedSigAndSignBits 
-//		Sig2		::= 0 <sigLen>(15 bits) [Sign1 | Sign2 ] sigBits 
-//		Sign1		::= 1 <codeLen>(15 bits) [DWORD alignment] codedSignBits
+//		Sig2		::= 0 <sigLen>(15 bits) [Sign1 | Sign2 ] [DWORD alignment] sigBits 
+//		Sign1		::= 1 <codeLen>(15 bits) codedSignBits
 //		Sign2		::= 0 <signLen>(15 bits) [DWORD alignment] signBits
 void CDecoder::CMacroBlock::BitplaneDecode() {
 	UINT32 bufferSize = m_header.rbh.bufferSize; ASSERT(bufferSize <= BufferSize);
@@ -616,6 +617,7 @@ void CDecoder::CMacroBlock::BitplaneDecode() {
 	}
 
 	// read number of bit planes
+	// <nPlanes>
 	nPlanes = GetValueBlock(m_codeBuffer, 0, MaxBitPlanesLog); 
 	codePos += MaxBitPlanesLog;
 
@@ -628,10 +630,11 @@ void CDecoder::CMacroBlock::BitplaneDecode() {
 		// read RL code
 		if (GetBit(m_codeBuffer, codePos)) {
 			// RL coding of sigBits is used
+			// <1><codeLen><codedSigAndSignBits>_<refBits>
 			codePos++;
 
 			// read codeLen
-			codeLen = GetValueBlock(m_codeBuffer, codePos, RLblockSizeLen); ASSERT(codeLen < (1 << RLblockSizeLen));
+			codeLen = GetValueBlock(m_codeBuffer, codePos, RLblockSizeLen); ASSERT(codeLen <= MaxCodeLen);
 
 			// position of encoded sigBits and signBits
 			sigPos = codePos + RLblockSizeLen; ASSERT(sigPos < CodeBufferBitLen); 
@@ -644,20 +647,22 @@ void CDecoder::CMacroBlock::BitplaneDecode() {
 			sigLen = ComposeBitplaneRLD(bufferSize, planeMask, sigPos, &m_codeBuffer[codePos >> WordWidthLog]);
 
 		} else {
-			// no RL coding is used
+			// no RL coding is used for sigBits and signBits together
+			// <0><sigLen>
 			codePos++;
 
 			// read sigLen
-			sigLen = GetValueBlock(m_codeBuffer, codePos, RLblockSizeLen); ASSERT(sigLen <= BufferSize);
+			sigLen = GetValueBlock(m_codeBuffer, codePos, RLblockSizeLen); ASSERT(sigLen <= MaxCodeLen);
 			codePos += RLblockSizeLen; ASSERT(codePos < CodeBufferBitLen);
 
 			// read RL code for signBits
 			if (GetBit(m_codeBuffer, codePos)) {
-				// RL coding is used
+				// RL coding is used just for signBits
+				// <1><codeLen><codedSignBits>_<sigBits>_<refBits>
 				codePos++;
 
 				// read codeLen
-				codeLen = GetValueBlock(m_codeBuffer, codePos, RLblockSizeLen);
+				codeLen = GetValueBlock(m_codeBuffer, codePos, RLblockSizeLen); ASSERT(codeLen <= MaxCodeLen);
 
 				// sign bits
 				signPos = codePos + RLblockSizeLen; ASSERT(signPos < CodeBufferBitLen);
@@ -669,20 +674,21 @@ void CDecoder::CMacroBlock::BitplaneDecode() {
 				codePos = AlignWordPos(sigPos + sigLen); ASSERT(codePos < CodeBufferBitLen);
 
 				// read significant and refinement bitset from m_codeBuffer
-				sigLen = ComposeBitplaneRLD(bufferSize, planeMask, &m_codeBuffer[sigPos >> WordWidthLog], &m_codeBuffer[codePos >> WordWidthLog], &m_codeBuffer[signPos >> WordWidthLog]);
+				sigLen = ComposeBitplaneRLD(bufferSize, planeMask, &m_codeBuffer[sigPos >> WordWidthLog], &m_codeBuffer[codePos >> WordWidthLog], signPos);
 			
 			} else {
 				// RL coding of signBits was not efficient and therefore not used
+				// <0><signLen>_<signBits>_<sigBits>_<refBits>
 				codePos++;
 
 				// read signLen
-				signLen = AlignWordPos(GetValueBlock(m_codeBuffer, codePos, RLblockSizeLen)); ASSERT(signLen <= bufferSize);
+				signLen = GetValueBlock(m_codeBuffer, codePos, RLblockSizeLen); ASSERT(signLen <= MaxCodeLen);
 				
 				// sign bits
 				signPos = AlignWordPos(codePos + RLblockSizeLen); ASSERT(signPos < CodeBufferBitLen);
 
 				// significant bits
-				sigPos = signPos + signLen; ASSERT(sigPos < CodeBufferBitLen);
+				sigPos = AlignWordPos(signPos + signLen); ASSERT(sigPos < CodeBufferBitLen);
 
 				// refinement bits
 				codePos = AlignWordPos(sigPos + sigLen); ASSERT(codePos < CodeBufferBitLen);
@@ -873,12 +879,11 @@ UINT32 CDecoder::CMacroBlock::ComposeBitplaneRLD(UINT32 bufferSize, DataT planeM
 // RLE:
 // decode run of 2^k 1's by a single 1
 // decode run of count 1's followed by a 0 with codeword: 0<count>
-UINT32 CDecoder::CMacroBlock::ComposeBitplaneRLD(UINT32 bufferSize, DataT planeMask, UINT32* sigBits, UINT32* refBits, UINT32* signBits) {
+UINT32 CDecoder::CMacroBlock::ComposeBitplaneRLD(UINT32 bufferSize, DataT planeMask, UINT32* sigBits, UINT32* refBits, UINT32 signPos) {
 	ASSERT(sigBits);
 	ASSERT(refBits);
-	ASSERT(signBits);
 
-	UINT32 valPos = 0, signPos = 0, refPos = 0;
+	UINT32 valPos = 0, refPos = 0;
 	UINT32 sigPos = 0, sigEnd;
 	UINT32 zerocnt, count = 0;
 	UINT32 k = 0;
@@ -913,7 +918,7 @@ UINT32 CDecoder::CMacroBlock::ComposeBitplaneRLD(UINT32 bufferSize, DataT planeM
 						zeroAfterRun = false;
 					} else {
 						// decode next sign bit
-						if (GetBit(signBits, signPos++)) {
+						if (GetBit(m_codeBuffer, signPos++)) {
 							// generate 1's run of length 2^k
 							count = runlen - 1;
 							signBit = true;
@@ -927,7 +932,7 @@ UINT32 CDecoder::CMacroBlock::ComposeBitplaneRLD(UINT32 bufferSize, DataT planeM
 							// extract counter and generate 1's run of length count
 							if (k > 0) {
 								// extract counter
-								count = GetValueBlock(signBits, signPos, k); 
+								count = GetValueBlock(m_codeBuffer, signPos, k); 
 								signPos += k;
 
 								// adapt k (half run-length interval)
@@ -970,7 +975,6 @@ UINT32 CDecoder::CMacroBlock::ComposeBitplaneRLD(UINT32 bufferSize, DataT planeM
 	}
 	ASSERT(sigPos <= bufferSize);
 	ASSERT(refPos <= bufferSize);
-	ASSERT(signPos <= bufferSize);
 	ASSERT(valPos == bufferSize);
 
 	return sigPos;

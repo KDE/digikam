@@ -70,18 +70,19 @@
 //-------------------------------------------------------------------------------
 //	32 Bit platform constants
 //-------------------------------------------------------------------------------
-#define WordWidth			32					// WordBytes*8
-#define WordWidthLog		5					// ld of WordWidth
-#define WordMask			0xFFFFFFE0			// least WordWidthLog bits are zero
-#define WordBytes			4					// sizeof(UINT32)
-#define WordBytesLog		2					// ld of WordBytes
+#define WordWidth			32					///< WordBytes*8
+#define WordWidthLog		5					///< ld of WordWidth
+#define WordMask			0xFFFFFFE0			///< least WordWidthLog bits are zero
+#define WordBytes			4					///< sizeof(UINT32)
+#define WordBytesMask		0xFFFFFFFC			///< least WordBytesLog bits are zero
+#define WordBytesLog		2					///< ld of WordBytes
 
 //-------------------------------------------------------------------------------
-// Macros
+// Alignment macros (used in PGF based libraries)
 //-------------------------------------------------------------------------------
-//#define DWWIDTH(bytes)		((((bytes) + WordBytes - 1) >> WordBytesLog) << WordBytesLog)	// aligns scanline width in bytes to DWORD value
-//#define DWWIDTHBITS(bits)	((((bits) + WordWidth - 1) >> WordWidthLog) << WordBytesLog)	// aligns scanline width in bits to DWORD value
-//#define DWWIDTHREST(bytes)	((WordBytes - (bytes)%WordBytes)%WordBytes)						// DWWIDTHBITS(bytes*8) - bytes
+#define DWWIDTHBITS(bits)	(((bits) + WordWidth - 1) & WordMask)		///< aligns scanline width in bits to DWORD value
+#define DWWIDTH(bytes)		(((bytes) + WordBytes - 1) & WordBytesMask)	///< aligns scanline width in bytes to DWORD value
+#define DWWIDTHREST(bytes)	((WordBytes - (bytes)%WordBytes)%WordBytes)	///< DWWIDTH(bytes) - bytes
 
 //-------------------------------------------------------------------------------
 // Min-Max macros
@@ -112,7 +113,7 @@
 #define ImageModeDuotone16			15
 // pgf extension
 #define ImageModeRGBA				17
-#define ImageModeGray31				18
+#define ImageModeGray32				18
 #define ImageModeRGB12				19
 #define ImageModeRGB16				20
 #define ImageModeUnknown			255
@@ -232,18 +233,18 @@ typedef bool (__cdecl *CallbackPtr)(double percent, bool escapeAllowed, void *da
 //-------------------------------------------------------------------------------
 // IO Error constants
 //-------------------------------------------------------------------------------
-#define NoError				ERROR_SUCCESS		// no error
-#define AppError			0x20000000			// all application error messages must be larger than this value
-#define InsufficientMemory	0x20000001			// memory allocation wasn't successfull
-#define InvalidStreamPos	0x20000002			// invalid memory stream position
-#define EscapePressed		0x20000003			// user break by ESC
-#define WrongVersion		0x20000004			// wrong pgf version 
-#define FormatCannotRead	0x20000005			// wrong data file format
-#define ImageTooSmall		0x20000006			// image is too small
-#define ZlibError			0x20000007			// error in zlib functions
-#define ColorTableError		0x20000008			// errors related to color table size
-#define PNGError			0x20000009			// errors in png functions
-#define MissingData			0x2000000A			// expected data cannot be read
+#define NoError				ERROR_SUCCESS		///< no error
+#define AppError			0x20000000			///< all application error messages must be larger than this value
+#define InsufficientMemory	0x20000001			///< memory allocation wasn't successfull
+#define InvalidStreamPos	0x20000002			///< invalid memory stream position
+#define EscapePressed		0x20000003			///< user break by ESC
+#define WrongVersion		0x20000004			///< wrong pgf version 
+#define FormatCannotRead	0x20000005			///< wrong data file format
+#define ImageTooSmall		0x20000006			///< image is too small
+#define ZlibError			0x20000007			///< error in zlib functions
+#define ColorTableError		0x20000008			///< errors related to color table size
+#define PNGError			0x20000009			///< errors in png functions
+#define MissingData			0x2000000A			///< expected data cannot be read
 
 //-------------------------------------------------------------------------------
 // methods
@@ -339,9 +340,9 @@ inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 
 
 //-------------------------------------------------------------------------------
-// NetBSD
+// *BSD
 //-------------------------------------------------------------------------------
-#ifdef __NetBSD__
+#if defined(__NetBSD__) || defined(__OpenBSD__) || defined(__FreeBSD__)
 #ifndef __POSIX__ 
 #define __POSIX__ 
 #endif 
@@ -354,7 +355,7 @@ inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 #define lseek64 lseek 
 #endif 
 
-#endif // __NetBSD__
+#endif // __NetBSD__ or __OpenBSD__ or __FreeBSD__
 
 
 //-------------------------------------------------------------------------------
@@ -497,17 +498,17 @@ __inline int MulDiv(int nNumber, int nNumerator, int nDenominator) {
 // IO Error constants
 //-------------------------------------------------------------------------------
 #define NoError					0x0000
-#define AppError				0x2000			// all application error messages must be larger than this value
-#define InsufficientMemory		0x2001			// memory allocation wasn't successfull
-#define InvalidStreamPos		0x2002			// invalid memory stream position
-#define EscapePressed			0x2003			// user break by ESC
-#define WrongVersion			0x2004			// wrong pgf version 
-#define FormatCannotRead		0x2005			// wrong data file format
-#define ImageTooSmall			0x2006			// image is too small
-#define ZlibError				0x2007			// error in zlib functions
-#define ColorTableError			0x2008			// errors related to color table size
-#define PNGError				0x2009			// errors in png functions
-#define MissingData				0x200A			// expected data cannot be read
+#define AppError				0x2000			///< all application error messages must be larger than this value
+#define InsufficientMemory		0x2001			///< memory allocation wasn't successfull
+#define InvalidStreamPos		0x2002			///< invalid memory stream position
+#define EscapePressed			0x2003			///< user break by ESC
+#define WrongVersion			0x2004			///< wrong pgf version 
+#define FormatCannotRead		0x2005			///< wrong data file format
+#define ImageTooSmall			0x2006			///< image is too small
+#define ZlibError				0x2007			///< error in zlib functions
+#define ColorTableError			0x2008			///< errors related to color table size
+#define PNGError				0x2009			///< errors in png functions
+#define MissingData				0x200A			///< expected data cannot be read
 
 //-------------------------------------------------------------------------------
 // methods

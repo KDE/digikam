@@ -6,7 +6,7 @@
  * Date        : 2009-09-14
  * Description : a rename dialog for the AdvancedRename utility
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -141,6 +141,13 @@ public:
     AdvancedRenameDialogPriv() :
         singleFileMode(false),
         minSizeDialog(450),
+        sortActionName(0),
+        sortActionDate(0),
+        sortActionSize(0),
+        sortActionAscending(0),
+        sortActionDescending(0),
+        sortGroupActions(0),
+        sortGroupDirections(0),
         listView(0),
         advancedRenameManager(0),
         advancedRenameWidget(0)
@@ -154,6 +161,16 @@ public:
 
     bool                   singleFileMode;
     int                    minSizeDialog;
+
+    QAction*               sortActionName;
+    QAction*               sortActionDate;
+    QAction*               sortActionSize;
+
+    QAction*               sortActionAscending;
+    QAction*               sortActionDescending;
+
+    QActionGroup*          sortGroupActions;
+    QActionGroup*          sortGroupDirections;
 
     QTreeWidget*           listView;
     AdvancedRenameManager* advancedRenameManager;
@@ -172,6 +189,38 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     d->advancedRenameManager  = new AdvancedRenameManager();
     d->advancedRenameWidget   = new AdvancedRenameWidget(this);
     d->advancedRenameManager->setWidget(d->advancedRenameWidget);
+
+    // --------------------------------------------------------
+
+    d->sortActionName  = new QAction(i18n("By Name"), this);
+    d->sortActionDate  = new QAction(i18n("By Date"), this);
+    d->sortActionSize  = new QAction(i18n("By File Size"), this);
+
+    d->sortActionName->setCheckable(true);
+    d->sortActionDate->setCheckable(true);
+    d->sortActionSize->setCheckable(true);
+
+    // --------------------------------------------------------
+
+    d->sortActionAscending  = new QAction(i18n("Ascending"), this);
+    d->sortActionDescending = new QAction(i18n("Descending"), this);
+
+    d->sortActionAscending->setCheckable(true);
+    d->sortActionDescending->setCheckable(true);
+
+    d->sortActionAscending->setChecked(true);
+
+    // --------------------------------------------------------
+
+    d->sortGroupActions     = new QActionGroup(this);
+    d->sortGroupDirections  = new QActionGroup(this);
+
+    d->sortGroupActions->addAction(d->sortActionName);
+    d->sortGroupActions->addAction(d->sortActionDate);
+    d->sortGroupActions->addAction(d->sortActionSize);
+
+    d->sortGroupDirections->addAction(d->sortActionAscending);
+    d->sortGroupDirections->addAction(d->sortActionDescending);
 
     // --------------------------------------------------------
 
@@ -223,6 +272,12 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 
     connect(d->listView, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotShowContextMenu(QPoint)));
+
+    connect(d->sortGroupActions, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotSortActionTriggered(QAction*)));
+
+    connect(d->sortGroupDirections, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotSortDirectionTriggered(QAction*)));
 }
 
 AdvancedRenameDialog::~AdvancedRenameDialog()
@@ -240,61 +295,50 @@ void AdvancedRenameDialog::slotReturnPressed()
     }
 }
 
-void AdvancedRenameDialog::slotSortAscending()
+void AdvancedRenameDialog::slotSortActionTriggered(QAction* action)
 {
-    d->advancedRenameManager->setSortType(AdvancedRenameManager::SortNameAscending);
+    if (!action)
+    {
+        d->advancedRenameManager->setSortAction(AdvancedRenameManager::SortCustom);
+    }
+    else if (action == d->sortActionName)
+    {
+        d->advancedRenameManager->setSortAction(AdvancedRenameManager::SortName);
+    }
+    else if (action == d->sortActionDate)
+    {
+        d->advancedRenameManager->setSortAction(AdvancedRenameManager::SortDate);
+    }
+    else if (action == d->sortActionSize)
+    {
+        d->advancedRenameManager->setSortAction(AdvancedRenameManager::SortSize);
+    }
 }
 
-void AdvancedRenameDialog::slotSortDescending()
+void AdvancedRenameDialog::slotSortDirectionTriggered(QAction* direction)
 {
-    d->advancedRenameManager->setSortType(AdvancedRenameManager::SortNameDescending);
-}
-
-void AdvancedRenameDialog::slotSortDateAscending()
-{
-    d->advancedRenameManager->setSortType(AdvancedRenameManager::SortDateAscending);
-}
-
-void AdvancedRenameDialog::slotSortDateDescending()
-{
-    d->advancedRenameManager->setSortType(AdvancedRenameManager::SortDateDescending);
-}
-
-void AdvancedRenameDialog::slotSortSizeAscending()
-{
-    d->advancedRenameManager->setSortType(AdvancedRenameManager::SortSizeAscending);
-}
-
-void AdvancedRenameDialog::slotSortSizeDescending()
-{
-    d->advancedRenameManager->setSortType(AdvancedRenameManager::SortSizeDescending);
+    if (direction == d->sortActionAscending)
+    {
+        d->advancedRenameManager->setSortDirection(AdvancedRenameManager::SortAscending);
+    }
+    else if (direction == d->sortActionDescending)
+    {
+        d->advancedRenameManager->setSortDirection(AdvancedRenameManager::SortDescending);
+    }
 }
 
 void AdvancedRenameDialog::slotShowContextMenu(const QPoint& pos)
 {
-    QAction* sortAscending      = new QAction(i18n("By Name - Ascending"), this);
-    QAction* sortDescending     = new QAction(i18n("By Name - Descending"), this);
-    QAction* sortDateAscending  = new QAction(i18n("By Date - Ascending"), this);
-    QAction* sortDateDescending = new QAction(i18n("By Date - Descending"), this);
-    QAction* sortSizeAscending  = new QAction(i18n("By File Size - Ascending"), this);
-    QAction* sortSizeDescending = new QAction(i18n("By File Size - Descending"), this);
-
-    // --------------------------------------------------------
-
     KMenu menu(this);
     menu.addTitle(i18n("Sort Images"));
 
     ContextMenuHelper cmhelper(&menu);
-    cmhelper.addAction(sortAscending, this, SLOT(slotSortAscending()));
-    cmhelper.addAction(sortDescending, this, SLOT(slotSortDescending()));
+    cmhelper.addAction(d->sortActionName);
+    cmhelper.addAction(d->sortActionDate);
+    cmhelper.addAction(d->sortActionSize);
     cmhelper.addSeparator();
-    cmhelper.addAction(sortDateAscending, this, SLOT(slotSortDateAscending()));
-    cmhelper.addAction(sortDateDescending, this, SLOT(slotSortDateDescending()));
-    cmhelper.addSeparator();
-    cmhelper.addAction(sortSizeAscending, this, SLOT(slotSortSizeAscending()));
-    cmhelper.addAction(sortSizeDescending, this, SLOT(slotSortSizeDescending()));
-
-    // --------------------------------------------------------
+    cmhelper.addAction(d->sortActionAscending);
+    cmhelper.addAction(d->sortActionDescending);
 
     cmhelper.exec(d->listView->viewport()->mapToGlobal(pos));
 }

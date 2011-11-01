@@ -420,7 +420,12 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
             }
         }
 
+#ifdef PGFCodecVersionID
+#   if PGFCodecVersionID < 0x061142
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
+#   endif
+#endif
+
         pgf.SetHeader(header);
 
         pgf.ImportBitmap(4 * imageWidth() * (imageSixteenBit() ? 2 : 1),

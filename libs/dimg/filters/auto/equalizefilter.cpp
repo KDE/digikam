@@ -98,6 +98,7 @@ void EqualizeFilter::equalizeImage()
     histogram->calculate();
 
     // Memory allocation.
+    // FIXME: Possible null pointer dereference "histogram", otherwise it is redundant to check if "histgram" is null below.
     map          = new double_packet[histogram->getHistogramSegments()];
     equalize_map = new int_packet[histogram->getHistogramSegments()];
 

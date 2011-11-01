@@ -3,6 +3,8 @@ digiKam 2.3.0 - Release date: 2011-11-06
 
 NEW FEATURES:
 
+General        : My Tags section from Captions/Tags sidebar have been moved to a dedicated sub-tab for
+                 better usability with small screen.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -16,11 +18,16 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 283708 : digiKam don't start after update to package 2.2.0-14.2 (undefined symbol: _ZN4KIPI21ImageCollectionSharedD2Ev).
 009 ==> 283856 : Libkexiv2 from kdegraphics-libs cannot be compiled with exiv2 0.22.
 010 ==> 284269 : Tamron SP AF 17-50 show wrong lens ID.
-011 ==> 284720 : Build fails with error
+011 ==> 284720 : Build fails with error.
 012 ==> 283088 : Crash after long startup - NFSed images.
 013 ==> 284604 : Import from EOS 350D does nothing (solid interface relevant).
 014 ==> 284731 : Crashed when work batch convert.
 015 ==> 284740 : Can't change theme.
-016 ==> 285056 : Differently sort files before renaming. 
-017 ==> 237806 : Rename using database entries. 
-018 ==> 
+016 ==> 285056 : Differently sort files before renaming.
+017 ==> 237806 : Rename using database entries.
+018 ==> 285240 : digiKam fails to build with external libpgf-6.11.42.
+019 ==> 284625 : Channel Mixer Preserve Luminosity does not work.
+020 ==> 285250 : digiKam crashed after saving changed file.
+021 ==> 250187 : Error message "trashbin full" - while trash _is_ definitely empty.
+022 ==> 284885 : Caption field is too short [patch].
+023 ==> 

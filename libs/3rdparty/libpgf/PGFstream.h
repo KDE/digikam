@@ -81,7 +81,7 @@ public:
 /// @brief File stream class
 class CPGFFileStream : public CPGFStream {
 protected:
-	HANDLE m_hFile;
+	HANDLE m_hFile;	///< file handle
 
 public:
 	CPGFFileStream() : m_hFile(0) {}
@@ -105,10 +105,10 @@ public:
 /// @brief Memory stream class
 class CPGFMemoryStream : public CPGFStream {
 protected:
-	UINT8 *m_buffer, *m_pos;// buffer start address and current buffer address
-	UINT8 *m_eos;			// end of stream (first address beyond written area)
-	size_t m_size;			// buffer size
-	bool   m_allocated;		// indicates a new allocated buffer
+	UINT8 *m_buffer, *m_pos;///< buffer start address and current buffer address
+	UINT8 *m_eos;			///< end of stream (first address beyond written area)
+	size_t m_size;			///< buffer size
+	bool   m_allocated;		///< indicates a new allocated buffer
 
 public:
 	/// Constructor
@@ -156,7 +156,7 @@ public:
 #ifdef _MFC_VER
 class CPGFMemFileStream : public CPGFStream {
 protected:
-	CMemFile *m_memFile;
+	CMemFile *m_memFile;	///< MFC memory file
 public:
 	CPGFMemFileStream(CMemFile *memFile) : m_memFile(memFile) {}
 	virtual bool	IsValid() const	{ return m_memFile != NULL; }
@@ -175,7 +175,7 @@ public:
 #if defined(WIN32) || defined(WINCE)
 class CPGFIStream : public CPGFStream {
 protected:
-	IStream *m_stream;
+	IStream *m_stream;	///< COM+ IStream
 public:
 	CPGFIStream(IStream *stream) : m_stream(stream) {}
 	virtual bool IsValid() const	{ return m_stream != 0; }

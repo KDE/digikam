@@ -781,6 +781,7 @@ void ThumbnailLoadThread::startKdePreviewJob()
         return;
     }
 
+    d->kdeJobHash.clear();
     KUrl::List list;
     foreach (const LoadingDescription& description, d->kdeTodo)
     {
@@ -803,8 +804,13 @@ void ThumbnailLoadThread::startKdePreviewJob()
 
 void ThumbnailLoadThread::gotKDEPreview(const KFileItem& item, const QPixmap& kdepix)
 {
+    if (!d->kdeJobHash.contains(item.url()))
+    {
+        return;
+    }
+
+    LoadingDescription description = d->kdeJobHash.value(item.url());
     QPixmap pix;
-    LoadingDescription description = d->kdeJobHash[item.url()];
 
     if (kdepix.isNull())
     {

@@ -743,6 +743,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
 
     for (i = 0 ; i < 5 ; ++i)
     {
+        // FIXME: scanf without field width limits can crash with huge input data
         fields = fscanf (file, "%d %d %d %d ",
                          &low_input[i],
                          &high_input[i],

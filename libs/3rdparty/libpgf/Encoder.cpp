@@ -412,8 +412,8 @@ void CEncoder::WriteMacroBlock(CMacroBlock* block) THROW_ {
 //		Buffer		::= <nPlanes>(5 bits) foreach(plane i): Plane[i]  
 //		Plane[i]	::= [ Sig1 | Sig2 ] [DWORD alignment] refBits
 //		Sig1		::= 1 <codeLen>(15 bits) codedSigAndSignBits 
-//		Sig2		::= 0 <sigLen>(15 bits) [Sign1 | Sign2 ] sigBits 
-//		Sign1		::= 1 <codeLen>(15 bits) [DWORD alignment] codedSignBits
+//		Sig2		::= 0 <sigLen>(15 bits) [Sign1 | Sign2 ] [DWORD alignment] sigBits 
+//		Sign1		::= 1 <codeLen>(15 bits) codedSignBits
 //		Sign2		::= 0 <signLen>(15 bits) [DWORD alignment] signBits
 void CEncoder::CMacroBlock::BitplaneEncode() {
 	UINT8	nPlanes;
@@ -424,7 +424,6 @@ void CEncoder::CMacroBlock::BitplaneEncode() {
 	UINT32  planeMask;
 	UINT32	bufferSize = m_header.rbh.bufferSize; ASSERT(bufferSize <= BufferSize);
 	bool	useRL;
-	//const UINT32 bufferLen = NumberOfWords(m_bufferSize);
 
 #ifdef TRACE
 	//printf("which thread: %d\n", omp_get_thread_num());
@@ -446,6 +445,7 @@ void CEncoder::CMacroBlock::BitplaneEncode() {
 	nPlanes = NumberOfBitplanes();
 
 	// write number of bit planes to m_codeBuffer
+	// <nPlanes>
 	SetValueBlock(m_codeBuffer, 0, nPlanes, MaxBitPlanesLog);
 	m_codePos += MaxBitPlanesLog;
 
@@ -464,6 +464,7 @@ void CEncoder::CMacroBlock::BitplaneEncode() {
 
 		if (sigLen > 0 && codeLen <= MaxCodeLen && codeLen < AlignWordPos(sigLen) + AlignWordPos(signLen) + 2*RLblockSizeLen) {
 			// set RL code bit
+			// <1><codeLen>
 			SetBit(m_codeBuffer, m_codePos++);
 
 			// write length codeLen to m_codeBuffer
@@ -481,6 +482,7 @@ void CEncoder::CMacroBlock::BitplaneEncode() {
 
 			// run-length coding wasn't efficient enough
 			// we don't use RL coding for sigBits
+			// <0><sigLen>
 			ClearBit(m_codeBuffer, m_codePos++);
 
 			// write length sigLen to m_codeBuffer
@@ -499,6 +501,7 @@ void CEncoder::CMacroBlock::BitplaneEncode() {
 
 			if (useRL && codeLen <= MaxCodeLen && codeLen < signLen) {
 				// RL encoding of m_sign was efficient
+				// <1><codeLen><codedSignBits>_
 				// write RL code bit
 				SetBit(m_codeBuffer, m_codePos++);
 				
@@ -506,10 +509,11 @@ void CEncoder::CMacroBlock::BitplaneEncode() {
 				SetValueBlock(m_codeBuffer, m_codePos, codeLen, RLblockSizeLen);
 
 				// compute position of sigBits
-				wordPos = NumberOfWords(m_codePos + codeLen + RLblockSizeLen);
-				ASSERT(0 <= wordPos && wordPos < BufferSize);
+				wordPos = NumberOfWords(m_codePos + RLblockSizeLen + codeLen);
+				ASSERT(0 <= wordPos && wordPos < bufferSize);
 			} else {
 				// RL encoding of signBits wasn't efficient
+				// <0><signLen>_<signBits>_
 				// clear RL code bit
 				ClearBit(m_codeBuffer, m_codePos++);
 
@@ -519,17 +523,17 @@ void CEncoder::CMacroBlock::BitplaneEncode() {
 
 				// write signBits to m_codeBuffer
 				wordPos = NumberOfWords(m_codePos + RLblockSizeLen);
-				ASSERT(0 <= wordPos && wordPos < BufferSize);
+				ASSERT(0 <= wordPos && wordPos < bufferSize);
 				codeLen = NumberOfWords(signLen);
 
 				for (UINT32 k=0; k < codeLen; k++) {
 					m_codeBuffer[wordPos++] = signBits[k];
 				}
-				
 			}
 
 			// write sigBits
-			ASSERT(0 <= wordPos && wordPos < BufferSize);
+			// <sigBits>_
+			ASSERT(0 <= wordPos && wordPos < bufferSize);
 			refLen = NumberOfWords(sigLen);
 
 			for (UINT32 k=0; k < refLen; k++) {
@@ -539,8 +543,9 @@ void CEncoder::CMacroBlock::BitplaneEncode() {
 		}
 
 		// append refinement bitset (aligned to word boundary)
+		// _<refBits>
 		wordPos = NumberOfWords(m_codePos);
-		ASSERT(0 <= wordPos && wordPos < BufferSize);
+		ASSERT(0 <= wordPos && wordPos < bufferSize);
 		refLen = NumberOfWords(bufferSize - sigLen);
 
 		for (UINT32 k=0; k < refLen; k++) {

@@ -75,11 +75,11 @@ int DImgLoader::granularity(DImgLoaderObserver* observer, int total, float progr
     // Progress slice is the part of 100% concerned with the current granularity
     // (E.g. in a loop only the values from 10% to 90% are used, then progressSlice is 0.8)
     // Current default is 1/20, that is progress info every 5%
-    int granularity=0;
+    int granularity = 0;
 
     if (observer)
     {
-        granularity = (int)(( total / (20 * progressSlice)) / observer->granularity());
+        granularity = (int)((total / (20 * progressSlice)) / observer->granularity());
     }
 
     return granularity ? granularity : 1;
@@ -100,22 +100,22 @@ unsigned int& DImgLoader::imageHeight()
     return m_image->m_priv->height;
 }
 
-bool DImgLoader::imageHasAlpha()
+bool DImgLoader::imageHasAlpha() const
 {
     return m_image->hasAlpha();
 }
 
-bool DImgLoader::imageSixteenBit()
+bool DImgLoader::imageSixteenBit() const
 {
     return m_image->sixteenBit();
 }
 
-int DImgLoader::imageBitsDepth()
+int DImgLoader::imageBitsDepth() const
 {
     return m_image->bitsDepth();
 }
 
-int DImgLoader::imageBytesDepth()
+int DImgLoader::imageBytesDepth() const
 {
     return m_image->bytesDepth();
 }
@@ -165,17 +165,23 @@ void DImgLoader::loadingFailed()
 unsigned char* DImgLoader::new_failureTolerant(size_t size)
 {
     if (!checkAllocation(size))
+    {
         return 0;
+    }
+
+    unsigned char* reserved = 0;
 
     try
     {
-        return new uchar[size];
+        reserved = new uchar[size];
     }
     catch (std::bad_alloc& ex)
     {
         kError() << "Failed to allocate chunk of memory of size" << size << ex.what();
-        return 0;
+        reserved = 0;
     }
+
+    return reserved;
 }
 
 unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
@@ -185,15 +191,19 @@ unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
         return 0;
     }
 
+    unsigned short* reserved = 0;
+
     try
     {
-        return new unsigned short[size];
+        reserved = new unsigned short[size];
     }
     catch (std::bad_alloc& ex)
     {
         kError() << "Failed to allocate chunk of memory of size" << size << ex.what();
-        return 0;
+        reserved = 0;
     }
+
+    return reserved;
 }
 
 int DImgLoader::checkAllocation(qint64 fullSize)
@@ -203,6 +213,7 @@ int DImgLoader::checkAllocation(qint64 fullSize)
         kError() << "Cannot allocate buffer of size" << fullSize;
         return 0;
     }
+
     int size = (int)fullSize;
 
     // Do extra check if allocating serious amounts of memory.
@@ -210,6 +221,7 @@ int DImgLoader::checkAllocation(qint64 fullSize)
     if (size > 100 * 1024 * 1024)
     {
         KMemoryInfo memory = KMemoryInfo::currentInfo();
+
         if (size > memory.bytes(KMemoryInfo::AvailableMemory) && memory.isValid())
         {
             kError() << "Not enough memory to allocate buffer of size" << size;
@@ -222,7 +234,7 @@ int DImgLoader::checkAllocation(qint64 fullSize)
 
 bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
 {
-    if (! ((m_loadFlags & LoadMetadata) || (m_loadFlags & LoadUniqueHash) || (m_loadFlags & LoadImageHistory)) )
+    if (!((m_loadFlags & LoadMetadata) || (m_loadFlags & LoadUniqueHash) || (m_loadFlags & LoadImageHistory)))
     {
         return false;
     }
@@ -320,8 +332,9 @@ bool DImgLoader::checkExifWorkingColorSpace()
 
 QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* img)
 {
-    QFile file( filePath );
-    if (!file.open( QIODevice::Unbuffered | QIODevice::ReadOnly ))
+    QFile file(filePath);
+
+    if (!file.open(QIODevice::Unbuffered | QIODevice::ReadOnly))
     {
         return QByteArray();
     }
@@ -334,18 +347,19 @@ QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* img)
 
     if (size)
     {
-        char *databuf = new char[size];
+        char* databuf = new char[size];
         int   read;
 
         // Read first 100 kB
-        if ((read = file.read(databuf, size)) > 0 )
+        if ((read = file.read(databuf, size)) > 0)
         {
             md5.addData(databuf, read);
         }
 
         // Read last 100 kB
         file.seek(file.size() - size);
-        if ((read = file.read(databuf, size)) > 0 )
+
+        if ((read = file.read(databuf, size)) > 0)
         {
             md5.addData(databuf, read);
         }
@@ -391,10 +405,10 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
     KMD5 md5;
 
     // First, read the Exif data into the hash
-    md5.update( bv );
+    md5.update(bv);
 
     // Second, read in the first 8KB of the file
-    QFile qfile( filePath );
+    QFile qfile(filePath);
 
     char databuf[8192];
     int readlen = 0;
@@ -402,12 +416,12 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
 
     QByteArray hash;
 
-    if ( qfile.open( QIODevice::Unbuffered | QIODevice::ReadOnly ) )
+    if (qfile.open(QIODevice::Unbuffered | QIODevice::ReadOnly))
     {
-        if ( ( readlen = qfile.read( databuf, 8192 ) ) > 0 )
+        if ((readlen = qfile.read(databuf, 8192)) > 0)
         {
-            md5.update( databuf, readlen );
-            md5.update( size.setNum( qfile.size() ) );
+            md5.update(databuf, readlen);
+            md5.update(size.setNum(qfile.size()));
             hash = md5.hexDigest();
         }
     }

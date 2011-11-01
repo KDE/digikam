@@ -107,6 +107,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     rewind(file);
 
+    // FIXME: scanf without field width limits can crash with huge input data
     if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4)
     {
         kDebug() << "Corrupted PPM file.";

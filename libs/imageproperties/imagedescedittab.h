@@ -101,7 +101,6 @@ private:
     void setMetadataWidgetStatus(int status, QWidget* widget);
     void metadataChange(qlonglong imageId);
     void resetMetadataChangeInfo();
-    void adjustTitleWidgetHeight();
 
 private Q_SLOTS:
 
