@@ -363,16 +363,6 @@ QString Canvas::ensureHasCurrentUuid() const
     return d->im->ensureHasCurrentUuid();
 }
 
-void Canvas::clearUndoHistory()
-{
-    d->im->clearUndoManager();
-}
-
-void Canvas::setUndoHistoryOrigin()
-{
-    d->im->setUndoManagerOrigin();
-}
-
 DImg Canvas::currentImage() const
 {
     DImg* image = d->im->getImg();

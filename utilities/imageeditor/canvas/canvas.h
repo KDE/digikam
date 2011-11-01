@@ -79,8 +79,6 @@ public:
     void    setModified();
     void    readMetadataFromFile(const QString& file);
     QString ensureHasCurrentUuid() const;
-    void    clearUndoHistory();
-    void    setUndoHistoryOrigin();
     DImg    currentImage() const;
     QString currentImageFileFormat() const;
     QString currentImageFilePath() const;

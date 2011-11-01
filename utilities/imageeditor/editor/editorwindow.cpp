@@ -1761,7 +1761,9 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success
 
 void EditorWindow::resetOrigin()
 {
-    m_canvas->interface()->setUndoManagerOrigin();
+    // With versioning, "only" resetting undo history does not work anymore
+    // as we calculate undo state based on the initial history stored in the DImg
+    resetOriginSwitchFile();
 }
 
 void EditorWindow::resetOriginSwitchFile()
