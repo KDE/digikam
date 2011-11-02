@@ -30,4 +30,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 285250 : digiKam crashed after saving changed file.
 021 ==> 250187 : Error message "trashbin full" - while trash _is_ definitely empty.
 022 ==> 284885 : Caption field is too short [patch].
-023 ==> 
+023 ==> 283767 : 'Image needs to be saved' notification after editing and saving manually an image.
+024 ==> 282746 : Scroll after image view.
+025 ==> 

@@ -2028,8 +2028,9 @@ void EditorWindow::startingSave(const KUrl& url)
     m_savingContext.savingState        = SavingContextContainer::SavingStateSave;
     m_savingContext.executedOperation  = SavingContextContainer::SavingStateNone;
 
-    m_canvas->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
-                     m_setExifOrientationTag && m_canvas->exifRotated());
+    m_canvas->interface()->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
+                                  m_setExifOrientationTag && m_canvas->exifRotated(), m_savingContext.format,
+                                  m_savingContext.destinationURL.toLocalFile());
 }
 
 bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
@@ -2425,9 +2426,10 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     // in any case, destructive (Save as) or non (Export), mark as New Version
     m_canvas->interface()->setHistoryIsBranch(true);
 
-    m_canvas->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
-                     m_setExifOrientationTag && m_canvas->exifRotated(),
-                     m_savingContext.format.toLower());
+    m_canvas->interface()->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
+                                  m_setExifOrientationTag && m_canvas->exifRotated(),
+                                  m_savingContext.format.toLower(),
+                                  m_savingContext.destinationURL.toLocalFile());
 
     return true;
 }
@@ -2495,25 +2497,24 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, 
     m_savingContext.versionFileOperation = saveVersionFileOperation(url, fork);
     m_canvas->interface()->setHistoryIsBranch(fork);
 
-    KUrl newURL = m_savingContext.versionFileOperation.saveFile.fileUrl();
-
     if (saveAs)
     {
-        KUrl suggested = newURL;
+        KUrl suggested = m_savingContext.versionFileOperation.saveFile.fileUrl();
+        KUrl selectedUrl;
 
-        if (!showFileSaveDialog(suggested, newURL))
+        if (!showFileSaveDialog(suggested, selectedUrl))
         {
             return false;
         }
 
-        m_savingContext.versionFileOperation = saveAsVersionFileOperation(url, newURL, m_savingContext.format);
+        m_savingContext.versionFileOperation = saveAsVersionFileOperation(url, selectedUrl, m_savingContext.format);
     }
     else if (!format.isNull())
     {
         m_savingContext.versionFileOperation = saveInFormatVersionFileOperation(url, format);
-        newURL = m_savingContext.versionFileOperation.saveFile.fileUrl();
     }
 
+    const KUrl newURL = m_savingContext.versionFileOperation.saveFile.fileUrl();
     kDebug() << "Writing file to " << newURL;
 
     if (!newURL.isValid())

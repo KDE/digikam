@@ -46,6 +46,7 @@ extern "C"
 
 #include <QFile>
 #include <QFileInfo>
+#include <QImage>
 #include <QMap>
 #include <QPaintEngine>
 #include <QPainter>
@@ -2681,81 +2682,110 @@ QByteArray DImg::createImageUniqueId() const
     return imageUUID;
 }
 
-void DImg::updateMetadata(const QString& destMimeType, const QString& originalFileName,
-                          bool resetExifOrientationTag, bool updateImageHistory)
+void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString& destMimeType,
+                                 bool resetExifOrientationTag)
+{
+    PrepareMetadataFlags flags = PrepareMetadataFlagsAll;
+    if (!resetExifOrientationTag)
+    {
+        flags &= ~ResetExifOrientationTag;
+    }
+    KUrl url = KUrl::fromPath(originalFilePath());
+    prepareMetadataToSave(intendedDestPath, destMimeType, url.fileName(KUrl::ObeyTrailingSlash), flags);
+}
+
+void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString& destMimeType,
+                                  const QString& originalFileName, PrepareMetadataFlags flags)
 {
     // Get image Exif/IPTC data.
     DMetadata meta(getMetadata());
 
-    // Update IPTC preview.
-    // NOTE: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
-    // bigger than 64K during of image preview tag size, the target JPEG image will be
-    // broken. Note that IPTC image preview tag is limited to 256K!!!
-    // There is no limitation with TIFF and PNG about IPTC byte array size.
-
-    // Before to update IPTC preview, we remove it.
-    meta.removeIptcTag("Iptc.Application2.Preview");
-    meta.removeIptcTag("Iptc.Application2.PreviewFormat");
-    meta.removeIptcTag("Iptc.Application2.PreviewVersion");
-
-    QSize previewSize = size();
-    previewSize.scale(1280, 1024, Qt::KeepAspectRatio);
-    QImage preview;
+    if (flags & RemoveOldMetadataPreviews || flags & CreateNewMetadataPreview)
     {
-        if (!IccManager::isSRGB(*this))
-        {
-            DImg previewDImg;
+        // IPTC
+        meta.removeIptcTag("Iptc.Application2.Preview");
+        meta.removeIptcTag("Iptc.Application2.PreviewFormat");
+        meta.removeIptcTag("Iptc.Application2.PreviewVersion");
+    }
 
-            if (previewSize.width() >= (int)width())
+    if (flags & RemoveOldMetadataPreviews && !(flags & CreateNewMetadataPreview))
+    {
+        // Unclear if libkexiv2 handles this case correctly.
+        // Code was updated in libkexiv2 as of Nov 1 2011
+        /*
+        meta.setImagePreview(QImage());
+        meta.setExifThumbnail(QImage());
+        meta.setTiffThumbnail(QImage());
+         */
+    }
+
+    if (flags & CreateNewMetadataPreview)
+    {
+        // Update IPTC preview.
+        // NOTE: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
+        // bigger than 64K during of image preview tag size, the target JPEG image will be
+        // broken. Note that IPTC image preview tag is limited to 256K!!!
+        // There is no limitation with TIFF and PNG about IPTC byte array size.
+
+        QSize previewSize = size();
+        previewSize.scale(1280, 1024, Qt::KeepAspectRatio);
+        QImage preview;
+        {
+            if (!IccManager::isSRGB(*this))
             {
-                previewDImg = copy();
+                DImg previewDImg;
+
+                if (previewSize.width() >= (int)width())
+                {
+                    previewDImg = copy();
+                }
+                else
+                {
+                    previewDImg = smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio);
+                }
+
+                IccManager manager(previewDImg);
+                manager.transformToSRGB();
+                preview = previewDImg.copyQImage();
             }
             else
             {
-                previewDImg = smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio);
+                // Ensure that preview is not upscaled
+                if (previewSize.width() >= (int)width())
+                {
+                    preview = copyQImage();
+                }
+                else
+                {
+                    preview = smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio).copyQImage();
+                }
             }
+        }
 
-            IccManager manager(previewDImg);
-            manager.transformToSRGB();
-            preview = previewDImg.copyQImage();
+        // With JPEG file, we don't store IPTC preview.
+        // NOTE: only store preview if pixel number is at least two times bigger
+        if (/* (2*(previewSize.width() * previewSize.height()) < (int)(d->image.width() * d->image.height())) &&*/
+            (destMimeType.toUpper() != QString("JPG") && destMimeType.toUpper() != QString("JPEG") &&
+            destMimeType.toUpper() != QString("JPE"))
+        )
+        {
+            // Non JPEG file, we update IPTC preview
+            meta.setImagePreview(preview);
+        }
+
+        if (destMimeType.toUpper() == QString("TIFF") || destMimeType.toUpper() == QString("TIF"))
+        {
+            // With TIFF file, we don't store JPEG thumbnail, we even need to erase it and store
+            // a thumbnail at a special location. See bug #211758
+            QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            meta.setTiffThumbnail(thumb);
         }
         else
         {
-            // Ensure that preview is not upscaled
-            if (previewSize.width() >= (int)width())
-            {
-                preview = copyQImage();
-            }
-            else
-            {
-                preview = smoothScale(previewSize.width(), previewSize.height(), Qt::IgnoreAspectRatio).copyQImage();
-            }
+            // Update Exif thumbnail.
+            QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            meta.setExifThumbnail(thumb);
         }
-    }
-
-    // With JPEG file, we don't store IPTC preview.
-    // NOTE: only store preview if pixel number is at least two times bigger
-    if (/* (2*(previewSize.width() * previewSize.height()) < (int)(d->image.width() * d->image.height())) &&*/
-        (destMimeType.toUpper() != QString("JPG") && destMimeType.toUpper() != QString("JPEG") &&
-         destMimeType.toUpper() != QString("JPE"))
-    )
-    {
-        // Non JPEG file, we update IPTC preview
-        meta.setImagePreview(preview);
-    }
-
-    if (destMimeType.toUpper() == QString("TIFF") || destMimeType.toUpper() == QString("TIF"))
-    {
-        // With TIFF file, we don't store JPEG thumbnail, we even need to erase it and store
-        // a thumbnail at a special location. See bug #211758
-        QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        meta.setTiffThumbnail(thumb);
-    }
-    else
-    {
-        // Update Exif thumbnail.
-        QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        meta.setExifThumbnail(thumb);
     }
 
     // Update Exif Image dimensions.
@@ -2768,7 +2798,7 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
     }
 
     // Update Exif Orientation tag if necessary.
-    if (resetExifOrientationTag)
+    if (flags & ResetExifOrientationTag)
     {
         meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
     }
@@ -2777,11 +2807,20 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
     {
         DImageHistory forSaving(m_priv->imageHistory);
         forSaving.adjustReferredImages();
+
+        KUrl url   = KUrl::fromPath(intendedDestPath);
+        QString filePath = url.directory(KUrl::ObeyTrailingSlash | KUrl::AppendTrailingSlash);
+        QString fileName = url.fileName(KUrl::ObeyTrailingSlash);
+        if (!filePath.isEmpty() && !fileName.isEmpty())
+        {
+            forSaving.purgePathFromReferredImages(filePath, fileName);
+        }
+
         QString imageHistoryXml = forSaving.toXml();
         meta.setImageHistory(imageHistoryXml);
     }
 
-    if (updateImageHistory)
+    if (flags & CreateNewImageHistoryUUID)
     {
         meta.setImageUniqueId(createImageUniqueId());
     }

@@ -25,6 +25,10 @@
 
 #include "iccmanager.h"
 
+// Qt includes
+
+#include <QImage>
+
 // KDE includes
 
 #include <kdebug.h>

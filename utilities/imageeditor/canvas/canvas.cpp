@@ -316,28 +316,6 @@ void Canvas::preload(const QString& /*filename*/)
     //    d->im->preload(filename);
 }
 
-/*
-These code part are unused and untested
-void Canvas::save(const QString& filename, IOFileSettingsContainer *IOFileSettings)
-{
-    d->im->save(filename, IOFileSettings);
-    emit signalSavingStarted(filename);
-}
-
-void Canvas::saveAs(const QString& filename,IOFileSettingsContainer *IOFileSettings,
-                    const QString& mimeType)
-{
-    d->im->saveAs(filename, IOFileSettings, mimeType);
-    emit signalSavingStarted(filename);
-}
-*/
-
-void Canvas::saveAs(const QString& filename, IOFileSettingsContainer* IOFileSettings,
-                    bool setExifOrientationTag, const QString& mimeType)
-{
-    d->im->saveAs(filename, IOFileSettings, setExifOrientationTag, mimeType);
-}
-
 void Canvas::slotImageSaved(const QString& filePath, bool success)
 {
     emit signalSavingFinished(filePath, success);

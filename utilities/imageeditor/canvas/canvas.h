@@ -71,8 +71,6 @@ public:
     void    load(const QString& filename, IOFileSettingsContainer* IOFileSettings);
     void    preload(const QString& filename);
 
-    void    saveAs(const QString& filename, IOFileSettingsContainer* IOFileSettings,
-                   bool setExifOrientationTag, const QString& mimeType=QString());
     void    resetImage();
     void    abortSaving();
     void    applyTransform(const IccTransform& transform);

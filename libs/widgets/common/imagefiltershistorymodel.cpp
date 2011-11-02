@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QHashIterator>
+#include <QPixmap>
 
 // KDE includes
 

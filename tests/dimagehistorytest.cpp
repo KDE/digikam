@@ -88,7 +88,7 @@ void DImageHistoryTest::testDImg()
     QCOMPARE(history.entries().first().referredImages.first().m_type, HistoryImageId::Current);
     QVERIFY(history.entries().last().referredImages.isEmpty());
 
-    m_im->saveAs(m_tempFile, &container, true);
+    m_im->saveAs(m_tempFile, &container, true, QString(), QString());
 
     m_loop.exec();
 

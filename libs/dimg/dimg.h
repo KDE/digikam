@@ -33,10 +33,9 @@
 // Qt includes
 
 #include <QtCore/QByteArray>
+#include <QtCore/QFlags>
 #include <QtCore/QSize>
 #include <QtCore/QRect>
-#include <QtGui/QImage>
-#include <QtGui/QPixmap>
 #include <QtCore/QVariant>
 
 // Local includes
@@ -50,7 +49,8 @@
 #include "iccprofile.h"
 
 
-class QString;
+class QImage;
+class QPixmap;
 
 namespace Digikam
 {
@@ -344,15 +344,51 @@ public:
     DImageHistory        getOriginalImageHistory() const;
     void                 addFilterAction(const FilterAction& action);
 
-    /** Use this method to update lead metadata after image transformations.
-        This fix Iptc preview, Exif thumbnail, image size information, etc.
-        'destMimeType' is destination type mime. In some case, any metadata are not updated by the same way.
-        'originalFileName' is original file name. Can be empty.
-        'resetExifOrientationTag' is used to force Exif orientation flag to normal.
-        'updateImageHistory' sets a new image UUID. If the image is changed in any way, set this to true.
+    /**
+     * When saving, several changes to the image metadata are necessary
+     * before it can safely be written to the new file.
+     * This method updates the stored DMetadata object in preparation to a subsequent
+     * call to save() with the same target file.
+     * 'intendedDestPath' is the finally intended file name. Do not give the temporary
+     *   file name if you are going to save() to a temp file.
+     * 'destMimeType' is destination type mime. In some cases, metadata is updated depending on this value.
+     * 'originalFileName' is the original file's name, for simplistic history tracking in metadata.
+     *   This is completely independent from the DImageHistory framework.
+     * For the 'flags' see below.
+     * Not all steps are optional and can be controlled with flags.
      */
-    void updateMetadata(const QString& destMimeType, const QString& originalFileName,
-                        bool resetExifOrientationTag, bool updateImageHistory);
+    enum PrepareMetadataFlag
+    {
+        /// A small preview can be stored in the metadata.
+        /// Remove old preview entries
+        RemoveOldMetadataPreviews = 1 << 0,
+        /// Create a new preview from current image data.
+        CreateNewMetadataPreview  = 1 << 1,
+        /// Set the exif orientation tag to "normal"
+        /// Applicable if the image data was rotated according to the tag
+        ResetExifOrientationTag   = 1 << 2,
+        /// Creates a new UUID for the image history.
+        /// Applicable if the file was changed.
+        CreateNewImageHistoryUUID = 1 << 3,
+
+        PrepareMetadataFlagsAll   = RemoveOldMetadataPreviews |
+                                    CreateNewMetadataPreview  |
+                                    ResetExifOrientationTag   |
+                                    CreateNewImageHistoryUUID
+    };
+    Q_DECLARE_FLAGS(PrepareMetadataFlags, PrepareMetadataFlag)
+
+    void prepareMetadataToSave(const QString& intendedDestPath,
+                               const QString& destMimeType,
+                               const QString& originalFileName = QString(),
+                               PrepareMetadataFlags flags      = PrepareMetadataFlagsAll);
+
+    /** For convenience: Including all flags, except for ResetExifOrientationTag which can be selected.
+     *  Uses originalFilePath() to fill the original file name.
+     */
+    void prepareMetadataToSave(const QString& intendedDestPath,
+                               const QString& destMimeType,
+                               bool           resetExifOrientationTag);
 
     /** Create a HistoryImageId for _this_ image _already_ saved at the given file path.*/
     HistoryImageId createHistoryImageId(const QString& filePath, HistoryImageId::Type type) const;
@@ -597,5 +633,7 @@ private:
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DImg::PrepareMetadataFlags)
 
 #endif /* DIMG_H */

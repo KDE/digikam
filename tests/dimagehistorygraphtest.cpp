@@ -143,22 +143,22 @@ void DImageHistoryGraphTest::testEditing()
     m_loop.exec();
 
     applyFilters1();
-    m_im->saveAs(collectionDir.filePath("1.jpg"), &container, true);
+    m_im->saveAs(collectionDir.filePath("1.jpg"), &container, true, QString(), QString());
     m_loop.exec();
 
     applyFilters2();
-    m_im->saveAs(collectionDir.filePath("2.jpg"), &container, true);
+    m_im->saveAs(collectionDir.filePath("2.jpg"), &container, true, QString(), QString());
     m_loop.exec();
 
     applyFilters3();
-    m_im->saveAs(collectionDir.filePath("3.jpg"), &container, true);
+    m_im->saveAs(collectionDir.filePath("3.jpg"), &container, true, QString(), QString());
     m_loop.exec();
 
     m_im->load(collectionDir.filePath("2.jpg"), &container);
     m_loop.exec();
 
     applyFilters4();
-    m_im->saveAs(collectionDir.filePath("4.jpg"), &container, true);
+    m_im->saveAs(collectionDir.filePath("4.jpg"), &container, true, QString(), QString());
     m_loop.exec();
 
     CollectionScanner().completeScan();
