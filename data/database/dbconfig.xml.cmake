@@ -905,7 +905,7 @@
                     DROP PROCEDURE IF EXISTS create_index_if_not_exists;
                 </statement>
                 <statement mode="plain">
-                    CREATE PROCEDURE create_index_if_not_exists(table_name_vc varchar(50), index_name_vc varchar(50), field_list_vc varchar(1024))
+                    CREATE PROCEDURE create_index_if_not_exists(table_name_vc varchar(50), index_name_vc varchar(50), field_list_vc varchar(1024), is_unique int)
                     SQL SECURITY INVOKER
                     BEGIN
 
@@ -921,7 +921,7 @@
                         set @index_sql = CONCAT( 
                             CONVERT( 'ALTER TABLE ' USING latin1),
                             CONVERT( table_name_vc USING latin1),
-                            CONVERT( ' ADD INDEX ' USING latin1),
+                            CONVERT( IF(is_unique = 0, ' ADD INDEX ', ' ADD UNIQUE INDEX ') USING latin1),
                             CONVERT( index_name_vc USING latin1),
                             CONVERT( '(' USING latin1),
                             CONVERT( field_list_vc USING latin1),
@@ -933,21 +933,21 @@
                     END IF;
                     END;
                 </statement>
-                <statement mode="plain">CALL create_index_if_not_exists('Images','dir_index','album');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('Images','hash_index','uniqueHash');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('ImageTags','tag_index','tagid');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('ImageTags','tag_id_index','imageid');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('Images','image_name_index','name(996)');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('ImageInformation','creationdate_index','creationDate');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('ImageComments','comments_imageid_index','imageid');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('ImageCopyright','copyright_imageid_index','imageid');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('ImageHistory','uuid_index','uuid');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('ImageRelations','subject_relations_index','subject');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('ImageRelations','object_relations_index','object');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('TagProperties','tagproperties_index','tagid');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_index','imageid, tagid');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_imageid_index','imageid');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_tagid_index','tagid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('Images','dir_index','album', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('Images','hash_index','uniqueHash', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTags','tag_index','tagid', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTags','tag_id_index','imageid', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('Images','image_name_index','name(996)', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageInformation','creationdate_index','creationDate', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageComments','comments_imageid_index','imageid', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageCopyright','copyright_imageid_index','imageid', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageHistory','uuid_index','uuid', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageRelations','subject_relations_index','subject', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageRelations','object_relations_index','object', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('TagProperties','tagproperties_index','tagid', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_index','imageid, tagid', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_imageid_index','imageid', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_tagid_index','tagid', 0);</statement>
             </dbaction>
 
             <!-- Triggers -->
@@ -986,13 +986,13 @@
                 FROM Tags 
                 WHERE id >= 0 AND pid>=0;
             </statement>
-            <statement mode="plain">SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';</statement>
+            <statement mode="plain">SET SQL_MODE='NO_AUTO_VALUE_ON_ZERO';</statement>
+            <statement mode="plain">UPDATE tags SET pid = 0 WHERE pid &lt; 0 AND id &gt; 0;</statement>
             <statement mode="plain">REPLACE INTO Tags
                 (id, pid, name, icon, iconkde, lft, rgt)
                 VALUES
                 (0, -1, '_Digikam_root_tag_', 0, NULL, @minLeft, @maxRight )
             </statement>
-            <statement mode="plain">SET SQL_MODE=@OLD_SQL_MODE;</statement>
             </dbaction>
                        
             <dbaction name="checkIfDatabaseExists">
@@ -1233,7 +1233,7 @@ ORDER BY inf.rating DESC, img.name ASC
                     DROP PROCEDURE IF EXISTS create_index_if_not_exists;
                 </statement>
                 <statement mode="plain">
-                    CREATE PROCEDURE create_index_if_not_exists(table_name_vc varchar(50), index_name_vc varchar(50), field_list_vc varchar(1024))
+                    CREATE PROCEDURE create_index_if_not_exists(table_name_vc varchar(50), index_name_vc varchar(50), field_list_vc varchar(1024), is_unique int)
                     SQL SECURITY INVOKER
                     BEGIN
 
@@ -1249,7 +1249,7 @@ ORDER BY inf.rating DESC, img.name ASC
                         set @index_sql = CONCAT( 
                             CONVERT( 'ALTER TABLE ' USING latin1),
                             CONVERT( table_name_vc USING latin1),
-                            CONVERT( ' ADD INDEX ' USING latin1),
+                            CONVERT( IF(is_unique = 0, ' ADD INDEX ', ' ADD UNIQUE INDEX ') USING latin1),
                             CONVERT( index_name_vc USING latin1),
                             CONVERT( '(' USING latin1),
                             CONVERT( field_list_vc USING latin1),
@@ -1261,9 +1261,9 @@ ORDER BY inf.rating DESC, img.name ASC
                     END IF;
                     END;
                 </statement>
-                <statement mode="plain">CALL create_index_if_not_exists('UniqueHashes','id_uniqueHashes','thumbId');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('FilePaths','id_filePaths','thumbId');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('CustomIdentifiers','id_customIdentifiers','thumbId');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('UniqueHashes','id_uniqueHashes','thumbId', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('FilePaths','id_filePaths','thumbId', 0);</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('CustomIdentifiers','id_customIdentifiers','thumbId', 0);</statement>
             </dbaction>
 
             <!-- Thumbnails Trigger DB -->
@@ -1490,7 +1490,9 @@ ORDER BY inf.rating DESC, img.name ASC
             <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_index','imageid,tagid');</statement>
             <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_imageid_index','imageid');</statement>
             <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_tagid_index','tagid');</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('Tags','name_pid_index','name(128), pid', 1);</statement>
             <statement mode="plain">ALTER TABLE Images CHANGE uniqueHash uniqueHash VARCHAR(128);</statement>
+
             <statement mode="plain">DROP TRIGGER IF EXISTS delete_image;</statement>
             <statement mode="plain">CREATE TRIGGER delete_image AFTER DELETE ON Images
                     FOR EACH ROW BEGIN
