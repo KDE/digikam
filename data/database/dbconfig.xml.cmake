@@ -986,13 +986,14 @@
                 FROM Tags 
                 WHERE id >= 0 AND pid>=0;
             </statement>
-            <statement mode="plain">SET SQL_MODE='NO_AUTO_VALUE_ON_ZERO';</statement>
+            <statement mode="plain">SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';</statement>
             <statement mode="plain">UPDATE tags SET pid = 0 WHERE pid &lt; 0 AND id &gt; 0;</statement>
             <statement mode="plain">REPLACE INTO Tags
                 (id, pid, name, icon, iconkde, lft, rgt)
                 VALUES
                 (0, -1, '_Digikam_root_tag_', 0, NULL, @minLeft, @maxRight )
             </statement>
+            <statement mode="plain">SET SQL_MODE=@OLD_SQL_MODE;</statement>
             </dbaction>
                        
             <dbaction name="checkIfDatabaseExists">
