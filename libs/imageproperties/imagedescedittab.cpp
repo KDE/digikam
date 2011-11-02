@@ -203,12 +203,20 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new DDateTimeEdit(dateBox, "datepicker");
 
-    KHBox* labelsBox      = new KHBox(captionTagsArea);
-    new QLabel(i18n("Labels:"), labelsBox);
-    d->pickLabelSelector  = new PickLabelSelector(labelsBox);
-    d->colorLabelSelector = new ColorLabelSelector(labelsBox);
-    d->ratingWidget       = new RatingWidget(labelsBox);
-    labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
+    KHBox* pickBox       = new KHBox(captionTagsArea);
+    new QLabel(i18n("Pick Label:"), pickBox);
+    d->pickLabelSelector = new PickLabelSelector(pickBox);
+    pickBox->layout()->setAlignment(d->pickLabelSelector, Qt::AlignVCenter|Qt::AlignRight);
+
+    KHBox* colorBox       = new KHBox(captionTagsArea);
+    new QLabel(i18n("Color Label:"), colorBox);
+    d->colorLabelSelector = new ColorLabelSelector(colorBox);
+    colorBox->layout()->setAlignment(d->colorLabelSelector, Qt::AlignVCenter|Qt::AlignRight);
+
+    KHBox* rateBox  = new KHBox(captionTagsArea);
+    new QLabel(i18n("Rating:"), rateBox);
+    d->ratingWidget = new RatingWidget(rateBox);
+    rateBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
 
     // Buttons -----------------------------------------
 
@@ -243,7 +251,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     grid1->addWidget(d->titleEdit,    0, 0, 1, 2);
     grid1->addWidget(d->captionsEdit, 1, 0, 1, 2);
     grid1->addWidget(dateBox,         2, 0, 1, 2);
-    grid1->addWidget(labelsBox,       3, 0, 1, 2);
+    grid1->addWidget(pickBox,         3, 0, 1, 2);
+    grid1->addWidget(colorBox,        4, 0, 1, 2);
+    grid1->addWidget(rateBox,         5, 0, 1, 2);
     grid1->setRowStretch(1, 10);
     grid1->setMargin(KDialog::spacingHint());
     grid1->setSpacing(KDialog::spacingHint());
