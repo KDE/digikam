@@ -39,6 +39,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 257523 : Showfoto crashes after pressing the color Hue/Saturation/Lightness bottom.
 030 ==> 265501 : Crash in printing dialog (digikam).
 031 ==> 282906 : digiKam crashed the selection date in the calendar.
-032 ==> 
+032 ==> 284663 : Crash while exporting on Picasaweb.
+033 ==> 
+
 
 
