@@ -171,7 +171,6 @@ void MixerFilter::filterImage()
     }
 }
 
-
 double MixerFilter::CalculateNorm(double RedGain, double GreenGain, double BlueGain, bool bPreserveLum)
 {
     double lfSum = RedGain + GreenGain + BlueGain;
@@ -232,6 +231,5 @@ void MixerFilter::readParameters(const Digikam::FilterAction& action)
     m_settings.redGreenGain = action.parameter("redGreenGain").toDouble();
     m_settings.redRedGain = action.parameter("redRedGain").toDouble();
 }
-
 
 }  // namespace Digikam
