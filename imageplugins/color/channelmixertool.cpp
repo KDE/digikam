@@ -166,7 +166,11 @@ ChannelMixerTool::~ChannelMixerTool()
 void ChannelMixerTool::slotMonochromeActived(bool mono)
 {
     d->gboxSettings->histogramBox()->setChannelEnabled(!mono);
-    d->gboxSettings->histogramBox()->setChannel(RedChannel);
+    if (mono)
+    {
+        d->gboxSettings->histogramBox()->setChannel(RedChannel);
+        slotChannelChanged();
+    }
 }
 
 void ChannelMixerTool::slotChannelChanged()
@@ -230,10 +234,11 @@ void ChannelMixerTool::readSettings()
 
     // we need to call these methods here, otherwise the histogram will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
-            (int)LuminosityChannel));
+            (int)RedChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
             (int)LogScaleHistogram));
 
+    slotMonochromeActived(d->settingsView->settings().bMonochrome);
     slotEffect();
 }
 
