@@ -36,6 +36,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 026 ==> 192269 : T1i camera raw tint correction.
 027 ==> 264605 : Crash after choice of the option.
 028 ==> 281028 : digiKam Crash while uploading Raw Photos.
-029 ==> 
+029 ==> 257523 : Showfoto crashes after pressing the color Hue/Saturation/Lightness bottom.
+030 ==> 
 
 
