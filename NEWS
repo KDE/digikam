@@ -32,4 +32,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 284885 : Caption field is too short [patch].
 023 ==> 283767 : 'Image needs to be saved' notification after editing and saving manually an image.
 024 ==> 282746 : Scroll after image view.
-025 ==> 
+025 ==> 240151 - Request for support of Panasonic DMC-FZ38 rw2 (raw) format.
+026 ==> 
+
