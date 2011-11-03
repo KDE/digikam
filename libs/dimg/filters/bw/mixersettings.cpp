@@ -6,7 +6,7 @@
  * Date        : 2009-02-18
  * Description : Channel mixer settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,6 +62,7 @@ public:
 
     MixerSettingsPriv() :
         currentChannel(RedChannel),
+        monochromeTips(0),
         resetButton(0),
         preserveLuminosity(0),
         monochrome(0),
@@ -87,6 +88,7 @@ public:
 
     int                   currentChannel;
 
+    QLabel*               monochromeTips;
     QPushButton*          resetButton;
 
     QCheckBox*            preserveLuminosity;
@@ -152,15 +154,26 @@ MixerSettings::MixerSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    d->monochrome = new QCheckBox(i18n("Monochrome"));
-    d->monochrome->setWhatsThis(i18n("Enable this option if you want the image rendered "
-                                     "in monochrome mode. "
-                                     "In this mode, the histogram will display only luminosity values."));
-
     d->preserveLuminosity = new QCheckBox(i18n("Preserve luminosity"));
     d->preserveLuminosity->setWhatsThis(i18n("Enable this option is you want preserve "
                                         "the image luminosity."));
+    
+    // -------------------------------------------------------------
 
+    d->monochrome     = new QCheckBox(i18n("Monochrome"));
+    d->monochromeTips = new QLabel(i18n("<p>Use <b>Monochrome</b> mode to convert color picture to Black and White:</p>"
+                                        "<p>The <qt><font color=\"red\">red channel</font></qt> modify <a href='http://en.wikipedia.org/wiki/Contrast_(vision)'>the contrast</a> of photograph.</p>"
+                                        "<p>The <qt><font color=\"green\">green channel</font></qt> enhance or reduce the details of photograph.</p>"
+                                        "<p>The <qt><font color=\"blue\">blue channel</font></qt> affects <a href='http://en.wikipedia.org/wiki/Image_noise'>the noise</a> of photograph.</p>"
+                                        "<p>Note: in this mode, the histogram will display only luminosity values.</p>"));
+
+    d->monochromeTips->setEnabled(false);
+    d->monochromeTips->setFont(KGlobalSettings::smallestReadableFont());
+    d->monochromeTips->setWordWrap(true);
+    d->monochromeTips->setOpenExternalLinks(true);
+    d->monochromeTips->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    d->monochromeTips->setLineWidth(1);
+        
     // -------------------------------------------------------------
 
     grid->addWidget(redLabel,              0, 0, 1, 1);
@@ -170,9 +183,10 @@ MixerSettings::MixerSettings(QWidget* parent)
     grid->addWidget(blueLabel,             2, 0, 1, 1);
     grid->addWidget(d->blueGain,           2, 1, 1, 4);
     grid->addWidget(d->resetButton,        3, 0, 1, 2);
-    grid->addWidget(d->monochrome,         4, 0, 1, 5);
-    grid->addWidget(d->preserveLuminosity, 5, 0, 1, 5);
-    grid->setRowStretch(6, 10);
+    grid->addWidget(d->preserveLuminosity, 4, 0, 1, 5);
+    grid->addWidget(d->monochrome,         5, 0, 1, 5);
+    grid->addWidget(d->monochromeTips,     6, 0, 1, 5);
+    grid->setRowStretch(7, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
@@ -200,6 +214,11 @@ MixerSettings::MixerSettings(QWidget* parent)
 MixerSettings::~MixerSettings()
 {
     delete d;
+}
+
+void MixerSettings::setMonochromeTipsVisible(bool b)
+{
+    b ? d->monochromeTips->show() : d->monochromeTips->hide();
 }
 
 void MixerSettings::setCurrentChannel(int channel)
@@ -367,14 +386,15 @@ void MixerSettings::updateSettingsWidgets()
 
 void MixerSettings::slotMonochromeActived(bool mono)
 {
-    d->mixerSettings.bMonochrome = d->monochrome->isChecked();
+    d->mixerSettings.bMonochrome = mono;
+    d->monochromeTips->setEnabled(mono);
     emit signalMonochromeActived(mono);
     emit signalSettingsChanged();
 }
 
-void MixerSettings::slotLuminosityChanged(bool)
+void MixerSettings::slotLuminosityChanged(bool lum)
 {
-    d->mixerSettings.bPreserveLum = d->preserveLuminosity->isChecked();
+    d->mixerSettings.bPreserveLum = lum;
     emit signalSettingsChanged();
 }
 

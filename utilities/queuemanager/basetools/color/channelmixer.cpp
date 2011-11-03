@@ -61,6 +61,7 @@ ChannelMixer::ChannelMixer(QObject* parent)
     m_channelCB->addItem(i18n("Blue"),  QVariant(BlueChannel));
 
     m_settingsView = new MixerSettings(vbox);
+    m_settingsView->setMonochromeTipsVisible(false);
     QLabel* space  = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 

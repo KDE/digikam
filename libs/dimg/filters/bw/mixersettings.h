@@ -6,7 +6,7 @@
  * Date        : 2009-02-18
  * Description : Channel mixer settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,6 +63,8 @@ public:
 
     void setCurrentChannel(int);
     int  currentChannel();
+    
+    void setMonochromeTipsVisible(bool b);
 
 Q_SIGNALS:
 
