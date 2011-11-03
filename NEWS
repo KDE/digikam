@@ -34,6 +34,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 282746 : Scroll after image view.
 025 ==> 240151 : Request for support of Panasonic DMC-FZ38 rw2 (raw) format.
 026 ==> 192269 : T1i camera raw tint correction.
-027 ==> 
+027 ==> 264605 : Crash after choice of the option.
+028 ==> 
 
 
