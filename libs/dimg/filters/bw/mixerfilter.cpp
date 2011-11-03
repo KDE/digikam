@@ -72,11 +72,12 @@ void MixerFilter::filterImage()
     int  progress;
 
     register uint i;
-    double   rnorm;
+    double   rnorm;    // red channel normalizer use in RGB mode.
+    double   mnorm;    // monochrome normalizer used in Monochrome mode.
 
     if (m_settings.bMonochrome)
     {
-        rnorm = CalculateNorm (m_settings.blackRedGain, m_settings.blackGreenGain,
+        mnorm = CalculateNorm (m_settings.blackRedGain, m_settings.blackGreenGain,
                                m_settings.blackBlueGain, m_settings.bPreserveLum);
     }
     else
@@ -105,7 +106,7 @@ void MixerFilter::filterImage()
             {
                 nGray = MixPixel (m_settings.blackRedGain, m_settings.blackGreenGain, m_settings.blackBlueGain,
                                   (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                  sixteenBit, rnorm);
+                                  sixteenBit, mnorm);
                 ptr[0] = ptr[1] = ptr[2] = nGray;
             }
             else
@@ -145,7 +146,7 @@ void MixerFilter::filterImage()
             if (m_settings.bMonochrome)
             {
                 nGray = MixPixel (m_settings.blackRedGain, m_settings.blackGreenGain, m_settings.blackBlueGain,
-                                  red, green, blue, sixteenBit, rnorm);
+                                  red, green, blue, sixteenBit, mnorm);
                 ptr[0] = ptr[1] = ptr[2] = nGray;
             }
             else
@@ -175,7 +176,7 @@ double MixerFilter::CalculateNorm(double RedGain, double GreenGain, double BlueG
 {
     double lfSum = RedGain + GreenGain + BlueGain;
 
-    if ((lfSum == 0.0) || (bPreserveLum == false))
+    if ((lfSum == 0.0) || (!bPreserveLum))
     {
         return (1.0);
     }
@@ -187,11 +188,8 @@ unsigned short MixerFilter::MixPixel(double RedGain, double GreenGain, double Bl
                                      unsigned short R, unsigned short G, unsigned short B, bool sixteenBit,
                                      double Norm)
 {
-    double lfMix = RedGain * (double)R + GreenGain * (double)G + BlueGain * (double)B;
-    lfMix        *= Norm;
-    int segment  = sixteenBit ? 65535 : 255;
-
-    return( (unsigned short)CLAMP((int)lfMix, 0, segment));
+    double lfMix = Norm * ( RedGain * (double)R + GreenGain * (double)G + BlueGain * (double)B );
+    return( (unsigned short)CLAMP((int)lfMix, 0, sixteenBit ? 65535 : 255));
 }
 
 FilterAction MixerFilter::filterAction()
