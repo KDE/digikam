@@ -74,6 +74,7 @@ Q_SIGNALS:
 private:
 
     void updateSettingsWidgets();
+    void updateTotalPercents();
 
 private Q_SLOTS:
 

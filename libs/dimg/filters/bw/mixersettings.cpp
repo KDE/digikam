@@ -63,6 +63,7 @@ public:
     MixerSettingsPriv() :
         currentChannel(RedChannel),
         monochromeTips(0),
+        totalPercents(0),
         resetButton(0),
         preserveLuminosity(0),
         monochrome(0),
@@ -89,6 +90,8 @@ public:
     int                   currentChannel;
 
     QLabel*               monochromeTips;
+    QLabel*               totalPercents;
+
     QPushButton*          resetButton;
 
     QCheckBox*            preserveLuminosity;
@@ -123,7 +126,7 @@ MixerSettings::MixerSettings(QWidget* parent)
 {
     QGridLayout* grid = new QGridLayout(this);
 
-    QLabel* redLabel  = new QLabel(i18n("Red:"));
+    QLabel* redLabel  = new QLabel(i18n("Red (%):"));
     d->redGain        = new RDoubleNumInput;
     d->redGain->setDecimals(1);
     d->redGain->setRange(-200.0, 200.0, 1);
@@ -131,7 +134,7 @@ MixerSettings::MixerSettings(QWidget* parent)
     d->redGain->setWhatsThis(i18n("Select the red color gain, as a percentage, "
                                   "for the current channel."));
 
-    QLabel* greenLabel = new QLabel(i18n("Green:"));
+    QLabel* greenLabel = new QLabel(i18n("Green (%):"));
     d->greenGain       = new RDoubleNumInput;
     d->greenGain->setDecimals(1);
     d->greenGain->setRange(-200.0, 200.0, 1);
@@ -139,7 +142,7 @@ MixerSettings::MixerSettings(QWidget* parent)
     d->greenGain->setWhatsThis(i18n("Select the green color gain, as a percentage, "
                                     "for the current channel."));
 
-    QLabel* blueLabel = new QLabel(i18n("Blue:"));
+    QLabel* blueLabel = new QLabel(i18n("Blue (%):"));
     d->blueGain       = new RDoubleNumInput;
     d->blueGain->setDecimals(1);
     d->blueGain->setRange(-200.0, 200.0, 1);
@@ -147,17 +150,22 @@ MixerSettings::MixerSettings(QWidget* parent)
     d->blueGain->setWhatsThis(i18n("Select the blue color gain, as a percentage, "
                                    "for the current channel."));
 
+    // -------------------------------------------------------------
+
     d->resetButton = new QPushButton(i18n("&Reset"));
     d->resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
     d->resetButton->setWhatsThis(i18n("Reset color channels' gains settings from "
                                       "the currently selected channel."));
 
+    d->totalPercents = new QLabel();
+    d->totalPercents->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    
     // -------------------------------------------------------------
 
     d->preserveLuminosity = new QCheckBox(i18n("Preserve luminosity"));
     d->preserveLuminosity->setWhatsThis(i18n("Enable this option is you want preserve "
                                         "the image luminosity."));
-    
+
     // -------------------------------------------------------------
 
     d->monochrome     = new QCheckBox(i18n("Monochrome"));
@@ -183,10 +191,12 @@ MixerSettings::MixerSettings(QWidget* parent)
     grid->addWidget(blueLabel,             2, 0, 1, 1);
     grid->addWidget(d->blueGain,           2, 1, 1, 4);
     grid->addWidget(d->resetButton,        3, 0, 1, 2);
+    grid->addWidget(d->totalPercents,      3, 3, 1, 1);
     grid->addWidget(d->preserveLuminosity, 4, 0, 1, 5);
     grid->addWidget(d->monochrome,         5, 0, 1, 5);
     grid->addWidget(d->monochromeTips,     6, 0, 1, 5);
     grid->setRowStretch(7, 10);
+    grid->setColumnStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
@@ -313,9 +323,17 @@ void MixerSettings::slotGainsChanged()
             break;
         }
     }
-
+    
+    updateTotalPercents();
     emit signalSettingsChanged();
 }
+
+void MixerSettings::updateTotalPercents()
+{
+    double total = d->redGain->value() + d->greenGain->value() + d->blueGain->value();
+    QString str;
+    d->totalPercents->setText(i18n("Total: %1 (%)", str.sprintf("%3.1f", total)));
+} 
 
 void MixerSettings::updateSettingsWidgets()
 {
@@ -376,6 +394,7 @@ void MixerSettings::updateSettingsWidgets()
 
     d->monochrome->setChecked(d->mixerSettings.bMonochrome);
     d->preserveLuminosity->setChecked(d->mixerSettings.bPreserveLum);
+    updateTotalPercents();
 
     d->monochrome->blockSignals(false);
     d->preserveLuminosity->blockSignals(false);
