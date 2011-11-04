@@ -41,4 +41,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 282906 : digiKam crashed the selection date in the calendar.
 032 ==> 284663 : Crash while exporting on Picasaweb.
 033 ==> 273534 : Showfoto crashes (Segmentation fault) when run.
-034 ==> 
+034 ==> 263954 : digiKam crashes when trying to re-download new pictures from SD card.
+035 ==> 
