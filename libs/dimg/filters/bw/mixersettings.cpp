@@ -162,8 +162,8 @@ MixerSettings::MixerSettings(QWidget* parent)
 
     d->monochrome     = new QCheckBox(i18n("Monochrome"));
     d->monochromeTips = new QLabel(i18n("<p>Use <b>Monochrome</b> mode to convert color picture to Black and White:</p>"
-                                        "<p>The <qt><font color=\"red\">red channel</font></qt> modify <a href='http://en.wikipedia.org/wiki/Contrast_(vision)'>the contrast</a> of photograph.</p>"
-                                        "<p>The <qt><font color=\"green\">green channel</font></qt> enhance or reduce the details level of photograph.</p>"
+                                        "<p>The <qt><font color=\"red\">red channel</font></qt> modifies <a href='http://en.wikipedia.org/wiki/Contrast_(vision)'>the contrast</a> of photograph.</p>"
+                                        "<p>The <qt><font color=\"green\">green channel</font></qt> enhances or reduces the details level of photograph.</p>"
                                         "<p>The <qt><font color=\"blue\">blue channel</font></qt> affects <a href='http://en.wikipedia.org/wiki/Image_noise'>the noise</a> of photograph.</p>"
                                         "<p><u>Note:</u> in this mode, the histogram will display only luminosity values.</p>"));
 
