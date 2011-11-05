@@ -50,5 +50,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 040 ==> 273508 : digiKam doesn't shutdown after using BQM.
 041 ==> 285840 : Batch queue manager resize tool have a bottom limit of 100.
 042 ==> 273122 : digiKam crashes while scanning faces.
-043 ==> 
-
+043 ==> 274487 : digiKam crashes after closing it.
+044 ==> 
