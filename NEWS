@@ -45,5 +45,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 283847 : Wrong edited photo on image editor.
 036 ==> 284909 : Manually built 2.2.0 digikam crashes in first time settings selection.
 037 ==> 285548 : Switching between most left sidebar options while in 'View Image' mode leaves the preview image but removes all thumbnails
-038 ==> 
+038 ==> 261277 : Windows and Linux Frontend using the same database.
+039 ==> 283393 : Remember Last Saved directory.
+040 ==> 
 
