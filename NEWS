@@ -44,4 +44,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 263954 : digiKam crashes when trying to re-download new pictures from SD card.
 035 ==> 283847 : Wrong edited photo on image editor.
 036 ==> 284909 : Manually built 2.2.0 digikam crashes in first time settings selection.
-037 ==> 
+037 ==> 285548 : Switching between most left sidebar options while in 'View Image' mode leaves the preview image but removes all thumbnails
+038 ==> 
+
