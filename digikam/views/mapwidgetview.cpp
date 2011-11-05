@@ -402,7 +402,6 @@ void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& cl
 
 void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 {
-    kDebug() << "---------------------------------------------------------------";
     const DatabaseFields::Set changes = changeset.changes();
 //    const DatabaseFields::ImagePositions imagePositionChanges = changes;
 
@@ -411,23 +410,18 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
            || ( changes & DatabaseFields::LongitudeNumber )
            || ( changes & DatabaseFields::Altitude ) )
     {
-        kDebug() << "changes!";
 
         foreach (const qlonglong& id, changeset.ids())
         {
             const QModelIndex index = d->model->indexForImageId(id);
-            kDebug()<<id<<index;
 
             if (index.isValid())
             {
-                kDebug()<<index;
                 emit(signalModelChangedDrastically());
                 break;
             }
         }
     }
-
-    kDebug() << "---------------------------------------------------------------";
 }
 
 /**
@@ -437,7 +431,6 @@ ImageInfo MapWidgetView::currentInfo()
 {
     /// @todo Have kgeomapwidget honor the 'current index'
     QModelIndex currentIndex = d->selectionModel->currentIndex();
-    kDebug()<<currentIndex;
 
     if (!currentIndex.isValid())
     {
@@ -450,7 +443,6 @@ ImageInfo MapWidgetView::currentInfo()
         currentIndex = d->selectionModel->selectedIndexes().first();
     }
 
-    kDebug()<<currentIndex;
     return d->imageFilterModel->imageInfo(currentIndex);
 }
 
