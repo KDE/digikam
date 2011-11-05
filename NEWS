@@ -42,4 +42,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 032 ==> 284663 : Crash while exporting on Picasaweb.
 033 ==> 273534 : Showfoto crashes (Segmentation fault) when run.
 034 ==> 263954 : digiKam crashes when trying to re-download new pictures from SD card.
-035 ==> 
+035 ==> 283847 : Wrong edited photo on image editor.
+036 ==> 
