@@ -205,14 +205,16 @@ SetupEditor::SetupEditor(QWidget* parent)
                                             "Otherwise, indicators are turned on when one of the color components matches the condition."));
 
     QLabel* exampleLabel = new QLabel(i18n("Example:"), exposureOptionsGroup);
-    d->preview           = DImg(KStandardDirs::locate("data","digikam/data/sample-aix.png"));
     KHBox* previewHBox   = new KHBox(exposureOptionsGroup);
     d->expoPreview       = new QLabel(previewHBox);
     QLabel* space        = new QLabel(previewHBox);
-    d->expoPreviewHisto  = new HistogramWidget(256, 128,
-                                               d->preview.bits(), d->preview.width(), d->preview.height(),
-                                               d->preview.sixteenBit(),
-                                               previewHBox, false, false);
+    d->expoPreviewHisto  = new HistogramWidget(256, 128, previewHBox, false, false);
+    d->preview           = DImg(KStandardDirs::locate("data","digikam/data/sample-aix.png"));
+    if (!d->preview.isNull())
+    {
+        d->expoPreviewHisto->updateData(d->preview.bits(), d->preview.width(),
+                                        d->preview.height(), d->preview.sixteenBit());
+    }
     d->expoPreviewHisto->setChannelType(ColorChannels);
     d->expoPreview->setFrameStyle(QFrame::Box|QFrame::Plain);
     previewHBox->setStretchFactor(space, 10);
