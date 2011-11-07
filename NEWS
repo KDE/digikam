@@ -1,54 +1,9 @@
 *****************************************************************************************************
-digiKam 2.3.0 - Release date: 2011-11-06
+digiKam 2.4.0 - Release date: 2011-12-04
 
 NEW FEATURES:
 
-General        : My Tags section from Captions/Tags sidebar have been moved to a dedicated sub-tab for
-                 better usability with small screen.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 262077 : Crash while trying to select a range of dates in timeline view.
-002 ==> 283304 : digiKam from git crashes after splash screen.
-003 ==> 282880 : Cannot save new version without from window close.
-004 ==> 282885 : When synchronizing meta-data with Nepomuk, the tag "Scanned for Faces" show up in Dolphin.
-005 ==> 281320 : Errors in subtag handling in Peoples-Browser.
-006 ==> 283631 : Symbol lookup error cause crash after splash screen on Gnome 3.
-007 ==> 283580 : UI problem: Captions/Tags too big and non-scrollable, makes Tags Tree unusable.
-008 ==> 283708 : digiKam don't start after update to package 2.2.0-14.2 (undefined symbol: _ZN4KIPI21ImageCollectionSharedD2Ev).
-009 ==> 283856 : Libkexiv2 from kdegraphics-libs cannot be compiled with exiv2 0.22.
-010 ==> 284269 : Tamron SP AF 17-50 show wrong lens ID.
-011 ==> 284720 : Build fails with error.
-012 ==> 283088 : Crash after long startup - NFSed images.
-013 ==> 284604 : Import from EOS 350D does nothing (solid interface relevant).
-014 ==> 284731 : Crashed when work batch convert.
-015 ==> 284740 : Can't change theme.
-016 ==> 285056 : Differently sort files before renaming.
-017 ==> 237806 : Rename using database entries.
-018 ==> 285240 : digiKam fails to build with external libpgf-6.11.42.
-019 ==> 284625 : Channel Mixer Preserve Luminosity does not work.
-020 ==> 285250 : digiKam crashed after saving changed file.
-021 ==> 250187 : Error message "trashbin full" - while trash _is_ definitely empty.
-022 ==> 284885 : Caption field is too short [patch].
-023 ==> 283767 : 'Image needs to be saved' notification after editing and saving manually an image.
-024 ==> 282746 : Scroll after image view.
-025 ==> 240151 : Request for support of Panasonic DMC-FZ38 rw2 (raw) format.
-026 ==> 192269 : T1i camera raw tint correction.
-027 ==> 264605 : Crash after choice of the option.
-028 ==> 281028 : digiKam Crash while uploading Raw Photos.
-029 ==> 257523 : Showfoto crashes after pressing the color Hue/Saturation/Lightness bottom.
-030 ==> 265501 : Crash in printing dialog (digikam).
-031 ==> 282906 : digiKam crashed the selection date in the calendar.
-032 ==> 284663 : Crash while exporting on Picasaweb.
-033 ==> 273534 : Showfoto crashes (Segmentation fault) when run.
-034 ==> 263954 : digiKam crashes when trying to re-download new pictures from SD card.
-035 ==> 283847 : Wrong edited photo on image editor.
-036 ==> 284909 : Manually built 2.2.0 digikam crashes in first time settings selection.
-037 ==> 285548 : Switching between most left sidebar options while in 'View Image' mode leaves the preview image but removes all thumbnails
-038 ==> 261277 : Windows and Linux Frontend using the same database.
-039 ==> 283393 : Remember Last Saved directory.
-040 ==> 273508 : digiKam doesn't shutdown after using BQM.
-041 ==> 285840 : Batch queue manager resize tool have a bottom limit of 100.
-042 ==> 273122 : digiKam crashes while scanning faces.
-043 ==> 274487 : digiKam crashes after closing it.
-044 ==> 
+001 ==> 
