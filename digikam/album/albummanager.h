@@ -658,11 +658,6 @@ private Q_SLOTS:
     void slotPeopleJobResult(KJob* job);
     void slotPeopleJobData(KIO::Job* job, const QByteArray& data);
 
-    void slotDirWatchDirty(const QString& path);
-    void slotKioFileMoved(const QString& urlFrom, const QString& urlTo);
-    void slotKioFilesDeleted(const QStringList& urls);
-    void slotKioFilesAdded(const QString& directory);
-    void slotNotifyFileChange(const QString& directory);
     void slotCollectionLocationStatusChanged(const CollectionLocation&, int);
     void slotCollectionLocationPropertiesChanged(const CollectionLocation& location);
     void slotAlbumChange(const AlbumChangeset& changeset);

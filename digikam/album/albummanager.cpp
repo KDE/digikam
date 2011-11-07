@@ -80,6 +80,7 @@ extern "C"
 #include "albumdb.h"
 #include "album.h"
 #include "albumsettings.h"
+#include "albumwatch.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include <config-digikam.h>
@@ -164,7 +165,7 @@ public:
         dateListJob(0),
         tagListJob(0),
         personListJob(0),
-        dirWatch(0),
+        albumWatch(0),
         rootPAlbum(0),
         rootTAlbum(0),
         rootDAlbum(0),
@@ -191,16 +192,12 @@ public:
     int                         dbPort;
     bool                        dbInternalServer;
 
-    QList<QDateTime>            dbPathModificationDateList;
-    QList<QString>              dirWatchBlackList;
-
     KIO::TransferJob*           albumListJob;
     KIO::TransferJob*           dateListJob;
     KIO::TransferJob*           tagListJob;
     KIO::TransferJob*           personListJob;
 
-    KDirWatch*                  dirWatch;
-    QStringList                 dirWatchAddedDirs;
+    AlbumWatch*                 albumWatch;
 
     PAlbum*                     rootPAlbum;
     TAlbum*                     rootTAlbum;
@@ -232,24 +229,6 @@ public:
     QMap<int,int>               fAlbumsCount;
 
 public:
-
-    QList<QDateTime> buildDirectoryModList(const QFileInfo& dbFile)
-    {
-        // retrieve modification dates
-        QList<QDateTime> modList;
-        QFileInfoList    fileInfoList = dbFile.dir().entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
-
-        // build list
-        foreach (const QFileInfo& info, fileInfoList)
-        {
-            // ignore digikam4.db and journal and other temporary files
-            if (!dirWatchBlackList.contains(info.fileName()))
-            {
-                modList << info.lastModified();
-            }
-        }
-        return modList;
-    }
 
     QString labelForAlbumRootAlbum(const CollectionLocation& location)
     {
@@ -309,10 +288,7 @@ AlbumManager::AlbumManager()
     : d(new AlbumManagerPriv)
 {
     internalInstance = this;
-    d->dirWatch      = new KDirWatch(this);
-
-    connect(d->dirWatch, SIGNAL(dirty(QString)),
-            this, SLOT(slotDirWatchDirty(QString)));
+    d->albumWatch = new AlbumWatch(this);
 
     // these operations are pretty fast, no need for long queuing
     d->scanPAlbumsTimer = new QTimer(this);
@@ -670,19 +646,9 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         disconnect(DatabaseAccess::databaseWatch(), 0, this, 0);
     }
 
-    d->dbPathModificationDateList.clear();
+    d->albumWatch->clear();
 
     cleanUp();
-
-    foreach (const QString& addedDirectory, d->dirWatchAddedDirs)
-    {
-        d->dirWatch->removeDir(addedDirectory);
-    }
-    d->dirWatchAddedDirs.clear();
-
-    QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FileMoved", 0, 0);
-    QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FilesAdded", 0, 0);
-    QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FilesRemoved", 0, 0);
 
     d->currentAlbum = 0;
     emit signalAlbumCurrentChanged(0);
@@ -740,6 +706,8 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         QApplication::restoreOverrideCursor();
         return true;
     }
+
+    d->albumWatch->setDatabaseParameters(params);
 
     // still suspended from above
     ScanController::instance()->resumeCollectionScan();
@@ -984,15 +952,8 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
     // -- ---------------------------------------------------------
 
-    d->dirWatchBlackList.clear();
-
 #ifdef USE_THUMBS_DB
     QApplication::setOverrideCursor(Qt::WaitCursor);
-
-    if (params.isSQLite())
-    {
-        d->dirWatchBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
-    }
 
     ThumbnailLoadThread::initializeThumbnailDatabase(DatabaseAccess::parameters().thumbnailParameters(),
                                                      new DatabaseThumbnailInfoProvider());
@@ -1002,18 +963,6 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
     QApplication::restoreOverrideCursor();
 #endif
-
-    // -- ---------------------------------------------------------
-
-    // measures to filter out KDirWatch signals caused by database operations
-    if (params.isSQLite())
-    {
-        QFileInfo dbFile(params.SQLiteDatabaseFile());
-        d->dirWatchBlackList << dbFile.fileName() << dbFile.fileName() + "-journal";
-
-        // ensure this is done after setting up the black list
-        d->dbPathModificationDateList = d->buildDirectoryModList(dbFile);
-    }
 
     // -- ---------------------------------------------------------
 
@@ -1106,33 +1055,6 @@ void AlbumManager::startScan()
     }
 
     d->changed = false;
-
-    KDirWatch::Method m = d->dirWatch->internalMethod();
-    QString           mName("FAM");
-
-    if (m == KDirWatch::DNotify)
-    {
-        mName = QString("DNotify");
-    }
-    else if (m == KDirWatch::Stat)
-    {
-        mName = QString("Stat");
-    }
-    else if (m == KDirWatch::INotify)
-    {
-        mName = QString("INotify");
-    }
-
-    kDebug() << "KDirWatch method = " << mName;
-
-    // connect to KDirNotify
-
-    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify", "FileMoved",
-                                          this, SLOT(slotKioFileMoved(QString,QString)));
-    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify", "FilesAdded",
-                                          this, SLOT(slotKioFilesAdded(QString)));
-    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify", "FilesRemoved",
-                                          this, SLOT(slotKioFilesDeleted(QStringList)));
 
     // create root albums
     d->rootPAlbum = new PAlbum(i18n("My Albums"));
@@ -1230,12 +1152,6 @@ void AlbumManager::slotCollectionLocationPropertiesChanged(const CollectionLocat
 
 void AlbumManager::addAlbumRoot(const CollectionLocation& location)
 {
-    if (!d->dirWatch->contains(location.albumRootPath()))
-    {
-        d->dirWatchAddedDirs << location.albumRootPath();
-        d->dirWatch->addDir(location.albumRootPath(), KDirWatch::WatchSubDirs);
-    }
-
     PAlbum* album = d->albumRootAlbumHash.value(location.id());
 
     if (!album)
@@ -1251,7 +1167,6 @@ void AlbumManager::addAlbumRoot(const CollectionLocation& location)
 
 void AlbumManager::removeAlbumRoot(const CollectionLocation& location)
 {
-    d->dirWatch->removeDir(location.albumRootPath());
     // retrieve and remove from hash
     PAlbum* album = d->albumRootAlbumHash.take(location.id());
 
@@ -3396,123 +3311,6 @@ void AlbumManager::slotImageTagChange(const ImageTagChangeset& changeset)
             break;
         default:
             break;
-    }
-}
-
-void AlbumManager::slotNotifyFileChange(const QString& path)
-{
-    //kDebug() << "Detected file change at" << path;
-    ScanController::instance()->scheduleCollectionScanRelaxed(path);
-}
-
-void AlbumManager::slotDirWatchDirty(const QString& path)
-{
-    // Filter out dirty signals triggered by changes on the database file
-    foreach (const QString& bannedFile, d->dirWatchBlackList)
-    {
-        if (path.endsWith(bannedFile))
-        {
-            return;
-        }
-    }
-
-    DatabaseParameters params = DatabaseAccess::parameters();
-
-    if (params.isSQLite())
-    {
-        QFileInfo info(path);
-        QDir dir;
-
-        if (info.isDir())
-        {
-            dir = QDir(path);
-        }
-        else
-        {
-            dir = info.dir();
-        }
-
-        QFileInfo dbFile(params.SQLiteDatabaseFile());
-
-        // Workaround for broken KDirWatch in KDE 4.2.4
-        if (path.startsWith(dbFile.filePath()))
-        {
-            return;
-        }
-
-        // is the signal for the directory containing the database file?
-        if (dbFile.dir() == dir)
-        {
-            // retrieve modification dates
-            QList<QDateTime> modList = d->buildDirectoryModList(dbFile);
-
-            // check for equality
-            if (modList == d->dbPathModificationDateList)
-            {
-                //kDebug() << "Filtering out db-file-triggered dir watch signal";
-                // we can skip the signal
-                return;
-            }
-
-            // set new list
-            d->dbPathModificationDateList = modList;
-        }
-    }
-
-    kDebug() << "KDirWatch detected change at" << path;
-
-    slotNotifyFileChange(path);
-}
-
-void AlbumManager::slotKioFileMoved(const QString& urlFrom, const QString& urlTo)
-{
-    kDebug() << urlFrom << urlTo;
-    handleKioNotification(KUrl(urlFrom));
-    handleKioNotification(KUrl(urlTo));
-}
-
-void AlbumManager::slotKioFilesAdded(const QString& url)
-{
-    kDebug() << url;
-    handleKioNotification(KUrl(url));
-}
-
-void AlbumManager::slotKioFilesDeleted(const QStringList& urls)
-{
-    kDebug() << urls;
-    foreach (const QString& url, urls)
-    {
-        handleKioNotification(KUrl(url));
-    }
-}
-
-void AlbumManager::handleKioNotification(const KUrl& url)
-{
-    if (url.isLocalFile())
-    {
-        QString path = url.directory();
-
-        //kDebug() << path << !CollectionManager::instance()->albumRootPath(path).isEmpty();
-        // check path is in our collection
-        if (CollectionManager::instance()->albumRootPath(path).isNull())
-        {
-            return;
-        }
-
-        kDebug() << "KDirNotify detected file change at" << path;
-
-        slotNotifyFileChange(path);
-    }
-    else
-    {
-        DatabaseUrl dbUrl(url);
-
-        if (dbUrl.isAlbumUrl())
-        {
-            QString path = dbUrl.fileUrl().directory();
-            kDebug() << "KDirNotify detected file change at" << path;
-            slotNotifyFileChange(path);
-        }
     }
 }
 
