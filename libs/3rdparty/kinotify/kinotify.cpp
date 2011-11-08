@@ -591,6 +591,7 @@ bool KInotify::watchingPath( const QString&) const { return false; }
 bool KInotify::filterWatch( const QString &, WatchEvents & , WatchFlags&) { return false; }
 bool KInotify::addWatch( const QString&, WatchEvents, WatchFlags) { return false; }
 bool KInotify::removeWatch( const QString&) { return false; }
+bool KInotify::removeDirectory( const QString& ) { return false; }
 bool KInotify::removeAllWatches() { return false; }
 bool KInotify::watchDirectory(const QString& ) { return false; }
 bool KInotify::watchDirectoryAndSubdirs(const QString&) { return false; }
