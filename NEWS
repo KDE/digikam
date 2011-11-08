@@ -7,4 +7,5 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 285884 : Shortcut changes aren't saved.
-002 ==> 
+002 ==> 286034 : digikam icons conflicts with oxygen-icon-theme
+003 ==> 
