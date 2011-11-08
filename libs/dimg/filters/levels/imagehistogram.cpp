@@ -6,7 +6,7 @@
  * Date        : 2004-07-21
  * Description : image histogram manipulation methods.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
