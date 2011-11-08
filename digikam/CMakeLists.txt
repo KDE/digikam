@@ -256,7 +256,7 @@ ENDIF(USE_SCRIPT_IFACE)
 
 QT4_ADD_DBUS_ADAPTOR(digikam_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
 
-KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/ox*-app-digikam.png")
+KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
 
 KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 
