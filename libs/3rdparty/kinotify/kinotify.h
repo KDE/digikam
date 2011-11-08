@@ -41,6 +41,7 @@ class DIGIKAM_EXPORT KInotify : public QObject
     Q_OBJECT
 
 public:
+
     KInotify( QObject* parent = 0 );
     virtual ~KInotify();
 
@@ -50,35 +51,36 @@ public:
      *
      * These flags correspond to the native Linux inotify flags.
      */
-    enum WatchEvent {
-        EventAccess = 0x00000001, /**< File was accessed (read, compare inotify's IN_ACCESS) */
+    enum WatchEvent
+    {
+        EventAccess          = 0x00000001, /**< File was accessed (read, compare inotify's IN_ACCESS) */
         EventAttributeChange = 0x00000004, /**< Metadata changed (permissions, timestamps, extended attributes, etc., compare inotify's IN_ATTRIB) */
-        EventCloseWrite = 0x00000008, /**< File opened for writing was closed (compare inotify's IN_CLOSE_WRITE) */
-        EventCloseRead = 0x00000010, /**< File not opened for writing was closed (compare inotify's IN_CLOSE_NOWRITE) */
-        EventCreate = 0x00000100, /** File/directory created in watched directory (compare inotify's IN_CREATE) */
-        EventDelete = 0x00000200, /**< File/directory deleted from watched directory (compare inotify's IN_DELETE) */
-        EventDeleteSelf = 0x00000400, /**< Watched file/directory was itself deleted (compare inotify's IN_DELETE_SELF) */
-        EventModify = 0x00000002, /**< File was modified (compare inotify's IN_MODIFY) */
-        EventMoveSelf = 0x00000800, /**< Watched file/directory was itself moved (compare inotify's IN_MOVE_SELF) */
-        EventMoveFrom = 0x00000040, /**< File moved out of watched directory (compare inotify's IN_MOVED_FROM) */
-        EventMoveTo = 0x00000080, /**< File moved into watched directory (compare inotify's IN_MOVED_TO) */
-        EventOpen = 0x00000020, /**< File was opened (compare inotify's IN_OPEN) */
-        EventUnmount = 0x00002000, /**< Backing fs was unmounted (compare inotify's IN_UNMOUNT) */
-        EventQueueOverflow = 0x00004000, /**< Event queued overflowed (compare inotify's IN_Q_OVERFLOW) */
-        EventIgnored = 0x00008000, /**< File was ignored (compare inotify's IN_IGNORED) */
-        EventMove = ( EventMoveFrom|EventMoveTo),
-        EventAll = ( EventAccess|
-                     EventAttributeChange|
-                     EventCloseWrite|
-                     EventCloseRead|
-                     EventCreate|
-                     EventDelete|
-                     EventDeleteSelf|
-                     EventModify|
-                     EventMoveSelf|
-                     EventMoveFrom|
-                     EventMoveTo|
-                     EventOpen )
+        EventCloseWrite      = 0x00000008, /**< File opened for writing was closed (compare inotify's IN_CLOSE_WRITE) */
+        EventCloseRead       = 0x00000010, /**< File not opened for writing was closed (compare inotify's IN_CLOSE_NOWRITE) */
+        EventCreate          = 0x00000100, /** File/directory created in watched directory (compare inotify's IN_CREATE) */
+        EventDelete          = 0x00000200, /**< File/directory deleted from watched directory (compare inotify's IN_DELETE) */
+        EventDeleteSelf      = 0x00000400, /**< Watched file/directory was itself deleted (compare inotify's IN_DELETE_SELF) */
+        EventModify          = 0x00000002, /**< File was modified (compare inotify's IN_MODIFY) */
+        EventMoveSelf        = 0x00000800, /**< Watched file/directory was itself moved (compare inotify's IN_MOVE_SELF) */
+        EventMoveFrom        = 0x00000040, /**< File moved out of watched directory (compare inotify's IN_MOVED_FROM) */
+        EventMoveTo          = 0x00000080, /**< File moved into watched directory (compare inotify's IN_MOVED_TO) */
+        EventOpen            = 0x00000020, /**< File was opened (compare inotify's IN_OPEN) */
+        EventUnmount         = 0x00002000, /**< Backing fs was unmounted (compare inotify's IN_UNMOUNT) */
+        EventQueueOverflow   = 0x00004000, /**< Event queued overflowed (compare inotify's IN_Q_OVERFLOW) */
+        EventIgnored         = 0x00008000, /**< File was ignored (compare inotify's IN_IGNORED) */
+        EventMove            = ( EventMoveFrom|EventMoveTo),
+        EventAll             = ( EventAccess|
+                                 EventAttributeChange|
+                                 EventCloseWrite|
+                                 EventCloseRead|
+                                 EventCreate|
+                                 EventDelete|
+                                 EventDeleteSelf|
+                                 EventModify|
+                                 EventMoveSelf|
+                                 EventMoveFrom|
+                                 EventMoveTo|
+                                 EventOpen )
     };
     Q_DECLARE_FLAGS(WatchEvents, WatchEvent)
 
@@ -87,10 +89,11 @@ public:
      *
      * These flags correspond to the native Linux inotify flags.
      */
-    enum WatchFlag {
-        FlagOnlyDir = 0x01000000, /**< Only watch the path if it is a directory (IN_ONLYDIR) */
+    enum WatchFlag
+    {
+        FlagOnlyDir     = 0x01000000, /**< Only watch the path if it is a directory (IN_ONLYDIR) */
         FlagDoNotFollow = 0x02000000, /**< Don't follow a sym link (IN_DONT_FOLLOW) */
-        FlagOneShot = 0x80000000 /**< Only send event once (IN_ONESHOT) */
+        FlagOneShot     = 0x80000000  /**< Only send event once (IN_ONESHOT) */
     };
     Q_DECLARE_FLAGS(WatchFlags, WatchFlag)
 
@@ -102,6 +105,7 @@ public:
     bool watchingPath( const QString& path ) const;
 
 protected:
+
     /**
      * Called for every folder that is being watched.
      * Returns true if the watch should be add or false if it should NOT be added.
@@ -109,7 +113,7 @@ protected:
     virtual bool filterWatch( const QString & path, WatchEvents & modes, WatchFlags & flags );
 
 public Q_SLOTS:
-    virtual bool addWatch( const QString& path, WatchEvents modes, WatchFlags flags = WatchFlags() );
+
     bool removeWatch( const QString& path );
     bool removeAllWatches();
 
@@ -117,7 +121,10 @@ public Q_SLOTS:
     bool watchDirectoryAndSubdirs(const QString& path);
     bool removeDirectory( const QString& path );
 
+    virtual bool addWatch( const QString& path, WatchEvents modes, WatchFlags flags = WatchFlags() );
+
 Q_SIGNALS:
+
     /**
      * Emitted if a file is accessed (KInotify::EventAccess)
      */
@@ -185,15 +192,17 @@ Q_SIGNALS:
     void watchUserLimitReached();
 
 private Q_SLOTS:
+
     void slotEvent( int );
 
 private:
+
     class Private;
     Private* const d;
 
     Q_PRIVATE_SLOT( d, void _k_addWatches() )
 };
 
-}
+} // namespace Digikam
 
-#endif
+#endif // _KINOTIFY_H_
