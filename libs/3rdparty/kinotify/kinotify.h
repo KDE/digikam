@@ -1,5 +1,6 @@
 /* This file is part of the KDE libraries
    Copyright (C) 2007-2010 Sebastian Trueg <trueg@kde.org>
+   Copyright 2011 Marcel Wiesweg <marcel.wiesweg@gmx.de>   
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,7 +36,7 @@ namespace Digikam
  * Warning: moving of top-level folders is not supported and
  * results in undefined behaviour.
  */
-class KInotify : public QObject
+class DIGIKAM_EXPORT KInotify : public QObject
 {
     Q_OBJECT
 
