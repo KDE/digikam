@@ -290,9 +290,10 @@ KInotify::~KInotify()
 }
 
 
-bool KInotify::available() const
+bool KInotify::available()
 {
-    if( d->inotify() > 0 )
+    KInotify q;
+    if( q.d->inotify() > 0 )
     {
         // trueg: Copied from KDirWatch.
         struct utsname uts;
