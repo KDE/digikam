@@ -9,4 +9,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 285884 : Shortcut changes aren't saved.
 002 ==> 286034 : digikam icons conflicts with oxygen-icon-theme
 003 ==> 286165 : Tag hierarchy not preserved when exporting metadata to IPTC.
-004 ==> 
+004 ==> 285742 : Crash in setup.
+005 ==> 
