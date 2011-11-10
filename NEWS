@@ -16,4 +16,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 285742 : Crash in setup.
 005 ==> 243074 : Channel mixer hangs on initialize.
 006 ==> 124814 : No color temperature used for RAW images.
-007 ==> 
+007 ==> 285194 : digiKam crashing while scanning >20000 pictures.
+008 ==> 
+
