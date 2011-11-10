@@ -587,7 +587,7 @@ public:
 };
 KInotify::KInotify(QObject* parent) : QObject(parent), d(0) {}
 KInotify::~KInotify() {}
-bool KInotify::available() const { return false; }
+bool KInotify::available() { return false; }
 bool KInotify::watchingPath( const QString&) const { return false; }
 bool KInotify::filterWatch( const QString &, WatchEvents & , WatchFlags&) { return false; }
 bool KInotify::addWatch( const QString&, WatchEvents, WatchFlags) { return false; }

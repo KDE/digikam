@@ -413,6 +413,8 @@ void AlbumWatch::connectToKDirWatch()
         return;
     }
 
+    d->dirWatch = new KDirWatch(this);
+
     KDirWatch::Method m = d->dirWatch->internalMethod();
     QString           mName("FAM");
 
@@ -430,8 +432,6 @@ void AlbumWatch::connectToKDirWatch()
     }
 
     kDebug() << "KDirWatch method = " << mName;
-
-    d->dirWatch = new KDirWatch(this);
 
     connect(d->dirWatch, SIGNAL(dirty(QString)),
             this, SLOT(slotDirWatchDirty(QString)));
