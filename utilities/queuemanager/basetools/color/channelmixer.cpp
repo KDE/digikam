@@ -6,7 +6,7 @@
  * Date        : 2010-02-19
  * Description : Channel Mixer batch tool.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,7 +33,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
-#include <kcombobox.h>
 
 // Local includes
 
@@ -51,15 +50,7 @@ ChannelMixer::ChannelMixer(QObject* parent)
     setToolDescription(i18n("Mix color channel."));
     setToolIcon(KIcon(SmallIcon("channelmixer")));
 
-    KVBox* vbox          = new KVBox;
-    KHBox* hbox          = new KHBox(vbox);
-    QLabel* channelLabel = new QLabel(hbox);
-    channelLabel->setText(i18n("Channel:"));
-    m_channelCB          = new KComboBox(hbox);
-    m_channelCB->addItem(i18n("Red"),   QVariant(RedChannel));
-    m_channelCB->addItem(i18n("Green"), QVariant(GreenChannel));
-    m_channelCB->addItem(i18n("Blue"),  QVariant(BlueChannel));
-
+    KVBox* vbox    = new KVBox;
     m_settingsView = new MixerSettings(vbox);
     m_settingsView->setMonochromeTipsVisible(false);
     QLabel* space  = new QLabel(vbox);
@@ -69,29 +60,10 @@ ChannelMixer::ChannelMixer(QObject* parent)
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
-
-    connect(m_channelCB, SIGNAL(activated(int)),
-            this, SLOT(slotChannelChanged()));
-
-    connect(m_settingsView, SIGNAL(signalMonochromeActived(bool)),
-            this, SLOT(slotMonochromeActived(bool)));
 }
 
 ChannelMixer::~ChannelMixer()
 {
-}
-
-void ChannelMixer::slotChannelChanged()
-{
-    int index = m_channelCB->currentIndex();
-    m_settingsView->setCurrentChannel((ChannelType)(m_channelCB->itemData(index).toInt()));
-}
-
-void ChannelMixer::slotMonochromeActived(bool mono)
-{
-    m_channelCB->setEnabled(!mono);
-    int id = m_channelCB->findData(QVariant(RedChannel));
-    m_channelCB->setCurrentIndex(id);
 }
 
 BatchToolSettings ChannelMixer::defaultSettings()
