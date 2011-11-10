@@ -90,7 +90,7 @@ public:
 
 void AlbumWatch::AlbumWatchPriv::determineMode()
 {
-    if (KInotify().available())
+    if (KInotify::available())
     {
         mode = InotifyMode;
     }

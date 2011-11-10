@@ -100,7 +100,7 @@ public:
     /**
      * \return \p true if inotify is available and usable.
      */
-    bool available() const;
+    static bool available();
 
     bool watchingPath( const QString& path ) const;
 
