@@ -15,4 +15,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 286165 : Tag hierarchy not preserved when exporting metadata to IPTC.
 004 ==> 285742 : Crash in setup.
 005 ==> 243074 : Channel mixer hangs on initialize.
-006 ==> 
+006 ==> 124814 : No color temperature used for RAW images.
+007 ==> 
