@@ -7,6 +7,7 @@ Libkdcraw : use internal libraw 0.14.3 to support new RAW camera :
             Fuji FinePix F600EXR, Nikon Coolpix P7100, Olympus E-PL3, Olympus E-PM1, 
             Panasonic DMC-FZ150, Sony NEX-5N, Sony SLT-A65V, Sony SLT-A77V.
 
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 285884 : Shortcut changes aren't saved.
