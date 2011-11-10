@@ -61,8 +61,7 @@ public:
     void loadSettings();
     void saveAsSettings();
 
-    void setCurrentChannel(int);
-    int  currentChannel();
+    int  currentChannel() const;
     
     void setMonochromeTipsVisible(bool b);
 
@@ -70,6 +69,7 @@ Q_SIGNALS:
 
     void signalSettingsChanged();
     void signalMonochromeActived(bool);
+    void signalOutChannelChanged();
 
 private:
 
@@ -82,6 +82,7 @@ private Q_SLOTS:
     void slotGainsChanged();
     void slotMonochromeActived(bool);
     void slotLuminosityChanged(bool);
+    void slotOutChannelChanged();
 
 private:
 

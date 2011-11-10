@@ -45,6 +45,7 @@
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kcombobox.h>
 
 // LibKDcraw includes
 
@@ -64,9 +65,11 @@ public:
         currentChannel(RedChannel),
         monochromeTips(0),
         totalPercents(0),
+        outChannelLabel(0),
         resetButton(0),
         preserveLuminosity(0),
         monochrome(0),
+        outChannelCB(0),
         redGain(0),
         greenGain(0),
         blueGain(0)
@@ -91,12 +94,15 @@ public:
 
     QLabel*               monochromeTips;
     QLabel*               totalPercents;
-
+    QLabel*               outChannelLabel;
+    
     QPushButton*          resetButton;
 
     QCheckBox*            preserveLuminosity;
     QCheckBox*            monochrome;
 
+    KComboBox*            outChannelCB;
+    
     MixerContainer        mixerSettings;
 
     RDoubleNumInput*      redGain;
@@ -125,6 +131,12 @@ MixerSettings::MixerSettings(QWidget* parent)
       d(new MixerSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(this);
+
+    d->outChannelLabel = new QLabel(i18n("Output Channel:"));
+    d->outChannelCB    = new KComboBox;
+    d->outChannelCB->addItem(i18n("Red"),   QVariant(RedChannel));
+    d->outChannelCB->addItem(i18n("Green"), QVariant(GreenChannel));
+    d->outChannelCB->addItem(i18n("Blue"),  QVariant(BlueChannel));
 
     QLabel* redLabel  = new QLabel(i18n("Red (%):"));
     d->redGain        = new RDoubleNumInput;
@@ -184,18 +196,20 @@ MixerSettings::MixerSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    grid->addWidget(redLabel,              0, 0, 1, 1);
-    grid->addWidget(d->redGain,            0, 1, 1, 4);
-    grid->addWidget(greenLabel,            1, 0, 1, 1);
-    grid->addWidget(d->greenGain,          1, 1, 1, 4);
-    grid->addWidget(blueLabel,             2, 0, 1, 1);
-    grid->addWidget(d->blueGain,           2, 1, 1, 4);
-    grid->addWidget(d->resetButton,        3, 0, 1, 2);
-    grid->addWidget(d->totalPercents,      3, 3, 1, 1);
-    grid->addWidget(d->preserveLuminosity, 4, 0, 1, 5);
-    grid->addWidget(d->monochrome,         5, 0, 1, 5);
-    grid->addWidget(d->monochromeTips,     6, 0, 1, 5);
-    grid->setRowStretch(7, 10);
+    grid->addWidget(d->outChannelLabel,    0, 0, 1, 1);
+    grid->addWidget(d->outChannelCB,       0, 3, 1, 2);
+    grid->addWidget(redLabel,              1, 0, 1, 1);
+    grid->addWidget(d->redGain,            1, 1, 1, 4);
+    grid->addWidget(greenLabel,            2, 0, 1, 1);
+    grid->addWidget(d->greenGain,          2, 1, 1, 4);
+    grid->addWidget(blueLabel,             3, 0, 1, 1);
+    grid->addWidget(d->blueGain,           3, 1, 1, 4);
+    grid->addWidget(d->resetButton,        4, 0, 1, 2);
+    grid->addWidget(d->totalPercents,      4, 3, 1, 1);
+    grid->addWidget(d->preserveLuminosity, 5, 0, 1, 5);
+    grid->addWidget(d->monochrome,         6, 0, 1, 5);
+    grid->addWidget(d->monochromeTips,     7, 0, 1, 5);
+    grid->setRowStretch(8, 10);
     grid->setColumnStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
@@ -219,6 +233,9 @@ MixerSettings::MixerSettings(QWidget* parent)
 
     connect(d->preserveLuminosity, SIGNAL(toggled(bool)),
             this, SLOT(slotLuminosityChanged(bool)));
+        
+    connect(d->outChannelCB, SIGNAL(activated(int)),
+            this, SLOT(slotOutChannelChanged()));
 }
 
 MixerSettings::~MixerSettings()
@@ -231,13 +248,15 @@ void MixerSettings::setMonochromeTipsVisible(bool b)
     b ? d->monochromeTips->show() : d->monochromeTips->hide();
 }
 
-void MixerSettings::setCurrentChannel(int channel)
+void MixerSettings::slotOutChannelChanged()
 {
-    d->currentChannel = channel;
+    int index         = d->outChannelCB->currentIndex();
+    d->currentChannel = (ChannelType)(d->outChannelCB->itemData(index).toInt());
     updateSettingsWidgets();
+    emit signalOutChannelChanged();
 }
 
-int MixerSettings::currentChannel()
+int MixerSettings::currentChannel() const
 {
     return d->currentChannel;
 }
@@ -407,6 +426,13 @@ void MixerSettings::slotMonochromeActived(bool mono)
 {
     d->mixerSettings.bMonochrome = mono;
     d->monochromeTips->setEnabled(mono);
+    
+    d->outChannelLabel->setEnabled(!mono);
+    d->outChannelCB->setEnabled(!mono);
+    int id = d->outChannelCB->findData(QVariant(RedChannel));
+    d->outChannelCB->setCurrentIndex(id);
+    slotOutChannelChanged();
+    
     emit signalMonochromeActived(mono);
     emit signalSettingsChanged();
 }

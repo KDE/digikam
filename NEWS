@@ -3,6 +3,10 @@ digiKam 2.4.0 - Release date: 2011-12-04
 
 NEW FEATURES:
 
+Libkdcraw : use internal libraw 0.14.3 to support new RAW camera : 
+            Fuji FinePix F600EXR, Nikon Coolpix P7100, Olympus E-PL3, Olympus E-PM1, 
+            Panasonic DMC-FZ150, Sony NEX-5N, Sony SLT-A65V, Sony SLT-A77V.
+
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -10,4 +14,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 286034 : digikam icons conflicts with oxygen-icon-theme
 003 ==> 286165 : Tag hierarchy not preserved when exporting metadata to IPTC.
 004 ==> 285742 : Crash in setup.
-005 ==> 
+005 ==> 243074 : Channel mixer hangs on initialize.
+006 ==> 124814 : No color temperature used for RAW images.
+007 ==> 

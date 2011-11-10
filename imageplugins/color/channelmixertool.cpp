@@ -6,7 +6,7 @@
  * Date        : 2005-02-26
  * Description : image channels mixer.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -124,7 +124,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
                                 EditorToolSettings::Cancel);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
-    d->gboxSettings->setHistogramType(RGB);
+    d->gboxSettings->setHistogramType(LRGBC);
 
     // -------------------------------------------------------------
 
@@ -145,12 +145,9 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
-
-    connect(d->gboxSettings, SIGNAL(signalChannelChanged()),
-            this, SLOT(slotChannelChanged()));
-
-    connect(d->settingsView, SIGNAL(signalMonochromeActived(bool)),
-            this, SLOT(slotMonochromeActived(bool)));
+    
+    connect(d->settingsView, SIGNAL(signalOutChannelChanged()),
+            this, SLOT(slotOutChannelChanged()));
 }
 
 ChannelMixerTool::~ChannelMixerTool()
@@ -163,24 +160,14 @@ ChannelMixerTool::~ChannelMixerTool()
     delete d;
 }
 
-void ChannelMixerTool::slotMonochromeActived(bool mono)
-{
-    d->gboxSettings->histogramBox()->setChannelEnabled(!mono);
-    if (mono)
-    {
-        d->gboxSettings->histogramBox()->setChannel(RedChannel);
-        slotChannelChanged();
-    }
-}
-
-void ChannelMixerTool::slotChannelChanged()
+void ChannelMixerTool::slotOutChannelChanged()
 {
     if (d->settingsView->settings().bMonochrome)
     {
         d->gboxSettings->histogramBox()->setGradientColors(QColor("black"), QColor("white"));
     }
 
-    d->settingsView->setCurrentChannel(d->gboxSettings->histogramBox()->channel());
+//    d->settingsView->setCurrentChannel(d->gboxSettings->histogramBox()->channel());
 }
 
 void ChannelMixerTool::prepareEffect()
@@ -238,7 +225,6 @@ void ChannelMixerTool::readSettings()
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
             (int)LogScaleHistogram));
 
-    slotMonochromeActived(d->settingsView->settings().bMonochrome);
     slotEffect();
 }
 
