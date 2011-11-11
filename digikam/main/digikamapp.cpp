@@ -1143,7 +1143,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
-    d->zoomTo100percents->setShortcut(KShortcut(Qt::ALT + Qt::CTRL + Qt::Key_0));       // NOTE: Photoshop 7 use ALT+CTRL+0
+    d->zoomTo100percents->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Comma));
     connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("album_zoomto100percents", d->zoomTo100percents);
 
