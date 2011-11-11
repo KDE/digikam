@@ -6,7 +6,7 @@
  * Date        : 2010-03-10
  * Description : Film Grain settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,7 +55,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class FilmGrainSettingsPriv
+class FilmGrainSettings::FilmGrainSettingsPriv
 {
 public:
 
@@ -139,23 +139,23 @@ public:
 
     RExpanderBox*        expanderBox;
 };
-const QString FilmGrainSettingsPriv::configGrainSizeEntry("GrainSizeEntry");
-const QString FilmGrainSettingsPriv::configPhotoDistributionEntry("PhotoDistributionEntry");
-const QString FilmGrainSettingsPriv::configAddLumNoiseEntry("AddLumNoiseEntry");
-const QString FilmGrainSettingsPriv::configIntensityLumAdjustmentEntry("IntensityLumAdjustment");
-const QString FilmGrainSettingsPriv::configShadowsLumAdjustmentEntry("ShadowsLumAdjustment");
-const QString FilmGrainSettingsPriv::configMidtonesLumAdjustmentEntry("MidtonesLumAdjustment");
-const QString FilmGrainSettingsPriv::configHighlightsLumAdjustmentEntry("HighlightsLumAdjustment");
-const QString FilmGrainSettingsPriv::configAddChromaBlueNoiseEntry("AddChromaBlueNoiseEntry");
-const QString FilmGrainSettingsPriv::configIntensityChromaBlueAdjustmentEntry("IntensityChromaBlueAdjustment");
-const QString FilmGrainSettingsPriv::configShadowsChromaBlueAdjustmentEntry("ShadowsChromaBlueAdjustment");
-const QString FilmGrainSettingsPriv::configMidtonesChromaBlueAdjustmentEntry("MidtonesChromaBlueAdjustment");
-const QString FilmGrainSettingsPriv::configHighlightsChromaBlueAdjustmentEntry("HighlightsChromaBlueAdjustment");
-const QString FilmGrainSettingsPriv::configAddChromaRedNoiseEntry("AddChromaRedNoiseEntry");
-const QString FilmGrainSettingsPriv::configIntensityChromaRedAdjustmentEntry("IntensityChromaRedAdjustment");
-const QString FilmGrainSettingsPriv::configShadowsChromaRedAdjustmentEntry("ShadowsChromaRedAdjustment");
-const QString FilmGrainSettingsPriv::configMidtonesChromaRedAdjustmentEntry("MidtonesChromaRedAdjustment");
-const QString FilmGrainSettingsPriv::configHighlightsChromaRedAdjustmentEntry("HighlightsChromaRedAdjustment");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configGrainSizeEntry("GrainSizeEntry");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configPhotoDistributionEntry("PhotoDistributionEntry");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configAddLumNoiseEntry("AddLumNoiseEntry");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configIntensityLumAdjustmentEntry("IntensityLumAdjustment");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configShadowsLumAdjustmentEntry("ShadowsLumAdjustment");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configMidtonesLumAdjustmentEntry("MidtonesLumAdjustment");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configHighlightsLumAdjustmentEntry("HighlightsLumAdjustment");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configAddChromaBlueNoiseEntry("AddChromaBlueNoiseEntry");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configIntensityChromaBlueAdjustmentEntry("IntensityChromaBlueAdjustment");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configShadowsChromaBlueAdjustmentEntry("ShadowsChromaBlueAdjustment");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configMidtonesChromaBlueAdjustmentEntry("MidtonesChromaBlueAdjustment");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configHighlightsChromaBlueAdjustmentEntry("HighlightsChromaBlueAdjustment");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configAddChromaRedNoiseEntry("AddChromaRedNoiseEntry");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configIntensityChromaRedAdjustmentEntry("IntensityChromaRedAdjustment");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configShadowsChromaRedAdjustmentEntry("ShadowsChromaRedAdjustment");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configMidtonesChromaRedAdjustmentEntry("MidtonesChromaRedAdjustment");
+const QString FilmGrainSettings::FilmGrainSettingsPriv::configHighlightsChromaRedAdjustmentEntry("HighlightsChromaRedAdjustment");
 
 // --------------------------------------------------------
 
