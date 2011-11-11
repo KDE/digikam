@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : filter to add Film Grain to image.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -35,8 +35,6 @@
 
 namespace Digikam
 {
-
-class FilmGrainFilterPriv;
 
 class DIGIKAM_EXPORT FilmGrainContainer
 {
@@ -113,18 +111,23 @@ public:
                              const FilmGrainContainer& settings=FilmGrainContainer());
     ~FilmGrainFilter();
 
+    void                    readParameters(const FilterAction& action);
+
     static QString          FilterIdentifier()
     {
         return "digikam:FilmGrainFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Film Grain Effect");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -134,8 +137,8 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
-    void                    readParameters(const FilterAction& action);
 
 private:
 
@@ -153,6 +156,7 @@ private:
 
 private:
 
+    class FilmGrainFilterPriv;
     FilmGrainFilterPriv* const d;
 };
 
