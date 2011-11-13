@@ -412,49 +412,54 @@ void KInotify::slotEvent( int socket )
     while ( i < len && len-i >= EVENT_STRUCT_SIZE  )
     {
         const struct inotify_event* event = ( struct inotify_event* )&d->eventBuffer[i];
+        i += EVENT_STRUCT_SIZE + event->len;
 
-        QByteArray path;
+        QByteArray encodedPath;
 
         // the event name only contains an interesting value if we get an event for a file/folder inside
         // a watched folder. Otherwise we should ignore it
         if ( event->mask & (EventDeleteSelf|EventMoveSelf) )
         {
-            path = d->watchPathHash.value( event->wd );
+            encodedPath = d->watchPathHash.value( event->wd );
         }
         else
         {
             // we cannot use event->len here since it contains the size of the buffer and not the length of the string
             const QByteArray eventName  = QByteArray::fromRawData( event->name, qstrlen(event->name) );
             const QByteArray hashedPath = d->watchPathHash.value( event->wd );
-            path                        = concatPath( hashedPath, eventName );
+            encodedPath                 = concatPath( hashedPath, eventName );
         }
 
-        Q_ASSERT( !path.isEmpty() || event->mask & EventIgnored );
-        Q_ASSERT( path != "/" || event->mask & EventIgnored );
+        if (encodedPath.isEmpty() || encodedPath == "/" || event->mask & EventIgnored)
+        {
+            continue;
+        }
+
+        QString path = QFile::decodeName(encodedPath);
 
         // now signal the event
         if ( event->mask & EventAccess)
         {
 //            kDebug() << path << "EventAccess";
-            emit accessed( QFile::decodeName(path) );
+            emit accessed(path);
         }
 
         if ( event->mask & EventAttributeChange )
         {
 //            kDebug() << path << "EventAttributeChange";
-            emit attributeChanged( QFile::decodeName(path) );
+            emit attributeChanged(path);
         }
 
         if ( event->mask & EventCloseWrite )
         {
 //            kDebug() << path << "EventCloseWrite";
-            emit closedWrite( QFile::decodeName(path) );
+            emit closedWrite(path);
         }
 
         if ( event->mask & EventCloseRead )
         {
 //            kDebug() << path << "EventCloseRead";
-            emit closedRead( QFile::decodeName(path) );
+            emit closedRead(path);
         }
 
         if ( event->mask & EventCreate )
@@ -467,14 +472,14 @@ void KInotify::slotEvent( int socket )
                 addWatch( path, d->mode, d->flags );
             }
             */
-            emit created( QFile::decodeName(path), event->mask & IN_ISDIR );
+            emit created(path, event->mask & IN_ISDIR );
         }
 
         if ( event->mask & EventDeleteSelf )
         {
             //kDebug() << path << "EventDeleteSelf";
             d->removeWatch( event->wd );
-            emit deleted( QFile::decodeName(path), event->mask & IN_ISDIR );
+            emit deleted(path, event->mask & IN_ISDIR );
         }
 
         if ( event->mask & EventDelete )
@@ -484,13 +489,13 @@ void KInotify::slotEvent( int socket )
             // we watch all folders recursively. Thus, folder removing is reported in DeleteSelf.
             if( !(event->mask & IN_ISDIR) )
             */
-            emit deleted( QFile::decodeName(path), false );
+            emit deleted(path, false );
         }
 
         if ( event->mask & EventModify )
         {
 //            kDebug() << path << "EventModify";
-            emit modified( QFile::decodeName(path) );
+            emit modified(path);
         }
 
         if ( event->mask & EventMoveSelf )
@@ -502,7 +507,8 @@ void KInotify::slotEvent( int socket )
         if ( event->mask & EventMoveFrom )
         {
 //            kDebug() << path << "EventMoveFrom";
-            d->cookies[event->cookie] = path;
+            d->cookies[event->cookie] = encodedPath;
+            emit movedFrom(path);
         }
 
         if ( event->mask & EventMoveTo )
@@ -520,24 +526,25 @@ void KInotify::slotEvent( int socket )
                     {
                         //kDebug() << oldPath << path;
                         const int wd         = it.value();
-                        d->watchPathHash[wd] = path;
+                        d->watchPathHash[wd] = encodedPath;
                         d->pathWatchHash.erase(it);
-                        d->pathWatchHash.insert( path, wd );
+                        d->pathWatchHash.insert(encodedPath, wd );
                     }
                 }
 //                kDebug() << oldPath << "EventMoveTo" << path;
-                emit moved( QFile::encodeName(oldPath), QFile::decodeName(path) );
+                emit moved(QFile::decodeName(oldPath), path);
             }
-            else
+            /*else
             {
                 kDebug() << "No cookie for move information of" << path;
-            }
+            }*/
+            emit movedTo(path);
         }
 
         if ( event->mask & EventOpen )
         {
 //            kDebug() << path << "EventOpen";
-            emit opened( QFile::decodeName(path) );
+            emit opened(path);
         }
 
         if ( event->mask & EventUnmount )
@@ -547,7 +554,7 @@ void KInotify::slotEvent( int socket )
             {
                 d->removeWatch( event->wd );
             }
-            emit unmounted( QFile::decodeName(path) );
+            emit unmounted(path);
         }
 
         if ( event->mask & EventQueueOverflow )
@@ -561,8 +568,6 @@ void KInotify::slotEvent( int socket )
         {
             kDebug() << path << "EventIgnored";
         }
-
-        i += EVENT_STRUCT_SIZE + event->len;
     }
 
     if ( len < 0 )

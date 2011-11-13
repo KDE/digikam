@@ -59,7 +59,7 @@ protected Q_SLOTS:
     void slotAlbumAdded(Album* album);
     void slotAlbumAboutToBeDeleted(Album* album);
 
-    void slotFileMoved(const QString& from, const QString& to);
+    void slotFileMoved(const QString& path);
     void slotFileDeleted(const QString& urlString, bool isDir);
     void slotFileCreated(const QString& path, bool isDir);
     void slotFileClosedAfterWrite(const QString&);

@@ -171,6 +171,20 @@ Q_SIGNALS:
     void moved( const QString& oldName, const QString& newName );
 
     /**
+     * Emitted if a file is moved from a given place, or to a given place.
+     *
+     * Note: moved() gives you more information in that it pairs movedFrom with the corresponding movedTo,
+     * but is only emitted if both source and target are being watched.
+     *
+     * Note: Order of emitted signals is
+     *  1) movedFrom
+     *  2) moved
+     *  3) movedTo
+     */
+    void movedFrom(const QString& oldName);
+    void movedTo(const QString& newName);
+
+    /**
      * Emitted if a file is opened (KInotify::EventOpen)
      */
     void opened( const QString& file );

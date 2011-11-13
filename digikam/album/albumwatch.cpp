@@ -261,8 +261,12 @@ void AlbumWatch::connectToKInotify()
 
     d->inotify = new KInotify(this);
 
-    connect( d->inotify, SIGNAL( moved( QString, QString ) ),
-             this, SLOT( slotFileMoved( QString, QString ) ) );
+    connect( d->inotify, SIGNAL( movedFrom( QString ) ),
+             this, SLOT( slotFileMoved( QString ) ) );
+    connect( d->inotify, SIGNAL( movedTo( QString ) ),
+             this, SLOT( slotFileMoved( QString ) ) );
+    /*connect( d->inotify, SIGNAL( moved( QString, QString ) ),
+             this, SLOT( slotFileMoved( QString, QString ) ) );*/
     connect( d->inotify, SIGNAL( deleted( QString, bool ) ),
              this, SLOT( slotFileDeleted( QString, bool ) ) );
     connect( d->inotify, SIGNAL( created( QString, bool ) ),
@@ -273,11 +277,21 @@ void AlbumWatch::connectToKInotify()
              this, SLOT( slotInotifyWatchUserLimitReached() ) );
 }
 
+/*
+ * Note that moved(QString,QString) is only emitted if both source and target are watched!
+ * This does not apply for moving to trash, or files moved from/to non-collection directories
 void AlbumWatch::slotFileMoved(const QString& from, const QString& to)
 {
     // we could add a copyOrMoveHint here...but identical-file detection seems to work well
     rescanPath(from);
     rescanPath(to);
+}*/
+
+void AlbumWatch::slotFileMoved(const QString& path)
+{
+    // both movedTo and movedFrom are connected to this slot
+    // moved(QString,QString) is ignored, with it the information about pairing of moves
+    rescanPath(path);
 }
 
 void AlbumWatch::slotFileDeleted(const QString& path, bool isDir)
