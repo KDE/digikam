@@ -653,6 +653,11 @@ void DigikamApp::setupAccelerators()
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
 
     d->cutItemsAction = KStandardAction::cut(this, SIGNAL(signalCutAlbumItemsSelection()), this);
+    // need to remove shift+del from cut action,
+    // else the shortcut for Delete permanently collides with secondary shortcut of Cut
+    KShortcut cutShortcut = d->cutItemsAction->shortcut();
+    cutShortcut.remove(Qt::SHIFT | Qt::Key_Delete, KShortcut::KeepEmpty);
+    d->cutItemsAction->setShortcut(cutShortcut);
     actionCollection()->addAction("cut_album_selection", d->cutItemsAction);
 
     d->copyItemsAction = KStandardAction::copy(this, SIGNAL(signalCopyAlbumItemsSelection()), this);
