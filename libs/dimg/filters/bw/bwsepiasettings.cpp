@@ -6,7 +6,7 @@
  * Date        : 2010-02-23
  * Description : black and white settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -221,17 +221,17 @@ BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
 
     type = BWSepiaContainer::BWIlfordSFX200;
 
-    item = d->bwFilm->addItem(new BWSepiaFilter(&d->thumbImage, 0, BWSepiaContainer(type, ccontainer)), i18n("Ilford SPX 200"), type);
+    item = d->bwFilm->addItem(new BWSepiaFilter(&d->thumbImage, 0, BWSepiaContainer(type, ccontainer)), i18n("Ilford SPX 200 (Infrared)"), type);
     item->setWhatsThis(i18n("<b>Ilford SPX 200</b>:"
                             "<p>Simulate the Ilford SPX infrared film at 200 ISO.</p>"));
 
     ++type;
-    item = d->bwFilm->addItem(new BWSepiaFilter(&d->thumbImage, 0, BWSepiaContainer(type, ccontainer)), i18n("Ilford SPX 400"), type);
+    item = d->bwFilm->addItem(new BWSepiaFilter(&d->thumbImage, 0, BWSepiaContainer(type, ccontainer)), i18n("Ilford SPX 400 (Infrared)"), type);
     item->setWhatsThis(i18n("<b>Ilford SPX 400</b>:"
                             "<p>Simulate the Ilford SPX infrared film at 400 ISO.</p>"));
 
     ++type;
-    item = d->bwFilm->addItem(new BWSepiaFilter(&d->thumbImage, 0, BWSepiaContainer(type, ccontainer)), i18n("Ilford SPX 800"), type);
+    item = d->bwFilm->addItem(new BWSepiaFilter(&d->thumbImage, 0, BWSepiaContainer(type, ccontainer)), i18n("Ilford SPX 800 (Infrared)"), type);
     item->setWhatsThis(i18n("<b>Ilford SPX 800</b>:"
                             "<p>Simulate the Ilford SPX infrared film at 800 ISO.</p>"));
 
