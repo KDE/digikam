@@ -18,6 +18,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 124814 : No color temperature used for RAW images.
 007 ==> 285194 : digiKam crashing while scanning >20000 pictures.
 008 ==> 283330 : Shortcut conflict - zoom to 100% vs assign flag.
-009 ==> 286212 : Digikam's shortcut for Delete permanently does not work (shift + del).
-010 ==> 
-
+009 ==> 286212 : digiKam's shortcut for Delete permanently does not work (shift + del).
+010 ==> 259223 : Overexposure prevention in white balance tool [patch].
+011 ==> 
