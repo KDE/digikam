@@ -201,7 +201,10 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
 
 void WhiteBalanceTool::prepareEffect()
 {
+    ImageIface iface(0, 0);
+    DImg* img            = iface.getOriginalImg();
     WBContainer settings = d->settingsView->settings();
+    WBFilter::findChanelsMax(img, settings.maxr, settings.maxg, settings.maxb);
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 

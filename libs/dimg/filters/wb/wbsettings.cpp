@@ -6,7 +6,7 @@
  * Date        : 2010-02-26
  * Description : White Balance settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,7 +65,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class WBSettingsPriv
+class WBSettings::WBSettingsPriv
 {
 
 public:
@@ -172,14 +172,14 @@ public:
         return tempDesc;
     }
 };
-const QString WBSettingsPriv::configDarkInputEntry("Dark");
-const QString WBSettingsPriv::configBlackInputEntry("Black");
-const QString WBSettingsPriv::configMainExposureEntry("MainExposure");
-const QString WBSettingsPriv::configFineExposureEntry("FineExposure");
-const QString WBSettingsPriv::configGammaInputEntry("Gamma");
-const QString WBSettingsPriv::configSaturationInputEntry("Saturation");
-const QString WBSettingsPriv::configGreenInputEntry("Green");
-const QString WBSettingsPriv::configTemperatureInputEntry("Temperature");
+const QString WBSettings::WBSettingsPriv::configDarkInputEntry("Dark");
+const QString WBSettings::WBSettingsPriv::configBlackInputEntry("Black");
+const QString WBSettings::WBSettingsPriv::configMainExposureEntry("MainExposure");
+const QString WBSettings::WBSettingsPriv::configFineExposureEntry("FineExposure");
+const QString WBSettings::WBSettingsPriv::configGammaInputEntry("Gamma");
+const QString WBSettings::WBSettingsPriv::configSaturationInputEntry("Saturation");
+const QString WBSettings::WBSettingsPriv::configGreenInputEntry("Green");
+const QString WBSettings::WBSettingsPriv::configTemperatureInputEntry("Temperature");
 
 // --------------------------------------------------------
 
@@ -187,8 +187,7 @@ WBSettings::WBSettings(QWidget* parent)
     : QWidget(parent),
       d(new WBSettingsPriv)
 {
-    QGridLayout* grid = new QGridLayout(parent);
-
+    QGridLayout* grid   = new QGridLayout(parent);
     d->temperatureLabel = new QLabel(i18n("<a href='http://en.wikipedia.org/wiki/Color_temperature'>"
                                           "Color Temperature</a> (K): "));
     d->temperatureLabel->setOpenExternalLinks(true);
@@ -229,7 +228,7 @@ WBSettings::WBSettings(QWidget* parent)
     toolTip += d->addTemperatureDescription(i18n("neutral color temperature"),             d->Neutral);
     toolTip += d->addTemperatureDescription(i18n("electronic photo flash"),                d->Flash);
     toolTip += d->addTemperatureDescription(i18n("tungsten lamp used in photo studio or "
-                                            "light at 1 hour from dusk/dawn"),        d->StudioLamp);
+                                                 "light at 1 hour from dusk/dawn"),        d->StudioLamp);
     toolTip += d->addTemperatureDescription(i18n("effective sun temperature"),             d->Sun);
     toolTip += d->addTemperatureDescription(i18n("sunrise or sunset light"),               d->Sunrise);
     toolTip += d->addTemperatureDescription(i18n("xenon lamp or light arc"),               d->XenonLamp);

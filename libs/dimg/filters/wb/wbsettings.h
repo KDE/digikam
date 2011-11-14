@@ -6,7 +6,7 @@
  * Date        : 2010-02-26
  * Description : White Balance settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,8 +39,6 @@
 
 namespace Digikam
 {
-
-class WBSettingsPriv;
 
 class DIGIKAM_EXPORT WBSettings : public QWidget
 {
@@ -81,6 +79,7 @@ private Q_SLOTS:
 
 private:
 
+    class WBSettingsPriv;
     WBSettingsPriv* const d;
 };
 
