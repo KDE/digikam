@@ -201,37 +201,37 @@ WBSettings::WBSettings(QWidget* parent)
 
     d->temperaturePresetLabel = new QLabel(i18n("Preset:"));
     d->temperaturePresetCB    = new RComboBox;
+    d->temperaturePresetCB->combo()->addItem(i18n("Candle"),                         QVariant(d->Candle));
     d->temperaturePresetCB->combo()->addItem(i18n("40W Lamp"),                       QVariant(d->Lamp40W));
     d->temperaturePresetCB->combo()->addItem(i18n("100W Lamp"),                      QVariant(d->Lamp100W));
     d->temperaturePresetCB->combo()->addItem(i18n("200W Lamp"),                      QVariant(d->Lamp200W));
-    d->temperaturePresetCB->combo()->addItem(i18n("Candle"),                         QVariant(d->Candle));
-    d->temperaturePresetCB->combo()->addItem(i18n("Daylight D50"),                   QVariant(d->DaylightD50));
-    d->temperaturePresetCB->combo()->addItem(i18n("Daylight D65"),                   QVariant(d->DaylightD65));
+    d->temperaturePresetCB->combo()->addItem(i18n("Sunrise"),                        QVariant(d->Sunrise));
+    d->temperaturePresetCB->combo()->addItem(i18n("Studio Lamp"),                    QVariant(d->StudioLamp));
     d->temperaturePresetCB->combo()->addItem(i18n("Moonlight"),                      QVariant(d->MoonLight));
     d->temperaturePresetCB->combo()->addItem(i18n("Neutral"),                        QVariant(d->Neutral));
+    d->temperaturePresetCB->combo()->addItem(i18n("Daylight D50"),                   QVariant(d->DaylightD50));
     d->temperaturePresetCB->combo()->addItem(i18n("Photo Flash"),                    QVariant(d->Flash));
-    d->temperaturePresetCB->combo()->addItem(i18n("Studio Lamp"),                    QVariant(d->StudioLamp));
     d->temperaturePresetCB->combo()->addItem(i18n("Sun"),                            QVariant(d->Sun));
-    d->temperaturePresetCB->combo()->addItem(i18n("Sunrise"),                        QVariant(d->Sunrise));
     d->temperaturePresetCB->combo()->addItem(i18n("Xenon Lamp"),                     QVariant(d->XenonLamp));
+    d->temperaturePresetCB->combo()->addItem(i18n("Daylight D65"),                   QVariant(d->DaylightD65));
     d->temperaturePresetCB->combo()->addItem(i18nc("no temperature preset", "None"), QVariant(d->None));
     d->temperaturePresetCB->setDefaultIndex(d->temperaturePresetCB->combo()->findData(QVariant(d->DefaultTemperature)));
 
     QString toolTip = QString("<p>%1</p>").arg(i18n("Select the white balance color temperature preset to use."));
+    toolTip += d->addTemperatureDescription(i18n("candle light"),                          d->Candle);
     toolTip += d->addTemperatureDescription(i18n("40 Watt incandescent lamp"),             d->Lamp40W);
     toolTip += d->addTemperatureDescription(i18n("100 Watt incandescent lamp"),            d->Lamp100W);
     toolTip += d->addTemperatureDescription(i18n("200 Watt incandescent lamp"),            d->Lamp200W);
-    toolTip += d->addTemperatureDescription(i18n("candle light"),                          d->Candle);
-    toolTip += d->addTemperatureDescription(i18n("sunny daylight around noon"),            d->DaylightD50);
-    toolTip += d->addTemperatureDescription(i18n("overcast sky light"),                    d->DaylightD65);
-    toolTip += d->addTemperatureDescription(i18n("moon light"),                            d->MoonLight);
-    toolTip += d->addTemperatureDescription(i18n("neutral color temperature"),             d->Neutral);
-    toolTip += d->addTemperatureDescription(i18n("electronic photo flash"),                d->Flash);
+    toolTip += d->addTemperatureDescription(i18n("sunrise or sunset light"),               d->Sunrise);
     toolTip += d->addTemperatureDescription(i18n("tungsten lamp used in photo studio or "
                                                  "light at 1 hour from dusk/dawn"),        d->StudioLamp);
+    toolTip += d->addTemperatureDescription(i18n("moon light"),                            d->MoonLight);
+    toolTip += d->addTemperatureDescription(i18n("neutral color temperature"),             d->Neutral);
+    toolTip += d->addTemperatureDescription(i18n("sunny daylight around noon"),            d->DaylightD50);
+    toolTip += d->addTemperatureDescription(i18n("electronic photo flash"),                d->Flash);
     toolTip += d->addTemperatureDescription(i18n("effective sun temperature"),             d->Sun);
-    toolTip += d->addTemperatureDescription(i18n("sunrise or sunset light"),               d->Sunrise);
     toolTip += d->addTemperatureDescription(i18n("xenon lamp or light arc"),               d->XenonLamp);
+    toolTip += d->addTemperatureDescription(i18n("overcast sky light"),                    d->DaylightD65);
     toolTip += d->addTemperatureDescription(i18n("no preset value"),                       d->None);
     d->temperaturePresetCB->setToolTip(toolTip);
 
