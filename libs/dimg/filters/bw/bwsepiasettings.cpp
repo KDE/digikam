@@ -235,6 +235,11 @@ BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
     item->setWhatsThis(i18n("<b>Ilford SPX 800</b>:"
                             "<p>Simulate the Ilford SPX infrared film at 800 ISO.</p>"));
 
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&d->thumbImage, 0, BWSepiaContainer(type, ccontainer)), i18n("Kodak HIE (Infrared)"), type);
+    item->setWhatsThis(i18n("<b>Kodak HIE</b>:"
+                            "<p>Simulate the Kodak HIE infrared film.</p>"));
+
     // -------------------------------------------------------------
 
     QWidget* vbox     = new QWidget();

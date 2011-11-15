@@ -95,14 +95,14 @@ public:
     QLabel*               monochromeTips;
     QLabel*               totalPercents;
     QLabel*               outChannelLabel;
-    
+
     QPushButton*          resetButton;
 
     QCheckBox*            preserveLuminosity;
     QCheckBox*            monochrome;
 
     KComboBox*            outChannelCB;
-    
+
     MixerContainer        mixerSettings;
 
     RDoubleNumInput*      redGain;
@@ -233,7 +233,7 @@ MixerSettings::MixerSettings(QWidget* parent)
 
     connect(d->preserveLuminosity, SIGNAL(toggled(bool)),
             this, SLOT(slotLuminosityChanged(bool)));
-        
+
     connect(d->outChannelCB, SIGNAL(activated(int)),
             this, SLOT(slotOutChannelChanged()));
 }
@@ -342,7 +342,7 @@ void MixerSettings::slotGainsChanged()
             break;
         }
     }
-    
+
     updateTotalPercents();
     emit signalSettingsChanged();
 }
@@ -426,13 +426,13 @@ void MixerSettings::slotMonochromeActived(bool mono)
 {
     d->mixerSettings.bMonochrome = mono;
     d->monochromeTips->setEnabled(mono);
-    
+
     d->outChannelLabel->setEnabled(!mono);
     d->outChannelCB->setEnabled(!mono);
     int id = d->outChannelCB->findData(QVariant(RedChannel));
     d->outChannelCB->setCurrentIndex(id);
     slotOutChannelChanged();
-    
+
     emit signalMonochromeActived(mono);
     emit signalSettingsChanged();
 }

@@ -6,7 +6,7 @@
  * Date        : 2005-03-06
  * Description : black and white image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -77,6 +77,7 @@ public:
         BWIlfordSFX200,       // Infrared film simulation.
         BWIlfordSFX400,
         BWIlfordSFX800,
+        BWKodakHIE,
 
         BWNoTone,             // Chemical color tone filter.
         BWSepiaTone,
@@ -153,23 +154,27 @@ public:
     {
         return "digikam:BWSepiaFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Black & White / Sepia Filter");
     }
+
     static QList<int>       SupportedVersions()
     {
-        return QList<int>() << 1;
+        return QList<int>() << 1 << 2;
     }
+
     static int              CurrentVersion()
     {
-        return 1;
+        return 2;
     }
 
     virtual QString         filterIdentifier() const
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

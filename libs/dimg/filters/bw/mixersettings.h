@@ -62,7 +62,7 @@ public:
     void saveAsSettings();
 
     int  currentChannel() const;
-    
+
     void setMonochromeTipsVisible(bool b);
 
 Q_SIGNALS:
