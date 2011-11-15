@@ -20,4 +20,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 283330 : Shortcut conflict - zoom to 100% vs assign flag.
 009 ==> 286212 : digiKam's shortcut for Delete permanently does not work (shift + del).
 010 ==> 259223 : Overexposure prevention in white balance tool [patch].
-011 ==> 
+011 ==> 221188 : When system is set to Czech locale, there is "Aspect Ratio Crop" missing in transform menu.
+012 ==> 
