@@ -79,6 +79,7 @@ public:
         customLabel(0),
         orientLabel(0),
         colorGuideLabel(0),
+        resLabel(0),
         centerWidth(0),
         centerHeight(0),
         goldenSectionBox(0),
@@ -139,6 +140,7 @@ public:
     QLabel*               customLabel;
     QLabel*               orientLabel;
     QLabel*               colorGuideLabel;
+    QLabel*               resLabel;
 
     QToolButton*          centerWidth;
     QToolButton*          centerHeight;
@@ -447,6 +449,23 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     d->expbox->addItem(compositionGuide, SmallIcon("tools-wizard"),
                        i18n("Composition Guides"), QString("CompositionGuide"), true);
+    
+    // -------------------------------------------------------------
+
+    QWidget* cropInfo  = new QWidget(d->expbox);
+    QGridLayout* grid3 = new QGridLayout(cropInfo);
+    
+    QLabel* resolution = new QLabel(i18n("Resolution:"), cropInfo);
+    d->resLabel        = new QLabel(cropInfo);
+
+    grid3->addWidget(resolution,  0, 0, 1, 1);
+    grid3->addWidget(d->resLabel, 0, 1, 1, 2);
+    grid3->setMargin(d->gboxSettings->spacingHint());
+    grid3->setSpacing(d->gboxSettings->spacingHint());
+
+    d->expbox->addItem(cropInfo, SmallIcon("help-about"),
+                       i18n("Crop Information"), QString("CropInformation"), true);
+    
     d->expbox->addStretch();
 
     // -------------------------------------------------------------
@@ -634,6 +653,8 @@ void RatioCropTool::readSettings()
     slotHeightChanged(d->heightInput->value());
 
     slotGuideTypeChanged(d->guideLinesCB->currentIndex());
+    
+    updateCropInfo();
 }
 
 void RatioCropTool::writeSettings()
@@ -725,12 +746,20 @@ void RatioCropTool::slotSelectionChanged(const QRect& rect)
     d->widthInput->setValue(rect.width());
     d->heightInput->setValue(rect.height());
 
-    d->gboxSettings->enableButton(EditorToolSettings::Ok,
-                                  rect.isValid());
+    d->gboxSettings->enableButton(EditorToolSettings::Ok, rect.isValid());
 
     d->preciseCrop->setEnabled(d->imageSelectionWidget->preciseCropAvailable());
 
+    updateCropInfo();
+        
     blockWidgetSignals(false);
+}
+
+void RatioCropTool::updateCropInfo()
+{
+    QString mpixels;
+    mpixels.setNum(d->widthInput->value() * d->heightInput->value() / 1000000.0, 'f', 2);
+    d->resLabel->setText(i18n("%1Mpx", mpixels));
 }
 
 void RatioCropTool::setRatioCBText(int orientation)

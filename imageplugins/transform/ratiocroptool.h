@@ -54,6 +54,7 @@ private:
     void writeSettings();
 
     void finalRendering();
+    void updateCropInfo();
     void applyRatioChanges(int a);
     void blockWidgetSignals(bool b);
     void setRatioCBText(int orientation);
