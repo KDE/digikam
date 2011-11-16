@@ -417,6 +417,7 @@ void PreviewList::slotFilterFinished(int id, const QPixmap& pix)
     {
         item->setBusy(false);
         item->setPixmap(pix);
+        update();
     }
 }
 
