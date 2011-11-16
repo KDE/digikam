@@ -1303,8 +1303,8 @@ void ImageSelectionWidget::mousePressEvent(QMouseEvent* e)
 
         if ( (e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier )
         {
-            bool symmetric = (e->modifiers() & Qt::ControlModifier ) == Qt::ControlModifier;
-            QPoint center  = d->regionSelection.center();
+            bool symmetric  = (e->modifiers() & Qt::ControlModifier ) == Qt::ControlModifier;
+            QPoint center   = d->regionSelection.center();
 
             // Find the closest corner
 
@@ -1313,22 +1313,24 @@ void ImageSelectionWidget::mousePressEvent(QMouseEvent* e)
                                 d->regionSelection.bottomLeft(),
                                 d->regionSelection.bottomRight()
                               };
+
             int resizings[] = { ImageSelectionWidgetPriv::ResizingTopLeft,
                                 ImageSelectionWidgetPriv::ResizingTopRight,
                                 ImageSelectionWidgetPriv::ResizingBottomLeft,
                                 ImageSelectionWidgetPriv::ResizingBottomRight
                               };
-            float dist  = -1.0f;
-            float dist2 =  0.0f;
+
+            float dist      = -1.0f;
+            float dist2     =  0.0f;
 
             for (int i = 0 ; i < 4 ; ++i)
             {
                 QPoint point = points[i];
-                dist2 = distance(pmVirtual, point);
+                dist2        = distance(pmVirtual, point);
 
                 if (dist2 < dist || d->currentResizing == ImageSelectionWidgetPriv::ResizingNone)
                 {
-                    dist = dist2;
+                    dist               = dist2;
                     d->currentResizing = resizings[i];
                 }
             }
