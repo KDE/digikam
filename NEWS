@@ -21,4 +21,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 286212 : digiKam's shortcut for Delete permanently does not work (shift + del).
 010 ==> 259223 : Overexposure prevention in white balance tool [patch].
 011 ==> 221188 : When system is set to Czech locale, there is "Aspect Ratio Crop" missing in transform menu.
-012 ==> 
+012 ==> 273433 : The size of the crop selection is not showed on the screen in aspect crop tool.
+013 ==> 
