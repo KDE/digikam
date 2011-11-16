@@ -50,15 +50,16 @@ public:
 
 private:
 
-    void readSettings();
-    void writeSettings();
+    void  readSettings();
+    void  writeSettings();
 
-    void finalRendering();
-    void updateCropInfo();
-    void applyRatioChanges(int a);
-    void blockWidgetSignals(bool b);
-    void setRatioCBText(int orientation);
-    void setBackgroundColor(const QColor& bg);
+    void  finalRendering();
+    void  updateCropInfo();
+    void  applyRatioChanges(int a);
+    void  blockWidgetSignals(bool b);
+    void  setRatioCBText(int orientation);
+    void  setBackgroundColor(const QColor& bg);
+    QRect getNormalizedRegion() const;
 
 private Q_SLOTS:
 
