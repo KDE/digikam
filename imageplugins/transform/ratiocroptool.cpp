@@ -353,42 +353,44 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
+    QLabel* positionLabel = new QLabel(i18n("Position:"), cropSelection);
+    positionLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+    
     d->xInput = new RIntNumInput(cropSelection);
     d->xInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
-    d->xInput->input()->setLabel(i18nc("top left corner position for cropping", "X:"), Qt::AlignLeft|Qt::AlignVCenter);
     d->xInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
-    d->xInput->setSliderEnabled(true);
+    d->xInput->setSliderEnabled(false);
     d->xInput->setDefaultValue(50);
 
+    d->yInput = new RIntNumInput(cropSelection);
+    d->yInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
+    d->yInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
+    d->yInput->setSliderEnabled(false);
+    d->yInput->setDefaultValue(50);
+
+    // -------------------------------------------------------------
+
+    QLabel* sizeLabel = new QLabel(i18n("Size:"), cropSelection);
+    sizeLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+    
     d->widthInput = new RIntNumInput(cropSelection);
-    d->widthInput->input()->setLabel(i18n("Width:"), Qt::AlignLeft|Qt::AlignVCenter);
     d->widthInput->setWhatsThis( i18n("Set here the width selection for cropping."));
     d->widthInput->setRange(d->imageSelectionWidget->getMinWidthRange(),
                             d->imageSelectionWidget->getMaxWidthRange(),
                             d->imageSelectionWidget->getWidthStep());
-    d->widthInput->setSliderEnabled(true);
+    d->widthInput->setSliderEnabled(false);
     d->widthInput->setDefaultValue(800);
 
     d->centerWidth = new QToolButton(cropSelection);
     d->centerWidth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerwidth.png")));
     d->centerWidth->setWhatsThis( i18n("Set width position to center."));
 
-    // -------------------------------------------------------------
-
-    d->yInput = new RIntNumInput(cropSelection);
-    d->yInput->input()->setLabel(i18n("Y:"), Qt::AlignLeft|Qt::AlignVCenter);
-    d->yInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
-    d->yInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
-    d->yInput->setSliderEnabled(true);
-    d->yInput->setDefaultValue(50);
-
     d->heightInput = new RIntNumInput(cropSelection);
-    d->heightInput->input()->setLabel(i18n("Height:"), Qt::AlignLeft|Qt::AlignVCenter);
     d->heightInput->setWhatsThis( i18n("Set here the height selection for cropping."));
     d->heightInput->setRange(d->imageSelectionWidget->getMinHeightRange(),
                              d->imageSelectionWidget->getMaxHeightRange(),
                              d->imageSelectionWidget->getHeightStep());
-    d->heightInput->setSliderEnabled(true);
+    d->heightInput->setSliderEnabled(false);
     d->heightInput->setDefaultValue(600);
 
     d->centerHeight = new QToolButton(cropSelection);
@@ -407,11 +409,13 @@ RatioCropTool::RatioCropTool(QObject* parent)
     mainLayout->addWidget(d->orientLabel,       3, 0, 1, 1);
     mainLayout->addWidget(d->orientCB,          3, 1, 1, 3);
     mainLayout->addWidget(d->autoOrientation,   3, 4, 1, 1);
-    mainLayout->addWidget(d->xInput,            4, 0, 1, 4);
-    mainLayout->addWidget(d->widthInput,        5, 0, 1, 4);
-    mainLayout->addWidget(d->centerWidth,       5, 4, 1, 1);
-    mainLayout->addWidget(d->yInput,            6, 0, 1, 4);
-    mainLayout->addWidget(d->heightInput,       7, 0, 1, 4);
+    mainLayout->addWidget(positionLabel,        4, 0, 1, 1);
+    mainLayout->addWidget(d->xInput,            4, 1, 1, 3);
+    mainLayout->addWidget(d->yInput,            5, 1, 1, 3);
+    mainLayout->addWidget(sizeLabel,            6, 0, 1, 1);
+    mainLayout->addWidget(d->widthInput,        6, 1, 1, 3);
+    mainLayout->addWidget(d->centerWidth,       6, 4, 1, 1);
+    mainLayout->addWidget(d->heightInput,       7, 1, 1, 3);
     mainLayout->addWidget(d->centerHeight,      7, 4, 1, 1);
     mainLayout->setMargin(d->gboxSettings->spacingHint());
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
@@ -754,7 +758,7 @@ void RatioCropTool::slotSelectionChanged(const QRect& rect)
 {
     blockWidgetSignals(true);
 
-    d->xInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1);
+    d->xInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth()  - rect.width(),  1);
     d->yInput->setRange(0, d->imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1);
     d->widthInput->setRange(d->imageSelectionWidget->getMinWidthRange(),
                             d->imageSelectionWidget->getMaxWidthRange(),
@@ -1059,7 +1063,6 @@ void RatioCropTool::finalRendering()
     int h                  = iface->originalHeight();
     bool a                 = iface->originalHasAlpha();
     bool sb                = iface->originalSixteenBit();
-
     QRect normalizedRegion = getNormalizedRegion();
 
     DImg imOrg(w, h, sb, a, data);
