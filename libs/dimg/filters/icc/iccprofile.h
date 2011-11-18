@@ -7,8 +7,8 @@
  * Description : a wrapper class for an ICC color profile
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,12 +40,29 @@ namespace Digikam
 {
 
 class DImg;
-class IccProfilePriv;
 
 class DIGIKAM_EXPORT IccProfile
 {
 public:
 
+    enum ProfileType
+    {
+        /// Returned for a null profile or an unknown (non-standard) profile type
+        InvalidType,
+        /// For an input device like a scanner or digital camera
+        Input,
+        /// For an output device like a printer
+        Output,
+        /// For a display device like a monitor
+        Display,
+        Abstract,
+        ColorSpace,
+        DeviceLink,
+        NamedColor
+    };    
+
+public:
+    
     /**
      * Creates a null profile
      */
@@ -66,6 +83,7 @@ public:
     static IccProfile adobeRGB();
     static IccProfile wideGamutRGB();
     static IccProfile proPhotoRGB();
+
     /// Returns a list with the profiles above
     static QList<IccProfile> defaultProfiles();
 
@@ -82,10 +100,12 @@ public:
      *  Note: This will not ensure that the data is loaded. Use isSameProfile().
      */
     bool operator==(const IccProfile& other) const;
+
     bool operator!=(const IccProfile& other) const
     {
         return !operator==(other);
     }
+
     /**
      * This method compares the actual profile data bit by bit.
      */
@@ -98,11 +118,13 @@ public:
      * You need to open each profile after construction.
      */
     bool open();
+
     /**
      * Close the profile, freeing resources. You can re-open.
      * Called automatically at destruction.
      */
     void close();
+
     /**
      * Returns if the profile is opened.
      */
@@ -119,22 +141,6 @@ public:
      */
     QString description();
 
-    enum ProfileType
-    {
-        /// Returned for a null profile or an unknown (non-standard) profile type
-        InvalidType,
-        /// For an input device like a scanner or digital camera
-        Input,
-        /// For an output device like a printer
-        Output,
-        /// For a display device like a monitor
-        Display,
-        Abstract,
-        ColorSpace,
-        DeviceLink,
-        NamedColor
-    };
-
     ProfileType type();
 
     /**
@@ -150,6 +156,7 @@ public:
 
     /// Access to the LCMS cmsHPROFILE handle
     void* handle() const;
+
     operator void* () const
     {
         return handle();
@@ -160,6 +167,7 @@ public:
      * This does not include any user-specified settings.
      */
     static QStringList defaultSearchPaths();
+
     static QList<IccProfile> scanDirectories(const QStringList& dirs);
 
     static void considerOriginalAdobeRGB(const QString& filePath);
@@ -170,6 +178,7 @@ private:
 
 private:
 
+    class IccProfilePriv;
     QSharedDataPointer<IccProfilePriv> d;
 };
 
