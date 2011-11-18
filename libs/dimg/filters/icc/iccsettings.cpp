@@ -7,8 +7,8 @@
  * Description : central place for ICC settings
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -79,14 +79,14 @@ public:
 
 public:
 
-    QList<IccProfile> scanDirectories(const QStringList& dirs);
-    void scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile>* profiles);
+    QList<IccProfile>    scanDirectories(const QStringList& dirs);
+    void                 scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile>* profiles);
 
-    IccProfile profileFromWindowSystem(QWidget* widget);
+    IccProfile           profileFromWindowSystem(QWidget* widget);
 
     ICCSettingsContainer readFromConfig() const;
-    void writeToConfig() const;
-    void writeManagedViewToConfig() const;
+    void                 writeToConfig() const;
+    void                 writeManagedViewToConfig() const;
 };
 
 // -----------------------------------------------------------------------------------------------
@@ -154,6 +154,7 @@ bool IccSettings::monitorProfileFromSystem()
     // First, look into cache
     {
         QMutexLocker lock(&d->mutex);
+
         foreach (const IccProfile& profile, d->screenProfiles)
         {
             if (!profile.isNull())
@@ -165,6 +166,7 @@ bool IccSettings::monitorProfileFromSystem()
 
     // Second, check all toplevel widgets
     QList<QWidget*> topLevels = qApp->topLevelWidgets();
+
     foreach (QWidget* widget, topLevels)
     {
         if (!d->profileFromWindowSystem(widget).isNull())
@@ -189,7 +191,7 @@ IccProfile IccSettings::IccSettingsPriv::profileFromWindowSystem(QWidget* widget
 #ifdef Q_WS_X11
 
     Qt::HANDLE appRootWindow;
-    QString atomName;
+    QString    atomName;
 
     QDesktopWidget* desktop = QApplication::desktop();
     int screenNumber        = desktop->screenNumber(widget);
@@ -219,7 +221,7 @@ IccProfile IccSettings::IccSettingsPriv::profileFromWindowSystem(QWidget* widget
     int           format;
     unsigned long nitems;
     unsigned long bytes_after;
-    quint8*       str;
+    quint8*       str = 0;
 
     static Atom icc_atom = XInternAtom( QX11Info::display(), atomName.toLatin1(), True );
 
@@ -235,7 +237,7 @@ IccProfile IccSettings::IccSettingsPriv::profileFromWindowSystem(QWidget* widget
                              &format,
                              &nitems,
                              &bytes_after,
-                             (unsigned char**) &str) == Success &&
+                             (unsigned char**)& str) == Success &&
           nitems
         )
     {
@@ -248,13 +250,13 @@ IccProfile IccSettings::IccSettingsPriv::profileFromWindowSystem(QWidget* widget
 
         kDebug() << "Found X.org XICC monitor profile" << profile.description();
     }
+/*
+    else
+    {
+        kDebug() << "No X.org XICC profile installed for screen" << screenNumber;
+    }
+*/
 
-    /*
-        else
-        {
-            kDebug() << "No X.org XICC profile installed for screen" << screenNumber;
-        }
-    */
     // insert to cache even if null
     {
         QMutexLocker lock(&mutex);
@@ -305,9 +307,10 @@ void IccSettings::readFromConfig()
     s = d->readFromConfig();
     {
         QMutexLocker lock(&d->mutex);
-        old = d->settings;
+        old         = d->settings;
         d->settings = s;
     }
+
     emit settingsChanged();
     emit settingsChanged(s, old);
 }
@@ -323,9 +326,10 @@ void IccSettings::setSettings(const ICCSettingsContainer& settings)
             d->profiles.clear();
         }
 
-        old = d->settings;
+        old         = d->settings;
         d->settings = settings;
     }
+
     d->writeToConfig();
     emit settingsChanged();
     emit settingsChanged(settings, old);
@@ -340,7 +344,9 @@ void IccSettings::setUseManagedView(bool useManagedView)
         d->settings.useManagedView = useManagedView;
         current                    = d->settings;
     }
+
     d->writeManagedViewToConfig();
+
     emit settingsChanged();
     emit settingsChanged(current, old);
 }
@@ -361,7 +367,9 @@ void IccSettings::setIccPath(const QString& path)
         d->settings.iccFolder = path;
         current               = d->settings;
     }
+
     d->writeManagedViewToConfig();
+
     emit settingsChanged();
     emit settingsChanged(current, old);
 }
@@ -369,10 +377,10 @@ void IccSettings::setIccPath(const QString& path)
 QList<IccProfile> IccSettings::IccSettingsPriv::scanDirectories(const QStringList& dirs)
 {
     QList<IccProfile> profiles;
-
-    QStringList filters;
+    QStringList       filters;
     filters << "*.icc" << "*.icm";
     kDebug() << dirs;
+
     foreach (const QString& dirPath, dirs)
     {
         QDir dir(dirPath);
@@ -390,10 +398,11 @@ QList<IccProfile> IccSettings::IccSettingsPriv::scanDirectories(const QStringLis
 
 void IccSettings::IccSettingsPriv::scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile>* profiles)
 {
-    QDir dir(path);
+    QDir          dir(path);
     QFileInfoList infos;
     infos << dir.entryInfoList(filter, QDir::Files | QDir::Readable);
     infos << dir.entryInfoList(QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot);
+
     foreach (const QFileInfo& info, infos)
     {
         if (info.isFile())
@@ -458,6 +467,7 @@ QList<IccProfile> IccSettings::allProfiles()
 QList<IccProfile> IccSettings::workspaceProfiles()
 {
     QList<IccProfile> profiles;
+
     foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
     {
         switch (profile.type())
@@ -470,12 +480,14 @@ QList<IccProfile> IccSettings::workspaceProfiles()
                 break;
         }
     }
+
     return profiles;
 }
 
 QList<IccProfile> IccSettings::displayProfiles()
 {
     QList<IccProfile> profiles;
+
     foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
     {
         if (profile.type() == IccProfile::Display)
@@ -483,12 +495,14 @@ QList<IccProfile> IccSettings::displayProfiles()
             profiles << profile;
         }
     }
+
     return profiles;
 }
 
 QList<IccProfile> IccSettings::inputProfiles()
 {
     QList<IccProfile> profiles;
+
     foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
     {
         switch (profile.type())
@@ -501,12 +515,14 @@ QList<IccProfile> IccSettings::inputProfiles()
                 break;
         }
     }
+
     return profiles;
 }
 
 QList<IccProfile> IccSettings::outputProfiles()
 {
     QList<IccProfile> profiles;
+
     foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
     {
         if (profile.type() == IccProfile::Output)
@@ -514,6 +530,7 @@ QList<IccProfile> IccSettings::outputProfiles()
             profiles << profile;
         }
     }
+
     return profiles;
 }
 
@@ -533,6 +550,7 @@ QList<IccProfile> IccSettings::profilesForDescription(const QString& description
             profiles << profile;
         }
     }
+
     return profiles;
 }
 
@@ -541,7 +559,7 @@ void IccSettings::loadAllProfilesProperties()
     allProfiles();
     const int size = d->profiles.size();
 
-    for (int i=0; i<size; ++i)
+    for (int i = 0; i < size; ++i)
     {
         IccProfile& profile = d->profiles[i];
 
