@@ -55,7 +55,15 @@ public:
     static void cleanUp();
 
     /**
-     * Clears all locations and re-reads the lists of collection locations
+     * Disables the collection watch.
+     * It will be reenabled as soon as refresh() is called
+     * or any other action triggered.
+     */
+    void setWatchDisabled();
+
+    /**
+     * Clears all locations and re-reads the lists of collection locations.
+     * Enables the watch.
      */
     void refresh();
 

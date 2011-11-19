@@ -640,6 +640,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     d->changed = true;
 
     disconnect(CollectionManager::instance(), 0, this, 0);
+    CollectionManager::instance()->setWatchDisabled();
 
     if (DatabaseAccess::databaseWatch())
     {
@@ -668,6 +669,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     d->rootTAlbum = 0;
     d->rootDAlbum = 0;
     d->rootSAlbum = 0;
+
 
     // -- Database initialization -------------------------------------------------
 
