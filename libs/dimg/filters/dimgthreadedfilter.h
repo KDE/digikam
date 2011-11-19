@@ -103,10 +103,13 @@ public:
     virtual QString filterIdentifier() const = 0;
     virtual QList<int> supportedVersions() const;
 
-    /** Set the filter version. A filter may implement different versions, to preserve
+    /**
+     *  Replaying a filter action:
+     *  Set the filter version. A filter may implement different versions, to preserve
      *  image history when the algorithm is changed.
      *  Any value set here must be contained in supportedVersions, otherwise
      *  this call will be ignored. Default value is 1.
+     *  (Note: If you intend to _record_ a filter action, please look at FilterAction's m_version)
      */
     void setFilterVersion(int version);
     int filterVersion() const;
@@ -211,6 +214,19 @@ protected:
                            isReproducible ? FilterAction::ReproducibleFilter : FilterAction::ComplexFilter)
         {
             setDisplayableName(Filter::DisplayableName());
+        }
+
+        /**
+         * Preserve backwards compatibility:
+         * If a given condition (some new feature is not used) is true,
+         * decrease the version so that older digikam versions can still replay the action
+         */
+        void supportOlderVersionIf(int version, bool condition)
+        {
+            if (condition && version <= m_version)
+            {
+                m_version = version;
+            }
         }
 
     };

@@ -77,7 +77,6 @@ public:
         BWIlfordSFX200,       // Infrared film simulation.
         BWIlfordSFX400,
         BWIlfordSFX800,
-        BWKodakHIE,
 
         BWNoTone,             // Chemical color tone filter.
         BWSepiaTone,
@@ -85,7 +84,10 @@ public:
         BWColdTone,
         BWSeleniumTone,
         BWPlatinumTone,
-        BWGreenTone
+        BWGreenTone,
+
+        // Filter version 2
+        BWKodakHIE            // Infrared film simulation.
     };
 
 public:

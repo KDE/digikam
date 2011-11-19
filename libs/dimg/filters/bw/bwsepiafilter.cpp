@@ -513,6 +513,9 @@ FilterAction BWSepiaFilter::filterAction()
     action.addParameter("strength", d->settings.strength);
     action.addParameter("toneType", d->settings.toneType);
 
+    // Version 2: BWKodakHIE added
+    action.supportOlderVersionIf(1, d->settings.filmType < BWSepiaContainer::BWKodakHIE);
+
     d->settings.curvesPrm.writeToFilterAction(action);
     d->settings.bcgPrm.writeToFilterAction(action);
 
