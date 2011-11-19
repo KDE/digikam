@@ -11,7 +11,7 @@ Libkdcraw : use internal libraw 0.14.3 to support new RAW camera :
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 285884 : Shortcut changes aren't saved.
-002 ==> 286034 : digikam icons conflicts with oxygen-icon-theme
+002 ==> 286034 : digiKam icons conflicts with oxygen-icon-theme
 003 ==> 286165 : Tag hierarchy not preserved when exporting metadata to IPTC.
 004 ==> 285742 : Crash in setup.
 005 ==> 243074 : Channel mixer hangs on initialize.
@@ -24,6 +24,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 273433 : The size of the crop selection is not showed on the screen in aspect crop tool.
 013 ==> 237524 : Correct -> local contrast = program hangs.
 014 ==> 163166 : Plugin cannot be used on large photographs.
-015 ==> 
-
-
+015 ==> 284173 : Canceling face scan crashes digiKam.
+016 ==> 
