@@ -25,4 +25,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 237524 : Correct -> local contrast = program hangs.
 014 ==> 163166 : Plugin cannot be used on large photographs.
 015 ==> 284173 : Canceling face scan crashes digiKam.
-016 ==> 
+016 ==> 181813 : digiKam text decoration font size problem.
+017 ==> 
