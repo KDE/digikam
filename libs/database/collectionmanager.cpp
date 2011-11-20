@@ -182,6 +182,7 @@ public:
     QMap<int, AlbumRootLocation*> locations;
     bool changingDB;
     QStringList udisToWatch;
+    bool watchEnabled;
 
     // hack for Solid's threading problems
     QList<SolidVolumeInfo> actuallyListVolumes();
@@ -256,7 +257,7 @@ namespace Digikam
 {
 
 CollectionManagerPrivate::CollectionManagerPrivate(CollectionManager* s)
-    : changingDB(false), s(s)
+    : changingDB(false), watchEnabled(false), s(s)
 {
     QObject::connect(s, SIGNAL(triggerUpdateVolumesList()),
                      s, SLOT(slotTriggerUpdateVolumesList()),
@@ -387,6 +388,9 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 
         volumes << info;
     }
+
+    // This is the central place where the watch is enabled
+    watchEnabled = true;
 
     return volumes;
 }
@@ -717,6 +721,8 @@ CollectionManager* CollectionManager::instance()
 
 void CollectionManager::cleanUp()
 {
+    delete m_instance;
+    m_instance = 0;
 }
 
 CollectionManager::CollectionManager()
@@ -752,6 +758,11 @@ void CollectionManager::refresh()
         clear_locked();
     }
     updateLocations();
+}
+
+void CollectionManager::setWatchDisabled()
+{
+    d->watchEnabled = false;
 }
 
 CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QString& label)
@@ -1477,6 +1488,10 @@ QString CollectionManager::oneAlbumRootPath()
 
 void CollectionManager::deviceAdded(const QString& udi)
 {
+    if (!d->watchEnabled)
+    {
+        return;
+    }
     Solid::Device device(udi);
 
     if (device.is<Solid::StorageAccess>())
@@ -1487,6 +1502,10 @@ void CollectionManager::deviceAdded(const QString& udi)
 
 void CollectionManager::deviceRemoved(const QString& udi)
 {
+    if (!d->watchEnabled)
+    {
+        return;
+    }
     // we can't access the Solid::Device to check because it is removed
     DatabaseAccess access;
 

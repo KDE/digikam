@@ -39,7 +39,7 @@ SET(digikamcore_LIB_SRCS
         ${libtthread_SRCS}
         ${libversionmanager_SRCS}
         ${libkgeomaphelper_SRCS}
-        ${libkmemoryinfo_SRCS}
+        ${libkde3rdparty_SRCS}
 
         # widgets and dialogs
         ${libcommonwidgets_SRCS}

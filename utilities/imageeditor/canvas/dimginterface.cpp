@@ -87,6 +87,7 @@ public:
 
     QString                 fileName;
     QString                 filePath;
+    QString                 intendedFilePath;
     int                     historyStep;
     QString                 mimeType;
     QMap<QString, QVariant> ioAttributes;
@@ -591,14 +592,22 @@ QMap<QString, QVariant> DImgInterface::ioAttributes(IOFileSettingsContainer* iof
 }
 
 void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iofileSettings,
-                           bool setExifOrientationTag, const QString& givenMimeType)
+                           bool setExifOrientationTag, const QString& givenMimeType,
+                           const QString& intendedFilePath)
 {
-    saveAs(filePath, iofileSettings, setExifOrientationTag, givenMimeType, VersionFileOperation());
+    saveAs(filePath, iofileSettings, setExifOrientationTag, givenMimeType, VersionFileOperation(), intendedFilePath);
 }
 
 void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iofileSettings,
                            bool setExifOrientationTag, const QString& givenMimeType,
                            const VersionFileOperation& op)
+{
+    saveAs(filePath, iofileSettings, setExifOrientationTag, givenMimeType, op, op.saveFile.filePath());
+}
+
+void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iofileSettings,
+                           bool setExifOrientationTag, const QString& givenMimeType,
+                           const VersionFileOperation& op, const QString& intendedFilePath)
 {
     // No need to toggle off undo, redo or save action during saving using
     // signalUndoStateChanged(), this is will done by GUI implementation directly.
@@ -623,6 +632,11 @@ void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iof
         d->image.getImageHistory().moveCurrentReferredImage(op.intermediateForLoadedFile.path,
                                                             op.intermediateForLoadedFile.fileName);
     }
+    if (op.tasks & VersionFileOperation::Replace)
+    {
+        // The current file will be replaced. Remove hint at file path (file path will be a different image)
+        d->image.getImageHistory().purgePathFromReferredImages(op.saveFile.path, op.saveFile.fileName);
+    }
 
     QMap<int,VersionFileInfo>::const_iterator it;
 
@@ -631,6 +645,7 @@ void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iof
         FileToSave file;
         file.fileName              = it.value().fileName;
         file.filePath              = it.value().filePath();
+        file.intendedFilePath      = file.filePath;
         file.mimeType              = it.value().format;
         file.ioAttributes          = ioAttributes(iofileSettings, it.value().format);
         file.historyStep           = it.key();
@@ -643,8 +658,9 @@ void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iof
 
     // This shall be the last in the list. If not, adjust slotImageSaved
     FileToSave primary;
-    primary.fileName              = getImageFileName();
-    primary.filePath              = filePath;
+    primary.fileName              = op.saveFile.fileName;
+    primary.filePath              = filePath; // can be temporary file path
+    primary.intendedFilePath      = intendedFilePath;
     primary.mimeType              = mimeType;
     primary.ioAttributes          = ioAttributes(iofileSettings, mimeType);
     primary.historyStep           = -1; // special value
@@ -671,7 +687,7 @@ void DImgInterface::saveNext()
     {
         // intermediate. Need to get data from undo manager
         int currentStep = getImageHistory().size() - 1;
-        kDebug() << "Requesting from undo manager data" << currentStep - file.historyStep << "steps back";
+        //kDebug() << "Requesting from undo manager data" << currentStep - file.historyStep << "steps back";
         d->undoMan->putImageDataAndHistory(&file.image, currentStep - file.historyStep);
     }
 
@@ -682,9 +698,10 @@ void DImgInterface::saveNext()
         file.image.setAttribute(it.key(), it.value());
     }
 
-    file.image.updateMetadata(file.mimeType, file.fileName, file.setExifOrientationTag, true);
-    kDebug() << "Adjusting image" << file.mimeType << file.fileName << file.setExifOrientationTag << file.ioAttributes
-             << "image:" << file.image.size() << file.image.isNull();
+    file.image.prepareMetadataToSave(file.intendedFilePath, file.mimeType,
+                                      file.setExifOrientationTag);
+    //kDebug() << "Adjusting image" << file.mimeType << file.fileName << file.setExifOrientationTag << file.ioAttributes
+      //       << "image:" << file.image.size() << file.image.isNull();
 
     d->thread->save(file.image, file.filePath, file.mimeType);
 }

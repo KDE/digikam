@@ -38,6 +38,7 @@
 // Local includes
 
 #include "albumdb.h"
+#include "collectionscannerobserver.h"
 #include "imageinfodata.h"
 #include "imageinfocache.h"
 #include "schemaupdater.h"
@@ -255,6 +256,12 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
     if (!DatabaseConfigElement::checkReadyForUse())
     {
         d->lastError = DatabaseConfigElement::errorMessage();
+
+        // Make sure the application does not continue to run
+        if (observer)
+        {
+            observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+        }
         return false;
     }
 

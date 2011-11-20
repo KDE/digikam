@@ -7,8 +7,8 @@
  * Description : methods that implement color management tasks
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,6 +25,10 @@
 
 #include "iccmanager.h"
 
+// Qt includes
+
+#include <QImage>
+
 // KDE includes
 
 #include <kdebug.h>
@@ -37,7 +41,7 @@
 namespace Digikam
 {
 
-class IccManagerPriv
+class IccManager::IccManagerPriv
 {
 public:
 
@@ -52,7 +56,7 @@ public:
     IccProfile           workspaceProfile;
     bool                 profileMismatch;
     ICCSettingsContainer settings;
-    DImgLoaderObserver* observer;
+    DImgLoaderObserver*  observer;
 };
 
 IccManager::IccManager(DImg& image, const ICCSettingsContainer& settings)
@@ -185,7 +189,7 @@ ICCSettingsContainer::Behavior IccManager::safestBestBehavior() const
     }
 }
 
-void IccManager::transform(ICCSettingsContainer::Behavior behavior, IccProfile specifiedProfile)
+void IccManager::transform(ICCSettingsContainer::Behavior behavior, const IccProfile& specifiedProfile)
 {
     if (d->image.isNull())
     {
@@ -229,7 +233,6 @@ void IccManager::transform(ICCSettingsContainer::Behavior behavior, IccProfile s
     }
 }
 
-
 bool IccManager::needsPostLoadingManagement(const DImg& img)
 {
     return (img.hasAttribute("missingProfileAskUser") ||
@@ -241,10 +244,10 @@ bool IccManager::needsPostLoadingManagement(const DImg& img)
  * "postLoadingManagement" is implemented in the class IccPostLoadingManager
  */
 
-// --- Behavior implementation ---
+// -- Behavior implementation ----------------------------------------------------------------------------------
 
 
-IccProfile IccManager::imageProfile(ICCSettingsContainer::Behavior behavior, IccProfile specifiedProfile)
+IccProfile IccManager::imageProfile(ICCSettingsContainer::Behavior behavior, const IccProfile& specifiedProfile)
 {
     if (behavior & ICCSettingsContainer::UseEmbeddedProfile)
     {
@@ -280,7 +283,7 @@ IccProfile IccManager::imageProfile(ICCSettingsContainer::Behavior behavior, Icc
     return IccProfile();
 }
 
-void IccManager::getTransform(IccTransform& trans, ICCSettingsContainer::Behavior behavior, IccProfile specifiedProfile)
+void IccManager::getTransform(IccTransform& trans, ICCSettingsContainer::Behavior behavior, const IccProfile& specifiedProfile)
 {
     IccProfile inputProfile = imageProfile(behavior, specifiedProfile);
     IccProfile outputProfile;
@@ -324,7 +327,7 @@ void IccManager::setIccProfile(const IccProfile& profile)
 }
 
 
-// --- Display ---
+// -- Display -------------------------------------------------------------------------------------------
 
 
 void IccManager::transformForDisplay()
@@ -360,7 +363,7 @@ void IccManager::transformForDisplay(const IccProfile& profile)
     {
         // set appropriate outputColorSpace in RawLoadingSettings
         kError() << "Do not use transformForDisplay for uncalibrated data "
-                 "but let the RAW loader do the conversion to sRGB";
+                    "but let the RAW loader do the conversion to sRGB";
     }
 
     IccTransform trans = displayTransform(outputProfile);
@@ -414,7 +417,7 @@ IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
     {
         // set appropriate outputColorSpace in RawLoadingSettings
         kError() << "Do not use transformForDisplay for uncalibrated data "
-                 "but let the RAW loader do the conversion to sRGB";
+                    "but let the RAW loader do the conversion to sRGB";
     }
     else if (isMissingProfile())
     {
@@ -463,7 +466,7 @@ IccTransform IccManager::displaySoftProofingTransform(const IccProfile& devicePr
     return transform;
 }
 
-// --- sRGB and Output ---
+// -- sRGB and Output -------------------------------------------------------------------------------------------------
 
 bool IccManager::isSRGB(const DImg& image)
 {
@@ -501,7 +504,7 @@ void IccManager::transformToSRGB()
     {
         // set appropriate outputColorSpace in RawLoadingSettings
         kError() << "Do not use transformForDisplay for uncalibrated data "
-                 "but let the RAW loader do the conversion to sRGB";
+                    "but let the RAW loader do the conversion to sRGB";
     }
     else if (isMissingProfile())
     {
@@ -594,7 +597,7 @@ void IccManager::transformForOutput(const IccProfile& prof)
     {
         // set appropriate outputColorSpace in RawLoadingSettings
         kError() << "Do not use transformForOutput for uncalibrated data "
-                 "but let the RAW loader do the conversion to sRGB";
+                    "but let the RAW loader do the conversion to sRGB";
     }
     else if (isMissingProfile())
     {

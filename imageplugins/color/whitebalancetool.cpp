@@ -8,7 +8,7 @@
  *               image white balance
  *
  * Copyright (C) 2008-2009 by Guillaume Castagnino <casta at xwing dot info>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -105,6 +105,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     d->gboxSettings = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
+    d->gboxSettings->setHistogramType(LRGBC);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|
@@ -200,7 +201,10 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
 
 void WhiteBalanceTool::prepareEffect()
 {
+    ImageIface iface(0, 0);
+    DImg* img            = iface.getOriginalImg();
     WBContainer settings = d->settingsView->settings();
+    WBFilter::findChanelsMax(img, settings.maxr, settings.maxg, settings.maxb);
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 

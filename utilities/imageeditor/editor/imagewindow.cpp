@@ -476,6 +476,7 @@ void ImageWindow::setupUserArea()
     d->imageFilterModel->setCategorizationMode(ImageSortSettings::NoCategories);
     d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)AlbumSettings::instance()->getImageSortOrder());
     d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)AlbumSettings::instance()->getImageSorting());
+    d->imageFilterModel->setAllGroupsOpen(true); // disable filtering out by group, see bug #283847
     d->imageFilterModel->sort(0); // an initial sorting is necessary
 
     d->dragDropHandler  = new ImageDragDropHandler(d->imageInfoModel);

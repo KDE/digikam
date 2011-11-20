@@ -485,7 +485,7 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_zoomminus", d->zoomMinusAction);
 
     d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
-    d->zoomTo100percents->setShortcut(KShortcut(Qt::ALT + Qt::CTRL + Qt::Key_0));       // NOTE: Photoshop 7 use ALT+CTRL+0
+    d->zoomTo100percents->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Comma));
     connect(d->zoomTo100percents, SIGNAL(triggered()), this, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("editorwindow_zoomto100percents", d->zoomTo100percents);
 
@@ -1761,7 +1761,9 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success
 
 void EditorWindow::resetOrigin()
 {
-    m_canvas->interface()->setUndoManagerOrigin();
+    // With versioning, "only" resetting undo history does not work anymore
+    // as we calculate undo state based on the initial history stored in the DImg
+    resetOriginSwitchFile();
 }
 
 void EditorWindow::resetOriginSwitchFile()
@@ -2026,8 +2028,9 @@ void EditorWindow::startingSave(const KUrl& url)
     m_savingContext.savingState        = SavingContextContainer::SavingStateSave;
     m_savingContext.executedOperation  = SavingContextContainer::SavingStateNone;
 
-    m_canvas->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
-                     m_setExifOrientationTag && m_canvas->exifRotated());
+    m_canvas->interface()->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
+                                  m_setExifOrientationTag && m_canvas->exifRotated(), m_savingContext.format,
+                                  m_savingContext.destinationURL.toLocalFile());
 }
 
 bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
@@ -2423,9 +2426,10 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     // in any case, destructive (Save as) or non (Export), mark as New Version
     m_canvas->interface()->setHistoryIsBranch(true);
 
-    m_canvas->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
-                     m_setExifOrientationTag && m_canvas->exifRotated(),
-                     m_savingContext.format.toLower());
+    m_canvas->interface()->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
+                                  m_setExifOrientationTag && m_canvas->exifRotated(),
+                                  m_savingContext.format.toLower(),
+                                  m_savingContext.destinationURL.toLocalFile());
 
     return true;
 }
@@ -2493,25 +2497,24 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, 
     m_savingContext.versionFileOperation = saveVersionFileOperation(url, fork);
     m_canvas->interface()->setHistoryIsBranch(fork);
 
-    KUrl newURL = m_savingContext.versionFileOperation.saveFile.fileUrl();
-
     if (saveAs)
     {
-        KUrl suggested = newURL;
+        KUrl suggested = m_savingContext.versionFileOperation.saveFile.fileUrl();
+        KUrl selectedUrl;
 
-        if (!showFileSaveDialog(suggested, newURL))
+        if (!showFileSaveDialog(suggested, selectedUrl))
         {
             return false;
         }
 
-        m_savingContext.versionFileOperation = saveAsVersionFileOperation(url, newURL, m_savingContext.format);
+        m_savingContext.versionFileOperation = saveAsVersionFileOperation(url, selectedUrl, m_savingContext.format);
     }
     else if (!format.isNull())
     {
         m_savingContext.versionFileOperation = saveInFormatVersionFileOperation(url, format);
-        newURL = m_savingContext.versionFileOperation.saveFile.fileUrl();
     }
 
+    const KUrl newURL = m_savingContext.versionFileOperation.saveFile.fileUrl();
     kDebug() << "Writing file to " << newURL;
 
     if (!newURL.isValid())

@@ -84,7 +84,8 @@ public:
     void   rollbackToOrigin();
 
     void   saveAs(const QString& file, IOFileSettingsContainer* iofileSettings,
-                  bool setExifOrientationTag, const QString& mimeType=QString());
+                  bool setExifOrientationTag, const QString& mimeType,
+                  const QString& intendedFilePath);
     void   saveAs(const QString& file, IOFileSettingsContainer* iofileSettings,
                   bool setExifOrientationTag, const QString& mimeType,
                   const VersionFileOperation& operation);
@@ -218,6 +219,10 @@ private Q_SLOTS:
     void slotLoadRaw();
 
 private:
+
+    void   saveAs(const QString& file, IOFileSettingsContainer* iofileSettings,
+                  bool setExifOrientationTag, const QString& mimeType,
+                  const VersionFileOperation& operation, const QString& intendedFilePath);
 
     void   putImageData(uchar* data, int w, int h, bool sixteenBit);
     void   applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* action);

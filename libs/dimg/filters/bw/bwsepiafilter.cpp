@@ -6,7 +6,7 @@
  * Date        : 2005-03-06
  * Description : black and white image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -398,6 +398,15 @@ void BWSepiaFilter::blackAndWhiteConversion(DImg& img, int type)
             break;
         }
 
+        case BWSepiaContainer::BWKodakHIE:
+        {
+            d->redMult   = +1.0;
+            d->greenMult = +1.0;
+            d->blueMult  = -1.0;
+            applyInfraredFilter(img, 100);
+            break;
+        }
+
         // --------------------------------------------------------------------------------
 
         case BWSepiaContainer::BWSepiaTone:
@@ -503,6 +512,9 @@ FilterAction BWSepiaFilter::filterAction()
     action.addParameter("previewType", d->settings.previewType);
     action.addParameter("strength", d->settings.strength);
     action.addParameter("toneType", d->settings.toneType);
+
+    // Version 2: BWKodakHIE added
+    action.supportOlderVersionIf(1, d->settings.filmType < BWSepiaContainer::BWKodakHIE);
 
     d->settings.curvesPrm.writeToFilterAction(action);
     d->settings.bcgPrm.writeToFilterAction(action);

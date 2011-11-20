@@ -1148,8 +1148,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
     d->rescanButton   = new QPushButton;
     d->rescanButton->setText(i18n("Scan collection for faces"));
 
-    QString s("user-identity");
-    KIcon* icon       = new KIcon(s);
+    KIcon* icon       = new KIcon(QString("edit-image-face-show"));
     QPixmap personPix = icon->pixmap(QSize(48, 48));
     d->personIcon     = new QLabel;
     d->personIcon->setPixmap(personPix);
@@ -1175,7 +1174,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
 
 QPixmap PeopleSideBarWidget::getIcon()
 {
-    return SmallIcon("user-identity");
+    return SmallIcon("edit-image-face-show");
 }
 
 QString PeopleSideBarWidget::getCaption()

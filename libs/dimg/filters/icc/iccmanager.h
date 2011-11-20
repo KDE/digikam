@@ -7,8 +7,8 @@
  * Description : methods that implement color management tasks
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,6 @@ namespace Digikam
 class DImg;
 class DImgLoaderObserver;
 class IccTransform;
-class IccManagerPriv;
 
 class DIGIKAM_EXPORT IccManager
 {
@@ -70,11 +69,12 @@ public:
      * but no action is taken. See IccPostLoadingManager.
      */
     void transformDefault();
+
     /**
      * Same as above, but not using default settings but the given settings.
      */
     void transform(ICCSettingsContainer::Behavior behavior,
-                   IccProfile specifiedProfile = IccProfile());
+                   const IccProfile& specifiedProfile = IccProfile());
     /**
      * Transforms the image to sRGB
      */
@@ -89,6 +89,7 @@ public:
      * Transforms the image for output to the specified output profile
      */
     void transformForOutput(const IccProfile& outputProfile);
+
     /**
      * Transforms the image for display on screen. The result is not suitable
      * for editing or storage.
@@ -122,19 +123,23 @@ public:
      *  using the given behavior
      */
     IccProfile imageProfile(ICCSettingsContainer::Behavior behavior,
-                            IccProfile specifiedProfile = IccProfile());
+                            const IccProfile& specifiedProfile = IccProfile());
 
     /** Transforms the given QImage from the given inputProfile to sRGB. */
     static void transformToSRGB(QImage& qimage, const IccProfile& inputProfile);
+
     /** Transforms the given QImage from sRGB to given display profile. */
     static void transformForDisplay(QImage& qimage, const IccProfile& displayProfile = displayProfile());
 
 protected:
 
-    void getTransform(IccTransform& trans, ICCSettingsContainer::Behavior behavior, IccProfile specifiedProfile);
+    void getTransform(IccTransform& trans, ICCSettingsContainer::Behavior behavior, const IccProfile& specifiedProfile);
     void setIccProfile(const IccProfile& profile);
     ICCSettingsContainer::Behavior safestBestBehavior() const;
 
+private:
+
+    class IccManagerPriv;
     IccManagerPriv* const d;
 };
 

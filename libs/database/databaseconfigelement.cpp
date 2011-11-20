@@ -218,6 +218,15 @@ bool DatabaseConfigElementLoader::readConfig()
     kDebug() << "Loading SQL code from config file" << filepath;
     QFile file(filepath);
 
+    if (!file.exists())
+    {
+        errorMessage = i18n("Could not open the dbconfig.xml file. "
+                            "This file is installed with the digikam application "
+                            "and is absolutely required to run digikam. "
+                            "Please check your installation.");
+        return false;
+    }
+
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         errorMessage = i18n("Could not open dbconfig.xml file <filename>%1</filename>", filepath);

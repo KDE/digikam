@@ -1035,6 +1035,8 @@ void ShowFoto::saveIsComplete()
     // Pop-up a message to bring user when save is done.
     Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
                                   this, windowTitle());
+
+    resetOrigin();
 }
 
 void ShowFoto::saveAsIsComplete()

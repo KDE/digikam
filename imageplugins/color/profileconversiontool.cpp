@@ -7,7 +7,7 @@
  * Description : a tool for color space conversion
  *
  * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -126,7 +126,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
                                 EditorToolSettings::Cancel);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
-    d->gboxSettings->setHistogramType(LRGBA);
+    d->gboxSettings->setHistogramType(LRGBAC);
 
     // -------------------------------------------------------------
 

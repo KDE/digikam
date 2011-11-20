@@ -1,0 +1,59 @@
+digiKam Keyboard shortcuts :
+
+ASSIGN RATING
+-------------
+
+no rating                : CTRL + key_0
+1 star                   : CTRL + key_1
+2 stars                  : CTRL + key_2
+3 stars                  : CTRL + key_3
+4 stars                  : CTRL + key_4
+5 stars                  : CTRL + key_5
+
+ASSIGN PICK LABEL
+-----------------
+
+none                     : ALT + key_0
+rejected                 : ALT + key_1
+pending                  : ALT + key_2
+accepted                 : ALT + key_3
+
+ASSIGN COLOR LABEL
+------------------
+
+none                     : CTRL + ALT + key_0
+red                      : CTRL + ALT + key_1
+orange                   : CTRL + ALT + key_2
+yellow                   : CTRL + ALT + key_3
+green                    : CTRL + ALT + key_4
+blue                     : CTRL + ALT + key_5
+magenta                  : CTRL + ALT + key_6
+gray                     : CTRL + ALT + key_7
+black                    : CTRL + ALT + key_8
+white                    : CTRL + ALT + key_9
+
+ZOOMING
+-------
+
+zoom in                  : CTRL + key_+
+zoom out                 : CTRL + key_-
+zoom 100%                : CTRL + key_.
+fit to window            : CTRL + ALT + key_e
+fit to selection         : CTRL + ALT + key_s
+
+GENERAL
+-------
+
+delete items permanently : SHIF + DEL
+
+
+================================================================================================================================
+
+LINKS
+-----
+
+APPLE APERTURE 3       : http://documentation.apple.com/en/aperture_otherhelp/Aperture%203%20Keyboard%20Shortcuts%20(en).pdf
+ADOBE LIGHTROOM 3      : http://www.lightroomqueen.com/downloads/shortcuts/lightroom_shortcuts_30.pdf
+ADOBE PHOTOSHOP CS4    : http://morris-photographics.com/photoshop/shortcuts/downloads/PSCS4_Keyboard_Shortcuts_PC.pdf
+THE GIMP 2.x           : http://www.keyxl.com/aaae27c/66/Gimp-Photo-software-keyboard-shortcuts.htm
+DESKTOP SHORCUTS TABLE : http://en.wikipedia.org/wiki/Table_of_keyboard_shortcuts

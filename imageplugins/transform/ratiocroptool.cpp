@@ -64,6 +64,8 @@
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageselectionwidget.h"
+#include "histogrambox.h"
+#include "histogramwidget.h"
 
 using namespace KDcrawIface;
 
@@ -79,6 +81,7 @@ public:
         customLabel(0),
         orientLabel(0),
         colorGuideLabel(0),
+        resLabel(0),
         centerWidth(0),
         centerHeight(0),
         goldenSectionBox(0),
@@ -102,7 +105,8 @@ public:
         guideColorBt(0),
         imageSelectionWidget(0),
         expbox(0),
-        gboxSettings(0)
+        gboxSettings(0),
+        histogramBox(0)
     {}
 
     static const QString  configGroupName;
@@ -133,12 +137,15 @@ public:
     static const QString  configGoldenFlipVerticalEntry;
     static const QString  configGuideColorEntry;
     static const QString  configGuideWidthEntry;
+    static const QString  configHistogramChannelEntry;
+    static const QString  configHistogramScaleEntry;
 
     bool                  originalIsLandscape;
 
     QLabel*               customLabel;
     QLabel*               orientLabel;
     QLabel*               colorGuideLabel;
+    QLabel*               resLabel;
 
     QToolButton*          centerWidth;
     QToolButton*          centerHeight;
@@ -169,6 +176,8 @@ public:
     ImageSelectionWidget* imageSelectionWidget;
     RExpanderBox*         expbox;
     EditorToolSettings*   gboxSettings;
+    HistogramBox*         histogramBox;
+    DImg                  imageSelection;    
 };
 
 const QString RatioCropTool::RatioCropToolPriv::configGroupName("aspectratiocrop Tool");
@@ -199,6 +208,8 @@ const QString RatioCropTool::RatioCropToolPriv::configGoldenFlipHorizontalEntry(
 const QString RatioCropTool::RatioCropToolPriv::configGoldenFlipVerticalEntry("Golden Flip Vertical");
 const QString RatioCropTool::RatioCropToolPriv::configGuideColorEntry("Guide Color");
 const QString RatioCropTool::RatioCropToolPriv::configGuideWidthEntry("Guide Width");
+const QString RatioCropTool::RatioCropToolPriv::configHistogramChannelEntry("Histogram Channel");
+const QString RatioCropTool::RatioCropToolPriv::configHistogramScaleEntry("Histogram Scale");
 
 // --------------------------------------------------------
 
@@ -249,6 +260,29 @@ RatioCropTool::RatioCropTool(QObject* parent)
     QVBoxLayout* vlay      = new QVBoxLayout(d->gboxSettings->plainPage());
     d->expbox              = new RExpanderBox(d->gboxSettings->plainPage());
     d->expbox->setObjectName("RatioCropTool Expander");
+    
+    // -------------------------------------------------------------
+
+    QWidget* cropInfo  = new QWidget(d->expbox);
+    QGridLayout* grid3 = new QGridLayout(cropInfo);
+    
+    d->histogramBox    = new HistogramBox(cropInfo, Digikam::LRGBAC);
+
+    QLabel* resolution = new QLabel(i18n("Resolution:"), cropInfo);
+    d->resLabel        = new QLabel(cropInfo);
+    d->resLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    
+    grid3->addWidget(d->histogramBox, 0, 0, 1, 3);
+    grid3->addWidget(resolution,      1, 0, 1, 1);
+    grid3->addWidget(d->resLabel,     1, 1, 1, 2);
+    grid3->setMargin(d->gboxSettings->spacingHint());
+    grid3->setSpacing(d->gboxSettings->spacingHint());
+
+    d->expbox->addItem(cropInfo, SmallIcon("help-about"),
+                       i18n("Crop Information"), QString("CropInformation"), true);
+    
+    // -------------------------------------------------------------
+    
     QWidget* cropSelection = new QWidget(d->expbox);
 
     QLabel* label = new QLabel(i18n("Aspect ratio:"), cropSelection);
@@ -319,42 +353,44 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
+    QLabel* positionLabel = new QLabel(i18n("Position:"), cropSelection);
+    positionLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+    
     d->xInput = new RIntNumInput(cropSelection);
     d->xInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
-    d->xInput->input()->setLabel(i18nc("top left corner position for cropping", "X:"), Qt::AlignLeft|Qt::AlignVCenter);
     d->xInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
-    d->xInput->setSliderEnabled(true);
+    d->xInput->setSliderEnabled(false);
     d->xInput->setDefaultValue(50);
 
+    d->yInput = new RIntNumInput(cropSelection);
+    d->yInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
+    d->yInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
+    d->yInput->setSliderEnabled(false);
+    d->yInput->setDefaultValue(50);
+
+    // -------------------------------------------------------------
+
+    QLabel* sizeLabel = new QLabel(i18n("Size:"), cropSelection);
+    sizeLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+    
     d->widthInput = new RIntNumInput(cropSelection);
-    d->widthInput->input()->setLabel(i18n("Width:"), Qt::AlignLeft|Qt::AlignVCenter);
     d->widthInput->setWhatsThis( i18n("Set here the width selection for cropping."));
     d->widthInput->setRange(d->imageSelectionWidget->getMinWidthRange(),
                             d->imageSelectionWidget->getMaxWidthRange(),
                             d->imageSelectionWidget->getWidthStep());
-    d->widthInput->setSliderEnabled(true);
+    d->widthInput->setSliderEnabled(false);
     d->widthInput->setDefaultValue(800);
 
     d->centerWidth = new QToolButton(cropSelection);
     d->centerWidth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerwidth.png")));
     d->centerWidth->setWhatsThis( i18n("Set width position to center."));
 
-    // -------------------------------------------------------------
-
-    d->yInput = new RIntNumInput(cropSelection);
-    d->yInput->input()->setLabel(i18n("Y:"), Qt::AlignLeft|Qt::AlignVCenter);
-    d->yInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
-    d->yInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
-    d->yInput->setSliderEnabled(true);
-    d->yInput->setDefaultValue(50);
-
     d->heightInput = new RIntNumInput(cropSelection);
-    d->heightInput->input()->setLabel(i18n("Height:"), Qt::AlignLeft|Qt::AlignVCenter);
     d->heightInput->setWhatsThis( i18n("Set here the height selection for cropping."));
     d->heightInput->setRange(d->imageSelectionWidget->getMinHeightRange(),
                              d->imageSelectionWidget->getMaxHeightRange(),
                              d->imageSelectionWidget->getHeightStep());
-    d->heightInput->setSliderEnabled(true);
+    d->heightInput->setSliderEnabled(false);
     d->heightInput->setDefaultValue(600);
 
     d->centerHeight = new QToolButton(cropSelection);
@@ -373,11 +409,13 @@ RatioCropTool::RatioCropTool(QObject* parent)
     mainLayout->addWidget(d->orientLabel,       3, 0, 1, 1);
     mainLayout->addWidget(d->orientCB,          3, 1, 1, 3);
     mainLayout->addWidget(d->autoOrientation,   3, 4, 1, 1);
-    mainLayout->addWidget(d->xInput,            4, 0, 1, 4);
-    mainLayout->addWidget(d->widthInput,        5, 0, 1, 4);
-    mainLayout->addWidget(d->centerWidth,       5, 4, 1, 1);
-    mainLayout->addWidget(d->yInput,            6, 0, 1, 4);
-    mainLayout->addWidget(d->heightInput,       7, 0, 1, 4);
+    mainLayout->addWidget(positionLabel,        4, 0, 1, 1);
+    mainLayout->addWidget(d->xInput,            4, 1, 1, 3);
+    mainLayout->addWidget(d->yInput,            5, 1, 1, 3);
+    mainLayout->addWidget(sizeLabel,            6, 0, 1, 1);
+    mainLayout->addWidget(d->widthInput,        6, 1, 1, 3);
+    mainLayout->addWidget(d->centerWidth,       6, 4, 1, 1);
+    mainLayout->addWidget(d->heightInput,       7, 1, 1, 3);
     mainLayout->addWidget(d->centerHeight,      7, 4, 1, 1);
     mainLayout->setMargin(d->gboxSettings->spacingHint());
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
@@ -447,6 +485,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     d->expbox->addItem(compositionGuide, SmallIcon("tools-wizard"),
                        i18n("Composition Guides"), QString("CompositionGuide"), true);
+        
     d->expbox->addStretch();
 
     // -------------------------------------------------------------
@@ -545,6 +584,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
 RatioCropTool::~RatioCropTool()
 {
+    d->histogramBox->histogram()->stopHistogramComputation();
     delete d;
 }
 
@@ -634,6 +674,11 @@ void RatioCropTool::readSettings()
     slotHeightChanged(d->heightInput->value());
 
     slotGuideTypeChanged(d->guideLinesCB->currentIndex());
+    
+    updateCropInfo();
+
+    d->histogramBox->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry, (int)Digikam::LuminosityChannel));
+    d->histogramBox->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,  (int)LogScaleHistogram));
 }
 
 void RatioCropTool::writeSettings()
@@ -677,7 +722,9 @@ void RatioCropTool::writeSettings()
     group.writeEntry(d->configGoldenFlipVerticalEntry,     d->flipVerBox->isChecked());
     group.writeEntry(d->configGuideColorEntry,             d->guideColorBt->color());
     group.writeEntry(d->configGuideWidthEntry,             d->guideSize->value());
-
+    group.writeEntry(d->configHistogramChannelEntry, (int)d->histogramBox->channel());
+    group.writeEntry(d->configHistogramScaleEntry,   (int)d->histogramBox->scale());
+    
 #if KDCRAW_VERSION >= 0x020000
     d->expbox->writeSettings(group);
 #else
@@ -711,7 +758,7 @@ void RatioCropTool::slotSelectionChanged(const QRect& rect)
 {
     blockWidgetSignals(true);
 
-    d->xInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1);
+    d->xInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth()  - rect.width(),  1);
     d->yInput->setRange(0, d->imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1);
     d->widthInput->setRange(d->imageSelectionWidget->getMinWidthRange(),
                             d->imageSelectionWidget->getMaxWidthRange(),
@@ -725,11 +772,12 @@ void RatioCropTool::slotSelectionChanged(const QRect& rect)
     d->widthInput->setValue(rect.width());
     d->heightInput->setValue(rect.height());
 
-    d->gboxSettings->enableButton(EditorToolSettings::Ok,
-                                  rect.isValid());
+    d->gboxSettings->enableButton(EditorToolSettings::Ok, rect.isValid());
 
     d->preciseCrop->setEnabled(d->imageSelectionWidget->preciseCropAvailable());
 
+    updateCropInfo();
+        
     blockWidgetSignals(false);
 }
 
@@ -962,11 +1010,46 @@ void RatioCropTool::slotCustomDRatioChanged(int a)
 
 void RatioCropTool::slotCustomRatioChanged()
 {
-    d->imageSelectionWidget->setSelectionAspectRatioValue(d->customRatioNInput->value(),
-            d->customRatioDInput->value());
+    d->imageSelectionWidget->setSelectionAspectRatioValue(d->customRatioNInput->value(), d->customRatioDInput->value());
 
     // Reset selection area.
     slotResetSettings();
+}
+
+void RatioCropTool::updateCropInfo()
+{
+    d->histogramBox->histogram()->stopHistogramComputation();
+    DImg* img         = d->imageSelectionWidget->imageIface()->getOriginalImg();
+    d->imageSelection = img->copy(getNormalizedRegion());
+    d->histogramBox->histogram()->updateData(d->imageSelection.bits(), 
+                                             d->imageSelection.width(), d->imageSelection.height(),
+                                             d->imageSelection.sixteenBit());
+
+    QString mpixels;
+    mpixels.setNum(d->widthInput->value() * d->heightInput->value() / 1000000.0, 'f', 2);
+    d->resLabel->setText(i18nc("width x height (megapixels Mpx)", "%1x%2 (%3Mpx)",
+                         d->widthInput->value(), d->heightInput->value(), mpixels));
+}
+
+QRect RatioCropTool::getNormalizedRegion() const
+{
+    QRect currentRegion    = d->imageSelectionWidget->getRegionSelection();
+    ImageIface* iface      = d->imageSelectionWidget->imageIface();
+    int w                  = iface->originalWidth();
+    int h                  = iface->originalHeight();
+    QRect normalizedRegion = currentRegion.normalized();
+
+    if (normalizedRegion.right() > w)
+    {
+        normalizedRegion.setRight(w);
+    }
+
+    if (normalizedRegion.bottom() > h)
+    {
+        normalizedRegion.setBottom(h);
+    }
+
+    return normalizedRegion;
 }
 
 void RatioCropTool::finalRendering()
@@ -980,32 +1063,22 @@ void RatioCropTool::finalRendering()
     int h                  = iface->originalHeight();
     bool a                 = iface->originalHasAlpha();
     bool sb                = iface->originalSixteenBit();
-    QRect normalizedRegion = currentRegion.normalized();
-
-    if (normalizedRegion.right() > w)
-    {
-        normalizedRegion.setRight(w);
-    }
-
-    if (normalizedRegion.bottom() > h)
-    {
-        normalizedRegion.setBottom(h);
-    }
+    QRect normalizedRegion = getNormalizedRegion();
 
     DImg imOrg(w, h, sb, a, data);
     delete [] data;
+
     imOrg.crop(normalizedRegion);
-
     FilterAction action("digikam:RatioCrop", 1);
-    action.setDisplayableName(i18n("Aspect Ratio Crop"));
 
+    action.setDisplayableName(i18n("Aspect Ratio Crop"));
     action.addParameter("x", currentRegion.x());
     action.addParameter("y", currentRegion.y());
     action.addParameter("width", currentRegion.width());
     action.addParameter("height", currentRegion.height());
 
     iface->putOriginalImage(i18n("Aspect Ratio Crop"), action, imOrg.bits(), imOrg.width(), imOrg.height());
-
+    
     kapp->restoreOverrideCursor();
     writeSettings();
 }

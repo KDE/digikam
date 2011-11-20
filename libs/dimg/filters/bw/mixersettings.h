@@ -6,7 +6,7 @@
  * Date        : 2009-02-18
  * Description : Channel mixer settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,17 +61,20 @@ public:
     void loadSettings();
     void saveAsSettings();
 
-    void setCurrentChannel(int);
-    int  currentChannel();
+    int  currentChannel() const;
+
+    void setMonochromeTipsVisible(bool b);
 
 Q_SIGNALS:
 
     void signalSettingsChanged();
     void signalMonochromeActived(bool);
+    void signalOutChannelChanged();
 
 private:
 
     void updateSettingsWidgets();
+    void updateTotalPercents();
 
 private Q_SLOTS:
 
@@ -79,6 +82,7 @@ private Q_SLOTS:
     void slotGainsChanged();
     void slotMonochromeActived(bool);
     void slotLuminosityChanged(bool);
+    void slotOutChannelChanged();
 
 private:
 

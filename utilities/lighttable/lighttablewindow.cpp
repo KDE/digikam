@@ -558,7 +558,7 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_zoomminus_left", d->leftZoomMinusAction);
 
     d->leftZoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
-    d->leftZoomTo100percents->setShortcut(KShortcut(Qt::ALT + Qt::CTRL + Qt::Key_0));    // NOTE: Photoshop 7 use ALT+CTRL+0
+    d->leftZoomTo100percents->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Comma));
     connect(d->leftZoomTo100percents, SIGNAL(triggered()), d->previewView, SLOT(slotLeftZoomTo100()));
     actionCollection()->addAction("lighttable_zoomto100percents_left", d->leftZoomTo100percents);
 
@@ -586,7 +586,7 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_zoomminus_right", d->rightZoomMinusAction);
 
     d->rightZoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
-    d->rightZoomTo100percents->setShortcut(KShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_0));
+    d->rightZoomTo100percents->setShortcut(KShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_Comma));
     connect(d->rightZoomTo100percents, SIGNAL(triggered()), d->previewView, SLOT(slotRightZoomTo100()));
     actionCollection()->addAction("lighttable_zoomto100percents_right", d->rightZoomTo100percents);
 

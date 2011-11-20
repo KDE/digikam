@@ -653,6 +653,11 @@ void DigikamApp::setupAccelerators()
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
 
     d->cutItemsAction = KStandardAction::cut(this, SIGNAL(signalCutAlbumItemsSelection()), this);
+    // need to remove shift+del from cut action,
+    // else the shortcut for Delete permanently collides with secondary shortcut of Cut
+    KShortcut cutShortcut = d->cutItemsAction->shortcut();
+    cutShortcut.remove(Qt::SHIFT | Qt::Key_Delete, KShortcut::KeepEmpty);
+    d->cutItemsAction->setShortcut(cutShortcut);
     actionCollection()->addAction("cut_album_selection", d->cutItemsAction);
 
     d->copyItemsAction = KStandardAction::copy(this, SIGNAL(signalCopyAlbumItemsSelection()), this);
@@ -1143,7 +1148,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
-    d->zoomTo100percents->setShortcut(KShortcut(Qt::ALT + Qt::CTRL + Qt::Key_0));       // NOTE: Photoshop 7 use ALT+CTRL+0
+    d->zoomTo100percents->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Comma));
     connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("album_zoomto100percents", d->zoomTo100percents);
 

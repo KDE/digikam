@@ -6,7 +6,7 @@
  * Date        : 2004-07-21
  * Description : a widget to display an image histogram.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,7 +66,7 @@ enum HistogramState
     HistogramFailed           // Histogram values calculation failed.
 };
 
-class HistogramWidgetPriv
+class HistogramWidget::HistogramWidgetPriv
 {
 public:
 
@@ -94,35 +94,35 @@ public:
         progressPix = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
     }
 
-    bool    sixteenBits;
-    bool    guideVisible;       // Display color guide.
-    bool    statisticsVisible;  // Display tooltip histogram statistics.
-    bool    inSelected;
-    bool    selectMode;         // If true, a part of the histogram can be selected !
-    bool    showProgress;       // If true, a message will be displayed during histogram computation,
-                                // else nothing (limit flicker effect in widget especially for small
-                                // image/computation time).
-    int     renderingType;      // Using full image or image selection for histogram rendering.
-    int            range;
-    HistogramState state;       // Clear drawing zone with message.
+    bool                sixteenBits;
+    bool                guideVisible;           // Display color guide.
+    bool                statisticsVisible;      // Display tooltip histogram statistics.
+    bool                inSelected;
+    bool                selectMode;             // If true, a part of the histogram can be selected !
+    bool                showProgress;           // If true, a message will be displayed during histogram computation,
+                                                // else nothing (limit flicker effect in widget especially for small
+                                                // image/computation time).
+    int                 renderingType;          // Using full image or image selection for histogram rendering.
+    int                 range;
+    HistogramState      state;                  // Clear drawing zone with message.
 
-    ChannelType channelType;    // Channel type to draw
-    HistogramScale scaleType;   // Scale to use for drawing
-    ImageHistogram* imageHistogram;      // Full image
-    ImageHistogram* selectionHistogram;  // Image selection
+    ChannelType         channelType;            // Channel type to draw
+    HistogramScale      scaleType;              // Scale to use for drawing
+    ImageHistogram*     imageHistogram;         // Full image
+    ImageHistogram*     selectionHistogram;     // Image selection
 
     // Current selection information.
-    double  xmin;
-    double  xminOrg;
-    double  xmax;
+    double              xmin;
+    double              xminOrg;
+    double              xmax;
 
     int                 animationState;
     QPropertyAnimation* animation;
     KPixmapSequence     progressPix;
 
-    DColor  colorGuide;
+    DColor              colorGuide;
 
-    HistogramPainter* histogramPainter;
+    HistogramPainter*   histogramPainter;
 };
 
 // Constructor without image data (needed to use updateData() method after instance created).

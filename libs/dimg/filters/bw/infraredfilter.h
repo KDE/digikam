@@ -6,7 +6,7 @@
  * Date   : 2005-05-25
  * Description : Infrared threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -74,14 +74,17 @@ public:
     {
         return "digikam:InfraredFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Infrared Filter");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -91,6 +94,7 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

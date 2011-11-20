@@ -6,7 +6,7 @@
  * Date        : 2007-16-01
  * Description : white balance color correction.
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Guillaume Castagnino <casta at xwing dot info>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -52,6 +52,10 @@ WBContainer::WBContainer()
     dark        = 0.5;
     gamma       = 1.0;
     saturation  = 1.0;
+    
+    maxr        = -1;
+    maxg        = -1;
+    maxb        = -1;
 }
 
 bool WBContainer::isDefault() const
@@ -61,12 +65,12 @@ bool WBContainer::isDefault() const
 
 bool WBContainer::operator==(const WBContainer& other) const
 {
-    return black       == other.black &&
-           exposition  == other.exposition &&
+    return black       == other.black       &&
+           exposition  == other.exposition  &&
            temperature == other.temperature &&
-           green       == other.green &&
-           dark        == other.dark  &&
-           gamma       == other.gamma &&
+           green       == other.green       &&
+           dark        == other.dark        &&
+           gamma       == other.gamma       &&
            saturation  == other.saturation;
 }
 
@@ -94,7 +98,9 @@ WBContainer WBContainer::fromFilterAction(const FilterAction& action, const QStr
     return settings;
 }
 
-class WBFilterPriv
+// ----------------------------------------------------------------------------------------------
+
+class WBFilter::WBFilterPriv
 {
 public:
 
@@ -174,6 +180,16 @@ void WBFilter::filterImage()
 
     setLUTv();
     setRGBmult();
+    
+    // See B.K.O #259223 : scaling down the rgb multipiers just enough to prevent clipping
+    if (m_settings.maxr == -1 && m_settings.maxg == -1 && m_settings.maxb == -1)
+    {
+        findChanelsMax((const DImg*) &m_orgImage, 
+                       m_settings.maxr, 
+                       m_settings.maxg, 
+                       m_settings.maxb);
+    }
+    preventAutoExposure(m_settings.maxr, m_settings.maxg, m_settings.maxb);
 
     // Apply White balance adjustments.
     adjustWhiteBalance(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
@@ -223,9 +239,9 @@ void WBFilter::autoWBAdjustementFromColor(const QColor& tc, double& temperature,
 void WBFilter::autoExposureAdjustement(const DImg* img, double& black, double& expo)
 {
     const uchar* data = img->bits();
-    int width   = img->width();
-    int height  = img->height();
-    bool sb     = img->sixteenBit();
+    int width         = img->width();
+    int height        = img->height();
+    bool sb           = img->sixteenBit();
 
     // Create an histogram of original image.
 
@@ -276,6 +292,7 @@ void WBFilter::setRGBmult(double& temperature, double& green, float& mr, float& 
     /* Here starts the code picked from ufraw (0.12.1)
        to convert Temperature + green multiplier to RGB multipliers
     */
+
     /* Convert between Temperature and RGB.
      * Base on information from http://www.brucelindbloom.com/
      * The fit for D-illuminant between 4000K and 12000K are from CIE
@@ -286,27 +303,27 @@ void WBFilter::setRGBmult(double& temperature, double& green, float& mr, float& 
     {
         { 3.24071,  -0.969258,  0.0556352 },
         {-1.53726,  1.87599,    -0.203996 },
-        {-0.498571, 0.0415557,  1.05707 }
+        {-0.498571, 0.0415557,  1.05707   }
     };
 
     // Fit for CIE Daylight illuminant
     if (temperature <= 4000)
     {
-        xD = 0.27475e9/(temperature*temperature*temperature)
-             - 0.98598e6/(temperature*temperature)
-             + 1.17444e3/temperature + 0.145986;
+        xD = 0.27475e9   / (temperature * temperature * temperature)
+             - 0.98598e6 / (temperature * temperature)
+             + 1.17444e3 / temperature + 0.145986;
     }
     else if (temperature <= 7000)
     {
-        xD = -4.6070e9/(temperature*temperature*temperature)
-             + 2.9678e6/(temperature*temperature)
-             + 0.09911e3/temperature + 0.244063;
+        xD = -4.6070e9   / (temperature * temperature * temperature)
+             + 2.9678e6  / (temperature * temperature)
+             + 0.09911e3 / temperature + 0.244063;
     }
     else
     {
-        xD = -2.0064e9/(temperature*temperature*temperature)
-             + 1.9018e6/(temperature*temperature)
-             + 0.24748e3/temperature + 0.237040;
+        xD = -2.0064e9   / (temperature * temperature * temperature)
+             + 1.9018e6  / (temperature * temperature)
+             + 0.24748e3 / temperature + 0.237040;
     }
 
     yD = -3*xD*xD + 2.87*xD - 0.275;
@@ -339,6 +356,68 @@ void WBFilter::setRGBmult()
     setRGBmult(m_settings.temperature, m_settings.green, d->mr, d->mg, d->mb);
 }
 
+void WBFilter::findChanelsMax(const DImg* img, int& maxr, int& maxg, int& maxb)
+{
+    const uchar* data = img->bits();
+    int width         = img->width();
+    int height        = img->height();
+    bool sixteenBit   = img->sixteenBit();
+    
+    maxr      = 0;
+    maxg      = 0;
+    maxb      = 0;
+    uint size = (uint)(width * height);
+
+    // Look for the maximum r, g, b values in the given image.
+
+    if (!sixteenBit)        // 8 bits image.
+    {
+        for (uint j = 0 ; j < size; ++j)
+        {
+            if (maxb < data[0])
+                maxb = data[0];
+            if (maxg < data[1])
+                maxg = data[1];
+            if (maxr < data[2])
+                maxr = data[2];
+            data += 4;
+        }
+    }
+    else                    // 16 bits image.
+    {
+        const unsigned short* ptr = (const unsigned short*)data;
+
+        for (uint j = 0 ; j < size; ++j)
+        {
+            if (maxb < ptr[0])
+                maxb = ptr[0];
+            if (maxg < ptr[1])
+                maxg = ptr[1];
+            if (maxr < ptr[2])
+                maxr = ptr[2];
+            ptr += 4;
+        }
+    }
+}
+
+void WBFilter::preventAutoExposure(int maxr, int maxg, int maxb)
+{
+    // White balance them and find the brightest one.
+    maxr     *= d->mr;
+    maxg     *= d->mg;
+    maxb     *= d->mb;
+    uint max  = qMax(maxr, qMax(maxb, maxg));
+
+    // Scale wb coefficients down if one of them is overexposed.
+    if (max > d->rgbMax-1)
+    {
+        double adjust  = (double)(d->rgbMax-1) / max;
+        d->mb         *= adjust;
+        d->mg         *= adjust;
+        d->mr         *= adjust;
+    }
+}
+
 void WBFilter::setLUTv()
 {
     double b = d->mg * pow(2, m_settings.exposition);
@@ -352,10 +431,10 @@ void WBFilter::setLUTv()
 
     kDebug() << "T(K): " << m_settings.temperature
              << " => R:" << d->mr
-             << " G:"    << d->mg
-             << " B:"    << d->mb
-             << " BP:"   << d->BP
-             << " WP:"   << d->WP;
+             << " G:   " << d->mg
+             << " B:   " << d->mb
+             << " BP:  " << d->BP
+             << " WP:  " << d->WP;
 
     d->curve[0] = 0;
 
@@ -499,6 +578,5 @@ void WBFilter::readParameters(const Digikam::FilterAction& action)
 {
     m_settings = WBContainer::fromFilterAction(action);
 }
-
 
 }  // namespace Digikam

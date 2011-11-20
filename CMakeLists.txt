@@ -15,11 +15,11 @@ OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"
 
 # digiKam version
 SET(DIGIKAM_MAJOR_VERSION "2")
-SET(DIGIKAM_MINOR_VERSION "3")
+SET(DIGIKAM_MINOR_VERSION "4")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2011-11-06")
+SET(DIGIKAM_RELEASE_DATE "2011-12-04")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -1293,9 +1293,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/where.c
        )
 
-    SET(libkmemoryinfo_SRCS
+    SET(libkde3rdparty_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo/kmemoryinfo.cpp
-       )
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify/kinotify.cpp
+      )
 
     SET(libhaar_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/haar.cpp
@@ -1383,6 +1384,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumthumbnailloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumtreeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumwatch.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/databaseguierrorhandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dbstatdlg.cpp
@@ -1496,6 +1498,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory

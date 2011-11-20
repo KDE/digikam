@@ -1018,6 +1018,7 @@ void DigikamView::slotAlbumSelected(Album* album)
         d->mapView->openAlbum(0);
         emit signalAlbumSelected(false);
         emit signalTagSelected(false);
+        slotTogglePreviewMode(ImageInfo());
         return;
     }
 

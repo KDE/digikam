@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : filter to add Film Grain to image.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class FilmGrainFilterPriv
+class FilmGrainFilter::FilmGrainFilterPriv
 {
 public:
 
@@ -62,12 +62,12 @@ public:
         ChromaRed
     };
 
-    double div;
-    double leadLumaNoise;
-    double leadChromaBlueNoise;
-    double leadChromaRedNoise;
+    double                div;
+    double                leadLumaNoise;
+    double                leadChromaBlueNoise;
+    double                leadChromaRedNoise;
 
-    FilmGrainContainer settings;
+    FilmGrainContainer    settings;
 
     RandomNumberGenerator generator;
 };
@@ -356,26 +356,26 @@ FilterAction FilmGrainFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("grainSize", d->settings.grainSize);
-    action.addParameter("photoDistribution", d->settings.photoDistribution);
+    action.addParameter("grainSize",               d->settings.grainSize);
+    action.addParameter("photoDistribution",       d->settings.photoDistribution);
 
-    action.addParameter("addLuminanceNoise", d->settings.addLuminanceNoise);
-    action.addParameter("lumaIntensity", d->settings.lumaIntensity);
-    action.addParameter("lumaShadows", d->settings.lumaShadows);
-    action.addParameter("lumaMidtones", d->settings.lumaMidtones);
-    action.addParameter("lumaHighlights", d->settings.lumaHighlights);
+    action.addParameter("addLuminanceNoise",       d->settings.addLuminanceNoise);
+    action.addParameter("lumaIntensity",           d->settings.lumaIntensity);
+    action.addParameter("lumaShadows",             d->settings.lumaShadows);
+    action.addParameter("lumaMidtones",            d->settings.lumaMidtones);
+    action.addParameter("lumaHighlights",          d->settings.lumaHighlights);
 
     action.addParameter("addChrominanceBlueNoise", d->settings.addChrominanceBlueNoise);
-    action.addParameter("chromaBlueIntensity", d->settings.chromaBlueIntensity);
-    action.addParameter("chromaBlueShadows", d->settings.chromaBlueShadows);
-    action.addParameter("chromaBlueMidtones", d->settings.chromaBlueMidtones);
-    action.addParameter("chromaBlueHighlights", d->settings.chromaBlueHighlights);
+    action.addParameter("chromaBlueIntensity",     d->settings.chromaBlueIntensity);
+    action.addParameter("chromaBlueShadows",       d->settings.chromaBlueShadows);
+    action.addParameter("chromaBlueMidtones",      d->settings.chromaBlueMidtones);
+    action.addParameter("chromaBlueHighlights",    d->settings.chromaBlueHighlights);
 
-    action.addParameter("addChrominanceRedNoise", d->settings.addChrominanceRedNoise);
-    action.addParameter("chromaRedIntensity", d->settings.chromaRedIntensity);
-    action.addParameter("chromaRedShadows", d->settings.chromaRedShadows);
-    action.addParameter("chromaRedMidtones", d->settings.chromaRedMidtones);
-    action.addParameter("chromaRedHighlights", d->settings.chromaRedHighlights);
+    action.addParameter("addChrominanceRedNoise",  d->settings.addChrominanceRedNoise);
+    action.addParameter("chromaRedIntensity",      d->settings.chromaRedIntensity);
+    action.addParameter("chromaRedShadows",        d->settings.chromaRedShadows);
+    action.addParameter("chromaRedMidtones",       d->settings.chromaRedMidtones);
+    action.addParameter("chromaRedHighlights",     d->settings.chromaRedHighlights);
 
     return action;
 }
@@ -403,7 +403,5 @@ void FilmGrainFilter::readParameters(const Digikam::FilterAction& action)
     d->settings.chromaRedMidtones       = action.parameter("chromaRedMidtones").toInt();
     d->settings.chromaRedHighlights     = action.parameter("chromaRedHighlights").toInt();
 }
-
-
 
 }  // namespace Digikam

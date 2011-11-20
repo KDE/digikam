@@ -6,7 +6,7 @@
  * Date        : 2005-24-01
  * Description : Change tonality image filter
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -64,15 +64,13 @@ void TonalityFilter::filterImage()
 {
     m_destImage.putImageData(m_orgImage.bits());
 
-    uchar* bits     = m_destImage.bits();
-    uint width      = m_destImage.width();
-    uint height     = m_destImage.height();
-    bool sixteenBit = m_destImage.sixteenBit();
-
-    uint size = width*height;
-    int  progress;
-
-    int hue, sat, lig;
+    uchar* bits       = m_destImage.bits();
+    uint   width      = m_destImage.width();
+    uint   height     = m_destImage.height();
+    bool   sixteenBit = m_destImage.sixteenBit();
+    uint   size       = width*height;
+    int    progress;
+    int    hue, sat, lig;
 
     DColor mask(m_settings.redMask, m_settings.greenMask, m_settings.blueMask, 0, sixteenBit);
     mask.getHSL(&hue, &sat, &lig);
@@ -143,10 +141,9 @@ FilterAction TonalityFilter::filterAction()
 
 void TonalityFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_settings.blueMask = action.parameter("blueMask").toInt();
+    m_settings.blueMask  = action.parameter("blueMask").toInt();
     m_settings.greenMask = action.parameter("greenMask").toInt();
-    m_settings.redMask = action.parameter("redMask").toInt();
+    m_settings.redMask   = action.parameter("redMask").toInt();
 }
-
 
 }  // namespace Digikam

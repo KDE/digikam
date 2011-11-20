@@ -7,8 +7,8 @@
  * Description : central place for ICC settings
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,8 +46,8 @@ class DIGIKAM_EXPORT IccSettings : public QObject
 
 public:
 
-    /** Global container for ICC settings. All accessor methods are thread-safe. */
-
+    /** Global container for ICC settings. All accessor methods are thread-safe.
+     */
     static IccSettings* instance();
 
     /// Returns the current ICC settings.
@@ -81,12 +81,16 @@ public:
     void setIccPath(const QString& path);
 
     QList<IccProfile> allProfiles();
+
     /// Get available profiles suitable as workspace profile
     QList<IccProfile> workspaceProfiles();
+
     /// Get available profiles suitable as monitor/display profile
     QList<IccProfile> displayProfiles();
+
     /// Get available profiles suitable as input profile
     QList<IccProfile> inputProfiles();
+
     /// Get available profiles suitable as proof/output profiles
     QList<IccProfile> outputProfiles();
 
