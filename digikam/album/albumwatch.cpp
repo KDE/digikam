@@ -174,12 +174,19 @@ void AlbumWatch::setDatabaseParameters(const DatabaseParameters& params)
 
     d->fileNameBlackList.clear();
     // filter out notifications caused by database operations
-    if (params.isSQLite())
+    if (params.isTmbSQLite() || params.isImgSQLite())
     {
-        d->fileNameBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
+        QFileInfo dbFile(params.imgSQLiteDatabaseFile());
 
-        QFileInfo dbFile(params.SQLiteDatabaseFile());
-        d->fileNameBlackList << dbFile.fileName() << dbFile.fileName() + "-journal";
+        if (params.isTmbSQLite())
+        {
+            d->fileNameBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
+        }
+
+        if (params.isImgSQLite())
+        {
+            d->fileNameBlackList << dbFile.fileName() << dbFile.fileName() + "-journal";
+        }
 
         // ensure this is done after setting up the black list
         d->dbPathModificationDateList = d->buildDirectoryModList(dbFile);
@@ -352,7 +359,7 @@ QList<QDateTime> AlbumWatch::AlbumWatchPriv::buildDirectoryModList(const QFileIn
 
 bool AlbumWatch::AlbumWatchPriv::inDirWatchParametersBlackList(const QFileInfo& info, const QString& path)
 {
-    if (params.isSQLite())
+    if (params.isTmbSQLite())
     {
         QDir dir;
 
@@ -365,7 +372,7 @@ bool AlbumWatch::AlbumWatchPriv::inDirWatchParametersBlackList(const QFileInfo& 
             dir = info.dir();
         }
 
-        QFileInfo dbFile(params.SQLiteDatabaseFile());
+        QFileInfo dbFile(params.tmbSQLiteDatabaseFile());
 
         // Workaround for broken KDirWatch in KDE 4.2.4
         if (path.startsWith(dbFile.filePath()))
