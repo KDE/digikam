@@ -46,6 +46,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kpixmapsequence.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -256,13 +257,21 @@ void HistogramWidget::updateData(uchar* i_data, uint i_w, uint i_h,
         }
     }
 
-    currentHistogram()->calculateInThread();
+    ImageHistogram* histo = currentHistogram();
+    if (histo)
+    {
+        histo->calculateInThread();
+    }
+    else
+    {
+        kWarning() << "Current histogram is null";
+    }
 }
 
 void HistogramWidget::updateSelectionData(uchar* s_data, uint s_w, uint s_h,
                                           bool i_sixteenBits, bool showProgress)
 {
-    updateData(0,0,0, i_sixteenBits, s_data, s_w, s_h, showProgress);
+    updateData(0, 0, 0, i_sixteenBits, s_data, s_w, s_h, showProgress);
 }
 
 void HistogramWidget::setHistogramGuideByColor(const DColor& color)
@@ -279,7 +288,12 @@ void HistogramWidget::setRenderingType(HistogramRenderingType type)
         d->renderingType = type;
 
         ImageHistogram* nowUsedHistogram = currentHistogram();
-
+        if (!nowUsedHistogram)
+        {
+            kWarning() << "Current histogram is null";
+            return;
+        }
+        
         // already calculated?
         if (!nowUsedHistogram->isValid())
         {
@@ -346,7 +360,9 @@ void HistogramWidget::setState(int state)
     switch (state)
     {
         case HistogramWidget::HistogramWidgetPriv::HistogramNone:
+        {
             break;
+        }
         case HistogramWidget::HistogramWidgetPriv::HistogramDataLoading:
         {
             startWaitingAnimation();
@@ -616,7 +632,7 @@ void HistogramWidget::mousePressEvent ( QMouseEvent* e )
             update();
         }
 
-        d->xmin = ((double)e->pos().x()) / ((double)width());
+        d->xmin    = ((double)e->pos().x()) / ((double)width());
         d->xminOrg = d->xmin;
         notifyValuesChanged();
         //emit signalValuesChanged( (int)(d->xmin * d->range),  );
