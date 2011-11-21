@@ -957,7 +957,10 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
         {
             d->assignedList->setCurrentTool(ad.index);
             d->currentTaskItem = d->assignedList->findTool(ad.index);
-            d->assignedList->scrollToItem(d->currentTaskItem);
+            if (d->currentTaskItem)
+            {
+                d->assignedList->scrollToItem(d->currentTaskItem);
+            }
             break;
         }
         case ActionData::TaskDone:
