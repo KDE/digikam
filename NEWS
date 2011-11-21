@@ -27,4 +27,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 284173 : Canceling face scan crashes digiKam.
 016 ==> 181813 : digiKam text decoration font size problem.
 017 ==> 265554 : Problem in colors between digiKam's theme and Gnome appearance.
-018 ==> 
+018 ==> 283281 : Crash during batch convert.
+019 ==> 
