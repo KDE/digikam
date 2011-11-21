@@ -555,7 +555,7 @@ void DigikamImageView::insertToQueue()
     {
         singleInfo = imageInfos().first();
     }
-    d->utilities->insertToQueueManagerAuto(imageInfoList, singleInfo);
+    d->utilities->insertToQueueManager(imageInfoList, singleInfo, true);
 }
 
 void DigikamImageView::insertSelectedToCurrentQueue()

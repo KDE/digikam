@@ -1188,6 +1188,8 @@ void QueueMgrWindow::busy(bool busy)
 
     d->busy ? d->queuePool->setCursor(Qt::WaitCursor) : d->queuePool->unsetCursor();
     d->busy ? d->animLogo->start() : d->animLogo->stop();
+    
+    emit signalBqmIsBusy(d->busy);
 }
 
 void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)

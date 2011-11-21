@@ -80,6 +80,7 @@ public:
 Q_SIGNALS:
 
     void signalWindowHasMoved();
+    void signalBqmIsBusy(bool);
 
 protected:
 

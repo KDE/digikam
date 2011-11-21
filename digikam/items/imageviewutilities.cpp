@@ -312,11 +312,6 @@ void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list, const 
     KWindowSystem::activateWindow(ltview->winId());
 }
 
-void ImageViewUtilities::insertToQueueManagerAuto(const QList<ImageInfo>& list, const ImageInfo& current)
-{
-    insertToQueueManager(list, current, QueueMgrWindow::queueManagerWindow()->isBusy());
-}
-
 void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, const ImageInfo& current, bool newQueue)
 {
     Q_UNUSED(current);
