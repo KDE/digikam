@@ -89,13 +89,6 @@ private Q_SLOTS:
 
 private:
 
-    enum AllColorsColorType
-    {
-        AllColorsRed = 0,
-        AllColorsGreen,
-        AllColorsBlue
-    };
-
     class ImagePropertiesColorsTabPriv;
     ImagePropertiesColorsTabPriv* const d;
 };

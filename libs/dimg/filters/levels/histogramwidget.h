@@ -108,6 +108,7 @@ public:
 public:
 
     void setRenderingType(HistogramRenderingType type);
+    HistogramRenderingType renderingType() const;
 
     /** Currently rendered histogram, depending on current rendering type.
      */

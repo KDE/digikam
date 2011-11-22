@@ -314,6 +314,11 @@ void HistogramWidget::setRenderingType(HistogramRenderingType type)
     }
 }
 
+HistogramRenderingType HistogramWidget::renderingType() const
+{
+    return (HistogramRenderingType)d->renderingType;
+}
+
 ImageHistogram* HistogramWidget::currentHistogram() const
 {
     if (d->renderingType == ImageSelectionHistogram && d->selectionHistogram)
