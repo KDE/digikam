@@ -209,7 +209,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     DTextLabelName* label11 = new DTextLabelName(i18n("Alpha Channel: "), gbox);
     d->labelAlphaChannel    = new DTextLabelValue(0, gbox);
     
-    DTextLabelName* label12 = new DTextLabelName(i18n("Computed on: "), gbox);
+    DTextLabelName* label12 = new DTextLabelName(i18n("Source: "), gbox);
     d->labelImageRegion     = new DTextLabelValue(0, gbox);
 
     grid->addWidget(label5,                  0, 0, 1, 1);
