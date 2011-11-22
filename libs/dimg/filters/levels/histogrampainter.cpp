@@ -36,8 +36,8 @@
 #include "kdebug.h"
 #include "klocale.h"
 
-#define HISTOGRAM_CALC_CUTOFF_MIN 0.1
-#define HISTOGRAM_CALC_CUTOFF_MAX 0.9
+#define HISTOGRAM_CALC_CUTOFF_MIN    0.1
+#define HISTOGRAM_CALC_CUTOFF_MAX    0.9
 #define HISTOGRAM_CALC_CUTOFF_HEIGHT 0.8
 
 namespace Digikam
@@ -71,8 +71,8 @@ public:
     {
         int segments = histogram->getHistogramSegments();
         int startSeg = (int)(HISTOGRAM_CALC_CUTOFF_MIN * (segments-1));
-        int endSeg = (int)(HISTOGRAM_CALC_CUTOFF_MAX * (segments-1));
-        double max = 0.0;
+        int endSeg   = (int)(HISTOGRAM_CALC_CUTOFF_MAX * (segments-1));
+        double max   = 0.0;
 
         switch (scale)
         {
@@ -104,6 +104,7 @@ public:
                 }
 
                 break;
+
             case LogScaleHistogram:
 
                 switch (channelType)
@@ -136,6 +137,7 @@ public:
                 }
 
                 break;
+
             default:
                 kError() << "Untreated histogram scale " << scale << ". Using linear as default.";
                 break;
@@ -157,6 +159,7 @@ public:
             {
                 return qMin((int) ((pixmapHeight * value) / max), pixmapHeight);
             }
+
             case LogScaleHistogram:
             {
                 if (value == 0.0)
@@ -172,6 +175,7 @@ public:
 
                 return qMin((int) ((pixmapHeight * log(value)) / max), pixmapHeight);
             }
+
             default:
             {
                 kError() << "Unknown scale type " << scale;
@@ -288,9 +292,9 @@ public:
             int endSegment   = 0;
             calculateSegementsForIndex(x - 1, wWidth - 2, startSegment, endSegment);
 
-            double valueR = histogram->getMaximum(RedChannel, startSegment, endSegment);
+            double valueR = histogram->getMaximum(RedChannel,   startSegment, endSegment);
             double valueG = histogram->getMaximum(GreenChannel, startSegment, endSegment);
-            double valueB = histogram->getMaximum(BlueChannel, startSegment, endSegment);
+            double valueB = histogram->getMaximum(BlueChannel,  startSegment, endSegment);
 
             int yr = scaleToPixmapHeight(valueR, wHeight - 1, max);
             int yg = scaleToPixmapHeight(valueG, wHeight - 1, max);
@@ -298,14 +302,14 @@ public:
 
             if (x > 1)
             {
-                (yr > yrPrev) ? curveRed.lineTo(x, wHeight - yrPrev) : curveRed.lineTo(x - 1, wHeight - yr);
+                (yr > yrPrev) ? curveRed.lineTo(x,   wHeight - yrPrev) : curveRed.lineTo(x - 1,   wHeight - yr);
                 (yg > ygPrev) ? curveGreen.lineTo(x, wHeight - ygPrev) : curveGreen.lineTo(x - 1, wHeight - yg);
-                (yb > ybPrev) ? curveBlue.lineTo(x, wHeight - ybPrev) : curveBlue.lineTo(x - 1, wHeight - yb);
+                (yb > ybPrev) ? curveBlue.lineTo(x,  wHeight - ybPrev) : curveBlue.lineTo(x - 1,  wHeight - yb);
             }
 
-            curveRed.lineTo(x, wHeight - yr);
+            curveRed.lineTo(x,   wHeight - yr);
             curveGreen.lineTo(x, wHeight - yg);
-            curveBlue.lineTo(x, wHeight - yb);
+            curveBlue.lineTo(x,  wHeight - yb);
 
             yrPrev = yr;
             ygPrev = yg;
@@ -423,7 +427,6 @@ public:
 
         if (guidePos != -1)
         {
-
             int xGuide = (int)(((double)(guidePos * bufferPixmap.width())) / ((double)histogram->getHistogramSegments()));
 
             p1.drawLine(xGuide, 0, xGuide, bufferPixmap.height());
