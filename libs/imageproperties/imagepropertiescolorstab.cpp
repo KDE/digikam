@@ -150,7 +150,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     // -------------------------------------------------------------
 
     KVBox* histoBox    = new KVBox(histogramPage);
-    d->histogramBox    = new HistogramBox(histoBox, Digikam::LRGBAC, true);
+    d->histogramBox    = new HistogramBox(histoBox, LRGBAC, true);
 
     QLabel* space = new QLabel(histoBox);
     space->setFixedHeight(1);
@@ -302,9 +302,9 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
 void ImagePropertiesColorsTab::readSettings(const KConfigGroup& group)
 {
     setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",                  (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
-    d->iccProfileWidget->setMode(group.readEntry("ICC Level",                     (int)ICCProfileWidget::CUSTOM));    
+    d->iccProfileWidget->setMode(group.readEntry("ICC Level",                     (int)ICCProfileWidget::CUSTOM));
     d->iccProfileWidget->setCurrentItemByKey(group.readEntry("Current ICC Item",  QString()));
-    d->histogramBox->setChannel((ChannelType)group.readEntry("Histogram Channel", (int)Digikam::LuminosityChannel));
+    d->histogramBox->setChannel((ChannelType)group.readEntry("Histogram Channel", (int)LuminosityChannel));
     d->histogramBox->setScale((HistogramScale)group.readEntry("Histogram Scale",  (int)LogScaleHistogram));
 }
 
@@ -612,7 +612,7 @@ void ImagePropertiesColorsTab::updateStatistics()
     int max                     = d->maxInterv->value();
     int channel                 = d->histogramBox->channel();
     HistogramRenderingType type = d->histogramBox->histogram()->renderingType();
-    
+
     if ( channel == ColorChannels )
     {
         channel = LuminosityChannel;
@@ -635,7 +635,7 @@ void ImagePropertiesColorsTab::updateStatistics()
 
     double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
     d->labelPercentileValue->setText(value.setNum(percentile, 'f', 1));
-    
+
     d->labelImageRegion->setText( (type == FullImageHistogram) ? i18n("Full Image") : i18n("Image Region") );
 }
 
