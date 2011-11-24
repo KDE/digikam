@@ -30,5 +30,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 283281 : Crash during batch convert.
 019 ==> 283572 : Unreadable text on tooltips in KDE 4.7 [patch].
 020 ==> 169432 : Introduce setting to always save to a lossless format.
-021 ==> 
-
+021 ==> 155406 : Extra tool bar in the image editor.
+022 ==> 
