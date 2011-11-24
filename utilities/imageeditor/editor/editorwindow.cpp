@@ -668,8 +668,9 @@ void EditorWindow::setupStatusBar()
     d->infoLabel = new KSqueezedTextLabel(i18n("No selection"), statusBar());
     d->infoLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(d->infoLabel, 100);
+    d->infoLabel->setToolTip( i18n("Information about current image selection"));
 
-    m_resLabel   = new QLabel(statusBar());
+    m_resLabel   = new KSqueezedTextLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_resLabel, 100);
     m_resLabel->setToolTip( i18n("Information about image size"));

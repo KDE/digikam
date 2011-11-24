@@ -47,8 +47,8 @@
 #include "savingcontextcontainer.h"
 
 class QSplitter;
-class QLabel;
 
+class KSqueezedTextLabel;
 class KAction;
 class KActionMenu;
 class KCategorizedView;
@@ -109,7 +109,7 @@ protected:
     bool                      m_setExifOrientationTag;
     bool                      m_editingOriginalImage;
 
-    QLabel*                   m_resLabel;
+    KSqueezedTextLabel*       m_resLabel;
 
     QColor                    m_bgColor;
 
