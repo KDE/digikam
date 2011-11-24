@@ -105,7 +105,11 @@ public:
 
     void reset();
 
-public:
+    HistogramScale scaleType()   const;
+    ChannelType    channelType() const;
+
+    int  animationState() const;
+    void setAnimationState(int animationState);
 
     void setRenderingType(HistogramRenderingType type);
     HistogramRenderingType renderingType() const;
@@ -127,10 +131,6 @@ public Q_SLOTS:
     void slotMaxValueChanged(int max);
     void setChannelType(ChannelType channel);
     void setScaleType(HistogramScale scale);
-
-    int  animationState() const;
-    void setAnimationState(int animationState);
-
 
 protected Q_SLOTS:
 

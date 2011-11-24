@@ -88,6 +88,7 @@ public:
                         max = qMin(histogram->getMaximum(channelType, startSeg, endSeg) / HISTOGRAM_CALC_CUTOFF_HEIGHT,
                                    histogram->getMaximum(channelType, 0, segments - 1));
                         break;
+
                     case ColorChannels:
                         max = qMin(qMax(qMax(histogram->getMaximum(RedChannel, startSeg, endSeg),
                                              histogram->getMaximum(GreenChannel, startSeg, endSeg)),
@@ -96,6 +97,7 @@ public:
                                              histogram->getMaximum(GreenChannel, 0, segments - 1)),
                                         histogram->getMaximum(BlueChannel, 0, segments - 1)));
                         break;
+
                     default:
                         kError() << "Untreated channel type " << channelType << ". Using luminosity as default.";
                         max = qMin(histogram->getMaximum(LuminosityChannel, startSeg, endSeg) / HISTOGRAM_CALC_CUTOFF_HEIGHT,
@@ -116,11 +118,13 @@ public:
                     case LuminosityChannel:
                         max = histogram->getMaximum(channelType, 0, segments - 1);
                         break;
+
                     case ColorChannels:
                         max = qMax(qMax(histogram->getMaximum(RedChannel, 0, segments - 1),
                                         histogram->getMaximum(GreenChannel, 0, segments - 1)),
                                    histogram->getMaximum(BlueChannel, 0, segments - 1));
                         break;
+
                     default:
                         kError() << "Untreated channel type " << channelType << ". Using luminosity as default.";
                         max = histogram->getMaximum(LuminosityChannel, 0, segments - 1);
@@ -184,17 +188,17 @@ public:
         }
     }
 
-    inline void calculateSegementsForIndex(const int& x, const int& drawWidth,
-                                           int& startSegment, int& endSegment)
+    inline void calculateSegmentsForIndex(const int& x, const int& drawWidth,
+                                          int& startSegment, int& endSegment)
     {
         if (drawWidth == 0)
         {
             startSegment = 0;
-            endSegment = 0;
+            endSegment   = 0;
             return;
         }
 
-        startSegment = (x * (histogram->getHistogramSegments()) - 1) / drawWidth;
+        startSegment = (x       * (histogram->getHistogramSegments()) - 1) / drawWidth;
         endSegment   = ((x + 1) * (histogram->getHistogramSegments()) - 1) / drawWidth;
     }
 
@@ -222,11 +226,10 @@ public:
             // calculate histogram segments included in this single pixel line
             int startSegment = 0;
             int endSegment   = 0;
-            calculateSegementsForIndex(x - 1, wWidth - 2, startSegment, endSegment);
+            calculateSegmentsForIndex(x - 1, wWidth - 2, startSegment, endSegment);
 
             double value = histogram->getMaximum(channelType, startSegment, endSegment);
-
-            int y = scaleToPixmapHeight(value, wHeight - 2, max);
+            int y        = scaleToPixmapHeight(value, wHeight - 2, max);
 
             if (x > 1)
             {
@@ -238,12 +241,38 @@ public:
         }
 
         curvePath.lineTo(wWidth - 2, wHeight - 1);
-        curvePath.lineTo(1, wHeight - 1);
+        curvePath.lineTo(1,          wHeight - 1);
         curvePath.closeSubpath();
 
         p2.fillRect(0, 0, wWidth, wHeight, palette.color(QPalette::Active, QPalette::Background));
-        p2.setPen(QPen(palette.color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-        p2.setBrush(QBrush(palette.color(QPalette::Active, QPalette::Foreground), Qt::SolidPattern));
+
+        QColor pColor;
+        QColor bColor;
+        switch (channelType)
+        {
+            case GreenChannel:
+                pColor = QColor(63, 255, 63);
+                bColor = QColor(0, 192, 0);
+                break;
+
+            case BlueChannel:
+                pColor = QColor(63, 63, 255);
+                bColor = QColor(0, 0, 192);
+                break;
+
+            case RedChannel:
+                pColor = QColor(255, 63, 63);
+                bColor = QColor(192, 0, 0);
+                break;
+
+            default:
+                pColor = palette.color(QPalette::Active,   QPalette::Foreground);
+                bColor = palette.color(QPalette::Inactive, QPalette::Foreground);
+                break;
+        }
+
+        p2.setPen(QPen(pColor, 1, Qt::SolidLine));
+        p2.setBrush(QBrush(bColor, Qt::SolidPattern));
         p2.drawPath(curvePath);
 
         if (highlightSelection)
@@ -290,7 +319,7 @@ public:
             // calculate histogram segments included in this single pixel line
             int startSegment = 0;
             int endSegment   = 0;
-            calculateSegementsForIndex(x - 1, wWidth - 2, startSegment, endSegment);
+            calculateSegmentsForIndex(x - 1, wWidth - 2, startSegment, endSegment);
 
             double valueR = histogram->getMaximum(RedChannel,   startSegment, endSegment);
             double valueG = histogram->getMaximum(GreenChannel, startSegment, endSegment);
@@ -327,8 +356,8 @@ public:
         curveBlue.closeSubpath();
 
         p2.fillRect(0, 0, wWidth, wHeight, palette.color(QPalette::Active, QPalette::Background));
-        p2.fillPath(curveBlue, QBrush(Qt::black, Qt::SolidPattern));
-        p2.fillPath(curveRed, QBrush(Qt::black, Qt::SolidPattern));
+        p2.fillPath(curveBlue,  QBrush(Qt::black, Qt::SolidPattern));
+        p2.fillPath(curveRed,   QBrush(Qt::black, Qt::SolidPattern));
         p2.fillPath(curveGreen, QBrush(Qt::black, Qt::SolidPattern));
 
         p2.setCompositionMode(QPainter::CompositionMode_Screen);
@@ -399,20 +428,28 @@ public:
         switch (channelType)
         {
             case RedChannel:
+            {
                 guidePos = colorGuide.red();
                 break;
+            }
 
             case GreenChannel:
+            {
                 guidePos = colorGuide.green();
                 break;
+            }
 
             case BlueChannel:
+            {
                 guidePos = colorGuide.blue();
                 break;
+            }
 
             case LuminosityChannel:
+            {
                 guidePos = qMax(qMax(colorGuide.red(), colorGuide.green()), colorGuide.blue());
                 break;
+            }
 
             case ColorChannels:
             {
@@ -421,8 +458,10 @@ public:
             }
 
             default:
+            {
                 guidePos = colorGuide.alpha();
                 break;
+            }
         }
 
         if (guidePos != -1)

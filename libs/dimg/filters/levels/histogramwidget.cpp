@@ -744,10 +744,20 @@ void HistogramWidget::setChannelType(ChannelType channel)
     update();
 }
 
+ChannelType HistogramWidget::channelType() const
+{
+    return d->channelType;
+}
+
 void HistogramWidget::setScaleType(HistogramScale scale)
 {
     d->scaleType = scale;
     update();
+}
+
+HistogramScale HistogramWidget::scaleType() const
+{
+    return d->scaleType;
 }
 
 }  // namespace Digikam
