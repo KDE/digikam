@@ -56,13 +56,13 @@ public:
     EditorStackView(QWidget* parent=0);
     ~EditorStackView();
 
-    void setCanvas(Canvas* canvas);
+    void    setCanvas(Canvas* canvas);
     Canvas* canvas() const;
 
-    void setToolView(QWidget* view);
+    void     setToolView(QWidget* view);
     QWidget* toolView() const;
 
-    int  viewMode();
+    int  viewMode() const;
     void setViewMode(int mode);
 
     void increaseZoom();
@@ -71,11 +71,10 @@ public:
     void fitToSelect();
     void zoomTo100Percent();
 
-    double zoomMax();
-    double zoomMin();
+    double zoomMax() const;
+    double zoomMin() const;
 
-    PreviewWidget*    previewWidget_old() const;
-    GraphicsDImgView* previewWidget() const;
+    bool isZoomablePreview() const;
 
 Q_SIGNALS:
 
@@ -91,6 +90,11 @@ private Q_SLOTS:
 
     void slotZoomChanged(double);
     void slotToggleOffFitToWindow(bool);
+
+private:
+
+    PreviewWidget*    previewWidget_old() const;
+    GraphicsDImgView* previewWidget()     const;
 
 private:
 
