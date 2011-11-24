@@ -32,4 +32,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 169432 : Introduce setting to always save to a lossless format.
 021 ==> 155406 : Extra tool bar in the image editor.
 022 ==> 254857 : Minimal image editor window is bigger than 800px.
-023 ==> 
+023 ==> 213680 : Show warning or info message when not working with color management in Image Editor.
+024 ==> 
+
