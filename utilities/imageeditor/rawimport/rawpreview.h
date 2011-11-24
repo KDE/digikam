@@ -84,9 +84,9 @@ private:
 
     void   setdemosaicedImg(const DImg& image);
     void   postProcessing(const DRawDecoding& settings);
-    int    previewWidth();
-    int    previewHeight();
-    bool   previewIsNull();
+    int    previewWidth() const;
+    int    previewHeight() const;
+    bool   previewIsNull() const;
     void   resetPreview();
     QImage previewToQImage() const;
 
