@@ -102,6 +102,7 @@ public:
     void setLoadingFailed();
 
     void setHistogramGuideByColor(const DColor& color);
+    void setStatisticsVisible(bool b);
 
     void reset();
 

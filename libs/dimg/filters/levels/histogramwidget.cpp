@@ -281,6 +281,12 @@ void HistogramWidget::setHistogramGuideByColor(const DColor& color)
     update();
 }
 
+void HistogramWidget::setStatisticsVisible(bool b)
+{
+    d->statisticsVisible = b;
+    update();
+}
+
 void HistogramWidget::setRenderingType(HistogramRenderingType type)
 {
     if (type != d->renderingType)

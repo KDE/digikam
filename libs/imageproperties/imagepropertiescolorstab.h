@@ -81,6 +81,7 @@ private Q_SLOTS:
     void slotMaxValueChanged(int);
 
     void slotUpdateInterval(int min, int max);
+    void slotUpdateIntervalFromRGB(int min, int max);
     void slotUpdateIntervRange(int range);
 
     void slotLoadImageFromUrlComplete(const LoadingDescription& loadingDescription, const DImg& img);
