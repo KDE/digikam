@@ -83,7 +83,6 @@ public:
 public:
 
     ImagePropertiesColorsTabPriv() :
-        blinkFlag(false),
         minInterv(0),
         maxInterv(0),
         labelMeanValue(0),
@@ -105,8 +104,6 @@ public:
     }
 
 public:
-
-    bool                  blinkFlag;
 
     QSpinBox*             minInterv;
     QSpinBox*             maxInterv;
@@ -297,7 +294,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
             this, SLOT(slotUpdateIntervRange(int)));
 
     connect(d->histogramBox->histogram(), SIGNAL(signalHistogramComputationDone(bool)),
-            this, SLOT(slotRefreshOptions(bool)));
+            this, SLOT(slotRefreshOptions()));
 
     connect(d->histogramBox->histogram(), SIGNAL(signalHistogramComputationFailed()),
             this, SLOT(slotHistogramComputationFailed()));
@@ -583,7 +580,7 @@ void ImagePropertiesColorsTab::setSelection(const QRect& selectionArea)
     }
 }
 
-void ImagePropertiesColorsTab::slotRefreshOptions(bool /*sixteenBit*/)
+void ImagePropertiesColorsTab::slotRefreshOptions()
 {
     slotChannelChanged();
     slotScaleChanged();

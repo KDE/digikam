@@ -72,7 +72,7 @@ private:
 
 private Q_SLOTS:
 
-    void slotRefreshOptions(bool sixteenBit);
+    void slotRefreshOptions();
     void slotHistogramComputationFailed();
     void slotChannelChanged();
     void slotScaleChanged();
