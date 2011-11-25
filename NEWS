@@ -6,7 +6,8 @@ NEW FEATURES:
 Libkdcraw : use internal libraw 0.14.3 to support new RAW camera : 
             Fuji FinePix F600EXR, Nikon Coolpix P7100, Olympus E-PL3, Olympus E-PM1, 
             Panasonic DMC-FZ150, Sony NEX-5N, Sony SLT-A65V, Sony SLT-A77V.
-
+General   : Colors tab from right sidebar : display RGB histograms in 3 separate diagrams
+            for better comparison, channel by channel.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -34,5 +35,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 254857 : Minimal image editor window is bigger than 800px.
 023 ==> 213680 : Show warning or info message when not working with color management in Image Editor.
 024 ==> 277628 : Resize controls in editor are missing.
-025 ==> 
-
+025 ==> 160013 : Display RGB histograms in 3 separate diagrams.
+026 ==> 
