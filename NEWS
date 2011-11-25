@@ -33,5 +33,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 155406 : Extra tool bar in the image editor.
 022 ==> 254857 : Minimal image editor window is bigger than 800px.
 023 ==> 213680 : Show warning or info message when not working with color management in Image Editor.
-024 ==> 
+024 ==> 277628 : Resize controls in editor are missing.
+025 ==> 
 
