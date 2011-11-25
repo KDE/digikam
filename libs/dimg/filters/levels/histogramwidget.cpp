@@ -175,7 +175,6 @@ HistogramWidget::~HistogramWidget()
 
     delete d->imageHistogram;
     delete d->selectionHistogram;
-
     delete d;
 }
 
@@ -183,9 +182,7 @@ void HistogramWidget::setup(int w, int h, bool selectMode, bool statisticsVisibl
 {
     d->statisticsVisible = statisticsVisible;
     d->selectMode        = selectMode;
-
     d->histogramPainter  = new HistogramPainter(this);
-
     d->animation         = new QPropertyAnimation(this, "animationState", this);
     d->animation->setStartValue(0);
     d->animation->setEndValue(d->progressPix.frameCount() - 1);
@@ -299,7 +296,7 @@ void HistogramWidget::setRenderingType(HistogramRenderingType type)
             kWarning() << "Current histogram is null";
             return;
         }
-        
+
         // already calculated?
         if (!nowUsedHistogram->isValid())
         {
@@ -399,7 +396,7 @@ void HistogramWidget::setState(int state)
 
             // Remove old histogram data from memory.
             delete d->imageHistogram;
-            d->imageHistogram = 0;
+            d->imageHistogram     = 0;
             delete d->selectionHistogram;
             d->selectionHistogram = 0;
 
@@ -509,7 +506,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
             )
     {
         // Image data is loading or histogram is being computed, we draw a message.
-        
+
         // In first, we draw an animation.
 
         QPixmap anim = d->progressPix.frameAt(d->animationState);
@@ -570,7 +567,6 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     }
 
     d->histogramPainter->setHistogram(histogram);
-
     d->histogramPainter->setChannelType(d->channelType);
     d->histogramPainter->setScale(d->scaleType);
     d->histogramPainter->setSelection(d->xmin, d->xmax);
@@ -629,11 +625,11 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
         tipText += "</table></qt>";
 
-        this->setToolTip(tipText);
+        setToolTip(tipText);
     }
 }
 
-void HistogramWidget::mousePressEvent ( QMouseEvent* e )
+void HistogramWidget::mousePressEvent(QMouseEvent* e)
 {
     if ( d->selectMode == true && d->state == HistogramWidget::HistogramWidgetPriv::HistogramCompleted )
     {
@@ -645,31 +641,29 @@ void HistogramWidget::mousePressEvent ( QMouseEvent* e )
 
         d->xmin    = ((double)e->pos().x()) / ((double)width());
         d->xminOrg = d->xmin;
+        d->xmax    = d->xmin;
         notifyValuesChanged();
-        //emit signalValuesChanged( (int)(d->xmin * d->range),  );
-        d->xmax = 0.0;
     }
 }
 
-void HistogramWidget::mouseReleaseEvent ( QMouseEvent* )
+void HistogramWidget::mouseReleaseEvent(QMouseEvent*)
 {
     if ( d->selectMode == true  && d->state == HistogramWidget::HistogramWidgetPriv::HistogramCompleted )
     {
         d->inSelected = false;
 
         // Only single click without mouse move? Remove selection.
-        if (d->xmax == 0.0)
+        if (d->xmax == d->xmin)
         {
             d->xmin = 0.0;
-            //emit signalMinValueChanged( 0 );
-            //emit signalMaxValueChanged( d->range );
+            d->xmax = 0.0;
             notifyValuesChanged();
             update();
         }
     }
 }
 
-void HistogramWidget::mouseMoveEvent ( QMouseEvent* e )
+void HistogramWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if ( d->selectMode == true && d->state == HistogramWidget::HistogramWidgetPriv::HistogramCompleted )
     {
@@ -678,13 +672,11 @@ void HistogramWidget::mouseMoveEvent ( QMouseEvent* e )
         if (d->inSelected)
         {
             double max = ((double)e->pos().x()) / ((double)width());
-            //int max = (int)(e->pos().x()*((float)m_imageHistogram->getHistogramSegments()/(float)width()));
 
             if (max < d->xminOrg)
             {
                 d->xmax = d->xminOrg;
                 d->xmin = max;
-                //emit signalMinValueChanged( (int)(d->xmin * d->range) );
             }
             else
             {
@@ -693,8 +685,6 @@ void HistogramWidget::mouseMoveEvent ( QMouseEvent* e )
             }
 
             notifyValuesChanged();
-            //emit signalMaxValueChanged( d->xmax == 0.0 ? d->range : (int)(d->xmax * d->range) );
-
             update();
         }
     }
