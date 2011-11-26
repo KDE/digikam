@@ -206,11 +206,6 @@ bool Parseable::addToken(const QString& id, const QString& description, const QS
 
     Token* token = new Token(id, description);
 
-    if (!token)
-    {
-        return false;
-    }
-
     if (!actionName.isEmpty())
     {
         token->action()->setText(actionName);
