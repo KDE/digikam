@@ -6,7 +6,7 @@
  * Date        : 2009-08-11
  * Description : the main parser object for the AdvancedRename utility
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,8 +34,6 @@
 
 #include "modifier.h"
 #include "option.h"
-#include "parseresults.h"
-#include "parsesettings.h"
 
 namespace Digikam
 {
