@@ -638,9 +638,22 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
 
     if (frm == "JPEG" || frm == "JPG" || frm == "JPE")
     {
-        JPEGLoader loader(this);
-        setAttribute("savedformat-isreadonly", loader.isReadOnly());
-        return loader.save(filePath, observer);
+        // JPEG does not support transparency, so we shall provide an image without alpha channel.
+        // This is only necessary if the image has an alpha channel, and there are actually transparent pixels
+        if (hasTransparentPixels())
+        {
+            DImg alphaRemoved = copy();
+            alphaRemoved.removeAlphaChannel();
+            JPEGLoader loader(&alphaRemoved);
+            setAttribute("savedformat-isreadonly", loader.isReadOnly());
+            return loader.save(filePath, observer);
+        }
+        else
+        {
+            JPEGLoader loader(this);
+            setAttribute("savedformat-isreadonly", loader.isReadOnly());
+            return loader.save(filePath, observer);
+        }
     }
     else if (frm == "PNG")
     {
@@ -1425,6 +1438,50 @@ void DImg::setPixelColor(uint x, uint y, const DColor& color)
     color.setPixel(data);
 }
 
+bool DImg::hasTransparentPixels() const
+{
+    if (m_priv->null || !m_priv->alpha)
+    {
+        return false;
+    }
+
+    const uint w = m_priv->width;
+    const uint h = m_priv->height;
+
+    if (!m_priv->sixteenBit)     // 8 bits image.
+    {
+        uchar* srcPtr = m_priv->data;
+
+        for (uint j=0; j<h; ++j)
+        {
+            for (uint i = 0; i < w; ++i)
+            {
+                if (srcPtr[3] != 0xFF)
+                {
+                    return true;
+                }
+                srcPtr += 4;
+            }
+        }
+    }
+    else
+    {
+        unsigned short* srcPtr = (unsigned short*)m_priv->data;
+
+        for (uint j=0; j<h; ++j)
+        {
+            for (uint i = 0; i < w; ++i)
+            {
+                if (srcPtr[3] != 0xFFFF)
+                {
+                    return true;
+                }
+                srcPtr += 4;
+            }
+        }
+    }
+    return false;
+}
 
 //---------------------------------------------------------------------------------------------------
 // copying operations
@@ -1645,6 +1702,7 @@ void DImg::bitBlt (const uchar* src, uchar* dest,
     }
 }
 
+
 void DImg::bitBlendImage(DColorComposer* composer, const DImg* src,
                          int sx, int sy, int w, int h, int dx, int dy,
                          DColorComposer::MultiplicationFlags multiplicationFlags)
@@ -1708,6 +1766,78 @@ void DImg::bitBlend (DColorComposer* composer, const uchar* src, uchar* dest,
     }
 }
 
+void DImg::bitBlendImageOnColor(const DColor& color)
+{
+    bitBlendImageOnColor(color, 0, 0, width(), height());
+}
+
+void DImg::bitBlendImageOnColor(const DColor& color, int x, int y, int w, int h)
+{
+    // get composer for compositing rule
+    DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+    // flags would be MultiplicationFlagsDImg for anything but PorterDuffNone
+    bitBlendImageOnColor(composer, color, x, y, w, h, DColorComposer::NoMultiplication);
+
+    delete composer;
+}
+
+void DImg::bitBlendImageOnColor(DColorComposer* composer, const DColor& color,
+                                int x, int y, int w, int h,
+                                DColorComposer::MultiplicationFlags multiplicationFlags)
+{
+    if (isNull())
+    {
+        return;
+    }
+
+    DColor c = color;
+    if (sixteenBit())
+    {
+        c.convertToSixteenBit();
+    }
+    else
+    {
+        c.convertToEightBit();
+    }
+
+    bitBlendOnColor(composer, c, bits(), x, y, w, h,
+                    width(), height(), sixteenBit(), bytesDepth(), multiplicationFlags);
+}
+
+void DImg::bitBlendOnColor(DColorComposer* composer, const DColor& color,
+                           uchar* data, int x, int y, int w, int h,
+                           uint width, uint height, bool sixteenBit, int depth,
+                           DColorComposer::MultiplicationFlags multiplicationFlags)
+{
+    // Normalize
+    if (!normalizeRegionArguments(x, y, w, h, x, y, width, height, width, height))
+    {
+        return;
+    }
+
+    uchar* ptr;
+
+    uint   linelength = width * depth;
+
+    int curY = y;
+
+    for (int j = 0 ; j < h ; ++j, ++curY)
+    {
+        ptr  = &data[ curY * linelength ] + x * depth;
+
+        // blend src and destination
+        for (int i = 0 ; i < w ; ++i, ptr+=depth)
+        {
+            DColor src(ptr, sixteenBit);
+            DColor dst(color);
+
+            // blend colors
+            composer->compose(dst, src, multiplicationFlags);
+
+            dst.setPixel(ptr);
+        }
+    }
+}
 
 //---------------------------------------------------------------------------------------------------
 // QImage / QPixmap access
@@ -2065,6 +2195,23 @@ void DImg::resize(int w, int h)
     delete [] m_priv->data;
     m_priv->data = image.stripImageData();
     setImageDimension(w, h);
+}
+
+void DImg::removeAlphaChannel()
+{
+    removeAlphaChannel(DColor(0xFF, 0xFF, 0xFF, 0xFF, false));
+}
+
+void DImg::removeAlphaChannel(const DColor& destColor)
+{
+    if (isNull() || !hasAlpha())
+    {
+        return;
+    }
+
+    bitBlendImageOnColor(destColor);
+    // unsure if alpha value is always 0xFF now
+    m_priv->alpha = false;
 }
 
 void DImg::rotate(ANGLE angle)
@@ -2697,38 +2844,52 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
 void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString& destMimeType,
                                   const QString& originalFileName, PrepareMetadataFlags flags)
 {
+    if (isNull())
+    {
+        return;
+    }
+
     // Get image Exif/IPTC data.
     DMetadata meta(getMetadata());
 
     if (flags & RemoveOldMetadataPreviews || flags & CreateNewMetadataPreview)
     {
-        // IPTC
+        // Clear IPTC preview
+        // NOTE: when depending on a libkexiv2 > Nov 1 2011, consolidate this to meta.setImagePreview(QImage())
         meta.removeIptcTag("Iptc.Application2.Preview");
         meta.removeIptcTag("Iptc.Application2.PreviewFormat");
         meta.removeIptcTag("Iptc.Application2.PreviewVersion");
+
+        // Clear Exif thumbnail
+        meta.removeExifThumbnail();
+
+        // Clear Tiff thumbnail
+        // NOTE: when depending on a libkexiv2 > Nov 1 2011, consolidate this to meta.setTiffThumbnail(QImage())
+        KExiv2::MetaDataMap tiffThumbTags = meta.getExifTagsDataList(QStringList() << "SubImage1");
+        for (KExiv2::MetaDataMap::iterator it = tiffThumbTags.begin(); it != tiffThumbTags.end(); ++it)
+        {
+            meta.removeExifTag(it.key().toAscii());
+        }
     }
 
-    if (flags & RemoveOldMetadataPreviews && !(flags & CreateNewMetadataPreview))
-    {
-        // Unclear if libkexiv2 handles this case correctly.
-        // Code was updated in libkexiv2 as of Nov 1 2011
-        /*
-        meta.setImagePreview(QImage());
-        meta.setExifThumbnail(QImage());
-        meta.setTiffThumbnail(QImage());
-         */
-    }
-
+    bool createNewPreview = false;
+    QSize previewSize;
     if (flags & CreateNewMetadataPreview)
     {
-        // Update IPTC preview.
-        // NOTE: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
-        // bigger than 64K during of image preview tag size, the target JPEG image will be
-        // broken. Note that IPTC image preview tag is limited to 256K!!!
-        // There is no limitation with TIFF and PNG about IPTC byte array size.
+        const QSize standardPreviewSize(1280, 1280);
+        previewSize = size();
+        // Scale to standard preview size. Only scale down, not up
+        if (width() > (uint)standardPreviewSize.width() && height() > (uint)standardPreviewSize.height())
+        {
+            previewSize.scale(standardPreviewSize, Qt::KeepAspectRatio);
+        }
+        // Only store a new preview if it is worth it - the original should be significantly larger than the preview
+        createNewPreview = (2*(uint)previewSize.width() <= width());
+    }
 
-        QSize previewSize = size();
-        previewSize.scale(1280, 1024, Qt::KeepAspectRatio);
+    if (createNewPreview)
+    {
+        // Create the preview QImage
         QImage preview;
         {
             if (!IccManager::isSRGB(*this))
@@ -2762,10 +2923,13 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
             }
         }
 
-        // With JPEG file, we don't store IPTC preview.
-        // NOTE: only store preview if pixel number is at least two times bigger
-        if (/* (2*(previewSize.width() * previewSize.height()) < (int)(d->image.width() * d->image.height())) &&*/
-            (destMimeType.toUpper() != QString("JPG") && destMimeType.toUpper() != QString("JPEG") &&
+        // Update IPTC preview.
+        // see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
+        // bigger than 64K during of image preview tag size, the target JPEG image will be
+        // broken. Note that IPTC image preview tag is limited to 256K!!!
+        // There is no limitation with TIFF and PNG about IPTC byte array size.
+        // So for a JPEG file, we don't store the IPTC preview.
+        if ((destMimeType.toUpper() != QString("JPG") && destMimeType.toUpper() != QString("JPEG") &&
             destMimeType.toUpper() != QString("JPE"))
         )
         {
