@@ -216,13 +216,8 @@ void HistogramWidget::updateData(uchar* i_data, uint i_w, uint i_h,
 
     // Do not using ImageHistogram::getHistogramSegments()
     // method here because histogram hasn't yet been computed.
-    int range = d->sixteenBits ? MAX_SEGMENT_16BIT : MAX_SEGMENT_8BIT;
-
-    if (d->range != range)
-    {
-        d->range = range;
-        emit signalMaximumValueChanged( d->range );
-    }
+    d->range = d->sixteenBits ? MAX_SEGMENT_16BIT : MAX_SEGMENT_8BIT;
+    emit signalMaximumValueChanged( d->range );
 
     if (i_data || (!i_data && !s_data))
     {
