@@ -72,7 +72,7 @@ private:
 
 private Q_SLOTS:
 
-    void slotRefreshOptions(bool sixteenBit);
+    void slotRefreshOptions();
     void slotHistogramComputationFailed();
     void slotChannelChanged();
     void slotScaleChanged();
@@ -81,6 +81,7 @@ private Q_SLOTS:
     void slotMaxValueChanged(int);
 
     void slotUpdateInterval(int min, int max);
+    void slotUpdateIntervalFromRGB(int min, int max);
     void slotUpdateIntervRange(int range);
 
     void slotLoadImageFromUrlComplete(const LoadingDescription& loadingDescription, const DImg& img);
@@ -88,13 +89,6 @@ private Q_SLOTS:
                                           const LoadingDescription& newLoadingDescription);
 
 private:
-
-    enum AllColorsColorType
-    {
-        AllColorsRed = 0,
-        AllColorsGreen,
-        AllColorsBlue
-    };
 
     class ImagePropertiesColorsTabPriv;
     ImagePropertiesColorsTabPriv* const d;

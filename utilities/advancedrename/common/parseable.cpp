@@ -6,7 +6,7 @@
  * Date        : 2010-05-01
  * Description : an abstract parseable class
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -205,11 +205,6 @@ bool Parseable::addToken(const QString& id, const QString& description, const QS
     }
 
     Token* token = new Token(id, description);
-
-    if (!token)
-    {
-        return false;
-    }
 
     if (!actionName.isEmpty())
     {

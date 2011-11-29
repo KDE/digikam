@@ -80,10 +80,9 @@ public:
         ICCPROFILE
     };
 
+public:
+
     ImagePropertiesColorsTabPriv() :
-        blinkFlag(false),
-        regionBox(0),
-        regionBG(0),
         minInterv(0),
         maxInterv(0),
         labelMeanValue(0),
@@ -94,44 +93,48 @@ public:
         labelPercentileValue(0),
         labelColorDepth(0),
         labelAlphaChannel(0),
+        labelImageRegion(0),
         iccProfileWidget(0),
         imageLoaderThread(0),
-        histogramBox(0)
+        histogramBox(0),
+        redHistogram(0),
+        greenHistogram(0),
+        blueHistogram(0)
     {
     }
 
-    bool                   blinkFlag;
+public:
 
-    QWidget*               regionBox;
+    QSpinBox*             minInterv;
+    QSpinBox*             maxInterv;
 
-    QButtonGroup*          regionBG;
+    DTextLabelValue*      labelMeanValue;
+    DTextLabelValue*      labelPixelsValue;
+    DTextLabelValue*      labelStdDevValue;
+    DTextLabelValue*      labelCountValue;
+    DTextLabelValue*      labelMedianValue;
+    DTextLabelValue*      labelPercentileValue;
+    DTextLabelValue*      labelColorDepth;
+    DTextLabelValue*      labelAlphaChannel;
+    DTextLabelValue*      labelImageRegion;
 
-    QSpinBox*              minInterv;
-    QSpinBox*              maxInterv;
+    QString               currentFilePath;
+    LoadingDescription    currentLoadingDescription;
 
-    DTextLabelValue*       labelMeanValue;
-    DTextLabelValue*       labelPixelsValue;
-    DTextLabelValue*       labelStdDevValue;
-    DTextLabelValue*       labelCountValue;
-    DTextLabelValue*       labelMedianValue;
-    DTextLabelValue*       labelPercentileValue;
-    DTextLabelValue*       labelColorDepth;
-    DTextLabelValue*       labelAlphaChannel;
+    QRect                 selectionArea;
 
-    QString                currentFilePath;
-    LoadingDescription     currentLoadingDescription;
+    IccProfile            embeddedProfile;
 
-    QRect                  selectionArea;
+    DImg                  image;
+    DImg                  imageSelection;
 
-    IccProfile             embedded_profile;
+    ICCProfileWidget*     iccProfileWidget;
+    SharedLoadSaveThread* imageLoaderThread;
 
-    DImg                   image;
-    DImg                   imageSelection;
-
-    ICCProfileWidget*      iccProfileWidget;
-    SharedLoadSaveThread*  imageLoaderThread;
-
-    HistogramBox*          histogramBox;
+    HistogramBox*         histogramBox;
+    HistogramWidget*      redHistogram;
+    HistogramWidget*      greenHistogram;
+    HistogramWidget*      blueHistogram;
 };
 
 ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
@@ -149,37 +152,9 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    d->regionBox       = new QWidget(histogramPage);
-    QHBoxLayout* hlay2 = new QHBoxLayout(d->regionBox);
-    d->regionBG        = new QButtonGroup(d->regionBox);
-    d->regionBG->setExclusive(true);
-    d->regionBox->hide();
-    d->regionBox->setWhatsThis( i18n("<p>Select from which region the histogram will be computed here:</p>"
-                                     "<p><b>Full Image</b>: Compute histogram using the full image.<br/>"
-                                     "<b>Selection</b>: Compute histogram using the current image "
-                                     "selection.</p>"));
-
-    QPushButton* fullImageButton = new QPushButton(d->regionBox);
-    fullImageButton->setToolTip( i18n( "Full Image" ) );
-    fullImageButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/image-full.png")));
-    fullImageButton->setCheckable(true);
-    d->regionBG->addButton(fullImageButton, FullImageHistogram);
-
-    QPushButton* SelectionImageButton = new QPushButton(d->regionBox);
-    SelectionImageButton->setToolTip( i18n( "Selection" ) );
-    SelectionImageButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/image-selection.png")));
-    SelectionImageButton->setCheckable(true);
-    d->regionBG->addButton(SelectionImageButton, ImageSelectionHistogram);
-
-    hlay2->setMargin(0);
-    hlay2->setSpacing(0);
-    hlay2->addWidget(fullImageButton);
-    hlay2->addWidget(SelectionImageButton);
-
-    // -------------------------------------------------------------
-
     KVBox* histoBox    = new KVBox(histogramPage);
-    d->histogramBox    = new HistogramBox(histoBox, Digikam::LRGBAC, true);
+    d->histogramBox    = new HistogramBox(histoBox, LRGBAC, true);
+    d->histogramBox->setStatisticsVisible(false);
 
     QLabel* space = new QLabel(histoBox);
     space->setFixedHeight(1);
@@ -205,12 +180,10 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     hlay3->addWidget(label3);
     hlay3->addWidget(d->minInterv);
     hlay3->addWidget(d->maxInterv);
-    hlay2->setSpacing(KDialog::spacingHint());
-    hlay2->setMargin(0);
 
     // -------------------------------------------------------------
 
-    QGroupBox* gbox = new QGroupBox(i18n("Statistics"), histogramPage);
+    QGroupBox* gbox         = new QGroupBox(i18n("Statistics"), histogramPage);
     gbox->setWhatsThis(i18n("Here you can see the statistical results calculated from the "
                             "selected histogram part. These values are available for all "
                             "channels."));
@@ -240,6 +213,9 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     DTextLabelName* label11 = new DTextLabelName(i18n("Alpha Channel: "), gbox);
     d->labelAlphaChannel    = new DTextLabelValue(0, gbox);
 
+    DTextLabelName* label12 = new DTextLabelName(i18n("Source: "), gbox);
+    d->labelImageRegion     = new DTextLabelValue(0, gbox);
+
     grid->addWidget(label5,                  0, 0, 1, 1);
     grid->addWidget(d->labelPixelsValue,     0, 1, 1, 1);
     grid->addWidget(label7,                  1, 0, 1, 1);
@@ -256,16 +232,33 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     grid->addWidget(d->labelColorDepth,      6, 1, 1, 1);
     grid->addWidget(label11,                 7, 0, 1, 1);
     grid->addWidget(d->labelAlphaChannel,    7, 1, 1, 1);
+    grid->addWidget(label12,                 8, 0, 1, 1);
+    grid->addWidget(d->labelImageRegion,     8, 1, 1, 1);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(0);
 
     // -------------------------------------------------------------
 
-    topLayout->addWidget(d->regionBox, 0, 3, 1, 1);
-    topLayout->addWidget(histoBox,     1, 0, 2, 4);
-    topLayout->addLayout(hlay3,        3, 0, 1, 4);
-    topLayout->addWidget(gbox,         4, 0, 1, 4);
-    topLayout->setRowStretch(5, 10);
+    d->redHistogram   = new HistogramWidget(256, 100, histogramPage);
+    d->greenHistogram = new HistogramWidget(256, 100, histogramPage);
+    d->blueHistogram  = new HistogramWidget(256, 100, histogramPage);
+
+    d->redHistogram->setChannelType(RedChannel);
+    d->redHistogram->setStatisticsVisible(true);
+    d->greenHistogram->setChannelType(GreenChannel);
+    d->greenHistogram->setStatisticsVisible(true);
+    d->blueHistogram->setChannelType(BlueChannel);
+    d->blueHistogram->setStatisticsVisible(true);
+
+    // -------------------------------------------------------------
+
+    topLayout->addWidget(histoBox,          0, 0, 2, 4);
+    topLayout->addLayout(hlay3,             2, 0, 1, 4);
+    topLayout->addWidget(gbox,              3, 0, 1, 4);
+    topLayout->addWidget(d->redHistogram,   4, 0, 1, 4);
+    topLayout->addWidget(d->greenHistogram, 5, 0, 1, 4);
+    topLayout->addWidget(d->blueHistogram,  6, 0, 1, 4);
+    topLayout->setRowStretch(7, 10);
     topLayout->setColumnStretch(2, 10);
     topLayout->setMargin(KDialog::spacingHint());
     topLayout->setSpacing(KDialog::spacingHint());
@@ -283,21 +276,25 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     insertTab(ImagePropertiesColorsTabPriv::ICCPROFILE, sv2, i18n("ICC profile"));
 
     // -------------------------------------------------------------
-
-    connect(d->regionBG, SIGNAL(buttonReleased(int)),
-            this, SLOT(slotRenderingChanged(int)));
-
-    // -------------------------------------------------------------
     // histogramBox connections
 
-    connect(d->histogramBox->histogram(), SIGNAL(signalIntervalChanged(int,int)),
-            this, SLOT(slotUpdateInterval(int,int)));
+    connect(d->histogramBox->histogram(), SIGNAL(signalIntervalChanged(int, int)),
+            this, SLOT(slotUpdateInterval(int, int)));
+
+    connect(d->redHistogram, SIGNAL(signalIntervalChanged(int, int)),
+            this, SLOT(slotUpdateIntervalFromRGB(int, int)));
+
+    connect(d->greenHistogram, SIGNAL(signalIntervalChanged(int, int)),
+            this, SLOT(slotUpdateIntervalFromRGB(int, int)));
+
+    connect(d->blueHistogram, SIGNAL(signalIntervalChanged(int, int)),
+            this, SLOT(slotUpdateIntervalFromRGB(int, int)));
 
     connect(d->histogramBox->histogram(), SIGNAL(signalMaximumValueChanged(int)),
             this, SLOT(slotUpdateIntervRange(int)));
 
     connect(d->histogramBox->histogram(), SIGNAL(signalHistogramComputationDone(bool)),
-            this, SLOT(slotRefreshOptions(bool)));
+            this, SLOT(slotRefreshOptions()));
 
     connect(d->histogramBox->histogram(), SIGNAL(signalHistogramComputationFailed()),
             this, SLOT(slotHistogramComputationFailed()));
@@ -322,6 +319,9 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     // If there is a currently histogram computation when dialog is closed,
     // stop it before the d->image data are deleted automatically!
     d->histogramBox->histogram()->stopHistogramComputation();
+    d->redHistogram->stopHistogramComputation();
+    d->greenHistogram->stopHistogramComputation();
+    d->blueHistogram->stopHistogramComputation();
 
     if (d->imageLoaderThread)
     {
@@ -333,32 +333,23 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
 
 void ImagePropertiesColorsTab::readSettings(const KConfigGroup& group)
 {
-    setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",
-                                    (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
-    d->iccProfileWidget->setMode(group.readEntry("ICC Level", (int)ICCProfileWidget::CUSTOM));
-    d->iccProfileWidget->setCurrentItemByKey(group.readEntry("Current ICC Item", QString()));
-
-    d->histogramBox->setChannel((ChannelType)group.readEntry("Histogram Channel",
-                                (int)Digikam::LuminosityChannel));
-    d->histogramBox->setScale((HistogramScale)group.readEntry("Histogram Scale",
-                              (int)LogScaleHistogram));
-    d->regionBG->button(group.readEntry("Histogram Rendering",
-                                        (int)FullImageHistogram))->setChecked(true);
-
+    setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",                  (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
+    d->iccProfileWidget->setMode(group.readEntry("ICC Level",                     (int)ICCProfileWidget::CUSTOM));
+    d->iccProfileWidget->setCurrentItemByKey(group.readEntry("Current ICC Item",  QString()));
+    d->histogramBox->setChannel((ChannelType)group.readEntry("Histogram Channel", (int)LuminosityChannel));
+    d->histogramBox->setScale((HistogramScale)group.readEntry("Histogram Scale",  (int)LogScaleHistogram));
 }
 
 void ImagePropertiesColorsTab::writeSettings(KConfigGroup& group)
 {
     group.writeEntry("ImagePropertiesColors Tab", currentIndex());
-    group.writeEntry("Histogram Channel", (int)d->histogramBox->channel());
-    group.writeEntry("Histogram Scale", (int)d->histogramBox->scale());
-    group.writeEntry("Histogram Rendering", d->regionBG->checkedId());
-    group.writeEntry("ICC Level", d->iccProfileWidget->getMode());
-    group.writeEntry("Current ICC Item", d->iccProfileWidget->getCurrentItemKey());
+    group.writeEntry("Histogram Channel",         (int)d->histogramBox->channel());
+    group.writeEntry("Histogram Scale",           (int)d->histogramBox->scale());
+    group.writeEntry("ICC Level",                 d->iccProfileWidget->getMode());
+    group.writeEntry("Current ICC Item",          d->iccProfileWidget->getCurrentItemKey());
 }
 
-void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionArea,
-                                       DImg* img)
+void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionArea, DImg* img)
 {
     // We might be getting duplicate events from AlbumIconView,
     // which will cause all sorts of duplicate work.
@@ -374,6 +365,9 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionAr
     // This is necessary to stop computation because d->image.bits() is currently used by
     // threaded histogram algorithm.
     d->histogramBox->histogram()->stopHistogramComputation();
+    d->redHistogram->stopHistogramComputation();
+    d->greenHistogram->stopHistogramComputation();
+    d->blueHistogram->stopHistogramComputation();
 
     d->currentFilePath.clear();
     d->currentLoadingDescription = LoadingDescription();
@@ -418,22 +412,41 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionAr
             {
                 d->imageSelection = d->image.copy(d->selectionArea);
                 d->histogramBox->histogram()->updateData(d->image.bits(), d->image.width(), d->image.height(),
-                        d->image.sixteenBit(), d->imageSelection.bits(),
-                        d->imageSelection.width(), d->imageSelection.height());
-                d->regionBox->show();
+                                                         d->image.sixteenBit(), d->imageSelection.bits(),
+                                                         d->imageSelection.width(), d->imageSelection.height());
+                d->redHistogram->updateData(d->image.bits(), d->image.width(), d->image.height(),
+                                            d->image.sixteenBit(), d->imageSelection.bits(),
+                                            d->imageSelection.width(), d->imageSelection.height());
+                d->greenHistogram->updateData(d->image.bits(), d->image.width(), d->image.height(),
+                                              d->image.sixteenBit(), d->imageSelection.bits(),
+                                              d->imageSelection.width(), d->imageSelection.height());
+                d->blueHistogram->updateData(d->image.bits(), d->image.width(), d->image.height(),
+                                             d->image.sixteenBit(), d->imageSelection.bits(),
+                                             d->imageSelection.width(), d->imageSelection.height());
+
+                slotRenderingChanged(ImageSelectionHistogram);
                 updateInformation();
             }
             else
             {
                 d->histogramBox->histogram()->updateData(d->image.bits(), d->image.width(),
-                        d->image.height(), d->image.sixteenBit());
-                d->regionBox->hide();
+                                                         d->image.height(), d->image.sixteenBit());
+                d->redHistogram->updateData(d->image.bits(), d->image.width(),
+                                            d->image.height(), d->image.sixteenBit());
+                d->greenHistogram->updateData(d->image.bits(), d->image.width(),
+                                              d->image.height(), d->image.sixteenBit());
+                d->blueHistogram->updateData(d->image.bits(), d->image.width(),
+                                             d->image.height(), d->image.sixteenBit());
+                slotRenderingChanged(FullImageHistogram);
                 updateInformation();
             }
         }
         else
         {
             d->histogramBox->histogram()->setLoadingFailed();
+            d->redHistogram->setLoadingFailed();
+            d->greenHistogram->setLoadingFailed();
+            d->blueHistogram->setLoadingFailed();
             d->iccProfileWidget->setLoadingFailed();
             slotHistogramComputationFailed();
         }
@@ -470,7 +483,7 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KUrl& url)
         return;
     }
 
-    d->currentFilePath = desc.filePath;
+    d->currentFilePath           = desc.filePath;
     d->currentLoadingDescription = desc;
 
     d->imageLoaderThread->load(d->currentLoadingDescription,
@@ -478,6 +491,9 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KUrl& url)
                                SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
 
     d->histogramBox->histogram()->setDataLoading();
+    d->redHistogram->setDataLoading();
+    d->greenHistogram->setDataLoading();
+    d->blueHistogram->setDataLoading();
     d->iccProfileWidget->setDataLoading();
 }
 
@@ -492,24 +508,29 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescrip
     if ( !img.isNull() )
     {
         d->histogramBox->histogram()->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
+        d->redHistogram->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
+        d->greenHistogram->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
+        d->blueHistogram->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
 
         // As a safety precaution, this must be changed only after updateData is called,
         // which stops computation because d->image.bits() is currently used by threaded histogram algorithm.
         d->image = img;
-        d->regionBox->hide();
         updateInformation();
         getICCData();
     }
     else
     {
         d->histogramBox->histogram()->setLoadingFailed();
+        d->redHistogram->setLoadingFailed();
+        d->greenHistogram->setLoadingFailed();
+        d->blueHistogram->setLoadingFailed();
         d->iccProfileWidget->setLoadingFailed();
         slotHistogramComputationFailed();
     }
 }
 
 void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
-        const LoadingDescription& newLoadingDescription)
+                                                                const LoadingDescription& newLoadingDescription)
 {
     if (oldLoadingDescription == d->currentLoadingDescription &&
         newLoadingDescription.equalsOrBetterThan(d->currentLoadingDescription))
@@ -534,32 +555,39 @@ void ImagePropertiesColorsTab::setSelection(const QRect& selectionArea)
     // This is necessary to stop computation because d->image.bits() is currently used by
     // threaded histogram algorithm.
     d->histogramBox->histogram()->stopHistogramComputation();
+    d->redHistogram->stopHistogramComputation();
+    d->greenHistogram->stopHistogramComputation();
+    d->blueHistogram->stopHistogramComputation();
     d->selectionArea = selectionArea;
 
     if (d->selectionArea.isValid())
     {
         d->imageSelection = d->image.copy(d->selectionArea);
         d->histogramBox->histogram()->updateSelectionData(d->imageSelection.bits(), d->imageSelection.width(),
-                d->imageSelection.height(), d->imageSelection.sixteenBit());
-        d->regionBox->show();
-        slotRenderingChanged(d->regionBG->checkedId());
+                                                          d->imageSelection.height(), d->imageSelection.sixteenBit());
+        d->redHistogram->updateSelectionData(d->imageSelection.bits(), d->imageSelection.width(),
+                                             d->imageSelection.height(), d->imageSelection.sixteenBit());
+        d->greenHistogram->updateSelectionData(d->imageSelection.bits(), d->imageSelection.width(),
+                                               d->imageSelection.height(), d->imageSelection.sixteenBit());
+        d->blueHistogram->updateSelectionData(d->imageSelection.bits(), d->imageSelection.width(),
+                                              d->imageSelection.height(), d->imageSelection.sixteenBit());
+        slotRenderingChanged(ImageSelectionHistogram);
     }
     else
     {
         d->imageSelection.reset();
-        d->regionBox->hide();
         slotRenderingChanged(FullImageHistogram);
     }
 }
 
-void ImagePropertiesColorsTab::slotRefreshOptions(bool /*sixteenBit*/)
+void ImagePropertiesColorsTab::slotRefreshOptions()
 {
     slotChannelChanged();
     slotScaleChanged();
 
     if (d->selectionArea.isValid())
     {
-        slotRenderingChanged(d->regionBG->checkedId());
+        slotRenderingChanged(ImageSelectionHistogram);
     }
 }
 
@@ -576,12 +604,19 @@ void ImagePropertiesColorsTab::slotChannelChanged()
 
 void ImagePropertiesColorsTab::slotScaleChanged()
 {
+    HistogramScale scale = d->histogramBox->histogram()->scaleType();
+    d->redHistogram->setScaleType(scale);
+    d->greenHistogram->setScaleType(scale);
+    d->blueHistogram->setScaleType(scale);
     updateStatistics();
 }
 
 void ImagePropertiesColorsTab::slotRenderingChanged(int rendering)
 {
     d->histogramBox->histogram()->setRenderingType((HistogramRenderingType)rendering);
+    d->redHistogram->setRenderingType((HistogramRenderingType)rendering);
+    d->greenHistogram->setRenderingType((HistogramRenderingType)rendering);
+    d->blueHistogram->setRenderingType((HistogramRenderingType)rendering);
     updateStatistics();
 }
 
@@ -598,6 +633,9 @@ void ImagePropertiesColorsTab::slotMinValueChanged(int min)
 
     d->maxInterv->setMinimum(min-1);
     d->histogramBox->histogram()->slotMinValueChanged(min);
+    d->redHistogram->slotMinValueChanged(min);
+    d->greenHistogram->slotMinValueChanged(min);
+    d->blueHistogram->slotMinValueChanged(min);
     updateStatistics();
 }
 
@@ -610,7 +648,17 @@ void ImagePropertiesColorsTab::slotMaxValueChanged(int max)
 
     d->minInterv->setMaximum(max+1);
     d->histogramBox->histogram()->slotMaxValueChanged(max);
+    d->redHistogram->slotMaxValueChanged(max);
+    d->greenHistogram->slotMaxValueChanged(max);
+    d->blueHistogram->slotMaxValueChanged(max);
     updateStatistics();
+}
+
+void ImagePropertiesColorsTab::slotUpdateIntervalFromRGB(int min, int max)
+{
+    d->histogramBox->histogram()->slotMinValueChanged(min);
+    d->histogramBox->histogram()->slotMaxValueChanged(max);
+    slotUpdateInterval(min, max);
 }
 
 void ImagePropertiesColorsTab::slotUpdateInterval(int min, int max)
@@ -628,6 +676,13 @@ void ImagePropertiesColorsTab::slotUpdateInterval(int min, int max)
     d->maxInterv->setValue(max);
     d->maxInterv->blockSignals(false);
 
+    d->redHistogram->slotMinValueChanged(min);
+    d->redHistogram->slotMaxValueChanged(max);
+    d->greenHistogram->slotMinValueChanged(min);
+    d->greenHistogram->slotMaxValueChanged(max);
+    d->blueHistogram->slotMinValueChanged(min);
+    d->blueHistogram->slotMaxValueChanged(max);
+
     updateStatistics();
 }
 
@@ -639,7 +694,7 @@ void ImagePropertiesColorsTab::slotUpdateIntervRange(int range)
 void ImagePropertiesColorsTab::updateInformation()
 {
     d->labelColorDepth->setText(d->image.sixteenBit() ? i18n("16 bits") : i18n("8 bits"));
-    d->labelAlphaChannel->setText(d->image.hasAlpha() ? i18n("Yes") : i18n("No"));
+    d->labelAlphaChannel->setText(d->image.hasAlpha() ? i18n("Yes")     : i18n("No"));
 }
 
 void ImagePropertiesColorsTab::updateStatistics()
@@ -652,9 +707,10 @@ void ImagePropertiesColorsTab::updateStatistics()
     }
 
     QString value;
-    int min = d->minInterv->value();
-    int max = d->maxInterv->value();
-    int channel = d->histogramBox->channel();
+    int min                     = d->minInterv->value();
+    int max                     = d->maxInterv->value();
+    int channel                 = d->histogramBox->channel();
+    HistogramRenderingType type = d->histogramBox->histogram()->renderingType();
 
     if ( channel == ColorChannels )
     {
@@ -678,6 +734,8 @@ void ImagePropertiesColorsTab::updateStatistics()
 
     double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
     d->labelPercentileValue->setText(value.setNum(percentile, 'f', 1));
+
+    d->labelImageRegion->setText( (type == FullImageHistogram) ? i18n("Full Image") : i18n("Image Region") );
 }
 
 void ImagePropertiesColorsTab::getICCData()
@@ -688,8 +746,8 @@ void ImagePropertiesColorsTab::getICCData()
     }
     else if (!d->image.getIccProfile().isNull())
     {
-        d->embedded_profile = d->image.getIccProfile();
-        d->iccProfileWidget->loadProfile(d->currentFilePath, d->embedded_profile);
+        d->embeddedProfile = d->image.getIccProfile();
+        d->iccProfileWidget->loadProfile(d->currentFilePath, d->embeddedProfile);
     }
     else
     {

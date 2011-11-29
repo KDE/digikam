@@ -543,6 +543,9 @@ void ImageWindow::setupConnections()
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
 
+    connect(d->imageInfoModel, SIGNAL(allRefreshingFinished()),
+            this, SLOT(slotThumbBarModelReady()));
+
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 }
@@ -626,7 +629,10 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
 
     d->currentImageInfo = ImageInfo();
     d->currentImageInfo = imageInfoCurrent;
-    // Note: Addition is asynchronous, index not yet available
+    // Note: Addition is asynchronous, indexes not yet available
+    // We enable thumbbar as soon as indexes are available
+    // If not, we load imageInfoCurrent, then the index 0, then again imageInfoCurrent
+    d->thumbBar->setEnabled(false);
     d->imageInfoModel->setImageInfos(imageInfoList);
     d->setThumbBarToCurrent();
 
@@ -652,6 +658,11 @@ void ImageWindow::slotLoadImageInfosStage2()
     }
 
     slotLoadCurrent();
+}
+
+void ImageWindow::slotThumbBarModelReady()
+{
+    d->thumbBar->setEnabled(true);
 }
 
 void ImageWindow::openImage(const ImageInfo& info)
@@ -702,7 +713,7 @@ void ImageWindow::setViewToURL(const KUrl& url)
 
 void ImageWindow::slotThumbBarImageSelected(const ImageInfo& info)
 {
-    if (d->currentImageInfo == info)
+    if (d->currentImageInfo == info || !d->thumbBar->isEnabled())
     {
         return;
     }

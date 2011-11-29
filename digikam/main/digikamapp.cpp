@@ -905,10 +905,10 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction* bqmAction = new KAction(KIcon("bqm-diff"), i18n("Batch Queue Manager"), this);
-    bqmAction->setShortcut(KShortcut(Qt::Key_B));
-    connect(bqmAction, SIGNAL(triggered()), d->view, SLOT(slotQueueMgr()));
-    actionCollection()->addAction("queue_manager", bqmAction);
+    d->bqmAction = new KAction(KIcon("bqm-diff"), i18n("Batch Queue Manager"), this);
+    d->bqmAction->setShortcut(KShortcut(Qt::Key_B));
+    connect(d->bqmAction, SIGNAL(triggered()), d->view, SLOT(slotQueueMgr()));
+    actionCollection()->addAction("queue_manager", d->bqmAction);
 
     d->imageAddCurrentQueueAction = new KAction(KIcon("bqm-commit"), i18n("Add to Current Queue"), this);
     d->imageAddCurrentQueueAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_B));
@@ -922,6 +922,17 @@ void DigikamApp::setupActions()
     connect(d->imageAddNewQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToNewQueue()));
     actionCollection()->addAction("image_add_to_new_queue", d->imageAddNewQueueAction);
 
+    // NOTE: see B.K.O #252130 and #283281 : we need to disable these actions when BQM is running.
+    
+    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
+            d->bqmAction, SLOT(setDisabled(bool)));
+
+    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
+            d->imageAddCurrentQueueAction, SLOT(setDisabled(bool)));
+
+    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
+            d->imageAddNewQueueAction, SLOT(setDisabled(bool)));
+    
     // -----------------------------------------------------------------
 
     d->quickImportMenu->setText(i18nc("@action Import photos from camera", "Import"));
@@ -1519,8 +1530,8 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     d->imageRenameAction->setEnabled(selectionCount > 0);
     d->imageLightTableAction->setEnabled(selectionCount > 0);
     d->imageAddLightTableAction->setEnabled(selectionCount > 0);
-    d->imageAddCurrentQueueAction->setEnabled(selectionCount > 0);
-    d->imageAddNewQueueAction->setEnabled(selectionCount > 0);
+    d->imageAddCurrentQueueAction->setEnabled((selectionCount > 0) && !QueueMgrWindow::queueManagerWindow()->isBusy());
+    d->imageAddNewQueueAction->setEnabled((selectionCount > 0) && !QueueMgrWindow::queueManagerWindow()->isBusy());
     d->imageWriteMetadataAction->setEnabled(selectionCount > 0);
     d->imageReadMetadataAction->setEnabled(selectionCount > 0);
     d->imageDeleteAction->setEnabled(selectionCount > 0);

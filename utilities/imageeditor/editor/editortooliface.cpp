@@ -102,10 +102,7 @@ void EditorToolIface::loadTool(EditorTool* tool)
     d->editor->toggleToolActions(d->tool);
 
     // If editor tool has zoomable preview, switch on zoom actions.
-    if (d->editor->editorStackView()->previewWidget())
-    {
-        d->editor->toggleZoomActions(true);
-    }
+    d->editor->toggleZoomActions(d->editor->editorStackView()->isZoomablePreview());
 
     ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->tool->toolView());
 
@@ -185,11 +182,7 @@ void EditorToolIface::setToolInfoMessage(const QString& txt)
 void EditorToolIface::setToolStartProgress(const QString& toolName)
 {
     d->editor->setToolStartProgress(toolName);
-
-    if (d->editor->editorStackView()->previewWidget())
-    {
-        d->editor->toggleZoomActions(false);
-    }
+    d->editor->toggleZoomActions( !d->editor->editorStackView()->isZoomablePreview() );
 }
 
 void EditorToolIface::setToolProgress(int progress)
@@ -200,11 +193,7 @@ void EditorToolIface::setToolProgress(int progress)
 void EditorToolIface::setToolStopProgress()
 {
     d->editor->setToolStopProgress();
-
-    if (d->editor->editorStackView()->previewWidget())
-    {
-        d->editor->toggleZoomActions(true);
-    }
+    d->editor->toggleZoomActions( d->editor->editorStackView()->isZoomablePreview() );
 }
 
 void EditorToolIface::slotToolAborted()

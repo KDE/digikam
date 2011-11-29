@@ -64,7 +64,6 @@ public Q_SLOTS:
     void insertToLightTableAuto(const QList<ImageInfo>& all, const QList<ImageInfo>& selected, const ImageInfo& current);
     void insertToLightTable(const QList<ImageInfo>& list, const ImageInfo& current, bool addTo);
 
-    void insertToQueueManagerAuto(const QList<ImageInfo>& list, const ImageInfo& currentInfo);
     void insertToQueueManager(const QList<ImageInfo>& list, const ImageInfo& currentInfo, bool newQueue);
     void insertSilentToQueueManager(const QList<ImageInfo>& list, const ImageInfo& currentInfo, int queueid);
 

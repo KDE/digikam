@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QLabel>
 #include <QToolButton>
 #include <QPainter>
 #include <QHBoxLayout>
@@ -36,6 +35,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdialog.h>
+#include <ksqueezedtextlabel.h>
 
 namespace Digikam
 {
@@ -63,7 +63,7 @@ public:
 
     int                 status;
 
-    QLabel*             info;
+    KSqueezedTextLabel* info;
     QToolButton*        resetBtn;
     QToolButton*        settingsBtn;
 
@@ -90,7 +90,7 @@ FilterStatusBar::FilterStatusBar(QWidget* parent)
     d->settingsBtn->setFocusPolicy(Qt::NoFocus);
     d->settingsBtn->setAutoRaise(true);
 
-    d->info        = new QLabel(this);
+    d->info        = new KSqueezedTextLabel(this);
     d->info->setWhatsThis(i18n("Background color indicates the global image filter status, "
                                "encompassing all filter settings from the right sidebar.\n\n"
                                "NO COLOR: no filter is active, all items are visible.\n"
@@ -156,7 +156,7 @@ void FilterStatusBar::slotFilterMatches(bool match)
     {
         filtersList.append(i18n("<br/><nobr><i>Mime Type</i></nobr>"));
     }
-    
+
     if (d->settings.isFilteringByGeolocation())
     {
         filtersList.append(i18n("<br/><nobr><i>Geolocation</i></nobr>"));

@@ -64,10 +64,14 @@ class ButtonExtendedLabel : public QLabel
 public:
 
     ButtonExtendedLabel(QWidget* parent = 0)
-        : QLabel(parent), m_button(0) {}
+        : QLabel(parent), m_button(0)
+    {
+    }
 
     ButtonExtendedLabel(const QString& text, QWidget* parent = 0)
-        : QLabel(text, parent), m_button(0) {}
+        : QLabel(text, parent), m_button(0)
+    {
+    }
 
     void setButton(QAbstractButton* button)
     {
@@ -156,13 +160,13 @@ public:
     QCheckBox*                   retrainAllButton;
     QCheckBox*                   benchmarkButton;
 
-    const QString configName;
-    const QString configMainTask;
-    const QString configValueDetectAndRecognize;
-    const QString configValueRecognizedMarkedFaces;
-    const QString configAlreadyScannedHandling;
-    const QString configUseFullCpu;
-    const QString configSettingsVisible;
+    const QString                configName;
+    const QString                configMainTask;
+    const QString                configValueDetectAndRecognize;
+    const QString                configValueRecognizedMarkedFaces;
+    const QString                configAlreadyScannedHandling;
+    const QString                configUseFullCpu;
+    const QString                configSettingsVisible;
 };
 
 FaceScanDialog::FaceScanDialog(QWidget* parent)
@@ -309,8 +313,8 @@ void FaceScanDialog::setupUi()
 
     // ---- Introductory labels ----
 
-    QLabel* personIcon = new QLabel;
-    personIcon->setPixmap(SmallIcon("user-identity", KIconLoader::SizeLarge));
+    QLabel* personIcon   = new QLabel;
+    personIcon->setPixmap(SmallIcon("edit-image-face-show", KIconLoader::SizeLarge));
 
     QLabel* introduction = new QLabel;
     introduction->setText(i18nc("@info",
@@ -321,7 +325,7 @@ void FaceScanDialog::setupUi()
 
     // ---- Main option box ----
 
-    d->optionGroupBox   = new QGroupBox;
+    d->optionGroupBox         = new QGroupBox;
     QGridLayout* optionLayout = new QGridLayout;
 
     d->detectAndRecognizeButton                  = new QRadioButton(i18nc("@option:radio", "Detect and recognize faces"));
@@ -331,16 +335,16 @@ void FaceScanDialog::setupUi()
                                            "which person is depicted"));
     //detectAndRecognizeLabel->setWordWrap(true);
     detectAndRecognizeLabel->setButton(d->detectAndRecognizeButton);
-    ButtonExtendedLabel* detectAndRecognizeIcon = new ButtonExtendedLabel;
-    detectAndRecognizeIcon->setPixmap(SmallIcon("user-group-new", KIconLoader::SizeLarge));
+    ButtonExtendedLabel* detectAndRecognizeIcon  = new ButtonExtendedLabel;
+    detectAndRecognizeIcon->setPixmap(SmallIcon("edit-image-face-detect", KIconLoader::SizeLarge));
     detectAndRecognizeIcon->setButton(d->detectAndRecognizeButton);
     detectAndRecognizeIcon->setAlignment(Qt::AlignCenter);
-    d->alreadyScannedBox = new QComboBox;
+    d->alreadyScannedBox                         = new QComboBox;
     d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Skip images already scanned"), FaceScanSettings::Skip);
     d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Scan again and merge results"), FaceScanSettings::Merge);
     d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Clear unconfirmed results and rescan"), FaceScanSettings::Rescan);
     d->alreadyScannedBox->setCurrentIndex(0);
-    QGridLayout* detectAndRecognizeLabelLayout = new QGridLayout;
+    QGridLayout* detectAndRecognizeLabelLayout   = new QGridLayout;
     detectAndRecognizeLabelLayout->addWidget(detectAndRecognizeLabel, 0, 0, 1, -1);
     detectAndRecognizeLabelLayout->setColumnMinimumWidth(0, 10);
     detectAndRecognizeLabelLayout->addWidget(d->alreadyScannedBox, 1, 1);
@@ -352,7 +356,7 @@ void FaceScanDialog::setupUi()
     //reRecognizeLabel->setWordWrap(true);
     reRecognizeLabel->setButton(d->reRecognizeButton);
     ButtonExtendedLabel* reRecognizeIcon = new ButtonExtendedLabel;
-    reRecognizeIcon->setPixmap(SmallIcon("view-media-artist", KIconLoader::SizeMedium));
+    reRecognizeIcon->setPixmap(SmallIcon("edit-image-face-recognize", KIconLoader::SizeMedium));
     reRecognizeIcon->setButton(d->reRecognizeButton);
     reRecognizeIcon->setAlignment(Qt::AlignCenter);
 
@@ -372,10 +376,11 @@ void FaceScanDialog::setupUi()
 
     // ---
 
-    mainLayout->addWidget(personIcon,   0, 0);
-    mainLayout->addWidget(introduction, 0, 1);
-    mainLayout->setColumnStretch(1, 1);
+    mainLayout->addWidget(personIcon,        0, 0);
+    mainLayout->addWidget(introduction,      0, 1);
     mainLayout->addWidget(d->optionGroupBox, 1, 0, 1, -1);
+    mainLayout->setColumnStretch(1, 1);
+    mainLayout->setRowStretch(2, 1);
     mainWidget->setLayout(mainLayout);
 
     setMainWidget(mainWidget);
@@ -390,8 +395,7 @@ void FaceScanDialog::setupUi()
     QGridLayout* selectAlbumsLayout = new QGridLayout;
 
     QLabel* includeAlbumsLabel      = new QLabel(i18nc("@label", "Search in:"));
-
-    d->albumSelectCB = new AlbumTreeViewSelectComboBox();
+    d->albumSelectCB                = new AlbumTreeViewSelectComboBox();
     //d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     d->albumSelectCB->setToolTip(i18nc("@info:tooltip", "Select all albums that should be included in the face scan."));
     d->albumSelectCB->setDefaultModel();
@@ -401,14 +405,14 @@ void FaceScanDialog::setupUi()
     d->albumClearButton = new ModelClearButton(d->albumSelectCB->view()->albumModel());
     d->albumClearButton->setToolTip(i18nc("@info:tooltip", "Reset selected albums"));
 
-    d->tagSelectCB = new TagTreeViewSelectComboBox();
+    d->tagSelectCB      = new TagTreeViewSelectComboBox();
     //d->tagSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     d->tagSelectCB->setToolTip(i18nc("@info:tooltip", "Select all tags that should be included in the face scan."));
     d->tagSelectCB->setDefaultModel();
     d->tagSelectCB->setNoSelectionText(i18nc("@info:status", "Any tags"));
     d->tagSelectCB->addCheckUncheckContextMenuActions();
 
-    d->tagClearButton = new ModelClearButton(d->tagSelectCB->view()->albumModel());
+    d->tagClearButton   = new ModelClearButton(d->tagSelectCB->view()->albumModel());
     d->tagClearButton->setToolTip(i18nc("@info:tooltip", "Reset selected tags"));
 
     selectAlbumsLayout->addWidget(includeAlbumsLabel, 0, 0, 1, 2);

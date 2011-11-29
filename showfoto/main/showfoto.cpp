@@ -86,6 +86,7 @@ extern "C"
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <kdebug.h>
+#include <ksqueezedtextlabel.h>
 
 // LibKDcraw includes
 

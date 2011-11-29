@@ -6,7 +6,8 @@ NEW FEATURES:
 Libkdcraw : use internal libraw 0.14.3 to support new RAW camera : 
             Fuji FinePix F600EXR, Nikon Coolpix P7100, Olympus E-PL3, Olympus E-PM1, 
             Panasonic DMC-FZ150, Sony NEX-5N, Sony SLT-A65V, Sony SLT-A77V.
-
+General   : Colors tab from right sidebar : display RGB histograms in 3 separate diagrams
+            for better comparison, channel by channel.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -26,4 +27,13 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 163166 : Plugin cannot be used on large photographs.
 015 ==> 284173 : Canceling face scan crashes digiKam.
 016 ==> 181813 : digiKam text decoration font size problem.
-017 ==> 
+017 ==> 265554 : Problem in colors between digiKam's theme and Gnome appearance.
+018 ==> 283281 : Crash during batch convert.
+019 ==> 283572 : Unreadable text on tooltips in KDE 4.7 [patch].
+020 ==> 169432 : Introduce setting to always save to a lossless format.
+021 ==> 155406 : Extra tool bar in the image editor.
+022 ==> 254857 : Minimal image editor window is bigger than 800px.
+023 ==> 213680 : Show warning or info message when not working with color management in Image Editor.
+024 ==> 277628 : Resize controls in editor are missing.
+025 ==> 160013 : Display RGB histograms in 3 separate diagrams.
+026 ==> 

@@ -200,17 +200,17 @@ void RawPreview::slotImageLoaded(const LoadingDescription& description, const DI
     }
 }
 
-int RawPreview::previewWidth()
+int RawPreview::previewWidth() const
 {
     return d->item->image().width();
 }
 
-int RawPreview::previewHeight()
+int RawPreview::previewHeight() const
 {
     return d->item->image().height();
 }
 
-bool RawPreview::previewIsNull()
+bool RawPreview::previewIsNull() const
 {
     return d->item->image().isNull();
 }

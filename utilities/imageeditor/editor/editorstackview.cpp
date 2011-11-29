@@ -125,7 +125,7 @@ QWidget* EditorStackView::toolView() const
     return d->toolView;
 }
 
-int EditorStackView::viewMode()
+int EditorStackView::viewMode() const
 {
     return indexOf(currentWidget());
 }
@@ -261,7 +261,7 @@ void EditorStackView::setZoomFactor(double zoom)
     }
 }
 
-double EditorStackView::zoomMax()
+double EditorStackView::zoomMax() const
 {
     if (viewMode() == CanvasMode)
     {
@@ -269,7 +269,7 @@ double EditorStackView::zoomMax()
     }
     else
     {
-        GraphicsDImgView* preview = previewWidget();
+        GraphicsDImgView* preview  = previewWidget();
         PreviewWidget* old_preview = previewWidget_old();
         if (old_preview)
         {
@@ -286,7 +286,7 @@ double EditorStackView::zoomMax()
     }
 }
 
-double EditorStackView::zoomMin()
+double EditorStackView::zoomMin() const
 {
     if (viewMode() == CanvasMode)
     {
@@ -294,7 +294,7 @@ double EditorStackView::zoomMin()
     }
     else
     {
-        GraphicsDImgView* preview = previewWidget();
+        GraphicsDImgView* preview  = previewWidget();
         PreviewWidget* old_preview = previewWidget_old();
         if (old_preview)
         {
@@ -313,7 +313,7 @@ double EditorStackView::zoomMin()
 
 void EditorStackView::slotZoomSliderChanged(int size)
 {
-    if (viewMode() == ToolViewMode && !previewWidget())
+    if (viewMode() == ToolViewMode && !isZoomablePreview())
     {
         return;
     }
@@ -374,7 +374,10 @@ void EditorStackView::slotZoomChanged(double zoom)
 
 void EditorStackView::slotToggleOffFitToWindow(bool b)
 {
-    if (b) emit signalToggleOffFitToWindow();
+    if (b)
+    {
+        emit signalToggleOffFitToWindow();
+    }
 }
 
 GraphicsDImgView* EditorStackView::previewWidget() const
@@ -397,6 +400,11 @@ PreviewWidget* EditorStackView::previewWidget_old() const
     }
 
     return 0;
+}
+
+bool EditorStackView::isZoomablePreview() const
+{
+    return (previewWidget_old() || previewWidget() );
 }
 
 }  // namespace Digikam

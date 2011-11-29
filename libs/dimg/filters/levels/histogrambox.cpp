@@ -150,12 +150,6 @@ HistogramBox::HistogramBox(QWidget* parent, HistogramBoxType type, bool selectMo
 
     // ---------------------------------------------------------------
 
-    //connect(d->channelCB, SIGNAL(activated(int)),
-    //        this, SIGNAL(signalChannelChanged()));
-
-    //connect(d->scaleBG, SIGNAL(buttonReleased(int)),
-    //        this, SIGNAL(signalScaleChanged()));
-
     connect(d->channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged()));
 
@@ -183,6 +177,11 @@ void HistogramBox::setGradientVisible(bool visible)
 void HistogramBox::setGradientColors(const QColor& from, const QColor& to)
 {
     d->hGradient->setColors(from, to);
+}
+
+void HistogramBox::setStatisticsVisible(bool b)
+{
+    d->histogramWidget->setStatisticsVisible(b);
 }
 
 ChannelType HistogramBox::channel() const

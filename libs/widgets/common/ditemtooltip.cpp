@@ -65,18 +65,18 @@ DToolTipStyleSheet::DToolTipStyleSheet(const QFont& font)
     headEnd     = QString("</b></center></font></nobr></td></tr>");
 
     cellBeg     = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                  .arg(kapp->palette().color(QPalette::Text).name())
+                  .arg(kapp->palette().color(QPalette::ToolTipText).name())
                   .arg(font.family());
     cellMid     = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                  .arg(kapp->palette().color(QPalette::Text).name())
+                  .arg(kapp->palette().color(QPalette::ToolTipText).name())
                   .arg(font.family());
     cellEnd     = QString("</font></nobr></td></tr>");
 
     cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                  .arg(kapp->palette().color(QPalette::Text).name())
+                  .arg(kapp->palette().color(QPalette::ToolTipText).name())
                   .arg(font.family());
     cellSpecMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\"><i>")
-                  .arg(kapp->palette().color(QPalette::Text).name())
+                  .arg(kapp->palette().color(QPalette::ToolTipText).name())
                   .arg(font.family());
     cellSpecEnd = QString("</i></font></nobr></td></tr>");
 }

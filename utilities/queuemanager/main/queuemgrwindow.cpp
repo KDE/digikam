@@ -957,7 +957,10 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
         {
             d->assignedList->setCurrentTool(ad.index);
             d->currentTaskItem = d->assignedList->findTool(ad.index);
-            d->assignedList->scrollToItem(d->currentTaskItem);
+            if (d->currentTaskItem)
+            {
+                d->assignedList->scrollToItem(d->currentTaskItem);
+            }
             break;
         }
         case ActionData::TaskDone:
@@ -1185,6 +1188,8 @@ void QueueMgrWindow::busy(bool busy)
 
     d->busy ? d->queuePool->setCursor(Qt::WaitCursor) : d->queuePool->unsetCursor();
     d->busy ? d->animLogo->start() : d->animLogo->stop();
+    
+    emit signalBqmIsBusy(d->busy);
 }
 
 void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)

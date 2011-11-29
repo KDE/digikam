@@ -315,6 +315,13 @@ public:
     DColor      getSubPixelColor(float x, float y) const;
     DColor      getSubPixelColorFast(float x, float y) const;
 
+    /** If the image has an alpha channel, check there there exist pixels
+     *  which actually have non-opaque color, that is alpha < 1.0.
+     *  Note that all pixels are scanned to reach a return value of "false".
+     *  If hasAlpha() is false, always returns false.
+     */
+    bool        hasTransparentPixels() const;
+
     /** Return true if the original image file format cannot be saved.
         This is depending of DImgLoader::save() implementation. For example
         RAW file formats are supported by DImg using dcraw than cannot support
@@ -478,6 +485,17 @@ public:
                              DColorComposer::MultiplicationFlags multiplicationFlags =
                                  DColorComposer::NoMultiplication);
 
+    /** For the specified region, blend this image on the given color with the specified
+        composer and multiplication flags. See documentation of DColorComposer for more info.
+        Note that the result pixel is again written to this image, which is, for the blending, source.
+     */
+    void       bitBlendImageOnColor(DColorComposer* composer, const DColor& color,
+                                    int x, int y, int w, int h,
+                                    DColorComposer::MultiplicationFlags multiplicationFlags =
+                                        DColorComposer::NoMultiplication);
+    void       bitBlendImageOnColor(const DColor& color, int x, int y, int w, int h);
+    void       bitBlendImageOnColor(const DColor& color);
+
     /** QImage wrapper methods
      */
     QImage     copyQImage() const;
@@ -492,6 +510,16 @@ public:
     /** Set width and height of this image, smoothScale it to the given size
      */
     void       resize(int w, int h);
+
+    /**
+     * If the image has an alpha channel and transparent pixels,
+     * it will be blended on the specified color and the alpha channel will be removed.
+     * This is a no-op if hasTransparentPixels() is false, but this method can be expensive,
+     * therefore it is _not_ checked inside removeAlphaChannel().
+     * (the trivial hasAlpha() is checked)
+     */
+    void       removeAlphaChannel(const DColor& destColor);
+    void       removeAlphaChannel();
 
     /** Return a version of this image scaled to the specified size with the specified mode.
         See QSize documentation for information on available modes
@@ -626,6 +654,10 @@ private:
                          uint swidth, uint sheight, uint dwidth, uint dheight,
                          bool sixteenBit, int sdepth, int ddepth,
                          DColorComposer::MultiplicationFlags multiplicationFlags);
+    static void bitBlendOnColor(DColorComposer* composer, const DColor& color,
+                                uchar* data, int x, int y, int w, int h,
+                                uint width, uint height, bool sixteenBit, int depth,
+                                DColorComposer::MultiplicationFlags multiplicationFlags);
     static bool normalizeRegionArguments(int& sx, int& sy, int& w, int& h, int& dx, int& dy,
                                          uint swidth, uint sheight, uint dwidth, uint dheight);
 

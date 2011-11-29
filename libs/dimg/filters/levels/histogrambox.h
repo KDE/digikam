@@ -60,12 +60,14 @@ public:
     void setGradientColors(const QColor& from, const QColor& to);
     void setGradientVisible(bool visible);
 
-    HistogramWidget* histogram() const;
-
     ChannelType channel() const;
     void setChannelEnabled(bool enabled);
 
+    void setStatisticsVisible(bool b);
+
     HistogramScale scale() const;
+
+    HistogramWidget* histogram() const;
 
 Q_SIGNALS:
 
