@@ -76,7 +76,11 @@ public:
      *  (initialResolvedHistory.size() <= i < currentHistory.size() - 1).
      */
 
-    VersionFileOperation() {}
+    VersionFileOperation()
+    {
+    }
+
+public:
 
     enum Task
     {
@@ -93,6 +97,8 @@ public:
     };
     Q_DECLARE_FLAGS(Tasks, Task)
 
+public:
+
     Tasks                     tasks;
 
     VersionFileInfo           loadedFile;
@@ -103,12 +109,10 @@ public:
 
     QMap<int,VersionFileInfo> intermediates;
 
-public:
-
     /**
      * Returns a list with all saving locations, for main result or intermediates
      */
-    QStringList allFilePaths() const;
+    QStringList               allFilePaths() const;
 };
 
 } // namespace Digikam
