@@ -36,4 +36,3 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 213680 : Show warning or info message when not working with color management in Image Editor.
 024 ==> 277628 : Resize controls in editor are missing.
 025 ==> 160013 : Display RGB histograms in 3 separate diagrams.
-026 ==> 
