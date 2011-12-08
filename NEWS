@@ -5,4 +5,5 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 279183 : Themes configuration dialogue does not open.
+002 ==> 
