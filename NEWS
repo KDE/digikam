@@ -7,4 +7,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 279183 : Themes configuration dialogue does not open.
 002 ==> 284136 : After moving images the old thumbnails remain there.
-003 ==> 
+003 ==> 288461 : digiKam: bashism in /bin/sh script [patch].
+004 ==> 
