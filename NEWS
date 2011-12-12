@@ -8,4 +8,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 279183 : Themes configuration dialogue does not open.
 002 ==> 284136 : After moving images the old thumbnails remain there.
 003 ==> 288461 : digiKam: bashism in /bin/sh script [patch].
-004 ==> 
+004 ==> 274852 : Delete dialog does not show thumbnails; shows only filenames, even if these are not shown in album view.
+005 ==> 
