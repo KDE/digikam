@@ -45,11 +45,12 @@ public:
 
     ImageViewUtilities* utilities() const;
 
-    virtual void setThumbnailSize(const ThumbnailSize& size);
-
     void toggleTagToSelected(int tagID);
+    int  fitToWidthIcons();
 
     void connectProgressSignals(QObject* progressManager);
+
+    virtual void setThumbnailSize(const ThumbnailSize& size);
 
 public Q_SLOTS:
 

@@ -1340,7 +1340,15 @@ void DigikamView::slotZoomTo100Percents()
 
 void DigikamView::slotFitToWindow()
 {
-    if (d->stackedview->previewMode() == StackedView::PreviewImageMode)
+    if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+    {
+        int nts = d->iconView->fitToWidthIcons();
+        kDebug() << "new thumb size = " << nts;
+        setThumbSize(nts);
+        toggleZoomActions();
+        emit signalThumbSizeChanged(d->thumbSize);
+    }
+    else if (d->stackedview->previewMode() == StackedView::PreviewImageMode)
     {
         d->stackedview->fitToWindow();
     }
