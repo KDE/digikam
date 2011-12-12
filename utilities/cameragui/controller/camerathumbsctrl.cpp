@@ -33,6 +33,7 @@
 #include <kdebug.h>
 #include <kurl.h>
 #include <kio/previewjob.h>
+#include <kdeversion.h>
 
 // Local includes
 
@@ -159,7 +160,18 @@ void CameraThumbsCtrl::startKdePreviewJob()
         d->kdeJobHash[url] = info;
     }
     d->kdeTodo.clear();
+
+#if KDE_IS_VERSION(4,7,0)
+    KFileItemList items;
+    for (KUrl::List::ConstIterator it = list.begin() ; it != list.end() ; ++it)
+    {
+        if ((*it).isValid())
+            items.append(KFileItem(KFileItem::Unknown, KFileItem::Unknown, *it, true));
+    }
+    d->kdeJob = KIO::filePreview(items, QSize(ThumbnailSize::Huge, ThumbnailSize::Huge));
+#else
     d->kdeJob = KIO::filePreview(list, ThumbnailSize::Huge);
+#endif
 
     connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
             this, SLOT(slotGotKDEPreview(KFileItem,QPixmap)));

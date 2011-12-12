@@ -179,6 +179,11 @@ void DigikamImageView::setThumbnailSize(const ThumbnailSize& size)
     ImageCategorizedView::setThumbnailSize(size);
 }
 
+int DigikamImageView::fitToWidthIcons()
+{
+    return delegate()->calculatethumbSizeToFit(viewport()->size().width());
+}
+
 void DigikamImageView::connectProgressSignals(QObject* progressManager)
 {
     connect(&d->editPipeline, SIGNAL(started(QString)),
@@ -228,8 +233,8 @@ void DigikamImageView::addRejectionOverlay(ImageDelegate* delegate)
     addOverlay(rejectionOverlay, delegate);
 }
 
-
-/*void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
+/*
+void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
 {
     TagsLineEditOverlay* tagOverlay = new TagsLineEditOverlay(this);
 
@@ -237,7 +242,8 @@ void DigikamImageView::addRejectionOverlay(ImageDelegate* delegate)
             this, SLOT(assignTag(QModelIndex,QString)));
 
     addOverlay(tagOverlay, delegate);
-}*/
+}
+*/
 
 void DigikamImageView::addAssignNameOverlay(ImageDelegate* delegate)
 {

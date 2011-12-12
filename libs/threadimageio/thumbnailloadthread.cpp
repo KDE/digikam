@@ -38,6 +38,7 @@
 #include <kiconloader.h>
 #include <kio/previewjob.h>
 #include <kmessagebox.h>
+#include <kdeversion.h>
 
 // Local includes
 
@@ -790,7 +791,18 @@ void ThumbnailLoadThread::startKdePreviewJob()
         d->kdeJobHash[url] = description;
     }
     d->kdeTodo.clear();
-    d->kdeJob = KIO::filePreview(list, d->creator->storedSize()); // FIXME: do not know if size 0 is allowed
+
+#if KDE_IS_VERSION(4,7,0)
+    KFileItemList items;
+    for (KUrl::List::ConstIterator it = list.begin() ; it != list.end() ; ++it)
+    {
+        if ((*it).isValid())
+            items.append(KFileItem(KFileItem::Unknown, KFileItem::Unknown, *it, true));
+    }
+    d->kdeJob = KIO::filePreview(items, QSize(d->creator->storedSize(), d->creator->storedSize())); // FIXME: do not know if size 0 is allowed
+#else
+    d->kdeJob = KIO::filePreview(list, d->creator->storedSize());                                   // FIXME: do not know if size 0 is allowed
+#endif
 
     connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
             this, SLOT(gotKDEPreview(KFileItem,QPixmap)));

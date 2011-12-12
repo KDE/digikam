@@ -27,6 +27,10 @@
 #include "imagedelegate.moc"
 #include "imagedelegatepriv.h"
 
+// C++ includes
+
+#include <cmath>
+
 // Qt includes
 
 #include <QCache>
@@ -515,6 +519,61 @@ void ImageDelegate::updateActualPixmapRect(const QModelIndex& index, const QRect
     {
         d->actualPixmapRectCache.insert(index.row(), new QRect(rect));
     }
+}
+
+int ImageDelegate::calculatethumbSizeToFit(int ws)
+{
+    Q_D(ImageDelegate);
+
+    int ts     = thumbnailSize().size();
+    int gs     = gridSize().width();
+    int sp     = spacing();
+    ws         = ws - 2*sp;
+
+    // Thumbnails size loop to check (upper/lower)
+    int ts1, ts2;
+    // New grid size used in loop
+    int ngs;
+
+    double rs1 = fmod(ws, gs);
+
+    for (ts1 = ts ; ts1 < ThumbnailSize::Huge ; ++ts1)
+    {
+        ngs        = ts1 + 2*(d->margin + d->radius) + sp;
+        double nrs = fmod(ws, ngs);
+
+        if (nrs <= rs1)
+        {
+            rs1 = nrs;
+        }
+        else 
+        {
+            break;
+        }
+    }
+
+    double rs2 = fmod(ws, gs);
+
+    for (ts2 = ts ; ts2 > ThumbnailSize::Small ; --ts2)
+    {
+        ngs        = ts2 + 2*(d->margin + d->radius) + sp;
+        double nrs = fmod(ws, ngs);
+
+        if (nrs >= rs2)
+        {
+            rs2 = nrs;
+        }
+        else
+        {
+            rs2 = nrs;
+            break;
+        }
+    }
+
+    if (rs1 > rs2)
+        return (ts2);
+
+    return (ts1);
 }
 
 } // namespace Digikam

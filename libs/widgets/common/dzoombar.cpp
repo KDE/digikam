@@ -326,7 +326,7 @@ void DZoomBar::setBarMode(BarMode mode)
 
             if (zfitAction)
             {
-                zfitAction->setEnabled(false);
+                zfitAction->setEnabled(true);
             }
 
             d->zoomTo100Button->show();

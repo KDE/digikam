@@ -57,6 +57,8 @@ public:
     QRect actualPixmapRect(const QModelIndex& index) const;
     QRect groupIndicatorRect() const;
 
+    int calculatethumbSizeToFit(int ws);
+
     virtual void setSpacing(int spacing);
     virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
     virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect,

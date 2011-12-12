@@ -1,0 +1,38 @@
+*****************************************************************************************************
+digiKam 2.4.0 - Release date: 2011-12-04
+
+NEW FEATURES:
+
+Libkdcraw : use internal libraw 0.14.3 to support new RAW camera : 
+            Fuji FinePix F600EXR, Nikon Coolpix P7100, Olympus E-PL3, Olympus E-PM1, 
+            Panasonic DMC-FZ150, Sony NEX-5N, Sony SLT-A65V, Sony SLT-A77V.
+General   : Colors tab from right sidebar : display RGB histograms in 3 separate diagrams
+            for better comparison, channel by channel.
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 285884 : Shortcut changes aren't saved.
+002 ==> 286034 : digiKam icons conflicts with oxygen-icon-theme
+003 ==> 286165 : Tag hierarchy not preserved when exporting metadata to IPTC.
+004 ==> 285742 : Crash in setup.
+005 ==> 243074 : Channel mixer hangs on initialize.
+006 ==> 124814 : No color temperature used for RAW images.
+007 ==> 285194 : digiKam crashing while scanning >20000 pictures.
+008 ==> 283330 : Shortcut conflict - zoom to 100% vs assign flag.
+009 ==> 286212 : digiKam's shortcut for Delete permanently does not work (shift + del).
+010 ==> 259223 : Overexposure prevention in white balance tool [patch].
+011 ==> 221188 : When system is set to Czech locale, there is "Aspect Ratio Crop" missing in transform menu.
+012 ==> 273433 : The size of the crop selection is not showed on the screen in aspect crop tool.
+013 ==> 237524 : Correct -> local contrast = program hangs.
+014 ==> 163166 : Plugin cannot be used on large photographs.
+015 ==> 284173 : Canceling face scan crashes digiKam.
+016 ==> 181813 : digiKam text decoration font size problem.
+017 ==> 265554 : Problem in colors between digiKam's theme and Gnome appearance.
+018 ==> 283281 : Crash during batch convert.
+019 ==> 283572 : Unreadable text on tooltips in KDE 4.7 [patch].
+020 ==> 169432 : Introduce setting to always save to a lossless format.
+021 ==> 155406 : Extra tool bar in the image editor.
+022 ==> 254857 : Minimal image editor window is bigger than 800px.
+023 ==> 213680 : Show warning or info message when not working with color management in Image Editor.
+024 ==> 277628 : Resize controls in editor are missing.
+025 ==> 160013 : Display RGB histograms in 3 separate diagrams.

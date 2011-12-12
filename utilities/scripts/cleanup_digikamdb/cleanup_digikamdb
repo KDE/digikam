@@ -110,14 +110,14 @@ EOF
 
 cleanupDB()
 {
-    cd "$1" 2&> /dev/null
+    cd "$1" > /dev/null 2>&1
     if [ $? = 0 ]; then
         local db_out="${output_str_database}:"
-        echo -e "${output_str_location}:\t$(pwd)"
+        echo "${output_str_location}:  $(pwd)"
 
         for db in $(eval "find . ${db_find_cmd} 2> /dev/null")
         do
-            echo -ne "${db_out}\t${db} ... "
+            echo -n "${db_out} ${db} ... "
             sqlite3 ${db} "VACUUM;"
             if [ $? = 0 ]
             then
@@ -126,9 +126,12 @@ cleanupDB()
                 echo "failed!"
             fi
         done
-        echo -e "\n=> Finished";
+        echo
+        echo "=> Finished"
     else
-        echo -e "\nI was not able to enter the database folder.\n"
+        echo
+        echo "I was not able to enter the database folder."
+        echo
         echo "Make sure that the variable '${config_key}' in your 'digikamrc' config file"
         echo "is set correctly and that you have permissions to access the database folder."
     fi
