@@ -30,15 +30,16 @@
 // Qt includes
 
 #include <QStackedWidget>
+#include <QPainter>
 #include <QLayout>
 #include <QLabel>
 #include <QTimer>
 #include <QCheckBox>
 #include <QKeyEvent>
+#include <QHeaderView>
 
 // KDE includes
 
-#include <klistwidget.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
@@ -54,21 +55,169 @@
 namespace Digikam
 {
 
+class DeleteItem::DeleteItemPriv
+{
+
+public:
+
+    DeleteItemPriv()
+    {
+        hasThumb = false;
+    }
+
+    bool hasThumb;
+
+    KUrl url;
+};
+
+DeleteItem::DeleteItem(QTreeWidget* parent, const KUrl& url)
+    : QTreeWidgetItem(parent), d(new DeleteItemPriv)
+{
+    d->url = url;
+    setThumb(SmallIcon("image-x-generic", parent->iconSize().width(), KIconLoader::DisabledState), false);
+
+    if ( d->url.isLocalFile() ) //path is null for non-local
+    {
+        setText(1, d->url.toLocalFile() );
+    }
+    else if ( d->url.protocol() == "digikamalbums")
+    {
+        setText(1, DatabaseUrl(d->url).fileUrl().toLocalFile() );
+    }
+    else
+    {
+        setText(1, d->url.prettyUrl() );
+    }
+}
+
+DeleteItem::~DeleteItem()
+{
+    delete d;
+}
+
+bool DeleteItem::hasValidThumbnail() const
+{
+    return d->hasThumb;
+}
+
+KUrl DeleteItem::url() const
+{
+    return d->url;
+}
+
+void DeleteItem::setThumb(const QPixmap& pix, bool hasThumb)
+{
+    int iconSize = treeWidget()->iconSize().width();
+    QPixmap pixmap(iconSize+2, iconSize+2);
+    pixmap.fill(Qt::transparent);
+    QPainter p(&pixmap);
+    p.drawPixmap((pixmap.width()/2)  - (pix.width()/2),
+                 (pixmap.height()/2) - (pix.height()/2), pix);
+
+    QIcon icon = QIcon(pixmap);
+    //  We make sure the preview icon stays the same regardless of the role
+    icon.addPixmap(pixmap, QIcon::Selected, QIcon::On);
+    icon.addPixmap(pixmap, QIcon::Selected, QIcon::Off);
+    icon.addPixmap(pixmap, QIcon::Active,   QIcon::On);
+    icon.addPixmap(pixmap, QIcon::Active,   QIcon::Off);
+    icon.addPixmap(pixmap, QIcon::Normal,   QIcon::On);
+    icon.addPixmap(pixmap, QIcon::Normal,   QIcon::Off);
+    setIcon(0, icon);
+
+    d->hasThumb = hasThumb;
+}
+
+//----------------------------------------------------------------------------
+
+class DeleteItemList::DeleteItemListPriv
+{
+
+public:
+
+    DeleteItemListPriv()
+        : iconSize(64)
+    {
+        thumbLoadThread = 0;
+    }
+
+    const int            iconSize;
+
+    ThumbnailLoadThread* thumbLoadThread;
+};
+
+DeleteItemList::DeleteItemList(QWidget* parent)
+    : QTreeWidget(parent), d(new DeleteItemListPriv)
+{
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
+
+    setRootIsDecorated(false);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setAllColumnsShowFocus(true);
+    setIconSize(QSize(d->iconSize, d->iconSize));
+    setColumnCount(2);
+    setHeaderLabels(QStringList() << i18n("Thumb") << i18n("Path"));
+    header()->setResizeMode(0, QHeaderView::ResizeToContents);
+    header()->setResizeMode(1, QHeaderView::Stretch);
+    setToolTip(i18n("List of files that are about to be deleted."));
+    setWhatsThis(i18n("This is the list of items that are about to be deleted."));
+
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
+}
+
+DeleteItemList::~DeleteItemList()
+{
+    delete d;
+}
+
+void DeleteItemList::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
+{
+    QTreeWidgetItemIterator it(this);
+
+    while (*it)
+    {
+        DeleteItem* item = dynamic_cast<DeleteItem*>(*it);
+
+        if (item->url().toLocalFile() == desc.filePath)
+        {
+            if (!pix.isNull())
+            {
+                item->setThumb(pix.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio));
+            }
+        }
+
+        ++it;
+    }
+}
+
+void DeleteItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
+{
+    DeleteItem* item = dynamic_cast<DeleteItem*>(itemFromIndex(index));
+    if (item && !item->hasValidThumbnail())
+    {
+        d->thumbLoadThread->find(item->url().toLocalFile());
+    }
+    QTreeWidget::drawRow(p, opt, index);
+}
+
+//----------------------------------------------------------------------------
+
 class DeleteWidget::DeleteWidgetPriv
 {
 public:
 
     DeleteWidgetPriv()
     {
-        checkBoxStack  = 0;
-        warningIcon    = 0;
-        deleteText     = 0;
-        numFiles       = 0;
-        shouldDelete   = 0;
-        doNotShowAgain = 0;
-        fileList       = 0;
-        listMode       = DeleteDialogMode::Files;
-        deleteMode     = DeleteDialogMode::UseTrash;
+        checkBoxStack   = 0;
+        warningIcon     = 0;
+        deleteText      = 0;
+        numFiles        = 0;
+        shouldDelete    = 0;
+        doNotShowAgain  = 0;
+        fileList        = 0;
+        listMode        = DeleteDialogMode::Files;
+        deleteMode      = DeleteDialogMode::UseTrash;
     }
 
     QStackedWidget*              checkBoxStack;
@@ -80,7 +229,7 @@ public:
     QCheckBox*                   shouldDelete;
     QCheckBox*                   doNotShowAgain;
 
-    KListWidget*                 fileList;
+    QTreeWidget*                 fileList;
 
     DeleteDialogMode::ListMode   listMode;
     DeleteDialogMode::DeleteMode deleteMode;
@@ -95,7 +244,6 @@ DeleteWidget::DeleteWidget(QWidget* parent)
     setMinimumSize(QSize(420, 320));
 
     d->checkBoxStack = new QStackedWidget(this);
-
     QLabel* logo     = new QLabel(this);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -120,11 +268,7 @@ DeleteWidget::DeleteWidget(QWidget* parent)
     hbox->addWidget(d->deleteText, 10);
     hbox->addWidget(d->warningIcon);
 
-    d->fileList       = new KListWidget(this);
-    d->fileList->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->fileList->setToolTip(i18n("List of files that are about to be deleted."));
-    d->fileList->setWhatsThis(i18n("This is the list of items that are about to be deleted."));
-
+    d->fileList       = new DeleteItemList(this);
     d->numFiles       = new QLabel(this);
     d->numFiles->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
     d->numFiles->setWordWrap(false);
@@ -177,18 +321,7 @@ void DeleteWidget::setFiles(const KUrl::List& files)
 
     for ( KUrl::List::ConstIterator it = files.begin(); it != files.end(); ++it)
     {
-        if ( (*it).isLocalFile() ) //path is null for non-local
-        {
-            d->fileList->addItem( (*it).toLocalFile() );
-        }
-        else if ( (*it).protocol() == "digikamalbums")
-        {
-            d->fileList->addItem( DatabaseUrl(*it).fileUrl().toLocalFile() );
-        }
-        else
-        {
-            d->fileList->addItem( (*it).prettyUrl() );
-        }
+        new DeleteItem(d->fileList, *it);
     }
 
     updateText();
@@ -248,7 +381,7 @@ void DeleteWidget::updateText()
                 d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
                                           KIconLoader::Desktop, KIconLoader::SizeLarge));
                 d->numFiles->setText(i18np("<b>1</b> file selected.", "<b>%1</b> files selected.",
-                                           d->fileList->count()));
+                                           d->fileList->topLevelItemCount()));
             }
 
             break;
@@ -272,7 +405,7 @@ void DeleteWidget::updateText()
             }
 
             d->numFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
-                                       d->fileList->count()));
+                                       d->fileList->topLevelItemCount()));
             break;
         }
         case DeleteDialogMode::Subalbums:
@@ -300,7 +433,7 @@ void DeleteWidget::updateText()
             }
 
             d->numFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
-                                       d->fileList->count()));
+                                       d->fileList->topLevelItemCount()));
             break;
         }
     }
@@ -507,5 +640,6 @@ void DeleteDialog::keyPressEvent(QKeyEvent* e)
 
     KDialog::keyPressEvent(e);
 }
+
 
 } // namespace Digikam

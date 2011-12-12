@@ -31,6 +31,7 @@
 // Qt includes
 
 #include <QWidget>
+#include <QTreeWidget>
 
 // KDE includes
 
@@ -40,6 +41,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -64,6 +66,52 @@ enum DeleteMode
 };
 
 } // namespace DeleteDialogMode
+
+// -----------------------------------------------------------
+
+class DeleteItem : public QTreeWidgetItem
+{
+
+public:
+
+    DeleteItem(QTreeWidget* parent, const KUrl& url);
+    virtual ~DeleteItem();
+
+    bool hasValidThumbnail() const;
+    KUrl url() const;
+
+    void setThumb(const QPixmap& pix, bool hasThumb=true);
+
+private:
+
+    class DeleteItemPriv;
+    DeleteItemPriv* const d;
+};
+
+// -----------------------------------------------------------
+
+class DeleteItemList : public QTreeWidget
+{
+    Q_OBJECT
+
+public:
+
+    DeleteItemList(QWidget* parent=0);
+    virtual ~DeleteItemList();
+
+private :
+
+    void drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const;
+
+private Q_SLOTS:
+
+    void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
+
+private:
+
+    class DeleteItemListPriv;
+    DeleteItemListPriv* const d;
+};
 
 // -----------------------------------------------------------
 
