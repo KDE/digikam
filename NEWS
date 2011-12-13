@@ -24,7 +24,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 282610 : digiKam crashes in view image mode (maybe only with face tags).
 015 ==> 233258 : Save album to a folder.
 016 ==> 219198 : Support for second screen.
-017 ==> 
+017 ==> 258119 : Pathname in file properties.
+018 ==> 
 
 
 
