@@ -17,5 +17,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 284909 : Manually built 2.2.0 digikam crashes in first time settings selection.
 011 ==> 166027 : More efficient way of selecting tags.
 012 ==> 211137 : Add duplicate option to album context menu.
-013 ==> 
+013 ==> 278365 : ContextMenu side image not visible anymore.
+014 ==> 
+
 
