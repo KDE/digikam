@@ -18,6 +18,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 166027 : More efficient way of selecting tags.
 012 ==> 211137 : Add duplicate option to album context menu.
 013 ==> 278365 : ContextMenu side image not visible anymore.
-014 ==> 
+014 ==> 282610 : digiKam crashes in view image mode (maybe only with face tags).
+015 ==> 
+
 
 
