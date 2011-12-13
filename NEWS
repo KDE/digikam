@@ -15,4 +15,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 269989 : Several crashes, unclear backround ( picsize "15GB"?, thumbnails-digikam.db 3, 5GB, memory 4GB? ).
 009 ==> 279954 : Thumbnails are not properly displayed, while they are OK in "view image" mode.
 010 ==> 284909 : Manually built 2.2.0 digikam crashes in first time settings selection.
-011 ==> 
+011 ==> 166027 : More efficient way of selecting tags.
+012 ==> 
