@@ -25,7 +25,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 233258 : Save album to a folder.
 016 ==> 219198 : Support for second screen.
 017 ==> 258119 : Pathname in file properties.
-018 ==> 
+018 ==> 237785 : digiKam can't copy images to mounted Samba/CIFS share.
+019 ==> 
+
 
 
 
