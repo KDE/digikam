@@ -21,22 +21,8 @@ To install it, please follow these instructions to enter in a console:
 
 More information: http://guide.macports.org
 
-2 - FAST INSTALL USING DIGIKAM PORT FILE
-----------------------------------------
-
-> sudo port -v install digikam
-
-3 - COMMON SETUP FOR KDE APPLICATIONS
--------------------------------------
-
-From a terminal, using your account user-name (here replace "foo" by your account), initialize KDE and Dbus services.
-
-> sudo chown -R foo ~/Library/Preferences/KDE
-> sudo chown -R foo /Library/LaunchAgents/org.freedesktop.dbus-session.plist
-> sudo launchctl load -w /Library/LaunchAgents/org.freedesktop.dbus-session.plist
-
-4 - DEPENDENCIES
-----------------
+2 - INSTALL DEPENDENCIES
+------------------------
 
 Install all compilation and run-time dependencies:
 
@@ -48,14 +34,18 @@ Install all compilation and run-time dependencies:
 > sudo port -v install libgpod
 > sudo port -v install libgphoto2
 
-5 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
+3 - RUN COMMON SETUP FOR KDE APPLICATIONS
+-----------------------------------------
+
+From a terminal, using your account user-name (here replace "foo" by your account), initialize KDE and Dbus services.
+
+> sudo chown -R foo ~/Library/Preferences/KDE
+> sudo chown -R foo /Library/LaunchAgents/org.freedesktop.dbus-session.plist
+> sudo launchctl load -w /Library/LaunchAgents/org.freedesktop.dbus-session.plist
+
+
+4 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
 ----------------------------------------------------------------
-
-* Process stage 1 to install Macports on your computer.
-
-* Process stage 4 of this tutorial to install all dependencies.
-
-* Process Stage 3 of this tutorial to setup system for KDE Applications.
 
 * In you prefered directory dedicated to store and compile source code, checkout digiKam Software Compilation 
 * from KDE git/master repository, and start cmake configuration:
@@ -74,4 +64,4 @@ Install all compilation and run-time dependencies:
 
 > sudo make install/fast
 
-* digiKam must be avaialble on Applications/Macports/KDE menu of you computer.
+* digiKam must be available on Applications/Macports/KDE menu of you Apple computer.
