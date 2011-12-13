@@ -9,4 +9,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 284136 : After moving images the old thumbnails remain there.
 003 ==> 288461 : digiKam: bashism in /bin/sh script [patch].
 004 ==> 274852 : Delete dialog does not show thumbnails; shows only filenames, even if these are not shown in album view.
-005 ==> 
+005 ==> 265197 : Please specify dependencies of digikam-2.0, and make digikam-2.0/core also build with stock kde.
+006 ==> 188709 : Tag hierarchy not properly restored from files (IPTC).
+007 ==> 271707 : Crash when starting after sleeping mode - previous task: rebuild all fingerprints.
+008 ==> 269989 : Several crashes, unclear backround ( picsize "15GB"?, thumbnails-digikam.db 3, 5GB, memory 4GB? ).
+009 ==> 279954 : Thumbnails are not properly displayed, while they are OK in "view image" mode.
+010 ==> 284909 : Manually built 2.2.0 digikam crashes in first time settings selection.
+011 ==> 
