@@ -39,5 +39,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 264998 : Clicking on a day/week/month/year in timeline does not display any photos.
 030 ==> 269720 : digiKam SIGSEGV during face scanning.
 031 ==> 266248 : Duplicate search never finishes.
-032 ==> 
+032 ==> 183579 : digiKam uses incorrect time format in the title/tags tab.
+033 ==> 
 
