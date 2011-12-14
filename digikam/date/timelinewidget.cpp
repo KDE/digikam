@@ -673,7 +673,7 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
     emit signalDateMapChanged();
 }
 
-int TimeLineWidget::calculateTop(int& val)
+int TimeLineWidget::calculateTop(int& val) const
 {
     const int minimum_valid_height = 1;
 
@@ -1419,7 +1419,7 @@ void TimeLineWidget::setDaysRangeSelection(const QDateTime& dts, const QDateTime
     while (dt < dte);
 }
 
-TimeLineWidget::SelectionMode TimeLineWidget::checkSelectionForDaysRange(const QDateTime& dts, const QDateTime& dte)
+TimeLineWidget::SelectionMode TimeLineWidget::checkSelectionForDaysRange(const QDateTime& dts, const QDateTime& dte) const
 {
     int year, day;
     int items    = 0;
@@ -1849,7 +1849,7 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool* isOnSelection
     return QDateTime();
 }
 
-QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
+QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber) const
 {
     // Search the first day of first week of year.
     // We start to scan from 1st December of year-1 because
