@@ -7,6 +7,7 @@
  * Description : left sidebar widgets
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,14 +60,15 @@ public:
                                  AlbumModificationHelper* albumModificationHelper);
     virtual ~AlbumFolderViewSideBarWidget();
 
-    void setActive(bool active);
-    void doLoadState();
-    void doSaveState();
-    void applySettings();
-    void changeAlbumFromHistory(Album* album);
-    AlbumPointer<PAlbum> currentAlbum() const;
+    void    setActive(bool active);
+    void    doLoadState();
+    void    doSaveState();
+    void    applySettings();
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
+
+    AlbumPointer<PAlbum> currentAlbum() const;
 
 public Q_SLOTS:
 
@@ -99,14 +101,15 @@ public:
     TagViewSideBarWidget(QWidget* parent, TagModel* model);
     virtual ~TagViewSideBarWidget();
 
-    void setActive(bool active);
-    void doLoadState();
-    void doSaveState();
-    void applySettings();
-    void changeAlbumFromHistory(Album* album);
-    AlbumPointer<TAlbum> currentAlbum() const;
+    void    setActive(bool active);
+    void    doLoadState();
+    void    doSaveState();
+    void    applySettings();
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
+
+    AlbumPointer<TAlbum> currentAlbum() const;
 
 public Q_SLOTS:
 
@@ -143,14 +146,15 @@ public:
                                 ImageAlbumFilterModel* imageFilterModel);
     virtual ~DateFolderViewSideBarWidget();
 
-    void setActive(bool active);
-    void doLoadState();
-    void doSaveState();
-    void applySettings();
-    void changeAlbumFromHistory(Album* album);
-    AlbumPointer<DAlbum> currentAlbum() const;
+    void    setActive(bool active);
+    void    doLoadState();
+    void    doSaveState();
+    void    applySettings();
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
+
+    AlbumPointer<DAlbum> currentAlbum() const;
 
     void gotoDate(const QDate& date);
 
@@ -177,11 +181,11 @@ public:
                           SearchModificationHelper* searchModificationHelper);
     virtual ~TimelineSideBarWidget();
 
-    void setActive(bool active);
-    void doLoadState();
-    void doSaveState();
-    void applySettings();
-    void changeAlbumFromHistory(Album* album);
+    void    setActive(bool active);
+    void    doLoadState();
+    void    doSaveState();
+    void    applySettings();
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -223,11 +227,11 @@ public:
                         SearchModificationHelper* searchModeificationHelper);
     virtual ~SearchSideBarWidget();
 
-    void setActive(bool active);
-    void doLoadState();
-    void doSaveState();
-    void applySettings();
-    void changeAlbumFromHistory(Album* album);
+    void    setActive(bool active);
+    void    doLoadState();
+    void    doSaveState();
+    void    applySettings();
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -255,11 +259,11 @@ public:
                              SearchModificationHelper* searchModificationHelper);
     virtual ~FuzzySearchSideBarWidget();
 
-    void setActive(bool active);
-    void doLoadState();
-    void doSaveState();
-    void applySettings();
-    void changeAlbumFromHistory(Album* album);
+    void    setActive(bool active);
+    void    doLoadState();
+    void    doSaveState();
+    void    applySettings();
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -295,11 +299,11 @@ public:
                            ImageFilterModel* imageFilterModel, QItemSelectionModel* itemSelectionModel);
     virtual ~GPSSearchSideBarWidget();
 
-    void setActive(bool active);
-    void doLoadState();
-    void doSaveState();
-    void applySettings();
-    void changeAlbumFromHistory(Album* album);
+    void    setActive(bool active);
+    void    doLoadState();
+    void    doSaveState();
+    void    applySettings();
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -330,11 +334,11 @@ public:
                         SearchModificationHelper* searchModificationHelper);
     virtual ~PeopleSideBarWidget();
 
-    void setActive(bool active);
-    void doLoadState();
-    void doSaveState();
-    void applySettings();
-    void changeAlbumFromHistory(Album* album);
+    void    setActive(bool active);
+    void    doLoadState();
+    void    doSaveState();
+    void    applySettings();
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
 
