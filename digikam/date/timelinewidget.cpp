@@ -952,6 +952,14 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
             selRect.setBottom(height() - d->bottomMargin/2);
             selRect.setRight(d->startPos + (i+1)*d->barWidth);
             p.fillRect(selRect, selBrush);
+
+            p.fillRect(barRect, selBrush);
+            p.drawLine(barRect.topLeft(), barRect.topRight());
+            p.drawLine(barRect.topRight(), barRect.bottomRight());
+            p.drawLine(barRect.bottomRight(), barRect.bottomLeft());
+            p.drawLine(barRect.bottomLeft(), barRect.topLeft());
+            p.drawLine(barRect.right(), barRect.bottom(), barRect.right(), barRect.bottom()+3);
+            p.drawLine(barRect.left(),  barRect.bottom(), barRect.left(),  barRect.bottom()+3);
         }
 
         paintItem(p, barRect, ref, barRect.left(), dateColor, subDateColor);
@@ -1029,6 +1037,14 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
             selRect.setBottom(height() - d->bottomMargin/2);
             selRect.setRight(d->startPos - i*d->barWidth);
             p.fillRect(selRect, selBrush);
+
+            p.fillRect(barRect, selBrush);
+            p.drawLine(barRect.topLeft(), barRect.topRight());
+            p.drawLine(barRect.topRight(), barRect.bottomRight());
+            p.drawLine(barRect.bottomRight(), barRect.bottomLeft());
+            p.drawLine(barRect.bottomLeft(), barRect.topLeft());
+            p.drawLine(barRect.right(), barRect.bottom(), barRect.right(), barRect.bottom()+3);
+            p.drawLine(barRect.left(),  barRect.bottom(), barRect.left(),  barRect.bottom()+3);
         }
 
         paintItem(p, barRect, ref, barRect.right(), dateColor, subDateColor);
