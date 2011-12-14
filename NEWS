@@ -28,7 +28,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 237785 : digiKam can't copy images to mounted Samba/CIFS share.
 019 ==> 262011 : Don't drag the window when dragging on metadata sidebars.
 020 ==> 274484 : Build failure - linking kstat.
-021 ==> 
+021 ==> 187652 : Main window doesn't show photos.
+022 ==> 
 
 
 
