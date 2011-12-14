@@ -40,5 +40,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 269720 : digiKam SIGSEGV during face scanning.
 031 ==> 266248 : Duplicate search never finishes.
 032 ==> 183579 : digiKam uses incorrect time format in the title/tags tab.
-033 ==> 
+033 ==> 190393 : digiKam always starts in fullscreen after a crash.
+034 ==> 
 
