@@ -157,7 +157,7 @@ TimeLineWidget::ScaleMode TimeLineWidget::scaleMode() const
     return d->scaleMode;
 }
 
-int TimeLineWidget::totalIndex()
+int TimeLineWidget::totalIndex() const
 {
     if (d->minDateTime.isNull() || d->maxDateTime.isNull())
     {
@@ -177,7 +177,7 @@ int TimeLineWidget::totalIndex()
     return i;
 }
 
-int TimeLineWidget::indexForDateTime(const QDateTime& date)
+int TimeLineWidget::indexForDateTime(const QDateTime& date) const
 {
     if (d->minDateTime.isNull() || d->maxDateTime.isNull() || date.isNull())
     {
@@ -197,12 +197,12 @@ int TimeLineWidget::indexForDateTime(const QDateTime& date)
     return i;
 }
 
-int TimeLineWidget::indexForRefDateTime()
+int TimeLineWidget::indexForRefDateTime() const
 {
     return (indexForDateTime(d->refDateTime));
 }
 
-int TimeLineWidget::indexForCursorDateTime()
+int TimeLineWidget::indexForCursorDateTime() const
 {
     return (indexForDateTime(d->cursorDateTime));
 }
@@ -429,7 +429,7 @@ void TimeLineWidget::setSelectedDateRange(const DateRangeList& list)
     update();
 }
 
-DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
+DateRangeList TimeLineWidget::selectedDateRange(int& totalCount) const
 {
     // We will parse all selections done on Days stats map.
 
@@ -1079,7 +1079,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
     p.end();
 }
 
-QDateTime TimeLineWidget::prevDateTime(const QDateTime& dt)
+QDateTime TimeLineWidget::prevDateTime(const QDateTime& dt) const
 {
     QDateTime prev;
 
@@ -1110,7 +1110,7 @@ QDateTime TimeLineWidget::prevDateTime(const QDateTime& dt)
     return prev;
 }
 
-QDateTime TimeLineWidget::nextDateTime(const QDateTime& dt)
+QDateTime TimeLineWidget::nextDateTime(const QDateTime& dt) const
 {
     QDateTime next;
 
@@ -1141,7 +1141,7 @@ QDateTime TimeLineWidget::nextDateTime(const QDateTime& dt)
     return next;
 }
 
-int TimeLineWidget::maxCount()
+int TimeLineWidget::maxCount() const
 {
     int max = 1;
 

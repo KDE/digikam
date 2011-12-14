@@ -85,12 +85,12 @@ public:
     int       cursorInfo(QString& infoDate) const;
 
     /** Return a list of Date-Range based on selection performed on days-map */
-    DateRangeList selectedDateRange(int& totalCount);
+    DateRangeList selectedDateRange(int& totalCount) const;
     void          setSelectedDateRange(const DateRangeList& list);
 
-    int  totalIndex();
-    int  indexForRefDateTime();
-    int  indexForCursorDateTime();
+    int  totalIndex() const;
+    int  indexForRefDateTime() const;
+    int  indexForCursorDateTime() const;
     void setCurrentIndex(int index);
 
 Q_SIGNALS:
@@ -115,11 +115,11 @@ private Q_SLOTS:
 
 private:
 
-    QDateTime     prevDateTime(const QDateTime& dt);
-    QDateTime     nextDateTime(const QDateTime& dt);
+    QDateTime     prevDateTime(const QDateTime& dt) const;
+    QDateTime     nextDateTime(const QDateTime& dt) const;
 
-    int           maxCount();
-    int           indexForDateTime(const QDateTime& date);
+    int           maxCount() const;
+    int           indexForDateTime(const QDateTime& date) const;
     int           statForDateTime(const QDateTime& dt, SelectionMode* selected) const;
     void          setRefDateTime(const QDateTime& dateTime);
 
