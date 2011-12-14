@@ -17,6 +17,9 @@ TARGET_LINK_LIBRARIES(digikamdatabaseserver
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTSQL_LIBRARY}
                       ${QT_QT3SUPPORT_LIBRARY}
+
+                      # To link under Solaris (see B.K.O #274484)
+                      ${MATH_LIBRARY}
                      )
 
 INSTALL(TARGETS digikamdatabaseserver DESTINATION ${LIBEXEC_INSTALL_DIR})
