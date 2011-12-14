@@ -29,7 +29,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 262011 : Don't drag the window when dragging on metadata sidebars.
 020 ==> 274484 : Build failure - linking kstat.
 021 ==> 187652 : Main window doesn't show photos.
-022 ==> 
+022 ==> 145231 : auto hide side bar.
+023 ==> 
 
 
 
