@@ -31,7 +31,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 187652 : Main window doesn't show photos.
 022 ==> 145231 : auto hide side bar.
 023 ==> 228803 : Wish: EV correction value in Photograph Properties.
-024 ==> 
+024 ==> 277493 : Wish: Show terminal emulator as part of the main window.
+025 ==> 
+
 
 
 
