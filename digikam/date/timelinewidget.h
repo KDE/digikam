@@ -112,12 +112,8 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotThemeChanged();
-    void slotFlickerTimer();
 
 private:
-
-    void showEvent(QShowEvent*);
-    void hideEvent(QHideEvent*);
 
     QDateTime     prevDateTime(const QDateTime& dt);
     QDateTime     nextDateTime(const QDateTime& dt);
