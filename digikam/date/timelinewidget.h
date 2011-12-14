@@ -82,7 +82,7 @@ public:
 
     void      setCursorDateTime(const QDateTime& dateTime);
     QDateTime cursorDateTime() const;
-    int       cursorInfo(QString& infoDate);
+    int       cursorInfo(QString& infoDate) const;
 
     /** Return a list of Date-Range based on selection performed on days-map */
     DateRangeList selectedDateRange(int& totalCount);
@@ -120,7 +120,7 @@ private:
 
     int           maxCount();
     int           indexForDateTime(const QDateTime& date);
-    int           statForDateTime(const QDateTime& dt, SelectionMode* selected);
+    int           statForDateTime(const QDateTime& dt, SelectionMode* selected) const;
     void          setRefDateTime(const QDateTime& dateTime);
 
     void          paintEvent(QPaintEvent*);

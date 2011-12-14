@@ -281,7 +281,7 @@ QDateTime TimeLineWidget::cursorDateTime() const
     return d->cursorDateTime;
 }
 
-int TimeLineWidget::cursorInfo(QString& infoDate)
+int TimeLineWidget::cursorInfo(QString& infoDate) const
 {
     SelectionMode selected;
     QDateTime dt = cursorDateTime();
@@ -1036,7 +1036,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
         ref = prevDateTime(ref);
     }
 
-    // Draw cursor rectangle over current date-time.
+    // Draw focus rectangle over current date-time.
     if (focusRect.isValid())
     {
         focusRect.setTop(d->topMargin);
@@ -1172,7 +1172,7 @@ int TimeLineWidget::maxCount()
     return max;
 }
 
-int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode* selected)
+int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode* selected) const
 {
     int count        = 0;
     int year         = dt.date().year();
