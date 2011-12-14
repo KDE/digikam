@@ -35,7 +35,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 250316 : After moving album and pictures, they are displayed like before.
 026 ==> 249136 : Not Safe For Work feature.
 027 ==> 203932 : Image view scrolling and thumb-generation is very slow.
-028 ==> 
+028 ==> 275687 : Artifacts when scrolling in album GUI.
+029 ==> 
 
 
 
