@@ -32,7 +32,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 145231 : auto hide side bar.
 023 ==> 228803 : Wish: EV correction value in Photograph Properties.
 024 ==> 277493 : Wish: Show terminal emulator as part of the main window.
-025 ==> 
+025 ==> 250316 : After moving album and pictures, they are displayed like before.
+026 ==> 
 
 
 
