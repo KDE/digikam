@@ -48,7 +48,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 038 ==> 250610 : Tool or procedure to check digikam database.
 039 ==> 264773 : digiKam does not like nepomukserver anymore.
 040 ==> 234078 : digiKam gpswidget display a grey geolocalization.
-041 ==> 
+041 ==> 286496 : Trigger on update of field - not supported in MySQL.
+042 ==> 
 
 
 
