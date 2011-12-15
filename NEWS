@@ -44,5 +44,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 236908 : Create the ISO date subalbums for existing albums.
 035 ==> 272332 : Moving a versioned file crashes digiKam.
 036 ==> 269528 : Schema updating process from v4 to v5.
-037 ==> 
+037 ==> 124013 : digiKam is overwhelmed by a large (60Gb) album.
+038 ==> 
 
