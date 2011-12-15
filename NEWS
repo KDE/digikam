@@ -43,4 +43,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 033 ==> 190393 : digiKam always starts in fullscreen after a crash.
 034 ==> 236908 : Create the ISO date subalbums for existing albums.
 035 ==> 272332 : Moving a versioned file crashes digiKam.
-036 ==> 
+036 ==> 269528 : Schema updating process from v4 to v5.
+037 ==> 
+
