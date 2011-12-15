@@ -46,6 +46,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 036 ==> 269528 : Schema updating process from v4 to v5.
 037 ==> 124013 : digiKam is overwhelmed by a large (60Gb) album.
 038 ==> 250610 : Tool or procedure to check digikam database.
-039 ==> 
+039 ==> 264773 : digiKam does not like nepomukserver anymore.
+040 ==> 234078 : digiKam gpswidget display a grey geolocalization.
+041 ==> 
+
 
 
