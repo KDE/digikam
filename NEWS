@@ -65,4 +65,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 055 ==> 288830 : Could not delete picture: trash full.
 056 ==> 199461 : Picture quickinfo doesn't show isospeed.
 057 ==> 279556 : Editing captions in metadata editor sets the exif image creation date to file modification date.
-058 ==> 
+058 ==> 224533 : digiKam acting weird on new qt 4.6.1/kde sc 4.3.95.
+059 ==> 
