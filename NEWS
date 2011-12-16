@@ -51,7 +51,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 041 ==> 286496 : Trigger on update of field - not supported in MySQL.
 042 ==> 205776 : "Embedded preview loads full image size" does not only do what it says, confusing users.
 043 ==> 281108 : File Properties uses unreadable black on dark grey text.
-044 ==> 
+044 ==> 194925 : Error "the process for the digikamalbums protocol died unexpectedly".
+045 ==> 
 
 
 
