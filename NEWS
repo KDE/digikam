@@ -61,5 +61,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 051 ==> 193489 : Thumbnails are flashing are not shown at all.
 052 ==> 225700 : Indicate hierarchy for too long tags on mouse over.
 053 ==> 157923 : Wish: tags should be allowed to contain a slash.
-054 ==> 
+054 ==> 188027 : Allow moving images between albums in tag view.
+055 ==> 
 
