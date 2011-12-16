@@ -100,7 +100,7 @@ public:
     bool    hasImageHistoryTag() const;
 
     QString getImageUniqueId() const;
-    bool setImageUniqueId(const QString& uuid) const;
+    bool    setImageUniqueId(const QString& uuid) const;
 
     /// Fills only the copyright values in the template. Use getMetadataTemplate() usually.
     /// Returns true if valid fields were read.
@@ -252,6 +252,7 @@ private:
 
     bool setProgramId(bool on=true) const;
     bool setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey) const;
+
     QVariant fromExifOrXmp(const char* exifTagName, const char* xmpTagName) const;
     QVariant fromIptcOrXmp(const char* iptcTagName, const char* xmpTagName) const;
     QVariant fromXmpList(const char* xmpTagName) const;
@@ -259,6 +260,8 @@ private:
     QVariant fromXmpLangAlt(const char* xmpTagName) const;
     QVariant fromIptcEmulateLangAlt(const char* iptcTagName) const;
     QVariant toStringListVariant(const QStringList& list) const;
+
+    QString getExifTagStringFromTagsList(const QStringList& tagsList) const;
 };
 
 }  // namespace Digikam
