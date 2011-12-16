@@ -64,5 +64,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 054 ==> 188027 : Allow moving images between albums in tag view.
 055 ==> 288830 : Could not delete picture: trash full.
 056 ==> 199461 : Picture quickinfo doesn't show isospeed.
-057 ==> 
-
+057 ==> 279556 : Editing captions in metadata editor sets the exif image creation date to file modification date.
+058 ==> 
