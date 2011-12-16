@@ -68,5 +68,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 058 ==> 224533 : digiKam acting weird on new qt 4.6.1/kde sc 4.3.95.
 059 ==> 183627 : digiKam & showfot logo's text in upper right corner looks jagged - could use scalable font or SVG.
 060 ==> 189990 : To set an IPTC caption with syncing EXIF => the image is no more displayed in the calendar view.
-061 ==> 
+061 ==> 288266 : digiKam crashed attempting to fix a shortcut conflict.
+062 ==> 
 
