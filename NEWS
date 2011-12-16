@@ -54,6 +54,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 194925 : Error "the process for the digikamalbums protocol died unexpectedly".
 045 ==> 196332 : Copying images leads to an error message.
 046 ==> 192437 : Insulate digiKam from geolocation crashes in Marble.
-047 ==> 
+047 ==> 251885 : Loose the small "toolbar" in the image preview.
+048 ==> 
 
 
