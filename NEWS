@@ -56,5 +56,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 046 ==> 192437 : Insulate digiKam from geolocation crashes in Marble.
 047 ==> 251885 : Loose the small "toolbar" in the image preview.
 048 ==> 200965 : Improve digikam main menu.
-049 ==> 
-
+049 ==> 261730 : digiKam 1.7 crashed after deleting a a lot of tags.
+050 ==> 
