@@ -59,4 +59,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 049 ==> 261730 : digiKam 1.7 crashed after deleting a a lot of tags.
 050 ==> 265718 : "Add tag from address book" disables image sidebar, if address book is empty.
 051 ==> 193489 : Thumbnails are flashing are not shown at all.
-052 ==> 
+052 ==> 225700 : Indicate hierarchy for too long tags on mouse over.
+053 ==> 
+
