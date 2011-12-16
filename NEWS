@@ -57,4 +57,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 251885 : Loose the small "toolbar" in the image preview.
 048 ==> 200965 : Improve digikam main menu.
 049 ==> 261730 : digiKam 1.7 crashed after deleting a a lot of tags.
-050 ==> 
+050 ==> 265718 : "Add tag from address book" disables image sidebar, if address book is empty.
+051 ==> 
+
