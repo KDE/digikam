@@ -74,6 +74,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 064 ==> 208160 : After edition image has different colors in QT nad GTK+ applications.
 065 ==> 276330 : Keyboard Shortcut doubled, orientation change not saved in exif nor xmp.
 066 ==> 192124 : (auto correction plugin) Provide an up to date list of cameras and lenses.
-067 ==> 
+067 ==> 280619 : Colour automatic correction doesn't work if an image was opened in editor for a longer time.
+068 ==> 
 
 
