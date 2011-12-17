@@ -71,5 +71,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 061 ==> 288266 : digiKam crashed attempting to fix a shortcut conflict.
 062 ==> 262585 : A single face is detected twice.
 063 ==> 171478 : Please add option to keep zoom ratio fixed when switching from image to image.
-064 ==> 
+064 ==> 208160 : After edition image has different colors in QT nad GTK+ applications.
+065 ==> 276330 : Keyboard Shortcut doubled, orientation change not saved in exif nor xmp.
+066 ==> 
+
 
