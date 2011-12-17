@@ -73,6 +73,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 063 ==> 171478 : Please add option to keep zoom ratio fixed when switching from image to image.
 064 ==> 208160 : After edition image has different colors in QT nad GTK+ applications.
 065 ==> 276330 : Keyboard Shortcut doubled, orientation change not saved in exif nor xmp.
-066 ==> 
+066 ==> 192124 : (auto correction plugin) Provide an up to date list of cameras and lenses.
+067 ==> 
 
 
