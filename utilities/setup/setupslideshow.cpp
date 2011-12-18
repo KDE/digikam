@@ -119,9 +119,6 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
     d->showMakeModel = new QCheckBox(i18n("Show camera make and model"), panel);
     d->showMakeModel->setWhatsThis( i18n("Show the camera make and model at the bottom of the screen."));
 
-    d->showLabels = new QCheckBox(i18n("Show image labels"), panel);
-    d->showLabels->setWhatsThis( i18n("Show the digiKam image color label, pick label, and rating at the bottom of the screen."));
-
     d->showComment = new QCheckBox(i18n("Show image caption"), panel);
     d->showComment->setWhatsThis( i18n("Show the image caption at the bottom of the screen."));
 
@@ -131,16 +128,21 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
     d->showCapIfNoTitle = new QCheckBox(i18n("Show image caption if it hasn't title"), panel);
     d->showCapIfNoTitle->setWhatsThis( i18n("Show the image caption at the bottom of the screen if no titles existed."));
 
+    d->showLabels = new QCheckBox(i18n("Show image labels"), panel);
+    d->showLabels->setWhatsThis( i18n("Show the digiKam image color label, pick label, and rating at the bottom of the screen."));
+
     // Disable and uncheck the "Show captions if no title" checkbox if the "Show comment" checkbox enabled
     connect(d->showComment, SIGNAL(stateChanged(int)), 
             this, SLOT(slotSetUnchecked(int)));
-    
+
     connect(d->showComment, SIGNAL(toggled(bool)),
             d->showCapIfNoTitle, SLOT(setDisabled(bool)));
 
     // Only digiKam support this feature, showFoto do not support digiKam database information.
     if (kapp->applicationName() == "showfoto")
     {
+        d->showTitle->hide();
+        d->showCapIfNoTitle->hide();
         d->showLabels->hide();
     }
 
@@ -152,10 +154,10 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
     layout->addWidget(d->showApertureFocal);
     layout->addWidget(d->showExpoSensitivity);
     layout->addWidget(d->showMakeModel);
-    layout->addWidget(d->showLabels);
     layout->addWidget(d->showComment);
     layout->addWidget(d->showTitle);
     layout->addWidget(d->showCapIfNoTitle);
+    layout->addWidget(d->showLabels);
     layout->addStretch();
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
