@@ -1835,6 +1835,7 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
         settings.fileList.append(info.fileUrl());
         SlidePictureInfo pictInfo;
         pictInfo.comment    = info.comment();
+        pictInfo.title      = info.title();
         pictInfo.rating     = info.rating();
         pictInfo.colorLabel = info.colorLabel();
         pictInfo.pickLabel  = info.pickLabel();

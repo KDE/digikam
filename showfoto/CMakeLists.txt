@@ -36,6 +36,9 @@ TARGET_LINK_LIBRARIES(showfoto
                       ${KDE4_KIO_LIBS}
                       ${LCMS_LIBRARIES}
                       ${QT_QT3SUPPORT_LIBRARY}
+
+                      # To link under Solaris (see B.K.O #274484)
+                      ${MATH_LIBRARY}
                      )
 
 INSTALL(TARGETS showfoto ${INSTALL_TARGETS_DEFAULT_ARGS})

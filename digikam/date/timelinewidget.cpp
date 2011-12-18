@@ -33,7 +33,6 @@
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
-#include <QTimer>
 
 // KDE includes
 
@@ -65,7 +64,6 @@ public:
     TimeLineWidgetPriv() :
         validMouseEvent(false),
         selMouseEvent(false),
-        flicker(false),
         maxCountByDay(1),
         maxCountByWeek(1),
         maxCountByMonth(1),
@@ -83,7 +81,6 @@ public:
 
     bool                         validMouseEvent;   // Current mouse enter event is valid to set cursor position or selection.
     bool                         selMouseEvent;     // Current mouse enter event is about to make a selection.
-    bool                         flicker;
 
     int                          maxCountByDay;
     int                          maxCountByWeek;
@@ -102,8 +99,6 @@ public:
     QDateTime                    selStartDateTime;
     QDateTime                    selMinDateTime;    // Lower date available on histogram.
     QDateTime                    selMaxDateTime;    // Higher date available on histogram.
-
-    QTimer                       timer;
 
     QPixmap                      pixmap;            // Used for widget double buffering.
 
@@ -130,11 +125,6 @@ TimeLineWidget::TimeLineWidget(QWidget* parent)
     setCursorDateTime(ref);
     setRefDateTime(ref);
 
-    d->timer.setInterval(800);
-
-    connect(&d->timer, SIGNAL(timeout()),
-            this, SLOT(slotFlickerTimer()));
-
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 }
@@ -142,18 +132,6 @@ TimeLineWidget::TimeLineWidget(QWidget* parent)
 TimeLineWidget::~TimeLineWidget()
 {
     delete d;
-}
-
-void TimeLineWidget::showEvent(QShowEvent* e)
-{
-    QWidget::showEvent(e);
-    d->timer.start();
-}
-
-void TimeLineWidget::hideEvent(QHideEvent* e)
-{
-    QWidget::hideEvent(e);
-    d->timer.stop();
 }
 
 void TimeLineWidget::setTimeUnit(TimeUnit timeUnit)
@@ -179,7 +157,7 @@ TimeLineWidget::ScaleMode TimeLineWidget::scaleMode() const
     return d->scaleMode;
 }
 
-int TimeLineWidget::totalIndex()
+int TimeLineWidget::totalIndex() const
 {
     if (d->minDateTime.isNull() || d->maxDateTime.isNull())
     {
@@ -199,7 +177,7 @@ int TimeLineWidget::totalIndex()
     return i;
 }
 
-int TimeLineWidget::indexForDateTime(const QDateTime& date)
+int TimeLineWidget::indexForDateTime(const QDateTime& date) const
 {
     if (d->minDateTime.isNull() || d->maxDateTime.isNull() || date.isNull())
     {
@@ -219,12 +197,12 @@ int TimeLineWidget::indexForDateTime(const QDateTime& date)
     return i;
 }
 
-int TimeLineWidget::indexForRefDateTime()
+int TimeLineWidget::indexForRefDateTime() const
 {
     return (indexForDateTime(d->refDateTime));
 }
 
-int TimeLineWidget::indexForCursorDateTime()
+int TimeLineWidget::indexForCursorDateTime() const
 {
     return (indexForDateTime(d->cursorDateTime));
 }
@@ -303,7 +281,7 @@ QDateTime TimeLineWidget::cursorDateTime() const
     return d->cursorDateTime;
 }
 
-int TimeLineWidget::cursorInfo(QString& infoDate)
+int TimeLineWidget::cursorInfo(QString& infoDate) const
 {
     SelectionMode selected;
     QDateTime dt = cursorDateTime();
@@ -451,7 +429,7 @@ void TimeLineWidget::setSelectedDateRange(const DateRangeList& list)
     update();
 }
 
-DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
+DateRangeList TimeLineWidget::selectedDateRange(int& totalCount) const
 {
     // We will parse all selections done on Days stats map.
 
@@ -695,9 +673,8 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
     emit signalDateMapChanged();
 }
 
-int TimeLineWidget::calculateTop(int& val)
+int TimeLineWidget::calculateTop(int& val) const
 {
-
     const int minimum_valid_height = 1;
 
     double max = (double)maxCount();
@@ -754,7 +731,6 @@ int TimeLineWidget::calculateTop(int& val)
 
         return top;
     }
-
 }
 
 void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
@@ -976,6 +952,14 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
             selRect.setBottom(height() - d->bottomMargin/2);
             selRect.setRight(d->startPos + (i+1)*d->barWidth);
             p.fillRect(selRect, selBrush);
+
+            p.fillRect(barRect, selBrush);
+            p.drawLine(barRect.topLeft(), barRect.topRight());
+            p.drawLine(barRect.topRight(), barRect.bottomRight());
+            p.drawLine(barRect.bottomRight(), barRect.bottomLeft());
+            p.drawLine(barRect.bottomLeft(), barRect.topLeft());
+            p.drawLine(barRect.right(), barRect.bottom(), barRect.right(), barRect.bottom()+3);
+            p.drawLine(barRect.left(),  barRect.bottom(), barRect.left(),  barRect.bottom()+3);
         }
 
         paintItem(p, barRect, ref, barRect.left(), dateColor, subDateColor);
@@ -1053,6 +1037,14 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
             selRect.setBottom(height() - d->bottomMargin/2);
             selRect.setRight(d->startPos - i*d->barWidth);
             p.fillRect(selRect, selBrush);
+
+            p.fillRect(barRect, selBrush);
+            p.drawLine(barRect.topLeft(), barRect.topRight());
+            p.drawLine(barRect.topRight(), barRect.bottomRight());
+            p.drawLine(barRect.bottomRight(), barRect.bottomLeft());
+            p.drawLine(barRect.bottomLeft(), barRect.topLeft());
+            p.drawLine(barRect.right(), barRect.bottom(), barRect.right(), barRect.bottom()+3);
+            p.drawLine(barRect.left(),  barRect.bottom(), barRect.left(),  barRect.bottom()+3);
         }
 
         paintItem(p, barRect, ref, barRect.right(), dateColor, subDateColor);
@@ -1060,7 +1052,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
         ref = prevDateTime(ref);
     }
 
-    // Draw cursor rectangle over current date-time.
+    // Draw focus rectangle over current date-time.
     if (focusRect.isValid())
     {
         focusRect.setTop(d->topMargin);
@@ -1098,43 +1090,12 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
         p.drawLine(focusRect.bottomRight(), focusRect.bottomLeft());
         p.drawLine(focusRect.bottomLeft(), focusRect.topLeft());
         p.drawLine(p1.x(), p1.y()-2, p2.x(), p2.y()-2);
-
-        // Draw flicker effect around selection area.
-
-        QRect srect;
-        srect.setTop(height() - d->bottomMargin);
-        srect.setLeft(focusRect.left());
-        srect.setBottom(height() - d->bottomMargin/2);
-        srect.setRight(focusRect.right());
-        srect.adjust(3, 1, -4, -2);
-
-        if (d->flicker)
-        {
-            p.setPen(QPen(Qt::white, 1, Qt::SolidLine));
-        }
-        else
-        {
-            p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-        }
-
-        p.drawRect(srect);
-
-        if (d->flicker)
-        {
-            p.setPen(QPen(Qt::red, 1, Qt::DotLine));
-        }
-        else
-        {
-            p.setPen(QPen(Qt::white, 1, Qt::DotLine));
-        }
-
-        p.drawRect(srect);
     }
 
     p.end();
 }
 
-QDateTime TimeLineWidget::prevDateTime(const QDateTime& dt)
+QDateTime TimeLineWidget::prevDateTime(const QDateTime& dt) const
 {
     QDateTime prev;
 
@@ -1165,7 +1126,7 @@ QDateTime TimeLineWidget::prevDateTime(const QDateTime& dt)
     return prev;
 }
 
-QDateTime TimeLineWidget::nextDateTime(const QDateTime& dt)
+QDateTime TimeLineWidget::nextDateTime(const QDateTime& dt) const
 {
     QDateTime next;
 
@@ -1196,7 +1157,7 @@ QDateTime TimeLineWidget::nextDateTime(const QDateTime& dt)
     return next;
 }
 
-int TimeLineWidget::maxCount()
+int TimeLineWidget::maxCount() const
 {
     int max = 1;
 
@@ -1227,7 +1188,7 @@ int TimeLineWidget::maxCount()
     return max;
 }
 
-int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode* selected)
+int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode* selected) const
 {
     int count        = 0;
     int year         = dt.date().year();
@@ -1474,7 +1435,7 @@ void TimeLineWidget::setDaysRangeSelection(const QDateTime& dts, const QDateTime
     while (dt < dte);
 }
 
-TimeLineWidget::SelectionMode TimeLineWidget::checkSelectionForDaysRange(const QDateTime& dts, const QDateTime& dte)
+TimeLineWidget::SelectionMode TimeLineWidget::checkSelectionForDaysRange(const QDateTime& dts, const QDateTime& dte) const
 {
     int year, day;
     int items    = 0;
@@ -1723,7 +1684,7 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent* e)
 {
     // set cursor shape to indicate selection area
     QRect selectionArea;
-    selectionArea.setTop(height() - d->bottomMargin + 1);
+    selectionArea.setTop(d->topMargin);
     selectionArea.setLeft(0);
     selectionArea.setBottom(height());
     selectionArea.setRight(width());
@@ -1838,7 +1799,7 @@ void TimeLineWidget::mouseReleaseEvent(QMouseEvent*)
 
 QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool* isOnSelectionArea)
 {
-    QRect barRect, selRect;
+    QRect barRect;
     *isOnSelectionArea = false;
 
     // Check on the right of reference date.
@@ -1856,18 +1817,10 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool* isOnSelection
         barRect.setBottom(height() - d->bottomMargin + 1);
         barRect.setRight(d->startPos + (i+1)*d->barWidth);
 
-        selRect.setTop(height() - d->bottomMargin + 1);
-        selRect.setLeft(d->startPos + i*d->barWidth);
-        selRect.setBottom(height());
-        selRect.setRight(d->startPos + (i+1)*d->barWidth);
-
-        if (selRect.contains(pt))
+        if (barRect.contains(pt))
         {
             *isOnSelectionArea = true;
-        }
 
-        if (barRect.contains(pt) || selRect.contains(pt))
-        {
             if (i >= d->nbItems)
             {
                 // Point is outside visible widget area. We scrolling widget contents.
@@ -1893,18 +1846,10 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool* isOnSelection
         barRect.setBottom(height() - d->bottomMargin + 1);
         barRect.setLeft(d->startPos - (i+1)*d->barWidth);
 
-        selRect.setTop(height() - d->bottomMargin + 1);
-        selRect.setLeft(d->startPos - (i+1)*d->barWidth);
-        selRect.setBottom(height());
-        selRect.setRight(d->startPos - i*d->barWidth);
-
-        if (selRect.contains(pt))
+        if (barRect.contains(pt))
         {
             *isOnSelectionArea = true;
-        }
 
-        if (barRect.contains(pt) || selRect.contains(pt))
-        {
             if (i >= d->nbItems-1)
             {
                 // Point is outside visible widget area. We scrolling widget contents.
@@ -1920,7 +1865,7 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool* isOnSelection
     return QDateTime();
 }
 
-QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
+QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber) const
 {
     // Search the first day of first week of year.
     // We start to scan from 1st December of year-1 because
@@ -1955,12 +1900,6 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
 
 void TimeLineWidget::slotThemeChanged()
 {
-    update();
-}
-
-void TimeLineWidget::slotFlickerTimer()
-{
-    d->flicker = !d->flicker;
     update();
 }
 

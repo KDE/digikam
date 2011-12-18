@@ -6,7 +6,7 @@
 # @date   2010-09-15
 # @brief  test lensfun interface
 #
-# @author Copyright (C) 2010 by Gilles Caulier
+# @author Copyright (C) 2010-2011 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -29,4 +29,7 @@ TARGET_LINK_LIBRARIES(testlensfuniface
                       ${QT_QTCORE_LIBRARY}
                       ${KDE4_KDECORE_LIBS}
                       ${KEXIV2_LIBRARIES}
+
+                      # To link under Solaris (see B.K.O #274484)
+                      ${MATH_LIBRARY}
                      )

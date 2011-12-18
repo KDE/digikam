@@ -935,12 +935,16 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
     {
         photoInfo.dateTime = getImageDateTime();
 
+        // -----------------------------------------------------------------------------------
+
         photoInfo.make     = getExifTagString("Exif.Image.Make");
 
         if (photoInfo.make.isEmpty())
         {
             photoInfo.make = getXmpTagString("Xmp.tiff.Make");
         }
+
+        // -----------------------------------------------------------------------------------
 
         photoInfo.model    = getExifTagString("Exif.Image.Model");
 
@@ -949,7 +953,11 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
             photoInfo.model = getXmpTagString("Xmp.tiff.Model");
         }
 
+        // -----------------------------------------------------------------------------------
+
         photoInfo.lens     = getLensDescription();
+
+        // -----------------------------------------------------------------------------------
 
         photoInfo.aperture = getExifTagString("Exif.Photo.FNumber");
 
@@ -968,6 +976,8 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
             photoInfo.aperture = getXmpTagString("Xmp.exif.ApertureValue");
         }
 
+        // -----------------------------------------------------------------------------------
+
         photoInfo.exposureTime = getExifTagString("Exif.Photo.ExposureTime");
 
         if (photoInfo.exposureTime.isEmpty())
@@ -985,6 +995,8 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
             photoInfo.exposureTime = getXmpTagString("Xmp.exif.ShutterSpeedValue");
         }
 
+        // -----------------------------------------------------------------------------------
+
         photoInfo.exposureMode    = getExifTagString("Exif.Photo.ExposureMode");
 
         if (photoInfo.exposureMode.isEmpty())
@@ -996,6 +1008,8 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
         {
             photoInfo.exposureMode = getExifTagString("Exif.CanonCs.MeteringMode");
         }
+
+        // -----------------------------------------------------------------------------------
 
         photoInfo.exposureProgram = getExifTagString("Exif.Photo.ExposureProgram");
 
@@ -1009,6 +1023,8 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
             photoInfo.exposureProgram = getExifTagString("Exif.CanonCs.ExposureProgram");
         }
 
+        // -----------------------------------------------------------------------------------
+
         photoInfo.focalLength     = getExifTagString("Exif.Photo.FocalLength");
 
         if (photoInfo.focalLength.isEmpty())
@@ -1021,6 +1037,8 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
             photoInfo.focalLength = getExifTagString("Exif.Canon.FocalLength");
         }
 
+        // -----------------------------------------------------------------------------------
+
         photoInfo.focalLength35mm = getExifTagString("Exif.Photo.FocalLengthIn35mmFilm");
 
         if (photoInfo.focalLength35mm.isEmpty())
@@ -1028,27 +1046,38 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
             photoInfo.focalLength35mm = getXmpTagString("Xmp.exif.FocalLengthIn35mmFilm");
         }
 
-        photoInfo.sensitivity = getExifTagString("Exif.Photo.ISOSpeedRatings");
+        // -----------------------------------------------------------------------------------
 
-        if (photoInfo.sensitivity.isEmpty())
-        {
-            photoInfo.sensitivity = getExifTagString("Exif.Photo.ExposureIndex");
-        }
+        QStringList ISOSpeedTags;
 
-        if (photoInfo.sensitivity.isEmpty())
-        {
-            photoInfo.sensitivity = getXmpTagString("Xmp.exif.ISOSpeedRatings");
-        }
+        ISOSpeedTags << "Exif.Photo.ISOSpeedRatings";
+        ISOSpeedTags << "Exif.Photo.ExposureIndex";
+        ISOSpeedTags << "Exif.Image.ISOSpeedRatings";
+        ISOSpeedTags << "Xmp.exif.ISOSpeedRatings";
+        ISOSpeedTags << "Xmp.exif.ExposureIndex";
+        ISOSpeedTags << "Exif.CanonSi.ISOSpeed";
+        ISOSpeedTags << "Exif.CanonCs.ISOSpeed";
+        ISOSpeedTags << "Exif.Nikon1.ISOSpeed";
+        ISOSpeedTags << "Exif.Nikon2.ISOSpeed";
+        ISOSpeedTags << "Exif.Nikon3.ISOSpeed";
+        ISOSpeedTags << "Exif.NikonIi.ISO";
+        ISOSpeedTags << "Exif.NikonIi.ISO2";
+        ISOSpeedTags << "Exif.MinoltaCsNew.ISOSetting";
+        ISOSpeedTags << "Exif.MinoltaCsOld.ISOSetting";
+        ISOSpeedTags << "Exif.MinoltaCs5D.ISOSpeed";
+        ISOSpeedTags << "Exif.MinoltaCs7D.ISOSpeed";
+        ISOSpeedTags << "Exif.Sony1Cs.ISOSetting";
+        ISOSpeedTags << "Exif.Sony2Cs.ISOSetting";
+        ISOSpeedTags << "Exif.Sony1Cs2.ISOSetting";
+        ISOSpeedTags << "Exif.Sony2Cs2.ISOSetting";
+        ISOSpeedTags << "Exif.Sony1MltCsA100.ISOSetting";
+        ISOSpeedTags << "Exif.Pentax.ISO";
+        ISOSpeedTags << "Exif.Olympus.ISOSpeed";
+        ISOSpeedTags << "Exif.Samsung2.ISO";
 
-        if (photoInfo.sensitivity.isEmpty())
-        {
-            photoInfo.sensitivity = getXmpTagString("Xmp.exif.ExposureIndex");
-        }
+        photoInfo.sensitivity = getExifTagStringFromTagsList(ISOSpeedTags);
 
-        if (photoInfo.sensitivity.isEmpty())
-        {
-            photoInfo.sensitivity = getExifTagString("Exif.CanonSi.ISOSpeed");
-        }
+        // -----------------------------------------------------------------------------------
 
         photoInfo.flash = getExifTagString("Exif.Photo.Flash");
 
@@ -1061,6 +1090,8 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
         {
             photoInfo.flash = getExifTagString("Exif.CanonCs.FlashActivity");
         }
+
+        // -----------------------------------------------------------------------------------
 
         photoInfo.whiteBalance = getExifTagString("Exif.Photo.WhiteBalance");
 
@@ -2793,6 +2824,19 @@ bool DMetadata::removeExifColorSpace() const
     ret      &= removeExifTag("Exif.Photo.ColorSpace", true);
     ret      &= removeXmpTag("Xmp.exif.ColorSpace", true);
     return ret;
+}
+
+QString DMetadata::getExifTagStringFromTagsList(const QStringList& tagsList) const
+{
+    QString val;
+    foreach (QString tag, tagsList)
+    {
+        val = getExifTagString(tag.toAscii());
+        if (!val.isEmpty())
+            return val;
+    }
+
+    return QString();
 }
 
 }  // namespace Digikam
