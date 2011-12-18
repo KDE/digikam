@@ -76,6 +76,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 066 ==> 192124 : (auto correction plugin) Provide an up to date list of cameras and lenses.
 067 ==> 280619 : Colour automatic correction doesn't work if an image was opened in editor for a longer time.
 068 ==> 283417 : Add an option to show image titles [patch].
-069 ==> 
-
+069 ==> 149786 : digiKam should try to reconnect to camera after the connection has expired.
+070 ==> 
 
