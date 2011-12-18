@@ -46,6 +46,10 @@ public:
 
     void applySettings();
 
+public slots:
+
+    void slotSetUnchecked(int);
+
 private:
 
     void readSettings();

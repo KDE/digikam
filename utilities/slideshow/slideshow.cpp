@@ -396,6 +396,8 @@ void SlideShow::updatePixmap()
 
             QString str;
             PhotoInfoContainer photoInfo = d->settings.pictInfoMap[d->currentImage].photoInfo;
+            QString            comment   = d->settings.pictInfoMap[d->currentImage].comment;
+            QString            title     = d->settings.pictInfoMap[d->currentImage].title;
             int offset                   = d->toolBar->height()+30;
 
             // Display Labels.
@@ -413,12 +415,36 @@ void SlideShow::updatePixmap()
                 d->labelsBox->move(10, height() - offset - d->clWidget->minimumHeight());
                 offset += d->clWidget->minimumHeight();
             }
+            
+            // Display Titles.
+            
+            if (d->settings.printTitle)
+            {
+                str.clear();
+                if (!title.isEmpty())
+                {
+                    str += title;
+                    printInfoText(p, offset, str);
+                }
+            }
 
+            // Display Captions if no Titles.
+
+            if (d->settings.printCapIfNoTitle)
+            {
+                str.clear();
+                if (title.isEmpty())
+                {
+                    str += comment;
+                    printComments(p, offset, str);
+                }
+            }
+            
             // Display Comments.
-
+            
             if (d->settings.printComment)
             {
-                str = d->settings.pictInfoMap[d->currentImage].comment;
+                str = comment;
                 printComments(p, offset, str);
             }
 

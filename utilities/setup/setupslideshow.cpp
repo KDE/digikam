@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QCheckBox>
+#include <QGroupBox>
 #include <QLabel>
 #include <QVBoxLayout>
 
@@ -57,8 +58,10 @@ public:
         showApertureFocal(0),
         showExpoSensitivity(0),
         showMakeModel(0),
-        showComment(0),
         showLabels(0),
+        showComment(0),
+        showTitle(0),
+        showCapIfNoTitle(0),
         delayInput(0)
     {}
 
@@ -69,8 +72,10 @@ public:
     QCheckBox*    showApertureFocal;
     QCheckBox*    showExpoSensitivity;
     QCheckBox*    showMakeModel;
-    QCheckBox*    showComment;
     QCheckBox*    showLabels;
+    QCheckBox*    showComment;
+    QCheckBox*    showTitle;
+    QCheckBox*    showCapIfNoTitle;
 
     KIntNumInput* delayInput;
 };
@@ -114,11 +119,24 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
     d->showMakeModel = new QCheckBox(i18n("Show camera make and model"), panel);
     d->showMakeModel->setWhatsThis( i18n("Show the camera make and model at the bottom of the screen."));
 
+    d->showLabels = new QCheckBox(i18n("Show image labels"), panel);
+    d->showLabels->setWhatsThis( i18n("Show the digiKam image color label, pick label, and rating at the bottom of the screen."));
+
     d->showComment = new QCheckBox(i18n("Show image caption"), panel);
     d->showComment->setWhatsThis( i18n("Show the image caption at the bottom of the screen."));
 
-    d->showLabels = new QCheckBox(i18n("Show image labels"), panel);
-    d->showLabels->setWhatsThis( i18n("Show the digiKam image color label, pick label, and rating at the bottom of the screen."));
+    d->showTitle = new QCheckBox(i18n("Show image title"), panel);
+    d->showTitle->setWhatsThis(i18n("Show the image title at the bottom of the screen."));
+
+    d->showCapIfNoTitle = new QCheckBox(i18n("Show image caption if it hasn't title"), panel);
+    d->showCapIfNoTitle->setWhatsThis( i18n("Show the image caption at the bottom of the screen if no titles existed."));
+
+    // Disable and uncheck the "Show captions if no title" checkbox if the "Show comment" checkbox enabled
+    connect(d->showComment, SIGNAL(stateChanged(int)), 
+            this, SLOT(slotSetUnchecked(int)));
+    
+    connect(d->showComment, SIGNAL(toggled(bool)),
+            d->showCapIfNoTitle, SLOT(setDisabled(bool)));
 
     // Only digiKam support this feature, showFoto do not support digiKam database information.
     if (kapp->applicationName() == "showfoto")
@@ -134,8 +152,10 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
     layout->addWidget(d->showApertureFocal);
     layout->addWidget(d->showExpoSensitivity);
     layout->addWidget(d->showMakeModel);
-    layout->addWidget(d->showComment);
     layout->addWidget(d->showLabels);
+    layout->addWidget(d->showComment);
+    layout->addWidget(d->showTitle);
+    layout->addWidget(d->showCapIfNoTitle);
     layout->addStretch();
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
@@ -154,6 +174,11 @@ SetupSlideShow::~SetupSlideShow()
     delete d;
 }
 
+void SetupSlideShow::slotSetUnchecked(int)
+{
+    d->showCapIfNoTitle->setCheckState(Qt::Unchecked);
+}
+
 void SetupSlideShow::applySettings()
 {
     SlideShowSettings settings;
@@ -166,6 +191,8 @@ void SetupSlideShow::applySettings()
     settings.printExpoSensitivity = d->showExpoSensitivity->isChecked();
     settings.printMakeModel       = d->showMakeModel->isChecked();
     settings.printComment         = d->showComment->isChecked();
+    settings.printTitle           = d->showTitle->isChecked();
+    settings.printCapIfNoTitle    = d->showCapIfNoTitle->isChecked();
     settings.printLabels          = d->showLabels->isChecked();
     settings.writeToConfig();
 }
@@ -183,6 +210,8 @@ void SetupSlideShow::readSettings()
     d->showExpoSensitivity->setChecked(settings.printExpoSensitivity);
     d->showMakeModel->setChecked(settings.printMakeModel);
     d->showComment->setChecked(settings.printComment);
+    d->showTitle->setChecked(settings.printTitle);
+    d->showCapIfNoTitle->setChecked(settings.printCapIfNoTitle);
     d->showLabels->setChecked(settings.printLabels);
 }
 

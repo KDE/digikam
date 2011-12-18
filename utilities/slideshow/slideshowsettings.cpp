@@ -43,6 +43,8 @@ const QString SlideShowSettings::configSlideShowDelayEntry("SlideShowDelay");
 const QString SlideShowSettings::configSlideShowLoopEntry("SlideShowLoop");
 const QString SlideShowSettings::configSlideShowPrintApertureFocalEntry("SlideShowPrintApertureFocal");
 const QString SlideShowSettings::configSlideShowPrintCommentEntry("SlideShowPrintComment");
+const QString SlideShowSettings::configSlideShowPrintTitleEntry("SlideShowPrintTitle");
+const QString SlideShowSettings::configSlideShowPrintCapIfNoTitleEntry("SlideShowPrintCapIfNoTitle");
 const QString SlideShowSettings::configSlideShowPrintDateEntry("SlideShowPrintDate");
 const QString SlideShowSettings::configSlideShowPrintExpoSensitivityEntry("SlideShowPrintExpoSensitivity");
 const QString SlideShowSettings::configSlideShowPrintMakeModelEntry("SlideShowPrintMakeModel");
@@ -58,6 +60,8 @@ SlideShowSettings::SlideShowSettings()
     printName            = true;
     printDate            = false;
     printComment         = false;
+    printTitle           = false;
+    printCapIfNoTitle    = false;
     printLabels          = false;
     printApertureFocal   = false;
     printMakeModel       = false;
@@ -81,6 +85,8 @@ void SlideShowSettings::readFromConfig()
     printExpoSensitivity      = group.readEntry(configSlideShowPrintExpoSensitivityEntry, false);
     printMakeModel            = group.readEntry(configSlideShowPrintMakeModelEntry, false);
     printComment              = group.readEntry(configSlideShowPrintCommentEntry, false);
+    printTitle                = group.readEntry(configSlideShowPrintTitleEntry, false);
+    printCapIfNoTitle         = group.readEntry(configSlideShowPrintCapIfNoTitleEntry, false);
     printLabels               = group.readEntry(configSlideShowPrintLabelsEntry, false);
 
     exifRotate                = MetadataSettings::instance()->settings().exifRotate;
@@ -99,6 +105,8 @@ void SlideShowSettings::writeToConfig()
     group.writeEntry(configSlideShowPrintExpoSensitivityEntry, printExpoSensitivity);
     group.writeEntry(configSlideShowPrintMakeModelEntry,       printMakeModel);
     group.writeEntry(configSlideShowPrintCommentEntry,         printComment);
+    group.writeEntry(configSlideShowPrintTitleEntry,           printTitle);
+    group.writeEntry(configSlideShowPrintCapIfNoTitleEntry,    printCapIfNoTitle);
     group.writeEntry(configSlideShowPrintLabelsEntry,          printLabels);
     group.sync();
 }

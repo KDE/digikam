@@ -66,6 +66,9 @@ public:
     /** Picture Comment */
     QString            comment;
 
+    /** Picture Title */
+    QString            title;
+
     /** Exif photo info of picture */
     PhotoInfoContainer photoInfo;
 };
@@ -112,6 +115,12 @@ public:
     /** Print picture comment during slide */
     bool                         printComment;
 
+    /** Print image title during slide */
+    bool                         printTitle;
+
+    /** Print image captions if no title available during slide */
+    bool                         printCapIfNoTitle;
+
     /** Print color label, pick label, and rating during slide */
     bool                         printLabels;
 
@@ -138,6 +147,8 @@ private:
     static const QString         configSlideShowLoopEntry;
     static const QString         configSlideShowPrintApertureFocalEntry;
     static const QString         configSlideShowPrintCommentEntry;
+    static const QString         configSlideShowPrintTitleEntry;
+    static const QString         configSlideShowPrintCapIfNoTitleEntry;
     static const QString         configSlideShowPrintDateEntry;
     static const QString         configSlideShowPrintExpoSensitivityEntry;
     static const QString         configSlideShowPrintMakeModelEntry;
