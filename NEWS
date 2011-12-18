@@ -78,4 +78,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 068 ==> 283417 : Add an option to show image titles [patch].
 069 ==> 149786 : digiKam should try to reconnect to camera after the connection has expired.
 070 ==> 158402 : Create a duplicate of an image in the image editor.
-071 ==> 
+071 ==> 174070 - enhancement plugins should be not in the menu, but in the toolbar on the right.
+072 ==> 
+
