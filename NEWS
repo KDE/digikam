@@ -81,4 +81,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 071 ==> 174070 : enhancement plugins should be not in the menu, but in the toolbar on the right.
 072 ==> 225564 : Automatically assign parent tags.
 073 ==> 233547 : Adjusting exif orientation doesn't work for ORF images.
-074 ==> 
+074 ==> 285135 : digiKam crashes at launch.
+075 ==> 
+
