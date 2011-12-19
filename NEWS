@@ -83,6 +83,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 073 ==> 233547 : Adjusting exif orientation doesn't work for ORF images.
 074 ==> 285135 : digiKam crashes at launch.
 075 ==> 277974 : Deleted images are still shown. Need manual Rescan.
-076 ==> 
+076 ==> 289357 : digiKam hangs at "Loading database".
+077 ==> 
 
 
