@@ -82,5 +82,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 072 ==> 225564 : Automatically assign parent tags.
 073 ==> 233547 : Adjusting exif orientation doesn't work for ORF images.
 074 ==> 285135 : digiKam crashes at launch.
-075 ==> 
+075 ==> 277974 : Deleted images are still shown. Need manual Rescan.
+076 ==> 
+
 
