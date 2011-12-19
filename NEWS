@@ -84,6 +84,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 074 ==> 285135 : digiKam crashes at launch.
 075 ==> 277974 : Deleted images are still shown. Need manual Rescan.
 076 ==> 289357 : digiKam hangs at "Loading database".
-077 ==> 
+077 ==> 259783 : Picture-orientation is wrong.
+078 ==> 
+
 
 
