@@ -96,11 +96,10 @@ void EqualizeFilter::equalizeImage()
     histogram->calculate();
 
     // Memory allocation.
-    // FIXME: Possible null pointer dereference "histogram", otherwise it is redundant to check if "histgram" is null below.
     QScopedArrayPointer<double_packet> map(new double_packet[histogram->getHistogramSegments()]);
     QScopedArrayPointer<int_packet> equalize_map(new int_packet[histogram->getHistogramSegments()]);
 
-    if ( !histogram || !map || !equalize_map )
+    if ( !map || !equalize_map )
     {
         delete histogram;
         kWarning() << ("Unable to allocate memory!");
