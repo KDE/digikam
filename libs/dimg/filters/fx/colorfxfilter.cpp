@@ -89,13 +89,13 @@ void ColorFXFilter::solarize(DImg* orgImage, DImg* destImage, int factor)
 
     if (!sb)        // 8 bits image.
     {
-        uint threshold = (uint)((100-factor)*(255+1)/100);
+        uint threshold = (uint)((100 - factor) * (255 + 1) / 100);
         threshold      = qMax((uint)1, threshold);
         const uchar* ptr = data;
         uchar* dst       = pResBits;
         uchar  a, r, g, b;
 
-        for (int x=0 ; x < w*h ; ++x)
+        for (int x = 0 ; x < w * h ; ++x)
         {
             b = ptr[0];
             g = ptr[1];
@@ -104,25 +104,25 @@ void ColorFXFilter::solarize(DImg* orgImage, DImg* destImage, int factor)
 
             if (stretch)
             {
-                r = (r > threshold) ? (255-r)*255/(255-threshold) : r*255/threshold;
-                g = (g > threshold) ? (255-g)*255/(255-threshold) : g*255/threshold;
-                b = (b > threshold) ? (255-b)*255/(255-threshold) : b*255/threshold;
+                r = (r > threshold) ? (255 - r) * 255 / (255 - threshold) : r * 255 / threshold;
+                g = (g > threshold) ? (255 - g) * 255 / (255 - threshold) : g * 255 / threshold;
+                b = (b > threshold) ? (255 - b) * 255 / (255 - threshold) : b * 255 / threshold;
             }
             else
             {
                 if (r > threshold)
                 {
-                    r = (255-r);
+                    r = (255 - r);
                 }
 
                 if (g > threshold)
                 {
-                    g = (255-g);
+                    g = (255 - g);
                 }
 
                 if (b > threshold)
                 {
-                    b = (255-b);
+                    b = (255 - b);
                 }
             }
 
@@ -137,13 +137,13 @@ void ColorFXFilter::solarize(DImg* orgImage, DImg* destImage, int factor)
     }
     else                            // 16 bits image.
     {
-        uint threshold      = (uint)((100-factor)*(65535+1)/100);
+        uint threshold      = (uint)((100 - factor) * (65535 + 1) / 100);
         threshold           = qMax((uint)1, threshold);
         const unsigned short* ptr = (const unsigned short*)data;
         unsigned short* dst = (unsigned short*)pResBits;
         unsigned short  a, r, g, b;
 
-        for (int x=0 ; x < w*h ; ++x)
+        for (int x = 0 ; x < w * h ; ++x)
         {
             b = ptr[0];
             g = ptr[1];
@@ -152,25 +152,25 @@ void ColorFXFilter::solarize(DImg* orgImage, DImg* destImage, int factor)
 
             if (stretch)
             {
-                r = (r > threshold) ? (65535-r)*65535/(65535-threshold) : r*65535/threshold;
-                g = (g > threshold) ? (65535-g)*65535/(65535-threshold) : g*65535/threshold;
-                b = (b > threshold) ? (65535-b)*65535/(65535-threshold) : b*65535/threshold;
+                r = (r > threshold) ? (65535 - r) * 65535 / (65535 - threshold) : r * 65535 / threshold;
+                g = (g > threshold) ? (65535 - g) * 65535 / (65535 - threshold) : g * 65535 / threshold;
+                b = (b > threshold) ? (65535 - b) * 65535 / (65535 - threshold) : b * 65535 / threshold;
             }
             else
             {
                 if (r > threshold)
                 {
-                    r = (65535-r);
+                    r = (65535 - r);
                 }
 
                 if (g > threshold)
                 {
-                    g = (65535-g);
+                    g = (65535 - g);
                 }
 
                 if (b > threshold)
                 {
-                    b = (65535-b);
+                    b = (65535 - b);
                 }
             }
 
@@ -187,19 +187,19 @@ void ColorFXFilter::solarize(DImg* orgImage, DImg* destImage, int factor)
 
 void ColorFXFilter::vivid(DImg* orgImage, DImg* destImage, int factor)
 {
-    float amount = factor/100.0;
+    float amount = factor / 100.0;
 
     // Apply Channel Mixer adjustments.
 
     MixerContainer settings;
     settings.redRedGain     = 1.0 + amount + amount;
-    settings.redGreenGain   = (-1.0)*amount;
-    settings.redBlueGain    = (-1.0)*amount;
-    settings.greenRedGain   = (-1.0)*amount;
+    settings.redGreenGain   = (-1.0) * amount;
+    settings.redBlueGain    = (-1.0) * amount;
+    settings.greenRedGain   = (-1.0) * amount;
     settings.greenGreenGain = 1.0 + amount + amount;
-    settings.greenBlueGain  = (-1.0)*amount;
-    settings.blueRedGain    = (-1.0)*amount;
-    settings.blueGreenGain  = (-1.0)*amount;
+    settings.greenBlueGain  = (-1.0) * amount;
+    settings.blueRedGain    = (-1.0) * amount;
+    settings.blueGreenGain  = (-1.0) * amount;
     settings.blueBlueGain   = 1.0 + amount + amount;
 
     MixerFilter mixer(orgImage, 0L, settings);
@@ -301,17 +301,17 @@ void ColorFXFilter::neonFindEdges(DImg* orgImage, DImg* destImage, bool neon, in
     uint color_1, color_2, colorPoint, colorOther1, colorOther2;
 
     // initial copy
-    memcpy (pResBits, data, Width*Height*bytesDepth);
+    memcpy(pResBits, data, Width * Height * bytesDepth);
 
-    double intensityFactor = sqrt( 1 << Intensity );
+    double intensityFactor = sqrt(1 << Intensity);
 
     for (int h = 0; h < Height; ++h)
     {
         for (int w = 0; w < Width; ++w)
         {
             ptr  = pResBits + getOffset(Width, w, h, bytesDepth);
-            ptr1 = pResBits + getOffset(Width, w + Lim_Max (w, BW, Width), h, bytesDepth);
-            ptr2 = pResBits + getOffset(Width, w, h + Lim_Max (h, BW, Height), bytesDepth);
+            ptr1 = pResBits + getOffset(Width, w + Lim_Max(w, BW, Width), h, bytesDepth);
+            ptr2 = pResBits + getOffset(Width, w, h + Lim_Max(h, BW, Height), bytesDepth);
 
             if (sixteenBit)
             {
@@ -329,11 +329,11 @@ void ColorFXFilter::neonFindEdges(DImg* orgImage, DImg* destImage, bool neon, in
 
                     if (neon)
                     {
-                        ((unsigned short*)ptr)[k] = CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                        ((unsigned short*)ptr)[k] = CLAMP065535((int)(sqrt((double)color_1 + color_2) * intensityFactor));
                     }
                     else
                     {
-                        ((unsigned short*)ptr)[k] = 65535 - CLAMP065535 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                        ((unsigned short*)ptr)[k] = 65535 - CLAMP065535((int)(sqrt((double)color_1 + color_2) * intensityFactor));
                     }
                 }
             }
@@ -349,11 +349,11 @@ void ColorFXFilter::neonFindEdges(DImg* orgImage, DImg* destImage, bool neon, in
 
                     if (neon)
                     {
-                        ptr[k] = CLAMP0255 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                        ptr[k] = CLAMP0255((int)(sqrt((double)color_1 + color_2) * intensityFactor));
                     }
                     else
                     {
-                        ptr[k] = 255 - CLAMP0255 ((int)( sqrt((double)color_1 + color_2) * intensityFactor ));
+                        ptr[k] = 255 - CLAMP0255((int)(sqrt((double)color_1 + color_2) * intensityFactor));
                     }
                 }
             }

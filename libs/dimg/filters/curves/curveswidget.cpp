@@ -175,8 +175,8 @@ public:
         QPainter p1(q);
         p1.fillRect(0, 0, q->width(), q->height(), q->palette().color(QPalette::Active, QPalette::Background));
         p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-        p1.drawRect(0, 0, q->width()-1, q->height()-1);
-        p1.drawPixmap(q->width()/2 - anim.width() /2, anim.height(), anim);
+        p1.drawRect(0, 0, q->width() - 1, q->height() - 1);
+        p1.drawPixmap(q->width() / 2 - anim.width() / 2, anim.height(), anim);
         p1.setPen(q->palette().color(QPalette::Active, QPalette::Text));
 
         if (clearFlag == CurvesWidgetPriv::HistogramDataLoading)
@@ -198,7 +198,7 @@ public:
         QPainter p1(q);
         p1.fillRect(0, 0, q->width(), q->height(), q->palette().color(QPalette::Active, QPalette::Background));
         p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-        p1.drawRect(0, 0, q->width()-1, q->height()-1);
+        p1.drawRect(0, 0, q->width() - 1, q->height() - 1);
         p1.setPen(q->palette().color(QPalette::Active, QPalette::Text));
         p1.drawText(0, 0, q->width(), q->height(), Qt::AlignCenter,
                     i18n("Histogram\ncalculation\nfailed."));
@@ -251,9 +251,9 @@ public:
 
                 if (curvePoint.x() >= 0)
                 {
-                    p1.drawEllipse( ((curvePoint.x() * wWidth) / imageHistogram->getHistogramSegments()) - 2,
-                                    wHeight - 2 - ((curvePoint.y() * wHeight) / imageHistogram->getHistogramSegments()),
-                                    4, 4 );
+                    p1.drawEllipse(((curvePoint.x() * wWidth) / imageHistogram->getHistogramSegments()) - 2,
+                                   wHeight - 2 - ((curvePoint.y() * wHeight) / imageHistogram->getHistogramSegments()),
+                                   4, 4);
                 }
             }
 
@@ -272,12 +272,12 @@ public:
 
         // Drawing black/middle/highlight tone grid separators.
         p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
-        p1.drawLine(wWidth/4, 0, wWidth/4, wHeight);
-        p1.drawLine(wWidth/2, 0, wWidth/2, wHeight);
-        p1.drawLine(3*wWidth/4, 0, 3*wWidth/4, wHeight);
-        p1.drawLine(0, wHeight/4, wWidth, wHeight/4);
-        p1.drawLine(0, wHeight/2, wWidth, wHeight/2);
-        p1.drawLine(0, 3*wHeight/4, wWidth, 3*wHeight/4);
+        p1.drawLine(wWidth / 4, 0, wWidth / 4, wHeight);
+        p1.drawLine(wWidth / 2, 0, wWidth / 2, wHeight);
+        p1.drawLine(3 * wWidth / 4, 0, 3 * wWidth / 4, wHeight);
+        p1.drawLine(0, wHeight / 4, wWidth, wHeight / 4);
+        p1.drawLine(0, wHeight / 2, wWidth, wHeight / 2);
+        p1.drawLine(0, 3 * wHeight / 4, wWidth, 3 * wHeight / 4);
 
     }
 
@@ -295,12 +295,12 @@ public:
 
         if (xMouseOver != -1 && yMouseOver != -1)
         {
-            QString string = i18n("x:%1\ny:%2",xMouseOver,yMouseOver);
+            QString string = i18n("x:%1\ny:%2", xMouseOver, yMouseOver);
             QFontMetrics fontMt(string);
             QRect rect     = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string);
             rect.moveRight(wWidth);
             rect.moveBottom(wHeight);
-            p1.drawText(rect, Qt::AlignLeft||Qt::AlignTop, string);
+            p1.drawText(rect, Qt::AlignLeft || Qt::AlignTop, string);
         }
     }
 
@@ -424,7 +424,7 @@ void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
         for (int point = 0; point <= ImageCurves::NUM_POINTS; ++point)
         {
             QPoint p = group.readEntry(CurvesWidgetPriv::getPointOption(prefix,
-                                       channel, point), ImageCurves::getDisabledValue());
+                                                                        channel, point), ImageCurves::getDisabledValue());
 
             // always load a 16 bit curve and stretch it to 8 bit if necessary
             if (!isSixteenBits() && p != ImageCurves::getDisabledValue())

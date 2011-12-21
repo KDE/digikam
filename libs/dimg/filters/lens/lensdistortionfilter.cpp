@@ -45,8 +45,8 @@ LensDistortionFilter::LensDistortionFilter(QObject* parent)
 }
 
 LensDistortionFilter::LensDistortionFilter(DImg* orgImage, QObject* parent, double main,
-        double edge, double rescale, double brighten,
-        int center_x, int center_y)
+                                           double edge, double rescale, double brighten,
+                                           int center_x, int center_y)
     : DImgThreadedFilter(orgImage, parent, "LensDistortionFilter")
 {
     m_main     = main;
@@ -136,9 +136,9 @@ void LensDistortionFilter::filterImage()
 
         // Update progress bar in dialog.
 
-        progress = (int) (((double)dstJ * 100.0) / jLimit);
+        progress = (int)(((double)dstJ * 100.0) / jLimit);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
             postProgress(progress);
         }

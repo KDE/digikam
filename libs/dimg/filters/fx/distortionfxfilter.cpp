@@ -82,7 +82,7 @@ void DistortionFXFilter::filterImage()
     switch (m_effectType)
     {
         case FishEye:
-            fisheye(&m_orgImage, &m_destImage, (double)(l/5.0), m_antiAlias);
+            fisheye(&m_orgImage, &m_destImage, (double)(l / 5.0), m_antiAlias);
             break;
 
         case Twirl:
@@ -102,7 +102,7 @@ void DistortionFXFilter::filterImage()
             break;
 
         case Caricature:
-            fisheye(&m_orgImage, &m_destImage, (double)(-l/5.0), m_antiAlias);
+            fisheye(&m_orgImage, &m_destImage, (double)(-l / 5.0), m_antiAlias);
             break;
 
         case MultipleCorners:
@@ -126,11 +126,11 @@ void DistortionFXFilter::filterImage()
             break;
 
         case CircularWaves1:
-            circularWaves(&m_orgImage, &m_destImage, w/2, h/2, (double)l, (double)f, 0.0, false, m_antiAlias);
+            circularWaves(&m_orgImage, &m_destImage, w / 2, h / 2, (double)l, (double)f, 0.0, false, m_antiAlias);
             break;
 
         case CircularWaves2:
-            circularWaves(&m_orgImage, &m_destImage, w/2, h/2, (double)l, (double)f, 25.0, true, m_antiAlias);
+            circularWaves(&m_orgImage, &m_destImage, w / 2, h / 2, (double)l, (double)f, 25.0, true, m_antiAlias);
             break;
 
         case PolarCoordinates:
@@ -142,7 +142,7 @@ void DistortionFXFilter::filterImage()
             break;
 
         case Tile:
-            tile(&m_orgImage, &m_destImage, 200-f, 200-f, l);
+            tile(&m_orgImage, &m_destImage, 200 - f, 200 - f, l);
             break;
     }
 }
@@ -153,8 +153,8 @@ void DistortionFXFilter::filterImage()
     Antialias if requested.
 */
 void DistortionFXFilter::setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
-        uchar* data, uchar* pResBits,
-        int w, int h, double nw, double nh, bool AntiAlias)
+                                           uchar* data, uchar* pResBits,
+                                           int w, int h, double nw, double nh, bool AntiAlias)
 {
     DColor color;
     int offset, offsetOther;
@@ -169,12 +169,12 @@ void DistortionFXFilter::setPixelFromOther(int Width, int Height, bool sixteenBi
         {
             unsigned short* ptr16 = (unsigned short*)ptr;
             PixelsAliasFilter().pixelAntiAliasing16((unsigned short*)data, Width, Height, nw, nh,
-                                                    ptr16+3, ptr16+2, ptr16+1, ptr16);
+                                                    ptr16 + 3, ptr16 + 2, ptr16 + 1, ptr16);
         }
         else
         {
             PixelsAliasFilter().pixelAntiAliasing(data, Width, Height, nw, nh,
-                                                  ptr+3, ptr+2, ptr+1, ptr);
+                                                  ptr + 3, ptr + 2, ptr + 1, ptr);
         }
     }
     else
@@ -237,7 +237,7 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
     }
 
     lfRadMax = (double)qMax(Height, Width) / 2.0;
-    lfCoeff = lfRadMax / log (fabs (lfCoeffStep) * lfRadMax + 1.0);
+    lfCoeff = lfRadMax / log(fabs(lfCoeffStep) * lfRadMax + 1.0);
 
     // main loop
 
@@ -250,23 +250,23 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
             tw = lfXScale * (double)(w - nHalfW);
 
             // we find the distance from the center
-            lfRadius = sqrt (th * th + tw * tw);
+            lfRadius = sqrt(th * th + tw * tw);
 
             if (lfRadius < lfRadMax)
             {
-                lfAngle = atan2 (th, tw);
+                lfAngle = atan2(th, tw);
 
                 if (Coeff > 0.0)
                 {
-                    lfRadius = (exp (lfRadius / lfCoeff) - 1.0) / lfCoeffStep;
+                    lfRadius = (exp(lfRadius / lfCoeff) - 1.0) / lfCoeffStep;
                 }
                 else
                 {
-                    lfRadius = lfCoeff * log (1.0 + (-1.0 * lfCoeffStep) * lfRadius);
+                    lfRadius = lfCoeff * log(1.0 + (-1.0 * lfCoeffStep) * lfRadius);
                 }
 
-                nw = (double)nHalfW + (lfRadius / lfXScale) * cos (lfAngle);
-                nh = (double)nHalfH + (lfRadius / lfYScale) * sin (lfAngle);
+                nw = (double)nHalfW + (lfRadius / lfXScale) * cos(lfAngle);
+                nh = (double)nHalfH + (lfRadius / lfYScale) * sin(lfAngle);
 
                 setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
             }
@@ -280,9 +280,9 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
         }
 
         // Update the progress bar in dialog.
-        progress = (int) (((double)(h) * 100.0) / Height);
+        progress = (int)(((double)(h) * 100.0) / Height);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
             postProgress(progress);
         }
@@ -353,21 +353,21 @@ void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int Twirl, bool 
             tw = lfXScale * (double)(w - nHalfW);
 
             // now, we get the distance
-            lfCurrentRadius = sqrt (th * th + tw * tw);
+            lfCurrentRadius = sqrt(th * th + tw * tw);
 
             // if distance is less than maximum radius...
             if (lfCurrentRadius < lfRadMax)
             {
                 // we find the angle from the center
-                lfAngle = atan2 (th, tw);
+                lfAngle = atan2(th, tw);
                 // we get the accumuled angle
                 lfAngleSum = lfAngleStep * (-1.0 * (lfCurrentRadius - lfRadMax));
                 // ok, we sum angle with accumuled to find a new angle
                 lfNewAngle = lfAngle + lfAngleSum;
 
                 // now we find the exact position's x and y
-                nw = (double)nHalfW + cos (lfNewAngle) * (lfCurrentRadius / lfXScale);
-                nh = (double)nHalfH + sin (lfNewAngle) * (lfCurrentRadius / lfYScale);
+                nw = (double)nHalfW + cos(lfNewAngle) * (lfCurrentRadius / lfXScale);
+                nh = (double)nHalfH + sin(lfNewAngle) * (lfCurrentRadius / lfYScale);
 
                 setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
             }
@@ -381,9 +381,9 @@ void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int Twirl, bool 
         }
 
         // Update the progress bar in dialog.
-        progress = (int) (((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / Height);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
             postProgress(progress);
         }
@@ -410,7 +410,7 @@ void DistortionFXFilter::cilindrical(DImg* orgImage, DImg* destImage, double Coe
                                      bool Horizontal, bool Vertical, bool AntiAlias)
 
 {
-    if ((Coeff == 0.0) || (! (Horizontal || Vertical)))
+    if ((Coeff == 0.0) || (!(Horizontal || Vertical)))
     {
         return;
     }
@@ -432,16 +432,16 @@ void DistortionFXFilter::cilindrical(DImg* orgImage, DImg* destImage, double Coe
 
     if (Horizontal)
     {
-        lfCoeffX = (double)nHalfW / log (fabs (lfCoeffStep) * nHalfW + 1.0);
+        lfCoeffX = (double)nHalfW / log(fabs(lfCoeffStep) * nHalfW + 1.0);
     }
 
     if (Vertical)
     {
-        lfCoeffY = (double)nHalfH / log (fabs (lfCoeffStep) * nHalfH + 1.0);
+        lfCoeffY = (double)nHalfH / log(fabs(lfCoeffStep) * nHalfH + 1.0);
     }
 
     // initial copy
-    memcpy (pResBits, data, orgImage->numBytes());
+    memcpy(pResBits, data, orgImage->numBytes());
 
     // main loop
 
@@ -450,18 +450,18 @@ void DistortionFXFilter::cilindrical(DImg* orgImage, DImg* destImage, double Coe
         for (w = 0; runningFlag() && (w < Width); ++w)
         {
             // we find the distance from the center
-            nh = fabs ((double)(h - nHalfH));
-            nw = fabs ((double)(w - nHalfW));
+            nh = fabs((double)(h - nHalfH));
+            nw = fabs((double)(w - nHalfW));
 
             if (Horizontal)
             {
                 if (Coeff > 0.0)
                 {
-                    nw = (exp (nw / lfCoeffX) - 1.0) / lfCoeffStep;
+                    nw = (exp(nw / lfCoeffX) - 1.0) / lfCoeffStep;
                 }
                 else
                 {
-                    nw = lfCoeffX * log (1.0 + (-1.0 * lfCoeffStep) * nw);
+                    nw = lfCoeffX * log(1.0 + (-1.0 * lfCoeffStep) * nw);
                 }
             }
 
@@ -469,11 +469,11 @@ void DistortionFXFilter::cilindrical(DImg* orgImage, DImg* destImage, double Coe
             {
                 if (Coeff > 0.0)
                 {
-                    nh = (exp (nh / lfCoeffY) - 1.0) / lfCoeffStep;
+                    nh = (exp(nh / lfCoeffY) - 1.0) / lfCoeffStep;
                 }
                 else
                 {
-                    nh = lfCoeffY * log (1.0 + (-1.0 * lfCoeffStep) * nh);
+                    nh = lfCoeffY * log(1.0 + (-1.0 * lfCoeffStep) * nh);
                 }
             }
 
@@ -484,9 +484,9 @@ void DistortionFXFilter::cilindrical(DImg* orgImage, DImg* destImage, double Coe
         }
 
         // Update the progress bar in dialog.
-        progress = (int) (((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / Height);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
             postProgress(progress);
         }
@@ -527,7 +527,7 @@ void DistortionFXFilter::multipleCorners(DImg* orgImage, DImg* destImage, int Fa
     int nHalfW = Width / 2, nHalfH = Height / 2;
     double lfAngle, lfNewRadius, lfCurrentRadius, lfRadMax;
 
-    lfRadMax = sqrt (Height * Height + Width * Width) / 2.0;
+    lfRadMax = sqrt(Height * Height + Width * Width) / 2.0;
 
     // main loop
 
@@ -540,24 +540,24 @@ void DistortionFXFilter::multipleCorners(DImg* orgImage, DImg* destImage, int Fa
             nw = nHalfW - w;
 
             // now, we get the distance
-            lfCurrentRadius = sqrt (nh * nh + nw * nw);
+            lfCurrentRadius = sqrt(nh * nh + nw * nw);
             // we find the angle from the center
-            lfAngle = atan2 (nh, nw) * (double)Factor;
+            lfAngle = atan2(nh, nw) * (double)Factor;
 
             // ok, we sum angle with accumuled to find a new angle
             lfNewRadius = lfCurrentRadius * lfCurrentRadius / lfRadMax;
 
             // now we find the exact position's x and y
-            nw = (double)nHalfW - (cos (lfAngle) * lfNewRadius);
-            nh = (double)nHalfH - (sin (lfAngle) * lfNewRadius);
+            nw = (double)nHalfW - (cos(lfAngle) * lfNewRadius);
+            nh = (double)nHalfH - (sin(lfAngle) * lfNewRadius);
 
             setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
         }
 
         // Update the progress bar in dialog.
-        progress = (int) (((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / Height);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
             postProgress(progress);
         }
@@ -616,9 +616,9 @@ void DistortionFXFilter::polarCoordinates(DImg* orgImage, DImg* destImage, bool 
             if (Type)
             {
                 // now, we get the distance
-                lfRadius = sqrt (th * th + tw * tw);
+                lfRadius = sqrt(th * th + tw * tw);
                 // we find the angle from the center
-                lfAngle = atan2 (tw, th);
+                lfAngle = atan2(tw, th);
 
                 // now we find the exact position's x and y
                 nh = lfRadius * (double) Height / lfRadMax;
@@ -631,17 +631,17 @@ void DistortionFXFilter::polarCoordinates(DImg* orgImage, DImg* destImage, bool 
                 lfRadius = (double)(h) * lfRadMax / (double)Height;
                 lfAngle  = (double)(w) * (2 * M_PI) / (double) Width;
 
-                nw = (double)nHalfW - (lfRadius / lfXScale) * sin (lfAngle);
-                nh = (double)nHalfH - (lfRadius / lfYScale) * cos (lfAngle);
+                nw = (double)nHalfW - (lfRadius / lfXScale) * sin(lfAngle);
+                nh = (double)nHalfH - (lfRadius / lfYScale) * cos(lfAngle);
             }
 
             setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
         }
 
         // Update the progress bar in dialog.
-        progress = (int) (((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / Height);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
             postProgress(progress);
         }
@@ -692,7 +692,7 @@ void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, i
 
     Phase *= ANGLE_RATIO;
 
-    lfRadMax = sqrt (Height * Height + Width * Width);
+    lfRadMax = sqrt(Height * Height + Width * Width);
 
     for (h = 0; runningFlag() && (h < Height); ++h)
     {
@@ -701,7 +701,7 @@ void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, i
             nw = X - w;
             nh = Y - h;
 
-            lfRadius = sqrt (nw * nw + nh * nh);
+            lfRadius = sqrt(nw * nw + nh * nh);
 
             if (WavesType)
             {
@@ -715,9 +715,9 @@ void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, i
         }
 
         // Update the progress bar in dialog.
-        progress = (int) (((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / Height);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
             postProgress(progress);
         }
@@ -763,7 +763,7 @@ void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
 
         for (h = 0; runningFlag() && (h < Height); ++h)
         {
-            tx = lround(Amplitude * sin ((Frequency * 2) * h * (M_PI / 180)));
+            tx = lround(Amplitude * sin((Frequency * 2) * h * (M_PI / 180)));
             destImage->bitBltImage(orgImage, 0, h,  Width, 1,  tx, h);
 
             if (FillSides)
@@ -773,9 +773,9 @@ void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
             }
 
             // Update the progress bar in dialog.
-            progress = (int) (((double)h * 100.0) / Height);
+            progress = (int)(((double)h * 100.0) / Height);
 
-            if (progress%5 == 0)
+            if (progress % 5 == 0)
             {
                 postProgress(progress);
             }
@@ -787,7 +787,7 @@ void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
 
         for (w = 0; runningFlag() && (w < Width); ++w)
         {
-            ty = lround(Amplitude * sin ((Frequency * 2) * w * (M_PI / 180)));
+            ty = lround(Amplitude * sin((Frequency * 2) * w * (M_PI / 180)));
             destImage->bitBltImage(orgImage, w, 0, 1, Height, w, ty);
 
             if (FillSides)
@@ -797,9 +797,9 @@ void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
             }
 
             // Update the progress bar in dialog.
-            progress = (int) (((double)w * 100.0) / Width);
+            progress = (int)(((double)w * 100.0) / Width);
 
-            if (progress%5 == 0)
+            if (progress % 5 == 0)
             {
                 postProgress(progress);
             }
@@ -858,13 +858,13 @@ void DistortionFXFilter::blockWaves(DImg* orgImage, DImg* destImage,
 
             if (Mode)
             {
-                nw = (int)(w + Amplitude * sin (Frequency * nw * (M_PI / 180)));
-                nh = (int)(h + Amplitude * cos (Frequency * nh * (M_PI / 180)));
+                nw = (int)(w + Amplitude * sin(Frequency * nw * (M_PI / 180)));
+                nh = (int)(h + Amplitude * cos(Frequency * nh * (M_PI / 180)));
             }
             else
             {
-                nw = (int)(w + Amplitude * sin (Frequency * w * (M_PI / 180)));
-                nh = (int)(h + Amplitude * cos (Frequency * h * (M_PI / 180)));
+                nw = (int)(w + Amplitude * sin(Frequency * w * (M_PI / 180)));
+                nh = (int)(h + Amplitude * cos(Frequency * h * (M_PI / 180)));
             }
 
             offset = getOffset(Width, w, h, bytesDepth);
@@ -877,9 +877,9 @@ void DistortionFXFilter::blockWaves(DImg* orgImage, DImg* destImage,
         }
 
         // Update the progress bar in dialog.
-        progress = (int) (((double)w * 100.0) / Width);
+        progress = (int)(((double)w * 100.0) / Width);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
             postProgress(progress);
         }
@@ -938,7 +938,7 @@ void DistortionFXFilter::tile(DImg* orgImage, DImg* destImage,
         // Update the progress bar in dialog.
         progress = (int)(((double)h * 100.0) / Height);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
             postProgress(progress);
         }

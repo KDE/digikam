@@ -156,35 +156,38 @@ void CurvesSettings::slotSpotColorChanged(const DColor& color)
         {
             // Black tonal curves point.
             d->curvesBox->curves()->setCurvePoint(LuminosityChannel, 1,
-                                                  QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 42*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(RedChannel, 1, QPoint(sc.red(), 42*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(GreenChannel, 1, QPoint(sc.green(), 42*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(BlueChannel, 1, QPoint(sc.blue(), 42*d->histoSegments/256));
+                                                  QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 42 * d->histoSegments / 256));
+            d->curvesBox->curves()->setCurvePoint(RedChannel, 1, QPoint(sc.red(), 42 * d->histoSegments / 256));
+            d->curvesBox->curves()->setCurvePoint(GreenChannel, 1, QPoint(sc.green(), 42 * d->histoSegments / 256));
+            d->curvesBox->curves()->setCurvePoint(BlueChannel, 1, QPoint(sc.blue(), 42 * d->histoSegments / 256));
             d->curvesBox->resetPickers();
             break;
         }
+
         case CurvesBox::GrayTonal:
         {
             // Gray tonal curves point.
             d->curvesBox->curves()->setCurvePoint(LuminosityChannel, 8,
-                                                  QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 128*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(RedChannel, 8, QPoint(sc.red(), 128*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(GreenChannel, 8, QPoint(sc.green(), 128*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(BlueChannel, 8, QPoint(sc.blue(), 128*d->histoSegments/256));
+                                                  QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 128 * d->histoSegments / 256));
+            d->curvesBox->curves()->setCurvePoint(RedChannel, 8, QPoint(sc.red(), 128 * d->histoSegments / 256));
+            d->curvesBox->curves()->setCurvePoint(GreenChannel, 8, QPoint(sc.green(), 128 * d->histoSegments / 256));
+            d->curvesBox->curves()->setCurvePoint(BlueChannel, 8, QPoint(sc.blue(), 128 * d->histoSegments / 256));
             d->curvesBox->resetPickers();
             break;
         }
+
         case CurvesBox::WhiteTonal:
         {
             // White tonal curves point.
             d->curvesBox->curves()->setCurvePoint(LuminosityChannel, 15,
-                                                  QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 213*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(RedChannel, 15, QPoint(sc.red(), 213*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(GreenChannel, 15, QPoint(sc.green(), 213*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(BlueChannel, 15, QPoint(sc.blue(), 213*d->histoSegments/256));
+                                                  QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 213 * d->histoSegments / 256));
+            d->curvesBox->curves()->setCurvePoint(RedChannel, 15, QPoint(sc.red(), 213 * d->histoSegments / 256));
+            d->curvesBox->curves()->setCurvePoint(GreenChannel, 15, QPoint(sc.green(), 213 * d->histoSegments / 256));
+            d->curvesBox->curves()->setCurvePoint(BlueChannel, 15, QPoint(sc.blue(), 213 * d->histoSegments / 256));
             d->curvesBox->resetPickers();
             break;
         }
+
         default:
         {
             d->curvesBox->setCurveGuide(color);
@@ -248,15 +251,15 @@ void CurvesSettings::loadSettings()
     KUrl loadCurvesFile;
 
     loadCurvesFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                     QString( "*" ), kapp->activeWindow(),
-                     QString( i18n("Select Gimp Curves File to Load")) );
+                                             QString("*"), kapp->activeWindow(),
+                                             QString(i18n("Select Gimp Curves File to Load")));
 
-    if ( loadCurvesFile.isEmpty() )
+    if (loadCurvesFile.isEmpty())
     {
         return;
     }
 
-    if ( d->curvesBox->curves()->loadCurvesFromGimpCurvesFile( loadCurvesFile ) == false )
+    if (d->curvesBox->curves()->loadCurvesFromGimpCurvesFile(loadCurvesFile) == false)
     {
         KMessageBox::error(kapp->activeWindow(),
                            i18n("Cannot load from the Gimp curves text file."));
@@ -269,15 +272,15 @@ void CurvesSettings::saveAsSettings()
     KUrl saveCurvesFile;
 
     saveCurvesFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                     QString( "*" ), kapp->activeWindow(),
-                     QString( i18n("Gimp Curves File to Save")) );
+                                             QString("*"), kapp->activeWindow(),
+                                             QString(i18n("Gimp Curves File to Save")));
 
-    if ( saveCurvesFile.isEmpty() )
+    if (saveCurvesFile.isEmpty())
     {
         return;
     }
 
-    if ( d->curvesBox->curves()->saveCurvesToGimpCurvesFile( saveCurvesFile ) == false )
+    if (d->curvesBox->curves()->saveCurvesToGimpCurvesFile(saveCurvesFile) == false)
     {
         KMessageBox::error(kapp->activeWindow(),
                            i18n("Cannot save to the Gimp curves text file."));

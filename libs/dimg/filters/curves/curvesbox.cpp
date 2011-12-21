@@ -143,15 +143,15 @@ void CurvesBox::setup()
     d->curveFree->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvefree.png")));
     d->curveFree->setCheckable(true);
     d->curveFree->setToolTip(i18n("Curve free mode"));
-    d->curveFree->setWhatsThis( i18n("With this button, you can draw your curve free-hand "
-                                     "with the mouse."));
+    d->curveFree->setWhatsThis(i18n("With this button, you can draw your curve free-hand "
+                                    "with the mouse."));
 
     d->curveSmooth = new QToolButton;
     d->curveSmooth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvemooth.png")));
     d->curveSmooth->setCheckable(true);
     d->curveSmooth->setToolTip(i18n("Curve smooth mode"));
-    d->curveSmooth->setWhatsThis( i18n("With this button, the curve type is constrained to "
-                                       "be a smooth line with tension."));
+    d->curveSmooth->setWhatsThis(i18n("With this button, the curve type is constrained to "
+                                      "be a smooth line with tension."));
 
     d->curveType = new QButtonGroup(typeBox);
     d->curveType->addButton(d->curveFree,   FreeDrawing);
@@ -175,25 +175,25 @@ void CurvesBox::setup()
     d->pickBlack->setIcon(KIcon("color-picker-black"));
     d->pickBlack->setCheckable(true);
     d->pickBlack->setToolTip(i18n("All channels shadow tone color picker"));
-    d->pickBlack->setWhatsThis( i18n("With this button, you can pick the color from original "
-                                     "image used to set <b>Shadow Tone</b> "
-                                     "smooth curves point on Red, Green, Blue, and Luminosity channels."));
+    d->pickBlack->setWhatsThis(i18n("With this button, you can pick the color from original "
+                                    "image used to set <b>Shadow Tone</b> "
+                                    "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
     d->pickGray = new QToolButton;
     d->pickGray->setIcon(KIcon("color-picker-grey"));
     d->pickGray->setCheckable(true);
     d->pickGray->setToolTip(i18n("All channels middle tone color picker"));
-    d->pickGray->setWhatsThis( i18n("With this button, you can pick the color from original "
-                                    "image used to set <b>Middle Tone</b> "
-                                    "smooth curves point on Red, Green, Blue, and Luminosity channels."));
+    d->pickGray->setWhatsThis(i18n("With this button, you can pick the color from original "
+                                   "image used to set <b>Middle Tone</b> "
+                                   "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
     d->pickWhite = new QToolButton;
     d->pickWhite->setIcon(KIcon("color-picker-white"));
     d->pickWhite->setCheckable(true);
-    d->pickWhite->setToolTip( i18n( "All channels highlight tone color picker" ) );
-    d->pickWhite->setWhatsThis( i18n("With this button, you can pick the color from original "
-                                     "image used to set <b>Highlight Tone</b> "
-                                     "smooth curves point on Red, Green, Blue, and Luminosity channels."));
+    d->pickWhite->setToolTip(i18n("All channels highlight tone color picker"));
+    d->pickWhite->setWhatsThis(i18n("With this button, you can pick the color from original "
+                                    "image used to set <b>Highlight Tone</b> "
+                                    "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
     d->pickerType = new QButtonGroup(d->pickerBox);
     d->pickerType->addButton(d->pickBlack, BlackTonal);

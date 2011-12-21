@@ -468,29 +468,29 @@ float ImageCurves::curvesLutFunc(int n_channels, int channel, float value)
     // For bw images this runs through the loop with j = 0 the first and
     // only time.
 
-    for ( ; j >= 0 ; j -= (channel + 1))
+    for (; j >= 0 ; j -= (channel + 1))
     {
         // Don't apply the overall curve to the alpha channel.
 
-        if (j == 0 && (n_channels == 2 || n_channels == 4) && channel == n_channels -1)
+        if (j == 0 && (n_channels == 2 || n_channels == 4) && channel == n_channels - 1)
         {
             return inten;
         }
 
         if (inten < 0.0)
         {
-            inten = d->curves->curve[j][0]/(float)d->segmentMax;
+            inten = d->curves->curve[j][0] / (float)d->segmentMax;
         }
         else if (inten >= 1.0)
         {
-            inten = d->curves->curve[j][d->segmentMax]/(float)(d->segmentMax);
+            inten = d->curves->curve[j][d->segmentMax] / (float)(d->segmentMax);
         }
         else       // interpolate the curve.
         {
             index = (int)floor(inten * (float)(d->segmentMax));
             f = inten * (float)(d->segmentMax) - index;
             inten = ((1.0 - f) * d->curves->curve[j][index    ] +
-                     (      f) * d->curves->curve[j][index + 1] ) / (float)(d->segmentMax);
+                     (f) * d->curves->curve[j][index + 1]) / (float)(d->segmentMax);
         }
     }
 
@@ -548,11 +548,11 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
     tmp2[1][1] = d2;
     tmp2[1][2] = d1;
     tmp2[1][3] = 0;
-    tmp2[2][0] = 6*d3;
-    tmp2[2][1] = 2*d2;
+    tmp2[2][0] = 6 * d3;
+    tmp2[2][1] = 2 * d2;
     tmp2[2][2] = 0;
     tmp2[2][3] = 0;
-    tmp2[3][0] = 6*d3;
+    tmp2[3][0] = 6 * d3;
     tmp2[3][1] = 0;
     tmp2[3][2] = 0;
     tmp2[3][3] = 0;
@@ -579,8 +579,8 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
     dy2 = deltas[2][1];
     dy3 = deltas[3][1];
 
-    lastx = (int)CLAMP (x, 0.0, (double)d->segmentMax);
-    lasty = (int)CLAMP (y, 0.0, (double)d->segmentMax);
+    lastx = (int)CLAMP(x, 0.0, (double)d->segmentMax);
+    lasty = (int)CLAMP(y, 0.0, (double)d->segmentMax);
 
     d->curves->curve[channel][lastx] = lasty;
 
@@ -646,13 +646,13 @@ void ImageCurves::curvesLutSetup(int nchannels)
 
     for (i = 0 ; i < d->lut->nchannels ; ++i)
     {
-        d->lut->luts[i] = new unsigned short[d->segmentMax+1];
+        d->lut->luts[i] = new unsigned short[d->segmentMax + 1];
 
         for (v = 0 ; v <= (uint)d->segmentMax ; ++v)
         {
             // To add gamma correction use func(v ^ g) ^ 1/g instead.
 
-            val = (double)(d->segmentMax) * curvesLutFunc( d->lut->nchannels, i, v / (float)(d->segmentMax)) + 0.5;
+            val = (double)(d->segmentMax) * curvesLutFunc(d->lut->nchannels, i, v / (float)(d->segmentMax)) + 0.5;
 
             d->lut->luts[i][v] = (unsigned short)CLAMP(val, 0.0, (double)d->segmentMax);
         }
@@ -690,29 +690,29 @@ void ImageCurves::curvesLutProcess(uchar* srcPR, uchar* destPR, int w, int h)
         uchar* ptr = srcPR;
         uchar* dst = destPR;
 
-        for (i = 0 ; i < w*h ; ++i)
+        for (i = 0 ; i < w * h ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
             red   = ptr[2];
             alpha = ptr[3];
 
-            if ( d->lut->nchannels > 0 )
+            if (d->lut->nchannels > 0)
             {
                 red = lut0[red];
             }
 
-            if ( d->lut->nchannels > 1 )
+            if (d->lut->nchannels > 1)
             {
                 green = lut1[green];
             }
 
-            if ( d->lut->nchannels > 2 )
+            if (d->lut->nchannels > 2)
             {
                 blue = lut2[blue];
             }
 
-            if ( d->lut->nchannels > 3 )
+            if (d->lut->nchannels > 3)
             {
                 alpha = lut3[alpha];
             }
@@ -732,29 +732,29 @@ void ImageCurves::curvesLutProcess(uchar* srcPR, uchar* destPR, int w, int h)
         unsigned short* ptr = (unsigned short*)srcPR;
         unsigned short* dst = (unsigned short*)destPR;
 
-        for (i = 0 ; i < w*h ; ++i)
+        for (i = 0 ; i < w * h ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
             red   = ptr[2];
             alpha = ptr[3];
 
-            if ( d->lut->nchannels > 0 )
+            if (d->lut->nchannels > 0)
             {
                 red = lut0[red];
             }
 
-            if ( d->lut->nchannels > 1 )
+            if (d->lut->nchannels > 1)
             {
                 green = lut1[green];
             }
 
-            if ( d->lut->nchannels > 2 )
+            if (d->lut->nchannels > 2)
             {
                 blue = lut2[blue];
             }
 
-            if ( d->lut->nchannels > 3 )
+            if (d->lut->nchannels > 3)
             {
                 alpha = lut3[alpha];
             }
@@ -792,12 +792,12 @@ bool ImageCurves::isCurvePointEnabled(int channel, int point) const
 
 QPoint ImageCurves::getCurvePoint(int channel, int point) const
 {
-    if ( d->curves &&
-         channel >= 0 && channel < NUM_CHANNELS &&
-         point >= 0 && point < NUM_POINTS )
+    if (d->curves &&
+        channel >= 0 && channel < NUM_CHANNELS &&
+        point >= 0 && point < NUM_POINTS)
     {
         return(QPoint(d->curves->points[channel][point][0],
-                      d->curves->points[channel][point][1]) );
+                      d->curves->points[channel][point][1]));
     }
 
     return getDisabledValue();
@@ -807,7 +807,7 @@ QPolygon ImageCurves::getCurvePoints(int channel) const
 {
     QPolygon array(NUM_POINTS);
 
-    if ( d->curves && channel >= 0 && channel < NUM_CHANNELS)
+    if (d->curves && channel >= 0 && channel < NUM_CHANNELS)
     {
         for (int j = 0 ; j < NUM_POINTS ; ++j)
         {
@@ -820,9 +820,9 @@ QPolygon ImageCurves::getCurvePoints(int channel) const
 
 int ImageCurves::getCurveValue(int channel, int bin) const
 {
-    if ( d->curves &&
-         channel >= 0 && channel < NUM_CHANNELS &&
-         bin >= 0 && bin <= d->segmentMax )
+    if (d->curves &&
+        channel >= 0 && channel < NUM_CHANNELS &&
+        bin >= 0 && bin <= d->segmentMax)
     {
         return(d->curves->curve[channel][bin]);
     }
@@ -832,7 +832,7 @@ int ImageCurves::getCurveValue(int channel, int bin) const
 
 QPolygon ImageCurves::getCurveValues(int channel) const
 {
-    QPolygon array(d->segmentMax+1);
+    QPolygon array(d->segmentMax + 1);
 
     if (d->curves && channel >= 0 && channel < NUM_CHANNELS)
     {
@@ -847,9 +847,9 @@ QPolygon ImageCurves::getCurveValues(int channel) const
 
 int ImageCurves::getCurvePointX(int channel, int point) const
 {
-    if ( d->curves &&
-         channel >= 0 && channel < NUM_CHANNELS &&
-         point >= 0 && point < NUM_POINTS )
+    if (d->curves &&
+        channel >= 0 && channel < NUM_CHANNELS &&
+        point >= 0 && point < NUM_POINTS)
     {
         return(d->curves->points[channel][point][0]);
     }
@@ -859,9 +859,9 @@ int ImageCurves::getCurvePointX(int channel, int point) const
 
 int ImageCurves::getCurvePointY(int channel, int point) const
 {
-    if ( d->curves &&
-         channel >= 0 && channel < NUM_CHANNELS &&
-         point >= 0 && point < NUM_POINTS )
+    if (d->curves &&
+        channel >= 0 && channel < NUM_CHANNELS &&
+        point >= 0 && point < NUM_POINTS)
     {
         return(d->curves->points[channel][point][1]);
     }
@@ -871,9 +871,9 @@ int ImageCurves::getCurvePointY(int channel, int point) const
 
 ImageCurves::CurveType ImageCurves::getCurveType(int channel) const
 {
-    if ( d->curves && channel >= 0 && channel < NUM_CHANNELS )
+    if (d->curves && channel >= 0 && channel < NUM_CHANNELS)
     {
-        return ((ImageCurves::CurveType) d->curves->curve_type[channel] );
+        return ((ImageCurves::CurveType) d->curves->curve_type[channel]);
     }
 
     return CURVE_SMOOTH;
@@ -885,7 +885,7 @@ CurvesContainer ImageCurves::getContainer() const
 
     for (int i = 0; i < ColorChannels; ++i)
     {
-        if ( (type = getCurveType(i)) == CURVE_FREE)
+        if ((type = getCurveType(i)) == CURVE_FREE)
         {
             type = CURVE_FREE;
             break;
@@ -962,9 +962,9 @@ void ImageCurves::setContainer(const CurvesContainer& container)
 
 void ImageCurves::setCurveValue(int channel, int bin, int val)
 {
-    if ( d->curves &&
-         channel >= 0 && channel < NUM_CHANNELS &&
-         bin >= 0 && bin <= d->segmentMax )
+    if (d->curves &&
+        channel >= 0 && channel < NUM_CHANNELS &&
+        bin >= 0 && bin <= d->segmentMax)
     {
         d->dirty = true;
         d->curves->curve[channel][bin] = val;
@@ -975,7 +975,7 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
 {
     int index;
     kDebug() << "vals size: " << vals.size();
-    kDebug() << "segmentMax: " << d->segmentMax+1;
+    kDebug() << "segmentMax: " << d->segmentMax + 1;
 
     if (d->curves && channel >= 0 && channel < NUM_CHANNELS)
     {
@@ -985,7 +985,7 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
             curvesChannelReset(channel);
         }
         // Bits depth are different ?
-        else if (vals.size() != d->segmentMax+1)
+        else if (vals.size() != d->segmentMax + 1)
         {
             if (vals.size() == 256)
             {
@@ -1035,6 +1035,7 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
         else
         {
             kDebug() << "Assign curves values directly";
+
             for (int j = 0 ; j <= d->segmentMax ; ++j)
             {
                 setCurveValue(channel, j, vals.point(j).y());
@@ -1045,11 +1046,11 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
 
 void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
 {
-    if ( d->curves &&
-         channel >= 0 && channel < NUM_CHANNELS &&
-         point >= 0 && point < NUM_POINTS &&
-         val.x() >= -1 && val.x() <= d->segmentMax && // x can be equal to -1
-         val.y() >= 0 && val.y() <= d->segmentMax)    // if the current point is disable !!!
+    if (d->curves &&
+        channel >= 0 && channel < NUM_CHANNELS &&
+        point >= 0 && point < NUM_POINTS &&
+        val.x() >= -1 && val.x() <= d->segmentMax && // x can be equal to -1
+        val.y() >= 0 && val.y() <= d->segmentMax)    // if the current point is disable !!!
     {
         d->dirty = true;
         d->curves->points[channel][point][0] = val.x();
@@ -1059,8 +1060,8 @@ void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
 
 void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
 {
-    if ( d->curves &&
-         channel >= 0 && channel < NUM_CHANNELS)
+    if (d->curves &&
+        channel >= 0 && channel < NUM_CHANNELS)
     {
         if (vals.isEmpty())
         {
@@ -1079,17 +1080,17 @@ void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
 
             if (vals.size() == 1)
             {
-                setCurvePoint(channel, NUM_POINTS/2, vals.first());
+                setCurvePoint(channel, NUM_POINTS / 2, vals.first());
             }
             else
             {
-                for (int j = 0 ; j < vals.size()-1 ; ++j)
+                for (int j = 0 ; j < vals.size() - 1 ; ++j)
                 {
                     setCurvePoint(channel, j, vals.point(j));
                 }
 
                 // set last to last
-                setCurvePoint(channel, NUM_POINTS-1, vals.last());
+                setCurvePoint(channel, NUM_POINTS - 1, vals.last());
             }
         }
     }
@@ -1101,10 +1102,10 @@ void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
 
 void ImageCurves::setCurvePointX(int channel, int point, int x)
 {
-    if ( d->curves &&
-         channel >= 0 && channel < NUM_CHANNELS &&
-         point >= 0 && point < NUM_POINTS &&
-         x >= -1 && x <= d->segmentMax) // x can be equal to -1 if the current point is disable !!!
+    if (d->curves &&
+        channel >= 0 && channel < NUM_CHANNELS &&
+        point >= 0 && point < NUM_POINTS &&
+        x >= -1 && x <= d->segmentMax) // x can be equal to -1 if the current point is disable !!!
     {
         d->dirty = true;
         d->curves->points[channel][point][0] = x;
@@ -1113,10 +1114,10 @@ void ImageCurves::setCurvePointX(int channel, int point, int x)
 
 void ImageCurves::setCurvePointY(int channel, int point, int y)
 {
-    if ( d->curves &&
-         channel >= 0 && channel < NUM_CHANNELS &&
-         point >= 0 && point < NUM_POINTS &&
-         y >= 0 && y <= d->segmentMax)
+    if (d->curves &&
+        channel >= 0 && channel < NUM_CHANNELS &&
+        point >= 0 && point < NUM_POINTS &&
+        y >= 0 && y <= d->segmentMax)
     {
         d->dirty = true;
         d->curves->points[channel][point][1] = y;
@@ -1125,9 +1126,9 @@ void ImageCurves::setCurvePointY(int channel, int point, int y)
 
 void ImageCurves::setCurveType(int channel, CurveType type)
 {
-    if ( d->curves &&
-         channel >= 0 && channel < NUM_CHANNELS &&
-         type >= CURVE_SMOOTH && type <= CURVE_FREE )
+    if (d->curves &&
+        channel >= 0 && channel < NUM_CHANNELS &&
+        type >= CURVE_SMOOTH && type <= CURVE_FREE)
     {
         d->curves->curve_type[channel] = type;
     }
@@ -1145,7 +1146,7 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
 {
     // TODO : support KUrl !
 
-    FILE* file=0;
+    FILE* file = 0;
     int   i, j;
     int   fields;
     char  buf[50];
@@ -1159,13 +1160,13 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
         return false;
     }
 
-    if (! fgets (buf, sizeof (buf), file))
+    if (! fgets(buf, sizeof(buf), file))
     {
         fclose(file);
         return false;
     }
 
-    if (strcmp (buf, "# GIMP Curves File\n") != 0)
+    if (strcmp(buf, "# GIMP Curves File\n") != 0)
     {
         fclose(file);
         return false;
@@ -1176,7 +1177,7 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
         for (j = 0 ; j < NUM_POINTS ; ++j)
         {
             // FIXME: scanf without field width limits can crash with huge input data
-            fields = fscanf (file, "%d %d ", &index[i][j], &value[i][j]);
+            fields = fscanf(file, "%d %d ", &index[i][j], &value[i][j]);
 
             if (fields != 2)
             {
@@ -1195,10 +1196,10 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
 
         for (j = 0 ; j < NUM_POINTS ; ++j)
         {
-            d->curves->points[i][j][0] = (isSixteenBits() && (index[i][j] !=-1) ?
-                                          index[i][j]*MULTIPLIER_16BIT : index[i][j]);
-            d->curves->points[i][j][1] = (isSixteenBits() && (value[i][j] !=-1) ?
-                                          value[i][j]*MULTIPLIER_16BIT : value[i][j]);
+            d->curves->points[i][j][0] = (isSixteenBits() && (index[i][j] != -1) ?
+                                          index[i][j] * MULTIPLIER_16BIT : index[i][j]);
+            d->curves->points[i][j][1] = (isSixteenBits() && (value[i][j] != -1) ?
+                                          value[i][j] * MULTIPLIER_16BIT : value[i][j]);
         }
     }
 
@@ -1220,7 +1221,7 @@ bool ImageCurves::saveCurvesToGimpCurvesFile(const KUrl& fileUrl) const
 {
     // TODO : support KUrl !
 
-    FILE* file=0;
+    FILE* file = 0;
     int   i, j;
     int   index;
 
@@ -1246,19 +1247,19 @@ bool ImageCurves::saveCurvesToGimpCurvesFile(const KUrl& fileUrl) const
         }
     }
 
-    fprintf (file, "# GIMP Curves File\n");
+    fprintf(file, "# GIMP Curves File\n");
 
     for (i = 0 ; i < NUM_CHANNELS ; ++i)
     {
         for (j = 0 ; j < NUM_POINTS ; ++j)
         {
-            fprintf (file, "%d %d ",
-                     (isSixteenBits() && (d->curves->points[i][j][0]!=-1) ?
-                      d->curves->points[i][j][0]/MULTIPLIER_16BIT : d->curves->points[i][j][0]),
-                     (isSixteenBits() && (d->curves->points[i][j][1]!=-1) ?
-                      d->curves->points[i][j][1]/MULTIPLIER_16BIT : d->curves->points[i][j][1]));
+            fprintf(file, "%d %d ",
+                    (isSixteenBits() && (d->curves->points[i][j][0] != -1) ?
+                     d->curves->points[i][j][0] / MULTIPLIER_16BIT : d->curves->points[i][j][0]),
+                    (isSixteenBits() && (d->curves->points[i][j][1] != -1) ?
+                     d->curves->points[i][j][1] / MULTIPLIER_16BIT : d->curves->points[i][j][1]));
 
-            fprintf (file, "\n");
+            fprintf(file, "\n");
         }
     }
 
@@ -1273,21 +1274,24 @@ bool ImageCurves::isLinear() const
     for (int i = 0; i < NUM_CHANNELS; ++i)
     {
         if (!isLinear(i))
+        {
             return false;
+        }
     }
+
     return true;
 }
 
 bool ImageCurves::isLinear(int channel) const
 {
-    if ( !d->curves || channel < 0 || channel >= NUM_CHANNELS)
+    if (!d->curves || channel < 0 || channel >= NUM_CHANNELS)
     {
         return false;
     }
 
     if (d->curves->curve_type[channel] == CURVE_FREE)
     {
-        for (int j=0; j<d->segmentMax; ++j)
+        for (int j = 0; j < d->segmentMax; ++j)
             if (d->curves->curve[channel][j] != j)
             {
                 return false;
@@ -1301,7 +1305,7 @@ bool ImageCurves::isLinear(int channel) const
         bool hasLast  = false;
 
         // find out number of valid points
-        for (int j=0; j<NUM_POINTS; ++j)
+        for (int j = 0; j < NUM_POINTS; ++j)
         {
             int x = d->curves->points[channel][j][0];
             int y = d->curves->points[channel][j][1];
@@ -1355,7 +1359,7 @@ bool ImageCurves::isLinear(int channel) const
 
 QByteArray ImageCurves::channelToBase64(int channel) const
 {
-    if ( !d->curves || channel < 0 || channel >= NUM_CHANNELS)
+    if (!d->curves || channel < 0 || channel >= NUM_CHANNELS)
     {
         return QByteArray();
     }
@@ -1393,7 +1397,7 @@ QByteArray ImageCurves::channelToBase64(int channel) const
         quint32 count = 0;
 
         // find out number of valid points
-        for (int j=0; j<NUM_POINTS; ++j)
+        for (int j = 0; j < NUM_POINTS; ++j)
         {
             if (d->curves->points[channel][j][0] > -1 && d->curves->points[channel][j][1] > -1)
             {
@@ -1403,7 +1407,7 @@ QByteArray ImageCurves::channelToBase64(int channel) const
 
         s << (quint32)count; // number of stored points,
 
-        for (int j=0; j<NUM_POINTS; ++j)
+        for (int j = 0; j < NUM_POINTS; ++j)
         {
             if (d->curves->points[channel][j][0] > -1 && d->curves->points[channel][j][1] > -1)
             {
@@ -1418,14 +1422,14 @@ QByteArray ImageCurves::channelToBase64(int channel) const
 
         if (isSixteenBits())
         {
-            for (int j=0; j<d->segmentMax; ++j)
+            for (int j = 0; j < d->segmentMax; ++j)
             {
                 s << (quint16)d->curves->curve[channel][j];
             }
         }
         else
         {
-            for (int j=0; j<d->segmentMax; ++j)
+            for (int j = 0; j < d->segmentMax; ++j)
             {
                 s << (quint8)d->curves->curve[channel][j];
             }
@@ -1437,7 +1441,7 @@ QByteArray ImageCurves::channelToBase64(int channel) const
 
 bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
 {
-    if ( !d->curves || channel < 0 || channel >= NUM_CHANNELS)
+    if (!d->curves || channel < 0 || channel >= NUM_CHANNELS)
     {
         return false;
     }
@@ -1476,7 +1480,7 @@ bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
 
     s >> depth;
 
-    if ( (depth == 1 && isSixteenBits()) || (depth == 2 && !isSixteenBits()) || depth <=0 || depth > 2)
+    if ((depth == 1 && isSixteenBits()) || (depth == 2 && !isSixteenBits()) || depth <= 0 || depth > 2)
     {
         return false;
     }
@@ -1496,9 +1500,9 @@ bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
 
         uint usedCount = qMin((uint)NUM_POINTS, count);
         QPolygon p(usedCount);
-        quint32 x,y;
+        quint32 x, y;
 
-        for (uint j=0; j<usedCount; ++j)
+        for (uint j = 0; j < usedCount; ++j)
         {
             s >> x;
             s >> y;
@@ -1520,7 +1524,7 @@ bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
         {
             quint16 data;
 
-            for (int j=0; j<d->segmentMax; ++j)
+            for (int j = 0; j < d->segmentMax; ++j)
             {
                 s >> data;
                 d->curves->curve[channel][j] = data;
@@ -1530,7 +1534,7 @@ bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
         {
             quint8 data;
 
-            for (int j=0; j<d->segmentMax; ++j)
+            for (int j = 0; j < d->segmentMax; ++j)
             {
                 s >> data;
                 d->curves->curve[channel][j] = data;

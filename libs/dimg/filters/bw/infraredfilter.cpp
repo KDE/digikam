@@ -84,7 +84,7 @@ void InfraredFilter::filterImage()
     bool sixteenBit = m_destImage.sixteenBit();
     uchar* data     = m_destImage.bits();
 
-    postProgress( 10 );
+    postProgress(10);
 
     if (!runningFlag())
     {
@@ -105,7 +105,7 @@ void InfraredFilter::filterImage()
 
     DColor bwData, bwBlurData, maskData, overData, outData;
 
-    postProgress( 20 );
+    postProgress(20);
 
     if (!runningFlag())
     {
@@ -130,7 +130,7 @@ void InfraredFilter::filterImage()
     mixer.startFilterDirectly();
     BWImage.putImageData(mixer.getTargetImage().bits());
 
-    postProgress( 30 );
+    postProgress(30);
 
     if (!runningFlag())
     {
@@ -146,7 +146,7 @@ void InfraredFilter::filterImage()
     // save a memcpy
     pOverlayBits = BWBlurImage.bits();
 
-    postProgress( 40 );
+    postProgress(40);
 
     if (!runningFlag())
     {
@@ -167,32 +167,32 @@ void InfraredFilter::filterImage()
     {
         for (int y = 0; runningFlag() && y < Height; ++y)
         {
-            offset = x*bytesDepth + (y*Width*bytesDepth);
+            offset = x * bytesDepth + (y * Width * bytesDepth);
 
             bwData.setColor(BWImage.bits() + offset, sixteenBit);
             overData.setColor(pOverlayBits + offset, sixteenBit);
 
             if (sixteenBit)
             {
-                outData.setRed  ( intMult16 (bwData.red(),   bwData.red()   + intMult16(2 * overData.red(),   65535 - bwData.red())   ) );
-                outData.setGreen( intMult16 (bwData.green(), bwData.green() + intMult16(2 * overData.green(), 65535 - bwData.green()) ) );
-                outData.setBlue ( intMult16 (bwData.blue(),  bwData.blue()  + intMult16(2 * overData.blue(),  65535 - bwData.blue())  ) );
+                outData.setRed(intMult16(bwData.red(),   bwData.red()   + intMult16(2 * overData.red(),   65535 - bwData.red())));
+                outData.setGreen(intMult16(bwData.green(), bwData.green() + intMult16(2 * overData.green(), 65535 - bwData.green())));
+                outData.setBlue(intMult16(bwData.blue(),  bwData.blue()  + intMult16(2 * overData.blue(),  65535 - bwData.blue())));
             }
             else
             {
-                outData.setRed  ( intMult8  (bwData.red(),   bwData.red()   + intMult8(2 * overData.red(),    255 - bwData.red())   ) );
-                outData.setGreen( intMult8  (bwData.green(), bwData.green() + intMult8(2 * overData.green(),  255 - bwData.green()) ) );
-                outData.setBlue ( intMult8  (bwData.blue(),  bwData.blue()  + intMult8(2 * overData.blue(),   255 - bwData.blue())  ) );
+                outData.setRed(intMult8(bwData.red(),   bwData.red()   + intMult8(2 * overData.red(),    255 - bwData.red())));
+                outData.setGreen(intMult8(bwData.green(), bwData.green() + intMult8(2 * overData.green(),  255 - bwData.green())));
+                outData.setBlue(intMult8(bwData.blue(),  bwData.blue()  + intMult8(2 * overData.blue(),   255 - bwData.blue())));
             }
 
             outData.setAlpha(bwData.alpha());
-            outData.setPixel( pOutBits + offset );
+            outData.setPixel(pOutBits + offset);
         }
 
         // Update progress bar in dialog.
-        progress = (int) (50.0 + ((double)x * 50.0) / Width);
+        progress = (int)(50.0 + ((double)x * 50.0) / Width);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
             postProgress(progress);
         }

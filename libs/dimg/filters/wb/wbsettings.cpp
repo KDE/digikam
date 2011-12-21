@@ -197,7 +197,7 @@ WBSettings::WBSettings(QWidget* parent)
     d->temperatureInput->setDecimals(1);
     d->temperatureInput->input()->setRange(1750.0, 12000.0, 10.0);
     d->temperatureInput->setDefaultValue((double)d->DefaultTemperature);
-    d->temperatureInput->setWhatsThis( i18n("Set here the white balance color temperature in Kelvin."));
+    d->temperatureInput->setWhatsThis(i18n("Set here the white balance color temperature in Kelvin."));
 
     d->temperaturePresetLabel = new QLabel(i18n("Preset:"));
     d->temperaturePresetCB    = new RComboBox;
@@ -238,7 +238,7 @@ WBSettings::WBSettings(QWidget* parent)
     d->pickTemperature = new QToolButton;
     d->pickTemperature->setIcon(KIcon("color-picker-grey"));
     d->pickTemperature->setCheckable(true);
-    d->pickTemperature->setToolTip( i18n( "Temperature tone color picker." ) );
+    d->pickTemperature->setToolTip(i18n("Temperature tone color picker."));
     d->pickTemperature->setWhatsThis(i18n("With this button, you can pick the color from the original "
                                           "image used to set the white color balance temperature and "
                                           "green component."));
@@ -251,7 +251,7 @@ WBSettings::WBSettings(QWidget* parent)
     d->blackInput = new RDoubleNumInput;
     d->blackInput->setDecimals(2);
     d->blackInput->input()->setRange(0.0, 0.05, 0.01, true);
-    d->blackInput->setWhatsThis( i18n("Set here the black level value."));
+    d->blackInput->setWhatsThis(i18n("Set here the black level value."));
     d->blackInput->setDefaultValue(0.0);
 
     d->darkLabel = new QLabel(i18n("Shadows:"));
@@ -259,21 +259,21 @@ WBSettings::WBSettings(QWidget* parent)
     d->darkInput->setDecimals(2);
     d->darkInput->input()->setRange(0.0, 1.0, 0.01, true);
     d->darkInput->setDefaultValue(0.5);
-    d->darkInput->setWhatsThis( i18n("Set here the shadow noise suppression level."));
+    d->darkInput->setWhatsThis(i18n("Set here the shadow noise suppression level."));
 
     d->saturationLabel = new QLabel(i18n("Saturation:"));
     d->saturationInput = new RDoubleNumInput;
     d->saturationInput->setDecimals(2);
     d->saturationInput->input()->setRange(0.0, 2.0, 0.01, true);
     d->saturationInput->setDefaultValue(1.0);
-    d->saturationInput->setWhatsThis( i18n("Set here the saturation value."));
+    d->saturationInput->setWhatsThis(i18n("Set here the saturation value."));
 
     d->gammaLabel = new QLabel(i18n("Gamma:"));
     d->gammaInput = new RDoubleNumInput;
     d->gammaInput->setDecimals(2);
     d->gammaInput->input()->setRange(0.1, 3.0, 0.01, true);
     d->gammaInput->setDefaultValue(1.0);
-    d->gammaInput->setWhatsThis( i18n("Set here the gamma correction value."));
+    d->gammaInput->setWhatsThis(i18n("Set here the gamma correction value."));
 
     d->greenLabel = new QLabel(i18n("Green:"));
     d->greenInput = new RDoubleNumInput;
@@ -294,14 +294,14 @@ WBSettings::WBSettings(QWidget* parent)
     d->mainExposureLabel  = new QLabel(i18nc("main exposure value", "Main:"));
     d->autoAdjustExposure = new QToolButton;
     d->autoAdjustExposure->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
-    d->autoAdjustExposure->setToolTip( i18n( "Auto exposure adjustments" ) );
+    d->autoAdjustExposure->setToolTip(i18n("Auto exposure adjustments"));
     d->autoAdjustExposure->setWhatsThis(i18n("With this button, you can automatically adjust Exposure "
-                                        "and Black Point values."));
+                                             "and Black Point values."));
     d->mainExposureInput = new RDoubleNumInput;
     d->mainExposureInput->setDecimals(2);
     d->mainExposureInput->input()->setRange(-6.0, 8.0, 0.1, true);
     d->mainExposureInput->setDefaultValue(0.0);
-    d->mainExposureInput->setWhatsThis( i18n("Set here the main exposure compensation value in E.V."));
+    d->mainExposureInput->setWhatsThis(i18n("Set here the main exposure compensation value in E.V."));
 
     d->fineExposureLabel = new QLabel(i18nc("fine exposure adjustment", "Fine:"));
     d->fineExposureInput = new RDoubleNumInput;
@@ -530,8 +530,8 @@ void WBSettings::writeSettings(KConfigGroup& group)
 void WBSettings::loadSettings()
 {
     KUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                                QString( "*" ), kapp->activeWindow(),
-                                QString(i18n("White Color Balance Settings File to Load")));
+                                                        QString("*"), kapp->activeWindow(),
+                                                        QString(i18n("White Color Balance Settings File to Load")));
 
     if (loadWhiteBalanceFile.isEmpty())
     {
@@ -577,19 +577,19 @@ void WBSettings::loadSettings()
 void WBSettings::saveAsSettings()
 {
     KUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                                QString( "*" ), kapp->activeWindow(),
-                                QString( i18n("White Color Balance Settings File to Save")));
+                                                        QString("*"), kapp->activeWindow(),
+                                                        QString(i18n("White Color Balance Settings File to Save")));
 
-    if ( saveWhiteBalanceFile.isEmpty() )
+    if (saveWhiteBalanceFile.isEmpty())
     {
         return;
     }
 
     QFile file(saveWhiteBalanceFile.toLocalFile());
 
-    if ( file.open(QIODevice::WriteOnly) )
+    if (file.open(QIODevice::WriteOnly))
     {
-        QTextStream stream( &file );
+        QTextStream stream(&file);
         stream << "# White Color Balance Configuration File V2\n";
         stream << d->temperatureInput->value() << "\n";
         stream << d->darkInput->value() << "\n";

@@ -136,7 +136,7 @@ SharpSettings::SharpSettings(QWidget* parent)
     d->sharpMethod->addItem(i18n("Unsharp mask"));
     d->sharpMethod->addItem(i18n("Refocus"));
     d->sharpMethod->setDefaultIndex(SharpContainer::SimpleSharp);
-    d->sharpMethod->setWhatsThis( i18n("Select the sharpening method to apply to the image."));
+    d->sharpMethod->setWhatsThis(i18n("Select the sharpening method to apply to the image."));
 
     d->stack = new QStackedWidget(parent);
 
@@ -158,9 +158,9 @@ SharpSettings::SharpSettings(QWidget* parent)
     d->radiusInput->setRange(0, 100, 1);
     d->radiusInput->setSliderEnabled(true);
     d->radiusInput->setDefaultValue(0);
-    d->radiusInput->setWhatsThis( i18n("A sharpness of 0 has no effect, "
-                                       "1 and above determine the sharpen matrix radius "
-                                       "that determines how much to sharpen the image."));
+    d->radiusInput->setWhatsThis(i18n("A sharpness of 0 has no effect, "
+                                      "1 and above determine the sharpen matrix radius "
+                                      "that determines how much to sharpen the image."));
 
     grid1->addWidget(label,          0, 0, 1, 2);
     grid1->addWidget(d->radiusInput, 1, 0, 1, 2);
@@ -179,24 +179,24 @@ SharpSettings::SharpSettings(QWidget* parent)
     d->radiusInput2 = new RDoubleNumInput(unsharpMaskSettings);
     d->radiusInput2->setRange(0.0, 120.0, 0.1, true);
     d->radiusInput2->setDefaultValue(1.0);
-    d->radiusInput2->setWhatsThis( i18n("Radius value is the Gaussian blur matrix radius value "
-                                        "used to determines how much to blur the image.") );
+    d->radiusInput2->setWhatsThis(i18n("Radius value is the Gaussian blur matrix radius value "
+                                       "used to determines how much to blur the image."));
 
     QLabel* label3 = new QLabel(i18n("Amount:"), unsharpMaskSettings);
     d->amountInput = new RDoubleNumInput(unsharpMaskSettings);
     d->amountInput->setDecimals(1);
     d->amountInput->input()->setRange(0.0, 5.0, 0.1, true);
     d->amountInput->setDefaultValue(1.0);
-    d->amountInput->setWhatsThis( i18n("The value of the difference between the "
-                                       "original and the blur image that is added back into the original.") );
+    d->amountInput->setWhatsThis(i18n("The value of the difference between the "
+                                      "original and the blur image that is added back into the original."));
 
     QLabel* label4    = new QLabel(i18n("Threshold:"), unsharpMaskSettings);
     d->thresholdInput = new RDoubleNumInput(unsharpMaskSettings);
     d->thresholdInput->setDecimals(2);
     d->thresholdInput->input()->setRange(0.0, 1.0, 0.01, true);
     d->thresholdInput->setDefaultValue(0.05);
-    d->thresholdInput->setWhatsThis( i18n("The threshold, as a fraction of the maximum "
-                                          "luminosity value, needed to apply the difference amount.") );
+    d->thresholdInput->setWhatsThis(i18n("The threshold, as a fraction of the maximum "
+                                         "luminosity value, needed to apply the difference amount."));
 
     grid2->addWidget(label2,            0, 0, 1, 2);
     grid2->addWidget(d->radiusInput2,   1, 0, 1, 2);
@@ -220,49 +220,49 @@ SharpSettings::SharpSettings(QWidget* parent)
     d->radius->setDecimals(2);
     d->radius->input()->setRange(0.0, 5.0, 0.01, true);
     d->radius->setDefaultValue(1.0);
-    d->radius->setWhatsThis( i18n("This is the radius of the circular convolution. It is the most important "
-                                  "parameter for using this plugin. For most images the default value of 1.0 "
-                                  "should give good results. Select a higher value when your image is very blurred."));
+    d->radius->setWhatsThis(i18n("This is the radius of the circular convolution. It is the most important "
+                                 "parameter for using this plugin. For most images the default value of 1.0 "
+                                 "should give good results. Select a higher value when your image is very blurred."));
 
     QLabel* label6 = new QLabel(i18n("Correlation:"), refocusSettings);
     d->correlation = new RDoubleNumInput(refocusSettings);
     d->correlation->setDecimals(2);
     d->correlation->input()->setRange(0.0, 1.0, 0.01, true);
     d->correlation->setDefaultValue(0.5);
-    d->correlation->setWhatsThis( i18n("Increasing the correlation may help to reduce artifacts. The correlation can "
-                                       "range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
-                                       "Using a high value for the correlation will reduce the sharpening effect of the "
-                                       "plugin."));
+    d->correlation->setWhatsThis(i18n("Increasing the correlation may help to reduce artifacts. The correlation can "
+                                      "range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
+                                      "Using a high value for the correlation will reduce the sharpening effect of the "
+                                      "plugin."));
 
     QLabel* label7 = new QLabel(i18n("Noise filter:"), refocusSettings);
     d->noise       = new RDoubleNumInput(refocusSettings);
     d->noise->setDecimals(3);
     d->noise->input()->setRange(0.0, 1.0, 0.001, true);
     d->noise->setDefaultValue(0.03);
-    d->noise->setWhatsThis( i18n("Increasing the noise filter parameter may help to reduce artifacts. The noise filter "
-                                 "can range from 0-1 but values higher than 0.1 are rarely helpful. When the noise filter "
-                                 "value is too low, e.g. 0.0 the image quality will be very poor. A useful value is 0.01. "
-                                 "Using a high value for the noise filter will reduce the sharpening "
-                                 "effect of the plugin."));
+    d->noise->setWhatsThis(i18n("Increasing the noise filter parameter may help to reduce artifacts. The noise filter "
+                                "can range from 0-1 but values higher than 0.1 are rarely helpful. When the noise filter "
+                                "value is too low, e.g. 0.0 the image quality will be very poor. A useful value is 0.01. "
+                                "Using a high value for the noise filter will reduce the sharpening "
+                                "effect of the plugin."));
 
     QLabel* label8 = new QLabel(i18n("Gaussian sharpness:"), refocusSettings);
     d->gauss       = new RDoubleNumInput(refocusSettings);
     d->gauss->setDecimals(2);
     d->gauss->input()->setRange(0.0, 1.0, 0.01, true);
     d->gauss->setDefaultValue(0.0);
-    d->gauss->setWhatsThis( i18n("This is the sharpness for the Gaussian convolution. Use this parameter when your "
-                                 "blurring is of a Gaussian type. In most cases you should set this parameter to 0, because "
-                                 "it causes nasty artifacts. When you use non-zero values, you will probably also have to "
-                                 "increase the correlation and/or noise filter parameters."));
+    d->gauss->setWhatsThis(i18n("This is the sharpness for the Gaussian convolution. Use this parameter when your "
+                                "blurring is of a Gaussian type. In most cases you should set this parameter to 0, because "
+                                "it causes nasty artifacts. When you use non-zero values, you will probably also have to "
+                                "increase the correlation and/or noise filter parameters."));
 
     QLabel* label9 = new QLabel(i18n("Matrix size:"), refocusSettings);
     d->matrixSize  = new RIntNumInput(refocusSettings);
     d->matrixSize->setRange(0, RefocusFilter::maxMatrixSize(), 1);
     d->matrixSize->setSliderEnabled(true);
     d->matrixSize->setDefaultValue(5);
-    d->matrixSize->setWhatsThis( i18n("This parameter determines the size of the transformation matrix. "
-                                      "Increasing the matrix width may give better results, especially when you have "
-                                      "chosen large values for circular or Gaussian sharpness."));
+    d->matrixSize->setWhatsThis(i18n("This parameter determines the size of the transformation matrix. "
+                                     "Increasing the matrix width may give better results, especially when you have "
+                                     "chosen large values for circular or Gaussian sharpness."));
 
     grid3->addWidget(label5,         0, 0, 1, 2);
     grid3->addWidget(d->radius,      1, 0, 1, 2);
@@ -454,21 +454,21 @@ void SharpSettings::writeSettings(KConfigGroup& group)
 void SharpSettings::loadSettings()
 {
     KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                               QString( "*" ), kapp->activeWindow(),
-                               QString( i18n("Photograph Refocus Settings File to Load")) );
+                                                       QString("*"), kapp->activeWindow(),
+                                                       QString(i18n("Photograph Refocus Settings File to Load")));
 
-    if ( loadRestorationFile.isEmpty() )
+    if (loadRestorationFile.isEmpty())
     {
         return;
     }
 
     QFile file(loadRestorationFile.toLocalFile());
 
-    if ( file.open(QIODevice::ReadOnly) )
+    if (file.open(QIODevice::ReadOnly))
     {
-        QTextStream stream( &file );
+        QTextStream stream(&file);
 
-        if ( stream.readLine() != "# Photograph Refocus Configuration File" )
+        if (stream.readLine() != "# Photograph Refocus Configuration File")
         {
             KMessageBox::error(kapp->activeWindow(),
                                i18n("\"%1\" is not a Photograph Refocus settings text file.",
@@ -478,11 +478,11 @@ void SharpSettings::loadSettings()
         }
 
         blockSignals(true);
-        d->matrixSize->setValue( stream.readLine().toInt() );
-        d->radius->setValue( stream.readLine().toDouble() );
-        d->gauss->setValue( stream.readLine().toDouble() );
-        d->correlation->setValue( stream.readLine().toDouble() );
-        d->noise->setValue( stream.readLine().toDouble() );
+        d->matrixSize->setValue(stream.readLine().toInt());
+        d->radius->setValue(stream.readLine().toDouble());
+        d->gauss->setValue(stream.readLine().toDouble());
+        d->correlation->setValue(stream.readLine().toDouble());
+        d->noise->setValue(stream.readLine().toDouble());
         blockSignals(false);
     }
     else
@@ -496,19 +496,19 @@ void SharpSettings::loadSettings()
 void SharpSettings::saveAsSettings()
 {
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                               QString( "*" ), kapp->activeWindow(),
-                               QString( i18n("Photograph Refocus Settings File to Save")) );
+                                                       QString("*"), kapp->activeWindow(),
+                                                       QString(i18n("Photograph Refocus Settings File to Save")));
 
-    if ( saveRestorationFile.isEmpty() )
+    if (saveRestorationFile.isEmpty())
     {
         return;
     }
 
     QFile file(saveRestorationFile.toLocalFile());
 
-    if ( file.open(QIODevice::WriteOnly) )
+    if (file.open(QIODevice::WriteOnly))
     {
-        QTextStream stream( &file );
+        QTextStream stream(&file);
         stream << "# Photograph Refocus Configuration File\n";
         stream << d->matrixSize->value() << "\n";
         stream << d->radius->value() << "\n";

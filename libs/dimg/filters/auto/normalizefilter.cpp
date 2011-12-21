@@ -96,9 +96,9 @@ void NormalizeFilter::normalizeImage()
 
     // Find min. and max. values.
 
-    param.min    = segments-1;
+    param.min    = segments - 1;
     param.max    = 0;
-    uint refSize = m_refImage.width()*m_refImage.height();
+    uint refSize = m_refImage.width() * m_refImage.height();
 
     if (!sixteenBit)        // 8 bits image.
     {
@@ -199,7 +199,7 @@ void NormalizeFilter::normalizeImage()
         {
             for (x = (int)param.min ; x <= (int)param.max ; ++x)
             {
-                param.lut[x] = (unsigned short)((segments-1) * (x - param.min) / range);
+                param.lut[x] = (unsigned short)((segments - 1) * (x - param.min) / range);
             }
         }
         else
@@ -211,7 +211,7 @@ void NormalizeFilter::normalizeImage()
     uchar* data = m_orgImage.bits();
     int w       = m_orgImage.width();
     int h       = m_orgImage.height();
-    uint size   = w*h;
+    uint size   = w * h;
 
     // Apply LUT to image.
 
@@ -234,9 +234,9 @@ void NormalizeFilter::normalizeImage()
 
             progress = (int)(((double)i * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }
@@ -259,9 +259,9 @@ void NormalizeFilter::normalizeImage()
 
             progress = (int)(((double)i * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }

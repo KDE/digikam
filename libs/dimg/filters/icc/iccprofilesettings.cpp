@@ -84,7 +84,7 @@ IccProfilesSettings::IccProfilesSettings(QWidget* parent)
     QLabel* newProfileLabel  = new QLabel(i18n("Convert to:"), this);
     d->profilesBox           = new IccProfilesComboBox(this);
     d->profilesBox->addProfilesSqueezed(IccSettings::instance()->workspaceProfiles());
-    d->profilesBox->setWhatsThis( i18n("Select the profile of the color space to convert to."));
+    d->profilesBox->setWhatsThis(i18n("Select the profile of the color space to convert to."));
     newProfileLabel->setBuddy(d->profilesBox);
     QPushButton* newProfInfo = new QPushButton(i18n("Info..."), this);
 
@@ -146,7 +146,7 @@ void IccProfilesSettings::readSettings(KConfigGroup& group)
 {
     QStringList lastProfiles = group.readPathEntry(d->configRecentlyUsedProfilesEntry, QStringList());
 
-    foreach (const QString& path, lastProfiles)
+    foreach(const QString & path, lastProfiles)
     {
         d->favoriteProfiles.insert(path, new bool(true));
     }

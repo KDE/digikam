@@ -69,8 +69,8 @@ RefocusFilter::RefocusFilter(DImg* orgImage, QObject* parent, int matrixSize, do
     initFilter();
 
     // initialize intermediate image
-    m_preImage = DImg(orgImage->width()+4*MAX_MATRIX_SIZE,
-                      orgImage->height()+4*MAX_MATRIX_SIZE,
+    m_preImage = DImg(orgImage->width() + 4 * MAX_MATRIX_SIZE,
+                      orgImage->height() + 4 * MAX_MATRIX_SIZE,
                       orgImage->sixteenBit(), orgImage->hasAlpha());
 }
 
@@ -86,55 +86,55 @@ void RefocusFilter::filterImage()
     int w = m_orgImage.width();
     int h = m_orgImage.height();
 
-    DImg img(w + 4*MAX_MATRIX_SIZE, h + 4*MAX_MATRIX_SIZE, sb, a);
+    DImg img(w + 4 * MAX_MATRIX_SIZE, h + 4 * MAX_MATRIX_SIZE, sb, a);
     DImg tmp;
 
     // copy the original
-    img.bitBltImage(&m_orgImage, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    img.bitBltImage(&m_orgImage, 2 * MAX_MATRIX_SIZE, 2 * MAX_MATRIX_SIZE);
 
     // Create dummy top border
-    tmp = m_orgImage.copy(0, 0, w, 2*MAX_MATRIX_SIZE);
+    tmp = m_orgImage.copy(0, 0, w, 2 * MAX_MATRIX_SIZE);
     tmp.flip(DImg::VERTICAL);
-    img.bitBltImage(&tmp, 2*MAX_MATRIX_SIZE, 0);
+    img.bitBltImage(&tmp, 2 * MAX_MATRIX_SIZE, 0);
 
     // Create dummy bottom border
-    tmp = m_orgImage.copy(0, h-2*MAX_MATRIX_SIZE, w, 2*MAX_MATRIX_SIZE);
+    tmp = m_orgImage.copy(0, h - 2 * MAX_MATRIX_SIZE, w, 2 * MAX_MATRIX_SIZE);
     tmp.flip(DImg::VERTICAL);
-    img.bitBltImage(&tmp, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE+h);
+    img.bitBltImage(&tmp, 2 * MAX_MATRIX_SIZE, 2 * MAX_MATRIX_SIZE + h);
 
     // Create dummy left border
-    tmp = m_orgImage.copy(0, 0, 2*MAX_MATRIX_SIZE, h);
+    tmp = m_orgImage.copy(0, 0, 2 * MAX_MATRIX_SIZE, h);
     tmp.flip(DImg::HORIZONTAL);
-    img.bitBltImage(&tmp, 0, 2*MAX_MATRIX_SIZE);
+    img.bitBltImage(&tmp, 0, 2 * MAX_MATRIX_SIZE);
 
     // Create dummy right border
-    tmp = m_orgImage.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, h);
+    tmp = m_orgImage.copy(w - 2 * MAX_MATRIX_SIZE, 0, 2 * MAX_MATRIX_SIZE, h);
     tmp.flip(DImg::HORIZONTAL);
-    img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    img.bitBltImage(&tmp, w + 2 * MAX_MATRIX_SIZE, 2 * MAX_MATRIX_SIZE);
 
     // Create dummy top/left corner
-    tmp = m_orgImage.copy(0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp = m_orgImage.copy(0, 0, 2 * MAX_MATRIX_SIZE, 2 * MAX_MATRIX_SIZE);
     tmp.flip(DImg::HORIZONTAL);
     tmp.flip(DImg::VERTICAL);
     img.bitBltImage(&tmp, 0, 0);
 
     // Create dummy top/right corner
-    tmp = m_orgImage.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp = m_orgImage.copy(w - 2 * MAX_MATRIX_SIZE, 0, 2 * MAX_MATRIX_SIZE, 2 * MAX_MATRIX_SIZE);
     tmp.flip(DImg::HORIZONTAL);
     tmp.flip(DImg::VERTICAL);
-    img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, 0);
+    img.bitBltImage(&tmp, w + 2 * MAX_MATRIX_SIZE, 0);
 
     // Create dummy bottom/left corner
-    tmp = m_orgImage.copy(0, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp = m_orgImage.copy(0, h - 2 * MAX_MATRIX_SIZE, 2 * MAX_MATRIX_SIZE, 2 * MAX_MATRIX_SIZE);
     tmp.flip(DImg::HORIZONTAL);
     tmp.flip(DImg::VERTICAL);
-    img.bitBltImage(&tmp, 0, h+2*MAX_MATRIX_SIZE);
+    img.bitBltImage(&tmp, 0, h + 2 * MAX_MATRIX_SIZE);
 
     // Create dummy bottom/right corner
-    tmp = m_orgImage.copy(w-2*MAX_MATRIX_SIZE, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp = m_orgImage.copy(w - 2 * MAX_MATRIX_SIZE, h - 2 * MAX_MATRIX_SIZE, 2 * MAX_MATRIX_SIZE, 2 * MAX_MATRIX_SIZE);
     tmp.flip(DImg::HORIZONTAL);
     tmp.flip(DImg::VERTICAL);
-    img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, h+2*MAX_MATRIX_SIZE);
+    img.bitBltImage(&tmp, w + 2 * MAX_MATRIX_SIZE, h + 2 * MAX_MATRIX_SIZE);
 
     // run filter algorithm on the prepared copy
     refocusImage(img.bits(), img.width(), img.height(),
@@ -142,30 +142,30 @@ void RefocusFilter::filterImage()
                  m_correlation, m_noise);
 
     // copy the result from intermediate image to final image
-    m_destImage.bitBltImage(&m_preImage, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, w, h, 0, 0);
+    m_destImage.bitBltImage(&m_preImage, 2 * MAX_MATRIX_SIZE, 2 * MAX_MATRIX_SIZE, w, h, 0, 0);
 }
 
 void RefocusFilter::refocusImage(uchar* data, int width, int height, bool sixteenBit,
                                  int matrixSize, double radius, double gauss,
                                  double correlation, double noise)
 {
-    CMat* matrix=0;
+    CMat* matrix = 0;
 
     // Compute matrix
     kDebug() << "RefocusFilter::Compute matrix...";
 
     CMat circle, gaussian, convolution;
 
-    RefocusMatrix::make_gaussian_convolution (gauss, &gaussian, matrixSize);
-    RefocusMatrix::make_circle_convolution (radius, &circle, matrixSize);
-    RefocusMatrix::init_c_mat (&convolution, matrixSize);
-    RefocusMatrix::convolve_star_mat (&convolution, &gaussian, &circle);
+    RefocusMatrix::make_gaussian_convolution(gauss, &gaussian, matrixSize);
+    RefocusMatrix::make_circle_convolution(radius, &circle, matrixSize);
+    RefocusMatrix::init_c_mat(&convolution, matrixSize);
+    RefocusMatrix::convolve_star_mat(&convolution, &gaussian, &circle);
 
-    matrix = RefocusMatrix::compute_g_matrix (&convolution, matrixSize, correlation, noise, 0.0, true);
+    matrix = RefocusMatrix::compute_g_matrix(&convolution, matrixSize, correlation, noise, 0.0, true);
 
-    RefocusMatrix::finish_c_mat (&convolution);
-    RefocusMatrix::finish_c_mat (&gaussian);
-    RefocusMatrix::finish_c_mat (&circle);
+    RefocusMatrix::finish_c_mat(&convolution);
+    RefocusMatrix::finish_c_mat(&gaussian);
+    RefocusMatrix::finish_c_mat(&circle);
 
     // Apply deconvolution kernel to image.
     kDebug() << "RefocusFilter::Apply Matrix to image...";
@@ -186,7 +186,7 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
     double valRed, valGreen, valBlue;
     int    x1, y1, x2, y2, index1, index2;
 
-    const int imageSize  = width*height;
+    const int imageSize  = width * height;
     const int mat_offset = mat_size / 2;
 
     for (y1 = 0; runningFlag() && (y1 < height); ++y1)
@@ -209,9 +209,9 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
                         index1 = width * (y1 + y2 - mat_offset) +
                                  x1 + x2 - mat_offset;
 
-                        if ( index1 >= 0 && index1 < imageSize )
+                        if (index1 >= 0 && index1 < imageSize)
                         {
-                            ptr   = &orgData[index1*4];
+                            ptr   = &orgData[index1 * 4];
                             blue  = ptr[0];
                             green = ptr[1];
                             red   = ptr[2];
@@ -228,8 +228,8 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
                 if (index2 >= 0 && index2 < imageSize)
                 {
                     // To get Alpha channel value from original (unchanged)
-                    memcpy (&destData[index2*4], &orgData[index2*4], 4);
-                    ptr = &destData[index2*4];
+                    memcpy(&destData[index2 * 4], &orgData[index2 * 4], 4);
+                    ptr = &destData[index2 * 4];
 
                     // Overwrite RGB values to destination.
                     ptr[0] = (uchar) CLAMP(valBlue,  0.0, 255.0);
@@ -251,9 +251,9 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
                         index1 = width * (y1 + y2 - mat_offset) +
                                  x1 + x2 - mat_offset;
 
-                        if ( index1 >= 0 && index1 < imageSize )
+                        if (index1 >= 0 && index1 < imageSize)
                         {
-                            ptr   = &orgData16[index1*4];
+                            ptr   = &orgData16[index1 * 4];
                             blue  = ptr[0];
                             green = ptr[1];
                             red   = ptr[2];
@@ -270,8 +270,8 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
                 if (index2 >= 0 && index2 < imageSize)
                 {
                     // To get Alpha channel value from original (unchanged)
-                    memcpy (&destData16[index2*4], &orgData16[index2*4], 8);
-                    ptr = &destData16[index2*4];
+                    memcpy(&destData16[index2 * 4], &orgData16[index2 * 4], 8);
+                    ptr = &destData16[index2 * 4];
 
                     // Overwrite RGB values to destination.
                     ptr[0] = (unsigned short) CLAMP(valBlue,  0.0, 65535.0);
@@ -284,9 +284,9 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
         // Update the progress bar in dialog.
         progress = (int)(((double)y1 * 100.0) / height);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
-            postProgress( progress );
+            postProgress(progress);
         }
     }
 }

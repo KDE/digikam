@@ -61,7 +61,7 @@ RainDropFilter::RainDropFilter(DImg* orgImage, QObject* parent, int drop,
 
     m_selectedX = m_selectedY = m_selectedW = m_selectedH = 0;
 
-    if ( selection )
+    if (selection)
     {
         m_selectedX = selection->left();
         m_selectedY = selection->top();
@@ -176,8 +176,8 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
         return;
     }
 
-    uchar* pStatusBits = new uchar[nHeight * nWidth];
-    memset(pStatusBits, 0, nHeight * nWidth * sizeof(uchar));
+    QScopedArrayPointer<uchar> pStatusBits(new uchar[nHeight * nWidth]);
+    memset(pStatusBits.data(), 0, nHeight * nWidth * sizeof(uchar));
 
     // Initially, copy all pixels to destination
 
@@ -196,9 +196,9 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
 
             nRandSize = m_generator.number(MinDropSize, MaxDropSize);
 
-            bResp = CreateRainDrop (data, nWidth, nHeight, sixteenBit, bytesDepth,
-                                    pResBits, pStatusBits,
-                                    nRandX, nRandY, nRandSize, Coeff, bLimitRange);
+            bResp = CreateRainDrop(data, nWidth, nHeight, sixteenBit, bytesDepth,
+                                   pResBits, pStatusBits.data(),
+                                   nRandX, nRandY, nRandSize, Coeff, bLimitRange);
 
             ++nCounter;
         }
@@ -213,11 +213,9 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
             break;
         }
 
-        postProgress( (int)(progressMin + ((double)(i) *
-                                           (double)(progressMax-progressMin)) / (double)Amount) );
+        postProgress((int)(progressMin + ((double)(i) *
+                                          (double)(progressMax - progressMin)) / (double)Amount));
     }
-
-    delete [] pStatusBits;
 }
 
 bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
@@ -237,22 +235,22 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
     if (CanBeDropped(Width, Height, pStatusBits, X, Y, DropSize, bLimitRange))
     {
         Coeff *= 0.01;
-        lfDiv = (double)nHalfSize / log (Coeff * (double)nHalfSize + 1.0);
+        lfDiv = (double)nHalfSize / log(Coeff * (double)nHalfSize + 1.0);
 
         for (h = -nHalfSize; runningFlag() && (h <= nHalfSize); ++h)
         {
             for (w = -nHalfSize; runningFlag() && (w <= nHalfSize); ++w)
             {
-                lfRadius = sqrt (h * h + w * w);
-                lfAngle = atan2 ((double)h, (double)w);
+                lfRadius = sqrt(h * h + w * w);
+                lfAngle = atan2((double)h, (double)w);
 
                 if (lfRadius <= (double)nHalfSize)
                 {
                     lfOldRadius = lfRadius;
-                    lfRadius = (exp (lfRadius / lfDiv) - 1.0) / Coeff;
+                    lfRadius = (exp(lfRadius / lfDiv) - 1.0) / Coeff;
 
-                    nw1 = (int)((double)X + lfRadius * cos (lfAngle));
-                    nh1 = (int)((double)Y + lfRadius * sin (lfAngle));
+                    nw1 = (int)((double)X + lfRadius * cos(lfAngle));
+                    nh1 = (int)((double)Y + lfRadius * sin(lfAngle));
 
                     nw2 = X + w;
                     nh2 = Y + h;
@@ -329,7 +327,7 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
                                 {
                                     nBright = 30;
                                 }
-                                else if ((lfAngle >= 1.75 ) && (lfAngle < 2.0))
+                                else if ((lfAngle >= 1.75) && (lfAngle < 2.0))
                                 {
                                     nBright = 30;
                                 }
@@ -373,15 +371,15 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
                                     nBright = (nBright - 1) * 256 + 1;
                                 }
 
-                                imageData.setRed  (LimitValues16(imageData.red()   + nBright));
+                                imageData.setRed(LimitValues16(imageData.red()   + nBright));
                                 imageData.setGreen(LimitValues16(imageData.green() + nBright));
-                                imageData.setBlue (LimitValues16(imageData.blue()  + nBright));
+                                imageData.setBlue(LimitValues16(imageData.blue()  + nBright));
                             }
                             else
                             {
-                                imageData.setRed  (LimitValues8(imageData.red()   + nBright));
+                                imageData.setRed(LimitValues8(imageData.red()   + nBright));
                                 imageData.setGreen(LimitValues8(imageData.green() + nBright));
-                                imageData.setBlue (LimitValues8(imageData.blue()  + nBright));
+                                imageData.setBlue(LimitValues8(imageData.blue()  + nBright));
                             }
 
                             imageData.setPixel(pResBits + Offset(Width, nw2, nh2, bytesDepth));
@@ -398,7 +396,7 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
         {
             for (w = -nHalfSize - nBlurRadius; runningFlag() && (w <= nHalfSize + nBlurRadius); ++w)
             {
-                lfRadius = sqrt (h * h + w * w);
+                lfRadius = sqrt(h * h + w * w);
 
                 if (lfRadius <= (double)nHalfSize * 1.1)
                 {
@@ -412,7 +410,7 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
                             nw2 = X + w + nw1;
                             nh2 = Y + h + nh1;
 
-                            if (IsInside (Width, Height, nw2, nh2))
+                            if (IsInside(Width, Height, nw2, nh2))
                             {
                                 imageData.setColor(pResBits + Offset(Width, nw2, nh2, bytesDepth), sixteenBit);
 
@@ -427,16 +425,16 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
                     nw1 = X + w;
                     nh1 = Y + h;
 
-                    if (IsInside (Width, Height, nw1, nh1))
+                    if (IsInside(Width, Height, nw1, nh1))
                     {
                         offset = Offset(Width, nw1, nh1, bytesDepth);
 
                         // to preserve alpha channel
                         imageData.setColor(pResBits + offset, sixteenBit);
 
-                        imageData.setRed  (nTotalR / nBlurPixels);
+                        imageData.setRed(nTotalR / nBlurPixels);
                         imageData.setGreen(nTotalG / nBlurPixels);
-                        imageData.setBlue (nTotalB / nBlurPixels);
+                        imageData.setBlue(nTotalB / nBlurPixels);
 
                         imageData.setPixel(pResBits + offset);
                     }
@@ -444,14 +442,14 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
             }
         }
 
-        SetDropStatusBits (Width, Height, pStatusBits, X, Y, DropSize);
+        SetDropStatusBits(Width, Height, pStatusBits, X, Y, DropSize);
     }
     else
     {
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* pStatusBits, int X, int Y,
@@ -462,33 +460,33 @@ bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* pStatusBits, int
 
     if (pStatusBits == NULL)
     {
-        return (true);
+        return true;
     }
 
     for (h = Y - nHalfSize; h <= Y + nHalfSize; ++h)
     {
         for (w = X - nHalfSize; w <= X + nHalfSize; ++w)
         {
-            if (IsInside (Width, Height, w, h))
+            if (IsInside(Width, Height, w, h))
             {
                 i = h * Width + w;
 
                 if (pStatusBits[i])
                 {
-                    return (false);
+                    return false;
                 }
             }
             else
             {
                 if (bLimitRange)
                 {
-                    return (false);
+                    return false;
                 }
             }
         }
     }
 
-    return (true);
+    return true;
 }
 
 bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* pStatusBits,
@@ -499,14 +497,14 @@ bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* pStatusBits
 
     if (pStatusBits == NULL)
     {
-        return (false);
+        return false;
     }
 
     for (h = Y - nHalfSize; h <= Y + nHalfSize; ++h)
     {
         for (w = X - nHalfSize; w <= X + nHalfSize; ++w)
         {
-            if (IsInside (Width, Height, w, h))
+            if (IsInside(Width, Height, w, h))
             {
                 i = h * Width + w;
                 pStatusBits[i] = 255;
@@ -514,7 +512,7 @@ bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* pStatusBits
         }
     }
 
-    return (true);
+    return true;
 }
 
 FilterAction RainDropFilter::filterAction()

@@ -111,7 +111,7 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
 
     d->addVignettingCheck = new QCheckBox(i18n("Add vignetting"));
     d->addVignettingCheck->setWhatsThis(i18n("This option adds vignetting to the image instead of removing it. "
-                                        "Use it for creative effects."));
+                                             "Use it for creative effects."));
     d->addVignettingCheck->setChecked(false);
 
     // -------------------------------------------------------------
@@ -183,7 +183,7 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     d->yOffsetInput->setDefaultValue(0);
     d->yOffsetInput->setWhatsThis(i18n("Y offset "));
 
-    KSeparator* line = new KSeparator (Qt::Horizontal);
+    KSeparator* line = new KSeparator(Qt::Horizontal);
 
     // -------------------------------------------------------------
 

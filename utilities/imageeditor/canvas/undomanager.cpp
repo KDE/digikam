@@ -367,12 +367,11 @@ void UndoManager::restoreSnapshot(int index, const DImageHistory& history)
 {
     int    newW, newH;
     bool   sixteenBit, hasAlpha;
-    uchar* newData = d->undoCache->getData(index, newW, newH, sixteenBit, hasAlpha);
+    QScopedArrayPointer<uchar> newData(d->undoCache->getData(index, newW, newH, sixteenBit, hasAlpha));
 
-    if (newData)
+    if (!newData.isNull())
     {
-        d->dimgiface->setUndoImageData(history, newData, newW, newH, sixteenBit);
-        delete [] newData;
+        d->dimgiface->setUndoImageData(history, newData.data(), newW, newH, sixteenBit);
     }
 }
 

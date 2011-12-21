@@ -70,8 +70,8 @@ public:
     double calculateMax()
     {
         int segments = histogram->getHistogramSegments();
-        int startSeg = (int)(HISTOGRAM_CALC_CUTOFF_MIN * (segments-1));
-        int endSeg   = (int)(HISTOGRAM_CALC_CUTOFF_MAX * (segments-1));
+        int startSeg = (int)(HISTOGRAM_CALC_CUTOFF_MIN * (segments - 1));
+        int endSeg   = (int)(HISTOGRAM_CALC_CUTOFF_MAX * (segments - 1));
         double max   = 0.0;
 
         switch (scale)
@@ -161,7 +161,7 @@ public:
         {
             case LinScaleHistogram:
             {
-                return qMin((int) ((pixmapHeight * value) / max), pixmapHeight);
+                return qMin((int)((pixmapHeight * value) / max), pixmapHeight);
             }
 
             case LogScaleHistogram:
@@ -177,7 +177,7 @@ public:
                     return 0;
                 }
 
-                return qMin((int) ((pixmapHeight * log(value)) / max), pixmapHeight);
+                return qMin((int)((pixmapHeight * log(value)) / max), pixmapHeight);
             }
 
             default:
@@ -248,6 +248,7 @@ public:
 
         QColor pColor;
         QColor bColor;
+
         switch (channelType)
         {
             case GreenChannel:
@@ -471,7 +472,7 @@ public:
             p1.drawLine(xGuide, 0, xGuide, bufferPixmap.height());
 
             QString string = i18n("x:%1", guidePos);
-            QFontMetrics fontMt( string );
+            QFontMetrics fontMt(string);
             QRect rect     = fontMt.boundingRect(0, 0, bufferPixmap.width(), bufferPixmap.height(), 0, string);
             p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
             rect.moveTop(1);
@@ -479,7 +480,7 @@ public:
             if (xGuide < bufferPixmap.width() / 2)
             {
                 rect.moveLeft(xGuide);
-                p1.fillRect(rect, QBrush(QColor(250, 250, 255)) );
+                p1.fillRect(rect, QBrush(QColor(250, 250, 255)));
                 p1.drawRect(rect);
                 rect.moveLeft(xGuide + 3);
                 p1.drawText(rect, Qt::AlignLeft, string);
@@ -487,7 +488,7 @@ public:
             else
             {
                 rect.moveRight(xGuide);
-                p1.fillRect(rect, QBrush(QColor(250, 250, 255)) );
+                p1.fillRect(rect, QBrush(QColor(250, 250, 255)));
                 p1.drawRect(rect);
                 rect.moveRight(xGuide - 3);
                 p1.drawText(rect, Qt::AlignRight, string);

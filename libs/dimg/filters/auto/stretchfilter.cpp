@@ -73,44 +73,33 @@ void StretchFilter::filterImage()
     of color values. This is a contrast enhancement technique.*/
 void StretchFilter::stretchContrastImage()
 {
-    struct double_packet high, low, intensity;
-    struct int_packet*   normalize_map;
-    long long            number_pixels;
-    register long        i;
-    int                  progress;
-    unsigned long        threshold_intensity;
-
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
         kDebug() << "Ref. image and Org. has different bits depth";
         return;
     }
 
+    struct double_packet high, low, intensity;
+    long long            number_pixels;
+    register long        i;
+    int                  progress;
+    unsigned long        threshold_intensity;
+
     // Create an histogram of the reference image.
-    ImageHistogram* histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(),
-            m_refImage.height(), m_refImage.sixteenBit());
-    if ( !histogram )
+    QScopedPointer<ImageHistogram> histogram(new ImageHistogram(m_refImage.bits(), m_refImage.width(),
+                                                                m_refImage.height(), m_refImage.sixteenBit()));
+    if (histogram.isNull())
     {
-      kWarning() << ("Unable to allocate memory!");
-      return;
+        kWarning() << ("Unable to allocate memory!");
+        return;
     }
     histogram->calculate();
 
     // Memory allocation.
-    normalize_map = new int_packet[histogram->getHistogramSegments()];
+    QScopedArrayPointer<int_packet> normalize_map(new int_packet[histogram->getHistogramSegments()]);
 
-    if ( !normalize_map )
+    if (normalize_map.isNull())
     {
-        if (histogram)
-        {
-            delete histogram;
-        }
-
-        if (normalize_map)
-        {
-            delete [] normalize_map;
-        }
-
         kWarning() << ("Unable to allocate memory!");
         return;
     }
@@ -131,13 +120,13 @@ void StretchFilter::stretchContrastImage()
     {
         intensity.red += histogram->getValue(RedChannel, (int)high.red);
 
-        if ( intensity.red > threshold_intensity )
+        if (intensity.red > threshold_intensity)
         {
             break;
         }
     }
 
-    if ( low.red == high.red )
+    if (low.red == high.red)
     {
         threshold_intensity = 0;
         memset(&intensity, 0, sizeof(struct double_packet));
@@ -146,7 +135,7 @@ void StretchFilter::stretchContrastImage()
         {
             intensity.red += histogram->getValue(RedChannel, (int)low.red);
 
-            if ( intensity.red > threshold_intensity )
+            if (intensity.red > threshold_intensity)
             {
                 break;
             }
@@ -158,7 +147,7 @@ void StretchFilter::stretchContrastImage()
         {
             intensity.red += histogram->getValue(RedChannel, (int)high.red);
 
-            if ( intensity.red > threshold_intensity )
+            if (intensity.red > threshold_intensity)
             {
                 break;
             }
@@ -173,13 +162,13 @@ void StretchFilter::stretchContrastImage()
     {
         intensity.green += histogram->getValue(GreenChannel, (int)high.green);
 
-        if ( intensity.green > threshold_intensity )
+        if (intensity.green > threshold_intensity)
         {
             break;
         }
     }
 
-    if ( low.green == high.green )
+    if (low.green == high.green)
     {
         threshold_intensity = 0;
         memset(&intensity, 0, sizeof(struct double_packet));
@@ -188,7 +177,7 @@ void StretchFilter::stretchContrastImage()
         {
             intensity.green += histogram->getValue(GreenChannel, (int)low.green);
 
-            if ( intensity.green > threshold_intensity )
+            if (intensity.green > threshold_intensity)
             {
                 break;
             }
@@ -200,7 +189,7 @@ void StretchFilter::stretchContrastImage()
         {
             intensity.green += histogram->getValue(GreenChannel, (int)high.green);
 
-            if ( intensity.green > threshold_intensity )
+            if (intensity.green > threshold_intensity)
             {
                 break;
             }
@@ -215,13 +204,13 @@ void StretchFilter::stretchContrastImage()
     {
         intensity.blue += histogram->getValue(BlueChannel, (int)high.blue);
 
-        if ( intensity.blue > threshold_intensity )
+        if (intensity.blue > threshold_intensity)
         {
             break;
         }
     }
 
-    if ( low.blue == high.blue )
+    if (low.blue == high.blue)
     {
         threshold_intensity = 0;
         memset(&intensity, 0, sizeof(struct double_packet));
@@ -230,7 +219,7 @@ void StretchFilter::stretchContrastImage()
         {
             intensity.blue += histogram->getValue(BlueChannel, (int)low.blue);
 
-            if ( intensity.blue > threshold_intensity )
+            if (intensity.blue > threshold_intensity)
             {
                 break;
             }
@@ -242,7 +231,7 @@ void StretchFilter::stretchContrastImage()
         {
             intensity.blue += histogram->getValue(BlueChannel, (int)high.blue);
 
-            if ( intensity.blue > threshold_intensity )
+            if (intensity.blue > threshold_intensity)
             {
                 break;
             }
@@ -257,13 +246,13 @@ void StretchFilter::stretchContrastImage()
     {
         intensity.alpha += histogram->getValue(AlphaChannel, (int)high.alpha);
 
-        if ( intensity.alpha > threshold_intensity )
+        if (intensity.alpha > threshold_intensity)
         {
             break;
         }
     }
 
-    if ( low.alpha == high.alpha )
+    if (low.alpha == high.alpha)
     {
         threshold_intensity = 0;
         memset(&intensity, 0, sizeof(struct double_packet));
@@ -272,7 +261,7 @@ void StretchFilter::stretchContrastImage()
         {
             intensity.alpha += histogram->getValue(AlphaChannel, (int)low.alpha);
 
-            if ( intensity.alpha > threshold_intensity )
+            if (intensity.alpha > threshold_intensity)
             {
                 break;
             }
@@ -284,7 +273,7 @@ void StretchFilter::stretchContrastImage()
         {
             intensity.alpha += histogram->getValue(AlphaChannel, (int)high.alpha);
 
-            if ( intensity.alpha > threshold_intensity )
+            if (intensity.alpha > threshold_intensity)
             {
                 break;
             }
@@ -293,7 +282,7 @@ void StretchFilter::stretchContrastImage()
 
     // Stretch the histogram to create the normalized image mapping.
 
-    memset(normalize_map, 0, histogram->getHistogramSegments()*sizeof(struct int_packet));
+    memset(normalize_map.data(), 0, histogram->getHistogramSegments()*sizeof(struct int_packet));
 
     // TODO magic number 256
     for (i = 0 ; runningFlag() && (i <= (long)histogram->getMaxSegmentIndex()) ; ++i)
@@ -304,11 +293,11 @@ void StretchFilter::stretchContrastImage()
         }
         else if (i > (long) high.red)
         {
-            normalize_map[i].red = (256*histogram->getHistogramSegments() -1);
+            normalize_map[i].red = (256 * histogram->getHistogramSegments() - 1);
         }
         else if (low.red != high.red)
         {
-            normalize_map[i].red = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.red))/(high.red-low.red));
+            normalize_map[i].red = (int)(((256 * histogram->getHistogramSegments() - 1) * (i - low.red)) / (high.red - low.red));
         }
 
         if (i < (long) low.green)
@@ -317,11 +306,11 @@ void StretchFilter::stretchContrastImage()
         }
         else if (i > (long) high.green)
         {
-            normalize_map[i].green = (256*histogram->getHistogramSegments() -1);
+            normalize_map[i].green = (256 * histogram->getHistogramSegments() - 1);
         }
         else if (low.green != high.green)
         {
-            normalize_map[i].green = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.green))/(high.green-low.green));
+            normalize_map[i].green = (int)(((256 * histogram->getHistogramSegments() - 1) * (i - low.green)) / (high.green - low.green));
         }
 
         if (i < (long) low.blue)
@@ -330,11 +319,11 @@ void StretchFilter::stretchContrastImage()
         }
         else if (i > (long) high.blue)
         {
-            normalize_map[i].blue = (256*histogram->getHistogramSegments() -1);
+            normalize_map[i].blue = (256 * histogram->getHistogramSegments() - 1);
         }
         else if (low.blue != high.blue)
         {
-            normalize_map[i].blue = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.blue))/(high.blue-low.blue));
+            normalize_map[i].blue = (int)(((256 * histogram->getHistogramSegments() - 1) * (i - low.blue)) / (high.blue - low.blue));
         }
 
         if (i < (long) low.alpha)
@@ -343,11 +332,11 @@ void StretchFilter::stretchContrastImage()
         }
         else if (i > (long) high.alpha)
         {
-            normalize_map[i].alpha = (256*histogram->getHistogramSegments() -1);
+            normalize_map[i].alpha = (256 * histogram->getHistogramSegments() - 1);
         }
         else if (low.alpha != high.alpha)
         {
-            normalize_map[i].alpha = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.alpha))/(high.alpha-low.alpha));
+            normalize_map[i].alpha = (int)(((256 * histogram->getHistogramSegments() - 1) * (i - low.alpha)) / (high.alpha - low.alpha));
         }
     }
 
@@ -357,7 +346,7 @@ void StretchFilter::stretchContrastImage()
     int w           = m_orgImage.width();
     int h           = m_orgImage.height();
     bool sixteenBit = m_orgImage.sixteenBit();
-    int size        = w*h;
+    int size        = w * h;
 
     // TODO magic number 257
     if (!sixteenBit)        // 8 bits image.
@@ -374,22 +363,22 @@ void StretchFilter::stretchContrastImage()
 
             if (low.red != high.red)
             {
-                red = (normalize_map[red].red)/257;
+                red = (normalize_map[red].red) / 257;
             }
 
             if (low.green != high.green)
             {
-                green = (normalize_map[green].green)/257;
+                green = (normalize_map[green].green) / 257;
             }
 
             if (low.blue != high.blue)
             {
-                blue = (normalize_map[blue].blue)/257;
+                blue = (normalize_map[blue].blue) / 257;
             }
 
             if (low.alpha != high.alpha)
             {
-                alpha = (normalize_map[alpha].alpha)/257;
+                alpha = (normalize_map[alpha].alpha) / 257;
             }
 
             ptr[0] = blue;
@@ -400,9 +389,9 @@ void StretchFilter::stretchContrastImage()
 
             progress = (int)(((double)i * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }
@@ -420,22 +409,22 @@ void StretchFilter::stretchContrastImage()
 
             if (low.red != high.red)
             {
-                red = (normalize_map[red].red)/257;
+                red = (normalize_map[red].red) / 257;
             }
 
             if (low.green != high.green)
             {
-                green = (normalize_map[green].green)/257;
+                green = (normalize_map[green].green) / 257;
             }
 
             if (low.blue != high.blue)
             {
-                blue = (normalize_map[blue].blue)/257;
+                blue = (normalize_map[blue].blue) / 257;
             }
 
             if (low.alpha != high.alpha)
             {
-                alpha = (normalize_map[alpha].alpha)/257;
+                alpha = (normalize_map[alpha].alpha) / 257;
             }
 
             ptr[0] = blue;
@@ -446,15 +435,12 @@ void StretchFilter::stretchContrastImage()
 
             progress = (int)(((double)i * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }
-
-    delete histogram;
-    delete [] normalize_map;
 }
 
 FilterAction StretchFilter::filterAction()

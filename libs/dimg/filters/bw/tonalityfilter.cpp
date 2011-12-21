@@ -68,7 +68,7 @@ void TonalityFilter::filterImage()
     uint   width      = m_destImage.width();
     uint   height     = m_destImage.height();
     bool   sixteenBit = m_destImage.sixteenBit();
-    uint   size       = width*height;
+    uint   size       = width * height;
     int    progress;
     int    hue, sat, lig;
 
@@ -94,9 +94,9 @@ void TonalityFilter::filterImage()
 
             progress = (int)(((double)i * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }
@@ -119,9 +119,9 @@ void TonalityFilter::filterImage()
 
             progress = (int)(((double)i * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }

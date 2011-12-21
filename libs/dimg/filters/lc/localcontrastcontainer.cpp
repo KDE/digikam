@@ -65,7 +65,7 @@ LocalContrastContainer::~LocalContrastContainer()
 float LocalContrastContainer::get_power(int nstage)
 {
     float power = stage[nstage].power;
-    power       = (float)(pow(power/100.0, 1.5)*100.0);
+    power       = (float)(pow(power / 100.0, 1.5) * 100.0);
     return power;
 }
 
@@ -77,7 +77,7 @@ float LocalContrastContainer::get_blur(int nstage)
 float LocalContrastContainer::get_unsharp_mask_power()
 {
     float power = unsharp_mask.power;
-    power       = (float)(pow(power/100.0, 3.0)*10.0);
+    power       = (float)(pow(power / 100.0, 3.0) * 10.0);
     return power;
 }
 

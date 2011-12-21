@@ -82,7 +82,7 @@ void CharcoalFilter::filterImage()
 
     // -- Applying Edge effect -----------------------------------------------
 
-    register long i=0;
+    register long i = 0;
     int kernelWidth = getOptimalKernelWidth(m_pencil, m_smooth);
 
     if ((int)m_orgImage.width() < kernelWidth)
@@ -91,26 +91,25 @@ void CharcoalFilter::filterImage()
         return;
     }
 
-    double* kernel = new double[kernelWidth*kernelWidth];
+    QScopedArrayPointer<double> kernel(new double[kernelWidth * kernelWidth]);
 
-    if (!kernel)
+    if (kernel.isNull())
     {
         kWarning() << "Unable to allocate memory!";
         return;
     }
 
-    for (i = 0 ; i < (kernelWidth*kernelWidth) ; ++i)
+    for (i = 0 ; i < (kernelWidth * kernelWidth) ; ++i)
     {
-        kernel[i]=(-1.0);
+        kernel[i] = (-1.0);
     }
 
-    kernel[i/2]=kernelWidth*kernelWidth-1.0;
-    convolveImage(kernelWidth, kernel);
-    delete [] kernel;
+    kernel[i / 2] = kernelWidth * kernelWidth - 1.0;
+    convolveImage(kernelWidth, kernel.data());
 
     // -- Applying Gaussian blur effect ---------------------------------------
 
-    BlurFilter(this, m_destImage, m_destImage, 80, 85, (int)(m_smooth/10.0));
+    BlurFilter(this, m_destImage, m_destImage, 80, 85, (int)(m_smooth / 10.0));
 
     if (!runningFlag())
     {
@@ -123,7 +122,7 @@ void CharcoalFilter::filterImage()
     stretch.startFilterDirectly();
     m_destImage.putImageData(stretch.getTargetImage().bits());
 
-    postProgress( 90 );
+    postProgress(90);
 
     if (!runningFlag())
     {
@@ -136,7 +135,7 @@ void CharcoalFilter::filterImage()
     invert.startFilterDirectly();
     m_destImage.putImageData(invert.getTargetImage().bits());
 
-    postProgress( 95 );
+    postProgress(95);
 
     if (!runningFlag())
     {
@@ -154,7 +153,7 @@ void CharcoalFilter::filterImage()
     mixer.startFilterDirectly();
     m_destImage.putImageData(mixer.getTargetImage().bits());
 
-    postProgress( 100 );
+    postProgress(100);
 
     if (!runningFlag())
     {
@@ -164,26 +163,26 @@ void CharcoalFilter::filterImage()
 
 bool CharcoalFilter::convolveImage(const unsigned int order, const double* kernel)
 {
-    uint    x, y;
-    int     mx, my, sx, sy, mcx, mcy, progress;
-    long    kernelWidth, i;
-    double  red, green, blue, alpha, normalize=0.0;
-    double* k=0;
-
-    kernelWidth = order;
+    long kernelWidth = order;
 
     if ((kernelWidth % 2) == 0)
     {
         kWarning() << "Kernel width must be an odd number!";
-        return(false);
+        return false;
     }
 
-    double* normal_kernel = new double[kernelWidth * kernelWidth];
+    uint    x, y;
+    long    i;
+    int     mx, my, sx, sy, mcx, mcy, progress;
+    double  red, green, blue, alpha, normalize = 0.0;
+    double* k = 0;
+
+    QScopedArrayPointer<double> normal_kernel(new double[kernelWidth * kernelWidth]);
 
     if (!normal_kernel)
     {
         kWarning() << "Unable to allocate memory!";
-        return(false);
+        return false;
     }
 
     for (i = 0; i < (kernelWidth * kernelWidth); ++i)
@@ -193,10 +192,10 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
 
     if (fabs(normalize) <= Epsilon)
     {
-        normalize=1.0;
+        normalize = 1.0;
     }
 
-    normalize = 1.0/normalize;
+    normalize = 1.0 / normalize;
 
     for (i = 0; i < (kernelWidth * kernelWidth); ++i)
     {
@@ -225,7 +224,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
 
         for (x = 0; runningFlag() && (x < width); ++x)
         {
-            k = normal_kernel;
+            k = normal_kernel.data();
             red = green = blue = alpha = 0;
             sy = y - (kernelWidth / 2);
 
@@ -246,26 +245,24 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
                 }
             }
 
-            red   =   red < 0.0 ? 0.0 :   red > maxClamp ? maxClamp :   red+0.5;
-            green = green < 0.0 ? 0.0 : green > maxClamp ? maxClamp : green+0.5;
-            blue  =  blue < 0.0 ? 0.0 :  blue > maxClamp ? maxClamp :  blue+0.5;
-            alpha = alpha < 0.0 ? 0.0 : alpha > maxClamp ? maxClamp : alpha+0.5;
+            red   =   red < 0.0 ? 0.0 :   red > maxClamp ? maxClamp :   red + 0.5;
+            green = green < 0.0 ? 0.0 : green > maxClamp ? maxClamp : green + 0.5;
+            blue  =  blue < 0.0 ? 0.0 :  blue > maxClamp ? maxClamp :  blue + 0.5;
+            alpha = alpha < 0.0 ? 0.0 : alpha > maxClamp ? maxClamp : alpha + 0.5;
 
-            DColor color((int)(red / 257UL),  (int)(green / 257UL),
+            DColor color((int)(red / 257UL), (int)(green / 257UL),
                          (int)(blue / 257UL), (int)(alpha / 257UL), sixteenBit);
             color.setPixel((ddata + x * ddepth + (width * y * ddepth)));
         }
 
-        progress = (int) (((double) y * 80.0) / height);
+        progress = (int)(((double) y * 80.0) / height);
 
         if (progress % 5 == 0)
         {
             postProgress(progress);
         }
     }
-
-    delete [] normal_kernel;
-    return(true);
+    return true;
 }
 
 int CharcoalFilter::getOptimalKernelWidth(double radius, double sigma)
@@ -276,30 +273,30 @@ int CharcoalFilter::getOptimalKernelWidth(double radius, double sigma)
 
     if (radius > 0.0)
     {
-        return((int)(2.0*ceil(radius)+1.0));
+        return((int)(2.0 * ceil(radius) + 1.0));
     }
 
-    for (kernelWidth=5; ;)
+    for (kernelWidth = 5; ;)
     {
-        normalize=0.0;
+        normalize = 0.0;
 
-        for (u=(-kernelWidth/2) ; u <= (kernelWidth/2) ; ++u)
+        for (u = (-kernelWidth / 2) ; u <= (kernelWidth / 2) ; ++u)
         {
-            normalize += exp(-((double) u*u)/(2.0*sigma*sigma))/(SQ2PI*sigma);
+            normalize += exp(-((double) u * u) / (2.0 * sigma * sigma)) / (SQ2PI * sigma);
         }
 
-        u     = kernelWidth/2;
-        value = exp(-((double) u*u)/(2.0*sigma*sigma))/(SQ2PI*sigma)/normalize;
+        u     = kernelWidth / 2;
+        value = exp(-((double) u * u) / (2.0 * sigma * sigma)) / (SQ2PI * sigma) / normalize;
 
-        if ((long)(65535*value) <= 0)
+        if ((long)(65535 * value) <= 0)
         {
             break;
         }
 
-        kernelWidth+=2;
+        kernelWidth += 2;
     }
 
-    return((int)kernelWidth-2);
+    return((int)kernelWidth - 2);
 }
 
 FilterAction CharcoalFilter::filterAction()

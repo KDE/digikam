@@ -104,7 +104,7 @@ QList<FilterAction> FilterActionFilter::filterActions() const
 
 bool FilterActionFilter::isReproducible() const
 {
-    foreach (const FilterAction& action, d->actions)
+    foreach(const FilterAction & action, d->actions)
     {
         if (!action.isNull() && action.category() != FilterAction::ReproducibleFilter)
         {
@@ -116,7 +116,7 @@ bool FilterActionFilter::isReproducible() const
 
 bool FilterActionFilter::isComplexAction() const
 {
-    foreach (const FilterAction& action, d->actions)
+    foreach(const FilterAction & action, d->actions)
     {
         if (!action.isNull() && action.category() != FilterAction::ReproducibleFilter &&
             action.category() != FilterAction::ComplexFilter)
@@ -129,7 +129,7 @@ bool FilterActionFilter::isComplexAction() const
 
 bool FilterActionFilter::isSupported() const
 {
-    foreach (const FilterAction& action, d->actions)
+    foreach(const FilterAction & action, d->actions)
     {
         if (!action.isNull() && !DImgFilterManager::instance()->isSupported(action.identifier(), action.version()))
         {
@@ -173,14 +173,14 @@ void FilterActionFilter::filterImage()
 {
     d->appliedActions.clear();
     d->errorMessage.clear();
-    const float progressIncrement = 1.0 / qMax(1,d->actions.size());
+    const float progressIncrement = 1.0 / qMax(1, d->actions.size());
     float progress                = 0;
 
     postProgress(0);
 
     DImg img = m_orgImage;
 
-    foreach (const FilterAction& action, d->actions)
+    foreach(const FilterAction & action, d->actions)
     {
         kDebug() << "Replaying action" << action.identifier();
 
@@ -246,7 +246,7 @@ void FilterActionFilter::filterImage()
             }
 
             // compute
-            filter->setupAndStartDirectly(img, this, (int)progress, (int)(progress+progressIncrement));
+            filter->setupAndStartDirectly(img, this, (int)progress, (int)(progress + progressIncrement));
             img = filter->getTargetImage();
             d->appliedActions << filter->filterAction();
         }

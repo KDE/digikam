@@ -93,7 +93,7 @@ void CBFilter::reset()
 {
     // initialize to linear mapping
 
-    for (int i=0; i<65536; ++i)
+    for (int i = 0; i < 65536; ++i)
     {
         d->redMap16[i]   = i;
         d->greenMap16[i] = i;
@@ -101,7 +101,7 @@ void CBFilter::reset()
         d->alphaMap16[i] = i;
     }
 
-    for (int i=0; i<256; ++i)
+    for (int i = 0; i < 256; ++i)
     {
         d->redMap[i]   = i;
         d->greenMap[i] = i;
@@ -219,7 +219,7 @@ void CBFilter::applyCBFilter(DImg& image, double r, double g, double b, double a
         return;
     }
 
-    uint size = image.width()*image.height();
+    uint size = image.width() * image.height();
     int  progress;
 
     adjustRGB(r, g, b, a, image.sixteenBit());
@@ -228,7 +228,7 @@ void CBFilter::applyCBFilter(DImg& image, double r, double g, double b, double a
     {
         uchar* data = (uchar*) image.bits();
 
-        for (uint i=0; runningFlag() && (i<size); ++i)
+        for (uint i = 0; runningFlag() && (i < size); ++i)
         {
             data[0] = d->blueMap[data[0]];
             data[1] = d->greenMap[data[1]];
@@ -239,9 +239,9 @@ void CBFilter::applyCBFilter(DImg& image, double r, double g, double b, double a
 
             progress = (int)(((double)i * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }
@@ -249,7 +249,7 @@ void CBFilter::applyCBFilter(DImg& image, double r, double g, double b, double a
     {
         ushort* data = (ushort*) image.bits();
 
-        for (uint i=0; runningFlag() && (i<size); ++i)
+        for (uint i = 0; runningFlag() && (i < size); ++i)
         {
             data[0] = d->blueMap16[data[0]];
             data[1] = d->greenMap16[data[1]];
@@ -260,9 +260,9 @@ void CBFilter::applyCBFilter(DImg& image, double r, double g, double b, double a
 
             progress = (int)(((double)i * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }
@@ -273,7 +273,7 @@ void CBFilter::setGamma(double val)
     val = (val < 0.01) ? 0.01 : val;
     int val2;
 
-    for (int i=0; i<65536; ++i)
+    for (int i = 0; i < 65536; ++i)
     {
         val2 = (int)(pow(((double)d->redMap16[i] / 65535), (1 / val)) * 65535);
         d->redMap16[i] = CLAMP065535(val2);
@@ -288,7 +288,7 @@ void CBFilter::setGamma(double val)
         d->alphaMap16[i] = CLAMP065535(val2);
     }
 
-    for (int i=0; i<256; ++i)
+    for (int i = 0; i < 256; ++i)
     {
         val2 = (int)(pow(((double)d->redMap[i] / 255), (1 / val)) * 255);
         d->redMap[i] = CLAMP0255(val2);

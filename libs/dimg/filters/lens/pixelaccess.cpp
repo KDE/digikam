@@ -45,7 +45,7 @@ PixelAccess::PixelAccess(DImg* srcImage)
     m_imageHeight = m_image->height();
     m_sixteenBit  = m_image->sixteenBit();
 
-    for ( int i = 0 ; i < PixelAccessRegions ; ++i )
+    for (int i = 0 ; i < PixelAccessRegions ; ++i)
     {
         m_buffer[i] = new DImg(m_image->copy(0, 0, m_width, m_height));
 
@@ -58,7 +58,7 @@ PixelAccess::PixelAccess(DImg* srcImage)
 
 PixelAccess::~PixelAccess()
 {
-    for ( int i = 0 ; i < PixelAccessRegions ; ++i )
+    for (int i = 0 ; i < PixelAccessRegions ; ++i)
     {
         delete m_buffer[i];
     }
@@ -82,13 +82,13 @@ void PixelAccess::pixelAccessSelectRegion(int n)
     c    = m_tileMinY[n];
     d    = m_tileMaxY[n];
 
-    for ( i = n ; i > 0 ; --i)
+    for (i = n ; i > 0 ; --i)
     {
-        m_buffer[i]   = m_buffer[i-1];
-        m_tileMinX[i] = m_tileMinX[i-1];
-        m_tileMaxX[i] = m_tileMaxX[i-1];
-        m_tileMinY[i] = m_tileMinY[i-1];
-        m_tileMaxY[i] = m_tileMaxY[i-1];
+        m_buffer[i]   = m_buffer[i - 1];
+        m_tileMinX[i] = m_tileMinX[i - 1];
+        m_tileMaxX[i] = m_tileMaxX[i - 1];
+        m_tileMinY[i] = m_tileMinY[i - 1];
+        m_tileMaxY[i] = m_tileMaxY[i - 1];
     }
 
     m_buffer[0]   = temp;
@@ -122,7 +122,7 @@ void PixelAccess::pixelAccessDoEdge(int i, int j)
 
     lineWidth = lineEnd - lineStart;
 
-    if ( lineStart >= lineEnd )
+    if (lineStart >= lineEnd)
     {
         return;
     }
@@ -141,7 +141,7 @@ void PixelAccess::pixelAccessDoEdge(int i, int j)
         rowEnd = m_imageHeight;
     }
 
-    for ( int y = rowStart ; y < rowEnd ; ++y )
+    for (int y = rowStart ; y < rowEnd ; ++y)
     {
         line = pixelAccessAddress(lineStart, y);
         memcpy(line, m_image->scanLine(y) + lineStart * m_depth, lineWidth * m_depth);
@@ -160,19 +160,19 @@ void PixelAccess::pixelAccessReposition(int xInt, int yInt)
     m_tileMaxY[0] = newStartY + m_height - 2;
 
 
-    if ( (newStartX < 0) || ((newStartX + m_width) >= m_imageWidth) ||
-         (newStartY < 0) || ((newStartY + m_height) >= m_imageHeight) )
+    if ((newStartX < 0) || ((newStartX + m_width) >= m_imageWidth) ||
+        (newStartY < 0) || ((newStartY + m_height) >= m_imageHeight))
     {
         // some data is off edge of image
 
-        m_buffer[0]->fill(DColor(0,0,0,0, m_sixteenBit));
+        m_buffer[0]->fill(DColor(0, 0, 0, 0, m_sixteenBit));
 
         // This could probably be done by bitBltImage but I did not figure out how,
         // so leave the working code here. And no, it is not this:
         //m_buffer[0]->bitBltImage(m_image, newStartX, newStartY, m_width, m_height, 0, 0);
 
-        if ( ((newStartX + m_width) < 0) || (newStartX >= m_imageWidth) ||
-             ((newStartY + m_height) < 0) || (newStartY >= m_imageHeight) )
+        if (((newStartX + m_width) < 0) || (newStartX >= m_imageWidth) ||
+            ((newStartY + m_height) < 0) || (newStartY >= m_imageHeight))
         {
             // totally outside, just leave it.
         }
@@ -202,7 +202,7 @@ void PixelAccess::pixelAccessGetCubic(double srcX, double srcY, double brighten,
     // they're probably in the last place we looked...
 
     if ((xInt >= m_tileMinX[0]) && (xInt < m_tileMaxX[0]) &&
-        (yInt >= m_tileMinY[0]) && (yInt < m_tileMaxY[0]) )
+        (yInt >= m_tileMinY[0]) && (yInt < m_tileMaxY[0]))
     {
         corner = pixelAccessAddress(xInt - 1, yInt - 1);
         cubicInterpolate(corner, m_depth * m_width, dst, m_sixteenBit, dx, dy, brighten);
@@ -211,10 +211,10 @@ void PixelAccess::pixelAccessGetCubic(double srcX, double srcY, double brighten,
 
     // Or maybe it was a while back...
 
-    for ( int i = 1 ; i < PixelAccessRegions ; ++i)
+    for (int i = 1 ; i < PixelAccessRegions ; ++i)
     {
         if ((xInt >= m_tileMinX[i]) && (xInt < m_tileMaxX[i]) &&
-            (yInt >= m_tileMinY[i]) && (yInt < m_tileMaxY[i]) )
+            (yInt >= m_tileMinY[i]) && (yInt < m_tileMaxY[i]))
         {
             // Check here first next time
 
@@ -274,7 +274,7 @@ void PixelAccess::cubicInterpolate(uchar* src, int rowStride, uchar* dst,
 
         for (c = 0 ; c < 4 * numberOfComponents ; ++c)
         {
-            verts[c] = vm1 * src16[c] + v * src16[c+rowStride] + vp1 * src16[c+rowStride*2] + vp2 * src16[c+rowStride*3];
+            verts[c] = vm1 * src16[c] + v * src16[c + rowStride] + vp1 * src16[c + rowStride * 2] + vp2 * src16[c + rowStride * 3];
         }
 
         // for each component, compute resulting value from array
@@ -282,8 +282,8 @@ void PixelAccess::cubicInterpolate(uchar* src, int rowStride, uchar* dst,
         for (c = 0 ; c < numberOfComponents ; ++c)
         {
             float result;
-            result = um1 * verts[c] + u * verts[c+numberOfComponents]
-                     + up1 * verts[c+numberOfComponents*2] + up2 * verts[c+numberOfComponents*3];
+            result = um1 * verts[c] + u * verts[c + numberOfComponents]
+                     + up1 * verts[c + numberOfComponents * 2] + up2 * verts[c + numberOfComponents * 3];
             result *= brighten;
 
             if (result < 0.0)
@@ -304,14 +304,14 @@ void PixelAccess::cubicInterpolate(uchar* src, int rowStride, uchar* dst,
     {
         for (c = 0 ; c < 4 * numberOfComponents ; ++c)
         {
-            verts[c] = vm1 * src[c] + v * src[c+rowStride] + vp1 * src[c+rowStride*2] + vp2 * src[c+rowStride*3];
+            verts[c] = vm1 * src[c] + v * src[c + rowStride] + vp1 * src[c + rowStride * 2] + vp2 * src[c + rowStride * 3];
         }
 
         for (c = 0 ; c < numberOfComponents ; ++c)
         {
             float result;
-            result = um1 * verts[c] + u * verts[c+numberOfComponents]
-                     + up1 * verts[c+numberOfComponents*2] + up2 * verts[c+numberOfComponents*3];
+            result = um1 * verts[c] + u * verts[c + numberOfComponents]
+                     + up1 * verts[c + numberOfComponents * 2] + up2 * verts[c + numberOfComponents * 3];
             result *= brighten;
 
             if (result < 0.0)

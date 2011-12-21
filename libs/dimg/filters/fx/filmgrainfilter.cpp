@@ -134,14 +134,14 @@ void FilmGrainFilter::filterImage()
     int    progress, posX, posY;
 
     // Reference point noise adjustements.
-    double refLumaNoise=0.0,       refLumaRange=0.0;
-    double refChromaBlueNoise=0.0, refChromaBlueRange=0.0;
-    double refChromaRedNoise=0.0,  refChromaRedRange=0.0;
+    double refLumaNoise = 0.0,       refLumaRange = 0.0;
+    double refChromaBlueNoise = 0.0, refChromaBlueRange = 0.0;
+    double refChromaRedNoise = 0.0,  refChromaRedRange = 0.0;
 
     // Current matrix point noise adjustements.
-    double matLumaNoise=0.0,       matLumaRange=0.0;
-    double matChromaBlueNoise=0.0, matChromaBlueRange=0.0;
-    double matChromaRedNoise=0.0,  matChromaRedRange=0.0;
+    double matLumaNoise = 0.0,       matLumaRange = 0.0;
+    double matChromaBlueNoise = 0.0, matChromaBlueRange = 0.0;
+    double matChromaRedNoise = 0.0,  matChromaRedRange = 0.0;
 
     int    width           = m_orgImage.width();
     int    height          = m_orgImage.height();
@@ -223,11 +223,11 @@ void FilmGrainFilter::filterImage()
         }
 
         // Update progress bar in dialog.
-        progress = (int) (((double)x * 100.0) / width);
+        progress = (int)(((double)x * 100.0) / width);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
-            postProgress( progress );
+            postProgress(progress);
         }
     }
 }
@@ -235,9 +235,9 @@ void FilmGrainFilter::filterImage()
 /** This method compute lead noise of reference matrix point used to similate graininess size
  */
 void FilmGrainFilter::computeNoiseSettings(const DColor& col,
-        double& luRange, double& luNoise,
-        double& cbRange, double& cbNoise,
-        double& crRange, double& crNoise)
+                                           double& luRange, double& luNoise,
+                                           double& cbRange, double& cbNoise,
+                                           double& crRange, double& crNoise)
 {
     if (d->settings.addLuminanceNoise)
     {
@@ -272,23 +272,25 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
 
     if (d->settings.photoDistribution)
     {
-        n2 = randomizePoisson((d->settings.grainSize/2.0)*(range/1.414));
+        n2 = randomizePoisson((d->settings.grainSize / 2.0) * (range / 1.414));
     }
     else
     {
-        n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414));
+        n2 = randomizeGauss((d->settings.grainSize / 2.0) * (range / 1.414));
     }
 
     switch (channel)
     {
         case FilmGrainFilterPriv::Luma:
-            y  = CLAMP(y  + (nRand + n2)/ d->div, 0.0, 1.0);
+            y  = CLAMP(y  + (nRand + n2) / d->div, 0.0, 1.0);
             break;
+
         case FilmGrainFilterPriv::ChromaBlue:
-            cb = CLAMP(cb + (nRand + n2)/ d->div, 0.0, 1.0);
+            cb = CLAMP(cb + (nRand + n2) / d->div, 0.0, 1.0);
             break;
+
         default:       // ChromaRed
-            cr = CLAMP(cr + (nRand + n2)/ d->div, 0.0, 1.0);
+            cr = CLAMP(cr + (nRand + n2) / d->div, 0.0, 1.0);
             break;
     }
 
@@ -300,7 +302,7 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
  */
 double FilmGrainFilter::randomizeUniform(double range)
 {
-    return d->generator.number(- range/2, range/2);
+    return d->generator.number(- range / 2, range / 2);
 }
 
 /** This method compute Guaussian noise value used to randomize all matrix points.
@@ -310,7 +312,7 @@ double FilmGrainFilter::randomizeGauss(double sigma)
 {
     double u = - d->generator.number(-1.0, 0.0); // exclude 0
     double v = d->generator.number(0.0, 1.0);
-    return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) ;
+    return (sigma * sqrt(-2 * log(u)) * cos(2 * M_PI * v)) ;
 }
 
 /** This method compute Poisson noise value used to randomize all matrix points.
@@ -322,7 +324,7 @@ double FilmGrainFilter::randomizeGauss(double sigma)
  */
 double FilmGrainFilter::randomizePoisson(double lambda)
 {
-    return (randomizeGauss( sqrt( lambda * d->settings.grainSize * d->settings.grainSize) ));
+    return (randomizeGauss(sqrt(lambda * d->settings.grainSize * d->settings.grainSize)));
 }
 
 /** This method interpolate gain adjustements to apply grain on shadows, midtones and highlights colors.
@@ -339,11 +341,11 @@ double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, c
 
     if (y >= 0.0 && y <= 0.5)
     {
-        return (s+2*(m-s)*y);
+        return (s + 2 * (m - s) * y);
     }
     else if (y >= 0.5 && y <= 1.0)
     {
-        return (2*(h-m)*y+2*m-h);
+        return (2 * (h - m) * y + 2 * m - h);
     }
     else
     {

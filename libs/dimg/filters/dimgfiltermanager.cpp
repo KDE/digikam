@@ -249,7 +249,7 @@ DImgFilterManager::DImgFilterManager()
     d->setupCoreGenerators();
     d->setupFilterIcons();
     d->setupI18nStrings();
-    foreach (DImgFilterGenerator* gen, d->coreGenerators)
+    foreach(DImgFilterGenerator * gen, d->coreGenerators)
     {
         addGenerator(gen);
     }
@@ -263,7 +263,7 @@ DImgFilterManager::~DImgFilterManager()
 void DImgFilterManager::addGenerator(DImgFilterGenerator* generator)
 {
     QMutexLocker lock(&d->mutex);
-    foreach (const QString& id, generator->supportedFilters())
+    foreach(const QString & id, generator->supportedFilters())
     {
         if (d->filterMap.contains(id))
         {
@@ -280,7 +280,7 @@ void DImgFilterManager::removeGenerator(DImgFilterGenerator* generator)
     QMutexLocker lock(&d->mutex);
     QMap<QString, DImgFilterGenerator*>::iterator it;
 
-    for ( it = d->filterMap.begin(); it != d->filterMap.end(); )
+    for (it = d->filterMap.begin(); it != d->filterMap.end();)
     {
         if (it.value() == generator)
         {
@@ -349,6 +349,7 @@ QString DImgFilterManager::filterIcon(const FilterAction& action)
     {
         return iconName;
     }
+
     return "document-edit";
 }
 
@@ -402,6 +403,7 @@ QString DImgFilterManager::i18nDisplayableName(const FilterAction& action)
     {
         QString i18nDispName = i18nDisplayableName(action.identifier());
         QString metadataDispName = action.displayableName();
+
         if (!i18nDispName.isEmpty())
         {
             return i18nDispName;
