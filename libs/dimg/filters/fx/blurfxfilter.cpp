@@ -865,7 +865,7 @@ void BlurFXFilter::motionBlur(DImg* orgImage, DImg* destImage, int Distance, dou
         // Update the progress bar in dialog.
         progress = (int) (((double)h * 100.0) / Height);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
             postProgress(progress);
         }
