@@ -118,9 +118,9 @@ void SharpenFilter::sharpenImage(double radius, double sigma)
         return;
     }
 
-    double* kernel = new double[kernelWidth * kernelWidth];
+    QScopedArrayPointer<double> kernel(new double[kernelWidth * kernelWidth]);
 
-    if (!kernel)
+    if (kernel.isNull())
     {
         kWarning() << "Unable to allocate memory!";
         return;
@@ -138,9 +138,7 @@ void SharpenFilter::sharpenImage(double radius, double sigma)
     }
 
     kernel[i / 2] = (-2.0) * normalize;
-    convolveImage(kernelWidth, kernel);
-
-    delete [] kernel;
+    convolveImage(kernelWidth, kernel.data());
 }
 
 bool SharpenFilter::convolveImage(const unsigned int order, const double* kernel)
@@ -161,9 +159,9 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* kernel
         return(false);
     }
 
-    double* normal_kernel = new double[kernelWidth * kernelWidth];
+    QScopedArrayPointer<double> normal_kernel(new double[kernelWidth * kernelWidth]);
 
-    if (!normal_kernel)
+    if (normal_kernel.isNull())
     {
         kWarning() << "Unable to allocate memory!";
         return(false);
@@ -195,7 +193,7 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* kernel
 
         for (x = 0 ; runningFlag() && (x < m_destImage.width()) ; ++x)
         {
-            k   = normal_kernel;
+            k   = normal_kernel.data();
             red = green = blue = alpha = 0;
             sy  = y - halfKernelWidth;
 
@@ -235,8 +233,6 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* kernel
             postProgress(progress);
         }
     }
-
-    delete [] normal_kernel;
     return(true);
 }
 
