@@ -25,6 +25,10 @@
 
 #include "weights.h"
 
+// Qt includes
+
+#include <QScopedArrayPointer>
+
 // C++ includes
 
 #include <cstring>
@@ -94,9 +98,6 @@ void Weights::calculateWeights()
 {
     mCoefficientNumber = (mTwoDim ? ((size_t)mPolynomeOrder + 1) * ((size_t)mPolynomeOrder + 1)
                           : (size_t)mPolynomeOrder + 1);
-    double* matrix;     /* num_coeff * num_coeff */
-    double* vector0;    /* mPositions.count()   * num_coeff */
-    double* vector1;    /* mPositions.count()   * num_coeff */
     size_t  ix,iy,i,j;
     int     x, y;
 
@@ -145,9 +146,9 @@ void Weights::calculateWeights()
 
     // Allocate memory.
 
-    matrix  = new double[mCoefficientNumber * mCoefficientNumber];
-    vector0 = new double[mPositions.count() * mCoefficientNumber];
-    vector1 = new double[mPositions.count() * mCoefficientNumber];
+    QScopedArrayPointer<double> matrix(new double[mCoefficientNumber * mCoefficientNumber]);
+    QScopedArrayPointer<double> vector0(new double[mPositions.count() * mCoefficientNumber]);
+    QScopedArrayPointer<double> vector1(new double[mPositions.count() * mCoefficientNumber]);
 
     // Calculate coefficient matrix and vectors
 
@@ -171,7 +172,7 @@ void Weights::calculateWeights()
 
     // Invert matrix.
 
-    matrixInv (matrix, mCoefficientNumber);
+    matrixInv (matrix.data(), mCoefficientNumber);
 
     // Multiply inverse matrix with vector.
 
@@ -222,10 +223,6 @@ void Weights::calculateWeights()
             }
         }
     }
-
-    delete[] vector1;
-    delete[] vector0;
-    delete[] matrix;
 }
 
 bool Weights::operator==(const Weights& ws) const
@@ -240,12 +237,12 @@ bool Weights::operator==(const Weights& ws) const
 //Invert a quadratic matrix.
 void Weights::matrixInv (double* const a, const size_t size)
 {
-    double* const b = new double[size * size];
+    QScopedArrayPointer<double> b(new double[size * size]);
     size_t ix, iy, j;
 
     // Copy matrix to new location.
 
-    memcpy (b, a, sizeof (double) * size * size);
+    memcpy (b.data(), a, sizeof (double) * size * size);
 
     // Set destination matrix to unit matrix.
 
@@ -293,8 +290,6 @@ void Weights::matrixInv (double* const a, const size_t size)
         {
             a [iy* size + ix] /= b [iy * size + iy];
         }
-
-    delete [] b;
 }
 
 // Calculates one term of the polynomial

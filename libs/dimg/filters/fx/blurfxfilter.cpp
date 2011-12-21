@@ -292,7 +292,7 @@ void BlurFXFilter::radialBlur(DImg* orgImage, DImg* destImage, int X, int Y, int
     DColor color;
     int offset;
 
-    double* nMultArray = new double[Distance * 2 + 1];
+    QScopedArrayPointer<double> nMultArray(new double[Distance * 2 + 1]);
 
     for (int i = -Distance; i <= Distance; ++i)
     {
@@ -367,8 +367,6 @@ void BlurFXFilter::radialBlur(DImg* orgImage, DImg* destImage, int X, int Y, int
             postProgress(progress);
         }
     }
-
-    delete [] nMultArray;
 }
 
 /* Function to apply the focusBlur effect backported from ImageProcessing version 2
