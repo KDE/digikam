@@ -177,7 +177,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
         return(false);
     }
 
-    double* normal_kernel = new double[kernelWidth * kernelWidth];
+    QScopedArrayPointer<double> normal_kernel(new double[kernelWidth * kernelWidth]);
 
     if (!normal_kernel)
     {
@@ -224,7 +224,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
 
         for (x = 0; runningFlag() && (x < width); ++x)
         {
-            k = normal_kernel;
+            k = normal_kernel.data();
             red = green = blue = alpha = 0;
             sy = y - (kernelWidth / 2);
 
@@ -262,8 +262,6 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
             postProgress(progress);
         }
     }
-
-    delete [] normal_kernel;
     return(true);
 }
 
