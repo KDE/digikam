@@ -91,9 +91,9 @@ void CharcoalFilter::filterImage()
         return;
     }
 
-    double* kernel = new double[kernelWidth*kernelWidth];
+    QScopedArrayPointer<double> kernel(new double[kernelWidth*kernelWidth]);
 
-    if (!kernel)
+    if (kernel.isNull())
     {
         kWarning() << "Unable to allocate memory!";
         return;
@@ -105,8 +105,7 @@ void CharcoalFilter::filterImage()
     }
 
     kernel[i/2]=kernelWidth*kernelWidth-1.0;
-    convolveImage(kernelWidth, kernel);
-    delete [] kernel;
+    convolveImage(kernelWidth, kernel.data());
 
     // -- Applying Gaussian blur effect ---------------------------------------
 
