@@ -231,7 +231,7 @@ private:
                     return true;
                 }
 
-        return (false);
+        return false;
     };
 
 private:

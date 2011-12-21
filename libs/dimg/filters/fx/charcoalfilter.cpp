@@ -168,7 +168,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
     if ((kernelWidth % 2) == 0)
     {
         kWarning() << "Kernel width must be an odd number!";
-        return(false);
+        return false;
     }
 
     uint    x, y;
@@ -182,7 +182,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
     if (!normal_kernel)
     {
         kWarning() << "Unable to allocate memory!";
-        return(false);
+        return false;
     }
 
     for (i = 0; i < (kernelWidth * kernelWidth); ++i)

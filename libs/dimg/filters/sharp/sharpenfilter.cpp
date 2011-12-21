@@ -156,7 +156,7 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* kernel
     if ((kernelWidth % 2) == 0)
     {
         kWarning() << "Kernel width must be an odd number!";
-        return(false);
+        return false;
     }
 
     QScopedArrayPointer<double> normal_kernel(new double[kernelWidth * kernelWidth]);
@@ -164,7 +164,7 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* kernel
     if (normal_kernel.isNull())
     {
         kWarning() << "Unable to allocate memory!";
-        return(false);
+        return false;
     }
 
     for (i = 0 ; i < (kernelWidth * kernelWidth) ; ++i)

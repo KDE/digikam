@@ -446,7 +446,7 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
     }
     else
     {
-        return (false);
+        return false;
     }
 
     return true;
@@ -473,14 +473,14 @@ bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* pStatusBits, int
 
                 if (pStatusBits[i])
                 {
-                    return (false);
+                    return false;
                 }
             }
             else
             {
                 if (bLimitRange)
                 {
-                    return (false);
+                    return false;
                 }
             }
         }
@@ -497,7 +497,7 @@ bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* pStatusBits
 
     if (pStatusBits == NULL)
     {
-        return (false);
+        return false;
     }
 
     for (h = Y - nHalfSize; h <= Y + nHalfSize; ++h)
