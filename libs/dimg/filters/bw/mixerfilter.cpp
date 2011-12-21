@@ -68,7 +68,7 @@ void MixerFilter::filterImage()
     uint height     = m_destImage.height();
     bool sixteenBit = m_destImage.sixteenBit();
 
-    uint size = width*height;
+    uint size = width * height;
     int  progress;
 
     register uint i;
@@ -77,19 +77,19 @@ void MixerFilter::filterImage()
 
     if (m_settings.bMonochrome)
     {
-        mnorm = CalculateNorm (m_settings.blackRedGain, m_settings.blackGreenGain,
-                               m_settings.blackBlueGain, m_settings.bPreserveLum);
+        mnorm = CalculateNorm(m_settings.blackRedGain, m_settings.blackGreenGain,
+                              m_settings.blackBlueGain, m_settings.bPreserveLum);
     }
     else
     {
-        rnorm = CalculateNorm (m_settings.redRedGain, m_settings.redGreenGain,
-                               m_settings.redBlueGain, m_settings.bPreserveLum);
+        rnorm = CalculateNorm(m_settings.redRedGain, m_settings.redGreenGain,
+                              m_settings.redBlueGain, m_settings.bPreserveLum);
     }
 
-    double gnorm = CalculateNorm (m_settings.greenRedGain, m_settings.greenGreenGain,
-                                  m_settings.greenBlueGain, m_settings.bPreserveLum);
-    double bnorm = CalculateNorm (m_settings.blueRedGain, m_settings.blueGreenGain,
-                                  m_settings.blueBlueGain, m_settings.bPreserveLum);
+    double gnorm = CalculateNorm(m_settings.greenRedGain, m_settings.greenGreenGain,
+                                 m_settings.greenBlueGain, m_settings.bPreserveLum);
+    double bnorm = CalculateNorm(m_settings.blueRedGain, m_settings.blueGreenGain,
+                                 m_settings.blueBlueGain, m_settings.bPreserveLum);
 
     if (!sixteenBit)        // 8 bits image.
     {
@@ -104,31 +104,31 @@ void MixerFilter::filterImage()
 
             if (m_settings.bMonochrome)
             {
-                nGray = MixPixel (m_settings.blackRedGain, m_settings.blackGreenGain, m_settings.blackBlueGain,
-                                  (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                  sixteenBit, mnorm);
+                nGray = MixPixel(m_settings.blackRedGain, m_settings.blackGreenGain, m_settings.blackBlueGain,
+                                 (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                 sixteenBit, mnorm);
                 ptr[0] = ptr[1] = ptr[2] = nGray;
             }
             else
             {
-                ptr[0] = (uchar)MixPixel (m_settings.blueRedGain, m_settings.blueGreenGain, m_settings.blueBlueGain,
-                                          (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                          sixteenBit, bnorm);
-                ptr[1] = (uchar)MixPixel (m_settings.greenRedGain, m_settings.greenGreenGain, m_settings.greenBlueGain,
-                                          (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                          sixteenBit, gnorm);
-                ptr[2] = (uchar)MixPixel (m_settings.redRedGain, m_settings.redGreenGain, m_settings.redBlueGain,
-                                          (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                          sixteenBit, rnorm);
+                ptr[0] = (uchar)MixPixel(m_settings.blueRedGain, m_settings.blueGreenGain, m_settings.blueBlueGain,
+                                         (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                         sixteenBit, bnorm);
+                ptr[1] = (uchar)MixPixel(m_settings.greenRedGain, m_settings.greenGreenGain, m_settings.greenBlueGain,
+                                         (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                         sixteenBit, gnorm);
+                ptr[2] = (uchar)MixPixel(m_settings.redRedGain, m_settings.redGreenGain, m_settings.redBlueGain,
+                                         (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                         sixteenBit, rnorm);
             }
 
             ptr += 4;
 
             progress = (int)(((double)i * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }
@@ -145,27 +145,27 @@ void MixerFilter::filterImage()
 
             if (m_settings.bMonochrome)
             {
-                nGray = MixPixel (m_settings.blackRedGain, m_settings.blackGreenGain, m_settings.blackBlueGain,
-                                  red, green, blue, sixteenBit, mnorm);
+                nGray = MixPixel(m_settings.blackRedGain, m_settings.blackGreenGain, m_settings.blackBlueGain,
+                                 red, green, blue, sixteenBit, mnorm);
                 ptr[0] = ptr[1] = ptr[2] = nGray;
             }
             else
             {
-                ptr[0] = MixPixel (m_settings.blueRedGain, m_settings.blueGreenGain, m_settings.blueBlueGain,
-                                   red, green, blue, sixteenBit, bnorm);
-                ptr[1] = MixPixel (m_settings.greenRedGain, m_settings.greenGreenGain, m_settings.greenBlueGain,
-                                   red, green, blue, sixteenBit, gnorm);
-                ptr[2] = MixPixel (m_settings.redRedGain, m_settings.redGreenGain, m_settings.redBlueGain,
-                                   red, green, blue, sixteenBit, rnorm);
+                ptr[0] = MixPixel(m_settings.blueRedGain, m_settings.blueGreenGain, m_settings.blueBlueGain,
+                                  red, green, blue, sixteenBit, bnorm);
+                ptr[1] = MixPixel(m_settings.greenRedGain, m_settings.greenGreenGain, m_settings.greenBlueGain,
+                                  red, green, blue, sixteenBit, gnorm);
+                ptr[2] = MixPixel(m_settings.redRedGain, m_settings.redGreenGain, m_settings.redBlueGain,
+                                  red, green, blue, sixteenBit, rnorm);
             }
 
             ptr += 4;
 
             progress = (int)(((double)i * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }
@@ -180,15 +180,15 @@ double MixerFilter::CalculateNorm(double RedGain, double GreenGain, double BlueG
         return (1.0);
     }
 
-    return( fabs (1.0 / lfSum) );
+    return(fabs(1.0 / lfSum));
 }
 
 unsigned short MixerFilter::MixPixel(double RedGain, double GreenGain, double BlueGain,
                                      unsigned short R, unsigned short G, unsigned short B, bool sixteenBit,
                                      double Norm)
 {
-    double lfMix = Norm * ( RedGain * (double)R + GreenGain * (double)G + BlueGain * (double)B );
-    return( (unsigned short)CLAMP((int)lfMix, 0, sixteenBit ? 65535 : 255));
+    double lfMix = Norm * (RedGain * (double)R + GreenGain * (double)G + BlueGain * (double)B);
+    return((unsigned short)CLAMP((int)lfMix, 0, sixteenBit ? 65535 : 255));
 }
 
 FilterAction MixerFilter::filterAction()

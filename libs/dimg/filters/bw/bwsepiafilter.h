@@ -50,7 +50,7 @@ public:
 
     enum BlackWhiteConversionType
     {
-        BWNoFilter=0,         // B&W filter to the front of lens.
+        BWNoFilter = 0,       // B&W filter to the front of lens.
         BWGreenFilter,
         BWOrangeFilter,
         BWRedFilter,

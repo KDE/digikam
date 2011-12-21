@@ -71,7 +71,7 @@ public:
 
     enum SettingsTab
     {
-        FilmTab=0,
+        FilmTab = 0,
         BWFiltersTab,
         ToneTab,
         LuminosityTab
@@ -441,7 +441,7 @@ BWSepiaContainer BWSepiaSettings::settings() const
     prm.filmType               = d->bwFilm->currentId();
     prm.filterType             = d->bwFilters->currentId();
     prm.toneType               = d->bwTone->currentId();
-    prm.bcgPrm.contrast        = ((double)(d->cInput->value()/100.0) + 1.00);
+    prm.bcgPrm.contrast        = ((double)(d->cInput->value() / 100.0) + 1.00);
     prm.strength               = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
     prm.curvesPrm              = d->curvesBox->curves()->getContainer(LuminosityChannel);
 
@@ -456,7 +456,7 @@ void BWSepiaSettings::setSettings(const BWSepiaContainer& settings)
     d->bwFilters->setCurrentId(settings.filterType);
     d->bwTone->setCurrentId(settings.toneType);
     d->cInput->setValue((int)((settings.bcgPrm.contrast - 1.00) * 100.0));
-    d->strengthInput->setValue((int)(1.0 + (settings.strength-1.0) * 3.0));
+    d->strengthInput->setValue((int)(1.0 + (settings.strength - 1.0) * 3.0));
     d->curvesBox->curves()->setContainer(settings.curvesPrm);
     d->curvesBox->update();
 
@@ -485,7 +485,7 @@ BWSepiaContainer BWSepiaSettings::defaultSettings() const
 {
     BWSepiaContainer prm;
 
-    prm.bcgPrm.contrast = ((double)(d->cInput->defaultValue()/100.0) + 1.00);
+    prm.bcgPrm.contrast = ((double)(d->cInput->defaultValue() / 100.0) + 1.00);
     prm.strength        = 1.0 + ((double)d->strengthInput->defaultValue() - 1.0) * (1.0 / 3.0);
 
     return prm;
@@ -536,21 +536,21 @@ void BWSepiaSettings::writeSettings(KConfigGroup& group)
 void BWSepiaSettings::loadSettings()
 {
     KUrl loadFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                                            QString( "*" ), kapp->activeWindow(),
-                                            QString( i18n("Black & White Settings File to Load")) );
+                                            QString("*"), kapp->activeWindow(),
+                                            QString(i18n("Black & White Settings File to Load")));
 
-    if ( loadFile.isEmpty() )
+    if (loadFile.isEmpty())
     {
         return;
     }
 
     QFile file(loadFile.toLocalFile());
 
-    if ( file.open(QIODevice::ReadOnly) )
+    if (file.open(QIODevice::ReadOnly))
     {
-        QTextStream stream( &file );
+        QTextStream stream(&file);
 
-        if ( stream.readLine() != "# Black & White Configuration File" )
+        if (stream.readLine() != "# Black & White Configuration File")
         {
             KMessageBox::error(kapp->activeWindow(),
                                i18n("\"%1\" is not a Black & White settings text file.",
@@ -580,8 +580,8 @@ void BWSepiaSettings::loadSettings()
 
         for (int j = 0 ; j < ImageCurves::NUM_POINTS ; ++j)
         {
-            p.setX( stream.readLine().toInt() );
-            p.setY( stream.readLine().toInt() );
+            p.setX(stream.readLine().toInt());
+            p.setY(stream.readLine().toInt());
 
             if (d->curvesBox->curves()->isSixteenBits() && p != disable)
             {
@@ -607,19 +607,19 @@ void BWSepiaSettings::loadSettings()
 void BWSepiaSettings::saveAsSettings()
 {
     KUrl saveFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                                            QString( "*" ), kapp->activeWindow(),
-                                            QString( i18n("Black & White Settings File to Save")) );
+                                            QString("*"), kapp->activeWindow(),
+                                            QString(i18n("Black & White Settings File to Save")));
 
-    if ( saveFile.isEmpty() )
+    if (saveFile.isEmpty())
     {
         return;
     }
 
     QFile file(saveFile.toLocalFile());
 
-    if ( file.open(QIODevice::WriteOnly) )
+    if (file.open(QIODevice::WriteOnly))
     {
-        QTextStream stream( &file );
+        QTextStream stream(&file);
         stream << "# Black & White Configuration File\n";
         stream << d->bwFilm->currentId() << "\n";
         stream << d->bwFilters->currentId() << "\n";
@@ -633,8 +633,8 @@ void BWSepiaSettings::saveAsSettings()
 
             if (d->curvesBox->curves()->isSixteenBits())
             {
-                p.setX(p.x()/ImageCurves::MULTIPLIER_16BIT);
-                p.setY(p.y()/ImageCurves::MULTIPLIER_16BIT);
+                p.setX(p.x() / ImageCurves::MULTIPLIER_16BIT);
+                p.setY(p.y() / ImageCurves::MULTIPLIER_16BIT);
             }
 
             stream << p.x() << "\n";
