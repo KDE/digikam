@@ -552,7 +552,7 @@ void BlurFXFilter::farBlur(DImg* orgImage, DImg* destImage, int Distance)
     // we need to create our kernel
     // e.g. distance = 3, so kernel={3 1 1 2 1 1 3}
 
-    int* nKern = new int[Distance * 2 + 1];
+    QScopedArrayPointer<int> nKern(new int[Distance * 2 + 1]);
 
     for (int i = 0; i < Distance * 2 + 1; ++i)
     {
@@ -579,10 +579,7 @@ void BlurFXFilter::farBlur(DImg* orgImage, DImg* destImage, int Distance)
     }
 
     // now, we apply a convolution with kernel
-    MakeConvolution(orgImage, destImage, Distance, nKern);
-
-    // we must delete to free memory
-    delete [] nKern;
+    MakeConvolution(orgImage, destImage, Distance, nKern.data());
 }
 
 /* Function to apply the SmartBlur effect
@@ -1399,11 +1396,11 @@ void BlurFXFilter::MakeConvolution (DImg* orgImage, DImg* destImage, int Radius,
     DColor color;
     int offset;
 
-    uchar* pBlur = new uchar[orgImage->numBytes()];
+    QScopedArrayPointer<uchar> pBlur(new uchar[orgImage->numBytes()]);
 
     // We need to copy our bits to blur bits
 
-    memcpy (pBlur, data, orgImage->numBytes());
+    memcpy (pBlur.data(), data, orgImage->numBytes());
 
     // We need to alloc a 2d array to help us to store the values
 
@@ -1470,7 +1467,7 @@ void BlurFXFilter::MakeConvolution (DImg* orgImage, DImg* destImage, int Radius,
             }
 
             // write color to blur bits
-            color.setPixel(pBlur + offset);
+            color.setPixel(pBlur.data() + offset);
         }
 
         // Update the progress bar in dialog.
@@ -1498,7 +1495,7 @@ void BlurFXFilter::MakeConvolution (DImg* orgImage, DImg* destImage, int Radius,
                 {
                     // read color from blur bits
                     offset = GetOffset(Width, w, h+n, bytesDepth);
-                    color.setColor(pBlur + offset, sixteenBit);
+                    color.setColor(pBlur.data() + offset, sixteenBit);
 
                     // finally, we sum the pixels using a method similar to assigntables
                     nSumR += arrMult[n + Radius][color.red()];
@@ -1549,7 +1546,6 @@ void BlurFXFilter::MakeConvolution (DImg* orgImage, DImg* destImage, int Radius,
 
     // now, we must free memory
     Free2DArray (arrMult, nKernelWidth);
-    delete [] pBlur;
 }
 
 FilterAction BlurFXFilter::filterAction()
