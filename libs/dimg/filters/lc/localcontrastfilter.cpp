@@ -89,7 +89,7 @@ void LocalContrastFilter::filterImage()
         if (m_orgImage.sixteenBit())
         {
             // sixteen bit image
-            unsigned short* data    = new unsigned short[size];
+            QScopedArrayPointer<unsigned short> data(new unsigned short[size]);
             unsigned short* dataImg = (unsigned short*)(m_orgImage.bits());
 
             for (i=0, j=0; runningFlag() && (i < size); i+=3, j+=4)
@@ -101,7 +101,7 @@ void LocalContrastFilter::filterImage()
 
             postProgress(10);
 
-            process_16bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
+            process_16bit_rgb_image(data.data(), m_orgImage.width(), m_orgImage.height());
 
             for (uint x=0; runningFlag() && (x < m_orgImage.width()); ++x)
             {
@@ -114,14 +114,11 @@ void LocalContrastFilter::filterImage()
                                                            65535, true));
                 }
             }
-
-            delete [] data;
         }
         else
         {
             // eight bit image
-
-            uchar* data = new uchar[size];
+            QScopedArrayPointer<uchar> data(new uchar[size]);
 
             for (i=0, j=0; runningFlag() && (i < size); i+=3, j+=4)
             {
@@ -132,7 +129,7 @@ void LocalContrastFilter::filterImage()
 
             postProgress(10);
 
-            process_8bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
+            process_8bit_rgb_image(data.data(), m_orgImage.width(), m_orgImage.height());
 
             for (uint x=0; runningFlag() && (x < m_orgImage.width()); ++x)
             {
@@ -142,8 +139,6 @@ void LocalContrastFilter::filterImage()
                     m_destImage.setPixelColor(x, y, DColor(data[i+2], data[i+1], data[i], 255, false));
                 }
             }
-
-            delete [] data;
         }
     }
 
@@ -152,8 +147,8 @@ void LocalContrastFilter::filterImage()
 
 void LocalContrastFilter::process_8bit_rgb_image(unsigned char* img, int sizex, int sizey)
 {
-    int size            = sizex*sizey;
-    float* tmpimage     = new float[size*3];
+    int size = sizex * sizey;
+    QScopedArrayPointer<float> tmpimage(new float[size*3]);
 
     for (int i=0 ; runningFlag() && (i < size*3) ; ++i)
     {
@@ -161,7 +156,7 @@ void LocalContrastFilter::process_8bit_rgb_image(unsigned char* img, int sizex, 
         tmpimage[i] = (float)(img[i]/255.0);
     }
 
-    process_rgb_image(tmpimage, sizex, sizey);
+    process_rgb_image(tmpimage.data(), sizex, sizey);
 
     // convert back to 8 bits (with dithering)
     int pos=0;
@@ -174,15 +169,13 @@ void LocalContrastFilter::process_8bit_rgb_image(unsigned char* img, int sizex, 
         img[pos+2]   = (int)(tmpimage[pos+2]*255.0+dither);
         pos += 3;
     }
-
-    delete [] tmpimage;
     postProgress(90);
 }
 
 void LocalContrastFilter::process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey)
 {
-    int size              = sizex*sizey;
-    float* tmpimage       = new float[size*3];
+    int size = sizex*sizey;
+    QScopedArrayPointer<float> tmpimage(new float[size*3]);
 
     for (int i=0 ; runningFlag() && (i < size*3) ; ++i)
     {
@@ -190,7 +183,7 @@ void LocalContrastFilter::process_16bit_rgb_image(unsigned short int* img, int s
         tmpimage[i] = (float)(img[i]/65535.0);
     }
 
-    process_rgb_image(tmpimage, sizex, sizey);
+    process_rgb_image(tmpimage.data(), sizex, sizey);
 
     // convert back to 16 bits (with dithering)
     int pos = 0;
@@ -203,9 +196,6 @@ void LocalContrastFilter::process_16bit_rgb_image(unsigned short int* img, int s
         img[pos+2]   = (int)(tmpimage[pos+2]*65535.0+dither);
         pos+=3;
     }
-
-    delete [] tmpimage;
-
     postProgress(90);
 }
 
@@ -266,9 +256,9 @@ float LocalContrastFilter::func(float x1, float x2)
 
 void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 {
-    int size         = sizex*sizey;
-    float* blurimage = new float[size];
-    float* srcimg    = new float[size*3];
+    int size = sizex*sizey;
+    QScopedArrayPointer<float> blurimage(new float[size]);
+    QScopedArrayPointer<float> srcimg(new float[size*3]);
 
     for (int i=0 ; i < (size*3) ; ++i)
     {
@@ -300,7 +290,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
             // blur
 
-            inplace_blur(blurimage, sizex, sizey, d->par.get_blur(nstage));
+            inplace_blur(blurimage.data(), sizex, sizey, d->par.get_blur(nstage));
 
             pos = 0;
 
@@ -365,7 +355,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
     if (d->par.unsharp_mask.enabled)
     {
-        float* val = new float[size];
+        QScopedArrayPointer<float> val(new float[size]);
 
         // compute the desatured image
 
@@ -379,7 +369,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
         }
 
         float blur_value = d->par.get_unsharp_mask_blur();
-        inplace_blur(blurimage, sizex, sizey, blur_value);
+        inplace_blur(blurimage.data(), sizex, sizey, blur_value);
 
         pos              = 0;
         float pow        = (float)(2.5*d->par.get_unsharp_mask_power());
@@ -449,13 +439,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
             pos += 3;
         }
-
-        delete [] val;
     }
-
-    delete [] srcimg;
-    delete [] blurimage;
-
     postProgress(80);
 }
 
