@@ -89,6 +89,7 @@
 
 namespace Digikam
 {
+typedef QSharedPointer<DImgFilterGenerator> ImgFilterPtr;
 
 class DImgFilterManager::DImgFilterManagerPriv
 {
@@ -101,75 +102,73 @@ public:
 
     ~DImgFilterManagerPriv()
     {
-        qDeleteAll(coreGenerators);
     }
 
     void setupCoreGenerators();
     void setupFilterIcons();
     void setupI18nStrings();
+    void addGenerator(const ImgFilterPtr& generator);
 
 public:
 
-    QMap<QString, DImgFilterGenerator*> filterMap;
+    QMap<QString, ImgFilterPtr> filterMap;
+    QList<ImgFilterPtr>         coreGenerators;
 
-    QList<DImgFilterGenerator*>         coreGenerators;
+    QHash<QString, QString>     filterIcons;
+    QHash<QString, QString>     i18nFilterNames;
 
-    QHash<QString, QString>             filterIcons;
-    QHash<QString, QString>             i18nFilterNames;
-
-    QMutex                              mutex;
+    QMutex                      mutex;
 };
 
 void DImgFilterManager::DImgFilterManagerPriv::setupCoreGenerators()
 {
     //Please keep this list sorted alphabetically
     coreGenerators
-            << new BasicDImgFilterGenerator<AntiVignettingFilter>()
-            << new BasicDImgFilterGenerator<AutoExpoFilter>()
-            << new BasicDImgFilterGenerator<AutoLevelsFilter>()
-            << new BasicDImgFilterGenerator<BCGFilter>()
-            << new BasicDImgFilterGenerator<BlurFilter>()
-            << new BasicDImgFilterGenerator<BlurFXFilter>()
-            << new BasicDImgFilterGenerator<BorderFilter>()
-            << new BasicDImgFilterGenerator<BWSepiaFilter>()
-            << new BasicDImgFilterGenerator<CBFilter>()
-            << new BasicDImgFilterGenerator<CharcoalFilter>()
-            << new BasicDImgFilterGenerator<ColorFXFilter>()
+            << ImgFilterPtr(new BasicDImgFilterGenerator<AntiVignettingFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<AutoExpoFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<AutoLevelsFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<BCGFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<BlurFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<BlurFXFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<BorderFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<BWSepiaFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<CBFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<CharcoalFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<ColorFXFilter>())
 #ifdef HAVE_GLIB2
-            << new BasicDImgFilterGenerator<ContentAwareFilter>()
+            << ImgFilterPtr(new BasicDImgFilterGenerator<ContentAwareFilter>())
 #endif
-            << new BasicDImgFilterGenerator<CurvesFilter>()
-            << new BasicDImgFilterGenerator<DistortionFXFilter>()
-            << new BasicDImgFilterGenerator<EmbossFilter>()
-            << new BasicDImgFilterGenerator<EqualizeFilter>()
-            << new BasicDImgFilterGenerator<FilmGrainFilter>()
-            << new BasicDImgFilterGenerator<FreeRotationFilter>()
-            << new BasicDImgFilterGenerator<GreycstorationFilter>()
-            << new BasicDImgFilterGenerator<HSLFilter>()
-            << new BasicDImgFilterGenerator<IccTransformFilter>()
-            << new BasicDImgFilterGenerator<InfraredFilter>()
-            << new BasicDImgFilterGenerator<InvertFilter>()
-            << new BasicDImgFilterGenerator<LensDistortionFilter>()
+            << ImgFilterPtr(new BasicDImgFilterGenerator<CurvesFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<DistortionFXFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<EmbossFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<EqualizeFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<FilmGrainFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<FreeRotationFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<GreycstorationFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<HSLFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<IccTransformFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<InfraredFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<InvertFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<LensDistortionFilter>())
 #ifdef HAVE_GLIB2
-            << new BasicDImgFilterGenerator<LensFunFilter>()
+            << ImgFilterPtr(new BasicDImgFilterGenerator<LensFunFilter>())
 #endif
-            << new BasicDImgFilterGenerator<LevelsFilter>()
-            << new BasicDImgFilterGenerator<LocalContrastFilter>()
-            << new BasicDImgFilterGenerator<MixerFilter>()
-            << new BasicDImgFilterGenerator<NormalizeFilter>()
-            << new BasicDImgFilterGenerator<NRFilter>()
-            << new BasicDImgFilterGenerator<OilPaintFilter>()
-            << new BasicDImgFilterGenerator<RainDropFilter>()
-            << new BasicDImgFilterGenerator<RefocusFilter>()
-            << new BasicDImgFilterGenerator<SharpenFilter>()
-            << new BasicDImgFilterGenerator<ShearFilter>()
-            << new BasicDImgFilterGenerator<StretchFilter>()
-            << new BasicDImgFilterGenerator<TextureFilter>()
-            << new BasicDImgFilterGenerator<TonalityFilter>()
-            << new BasicDImgFilterGenerator<UnsharpMaskFilter>()
-            << new BasicDImgFilterGenerator<WBFilter>()
-
-            << new BasicDImgFilterGenerator<RawProcessingFilter>();
+            << ImgFilterPtr(new BasicDImgFilterGenerator<LevelsFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<LocalContrastFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<MixerFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<NormalizeFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<NRFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<OilPaintFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<RainDropFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<RefocusFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<SharpenFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<ShearFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<StretchFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<TextureFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<TonalityFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<UnsharpMaskFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<WBFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<RawProcessingFilter>());
 }
 
 void DImgFilterManager::DImgFilterManagerPriv::setupFilterIcons()
@@ -226,6 +225,21 @@ void DImgFilterManager::DImgFilterManagerPriv::setupI18nStrings()
     // i18nFilterNames.insert("someIdentifier", i18n("display name"));
 }
 
+void DImgFilterManager::DImgFilterManagerPriv::addGenerator(const ImgFilterPtr& generator)
+{
+    QMutexLocker lock(&mutex);
+    foreach(const QString & id, generator->supportedFilters())
+    {
+        if (filterMap.contains(id))
+        {
+            kError() << "Attempt to register filter identifier" << id << "twice. Ignoring.";
+            continue;
+        }
+
+        filterMap[id] = generator;
+    }
+}
+
 // -----------------------------------------------------------------------------------------
 
 class DImgFilterManagerCreator
@@ -249,9 +263,9 @@ DImgFilterManager::DImgFilterManager()
     d->setupCoreGenerators();
     d->setupFilterIcons();
     d->setupI18nStrings();
-    foreach(DImgFilterGenerator * gen, d->coreGenerators)
+    foreach(const ImgFilterPtr& gen, d->coreGenerators)
     {
-        addGenerator(gen);
+        d->addGenerator(gen);
     }
 }
 
@@ -262,35 +276,26 @@ DImgFilterManager::~DImgFilterManager()
 
 void DImgFilterManager::addGenerator(DImgFilterGenerator* generator)
 {
-    QMutexLocker lock(&d->mutex);
-    foreach(const QString & id, generator->supportedFilters())
-    {
-        if (d->filterMap.contains(id))
-        {
-            kError() << "Attempt to register filter identifier" << id << "twice. Ignoring.";
-            continue;
-        }
-
-        d->filterMap[id] = generator;
-    }
+    ImgFilterPtr shared(generator);
+    d->addGenerator(shared);
 }
 
 void DImgFilterManager::removeGenerator(DImgFilterGenerator* generator)
 {
-    QMutexLocker lock(&d->mutex);
-    QMap<QString, DImgFilterGenerator*>::iterator it;
-
-    for (it = d->filterMap.begin(); it != d->filterMap.end();)
-    {
-        if (it.value() == generator)
-        {
-            it = d->filterMap.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
+//    QMutexLocker lock(&d->mutex);
+//    QMap<QString, DImgFilterGenerator*>::iterator it;
+//
+//    for (it = d->filterMap.begin(); it != d->filterMap.end();)
+//    {
+//        if (it.value() == generator)
+//        {
+//            it = d->filterMap.erase(it);
+//        }
+//        else
+//        {
+//            ++it;
+//        }
+//    }
 }
 
 QStringList DImgFilterManager::supportedFilters()
@@ -307,7 +312,7 @@ QList<int> DImgFilterManager::supportedVersions(const QString& filterIdentifier)
     }
 
     QMutexLocker lock(&d->mutex);
-    DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
+    DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier).data();
 
     if (gen)
     {
@@ -320,7 +325,7 @@ QList<int> DImgFilterManager::supportedVersions(const QString& filterIdentifier)
 QString DImgFilterManager::displayableName(const QString& filterIdentifier)
 {
     QMutexLocker lock(&d->mutex);
-    DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
+    DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier).data();
 
     if (gen)
     {
@@ -440,7 +445,7 @@ bool DImgFilterManager::isSupported(const QString& filterIdentifier, int version
         return true;
     }
 
-    DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
+    DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier).data();
 
     if (gen)
     {
@@ -459,7 +464,7 @@ DImgThreadedFilter* DImgFilterManager::createFilter(const QString& filterIdentif
 {
     QMutexLocker lock(&d->mutex);
     kDebug() << "Creating filter " << filterIdentifier;
-    DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
+    DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier).data();
 
     if (gen)
     {
