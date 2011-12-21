@@ -80,15 +80,15 @@ void EqualizeFilter::filterImage()
     miracles on an image or destroy it.*/
 void EqualizeFilter::equalizeImage()
 {
-    struct double_packet  high, low, intensity;
-    register int          i;
-    int                   progress;
-
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
         kDebug() << "Ref. image and Org. has different bits depth";
         return;
     }
+
+    struct double_packet  high, low, intensity;
+    register int          i;
+    int                   progress;
 
     // Create an histogram of the reference image.
     QScopedPointer<ImageHistogram> histogram(new ImageHistogram(m_refImage.bits(), m_refImage.width(),
