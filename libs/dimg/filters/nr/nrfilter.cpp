@@ -201,13 +201,13 @@ void NRFilter::filterImage()
 void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
                               float threshold, double softness)
 {
-    float*       temp = 0, thold;
+    float        thold;
     unsigned int i, lev, lpass = 0, hpass = 0, size, col, row;
     double       stdev[5];
     unsigned int samples[5];
 
     size  = width * height;
-    temp  = new float[qMax(width, height)];
+    QScopedArrayPointer<float> temp(new float[qMax(width, height)]);
 
     for (lev = 0; runningFlag() && (lev < 5); ++lev)
     {
@@ -215,7 +215,7 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
 
         for (row = 0; runningFlag() && (row < height); ++row)
         {
-            hatTransform(temp, fimg[hpass] + row * width, 1, width, 1 << lev);
+            hatTransform(temp.data(), fimg[hpass] + row * width, 1, width, 1 << lev);
 
             for (col = 0; col < width; ++col)
             {
@@ -225,7 +225,7 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
 
         for (col = 0; runningFlag() && (col < width); ++col)
         {
-            hatTransform(temp, fimg[lpass] + col, width, height, 1 << lev);
+            hatTransform(temp.data(), fimg[lpass] + col, width, height, 1 << lev);
 
             for (row = 0; row < height; ++row)
             {
@@ -333,8 +333,6 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
     {
         fimg[0][i] = fimg[0][i] + fimg[lpass][i];
     }
-
-    delete [] temp;
 }
 
 void NRFilter::hatTransform(float* temp, float* base, int st, int size, int sc)
