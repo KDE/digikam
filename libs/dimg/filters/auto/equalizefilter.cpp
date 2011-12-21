@@ -99,7 +99,7 @@ void EqualizeFilter::equalizeImage()
     QScopedArrayPointer<double_packet> map(new double_packet[histogram->getHistogramSegments()]);
     QScopedArrayPointer<int_packet> equalize_map(new int_packet[histogram->getHistogramSegments()]);
 
-    if ( !map || !equalize_map )
+    if ( map.isNull() || equalize_map.isNull() )
     {
         kWarning() << ("Unable to allocate memory!");
         return;
