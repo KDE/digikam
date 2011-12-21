@@ -1058,15 +1058,14 @@ void RatioCropTool::finalRendering()
 
     QRect currentRegion    = d->imageSelectionWidget->getRegionSelection();
     ImageIface* iface      = d->imageSelectionWidget->imageIface();
-    uchar* data            = iface->getOriginalImage();
     int w                  = iface->originalWidth();
     int h                  = iface->originalHeight();
     bool a                 = iface->originalHasAlpha();
     bool sb                = iface->originalSixteenBit();
     QRect normalizedRegion = getNormalizedRegion();
 
-    DImg imOrg(w, h, sb, a, data);
-    delete [] data;
+    QScopedArrayPointer<uchar> data(iface->getOriginalImage());
+    DImg imOrg(w, h, sb, a, data.data());
 
     imOrg.crop(normalizedRegion);
     FilterAction action("digikam:RatioCrop", 1);

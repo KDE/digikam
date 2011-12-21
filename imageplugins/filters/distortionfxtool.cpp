@@ -345,10 +345,9 @@ void DistortionFXTool::prepareEffect()
     int e = d->effectType->currentIndex();
 
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar* data       = iface->getPreviewImage();
+    QScopedArrayPointer<uchar> data(iface->getPreviewImage());
     DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
-               iface->previewHasAlpha(), data);
-    delete [] data;
+               iface->previewHasAlpha(), data.data());
 
     setFilter(new DistortionFXFilter(&image, this, e, l, f));
 }

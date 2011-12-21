@@ -328,15 +328,13 @@ void RestorationTool::prepareEffect()
 void RestorationTool::prepareFinal()
 {
     ImageIface iface(0, 0);
-    uchar* data = iface.getOriginalImage();
+    QScopedArrayPointer<uchar> data(iface.getOriginalImage());
     DImg originalImage(iface.originalWidth(), iface.originalHeight(),
-                       iface.originalSixteenBit(), iface.originalHasAlpha(), data);
+                       iface.originalSixteenBit(), iface.originalHasAlpha(), data.data());
 
     setFilter(new GreycstorationFilter(&originalImage,
                                        d->settingsWidget->settings(), GreycstorationFilter::Restore,
                                        0, 0, QImage(), this));
-
-    delete [] data;
 }
 
 void RestorationTool::putPreviewData()
