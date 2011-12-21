@@ -179,7 +179,7 @@ void IconGroupItem::takeItem(IconItem* item)
     {
         d->lastItem = d->lastItem->m_prev;
 
-        if ( d->lastItem )
+        if (d->lastItem)
         {
             d->lastItem->m_next = 0;
         }
@@ -194,12 +194,12 @@ void IconGroupItem::takeItem(IconItem* item)
 
         if (i)
         {
-            if (i->m_prev )
+            if (i->m_prev)
             {
                 i->m_prev->m_next = i->m_next;
             }
 
-            if ( i->m_next )
+            if (i->m_next)
             {
                 i->m_next->m_prev = i->m_prev;
             }
@@ -214,16 +214,16 @@ int IconGroupItem::count() const
 
 int IconGroupItem::index(IconItem* item) const
 {
-    if ( !item )
+    if (!item)
     {
         return -1;
     }
 
-    if ( item == d->firstItem )
+    if (item == d->firstItem)
     {
         return 0;
     }
-    else if ( item == d->lastItem )
+    else if (item == d->lastItem)
     {
         return d->count - 1;
     }
@@ -232,7 +232,7 @@ int IconGroupItem::index(IconItem* item) const
         IconItem* i = d->firstItem;
         int j = 0;
 
-        while ( i && i != item )
+        while (i && i != item)
         {
             i = i->m_next;
             ++j;
@@ -274,25 +274,25 @@ void IconGroupItem::sort()
     IconItem* item = d->firstItem;
     int i = 0;
 
-    for ( ; item; item = item->m_next )
+    for (; item; item = item->m_next)
     {
         items[ i++ ].item = item;
     }
 
-    qsort( items, count(), sizeof( IconGroupItemPriv::SortableItem ), cmpItems );
+    qsort(items, count(), sizeof(IconGroupItemPriv::SortableItem), cmpItems);
 
     IconItem* prev = 0;
     item           = 0;
 
-    for ( i = 0; i < (int)count(); ++i )
+    for (i = 0; i < (int)count(); ++i)
     {
         item = items[ i ].item;
 
-        if ( item )
+        if (item)
         {
             item->m_prev = prev;
 
-            if ( item->m_prev )
+            if (item->m_prev)
             {
                 item->m_prev->m_next = item;
             }
@@ -300,12 +300,12 @@ void IconGroupItem::sort()
             item->m_next = 0;
         }
 
-        if ( i == 0 )
+        if (i == 0)
         {
             d->firstItem = item;
         }
 
-        if ( i == (int)count() - 1 )
+        if (i == (int)count() - 1)
         {
             d->lastItem = item;
         }
@@ -339,7 +339,7 @@ int IconGroupItem::compare(IconGroupItem*)
 
 int IconGroupItem::cmpItems(const void* n1, const void* n2)
 {
-    if ( !n1 || !n2 )
+    if (!n1 || !n2)
     {
         return 0;
     }
@@ -347,7 +347,7 @@ int IconGroupItem::cmpItems(const void* n1, const void* n2)
     IconGroupItemPriv::SortableItem* i1 = (IconGroupItemPriv::SortableItem*)n1;
     IconGroupItemPriv::SortableItem* i2 = (IconGroupItemPriv::SortableItem*)n2;
 
-    return i1->item->compare( i2->item );
+    return i1->item->compare(i2->item);
 }
 
 }  // namespace Digikam

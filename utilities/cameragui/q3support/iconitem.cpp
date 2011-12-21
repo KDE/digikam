@@ -135,7 +135,7 @@ QRect IconItem::toggleSelectRect() const
     QSize selSize = d->group->iconView()->selectPixmap().size();
     QRect selRect(QPoint(0, 0), selSize);
 
-    selRect.translate(r.x()+5, r.y()+5);
+    selRect.translate(r.x() + 5, r.y() + 5);
     return selRect;
 }
 
@@ -155,7 +155,7 @@ QRect IconItem::clickToToggleSelectRect() const
     QSize selSize = d->group->iconView()->selectPixmap().size();
     QRect selRect(QPoint(0, 0), selSize);
 
-    selRect.translate(r.x()+5, r.y()+5);
+    selRect.translate(r.x() + 5, r.y() + 5);
     return selRect;
 }
 
@@ -257,7 +257,7 @@ void IconItem::paintItem(QPainter* p)
     {
         QPainter p(&pix);
         p.setPen(QPen(d->selected ? Qt::white : Qt::black, 1, Qt::DotLine));
-        p.drawRect(2, 2, r.width()-4, r.width()-4);
+        p.drawRect(2, 2, r.width() - 4, r.width() - 4);
         p.end();
     }
 
