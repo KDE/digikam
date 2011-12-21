@@ -176,8 +176,8 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
         return;
     }
 
-    uchar* pStatusBits = new uchar[nHeight * nWidth];
-    memset(pStatusBits, 0, nHeight * nWidth * sizeof(uchar));
+    QScopedArrayPointer<uchar> pStatusBits(new uchar[nHeight * nWidth]);
+    memset(pStatusBits.data(), 0, nHeight * nWidth * sizeof(uchar));
 
     // Initially, copy all pixels to destination
 
@@ -197,7 +197,7 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
             nRandSize = m_generator.number(MinDropSize, MaxDropSize);
 
             bResp = CreateRainDrop(data, nWidth, nHeight, sixteenBit, bytesDepth,
-                                   pResBits, pStatusBits,
+                                   pResBits, pStatusBits.data(),
                                    nRandX, nRandY, nRandSize, Coeff, bLimitRange);
 
             ++nCounter;
@@ -216,8 +216,6 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
         postProgress((int)(progressMin + ((double)(i) *
                                           (double)(progressMax - progressMin)) / (double)Amount));
     }
-
-    delete [] pStatusBits;
 }
 
 bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
