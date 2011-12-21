@@ -171,7 +171,7 @@ void LensFunFilter::filterImage()
 
     int loop   = 0;
     int lwidth = m_orgImage.width() * 2 * 3;
-    float* pos = new float[lwidth];
+    QScopedArrayPointer<float> pos(new float[lwidth]);
 
     kDebug() << "Image size to process: (" << m_orgImage.width() << ", " << m_orgImage.height() << ")";
 
@@ -183,9 +183,9 @@ void LensFunFilter::filterImage()
 
         for (unsigned int y = 0; runningFlag() && (y < m_orgImage.height()); ++y)
         {
-            if (d->modifier->ApplySubpixelDistortion(0.0, y, m_orgImage.width(), 1, pos))
+            if (d->modifier->ApplySubpixelDistortion(0.0, y, m_orgImage.width(), 1, pos.data()))
             {
-                float* src = pos;
+                float* src = pos.data();
 
                 for (unsigned x = 0; runningFlag() && (x < m_destImage.width()); ++x)
                 {
@@ -264,9 +264,9 @@ void LensFunFilter::filterImage()
 
         for (unsigned long y = 0; runningFlag() && (y < tempImage.height()); ++y)
         {
-            if (d->modifier->ApplyGeometryDistortion(0.0, y, tempImage.width(), 1, pos))
+            if (d->modifier->ApplyGeometryDistortion(0.0, y, tempImage.width(), 1, pos.data()))
             {
-                float* src = pos;
+                float* src = pos.data();
 
                 for (unsigned long x = 0; runningFlag() && (x < tempImage.width()); ++x, ++loop)
                 {
@@ -293,10 +293,6 @@ void LensFunFilter::filterImage()
             m_destImage = tempImage;
         }
     }
-
-    // clean up
-
-    delete [] pos;
 }
 
 bool LensFunFilter::registerSettingsToXmp(KExiv2Data& data) const
