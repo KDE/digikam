@@ -201,7 +201,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
 
     nKSize      = 2 * radius + 1;
     nCenter     = nKSize / 2;
-    int* Kernel = new int[nKSize];
+    QScopedArrayPointer<int> Kernel(new int[nKSize]);
 
     lnfactor = (4.2485 - 2.7081) / 10 * nKSize + 2.7081;
     lnsd     = (0.5878 + 0.5447) / 10 * nKSize - 0.5447;
@@ -236,15 +236,15 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
     // We need to copy our bits to blur bits
 
     uchar* pOutBits = m_destImage.bits();
-    uchar* pBlur    = new uchar[m_destImage.numBytes()];
+    QScopedArrayPointer<uchar> pBlur(new uchar[m_destImage.numBytes()]);
 
-    memcpy(pBlur, data, m_destImage.numBytes());
+    memcpy(pBlur.data(), data, m_destImage.numBytes());
 
     // We need to initialize all the loop and iterator variables
 
     nSumA = nSumR = nSumG = nSumB = nCount = i = j = 0;
     unsigned short* data16     = (unsigned short*)data;
-    unsigned short* pBlur16    = (unsigned short*)pBlur;
+    unsigned short* pBlur16    = (unsigned short*)pBlur.data();
     unsigned short* pOutBits16 = (unsigned short*)pOutBits;
 
     // Now, we enter in the main loop
@@ -453,8 +453,6 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
 
     // now, we must free memory
     Free2DArray(arrMult, nKernelWidth);
-    delete [] pBlur;
-    delete [] Kernel;
 }
 
 FilterAction BlurFilter::filterAction()
