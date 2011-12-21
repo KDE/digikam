@@ -247,10 +247,12 @@ void Weights::matrixInv (double* const a, const size_t size)
     // Set destination matrix to unit matrix.
 
     for (iy = 0; iy < size; ++iy)
+    {
         for (ix = 0; ix < size; ++ix)
         {
             a [iy* size + ix] = ix == iy ? 1.0 : 0.0;
         }
+    }
 
     // Convert matrix to upper triangle form.
 
@@ -286,10 +288,12 @@ void Weights::matrixInv (double* const a, const size_t size)
     // Convert matrix to unit matrix.
 
     for (iy = 0; iy < size; ++iy)
+    {
         for (ix = 0; ix < size; ++ix)
         {
             a [iy* size + ix] /= b [iy * size + iy];
         }
+    }
 }
 
 // Calculates one term of the polynomial

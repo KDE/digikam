@@ -362,7 +362,7 @@ void BlurFXFilter::radialBlur(DImg* orgImage, DImg* destImage, int X, int Y, int
         // Update the progress bar in dialog.
         progress = (int) (((double)(h - yMin) * 100.0) / (yMax - yMin));
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
             postProgress(progress);
         }
