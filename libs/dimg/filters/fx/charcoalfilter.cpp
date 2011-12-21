@@ -262,7 +262,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
             postProgress(progress);
         }
     }
-    return(true);
+    return true;
 }
 
 int CharcoalFilter::getOptimalKernelWidth(double radius, double sigma)

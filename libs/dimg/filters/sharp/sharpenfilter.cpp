@@ -233,7 +233,7 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* kernel
             postProgress(progress);
         }
     }
-    return(true);
+    return true;
 }
 
 int SharpenFilter::getOptimalKernelWidth(double radius, double sigma)

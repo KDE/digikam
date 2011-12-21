@@ -449,7 +449,7 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
         return (false);
     }
 
-    return (true);
+    return true;
 }
 
 bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* pStatusBits, int X, int Y,
@@ -460,7 +460,7 @@ bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* pStatusBits, int
 
     if (pStatusBits == NULL)
     {
-        return (true);
+        return true;
     }
 
     for (h = Y - nHalfSize; h <= Y + nHalfSize; ++h)
@@ -486,7 +486,7 @@ bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* pStatusBits, int
         }
     }
 
-    return (true);
+    return true;
 }
 
 bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* pStatusBits,
@@ -512,7 +512,7 @@ bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* pStatusBits
         }
     }
 
-    return (true);
+    return true;
 }
 
 FilterAction RainDropFilter::filterAction()

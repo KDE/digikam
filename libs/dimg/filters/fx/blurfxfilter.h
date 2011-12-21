@@ -228,7 +228,7 @@ private:
             if ((nG >= cG - Range) && (nG <= cG + Range))
                 if ((nB >= cB - Range) && (nB <= cB + Range))
                 {
-                    return (true);
+                    return true;
                 }
 
         return (false);
