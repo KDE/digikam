@@ -87,7 +87,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 077 ==> 259783 : Picture-orientation is wrong.
 078 ==> 241244 : Lens auto correction doesn't include Nikon D90 and doesn't recognize 18-70 kit kens.
 079 ==> 289006 : digiKam crashed in import dialog when selecting filter on videos.
-080 ==> 
+080 ==> 277584 - digiKam crashed while applying Lens correction (Lensfun).
+081 ==> 
 
 
 
