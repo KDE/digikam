@@ -740,7 +740,7 @@ void IconView::sort()
     int gcount = groupCount();
 
     // then sort the groups themselves
-    IconViewPriv::SortableItem* groups = new IconViewPriv::SortableItem[ gcount ];
+    QScopedArrayPointer<IconViewPriv::SortableItem> groups(new IconViewPriv::SortableItem[ gcount ]);
 
     IconGroupItem* group = d->firstGroup;
     int i = 0;
@@ -750,7 +750,7 @@ void IconView::sort()
         groups[i++].group = group;
     }
 
-    qsort( groups, gcount, sizeof( IconViewPriv::SortableItem ), cmpItems );
+    qsort( groups.data(), gcount, sizeof( IconViewPriv::SortableItem ), cmpItems );
 
     IconGroupItem* prev = 0;
     group = 0;
@@ -783,8 +783,6 @@ void IconView::sort()
 
         prev = group;
     }
-
-    delete [] groups;
 }
 
 void IconView::slotRearrange()
