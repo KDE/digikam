@@ -73,17 +73,17 @@ void StretchFilter::filterImage()
     of color values. This is a contrast enhancement technique.*/
 void StretchFilter::stretchContrastImage()
 {
-    struct double_packet high, low, intensity;
-    long long            number_pixels;
-    register long        i;
-    int                  progress;
-    unsigned long        threshold_intensity;
-
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
         kDebug() << "Ref. image and Org. has different bits depth";
         return;
     }
+
+    struct double_packet high, low, intensity;
+    long long            number_pixels;
+    register long        i;
+    int                  progress;
+    unsigned long        threshold_intensity;
 
     // Create an histogram of the reference image.
     QScopedPointer<ImageHistogram> histogram(new ImageHistogram(m_refImage.bits(), m_refImage.width(),
