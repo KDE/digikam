@@ -289,13 +289,12 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         if (bits_per_sample == 16)          // 16 bits image.
         {
             data  = new_failureTolerant(w*h*8);
-            uchar* strip = new_failureTolerant(strip_size);
+            QScopedArrayPointer<uchar> strip(new_failureTolerant(strip_size));
 
-            if (!data || !strip)
+            if (!data || strip.isNull())
             {
                 kDebug() << "Failed to allocate memory for TIFF image" << filePath;
                 delete[] data;
-                delete[] strip;
                 TIFFClose(tif);
                 loadingFailed();
                 return false;
@@ -315,7 +314,6 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     if (!observer->continueQuery(m_image))
                     {
                         delete [] data;
-                        delete [] strip;
                         TIFFClose(tif);
                         loadingFailed();
                         return false;
@@ -324,7 +322,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)st)/((float)num_of_strips) )));
                 }
 
-                bytesRead = TIFFReadEncodedStrip(tif, st, strip, strip_size);
+                bytesRead = TIFFReadEncodedStrip(tif, st, strip.data(), strip_size);
 
                 if (bytesRead == -1)
                 {
@@ -341,7 +339,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     offset = 0;
                 }
 
-                ushort* stripPtr = (ushort*)(strip);
+                ushort* stripPtr = (ushort*)(strip.data());
                 ushort* dataPtr  = (ushort*)(data + offset);
                 ushort* p;
 
@@ -524,19 +522,16 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     offset += bytesRead/2 * 8;
                 }
             }
-
-            delete [] strip;
         }
         else       // Non 16 bits images ==> get it on BGRA 8 bits.
         {
             data  = new_failureTolerant(w*h*4);
-            uchar* strip = new_failureTolerant(w*rows_per_strip*4);
+            QScopedArrayPointer<uchar> strip(new_failureTolerant(w*rows_per_strip*4));
 
-            if (!data || !strip)
+            if (!data || strip.isNull())
             {
                 kDebug() << "Failed to allocate memory for TIFF image" << filePath;
                 delete[] data;
-                delete[] strip;
                 TIFFClose(tif);
                 loadingFailed();
                 return false;
@@ -559,7 +554,6 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 kDebug() << "Failed to set up RGBA reading of image, filename "
                          << TIFFFileName(tif) <<  " error message from Libtiff: " << emsg;
                 delete [] data;
-                delete [] strip;
                 TIFFClose(tif);
                 loadingFailed();
                 return false;
@@ -579,7 +573,6 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     if (!observer->continueQuery(m_image))
                     {
                         delete [] data;
-                        delete [] strip;
                         TIFFClose(tif);
                         loadingFailed();
                         return false;
@@ -602,11 +595,10 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
                 // Read data
 
-                if (TIFFRGBAImageGet(&img, (uint32*)strip, img.width, rows_to_read ) == -1)
+                if (TIFFRGBAImageGet(&img, (uint32*)strip.data(), img.width, rows_to_read ) == -1)
                 {
                     kDebug() << "Failed to read image data";
                     delete [] data;
-                    delete [] strip;
                     TIFFClose(tif);
                     loadingFailed();
                     return false;
@@ -614,7 +606,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
                 pixelsRead = rows_to_read * img.width;
 
-                uchar* stripPtr = (uchar*)(strip);
+                uchar* stripPtr = (uchar*)(strip.data());
                 uchar* dataPtr  = (uchar*)(data + offset);
                 uchar* p;
 
@@ -647,7 +639,6 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             }
 
             TIFFRGBAImageEnd(&img);
-            delete [] strip;
         }
     }
 
