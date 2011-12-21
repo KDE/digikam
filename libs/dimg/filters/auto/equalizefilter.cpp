@@ -81,8 +81,6 @@ void EqualizeFilter::filterImage()
 void EqualizeFilter::equalizeImage()
 {
     struct double_packet  high, low, intensity;
-    struct double_packet* map;
-    struct int_packet*    equalize_map;
     register int          i;
     int                   progress;
 
@@ -99,22 +97,12 @@ void EqualizeFilter::equalizeImage()
 
     // Memory allocation.
     // FIXME: Possible null pointer dereference "histogram", otherwise it is redundant to check if "histgram" is null below.
-    map          = new double_packet[histogram->getHistogramSegments()];
-    equalize_map = new int_packet[histogram->getHistogramSegments()];
+    QScopedArrayPointer<double_packet> map(new double_packet[histogram->getHistogramSegments()]);
+    QScopedArrayPointer<int_packet> equalize_map(new int_packet[histogram->getHistogramSegments()]);
 
     if ( !histogram || !map || !equalize_map )
     {
         delete histogram;
-        if (map)
-        {
-            delete [] map;
-        }
-
-        if (equalize_map)
-        {
-            delete [] equalize_map;
-        }
-
         kWarning() << ("Unable to allocate memory!");
         return;
     }
@@ -138,7 +126,7 @@ void EqualizeFilter::equalizeImage()
 
     low  = map[0];
     high = map[histogram->getHistogramSegments()-1];
-    memset(equalize_map, 0, histogram->getHistogramSegments()*sizeof(int_packet));
+    memset(equalize_map.data(), 0, histogram->getHistogramSegments()*sizeof(int_packet));
 
     // TODO magic number 256
     for (i = 0 ; runningFlag() && (i < histogram->getHistogramSegments()) ; ++i)
@@ -161,7 +149,6 @@ void EqualizeFilter::equalizeImage()
     }
 
     delete histogram;
-    delete [] map;
 
     uchar* data     = m_orgImage.bits();
     int w           = m_orgImage.width();
@@ -263,8 +250,6 @@ void EqualizeFilter::equalizeImage()
             }
         }
     }
-
-    delete [] equalize_map;
 }
 
 FilterAction EqualizeFilter::filterAction()
