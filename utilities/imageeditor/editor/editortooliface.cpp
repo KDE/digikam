@@ -64,6 +64,15 @@ EditorToolIface* EditorToolIface::editorToolIface()
     return m_iface;
 }
 
+// FIXME: memory leak: QObject is not assigned a parent, so the EditorToolIface object is not destroyed
+/*
+==10289== 8 bytes in 1 blocks are still reachable in loss record 485 of 2,501
+==10289==    at 0x4029B64: operator new(unsigned int) (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==10289==    by 0x4404F43: Digikam::EditorToolIface::EditorToolIface(Digikam::EditorWindow*) (editortooliface.cpp:68)
+==10289==    by 0x4409D94: Digikam::EditorWindow::EditorWindow(char const*) (editorwindow.cpp:204)
+==10289==    by 0x806DF3E: ShowFoto::ShowFoto::ShowFoto(KUrl::List const&) (showfoto.cpp:169)
+==10289==    by 0x806CC00: main (main.cpp:82)
+ */
 EditorToolIface::EditorToolIface(EditorWindow* editor)
     : QObject(), d(new EditorToolIfacePriv)
 {
