@@ -1009,10 +1009,10 @@ void BlurFXFilter::shakeBlur(DImg* orgImage, DImg* destImage, int Distance)
     int offset, offsetLayer;
 
     int numBytes = orgImage->numBytes();
-    uchar* Layer1 = new uchar[numBytes];
-    uchar* Layer2 = new uchar[numBytes];
-    uchar* Layer3 = new uchar[numBytes];
-    uchar* Layer4 = new uchar[numBytes];
+    QScopedArrayPointer<uchar> Layer1(new uchar[numBytes]);
+    QScopedArrayPointer<uchar> Layer2(new uchar[numBytes]);
+    QScopedArrayPointer<uchar> Layer3(new uchar[numBytes]);
+    QScopedArrayPointer<uchar> Layer4(new uchar[numBytes]);
 
     int h, w, nw, nh;
 
@@ -1025,22 +1025,22 @@ void BlurFXFilter::shakeBlur(DImg* orgImage, DImg* destImage, int Distance)
             nh = (h + Distance >= Height) ? Height - 1 : h + Distance;
             offset = GetOffset(Width, w, nh, bytesDepth);
             color.setColor(data + offset, sixteenBit);
-            color.setPixel(Layer1 + offsetLayer);
+            color.setPixel(Layer1.data() + offsetLayer);
 
             nh = (h - Distance < 0) ? 0 : h - Distance;
             offset = GetOffset(Width, w, nh, bytesDepth);
             color.setColor(data + offset, sixteenBit);
-            color.setPixel(Layer2 + offsetLayer);
+            color.setPixel(Layer2.data() + offsetLayer);
 
             nw = (w + Distance >= Width) ? Width - 1 : w + Distance;
             offset = GetOffset(Width, nw, h, bytesDepth);
             color.setColor(data + offset, sixteenBit);
-            color.setPixel(Layer3 + offsetLayer);
+            color.setPixel(Layer3.data() + offsetLayer);
 
             nw = (w - Distance < 0) ? 0 : w - Distance;
             offset = GetOffset(Width, nw, h, bytesDepth);
             color.setColor(data + offset, sixteenBit);
-            color.setPixel(Layer4 + offsetLayer);
+            color.setPixel(Layer4.data() + offsetLayer);
         }
 
         // Update the progress bar in dialog.
@@ -1060,10 +1060,10 @@ void BlurFXFilter::shakeBlur(DImg* orgImage, DImg* destImage, int Distance)
             // read original data to preserve alpha
             color.setColor(data + offset, sixteenBit);
             // read colors from all four layers
-            color1.setColor(Layer1 + offset, sixteenBit);
-            color2.setColor(Layer2 + offset, sixteenBit);
-            color3.setColor(Layer3 + offset, sixteenBit);
-            color4.setColor(Layer4 + offset, sixteenBit);
+            color1.setColor(Layer1.data() + offset, sixteenBit);
+            color2.setColor(Layer2.data() + offset, sixteenBit);
+            color3.setColor(Layer3.data() + offset, sixteenBit);
+            color4.setColor(Layer4.data() + offset, sixteenBit);
 
             // set color components of resulting color
             color.setRed  ( (color1.red()   + color2.red()   + color3.red()   + color4.red())   / 4 );
@@ -1081,11 +1081,6 @@ void BlurFXFilter::shakeBlur(DImg* orgImage, DImg* destImage, int Distance)
             postProgress(progress);
         }
     }
-
-    delete [] Layer1;
-    delete [] Layer2;
-    delete [] Layer3;
-    delete [] Layer4;
 }
 
 /* Function to apply the frostGlass effect
@@ -1123,10 +1118,10 @@ void BlurFXFilter::frostGlass(DImg* orgImage, DImg* destImage, int Frost)
     int range = sixteenBit ? 65535 : 255;
 
     // it is a huge optimization to allocate these here once
-    uchar* IntensityCount = new uchar[range + 1];
-    uint* AverageColorR   = new uint[range + 1];
-    uint* AverageColorG   = new uint[range + 1];
-    uint* AverageColorB   = new uint[range + 1];
+    QScopedArrayPointer<uchar> IntensityCount(new uchar[range + 1]);
+    QScopedArrayPointer<uint> AverageColorR(new uint[range + 1]);
+    QScopedArrayPointer<uint> AverageColorG(new uint[range + 1]);
+    QScopedArrayPointer<uint> AverageColorB(new uint[range + 1]);
 
     for (h = 0; runningFlag() && (h < Height); ++h)
     {
@@ -1138,8 +1133,8 @@ void BlurFXFilter::frostGlass(DImg* orgImage, DImg* destImage, int Frost)
 
             // get random color from surrounding of w|h
             color = RandomColor (data, Width, Height, sixteenBit, bytesDepth,
-                                 w, h, Frost, color.alpha(), generator, range, IntensityCount,
-                                 AverageColorR, AverageColorG, AverageColorB);
+                                 w, h, Frost, color.alpha(), generator, range, IntensityCount.data(),
+                                 AverageColorR.data(), AverageColorG.data(), AverageColorB.data());
 
             // write color to destination
             color.setPixel(pResBits + offset);
@@ -1153,11 +1148,6 @@ void BlurFXFilter::frostGlass(DImg* orgImage, DImg* destImage, int Frost)
             postProgress(progress);
         }
     }
-
-    delete [] IntensityCount;
-    delete [] AverageColorR;
-    delete [] AverageColorG;
-    delete [] AverageColorB;
 }
 
 /* Function to apply the mosaic effect backported from ImageProcessing version 2
