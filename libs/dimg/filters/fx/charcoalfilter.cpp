@@ -163,19 +163,19 @@ void CharcoalFilter::filterImage()
 
 bool CharcoalFilter::convolveImage(const unsigned int order, const double* kernel)
 {
-    uint    x, y;
-    int     mx, my, sx, sy, mcx, mcy, progress;
-    long    kernelWidth, i;
-    double  red, green, blue, alpha, normalize = 0.0;
-    double* k = 0;
-
-    kernelWidth = order;
+    long kernelWidth = order;
 
     if ((kernelWidth % 2) == 0)
     {
         kWarning() << "Kernel width must be an odd number!";
         return(false);
     }
+
+    uint    x, y;
+    long    i;
+    int     mx, my, sx, sy, mcx, mcy, progress;
+    double  red, green, blue, alpha, normalize = 0.0;
+    double* k = 0;
 
     QScopedArrayPointer<double> normal_kernel(new double[kernelWidth * kernelWidth]);
 
