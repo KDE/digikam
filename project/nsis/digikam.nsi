@@ -187,6 +187,10 @@ Section "digiKam" SecDigiKam
 	Pop $0 # return value/error/timeout
   nsExec::Exec 'taskkill /f /im klauncher.exe'
 	Pop $0 # return value/error/timeout
+  nsExec::Exec 'taskkill /f /im update-mime-database.exe'
+	Pop $0 # return value/error/timeout
+  nsExec::Exec 'taskkill /f /im kio_http_cache_cleaner.exe'
+	Pop $0 # return value/error/timeout
   nsExec::Exec 'taskkill /f /im digikam.exe'
 	Pop $0 # return value/error/timeout
   
@@ -197,9 +201,9 @@ Section "digiKam" SecDigiKam
 
   ;Copy only required directories
   ;The SetOutPath is required because otherwise NSIS will assume all files are
-  ;  in the same folder even though they are source from different folders
-  ;The \*.* is required because without it, NSIS would add every folder with
-  ;  the name 'bin' in all subdirectories of $INSTDIR
+  ;  in the same folder even though they are sourced from different folders
+  ;The \*.* is required for File /r because without it, NSIS would add every 
+  ;  folder with the name 'bin' in all subdirectories of ${KDE4PATH}
   SetOutPath "$INSTDIR\bin"
   File "${MSVCRuntimePath}\msvcp100.dll"
   File "${MSVCRuntimePath}\msvcr100.dll"
@@ -272,7 +276,7 @@ Section "digiKam" SecDigiKam
   ;WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "VersionMajor" "2"
   ;WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MY_PRODUCT}" "VersionMinor" "2"
 
-  ;Add start menu items
+  ;Add start menu items to All Users
   SetShellVarContext all
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     
@@ -304,6 +308,7 @@ Section "Uninstall"
   Delete /REBOOTOK "$INSTDIR\RELEASENOTES.txt"
   Delete /REBOOTOK "$INSTDIR\digikam-uninstaller.ico"
 
+  RMDir /r /REBOOTOK "$INSTDIR\kde4" ;remove any old installs
   RMDir /r /REBOOTOK "$INSTDIR\bin"
   RMDir /r /REBOOTOK "$INSTDIR\certs"
   ;RMDir /r /REBOOTOK "$INSTDIR\data"
@@ -339,7 +344,7 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\$StartMenuFolder\ScanGui.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\SystemSettings.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\The ${MY_PRODUCT} HomePage.url"
-  RMDir "$SMPROGRAMS\$StartMenuFolder"
+  RMDir /r "$SMPROGRAMS\$StartMenuFolder"
 
   ;Remove registry entries
   DeleteRegKey /ifempty HKLM "Software\${MY_PRODUCT}"
