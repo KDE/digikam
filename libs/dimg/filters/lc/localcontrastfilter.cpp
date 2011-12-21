@@ -436,7 +436,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
                 b = 1.0;
             }
 
-            img[pos]   = r;
+            img[pos]     = r;
             img[pos + 1] = g;
             img[pos + 2] = b;
 
