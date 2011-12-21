@@ -182,12 +182,22 @@ void ImageHistogram::calculate()
         return;
     }
 
+    // check if the calculation has been done before
+    if (d->histogram && d->valid)
+    {
+        emit calculationFinished(true);
+        return;
+    }
+
     register uint  i;
     int            max;
 
     emit calculationStarted();
 
-    d->histogram = new ImageHistogramPriv::double_packet[d->histoSegments];
+    if (!d->histogram)
+    {
+        d->histogram = new ImageHistogramPriv::double_packet[d->histoSegments];
+    }
 
     if (!d->histogram)
     {
