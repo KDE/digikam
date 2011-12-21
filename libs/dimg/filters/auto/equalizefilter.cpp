@@ -91,8 +91,8 @@ void EqualizeFilter::equalizeImage()
     }
 
     // Create an histogram of the reference image.
-    ImageHistogram* histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(),
-            m_refImage.height(), m_refImage.sixteenBit());
+    QScopedPointer<ImageHistogram> histogram(new ImageHistogram(m_refImage.bits(), m_refImage.width(),
+            m_refImage.height(), m_refImage.sixteenBit()));
     histogram->calculate();
 
     // Memory allocation.
@@ -101,7 +101,6 @@ void EqualizeFilter::equalizeImage()
 
     if ( !map || !equalize_map )
     {
-        delete histogram;
         kWarning() << ("Unable to allocate memory!");
         return;
     }
@@ -146,8 +145,6 @@ void EqualizeFilter::equalizeImage()
             equalize_map[i].alpha = (uint)(((256*histogram->getHistogramSegments() -1) *
                                             (map[i].alpha-low.alpha))/(high.alpha-low.alpha));
     }
-
-    delete histogram;
 
     uchar* data     = m_orgImage.bits();
     int w           = m_orgImage.width();
