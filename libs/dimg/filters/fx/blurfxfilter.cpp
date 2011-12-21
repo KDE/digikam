@@ -624,11 +624,11 @@ void BlurFXFilter::smartBlur(DImg* orgImage, DImg* destImage, int Radius, int St
     DColor color, radiusColor, radiusColorBlur;
     int offset, loopOffset;
 
-    uchar* pBlur    = new uchar[orgImage->numBytes()];
+    QScopedArrayPointer<uchar> pBlur(new uchar[orgImage->numBytes()]);
 
     // We need to copy our bits to blur bits
 
-    memcpy (pBlur, data, orgImage->numBytes());
+    memcpy (pBlur.data(), data, orgImage->numBytes());
 
     // we have reached the main loop
 
@@ -682,7 +682,7 @@ void BlurFXFilter::smartBlur(DImg* orgImage, DImg* destImage, int Radius, int St
             color.setBlue (sumB / nCount);
 
             // write color to destination
-            color.setPixel(pBlur + offset);
+            color.setPixel(pBlur.data() + offset);
         }
 
         // Update the progress bar in dialog.
@@ -722,7 +722,7 @@ void BlurFXFilter::smartBlur(DImg* orgImage, DImg* destImage, int Radius, int St
                                                radiusColor.red(), radiusColor.green(), radiusColor.blue(),
                                                StrengthRange))
                     {
-                        radiusColorBlur.setColor(pBlur + loopOffset, sixteenBit);
+                        radiusColorBlur.setColor(pBlur.data() + loopOffset, sixteenBit);
                         // finally we sum the bits
                         sumR += radiusColorBlur.red();
                         sumG += radiusColorBlur.green();
@@ -758,9 +758,6 @@ void BlurFXFilter::smartBlur(DImg* orgImage, DImg* destImage, int Radius, int St
             postProgress(progress);
         }
     }
-
-    // now, we must free memory
-    delete [] pBlur;
 }
 
 /* Function to apply the motionBlur effect backported from ImageProcessing version 2
@@ -812,8 +809,8 @@ void BlurFXFilter::motionBlur(DImg* orgImage, DImg* destImage, int Distance, dou
     nCount = Distance * 2 + 1;
 
     // we will alloc size and calc the possible results
-    int* lpXArray = new int[nCount];
-    int* lpYArray = new int[nCount];
+    QScopedArrayPointer<int> lpXArray(new int[nCount]);
+    QScopedArrayPointer<int> lpYArray(new int[nCount]);
 
     for (int i = 0; i < nCount; ++i)
     {
@@ -873,9 +870,6 @@ void BlurFXFilter::motionBlur(DImg* orgImage, DImg* destImage, int Distance, dou
             postProgress(progress);
         }
     }
-
-    delete [] lpXArray;
-    delete [] lpYArray;
 }
 
 /* Function to apply the softenerBlur effect
