@@ -655,12 +655,11 @@ int RefocusMatrix::dgesv(const int N, const int NRHS, double* A, const int lda, 
 {
     int result = 0;
     integer i_N = N, i_NHRS = NRHS, i_lda = lda, i_ldb = ldb, info;
-    integer* ipiv = new integer[N];
+    QScopedArrayPointer<integer> ipiv(new integer[N]);
 
     // Clapack call.
-    dgesv_(&i_N, &i_NHRS, A, &i_lda, ipiv, B, &i_ldb, &info);
+    dgesv_(&i_N, &i_NHRS, A, &i_lda, ipiv.data(), B, &i_ldb, &info);
 
-    delete [] ipiv;
     result = info;
     return (result);
 }
