@@ -269,7 +269,7 @@ void IconGroupItem::clear(bool update)
 
 void IconGroupItem::sort()
 {
-    IconGroupItemPriv::SortableItem* items = new IconGroupItemPriv::SortableItem[ count() ];
+    QScopedArrayPointer<IconGroupItemPriv::SortableItem> items(new IconGroupItemPriv::SortableItem[ count() ]);
 
     IconItem* item = d->firstItem;
     int i = 0;
@@ -279,7 +279,7 @@ void IconGroupItem::sort()
         items[ i++ ].item = item;
     }
 
-    qsort(items, count(), sizeof(IconGroupItemPriv::SortableItem), cmpItems);
+    qsort(items.data(), count(), sizeof(IconGroupItemPriv::SortableItem), cmpItems);
 
     IconItem* prev = 0;
     item           = 0;
@@ -312,8 +312,6 @@ void IconGroupItem::sort()
 
         prev = item;
     }
-
-    delete [] items;
 }
 
 bool IconGroupItem::move(int y)
