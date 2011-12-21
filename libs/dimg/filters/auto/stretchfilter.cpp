@@ -74,7 +74,6 @@ void StretchFilter::filterImage()
 void StretchFilter::stretchContrastImage()
 {
     struct double_packet high, low, intensity;
-    struct int_packet*   normalize_map;
     long long            number_pixels;
     register long        i;
     int                  progress;
@@ -87,30 +86,20 @@ void StretchFilter::stretchContrastImage()
     }
 
     // Create an histogram of the reference image.
-    ImageHistogram* histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(),
-            m_refImage.height(), m_refImage.sixteenBit());
-    if ( !histogram )
+    QScopedPointer<ImageHistogram> histogram(new ImageHistogram(m_refImage.bits(), m_refImage.width(),
+            m_refImage.height(), m_refImage.sixteenBit()));
+    if (histogram.isNull())
     {
-      kWarning() << ("Unable to allocate memory!");
-      return;
+        kWarning() << ("Unable to allocate memory!");
+        return;
     }
     histogram->calculate();
 
     // Memory allocation.
-    normalize_map = new int_packet[histogram->getHistogramSegments()];
+    QScopedArrayPointer<int_packet> normalize_map(new int_packet[histogram->getHistogramSegments()]);
 
-    if ( !normalize_map )
+    if (normalize_map.isNull())
     {
-        if (histogram)
-        {
-            delete histogram;
-        }
-
-        if (normalize_map)
-        {
-            delete [] normalize_map;
-        }
-
         kWarning() << ("Unable to allocate memory!");
         return;
     }
@@ -293,7 +282,7 @@ void StretchFilter::stretchContrastImage()
 
     // Stretch the histogram to create the normalized image mapping.
 
-    memset(normalize_map, 0, histogram->getHistogramSegments()*sizeof(struct int_packet));
+    memset(normalize_map.data(), 0, histogram->getHistogramSegments()*sizeof(struct int_packet));
 
     // TODO magic number 256
     for (i = 0 ; runningFlag() && (i <= (long)histogram->getMaxSegmentIndex()) ; ++i)
@@ -452,9 +441,6 @@ void StretchFilter::stretchContrastImage()
             }
         }
     }
-
-    delete histogram;
-    delete [] normalize_map;
 }
 
 FilterAction StretchFilter::filterAction()
