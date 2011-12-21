@@ -363,7 +363,7 @@ void IccManager::transformForDisplay(const IccProfile& profile)
     {
         // set appropriate outputColorSpace in RawLoadingSettings
         kError() << "Do not use transformForDisplay for uncalibrated data "
-                    "but let the RAW loader do the conversion to sRGB";
+                 "but let the RAW loader do the conversion to sRGB";
     }
 
     IccTransform trans = displayTransform(outputProfile);
@@ -417,7 +417,7 @@ IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
     {
         // set appropriate outputColorSpace in RawLoadingSettings
         kError() << "Do not use transformForDisplay for uncalibrated data "
-                    "but let the RAW loader do the conversion to sRGB";
+                 "but let the RAW loader do the conversion to sRGB";
     }
     else if (isMissingProfile())
     {
@@ -504,7 +504,7 @@ void IccManager::transformToSRGB()
     {
         // set appropriate outputColorSpace in RawLoadingSettings
         kError() << "Do not use transformForDisplay for uncalibrated data "
-                    "but let the RAW loader do the conversion to sRGB";
+                 "but let the RAW loader do the conversion to sRGB";
     }
     else if (isMissingProfile())
     {
@@ -597,7 +597,7 @@ void IccManager::transformForOutput(const IccProfile& prof)
     {
         // set appropriate outputColorSpace in RawLoadingSettings
         kError() << "Do not use transformForOutput for uncalibrated data "
-                    "but let the RAW loader do the conversion to sRGB";
+                 "but let the RAW loader do the conversion to sRGB";
     }
     else if (isMissingProfile())
     {

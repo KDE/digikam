@@ -155,7 +155,7 @@ bool IccSettings::monitorProfileFromSystem()
     {
         QMutexLocker lock(&d->mutex);
 
-        foreach (const IccProfile& profile, d->screenProfiles)
+        foreach(const IccProfile & profile, d->screenProfiles)
         {
             if (!profile.isNull())
             {
@@ -167,7 +167,7 @@ bool IccSettings::monitorProfileFromSystem()
     // Second, check all toplevel widgets
     QList<QWidget*> topLevels = qApp->topLevelWidgets();
 
-    foreach (QWidget* widget, topLevels)
+    foreach(QWidget * widget, topLevels)
     {
         if (!d->profileFromWindowSystem(widget).isNull())
         {
@@ -223,23 +223,23 @@ IccProfile IccSettings::IccSettingsPriv::profileFromWindowSystem(QWidget* widget
     unsigned long bytes_after;
     quint8*       str = 0;
 
-    static Atom icc_atom = XInternAtom( QX11Info::display(), atomName.toLatin1(), True );
+    static Atom icc_atom = XInternAtom(QX11Info::display(), atomName.toLatin1(), True);
 
-    if  ( icc_atom != None &&
-          XGetWindowProperty(QX11Info::display(),
-                             appRootWindow,
-                             icc_atom,
-                             0,
-                             INT_MAX,
-                             False,
-                             XA_CARDINAL,
-                             &type,
-                             &format,
-                             &nitems,
-                             &bytes_after,
-                             (unsigned char**)& str) == Success &&
-          nitems
-        )
+    if (icc_atom != None &&
+        XGetWindowProperty(QX11Info::display(),
+                           appRootWindow,
+                           icc_atom,
+                           0,
+                           INT_MAX,
+                           False,
+                           XA_CARDINAL,
+                           &type,
+                           &format,
+                           &nitems,
+                           &bytes_after,
+                           (unsigned char**)& str) == Success &&
+        nitems
+       )
     {
         QByteArray bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
@@ -250,12 +250,13 @@ IccProfile IccSettings::IccSettingsPriv::profileFromWindowSystem(QWidget* widget
 
         kDebug() << "Found X.org XICC monitor profile" << profile.description();
     }
-/*
-    else
-    {
-        kDebug() << "No X.org XICC profile installed for screen" << screenNumber;
-    }
-*/
+
+    /*
+        else
+        {
+            kDebug() << "No X.org XICC profile installed for screen" << screenNumber;
+        }
+    */
 
     // insert to cache even if null
     {
@@ -381,7 +382,7 @@ QList<IccProfile> IccSettings::IccSettingsPriv::scanDirectories(const QStringLis
     filters << "*.icc" << "*.icm";
     kDebug() << dirs;
 
-    foreach (const QString& dirPath, dirs)
+    foreach(const QString & dirPath, dirs)
     {
         QDir dir(dirPath);
 
@@ -403,7 +404,7 @@ void IccSettings::IccSettingsPriv::scanDirectory(const QString& path, const QStr
     infos << dir.entryInfoList(filter, QDir::Files | QDir::Readable);
     infos << dir.entryInfoList(QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot);
 
-    foreach (const QFileInfo& info, infos)
+    foreach(const QFileInfo & info, infos)
     {
         if (info.isFile())
         {
@@ -468,7 +469,7 @@ QList<IccProfile> IccSettings::workspaceProfiles()
 {
     QList<IccProfile> profiles;
 
-    foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
+    foreach(IccProfile profile, allProfiles())  // krazy:exclude=foreach
     {
         switch (profile.type())
         {
@@ -476,6 +477,7 @@ QList<IccProfile> IccSettings::workspaceProfiles()
             case IccProfile::ColorSpace:
                 profiles << profile;
                 break;
+
             default:
                 break;
         }
@@ -488,7 +490,7 @@ QList<IccProfile> IccSettings::displayProfiles()
 {
     QList<IccProfile> profiles;
 
-    foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
+    foreach(IccProfile profile, allProfiles())  // krazy:exclude=foreach
     {
         if (profile.type() == IccProfile::Display)
         {
@@ -503,7 +505,7 @@ QList<IccProfile> IccSettings::inputProfiles()
 {
     QList<IccProfile> profiles;
 
-    foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
+    foreach(IccProfile profile, allProfiles())  // krazy:exclude=foreach
     {
         switch (profile.type())
         {
@@ -511,6 +513,7 @@ QList<IccProfile> IccSettings::inputProfiles()
             case IccProfile::ColorSpace:
                 profiles << profile;
                 break;
+
             default:
                 break;
         }
@@ -523,7 +526,7 @@ QList<IccProfile> IccSettings::outputProfiles()
 {
     QList<IccProfile> profiles;
 
-    foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
+    foreach(IccProfile profile, allProfiles())  // krazy:exclude=foreach
     {
         if (profile.type() == IccProfile::Output)
         {
@@ -543,7 +546,7 @@ QList<IccProfile> IccSettings::profilesForDescription(const QString& description
         return profiles;
     }
 
-    foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
+    foreach(IccProfile profile, allProfiles())  // krazy:exclude=foreach
     {
         if (profile.description() == description)
         {

@@ -103,27 +103,27 @@ void LensFunFilter::filterImage()
 
     int modifyFlags = 0;
 
-    if ( d->iface->settings().filterDST )
+    if (d->iface->settings().filterDST)
     {
         modifyFlags |= LF_MODIFY_DISTORTION;
     }
 
-    if ( d->iface->settings().filterGEO )
+    if (d->iface->settings().filterGEO)
     {
         modifyFlags |= LF_MODIFY_GEOMETRY;
     }
 
-    if ( d->iface->settings().filterCCA )
+    if (d->iface->settings().filterCCA)
     {
         modifyFlags |= LF_MODIFY_TCA;
     }
 
-    if ( d->iface->settings().filterVIG )
+    if (d->iface->settings().filterVIG)
     {
         modifyFlags |= LF_MODIFY_VIGNETTING;
     }
 
-    if ( d->iface->settings().filterCCI )
+    if (d->iface->settings().filterCCI)
     {
         modifyFlags |= LF_MODIFY_CCI;
     }
@@ -155,13 +155,13 @@ void LensFunFilter::filterImage()
 
     // Calc necessary steps for progress bar
 
-    int steps = ( d->iface->settings().filterCCA                                   ) ? 1 : 0 +
-                ( d->iface->settings().filterVIG || d->iface->settings().filterCCI ) ? 1 : 0 +
-                ( d->iface->settings().filterDST || d->iface->settings().filterGEO ) ? 1 : 0;
+    int steps = (d->iface->settings().filterCCA) ? 1 : 0 +
+                (d->iface->settings().filterVIG || d->iface->settings().filterCCI) ? 1 : 0 +
+                (d->iface->settings().filterDST || d->iface->settings().filterGEO) ? 1 : 0;
 
     kDebug() << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps;
 
-    if ( steps < 1 )
+    if (steps < 1)
     {
         kDebug() << "No LensFun Modifier steps. There is nothing to process...";
         return;
@@ -177,11 +177,11 @@ void LensFunFilter::filterImage()
 
     // Stage 1: Chromatic Aberation Corrections
 
-    if ( d->iface->settings().filterCCA )
+    if (d->iface->settings().filterCCA)
     {
         m_orgImage.prepareSubPixelAccess(); // init lanczos kernel
 
-        for (unsigned int y=0; runningFlag() && (y < m_orgImage.height()); ++y)
+        for (unsigned int y = 0; runningFlag() && (y < m_orgImage.height()); ++y)
         {
             if (d->modifier->ApplySubpixelDistortion(0.0, y, m_orgImage.width(), 1, pos))
             {
@@ -191,9 +191,9 @@ void LensFunFilter::filterImage()
                 {
                     DColor destPixel(0, 0, 0, 0xFFFF, m_destImage.sixteenBit());
 
-                    destPixel.setRed  (m_orgImage.getSubPixelColorFast(src[0], src[1]).red()   );
-                    destPixel.setGreen(m_orgImage.getSubPixelColorFast(src[2], src[3]).green() );
-                    destPixel.setBlue (m_orgImage.getSubPixelColorFast(src[4], src[5]).blue()  );
+                    destPixel.setRed(m_orgImage.getSubPixelColorFast(src[0], src[1]).red());
+                    destPixel.setGreen(m_orgImage.getSubPixelColorFast(src[2], src[3]).green());
+                    destPixel.setBlue(m_orgImage.getSubPixelColorFast(src[4], src[5]).blue());
 
                     m_destImage.setPixelColor(x, y, destPixel);
                     src += 2 * 3;
@@ -205,9 +205,9 @@ void LensFunFilter::filterImage()
             // Update progress bar in dialog.
             int progress = (int)(((double)y * 100.0) / m_orgImage.height());
 
-            if (progress%5 == 0)
+            if (progress % 5 == 0)
             {
-                postProgress(progress/steps);
+                postProgress(progress / steps);
             }
         }
 
@@ -216,13 +216,13 @@ void LensFunFilter::filterImage()
 
     // Stage 2: Color Corrections: Vignetting and Color Contribution Index
 
-    if ( d->iface->settings().filterVIG || d->iface->settings().filterCCI )
+    if (d->iface->settings().filterVIG || d->iface->settings().filterCCI)
     {
         uchar* data   = m_destImage.bits();
         loop          = 0;
         double offset = 0.0;
 
-        if ( steps == 3 )
+        if (steps == 3)
         {
             offset = 33.3;
         }
@@ -231,7 +231,7 @@ void LensFunFilter::filterImage()
             offset = 50.0;
         }
 
-        for (unsigned int y=0; runningFlag() && (y < m_destImage.height()); ++y)
+        for (unsigned int y = 0; runningFlag() && (y < m_destImage.height()); ++y)
         {
             if (d->modifier->ApplyColorModification(data, 0.0, y, m_destImage.width(),
                                                     1, m_destImage.bytesDepth(), 0))
@@ -243,9 +243,9 @@ void LensFunFilter::filterImage()
             // Update progress bar in dialog.
             int progress = (int)(((double)y * 100.0) / m_destImage.height());
 
-            if (progress%5 == 0)
+            if (progress % 5 == 0)
             {
-                postProgress(progress/steps + offset);
+                postProgress(progress / steps + offset);
             }
         }
 
@@ -254,7 +254,7 @@ void LensFunFilter::filterImage()
 
     // Stage 3: Distortion and Geometry Corrections
 
-    if ( d->iface->settings().filterDST || d->iface->settings().filterGEO )
+    if (d->iface->settings().filterDST || d->iface->settings().filterGEO)
     {
         loop = 0;
 
@@ -262,7 +262,7 @@ void LensFunFilter::filterImage()
         DImg tempImage(m_destImage.width(), m_destImage.height(), m_destImage.sixteenBit(), m_destImage.hasAlpha());
         m_destImage.prepareSubPixelAccess(); // init lanczos kernel
 
-        for (unsigned long y=0; runningFlag() && (y < tempImage.height()); ++y)
+        for (unsigned long y = 0; runningFlag() && (y < tempImage.height()); ++y)
         {
             if (d->modifier->ApplyGeometryDistortion(0.0, y, tempImage.width(), 1, pos))
             {
@@ -280,9 +280,9 @@ void LensFunFilter::filterImage()
             // Update progress bar in dialog.
             int progress = (int)(((double)y * 100.0) / tempImage.height());
 
-            if (progress%5 == 0)
+            if (progress % 5 == 0)
             {
-                postProgress(progress/steps + 33.3*(steps-1));
+                postProgress(progress / steps + 33.3 * (steps - 1));
             }
         }
 

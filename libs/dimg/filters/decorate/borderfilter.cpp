@@ -200,17 +200,17 @@ void BorderFilter::solid(DImg& src, DImg& dest, const DColor& fg, int borderWidt
 {
     if (d->settings.orgWidth > d->settings.orgHeight)
     {
-        int height = src.height() + borderWidth*2;
-        dest       = DImg((int)(height*d->orgRatio), height, src.sixteenBit(), src.hasAlpha());
+        int height = src.height() + borderWidth * 2;
+        dest       = DImg((int)(height * d->orgRatio), height, src.sixteenBit(), src.hasAlpha());
         dest.fill(fg);
-        dest.bitBltImage(&src, (dest.width()-src.width())/2, borderWidth);
+        dest.bitBltImage(&src, (dest.width() - src.width()) / 2, borderWidth);
     }
     else
     {
-        int width = src.width() + borderWidth*2;
-        dest      = DImg(width, (int)(width/d->orgRatio), src.sixteenBit(), src.hasAlpha());
+        int width = src.width() + borderWidth * 2;
+        dest      = DImg(width, (int)(width / d->orgRatio), src.sixteenBit(), src.hasAlpha());
         dest.fill(fg);
-        dest.bitBltImage(&src, borderWidth, (dest.height()-src.height())/2);
+        dest.bitBltImage(&src, borderWidth, (dest.height() - src.height()) / 2);
     }
 }
 
@@ -229,13 +229,13 @@ void BorderFilter::bevel(DImg& src, DImg& dest, const DColor& topColor,
 
     if (d->settings.orgWidth > d->settings.orgHeight)
     {
-        height = src.height() + borderWidth*2;
-        width  = (int)(height*d->orgRatio);
+        height = src.height() + borderWidth * 2;
+        width  = (int)(height * d->orgRatio);
     }
     else
     {
-        width  = src.width() + borderWidth*2;
-        height = (int)(width/d->orgRatio);
+        width  = src.width() + borderWidth * 2;
+        height = (int)(width / d->orgRatio);
     }
 
     dest = DImg(width, height, src.sixteenBit(), src.hasAlpha());
@@ -320,29 +320,29 @@ void BorderFilter::pattern(DImg& src, DImg& dest, int borderWidth,
 
     if (d->settings.orgWidth > d->settings.orgHeight)
     {
-        height = tmp.height() + borderWidth*2;
-        width  = (int)(height*d->orgRatio);
+        height = tmp.height() + borderWidth * 2;
+        width  = (int)(height * d->orgRatio);
     }
     else
     {
-        width  = tmp.width() + borderWidth*2;
-        height = (int)(width/d->orgRatio);
+        width  = tmp.width() + borderWidth * 2;
+        height = (int)(width / d->orgRatio);
     }
 
     DImg tmp2(width, height, tmp.sixteenBit(), tmp.hasAlpha());
     kDebug() << "Border File:" << d->settings.borderPath;
     DImg border(d->settings.borderPath);
 
-    if ( border.isNull() )
+    if (border.isNull())
     {
         return;
     }
 
     border.convertToDepthOfImage(&tmp2);
 
-    for (int x = 0 ; x < width ; x+=border.width())
+    for (int x = 0 ; x < width ; x += border.width())
     {
-        for (int y = 0 ; y < height ; y+=border.height())
+        for (int y = 0 ; y < height ; y += border.height())
         {
             tmp2.bitBltImage(&border, x, y);
         }
@@ -353,11 +353,11 @@ void BorderFilter::pattern(DImg& src, DImg& dest, int borderWidth,
     // Merge both images to one.
     if (d->settings.orgWidth > d->settings.orgHeight)
     {
-        dest.bitBltImage(&tmp, (dest.width()-tmp.width())/2, borderWidth);
+        dest.bitBltImage(&tmp, (dest.width() - tmp.width()) / 2, borderWidth);
     }
     else
     {
-        dest.bitBltImage(&tmp, borderWidth, (dest.height()-tmp.height())/2);
+        dest.bitBltImage(&tmp, borderWidth, (dest.height() - tmp.height()) / 2);
     }
 }
 
@@ -366,7 +366,7 @@ void BorderFilter::pattern(DImg& src, DImg& dest, int borderWidth,
 
 void BorderFilter::solid2(DImg& src, DImg& dest, const DColor& fg, int borderWidth)
 {
-    dest = DImg(src.width() + borderWidth*2, src.height() + borderWidth*2,
+    dest = DImg(src.width() + borderWidth * 2, src.height() + borderWidth * 2,
                 src.sixteenBit(), src.hasAlpha());
     dest.fill(fg);
     dest.bitBltImage(&src, borderWidth, borderWidth);
@@ -386,15 +386,15 @@ void BorderFilter::bevel2(DImg& src, DImg& dest, const DColor& topColor,
     int x, y;
     int wc;
 
-    dest = DImg(src.width() + borderWidth*2,
-                src.height() + borderWidth*2,
+    dest = DImg(src.width() + borderWidth * 2,
+                src.height() + borderWidth * 2,
                 src.sixteenBit(), src.hasAlpha());
 
     // top
 
-    for (y=0, wc = (int)dest.width()-1; y < borderWidth; ++y, --wc)
+    for (y = 0, wc = (int)dest.width() - 1; y < borderWidth; ++y, --wc)
     {
-        for (x=0; x < wc; ++x)
+        for (x = 0; x < wc; ++x)
         {
             dest.setPixelColor(x, y, topColor);
         }
@@ -407,14 +407,14 @@ void BorderFilter::bevel2(DImg& src, DImg& dest, const DColor& topColor,
 
     // left and right
 
-    for (; y < (int)dest.height()-borderWidth; ++y)
+    for (; y < (int)dest.height() - borderWidth; ++y)
     {
-        for (x=0; x < borderWidth; ++x)
+        for (x = 0; x < borderWidth; ++x)
         {
             dest.setPixelColor(x, y, topColor);
         }
 
-        for (x = (int)dest.width()-1; x > (int)dest.width()-borderWidth-1; --x)
+        for (x = (int)dest.width() - 1; x > (int)dest.width() - borderWidth - 1; --x)
         {
             dest.setPixelColor(x, y, btmColor);
         }
@@ -424,7 +424,7 @@ void BorderFilter::bevel2(DImg& src, DImg& dest, const DColor& topColor,
 
     for (wc = borderWidth; y < (int)dest.height(); ++y, --wc)
     {
-        for (x=0; x < wc; ++x)
+        for (x = 0; x < wc; ++x)
         {
             dest.setPixelColor(x, y, topColor);
         }
@@ -444,13 +444,13 @@ void BorderFilter::pattern2(DImg& src, DImg& dest, int borderWidth,
 {
     // Border tile.
 
-    int w = d->settings.orgWidth + borderWidth*2;
-    int h = d->settings.orgHeight + borderWidth*2;
+    int w = d->settings.orgWidth + borderWidth * 2;
+    int h = d->settings.orgHeight + borderWidth * 2;
 
     kDebug() << "Border File:" << d->settings.borderPath;
     DImg border(d->settings.borderPath);
 
-    if ( border.isNull() )
+    if (border.isNull())
     {
         return;
     }
@@ -458,17 +458,17 @@ void BorderFilter::pattern2(DImg& src, DImg& dest, int borderWidth,
     DImg borderImg(w, h, src.sixteenBit(), src.hasAlpha());
     border.convertToDepthOfImage(&borderImg);
 
-    for (int x = 0 ; x < w ; x+=border.width())
+    for (int x = 0 ; x < w ; x += border.width())
     {
-        for (int y = 0 ; y < h ; y+=border.height())
+        for (int y = 0 ; y < h ; y += border.height())
         {
             borderImg.bitBltImage(&border, x, y);
         }
     }
 
     // First line around the pattern tile.
-    DImg tmp = borderImg.smoothScale(src.width() + borderWidth*2,
-                                     src.height() + borderWidth*2 );
+    DImg tmp = borderImg.smoothScale(src.width() + borderWidth * 2,
+                                     src.height() + borderWidth * 2);
 
     solid2(tmp, dest, firstColor, firstWidth);
 

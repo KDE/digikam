@@ -208,29 +208,29 @@ void LensFunSettings::writeSettings(KConfigGroup& group)
     LensFunContainer prm;
     assignFilterSettings(prm);
 
-    if ( d->filterCCA->isEnabled() )
+    if (d->filterCCA->isEnabled())
     {
-        group.writeEntry(d->configCCAEntry,        (prm.filterCCA));
+        group.writeEntry(d->configCCAEntry, (prm.filterCCA));
     }
 
-    if ( d->filterVIG->isEnabled() )
+    if (d->filterVIG->isEnabled())
     {
         group.writeEntry(d->configVignettingEntry, (prm.filterVIG));
     }
 
-    if ( d->filterCCI->isEnabled() )
+    if (d->filterCCI->isEnabled())
     {
-        group.writeEntry(d->configCCIEntry,        (prm.filterCCI));
+        group.writeEntry(d->configCCIEntry, (prm.filterCCI));
     }
 
-    if ( d->filterDST->isEnabled() )
+    if (d->filterDST->isEnabled())
     {
         group.writeEntry(d->configDistortionEntry, (prm.filterDST));
     }
 
-    if ( d->filterGEO->isEnabled() )
+    if (d->filterGEO->isEnabled())
     {
-        group.writeEntry(d->configGeometryEntry,   (prm.filterGEO));
+        group.writeEntry(d->configGeometryEntry, (prm.filterGEO));
     }
 }
 

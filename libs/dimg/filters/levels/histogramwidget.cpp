@@ -217,7 +217,7 @@ void HistogramWidget::updateData(uchar* i_data, uint i_w, uint i_h,
     // Do not using ImageHistogram::getHistogramSegments()
     // method here because histogram hasn't yet been computed.
     d->range = d->sixteenBits ? MAX_SEGMENT_16BIT : MAX_SEGMENT_8BIT;
-    emit signalMaximumValueChanged( d->range );
+    emit signalMaximumValueChanged(d->range);
 
     if (i_data || (!i_data && !s_data))
     {
@@ -250,6 +250,7 @@ void HistogramWidget::updateData(uchar* i_data, uint i_w, uint i_h,
     }
 
     ImageHistogram* histo = currentHistogram();
+
     if (histo)
     {
         histo->calculateInThread();
@@ -286,6 +287,7 @@ void HistogramWidget::setRenderingType(HistogramRenderingType type)
         d->renderingType = type;
 
         ImageHistogram* nowUsedHistogram = currentHistogram();
+
         if (!nowUsedHistogram)
         {
             kWarning() << "Current histogram is null";
@@ -342,7 +344,7 @@ void HistogramWidget::startWaitingAnimation()
         d->animation->start();
     }
 
-    setCursor( Qt::WaitCursor );
+    setCursor(Qt::WaitCursor);
 }
 
 void HistogramWidget::stopWaitingAnimation()
@@ -366,16 +368,19 @@ void HistogramWidget::setState(int state)
         {
             break;
         }
+
         case HistogramWidget::HistogramWidgetPriv::HistogramDataLoading:
         {
             startWaitingAnimation();
             break;
         }
+
         case HistogramWidget::HistogramWidgetPriv::HistogramStarted:
         {
             startWaitingAnimation();
             break;
         }
+
         case HistogramWidget::HistogramWidgetPriv::HistogramCompleted:
         {
             notifyValuesChanged();
@@ -385,6 +390,7 @@ void HistogramWidget::setState(int state)
             update();
             break;
         }
+
         case HistogramWidget::HistogramWidgetPriv::HistogramFailed:
         {
             emit signalHistogramComputationFailed();
@@ -464,7 +470,9 @@ int HistogramWidget::animationState() const
 void HistogramWidget::setAnimationState(int animationState)
 {
     if (d->animationState == animationState)
+    {
         return;
+    }
 
     d->animationState = animationState;
     update();
@@ -475,16 +483,16 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     // Widget is disabled, not initialized,
     // or loading, but no message shall be drawn:
     // Drawing grayed frame.
-    if ( !isEnabled()                                                    ||
-         d->state == HistogramWidget::HistogramWidgetPriv::HistogramNone ||
-         (!d->showProgress && (d->state == HistogramWidget::HistogramWidgetPriv::HistogramStarted || 
-                               d->state == HistogramWidget::HistogramWidgetPriv::HistogramDataLoading))
+    if (!isEnabled()                                                    ||
+        d->state == HistogramWidget::HistogramWidgetPriv::HistogramNone ||
+        (!d->showProgress && (d->state == HistogramWidget::HistogramWidgetPriv::HistogramStarted ||
+                              d->state == HistogramWidget::HistogramWidgetPriv::HistogramDataLoading))
        )
     {
         QPainter p1(this);
         p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Disabled, QPalette::Background));
         p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-        p1.drawRect(0, 0, width()-1, height()-1);
+        p1.drawRect(0, 0, width() - 1, height() - 1);
         QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
         pen.setStyle(Qt::SolidLine);
         pen.setWidth(1);
@@ -495,9 +503,9 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
         return;
     }
-    else if (  d->showProgress &&
-               (d->state == HistogramWidget::HistogramWidgetPriv::HistogramStarted ||
-                d->state == HistogramWidget::HistogramWidgetPriv::HistogramDataLoading)
+    else if (d->showProgress &&
+             (d->state == HistogramWidget::HistogramWidgetPriv::HistogramStarted ||
+              d->state == HistogramWidget::HistogramWidgetPriv::HistogramDataLoading)
             )
     {
         // Image data is loading or histogram is being computed, we draw a message.
@@ -511,8 +519,8 @@ void HistogramWidget::paintEvent(QPaintEvent*)
         QPainter p1(this);
         p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
         p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-        p1.drawRect(0, 0, width()-1, height()-1);
-        p1.drawPixmap(width()/2 - anim.width() /2, anim.height(), anim);
+        p1.drawRect(0, 0, width() - 1, height() - 1);
+        p1.drawPixmap(width() / 2 - anim.width() / 2, anim.height(), anim);
         p1.setPen(palette().color(QPalette::Active, QPalette::Text));
 
         if (d->state == HistogramWidget::HistogramWidgetPriv::HistogramDataLoading)
@@ -535,7 +543,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
         QPainter p1(this);
         p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
         p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-        p1.drawRect(0, 0, width()-1, height()-1);
+        p1.drawRect(0, 0, width() - 1, height() - 1);
         p1.setPen(palette().color(QPalette::Active, QPalette::Text));
         p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
                     i18n("Histogram\ncalculation\nfailed."));
@@ -595,7 +603,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
         tipText = "<qt><table cellspacing=0 cellpadding=0>";
 
         tipText += cnt.cellBeg + i18n("Mean:") + cnt.cellMid;
-        double mean = histogram->getMean(d->channelType, 0, histogram->getHistogramSegments()-1);
+        double mean = histogram->getMean(d->channelType, 0, histogram->getHistogramSegments() - 1);
         tipText += value.setNum(mean, 'f', 1) + cnt.cellEnd;
 
         tipText += cnt.cellBeg + i18n("Pixels:") + cnt.cellMid;
@@ -603,15 +611,15 @@ void HistogramWidget::paintEvent(QPaintEvent*)
         tipText += value.setNum((float)pixels, 'f', 0) + cnt.cellEnd;
 
         tipText += cnt.cellBeg + i18n("Std dev.:") + cnt.cellMid;
-        double stddev = histogram->getStdDev(d->channelType, 0, histogram->getHistogramSegments()-1);
+        double stddev = histogram->getStdDev(d->channelType, 0, histogram->getHistogramSegments() - 1);
         tipText += value.setNum(stddev, 'f', 1) + cnt.cellEnd;
 
         tipText += cnt.cellBeg + i18n("Count:") + cnt.cellMid;
-        double counts = histogram->getCount(d->channelType, 0, histogram->getHistogramSegments()-1);
+        double counts = histogram->getCount(d->channelType, 0, histogram->getHistogramSegments() - 1);
         tipText += value.setNum((float)counts, 'f', 0) + cnt.cellEnd;
 
         tipText += cnt.cellBeg + i18n("Median:") + cnt.cellMid;
-        double median = histogram->getMedian(d->channelType, 0, histogram->getHistogramSegments()-1);
+        double median = histogram->getMedian(d->channelType, 0, histogram->getHistogramSegments() - 1);
         tipText += value.setNum(median, 'f', 1) + cnt.cellEnd;
 
         tipText += cnt.cellBeg + i18n("Percent:") + cnt.cellMid;
@@ -626,7 +634,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
 void HistogramWidget::mousePressEvent(QMouseEvent* e)
 {
-    if ( d->selectMode == true && d->state == HistogramWidget::HistogramWidgetPriv::HistogramCompleted )
+    if (d->selectMode == true && d->state == HistogramWidget::HistogramWidgetPriv::HistogramCompleted)
     {
         if (!d->inSelected)
         {
@@ -643,7 +651,7 @@ void HistogramWidget::mousePressEvent(QMouseEvent* e)
 
 void HistogramWidget::mouseReleaseEvent(QMouseEvent*)
 {
-    if ( d->selectMode == true  && d->state == HistogramWidget::HistogramWidgetPriv::HistogramCompleted )
+    if (d->selectMode == true  && d->state == HistogramWidget::HistogramWidgetPriv::HistogramCompleted)
     {
         d->inSelected = false;
 
@@ -660,9 +668,9 @@ void HistogramWidget::mouseReleaseEvent(QMouseEvent*)
 
 void HistogramWidget::mouseMoveEvent(QMouseEvent* e)
 {
-    if ( d->selectMode == true && d->state == HistogramWidget::HistogramWidgetPriv::HistogramCompleted )
+    if (d->selectMode == true && d->state == HistogramWidget::HistogramWidgetPriv::HistogramCompleted)
     {
-        setCursor( Qt::CrossCursor );
+        setCursor(Qt::CrossCursor);
 
         if (d->inSelected)
         {
@@ -687,12 +695,12 @@ void HistogramWidget::mouseMoveEvent(QMouseEvent* e)
 
 void HistogramWidget::notifyValuesChanged()
 {
-    emit signalIntervalChanged( (int)(d->xmin * d->range), d->xmax == 0.0 ? d->range : (int)(d->xmax * d->range) );
+    emit signalIntervalChanged((int)(d->xmin * d->range), d->xmax == 0.0 ? d->range : (int)(d->xmax * d->range));
 }
 
 void HistogramWidget::slotMinValueChanged(int min)
 {
-    if ( d->selectMode == true && d->state == HistogramWidget::HistogramWidgetPriv::HistogramCompleted )
+    if (d->selectMode == true && d->state == HistogramWidget::HistogramWidgetPriv::HistogramCompleted)
     {
         if (min == 0 && d->xmax == 1.0)
         {
@@ -703,7 +711,7 @@ void HistogramWidget::slotMinValueChanged(int min)
 
         if (min >= 0 && min < d->range)
         {
-            d->xmin = ((double)min)/d->range;
+            d->xmin = ((double)min) / d->range;
         }
 
         update();
@@ -712,7 +720,7 @@ void HistogramWidget::slotMinValueChanged(int min)
 
 void HistogramWidget::slotMaxValueChanged(int max)
 {
-    if ( d->selectMode == true && d->state == HistogramWidget::HistogramWidgetPriv::HistogramCompleted )
+    if (d->selectMode == true && d->state == HistogramWidget::HistogramWidgetPriv::HistogramCompleted)
     {
         if (d->xmin == 0.0 && max == d->range)
         {
@@ -722,7 +730,7 @@ void HistogramWidget::slotMaxValueChanged(int max)
         }
         else if (max > 0 && max <= d->range)
         {
-            d->xmax = ((double)max)/d->range;
+            d->xmax = ((double)max) / d->range;
         }
 
         update();

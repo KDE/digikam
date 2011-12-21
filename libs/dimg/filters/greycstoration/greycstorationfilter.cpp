@@ -108,11 +108,11 @@ GreycstorationFilter::GreycstorationFilter(QObject* parent)
 }
 
 GreycstorationFilter::GreycstorationFilter(DImg* orgImage,
-        const GreycstorationContainer& settings,
-        int mode,
-        int newWidth, int newHeight,
-        const QImage& inPaintingMask,
-        QObject* parent)
+                                           const GreycstorationContainer& settings,
+                                           int mode,
+                                           int newWidth, int newHeight,
+                                           const QImage& inPaintingMask,
+                                           QObject* parent)
     : DImgThreadedFilter(parent),
       d(new GreycstorationFilterPriv)
 {
@@ -163,7 +163,7 @@ void GreycstorationFilter::setup()
 
     if (m_orgImage.sixteenBit())   // 16 bits image.
     {
-        d->gfact = 1.0/256.0;
+        d->gfact = 1.0 / 256.0;
     }
 
     if (d->mode == Resize || d->mode == SimpleResize)
@@ -374,7 +374,7 @@ void GreycstorationFilter::inpainting()
         return;
     }
 
-    for (uint iter=0 ; runningFlag() && (iter < d->settings.nbIter) ; ++iter)
+    for (uint iter = 0 ; runningFlag() && (iter < d->settings.nbIter) ; ++iter)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
@@ -456,8 +456,8 @@ void GreycstorationFilter::simpleResize()
     int w = m_destImage.width();
     int h = m_destImage.height();
 
-    while (d->img.dimx() > 2*w &&
-           d->img.dimy() > 2*h)
+    while (d->img.dimx() > 2 * w &&
+           d->img.dimy() > 2 * h)
     {
         d->img.resize_halfXY();
     }
@@ -479,7 +479,7 @@ void GreycstorationFilter::iterationLoop(uint iter)
             // Update the progress bar in dialog. We simply computes the global
             // progression index (including all iterations).
 
-            p = (uint)((iter*100 + d->img.greycstoration_progress())/d->settings.nbIter);
+            p = (uint)((iter * 100 + d->img.greycstoration_progress()) / d->settings.nbIter);
 
             if (p > mp)
             {
@@ -523,8 +523,8 @@ void GreycstorationFilter::readParameters(const Digikam::FilterAction& action)
     d->settings.amplitude = action.parameter("amplitude").toFloat();
     d->settings.anisotropy = action.parameter("anisotropy").toFloat();
     d->settings.btile = action.parameter("btile").toInt();
-    d->settings.da= action.parameter("da").toFloat();
-    d->settings.dl= action.parameter("dl").toFloat();
+    d->settings.da = action.parameter("da").toFloat();
+    d->settings.dl = action.parameter("dl").toFloat();
     d->settings.fastApprox = action.parameter("fastApprox").toBool();
     d->settings.gaussPrec = action.parameter("gaussPrec").toFloat();
     d->settings.interp = action.parameter("interp").toFloat();

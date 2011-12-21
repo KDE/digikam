@@ -52,7 +52,7 @@ WBContainer::WBContainer()
     dark        = 0.5;
     gamma       = 1.0;
     saturation  = 1.0;
-    
+
     maxr        = -1;
     maxg        = -1;
     maxb        = -1;
@@ -180,15 +180,16 @@ void WBFilter::filterImage()
 
     setLUTv();
     setRGBmult();
-    
+
     // See B.K.O #259223 : scaling down the rgb multipiers just enough to prevent clipping
     if (m_settings.maxr == -1 && m_settings.maxg == -1 && m_settings.maxb == -1)
     {
-        findChanelsMax((const DImg*) &m_orgImage, 
-                       m_settings.maxr, 
-                       m_settings.maxg, 
+        findChanelsMax((const DImg*) &m_orgImage,
+                       m_settings.maxr,
+                       m_settings.maxg,
                        m_settings.maxb);
     }
+
     preventAutoExposure(m_settings.maxr, m_settings.maxg, m_settings.maxb);
 
     // Apply White balance adjustments.
@@ -214,12 +215,12 @@ void WBFilter::autoWBAdjustementFromColor(const QColor& tc, double& temperature,
     mBR   = (double)tc.blue() / (double)tc.red();
     green = 1.0;
 
-    for (temperature = (tmin+tmax)/2; tmax-tmin > 10; temperature = (tmin+tmax)/2)
+    for (temperature = (tmin + tmax) / 2; tmax - tmin > 10; temperature = (tmin + tmax) / 2)
     {
         kDebug() << "Intermediate Temperature (K):" << temperature;
         setRGBmult(temperature, green, mr, mg, mb);
 
-        if (mr/mb > mBR)
+        if (mr / mb > mBR)
         {
             tmax = temperature;
         }
@@ -263,7 +264,7 @@ void WBFilter::autoExposureAdjustement(const DImg* img, double& black, double& e
         sum += histogram->getValue(LuminosityChannel, i);
     }
 
-    expo = -log((float)(i+1) / rgbMax) / log(2);
+    expo = -log((float)(i + 1) / rgbMax) / log(2);
     kDebug() << "White level at:" << i;
 
     for (i = 1, sum = 0; (i < (int)rgbMax) && (sum < stop); ++i)
@@ -284,7 +285,7 @@ void WBFilter::setRGBmult(double& temperature, double& green, float& mr, float& 
     float  mi;
     double xD, yD, X, Y, Z;
 
-    if ( temperature > 12000 )
+    if (temperature > 12000)
     {
         temperature = 12000.0;
     }
@@ -302,8 +303,8 @@ void WBFilter::setRGBmult(double& temperature, double& green, float& mr, float& 
     const double XYZ_to_RGB[3][3] =
     {
         { 3.24071,  -0.969258,  0.0556352 },
-        {-1.53726,  1.87599,    -0.203996 },
-        {-0.498571, 0.0415557,  1.05707   }
+        { -1.53726,  1.87599,    -0.203996 },
+        { -0.498571, 0.0415557,  1.05707   }
     };
 
     // Fit for CIE Daylight illuminant
@@ -326,14 +327,14 @@ void WBFilter::setRGBmult(double& temperature, double& green, float& mr, float& 
              + 0.24748e3 / temperature + 0.237040;
     }
 
-    yD = -3*xD*xD + 2.87*xD - 0.275;
+    yD = -3 * xD * xD + 2.87 * xD - 0.275;
 
-    X  = xD/yD;
+    X  = xD / yD;
     Y  = 1;
-    Z  = (1-xD-yD)/yD;
-    mr = X*XYZ_to_RGB[0][0] + Y*XYZ_to_RGB[1][0] + Z*XYZ_to_RGB[2][0];
-    mg = X*XYZ_to_RGB[0][1] + Y*XYZ_to_RGB[1][1] + Z*XYZ_to_RGB[2][1];
-    mb = X*XYZ_to_RGB[0][2] + Y*XYZ_to_RGB[1][2] + Z*XYZ_to_RGB[2][2];
+    Z  = (1 - xD - yD) / yD;
+    mr = X * XYZ_to_RGB[0][0] + Y * XYZ_to_RGB[1][0] + Z * XYZ_to_RGB[2][0];
+    mg = X * XYZ_to_RGB[0][1] + Y * XYZ_to_RGB[1][1] + Z * XYZ_to_RGB[2][1];
+    mb = X * XYZ_to_RGB[0][2] + Y * XYZ_to_RGB[1][2] + Z * XYZ_to_RGB[2][2];
     /* End of the code picked to ufraw
     */
 
@@ -362,7 +363,7 @@ void WBFilter::findChanelsMax(const DImg* img, int& maxr, int& maxg, int& maxb)
     int width         = img->width();
     int height        = img->height();
     bool sixteenBit   = img->sixteenBit();
-    
+
     maxr      = 0;
     maxg      = 0;
     maxb      = 0;
@@ -375,11 +376,20 @@ void WBFilter::findChanelsMax(const DImg* img, int& maxr, int& maxg, int& maxb)
         for (uint j = 0 ; j < size; ++j)
         {
             if (maxb < data[0])
+            {
                 maxb = data[0];
+            }
+
             if (maxg < data[1])
+            {
                 maxg = data[1];
+            }
+
             if (maxr < data[2])
+            {
                 maxr = data[2];
+            }
+
             data += 4;
         }
     }
@@ -390,11 +400,20 @@ void WBFilter::findChanelsMax(const DImg* img, int& maxr, int& maxg, int& maxb)
         for (uint j = 0 ; j < size; ++j)
         {
             if (maxb < ptr[0])
+            {
                 maxb = ptr[0];
+            }
+
             if (maxg < ptr[1])
+            {
                 maxg = ptr[1];
+            }
+
             if (maxr < ptr[2])
+            {
                 maxr = ptr[2];
+            }
+
             ptr += 4;
         }
     }
@@ -409,9 +428,9 @@ void WBFilter::preventAutoExposure(int maxr, int maxg, int maxb)
     uint max  = qMax(maxr, qMax(maxb, maxg));
 
     // Scale wb coefficients down if one of them is overexposed.
-    if (max > d->rgbMax-1)
+    if (max > d->rgbMax - 1)
     {
-        double adjust  = (double)(d->rgbMax-1) / max;
+        double adjust  = (double)(d->rgbMax - 1) / max;
         d->mb         *= adjust;
         d->mg         *= adjust;
         d->mr         *= adjust;
@@ -443,17 +462,17 @@ void WBFilter::setLUTv()
 
     if (m_settings.gamma >= 1.0)
     {
-        gamma = 0.335*(2.0-m_settings.gamma) + 0.665;
+        gamma = 0.335 * (2.0 - m_settings.gamma) + 0.665;
     }
     else
     {
-        gamma = 1.8*(2.0-m_settings.gamma) - 0.8;
+        gamma = 1.8 * (2.0 - m_settings.gamma) - 0.8;
     }
 
     for (int i = 1; i < (int)d->rgbMax; ++i)
     {
-        float x      = (float)(i - d->BP)/(d->WP - d->BP);
-        d->curve[i]  = (i < d->BP) ? 0 : (d->rgbMax-1) * pow((double)x, gamma);
+        float x      = (float)(i - d->BP) / (d->WP - d->BP);
+        d->curve[i]  = (i < d->BP) ? 0 : (d->rgbMax - 1) * pow((double)x, gamma);
         d->curve[i] *= (1 - m_settings.dark * exp(-x * x / 0.002));
         d->curve[i] /= (float)i;
     }
@@ -461,7 +480,7 @@ void WBFilter::setLUTv()
 
 void WBFilter::adjustWhiteBalance(uchar* data, int width, int height, bool sixteenBit)
 {
-    uint size = (uint)(width*height);
+    uint size = (uint)(width * height);
     uint i, j;
     int  progress;
 
@@ -486,7 +505,7 @@ void WBFilter::adjustWhiteBalance(uchar* data, int width, int height, bool sixte
 
             if (d->clipSat)
             {
-                v = qMin(v, (int)d->rgbMax-1);
+                v = qMin(v, (int)d->rgbMax - 1);
             }
 
             i = v;
@@ -498,9 +517,9 @@ void WBFilter::adjustWhiteBalance(uchar* data, int width, int height, bool sixte
 
             progress = (int)(((double)j * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }
@@ -525,7 +544,7 @@ void WBFilter::adjustWhiteBalance(uchar* data, int width, int height, bool sixte
 
             if (d->clipSat)
             {
-                v = qMin(v, (int)d->rgbMax-1);
+                v = qMin(v, (int)d->rgbMax - 1);
             }
 
             i = v;
@@ -537,9 +556,9 @@ void WBFilter::adjustWhiteBalance(uchar* data, int width, int height, bool sixte
 
             progress = (int)(((double)j * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }
@@ -561,7 +580,7 @@ unsigned short WBFilter::pixelColor(int colorMult, int index, int value)
         }
     }
 
-    return((unsigned short)CLAMP((int)((index - m_settings.saturation*(index - r)) * d->curve[index]), 0, (int)(d->rgbMax-1)));
+    return((unsigned short)CLAMP((int)((index - m_settings.saturation * (index - r)) * d->curve[index]), 0, (int)(d->rgbMax - 1)));
 }
 
 FilterAction WBFilter::filterAction()

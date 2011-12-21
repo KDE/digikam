@@ -189,26 +189,26 @@ void ImageHistogram::calculate()
 
     d->histogram = new ImageHistogramPriv::double_packet[d->histoSegments];
 
-    if ( !d->histogram )
+    if (!d->histogram)
     {
         kWarning() << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!");
         emit calculationFinished(false);
         return;
     }
 
-    memset(d->histogram, 0, d->histoSegments*sizeof(struct ImageHistogramPriv::double_packet));
+    memset(d->histogram, 0, d->histoSegments * sizeof(struct ImageHistogramPriv::double_packet));
 
     if (d->histoSegments == NUM_SEGMENTS_16BIT)         // 16 bits image.
     {
         unsigned short  blue, green, red, alpha;
         unsigned short* data = (unsigned short*)d->imageData;
 
-        for (i = 0 ; (i < d->imageHeight*d->imageWidth*4) && runningFlag() ; i+=4)
+        for (i = 0 ; (i < d->imageHeight * d->imageWidth * 4) && runningFlag() ; i += 4)
         {
             blue  = data[ i ];
-            green = data[i+1];
-            red   = data[i+2];
-            alpha = data[i+3];
+            green = data[i + 1];
+            red   = data[i + 2];
+            alpha = data[i + 3];
 
             d->histogram[blue].blue++;
             d->histogram[green].green++;
@@ -232,12 +232,12 @@ void ImageHistogram::calculate()
         uchar blue, green, red, alpha;
         const uchar* data = d->imageData;
 
-        for (i = 0 ; (i < d->imageHeight*d->imageWidth*4) && runningFlag() ; i+=4)
+        for (i = 0 ; (i < d->imageHeight * d->imageWidth * 4) && runningFlag() ; i += 4)
         {
             blue  = data[ i ];
-            green = data[i+1];
-            red   = data[i+2];
-            alpha = data[i+3];
+            green = data[i + 1];
+            red   = data[i + 2];
+            alpha = data[i + 3];
 
             d->histogram[blue].blue++;
             d->histogram[green].green++;
@@ -269,8 +269,8 @@ double ImageHistogram::getCount(int channel, int start, int end)
     int    i;
     double count = 0.0;
 
-    if ( !d->histogram || start < 0 ||
-         end > d->histoSegments-1 || start > end )
+    if (!d->histogram || start < 0 ||
+        end > d->histoSegments - 1 || start > end)
     {
         return 0.0;
     }
@@ -332,7 +332,7 @@ double ImageHistogram::getCount(int channel, int start, int end)
 
 double ImageHistogram::getPixels()
 {
-    if ( !d->histogram )
+    if (!d->histogram)
     {
         return 0.0;
     }
@@ -346,8 +346,8 @@ double ImageHistogram::getMean(int channel, int start, int end)
     double mean = 0.0;
     double count;
 
-    if ( !d->histogram || start < 0 ||
-         end > d->histoSegments-1 || start > end )
+    if (!d->histogram || start < 0 ||
+        end > d->histoSegments - 1 || start > end)
     {
         return 0.0;
     }
@@ -420,8 +420,8 @@ int ImageHistogram::getMedian(int channel, int start, int end)
     double sum = 0.0;
     double count;
 
-    if ( !d->histogram || start < 0 ||
-         end > d->histoSegments-1 || start > end )
+    if (!d->histogram || start < 0 ||
+        end > d->histoSegments - 1 || start > end)
     {
         return 0;
     }
@@ -515,8 +515,8 @@ double ImageHistogram::getStdDev(int channel, int start, int end)
     double count;
     double mean;
 
-    if ( !d->histogram || start < 0 ||
-         end > d->histoSegments-1 || start > end )
+    if (!d->histogram || start < 0 ||
+        end > d->histoSegments - 1 || start > end)
     {
         return 0.0;
     }
@@ -588,7 +588,7 @@ double ImageHistogram::getValue(int channel, int bin)
 {
     double value;
 
-    if ( !d->histogram || bin < 0 || bin > d->histoSegments-1 )
+    if (!d->histogram || bin < 0 || bin > d->histoSegments - 1)
     {
         return 0.0;
     }
@@ -628,8 +628,8 @@ double ImageHistogram::getMaximum(int channel, int start, int end)
     double max = 0.0;
     int    x;
 
-    if ( !d->histogram || start < 0 ||
-         end > d->histoSegments-1 || start > end )
+    if (!d->histogram || start < 0 ||
+        end > d->histoSegments - 1 || start > end)
     {
         return 0.0;
     }

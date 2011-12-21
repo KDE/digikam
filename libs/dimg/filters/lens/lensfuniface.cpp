@@ -140,7 +140,7 @@ void LensFunIface::setFilterSettings(const LensFunContainer& other)
 
 LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QString& model) const
 {
-    const lfCamera* const* lfCamera = d->lfDb->FindCameras( make.toAscii().constData(), model.toAscii().constData() );
+    const lfCamera* const* lfCamera = d->lfDb->FindCameras(make.toAscii().constData(), model.toAscii().constData());
 
     while (lfCamera && *lfCamera)
     {
@@ -183,7 +183,7 @@ LensFunIface::LensPtr LensFunIface::findLens(const QString& model) const
 }
 
 LensFunIface::LensList LensFunIface::findLenses(const lfCamera* lfCamera, const QString& lensDesc,
-        const QString& lensMaker) const
+                                                const QString& lensMaker) const
 {
     LensList lensList;
     const lfLens** lfLens = 0;
@@ -249,7 +249,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
         // ------------------------------------------------------------------------------------------------
 
-        DevicePtr lfCamera = findCamera( d->makeDescription.toAscii().constData(), d->modelDescription.toAscii().constData() );
+        DevicePtr lfCamera = findCamera(d->makeDescription.toAscii().constData(), d->modelDescription.toAscii().constData());
 
         if (lfCamera)
         {
@@ -359,7 +359,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
         exactMatch &= false;
     }
 
-    d->settings.focalLength = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
+    d->settings.focalLength = temp.mid(0, temp.length() - 3).toDouble(); // HACK: strip the " mm" at the end ...
     kDebug() << "Focal Length   : " << d->settings.focalLength;
 
     // ------------------------------------------------------------------------------------------------
@@ -437,9 +437,11 @@ QString LensFunIface::metadataMatchDebugStr(MetadataMatch val) const
         case MetadataNoMatch:
             ret = QString("No Match");
             break;
+
         case MetadataPartialMatch:
             ret = QString("Partial Match");
             break;
+
         default:
             ret = QString("Exact Match");
             break;
@@ -479,8 +481,8 @@ bool LensFunIface::supportsVig() const
 
     lfLensCalibVignetting res;
     return d->usedLens->InterpolateVignetting(d->settings.focalLength,
-            d->settings.aperture,
-            d->settings.subjectDistance, res);
+                                              d->settings.aperture,
+                                              d->settings.subjectDistance, res);
 }
 
 bool LensFunIface::supportsGeometry() const

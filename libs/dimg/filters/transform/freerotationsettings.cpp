@@ -125,7 +125,7 @@ FreeRotationSettings::FreeRotationSettings(QWidget* parent)
     grid->addWidget(d->angleInput,     1, 0, 1, 2);
     grid->addWidget(label4,            2, 0, 1, 1);
     grid->addWidget(d->fineAngleInput, 3, 0, 1, 2);
-    grid->addWidget(d->antialiasInput, 4, 0, 1,-1);
+    grid->addWidget(d->antialiasInput, 4, 0, 1, -1);
     grid->addWidget(label5,            5, 0, 1, 1);
     grid->addWidget(d->autoCropCB,     5, 1, 1, 1);
     grid->setMargin(KDialog::spacingHint());

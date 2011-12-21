@@ -85,16 +85,16 @@ void ShearFilter::filterImage()
     unsigned short* pBits16 = (unsigned short*)m_orgImage.bits();
 
     // get beta ( complementary ) angle for horizontal and vertical angles
-    horz_beta_angle = ( ( ( m_hAngle < 0.0 ) ? 180.0 : 90.0 ) - m_hAngle ) * DEG2RAD;
-    vert_beta_angle = ( ( ( m_vAngle < 0.0 ) ? 180.0 : 90.0 ) - m_vAngle ) * DEG2RAD;
+    horz_beta_angle = (((m_hAngle < 0.0) ? 180.0 : 90.0) - m_hAngle) * DEG2RAD;
+    vert_beta_angle = (((m_vAngle < 0.0) ? 180.0 : 90.0) - m_vAngle) * DEG2RAD;
 
     // get new distance for width and height values
-    horz_add = nHeight * ( ( m_hAngle < 0.0 ) ? sin( horz_beta_angle ) : cos( horz_beta_angle ) );
-    vert_add = nWidth  * ( ( m_vAngle < 0.0 ) ? sin( vert_beta_angle ) : cos( vert_beta_angle ) );
+    horz_add = nHeight * ((m_hAngle < 0.0) ? sin(horz_beta_angle) : cos(horz_beta_angle));
+    vert_add = nWidth  * ((m_vAngle < 0.0) ? sin(vert_beta_angle) : cos(vert_beta_angle));
 
     // get absolute values for the distances
-    horz_add = fabs( horz_add );
-    vert_add = fabs( vert_add );
+    horz_add = fabs(horz_add);
+    vert_add = fabs(vert_add);
 
     // get new image size ( original size + distance )
     new_width  = (int)horz_add + nWidth;
@@ -106,7 +106,7 @@ void ShearFilter::filterImage()
 
     // if horizontal angle is greater than zero...
     // else, initial distance is equal to maximum distance ( in negative form )
-    if ( m_hAngle > 0.0 )
+    if (m_hAngle > 0.0)
     {
         // initial distance is zero and scale is negative ( to decrease )
         dx = 0;
@@ -119,7 +119,7 @@ void ShearFilter::filterImage()
 
     // if vertical angle is greater than zero...
     // else, initial distance is equal to maximum distance ( in negative form )
-    if ( m_vAngle > 0.0 )
+    if (m_vAngle > 0.0)
     {
         // initial distance is zero and scale is negative ( to decrease )
         dy = 0;
@@ -134,48 +134,48 @@ void ShearFilter::filterImage()
 
     bool sixteenBit = m_orgImage.sixteenBit();
     m_destImage     = DImg(new_width, new_height, sixteenBit, m_orgImage.hasAlpha());
-    m_destImage.fill( DColor(m_backgroundColor.rgb(), sixteenBit) );
+    m_destImage.fill(DColor(m_backgroundColor.rgb(), sixteenBit));
 
     uchar* pResBits            = m_destImage.bits();
     unsigned short* pResBits16 = (unsigned short*)m_destImage.bits();
 
     PixelsAliasFilter alias;
 
-    for ( y = 0; y < new_height; ++y)
+    for (y = 0; y < new_height; ++y)
     {
-        for ( x = 0; x < new_width; ++x, p += 4 )
+        for (x = 0; x < new_width; ++x, p += 4)
         {
             // get new positions
             nx = x + dx + y * horz_factor;
             ny = y + dy + x * vert_factor;
 
             // if is inside the source image
-            if (isInside (nWidth, nHeight, lround( nx ), lround( ny )))
+            if (isInside(nWidth, nHeight, lround(nx), lround(ny)))
             {
-                if ( m_antiAlias )
+                if (m_antiAlias)
                 {
                     if (!sixteenBit)
                         alias.pixelAntiAliasing(pBits, nWidth, nHeight, nx, ny,
-                                                &pResBits[p+3], &pResBits[p+2],
-                                                &pResBits[p+1], &pResBits[p]);
+                                                &pResBits[p + 3], &pResBits[p + 2],
+                                                &pResBits[p + 1], &pResBits[p]);
                     else
                         alias.pixelAntiAliasing16(pBits16, nWidth, nHeight, nx, ny,
-                                                  &pResBits16[p+3], &pResBits16[p+2],
-                                                  &pResBits16[p+1], &pResBits16[p]);
+                                                  &pResBits16[p + 3], &pResBits16[p + 2],
+                                                  &pResBits16[p + 1], &pResBits16[p]);
                 }
                 else
                 {
-                    pt = setPosition (nWidth, lround( nx ), lround( ny ));
+                    pt = setPosition(nWidth, lround(nx), lround(ny));
 
                     for (int z = 0 ; z < 4 ; ++z)
                     {
                         if (!sixteenBit)
                         {
-                            pResBits[p+z] = pBits[pt+z];
+                            pResBits[p + z] = pBits[pt + z];
                         }
                         else
                         {
-                            pResBits16[p+z] = pBits16[pt+z];
+                            pResBits16[p + z] = pBits16[pt + z];
                         }
                     }
                 }
@@ -185,15 +185,15 @@ void ShearFilter::filterImage()
         // Update the progress bar in dialog.
         progress = (int)(((double)y * 100.0) / new_height);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
-            postProgress( progress );
+            postProgress(progress);
         }
     }
 
     // To compute the rotated destination image size using original image dimensions.
-    int W = (int)(fabs(m_orgH * ( ( m_hAngle < 0.0 ) ? sin( horz_beta_angle ) : cos( horz_beta_angle )))) + m_orgW;
-    int H = (int)(fabs(m_orgW * ( ( m_vAngle < 0.0 ) ? sin( vert_beta_angle ) : cos( vert_beta_angle )))) + m_orgH;
+    int W = (int)(fabs(m_orgH * ((m_hAngle < 0.0) ? sin(horz_beta_angle) : cos(horz_beta_angle)))) + m_orgW;
+    int H = (int)(fabs(m_orgW * ((m_vAngle < 0.0) ? sin(vert_beta_angle) : cos(vert_beta_angle)))) + m_orgH;
 
     m_newSize.setWidth(W);
     m_newSize.setHeight(H);

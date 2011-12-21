@@ -416,12 +416,16 @@ static int renderingIntentToLcmsIntent(IccTransform::RenderingIntent intent)
     {
         case IccTransform::Perceptual:
             return INTENT_PERCEPTUAL;
+
         case IccTransform::RelativeColorimetric:
             return INTENT_RELATIVE_COLORIMETRIC;
+
         case IccTransform::Saturation:
             return INTENT_SATURATION;
+
         case IccTransform::AbsoluteColorimetric:
             return INTENT_ABSOLUTE_COLORIMETRIC;
+
         default:
             return INTENT_PERCEPTUAL;
     }
@@ -700,11 +704,11 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
     uchar* data             = image.bits();
 
     // see dimgloader.cpp, granularity().
-    int granularity=1;
+    int granularity = 1;
 
     if (observer)
     {
-        granularity = (int)(( pixels / (20 * 0.9)) / observer->granularity());
+        granularity = (int)((pixels / (20 * 0.9)) / observer->granularity());
     }
 
     int checkPoint = pixels;
@@ -712,7 +716,7 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
     // it is safe to use the same input and output buffer if the format is the same
     if (description.inputFormat == description.outputFormat)
     {
-        for (int p=pixels; p > 0; p -= pixelsPerStep)
+        for (int p = pixels; p > 0; p -= pixelsPerStep)
         {
             int pixelsThisStep = qMin(p, pixelsPerStep);
             int size           = pixelsThisStep * bytesDepth;
@@ -723,7 +727,7 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
             if (observer && p <= checkPoint)
             {
                 checkPoint -= granularity;
-                observer->progressInfo(&image, 0.1 + 0.9*(1.0 - float(p)/float(pixels)));
+                observer->progressInfo(&image, 0.1 + 0.9 * (1.0 - float(p) / float(pixels)));
             }
         }
     }
@@ -731,7 +735,7 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
     {
         QVarLengthArray<uchar> buffer(pixelsPerStep * bytesDepth);
 
-        for (int p=pixels; p > 0; p -= pixelsPerStep)
+        for (int p = pixels; p > 0; p -= pixelsPerStep)
         {
             int pixelsThisStep = qMin(p, pixelsPerStep);
             int size           = pixelsThisStep * bytesDepth;
@@ -743,7 +747,7 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
             if (observer && p <= checkPoint)
             {
                 checkPoint -= granularity;
-                observer->progressInfo(&image, 0.1 + 0.9*(1.0 - float(p)/float(pixels)));
+                observer->progressInfo(&image, 0.1 + 0.9 * (1.0 - float(p) / float(pixels)));
             }
         }
     }
@@ -757,7 +761,7 @@ void IccTransform::transform(QImage& image, const TransformDescription&)
     const int pixelsPerStep = image.width() * 10;
     uchar* data             = image.bits();
 
-    for (int p=pixels; p > 0; p -= pixelsPerStep)
+    for (int p = pixels; p > 0; p -= pixelsPerStep)
     {
         int pixelsThisStep = qMin(p, pixelsPerStep);
         int size           = pixelsThisStep * bytesDepth;

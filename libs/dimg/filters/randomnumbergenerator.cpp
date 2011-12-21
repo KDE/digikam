@@ -97,7 +97,7 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
     boost::random_device device;
     boost::random_device::result_type* ptr = reinterpret_cast<boost::random_device::result_type*>(data());
 
-    for (int i=0; i<stepSize; ++i)
+    for (int i = 0; i < stepSize; ++i)
     {
         *ptr++ = device();
     }

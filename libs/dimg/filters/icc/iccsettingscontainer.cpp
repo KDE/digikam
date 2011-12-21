@@ -102,13 +102,13 @@ void ICCSettingsContainer::writeToConfig(KConfigGroup& group) const
         return;    // No need to write settings in this case.
     }
 
-    group.writeEntry("DefaultMismatchBehavior",       (int)defaultMismatchBehavior);
+    group.writeEntry("DefaultMismatchBehavior", (int)defaultMismatchBehavior);
     group.writeEntry("DefaultMissingProfileBehavior", (int)defaultMissingProfileBehavior);
-    group.writeEntry("DefaultUncalibratedBehavior",   (int)defaultUncalibratedBehavior);
+    group.writeEntry("DefaultUncalibratedBehavior", (int)defaultUncalibratedBehavior);
 
-    group.writeEntry("LastMismatchBehavior",          (int)lastMismatchBehavior);
-    group.writeEntry("LastMissingProfileBehavior",    (int)lastMissingProfileBehavior);
-    group.writeEntry("LastUncalibratedBehavior",      (int)lastUncalibratedBehavior);
+    group.writeEntry("LastMismatchBehavior", (int)lastMismatchBehavior);
+    group.writeEntry("LastMissingProfileBehavior", (int)lastMissingProfileBehavior);
+    group.writeEntry("LastUncalibratedBehavior", (int)lastUncalibratedBehavior);
     group.writeEntry("LastSpecifiedAssignProfile",    lastSpecifiedAssignProfile);
     group.writeEntry("LastSpecifiedInputProfile",     lastSpecifiedInputProfile);
 

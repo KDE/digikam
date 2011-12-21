@@ -69,7 +69,7 @@ void OilPaintFilter::filterImage()
 {
     int    progress;
     DColor mostFrequentColor;
-    int    w,h;
+    int    w, h;
 
     mostFrequentColor.setSixteenBit(m_orgImage.sixteenBit());
     w              = (int)m_orgImage.width();
@@ -90,15 +90,15 @@ void OilPaintFilter::filterImage()
         for (int w2 = 0; runningFlag() && (w2 < w); ++w2)
         {
             mostFrequentColor = MostFrequentColor(m_orgImage, w2, h2, m_brushSize, m_smoothness);
-            dptr              = dest + w2*bytesDepth + (w*h2*bytesDepth);
+            dptr              = dest + w2 * bytesDepth + (w * h2 * bytesDepth);
             mostFrequentColor.setPixel(dptr);
         }
 
-        progress = (int) (((double)h2 * 100.0) / h);
+        progress = (int)(((double)h2 * 100.0) / h);
 
-        if ( progress%5 == 0 )
+        if (progress % 5 == 0)
         {
-            postProgress( progress );
+            postProgress(progress);
         }
     }
 
@@ -139,7 +139,7 @@ DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, in
     Height       = (int)src.height();
 
     // Erase the array
-    memset(m_intensityCount, 0, (Intensity + 1) * sizeof (uchar));
+    memset(m_intensityCount, 0, (Intensity + 1) * sizeof(uchar));
 
     for (w = X - Radius; w <= X + Radius; ++w)
     {
@@ -149,13 +149,13 @@ DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, in
 
             if ((w >= 0) && (w < Width) && (h >= 0) && (h < Height))
             {
-                sptr          = dest + w*bytesDepth + (Width*h*bytesDepth);
+                sptr          = dest + w * bytesDepth + (Width * h * bytesDepth);
                 DColor color(sptr, sixteenBit);
                 red           = (uint)color.red();
                 green         = (uint)color.green();
                 blue          = (uint)color.blue();
 
-                I = lround(GetIntensity (red, green, blue) * Scale);
+                I = lround(GetIntensity(red, green, blue) * Scale);
                 m_intensityCount[I]++;
 
                 if (m_intensityCount[I] == 1)
