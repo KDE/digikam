@@ -289,11 +289,10 @@ void InsertTextWidget::makePixmap()
     }
 
     // get preview image data
-    uchar* data = d->iface->getPreviewImage();
+    QScopedArrayPointer<uchar> data(d->iface->getPreviewImage());
     DImg image(d->iface->previewWidth(), d->iface->previewHeight(), d->iface->previewSixteenBit(),
-               d->iface->previewHasAlpha(), data);
+               d->iface->previewHasAlpha(), data.data());
     image.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
-    delete [] data;
 
     // paint pixmap for drawing this widget
     // First, fill with background color

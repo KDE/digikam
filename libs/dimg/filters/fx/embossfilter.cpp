@@ -90,26 +90,26 @@ void EmbossFilter::filterImage()
         for (int w = 0 ; runningFlag() && (w < Width) ; ++w)
         {
             offset      = getOffset(Width, w, h, bytesDepth);
-            offsetOther = getOffset(Width, w + Lim_Max (w, 1, Width), h + Lim_Max (h, 1, Height), bytesDepth);
+            offsetOther = getOffset(Width, w + Lim_Max(w, 1, Width), h + Lim_Max(h, 1, Height), bytesDepth);
 
             color.setColor(Bits + offset, sixteenBit);
             colorOther.setColor(Bits + offsetOther, sixteenBit);
 
             if (sixteenBit)
             {
-                red   = abs ((int)((color.red()   - colorOther.red())   * Depth + 32768));
-                green = abs ((int)((color.green() - colorOther.green()) * Depth + 32768));
-                blue  = abs ((int)((color.blue()  - colorOther.blue())  * Depth + 32768));
+                red   = abs((int)((color.red()   - colorOther.red())   * Depth + 32768));
+                green = abs((int)((color.green() - colorOther.green()) * Depth + 32768));
+                blue  = abs((int)((color.blue()  - colorOther.blue())  * Depth + 32768));
 
-                gray  = CLAMP065535 ((red + green + blue) / 3);
+                gray  = CLAMP065535((red + green + blue) / 3);
             }
             else
             {
-                red   = abs ((int)((color.red()   - colorOther.red())   * Depth + 128));
-                green = abs ((int)((color.green() - colorOther.green()) * Depth + 128));
-                blue  = abs ((int)((color.blue()  - colorOther.blue())  * Depth + 128));
+                red   = abs((int)((color.red()   - colorOther.red())   * Depth + 128));
+                green = abs((int)((color.green() - colorOther.green()) * Depth + 128));
+                blue  = abs((int)((color.blue()  - colorOther.blue())  * Depth + 128));
 
-                gray  = CLAMP0255 ((red + green + blue) / 3);
+                gray  = CLAMP0255((red + green + blue) / 3);
             }
 
             // Overwrite RGB values to destination. Alpha remains unchanged.
@@ -119,18 +119,18 @@ void EmbossFilter::filterImage()
             color.setPixel(Bits + offset);
         }
 
-        progress = (int) (((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / Height);
 
-        if ( progress%5 == 0 )
+        if (progress % 5 == 0)
         {
-            postProgress( progress );
+            postProgress(progress);
         }
     }
 }
 
 /** Function to limit the max and min values defined by the developer.
  */
-int EmbossFilter::Lim_Max (int Now, int Up, int Max)
+int EmbossFilter::Lim_Max(int Now, int Up, int Max)
 {
     --Max;
 

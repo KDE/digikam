@@ -43,27 +43,37 @@ CurvesContainer::CurvesContainer(int type, bool sixteenBit)
 
 bool CurvesContainer::isEmpty() const
 {
-    for (int i=0; i<ColorChannels; ++i)
+    for (int i = 0; i < ColorChannels; ++i)
     {
         if (!values[i].isEmpty())
+        {
             return false;
+        }
     }
+
     return true;
 }
 
 bool CurvesContainer::operator==(const CurvesContainer& other) const
 {
     if (isEmpty() && other.isEmpty())
+    {
         return true;
+    }
 
     if (sixteenBit != other.sixteenBit || curvesType != other.curvesType)
+    {
         return false;
+    }
 
-    for (int i=0; i<ColorChannels; ++i)
+    for (int i = 0; i < ColorChannels; ++i)
     {
         if (values[i] != other.values[i])
+        {
             return false;
+        }
     }
+
     return true;
 }
 
@@ -77,7 +87,7 @@ void CurvesContainer::initialize()
     {
         for (int i = 0; i < ColorChannels; ++i)
         {
-            values[i].resize(segmentMax+1);
+            values[i].resize(segmentMax + 1);
 
             for (int j = 0 ; j <= segmentMax ; ++j)
             {
@@ -132,7 +142,7 @@ void CurvesContainer::writeToFilterAction(FilterAction& action, const QString& p
 
     action.addParameter(prefix + "curveBitDepth", 8);
 
-    for (int i=0; i<ColorChannels; ++i)
+    for (int i = 0; i < ColorChannels; ++i)
     {
         action.addParameter(prefix + QString("curveData[%1]").arg(i), curves.channelToBase64(i));
     }
@@ -147,7 +157,7 @@ CurvesContainer CurvesContainer::fromFilterAction(const FilterAction& action, co
 
     ImageCurves curves(action.parameter(prefix + "curveBitDepth", 8) == 16);
 
-    for (int i=0; i<ColorChannels; ++i)
+    for (int i = 0; i < ColorChannels; ++i)
     {
         QByteArray base64 = action.parameter(prefix + QString("curveData[%1]").arg(i), QByteArray());
         // check return value and set readParametersError?

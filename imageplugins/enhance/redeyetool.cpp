@@ -413,13 +413,12 @@ void RedEyeTool::finalRendering()
     kapp->setOverrideCursor( Qt::WaitCursor );
 
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar* data       = iface->getImageSelection();
+    QScopedArrayPointer<uchar> data(iface->getImageSelection());
     int w             = iface->selectedWidth();
     int h             = iface->selectedHeight();
     bool sixteenBit   = iface->originalSixteenBit();
     bool hasAlpha     = iface->originalHasAlpha();
-    DImg selection(w, h, sixteenBit, hasAlpha, data);
-    delete [] data;
+    DImg selection(w, h, sixteenBit, hasAlpha, data.data());
 
     redEyeFilter(selection);
 

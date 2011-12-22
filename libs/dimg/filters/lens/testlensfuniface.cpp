@@ -27,17 +27,17 @@
 #include <QString>
 #include <QFile>
 
-// KDE includes.
+// KDE includes
 
 #include "kdebug.h"
 
-// Local includes.
+// Local includes
 
 #include "lensfuniface.h"
 
 using namespace Digikam;
 
-int main (int argc, char** argv)
+int main(int argc, char** argv)
 {
     if (argc != 2)
     {

@@ -193,10 +193,11 @@ uchar* ImageIface::getPreviewImage() const
             int    x, y, w, h;
             bool   s    = DImgInterface::defaultInterface()->sixteenBit();
             bool   a    = DImgInterface::defaultInterface()->hasAlpha();
-            uchar* data = DImgInterface::defaultInterface()->getImageSelection();
+
+            QScopedArrayPointer<uchar> data (DImgInterface::defaultInterface()->getImageSelection());
+
             DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
-            im          = new DImg(w, h, s, a, data, true);
-            delete [] data;
+            im = new DImg(w, h, s, a, data.data(), true);
 
             if (!im)
             {

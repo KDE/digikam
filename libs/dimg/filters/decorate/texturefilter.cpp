@@ -92,7 +92,7 @@ void TextureFilter::filterImage()
     kDebug() << "Texture File: " << m_texturePath;
     DImg texture(m_texturePath);
 
-    if ( texture.isNull() )
+    if (texture.isNull())
     {
         return;
     }
@@ -101,9 +101,9 @@ void TextureFilter::filterImage()
 
     texture.convertToDepthOfImage(&textureImg);
 
-    for (int x = 0 ; x < w ; x+=texture.width())
+    for (int x = 0 ; x < w ; x += texture.width())
     {
-        for (int y = 0 ; y < h ; y+=texture.height())
+        for (int y = 0 ; y < h ; y += texture.height())
         {
             textureImg.bitBltImage(&texture, x, y);
         }
@@ -164,7 +164,7 @@ void TextureFilter::filterImage()
         }
 
         // Update progress bar in dialog.
-        progress = (int) (((double) x * 50.0) / w);
+        progress = (int)(((double) x * 50.0) / w);
 
         if (progress % 5 == 0)
         {
@@ -205,9 +205,9 @@ void TextureFilter::filterImage()
         }
 
         // Update progress bar in dialog.
-        progress = (int) (50.0 + ((double) x * 50.0) / w);
+        progress = (int)(50.0 + ((double) x * 50.0) / w);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
         {
             postProgress(progress);
         }

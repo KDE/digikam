@@ -204,15 +204,14 @@ void ImageSelectionWidget::setup(int w, int h,
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->iface        = new ImageIface(w, h);
-    uchar* data     = d->iface->getPreviewImage();
+    QScopedArrayPointer<uchar> data(d->iface->getPreviewImage());
     int width       = d->iface->previewWidth();
     int height      = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data);
+    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data.data());
     d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
     d->preview.convertToEightBit();
-    delete [] data;
 
     d->pixmap = new QPixmap(w, h);
     d->image  = QRect(0, 0, d->iface->originalWidth(), d->iface->originalHeight());
@@ -235,15 +234,14 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent* e)
     int w           = e->size().width();
     int h           = e->size().height();
 
-    uchar* data     = d->iface->setPreviewImageSize(w, h);
+    QScopedArrayPointer<uchar> data(d->iface->setPreviewImageSize(w, h));
     int width       = d->iface->previewWidth();
     int height      = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data);
+    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data.data());
     d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
     d->preview.convertToEightBit();
-    delete [] data;
 
     d->pixmap = new QPixmap(w, h);
     d->rect   = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,

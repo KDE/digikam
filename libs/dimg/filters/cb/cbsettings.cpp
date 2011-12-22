@@ -161,9 +161,9 @@ CBContainer CBSettings::settings() const
 {
     CBContainer prm;
 
-    prm.red   = ((double)d->rInput->value() + 100.0)/100.0;
-    prm.green = ((double)d->gInput->value() + 100.0)/100.0;
-    prm.blue  = ((double)d->bInput->value() + 100.0)/100.0;
+    prm.red   = ((double)d->rInput->value() + 100.0) / 100.0;
+    prm.green = ((double)d->gInput->value() + 100.0) / 100.0;
+    prm.blue  = ((double)d->bInput->value() + 100.0) / 100.0;
 
     return prm;
 }
@@ -190,9 +190,9 @@ CBContainer CBSettings::defaultSettings() const
 {
     CBContainer prm;
 
-    prm.red   = ((double)d->rInput->defaultValue() + 100.0)/100.0;
-    prm.green = ((double)d->gInput->defaultValue() + 100.0)/100.0;
-    prm.blue  = ((double)d->bInput->defaultValue() + 100.0)/100.0;
+    prm.red   = ((double)d->rInput->defaultValue() + 100.0) / 100.0;
+    prm.green = ((double)d->gInput->defaultValue() + 100.0) / 100.0;
+    prm.blue  = ((double)d->bInput->defaultValue() + 100.0) / 100.0;
 
     return prm;
 }

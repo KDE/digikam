@@ -99,20 +99,20 @@ void HSPreviewWidget::paintEvent(QPaintEvent*)
 
 void HSPreviewWidget::updatePixmap()
 {
-    int xSize = width()-2*d->xBorder;
+    int xSize = width() - 2 * d->xBorder;
     int ySize = height();
 
     DImg   image(xSize, ySize, false, false, 0, false);
     QColor col;
     uint*  p;
 
-    for ( int s = ySize-1 ; s >= 0 ; --s )
+    for (int s = ySize - 1 ; s >= 0 ; --s)
     {
         p = (uint*)image.scanLine(ySize - s - 1);
 
-        for ( int h = 0 ; h < xSize ; ++h )
+        for (int h = 0 ; h < xSize ; ++h)
         {
-            col.setHsv( 359*h/(xSize-1), 255, 192 );
+            col.setHsv(359 * h / (xSize - 1), 255, 192);
             *p = col.rgb();
             ++p;
         }

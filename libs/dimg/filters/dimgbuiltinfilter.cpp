@@ -129,10 +129,13 @@ bool DImgBuiltinFilter::isValid() const
     {
         case NoOperation:
             return false;
+
         case Crop:
             return m_arg.type() == QVariant::Rect;
+
         case Resize:
             return m_arg.type() == QVariant::Size;
+
         default:
             return true;
     }
@@ -144,33 +147,42 @@ void DImgBuiltinFilter::apply(DImg& image) const
     {
         case NoOperation:
             break;
+
         case Rotate90:
             image.rotate(DImg::ROT90);
             break;
+
         case Rotate180:
             image.rotate(DImg::ROT180);
             break;
+
         case Rotate270:
             image.rotate(DImg::ROT270);
             break;
+
         case FlipHorizontally:
             image.flip(DImg::HORIZONTAL);
             break;
+
         case FlipVertically:
             image.flip(DImg::VERTICAL);
             break;
+
         case Crop:
             image.crop(m_arg.toRect());
             break;
+
         case Resize:
         {
             QSize s = m_arg.toSize();
             image.resize(s.width(), s.height());
             break;
         }
+
         case ConvertTo8Bit:
             image.convertToEightBit();
             break;
+
         case ConvertTo16Bit:
             image.convertToSixteenBit();
             break;
@@ -180,11 +192,13 @@ void DImgBuiltinFilter::apply(DImg& image) const
 FilterAction DImgBuiltinFilter::filterAction() const
 {
     FilterAction action;
+
     switch (m_type)
     {
         case NoOperation:
         default:
             return action;
+
         case Rotate90:
         case Rotate180:
         case Rotate270:
@@ -208,6 +222,7 @@ FilterAction DImgBuiltinFilter::filterAction() const
             action.addParameter("angle", angle);
             break;
         }
+
         case FlipHorizontally:
         case FlipVertically:
         {
@@ -215,6 +230,7 @@ FilterAction DImgBuiltinFilter::filterAction() const
             action.addParameter("direction", m_type == FlipHorizontally ? "horizontal" : "vertical");
             break;
         }
+
         case Crop:
         {
             action  = FilterAction("transform:crop", 1);
@@ -225,6 +241,7 @@ FilterAction DImgBuiltinFilter::filterAction() const
             action.addParameter("height", r.height());
             break;
         }
+
         case Resize:
         {
             action  = FilterAction("transform:resize", 1);
@@ -233,6 +250,7 @@ FilterAction DImgBuiltinFilter::filterAction() const
             action.addParameter("height", s.height());
             break;
         }
+
         case ConvertTo8Bit:
         case ConvertTo16Bit:
         {
@@ -252,13 +270,17 @@ DImgBuiltinFilter DImgBuiltinFilter::reverseFilter() const
     {
         case Rotate90:
             return DImgBuiltinFilter(Rotate270);
+
         case Rotate180:
             return DImgBuiltinFilter(Rotate180);
+
         case Rotate270:
             return DImgBuiltinFilter(Rotate90);
+
         case FlipHorizontally:
         case FlipVertically:
             return DImgBuiltinFilter(m_type);
+
         case Crop:
         case Resize:
         case ConvertTo8Bit:
@@ -308,22 +330,31 @@ QString DImgBuiltinFilter::displayableName() const
     {
         case NoOperation:
             break;
+
         case Rotate90:
             return I18N_NOOP("Rotate Right");
+
         case Rotate180:
             return I18N_NOOP("Rotate 180°");
+
         case Rotate270:
             return I18N_NOOP("Rotate Left");
+
         case FlipHorizontally:
             return I18N_NOOP("Flip Horizontally");
+
         case FlipVertically:
             return I18N_NOOP("Flip Vertically");
+
         case Crop:
             return I18N_NOOP("Crop");
+
         case Resize:
             return I18N_NOOP("Resize");
+
         case ConvertTo8Bit:
             return I18N_NOOP("Convert to 8 Bit");
+
         case ConvertTo16Bit:
             return I18N_NOOP("Convert to 16 Bit");
     }
@@ -337,22 +368,31 @@ QString DImgBuiltinFilter::filterIcon() const
     {
         case NoOperation:
             break;
+
         case Rotate90:
             return "object-rotate-left";
+
         case Rotate180:
             return "transform-rotate";
+
         case Rotate270:
             return "object-rotate-right";
+
         case FlipHorizontally:
             return "object-flip-horizontal";
+
         case FlipVertically:
             return "object-flip-vertical";
+
         case Crop:
             return "transform-crop";
+
         case Resize:
             return "transform-scale";
+
         case ConvertTo8Bit:
             return "depth16to8";
+
         case ConvertTo16Bit:
             return "depth8to16";
     }

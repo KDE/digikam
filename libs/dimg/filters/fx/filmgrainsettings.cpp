@@ -240,7 +240,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget* secondPage = new QWidget();
-    QGridLayout* grid2  = new QGridLayout( secondPage );
+    QGridLayout* grid2  = new QGridLayout(secondPage);
 
     d->label5                   = new QLabel(i18n("Intensity:"), secondPage);
     d->intensityChromaBlueInput = new RIntNumInput(secondPage);
@@ -248,7 +248,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->intensityChromaBlueInput->setSliderEnabled(true);
     d->intensityChromaBlueInput->setDefaultValue(25);
     d->intensityChromaBlueInput->setWhatsThis(i18n("Set here the film sensitivity to use for "
-            "simulating the CCD blue noise."));
+                                                   "simulating the CCD blue noise."));
 
     // -------------------------------------------------------------
 
@@ -291,7 +291,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     // -------------------------------------------------------------
 
     QWidget* thirdPage = new QWidget();
-    QGridLayout* grid3 = new QGridLayout( thirdPage );
+    QGridLayout* grid3 = new QGridLayout(thirdPage);
 
     d->label9                  = new QLabel(i18n("Intensity:"), thirdPage);
     d->intensityChromaRedInput = new RIntNumInput(thirdPage);
@@ -299,7 +299,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->intensityChromaRedInput->setSliderEnabled(true);
     d->intensityChromaRedInput->setDefaultValue(25);
     d->intensityChromaRedInput->setWhatsThis(i18n("Set here the film sensitivity to use for "
-            "simulating the CCD red noise."));
+                                                  "simulating the CCD red noise."));
 
     // -------------------------------------------------------------
 
@@ -374,8 +374,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     connect(d->photoDistribution, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->expanderBox, SIGNAL(signalItemToggled(int,bool)),
-            this, SLOT(slotItemToggled(int,bool)));
+    connect(d->expanderBox, SIGNAL(signalItemToggled(int, bool)),
+            this, SLOT(slotItemToggled(int, bool)));
 
     connect(d->intensityLumInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
@@ -435,6 +435,7 @@ void FilmGrainSettings::slotItemToggled(int index, bool b)
             d->highlightsLumInput->setEnabled(b);
             break;
         }
+
         case 2:
         {
             d->label5->setEnabled(b);
@@ -447,6 +448,7 @@ void FilmGrainSettings::slotItemToggled(int index, bool b)
             d->highlightsChromaBlueInput->setEnabled(b);
             break;
         }
+
         case 3:
         {
             d->label9->setEnabled(b);

@@ -142,14 +142,15 @@ ImageGuideWidget::ImageGuideWidget(QWidget* parent,
 
     d->iface        = new ImageIface(w, h);
     d->iface->setPreviewType(useImageSelection);
-    uchar* data     = d->iface->getPreviewImage();
+
+    QScopedArrayPointer<uchar> data(d->iface->getPreviewImage());
+
     d->width        = d->iface->previewWidth();
     d->height       = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
+    d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data.data());
     d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
-    delete [] data;
 
     d->pixmap        = new QPixmap(w, h);
     d->rect          = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
@@ -553,14 +554,14 @@ void ImageGuideWidget::resizeEvent(QResizeEvent* e)
     int old_w = d->width;
     int old_h = d->height;
 
-    uchar* data     = d->iface->setPreviewImageSize(w, h);
+    QScopedArrayPointer<uchar> data(d->iface->setPreviewImageSize(w, h));
+
     d->width        = d->iface->previewWidth();
     d->height       = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data);
+    d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data.data());
     d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
-    delete [] data;
 
     d->pixmap         = new QPixmap(w, h);
     d->previewPixmap  = new QPixmap(w, h);

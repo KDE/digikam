@@ -90,7 +90,7 @@ void RawProcessingFilter::setOutputProfile(const IccProfile& profile)
     m_customOutputProfile = profile;
 }
 
-void RawProcessingFilter::setObserver(DImgLoaderObserver *observer, int progressBegin, int progressEnd)
+void RawProcessingFilter::setObserver(DImgLoaderObserver* observer, int progressBegin, int progressEnd)
 {
     initSlave(0, progressBegin, progressEnd);
     m_observer = observer;
@@ -111,6 +111,7 @@ void RawProcessingFilter::readParameters(const FilterAction& action)
 void RawProcessingFilter::postProgress(int)
 {
     DImgThreadedFilter::postProgress(20);
+
     if (m_observer)
     {
         m_observer->progressInfo(&m_destImage, float(modulateProgress(20)) / 100);
@@ -123,6 +124,7 @@ bool RawProcessingFilter::continueQuery() const
     {
         return false;
     }
+
     return runningFlag();
 }
 

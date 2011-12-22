@@ -208,7 +208,7 @@ NRSettings::NRSettings(QWidget* parent)
                                QString("Luminance"), true);
     d->advExpanderBox->addItem(d->chrominanceRedBox, KStandardDirs::locate("data", "digikam/data/colors-chromared.png"),
                                i18n("Chrominance Red"),
-                               QString("ChrominanceRed"),true);
+                               QString("ChrominanceRed"), true);
     d->advExpanderBox->addItem(d->chrominanceBlueBox, KStandardDirs::locate("data", "digikam/data/colors-chromablue.png"),
                                i18n("Chrominance Blue"),
                                QString("ChrominanceBlue"), true);
@@ -328,21 +328,21 @@ void NRSettings::writeSettings(KConfigGroup& group)
 void NRSettings::loadSettings()
 {
     KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                               QString( "*" ), kapp->activeWindow(),
-                               QString( i18n("Photograph Noise Reduction Settings File to Load")) );
+                                                       QString("*"), kapp->activeWindow(),
+                                                       QString(i18n("Photograph Noise Reduction Settings File to Load")));
 
-    if ( loadRestorationFile.isEmpty() )
+    if (loadRestorationFile.isEmpty())
     {
         return;
     }
 
     QFile file(loadRestorationFile.toLocalFile());
 
-    if ( file.open(QIODevice::ReadOnly) )
+    if (file.open(QIODevice::ReadOnly))
     {
-        QTextStream stream( &file );
+        QTextStream stream(&file);
 
-        if ( stream.readLine() != "# Photograph Wavelets Noise Reduction Configuration File V2" )
+        if (stream.readLine() != "# Photograph Wavelets Noise Reduction Configuration File V2")
         {
             KMessageBox::error(kapp->activeWindow(),
                                i18n("\"%1\" is not a Photograph Noise Reduction settings text file.",
@@ -353,12 +353,12 @@ void NRSettings::loadSettings()
 
         blockSignals(true);
 
-        d->thrLumInput->setValue( stream.readLine().toDouble() );
-        d->softLumInput->setValue( stream.readLine().toDouble() );
-        d->thrCrInput->setValue( stream.readLine().toDouble() );
-        d->softCrInput->setValue( stream.readLine().toDouble() );
-        d->thrCbInput->setValue( stream.readLine().toDouble() );
-        d->softCbInput->setValue( stream.readLine().toDouble() );
+        d->thrLumInput->setValue(stream.readLine().toDouble());
+        d->softLumInput->setValue(stream.readLine().toDouble());
+        d->thrCrInput->setValue(stream.readLine().toDouble());
+        d->softCrInput->setValue(stream.readLine().toDouble());
+        d->thrCbInput->setValue(stream.readLine().toDouble());
+        d->softCbInput->setValue(stream.readLine().toDouble());
 
         blockSignals(false);
     }
@@ -373,19 +373,19 @@ void NRSettings::loadSettings()
 void NRSettings::saveAsSettings()
 {
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                               QString( "*" ), kapp->activeWindow(),
-                               QString( i18n("Photograph Noise Reduction Settings File to Save")) );
+                                                       QString("*"), kapp->activeWindow(),
+                                                       QString(i18n("Photograph Noise Reduction Settings File to Save")));
 
-    if ( saveRestorationFile.isEmpty() )
+    if (saveRestorationFile.isEmpty())
     {
         return;
     }
 
     QFile file(saveRestorationFile.toLocalFile());
 
-    if ( file.open(QIODevice::WriteOnly) )
+    if (file.open(QIODevice::WriteOnly))
     {
-        QTextStream stream( &file );
+        QTextStream stream(&file);
         stream << "# Photograph Wavelets Noise Reduction Configuration File V2\n";
         stream << d->thrLumInput->value()  << "\n";
         stream << d->softLumInput->value() << "\n";

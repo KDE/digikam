@@ -23,7 +23,7 @@
 #ifndef SUBJECTEDIT_H
 #define SUBJECTEDIT_H
 
-// Local includes.
+// Local includes
 
 #include <libkexiv2/subjectwidget.h>
 

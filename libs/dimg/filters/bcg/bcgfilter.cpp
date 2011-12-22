@@ -152,12 +152,12 @@ void BCGFilter::setGamma(double val)
 {
     val = (val < 0.01) ? 0.01 : val;
 
-    for (int i=0; i<65536; ++i)
+    for (int i = 0; i < 65536; ++i)
     {
         d->map16[i] = lround(pow(((double)d->map16[i] / 65535.0), (1.0 / val)) * 65535.0);
     }
 
-    for (int i=0; i<256; ++i)
+    for (int i = 0; i < 256; ++i)
     {
         d->map[i] = lround(pow(((double)d->map[i] / 255.0), (1.0 / val)) * 255.0);
     }
@@ -197,12 +197,12 @@ void BCGFilter::reset()
 {
     // initialize to linear mapping
 
-    for (int i=0; i<65536; ++i)
+    for (int i = 0; i < 65536; ++i)
     {
         d->map16[i] = i;
     }
 
-    for (int i=0; i<256; ++i)
+    for (int i = 0; i < 256; ++i)
     {
         d->map[i] = i;
     }
@@ -225,14 +225,14 @@ void BCGFilter::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
         return;
     }
 
-    uint size = width*height;
+    uint size = width * height;
     int  progress;
 
     if (!sixteenBits)                    // 8 bits image.
     {
         uchar* data = bits;
 
-        for (uint i=0; runningFlag() && (i<size); ++i)
+        for (uint i = 0; runningFlag() && (i < size); ++i)
         {
             switch (d->settings.channel)
             {
@@ -259,9 +259,9 @@ void BCGFilter::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
 
             progress = (int)(((double)i * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }
@@ -269,7 +269,7 @@ void BCGFilter::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
     {
         ushort* data = (ushort*)bits;
 
-        for (uint i=0; runningFlag() && (i<size); ++i)
+        for (uint i = 0; runningFlag() && (i < size); ++i)
         {
             switch (d->settings.channel)
             {
@@ -296,9 +296,9 @@ void BCGFilter::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
 
             progress = (int)(((double)i * 100.0) / size);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }

@@ -171,12 +171,12 @@ MixerSettings::MixerSettings(QWidget* parent)
 
     d->totalPercents = new QLabel();
     d->totalPercents->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    
+
     // -------------------------------------------------------------
 
     d->preserveLuminosity = new QCheckBox(i18n("Preserve luminosity"));
     d->preserveLuminosity->setWhatsThis(i18n("Enable this option is you want preserve "
-                                        "the image luminosity."));
+                                             "the image luminosity."));
 
     // -------------------------------------------------------------
 
@@ -326,7 +326,7 @@ void MixerSettings::slotGainsChanged()
 
         default:                         // Red or monochrome.
         {
-            if ( d->monochrome->isChecked() )
+            if (d->monochrome->isChecked())
             {
                 d->mixerSettings.blackRedGain   = d->redGain->value()   / 100.0;
                 d->mixerSettings.blackGreenGain = d->greenGain->value() / 100.0;
@@ -352,7 +352,7 @@ void MixerSettings::updateTotalPercents()
     double total = d->redGain->value() + d->greenGain->value() + d->blueGain->value();
     QString str;
     d->totalPercents->setText(i18n("Total: %1 (%)", str.sprintf("%3.1f", total)));
-} 
+}
 
 void MixerSettings::updateSettingsWidgets()
 {
@@ -388,7 +388,7 @@ void MixerSettings::updateSettingsWidgets()
 
         default:          // Red or monochrome.
         {
-            if ( d->monochrome->isChecked() )
+            if (d->monochrome->isChecked())
             {
                 d->redGain->setDefaultValue(100);
                 d->greenGain->setDefaultValue(0);
@@ -546,17 +546,17 @@ void MixerSettings::loadSettings()
     MixerContainer settings;
 
     loadGainsFileUrl = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                       QString( "*" ), kapp->activeWindow(),
-                       QString( i18n("Select Gimp Gains Mixer File to Load")) );
+                                               QString("*"), kapp->activeWindow(),
+                                               QString(i18n("Select Gimp Gains Mixer File to Load")));
 
-    if ( loadGainsFileUrl.isEmpty() )
+    if (loadGainsFileUrl.isEmpty())
     {
         return;
     }
 
     fp = fopen(QFile::encodeName(loadGainsFileUrl.toLocalFile()), "r");
 
-    if ( fp )
+    if (fp)
     {
 //        ChannelType currentOutputChannel = RedChannel;
         char buf1[1024];
@@ -586,12 +586,12 @@ void MixerSettings::loadSettings()
 //        }
 
         // FIXME: scanf without field width limits can crash with huge input data
-        fscanf (fp, "%*s %s", buf1); // preview flag, preserved for compatibility
+        fscanf(fp, "%*s %s", buf1);  // preview flag, preserved for compatibility
 
         // FIXME: scanf without field width limits can crash with huge input data
-        fscanf (fp, "%*s %s", buf1);
+        fscanf(fp, "%*s %s", buf1);
 
-        if (strcmp (buf1, "true") == 0)
+        if (strcmp(buf1, "true") == 0)
         {
             settings.bMonochrome = true;
         }
@@ -601,9 +601,9 @@ void MixerSettings::loadSettings()
         }
 
         // FIXME: scanf without field width limits can crash with huge input data
-        fscanf (fp, "%*s %s", buf1);
+        fscanf(fp, "%*s %s", buf1);
 
-        if (strcmp (buf1, "true") == 0)
+        if (strcmp(buf1, "true") == 0)
         {
             settings.bPreserveLum = true;
         }
@@ -613,25 +613,25 @@ void MixerSettings::loadSettings()
         }
 
         // FIXME: scanf without field width limits can crash with huge input data
-        fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
+        fscanf(fp, "%*s %s %s %s", buf1, buf2, buf3);
         settings.redRedGain   = atof(buf1);
         settings.redGreenGain = atof(buf2);
         settings.redBlueGain  = atof(buf3);
 
         // FIXME: scanf without field width limits can crash with huge input data
-        fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
+        fscanf(fp, "%*s %s %s %s", buf1, buf2, buf3);
         settings.greenRedGain   = atof(buf1);
         settings.greenGreenGain = atof(buf2);
         settings.greenBlueGain  = atof(buf3);
 
         // FIXME: scanf without field width limits can crash with huge input data
-        fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
+        fscanf(fp, "%*s %s %s %s", buf1, buf2, buf3);
         settings.blueRedGain   = atof(buf1);
         settings.blueGreenGain = atof(buf2);
         settings.blueBlueGain  = atof(buf3);
 
         // FIXME: scanf without field width limits can crash with huge input data
-        fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
+        fscanf(fp, "%*s %s %s %s", buf1, buf2, buf3);
         settings.blackRedGain   = atof(buf1);
         settings.blackGreenGain = atof(buf2);
         settings.blackBlueGain  = atof(buf3);
@@ -654,17 +654,17 @@ void MixerSettings::saveAsSettings()
     FILE* fp = 0L;
 
     saveGainsFileUrl = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                       QString( "*" ), kapp->activeWindow(),
-                       QString( i18n("Gimp Gains Mixer File to Save")) );
+                                               QString("*"), kapp->activeWindow(),
+                                               QString(i18n("Gimp Gains Mixer File to Save")));
 
-    if ( saveGainsFileUrl.isEmpty() )
+    if (saveGainsFileUrl.isEmpty())
     {
         return;
     }
 
     fp = fopen(QFile::encodeName(saveGainsFileUrl.toLocalFile()), "w");
 
-    if ( fp )
+    if (fp)
     {
         const char* str = 0L;
         char        buf1[256];
@@ -676,47 +676,50 @@ void MixerSettings::saveAsSettings()
             case RedChannel:
                 str = "RED";
                 break;
+
             case GreenChannel:
                 str = "GREEN";
                 break;
+
             case BlueChannel:
                 str = "BLUE";
                 break;
+
             default:
                 kWarning() <<  "Unknown Color channel gains";
                 break;
         }
 
-        fprintf (fp, "# Channel Mixer Configuration File\n");
+        fprintf(fp, "# Channel Mixer Configuration File\n");
 
-        fprintf (fp, "CHANNEL: %s\n", str);
-        fprintf (fp, "PREVIEW: %s\n", "true"); // preserved for compatibility
-        fprintf (fp, "MONOCHROME: %s\n",
-                 d->mixerSettings.bMonochrome ? "true" : "false");
-        fprintf (fp, "PRESERVE_LUMINOSITY: %s\n",
-                 d->mixerSettings.bPreserveLum ? "true" : "false");
+        fprintf(fp, "CHANNEL: %s\n", str);
+        fprintf(fp, "PREVIEW: %s\n", "true");  // preserved for compatibility
+        fprintf(fp, "MONOCHROME: %s\n",
+                d->mixerSettings.bMonochrome ? "true" : "false");
+        fprintf(fp, "PRESERVE_LUMINOSITY: %s\n",
+                d->mixerSettings.bPreserveLum ? "true" : "false");
 
-        sprintf (buf1, "%5.3f", d->mixerSettings.redRedGain);
-        sprintf (buf2, "%5.3f", d->mixerSettings.redGreenGain);
-        sprintf (buf3, "%5.3f", d->mixerSettings.redBlueGain);
-        fprintf (fp, "RED: %s %s %s\n", buf1, buf2,buf3);
+        sprintf(buf1, "%5.3f", d->mixerSettings.redRedGain);
+        sprintf(buf2, "%5.3f", d->mixerSettings.redGreenGain);
+        sprintf(buf3, "%5.3f", d->mixerSettings.redBlueGain);
+        fprintf(fp, "RED: %s %s %s\n", buf1, buf2, buf3);
 
-        sprintf (buf1, "%5.3f", d->mixerSettings.greenRedGain);
-        sprintf (buf2, "%5.3f", d->mixerSettings.greenGreenGain);
-        sprintf (buf3, "%5.3f", d->mixerSettings.greenBlueGain);
-        fprintf (fp, "GREEN: %s %s %s\n", buf1, buf2,buf3);
+        sprintf(buf1, "%5.3f", d->mixerSettings.greenRedGain);
+        sprintf(buf2, "%5.3f", d->mixerSettings.greenGreenGain);
+        sprintf(buf3, "%5.3f", d->mixerSettings.greenBlueGain);
+        fprintf(fp, "GREEN: %s %s %s\n", buf1, buf2, buf3);
 
-        sprintf (buf1, "%5.3f", d->mixerSettings.blueRedGain);
-        sprintf (buf2, "%5.3f", d->mixerSettings.blueGreenGain);
-        sprintf (buf3, "%5.3f", d->mixerSettings.blueBlueGain);
-        fprintf (fp, "BLUE: %s %s %s\n", buf1, buf2,buf3);
+        sprintf(buf1, "%5.3f", d->mixerSettings.blueRedGain);
+        sprintf(buf2, "%5.3f", d->mixerSettings.blueGreenGain);
+        sprintf(buf3, "%5.3f", d->mixerSettings.blueBlueGain);
+        fprintf(fp, "BLUE: %s %s %s\n", buf1, buf2, buf3);
 
-        sprintf (buf1, "%5.3f", d->mixerSettings.blackRedGain);
-        sprintf (buf2, "%5.3f", d->mixerSettings.blackGreenGain);
-        sprintf (buf3, "%5.3f", d->mixerSettings.blackBlueGain);
-        fprintf (fp, "BLACK: %s %s %s\n", buf1, buf2,buf3);
+        sprintf(buf1, "%5.3f", d->mixerSettings.blackRedGain);
+        sprintf(buf2, "%5.3f", d->mixerSettings.blackGreenGain);
+        sprintf(buf3, "%5.3f", d->mixerSettings.blackBlueGain);
+        fprintf(fp, "BLACK: %s %s %s\n", buf1, buf2, buf3);
 
-        fclose (fp);
+        fclose(fp);
     }
     else
     {

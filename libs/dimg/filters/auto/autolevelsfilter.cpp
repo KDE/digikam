@@ -99,11 +99,11 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     {
         if (sixteenBit)
         {
-            desData = new uchar[w*h*8];
+            desData = new uchar[w * h * 8];
         }
         else
         {
-            desData = new uchar[w*h*4];
+            desData = new uchar[w * h * 4];
         }
 
         postProgress(20);
@@ -150,11 +150,11 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     {
         if (sixteenBit)
         {
-            memcpy (data, desData, w*h*8);
+            memcpy(data, desData, w * h * 8);
         }
         else
         {
-            memcpy (data, desData, w*h*4);
+            memcpy(data, desData, w * h * 4);
         }
 
         postProgress(80);

@@ -151,8 +151,8 @@ HSLSettings::HSLSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->HSSelector, SIGNAL(valueChanged(int,int)),
-            this, SLOT(slotHSChanged(int,int)));
+    connect(d->HSSelector, SIGNAL(valueChanged(int, int)),
+            this, SLOT(slotHSChanged(int, int)));
 
     connect(d->hInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
@@ -184,7 +184,7 @@ void HSLSettings::slotHSChanged(int h, int s)
         hue = (double)(h) - 359.0;
     }
 
-    double sat = ((double)s * (200.0/255.0)) - 100.0;
+    double sat = ((double)s * (200.0 / 255.0)) - 100.0;
 
     d->hInput->blockSignals(true);
     d->sInput->blockSignals(true);
@@ -215,7 +215,7 @@ void HSLSettings::slotHChanged(double h)
 
 void HSLSettings::slotSChanged(double s)
 {
-    int sat = (int)((s + 100.0) * (255.0/200.0));
+    int sat = (int)((s + 100.0) * (255.0 / 200.0));
 
     d->HSSelector->blockSignals(true);
     d->HSSelector->setYValue(sat);

@@ -81,4 +81,19 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 071 ==> 174070 : enhancement plugins should be not in the menu, but in the toolbar on the right.
 072 ==> 225564 : Automatically assign parent tags.
 073 ==> 233547 : Adjusting exif orientation doesn't work for ORF images.
-074 ==> 
+074 ==> 285135 : digiKam crashes at launch.
+075 ==> 277974 : Deleted images are still shown. Need manual Rescan.
+076 ==> 289357 : digiKam hangs at "Loading database".
+077 ==> 259783 : Picture-orientation is wrong.
+078 ==> 241244 : Lens auto correction doesn't include Nikon D90 and doesn't recognize 18-70 kit kens.
+079 ==> 289006 : digiKam crashed in import dialog when selecting filter on videos.
+080 ==> 277584 : digiKam crashed while applying Lens correction (Lensfun).
+081 ==> 150608 : Batching files does multiple processes together. (Resize and Rename in one action is a good example).
+082 ==> 155677 : Batch rename shouldn't always add a sequence number.
+083 ==> 131936 : Batch Rename Images - file extension in uppercase.
+084 ==> 197386 : Crop tool doesn't remember settings correctly.
+085 ==> 
+
+
+
+

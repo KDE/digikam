@@ -62,14 +62,19 @@ static LqrEnergyFuncBuiltinType toLqrEnergy(ContentAwareContainer::EnergyFunctio
         case ContentAwareContainer::GradientNorm:
         default:
             return LQR_EF_GRAD_NORM;
+
         case ContentAwareContainer::SumOfAbsoluteValues:
             return LQR_EF_GRAD_SUMABS;
+
         case ContentAwareContainer::XAbsoluteValue:
             return LQR_EF_GRAD_XABS;
+
         case ContentAwareContainer::LumaGradientNorm:
             return LQR_EF_LUMA_GRAD_NORM;
+
         case ContentAwareContainer::LumaSumOfAbsoluteValues:
             return LQR_EF_LUMA_GRAD_SUMABS;
+
         case ContentAwareContainer::LumaXAbsoluteValue:
             return LQR_EF_LUMA_GRAD_XABS;
     }
@@ -82,6 +87,7 @@ static LqrResizeOrder toLqrOrder(Qt::Orientation direction)
         case Qt::Horizontal:
         default:
             return LQR_RES_ORDER_HOR;
+
         case Qt::Vertical:
             return LQR_RES_ORDER_VERT;
     }
@@ -186,7 +192,7 @@ void ContentAwareFilter::getEnergyImage()
 
     int w        = lqr_carver_get_width(d->carver);
     int h        = lqr_carver_get_height(d->carver);
-    guchar* buff = (guchar*) malloc(w*h*3*sizeof(guchar));
+    guchar* buff = (guchar*) malloc(w * h * 3 * sizeof(guchar));
 
     lqr_carver_get_energy_image(d->carver, buff, 1, LQR_COLDEPTH_8I, LQR_RGBA_IMAGE);
 }
@@ -222,9 +228,9 @@ void ContentAwareFilter::filterImage()
     // Write pixels in the DImg structure image
     lqr_carver_scan_reset(d->carver);
 
-    void*           rgb=0;
-    uchar*          rgbOut8=0;
-    unsigned short* rgbOut16=0;
+    void*           rgb = 0;
+    uchar*          rgbOut8 = 0;
+    unsigned short* rgbOut16 = 0;
 
     if (m_orgImage.sixteenBit())
     {
@@ -246,9 +252,9 @@ void ContentAwareFilter::filterImage()
 
 void ContentAwareFilter::progressCallback(int progress)
 {
-    if (progress%5 == 0)
+    if (progress % 5 == 0)
     {
-        postProgress( progress );
+        postProgress(progress);
     }
 
     //kDebug() << "Content Aware Resizing: " << progress << " %";
@@ -270,10 +276,10 @@ bool ContentAwareFilter::isSkinTone(const DColor& color)
     double B = color.blue()  / 255.0;
     double S = R + G + B;
 
-    return( (B/G         < 1.249) &&
-            (S/3.0*R     > 0.696) &&
-            (1.0/3.0-B/S > 0.014) &&
-            (G/(3.0*S)   < 0.108)
+    return((B / G         < 1.249) &&
+           (S / 3.0 * R     > 0.696) &&
+           (1.0 / 3.0 - B / S > 0.014) &&
+           (G / (3.0 * S)   < 0.108)
           );
 }
 
@@ -281,14 +287,14 @@ void ContentAwareFilter::buildSkinToneBias()
 {
     DColor c;
 
-    for (uint x=0; x < m_orgImage.width(); ++x)
+    for (uint x = 0; x < m_orgImage.width(); ++x)
     {
-        for (uint y=0; y < m_orgImage.height(); ++y)
+        for (uint y = 0; y < m_orgImage.height(); ++y)
         {
             c = m_orgImage.getPixelColor(x, y);
             c.convertToEightBit();
-            gdouble bias = 10000*isSkinTone(c);
-            lqr_carver_bias_add_xy(d->carver,bias,x,y);
+            gdouble bias = 10000 * isSkinTone(c);
+            lqr_carver_bias_add_xy(d->carver, bias, x, y);
         }
     }
 }
@@ -296,27 +302,27 @@ void ContentAwareFilter::buildSkinToneBias()
 void ContentAwareFilter::buildBias(const QImage& mask)
 {
     QColor pixColor;
-    int    r,g,b,a;
+    int    r, g, b, a;
 
-    for (int x=0; x < mask.width(); ++x)
+    for (int x = 0; x < mask.width(); ++x)
     {
-        for (int y=0; y < mask.height(); ++y)
+        for (int y = 0; y < mask.height(); ++y)
         {
             pixColor = QColor::fromRgba(mask.pixel(x, y));
             pixColor.getRgb(&r, &g, &b, &a);
-            gdouble bias=0.0;
+            gdouble bias = 0.0;
 
             if (g == 255)
             {
-                bias=1000000.0;
+                bias = 1000000.0;
             }
 
             if (r == 255)
             {
-                bias=-1000000.0;
+                bias = -1000000.0;
             }
 
-            lqr_carver_bias_add_xy(d->carver,bias, x, y);
+            lqr_carver_bias_add_xy(d->carver, bias, x, y);
         }
     }
 }
@@ -375,16 +381,16 @@ LqrRetVal s_carverProgressUpdate(gdouble percentage)
     {
         if (!s_wResize || !s_hResize)
         {
-            progress = (int)(percentage*100.0);
+            progress = (int)(percentage * 100.0);
         }
         else
         {
-            progress = (int)(percentage*50.0);
+            progress = (int)(percentage * 50.0);
         }
     }
     else
     {
-        progress = (int)(50.0 + percentage*50.0);
+        progress = (int)(50.0 + percentage * 50.0);
     }
 
     s_resiser->progressCallback(progress);

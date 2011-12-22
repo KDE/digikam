@@ -114,7 +114,7 @@ void NRFilter::filterImage()
         }
     }
 
-    postProgress( 10 );
+    postProgress(10);
 
     // do colour model conversion sRGB[0,1] -> YCrCb.
 
@@ -123,7 +123,7 @@ void NRFilter::filterImage()
         srgb2ycbcr(d->fimg, width * height);
     }
 
-    postProgress( 20 );
+    postProgress(20);
 
     // denoise the channels individually
 
@@ -135,11 +135,11 @@ void NRFilter::filterImage()
         {
             waveletDenoise(d->buffer, width, height, d->settings.thresholds[c], d->settings.softness[c]);
 
-            progress = (int) (30.0 + ((double)c * 60.0) / 4);
+            progress = (int)(30.0 + ((double)c * 60.0) / 4);
 
-            if ( progress%5 == 0 )
+            if (progress % 5 == 0)
             {
-                postProgress( progress );
+                postProgress(progress);
             }
         }
     }
@@ -151,7 +151,7 @@ void NRFilter::filterImage()
         ycbcr2srgb(d->fimg, width * height);
     }
 
-    postProgress( 80 );
+    postProgress(80);
 
     // clip the values
 
@@ -163,7 +163,7 @@ void NRFilter::filterImage()
         }
     }
 
-    postProgress( 90 );
+    postProgress(90);
 
     // Write back the full image and convert pixel values from float [0,1].
 
@@ -173,17 +173,17 @@ void NRFilter::filterImage()
     {
         for (int x = 0; x < width; ++x)
         {
-            col.setRed(   (int)(d->fimg[0][j] + 0.5) );
-            col.setGreen( (int)(d->fimg[1][j] + 0.5) );
-            col.setBlue(  (int)(d->fimg[2][j] + 0.5) );
-            col.setAlpha( m_orgImage.getPixelColor(x, y).alpha() );
+            col.setRed((int)(d->fimg[0][j] + 0.5));
+            col.setGreen((int)(d->fimg[1][j] + 0.5));
+            col.setBlue((int)(d->fimg[2][j] + 0.5));
+            col.setAlpha(m_orgImage.getPixelColor(x, y).alpha());
             ++j;
 
             m_destImage.setPixelColor(x, y, col);
         }
     }
 
-    postProgress( 100 );
+    postProgress(100);
 
     // Free buffers.
 
@@ -201,13 +201,13 @@ void NRFilter::filterImage()
 void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
                               float threshold, double softness)
 {
-    float*       temp=0, thold;
-    unsigned int i, lev, lpass=0, hpass=0, size, col, row;
+    float        thold;
+    unsigned int i, lev, lpass = 0, hpass = 0, size, col, row;
     double       stdev[5];
     unsigned int samples[5];
 
     size  = width * height;
-    temp  = new float[qMax(width, height)];
+    QScopedArrayPointer<float> temp(new float[qMax(width, height)]);
 
     for (lev = 0; runningFlag() && (lev < 5); ++lev)
     {
@@ -215,25 +215,25 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
 
         for (row = 0; runningFlag() && (row < height); ++row)
         {
-            hatTransform(temp, fimg[hpass] + row * width, 1, width, 1 << lev);
+            hatTransform(temp.data(), fimg[hpass] + row * width, 1, width, 1 << lev);
 
             for (col = 0; col < width; ++col)
             {
-                fimg[lpass][row* width + col] = temp[col] * 0.25;
+                fimg[lpass][row * width + col] = temp[col] * 0.25;
             }
         }
 
         for (col = 0; runningFlag() && (col < width); ++col)
         {
-            hatTransform(temp, fimg[lpass] + col, width, height, 1 << lev);
+            hatTransform(temp.data(), fimg[lpass] + col, width, height, 1 << lev);
 
             for (row = 0; row < height; ++row)
             {
-                fimg[lpass][row* width + col] = temp[row] * 0.25;
+                fimg[lpass][row * width + col] = temp[row] * 0.25;
             }
         }
 
-        thold = 5.0 / (1 << 6) * exp (-2.6 * sqrt (lev + 1.0)) * 0.8002 / exp (-2.6);
+        thold = 5.0 / (1 << 6) * exp(-2.6 * sqrt(lev + 1.0)) * 0.8002 / exp(-2.6);
 
         // initialize stdev values for all intensities
 
@@ -333,11 +333,9 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
     {
         fimg[0][i] = fimg[0][i] + fimg[lpass][i];
     }
-
-    delete [] temp;
 }
 
-void NRFilter::hatTransform (float* temp, float* base, int st, int size, int sc)
+void NRFilter::hatTransform(float* temp, float* base, int st, int size, int sc)
 {
     int i;
 

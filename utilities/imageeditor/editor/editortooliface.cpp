@@ -182,7 +182,7 @@ void EditorToolIface::setToolInfoMessage(const QString& txt)
 void EditorToolIface::setToolStartProgress(const QString& toolName)
 {
     d->editor->setToolStartProgress(toolName);
-    d->editor->toggleZoomActions( !d->editor->editorStackView()->isZoomablePreview() );
+    d->editor->toggleZoomActions(!d->editor->editorStackView()->isZoomablePreview());
 }
 
 void EditorToolIface::setToolProgress(int progress)
@@ -193,7 +193,7 @@ void EditorToolIface::setToolProgress(int progress)
 void EditorToolIface::setToolStopProgress()
 {
     d->editor->setToolStopProgress();
-    d->editor->toggleZoomActions( d->editor->editorStackView()->isZoomablePreview() );
+    d->editor->toggleZoomActions(d->editor->editorStackView()->isZoomablePreview());
 }
 
 void EditorToolIface::slotToolAborted()

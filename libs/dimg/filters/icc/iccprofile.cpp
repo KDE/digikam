@@ -288,7 +288,7 @@ QByteArray IccProfile::data()
     {
         QFile file(d->filePath);
 
-        if ( !file.open(QIODevice::ReadOnly) )
+        if (!file.open(QIODevice::ReadOnly))
         {
             return QByteArray();
         }
@@ -418,24 +418,31 @@ IccProfile::ProfileType IccProfile::type()
         case 0x6e6b7066: // 'nkbf', proprietary in Nikon profiles
             d->type = Input;
             break;
+
         case icSigDisplayClass:
             d->type = Display;
             break;
+
         case icSigOutputClass:
             d->type = Output;
             break;
+
         case icSigColorSpaceClass:
             d->type = ColorSpace;
             break;
+
         case icSigLinkClass:
             d->type = DeviceLink;
             break;
+
         case icSigAbstractClass:
             d->type = Abstract;
             break;
+
         case icSigNamedColorClass:
             d->type = NamedColor;
             break;
+
         default:
             break;
     }
@@ -456,7 +463,7 @@ bool IccProfile::writeToFile(const QString& filePath)
     {
         QFile file(filePath);
 
-        if ( !file.open(QIODevice::WriteOnly) )
+        if (!file.open(QIODevice::WriteOnly))
         {
             return false;
         }
@@ -509,7 +516,7 @@ QStringList IccProfile::defaultSearchPaths()
         dataDirs << "/usr/local/share";
     }
 
-    foreach (const QString& dataDir, dataDirs)
+    foreach(const QString & dataDir, dataDirs)
     {
         candidates << dataDir + "/color/icc";
     }
@@ -530,7 +537,7 @@ QStringList IccProfile::defaultSearchPaths()
 
 #endif
 
-    foreach (const QString& candidate, candidates)
+    foreach(const QString & candidate, candidates)
     {
         QDir dir(candidate);
 

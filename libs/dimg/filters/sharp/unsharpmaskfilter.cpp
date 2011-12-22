@@ -86,7 +86,7 @@ void UnsharpMaskFilter::filterImage()
     BlurFilter(this, m_orgImage, m_destImage, 0, 10, (int)(m_radius));
 
     quantum          = m_destImage.sixteenBit() ? 65535 : 255;
-    quantumThreshold = quantum*m_threshold;
+    quantumThreshold = quantum * m_threshold;
 
     for (uint y = 0 ; runningFlag() && (y < m_destImage.height()) ; ++y)
     {
@@ -96,57 +96,57 @@ void UnsharpMaskFilter::filterImage()
             q = m_destImage.getPixelColor(x, y);
 
             // Red channel.
-            value = (double)(p.red())-(double)(q.red());
+            value = (double)(p.red()) - (double)(q.red());
 
-            if (fabs(2.0*value) < quantumThreshold)
+            if (fabs(2.0 * value) < quantumThreshold)
             {
                 value = (double)(p.red());
             }
             else
             {
-                value = (double)(p.red()) + value*m_amount;
+                value = (double)(p.red()) + value * m_amount;
             }
 
             q.setRed(CLAMP(lround(value), zero, quantum));
 
             // Green Channel.
-            value = (double)(p.green())-(double)(q.green());
+            value = (double)(p.green()) - (double)(q.green());
 
-            if (fabs(2.0*value) < quantumThreshold)
+            if (fabs(2.0 * value) < quantumThreshold)
             {
                 value = (double)(p.green());
             }
             else
             {
-                value = (double)(p.green()) + value*m_amount;
+                value = (double)(p.green()) + value * m_amount;
             }
 
             q.setGreen(CLAMP(lround(value), zero, quantum));
 
             // Blue Channel.
-            value = (double)(p.blue())-(double)(q.blue());
+            value = (double)(p.blue()) - (double)(q.blue());
 
-            if (fabs(2.0*value) < quantumThreshold)
+            if (fabs(2.0 * value) < quantumThreshold)
             {
                 value = (double)(p.blue());
             }
             else
             {
-                value = (double)(p.blue()) + value*m_amount;
+                value = (double)(p.blue()) + value * m_amount;
             }
 
             q.setBlue(CLAMP(lround(value), zero, quantum));
 
             // Alpha Channel.
-            value = (double)(p.alpha())-(double)(q.alpha());
+            value = (double)(p.alpha()) - (double)(q.alpha());
 
-            if (fabs(2.0*value) < quantumThreshold)
+            if (fabs(2.0 * value) < quantumThreshold)
             {
                 value = (double)(p.alpha());
             }
             else
             {
-                value = (double)(p.alpha()) + value*m_amount;
+                value = (double)(p.alpha()) + value * m_amount;
             }
 
             q.setAlpha(CLAMP(lround(value), zero, quantum));
@@ -156,9 +156,9 @@ void UnsharpMaskFilter::filterImage()
 
         progress = (int)(10.0 + ((double)y * 90.0) / m_destImage.height());
 
-        if ( progress%5 == 0 )
+        if (progress % 5 == 0)
         {
-            postProgress( progress );
+            postProgress(progress);
         }
     }
 }

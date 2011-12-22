@@ -348,14 +348,17 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
                     d->metadataResult->setText(i18n("(no metadata available)"));
                     d->metadataResult->setStyleSheet(d->redStyle);
                     break;
+
                 case LensFunIface::MetadataNoMatch:
                     d->metadataResult->setText(i18n("(no match found)"));
                     d->metadataResult->setStyleSheet(d->redStyle);
                     break;
+
                 case LensFunIface::MetadataPartialMatch:
                     d->metadataResult->setText(i18n("(partial match found)"));
                     d->metadataResult->setStyleSheet(d->orangeStyle);
                     break;
+
                 default:
                     d->metadataResult->setText(i18n("(exact match found)"));
                     d->metadataResult->setStyleSheet(d->greenStyle);
@@ -571,33 +574,33 @@ void LensFunCameraSelector::populateDeviceCombos()
 
     bool firstRun = false;
 
-    if ( d->make->combo()->count() == 0 )
+    if (d->make->combo()->count() == 0)
     {
         firstRun = true;
     }
 
-    while ( *it )
+    while (*it)
     {
-        if ( firstRun )
+        if (firstRun)
         {
             // Maker DB does not change, so we fill it only once.
-            if ( (*it)->Maker )
+            if ((*it)->Maker)
             {
-                QString t( (*it)->Maker );
+                QString t((*it)->Maker);
 
-                if ( d->make->combo()->findText( t, Qt::MatchExactly ) < 0 )
+                if (d->make->combo()->findText(t, Qt::MatchExactly) < 0)
                 {
-                    d->make->addItem( t );
+                    d->make->addItem(t);
                 }
             }
         }
 
         // Fill models for current selected maker
-        if ( (*it)->Model && (*it)->Maker == d->make->combo()->currentText() )
+        if ((*it)->Model && (*it)->Maker == d->make->combo()->currentText())
         {
             LensFunIface::DevicePtr dev = *it;
             QVariant b                  = qVariantFromValue(dev);
-            d->model->combo()->addItem( dev->Model, b );
+            d->model->combo()->addItem(dev->Model, b);
         }
 
         ++it;
@@ -615,7 +618,7 @@ void LensFunCameraSelector::populateLensCombo()
     d->lens->blockSignals(true);
     d->lens->combo()->clear();
 
-    QVariant v = d->model->combo()->itemData( d->model->currentIndex() );
+    QVariant v = d->model->combo()->itemData(d->model->currentIndex());
 
     if (!v.isValid() || v.isNull())
     {
@@ -665,7 +668,7 @@ void LensFunCameraSelector::slotMakeSelected()
 
 void LensFunCameraSelector::slotModelSelected()
 {
-    QVariant v = d->model->combo()->itemData( d->model->currentIndex() );
+    QVariant v = d->model->combo()->itemData(d->model->currentIndex());
     d->iface->setUsedCamera(d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
                             v.value<LensFunIface::DevicePtr>());
     emit signalLensSettingsChanged();
@@ -673,7 +676,7 @@ void LensFunCameraSelector::slotModelSelected()
 
 void LensFunCameraSelector::slotLensSelected()
 {
-    QVariant v = d->lens->combo()->itemData( d->lens->currentIndex() );
+    QVariant v = d->lens->combo()->itemData(d->lens->currentIndex());
     d->iface->setUsedLens(d->metadataUsage->isChecked() && d->passiveMetadataUsage ? 0 :
                           v.value<LensFunIface::LensPtr>());
 

@@ -37,17 +37,17 @@ the same distribution terms that you use for the rest of that program.
 
 #ifndef __cmsprf_H
 
-// liblcms includes.
+// liblcms includes
 
 #include <lcms.h>
 
-// C++ includes.
+// C++ includes
 
 #include <cctype>
 #include <climits>
 #include <cstdarg>
 
-// C Ansi includes.
+// C Ansi includes
 
 #include <sys/stat.h>
 

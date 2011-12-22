@@ -130,7 +130,7 @@ BorderSettings::BorderSettings(QWidget* parent)
     QGridLayout* grid = new QGridLayout(parent);
 
     QLabel* label1 = new QLabel(i18n("Type:"));
-    d->borderType  = new RComboBox( );
+    d->borderType  = new RComboBox();
     d->borderType->addItem(i18nc("solid border type", "Solid"));
     // NOTE: Niepce is a real name. This is the first guy in the world to have built a camera.
     d->borderType->addItem("Niepce");
@@ -152,7 +152,7 @@ BorderSettings::BorderSettings(QWidget* parent)
     d->borderType->addItem(i18n("Decorative Rock"));
     d->borderType->addItem(i18n("Decorative Wall"));
     d->borderType->setDefaultIndex(BorderContainer::SolidBorder);
-    d->borderType->setWhatsThis( i18n("Select the border type to add around the image here."));
+    d->borderType->setWhatsThis(i18n("Select the border type to add around the image here."));
 
     KSeparator* line1 = new KSeparator(Qt::Horizontal);
 
@@ -161,16 +161,16 @@ BorderSettings::BorderSettings(QWidget* parent)
     d->preserveAspectRatio = new QCheckBox();
     d->preserveAspectRatio->setText(i18n("Preserve Aspect Ratio"));
     d->preserveAspectRatio->setWhatsThis(i18n("Enable this option if you want to preserve the aspect "
-                                         "ratio of image. If enabled, the border width will be "
-                                         "a percentage of the image size, else the border width will be "
-                                         "in pixels."));
+                                              "ratio of image. If enabled, the border width will be "
+                                              "a percentage of the image size, else the border width will be "
+                                              "in pixels."));
 
     d->labelBorderPercent  = new QLabel(i18n("Width (%):"));
     d->borderPercent       = new RIntNumInput();
     d->borderPercent->setRange(1, 50, 1);
     d->borderPercent->setSliderEnabled(true);
     d->borderPercent->setDefaultValue(10);
-    d->borderPercent->setWhatsThis( i18n("Set here the border width as a percentage of the image size."));
+    d->borderPercent->setWhatsThis(i18n("Set here the border width as a percentage of the image size."));
 
     d->labelBorderWidth = new QLabel(i18n("Width (pixels):"));
     d->borderWidth      = new RIntNumInput();
@@ -184,9 +184,9 @@ BorderSettings::BorderSettings(QWidget* parent)
     // -------------------------------------------------------------------
 
     d->labelForeground   = new QLabel();
-    d->firstColorButton  = new KColorButton( QColor( 192, 192, 192 ) );
+    d->firstColorButton  = new KColorButton(QColor(192, 192, 192));
     d->labelBackground   = new QLabel();
-    d->secondColorButton = new KColorButton( QColor( 128, 128, 128 ) );
+    d->secondColorButton = new KColorButton(QColor(128, 128, 128));
 
     // -------------------------------------------------------------------
 
@@ -243,8 +243,8 @@ BorderContainer BorderSettings::settings() const
     prm.borderWidth2          = 15;
     prm.borderWidth3          = 15;
     prm.borderWidth4          = 10;
-    prm.borderPercent         = d->borderPercent->value()/100.0;
-    prm.borderPath            = getBorderPath( d->borderType->currentIndex() );
+    prm.borderPercent         = d->borderPercent->value() / 100.0;
+    prm.borderPath            = getBorderPath(d->borderType->currentIndex());
     prm.solidColor            = d->solidColor;
     prm.niepceBorderColor     = d->niepceBorderColor;
     prm.niepceLineColor       = d->niepceLineColor;

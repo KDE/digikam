@@ -108,7 +108,7 @@ void DImgThreadedFilter::setupFilter(const DImg& orgImage)
 }
 
 void DImgThreadedFilter::setupAndStartDirectly(const DImg& orgImage, DImgThreadedFilter* master,
-        int progressBegin, int progressEnd)
+                                               int progressBegin, int progressEnd)
 {
     initSlave(master, progressBegin, progressEnd);
     setupFilter(orgImage);
