@@ -90,8 +90,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 080 ==> 277584 : digiKam crashed while applying Lens correction (Lensfun).
 081 ==> 150608 : Batching files does multiple processes together. (Resize and Rename in one action is a good example).
 082 ==> 155677 : Batch rename shouldn't always add a sequence number.
-083 ==> 131936 - Batch Rename Images - file extension in uppercase.
-084 ==> 
+083 ==> 131936 : Batch Rename Images - file extension in uppercase.
+084 ==> 197386 : Crop tool doesn't remember settings correctly.
+085 ==> 
 
 
 
