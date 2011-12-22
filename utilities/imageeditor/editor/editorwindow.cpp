@@ -320,11 +320,11 @@ void EditorWindow::setupStandardActions()
 
     m_backwardAction = KStandardAction::back(this, SLOT(slotBackward()), this);
     actionCollection()->addAction("editorwindow_backward", m_backwardAction);
-    m_backwardAction->setShortcut( KShortcut(Qt::Key_PageUp, Qt::Key_Backspace) );
+    m_backwardAction->setShortcut(KShortcut(Qt::Key_PageUp, Qt::Key_Backspace));
 
     m_forwardAction = KStandardAction::forward(this, SLOT(slotForward()), this);
     actionCollection()->addAction("editorwindow_forward", m_forwardAction);
-    m_forwardAction->setShortcut( KShortcut(Qt::Key_PageDown, Qt::Key_Space) );
+    m_forwardAction->setShortcut(KShortcut(Qt::Key_PageDown, Qt::Key_Space));
 
     m_firstAction = new KAction(KIcon("go-first"), i18n("&First"), this);
     m_firstAction->setShortcut(KStandardShortcut::begin());
@@ -408,7 +408,7 @@ void EditorWindow::setupStandardActions()
     m_discardChangesAction->setEnabled(false);
 
     d->filePrintAction = new KAction(KIcon("document-print-frame"), i18n("Print Image..."), this);
-    d->filePrintAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_P));
+    d->filePrintAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_P));
     connect(d->filePrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
     actionCollection()->addAction("editorwindow_print", d->filePrintAction);
 
@@ -462,12 +462,12 @@ void EditorWindow::setupStandardActions()
     d->redoSignalMapper->setMapping(m_redoAction, 1);
 
     d->selectAllAction = new KAction(i18nc("Create a selection containing the full image", "Select All"), this);
-    d->selectAllAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_A));
+    d->selectAllAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_A));
     connect(d->selectAllAction, SIGNAL(triggered()), m_canvas, SLOT(slotSelectAll()));
     actionCollection()->addAction("editorwindow_selectAll", d->selectAllAction);
 
     d->selectNoneAction = new KAction(i18n("Select None"), this);
-    d->selectNoneAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
+    d->selectNoneAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     connect(d->selectNoneAction, SIGNAL(triggered()), m_canvas, SLOT(slotSelectNone()));
     actionCollection()->addAction("editorwindow_selectNone", d->selectNoneAction);
 
@@ -525,7 +525,7 @@ void EditorWindow::setupStandardActions()
     d->viewOverExpoAction->setShortcut(KShortcut(Qt::Key_F11));
     d->viewOverExpoAction->setWhatsThis(i18n("Set this option to display white "
                                              "overlaid on the image. This will help you to avoid "
-                                             "over-exposing the image." ) );
+                                             "over-exposing the image."));
     connect(d->viewOverExpoAction, SIGNAL(triggered(bool)), this, SLOT(slotSetOverExposureIndicator(bool)));
     actionCollection()->addAction("editorwindow_overexposure", d->viewOverExpoAction);
 
@@ -548,7 +548,7 @@ void EditorWindow::setupStandardActions()
     // -- Standard 'Transform' menu actions ---------------------------------------------
 
     d->cropAction = new KAction(KIcon("transform-crop-and-resize"), i18nc("@action", "Crop to Selection"), this);
-    d->cropAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_X));
+    d->cropAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_X));
     connect(d->cropAction, SIGNAL(triggered()), m_canvas, SLOT(slotCrop()));
     actionCollection()->addAction("editorwindow_crop", d->cropAction);
     d->cropAction->setEnabled(false);
@@ -558,13 +558,13 @@ void EditorWindow::setupStandardActions()
     // -- Standard 'Flip' menu actions ---------------------------------------------
 
     d->flipHorizAction = new KAction(KIcon("object-flip-horizontal"), i18n("Flip Horizontally"), this);
-    d->flipHorizAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Asterisk));
+    d->flipHorizAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Asterisk));
     connect(d->flipHorizAction, SIGNAL(triggered()), m_canvas, SLOT(slotFlipHoriz()));
     actionCollection()->addAction("editorwindow_flip_horiz", d->flipHorizAction);
     d->flipHorizAction->setEnabled(false);
 
     d->flipVertAction = new KAction(KIcon("object-flip-vertical"), i18n("Flip Vertically"), this);
-    d->flipVertAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Slash));
+    d->flipVertAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Slash));
     connect(d->flipVertAction, SIGNAL(triggered()), m_canvas, SLOT(slotFlipVert()));
     actionCollection()->addAction("editorwindow_flip_vert", d->flipVertAction);
     d->flipVertAction->setEnabled(false);
@@ -572,13 +572,13 @@ void EditorWindow::setupStandardActions()
     // -- Standard 'Rotate' menu actions ----------------------------------------
 
     d->rotateLeftAction = new KAction(KIcon("object-rotate-left"), i18n("Rotate Left"), this);
-    d->rotateLeftAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_Left));
+    d->rotateLeftAction->setShortcut(KShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_Left));
     connect(d->rotateLeftAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate270()));
     actionCollection()->addAction("editorwindow_rotate_left", d->rotateLeftAction);
     d->rotateLeftAction->setEnabled(false);
 
     d->rotateRightAction = new KAction(KIcon("object-rotate-right"), i18n("Rotate Right"), this);
-    d->rotateRightAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_Right));
+    d->rotateRightAction->setShortcut(KShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_Right));
     connect(d->rotateRightAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate90()));
     actionCollection()->addAction("editorwindow_rotate_right", d->rotateRightAction);
     d->rotateRightAction->setEnabled(false);
@@ -614,7 +614,7 @@ void EditorWindow::setupStandardActions()
 
     KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("editorwindow_backward_shift_space", altBackwardAction);
-    altBackwardAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
+    altBackwardAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Space));
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
 
     // -- Tool control actions ------------------------------
@@ -628,12 +628,12 @@ void EditorWindow::setupStandardActions()
 
     m_applyToolAction = new KAction(KStandardGuiItem::ok().icon(), i18n("Ok"), this);
     actionCollection()->addAction("editorwindow_applytool", m_applyToolAction);
-    m_applyToolAction->setShortcut( KShortcut(Qt::Key_Return) );
+    m_applyToolAction->setShortcut(KShortcut(Qt::Key_Return));
     connect(m_applyToolAction, SIGNAL(triggered()), this, SLOT(slotApplyTool()));
 
     m_closeToolAction = new KAction(KStandardGuiItem::cancel().icon(), i18n("Cancel"), this);
     actionCollection()->addAction("editorwindow_closetool", m_closeToolAction);
-    m_closeToolAction->setShortcut(KShortcut(Qt::Key_Escape) );
+    m_closeToolAction->setShortcut(KShortcut(Qt::Key_Escape));
     connect(m_closeToolAction, SIGNAL(triggered()), this, SLOT(slotCloseTool()));
 
 
@@ -669,12 +669,12 @@ void EditorWindow::setupStatusBar()
     d->infoLabel = new KSqueezedTextLabel(i18n("No selection"), statusBar());
     d->infoLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(d->infoLabel, 100);
-    d->infoLabel->setToolTip( i18n("Information about current image selection"));
+    d->infoLabel->setToolTip(i18n("Information about current image selection"));
 
     m_resLabel   = new KSqueezedTextLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_resLabel, 100);
-    m_resLabel->setToolTip( i18n("Information about image size"));
+    m_resLabel->setToolTip(i18n("Information about image size"));
 
     d->zoomBar   = new DZoomBar(statusBar());
     d->zoomBar->setZoomToFitAction(d->zoomFitToWindowAction);
@@ -763,7 +763,7 @@ void EditorWindow::slotAboutToShowUndoMenu()
     m_undoAction->menu()->clear();
     QStringList titles = m_canvas->interface()->getUndoHistory();
 
-    for (int i=0; i<titles.size(); ++i)
+    for (int i = 0; i < titles.size(); ++i)
     {
         QAction* action = m_undoAction->menu()->addAction(titles.at(i), d->undoSignalMapper, SLOT(map()));
         d->undoSignalMapper->setMapping(action, i + 1);
@@ -775,7 +775,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
     m_redoAction->menu()->clear();
     QStringList titles = m_canvas->interface()->getRedoHistory();
 
-    for (int i=0; i<titles.size(); ++i)
+    for (int i = 0; i < titles.size(); ++i)
     {
         QAction* action = m_redoAction->menu()->addAction(titles.at(i), d->redoSignalMapper, SLOT(map()));
         d->redoSignalMapper->setMapping(action, i + 1);
@@ -874,7 +874,7 @@ void EditorWindow::loadImagePlugins()
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
-    foreach (ImagePlugin* plugin, pluginList)
+    foreach(ImagePlugin * plugin, pluginList)
     {
         if (plugin)
         {
@@ -887,14 +887,14 @@ void EditorWindow::loadImagePlugins()
             if (categoryStr != QString("__INVALID__") && !categoryStr.isEmpty())
             {
                 KActionCategory* category = new KActionCategory(categoryStr, d->imagepluginsActionCollection);
-                foreach (QAction* action, plugin->actionCollection()->actions())
+                foreach(QAction * action, plugin->actionCollection()->actions())
                 {
                     category->addAction(action->objectName(), action);
                 }
             }
             else
             {
-                foreach (QAction* action, plugin->actionCollection()->actions())
+                foreach(QAction * action, plugin->actionCollection()->actions())
                 {
                     d->imagepluginsActionCollection->addAction(action->objectName(), action);
                 }
@@ -920,7 +920,7 @@ void EditorWindow::unLoadImagePlugins()
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
-    foreach (ImagePlugin* plugin, pluginList)
+    foreach(ImagePlugin * plugin, pluginList)
     {
         if (plugin)
         {
@@ -1159,7 +1159,7 @@ void EditorWindow::toggleStandardActions(bool val)
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
-    foreach (ImagePlugin* plugin, pluginList)
+    foreach(ImagePlugin * plugin, pluginList)
     {
         if (plugin)
         {
@@ -1202,7 +1202,7 @@ void EditorWindow::slotToggleFullScreen()
 {
     if (m_fullScreen) // out of fullscreen
     {
-        setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
+        setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
         m_canvas->setBackgroundColor(m_bgColor);
 
         slotShowMenuBar();
@@ -1212,7 +1212,7 @@ void EditorWindow::slotToggleFullScreen()
         if (d->removeFullScreenButton)
         {
             QList<KToolBar*> toolbars = toolBars();
-            foreach (KToolBar* toolbar, toolbars)
+            foreach(KToolBar * toolbar, toolbars)
             {
                 // name is set in ui.rc XML file
                 if (toolbar->objectName() == "ToolBar")
@@ -1244,7 +1244,7 @@ void EditorWindow::slotToggleFullScreen()
 
             QList<KToolBar*> toolbars = toolBars();
             KToolBar* mainToolbar     = 0;
-            foreach (KToolBar* toolbar, toolbars)
+            foreach(KToolBar * toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
                 {
@@ -1254,37 +1254,37 @@ void EditorWindow::slotToggleFullScreen()
             }
 
             // add fullscreen action if necessary
-            if ( mainToolbar && !mainToolbar->actions().contains(m_fullScreenAction) )
+            if (mainToolbar && !mainToolbar->actions().contains(m_fullScreenAction))
             {
                 mainToolbar->addAction(m_fullScreenAction);
-                d->removeFullScreenButton=true;
+                d->removeFullScreenButton = true;
             }
             else
             {
                 // If FullScreen button is enabled in toolbar settings,
                 // we shall not remove it when leaving of fullscreen mode.
-                d->removeFullScreenButton=false;
+                d->removeFullScreenButton = false;
             }
         }
 
         toggleGUI2FullScreen();
-        setWindowState( windowState() | Qt::WindowFullScreen ); // set
+        setWindowState(windowState() | Qt::WindowFullScreen);   // set
         m_fullScreen = true;
     }
 }
 
 void EditorWindow::slotLoadingProgress(const QString&, float progress)
 {
-    m_nameLabel->setProgressValue((int)(progress*100.0));
+    m_nameLabel->setProgressValue((int)(progress * 100.0));
 }
 
 void EditorWindow::slotSavingProgress(const QString&, float progress)
 {
-    m_nameLabel->setProgressValue((int)(progress*100.0));
+    m_nameLabel->setProgressValue((int)(progress * 100.0));
 
     if (m_savingProgressDialog)
     {
-        m_savingProgressDialog->progressBar()->setValue((int)(progress*100.0));
+        m_savingProgressDialog->progressBar()->setValue((int)(progress * 100.0));
     }
 }
 
@@ -1366,7 +1366,7 @@ DImageHistory EditorWindow::resolvedImageHistory(const DImageHistory& history)
     {
         QList<HistoryImageId>::iterator hit;
 
-        for (hit = it->referredImages.begin(); hit != it->referredImages.end(); )
+        for (hit = it->referredImages.begin(); hit != it->referredImages.end();)
         {
             QFileInfo info(hit->m_filePath + '/' + hit->m_fileName);
 
@@ -1559,6 +1559,7 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
                     }
 
                     break;
+
                 case OverwriteWithoutAsking:
 
                     if (m_nonDestructive)
@@ -1586,6 +1587,7 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
                     }
 
                     break;
+
                 case AlwaysSaveAs:
 
                     if (m_nonDestructive)
@@ -1680,7 +1682,7 @@ void EditorWindow::slotSelected(bool val)
     d->copyAction->setEnabled(val);
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
-    foreach (ImagePlugin* plugin, pluginList)
+    foreach(ImagePlugin * plugin, pluginList)
     {
         if (plugin)
         {
@@ -1706,7 +1708,7 @@ void EditorWindow::slotSelected(bool val)
 void EditorWindow::hideToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach (KToolBar* toolbar, toolbars)
+    foreach(KToolBar * toolbar, toolbars)
     {
         toolbar->hide();
     }
@@ -1715,7 +1717,7 @@ void EditorWindow::hideToolBars()
 void EditorWindow::showToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach (KToolBar* toolbar, toolbars)
+    foreach(KToolBar * toolbar, toolbars)
     {
         toolbar->show();
     }
@@ -1919,12 +1921,15 @@ void EditorWindow::movingSaveFileFinished(bool successful)
     {
         case SavingContextContainer::SavingStateNone:
             break;
+
         case SavingContextContainer::SavingStateSave:
             saveIsComplete();
             break;
+
         case SavingContextContainer::SavingStateSaveAs:
             saveAsIsComplete();
             break;
+
         case SavingContextContainer::SavingStateVersion:
             saveVersionIsComplete();
             break;
@@ -2039,7 +2044,7 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
 {
     FileSaveOptionsBox* options      = new FileSaveOptionsBox();
     QPointer<KFileDialog> imageFileSaveDialog
-        = new KFileDialog(initialUrl, QString(), this,options);
+        = new KFileDialog(initialUrl, QString(), this, options);
     options->setDialog(imageFileSaveDialog);
 
     ImageDialogPreview* preview = new ImageDialogPreview(imageFileSaveDialog);
@@ -2119,10 +2124,10 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
 #ifdef _WIN32
     //-- Show Settings Dialog ----------------------------------------------
 
-    const QString configShowImageSettingsDialog="ShowImageSettingsDialog";
+    const QString configShowImageSettingsDialog = "ShowImageSettingsDialog";
     bool showDialog = group.readEntry(configShowImageSettingsDialog, true);
 
-    if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE)!=DImg::NONE)
+    if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE) != DImg::NONE)
     {
         FileSaveOptionsDlg* fileSaveOptionsDialog   = new FileSaveOptionsDlg(this, options);
         options->slotImageFileFormatChanged(newURL.fileName());
@@ -2204,7 +2209,7 @@ QString EditorWindow::findFilterByExtension(const QStringList& allFilters, const
 
     const QString filterExtension = QString("*.%1").arg(extension.toLower());
 
-    foreach(const QString& filter, allFilters)
+    foreach(const QString & filter, allFilters)
     {
 
         if (filter.contains(filterExtension))
@@ -2227,7 +2232,7 @@ QString EditorWindow::findFilterByExtension(const QStringList& allFilters, const
 
 QString EditorWindow::getExtensionFromFilter(const QString& filter)
 {
-    kDebug () << "Trying to extract format from filter: " << filter;
+    kDebug() << "Trying to extract format from filter: " << filter;
 
     // find locations of interesting characters in the filter string
     const int asteriskLocation = filter.indexOf('*');
@@ -2400,7 +2405,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     QFileInfo fi(newURL.toLocalFile());
     m_savingContext.destinationExisted = fi.exists();
 
-    if ( m_savingContext.destinationExisted )
+    if (m_savingContext.destinationExisted)
     {
         if (!checkOverwrite(newURL))
         {
@@ -2535,7 +2540,7 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, 
 
     // Check for overwrite (saveAs only) --------------------------------------------
 
-    if ( m_savingContext.destinationExisted )
+    if (m_savingContext.destinationExisted)
     {
         // So, should we refuse to overwrite the original?
         // It's a frontal crash againt non-destructive principles.
@@ -2594,14 +2599,14 @@ bool EditorWindow::checkPermissions(const KUrl& url)
     {
         int result =
 
-            KMessageBox::warningYesNo( this, i18n("You do not have write permissions "
-                                                  "for the file named \"%1\". "
-                                                  "Are you sure you want "
-                                                  "to overwrite it?",
-                                                  url.fileName()),
-                                       i18n("Overwrite File?"),
-                                       KStandardGuiItem::overwrite(),
-                                       KStandardGuiItem::cancel() );
+            KMessageBox::warningYesNo(this, i18n("You do not have write permissions "
+                                                 "for the file named \"%1\". "
+                                                 "Are you sure you want "
+                                                 "to overwrite it?",
+                                                 url.fileName()),
+                                      i18n("Overwrite File?"),
+                                      KStandardGuiItem::overwrite(),
+                                      KStandardGuiItem::cancel());
 
         if (result != KMessageBox::Yes)
         {
@@ -2616,13 +2621,13 @@ bool EditorWindow::checkOverwrite(const KUrl& url)
 {
     int result =
 
-        KMessageBox::warningYesNo( this, i18n("A file named \"%1\" already "
-                                              "exists. Are you sure you want "
-                                              "to overwrite it?",
-                                              url.fileName()),
-                                   i18n("Overwrite File?"),
-                                   KStandardGuiItem::overwrite(),
-                                   KStandardGuiItem::cancel() );
+        KMessageBox::warningYesNo(this, i18n("A file named \"%1\" already "
+                                             "exists. Are you sure you want "
+                                             "to overwrite it?",
+                                             url.fileName()),
+                                  i18n("Overwrite File?"),
+                                  KStandardGuiItem::overwrite(),
+                                  KStandardGuiItem::cancel());
 
     return result == KMessageBox::Yes;
 }
@@ -3041,6 +3046,7 @@ void EditorWindow::addAction2ContextMenu(const QString& actionName, bool addDisa
     }
 
     QAction* action = actionCollection()->action(actionName);
+
     if (action && (action->isEnabled() || addDisabled))
     {
         m_contextMenu->addAction(action);
