@@ -26,7 +26,7 @@
 #ifndef WBCONTAINER_H
 #define WBCONTAINER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 

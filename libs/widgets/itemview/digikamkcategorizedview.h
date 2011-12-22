@@ -21,11 +21,11 @@
 #ifndef DIGIKAMKCATEGORIZEDVIEW_H
 #define DIGIKAMKCATEGORIZEDVIEW_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QListView>
 
-// Local includes.
+// Local includes
 
 #include "digikam_export.h"
 

@@ -26,7 +26,7 @@
 #ifndef WBFILTER_H
 #define WBFILTER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QColor>
 

@@ -24,7 +24,7 @@
 
 #include "localcontrastcontainer.h"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 #include <cstring>

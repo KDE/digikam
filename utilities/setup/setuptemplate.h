@@ -28,7 +28,7 @@
 
 #include <QScrollArea>
 
-// Local includes.
+// Local includes
 
 #include "template.h"
 
