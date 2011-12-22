@@ -210,6 +210,7 @@ EditorWindow::~EditorWindow()
 {
     delete m_canvas;
     delete m_IOFileSettings;
+    delete d->toolIface;
     delete d->exposureSettings;
     delete d;
 }
