@@ -89,7 +89,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 079 ==> 289006 : digiKam crashed in import dialog when selecting filter on videos.
 080 ==> 277584 : digiKam crashed while applying Lens correction (Lensfun).
 081 ==> 150608 : Batching files does multiple processes together. (Resize and Rename in one action is a good example).
-082 ==> 
+082 ==> 155677 : Batch rename shouldn't always add a sequence number.
+083 ==> 
 
 
 
