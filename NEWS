@@ -92,7 +92,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 082 ==> 155677 : Batch rename shouldn't always add a sequence number.
 083 ==> 131936 : Batch Rename Images - file extension in uppercase.
 084 ==> 197386 : Crop tool doesn't remember settings correctly.
-085 ==> 
+085 ==> 150874 : Bigger more informative hint in browser [patch].
+086 ==> 
+
 
 
 
