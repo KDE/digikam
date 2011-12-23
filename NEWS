@@ -95,4 +95,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 085 ==> 150874 : Bigger more informative hint in browser [patch].
 086 ==> 187653 : New Album cursor enhancement.
 087 ==> 289665 : Scan collections in the background.
-088 ==> 
+088 ==> 289686 : Cannot display slideshow on second monitor (with xrandr) [patch].
+089 ==> 
