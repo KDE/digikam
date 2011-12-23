@@ -82,9 +82,6 @@ void NormalizeFilter::normalizeImage()
     }
 
     NormalizeParam param;
-    unsigned short range;
-    int            progress;
-
 
     bool sixteenBit = m_orgImage.sixteenBit();
     int segments    = sixteenBit ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
@@ -192,7 +189,7 @@ void NormalizeFilter::normalizeImage()
 
     if (runningFlag())
     {
-        range = (unsigned short)(param.max - param.min);
+        unsigned short range = (unsigned short)(param.max - param.min);
 
         if (range != 0)
         {
@@ -213,7 +210,7 @@ void NormalizeFilter::normalizeImage()
     uint size   = w * h;
 
     // Apply LUT to image.
-
+    int progress = 0;
     if (!sixteenBit)        // 8 bits image.
     {
         uchar  red, green, blue;
