@@ -382,7 +382,7 @@ void FindDuplicatesView::slotAlbumDeleted(Album* a)
 
     SAlbum* album = static_cast<SAlbum*>(a);
 
-    FindDuplicatesAlbumItem* item = (FindDuplicatesAlbumItem*) album->extraData(this);
+    FindDuplicatesAlbumItem* item = static_cast<FindDuplicatesAlbumItem*>(album->extraData(this));
 
     if (item)
     {
