@@ -477,7 +477,7 @@ QString TAlbum::tagPath(bool leadingSlash) const
 
     if (parent())
     {
-        u = ((TAlbum*)parent())->tagPath(leadingSlash);
+        u = (static_cast<TAlbum*>(parent()))->tagPath(leadingSlash);
 
         if (!parent()->isRoot())
         {

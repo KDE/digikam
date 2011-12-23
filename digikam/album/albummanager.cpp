@@ -1869,7 +1869,7 @@ PAlbum* AlbumManager::findPAlbum(int id) const
 
     int gid = d->rootPAlbum->globalID() + id;
 
-    return (PAlbum*)(d->allAlbumsIdHash.value(gid));
+    return static_cast<PAlbum*>((d->allAlbumsIdHash.value(gid)));
 }
 
 TAlbum* AlbumManager::findTAlbum(int id) const
@@ -1881,7 +1881,7 @@ TAlbum* AlbumManager::findTAlbum(int id) const
 
     int gid = d->rootTAlbum->globalID() + id;
 
-    return (TAlbum*)(d->allAlbumsIdHash.value(gid));
+    return static_cast<TAlbum*>((d->allAlbumsIdHash.value(gid)));
 }
 
 SAlbum* AlbumManager::findSAlbum(int id) const
@@ -1893,7 +1893,7 @@ SAlbum* AlbumManager::findSAlbum(int id) const
 
     int gid = d->rootSAlbum->globalID() + id;
 
-    return (SAlbum*)(d->allAlbumsIdHash.value(gid));
+    return static_cast<SAlbum*>((d->allAlbumsIdHash.value(gid)));
 }
 
 DAlbum* AlbumManager::findDAlbum(int id) const
@@ -1905,7 +1905,7 @@ DAlbum* AlbumManager::findDAlbum(int id) const
 
     int gid = d->rootDAlbum->globalID() + id;
 
-    return (DAlbum*)(d->allAlbumsIdHash.value(gid));
+    return static_cast<DAlbum*>((d->allAlbumsIdHash.value(gid)));
 }
 
 Album* AlbumManager::findAlbum(int gid) const
