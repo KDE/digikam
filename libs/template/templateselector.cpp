@@ -146,12 +146,10 @@ Template TemplateSelector::getTemplate() const
             Template t;
             t.setTemplateTitle(Template::removeTemplateTitle());
             return t;
-            break;
         }
         case DONTCHANGE:
         {
             return Template();
-            break;
         }
         default:
         {
