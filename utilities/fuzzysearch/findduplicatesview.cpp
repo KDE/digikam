@@ -359,7 +359,7 @@ void FindDuplicatesView::slotAlbumAdded(Album* a)
         return;
     }
 
-    SAlbum* salbum  = (SAlbum*)a;
+    SAlbum* salbum  = static_cast<SAlbum*>(a);
 
     if (!salbum->isDuplicatesSearch())
     {
@@ -380,7 +380,7 @@ void FindDuplicatesView::slotAlbumDeleted(Album* a)
         return;
     }
 
-    SAlbum* album = (SAlbum*)a;
+    SAlbum* album = static_cast<SAlbum*>(a);
 
     FindDuplicatesAlbumItem* item = (FindDuplicatesAlbumItem*) album->extraData(this);
 
