@@ -215,7 +215,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* par
         field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
         field->setBoundary(1, 100000, 250);
         field->setSuggestedValues(QList<int>()
-                                  << 50 << 100 << 200 << 300 << 400 << 500 << 600 <<700 << 800 << 900
+                                  << 50 << 100 << 200 << 300 << 400 << 500 << 600 << 700 << 800 << 900
                                   << 1000 << 1250 << 1500 << 1750 << 2000 << 3000 << 4000
                                   << 5000 << 6000 << 7000 << 8000 << 9000 << 10000
                                  );
@@ -232,7 +232,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* par
         field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
         field->setBoundary(1, 100000, 250);
         field->setSuggestedValues(QList<int>()
-                                  << 50 << 100 << 200 << 300 << 400 << 500 << 600 <<700 << 800 << 900
+                                  << 50 << 100 << 200 << 300 << 400 << 500 << 600 << 700 << 800 << 900
                                   << 1000 << 1250 << 1500 << 1750 << 2000 << 3000 << 4000
                                   << 5000 << 6000 << 7000 << 8000 << 9000 << 10000
                                  );
@@ -768,7 +768,7 @@ void SearchFieldKeyword::read(SearchXmlCachingReader& reader)
 void SearchFieldKeyword::write(SearchXmlWriter& writer)
 {
     QStringList keywordList = KeywordSearch::split(m_edit->text());
-    foreach (const QString& keyword, keywordList)
+    foreach(const QString & keyword, keywordList)
     {
         if (!keyword.isEmpty())
         {
@@ -800,8 +800,8 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout* layout, int row, int c
     if (m_type == DateOnly)
     {
         layout->addWidget(m_firstDateEdit, row, column);
-        layout->addWidget(m_betweenLabel, row, column+1, Qt::AlignHCenter);
-        layout->addWidget(m_secondDateEdit, row, column+2);
+        layout->addWidget(m_betweenLabel, row, column + 1, Qt::AlignHCenter);
+        layout->addWidget(m_secondDateEdit, row, column + 2);
         /*
         hbox->addWidget(m_firstDateEdit);
         hbox->addWidget(m_betweenLabel);
@@ -816,8 +816,8 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout* layout, int row, int c
         QHBoxLayout* hbox2 = new QHBoxLayout;
 
         layout->addLayout(hbox1, row, column);
-        layout->addWidget(m_betweenLabel, row, column+1, Qt::AlignHCenter);
-        layout->addLayout(hbox2, row, column+2);
+        layout->addWidget(m_betweenLabel, row, column + 1, Qt::AlignHCenter);
+        layout->addLayout(hbox2, row, column + 2);
 
         hbox1->addWidget(m_firstDateEdit);
         hbox1->addWidget(m_firstTimeEdit);
@@ -1100,8 +1100,8 @@ void SearchFieldRangeInt::setupValueWidgets(QGridLayout* layout, int row, int co
     //     hbox->addWidget(m_secondBox);
     //     hbox->addStretch(1);
     layout->addWidget(m_firstBox, row, column);
-    layout->addWidget(m_betweenLabel, row, column+1, Qt::AlignHCenter);
-    layout->addWidget(m_secondBox, row, column+2);
+    layout->addWidget(m_betweenLabel, row, column + 1, Qt::AlignHCenter);
+    layout->addWidget(m_secondBox, row, column + 2);
 
     connect(m_firstBox, SIGNAL(valueChanged(int)),
             this, SLOT(valueChanged()));
@@ -1122,14 +1122,17 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader& reader)
             case SearchXml::LessThan:
                 m_firstBox->setFractionMagicValue(reader.valueToDouble());
                 break;
+
             case SearchXml::GreaterThanOrEqual:
             case SearchXml::GreaterThan:
                 m_secondBox->setFractionMagicValue(reader.valueToDouble());
                 break;
+
             case SearchXml::Equal:
                 m_firstBox->setFractionMagicValue(reader.valueToDouble());
                 m_secondBox->setFractionMagicValue(reader.valueToDouble());
                 break;
+
             case SearchXml::Interval:
             case SearchXml::IntervalOpen:
             {
@@ -1144,6 +1147,7 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader& reader)
                 m_firstBox->setFractionMagicValue(list.last());
                 break;
             }
+
             default:
                 break;
         }
@@ -1155,19 +1159,24 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader& reader)
             case SearchXml::GreaterThanOrEqual:
                 m_firstBox->setValue(reader.valueToInt());
                 break;
+
             case SearchXml::GreaterThan:
                 m_firstBox->setValue(reader.valueToInt() - 1);
                 break;
+
             case SearchXml::LessThanOrEqual:
                 m_secondBox->setValue(reader.valueToInt());
                 break;
+
             case SearchXml::LessThan:
                 m_secondBox->setValue(reader.valueToInt() + 1);
                 break;
+
             case SearchXml::Equal:
                 m_firstBox->setValue(reader.valueToInt());
                 m_secondBox->setValue(reader.valueToInt());
                 break;
+
             case SearchXml::Interval:
             case SearchXml::IntervalOpen:
             {
@@ -1182,6 +1191,7 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader& reader)
                 m_secondBox->setValue(list.last());
                 break;
             }
+
             default:
                 break;
         }
@@ -1352,7 +1362,7 @@ void SearchFieldRangeInt::valueChanged()
 
         if (!firstAtMinimum)
         {
-            m_secondBox->setRange(m_min-1, m_firstBox->value());
+            m_secondBox->setRange(m_min - 1, m_firstBox->value());
 
             if (secondAtMinimum)
             {
@@ -1451,8 +1461,8 @@ void SearchFieldRangeDouble::setupValueWidgets(QGridLayout* layout, int row, int
         hbox->addWidget(m_secondBox);
         hbox->addStretch(1);*/
     layout->addWidget(m_firstBox, row, column);
-    layout->addWidget(m_betweenLabel, row, column+1, Qt::AlignHCenter);
-    layout->addWidget(m_secondBox, row, column+2);
+    layout->addWidget(m_betweenLabel, row, column + 1, Qt::AlignHCenter);
+    layout->addWidget(m_secondBox, row, column + 2);
 
     connect(m_firstBox, SIGNAL(valueChanged(double)),
             this, SLOT(valueChanged()));
@@ -1467,11 +1477,11 @@ void SearchFieldRangeDouble::read(SearchXmlCachingReader& reader)
 
     if (relation == SearchXml::GreaterThanOrEqual || relation == SearchXml::GreaterThan)
     {
-        m_firstBox->setValue(reader.valueToDouble() / m_factor );
+        m_firstBox->setValue(reader.valueToDouble() / m_factor);
     }
     else if (relation == SearchXml::LessThanOrEqual || relation == SearchXml::LessThan)
     {
-        m_secondBox->setValue(reader.valueToDouble() / m_factor );
+        m_secondBox->setValue(reader.valueToDouble() / m_factor);
     }
     else if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
     {
@@ -1659,7 +1669,7 @@ SearchFieldChoice::SearchFieldChoice(QObject* parent)
 void SearchFieldChoice::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
     m_comboBox = new ChoiceSearchComboBox;
-    m_comboBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+    m_comboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     connect(m_model, SIGNAL(checkStateChanged(QVariant,bool)),
             this, SLOT(checkStateChanged()));
@@ -2045,7 +2055,7 @@ SearchFieldAlbum::SearchFieldAlbum(QObject* parent, Type type)
 void SearchFieldAlbum::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
     m_comboBox = new AlbumSelectComboBox;
-    m_comboBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+    m_comboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     if (m_type == TypeAlbum)
     {
@@ -2115,7 +2125,7 @@ void SearchFieldAlbum::write(SearchXmlWriter& writer)
     }
 
     QList<int> albumIds;
-    foreach (Album* album, checkedAlbums)
+    foreach(Album * album, checkedAlbums)
     {
         albumIds << album->id();
     }
@@ -2164,8 +2174,8 @@ SearchFieldRating::SearchFieldRating(QObject* parent)
 void SearchFieldRating::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
     layout->addWidget(m_firstBox, row, column);
-    layout->addWidget(m_betweenLabel, row, column+1, Qt::AlignHCenter);
-    layout->addWidget(m_secondBox, row, column+2);
+    layout->addWidget(m_betweenLabel, row, column + 1, Qt::AlignHCenter);
+    layout->addWidget(m_secondBox, row, column + 2);
 
     connect(m_firstBox, SIGNAL(ratingValueChanged(int)),
             this, SLOT(firstValueChanged()));
@@ -2183,19 +2193,24 @@ void SearchFieldRating::read(SearchXmlCachingReader& reader)
         case SearchXml::GreaterThanOrEqual:
             m_firstBox->setRatingValue((RatingComboBox::RatingValue)reader.valueToInt());
             break;
+
         case SearchXml::GreaterThan:
             m_firstBox->setRatingValue((RatingComboBox::RatingValue)(reader.valueToInt() - 1));
             break;
+
         case SearchXml::LessThanOrEqual:
             m_secondBox->setRatingValue((RatingComboBox::RatingValue)reader.valueToInt());
             break;
+
         case SearchXml::LessThan:
             m_secondBox->setRatingValue((RatingComboBox::RatingValue)(reader.valueToInt() + 1));
             break;
+
         case SearchXml::Equal:
             m_firstBox->setRatingValue((RatingComboBox::RatingValue)reader.valueToInt());
             m_secondBox->setRatingValue((RatingComboBox::RatingValue)reader.valueToInt());
             break;
+
         case SearchXml::Interval:
         case SearchXml::IntervalOpen:
         {
@@ -2210,6 +2225,7 @@ void SearchFieldRating::read(SearchXmlCachingReader& reader)
             m_secondBox->setRatingValue((RatingComboBox::RatingValue)list.last());
             break;
         }
+
         default:
             break;
     }
@@ -2603,7 +2619,7 @@ void SearchFieldLabels::write(SearchXmlWriter& writer)
 
     if (!clAlbums.isEmpty())
     {
-        foreach (TAlbum* album, clAlbums)
+        foreach(TAlbum * album, clAlbums)
         {
             albumIds << album->id();
         }
@@ -2613,7 +2629,7 @@ void SearchFieldLabels::write(SearchXmlWriter& writer)
 
     if (!plAlbums.isEmpty())
     {
-        foreach (TAlbum* album, plAlbums)
+        foreach(TAlbum * album, plAlbums)
         {
             albumIds << album->id();
         }

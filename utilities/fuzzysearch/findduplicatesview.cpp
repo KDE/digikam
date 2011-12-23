@@ -121,10 +121,12 @@ void FindDuplicatesAlbum::slotThumbnailLoaded(const LoadingDescription& desc, co
 void FindDuplicatesAlbum::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
     FindDuplicatesAlbumItem* item = dynamic_cast<FindDuplicatesAlbumItem*>(itemFromIndex(index));
+
     if (item && !item->hasValidThumbnail())
     {
         d->thumbLoadThread->find(item->refUrl().toLocalFile());
     }
+
     QTreeWidget::drawRow(p, opt, index);
 }
 
@@ -440,11 +442,11 @@ void FindDuplicatesView::slotFindDuplicates()
 
     QStringList albumsIdList;
     QStringList tagsIdList;
-    foreach(const Album* album, d->albumModel->checkedAlbums())
+    foreach(const Album * album, d->albumModel->checkedAlbums())
     {
         albumsIdList << QString::number(album->id());
     }
-    foreach(const Album* album, d->tagModel->checkedAlbums())
+    foreach(const Album * album, d->tagModel->checkedAlbums())
     {
         tagsIdList << QString::number(album->id());
     }

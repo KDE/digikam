@@ -276,12 +276,12 @@ void QueueMgrWindow::setupStatusBar()
 {
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);
+    d->statusProgressBar->setMaximumHeight(fontMetrics().height() + 2);
     statusBar()->addWidget(d->statusProgressBar, 60);
 
     d->statusLabel = new QLabel(statusBar());
     d->statusLabel->setAlignment(Qt::AlignCenter);
-    d->statusLabel->setMaximumHeight(fontMetrics().height()+2);
+    d->statusLabel->setMaximumHeight(fontMetrics().height() + 2);
     statusBar()->addWidget(d->statusLabel, 40);
 }
 
@@ -352,13 +352,13 @@ void QueueMgrWindow::setupActions()
     // -- Standard 'File' menu actions ---------------------------------------------
 
     d->runAction = new KAction(KIcon("media-playback-start"), i18n("Run"), this);
-    d->runAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_P));
+    d->runAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_P));
     d->runAction->setEnabled(false);
     connect(d->runAction, SIGNAL(triggered()), this, SLOT(slotRun()));
     actionCollection()->addAction("queuemgr_run", d->runAction);
 
     d->stopAction = new KAction(KIcon("media-playback-stop"), i18n("Stop"), this);
-    d->stopAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_S));
+    d->stopAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_S));
     d->stopAction->setEnabled(false);
     connect(d->stopAction, SIGNAL(triggered()), this, SLOT(slotStop()));
     actionCollection()->addAction("queuemgr_stop", d->stopAction);
@@ -372,7 +372,7 @@ void QueueMgrWindow::setupActions()
     actionCollection()->addAction("queuemgr_removequeue", d->removeQueueAction);
 
     d->removeItemsSelAction = new KAction(KIcon("list-remove"), i18n("Remove items"), this);
-    d->removeItemsSelAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_K));
+    d->removeItemsSelAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_K));
     d->removeItemsSelAction->setEnabled(false);
     connect(d->removeItemsSelAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveSelectedItems()));
     actionCollection()->addAction("queuemgr_removeitemssel", d->removeItemsSelAction);
@@ -383,7 +383,7 @@ void QueueMgrWindow::setupActions()
     actionCollection()->addAction("queuemgr_removeitemsdone", d->removeItemsDoneAction);
 
     d->clearQueueAction = new KAction(KIcon("edit-clear"), i18n("Clear Queue"), this);
-    d->clearQueueAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K));
+    d->clearQueueAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_K));
     d->clearQueueAction->setEnabled(false);
     connect(d->clearQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotClearList()));
     actionCollection()->addAction("queuemgr_clearlist", d->clearQueueAction);
@@ -548,6 +548,7 @@ void QueueMgrWindow::refreshStatusBar()
         case 0:
             message.append(i18n("No items"));
             break;
+
         default:
             message.append(i18np("1 item", "%1 items", pendingItems));
             break;
@@ -560,6 +561,7 @@ void QueueMgrWindow::refreshStatusBar()
         case 0:
             message.append(i18n("No tasks"));
             break;
+
         default:
             message.append(i18np("1 task", "%1 tasks", tasks));
             break;
@@ -572,6 +574,7 @@ void QueueMgrWindow::refreshStatusBar()
         case 0:
             message.append(i18n("No items"));
             break;
+
         default:
             message.append(i18np("1 item", "%1 items", totalItems));
             break;
@@ -584,6 +587,7 @@ void QueueMgrWindow::refreshStatusBar()
         case 0:
             message.append(i18n("No tasks"));
             break;
+
         default:
             message.append(i18np("1 task", "%1 tasks", totalTasks));
             break;
@@ -605,7 +609,7 @@ void QueueMgrWindow::slotToggleFullScreen()
 {
     if (d->fullScreen) // out of fullscreen
     {
-        setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
+        setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
 
         slotShowMenuBar();
         statusBar()->show();
@@ -614,7 +618,7 @@ void QueueMgrWindow::slotToggleFullScreen()
         if (d->removeFullScreenButton)
         {
             QList<KToolBar*> toolbars = toolBars();
-            foreach(KToolBar* toolbar, toolbars)
+            foreach(KToolBar * toolbar, toolbars)
             {
                 // name is set in ui.rc XML file
                 if (toolbar->objectName() == "ToolBar")
@@ -643,7 +647,7 @@ void QueueMgrWindow::slotToggleFullScreen()
 
             QList<KToolBar*> toolbars = toolBars();
             KToolBar* mainToolbar = 0;
-            foreach(KToolBar* toolbar, toolbars)
+            foreach(KToolBar * toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
                 {
@@ -653,20 +657,20 @@ void QueueMgrWindow::slotToggleFullScreen()
             }
 
             // add fullscreen action if necessary
-            if ( mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction) )
+            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
             {
                 mainToolbar->addAction(d->fullScreenAction);
-                d->removeFullScreenButton=true;
+                d->removeFullScreenButton = true;
             }
             else
             {
                 // If FullScreen button is enabled in toolbar settings,
                 // we shall not remove it when leaving of fullscreen mode.
-                d->removeFullScreenButton=false;
+                d->removeFullScreenButton = false;
             }
         }
 
-        setWindowState( windowState() | Qt::WindowFullScreen ); // set
+        setWindowState(windowState() | Qt::WindowFullScreen);   // set
         d->fullScreen = true;
     }
 }
@@ -682,7 +686,7 @@ void QueueMgrWindow::slotEscapePressed()
 void QueueMgrWindow::showToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar* toolbar, toolbars)
+    foreach(KToolBar * toolbar, toolbars)
     {
         toolbar->show();
     }
@@ -691,7 +695,7 @@ void QueueMgrWindow::showToolBars()
 void QueueMgrWindow::hideToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar* toolbar, toolbars)
+    foreach(KToolBar * toolbar, toolbars)
     {
         toolbar->hide();
     }
@@ -701,7 +705,7 @@ void QueueMgrWindow::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
                             KShortcutsEditor::LetterShortcutsAllowed, this);
-    dialog.addCollection( actionCollection(), i18n( "General" ) );
+    dialog.addCollection(actionCollection(), i18n("General"));
     dialog.configure();
 }
 
@@ -804,7 +808,7 @@ void QueueMgrWindow::slotItemSelectionChanged()
 void QueueMgrWindow::populateToolsList()
 {
     BatchToolsList list = d->batchToolsMgr->toolsList();
-    foreach(BatchTool* tool, list)
+    foreach(BatchTool * tool, list)
     {
         d->toolsView->addTool(tool);
     }
@@ -935,64 +939,77 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
             processing(ad.fileUrl);
             break;
         }
+
         case ActionData::BatchDone:
         {
             processed(ad.fileUrl, ad.destUrl);
             processOne();
             break;
         }
+
         case ActionData::BatchFailed:
         {
             processingFailed(ad.fileUrl, ad.message);
             processOne();
             break;
         }
+
         case ActionData::BatchCanceled:
         {
             processingCanceled(ad.fileUrl);
             processOne();
             break;
         }
+
         case ActionData::TaskStarted:
         {
             d->assignedList->setCurrentTool(ad.index);
             d->currentTaskItem = d->assignedList->findTool(ad.index);
+
             if (d->currentTaskItem)
             {
                 d->assignedList->scrollToItem(d->currentTaskItem);
             }
+
             break;
         }
+
         case ActionData::TaskDone:
         {
             if (d->currentTaskItem)
             {
                 d->currentTaskItem->setDone();
                 d->currentTaskItem = 0;
-                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue()+1);
+                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             }
+
             break;
         }
+
         case ActionData::TaskFailed:
         {
             if (d->currentTaskItem)
             {
                 d->currentTaskItem->setCanceled();
                 d->currentTaskItem = 0;
-                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue()+1);
+                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             }
+
             break;
         }
+
         case ActionData::TaskCanceled:
         {
             if (d->currentTaskItem)
             {
                 d->currentTaskItem->setCanceled();
                 d->currentTaskItem = 0;
-                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue()+1);
+                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             }
+
             break;
         }
+
         default:    // NONE
         {
             break;
@@ -1066,6 +1083,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                     addHistoryMessage(i18n("Process Cancelled..."), DHistoryView::CancelEntry);
                     return;
                 }
+
                 case KIO::R_SKIP:
                 {
                     dest = KUrl();
@@ -1078,12 +1096,14 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
 
                     break;
                 }
+
                 case KIO::R_RENAME:
                 {
                     dest = dlg.newDestUrl();
                     addHistoryMessage(i18n("Item renamed to %1...", dest.fileName()), DHistoryView::WarningEntry);
                     break;
                 }
+
                 default:    // Overwrite.
                     addHistoryMessage(i18n("Item overwritten..."), DHistoryView::WarningEntry);
                     break;
@@ -1187,7 +1207,7 @@ void QueueMgrWindow::busy(bool busy)
 
     d->busy ? d->queuePool->setCursor(Qt::WaitCursor) : d->queuePool->unsetCursor();
     d->busy ? d->animLogo->start() : d->animLogo->stop();
-    
+
     emit signalBqmIsBusy(d->busy);
 }
 
@@ -1212,6 +1232,7 @@ void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
             d->clearToolsAction->setEnabled(false);
             break;
         }
+
         case 1:
         {
             d->moveUpToolAction->setEnabled(false);
@@ -1220,6 +1241,7 @@ void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
             d->clearToolsAction->setEnabled(true);
             break;
         }
+
         default:
         {
             d->moveUpToolAction->setEnabled(true);
@@ -1257,7 +1279,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
 
     QFileInfo dir(processedItemsAlbumUrl.toLocalFile());
 
-    if ( !dir.exists() || !dir.isWritable() )
+    if (!dir.exists() || !dir.isWritable())
     {
         KMessageBox::error(this,
                            i18n("Album to host processed items from queue \"%1\" "

@@ -297,7 +297,7 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 
     udisToWatch.clear();
 
-    foreach(const Solid::Device& accessDevice, devices)
+    foreach(const Solid::Device & accessDevice, devices)
     {
         // check for StorageAccess
         if (!accessDevice.is<Solid::StorageAccess>())
@@ -375,6 +375,7 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 
         info.uuid = volume->uuid();
         info.label = volume->label();
+
         if (drive)
         {
             info.isRemovable = drive->isHotpluggable() || drive->isRemovable();
@@ -384,6 +385,7 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
             // impossible to know, but probably not hotpluggable (see comment above)
             info.isRemovable = false;
         }
+
         info.isOpticalDisc = volumeDevice.is<Solid::OpticalDisc>();
 
         volumes << info;
@@ -484,7 +486,7 @@ QString CollectionManagerPrivate::directoryHash(const QString& path)
     {
         QStringList entries = dir.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
         KMD5 hash;
-        foreach (const QString& entry, entries)
+        foreach(const QString & entry, entries)
         {
             hash.update(entry.toUtf8());
         }
@@ -506,7 +508,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
 
     if (!(queryItem = url.queryItem("uuid")).isNull())
     {
-        foreach (const SolidVolumeInfo& volume, volumes)
+        foreach(const SolidVolumeInfo & volume, volumes)
         {
             if (volume.uuid.compare(queryItem, Qt::CaseInsensitive) == 0)
             {
@@ -522,7 +524,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
 
         // find all available volumes with the given label (usually one)
         QList<SolidVolumeInfo> candidateVolumes;
-        foreach (const SolidVolumeInfo& volume, volumes)
+        foreach(const SolidVolumeInfo & volume, volumes)
         {
             if (volume.label == queryItem)
             {
@@ -537,7 +539,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
 
         // find out of there is another location with the same label (usually not)
         bool hasOtherLocation = false;
-        foreach (AlbumRootLocation* otherLocation, locations)
+        foreach(AlbumRootLocation * otherLocation, locations)
         {
             if (otherLocation == location)
             {
@@ -573,7 +575,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
             }
 
             // match against directory hash
-            foreach (const SolidVolumeInfo& volume, candidateVolumes)
+            foreach(const SolidVolumeInfo & volume, candidateVolumes)
             {
                 QString volumeDirHash = directoryHash(volume.path);
 
@@ -588,7 +590,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
     }
     else if (!(queryItem = url.queryItem("mountpath")).isNull())
     {
-        foreach (const SolidVolumeInfo& volume, volumes)
+        foreach(const SolidVolumeInfo & volume, volumes)
         {
             if (volume.isMounted && volume.path == queryItem)
             {
@@ -649,7 +651,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& fileUrl, 
 
     //FIXME: Network shares! Here we get only the volume of the mount path...
     // This is probably not really clean. But Solid does not help us.
-    foreach (const SolidVolumeInfo& v, volumes)
+    foreach(const SolidVolumeInfo & v, volumes)
     {
         if (v.isMounted && !v.path.isEmpty() && path.startsWith(v.path))
         {
@@ -676,7 +678,7 @@ bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<Coll
     const KUrl filePathUrl = filePath;
 
     DatabaseAccess access;
-    foreach (AlbumRootLocation* location, locations)
+    foreach(AlbumRootLocation * location, locations)
     {
         const KUrl locationPathUrl = location->albumRootPath();
 
@@ -684,12 +686,12 @@ bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<Coll
         // make sure filePathUrl is neither a child nor a parent
         // of an existing collection
         if (!locationPathUrl.isEmpty() &&
-            ( filePathUrl.isParentOf(locationPathUrl) ||
-              locationPathUrl.isParentOf(filePathUrl) )
+            (filePathUrl.isParentOf(locationPathUrl) ||
+             locationPathUrl.isParentOf(filePathUrl))
            )
         {
             bool isDeleted = false;
-            foreach (const CollectionLocation& deletedLoc, assumeDeleted)
+            foreach(const CollectionLocation & deletedLoc, assumeDeleted)
             {
                 if (deletedLoc.id() == location->id())
                 {
@@ -934,7 +936,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
             if (volume.isOpticalDisc)
             {
                 bool hasOtherLocation = false;
-                foreach (AlbumRootLocation* otherLocation, d->locations)
+                foreach(AlbumRootLocation * otherLocation, d->locations)
                 {
                     KUrl otherUrl(otherLocation->identifier);
 
@@ -1126,7 +1128,7 @@ QList<CollectionLocation> CollectionManager::checkHardWiredLocations()
 
     DatabaseAccess access;
 
-    foreach (AlbumRootLocation* location, d->locations)
+    foreach(AlbumRootLocation * location, d->locations)
     {
         // Hardwired and unavailable?
         if (location->type() == CollectionLocation::TypeVolumeHardWired
@@ -1141,7 +1143,7 @@ QList<CollectionLocation> CollectionManager::checkHardWiredLocations()
 
 
 void CollectionManager::migrationCandidates(const CollectionLocation& location, QString* description,
-        QStringList* candidateIdentifiers, QStringList* candidateDescriptions)
+                                            QStringList* candidateIdentifiers, QStringList* candidateDescriptions)
 {
     description->clear();
     candidateIdentifiers->clear();
@@ -1161,7 +1163,7 @@ void CollectionManager::migrationCandidates(const CollectionLocation& location, 
     *description = d->technicalDescription(albumLoc);
 
     // Find possible new volumes where the specific path is found.
-    foreach (const SolidVolumeInfo& info, volumes)
+    foreach(const SolidVolumeInfo & info, volumes)
     {
         if (info.isMounted && !info.path.isEmpty())
         {
@@ -1242,7 +1244,7 @@ QList<CollectionLocation> CollectionManager::allLocations()
 {
     DatabaseAccess access;
     QList<CollectionLocation> list;
-    foreach (AlbumRootLocation* location, d->locations)
+    foreach(AlbumRootLocation * location, d->locations)
     {
         list << *location;
     }
@@ -1253,7 +1255,7 @@ QList<CollectionLocation> CollectionManager::allAvailableLocations()
 {
     DatabaseAccess access;
     QList<CollectionLocation> list;
-    foreach (AlbumRootLocation* location, d->locations)
+    foreach(AlbumRootLocation * location, d->locations)
     {
         if (location->status() == CollectionLocation::LocationAvailable)
         {
@@ -1267,7 +1269,7 @@ QStringList CollectionManager::allAvailableAlbumRootPaths()
 {
     DatabaseAccess access;
     QStringList list;
-    foreach (AlbumRootLocation* location, d->locations)
+    foreach(AlbumRootLocation * location, d->locations)
     {
         if (location->status() == CollectionLocation::LocationAvailable)
         {
@@ -1301,7 +1303,7 @@ CollectionLocation CollectionManager::locationForAlbumRootPath(const QString& al
 {
     DatabaseAccess access;
     QString path = albumRootPath;
-    foreach (AlbumRootLocation* location, d->locations)
+    foreach(AlbumRootLocation * location, d->locations)
     {
         if (location->albumRootPath() == path)
         {
@@ -1319,7 +1321,7 @@ CollectionLocation CollectionManager::locationForUrl(const KUrl& fileUrl)
 CollectionLocation CollectionManager::locationForPath(const QString& givenPath)
 {
     DatabaseAccess access;
-    foreach (AlbumRootLocation* location, d->locations)
+    foreach(AlbumRootLocation * location, d->locations)
     {
         QString rootPath = location->albumRootPath();
         QString filePath = QDir::fromNativeSeparators(givenPath);
@@ -1362,7 +1364,7 @@ QString CollectionManager::albumRootPath(const KUrl& fileUrl)
 QString CollectionManager::albumRootPath(const QString& givenPath)
 {
     DatabaseAccess access;
-    foreach (AlbumRootLocation* location, d->locations)
+    foreach(AlbumRootLocation * location, d->locations)
     {
         QString rootPath = location->albumRootPath();
         QString filePath = QDir::fromNativeSeparators(givenPath);
@@ -1387,7 +1389,7 @@ bool CollectionManager::isAlbumRoot(const KUrl& fileUrl)
 bool CollectionManager::isAlbumRoot(const QString& filePath)
 {
     DatabaseAccess access;
-    foreach (AlbumRootLocation* location, d->locations)
+    foreach(AlbumRootLocation * location, d->locations)
     {
         if (filePath == location->albumRootPath())
         {
@@ -1405,7 +1407,7 @@ QString CollectionManager::album(const KUrl& fileUrl)
 QString CollectionManager::album(const QString& filePath)
 {
     DatabaseAccess access;
-    foreach (AlbumRootLocation* location, d->locations)
+    foreach(AlbumRootLocation * location, d->locations)
     {
         QString absolutePath = location->albumRootPath();
 
@@ -1419,7 +1421,7 @@ QString CollectionManager::album(const QString& filePath)
         if (firstPart == absolutePath)
         {
             if (filePath == absolutePath
-                    || (filePath.length() == absolutePath.length() + 1 && filePath.right(1) == "/"))
+                || (filePath.length() == absolutePath.length() + 1 && filePath.right(1) == "/"))
             {
                 return "/";
             }
@@ -1478,7 +1480,7 @@ KUrl CollectionManager::oneAlbumRoot()
 QString CollectionManager::oneAlbumRootPath()
 {
     DatabaseAccess access;
-    foreach (AlbumRootLocation* location, d->locations)
+    foreach(AlbumRootLocation * location, d->locations)
     {
         if (location->status() == CollectionLocation::LocationAvailable)
         {
@@ -1494,6 +1496,7 @@ void CollectionManager::deviceAdded(const QString& udi)
     {
         return;
     }
+
     Solid::Device device(udi);
 
     if (device.is<Solid::StorageAccess>())
@@ -1508,6 +1511,7 @@ void CollectionManager::deviceRemoved(const QString& udi)
     {
         return;
     }
+
     // we can't access the Solid::Device to check because it is removed
     DatabaseAccess access;
 
@@ -1544,7 +1548,7 @@ void CollectionManager::updateLocations()
         // synchronize map with database
         QMap<int, AlbumRootLocation*> locs = d->locations;
         d->locations.clear();
-        foreach (const AlbumRootInfo& info, infos)
+        foreach(const AlbumRootInfo & info, infos)
         {
             if (locs.contains(info.id))
             {
@@ -1558,7 +1562,7 @@ void CollectionManager::updateLocations()
         }
 
         // delete old locations
-        foreach (AlbumRootLocation* location, locs)
+        foreach(AlbumRootLocation * location, locs)
         {
             CollectionLocation::Status oldStatus = location->status();
             location->setStatus(CollectionLocation::LocationDeleted);
@@ -1568,7 +1572,7 @@ void CollectionManager::updateLocations()
 
         // update status with current access state, store old status in list
         QList<CollectionLocation::Status> oldStatus;
-        foreach (AlbumRootLocation* location, d->locations)
+        foreach(AlbumRootLocation * location, d->locations)
         {
             oldStatus << location->status();
             bool available = false;
@@ -1576,7 +1580,7 @@ void CollectionManager::updateLocations()
 
             if (location->type() == CollectionLocation::TypeNetwork)
             {
-                foreach (const QString& path, d->networkShareMountPathsFromIdentifier(location))
+                foreach(const QString & path, d->networkShareMountPathsFromIdentifier(location))
                 {
                     QDir dir(path);
                     available = dir.isReadable()
@@ -1629,8 +1633,8 @@ void CollectionManager::updateLocations()
         }
 
         // emit status changes (and new locations)
-        int i=0;
-        foreach (AlbumRootLocation* location, d->locations)
+        int i = 0;
+        foreach(AlbumRootLocation * location, d->locations)
         {
             if (oldStatus.at(i) != location->status())
             {
@@ -1646,7 +1650,7 @@ void CollectionManager::clear_locked()
 {
     // Internal method: Called with mutex locked
     // Cave: Difficult recursions with DatabaseAccess constructor and setParameters
-    foreach (AlbumRootLocation* location, d->locations)
+    foreach(AlbumRootLocation * location, d->locations)
     {
         CollectionLocation::Status oldStatus = location->status();
         location->setStatus(CollectionLocation::LocationDeleted);
@@ -1669,6 +1673,7 @@ void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset& changeset)
         case AlbumRootChangeset::Deleted:
             updateLocations();
             break;
+
         case AlbumRootChangeset::PropertiesChanged:
             // label has changed
         {
@@ -1680,7 +1685,7 @@ void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset& changeset)
                 if (location)
                 {
                     QList<AlbumRootInfo> infos = access.db()->getAlbumRoots();
-                    foreach (const AlbumRootInfo& info, infos)
+                    foreach(const AlbumRootInfo & info, infos)
                     {
                         if (info.id == location->id())
                         {
@@ -1698,6 +1703,7 @@ void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset& changeset)
             }
         }
         break;
+
         case AlbumRootChangeset::Unknown:
             break;
     }

@@ -58,7 +58,7 @@ void ManagedLoadSaveThread::shutDown()
             QMutexLocker lock(threadMutex());
             LoadingTask* loadingTask = 0;
 
-            if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterAll)) )
+            if ((loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterAll)))
             {
                 loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
             }
@@ -66,12 +66,13 @@ void ManagedLoadSaveThread::shutDown()
             removeLoadingTasks(LoadingDescription(QString()), LoadingTaskFilterAll);
             break;
         }
+
         case TerminationPolicyTerminatePreloading:
         {
             QMutexLocker lock(threadMutex());
             LoadingTask* loadingTask = 0;
 
-            if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)) )
+            if ((loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)))
             {
                 loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
             }
@@ -79,8 +80,10 @@ void ManagedLoadSaveThread::shutDown()
             removeLoadingTasks(LoadingDescription(QString()), LoadingTaskFilterPreloading);
             break;
         }
+
         case TerminationPolicyWait:
             break;
+
         case TerminationPolicyTerminateAll:
         {
             stopAllTasks();
@@ -131,7 +134,7 @@ LoadingTask* ManagedLoadSaveThread::findExistingTask(const LoadingDescription& l
         }
     }
 
-    for (int i=0; i < m_todo.size(); ++i)
+    for (int i = 0; i < m_todo.size(); ++i)
     {
         LoadSaveTask* task = m_todo[i];
 
@@ -211,7 +214,7 @@ void ManagedLoadSaveThread::load(const LoadingDescription& description, LoadingM
             // stop current task
             if (m_currentTask && m_currentTask != existingTask)
             {
-                if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterAll)) )
+                if ((loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterAll)))
                 {
                     loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
                 }
@@ -220,7 +223,7 @@ void ManagedLoadSaveThread::load(const LoadingDescription& description, LoadingM
             //kDebug() << "LoadingPolicyFirstRemovePrevious, Existing task " << existingTask <<
             //", m_currentTask " << m_currentTask << ", loadingTask " << loadingTask;
             // remove all loading tasks
-            for (int i=0; i < m_todo.size(); ++i)
+            for (int i = 0; i < m_todo.size(); ++i)
             {
                 LoadSaveTask* task = m_todo[i];
 
@@ -250,7 +253,7 @@ void ManagedLoadSaveThread::load(const LoadingDescription& description, LoadingM
             // stop and postpone current task if it is a preloading task
             if (m_currentTask)
             {
-                if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)) )
+                if ((loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)))
                 {
                     loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
                     load(loadingTask->loadingDescription(), LoadingPolicyPreload);
@@ -281,7 +284,7 @@ void ManagedLoadSaveThread::load(const LoadingDescription& description, LoadingM
             // stop and postpone current task if it is a preloading task
             if (m_currentTask)
             {
-                if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)) )
+                if ((loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)))
                 {
                     loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
                     load(loadingTask->loadingDescription(), LoadingPolicyPreload);
@@ -297,7 +300,7 @@ void ManagedLoadSaveThread::load(const LoadingDescription& description, LoadingM
             // append new loading task, put it in front of preloading tasks
             int i;
 
-            for (i = 0; i<m_todo.count(); ++i)
+            for (i = 0; i < m_todo.count(); ++i)
             {
                 if (checkLoadingTask(m_todo.at(i), LoadingTaskFilterPreloading))
                 {
@@ -387,7 +390,7 @@ void ManagedLoadSaveThread::preloadThumbnailGroup(const QList<LoadingDescription
     QMutexLocker lock(threadMutex());
     QList<LoadSaveTask*> todo;
 
-    foreach (const LoadingDescription& description, descriptions)
+    foreach(const LoadingDescription & description, descriptions)
     {
         LoadingTask* existingTask = findExistingTask(description);
 
@@ -426,7 +429,7 @@ void ManagedLoadSaveThread::prependThumbnailGroup(const QList<LoadingDescription
 
     int index = 0;
 
-    for (int i=0; i<descriptions.size(); ++i)
+    for (int i = 0; i < descriptions.size(); ++i)
     {
         LoadingTask* existingTask = findExistingTask(descriptions.at(i));
 
@@ -510,7 +513,7 @@ void ManagedLoadSaveThread::stopAllTasks()
         }
     }
 
-    foreach (LoadSaveTask* task, m_todo)
+    foreach(LoadSaveTask * task, m_todo)
     {
         delete task;
     }
@@ -533,7 +536,7 @@ void ManagedLoadSaveThread::stopSaving(const QString& filePath)
     }
 
     // remove relevant tasks from list
-    for (int i=0; i < m_todo.size(); ++i)
+    for (int i = 0; i < m_todo.size(); ++i)
     {
         LoadSaveTask* task = m_todo[i];
 
@@ -554,7 +557,7 @@ void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription& descrip
     LoadingTask* loadingTask = 0;
 
     // stop current task if it is matching the criteria
-    if ( (loadingTask = checkLoadingTask(m_currentTask, filter)) )
+    if ((loadingTask = checkLoadingTask(m_currentTask, filter)))
     {
         if (description.filePath.isNull() || loadingTask->loadingDescription() == description)
         {
@@ -564,9 +567,10 @@ void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription& descrip
 
     // remove relevant tasks from list
     QList<LoadSaveTask*>::iterator it;
-    for (it = m_todo.begin(); it != m_todo.end(); )
+
+    for (it = m_todo.begin(); it != m_todo.end();)
     {
-        if ( (loadingTask = checkLoadingTask(*it, filter)) )
+        if ((loadingTask = checkLoadingTask(*it, filter)))
         {
             if (description.filePath.isNull() || loadingTask->loadingDescription() == description)
             {
@@ -574,6 +578,7 @@ void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription& descrip
                 continue;
             }
         }
+
         ++it;
     }
 }
@@ -593,11 +598,11 @@ void ManagedLoadSaveThread::save(DImg& image, const QString& filePath, const QSt
     // append new loading task, put it in front of preloading tasks
     int i;
 
-    for (i = 0; i<m_todo.count(); ++i)
+    for (i = 0; i < m_todo.count(); ++i)
     {
         LoadSaveTask* task = m_todo[i];
 
-        if ( (loadingTask = checkLoadingTask(task, LoadingTaskFilterPreloading)) )
+        if ((loadingTask = checkLoadingTask(task, LoadingTaskFilterPreloading)))
         {
             break;
         }

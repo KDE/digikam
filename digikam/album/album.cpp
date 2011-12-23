@@ -137,7 +137,7 @@ QList< int > Album::childAlbumIds(bool recursive)
 
     QListIterator<Album*> it(childList);
 
-    while ( it.hasNext() )
+    while (it.hasNext())
     {
         ids += it.next()->id();
     }
@@ -242,14 +242,19 @@ int Album::globalID() const
             // Use the upper bits to create unique ids.
         case (PHYSICAL):
             return m_id;
-        case(TAG):
+
+        case (TAG):
             return m_id | (1 << 28);
-        case(DATE):
+
+        case (DATE):
             return m_id | (1 << 29);
-        case(SEARCH):
+
+        case (SEARCH):
             return m_id | (1 << 30);
-        case(FACE):
+
+        case (FACE):
             return m_id | (1 << 31);
+
         default:
             kError() << "Unknown album type";
             return -1;
@@ -440,7 +445,7 @@ QString PAlbum::icon() const
 KUrl PAlbum::iconKURL() const
 {
     KUrl u;
-    u.setPath( m_icon );
+    u.setPath(m_icon);
     return u;
 }
 
@@ -632,6 +637,7 @@ bool SAlbum::isNormalSearch() const
         case DatabaseSearch::AdvancedSearch:
         case DatabaseSearch::LegacyUrlSearch:
             return true;
+
         default:
             return false;
     }
@@ -687,6 +693,7 @@ QString SAlbum::displayTitle() const
         {
             case DatabaseSearch::TimeLineSearch:
                 return i18n("Current Timeline Search");
+
             case DatabaseSearch::HaarSearch:
             {
                 if (title() == getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch))
@@ -700,14 +707,18 @@ QString SAlbum::displayTitle() const
 
                 break;
             }
+
             case DatabaseSearch::MapSearch:
                 return i18n("Current Map Search");
+
             case DatabaseSearch::KeywordSearch:
             case DatabaseSearch::AdvancedSearch:
             case DatabaseSearch::LegacyUrlSearch:
                 return i18n("Current Search");
+
             case DatabaseSearch::DuplicatesSearch:
                 return i18n("Current Duplicates Search");
+
             case DatabaseSearch::UndefinedType:
                 break;
         }
@@ -722,16 +733,21 @@ QString SAlbum::getTemporaryTitle(DatabaseSearch::Type type, DatabaseSearch::Haa
     {
         case DatabaseSearch::TimeLineSearch:
             return "_Current_Time_Line_Search_";
+
         case DatabaseSearch::HaarSearch:
             return getTemporaryHaarTitle(haarType);
+
         case DatabaseSearch::MapSearch:
             return "_Current_Map_Search_";
+
         case DatabaseSearch::KeywordSearch:
         case DatabaseSearch::AdvancedSearch:
         case DatabaseSearch::LegacyUrlSearch:
             return "_Current_Search_View_Search_";
+
         case DatabaseSearch::DuplicatesSearch:
             return "_Current_Duplicates_Search_";
+
         default:
             kError() << "Untreated temporary search type " << type;
             return "_Current_Unknown_Search_";
@@ -744,8 +760,10 @@ QString SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType)
     {
         case DatabaseSearch::HaarImageSearch:
             return "_Current_Fuzzy_Image_Search_";
+
         case DatabaseSearch::HaarSketchSearch:
             return "_Current_Fuzzy_Sketch_Search_";
+
         default:
             kError() << "Untreated temporary haar search type " << haarType;
             return "_Current_Unknown_Haar_Search_";
@@ -773,13 +791,13 @@ AlbumIterator& AlbumIterator::operator++()
 
     Album* album = m_current->firstChild();
 
-    if ( !album )
+    if (!album)
     {
-        while ( (album = m_current->next()) == 0  )
+        while ((album = m_current->next()) == 0)
         {
             m_current = m_current->parent();
 
-            if ( m_current == m_root )
+            if (m_current == m_root)
             {
                 // we have reached the root.
                 // that means no more children
@@ -787,7 +805,7 @@ AlbumIterator& AlbumIterator::operator++()
                 break;
             }
 
-            if ( m_current == 0 )
+            if (m_current == 0)
             {
                 break;
             }
