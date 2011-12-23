@@ -75,12 +75,6 @@ void NormalizeFilter::filterImage()
     images that are dim or washed out.*/
 void NormalizeFilter::normalizeImage()
 {
-    NormalizeParam param;
-    int            x;
-    uint           i;
-    unsigned short range;
-    int            progress;
-
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
         kDebug() << "Ref. image and Org. has different bits depth";
@@ -92,6 +86,7 @@ void NormalizeFilter::normalizeImage()
 
     // Memory allocation.
 
+    NormalizeParam param;
     param.lut = new unsigned short[segments];
 
     // Find min. and max. values.
@@ -105,7 +100,7 @@ void NormalizeFilter::normalizeImage()
         uchar  red, green, blue;
         uchar* ptr = m_refImage.bits();
 
-        for (i = 0 ; runningFlag() && (i < refSize) ; ++i)
+        for (uint i = 0 ; runningFlag() && (i < refSize) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -149,7 +144,7 @@ void NormalizeFilter::normalizeImage()
         unsigned short  red, green, blue;
         unsigned short* ptr = (unsigned short*)m_refImage.bits();
 
-        for (i = 0 ; runningFlag() && (i < refSize) ; ++i)
+        for (uint i = 0 ; runningFlag() && (i < refSize) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -193,11 +188,11 @@ void NormalizeFilter::normalizeImage()
 
     if (runningFlag())
     {
-        range = (unsigned short)(param.max - param.min);
+        unsigned short range = (unsigned short)(param.max - param.min);
 
         if (range != 0)
         {
-            for (x = (int)param.min ; x <= (int)param.max ; ++x)
+            for (int x = (int)param.min ; x <= (int)param.max ; ++x)
             {
                 param.lut[x] = (unsigned short)((segments - 1) * (x - param.min) / range);
             }
@@ -214,13 +209,14 @@ void NormalizeFilter::normalizeImage()
     uint size   = w * h;
 
     // Apply LUT to image.
+    int progress = 0;
 
     if (!sixteenBit)        // 8 bits image.
     {
         uchar  red, green, blue;
         uchar* ptr = data;
 
-        for (i = 0 ; runningFlag() && (i < size) ; ++i)
+        for (uint i = 0 ; runningFlag() && (i < size) ; ++i)
         {
             blue   = ptr[0];
             green  = ptr[1];
@@ -245,7 +241,7 @@ void NormalizeFilter::normalizeImage()
         unsigned short  red, green, blue;
         unsigned short* ptr = (unsigned short*)data;
 
-        for (i = 0 ; runningFlag() && (i < size) ; ++i)
+        for (uint i = 0 ; runningFlag() && (i < size) ; ++i)
         {
             blue   = ptr[0];
             green  = ptr[1];

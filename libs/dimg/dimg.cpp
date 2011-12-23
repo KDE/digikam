@@ -416,7 +416,6 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* o
         {
             kDebug() << filePath << " : Unknown image format !!!";
             return false;
-            break;
         }
         case(JPEG):
         {
@@ -569,7 +568,6 @@ QString DImg::formatToMimeType(FORMAT frm)
         case(NONE):
         {
             return format;
-            break;
         }
         case(JPEG):
         {
