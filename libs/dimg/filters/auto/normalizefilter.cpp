@@ -82,7 +82,6 @@ void NormalizeFilter::normalizeImage()
     }
 
     NormalizeParam param;
-    int            x;
     uint           i;
     unsigned short range;
     int            progress;
@@ -198,7 +197,7 @@ void NormalizeFilter::normalizeImage()
 
         if (range != 0)
         {
-            for (x = (int)param.min ; x <= (int)param.max ; ++x)
+            for (int x = (int)param.min ; x <= (int)param.max ; ++x)
             {
                 param.lut[x] = (unsigned short)((segments - 1) * (x - param.min) / range);
             }
