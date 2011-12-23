@@ -82,7 +82,6 @@ void NormalizeFilter::normalizeImage()
     }
 
     NormalizeParam param;
-    uint           i;
     unsigned short range;
     int            progress;
 
@@ -105,7 +104,7 @@ void NormalizeFilter::normalizeImage()
         uchar  red, green, blue;
         uchar* ptr = m_refImage.bits();
 
-        for (i = 0 ; runningFlag() && (i < refSize) ; ++i)
+        for (uint i = 0 ; runningFlag() && (i < refSize) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -149,7 +148,7 @@ void NormalizeFilter::normalizeImage()
         unsigned short  red, green, blue;
         unsigned short* ptr = (unsigned short*)m_refImage.bits();
 
-        for (i = 0 ; runningFlag() && (i < refSize) ; ++i)
+        for (uint i = 0 ; runningFlag() && (i < refSize) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -220,7 +219,7 @@ void NormalizeFilter::normalizeImage()
         uchar  red, green, blue;
         uchar* ptr = data;
 
-        for (i = 0 ; runningFlag() && (i < size) ; ++i)
+        for (uint i = 0 ; runningFlag() && (i < size) ; ++i)
         {
             blue   = ptr[0];
             green  = ptr[1];
@@ -245,7 +244,7 @@ void NormalizeFilter::normalizeImage()
         unsigned short  red, green, blue;
         unsigned short* ptr = (unsigned short*)data;
 
-        for (i = 0 ; runningFlag() && (i < size) ; ++i)
+        for (uint i = 0 ; runningFlag() && (i < size) ; ++i)
         {
             blue   = ptr[0];
             green  = ptr[1];
