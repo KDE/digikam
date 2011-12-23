@@ -1065,7 +1065,6 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                     slotStop();
                     addHistoryMessage(i18n("Process Cancelled..."), DHistoryView::CancelEntry);
                     return;
-                    break;
                 }
                 case KIO::R_SKIP:
                 {
