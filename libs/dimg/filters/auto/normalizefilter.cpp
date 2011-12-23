@@ -81,13 +81,12 @@ void NormalizeFilter::normalizeImage()
         return;
     }
 
-    NormalizeParam param;
-
     bool sixteenBit = m_orgImage.sixteenBit();
     int segments    = sixteenBit ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
 
     // Memory allocation.
 
+    NormalizeParam param;
     param.lut = new unsigned short[segments];
 
     // Find min. and max. values.
