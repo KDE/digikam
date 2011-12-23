@@ -75,17 +75,18 @@ void NormalizeFilter::filterImage()
     images that are dim or washed out.*/
 void NormalizeFilter::normalizeImage()
 {
+    if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
+    {
+        kDebug() << "Ref. image and Org. has different bits depth";
+        return;
+    }
+
     NormalizeParam param;
     int            x;
     uint           i;
     unsigned short range;
     int            progress;
 
-    if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
-    {
-        kDebug() << "Ref. image and Org. has different bits depth";
-        return;
-    }
 
     bool sixteenBit = m_orgImage.sixteenBit();
     int segments    = sixteenBit ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
