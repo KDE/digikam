@@ -271,6 +271,9 @@ IccProfile IccSettings::IccSettingsPriv::profileFromWindowSystem(QWidget* widget
     //TODO
 #endif
 
+
+    // FIXME: unreachable code
+
     return IccProfile();
 }
 
