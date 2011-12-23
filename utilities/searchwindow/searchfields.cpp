@@ -528,7 +528,6 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* par
         field->setFieldName(name);
         field->setText(i18n("Headline"), i18n("Return pictures with the IPTC headline"));
         return field;
-        return field;
     }
     else if (name == "title")
     {
