@@ -210,6 +210,7 @@ void NormalizeFilter::normalizeImage()
 
     // Apply LUT to image.
     int progress = 0;
+
     if (!sixteenBit)        // 8 bits image.
     {
         uchar  red, green, blue;
