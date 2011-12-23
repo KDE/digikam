@@ -627,6 +627,8 @@ QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation* 
     }
     else if (url.protocol() == "networkshareid")
     {
+        // FIXME: unreachable code??? What should this code really do?
+
         return QString();
 
         if (!(queryItem =  url.queryItem("mountpath")).isNull())
