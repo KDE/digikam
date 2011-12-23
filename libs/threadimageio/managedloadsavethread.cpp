@@ -95,7 +95,7 @@ LoadingTask* ManagedLoadSaveThread::checkLoadingTask(LoadSaveTask* task, Loading
 {
     if (task && task->type() == LoadSaveTask::TaskTypeLoading)
     {
-        LoadingTask* loadingTask = (LoadingTask*)task;
+        LoadingTask* loadingTask = static_cast<LoadingTask*>(task);
 
         if (filter == LoadingTaskFilterAll)
         {
@@ -121,7 +121,7 @@ LoadingTask* ManagedLoadSaveThread::findExistingTask(const LoadingDescription& l
     {
         if (m_currentTask->type() == LoadSaveTask::TaskTypeLoading)
         {
-            loadingTask                               = (LoadingTask*)m_currentTask;
+            loadingTask                               = static_cast<LoadingTask*>(m_currentTask);
             const LoadingDescription& taskDescription = loadingTask->loadingDescription();
 
             if (taskDescription == loadingDescription)
@@ -137,7 +137,7 @@ LoadingTask* ManagedLoadSaveThread::findExistingTask(const LoadingDescription& l
 
         if (task->type() == LoadSaveTask::TaskTypeLoading)
         {
-            loadingTask = (LoadingTask*)task;
+            loadingTask = static_cast<LoadingTask*>(task);
 
             if (loadingTask->loadingDescription() == loadingDescription)
             {
@@ -524,7 +524,7 @@ void ManagedLoadSaveThread::stopSaving(const QString& filePath)
     // stop current task if it is matching the criteria
     if (m_currentTask && m_currentTask->type() == LoadSaveTask::TaskTypeSaving)
     {
-        SavingTask* savingTask = (SavingTask*)m_currentTask;
+        SavingTask* savingTask = static_cast<SavingTask*>(m_currentTask);
 
         if (filePath.isNull() || savingTask->filePath() == filePath)
         {
