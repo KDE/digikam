@@ -72,7 +72,7 @@ SetupPlugins::SetupPlugins(QWidget* parent)
     if (KIPI::PluginLoader::instance())
     {
         d->kipiConfig = KIPI::PluginLoader::instance()->configWidget(panel);
-        d->kipiConfig->setWhatsThis(i18n("A list of available Kipi plugins appears below."));
+        d->kipiConfig->setWhatsThis(i18n("A list of available Kipi plugins."));
     }
 
     layout->addWidget(d->pluginsNumber);
