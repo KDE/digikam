@@ -42,9 +42,8 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-namespace Digikam
+namespace
 {
-
 static const char* configGroupDatabase = "Database Settings";
 static const char* configInternalDatabaseServer = "Internal Database Server";
 static const char* configDatabaseType = "Database Type";
@@ -61,6 +60,10 @@ static const char* configAlbumPathEntry = "Album Path";
 
 static const char* digikam4db = "digikam4.db";
 static const char* thumbnails_digikamdb = "thumbnails-digikam.db";
+}
+
+namespace Digikam
+{
 
 DatabaseParameters::DatabaseParameters()
     : port(-1)

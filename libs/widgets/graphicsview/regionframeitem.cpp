@@ -51,7 +51,10 @@
 #include "graphicsdimgitem.h"
 #include "itemvisibilitycontroller.h"
 
+namespace
+{
 static const int HANDLE_SIZE = 15;
+}
 
 namespace Digikam
 {

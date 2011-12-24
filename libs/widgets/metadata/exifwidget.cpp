@@ -38,9 +38,9 @@
 #include "dmetadata.h"
 #include "metadatalistview.h"
 
-namespace Digikam
-{
 
+namespace
+{
 // Standard Exif Entry list from to less important to the most important for photograph.
 static const char* StandardExifEntryList[] =
 {
@@ -53,6 +53,10 @@ static const char* StandardExifEntryList[] =
     "GPSInfo",
     "-1"
 };
+}
+
+namespace Digikam
+{
 
 ExifWidget::ExifWidget(QWidget* parent, const char* name)
     : MetadataWidget(parent, name)

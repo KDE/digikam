@@ -52,9 +52,8 @@
 #include "cietonguewidget.h"
 #include "metadatalistview.h"
 
-namespace Digikam
+namespace
 {
-
 static const char* ICCHumanList[] =
 {
     "Icc.Header.ColorSpace",
@@ -72,6 +71,10 @@ static const char* ICCEntryList[] =
     "Header",
     "-1"
 };
+}
+
+namespace Digikam
+{
 
 class ICCTagInfo
 {
