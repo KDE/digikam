@@ -36,10 +36,32 @@ using namespace Digikam;
 
 QTEST_KDEMAIN(AdvancedRenameWidgetTest, GUI)
 
-const QString fileName("advancedrename_testimage.jpg");
-const QString fileName2("advancedrename_testimage2.jpg");
-const QString filePath(KDESRCDIR+fileName);
-const QString filePath2(KDESRCDIR+fileName2);
+const QString imagesDir("advancedrenameimages/");
+
+QString createFilePath(const QString& file)
+{
+    return QString(KDESRCDIR + imagesDir + file);
+}
+
+const QString fileName  = "advancedrename_testimage.jpg";
+const QString fileName2 = "advancedrename_testimage2.jpg";
+const QString fileName3 = "001a.jpg";
+const QString fileName4 = "test.png";
+const QString fileName5 = "myfile.jpg";
+const QString fileName6 = "my_file.jpg";
+const QString fileName7 = "holiday_spain_2011_img001.jpg";
+const QString fileName8 = "my images.jpg";
+const QString fileName9 = "holiday_spain_2011_001img.jpg";
+
+const QString filePath = createFilePath(fileName);
+const QString filePath2 = createFilePath(fileName2);
+const QString filePath3 = createFilePath(fileName3);
+const QString filePath4 = createFilePath(fileName4);
+const QString filePath5 = createFilePath(fileName5);
+const QString filePath6 = createFilePath(fileName6);
+const QString filePath7 = createFilePath(fileName7);
+const QString filePath8 = createFilePath(fileName8);
+const QString filePath9 = createFilePath(fileName9);
 
 void AdvancedRenameWidgetTest::testFileNameToken()
 {
@@ -89,8 +111,7 @@ void AdvancedRenameWidgetTest::testFileOwnerToken()
 {
     QList<ParseSettings> files;
     ParseSettings ps;
-    QString filePath = KDESRCDIR"/test.png";
-    ps.fileUrl = KUrl(filePath);
+    ps.fileUrl = KUrl(filePath4);
     files << ps;
     AdvancedRenameManager manager(files);
     manager.parseFiles("[user]");
@@ -103,7 +124,7 @@ void AdvancedRenameWidgetTest::testFileOwnerToken()
     QVERIFY(!userName.isEmpty());
 
     QString result = userName + ".png";
-    QString parsed = manager.newName(filePath);
+    QString parsed = manager.newName(filePath4);
 
     QCOMPARE(parsed, result);
 }
@@ -112,8 +133,7 @@ void AdvancedRenameWidgetTest::testFileGroupToken()
 {
     QList<ParseSettings> files;
     ParseSettings ps;
-    QString filePath = KDESRCDIR"/test.png";
-    ps.fileUrl = KUrl(filePath);
+    ps.fileUrl = KUrl(filePath4);
     files << ps;
     AdvancedRenameManager manager(files);
     manager.parseFiles("[group]");
@@ -126,7 +146,7 @@ void AdvancedRenameWidgetTest::testFileGroupToken()
     QVERIFY(!groupName.isEmpty());
 
     QString result = groupName + ".png";
-    QString parsed = manager.newName(filePath);
+    QString parsed = manager.newName(filePath4);
 
     QCOMPARE(parsed, result);
 }
@@ -138,14 +158,14 @@ void AdvancedRenameWidgetTest::testDirectoryNameToken_data()
 
     // The main directory of digikam can have different names, depending on how the
     // user named it. Therefore we have to detect the name here:
-    const KUrl dir2up = KUrl(KDESRCDIR).upUrl();
+    const KUrl dir2up = KUrl(KDESRCDIR + imagesDir).upUrl();
     const QString dir2upString = dir2up.url();
-    QString digikamDir = dir2upString.right(dir2upString.size()-dir2up.upUrl().url().size());
+    QString digikamDir = dir2upString.right(dir2upString.size() - dir2up.upUrl().url().size());
     digikamDir.chop(1);
 
-    QTest::newRow("[dir]")          << QString("[dir]")          << QString("tests.jpg");
+    QTest::newRow("[dir]")          << QString("[dir]")          << QString("advancedrenameimages.jpg");
     QTest::newRow("[dir.]")         << QString("[dir.]")         << QString("%1.jpg").arg(digikamDir);
-    QTest::newRow("[dir.]_[dir]")   << QString("[dir.]_[dir]")   << QString("%1_tests.jpg").arg(digikamDir);
+    QTest::newRow("[dir.]_[dir]")   << QString("[dir.]_[dir]")   << QString("%1_advancedrenameimages.jpg").arg(digikamDir);
     QTest::newRow("[dir......................................................................]")
        << QString("[dir......................................................................]")
        << fileName;
@@ -207,32 +227,32 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier_data()
 
     QTest::newRow("myfile")
         << QString("[file]{firstupper}")
-        << QString("myfile.jpg")
+        << filePath5
         << QString("Myfile.jpg");
 
     QTest::newRow("my_file")
         << QString("[file]{firstupper}")
-        << QString("my_file.jpg")
+        << filePath6
         << QString("My_File.jpg");
 
     QTest::newRow("holiday_spain_2011_img001")
         << QString("[file]{firstupper}")
-        << QString("holiday_spain_2011_img001.jpg")
+        << filePath7
         << QString("Holiday_Spain_2011_Img001.jpg");
 
     QTest::newRow("holiday_spain_2011_001img")
         << QString("[file]{firstupper}")
-        << QString("holiday_spain_2011_001img.jpg")
+        << filePath9
         << QString("Holiday_Spain_2011_001Img.jpg");
 
     QTest::newRow("001a")
         << QString("[file]{firstupper}")
-        << QString("001a.jpg")
+        << filePath3
         << QString("001A.jpg");
 
     QTest::newRow("my images")
         << QString("[file]{firstupper}")
-        << QString("my images.jpg")
+        << filePath8
         << QString("My Images.jpg");
 
     QTest::newRow("<empty>")
@@ -242,7 +262,7 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier_data()
 
     QTest::newRow(fileName.toAscii())
         << QString("[file]{firstupper}")
-        << fileName
+        << filePath
         << QString("Advancedrename_Testimage.jpg");
 }
 
