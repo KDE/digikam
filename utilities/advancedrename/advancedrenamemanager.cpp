@@ -47,24 +47,33 @@
 namespace Digikam
 {
 
-bool sortByNameCaseInsensitive(const QString& s1, const QString& s2)
+struct SortByNameCaseInsensitive
 {
+    bool operator()(const QString& s1, const QString& s2)
+    {
     return s1.toLower() < s2.toLower();
-}
+    }
+};
 
-bool sortByDate(const QString& s1, const QString& s2)
+struct SortByDate
 {
-    ImageInfo i1 = ImageInfo(KUrl(s1));
-    ImageInfo i2 = ImageInfo(KUrl(s2));
-    return i1.dateTime() < i2.dateTime();
-}
+    bool operator()(const QString& s1, const QString& s2)
+    {
+        ImageInfo i1 = ImageInfo(KUrl(s1));
+        ImageInfo i2 = ImageInfo(KUrl(s2));
+        return i1.dateTime() < i2.dateTime();
+    }
+};
 
-bool sortBySize(const QString& s1, const QString& s2)
+struct SortBySize
 {
-    ImageInfo i1 = ImageInfo(KUrl(s1));
-    ImageInfo i2 = ImageInfo(KUrl(s2));
-    return i1.fileSize() < i2.fileSize();
-}
+    bool operator()(const QString& s1, const QString& s2)
+    {
+        ImageInfo i1 = ImageInfo(KUrl(s1));
+        ImageInfo i2 = ImageInfo(KUrl(s2));
+        return i1.fileSize() < i2.fileSize();
+    }
+};
 
 class AdvancedRenameManager::ParseManagerPriv
 {
@@ -309,19 +318,19 @@ QStringList AdvancedRenameManager::fileList()
     {
         case SortName:
         {
-            qSort(tmpFiles.begin(), tmpFiles.end(), sortByNameCaseInsensitive);
+            qSort(tmpFiles.begin(), tmpFiles.end(), SortByNameCaseInsensitive());
             break;
         }
 
         case SortDate:
         {
-            qSort(tmpFiles.begin(), tmpFiles.end(), sortByDate);
+            qSort(tmpFiles.begin(), tmpFiles.end(), SortByDate());
             break;
         }
 
         case SortSize:
         {
-            qSort(tmpFiles.begin(), tmpFiles.end(), sortBySize);
+            qSort(tmpFiles.begin(), tmpFiles.end(), SortBySize());
             break;
         }
 
