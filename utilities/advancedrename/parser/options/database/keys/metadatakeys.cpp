@@ -32,6 +32,8 @@
 #include "databaseinfocontainers.h"
 #include "imageinfo.h"
 
+namespace
+{
 static const QString KEY_MAKE("CameraMake");
 static const QString KEY_MODEL("CameraModel");
 static const QString KEY_LENS("CameraLens");
@@ -48,6 +50,7 @@ static const QString KEY_WHITEBALANCECOLORTEMPERATURE("WhiteBalanceColorTemp");
 static const QString KEY_METERINGMODE("MeteringMode");
 static const QString KEY_SUBJECTDISTANCE("SubjectDistance");
 static const QString KEY_SUBJECTDISTANCECATEGORY("SubjectDistanceCategory");
+}
 
 namespace Digikam
 {
