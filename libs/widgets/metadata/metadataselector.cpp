@@ -28,6 +28,7 @@
 #include <QTreeWidget>
 #include <QHeaderView>
 #include <QGridLayout>
+#include <QApplication>
 
 // KDE includes
 
@@ -199,6 +200,8 @@ QStringList MetadataSelector::checkedTagsList()
 
 void MetadataSelector::clearSelection()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
 
     while (*it)
@@ -212,11 +215,15 @@ void MetadataSelector::clearSelection()
 
         ++it;
     }
+
+    QApplication::restoreOverrideCursor();
 }
 
 void MetadataSelector::selectAll()
 {
-    QTreeWidgetItemIterator it(this);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
+    QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::NotChecked);
 
     while (*it)
     {
@@ -229,6 +236,8 @@ void MetadataSelector::selectAll()
 
         ++it;
     }
+
+    QApplication::restoreOverrideCursor();
 }
 
 // ------------------------------------------------------------------------------------
