@@ -31,13 +31,13 @@
 
 #include <klocale.h>
 
+namespace Digikam
+{
+
 static const QString KEY_FILE("[file]");
 static const QString KEY_EXT("[ext]");
 static const QString KEY_USER("[user]");
 static const QString KEY_GROUP("[group]");
-
-namespace Digikam
-{
 
 FilePropertiesOption::FilePropertiesOption()
     : Option(i18n("File"), i18n("Add file properties"), "folder-image")
