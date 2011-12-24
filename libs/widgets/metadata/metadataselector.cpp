@@ -124,7 +124,7 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
         {
             ifDItemName = currentIfDName;
 
-            // Check if the current IfD have any items. If no remove it before to toggle to the next IfD.
+            // Check if the current IfD have any items. If not, remove it before to toggle to the next IfD.
             if ( subItems == 0 && parentifDItem)
             {
                 delete parentifDItem;
