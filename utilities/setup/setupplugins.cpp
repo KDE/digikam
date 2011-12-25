@@ -114,6 +114,7 @@ void SetupPlugins::initPlugins()
 
         int activated = 0;
         KIPI::PluginLoader::PluginList::const_iterator it = list.constBegin();
+
         for (; it != list.constEnd(); ++it)
         {
             if ((*it)->shouldLoad())
