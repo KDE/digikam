@@ -201,6 +201,7 @@ QStringList MetadataSelector::checkedTagsList()
 void MetadataSelector::clearSelection()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
+    collapseAll();
 
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
 
@@ -216,12 +217,14 @@ void MetadataSelector::clearSelection()
         ++it;
     }
 
+    expandAll();
     QApplication::restoreOverrideCursor();
 }
 
 void MetadataSelector::selectAll()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
+    collapseAll();
 
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::NotChecked);
 
@@ -237,6 +240,7 @@ void MetadataSelector::selectAll()
         ++it;
     }
 
+    expandAll();
     QApplication::restoreOverrideCursor();
 }
 
