@@ -123,21 +123,25 @@ public:
     QModelIndex indexForAlbumFromAction(QObject* sender) const
     {
         QAction* action;
-        if ( (action = qobject_cast<QAction*>(sender)) )
+
+        if ((action = qobject_cast<QAction*>(sender)))
         {
             Album* album = action->data().value<AlbumPointer<> >();
             return albumModel->indexForAlbum(album);
         }
+
         return QModelIndex();
     }
 
-    QAction* copyFromMainCollection(const char *name)
+    QAction* copyFromMainCollection(const char* name)
     {
         QAction* mainAction = stdActionCollection->action(name);
+
         if (!mainAction)
         {
             return 0;
         }
+
         QAction* action = new QAction(mainAction->icon(), mainAction->text(), q);
         action->setToolTip(mainAction->toolTip());
         return action;
@@ -235,11 +239,11 @@ void ContextMenuHelper::addStandardActionThumbnail(imageIds& ids, Album* album)
 
     if (album && ids.count() == 1)
     {
-        if (album->type() == Album::PHYSICAL )
+        if (album->type() == Album::PHYSICAL)
         {
             d->setThumbnailAction = new QAction(i18n("Set as Album Thumbnail"), this);
         }
-        else if (album->type() == Album::TAG )
+        else if (album->type() == Album::TAG)
         {
             d->setThumbnailAction = new QAction(i18n("Set as Tag Thumbnail"), this);
         }
@@ -259,7 +263,7 @@ void ContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
     QStringList    mimeTypes;
     KService::List offers;
 
-    foreach(const KUrl& item, d->selectedItems)
+    foreach(const KUrl & item, d->selectedItems)
     {
         const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
 
@@ -275,12 +279,12 @@ void ContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
         const QString firstMimeType = mimeTypes.takeFirst();
         const QString constraintTemplate = "'%1' in ServiceTypes";
         QStringList constraints;
-        foreach(const QString& mimeType, mimeTypes)
+        foreach(const QString & mimeType, mimeTypes)
         {
             constraints << constraintTemplate.arg(mimeType);
         }
 
-        offers = KMimeTypeTrader::self()->query(firstMimeType, "Application", constraints.join( " and "));
+        offers = KMimeTypeTrader::self()->query(firstMimeType, "Application", constraints.join(" and "));
 
         // remove duplicate service entries
         QSet<QString> seenApps;
@@ -309,9 +313,9 @@ void ContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
         QAction* serviceAction = servicesMenu->menuAction();
         serviceAction->setText(i18n("Open With"));
 
-        foreach (KService::Ptr service, offers)
+        foreach(KService::Ptr service, offers)
         {
-            QString name = service->name().replace( '&', "&&" );
+            QString name = service->name().replace('&', "&&");
             QAction* action = servicesMenu->addAction(name);
             action->setIcon(KIcon(service->icon()));
             action->setData(service->name());
@@ -403,14 +407,14 @@ KAction* ContextMenuHelper::kipiRotateAction()
     KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
 
-    foreach (KIPI::PluginLoader::Info* info, pluginList)
+    foreach(KIPI::PluginLoader::Info * info, pluginList)
     {
         KIPI::Plugin* plugin = info->plugin();
 
         if (plugin && info->shouldLoad() && info->library() == "kipiplugin_jpeglossless")
         {
             QList<KAction*> actionList = plugin->actions();
-            foreach (KAction* action, actionList)
+            foreach(KAction * action, actionList)
             {
                 if (action->objectName().toLatin1() == QString::fromLatin1("jpeglossless_rotate"))
                 {
@@ -427,12 +431,12 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
     bool sameCategory = true;
     QVariantList varList;
 
-    foreach (const qlonglong& id, ids)
+    foreach(const qlonglong & id, ids)
     {
         varList = DatabaseAccess().db()->getImagesFields(id, DatabaseFields::Category);
 
-        if ( varList.isEmpty() ||
-             (DatabaseItem::Category)varList.first().toInt() != category )
+        if (varList.isEmpty() ||
+            (DatabaseItem::Category)varList.first().toInt() != category)
         {
             sameCategory = false;
             break;
@@ -479,7 +483,7 @@ void ContextMenuHelper::addActionNewAlbum(AlbumModificationHelper* helper, PAlbu
 void ContextMenuHelper::addActionDeleteAlbum(AlbumModificationHelper* helper, PAlbum* album)
 {
     QAction* action = d->copyFromMainCollection("album_delete");
-    addAction(action, !(album->isRoot() || album->isAlbumRoot()) );
+    addAction(action, !(album->isRoot() || album->isAlbumRoot()));
     helper->bindAlbum(action, album);
     connect(action, SIGNAL(triggered()), helper, SLOT(slotAlbumDelete()));
 }
@@ -495,7 +499,7 @@ void ContextMenuHelper::addActionEditAlbum(AlbumModificationHelper* helper, PAlb
 void ContextMenuHelper::addActionRenameAlbum(AlbumModificationHelper* helper, PAlbum* album)
 {
     QAction* action = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
-    addAction(action, !(album->isRoot() || album->isAlbumRoot()) );
+    addAction(action, !(album->isRoot() || album->isAlbumRoot()));
     helper->bindAlbum(action, album);
     connect(action, SIGNAL(triggered()), helper, SLOT(slotAlbumRename()));
 }
@@ -662,6 +666,7 @@ void ContextMenuHelper::addExportMenu()
     QAction* selectAllAction = 0;
     selectAllAction = d->stdActionCollection->action("selectAll");
 #endif
+
     if (!exportActions.isEmpty())
     {
         menuExport->addActions(exportActions);
@@ -684,6 +689,7 @@ void ContextMenuHelper::addBatchMenu()
     QAction* selectAllAction = 0;
     selectAllAction = d->stdActionCollection->action("selectAll");
 #endif
+
     if (!batchActions.isEmpty())
     {
         menuKIPIBatch->addActions(batchActions);
@@ -868,6 +874,7 @@ void ContextMenuHelper::slotSelectChildren()
     {
         return;
     }
+
     d->albumModel->checkAllAlbums(d->indexForAlbumFromAction(sender()));
 }
 
@@ -877,6 +884,7 @@ void ContextMenuHelper::slotDeselectChildren()
     {
         return;
     }
+
     d->albumModel->resetCheckedAlbums(d->indexForAlbumFromAction(sender()));
 }
 
@@ -886,6 +894,7 @@ void ContextMenuHelper::slotSelectParents()
     {
         return;
     }
+
     d->albumModel->checkAllParentAlbums(d->indexForAlbumFromAction(sender()));
 }
 
@@ -895,6 +904,7 @@ void ContextMenuHelper::slotDeselectParents()
     {
         return;
     }
+
     d->albumModel->resetCheckedParentAlbums(d->indexForAlbumFromAction(sender()));
 }
 
@@ -908,7 +918,7 @@ void ContextMenuHelper::addGroupMenu(imageIds& ids)
     }
 
     KMenu* menu = new KMenu(i18n("Group"));
-    foreach (QAction* action, actions)
+    foreach(QAction * action, actions)
     {
         menu->addAction(action);
     }
@@ -917,7 +927,7 @@ void ContextMenuHelper::addGroupMenu(imageIds& ids)
 
 void ContextMenuHelper::addGroupActions(imageIds& ids)
 {
-    foreach (QAction* action, groupMenuActions(ids))
+    foreach(QAction * action, groupMenuActions(ids))
     {
         d->parent->addAction(action);
     }
@@ -1043,7 +1053,7 @@ void ContextMenuHelper::setGroupsOpen(bool open)
     }
 
     GroupImageFilterSettings settings = d->imageFilterModel->groupImageFilterSettings();
-    foreach (qlonglong id, d->selectedIds)
+    foreach(qlonglong id, d->selectedIds)
     {
         ImageInfo info(id);
 
