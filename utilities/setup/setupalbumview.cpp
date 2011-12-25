@@ -137,7 +137,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
 
     d->iconShowTitleBox      = new QCheckBox(i18n("Show digiKam tit&le"), iconViewGroup);
     d->iconShowTitleBox->setWhatsThis(i18n("Set this option to show the digiKam title "
-                                              "below the image thumbnail."));
+                                           "below the image thumbnail."));
 
     d->iconShowCommentsBox   = new QCheckBox(i18n("Show digiKam &captions"), iconViewGroup);
     d->iconShowCommentsBox->setWhatsThis(i18n("Set this option to show the digiKam captions "

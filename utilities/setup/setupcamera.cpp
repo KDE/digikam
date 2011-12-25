@@ -111,12 +111,12 @@ private:
 
 class CameraAutoDetectThread::CameraAutoDetectThreadPriv
 {
-    public:
+public:
 
-        CameraAutoDetectThreadPriv()
-        {
-            result = 0;
-        }
+    CameraAutoDetectThreadPriv()
+    {
+        result = 0;
+    }
 
     int     result;
 
@@ -210,7 +210,7 @@ const QString SetupCamera::SetupCameraPriv::configUseDefaultTargetAlbum("UseDefa
 const QString SetupCamera::SetupCameraPriv::configDefaultTargetAlbumId("DefaultTargetAlbumId");
 const QString SetupCamera::SetupCameraPriv::importFiltersConfigGroupName("Import Filters");
 
-SetupCamera::SetupCamera( QWidget* parent )
+SetupCamera::SetupCamera(QWidget* parent)
     : QScrollArea(parent), d(new SetupCameraPriv)
 {
     d->tab = new KTabWidget(viewport());
@@ -231,10 +231,10 @@ SetupCamera::SetupCamera( QWidget* parent )
                                    "via the Gphoto interface."));
 
     QStringList labels;
-    labels.append( i18n("Title") );
-    labels.append( i18n("Model") );
-    labels.append( i18n("Port") );
-    labels.append( i18n("Path") );
+    labels.append(i18n("Title"));
+    labels.append(i18n("Model"));
+    labels.append(i18n("Port"));
+    labels.append(i18n("Path"));
     d->listView->setHeaderLabels(labels);
     d->listView->header()->setResizeMode(0, QHeaderView::ResizeToContents);
     d->listView->header()->setResizeMode(1, QHeaderView::Stretch);
@@ -248,20 +248,20 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->editButton       = new QPushButton(panel);
     d->autoDetectButton = new QPushButton(panel);
 
-    d->addButton->setText( i18n( "&Add..." ) );
+    d->addButton->setText(i18n("&Add..."));
     d->addButton->setIcon(SmallIcon("list-add"));
-    d->removeButton->setText( i18n( "&Remove" ) );
+    d->removeButton->setText(i18n("&Remove"));
     d->removeButton->setIcon(SmallIcon("list-remove"));
-    d->editButton->setText( i18n( "&Edit..." ) );
+    d->editButton->setText(i18n("&Edit..."));
     d->editButton->setIcon(SmallIcon("configure"));
-    d->autoDetectButton->setText( i18n( "Auto-&Detect" ) );
+    d->autoDetectButton->setText(i18n("Auto-&Detect"));
     d->autoDetectButton->setIcon(SmallIcon("system-search"));
     d->removeButton->setEnabled(false);
     d->editButton->setEnabled(false);
 
     // -------------------------------------------------------------
 
-    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    QSpacerItem* spacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     KUrlLabel* gphotoLogoLabel = new KUrlLabel(panel);
     gphotoLogoLabel->setText(QString());
@@ -324,7 +324,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     d->importAddButton    = new QPushButton(panel3);
     d->importRemoveButton = new QPushButton(panel3);
     d->importEditButton   = new QPushButton(panel3);
-    QSpacerItem* spacer2  = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QSpacerItem* spacer2  = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     QGroupBox* groupBox         = new QGroupBox(panel3);
     QVBoxLayout* verticalLayout = new QVBoxLayout(groupBox);
@@ -340,11 +340,11 @@ SetupCamera::SetupCamera( QWidget* parent )
     groupBox->setTitle(i18n("Always ignore"));
     label->setText(i18n("Ignored file names:"));
     label2->setText(i18n("Ignored file extensions:"));
-    d->importAddButton->setText( i18n( "&Add..." ) );
+    d->importAddButton->setText(i18n("&Add..."));
     d->importAddButton->setIcon(SmallIcon("list-add"));
-    d->importRemoveButton->setText( i18n( "&Remove" ) );
+    d->importRemoveButton->setText(i18n("&Remove"));
     d->importRemoveButton->setIcon(SmallIcon("list-remove"));
-    d->importEditButton->setText( i18n( "&Edit..." ) );
+    d->importEditButton->setText(i18n("&Edit..."));
     d->importEditButton->setIcon(SmallIcon("configure"));
     d->importRemoveButton->setEnabled(false);
     d->importEditButton->setEnabled(false);
@@ -425,7 +425,7 @@ void SetupCamera::readSettings()
     {
         QList<CameraType*>* cl = clist->cameraList();
 
-        foreach (CameraType* ctype, *cl)
+        foreach(CameraType * ctype, *cl)
         {
             new SetupCameraItem(d->listView, ctype);
         }
@@ -445,19 +445,23 @@ void SetupCamera::readSettings()
     // -------------------------------------------------------
 
     KConfigGroup importGroup = config->group(d->importFiltersConfigGroupName);
+
     for (int i = 0; true; ++i)
     {
         QString filter = importGroup.readEntry(QString("Filter%1").arg(i), QString());
+
         if (filter.isEmpty())
         {
             break;
         }
+
         Filter* f = new Filter;
         f->fromString(filter);
         d->filters.append(f);
     }
+
     FilterComboBox::defaultFilters(&d->filters);
-    foreach (Filter* f, d->filters)
+    foreach(Filter * f, d->filters)
     {
         new QListWidgetItem(f->name, d->importListView);
     }
@@ -513,10 +517,12 @@ void SetupCamera::applySettings()
     KConfigGroup importGroup = config->group(d->importFiltersConfigGroupName);
 
     importGroup.deleteGroup();
+
     for (int i = 0; i < d->filters.count(); ++i)
     {
         importGroup.writeEntry(QString("Filter%1").arg(i), d->filters[i]->toString());
     }
+
     importGroup.writeEntry("IgnoreNames", d->ignoreNamesEdit->text());
     importGroup.writeEntry("IgnoreExtensions", d->ignoreExtensionsEdit->text());
     importGroup.sync();
@@ -526,11 +532,12 @@ bool SetupCamera::checkSettings()
 {
     if (d->useDefaultTargetAlbum->isChecked() && !d->target1AlbumSelector->currentAlbum())
     {
-         d->tab->setCurrentIndex(1);
-         KMessageBox::information(this, i18n("No default target album have been selected to process download "
-                                             "from camera device. Please select one."));
-         return false;
+        d->tab->setCurrentIndex(1);
+        KMessageBox::information(this, i18n("No default target album have been selected to process download "
+                                            "from camera device. Please select one."));
+        return false;
     }
+
     return true;
 }
 
@@ -634,9 +641,9 @@ void SetupCamera::slotAutoDetectCamera()
 
     if (ret != 0)
     {
-        KMessageBox::error(this,i18n("Failed to auto-detect camera.\n"
-                                     "Please check if your camera is turned on "
-                                     "and retry or try setting it manually."));
+        KMessageBox::error(this, i18n("Failed to auto-detect camera.\n"
+                                      "Please check if your camera is turned on "
+                                      "and retry or try setting it manually."));
         return;
     }
 
@@ -671,6 +678,7 @@ void SetupCamera::slotAddFilter()
     filter.name = i18n("Untitled");
     ImportFilters dlg(this);
     dlg.setData(filter);
+
     if (dlg.exec() == QDialog::Accepted)
     {
         Filter* f = new Filter;
@@ -678,6 +686,7 @@ void SetupCamera::slotAddFilter()
         d->filters.append(f);
         new QListWidgetItem(f->name, d->importListView);
     }
+
     slotImportSelectionChanged();
 }
 
@@ -695,6 +704,7 @@ void SetupCamera::slotEditFilter()
     Filter filter = *d->filters.at(i);
     ImportFilters dlg(this);
     dlg.setData(filter);
+
     if (dlg.exec() == QDialog::Accepted)
     {
         Filter* f = d->filters.at(i);

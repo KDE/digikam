@@ -112,7 +112,7 @@ static QWidget* createGroupBox(QWidget* w)
     return box;
 }
 
-SetupIOFiles::SetupIOFiles(QWidget* parent )
+SetupIOFiles::SetupIOFiles(QWidget* parent)
     : QScrollArea(parent), d(new SetupIOFilesPriv)
 {
     QWidget* panel     = new QWidget;
@@ -128,8 +128,8 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
 
     d->showImageSettingsDialog = new QCheckBox(panel);
     d->showImageSettingsDialog->setText(i18n("Show Settings Dialog when Saving Image Files"));
-    d->showImageSettingsDialog->setWhatsThis( i18n("<ul><li>Checked: A dialog where settings can be changed when saving image files</li>"
-                                                   "<li>Unchecked: Default settings are used when saving image files</li></ul>"));
+    d->showImageSettingsDialog->setWhatsThis(i18n("<ul><li>Checked: A dialog where settings can be changed when saving image files</li>"
+                                                  "<li>Unchecked: Default settings are used when saving image files</li></ul>"));
 #endif
 
     vbox->addWidget(createGroupBox(d->JPEGOptions));
@@ -184,16 +184,16 @@ void SetupIOFiles::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    d->JPEGOptions->setCompressionValue(group.readEntry(d->configJPEGCompressionEntry,          75) );
-    d->JPEGOptions->setSubSamplingValue(group.readEntry(d->configJPEGSubSamplingEntry,          1) ); // Medium sub-sampling
-    d->PNGOptions->setCompressionValue(group.readEntry(d->configPNGCompressionEntry,            9) );
+    d->JPEGOptions->setCompressionValue(group.readEntry(d->configJPEGCompressionEntry,          75));
+    d->JPEGOptions->setSubSamplingValue(group.readEntry(d->configJPEGSubSamplingEntry,          1));  // Medium sub-sampling
+    d->PNGOptions->setCompressionValue(group.readEntry(d->configPNGCompressionEntry,            9));
     d->TIFFOptions->setCompression(group.readEntry(d->configTIFFCompressionEntry,               false));
-    d->JPEG2000Options->setCompressionValue( group.readEntry(d->configJPEG2000CompressionEntry, 75) );
-    d->JPEG2000Options->setLossLessCompression( group.readEntry(d->configJPEG2000LossLessEntry, true) );
-    d->PGFOptions->setCompressionValue( group.readEntry(d->configPGFCompressionEntry,           3) );
-    d->PGFOptions->setLossLessCompression( group.readEntry(d->configPGFLossLessEntry,           true) );
+    d->JPEG2000Options->setCompressionValue(group.readEntry(d->configJPEG2000CompressionEntry, 75));
+    d->JPEG2000Options->setLossLessCompression(group.readEntry(d->configJPEG2000LossLessEntry, true));
+    d->PGFOptions->setCompressionValue(group.readEntry(d->configPGFCompressionEntry,           3));
+    d->PGFOptions->setLossLessCompression(group.readEntry(d->configPGFLossLessEntry,           true));
 #ifdef _WIN32
-    d->showImageSettingsDialog->setChecked( group.readEntry(d->configShowImageSettingsDialog,   true) );
+    d->showImageSettingsDialog->setChecked(group.readEntry(d->configShowImageSettingsDialog,   true));
 #endif
 }
 

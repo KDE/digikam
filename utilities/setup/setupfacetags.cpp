@@ -140,10 +140,10 @@ SetupFaceTags::SetupFaceTags(QWidget* parent)
     layout->setSpacing(KDialog::spacingHint());
 
     connect(d->enableFaceDetection, SIGNAL(stateChanged(int)),
-            this, SLOT(updateDetection(int)) );
+            this, SLOT(updateDetection(int)));
 
     connect(d->enableFaceSuggestions, SIGNAL(stateChanged(int)),
-            this, SLOT(updateSuggestion(int)) );
+            this, SLOT(updateSuggestion(int)));
 
     readSettings();
 

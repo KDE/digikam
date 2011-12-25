@@ -139,15 +139,15 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->themebackgroundColor          = new QCheckBox(i18n("&Use theme background color"),
                                                      interfaceOptionsGroup);
 
-    d->themebackgroundColor->setWhatsThis( i18n("Enable this option to use the background theme "
-                                                "color in the image editor area.") );
+    d->themebackgroundColor->setWhatsThis(i18n("Enable this option to use the background theme "
+                                               "color in the image editor area."));
 
     d->colorBox                  = new KHBox(interfaceOptionsGroup);
-    QLabel* backgroundColorlabel = new QLabel( i18n("&Background color:"), d->colorBox );
+    QLabel* backgroundColorlabel = new QLabel(i18n("&Background color:"), d->colorBox);
     d->backgroundColor           = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
-    d->backgroundColor->setWhatsThis( i18n("Customize the background color to use "
-                                           "in the image editor area.") );
+    d->backgroundColor->setWhatsThis(i18n("Customize the background color to use "
+                                          "in the image editor area."));
 
     d->hideToolBar      = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar     = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
@@ -178,8 +178,8 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->underExposurePcents->input()->setRange(0.1, 5.0, 0.1, true);
     d->underExposurePcents->setDefaultValue(1.0);
     underExpoPcentlabel->setBuddy(d->underExposurePcents);
-    d->underExposurePcents->setWhatsThis( i18n("Adjust the percents of the bottom of image histogram "
-                                               "which will be used to check under exposed pixels.") );
+    d->underExposurePcents->setWhatsThis(i18n("Adjust the percents of the bottom of image histogram "
+                                              "which will be used to check under exposed pixels."));
 
     KHBox* overExpoBox         = new KHBox(exposureOptionsGroup);
     QLabel* overExpoColorlabel = new QLabel(i18n("&Over-exposure color:"), overExpoBox);
@@ -209,14 +209,16 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->expoPreview       = new QLabel(previewHBox);
     QLabel* space        = new QLabel(previewHBox);
     d->expoPreviewHisto  = new HistogramWidget(256, 128, previewHBox, false, false);
-    d->preview           = DImg(KStandardDirs::locate("data","digikam/data/sample-aix.png"));
+    d->preview           = DImg(KStandardDirs::locate("data", "digikam/data/sample-aix.png"));
+
     if (!d->preview.isNull())
     {
         d->expoPreviewHisto->updateData(d->preview.bits(), d->preview.width(),
                                         d->preview.height(), d->preview.sixteenBit());
     }
+
     d->expoPreviewHisto->setChannelType(ColorChannels);
-    d->expoPreview->setFrameStyle(QFrame::Box|QFrame::Plain);
+    d->expoPreview->setFrameStyle(QFrame::Box | QFrame::Plain);
     previewHBox->setStretchFactor(space, 10);
 
     gLayout2->addWidget(underExpoBox);

@@ -112,7 +112,7 @@ bool CameraList::load()
 
     QDomElement docElem = doc.documentElement();
 
-    if (docElem.tagName()!="cameralist")
+    if (docElem.tagName() != "cameralist")
     {
         return false;
     }
@@ -154,9 +154,9 @@ bool CameraList::save()
     QDomDocument doc("cameralist");
     doc.setContent(QString("<!DOCTYPE XMLCameraList><cameralist version=\"1.2\" client=\"digikam\"/>"));
 
-    QDomElement docElem=doc.documentElement();
+    QDomElement docElem = doc.documentElement();
 
-    foreach (CameraType* ctype, d->clist)
+    foreach(CameraType * ctype, d->clist)
     {
         QDomElement elem = doc.createElement("item");
         elem.setAttribute("title",          ctype->title());
@@ -237,7 +237,7 @@ void CameraList::clear()
 {
     while (!d->clist.isEmpty())
     {
-        removePrivate( d->clist.first());
+        removePrivate(d->clist.first());
     }
 }
 
@@ -248,7 +248,7 @@ QList<CameraType*>* CameraList::cameraList()
 
 CameraType* CameraList::find(const QString& title)
 {
-    foreach (CameraType* ctype, d->clist)
+    foreach(CameraType * ctype, d->clist)
     {
         if (ctype->title() == title)
         {
@@ -266,16 +266,16 @@ CameraType* CameraList::autoDetect(bool& retry)
 
     if (GPCamera::autoDetect(model, port) != 0)
     {
-        retry = ( KMessageBox::warningYesNo(0, i18n("Failed to auto-detect camera; "
-                                                    "please make sure it is connected "
-                                                    "properly and is turned on. "
-                                                    "Would you like to try again?"))
-                  == KMessageBox::Yes );
+        retry = (KMessageBox::warningYesNo(0, i18n("Failed to auto-detect camera; "
+                                                   "please make sure it is connected "
+                                                   "properly and is turned on. "
+                                                   "Would you like to try again?"))
+                 == KMessageBox::Yes);
         return 0;
     }
 
     // Check if the camera is already in the list
-    foreach (CameraType* ctype, d->clist)
+    foreach(CameraType * ctype, d->clist)
     {
         // We can get away with checking only the model, as the auto-detection
         // works only for usb cameras. so the port is always usb:

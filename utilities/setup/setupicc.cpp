@@ -192,14 +192,14 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog)
 
     d->enableColorManagement = new QCheckBox(colorPolicy);
     d->enableColorManagement->setText(i18n("Enable Color Management"));
-    d->enableColorManagement->setWhatsThis( i18n("<ul><li>Checked: Color Management is enabled</li>"
-                                                 "<li>Unchecked: Color Management is "
-                                                 "disabled</li></ul>"));
+    d->enableColorManagement->setWhatsThis(i18n("<ul><li>Checked: Color Management is enabled</li>"
+                                                "<li>Unchecked: Color Management is "
+                                                "disabled</li></ul>"));
 
     KUrlLabel* lcmsLogoLabel = new KUrlLabel(colorPolicy);
     lcmsLogoLabel->setText(QString());
     lcmsLogoLabel->setUrl("http://www.littlecms.com");
-    lcmsLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("data", "digikam/data/logo-lcms.png" ) ));
+    lcmsLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-lcms.png")));
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
     gridHeader->addWidget(d->enableColorManagement, 0, 0, 1, 1);
@@ -216,9 +216,9 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog)
     QLabel* workIcon     = new QLabel;
     workIcon->setPixmap(SmallIcon("input-tablet"));
     d->workProfilesKC    = new IccProfilesComboBox;
-    d->workProfilesKC->setWhatsThis( i18n("<p>This is the color space all the images will be converted to when opened "
-                                          "(if you choose to convert) and the profile that will be embedded when saving. "
-                                          "Good and safe choices are <b>Adobe RGB (1998)</b> and <b>sRGB IEC61966-2.1</b>"));
+    d->workProfilesKC->setWhatsThis(i18n("<p>This is the color space all the images will be converted to when opened "
+                                         "(if you choose to convert) and the profile that will be embedded when saving. "
+                                         "Good and safe choices are <b>Adobe RGB (1998)</b> and <b>sRGB IEC61966-2.1</b>"));
 
     d->infoWorkProfiles = new QPushButton;
     d->infoWorkProfiles->setIcon(SmallIcon("dialog-information"));
@@ -679,7 +679,7 @@ void SetupICC::readSettings(bool restore)
             d->defaultSRGBMissing->setChecked(true);
             d->defaultSRGBConvert->setChecked(settings.defaultMissingProfileBehavior & ICCSettingsContainer::ConvertToWorkspace);
         }
-        else if (settings.defaultMissingProfileBehavior& ICCSettingsContainer::UseWorkspace)
+        else if (settings.defaultMissingProfileBehavior & ICCSettingsContainer::UseWorkspace)
         {
             d->defaultWSMissing->setChecked(true);
         }
@@ -735,7 +735,7 @@ void SetupICC::fillCombos(bool report)
 
     QList<IccProfile> profiles = IccSettings::instance()->allProfiles();
 
-    if ( profiles.isEmpty() )
+    if (profiles.isEmpty())
     {
         if (report)
         {
@@ -906,7 +906,7 @@ void SetupICC::slotShowDefaultSearchPaths()
                         "<li>%1</li>"
                         "</ul>",
                         existingPaths);
-    QWhatsThis::showText(d->iccFolderLabel->mapToGlobal(QPoint(0,0)), text, d->iccFolderLabel);
+    QWhatsThis::showText(d->iccFolderLabel->mapToGlobal(QPoint(0, 0)), text, d->iccFolderLabel);
 }
 
 bool SetupICC::iccRepositoryIsValid()

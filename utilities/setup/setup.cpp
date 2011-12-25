@@ -176,7 +176,7 @@ Setup::Setup(QWidget* parent)
     : KPageDialog(parent), d(new SetupPrivate)
 {
     setCaption(i18n("Configure"));
-    setButtons(Help|Ok|Cancel );
+    setButtons(Help | Ok | Cancel);
     setDefaultButton(Ok);
     setHelp("setupdialog.anchor", "digikam");
     setFaceType(List);
@@ -443,9 +443,13 @@ bool Setup::execTemplateEditor(QWidget* parent, const Template& t)
 void Setup::slotButtonClicked(int button)
 {
     if (button == KDialog::Ok)
+    {
         okClicked();
+    }
     else
+    {
         KDialog::slotButtonClicked(button);
+    }
 }
 
 void Setup::okClicked()
@@ -625,10 +629,12 @@ Setup::Page Setup::activePageIndex()
     }
 
 #ifdef USE_SCRIPT_IFACE
+
     if (cur == d->page_scriptmanager)
     {
         return ScriptManagerPage;
     }
+
 #endif
 
     return DatabasePage;
@@ -640,46 +646,66 @@ KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
     {
         case Setup::DatabasePage:
             return page_database;
+
         case Setup::CollectionsPage:
             return page_collections;
+
         case Setup::AlbumViewPage:
             return page_albumView;
+
         case Setup::ToolTipPage:
             return page_tooltip;
+
         case Setup::MetadataPage:
             return page_metadata;
+
         case Setup::TemplatePage:
             return page_template;
+
         case Setup::CategoryPage:
             return page_category;
+
         case Setup::MimePage:
             return page_mime;
+
         case Setup::LightTablePage:
             return page_lighttable;
+
         case Setup::EditorPage:
             return page_editor;
+
         case Setup::DcrawPage:
             return page_dcraw;
+
         case Setup::IOFilesPage:
             return page_iofiles;
+
         case Setup::SlideshowPage:
             return page_slideshow;
+
         case Setup::ICCPage:
             return page_icc;
+
         case Setup::KipiPluginsPage:
             return page_plugins;
+
         case Setup::CameraPage:
             return page_camera;
+
         case Setup::FaceTagsPage:
             return page_facetags;
+
         case Setup::MiscellaneousPage:
             return page_misc;
+
         case Setup::VersioningPage:
             return page_versioning;
 #ifdef USE_SCRIPT_IFACE
+
         case Setup::ScriptManagerPage:
             return page_scriptmanager;
 #endif
+
         default:
             return 0;
     }

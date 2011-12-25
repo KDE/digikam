@@ -127,8 +127,8 @@ SetupVersioning::SetupVersioning(QWidget* parent)
 
     d->enableNonDestructive = new QCheckBox;
     d->enableNonDestructive->setText(i18n("Enable Non-Destructive Editing and Versioning"));
-    d->enableNonDestructive->setToolTip( i18nc("@info:tooltip",
-                                               "Enable support for non-destructive editing and image versioning"));
+    d->enableNonDestructive->setToolTip(i18nc("@info:tooltip",
+                                              "Enable support for non-destructive editing and image versioning"));
     d->enableNonDestructive->setWhatsThis(i18nc("@info:whatsthis",
                                                 "<para><interface>Non-Destructive Editing and Versioning</interface> "
                                                 "allows different versions of an image to be created, "
@@ -496,24 +496,24 @@ void SetupVersioning::readSettings()
 
 void SetupVersioning::showNonDestructiveInformation()
 {
-    qApp->postEvent(d->enableNonDestructive, new QHelpEvent(QEvent::WhatsThis, QPoint(0,0),
-                                                            d->enableNonDestructive->mapToGlobal(QPoint(0,0))));
+    qApp->postEvent(d->enableNonDestructive, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0),
+                                                            d->enableNonDestructive->mapToGlobal(QPoint(0, 0))));
 }
 
 void SetupVersioning::showFormatInformation()
 {
-    qApp->postEvent(d->formatBox, new QHelpEvent(QEvent::WhatsThis, QPoint(0,0), d->formatBox->mapToGlobal(QPoint(0,0))));
+    qApp->postEvent(d->formatBox, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0), d->formatBox->mapToGlobal(QPoint(0, 0))));
 }
 
 void SetupVersioning::showSnapshotInformation()
 {
-    QPoint p(0,0);
+    QPoint p(0, 0);
     qApp->postEvent(d->snapshotGB, new QHelpEvent(QEvent::WhatsThis, p, d->snapshotGB->mapToGlobal(p)));
 }
 
 void SetupVersioning::showViewInformation()
 {
-    QPoint p(0,0);
+    QPoint p(0, 0);
     qApp->postEvent(d->viewGB, new QHelpEvent(QEvent::WhatsThis, p, d->viewGB->mapToGlobal(p)));
 }
 

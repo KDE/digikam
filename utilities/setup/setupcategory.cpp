@@ -76,7 +76,7 @@ public:
     KLineEdit*   categoryEdit;
 };
 
-SetupCategory::SetupCategory(QWidget* parent )
+SetupCategory::SetupCategory(QWidget* parent)
     : QScrollArea(parent), d(new SetupCategoryPriv)
 {
     QWidget* panel = new QWidget(viewport());

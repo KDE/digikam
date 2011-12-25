@@ -96,13 +96,13 @@ public:
     SearchTextBar* searchBar;
 };
 
-CameraSelection::CameraSelection( QWidget* parent )
+CameraSelection::CameraSelection(QWidget* parent)
     : KDialog(parent), d(new CameraSelectionPriv)
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    kapp->setOverrideCursor(Qt::WaitCursor);
     setHelp("cameraselection.anchor", "digikam");
     setCaption(i18n("Camera Configuration"));
-    setButtons(KDialog::Help|KDialog::Ok|KDialog::Cancel);
+    setButtons(KDialog::Help | KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
     setModal(true);
 
@@ -147,14 +147,14 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     QGroupBox* portBox    = new QGroupBox(i18n("Camera Port Type"), mainWidget());
     QVBoxLayout* gLayout2 = new QVBoxLayout(portBox);
-    d->portButtonGroup    = new QButtonGroup( portBox );
-    d->portButtonGroup->setExclusive( true );
+    d->portButtonGroup    = new QButtonGroup(portBox);
+    d->portButtonGroup->setExclusive(true);
 
     d->usbButton = new QRadioButton(i18n("USB"), portBox);
     d->usbButton->setWhatsThis(i18n("<p>Select this option if your camera is connected to your "
                                     "computer using a USB cable.</p>"));
 
-    d->serialButton = new QRadioButton( i18n("Serial"), portBox );
+    d->serialButton = new QRadioButton(i18n("Serial"), portBox);
     d->serialButton->setWhatsThis(i18n("<p>Select this option if your camera is connected to your "
                                        "computer using a serial cable.</p>"));
 
@@ -171,13 +171,13 @@ CameraSelection::CameraSelection( QWidget* parent )
     QGroupBox* portPathBox = new QGroupBox(i18n("Camera Port Path"), mainWidget());
     QVBoxLayout* gLayout3  = new QVBoxLayout(portPathBox);
 
-    d->portPathLabel = new QLabel( portPathBox);
+    d->portPathLabel = new QLabel(portPathBox);
     d->portPathLabel->setText(i18n("Note: only for serial port cameras."));
 
-    d->portPathComboBox = new KComboBox( portPathBox );
-    d->portPathComboBox->setDuplicatesEnabled( false );
-    d->portPathComboBox->setWhatsThis( i18n("<p>Select the serial port to use on your computer here. "
-                                            "This option is only required if you use a serial camera.</p>"));
+    d->portPathComboBox = new KComboBox(portPathBox);
+    d->portPathComboBox->setDuplicatesEnabled(false);
+    d->portPathComboBox->setWhatsThis(i18n("<p>Select the serial port to use on your computer here. "
+                                           "This option is only required if you use a serial camera.</p>"));
 
     gLayout3->addWidget(d->portPathLabel);
     gLayout3->addWidget(d->portPathComboBox);
@@ -189,10 +189,10 @@ CameraSelection::CameraSelection( QWidget* parent )
     QGroupBox* umsMountBox = new QGroupBox(i18n("Camera Mount Path"), mainWidget());
     QVBoxLayout* gLayout4  = new QVBoxLayout(umsMountBox);
 
-    QLabel* umsMountLabel = new QLabel( umsMountBox );
+    QLabel* umsMountLabel = new QLabel(umsMountBox);
     umsMountLabel->setText(i18n("Note: only for USB/IEEE mass storage cameras."));
 
-    d->umsMountURL = new KUrlRequester( QString("/mnt/camera"), umsMountBox);
+    d->umsMountURL = new KUrlRequester(QString("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
     d->umsMountURL->setWhatsThis(i18n("<p>Set here the mount path to use on your computer. This "
                                       "option is only required if you use a <b>USB Mass Storage</b> "
@@ -360,7 +360,7 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
         {
             d->serialButton->setChecked(true);
 
-            for (int i=0 ; i < d->portPathComboBox->count() ; ++i)
+            for (int i = 0 ; i < d->portPathComboBox->count() ; ++i)
             {
                 if (port == d->portPathComboBox->itemText(i))
                 {
@@ -492,7 +492,7 @@ void CameraSelection::slotPortChanged()
     {
         d->portPathComboBox->setEnabled(true);
         d->portPathComboBox->clear();
-        d->portPathComboBox->insertItem( 0, QString("usb:"));
+        d->portPathComboBox->insertItem(0, QString("usb:"));
         d->portPathComboBox->setEnabled(false);
         return;
     }
