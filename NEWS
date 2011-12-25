@@ -97,4 +97,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 087 ==> 289665 : Scan collections in the background.
 088 ==> 289686 : Cannot display slideshow on second monitor (with xrandr) [patch].
 089 ==> 252726 : Camera direct capture problems.
-090 ==> 
+090 ==> 288390 : Ctrl+drag and Shift+drag images to Dolphin changes the image selection.
+091 ==> 
+
