@@ -200,7 +200,6 @@ QStringList MetadataSelector::checkedTagsList()
 
 void MetadataSelector::clearSelection()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     collapseAll();
 
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
@@ -218,12 +217,10 @@ void MetadataSelector::clearSelection()
     }
 
     expandAll();
-    QApplication::restoreOverrideCursor();
 }
 
 void MetadataSelector::selectAll()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     collapseAll();
 
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::NotChecked);
@@ -241,7 +238,6 @@ void MetadataSelector::selectAll()
     }
 
     expandAll();
-    QApplication::restoreOverrideCursor();
 }
 
 // ------------------------------------------------------------------------------------
@@ -432,6 +428,10 @@ void MetadataSelectorView::cleanUpMdKeyItem()
 void MetadataSelectorView::slotDeflautSelection()
 {
     slotClearSelection();
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    d->selector->collapseAll();
+
     QTreeWidgetItemIterator it(d->selector);
 
     while (*it)
@@ -448,16 +448,23 @@ void MetadataSelectorView::slotDeflautSelection()
 
         ++it;
     }
+
+    d->selector->expandAll();
+    QApplication::restoreOverrideCursor();
 }
 
 void MetadataSelectorView::slotSelectAll()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     d->selector->selectAll();
+    QApplication::restoreOverrideCursor();
 }
 
 void MetadataSelectorView::slotClearSelection()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     d->selector->clearSelection();
+    QApplication::restoreOverrideCursor();
 }
 
 void MetadataSelectorView::setControlElements(ControlElements controllerMask)
