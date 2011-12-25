@@ -40,8 +40,11 @@ public:
     SetupPlugins(QWidget* parent = 0);
     ~SetupPlugins();
 
-    void initPlugins(int kipiPluginsNumber);
     void applyPlugins();
+
+private:
+
+    void initPlugins();
 
 private:
 
