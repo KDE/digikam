@@ -644,6 +644,12 @@ void ContextMenuHelper::addImportMenu()
     {
         menuImport->addActions(importActions);
     }
+    else
+    {
+        QAction* noPlugins = new QAction(i18n("No import plugins available"), this);
+        noPlugins->setEnabled(false);
+        menuImport->addAction(noPlugins);
+    }
 
     d->parent->addMenu(menuImport);
 }
@@ -660,6 +666,12 @@ void ContextMenuHelper::addExportMenu()
     {
         menuExport->addActions(exportActions);
     }
+    else
+    {
+        QAction* noPlugins = new QAction(i18n("No export plugins available"), this);
+        noPlugins->setEnabled(false);
+        menuExport->addAction(noPlugins);
+    }
 
     d->parent->addMenu(menuExport);
 }
@@ -675,6 +687,12 @@ void ContextMenuHelper::addBatchMenu()
     if (!batchActions.isEmpty())
     {
         menuKIPIBatch->addActions(batchActions);
+    }
+    else
+    {
+        QAction* noPlugins = new QAction(i18n("No batch process plugins available"), this);
+        noPlugins->setEnabled(false);
+        menuKIPIBatch->addAction(noPlugins);
     }
 
     d->parent->addMenu(menuKIPIBatch);
