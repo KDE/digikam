@@ -43,6 +43,11 @@ public:
 
     void applyPlugins();
 
+private Q_SLOTS:
+
+    void slotCheckAll();
+    void slotClear();
+
 private:
 
     void initPlugins();
