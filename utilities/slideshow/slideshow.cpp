@@ -143,7 +143,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
-    QRect deskRect = KGlobalSettings::desktopGeometry(this);
+    QRect deskRect = KGlobalSettings::desktopGeometry( kapp->activeWindow() );
     d->deskX       = deskRect.x();
     d->deskY       = deskRect.y();
     d->deskWidth   = deskRect.width();

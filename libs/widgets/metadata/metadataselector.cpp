@@ -28,6 +28,7 @@
 #include <QTreeWidget>
 #include <QHeaderView>
 #include <QGridLayout>
+#include <QApplication>
 
 // KDE includes
 
@@ -124,7 +125,7 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
         {
             ifDItemName = currentIfDName;
 
-            // Check if the current IfD have any items. If no remove it before to toggle to the next IfD.
+            // Check if the current IfD have any items. If not, remove it before to toggle to the next IfD.
             if ( subItems == 0 && parentifDItem)
             {
                 delete parentifDItem;
@@ -199,6 +200,8 @@ QStringList MetadataSelector::checkedTagsList()
 
 void MetadataSelector::clearSelection()
 {
+    collapseAll();
+
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
 
     while (*it)
@@ -212,11 +215,15 @@ void MetadataSelector::clearSelection()
 
         ++it;
     }
+
+    expandAll();
 }
 
 void MetadataSelector::selectAll()
 {
-    QTreeWidgetItemIterator it(this);
+    collapseAll();
+
+    QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::NotChecked);
 
     while (*it)
     {
@@ -229,6 +236,8 @@ void MetadataSelector::selectAll()
 
         ++it;
     }
+
+    expandAll();
 }
 
 // ------------------------------------------------------------------------------------
@@ -419,6 +428,10 @@ void MetadataSelectorView::cleanUpMdKeyItem()
 void MetadataSelectorView::slotDeflautSelection()
 {
     slotClearSelection();
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    d->selector->collapseAll();
+
     QTreeWidgetItemIterator it(d->selector);
 
     while (*it)
@@ -435,16 +448,23 @@ void MetadataSelectorView::slotDeflautSelection()
 
         ++it;
     }
+
+    d->selector->expandAll();
+    QApplication::restoreOverrideCursor();
 }
 
 void MetadataSelectorView::slotSelectAll()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     d->selector->selectAll();
+    QApplication::restoreOverrideCursor();
 }
 
 void MetadataSelectorView::slotClearSelection()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     d->selector->clearSelection();
+    QApplication::restoreOverrideCursor();
 }
 
 void MetadataSelectorView::setControlElements(ControlElements controllerMask)

@@ -73,7 +73,7 @@ public:
 
 // ----------------------------------------------------------------------------------------
 
-ImportFilters::ImportFilters(QWidget* parent) 
+ImportFilters::ImportFilters(QWidget* parent)
     : KDialog(parent), d(new ImportFiltersPriv)
 {
     setButtons(KDialog::Cancel | KDialog::Ok);
@@ -153,7 +153,7 @@ ImportFilters::ImportFilters(QWidget* parent)
             this, SLOT(pathCheckBoxClicked()));
 }
 
-ImportFilters::~ImportFilters() 
+ImportFilters::~ImportFilters()
 {
 }
 

@@ -46,9 +46,8 @@
 
 #include "config-digikam.h"
 
-namespace Digikam
+namespace
 {
-
 static const char* configGroupDatabase = "Database Settings";
 static const char* configInternalDatabaseServer = "Internal Database Server";
 
@@ -80,6 +79,14 @@ static const char* configDatabaseConnectOptions = "Database Connectoptions";
 static const char* configDatabaseFilePathEntry = "Database File Path";
 static const char* configAlbumPathEntry = "Album Path";
 
+static const char* digikam4db = "digikam4.db";
+static const char* thumbnails_digikamdb = "thumbnails-digikam.db";
+}
+
+namespace Digikam
+{
+
+>>>>>>> origin/master
 DatabaseParameters::DatabaseParameters()
     : imgPort(-1), tmbPort(-1)
 {

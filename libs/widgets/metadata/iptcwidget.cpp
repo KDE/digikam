@@ -37,15 +37,18 @@
 
 #include "dmetadata.h"
 
-namespace Digikam
+namespace
 {
-
 static const char* StandardIptcEntryList[] =
 {
     "Envelope",
     "Application2",
     "-1"
 };
+}
+
+namespace Digikam
+{
 
 IptcWidget::IptcWidget(QWidget* parent, const char* name)
     : MetadataWidget(parent, name)

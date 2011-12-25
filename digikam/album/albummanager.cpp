@@ -205,7 +205,7 @@ public:
     DAlbum*                     rootDAlbum;
     SAlbum*                     rootSAlbum;
 
-    QHash<int,Album*>           allAlbumsIdHash;
+    QHash<int, Album*>          allAlbumsIdHash;
     QHash<PAlbumPath, PAlbum*>  albumPathHash;
     QHash<int, PAlbum*>         albumRootAlbumHash;
     Album*                      currentlyMovingAlbum;
@@ -227,7 +227,7 @@ public:
     QMap<int, int>              pAlbumsCount;
     QMap<int, int>              tAlbumsCount;
     QMap<YearMonth, int>        dAlbumsCount;
-    QMap<int,int>               fAlbumsCount;
+    QMap<int, int>              fAlbumsCount;
 
 public:
 
@@ -693,7 +693,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     {
         DatabaseServerError result = DatabaseServerStarter::startServerManagerProcess();
 
-        if (result.getErrorType()!=DatabaseServerError::NoErrors)
+        if (result.getErrorType() != DatabaseServerError::NoErrors)
         {
             QWidget* parent = QWidget::find(0);
             QString message = i18n("<p><b>An error occurred during the internal server start.</b></p>"
@@ -735,6 +735,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     {
         case ScanController::Success:
             break;
+
         case ScanController::ContinueWithoutDatabase:
         {
             QString errorMsg = DatabaseAccess().lastError();
@@ -759,6 +760,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
             return true;
         }
+
         case ScanController::AbortImmediately:
             return false;
     }
@@ -804,7 +806,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
             dbLocale = currLocale;
 
             localeChanged = false;
-            DatabaseAccess().db()->setSetting("Locale",dbLocale);
+            DatabaseAccess().db()->setSetting("Locale", dbLocale);
         }
     }
     else
@@ -839,13 +841,13 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
             exit(0);
         }
 
-        DatabaseAccess().db()->setSetting("Locale",currLocale);
+        DatabaseAccess().db()->setSetting("Locale", currLocale);
     }
 
     // -- UUID Checking ---------------------------------------------------------
 
     QList<CollectionLocation> disappearedLocations = CollectionManager::instance()->checkHardWiredLocations();
-    foreach (const CollectionLocation& loc, disappearedLocations)
+    foreach(const CollectionLocation & loc, disappearedLocations)
     {
         QString locDescription;
         QStringList candidateIds, candidateDescriptions;
@@ -889,7 +891,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
             migrateChoices = new KComboBox;
 
-            for (int i=0; i<candidateIds.size(); ++i)
+            for (int i = 0; i < candidateIds.size(); ++i)
             {
                 migrateChoices->addItem(candidateDescriptions.at(i), candidateIds.at(i));
             }
@@ -1035,26 +1037,26 @@ bool AlbumManager::checkNepomukService()
         return false;
     }
 
-/*
-    QEventLoop loop;
+    /*
+        QEventLoop loop;
 
-    if (!connect(&nepomukInterface, SIGNAL(serviceInitialized(QString)),
-                 &loop, SLOT(quit())))
-    {
-        kDebug() << "Could not connect to Nepomuk server signal";
-        return false;
-    }
+        if (!connect(&nepomukInterface, SIGNAL(serviceInitialized(QString)),
+                     &loop, SLOT(quit())))
+        {
+            kDebug() << "Could not connect to Nepomuk server signal";
+            return false;
+        }
 
-    QTimer::singleShot(1000, &loop, SLOT(quit()));
-*/
+        QTimer::singleShot(1000, &loop, SLOT(quit()));
+    */
 
     kDebug() << "Trying to start up digikamnepomukservice";
     nepomukInterface.call(QDBus::NoBlock, "startService", "digikamnepomukservice");
 
-/*
-    // wait (at most 1sec) for service to start up
-    loop.exec();
-*/
+    /*
+        // wait (at most 1sec) for service to start up
+        loop.exec();
+    */
 
     hasNepomuk = true;
 #endif // HAVE_NEPOMUK
@@ -1090,7 +1092,7 @@ void AlbumManager::startScan()
 
     // create albums for album roots
     QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
-    foreach(const CollectionLocation& location, locations)
+    foreach(const CollectionLocation & location, locations)
     {
         addAlbumRoot(location);
     }
@@ -1233,7 +1235,7 @@ void AlbumManager::scanPAlbums()
     QList<AlbumInfo> newAlbums;
 
     // go through all the Albums and see which ones are already present
-    foreach (const AlbumInfo& info, currentAlbums)
+    foreach(const AlbumInfo & info, currentAlbums)
     {
         // check that location of album is available
         if (CollectionManager::instance()->locationForAlbumRootId(info.albumRootId).isAvailable())
@@ -1258,7 +1260,7 @@ void AlbumManager::scanPAlbums()
     // removePAlbum takes care of that.
     // So we only feed it the albums from oldAlbums topmost in hierarchy.
     QSet<PAlbum*> topMostOldAlbums;
-    foreach (PAlbum* album, oldAlbums)
+    foreach(PAlbum * album, oldAlbums)
     {
         if (!album->parent() || !oldAlbums.contains(album->parent()->id()))
         {
@@ -1266,7 +1268,7 @@ void AlbumManager::scanPAlbums()
         }
     }
 
-    foreach (PAlbum* album, topMostOldAlbums)
+    foreach(PAlbum * album, topMostOldAlbums)
     {
         // recursively removes all children and the album
         removePAlbum(album);
@@ -1276,14 +1278,14 @@ void AlbumManager::scanPAlbums()
     qSort(newAlbums);
 
     // create all new albums
-    foreach (const AlbumInfo& info, newAlbums)
+    foreach(const AlbumInfo & info, newAlbums)
     {
         if (info.relativePath.isEmpty())
         {
             continue;
         }
 
-        PAlbum* album=0, *parent=0;
+        PAlbum* album = 0, *parent = 0;
 
         if (info.relativePath == "/")
         {
@@ -1364,9 +1366,9 @@ void AlbumManager::updateChangedPAlbums()
     bool needScanPAlbums           = false;
 
     // Find the AlbumInfo for each id in changedPAlbums
-    foreach (int id, d->changedPAlbums)
+    foreach(int id, d->changedPAlbums)
     {
-        foreach (const AlbumInfo& info, currentAlbums)
+        foreach(const AlbumInfo & info, currentAlbums)
         {
             if (info.id == id)
             {
@@ -1522,7 +1524,7 @@ void AlbumManager::scanTAlbums()
 
         // build tree
         for (QHash<int, TAlbum*>::const_iterator iter = tagHash.constBegin();
-             iter != tagHash.constEnd(); ++iter )
+             iter != tagHash.constEnd(); ++iter)
         {
             TAlbum* album = *iter;
 
@@ -1677,7 +1679,7 @@ void AlbumManager::scanSAlbums()
     QList<SearchInfo> newSearches;
 
     // go through all the Albums and see which ones are already present
-    foreach (const SearchInfo& info, currentSearches)
+    foreach(const SearchInfo & info, currentSearches)
     {
         if (oldSearches.contains(info.id))
         {
@@ -1709,7 +1711,7 @@ void AlbumManager::scanSAlbums()
     }
 
     // remove old albums that have been deleted
-    foreach (SAlbum* album, oldSearches)
+    foreach(SAlbum * album, oldSearches)
     {
         emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
@@ -1719,7 +1721,7 @@ void AlbumManager::scanSAlbums()
     }
 
     // add new albums
-    foreach (const SearchInfo& info, newSearches)
+    foreach(const SearchInfo & info, newSearches)
     {
         SAlbum* album = new SAlbum(info.name, info.id);
         album->setSearch(info.type, info.query);
@@ -1853,12 +1855,12 @@ Album* AlbumManager::currentAlbum() const
 
 PAlbum* AlbumManager::currentPAlbum() const
 {
-    return dynamic_cast<PAlbum*> (d->currentAlbum);
+    return dynamic_cast<PAlbum*>(d->currentAlbum);
 }
 
 TAlbum* AlbumManager::currentTAlbum() const
 {
-    return dynamic_cast<TAlbum*> (d->currentAlbum);
+    return dynamic_cast<TAlbum*>(d->currentAlbum);
 }
 
 PAlbum* AlbumManager::findPAlbum(const KUrl& url) const
@@ -1882,7 +1884,7 @@ PAlbum* AlbumManager::findPAlbum(int id) const
 
     int gid = d->rootPAlbum->globalID() + id;
 
-    return (PAlbum*)(d->allAlbumsIdHash.value(gid));
+    return static_cast<PAlbum*>((d->allAlbumsIdHash.value(gid)));
 }
 
 TAlbum* AlbumManager::findTAlbum(int id) const
@@ -1894,7 +1896,7 @@ TAlbum* AlbumManager::findTAlbum(int id) const
 
     int gid = d->rootTAlbum->globalID() + id;
 
-    return (TAlbum*)(d->allAlbumsIdHash.value(gid));
+    return static_cast<TAlbum*>((d->allAlbumsIdHash.value(gid)));
 }
 
 SAlbum* AlbumManager::findSAlbum(int id) const
@@ -1906,7 +1908,7 @@ SAlbum* AlbumManager::findSAlbum(int id) const
 
     int gid = d->rootSAlbum->globalID() + id;
 
-    return (SAlbum*)(d->allAlbumsIdHash.value(gid));
+    return static_cast<SAlbum*>((d->allAlbumsIdHash.value(gid)));
 }
 
 DAlbum* AlbumManager::findDAlbum(int id) const
@@ -1918,7 +1920,7 @@ DAlbum* AlbumManager::findDAlbum(int id) const
 
     int gid = d->rootDAlbum->globalID() + id;
 
-    return (DAlbum*)(d->allAlbumsIdHash.value(gid));
+    return static_cast<DAlbum*>((d->allAlbumsIdHash.value(gid)));
 }
 
 Album* AlbumManager::findAlbum(int gid) const
@@ -1999,7 +2001,7 @@ void AlbumManager::invalidateGuardedPointers(Album* album)
 
     QMultiHash<Album*, Album**>::iterator it = d->guardedPointers.find(album);
 
-    for ( ; it != d->guardedPointers.end() && it.key() == album; ++it)
+    for (; it != d->guardedPointers.end() && it.key() == album; ++it)
     {
         if (it.value())
         {
@@ -2300,6 +2302,7 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     insertTAlbum(album, parent);
 
     TAlbum* personParentTag = findTAlbum(FaceTags::personParentTag());
+
     if (personParentTag && personParentTag->isAncestorOf(album))
     {
         FaceTags::ensureIsPerson(album->id());
@@ -2465,6 +2468,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
     d->currentlyMovingAlbum = 0;
 
     TAlbum* personParentTag = findTAlbum(FaceTags::personParentTag());
+
     if (personParentTag && personParentTag->isAncestorOf(album))
     {
         FaceTags::ensureIsPerson(album->id());
@@ -2637,7 +2641,7 @@ AlbumList AlbumManager::findTagsWithProperty(const QString& property)
     AlbumList list;
 
     QList<int> ids = TagsCache::instance()->tagsWithProperty(property);
-    foreach (int id, ids)
+    foreach(int id, ids)
     {
         TAlbum* album = findTAlbum(id);
 
@@ -2967,18 +2971,19 @@ void AlbumManager::slotPeopleJobData(KIO::Job*, const QByteArray& data)
         return;
     }
 
-    QMap<QString, QMap<int,int> > facesStatMap;
+    QMap<QString, QMap<int, int> > facesStatMap;
     QByteArray di(data);
     QDataStream ds(&di, QIODevice::ReadOnly);
     ds >> facesStatMap;
 
     // For now, we only use the sum of confirmed and unconfirmed faces
     d->fAlbumsCount.clear();
-    typedef QMap<int,int> IntIntMap;
+    typedef QMap<int, int> IntIntMap;
 
-    foreach (const IntIntMap& counts, facesStatMap)
+    foreach(const IntIntMap & counts, facesStatMap)
     {
-        QMap<int,int>::const_iterator it;
+        QMap<int, int>::const_iterator it;
+
         for (it = counts.begin(); it != counts.end(); ++it)
         {
             d->fAlbumsCount[it.key()] += it.value();
@@ -3070,9 +3075,9 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
 
         QMap<YearMonth, int>::iterator it2 = yearMonthMap.find(yearMonth);
 
-        if ( it2 == yearMonthMap.end() )
+        if (it2 == yearMonthMap.end())
         {
-            yearMonthMap.insert( yearMonth, *it );
+            yearMonthMap.insert(yearMonth, *it);
         }
         else
         {
@@ -3187,6 +3192,7 @@ void AlbumManager::slotAlbumChange(const AlbumChangeset& changeset)
             }
 
             break;
+
         case AlbumChangeset::Renamed:
         case AlbumChangeset::PropertiesChanged:
             // mark for rescan
@@ -3198,6 +3204,7 @@ void AlbumManager::slotAlbumChange(const AlbumChangeset& changeset)
             }
 
             break;
+
         case AlbumChangeset::Unknown:
             break;
     }
@@ -3222,12 +3229,14 @@ void AlbumManager::slotTagChange(const TagChangeset& changeset)
             }
 
             break;
+
         case TagChangeset::Renamed:
         case TagChangeset::IconChanged:
             /**
              * @todo what happens here?
              */
             break;
+
         case TagChangeset::PropertiesChanged:
         {
             TAlbum* tag = findTAlbum(changeset.tagId());
@@ -3236,8 +3245,10 @@ void AlbumManager::slotTagChange(const TagChangeset& changeset)
             {
                 emit signalTagPropertiesChanged(tag);
             }
+
             break;
         }
+
         case TagChangeset::Unknown:
             break;
     }
@@ -3261,6 +3272,7 @@ void AlbumManager::slotSearchChange(const SearchChangeset& changeset)
             }
 
             break;
+
         case SearchChangeset::Changed:
 
             if (d->currentAlbum && d->currentAlbum->type() == Album::SEARCH
@@ -3271,6 +3283,7 @@ void AlbumManager::slotSearchChange(const SearchChangeset& changeset)
             }
 
             break;
+
         case SearchChangeset::Unknown:
             break;
     }
@@ -3300,6 +3313,7 @@ void AlbumManager::slotCollectionImageChange(const CollectionImageChangeset& cha
             }
 
             break;
+
         default:
             break;
     }
@@ -3324,6 +3338,7 @@ void AlbumManager::slotImageTagChange(const ImageTagChangeset& changeset)
             }
 
             break;
+
         default:
             break;
     }

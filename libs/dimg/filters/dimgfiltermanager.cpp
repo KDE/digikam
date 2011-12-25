@@ -280,7 +280,7 @@ void DImgFilterManager::addGenerator(DImgFilterGenerator* generator)
     d->addGenerator(shared);
 }
 
-void DImgFilterManager::removeGenerator(DImgFilterGenerator* generator)
+void DImgFilterManager::removeGenerator(DImgFilterGenerator* /*generator*/)
 {
 //    QMutexLocker lock(&d->mutex);
 //    QMap<QString, DImgFilterGenerator*>::iterator it;

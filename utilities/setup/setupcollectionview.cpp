@@ -75,7 +75,7 @@ public:
     virtual bool editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index);
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual void setEditorData(QWidget* editor, const QModelIndex& index) const;
-    virtual void setModelData(QWidget* editor,QAbstractItemModel* model, const QModelIndex& index) const;
+    virtual void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
@@ -175,7 +175,7 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
     {
         // get the largest size hint for the icon/text of all category entries
         int maxStyledWidth = 0;
-        foreach(const QModelIndex& catIndex, static_cast<const SetupCollectionModel*>(index.model())->categoryIndexes())
+        foreach(const QModelIndex & catIndex, static_cast<const SetupCollectionModel*>(index.model())->categoryIndexes())
         {
             maxStyledWidth = qMax(maxStyledWidth, m_styledDelegate->sizeHint(option, catIndex).width());
         }
@@ -322,7 +322,7 @@ void SetupCollectionTreeView::setModel(SetupCollectionModel* collectionModel)
 void SetupCollectionTreeView::modelLoadedCollections()
 {
     // make category entries span the whole line
-    for (int i=0; i<model()->rowCount(QModelIndex()); ++i)
+    for (int i = 0; i < model()->rowCount(QModelIndex()); ++i)
     {
         setFirstColumnSpanned(i, QModelIndex(), true);
     }
@@ -396,7 +396,7 @@ void SetupCollectionModel::loadCollections()
     m_collections.clear();
 
     QList<CollectionLocation> locations = CollectionManager::instance()->allLocations();
-    foreach(const CollectionLocation& location, locations)
+    foreach(const CollectionLocation & location, locations)
     {
         m_collections << Item(location);
     }
@@ -409,7 +409,7 @@ void SetupCollectionModel::apply()
 {
     QList<int> newItems, deletedItems, renamedItems;
 
-    for (int i=0; i<m_collections.count(); ++i)
+    for (int i = 0; i < m_collections.count(); ++i)
     {
         const Item& item = m_collections.at(i);
 
@@ -434,7 +434,7 @@ void SetupCollectionModel::apply()
     }
 
     // Delete deleted items
-    foreach (int i, deletedItems)
+    foreach(int i, deletedItems)
     {
         Item& item    = m_collections[i];
         CollectionManager::instance()->removeLocation(item.location);
@@ -443,7 +443,7 @@ void SetupCollectionModel::apply()
 
     // Add added items
     QList<Item> failedItems;
-    foreach (int i, newItems)
+    foreach(int i, newItems)
     {
         Item& item = m_collections[i];
         CollectionLocation location;
@@ -470,7 +470,7 @@ void SetupCollectionModel::apply()
     }
 
     // Rename collections
-    foreach (int i, renamedItems)
+    foreach(int i, renamedItems)
     {
         Item& item = m_collections[i];
         CollectionManager::instance()->setLabel(item.location, item.label);
@@ -481,7 +481,7 @@ void SetupCollectionModel::apply()
     if (!failedItems.isEmpty())
     {
         QStringList failedPaths;
-        foreach(const Item& item, failedItems)
+        foreach(const Item & item, failedItems)
         {
             failedPaths << item.path;
         }
@@ -523,7 +523,7 @@ void SetupCollectionModel::addCollection(int category)
 #ifdef _WIN32
     QString picturesPath;
 
-    if (m_collections.count()>0)
+    if (m_collections.count() > 0)
     {
         const Item& item = m_collections[0];
         picturesPath = item.path;
@@ -556,7 +556,7 @@ void SetupCollectionModel::addCollection(int category)
     // Check path: First check with manager
     QString messageFromManager, deviceIcon;
     QList<CollectionLocation> assumeDeleted;
-    foreach (const Item& item, m_collections)
+    foreach(const Item & item, m_collections)
     {
         if (item.deleted && !item.location.isNull())
         {
@@ -573,7 +573,7 @@ void SetupCollectionModel::addCollection(int category)
                                                               &messageFromManager, &deviceIcon);
 
     // If there are other added collections then CollectionManager does not know about them. Check here.
-    foreach (const Item& item, m_collections)
+    foreach(const Item & item, m_collections)
     {
         if (!item.deleted && item.location.isNull())
         {
@@ -598,9 +598,11 @@ void SetupCollectionModel::addCollection(int category)
         case CollectionManager::LocationAllRight:
             iconName = "dialog-ok-apply";
             break;
+
         case CollectionManager::LocationHasProblems:
             iconName = "dialog-information";
             break;
+
         case CollectionManager::LocationNotAllowed:
         case CollectionManager::LocationInvalidCheck:
             KMessageBox::sorry(m_dialogParentWidget, messageFromManager, i18n("Problem Adding Collection"));
@@ -610,8 +612,8 @@ void SetupCollectionModel::addCollection(int category)
 
     // Create a dialog that displays volume information and allows to change the name of the collection
     KDialog* dialog = new KDialog(m_dialogParentWidget);
-    dialog->setCaption( i18n("Adding Collection") );
-    dialog->setButtons( KDialog::Ok | KDialog::Cancel );
+    dialog->setCaption(i18n("Adding Collection"));
+    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
 
     QWidget* mainWidget = new QWidget(dialog);
     dialog->setMainWidget(mainWidget);
@@ -748,11 +750,14 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                     {
                         case CategoryLocal:
                             return i18n("Local Collections");
+
                         case CategoryRemovable:
                             return i18n("Collections on Removable Media");
+
                         case CategoryRemote:
                             return i18n("Collections on Network Shares");
                     }
+
                     break;
 
                 case Qt::DecorationRole:
@@ -761,19 +766,25 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                     {
                         case CategoryLocal:
                             return SmallIcon("drive-harddisk", KIconLoader::SizeMedium);
+
                         case CategoryRemovable:
                             return SmallIcon("drive-removable-media-usb", KIconLoader::SizeMedium);
+
                         case CategoryRemote:
                             return SmallIcon("network-wired", KIconLoader::SizeMedium);
                     }
+
                     break;
 
                 case IsCategoryRole:
                     return true;
+
                 case CategoryButtonDisplayRole:
                     return i18n("Add Collection");
+
                 case CategoryButtonMapId:
                     return categoryButtonMapId(index);
+
                 default:
                     break;
             }
@@ -803,6 +814,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                 }
 
                 break;
+
             case ColumnPath:
 
                 if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
@@ -818,6 +830,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                 }
 
                 break;
+
             case ColumnStatus:
 
                 if (role == Qt::DecorationRole)
@@ -836,16 +849,20 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                     {
                         case CollectionLocation::LocationAvailable:
                             return SmallIcon("dialog-ok-apply");
+
                         case CollectionLocation::LocationHidden:
                             return SmallIcon("object-locked");
+
                         case CollectionLocation::LocationUnavailable:
 
                             switch (item.parentId)
                             {
                                 case CategoryLocal:
                                     return SmallIcon("drive-harddisk", 0, KIconLoader::DisabledState);
+
                                 case CategoryRemovable:
                                     return SmallIcon("drive-removable-media-usb", 0, KIconLoader::DisabledState);
+
                                 case CategoryRemote:
                                     return SmallIcon("network-wired", 0, KIconLoader::DisabledState);
                             }
@@ -861,29 +878,37 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                     {
                         case CollectionLocation::LocationUnavailable:
                             return i18n("This collection is currently not available.");
+
                         case CollectionLocation::LocationAvailable:
                             return i18n("No problems found, enjoy this collection.");
+
                         case CollectionLocation::LocationHidden:
                             return i18n("This collection is hidden.");
+
                         default:
                             break;
                     }
                 }
 
                 break;
+
             case ColumnDeleteButton:
 
                 switch (role)
                 {
                     case Qt::ToolTipRole:
                         return i18n("Remove collection");
+
                     case IsButtonRole:
                         return true;
+
                     case ButtonDecorationRole:
                         return SmallIcon("edit-delete");
+
                     case ButtonMapId:
                         return buttonMapId(index);
                 }
+
                 break;
         }
     }
@@ -899,10 +924,13 @@ QVariant SetupCollectionModel::headerData(int section, Qt::Orientation orientati
         {
             case ColumnName:
                 return i18n("Name");
+
             case ColumnPath:
                 return i18n("Path");
+
             case ColumnStatus:
                 return i18n("Status");
+
             case ColumnDeleteButton:
                 break;
         }
@@ -931,7 +959,7 @@ int SetupCollectionModel::rowCount(const QModelIndex& parent) const
     // Level 1: item children count
     int parentId = parent.row();
     int rowCount = 0;
-    foreach (const Item& item, m_collections)
+    foreach(const Item & item, m_collections)
     {
         if (!item.deleted && item.parentId == parentId)
         {
@@ -963,6 +991,7 @@ Qt::ItemFlags SetupCollectionModel::flags(const QModelIndex& index) const
         {
             case ColumnName:
                 return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+
             default:
                 return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
         }
@@ -998,7 +1027,7 @@ QModelIndex SetupCollectionModel::index(int row, int column, const QModelIndex& 
         int parentId = parent.row();
         int rowCount = 0;
 
-        for (int i=0; i<m_collections.count(); ++i)
+        for (int i = 0; i < m_collections.count(); ++i)
         {
             const Item& item = m_collections.at(i);
 
@@ -1043,7 +1072,7 @@ QList<QModelIndex> SetupCollectionModel::categoryIndexes() const
 {
     QList<QModelIndex> list;
 
-    for (int cat=0; cat<NumberOfCategories; ++cat)
+    for (int cat = 0; cat < NumberOfCategories; ++cat)
     {
         list << index(cat, 0, QModelIndex());
     }
@@ -1056,7 +1085,7 @@ QModelIndex SetupCollectionModel::indexForId(int id, int column) const
     int row = 0;
     const Item& indexItem = m_collections.at(id);
 
-    for (int i=0; i<m_collections.count(); ++i)
+    for (int i = 0; i < m_collections.count(); ++i)
     {
         const Item& item = m_collections.at(i);
 
@@ -1081,8 +1110,10 @@ SetupCollectionModel::Category SetupCollectionModel::typeToCategory(CollectionLo
         default:
         case CollectionLocation::TypeVolumeHardWired:
             return CategoryLocal;
+
         case CollectionLocation::TypeVolumeRemovable:
             return CategoryRemovable;
+
         case CollectionLocation::TypeNetwork:
             return CategoryRemote;
     }

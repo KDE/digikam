@@ -154,55 +154,55 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
     d->saveTagsBox = new QCheckBox(commonGroup);
     d->saveTagsBox->setText(i18n("&Save image tags as \"Keywords\" tags in metadata embedded in files"));
-    d->saveTagsBox->setWhatsThis( i18n("Turn on this option to store the image tags "
-                                       "in the XMP and IPTC tags."));
+    d->saveTagsBox->setWhatsThis(i18n("Turn on this option to store the image tags "
+                                      "in the XMP and IPTC tags."));
 
     d->saveTemplateBox = new QCheckBox(commonGroup);
     d->saveTemplateBox->setText(i18n("&Save metadata template as metadata embedded in files"));
-    d->saveTemplateBox->setWhatsThis( i18n("Turn on this option to store the metadata "
-                                           "template in the XMP and the IPTC tags. "
-                                           "You can set template values to Template setup page."));
+    d->saveTemplateBox->setWhatsThis(i18n("Turn on this option to store the metadata "
+                                          "template in the XMP and the IPTC tags. "
+                                          "You can set template values to Template setup page."));
 
     d->saveCommentsBox = new QCheckBox(commonGroup);
     d->saveCommentsBox->setText(i18n("&Save image captions and title in metadata embedded in files "));
-    d->saveCommentsBox->setWhatsThis( i18n("Turn on this option to store image caption and title "
-                                           "in the JFIF Comment section, the EXIF tag, the XMP tag, "
-                                           "and the IPTC tag."));
+    d->saveCommentsBox->setWhatsThis(i18n("Turn on this option to store image caption and title "
+                                          "in the JFIF Comment section, the EXIF tag, the XMP tag, "
+                                          "and the IPTC tag."));
 
     d->saveDateTimeBox = new QCheckBox(commonGroup);
     d->saveDateTimeBox->setText(i18n("&Save image timestamps in metadata embedded in files"));
-    d->saveDateTimeBox->setWhatsThis( i18n("Turn on this option to store the image date and time "
-                                           "in the EXIF, XMP, and IPTC tags."));
+    d->saveDateTimeBox->setWhatsThis(i18n("Turn on this option to store the image date and time "
+                                          "in the EXIF, XMP, and IPTC tags."));
 
     d->savePickLabelBox = new QCheckBox(commonGroup);
     d->savePickLabelBox->setText(i18n("&Save image pick label in metadata embedded in files"));
-    d->savePickLabelBox->setWhatsThis( i18n("Turn on this option to store the image pick label "
-                                            "in the XMP tags."));
+    d->savePickLabelBox->setWhatsThis(i18n("Turn on this option to store the image pick label "
+                                           "in the XMP tags."));
 
     d->saveColorLabelBox = new QCheckBox(commonGroup);
     d->saveColorLabelBox->setText(i18n("&Save image color label in metadata embedded in files"));
-    d->saveColorLabelBox->setWhatsThis( i18n("Turn on this option to store the image color label "
-                                             "in the XMP tags."));
+    d->saveColorLabelBox->setWhatsThis(i18n("Turn on this option to store the image color label "
+                                            "in the XMP tags."));
 
     d->saveRatingBox = new QCheckBox(commonGroup);
     d->saveRatingBox->setText(i18n("&Save image rating in metadata embedded in files"));
-    d->saveRatingBox->setWhatsThis( i18n("Turn on this option to store the image rating "
-                                         "in the EXIF tag and the XMP tags."));
+    d->saveRatingBox->setWhatsThis(i18n("Turn on this option to store the image rating "
+                                        "in the EXIF tag and the XMP tags."));
 
     d->writeRawFilesBox = new QCheckBox(commonGroup);
     d->writeRawFilesBox->setText(i18n("&Write Metadata to RAW files (experimental)"));
-    d->writeRawFilesBox->setWhatsThis( i18n("Turn on this option to write metadata into RAW TIFF/EP files. "
-                                            "This feature requires the Exiv2 shared library, version >= 0.18.0. It is still "
-                                            "experimental, and is disabled by default."));
+    d->writeRawFilesBox->setWhatsThis(i18n("Turn on this option to write metadata into RAW TIFF/EP files. "
+                                           "This feature requires the Exiv2 shared library, version >= 0.18.0. It is still "
+                                           "experimental, and is disabled by default."));
     d->writeRawFilesBox->setEnabled(KExiv2::supportMetadataWritting("image/x-raw"));
 
     d->updateFileTimeStampBox = new QCheckBox(commonGroup);
     d->updateFileTimeStampBox->setText(i18n("&Update file timestamp when metadata are saved"));
-    d->updateFileTimeStampBox->setWhatsThis( i18n("Turn on this option to update file timestamps when metadata are saved."));
+    d->updateFileTimeStampBox->setWhatsThis(i18n("Turn on this option to update file timestamps when metadata are saved."));
 
     d->useXMPSidecarBox = new QCheckBox(commonGroup);
     d->useXMPSidecarBox->setText(i18n("&Read metadata from XMP sidecar files (experimental)"));
-    d->useXMPSidecarBox->setWhatsThis( i18n("Turn on this option to prefer metadata from XMP sidecar files when reading metadata."));
+    d->useXMPSidecarBox->setWhatsThis(i18n("Turn on this option to prefer metadata from XMP sidecar files when reading metadata."));
     d->useXMPSidecarBox->setEnabled(KExiv2::supportXmp());
 
     KHBox* hbox              = new KHBox(commonGroup);
@@ -293,14 +293,14 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
     d->saveToNepomukBox     = new QCheckBox;
     d->saveToNepomukBox->setText(i18n("Store metadata from digiKam in Nepomuk"));
-    d->saveToNepomukBox->setWhatsThis( i18n("Turn on this option to push rating, comments and tags "
-                                            "from digiKam into the Nepomuk storage"));
+    d->saveToNepomukBox->setWhatsThis(i18n("Turn on this option to push rating, comments and tags "
+                                           "from digiKam into the Nepomuk storage"));
 
     d->readFromNepomukBox   = new QCheckBox;
     d->readFromNepomukBox->setText(i18n("Read metadata from Nepomuk"));
-    d->readFromNepomukBox->setWhatsThis( i18n("Turn on this option if you want to apply changes to "
-                                              "rating, comments and tags made in Nepomuk to digiKam's metadata storage. "
-                                              "Please note that image metadata will not be edited automatically."));
+    d->readFromNepomukBox->setWhatsThis(i18n("Turn on this option if you want to apply changes to "
+                                             "rating, comments and tags made in Nepomuk to digiKam's metadata storage. "
+                                             "Please note that image metadata will not be edited automatically."));
 
     gLayout3->addWidget(d->saveToNepomukBox);
     gLayout3->addWidget(d->readFromNepomukBox);
@@ -489,7 +489,7 @@ bool SetupMetadata::exifAutoRotateAsChanged()
 
 void SetupMetadata::slotExifAutoRotateToggled(bool b)
 {
-    if ( b != d->exifAutoRotateOrg)
+    if (b != d->exifAutoRotateOrg)
     {
         d->exifAutoRotateAsChanged = true;
     }

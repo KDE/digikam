@@ -92,8 +92,14 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 082 ==> 155677 : Batch rename shouldn't always add a sequence number.
 083 ==> 131936 : Batch Rename Images - file extension in uppercase.
 084 ==> 197386 : Crop tool doesn't remember settings correctly.
-085 ==> 
-
-
+085 ==> 150874 : Bigger more informative hint in browser [patch].
+086 ==> 187653 : New Album cursor enhancement.
+087 ==> 289665 : Scan collections in the background.
+088 ==> 289686 : Cannot display slideshow on second monitor (with xrandr) [patch].
+089 ==> 252726 : Camera direct capture problems.
+090 ==> 288390 : Ctrl+drag and Shift+drag images to Dolphin changes the image selection.
+091 ==> 125736 : Uniquely identifying each image in a collection of images.
+092 ==> 229888 : Speed up "Scan for new items at startup".
+093 ==> 
 
 

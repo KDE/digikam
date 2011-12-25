@@ -98,38 +98,38 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
     d->delayInput->setWhatsThis(i18n("The delay, in seconds, between images."));
 
     d->startWithCurrent = new QCheckBox(i18n("Start with current image"), panel);
-    d->startWithCurrent->setWhatsThis( i18n("If this option is enabled, the Slideshow will be started "
-                                            "with the current image selected in the images list."));
+    d->startWithCurrent->setWhatsThis(i18n("If this option is enabled, the Slideshow will be started "
+                                           "with the current image selected in the images list."));
 
     d->loopMode = new QCheckBox(i18n("Slideshow runs in a loop"), panel);
-    d->loopMode->setWhatsThis( i18n("Run the slideshow in a loop."));
+    d->loopMode->setWhatsThis(i18n("Run the slideshow in a loop."));
 
     d->showName = new QCheckBox(i18n("Show image file name"), panel);
-    d->showName->setWhatsThis( i18n("Show the image file name at the bottom of the screen."));
+    d->showName->setWhatsThis(i18n("Show the image file name at the bottom of the screen."));
 
     d->showDate = new QCheckBox(i18n("Show image creation date"), panel);
-    d->showDate->setWhatsThis( i18n("Show the image creation time/date at the bottom of the screen."));
+    d->showDate->setWhatsThis(i18n("Show the image creation time/date at the bottom of the screen."));
 
     d->showApertureFocal = new QCheckBox(i18n("Show camera aperture and focal length"), panel);
-    d->showApertureFocal->setWhatsThis( i18n("Show the camera aperture and focal length at the bottom of the screen."));
+    d->showApertureFocal->setWhatsThis(i18n("Show the camera aperture and focal length at the bottom of the screen."));
 
     d->showExpoSensitivity = new QCheckBox(i18n("Show camera exposure and sensitivity"), panel);
-    d->showExpoSensitivity->setWhatsThis( i18n("Show the camera exposure and sensitivity at the bottom of the screen."));
+    d->showExpoSensitivity->setWhatsThis(i18n("Show the camera exposure and sensitivity at the bottom of the screen."));
 
     d->showMakeModel = new QCheckBox(i18n("Show camera make and model"), panel);
-    d->showMakeModel->setWhatsThis( i18n("Show the camera make and model at the bottom of the screen."));
+    d->showMakeModel->setWhatsThis(i18n("Show the camera make and model at the bottom of the screen."));
 
     d->showComment = new QCheckBox(i18n("Show image caption"), panel);
-    d->showComment->setWhatsThis( i18n("Show the image caption at the bottom of the screen."));
+    d->showComment->setWhatsThis(i18n("Show the image caption at the bottom of the screen."));
 
     d->showTitle = new QCheckBox(i18n("Show image title"), panel);
     d->showTitle->setWhatsThis(i18n("Show the image title at the bottom of the screen."));
 
     d->showCapIfNoTitle = new QCheckBox(i18n("Show image caption if it hasn't title"), panel);
-    d->showCapIfNoTitle->setWhatsThis( i18n("Show the image caption at the bottom of the screen if no titles existed."));
+    d->showCapIfNoTitle->setWhatsThis(i18n("Show the image caption at the bottom of the screen if no titles existed."));
 
     d->showLabels = new QCheckBox(i18n("Show image labels"), panel);
-    d->showLabels->setWhatsThis( i18n("Show the digiKam image color label, pick label, and rating at the bottom of the screen."));
+    d->showLabels->setWhatsThis(i18n("Show the digiKam image color label, pick label, and rating at the bottom of the screen."));
 
     // Disable and uncheck the "Show captions if no title" checkbox if the "Show comment" checkbox enabled
     connect(d->showComment, SIGNAL(stateChanged(int)), 

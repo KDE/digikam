@@ -124,7 +124,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     d->addButton->setText(i18n("&Add..."));
     d->addButton->setIcon(SmallIcon("list-add"));
-    d->delButton->setText(i18n( "&Remove"));
+    d->delButton->setText(i18n("&Remove"));
     d->delButton->setIcon(SmallIcon("list-remove"));
     d->repButton->setText(i18n("&Replace..."));
     d->repButton->setIcon(SmallIcon("view-refresh"));

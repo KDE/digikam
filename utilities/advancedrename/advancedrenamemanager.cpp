@@ -47,24 +47,33 @@
 namespace Digikam
 {
 
-bool sortByNameCaseInsensitive(const QString& s1, const QString& s2)
+struct SortByNameCaseInsensitive
 {
-    return s1.toLower() < s2.toLower();
-}
+    bool operator()(const QString& s1, const QString& s2)
+    {
+        return s1.toLower() < s2.toLower();
+    }
+};
 
-bool sortByDate(const QString& s1, const QString& s2)
+struct SortByDate
 {
-    ImageInfo i1 = ImageInfo(KUrl(s1));
-    ImageInfo i2 = ImageInfo(KUrl(s2));
-    return i1.dateTime() < i2.dateTime();
-}
+    bool operator()(const QString& s1, const QString& s2)
+    {
+        ImageInfo i1 = ImageInfo(KUrl(s1));
+        ImageInfo i2 = ImageInfo(KUrl(s2));
+        return i1.dateTime() < i2.dateTime();
+    }
+};
 
-bool sortBySize(const QString& s1, const QString& s2)
+struct SortBySize
 {
-    ImageInfo i1 = ImageInfo(KUrl(s1));
-    ImageInfo i2 = ImageInfo(KUrl(s2));
-    return i1.fileSize() < i2.fileSize();
-}
+    bool operator()(const QString& s1, const QString& s2)
+    {
+        ImageInfo i1 = ImageInfo(KUrl(s1));
+        ImageInfo i2 = ImageInfo(KUrl(s2));
+        return i1.fileSize() < i2.fileSize();
+    }
+};
 
 class AdvancedRenameManager::ParseManagerPriv
 {
@@ -230,7 +239,7 @@ void AdvancedRenameManager::parseFiles(const QString& parseString)
 
     d->parser->reset();
 
-    foreach(const QString& file, fileList())
+    foreach(const QString & file, fileList())
     {
         KUrl url(file);
         ParseSettings settings;
@@ -252,7 +261,7 @@ void AdvancedRenameManager::parseFiles(const QString& parseString, ParseSettings
 
     d->parser->reset();
 
-    foreach(const QString& file, fileList())
+    foreach(const QString & file, fileList())
     {
         KUrl url(file);
         ParseSettings settings = _settings;
@@ -267,7 +276,7 @@ void AdvancedRenameManager::parseFiles(const QString& parseString, ParseSettings
 
 void AdvancedRenameManager::addFiles(const QList<ParseSettings>& files)
 {
-    foreach(const ParseSettings& ps, files)
+    foreach(const ParseSettings & ps, files)
     {
         addFile(ps.fileUrl.toLocalFile(), ps.creationTime);
     }
@@ -309,19 +318,19 @@ QStringList AdvancedRenameManager::fileList()
     {
         case SortName:
         {
-            qSort(tmpFiles.begin(), tmpFiles.end(), sortByNameCaseInsensitive);
+            qSort(tmpFiles.begin(), tmpFiles.end(), SortByNameCaseInsensitive());
             break;
         }
 
         case SortDate:
         {
-            qSort(tmpFiles.begin(), tmpFiles.end(), sortByDate);
+            qSort(tmpFiles.begin(), tmpFiles.end(), SortByDate());
             break;
         }
 
         case SortSize:
         {
-            qSort(tmpFiles.begin(), tmpFiles.end(), sortBySize);
+            qSort(tmpFiles.begin(), tmpFiles.end(), SortBySize());
             break;
         }
 
@@ -335,6 +344,7 @@ QStringList AdvancedRenameManager::fileList()
         case SortDescending:
             std::reverse(tmpFiles.begin(), tmpFiles.end());
             break;
+
         case SortAscending:
         default:
             break;
@@ -363,7 +373,7 @@ bool AdvancedRenameManager::initialize()
     // fill normal index map
     {
         int counter = 1;
-        foreach(const QString& file, filelist)
+        foreach(const QString & file, filelist)
         {
             d->fileIndexMap[file] = counter++;
         }
@@ -372,7 +382,7 @@ bool AdvancedRenameManager::initialize()
     // fill file group index map
     {
         int counter = 1;
-        foreach(const QString& file, filelist)
+        foreach(const QString & file, filelist)
         {
             if (!d->fileGroupIndexMap.contains(fileGroupKey(file)))
             {
@@ -384,7 +394,7 @@ bool AdvancedRenameManager::initialize()
     // fill folder group index map
     {
         QMap<QString, QList<QString> > dirMap;
-        foreach(const QString& file, filelist)
+        foreach(const QString & file, filelist)
         {
             QFileInfo fi(file);
             QString path = fi.absolutePath();
@@ -400,10 +410,10 @@ bool AdvancedRenameManager::initialize()
             }
         }
 
-        foreach(const QString& dir, dirMap.keys())
+        foreach(const QString & dir, dirMap.keys())
         {
             int index = 0;
-            foreach(const QString& f, dirMap[dir])
+            foreach(const QString & f, dirMap[dir])
             {
                 if (!d->folderIndexMap.contains(f))
                 {

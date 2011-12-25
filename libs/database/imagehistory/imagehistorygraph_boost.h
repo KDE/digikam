@@ -1389,7 +1389,7 @@ protected:
                 : g(g), vertexLessThan(vertexLessThan) {}
             const GraphType& g;
             VertexLessThan vertexLessThan;
-            bool operator()(const Edge& a, const Edge b)
+            bool operator()(const Edge& a, const Edge& b)
             {
                 return vertexLessThan(boost::target(a.toEdge(), g), boost::target(b.toEdge(), g));
             }

@@ -72,7 +72,7 @@ public:
     Template          metadataTemplate;
 };
 
-TemplateSelector::TemplateSelector(QWidget* parent=0)
+TemplateSelector::TemplateSelector(QWidget* parent = 0)
     : KHBox(parent), d(new TemplateSelectorPriv)
 {
     d->label         = new QLabel(i18n("Template: "), this);
@@ -120,16 +120,16 @@ void TemplateSelector::populateTemplates()
     d->templateCombo->clear();
     d->templateCombo->insertSqueezedItem(i18n("To remove"),    REMOVETEMPLATE);
     d->templateCombo->insertSqueezedItem(i18n("Do not change"), DONTCHANGE);
-    d->templateCombo->insertSeparator(DONTCHANGE+1);
+    d->templateCombo->insertSeparator(DONTCHANGE + 1);
 
     TemplateManager* tm = TemplateManager::defaultManager();
 
     if (tm)
     {
-        int i                 = DONTCHANGE+2;
+        int i                 = DONTCHANGE + 2;
         QList<Template> list  = tm->templateList();
 
-        foreach (const Template& t, list)
+        foreach(const Template & t, list)
         {
             d->templateCombo->insertSqueezedItem(t.templateTitle(), i);
             ++i;
@@ -146,20 +146,20 @@ Template TemplateSelector::getTemplate() const
             Template t;
             t.setTemplateTitle(Template::removeTemplateTitle());
             return t;
-            break;
         }
+
         case DONTCHANGE:
         {
             return Template();
-            break;
         }
+
         default:
         {
             TemplateManager* tm = TemplateManager::defaultManager();
 
             if (tm)
             {
-                return tm->fromIndex(d->templateCombo->currentIndex()-3);
+                return tm->fromIndex(d->templateCombo->currentIndex() - 3);
             }
 
             break;

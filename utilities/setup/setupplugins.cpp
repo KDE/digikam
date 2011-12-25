@@ -7,6 +7,7 @@
  * Description : setup Kipi plugins tab.
  *
  * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +31,7 @@
 #include <QLayout>
 #include <QString>
 #include <QVBoxLayout>
+#include <QGridLayout>
 
 // KDE includes
 
@@ -50,11 +52,13 @@ public:
 
     SetupPluginsPriv() :
         pluginsNumber(0),
+        pluginsNumberActivated(0),
         kipiConfig(0)
     {
     }
 
     QLabel*             pluginsNumber;
+    QLabel*             pluginsNumberActivated;
 
     KIPI::ConfigWidget* kipiConfig;
 };
@@ -62,29 +66,30 @@ public:
 SetupPlugins::SetupPlugins(QWidget* parent)
     : QScrollArea(parent), d(new SetupPluginsPriv)
 {
-    QWidget* panel      = new QWidget(viewport());
+    QWidget* panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout* layout = new QVBoxLayout(panel);
-    d->pluginsNumber    = new QLabel(panel);
+    QGridLayout* mainLayout   = new QGridLayout;
+    d->pluginsNumber          = new QLabel;
+    d->pluginsNumberActivated = new QLabel;
 
     if (KIPI::PluginLoader::instance())
     {
         d->kipiConfig = KIPI::PluginLoader::instance()->configWidget(panel);
-        d->kipiConfig->setWhatsThis(i18n("A list of available Kipi plugins appears below."));
+        d->kipiConfig->setWhatsThis(i18n("A list of available Kipi plugins."));
     }
 
-    layout->addWidget(d->pluginsNumber);
-    layout->addWidget(d->kipiConfig);
-    layout->setMargin(KDialog::spacingHint());
-    layout->setSpacing(KDialog::spacingHint());
+    mainLayout->addWidget(d->pluginsNumber,             0, 0, 1, 1);
+    mainLayout->addWidget(d->pluginsNumberActivated,    0, 1, 1, 1);
+    mainLayout->addWidget(d->kipiConfig,                1, 0, 1, -1);
+    mainLayout->setColumnStretch(2, 10);
+    mainLayout->setMargin(KDialog::spacingHint());
+    mainLayout->setSpacing(KDialog::spacingHint());
 
-    if (KIPI::PluginLoader::instance())
-    {
-        KIPI::PluginLoader::PluginList list = KIPI::PluginLoader::instance()->pluginList();
-        initPlugins((int)list.count());
-    }
+    panel->setLayout(mainLayout);
+
+    initPlugins();
 
     // --------------------------------------------------------
 
@@ -98,11 +103,29 @@ SetupPlugins::~SetupPlugins()
     delete d;
 }
 
-void SetupPlugins::initPlugins(int kipiPluginsNumber)
+void SetupPlugins::initPlugins()
 {
-    d->pluginsNumber->setText(i18np("1 Kipi plugin found",
-                                    "%1 Kipi plugins found",
-                                    kipiPluginsNumber));
+    if (KIPI::PluginLoader::instance())
+    {
+        KIPI::PluginLoader::PluginList list = KIPI::PluginLoader::instance()->pluginList();
+        d->pluginsNumber->setText(i18np("1 Kipi plugin found",
+                                        "%1 Kipi plugins found",
+                                        list.count()));
+
+        int activated = 0;
+        KIPI::PluginLoader::PluginList::const_iterator it = list.constBegin();
+
+        for (; it != list.constEnd(); ++it)
+        {
+            if ((*it)->shouldLoad())
+            {
+                ++activated;
+            }
+        }
+
+        d->pluginsNumberActivated->setText(i18nc("%1: number of plugins activated",
+                                                 "(%1 activated)", activated));
+    }
 }
 
 void SetupPlugins::applyPlugins()

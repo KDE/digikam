@@ -129,8 +129,11 @@ SetupMisc::SetupMisc(QWidget* parent)
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
 
     QStringList styleList = QStyleFactory::keys();
+
     for (int i = 0; i < styleList.count(); ++i)
+    {
         d->applicationStyle->addItem(styleList.at(i));
+    }
 
     // --------------------------------------------------------
 

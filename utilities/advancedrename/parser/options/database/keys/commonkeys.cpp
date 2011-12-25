@@ -33,6 +33,8 @@
 #include "imageinfo.h"
 #include "imagecopyright.h"
 
+namespace
+{
 static const QString KEY_DEFAULTCOMMENT("DefaultComment");
 static const QString KEY_DIMENSION("Dimension");
 static const QString KEY_FILESIZE("FileSize");
@@ -46,6 +48,7 @@ static const QString KEY_COLORDEPTH("ColorDepth");
 static const QString KEY_COLORMODEL("ColorModel");
 static const QString KEY_DEFAULTAUTHOR("DefaultAuthor");
 static const QString KEY_AUTHORS("Authors");
+}
 
 namespace Digikam
 {

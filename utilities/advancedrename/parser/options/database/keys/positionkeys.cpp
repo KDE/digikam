@@ -33,6 +33,8 @@
 #include "imageinfo.h"
 #include "imageposition.h"
 
+namespace
+{
 static const QString KEY_LATITUDE("Latitude");
 static const QString KEY_LONGITUDE("Longitude");
 static const QString KEY_LATTITUDENUMBER("LatitudeNumber");
@@ -46,6 +48,7 @@ static const QString KEY_ROLL("Roll");
 static const QString KEY_TILT("Tilt");
 static const QString KEY_ACCURACY("Accuracy");
 static const QString KEY_DESCRIPTION("Description");
+}
 
 namespace Digikam
 {
