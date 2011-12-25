@@ -101,6 +101,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 091 ==> 125736 : Uniquely identifying each image in a collection of images.
 092 ==> 229888 : Speed up "Scan for new items at startup".
 093 ==> 289779 : Plugins are not really freed / unplugged when disabled in the kipi setup dialog. 
-094 ==> 
+094 ==> 284394 : Crashed while open Sidebar "Mapsearch".
+095 ==> 
 
 
