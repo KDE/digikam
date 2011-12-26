@@ -66,7 +66,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 056 ==> 199461 : Picture quickinfo doesn't show isospeed.
 057 ==> 279556 : Editing captions in metadata editor sets the exif image creation date to file modification date.
 058 ==> 224533 : digiKam acting weird on new qt 4.6.1/kde sc 4.3.95.
-059 ==> 183627 : digiKam & showfot logo's text in upper right corner looks jagged - could use scalable font or SVG.
+059 ==> 183627 : digiKam & showfoto logo's text in upper right corner looks jagged - could use scalable font or SVG.
 060 ==> 189990 : To set an IPTC caption with syncing EXIF => the image is no more displayed in the calendar view.
 061 ==> 288266 : digiKam crashed attempting to fix a shortcut conflict.
 062 ==> 262585 : A single face is detected twice.
@@ -78,7 +78,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 068 ==> 283417 : Add an option to show image titles [patch].
 069 ==> 149786 : digiKam should try to reconnect to camera after the connection has expired.
 070 ==> 158402 : Create a duplicate of an image in the image editor.
-071 ==> 174070 : enhancement plugins should be not in the menu, but in the toolbar on the right.
+071 ==> 174070 : Enhancement plugins should be not in the menu, but in the toolbar on the right.
 072 ==> 225564 : Automatically assign parent tags.
 073 ==> 233547 : Adjusting exif orientation doesn't work for ORF images.
 074 ==> 285135 : digiKam crashes at launch.
@@ -103,4 +103,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 093 ==> 289779 : Plugins are not really freed / unplugged when disabled in the kipi setup dialog.
 094 ==> 284394 : Crashed while open Sidebar "Mapsearch".
 095 ==> 289835 : The face group widget is not displayed when reentering the ImagePreviewView.
-096 ==> 
+096 ==> 158533 : Be able to see not only "image2 files but any that are there in an album.
+097 ==> 
