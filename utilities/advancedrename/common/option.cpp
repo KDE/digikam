@@ -23,15 +23,6 @@
 
 #include "option.moc"
 
-// Qt includes
-
-#include <QRegExp>
-
-// KDE includes
-
-#include <kiconloader.h>
-#include <klocale.h>
-
 namespace Digikam
 {
 

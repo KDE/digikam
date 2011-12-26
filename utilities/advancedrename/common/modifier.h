@@ -24,16 +24,9 @@
 #ifndef MODIFIER_H
 #define MODIFIER_H
 
-// Qt includes
-
-#include <QList>
-#include <QString>
-
 // Local includes
 
 #include "parseable.h"
-
-class QAction;
 
 namespace Digikam
 {

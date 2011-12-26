@@ -23,11 +23,6 @@
 
 #include "highlighter.h"
 
-// Qt includes
-
-#include <QFileInfo>
-#include <QTextEdit>
-
 // Local includes
 
 #include "parser.h"

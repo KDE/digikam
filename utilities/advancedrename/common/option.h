@@ -28,8 +28,6 @@
 
 #include "parseable.h"
 
-class QRegExp;
-
 namespace Digikam
 {
 
