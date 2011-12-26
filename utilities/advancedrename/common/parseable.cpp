@@ -228,7 +228,7 @@ bool Parseable::useTokenMenu() const
     return d->useTokenMenu;
 }
 
-TokenList Parseable::tokens() const
+TokenList& Parseable::tokens() const
 {
     return d->tokens;
 }

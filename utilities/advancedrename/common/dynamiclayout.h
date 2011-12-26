@@ -27,12 +27,10 @@
 // Qt includes
 
 #include <QLayout>
-#include <QSize>
-#include <QStyle>
-#include <QWidget>
 
 class QLayoutItem;
 class QRect;
+class QWidget;
 
 namespace Digikam
 {

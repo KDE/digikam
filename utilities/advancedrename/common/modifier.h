@@ -24,16 +24,9 @@
 #ifndef MODIFIER_H
 #define MODIFIER_H
 
-// Qt includes
-
-#include <QList>
-#include <QString>
-
 // Local includes
 
 #include "parseable.h"
-
-class QAction;
 
 namespace Digikam
 {
@@ -49,7 +42,7 @@ public:
     Modifier(const QString& name, const QString& description, const QString& icon);
     virtual ~Modifier();
 
-    virtual ParseResults parse(ParseSettings& settings);
+    virtual ParseResults& parse(ParseSettings& settings);
 
 protected:
 
