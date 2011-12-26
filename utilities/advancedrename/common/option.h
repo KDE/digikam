@@ -32,7 +32,6 @@ namespace Digikam
 {
 
 class OptionPriv;
-
 class Option : public Parseable
 {
     Q_OBJECT
@@ -43,7 +42,7 @@ public:
     Option(const QString& name, const QString& description, const QString& icon);
     virtual ~Option();
 
-    virtual ParseResults parse(ParseSettings& settings);
+    virtual ParseResults& parse(ParseSettings& settings);
 
 protected:
 

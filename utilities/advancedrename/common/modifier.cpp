@@ -53,7 +53,7 @@ Modifier::~Modifier()
     delete d;
 }
 
-ParseResults Modifier::parse(ParseSettings& settings)
+ParseResults& Modifier::parse(ParseSettings& settings)
 {
     d->parsedResults.clear();
 

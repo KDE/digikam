@@ -42,7 +42,7 @@ public:
     Modifier(const QString& name, const QString& description, const QString& icon);
     virtual ~Modifier();
 
-    virtual ParseResults parse(ParseSettings& settings);
+    virtual ParseResults& parse(ParseSettings& settings);
 
 protected:
 

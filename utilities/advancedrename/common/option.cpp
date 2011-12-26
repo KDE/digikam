@@ -54,7 +54,7 @@ Option::~Option()
 }
 
 
-ParseResults Option::parse(ParseSettings& settings)
+ParseResults& Option::parse(ParseSettings& settings)
 {
     d->parsedResults.clear();
     const QRegExp& reg         = regExp();
