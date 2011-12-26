@@ -92,6 +92,7 @@ protected:
     bool acceptsMouseClick(QMouseEvent* e);
     void enterEvent(QEvent* e);
     void leaveEvent(QEvent* e);
+    void showEvent(QShowEvent* e);
 
 private Q_SLOTS:
 
