@@ -903,6 +903,7 @@ static QStringList joinMainAndUserFilterString(const QString& filter, const QStr
 {
     QSet<QString> filterSet;
     QStringList userFilterList;
+    QStringList sortedList;
 
     filterSet = filter.split(';', QString::SkipEmptyParts).toSet();
     userFilterList = userFilter.split(';', QString::SkipEmptyParts);
@@ -917,7 +918,10 @@ static QStringList joinMainAndUserFilterString(const QString& filter, const QStr
             filterSet << userFormat;
         }
     }
-    return filterSet.toList();
+
+    sortedList = filterSet.toList();
+    sortedList.sort();
+    return sortedList;
 }
 
 void AlbumDB::getFilterSettings(QStringList* imageFilter, QStringList* videoFilter, QStringList* audioFilter)
