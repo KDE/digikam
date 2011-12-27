@@ -512,6 +512,7 @@ bool exifTransform(const QString& file, const QString& documentName,
             jpeg_stdio_dest(&dstinfo, output_file);
 
             // Start compressor (note no image data is actually written here)
+            dstinfo.optimize_coding = true;
             jpeg_write_coefficients(&dstinfo, dst_coef_arrays);
 
             // Copy to the output file any extra markers that we want to preserve
