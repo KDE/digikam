@@ -261,20 +261,20 @@ void AlbumWatch::connectToKInotify()
 
     d->inotify = new KInotify(this);
 
-    connect( d->inotify, SIGNAL( movedFrom( QString ) ),
-             this, SLOT( slotFileMoved( QString ) ) );
-    connect( d->inotify, SIGNAL( movedTo( QString ) ),
-             this, SLOT( slotFileMoved( QString ) ) );
-    /*connect( d->inotify, SIGNAL( moved( QString, QString ) ),
-             this, SLOT( slotFileMoved( QString, QString ) ) );*/
-    connect( d->inotify, SIGNAL( deleted( QString, bool ) ),
-             this, SLOT( slotFileDeleted( QString, bool ) ) );
-    connect( d->inotify, SIGNAL( created( QString, bool ) ),
-             this, SLOT( slotFileCreated( QString, bool ) ) );
-    connect( d->inotify, SIGNAL( closedWrite( QString ) ),
-             this, SLOT( slotFileClosedAfterWrite( QString ) ) );
-    connect( d->inotify, SIGNAL( watchUserLimitReached() ),
-             this, SLOT( slotInotifyWatchUserLimitReached() ) );
+    connect( d->inotify, SIGNAL(movedFrom(QString)),
+             this, SLOT(slotFileMoved(QString)) );
+    connect( d->inotify, SIGNAL(movedTo(QString)),
+             this, SLOT(slotFileMoved(QString)) );
+    /*connect( d->inotify, SIGNAL(moved(QString,QString)),
+             this, SLOT(slotFileMoved(QString,QString)) );*/
+    connect( d->inotify, SIGNAL(deleted(QString,bool)),
+             this, SLOT(slotFileDeleted(QString,bool)) );
+    connect( d->inotify, SIGNAL(created(QString,bool)),
+             this, SLOT(slotFileCreated(QString,bool)) );
+    connect( d->inotify, SIGNAL(closedWrite(QString)),
+             this, SLOT(slotFileClosedAfterWrite(QString)) );
+    connect( d->inotify, SIGNAL(watchUserLimitReached()),
+             this, SLOT(slotInotifyWatchUserLimitReached()) );
 }
 
 /*
