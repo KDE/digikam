@@ -67,7 +67,7 @@ public:
 
     // --------------------------------------------------------
 
-    bool isValid()
+    bool isValid() const
     {
         QFileInfo fi(fileUrl.toLocalFile());
         return fi.isReadable();

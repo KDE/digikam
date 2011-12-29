@@ -54,30 +54,30 @@ public:
 
     bool       hasKey(const ResultsKey& key);
 
-    QString    result(const ResultsKey& key);
-    QString    token(const ResultsKey& key);
+    QString    result(const ResultsKey& key) const;
+    QString    token(const ResultsKey& key)  const;
 
-    int        offset(const ResultsKey& key);
+    int        offset(const ResultsKey& key) const;
 
-    ResultsKey keyAtPosition(int pos);
-    bool       hasKeyAtPosition(int pos);
+    ResultsKey keyAtPosition(int pos)    const;
+    bool       hasKeyAtPosition(int pos) const;
 
-    ResultsKey keyAtApproximatePosition(int pos);
-    bool       hasKeyAtApproximatePosition(int pos);
+    ResultsKey keyAtApproximatePosition(int pos)    const;
+    bool       hasKeyAtApproximatePosition(int pos) const;
 
-    bool       isEmpty();
+    bool       isEmpty() const;
 
     void       append(ParseResults& results);
     void       clear();
 
-    QString    replaceTokens(const QString& markedString);
+    QString    replaceTokens(const QString& markedString) const;
 
-    void       debug();
+    void       debug() const;
 
 private:
 
     ResultsKey createInvalidKey() const;
-    bool       keyIsValid(const ResultsKey& key);
+    bool       keyIsValid(const ResultsKey& key) const;
 
     ResultsMap  m_results;
 };
