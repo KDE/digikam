@@ -2895,6 +2895,15 @@ void DigikamApp::slotKipiPluginPlug()
     // load KIPI actions settings
     d->kipipluginsActionCollection->readSettings();
 
+    // Check if the kipiFileActionsExport are empty, if so, add an empty action which tells the user that no export plugins are
+    // available. It is more user-friendly to present some menu entry, instead of leaving it completely empty.
+    if (d->kipiFileActionsExport.empty())
+    {
+        QAction* noPluginsLoaded = new QAction(i18n("No export plugins available"), this);
+        noPluginsLoaded->setEnabled(false);
+        d->kipiFileActionsExport << noPluginsLoaded;
+    }
+
     // Create GUI menu in according with plugins.
     plugActionList(QString::fromLatin1("file_actions_export"),        d->kipiFileActionsExport);
     plugActionList(QString::fromLatin1("file_actions_import"),        d->kipiFileActionsImport);

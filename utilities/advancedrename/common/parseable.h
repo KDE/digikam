@@ -88,7 +88,7 @@ public:
     /**
      * @return a list of all registered tokens
      */
-    TokenList tokens() const;
+    TokenList& tokens() const;
 
     /**
      * Register a button in the parent object. By calling this method, a new button for the parser
@@ -145,7 +145,7 @@ public:
      * @param settings
      * @return
      */
-    virtual ParseResults parse(ParseSettings& settings) = 0;
+    virtual ParseResults& parse(ParseSettings& settings) = 0;
 
 Q_SIGNALS:
 

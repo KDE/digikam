@@ -27,10 +27,6 @@
 // Qt includes
 
 #include <QSyntaxHighlighter>
-#include <QTextCharFormat>
-#include <QVector>
-
-class QTextEdit;
 
 namespace Digikam
 {

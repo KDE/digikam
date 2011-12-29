@@ -25,13 +25,8 @@
 
 // Qt includes
 
-#include <QLayoutItem>
-#include <QList>
-#include <QRect>
-
-// KDE includes
-
-#include <kdebug.h>
+#include <QStyle>
+#include <QWidget>
 
 namespace Digikam
 {

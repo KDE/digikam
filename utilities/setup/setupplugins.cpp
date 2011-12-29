@@ -26,12 +26,12 @@
 
 // Qt includes
 
-#include <QHBoxLayout>
+#include <QApplication>
 #include <QLabel>
 #include <QLayout>
 #include <QString>
-#include <QVBoxLayout>
 #include <QGridLayout>
+#include <QPushButton>
 
 // KDE includes
 
@@ -53,12 +53,17 @@ public:
     SetupPluginsPriv() :
         pluginsNumber(0),
         pluginsNumberActivated(0),
+        checkAllBtn(0),
+        clearBtn(0),
         kipiConfig(0)
     {
     }
 
     QLabel*             pluginsNumber;
     QLabel*             pluginsNumberActivated;
+
+    QPushButton*        checkAllBtn;
+    QPushButton*        clearBtn;
 
     KIPI::ConfigWidget* kipiConfig;
 };
@@ -74,6 +79,10 @@ SetupPlugins::SetupPlugins(QWidget* parent)
     d->pluginsNumber          = new QLabel;
     d->pluginsNumberActivated = new QLabel;
 
+    d->checkAllBtn            = new QPushButton(i18n("Check all"));
+    d->clearBtn               = new QPushButton(i18n("Clear"));
+
+
     if (KIPI::PluginLoader::instance())
     {
         d->kipiConfig = KIPI::PluginLoader::instance()->configWidget(panel);
@@ -83,6 +92,8 @@ SetupPlugins::SetupPlugins(QWidget* parent)
     mainLayout->addWidget(d->pluginsNumber,             0, 0, 1, 1);
     mainLayout->addWidget(d->pluginsNumberActivated,    0, 1, 1, 1);
     mainLayout->addWidget(d->kipiConfig,                1, 0, 1, -1);
+    mainLayout->addWidget(d->checkAllBtn,               2, 3, 1, 1);
+    mainLayout->addWidget(d->clearBtn,                  2, 4, 1, 1);
     mainLayout->setColumnStretch(2, 10);
     mainLayout->setMargin(KDialog::spacingHint());
     mainLayout->setSpacing(KDialog::spacingHint());
@@ -96,6 +107,14 @@ SetupPlugins::SetupPlugins(QWidget* parent)
     setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
     panel->setAutoFillBackground(false);
+
+    // --------------------------------------------------------
+
+    connect(d->checkAllBtn, SIGNAL(clicked()),
+            this, SLOT(slotCheckAll()));
+
+    connect(d->clearBtn, SIGNAL(clicked()),
+            this, SLOT(slotClear()));
 }
 
 SetupPlugins::~SetupPlugins()
@@ -136,4 +155,17 @@ void SetupPlugins::applyPlugins()
     }
 }
 
+void SetupPlugins::slotCheckAll()
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    d->kipiConfig->slotCheckAll();
+    QApplication::restoreOverrideCursor();
+}
+
+void SetupPlugins::slotClear()
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    d->kipiConfig->slotClear();
+    QApplication::restoreOverrideCursor();
+}
 }  // namespace Digikam

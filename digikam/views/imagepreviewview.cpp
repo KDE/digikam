@@ -103,17 +103,17 @@ public:
         setPath(info.filePath());
     }
 
-    void hoverEnterEvent (QGraphicsSceneHoverEvent* e)
+    void hoverEnterEvent(QGraphicsSceneHoverEvent* e)
     {
         m_group->itemHoverEnterEvent(e);
     }
 
-    void hoverLeaveEvent (QGraphicsSceneHoverEvent* e)
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent* e)
     {
         m_group->itemHoverLeaveEvent(e);
     }
 
-    void hoverMoveEvent (QGraphicsSceneHoverEvent* e)
+    void hoverMoveEvent(QGraphicsSceneHoverEvent* e)
     {
         m_group->itemHoverMoveEvent(e);
     }
@@ -225,6 +225,7 @@ ImagePreviewView::ImagePreviewView(QWidget* parent, Mode mode)
         d->toolBar->addAction(d->nextAction);
         d->toolBar->addAction(d->back2AlbumAction);
     }
+
     d->toolBar->addAction(d->rotLeftAction);
     d->toolBar->addAction(d->rotRightAction);
     d->toolBar->addAction(d->peopleToggleAction);
@@ -311,14 +312,17 @@ void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& prev
     d->nextAction->setEnabled(!next.isNull());
 
     QStringList previewPaths;
+
     if (next.category() == DatabaseItem::Image)
     {
         previewPaths << next.filePath();
     }
+
     if (previous.category() == DatabaseItem::Image)
     {
         previewPaths << previous.filePath();
     }
+
     d->item->setPreloadPaths(previewPaths);
 }
 
@@ -345,6 +349,12 @@ void ImagePreviewView::enterEvent(QEvent* e)
 void ImagePreviewView::leaveEvent(QEvent* e)
 {
     d->faceGroup->leaveEvent(e);
+}
+
+void ImagePreviewView::showEvent(QShowEvent* e)
+{
+    GraphicsDImgView::showEvent(e);
+    d->faceGroup->setVisible(d->peopleToggleAction->isChecked());
 }
 
 void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent* event)
@@ -505,7 +515,7 @@ void ImagePreviewView::slotRotateLeft()
     if (action)
     {
         QList<QAction*> list = action->menu()->actions();
-        foreach(QAction* ac, list)
+        foreach(QAction * ac, list)
         {
             if (ac->objectName() == QString("rotate_ccw"))
             {
@@ -522,7 +532,7 @@ void ImagePreviewView::slotRotateRight()
     if (action)
     {
         QList<QAction*> list = action->menu()->actions();
-        foreach(QAction* ac, list)
+        foreach(QAction * ac, list)
         {
             if (ac->objectName() == QString("rotate_cw"))
             {

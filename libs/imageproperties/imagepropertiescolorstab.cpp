@@ -278,17 +278,17 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     // -------------------------------------------------------------
     // histogramBox connections
 
-    connect(d->histogramBox->histogram(), SIGNAL(signalIntervalChanged(int, int)),
-            this, SLOT(slotUpdateInterval(int, int)));
+    connect(d->histogramBox->histogram(), SIGNAL(signalIntervalChanged(int,int)),
+            this, SLOT(slotUpdateInterval(int,int)));
 
-    connect(d->redHistogram, SIGNAL(signalIntervalChanged(int, int)),
-            this, SLOT(slotUpdateIntervalFromRGB(int, int)));
+    connect(d->redHistogram, SIGNAL(signalIntervalChanged(int,int)),
+            this, SLOT(slotUpdateIntervalFromRGB(int,int)));
 
-    connect(d->greenHistogram, SIGNAL(signalIntervalChanged(int, int)),
-            this, SLOT(slotUpdateIntervalFromRGB(int, int)));
+    connect(d->greenHistogram, SIGNAL(signalIntervalChanged(int,int)),
+            this, SLOT(slotUpdateIntervalFromRGB(int,int)));
 
-    connect(d->blueHistogram, SIGNAL(signalIntervalChanged(int, int)),
-            this, SLOT(slotUpdateIntervalFromRGB(int, int)));
+    connect(d->blueHistogram, SIGNAL(signalIntervalChanged(int,int)),
+            this, SLOT(slotUpdateIntervalFromRGB(int,int)));
 
     connect(d->histogramBox->histogram(), SIGNAL(signalMaximumValueChanged(int)),
             this, SLOT(slotUpdateIntervRange(int)));

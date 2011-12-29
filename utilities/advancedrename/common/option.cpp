@@ -23,15 +23,6 @@
 
 #include "option.moc"
 
-// Qt includes
-
-#include <QRegExp>
-
-// KDE includes
-
-#include <kiconloader.h>
-#include <klocale.h>
-
 namespace Digikam
 {
 
@@ -63,7 +54,7 @@ Option::~Option()
 }
 
 
-ParseResults Option::parse(ParseSettings& settings)
+ParseResults& Option::parse(ParseSettings& settings)
 {
     d->parsedResults.clear();
     const QRegExp& reg         = regExp();
