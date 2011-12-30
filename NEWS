@@ -107,5 +107,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 097 ==> 283416 : Configuration/MIME Types: List of supported types is in random order [patch].
 098 ==> 209721 : Search field in digikam's coordinates editor uses black text on black background.
 099 ==> 289644 : digiKam crashes while resizing pictures.
-100 ==> 
+100 ==> 290157 : Libkdcraw should support LCMS2 [patch].
+101 ==> 
 
