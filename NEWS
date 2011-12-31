@@ -108,5 +108,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 098 ==> 209721 : Search field in digikam's coordinates editor uses black text on black background.
 099 ==> 289644 : digiKam crashes while resizing pictures.
 100 ==> 290157 : Libkdcraw should support LCMS2 [patch].
-101 ==> 
+101 ==> 290196 : PATCH: Improvements for Levels adjust tool.
+102 ==> 
 
