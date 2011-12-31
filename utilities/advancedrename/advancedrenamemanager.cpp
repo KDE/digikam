@@ -23,6 +23,10 @@
 
 #include "advancedrenamemanager.moc"
 
+// C++ includes
+
+#include <algorithm>
+
 // Qt includes
 
 #include <QList>
@@ -39,10 +43,6 @@
 #include "defaultrenameparser.h"
 #include "importrenameparser.h"
 #include "imageinfo.h"
-
-// C++ includes
-
-#include <algorithm>
 
 namespace Digikam
 {
@@ -195,7 +195,7 @@ void AdvancedRenameManager::setParserType(ParserType type)
     }
 }
 
-Parser* AdvancedRenameManager::getParser()
+Parser* AdvancedRenameManager::getParser() const
 {
     if (!d->parser)
     {
@@ -239,7 +239,7 @@ void AdvancedRenameManager::parseFiles(const QString& parseString)
 
     d->parser->reset();
 
-    foreach(const QString & file, fileList())
+    foreach(const QString& file, fileList())
     {
         KUrl url(file);
         ParseSettings settings;
@@ -261,7 +261,7 @@ void AdvancedRenameManager::parseFiles(const QString& parseString, ParseSettings
 
     d->parser->reset();
 
-    foreach(const QString & file, fileList())
+    foreach(const QString& file, fileList())
     {
         KUrl url(file);
         ParseSettings settings = _settings;
@@ -276,14 +276,14 @@ void AdvancedRenameManager::parseFiles(const QString& parseString, ParseSettings
 
 void AdvancedRenameManager::addFiles(const QList<ParseSettings>& files)
 {
-    foreach(const ParseSettings & ps, files)
+    foreach(const ParseSettings& ps, files)
     {
         addFile(ps.fileUrl.toLocalFile(), ps.creationTime);
     }
     initialize();
 }
 
-void AdvancedRenameManager::clearMappings()
+void AdvancedRenameManager::clearMappings() const
 {
     d->fileIndexMap.clear();
     d->folderIndexMap.clear();
@@ -310,7 +310,7 @@ void AdvancedRenameManager::resetState()
     d->startIndex = 1;
 }
 
-QStringList AdvancedRenameManager::fileList()
+QStringList AdvancedRenameManager::fileList() const
 {
     QStringList tmpFiles = d->files;
 
@@ -358,7 +358,7 @@ QMap<QString, QString> AdvancedRenameManager::newFileList() const
     return d->renamedFiles;
 }
 
-bool AdvancedRenameManager::initialize()
+bool AdvancedRenameManager::initialize() const
 {
     if (d->files.isEmpty())
     {
@@ -373,7 +373,7 @@ bool AdvancedRenameManager::initialize()
     // fill normal index map
     {
         int counter = 1;
-        foreach(const QString & file, filelist)
+        foreach(const QString& file, filelist)
         {
             d->fileIndexMap[file] = counter++;
         }
@@ -382,7 +382,7 @@ bool AdvancedRenameManager::initialize()
     // fill file group index map
     {
         int counter = 1;
-        foreach(const QString & file, filelist)
+        foreach(const QString& file, filelist)
         {
             if (!d->fileGroupIndexMap.contains(fileGroupKey(file)))
             {
@@ -394,7 +394,7 @@ bool AdvancedRenameManager::initialize()
     // fill folder group index map
     {
         QMap<QString, QList<QString> > dirMap;
-        foreach(const QString & file, filelist)
+        foreach(const QString& file, filelist)
         {
             QFileInfo fi(file);
             QString path = fi.absolutePath();
@@ -410,10 +410,10 @@ bool AdvancedRenameManager::initialize()
             }
         }
 
-        foreach(const QString & dir, dirMap.keys())
+        foreach(const QString& dir, dirMap.keys())
         {
             int index = 0;
-            foreach(const QString & f, dirMap[dir])
+            foreach(const QString& f, dirMap[dir])
             {
                 if (!d->folderIndexMap.contains(f))
                 {
@@ -426,7 +426,7 @@ bool AdvancedRenameManager::initialize()
     return true;
 }
 
-QString AdvancedRenameManager::fileGroupKey(const QString& filename)
+QString AdvancedRenameManager::fileGroupKey(const QString& filename) const
 {
     QFileInfo fi(filename);
     QString tmp = fi.absoluteFilePath().left(fi.absoluteFilePath().lastIndexOf(fi.suffix()));
