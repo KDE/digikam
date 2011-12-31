@@ -103,7 +103,7 @@ KLocalizedString DAboutData::digiKamSlogan()
 
 KLocalizedString DAboutData::copyright()
 {
-    return ki18n("(c) 2002-2011, digiKam developers team");
+    return ki18n("(c) 2002-2012, digiKam developers team");
 }
 
 KUrl DAboutData::webProjectUrl()
