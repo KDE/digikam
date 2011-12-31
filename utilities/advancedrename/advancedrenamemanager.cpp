@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "advancedrenamemanager.h"
+#include "advancedrenamemanager.moc"
 
 // Qt includes
 
