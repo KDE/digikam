@@ -200,7 +200,7 @@ void AlbumModelTest::init()
     safeCreatePAlbum(palbumRoot1, sameName, palbumChild0Root1);
 
     kDebug() << "AlbumManager now knows these PAlbums:";
-    foreach (Album* a, AlbumManager::instance()->allPAlbums())
+    foreach(Album* a, AlbumManager::instance()->allPAlbums())
     {
         kDebug() << "\t" << a->title();
     }
@@ -231,7 +231,7 @@ void AlbumModelTest::init()
     kDebug() << "copying images " << imageFiles << " to "
              << palbumChild0Root0->fileUrl();
 
-    foreach (const QString& imageFile, imageFiles)
+    foreach(const QString& imageFile, imageFiles)
     {
         QString src = IMAGE_PATH + '/' + imageFile;
         QString dst = palbumChild0Root0->fileUrl().toLocalFile() + '/' + imageFile;
@@ -254,7 +254,7 @@ void AlbumModelTest::init()
     DAlbum* rootFromAlbumManager = AlbumManager::instance()->findDAlbum(0);
     QVERIFY(rootFromAlbumManager);
     DAlbum* rootFromList = 0;
-    foreach (Album* album, AlbumManager::instance()->allDAlbums())
+    foreach(Album* album, AlbumManager::instance()->allDAlbums())
     {
         DAlbum* dAlbum = dynamic_cast<DAlbum*> (album);
         QVERIFY(dAlbum);
@@ -505,7 +505,7 @@ void AlbumModelTest::testDAlbumContainsAlbums()
 
     QVERIFY(albumModel->rootAlbum());
 
-    foreach (Album* album, AlbumManager::instance()->allDAlbums())
+    foreach(Album* album, AlbumManager::instance()->allDAlbums())
     {
 
         DAlbum* dAlbum = dynamic_cast<DAlbum*> (album);

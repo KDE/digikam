@@ -266,7 +266,7 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
 
     d->leftSideBarWidgets << d->peopleSideBar;
 
-    foreach (SidebarWidget* leftWidget, d->leftSideBarWidgets)
+    foreach(SidebarWidget* leftWidget, d->leftSideBarWidgets)
     {
         d->leftSideBar->appendTab(leftWidget, leftWidget->getIcon(),
                                   leftWidget->getCaption());
@@ -309,7 +309,7 @@ DigikamView::~DigikamView()
 
 void DigikamView::applySettings()
 {
-    foreach (SidebarWidget* sidebarWidget, d->leftSideBarWidgets)
+    foreach(SidebarWidget* sidebarWidget, d->leftSideBarWidgets)
     {
         sidebarWidget->applySettings();
     }
@@ -633,7 +633,7 @@ void DigikamView::slotPopupFiltersView()
 
 void DigikamView::loadViewState()
 {
-    foreach (SidebarWidget* widget, d->leftSideBarWidgets)
+    foreach(SidebarWidget* widget, d->leftSideBarWidgets)
     {
         widget->loadState();
     }
@@ -662,7 +662,7 @@ void DigikamView::saveViewState()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
 
-    foreach (SidebarWidget* widget, d->leftSideBarWidgets)
+    foreach(SidebarWidget* widget, d->leftSideBarWidgets)
     {
         widget->saveState();
     }
@@ -1750,7 +1750,7 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 {
     // TODO update, temporary cast
     SidebarWidget* widget = dynamic_cast<SidebarWidget*> (w);
-    foreach (SidebarWidget* sideBarWidget, d->leftSideBarWidgets)
+    foreach(SidebarWidget* sideBarWidget, d->leftSideBarWidgets)
     {
         bool active = (widget && (widget == sideBarWidget));
         sideBarWidget->setActive(active);

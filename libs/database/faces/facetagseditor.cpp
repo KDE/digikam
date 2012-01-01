@@ -86,11 +86,11 @@ QList<DatabaseFace> FaceTagsEditor::databaseFaces(qlonglong imageid, DatabaseFac
 {
     QList<DatabaseFace> faces;
     QStringList attributes = DatabaseFace::attributesForFlags(flags);
-    foreach (const ImageTagPair& pair, faceImageTagPairs(imageid, flags))
+    foreach(const ImageTagPair& pair, faceImageTagPairs(imageid, flags))
     {
-        foreach (const QString& attribute, attributes)
+        foreach(const QString& attribute, attributes)
         {
-            foreach (const QString& regionString, pair.values(attribute))
+            foreach(const QString& regionString, pair.values(attribute))
             {
                 TagRegion region(regionString);
                 kDebug() << "rect found as "<< region << "for attribute" << attribute << "tag" << pair.tagId();
@@ -113,7 +113,7 @@ QList<ImageTagPair> FaceTagsEditor::faceImageTagPairs(qlonglong imageid, Databas
     QList<ImageTagPair> pairs;
 
     QStringList attributes = DatabaseFace::attributesForFlags(flags);
-    foreach (const ImageTagPair& pair, ImageTagPair::availablePairs(imageid))
+    foreach(const ImageTagPair& pair, ImageTagPair::availablePairs(imageid))
     {
         //kDebug() << pair.tagId() << pair.properties();
         if (!FaceTags::isPerson(pair.tagId()))
@@ -143,10 +143,10 @@ QList< QRect > FaceTagsEditor::getTagRects(qlonglong imageid) const
     QList< QRect > rectList;
 
     QList<ImageTagPair> pairs = ImageTagPair::availablePairs(imageid);
-    foreach (const ImageTagPair& pair, pairs)
+    foreach(const ImageTagPair& pair, pairs)
     {
         QStringList regions = pair.values(ImageTagPropertyName::tagRegion());
-        foreach (const QString& region, regions)
+        foreach(const QString& region, regions)
         {
             QRect rect = TagRegion(region).toRect();
 
@@ -166,7 +166,7 @@ int FaceTagsEditor::numberOfFaces(qlonglong imageid) const
     int count = 0;
 
     QList<ImageTagPair> pairs = ImageTagPair::availablePairs(imageid);
-    foreach (const ImageTagPair& pair, pairs)
+    foreach(const ImageTagPair& pair, pairs)
     {
         QStringList regions = pair.values(ImageTagPropertyName::tagRegion());
         count += regions.size();
@@ -259,7 +259,7 @@ void FaceTagsEditor::addFaceAndTag(ImageTagPair& pair, const DatabaseFace& face,
     FaceTags::ensureIsPerson(face.tagId());
 
     QString region = face.region().toXml();
-    foreach (const QString& property, properties)
+    foreach(const QString& property, properties)
     {
         pair.addProperty(property, region);
     }
@@ -276,9 +276,9 @@ void FaceTagsEditor::removeAllFaces(qlonglong imageid)
 {
     QList<int> tagsToRemove;
     QStringList attributes = DatabaseFace::attributesForFlags(DatabaseFace::AllTypes);
-    foreach (ImageTagPair pair, faceImageTagPairs(imageid, DatabaseFace::AllTypes))
+    foreach(ImageTagPair pair, faceImageTagPairs(imageid, DatabaseFace::AllTypes))
     {
-        foreach (const QString& attribute, attributes)
+        foreach(const QString& attribute, attributes)
         {
             pair.removeProperties(attribute);
         }
@@ -301,9 +301,9 @@ void FaceTagsEditor::removeFace(qlonglong imageid, const QRect& rect)
     for (int i=0; i<pairs.size(); ++i)
     {
         ImageTagPair& pair = pairs[i];
-        foreach (const QString& attribute, attributes)
+        foreach(const QString& attribute, attributes)
         {
-            foreach (const QString& regionString, pair.values(attribute))
+            foreach(const QString& regionString, pair.values(attribute))
             {
                 if (rect == TagRegion(regionString).toRect())
                 {
@@ -334,7 +334,7 @@ void FaceTagsEditor::removeFace(const DatabaseFace& face)
 
 void FaceTagsEditor::removeFaces(const QList<DatabaseFace>& faces)
 {
-    foreach (const DatabaseFace& face, faces)
+    foreach(const DatabaseFace& face, faces)
     {
         if (face.isNull())
         {
@@ -400,7 +400,7 @@ void FaceTagsEditor::removeNormalTags(qlonglong imageId, QList<int> tagIds)
     DatabaseOperationGroup group;
     group.setMaximumTime(200);
     ImageInfo info(imageId);
-    foreach (int tagId, tagIds)
+    foreach(int tagId, tagIds)
     {
         info.removeTag(tagId);
         group.allowLift();

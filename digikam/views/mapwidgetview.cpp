@@ -312,7 +312,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
     // now get the ImageInfos and convert them to GPSImageInfos
     const QList<ImageInfo> imageInfoList =  d->model->imageInfos(indexList);
     GPSImageInfo::List gpsImageInfoList;
-    foreach (const ImageInfo& imageInfo, imageInfoList)
+    foreach(const ImageInfo& imageInfo, imageInfoList)
     {
         GPSImageInfo gpsImageInfo;
 
@@ -411,7 +411,7 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
            || ( changes & DatabaseFields::Altitude ) )
     {
 
-        foreach (const qlonglong& id, changeset.ids())
+        foreach(const qlonglong& id, changeset.ids())
         {
             const QModelIndex index = d->model->indexForImageId(id);
 

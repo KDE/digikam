@@ -601,7 +601,7 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
 
     QStringList tagsShortened;
     QString previous;
-    foreach (const PathValuePair& pair, tagsSorted)
+    foreach(const PathValuePair& pair, tagsSorted)
     {
         const QString& tagPath = pair.first;
         QString shortenedPath = tagPath;

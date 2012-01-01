@@ -148,7 +148,7 @@ void ChoiceSearchModel::setChecked(const T& value, SearchXml::Relation relation)
 template <typename T>
 void ChoiceSearchModel::setChecked(const QList<T>& keys, bool checked)
 {
-    foreach (T key, keys)
+    foreach(T key, keys)
     {
         setChecked(key, checked);
     }

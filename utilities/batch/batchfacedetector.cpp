@@ -205,7 +205,7 @@ void BatchFaceDetector::startAlbumListing()
     QMap<int, int> palbumCounts, talbumCounts;
     bool hasPAlbums = false, hasTAlbums = false;
 
-    foreach (Album* album, d->albumTodoList)
+    foreach(Album* album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
         {
@@ -235,7 +235,7 @@ void BatchFaceDetector::startAlbumListing()
     }
 
     d->total = 0;
-    foreach (Album* album, d->albumTodoList)
+    foreach(Album* album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
         {

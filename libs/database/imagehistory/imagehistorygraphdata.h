@@ -131,7 +131,7 @@ public:
     inline QList<ImageInfo> toInfoList(const QList<Vertex>& vertices) const
     {
         QList<ImageInfo> infos;
-        foreach (const HistoryGraph::Vertex& v, vertices)
+        foreach(const HistoryGraph::Vertex& v, vertices)
         {
             infos << properties(v).infos;
         }

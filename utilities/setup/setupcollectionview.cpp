@@ -175,7 +175,7 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
     {
         // get the largest size hint for the icon/text of all category entries
         int maxStyledWidth = 0;
-        foreach(const QModelIndex & catIndex, static_cast<const SetupCollectionModel*>(index.model())->categoryIndexes())
+        foreach(const QModelIndex& catIndex, static_cast<const SetupCollectionModel*>(index.model())->categoryIndexes())
         {
             maxStyledWidth = qMax(maxStyledWidth, m_styledDelegate->sizeHint(option, catIndex).width());
         }
@@ -396,7 +396,7 @@ void SetupCollectionModel::loadCollections()
     m_collections.clear();
 
     QList<CollectionLocation> locations = CollectionManager::instance()->allLocations();
-    foreach(const CollectionLocation & location, locations)
+    foreach(const CollectionLocation& location, locations)
     {
         m_collections << Item(location);
     }
@@ -481,7 +481,7 @@ void SetupCollectionModel::apply()
     if (!failedItems.isEmpty())
     {
         QStringList failedPaths;
-        foreach(const Item & item, failedItems)
+        foreach(const Item& item, failedItems)
         {
             failedPaths << item.path;
         }
@@ -556,7 +556,7 @@ void SetupCollectionModel::addCollection(int category)
     // Check path: First check with manager
     QString messageFromManager, deviceIcon;
     QList<CollectionLocation> assumeDeleted;
-    foreach(const Item & item, m_collections)
+    foreach(const Item& item, m_collections)
     {
         if (item.deleted && !item.location.isNull())
         {
@@ -573,7 +573,7 @@ void SetupCollectionModel::addCollection(int category)
                                                               &messageFromManager, &deviceIcon);
 
     // If there are other added collections then CollectionManager does not know about them. Check here.
-    foreach(const Item & item, m_collections)
+    foreach(const Item& item, m_collections)
     {
         if (!item.deleted && item.location.isNull())
         {
@@ -959,7 +959,7 @@ int SetupCollectionModel::rowCount(const QModelIndex& parent) const
     // Level 1: item children count
     int parentId = parent.row();
     int rowCount = 0;
-    foreach(const Item & item, m_collections)
+    foreach(const Item& item, m_collections)
     {
         if (!item.deleted && item.parentId == parentId)
         {

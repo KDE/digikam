@@ -826,7 +826,7 @@ void ImageInfo::addToGroup(const ImageInfo& leader)
     }
 
     QList<ImageInfo> ownGroup = groupedImages();
-    foreach (const ImageInfo& info, ownGroup)
+    foreach(const ImageInfo& info, ownGroup)
     {
         ImageInfo(info).addToGroup(leader);
     }
@@ -1197,7 +1197,7 @@ void ImageInfo::setPickLabel(int pickId)
     // Perform "switch" operation atomic
     {
         DatabaseAccess access;
-        foreach (int tagId, currentTagIds)
+        foreach(int tagId, currentTagIds)
         {
             if (pickLabelTags.contains(tagId))
             {
@@ -1226,7 +1226,7 @@ void ImageInfo::setColorLabel(int colorId)
     // Perform "switch" operation atomic
     {
         DatabaseAccess access;
-        foreach (int tagId, currentTagIds)
+        foreach(int tagId, currentTagIds)
         {
             if (colorLabelTags.contains(tagId))
             {

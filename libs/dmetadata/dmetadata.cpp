@@ -2204,7 +2204,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
 QVariantList DMetadata::getMetadataFields(const MetadataFields& fields) const
 {
     QVariantList list;
-    foreach (MetadataInfo::Field field, fields) // krazy:exclude=foreach
+    foreach(MetadataInfo::Field field, fields) // krazy:exclude=foreach
     {
         list << getMetadataField(field);
     }
@@ -2829,7 +2829,7 @@ bool DMetadata::removeExifColorSpace() const
 QString DMetadata::getExifTagStringFromTagsList(const QStringList& tagsList) const
 {
     QString val;
-    foreach (QString tag, tagsList)
+    foreach(QString tag, tagsList)
     {
         val = getExifTagString(tag.toAscii());
         if (!val.isEmpty())

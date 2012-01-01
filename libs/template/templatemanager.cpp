@@ -317,7 +317,7 @@ bool TemplateManager::save()
     {
         QMutexLocker lock(&d->mutex);
 
-        foreach (const Template& t, d->pList)
+        foreach(const Template& t, d->pList)
         {
             QDomElement elem = doc.createElement("template");
 
@@ -343,7 +343,7 @@ bool TemplateManager::save()
 
             QDomElement authors = doc.createElement(QString::fromLatin1("authors"));
             elem.appendChild(authors);
-            foreach (const QString& name, t.authors())
+            foreach(const QString& name, t.authors())
             {
                 QDomElement e = doc.createElement(QString::fromLatin1("name"));
                 e.setAttribute(QString::fromLatin1("value"), name);
@@ -430,7 +430,7 @@ bool TemplateManager::save()
 
             QDomElement subjects = doc.createElement(QString::fromLatin1("subjects"));
             elem.appendChild(subjects);
-            foreach (const QString& subject, t.IptcSubjects())
+            foreach(const QString& subject, t.IptcSubjects())
             {
                 QDomElement e = doc.createElement(QString::fromLatin1("subject"));
                 e.setAttribute(QString::fromLatin1("value"), subject);
@@ -524,7 +524,7 @@ void TemplateManager::clear()
         d->pList.clear();
     }
 
-    foreach (const Template& t, d->pList)
+    foreach(const Template& t, d->pList)
     {
         emit signalTemplateRemoved(t);
     }
@@ -539,7 +539,7 @@ Template TemplateManager::findByTitle(const QString& title) const
 {
     QMutexLocker lock(&d->mutex);
 
-    foreach (const Template& t, d->pList)
+    foreach(const Template& t, d->pList)
     {
         if (t.templateTitle() == title)
         {
@@ -553,7 +553,7 @@ Template TemplateManager::findByContents(const Template& tref) const
 {
     QMutexLocker lock(&d->mutex);
 
-    foreach (const Template& t, d->pList)
+    foreach(const Template& t, d->pList)
     {
         if (t == tref)
         {

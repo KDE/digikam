@@ -836,7 +836,7 @@ void CameraUI::finishDialog()
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                           i18n("Scanning for new files, please wait..."));
-    foreach (const QString& folder, d->foldersToScan)
+    foreach(const QString& folder, d->foldersToScan)
     {
         ScanController::instance()->scheduleCollectionScan(folder);
     }
@@ -1725,7 +1725,7 @@ void CameraUI::slotMarkAsDownloaded()
 {
     CamItemInfoList list = d->view->selectedItems();
 
-    foreach (CamItemInfo info, list)
+    foreach(CamItemInfo info, list)
     {
         d->view->setDownloaded(info, CamItemInfo::DownloadedYes);
 
@@ -1741,7 +1741,7 @@ void CameraUI::slotToggleLock()
     CamItemInfoList list = d->view->selectedItems();
     int count            = list.count();
 
-    foreach (CamItemInfo info, list)
+    foreach(CamItemInfo info, list)
     {
         QString folder = info.folder;
         QString file   = info.name;
@@ -2078,7 +2078,7 @@ void CameraUI::slotToggleFullScreen()
         if (d->removeFullScreenButton)
         {
             QList<KToolBar*> toolbars = toolBars();
-            foreach (KToolBar* toolbar, toolbars)
+            foreach(KToolBar* toolbar, toolbars)
             {
                 // name is set in ui.rc XML file
                 if (toolbar->objectName() == "ToolBar")
@@ -2109,7 +2109,7 @@ void CameraUI::slotToggleFullScreen()
 
             QList<KToolBar*> toolbars = toolBars();
             KToolBar* mainToolbar = 0;
-            foreach (KToolBar* toolbar, toolbars)
+            foreach(KToolBar* toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
                 {
@@ -2150,7 +2150,7 @@ void CameraUI::slotEscapePressed()
 void CameraUI::showToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach (KToolBar* toolbar, toolbars)
+    foreach(KToolBar* toolbar, toolbars)
     {
         toolbar->show();
     }
@@ -2159,7 +2159,7 @@ void CameraUI::showToolBars()
 void CameraUI::hideToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach (KToolBar* toolbar, toolbars)
+    foreach(KToolBar* toolbar, toolbars)
     {
         toolbar->hide();
     }

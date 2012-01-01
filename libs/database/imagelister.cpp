@@ -162,7 +162,7 @@ void ImageLister::listAlbum(ImageListerReceiver* receiver,
             return;
         }
 
-        foreach (int id, intAlbumIds)
+        foreach(int id, intAlbumIds)
         {
             albumIds << id;
         }
@@ -788,7 +788,7 @@ void ImageLister::listFromIdList(ImageListerReceiver* receiver, QList<qlonglong>
         /*
         // Unfortunately, we need to convert to QVariant
         QList<QVariant> variantIdList;
-        foreach (const qlonglong& id, imageIds)
+        foreach(const qlonglong& id, imageIds)
         {
             variantIdList << id;
         }
@@ -821,7 +821,7 @@ void ImageLister::listFromIdList(ImageListerReceiver* receiver, QList<qlonglong>
                              " WHERE Images.status=1 AND Images.id = ?;"
                          ));
 
-        foreach (const qlonglong& id, imageIds)
+        foreach(const qlonglong& id, imageIds)
         {
             query.bindValue(0, id);
             executionSuccess = access.backend()->exec(query);
@@ -892,7 +892,7 @@ QSet<int> ImageLister::albumRootsToList()
 
     QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
     QSet<int> ids;
-    foreach (const CollectionLocation& location, locations)
+    foreach(const CollectionLocation& location, locations)
     {
         ids << location.id();
     }
@@ -914,7 +914,7 @@ QString ImageLister::tagSearchXml(const DatabaseUrl& url, const QString& type, b
         properties << "autodetectedFace";
         properties << "tagRegion";
 
-        foreach (const QString& property, properties)
+        foreach(const QString& property, properties)
         {
             writer.writeField("imagetagproperty", includeChildTags ? SearchXml::InTree : SearchXml::Equal);
 

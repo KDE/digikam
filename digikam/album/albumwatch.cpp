@@ -103,7 +103,7 @@ void AlbumWatch::AlbumWatchPriv::determineMode()
 bool AlbumWatch::AlbumWatchPriv::inBlackList(const QString& path)
 {
     // Filter out dirty signals triggered by changes on the database file
-    foreach (const QString& bannedFile, fileNameBlackList)
+    foreach(const QString& bannedFile, fileNameBlackList)
     {
         if (path.endsWith(bannedFile))
         {
@@ -146,7 +146,7 @@ void AlbumWatch::clear()
 {
     if (d->dirWatch)
     {
-        foreach (const QString& addedDirectory, d->dirWatchAddedDirs)
+        foreach(const QString& addedDirectory, d->dirWatchAddedDirs)
         {
             d->dirWatch->removeDir(addedDirectory);
         }
@@ -339,7 +339,7 @@ QList<QDateTime> AlbumWatch::AlbumWatchPriv::buildDirectoryModList(const QFileIn
     QFileInfoList    fileInfoList = dbFile.dir().entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
 
     // build list
-    foreach (const QFileInfo& info, fileInfoList)
+    foreach(const QFileInfo& info, fileInfoList)
     {
         // ignore digikam4.db and journal and other temporary files
         if (!fileNameBlackList.contains(info.fileName()))
@@ -481,7 +481,7 @@ void AlbumWatch::slotKioFileMoved(const QString& urlFrom, const QString& urlTo)
 void AlbumWatch::slotKioFilesDeleted(const QStringList& urls)
 {
     kDebug() << urls;
-    foreach (const QString& url, urls)
+    foreach(const QString& url, urls)
     {
         handleKioNotification(KUrl(url));
     }

@@ -1124,7 +1124,7 @@ void ImageWindow::saveAsIsComplete()
     // copy the metadata of the original file to the new file
     if (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
     {
-        foreach (const QString& path, m_savingContext.versionFileOperation.allFilePaths())
+        foreach(const QString& path, m_savingContext.versionFileOperation.allFilePaths())
         {
             ScanController::instance()->scanFileDirectlyCopyAttributes(path, d->currentImageInfo.id());
         }
@@ -1502,7 +1502,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
 
         cnt = (float)d->imageInfoModel->rowCount();
 
-        foreach (const ImageInfo& info, d->imageInfoModel->imageInfos())
+        foreach(const ImageInfo& info, d->imageInfoModel->imageInfos())
         {
             SlidePictureInfo pictInfo;
             pictInfo.comment    = info.comment();
@@ -1722,7 +1722,7 @@ void ImageWindow::slotOpenOriginal()
     }
 
     QList<ImageInfo> imageInfos;
-    foreach (const HistoryImageId& id, originals)
+    foreach(const HistoryImageId& id, originals)
     {
         KUrl url;
         url.addPath(id.m_filePath);

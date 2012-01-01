@@ -128,7 +128,7 @@ ImagePluginLoader::ImagePluginLoader(QObject* parent, SplashScreen* splash)
     QStringList imagePluginsList2Load;
 
     const KService::List offers = KServiceTypeTrader::self()->query("Digikam/ImagePlugin");
-    foreach (const KService::Ptr& service, offers)
+    foreach(const KService::Ptr& service, offers)
     {
         if (service)
         {
@@ -136,7 +136,7 @@ ImagePluginLoader::ImagePluginLoader(QObject* parent, SplashScreen* splash)
         }
     }
 
-    foreach (const KService::Ptr& service, d->pluginServiceMap)
+    foreach(const KService::Ptr& service, d->pluginServiceMap)
     {
         if (!d->obsoleteImagePluginsList.contains(service->library()))
         {
@@ -169,7 +169,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
 
     int cpt = 0;
 
-    foreach (const QString& name, pluginsToLoad)
+    foreach(const QString& name, pluginsToLoad)
     {
         KService::Ptr service = d->pluginServiceMap.value(name);
         ImagePlugin* plugin;
@@ -226,7 +226,7 @@ ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& name) const
 
 ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName) const
 {
-    foreach (const KService::Ptr& service, d->pluginServiceMap)
+    foreach(const KService::Ptr& service, d->pluginServiceMap)
     {
         if (service->library() == libraryName)
         {
@@ -239,7 +239,7 @@ ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName) const
 
 bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName) const
 {
-    foreach (const KService::Ptr& service, d->pluginServiceMap)
+    foreach(const KService::Ptr& service, d->pluginServiceMap)
     {
         if (service->library() == libraryName)
         {

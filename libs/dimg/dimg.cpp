@@ -1102,7 +1102,7 @@ QStringList DImgPrivate::fileOriginAttributes()
 QVariant DImg::fileOriginData() const
 {
     QVariantMap map;
-    foreach(const QString & key, m_priv->fileOriginAttributes())
+    foreach(const QString& key, m_priv->fileOriginAttributes())
     {
         QVariant attr = attribute(key);
 
@@ -1158,7 +1158,7 @@ QVariant DImg::lastSavedFileOriginData() const
 void DImg::setFileOriginData(const QVariant& data)
 {
     QVariantMap map = data.toMap();
-    foreach(const QString & key, m_priv->fileOriginAttributes())
+    foreach(const QString& key, m_priv->fileOriginAttributes())
     {
         removeAttribute(key);
         QVariant attr = map.value(key);

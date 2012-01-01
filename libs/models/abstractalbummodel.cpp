@@ -284,7 +284,7 @@ QMimeData* AbstractAlbumModel::mimeData(const QModelIndexList& indexes) const
     }
 
     QList<Album*> albums;
-    foreach (const QModelIndex& index, indexes)
+    foreach(const QModelIndex& index, indexes)
     {
         Album* a = albumForIndex(index);
 
@@ -949,7 +949,7 @@ void AbstractCheckableAlbumModel::resetAllCheckedAlbums()
     QList<Album*> oldChecked = d->checkedAlbums.keys();
     d->checkedAlbums.clear();
 
-    foreach (Album* album, oldChecked)
+    foreach(Album* album, oldChecked)
     {
         QModelIndex index = indexForAlbum(album);
         emit dataChanged(index, index);

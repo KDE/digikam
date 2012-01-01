@@ -641,7 +641,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
         beginTransaction();
     }
 
-    foreach (const DatabaseActionElement& actionElement, action.dbActionElements)
+    foreach(const DatabaseActionElement& actionElement, action.dbActionElements)
     {
         DatabaseCoreBackend::QueryState result;
 
@@ -701,7 +701,7 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction& action, c
 #endif
 
     QSqlQuery result;
-    foreach (const DatabaseActionElement& actionElement, action.dbActionElements)
+    foreach(const DatabaseActionElement& actionElement, action.dbActionElements)
     {
         if (actionElement.mode==QString("query"))
         {
@@ -1486,7 +1486,7 @@ SqlQuery DatabaseCoreBackend::copyQuery(const SqlQuery& old)
     query.setForwardOnly(old.isForwardOnly());
     // only for positional binding
     QList<QVariant> boundValues = old.boundValues().values();
-    foreach (const QVariant& value, boundValues)
+    foreach(const QVariant& value, boundValues)
     {
 #ifdef DATABASCOREBACKEND_DEBUG
         kDebug() << "Bind value to query ["<<value<<"]";

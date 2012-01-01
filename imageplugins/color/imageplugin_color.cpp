@@ -328,7 +328,7 @@ void ImagePlugin_Color::slotUpdateColorSpaceMenu()
                      << IccProfile::wideGamutRGB()
                      << IccProfile::proPhotoRGB();
 
-    foreach (IccProfile profile, standardProfiles) // krazy:exclude=foreach
+    foreach(IccProfile profile, standardProfiles) // krazy:exclude=foreach
     {
         d->profileMenuAction->addProfile(profile, profile.description());
         standardProfilePaths << profile.filePath();
@@ -338,7 +338,7 @@ void ImagePlugin_Color::slotUpdateColorSpaceMenu()
 
     favoriteProfilePaths = QSet<QString>::fromList(ProfileConversionTool::favoriteProfiles());
     favoriteProfilePaths -= standardProfilePaths;
-    foreach (const QString& path, favoriteProfilePaths)
+    foreach(const QString& path, favoriteProfilePaths)
     {
         favoriteProfiles << path;
     }

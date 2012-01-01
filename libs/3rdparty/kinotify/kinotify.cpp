@@ -388,7 +388,7 @@ bool KInotify::removeDirectory( const QString& path )
 
 bool KInotify::removeAllWatches()
 {
-    foreach (int wd, d->pathWatchHash)
+    foreach(int wd, d->pathWatchHash)
     {
         d->removeWatch(wd);
     }

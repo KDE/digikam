@@ -884,7 +884,7 @@ public:
 
         // remove all vertices from the DFS of v that are not in the dominated tree
         QList<Vertex> orderedTree;
-        foreach (const Vertex& v, presortedVertices)
+        foreach(const Vertex& v, presortedVertices)
         {
             if (dominatedTree.contains(v))
             {
@@ -921,7 +921,7 @@ public:
         GraphSearch search;
         search.breadthFirstSearch(graph, vertices.first(), direction == ChildToParent);
         QList<Vertex> bfs = search.vertices;
-        foreach (const Vertex& v, vertices)
+        foreach(const Vertex& v, vertices)
         {
             bfs.removeOne(v);
         }
@@ -943,7 +943,7 @@ public:
 
                 // any item reachable from *it should come after it
                 int minIndex = vertices.size();
-                foreach (const Vertex& c, childBfs)
+                foreach(const Vertex& c, childBfs)
                 {
                     int foundAt = vertices.indexOf(c);
                     if (foundAt == -1)
@@ -955,7 +955,7 @@ public:
                         minIndex = qMin(foundAt, minIndex);
                     }
                 }
-                foreach (const Vertex& c, toInsert)
+                foreach(const Vertex& c, toInsert)
                 {
                     vertices.insert(minIndex++, c);
                 }
@@ -993,7 +993,7 @@ public:
         GraphSearch search;
         search.depthFirstSearchSorted(graph, vertices.first(), direction == ChildToParent, lessThan);
         QList<Vertex> dfs = search.vertices;
-        foreach (const Vertex& v, vertices)
+        foreach(const Vertex& v, vertices)
         {
             dfs.removeOne(v);
         }
@@ -1016,7 +1016,7 @@ protected:
     {
         QList<Vertex> children = predecessors.keys(v);
         vertices << children;
-        foreach (const Vertex& child, children)
+        foreach(const Vertex& child, children)
         {
             treeFromPredecessorsRecursive(child, vertices, predecessors);
         }
@@ -1170,7 +1170,7 @@ protected:
         search.breadthFirstSearch(graph, v, invertGraph);
 
         QList<Vertex> vertices;
-        foreach (const Vertex& candidate, search.vertices)
+        foreach(const Vertex& candidate, search.vertices)
         {
             if ( (inOrOut ? in_degree(candidate, graph) : out_degree(candidate, graph)) == 0)
             {
@@ -1413,7 +1413,7 @@ protected:
             // maps the given edges to their targets, and calls our vertex lessThan.
             qSort(outEdges.begin(), outEdges.end(), lessThanMapEdgeToTarget<IncidenceGraph, LessThan>(g, lessThan));
 
-            foreach (const Edge& e, outEdges)
+            foreach(const Edge& e, outEdges)
             {
                 Vertex v = boost::target(e.toEdge(), g);
                 vis.examine_edge(e, g);

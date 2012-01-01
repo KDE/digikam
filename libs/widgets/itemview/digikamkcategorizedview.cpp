@@ -230,7 +230,7 @@ QRect DigikamKCategorizedView::Private::visualRectInViewport(const QModelIndex& 
         row            = elementsInfo[index.row()].relativeOffsetToCategory / elementsPerRow;
     }
 
-    foreach (const QString& category, categories)
+    foreach(const QString& category, categories)
     {
         if (category == curCategory)
         {
@@ -335,7 +335,7 @@ QRect DigikamKCategorizedView::Private::visualCategoryRectInViewport(const QStri
         elementsPerRow = 1;
     }
 
-    foreach (const QString& itCategory, categories)
+    foreach(const QString& itCategory, categories)
     {
         if (itCategory == category)
         {
@@ -510,7 +510,7 @@ void DigikamKCategorizedView::Private::drawDraggedItems(QPainter* painter)
 {
     QStyleOptionViewItemV4 option = listView->viewOptions();
     option.state                  &= ~QStyle::State_MouseOver;
-    foreach (const QModelIndex& index, listView->selectionModel()->selectedIndexes())
+    foreach(const QModelIndex& index, listView->selectionModel()->selectedIndexes())
     {
         const int dx = mousePosition.x() - initialPressPosition.x() + listView->horizontalOffset();
         const int dy = mousePosition.y() - initialPressPosition.y() + listView->verticalOffset();
@@ -529,7 +529,7 @@ void DigikamKCategorizedView::Private::drawDraggedItems()
     QRect rectToUpdate;
     QRect currentRect;
 
-    foreach (const QModelIndex& index, listView->selectionModel()->selectedIndexes())
+    foreach(const QModelIndex& index, listView->selectionModel()->selectedIndexes())
     {
         int dx      = mousePosition.x() - initialPressPosition.x() + listView->horizontalOffset();
         int dy      = mousePosition.y() - initialPressPosition.y() + listView->verticalOffset();
@@ -649,7 +649,7 @@ QModelIndex DigikamKCategorizedView::categoryAt(const QPoint& point) const
     // We traverse the categories and find the first where point.y() is below the visualRect
     int     y = 0, lastY = 0;
     QString lastCategory;
-    foreach (const QString& category, d->categories)
+    foreach(const QString& category, d->categories)
     {
         y = d->categoryVisualRect(category).top();
 
@@ -811,7 +811,7 @@ void DigikamKCategorizedView::paintEvent(QPaintEvent* event)
         alternate = dirtyIndexes[0].row() % 2;
     }
 
-    foreach (const QModelIndex& index, dirtyIndexes)
+    foreach(const QModelIndex& index, dirtyIndexes)
     {
         if (alternatingRows && alternate)
         {
@@ -875,7 +875,7 @@ void DigikamKCategorizedView::paintEvent(QPaintEvent* event)
     QStyleOptionViewItemV4 otherOption;
     bool                   intersectedInThePast = false;
 
-    foreach (const QString& category, d->categories)
+    foreach(const QString& category, d->categories)
     {
         otherOption       = option;
         otherOption.rect  = d->categoryVisualRect(category);
@@ -1245,7 +1245,7 @@ void DigikamKCategorizedView::mouseMoveEvent(QMouseEvent* event)
     d->hoveredCategory.clear();
 
     // Redraw categories
-    foreach (const QString& category, d->categories)
+    foreach(const QString& category, d->categories)
     {
         if (d->categoryVisualRect(category).intersects(QRect(event->pos(), event->pos())))
         {
@@ -1335,7 +1335,7 @@ void DigikamKCategorizedView::mouseReleaseEvent(QMouseEvent* event)
     if ((selectionMode() != SingleSelection) && (selectionMode() != NoSelection) &&
         (initialPressPosition == d->initialPressPosition))
     {
-        foreach (const QString& category, d->categories)
+        foreach(const QString& category, d->categories)
         {
             if (d->categoryVisualRect(category).contains(event->pos()) &&
                 selectionModel())
@@ -1343,7 +1343,7 @@ void DigikamKCategorizedView::mouseReleaseEvent(QMouseEvent* event)
                 QItemSelection selection      = selectionModel()->selection();
                 const QVector<int> &indexList = d->categoriesIndexes[category];
 
-                foreach (int row, indexList)
+                foreach(int row, indexList)
                 {
                     QModelIndex selectIndex = d->proxyModel->index(row, 0);
 
@@ -1524,7 +1524,7 @@ QModelIndex DigikamKCategorizedView::moveCursor(CursorAction cursorAction,
     QString afterCategory = d->categories.first();
     bool hasToBreak       = false;
 
-    foreach (const QString& category, d->categories)
+    foreach(const QString& category, d->categories)
     {
         if (hasToBreak)
         {

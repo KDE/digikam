@@ -81,7 +81,7 @@ bool PollThread::checkDigikamInstancesRunning()
         QLatin1String digikamStartupService("org.kde.digikam.startup-");
         QLatin1String digikamService("org.kde.digikam-");
         QLatin1String digikamKioService("org.kde.digikam.KIO-");
-        foreach (const QString& service, serviceNames)
+        foreach(const QString& service, serviceNames)
         {
             if (service.startsWith(digikamStartupService) ||
                 service.startsWith(digikamService) ||

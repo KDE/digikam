@@ -581,7 +581,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
         }
 
         // Tag names
-        foreach (int id, info.tagIds())
+        foreach(int id, info.tagIds())
         {
             if (m_textFilterSettings.textFields & SearchTextFilterSettings::TagName &&
                 m_tagNameHash.value(id).contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
@@ -709,7 +709,7 @@ bool VersionImageFilterSettings::isHiddenBySettings(const ImageInfo& info) const
 {
     QList<int> tagIds = info.tagIds();
 
-    foreach (int tagId, m_excludeTagFilter)
+    foreach(int tagId, m_excludeTagFilter)
     {
         if (tagIds.contains(tagId))
         {

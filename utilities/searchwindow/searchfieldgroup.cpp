@@ -80,7 +80,7 @@ void SearchFieldGroup::setLabel(SearchFieldGroupLabel* label)
 
 SearchField* SearchFieldGroup::fieldForName(const QString& fieldName)
 {
-    foreach (SearchField* field, m_fields)
+    foreach(SearchField* field, m_fields)
     {
         if (field->supportsField(fieldName))
         {
@@ -92,7 +92,7 @@ SearchField* SearchFieldGroup::fieldForName(const QString& fieldName)
 
 void SearchFieldGroup::write(SearchXmlWriter& writer)
 {
-    foreach (SearchField* field, m_fields)
+    foreach(SearchField* field, m_fields)
     {
         field->write(writer);
     }
@@ -101,7 +101,7 @@ void SearchFieldGroup::write(SearchXmlWriter& writer)
 void SearchFieldGroup::reset()
 {
     clearMarkedFields();
-    foreach (SearchField* field, m_fields)
+    foreach(SearchField* field, m_fields)
     {
         field->reset();
     }
@@ -136,7 +136,7 @@ QList<QRect> SearchFieldGroup::areaOfMarkedFields() const
         return rects;
     }
 
-    foreach (SearchField* field, m_markedFields)
+    foreach(SearchField* field, m_markedFields)
     {
         if (field->isVisible())
         {

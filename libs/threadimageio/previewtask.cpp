@@ -76,7 +76,7 @@ void PreviewLoadingTask::execute()
         // Scaling a full version takes longer!
         lookupKeys.push_front(m_loadingDescription.cacheKey());
 
-        foreach (const QString& key, lookupKeys)
+        foreach(const QString& key, lookupKeys)
         {
             if ( (cachedImg = cache->retrieveImage(key)) )
             {

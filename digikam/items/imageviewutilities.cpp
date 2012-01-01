@@ -131,7 +131,7 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool delete
     KUrl::List urlList;
     KUrl::List kioUrlList;
 
-    foreach (const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, infos)
     {
         urlList << info.fileUrl();
         kioUrlList << info.databaseUrl();
@@ -177,7 +177,7 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, boo
     KUrl::List kioUrlList;
     KUrl::List urlList;
 
-    foreach (const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, infos)
     {
         urlList << info.fileUrl();
         kioUrlList << info.databaseUrl();
@@ -230,7 +230,7 @@ void ImageViewUtilities::slotDIOResult(KJob* kjob)
 
 void ImageViewUtilities::notifyFileContentChanged(const KUrl::List& urls)
 {
-    foreach (const KUrl& url, urls)
+    foreach(const KUrl& url, urls)
     {
         QString path = url.toLocalFile();
         ThumbnailLoadThread::deleteThumbnail(path);
@@ -244,7 +244,7 @@ void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, A
     KUrl::List       kioURLs;
     QList<qlonglong> imageIDs;
 
-    foreach (const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, infos)
     {
         imageIDs << info.id();
         kioURLs << info.databaseUrl();

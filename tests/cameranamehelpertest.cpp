@@ -84,7 +84,7 @@ void CameraNameHelperTest::testCameraNameFromGPCamera()
     GPCamera::getSupportedCameras(count, clist);
 
     // test if all camera names stay intact
-    foreach (const QString& camera, clist)
+    foreach(const QString& camera, clist)
     {
         QCOMPARE(CameraNameHelper::formattedFullCameraName(camera), camera.simplified());
     }

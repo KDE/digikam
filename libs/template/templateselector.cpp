@@ -129,7 +129,7 @@ void TemplateSelector::populateTemplates()
         int i                 = DONTCHANGE + 2;
         QList<Template> list  = tm->templateList();
 
-        foreach(const Template & t, list)
+        foreach(const Template& t, list)
         {
             d->templateCombo->insertSqueezedItem(t.templateTitle(), i);
             ++i;

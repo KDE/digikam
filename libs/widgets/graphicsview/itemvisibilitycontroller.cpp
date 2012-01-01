@@ -227,7 +227,7 @@ void AnimationControl::clear()
     animation      = 0;
     animationGroup = 0; // the same pointer as animation
 
-    foreach (QObject* item, items)
+    foreach(QObject* item, items)
     {
         disconnect(item);
     }
@@ -329,7 +329,7 @@ void AnimationControl::moveTo(AnimationControl* other, QObject* item)
 
 void AnimationControl::moveAllTo(AnimationControl* other)
 {
-    foreach (QObject* item, items)
+    foreach(QObject* item, items)
     {
         moveTo(other, item);
     }
@@ -359,7 +359,7 @@ bool AnimationControl::hasVisibleItems(ItemVisibilityController::IncludeFadingOu
 
 void AnimationControl::setVisibleProperty(bool value)
 {
-    foreach (QObject* o, items)
+    foreach(QObject* o, items)
     {
         o->setProperty("visible", value);
     }
@@ -519,7 +519,7 @@ public:
 
 AnimationControl* ItemVisibilityController::ItemVisibilityControllerPriv::findInChildren(QObject* item) const
 {
-    foreach (AnimationControl* child, childControls)
+    foreach(AnimationControl* child, childControls)
     {
         if (child->hasItem(item))
         {
@@ -565,7 +565,7 @@ void ItemVisibilityController::ItemVisibilityControllerPriv::cleanupChildren(QAb
         }
         else if (child->animation == finishedAnimation && child->situation == AnimationControl::RemovingControl)
         {
-            foreach (QObject* item, child->items)
+            foreach(QObject* item, child->items)
             {
                 emit q->hiddenAndRemoved(item);
             }
@@ -589,7 +589,7 @@ void ItemVisibilityController::ItemVisibilityControllerPriv::setVisible(bool v, 
         control->transitionToVisible(shallBeShown && visible, immediately);
     }
 
-    foreach (AnimationControl* child, childControls)
+    foreach(AnimationControl* child, childControls)
     {
         if (child->situation == AnimationControl::IndependentControl)
         {
@@ -690,7 +690,7 @@ void ItemVisibilityController::clear()
         d->control->clear();
     }
 
-    foreach (AnimationControl* child, d->childControls)
+    foreach(AnimationControl* child, d->childControls)
     {
         child->clear();
     }
@@ -708,7 +708,7 @@ QList<QObject*> ItemVisibilityController::items() const
         items = d->control->items;
     }
 
-    foreach (AnimationControl* child, d->childControls)
+    foreach(AnimationControl* child, d->childControls)
     {
         items += child->items;
     }
@@ -724,7 +724,7 @@ QList<QObject*> ItemVisibilityController::visibleItems(IncludeFadingOutMode mode
         items = d->control->items;
     }
 
-    foreach (AnimationControl* child, d->childControls)
+    foreach(AnimationControl* child, d->childControls)
     {
         if (child->hasVisibleItems(mode))
         {
@@ -756,7 +756,7 @@ bool ItemVisibilityController::hasVisibleItems(IncludeFadingOutMode mode) const
         return true;
     }
 
-    foreach (AnimationControl* child, d->childControls)
+    foreach(AnimationControl* child, d->childControls)
     {
         if (child->hasVisibleItems(mode))
         {
@@ -775,7 +775,7 @@ void ItemVisibilityController::setEasingCurve(const QEasingCurve& easing)
         d->control->setEasingCurve(easing);
     }
 
-    foreach (AnimationControl* child, d->childControls)
+    foreach(AnimationControl* child, d->childControls)
     {
         child->setEasingCurve(easing);
     }
@@ -790,7 +790,7 @@ void ItemVisibilityController::setAnimationDuration(int msecs)
         d->control->setAnimationDuration(msecs);
     }
 
-    foreach (AnimationControl* child, d->childControls)
+    foreach(AnimationControl* child, d->childControls)
     {
         child->setAnimationDuration(msecs);
     }
@@ -884,12 +884,12 @@ void ItemVisibilityController::animationFinished()
         emit propertiesAssigned(d->control->state == Visible);
     }
 
-    foreach (AnimationControl* child, d->childControls)
+    foreach(AnimationControl* child, d->childControls)
     {
         if (child->animation == animation)
         {
             child->animationFinished();
-            foreach (QObject* item, child->items)
+            foreach(QObject* item, child->items)
             {
                 emit propertiesAssigned(item, d->control->state == Visible);
             }

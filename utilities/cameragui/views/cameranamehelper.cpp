@@ -150,7 +150,7 @@ QString CameraNameHelper::extractCameraNameToken(const QString& cameraName, int 
     QStringList words = tmp.split((' '));
     tmp.clear();
 
-    foreach (const QString& word, words)
+    foreach(const QString& word, words)
     {
         tmp.append(word.simplified());
         tmp.append(' ');

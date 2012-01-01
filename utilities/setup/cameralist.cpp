@@ -156,7 +156,7 @@ bool CameraList::save()
 
     QDomElement docElem = doc.documentElement();
 
-    foreach(CameraType * ctype, d->clist)
+    foreach(CameraType* ctype, d->clist)
     {
         QDomElement elem = doc.createElement("item");
         elem.setAttribute("title",          ctype->title());
@@ -248,7 +248,7 @@ QList<CameraType*>* CameraList::cameraList()
 
 CameraType* CameraList::find(const QString& title)
 {
-    foreach(CameraType * ctype, d->clist)
+    foreach(CameraType* ctype, d->clist)
     {
         if (ctype->title() == title)
         {
@@ -275,7 +275,7 @@ CameraType* CameraList::autoDetect(bool& retry)
     }
 
     // Check if the camera is already in the list
-    foreach(CameraType * ctype, d->clist)
+    foreach(CameraType* ctype, d->clist)
     {
         // We can get away with checking only the model, as the auto-detection
         // works only for usb cameras. so the port is always usb:

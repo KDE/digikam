@@ -83,7 +83,7 @@ void DImageHistoryGraphTest::initTestCase()
 
     QList<AlbumShortInfo> albums = DatabaseAccess().db()->getAlbumShortInfos();
     QVERIFY(albums.size() >= 2);
-    foreach (const AlbumShortInfo& album, albums)
+    foreach(const AlbumShortInfo& album, albums)
     {
         //qDebug() << album.relativePath << album.id;
         //qDebug() << CollectionManager::instance()->albumRootPath(album.albumRootId);
@@ -91,7 +91,7 @@ void DImageHistoryGraphTest::initTestCase()
         readOnlyImages << DatabaseAccess().db()->getItemURLsInAlbum(album.id);
     }
 
-    foreach (const QString& file, readOnlyImages)
+    foreach(const QString& file, readOnlyImages)
     {
         ids << ImageInfo(file).id();
     }
@@ -119,7 +119,7 @@ template <typename from, typename to>
 QList<to> mapList(const QList<from>& l, const QMap<from,to> map)
 {
     QList<to> r;
-    foreach (const from& f, l)
+    foreach(const from& f, l)
     {
         r << map.value(f);
     }
@@ -414,7 +414,7 @@ void DImageHistoryGraphTest::testGraph()
 
     QMap<qlonglong,HistoryGraph::Vertex> idToVertex;
     QMap<HistoryGraph::Vertex, qlonglong> vertexToId;
-    foreach (const HistoryGraph::Vertex& v, graph.data().vertices())
+    foreach(const HistoryGraph::Vertex& v, graph.data().vertices())
     {
         HistoryVertexProperties props = graph.data().properties(v);
         idToVertex[props.infos.first().id()] = v;

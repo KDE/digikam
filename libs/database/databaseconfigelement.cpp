@@ -296,7 +296,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
 #ifdef DATABASEPARAMETERS_DEBUG
     kDebug() << "Found entries: " << databaseConfigs.size();
-    foreach (const DatabaseConfigElement& configElement, databaseConfigs )
+    foreach(const DatabaseConfigElement& configElement, databaseConfigs )
     {
         kDebug() << "DatabaseID: " << configElement.databaseID;
         kDebug() << "HostName: " << configElement.hostName;
@@ -311,11 +311,11 @@ bool DatabaseConfigElementLoader::readConfig()
         /*
         kDebug() << "Statements:";
 
-        foreach (const QString actionKey, configElement.sqlStatements.keys())
+        foreach(const QString actionKey, configElement.sqlStatements.keys())
         {
             QList<databaseActionElement> l_DBActionElement = configElement.sqlStatements[actionKey].dBActionElements;
             kDebug() << "DBAction [" << actionKey << "] has [" << l_DBActionElement.size() << "] actions";
-            foreach (const databaseActionElement statement, l_DBActionElement)
+            foreach(const databaseActionElement statement, l_DBActionElement)
             {
                 kDebug() << "\tMode ["<< statement.mode <<"] Value ["<< statement.statement <<"]";
             }

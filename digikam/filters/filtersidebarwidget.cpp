@@ -352,28 +352,28 @@ void FilterSideBarWidget::filterChanged()
 
     if (!showUntagged || d->tagMatchCond == ImageFilterSettings::OrCondition)
     {
-        foreach (TAlbum* tag, d->tagFilterView->getCheckedTags())
+        foreach(TAlbum* tag, d->tagFilterView->getCheckedTags())
         {
             if (tag)
             {
                 includedTagIds << tag->id();
             }
         }
-        foreach (TAlbum* tag, d->tagFilterView->getPartiallyCheckedTags())
+        foreach(TAlbum* tag, d->tagFilterView->getPartiallyCheckedTags())
         {
             if (tag)
             {
                 excludedTagIds << tag->id();
             }
         }
-        foreach (TAlbum* tag, d->colorLabelFilter->getCheckedColorLabelTags())
+        foreach(TAlbum* tag, d->colorLabelFilter->getCheckedColorLabelTags())
         {
             if (tag)
             {
                 clTagIds << tag->id();
             }
         }
-        foreach (TAlbum* tag, d->pickLabelFilter->getCheckedPickLabelTags())
+        foreach(TAlbum* tag, d->pickLabelFilter->getCheckedPickLabelTags())
         {
             if (tag)
             {

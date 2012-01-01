@@ -829,7 +829,7 @@ public:
 
     AlbumPointerList<T>& operator=(const QList<T*>& list)
     {
-        foreach (T* t, list)
+        foreach(T* t, list)
         {
             append(AlbumPointer<T>(t));
         }

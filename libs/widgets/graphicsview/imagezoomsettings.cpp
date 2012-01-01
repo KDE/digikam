@@ -176,7 +176,7 @@ double ImageZoomSettings::snappedZoomStep(double nextZoom, const QSizeF& frameSi
 
     if (currentZoom < nextZoom)
     {
-        foreach (double z, snapValues)
+        foreach(double z, snapValues)
         {
             if (lessThanLimitedPrecision(currentZoom, z) && lessThanLimitedPrecision(z, nextZoom))
             {
@@ -186,7 +186,7 @@ double ImageZoomSettings::snappedZoomStep(double nextZoom, const QSizeF& frameSi
     }
     else
     {
-        foreach (double z, snapValues)
+        foreach(double z, snapValues)
         {
             if (lessThanLimitedPrecision(z, currentZoom) && lessThanLimitedPrecision(nextZoom, z))
             {
@@ -209,7 +209,7 @@ double ImageZoomSettings::snappedZoomFactor(double zoom, const QSizeF& frameSize
         snapValues << fitToSizeZoomFactor(frameSize);
     }
 
-    foreach (double z, snapValues)
+    foreach(double z, snapValues)
     {
         if (fabs(zoom - z) < 0.05)
         {

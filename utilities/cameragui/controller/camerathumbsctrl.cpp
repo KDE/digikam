@@ -153,7 +153,7 @@ void CameraThumbsCtrl::startKdePreviewJob()
 
     d->kdeJobHash.clear();
     KUrl::List list;
-    foreach (const CamItemInfo& info, d->kdeTodo)
+    foreach(const CamItemInfo& info, d->kdeTodo)
     {
         KUrl url           = info.url();
         list << url;
