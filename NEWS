@@ -6,4 +6,5 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 286730 : digiKam crash when tagging faces.
-002 ==> 
+002 ==> 290496 : digikam-2.5.0 core fails to build against libkipi from kde-4.7.95.
+003 ==> 
