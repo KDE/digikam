@@ -788,17 +788,25 @@ void AdjustLevelsTool::readSettings()
     d->levelsHistogramWidget->reset();
     d->gboxSettings->histogramBox()->histogram()->reset();
 
-    d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
-            (int)LuminosityChannel));
+    ChannelType ch = (ChannelType)group.readEntry(d->configHistogramChannelEntry, 
+            (int)LuminosityChannel);
+
+    // restore the previous channel
+    d->gboxSettings->histogramBox()->setChannel(ch);
+
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
             (int)LogScaleHistogram));
 
+    // if ColorChannels was set, make sure to take values from LuminosityChannel
+    if (ch == ColorChannels)
+        ch = LuminosityChannel;
+
     // This is mandatory here to set spinbox values because slot connections
     // can be not set completely at plugin startup.
-    d->minInput->setValue(d->levels->getLevelLowInputValue(d->gboxSettings->histogramBox()->channel()));
-    d->minOutput->setValue(d->levels->getLevelLowOutputValue(d->gboxSettings->histogramBox()->channel()));
-    d->maxInput->setValue(d->levels->getLevelHighInputValue(d->gboxSettings->histogramBox()->channel()));
-    d->maxOutput->setValue(d->levels->getLevelHighOutputValue(d->gboxSettings->histogramBox()->channel()));
+    d->minInput->setValue(d->levels->getLevelLowInputValue(ch));
+    d->minOutput->setValue(d->levels->getLevelLowOutputValue(ch));
+    d->maxInput->setValue(d->levels->getLevelHighInputValue(ch));
+    d->maxOutput->setValue(d->levels->getLevelHighOutputValue(ch));
     slotChannelChanged();
     slotScaleChanged();
 }
