@@ -91,9 +91,9 @@ SetupPlugins::SetupPlugins(QWidget* parent)
 
     mainLayout->addWidget(d->pluginsNumber,             0, 0, 1, 1);
     mainLayout->addWidget(d->pluginsNumberActivated,    0, 1, 1, 1);
+    mainLayout->addWidget(d->checkAllBtn,               0, 3, 1, 1);
+    mainLayout->addWidget(d->clearBtn,                  0, 4, 1, 1);
     mainLayout->addWidget(d->kipiConfig,                1, 0, 1, -1);
-    mainLayout->addWidget(d->checkAllBtn,               2, 3, 1, 1);
-    mainLayout->addWidget(d->clearBtn,                  2, 4, 1, 1);
     mainLayout->setColumnStretch(2, 10);
     mainLayout->setMargin(KDialog::spacingHint());
     mainLayout->setSpacing(KDialog::spacingHint());
@@ -168,4 +168,5 @@ void SetupPlugins::slotClear()
     d->kipiConfig->slotClear();
     QApplication::restoreOverrideCursor();
 }
+
 }  // namespace Digikam
