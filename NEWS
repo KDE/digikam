@@ -5,5 +5,5 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
-
+001 ==> 286730 : digiKam crash when tagging faces.
+002 ==> 
