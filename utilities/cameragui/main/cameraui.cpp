@@ -119,6 +119,7 @@
 #include "cameralist.h"
 #include "cameratype.h"
 #include "cameranamehelper.h"
+#include "cameramessagebox.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
 
@@ -1782,7 +1783,7 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
 
 
 void CameraUI::checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
-                                  QStringList& deleteList, QStringList& lockedList)
+                                  QStringList& deleteList, CamItemInfoList& lockedList)
 {
     if (info.writePermissions != 0)  // Item not locked ?
     {
@@ -1794,16 +1795,16 @@ void CameraUI::checkItem4Deletion(const CamItemInfo& info, QStringList& folders,
     }
     else
     {
-        lockedList.append(info.name);
+        lockedList.append(info);
     }
 }
 
 void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
 {
-    QStringList folders;
-    QStringList files;
-    QStringList deleteList;
-    QStringList lockedList;
+    QStringList     folders;
+    QStringList     files;
+    QStringList     deleteList;
+    CamItemInfoList lockedList;
     CamItemInfoList list = onlySelected ? d->view->selectedItems() : d->view->allItems();
 
     foreach(CamItemInfo info, list)
@@ -1827,7 +1828,7 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
         QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
                              "These items will not be deleted. If you really want to delete these items, "
                              "please unlock them and try again."));
-        KMessageBox::informationList(this, infoMsg, lockedList, i18n("Information"));
+        CameraMessageBox::informationList(d->camThumbsCtrl, this, infoMsg, lockedList, i18n("Information"));
     }
 
     if (folders.isEmpty())

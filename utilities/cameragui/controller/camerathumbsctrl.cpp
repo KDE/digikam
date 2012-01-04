@@ -86,13 +86,14 @@ CameraThumbsCtrl::~CameraThumbsCtrl()
     delete d;
 }
 
-CachedItem CameraThumbsCtrl::getThumbInfo(const CamItemInfo& info) const
+bool CameraThumbsCtrl::getThumbInfo(const CamItemInfo& info, CachedItem& item) const
 {
     // We look if items are not in cache.
 
     if (hasItemFromCache(info.url()))
     {
-        return *retrieveItemFromCache(info.url());
+        item = *retrieveItemFromCache(info.url());
+        return true;
         // kDebug() << "Found in cache: " << info.url();
     }
 
@@ -105,7 +106,8 @@ CachedItem CameraThumbsCtrl::getThumbInfo(const CamItemInfo& info) const
         d->controller->getThumbsInfo(CamItemInfoList() << info);
     }
 
-    return CachedItem(info, d->controller->mimeTypeThumbnail(info.name));
+    item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name));
+    return false;
 }
 
 void CameraThumbsCtrl::slotThumbInfo(const QString&, const QString& file, const CamItemInfo& info, const QImage& thumb)

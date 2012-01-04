@@ -55,7 +55,11 @@ public:
     CameraThumbsCtrl(CameraController* ctrl, QObject* parent);
     ~CameraThumbsCtrl();
 
-    CachedItem getThumbInfo(const CamItemInfo& info) const;
+    /** fill item with relevant information.
+     *  if item is not in cache, return false and information will be dispatched later through signalThumbInfoReady(),
+     *  else return true and information are available imediatly.
+     */
+    bool getThumbInfo(const CamItemInfo& info, CachedItem& item) const;
 
     void setCacheSize(int numberOfItems);
     void clearCache();

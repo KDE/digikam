@@ -221,7 +221,9 @@ void CameraIconView::setThumbControler(CameraThumbsCtrl* controler)
 CachedItem CameraIconView::getThumbInfo(const CamItemInfo& itemInfo) const
 {
     // If thumb/Info are not yet in cache, there will arrive later with slotThumbInfoReady()
-    return d->thumbCtrl->getThumbInfo(itemInfo);
+    CachedItem item;
+    d->thumbCtrl->getThumbInfo(itemInfo, item);
+    return item;
 }
 
 void CameraIconView::slotThumbInfoReady(const CamItemInfo& info)

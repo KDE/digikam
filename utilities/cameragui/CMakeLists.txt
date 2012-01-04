@@ -9,6 +9,7 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/camerafolderdialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/camerainfodialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/capturedlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/cameramessagebox.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/items/camerafolderitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/items/cameraiconitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp

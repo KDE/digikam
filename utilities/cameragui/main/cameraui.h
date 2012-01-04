@@ -117,7 +117,7 @@ private:
     void refreshCollectionFreeSpace();
     void deleteItems(bool onlySelected, bool onlyDownloaded);
     void checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
-                            QStringList& deleteList, QStringList& lockedList);
+                            QStringList& deleteList, CamItemInfoList& lockedList);
 
 private Q_SLOTS:
 
