@@ -1783,7 +1783,7 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
 
 
 void CameraUI::checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
-                                  QStringList& deleteList, CamItemInfoList& lockedList)
+                                  CamItemInfoList& deleteList, CamItemInfoList& lockedList)
 {
     if (info.writePermissions != 0)  // Item not locked ?
     {
@@ -1791,7 +1791,7 @@ void CameraUI::checkItem4Deletion(const CamItemInfo& info, QStringList& folders,
         QString file   = info.name;
         folders.append(folder);
         files.append(file);
-        deleteList.append(folder + QString("/") + file);
+        deleteList.append(info);
     }
     else
     {
@@ -1803,7 +1803,7 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
 {
     QStringList     folders;
     QStringList     files;
-    QStringList     deleteList;
+    CamItemInfoList deleteList;
     CamItemInfoList lockedList;
     CamItemInfoList list = onlySelected ? d->view->selectedItems() : d->view->allItems();
 
@@ -1844,12 +1844,14 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                           "Are you sure?",
                           deleteList.count()));
 
-    if (KMessageBox::warningContinueCancelList(this, warnMsg,
-                                               deleteList,
-                                               i18n("Warning"),
-                                               KGuiItem(i18n("Delete")),
-                                               KStandardGuiItem::cancel(),
-                                               QString("DontAskAgainToDeleteItemsFromCamera"))
+    if (CameraMessageBox::warningContinueCancelList(d->camThumbsCtrl,
+                                                    this,
+                                                    warnMsg,
+                                                    deleteList,
+                                                    i18n("Warning"),
+                                                    KGuiItem(i18n("Delete")),
+                                                    KStandardGuiItem::cancel(),
+                                                    QString("DontAskAgainToDeleteItemsFromCamera"))
         ==  KMessageBox::Continue)
     {
         QStringList::const_iterator itFolder = folders.constBegin();

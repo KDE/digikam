@@ -38,6 +38,7 @@
 
 // KDE includes
 
+#include <kurl.h>
 #include <kglobalsettings.h>
 #include <knotification.h>
 #include <kiconloader.h>
@@ -290,6 +291,46 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* ctrl, QWidget* parent, 
     {
         KMessageBox::saveDontShowAgainContinue(dontShowAgainName);
     }
+}
+
+int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* ctrl, QWidget* parent, const QString& text,
+                                                const CamItemInfoList& items,
+                                                const QString& caption,
+                                                const KGuiItem& buttonContinue,
+                                                const KGuiItem& buttonCancel,
+                                                const QString& dontAskAgainName)
+{
+    if (!KMessageBox::shouldBeShownContinue(dontAskAgainName))
+    {
+        return KMessageBox::Continue;
+    }
+
+    KDialog* dialog = new KDialog(parent, Qt::Dialog);
+    dialog->setCaption( caption.isEmpty() ? i18n("Warning") : caption );
+    dialog->setButtons( KDialog::Yes | KDialog::No );
+    dialog->setObjectName( "warningYesNo" );
+    dialog->setModal( true );
+    dialog->setButtonGuiItem( KDialog::Yes, buttonContinue );
+    dialog->setButtonGuiItem( KDialog::No, buttonCancel );
+    dialog->setDefaultButton( KDialog::Yes );
+    dialog->setEscapeButton( KDialog::No );
+
+    bool checkboxResult = false;
+    const int result    = createMessageBox(ctrl, dialog, themedMessageBoxIcon(QMessageBox::Warning), text, items,
+                                           dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
+                                           &checkboxResult, KMessageBox::Notify);
+
+    if ( result != KDialog::Yes )
+    {
+        return KMessageBox::Cancel;
+    }
+    
+    if (checkboxResult)
+    {
+        KMessageBox::saveDontShowAgainContinue(dontAskAgainName);
+    }
+    
+    return KMessageBox::Continue;
 }
 
 int CameraMessageBox::createMessageBox(CameraThumbsCtrl* ctrl,

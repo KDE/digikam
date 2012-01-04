@@ -31,8 +31,8 @@
 
 // KDE includes
 
-#include <kurl.h>
 #include <kmessagebox.h>
+#include <kstandardguiitem.h>
 
 // Local includes
 
@@ -96,9 +96,21 @@ class CameraMessageBox
 public:
 
     static void informationList(CameraThumbsCtrl* ctrl,
-                                QWidget *parent, const QString& text, const CamItemInfoList& items,
-                                const QString& caption = QString(), const QString& dontShowAgainName = QString());
+                                QWidget *parent,
+                                const QString& text,
+                                const CamItemInfoList& items,
+                                const QString& caption = QString(),
+                                const QString& dontShowAgainName = QString());
 
+    static int warningContinueCancelList(CameraThumbsCtrl* ctrl,
+                                         QWidget* parent,
+                                         const QString& text,
+                                         const CamItemInfoList& items,
+                                         const QString& caption = QString(),
+                                         const KGuiItem& buttonContinue = KStandardGuiItem::cont(),
+                                         const KGuiItem& buttonCancel = KStandardGuiItem::cancel(),
+                                         const QString& dontAskAgainName = QString());
+    
     static int createMessageBox(CameraThumbsCtrl* ctrl,
                                 KDialog* dialog,
                                 const QIcon& icon,
