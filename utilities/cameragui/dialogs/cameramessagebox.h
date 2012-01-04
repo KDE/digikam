@@ -117,10 +117,7 @@ public:
                                 const QString& text,
                                 const CamItemInfoList& items,
                                 const QString& ask, 
-                                bool* checkboxReturn,
-                                KMessageBox::Options options,
-                                const QString& details=QString(),
-                                QMessageBox::Icon notifyType=QMessageBox::Information
+                                bool* checkboxReturn
                                );
 };
 

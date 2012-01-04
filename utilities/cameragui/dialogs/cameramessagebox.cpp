@@ -33,22 +33,16 @@
 #include <QLabel>
 #include <QHeaderView>
 #include <QMessageBox>
-#include <QScrollArea>
-#include <QScrollBar>
 
 // KDE includes
 
 #include <kurl.h>
 #include <kglobalsettings.h>
-#include <knotification.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <kdebug.h>
-#include <ktextedit.h>
-#include <ksqueezedtextlabel.h>
-#include <kwindowsystem.h>
 
 namespace Digikam
 {
@@ -197,72 +191,9 @@ void CameraItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const
 }
 
 // --------------------------------------------------------------------------------------------------------
-/** For these methods, see KMessageBox class implementation
+
+/** These methods are simplified version from KMessageBox class implementation
  */
-
-static QIcon themedMessageBoxIcon(QMessageBox::Icon icon)
-{
-    QString icon_name;
-
-    switch (icon) {
-    case QMessageBox::NoIcon:
-        return QIcon();
-        break;
-    case QMessageBox::Information:
-        icon_name = "dialog-information";
-        break;
-    case QMessageBox::Warning:
-        icon_name = "dialog-warning";
-        break;
-    case QMessageBox::Critical:
-        icon_name = "dialog-error";
-        break;
-    default:
-        break;
-    }
-
-   QIcon ret = KIconLoader::global()->loadIcon(icon_name, KIconLoader::NoGroup, KIconLoader::SizeHuge, KIconLoader::DefaultState, QStringList(), 0, true);
-
-   if (ret.isNull()) {
-       return QMessageBox::standardIcon(icon);
-   } else {
-       return ret;
-   }
-}
-
-static void sendNotification( QString message, //krazy:exclude=passbyvalue
-                              const QStringList& strlist,
-                              QMessageBox::Icon icon,
-                              WId parent_id )
-{
-    // create the message for KNotify
-    QString messageType;
-    switch (icon) {
-    case QMessageBox::Warning:
-        messageType = "messageWarning";
-        break;
-    case QMessageBox::Critical:
-        messageType = "messageCritical";
-        break;
-    case QMessageBox::Question:
-        messageType = "messageQuestion";
-        break;
-    default:
-        messageType = "messageInformation";
-        break;
-    }
-
-    if ( !strlist.isEmpty() ) {
-        for ( QStringList::ConstIterator it = strlist.begin(); it != strlist.end(); ++it ) {
-            message += '\n' + *it;
-        }
-    }
-
-    if ( !message.isEmpty() ) {
-        KNotification::event( messageType, message, QPixmap(), QWidget::find( parent_id ),
-                              KNotification::DefaultEvent | KNotification::CloseOnTimeout );
-    }
-}
 
 void CameraMessageBox::informationList(CameraThumbsCtrl* ctrl, QWidget* parent, const QString& text, 
                                        const CamItemInfoList& items,
@@ -282,10 +213,12 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* ctrl, QWidget* parent, 
     dialog->setEscapeButton(KDialog::Ok);
 
     bool checkboxResult = false;
+    QIcon icon          = KIconLoader::global()->loadIcon("dialog-information", KIconLoader::NoGroup, KIconLoader::SizeHuge,
+                                                          KIconLoader::DefaultState, QStringList(), 0, true);
 
-    createMessageBox(ctrl, dialog, themedMessageBoxIcon(QMessageBox::Information), text, items,
+    createMessageBox(ctrl, dialog, icon, text, items,
                      dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
-                     &checkboxResult, KMessageBox::Notify);
+                     &checkboxResult);
 
     if (checkboxResult)
     {
@@ -316,9 +249,11 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* ctrl, QWidget*
     dialog->setEscapeButton( KDialog::No );
 
     bool checkboxResult = false;
-    const int result    = createMessageBox(ctrl, dialog, themedMessageBoxIcon(QMessageBox::Warning), text, items,
+    QIcon icon          = KIconLoader::global()->loadIcon("dialog-warning", KIconLoader::NoGroup, KIconLoader::SizeHuge,
+                                                          KIconLoader::DefaultState, QStringList(), 0, true);
+    const int result    = createMessageBox(ctrl, dialog, icon, text, items,
                                            dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
-                                           &checkboxResult, KMessageBox::Notify);
+                                           &checkboxResult);
 
     if ( result != KDialog::Yes )
     {
@@ -339,31 +274,27 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* ctrl,
                                        const QString& text,
                                        const CamItemInfoList& items,
                                        const QString& ask,
-                                       bool* checkboxReturn,
-                                       KMessageBox::Options options,
-                                       const QString& details,
-                                       QMessageBox::Icon notifyType
+                                       bool* checkboxReturn
                                       )
 {
-    QWidget *mainWidget = new QWidget(dialog);
-    QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
+    QWidget* mainWidget     = new QWidget(dialog);
+    QVBoxLayout* mainLayout = new QVBoxLayout(mainWidget);
     mainLayout->setSpacing(KDialog::spacingHint() * 2); // provide extra spacing
     mainLayout->setMargin(0);
 
-    QHBoxLayout *hLayout = new QHBoxLayout();
+    QHBoxLayout* hLayout = new QHBoxLayout();
     hLayout->setMargin(0);
     hLayout->setSpacing(-1); // use default spacing
     mainLayout->addLayout(hLayout,5);
 
-    QLabel *iconLabel = new QLabel(mainWidget);
+    QLabel* iconLabel = new QLabel(mainWidget);
+    QStyleOption option;
+    option.initFrom(mainWidget);
+    iconLabel->setPixmap(icon.pixmap(mainWidget->style()->pixelMetric(QStyle::PM_MessageBoxIconSize, &option, mainWidget)));
 
-    if (!icon.isNull()) {
-        QStyleOption option;
-        option.initFrom(mainWidget);
-        iconLabel->setPixmap(icon.pixmap(mainWidget->style()->pixelMetric(QStyle::PM_MessageBoxIconSize, &option, mainWidget)));
-    }
+    //--------------------------------------------------------------------------------
 
-    QVBoxLayout *iconLayout = new QVBoxLayout();
+    QVBoxLayout* iconLayout = new QVBoxLayout();
     iconLayout->addStretch(1);
     iconLayout->addWidget(iconLabel);
     iconLayout->addStretch(5);
@@ -371,136 +302,50 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* ctrl,
     hLayout->addLayout(iconLayout,0);
     hLayout->addSpacing(KDialog::spacingHint());
 
-    QLabel *messageLabel = new QLabel(text, mainWidget);
-    messageLabel->setOpenExternalLinks(options & KMessageBox::AllowLink);
-    Qt::TextInteractionFlags flags = Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard;
-    if (options & KMessageBox::AllowLink) {
-        flags |= Qt::LinksAccessibleByMouse | Qt::LinksAccessibleByKeyboard;
-    }
-    messageLabel->setTextInteractionFlags(flags);
+    //--------------------------------------------------------------------------------
 
-    QRect desktop = KGlobalSettings::desktopGeometry(dialog);
-    bool usingSqueezedTextLabel = false;
-    if (messageLabel->sizeHint().width() > desktop.width() * 0.5) {
-        // enable automatic wrapping of messages which are longer than 50% of screen width
-        messageLabel->setWordWrap(true);
-        // display a text widget with scrollbar if still too wide
-        usingSqueezedTextLabel = messageLabel->sizeHint().width() > desktop.width() * 0.85;
-        if (usingSqueezedTextLabel)
-        {
-            delete messageLabel;
-            messageLabel = new KSqueezedTextLabel(text, mainWidget);
-            messageLabel->setOpenExternalLinks(options & KMessageBox::AllowLink);
-            messageLabel->setTextInteractionFlags(flags);
-        }
-    }
-
+    QLabel* messageLabel = new QLabel(text, mainWidget);
+    messageLabel->setOpenExternalLinks(true);
     QPalette messagePal(messageLabel->palette());
     messagePal.setColor(QPalette::Window, Qt::transparent);
     messageLabel->setPalette(messagePal);
+    hLayout->addWidget(messageLabel, 5);
 
+    // enable automatic wrapping since the listwidget has already a good initial width
+    messageLabel->setWordWrap(true);
+    messageLabel->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Minimum);
 
-    bool usingScrollArea=desktop.height() / 3 < messageLabel->sizeHint().height();
-    if (usingScrollArea)
-    {
-        QScrollArea* messageScrollArea = new QScrollArea(mainWidget);
-        messageScrollArea->setWidget(messageLabel);
-        messageScrollArea->setFrameShape(QFrame::NoFrame);
-        messageScrollArea->setWidgetResizable(true);
-        QPalette scrollPal(messageScrollArea->palette());
-        scrollPal.setColor(QPalette::Window, Qt::transparent);
-        messageScrollArea->viewport()->setPalette(scrollPal);
-        hLayout->addWidget(messageScrollArea,5);
-    }
-    else
-        hLayout->addWidget(messageLabel,5);
+    //--------------------------------------------------------------------------------
 
-    const bool usingListWidget=!items.isEmpty();
-    if (usingListWidget) {
-        // enable automatic wrapping since the listwidget has already a good initial width
-        messageLabel->setWordWrap(true);
-        messageLabel->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Minimum);
+    // NOTE: customization here
+    CameraItemList* listWidget = new CameraItemList(mainWidget);
+    listWidget->setThumbCtrl(ctrl);
+    listWidget->setItems(items);
+    // end of customization
 
-        // NOTE: customization here
-        CameraItemList* listWidget = new CameraItemList(mainWidget);
-        listWidget->setThumbCtrl(ctrl);
-        listWidget->setItems(items);
-        // end of customization
+    mainLayout->addWidget(listWidget, 50);
 
-        mainLayout->addWidget(listWidget,usingScrollArea?10:50);
-    }
-    else if (!usingScrollArea)
-        mainLayout->addStretch(15);
+    //--------------------------------------------------------------------------------
 
     QPointer<QCheckBox> checkbox = 0;
-    if (!ask.isEmpty()) {
+    if (!ask.isEmpty())
+    {
         checkbox = new QCheckBox(ask, mainWidget);
         mainLayout->addWidget(checkbox);
-        if (checkboxReturn) {
+        if (checkboxReturn)
+        {
             checkbox->setChecked(*checkboxReturn);
         }
     }
 
-    if (!details.isEmpty()) {
-        QGroupBox *detailsGroup = new QGroupBox(i18n("Details"));
-        QVBoxLayout *detailsLayout = new QVBoxLayout(detailsGroup);
-        if (details.length() < 512) {
-            QLabel *detailsLabel = new QLabel(details);
-            detailsLabel->setOpenExternalLinks(options & KMessageBox::AllowLink);
-            Qt::TextInteractionFlags flags = Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard;
-            if ( options & KMessageBox::AllowLink )
-                flags |= Qt::LinksAccessibleByMouse | Qt::LinksAccessibleByKeyboard;;
-            detailsLabel->setTextInteractionFlags(flags);
-            detailsLabel->setWordWrap(true);
-            detailsLayout->addWidget(detailsLabel,50);
-        } else {
-            KTextEdit *detailTextEdit = new KTextEdit(details);
-            detailTextEdit->setReadOnly(true);
-            detailTextEdit->setMinimumHeight(detailTextEdit->fontMetrics().lineSpacing() * 11);
-            detailsLayout->addWidget(detailTextEdit,50);
-        }
-        if (!usingListWidget)
-            mainLayout->setStretchFactor(hLayout,10);
-        dialog->setDetailsWidget(detailsGroup);
-    }
-
     dialog->setMainWidget(mainWidget);
-    if (!usingListWidget && !usingScrollArea && !usingSqueezedTextLabel && details.isEmpty())
-        dialog->setFixedSize(dialog->sizeHint() + QSize( 10, 10 ));
-    else if (!details.isEmpty() && dialog->minimumHeight()<iconLabel->sizeHint().height()*2)//strange bug...
-    {
-        if (!usingScrollArea)
-            dialog->setMinimumSize(300,qMax(150,qMax(iconLabel->sizeHint().height(),messageLabel->sizeHint().height())));
-        else
-            dialog->setMinimumSize(300,qMax(150,iconLabel->sizeHint().height()));
-    }
 
-    if ((options & KMessageBox::Dangerous)) {
-        if (dialog->isButtonEnabled(KDialog::Cancel))
-            dialog->setDefaultButton(KDialog::Cancel);
-        else if (dialog->isButtonEnabled(KDialog::No))
-            dialog->setDefaultButton(KDialog::No);
-    }
+    //--------------------------------------------------------------------------------
 
     KDialog::ButtonCode defaultCode = dialog->defaultButton();
-    if (defaultCode != KDialog::NoDefault) {
+    if (defaultCode != KDialog::NoDefault)
+    {
         dialog->setButtonFocus(defaultCode);
-    }
-
-/*
-#ifndef Q_WS_WIN // FIXME problems with KNotify on Windows
-    if ((options & KMessageBox::Notify)) {
-        sendNotification(text, strlist, notifyType, dialog->topLevelWidget()->winId());
-    }
-#endif
-
-    if (KMessageBox_queue) {
-        KDialogQueue::queueDialog(dialog);
-        return KMessageBox::Cancel; // We have to return something.
-    }
-*/
-    if ((options & KMessageBox::NoExec)) {
-        return KMessageBox::Cancel; // We have to return something.
     }
 
     // We use a QPointer because the dialog may get deleted
@@ -509,11 +354,12 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* ctrl,
     QPointer<KDialog> guardedDialog = dialog;
 
     const int result = guardedDialog->exec();
-    if (checkbox && checkboxReturn) {
+    if (checkbox && checkboxReturn)
+    {
         *checkboxReturn = checkbox->isChecked();
     }
 
-    delete (KDialog *) guardedDialog;
+    delete (KDialog*) guardedDialog;
     return result;
 }
 
