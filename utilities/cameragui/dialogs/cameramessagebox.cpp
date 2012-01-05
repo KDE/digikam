@@ -67,7 +67,7 @@ CameraItem::CameraItem(QTreeWidget* parent, const CamItemInfo& info)
 {
     d->info = info;
     setThumb(SmallIcon("image-x-generic", parent->iconSize().width(), KIconLoader::DisabledState), false);
-    setText(1, d->info.name );
+    setText(1, d->info.name);
 }
 
 CameraItem::~CameraItem()
@@ -163,17 +163,20 @@ void CameraItemList::setThumbCtrl(CameraThumbsCtrl* ctrl)
 void CameraItemList::slotThumbnailLoaded(const CamItemInfo& info)
 {
     QTreeWidgetItemIterator it(this);
+    bool                    valid;
+    CachedItem              citem;
 
     while (*it)
     {
         CameraItem* item = dynamic_cast<CameraItem*>(*it);
+
         if (item && item->info().url() == info.url())
         {
-            CachedItem citem;
-            bool valid = d->ctrl->getThumbInfo(info, citem);
+            valid = d->ctrl->getThumbInfo(info, citem);
             item->setThumb(citem.second.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio), valid);
             return;
         }
+
         ++it;
     }
 }
@@ -181,12 +184,14 @@ void CameraItemList::slotThumbnailLoaded(const CamItemInfo& info)
 void CameraItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
     CameraItem* item = dynamic_cast<CameraItem*>(itemFromIndex(index));
+
     if (item && !item->hasValidThumbnail())
     {
         CachedItem citem;
         bool valid = d->ctrl->getThumbInfo(item->info(), citem);
         item->setThumb(citem.second.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio), valid);
     }
+
     QTreeWidget::drawRow(p, opt, index);
 }
 
@@ -195,9 +200,12 @@ void CameraItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const
 /** These methods are simplified version from KMessageBox class implementation
  */
 
-void CameraMessageBox::informationList(CameraThumbsCtrl* ctrl, QWidget* parent, const QString& text, 
+void CameraMessageBox::informationList(CameraThumbsCtrl* ctrl,
+                                       QWidget* parent,
+                                       const QString& text,
                                        const CamItemInfoList& items,
-                                       const QString& caption, const QString& dontShowAgainName)
+                                       const QString& caption,
+                                       const QString& dontShowAgainName)
 {
     if (!KMessageBox::shouldBeShownContinue(dontShowAgainName))
     {
@@ -226,7 +234,9 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* ctrl, QWidget* parent, 
     }
 }
 
-int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* ctrl, QWidget* parent, const QString& text,
+int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* ctrl,
+                                                QWidget* parent,
+                                                const QString& text,
                                                 const CamItemInfoList& items,
                                                 const QString& caption,
                                                 const KGuiItem& buttonContinue,
@@ -239,14 +249,14 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* ctrl, QWidget*
     }
 
     KDialog* dialog = new KDialog(parent, Qt::Dialog);
-    dialog->setCaption( caption.isEmpty() ? i18n("Warning") : caption );
-    dialog->setButtons( KDialog::Yes | KDialog::No );
-    dialog->setObjectName( "warningYesNo" );
-    dialog->setModal( true );
-    dialog->setButtonGuiItem( KDialog::Yes, buttonContinue );
-    dialog->setButtonGuiItem( KDialog::No, buttonCancel );
-    dialog->setDefaultButton( KDialog::Yes );
-    dialog->setEscapeButton( KDialog::No );
+    dialog->setCaption(caption.isEmpty() ? i18n("Warning") : caption);
+    dialog->setButtons(KDialog::Yes | KDialog::No);
+    dialog->setObjectName("warningYesNo");
+    dialog->setModal(true);
+    dialog->setButtonGuiItem(KDialog::Yes, buttonContinue);
+    dialog->setButtonGuiItem(KDialog::No, buttonCancel);
+    dialog->setDefaultButton(KDialog::Yes);
+    dialog->setEscapeButton(KDialog::No);
 
     bool checkboxResult = false;
     QIcon icon          = KIconLoader::global()->loadIcon("dialog-warning", KIconLoader::NoGroup, KIconLoader::SizeHuge,
@@ -255,16 +265,16 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* ctrl, QWidget*
                                            dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
                                            &checkboxResult);
 
-    if ( result != KDialog::Yes )
+    if (result != KDialog::Yes)
     {
         return KMessageBox::Cancel;
     }
-    
+
     if (checkboxResult)
     {
         KMessageBox::saveDontShowAgainContinue(dontAskAgainName);
     }
-    
+
     return KMessageBox::Continue;
 }
 
@@ -282,47 +292,41 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* ctrl,
     mainLayout->setSpacing(KDialog::spacingHint() * 2); // provide extra spacing
     mainLayout->setMargin(0);
 
-    QHBoxLayout* hLayout = new QHBoxLayout();
+    QHBoxLayout* hLayout    = new QHBoxLayout();
     hLayout->setMargin(0);
     hLayout->setSpacing(-1); // use default spacing
-    mainLayout->addLayout(hLayout,5);
+    mainLayout->addLayout(hLayout, 5);
 
-    QLabel* iconLabel = new QLabel(mainWidget);
+    //--------------------------------------------------------------------------------
+
+    QLabel* iconLabel       = new QLabel(mainWidget);
     QStyleOption option;
     option.initFrom(mainWidget);
     iconLabel->setPixmap(icon.pixmap(mainWidget->style()->pixelMetric(QStyle::PM_MessageBoxIconSize, &option, mainWidget)));
-
-    //--------------------------------------------------------------------------------
 
     QVBoxLayout* iconLayout = new QVBoxLayout();
     iconLayout->addStretch(1);
     iconLayout->addWidget(iconLabel);
     iconLayout->addStretch(5);
-
-    hLayout->addLayout(iconLayout,0);
+    hLayout->addLayout(iconLayout, 0);
     hLayout->addSpacing(KDialog::spacingHint());
 
     //--------------------------------------------------------------------------------
 
-    QLabel* messageLabel = new QLabel(text, mainWidget);
+    QLabel* messageLabel    = new QLabel(text, mainWidget);
     messageLabel->setOpenExternalLinks(true);
+    messageLabel->setWordWrap(true);
+    messageLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     QPalette messagePal(messageLabel->palette());
     messagePal.setColor(QPalette::Window, Qt::transparent);
     messageLabel->setPalette(messagePal);
     hLayout->addWidget(messageLabel, 5);
 
-    // enable automatic wrapping since the listwidget has already a good initial width
-    messageLabel->setWordWrap(true);
-    messageLabel->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Minimum);
-
     //--------------------------------------------------------------------------------
 
-    // NOTE: customization here
     CameraItemList* listWidget = new CameraItemList(mainWidget);
     listWidget->setThumbCtrl(ctrl);
     listWidget->setItems(items);
-    // end of customization
-
     mainLayout->addWidget(listWidget, 50);
 
     //--------------------------------------------------------------------------------

@@ -110,13 +110,15 @@ public:
                                          const KGuiItem& buttonContinue = KStandardGuiItem::cont(),
                                          const KGuiItem& buttonCancel = KStandardGuiItem::cancel(),
                                          const QString& dontAskAgainName = QString());
-    
+
+private:
+
     static int createMessageBox(CameraThumbsCtrl* ctrl,
                                 KDialog* dialog,
                                 const QIcon& icon,
                                 const QString& text,
                                 const CamItemInfoList& items,
-                                const QString& ask, 
+                                const QString& ask,
                                 bool* checkboxReturn
                                );
 };
