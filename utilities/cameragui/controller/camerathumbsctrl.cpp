@@ -6,7 +6,7 @@
  * Date        : 2011-08-03
  * Description : digital camera thumbnails controller
  *
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -108,6 +108,13 @@ bool CameraThumbsCtrl::getThumbInfo(const CamItemInfo& info, CachedItem& item) c
 
     item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name));
     return false;
+}
+
+void CameraThumbsCtrl::updateThumbInfoFromCache(const CamItemInfo& info)
+{
+    removeItemFromCache(info.url());
+    CachedItem item;
+    getThumbInfo(info, item);
 }
 
 void CameraThumbsCtrl::slotThumbInfo(const QString&, const QString& file, const CamItemInfo& info, const QImage& thumb)

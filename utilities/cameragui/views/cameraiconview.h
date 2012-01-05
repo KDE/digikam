@@ -7,7 +7,7 @@
  * Description : camera icon view
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
@@ -70,8 +70,6 @@ public:
     void removeItem(const CamItemInfo& itemInfo);
 
     CachedItem getThumbInfo(const CamItemInfo& itemInfo) const;
-
-    void toggleLock(const CamItemInfo& itemInfo);
 
     void setDownloaded(const CamItemInfo& itemInfo, int status);
     bool isDownloaded(const CamItemInfo& itemInfo);

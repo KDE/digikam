@@ -7,7 +7,7 @@
  * Description : camera icon view item
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -125,19 +125,6 @@ void CameraIconItem::setDownloaded(int status)
 bool CameraIconItem::isDownloaded() const
 {
     return (d->itemInfo.downloaded == CamItemInfo::DownloadedYes);
-}
-
-void CameraIconItem::toggleLock()
-{
-    if (d->itemInfo.writePermissions == 0)
-    {
-        d->itemInfo.writePermissions = 1;
-    }
-    else
-    {
-        d->itemInfo.writePermissions = 0;
-    }
-    update();
 }
 
 void CameraIconItem::calcRect(const QString& itemName, const QString& newName, const QPixmap& thumb)
