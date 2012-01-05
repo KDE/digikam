@@ -127,6 +127,19 @@ bool CameraIconItem::isDownloaded() const
     return (d->itemInfo.downloaded == CamItemInfo::DownloadedYes);
 }
 
+void CameraIconItem::toggleLock()
+{
+    if (d->itemInfo.writePermissions == 0)
+    {
+        d->itemInfo.writePermissions = 1;
+    }
+    else
+    {
+        d->itemInfo.writePermissions = 0;
+    }
+    update();
+}
+
 void CameraIconItem::calcRect(const QString& itemName, const QString& newName, const QPixmap& thumb)
 {
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
@@ -200,12 +213,14 @@ void CameraIconItem::paintItem(QPainter* p)
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
     CachedItem item      = view->getThumbInfo(itemInfo());
 
-    CamItemInfo newinf   = item.first;
+    CamItemInfo newinf      = item.first;
     // NOTE: B.K.O #260669: do not overwrite download information have been set before.
-    newinf.downloaded    = itemInfo().downloaded;
-    newinf.downloadName  = itemInfo().downloadName;
+    newinf.downloaded       = itemInfo().downloaded;
+    newinf.downloadName     = itemInfo().downloadName;
     // NOTE: B.K.O #246336: do not overwrite too the file mtime set previously at camera connection using cameragui settings.
-    newinf.mtime         = itemInfo().mtime;
+    newinf.mtime            = itemInfo().mtime;
+    // NOTE: do not overwrite lock info which can be toggle by user from GUI.
+    newinf.writePermissions = itemInfo().writePermissions;
     setItemInfo(newinf);
 
     QFont fn(view->font());

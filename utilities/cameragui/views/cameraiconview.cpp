@@ -347,6 +347,12 @@ bool CameraIconView::isDownloaded(const CamItemInfo& itemInfo)
     return false;
 }
 
+void CameraIconView::toggleLock(const CamItemInfo& itemInfo)
+{
+    CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
+    if (iconItem) iconItem->toggleLock();
+}
+
 void CameraIconView::ensureItemVisible(CameraIconItem* item)
 {
     IconView::ensureItemVisible(item);

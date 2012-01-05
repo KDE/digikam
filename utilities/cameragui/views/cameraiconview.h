@@ -71,6 +71,8 @@ public:
 
     CachedItem getThumbInfo(const CamItemInfo& itemInfo) const;
 
+    void toggleLock(const CamItemInfo& itemInfo);
+
     void setDownloaded(const CamItemInfo& itemInfo, int status);
     bool isDownloaded(const CamItemInfo& itemInfo);
 

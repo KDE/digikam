@@ -1674,6 +1674,11 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
     {
         d->view->setDownloaded(info, status);
 
+        if (d->rightSideBar->url() == info.url())
+        {
+            slotItemsSelected(d->view->findItemInfo(folder, file), true);
+        }
+
         if (status == CamItemInfo::DownloadedYes)
         {
             int curr = d->statusProgressBar->progressValue();
@@ -1773,9 +1778,11 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
         CamItemInfo info = d->view->findItemInfo(folder, file);
         if (!info.isNull())
         {
-            // Camera file system have been updated, and thumb ctrl cache need to be updated.
-            // This will updated automatically camera icon view item...
-            d->camThumbsCtrl->updateThumbInfoFromCache(info);
+            d->view->toggleLock(info);
+            if (d->rightSideBar->url() == info.url())
+            {
+                slotItemsSelected(d->view->findItemInfo(folder, file), true);
+            }
         }
     }
 

@@ -55,6 +55,9 @@ public:
     void          setItemInfo(const CamItemInfo& itemInfo);
     CamItemInfo   itemInfo() const;
 
+    /** Lock on/off item (to prevent deletetion by error) */
+    void          toggleLock();
+
     // reimplemented from IconItem
     virtual QRect clickToOpenRect();
 
