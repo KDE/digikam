@@ -82,14 +82,15 @@ QmlShow::QmlShow(const QStringList& list)
             this, SLOT(play()));
     connect(object, SIGNAL(pause()),
             this, SLOT(pause()));
+    connect(object,SIGNAL(gridChanged(int)),this,SLOT(gridChanged(int)));
     d->imageno=0;
 
     d->ui->show();
     showMaximized();
 
-    if(!list.isEmpty())
+    if(!d->list.isEmpty())
     {
-        object->setProperty("text", d->list[0]);
+        object->setProperty("text", d->list[1]);
     }
     else
     {
@@ -136,4 +137,10 @@ void QmlShow::pause()
     object->setProperty("bool_pp", false);
 }
 
+void QmlShow::gridChanged(int index)
+{
+	QObject* object = d->ui->rootObject();
+	object->setProperty("text", d->list[index]);
+	d->imageno=index;
+}
 }

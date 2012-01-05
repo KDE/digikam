@@ -47,7 +47,7 @@ public slots:
     void prevImage();
     void pause();
     void play();
-
+    void gridChanged(int);
 private:
 
     class QmlShowPriv;

@@ -13,7 +13,7 @@ Rectangle {
     signal prevClicked;
     signal play;
     signal pause;
-    signal gridItem;
+    signal gridChanged (int index);
     property bool bool_pp: true;
     property real source_scale: 1;
 
@@ -325,7 +325,8 @@ Rectangle {
                 clip: true
                 height: grid.cellHeight;
                 width: grid.cellWidth;
-
+		onXChanged: rect.gridChanged(grid.currentIndex);
+		onYChanged: rect.gridChanged(grid.currentIndex);
             }
             focus: parent.visible
 
