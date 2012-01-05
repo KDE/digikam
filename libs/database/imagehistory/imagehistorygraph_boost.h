@@ -1362,7 +1362,7 @@ protected:
             template <typename VertexType, typename GraphType>
             void discover_vertex(VertexType u, const GraphType&) const
             {
-                record(u);
+                this->record(u);
             }
         };
 
@@ -1373,7 +1373,7 @@ protected:
             template <typename VertexType, typename GraphType>
             void discover_vertex(VertexType u, const GraphType&) const
             {
-                record(u);
+                this->record(u);
             }
         };
 

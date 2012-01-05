@@ -831,7 +831,7 @@ public:
     {
         foreach(T* t, list)
         {
-            append(AlbumPointer<T>(t));
+            this->append(AlbumPointer<T>(t));
         }
         return *this;
     }
