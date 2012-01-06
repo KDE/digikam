@@ -1646,7 +1646,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
         settings.dest = downloadUrl.toLocalFile();
         allItems.append(settings);
-        
+
         ++total;
     }
 
@@ -1749,6 +1749,12 @@ void CameraUI::slotToggleLock()
 {
     CamItemInfoList list = d->view->selectedItems();
     int count            = list.count();
+    if (count > 0)
+    {
+        d->statusProgressBar->setProgressValue(0);
+        d->statusProgressBar->setProgressTotalSteps(count);
+        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+    }
 
     foreach(CamItemInfo info, list)
     {
@@ -1764,13 +1770,6 @@ void CameraUI::slotToggleLock()
         }
 
         d->controller->lockFile(folder, file, lock);
-    }
-
-    if (count > 0)
-    {
-        d->statusProgressBar->setProgressValue(0);
-        d->statusProgressBar->setProgressTotalSteps(count);
-        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
     }
 }
 
