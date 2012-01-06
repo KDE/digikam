@@ -8,5 +8,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 286730 : digiKam crash when tagging faces.
 002 ==> 290496 : digikam-2.5.0 core fails to build against libkipi from kde-4.7.95.
 003 ==> 272980 : Crash while searching on a tag.
-004 ==> 290642 : build failed with gcc-4.7.0 [patch].
-005 ==> 
+004 ==> 290642 : Build failed with gcc-4.7.0 [patch].
+005 ==> 287772 : Build failed against boost-1.48 [patch].
+006 ==> 
