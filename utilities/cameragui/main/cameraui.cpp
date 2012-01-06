@@ -1504,10 +1504,11 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
     d->controller->downloadPrep();
 
-    DownloadSettings settings = downloadSettings();
-    QString   downloadName;
-    QDateTime dateTime;
-    int       total = 0;
+    QString              downloadName;
+    QDateTime            dateTime;
+    DownloadSettingsList allItems;
+    DownloadSettings     settings = downloadSettings();
+    int                  total    = 0;
 
     // -- Download camera items -------------------------------
     // Since we show camera items in reverse order, downloading need to be done also in reverse order.
@@ -1644,8 +1645,8 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         }
 
         settings.dest = downloadUrl.toLocalFile();
-
-        d->controller->download(settings);
+        allItems.append(settings);
+        
         ++total;
     }
 
@@ -1664,6 +1665,8 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     d->advBox->setEnabled(false);
 
     d->deleteAfter = deleteAfter;
+
+    d->controller->download(allItems);
 }
 
 void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)
