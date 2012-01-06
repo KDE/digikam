@@ -10,4 +10,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 272980 : Crash while searching on a tag.
 004 ==> 290642 : Build failed with gcc-4.7.0 [patch].
 005 ==> 287772 : Build failed against boost-1.48 [patch].
-006 ==> 
+006 ==> 267777 : Versioning not working properly when saving changes in the image editor.
+007 ==> 
