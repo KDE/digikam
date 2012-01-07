@@ -86,7 +86,6 @@ static const char* thumbnails_digikamdb = "thumbnails-digikam.db";
 namespace Digikam
 {
 
->>>>>>> origin/master
 DatabaseParameters::DatabaseParameters()
     : imgPort(-1), tmbPort(-1)
 {
