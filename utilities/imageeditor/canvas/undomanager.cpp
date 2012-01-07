@@ -525,7 +525,7 @@ int UndoManager::availableRedoSteps() const
 QStringList UndoManager::getUndoHistory() const
 {
     QStringList titles;
-    foreach (UndoAction* action, d->undoActions)
+    foreach(UndoAction* action, d->undoActions)
     titles << action->getTitle();
     return titles;
 }
@@ -533,7 +533,7 @@ QStringList UndoManager::getUndoHistory() const
 QStringList UndoManager::getRedoHistory() const
 {
     QStringList titles;
-    foreach (UndoAction* action, d->redoActions)
+    foreach(UndoAction* action, d->redoActions)
     titles.prepend(action->getTitle());
     return titles;
 }

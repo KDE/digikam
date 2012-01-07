@@ -649,7 +649,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* querySig,
     // read cached signature map if possible
     else
     {
-        foreach (const qlonglong& imageid, signatureCache.keys())
+        foreach(const qlonglong& imageid, signatureCache.keys())
         {
             double& score              = scores[imageid];
             Haar::SignatureData& qSig  = *querySig;

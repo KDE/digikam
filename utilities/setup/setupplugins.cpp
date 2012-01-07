@@ -6,8 +6,8 @@
  * Date        : 2004-01-02
  * Description : setup Kipi plugins tab.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2011 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -91,14 +91,19 @@ SetupPlugins::SetupPlugins(QWidget* parent)
 
     mainLayout->addWidget(d->pluginsNumber,             0, 0, 1, 1);
     mainLayout->addWidget(d->pluginsNumberActivated,    0, 1, 1, 1);
+    mainLayout->addWidget(d->checkAllBtn,               0, 3, 1, 1);
+    mainLayout->addWidget(d->clearBtn,                  0, 4, 1, 1);
     mainLayout->addWidget(d->kipiConfig,                1, 0, 1, -1);
-    mainLayout->addWidget(d->checkAllBtn,               2, 3, 1, 1);
-    mainLayout->addWidget(d->clearBtn,                  2, 4, 1, 1);
     mainLayout->setColumnStretch(2, 10);
     mainLayout->setMargin(KDialog::spacingHint());
     mainLayout->setSpacing(KDialog::spacingHint());
 
     panel->setLayout(mainLayout);
+
+#if KIPI_VERSION < 0x010400
+    d->checkAllBtn->setVisible(false);
+    d->clearBtn->setVisible(false);
+#endif
 
     initPlugins();
 
@@ -158,14 +163,19 @@ void SetupPlugins::applyPlugins()
 void SetupPlugins::slotCheckAll()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
+#if KIPI_VERSION >= 0x010400
     d->kipiConfig->slotCheckAll();
+#endif
     QApplication::restoreOverrideCursor();
 }
 
 void SetupPlugins::slotClear()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
+#if KIPI_VERSION >= 0x010400
     d->kipiConfig->slotClear();
+#endif
     QApplication::restoreOverrideCursor();
 }
+
 }  // namespace Digikam

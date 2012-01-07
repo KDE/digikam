@@ -113,7 +113,7 @@ void SharedLoadingTask::execute()
         DImg* cachedImg        = 0;
         QStringList lookupKeys = m_loadingDescription.lookupCacheKeys();
 
-        foreach (const QString& key, lookupKeys)
+        foreach(const QString& key, lookupKeys)
         {
             if ( (cachedImg = cache->retrieveImage(key)) )
             {

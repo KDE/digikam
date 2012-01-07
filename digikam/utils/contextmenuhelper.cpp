@@ -263,7 +263,7 @@ void ContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
     QStringList    mimeTypes;
     KService::List offers;
 
-    foreach(const KUrl & item, d->selectedItems)
+    foreach(const KUrl& item, d->selectedItems)
     {
         const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
 
@@ -279,7 +279,7 @@ void ContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
         const QString firstMimeType = mimeTypes.takeFirst();
         const QString constraintTemplate = "'%1' in ServiceTypes";
         QStringList constraints;
-        foreach(const QString & mimeType, mimeTypes)
+        foreach(const QString& mimeType, mimeTypes)
         {
             constraints << constraintTemplate.arg(mimeType);
         }
@@ -407,14 +407,14 @@ KAction* ContextMenuHelper::kipiRotateAction()
     KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
 
-    foreach(KIPI::PluginLoader::Info * info, pluginList)
+    foreach(KIPI::PluginLoader::Info* info, pluginList)
     {
         KIPI::Plugin* plugin = info->plugin();
 
         if (plugin && info->shouldLoad() && info->library() == "kipiplugin_jpeglossless")
         {
             QList<KAction*> actionList = plugin->actions();
-            foreach(KAction * action, actionList)
+            foreach(KAction* action, actionList)
             {
                 if (action->objectName().toLatin1() == QString::fromLatin1("jpeglossless_rotate"))
                 {
@@ -431,7 +431,7 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
     bool sameCategory = true;
     QVariantList varList;
 
-    foreach(const qlonglong & id, ids)
+    foreach(const qlonglong& id, ids)
     {
         varList = DatabaseAccess().db()->getImagesFields(id, DatabaseFields::Category);
 
@@ -918,7 +918,7 @@ void ContextMenuHelper::addGroupMenu(imageIds& ids)
     }
 
     KMenu* menu = new KMenu(i18n("Group"));
-    foreach(QAction * action, actions)
+    foreach(QAction* action, actions)
     {
         menu->addAction(action);
     }
@@ -927,7 +927,7 @@ void ContextMenuHelper::addGroupMenu(imageIds& ids)
 
 void ContextMenuHelper::addGroupActions(imageIds& ids)
 {
-    foreach(QAction * action, groupMenuActions(ids))
+    foreach(QAction* action, groupMenuActions(ids))
     {
         d->parent->addAction(action);
     }

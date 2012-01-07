@@ -172,7 +172,7 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
     // Hard Refresh
     QSet<QString> dirs;
     QList<qlonglong> ids;
-    foreach (const KUrl& url, urls)
+    foreach(const KUrl& url, urls)
     {
         ImageInfo info(url);
 
@@ -188,7 +188,7 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
         dirs << url.directory();
     }
     ScanController::instance()->hintAtModificationOfItems(ids);
-    foreach (const QString& dir, dirs)
+    foreach(const QString& dir, dirs)
     {
         ScanController::instance()->scheduleCollectionScan(dir);
     }

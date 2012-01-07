@@ -65,7 +65,7 @@ static QList<A*> selectedAlbums(QItemSelectionModel* selModel, AlbumFilterModel*
 {
     QList<QModelIndex> indexes = selModel->selectedIndexes();
     QList<A*> albums;
-    foreach (const QModelIndex& index, indexes)
+    foreach(const QModelIndex& index, indexes)
     {
         albums << static_cast<A*>(filterModel->albumForIndex(index));
     }
@@ -376,7 +376,7 @@ void AbstractAlbumTreeView::slotSearchTextSettingsAboutToChange(bool searched, b
 
         // selection is ignored here because the user may have changed this
         // while searching
-        foreach (const int& expandedId, expansion)
+        foreach(const int& expandedId, expansion)
         {
             d->searchBackup[expandedId].expanded = true;
         }
@@ -686,7 +686,7 @@ void AbstractAlbumTreeView::doLoadState()
     // extract the selection from the config
     const QStringList selection = configGroup.readEntry(entryName(d->configSelectionEntry), QStringList());
     //kDebug() << "selection: " << selection;
-    foreach (const QString& key, selection)
+    foreach(const QString& key, selection)
     {
         bool validId;
         int id = key.toInt(&validId);
@@ -700,7 +700,7 @@ void AbstractAlbumTreeView::doLoadState()
     // extract expansion state from config
     const QStringList expansion = configGroup.readEntry(entryName(d->configExpansionEntry), QStringList());
     //kDebug() << "expansion: " << expansion;
-    foreach (const QString& key, expansion)
+    foreach(const QString& key, expansion)
     {
         bool validId;
         int id = key.toInt(&validId);
@@ -1029,7 +1029,7 @@ void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent* event)
     ContextMenuHelper cmhelper(&popmenu);
 
     addCustomContextMenuActions(cmhelper, album);
-    foreach (ContextMenuElement* element, d->contextMenuElements)
+    foreach(ContextMenuElement* element, d->contextMenuElements)
     {
         element->addActions(this, cmhelper, album);
     }

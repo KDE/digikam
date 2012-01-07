@@ -267,12 +267,12 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
     AddTagsCompletionBoxItem* createItemTopLevel    = d->createItemForNewTag(currentText, 0);
 
     QList<AddTagsCompletionBoxItem*> assignItems;
-    foreach (const QString& tagName, completionEntries)
+    foreach(const QString& tagName, completionEntries)
     {
         QList<int> tagIds = TagsCache::instance()->tagsForName(tagName);
         bool uniqueName   = tagIds.count() == 1;
 
-        foreach (int tagId, tagIds)
+        foreach(int tagId, tagIds)
         {
             AddTagsCompletionBoxItem* item = d->createItemForExistingTag(AlbumManager::instance()->findTAlbum(tagId), uniqueName);
 
@@ -292,7 +292,7 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
         {
             addItem(createItemUnderParent);
             setCurrentItem(createItemUnderParent);
-            foreach (AddTagsCompletionBoxItem* item, assignItems)
+            foreach(AddTagsCompletionBoxItem* item, assignItems)
             {
                 addItem(item);
             }
@@ -302,7 +302,7 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
         {
             addItem(createItemTopLevel);
             setCurrentItem(createItemTopLevel);
-            foreach (AddTagsCompletionBoxItem* item, assignItems)
+            foreach(AddTagsCompletionBoxItem* item, assignItems)
             {
                 addItem(item);
             }
@@ -311,7 +311,7 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
     }
     else
     {
-        foreach (AddTagsCompletionBoxItem* item, assignItems)
+        foreach(AddTagsCompletionBoxItem* item, assignItems)
         {
             addItem(item);
 
@@ -627,7 +627,7 @@ TaggingAction AddTagsCompletionBox::makeDefaultTaggingAction(const QString& text
                 // sort lexically
                 QMap<QString, int> map;
 
-                foreach (int id, tagIds)
+                foreach(int id, tagIds)
                 {
                     map[TagsCache::instance()->tagPath(id, TagsCache::NoLeadingSlash)] = id;
                 }

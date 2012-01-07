@@ -104,7 +104,7 @@ public:
                                          AbstractCheckableAlbumModel* model,
                                          const QString& ext)
     {
-        foreach (Album* album, model->checkedAlbums())
+        foreach(Album* album, model->checkedAlbums())
         {
             if (!album)
             {

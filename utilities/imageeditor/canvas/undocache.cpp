@@ -72,7 +72,7 @@ UndoCache::UndoCache()
 
     // remove any remnants
     QDir dir(cacheDir);
-    foreach (const QFileInfo& info, dir.entryInfoList(QStringList() << (d->cachePrefix + '*')))
+    foreach(const QFileInfo& info, dir.entryInfoList(QStringList() << (d->cachePrefix + '*')))
     {
         QFile(info.filePath()).remove();
     }
@@ -86,7 +86,7 @@ UndoCache::~UndoCache()
 
 void UndoCache::clear()
 {
-    foreach (int level, d->cachedLevels)
+    foreach(int level, d->cachedLevels)
     {
         QFile(d->cacheFile(level)).remove();
     }
@@ -95,7 +95,7 @@ void UndoCache::clear()
 
 void UndoCache::clearFrom(int fromLevel)
 {
-    foreach (int level, d->cachedLevels)
+    foreach(int level, d->cachedLevels)
     {
         if (level >= fromLevel)
         {

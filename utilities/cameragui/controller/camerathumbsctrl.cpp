@@ -6,7 +6,7 @@
  * Date        : 2011-08-03
  * Description : digital camera thumbnails controller
  *
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -86,13 +86,14 @@ CameraThumbsCtrl::~CameraThumbsCtrl()
     delete d;
 }
 
-CachedItem CameraThumbsCtrl::getThumbInfo(const CamItemInfo& info) const
+bool CameraThumbsCtrl::getThumbInfo(const CamItemInfo& info, CachedItem& item) const
 {
     // We look if items are not in cache.
 
     if (hasItemFromCache(info.url()))
     {
-        return *retrieveItemFromCache(info.url());
+        item = *retrieveItemFromCache(info.url());
+        return true;
         // kDebug() << "Found in cache: " << info.url();
     }
 
@@ -105,7 +106,15 @@ CachedItem CameraThumbsCtrl::getThumbInfo(const CamItemInfo& info) const
         d->controller->getThumbsInfo(CamItemInfoList() << info);
     }
 
-    return CachedItem(info, d->controller->mimeTypeThumbnail(info.name));
+    item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name));
+    return false;
+}
+
+void CameraThumbsCtrl::updateThumbInfoFromCache(const CamItemInfo& info)
+{
+    removeItemFromCache(info.url());
+    CachedItem item;
+    getThumbInfo(info, item);
 }
 
 void CameraThumbsCtrl::slotThumbInfo(const QString&, const QString& file, const CamItemInfo& info, const QImage& thumb)
@@ -153,7 +162,7 @@ void CameraThumbsCtrl::startKdePreviewJob()
 
     d->kdeJobHash.clear();
     KUrl::List list;
-    foreach (const CamItemInfo& info, d->kdeTodo)
+    foreach(const CamItemInfo& info, d->kdeTodo)
     {
         KUrl url           = info.url();
         list << url;

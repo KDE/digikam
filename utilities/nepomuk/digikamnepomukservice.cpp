@@ -442,7 +442,7 @@ void NepomukService::fullSyncDigikamToNepomuk()
 {
     // List album root albums of all available collections recursively
     QList<CollectionLocation> collections = CollectionManager::instance()->allAvailableLocations();
-    foreach (const CollectionLocation& location, collections)
+    foreach(const CollectionLocation& location, collections)
     {
         DatabaseUrl url = DatabaseUrl::fromAlbumAndName(QString(), "/", location.albumRootPath(), location.id());
         KIO::Job* job = ImageLister::startListJob(url);
@@ -525,7 +525,7 @@ static int digikamToNepomukRating(int digikamRating)
 void NepomukService::syncToNepomuk(const QList<qlonglong>& imageIds, SyncToNepomukSettings syncSettings)
 {
     QList<ImageInfo> infos;
-    foreach (const qlonglong& imageid, imageIds)
+    foreach(const qlonglong& imageid, imageIds)
     {
         ImageInfo info(imageid);
 
@@ -539,7 +539,7 @@ void NepomukService::syncToNepomuk(const QList<qlonglong>& imageIds, SyncToNepom
 
 void NepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukSettings syncSettings)
 {
-    foreach (const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, infos)
     {
         ChangingNepomuk changing(d);
 
@@ -620,7 +620,7 @@ static Nepomuk::Tag nepomukForDigikamTag(int tagId)
 
 void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const QList<int>& tagIds, bool addOrRemove)
 {
-    foreach (int tagId, tagIds)
+    foreach(int tagId, tagIds)
     {
         ChangingNepomuk changing(d);
         Nepomuk::Tag tag = nepomukForDigikamTag(tagId);
@@ -628,7 +628,7 @@ void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const Q
 
         if (tag.isValid())
         {
-            foreach (const qlonglong& imageId, imageIds)
+            foreach(const qlonglong& imageId, imageIds)
             {
                 ImageInfo info(imageId);
 
@@ -656,13 +656,13 @@ void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const Q
 
 void NepomukService::pushTagsToNepomuk(const QList<ImageInfo>& imageInfos)
 {
-    foreach (const ImageInfo& info, imageInfos)
+    foreach(const ImageInfo& info, imageInfos)
     {
         ChangingNepomuk changing(d);
 
         if (!info.isNull())
         {
-            foreach (int tagId, info.tagIds())
+            foreach(int tagId, info.tagIds())
             {
                 Nepomuk::Tag tag = nepomukForDigikamTag(tagId);
 
@@ -878,7 +878,7 @@ void NepomukService::syncNepomukToDigikam()
 TODO: Integrate to ImageScanner
 void NepomukService::syncAddedImagesToDigikam(const QList<qlonglong> &ids)
 {
-    foreach (qlonglong id, ids)
+    foreach(qlonglong id, ids)
     {
         ImageInfo info(id);
         if (info.isNull())
@@ -900,7 +900,7 @@ void NepomukService::syncAddedImagesToDigikam(const QList<qlonglong> &ids)
         }
 
         QList<Nepomuk::Tag> tags = res.tags();
-        foreach (const Nepomuk::Tag& tag, tags)
+        foreach(const Nepomuk::Tag& tag, tags)
         {
             int id = bestDigikamTagForTagName(info, tag.genericLabel());
             if (id)
@@ -1062,7 +1062,7 @@ void NepomukService::removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag)
         return;
     }
 
-    foreach (int candidate, candidates)
+    foreach(int candidate, candidates)
     {
         if (tags.contains(candidate))
         {
@@ -1094,7 +1094,7 @@ int NepomukService::bestDigikamTagForTagName(const ImageInfo& info, const QStrin
         int currentCandidate = 0;
         int currentMinimumScore = 0;
         QList<int> assignedTags = info.tagIds();
-        foreach (int tagId, candidates)
+        foreach(int tagId, candidates)
         {
             // already assigned one of the candidates?
             if (assignedTags.contains(tagId))
@@ -1189,7 +1189,7 @@ DatabaseParameters NepomukService::databaseParameters() const
     {
         QStringList serviceNames = reply.value();
         QLatin1String digikamService("org.kde.digikam-");
-        foreach (const QString& service, serviceNames)
+        foreach(const QString& service, serviceNames)
         {
             if (service.startsWith(digikamService))
             {

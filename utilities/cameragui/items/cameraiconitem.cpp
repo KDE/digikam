@@ -7,7 +7,7 @@
  * Description : camera icon view item
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -213,12 +213,14 @@ void CameraIconItem::paintItem(QPainter* p)
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
     CachedItem item      = view->getThumbInfo(itemInfo());
 
-    CamItemInfo newinf   = item.first;
+    CamItemInfo newinf      = item.first;
     // NOTE: B.K.O #260669: do not overwrite download information have been set before.
-    newinf.downloaded    = itemInfo().downloaded;
-    newinf.downloadName  = itemInfo().downloadName;
+    newinf.downloaded       = itemInfo().downloaded;
+    newinf.downloadName     = itemInfo().downloadName;
     // NOTE: B.K.O #246336: do not overwrite too the file mtime set previously at camera connection using cameragui settings.
-    newinf.mtime         = itemInfo().mtime;
+    newinf.mtime            = itemInfo().mtime;
+    // NOTE: do not overwrite lock info which can be toggle by user from GUI.
+    newinf.writePermissions = itemInfo().writePermissions;
     setItemInfo(newinf);
 
     QFont fn(view->font());

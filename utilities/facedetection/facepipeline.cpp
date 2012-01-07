@@ -64,7 +64,7 @@ FacePipelineDatabaseFaceList::FacePipelineDatabaseFaceList(const QList<DatabaseF
 
 FacePipelineDatabaseFaceList& FacePipelineDatabaseFaceList::operator=(const QList<DatabaseFace>& faces)
 {
-    foreach (const DatabaseFace& face, faces)
+    foreach(const DatabaseFace& face, faces)
     {
         operator<<(face);
     }
@@ -153,7 +153,7 @@ ParallelPipes::ParallelPipes()
 
 ParallelPipes::~ParallelPipes()
 {
-    foreach (WorkerObject* object, m_workers)
+    foreach(WorkerObject* object, m_workers)
     {
         delete object;
     }
@@ -161,7 +161,7 @@ ParallelPipes::~ParallelPipes()
 
 void ParallelPipes::schedule()
 {
-    foreach (WorkerObject* object, m_workers)
+    foreach(WorkerObject* object, m_workers)
     {
         object->schedule();
     }
@@ -169,7 +169,7 @@ void ParallelPipes::schedule()
 
 void ParallelPipes::deactivate(WorkerObject::DeactivatingMode mode)
 {
-    foreach (WorkerObject* object, m_workers)
+    foreach(WorkerObject* object, m_workers)
     {
         object->deactivate(mode);
     }
@@ -177,7 +177,7 @@ void ParallelPipes::deactivate(WorkerObject::DeactivatingMode mode)
 
 void ParallelPipes::setPriority(QThread::Priority priority)
 {
-    foreach (WorkerObject* object, m_workers)
+    foreach(WorkerObject* object, m_workers)
     {
         object->setPriority(priority);
     }
@@ -323,7 +323,7 @@ void ScanStateFilter::run()
         {
             QList<FacePipelineExtendedPackage::Ptr> send;
             QList<ImageInfo> skip;
-            foreach (const ImageInfo& info, todo)
+            foreach(const ImageInfo& info, todo)
             {
                 FacePipelineExtendedPackage::Ptr package = filter(info);
 
@@ -668,13 +668,13 @@ void Benchmarker::process(FacePipelineExtendedPackage::Ptr package)
         faces += trueFaces;
         totalPixels += package->detectionImage.originalSize().width() * package->detectionImage.originalSize().height();
 
-        foreach (const DatabaseFace& trueFace, groundTruth)
+        foreach(const DatabaseFace& trueFace, groundTruth)
         {
             ++faces;
             QRect rect = trueFace.region().toRect();
             facePixels += rect.width() * rect.height();
 
-            foreach (const DatabaseFace& testedFace, testedFaces)
+            foreach(const DatabaseFace& testedFace, testedFaces)
             {
                 if (trueFace.region().intersects(testedFace.region(), minOverlap))
                 {
@@ -684,9 +684,9 @@ void Benchmarker::process(FacePipelineExtendedPackage::Ptr package)
                 }
             }
         }
-        foreach (const DatabaseFace& testedFace, testedFaces)
+        foreach(const DatabaseFace& testedFace, testedFaces)
         {
-            foreach (const DatabaseFace& trueFace, groundTruth)
+            foreach(const DatabaseFace& trueFace, groundTruth)
             {
                 if (trueFace.region().intersects(testedFace.region(), minOverlap))
                 {
@@ -802,7 +802,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
     //kDebug() << "Trainer: processing one package";
     // Get a list of faces with type FaceForTraining (probably type is ConfirmedFace)
     QList<DatabaseFace> toTrain;
-    foreach (const FacePipelineDatabaseFace& face, package->databaseFaces)
+    foreach(const FacePipelineDatabaseFace& face, package->databaseFaces)
     {
         if (face.roles & FacePipelineDatabaseFace::ForTraining)
         {
@@ -894,7 +894,7 @@ void FacePipeline::FacePipelinePriv::processBatch(const QList<ImageInfo>& infos)
     }
     else
     {
-        foreach (const ImageInfo& info, infos)
+        foreach(const ImageInfo& info, infos)
         {
             send(buildPackage(info));
         }
@@ -905,7 +905,7 @@ void FacePipeline::FacePipelinePriv::processBatch(const QList<ImageInfo>& infos)
 void FacePipeline::FacePipelinePriv::sendFromFilter(const QList<FacePipelineExtendedPackage::Ptr>& packages)
 {
     infosForFiltering -= packages.size();
-    foreach (const FacePipelineExtendedPackage::Ptr& package, packages)
+    foreach(const FacePipelineExtendedPackage::Ptr& package, packages)
     {
         send(package);
     }
@@ -1034,7 +1034,7 @@ void FacePipeline::FacePipelinePriv::start()
 
     WorkerObject*  workerObject;
     ParallelPipes* pipes;
-    foreach (QObject* element, pipeline)
+    foreach(QObject* element, pipeline)
     {
         if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
         {
@@ -1066,7 +1066,7 @@ void FacePipeline::FacePipelinePriv::stop()
     ParallelPipes* pipes       = 0;
     DynamicThread* thread      = 0;
 
-    foreach (QObject* element, pipeline)
+    foreach(QObject* element, pipeline)
     {
         if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
         {
@@ -1089,7 +1089,7 @@ void FacePipeline::FacePipelinePriv::applyPriority()
 {
     WorkerObject*  workerObject;
     ParallelPipes* pipes;
-    foreach (QObject* element, pipeline)
+    foreach(QObject* element, pipeline)
     {
         if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
         {

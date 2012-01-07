@@ -332,7 +332,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildImagesList()
 
     QList<HistoryGraph::Vertex> verticesOrdered = graph().verticesDepthFirstSorted(path.first(),
                                                                                    sortBy(oldestInfoFirst));
-    foreach (const HistoryGraph::Vertex& v, verticesOrdered)
+    foreach(const HistoryGraph::Vertex& v, verticesOrdered)
     {
         rootItem->addItem(createVertexItem(v));
     }
@@ -350,7 +350,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildImagesTree()
     VertexItem* item         = 0;
     VertexItem* previousItem = 0;
 
-    foreach (const HistoryGraph::Vertex& v, verticesOrdered)
+    foreach(const HistoryGraph::Vertex& v, verticesOrdered)
     {
         int currentLevel = distances.value(v);
         if (currentLevel == -1)
@@ -422,7 +422,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildCombinedTree(const
 
         // any extra sources?
         QList<HistoryGraph::Vertex> sources = graph().adjacentVertices(item->vertex, HistoryGraph::EdgesToRoot);
-        foreach (const HistoryGraph::Vertex& source, sources)
+        foreach(const HistoryGraph::Vertex& source, sources)
         {
             if (source != previous)
             {
@@ -434,7 +434,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildCombinedTree(const
         // Any other egdes off the main path?
         QList<HistoryGraph::Vertex> branches = graph().adjacentVertices(v, HistoryGraph::EdgesToLeaf);
         QList<HistoryGraph::Vertex> subgraph;
-        foreach (const HistoryGraph::Vertex& branch, branches)
+        foreach(const HistoryGraph::Vertex& branch, branches)
         {
             if (branch != next)
             {
@@ -446,7 +446,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildCombinedTree(const
 
         // Add filter actions above item
         HistoryEdgeProperties props = graph().properties(v, previous);
-        foreach (const FilterAction& action, props.actions)
+        foreach(const FilterAction& action, props.actions)
         {
             rootItem->addItem(createFilterActionItem(action));
         }
@@ -460,7 +460,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildCombinedTree(const
             break;
     }
 
-    foreach (const HistoryGraph::Vertex& v, added)
+    foreach(const HistoryGraph::Vertex& v, added)
     {
         leavesFromRef.removeOne(v);
     }
@@ -470,7 +470,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildCombinedTree(const
         addCombinedItemCategory(rootItem, leavesFromRef, i18nc("@title", "Derived Images"), ref, added);
     }
 
-    foreach (const HistoryGraph::Vertex& v, added)
+    foreach(const HistoryGraph::Vertex& v, added)
     {
         currentVersions.removeOne(v);
     }
@@ -498,7 +498,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
     bool isFirst     = true;
     VertexItem* item = 0;
 
-    foreach (const HistoryGraph::Vertex& v, vertices)
+    foreach(const HistoryGraph::Vertex& v, vertices)
     {
         if (isFirst)
         {
@@ -516,7 +516,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
         for (int i=1; i<shortestPath.size(); ++i)
         {
             HistoryEdgeProperties props = graph().properties(shortestPath.at(i), shortestPath.at(i-1));
-            foreach (const FilterAction& action, props.actions)
+            foreach(const FilterAction& action, props.actions)
             {
                 parentItem->addItem(createFilterActionItem(action));
             }
@@ -528,7 +528,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
         // Provide access to intermediates
         shortestPath.removeOne(showActionsFrom);
         shortestPath.removeOne(v);
-        foreach (const HistoryGraph::Vertex& addedVertex, added)
+        foreach(const HistoryGraph::Vertex& addedVertex, added)
         {
             shortestPath.removeOne(addedVertex);
         }
@@ -544,7 +544,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::
     HeaderItem* header = new HeaderItem(title);
     parent->addItem(header);
     HistoryTreeItem* addToItem = flat ? static_cast<HistoryTreeItem*>(parent) : static_cast<HistoryTreeItem*>(header);
-    foreach (const HistoryGraph::Vertex& v, vertices)
+    foreach(const HistoryGraph::Vertex& v, vertices)
     {
         addToItem->addItem(createVertexItem(v));
     }
@@ -673,7 +673,7 @@ QModelIndex ImageHistoryGraphModel::indexForInfo(const ImageInfo& info) const
         return QModelIndex();
     }
     // try with primary info
-    foreach (VertexItem* item, d->vertexItems)
+    foreach(VertexItem* item, d->vertexItems)
     {
         if (ImageModel::retrieveImageInfo(item->index) == info)
         {
@@ -681,7 +681,7 @@ QModelIndex ImageHistoryGraphModel::indexForInfo(const ImageInfo& info) const
         }
     }
     // try all associated infos
-    foreach (VertexItem* item, d->vertexItems)
+    foreach(VertexItem* item, d->vertexItems)
     {
         if (d->graph().properties(item->vertex).infos.contains(info))
         {

@@ -230,7 +230,7 @@ void ImageInfoCache::invalidate()
 void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
 {
     ImageInfoWriteLocker lock;
-    foreach (const qlonglong& imageId, changeset.ids())
+    foreach(const qlonglong& imageId, changeset.ids())
     {
         QHash<qlonglong, ImageInfoData*>::iterator it = m_infos.find(imageId);
 
@@ -314,7 +314,7 @@ void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset& changeset)
     }
 
     ImageInfoWriteLocker lock;
-    foreach (const qlonglong& imageId, changeset.ids())
+    foreach(const qlonglong& imageId, changeset.ids())
     {
         QHash<qlonglong, ImageInfoData*>::iterator it = m_infos.find(imageId);
 

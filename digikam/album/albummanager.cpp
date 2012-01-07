@@ -847,7 +847,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     // -- UUID Checking ---------------------------------------------------------
 
     QList<CollectionLocation> disappearedLocations = CollectionManager::instance()->checkHardWiredLocations();
-    foreach(const CollectionLocation & loc, disappearedLocations)
+    foreach(const CollectionLocation& loc, disappearedLocations)
     {
         QString locDescription;
         QStringList candidateIds, candidateDescriptions;
@@ -1092,7 +1092,7 @@ void AlbumManager::startScan()
 
     // create albums for album roots
     QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
-    foreach(const CollectionLocation & location, locations)
+    foreach(const CollectionLocation& location, locations)
     {
         addAlbumRoot(location);
     }
@@ -1235,7 +1235,7 @@ void AlbumManager::scanPAlbums()
     QList<AlbumInfo> newAlbums;
 
     // go through all the Albums and see which ones are already present
-    foreach(const AlbumInfo & info, currentAlbums)
+    foreach(const AlbumInfo& info, currentAlbums)
     {
         // check that location of album is available
         if (CollectionManager::instance()->locationForAlbumRootId(info.albumRootId).isAvailable())
@@ -1260,7 +1260,7 @@ void AlbumManager::scanPAlbums()
     // removePAlbum takes care of that.
     // So we only feed it the albums from oldAlbums topmost in hierarchy.
     QSet<PAlbum*> topMostOldAlbums;
-    foreach(PAlbum * album, oldAlbums)
+    foreach(PAlbum* album, oldAlbums)
     {
         if (!album->parent() || !oldAlbums.contains(album->parent()->id()))
         {
@@ -1268,7 +1268,7 @@ void AlbumManager::scanPAlbums()
         }
     }
 
-    foreach(PAlbum * album, topMostOldAlbums)
+    foreach(PAlbum* album, topMostOldAlbums)
     {
         // recursively removes all children and the album
         removePAlbum(album);
@@ -1278,7 +1278,7 @@ void AlbumManager::scanPAlbums()
     qSort(newAlbums);
 
     // create all new albums
-    foreach(const AlbumInfo & info, newAlbums)
+    foreach(const AlbumInfo& info, newAlbums)
     {
         if (info.relativePath.isEmpty())
         {
@@ -1368,7 +1368,7 @@ void AlbumManager::updateChangedPAlbums()
     // Find the AlbumInfo for each id in changedPAlbums
     foreach(int id, d->changedPAlbums)
     {
-        foreach(const AlbumInfo & info, currentAlbums)
+        foreach(const AlbumInfo& info, currentAlbums)
         {
             if (info.id == id)
             {
@@ -1679,7 +1679,7 @@ void AlbumManager::scanSAlbums()
     QList<SearchInfo> newSearches;
 
     // go through all the Albums and see which ones are already present
-    foreach(const SearchInfo & info, currentSearches)
+    foreach(const SearchInfo& info, currentSearches)
     {
         if (oldSearches.contains(info.id))
         {
@@ -1711,7 +1711,7 @@ void AlbumManager::scanSAlbums()
     }
 
     // remove old albums that have been deleted
-    foreach(SAlbum * album, oldSearches)
+    foreach(SAlbum* album, oldSearches)
     {
         emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
@@ -1721,7 +1721,7 @@ void AlbumManager::scanSAlbums()
     }
 
     // add new albums
-    foreach(const SearchInfo & info, newSearches)
+    foreach(const SearchInfo& info, newSearches)
     {
         SAlbum* album = new SAlbum(info.name, info.id);
         album->setSearch(info.type, info.query);
@@ -2980,7 +2980,7 @@ void AlbumManager::slotPeopleJobData(KIO::Job*, const QByteArray& data)
     d->fAlbumsCount.clear();
     typedef QMap<int, int> IntIntMap;
 
-    foreach(const IntIntMap & counts, facesStatMap)
+    foreach(const IntIntMap& counts, facesStatMap)
     {
         QMap<int, int>::const_iterator it;
 

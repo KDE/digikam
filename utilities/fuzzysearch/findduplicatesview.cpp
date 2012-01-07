@@ -442,11 +442,11 @@ void FindDuplicatesView::slotFindDuplicates()
 
     QStringList albumsIdList;
     QStringList tagsIdList;
-    foreach(const Album * album, d->albumModel->checkedAlbums())
+    foreach(const Album* album, d->albumModel->checkedAlbums())
     {
         albumsIdList << QString::number(album->id());
     }
-    foreach(const Album * album, d->tagModel->checkedAlbums())
+    foreach(const Album* album, d->tagModel->checkedAlbums())
     {
         tagsIdList << QString::number(album->id());
     }

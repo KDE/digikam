@@ -268,7 +268,7 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
                                 && imageAlbumModel()->currentAlbum()
                                 && tagId != imageAlbumModel()->currentAlbum()->id();
 
-    foreach (const QModelIndex& index, indexes)
+    foreach(const QModelIndex& index, indexes)
     {
         infos << ImageModel::retrieveImageInfo(index);
         faces << d->faceDelegate->face(index);
@@ -292,7 +292,7 @@ void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
     QList<DatabaseFace> faces;
     QList<QModelIndex> sourceIndexes;
 
-    foreach (const QModelIndex& index, indexes)
+    foreach(const QModelIndex& index, indexes)
     {
         infos << ImageModel::retrieveImageInfo(index);
         faces << d->faceDelegate->face(index);
@@ -328,7 +328,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 {
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
     QList<qlonglong> selectedImageIDs;
-    foreach (const ImageInfo& info, selectedInfos)
+    foreach(const ImageInfo& info, selectedInfos)
     {
         selectedImageIDs << info.id();
     }
@@ -438,7 +438,7 @@ void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMe
     Q_UNUSED(index);
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
     QList<qlonglong> selectedImageIDs;
-    foreach (const ImageInfo& info, selectedInfos)
+    foreach(const ImageInfo& info, selectedInfos)
     {
         selectedImageIDs << info.id();
     }

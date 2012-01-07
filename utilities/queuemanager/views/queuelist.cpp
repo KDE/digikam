@@ -1043,7 +1043,7 @@ void QueueListView::slotCollectionImageChange(const CollectionImageChangeset& ch
         case CollectionImageChangeset::Removed:
         case CollectionImageChangeset::RemovedAll:
         {
-            foreach (const qlonglong& id, changeset.ids())
+            foreach(const qlonglong& id, changeset.ids())
             {
                 removeItemById(id);
             }

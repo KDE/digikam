@@ -110,6 +110,11 @@ void ImagePropertiesSideBarCamGui::applySettings()
     /// @todo Are load/saveState called by the creator?
 }
 
+KUrl ImagePropertiesSideBarCamGui::url() const
+{
+    return d->itemInfo.url();
+}
+
 void ImagePropertiesSideBarCamGui::itemChanged(const CamItemInfo& itemInfo, const DMetadata& meta)
 {
     if (itemInfo.isNull())

@@ -81,7 +81,7 @@ public:
     void parseFiles(const QString& parseString, ParseSettings& settings);
 
     void setParserType(ParserType type);
-    Parser* getParser();
+    Parser* getParser() const;
 
     void setSortAction(SortAction action);
     SortAction sortAction() const;
@@ -98,7 +98,7 @@ public:
     int indexOfFileGroup(const QString& filename);
     QString newName(const QString& filename);
 
-    QStringList            fileList();
+    QStringList            fileList() const;
     QMap<QString, QString> newFileList() const;
 
 Q_SIGNALS:
@@ -112,12 +112,12 @@ private:
 
     void addFile(const QString& filename) const;
     void addFile(const QString& filename, const QDateTime& datetime) const;
-    bool initialize();
+    bool initialize() const;
     void resetState();
 
-    QString fileGroupKey(const QString& filename);
+    QString fileGroupKey(const QString& filename) const;
 
-    void clearMappings();
+    void clearMappings() const;
     void clearAll();
 
 private:

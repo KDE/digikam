@@ -110,7 +110,7 @@ QList<KFaceIface::Face> FaceIface::unconfirmedFacesFromTags(qlonglong imageId) c
 QList<KFaceIface::Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFaces) const
 {
     QList<KFaceIface::Face> faceList;
-    foreach (const DatabaseFace& databaseFace, databaseFaces)
+    foreach(const DatabaseFace& databaseFace, databaseFaces)
     {
         QRect rect = databaseFace.region().toRect();
 
@@ -137,7 +137,7 @@ QList<DatabaseFace> FaceIface::toDatabaseFaces(const DImg& image, qlonglong imag
                                     const QList<KFaceIface::Face>& faceList) const
 {
     QList<DatabaseFace> faces;
-    foreach (const KFaceIface::Face& face, faceList)
+    foreach(const KFaceIface::Face& face, faceList)
     {
         // We'll get the unknownPersonTagId if face.name() is null
         int tagId          = FaceTags::tagForFaceName(face.name());
@@ -185,7 +185,7 @@ void FaceIface::fillImageInFace(const DImg& image, KFaceIface::Face& face, const
 void FaceIface::fillImageInFaces(ThumbnailImageCatcher* catcher, const QString& filePath,
                                  QList<KFaceIface::Face>& faces, const QSize& scaleSize) const
 {
-    foreach (const KFaceIface::Face& face, faces)
+    foreach(const KFaceIface::Face& face, faces)
     {
         QRect rect = face.toRect();
 
@@ -226,14 +226,14 @@ KFaceIface::Image FaceIface::toImage(const DImg& image)
 void FaceIface::storeThumbnails(ThumbnailLoadThread* thread, const QString& filePath,
                                 const QList<DatabaseFace>& databaseFaces, const DImg& image)
 {
-    foreach (const DatabaseFace& face, databaseFaces)
+    foreach(const DatabaseFace& face, databaseFaces)
     {
         QList<QRect> rects;
         rects << face.region().toRect();
         const int margin = faceRectDisplayMargin();
         rects << face.region().toRect().adjusted(-margin, -margin, margin, margin);
 
-        foreach (const QRect& rect, rects)
+        foreach(const QRect& rect, rects)
         {
             QRect mapped = TagRegion::mapFromOriginalSize(image, rect);
             QImage detail = image.copyQImage(mapped);
@@ -264,7 +264,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
         DatabaseFace& newFace = newFaces[i];
 
         QList<DatabaseFace> overlappingEntries;
-        foreach (const DatabaseFace& oldFace, currentFaces)
+        foreach(const DatabaseFace& oldFace, currentFaces)
         {
             double minOverlap = oldFace.isConfirmedName() ? 0.25 : 0.5;
 

@@ -155,7 +155,7 @@ bool IccSettings::monitorProfileFromSystem()
     {
         QMutexLocker lock(&d->mutex);
 
-        foreach(const IccProfile & profile, d->screenProfiles)
+        foreach(const IccProfile& profile, d->screenProfiles)
         {
             if (!profile.isNull())
             {
@@ -167,7 +167,7 @@ bool IccSettings::monitorProfileFromSystem()
     // Second, check all toplevel widgets
     QList<QWidget*> topLevels = qApp->topLevelWidgets();
 
-    foreach(QWidget * widget, topLevels)
+    foreach(QWidget* widget, topLevels)
     {
         if (!d->profileFromWindowSystem(widget).isNull())
         {
@@ -385,7 +385,7 @@ QList<IccProfile> IccSettings::IccSettingsPriv::scanDirectories(const QStringLis
     filters << "*.icc" << "*.icm";
     kDebug() << dirs;
 
-    foreach(const QString & dirPath, dirs)
+    foreach(const QString& dirPath, dirs)
     {
         QDir dir(dirPath);
 
@@ -407,7 +407,7 @@ void IccSettings::IccSettingsPriv::scanDirectory(const QString& path, const QStr
     infos << dir.entryInfoList(filter, QDir::Files | QDir::Readable);
     infos << dir.entryInfoList(QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot);
 
-    foreach(const QFileInfo & info, infos)
+    foreach(const QFileInfo& info, infos)
     {
         if (info.isFile())
         {

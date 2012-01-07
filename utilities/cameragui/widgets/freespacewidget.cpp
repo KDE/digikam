@@ -196,7 +196,7 @@ void FreeSpaceWidget::addInformation(unsigned long kBSize,
     d->kBUsed      = 0;
     d->kBAvail     = 0;
     d->isValid     = false;
-    foreach (const MountPointInfo& info, d->infos)
+    foreach(const MountPointInfo& info, d->infos)
     {
         if (info.isValid)
         {
@@ -255,7 +255,7 @@ unsigned long FreeSpaceWidget::kBAvail(const QString& path) const
     int mountPointMatch = 0;
     MountPointInfo selectedInfo;
 
-    foreach (const MountPointInfo& info, d->infos)
+    foreach(const MountPointInfo& info, d->infos)
     {
         if (info.isValid && !info.mountPoint.isEmpty() && path.startsWith(info.mountPoint))
         {
@@ -383,7 +383,7 @@ void FreeSpaceWidget::leaveEvent(QEvent* e)
 #if KDE_IS_VERSION(4,1,68)
 void FreeSpaceWidget::slotTimeout()
 {
-    foreach (const QString& path, d->paths)
+    foreach(const QString& path, d->paths)
     {
         KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(path);
 
@@ -402,7 +402,7 @@ void FreeSpaceWidget::slotTimeout()
 {
     KMountPoint::List list = KMountPoint::currentMountPoints();
 
-    foreach (const QString& path, d->paths)
+    foreach(const QString& path, d->paths)
     {
         KMountPoint::Ptr mp = list.findByPath(path);
 

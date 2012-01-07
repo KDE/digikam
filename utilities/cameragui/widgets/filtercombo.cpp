@@ -178,7 +178,7 @@ void FilterComboBox::fillCombo()
         removeItem(0);
     }
 
-    foreach (Filter* f, d->filters)
+    foreach(Filter* f, d->filters)
     {
         addItem(f->name);
     }
@@ -219,7 +219,7 @@ bool FilterComboBox::match(const QStringList& wildcards, const QString& name)
 {
     bool match = false;
 
-    foreach (const QString& wildcard, wildcards)
+    foreach(const QString& wildcard, wildcards)
     {
         match = regexp(wildcard).exactMatch(name);
         //kDebug() << "**" << wildcard << name << match;
@@ -238,10 +238,10 @@ const QStringList& FilterComboBox::mimeWildcards(const QString& mime)
     {
         QStringList& wc  = d->mimeHash[mime];
         QStringList list = mime.split(';');
-        foreach (const QString& m, list)
+        foreach(const QString& m, list)
         {
             KMimeType::Ptr mime = KMimeType::mimeType(m);
-            foreach (const QString& pattern, mime->patterns())
+            foreach(const QString& pattern, mime->patterns())
             {
                 wc.append(pattern);
             }

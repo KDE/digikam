@@ -15,11 +15,11 @@ OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"
 
 # digiKam version
 SET(DIGIKAM_MAJOR_VERSION "2")
-SET(DIGIKAM_MINOR_VERSION "5")
+SET(DIGIKAM_MINOR_VERSION "6")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2012-01-01")
+SET(DIGIKAM_RELEASE_DATE "2012-02-05")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -484,13 +484,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                    "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake"
                    @ONLY)
 
-    ADD_CUSTOM_COMMAND(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/gitversion.h"
-                       DEPENDS ${GIT_MARKER}
-                       COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake")
-
     # Add a custom target to drive the custom command.
-    ADD_CUSTOM_TARGET(digikam-gitversion
-                      ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/gitversion.h")
+    ADD_CUSTOM_TARGET(digikam-gitversion ALL COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake")
 
     # ==================================================================================================
     # get the gcc version

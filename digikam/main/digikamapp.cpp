@@ -735,7 +735,7 @@ void DigikamApp::setupActions()
     connect(browseActionsMapper, SIGNAL(mapped(QWidget*)),
             d->view, SLOT(slotLeftSideBarActivate(QWidget*)));
 
-    foreach (SidebarWidget* leftWidget, d->view->leftSidebarWidgets())
+    foreach(SidebarWidget* leftWidget, d->view->leftSidebarWidgets())
     {
         QString actionName = "browse_" +
                              leftWidget->objectName().remove(' ').remove("Sidebar").remove("FolderView").remove("View").toLower();
@@ -1628,7 +1628,7 @@ void DigikamApp::DigikamAppPriv::updateProgressBar()
     else
     {
         bool canCancelOne = false;
-        foreach (const ProgressEntry& entry, progressEntries)
+        foreach(const ProgressEntry& entry, progressEntries)
         {
             if (entry.canCancel)
             {
@@ -1662,7 +1662,7 @@ void DigikamApp::DigikamAppPriv::updateProgressValue()
     }
 
     float progress = 0;
-    foreach (const ProgressEntry& entry, progressEntries)
+    foreach(const ProgressEntry& entry, progressEntries)
     {
         progress += entry.progress;
     }
@@ -2742,7 +2742,7 @@ void DigikamApp::slotKipiPluginPlug()
     d->kipiMetadataActions.clear();
 
     // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
-    foreach (QAction* action, d->slideShowAction->menu()->actions())
+    foreach(QAction* action, d->slideShowAction->menu()->actions())
     {
         if (action->objectName() == QString("advancedslideshow"))
         {
@@ -2787,7 +2787,7 @@ void DigikamApp::slotKipiPluginPlug()
         if (allPluginActions.count() > 3)
         {
             KActionCategory* category = new KActionCategory(plugin->objectName(), d->kipipluginsActionCollection);
-            foreach (QAction* action, allPluginActions)
+            foreach(QAction* action, allPluginActions)
             {
                 QString actionName(action->objectName());
 
@@ -2799,7 +2799,7 @@ void DigikamApp::slotKipiPluginPlug()
         }
         else
         {
-            foreach (QAction* action, allPluginActions)
+            foreach(QAction* action, allPluginActions)
             {
                 QString actionName(action->objectName());
 
@@ -2813,7 +2813,7 @@ void DigikamApp::slotKipiPluginPlug()
         // Plugin category identification using KAction method based.
 
         QList<KAction*> actions = plugin->actions();
-        foreach (KAction* action, actions)
+        foreach(KAction* action, actions)
         {
             QString actionName(action->objectName());
 
@@ -3221,16 +3221,16 @@ void DigikamApp::updateCameraMenu()
 {
     d->cameraMenu->menu()->clear();
 
-    foreach (QAction* action, d->solidCameraActionGroup->actions())
+    foreach(QAction* action, d->solidCameraActionGroup->actions())
     {
         d->cameraMenu->addAction(action);
     }
     d->cameraMenu->addSeparator();
 
-    foreach (QAction* action, d->manualCameraActionGroup->actions())
+    foreach(QAction* action, d->manualCameraActionGroup->actions())
     {
         // remove duplicate entries, prefer manually added cameras
-        foreach (QAction* actionSolid, d->solidCameraActionGroup->actions())
+        foreach(QAction* actionSolid, d->solidCameraActionGroup->actions())
         {
             if (CameraNameHelper::sameDevices(actionSolid->iconText(), action->iconText()))
             {
@@ -3248,15 +3248,15 @@ void DigikamApp::updateCameraMenu()
 void DigikamApp::updateQuickImportAction()
 {
     d->quickImportMenu->menu()->clear();
-    foreach (QAction* action, d->solidCameraActionGroup->actions())
+    foreach(QAction* action, d->solidCameraActionGroup->actions())
     {
         d->quickImportMenu->addAction(action);
     }
-    foreach (QAction* action, d->solidUsmActionGroup->actions())
+    foreach(QAction* action, d->solidUsmActionGroup->actions())
     {
         d->quickImportMenu->addAction(action);
     }
-    foreach (QAction* action, d->manualCameraActionGroup->actions())
+    foreach(QAction* action, d->manualCameraActionGroup->actions())
     {
         d->quickImportMenu->addAction(action);
     }
@@ -3271,7 +3271,7 @@ void DigikamApp::updateQuickImportAction()
 
         QAction* primaryAction = 0;
         QDateTime latest;
-        foreach (QAction* action, d->quickImportMenu->menu()->actions())
+        foreach(QAction* action, d->quickImportMenu->menu()->actions())
         {
             QDateTime appearanceTime = d->cameraAppearanceTimes.value(action->data().toString());
 
@@ -3442,7 +3442,7 @@ void DigikamApp::slotComponentsInfo()
 void DigikamApp::showToolBars(bool show)
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach (KToolBar* toolbar, toolbars)
+    foreach(KToolBar* toolbar, toolbars)
     {
         show ? toolbar->show() : toolbar->hide();
     }

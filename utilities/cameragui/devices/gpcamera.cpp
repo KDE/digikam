@@ -30,6 +30,7 @@
 extern "C"
 {
 #include <utime.h>
+#include <unistd.h>
 }
 
 // C++ includes

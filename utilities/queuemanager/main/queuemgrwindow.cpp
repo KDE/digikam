@@ -618,7 +618,7 @@ void QueueMgrWindow::slotToggleFullScreen()
         if (d->removeFullScreenButton)
         {
             QList<KToolBar*> toolbars = toolBars();
-            foreach(KToolBar * toolbar, toolbars)
+            foreach(KToolBar* toolbar, toolbars)
             {
                 // name is set in ui.rc XML file
                 if (toolbar->objectName() == "ToolBar")
@@ -647,7 +647,7 @@ void QueueMgrWindow::slotToggleFullScreen()
 
             QList<KToolBar*> toolbars = toolBars();
             KToolBar* mainToolbar = 0;
-            foreach(KToolBar * toolbar, toolbars)
+            foreach(KToolBar* toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
                 {
@@ -686,7 +686,7 @@ void QueueMgrWindow::slotEscapePressed()
 void QueueMgrWindow::showToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar * toolbar, toolbars)
+    foreach(KToolBar* toolbar, toolbars)
     {
         toolbar->show();
     }
@@ -695,7 +695,7 @@ void QueueMgrWindow::showToolBars()
 void QueueMgrWindow::hideToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar * toolbar, toolbars)
+    foreach(KToolBar* toolbar, toolbars)
     {
         toolbar->hide();
     }
@@ -808,7 +808,7 @@ void QueueMgrWindow::slotItemSelectionChanged()
 void QueueMgrWindow::populateToolsList()
 {
     BatchToolsList list = d->batchToolsMgr->toolsList();
-    foreach(BatchTool * tool, list)
+    foreach(BatchTool* tool, list)
     {
         d->toolsView->addTool(tool);
     }

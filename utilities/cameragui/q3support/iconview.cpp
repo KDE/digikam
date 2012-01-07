@@ -270,7 +270,7 @@ IconItem* IconView::findItem(const QPoint& pos)
     {
         if (c->rect.contains(pos))
         {
-            foreach(IconItem * item, c->items)
+            foreach(IconItem* item, c->items)
             {
                 if (item->rect().contains(pos))
                 {
@@ -412,7 +412,7 @@ void IconView::clearSelection()
     }
 
     QSet<IconItem*> selItems = d->selectedItems;
-    foreach(IconItem * item, selItems)
+    foreach(IconItem* item, selItems)
     {
         item->setSelected(false, false);
     }
@@ -948,7 +948,7 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
     {
         if (contentsPaintRect.intersects(c->rect))
         {
-            foreach(IconItem * item, c->items)
+            foreach(IconItem* item, c->items)
             {
                 if (contentsPaintRect.intersects(item->rect()))
                 {
@@ -958,7 +958,7 @@ void IconView::viewportPaintEvent(QPaintEvent* pe)
         }
     }
 
-    foreach(IconItem * item, itemsToRepaint)
+    foreach(IconItem* item, itemsToRepaint)
     {
         QRect viewportRect = contentsRectToViewport(item->rect());
         //painter.save();
@@ -1404,7 +1404,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
     {
         if (rubberUnion.intersects(c->rect))
         {
-            foreach(IconItem * item, c->items)
+            foreach(IconItem* item, c->items)
             {
                 if (newArea.intersects(item->rect()))
                 {
@@ -2191,7 +2191,7 @@ IconItem* IconView::findFirstVisibleItem(const QRect& r, bool useThumbnailRect) 
         if (c->rect.intersects(r))
         {
             alreadyIntersected = true;
-            foreach(IconItem * item, c->items)
+            foreach(IconItem* item, c->items)
             {
                 // if useThumbnailRect, we only check for the clickToOpenRect, which is the thumbnail,
                 // otherwise, we take the whole item rect
@@ -2242,7 +2242,7 @@ IconItem* IconView::findLastVisibleItem(const QRect& r, bool useThumbnailRect) c
         if (c->rect.intersects(r))
         {
             alreadyIntersected = true;
-            foreach(IconItem * item, c->items)
+            foreach(IconItem* item, c->items)
             {
                 if (r.intersects(useThumbnailRect ? item->clickToOpenRect() : item->rect()))
                 {

@@ -274,7 +274,7 @@ ImageInfo FaceGroup::info() const
 QList<RegionFrameItem*> FaceGroup::items() const
 {
     QList<RegionFrameItem*> items;
-    foreach (FaceItem* item, d->items)
+    foreach(FaceItem* item, d->items)
     {
         items << item;
     }
@@ -394,7 +394,7 @@ RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* manhattanLength
     qreal minDistance            = 0;
     qreal minCenterDistance      = 0;
 
-    foreach (RegionFrameItem* item, d->items)
+    foreach(RegionFrameItem* item, d->items)
     {
         QRectF r        = item->boundingRect().translated(item->pos());
         qreal distance = (p - closestPointOfRect(p, r)).manhattanLength();
@@ -471,9 +471,9 @@ void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent* e)
             QList<QGraphicsItem*> hotItems = d->hotItems(e->scenePos());
             // this will be the one item shown by mouse over
             QList<QObject*> visible = d->visibilityController->visibleItems(ItemVisibilityController::ExcludeFadingOut);
-            foreach (QGraphicsItem* item, hotItems)
+            foreach(QGraphicsItem* item, hotItems)
             {
-                foreach (QObject* parent, visible)
+                foreach(QObject* parent, visible)
                 {
                     if (static_cast<QGraphicsObject*>(parent)->isAncestorOf(item))
                     {
@@ -607,7 +607,7 @@ void FaceGroup::load()
 
     QList<DatabaseFace> faces = FaceTagsEditor().databaseFaces(d->info.id());
 
-    foreach (const DatabaseFace& face, faces)
+    foreach(const DatabaseFace& face, faces)
     {
         d->addItem(face);
     }
@@ -624,7 +624,7 @@ void FaceGroup::clear()
 {
     cancelAddItem();
     d->visibilityController->clear();
-    foreach (RegionFrameItem* item, d->items)
+    foreach(RegionFrameItem* item, d->items)
     {
         delete item;
     }
@@ -774,7 +774,7 @@ void FaceGroup::cancelAddItem()
 
 void FaceGroup::applyItemGeometryChanges()
 {
-    foreach (FaceItem* item, d->items)
+    foreach(FaceItem* item, d->items)
     {
         if (item->face().isNull())
         {

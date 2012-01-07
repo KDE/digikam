@@ -756,7 +756,7 @@ QList< int > AlbumDB::getTagsWithProperty(const QString& property)
                     property, &values );
 
     QList<int> tagIds;
-    foreach (const QVariant& var, values)
+    foreach(const QVariant& var, values)
     {
         tagIds << var.toInt();
     }
@@ -907,7 +907,7 @@ static QStringList joinMainAndUserFilterString(const QString& filter, const QStr
 
     filterSet = filter.split(';', QString::SkipEmptyParts).toSet();
     userFilterList = userFilter.split(';', QString::SkipEmptyParts);
-    foreach (const QString& userFormat, userFilterList)
+    foreach(const QString& userFormat, userFilterList)
     {
         if (userFormat.startsWith('-'))
         {
@@ -994,7 +994,7 @@ static QStringList cleanUserFilterString(const QString& filterString)
     }
 
     QStringList sepList = filterString.split(sep, QString::SkipEmptyParts);
-    foreach (const QString& f, sepList)
+    foreach(const QString& f, sepList)
     {
         if (f.startsWith(wildcard))
         {
@@ -1237,7 +1237,7 @@ QVector<QList<int> > AlbumDB::getItemsTagIDs(const QList<qlonglong> imageIds)
     {
         d->db->execSql(query, imageIds[i], &values);
         QList<int>& tagIds = results[i];
-        foreach (const QVariant& v, values)
+        foreach(const QVariant& v, values)
         {
             tagIds << v.toInt();
         }
@@ -1636,7 +1636,7 @@ QVariantList AlbumDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseField
 
         SqlQuery query = d->db->prepareQuery(sql);
 
-        foreach (const qlonglong& imageid, imageIDs)
+        foreach(const qlonglong& imageid, imageIDs)
         {
             QVariantList singleValueList;
             d->db->execSql(query, imageid, &singleValueList);
@@ -1698,7 +1698,7 @@ void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList& infos, 
     // Take care for datetime values
     if ((fields & DatabaseFields::CreationDate) || (fields & DatabaseFields::DigitizationDate))
     {
-        foreach (const QVariant& value, infos)
+        foreach(const QVariant& value, infos)
         {
             if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
             {
@@ -2074,7 +2074,7 @@ QList<qlonglong> AlbumDB::findByNameAndCreationDate(const QString& fileName, con
                     fileName, creationDate.toString(Qt::ISODate), &values);
 
     QList<qlonglong> ids;
-    foreach (const QVariant& var, values)
+    foreach(const QVariant& var, values)
     {
         ids << var.toLongLong();
     }
@@ -2457,7 +2457,7 @@ QList<qlonglong> AlbumDB::getOneRelatedImageEach(const QList<qlonglong>& ids, Da
 
     QSet<qlonglong> result;
     QList<QVariant> values;
-    foreach (qlonglong id, ids)
+    foreach(qlonglong id, ids)
     {
         if (type == DatabaseRelation::UndefinedType)
         {
@@ -3075,9 +3075,9 @@ void AlbumDB::addTagsToItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
     QVariantList images;
     QVariantList tags;
 
-    foreach (const qlonglong& imageid, imageIDs)
+    foreach(const qlonglong& imageid, imageIDs)
     {
-        foreach (int tagid, tagIDs)
+        foreach(int tagid, tagIDs)
         {
             images << imageid;
             tags << tagid;
@@ -3126,9 +3126,9 @@ void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, const QList<int>& t
     QVariantList images;
     QVariantList tags;
 
-    foreach (const qlonglong& imageid, imageIDs)
+    foreach(const qlonglong& imageid, imageIDs)
     {
-        foreach (int tagid, tagIDs)
+        foreach(int tagid, tagIDs)
         {
             images << imageid;
             tags << tagid;
@@ -3201,7 +3201,7 @@ QList<QDateTime> AlbumDB::getAllCreationDates()
                     " WHERE Images.status=1;", &values );
 
     QList<QDateTime> list;
-    foreach (const QVariant& value, values)
+    foreach(const QVariant& value, values)
     {
         if (!value.isNull())
         {
@@ -3219,7 +3219,7 @@ QMap<QDateTime, int> AlbumDB::getAllCreationDatesAndNumberOfImages()
                     " WHERE Images.status=1;", &values );
 
     QMap<QDateTime, int> datesStatMap;
-    foreach (const QVariant& value, values)
+    foreach(const QVariant& value, values)
     {
         if (!value.isNull())
         {
@@ -4201,7 +4201,7 @@ QDate AlbumDB::getAlbumAverageDate(int albumID)
     }
 
     qint64 julianDays = 0;
-    foreach (const QDate& date, dates)
+    foreach(const QDate& date, dates)
     {
         julianDays += date.toJulianDay();
     }
@@ -4233,7 +4233,7 @@ void AlbumDB::removeItems(QList<qlonglong> itemIDs, const QList<int>& albumIDs)
 
     QVariantList imageIds;
     QVariantList status;
-    foreach (const qlonglong& id, itemIDs)
+    foreach(const qlonglong& id, itemIDs)
     {
         status << (int)DatabaseItem::Removed;
         imageIds << id;

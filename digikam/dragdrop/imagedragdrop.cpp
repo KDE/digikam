@@ -646,7 +646,7 @@ QMimeData* ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexe
     QList<int> albumIDs;
     QList<qlonglong> imageIDs;
 
-    foreach (const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, infos)
     {
         urls.append(info.fileUrl());
         kioURLs.append(info.databaseUrl());

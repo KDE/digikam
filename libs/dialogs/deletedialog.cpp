@@ -10,7 +10,7 @@
  * Copyright (C) 2006 by Ian Monroe <ian@monroe.nu>
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -179,14 +179,14 @@ void DeleteItemList::slotThumbnailLoaded(const LoadingDescription& desc, const Q
     {
         DeleteItem* item = dynamic_cast<DeleteItem*>(*it);
 
-        if (item->url().toLocalFile() == desc.filePath)
+        if (item && item->url().toLocalFile() == desc.filePath)
         {
             if (!pix.isNull())
             {
                 item->setThumb(pix.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio));
             }
+            return;
         }
-
         ++it;
     }
 }

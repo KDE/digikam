@@ -6,7 +6,7 @@
  * Date        : 2009-09-14
  * Description : a parse results map for token management
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,7 +60,7 @@ QList<ParseResults::ResultsValue> ParseResults::values() const
     return m_results.values();
 }
 
-QString ParseResults::result(const ResultsKey& key)
+QString ParseResults::result(const ResultsKey& key) const
 {
     if (m_results.isEmpty())
     {
@@ -71,7 +71,7 @@ QString ParseResults::result(const ResultsKey& key)
     return result;
 }
 
-QString ParseResults::token(const ResultsKey& key)
+QString ParseResults::token(const ResultsKey& key) const
 {
     if (m_results.isEmpty())
     {
@@ -82,7 +82,7 @@ QString ParseResults::token(const ResultsKey& key)
     return token;
 }
 
-int ParseResults::offset(const ResultsKey& key)
+int ParseResults::offset(const ResultsKey& key) const
 {
     int pos    = key.first;
     int length = key.second;
@@ -100,7 +100,7 @@ int ParseResults::offset(const ResultsKey& key)
     return INVALID_KEY_ID;
 }
 
-ParseResults::ResultsKey ParseResults::keyAtPosition(int pos)
+ParseResults::ResultsKey ParseResults::keyAtPosition(int pos) const
 {
     foreach(const ResultsKey& key, m_results.keys())
     {
@@ -113,13 +113,13 @@ ParseResults::ResultsKey ParseResults::keyAtPosition(int pos)
     return createInvalidKey();
 }
 
-bool ParseResults::hasKeyAtPosition(int pos)
+bool ParseResults::hasKeyAtPosition(int pos) const
 {
     ResultsKey key = keyAtPosition(pos);
     return keyIsValid(key);
 }
 
-ParseResults::ResultsKey ParseResults::keyAtApproximatePosition(int pos)
+ParseResults::ResultsKey ParseResults::keyAtApproximatePosition(int pos) const
 {
     foreach(const ResultsKey& key, m_results.keys())
     {
@@ -134,7 +134,7 @@ ParseResults::ResultsKey ParseResults::keyAtApproximatePosition(int pos)
     return createInvalidKey();
 }
 
-bool ParseResults::hasKeyAtApproximatePosition(int pos)
+bool ParseResults::hasKeyAtApproximatePosition(int pos) const
 {
     ResultsKey key = keyAtApproximatePosition(pos);
     return keyIsValid(key);
@@ -150,7 +150,7 @@ void ParseResults::append(ParseResults& results)
     m_results.unite(results.m_results);
 }
 
-bool ParseResults::isEmpty()
+bool ParseResults::isEmpty() const
 {
     return m_results.isEmpty();
 }
@@ -160,12 +160,12 @@ ParseResults::ResultsKey ParseResults::createInvalidKey() const
     return ResultsKey(INVALID_KEY_ID, INVALID_KEY_ID);
 }
 
-bool ParseResults::keyIsValid(const ResultsKey& key)
+bool ParseResults::keyIsValid(const ResultsKey& key) const
 {
     return (key.first != INVALID_KEY_ID && key.second != INVALID_KEY_ID);
 }
 
-QString ParseResults::replaceTokens(const QString& markedString)
+QString ParseResults::replaceTokens(const QString& markedString) const
 {
     QString result;
 
@@ -188,7 +188,7 @@ QString ParseResults::replaceTokens(const QString& markedString)
     return result;
 }
 
-void ParseResults::debug()
+void ParseResults::debug() const
 {
     foreach(const ResultsKey& key, m_results.keys())
     {

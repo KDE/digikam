@@ -724,7 +724,7 @@ static QStringList cleanUserFilterString(const QString& filterString)
     }
 
     QStringList sepList = filterString.split(sep, QString::SkipEmptyParts);
-    foreach (const QString& f, sepList)
+    foreach(const QString& f, sepList)
     {
         if (f.startsWith(wildcard))
         {

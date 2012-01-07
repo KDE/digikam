@@ -174,7 +174,7 @@ qlonglong ImageModel::imageId(const QModelIndex& index) const
 QList<ImageInfo> ImageModel::imageInfos(const QList<QModelIndex>& indexes) const
 {
     QList<ImageInfo> infos;
-    foreach (const QModelIndex& index, indexes)
+    foreach(const QModelIndex& index, indexes)
     {
         infos << imageInfo(index);
     }
@@ -184,7 +184,7 @@ QList<ImageInfo> ImageModel::imageInfos(const QList<QModelIndex>& indexes) const
 QList<qlonglong> ImageModel::imageIds(const QList<QModelIndex>& indexes) const
 {
     QList<qlonglong> ids;
-    foreach (const QModelIndex& index, indexes)
+    foreach(const QModelIndex& index, indexes)
     {
         ids << imageId(index);
     }
@@ -394,7 +394,7 @@ ImageInfo ImageModel::imageInfo(const QString& filePath) const
     }
     else
     {
-        foreach (const ImageInfo& info, d->infos)
+        foreach(const ImageInfo& info, d->infos)
         {
             if (info.filePath() == filePath)
             {
@@ -416,7 +416,7 @@ QList<ImageInfo> ImageModel::imageInfos(const QString& filePath) const
 
         if (id)
         {
-            foreach (int index, d->idHash.values(id))
+            foreach(int index, d->idHash.values(id))
             {
                 infos << d->infos.at(index);
             }
@@ -424,7 +424,7 @@ QList<ImageInfo> ImageModel::imageInfos(const QString& filePath) const
     }
     else
     {
-        foreach (const ImageInfo& info, d->infos)
+        foreach(const ImageInfo& info, d->infos)
         {
             if (info.filePath() == filePath)
             {
@@ -562,7 +562,7 @@ void ImageModel::emitDataChangedForSelection(const QItemSelection& selection)
 {
     if (!selection.isEmpty())
     {
-        foreach (const QItemSelectionRange& range, selection)
+        foreach(const QItemSelectionRange& range, selection)
         {
             emit dataChanged(range.topLeft(), range.bottomRight());
         }
@@ -734,7 +734,7 @@ void ImageModel::removeIndex(const QModelIndex& index)
 void ImageModel::removeIndexes(const QList<QModelIndex>& indexes)
 {
     QList<int> listIndexes;
-    foreach (const QModelIndex& index, indexes)
+    foreach(const QModelIndex& index, indexes)
     {
         if (d->isValid(index))
         {
@@ -758,7 +758,7 @@ void ImageModel::removeImageInfo(const ImageInfo& info)
 void ImageModel::removeImageInfos(const QList<ImageInfo>& infos)
 {
     QList<int> listIndexes;
-    foreach (const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, infos)
     {
         QModelIndex index = indexForImageId(info.id());
         if (index.isValid())
@@ -852,7 +852,7 @@ void ImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
     int removedRows = 0, offset = 0;
     typedef QPair<int, int> IntPair; // to make foreach macro happy
 
-    foreach (const IntPair& pair, toRemove)
+    foreach(const IntPair& pair, toRemove)
     {
         const int begin = pair.first - offset;
         const int end   = pair.second - offset; // inclusive
@@ -937,7 +937,7 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
 {
     if (extraValues.isEmpty())
     {
-        foreach (const ImageInfo& info, infos)
+        foreach(const ImageInfo& info, infos)
         {
             QHash<qlonglong,int>::iterator it = oldIds.find(info.id());
 
@@ -992,11 +992,11 @@ QList<QPair<int, int> > ImageModelIncrementalUpdater::oldIndexes()
 {
     // first, apply all changes to indexes by direct removal in model
     // while the updater was active
-    foreach (const IntPairList& list, modelRemovals)
+    foreach(const IntPairList& list, modelRemovals)
     {
         int removedRows = 0, offset = 0;
 
-        foreach (const IntPair& pair, list)
+        foreach(const IntPair& pair, list)
         {
             const int begin = pair.first - offset;
             const int end   = pair.second - offset; // inclusive
@@ -1169,7 +1169,7 @@ void ImageModel::slotImageChange(const ImageChangeset& changeset)
     if (d->watchFlags & changeset.changes())
     {
         QItemSelection items;
-        foreach (const qlonglong& id, changeset.ids())
+        foreach(const qlonglong& id, changeset.ids())
         {
             QModelIndex index = indexForImageId(id);
 
@@ -1195,7 +1195,7 @@ void ImageModel::slotImageTagChange(const ImageTagChangeset& changeset)
     }
 
     QItemSelection items;
-    foreach (const qlonglong& id, changeset.ids())
+    foreach(const qlonglong& id, changeset.ids())
     {
         QModelIndex index = indexForImageId(id);
 

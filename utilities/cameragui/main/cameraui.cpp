@@ -7,7 +7,7 @@
 * Description : Camera interface
 *
 * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
-* Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+* Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
 * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
 *
 * This program is free software; you can redistribute it
@@ -119,6 +119,7 @@
 #include "cameralist.h"
 #include "cameratype.h"
 #include "cameranamehelper.h"
+#include "cameramessagebox.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
 
@@ -836,7 +837,7 @@ void CameraUI::finishDialog()
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                           i18n("Scanning for new files, please wait..."));
-    foreach (const QString& folder, d->foldersToScan)
+    foreach(const QString& folder, d->foldersToScan)
     {
         ScanController::instance()->scheduleCollectionScan(folder);
     }
@@ -1503,10 +1504,11 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
     d->controller->downloadPrep();
 
-    DownloadSettings settings = downloadSettings();
-    QString   downloadName;
-    QDateTime dateTime;
-    int       total = 0;
+    QString              downloadName;
+    QDateTime            dateTime;
+    DownloadSettingsList allItems;
+    DownloadSettings     settings = downloadSettings();
+    int                  total    = 0;
 
     // -- Download camera items -------------------------------
     // Since we show camera items in reverse order, downloading need to be done also in reverse order.
@@ -1643,8 +1645,8 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         }
 
         settings.dest = downloadUrl.toLocalFile();
+        allItems.append(settings);
 
-        d->controller->download(settings);
         ++total;
     }
 
@@ -1663,6 +1665,8 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     d->advBox->setEnabled(false);
 
     d->deleteAfter = deleteAfter;
+
+    d->controller->download(allItems);
 }
 
 void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)
@@ -1672,6 +1676,11 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
     if (!info.isNull())
     {
         d->view->setDownloaded(info, status);
+
+        if (d->rightSideBar->url() == info.url())
+        {
+            slotItemsSelected(d->view->findItemInfo(folder, file), true);
+        }
 
         if (status == CamItemInfo::DownloadedYes)
         {
@@ -1725,7 +1734,7 @@ void CameraUI::slotMarkAsDownloaded()
 {
     CamItemInfoList list = d->view->selectedItems();
 
-    foreach (CamItemInfo info, list)
+    foreach(CamItemInfo info, list)
     {
         d->view->setDownloaded(info, CamItemInfo::DownloadedYes);
 
@@ -1740,8 +1749,14 @@ void CameraUI::slotToggleLock()
 {
     CamItemInfoList list = d->view->selectedItems();
     int count            = list.count();
+    if (count > 0)
+    {
+        d->statusProgressBar->setProgressValue(0);
+        d->statusProgressBar->setProgressTotalSteps(count);
+        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+    }
 
-    foreach (CamItemInfo info, list)
+    foreach(CamItemInfo info, list)
     {
         QString folder = info.folder;
         QString file   = info.name;
@@ -1756,13 +1771,6 @@ void CameraUI::slotToggleLock()
 
         d->controller->lockFile(folder, file, lock);
     }
-
-    if (count > 0)
-    {
-        d->statusProgressBar->setProgressValue(0);
-        d->statusProgressBar->setProgressTotalSteps(count);
-        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
-    }
 }
 
 void CameraUI::slotLocked(const QString& folder, const QString& file, bool status)
@@ -1773,6 +1781,10 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
         if (!info.isNull())
         {
             d->view->toggleLock(info);
+            if (d->rightSideBar->url() == info.url())
+            {
+                slotItemsSelected(d->view->findItemInfo(folder, file), true);
+            }
         }
     }
 
@@ -1782,7 +1794,7 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
 
 
 void CameraUI::checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
-                                  QStringList& deleteList, QStringList& lockedList)
+                                  CamItemInfoList& deleteList, CamItemInfoList& lockedList)
 {
     if (info.writePermissions != 0)  // Item not locked ?
     {
@@ -1790,20 +1802,20 @@ void CameraUI::checkItem4Deletion(const CamItemInfo& info, QStringList& folders,
         QString file   = info.name;
         folders.append(folder);
         files.append(file);
-        deleteList.append(folder + QString("/") + file);
+        deleteList.append(info);
     }
     else
     {
-        lockedList.append(info.name);
+        lockedList.append(info);
     }
 }
 
 void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
 {
-    QStringList folders;
-    QStringList files;
-    QStringList deleteList;
-    QStringList lockedList;
+    QStringList     folders;
+    QStringList     files;
+    CamItemInfoList deleteList;
+    CamItemInfoList lockedList;
     CamItemInfoList list = onlySelected ? d->view->selectedItems() : d->view->allItems();
 
     foreach(CamItemInfo info, list)
@@ -1827,7 +1839,7 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
         QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
                              "These items will not be deleted. If you really want to delete these items, "
                              "please unlock them and try again."));
-        KMessageBox::informationList(this, infoMsg, lockedList, i18n("Information"));
+        CameraMessageBox::informationList(d->camThumbsCtrl, this, infoMsg, lockedList, i18n("Information"));
     }
 
     if (folders.isEmpty())
@@ -1843,12 +1855,14 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                           "Are you sure?",
                           deleteList.count()));
 
-    if (KMessageBox::warningContinueCancelList(this, warnMsg,
-                                               deleteList,
-                                               i18n("Warning"),
-                                               KGuiItem(i18n("Delete")),
-                                               KStandardGuiItem::cancel(),
-                                               QString("DontAskAgainToDeleteItemsFromCamera"))
+    if (CameraMessageBox::warningContinueCancelList(d->camThumbsCtrl,
+                                                    this,
+                                                    warnMsg,
+                                                    deleteList,
+                                                    i18n("Warning"),
+                                                    KGuiItem(i18n("Delete")),
+                                                    KStandardGuiItem::cancel(),
+                                                    QString("DontAskAgainToDeleteItemsFromCamera"))
         ==  KMessageBox::Continue)
     {
         QStringList::const_iterator itFolder = folders.constBegin();
@@ -2078,7 +2092,7 @@ void CameraUI::slotToggleFullScreen()
         if (d->removeFullScreenButton)
         {
             QList<KToolBar*> toolbars = toolBars();
-            foreach (KToolBar* toolbar, toolbars)
+            foreach(KToolBar* toolbar, toolbars)
             {
                 // name is set in ui.rc XML file
                 if (toolbar->objectName() == "ToolBar")
@@ -2109,7 +2123,7 @@ void CameraUI::slotToggleFullScreen()
 
             QList<KToolBar*> toolbars = toolBars();
             KToolBar* mainToolbar = 0;
-            foreach (KToolBar* toolbar, toolbars)
+            foreach(KToolBar* toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
                 {
@@ -2150,7 +2164,7 @@ void CameraUI::slotEscapePressed()
 void CameraUI::showToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach (KToolBar* toolbar, toolbars)
+    foreach(KToolBar* toolbar, toolbars)
     {
         toolbar->show();
     }
@@ -2159,7 +2173,7 @@ void CameraUI::showToolBars()
 void CameraUI::hideToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach (KToolBar* toolbar, toolbars)
+    foreach(KToolBar* toolbar, toolbars)
     {
         toolbar->hide();
     }

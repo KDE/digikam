@@ -159,7 +159,7 @@ void TagCheckView::doSaveState()
 QList<TAlbum*> TagCheckView::getCheckedTags() const
 {
     QList<TAlbum*> tags;
-    foreach (Album* album, albumModel()->checkedAlbums())
+    foreach(Album* album, albumModel()->checkedAlbums())
     {
         TAlbum* tag = dynamic_cast<TAlbum*> (album);
 
@@ -174,7 +174,7 @@ QList<TAlbum*> TagCheckView::getCheckedTags() const
 QList<TAlbum*> TagCheckView::getPartiallyCheckedTags() const
 {
     QList<TAlbum*> tags;
-    foreach (Album* album, albumModel()->partiallyCheckedAlbums())
+    foreach(Album* album, albumModel()->partiallyCheckedAlbums())
     {
         TAlbum* tag = dynamic_cast<TAlbum*> (album);
 

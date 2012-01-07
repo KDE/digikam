@@ -515,7 +515,7 @@ void ImagePreviewView::slotRotateLeft()
     if (action)
     {
         QList<QAction*> list = action->menu()->actions();
-        foreach(QAction * ac, list)
+        foreach(QAction* ac, list)
         {
             if (ac->objectName() == QString("rotate_ccw"))
             {
@@ -532,7 +532,7 @@ void ImagePreviewView::slotRotateRight()
     if (action)
     {
         QList<QAction*> list = action->menu()->actions();
-        foreach(QAction * ac, list)
+        foreach(QAction* ac, list)
         {
             if (ac->objectName() == QString("rotate_cw"))
             {

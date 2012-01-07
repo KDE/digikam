@@ -784,19 +784,19 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
 DImageHistory ImageScanner::resolvedImageHistory(const DImageHistory& history, bool mustBeAvailable)
 {
     DImageHistory h;
-    foreach (const DImageHistory::Entry& e, history.entries())
+    foreach(const DImageHistory::Entry& e, history.entries())
     {
         // Copy entry, without referredImages
         DImageHistory::Entry entry;
         entry.action = e.action;
 
         // resolve referredImages
-        foreach (const HistoryImageId& id, e.referredImages)
+        foreach(const HistoryImageId& id, e.referredImages)
         {
             QList<qlonglong> imageIds = resolveHistoryImageId(id);
 
             // append each image found in collection to referredImages
-            foreach (qlonglong imageId, imageIds)
+            foreach(qlonglong imageId, imageIds)
             {
                 ImageInfo info(imageId);
 
@@ -893,7 +893,7 @@ static QList<qlonglong> mergedIdLists(const HistoryImageId& referenceId,
 
     // Add a candidate if it has the same UUID, or either reference or candidate  have a UUID
     // (other way round: do not add a candidate which positively has a different UUID)
-    foreach (qlonglong candidate, candidates)
+    foreach(qlonglong candidate, candidates)
     {
         if (results.contains(candidate))
         {
@@ -933,7 +933,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
         if (!infos.isEmpty())
         {
             QList<qlonglong> ids;
-            foreach (const ItemScanInfo& info, infos)
+            foreach(const ItemScanInfo& info, infos)
             {
                 if (info.status != DatabaseItem::Removed)
                 {
@@ -1121,7 +1121,7 @@ void ImageScanner::scanVideoFile()
     if (metaInfo.isValid())
     {
         QStringList keys = metaInfo.keys();
-        foreach (const QString& key, keys)
+        foreach(const QString& key, keys)
         {
             KFileMetaInfoItem item = metaInfo.item(key);
             kDebug() << item.name() << item.value();

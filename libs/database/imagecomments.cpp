@@ -121,7 +121,7 @@ public:
     void adjustStoredIndexes(QSet<int> &set, int removedIndex)
     {
         QSet<int> newSet;
-        foreach (int index, set)
+        foreach(int index, set)
         {
             if (index > removedIndex)
             {
@@ -466,7 +466,7 @@ void ImageComments::replaceFrom(const ImageComments& source)
         return;
     }
 
-    foreach (const CommentInfo& info, source.d->infos)
+    foreach(const CommentInfo& info, source.d->infos)
     {
         addComment(info.comment, info.language, info.author, info.date, info.type);
     }
@@ -543,7 +543,7 @@ void ImageComments::removeAll()
         return;
     }
 
-    foreach (const CommentInfo& info, d->infos)
+    foreach(const CommentInfo& info, d->infos)
     {
         d->idsToRemove << info.id;
     }
@@ -655,7 +655,7 @@ CaptionsMap ImageComments::toCaptionsMap(DatabaseComment::Type type) const
 
     if (d)
     {
-        foreach (const CommentInfo& info, d->infos)
+        foreach(const CommentInfo& info, d->infos)
         {
             if (info.type == type)
             {

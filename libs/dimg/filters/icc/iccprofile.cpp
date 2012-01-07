@@ -516,7 +516,7 @@ QStringList IccProfile::defaultSearchPaths()
         dataDirs << "/usr/local/share";
     }
 
-    foreach(const QString & dataDir, dataDirs)
+    foreach(const QString& dataDir, dataDirs)
     {
         candidates << dataDir + "/color/icc";
     }
@@ -537,7 +537,7 @@ QStringList IccProfile::defaultSearchPaths()
 
 #endif
 
-    foreach(const QString & candidate, candidates)
+    foreach(const QString& candidate, candidates)
     {
         QDir dir(candidate);
 

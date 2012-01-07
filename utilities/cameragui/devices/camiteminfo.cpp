@@ -7,7 +7,7 @@
  * Description : camera item info container
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,18 +69,18 @@ KUrl CamItemInfo::url() const
     return url;
 }
 
-bool CamItemInfo::operator==(const CamItemInfo& t) const
+bool CamItemInfo::operator==(const CamItemInfo& info) const
 {
-    bool b1  = size             == t.size;
-    bool b2  = width            == t.width;
-    bool b3  = height           == t.height;
-    bool b4  = readPermissions  == t.readPermissions;
-    bool b5  = writePermissions == t.writePermissions;
-    bool b6  = name             == t.name;
-    bool b7  = folder           == t.folder;
-    bool b8  = mime             == t.mime;
-    bool b9  = mtime            == t.mtime;
-    bool b10 = photoInfo        == t.photoInfo;
+    bool b1  = size             == info.size;
+    bool b2  = width            == info.width;
+    bool b3  = height           == info.height;
+    bool b4  = readPermissions  == info.readPermissions;
+    bool b5  = writePermissions == info.writePermissions;
+    bool b6  = name             == info.name;
+    bool b7  = folder           == info.folder;
+    bool b8  = mime             == info.mime;
+    bool b9  = mtime            == info.mtime;
+    bool b10 = photoInfo        == info.photoInfo;
 
     return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10;
 }
@@ -119,6 +119,33 @@ QDataStream& operator>>(QDataStream& ds, CamItemInfo& info)
     ds >> info.downloadName;
 
     return ds;
+}
+
+QDebug operator<<(QDebug dbg, const CamItemInfo& info)
+{
+    dbg.nospace() << "CamItemInfo::size: "
+                  << info.size << ", ";
+    dbg.nospace() << "CamItemInfo::width: "
+                  << info.width << ", ";
+    dbg.nospace() << "CamItemInfo::height: "
+                  << info.height << ", ";
+    dbg.nospace() << "CamItemInfo::readPermissions: "
+                  << info.readPermissions << ", ";
+    dbg.nospace() << "CamItemInfo::writePermissions: "
+                  << info.writePermissions << ", ";
+    dbg.nospace() << "CamItemInfo::name: "
+                  << info.name << ", ";
+    dbg.nospace() << "CamItemInfo::folder: "
+                  << info.folder << ", ";
+    dbg.nospace() << "CamItemInfo::mime: "
+                  << info.mime << ", ";
+    dbg.nospace() << "CamItemInfo::mtime: "
+                  << info.mtime << ", ";
+    dbg.nospace() << "CamItemInfo::downloaded: "
+                  << info.downloaded;
+    dbg.nospace() << "CamItemInfo::downloadName: "
+                  << info.downloadName;
+    return dbg.space();
 }
 
 }  // namespace Digikam

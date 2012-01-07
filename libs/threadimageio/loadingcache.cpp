@@ -476,14 +476,14 @@ void ClassicLoadingCacheFileWatch::slotUpdateDirWatch()
         }
     }
 
-    foreach (const QString& watchedItem, toBeRemoved)
+    foreach(const QString& watchedItem, toBeRemoved)
     {
         //kDebug() << "removing m_watch for " << *it;
         m_watch->removeFile(watchedItem);
         m_watchedFiles.remove(watchedItem);
     }
 
-    foreach (const QString& watchedItem, toBeAdded)
+    foreach(const QString& watchedItem, toBeAdded)
     {
         //kDebug() << "adding m_watch for " << *it;
         m_watch->addFile(watchedItem);

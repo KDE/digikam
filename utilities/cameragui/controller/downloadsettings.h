@@ -6,7 +6,7 @@
  * Date        : 2006-21-07
  * Description : Camera item download settings container.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -71,6 +71,8 @@ public:
     QString   file;
     QString   dest;
 };
+
+typedef QList<DownloadSettings> DownloadSettingsList;
 
 }  // namespace Digikam
 

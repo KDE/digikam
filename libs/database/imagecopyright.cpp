@@ -111,7 +111,7 @@ void ImageCopyright::replaceFrom(const ImageCopyright& source)
     }
 
     QList<CopyrightInfo> infos = access.db()->getImageCopyright(source.m_id, QString());
-    foreach (const CopyrightInfo& info, infos)
+    foreach(const CopyrightInfo& info, infos)
     {
         access.db()->setImageCopyrightProperty(m_id, info.property, info.value,
                                                info.extraValue, AlbumDB::PropertyNoConstraint);
@@ -352,7 +352,7 @@ CopyrightInfo ImageCopyright::copyrightInfo(const QString& property) const
 {
     if (m_cache)
     {
-        foreach (const CopyrightInfo& info, m_cache->infos)
+        foreach(const CopyrightInfo& info, m_cache->infos)
         {
             if (info.property == property)
             {
@@ -378,7 +378,7 @@ QList<CopyrightInfo> ImageCopyright::copyrightInfos(const QString& property) con
     if (m_cache)
     {
         QList<CopyrightInfo> infos;
-        foreach (const CopyrightInfo& info, m_cache->infos)
+        foreach(const CopyrightInfo& info, m_cache->infos)
         {
             if (info.property == property)
             {
@@ -422,7 +422,7 @@ KExiv2Iface::KExiv2::AltLangMap ImageCopyright::readLanguageProperties(const QSt
 {
     KExiv2Iface::KExiv2::AltLangMap map;
     QList<CopyrightInfo> infos = copyrightInfos(property);
-    foreach (const CopyrightInfo& info, infos)
+    foreach(const CopyrightInfo& info, infos)
     {
         map[info.extraValue] = info.value;
     }

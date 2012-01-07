@@ -355,7 +355,7 @@ void MetadataManager::MetadataManagerPriv::setWriterAction(const QString& action
 void MetadataManager::MetadataManagerPriv::startingToWrite(const QList<ImageInfo>& infos)
 {
     QMutexLocker lock(&mutex);
-    foreach (const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, infos)
     {
         scheduledToWrite.remove(info.id());
     }
@@ -508,7 +508,7 @@ void MetadataManagerDatabaseWorker::assignPickLabel(const QList<ImageInfo>& info
         //ScanController::instance()->suspendCollectionScan();
         DatabaseOperationGroup group;
         group.setMaximumTime(200);
-        foreach (const ImageInfo& info, infos)
+        foreach(const ImageInfo& info, infos)
         {
             hub.load(info);
             hub.setPickLabel(pickId);
@@ -546,7 +546,7 @@ void MetadataManagerDatabaseWorker::assignColorLabel(const QList<ImageInfo>& inf
         //ScanController::instance()->suspendCollectionScan();
         DatabaseOperationGroup group;
         group.setMaximumTime(200);
-        foreach (const ImageInfo& info, infos)
+        foreach(const ImageInfo& info, infos)
         {
             hub.load(info);
             hub.setColorLabel(colorId);
@@ -585,7 +585,7 @@ void MetadataManagerDatabaseWorker::assignRating(const QList<ImageInfo>& infos, 
         //ScanController::instance()->suspendCollectionScan();
         DatabaseOperationGroup group;
         group.setMaximumTime(200);
-        foreach (const ImageInfo& info, infos)
+        foreach(const ImageInfo& info, infos)
         {
             hub.load(info);
             hub.setRating(rating);
@@ -619,7 +619,7 @@ void MetadataManagerDatabaseWorker::editGroup(int groupAction, const ImageInfo& 
     {
         DatabaseOperationGroup group;
         group.setMaximumTime(200);
-        foreach (const ImageInfo& constInfo, infos)
+        foreach(const ImageInfo& constInfo, infos)
         {
             ImageInfo info(constInfo);
 
@@ -685,7 +685,7 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
 
     QStringList failedItems;
 
-    foreach (const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, infos)
     {
         //kDebug() << "Setting Exif Orientation tag to " << orientation;
 

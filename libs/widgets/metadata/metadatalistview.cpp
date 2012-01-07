@@ -303,7 +303,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     // Add not found tags from filter as grey items.
     if (!filters.isEmpty() && filters.at(0) != QString("FULL") && filters.at(0).contains("."))
     {
-        foreach (const QString& key, filters)
+        foreach(const QString& key, filters)
         {
             MdKeyListViewItem* pitem = findMdKeyItem(key);
 

@@ -264,7 +264,7 @@ void MetadataHub::loadTags(const QList<int>& loadedTags)
     QSet<int> previousTags = d->tags.keys().toSet();
 
     // first go through all tags contained in this set
-    foreach (int tagId, loadedTags)
+    foreach(int tagId, loadedTags)
     {
         if (TagsCache::instance()->isInternalTag(tagId))
         {
@@ -303,7 +303,7 @@ void MetadataHub::loadTags(const QList<int>& loadedTags)
 
     // Those tags which had been set as MetadataAvailable before,
     // but are not contained in this set, have to be set to MetadataDisjoint
-    foreach (int tagId, previousTags)
+    foreach(int tagId, previousTags)
     {
         QMap<int, TagStatus>::iterator mapIt = d->tags.find(tagId);
 
@@ -1219,7 +1219,7 @@ void MetadataHubOnTheRoad::applyChangeNotifications()
         d->tagIds.clear();
     }
 
-    foreach (int tagId, tagIds)
+    foreach(int tagId, tagIds)
     {
         notifyTagDeleted(tagId);
     }

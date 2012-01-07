@@ -144,7 +144,7 @@ void TagsActionMngr::createActions()
     // Create Tags shortcuts.
 
     QList<int> tagIds = TagsCache::instance()->tagsWithProperty(TagPropertyName::tagKeyboardShortcut());
-    foreach (int tagId, tagIds)
+    foreach(int tagId, tagIds)
     {
         createTagActionShortcut(tagId);
     }

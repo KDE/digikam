@@ -287,7 +287,7 @@ void DCategorizedView::setSelectedIndexes(const QList<QModelIndex>& indexes)
 
     QItemSelection mySelection;
 
-    foreach (const QModelIndex& index, indexes)
+    foreach(const QModelIndex& index, indexes)
     {
         mySelection.select(index, index);
     }
@@ -891,7 +891,7 @@ void DCategorizedView::keyPressEvent(QKeyEvent* event)
     if (trigger)
     {
         const QModelIndexList indexList = selModel->selectedIndexes();
-        foreach (const QModelIndex& index, indexList)
+        foreach(const QModelIndex& index, indexList)
         {
             emit itemTriggered(itemForIndex(index));
         }

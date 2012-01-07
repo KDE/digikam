@@ -292,7 +292,7 @@ void CollectionScanner::completeScan()
     {
         // count for progress info
         int count = 0;
-        foreach (const CollectionLocation& location, allLocations)
+        foreach(const CollectionLocation& location, allLocations)
         {
             count += countItemsInFolder(location.albumRootPath());
         }
@@ -325,7 +325,7 @@ void CollectionScanner::completeScan()
         emit startScanningAlbumRoots();
     }
 
-    foreach (const CollectionLocation& location, allLocations)
+    foreach(const CollectionLocation& location, allLocations)
     {
         scanAlbumRoot(location);
     }
@@ -387,7 +387,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
     {
         // count for progress info
         int count = 0;
-        foreach (const QString& path, sortedPaths)
+        foreach(const QString& path, sortedPaths)
         {
             count += countItemsInFolder(path);
         }
@@ -395,7 +395,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
         emit totalFilesToScan(count);
     }
 
-    foreach (const QString& path, sortedPaths)
+    foreach(const QString& path, sortedPaths)
     {
         CollectionLocation location = CollectionManager::instance()->locationForPath(path);
         QString album = CollectionManager::instance()->album(path);
@@ -664,7 +664,7 @@ void CollectionScanner::scanAlbumRoot(const CollectionLocation& location)
 void CollectionScanner::scanForStaleAlbums(const QList<CollectionLocation>& locations)
 {
     QList<int> locationIdsToScan;
-    foreach (const CollectionLocation& location, locations)
+    foreach(const CollectionLocation& location, locations)
     {
         locationIdsToScan << location.id();
     }
@@ -685,7 +685,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
 /*
     // See B.K.O #231598
     QHash<int, CollectionLocation> albumRoots;
-    foreach (const CollectionLocation& location, locations)
+    foreach(const CollectionLocation& location, locations)
     {
         albumRoots[location.id()] = location;
     }
@@ -777,7 +777,7 @@ void CollectionScanner::safelyRemoveAlbums(const QList<int>& albumIds)
     // Make album orphan (no album root, keep entries until next application start)
     DatabaseAccess access;
     DatabaseTransaction transaction(&access);
-    foreach (int albumId, albumIds)
+    foreach(int albumId, albumIds)
     {
         QList<qlonglong> ids = access.db()->getItemIDsInAlbum(albumId);
         access.db()->removeItemsFromAlbum(albumId, ids);
@@ -1130,7 +1130,7 @@ void CollectionScanner::itemsWereRemoved(const QList<qlonglong> &removedIds)
 
     if (d->recordHistoryIds)
     {
-        foreach (qlonglong id, relatedImages)
+        foreach(qlonglong id, relatedImages)
         {
             d->needTaggingHistorySet << id;
         }
@@ -1181,7 +1181,7 @@ void CollectionScanner::finishHistoryScanning()
 
 void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
 {
-    foreach (qlonglong id, ids)
+    foreach(qlonglong id, ids)
     {
         if (!d->checkObserver())
         {
@@ -1194,7 +1194,7 @@ void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
         {
             QList<qlonglong> needTaggingIds;
             ImageScanner::resolveImageHistory(id, &needTaggingIds);
-            foreach (qlonglong needTag, needTaggingIds)
+            foreach(qlonglong needTag, needTaggingIds)
             {
                 d->needTaggingHistorySet << needTag;
             }
@@ -1208,7 +1208,7 @@ void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
 
 void CollectionScanner::historyScanningStage3(const QList<qlonglong>& ids)
 {
-    foreach (qlonglong id, ids)
+    foreach(qlonglong id, ids)
     {
         if (!d->checkObserver())
         {
@@ -1473,7 +1473,7 @@ void CollectionScanner::scanAlbums()
         QStringList fileList(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
 
         DatabaseTransaction transaction;
-        foreach (const QString& dir, fileList)
+        foreach(const QString& dir, fileList)
         {
             scanAlbum(*it, '/' + dir);
         }

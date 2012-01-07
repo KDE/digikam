@@ -658,7 +658,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
         return;
     }
 
-    foreach (const qlonglong& id, changeset.ids())
+    foreach(const qlonglong& id, changeset.ids())
     {
         const ImageInfo newImageInfo(id);
 

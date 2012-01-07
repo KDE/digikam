@@ -120,7 +120,7 @@ void AbstractSearchGroupContainer::finishReadingGroups()
 
 void AbstractSearchGroupContainer::writeGroups(SearchXmlWriter& writer)
 {
-    foreach (SearchGroup* group, m_groups)
+    foreach(SearchGroup* group, m_groups)
     {
         group->write(writer);
     }
@@ -134,7 +134,7 @@ void AbstractSearchGroupContainer::removeSendingSearchGroup()
 QList<QRect> AbstractSearchGroupContainer::startupAnimationAreaOfGroups() const
 {
     QList<QRect> list;
-    foreach (SearchGroup* group, m_groups)
+    foreach(SearchGroup* group, m_groups)
     {
         list += group->startupAnimationArea();
     }

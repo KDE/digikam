@@ -70,7 +70,7 @@ public:
 
 ImageQueryPostHooks::~ImageQueryPostHooks()
 {
-    foreach (ImageQueryPostHook* hook, m_postHooks)
+    foreach(ImageQueryPostHook* hook, m_postHooks)
     {
         delete hook;
     }
@@ -83,7 +83,7 @@ void ImageQueryPostHooks::addHook(ImageQueryPostHook* hook)
 
 bool ImageQueryPostHooks::checkPosition(double latitudeNumber, double longitudeNumber)
 {
-    foreach (ImageQueryPostHook* hook, m_postHooks)
+    foreach(ImageQueryPostHook* hook, m_postHooks)
     {
         if (!hook->checkPosition(latitudeNumber, longitudeNumber))
         {
@@ -425,7 +425,7 @@ public:
                 sql += ") ";
             }
 
-            foreach (int v, values)
+            foreach(int v, values)
             {
                 *boundValues << v;
             }
@@ -445,7 +445,7 @@ public:
             sql += " (" + name + " IN (";
             AlbumDB::addBoundValuePlaceholders(sql, values.size());
             sql += ") ";
-            foreach (const qlonglong& v, values)
+            foreach(const qlonglong& v, values)
             {
                 *boundValues << v;
             }
@@ -482,7 +482,7 @@ public:
                 sql += "OR " + name + " IS NULL ";
             }
 
-            foreach (int v, values)
+            foreach(int v, values)
             {
                 *boundValues << v;
             }

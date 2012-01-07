@@ -112,7 +112,7 @@ public:
     {
         int categorySortStartIndex = model->rowCount();
 
-        foreach (QAction* a, actions)
+        foreach(QAction* a, actions)
         {
             QAction* categoryAction = 0;
             if (mode & ActionItemModel::ToplevelMenuCategory)
@@ -146,7 +146,7 @@ protected:
 
     void enumerateActions(const QWidget* w, QAction* widgetAction)
     {
-        foreach (QAction *a, w->actions())
+        foreach(QAction *a, w->actions())
         {
             if (a->menu())
             {

@@ -6,7 +6,7 @@
  * Date        : 2004-07-20
  * Description : image histogram adjust levels.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -198,7 +198,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                 EditorToolSettings::Cancel);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
-    d->gboxSettings->setHistogramType(Digikam::LRGBA);
+    d->gboxSettings->setHistogramType(Digikam::LRGBAC);
 
     // we don't need to use the Gradient widget in this tool
     d->gboxSettings->histogramBox()->setGradientVisible(false);
@@ -522,22 +522,43 @@ void AdjustLevelsTool::slotPickerColorButtonActived(int type)
 
 void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
 {
+    ChannelType channel = d->gboxSettings->histogramBox()->channel();
+
     if ( d->pickBlack->isChecked() )
     {
-        // Black tonal levels point.
-        d->levels->levelsBlackToneAdjustByColors(d->gboxSettings->histogramBox()->channel(), color);
+        if (channel != ColorChannels)
+        {
+            // Black tonal levels point.
+            d->levels->levelsBlackToneAdjustByColors(channel, color);
+        }
+        else
+        {
+            for (int i = RedChannel; i <= BlueChannel; i++)
+                d->levels->levelsBlackToneAdjustByColors(i, color);
+        }
         d->pickBlack->setChecked(false);
     }
     else if ( d->pickGray->isChecked() )
     {
-        // Gray tonal levels point.
-        d->levels->levelsGrayToneAdjustByColors(d->gboxSettings->histogramBox()->channel(), color);
+        if (channel != ColorChannels)
+        {
+            // Gray tonal levels point.
+            d->levels->levelsGrayToneAdjustByColors(channel, color);
+        }
         d->pickGray->setChecked(false);
     }
     else if ( d->pickWhite->isChecked() )
     {
-        // White tonal levels point.
-        d->levels->levelsWhiteToneAdjustByColors(d->gboxSettings->histogramBox()->channel(), color);
+        if (channel != ColorChannels)
+        {
+            // White tonal levels point.
+            d->levels->levelsWhiteToneAdjustByColors(channel, color);
+        }
+        else
+        {
+            for (int i = RedChannel; i <= BlueChannel; i++)
+                d->levels->levelsWhiteToneAdjustByColors(i, color);
+        }
         d->pickWhite->setChecked(false);
     }
     else
@@ -560,8 +581,13 @@ void AdjustLevelsTool::slotColorSelectedFromTarget(const DColor& color)
 
 void AdjustLevelsTool::slotGammaInputchanged(double val)
 {
+    ChannelType channel = d->gboxSettings->histogramBox()->channel();
+
+    if (channel == ColorChannels)
+        channel = LuminosityChannel;
+
     blockSignals(true);
-    d->levels->setLevelGammaValue(d->gboxSettings->histogramBox()->channel(), val);
+    d->levels->setLevelGammaValue(channel, val);
     blockSignals(false);
     slotTimer();
 }
@@ -633,6 +659,11 @@ void AdjustLevelsTool::adjustSlidersAndSpinboxes(int minIn, double gamIn, int ma
 
 void AdjustLevelsTool::adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut)
 {
+    ChannelType channel = d->gboxSettings->histogramBox()->channel();
+
+    if (channel == ColorChannels)
+        channel = LuminosityChannel;
+
     d->inputLevels->blockSignals(true);
     d->gammaInput->blockSignals(true);
     d->outputLevels->blockSignals(true);
@@ -643,10 +674,10 @@ void AdjustLevelsTool::adjustSliders(int minIn, double gamIn, int maxIn, int min
     d->outputLevels->setLeftValue((double)minOut/(double)d->histoSegments);
     d->outputLevels->setRightValue((double)maxOut/(double)d->histoSegments);
 
-    d->levels->setLevelLowInputValue(d->gboxSettings->histogramBox()->channel(), minIn);
-    d->levels->setLevelHighInputValue(d->gboxSettings->histogramBox()->channel(), maxIn);
-    d->levels->setLevelLowOutputValue(d->gboxSettings->histogramBox()->channel(), minOut);
-    d->levels->setLevelHighOutputValue(d->gboxSettings->histogramBox()->channel(), maxOut);
+    d->levels->setLevelLowInputValue(channel, minIn);
+    d->levels->setLevelHighInputValue(channel, maxIn);
+    d->levels->setLevelLowOutputValue(channel, minOut);
+    d->levels->setLevelHighOutputValue(channel, maxOut);
 
     d->inputLevels->blockSignals(false);
     d->gammaInput->blockSignals(false);
@@ -655,7 +686,12 @@ void AdjustLevelsTool::adjustSliders(int minIn, double gamIn, int maxIn, int min
 
 void AdjustLevelsTool::slotResetCurrentChannel()
 {
-    d->levels->levelsChannelReset(d->gboxSettings->histogramBox()->channel());
+    ChannelType channel = d->gboxSettings->histogramBox()->channel();
+
+    if (channel == ColorChannels)
+        channel = LuminosityChannel;
+
+    d->levels->levelsChannelReset(channel);
 
     // Refresh the current levels config.
     slotChannelChanged();
@@ -679,6 +715,9 @@ void AdjustLevelsTool::slotChannelChanged()
 {
     ChannelType channel = d->gboxSettings->histogramBox()->channel();
     d->levelsHistogramWidget->setChannelType(channel);
+
+    if (channel == ColorChannels)
+        channel = LuminosityChannel;
 
     switch (channel)
     {
@@ -749,17 +788,25 @@ void AdjustLevelsTool::readSettings()
     d->levelsHistogramWidget->reset();
     d->gboxSettings->histogramBox()->histogram()->reset();
 
-    d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
-            (int)LuminosityChannel));
+    ChannelType ch = (ChannelType)group.readEntry(d->configHistogramChannelEntry, 
+            (int)LuminosityChannel);
+
+    // restore the previous channel
+    d->gboxSettings->histogramBox()->setChannel(ch);
+
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
             (int)LogScaleHistogram));
 
+    // if ColorChannels was set, make sure to take values from LuminosityChannel
+    if (ch == ColorChannels)
+        ch = LuminosityChannel;
+
     // This is mandatory here to set spinbox values because slot connections
     // can be not set completely at plugin startup.
-    d->minInput->setValue(d->levels->getLevelLowInputValue(d->gboxSettings->histogramBox()->channel()));
-    d->minOutput->setValue(d->levels->getLevelLowOutputValue(d->gboxSettings->histogramBox()->channel()));
-    d->maxInput->setValue(d->levels->getLevelHighInputValue(d->gboxSettings->histogramBox()->channel()));
-    d->maxOutput->setValue(d->levels->getLevelHighOutputValue(d->gboxSettings->histogramBox()->channel()));
+    d->minInput->setValue(d->levels->getLevelLowInputValue(ch));
+    d->minOutput->setValue(d->levels->getLevelLowOutputValue(ch));
+    d->maxInput->setValue(d->levels->getLevelHighInputValue(ch));
+    d->maxOutput->setValue(d->levels->getLevelHighOutputValue(ch));
     slotChannelChanged();
     slotScaleChanged();
 }
@@ -788,9 +835,9 @@ void AdjustLevelsTool::writeSettings()
             highOutput = d->levels->getLevelHighOutputValue(i);
 
             group.writeEntry(d->configGammaChannelEntry.arg(i), gamma);
-            group.writeEntry(d->configLowInputChannelEntry.arg(i), sb ? lowInput/255 : lowInput);
-            group.writeEntry(d->configLowOutputChannelEntry.arg(i), sb ? lowOutput/255 : lowOutput);
-            group.writeEntry(d->configHighInputChannelEntry.arg(i), sb ? highInput/255 : highInput);
+            group.writeEntry(d->configLowInputChannelEntry.arg(i),   sb ? lowInput/255   : lowInput);
+            group.writeEntry(d->configLowOutputChannelEntry.arg(i),  sb ? lowOutput/255  : lowOutput);
+            group.writeEntry(d->configHighInputChannelEntry.arg(i),  sb ? highInput/255  : highInput);
             group.writeEntry(d->configHighOutputChannelEntry.arg(i), sb ? highOutput/255 : highOutput);
         }
     }

@@ -98,7 +98,7 @@ void TemplateList::readSettings()
     if (tm)
     {
         QList<Template> list = tm->templateList();
-        foreach (const Template& t, list)
+        foreach(const Template& t, list)
         {
             new TemplateListItem(this, t);
         }

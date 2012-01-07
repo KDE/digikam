@@ -265,7 +265,7 @@ void SetupMime::applySettings()
                      << "png";                                 // PNG
 
     QString imageFilter = d->imageFileFilterEdit->text();
-    foreach(const QString & format, coreImageFormats)
+    foreach(const QString& format, coreImageFormats)
     {
         if (imageFilter.contains('-' + format)
             || imageFilter.contains("-*." + format))

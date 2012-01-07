@@ -784,7 +784,7 @@ void ThumbnailLoadThread::startKdePreviewJob()
 
     d->kdeJobHash.clear();
     KUrl::List list;
-    foreach (const LoadingDescription& description, d->kdeTodo)
+    foreach(const LoadingDescription& description, d->kdeTodo)
     {
         KUrl url = KUrl::fromPath(description.filePath);
         list << url;
@@ -1153,7 +1153,7 @@ int ThumbnailImageCatcher::enqueue()
     QList<LoadingDescription> descriptions = d->thread->lastDescriptions();
 
     QMutexLocker(&d->mutex);
-    foreach (const LoadingDescription& description, descriptions)
+    foreach(const LoadingDescription& description, descriptions)
     {
         d->tasks << description;
     }
@@ -1172,7 +1172,7 @@ QList<QImage> ThumbnailImageCatcher::waitForThumbnails()
     d->state = Waiting;
 
     // first, handle results received between request and calling this method
-    foreach (const ThumbnailImageCatcherResult& result, d->intermediate)
+    foreach(const ThumbnailImageCatcherResult& result, d->intermediate)
     {
         d->harvest(result.description, result.image);
     }
@@ -1185,7 +1185,7 @@ QList<QImage> ThumbnailImageCatcher::waitForThumbnails()
     }
 
     QList<QImage> result;
-    foreach (const ThumbnailImageCatcherResult& task, d->tasks)
+    foreach(const ThumbnailImageCatcherResult& task, d->tasks)
     {
         result << task.image;
     }

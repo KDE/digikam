@@ -60,7 +60,6 @@
 #include "imagedialog.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-#include "version.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;

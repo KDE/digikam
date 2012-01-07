@@ -60,6 +60,8 @@ public:
 
     void itemChanged(const CamItemInfo& itemInfo, const DMetadata& meta);
 
+    KUrl url() const;
+
 public Q_SLOTS:
 
     virtual void slotNoCurrentItem();

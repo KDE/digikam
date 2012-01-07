@@ -109,13 +109,13 @@ bool DImageHistory::isValid() const
     }
     else
     {
-        foreach (const Entry& e, d->entries)
+        foreach(const Entry& e, d->entries)
         {
             if (!e.action.isNull())
             {
                 return true;
             }
-            foreach (const HistoryImageId& id, e.referredImages)
+            foreach(const HistoryImageId& id, e.referredImages)
             {
                 if (id.isValid() && !id.isCurrentFile())
                 {
@@ -248,7 +248,7 @@ const FilterAction& DImageHistory::action(int i) const
 QList<FilterAction> DImageHistory::allActions() const
 {
     QList<FilterAction> actions;
-    foreach (const Entry& entry, d->entries)
+    foreach(const Entry& entry, d->entries)
     {
         if (!entry.action.isNull())
         {
@@ -261,7 +261,7 @@ QList<FilterAction> DImageHistory::allActions() const
 int DImageHistory::actionCount() const
 {
     int count = 0;
-    foreach (const Entry& entry, d->entries)
+    foreach(const Entry& entry, d->entries)
     {
         if (!entry.action.isNull())
         {
@@ -274,7 +274,7 @@ int DImageHistory::actionCount() const
 
 bool DImageHistory::hasActions() const
 {
-    foreach (const Entry& entry, d->entries)
+    foreach(const Entry& entry, d->entries)
     {
         if (!entry.action.isNull())
         {
@@ -298,7 +298,7 @@ const QList<HistoryImageId> &DImageHistory::referredImages(int i) const
 QList<HistoryImageId> DImageHistory::allReferredImages() const
 {
     QList<HistoryImageId> ids;
-    foreach (const Entry& entry, d->entries)
+    foreach(const Entry& entry, d->entries)
     {
         ids << entry.referredImages;
     }
@@ -307,7 +307,7 @@ QList<HistoryImageId> DImageHistory::allReferredImages() const
 
 bool DImageHistory::hasReferredImages() const
 {
-    foreach (const Entry& entry, d->entries)
+    foreach(const Entry& entry, d->entries)
     {
         if (!entry.referredImages.isEmpty())
         {
@@ -320,9 +320,9 @@ bool DImageHistory::hasReferredImages() const
 
 bool DImageHistory::hasReferredImageOfType(HistoryImageId::Type type) const
 {
-    foreach (const Entry& entry, d->entries)
+    foreach(const Entry& entry, d->entries)
     {
-        foreach (const HistoryImageId& id, entry.referredImages)
+        foreach(const HistoryImageId& id, entry.referredImages)
         {
             if (id.m_type == type)
             {
@@ -346,9 +346,9 @@ bool DImageHistory::hasOriginalReferredImage() const
 QList<HistoryImageId> DImageHistory::referredImagesOfType(HistoryImageId::Type type) const
 {
     QList<HistoryImageId> ids;
-    foreach (const Entry& entry, d->entries)
+    foreach(const Entry& entry, d->entries)
     {
-        foreach (const HistoryImageId& id, entry.referredImages)
+        foreach(const HistoryImageId& id, entry.referredImages)
         {
             if (id.m_type == type)
             {
@@ -361,9 +361,9 @@ QList<HistoryImageId> DImageHistory::referredImagesOfType(HistoryImageId::Type t
 
 HistoryImageId DImageHistory::currentReferredImage() const
 {
-    foreach (const Entry& entry, d->entries)
+    foreach(const Entry& entry, d->entries)
     {
-        foreach (const HistoryImageId& id, entry.referredImages)
+        foreach(const HistoryImageId& id, entry.referredImages)
         {
             if (id.isCurrentFile())
             {
@@ -376,9 +376,9 @@ HistoryImageId DImageHistory::currentReferredImage() const
 
 HistoryImageId DImageHistory::originalReferredImage() const
 {
-    foreach (const Entry& entry, d->entries)
+    foreach(const Entry& entry, d->entries)
     {
-        foreach (const HistoryImageId& id, entry.referredImages)
+        foreach(const HistoryImageId& id, entry.referredImages)
         {
             if (id.isOriginalFile())
             {
@@ -523,7 +523,7 @@ QString DImageHistory::toXml() const
             {
                 QList<QString> keys = params.keys();
                 qSort(keys);
-                foreach (const QString& key, keys)
+                foreach(const QString& key, keys)
                 {
                     QHash<QString, QVariant>::const_iterator it;
 
@@ -543,7 +543,7 @@ QString DImageHistory::toXml() const
 
         if (!step.referredImages.isEmpty())
         {
-            foreach (const HistoryImageId& imageId, step.referredImages)
+            foreach(const HistoryImageId& imageId, step.referredImages)
             {
                 if (!imageId.isValid())
                 {

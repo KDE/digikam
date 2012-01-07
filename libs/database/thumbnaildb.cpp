@@ -160,7 +160,7 @@ DatabaseThumbnailInfo ThumbnailDB::findByFilePath(const QString& path, const QSt
     }
     else
     {
-        foreach (const QVariant& hash, values)
+        foreach(const QVariant& hash, values)
         {
             if (hash == uniqueHash)
             {

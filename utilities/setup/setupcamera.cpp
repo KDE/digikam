@@ -425,7 +425,7 @@ void SetupCamera::readSettings()
     {
         QList<CameraType*>* cl = clist->cameraList();
 
-        foreach(CameraType * ctype, *cl)
+        foreach(CameraType* ctype, *cl)
         {
             new SetupCameraItem(d->listView, ctype);
         }
@@ -461,7 +461,7 @@ void SetupCamera::readSettings()
     }
 
     FilterComboBox::defaultFilters(&d->filters);
-    foreach(Filter * f, d->filters)
+    foreach(Filter* f, d->filters)
     {
         new QListWidgetItem(f->name, d->importListView);
     }

@@ -309,7 +309,7 @@ QList<ImageInfo> ImageCategorizedView::selectedImageInfosCurrentFirst() const
     QModelIndex        current = currentIndex();
     QList<ImageInfo>   infos;
 
-    foreach (const QModelIndex& index, indexes)
+    foreach(const QModelIndex& index, indexes)
     {
         ImageInfo info = d->filterModel->imageInfo(index);
 
@@ -336,7 +336,7 @@ KUrl::List ImageCategorizedView::urls() const
     QList<ImageInfo> infos = imageInfos();
     KUrl::List       urls;
 
-    foreach (const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, infos)
     {
         urls << info.fileUrl();
     }
@@ -349,7 +349,7 @@ KUrl::List ImageCategorizedView::selectedUrls() const
     QList<ImageInfo> infos = selectedImageInfos();
     KUrl::List       urls;
 
-    foreach (const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, infos)
     {
         urls << info.fileUrl();
     }
@@ -391,7 +391,7 @@ QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const
             int minDiff                            = d->filterModel->rowCount();
             QList<QModelIndex> indexesForImageInfo = d->filterModel->mapListFromSource(d->model->indexesForImageInfo(info));
 
-            foreach (const QModelIndex& index, indexesForImageInfo)
+            foreach(const QModelIndex& index, indexesForImageInfo)
             {
                 if (index == anchor || !index.isValid() || removed.contains(index))
                 {
@@ -512,7 +512,7 @@ void ImageCategorizedView::setSelectedImageInfos(const QList<ImageInfo>& infos)
 {
     QItemSelection mySelection;
 
-    foreach (const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, infos)
     {
         QModelIndex index = d->filterModel->indexForImageInfo(info);
         mySelection.select(index, index);

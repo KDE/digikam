@@ -228,7 +228,7 @@ void DImgFilterManager::DImgFilterManagerPriv::setupI18nStrings()
 void DImgFilterManager::DImgFilterManagerPriv::addGenerator(const ImgFilterPtr& generator)
 {
     QMutexLocker lock(&mutex);
-    foreach(const QString & id, generator->supportedFilters())
+    foreach(const QString& id, generator->supportedFilters())
     {
         if (filterMap.contains(id))
         {

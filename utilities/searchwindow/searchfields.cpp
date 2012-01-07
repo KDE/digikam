@@ -768,7 +768,7 @@ void SearchFieldKeyword::read(SearchXmlCachingReader& reader)
 void SearchFieldKeyword::write(SearchXmlWriter& writer)
 {
     QStringList keywordList = KeywordSearch::split(m_edit->text());
-    foreach(const QString & keyword, keywordList)
+    foreach(const QString& keyword, keywordList)
     {
         if (!keyword.isEmpty())
         {
@@ -2125,7 +2125,7 @@ void SearchFieldAlbum::write(SearchXmlWriter& writer)
     }
 
     QList<int> albumIds;
-    foreach(Album * album, checkedAlbums)
+    foreach(Album* album, checkedAlbums)
     {
         albumIds << album->id();
     }
@@ -2619,7 +2619,7 @@ void SearchFieldLabels::write(SearchXmlWriter& writer)
 
     if (!clAlbums.isEmpty())
     {
-        foreach(TAlbum * album, clAlbums)
+        foreach(TAlbum* album, clAlbums)
         {
             albumIds << album->id();
         }
@@ -2629,7 +2629,7 @@ void SearchFieldLabels::write(SearchXmlWriter& writer)
 
     if (!plAlbums.isEmpty())
     {
-        foreach(TAlbum * album, plAlbums)
+        foreach(TAlbum* album, plAlbums)
         {
             albumIds << album->id();
         }

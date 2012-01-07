@@ -874,7 +874,7 @@ void EditorWindow::loadImagePlugins()
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
-    foreach(ImagePlugin * plugin, pluginList)
+    foreach(ImagePlugin* plugin, pluginList)
     {
         if (plugin)
         {
@@ -887,14 +887,14 @@ void EditorWindow::loadImagePlugins()
             if (categoryStr != QString("__INVALID__") && !categoryStr.isEmpty())
             {
                 KActionCategory* category = new KActionCategory(categoryStr, d->imagepluginsActionCollection);
-                foreach(QAction * action, plugin->actionCollection()->actions())
+                foreach(QAction* action, plugin->actionCollection()->actions())
                 {
                     category->addAction(action->objectName(), action);
                 }
             }
             else
             {
-                foreach(QAction * action, plugin->actionCollection()->actions())
+                foreach(QAction* action, plugin->actionCollection()->actions())
                 {
                     d->imagepluginsActionCollection->addAction(action->objectName(), action);
                 }
@@ -920,7 +920,7 @@ void EditorWindow::unLoadImagePlugins()
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
-    foreach(ImagePlugin * plugin, pluginList)
+    foreach(ImagePlugin* plugin, pluginList)
     {
         if (plugin)
         {
@@ -1159,7 +1159,7 @@ void EditorWindow::toggleStandardActions(bool val)
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
-    foreach(ImagePlugin * plugin, pluginList)
+    foreach(ImagePlugin* plugin, pluginList)
     {
         if (plugin)
         {
@@ -1212,7 +1212,7 @@ void EditorWindow::slotToggleFullScreen()
         if (d->removeFullScreenButton)
         {
             QList<KToolBar*> toolbars = toolBars();
-            foreach(KToolBar * toolbar, toolbars)
+            foreach(KToolBar* toolbar, toolbars)
             {
                 // name is set in ui.rc XML file
                 if (toolbar->objectName() == "ToolBar")
@@ -1244,7 +1244,7 @@ void EditorWindow::slotToggleFullScreen()
 
             QList<KToolBar*> toolbars = toolBars();
             KToolBar* mainToolbar     = 0;
-            foreach(KToolBar * toolbar, toolbars)
+            foreach(KToolBar* toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
                 {
@@ -1682,7 +1682,7 @@ void EditorWindow::slotSelected(bool val)
     d->copyAction->setEnabled(val);
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
-    foreach(ImagePlugin * plugin, pluginList)
+    foreach(ImagePlugin* plugin, pluginList)
     {
         if (plugin)
         {
@@ -1708,7 +1708,7 @@ void EditorWindow::slotSelected(bool val)
 void EditorWindow::hideToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar * toolbar, toolbars)
+    foreach(KToolBar* toolbar, toolbars)
     {
         toolbar->hide();
     }
@@ -1717,7 +1717,7 @@ void EditorWindow::hideToolBars()
 void EditorWindow::showToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar * toolbar, toolbars)
+    foreach(KToolBar* toolbar, toolbars)
     {
         toolbar->show();
     }
@@ -2209,7 +2209,7 @@ QString EditorWindow::findFilterByExtension(const QStringList& allFilters, const
 
     const QString filterExtension = QString("*.%1").arg(extension.toLower());
 
-    foreach(const QString & filter, allFilters)
+    foreach(const QString& filter, allFilters)
     {
 
         if (filter.contains(filterExtension))

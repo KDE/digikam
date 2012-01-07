@@ -6,7 +6,7 @@
  * Date        : 2009-09-12
  * Description : parse settings class
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,7 +67,7 @@ public:
 
     // --------------------------------------------------------
 
-    bool isValid()
+    bool isValid() const
     {
         QFileInfo fi(fileUrl.toLocalFile());
         return fi.isReadable();
