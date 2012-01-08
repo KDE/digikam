@@ -49,7 +49,7 @@
 // Local includes
 
 #include "iccprofile.h"
-#include "lcmsprf.h"
+//#include "lcmsprf.h"
 
 namespace Digikam
 {
@@ -175,8 +175,8 @@ public:
         hXFORM(0)
     {
         progressPix         = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
-        Measurement.Patches = 0;
-        Measurement.Allowed = 0;
+        //Measurement.Patches = 0;
+        //Measurement.Allowed = 0;
     }
 
     bool            profileDataAvailable;
@@ -206,7 +206,7 @@ public:
     cmsCIExyYTRIPLE Primaries;
     cmsCIEXYZ       MediaWhite;
 
-    MEASUREMENT     Measurement;
+    //MEASUREMENT     Measurement;
 };
 
 CIETongueWidget::CIETongueWidget(int w, int h, QWidget* parent, cmsHPROFILE hMonitor)
@@ -237,15 +237,15 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget* parent, cmsHPROFILE hMon
 
 CIETongueWidget::~CIETongueWidget()
 {
-    if (d->Measurement.Patches)
-    {
-        free(d->Measurement.Patches);
-    }
-
-    if (d->Measurement.Allowed)
-    {
-        free(d->Measurement.Allowed);
-    }
+//     if (d->Measurement.Patches)
+//     {
+//         free(d->Measurement.Patches);
+//     }
+// 
+//     if (d->Measurement.Allowed)
+//     {
+//         free(d->Measurement.Allowed);
+//     }
 
     cmsDeleteTransform(d->hXFORM);
     cmsCloseProfile(d->hXYZProfile);
@@ -378,20 +378,20 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
 
     // Get target data stored in profile
 
-    ZeroMemory(&(d->Measurement), sizeof(MEASUREMENT));
+//     ZeroMemory(&(d->Measurement), sizeof(MEASUREMENT));
     char*  CharTarget     = 0;
     size_t CharTargetSize = 0;
 
     if (cmsTakeCharTargetData(hProfile, &CharTarget, &CharTargetSize))
     {
-        LCMSHANDLE hSheet = cmsxIT8LoadFromMem(CharTarget, CharTargetSize);
-
-        if (hSheet != NULL)
-        {
-            cmsxPCollLoadFromSheet(&(d->Measurement),  hSheet);
-            cmsxIT8Free(hSheet);
-            cmsxPCollValidatePatches(&(d->Measurement), PATCH_HAS_XYZ|PATCH_HAS_RGB);
-        }
+//         LCMSHANDLE hSheet = cmsxIT8LoadFromMem(CharTarget, CharTargetSize);
+// 
+//         if (hSheet != NULL)
+//         {
+//             cmsxPCollLoadFromSheet(&(d->Measurement),  hSheet);
+//             cmsxIT8Free(hSheet);
+//             cmsxPCollValidatePatches(&(d->Measurement), PATCH_HAS_XYZ|PATCH_HAS_RGB);
+//         }
     }
 }
 
@@ -608,47 +608,47 @@ void CIETongueWidget::drawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, i
 
 void CIETongueWidget::drawPatches()
 {
-    for (int i=0; i < d->Measurement.nPatches; ++i)
-    {
-        LPPATCH p = d->Measurement.Patches + i;
-
-        if (d->Measurement.Allowed[i])
-        {
-            LPcmsCIEXYZ XYZ = &p ->XYZ;
-            cmsCIExyY xyY;
-            cmsXYZ2xyY(&xyY, XYZ);
-
-            drawSmallElipse(&xyY,  0, 0, 0, 4);
-
-            if (p->dwFlags & PATCH_HAS_XYZ_PROOF)
-            {
-                if (p->XYZ.Y < 0.03)
-                {
-                    continue;
-                }
-
-                if (p->XYZProof.Y < 0.03)
-                {
-                    continue;
-                }
-
-                cmsCIExyY Pt;
-                cmsXYZ2xyY(&Pt, &p->XYZProof);
-                int icx1, icx2, icy1, icy2;
-
-                mapPoint(icx1, icy1, &xyY);
-                mapPoint(icx2, icy2, &Pt);
-
-                if (icx2 < 5 || icy2 < 5 || icx1 < 5 || icy1 < 5)
-                {
-                    continue;
-                }
-
-                d->painter.setPen(qRgb(255, 255, 0));
-                biasedLine(icx1, icy1, icx2, icy2);
-            }
-        }
-    }
+//     for (int i=0; i < d->Measurement.nPatches; ++i)
+//     {
+//         LPPATCH p = d->Measurement.Patches + i;
+// 
+//         if (d->Measurement.Allowed[i])
+//         {
+//             LPcmsCIEXYZ XYZ = &p ->XYZ;
+//             cmsCIExyY xyY;
+//             cmsXYZ2xyY(&xyY, XYZ);
+// 
+//             drawSmallElipse(&xyY,  0, 0, 0, 4);
+// 
+//             if (p->dwFlags & PATCH_HAS_XYZ_PROOF)
+//             {
+//                 if (p->XYZ.Y < 0.03)
+//                 {
+//                     continue;
+//                 }
+// 
+//                 if (p->XYZProof.Y < 0.03)
+//                 {
+//                     continue;
+//                 }
+// 
+//                 cmsCIExyY Pt;
+//                 cmsXYZ2xyY(&Pt, &p->XYZProof);
+//                 int icx1, icx2, icy1, icy2;
+// 
+//                 mapPoint(icx1, icy1, &xyY);
+//                 mapPoint(icx2, icy2, &Pt);
+// 
+//                 if (icx2 < 5 || icy2 < 5 || icx1 < 5 || icy1 < 5)
+//                 {
+//                     continue;
+//                 }
+// 
+//                 d->painter.setPen(qRgb(255, 255, 0));
+//                 biasedLine(icx1, icy1, icx2, icy2);
+//             }
+//         }
+//     }
 }
 
 void CIETongueWidget::drawColorantTriangle()
@@ -788,10 +788,10 @@ void CIETongueWidget::updatePixmap()
         drawColorantTriangle();
     }
 
-    if (d->Measurement.Patches && d->Measurement.Allowed)
-    {
-        drawPatches();
-    }
+//     if (d->Measurement.Patches && d->Measurement.Allowed)
+//     {
+//         drawPatches();
+//     }
 
     d->painter.end();
 }

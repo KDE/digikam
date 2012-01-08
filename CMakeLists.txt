@@ -139,9 +139,10 @@ INCLUDE(KDE4Defaults)
 INCLUDE(MacroLibrary)
 
 INCLUDE(FindPackageHandleStandardArgs)
+INCLUDE(FindPkgConfig)
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
-FIND_PACKAGE(LCMS)
+FIND_PACKAGE(PkgConfig)
 FIND_PACKAGE(JPEG)
 FIND_PACKAGE(PNG)
 FIND_PACKAGE(TIFF)
@@ -154,6 +155,25 @@ FIND_PACKAGE(KGeoMap)
 FIND_PACKAGE(PGF)
 FIND_PACKAGE(CLAPACK)
 FIND_PACKAGE(Boost) # 1.36.0)
+
+pkg_check_modules(LCMS2 REQUIRED lcms2)
+if ( 0 )
+#if (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
+    MESSAGE(STATUS "Found lcms2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIRS}")
+#     MESSAGE(STATUS "      lcms2 LCMS2_LIBRARIES      ${LCMS2_LIBRARIES}")
+#     MESSAGE(STATUS "      lcms2 LCMS2_LIBRARY_DIRS   ${LCMS2_LIBRARY_DIRS}")
+#     MESSAGE(STATUS "      lcms2 LCMS2_LDFLAGS        ${LCMS2_LDFLAGS}")
+#     MESSAGE(STATUS "      lcms2 LCMS2_LDFLAGS_OTHERS ${LCMS2_LDFLAGS_OTHERS}")
+#     MESSAGE(STATUS "      lcms2 LCMS2_INCLUDE_DIRS   ${LCMS2_INCLUDE_DIRS}")
+#     MESSAGE(STATUS "      lcms2 LCMS2_CFLAGS         ${LCMS2_CFLAGS}")
+#     MESSAGE(STATUS "      lcms2 LCMS2_CFLAGS_OTHERS  ${LCMS2_CFLAGS_OTHERS}")
+    SET(LCMS_FOUND ${LCMS2_FOUND})
+    SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
+    SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIRS})
+else (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
+    FIND_PACKAGE(LCMS)
+    MESSAGE(STATUS "Found lcms1: ${LCMS_LIBRARIES}  ${LCMS_INCLUDE_DIR}")
+endif (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
 
 # To link under Solaris (see B.K.O #274484)
 IF(NOT WIN32)
@@ -879,24 +899,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
            )
     ENDIF(MSVC)
 
-    # Gilles Caulier 12/01/06: lprof implementation is C not C++ and do not
-    # support 'nofinal' compilation option.
-    KDE4_NO_ENABLE_FINAL(liblprof)
-    SET(liblprof_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmshull.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmslm.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmslnr.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsmatn.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsmkmsh.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsmntr.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsoutl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmspcoll.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsprf.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsreg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsscn.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmssheet.cpp
-       )
-
     SET(libthreadimageio_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/loadsavethread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/managedloadsavethread.cpp
@@ -1495,7 +1497,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/kioslave
         ${CMAKE_CURRENT_SOURCE_DIR}/libs
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify
