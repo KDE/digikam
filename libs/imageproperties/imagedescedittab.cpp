@@ -7,7 +7,7 @@
  * Description : Captions, Tags, and Rating properties editor
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
@@ -310,7 +310,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->recentTagsBtn->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
     d->recentTagsBtn->setMenu(recentTagsMenu);
     d->recentTagsBtn->setPopupMode(QToolButton::InstantPopup);
-    d->recentTagsMapper   = new QSignalMapper(this);    
+    d->recentTagsMapper   = new QSignalMapper(this);
 
     grid3->addWidget(d->newTagEdit,   0, 0, 1, 2);
     grid3->addWidget(d->tagCheckView, 1, 0, 1, 2);
@@ -333,6 +333,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     d->templateSelector = new TemplateSelector(infoArea);
     d->templateViewer   = new TemplateViewer(infoArea);
+    d->templateViewer->setObjectName("ImageDescEditTab Expander");
 
     grid2->addWidget(d->templateSelector, 0, 0, 1, 2);
     grid2->addWidget(d->templateViewer,   1, 0, 1, 2);
@@ -431,42 +432,38 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     connect(watch, SIGNAL(signalImageCaptionChanged(qlonglong)),
             this, SLOT(slotImageCaptionChanged(qlonglong)));
-
-    // -- read config ---------------------------------------------------------
-
-    /// @todo Implement read/writeSettings functions with externally supplied groups
-
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group2       = config->group("Image Properties SideBar");
-    d->tabWidget->setCurrentIndex(group2.readEntry("ImageDescEditTab Tab",
-                                  (int)ImageDescEditTabPriv::DESCRIPTIONS));
-    d->templateViewer->setObjectName("ImageDescEditTab Expander");
-
-#if KDCRAW_VERSION >= 0x020000
-    d->templateViewer->readSettings(group2);
-#else
-    d->templateViewer->readSettings();
-#endif
-
-    d->tagCheckView->setConfigGroup(group2);
-    d->tagCheckView->setEntryPrefix("ImageDescEditTab TagCheckView");
-    d->tagCheckView->loadState();
-    d->tagsSearchBar->setConfigGroup(group2);
-    d->tagsSearchBar->setEntryPrefix("ImageDescEditTab SearchBar");
-    d->tagsSearchBar->loadState();
 }
 
 ImageDescEditTab::~ImageDescEditTab()
 {
-    // FIXME: this slot seems to be called several times, which can also be seen when changing the metadata of
-    // an image and then switching to another one, because you'll get the dialog created by slotChangingItems()
-    // twice, and this seems to be exactly the problem when called here.
-    // We should disable the slot here at the moment, otherwise digikam crashes.
-    //slotChangingItems();
+    delete d;
+}
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Image Properties SideBar");
-    group.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
+void ImageDescEditTab::readSettings(KConfigGroup& group)
+{
+    d->tabWidget->setCurrentIndex(group.readEntry("ImageDescEdit Tab", (int)ImageDescEditTabPriv::DESCRIPTIONS));
+    d->titleEdit->setCurrentLanguageCode(group.readEntry("ImageDescEditTab TitleLang", QString()));
+    d->captionsEdit->setCurrentLanguageCode(group.readEntry("ImageDescEditTab CaptionsLang", QString()));
+
+#if KDCRAW_VERSION >= 0x020000
+    d->templateViewer->readSettings(group);
+#else
+    d->templateViewer->readSettings();
+#endif
+
+    d->tagCheckView->setConfigGroup(group);
+    d->tagCheckView->setEntryPrefix("ImageDescEditTab TagCheckView");
+    d->tagCheckView->loadState();
+    d->tagsSearchBar->setConfigGroup(group);
+    d->tagsSearchBar->setEntryPrefix("ImageDescEditTab SearchBar");
+    d->tagsSearchBar->loadState();
+}
+
+void ImageDescEditTab::writeSettings(KConfigGroup& group)
+{
+    group.writeEntry("ImageDescEdit Tab",             d->tabWidget->currentIndex());
+    group.writeEntry("ImageDescEditTab TitleLang",    d->titleEdit->currentLanguageCode());
+    group.writeEntry("ImageDescEditTab CaptionsLang", d->captionsEdit->currentLanguageCode());
 
 #if KDCRAW_VERSION >= 0x020000
     d->templateViewer->writeSettings(group);
@@ -474,12 +471,8 @@ ImageDescEditTab::~ImageDescEditTab()
     d->templateViewer->writeSettings();
 #endif
 
-    group.sync();
-
     d->tagCheckView->saveState();
     d->tagsSearchBar->saveState();
-
-    delete d;
 }
 
 bool ImageDescEditTab::singleSelection() const
@@ -870,7 +863,7 @@ void ImageDescEditTab::slotCommentChanged()
 void ImageDescEditTab::slotTitleChanged()
 {
     CaptionsMap titles;
-    
+
     titles.fromAltLangMap(d->titleEdit->values());
     d->hub.setTitles(titles);
     setMetadataWidgetStatus(d->hub.titlesStatus(), d->titleEdit);

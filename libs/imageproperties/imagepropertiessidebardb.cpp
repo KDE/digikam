@@ -7,7 +7,7 @@
  * Description : image properties side bar using data from
  *               digiKam database.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2011 by Martin Klapetek <martin dot klapetek at gmail dot com>
  * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -630,8 +630,11 @@ void ImagePropertiesSideBarDB::doLoadState()
 
     KConfigGroup group = getConfigGroup();
 
-    const KConfigGroup groupVersionTab = KConfigGroup(&group, entryName("Version Properties Tab"));
+    KConfigGroup groupVersionTab = KConfigGroup(&group, entryName("Version Properties Tab"));
     d->versionsHistoryTab->readSettings(groupVersionTab);
+
+    KConfigGroup groupCaptionsTagsTab = KConfigGroup(&group, entryName("Captions Tags Properties Tab"));
+    d->desceditTab->readSettings(groupCaptionsTagsTab);
 }
 
 void ImagePropertiesSideBarDB::doSaveState()
@@ -642,6 +645,9 @@ void ImagePropertiesSideBarDB::doSaveState()
 
     KConfigGroup groupVersionTab = KConfigGroup(&group, entryName("Version Properties Tab"));
     d->versionsHistoryTab->writeSettings(groupVersionTab);
+
+    KConfigGroup groupCaptionsTagsTab = KConfigGroup(&group, entryName("Captions Tags Properties Tab"));
+    d->desceditTab->writeSettings(groupCaptionsTagsTab);
 }
 
 void ImagePropertiesSideBarDB::slotPopupTagsView()

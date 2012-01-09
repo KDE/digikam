@@ -60,7 +60,7 @@ public:
     ImagePropertiesVersionsTab(QWidget* parent);
     ~ImagePropertiesVersionsTab();
 
-    void readSettings(const KConfigGroup& group);
+    void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
     void clear();
