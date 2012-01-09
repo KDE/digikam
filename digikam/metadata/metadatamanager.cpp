@@ -53,8 +53,8 @@ namespace Digikam
 class MetadataManagerCreator
 {
 public:
-    MetadataManager object;
 
+    MetadataManager object;
 };
 
 K_GLOBAL_STATIC(MetadataManagerCreator, metadataManagercreator)
@@ -689,7 +689,7 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
     {
         //kDebug() << "Setting Exif Orientation tag to " << orientation;
 
-        QString path = info.filePath();
+        QString path                  = info.filePath();
         DMetadata metadata(path);
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
         metadata.setImageOrientation(o);
