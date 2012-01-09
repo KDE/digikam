@@ -4,10 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-05
- * Description : Metadata operations on images
+ * Description : file action manager
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#include "metadatamanager.moc"
-#include "metadatamanager_p.moc"
+#include "fileactionmngr.moc"
+#include "fileactionmngr_p.moc"
 
 // Qt includes
 
@@ -50,22 +50,22 @@
 namespace Digikam
 {
 
-class MetadataManagerCreator
+class FileActionMngrCreator
 {
 public:
 
-    MetadataManager object;
+    FileActionMngr object;
 };
 
-K_GLOBAL_STATIC(MetadataManagerCreator, metadataManagercreator)
+K_GLOBAL_STATIC(FileActionMngrCreator, metadataManagercreator)
 
-MetadataManager* MetadataManager::instance()
+FileActionMngr* FileActionMngr::instance()
 {
     return &metadataManagercreator->object;
 }
 
-MetadataManager::MetadataManager()
-    : d(new MetadataManagerPriv(this))
+FileActionMngr::FileActionMngr()
+    : d(new FileActionMngrPriv(this))
 {
     connect(d, SIGNAL(progressMessageChanged(QString)),
             this, SIGNAL(progressMessageChanged(QString)));
@@ -80,145 +80,145 @@ MetadataManager::MetadataManager()
             this, SIGNAL(orientationChangeFailed(QStringList)));
 }
 
-MetadataManager::~MetadataManager()
+FileActionMngr::~FileActionMngr()
 {
     shutDown();
     delete d;
 }
 
-bool MetadataManager::requestShutDown()
+bool FileActionMngr::requestShutDown()
 {
     //TODO
     return true;
 }
 
-void MetadataManager::shutDown()
+void FileActionMngr::shutDown()
 {
     d->dbWorker->deactivate();
     d->fileWorker->deactivate();
 }
 
-void MetadataManager::assignTags(const QList<qlonglong>& ids, const QList<int>& tagIDs)
+void FileActionMngr::assignTags(const QList<qlonglong>& ids, const QList<int>& tagIDs)
 {
     assignTags(ImageInfoList(ids), tagIDs);
 }
 
-void MetadataManager::assignTag(const ImageInfo& info, int tagID)
+void FileActionMngr::assignTag(const ImageInfo& info, int tagID)
 {
     assignTags(QList<ImageInfo>() << info, QList<int>() << tagID);
 }
 
-void MetadataManager::assignTag(const QList<ImageInfo>& infos, int tagID)
+void FileActionMngr::assignTag(const QList<ImageInfo>& infos, int tagID)
 {
     assignTags(infos, QList<int>() << tagID);
 }
 
-void MetadataManager::assignTags(const ImageInfo& info, const QList<int>& tagIDs)
+void FileActionMngr::assignTags(const ImageInfo& info, const QList<int>& tagIDs)
 {
     assignTags(QList<ImageInfo>() << info, tagIDs);
 }
 
-void MetadataManager::assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
+void FileActionMngr::assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
     d->schedulingForDB(infos.size());
     d->assignTags(infos, tagIDs);
 }
 
-void MetadataManager::removeTag(const ImageInfo& info, int tagID)
+void FileActionMngr::removeTag(const ImageInfo& info, int tagID)
 {
     removeTags(QList<ImageInfo>() << info, QList<int>() << tagID);
 }
 
-void MetadataManager::removeTag(const QList<ImageInfo>& infos, int tagID)
+void FileActionMngr::removeTag(const QList<ImageInfo>& infos, int tagID)
 {
     removeTags(infos, QList<int>() << tagID);
 }
 
-void MetadataManager::removeTags(const ImageInfo& info, const QList<int>& tagIDs)
+void FileActionMngr::removeTags(const ImageInfo& info, const QList<int>& tagIDs)
 {
     removeTags(QList<ImageInfo>() << info, tagIDs);
 }
 
-void MetadataManager::removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
+void FileActionMngr::removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
     d->schedulingForDB(infos.size());
     d->removeTags(infos, tagIDs);
 }
 
-void MetadataManager::assignPickLabel(const ImageInfo& info, int pickId)
+void FileActionMngr::assignPickLabel(const ImageInfo& info, int pickId)
 {
     assignPickLabel(QList<ImageInfo>() << info, pickId);
 }
 
-void MetadataManager::assignColorLabel(const ImageInfo& info, int colorId)
+void FileActionMngr::assignColorLabel(const ImageInfo& info, int colorId)
 {
     assignColorLabel(QList<ImageInfo>() << info, colorId);
 }
 
-void MetadataManager::assignPickLabel(const QList<ImageInfo>& infos, int pickId)
+void FileActionMngr::assignPickLabel(const QList<ImageInfo>& infos, int pickId)
 {
     d->schedulingForDB(infos.size());
     d->assignPickLabel(infos, pickId);
 }
 
-void MetadataManager::assignColorLabel(const QList<ImageInfo>& infos, int colorId)
+void FileActionMngr::assignColorLabel(const QList<ImageInfo>& infos, int colorId)
 {
     d->schedulingForDB(infos.size());
     d->assignColorLabel(infos, colorId);
 }
 
-void MetadataManager::assignRating(const ImageInfo& info, int rating)
+void FileActionMngr::assignRating(const ImageInfo& info, int rating)
 {
     assignRating(QList<ImageInfo>() << info, rating);
 }
 
-void MetadataManager::assignRating(const QList<ImageInfo>& infos, int rating)
+void FileActionMngr::assignRating(const QList<ImageInfo>& infos, int rating)
 {
     d->schedulingForDB(infos.size());
     d->assignRating(infos, rating);
 }
 
-void MetadataManager::addToGroup(const ImageInfo& pick, const QList<ImageInfo>& infos)
+void FileActionMngr::addToGroup(const ImageInfo& pick, const QList<ImageInfo>& infos)
 {
     d->schedulingForDB(infos.size());
     d->editGroup(AddToGroup, pick, infos);
 }
 
-void MetadataManager::removeFromGroup(const ImageInfo& info)
+void FileActionMngr::removeFromGroup(const ImageInfo& info)
 {
     removeFromGroup(QList<ImageInfo>() << info);
 }
 
-void MetadataManager::removeFromGroup(const QList<ImageInfo>& infos)
+void FileActionMngr::removeFromGroup(const QList<ImageInfo>& infos)
 {
     d->schedulingForDB(infos.size());
     d->editGroup(RemoveFromGroup, ImageInfo(), infos);
 }
 
-void MetadataManager::ungroup(const ImageInfo& info)
+void FileActionMngr::ungroup(const ImageInfo& info)
 {
     ungroup(QList<ImageInfo>() << info);
 }
 
-void MetadataManager::ungroup(const QList<ImageInfo>& infos)
+void FileActionMngr::ungroup(const QList<ImageInfo>& infos)
 {
     d->schedulingForDB(infos.size());
     d->editGroup(Ungroup, ImageInfo(), infos);
 }
 
-void MetadataManager::setExifOrientation(const QList<ImageInfo>& infos, int orientation)
+void FileActionMngr::setExifOrientation(const QList<ImageInfo>& infos, int orientation)
 {
     d->schedulingForDB(infos.size());
     d->setExifOrientation(infos, orientation);
 }
 
-void MetadataManager::applyMetadata(const QList<ImageInfo>& infos, const MetadataHub& hub)
+void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const MetadataHub& hub)
 {
     d->schedulingForDB(infos.size());
     d->applyMetadata(infos, new MetadataHubOnTheRoad(hub, this));
 }
 
-void MetadataManager::applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad& hub)
+void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad& hub)
 {
     d->schedulingForDB(infos.size());
     d->applyMetadata(infos, new MetadataHubOnTheRoad(hub, this));
@@ -226,11 +226,11 @@ void MetadataManager::applyMetadata(const QList<ImageInfo>& infos, const Metadat
 
 // --------------------------------------------------------------------------------------
 
-MetadataManager::MetadataManagerPriv::MetadataManagerPriv(MetadataManager* q)
+FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
     : q(q)
 {
-    dbWorker   = new MetadataManagerDatabaseWorker(this);
-    fileWorker = new MetadataManagerFileWorker(this);
+    dbWorker   = new FileActionMngrDatabaseWorker(this);
+    fileWorker = new FileActionMngrFileWorker(this);
 
     sleepTimer = new QTimer(this);
     sleepTimer->setSingleShot(true);
@@ -284,25 +284,25 @@ MetadataManager::MetadataManagerPriv::MetadataManagerPriv(MetadataManager* q)
             this, SLOT(slotSleepTimer()));
 }
 
-MetadataManager::MetadataManagerPriv::~MetadataManagerPriv()
+FileActionMngr::FileActionMngrPriv::~FileActionMngrPriv()
 {
     delete dbWorker;
     delete fileWorker;
 }
 
-void MetadataManager::MetadataManagerPriv::schedulingForDB(int numberOfInfos)
+void FileActionMngr::FileActionMngrPriv::schedulingForDB(int numberOfInfos)
 {
     dbTodo += numberOfInfos;
     updateProgress();
 }
 
-void MetadataManager::MetadataManagerPriv::setDBAction(const QString& action)
+void FileActionMngr::FileActionMngrPriv::setDBAction(const QString& action)
 {
     dbMessage = action;
     updateProgressMessage();
 }
 
-bool MetadataManager::MetadataManagerPriv::shallSendForWriting(qlonglong id)
+bool FileActionMngr::FileActionMngrPriv::shallSendForWriting(qlonglong id)
 {
     QMutexLocker lock(&mutex);
 
@@ -315,7 +315,7 @@ bool MetadataManager::MetadataManagerPriv::shallSendForWriting(qlonglong id)
     return true;
 }
 
-void MetadataManager::MetadataManagerPriv::dbProcessedOne()
+void FileActionMngr::FileActionMngrPriv::dbProcessedOne()
 {
     if ( (dbDone++ % 10) == 0)
     {
@@ -323,36 +323,36 @@ void MetadataManager::MetadataManagerPriv::dbProcessedOne()
     }
 }
 
-void MetadataManager::MetadataManagerPriv::dbProcessed(int numberOfInfos)
+void FileActionMngr::FileActionMngrPriv::dbProcessed(int numberOfInfos)
 {
     dbDone += numberOfInfos;
     updateProgress();
 }
 
-void MetadataManager::MetadataManagerPriv::dbFinished(int numberOfInfos)
+void FileActionMngr::FileActionMngrPriv::dbFinished(int numberOfInfos)
 {
     dbTodo -= numberOfInfos;
     updateProgress();
 }
 
-void MetadataManager::MetadataManagerPriv::schedulingForWrite(int numberOfInfos)
+void FileActionMngr::FileActionMngrPriv::schedulingForWrite(int numberOfInfos)
 {
     writerTodo += numberOfInfos;
     updateProgress();
 }
 
-void MetadataManager::MetadataManagerPriv::schedulingForOrientationWrite(int numberOfInfos)
+void FileActionMngr::FileActionMngrPriv::schedulingForOrientationWrite(int numberOfInfos)
 {
     schedulingForWrite(numberOfInfos);
 }
 
-void MetadataManager::MetadataManagerPriv::setWriterAction(const QString& action)
+void FileActionMngr::FileActionMngrPriv::setWriterAction(const QString& action)
 {
     writerMessage = action;
     updateProgressMessage();
 }
 
-void MetadataManager::MetadataManagerPriv::startingToWrite(const QList<ImageInfo>& infos)
+void FileActionMngr::FileActionMngrPriv::startingToWrite(const QList<ImageInfo>& infos)
 {
     QMutexLocker lock(&mutex);
     foreach(const ImageInfo& info, infos)
@@ -361,24 +361,24 @@ void MetadataManager::MetadataManagerPriv::startingToWrite(const QList<ImageInfo
     }
 }
 
-void MetadataManager::MetadataManagerPriv::writtenToOne()
+void FileActionMngr::FileActionMngrPriv::writtenToOne()
 {
     writerDone++;
     updateProgress();
 }
 
-void MetadataManager::MetadataManagerPriv::orientationWrittenToOne()
+void FileActionMngr::FileActionMngrPriv::orientationWrittenToOne()
 {
     writtenToOne();
 }
 
-void MetadataManager::MetadataManagerPriv::finishedWriting(int numberOfInfos)
+void FileActionMngr::FileActionMngrPriv::finishedWriting(int numberOfInfos)
 {
     writerTodo -= numberOfInfos;
     updateProgress();
 }
 
-void MetadataManager::MetadataManagerPriv::updateProgressMessage()
+void FileActionMngr::FileActionMngrPriv::updateProgressMessage()
 {
     QString message;
 
@@ -398,7 +398,7 @@ void MetadataManager::MetadataManagerPriv::updateProgressMessage()
     emit progressMessageChanged(message);
 }
 
-void MetadataManager::MetadataManagerPriv::updateProgress()
+void FileActionMngr::FileActionMngrPriv::updateProgress()
 {
     if (dbTodo == 0 && writerTodo == 0)
     {
@@ -413,7 +413,7 @@ void MetadataManager::MetadataManagerPriv::updateProgress()
     emit progressValueChanged(percent);
 }
 
-void MetadataManager::MetadataManagerPriv::slotImageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache)
+void FileActionMngr::FileActionMngrPriv::slotImageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache)
 {
     // must be done from the UI thread, touches pixmaps
     if (removeThumbnails)
@@ -427,7 +427,7 @@ void MetadataManager::MetadataManagerPriv::slotImageDataChanged(const QString& p
     }
 }
 
-void MetadataManager::MetadataManagerPriv::slotSleepTimer()
+void FileActionMngr::FileActionMngrPriv::slotSleepTimer()
 {
     if (dbTodo == 0)
     {
@@ -442,19 +442,19 @@ void MetadataManager::MetadataManagerPriv::slotSleepTimer()
 
 // -------------------------------------------------------------------------------
 
-void MetadataManagerDatabaseWorker::assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
+void FileActionMngrDatabaseWorker::assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
     d->setDBAction(i18n("Assigning image tags. Please wait..."));
     changeTags(infos, tagIDs, true);
 }
 
-void MetadataManagerDatabaseWorker::removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
+void FileActionMngrDatabaseWorker::removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
     d->setDBAction(i18n("Removing image tags. Please wait..."));
     changeTags(infos, tagIDs, false);
 }
 
-void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos,
+void FileActionMngrDatabaseWorker::changeTags(const QList<ImageInfo>& infos,
                                                const QList<int>& tagIDs, bool addOrRemove)
 {
     MetadataHub      hub;
@@ -497,7 +497,7 @@ void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos,
     d->dbFinished(infos.size());
 }
 
-void MetadataManagerDatabaseWorker::assignPickLabel(const QList<ImageInfo>& infos, int pickId)
+void FileActionMngrDatabaseWorker::assignPickLabel(const QList<ImageInfo>& infos, int pickId)
 {
     d->setDBAction(i18n("Assigning image pick label. Please wait..."));
 
@@ -535,7 +535,7 @@ void MetadataManagerDatabaseWorker::assignPickLabel(const QList<ImageInfo>& info
     d->dbFinished(infos.size());
 }
 
-void MetadataManagerDatabaseWorker::assignColorLabel(const QList<ImageInfo>& infos, int colorId)
+void FileActionMngrDatabaseWorker::assignColorLabel(const QList<ImageInfo>& infos, int colorId)
 {
     d->setDBAction(i18n("Assigning image color label. Please wait..."));
 
@@ -573,7 +573,7 @@ void MetadataManagerDatabaseWorker::assignColorLabel(const QList<ImageInfo>& inf
     d->dbFinished(infos.size());
 }
 
-void MetadataManagerDatabaseWorker::assignRating(const QList<ImageInfo>& infos, int rating)
+void FileActionMngrDatabaseWorker::assignRating(const QList<ImageInfo>& infos, int rating)
 {
     d->setDBAction(i18n("Assigning image ratings. Please wait..."));
 
@@ -612,7 +612,7 @@ void MetadataManagerDatabaseWorker::assignRating(const QList<ImageInfo>& infos, 
     d->dbFinished(infos.size());
 }
 
-void MetadataManagerDatabaseWorker::editGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos)
+void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos)
 {
     d->setDBAction(i18n("Editing group. Please wait..."));
 
@@ -643,7 +643,7 @@ void MetadataManagerDatabaseWorker::editGroup(int groupAction, const ImageInfo& 
     d->dbFinished(infos.size());
 }
 
-void MetadataManagerDatabaseWorker::setExifOrientation(const QList<ImageInfo>& infos, int orientation)
+void FileActionMngrDatabaseWorker::setExifOrientation(const QList<ImageInfo>& infos, int orientation)
 {
     d->setDBAction(i18n("Updating orientation in database. Please wait..."));
     //TODO: update db
@@ -653,7 +653,7 @@ void MetadataManagerDatabaseWorker::setExifOrientation(const QList<ImageInfo>& i
     d->dbFinished(infos.size());
 }
 
-void MetadataManagerDatabaseWorker::applyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub)
+void FileActionMngrDatabaseWorker::applyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub)
 {
     d->setDBAction(i18n("Applying metadata. Please wait..."));
 
@@ -679,7 +679,7 @@ void MetadataManagerDatabaseWorker::applyMetadata(const QList<ImageInfo>& infos,
 
 // ----------------------------------------------------------------------
 
-void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation)
+void FileActionMngrFileWorker::writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation)
 {
     d->setWriterAction(i18n("Revising Exif Orientation tags. Please wait..."));
 
@@ -716,7 +716,7 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
     d->finishedWriting(infos.size());
 }
 
-void MetadataManagerFileWorker::writeMetadataToFiles(const QList<ImageInfo>& infos)
+void FileActionMngrFileWorker::writeMetadataToFiles(const QList<ImageInfo>& infos)
 {
     d->setWriterAction(i18n("Writing metadata to files. Please wait..."));
     d->startingToWrite(infos);
@@ -745,7 +745,7 @@ void MetadataManagerFileWorker::writeMetadataToFiles(const QList<ImageInfo>& inf
     d->finishedWriting(infos.size());
 }
 
-void MetadataManagerFileWorker::writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub)
+void FileActionMngrFileWorker::writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub)
 {
     d->setWriterAction(i18n("Writing metadata to files. Please wait..."));
     d->startingToWrite(infos);

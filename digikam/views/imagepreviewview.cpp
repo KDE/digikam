@@ -63,7 +63,7 @@
 #include "dimgpreviewitem.h"
 #include "facegroup.h"
 #include "imageinfo.h"
-#include "metadatamanager.h"
+#include "fileactionmngr.h"
 #include "metadatasettings.h"
 #include "regionframeitem.h"
 #include "tagspopupmenu.h"
@@ -467,27 +467,27 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
 
 void ImagePreviewView::slotAssignTag(int tagID)
 {
-    MetadataManager::instance()->assignTag(d->item->imageInfo(), tagID);
+    FileActionMngr::instance()->assignTag(d->item->imageInfo(), tagID);
 }
 
 void ImagePreviewView::slotRemoveTag(int tagID)
 {
-    MetadataManager::instance()->removeTag(d->item->imageInfo(), tagID);
+    FileActionMngr::instance()->removeTag(d->item->imageInfo(), tagID);
 }
 
 void ImagePreviewView::slotAssignPickLabel(int pickId)
 {
-    MetadataManager::instance()->assignPickLabel(d->item->imageInfo(), pickId);
+    FileActionMngr::instance()->assignPickLabel(d->item->imageInfo(), pickId);
 }
 
 void ImagePreviewView::slotAssignColorLabel(int colorId)
 {
-    MetadataManager::instance()->assignColorLabel(d->item->imageInfo(), colorId);
+    FileActionMngr::instance()->assignColorLabel(d->item->imageInfo(), colorId);
 }
 
 void ImagePreviewView::slotAssignRating(int rating)
 {
-    MetadataManager::instance()->assignRating(d->item->imageInfo(), rating);
+    FileActionMngr::instance()->assignRating(d->item->imageInfo(), rating);
 }
 
 void ImagePreviewView::slotThemeChanged()

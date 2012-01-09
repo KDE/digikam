@@ -4,10 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-05
- * Description : Metadata operations on images
+ * Description : file action manager
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATAMANAGER_P_H
-#define METADATAMANAGER_P_H
+#ifndef FILEACTIONMNGR_P_H
+#define FILEACTIONMNGR_P_H
 
 // Qt includes
 
@@ -39,8 +39,8 @@
 namespace Digikam
 {
 
-class MetadataManagerDatabaseWorker;
-class MetadataManagerFileWorker;
+class FileActionMngrDatabaseWorker;
+class FileActionMngrFileWorker;
 
 enum GroupAction
 {
@@ -49,14 +49,14 @@ enum GroupAction
     Ungroup
 };
 
-class MetadataManager::MetadataManagerPriv : public QObject
+class FileActionMngr::FileActionMngrPriv : public QObject
 {
     Q_OBJECT
 
 public:
 
-    MetadataManagerPriv(MetadataManager* q);
-    ~MetadataManagerPriv();
+    FileActionMngrPriv(FileActionMngr* q);
+    ~FileActionMngrPriv();
 
 public:
 
@@ -69,10 +69,10 @@ public:
     QString                        writerMessage;
     QMutex                         mutex;
 
-    MetadataManager*               q;
+    FileActionMngr*               q;
 
-    MetadataManagerDatabaseWorker* dbWorker;
-    MetadataManagerFileWorker*     fileWorker;
+    FileActionMngrDatabaseWorker* dbWorker;
+    FileActionMngrFileWorker*     fileWorker;
 
     QTimer*                        sleepTimer;
 
@@ -148,7 +148,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    // connected to MetadataManager public signals
+    // connected to FileActionMngr public signals
     void progressMessageChanged(const QString& descriptionOfAction);
     void progressValueChanged(float percent);
     void progressFinished();
@@ -166,13 +166,13 @@ Q_SIGNALS:
 
 // ---------------------------------------------------------------------------------------------
 
-class MetadataManagerDatabaseWorker : public WorkerObject
+class FileActionMngrDatabaseWorker : public WorkerObject
 {
     Q_OBJECT
 
 public:
 
-    MetadataManagerDatabaseWorker(MetadataManager::MetadataManagerPriv* d)
+    FileActionMngrDatabaseWorker(FileActionMngr::FileActionMngrPriv* d)
         : d(d) {}
 
 public Q_SLOTS:
@@ -196,18 +196,18 @@ private:
 
     void changeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs, bool addOrRemove);
 
-    MetadataManager::MetadataManagerPriv* const d;
+    FileActionMngr::FileActionMngrPriv* const d;
 };
 
 // ---------------------------------------------------------------------------------------------
 
-class MetadataManagerFileWorker : public WorkerObject
+class FileActionMngrFileWorker : public WorkerObject
 {
     Q_OBJECT
 
 public:
 
-    MetadataManagerFileWorker(MetadataManager::MetadataManagerPriv* d)
+    FileActionMngrFileWorker(FileActionMngr::FileActionMngrPriv* d)
         : d(d) {}
 
 public Q_SLOTS:
@@ -223,9 +223,9 @@ Q_SIGNALS:
 
 private:
 
-    MetadataManager::MetadataManagerPriv* const d;
+    FileActionMngr::FileActionMngrPriv* const d;
 };
 
 } // namespace Digikam
 
-#endif //METADATAMANAGER_P_H
+#endif //FILEACTIONMNGR_P_H

@@ -62,7 +62,7 @@
 #include "albumthumbnailloader.h"
 #include "collectionscanner.h"
 #include "databasetransaction.h"
-#include "metadatamanager.h"
+#include "fileactionmngr.h"
 #include "ratingwidget.h"
 #include "scancontroller.h"
 #include "tagcheckview.h"
@@ -654,7 +654,7 @@ void ImageDescEditTab::slotApplyAllChanges()
         return;
     }
 
-    MetadataManager::instance()->applyMetadata(d->currInfos, d->hub);
+    FileActionMngr::instance()->applyMetadata(d->currInfos, d->hub);
 
     d->modified = false;
     d->hub.resetChanged();
@@ -1414,7 +1414,7 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
         tmpSet.insert(relations.at(i).second);
     }
 
-    MetadataManager::instance()->applyMetadata(ImageInfoList(tmpSet.toList()), d->hub);
+    FileActionMngr::instance()->applyMetadata(ImageInfoList(tmpSet.toList()), d->hub);
 
     d->modified = false;
     d->hub.resetChanged();

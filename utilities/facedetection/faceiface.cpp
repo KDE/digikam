@@ -47,7 +47,7 @@
 #include "facetags.h"
 #include "imageinfo.h"
 #include "imagetagpair.h"
-#include "metadatamanager.h"
+#include "fileactionmngr.h"
 #include "tagproperties.h"
 #include "tagscache.h"
 #include "tagregion.h"
@@ -353,21 +353,21 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
     return newFaces;
 }
 
-// --- Editing normal tags, reimplemented with MetadataManager ---
+// --- Editing normal tags, reimplemented with FileActionMngr ---
 
 void FaceIface::addNormalTag(qlonglong imageid, int tagId)
 {
-    MetadataManager::instance()->assignTag(ImageInfo(imageid), tagId);
+    FileActionMngr::instance()->assignTag(ImageInfo(imageid), tagId);
 }
 
 void FaceIface::removeNormalTag(qlonglong imageId, int tagId)
 {
-    MetadataManager::instance()->removeTag(ImageInfo(imageId), tagId);
+    FileActionMngr::instance()->removeTag(ImageInfo(imageId), tagId);
 }
 
 void FaceIface::removeNormalTags(qlonglong imageId, QList<int> tagIds)
 {
-    MetadataManager::instance()->removeTags(ImageInfo(imageId), tagIds);
+    FileActionMngr::instance()->removeTags(ImageInfo(imageId), tagIds);
 }
 
 // --- Utilities ---

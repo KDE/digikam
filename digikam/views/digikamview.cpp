@@ -64,7 +64,7 @@
 #include "metadatasettings.h"
 #include "globals.h"
 #include "metadatahub.h"
-#include "metadatamanager.h"
+#include "fileactionmngr.h"
 #include "queuemgrwindow.h"
 #include "scancontroller.h"
 #include "sidebar.h"
@@ -522,18 +522,18 @@ void DigikamView::setupConnections()
     connect(d->stackedview, SIGNAL(signalGotoTagAndItem(int)),
             this, SLOT(slotGotoTagAndItem(int)));
 
-    // -- MetadataManager progress ---------------
+    // -- FileActionMngr progress ---------------
 
-    connect(MetadataManager::instance(), SIGNAL(progressMessageChanged(QString)),
+    connect(FileActionMngr::instance(), SIGNAL(progressMessageChanged(QString)),
             d->parent, SLOT(enterProgress(QString)));
 
-    connect(MetadataManager::instance(), SIGNAL(progressValueChanged(float)),
+    connect(FileActionMngr::instance(), SIGNAL(progressValueChanged(float)),
             d->parent, SLOT(progressValue(float)));
 
-    connect(MetadataManager::instance(), SIGNAL(progressFinished()),
+    connect(FileActionMngr::instance(), SIGNAL(progressFinished()),
             d->parent, SLOT(finishProgress()));
 
-    connect(MetadataManager::instance(), SIGNAL(orientationChangeFailed(QStringList)),
+    connect(FileActionMngr::instance(), SIGNAL(orientationChangeFailed(QStringList)),
             this, SLOT(slotOrientationChangeFailed(QStringList)));
 
     // -- Icon view progress

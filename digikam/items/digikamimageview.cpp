@@ -74,7 +74,7 @@
 #include "tagslineeditoverlay.h"
 #include "imageviewutilities.h"
 #include "imagewindow.h"
-#include "metadatamanager.h"
+#include "fileactionmngr.h"
 #include "thumbnailloadthread.h"
 #include "tagregion.h"
 #include "addtagslineedit.h"
@@ -149,10 +149,10 @@ DigikamImageView::DigikamImageView(QWidget* parent)
             this, SLOT(setCurrentUrl(KUrl)));
 
     connect(imageModel()->dragDropHandler(), SIGNAL(assignTags(QList<ImageInfo>,QList<int>)),
-            MetadataManager::instance(), SLOT(assignTags(QList<ImageInfo>,QList<int>)));
+            FileActionMngr::instance(), SLOT(assignTags(QList<ImageInfo>,QList<int>)));
 
     connect(imageModel()->dragDropHandler(), SIGNAL(addToGroup(ImageInfo,QList<ImageInfo>)),
-            MetadataManager::instance(), SLOT(addToGroup(ImageInfo,QList<ImageInfo>)));
+            FileActionMngr::instance(), SLOT(addToGroup(ImageInfo,QList<ImageInfo>)));
 
     connect(imageModel()->dragDropHandler(), SIGNAL(dioResult(KJob*)),
             d->utilities, SLOT(slotDIOResult(KJob*)));
@@ -623,48 +623,48 @@ void DigikamImageView::toggleTagToSelected(int tagID)
             tagToAssign.append(info);
     }
 
-    MetadataManager::instance()->assignTags(tagToAssign, QList<int>() << tagID);
-    MetadataManager::instance()->removeTags(tagToRemove, QList<int>() << tagID);
+    FileActionMngr::instance()->assignTags(tagToAssign, QList<int>() << tagID);
+    FileActionMngr::instance()->removeTags(tagToRemove, QList<int>() << tagID);
 }
 
 void DigikamImageView::assignTagToSelected(int tagID)
 {
-    MetadataManager::instance()->assignTags(selectedImageInfos(), QList<int>() << tagID);
+    FileActionMngr::instance()->assignTags(selectedImageInfos(), QList<int>() << tagID);
 }
 
 void DigikamImageView::removeTagFromSelected(int tagID)
 {
-    MetadataManager::instance()->removeTags(selectedImageInfos(), QList<int>() << tagID);
+    FileActionMngr::instance()->removeTags(selectedImageInfos(), QList<int>() << tagID);
 }
 
 void DigikamImageView::assignPickLabelToSelected(int pickId)
 {
-    MetadataManager::instance()->assignPickLabel(selectedImageInfos(), pickId);
+    FileActionMngr::instance()->assignPickLabel(selectedImageInfos(), pickId);
 }
 
 void DigikamImageView::assignPickLabel(const QModelIndex& index, int pickId)
 {
-    MetadataManager::instance()->assignPickLabel(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), pickId);
+    FileActionMngr::instance()->assignPickLabel(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), pickId);
 }
 
 void DigikamImageView::assignColorLabelToSelected(int colorId)
 {
-    MetadataManager::instance()->assignColorLabel(selectedImageInfos(), colorId);
+    FileActionMngr::instance()->assignColorLabel(selectedImageInfos(), colorId);
 }
 
 void DigikamImageView::assignColorLabel(const QModelIndex& index, int colorId)
 {
-    MetadataManager::instance()->assignColorLabel(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), colorId);
+    FileActionMngr::instance()->assignColorLabel(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), colorId);
 }
 
 void DigikamImageView::assignRatingToSelected(int rating)
 {
-    MetadataManager::instance()->assignRating(selectedImageInfos(), rating);
+    FileActionMngr::instance()->assignRating(selectedImageInfos(), rating);
 }
 
 void DigikamImageView::assignRating(const QList<QModelIndex>& indexes, int rating)
 {
-    MetadataManager::instance()->assignRating(imageFilterModel()->imageInfos(indexes), rating);
+    FileActionMngr::instance()->assignRating(imageFilterModel()->imageInfos(indexes), rating);
 }
 
 void DigikamImageView::setAsAlbumThumbnail(const ImageInfo& setAsThumbnail)
@@ -692,7 +692,7 @@ void DigikamImageView::createGroupFromSelection()
 {
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
     ImageInfo groupLeader = selectedInfos.takeFirst();
-    MetadataManager::instance()->addToGroup(groupLeader, selectedInfos);
+    FileActionMngr::instance()->addToGroup(groupLeader, selectedInfos);
 }
 
 void DigikamImageView::createGroupByTimeFromSelection()
@@ -705,23 +705,23 @@ void DigikamImageView::createGroupByTimeFromSelection()
         while (selectedInfos.size()>0 && abs(dateTime.secsTo(selectedInfos.first().dateTime()))<2) {
             group.push_back(selectedInfos.takeFirst());
         }
-        MetadataManager::instance()->addToGroup(groupLeader, group);
+        FileActionMngr::instance()->addToGroup(groupLeader, group);
     }
 }
 
 void DigikamImageView::ungroupSelected()
 {
-    MetadataManager::instance()->ungroup(selectedImageInfos());
+    FileActionMngr::instance()->ungroup(selectedImageInfos());
 }
 
 void DigikamImageView::removeSelectedFromGroup()
 {
-    MetadataManager::instance()->removeFromGroup(selectedImageInfos());
+    FileActionMngr::instance()->removeFromGroup(selectedImageInfos());
 }
 
 void DigikamImageView::setExifOrientationOfSelected(int orientation)
 {
-    MetadataManager::instance()->setExifOrientation(selectedImageInfos(), orientation);
+    FileActionMngr::instance()->setExifOrientation(selectedImageInfos(), orientation);
 }
 
 void DigikamImageView::rename()
