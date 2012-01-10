@@ -15,4 +15,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 268262 : Editor: Color: Color Effects: Vivid - black areas become reddish.
 009 ==> 283491 : Caption/Tags tab: Active sub-tab not restored after restart [patch].
 010 ==> 234067 : Annoying list of languages to select from when entering picture captions [patch].
-011 ==> 
+011 ==> 277328 : Album Icon View Header linkable.
+012 ==> 
