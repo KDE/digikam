@@ -535,12 +535,12 @@ int ImageDelegate::calculatethumbSizeToFit(int ws)
     // New grid size used in loop
     int ngs;
 
-    double rs1 = fmod(ws, gs);
+    double rs1 = fmod((double)ws, (double)gs);
 
     for (ts1 = ts ; ts1 < ThumbnailSize::Huge ; ++ts1)
     {
         ngs        = ts1 + 2*(d->margin + d->radius) + sp;
-        double nrs = fmod(ws, ngs);
+        double nrs = fmod((double)ws, (double)ngs);
 
         if (nrs <= rs1)
         {
@@ -552,12 +552,12 @@ int ImageDelegate::calculatethumbSizeToFit(int ws)
         }
     }
 
-    double rs2 = fmod(ws, gs);
+    double rs2 = fmod((double)ws, (double)gs);
 
     for (ts2 = ts ; ts2 > ThumbnailSize::Small ; --ts2)
     {
         ngs        = ts2 + 2*(d->margin + d->radius) + sp;
-        double nrs = fmod(ws, ngs);
+        double nrs = fmod((double)ws, (double)ngs);
 
         if (nrs >= rs2)
         {
