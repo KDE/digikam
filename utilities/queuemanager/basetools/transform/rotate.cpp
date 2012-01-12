@@ -225,45 +225,7 @@ bool Rotate::toolOperations()
     if (useExif)
     {
         DMetadata meta(inputUrl().toLocalFile());
-
-        switch (meta.getImageOrientation())
-        {
-            case DMetadata::ORIENTATION_HFLIP:
-                image().flip(DImg::HORIZONTAL);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_180:
-                image().rotate(DImg::ROT180);
-                break;
-
-            case DMetadata::ORIENTATION_VFLIP:
-                image().flip(DImg::VERTICAL);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90_HFLIP:
-                image().flip(DImg::HORIZONTAL);
-                image().rotate(DImg::ROT90);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90:
-                image().rotate(DImg::ROT90);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90_VFLIP:
-                image().flip(DImg::VERTICAL);
-                image().rotate(DImg::ROT90);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_270:
-                image().rotate(DImg::ROT270);
-                break;
-
-            default:
-                // DMetadata::ORIENTATION_NORMAL
-                // DMetadata::ORIENTATION_UNSPECIFIED
-                // Nothing to do...
-                break;
-        }
+        image().rotateAndFlip(meta.getImageOrientation());
     }
     else
     {
