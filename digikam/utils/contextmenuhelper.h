@@ -7,7 +7,7 @@
  * Description : contextmenu helper class
  *
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -316,6 +316,12 @@ public:
     void addLabelsAction();
 
     /**
+     * Add a menu to rotate item.
+     * @param ids the selected items
+     */
+    void addRotateMenu(imageIds& ids);
+
+    /**
      * Add a "Group" menu.
      * This menu will provide actions open, close, add to, remove from, or split a group.
      *
@@ -342,14 +348,6 @@ public:
      * The check/uncheck actions will operate directly on the model.
      */
     void setAlbumModel(AbstractCheckableAlbumModel* model);
-
-    /**
-     * Add some of the KIPI actions to the menu.
-     *
-     * This method will add some of the KIPI actions into the context menu, right now only the
-     * rotation actions are added.
-     */
-    void addKipiActions(imageIds& ids);
 
     /**
      * Add Import KIPI actions menu.
@@ -392,8 +390,6 @@ public:
      */
     QAction* exec(const QPoint& pos, QAction* at = 0);
 
-    static KAction* kipiRotateAction();
-
 private Q_SLOTS:
 
     void slotOpenWith();
@@ -409,6 +405,7 @@ private Q_SLOTS:
     void slotDeselectChildren();
     void slotSelectParents();
     void slotDeselectParents();
+    void slotRotate();
 
 private:
 

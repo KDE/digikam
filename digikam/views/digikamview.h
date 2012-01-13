@@ -7,7 +7,7 @@
  * Description : implementation of album view interface.
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
@@ -228,7 +228,7 @@ private Q_SLOTS:
 
     void slotSidebarTabTitleStyleChanged();
 
-    void slotOrientationChangeFailed(const QStringList& failedFileNames);
+    void slotImageChangeFailed(const QString& message, const QStringList& fileNames);
 
     void slotRatingChanged(const KUrl&, int);
     void slotColorLabelChanged(const KUrl&, int);

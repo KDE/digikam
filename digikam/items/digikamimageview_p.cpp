@@ -91,21 +91,4 @@ void DigikamImageView::DigikamImageViewPriv::updateOverlays()
     }
 }
 
-void DigikamImageView::DigikamImageViewPriv::triggerRotateAction(const char* actionName)
-{
-    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
-
-    if (action)
-    {
-        QList<QAction*> list = action->menu()->actions();
-        foreach(QAction* ac, list)
-        {
-            if (ac->objectName() == actionName)
-            {
-                ac->trigger();
-            }
-        }
-    }
-}
-
 } // namespace Digikam

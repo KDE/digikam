@@ -60,21 +60,21 @@ public:
 
 public:
 
-    int                            dbTodo;
-    int                            dbDone;
-    int                            writerTodo;
-    int                            writerDone;
-    QSet<qlonglong>                scheduledToWrite;
-    QString                        dbMessage;
-    QString                        writerMessage;
-    QMutex                         mutex;
+    int                           dbTodo;
+    int                           dbDone;
+    int                           writerTodo;
+    int                           writerDone;
+    QSet<qlonglong>               scheduledToWrite;
+    QString                       dbMessage;
+    QString                       writerMessage;
+    QMutex                        mutex;
 
     FileActionMngr*               q;
 
     FileActionMngrDatabaseWorker* dbWorker;
     FileActionMngrFileWorker*     fileWorker;
 
-    QTimer*                        sleepTimer;
+    QTimer*                       sleepTimer;
 
 public:
 
@@ -83,59 +83,78 @@ public:
     {
         emit signalAddTags(infos, tagIDs);
     }
+
     void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
     {
         emit signalRemoveTags(infos, tagIDs);
     }
+
     void assignPickLabel(const QList<ImageInfo>& infos, int pickId)
     {
         emit signalAssignPickLabel(infos, pickId);
     }
+
     void assignColorLabel(const QList<ImageInfo>& infos, int colorId)
     {
         emit signalAssignColorLabel(infos, colorId);
     }
+
     void assignRating(const QList<ImageInfo>& infos, int rating)
     {
         emit signalAssignRating(infos, rating);
     }
+
     void editGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos)
     {
         emit signalEditGroup(groupAction, pick, infos);
     }
+
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation)
     {
         emit signalSetExifOrientation(infos, orientation);
     }
+
     void applyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub)
     {
         emit signalApplyMetadata(infos, hub);
+    }
+
+    void rotate(const QList<ImageInfo>& infos, int orientation)
+    {
+        emit signalRotate(infos, orientation);
     }
 
 public:
 
     // -- Workflow controlling --
 
-    // before sending to db worker
+    /// before sending to db worker
     void schedulingForDB(int numberOfInfos);
-    // called by db worker to say what it is doing
+
+    /// called by db worker to say what it is doing
     void setDBAction(const QString& action);
-    // db worker will send info to file worker if returns true
+
+    /// db worker will send info to file worker if returns true
     bool shallSendForWriting(qlonglong id);
-    // db worker progress info
+
+    /// db worker progress info
     void dbProcessedOne();
     void dbProcessed(int numberOfInfos);
     void dbFinished(int numberOfInfos);
-    // db worker calls this before sending to file worker
+
+    /// db worker calls this before sending to file worker
     void schedulingForWrite(int numberOfInfos);
     void schedulingForOrientationWrite(int numberOfInfos);
-    // called by file worker to say what it is doing
+
+    /// called by file worker to say what it is doing
     void setWriterAction(const QString& action);
-    // file worker calls this when receiving a task
+
+    /// file worker calls this when receiving a task
     void startingToWrite(const QList<ImageInfo>& infos);
-    // file worker calls this when finished
+
+    /// file worker calls this when finished
     void writtenToOne();
-    void orientationWrittenToOne();
+
     void finishedWriting(int numberOfInfos);
 
     void updateProgress();
@@ -162,6 +181,7 @@ Q_SIGNALS:
     void signalSetExifOrientation(const QList<ImageInfo>& infos, int orientation);
     void signalApplyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
     void signalEditGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos);
+    void signalRotate(const QList<ImageInfo>& infos, int orientation);
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -196,6 +216,8 @@ private:
 
     void changeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs, bool addOrRemove);
 
+private:
+
     FileActionMngr::FileActionMngrPriv* const d;
 };
 
@@ -215,11 +237,12 @@ public Q_SLOTS:
     void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
     void writeMetadataToFiles(const QList<ImageInfo>& infos);
     void writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
+    void rotate(const QList<ImageInfo>& infos, int orientation);
 
 Q_SIGNALS:
 
     void imageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache);
-    void orientationChangeFailed(const QStringList& failedFileNames);
+    void imageChangeFailed(const QString& message, const QStringList& fileNames);
 
 private:
 

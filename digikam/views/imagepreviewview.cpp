@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
@@ -400,7 +400,7 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
 
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedItems);
-    cmhelper.addKipiActions(idList);
+    cmhelper.addRotateMenu(idList);
     cmhelper.addSeparator();
 
     // --------------------------------------------------------
@@ -510,36 +510,12 @@ void ImagePreviewView::slotSetupChanged()
 
 void ImagePreviewView::slotRotateLeft()
 {
-    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
-
-    if (action)
-    {
-        QList<QAction*> list = action->menu()->actions();
-        foreach(QAction* ac, list)
-        {
-            if (ac->objectName() == QString("rotate_ccw"))
-            {
-                ac->trigger();
-            }
-        }
-    }
+    FileActionMngr::instance()->rotate(QList<ImageInfo>() << d->item->imageInfo(), DImg::ROT270);
 }
 
 void ImagePreviewView::slotRotateRight()
 {
-    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
-
-    if (action)
-    {
-        QList<QAction*> list = action->menu()->actions();
-        foreach(QAction* ac, list)
-        {
-            if (ac->objectName() == QString("rotate_cw"))
-            {
-                ac->trigger();
-            }
-        }
-    }
+    FileActionMngr::instance()->rotate(QList<ImageInfo>() << d->item->imageInfo(), DImg::ROT90);
 }
 
 void ImagePreviewView::slotDeleteItem()

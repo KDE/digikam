@@ -7,7 +7,7 @@
  * Description : contextmenu helper class
  *
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,19 +56,14 @@
 #include <kabc/stdaddressbook.h>
 #endif // HAVE_KDEPIMLIBS
 
-// LibKIPI includes
-
-#include <libkipi/plugin.h>
-#include <libkipi/pluginloader.h>
-
 // Local includes
 
+#include "config-digikam.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albummodificationhelper.h"
 #include "abstractalbummodel.h"
-#include <config-digikam.h>
 #include "databaseaccess.h"
 #include "digikamapp.h"
 #include "imageinfo.h"
@@ -80,6 +75,8 @@
 #include "ratingwidget.h"
 #include "tagmodificationhelper.h"
 #include "tagspopupmenu.h"
+#include "fileactionmngr.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -387,43 +384,40 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     KRun::run(*service, list, d->parent);
 }
 
-void ContextMenuHelper::addKipiActions(imageIds& ids)
+void ContextMenuHelper::addRotateMenu(imageIds& ids)
 {
     setSelectedIds(ids);
 
-    if (imageIdsHaveSameCategory(ids, DatabaseItem::Image))
-    {
-        KAction* action = kipiRotateAction();
+    KMenu* imageRotateMenu = new KMenu(i18n("Rotate"), d->parent);
+    imageRotateMenu->setIcon(KIcon("object-rotate-right"));
 
-        if (action)
-        {
-            d->parent->addAction(action);
-        }
-    }
+    KAction* left = new KAction(this);
+    left->setObjectName("rotate_ccw");
+    left->setText(i18nc("rotate image left", "Left"));
+    connect(left, SIGNAL(triggered(bool)),
+            this, SLOT(slotRotate()));
+    imageRotateMenu->addAction(left);
+
+    KAction* right = new KAction(this);
+    right->setObjectName("rotate_cw");
+    right->setText(i18nc("rotate image right", "Right"));
+    connect(right, SIGNAL(triggered(bool)),
+            this, SLOT(slotRotate()));
+    imageRotateMenu->addAction(right);
+
+    d->parent->addMenu(imageRotateMenu);
 }
 
-KAction* ContextMenuHelper::kipiRotateAction()
+void ContextMenuHelper::slotRotate()
 {
-    KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
-    KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
-
-    foreach(KIPI::PluginLoader::Info* info, pluginList)
+    if (sender()->objectName() == "rotate_ccw")
     {
-        KIPI::Plugin* plugin = info->plugin();
-
-        if (plugin && info->shouldLoad() && info->library() == "kipiplugin_jpeglossless")
-        {
-            QList<KAction*> actionList = plugin->actions();
-            foreach(KAction* action, actionList)
-            {
-                if (action->objectName().toLatin1() == QString::fromLatin1("jpeglossless_rotate"))
-                {
-                    return(action);
-                }
-            }
-        }
+        FileActionMngr::instance()->rotate(ImageInfoList(d->selectedIds), DImg::ROT270);
     }
-    return 0;
+    else
+    {
+        FileActionMngr::instance()->rotate(ImageInfoList(d->selectedIds), DImg::ROT90);
+    }
 }
 
 bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category)

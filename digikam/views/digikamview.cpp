@@ -7,10 +7,10 @@
  * Description : implementation of album view interface.
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
- * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2011      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -533,8 +533,8 @@ void DigikamView::setupConnections()
     connect(FileActionMngr::instance(), SIGNAL(progressFinished()),
             d->parent, SLOT(finishProgress()));
 
-    connect(FileActionMngr::instance(), SIGNAL(orientationChangeFailed(QStringList)),
-            this, SLOT(slotOrientationChangeFailed(QStringList)));
+    connect(FileActionMngr::instance(), SIGNAL(imageChangeFailed(QString, QStringList)),
+            this, SLOT(slotImageChangeFailed(QString, QStringList)));
 
     // -- Icon view progress
 
@@ -1904,23 +1904,14 @@ void DigikamView::slotSidebarTabTitleStyleChanged()
     //     d->rightSideBar->applySettings();
 }
 
-void DigikamView::slotOrientationChangeFailed(const QStringList& failedFileNames)
+void DigikamView::slotImageChangeFailed(const QString& message, const QStringList& fileNames)
 {
-    if (failedFileNames.isEmpty())
+    if (fileNames.isEmpty())
     {
         return;
     }
 
-    if (failedFileNames.count() == 1)
-    {
-        KMessageBox::error(0, i18n("Failed to revise Exif orientation for file %1.",
-                                   failedFileNames.at(0)));
-    }
-    else
-    {
-        KMessageBox::errorList(0, i18n("Failed to revise Exif orientation these files:"),
-                               failedFileNames);
-    }
+    KMessageBox::errorList(0, message, fileNames);
 }
 
 void DigikamView::slotLeftSideBarActivateAlbums()

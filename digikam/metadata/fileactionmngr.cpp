@@ -46,6 +46,8 @@
 #include "scancontroller.h"
 #include "thumbnailloadthread.h"
 #include "globals.h"
+#include "jpegutils.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -76,8 +78,8 @@ FileActionMngr::FileActionMngr()
     connect(d, SIGNAL(progressFinished()),
             this, SIGNAL(progressFinished()));
 
-    connect(d->fileWorker, SIGNAL(orientationChangeFailed(QStringList)),
-            this, SIGNAL(orientationChangeFailed(QStringList)));
+    connect(d->fileWorker, SIGNAL(imageChangeFailed(QString, QStringList)),
+            this, SIGNAL(imageChangeFailed(QString, QStringList)));
 }
 
 FileActionMngr::~FileActionMngr()
@@ -224,6 +226,11 @@ void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const Metadata
     d->applyMetadata(infos, new MetadataHubOnTheRoad(hub, this));
 }
 
+void FileActionMngr::rotate(const QList<ImageInfo>& infos, int orientation)
+{
+    d->rotate(infos, orientation);
+}
+
 // --------------------------------------------------------------------------------------
 
 FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
@@ -273,6 +280,9 @@ FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
 
     WorkerObject::connectAndSchedule(dbWorker, SIGNAL(writeMetadata(QList<ImageInfo>,MetadataHub*)),
                                      fileWorker, SLOT(writeMetadata(QList<ImageInfo>,MetadataHub*)));
+
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalRotate(QList<ImageInfo>,int)),
+                                     fileWorker, SLOT(rotate(QList<ImageInfo>,int)));
 
     connect(fileWorker, SIGNAL(imageDataChanged(QString,bool,bool)),
             this, SLOT(slotImageDataChanged(QString,bool,bool)));
@@ -365,11 +375,6 @@ void FileActionMngr::FileActionMngrPriv::writtenToOne()
 {
     writerDone++;
     updateProgress();
-}
-
-void FileActionMngr::FileActionMngrPriv::orientationWrittenToOne()
-{
-    writtenToOne();
 }
 
 void FileActionMngr::FileActionMngrPriv::finishedWriting(int numberOfInfos)
@@ -705,12 +710,12 @@ void FileActionMngrFileWorker::writeOrientationToFiles(const QList<ImageInfo>& i
             ImageAttributesWatch::instance()->fileMetadataChanged(url);
         }
 
-        d->orientationWrittenToOne();
+        d->writtenToOne();
     }
 
     if (!failedItems.isEmpty())
     {
-        emit orientationChangeFailed(failedItems);
+        emit imageChangeFailed(i18n("Failed to revise Exif orientation these files:"), failedItems);
     }
 
     d->finishedWriting(infos.size());
@@ -772,6 +777,95 @@ void FileActionMngrFileWorker::writeMetadata(const QList<ImageInfo>& infos, Meta
     }
     ScanController::instance()->resumeCollectionScan();
 
+    d->finishedWriting(infos.size());
+}
+
+void FileActionMngrFileWorker::rotate(const QList<ImageInfo>& infos, int orientation)
+{
+    d->setWriterAction(i18n("Rotate items. Please wait..."));
+    d->startingToWrite(infos);
+
+    bool useExif = (orientation == -1);
+    QStringList failedItems;
+    ScanController::instance()->suspendCollectionScan();
+
+    foreach(const ImageInfo& info, infos)
+    {
+        KUrl url = info.fileUrl();
+
+        if (isJpegImage(url.toLocalFile()))
+        {
+            if (useExif)
+            {
+                if (!exifTransform(url.toLocalFile(), url.fileName(), url.toLocalFile(), Auto))
+                {
+                    failedItems.append(info.name());
+                }
+            }
+            else
+            {
+                switch (orientation)
+                {
+                    case DImg::ROT90:
+                        if (!exifTransform(url.toLocalFile(), url.fileName(), url.toLocalFile(), Rotate90))
+                            failedItems.append(info.name());
+                        break;
+                    case DImg::ROT180:
+                        if (!exifTransform(url.toLocalFile(), url.fileName(), url.toLocalFile(), Rotate180))
+                            failedItems.append(info.name());
+                        break;
+                    case DImg::ROT270:
+                        if (!exifTransform(url.toLocalFile(), url.fileName(), url.toLocalFile(), Rotate270))
+                            failedItems.append(info.name());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        else
+        {
+            // Non-JPEG image: DImg
+            DImg image;
+
+            if (!image.load(url.toLocalFile()))
+            {
+                failedItems.append(info.name());
+            }
+            else
+            {
+                if (useExif)
+                {
+                    DMetadata meta(url.toLocalFile());
+                    image.rotateAndFlip(meta.getImageOrientation());
+                }
+                else
+                {
+                    image.rotate((DImg::ANGLE)orientation);
+                }
+
+                if (!image.save(url.toLocalFile(), DImg::fileFormat(url.toLocalFile())))
+                {
+                    failedItems.append(info.name());
+                }
+            }
+        }
+
+        if (!failedItems.contains(info.name()))
+        {
+            emit imageDataChanged(url.toLocalFile(), true, true);
+            ImageAttributesWatch::instance()->fileMetadataChanged(url);
+        }
+
+        d->writtenToOne();
+    }
+
+    if (!failedItems.isEmpty())
+    {
+        emit imageChangeFailed(i18n("Failed to rotate these files:"), failedItems);
+    }
+
+    ScanController::instance()->resumeCollectionScan();
     d->finishedWriting(infos.size());
 }
 

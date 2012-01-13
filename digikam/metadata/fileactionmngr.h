@@ -85,13 +85,15 @@ public Q_SLOTS:
     void applyMetadata(const QList<ImageInfo>& infos, const MetadataHub& hub);
     void applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad& hub);
 
+    void rotate(const QList<ImageInfo>& infos, int orientation);
+
 Q_SIGNALS:
 
     void progressMessageChanged(const QString& descriptionOfAction);
     void progressValueChanged(float percent);
     void progressFinished();
 
-    void orientationChangeFailed(const QStringList& failedFileNames);
+    void imageChangeFailed(const QString& message, const QStringList& fileNames);
 
 public:
 

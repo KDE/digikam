@@ -352,7 +352,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedUrls());
     cmhelper.addGotoMenu(selectedImageIDs);
-    cmhelper.addKipiActions(selectedImageIDs);
+    cmhelper.addRotateMenu(selectedImageIDs);
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");
@@ -749,14 +749,12 @@ void DigikamImageView::rename()
 
 void DigikamImageView::slotRotateLeft(const QList<QModelIndex>& indexes)
 {
-    setSelectedIndexes(indexes);
-    d->triggerRotateAction("rotate_ccw");
+    FileActionMngr::instance()->rotate(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes), DImg::ROT270);
 }
 
 void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 {
-    setSelectedIndexes(indexes);
-    d->triggerRotateAction("rotate_cw");
+    FileActionMngr::instance()->rotate(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes), DImg::ROT90);
 }
 
 } // namespace Digikam
