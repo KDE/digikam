@@ -144,6 +144,9 @@
 #include "tagsactionmngr.h"
 #include "databaseserverstarter.h"
 #include "metadatasettings.h"
+#include "progressmanager.h"
+#include "progressdialog.h"
+#include "statusbarprogresswidget.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
@@ -579,6 +582,27 @@ void DigikamApp::setupStatusBar()
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     statusBar()->addPermanentWidget(d->zoomBar);
 
+    //------------------------------------------------------------------------------
+
+    ProgressDialog* progressDialog = new ProgressDialog(statusBar(), this);
+    progressDialog->hide();
+
+    StatusbarProgressWidget* littleProgress = new StatusbarProgressWidget(progressDialog, statusBar());
+    littleProgress->show();
+    statusBar()->addPermanentWidget(littleProgress);
+
+/* Marcel : TEST code
+    ProgressItem* mProgressItem = ProgressManager::createProgressItem("Job1", i18n("Job1"), QString(), true );
+    mProgressItem->setUsesBusyIndicator( true );
+    mProgressItem = ProgressManager::createProgressItem("Job2", i18n("Job2"), QString(), true );
+    mProgressItem->setUsesBusyIndicator( true );
+    mProgressItem = ProgressManager::createProgressItem("Job3", i18n("Job3"), QString(), true );
+    mProgressItem->setUsesBusyIndicator( true );
+    mProgressItem = ProgressManager::createProgressItem("Job4", i18n("Job4"), QString(), true );
+    mProgressItem->setUsesBusyIndicator( true );
+//    connect(mProgressItem, SIGNAL(progressItemCanceled(KPIM::ProgressItem*)),
+//            this, SLOT(cancelJob()) );
+*/
     //------------------------------------------------------------------------------
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());

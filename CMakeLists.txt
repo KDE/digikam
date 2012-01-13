@@ -1046,6 +1046,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawsettingsbox.cpp
        )
 
+    SET(libprogressmanager_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/overlaywidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/progressdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/progressmanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/statusbarprogresswidget.cpp
+       )
+
     SET(libthememanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/thememanager/thememanager.cpp
        )
@@ -1533,6 +1540,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/thememanager
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager

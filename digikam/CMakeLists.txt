@@ -32,6 +32,7 @@ SET(digikamcore_LIB_SRCS
         ${liblprof_SRCS}
         ${libjpegutils_SRCS}
         ${libthreadimageio_SRCS}
+        ${libprogressmanager_SRCS}
         ${libthememanager_SRCS}
         ${libpgf_SRCS}
         ${pgfutils_SRCS}
