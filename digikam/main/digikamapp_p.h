@@ -6,7 +6,7 @@
  * Date        : 2007-31-01
  * Description : main digiKam interface implementation
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -142,6 +142,9 @@ public:
         imageSetExifOrientation7Action(0),
         imageSetExifOrientation8Action(0),
         imageRenameAction(0),
+        imageRotateActionMenu(0),
+        imageFlipActionMenu(0),
+        imageAutoExifActionMenu(0),
         imageDeleteAction(0),
         imageExifOrientationActionMenu(0),
         cutItemsAction(0),
@@ -208,7 +211,6 @@ public:
     // KIPI plugins support
     QList<QAction*>                     kipiFileActionsExport;
     QList<QAction*>                     kipiFileActionsImport;
-    QList<QAction*>                     kipiJpeglosslessActions;
     QList<QAction*>                     kipiPrintActions;
     QList<QAction*>                     kipiMetadataActions;
     QList<QAction*>                     kipiImageActions;
@@ -275,6 +277,9 @@ public:
     KToggleAction*                      imageSetExifOrientation7Action;
     KToggleAction*                      imageSetExifOrientation8Action;
     KAction*                            imageRenameAction;
+    KActionMenu*                        imageRotateActionMenu;
+    KActionMenu*                        imageFlipActionMenu;
+    KAction*                            imageAutoExifActionMenu;
     KAction*                            imageDeleteAction;
     KActionMenu*                        imageExifOrientationActionMenu;
 

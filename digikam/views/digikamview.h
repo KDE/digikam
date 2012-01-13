@@ -74,6 +74,7 @@ public:
     bool isThumbBarVisible();
     void setRecurseAlbums(bool recursive);
     void setRecurseTags(bool recursive);
+    void imageTransform(int transform);
 
     void connectIconViewFilter(FilterStatusBar* filter);
 

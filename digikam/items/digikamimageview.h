@@ -76,7 +76,6 @@ public Q_SLOTS:
     void assignRatingToSelected(int rating);
     void setAsAlbumThumbnail(const ImageInfo& setAsThumbnail);
     void createNewAlbumForSelected();
-    void setExifOrientationOfSelected(int orientation);
     void rename();
 
     void assignPickLabel(const QModelIndex& index, int pickId);

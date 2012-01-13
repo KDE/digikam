@@ -86,6 +86,7 @@ public Q_SLOTS:
     void applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad& hub);
 
     void rotate(const QList<ImageInfo>& infos, int orientation);
+    void flip(const QList<ImageInfo>& infos, int flip);
 
 Q_SIGNALS:
 

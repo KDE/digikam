@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
@@ -149,6 +149,7 @@ private:
     void setupActions();
     void setupAccelerators();
     void setupExifOrientationActions();
+    void setupImageTransformActions();
     void loadPlugins();
     void loadCameras();
     void populateThemes();
@@ -190,6 +191,7 @@ private Q_SLOTS:
     void slotSetupChanged();
     void slotSetCheckedExifOrientationAction(const ImageInfo& info);
     void slotResetExifOrientationActions();
+    void slotTransformAction();
 
     void slotKipiPluginPlug();
 

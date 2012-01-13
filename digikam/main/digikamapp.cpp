@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
@@ -1108,6 +1108,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
+    setupImageTransformActions();
     setupExifOrientationActions();
 
     // -----------------------------------------------------------------
@@ -2562,15 +2563,14 @@ void DigikamApp::slotConfToolbars()
     {
         createGUI(xmlFile());
         applyMainWindowSettings(d->config->group("General Settings"));
-        plugActionList( QString::fromLatin1("file_actions_import"), d->kipiFileActionsImport );
-        plugActionList( QString::fromLatin1("image_jpeglossless_actions"), d->kipiJpeglosslessActions);
-        plugActionList( QString::fromLatin1("image_print_actions"),  d->kipiPrintActions);
+        plugActionList( QString::fromLatin1("file_actions_import"),    d->kipiFileActionsImport );
+        plugActionList( QString::fromLatin1("image_print_actions"),    d->kipiPrintActions);
         plugActionList( QString::fromLatin1("image_metadata_actions"), d->kipiMetadataActions);
-        plugActionList( QString::fromLatin1("image_actions"),       d->kipiImageActions );
-        plugActionList( QString::fromLatin1("tool_actions"),        d->kipiToolsActions );
-        plugActionList( QString::fromLatin1("batch_actions"),       d->kipiBatchActions );
-        plugActionList( QString::fromLatin1("album_actions"),       d->kipiAlbumActions );
-        plugActionList( QString::fromLatin1("file_actions_export"), d->kipiFileActionsExport );
+        plugActionList( QString::fromLatin1("image_actions"),          d->kipiImageActions );
+        plugActionList( QString::fromLatin1("tool_actions"),           d->kipiToolsActions );
+        plugActionList( QString::fromLatin1("batch_actions"),          d->kipiBatchActions );
+        plugActionList( QString::fromLatin1("album_actions"),          d->kipiAlbumActions );
+        plugActionList( QString::fromLatin1("file_actions_export"),    d->kipiFileActionsExport );
     }
 
     delete dlg;
@@ -2689,6 +2689,9 @@ void DigikamApp::loadPlugins()
     ignores.append( "SimpleViewer" );
     ignores.append( "KioExport" );
 
+    // These plugins have been replaced by digiKam core solution with 2.6.0
+    ignores.append( "JPEGLossless" );
+
     d->kipiPluginLoader = new KIPI::PluginLoader( ignores, d->kipiInterface );
 
     connect( d->kipiPluginLoader, SIGNAL(replug()),
@@ -2708,7 +2711,6 @@ void DigikamApp::slotKipiPluginPlug()
 {
     unplugActionList(QString::fromLatin1("file_actions_export"));
     unplugActionList(QString::fromLatin1("file_actions_import"));
-    unplugActionList(QString::fromLatin1("image_jpeglossless_actions"));
     unplugActionList(QString::fromLatin1("image_print_actions"));
     unplugActionList(QString::fromLatin1("image_metadata_actions"));
     unplugActionList(QString::fromLatin1("image_actions"));
@@ -2722,7 +2724,6 @@ void DigikamApp::slotKipiPluginPlug()
     d->kipiToolsActions.clear();
     d->kipiBatchActions.clear();
     d->kipiAlbumActions.clear();
-    d->kipiJpeglosslessActions.clear();
     d->kipiPrintActions.clear();
     d->kipiMetadataActions.clear();
 
@@ -2750,7 +2751,6 @@ void DigikamApp::slotKipiPluginPlug()
     pluginActionsDisabled << QString("batch_convert_images");           // Obsolete since 1.2.0, replaced by BQM convert tool.
     pluginActionsDisabled << QString("batch_color_images");             // Obsolete since 1.2.0, replaced by BQM color tool.
     pluginActionsDisabled << QString("batch_filter_images");            // Obsolete since 1.2.0, replaced by BQM enhance tool.
-    pluginActionsDisabled << QString("jpeglossless_convert2grayscale"); // Obsolete since 1.7.0, replaced by BQM B&W tool.
 
     for ( KIPI::PluginLoader::PluginList::ConstIterator it = list.constBegin() ;
           it != list.constEnd() ; ++it )
@@ -2828,11 +2828,7 @@ void DigikamApp::slotKipiPluginPlug()
                     }
                     case KIPI::ImagesPlugin:
                     {
-                        if (plugin->objectName() == "JPEGLossless")
-                        {
-                            d->kipiJpeglosslessActions.append(action);
-                        }
-                        else if (plugin->objectName() == "PrintImages")
+                        if (plugin->objectName() == "PrintImages")
                         {
                             d->kipiPrintActions.append(action);
                         }
@@ -2892,7 +2888,6 @@ void DigikamApp::slotKipiPluginPlug()
     // Create GUI menu in according with plugins.
     plugActionList(QString::fromLatin1("file_actions_export"),        d->kipiFileActionsExport);
     plugActionList(QString::fromLatin1("file_actions_import"),        d->kipiFileActionsImport);
-    plugActionList(QString::fromLatin1("image_jpeglossless_actions"), d->kipiJpeglosslessActions);
     plugActionList(QString::fromLatin1("image_print_actions"),        d->kipiPrintActions);
     plugActionList(QString::fromLatin1("image_metadata_actions"),     d->kipiMetadataActions);
     plugActionList(QString::fromLatin1("image_actions"),              d->kipiImageActions);
@@ -3436,6 +3431,81 @@ void DigikamApp::showToolBars(bool show)
 void DigikamApp::showThumbBar(bool show)
 {
     d->view->toggleShowBar(show);
+}
+
+void DigikamApp::setupImageTransformActions()
+{
+    d->imageRotateActionMenu = new KActionMenu(KIcon("object-rotate-right"), i18n("Rotate"), actionCollection());
+    d->imageRotateActionMenu->setDelayed(false);
+
+    KAction* left = actionCollection()->addAction("rotate_ccw");
+    left->setText(i18nc("rotate image left", "Left"));
+    left->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_Left));
+    connect(left, SIGNAL(triggered(bool)),
+            this, SLOT(slotTransformAction()));
+    d->imageRotateActionMenu->addAction(left);
+
+    KAction* right = actionCollection()->addAction("rotate_cw");
+    right->setText(i18nc("rotate image right", "Right"));
+    right->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_Right));
+    connect(right, SIGNAL(triggered(bool)),
+            this, SLOT(slotTransformAction()));
+    d->imageRotateActionMenu->addAction(right);
+
+    actionCollection()->addAction("image_rotate", d->imageRotateActionMenu);
+
+    // -----------------------------------------------------------------------------------
+
+    d->imageFlipActionMenu = new KActionMenu(KIcon("flip-horizontal"), i18n("Flip"), actionCollection());
+    d->imageFlipActionMenu->setDelayed(false);
+
+    KAction* hori = actionCollection()->addAction("flip_horizontal");
+    hori->setText(i18n("Horizontally"));
+    hori->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Asterisk));
+    connect(hori, SIGNAL(triggered(bool)),
+            this, SLOT(slotTransformAction()));
+    d->imageFlipActionMenu->addAction(hori);
+
+    KAction* verti = actionCollection()->addAction("flip_vertical");
+    verti->setText(i18n("Vertically"));
+    verti->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Slash));
+    connect(verti, SIGNAL(triggered(bool)),
+            this, SLOT(slotTransformAction()));
+    d->imageFlipActionMenu->addAction(verti);
+
+    actionCollection()->addAction("image_flip", d->imageFlipActionMenu);
+
+    // -----------------------------------------------------------------------------------
+
+    d->imageAutoExifActionMenu = new KAction(i18n("Auto Rotate/Flip Using Exif Information"), this);
+    connect(d->imageAutoExifActionMenu, SIGNAL(triggered(bool)),
+            this, SLOT(slotTransformAction()));
+
+    actionCollection()->addAction("image_transform_exif", d->imageAutoExifActionMenu);
+}
+
+void DigikamApp::slotTransformAction()
+{
+    if (sender()->objectName() == "rotate_ccw")
+    {
+        d->view->imageTransform(DImg::ROT180);
+    }
+    else if (sender()->objectName() == "rotate_cw")
+    {
+        d->view->imageTransform(DImg::ROT90);
+    }
+    else if (sender()->objectName() == "flip_horizontal")
+    {
+        d->view->imageTransform(DImg::HORIZONTAL);
+    }
+    else if (sender()->objectName() == "flip_vertical")
+    {
+        d->view->imageTransform(DImg::VERTICAL);
+    }
+    else if (sender()->objectName() == "image_transform_exif")
+    {
+        d->view->imageTransform(-1);
+    }
 }
 
 #ifdef USE_SCRIPT_IFACE

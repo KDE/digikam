@@ -719,11 +719,6 @@ void DigikamImageView::removeSelectedFromGroup()
     FileActionMngr::instance()->removeFromGroup(selectedImageInfos());
 }
 
-void DigikamImageView::setExifOrientationOfSelected(int orientation)
-{
-    FileActionMngr::instance()->setExifOrientation(selectedImageInfos(), orientation);
-}
-
 void DigikamImageView::rename()
 {
     KUrl::List urls = selectedUrls();

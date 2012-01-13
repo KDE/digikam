@@ -231,6 +231,11 @@ void FileActionMngr::rotate(const QList<ImageInfo>& infos, int orientation)
     d->rotate(infos, orientation);
 }
 
+void FileActionMngr::flip(const QList<ImageInfo>& infos, int flip)
+{
+    d->flip(infos, flip);
+}
+
 // --------------------------------------------------------------------------------------
 
 FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
@@ -283,6 +288,9 @@ FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
 
     WorkerObject::connectAndSchedule(this, SIGNAL(signalRotate(QList<ImageInfo>,int)),
                                      fileWorker, SLOT(rotate(QList<ImageInfo>,int)));
+
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalFlip(QList<ImageInfo>,int)),
+                                     fileWorker, SLOT(flip(QList<ImageInfo>,int)));
 
     connect(fileWorker, SIGNAL(imageDataChanged(QString,bool,bool)),
             this, SLOT(slotImageDataChanged(QString,bool,bool)));
@@ -897,7 +905,6 @@ void FileActionMngrFileWorker::flip(const QList<ImageInfo>& infos, int flip)
                     break;
             }
         }
-
         else
         {
             // Non-JPEG image: DImg

@@ -609,7 +609,6 @@ void DigikamView::connectIconViewFilter(FilterStatusBar* filterbar)
 
     connect(filterbar, SIGNAL(signalPopupFiltersView()),
             this, SLOT(slotPopupFiltersView()));
-
 }
 
 void DigikamView::DigikamViewPriv::addPageUpDownActions(DigikamView* q, QWidget* w)
@@ -1539,11 +1538,6 @@ void DigikamView::slotImageFindSimilar()
     }
 }
 
-void DigikamView::slotImageExifOrientation(int orientation)
-{
-    d->iconView->setExifOrientationOfSelected(orientation);
-}
-
 void DigikamView::slotEditor()
 {
     d->iconView->openEditor();
@@ -1982,6 +1976,23 @@ bool DigikamView::hasCurrentItem() const
     // We should actually get this directly from the selection model,
     // but the iconView is fine for now.
     return !d->iconView->currentInfo().isNull();
+}
+
+void DigikamView::slotImageExifOrientation(int orientation)
+{
+    FileActionMngr::instance()->setExifOrientation(d->iconView->selectedImageInfos(), orientation);
+}
+
+void DigikamView::imageTransform(int transform)
+{
+    if ((transform != DImg::HORIZONTAL) && (transform != DImg::VERTICAL))
+    {
+        FileActionMngr::instance()->rotate(d->iconView->selectedImageInfos(), transform);
+    }
+    else
+    {
+        FileActionMngr::instance()->flip(d->iconView->selectedImageInfos(), transform);
+    }
 }
 
 }  // namespace Digikam
