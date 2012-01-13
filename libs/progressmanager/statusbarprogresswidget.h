@@ -54,19 +54,19 @@ class DIGIKAM_EXPORT StatusbarProgressWidget : public QFrame
 
 public:
 
-    StatusbarProgressWidget( ProgressDialog* progressDialog, QWidget* parent, bool button = true );
+    StatusbarProgressWidget(ProgressDialog* progressDialog, QWidget* parent, bool button = true);
 
 public Q_SLOTS:
 
     void slotClean();
 
-    void slotProgressItemAdded( Digikam::ProgressItem *i );
-    void slotProgressItemCompleted( Digikam::ProgressItem *i );
-    void slotProgressItemProgress( Digikam::ProgressItem *i, unsigned int value );
+    void slotProgressItemAdded(Digikam::ProgressItem* i);
+    void slotProgressItemCompleted(Digikam::ProgressItem* i);
+    void slotProgressItemProgress(Digikam::ProgressItem* i, unsigned int value );
 
 protected Q_SLOTS:
     
-    void slotProgressDialogVisible( bool );
+    void slotProgressDialogVisible(bool);
     void slotShowItemDelayed();
     void slotBusyIndicator();
     void updateBusyMode();
@@ -77,7 +77,7 @@ protected:
     void connectSingleItem();
     void activateSingleItemMode();
 
-    virtual bool eventFilter( QObject *, QEvent * );
+    virtual bool eventFilter(QObject*, QEvent*);
 
 private:
 
@@ -89,20 +89,20 @@ private:
 
 private:
 
-    uint            mode;
+    uint            m_mode;
     bool            m_bShowButton;
 
     QProgressBar*   m_pProgressBar;
     QLabel*         m_pLabel;
     QPushButton*    m_pButton;
 
-    QBoxLayout*     box;
-    QStackedWidget* stack;
-    ProgressItem*   mCurrentItem;
-    ProgressDialog* mProgressDialog;
-    QTimer*         mDelayTimer;
-    QTimer*         mBusyTimer;
-    QTimer*         mCleanTimer;
+    QBoxLayout*     m_box;
+    QStackedWidget* m_stack;
+    ProgressItem*   m_currentItem;
+    ProgressDialog* m_progressDialog;
+    QTimer*         m_delayTimer;
+    QTimer*         m_busyTimer;
+    QTimer*         m_cleanTimer;
 };
 
 } // namespace Digikam

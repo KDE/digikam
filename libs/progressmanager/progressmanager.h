@@ -132,11 +132,11 @@ public:
     void cancel();
 
     // Often needed values for calculating progress.
-    void setTotalItems( unsigned int v ) { mTotal = v; }
-    unsigned int totalItems() const { return mTotal; }
-    void setCompletedItems( unsigned int v ) { mCompleted = v; }
-    void incCompletedItems( unsigned int v = 1 ) { mCompleted += v; }
-    unsigned int completedItems() const { return mCompleted; }
+    void setTotalItems( unsigned int v )         { mTotal = v;        }
+    unsigned int totalItems() const              { return mTotal;     }
+    void setCompletedItems( unsigned int v )     { mCompleted = v;    }
+    void incCompletedItems( unsigned int v = 1 ) { mCompleted += v;   }
+    unsigned int completedItems() const          { return mCompleted; }
 
     /**
      * Recalculate progress according to total/completed items and update.
@@ -279,7 +279,7 @@ public:
      */
     static QString getUniqueID()
     {
-        return QString::number( ++uID );
+        return QString::number( ++s_uID );
     }
 
      /**
@@ -371,16 +371,22 @@ Q_SIGNALS:
     
     /** @see ProgressItem::progressItemAdded() */
     void progressItemAdded( Digikam::ProgressItem * );
+    
     /** @see ProgressItem::progressItemProgress() */
     void progressItemProgress( Digikam::ProgressItem *, unsigned int );
+    
     /** @see ProgressItem::progressItemCompleted() */
     void progressItemCompleted( Digikam::ProgressItem * );
+    
     /** @see ProgressItem::progressItemCanceled() */
     void progressItemCanceled( Digikam::ProgressItem * );
+    
     /** @see ProgressItem::progressItemStatus() */
     void progressItemStatus( Digikam::ProgressItem *, const QString & );
+    
     /** @see ProgressItem::progressItemLabel() */
     void progressItemLabel( Digikam::ProgressItem *, const QString & );
+    
     /** @see ProgressItem::progressItemUsesBusyIndicator */
     void progressItemUsesBusyIndicator( Digikam::ProgressItem*, bool );
 
@@ -434,7 +440,7 @@ private:
 private:
 
     QHash<QString, ProgressItem*> mTransactions;
-    static unsigned int           uID;
+    static unsigned int           s_uID;
 
     friend struct ProgressManagerPrivate;
 };

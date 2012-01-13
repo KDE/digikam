@@ -33,6 +33,8 @@
 namespace Digikam
 {
 
+unsigned int ProgressManager::s_uID = 1000;
+
 ProgressItem::ProgressItem( ProgressItem *parent, const QString &id,
                             const QString &label, const QString &status,
                             bool canBeCanceled)

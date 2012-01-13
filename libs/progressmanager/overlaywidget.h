@@ -46,16 +46,16 @@ class OverlayWidget : public KHBox
 
 public:
     
-    OverlayWidget( QWidget* alignWidget, QWidget* parent, const char* name = 0 );
+    OverlayWidget(QWidget* alignWidget, QWidget* parent, const char* name = 0);
     ~OverlayWidget();
 
     QWidget * alignWidget() { return mAlignWidget; }
-    void setAlignWidget( QWidget * alignWidget );
+    void setAlignWidget(QWidget* alignWidget);
 
 protected:
     
-    void resizeEvent( QResizeEvent* ev );
-    bool eventFilter( QObject* o, QEvent* e);
+    void resizeEvent(QResizeEvent* ev);
+    bool eventFilter(QObject* o, QEvent* e);
 
 private:
     
@@ -63,7 +63,7 @@ private:
 
 private:
     
-    QWidget * mAlignWidget;
+    QWidget* mAlignWidget;
 };
 
 } // namespace Digikam
