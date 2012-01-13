@@ -238,6 +238,7 @@ public Q_SLOTS:
     void writeMetadataToFiles(const QList<ImageInfo>& infos);
     void writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
     void rotate(const QList<ImageInfo>& infos, int orientation);
+    void flip(const QList<ImageInfo>& infos, int flip);
 
 Q_SIGNALS:
 

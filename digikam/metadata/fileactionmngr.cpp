@@ -869,4 +869,71 @@ void FileActionMngrFileWorker::rotate(const QList<ImageInfo>& infos, int orienta
     d->finishedWriting(infos.size());
 }
 
+void FileActionMngrFileWorker::flip(const QList<ImageInfo>& infos, int flip)
+{
+    d->setWriterAction(i18n("Flip items. Please wait..."));
+    d->startingToWrite(infos);
+
+    QStringList failedItems;
+    ScanController::instance()->suspendCollectionScan();
+
+    foreach(const ImageInfo& info, infos)
+    {
+        KUrl url = info.fileUrl();
+
+        if (isJpegImage(url.toLocalFile()))
+        {
+            switch (flip)
+            {
+                case DImg::HORIZONTAL:
+                    if (!exifTransform(url.toLocalFile(), url.fileName(), url.toLocalFile(), FlipHorizontal))
+                        failedItems.append(info.name());
+                    break;
+                case DImg::VERTICAL:
+                    if (!exifTransform(url.toLocalFile(), url.fileName(), url.toLocalFile(), FlipVertical))
+                        failedItems.append(info.name());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        else
+        {
+            // Non-JPEG image: DImg
+            DImg image;
+
+            if (!image.load(url.toLocalFile()))
+            {
+                failedItems.append(info.name());
+            }
+            else
+            {
+                image.flip((DImg::FLIP)flip);
+
+                if (!image.save(url.toLocalFile(), DImg::fileFormat(url.toLocalFile())))
+                {
+                    failedItems.append(info.name());
+                }
+            }
+        }
+
+        if (!failedItems.contains(info.name()))
+        {
+            emit imageDataChanged(url.toLocalFile(), true, true);
+            ImageAttributesWatch::instance()->fileMetadataChanged(url);
+        }
+
+        d->writtenToOne();
+    }
+
+    if (!failedItems.isEmpty())
+    {
+        emit imageChangeFailed(i18n("Failed to flip these files:"), failedItems);
+    }
+
+    ScanController::instance()->resumeCollectionScan();
+    d->finishedWriting(infos.size());
+}
+
 } // namespace Digikam
