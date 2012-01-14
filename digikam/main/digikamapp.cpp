@@ -118,6 +118,7 @@
 #include "dlogoaction.h"
 #include "facescandialog.h"
 #include "filterstatusbar.h"
+#include "fileactionmngr.h"
 #include "fingerprintsgenerator.h"
 #include "iccsettings.h"
 #include "imageattributeswatch.h"
@@ -433,6 +434,14 @@ void DigikamApp::restoreSession()
             ++n;
         }
     }
+}
+
+void DigikamApp::closeEvent(QCloseEvent* e)
+{
+    // may show a progress dialog to finish actions
+    FileActionMngr::instance()->requestShutDown();
+
+    KXmlGuiWindow::closeEvent(e);
 }
 
 const QList<QAction*>& DigikamApp::menuImageActions()
