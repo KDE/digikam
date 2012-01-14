@@ -149,25 +149,24 @@ K_GLOBAL_STATIC( ProgressManagerPrivate, progressManagerPrivate )
 ProgressManager::ProgressManager()
     : QObject()
 {
-
 }
 
 ProgressManager::~ProgressManager()
 {
 }
 
-ProgressManager *ProgressManager::instance()
+ProgressManager* ProgressManager::instance()
 {
     return progressManagerPrivate.isDestroyed() ? 0 : &progressManagerPrivate->instance ;
 }
 
-ProgressItem *ProgressManager::createProgressItemImpl( ProgressItem *parent,
-                                                       const QString &id,
-                                                       const QString &label,
-                                                       const QString &status,
-                                                       bool cancellable)
+ProgressItem* ProgressManager::createProgressItemImpl(ProgressItem* parent,
+                                                      const QString& id,
+                                                      const QString& label,
+                                                      const QString& status,
+                                                      bool  cancellable)
 {
-    ProgressItem *t = 0;
+    ProgressItem* t = 0;
     if ( !mTransactions.value( id ) )
     {
         t = new ProgressItem ( parent, id, label, status, cancellable);
@@ -180,6 +179,7 @@ ProgressItem *ProgressManager::createProgressItemImpl( ProgressItem *parent,
                 p->addChild( t );
             }
         }
+
         // connect all signals
         connect ( t, SIGNAL( progressItemCompleted(Digikam::ProgressItem*) ),
                 this, SLOT( slotTransactionCompleted(Digikam::ProgressItem*) ) );
@@ -212,14 +212,14 @@ ProgressItem *ProgressManager::createProgressItemImpl( ProgressItem *parent,
     return t;
 }
 
-ProgressItem *ProgressManager::createProgressItemImpl( const QString &parent,
-                                                       const QString &id,
-                                                       const QString &label,
-                                                       const QString &status,
-                                                       bool  canBeCanceled)
+ProgressItem* ProgressManager::createProgressItemImpl(const QString& parent,
+                                                      const QString& id,
+                                                      const QString& label,
+                                                      const QString& status,
+                                                      bool  canBeCanceled)
 {
-    ProgressItem *p = mTransactions.value( parent );
-    return createProgressItemImpl( p, id, label, status, canBeCanceled);
+    ProgressItem* p = mTransactions.value(parent);
+    return createProgressItemImpl(p, id, label, status, canBeCanceled);
 }
 
 void ProgressManager::emitShowProgressViewImpl()
@@ -227,20 +227,20 @@ void ProgressManager::emitShowProgressViewImpl()
     emit showProgressView();
 }
 
-void ProgressManager::slotTransactionCompleted( ProgressItem *item )
+void ProgressManager::slotTransactionCompleted(ProgressItem* item)
 {
     mTransactions.remove( item->id() );
     emit progressItemCompleted( item );
 }
 
-void ProgressManager::slotStandardCancelHandler( ProgressItem *item )
+void ProgressManager::slotStandardCancelHandler(ProgressItem* item)
 {
     item->setComplete();
 }
 
-ProgressItem *ProgressManager::singleItem() const
+ProgressItem* ProgressManager::singleItem() const
 {
-    ProgressItem *item = 0;
+    ProgressItem* item                                 = 0;
     QHash< QString, ProgressItem* >::const_iterator it = mTransactions.constBegin();
     while ( it != mTransactions.constEnd() )
     {
@@ -266,7 +266,7 @@ ProgressItem *ProgressManager::singleItem() const
 
 void ProgressManager::slotAbortAll()
 {
-    QHashIterator<QString, ProgressItem *> it(mTransactions);
+    QHashIterator<QString, ProgressItem*> it(mTransactions);
     while (it.hasNext())
     {
         it.next();
