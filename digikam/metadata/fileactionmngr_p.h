@@ -230,16 +230,6 @@ public:
         emit signalTransform(infos, orientation);
     }
 
-    void flip(const QList<ImageInfo>& infos, int flip)
-    {
-        emit signalFlip(infos, flip);
-    }
-
-    void flip(const QList<ImageInfo>& infos, int flip)
-    {
-        emit signalFlip(infos, flip);
-    }
-
 public:
 
     // -- Workflow controlling --
@@ -302,7 +292,6 @@ Q_SIGNALS:
     void signalApplyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
     void signalEditGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos);
     void signalTransform(const QList<ImageInfo>& infos, int orientation);
-    void signalFlip(const QList<ImageInfo>& infos, int flip);
 };
 
 // ---------------------------------------------------------------------------------------------
