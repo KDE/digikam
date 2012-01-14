@@ -177,27 +177,26 @@ bool Rotate::toolOperations()
 
     if (isJpegImage(inputUrl().toLocalFile()) && image().isNull())
     {
+        JpegRotator rotator(inputUrl().toLocalFile());
+        rotator.setDestinationFile(outputUrl().toLocalFile());
         if (useExif)
         {
-            if (!exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Auto))
-            {
-                return false;
-            }
+            return rotator.autoExifTransform();
         }
         else
         {
             switch (rotation)
             {
                 case DImg::ROT90:
-                    return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate90));
+                    return rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate90);
                     break;
                 case DImg::ROT180:
-                    return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate180));
+                    return rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate180);
                     break;
                 case DImg::ROT270:
-                    return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate270));
+                    return rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate270);
                     break;
-                default:      // Custom value
+                default:
 
                     // there is no loss less methode to turn JPEG image with a custom angle.
                     if (!loadToDImg())

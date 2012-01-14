@@ -97,13 +97,15 @@ bool Flip::toolOperations()
 
     if (isJpegImage(inputUrl().toLocalFile()) && image().isNull())
     {
+        JpegRotator rotator(inputUrl().toLocalFile());
+        rotator.setDestinationFile(outputUrl().toLocalFile());
         switch (flip)
         {
             case DImg::HORIZONTAL:
-                return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), FlipHorizontal));
+                return rotator.exifTransform(KExiv2Iface::RotationMatrix::FlipHorizontal);
                 break;
             case DImg::VERTICAL:
-                return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), FlipVertical));
+                return rotator.exifTransform(KExiv2Iface::RotationMatrix::FlipVertical);
                 break;
             default:
                 kDebug() << "Unknown flip action";
