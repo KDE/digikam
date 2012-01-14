@@ -256,11 +256,11 @@ void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const Metadata
     d->applyMetadata(infos, new MetadataHubOnTheRoad(hub, this));
 }
 
-void FileActionMngr::rotate(const QList<ImageInfo>& infos, int orientation)
+void FileActionMngr::transform(const QList<ImageInfo>& infos, KExiv2Iface::RotationMatrix::TransformationAction action)
 {
     d->schedulingForWrite(infos.size());
     for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
-        d->rotate(splitter.next(), orientation);
+        d->transform(splitter.next(), action);
 }
 
 // --------------------------------------------------------------------------------------
@@ -289,8 +289,8 @@ FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
 
     connectDatabaseToFileWorker();
 
-    connect(this, SIGNAL(signalRotate(QList<ImageInfo>,int)),
-            fileWorker, SLOT(rotate(QList<ImageInfo>,int)), Qt::DirectConnection);
+    connect(this, SIGNAL(signalTransform(QList<ImageInfo>,int)),
+            fileWorker, SLOT(transform(QList<ImageInfo>,int)), Qt::DirectConnection);
 
     connect(fileWorker, SIGNAL(imageDataChanged(QString,bool,bool)),
             this, SLOT(slotImageDataChanged(QString,bool,bool)));
@@ -848,12 +848,11 @@ void FileActionMngrFileWorker::writeMetadata(const QList<ImageInfo>& infos, Meta
     d->finishedWriting(infos.size());
 }
 
-void FileActionMngrFileWorker::rotate(const QList<ImageInfo>& infos, int orientation)
+void FileActionMngrFileWorker::transform(const QList<ImageInfo>& infos, int action)
 {
-    d->setWriterAction(i18n("Rotate items. Please wait..."));
+    d->setWriterAction(i18n("Transforming items. Please wait..."));
     d->startingToWrite(infos);
 
-    bool useExif = (orientation == -1);
     QStringList failedItems;
     ScanController::instance()->suspendCollectionScan();
 
@@ -866,26 +865,13 @@ void FileActionMngrFileWorker::rotate(const QList<ImageInfo>& infos, int orienta
         {
             JpegRotator rotator(url.toLocalFile());
             bool success = false;
-            if (useExif)
+            if (action == KExiv2Iface::RotationMatrix::NoTransformation)
             {
                 success = rotator.autoExifTransform();
             }
             else
             {
-                switch (orientation)
-                {
-                    case DImg::ROT90:
-                        success = rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate90);
-                        break;
-                    case DImg::ROT180:
-                        success = rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate180);
-                        break;
-                    case DImg::ROT270:
-                        success = rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate270);
-                        break;
-                    default:
-                        break;
-                }
+                success = rotator.exifTransform((KExiv2Iface::RotationMatrix::TransformationAction)action);
             }
             if (!success)
             {
@@ -903,14 +889,14 @@ void FileActionMngrFileWorker::rotate(const QList<ImageInfo>& infos, int orienta
             }
             else
             {
-                if (useExif)
+                if (action == KExiv2Iface::RotationMatrix::NoTransformation)
                 {
                     DMetadata meta(url.toLocalFile());
                     image.rotateAndFlip(meta.getImageOrientation());
                 }
                 else
                 {
-                    image.rotate((DImg::ANGLE)orientation);
+                    image.transform(action);
                 }
 
                 if (!image.save(url.toLocalFile(), DImg::fileFormat(url.toLocalFile())))
@@ -931,7 +917,7 @@ void FileActionMngrFileWorker::rotate(const QList<ImageInfo>& infos, int orienta
 
     if (!failedItems.isEmpty())
     {
-        emit imageChangeFailed(i18n("Failed to rotate these files:"), failedItems);
+        emit imageChangeFailed(i18n("Failed to transform these files:"), failedItems);
     }
 
     ScanController::instance()->resumeCollectionScan();

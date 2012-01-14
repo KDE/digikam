@@ -104,7 +104,7 @@ public Q_SLOTS:
     void writeOrientationToFiles(const QList<ImageInfo>&, int) {};
     virtual void writeMetadataToFiles(const QList<ImageInfo>&) {};
     virtual void writeMetadata(const QList<ImageInfo>&, MetadataHub*) {};
-    virtual void rotate(const QList<ImageInfo>&, int) {};
+    virtual void transform(const QList<ImageInfo>&, int) {};
 
 Q_SIGNALS:
 
@@ -125,7 +125,7 @@ public:
     void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
     void writeMetadataToFiles(const QList<ImageInfo>& infos);
     void writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
-    void rotate(const QList<ImageInfo>& infos, int orientation);
+    void transform(const QList<ImageInfo>& infos, int orientation);
 
 private:
 
@@ -225,9 +225,14 @@ public:
         emit signalApplyMetadata(infos, hub);
     }
 
-    void rotate(const QList<ImageInfo>& infos, int orientation)
+    void transform(const QList<ImageInfo>& infos, int orientation)
     {
-        emit signalRotate(infos, orientation);
+        emit signalTransform(infos, orientation);
+    }
+
+    void flip(const QList<ImageInfo>& infos, int flip)
+    {
+        emit signalFlip(infos, flip);
     }
 
     void flip(const QList<ImageInfo>& infos, int flip)
@@ -296,7 +301,7 @@ Q_SIGNALS:
     void signalSetExifOrientation(const QList<ImageInfo>& infos, int orientation);
     void signalApplyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
     void signalEditGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos);
-    void signalRotate(const QList<ImageInfo>& infos, int orientation);
+    void signalTransform(const QList<ImageInfo>& infos, int orientation);
     void signalFlip(const QList<ImageInfo>& infos, int flip);
 };
 

@@ -25,6 +25,10 @@
 #ifndef FILEACTIONMNGR_H
 #define FILEACTIONMNGR_H
 
+// libkexiv2 includes
+
+#include <libkexiv2/rotationmatrix.h>
+
 // Local includes
 
 #include "imageinfo.h"
@@ -87,8 +91,8 @@ public Q_SLOTS:
     void applyMetadata(const QList<ImageInfo>& infos, const MetadataHub& hub);
     void applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad& hub);
 
-    void rotate(const QList<ImageInfo>& infos, int orientation);
-    void flip(const QList<ImageInfo>& infos, int flip);
+    /** Flip or rotate. Note: The NoTransformation action is interpreted as Exif auto-rotate */
+    void transform(const QList<ImageInfo>& infos, KExiv2Iface::RotationMatrix::TransformationAction action);
 
 Q_SIGNALS:
 
