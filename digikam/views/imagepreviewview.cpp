@@ -510,12 +510,12 @@ void ImagePreviewView::slotSetupChanged()
 
 void ImagePreviewView::slotRotateLeft()
 {
-    FileActionMngr::instance()->rotate(QList<ImageInfo>() << d->item->imageInfo(), DImg::ROT270);
+    FileActionMngr::instance()->transform(QList<ImageInfo>() << d->item->imageInfo(), KExiv2Iface::RotationMatrix::Rotate270);
 }
 
 void ImagePreviewView::slotRotateRight()
 {
-    FileActionMngr::instance()->rotate(QList<ImageInfo>() << d->item->imageInfo(), DImg::ROT90);
+    FileActionMngr::instance()->transform(QList<ImageInfo>() << d->item->imageInfo(), KExiv2Iface::RotationMatrix::Rotate90);
 }
 
 void ImagePreviewView::slotDeleteItem()

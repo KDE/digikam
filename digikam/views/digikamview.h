@@ -38,6 +38,10 @@
 #include <khbox.h>
 #include <kurl.h>
 
+// libkexiv2 includes
+
+#include <libkexiv2/rotationmatrix.h>
+
 // Local includes
 
 #include "searchtextbar.h"
@@ -74,7 +78,7 @@ public:
     bool isThumbBarVisible();
     void setRecurseAlbums(bool recursive);
     void setRecurseTags(bool recursive);
-    void imageTransform(int transform);
+    void imageTransform(KExiv2Iface::RotationMatrix::TransformationAction transform);
 
     void connectIconViewFilter(FilterStatusBar* filter);
 

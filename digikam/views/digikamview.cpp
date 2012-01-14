@@ -1983,16 +1983,9 @@ void DigikamView::slotImageExifOrientation(int orientation)
     FileActionMngr::instance()->setExifOrientation(d->iconView->selectedImageInfos(), orientation);
 }
 
-void DigikamView::imageTransform(int transform)
+void DigikamView::imageTransform(KExiv2Iface::RotationMatrix::TransformationAction transform)
 {
-    if ((transform != DImg::HORIZONTAL) && (transform != DImg::VERTICAL))
-    {
-        FileActionMngr::instance()->rotate(d->iconView->selectedImageInfos(), transform);
-    }
-    else
-    {
-        FileActionMngr::instance()->flip(d->iconView->selectedImageInfos(), transform);
-    }
+    FileActionMngr::instance()->transform(d->iconView->selectedImageInfos(), transform);
 }
 
 }  // namespace Digikam

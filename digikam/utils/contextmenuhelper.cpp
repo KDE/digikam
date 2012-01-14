@@ -412,11 +412,11 @@ void ContextMenuHelper::slotRotate()
 {
     if (sender()->objectName() == "rotate_ccw")
     {
-        FileActionMngr::instance()->rotate(ImageInfoList(d->selectedIds), DImg::ROT270);
+        FileActionMngr::instance()->transform(ImageInfoList(d->selectedIds), KExiv2Iface::RotationMatrix::Rotate270);
     }
     else
     {
-        FileActionMngr::instance()->rotate(ImageInfoList(d->selectedIds), DImg::ROT90);
+        FileActionMngr::instance()->transform(ImageInfoList(d->selectedIds), KExiv2Iface::RotationMatrix::Rotate90);
     }
 }
 

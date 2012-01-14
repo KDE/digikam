@@ -744,12 +744,14 @@ void DigikamImageView::rename()
 
 void DigikamImageView::slotRotateLeft(const QList<QModelIndex>& indexes)
 {
-    FileActionMngr::instance()->rotate(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes), DImg::ROT270);
+    FileActionMngr::instance()->transform(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes),
+                                          KExiv2Iface::RotationMatrix::Rotate270);
 }
 
 void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 {
-    FileActionMngr::instance()->rotate(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes), DImg::ROT90);
+    FileActionMngr::instance()->transform(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes),
+                                          KExiv2Iface::RotationMatrix::Rotate90);
 }
 
 } // namespace Digikam
