@@ -100,6 +100,10 @@
 
 #include <libkface/face.h>
 
+// Libkexiv2
+
+#include <libkexiv2/rotationmatrix.h>
+
 // Local includes
 
 #include "album.h"
@@ -118,7 +122,6 @@
 #include "dlogoaction.h"
 #include "facescandialog.h"
 #include "filterstatusbar.h"
-#include "fileactionmngr.h"
 #include "fingerprintsgenerator.h"
 #include "iccsettings.h"
 #include "imageattributeswatch.h"
@@ -434,14 +437,6 @@ void DigikamApp::restoreSession()
             ++n;
         }
     }
-}
-
-void DigikamApp::closeEvent(QCloseEvent* e)
-{
-    // may show a progress dialog to finish actions
-    FileActionMngr::instance()->requestShutDown();
-
-    KXmlGuiWindow::closeEvent(e);
 }
 
 const QList<QAction*>& DigikamApp::menuImageActions()
@@ -3521,23 +3516,24 @@ void DigikamApp::slotTransformAction()
 {
     if (sender()->objectName() == "rotate_ccw")
     {
-        d->view->imageTransform(DImg::ROT180);
+        d->view->imageTransform(KExiv2Iface::RotationMatrix::Rotate270);
     }
     else if (sender()->objectName() == "rotate_cw")
     {
-        d->view->imageTransform(DImg::ROT90);
+        d->view->imageTransform(KExiv2Iface::RotationMatrix::Rotate90);
     }
     else if (sender()->objectName() == "flip_horizontal")
     {
-        d->view->imageTransform(DImg::HORIZONTAL);
+        d->view->imageTransform(KExiv2Iface::RotationMatrix::FlipHorizontal);
     }
     else if (sender()->objectName() == "flip_vertical")
     {
-        d->view->imageTransform(DImg::VERTICAL);
+        d->view->imageTransform(KExiv2Iface::RotationMatrix::FlipVertical);
     }
     else if (sender()->objectName() == "image_transform_exif")
     {
-        d->view->imageTransform(-1);
+        // special value for FileActionMngr
+        d->view->imageTransform(KExiv2Iface::RotationMatrix::NoTransformation);
     }
 }
 
