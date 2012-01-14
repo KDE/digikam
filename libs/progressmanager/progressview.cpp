@@ -142,52 +142,60 @@ void TransactionItemView::slotLayoutFirstItem()
 
 // ----------------------------------------------------------------------------
 
-TransactionItem::TransactionItem( QWidget *parent, ProgressItem *item, bool first )
-    : KVBox( parent ), mCancelButton( 0 ), mItem( item )
+TransactionItem::TransactionItem(QWidget* parent, ProgressItem* item, bool first)
+    : KVBox(parent), mCancelButton(0), mItem(item)
 {
-    setSpacing( 2 );
-    setMargin( 2 );
-    setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
+    setSpacing(2);
+    setMargin(2);
+    setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
 
-    mFrame = new QFrame( this );
-    mFrame->setFrameShape( QFrame::HLine );
-    mFrame->setFrameShadow( QFrame::Raised );
+    mFrame = new QFrame(this);
+    mFrame->setFrameShape(QFrame::HLine);
+    mFrame->setFrameShadow(QFrame::Raised);
     mFrame->show();
-    setStretchFactor( mFrame, 3 );
-    layout()->addWidget( mFrame );
+    setStretchFactor(mFrame, 3);
+    layout()->addWidget(mFrame);
 
-    KHBox* h = new KHBox( this );
-    h->setSpacing( 5 );
-    layout()->addWidget( h );
+    KHBox* h = new KHBox(this);
+    h->setSpacing(5);
+    layout()->addWidget(h);
 
-    mItemLabel = new QLabel( fontMetrics().elidedText( item->label(), Qt::ElideRight, MAX_LABEL_WIDTH ), h );
-    h->layout()->addWidget( mItemLabel );
-    h->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
-
-    mProgress = new QProgressBar( h );
-    mProgress->setMaximum( 100 );
-    mProgress->setValue( item->progress() );
-    h->layout()->addWidget( mProgress );
-
-    if ( item->canBeCanceled() )
+    if (item->hasThumbnail())
     {
-        mCancelButton = new QPushButton( SmallIcon( "list-remove" ), QString(), h );
-        mCancelButton->setToolTip( i18n( "Cancel this operation." ) );
-        connect ( mCancelButton, SIGNAL( clicked() ),
-                this, SLOT( slotItemCanceled() ));
-        h->layout()->addWidget( mCancelButton );
+        mItemThumb = new QLabel(h);
+        mItemThumb->setFixedSize(QSize(22, 22));
+        h->layout()->addWidget(mItemThumb);
+        h->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
     }
 
-    h = new KHBox( this );
-    h->setSpacing( 5 );
-    h->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
-    layout()->addWidget( h );
+    mItemLabel = new QLabel(fontMetrics().elidedText(item->label(), Qt::ElideRight, MAX_LABEL_WIDTH), h);
+    h->layout()->addWidget(mItemLabel);
+    h->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
 
-    mItemStatus = new QLabel( h );
-    mItemStatus->setTextFormat( Qt::RichText );
-    mItemStatus->setText(fontMetrics().elidedText( item->status(), Qt::ElideRight, MAX_LABEL_WIDTH ) );
-    h->layout()->addWidget( mItemStatus );
-    if ( first )
+    mProgress = new QProgressBar(h);
+    mProgress->setMaximum(100);
+    mProgress->setValue(item->progress());
+    h->layout()->addWidget(mProgress);
+
+    if (item->canBeCanceled())
+    {
+        mCancelButton = new QPushButton(SmallIcon("list-remove"), QString(), h);
+        mCancelButton->setToolTip( i18n("Cancel this operation."));
+        connect(mCancelButton, SIGNAL( clicked()),
+                this, SLOT(slotItemCanceled()));
+        h->layout()->addWidget(mCancelButton);
+    }
+
+    h = new KHBox(this);
+    h->setSpacing(5);
+    h->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
+    layout()->addWidget(h);
+
+    mItemStatus = new QLabel(h);
+    mItemStatus->setTextFormat(Qt::RichText);
+    mItemStatus->setText(fontMetrics().elidedText(item->status(), Qt::ElideRight, MAX_LABEL_WIDTH));
+    h->layout()->addWidget(mItemStatus);
+    if (first)
     {
         hideHLine();
     }
@@ -202,24 +210,29 @@ void TransactionItem::hideHLine()
     mFrame->hide();
 }
 
-void TransactionItem::setProgress( int progress )
+void TransactionItem::setProgress(int progress)
 {
-    mProgress->setValue( progress );
+    mProgress->setValue(progress);
 }
 
-void TransactionItem::setLabel( const QString &label )
+void TransactionItem::setLabel(const QString& label)
 {
-    mItemLabel->setText( fontMetrics().elidedText( label, Qt::ElideRight, MAX_LABEL_WIDTH ) );
+    mItemLabel->setText(fontMetrics().elidedText(label, Qt::ElideRight, MAX_LABEL_WIDTH));
 }
 
-void TransactionItem::setStatus( const QString &status )
+void TransactionItem::setThumbnail(const QPixmap& thumb)
 {
-    mItemStatus->setText( fontMetrics().elidedText( status, Qt::ElideRight, MAX_LABEL_WIDTH ) );
+    mItemThumb->setPixmap(thumb);
 }
 
-void TransactionItem::setTotalSteps( int totalSteps )
+void TransactionItem::setStatus(const QString& status)
 {
-    mProgress->setMaximum( totalSteps );
+    mItemStatus->setText(fontMetrics().elidedText(status, Qt::ElideRight, MAX_LABEL_WIDTH));
+}
+
+void TransactionItem::setTotalSteps(int totalSteps)
+{
+    mProgress->setMaximum(totalSteps);
 }
 
 void TransactionItem::slotItemCanceled()
@@ -230,9 +243,9 @@ void TransactionItem::slotItemCanceled()
     }
 }
 
-void TransactionItem::addSubTransaction( ProgressItem *item )
+void TransactionItem::addSubTransaction(ProgressItem* item)
 {
-    Q_UNUSED( item );
+    Q_UNUSED(item);
 }
 
 // ---------------------------------------------------------------------------
@@ -265,28 +278,31 @@ ProgressView::ProgressView(QWidget* alignWidget, QWidget* parent, const char* na
     * Get the singleton ProgressManager item which will inform us of
     * appearing and vanishing items.
     */
-    ProgressManager *pm = ProgressManager::instance();
+    ProgressManager* pm = ProgressManager::instance();
     
-    connect ( pm, SIGNAL( progressItemAdded( Digikam::ProgressItem* ) ),
-              this, SLOT( slotTransactionAdded( Digikam::ProgressItem* ) ) );
+    connect(pm, SIGNAL(progressItemAdded(Digikam::ProgressItem*)),
+            this, SLOT(slotTransactionAdded(Digikam::ProgressItem*)));
     
-    connect ( pm, SIGNAL( progressItemCompleted( Digikam::ProgressItem* ) ),
-              this, SLOT( slotTransactionCompleted( Digikam::ProgressItem* ) ) );
+    connect(pm, SIGNAL(progressItemCompleted(Digikam::ProgressItem*)),
+            this, SLOT(slotTransactionCompleted(Digikam::ProgressItem*)));
     
-    connect ( pm, SIGNAL( progressItemProgress( Digikam::ProgressItem*, unsigned int ) ),
-              this, SLOT( slotTransactionProgress( Digikam::ProgressItem*, unsigned int ) ) );
+    connect(pm, SIGNAL(progressItemProgress(Digikam::ProgressItem*, unsigned int)),
+            this, SLOT(slotTransactionProgress(Digikam::ProgressItem*, unsigned int)));
     
-    connect ( pm, SIGNAL( progressItemStatus( Digikam::ProgressItem*, const QString& ) ),
-              this, SLOT( slotTransactionStatus( Digikam::ProgressItem*, const QString& ) ) );
+    connect(pm, SIGNAL(progressItemStatus(Digikam::ProgressItem*, const QString&)),
+            this, SLOT(slotTransactionStatus(Digikam::ProgressItem*, const QString&)));
     
-    connect ( pm, SIGNAL( progressItemLabel( Digikam::ProgressItem*, const QString& ) ),
-              this, SLOT( slotTransactionLabel( Digikam::ProgressItem*, const QString& ) ) );
+    connect(pm, SIGNAL(progressItemLabel(Digikam::ProgressItem*, const QString&)),
+            this, SLOT(slotTransactionLabel(Digikam::ProgressItem*, const QString&)));
     
-    connect ( pm, SIGNAL( progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool) ),
-              this, SLOT( slotTransactionUsesBusyIndicator( Digikam::ProgressItem*, bool ) ) );
+    connect(pm, SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool)),
+            this, SLOT(slotTransactionUsesBusyIndicator(Digikam::ProgressItem*, bool)));
+
+    connect(pm, SIGNAL(progressItemThumbnail(Digikam::ProgressItem*, const QPixmap&)),
+            this, SLOT(slotTransactionThumbnail(Digikam::ProgressItem*, const QPixmap&)));
     
-    connect ( pm, SIGNAL( showProgressView() ),
-              this, SLOT( slotShow() ) );
+    connect(pm, SIGNAL(showProgressView()),
+            this, SLOT(slotShow()));
 }
 
 void ProgressView::closeEvent( QCloseEvent *e )
@@ -305,15 +321,16 @@ void ProgressView::slotTransactionAdded( ProgressItem *item )
     TransactionItem *parent = 0;
     if ( item->parent() )
     {
-        if ( mTransactionsToListviewItems.contains( item->parent() ) ) {
-        parent = mTransactionsToListviewItems[ item->parent() ];
-        parent->addSubTransaction( item );
+        if ( mTransactionsToListviewItems.contains( item->parent() ) )
+        {
+            parent = mTransactionsToListviewItems[ item->parent() ];
+            parent->addSubTransaction( item );
         }
     }
     else
     {
         const bool first    = mTransactionsToListviewItems.empty();
-        TransactionItem *ti = mScrollView->addTransactionItem( item, first );
+        TransactionItem* ti = mScrollView->addTransactionItem( item, first );
         if ( ti )
         {
             mTransactionsToListviewItems.insert( item, ti );
@@ -322,7 +339,6 @@ void ProgressView::slotTransactionAdded( ProgressItem *item )
         {
             QTimer::singleShot( 1000, this, SLOT( slotShow() ) );
         }
-
     }
 }
 
@@ -379,19 +395,28 @@ void ProgressView::slotTransactionLabel( ProgressItem *item,
     }
 }
 
-void ProgressView::slotTransactionUsesBusyIndicator( Digikam::ProgressItem *item, bool value )
+void ProgressView::slotTransactionUsesBusyIndicator(Digikam::ProgressItem* item, bool value)
 {
-    if ( mTransactionsToListviewItems.contains( item ) )
+    if (mTransactionsToListviewItems.contains(item))
     {
-        TransactionItem *ti = mTransactionsToListviewItems[ item ];
-        if ( value )
+        TransactionItem* ti = mTransactionsToListviewItems[item];
+        if (value)
         {
-            ti->setTotalSteps( 0 );
+            ti->setTotalSteps(0);
         }
         else
         {
-            ti->setTotalSteps( 100 );
+            ti->setTotalSteps(100);
         }
+    }
+}
+
+void ProgressView::slotTransactionThumbnail(Digikam::ProgressItem* item, const QPixmap& thumb)
+{
+    if (mTransactionsToListviewItems.contains(item))
+    {
+        TransactionItem* ti = mTransactionsToListviewItems[item];
+        ti->setThumbnail(thumb);
     }
 }
 

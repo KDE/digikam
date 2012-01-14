@@ -27,6 +27,7 @@
 
 // Qt includes
 
+#include <QPixmap>
 #include <QScrollArea>
 #include <QMap>
 
@@ -89,18 +90,19 @@ public:
 
     void hideHLine();
 
-    void setProgress( int progress );
-    void setLabel( const QString & );
+    void setProgress(int progress);
+    void setLabel(const QString&);
+    void setThumbnail(const QPixmap&);
 
     // the given text is interpreted as RichText, so you might need to
     // Qt::escape() it before passing
-    void setStatus( const QString & );
+    void setStatus(const QString&);
 
     void setTotalSteps( int totalSteps );
 
-    ProgressItem *item() const { return mItem; }
+    ProgressItem* item() const { return mItem; }
 
-    void addSubTransaction( ProgressItem *item );
+    void addSubTransaction(ProgressItem* item);
 
     // The progressitem is deleted immediately, we take 5s to go out,
     // so better not use mItem during this time.
@@ -116,6 +118,7 @@ protected:
     QPushButton*  mCancelButton;
     QLabel*       mItemLabel;
     QLabel*       mItemStatus;
+    QLabel*       mItemThumb;
     QFrame*       mFrame;
     ProgressItem* mItem;
 };
@@ -142,14 +145,14 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void slotTransactionAdded( Digikam::ProgressItem *item );
-    void slotTransactionCompleted( Digikam::ProgressItem *item );
-    void slotTransactionCanceled( Digikam::ProgressItem *item );
-    void slotTransactionProgress( Digikam::ProgressItem *item, unsigned int progress );
-    void slotTransactionStatus( Digikam::ProgressItem *item, const QString & );
-    void slotTransactionLabel( Digikam::ProgressItem *item, const QString & );
-    void slotTransactionUsesBusyIndicator( Digikam::ProgressItem *, bool );
-
+    void slotTransactionAdded(Digikam::ProgressItem*);
+    void slotTransactionCompleted(Digikam::ProgressItem*);
+    void slotTransactionCanceled(Digikam::ProgressItem*);
+    void slotTransactionProgress(Digikam::ProgressItem*, unsigned int progress);
+    void slotTransactionStatus(Digikam::ProgressItem*, const QString&);
+    void slotTransactionLabel(Digikam::ProgressItem*, const QString&);
+    void slotTransactionUsesBusyIndicator(Digikam::ProgressItem*, bool);
+    void slotTransactionThumbnail(Digikam::ProgressItem*, const QPixmap&);
     void slotClose();
     void slotShow();
     void slotHide();

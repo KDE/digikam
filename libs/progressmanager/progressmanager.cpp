@@ -35,13 +35,21 @@ namespace Digikam
 
 unsigned int ProgressManager::s_uID = 1000;
 
-ProgressItem::ProgressItem( ProgressItem *parent, const QString &id,
-                            const QString &label, const QString &status,
-                            bool canBeCanceled)
-    : mId( id ), mLabel( label ), mStatus( status ), mParent( parent ),
-      mCanBeCanceled( canBeCanceled ), mProgress( 0 ), mTotal( 0 ),
-      mCompleted( 0 ), mWaitingForKids( false ), mCanceled( false ),
-      mUsesBusyIndicator( false )
+ProgressItem::ProgressItem( ProgressItem* parent, const QString& id,
+                            const QString& label, const QString& status,
+                            bool canBeCanceled, bool hasThumb)
+    : mId(id),
+      mLabel(label),
+      mStatus(status),
+      mParent(parent),
+      mCanBeCanceled(canBeCanceled),
+      mHasThumb(hasThumb),
+      mProgress(0),
+      mTotal(0),
+      mCompleted(0),
+      mWaitingForKids(false),
+      mCanceled(false),
+      mUsesBusyIndicator(false)
 {
 }
 
@@ -131,10 +139,16 @@ void ProgressItem::setStatus( const QString &v )
     emit progressItemStatus( this, mStatus );
 }
 
-void ProgressItem::setUsesBusyIndicator( bool useBusyIndicator )
+void ProgressItem::setUsesBusyIndicator(bool useBusyIndicator)
 {
     mUsesBusyIndicator = useBusyIndicator;
-    emit progressItemUsesBusyIndicator( this, useBusyIndicator );
+    emit progressItemUsesBusyIndicator(this, useBusyIndicator);
+}
+
+void ProgressItem::setThumbnail(const QPixmap& thumb)
+{
+    mThumb = thumb;
+    emit progressItemThumbnail(this, thumb);
 }
 
 // --------------------------------------------------------------------------
@@ -164,43 +178,48 @@ ProgressItem* ProgressManager::createProgressItemImpl(ProgressItem* parent,
                                                       const QString& id,
                                                       const QString& label,
                                                       const QString& status,
-                                                      bool  cancellable)
+                                                      bool  cancellable,
+                                                      bool  hasThumb
+                                                     )
 {
     ProgressItem* t = 0;
+    
     if ( !mTransactions.value( id ) )
     {
-        t = new ProgressItem ( parent, id, label, status, cancellable);
-        mTransactions.insert( id, t );
-        if ( parent )
+        t = new ProgressItem(parent, id, label, status, cancellable, hasThumb);
+        mTransactions.insert(id, t);
+        if (parent)
         {
-            ProgressItem *p = mTransactions.value( parent->id() );
+            ProgressItem* p = mTransactions.value( parent->id() );
             if ( p )
             {
                 p->addChild( t );
             }
         }
 
-        // connect all signals
-        connect ( t, SIGNAL( progressItemCompleted(Digikam::ProgressItem*) ),
-                this, SLOT( slotTransactionCompleted(Digikam::ProgressItem*) ) );
+        connect(t, SIGNAL(progressItemCompleted(Digikam::ProgressItem*)),
+                this, SLOT(slotTransactionCompleted(Digikam::ProgressItem*)));
         
-        connect ( t, SIGNAL( progressItemProgress(Digikam::ProgressItem*, unsigned int) ),
-                this, SIGNAL( progressItemProgress(Digikam::ProgressItem*, unsigned int) ) );
+        connect(t, SIGNAL(progressItemProgress(Digikam::ProgressItem*, unsigned int)),
+                this, SIGNAL(progressItemProgress(Digikam::ProgressItem*, unsigned int)));
         
-        connect ( t, SIGNAL( progressItemAdded(Digikam::ProgressItem*) ),
-                this, SIGNAL( progressItemAdded(Digikam::ProgressItem*) ) );
+        connect(t, SIGNAL(progressItemAdded(Digikam::ProgressItem*)),
+                this, SIGNAL(progressItemAdded(Digikam::ProgressItem*)));
         
-        connect ( t, SIGNAL( progressItemCanceled(Digikam::ProgressItem*) ),
-                this, SIGNAL( progressItemCanceled(Digikam::ProgressItem*) ) );
+        connect(t, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)),
+                this, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)));
         
-        connect ( t, SIGNAL( progressItemStatus(Digikam::ProgressItem*, const QString&) ),
-                this, SIGNAL( progressItemStatus(Digikam::ProgressItem*, const QString&) ) );
+        connect(t, SIGNAL(progressItemStatus(Digikam::ProgressItem*, const QString&)),
+                this, SIGNAL(progressItemStatus(Digikam::ProgressItem*, const QString&)));
         
-        connect ( t, SIGNAL( progressItemLabel(Digikam::ProgressItem*, const QString&) ),
-                this, SIGNAL( progressItemLabel(Digikam::ProgressItem*, const QString&) ) );
+        connect(t, SIGNAL(progressItemLabel(Digikam::ProgressItem*, const QString&)),
+                this, SIGNAL(progressItemLabel(Digikam::ProgressItem*, const QString&)));
         
-        connect ( t, SIGNAL( progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool) ),
-                this, SIGNAL( progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool) ) );
+        connect(t, SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool)),
+                this, SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool)));
+
+        connect(t, SIGNAL(progressItemThumbnail(Digikam::ProgressItem*, const QPixmap&)),
+                this, SIGNAL(progressItemThumbnail(Digikam::ProgressItem*, const QPixmap&)));
         
         emit progressItemAdded( t );
     }
@@ -216,10 +235,12 @@ ProgressItem* ProgressManager::createProgressItemImpl(const QString& parent,
                                                       const QString& id,
                                                       const QString& label,
                                                       const QString& status,
-                                                      bool  canBeCanceled)
+                                                      bool  canBeCanceled,
+                                                      bool  hasThumb
+                                                     )
 {
     ProgressItem* p = mTransactions.value(parent);
-    return createProgressItemImpl(p, id, label, status, canBeCanceled);
+    return createProgressItemImpl(p, id, label, status, canBeCanceled, hasThumb);
 }
 
 void ProgressManager::emitShowProgressViewImpl()

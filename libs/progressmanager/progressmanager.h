@@ -31,6 +31,7 @@
 #include <QString>
 #include <QMap>
 #include <QHash>
+#include <QPixmap>
 
 // Local includes
 
@@ -53,33 +54,33 @@ public:
      * @return The id string which uniquely identifies the operation
      *         represented by this item.
      */
-    const QString &id() const { return mId; }
+    const QString& id() const { return mId; }
 
     /**
      * @return The parent item of this one, if there is one.
      */
-    ProgressItem *parent() const { return mParent; }
+    ProgressItem* parent() const { return mParent; }
 
     /**
      * @return The user visible string to be used to represent this item.
      */
-    const QString &label() const { return mLabel; }
+    const QString& label() const { return mLabel; }
 
     /**
      * @param v Set the user visible string identifying this item.
      */
-    void setLabel( const QString &v );
+    void setLabel(const QString& v);
 
     /**
      * @return The string to be used for showing this item's current status.
      */
-    const QString &status() const { return mStatus; }
+    const QString& status() const { return mStatus; }
 
     /**
      * Set the string to be used for showing this item's current status.
      * @param v The status string.
      */
-    void setStatus( const QString &v );
+    void setStatus(const QString& v);
 
     /**
      * @return Whether this item can be canceled.
@@ -97,6 +98,16 @@ public:
      * time to update the busy indicator.
      */
     void setUsesBusyIndicator( bool useBusyIndicator );
+
+    /**
+     * @return whether this item has a thumbnail.
+     */
+    bool hasThumbnail() const { return mHasThumb; }
+
+    /**
+     * Sets whether this item has a thumbnail.
+     */
+    void setThumbnail(const QPixmap& thumb);
 
     /**
      * @return The current progress value of this item in percent.
@@ -209,13 +220,20 @@ Q_SIGNALS:
      * @param item The updated item
      * @param value True if the item uses a busy indicator now, false otherwise
      */
-    void progressItemUsesBusyIndicator( Digikam::ProgressItem *item, bool value );
+    void progressItemUsesBusyIndicator(Digikam::ProgressItem* item, bool value);
 
+    /**
+     * Emitted when the thumbnail data must be set in item.
+     * @param item The updated item
+     * @param thumb thumbnail data
+     */
+    void progressItemThumbnail(Digikam::ProgressItem* item, const QPixmap& thumb);
+    
 protected:
 
     /* Only to be used by our good friend the ProgressManager */
     ProgressItem( ProgressItem* parent, const QString& id, const QString& label,
-                  const QString& status, bool isCancellable);
+                  const QString& status, bool isCancellable, bool hasThumb);
     virtual ~ProgressItem();
 
 private:
@@ -223,8 +241,10 @@ private:
     QString         mId;
     QString         mLabel;
     QString         mStatus;
+    QPixmap         mThumb;
     ProgressItem*   mParent;
     bool            mCanBeCanceled;
+    bool            mHasThumb;
     unsigned int    mProgress;
     ProgressItemMap mChildren;
     unsigned int    mTotal;
@@ -235,6 +255,8 @@ private:
 
     friend class ProgressManager;
 };
+
+// --------------------------------------------------------------------------------------------
 
 struct ProgressManagerPrivate;
 
@@ -306,7 +328,7 @@ public:
       */
     static ProgressItem* createProgressItem(const QString& label)
     {
-        return instance()->createProgressItemImpl(0, getUniqueID(), label, QString(), true);
+        return instance()->createProgressItemImpl(0, getUniqueID(), label, QString(), true, false);
     }
 
     /**
@@ -326,9 +348,11 @@ public:
                                             const QString& id,
                                             const QString& label,
                                             const QString& status = QString(),
-                                            bool  canBeCanceled = true)
+                                            bool  canBeCanceled = true,
+                                            bool  hasThumb = false
+                                           )
     {
-        return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled);
+        return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled, hasThumb);
     }
 
     /**
@@ -339,9 +363,11 @@ public:
                                             const QString& id,
                                             const QString& label,
                                             const QString& status = QString(),
-                                            bool  canBeCanceled = true)
+                                            bool  canBeCanceled = true,
+                                            bool  hasThumb = false
+                                           )
     {
-        return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled);
+        return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled, hasThumb);
     }
 
     /**
@@ -350,9 +376,10 @@ public:
     static ProgressItem* createProgressItem(const QString& id,
                                             const QString& label,
                                             const QString& status = QString(),
-                                            bool  canBeCanceled = true)
+                                            bool  canBeCanceled = true,
+                                            bool  hasThumb = false)
     {
-        return instance()->createProgressItemImpl(0, id, label, status, canBeCanceled);
+        return instance()->createProgressItemImpl(0, id, label, status, canBeCanceled, hasThumb);
     }
 
     /**
@@ -386,6 +413,9 @@ Q_SIGNALS:
     
     /** @see ProgressItem::progressItemUsesBusyIndicator */
     void progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool);
+
+    /** @see ProgressItem::progressItemThumbnail */
+    void progressItemThumbnail(Digikam::ProgressItem*, const QPixmap&);
 
     /**
      * Emitted when an operation requests the listeners to be shown.
@@ -423,19 +453,23 @@ private:
                                              const QString& id,
                                              const QString& label,
                                              const QString& status,
-                                             bool  cancellable);
+                                             bool  cancellable,
+                                             bool  hasThumb);
     
-    virtual ProgressItem *createProgressItemImpl(ProgressItem* parent,
+    virtual ProgressItem* createProgressItemImpl(ProgressItem* parent,
                                                  const QString& id,
                                                  const QString& label,
                                                  const QString& status,
-                                                 bool  cancellable);
+                                                 bool  cancellable,
+                                                 bool  hasThumb);
 
-    virtual ProgressItem *createProgressItemImpl(const QString& parent,
+    virtual ProgressItem* createProgressItemImpl(const QString& parent,
                                                  const QString& id,
                                                  const QString& label,
                                                  const QString& status,
-                                                 bool  cancellable);
+                                                 bool  cancellable,
+                                                 bool  hasThumb
+                                                );
 
 private:
 
