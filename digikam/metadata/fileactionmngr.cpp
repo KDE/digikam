@@ -28,12 +28,14 @@
 // Qt includes
 
 #include <QMutexLocker>
+#include <QPointer>
 
 // KDE includes
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kprogressdialog.h>
 
 // Local includes
 
@@ -75,6 +77,9 @@ FileActionMngr::FileActionMngr()
     connect(d, SIGNAL(progressValueChanged(float)),
             this, SIGNAL(progressValueChanged(float)));
 
+    connect(d, SIGNAL(progressValueChanged(int)),
+            this, SIGNAL(progressValueChanged(int)));
+
     connect(d, SIGNAL(progressFinished()),
             this, SIGNAL(progressFinished()));
 
@@ -90,7 +95,25 @@ FileActionMngr::~FileActionMngr()
 
 bool FileActionMngr::requestShutDown()
 {
-    //TODO
+    if (!isActive())
+    {
+        return true;
+    }
+
+    QPointer<KProgressDialog> dialog = new KProgressDialog;
+    dialog->setAllowCancel(true);
+    dialog->setMinimumDuration(100);
+    dialog->setLabelText(i18nc("@label", "Finishing tasks"));
+
+    connect(this, SIGNAL(progressValueChanged(int)),
+            dialog->progressBar(), SLOT(setValue(int)));
+    connect(this, SIGNAL(progressFinished()),
+            dialog, SLOT(accept()));
+    d->updateProgress();
+
+    dialog->exec();
+    // Either, we finished and all is fine, or the user cancelled and we kill
+    shutDown();
     return true;
 }
 
@@ -98,6 +121,13 @@ void FileActionMngr::shutDown()
 {
     d->dbWorker->deactivate();
     d->fileWorker->deactivate();
+    d->dbWorker->wait();
+    d->fileWorker->wait();
+}
+
+bool FileActionMngr::isActive()
+{
+    return d->dbTodo || d->writerTodo;
 }
 
 void FileActionMngr::assignTags(const QList<qlonglong>& ids, const QList<int>& tagIDs)
@@ -228,12 +258,9 @@ void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const Metadata
 
 void FileActionMngr::rotate(const QList<ImageInfo>& infos, int orientation)
 {
-    d->rotate(infos, orientation);
-}
-
-void FileActionMngr::flip(const QList<ImageInfo>& infos, int flip)
-{
-    d->flip(infos, flip);
+    d->schedulingForWrite(infos.size());
+    for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
+        d->rotate(splitter.next(), orientation);
 }
 
 // --------------------------------------------------------------------------------------
@@ -242,7 +269,12 @@ FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
     : q(q)
 {
     dbWorker   = new FileActionMngrDatabaseWorker(this);
-    fileWorker = new FileActionMngrFileWorker(this);
+
+    fileWorker   = new ParallelAdapter<FileWorkerInterface>();
+    while (!fileWorker->optimalWorkerCountReached())
+    {
+        fileWorker->add(new FileActionMngrFileWorker(this));
+    }
 
     sleepTimer = new QTimer(this);
     sleepTimer->setSingleShot(true);
@@ -252,6 +284,26 @@ FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
     dbDone     = 0;
     writerTodo = 0;
     writerDone = 0;
+
+    connectToDatabaseWorker();
+
+    connectDatabaseToFileWorker();
+
+    connect(this, SIGNAL(signalRotate(QList<ImageInfo>,int)),
+            fileWorker, SLOT(rotate(QList<ImageInfo>,int)), Qt::DirectConnection);
+
+    connect(fileWorker, SIGNAL(imageDataChanged(QString,bool,bool)),
+            this, SLOT(slotImageDataChanged(QString,bool,bool)));
+
+    connect(this, SIGNAL(progressFinished()),
+            sleepTimer, SLOT(start()));
+
+    connect(sleepTimer, SIGNAL(timeout()),
+            this, SLOT(slotSleepTimer()));
+}
+
+void FileActionMngr::FileActionMngrPriv::connectToDatabaseWorker()
+{
 
     WorkerObject::connectAndSchedule(this, SIGNAL(signalAddTags(QList<ImageInfo>,QList<int>)),
                                      dbWorker, SLOT(assignTags(QList<ImageInfo>,QList<int>)));
@@ -276,30 +328,18 @@ FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
 
     WorkerObject::connectAndSchedule(this, SIGNAL(signalApplyMetadata(QList<ImageInfo>,MetadataHub*)),
                                      dbWorker, SLOT(applyMetadata(QList<ImageInfo>,MetadataHub*)));
+}
 
-    WorkerObject::connectAndSchedule(dbWorker, SIGNAL(writeMetadataToFiles(QList<ImageInfo>)),
-                                     fileWorker, SLOT(writeMetadataToFiles(QList<ImageInfo>)));
+void FileActionMngr::FileActionMngrPriv::connectDatabaseToFileWorker()
+{
+    connect(dbWorker, SIGNAL(writeMetadataToFiles(QList<ImageInfo>)),
+            fileWorker, SLOT(writeMetadataToFiles(QList<ImageInfo>)), Qt::DirectConnection);
 
-    WorkerObject::connectAndSchedule(dbWorker, SIGNAL(writeOrientationToFiles(QList<ImageInfo>,int)),
-                                     fileWorker, SLOT(writeOrientationToFiles(QList<ImageInfo>,int)));
+    connect(dbWorker, SIGNAL(writeOrientationToFiles(QList<ImageInfo>,int)),
+            fileWorker, SLOT(writeOrientationToFiles(QList<ImageInfo>,int)), Qt::DirectConnection);
 
-    WorkerObject::connectAndSchedule(dbWorker, SIGNAL(writeMetadata(QList<ImageInfo>,MetadataHub*)),
-                                     fileWorker, SLOT(writeMetadata(QList<ImageInfo>,MetadataHub*)));
-
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalRotate(QList<ImageInfo>,int)),
-                                     fileWorker, SLOT(rotate(QList<ImageInfo>,int)));
-
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalFlip(QList<ImageInfo>,int)),
-                                     fileWorker, SLOT(flip(QList<ImageInfo>,int)));
-
-    connect(fileWorker, SIGNAL(imageDataChanged(QString,bool,bool)),
-            this, SLOT(slotImageDataChanged(QString,bool,bool)));
-
-    connect(this, SIGNAL(progressFinished()),
-            sleepTimer, SLOT(start()));
-
-    connect(sleepTimer, SIGNAL(timeout()),
-            this, SLOT(slotSleepTimer()));
+    connect(dbWorker, SIGNAL(writeMetadata(QList<ImageInfo>,MetadataHub*)),
+            fileWorker, SLOT(writeMetadata(QList<ImageInfo>,MetadataHub*)), Qt::DirectConnection);
 }
 
 FileActionMngr::FileActionMngrPriv::~FileActionMngrPriv()
@@ -350,6 +390,7 @@ void FileActionMngr::FileActionMngrPriv::dbProcessed(int numberOfInfos)
 void FileActionMngr::FileActionMngrPriv::dbFinished(int numberOfInfos)
 {
     dbTodo -= numberOfInfos;
+    dbDone -= numberOfInfos;
     updateProgress();
 }
 
@@ -388,6 +429,7 @@ void FileActionMngr::FileActionMngrPriv::writtenToOne()
 void FileActionMngr::FileActionMngrPriv::finishedWriting(int numberOfInfos)
 {
     writerTodo -= numberOfInfos;
+    writerDone -= numberOfInfos;
     updateProgress();
 }
 
@@ -413,17 +455,29 @@ void FileActionMngr::FileActionMngrPriv::updateProgressMessage()
 
 void FileActionMngr::FileActionMngrPriv::updateProgress()
 {
-    if (dbTodo == 0 && writerTodo == 0)
+    if (!q->isActive())
     {
+        dbDone     = 0;
+        writerDone = 0;
         emit progressFinished();
         return;
     }
 
-    // we use a weighting factor of 10 for file writing
-    float allTodo = dbTodo + 10*writerTodo;
-    float allDone = dbDone + 10*writerDone;
-    float percent = allDone / allTodo;
+    float dbPercent     = float(dbDone) / float(qMax(1, dbTodo));
+    float writerPercent = float(writerDone) / float(qMax(1, writerTodo));
+    float percent;
+    if (dbTodo && writerTodo)
+    {
+        // we use a weighting factor of 10 for file writing
+        percent = 0.1 * dbPercent + 0.9 * writerPercent;
+    }
+    else
+    {
+        percent = dbPercent + writerPercent;
+    }
+
     emit progressValueChanged(percent);
+    emit progressValueChanged(int(percent*100));
 }
 
 void FileActionMngr::FileActionMngrPriv::slotImageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache)
@@ -504,7 +558,8 @@ void FileActionMngrDatabaseWorker::changeTags(const QList<ImageInfo>& infos,
     if (!forWriting.isEmpty())
     {
         d->schedulingForWrite(forWriting.size());
-        emit writeMetadataToFiles(forWriting);
+        for (ImageInfoTaskSplitter splitter(forWriting); splitter.hasNext(); )
+            emit writeMetadataToFiles(splitter.next());
     }
 
     d->dbFinished(infos.size());
@@ -542,7 +597,8 @@ void FileActionMngrDatabaseWorker::assignPickLabel(const QList<ImageInfo>& infos
     if (!forWriting.isEmpty())
     {
         d->schedulingForWrite(forWriting.size());
-        emit writeMetadataToFiles(forWriting);
+        for (ImageInfoTaskSplitter splitter(forWriting); splitter.hasNext(); )
+            emit writeMetadataToFiles(splitter.next());
     }
 
     d->dbFinished(infos.size());
@@ -580,7 +636,8 @@ void FileActionMngrDatabaseWorker::assignColorLabel(const QList<ImageInfo>& info
     if (!forWriting.isEmpty())
     {
         d->schedulingForWrite(forWriting.size());
-        emit writeMetadataToFiles(forWriting);
+        for (ImageInfoTaskSplitter splitter(forWriting); splitter.hasNext(); )
+            emit writeMetadataToFiles(splitter.next());
     }
 
     d->dbFinished(infos.size());
@@ -619,7 +676,8 @@ void FileActionMngrDatabaseWorker::assignRating(const QList<ImageInfo>& infos, i
     if (!forWriting.isEmpty())
     {
         d->schedulingForWrite(forWriting.size());
-        emit writeMetadataToFiles(forWriting);
+        for (ImageInfoTaskSplitter splitter(forWriting); splitter.hasNext(); )
+            emit writeMetadataToFiles(splitter.next());
     }
 
     d->dbFinished(infos.size());
@@ -662,7 +720,8 @@ void FileActionMngrDatabaseWorker::setExifOrientation(const QList<ImageInfo>& in
     //TODO: update db
     d->dbProcessed(infos.count());
     d->schedulingForOrientationWrite(infos.count());
-    emit writeOrientationToFiles(infos, orientation);
+    for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
+        emit writeOrientationToFiles(splitter.next(), orientation);
     d->dbFinished(infos.size());
 }
 
@@ -686,7 +745,8 @@ void FileActionMngrDatabaseWorker::applyMetadata(const QList<ImageInfo>& infos, 
     //ScanController::instance()->resumeCollectionScan();
 
     d->schedulingForWrite(infos.size());
-    emit writeMetadata(infos, hub);
+    for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
+        emit writeMetadata(splitter.next(), hub);
     d->dbFinished(infos.size());
 }
 
@@ -799,36 +859,37 @@ void FileActionMngrFileWorker::rotate(const QList<ImageInfo>& infos, int orienta
 
     foreach(const ImageInfo& info, infos)
     {
+        kDebug() << info.name() << QThread::currentThread();
         KUrl url = info.fileUrl();
 
         if (isJpegImage(url.toLocalFile()))
         {
+            JpegRotator rotator(url.toLocalFile());
+            bool success = false;
             if (useExif)
             {
-                if (!exifTransform(url.toLocalFile(), url.fileName(), url.toLocalFile(), Auto))
-                {
-                    failedItems.append(info.name());
-                }
+                success = rotator.autoExifTransform();
             }
             else
             {
                 switch (orientation)
                 {
                     case DImg::ROT90:
-                        if (!exifTransform(url.toLocalFile(), url.fileName(), url.toLocalFile(), Rotate90))
-                            failedItems.append(info.name());
+                        success = rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate90);
                         break;
                     case DImg::ROT180:
-                        if (!exifTransform(url.toLocalFile(), url.fileName(), url.toLocalFile(), Rotate180))
-                            failedItems.append(info.name());
+                        success = rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate180);
                         break;
                     case DImg::ROT270:
-                        if (!exifTransform(url.toLocalFile(), url.fileName(), url.toLocalFile(), Rotate270))
-                            failedItems.append(info.name());
+                        success = rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate270);
                         break;
                     default:
                         break;
                 }
+            }
+            if (!success)
+            {
+                failedItems.append(info.name());
             }
         }
         else
@@ -877,70 +938,37 @@ void FileActionMngrFileWorker::rotate(const QList<ImageInfo>& infos, int orienta
     d->finishedWriting(infos.size());
 }
 
-void FileActionMngrFileWorker::flip(const QList<ImageInfo>& infos, int flip)
+ // -------------------------------------------------------------------------------
+
+ImageInfoTaskSplitter::ImageInfoTaskSplitter(const QList<ImageInfo>& list)
+    : QList<ImageInfo>(list)
 {
-    d->setWriterAction(i18n("Flip items. Please wait..."));
-    d->startingToWrite(infos);
+    int parts = ParallelWorkers::optimalWorkerCount();
+    m_n = qMax(1, list.size() / parts);
+}
 
-    QStringList failedItems;
-    ScanController::instance()->suspendCollectionScan();
-
-    foreach(const ImageInfo& info, infos)
+QList<ImageInfo> ImageInfoTaskSplitter::next()
+{
+    QList<ImageInfo> list;
+    if (size() <= m_n)
     {
-        KUrl url = info.fileUrl();
-
-        if (isJpegImage(url.toLocalFile()))
-        {
-            switch (flip)
-            {
-                case DImg::HORIZONTAL:
-                    if (!exifTransform(url.toLocalFile(), url.fileName(), url.toLocalFile(), FlipHorizontal))
-                        failedItems.append(info.name());
-                    break;
-                case DImg::VERTICAL:
-                    if (!exifTransform(url.toLocalFile(), url.fileName(), url.toLocalFile(), FlipVertical))
-                        failedItems.append(info.name());
-                    break;
-                default:
-                    break;
-            }
-        }
-        else
-        {
-            // Non-JPEG image: DImg
-            DImg image;
-
-            if (!image.load(url.toLocalFile()))
-            {
-                failedItems.append(info.name());
-            }
-            else
-            {
-                image.flip((DImg::FLIP)flip);
-
-                if (!image.save(url.toLocalFile(), DImg::fileFormat(url.toLocalFile())))
-                {
-                    failedItems.append(info.name());
-                }
-            }
-        }
-
-        if (!failedItems.contains(info.name()))
-        {
-            emit imageDataChanged(url.toLocalFile(), true, true);
-            ImageAttributesWatch::instance()->fileMetadataChanged(url);
-        }
-
-        d->writtenToOne();
+        list = *this;
+        clear();
     }
-
-    if (!failedItems.isEmpty())
+    else
     {
-        emit imageChangeFailed(i18n("Failed to flip these files:"), failedItems);
+        list.reserve(m_n);
+        // qCopy does not work with QList
+        for (int i=0; i<m_n; i++)
+            list << at(i);
+        erase(begin(), begin() + m_n);
     }
+    return list;
+}
 
-    ScanController::instance()->resumeCollectionScan();
-    d->finishedWriting(infos.size());
+bool ImageInfoTaskSplitter::hasNext() const
+{
+    return !isEmpty();
 }
 
 } // namespace Digikam

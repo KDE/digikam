@@ -53,6 +53,8 @@ public:
     bool requestShutDown();
     void shutDown();
 
+    bool isActive();
+
 public Q_SLOTS:
 
     void assignTag(const ImageInfo& info, int tagID);
@@ -92,6 +94,7 @@ Q_SIGNALS:
 
     void progressMessageChanged(const QString& descriptionOfAction);
     void progressValueChanged(float percent);
+    void progressValueChanged(int percent);
     void progressFinished();
 
     void imageChangeFailed(const QString& message, const QStringList& fileNames);

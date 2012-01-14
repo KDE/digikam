@@ -34,6 +34,7 @@
 // Local includes
 
 #include "imageinfo.h"
+#include "parallelworkers.h"
 #include "workerobject.h"
 
 namespace Digikam
@@ -41,6 +42,111 @@ namespace Digikam
 
 class FileActionMngrDatabaseWorker;
 class FileActionMngrFileWorker;
+
+class DatabaseWorkerInterface : public WorkerObject
+{
+    Q_OBJECT
+
+public Q_SLOTS:
+
+    virtual void assignTags(const QList<ImageInfo>&, const QList<int>&) {};
+    virtual void removeTags(const QList<ImageInfo>&, const QList<int>&) {};
+    virtual void assignPickLabel(const QList<ImageInfo>&, int) {};
+    virtual void assignColorLabel(const QList<ImageInfo>&, int) {};
+    virtual void assignRating(const QList<ImageInfo>&, int) {};
+    virtual void editGroup(int, const ImageInfo&, const QList<ImageInfo>&) {};
+    virtual void setExifOrientation(const QList<ImageInfo>&, int) {};
+    virtual void applyMetadata(const QList<ImageInfo>&, MetadataHub*) {};
+
+Q_SIGNALS:
+
+    void writeMetadataToFiles(const QList<ImageInfo>& infos);
+    void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
+    void writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
+
+};
+
+class FileActionMngrDatabaseWorker : public DatabaseWorkerInterface
+{
+public:
+
+    FileActionMngrDatabaseWorker(FileActionMngr::FileActionMngrPriv* d)
+        : d(d) {}
+
+public:
+
+    void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void assignPickLabel(const QList<ImageInfo>& infos, int pickId);
+    void assignColorLabel(const QList<ImageInfo>& infos, int colorId);
+    void assignRating(const QList<ImageInfo>& infos, int rating);
+    void editGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos);
+    void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
+    void applyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
+
+private:
+
+    void changeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs, bool addOrRemove);
+
+private:
+
+    FileActionMngr::FileActionMngrPriv* const d;
+};
+
+// ---------------------------------------------------------------------------------------------
+
+class FileWorkerInterface : public WorkerObject
+{
+    Q_OBJECT
+
+public Q_SLOTS:
+
+    void writeOrientationToFiles(const QList<ImageInfo>&, int) {};
+    virtual void writeMetadataToFiles(const QList<ImageInfo>&) {};
+    virtual void writeMetadata(const QList<ImageInfo>&, MetadataHub*) {};
+    virtual void rotate(const QList<ImageInfo>&, int) {};
+
+Q_SIGNALS:
+
+    void imageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache);
+    void imageChangeFailed(const QString& message, const QStringList& fileNames);
+};
+
+class FileActionMngrFileWorker : public FileWorkerInterface
+{
+
+public:
+
+    FileActionMngrFileWorker(FileActionMngr::FileActionMngrPriv* d)
+        : d(d) {}
+
+public:
+
+    void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
+    void writeMetadataToFiles(const QList<ImageInfo>& infos);
+    void writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
+    void rotate(const QList<ImageInfo>& infos, int orientation);
+
+private:
+
+    FileActionMngr::FileActionMngrPriv* const d;
+};
+
+// ---------------------------------------------------------------------------------------------
+
+class ImageInfoTaskSplitter : public QList<ImageInfo>
+{
+public:
+
+    ImageInfoTaskSplitter(const QList<ImageInfo>& list);
+    QList<ImageInfo> next();
+    bool hasNext() const;
+
+protected:
+    int m_n;
+};
+
+// ---------------------------------------------------------------------------------------------
 
 enum GroupAction
 {
@@ -71,8 +177,8 @@ public:
 
     FileActionMngr*               q;
 
-    FileActionMngrDatabaseWorker* dbWorker;
-    FileActionMngrFileWorker*     fileWorker;
+    DatabaseWorkerInterface*                  dbWorker;
+    ParallelAdapter<FileWorkerInterface>*     fileWorker;
 
     QTimer*                       sleepTimer;
 
@@ -165,6 +271,9 @@ public:
     void updateProgress();
     void updateProgressMessage();
 
+    void connectToDatabaseWorker();
+    void connectDatabaseToFileWorker();
+
 public Q_SLOTS:
 
     void slotImageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache);
@@ -175,6 +284,7 @@ Q_SIGNALS:
     // connected to FileActionMngr public signals
     void progressMessageChanged(const QString& descriptionOfAction);
     void progressValueChanged(float percent);
+    void progressValueChanged(int percent);
     void progressFinished();
 
     // inter-thread signals: connected to database worker slots
@@ -192,69 +302,6 @@ Q_SIGNALS:
 
 // ---------------------------------------------------------------------------------------------
 
-class FileActionMngrDatabaseWorker : public WorkerObject
-{
-    Q_OBJECT
-
-public:
-
-    FileActionMngrDatabaseWorker(FileActionMngr::FileActionMngrPriv* d)
-        : d(d) {}
-
-public Q_SLOTS:
-
-    void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
-    void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
-    void assignPickLabel(const QList<ImageInfo>& infos, int pickId);
-    void assignColorLabel(const QList<ImageInfo>& infos, int colorId);
-    void assignRating(const QList<ImageInfo>& infos, int rating);
-    void editGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos);
-    void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
-    void applyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
-
-Q_SIGNALS:
-
-    void writeMetadataToFiles(const QList<ImageInfo>& infos);
-    void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
-    void writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
-
-private:
-
-    void changeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs, bool addOrRemove);
-
-private:
-
-    FileActionMngr::FileActionMngrPriv* const d;
-};
-
-// ---------------------------------------------------------------------------------------------
-
-class FileActionMngrFileWorker : public WorkerObject
-{
-    Q_OBJECT
-
-public:
-
-    FileActionMngrFileWorker(FileActionMngr::FileActionMngrPriv* d)
-        : d(d) {}
-
-public Q_SLOTS:
-
-    void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
-    void writeMetadataToFiles(const QList<ImageInfo>& infos);
-    void writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
-    void rotate(const QList<ImageInfo>& infos, int orientation);
-    void flip(const QList<ImageInfo>& infos, int flip);
-
-Q_SIGNALS:
-
-    void imageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache);
-    void imageChangeFailed(const QString& message, const QStringList& fileNames);
-
-private:
-
-    FileActionMngr::FileActionMngrPriv* const d;
-};
 
 } // namespace Digikam
 
