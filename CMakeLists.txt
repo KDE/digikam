@@ -1061,6 +1061,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/threadmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/workerobject.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/dynamicthread.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/parallelworkers.cpp
        )
 
     # ==================================================================================================
