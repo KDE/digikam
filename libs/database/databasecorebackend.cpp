@@ -386,7 +386,7 @@ DatabaseCoreBackendPrivate::AbstractUnlocker::~AbstractUnlocker()
     }
 
     // update lock count
-    d->lock->lockCount = count;
+    d->lock->lockCount += count;
 }
 
 DatabaseCoreBackendPrivate::AbstractWaitingUnlocker::AbstractWaitingUnlocker(DatabaseCoreBackendPrivate* d,
@@ -404,6 +404,7 @@ DatabaseCoreBackendPrivate::AbstractWaitingUnlocker::~AbstractWaitingUnlocker()
 {
     // unlock condvar mutex. Both mutexes are now free.
     mutex->unlock();
+    // now base class destructor is executed, reallocating main mutex
 }
 
 bool DatabaseCoreBackendPrivate::AbstractWaitingUnlocker::wait(unsigned long time)
