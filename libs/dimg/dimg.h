@@ -554,6 +554,12 @@ public:
      */
     bool       rotateAndFlip(int orientation);
 
+    /** Rotates and/or flip the DImg according to the given transform action,
+     *  which is a KExiv2Iface::RotationMatrix::TransformAction.
+     *  Returns true if the image was actually rotated or flipped.
+     */
+    bool       transform(int transformAction);
+
     QPixmap    convertToPixmap() const;
     QPixmap    convertToPixmap(IccTransform& monitorICCtrans) const;
 

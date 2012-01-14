@@ -65,6 +65,10 @@ extern "C"
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
+// Libkexiv2 includes
+
+#include <libkexiv2/rotationmatrix.h>
+
 // Local includes
 
 #include "dimagehistory.h"
@@ -2651,6 +2655,33 @@ bool DImg::rotateAndFlip(int orientation)
     }
 
     return rotatedOrFlipped;
+}
+
+bool DImg::transform(int transformAction)
+{
+    switch (transformAction)
+    {
+        case KExiv2Iface::RotationMatrix::NoTransformation:
+        default:
+            return false;
+            break;
+        case KExiv2Iface::RotationMatrix::FlipHorizontal:
+            flip(DImg::HORIZONTAL);
+            break;
+        case KExiv2Iface::RotationMatrix::FlipVertical:
+            flip(DImg::VERTICAL);
+            break;
+        case KExiv2Iface::RotationMatrix::Rotate90:
+            rotate(DImg::ROT90);
+            break;
+        case KExiv2Iface::RotationMatrix::Rotate180:
+            rotate(DImg::ROT180);
+            break;
+        case KExiv2Iface::RotationMatrix::Rotate270:
+            rotate(DImg::ROT270);
+            break;
+    }
+    return true;
 }
 
 void DImg::convertToSixteenBit()
