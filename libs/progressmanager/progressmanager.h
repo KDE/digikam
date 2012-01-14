@@ -214,8 +214,8 @@ Q_SIGNALS:
 protected:
 
     /* Only to be used by our good friend the ProgressManager */
-    ProgressItem( ProgressItem *parent, const QString &id, const QString &label,
-                  const QString &status, bool isCancellable);
+    ProgressItem( ProgressItem* parent, const QString& id, const QString& label,
+                  const QString& status, bool isCancellable);
     virtual ~ProgressItem();
 
 private:
@@ -267,9 +267,26 @@ public:
     virtual ~ProgressManager();
 
     /**
+     * @return true when there are no more progress items.
+     */
+    bool isEmpty() const
+    {
+        return mTransactions.isEmpty();
+    }
+
+    /**
+     * @return the only top level progressitem when there's only one.
+     * Returns 0 if there is no item, or more than one top level item.
+     * Since this is used to calculate the overall progress, it will also return
+     * 0 if there is an item which uses a busy indicator, since that will invalidate
+     * the overall progress.
+     */
+    ProgressItem* singleItem() const;
+    
+    /**
      * @return The singleton instance of this class.
      */
-    static ProgressManager *instance();
+    static ProgressManager* instance();
 
     /**
      * Use this to acquire a unique id number which can be used to discern
@@ -287,9 +304,9 @@ public:
       * This is the simplest way to acquire a progress item. It will not
       * have a parent and will be set to be cancellable.
       */
-    static ProgressItem *createProgressItem( const QString &label )
+    static ProgressItem* createProgressItem(const QString& label)
     {
-        return instance()->createProgressItemImpl( 0, getUniqueID(), label, QString(), true);
+        return instance()->createProgressItemImpl(0, getUniqueID(), label, QString(), true);
     }
 
     /**
@@ -305,58 +322,38 @@ public:
      * canceled) and ongoing children prevent parents from finishing.
      * @return The ProgressItem representing the operation.
      */
-    static ProgressItem *createProgressItem( ProgressItem *parent,
-                                             const QString &id,
-                                             const QString &label,
-                                             const QString &status = QString(),
-                                             bool canBeCanceled = true)
+    static ProgressItem* createProgressItem(ProgressItem* parent,
+                                            const QString& id,
+                                            const QString& label,
+                                            const QString& status = QString(),
+                                            bool  canBeCanceled = true)
     {
-        return instance()->createProgressItemImpl( parent, id, label, status,
-                                                    canBeCanceled);
+        return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled);
     }
 
     /**
      * Use this version if you have the id string of the parent and want to
      * add a subjob to it.
      */
-    static ProgressItem *createProgressItem( const QString &parent,
-                                             const QString &id,
-                                             const QString &label,
-                                             const QString &status = QString(),
-                                             bool canBeCanceled = true)
+    static ProgressItem* createProgressItem(const QString& parent,
+                                            const QString& id,
+                                            const QString& label,
+                                            const QString& status = QString(),
+                                            bool  canBeCanceled = true)
     {
-        return instance()->createProgressItemImpl( parent, id, label,
-                                                    status, canBeCanceled);
+        return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled);
     }
 
     /**
      * Version without a parent.
      */
-    static ProgressItem *createProgressItem( const QString &id,
-                                             const QString &label,
-                                             const QString &status = QString(),
-                                             bool canBeCanceled = true)
+    static ProgressItem* createProgressItem(const QString& id,
+                                            const QString& label,
+                                            const QString& status = QString(),
+                                            bool  canBeCanceled = true)
     {
-        return instance()->createProgressItemImpl( 0, id, label, status,
-                                                    canBeCanceled);
+        return instance()->createProgressItemImpl(0, id, label, status, canBeCanceled);
     }
-
-    /**
-     * @return true when there are no more progress items.
-     */
-    bool isEmpty() const
-    {
-        return mTransactions.isEmpty();
-    }
-
-    /**
-     * @return the only top level progressitem when there's only one.
-     * Returns 0 if there is no item, or more than one top level item.
-     * Since this is used to calculate the overall progress, it will also return
-     * 0 if there is an item which uses a busy indicator, since that will invalidate
-     * the overall progress.
-     */
-    ProgressItem* singleItem() const;
 
     /**
      * Ask all listeners to show the progress dialog, because there is
@@ -370,25 +367,25 @@ public:
 Q_SIGNALS:
     
     /** @see ProgressItem::progressItemAdded() */
-    void progressItemAdded( Digikam::ProgressItem * );
+    void progressItemAdded(Digikam::ProgressItem*);
     
     /** @see ProgressItem::progressItemProgress() */
-    void progressItemProgress( Digikam::ProgressItem *, unsigned int );
+    void progressItemProgress(Digikam::ProgressItem*, unsigned int);
     
     /** @see ProgressItem::progressItemCompleted() */
-    void progressItemCompleted( Digikam::ProgressItem * );
+    void progressItemCompleted(Digikam::ProgressItem*);
     
     /** @see ProgressItem::progressItemCanceled() */
-    void progressItemCanceled( Digikam::ProgressItem * );
+    void progressItemCanceled(Digikam::ProgressItem*);
     
     /** @see ProgressItem::progressItemStatus() */
-    void progressItemStatus( Digikam::ProgressItem *, const QString & );
+    void progressItemStatus(Digikam::ProgressItem*, const QString&);
     
     /** @see ProgressItem::progressItemLabel() */
-    void progressItemLabel( Digikam::ProgressItem *, const QString & );
+    void progressItemLabel(Digikam::ProgressItem*, const QString&);
     
     /** @see ProgressItem::progressItemUsesBusyIndicator */
-    void progressItemUsesBusyIndicator( Digikam::ProgressItem*, bool );
+    void progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool);
 
     /**
      * Emitted when an operation requests the listeners to be shown.
@@ -403,7 +400,7 @@ public Q_SLOTS:
      * Provided for convenience.
      * @param item the canceled item.
      */
-    void slotStandardCancelHandler( Digikam::ProgressItem *item );
+    void slotStandardCancelHandler(Digikam::ProgressItem* item);
 
     /**
      * Aborts all running jobs. Bound to "Esc"
@@ -412,30 +409,33 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void slotTransactionCompleted( Digikam::ProgressItem *item );
+    void slotTransactionCompleted(Digikam::ProgressItem* item);
 
 private:
 
     ProgressManager();
      // prevent unsolicited copies
-    ProgressManager( const ProgressManager & );
+    ProgressManager(const ProgressManager&);
 
-    virtual ProgressItem *createProgressItemImpl( ProgressItem *parent,
-                                                  const QString &id,
-                                                  const QString &label,
-                                                  const QString &status,
-                                                  bool cancellable);
-    virtual ProgressItem *createProgressItemImpl( const QString &parent,
-                                                  const QString &id,
-                                                  const QString &label,
-                                                  const QString &status,
-                                                  bool cancellable);
-    ProgressItem *createProgressItemForAgent( ProgressItem *parent,
-                                              const QString &id,
-                                              const QString &label,
-                                              const QString &status,
-                                              bool cancellable);
     void emitShowProgressViewImpl();
+
+    ProgressItem* createProgressItemForAgent(ProgressItem* parent,
+                                             const QString& id,
+                                             const QString& label,
+                                             const QString& status,
+                                             bool  cancellable);
+    
+    virtual ProgressItem *createProgressItemImpl(ProgressItem* parent,
+                                                 const QString& id,
+                                                 const QString& label,
+                                                 const QString& status,
+                                                 bool  cancellable);
+
+    virtual ProgressItem *createProgressItemImpl(const QString& parent,
+                                                 const QString& id,
+                                                 const QString& label,
+                                                 const QString& status,
+                                                 bool  cancellable);
 
 private:
 
