@@ -46,7 +46,7 @@ class QTimer;
 namespace Digikam
 {
 class ProgressItem;
-class ProgressDialog;
+class ProgressView;
 
 class DIGIKAM_EXPORT StatusbarProgressWidget : public QFrame
 {
@@ -54,7 +54,7 @@ class DIGIKAM_EXPORT StatusbarProgressWidget : public QFrame
 
 public:
 
-    StatusbarProgressWidget(ProgressDialog* progressDialog, QWidget* parent, bool button = true);
+    StatusbarProgressWidget(ProgressView* progressView, QWidget* parent, bool button = true);
 
 public Q_SLOTS:
 
@@ -66,7 +66,7 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     
-    void slotProgressDialogVisible(bool);
+    void slotProgressViewVisible(bool);
     void slotShowItemDelayed();
     void slotBusyIndicator();
     void updateBusyMode();
@@ -99,7 +99,7 @@ private:
     QBoxLayout*     m_box;
     QStackedWidget* m_stack;
     ProgressItem*   m_currentItem;
-    ProgressDialog* m_progressDialog;
+    ProgressView*   m_progressView;
     QTimer*         m_delayTimer;
     QTimer*         m_busyTimer;
     QTimer*         m_cleanTimer;

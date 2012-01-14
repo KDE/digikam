@@ -68,7 +68,6 @@
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <kstandardshortcut.h>
-#include <migrationdlg.h>
 #include <ktip.h>
 #include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
@@ -145,8 +144,9 @@
 #include "databaseserverstarter.h"
 #include "metadatasettings.h"
 #include "progressmanager.h"
-#include "progressdialog.h"
+#include "progressview.h"
 #include "statusbarprogresswidget.h"
+#include "migrationdlg.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
@@ -584,25 +584,25 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    ProgressDialog* progressDialog = new ProgressDialog(statusBar(), this);
-    progressDialog->hide();
+    ProgressView* view = new ProgressView(statusBar(), this);
+    view->hide();
 
-    StatusbarProgressWidget* littleProgress = new StatusbarProgressWidget(progressDialog, statusBar());
+    StatusbarProgressWidget* littleProgress = new StatusbarProgressWidget(view, statusBar());
     littleProgress->show();
     statusBar()->addPermanentWidget(littleProgress);
 
-/* Marcel : TEST code
-    ProgressItem* mProgressItem = ProgressManager::createProgressItem("Job1", i18n("Job1"), QString(), true );
-    mProgressItem->setUsesBusyIndicator( true );
-    mProgressItem = ProgressManager::createProgressItem("Job2", i18n("Job2"), QString(), true );
-    mProgressItem->setUsesBusyIndicator( true );
-    mProgressItem = ProgressManager::createProgressItem("Job3", i18n("Job3"), QString(), true );
-    mProgressItem->setUsesBusyIndicator( true );
-    mProgressItem = ProgressManager::createProgressItem("Job4", i18n("Job4"), QString(), true );
-    mProgressItem->setUsesBusyIndicator( true );
-//    connect(mProgressItem, SIGNAL(progressItemCanceled(KPIM::ProgressItem*)),
+// Marcel : TEST code
+    ProgressItem* progressItem = ProgressManager::createProgressItem("Job1", i18n("Job1"), QString(), true );
+    progressItem->setUsesBusyIndicator( true );
+    progressItem = ProgressManager::createProgressItem("Job2", i18n("Job2"), QString(), true );
+    progressItem->setUsesBusyIndicator( true );
+    progressItem = ProgressManager::createProgressItem("Job3", i18n("Job3"), QString(), true );
+    progressItem->setUsesBusyIndicator( true );
+    progressItem = ProgressManager::createProgressItem("Job4", i18n("Job4"), QString(), true );
+    progressItem->setUsesBusyIndicator( true );
+//    connect(progressItem, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)),
 //            this, SLOT(cancelJob()) );
-*/
+
     //------------------------------------------------------------------------------
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());

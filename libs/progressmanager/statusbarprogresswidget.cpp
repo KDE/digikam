@@ -45,14 +45,14 @@
 
 // Local includes
 
-#include "progressdialog.h"
+#include "progressview.h"
 #include "progressmanager.h"
 
 namespace Digikam
 {
     
-StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog, QWidget* parent, bool button )
-    : QFrame( parent ), m_currentItem( 0 ), m_progressDialog( progressDialog ),
+StatusbarProgressWidget::StatusbarProgressWidget( ProgressView* progressView, QWidget* parent, bool button )
+    : QFrame( parent ), m_currentItem( 0 ), m_progressView( progressView ),
       m_delayTimer( 0 ), m_busyTimer( 0 ), m_cleanTimer( 0 )
 {
     m_bShowButton = button;
@@ -91,7 +91,7 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
     setMode();
 
     connect( m_pButton, SIGNAL( clicked() ),
-            progressDialog, SLOT( slotToggleVisibility() ) );
+            progressView, SLOT( slotToggleVisibility() ) );
 
     connect ( ProgressManager::instance(), SIGNAL( progressItemAdded( Digikam::ProgressItem * ) ),
                 this, SLOT( slotProgressItemAdded( Digikam::ProgressItem * ) ) );
@@ -102,8 +102,8 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
     connect ( ProgressManager::instance(), SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*,bool)),
                 this, SLOT( updateBusyMode() ) );
 
-    connect ( progressDialog, SIGNAL( visibilityChanged( bool )),
-                this, SLOT( slotProgressDialogVisible( bool ) ) );
+    connect ( progressView, SIGNAL( visibilityChanged( bool )),
+                this, SLOT( slotProgressViewVisible( bool ) ) );
 
     m_delayTimer = new QTimer( this );
     m_delayTimer->setSingleShot( true );
@@ -279,14 +279,14 @@ bool StatusbarProgressWidget::eventFilter( QObject *, QEvent *ev )
             // toggle view on left mouse button
             // Consensus seems to be that we should show/hide the fancy dialog when the user
             // clicks anywhere in the small one.
-            m_progressDialog->slotToggleVisibility();
+            m_progressView->slotToggleVisibility();
             return true;
         }
     }
     return false;
 }
 
-void StatusbarProgressWidget::slotProgressDialogVisible( bool b )
+void StatusbarProgressWidget::slotProgressViewVisible( bool b )
 {
     // Update the hide/show button when the detailed one is shown/hidden
     if ( b )

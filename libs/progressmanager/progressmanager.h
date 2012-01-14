@@ -356,15 +356,15 @@ public:
      * 0 if there is an item which uses a busy indicator, since that will invalidate
      * the overall progress.
      */
-    ProgressItem *singleItem() const;
+    ProgressItem* singleItem() const;
 
     /**
      * Ask all listeners to show the progress dialog, because there is
      * something that wants to be shown.
      */
-    static void emitShowProgressDialog()
+    static void emitShowProgressView()
     {
-       instance()->emitShowProgressDialogImpl();
+       instance()->emitShowProgressViewImpl();
     }
 
 Q_SIGNALS:
@@ -392,9 +392,9 @@ Q_SIGNALS:
 
     /**
      * Emitted when an operation requests the listeners to be shown.
-     * Use emitShowProgressDialog() to trigger it.
+     * Use emitShowProgressView() to trigger it.
      */
-    void showProgressDialog();
+    void showProgressView();
 
 public Q_SLOTS:
 
@@ -435,7 +435,7 @@ private:
                                               const QString &label,
                                               const QString &status,
                                               bool cancellable);
-    void emitShowProgressDialogImpl();
+    void emitShowProgressViewImpl();
 
 private:
 

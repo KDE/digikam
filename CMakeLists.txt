@@ -1048,7 +1048,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libprogressmanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/overlaywidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/progressdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/progressview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/progressmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/statusbarprogresswidget.cpp
        )

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PROGRESS_DIALOG_H
-#define PROGRESS_DIALOG_H
+#ifndef PROGRESS_VIEW_H
+#define PROGRESS_VIEW_H
 
 // Qt includes
 
@@ -52,7 +52,7 @@ class TransactionItem;
 class TransactionItemView : public QScrollArea
 {
     Q_OBJECT
-    
+
 public:
 
     explicit TransactionItemView( QWidget * parent = 0, const char * name = 0 );
@@ -84,7 +84,7 @@ class TransactionItem : public KVBox
 
 public:
 
-    TransactionItem( QWidget *parent, ProgressItem *item, bool first );
+    TransactionItem(QWidget* parent, ProgressItem* item, bool first);
     ~TransactionItem();
 
     void hideHLine();
@@ -122,15 +122,15 @@ protected:
 
 // --------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT ProgressDialog : public OverlayWidget
+class DIGIKAM_EXPORT ProgressView : public OverlayWidget
 {
     Q_OBJECT
 
 public:
 
-    ProgressDialog( QWidget *alignWidget, QWidget *parent, const char *name = 0 );
-    ~ProgressDialog();
-    void setVisible( bool b );
+    ProgressView(QWidget* alignWidget, QWidget* parent, const char* name = 0);
+    ~ProgressView();
+    void setVisible(bool b);
 
 public Q_SLOTS:
 
@@ -138,7 +138,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void visibilityChanged( bool );
+    void visibilityChanged(bool);
 
 protected Q_SLOTS:
 
@@ -156,7 +156,7 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual void closeEvent( QCloseEvent * );
+    virtual void closeEvent(QCloseEvent*);
 
 protected:
 
@@ -168,4 +168,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // PROGRESS_DIALOG_H
+#endif // PROGRESS_VIEW_H

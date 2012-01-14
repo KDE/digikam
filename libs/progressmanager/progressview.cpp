@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "progressdialog.moc"
+#include "progressview.moc"
 
 // Qt includes
 
@@ -106,11 +106,11 @@ QSize TransactionItemView::sizeHint() const
 
 QSize TransactionItemView::minimumSizeHint() const
 {
-    int f = 2 * frameWidth();
+    int f      = 2 * frameWidth();
     // Make room for a vertical scrollbar in all cases, to avoid a horizontal one
     int vsbExt = verticalScrollBar()->sizeHint().width();
-    int minw = topLevelWidget()->width() / 3;
-    int maxh = topLevelWidget()->height() / 2;
+    int minw   = topLevelWidget()->width() / 3;
+    int maxh   = topLevelWidget()->height() / 2;
     QSize sz( mBigBox->minimumSizeHint() );
     sz.setWidth( qMax( sz.width(), minw ) + f + vsbExt );
     sz.setHeight( qMin( sz.height(), maxh ) + f );
@@ -237,12 +237,12 @@ void TransactionItem::addSubTransaction( ProgressItem *item )
 
 // ---------------------------------------------------------------------------
 
-ProgressDialog::ProgressDialog( QWidget *alignWidget, QWidget *parent, const char *name )
-    : OverlayWidget( alignWidget, parent, name ), mWasLastShown( false )
+ProgressView::ProgressView(QWidget* alignWidget, QWidget* parent, const char* name )
+    : OverlayWidget(alignWidget, parent, name), mWasLastShown(false)
 {
-    setFrameStyle( QFrame::Panel | QFrame::Sunken ); // QFrame
+    setFrameStyle(QFrame::Panel | QFrame::Sunken);
 
-    setAutoFillBackground( true );
+    setAutoFillBackground(true);
 
     mScrollView = new TransactionItemView( this, "ProgressScrollView" );
     layout()->addWidget( mScrollView );
@@ -285,22 +285,22 @@ ProgressDialog::ProgressDialog( QWidget *alignWidget, QWidget *parent, const cha
     connect ( pm, SIGNAL( progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool) ),
               this, SLOT( slotTransactionUsesBusyIndicator( Digikam::ProgressItem*, bool ) ) );
     
-    connect ( pm, SIGNAL( showProgressDialog() ),
+    connect ( pm, SIGNAL( showProgressView() ),
               this, SLOT( slotShow() ) );
 }
 
-void ProgressDialog::closeEvent( QCloseEvent *e )
+void ProgressView::closeEvent( QCloseEvent *e )
 {
     e->accept();
     hide();
 }
 
-ProgressDialog::~ProgressDialog()
+ProgressView::~ProgressView()
 {
     // no need to delete child widgets.
 }
 
-void ProgressDialog::slotTransactionAdded( ProgressItem *item )
+void ProgressView::slotTransactionAdded( ProgressItem *item )
 {
     TransactionItem *parent = 0;
     if ( item->parent() )
@@ -326,7 +326,7 @@ void ProgressDialog::slotTransactionAdded( ProgressItem *item )
     }
 }
 
-void ProgressDialog::slotTransactionCompleted( ProgressItem *item )
+void ProgressView::slotTransactionCompleted( ProgressItem *item )
 {
     if ( mTransactionsToListviewItems.contains( item ) )
     {
@@ -345,11 +345,11 @@ void ProgressDialog::slotTransactionCompleted( ProgressItem *item )
     }
 }
 
-void ProgressDialog::slotTransactionCanceled( ProgressItem * )
+void ProgressView::slotTransactionCanceled( ProgressItem * )
 {
 }
 
-void ProgressDialog::slotTransactionProgress( ProgressItem *item,
+void ProgressView::slotTransactionProgress( ProgressItem *item,
                                               unsigned int progress )
 {
     if ( mTransactionsToListviewItems.contains( item ) )
@@ -359,7 +359,7 @@ void ProgressDialog::slotTransactionProgress( ProgressItem *item,
     }
 }
 
-void ProgressDialog::slotTransactionStatus( ProgressItem *item,
+void ProgressView::slotTransactionStatus( ProgressItem *item,
                                             const QString &status )
 {
     if ( mTransactionsToListviewItems.contains( item ) )
@@ -369,7 +369,7 @@ void ProgressDialog::slotTransactionStatus( ProgressItem *item,
     }
 }
 
-void ProgressDialog::slotTransactionLabel( ProgressItem *item,
+void ProgressView::slotTransactionLabel( ProgressItem *item,
                                            const QString &label )
 {
     if ( mTransactionsToListviewItems.contains( item ) )
@@ -379,7 +379,7 @@ void ProgressDialog::slotTransactionLabel( ProgressItem *item,
     }
 }
 
-void ProgressDialog::slotTransactionUsesBusyIndicator( Digikam::ProgressItem *item, bool value )
+void ProgressView::slotTransactionUsesBusyIndicator( Digikam::ProgressItem *item, bool value )
 {
     if ( mTransactionsToListviewItems.contains( item ) )
     {
@@ -395,12 +395,12 @@ void ProgressDialog::slotTransactionUsesBusyIndicator( Digikam::ProgressItem *it
     }
 }
 
-void ProgressDialog::slotShow()
+void ProgressView::slotShow()
 {
     setVisible( true );
 }
 
-void ProgressDialog::slotHide()
+void ProgressView::slotHide()
 {
     // check if a new item showed up since we started the timer. If not, hide
     if ( mTransactionsToListviewItems.isEmpty() )
@@ -409,19 +409,19 @@ void ProgressDialog::slotHide()
     }
 }
 
-void ProgressDialog::slotClose()
+void ProgressView::slotClose()
 {
     mWasLastShown = false;
     setVisible( false );
 }
 
-void ProgressDialog::setVisible( bool b )
+void ProgressView::setVisible( bool b )
 {
     OverlayWidget::setVisible( b );
     emit visibilityChanged( b );
 }
 
-void ProgressDialog::slotToggleVisibility()
+void ProgressView::slotToggleVisibility()
 {
     /* Since we are only hiding with a timeout, there is a short period of
     * time where the last item is still visible, but clicking on it in

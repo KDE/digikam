@@ -216,15 +216,15 @@ ProgressItem *ProgressManager::createProgressItemImpl( const QString &parent,
                                                        const QString &id,
                                                        const QString &label,
                                                        const QString &status,
-                                                       bool canBeCanceled)
+                                                       bool  canBeCanceled)
 {
     ProgressItem *p = mTransactions.value( parent );
     return createProgressItemImpl( p, id, label, status, canBeCanceled);
 }
 
-void ProgressManager::emitShowProgressDialogImpl()
+void ProgressManager::emitShowProgressViewImpl()
 {
-    emit showProgressDialog();
+    emit showProgressView();
 }
 
 void ProgressManager::slotTransactionCompleted( ProgressItem *item )
