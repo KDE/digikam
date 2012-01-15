@@ -63,8 +63,8 @@ public:
 
     QString       parse(ParseSettings& settings);
 
-    OptionsList            options()   const;
-    ModifierList           modifiers() const;
+    OptionsList   options()   const;
+    ModifierList  modifiers() const;
 
     bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos);
     bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos, int& start, int& length);
