@@ -194,8 +194,7 @@ void AlbumSelectionTreeView::slotRebuildThumbs()
     {
         return;
     }
-    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this, album->id());
-    thumbsGenerator->show();
+    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(album->id());
 }
 
 bool AlbumSelectionTreeView::viewportEvent(QEvent* event)

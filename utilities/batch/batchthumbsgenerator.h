@@ -26,15 +26,12 @@
 
 // Qt includes
 
+#include <QObject>
 #include <QPixmap>
-#include <QCloseEvent>
 
 // Local includes
 
-#include "dprogressdlg.h"
-
-class QWidget;
-class QPixmap;
+#include "progressmanager.h"
 
 class KUrl;
 
@@ -43,14 +40,14 @@ namespace Digikam
 
 class LoadingDescription;
 
-class BatchThumbsGenerator : public DProgressDlg
+class BatchThumbsGenerator : public ProgressItem
 {
     Q_OBJECT
 
 public:
 
-    explicit BatchThumbsGenerator(QWidget* parent, bool rebuildAll=true);
-    BatchThumbsGenerator(QWidget* parent, int albumId);
+    explicit BatchThumbsGenerator(bool rebuildAll=true);
+    BatchThumbsGenerator(int albumId);
     ~BatchThumbsGenerator();
 
 Q_SIGNALS:
@@ -59,20 +56,12 @@ Q_SIGNALS:
 
 private:
 
-    void abort();
     void complete();
     void processOne();
 
-protected:
-
-    void closeEvent(QCloseEvent* e);
-
-protected Q_SLOTS:
-
-    void slotCancel();
-
 private Q_SLOTS:
 
+    void slotCancel();
     void slotRebuildThumbs();
     void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
 

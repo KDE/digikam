@@ -604,18 +604,6 @@ void DigikamApp::setupStatusBar()
     littleProgress->show();
     statusBar()->addPermanentWidget(littleProgress);
 
-// Marcel : TEST code
-    ProgressItem* progressItem = ProgressManager::createProgressItem("Job1", i18n("Job1"), QString(), true );
-    progressItem->setUsesBusyIndicator( true );
-    progressItem = ProgressManager::createProgressItem("Job2", i18n("Job2"), QString(), true );
-    progressItem->setUsesBusyIndicator( true );
-    progressItem = ProgressManager::createProgressItem("Job3", i18n("Job3"), QString(), true );
-    progressItem->setUsesBusyIndicator( true );
-    progressItem = ProgressManager::createProgressItem("Job4", i18n("Job4"), QString(), true );
-    progressItem->setUsesBusyIndicator( true );
-//    connect(progressItem, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)),
-//            this, SLOT(cancelJob()) );
-
     //------------------------------------------------------------------------------
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
@@ -3025,14 +3013,12 @@ void DigikamApp::slotRebuildThumbnails()
 
 void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
 {
-    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this, rebuildAll);
-    thumbsGenerator->show();
+    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(rebuildAll);
 }
 
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
-    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this, AlbumManager::instance()->currentAlbum()->id());
-    thumbsGenerator->show();
+    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(AlbumManager::instance()->currentAlbum()->id());
 }
 
 void DigikamApp::slotGenerateFingerPrintsFirstTime()

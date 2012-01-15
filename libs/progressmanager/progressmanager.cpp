@@ -26,9 +26,10 @@
 
 // KDE includes
 
-#include <KDebug>
-#include <KLocale>
-#include <KGlobal>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kglobal.h>
+#include <kiconloader.h>
 
 namespace Digikam
 {
@@ -133,10 +134,10 @@ void ProgressItem::setLabel( const QString &v )
     emit progressItemLabel( this, mLabel );
 }
 
-void ProgressItem::setStatus( const QString &v )
+void ProgressItem::setStatus(const QString& v)
 {
     mStatus = v;
-    emit progressItemStatus( this, mStatus );
+    emit progressItemStatus(this, mStatus);
 }
 
 void ProgressItem::setUsesBusyIndicator(bool useBusyIndicator)
@@ -147,8 +148,20 @@ void ProgressItem::setUsesBusyIndicator(bool useBusyIndicator)
 
 void ProgressItem::setThumbnail(const QPixmap& thumb)
 {
-    mThumb = thumb;
-    emit progressItemThumbnail(this, thumb);
+    if (!hasThumbnail()) return;
+    
+    QPixmap pix = thumb;
+
+    if (pix.isNull())
+    {
+        pix = DesktopIcon("image-missing", KIconLoader::SizeMedium);    // 32x32 px
+    }
+    else
+    {
+        pix = pix.scaled(22, 22, Qt::KeepAspectRatio, Qt::FastTransformation);
+    }
+
+    emit progressItemThumbnail(this, pix);
 }
 
 // --------------------------------------------------------------------------
@@ -187,41 +200,7 @@ ProgressItem* ProgressManager::createProgressItemImpl(ProgressItem* parent,
     if ( !mTransactions.value( id ) )
     {
         t = new ProgressItem(parent, id, label, status, cancellable, hasThumb);
-        mTransactions.insert(id, t);
-        if (parent)
-        {
-            ProgressItem* p = mTransactions.value( parent->id() );
-            if ( p )
-            {
-                p->addChild( t );
-            }
-        }
-
-        connect(t, SIGNAL(progressItemCompleted(Digikam::ProgressItem*)),
-                this, SLOT(slotTransactionCompleted(Digikam::ProgressItem*)));
-        
-        connect(t, SIGNAL(progressItemProgress(Digikam::ProgressItem*, unsigned int)),
-                this, SIGNAL(progressItemProgress(Digikam::ProgressItem*, unsigned int)));
-        
-        connect(t, SIGNAL(progressItemAdded(Digikam::ProgressItem*)),
-                this, SIGNAL(progressItemAdded(Digikam::ProgressItem*)));
-        
-        connect(t, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)),
-                this, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)));
-        
-        connect(t, SIGNAL(progressItemStatus(Digikam::ProgressItem*, const QString&)),
-                this, SIGNAL(progressItemStatus(Digikam::ProgressItem*, const QString&)));
-        
-        connect(t, SIGNAL(progressItemLabel(Digikam::ProgressItem*, const QString&)),
-                this, SIGNAL(progressItemLabel(Digikam::ProgressItem*, const QString&)));
-        
-        connect(t, SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool)),
-                this, SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool)));
-
-        connect(t, SIGNAL(progressItemThumbnail(Digikam::ProgressItem*, const QPixmap&)),
-                this, SIGNAL(progressItemThumbnail(Digikam::ProgressItem*, const QPixmap&)));
-        
-        emit progressItemAdded( t );
+        addProgressItemImpl(t, parent);
     }
     else
     {
@@ -241,6 +220,45 @@ ProgressItem* ProgressManager::createProgressItemImpl(const QString& parent,
 {
     ProgressItem* p = mTransactions.value(parent);
     return createProgressItemImpl(p, id, label, status, canBeCanceled, hasThumb);
+}
+
+void ProgressManager::addProgressItemImpl(ProgressItem* t, ProgressItem* parent)
+{
+    mTransactions.insert(t->id(), t);
+    if (parent)
+    {
+        ProgressItem* p = mTransactions.value( parent->id() );
+        if ( p )
+        {
+            p->addChild( t );
+        }
+    }
+
+    connect(t, SIGNAL(progressItemCompleted(Digikam::ProgressItem*)),
+            this, SLOT(slotTransactionCompleted(Digikam::ProgressItem*)));
+
+    connect(t, SIGNAL(progressItemProgress(Digikam::ProgressItem*, unsigned int)),
+            this, SIGNAL(progressItemProgress(Digikam::ProgressItem*, unsigned int)));
+
+    connect(t, SIGNAL(progressItemAdded(Digikam::ProgressItem*)),
+            this, SIGNAL(progressItemAdded(Digikam::ProgressItem*)));
+
+    connect(t, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)),
+            this, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)));
+
+    connect(t, SIGNAL(progressItemStatus(Digikam::ProgressItem*, const QString&)),
+            this, SIGNAL(progressItemStatus(Digikam::ProgressItem*, const QString&)));
+
+    connect(t, SIGNAL(progressItemLabel(Digikam::ProgressItem*, const QString&)),
+            this, SIGNAL(progressItemLabel(Digikam::ProgressItem*, const QString&)));
+
+    connect(t, SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool)),
+            this, SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool)));
+
+    connect(t, SIGNAL(progressItemThumbnail(Digikam::ProgressItem*, const QPixmap&)),
+            this, SIGNAL(progressItemThumbnail(Digikam::ProgressItem*, const QPixmap&)));
+
+    emit progressItemAdded( t );
 }
 
 void ProgressManager::emitShowProgressViewImpl()

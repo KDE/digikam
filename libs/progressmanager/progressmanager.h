@@ -143,11 +143,11 @@ public:
     void cancel();
 
     // Often needed values for calculating progress.
-    void setTotalItems( unsigned int v )         { mTotal = v;        }
-    unsigned int totalItems() const              { return mTotal;     }
-    void setCompletedItems( unsigned int v )     { mCompleted = v;    }
-    void incCompletedItems( unsigned int v = 1 ) { mCompleted += v;   }
-    unsigned int completedItems() const          { return mCompleted; }
+    void         setTotalItems( unsigned int v )         { mTotal = v;        }
+    unsigned int totalItems() const                      { return mTotal;     }
+    void         setCompletedItems( unsigned int v )     { mCompleted = v;    }
+    unsigned int completedItems() const                  { return mCompleted; }
+    void         incCompletedItems( unsigned int v = 1 ) { mCompleted += v;   }
 
     /**
      * Recalculate progress according to total/completed items and update.
@@ -211,7 +211,7 @@ Q_SIGNALS:
      * @param  The updated item.
      * @param  The new label.
      */
-    void progressItemLabel( Digikam::ProgressItem *, const QString & );
+    void progressItemLabel(Digikam::ProgressItem*, const QString&);
 
     /**
      * Emitted when the busy indicator state of an item changes. Should be used
@@ -232,8 +232,8 @@ Q_SIGNALS:
 protected:
 
     /* Only to be used by our good friend the ProgressManager */
-    ProgressItem( ProgressItem* parent, const QString& id, const QString& label,
-                  const QString& status, bool isCancellable, bool hasThumb);
+    ProgressItem(ProgressItem* parent, const QString& id, const QString& label,
+                 const QString& status, bool isCancellable, bool hasThumb);
     virtual ~ProgressItem();
 
 private:
@@ -241,7 +241,6 @@ private:
     QString         mId;
     QString         mLabel;
     QString         mStatus;
-    QPixmap         mThumb;
     ProgressItem*   mParent;
     bool            mCanBeCanceled;
     bool            mHasThumb;
@@ -324,11 +323,20 @@ public:
      /**
       * Creates a ProgressItem with a unique id and the given label.
       * This is the simplest way to acquire a progress item. It will not
-      * have a parent and will be set to be cancellable.
+      * have a parent.
+      * @param label The text to be displayed by progress handlers
+      * @param status Additional text to be displayed for the item.
+      * @param canBeCanceled can the user cancel this operation?
+      * Cancelling the parent will cancel the children as well (if they can be
+      * canceled) and ongoing children prevent parents from finishing.
+      * @return The ProgressItem representing the operation.
       */
-    static ProgressItem* createProgressItem(const QString& label)
+    static ProgressItem* createProgressItem(const QString& label,
+                                            const QString& status = QString(),
+                                            bool  canBeCanceled = true,
+                                            bool  hasThumb = false)
     {
-        return instance()->createProgressItemImpl(0, getUniqueID(), label, QString(), true, false);
+        return instance()->createProgressItemImpl(0, getUniqueID(), label, status, canBeCanceled, hasThumb);
     }
 
     /**
@@ -380,6 +388,17 @@ public:
                                             bool  hasThumb = false)
     {
         return instance()->createProgressItemImpl(0, id, label, status, canBeCanceled, hasThumb);
+    }
+
+    /**
+     * Add a created progressItem outside manager with the given parent.
+     *
+     * @param t The process to add on manager.
+     * @param parent Specify an already existing item as the parent of this one (can be null).
+     */
+    static void addProgressItem(ProgressItem* t, ProgressItem* parent=0)
+    {
+        instance()->addProgressItemImpl(t, parent);
     }
 
     /**
@@ -471,6 +490,8 @@ private:
                                                  bool  hasThumb
                                                 );
 
+    virtual void addProgressItemImpl(ProgressItem* t, ProgressItem* parent);
+    
 private:
 
     QHash<QString, ProgressItem*> mTransactions;

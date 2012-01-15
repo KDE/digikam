@@ -503,8 +503,7 @@ void Setup::okClicked()
             return;
         }
 
-        BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this);
-        thumbsGenerator->show();
+        BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator();
     }
 
     accept();
