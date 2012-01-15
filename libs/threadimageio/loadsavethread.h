@@ -63,6 +63,19 @@ public:
     virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img) = 0;
 };
 
+class DIGIKAM_EXPORT LoadSaveFileInfoProvider
+{
+public:
+
+    virtual ~LoadSaveFileInfoProvider() {}
+    /**
+     * Gives a hint at the orientation of the image.
+     * This can be used to supersede the Exif information in the file.
+     * Will not be used if DMetadata::ORIENTATION_UNSPECIFIED (default value)
+     */
+    virtual int orientationHint(const QString& path) = 0;
+};
+
 // -------------------------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT LoadSaveThread : public DynamicThread, public LoadSaveNotifier
@@ -109,6 +122,9 @@ public:
 
     void setNotificationPolicy(NotificationPolicy notificationPolicy);
 
+    static void setInfoProvider(LoadSaveFileInfoProvider* infoProvider);
+    static LoadSaveFileInfoProvider* infoProvider();
+
     /**
      * Utility to make sure that an image is rotated according to Exif tag.
      * Detects if an image has previously already been rotated: You can
@@ -117,6 +133,12 @@ public:
      * Returns false if a rotation was not needed.
      */
     static bool exifRotate(DImg& image, const QString& filePath);
+
+    /**
+     * Retrieves the Exif orientation, either from the info provider if available,
+     * or from the metadata
+     */
+    static int exifOrientation(const QString& filePath);
 
 Q_SIGNALS:
 

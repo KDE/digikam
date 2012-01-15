@@ -51,7 +51,11 @@ public:
     QTime         notificationTime;
 
     LoadSaveTask* lastTask;
+
+    static LoadSaveFileInfoProvider* infoProvider;
 };
+
+LoadSaveFileInfoProvider* LoadSaveThread::LoadSaveThreadPriv::infoProvider = 0;
 
 //---------------------------------------------------------------------------------------------------
 
@@ -67,6 +71,16 @@ LoadSaveThread::~LoadSaveThread()
 {
     wait();
     delete d;
+}
+
+void LoadSaveThread::setInfoProvider(LoadSaveFileInfoProvider* infoProvider)
+{
+    LoadSaveThreadPriv::infoProvider = infoProvider;
+}
+
+LoadSaveFileInfoProvider* LoadSaveThread::infoProvider()
+{
+    return LoadSaveThreadPriv::infoProvider;
 }
 
 void LoadSaveThread::load(LoadingDescription description)
@@ -249,6 +263,21 @@ bool LoadSaveThread::querySendNotifyEvent()
     return false;
 }
 
+int LoadSaveThread::exifOrientation(const QString& filePath)
+{
+    int orientation = KExiv2::ORIENTATION_UNSPECIFIED;
+    if (infoProvider())
+    {
+        orientation = infoProvider()->orientationHint(filePath);
+    }
+    if (orientation == KExiv2::ORIENTATION_UNSPECIFIED)
+    {
+        DMetadata metadata(filePath);
+        orientation = metadata.getImageOrientation();
+    }
+    return orientation;
+}
+
 bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
 {
     // Keep in sync with the variant in thumbnailcreator.cpp
@@ -271,9 +300,7 @@ bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
 
     // Rotate thumbnail based on metadata orientation information
 
-    DMetadata metadata(filePath);
-    DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-    bool rotatedOrFlipped                   = image.rotateAndFlip(orientation);
+    bool rotatedOrFlipped = image.rotateAndFlip(exifOrientation(filePath));
     image.setAttribute("exifRotated", true);
 
     return rotatedOrFlipped;
