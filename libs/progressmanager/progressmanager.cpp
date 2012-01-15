@@ -36,9 +36,9 @@ namespace Digikam
 
 unsigned int ProgressManager::s_uID = 1000;
 
-ProgressItem::ProgressItem( ProgressItem* parent, const QString& id,
-                            const QString& label, const QString& status,
-                            bool canBeCanceled, bool hasThumb)
+ProgressItem::ProgressItem(ProgressItem* parent, const QString& id,
+                           const QString& label, const QString& status,
+                           bool canBeCanceled, bool hasThumb)
     : mId(id),
       mLabel(label),
       mStatus(status),
@@ -79,14 +79,15 @@ void ProgressItem::setComplete()
     }
 }
 
-void ProgressItem::addChild( ProgressItem *kiddo )
+void ProgressItem::addChild(ProgressItem * kiddo)
 {
-    mChildren.insert( kiddo, true );
+    mChildren.insert(kiddo, true);
 }
 
-void ProgressItem::removeChild( ProgressItem *kiddo )
+void ProgressItem::removeChild(ProgressItem* kiddo)
 {
     mChildren.remove( kiddo );
+    
     // in case we were waiting for the last kid to go away, now is the time
     if ( mChildren.count() == 0 && mWaitingForKids )
     {
@@ -102,8 +103,8 @@ void ProgressItem::cancel()
         return;
     }
 
-    kDebug() << label();
     mCanceled = true;
+
     // Cancel all children.
     QList<ProgressItem*> kids = mChildren.keys();
     QList<ProgressItem*>::Iterator it( kids.begin() );
@@ -111,7 +112,7 @@ void ProgressItem::cancel()
 
     for ( ; it != end; it++ )
     {
-        ProgressItem *kid = *it;
+        ProgressItem* kid = *it;
         if ( kid->canBeCanceled() )
         {
             kid->cancel();
@@ -121,14 +122,13 @@ void ProgressItem::cancel()
     emit progressItemCanceled( this );
 }
 
-void ProgressItem::setProgress( unsigned int v )
+void ProgressItem::setProgress(unsigned int v)
 {
     mProgress = v;
-    // kDebug() << label() << " :" << v;
-    emit progressItemProgress( this, mProgress );
+    emit progressItemProgress(this, mProgress);
 }
 
-void ProgressItem::setLabel( const QString &v )
+void ProgressItem::setLabel( const QString& v)
 {
     mLabel = v;
     emit progressItemLabel( this, mLabel );
@@ -154,11 +154,11 @@ void ProgressItem::setThumbnail(const QPixmap& thumb)
 
     if (pix.isNull())
     {
-        pix = DesktopIcon("image-missing", KIconLoader::SizeMedium);    // 32x32 px
+        pix = DesktopIcon("image-missing", KIconLoader::SizeSmallMedium);
     }
     else
     {
-        pix = pix.scaled(22, 22, Qt::KeepAspectRatio, Qt::FastTransformation);
+        pix = pix.scaled(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium, Qt::KeepAspectRatio, Qt::FastTransformation);
     }
 
     emit progressItemThumbnail(this, pix);

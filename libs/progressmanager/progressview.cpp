@@ -60,7 +60,7 @@ static const int MAX_LABEL_WIDTH = 650;
 
 class TransactionItem;
 
-TransactionItemView::TransactionItemView( QWidget *parent, const char *name )
+TransactionItemView::TransactionItemView(QWidget* parent, const char* name)
     : QScrollArea( parent )
 {
     setObjectName( name );
@@ -71,9 +71,9 @@ TransactionItemView::TransactionItemView( QWidget *parent, const char *name )
     setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
 }
 
-TransactionItem *TransactionItemView::addTransactionItem( ProgressItem *item, bool first )
+TransactionItem* TransactionItemView::addTransactionItem(ProgressItem* item, bool first)
 {
-    TransactionItem *ti = new TransactionItem( mBigBox, item, first );
+    TransactionItem* ti = new TransactionItem( mBigBox, item, first );
     mBigBox->layout()->addWidget( ti );
 
     resize( mBigBox->width(), mBigBox->height() );
@@ -81,12 +81,12 @@ TransactionItem *TransactionItemView::addTransactionItem( ProgressItem *item, bo
     return ti;
 }
 
-void TransactionItemView::resizeEvent ( QResizeEvent *event )
+void TransactionItemView::resizeEvent(QResizeEvent* event)
 {
-    // Tell the layout in the parent (progressdialog) that our size changed
+    // Tell the layout in the parent (progressview) that our size changed
     updateGeometry();
 
-    QSize sz = parentWidget()->sizeHint();
+    QSize sz         = parentWidget()->sizeHint();
     int currentWidth = parentWidget()->width();
 
     // Don't resize to sz.width() every time when it only reduces a little bit
@@ -133,7 +133,7 @@ void TransactionItemView::slotLayoutFirstItem()
         be the first item very shortly. That's the one we want to remove the
         hline for.
     */
-    TransactionItem *ti = mBigBox->findChild<Digikam::TransactionItem*>( "TransactionItem" );
+    TransactionItem* ti = mBigBox->findChild<Digikam::TransactionItem*>("TransactionItem");
     if ( ti )
     {
         ti->hideHLine();
@@ -163,7 +163,7 @@ TransactionItem::TransactionItem(QWidget* parent, ProgressItem* item, bool first
     if (item->hasThumbnail())
     {
         mItemThumb = new QLabel(h);
-        mItemThumb->setFixedSize(QSize(22, 22));
+        mItemThumb->setFixedSize(QSize(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium));
         h->layout()->addWidget(mItemThumb);
         h->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
     }
@@ -179,7 +179,7 @@ TransactionItem::TransactionItem(QWidget* parent, ProgressItem* item, bool first
 
     if (item->canBeCanceled())
     {
-        mCancelButton = new QPushButton(SmallIcon("list-remove"), QString(), h);
+        mCancelButton = new QPushButton(SmallIcon("dialog-cancel"), QString(), h);
         mCancelButton->setToolTip( i18n("Cancel this operation."));
         connect(mCancelButton, SIGNAL( clicked()),
                 this, SLOT(slotItemCanceled()));
@@ -250,7 +250,7 @@ void TransactionItem::addSubTransaction(ProgressItem* item)
 
 // ---------------------------------------------------------------------------
 
-ProgressView::ProgressView(QWidget* alignWidget, QWidget* parent, const char* name )
+ProgressView::ProgressView(QWidget* alignWidget, QWidget* parent, const char* name)
     : OverlayWidget(alignWidget, parent, name), mWasLastShown(false)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -305,7 +305,7 @@ ProgressView::ProgressView(QWidget* alignWidget, QWidget* parent, const char* na
             this, SLOT(slotShow()));
 }
 
-void ProgressView::closeEvent( QCloseEvent *e )
+void ProgressView::closeEvent(QCloseEvent* e)
 {
     e->accept();
     hide();
@@ -316,9 +316,9 @@ ProgressView::~ProgressView()
     // no need to delete child widgets.
 }
 
-void ProgressView::slotTransactionAdded( ProgressItem *item )
+void ProgressView::slotTransactionAdded(ProgressItem* item)
 {
-    TransactionItem *parent = 0;
+    TransactionItem* parent = 0;
     if ( item->parent() )
     {
         if ( mTransactionsToListviewItems.contains( item->parent() ) )
@@ -342,14 +342,15 @@ void ProgressView::slotTransactionAdded( ProgressItem *item )
     }
 }
 
-void ProgressView::slotTransactionCompleted( ProgressItem *item )
+void ProgressView::slotTransactionCompleted(ProgressItem* item)
 {
     if ( mTransactionsToListviewItems.contains( item ) )
     {
-        TransactionItem *ti = mTransactionsToListviewItems[ item ];
+        TransactionItem* ti = mTransactionsToListviewItems[item];
         mTransactionsToListviewItems.remove( item );
         ti->setItemComplete();
         QTimer::singleShot( 3000, ti, SLOT( deleteLater() ) );
+
         // see the slot for comments as to why that works
         connect ( ti, SIGNAL( destroyed() ),
                 mScrollView, SLOT( slotLayoutFirstItem() ) );
@@ -361,37 +362,34 @@ void ProgressView::slotTransactionCompleted( ProgressItem *item )
     }
 }
 
-void ProgressView::slotTransactionCanceled( ProgressItem * )
+void ProgressView::slotTransactionCanceled(ProgressItem*)
 {
 }
 
-void ProgressView::slotTransactionProgress( ProgressItem *item,
-                                              unsigned int progress )
+void ProgressView::slotTransactionProgress(ProgressItem* item, unsigned int progress)
 {
-    if ( mTransactionsToListviewItems.contains( item ) )
+    if (mTransactionsToListviewItems.contains(item))
     {
-        TransactionItem *ti = mTransactionsToListviewItems[ item ];
-        ti->setProgress( progress );
+        TransactionItem* ti = mTransactionsToListviewItems[item];
+        ti->setProgress(progress);
     }
 }
 
-void ProgressView::slotTransactionStatus( ProgressItem *item,
-                                            const QString &status )
+void ProgressView::slotTransactionStatus(ProgressItem* item, const QString& status)
 {
-    if ( mTransactionsToListviewItems.contains( item ) )
+    if (mTransactionsToListviewItems.contains(item))
     {
-        TransactionItem *ti = mTransactionsToListviewItems[ item ];
-        ti->setStatus( status );
+        TransactionItem* ti = mTransactionsToListviewItems[item];
+        ti->setStatus(status);
     }
 }
 
-void ProgressView::slotTransactionLabel( ProgressItem *item,
-                                           const QString &label )
+void ProgressView::slotTransactionLabel(ProgressItem* item, const QString& label )
 {
-    if ( mTransactionsToListviewItems.contains( item ) )
+    if ( mTransactionsToListviewItems.contains(item))
     {
-        TransactionItem *ti = mTransactionsToListviewItems[ item ];
-        ti->setLabel( label );
+        TransactionItem* ti = mTransactionsToListviewItems[item];
+        ti->setLabel(label);
     }
 }
 
@@ -422,7 +420,7 @@ void ProgressView::slotTransactionThumbnail(Digikam::ProgressItem* item, const Q
 
 void ProgressView::slotShow()
 {
-    setVisible( true );
+    setVisible(true);
 }
 
 void ProgressView::slotHide()
@@ -430,20 +428,20 @@ void ProgressView::slotHide()
     // check if a new item showed up since we started the timer. If not, hide
     if ( mTransactionsToListviewItems.isEmpty() )
     {
-        setVisible( false );
+        setVisible(false);
     }
 }
 
 void ProgressView::slotClose()
 {
     mWasLastShown = false;
-    setVisible( false );
+    setVisible(false);
 }
 
-void ProgressView::setVisible( bool b )
+void ProgressView::setVisible(bool b)
 {
-    OverlayWidget::setVisible( b );
-    emit visibilityChanged( b );
+    OverlayWidget::setVisible(b);
+    emit visibilityChanged(b);
 }
 
 void ProgressView::slotToggleVisibility()

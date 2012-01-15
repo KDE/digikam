@@ -247,8 +247,9 @@ void BatchThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, cons
     }
 
     setThumbnail(pix);
-    setProgress(progress()+1);
-
+    setCompletedItems(completedItems()+1);
+    updateProgress();
+    
     if (!d->allPicturesPath.isEmpty())
     {
         d->allPicturesPath.removeFirst();
