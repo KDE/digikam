@@ -77,13 +77,9 @@ public:
      * @return a const ref to the assigned regexp object
      */
     QRegExp& regExp() const;
-    void     setRegExp(const QRegExp& regExp);
 
     QString description() const;
-    void    setDescription(const QString& desc);
-
     QPixmap icon(Parseable::IconType type = Parseable::Action) const;
-    void    setIcon(const QString& pixmap);
 
     /**
      * @return a list of all registered tokens
@@ -112,14 +108,6 @@ public:
      * Returns true if a token menu is used.
      */
     bool useTokenMenu() const;
-
-    /**
-     * If multiple tokens have been assigned to a Parseable, a menu will be created.
-     * If you want to display a menu for every defined token, set this method to 'true' and
-     * re-implement the @see slotTokenTriggered method.
-     * @param value boolean parameter to set token menu usage
-     */
-    void setUseTokenMenu(bool value);
 
     /**
      * Checks the validity of the parse object
@@ -151,7 +139,6 @@ Q_SIGNALS:
 
     void signalTokenTriggered(const QString&);
 
-
 protected:
 
     /**
@@ -169,6 +156,18 @@ protected:
      * @return
      */
     bool addToken(const QString& id, const QString& description, const QString& actionName = QString());
+
+    void setRegExp(const QRegExp& regExp);
+    void setDescription(const QString& desc);
+    void setIcon(const QString& pixmap);
+
+    /**
+     * If multiple tokens have been assigned to a Parseable, a menu will be created.
+     * If you want to display a menu for every defined token, set this method to 'true' and
+     * re-implement the @see slotTokenTriggered method.
+     * @param value boolean parameter to set token menu usage
+     */
+    void setUseTokenMenu(bool value);
 
 protected Q_SLOTS:
 
