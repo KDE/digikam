@@ -889,7 +889,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                 scanFileNormal(*fi, scanInfos.at(index));
             }
             // ignore temp files we created ourselves
-            else if (fi->completeSuffix() == "digikamtempfile.tmp")
+            else if (fi->completeSuffix().contains("digikamtempfile."))
             {
                 continue;
             }
