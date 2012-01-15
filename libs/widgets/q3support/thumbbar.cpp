@@ -155,7 +155,7 @@ public:
 
 // -------------------------------------------------------------------------
 
-ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
+ThumbBarView::ThumbBarView(QWidget* parent, int orientation,
                            const ThumbBarToolTipSettings& settings)
     : Q3ScrollView(parent), d(new ThumbBarViewPriv)
 {
@@ -165,7 +165,6 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
     d->preloadTimer    = new QTimer(this);
     d->preloadTimer->setSingleShot(true);
     d->thumbLoadThread = ThumbnailLoadThread::defaultThumbBarThread();
-    d->thumbLoadThread->setExifRotate(exifRotate);
     d->maxTileSize     = d->thumbLoadThread->maximumThumbnailSize();
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
@@ -266,28 +265,6 @@ void ThumbBarView::resizeEvent(QResizeEvent* e)
 
     rearrangeItems();
     ensureItemVisible(currentItem());
-}
-
-void ThumbBarView::setExifRotate(bool exifRotate)
-{
-    if (d->thumbLoadThread->exifRotate() == exifRotate)
-    {
-        return;
-    }
-
-    d->thumbLoadThread->setExifRotate(exifRotate);
-
-    for (ThumbBarItem* item = d->firstItem; item; item = item->d->next)
-    {
-        invalidateThumb(item);
-    }
-
-    triggerUpdate();
-}
-
-bool ThumbBarView::getExifRotate()
-{
-    return d->thumbLoadThread->exifRotate();
 }
 
 int ThumbBarView::getOrientation()

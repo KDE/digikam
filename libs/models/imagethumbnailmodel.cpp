@@ -51,8 +51,7 @@ public:
         thumbSize(0),
         lastGlobalThumbSize(0),
         preloadThumbSize(0),
-        emitDataChanged(true),
-        exifRotate(true)
+        emitDataChanged(true)
     {
     }
 
@@ -64,7 +63,6 @@ public:
     QRect                  detailRect;
 
     bool                   emitDataChanged;
-    bool                   exifRotate;
 
     int preloadThumbnailSize() const
     {
@@ -131,7 +129,6 @@ void ImageThumbnailModel::setPreloadThumbnails(bool preload)
         {
             d->preloadThread = new ThumbnailLoadThread;
             d->preloadThread->setPixmapRequested(false);
-            d->preloadThread->setExifRotate(d->exifRotate);
             d->preloadThread->setPriority(QThread::LowestPriority);
         }
 
@@ -144,21 +141,6 @@ void ImageThumbnailModel::setPreloadThumbnails(bool preload)
         d->preloadThread = 0;
         disconnect(this, SIGNAL(allRefreshingFinished()),
                    this, SLOT(preloadAllThumbnails()));
-    }
-}
-
-void ImageThumbnailModel::setExifRotate(bool rotate)
-{
-    d->exifRotate = rotate;
-
-    if (d->thread)
-    {
-        d->thread->setExifRotate(rotate);
-    }
-
-    if (d->preloadThread)
-    {
-        d->preloadThread->setExifRotate(rotate);
     }
 }
 

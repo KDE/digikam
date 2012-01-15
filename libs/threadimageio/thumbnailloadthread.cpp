@@ -108,7 +108,6 @@ public:
     {
         size               = ThumbnailSize::Huge;
         wantPixmap         = true;
-        explicitExifRotate = -1;
         highlight          = true;
         sendSurrogate      = true;
         creator            = 0;
@@ -116,7 +115,6 @@ public:
         notifiedForResults = false;
     }
 
-    int                             explicitExifRotate;
     bool                            wantPixmap;
     bool                            highlight;
     bool                            sendSurrogate;
@@ -137,7 +135,6 @@ public:
 
 public:
 
-    bool                      exifRotate() const;
     LoadingDescription        createLoadingDescription(const QString& filePath, int size, bool setLastDescription = true);
     LoadingDescription        createLoadingDescription(const QString& filePath, int size,
                                                        const QRect& detailRect, bool setLastDescription = true);
@@ -257,21 +254,6 @@ int ThumbnailLoadThread::maximumThumbnailPixmapSize(bool highlight)
     }
 }
 
-void ThumbnailLoadThread::setExifRotate(bool exifRotate)
-{
-    d->explicitExifRotate = exifRotate ? 1 : 0;
-}
-
-bool ThumbnailLoadThread::exifRotate() const
-{
-    return d->exifRotate();
-}
-
-bool ThumbnailLoadThread::ThumbnailLoadThreadPriv::exifRotate() const
-{
-    return explicitExifRotate == -1 ? MetadataSettings::instance()->exifRotate() : explicitExifRotate;
-}
-
 void ThumbnailLoadThread::setSendSurrogatePixmap(bool send)
 {
     d->sendSurrogate = send;
@@ -340,7 +322,7 @@ LoadingDescription ThumbnailLoadThread::ThumbnailLoadThreadPriv
 {
     size = thumbnailSizeForPixmapSize(size);
 
-    LoadingDescription description(filePath, size, exifRotate(),
+    LoadingDescription description(filePath, size,
                                    LoadingDescription::NoColorConversion,
                                    LoadingDescription::PreviewParameters::Thumbnail);
 
@@ -364,7 +346,7 @@ LoadingDescription ThumbnailLoadThread::ThumbnailLoadThreadPriv
 {
     size = thumbnailSizeForPixmapSize(size);
 
-    LoadingDescription description(filePath, size, exifRotate(),
+    LoadingDescription description(filePath, size,
                                    LoadingDescription::NoColorConversion,
                                    LoadingDescription::PreviewParameters::DetailThumbnail);
 

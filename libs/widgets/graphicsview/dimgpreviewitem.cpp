@@ -59,7 +59,6 @@ DImgPreviewItem::DImgPreviewItem(DImgPreviewItemPrivate& dd, QGraphicsItem* pare
 DImgPreviewItem::DImgPreviewItemPrivate::DImgPreviewItemPrivate()
 {
     state             = DImgPreviewItem::NoImage;
-    exifRotate        = true;
     previewSize       = 1024;
     loadFullImageSize = false;
     previewThread     = 0;
@@ -118,12 +117,6 @@ void DImgPreviewItem::setLoadFullImageSize(bool b)
     reload();
 }
 
-void DImgPreviewItem::setExifRotate(bool b)
-{
-    Q_D(DImgPreviewItem);
-    d->exifRotate = b;
-}
-
 QString DImgPreviewItem::path() const
 {
     Q_D(const DImgPreviewItem);
@@ -152,11 +145,11 @@ void DImgPreviewItem::setPath(const QString& path)
 
         if (d->loadFullImageSize)
         {
-            d->previewThread->loadHighQuality(d->path, d->exifRotate);
+            d->previewThread->loadHighQuality(d->path);
         }
         else
         {
-            d->previewThread->load(d->path, d->previewSize, d->exifRotate);
+            d->previewThread->load(d->path, d->previewSize);
         }
 
         emit stateChanged(d->state);
@@ -300,11 +293,11 @@ void DImgPreviewItem::preloadNext()
 
     if (d->loadFullImageSize)
     {
-        d->preloadThread->loadHighQuality(preloadPath, d->exifRotate);
+        d->preloadThread->loadHighQuality(preloadPath);
     }
     else
     {
-        d->preloadThread->load(preloadPath, d->previewSize, d->exifRotate);
+        d->preloadThread->load(preloadPath, d->previewSize);
     }
 }
 

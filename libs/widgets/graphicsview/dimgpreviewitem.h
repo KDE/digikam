@@ -62,7 +62,6 @@ public:
 
     void setDisplayingWidget(QWidget* widget);
     void setLoadFullImageSize(bool b);
-    void setExifRotate(bool rotate);
 
     QString path() const;
     void    setPath(const QString& path);

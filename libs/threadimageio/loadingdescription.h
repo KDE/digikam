@@ -82,12 +82,11 @@ public:
         enum PreviewFlag
         {
             NoFlags         = 0,
-            ExifRotate      = 1 << 0,
-            OnlyPregenerate = 1 << 1,
+            OnlyPregenerate = 1 << 0,
             /// This prefers large images, but if loading a larger
             /// image is very much slower, it will give a smaller image.
             /// Size serves as a lower bound.
-            FastButLarge    = 1 << 2
+            FastButLarge    = 1 << 1
         };
         Q_DECLARE_FLAGS(PreviewFlags, PreviewFlag)
 
@@ -96,11 +95,6 @@ public:
             type            = NoPreview;
             size            = 0;
             flags           = NoFlags;
-        }
-
-        bool exifRotate() const
-        {
-            return flags & ExifRotate;
         }
 
         bool onlyPregenerate() const
@@ -175,16 +169,12 @@ public:
     /**
      * For preview and thumbnail jobs:
      * Stores preview max size and Exif rotation.
-     * Exif Rotation:
-     *    The Exif rotation is only a hint.
-     *    Call LoadSaveThread::exifRotate to make sure that the image is really
-     *    rotated. It is safe to call this method even if the image is rotated.
      * Raw files / preview jobs:
      *    If size is not 0, the embedded preview will be loaded if available.
      *    If size is 0, DImg based loading will be used with default raw decoding settings.
      *    You can also adjust raw decoding settings and hint in this case.
      */
-    LoadingDescription(const QString& filePath, int size, bool exifRotate,
+    LoadingDescription(const QString& filePath, int size,
                        ColorManagementSettings = NoColorConversion,
                        PreviewParameters::PreviewType = PreviewParameters::PreviewImage);
 

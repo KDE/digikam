@@ -403,7 +403,7 @@ void PreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
     }
 
     scheduledPackages << package;
-    loadFastButLarge(package->filePath, 1600, MetadataSettings::instance()->settings().exifRotate);
+    loadFastButLarge(package->filePath, 1600);
     //load(package->filePath, 800, MetadataSettings::instance()->settings().exifRotate);
     //loadHighQuality(package->filePath, MetadataSettings::instance()->settings().exifRotate);
 
@@ -1114,7 +1114,6 @@ void FacePipeline::FacePipelinePriv::createThumbnailLoadThread()
         thumbnailLoadThread->setPixmapRequested(false);
         thumbnailLoadThread->setThumbnailSize(ThumbnailLoadThread::maximumThumbnailSize());
         // KFaceIface::Image::recommendedSizeForRecognition()
-        thumbnailLoadThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
         thumbnailLoadThread->setPriority(priority);
     }
 
