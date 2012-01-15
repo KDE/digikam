@@ -426,7 +426,7 @@ void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath) const
 
 ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, const QRect& detailRect, bool isFace) const
 {
-    QString path = info.filePath;
+    const QString path = info.filePath;
 
     if (!info.isAccessible)
     {
@@ -450,7 +450,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     if (!detailRect.isNull())
     {
         // when taking a detail, we have to load the image full size
-        qimage = loadImageDetail(path, metadata, detailRect, &profile);
+        qimage = loadImageDetail(info, metadata, detailRect, &profile);
         fromDetail = !qimage.isNull();
     }
 
@@ -547,7 +547,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
 
     ThumbnailImage image;
     image.qimage          = qimage;
-    image.exifOrientation = exifOrientation(path, metadata, fromEmbeddedPreview, fromDetail);
+    image.exifOrientation = exifOrientation(info, metadata, fromEmbeddedPreview, fromDetail);
     return image;
 }
 
@@ -560,8 +560,10 @@ QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile* profile) 
     return img.copyQImage();
 }
 
-QImage ThumbnailCreator::loadImageDetail(const QString& path, const DMetadata& metadata, const QRect& detailRect, IccProfile* profile) const
+QImage ThumbnailCreator::loadImageDetail(const ThumbnailInfo& info, const DMetadata& metadata,
+                                         const QRect& detailRect, IccProfile* profile) const
 {
+    const QString& path = info.filePath;
     // Check the first and largest preview (Raw files)
     KExiv2Iface::KExiv2Previews previews(path);
 
@@ -589,7 +591,7 @@ QImage ThumbnailCreator::loadImageDetail(const QString& path, const DMetadata& m
     // We must rotate before clipping because the rect refers to the oriented image.
     // I do not know currently how to back-rotate the rect for clipping before rotation.
     // If someone has the mathematics, have a go.
-    img.rotateAndFlip(exifOrientation(path, metadata, false, false));
+    img.rotateAndFlip(exifOrientation(info, metadata, false, false));
 
     QRect mappedDetail = TagRegion::mapFromOriginalSize(img, detailRect);
     img.crop(mappedDetail.intersected(QRect(0, 0, img.width(), img.height())));
@@ -640,7 +642,8 @@ QImage ThumbnailCreator::handleAlphaChannel(const QImage& qimage) const
     return qimage;
 }
 
-int ThumbnailCreator::exifOrientation(const QString& filePath, const DMetadata& metadata, bool fromEmbeddedPreview, bool fromDetail) const
+int ThumbnailCreator::exifOrientation(const ThumbnailInfo& info, const DMetadata& metadata,
+                                      bool fromEmbeddedPreview, bool fromDetail) const
 {
     if (fromDetail)
     {
@@ -649,12 +652,15 @@ int ThumbnailCreator::exifOrientation(const QString& filePath, const DMetadata& 
 
     // Keep in sync with main version in loadsavethread.cpp:
 
-    if (DImg::fileFormat(filePath) == DImg::RAW && !fromEmbeddedPreview )
+    if (DImg::fileFormat(info.filePath) == DImg::RAW && !fromEmbeddedPreview )
     {
         return DMetadata::ORIENTATION_NORMAL;
     }
 
-    return metadata.getImageOrientation();
+    if (info.orientationHint == DMetadata::ORIENTATION_UNSPECIFIED)
+        return metadata.getImageOrientation();
+    else
+        return info.orientationHint;
 }
 
 QImage ThumbnailCreator::exifRotate(const QImage& thumb, int orientation) const
