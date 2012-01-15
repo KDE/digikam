@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QFlags>
 #include <QString>
 
 // Local includes
@@ -47,6 +48,29 @@ public:
 
     MetadataSettingsContainer();
     ~MetadataSettingsContainer() {};
+
+    /**
+     * Describes the allowed and desired operation when rotating a picture.
+     * The modes are in escalating order and describe if an operation is allowed.
+     * What is actually done will be goverend by what is possible:
+     * 1) RAW files cannot by rotated by content, setting the metadata may be problematic
+     * 2) Read-Only files cannot edited, neither content nor metadata
+     * 3) Writable files wil have lossy compression
+     * 4) Only JPEG and PGF offer lossless rotation
+     * Using a contents-based rotation always implies resetting the flag.
+     */
+    enum RotationBehaviorFlag
+    {
+        NoRotation               = 0,
+        RotateByInternalFlag     = 1 << 0,
+        RotateByMetadataFlag     = 1 << 1,
+        RotateByLosslessRotation = 1 << 2,
+        RotateByLossyRotation    = 1 << 3,
+
+        RotatingFlags            = RotateByInternalFlag | RotateByMetadataFlag,
+        RotatingPixels           = RotateByLosslessRotation | RotateByLossyRotation,
+    };
+    Q_DECLARE_FLAGS(RotationBehaviorFlags, RotationBehaviorFlag)
 
 public:
 
@@ -72,8 +96,12 @@ public:
     bool useXMPSidecar4Reading;
 
     int  metadataWritingMode;
+
+    RotationBehaviorFlags rotationBehavior;
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::MetadataSettingsContainer::RotationBehaviorFlags)
 
 #endif  // METADATASETTINGSCONTAINER_H
