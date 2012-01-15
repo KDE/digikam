@@ -717,7 +717,14 @@ void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ImageInfo& p
 void FileActionMngrDatabaseWorker::setExifOrientation(const QList<ImageInfo>& infos, int orientation)
 {
     d->setDBAction(i18n("Updating orientation in database. Please wait..."));
-    //TODO: update db
+    {
+        DatabaseOperationGroup group;
+        group.setMaximumTime(200);
+        foreach (ImageInfo info, infos)
+        {
+            info.setOrientation(orientation);
+        }
+    }
     d->dbProcessed(infos.count());
     d->schedulingForOrientationWrite(infos.count());
     for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
@@ -859,31 +866,75 @@ void FileActionMngrFileWorker::transform(const QList<ImageInfo>& infos, int acti
     foreach(const ImageInfo& info, infos)
     {
         kDebug() << info.name() << QThread::currentThread();
-        KUrl url = info.fileUrl();
+        QString path = info.filePath();
+        QString format = info.format();
+        KExiv2::ImageOrientation currentOrientation = (KExiv2::ImageOrientation)info.orientation();
+        bool isRaw = info.format().startsWith(QLatin1String("RAW"));
 
-        if (isJpegImage(url.toLocalFile()))
+        bool rotateAsJpeg     = false;
+        bool rotateLossy      = false;
+        bool rotateByMetadata = false;
+
+        MetadataSettingsContainer::RotationBehaviorFlags behavior;
+        behavior = MetadataSettings::instance()->settings().rotationBehavior;
+
+        rotateByMetadata = (behavior & MetadataSettingsContainer::RotateByMetadataFlag);
+
+        // Check if rotation by content, as desired, is feasible
+        // We'll later check again if it was successful
+        if (behavior & MetadataSettingsContainer::RotatingPixels)
         {
-            JpegRotator rotator(url.toLocalFile());
-            bool success = false;
+            if (format == "JPG" && isJpegImage(path))
+            {
+                rotateAsJpeg = true;
+            }
+
+            if (behavior & MetadataSettingsContainer::RotateByLossyRotation)
+            {
+                DImg::FORMAT format = DImg::fileFormat(path);
+                switch (format)
+                {
+                    case DImg::JPEG:
+                    case DImg::PNG:
+                    case DImg::TIFF:
+                    case DImg::JP2K:
+                    case DImg::PGF:
+                        rotateLossy = true;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        KExiv2Iface::RotationMatrix matrix;
+        matrix *= currentOrientation;
+        matrix *= (KExiv2Iface::RotationMatrix::TransformationAction)action;
+        KExiv2::ImageOrientation finalOrientation = matrix.exifOrientation();
+
+        bool rotatedPixels = false;
+        if (rotateAsJpeg)
+        {
+            JpegRotator rotator(path);
+            rotator.setCurrentOrientation(currentOrientation);
             if (action == KExiv2Iface::RotationMatrix::NoTransformation)
             {
-                success = rotator.autoExifTransform();
+                rotatedPixels = rotator.autoExifTransform();
             }
             else
             {
-                success = rotator.exifTransform((KExiv2Iface::RotationMatrix::TransformationAction)action);
+                rotatedPixels = rotator.exifTransform((KExiv2Iface::RotationMatrix::TransformationAction)action);
             }
-            if (!success)
+            if (!rotatedPixels)
             {
                 failedItems.append(info.name());
             }
         }
-        else
+        else if (rotateLossy)
         {
             // Non-JPEG image: DImg
             DImg image;
 
-            if (!image.load(url.toLocalFile()))
+            if (!image.load(path))
             {
                 failedItems.append(info.name());
             }
@@ -891,25 +942,52 @@ void FileActionMngrFileWorker::transform(const QList<ImageInfo>& infos, int acti
             {
                 if (action == KExiv2Iface::RotationMatrix::NoTransformation)
                 {
-                    DMetadata meta(url.toLocalFile());
-                    image.rotateAndFlip(meta.getImageOrientation());
+                    image.rotateAndFlip(currentOrientation);
                 }
                 else
                 {
                     image.transform(action);
                 }
 
-                if (!image.save(url.toLocalFile(), DImg::fileFormat(url.toLocalFile())))
+                // TODO: Atomic operation!!
+                // prepare metadata, including to reset Exif tag
+                image.prepareMetadataToSave(path, image.format(), true);
+                if (image.save(path, image.detectedFormat()))
+                {
+                    rotatedPixels = true;
+                }
+                else
                 {
                     failedItems.append(info.name());
                 }
             }
         }
 
+        if (rotatedPixels)
+        {
+            // reset for DB. Metadata is already edited.
+            finalOrientation = KExiv2::ORIENTATION_NORMAL;
+        }
+        else if (rotateByMetadata)
+        {
+            // Setting the rotation flag on Raws with embedded JPEG is a mess
+            // Can apply to the RAW data, or to the embedded JPEG, or to both.
+            if (!isRaw)
+            {
+                DMetadata metadata(path);
+                metadata.setImageOrientation(finalOrientation);
+                metadata.applyChanges();
+            }
+        }
+
+        kDebug() << "Settings database flag to" << finalOrientation;
+        // DB rotation
+        ImageInfo(info).setOrientation(finalOrientation);
+
         if (!failedItems.contains(info.name()))
         {
-            emit imageDataChanged(url.toLocalFile(), true, true);
-            ImageAttributesWatch::instance()->fileMetadataChanged(url);
+            emit imageDataChanged(path, true, true);
+            ImageAttributesWatch::instance()->fileMetadataChanged(info.fileUrl());
         }
 
         d->writtenToOne();
