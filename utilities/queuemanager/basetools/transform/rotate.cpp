@@ -47,6 +47,7 @@
 #include "jpegutils.h"
 #include "freerotationfilter.h"
 #include "freerotationsettings.h"
+#include "loadsavethread.h"
 
 using namespace KDcrawIface;
 
@@ -223,8 +224,7 @@ bool Rotate::toolOperations()
 
     if (useExif)
     {
-        DMetadata meta(inputUrl().toLocalFile());
-        image().rotateAndFlip(meta.getImageOrientation());
+        image().rotateAndFlip(LoadSaveThread::exifOrientation(inputUrl().toLocalFile()));
     }
     else
     {

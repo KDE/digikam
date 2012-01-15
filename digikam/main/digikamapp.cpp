@@ -117,6 +117,7 @@
 #include "cameranamehelper.h"
 #include "collectionscanner.h"
 #include "componentsinfo.h"
+#include "databasethumbnailinfoprovider.h"
 #include "digikamadaptor.h"
 #include "dio.h"
 #include "dlogoaction.h"
@@ -133,6 +134,7 @@
 #include "queuemgrwindow.h"
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
+#include "loadsavethread.h"
 #include "scancontroller.h"
 #include "setup.h"
 #include "setupeditor.h"
@@ -302,6 +304,8 @@ DigikamApp::DigikamApp()
             this, SLOT(finishProgress()));
 
     ScanController::instance()->allowToScanDeferredFiles();
+
+    LoadSaveThread::setInfoProvider(new DatabaseLoadSaveFileInfoProvider);
 }
 
 DigikamApp::~DigikamApp()

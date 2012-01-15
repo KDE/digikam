@@ -139,11 +139,10 @@ int KipiImageInfo::angle()
 {
     if (MetadataSettings::instance()->settings().exifRotate)
     {
-        //TODO: read from DB
-        DMetadata metadata(_url.toLocalFile());
-        DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
+        // DMetadata metadata(_url.toLocalFile());
+        // DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
 
-        switch (orientation)
+        switch (m_info.orientation())
         {
             case DMetadata::ORIENTATION_ROT_180:
                 return 180;
