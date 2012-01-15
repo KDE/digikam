@@ -1255,6 +1255,16 @@ void ImageInfo::setRating(int value)
     m_data->ratingCached = true;
 }
 
+void ImageInfo::setOrientation(int value)
+{
+    if (!m_data)
+    {
+        return;
+    }
+
+    DatabaseAccess().db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Orientation);
+}
+
 void ImageInfo::setDateTime(const QDateTime& dateTime)
 {
     if (!m_data || !dateTime.isValid())

@@ -431,6 +431,11 @@ public:
     void        setRating(int value);
 
     /**
+     * Set the orientation for the item
+     */
+    void        setOrientation(int value);
+
+    /**
      * Set the visibility flag - triggers between Visible and Hidden
      */
     void        setVisible(bool isVisible);
