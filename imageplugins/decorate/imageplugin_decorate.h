@@ -51,7 +51,6 @@ private Q_SLOTS:
     void slotInsertText();
     void slotBorder();
     void slotTexture();
-    void slotSuperImpose();
 
 private:
 
