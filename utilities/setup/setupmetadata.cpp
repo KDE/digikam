@@ -162,7 +162,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->fieldsGroup->setWhatsThis(i18nc("@info:whatsthis",
                                     "<para>In addition to the pixel content, image files usually "
                                     "contain a variety of metadata. A lot of the parameters you can use "
-                                    "in digikam to manage files, such as rating or comment, can be written "
+                                    "in digiKam to manage files, such as rating or comment, can be written "
                                     "to the files' metadata.</para> "
                                     "<para>Storing in metadata allows to preserve this information "
                                     "when moving or sending the files to different systems.</para>"));
@@ -240,7 +240,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->writeXMPSidecarBox = new QCheckBox;
     d->writeXMPSidecarBox->setText(i18nc("@option:check", "Write to sidecar files"));
     d->writeXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
-                                              "Turn on this option to save, as specififed, metadata to XMP sidecar files."));
+                                              "Turn on this option to save, as specified, metadata to XMP sidecar files."));
     d->writeXMPSidecarBox->setEnabled(KExiv2::supportXmp());
 
     d->writingModeCombo      = new KComboBox;
@@ -360,7 +360,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
                                         "<para>Select this option if you always want to set only a flag. "
                                         "This is less obtrusive, but requires support if the file is accessed with another software. "
                                         "Ensure to allow setting the flag in the metadata if you want to share your files "
-                                        "outside digikam.</para>"));
+                                        "outside digiKam.</para>"));
 
     d->rotateByContents->setToolTip(i18nc("@info:tooltip",
                                           "If possible rotate files by changing the pixel data"));
@@ -372,7 +372,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
                                         "This is a lossless operation for JPEG files. For other formats it is a lossy operation, "
                                         "which you need to enable explicitly. "
                                         "It is not support for RAW and other read-only formats, "
-                                        "which will be rotated by flag only </para>"));
+                                        "which will be rotated by flag only.</para>"));
 
     d->allowLossyRotate->setToolTip(i18nc("@info:tooltip",
                                           "Rotate files by changing the pixel data even if the operation will incur quality loss"));
