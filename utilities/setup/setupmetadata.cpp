@@ -7,7 +7,8 @@
  * Description : setup Metadata tab.
  *
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -330,17 +331,17 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     QWidget* rotationPanel      = new QWidget(d->tab);
     QVBoxLayout* rotationLayout = new QVBoxLayout;
 
-    d->rotationGroup    = new QGroupBox;//(i18n("@title:group", "File Rotation"), nepoPanel);
+    d->rotationGroup                 = new QGroupBox;
     QGridLayout* rotationGroupLayout = new QGridLayout;
 
     QLabel* rotationExplanation = new QLabel(i18nc("@label", "When rotating a file"));
-    QLabel* rotationIcon  = new QLabel;
+    QLabel* rotationIcon        = new QLabel;
     rotationIcon->setPixmap(SmallIcon("transform-rotate", KIconLoader::SizeMedium));
 
-    d->rotateByFlag          = new QRadioButton(i18nc("@option:radio", "Rotate by only setting a flag"));
-    d->rotateByContents      = new QRadioButton(i18nc("@option:radio", "Rotate by changing the content if possible"));
-    d->allowLossyRotate      = new QCheckBox(i18nc("@option:check", "Even allow lossy rotation if necessary"));
-    d->allowRotateByMetadata = new QCheckBox(i18nc("@option:check", "Write flag to metadata if possible"));
+    d->rotateByFlag             = new QRadioButton(i18nc("@option:radio", "Rotate by only setting a flag"));
+    d->rotateByContents         = new QRadioButton(i18nc("@option:radio", "Rotate by changing the content if possible"));
+    d->allowLossyRotate         = new QCheckBox(i18nc("@option:check", "Even allow lossy rotation if necessary"));
+    d->allowRotateByMetadata    = new QCheckBox(i18nc("@option:check", "Write flag to metadata if possible"));
 
     connect(d->rotateByContents, SIGNAL(toggled(bool)),
             d->allowLossyRotate, SLOT(setEnabled(bool)));
@@ -389,31 +390,42 @@ SetupMetadata::SetupMetadata(QWidget* parent)
                                                  "that a file shall be shown rotated. "
                                                  "Enable this option to allow editing this field. "));
 
-    rotationGroupLayout->addWidget(rotationIcon,             0, 0);
+    rotationGroupLayout->addWidget(rotationIcon,             0, 0, 1, 1);
     rotationGroupLayout->addWidget(rotationExplanation,      0, 1, 1, 2);
     rotationGroupLayout->addWidget(d->rotateByFlag,          1, 0, 1, 3);
     rotationGroupLayout->addWidget(d->rotateByContents,      2, 0, 1, 3);
-    rotationGroupLayout->addWidget(d->allowLossyRotate,      3, 2);
+    rotationGroupLayout->addWidget(d->allowLossyRotate,      3, 2, 1, 1);
     rotationGroupLayout->addWidget(d->allowRotateByMetadata, 4, 0, 1, 3);
-    rotationGroupLayout->setColumnStretch(3, 1);
+    rotationGroupLayout->setColumnStretch(3, 10);
 
     d->rotationGroup->setLayout(rotationGroupLayout);
 
-    d->rotationAdvGroup            = new QGroupBox(i18n("Advanced Settings"));
-    QVBoxLayout* rotationAdvLayout = new QVBoxLayout;
+    // --------------------------------------------------------
+
+    d->rotationAdvGroup            = new QGroupBox;
+    QGridLayout* rotationAdvLayout = new QGridLayout;
+
+    QLabel* rotationAdvExpl = new QLabel(i18nc("@label", "Advanced Settings"));
+    QLabel* rotationAdvIcon = new QLabel;
+    rotationAdvIcon->setPixmap(SmallIcon("configure", KIconLoader::SizeMedium));
 
     d->exifRotateBox         = new QCheckBox;
     d->exifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
     d->exifSetOrientationBox = new QCheckBox;
     d->exifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip."));
 
-    rotationAdvLayout->addWidget(d->exifRotateBox);
-    rotationAdvLayout->addWidget(d->exifSetOrientationBox);
+    rotationAdvLayout->addWidget(rotationAdvIcon,          0, 0, 1, 1);
+    rotationAdvLayout->addWidget(rotationAdvExpl,          0, 1, 1, 1);
+    rotationAdvLayout->addWidget(d->exifRotateBox,         1, 0, 1, 3);
+    rotationAdvLayout->addWidget(d->exifSetOrientationBox, 2, 0, 1, 3);
+    rotationAdvLayout->setColumnStretch(2, 10);
     d->rotationAdvGroup->setLayout(rotationAdvLayout);
 
+    // --------------------------------------------------------
+
     rotationLayout->addWidget(d->rotationGroup);
-    rotationLayout->addStretch();
     rotationLayout->addWidget(d->rotationAdvGroup);
+    rotationLayout->addStretch();
     rotationPanel->setLayout(rotationLayout);
 
     d->tab->addTab(rotationPanel, i18n("Rotation"));
