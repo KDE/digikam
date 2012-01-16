@@ -21,7 +21,6 @@ decorate
   /border                   DONE                  NO                   DONE
   /inserttext               TODO                  NO                   TODO (though BQM Watermark tool)
   /texture                  DONE                 DONE                  TODO
-  /superimpose               NO                   NO                    NO
 
 filters
   /colorfx                  TODO                 TODO                  TODO

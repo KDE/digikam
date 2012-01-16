@@ -6,7 +6,7 @@
  * Date        : 2005-02-14
  * Description : a plugin to insert a text over an image.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,6 @@
 #include "inserttexttool.h"
 #include "bordertool.h"
 #include "texturetool.h"
-#include "superimposetool.h"
 
 using namespace DigikamDecorateImagePlugin;
 
@@ -51,14 +50,12 @@ class ImagePlugin_Decorate::ImagePlugin_DecoratePriv
 public:
 
     ImagePlugin_DecoratePriv() :
-        superimposeAction(0),
         textureAction(0),
         borderAction(0),
         insertTextAction(0)
     {
     }
 
-    KAction* superimposeAction;
     KAction* textureAction;
     KAction* borderAction;
     KAction* insertTextAction;
@@ -84,11 +81,6 @@ ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* parent, const QVariantList&)
     connect(d->textureAction, SIGNAL(triggered(bool)),
             this, SLOT(slotTexture()));
 
-    d->superimposeAction = new KAction(KIcon("superimpose"), i18n("Template Superimpose..."), this);
-    actionCollection()->addAction("imageplugin_superimpose", d->superimposeAction );
-    connect(d->superimposeAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotSuperImpose()));
-
     setXMLFile("digikamimageplugin_decorate_ui.rc");
 
     kDebug() << "ImagePlugin_Decorate plugin loaded";
@@ -104,7 +96,6 @@ void ImagePlugin_Decorate::setEnabledActions(bool b)
     d->insertTextAction->setEnabled(b);
     d->borderAction->setEnabled(b);
     d->textureAction->setEnabled(b);
-    d->superimposeAction->setEnabled(b);
 }
 
 void ImagePlugin_Decorate::slotInsertText()
@@ -122,11 +113,5 @@ void ImagePlugin_Decorate::slotBorder()
 void ImagePlugin_Decorate::slotTexture()
 {
     TextureTool* tool = new TextureTool(this);
-    loadTool(tool);
-}
-
-void ImagePlugin_Decorate::slotSuperImpose()
-{
-    SuperImposeTool* tool = new SuperImposeTool(this);
     loadTool(tool);
 }
