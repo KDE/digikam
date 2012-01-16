@@ -1185,15 +1185,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
        )
 
-    SET(libbatch_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/maintenancetool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfojob.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfoalbumsjob.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchthumbsgenerator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchalbumssyncmetadata.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchsyncmetadata.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/fingerprintsgenerator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchfacedetector.cpp
+    SET(libmaintenance_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancetool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfojob.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfoalbumsjob.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/batchthumbsgenerator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/batchalbumssyncmetadata.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/batchsyncmetadata.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/fingerprintsgenerator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/batchfacedetector.cpp
        )
 
     SET(libdatabasecore_SRCS
@@ -1563,7 +1563,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/controller
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/devices

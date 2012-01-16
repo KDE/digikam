@@ -235,7 +235,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libsetup_SRCS}
                  ${libcameragui_SRCS}
                  ${liblighttable_SRCS}
-                 ${libbatch_SRCS}
+                 ${libmaintenance_SRCS}
                  ${libkipiiface_SRCS}
                  ${libsearchwindow_SRCS}
                  ${libfuzzysearch_SRCS}
