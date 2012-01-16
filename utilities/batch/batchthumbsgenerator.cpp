@@ -38,6 +38,7 @@
 #include <kcodecs.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -225,7 +226,7 @@ void BatchThumbsGenerator::processOne()
 void BatchThumbsGenerator::complete()
 {
     setComplete();
-    QTime t = t.addMSecs(d->duration.elapsed());
+    QTime now, t = now.addMSecs(d->duration.elapsed());
     // Pop-up a message to bring user when all is done.
     KNotificationWrapper("batchthumbscompleted",
                          i18n("The thumbnails database has been updated.\nDuration: %1", t.toString()),
@@ -246,8 +247,7 @@ void BatchThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, cons
     }
 
     setThumbnail(pix);
-    setCompletedItems(completedItems()+1);
-    updateProgress();
+    advance(1);
 
     if (!d->allPicturesPath.isEmpty())
     {

@@ -6,7 +6,7 @@
  * Date        : 2012-01-13
  * Description : progress manager
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2004 Till Adam <adam at kde dot org>
  * Copyright (C) 2004 David Faure <faure at kde dot org>
  *
@@ -50,7 +50,7 @@
 
 namespace Digikam
 {
-    
+
 StatusbarProgressWidget::StatusbarProgressWidget( ProgressView* progressView, QWidget* parent, bool button )
     : QFrame( parent ), m_currentItem( 0 ), m_progressView( progressView ),
       m_delayTimer( 0 ), m_busyTimer( 0 ), m_cleanTimer( 0 )
@@ -90,30 +90,30 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressView* progressView, QW
     m_mode = None;
     setMode();
 
-    connect( m_pButton, SIGNAL( clicked() ),
-            progressView, SLOT( slotToggleVisibility() ) );
+    connect(m_pButton, SIGNAL(clicked()),
+            progressView, SLOT(slotToggleVisibility()));
 
-    connect ( ProgressManager::instance(), SIGNAL( progressItemAdded( Digikam::ProgressItem * ) ),
-                this, SLOT( slotProgressItemAdded( Digikam::ProgressItem * ) ) );
-    
-    connect ( ProgressManager::instance(), SIGNAL( progressItemCompleted( Digikam::ProgressItem * ) ),
-                this, SLOT( slotProgressItemCompleted( Digikam::ProgressItem * ) ) );
-    
-    connect ( ProgressManager::instance(), SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*,bool)),
-                this, SLOT( updateBusyMode() ) );
+    connect(ProgressManager::instance(), SIGNAL(progressItemAdded(Digikam::ProgressItem*)),
+            this, SLOT( slotProgressItemAdded(Digikam::ProgressItem*)));
 
-    connect ( progressView, SIGNAL( visibilityChanged( bool )),
-                this, SLOT( slotProgressViewVisible( bool ) ) );
+    connect(ProgressManager::instance(), SIGNAL(progressItemCompleted(Digikam::ProgressItem*)),
+            this, SLOT(slotProgressItemCompleted(Digikam::ProgressItem*)));
+
+    connect(ProgressManager::instance(), SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*,bool)),
+            this, SLOT(updateBusyMode()));
+
+    connect(progressView, SIGNAL(visibilityChanged(bool)),
+            this, SLOT(slotProgressViewVisible(bool)));
 
     m_delayTimer = new QTimer( this );
     m_delayTimer->setSingleShot( true );
-    connect ( m_delayTimer, SIGNAL( timeout() ),
-              this, SLOT( slotShowItemDelayed() ) );
+    connect(m_delayTimer, SIGNAL( timeout() ),
+            this, SLOT( slotShowItemDelayed() ) );
 
     m_cleanTimer = new QTimer( this );
     m_cleanTimer->setSingleShot( true );
-    connect ( m_cleanTimer, SIGNAL(timeout()),
-              this, SLOT(slotClean()) );
+    connect(m_cleanTimer, SIGNAL(timeout()),
+            this, SLOT(slotClean()) );
 }
 
 // There are three cases: no progressitem, one progressitem (connect to it directly),
@@ -157,15 +157,16 @@ void StatusbarProgressWidget::slotProgressItemCompleted( ProgressItem *item )
     if ( item->parent() ) return; // we are only interested in top level items
 
     connectSingleItem(); // if going back to 1 item
-    
+
     if ( ProgressManager::instance()->isEmpty() )
     {
         // No item
         // Done. In 5s the progress-widget will close, then we can clean up the statusbar
-        m_cleanTimer->start( 5000 );
+        m_cleanTimer->start(5000);
     }
     else if ( m_currentItem )
-    { // Exactly one item
+    {
+        // Exactly one item
         delete m_busyTimer;
         m_busyTimer = 0;
         activateSingleItemMode();
@@ -176,14 +177,14 @@ void StatusbarProgressWidget::connectSingleItem()
 {
     if ( m_currentItem )
     {
-        disconnect ( m_currentItem, SIGNAL( progressItemProgress( Digikam::ProgressItem *, unsigned int ) ),
-                    this, SLOT( slotProgressItemProgress( Digikam::ProgressItem *, unsigned int ) ) );
+        disconnect(m_currentItem, SIGNAL( progressItemProgress( Digikam::ProgressItem *, unsigned int ) ),
+                   this, SLOT( slotProgressItemProgress( Digikam::ProgressItem *, unsigned int ) ) );
         m_currentItem = 0;
     }
     m_currentItem = ProgressManager::instance()->singleItem();
     if ( m_currentItem )
     {
-        connect ( m_currentItem, SIGNAL( progressItemProgress( Digikam::ProgressItem *, unsigned int ) ),
+        connect(m_currentItem, SIGNAL( progressItemProgress( Digikam::ProgressItem *, unsigned int ) ),
                 this, SLOT( slotProgressItemProgress( Digikam::ProgressItem *, unsigned int ) ) );
     }
 }
@@ -268,11 +269,11 @@ void StatusbarProgressWidget::slotClean()
     }
 }
 
-bool StatusbarProgressWidget::eventFilter( QObject *, QEvent *ev )
+bool StatusbarProgressWidget::eventFilter(QObject*, QEvent* ev)
 {
     if ( ev->type() == QEvent::MouseButtonPress )
     {
-        QMouseEvent *e = (QMouseEvent*)ev;
+        QMouseEvent* e = (QMouseEvent*)ev;
 
         if ( e->button() == Qt::LeftButton && m_mode != None )
         {
@@ -286,7 +287,7 @@ bool StatusbarProgressWidget::eventFilter( QObject *, QEvent *ev )
     return false;
 }
 
-void StatusbarProgressWidget::slotProgressViewVisible( bool b )
+void StatusbarProgressWidget::slotProgressViewVisible(bool b)
 {
     // Update the hide/show button when the detailed one is shown/hidden
     if ( b )

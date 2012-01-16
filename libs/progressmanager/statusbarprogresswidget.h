@@ -6,7 +6,7 @@
  * Date        : 2012-01-13
  * Description : progress manager
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2004 Till Adam <adam at kde dot org>
  * Copyright (C) 2004 David Faure <faure at kde dot org>
  *
@@ -65,7 +65,7 @@ public Q_SLOTS:
     void slotProgressItemProgress(Digikam::ProgressItem* i, unsigned int value );
 
 protected Q_SLOTS:
-    
+
     void slotProgressViewVisible(bool);
     void slotShowItemDelayed();
     void slotBusyIndicator();

@@ -6,7 +6,7 @@
  * Date        : 2012-01-13
  * Description : progress manager
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2004 Till Adam <adam at kde dot org>
  *
  * This program is free software; you can redistribute it
@@ -118,7 +118,7 @@ public:
      * Set the progress (percentage of completion) value of this item.
      * @param v The percentage value.
      */
-    void setProgress( unsigned int v );
+    void setProgress(unsigned int v);
 
     /**
      * Tell the item it has finished. This will emit progressItemCompleted()
@@ -135,8 +135,8 @@ public:
      */
     void reset()
     {
-        setProgress( 0 );
-        setStatus( QString() );
+        setProgress(0);
+        setStatus(QString());
         mCompleted = 0;
     }
 
@@ -149,6 +149,8 @@ public:
     unsigned int completedItems() const                  { return mCompleted; }
     void         incCompletedItems( unsigned int v = 1 ) { mCompleted += v;   }
 
+    bool canceled() const                                { return mCanceled;  }
+
     /**
      * Recalculate progress according to total/completed items and update.
      */
@@ -157,10 +159,18 @@ public:
         setProgress( mTotal? mCompleted * 100 / mTotal : 0 );
     }
 
-    void addChild( ProgressItem *kiddo );
-    void removeChild( ProgressItem *kiddo );
+    /**
+     * Advance total items processed by n values and update percentage in progressbar.
+     * @param v The value to advance.
+     */
+    void advance(unsigned int v)
+    {
+        setCompletedItems(completedItems()+v);
+        updateProgress();
+    }
 
-    bool canceled() const { return mCanceled; }
+    void addChild(ProgressItem* kiddo);
+    void removeChild(ProgressItem* kiddo);
 
 Q_SIGNALS:
 
@@ -168,14 +178,14 @@ Q_SIGNALS:
      * Emitted when a new ProgressItem is added.
      * @param The ProgressItem that was added.
      */
-    void progressItemAdded( Digikam::ProgressItem * );
+    void progressItemAdded(Digikam::ProgressItem*);
 
     /**
      * Emitted when the progress value of an item changes.
      * @param  The item which got a new value.
      * @param  The value, for convenience.
      */
-    void progressItemProgress( Digikam::ProgressItem *, unsigned int );
+    void progressItemProgress(Digikam::ProgressItem*, unsigned int);
 
     /**
      * Emitted when a progress item was completed. The item will be
@@ -183,7 +193,7 @@ Q_SIGNALS:
      * chance to work with this item.
      * @param The completed item.
      */
-    void progressItemCompleted( Digikam::ProgressItem * );
+    void progressItemCompleted(Digikam::ProgressItem*);
 
     /**
      * Emitted when an item was canceled. It will _not_ go away immediately,
@@ -195,7 +205,7 @@ Q_SIGNALS:
      * be done on cancel.
      * @param The canceled item;
      */
-    void progressItemCanceled( Digikam::ProgressItem * );
+    void progressItemCanceled(Digikam::ProgressItem*);
 
     /**
      * Emitted when the status message of an item changed. Should be used by
@@ -203,7 +213,7 @@ Q_SIGNALS:
      * @param  The updated item.
      * @param  The new message.
      */
-    void progressItemStatus( Digikam::ProgressItem *, const QString & );
+    void progressItemStatus(Digikam::ProgressItem*, const QString&);
 
     /**
      * Emitted when the label of an item changed. Should be used by
@@ -228,7 +238,7 @@ Q_SIGNALS:
      * @param thumb thumbnail data
      */
     void progressItemThumbnail(Digikam::ProgressItem* item, const QPixmap& thumb);
-    
+
 protected:
 
     /* Only to be used by our good friend the ProgressManager */
@@ -284,7 +294,7 @@ class DIGIKAM_EXPORT ProgressManager : public QObject
     Q_OBJECT
 
 public:
-      
+
     virtual ~ProgressManager();
 
     /**
@@ -303,7 +313,7 @@ public:
      * the overall progress.
      */
     ProgressItem* singleItem() const;
-    
+
     /**
      * @return The singleton instance of this class.
      */
@@ -411,25 +421,25 @@ public:
     }
 
 Q_SIGNALS:
-    
+
     /** @see ProgressItem::progressItemAdded() */
     void progressItemAdded(Digikam::ProgressItem*);
-    
+
     /** @see ProgressItem::progressItemProgress() */
     void progressItemProgress(Digikam::ProgressItem*, unsigned int);
-    
+
     /** @see ProgressItem::progressItemCompleted() */
     void progressItemCompleted(Digikam::ProgressItem*);
-    
+
     /** @see ProgressItem::progressItemCanceled() */
     void progressItemCanceled(Digikam::ProgressItem*);
-    
+
     /** @see ProgressItem::progressItemStatus() */
     void progressItemStatus(Digikam::ProgressItem*, const QString&);
-    
+
     /** @see ProgressItem::progressItemLabel() */
     void progressItemLabel(Digikam::ProgressItem*, const QString&);
-    
+
     /** @see ProgressItem::progressItemUsesBusyIndicator */
     void progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool);
 
@@ -474,7 +484,7 @@ private:
                                              const QString& status,
                                              bool  cancellable,
                                              bool  hasThumb);
-    
+
     virtual ProgressItem* createProgressItemImpl(ProgressItem* parent,
                                                  const QString& id,
                                                  const QString& label,
@@ -487,11 +497,10 @@ private:
                                                  const QString& label,
                                                  const QString& status,
                                                  bool  cancellable,
-                                                 bool  hasThumb
-                                                );
+                                                 bool  hasThumb);
 
     virtual void addProgressItemImpl(ProgressItem* t, ProgressItem* parent);
-    
+
 private:
 
     QHash<QString, ProgressItem*> mTransactions;
