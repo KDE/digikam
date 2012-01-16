@@ -3017,12 +3017,14 @@ void DigikamApp::slotRebuildThumbnails()
 
 void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
 {
-    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(rebuildAll);
+    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(rebuildAll ? BatchThumbsGenerator::AllItems
+                                                                                : BatchThumbsGenerator::MissingItems);
 }
 
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
-    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(AlbumManager::instance()->currentAlbum()->id());
+    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(BatchThumbsGenerator::AlbumItems,
+                                                                     AlbumManager::instance()->currentAlbum()->id());
 }
 
 void DigikamApp::slotGenerateFingerPrintsFirstTime()

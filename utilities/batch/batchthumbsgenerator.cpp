@@ -65,36 +65,36 @@ public:
 
     BatchThumbsGeneratorPriv() :
         cancel(false),
-        rebuildAll(true),
+        mode(BatchThumbsGenerator::AllItems),
+        albumId(-1),
         thumbLoadThread(0)
     {
         duration.start();
     }
 
-    bool                 cancel;
-    bool                 rebuildAll;
+    bool                       cancel;
+    QTime                      duration;
+    QStringList                allPicturesPath;
 
-    int                  albumId;
+    BatchThumbsGenerator::Mode mode;
+    int                        albumId;
 
-    QTime                duration;
+    ThumbnailLoadThread*       thumbLoadThread;
 
-    QStringList          allPicturesPath;
-
-    ThumbnailLoadThread* thumbLoadThread;
 };
 
-BatchThumbsGenerator::BatchThumbsGenerator(bool rebuildAll)
+BatchThumbsGenerator::BatchThumbsGenerator(Mode mode, int albumId)
     : ProgressItem(0,
                    ProgressManager::getUniqueID(),
-                   rebuildAll ? i18n("Rebuild All Thumbnails") : i18n("Build Missing Thumbnails"),
+                   QString(),
                    QString(),
                    true,
                    true),
       d(new BatchThumbsGeneratorPriv)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
-    d->rebuildAll      = rebuildAll;
-    d->albumId         = -1;
+    d->mode            = mode;
+    d->albumId         = albumId;
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
@@ -102,33 +102,26 @@ BatchThumbsGenerator::BatchThumbsGenerator(bool rebuildAll)
     connect(this, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)),
             this, SLOT(slotCancel()));
 
-    QTimer::singleShot(500, this, SLOT(slotRebuildThumbs()));
-
     ProgressManager::addProgressItem(this);
-}
 
-BatchThumbsGenerator::BatchThumbsGenerator(int albumId)
-    : ProgressItem(0,
-                   ProgressManager::getUniqueID(),
-                   i18n("Rebuild Thumbs for Album"),
-                   QString(),
-                   true,
-                   true),
-      d(new BatchThumbsGeneratorPriv)
-{
-    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
-    d->rebuildAll      = true;
-    d->albumId         = albumId;
+    QTimer::singleShot(500, this, SLOT(slotRun()));
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
-            this, SLOT(slotGotThumbnail(LoadingDescription, QPixmap)));
+    QString label = i18n("Thumbs: ");
 
-    connect(this, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)),
-            this, SLOT(slotCancel()));
+    switch(d->mode)
+    {
+        case AllItems:
+            label.append(i18n("process all items"));
+            break;
+        case MissingItems:
+            label.append(i18n("process missing items"));
+            break;
+        case AlbumItems:
+            label.append(i18n("process album items"));
+            break;
+    }
 
-    QTimer::singleShot(500, this, SLOT(slotRebuildThumbs()));
-
-    ProgressManager::addProgressItem(this);
+    setLabel(label);
 }
 
 BatchThumbsGenerator::~BatchThumbsGenerator()
@@ -136,12 +129,12 @@ BatchThumbsGenerator::~BatchThumbsGenerator()
     delete d;
 }
 
-void BatchThumbsGenerator::slotRebuildThumbs()
+void BatchThumbsGenerator::slotRun()
 {
     // Get all digiKam albums collection pictures path.
     AlbumList palbumList;
 
-    if (d->albumId == -1)
+    if (d->mode != AlbumItems)
     {
         palbumList  = AlbumManager::instance()->allPAlbums();
     }
@@ -163,7 +156,7 @@ void BatchThumbsGenerator::slotRebuildThumbs()
 
 #ifdef USE_THUMBS_DB
 
-    if (!d->rebuildAll)
+    if (d->mode != AllItems)
     {
         QHash<QString, int> filePaths = ThumbnailDatabaseAccess().db()->getFilePathsWithThumbnail();
 
@@ -231,7 +224,7 @@ void BatchThumbsGenerator::complete()
     KNotificationWrapper("batchthumbscompleted",
                          i18n("The thumbnails database has been updated.\nDuration: %1", t.toString()),
                          kapp->activeWindow(), label());
-    emit signalRebuildAllThumbsDone();
+    emit signalProcessDone();
 }
 
 void BatchThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
@@ -267,7 +260,7 @@ void BatchThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, cons
 void BatchThumbsGenerator::slotCancel()
 {
     d->cancel = true;
-    emit signalRebuildAllThumbsDone();
+    emit signalProcessDone();
     setComplete();
 }
 

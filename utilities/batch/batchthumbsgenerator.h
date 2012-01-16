@@ -43,13 +43,21 @@ class BatchThumbsGenerator : public ProgressItem
 
 public:
 
-    explicit BatchThumbsGenerator(bool rebuildAll=true);
-    BatchThumbsGenerator(int albumId);
+    enum Mode
+    {
+        AllItems = 0,
+        MissingItems,
+        AlbumItems
+    };
+
+public:
+
+    BatchThumbsGenerator(Mode mode=AllItems, int albumId=-1);
     ~BatchThumbsGenerator();
 
 Q_SIGNALS:
 
-    void signalRebuildAllThumbsDone();
+    void signalProcessDone();
 
 private:
 
@@ -59,7 +67,7 @@ private:
 private Q_SLOTS:
 
     void slotCancel();
-    void slotRebuildThumbs();
+    void slotRun();
     void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
 
 private:
