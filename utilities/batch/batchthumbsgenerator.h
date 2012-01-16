@@ -24,56 +24,26 @@
 #ifndef BATCHTHUMBSGENERATOR_H
 #define BATCHTHUMBSGENERATOR_H
 
-// Qt includes
-
-#include <QPixmap>
-
 // Local includes
 
-#include "progressmanager.h"
+#include "maintenancetool.h"
 
 namespace Digikam
 {
 
-class LoadingDescription;
-
-class BatchThumbsGenerator : public ProgressItem
+class BatchThumbsGenerator : public MaintenanceTool
 {
     Q_OBJECT
-
-public:
-
-    enum Mode
-    {
-        AllItems = 0,
-        MissingItems,
-        AlbumItems
-    };
 
 public:
 
     BatchThumbsGenerator(Mode mode=AllItems, int albumId=-1);
     ~BatchThumbsGenerator();
 
-Q_SIGNALS:
-
-    void signalProcessDone();
-
 private:
 
-    void complete();
+    void listItemstoProcess();
     void processOne();
-
-private Q_SLOTS:
-
-    void slotCancel();
-    void slotRun();
-    void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
-
-private:
-
-    class BatchThumbsGeneratorPriv;
-    BatchThumbsGeneratorPriv* const d;
 };
 
 }  // namespace Digikam

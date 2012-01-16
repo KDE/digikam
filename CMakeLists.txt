@@ -1186,6 +1186,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libbatch_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/maintenancetool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfojob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfoalbumsjob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchthumbsgenerator.cpp
