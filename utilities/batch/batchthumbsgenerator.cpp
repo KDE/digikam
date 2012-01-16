@@ -31,7 +31,6 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QPixmap>
-#include <QCloseEvent>
 
 // KDE includes
 
@@ -79,7 +78,7 @@ public:
     QTime                duration;
 
     QStringList          allPicturesPath;
-    
+
     ThumbnailLoadThread* thumbLoadThread;
 };
 
@@ -101,7 +100,7 @@ BatchThumbsGenerator::BatchThumbsGenerator(bool rebuildAll)
 
     connect(this, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)),
             this, SLOT(slotCancel()));
-    
+
     QTimer::singleShot(500, this, SLOT(slotRebuildThumbs()));
 
     ProgressManager::addProgressItem(this);
@@ -200,7 +199,7 @@ void BatchThumbsGenerator::slotRebuildThumbs()
             ++it;
         }
     }
-    
+
     if (d->allPicturesPath.isEmpty())
     {
         slotCancel();
@@ -249,7 +248,7 @@ void BatchThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, cons
     setThumbnail(pix);
     setCompletedItems(completedItems()+1);
     updateProgress();
-    
+
     if (!d->allPicturesPath.isEmpty())
     {
         d->allPicturesPath.removeFirst();
