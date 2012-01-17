@@ -7,7 +7,7 @@
  * Description : batch face detection
  *
  * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,6 +58,37 @@
 namespace Digikam
 {
 
+class BenchmarkMessageDisplay : public QWidget
+{
+public:
+
+    BenchmarkMessageDisplay(const QString& richText)
+        : QWidget(0)
+    {
+        setAttribute(Qt::WA_DeleteOnClose);
+
+        QVBoxLayout* vbox     = new QVBoxLayout;
+        KTextEdit* edit       = new KTextEdit;
+        vbox->addWidget(edit, 1);
+        KPushButton* okButton = new KPushButton(KStandardGuiItem::ok());
+        vbox->addWidget(okButton, 0, Qt::AlignRight);
+
+        setLayout(vbox);
+
+        connect(okButton, SIGNAL(clicked()),
+                this, SLOT(close()));
+
+        edit->setHtml(richText);
+        QApplication::clipboard()->setText(edit->toPlainText());
+
+        resize(500, 400);
+        show();
+        raise();
+    }
+};
+
+// --------------------------------------------------------------------------
+
 class BatchFaceDetector::BatchFaceDetectorPriv
 {
 public:
@@ -71,15 +102,15 @@ public:
         duration.start();
     }
 
-    bool         rebuildAll;
-    bool         benchmark;
+    bool               rebuildAll;
+    bool               benchmark;
 
-    QTime        duration;
-    int          total;
+    QTime              duration;
+    int                total;
 
     AlbumPointerList<> albumTodoList;
-    ImageInfoJob albumListing;
-    FacePipeline pipeline;
+    ImageInfoJob       albumListing;
+    FacePipeline       pipeline;
 };
 
 BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings& settings)
@@ -104,6 +135,7 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings
         d->benchmark = true;
         d->pipeline.plugDatabaseFilter(FacePipeline::ScanAll);
         d->pipeline.plugPreviewLoader();
+
         if (settings.useFullCpu)
         {
             d->pipeline.plugParallelFaceDetectors();
@@ -112,6 +144,7 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings
         {
             d->pipeline.plugFaceDetector();
         }
+
         d->pipeline.plugBenchmarker();
         d->pipeline.construct();
     }
@@ -203,7 +236,8 @@ void BatchFaceDetector::startAlbumListing()
 {
     // get total count, cached by AlbumManager
     QMap<int, int> palbumCounts, talbumCounts;
-    bool hasPAlbums = false, hasTAlbums = false;
+    bool hasPAlbums = false;
+    bool hasTAlbums = false;
 
     foreach(Album* album, d->albumTodoList)
     {
@@ -235,6 +269,7 @@ void BatchFaceDetector::startAlbumListing()
     }
 
     d->total = 0;
+
     foreach(Album* album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
@@ -248,7 +283,9 @@ void BatchFaceDetector::startAlbumListing()
             d->total += talbumCounts.value(album->id());
         }
     }
+
     kDebug() << "Total is" << d->total;
+
     d->total = qMax(1, d->total);
     setMaximum(d->total);
 
@@ -266,7 +303,8 @@ void BatchFaceDetector::continueAlbumListing()
     }
 
     // list can have null pointer if album was deleted recently
-    Album* album;
+    Album* album = 0;
+
     do
     {
         if (d->albumTodoList.isEmpty())
@@ -275,7 +313,8 @@ void BatchFaceDetector::continueAlbumListing()
         }
 
         album = d->albumTodoList.takeFirst();
-    } while (!album);
+    }
+    while (!album);
 
     d->albumListing.allItemsFromAlbum(album);
 }
@@ -284,35 +323,6 @@ void BatchFaceDetector::slotItemsInfo(const ImageInfoList& items)
 {
     d->pipeline.process(items);
 }
-
-class BenchmarkMessageDisplay : public QWidget
-{
-public:
-    BenchmarkMessageDisplay(const QString& richText)
-        : QWidget(0)
-    {
-        setAttribute(Qt::WA_DeleteOnClose);
-
-        QVBoxLayout* vbox = new QVBoxLayout;
-
-        KTextEdit* edit = new KTextEdit;
-        vbox->addWidget(edit, 1);
-        KPushButton* okButton = new KPushButton(KStandardGuiItem::ok());
-        vbox->addWidget(okButton, 0, Qt::AlignRight);
-
-        setLayout(vbox);
-
-        connect(okButton, SIGNAL(clicked()),
-                this, SLOT(close()));
-
-        edit->setHtml(richText);
-        QApplication::clipboard()->setText(edit->toPlainText());
-
-        resize(500, 400);
-        show();
-        raise();
-    }
-};
 
 void BatchFaceDetector::complete()
 {
