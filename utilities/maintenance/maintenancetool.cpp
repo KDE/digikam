@@ -48,7 +48,9 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
+#include "dimg.h"
 #include "imageinfo.h"
+#include "previewloadthread.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "thumbnaildatabaseaccess.h"
@@ -67,7 +69,8 @@ public:
         cancel(false),
         mode(MaintenanceTool::AllItems),
         albumId(-1),
-        thumbLoadThread(0)
+        thumbLoadThread(0),
+        previewLoadThread(0)
     {
         duration.start();
     }
@@ -80,6 +83,7 @@ public:
     int                   albumId;
 
     ThumbnailLoadThread*  thumbLoadThread;
+    PreviewLoadThread*    previewLoadThread;
 };
 
 MaintenanceTool::MaintenanceTool(Mode mode, int albumId)
@@ -91,12 +95,18 @@ MaintenanceTool::MaintenanceTool(Mode mode, int albumId)
                    true),
       d(new MaintenanceToolPriv)
 {
-    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
-    d->mode            = mode;
-    d->albumId         = albumId;
+    d->mode              = mode;
+    d->albumId           = albumId;
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
-            this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
+    d->previewLoadThread = new PreviewLoadThread();
+
+    connect(d->previewLoadThread, SIGNAL(signalImageLoaded(LoadingDescription, DImg)),
+            this, SLOT(slotGotImagePreview(LoadingDescription, DImg)));
+    
+    d->thumbLoadThread   = ThumbnailLoadThread::defaultThread();
+
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
+            this, SLOT(slotGotThumbnail(LoadingDescription, QPixmap)));
 
     connect(this, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)),
             this, SLOT(slotCancel()));
@@ -146,6 +156,11 @@ ThumbnailLoadThread* MaintenanceTool::thumbsLoadThread() const
     return d->thumbLoadThread;
 }
 
+PreviewLoadThread* MaintenanceTool::previewLoadThread() const
+{
+    return d->previewLoadThread;
+}
+    
 void MaintenanceTool::slotRun()
 {
     // Get all digiKam albums collection pictures path.
@@ -186,12 +201,14 @@ void MaintenanceTool::slotRun()
     processOne();
 }
 
-void MaintenanceTool::processOne()
+bool MaintenanceTool::checkToContinue() const
 {
     if (d->cancel || d->allPicturesPath.isEmpty())
     {
-        return;
+        return false;
     }
+    
+    return true;
 }
 
 void MaintenanceTool::complete()
@@ -217,6 +234,41 @@ void MaintenanceTool::slotGotThumbnail(const LoadingDescription& desc, const QPi
         return;
     }
 
+    gotNewThumbnail(desc, pix);
+
+    setThumbnail(pix);
+    advance(1);
+
+    if (!d->allPicturesPath.isEmpty())
+    {
+        d->allPicturesPath.removeFirst();
+    }
+
+    if (d->allPicturesPath.isEmpty())
+    {
+        complete();
+    }
+    else
+    {
+        processOne();
+    }
+}
+
+void MaintenanceTool::slotGotImagePreview(const LoadingDescription& desc, const DImg& img)
+{
+    if (d->cancel || d->allPicturesPath.isEmpty())
+    {
+        return;
+    }
+
+    if (d->allPicturesPath.first() != desc.filePath)
+    {
+        return;
+    }
+
+    gotNewPreview(desc, img);
+
+    QPixmap pix = DImg(img).smoothScale(22, 22, Qt::KeepAspectRatio).convertToPixmap();
     setThumbnail(pix);
     advance(1);
 

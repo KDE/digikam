@@ -99,6 +99,8 @@ void BatchThumbsGenerator::listItemstoProcess()
 
 void BatchThumbsGenerator::processOne()
 {
+    if (!checkToContinue()) return;
+
     QString path = allPicturePath().first();
     thumbsLoadThread()->deleteThumbnail(path);
     thumbsLoadThread()->find(path);

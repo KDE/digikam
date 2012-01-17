@@ -6,7 +6,7 @@
  * Date        : 2008-05-16
  * Description : finger-prints generator
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,17 +24,10 @@
 #ifndef FINGERPRINTSGENERATOR_H
 #define FINGERPRINTSGENERATOR_H
 
-// Qt includes
-
-#include <QCloseEvent>
-
 // Local includes
 
-#include "dprogressdlg.h"
-
-class QWidget;
-
-class KUrl;
+#include "maintenancetool.h"
+#include "haariface.h"
 
 namespace Digikam
 {
@@ -42,42 +35,27 @@ namespace Digikam
 class DImg;
 class LoadingDescription;
 
-class FingerPrintsGenerator : public DProgressDlg
+class FingerPrintsGenerator : public MaintenanceTool
 {
     Q_OBJECT
 
 public:
 
-    FingerPrintsGenerator(QWidget* parent, bool rebuildAll);
+    FingerPrintsGenerator(Mode mode=AllItems, int albumId=-1);
     ~FingerPrintsGenerator();
-
-Q_SIGNALS:
-
-    void signalRebuildAllFingerPrintsDone();
 
 private:
 
-    void abort();
-    void complete();
+    void listItemstoProcess();
     void processOne();
-
-protected:
-
-    void closeEvent(QCloseEvent* e);
-
-protected Q_SLOTS:
-
-    void slotCancel();
 
 private Q_SLOTS:
 
-    void slotRebuildFingerPrints();
-    void slotGotImagePreview(const LoadingDescription&, const DImg&);
+    void gotNewPreview(const LoadingDescription&, const DImg&);
 
 private:
 
-    class FingerPrintsGeneratorPriv;
-    FingerPrintsGeneratorPriv* const d;
+    HaarIface m_haarIface;
 };
 
 }  // namespace Digikam

@@ -35,8 +35,10 @@
 namespace Digikam
 {
 
+class DImg;
 class LoadingDescription;
 class ThumbnailLoadThread;
+class PreviewLoadThread;
 
 class MaintenanceTool : public ProgressItem
 {
@@ -46,9 +48,9 @@ public:
 
     enum Mode
     {
-        AllItems = 0,
-        MissingItems,
-        AlbumItems
+        AllItems = 0,  /// Process all items from whole collections
+        MissingItems,  /// Process missing items from whole collections
+        AlbumItems     /// Process items from current album set by albumId
     };
 
 public:
@@ -64,26 +66,66 @@ Q_SIGNALS:
 
 protected:
 
+    /** Return all paths to process. Data container can be custumized
+     */
     QStringList&         allPicturePath();
-    Mode                 mode();
-    ThumbnailLoadThread* thumbsLoadThread() const;
 
-    /** Customize these method in child class
+    /** Return mode set in contructor. see Mode enum for details
+     */
+    Mode                 mode();
+    
+    /** Return thumbs loader instance
+     */
+    ThumbnailLoadThread* thumbsLoadThread()  const;
+
+    /** Return preview loader instance
+     */
+    PreviewLoadThread*   previewLoadThread() const;
+
+    /** Call this method into processOne() to check if another item must be processed
+     */
+    bool                 checkToContinue() const;
+
+    /** Re-implement this if you want to use thumb loader items processed
+     */
+    virtual void gotNewThumbnail(const LoadingDescription&, const QPixmap&) {};
+
+    /** Re-implement this if you want to use preview loader items processed
+     */
+    virtual void gotNewPreview(const LoadingDescription&, const DImg&) {};
+
+    /** In this method, you can filter items to manage, hosted by allPicturePath(). These paths will be 
+     *  used calling processOne().
      */
     virtual void listItemstoProcess() = 0;
-    virtual void processOne();
+    
+    /** In this method, you can use thumb load thread or preview load thread to get item images. 
+     *  gotNewThumbnail() or gotNewPreview() will be called accordingly.
+     */
+    virtual void processOne() = 0;
 
 private Q_SLOTS:
 
-    /** This slot call listItemstoProcess()
+    /** This slot call listItemstoProcess() when tool is started
      */
     void slotRun();
 
+    /** This slot is called when user cancel tool from gui
+     */
     void slotCancel();
+    
+    /** This slot call gotNewThumbnail()
+     */
     void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
+
+    /** This slot call gotNewPreview()
+     */
+    void slotGotImagePreview(const LoadingDescription&, const DImg&);
 
 private:
 
+    /** Called when all is done. It fire signalProcessDone()
+     */
     void complete();
 
 private:

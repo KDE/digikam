@@ -3017,13 +3017,13 @@ void DigikamApp::slotRebuildThumbnails()
 
 void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
 {
-    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(rebuildAll ? BatchThumbsGenerator::AllItems
-                                                                                : BatchThumbsGenerator::MissingItems);
+    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(rebuildAll ? MaintenanceTool::AllItems
+                                                                                : MaintenanceTool::MissingItems);
 }
 
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
-    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(BatchThumbsGenerator::AlbumItems,
+    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(MaintenanceTool::AlbumItems,
                                                                      AlbumManager::instance()->currentAlbum()->id());
 }
 
@@ -3063,12 +3063,11 @@ void DigikamApp::slotScanForFaces()
 
 void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
 {
-    FingerPrintsGenerator* fingerprintsGenerator = new FingerPrintsGenerator(this, rebuildAll);
+    FingerPrintsGenerator* fingerprintsGenerator = new FingerPrintsGenerator(rebuildAll ? MaintenanceTool::AllItems
+                                                                                        : MaintenanceTool::MissingItems);
 
-    connect(fingerprintsGenerator, SIGNAL(signalRebuildAllFingerPrintsDone()),
+    connect(fingerprintsGenerator, SIGNAL(signalProcessDone()),
             this, SLOT(slotRebuildFingerPrintsDone()));
-
-    fingerprintsGenerator->show();
 }
 
 void DigikamApp::runFaceScanner(const FaceScanSettings& settings)
