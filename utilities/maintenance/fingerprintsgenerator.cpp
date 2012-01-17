@@ -26,9 +26,6 @@
 // Qt includes
 
 #include <QString>
-#include <QTimer>
-#include <QDir>
-#include <QFileInfo>
 
 // KDE includes
 
@@ -37,14 +34,11 @@
 // Local includes
 
 #include "dimg.h"
-#include "album.h"
 #include "albumdb.h"
-#include "albummanager.h"
 #include "databaseaccess.h"
 #include "previewloadthread.h"
 #include "loadingdescription.h"
 #include "haar.h"
-#include "metadatasettings.h"
 
 namespace Digikam
 {

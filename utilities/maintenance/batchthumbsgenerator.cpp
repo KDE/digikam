@@ -26,31 +26,14 @@
 // Qt includes
 
 #include <QString>
-#include <QTimer>
-#include <QDir>
-#include <QFileInfo>
-#include <QDateTime>
-#include <QPixmap>
 
 // KDE includes
 
-#include <kapplication.h>
-#include <kcodecs.h>
 #include <klocale.h>
-#include <kapplication.h>
-#include <kdebug.h>
 
 // Local includes
 
-#include "album.h"
-#include "albumdb.h"
-#include "albuminfo.h"
-#include "albummanager.h"
-#include "albumsettings.h"
-#include "databaseaccess.h"
-#include "imageinfo.h"
 #include "thumbnailloadthread.h"
-#include "thumbnailsize.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
 #include "config-digikam.h"
