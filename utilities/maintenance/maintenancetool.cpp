@@ -46,7 +46,6 @@
 #include "albumdb.h"
 #include "albuminfo.h"
 #include "albummanager.h"
-#include "albumsettings.h"
 #include "databaseaccess.h"
 #include "dimg.h"
 #include "imageinfo.h"
@@ -56,7 +55,6 @@
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
 #include "knotificationwrapper.h"
-#include "config-digikam.h"
 
 namespace Digikam
 {
@@ -102,7 +100,7 @@ MaintenanceTool::MaintenanceTool(Mode mode, int albumId)
 
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(LoadingDescription, DImg)),
             this, SLOT(slotGotImagePreview(LoadingDescription, DImg)));
-    
+
     d->thumbLoadThread   = ThumbnailLoadThread::defaultThread();
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
@@ -160,7 +158,7 @@ PreviewLoadThread* MaintenanceTool::previewLoadThread() const
 {
     return d->previewLoadThread;
 }
-    
+
 void MaintenanceTool::slotRun()
 {
     // Get all digiKam albums collection pictures path.
@@ -207,7 +205,7 @@ bool MaintenanceTool::checkToContinue() const
     {
         return false;
     }
-    
+
     return true;
 }
 
