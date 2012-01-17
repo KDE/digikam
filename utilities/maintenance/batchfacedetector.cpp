@@ -95,14 +95,12 @@ public:
 
     BatchFaceDetectorPriv()
     {
-        rebuildAll = true;
         benchmark  = false;
         total      = 0;
 
         duration.start();
     }
 
-    bool               rebuildAll;
     bool               benchmark;
 
     QTime              duration;
