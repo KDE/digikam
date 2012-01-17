@@ -84,9 +84,9 @@ public:
     PreviewLoadThread*    previewLoadThread;
 };
 
-MaintenanceTool::MaintenanceTool(Mode mode, int albumId)
+MaintenanceTool::MaintenanceTool(const QString& id, Mode mode, int albumId)
     : ProgressItem(0,
-                   ProgressManager::getUniqueID(),
+                   id,
                    QString(),
                    QString(),
                    true,
@@ -108,8 +108,6 @@ MaintenanceTool::MaintenanceTool(Mode mode, int albumId)
 
     connect(this, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)),
             this, SLOT(slotCancel()));
-
-    ProgressManager::addProgressItem(this);
 
     QTimer::singleShot(500, this, SLOT(slotRun()));
 }
@@ -139,7 +137,7 @@ void MaintenanceTool::setTitle(const QString& title)
     setLabel(label);
 }
 
-QStringList& MaintenanceTool::allPicturePath()
+QStringList& MaintenanceTool::allPicturesPath()
 {
     return d->allPicturesPath;
 }
@@ -160,6 +158,12 @@ PreviewLoadThread* MaintenanceTool::previewLoadThread() const
 }
 
 void MaintenanceTool::slotRun()
+{
+    if (ProgressManager::addProgressItem(this))
+        populateAllPicturesPath();
+}
+
+void MaintenanceTool::populateAllPicturesPath()
 {
     // Get all digiKam albums collection pictures path.
     AlbumList palbumList;

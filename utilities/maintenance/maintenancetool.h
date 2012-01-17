@@ -55,7 +55,7 @@ public:
 
 public:
 
-    MaintenanceTool(Mode mode=AllItems, int albumId=-1);
+    MaintenanceTool(const QString& id, Mode mode=AllItems, int albumId=-1);
     virtual ~MaintenanceTool();
 
     void setTitle(const QString& title);
@@ -68,12 +68,12 @@ protected:
 
     /** Return all paths to process. Data container can be custumized
      */
-    QStringList&         allPicturePath();
+    QStringList&         allPicturesPath();
 
     /** Return mode set in contructor. see Mode enum for details
      */
     Mode                 mode();
-    
+
     /** Return thumbs loader instance
      */
     ThumbnailLoadThread* thumbsLoadThread()  const;
@@ -85,6 +85,10 @@ protected:
     /** Call this method into processOne() to check if another item must be processed
      */
     bool                 checkToContinue() const;
+
+    /** Called by slotRun() to populate all pictures path to process.
+     */
+    virtual void populateAllPicturesPath();
 
     /** Re-implement this if you want to use thumb loader items processed
      */
@@ -98,7 +102,7 @@ protected:
      *  used calling processOne().
      */
     virtual void listItemstoProcess() = 0;
-    
+
     /** In this method, you can use thumb load thread or preview load thread to get item images. 
      *  gotNewThumbnail() or gotNewPreview() will be called accordingly.
      */
@@ -113,7 +117,7 @@ private Q_SLOTS:
     /** This slot is called when user cancel tool from gui
      */
     void slotCancel();
-    
+
     /** This slot call gotNewThumbnail()
      */
     void slotGotThumbnail(const LoadingDescription&, const QPixmap&);

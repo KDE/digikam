@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 FingerPrintsGenerator::FingerPrintsGenerator(Mode mode, int albumId)
-    : MaintenanceTool(mode, albumId)
+    : MaintenanceTool("FingerPrintsGenerator", mode, albumId)
 {
     setTitle(i18n("Fingerprints"));
 }
@@ -57,7 +57,7 @@ void FingerPrintsGenerator::listItemstoProcess()
 {
     if (mode() == MaintenanceTool::MissingItems)
     {
-        allPicturePath() = DatabaseAccess().db()->getDirtyOrMissingFingerprintURLs();
+        allPicturesPath() = DatabaseAccess().db()->getDirtyOrMissingFingerprintURLs();
     }
 }
 
@@ -65,7 +65,7 @@ void FingerPrintsGenerator::processOne()
 {
     if (!checkToContinue()) return;
 
-    QString path = allPicturePath().first();
+    QString path = allPicturesPath().first();
     LoadingDescription description(path, HaarIface::preferredSize(), LoadingDescription::ConvertToSRGB);
     description.rawDecodingSettings.rawPrm.sixteenBitsImage = false;
     previewLoadThread()->load(description);

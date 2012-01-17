@@ -305,6 +305,13 @@ public:
         return mTransactions.isEmpty();
     }
 
+    /** @return the progressitem for this id if it exist, else null.
+     */
+    ProgressItem* findItembyId(const QString& id) const
+    {
+        return mTransactions.value(id);
+    }
+
     /**
      * @return the only top level progressitem when there's only one.
      * Returns 0 if there is no item, or more than one top level item.
@@ -405,11 +412,9 @@ public:
      *
      * @param t The process to add on manager.
      * @param parent Specify an already existing item as the parent of this one (can be null).
+     * @return true if ProgressItem have been added to manager, else false.
      */
-    static void addProgressItem(ProgressItem* t, ProgressItem* parent=0)
-    {
-        instance()->addProgressItemImpl(t, parent);
-    }
+    static bool addProgressItem(ProgressItem* t, ProgressItem* parent=0);
 
     /**
      * Ask all listeners to show the progress dialog, because there is

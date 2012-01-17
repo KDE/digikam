@@ -30,6 +30,8 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kapplication.h>
+#include <kmessagebox.h>
 
 namespace Digikam
 {
@@ -86,12 +88,12 @@ void ProgressItem::addChild(ProgressItem * kiddo)
 
 void ProgressItem::removeChild(ProgressItem* kiddo)
 {
-    mChildren.remove( kiddo );
-    
+    mChildren.remove(kiddo);
+
     // in case we were waiting for the last kid to go away, now is the time
-    if ( mChildren.count() == 0 && mWaitingForKids )
+    if (mChildren.count() == 0 && mWaitingForKids)
     {
-        emit progressItemCompleted( this );
+        emit progressItemCompleted(this);
         deleteLater();
     }
 }
@@ -196,8 +198,8 @@ ProgressItem* ProgressManager::createProgressItemImpl(ProgressItem* parent,
                                                      )
 {
     ProgressItem* t = 0;
-    
-    if ( !mTransactions.value( id ) )
+
+    if ( !findItembyId(id))
     {
         t = new ProgressItem(parent, id, label, status, cancellable, hasThumb);
         addProgressItemImpl(t, parent);
@@ -205,7 +207,7 @@ ProgressItem* ProgressManager::createProgressItemImpl(ProgressItem* parent,
     else
     {
         // Hm, is this what makes the most sense?
-        t = mTransactions.value( id );
+        t = findItembyId(id);
     }
     return t;
 }
@@ -218,8 +220,24 @@ ProgressItem* ProgressManager::createProgressItemImpl(const QString& parent,
                                                       bool  hasThumb
                                                      )
 {
-    ProgressItem* p = mTransactions.value(parent);
+    ProgressItem* p = findItembyId(parent);
     return createProgressItemImpl(p, id, label, status, canBeCanceled, hasThumb);
+}
+
+bool ProgressManager::addProgressItem(ProgressItem* t, ProgressItem* parent)
+{
+    if (!instance()->findItembyId(t->id()))
+    {
+        instance()->addProgressItemImpl(t, parent);
+        return true;
+    }
+    else
+    {
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("A tool named \"%1\" is already running....", t->label()));
+        t->setComplete();
+        return false;
+    }
 }
 
 void ProgressManager::addProgressItemImpl(ProgressItem* t, ProgressItem* parent)
@@ -227,10 +245,10 @@ void ProgressManager::addProgressItemImpl(ProgressItem* t, ProgressItem* parent)
     mTransactions.insert(t->id(), t);
     if (parent)
     {
-        ProgressItem* p = mTransactions.value( parent->id() );
-        if ( p )
+        ProgressItem* p = findItembyId(parent->id());
+        if (p)
         {
-            p->addChild( t );
+            p->addChild(t);
         }
     }
 
@@ -268,8 +286,8 @@ void ProgressManager::emitShowProgressViewImpl()
 
 void ProgressManager::slotTransactionCompleted(ProgressItem* item)
 {
-    mTransactions.remove( item->id() );
-    emit progressItemCompleted( item );
+    mTransactions.remove(item->id());
+    emit progressItemCompleted(item);
 }
 
 void ProgressManager::slotStandardCancelHandler(ProgressItem* item)
@@ -279,8 +297,8 @@ void ProgressManager::slotStandardCancelHandler(ProgressItem* item)
 
 ProgressItem* ProgressManager::singleItem() const
 {
-    ProgressItem* item                                 = 0;
-    QHash< QString, ProgressItem* >::const_iterator it = mTransactions.constBegin();
+    ProgressItem* item                               = 0;
+    QHash<QString, ProgressItem*>::const_iterator it = mTransactions.constBegin();
     while ( it != mTransactions.constEnd() )
     {
         // No single item for progress possible, as one of them is a busy indicator one.

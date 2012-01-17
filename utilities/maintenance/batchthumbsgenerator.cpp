@@ -42,7 +42,7 @@ namespace Digikam
 {
 
 BatchThumbsGenerator::BatchThumbsGenerator(Mode mode, int albumId)
-    : MaintenanceTool(mode, albumId)
+    : MaintenanceTool("BatchThumbsGenerator", mode, albumId)
 {
     setTitle(i18n("Thumbs"));
 }
@@ -53,7 +53,7 @@ BatchThumbsGenerator::~BatchThumbsGenerator()
 
 void BatchThumbsGenerator::listItemstoProcess()
 {
-    QStringList& all = allPicturePath();
+    QStringList& all = allPicturesPath();
 
 #ifdef USE_THUMBS_DB
 
@@ -84,7 +84,7 @@ void BatchThumbsGenerator::processOne()
 {
     if (!checkToContinue()) return;
 
-    QString path = allPicturePath().first();
+    QString path = allPicturesPath().first();
     thumbsLoadThread()->deleteThumbnail(path);
     thumbsLoadThread()->find(path);
 }
