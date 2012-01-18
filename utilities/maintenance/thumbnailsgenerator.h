@@ -26,12 +26,12 @@
 
 // Local includes
 
-#include "maintenancetool.h"
+#include "maintenancethumbtool.h"
 
 namespace Digikam
 {
 
-class ThumbnailsGenerator : public MaintenanceTool
+class ThumbnailsGenerator : public MaintenanceThumbTool
 {
     Q_OBJECT
 

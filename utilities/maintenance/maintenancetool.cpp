@@ -67,7 +67,6 @@ public:
         cancel(false),
         mode(MaintenanceTool::AllItems),
         albumId(-1),
-        thumbLoadThread(0),
         previewLoadThread(0)
     {
         duration.start();
@@ -75,12 +74,14 @@ public:
 
     bool                  cancel;
     QTime                 duration;
+
+    // Managed by thumbLoadThread or previewLoadThread as items processors.
     QStringList           allPicturesPath;
 
     MaintenanceTool::Mode mode;
     int                   albumId;
 
-    ThumbnailLoadThread*  thumbLoadThread;
+    // Items processors.
     PreviewLoadThread*    previewLoadThread;
 };
 
@@ -100,11 +101,6 @@ MaintenanceTool::MaintenanceTool(const QString& id, Mode mode, int albumId)
 
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(LoadingDescription, DImg)),
             this, SLOT(slotGotImagePreview(LoadingDescription, DImg)));
-
-    d->thumbLoadThread   = ThumbnailLoadThread::defaultThread();
-
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
-            this, SLOT(slotGotThumbnail(LoadingDescription, QPixmap)));
 
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
@@ -137,19 +133,19 @@ void MaintenanceTool::setTitle(const QString& title)
     setLabel(label);
 }
 
+bool MaintenanceTool::cancel() const
+{
+    return d->cancel;
+}
+
 QStringList& MaintenanceTool::allPicturesPath()
 {
     return d->allPicturesPath;
 }
 
-MaintenanceTool::Mode MaintenanceTool::mode()
+MaintenanceTool::Mode MaintenanceTool::mode() const
 {
     return d->mode;
-}
-
-ThumbnailLoadThread* MaintenanceTool::thumbsLoadThread() const
-{
-    return d->thumbLoadThread;
 }
 
 PreviewLoadThread* MaintenanceTool::previewLoadThread() const
@@ -219,38 +215,6 @@ void MaintenanceTool::complete()
                          i18n("Process is done.\nDuration: %1", t.toString()),
                          kapp->activeWindow(), label());
     emit signalProcessDone();
-}
-
-void MaintenanceTool::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
-{
-    if (d->cancel || d->allPicturesPath.isEmpty())
-    {
-        return;
-    }
-
-    if (d->allPicturesPath.first() != desc.filePath)
-    {
-        return;
-    }
-
-    gotNewThumbnail(desc, pix);
-
-    setThumbnail(pix);
-    advance(1);
-
-    if (!d->allPicturesPath.isEmpty())
-    {
-        d->allPicturesPath.removeFirst();
-    }
-
-    if (d->allPicturesPath.isEmpty())
-    {
-        complete();
-    }
-    else
-    {
-        processOne();
-    }
 }
 
 void MaintenanceTool::slotGotImagePreview(const LoadingDescription& desc, const DImg& img)

@@ -37,7 +37,6 @@ namespace Digikam
 
 class DImg;
 class LoadingDescription;
-class ThumbnailLoadThread;
 class PreviewLoadThread;
 
 class MaintenanceTool : public ProgressItem
@@ -58,13 +57,19 @@ public:
     MaintenanceTool(const QString& id, Mode mode=AllItems, int albumId=-1);
     virtual ~MaintenanceTool();
 
-    void setTitle(const QString& title);
-
 Q_SIGNALS:
 
     void signalProcessDone();
 
 protected:
+
+    void setTitle(const QString& title);
+
+    bool cancel() const;
+
+    /** Called when all is done. It fire signalProcessDone()
+     */
+    void complete();
 
     /** Return all paths to process. Data container can be custumized
      */
@@ -72,11 +77,7 @@ protected:
 
     /** Return mode set in contructor. see Mode enum for details
      */
-    Mode                 mode();
-
-    /** Return thumbs loader instance
-     */
-    ThumbnailLoadThread* thumbsLoadThread()  const;
+    Mode                 mode() const;
 
     /** Return preview loader instance
      */
@@ -90,11 +91,7 @@ protected:
      */
     virtual void populateAllPicturesPath();
 
-    /** Re-implement this if you want to use thumb loader items processed
-     */
-    virtual void gotNewThumbnail(const LoadingDescription&, const QPixmap&) {};
-
-    /** Re-implement this if you want to use preview loader items processed
+    /** Re-implement this if you want to use preview loader as items processor
      */
     virtual void gotNewPreview(const LoadingDescription&, const DImg&) {};
 
@@ -103,8 +100,8 @@ protected:
      */
     virtual void listItemstoProcess() = 0;
 
-    /** In this method, you can use thumb load thread or preview load thread to get item images. 
-     *  gotNewThumbnail() or gotNewPreview() will be called accordingly.
+    /** In this method, you can use thumb load thread, or preview load thread, or image info job as items processor. 
+     *  gotNewThumbnail(), or gotNewPreview() will be called accordingly.
      */
     virtual void processOne() = 0;
 
@@ -118,19 +115,9 @@ private Q_SLOTS:
      */
     void slotCancel();
 
-    /** This slot call gotNewThumbnail()
-     */
-    void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
-
-    /** This slot call gotNewPreview()
+    /** Called by preview thread. This slot call gotNewPreview()
      */
     void slotGotImagePreview(const LoadingDescription&, const DImg&);
-
-private:
-
-    /** Called when all is done. It fire signalProcessDone()
-     */
-    void complete();
 
 private:
 

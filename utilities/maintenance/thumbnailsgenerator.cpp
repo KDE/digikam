@@ -42,7 +42,7 @@ namespace Digikam
 {
 
 ThumbnailsGenerator::ThumbnailsGenerator(Mode mode, int albumId)
-    : MaintenanceTool("ThumbnailsGenerator", mode, albumId)
+    : MaintenanceThumbTool("ThumbnailsGenerator", mode, albumId)
 {
     setTitle(i18n("Thumbs"));
 }
