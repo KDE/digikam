@@ -80,9 +80,10 @@ class AlbumSelectionTreeView::AlbumSelectionTreeViewContextMenuElement
 {
 public:
 
-    AlbumSelectionTreeViewContextMenuElement(AlbumSelectionTreeView::AlbumSelectionTreeViewPriv *d)
+    AlbumSelectionTreeViewContextMenuElement(AlbumSelectionTreeView::AlbumSelectionTreeViewPriv* d)
         : d(d)
-    {}
+    {
+    }
 
     virtual void addActions(AbstractAlbumTreeView* view, ContextMenuHelper& cmh, Album* album);
 
@@ -156,10 +157,11 @@ void AlbumSelectionTreeView::setEnableToolTips(bool enable)
     d->enableToolTips = enable;
 }
 
-void AlbumSelectionTreeView::AlbumSelectionTreeViewContextMenuElement::
-     addActions(AbstractAlbumTreeView*, ContextMenuHelper& cmh, Album* a)
+void AlbumSelectionTreeView::AlbumSelectionTreeViewContextMenuElement::addActions(AbstractAlbumTreeView*,
+                                                                                  ContextMenuHelper& cmh,
+                                                                                  Album* a)
 {
-    PAlbum* album = dynamic_cast<PAlbum*> (a);
+    PAlbum* album = dynamic_cast<PAlbum*>(a);
 
     if (!album)
     {
@@ -199,7 +201,7 @@ void AlbumSelectionTreeView::slotFindDuplicates()
 
 void AlbumSelectionTreeView::slotRebuildThumbs()
 {
-    PAlbum *album = d->albumModificationHelper->boundAlbum(sender());
+    PAlbum* album = d->albumModificationHelper->boundAlbum(sender());
     if (!album)
     {
         return;
