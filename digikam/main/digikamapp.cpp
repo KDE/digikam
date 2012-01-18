@@ -111,7 +111,7 @@
 #include "albumselectdialog.h"
 #include "albumthumbnailloader.h"
 #include "batchalbumssyncmetadata.h"
-#include "batchthumbsgenerator.h"
+#include "thumbnailsgenerator.h"
 #include "cameratype.h"
 #include "cameraui.h"
 #include "cameranamehelper.h"
@@ -3017,12 +3017,12 @@ void DigikamApp::slotRebuildThumbnails()
 
 void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
 {
-    new BatchThumbsGenerator(rebuildAll ? MaintenanceTool::AllItems : MaintenanceTool::MissingItems);
+    new ThumbnailsGenerator(rebuildAll ? MaintenanceTool::AllItems : MaintenanceTool::MissingItems);
 }
 
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
-    new BatchThumbsGenerator(MaintenanceTool::AlbumItems, AlbumManager::instance()->currentAlbum()->id());
+    new ThumbnailsGenerator(MaintenanceTool::AlbumItems, AlbumManager::instance()->currentAlbum()->id());
 }
 
 void DigikamApp::slotGenerateFingerPrintsFirstTime()

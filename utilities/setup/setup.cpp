@@ -42,7 +42,7 @@
 // Local includes
 
 #include "albumsettings.h"
-#include "batchthumbsgenerator.h"
+#include "thumbnailsgenerator.h"
 #include "setupalbumview.h"
 #include "setupcamera.h"
 #include "setupcategory.h"
@@ -503,7 +503,7 @@ void Setup::okClicked()
             return;
         }
 
-        new BatchThumbsGenerator();
+        new ThumbnailsGenerator();
     }
 
     accept();
@@ -699,8 +699,8 @@ KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
 
         case Setup::VersioningPage:
             return page_versioning;
-#ifdef USE_SCRIPT_IFACE
 
+#ifdef USE_SCRIPT_IFACE
         case Setup::ScriptManagerPage:
             return page_scriptmanager;
 #endif

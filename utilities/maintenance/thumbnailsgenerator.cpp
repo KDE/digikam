@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "batchthumbsgenerator.moc"
+#include "thumbnailsgenerator.moc"
 
 // Qt includes
 
@@ -41,17 +41,17 @@
 namespace Digikam
 {
 
-BatchThumbsGenerator::BatchThumbsGenerator(Mode mode, int albumId)
-    : MaintenanceTool("BatchThumbsGenerator", mode, albumId)
+ThumbnailsGenerator::ThumbnailsGenerator(Mode mode, int albumId)
+    : MaintenanceTool("ThumbnailsGenerator", mode, albumId)
 {
     setTitle(i18n("Thumbs"));
 }
 
-BatchThumbsGenerator::~BatchThumbsGenerator()
+ThumbnailsGenerator::~ThumbnailsGenerator()
 {
 }
 
-void BatchThumbsGenerator::listItemstoProcess()
+void ThumbnailsGenerator::listItemstoProcess()
 {
     QStringList& all = allPicturesPath();
 
@@ -80,7 +80,7 @@ void BatchThumbsGenerator::listItemstoProcess()
 
 }
 
-void BatchThumbsGenerator::processOne()
+void ThumbnailsGenerator::processOne()
 {
     if (!checkToContinue()) return;
 

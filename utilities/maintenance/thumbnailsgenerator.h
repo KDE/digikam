@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BATCHTHUMBSGENERATOR_H
-#define BATCHTHUMBSGENERATOR_H
+#ifndef THUMBNAILSGENERATOR_H
+#define THUMBNAILSGENERATOR_H
 
 // Local includes
 
@@ -31,14 +31,14 @@
 namespace Digikam
 {
 
-class BatchThumbsGenerator : public MaintenanceTool
+class ThumbnailsGenerator : public MaintenanceTool
 {
     Q_OBJECT
 
 public:
 
-    BatchThumbsGenerator(Mode mode=AllItems, int albumId=-1);
-    ~BatchThumbsGenerator();
+    ThumbnailsGenerator(Mode mode=AllItems, int albumId=-1);
+    ~ThumbnailsGenerator();
 
 private:
 
@@ -48,4 +48,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* BATCHTHUMBSGENERATOR_H */
+#endif /* THUMBNAILSGENERATOR_H */
