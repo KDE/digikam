@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "maintenancetool.h"
+#include "maintenancepictpathtool.h"
 
 namespace Digikam
 {
@@ -35,7 +35,7 @@ class DImg;
 class LoadingDescription;
 class PreviewLoadThread;
 
-class MaintenancePreviewTool : public MaintenanceTool
+class MaintenancePreviewTool : public MaintenancePictPathTool
 {
     Q_OBJECT
 
@@ -48,7 +48,7 @@ protected:
 
     /** Return preview loader instance
      */
-    PreviewLoadThread*   previewLoadThread() const;
+    PreviewLoadThread* previewLoadThread() const;
 
     /** Re-implement this if you want to use preview loader as items processor
      */

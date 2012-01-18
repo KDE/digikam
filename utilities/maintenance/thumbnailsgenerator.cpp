@@ -51,7 +51,7 @@ ThumbnailsGenerator::~ThumbnailsGenerator()
 {
 }
 
-void ThumbnailsGenerator::listItemstoProcess()
+void ThumbnailsGenerator::filterItemstoProcess()
 {
     QStringList& all = allPicturesPath();
 

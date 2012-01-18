@@ -65,11 +65,9 @@ public:
 
     bool                  cancel;
     QTime                 duration;
-
-    // Managed by thumbLoadThread or previewLoadThread as items processors.
-    QStringList           allPicturesPath;
-
     MaintenanceTool::Mode mode;
+
+    QStringList           allPicturesPath;
     int                   albumId;
 };
 
@@ -82,8 +80,8 @@ MaintenanceTool::MaintenanceTool(const QString& id, Mode mode, int albumId)
                    true),
       d(new MaintenanceToolPriv)
 {
-    d->mode              = mode;
-    d->albumId           = albumId;
+    d->mode    = mode;
+    d->albumId = albumId;
 
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
@@ -121,6 +119,11 @@ bool MaintenanceTool::cancel() const
     return d->cancel;
 }
 
+int MaintenanceTool::albumId() const
+{
+    return d->albumId;
+}
+
 QStringList& MaintenanceTool::allPicturesPath()
 {
     return d->allPicturesPath;
@@ -134,10 +137,10 @@ MaintenanceTool::Mode MaintenanceTool::mode() const
 void MaintenanceTool::slotRun()
 {
     if (ProgressManager::addProgressItem(this))
-        populateAllPicturesPath();
+        populateItemsToProcess();
 }
 
-void MaintenanceTool::populateAllPicturesPath()
+void MaintenanceTool::populateItemsToProcess()
 {
     // Get all digiKam albums collection pictures path.
     AlbumList palbumList;
@@ -162,7 +165,7 @@ void MaintenanceTool::populateAllPicturesPath()
         d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
     }
 
-    listItemstoProcess();
+    filterItemstoProcess();
 
     if (d->allPicturesPath.isEmpty())
     {
@@ -176,7 +179,7 @@ void MaintenanceTool::populateAllPicturesPath()
 
 bool MaintenanceTool::checkToContinue() const
 {
-    if (d->cancel || d->allPicturesPath.isEmpty())
+    if (cancel() || isEmpty())
     {
         return false;
     }

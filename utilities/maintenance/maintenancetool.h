@@ -63,6 +63,8 @@ protected:
 
     bool cancel() const;
 
+    int albumId() const;
+
     /** Called when all is done. It fire signalProcessDone().
      */
     void complete();
@@ -79,28 +81,33 @@ protected:
      */
     bool                 checkToContinue() const;
 
-    /** Called by slotRun() to populate all pictures path to process.
+    /** Called by slotRun() to populate all item to process.
      */
-    virtual void populateAllPicturesPath();
+    virtual void populateItemsToProcess();
 
-    /** In this method, you can filter items to manage, hosted by allPicturePath(). These paths will be 
-     *  used calling processOne().
+    /** In this method, you can filter items to process.
      */
-    virtual void listItemstoProcess() = 0;
+    virtual void filterItemstoProcess() {};
 
-    /** In this method, you can customize your items processor.
+    /** Return true is list of items to process is empty.
+     */
+    virtual bool isEmpty() const = 0;
+
+    /** In this method, you must customize your items processor.
      */
     virtual void processOne() = 0;
+
+protected Q_SLOTS:
+
+    /** This slot is called when user cancel tool from gui.
+     */
+    void slotCancel();
 
 private Q_SLOTS:
 
     /** This slot call listItemstoProcess() when tool is started.
      */
     void slotRun();
-
-    /** This slot is called when user cancel tool from gui.
-     */
-    void slotCancel();
 
 private:
 

@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2008-05-16
- * Description : finger-prints generator
+ * Date        : 2012-01-16
+ * Description : Maintenance tool using picture paths list
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,43 +21,44 @@
  *
  * ============================================================ */
 
-#ifndef FINGERPRINTSGENERATOR_H
-#define FINGERPRINTSGENERATOR_H
+#ifndef MAINTENANCEPICTPATHTOOL_H
+#define MAINTENANCEPICTPATHTOOL_H
+
+// Qt includes
+
+#include <QString>
 
 // Local includes
 
-#include "maintenancepreviewtool.h"
-#include "haariface.h"
+#include "maintenancetool.h"
 
 namespace Digikam
 {
 
-class DImg;
-class LoadingDescription;
-
-class FingerPrintsGenerator : public MaintenancePreviewTool
+class MaintenancePictPathTool : public MaintenanceTool
 {
     Q_OBJECT
 
 public:
 
-    FingerPrintsGenerator(Mode mode=AllItems, int albumId=-1);
-    ~FingerPrintsGenerator();
+    MaintenancePictPathTool(const QString& id, Mode mode=AllItems, int albumId=-1);
+    virtual ~MaintenancePictPathTool();
+
+protected:
+
+    /** Return all paths to process. Data container can be customized.
+     */
+    QStringList& allPicturesPath();
+
+    void populateItemsToProcess();
+    bool isEmpty() const;
 
 private:
 
-    void filterItemstoProcess();
-    void processOne();
-
-private Q_SLOTS:
-
-    void gotNewPreview(const LoadingDescription&, const DImg&);
-
-private:
-
-    HaarIface m_haarIface;
+    class MaintenancePictPathToolPriv;
+    MaintenancePictPathToolPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* FINGERPRINTSGENERATOR_H */
+#endif /* MAINTENANCEPICTPATHTOOL_H */

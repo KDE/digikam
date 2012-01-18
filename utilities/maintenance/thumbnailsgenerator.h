@@ -42,7 +42,7 @@ public:
 
 private:
 
-    void listItemstoProcess();
+    void filterItemstoProcess();
     void processOne();
 };
 

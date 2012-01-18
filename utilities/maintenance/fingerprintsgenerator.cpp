@@ -53,7 +53,7 @@ FingerPrintsGenerator::~FingerPrintsGenerator()
 {
 }
 
-void FingerPrintsGenerator::listItemstoProcess()
+void FingerPrintsGenerator::filterItemstoProcess()
 {
     if (mode() == MaintenanceTool::MissingItems)
     {

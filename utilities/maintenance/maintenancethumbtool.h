@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "maintenancetool.h"
+#include "maintenancepictpathtool.h"
 
 namespace Digikam
 {
@@ -38,7 +38,7 @@ namespace Digikam
 class LoadingDescription;
 class ThumbnailLoadThread;
 
-class MaintenanceThumbTool : public MaintenanceTool
+class MaintenanceThumbTool : public MaintenancePictPathTool
 {
     Q_OBJECT
 

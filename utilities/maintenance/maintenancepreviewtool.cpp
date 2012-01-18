@@ -56,7 +56,7 @@ public:
 };
 
 MaintenancePreviewTool::MaintenancePreviewTool(const QString& id, Mode mode, int albumId)
-    : MaintenanceTool(id, mode, albumId),
+    : MaintenancePictPathTool(id, mode, albumId),
       d(new MaintenancePreviewToolPriv)
 {
     d->previewLoadThread = new PreviewLoadThread();

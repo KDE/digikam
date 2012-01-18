@@ -58,7 +58,7 @@ public:
 };
 
 MaintenanceThumbTool::MaintenanceThumbTool(const QString& id, Mode mode, int albumId)
-    : MaintenanceTool(id, mode, albumId),
+    : MaintenancePictPathTool(id, mode, albumId),
       d(new MaintenanceThumbToolPriv)
 {
     d->thumbLoadThread   = ThumbnailLoadThread::defaultThread();
