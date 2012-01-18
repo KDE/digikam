@@ -75,23 +75,6 @@ protected:
 
 // ----------------------------------------------------------------------------------------------------
 
-class AlbumSelectionTreeView::AlbumSelectionTreeViewContextMenuElement
-      : public AbstractAlbumTreeView::ContextMenuElement
-{
-public:
-
-    AlbumSelectionTreeViewContextMenuElement(AlbumSelectionTreeView::AlbumSelectionTreeViewPriv* d)
-        : d(d)
-    {
-    }
-
-    virtual void addActions(AbstractAlbumTreeView* view, ContextMenuHelper& cmh, Album* album);
-
-    AlbumSelectionTreeView::AlbumSelectionTreeViewPriv* const d;
-};
-
-// ----------------------------------------------------------------------------------------------------
-
 class AlbumSelectionTreeView::AlbumSelectionTreeViewPriv
 {
 
@@ -118,8 +101,28 @@ public:
     QAction*                                  findDuplAction;
     QAction*                                  rebuildThumbsAction;
 
+    class AlbumSelectionTreeViewContextMenuElement;
     AlbumSelectionTreeViewContextMenuElement* contextMenuElement;
 };
+
+// ----------------------------------------------------------------------------------------------------
+
+class AlbumSelectionTreeView::AlbumSelectionTreeViewPriv::AlbumSelectionTreeViewContextMenuElement
+      : public AbstractAlbumTreeView::ContextMenuElement
+{
+public:
+
+    AlbumSelectionTreeViewContextMenuElement(AlbumSelectionTreeView::AlbumSelectionTreeViewPriv* d)
+        : d(d)
+    {
+    }
+
+    virtual void addActions(AbstractAlbumTreeView* view, ContextMenuHelper& cmh, Album* album);
+
+    AlbumSelectionTreeView::AlbumSelectionTreeViewPriv* const d;
+};
+
+// ----------------------------------------------------------------------------------------------------
 
 AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* parent, AlbumModel* model,
                                                AlbumModificationHelper* albumModificationHelper)
@@ -142,7 +145,7 @@ AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* parent, AlbumModel* mode
     setEnableContextMenu(true);
     setContextMenuTitle(i18n("My Albums"));
 
-    d->contextMenuElement = new AlbumSelectionTreeViewContextMenuElement(d);
+    d->contextMenuElement = new AlbumSelectionTreeViewPriv::AlbumSelectionTreeViewContextMenuElement(d);
     addContextMenuElement(d->contextMenuElement);
 }
 
@@ -157,7 +160,8 @@ void AlbumSelectionTreeView::setEnableToolTips(bool enable)
     d->enableToolTips = enable;
 }
 
-void AlbumSelectionTreeView::AlbumSelectionTreeViewContextMenuElement::addActions(AbstractAlbumTreeView*,
+void AlbumSelectionTreeView::AlbumSelectionTreeViewPriv
+                           ::AlbumSelectionTreeViewContextMenuElement::addActions(AbstractAlbumTreeView*,
                                                                                   ContextMenuHelper& cmh,
                                                                                   Album* a)
 {

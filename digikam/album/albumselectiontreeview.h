@@ -85,8 +85,6 @@ private:
 
 private:
 
-    class AlbumSelectionTreeViewContextMenuElement;
-
     class AlbumSelectionTreeViewPriv;
     AlbumSelectionTreeViewPriv* const d;
 };
