@@ -50,6 +50,8 @@ public:
         ReadFromFileToDatabase
     };
 
+public:
+
     /** Constructor which sync all metadata pictures from an Album */
     explicit BatchSyncMetadata(Album* album, SyncDirection direction = WriteFromDatabaseToFile, QObject* parent = 0);
 

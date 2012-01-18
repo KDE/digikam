@@ -101,6 +101,23 @@ BatchSyncMetadata::~BatchSyncMetadata()
     delete d;
 }
 
+void BatchSyncMetadata::slotAbort()
+{
+    d->cancel = true;
+
+    if (d->imageInfoJob)
+    {
+        d->imageInfoJob->stop();
+    }
+}
+
+void BatchSyncMetadata::complete()
+{
+    emit signalComplete();
+}
+
+// Parse album methods -----------------------------------------------------------------------
+
 void BatchSyncMetadata::parseAlbum()
 {
     d->imageInfoJob = new ImageInfoJob;
@@ -130,6 +147,8 @@ void BatchSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
         emit startParsingList();
     }
 }
+
+// Parse info list methods -----------------------------------------------------------------------
 
 void BatchSyncMetadata::parseList()
 {
@@ -190,21 +209,6 @@ void BatchSyncMetadata::parsePicture()
     emit signalProgressValue(d->count++/(float)d->imageInfoList.count());
 
     d->imageInfoIndex++;
-}
-
-void BatchSyncMetadata::slotAbort()
-{
-    d->cancel = true;
-
-    if (d->imageInfoJob)
-    {
-        d->imageInfoJob->stop();
-    }
-}
-
-void BatchSyncMetadata::complete()
-{
-    emit signalComplete();
 }
 
 }  // namespace Digikam
