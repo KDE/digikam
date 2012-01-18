@@ -63,7 +63,7 @@ protected:
 
     bool cancel() const;
 
-    int albumId() const;
+    int  albumId() const;
 
     /** Called when all is done. It fire signalProcessDone().
      */
@@ -79,7 +79,7 @@ protected:
 
     /** Called by slotRun() to populate all item to process.
      */
-    virtual void populateItemsToProcess();
+    virtual void populateItemsToProcess() {};
 
     /** In this method, you can filter items to process.
      */

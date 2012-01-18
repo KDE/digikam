@@ -67,7 +67,6 @@ public:
     QTime                 duration;
     MaintenanceTool::Mode mode;
 
-    QStringList           allPicturesPath;
     int                   albumId;
 };
 
@@ -124,11 +123,6 @@ int MaintenanceTool::albumId() const
     return d->albumId;
 }
 
-QStringList& MaintenanceTool::allPicturesPath()
-{
-    return d->allPicturesPath;
-}
-
 MaintenanceTool::Mode MaintenanceTool::mode() const
 {
     return d->mode;
@@ -138,43 +132,6 @@ void MaintenanceTool::slotRun()
 {
     if (ProgressManager::addProgressItem(this))
         populateItemsToProcess();
-}
-
-void MaintenanceTool::populateItemsToProcess()
-{
-    // Get all digiKam albums collection pictures path.
-    AlbumList palbumList;
-
-    if (d->mode != AlbumItems)
-    {
-        palbumList  = AlbumManager::instance()->allPAlbums();
-    }
-    else
-    {
-        palbumList.append(AlbumManager::instance()->findPAlbum(d->albumId));
-    }
-
-    for (AlbumList::const_iterator it = palbumList.constBegin();
-         !d->cancel && (it != palbumList.constEnd()); ++it )
-    {
-        if (!(*it))
-        {
-            continue;
-        }
-
-        d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
-    }
-
-    filterItemstoProcess();
-
-    if (d->allPicturesPath.isEmpty())
-    {
-        slotCancel();
-        return;
-    }
-
-    setTotalItems(d->allPicturesPath.count());
-    processOne();
 }
 
 bool MaintenanceTool::checkToContinue() const
