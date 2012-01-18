@@ -69,17 +69,13 @@ protected:
      */
     void complete();
 
-    /** Return all paths to process. Data container can be customized.
-     */
-    QStringList&         allPicturesPath();
-
     /** Return mode set in contructor. see Mode enum for details.
      */
-    Mode                 mode() const;
+    Mode mode() const;
 
     /** Call this method into processOne() to check if another item must be processed.
      */
-    bool                 checkToContinue() const;
+    bool checkToContinue() const;
 
     /** Called by slotRun() to populate all item to process.
      */
