@@ -122,6 +122,42 @@ public:
     AlbumSelectionTreeView::AlbumSelectionTreeViewPriv* const d;
 };
 
+void AlbumSelectionTreeView::AlbumSelectionTreeViewPriv::AlbumSelectionTreeViewContextMenuElement
+                           ::addActions(AbstractAlbumTreeView*, ContextMenuHelper& cmh, Album* a)
+{
+    PAlbum* album = dynamic_cast<PAlbum*>(a);
+
+    if (!album)
+    {
+        return;
+    }
+
+    // --------------------------------------------------------
+    cmh.addActionNewAlbum(d->albumModificationHelper, album);
+    cmh.addAction("album_openinfilemanager");
+    cmh.addAction("album_openinterminal");
+    cmh.addSeparator();
+    // --------------------------------------------------------
+    cmh.addActionRenameAlbum(d->albumModificationHelper, album);
+    cmh.addActionResetAlbumIcon(d->albumModificationHelper, album);
+    cmh.addSeparator();
+    // --------------------------------------------------------
+    cmh.addAction(d->findDuplAction);
+    d->albumModificationHelper->bindAlbum(d->findDuplAction, album);
+    cmh.addAction(d->rebuildThumbsAction);
+    d->albumModificationHelper->bindAlbum(d->rebuildThumbsAction, album);
+    cmh.addImportMenu();
+    cmh.addExportMenu();
+    cmh.addBatchMenu();
+    cmh.addAlbumActions();
+    cmh.addSeparator();
+    // --------------------------------------------------------
+    cmh.addActionDeleteAlbum(d->albumModificationHelper, album);
+    cmh.addSeparator();
+    // --------------------------------------------------------
+    cmh.addActionEditAlbum(d->albumModificationHelper, album);
+}
+
 // ----------------------------------------------------------------------------------------------------
 
 AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* parent, AlbumModel* model,
@@ -158,44 +194,6 @@ AlbumSelectionTreeView::~AlbumSelectionTreeView()
 void AlbumSelectionTreeView::setEnableToolTips(bool enable)
 {
     d->enableToolTips = enable;
-}
-
-void AlbumSelectionTreeView::AlbumSelectionTreeViewPriv
-                           ::AlbumSelectionTreeViewContextMenuElement::addActions(AbstractAlbumTreeView*,
-                                                                                  ContextMenuHelper& cmh,
-                                                                                  Album* a)
-{
-    PAlbum* album = dynamic_cast<PAlbum*>(a);
-
-    if (!album)
-    {
-        return;
-    }
-
-    // --------------------------------------------------------
-    cmh.addActionNewAlbum(d->albumModificationHelper, album);
-    cmh.addAction("album_openinfilemanager");
-    cmh.addAction("album_openinterminal");
-    cmh.addSeparator();
-    // --------------------------------------------------------
-    cmh.addActionRenameAlbum(d->albumModificationHelper, album);
-    cmh.addActionResetAlbumIcon(d->albumModificationHelper, album);
-    cmh.addSeparator();
-    // --------------------------------------------------------
-    cmh.addAction(d->findDuplAction);
-    d->albumModificationHelper->bindAlbum(d->findDuplAction, album);
-    cmh.addAction(d->rebuildThumbsAction);
-    d->albumModificationHelper->bindAlbum(d->rebuildThumbsAction, album);
-    cmh.addImportMenu();
-    cmh.addExportMenu();
-    cmh.addBatchMenu();
-    cmh.addAlbumActions();
-    cmh.addSeparator();
-    // --------------------------------------------------------
-    cmh.addActionDeleteAlbum(d->albumModificationHelper, album);
-    cmh.addSeparator();
-    // --------------------------------------------------------
-    cmh.addActionEditAlbum(d->albumModificationHelper, album);
 }
 
 void AlbumSelectionTreeView::slotFindDuplicates()
