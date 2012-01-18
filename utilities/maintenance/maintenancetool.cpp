@@ -44,7 +44,6 @@
 #include "albumdb.h"
 #include "albuminfo.h"
 #include "albummanager.h"
-#include "imageinfo.h"
 #include "databaseaccess.h"
 #include "knotificationwrapper.h"
 
@@ -67,10 +66,11 @@ public:
     QTime                 duration;
     MaintenanceTool::Mode mode;
 
+    ImageInfoList         imagesList;
     int                   albumId;
 };
 
-MaintenanceTool::MaintenanceTool(const QString& id, Mode mode, int albumId)
+MaintenanceTool::MaintenanceTool(const QString& id, Mode mode, int albumId, const ImageInfoList& list)
     : ProgressItem(0,
                    id,
                    QString(),
@@ -79,8 +79,9 @@ MaintenanceTool::MaintenanceTool(const QString& id, Mode mode, int albumId)
                    true),
       d(new MaintenanceToolPriv)
 {
-    d->mode    = mode;
-    d->albumId = albumId;
+    d->mode       = mode;
+    d->albumId    = albumId;
+    d->imagesList = list;
 
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
@@ -108,6 +109,9 @@ void MaintenanceTool::setTitle(const QString& title)
         case AlbumItems:
             label.append(i18n("process album items"));
             break;
+        case ItemsList:
+            label.append(i18n("process items selection"));
+            break;
     }
 
     setLabel(label);
@@ -121,6 +125,11 @@ bool MaintenanceTool::cancel() const
 int MaintenanceTool::albumId() const
 {
     return d->albumId;
+}
+
+ImageInfoList MaintenanceTool::imagesList() const
+{
+    return d->imagesList;
 }
 
 MaintenanceTool::Mode MaintenanceTool::mode() const

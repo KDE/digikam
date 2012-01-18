@@ -70,17 +70,24 @@ public:
     BatchAlbumsStatus   status;
 };
 
-MaintenanceImgInfJobTool::MaintenanceImgInfJobTool(const QString& id, Mode mode, int albumId)
-    : MaintenanceTool(id, mode, albumId),
+MaintenanceImgInfJobTool::MaintenanceImgInfJobTool(const QString& id, Mode mode, int albumId, const ImageInfoList& list)
+    : MaintenanceTool(id, mode, albumId, list),
       d(new MaintenanceImgInfJobToolPriv)
 {
-    d->imageInfoJob = new ImageInfoJob();
+    if (mode == AllItems)
+    {
+        d->imageInfoJob = new ImageInfoJob();
 
-    connect(d->imageInfoJob, SIGNAL(signalItemsInfo(ImageInfoList)),
-            this, SLOT(slotAlbumItemsInfo(ImageInfoList)));
+        connect(d->imageInfoJob, SIGNAL(signalItemsInfo(ImageInfoList)),
+                this, SLOT(slotAlbumItemsInfo(ImageInfoList)));
 
-    connect(d->imageInfoJob, SIGNAL(signalCompleted()),
-            this, SLOT(slotOneAlbumComplete()));
+        connect(d->imageInfoJob, SIGNAL(signalCompleted()),
+                this, SLOT(slotOneAlbumComplete()));
+    }
+    else if (mode == ItemsList)
+    {
+        gotNewImageInfoList(list);
+    }
 }
 
 MaintenanceImgInfJobTool::~MaintenanceImgInfJobTool()

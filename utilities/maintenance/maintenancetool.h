@@ -31,6 +31,7 @@
 // Local includes
 
 #include "progressmanager.h"
+#include "imageinfo.h"
 
 namespace Digikam
 {
@@ -45,12 +46,14 @@ public:
     {
         AllItems = 0,  /// Process all items from whole collections
         MissingItems,  /// Process missing items from whole collections
-        AlbumItems     /// Process items from current album set by albumId
+        AlbumItems,    /// Process items from current album set by albumId
+        ItemsList      /// Process items from current selection set by imagesList
     };
 
 public:
 
-    MaintenanceTool(const QString& id, Mode mode=AllItems, int albumId=-1);
+    MaintenanceTool(const QString& id, Mode mode=AllItems, int albumId=-1,
+                    const ImageInfoList& list=ImageInfoList());
     virtual ~MaintenanceTool();
 
 Q_SIGNALS:
@@ -63,7 +66,8 @@ protected:
 
     bool cancel() const;
 
-    int  albumId() const;
+    int           albumId() const;
+    ImageInfoList imagesList() const;
 
     /** Called when all is done. It fire signalProcessDone().
      */

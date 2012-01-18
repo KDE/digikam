@@ -42,7 +42,8 @@ class MaintenanceImgInfJobTool : public MaintenanceTool
 
 public:
 
-    MaintenanceImgInfJobTool(const QString& id, Mode mode=AllItems, int albumId=-1);
+    MaintenanceImgInfJobTool(const QString& id, Mode mode=AllItems, int albumId=-1,
+                             const ImageInfoList& list=ImageInfoList());
     virtual ~MaintenanceImgInfJobTool();
 
 protected:
