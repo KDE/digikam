@@ -85,6 +85,7 @@ MaintenanceImgInfJobTool::MaintenanceImgInfJobTool(const QString& id, Mode mode,
 
 MaintenanceImgInfJobTool::~MaintenanceImgInfJobTool()
 {
+    delete d->imageInfoJob;
     delete d;
 }
 
