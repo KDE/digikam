@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QPixmap>
+#include <QString>
 
 // Local includes
 
@@ -34,10 +34,6 @@
 
 namespace Digikam
 {
-
-class DImg;
-class LoadingDescription;
-class PreviewLoadThread;
 
 class MaintenanceTool : public ProgressItem
 {
@@ -79,10 +75,6 @@ protected:
      */
     Mode                 mode() const;
 
-    /** Return preview loader instance
-     */
-    PreviewLoadThread*   previewLoadThread() const;
-
     /** Call this method into processOne() to check if another item must be processed
      */
     bool                 checkToContinue() const;
@@ -90,10 +82,6 @@ protected:
     /** Called by slotRun() to populate all pictures path to process.
      */
     virtual void populateAllPicturesPath();
-
-    /** Re-implement this if you want to use preview loader as items processor
-     */
-    virtual void gotNewPreview(const LoadingDescription&, const DImg&) {};
 
     /** In this method, you can filter items to manage, hosted by allPicturePath(). These paths will be 
      *  used calling processOne().
@@ -114,10 +102,6 @@ private Q_SLOTS:
     /** This slot is called when user cancel tool from gui
      */
     void slotCancel();
-
-    /** Called by preview thread. This slot call gotNewPreview()
-     */
-    void slotGotImagePreview(const LoadingDescription&, const DImg&);
 
 private:
 

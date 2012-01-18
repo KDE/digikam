@@ -24,10 +24,6 @@
 #ifndef MAINTENANCEPREVIEWTOOL_H
 #define MAINTENANCEPREVIEWTOOL_H
 
-// Qt includes
-
-#include <QString>
-
 // Local includes
 
 #include "maintenancetool.h"

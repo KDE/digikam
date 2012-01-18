@@ -41,7 +41,6 @@
 #include "thumbnailsize.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
-#include "knotificationwrapper.h"
 
 namespace Digikam
 {

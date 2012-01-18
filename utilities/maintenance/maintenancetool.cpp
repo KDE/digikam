@@ -25,7 +25,6 @@
 
 // Qt includes
 
-#include <QString>
 #include <QTimer>
 #include <QDir>
 #include <QFileInfo>
@@ -38,7 +37,6 @@
 #include <kcodecs.h>
 #include <klocale.h>
 #include <kapplication.h>
-#include <kdebug.h>
 
 // Local includes
 
@@ -46,14 +44,8 @@
 #include "albumdb.h"
 #include "albuminfo.h"
 #include "albummanager.h"
-#include "databaseaccess.h"
-#include "dimg.h"
 #include "imageinfo.h"
-#include "previewloadthread.h"
-#include "thumbnailloadthread.h"
-#include "thumbnailsize.h"
-#include "thumbnaildatabaseaccess.h"
-#include "thumbnaildb.h"
+#include "databaseaccess.h"
 #include "knotificationwrapper.h"
 
 namespace Digikam
@@ -66,8 +58,7 @@ public:
     MaintenanceToolPriv() :
         cancel(false),
         mode(MaintenanceTool::AllItems),
-        albumId(-1),
-        previewLoadThread(0)
+        albumId(-1)
     {
         duration.start();
     }
@@ -80,9 +71,6 @@ public:
 
     MaintenanceTool::Mode mode;
     int                   albumId;
-
-    // Items processors.
-    PreviewLoadThread*    previewLoadThread;
 };
 
 MaintenanceTool::MaintenanceTool(const QString& id, Mode mode, int albumId)
@@ -96,11 +84,6 @@ MaintenanceTool::MaintenanceTool(const QString& id, Mode mode, int albumId)
 {
     d->mode              = mode;
     d->albumId           = albumId;
-
-    d->previewLoadThread = new PreviewLoadThread();
-
-    connect(d->previewLoadThread, SIGNAL(signalImageLoaded(LoadingDescription, DImg)),
-            this, SLOT(slotGotImagePreview(LoadingDescription, DImg)));
 
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
@@ -146,11 +129,6 @@ QStringList& MaintenanceTool::allPicturesPath()
 MaintenanceTool::Mode MaintenanceTool::mode() const
 {
     return d->mode;
-}
-
-PreviewLoadThread* MaintenanceTool::previewLoadThread() const
-{
-    return d->previewLoadThread;
 }
 
 void MaintenanceTool::slotRun()
@@ -215,39 +193,6 @@ void MaintenanceTool::complete()
                          i18n("Process is done.\nDuration: %1", t.toString()),
                          kapp->activeWindow(), label());
     emit signalProcessDone();
-}
-
-void MaintenanceTool::slotGotImagePreview(const LoadingDescription& desc, const DImg& img)
-{
-    if (d->cancel || d->allPicturesPath.isEmpty())
-    {
-        return;
-    }
-
-    if (d->allPicturesPath.first() != desc.filePath)
-    {
-        return;
-    }
-
-    gotNewPreview(desc, img);
-
-    QPixmap pix = DImg(img).smoothScale(22, 22, Qt::KeepAspectRatio).convertToPixmap();
-    setThumbnail(pix);
-    advance(1);
-
-    if (!d->allPicturesPath.isEmpty())
-    {
-        d->allPicturesPath.removeFirst();
-    }
-
-    if (d->allPicturesPath.isEmpty())
-    {
-        complete();
-    }
-    else
-    {
-        processOne();
-    }
 }
 
 void MaintenanceTool::slotCancel()

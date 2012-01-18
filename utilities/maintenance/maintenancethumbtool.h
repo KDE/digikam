@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QString>
 #include <QPixmap>
 
 // Local includes
