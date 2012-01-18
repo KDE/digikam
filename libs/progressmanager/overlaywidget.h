@@ -49,7 +49,7 @@ public:
     OverlayWidget(QWidget* alignWidget, QWidget* parent, const char* name = 0);
     ~OverlayWidget();
 
-    QWidget * alignWidget() { return mAlignWidget; }
+    QWidget* alignWidget() const { return mAlignWidget; }
     void setAlignWidget(QWidget* alignWidget);
 
 protected:
