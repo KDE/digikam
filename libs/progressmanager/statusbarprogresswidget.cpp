@@ -93,13 +93,13 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressView* progressView, QW
     connect(m_pButton, SIGNAL(clicked()),
             progressView, SLOT(slotToggleVisibility()));
 
-    connect(ProgressManager::instance(), SIGNAL(progressItemAdded(Digikam::ProgressItem*)),
-            this, SLOT( slotProgressItemAdded(Digikam::ProgressItem*)));
+    connect(ProgressManager::instance(), SIGNAL(progressItemAdded(ProgressItem*)),
+            this, SLOT( slotProgressItemAdded(ProgressItem*)));
 
-    connect(ProgressManager::instance(), SIGNAL(progressItemCompleted(Digikam::ProgressItem*)),
-            this, SLOT(slotProgressItemCompleted(Digikam::ProgressItem*)));
+    connect(ProgressManager::instance(), SIGNAL(progressItemCompleted(ProgressItem*)),
+            this, SLOT(slotProgressItemCompleted(ProgressItem*)));
 
-    connect(ProgressManager::instance(), SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*,bool)),
+    connect(ProgressManager::instance(), SIGNAL(progressItemUsesBusyIndicator(ProgressItem*,bool)),
             this, SLOT(updateBusyMode()));
 
     connect(progressView, SIGNAL(visibilityChanged(bool)),
@@ -177,15 +177,15 @@ void StatusbarProgressWidget::connectSingleItem()
 {
     if ( m_currentItem )
     {
-        disconnect(m_currentItem, SIGNAL( progressItemProgress( Digikam::ProgressItem *, unsigned int ) ),
-                   this, SLOT( slotProgressItemProgress( Digikam::ProgressItem *, unsigned int ) ) );
+        disconnect(m_currentItem, SIGNAL( progressItemProgress( ProgressItem *, unsigned int ) ),
+                   this, SLOT( slotProgressItemProgress( ProgressItem *, unsigned int ) ) );
         m_currentItem = 0;
     }
     m_currentItem = ProgressManager::instance()->singleItem();
     if ( m_currentItem )
     {
-        connect(m_currentItem, SIGNAL( progressItemProgress( Digikam::ProgressItem *, unsigned int ) ),
-                this, SLOT( slotProgressItemProgress( Digikam::ProgressItem *, unsigned int ) ) );
+        connect(m_currentItem, SIGNAL( progressItemProgress( ProgressItem *, unsigned int ) ),
+                this, SLOT( slotProgressItemProgress( ProgressItem *, unsigned int ) ) );
     }
 }
 

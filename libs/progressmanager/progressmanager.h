@@ -178,14 +178,14 @@ Q_SIGNALS:
      * Emitted when a new ProgressItem is added.
      * @param The ProgressItem that was added.
      */
-    void progressItemAdded(Digikam::ProgressItem*);
+    void progressItemAdded(ProgressItem*);
 
     /**
      * Emitted when the progress value of an item changes.
      * @param  The item which got a new value.
      * @param  The value, for convenience.
      */
-    void progressItemProgress(Digikam::ProgressItem*, unsigned int);
+    void progressItemProgress(ProgressItem*, unsigned int);
 
     /**
      * Emitted when a progress item was completed. The item will be
@@ -193,7 +193,7 @@ Q_SIGNALS:
      * chance to work with this item.
      * @param The completed item.
      */
-    void progressItemCompleted(Digikam::ProgressItem*);
+    void progressItemCompleted(ProgressItem*);
 
     /**
      * Emitted when an item was canceled. It will _not_ go away immediately,
@@ -205,7 +205,7 @@ Q_SIGNALS:
      * be done on cancel.
      * @param The canceled item;
      */
-    void progressItemCanceled(Digikam::ProgressItem*);
+    void progressItemCanceled(ProgressItem*);
 
     /**
      * Emitted when the status message of an item changed. Should be used by
@@ -213,7 +213,7 @@ Q_SIGNALS:
      * @param  The updated item.
      * @param  The new message.
      */
-    void progressItemStatus(Digikam::ProgressItem*, const QString&);
+    void progressItemStatus(ProgressItem*, const QString&);
 
     /**
      * Emitted when the label of an item changed. Should be used by
@@ -221,7 +221,7 @@ Q_SIGNALS:
      * @param  The updated item.
      * @param  The new label.
      */
-    void progressItemLabel(Digikam::ProgressItem*, const QString&);
+    void progressItemLabel(ProgressItem*, const QString&);
 
     /**
      * Emitted when the busy indicator state of an item changes. Should be used
@@ -230,16 +230,16 @@ Q_SIGNALS:
      * @param item The updated item
      * @param value True if the item uses a busy indicator now, false otherwise
      */
-    void progressItemUsesBusyIndicator(Digikam::ProgressItem* item, bool value);
+    void progressItemUsesBusyIndicator(ProgressItem* item, bool value);
 
     /**
      * Emitted when the thumbnail data must be set in item.
      * @param item The updated item
      * @param thumb thumbnail data
      */
-    void progressItemThumbnail(Digikam::ProgressItem* item, const QPixmap& thumb);
+    void progressItemThumbnail(ProgressItem* item, const QPixmap& thumb);
 
-protected:
+public:
 
     /* Only to be used by our good friend the ProgressManager */
     ProgressItem(ProgressItem* parent, const QString& id, const QString& label,
@@ -265,8 +265,13 @@ private:
     friend class ProgressManager;
 };
 
+} //namespace Digikam
+
 // --------------------------------------------------------------------------------------------
 
+namespace Digikam
+{
+    
 struct ProgressManagerPrivate;
 
 /**
@@ -428,28 +433,28 @@ public:
 Q_SIGNALS:
 
     /** @see ProgressItem::progressItemAdded() */
-    void progressItemAdded(Digikam::ProgressItem*);
+    void progressItemAdded(ProgressItem*);
 
     /** @see ProgressItem::progressItemProgress() */
-    void progressItemProgress(Digikam::ProgressItem*, unsigned int);
+    void progressItemProgress(ProgressItem*, unsigned int);
 
     /** @see ProgressItem::progressItemCompleted() */
-    void progressItemCompleted(Digikam::ProgressItem*);
+    void progressItemCompleted(ProgressItem*);
 
     /** @see ProgressItem::progressItemCanceled() */
-    void progressItemCanceled(Digikam::ProgressItem*);
+    void progressItemCanceled(ProgressItem*);
 
     /** @see ProgressItem::progressItemStatus() */
-    void progressItemStatus(Digikam::ProgressItem*, const QString&);
+    void progressItemStatus(ProgressItem*, const QString&);
 
     /** @see ProgressItem::progressItemLabel() */
-    void progressItemLabel(Digikam::ProgressItem*, const QString&);
+    void progressItemLabel(ProgressItem*, const QString&);
 
     /** @see ProgressItem::progressItemUsesBusyIndicator */
-    void progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool);
+    void progressItemUsesBusyIndicator(ProgressItem*, bool);
 
     /** @see ProgressItem::progressItemThumbnail */
-    void progressItemThumbnail(Digikam::ProgressItem*, const QPixmap&);
+    void progressItemThumbnail(ProgressItem*, const QPixmap&);
 
     /**
      * Emitted when an operation requests the listeners to be shown.
@@ -464,7 +469,7 @@ public Q_SLOTS:
      * Provided for convenience.
      * @param item the canceled item.
      */
-    void slotStandardCancelHandler(Digikam::ProgressItem* item);
+    void slotStandardCancelHandler(ProgressItem* item);
 
     /**
      * Aborts all running jobs. Bound to "Esc"
@@ -473,7 +478,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void slotTransactionCompleted(Digikam::ProgressItem* item);
+    void slotTransactionCompleted(ProgressItem* item);
 
 private:
 

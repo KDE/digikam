@@ -33,6 +33,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "progressmanager.h"
 
 class QBoxLayout;
 class QEvent;
@@ -60,9 +61,9 @@ public Q_SLOTS:
 
     void slotClean();
 
-    void slotProgressItemAdded(Digikam::ProgressItem* i);
-    void slotProgressItemCompleted(Digikam::ProgressItem* i);
-    void slotProgressItemProgress(Digikam::ProgressItem* i, unsigned int value );
+    void slotProgressItemAdded(ProgressItem* i);
+    void slotProgressItemCompleted(ProgressItem* i);
+    void slotProgressItemProgress(ProgressItem* i, unsigned int value );
 
 protected Q_SLOTS:
 

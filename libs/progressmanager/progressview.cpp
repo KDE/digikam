@@ -133,7 +133,7 @@ void TransactionItemView::slotLayoutFirstItem()
         be the first item very shortly. That's the one we want to remove the
         hline for.
     */
-    TransactionItem* ti = mBigBox->findChild<Digikam::TransactionItem*>("TransactionItem");
+    TransactionItem* ti = mBigBox->findChild<TransactionItem*>("TransactionItem");
     if ( ti )
     {
         ti->hideHLine();
@@ -280,26 +280,26 @@ ProgressView::ProgressView(QWidget* alignWidget, QWidget* parent, const char* na
     */
     ProgressManager* pm = ProgressManager::instance();
     
-    connect(pm, SIGNAL(progressItemAdded(Digikam::ProgressItem*)),
-            this, SLOT(slotTransactionAdded(Digikam::ProgressItem*)));
+    connect(pm, SIGNAL(progressItemAdded(ProgressItem*)),
+            this, SLOT(slotTransactionAdded(ProgressItem*)));
     
-    connect(pm, SIGNAL(progressItemCompleted(Digikam::ProgressItem*)),
-            this, SLOT(slotTransactionCompleted(Digikam::ProgressItem*)));
+    connect(pm, SIGNAL(progressItemCompleted(ProgressItem*)),
+            this, SLOT(slotTransactionCompleted(ProgressItem*)));
     
-    connect(pm, SIGNAL(progressItemProgress(Digikam::ProgressItem*, unsigned int)),
-            this, SLOT(slotTransactionProgress(Digikam::ProgressItem*, unsigned int)));
+    connect(pm, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)),
+            this, SLOT(slotTransactionProgress(ProgressItem*, unsigned int)));
     
-    connect(pm, SIGNAL(progressItemStatus(Digikam::ProgressItem*, const QString&)),
-            this, SLOT(slotTransactionStatus(Digikam::ProgressItem*, const QString&)));
+    connect(pm, SIGNAL(progressItemStatus(ProgressItem*, const QString&)),
+            this, SLOT(slotTransactionStatus(ProgressItem*, const QString&)));
     
-    connect(pm, SIGNAL(progressItemLabel(Digikam::ProgressItem*, const QString&)),
-            this, SLOT(slotTransactionLabel(Digikam::ProgressItem*, const QString&)));
+    connect(pm, SIGNAL(progressItemLabel(ProgressItem*, const QString&)),
+            this, SLOT(slotTransactionLabel(ProgressItem*, const QString&)));
     
-    connect(pm, SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool)),
-            this, SLOT(slotTransactionUsesBusyIndicator(Digikam::ProgressItem*, bool)));
+    connect(pm, SIGNAL(progressItemUsesBusyIndicator(ProgressItem*, bool)),
+            this, SLOT(slotTransactionUsesBusyIndicator(ProgressItem*, bool)));
 
-    connect(pm, SIGNAL(progressItemThumbnail(Digikam::ProgressItem*, const QPixmap&)),
-            this, SLOT(slotTransactionThumbnail(Digikam::ProgressItem*, const QPixmap&)));
+    connect(pm, SIGNAL(progressItemThumbnail(ProgressItem*, const QPixmap&)),
+            this, SLOT(slotTransactionThumbnail(ProgressItem*, const QPixmap&)));
     
     connect(pm, SIGNAL(showProgressView()),
             this, SLOT(slotShow()));
@@ -393,7 +393,7 @@ void ProgressView::slotTransactionLabel(ProgressItem* item, const QString& label
     }
 }
 
-void ProgressView::slotTransactionUsesBusyIndicator(Digikam::ProgressItem* item, bool value)
+void ProgressView::slotTransactionUsesBusyIndicator(ProgressItem* item, bool value)
 {
     if (mTransactionsToListviewItems.contains(item))
     {
@@ -409,7 +409,7 @@ void ProgressView::slotTransactionUsesBusyIndicator(Digikam::ProgressItem* item,
     }
 }
 
-void ProgressView::slotTransactionThumbnail(Digikam::ProgressItem* item, const QPixmap& thumb)
+void ProgressView::slotTransactionThumbnail(ProgressItem* item, const QPixmap& thumb)
 {
     if (mTransactionsToListviewItems.contains(item))
     {

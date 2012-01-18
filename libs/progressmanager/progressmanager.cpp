@@ -252,29 +252,29 @@ void ProgressManager::addProgressItemImpl(ProgressItem* t, ProgressItem* parent)
         }
     }
 
-    connect(t, SIGNAL(progressItemCompleted(Digikam::ProgressItem*)),
-            this, SLOT(slotTransactionCompleted(Digikam::ProgressItem*)));
+    connect(t, SIGNAL(progressItemCompleted(ProgressItem*)),
+            this, SLOT(slotTransactionCompleted(ProgressItem*)));
 
-    connect(t, SIGNAL(progressItemProgress(Digikam::ProgressItem*, unsigned int)),
-            this, SIGNAL(progressItemProgress(Digikam::ProgressItem*, unsigned int)));
+    connect(t, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)),
+            this, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)));
 
-    connect(t, SIGNAL(progressItemAdded(Digikam::ProgressItem*)),
-            this, SIGNAL(progressItemAdded(Digikam::ProgressItem*)));
+    connect(t, SIGNAL(progressItemAdded(ProgressItem*)),
+            this, SIGNAL(progressItemAdded(ProgressItem*)));
 
-    connect(t, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)),
-            this, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)));
+    connect(t, SIGNAL(progressItemCanceled(ProgressItem*)),
+            this, SIGNAL(progressItemCanceled(ProgressItem*)));
 
-    connect(t, SIGNAL(progressItemStatus(Digikam::ProgressItem*, const QString&)),
-            this, SIGNAL(progressItemStatus(Digikam::ProgressItem*, const QString&)));
+    connect(t, SIGNAL(progressItemStatus(ProgressItem*, const QString&)),
+            this, SIGNAL(progressItemStatus(ProgressItem*, const QString&)));
 
-    connect(t, SIGNAL(progressItemLabel(Digikam::ProgressItem*, const QString&)),
-            this, SIGNAL(progressItemLabel(Digikam::ProgressItem*, const QString&)));
+    connect(t, SIGNAL(progressItemLabel(ProgressItem*, const QString&)),
+            this, SIGNAL(progressItemLabel(ProgressItem*, const QString&)));
 
-    connect(t, SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool)),
-            this, SIGNAL(progressItemUsesBusyIndicator(Digikam::ProgressItem*, bool)));
+    connect(t, SIGNAL(progressItemUsesBusyIndicator(ProgressItem*, bool)),
+            this, SIGNAL(progressItemUsesBusyIndicator(ProgressItem*, bool)));
 
-    connect(t, SIGNAL(progressItemThumbnail(Digikam::ProgressItem*, const QPixmap&)),
-            this, SIGNAL(progressItemThumbnail(Digikam::ProgressItem*, const QPixmap&)));
+    connect(t, SIGNAL(progressItemThumbnail(ProgressItem*, const QPixmap&)),
+            this, SIGNAL(progressItemThumbnail(ProgressItem*, const QPixmap&)));
 
     emit progressItemAdded( t );
 }

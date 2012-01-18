@@ -145,14 +145,14 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void slotTransactionAdded(Digikam::ProgressItem*);
-    void slotTransactionCompleted(Digikam::ProgressItem*);
-    void slotTransactionCanceled(Digikam::ProgressItem*);
-    void slotTransactionProgress(Digikam::ProgressItem*, unsigned int progress);
-    void slotTransactionStatus(Digikam::ProgressItem*, const QString&);
-    void slotTransactionLabel(Digikam::ProgressItem*, const QString&);
-    void slotTransactionUsesBusyIndicator(Digikam::ProgressItem*, bool);
-    void slotTransactionThumbnail(Digikam::ProgressItem*, const QPixmap&);
+    void slotTransactionAdded(ProgressItem*);
+    void slotTransactionCompleted(ProgressItem*);
+    void slotTransactionCanceled(ProgressItem*);
+    void slotTransactionProgress(ProgressItem*, unsigned int progress);
+    void slotTransactionStatus(ProgressItem*, const QString&);
+    void slotTransactionLabel(ProgressItem*, const QString&);
+    void slotTransactionUsesBusyIndicator(ProgressItem*, bool);
+    void slotTransactionThumbnail(ProgressItem*, const QPixmap&);
     void slotClose();
     void slotShow();
     void slotHide();

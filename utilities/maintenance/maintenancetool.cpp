@@ -106,7 +106,7 @@ MaintenanceTool::MaintenanceTool(const QString& id, Mode mode, int albumId)
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription, QPixmap)));
 
-    connect(this, SIGNAL(progressItemCanceled(Digikam::ProgressItem*)),
+    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
 
     QTimer::singleShot(500, this, SLOT(slotRun()));
@@ -175,7 +175,6 @@ void MaintenanceTool::populateAllPicturesPath()
     else
     {
         palbumList.append(AlbumManager::instance()->findPAlbum(d->albumId));
-        kDebug() << d->albumId;
     }
 
     for (AlbumList::const_iterator it = palbumList.constBegin();
@@ -188,8 +187,6 @@ void MaintenanceTool::populateAllPicturesPath()
 
         d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
     }
-
-    kDebug() << d->allPicturesPath;
 
     listItemstoProcess();
 
