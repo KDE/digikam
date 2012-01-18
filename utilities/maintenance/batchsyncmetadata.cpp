@@ -80,7 +80,7 @@ public:
 BatchSyncMetadata::BatchSyncMetadata(Album* album, SyncDirection direction, QObject* parent)
     : QObject(parent), d(new BatchSyncMetadataPriv)
 {
-    d->album = album;
+    d->album     = album;
     d->direction = direction;
 
     connect(this, SIGNAL(startParsingList()),
@@ -92,7 +92,7 @@ BatchSyncMetadata::BatchSyncMetadata(const ImageInfoList& list, SyncDirection di
     : QObject(parent), d(new BatchSyncMetadataPriv)
 {
     d->imageInfoList = list;
-    d->direction = direction;
+    d->direction     = direction;
 }
 
 BatchSyncMetadata::~BatchSyncMetadata()
@@ -161,7 +161,7 @@ void BatchSyncMetadata::parseList()
 
     d->running = false;
 
-    if (d->cancel ||
+    if (d->cancel                                          ||
         (d->imageInfoJob && !d->imageInfoJob->isRunning()) ||
         !d->imageInfoJob
        )

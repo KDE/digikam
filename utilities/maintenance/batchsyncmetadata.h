@@ -65,25 +65,22 @@ Q_SIGNALS:
     void signalComplete();
     void signalProgressValue(float);
     void signalBegin(const QString&);
+    void startParsingList();
 
 public Q_SLOTS:
 
     void parseList();
     void slotAbort();
 
-private:
-
-    void parsePicture();
-    void complete();
-
 private Q_SLOTS:
 
     void slotAlbumParsed(const ImageInfoList&);
     void slotComplete();
 
-Q_SIGNALS:
+private:
 
-    void startParsingList();
+    void parsePicture();
+    void complete();
 
 private:
 
