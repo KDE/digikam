@@ -63,19 +63,19 @@ protected:
 
     bool cancel() const;
 
-    /** Called when all is done. It fire signalProcessDone()
+    /** Called when all is done. It fire signalProcessDone().
      */
     void complete();
 
-    /** Return all paths to process. Data container can be custumized
+    /** Return all paths to process. Data container can be customized.
      */
     QStringList&         allPicturesPath();
 
-    /** Return mode set in contructor. see Mode enum for details
+    /** Return mode set in contructor. see Mode enum for details.
      */
     Mode                 mode() const;
 
-    /** Call this method into processOne() to check if another item must be processed
+    /** Call this method into processOne() to check if another item must be processed.
      */
     bool                 checkToContinue() const;
 
@@ -88,18 +88,17 @@ protected:
      */
     virtual void listItemstoProcess() = 0;
 
-    /** In this method, you can use thumb load thread, or preview load thread, or image info job as items processor. 
-     *  gotNewThumbnail(), or gotNewPreview() will be called accordingly.
+    /** In this method, you can customize your items processor.
      */
     virtual void processOne() = 0;
 
 private Q_SLOTS:
 
-    /** This slot call listItemstoProcess() when tool is started
+    /** This slot call listItemstoProcess() when tool is started.
      */
     void slotRun();
 
-    /** This slot is called when user cancel tool from gui
+    /** This slot is called when user cancel tool from gui.
      */
     void slotCancel();
 
