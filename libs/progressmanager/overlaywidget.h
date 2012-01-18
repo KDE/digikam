@@ -45,7 +45,7 @@ class OverlayWidget : public KHBox
     Q_OBJECT
 
 public:
-    
+
     OverlayWidget(QWidget* alignWidget, QWidget* parent, const char* name = 0);
     ~OverlayWidget();
 
@@ -53,16 +53,16 @@ public:
     void setAlignWidget(QWidget* alignWidget);
 
 protected:
-    
+
     void resizeEvent(QResizeEvent* ev);
     bool eventFilter(QObject* o, QEvent* e);
 
 private:
-    
+
     void reposition();
 
 private:
-    
+
     QWidget* mAlignWidget;
 };
 

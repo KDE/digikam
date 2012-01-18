@@ -271,8 +271,6 @@ private:
 
 namespace Digikam
 {
-    
-struct ProgressManagerPrivate;
 
 /**
  * The ProgressManager singleton keeps track of all ongoing transactions
@@ -510,6 +508,10 @@ private:
                                                  bool  hasThumb);
 
     virtual void addProgressItemImpl(ProgressItem* t, ProgressItem* parent);
+
+public:
+
+    struct ProgressManagerPrivate;
 
 private:
 

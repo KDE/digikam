@@ -169,12 +169,12 @@ void ProgressItem::setThumbnail(const QPixmap& thumb)
 
 // --------------------------------------------------------------------------
 
-struct ProgressManagerPrivate
+struct ProgressManager::ProgressManagerPrivate
 {
     ProgressManager instance;
 };
 
-K_GLOBAL_STATIC( ProgressManagerPrivate, progressManagerPrivate )
+K_GLOBAL_STATIC( ProgressManager::ProgressManagerPrivate, progressManagerPrivate )
 
 ProgressManager::ProgressManager()
     : QObject()

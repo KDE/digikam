@@ -47,7 +47,7 @@ void OverlayWidget::reposition()
 {
     if ( !mAlignWidget )
         return;
-    
+
     // p is in the alignWidget's coordinates
     QPoint p;
     // We are always above the alignWidget, right-aligned with it.
