@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-01-16
- * Description : Maintenance tool using thumbnails load thread as items processor.
+ * Description : Maintenance tool using preview load thread as items processor.
  *
  * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,13 +21,13 @@
  *
  * ============================================================ */
 
-#include "maintenancethumbtool.moc"
+#include "maintenancepreviewtool.moc"
 
 // Qt includes
 
-#include <QDir>
 #include <QFileInfo>
 #include <QDateTime>
+#include <QPixmap>
 
 // Local includes
 
@@ -36,49 +36,46 @@
 #include "albuminfo.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
+#include "dimg.h"
 #include "imageinfo.h"
-#include "thumbnailloadthread.h"
-#include "thumbnailsize.h"
-#include "thumbnaildatabaseaccess.h"
-#include "thumbnaildb.h"
-#include "knotificationwrapper.h"
+#include "previewloadthread.h"
 
 namespace Digikam
 {
 
-class MaintenanceThumbTool::MaintenanceThumbToolPriv
+class MaintenancePreviewTool::MaintenancePreviewToolPriv
 {
 public:
 
-    MaintenanceThumbToolPriv() :
-        thumbLoadThread(0)
+    MaintenancePreviewToolPriv() :
+        previewLoadThread(0)
     {
     }
 
-    ThumbnailLoadThread* thumbLoadThread;
+    PreviewLoadThread* previewLoadThread;
 };
 
-MaintenanceThumbTool::MaintenanceThumbTool(const QString& id, Mode mode, int albumId)
+MaintenancePreviewTool::MaintenancePreviewTool(const QString& id, Mode mode, int albumId)
     : MaintenanceTool(id, mode, albumId),
-      d(new MaintenanceThumbToolPriv)
+      d(new MaintenancePreviewToolPriv)
 {
-    d->thumbLoadThread   = ThumbnailLoadThread::defaultThread();
+    d->previewLoadThread = new PreviewLoadThread();
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
-            this, SLOT(slotGotThumbnail(LoadingDescription, QPixmap)));
+    connect(d->previewLoadThread, SIGNAL(signalImageLoaded(LoadingDescription, DImg)),
+            this, SLOT(slotGotImagePreview(LoadingDescription, DImg)));
 }
 
-MaintenanceThumbTool::~MaintenanceThumbTool()
+MaintenancePreviewTool::~MaintenancePreviewTool()
 {
     delete d;
 }
 
-ThumbnailLoadThread* MaintenanceThumbTool::thumbsLoadThread() const
+PreviewLoadThread* MaintenancePreviewTool::previewLoadThread() const
 {
-    return d->thumbLoadThread;
+    return d->previewLoadThread;
 }
 
-void MaintenanceThumbTool::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
+void MaintenancePreviewTool::slotGotImagePreview(const LoadingDescription& desc, const DImg& img)
 {
     if (cancel() || allPicturesPath().isEmpty())
     {
@@ -90,8 +87,9 @@ void MaintenanceThumbTool::slotGotThumbnail(const LoadingDescription& desc, cons
         return;
     }
 
-    gotNewThumbnail(desc, pix);
+    gotNewPreview(desc, img);
 
+    QPixmap pix = DImg(img).smoothScale(22, 22, Qt::KeepAspectRatio).convertToPixmap();
     setThumbnail(pix);
     advance(1);
 

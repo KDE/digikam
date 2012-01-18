@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-01-16
- * Description : Maintenance tool using thumbnails load thread as items processor.
+ * Description : Maintenance tool using preview load thread as items processor.
  *
  * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,13 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef MAINTENANCETHUMBTOOL_H
-#define MAINTENANCETHUMBTOOL_H
+#ifndef MAINTENANCEPREVIEWTOOL_H
+#define MAINTENANCEPREVIEWTOOL_H
 
 // Qt includes
 
 #include <QString>
-#include <QPixmap>
 
 // Local includes
 
@@ -36,40 +35,41 @@
 namespace Digikam
 {
 
+class DImg;
 class LoadingDescription;
-class ThumbnailLoadThread;
+class PreviewLoadThread;
 
-class MaintenanceThumbTool : public MaintenanceTool
+class MaintenancePreviewTool : public MaintenanceTool
 {
     Q_OBJECT
 
 public:
 
-    MaintenanceThumbTool(const QString& id, Mode mode=AllItems, int albumId=-1);
-    virtual ~MaintenanceThumbTool();
+    MaintenancePreviewTool(const QString& id, Mode mode=AllItems, int albumId=-1);
+    virtual ~MaintenancePreviewTool();
 
 protected:
 
-    /** Return thumbs loader instance
+    /** Return preview loader instance
      */
-    ThumbnailLoadThread* thumbsLoadThread()  const;
+    PreviewLoadThread*   previewLoadThread() const;
 
-    /** Re-implement this if you want to use thumb loader as items processor
+    /** Re-implement this if you want to use preview loader as items processor
      */
-    virtual void gotNewThumbnail(const LoadingDescription&, const QPixmap&) {};
+    virtual void gotNewPreview(const LoadingDescription&, const DImg&) {};
 
 private Q_SLOTS:
 
-    /** Called by thumbnail thread. This slot call gotNewThumbnail()
+    /** Called by preview thread. This slot call gotNewPreview()
      */
-    void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
+    void slotGotImagePreview(const LoadingDescription&, const DImg&);
 
 private:
 
-    class MaintenanceThumbToolPriv;
-    MaintenanceThumbToolPriv* const d;
+    class MaintenancePreviewToolPriv;
+    MaintenancePreviewToolPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* MAINTENANCETHUMBTOOL_H */
+#endif /* MAINTENANCEPREVIEWTOOL_H */

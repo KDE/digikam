@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 FingerPrintsGenerator::FingerPrintsGenerator(Mode mode, int albumId)
-    : MaintenanceTool("FingerPrintsGenerator", mode, albumId)
+    : MaintenancePreviewTool("FingerPrintsGenerator", mode, albumId)
 {
     setTitle(i18n("Fingerprints"));
 }

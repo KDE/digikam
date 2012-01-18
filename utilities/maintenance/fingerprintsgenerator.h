@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "maintenancetool.h"
+#include "maintenancepreviewtool.h"
 #include "haariface.h"
 
 namespace Digikam
@@ -35,7 +35,7 @@ namespace Digikam
 class DImg;
 class LoadingDescription;
 
-class FingerPrintsGenerator : public MaintenanceTool
+class FingerPrintsGenerator : public MaintenancePreviewTool
 {
     Q_OBJECT
 
