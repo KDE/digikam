@@ -117,46 +117,43 @@ public:
     {
     }
 
-    virtual void addActions(AbstractAlbumTreeView* view, ContextMenuHelper& cmh, Album* album);
+    virtual void addActions(AbstractAlbumTreeView*, ContextMenuHelper& cmh, Album* a)
+    {
+        PAlbum* album = dynamic_cast<PAlbum*>(a);
+
+        if (!album)
+        {
+            return;
+        }
+
+        // --------------------------------------------------------
+        cmh.addActionNewAlbum(d->albumModificationHelper, album);
+        cmh.addAction("album_openinfilemanager");
+        cmh.addAction("album_openinterminal");
+        cmh.addSeparator();
+        // --------------------------------------------------------
+        cmh.addActionRenameAlbum(d->albumModificationHelper, album);
+        cmh.addActionResetAlbumIcon(d->albumModificationHelper, album);
+        cmh.addSeparator();
+        // --------------------------------------------------------
+        cmh.addAction(d->findDuplAction);
+        d->albumModificationHelper->bindAlbum(d->findDuplAction, album);
+        cmh.addAction(d->rebuildThumbsAction);
+        d->albumModificationHelper->bindAlbum(d->rebuildThumbsAction, album);
+        cmh.addImportMenu();
+        cmh.addExportMenu();
+        cmh.addBatchMenu();
+        cmh.addAlbumActions();
+        cmh.addSeparator();
+        // --------------------------------------------------------
+        cmh.addActionDeleteAlbum(d->albumModificationHelper, album);
+        cmh.addSeparator();
+        // --------------------------------------------------------
+        cmh.addActionEditAlbum(d->albumModificationHelper, album);
+    }
 
     AlbumSelectionTreeView::AlbumSelectionTreeViewPriv* const d;
 };
-
-void AlbumSelectionTreeView::AlbumSelectionTreeViewPriv::AlbumSelectionTreeViewContextMenuElement
-                           ::addActions(AbstractAlbumTreeView*, ContextMenuHelper& cmh, Album* a)
-{
-    PAlbum* album = dynamic_cast<PAlbum*>(a);
-
-    if (!album)
-    {
-        return;
-    }
-
-    // --------------------------------------------------------
-    cmh.addActionNewAlbum(d->albumModificationHelper, album);
-    cmh.addAction("album_openinfilemanager");
-    cmh.addAction("album_openinterminal");
-    cmh.addSeparator();
-    // --------------------------------------------------------
-    cmh.addActionRenameAlbum(d->albumModificationHelper, album);
-    cmh.addActionResetAlbumIcon(d->albumModificationHelper, album);
-    cmh.addSeparator();
-    // --------------------------------------------------------
-    cmh.addAction(d->findDuplAction);
-    d->albumModificationHelper->bindAlbum(d->findDuplAction, album);
-    cmh.addAction(d->rebuildThumbsAction);
-    d->albumModificationHelper->bindAlbum(d->rebuildThumbsAction, album);
-    cmh.addImportMenu();
-    cmh.addExportMenu();
-    cmh.addBatchMenu();
-    cmh.addAlbumActions();
-    cmh.addSeparator();
-    // --------------------------------------------------------
-    cmh.addActionDeleteAlbum(d->albumModificationHelper, album);
-    cmh.addSeparator();
-    // --------------------------------------------------------
-    cmh.addActionEditAlbum(d->albumModificationHelper, album);
-}
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -167,7 +164,7 @@ AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* parent, AlbumModel* mode
     setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
     d->toolTip                 = new AlbumViewToolTip(this);
-    d->findDuplAction          = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
+    d->findDuplAction          = new QAction(SmallIcon("tools-wizard"),     i18n("Find Duplicates..."),    this);
     d->rebuildThumbsAction     = new QAction(SmallIcon("view-process-all"), i18n("Rebuild Thumbnails..."), this);
 
     connect(d->findDuplAction,      SIGNAL(triggered()),
