@@ -3017,14 +3017,12 @@ void DigikamApp::slotRebuildThumbnails()
 
 void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
 {
-    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(rebuildAll ? MaintenanceTool::AllItems
-                                                                                : MaintenanceTool::MissingItems);
+    new BatchThumbsGenerator(rebuildAll ? MaintenanceTool::AllItems : MaintenanceTool::MissingItems);
 }
 
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
-    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(MaintenanceTool::AlbumItems,
-                                                                     AlbumManager::instance()->currentAlbum()->id());
+    new BatchThumbsGenerator(MaintenanceTool::AlbumItems, AlbumManager::instance()->currentAlbum()->id());
 }
 
 void DigikamApp::slotGenerateFingerPrintsFirstTime()
@@ -3079,6 +3077,7 @@ void DigikamApp::runFaceScanner(const FaceScanSettings& settings)
 
     batchFaceDetector->show();
 }
+
 void DigikamApp::slotRebuildFingerPrintsDone()
 {
     d->config->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
