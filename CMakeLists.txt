@@ -1190,6 +1190,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancepictpathtool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancethumbtool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancepreviewtool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenanceimginfjobtool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfojob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfoalbumsjob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/batchalbumssyncmetadata.cpp

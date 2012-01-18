@@ -2992,8 +2992,7 @@ void DigikamApp::slotWriteMetadataToAllImages()
         return;
     }
 
-    BatchAlbumsSyncMetadata* syncMetadata = new BatchAlbumsSyncMetadata(this);
-    syncMetadata->show();
+    new BatchAlbumsSyncMetadata();
 }
 
 void DigikamApp::slotRebuildThumbnails()
@@ -3064,7 +3063,7 @@ void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
     FingerPrintsGenerator* fingerprintsGenerator = new FingerPrintsGenerator(rebuildAll ? MaintenanceTool::AllItems
                                                                                         : MaintenanceTool::MissingItems);
 
-    connect(fingerprintsGenerator, SIGNAL(signalProcessDone()),
+    connect(fingerprintsGenerator, SIGNAL(signalComplete()),
             this, SLOT(slotRebuildFingerPrintsDone()));
 }
 

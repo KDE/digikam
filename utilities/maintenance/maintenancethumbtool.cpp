@@ -61,7 +61,7 @@ MaintenanceThumbTool::MaintenanceThumbTool(const QString& id, Mode mode, int alb
     : MaintenancePictPathTool(id, mode, albumId),
       d(new MaintenanceThumbToolPriv)
 {
-    d->thumbLoadThread   = ThumbnailLoadThread::defaultThread();
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription, QPixmap)));

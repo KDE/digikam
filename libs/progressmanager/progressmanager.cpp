@@ -151,7 +151,7 @@ void ProgressItem::setUsesBusyIndicator(bool useBusyIndicator)
 void ProgressItem::setThumbnail(const QPixmap& thumb)
 {
     if (!hasThumbnail()) return;
-    
+
     QPixmap pix = thumb;
 
     if (pix.isNull())
@@ -160,7 +160,8 @@ void ProgressItem::setThumbnail(const QPixmap& thumb)
     }
     else
     {
-        pix = pix.scaled(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium, Qt::KeepAspectRatio, Qt::FastTransformation);
+        pix = pix.scaled(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium, 
+                         Qt::KeepAspectRatio, Qt::FastTransformation);
     }
 
     emit progressItemThumbnail(this, pix);

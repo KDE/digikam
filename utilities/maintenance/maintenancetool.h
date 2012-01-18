@@ -55,7 +55,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalProcessDone();
+    void signalComplete();
 
 protected:
 
@@ -101,7 +101,7 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
 
-    /** This slot call listItemstoProcess() when tool is started.
+    /** This slot call populateItemsToProcess() when tool is started.
      */
     void slotRun();
 

@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-22-01
- * Description : batch sync pictures metadata with
- *               digiKam database
+ * Description : batch sync pictures metadata with digiKam database
  *
  * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -25,56 +24,26 @@
 #ifndef BATCHALBUMSSYNCMETADATA_H
 #define BATCHALBUMSSYNCMETADATA_H
 
-// Qt includes
-
-#include <QCloseEvent>
-
 // Local includes
 
 #include "imageinfo.h"
-#include "dprogressdlg.h"
-
-class QWidget;
+#include "maintenanceimginfjobtool.h"
 
 namespace Digikam
 {
 
-class BatchAlbumsSyncMetadata : public DProgressDlg
+class BatchAlbumsSyncMetadata : public MaintenanceImgInfJobTool
 {
     Q_OBJECT
 
 public:
 
-    BatchAlbumsSyncMetadata(QWidget* parent);
+    BatchAlbumsSyncMetadata();
     ~BatchAlbumsSyncMetadata();
 
-Q_SIGNALS:
-
-    void signalComplete();
-
 private:
 
-    void abort();
-    void parseAlbum();
-
-protected:
-
-    void closeEvent(QCloseEvent* e);
-
-protected Q_SLOTS:
-
-    void slotCancel();
-
-private Q_SLOTS:
-
-    void slotStart();
-    void slotAlbumItemsInfo(const ImageInfoList&);
-    void slotComplete();
-
-private:
-
-    class BatchAlbumsSyncMetadataPriv;
-    BatchAlbumsSyncMetadataPriv* const d;
+    void gotNewImageInfoList(const ImageInfoList&);
 };
 
 }  // namespace Digikam

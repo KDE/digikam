@@ -146,19 +146,19 @@ bool MaintenanceTool::checkToContinue() const
 
 void MaintenanceTool::complete()
 {
-    setComplete();
     QTime now, t = now.addMSecs(d->duration.elapsed());
     // Pop-up a message to bring user when all is done.
     KNotificationWrapper(id(),
                          i18n("Process is done.\nDuration: %1", t.toString()),
                          kapp->activeWindow(), label());
-    emit signalProcessDone();
+    emit signalComplete();
+    setComplete();
 }
 
 void MaintenanceTool::slotCancel()
 {
     d->cancel = true;
-    emit signalProcessDone();
+    emit signalComplete();
     setComplete();
 }
 
