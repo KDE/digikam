@@ -203,7 +203,6 @@ private:
     void saveViewState();
     void changeAlbumFromHistory(Album* album, QWidget* widget);
     void slideShow(const ImageInfoList& infoList);
-    void connectBatchSyncMetadata(BatchSyncMetadata* syncMetadata);
 
 private Q_SLOTS:
 

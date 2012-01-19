@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QString>
+#include <QTimer>
 
 // KDE includes
 
@@ -77,22 +78,46 @@ public:
     BatchSyncMetadata::SyncDirection direction;
 };
 
-BatchSyncMetadata::BatchSyncMetadata(Album* album, SyncDirection direction, QObject* parent)
-    : QObject(parent), d(new BatchSyncMetadataPriv)
+BatchSyncMetadata::BatchSyncMetadata(Album* album, SyncDirection direction)
+    : ProgressItem(0,
+                   "BatchSyncMetadata",
+                   QString(),
+                   QString(),
+                   true,
+                   true),
+      d(new BatchSyncMetadataPriv)
 {
     d->album     = album;
     d->direction = direction;
 
+    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
+            this, SLOT(slotCancel()));
+
     connect(this, SIGNAL(startParsingList()),
-            this, SLOT(parseList()),
+            this, SLOT(slotParseList()),
             Qt::QueuedConnection);
+
+    if (ProgressManager::addProgressItem(this))    
+        QTimer::singleShot(500, this, SLOT(slotParseAlbum()));
 }
 
-BatchSyncMetadata::BatchSyncMetadata(const ImageInfoList& list, SyncDirection direction, QObject* parent)
-    : QObject(parent), d(new BatchSyncMetadataPriv)
+BatchSyncMetadata::BatchSyncMetadata(const ImageInfoList& list, SyncDirection direction)
+    : ProgressItem(0,
+                   "BatchSyncMetadata",
+                    QString(),
+                    QString(),
+                    true,
+                    true),
+      d(new BatchSyncMetadataPriv)
 {
     d->imageInfoList = list;
     d->direction     = direction;
+    
+    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
+            this, SLOT(slotCancel()));
+
+    if (ProgressManager::addProgressItem(this))    
+        QTimer::singleShot(500, this, SLOT(slotParseList()));
 }
 
 BatchSyncMetadata::~BatchSyncMetadata()
@@ -101,7 +126,7 @@ BatchSyncMetadata::~BatchSyncMetadata()
     delete d;
 }
 
-void BatchSyncMetadata::slotAbort()
+void BatchSyncMetadata::slotCancel()
 {
     d->cancel = true;
 
@@ -109,16 +134,13 @@ void BatchSyncMetadata::slotAbort()
     {
         d->imageInfoJob->stop();
     }
-}
 
-void BatchSyncMetadata::complete()
-{
-    emit signalComplete();
+    setComplete();
 }
 
 // Parse album methods -----------------------------------------------------------------------
 
-void BatchSyncMetadata::parseAlbum()
+void BatchSyncMetadata::slotParseAlbum()
 {
     d->imageInfoJob = new ImageInfoJob;
     d->imageInfoJob->allItemsFromAlbum(d->album);
@@ -127,12 +149,12 @@ void BatchSyncMetadata::parseAlbum()
             this, SLOT(slotAlbumParsed(ImageInfoList)));
 
     connect(d->imageInfoJob, SIGNAL(signalCompleted()),
-            this, SLOT(slotComplete()));
+            this, SLOT(slotJobComplete()));
 }
 
-void BatchSyncMetadata::slotComplete()
+void BatchSyncMetadata::slotJobComplete()
 {
-    if (!d->running)
+    if (!d->running && !d->cancel)
     {
         emit startParsingList();
     }
@@ -150,7 +172,7 @@ void BatchSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
 
 // Parse info list methods -----------------------------------------------------------------------
 
-void BatchSyncMetadata::parseList()
+void BatchSyncMetadata::slotParseList()
 {
     if (!d->everStarted)
     {
@@ -158,14 +180,15 @@ void BatchSyncMetadata::parseList()
 
         if (d->direction == WriteFromDatabaseToFile)
         {
-            message = i18n("Synchronizing image metadata with database. Please wait...");
+            message = i18n("Synchronizing image metadata with database");
         }
         else
         {
-            message = i18n("Updating database from image metadata. Please wait...");
+            message = i18n("Updating database from image metadata");
         }
 
-        emit signalBegin(message);
+        setLabel(message);
+        setTotalItems(d->imageInfoList.count());
 
         d->everStarted = true;
     }
@@ -180,12 +203,9 @@ void BatchSyncMetadata::parseList()
 
     d->running = false;
 
-    if (d->cancel                                          ||
-        (d->imageInfoJob && !d->imageInfoJob->isRunning()) ||
-        !d->imageInfoJob
-       )
+    if (d->cancel || (d->imageInfoJob && !d->imageInfoJob->isRunning()) || !d->imageInfoJob)
     {
-        complete();
+        setComplete();
     }
 }
 
@@ -206,7 +226,7 @@ void BatchSyncMetadata::parsePicture()
         d->scanner.scanFile(info, CollectionScanner::Rescan);
     }
 
-    emit signalProgressValue(d->count++/(float)d->imageInfoList.count());
+    advance(d->count++);
 
     d->imageInfoIndex++;
 }

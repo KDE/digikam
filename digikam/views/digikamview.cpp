@@ -1358,21 +1358,6 @@ void DigikamView::slotAlbumPropsEdit()
     d->albumModificationHelper->slotAlbumEdit(d->albumManager->currentPAlbum());
 }
 
-void DigikamView::connectBatchSyncMetadata(BatchSyncMetadata* syncMetadata)
-{
-    connect(syncMetadata, SIGNAL(signalBegin(QString)),
-            d->parent, SLOT(enterCancellableProgress(QString)));
-
-    connect(syncMetadata, SIGNAL(signalProgressValue(float)),
-            d->parent, SLOT(progressValue(float)));
-
-    connect(syncMetadata, SIGNAL(signalComplete()),
-            d->parent, SLOT(finishProgress()));
-
-    connect(d->parent, SIGNAL(signalCancelButtonPressed()),
-            syncMetadata, SLOT(slotAbort()));
-}
-
 void DigikamView::slotAlbumWriteMetadata()
 {
     Album* album = d->albumManager->currentAlbum();
@@ -1381,10 +1366,7 @@ void DigikamView::slotAlbumWriteMetadata()
     {
         return;
     }
-
-    BatchSyncMetadata* syncMetadata = new BatchSyncMetadata(album, BatchSyncMetadata::WriteFromDatabaseToFile, this);
-    connectBatchSyncMetadata(syncMetadata);
-    syncMetadata->parseAlbum();
+    new BatchSyncMetadata(album, BatchSyncMetadata::WriteFromDatabaseToFile);
 }
 
 void DigikamView::slotAlbumReadMetadata()
@@ -1395,28 +1377,19 @@ void DigikamView::slotAlbumReadMetadata()
     {
         return;
     }
-
-    BatchSyncMetadata* syncMetadata = new BatchSyncMetadata(album, BatchSyncMetadata::ReadFromFileToDatabase, this);
-    connectBatchSyncMetadata(syncMetadata);
-    syncMetadata->parseAlbum();
+    new BatchSyncMetadata(album, BatchSyncMetadata::ReadFromFileToDatabase);
 }
 
 void DigikamView::slotImageWriteMetadata()
 {
     ImageInfoList selected = d->iconView->selectedImageInfos();
-
-    BatchSyncMetadata* syncMetadata = new BatchSyncMetadata(selected, BatchSyncMetadata::WriteFromDatabaseToFile, this);
-    connectBatchSyncMetadata(syncMetadata);
-    syncMetadata->parseList();
+    new BatchSyncMetadata(selected, BatchSyncMetadata::WriteFromDatabaseToFile);
 }
 
 void DigikamView::slotImageReadMetadata()
 {
     ImageInfoList selected = d->iconView->selectedImageInfos();
-
-    BatchSyncMetadata* syncMetadata = new BatchSyncMetadata(selected, BatchSyncMetadata::ReadFromFileToDatabase, this);
-    connectBatchSyncMetadata(syncMetadata);
-    syncMetadata->parseList();
+    new BatchSyncMetadata(selected, BatchSyncMetadata::ReadFromFileToDatabase);
 }
 
 // ----------------------------------------------------------------

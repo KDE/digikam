@@ -25,20 +25,17 @@
 #ifndef BATCHSYNCMETADATA_H
 #define BATCHSYNCMETADATA_H
 
-// Qt includes
-
-#include <QObject>
-
 // Local includes
 
 #include "imageinfo.h"
+#include "progressmanager.h"
 
 namespace Digikam
 {
 
 class Album;
 
-class BatchSyncMetadata : public QObject
+class BatchSyncMetadata : public ProgressItem
 {
     Q_OBJECT
 
@@ -53,36 +50,29 @@ public:
 public:
 
     /** Constructor which sync all metadata pictures from an Album */
-    explicit BatchSyncMetadata(Album* album, SyncDirection direction = WriteFromDatabaseToFile, QObject* parent = 0);
+    explicit BatchSyncMetadata(Album* album, SyncDirection direction = WriteFromDatabaseToFile);
 
     /** Constructor which sync all metadata from an images list */
-    explicit BatchSyncMetadata(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile, QObject* parent = 0);
+    explicit BatchSyncMetadata(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile);
 
     ~BatchSyncMetadata();
-
-    void parseAlbum();
 
 Q_SIGNALS:
 
     void signalComplete();
-    void signalProgressValue(float);
-    void signalBegin(const QString&);
     void startParsingList();
-
-public Q_SLOTS:
-
-    void parseList();
-    void slotAbort();
 
 private Q_SLOTS:
 
+    void slotParseAlbum();
     void slotAlbumParsed(const ImageInfoList&);
-    void slotComplete();
+    void slotParseList();
+    void slotJobComplete();
+    void slotCancel();
 
 private:
 
     void parsePicture();
-    void complete();
 
 private:
 
