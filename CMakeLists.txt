@@ -1190,11 +1190,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancepictpathtool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancethumbtool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancepreviewtool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenanceimginfjobtool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfojob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfoalbumsjob.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/batchalbumssyncmetadata.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/batchsyncmetadata.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/metadatasynchronizer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/fingerprintsgenerator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/thumbnailsgenerator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/batchfacedetector.cpp

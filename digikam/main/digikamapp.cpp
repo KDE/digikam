@@ -110,7 +110,7 @@
 #include "albumdb.h"
 #include "albumselectdialog.h"
 #include "albumthumbnailloader.h"
-#include "batchalbumssyncmetadata.h"
+#include "metadatasynchronizer.h"
 #include "thumbnailsgenerator.h"
 #include "cameratype.h"
 #include "cameraui.h"
@@ -2992,7 +2992,7 @@ void DigikamApp::slotWriteMetadataToAllImages()
         return;
     }
 
-    new BatchAlbumsSyncMetadata();
+    new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
 }
 
 void DigikamApp::slotRebuildThumbnails()

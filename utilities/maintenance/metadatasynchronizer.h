@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-22-01
- * Description : batch sync pictures metadata with
- *               digiKam database
+ * Description : batch sync pictures metadata with database
  *
  * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -22,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BATCHSYNCMETADATA_H
-#define BATCHSYNCMETADATA_H
+#ifndef METADATASYNCHRONIZER_H
+#define METADATASYNCHRONIZER_H
 
 // Local includes
 
@@ -35,7 +34,7 @@ namespace Digikam
 
 class Album;
 
-class BatchSyncMetadata : public ProgressItem
+class MetadataSynchronizer : public ProgressItem
 {
     Q_OBJECT
 
@@ -49,37 +48,41 @@ public:
 
 public:
 
-    /** Constructor which sync all metadata pictures from an Album */
-    explicit BatchSyncMetadata(Album* album, SyncDirection direction = WriteFromDatabaseToFile);
+    /** Constructor which sync all pictures metadata pictures from whole Albums collection */
+    MetadataSynchronizer(SyncDirection direction);
 
-    /** Constructor which sync all metadata from an images list */
-    explicit BatchSyncMetadata(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile);
+    /** Constructor which sync all pictures metadata from an Album */
+    MetadataSynchronizer(Album* album, SyncDirection direction = WriteFromDatabaseToFile);
 
-    ~BatchSyncMetadata();
+    /** Constructor which sync all pictures metadata from an images list */
+    MetadataSynchronizer(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile);
+
+    ~MetadataSynchronizer();
 
 Q_SIGNALS:
 
     void signalComplete();
-    void startParsingList();
+    void signalStartParsingList();
 
 private Q_SLOTS:
 
-    void slotParseAlbum();
-    void slotAlbumParsed(const ImageInfoList&);
+    void slotParseAlbums();
     void slotParseList();
-    void slotJobComplete();
+    void slotAlbumParsed(const ImageInfoList&);
+    void slotOneAlbumIsComplete();
     void slotCancel();
 
 private:
 
+    void processOneAlbum();
     void parsePicture();
 
 private:
 
-    class BatchSyncMetadataPriv;
-    BatchSyncMetadataPriv* const d;
+    class MetadataSynchronizerPriv;
+    MetadataSynchronizerPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* BATCHSYNCMETADATA_H */
+#endif /* METADATASYNCHRONIZER_H */

@@ -45,7 +45,7 @@
 #include "albumhistory.h"
 #include "albumsettings.h"
 #include "stackedview.h"
-#include "batchsyncmetadata.h"
+#include "metadatasynchronizer.h"
 #include "digikamapp.h"
 #include "digikamimageview.h"
 #include "dzoombar.h"
@@ -1366,7 +1366,7 @@ void DigikamView::slotAlbumWriteMetadata()
     {
         return;
     }
-    new BatchSyncMetadata(album, BatchSyncMetadata::WriteFromDatabaseToFile);
+    new MetadataSynchronizer(album, MetadataSynchronizer::WriteFromDatabaseToFile);
 }
 
 void DigikamView::slotAlbumReadMetadata()
@@ -1377,19 +1377,19 @@ void DigikamView::slotAlbumReadMetadata()
     {
         return;
     }
-    new BatchSyncMetadata(album, BatchSyncMetadata::ReadFromFileToDatabase);
+    new MetadataSynchronizer(album, MetadataSynchronizer::ReadFromFileToDatabase);
 }
 
 void DigikamView::slotImageWriteMetadata()
 {
     ImageInfoList selected = d->iconView->selectedImageInfos();
-    new BatchSyncMetadata(selected, BatchSyncMetadata::WriteFromDatabaseToFile);
+    new MetadataSynchronizer(selected, MetadataSynchronizer::WriteFromDatabaseToFile);
 }
 
 void DigikamView::slotImageReadMetadata()
 {
     ImageInfoList selected = d->iconView->selectedImageInfos();
-    new BatchSyncMetadata(selected, BatchSyncMetadata::ReadFromFileToDatabase);
+    new MetadataSynchronizer(selected, MetadataSynchronizer::ReadFromFileToDatabase);
 }
 
 // ----------------------------------------------------------------
