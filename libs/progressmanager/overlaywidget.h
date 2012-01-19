@@ -25,7 +25,13 @@
 #ifndef OVERLAY_WIDGET_H
 #define OVERLAY_WIDGET_H
 
+// KDE includes
+
 #include <KHBox>
+
+// Local includes
+
+#include "digikam_export.h"
 
 class QResizeEvent;
 class QEvent;
@@ -40,7 +46,7 @@ namespace Digikam
  *
  * OverlayWidget inherits KHBox for convenience purposes (layout, and frame)
  */
-class OverlayWidget : public KHBox
+class DIGIKAM_EXPORT OverlayWidget : public KHBox
 {
     Q_OBJECT
 
