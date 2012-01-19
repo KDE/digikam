@@ -62,20 +62,20 @@ public:
 Q_SIGNALS:
 
     void signalComplete();
-    void signalStartParsingList();
 
 private Q_SLOTS:
 
     void slotParseAlbums();
-    void slotParseList();
     void slotAlbumParsed(const ImageInfoList&);
     void slotOneAlbumIsComplete();
     void slotCancel();
 
 private:
 
-    void processOneAlbum();
+    void init();
+    void parseList();
     void parsePicture();
+    void processOneAlbum();
 
 private:
 

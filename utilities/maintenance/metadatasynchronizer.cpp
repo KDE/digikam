@@ -34,7 +34,6 @@
 #include <kicon.h>
 #include <kapplication.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 // Local includes
 
@@ -92,15 +91,7 @@ MetadataSynchronizer::MetadataSynchronizer(SyncDirection direction)
     d->palbumList = AlbumManager::instance()->allPAlbums();
     d->direction  = direction;
 
-    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
-            this, SLOT(slotCancel()));
-
-    connect(this, SIGNAL(signalStartParsingList()),
-            this, SLOT(slotParseList()),
-            Qt::QueuedConnection);
-
-    if (ProgressManager::addProgressItem(this))
-        QTimer::singleShot(500, this, SLOT(slotParseAlbums()));
+    init();
 }
 
 MetadataSynchronizer::MetadataSynchronizer(Album* album, SyncDirection direction)
@@ -115,15 +106,7 @@ MetadataSynchronizer::MetadataSynchronizer(Album* album, SyncDirection direction
     d->palbumList.append(album);
     d->direction = direction;
 
-    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
-            this, SLOT(slotCancel()));
-
-    connect(this, SIGNAL(signalStartParsingList()),
-            this, SLOT(slotParseList()),
-            Qt::QueuedConnection);
-
-    if (ProgressManager::addProgressItem(this))
-        QTimer::singleShot(500, this, SLOT(slotParseAlbums()));
+    init();
 }
 
 MetadataSynchronizer::MetadataSynchronizer(const ImageInfoList& list, SyncDirection direction)
@@ -138,14 +121,27 @@ MetadataSynchronizer::MetadataSynchronizer(const ImageInfoList& list, SyncDirect
     d->imageInfoList = list;
     d->direction     = direction;
 
+    init();
+}
+
+// Common methods ----------------------------------------------------------------------------
+
+void MetadataSynchronizer::init()
+{
+    d->imageInfoJob = new ImageInfoJob;
+
+    connect(d->imageInfoJob, SIGNAL(signalItemsInfo(ImageInfoList)),
+            this, SLOT(slotAlbumParsed(ImageInfoList)));
+
+    connect(d->imageInfoJob, SIGNAL(signalCompleted()),
+            this, SLOT(slotOneAlbumIsComplete()));
+
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
 
     if (ProgressManager::addProgressItem(this))
-        QTimer::singleShot(500, this, SLOT(slotParseList()));
+        QTimer::singleShot(500, this, SLOT(slotParseAlbums()));
 }
-
-// Common methods ----------------------------------------------------------------------------
 
 MetadataSynchronizer::~MetadataSynchronizer()
 {
@@ -156,12 +152,7 @@ MetadataSynchronizer::~MetadataSynchronizer()
 void MetadataSynchronizer::slotCancel()
 {
     d->cancel = true;
-
-    if (d->imageInfoJob)
-    {
-        d->imageInfoJob->stop();
-    }
-
+    d->imageInfoJob->stop();
     setComplete();
 }
 
@@ -169,25 +160,18 @@ void MetadataSynchronizer::slotCancel()
 
 void MetadataSynchronizer::slotParseAlbums()
 {
-    d->imageInfoJob = new ImageInfoJob;
-
-    connect(d->imageInfoJob, SIGNAL(signalItemsInfo(ImageInfoList)),
-            this, SLOT(slotAlbumParsed(ImageInfoList)));
-
-    connect(d->imageInfoJob, SIGNAL(signalCompleted()),
-            this, SLOT(slotOneAlbumIsComplete()));
-
+    setUsesBusyIndicator(true);
     d->albumsIt = d->palbumList.begin();
     processOneAlbum();
 }
 
 void MetadataSynchronizer::processOneAlbum()
 {
-    if (d->palbumList.empty() || d->cancel) return;
+    if (d->cancel) return;
 
     if (d->albumsIt == d->palbumList.end())     // All albums are parsed.
     {
-        emit signalStartParsingList();
+        parseList();
         return;
     }
 
@@ -207,8 +191,10 @@ void MetadataSynchronizer::slotOneAlbumIsComplete()
 
 // Parse info list methods -----------------------------------------------------------------------
 
-void MetadataSynchronizer::slotParseList()
+void MetadataSynchronizer::parseList()
 {
+    setUsesBusyIndicator(false);
+
     if (d->direction == WriteFromDatabaseToFile)
     {
         setLabel(i18n("Synchronizing image metadata with database"));
@@ -237,6 +223,7 @@ void MetadataSynchronizer::slotParseList()
     setComplete();
 }
 
+// TODO : use multithreading to process this method.
 void MetadataSynchronizer::parsePicture()
 {
     ImageInfo   info = d->imageInfoList.at(d->imageInfoIndex);
@@ -255,8 +242,8 @@ void MetadataSynchronizer::parsePicture()
         d->scanner.scanFile(info, CollectionScanner::Rescan);
     }
 
-    advance(d->imageInfoIndex++);
-    kDebug() << d->imageInfoIndex << " / " << d->imageInfoList.count();
+    advance(1);
+    d->imageInfoIndex++;
 }
 
 }  // namespace Digikam
