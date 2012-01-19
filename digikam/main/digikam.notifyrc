@@ -257,7 +257,7 @@ Comment[zh_CN]=批处理队列管理器中的队列已完成。
 Comment[zh_TW]=批次佇列管理器中的佇列已經完成。
 Action=Popup
 
-[Event/fingerprintscompleted]
+[Event/FingerPrintsGenerator]
 Name=Update of fingerprint database complete
 Name[ast]=Anovamientu de la base de datos d'imprentaciones dixitales completáu
 Name[bs]=Ažuriranje baze otisaka prstiju završeno
@@ -329,7 +329,7 @@ Comment[zh_CN]=更新指纹数据库已完成。
 Comment[zh_TW]=指紋資料庫的更新已經完成。
 Action=Popup
 
-[Event/batchthumbscompleted]
+[Event/ThumbnailsGenerator]
 Name=Update of thumbnails database complete
 Name[ast]=Anovamientu de la base de datos de miniatures completa
 Name[bs]=Ažuriranje baze smanjenih slika završeno
@@ -402,7 +402,7 @@ Comment[zh_CN]=更新缩略图数据库已完成。
 Comment[zh_TW]=縮圖資料庫的更新已經完成。
 Action=Popup
 
-[Event/batchalbumssyncmetadatacompleted]
+[Event/MetadataSynchronizer]
 Name=Synchronization of images' metadata with database completed
 Name[ast]=Sincronización de metadatos d'imáxenes cola base de datos completa
 Name[bs]=Sinhronizacija metapodataka slike sa bazom podataka završeno
@@ -471,7 +471,7 @@ Comment[zh_CN]=与数据库同步图像元数据已完成。
 Comment[zh_TW]=用資料庫同步影像的中繼資料已經完成。
 Action=Popup
 
-[Event/batchfacedetectioncompleted]
+[Event/FaceDetector]
 Name=Update of detected faces database complete
 Name[bs]=Ažuriranje baze prepoznatih lica završeno
 Name[ca]=Actualització completada de la base de dades de cares detectades

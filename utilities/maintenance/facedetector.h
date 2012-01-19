@@ -25,13 +25,9 @@
 #ifndef BATCHFACEDETECTOR_H
 #define BATCHFACEDETECTOR_H
 
-// Qt includes
-
-#include <QCloseEvent>
-
 // Local includes
 
-#include "dprogressdlg.h"
+#include "progressmanager.h"
 
 class QWidget;
 
@@ -45,28 +41,23 @@ class ImageInfo;
 class ImageInfoList;
 class LoadingDescription;
 
-class BatchFaceDetector : public DProgressDlg
+class FaceDetector : public ProgressItem
 {
     Q_OBJECT
 
 public:
 
-    explicit BatchFaceDetector(QWidget* parent, const FaceScanSettings& settings);
-    ~BatchFaceDetector();
+    explicit FaceDetector(const FaceScanSettings& settings);
+    ~FaceDetector();
 
 Q_SIGNALS:
 
-    void signalDetectAllFacesDone();
+    void signalComplete();
 
 private:
 
-    void abort();
     void complete();
     void processOne();
-
-protected:
-
-    void closeEvent(QCloseEvent* e);
 
 private Q_SLOTS:
 
@@ -79,8 +70,8 @@ private Q_SLOTS:
 
 private:
 
-    class BatchFaceDetectorPriv;
-    BatchFaceDetectorPriv* const d;
+    class FaceDetectorPriv;
+    FaceDetectorPriv* const d;
 };
 
 } // namespace Digikam

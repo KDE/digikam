@@ -75,7 +75,6 @@
 #include <ktoolbarpopupaction.h>
 #include <ktoolinvocation.h>
 #include <kwindowsystem.h>
-#include <knotificationwrapper.h>
 
 #include <solid/camera.h>
 #include <solid/device.h>
@@ -145,7 +144,7 @@
 #include "thumbnailsize.h"
 #include "dmetadata.h"
 #include "uifilevalidator.h"
-#include "batchfacedetector.h"
+#include "facedetector.h"
 #include "tagscache.h"
 #include "tagsactionmngr.h"
 #include "databaseserverstarter.h"
@@ -3069,12 +3068,10 @@ void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
 
 void DigikamApp::runFaceScanner(const FaceScanSettings& settings)
 {
-    BatchFaceDetector* batchFaceDetector = new BatchFaceDetector(this, settings);
+    FaceDetector* faceDetector = new FaceDetector(settings);
 
-    connect(batchFaceDetector, SIGNAL(signalDetectAllFacesDone()),
+    connect(faceDetector, SIGNAL(signalComplete()),
             this, SLOT(slotScanForFacesDone()));
-
-    batchFaceDetector->show();
 }
 
 void DigikamApp::slotRebuildFingerPrintsDone()
@@ -3084,9 +3081,6 @@ void DigikamApp::slotRebuildFingerPrintsDone()
 
 void DigikamApp::slotScanForFacesDone()
 {
-    // Pop-up a message to bring user when all is done.
-    KNotificationWrapper("facescanningcompleted", i18n("Update of people database completed."),
-                         this, windowTitle());
     d->config->group("General Settings").writeEntry("Face Scanner First Run", true);
 }
 

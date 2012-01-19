@@ -22,23 +22,23 @@
  *
  * ============================================================ */
 
-#include "batchfacedetector.moc"
+#include "facedetector.moc"
 
 // Qt includes
 
-#include <QApplication>
 #include <QClipboard>
-#include <QCloseEvent>
 #include <QVBoxLayout>
 
 // KDE includes
 
+#include <kicon.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
 #include <ktextedit.h>
+#include <kapplication.h>
 
 // KFace includes
 
@@ -89,11 +89,11 @@ public:
 
 // --------------------------------------------------------------------------
 
-class BatchFaceDetector::BatchFaceDetectorPriv
+class FaceDetector::FaceDetectorPriv
 {
 public:
 
-    BatchFaceDetectorPriv()
+    FaceDetectorPriv()
     {
         benchmark  = false;
         total      = 0;
@@ -111,16 +111,15 @@ public:
     FacePipeline       pipeline;
 };
 
-BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings& settings)
-    : DProgressDlg(0), d(new BatchFaceDetectorPriv)
+FaceDetector::FaceDetector(const FaceScanSettings& settings)
+    : ProgressItem(0,
+                   "FaceDetector",
+                   QString(),
+                   QString(),
+                   true,
+                   true),
+      d(new FaceDetectorPriv)
 {
-    setAttribute(Qt::WA_DeleteOnClose);
-    setModal(false);
-    setValue(0);
-    setCaption(i18nc("@title:window", "Scanning Faces"));
-    setLabel(i18n("<b>Updating faces database. Please wait...</b>"));
-    setButtonText(i18n("&Abort"));
-
     if (settings.task == FaceScanSettings::RetrainAll)
     {
         KFaceIface::RecognitionDatabase::addDatabase();
@@ -213,6 +212,9 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings
     connect(&d->pipeline, SIGNAL(skipped(QList<ImageInfo>)),
             this, SLOT(slotImagesSkipped(QList<ImageInfo>)));
 
+    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
+            this, SLOT(slotCancel()));
+
     if (settings.albums.isEmpty() || settings.task == FaceScanSettings::RetrainAll)
     {
         d->albumTodoList = AlbumManager::instance()->allPAlbums();
@@ -222,16 +224,20 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, const FaceScanSettings
         d->albumTodoList = settings.albums;
     }
 
-    startAlbumListing();
+    if (ProgressManager::addProgressItem(this))
+        startAlbumListing();
 }
 
-BatchFaceDetector::~BatchFaceDetector()
+FaceDetector::~FaceDetector()
 {
     delete d;
 }
 
-void BatchFaceDetector::startAlbumListing()
+void FaceDetector::startAlbumListing()
 {
+    setThumbnail(KIcon("edit-image-face-show").pixmap(22));
+    setUsesBusyIndicator(true);
+
     // get total count, cached by AlbumManager
     QMap<int, int> palbumCounts, talbumCounts;
     bool hasPAlbums = false;
@@ -285,12 +291,15 @@ void BatchFaceDetector::startAlbumListing()
     kDebug() << "Total is" << d->total;
 
     d->total = qMax(1, d->total);
-    setMaximum(d->total);
+
+    setUsesBusyIndicator(false);
+    setLabel(i18n("Updating faces database."));
+    setTotalItems(d->total);
 
     continueAlbumListing();
 }
 
-void BatchFaceDetector::continueAlbumListing()
+void FaceDetector::continueAlbumListing()
 {
     kDebug() << d->albumListing.isRunning() << !d->pipeline.hasFinished();
 
@@ -317,68 +326,53 @@ void BatchFaceDetector::continueAlbumListing()
     d->albumListing.allItemsFromAlbum(album);
 }
 
-void BatchFaceDetector::slotItemsInfo(const ImageInfoList& items)
+void FaceDetector::slotItemsInfo(const ImageInfoList& items)
 {
     d->pipeline.process(items);
 }
 
-void BatchFaceDetector::complete()
+void FaceDetector::complete()
 {
-    QTime t;
-    t = t.addMSecs(d->duration.elapsed());
-    setLabel(i18n("<b>Scanning for people completed.</b>"));
-    setTitle(i18n("Duration: %1", t.toString()));
-    // set value to be sure in case of scanning for tags and total was too large
-    setValue(d->total);
-    setButtonGuiItem(KStandardGuiItem::ok());
-    setButtonText(i18n("&Close"));
+    QTime now, t = now.addMSecs(d->duration.elapsed());
     // Pop-up a message to bring user when all is done.
-    KNotificationWrapper("batchfacedetectioncompleted", i18n("The database of detected faces has been updated."),
-                         this, windowTitle());
-    emit signalDetectAllFacesDone();
+    KNotificationWrapper(id(),
+                         i18n("Process is done.\nDuration: %1", t.toString()),
+                         kapp->activeWindow(), label());
+    emit signalComplete();
 
     if (d->benchmark)
     {
         new BenchmarkMessageDisplay(d->pipeline.benchmarkResult());
     }
+
+    setComplete();
 }
 
-void BatchFaceDetector::slotCancel()
-{
-    abort();
-    done(Cancel);
-}
-
-void BatchFaceDetector::closeEvent(QCloseEvent* e)
-{
-    abort();
-    e->accept();
-}
-
-void BatchFaceDetector::abort()
+void FaceDetector::slotCancel()
 {
     d->pipeline.cancel();
+    setComplete();
 }
 
-void BatchFaceDetector::slotImagesSkipped(const QList<ImageInfo>& infos)
+void FaceDetector::slotImagesSkipped(const QList<ImageInfo>& infos)
 {
     advance(infos.size());
 }
 
-void BatchFaceDetector::slotShowOneDetected(const FacePipelinePackage& package)
+void FaceDetector::slotShowOneDetected(const FacePipelinePackage& package)
 {
     QPixmap pix;
 
     if (!package.image.isNull())
     {
-        pix = package.image.smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
+        pix = package.image.smoothScale(22, 22, Qt::KeepAspectRatio).convertToPixmap();
     }
     else if (!package.faces.isEmpty())
     {
-        pix = QPixmap::fromImage(package.faces.first().image().toQImage().scaled(128, 128, Qt::KeepAspectRatio));
+        pix = QPixmap::fromImage(package.faces.first().image().toQImage().scaled(22, 22, Qt::KeepAspectRatio));
     }
 
-    addedAction(pix, package.info.filePath());
+    setThumbnail(pix);
     advance(1);
 }
 
