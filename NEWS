@@ -24,4 +24,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 117343 : JJ: Border images - Christmas and other seasons templates wanted.
 016 ==> 103695 : Precise movement in superimpose template.
 017 ==> 289264 : Add option: "show thumbbar in full-screen picture preview".
-018 ==> 
+018 ==> 237452 : Tagging interface functionality lost.
+019 ==> 
