@@ -136,7 +136,6 @@ void MaintenanceImgInfJobTool::processOne()
 
     d->status = LoadingAlbum;
     d->imageInfoJob->allItemsFromAlbum(*d->albumsIt);
-    kDebug() << "Sync Items from Album :" << (*d->albumsIt)->title();
 }
 
 void MaintenanceImgInfJobTool::slotAlbumItemsInfo(const ImageInfoList& list)
