@@ -31,6 +31,7 @@
 
 // KDE includes
 
+#include <kicon.h>
 #include <kapplication.h>
 #include <klocale.h>
 
@@ -176,18 +177,17 @@ void BatchSyncMetadata::slotParseList()
 {
     if (!d->everStarted)
     {
-        QString message;
-
         if (d->direction == WriteFromDatabaseToFile)
         {
-            message = i18n("Synchronizing image metadata with database");
+            setLabel(i18n("Synchronizing image metadata with database"));
+            setThumbnail(KIcon("document-edit").pixmap(22));
         }
         else
         {
-            message = i18n("Updating database from image metadata");
+            setLabel(i18n("Updating database from image metadata"));
+            setThumbnail(KIcon("edit-redo").pixmap(22));
         }
-
-        setLabel(message);
+ 
         setTotalItems(d->imageInfoList.count());
 
         d->everStarted = true;

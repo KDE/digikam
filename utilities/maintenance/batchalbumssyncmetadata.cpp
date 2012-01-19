@@ -29,7 +29,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+#include <kicon.h>
 #include <kapplication.h>
 #include <klocale.h>
 
@@ -43,8 +43,6 @@ namespace Digikam
 BatchAlbumsSyncMetadata::BatchAlbumsSyncMetadata()
     : MaintenanceImgInfJobTool("BatchAlbumsSyncMetadata")
 {
-    setTitle(i18n("Sync metadata"));
-    setThumbnail(KIconLoader::global()->loadIcon("run-build-file", KIconLoader::NoGroup, 22));
 }
 
 BatchAlbumsSyncMetadata::~BatchAlbumsSyncMetadata()
@@ -53,6 +51,9 @@ BatchAlbumsSyncMetadata::~BatchAlbumsSyncMetadata()
 
 void BatchAlbumsSyncMetadata::gotNewImageInfoList(const ImageInfoList& list)
 {
+    setTitle(i18n("Sync metadata"));
+    setThumbnail(KIcon("run-build-file").pixmap(22));
+
     MetadataHub fileHub;
     foreach(const ImageInfo& info, list)
     {
