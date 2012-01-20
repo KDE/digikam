@@ -48,77 +48,12 @@
 #include "databaseaccess.h"
 #include "databasebackend.h"
 #include "findduplicatesalbumitem.h"
-#include "imagelister.h"
+#include "duplicatesfinder.h"
 #include "albumselectcombobox.h"
 #include "abstractalbummodel.h"
 
 namespace Digikam
 {
-
-FindDuplicatesProgressItem::FindDuplicatesProgressItem(const QStringList& albumsIdList,
-                                                       const QStringList& tagsIdList, int similarity)
-    : ProgressItem(0, ProgressManager::getUniqueID(), QString(), QString(), true, true)
-{
-    ProgressManager::addProgressItem(this);
-
-    double thresh = similarity / 100.0;
-
-    m_job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
-    m_job->addMetaData("duplicates", "normal");
-    m_job->addMetaData("albumids",   albumsIdList.join(","));
-    m_job->addMetaData("tagids",     tagsIdList.join(","));
-    m_job->addMetaData("threshold",  QString::number(thresh));
-
-    connect(m_job, SIGNAL(result(KJob*)),
-            this, SLOT(slotDuplicatesSearchResult()));
-
-    connect(m_job, SIGNAL(totalAmount(KJob*, KJob::Unit, qulonglong)),
-            this, SLOT(slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong)));
-
-    connect(m_job, SIGNAL(processedAmount(KJob*, KJob::Unit, qulonglong)),
-            this, SLOT(slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong)));
-
-    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
-            this, SLOT(slotCancelButtonPressed()));
-
-    setLabel(i18n("Find duplicates items"));
-    setThumbnail(KIcon("tools-wizard").pixmap(22));
-}
-
-void FindDuplicatesProgressItem::slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong amount)
-{
-    setTotalItems(amount);
-}
-
-void FindDuplicatesProgressItem::slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong amount)
-{
-    setCompletedItems(amount);
-    updateProgress();
-}
-
-void FindDuplicatesProgressItem::slotDuplicatesSearchResult()
-{
-    m_job = NULL;
-
-    emit signalComplete();
-
-    setComplete();
-}
-
-void FindDuplicatesProgressItem::slotCancelButtonPressed()
-{
-    if (m_job)
-    {
-        m_job->kill();
-        m_job = NULL;
-    }
-
-    emit signalComplete();
-
-    setComplete();
-}
-
-// ------------------------------------------------------------------------
 
 class FindDuplicatesAlbum::FindDuplicatesAlbumPriv
 {
@@ -500,13 +435,9 @@ void FindDuplicatesView::slotFindDuplicates()
         tagsIdList << QString::number(album->id());
     }
 
-    // --------------------------------------------------------
+    DuplicatesFinder* finder = new DuplicatesFinder(albumsIdList, tagsIdList, d->similarity->value());
 
-    FindDuplicatesProgressItem* progressItem = new FindDuplicatesProgressItem(albumsIdList,
-                                                                              tagsIdList,
-                                                                              d->similarity->value());
-
-    connect(progressItem, SIGNAL(signalComplete()),
+    connect(finder, SIGNAL(signalComplete()),
             this, SLOT(slotComplete()));
 }
 

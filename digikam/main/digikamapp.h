@@ -216,12 +216,15 @@ private Q_SLOTS:
     void slotConfNotifications();
     void slotToggleFullScreen();
 
-    void slotDatabaseMigration();
-    void slotDatabaseRescan();
     void slotRebuildAlbumThumbnails();
     void slotRebuildThumbnails();
     void slotWriteMetadataToAllImages();
     void slotGenerateFingerPrintsFirstTime();
+    void slotDatabaseMigration();
+
+    void slotDatabaseRescan();
+    void slotDatabaseRescanDone();
+
     void slotRebuildFingerPrints();
     void slotRebuildFingerPrintsDone();
 

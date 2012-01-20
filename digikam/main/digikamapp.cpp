@@ -153,6 +153,8 @@
 #include "progressview.h"
 #include "statusbarprogresswidget.h"
 #include "migrationdlg.h"
+#include "progressmanager.h"
+#include "newitemsfinder.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
@@ -231,6 +233,7 @@ DigikamApp::DigikamApp()
     LoadingCacheInterface::initialize();
     IccSettings::instance()->loadAllProfilesProperties();
     MetadataSettings::instance();
+    ProgressManager::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
 
     // creation of the engine on first use - when drawing -
@@ -292,17 +295,8 @@ DigikamApp::DigikamApp()
 
     setAutoSaveSettings("General Settings", true);
 
-    // now, enable finished the collection scan
-    connect(ScanController::instance(), SIGNAL(collectionScanStarted(QString)),
-            this, SLOT(enterProgress(QString)));
-
-    connect(ScanController::instance(), SIGNAL(scanningProgress(float)),
-            this, SLOT(progressValue(float)));
-
-    connect(ScanController::instance(), SIGNAL(collectionScanFinished()),
-            this, SLOT(finishProgress()));
-
-    ScanController::instance()->allowToScanDeferredFiles();
+    // Now, enable finished the collection scan as deferred process
+    new NewItemsFinder(true);
 
     LoadSaveThread::setInfoProvider(new DatabaseLoadSaveFileInfoProvider);
 }
@@ -2965,8 +2959,14 @@ void DigikamApp::slotDatabaseMigration()
 
 void DigikamApp::slotDatabaseRescan()
 {
-    ScanController::instance()->completeCollectionScan();
+    NewItemsFinder* finder = new NewItemsFinder();
 
+    connect(finder, SIGNAL(signalComplete()),
+            this, SLOT(slotDatabaseRescanDone()));
+}
+
+void DigikamApp::slotDatabaseRescanDone()
+{
     d->view->refreshView();
 
     if (LightTableWindow::lightTableWindowCreated())

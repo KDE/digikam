@@ -193,7 +193,6 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings)
         d->pipeline.plugFaceRecognizer();
         d->pipeline.plugDatabaseWriter(writeMode);
         d->pipeline.construct();
-
         d->pipeline.setDetectionAccuracy(settings.accuracy);
     }
 
@@ -336,7 +335,7 @@ void FaceDetector::complete()
     QTime now, t = now.addMSecs(d->duration.elapsed());
     // Pop-up a message to bring user when all is done.
     KNotificationWrapper(id(),
-                         i18n("Process is done.\nDuration: %1", t.toString()),
+                         i18n("Face Detection is done.\nDuration: %1", t.toString()),
                          kapp->activeWindow(), label());
     emit signalComplete();
 

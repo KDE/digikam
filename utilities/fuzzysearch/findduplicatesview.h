@@ -32,51 +32,16 @@
 #include <QPixmap>
 #include <QTreeWidget>
 
-// KDE includes
-
-#include <kio/job.h>
-#include <kjob.h>
-
 // Local includes
 
 #include "thumbnailloadthread.h"
-#include "progressmanager.h"
 
 class QTreeWidgetItem;
-
-using namespace KIO;
 
 namespace Digikam
 {
 class Album;
 class SAlbum;
-
-class FindDuplicatesProgressItem : public ProgressItem
-{
-    Q_OBJECT
-
-public:
-
-    FindDuplicatesProgressItem(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity);
-    ~FindDuplicatesProgressItem(){};
-
-Q_SIGNALS:
-
-    void signalComplete();
-
-private Q_SLOTS:
-
-    void slotDuplicatesSearchResult();
-    void slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong);
-    void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
-    void slotCancelButtonPressed();
-
-private:
-
-    Job* m_job;
-};
-
-// --------------------------------------------------------------------------------------------------------
 
 class FindDuplicatesView : public QWidget
 {

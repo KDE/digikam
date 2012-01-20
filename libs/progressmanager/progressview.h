@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <KVBox>
+#include <kvbox.h>
 
 // Local includes
 
