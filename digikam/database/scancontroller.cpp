@@ -438,7 +438,7 @@ void ScanController::allowToScanDeferredFiles()
 
 void ScanController::completeCollectionScan(SplashScreen* splash, bool defer)
 {
-    d->splash         = splash;
+    d->splash = splash;
     createProgressDialog();
     // we only need to count the files in advance
     //if we show a progress percentage in progress dialog
