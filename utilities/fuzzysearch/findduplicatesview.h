@@ -6,7 +6,7 @@
  * Date        : 2008-05-19
  * Description : Find Duplicates View.
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at googlemail dot com>
  *
@@ -34,18 +34,49 @@
 
 // KDE includes
 
+#include <kio/job.h>
 #include <kjob.h>
 
 // Local includes
 
 #include "thumbnailloadthread.h"
+#include "progressmanager.h"
 
 class QTreeWidgetItem;
+
+using namespace KIO;
 
 namespace Digikam
 {
 class Album;
 class SAlbum;
+
+class FindDuplicatesProgressItem : public ProgressItem
+{
+    Q_OBJECT
+
+public:
+
+    FindDuplicatesProgressItem(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity);
+    ~FindDuplicatesProgressItem(){};
+
+Q_SIGNALS:
+
+    void signalComplete();
+
+private Q_SLOTS:
+
+    void slotDuplicatesSearchResult();
+    void slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong);
+    void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
+    void slotCancelButtonPressed();
+
+private:
+
+    Job* m_job;
+};
+
+// --------------------------------------------------------------------------------------------------------
 
 class FindDuplicatesView : public QWidget
 {
@@ -76,12 +107,7 @@ private Q_SLOTS:
     void slotClear();
     void slotFindDuplicates();
     void slotDuplicatesAlbumActived(QTreeWidgetItem*, int);
-
-    void slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong);
-    void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
-    void slotDuplicatesSearchResult(KJob*);
-
-    void slotCancelButtonPressed();
+    void slotComplete();
 
     void slotAlbumSelectionChanged(Album*, Qt::CheckState);
     void slotTagSelectionChanged(Album*, Qt::CheckState);

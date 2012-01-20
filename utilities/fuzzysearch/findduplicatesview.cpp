@@ -6,7 +6,7 @@
  * Date        : 2008-05-19
  * Description : Find Duplicates View.
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at googlemail dot com>
  *
@@ -49,12 +49,76 @@
 #include "databasebackend.h"
 #include "findduplicatesalbumitem.h"
 #include "imagelister.h"
-#include "statusprogressbar.h"
 #include "albumselectcombobox.h"
 #include "abstractalbummodel.h"
 
 namespace Digikam
 {
+
+FindDuplicatesProgressItem::FindDuplicatesProgressItem(const QStringList& albumsIdList,
+                                                       const QStringList& tagsIdList, int similarity)
+    : ProgressItem(0, ProgressManager::getUniqueID(), QString(), QString(), true, true)
+{
+    ProgressManager::addProgressItem(this);
+
+    double thresh = similarity / 100.0;
+
+    m_job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
+    m_job->addMetaData("duplicates", "normal");
+    m_job->addMetaData("albumids",   albumsIdList.join(","));
+    m_job->addMetaData("tagids",     tagsIdList.join(","));
+    m_job->addMetaData("threshold",  QString::number(thresh));
+
+    connect(m_job, SIGNAL(result(KJob*)),
+            this, SLOT(slotDuplicatesSearchResult()));
+
+    connect(m_job, SIGNAL(totalAmount(KJob*, KJob::Unit, qulonglong)),
+            this, SLOT(slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong)));
+
+    connect(m_job, SIGNAL(processedAmount(KJob*, KJob::Unit, qulonglong)),
+            this, SLOT(slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong)));
+
+    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
+            this, SLOT(slotCancelButtonPressed()));
+
+    setLabel(i18n("Find duplicates items"));
+    setThumbnail(KIcon("tools-wizard").pixmap(22));
+}
+
+void FindDuplicatesProgressItem::slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong amount)
+{
+    setTotalItems(amount);
+}
+
+void FindDuplicatesProgressItem::slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong amount)
+{
+    setCompletedItems(amount);
+    updateProgress();
+}
+
+void FindDuplicatesProgressItem::slotDuplicatesSearchResult()
+{
+    m_job = NULL;
+
+    emit signalComplete();
+
+    setComplete();
+}
+
+void FindDuplicatesProgressItem::slotCancelButtonPressed()
+{
+    if (m_job)
+    {
+        m_job->kill();
+        m_job = NULL;
+    }
+
+    emit signalComplete();
+
+    setComplete();
+}
+
+// ------------------------------------------------------------------------
 
 class FindDuplicatesAlbum::FindDuplicatesAlbumPriv
 {
@@ -142,7 +206,7 @@ public:
         listView           = 0;
         scanDuplicatesBtn  = 0;
         updateFingerPrtBtn = 0;
-        progressBar        = 0;
+        progressItem       = 0;
         includeAlbumsLabel = 0;
         similarityLabel    = 0;
         similarity         = 0;
@@ -150,10 +214,7 @@ public:
         tagSelectCB        = 0;
         albumModel         = 0;
         tagModel           = 0;
-        searchJob          = NULL;
     }
-
-    KIO::Job*                    searchJob;
 
     QLabel*                      includeAlbumsLabel;
     QLabel*                      similarityLabel;
@@ -165,7 +226,7 @@ public:
 
     FindDuplicatesAlbum*         listView;
 
-    StatusProgressBar*           progressBar;
+    ProgressItem*                progressItem;
 
     AlbumSelectComboBox*         albumSelectCB;
     AlbumSelectComboBox*         tagSelectCB;
@@ -191,10 +252,6 @@ FindDuplicatesView::FindDuplicatesView(QWidget* parent)
     d->scanDuplicatesBtn->setIcon(KIcon("system-search"));
     d->scanDuplicatesBtn->setWhatsThis(i18n("Use this button to scan the selected albums for "
                                             "duplicate items."));
-
-    d->progressBar = new StatusProgressBar();
-    d->progressBar->progressBarMode(StatusProgressBar::TextMode);
-    d->progressBar->setEnabled(false);
 
     // ---------------------------------------------------------------
 
@@ -236,7 +293,6 @@ FindDuplicatesView::FindDuplicatesView(QWidget* parent)
     mainLayout->addWidget(d->similarity,         3, 2, 1, 1);
     mainLayout->addWidget(d->updateFingerPrtBtn, 4, 0, 1,-1);
     mainLayout->addWidget(d->scanDuplicatesBtn,  5, 0, 1,-1);
-    mainLayout->addWidget(d->progressBar,        6, 0, 1,-1);
     mainLayout->setRowStretch(0, 10);
     mainLayout->setColumnStretch(1, 10);
     mainLayout->setMargin(KDialog::spacingHint());
@@ -253,9 +309,6 @@ FindDuplicatesView::FindDuplicatesView(QWidget* parent)
 
     connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
             this, SLOT(slotDuplicatesAlbumActived(QTreeWidgetItem*,int)));
-
-    connect(d->progressBar, SIGNAL(signalCancelButtonPressed()),
-            this, SLOT(slotCancelButtonPressed()));
 
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(populateTreeView()));
@@ -428,11 +481,6 @@ void FindDuplicatesView::enableControlWidgets(bool val)
     d->tagSelectCB->setEnabled(val);
     d->similarityLabel->setEnabled(val);
     d->similarity->setEnabled(val);
-
-    d->progressBar->progressBarMode(val ? StatusProgressBar::TextMode
-                                    : StatusProgressBar::CancelProgressBarMode);
-    d->progressBar->setProgressValue(0);
-    d->progressBar->setEnabled(!val);
 }
 
 void FindDuplicatesView::slotFindDuplicates()
@@ -440,12 +488,13 @@ void FindDuplicatesView::slotFindDuplicates()
     slotClear();
     enableControlWidgets(false);
 
-    QStringList albumsIdList;
-    QStringList tagsIdList;
+    QStringList albumsIdList, tagsIdList;
+
     foreach(const Album* album, d->albumModel->checkedAlbums())
     {
         albumsIdList << QString::number(album->id());
     }
+
     foreach(const Album* album, d->tagModel->checkedAlbums())
     {
         tagsIdList << QString::number(album->id());
@@ -453,52 +502,16 @@ void FindDuplicatesView::slotFindDuplicates()
 
     // --------------------------------------------------------
 
-    double thresh = d->similarity->value() / 100.0;
+    FindDuplicatesProgressItem* progressItem = new FindDuplicatesProgressItem(albumsIdList,
+                                                                              tagsIdList,
+                                                                              d->similarity->value());
 
-    KIO::Job* job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
-    job->addMetaData("duplicates", "normal");
-    job->addMetaData("albumids",   albumsIdList.join(","));
-    job->addMetaData("tagids",     tagsIdList.join(","));
-    job->addMetaData("threshold",  QString::number(thresh));
-    d->searchJob = job;
-
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotDuplicatesSearchResult(KJob*)));
-
-    connect(job, SIGNAL(totalAmount(KJob*,KJob::Unit,qulonglong)),
-            this, SLOT(slotDuplicatesSearchTotalAmount(KJob*,KJob::Unit,qulonglong)));
-
-    connect(job, SIGNAL(processedAmount(KJob*,KJob::Unit,qulonglong)),
-            this, SLOT(slotDuplicatesSearchProcessedAmount(KJob*,KJob::Unit,qulonglong)));
+    connect(progressItem, SIGNAL(signalComplete()),
+            this, SLOT(slotComplete()));
 }
 
-void FindDuplicatesView::slotCancelButtonPressed()
+void FindDuplicatesView::slotComplete()
 {
-    if (d->searchJob)
-    {
-        d->searchJob->kill();
-        d->searchJob = NULL;
-
-        enableControlWidgets(true);
-        populateTreeView();
-    }
-}
-
-void FindDuplicatesView::slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong amount)
-{
-    d->progressBar->setProgressValue(0);
-    d->progressBar->setProgressTotalSteps(amount);
-}
-
-void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong amount)
-{
-    d->progressBar->setProgressValue(amount);
-}
-
-void FindDuplicatesView::slotDuplicatesSearchResult(KJob*)
-{
-    d->searchJob = NULL;
-
     enableControlWidgets(true);
     populateTreeView();
 }

@@ -50,6 +50,10 @@ class DIGIKAM_EXPORT ProgressItem : public QObject
 
 public:
 
+    ProgressItem(ProgressItem* parent, const QString& id, const QString& label,
+                 const QString& status, bool isCancellable, bool hasThumb);
+    virtual ~ProgressItem();
+
     /**
      * @return The id string which uniquely identifies the operation
      *         represented by this item.
@@ -238,13 +242,6 @@ Q_SIGNALS:
      * @param thumb thumbnail data
      */
     void progressItemThumbnail(ProgressItem* item, const QPixmap& thumb);
-
-public:
-
-    /* Only to be used by our good friend the ProgressManager */
-    ProgressItem(ProgressItem* parent, const QString& id, const QString& label,
-                 const QString& status, bool isCancellable, bool hasThumb);
-    virtual ~ProgressItem();
 
 private:
 
