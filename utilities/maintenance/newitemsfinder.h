@@ -51,7 +51,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotScanInformation(const QString& info);
+    void slotScanStarted(const QString& info);
     void slotProgressValue(float);
     void slotScanCompleted();
     void slotCancel();

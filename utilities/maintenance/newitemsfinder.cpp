@@ -41,9 +41,10 @@ namespace Digikam
 NewItemsFinder::NewItemsFinder(bool defer)
     : ProgressItem(0, "NewItemsFinder", QString(), QString(), true, true)
 {
-    ProgressManager::addProgressItem(this);
-
     m_duration.start();
+
+    connect(ScanController::instance(), SIGNAL(collectionScanStarted(QString)),
+            this, SLOT(slotScanStarted(QString)));
 
     connect(ScanController::instance(), SIGNAL(scanningProgress(float)),
             this, SLOT(slotProgressValue(float)));
@@ -51,15 +52,8 @@ NewItemsFinder::NewItemsFinder(bool defer)
     connect(ScanController::instance(), SIGNAL(collectionScanFinished()),
             this, SLOT(slotScanCompleted()));
 
-    connect(ScanController::instance(), SIGNAL(collectionScanStarted(QString)),
-            this, SLOT(slotScanInformation(QString)));
-
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
-
-    setLabel(i18n("Find new items"));
-    setThumbnail(KIcon("view-refresh").pixmap(22));
-    setUsesBusyIndicator(true);
 
     if (defer)
         ScanController::instance()->allowToScanDeferredFiles();
@@ -71,15 +65,19 @@ NewItemsFinder::~NewItemsFinder()
 {
 }
 
+void NewItemsFinder::slotScanStarted(const QString& info)
+{
+    ProgressManager::addProgressItem(this);
+    setUsesBusyIndicator(true);
+    setLabel(i18n("Find new items"));
+    setStatus(info);
+    setThumbnail(KIcon("view-refresh").pixmap(22));
+}
+
 void NewItemsFinder::slotProgressValue(float v)
 {
     // FIXME: sound like progress indication from ScanController are not suitable... Why ?
 //    setProgress((int)(v*100.0));
-}
-
-void NewItemsFinder::slotScanInformation(const QString& info)
-{
-    setStatus(info);
 }
 
 void NewItemsFinder::slotScanCompleted()
