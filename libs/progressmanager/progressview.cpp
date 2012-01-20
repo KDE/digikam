@@ -41,13 +41,12 @@
 
 // KDE includes
 
-#include <KDebug>
-#include <KDialog>
-#include <KHBox>
-#include <KIconLoader>
-#include <KLocale>
-#include <KStandardGuiItem>
-#include <KVBox>
+#include <kdebug.h>
+#include <kdialog.h>
+#include <khbox.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kstandardguiitem.h>
 
 // Local includes
 
@@ -279,28 +278,28 @@ ProgressView::ProgressView(QWidget* alignWidget, QWidget* parent, const char* na
     * appearing and vanishing items.
     */
     ProgressManager* pm = ProgressManager::instance();
-    
+
     connect(pm, SIGNAL(progressItemAdded(ProgressItem*)),
             this, SLOT(slotTransactionAdded(ProgressItem*)));
-    
+
     connect(pm, SIGNAL(progressItemCompleted(ProgressItem*)),
             this, SLOT(slotTransactionCompleted(ProgressItem*)));
-    
+
     connect(pm, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)),
             this, SLOT(slotTransactionProgress(ProgressItem*, unsigned int)));
-    
+
     connect(pm, SIGNAL(progressItemStatus(ProgressItem*, const QString&)),
             this, SLOT(slotTransactionStatus(ProgressItem*, const QString&)));
-    
+
     connect(pm, SIGNAL(progressItemLabel(ProgressItem*, const QString&)),
             this, SLOT(slotTransactionLabel(ProgressItem*, const QString&)));
-    
+
     connect(pm, SIGNAL(progressItemUsesBusyIndicator(ProgressItem*, bool)),
             this, SLOT(slotTransactionUsesBusyIndicator(ProgressItem*, bool)));
 
     connect(pm, SIGNAL(progressItemThumbnail(ProgressItem*, const QPixmap&)),
             this, SLOT(slotTransactionThumbnail(ProgressItem*, const QPixmap&)));
-    
+
     connect(pm, SIGNAL(showProgressView()),
             this, SLOT(slotShow()));
 }

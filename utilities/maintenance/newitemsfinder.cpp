@@ -51,6 +51,9 @@ NewItemsFinder::NewItemsFinder()
     connect(ScanController::instance(), SIGNAL(collectionScanFinished()),
             this, SLOT(slotScanCompleted()));
 
+    connect(ScanController::instance(), SIGNAL(collectionScanStarted(QString)),
+            this, SLOT(slotScanInformation(QString)));
+
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
 
@@ -69,6 +72,11 @@ void NewItemsFinder::slotProgressValue(float v)
 {
     // FIXME: sound like progress indication from ScanController are not suitable... Why ?
 //    setProgress((int)(v*100.0));
+}
+
+void NewItemsFinder::slotScanInformation(const QString& info)
+{
+    setStatus(info);
 }
 
 void NewItemsFinder::slotScanCompleted()

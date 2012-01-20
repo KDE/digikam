@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QTime>
+#include <QString>
 
 // Local includes
 
@@ -50,6 +51,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
+    void slotScanInformation(const QString& info);
     void slotProgressValue(float);
     void slotScanCompleted();
     void slotCancel();

@@ -27,7 +27,7 @@
 
 // KDE includes
 
-#include <KHBox>
+#include <khbox.h>
 
 // Local includes
 
