@@ -561,6 +561,8 @@ void CameraUI::setupStatusBar()
 {
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+    d->statusProgressBar->setNotify(true);
+    d->statusProgressBar->setNotificationTitle(d->cameraTitle, KIcon("camera-photo").pixmap(22));
     statusBar()->addWidget(d->statusProgressBar, 100);
 
     //------------------------------------------------------------------------------
