@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-01-20
- * Description : Duplicates items finder.
+ * Description : new items finder.
  *
  * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,36 +21,28 @@
  *
  * ============================================================ */
 
-#ifndef DUPLICATESFINDER_H
-#define DUPLICATESFINDER_H
+#ifndef NEWITEMSFINDER_H
+#define NEWITEMSFINDER_H
 
 // Qt includes
 
-#include <QString>
 #include <QTime>
-
-// KDE includes
-
-#include <kio/job.h>
-#include <kjob.h>
 
 // Local includes
 
 #include "progressmanager.h"
 
-using namespace KIO;
-
 namespace Digikam
 {
 
-class DuplicatesFinder : public ProgressItem
+class NewItemsFinder : public ProgressItem
 {
     Q_OBJECT
 
 public:
 
-    DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity);
-    ~DuplicatesFinder();
+    NewItemsFinder();
+    ~NewItemsFinder();
 
 Q_SIGNALS:
 
@@ -58,17 +50,15 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotDuplicatesSearchResult();
-    void slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong);
-    void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
+    void slotProgressValue(float);
+    void slotScanCompleted();
     void slotCancel();
 
 private:
 
     QTime m_duration;
-    Job*  m_job;
 };
 
 } // namespace Digikam
 
-#endif /* DUPLICATESFINDER_H */
+#endif /* NEWITEMSFINDER_H */

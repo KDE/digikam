@@ -63,7 +63,7 @@ DuplicatesFinder::DuplicatesFinder(const QStringList& albumsIdList, const QStrin
             this, SLOT(slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong)));
 
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
-            this, SLOT(slotCancelButtonPressed()));
+            this, SLOT(slotCancel()));
 
     setLabel(i18n("Find duplicates items"));
     setThumbnail(KIcon("tools-wizard").pixmap(22));
@@ -98,7 +98,7 @@ void DuplicatesFinder::slotDuplicatesSearchResult()
     setComplete();
 }
 
-void DuplicatesFinder::slotCancelButtonPressed()
+void DuplicatesFinder::slotCancel()
 {
     if (m_job)
     {

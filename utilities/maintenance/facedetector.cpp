@@ -193,7 +193,6 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings)
         d->pipeline.plugFaceRecognizer();
         d->pipeline.plugDatabaseWriter(writeMode);
         d->pipeline.construct();
-
         d->pipeline.setDetectionAccuracy(settings.accuracy);
     }
 

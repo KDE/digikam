@@ -523,3 +523,9 @@ Name=Update of duplicates items in database complete
 Name[x-test]=xxUpdate of duplicates items in database completexx
 Comment=The update of the duplicates items in database has completed.
 Action=Popup
+
+[Event/NewItemsFinder]
+Name=Find of new items in database complete
+Name[x-test]=xxFind of new items in database completexx
+Comment=The scan of the new items in database has completed.
+Action=Popup
