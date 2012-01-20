@@ -561,7 +561,6 @@ void CameraUI::setupStatusBar()
 {
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
-    d->statusProgressBar->setNotify(true);
     d->statusProgressBar->setNotificationTitle(d->cameraTitle, KIcon("camera-photo").pixmap(22));
     statusBar()->addWidget(d->statusProgressBar, 100);
 
@@ -905,6 +904,7 @@ void CameraUI::slotBusy(bool val)
 
         d->anim->stop();
         d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
+        d->statusProgressBar->setNotify(false);
 
         // like WDestructiveClose, but after camera controller operation has safely finished
         if (d->closed)
@@ -1658,6 +1658,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     }
 
     d->lastDestURL = url;
+    d->statusProgressBar->setNotify(true);
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->setProgressTotalSteps(total);
     d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
