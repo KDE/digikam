@@ -3,6 +3,7 @@ digiKam 2.6.0 - Release date: 2012-02-05
 
 NEW FEATURES:
 
+General        : Add a Progress Manager as into Kontact to drive process running in parallele.
 ImageEditor    : Template Superimpose feature have been moved to PhotoLayoutEditor kipi-plugin.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):

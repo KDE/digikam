@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-NewItemsFinder::NewItemsFinder()
+NewItemsFinder::NewItemsFinder(bool defer)
     : ProgressItem(0, "NewItemsFinder", QString(), QString(), true, true)
 {
     ProgressManager::addProgressItem(this);
@@ -61,7 +61,10 @@ NewItemsFinder::NewItemsFinder()
     setThumbnail(KIcon("view-refresh").pixmap(22));
     setUsesBusyIndicator(true);
 
-    ScanController::instance()->allowToScanDeferredFiles();
+    if (defer)
+        ScanController::instance()->allowToScanDeferredFiles();
+    else
+        ScanController::instance()->completeCollectionScan();
 }
 
 NewItemsFinder::~NewItemsFinder()

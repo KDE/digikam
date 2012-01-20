@@ -295,9 +295,8 @@ DigikamApp::DigikamApp()
 
     setAutoSaveSettings("General Settings", true);
 
-    // Now, enable finished the collection scan ----------------------------------------------------
-
-    new NewItemsFinder();
+    // Now, enable finished the collection scan as deferred process
+    new NewItemsFinder(true);
 
     LoadSaveThread::setInfoProvider(new DatabaseLoadSaveFileInfoProvider);
 }
@@ -2960,8 +2959,14 @@ void DigikamApp::slotDatabaseMigration()
 
 void DigikamApp::slotDatabaseRescan()
 {
-    ScanController::instance()->completeCollectionScan();
+    NewItemsFinder* finder = new NewItemsFinder();
 
+    connect(finder, SIGNAL(signalComplete()),
+            this, SLOT(slotDatabaseRescanDone()));
+}
+
+void DigikamApp::slotDatabaseRescanDone()
+{
     d->view->refreshView();
 
     if (LightTableWindow::lightTableWindowCreated())

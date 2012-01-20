@@ -42,7 +42,7 @@ class NewItemsFinder : public ProgressItem
 
 public:
 
-    NewItemsFinder();
+    NewItemsFinder(bool defer = false);
     ~NewItemsFinder();
 
 Q_SIGNALS:
