@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-NewItemsFinder::NewItemsFinder(bool defer)
+NewItemsFinder::NewItemsFinder(FinderMode mode, const QStringList& foldersToScan)
     : ProgressItem(0, "NewItemsFinder", QString(), QString(), true, true)
 {
     m_duration.start();
@@ -55,10 +55,25 @@ NewItemsFinder::NewItemsFinder(bool defer)
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
 
-    if (defer)
-        ScanController::instance()->allowToScanDeferredFiles();
-    else
-        ScanController::instance()->completeCollectionScan();
+    switch(mode)
+    {
+        case ScanDeferredFiles:
+        {
+            ScanController::instance()->allowToScanDeferredFiles();
+            break;
+        }
+        case CompleteCollectionScan:
+        {
+            ScanController::instance()->completeCollectionScan();
+            break;
+        }
+        case ScheduleCollectionScan:
+        {
+            foreach(const QString& folder, foldersToScan)
+                ScanController::instance()->scheduleCollectionScan(folder);
+            break;
+        }
+    }
 }
 
 NewItemsFinder::~NewItemsFinder()

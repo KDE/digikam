@@ -296,7 +296,7 @@ DigikamApp::DigikamApp()
     setAutoSaveSettings("General Settings", true);
 
     // Now, enable finished the collection scan as deferred process
-    new NewItemsFinder(true);
+    new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
 
     LoadSaveThread::setInfoProvider(new DatabaseLoadSaveFileInfoProvider);
 }

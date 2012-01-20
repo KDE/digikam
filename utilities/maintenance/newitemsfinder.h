@@ -42,7 +42,16 @@ class NewItemsFinder : public ProgressItem
 
 public:
 
-    NewItemsFinder(bool defer = false);
+    enum FinderMode
+    {
+        CompleteCollectionScan,   // Scan whole collection imediatly.
+        ScanDeferredFiles,        // Defer whole collection scan.
+        ScheduleCollectionScan    // Scan imediatly folders list passed in contructor.
+    };
+    
+public:
+
+    NewItemsFinder(FinderMode mode=CompleteCollectionScan, const QStringList& foldersToScan=QStringList());
     ~NewItemsFinder();
 
 Q_SIGNALS:

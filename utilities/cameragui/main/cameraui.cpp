@@ -122,6 +122,7 @@
 #include "cameramessagebox.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
+#include "newitemsfinder.h"
 
 using namespace KDcrawIface;
 
@@ -838,10 +839,9 @@ void CameraUI::finishDialog()
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                           i18n("Scanning for new files, please wait..."));
-    foreach(const QString& folder, d->foldersToScan)
-    {
-        ScanController::instance()->scheduleCollectionScan(folder);
-    }
+
+    new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
+
     d->foldersToScan.clear();
 
     deleteLater();
