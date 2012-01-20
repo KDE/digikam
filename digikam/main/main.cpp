@@ -226,7 +226,7 @@ int main(int argc, char* argv[])
 
     if (!app.isSessionRestored())
     {
-        KTipDialog::showMultiTip(0, tipsFiles, false);
+        KTipDialog::showMultiTip(digikam, tipsFiles, false);
     }
 
     int ret = app.exec();
