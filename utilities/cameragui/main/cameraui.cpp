@@ -930,9 +930,6 @@ void CameraUI::slotBusy(bool val)
         // all selection actions are disable when camera interface is busy.
         d->view->viewport()->setEnabled(false);
 
-        d->cameraCancelAction->setEnabled(true);
-        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
-
         // Settings tab is disabled in slotDownload, selectively when downloading
         // Fast dis/enabling would create the impression of flicker, e.g. when retrieving EXIF from camera
         //d->advBox->setEnabled(false);
