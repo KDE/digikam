@@ -74,7 +74,7 @@ void NewItemsFinder::slotScanStarted(const QString& info)
     setThumbnail(KIcon("view-refresh").pixmap(22));
 }
 
-void NewItemsFinder::slotProgressValue(float v)
+void NewItemsFinder::slotProgressValue(float /*v*/)
 {
     // FIXME: sound like progress indication from ScanController are not suitable... Why ?
 //    setProgress((int)(v*100.0));
