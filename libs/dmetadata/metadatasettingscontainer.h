@@ -68,7 +68,7 @@ public:
         RotateByLossyRotation    = 1 << 3,
 
         RotatingFlags            = RotateByInternalFlag | RotateByMetadataFlag,
-        RotatingPixels           = RotateByLosslessRotation | RotateByLossyRotation,
+        RotatingPixels           = RotateByLosslessRotation | RotateByLossyRotation
     };
     Q_DECLARE_FLAGS(RotationBehaviorFlags, RotationBehaviorFlag)
 
