@@ -35,65 +35,12 @@
 
 #include "imageinfo.h"
 #include "parallelworkers.h"
-#include "workerobject.h"
+#include "databaseworkeriface.h"
 #include "metadatahub.h"
 #include "fileactionmngr.h"
 
 namespace Digikam
 {
-
-class DatabaseWorkerInterface : public WorkerObject
-{
-    Q_OBJECT
-
-public Q_SLOTS:
-
-    virtual void assignTags(const QList<ImageInfo>&, const QList<int>&) {};
-    virtual void removeTags(const QList<ImageInfo>&, const QList<int>&) {};
-    virtual void assignPickLabel(const QList<ImageInfo>&, int) {};
-    virtual void assignColorLabel(const QList<ImageInfo>&, int) {};
-    virtual void assignRating(const QList<ImageInfo>&, int) {};
-    virtual void editGroup(int, const ImageInfo&, const QList<ImageInfo>&) {};
-    virtual void setExifOrientation(const QList<ImageInfo>&, int) {};
-    virtual void applyMetadata(const QList<ImageInfo>&, MetadataHub*) {};
-
-Q_SIGNALS:
-
-    void writeMetadataToFiles(const QList<ImageInfo>& infos);
-    void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
-    void writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
-};
-
-// ---------------------------------------------------------------------------------------------
-
-class FileActionMngrDatabaseWorker : public DatabaseWorkerInterface
-{
-public:
-
-    FileActionMngrDatabaseWorker(FileActionMngr::FileActionMngrPriv* d)
-        : d(d) {}
-
-public:
-
-    void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
-    void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
-    void assignPickLabel(const QList<ImageInfo>& infos, int pickId);
-    void assignColorLabel(const QList<ImageInfo>& infos, int colorId);
-    void assignRating(const QList<ImageInfo>& infos, int rating);
-    void editGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos);
-    void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
-    void applyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
-
-private:
-
-    void changeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs, bool addOrRemove);
-
-private:
-
-    FileActionMngr::FileActionMngrPriv* const d;
-};
-
-// ---------------------------------------------------------------------------------------------
 
 class FileWorkerInterface : public WorkerObject
 {

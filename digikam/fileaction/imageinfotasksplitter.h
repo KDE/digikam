@@ -52,4 +52,4 @@ protected:
 
 } // namespace Digikam
 
-#endif /* FILEACTIONMNGR_H */
+#endif /* IMAGEINFOTASKSPLITTER_H */
