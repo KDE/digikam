@@ -42,6 +42,7 @@
 #include "albumsettings.h"
 #include "databaseoperationgroup.h"
 #include "imageattributeswatch.h"
+#include "imageinfotasksplitter.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
 #include "metadatasettings.h"
@@ -756,39 +757,6 @@ void FileActionMngrFileWorker::transform(const QList<ImageInfo>& infos, int acti
 
     ScanController::instance()->resumeCollectionScan();
     d->finishedWriting(infos.size());
-}
-
- // -------------------------------------------------------------------------------
-
-ImageInfoTaskSplitter::ImageInfoTaskSplitter(const QList<ImageInfo>& list)
-    : QList<ImageInfo>(list)
-{
-    int parts = ParallelWorkers::optimalWorkerCount();
-    m_n = qMax(1, list.size() / parts);
-}
-
-QList<ImageInfo> ImageInfoTaskSplitter::next()
-{
-    QList<ImageInfo> list;
-    if (size() <= m_n)
-    {
-        list = *this;
-        clear();
-    }
-    else
-    {
-        list.reserve(m_n);
-        // qCopy does not work with QList
-        for (int i=0; i<m_n; i++)
-            list << at(i);
-        erase(begin(), begin() + m_n);
-    }
-    return list;
-}
-
-bool ImageInfoTaskSplitter::hasNext() const
-{
-    return !isEmpty();
 }
 
 } // namespace Digikam

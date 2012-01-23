@@ -24,33 +24,11 @@
 
 #include "fileactionmngr_p.moc"
 
-// Qt includes
-/*
-#include <QMutexLocker>
-#include <QPointer>
-*/
-// KDE includes
-/*
-#include <kglobal.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kprogressdialog.h>
-*/
 // Local includes
 
 #include "thumbnailloadthread.h"
 #include "loadingcacheinterface.h"
 
-/*
-#include "albumsettings.h"
-#include "databaseoperationgroup.h"
-#include "imageattributeswatch.h"
-#include "metadatasettings.h"
-#include "scancontroller.h"
-#include "globals.h"
-#include "jpegutils.h"
-#include "dimg.h"
-*/
 namespace Digikam
 {
 

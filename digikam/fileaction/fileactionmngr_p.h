@@ -136,21 +136,6 @@ private:
 
 // ---------------------------------------------------------------------------------------------
 
-class ImageInfoTaskSplitter : public QList<ImageInfo>
-{
-public:
-
-    ImageInfoTaskSplitter(const QList<ImageInfo>& list);
-    QList<ImageInfo> next();
-    bool hasNext() const;
-
-protected:
-
-    int m_n;
-};
-
-// ---------------------------------------------------------------------------------------------
-
 enum GroupAction
 {
     AddToGroup,
