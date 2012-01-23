@@ -1447,6 +1447,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/metadatahub.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileactionmngr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileactionmngr_p.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscompletionbox.cpp

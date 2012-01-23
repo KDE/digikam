@@ -36,12 +36,11 @@
 #include "imageinfo.h"
 #include "parallelworkers.h"
 #include "workerobject.h"
+#include "metadatahub.h"
+#include "fileactionmngr.h"
 
 namespace Digikam
 {
-
-class FileActionMngrDatabaseWorker;
-class FileActionMngrFileWorker;
 
 class DatabaseWorkerInterface : public WorkerObject
 {
@@ -63,8 +62,9 @@ Q_SIGNALS:
     void writeMetadataToFiles(const QList<ImageInfo>& infos);
     void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
     void writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
-
 };
+
+// ---------------------------------------------------------------------------------------------
 
 class FileActionMngrDatabaseWorker : public DatabaseWorkerInterface
 {
@@ -112,6 +112,8 @@ Q_SIGNALS:
     void imageChangeFailed(const QString& message, const QStringList& fileNames);
 };
 
+// ---------------------------------------------------------------------------------------------
+
 class FileActionMngrFileWorker : public FileWorkerInterface
 {
 
@@ -143,6 +145,7 @@ public:
     bool hasNext() const;
 
 protected:
+
     int m_n;
 };
 
@@ -166,25 +169,26 @@ public:
 
 public:
 
-    int                           dbTodo;
-    int                           dbDone;
-    int                           writerTodo;
-    int                           writerDone;
-    QSet<qlonglong>               scheduledToWrite;
-    QString                       dbMessage;
-    QString                       writerMessage;
-    QMutex                        mutex;
+    int                                   dbTodo;
+    int                                   dbDone;
+    int                                   writerTodo;
+    int                                   writerDone;
+    QSet<qlonglong>                       scheduledToWrite;
+    QString                               dbMessage;
+    QString                               writerMessage;
+    QMutex                                mutex;
 
-    FileActionMngr*               q;
+    FileActionMngr*                       q;
 
-    DatabaseWorkerInterface*                  dbWorker;
-    ParallelAdapter<FileWorkerInterface>*     fileWorker;
+    DatabaseWorkerInterface*              dbWorker;
+    ParallelAdapter<FileWorkerInterface>* fileWorker;
 
-    QTimer*                       sleepTimer;
+    QTimer*                               sleepTimer;
 
 public:
 
-    // Signal-emitter glue code
+    // -- Signal-emitter glue code --
+
     void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
     {
         emit signalAddTags(infos, tagIDs);
@@ -293,9 +297,6 @@ Q_SIGNALS:
     void signalEditGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos);
     void signalTransform(const QList<ImageInfo>& infos, int orientation);
 };
-
-// ---------------------------------------------------------------------------------------------
-
 
 } // namespace Digikam
 
