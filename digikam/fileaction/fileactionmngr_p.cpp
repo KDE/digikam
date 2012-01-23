@@ -115,18 +115,6 @@ FileActionMngr::FileActionMngrPriv::~FileActionMngrPriv()
     delete fileWorker;
 }
 
-void FileActionMngr::FileActionMngrPriv::schedulingForDB(int numberOfInfos)
-{
-    dbTodo += numberOfInfos;
-    updateProgress();
-}
-
-void FileActionMngr::FileActionMngrPriv::setDBAction(const QString& action)
-{
-    dbMessage = action;
-    updateProgressMessage();
-}
-
 bool FileActionMngr::FileActionMngrPriv::shallSendForWriting(qlonglong id)
 {
     QMutexLocker lock(&mutex);
@@ -138,6 +126,54 @@ bool FileActionMngr::FileActionMngrPriv::shallSendForWriting(qlonglong id)
 
     scheduledToWrite << id;
     return true;
+}
+
+void FileActionMngr::FileActionMngrPriv::startingToWrite(const QList<ImageInfo>& infos)
+{
+    QMutexLocker lock(&mutex);
+    foreach(const ImageInfo& info, infos)
+    {
+        scheduledToWrite.remove(info.id());
+    }
+}
+
+void FileActionMngr::FileActionMngrPriv::slotSleepTimer()
+{
+    if (dbTodo == 0)
+    {
+        dbWorker->deactivate();
+    }
+
+    if (writerTodo == 0)
+    {
+        fileWorker->deactivate();
+    }
+}
+
+void FileActionMngr::FileActionMngrPriv::slotImageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache)
+{
+    // must be done from the UI thread, touches pixmaps
+    if (removeThumbnails)
+    {
+        ThumbnailLoadThread::deleteThumbnail(path);
+    }
+
+    if (notifyCache)
+    {
+        LoadingCacheInterface::fileChanged(path);
+    }
+}
+
+void FileActionMngr::FileActionMngrPriv::setDBAction(const QString& action)
+{
+    dbMessage = action;
+    updateProgressMessage();
+}
+
+void FileActionMngr::FileActionMngrPriv::schedulingForDB(int numberOfInfos)
+{
+    dbTodo += numberOfInfos;
+    updateProgress();
 }
 
 void FileActionMngr::FileActionMngrPriv::dbProcessedOne()
@@ -172,28 +208,6 @@ void FileActionMngr::FileActionMngrPriv::schedulingForOrientationWrite(int numbe
     schedulingForWrite(numberOfInfos);
 }
 
-void FileActionMngr::FileActionMngrPriv::startingToWrite(const QList<ImageInfo>& infos)
-{
-    QMutexLocker lock(&mutex);
-    foreach(const ImageInfo& info, infos)
-    {
-        scheduledToWrite.remove(info.id());
-    }
-}
-
-void FileActionMngr::FileActionMngrPriv::slotSleepTimer()
-{
-    if (dbTodo == 0)
-    {
-        dbWorker->deactivate();
-    }
-
-    if (writerTodo == 0)
-    {
-        fileWorker->deactivate();
-    }
-}
-
 void FileActionMngr::FileActionMngrPriv::setWriterAction(const QString& action)
 {
     writerMessage = action;
@@ -211,20 +225,6 @@ void FileActionMngr::FileActionMngrPriv::finishedWriting(int numberOfInfos)
     writerTodo -= numberOfInfos;
     writerDone -= numberOfInfos;
     updateProgress();
-}
-
-void FileActionMngr::FileActionMngrPriv::slotImageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache)
-{
-    // must be done from the UI thread, touches pixmaps
-    if (removeThumbnails)
-    {
-        ThumbnailLoadThread::deleteThumbnail(path);
-    }
-
-    if (notifyCache)
-    {
-        LoadingCacheInterface::fileChanged(path);
-    }
 }
 
 void FileActionMngr::FileActionMngrPriv::updateProgressMessage()
