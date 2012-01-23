@@ -1445,8 +1445,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/assignnameoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/facerejectionoverlay.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata/metadatahub.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata/fileactionmngr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/metadatahub.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileactionmngr.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscompletionbox.cpp
