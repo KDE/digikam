@@ -33,55 +33,14 @@
 
 // Local includes
 
-#include "imageinfo.h"
 #include "parallelworkers.h"
 #include "databaseworkeriface.h"
+#include "fileworkeriface.h"
 #include "metadatahub.h"
 #include "fileactionmngr.h"
 
 namespace Digikam
 {
-
-class FileWorkerInterface : public WorkerObject
-{
-    Q_OBJECT
-
-public Q_SLOTS:
-
-    void writeOrientationToFiles(const QList<ImageInfo>&, int) {};
-    virtual void writeMetadataToFiles(const QList<ImageInfo>&) {};
-    virtual void writeMetadata(const QList<ImageInfo>&, MetadataHub*) {};
-    virtual void transform(const QList<ImageInfo>&, int) {};
-
-Q_SIGNALS:
-
-    void imageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache);
-    void imageChangeFailed(const QString& message, const QStringList& fileNames);
-};
-
-// ---------------------------------------------------------------------------------------------
-
-class FileActionMngrFileWorker : public FileWorkerInterface
-{
-
-public:
-
-    FileActionMngrFileWorker(FileActionMngr::FileActionMngrPriv* d)
-        : d(d) {}
-
-public:
-
-    void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
-    void writeMetadataToFiles(const QList<ImageInfo>& infos);
-    void writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
-    void transform(const QList<ImageInfo>& infos, int orientation);
-
-private:
-
-    FileActionMngr::FileActionMngrPriv* const d;
-};
-
-// ---------------------------------------------------------------------------------------------
 
 enum GroupAction
 {
@@ -98,24 +57,6 @@ public:
 
     FileActionMngrPriv(FileActionMngr* q);
     ~FileActionMngrPriv();
-
-public:
-
-    int                                   dbTodo;
-    int                                   dbDone;
-    int                                   writerTodo;
-    int                                   writerDone;
-    QSet<qlonglong>                       scheduledToWrite;
-    QString                               dbMessage;
-    QString                               writerMessage;
-    QMutex                                mutex;
-
-    FileActionMngr*                       q;
-
-    DatabaseWorkerInterface*              dbWorker;
-    ParallelAdapter<FileWorkerInterface>* fileWorker;
-
-    QTimer*                               sleepTimer;
 
 public:
 
@@ -228,6 +169,24 @@ Q_SIGNALS:
     void signalApplyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
     void signalEditGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos);
     void signalTransform(const QList<ImageInfo>& infos, int orientation);
+
+public:
+
+    int                                   dbTodo;
+    int                                   dbDone;
+    int                                   writerTodo;
+    int                                   writerDone;
+    QSet<qlonglong>                       scheduledToWrite;
+    QString                               dbMessage;
+    QString                               writerMessage;
+    QMutex                                mutex;
+
+    FileActionMngr*                       q;
+
+    DatabaseWorkerInterface*              dbWorker;
+    ParallelAdapter<FileWorkerInterface>* fileWorker;
+
+    QTimer*                               sleepTimer;
 };
 
 } // namespace Digikam

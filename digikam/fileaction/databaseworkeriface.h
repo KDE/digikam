@@ -45,14 +45,14 @@ class DatabaseWorkerInterface : public WorkerObject
 
 public Q_SLOTS:
 
-    virtual void assignTags(const QList<ImageInfo>&, const QList<int>&) {};
-    virtual void removeTags(const QList<ImageInfo>&, const QList<int>&) {};
-    virtual void assignPickLabel(const QList<ImageInfo>&, int) {};
-    virtual void assignColorLabel(const QList<ImageInfo>&, int) {};
-    virtual void assignRating(const QList<ImageInfo>&, int) {};
+    virtual void assignTags(const QList<ImageInfo>&, const QList<int>&)    {};
+    virtual void removeTags(const QList<ImageInfo>&, const QList<int>&)    {};
+    virtual void assignPickLabel(const QList<ImageInfo>&, int)             {};
+    virtual void assignColorLabel(const QList<ImageInfo>&, int)            {};
+    virtual void assignRating(const QList<ImageInfo>&, int)                {};
     virtual void editGroup(int, const ImageInfo&, const QList<ImageInfo>&) {};
-    virtual void setExifOrientation(const QList<ImageInfo>&, int) {};
-    virtual void applyMetadata(const QList<ImageInfo>&, MetadataHub*) {};
+    virtual void setExifOrientation(const QList<ImageInfo>&, int)          {};
+    virtual void applyMetadata(const QList<ImageInfo>&, MetadataHub*)      {};
 
 Q_SIGNALS:
 
