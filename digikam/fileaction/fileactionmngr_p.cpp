@@ -172,12 +172,6 @@ void FileActionMngr::FileActionMngrPriv::schedulingForOrientationWrite(int numbe
     schedulingForWrite(numberOfInfos);
 }
 
-void FileActionMngr::FileActionMngrPriv::setWriterAction(const QString& action)
-{
-    writerMessage = action;
-    updateProgressMessage();
-}
-
 void FileActionMngr::FileActionMngrPriv::startingToWrite(const QList<ImageInfo>& infos)
 {
     QMutexLocker lock(&mutex);
@@ -185,6 +179,25 @@ void FileActionMngr::FileActionMngrPriv::startingToWrite(const QList<ImageInfo>&
     {
         scheduledToWrite.remove(info.id());
     }
+}
+
+void FileActionMngr::FileActionMngrPriv::slotSleepTimer()
+{
+    if (dbTodo == 0)
+    {
+        dbWorker->deactivate();
+    }
+
+    if (writerTodo == 0)
+    {
+        fileWorker->deactivate();
+    }
+}
+
+void FileActionMngr::FileActionMngrPriv::setWriterAction(const QString& action)
+{
+    writerMessage = action;
+    updateProgressMessage();
 }
 
 void FileActionMngr::FileActionMngrPriv::writtenToOne()
@@ -211,19 +224,6 @@ void FileActionMngr::FileActionMngrPriv::slotImageDataChanged(const QString& pat
     if (notifyCache)
     {
         LoadingCacheInterface::fileChanged(path);
-    }
-}
-
-void FileActionMngr::FileActionMngrPriv::slotSleepTimer()
-{
-    if (dbTodo == 0)
-    {
-        dbWorker->deactivate();
-    }
-
-    if (writerTodo == 0)
-    {
-        fileWorker->deactivate();
     }
 }
 
