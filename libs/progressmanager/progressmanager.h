@@ -309,7 +309,10 @@ public:
      */
     ProgressItem* findItembyId(const QString& id) const
     {
-        return mTransactions.value(id);
+        if (!id.isEmpty())
+            return mTransactions.value(id, 0);
+
+        return 0;
     }
 
     /**

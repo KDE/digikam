@@ -287,8 +287,11 @@ void ProgressManager::emitShowProgressViewImpl()
 
 void ProgressManager::slotTransactionCompleted(ProgressItem* item)
 {
-    mTransactions.remove(item->id());
-    emit progressItemCompleted(item);
+    if (item)
+    {
+        mTransactions.remove(item->id());
+        emit progressItemCompleted(item);
+    }
 }
 
 void ProgressManager::slotStandardCancelHandler(ProgressItem* item)
