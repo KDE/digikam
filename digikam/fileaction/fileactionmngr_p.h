@@ -58,6 +58,25 @@ public:
     FileActionMngrPriv(FileActionMngr* q);
     ~FileActionMngrPriv();
 
+Q_SIGNALS:
+
+    // connected to FileActionMngr public signals
+    void progressMessageChanged(const QString& descriptionOfAction);
+    void progressValueChanged(float percent);
+    void progressValueChanged(int percent);
+    void progressFinished();
+
+    // inter-thread signals: connected to database worker slots
+    void signalAddTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void signalRemoveTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void signalAssignPickLabel(const QList<ImageInfo>& infos, int pickId);
+    void signalAssignColorLabel(const QList<ImageInfo>& infos, int colorId);
+    void signalAssignRating(const QList<ImageInfo>& infos, int rating);
+    void signalSetExifOrientation(const QList<ImageInfo>& infos, int orientation);
+    void signalApplyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
+    void signalEditGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos);
+    void signalTransform(const QList<ImageInfo>& infos, int orientation);
+
 public:
 
     // -- Signal-emitter glue code --
@@ -140,35 +159,16 @@ public:
 
     void finishedWriting(int numberOfInfos);
 
-    void updateProgress();
-    void updateProgressMessage();
-
     void connectToDatabaseWorker();
     void connectDatabaseToFileWorker();
+
+    void updateProgress();
+    void updateProgressMessage();
 
 public Q_SLOTS:
 
     void slotImageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache);
     void slotSleepTimer();
-
-Q_SIGNALS:
-
-    // connected to FileActionMngr public signals
-    void progressMessageChanged(const QString& descriptionOfAction);
-    void progressValueChanged(float percent);
-    void progressValueChanged(int percent);
-    void progressFinished();
-
-    // inter-thread signals: connected to database worker slots
-    void signalAddTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
-    void signalRemoveTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
-    void signalAssignPickLabel(const QList<ImageInfo>& infos, int pickId);
-    void signalAssignColorLabel(const QList<ImageInfo>& infos, int colorId);
-    void signalAssignRating(const QList<ImageInfo>& infos, int rating);
-    void signalSetExifOrientation(const QList<ImageInfo>& infos, int orientation);
-    void signalApplyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
-    void signalEditGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos);
-    void signalTransform(const QList<ImageInfo>& infos, int orientation);
 
 public:
 

@@ -52,12 +52,22 @@ public:
         SplitGroup
     };
 
+public:
+
     static FileActionMngr* instance();
 
     bool requestShutDown();
     void shutDown();
-
     bool isActive();
+
+Q_SIGNALS:
+
+    void progressMessageChanged(const QString& descriptionOfAction);
+    void progressValueChanged(float percent);
+    void progressValueChanged(int percent);
+    void progressFinished();
+
+    void imageChangeFailed(const QString& message, const QStringList& fileNames);
 
 public Q_SLOTS:
 
@@ -93,15 +103,6 @@ public Q_SLOTS:
 
     /** Flip or rotate. Note: The NoTransformation action is interpreted as Exif auto-rotate */
     void transform(const QList<ImageInfo>& infos, KExiv2Iface::RotationMatrix::TransformationAction action);
-
-Q_SIGNALS:
-
-    void progressMessageChanged(const QString& descriptionOfAction);
-    void progressValueChanged(float percent);
-    void progressValueChanged(int percent);
-    void progressFinished();
-
-    void imageChangeFailed(const QString& message, const QStringList& fileNames);
 
 public:
 
