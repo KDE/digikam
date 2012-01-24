@@ -224,7 +224,7 @@ bool Rotate::toolOperations()
 
     if (useExif)
     {
-        image().rotateAndFlip(LoadSaveThread::exifOrientation(inputUrl().toLocalFile()));
+        image().rotateAndFlip(LoadSaveThread::exifOrientation(image(), inputUrl().toLocalFile()));
     }
     else
     {

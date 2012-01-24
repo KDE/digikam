@@ -429,7 +429,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
 
             if (!attribute.isValid() || !attribute.toBool())
             {
-                d->rotatedOrFlipped = d->image.rotateAndFlip(LoadSaveThread::exifOrientation(loadingDescription.filePath));
+                d->rotatedOrFlipped = d->image.rotateAndFlip(LoadSaveThread::exifOrientation(d->image, loadingDescription.filePath));
             }
         }
 

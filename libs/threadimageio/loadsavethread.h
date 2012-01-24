@@ -44,6 +44,7 @@
 namespace Digikam
 {
 
+class DMetadata;
 class LoadSaveTask;
 
 class DIGIKAM_EXPORT LoadSaveNotifier
@@ -138,7 +139,9 @@ public:
      * Retrieves the Exif orientation, either from the info provider if available,
      * or from the metadata
      */
-    static int exifOrientation(const QString& filePath);
+    static int exifOrientation(const DImg& image, const QString& filePath);
+    static int exifOrientation(const QString& filePath, const DMetadata& metadata,
+                               bool isRaw, bool fromRawEmbeddedPreview);
 
 Q_SIGNALS:
 
