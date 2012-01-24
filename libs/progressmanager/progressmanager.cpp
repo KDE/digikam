@@ -249,6 +249,7 @@ void ProgressManager::addProgressItemImpl(ProgressItem* t, ProgressItem* parent)
         ProgressItem* p = findItembyId(parent->id());
         if (p)
         {
+            kDebug() << "Add child progress " << t->id() << " to " << p->id();
             p->addChild(t);
         }
     }
@@ -277,7 +278,7 @@ void ProgressManager::addProgressItemImpl(ProgressItem* t, ProgressItem* parent)
     connect(t, SIGNAL(progressItemThumbnail(ProgressItem*, const QPixmap&)),
             this, SIGNAL(progressItemThumbnail(ProgressItem*, const QPixmap&)));
 
-    emit progressItemAdded( t );
+    emit progressItemAdded(t);
 }
 
 void ProgressManager::emitShowProgressViewImpl()
