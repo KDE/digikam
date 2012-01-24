@@ -1070,10 +1070,11 @@ void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset&
     {
         DatabaseFields::Set changes = changeset.changes();
 
-        if (changes & DatabaseFields::ModificationDate)
+        if (changes & DatabaseFields::ModificationDate
+            || changes & DatabaseFields::Orientation)
         {
             ImageInfo info(imageId);
-            kDebug() << imageId << info.filePath();
+            //kDebug() << imageId << info.filePath();
             notifyFileChanged(info.filePath());
         }
     }
