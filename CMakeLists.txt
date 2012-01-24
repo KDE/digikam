@@ -1471,6 +1471,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/editablesearchtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/sidebarwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/slideshowbuilder.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/stackedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/digikamview.cpp
