@@ -425,15 +425,6 @@ void DigikamView::setupConnections()
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
-    connect(d->rightSideBar->imageDescEditTab(), SIGNAL(progressEntered(QString)),
-            d->parent, SLOT(enterProgress(QString)));
-
-    connect(d->rightSideBar->imageDescEditTab(), SIGNAL(progressValueChanged(float)),
-            d->parent, SLOT(progressValue(float)));
-
-    connect(d->rightSideBar->imageDescEditTab(), SIGNAL(progressFinished()),
-            d->parent, SLOT(finishProgress()));
-
     connect(d->fuzzySearchSideBar, SIGNAL(signalUpdateFingerPrints()),
             d->parent, SLOT(slotRebuildFingerPrints()));
 
@@ -526,7 +517,7 @@ void DigikamView::setupConnections()
     // -- FileActionMngr progress ---------------
 
 
-    connect(FileActionMngr::instance(), SIGNAL(signalScheduled()),
+    connect(FileActionMngr::instance(), SIGNAL(signalProgressScheduled()),
             this, SLOT(slotInitProgressIndicator()));
 
     connect(FileActionMngr::instance(), SIGNAL(signalImageChangeFailed(QString, QStringList)),

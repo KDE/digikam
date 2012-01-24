@@ -47,6 +47,9 @@
 #include <kdialog.h>
 #include <ktabwidget.h>
 #include <kdebug.h>
+
+// Libkexiv2 includes
+
 #include <libkexiv2/altlangstredit.h>
 
 // Libkdcraw includes
@@ -76,6 +79,7 @@
 #include "imageinfo.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
+#include "fileactionprogress.h"
 
 namespace Digikam
 {
@@ -740,7 +744,8 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
 
 void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 {
-    emit progressEntered(i18n("Reading metadata from files. Please wait..."));
+    initProgressIndicator();
+    emit signalProgressMessageChanged(i18n("Reading metadata from files. Please wait..."));
 
     d->ignoreImageAttributesWatch = true;
     int i                         = 0;
@@ -762,14 +767,14 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
         fileHub.write(info);
         */
 
-        emit progressValueChanged(i++/(float)d->currInfos.count());
+        emit signalProgressValueChanged(i++/(float)d->currInfos.count());
         kapp->processEvents();
     }
 
     ScanController::instance()->resumeCollectionScan();
     d->ignoreImageAttributesWatch = false;
 
-    emit progressFinished();
+    emit signalProgressFinished();
 
     // reload everything
     setInfos(d->currInfos);
@@ -777,7 +782,8 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 
 void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
 {
-    emit progressEntered(i18n("Writing metadata to files. Please wait..."));
+    initProgressIndicator();
+    emit signalProgressMessageChanged(i18n("Writing metadata to files. Please wait..."));
 
     int i = 0;
     foreach(const ImageInfo& info, d->currInfos)
@@ -788,11 +794,11 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
         // write out to file DMetadata
         fileHub.write(info.filePath());
 
-        emit progressValueChanged(i++/(float)d->currInfos.count());
+        emit signalProgressValueChanged(i++/(float)d->currInfos.count());
         kapp->processEvents();
     }
 
-    emit progressFinished();
+    emit signalProgressFinished();
 }
 
 bool ImageDescEditTab::eventFilter(QObject* o, QEvent* e)
@@ -1421,6 +1427,23 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
     d->applyToAllVersionsButton->setEnabled(false);
+}
+
+void ImageDescEditTab::initProgressIndicator()
+{
+    if (!ProgressManager::instance()->findItembyId("ImageDescEditTabProgress"))
+    {
+        FileActionProgress* item = new FileActionProgress("ImageDescEditTabProgress");
+
+        connect(this, SIGNAL(signalProgressMessageChanged(QString)),
+                item, SLOT(slotProgressStatus(QString)));
+
+        connect(this, SIGNAL(signalProgressValueChanged(float)),
+                item, SLOT(slotProgressValue(float)));
+
+        connect(this, SIGNAL(signalProgressFinished()),
+                item, SLOT(slotCompleted()));
+    }
 }
 
 }  // namespace Digikam

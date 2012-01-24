@@ -72,9 +72,10 @@ public:
 
 Q_SIGNALS:
 
-    void progressEntered(const QString&);
-    void progressValueChanged(float);
-    void progressFinished();
+    void signalProgressMessageChanged(const QString& actionDescription);
+    void signalProgressValueChanged(float percent);
+    void signalProgressFinished();
+
     void signalTagFilterMatch(bool);
     void signalPrevItem();
     void signalNextItem();
@@ -104,7 +105,8 @@ private:
     void setMetadataWidgetStatus(int status, QWidget* widget);
     void metadataChange(qlonglong imageId);
     void resetMetadataChangeInfo();
-
+    void initProgressIndicator();
+    
 private Q_SLOTS:
 
     void slotApplyAllChanges();
