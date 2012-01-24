@@ -71,6 +71,7 @@
 #include "iccmanager.h"
 #include "iccprofile.h"
 #include "iccsettings.h"
+#include "loadsavethread.h"
 #include "jpegutils.h"
 #include "pgfutils.h"
 #include "tagregion.h"
@@ -650,17 +651,9 @@ int ThumbnailCreator::exifOrientation(const ThumbnailInfo& info, const DMetadata
         return DMetadata::ORIENTATION_NORMAL;
     }
 
-    // Keep in sync with main version in loadsavethread.cpp:
-
-    if (DImg::fileFormat(info.filePath) == DImg::RAW && !fromEmbeddedPreview )
-    {
-        return DMetadata::ORIENTATION_NORMAL;
-    }
-
-    if (info.orientationHint == DMetadata::ORIENTATION_UNSPECIFIED)
-        return metadata.getImageOrientation();
-    else
-        return info.orientationHint;
+    return LoadSaveThread::exifOrientation(info.filePath, metadata,
+                                           DImg::fileFormat(info.filePath) == DImg::RAW,
+                                           fromEmbeddedPreview);
 }
 
 QImage ThumbnailCreator::exifRotate(const QImage& thumb, int orientation) const
@@ -930,7 +923,17 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
         }
     }
 
-    image.exifOrientation = dbInfo.orientationHint;
+    // Give priority to main database's rotation flag
+    // NOTE: Breaks rotation of RAWs which do not contain JPEG previews
+    image.exifOrientation = DMetadata::ORIENTATION_UNSPECIFIED;
+    if (LoadSaveThread::infoProvider())
+    {
+        image.exifOrientation = LoadSaveThread::infoProvider()->orientationHint(info.filePath);
+    }
+    if (image.exifOrientation == DMetadata::ORIENTATION_UNSPECIFIED)
+    {
+        image.exifOrientation = dbInfo.orientationHint;
+    }
 
     return image;
 }
