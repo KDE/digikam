@@ -72,20 +72,20 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressView* progressView, QW
     m_stack->setMaximumHeight( maximumHeight );
     m_box->addWidget( m_stack );
 
-    m_pButton->setToolTip( i18n("Open detailed progress dialog") );
+    m_pButton->setToolTip(i18n("Open detailed progress dialog"));
 
-    m_pProgressBar = new QProgressBar( this );
-    m_pProgressBar->installEventFilter( this );
-    m_pProgressBar->setMinimumWidth( w );
-    m_stack->insertWidget( 1,m_pProgressBar );
+    m_pProgressBar = new QProgressBar(this);
+    m_pProgressBar->installEventFilter(this);
+    m_pProgressBar->setMinimumWidth(w);
+    m_stack->insertWidget(1, m_pProgressBar);
 
-    m_pLabel = new QLabel( QString(), this );
-    m_pLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-    m_pLabel->installEventFilter( this );
-    m_pLabel->setMinimumWidth( w );
-    m_stack->insertWidget( 2, m_pLabel );
-    m_pButton->setMaximumHeight( maximumHeight );
-    setMinimumWidth( minimumSizeHint().width() );
+    m_pLabel = new QLabel(i18n("No active process"), this);
+    m_pLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    m_pLabel->installEventFilter(this);
+    m_pLabel->setMinimumWidth(w);
+    m_stack->insertWidget(2, m_pLabel);
+    m_pButton->setMaximumHeight(maximumHeight);
+    setMinimumWidth(minimumSizeHint().width());
 
     m_mode = None;
     setMode();
@@ -234,26 +234,28 @@ void StatusbarProgressWidget::slotProgressItemProgress( ProgressItem *item, unsi
 
 void StatusbarProgressWidget::setMode()
 {
-    switch ( m_mode )
+    switch (m_mode)
     {
         case None:
-            if ( m_bShowButton )
+        {
+            if (m_bShowButton)
             {
                 m_pButton->hide();
             }
-            // show the empty label in order to make the status bar look better
             m_stack->show();
-            m_stack->setCurrentWidget( m_pLabel );
+            m_stack->setCurrentWidget(m_pLabel);
             break;
-
+        }
         case Progress:
+        {
             m_stack->show();
-            m_stack->setCurrentWidget( m_pProgressBar );
-            if ( m_bShowButton )
+            m_stack->setCurrentWidget(m_pProgressBar);
+            if (m_bShowButton)
             {
                 m_pButton->show();
             }
             break;
+        }
     }
 }
 
