@@ -486,13 +486,6 @@ private:
 
     void emitShowProgressViewImpl();
 
-    ProgressItem* createProgressItemForAgent(ProgressItem* parent,
-                                             const QString& id,
-                                             const QString& label,
-                                             const QString& status,
-                                             bool  cancellable,
-                                             bool  hasThumb);
-
     virtual ProgressItem* createProgressItemImpl(ProgressItem* parent,
                                                  const QString& id,
                                                  const QString& label,
