@@ -39,11 +39,7 @@ FileActionProgress::FileActionProgress()
     : ProgressItem(0, "FileActionProgress", QString(), QString(), true, true)
 {
     ProgressManager::addProgressItem(this);
-    /*m_dbProgress     = ProgressManager::createProgressItem(this, "FileActionMngrDBProgressItem",     QString());
-    m_writerProgress = ProgressManager::createProgressItem(this, "FileActionMngrWriterProgressItem", QString());
-    m_dbProgress->setUsesBusyIndicator(true);
-    m_writerProgress->setUsesBusyIndicator(true);
-*/    setLabel(i18n("Process Items"));
+    setLabel(i18n("Process Items"));
     setThumbnail(KIcon("digikam").pixmap(22));
 
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
@@ -54,18 +50,14 @@ FileActionProgress::~FileActionProgress()
 {
 }
 
-void FileActionProgress::slotStarted()
-{
-}
-
 void FileActionProgress::slotProgressValue(float v)
 {
     setProgress((int)(v*100.0));
 }
 
-void FileActionProgress::slotProgressMessage(const QString& mess)
+void FileActionProgress::slotProgressStatus(const QString& st)
 {
-    setStatus(mess);
+    setStatus(st);
 }
 
 void FileActionProgress::slotCompleted()
@@ -77,8 +69,6 @@ void FileActionProgress::slotCompleted()
 
 void FileActionProgress::slotCancel()
 {
-    emit signalComplete();
-
     setComplete();
 }
 

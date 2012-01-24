@@ -51,16 +51,10 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotStarted();
     void slotProgressValue(float);
-    void slotProgressMessage(const QString&);
+    void slotProgressStatus(const QString&);
     void slotCompleted();
     void slotCancel();
-
-private:
-
-    ProgressItem* m_dbProgress;
-    ProgressItem* m_writerProgress;
 };
 
 } // namespace Digikam

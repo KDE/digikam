@@ -240,6 +240,8 @@ private Q_SLOTS:
 
     void slotPopupFiltersView();
 
+    void slotInitProgressIndicator();
+
 private:
 
     class DigikamViewPriv;

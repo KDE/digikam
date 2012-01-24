@@ -56,13 +56,13 @@ FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
 
     connectDatabaseToFileWorker();
 
-    connect(this, SIGNAL(signalTransform(QList<ImageInfo>,int)),
-            fileWorker, SLOT(transform(QList<ImageInfo>,int)), Qt::DirectConnection);
+    connect(this, SIGNAL(signalTransform(QList<ImageInfo>, int)),
+            fileWorker, SLOT(transform(QList<ImageInfo>, int)), Qt::DirectConnection);
 
-    connect(fileWorker, SIGNAL(imageDataChanged(QString,bool,bool)),
-            this, SLOT(slotImageDataChanged(QString,bool,bool)));
+    connect(fileWorker, SIGNAL(imageDataChanged(QString, bool, bool)),
+            this, SLOT(slotImageDataChanged(QString, bool, bool)));
 
-    connect(this, SIGNAL(progressFinished()),
+    connect(this, SIGNAL(signalProgressFinished()),
             sleepTimer, SLOT(start()));
 
     connect(sleepTimer, SIGNAL(timeout()),
@@ -72,29 +72,29 @@ FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
 void FileActionMngr::FileActionMngrPriv::connectToDatabaseWorker()
 {
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAddTags(QList<ImageInfo>,QList<int>)),
-                                     dbWorker, SLOT(assignTags(QList<ImageInfo>,QList<int>)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAddTags(QList<ImageInfo>, QList<int>)),
+                                     dbWorker, SLOT(assignTags(QList<ImageInfo>, QList<int>)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalRemoveTags(QList<ImageInfo>,QList<int>)),
-                                     dbWorker, SLOT(removeTags(QList<ImageInfo>,QList<int>)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalRemoveTags(QList<ImageInfo>, QList<int>)),
+                                     dbWorker, SLOT(removeTags(QList<ImageInfo>, QList<int>)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignPickLabel(QList<ImageInfo>,int)),
-                                     dbWorker, SLOT(assignPickLabel(QList<ImageInfo>,int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignPickLabel(QList<ImageInfo>, int)),
+                                     dbWorker, SLOT(assignPickLabel(QList<ImageInfo>, int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignColorLabel(QList<ImageInfo>,int)),
-                                     dbWorker, SLOT(assignColorLabel(QList<ImageInfo>,int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignColorLabel(QList<ImageInfo>, int)),
+                                     dbWorker, SLOT(assignColorLabel(QList<ImageInfo>, int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignRating(QList<ImageInfo>,int)),
-                                     dbWorker, SLOT(assignRating(QList<ImageInfo>,int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignRating(QList<ImageInfo>, int)),
+                                     dbWorker, SLOT(assignRating(QList<ImageInfo>, int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalEditGroup(int,ImageInfo,QList<ImageInfo>)),
-                                     dbWorker, SLOT(editGroup(int,ImageInfo,QList<ImageInfo>)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalEditGroup(int, ImageInfo, QList<ImageInfo>)),
+                                     dbWorker, SLOT(editGroup(int, ImageInfo, QList<ImageInfo>)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalSetExifOrientation(QList<ImageInfo>,int)),
-                                     dbWorker, SLOT(setExifOrientation(QList<ImageInfo>,int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalSetExifOrientation(QList<ImageInfo>, int)),
+                                     dbWorker, SLOT(setExifOrientation(QList<ImageInfo>, int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalApplyMetadata(QList<ImageInfo>,MetadataHub*)),
-                                     dbWorker, SLOT(applyMetadata(QList<ImageInfo>,MetadataHub*)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalApplyMetadata(QList<ImageInfo>, MetadataHub*)),
+                                     dbWorker, SLOT(applyMetadata(QList<ImageInfo>, MetadataHub*)));
 }
 
 void FileActionMngr::FileActionMngrPriv::connectDatabaseToFileWorker()
@@ -102,11 +102,11 @@ void FileActionMngr::FileActionMngrPriv::connectDatabaseToFileWorker()
     connect(dbWorker, SIGNAL(writeMetadataToFiles(QList<ImageInfo>)),
             fileWorker, SLOT(writeMetadataToFiles(QList<ImageInfo>)), Qt::DirectConnection);
 
-    connect(dbWorker, SIGNAL(writeOrientationToFiles(QList<ImageInfo>,int)),
-            fileWorker, SLOT(writeOrientationToFiles(QList<ImageInfo>,int)), Qt::DirectConnection);
+    connect(dbWorker, SIGNAL(writeOrientationToFiles(QList<ImageInfo>, int)),
+            fileWorker, SLOT(writeOrientationToFiles(QList<ImageInfo>, int)), Qt::DirectConnection);
 
-    connect(dbWorker, SIGNAL(writeMetadata(QList<ImageInfo>,MetadataHub*)),
-            fileWorker, SLOT(writeMetadata(QList<ImageInfo>,MetadataHub*)), Qt::DirectConnection);
+    connect(dbWorker, SIGNAL(writeMetadata(QList<ImageInfo>, MetadataHub*)),
+            fileWorker, SLOT(writeMetadata(QList<ImageInfo>, MetadataHub*)), Qt::DirectConnection);
 }
 
 FileActionMngr::FileActionMngrPriv::~FileActionMngrPriv()
@@ -244,7 +244,7 @@ void FileActionMngr::FileActionMngrPriv::updateProgressMessage()
         message = writerMessage;
     }
 
-    emit progressMessageChanged(message);
+    emit signalProgressMessageChanged(message);
 }
 
 void FileActionMngr::FileActionMngrPriv::updateProgress()
@@ -253,13 +253,14 @@ void FileActionMngr::FileActionMngrPriv::updateProgress()
     {
         dbDone     = 0;
         writerDone = 0;
-        emit progressFinished();
+        emit signalProgressFinished();
         return;
     }
 
-    float dbPercent     = float(dbDone) / float(qMax(1, dbTodo));
+    float dbPercent     = float(dbDone)     / float(qMax(1, dbTodo));
     float writerPercent = float(writerDone) / float(qMax(1, writerTodo));
     float percent;
+
     if (dbTodo && writerTodo)
     {
         // we use a weighting factor of 10 for file writing
@@ -270,8 +271,7 @@ void FileActionMngr::FileActionMngrPriv::updateProgress()
         percent = dbPercent + writerPercent;
     }
 
-    emit progressValueChanged(percent);
-    emit progressValueChanged(int(percent*100));
+    emit signalProgressValueChanged(percent);
 }
 
 } // namespace Digikam

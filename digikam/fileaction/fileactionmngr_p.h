@@ -61,10 +61,9 @@ public:
 Q_SIGNALS:
 
     // connected to FileActionMngr public signals
-    void progressMessageChanged(const QString& descriptionOfAction);
-    void progressValueChanged(float percent);
-    void progressValueChanged(int percent);
-    void progressFinished();
+    void signalProgressMessageChanged(const QString& actionDescription);
+    void signalProgressValueChanged(float percent);
+    void signalProgressFinished();
 
     // inter-thread signals: connected to database worker slots
     void signalAddTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);

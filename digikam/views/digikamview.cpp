@@ -76,6 +76,7 @@
 #include "tagscache.h"
 #include "searchxml.h"
 #include "faceiface.h"
+#include "fileactionprogress.h"
 #include "versionmanagersettings.h"
 
 namespace Digikam
@@ -524,17 +525,11 @@ void DigikamView::setupConnections()
 
     // -- FileActionMngr progress ---------------
 
-    connect(FileActionMngr::instance(), SIGNAL(progressMessageChanged(QString)),
-            d->parent, SLOT(enterProgress(QString)));
-
-    connect(FileActionMngr::instance(), SIGNAL(progressValueChanged(float)),
-            d->parent, SLOT(progressValue(float)));
-
-    connect(FileActionMngr::instance(), SIGNAL(progressFinished()),
-            d->parent, SLOT(finishProgress()));
-
-    connect(FileActionMngr::instance(), SIGNAL(imageChangeFailed(QString, QStringList)),
+    connect(FileActionMngr::instance(), SIGNAL(signalImageChangeFailed(QString, QStringList)),
             this, SLOT(slotImageChangeFailed(QString, QStringList)));
+
+    connect(FileActionMngr::instance(), SIGNAL(signalInitProgressIndicator()),
+            this, SLOT(slotInitProgressIndicator()));
 
     // -- Icon view progress
 
@@ -1959,6 +1954,23 @@ void DigikamView::slotImageExifOrientation(int orientation)
 void DigikamView::imageTransform(KExiv2Iface::RotationMatrix::TransformationAction transform)
 {
     FileActionMngr::instance()->transform(d->iconView->selectedImageInfos(), transform);
+}
+
+void DigikamView::slotInitProgressIndicator()
+{
+    if (!ProgressManager::instance()->findItembyId("FileActionProgress"))
+    {
+        FileActionProgress* item = new FileActionProgress();
+
+        connect(FileActionMngr::instance(), SIGNAL(signalProgressMessageChanged(QString)),
+                item, SLOT(slotProgressStatus(QString)));
+
+        connect(FileActionMngr::instance(), SIGNAL(signalProgressValueChanged(float)),
+                item, SLOT(slotProgressValue(float)));
+
+        connect(FileActionMngr::instance(), SIGNAL(signalProgressFinished()),
+                item, SLOT(slotCompleted()));
+    }
 }
 
 }  // namespace Digikam

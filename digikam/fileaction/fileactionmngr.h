@@ -62,12 +62,13 @@ public:
 
 Q_SIGNALS:
 
-    void progressMessageChanged(const QString& descriptionOfAction);
-    void progressValueChanged(float percent);
-    void progressValueChanged(int percent);
-    void progressFinished();
+    void signalInitProgressIndicator();
 
-    void imageChangeFailed(const QString& message, const QStringList& fileNames);
+    void signalProgressMessageChanged(const QString& actionDescription);
+    void signalProgressValueChanged(float percent);
+    void signalProgressFinished();
+
+    void signalImageChangeFailed(const QString& message, const QStringList& fileNames);
 
 public Q_SLOTS:
 
