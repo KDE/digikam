@@ -672,10 +672,12 @@ void DigikamImageView::createNewAlbumForSelected()
 void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
 {
     ImageInfo info = imageFilterModel()->imageInfo(index);
+
     if (info.isNull())
     {
         return;
     }
+
     setCurrentIndex(index);
     imageFilterModel()->toggleGroupOpen(info.id());
 }
@@ -683,20 +685,25 @@ void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
 void DigikamImageView::createGroupFromSelection()
 {
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
-    ImageInfo groupLeader = selectedInfos.takeFirst();
+    ImageInfo groupLeader          = selectedInfos.takeFirst();
     FileActionMngr::instance()->addToGroup(groupLeader, selectedInfos);
 }
 
 void DigikamImageView::createGroupByTimeFromSelection()
 {
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
-    while (selectedInfos.size() > 0) {
+
+    while (selectedInfos.size() > 0)
+    {
         QList<ImageInfo> group;
         ImageInfo groupLeader = selectedInfos.takeFirst();
-        QDateTime dateTime = groupLeader.dateTime();
-        while (selectedInfos.size()>0 && abs(dateTime.secsTo(selectedInfos.first().dateTime()))<2) {
+        QDateTime dateTime    = groupLeader.dateTime();
+
+        while (selectedInfos.size() > 0 && abs(dateTime.secsTo(selectedInfos.first().dateTime())) < 2)
+        {
             group.push_back(selectedInfos.takeFirst());
         }
+
         FileActionMngr::instance()->addToGroup(groupLeader, group);
     }
 }
@@ -748,8 +755,6 @@ void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 
 void DigikamImageView::slotInitProgressIndicator()
 {
-    kDebug() << "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
-    
     if (!ProgressManager::instance()->findItembyId("FaceActionProgress"))
     {
         FileActionProgress* item = new FileActionProgress("FaceActionProgress");
