@@ -472,7 +472,7 @@ void DigikamView::setupConnections()
 
     connect(d->filterWidget, SIGNAL(signalMimeTypeFilterChanged(int)),
             model, SLOT(setMimeTypeFilter(int)));
-    
+
     connect(d->filterWidget, SIGNAL(signalGeolocationFilterChanged(ImageFilterSettings::GeolocationCondition)),
             model, SLOT(setGeolocationFilter(ImageFilterSettings::GeolocationCondition)));
 
@@ -525,15 +525,12 @@ void DigikamView::setupConnections()
 
     // -- FileActionMngr progress ---------------
 
-    connect(FileActionMngr::instance(), SIGNAL(signalImageChangeFailed(QString, QStringList)),
-            this, SLOT(slotImageChangeFailed(QString, QStringList)));
 
-    connect(FileActionMngr::instance(), SIGNAL(signalInitProgressIndicator()),
+    connect(FileActionMngr::instance(), SIGNAL(signalScheduled()),
             this, SLOT(slotInitProgressIndicator()));
 
-    // -- Icon view progress
-
-    d->iconView->connectProgressSignals(d->parent);
+    connect(FileActionMngr::instance(), SIGNAL(signalImageChangeFailed(QString, QStringList)),
+            this, SLOT(slotImageChangeFailed(QString, QStringList)));
 
     // -- timers ---------------
 
@@ -1960,7 +1957,7 @@ void DigikamView::slotInitProgressIndicator()
 {
     if (!ProgressManager::instance()->findItembyId("FileActionProgress"))
     {
-        FileActionProgress* item = new FileActionProgress();
+        FileActionProgress* item = new FileActionProgress("FileActionProgress");
 
         connect(FileActionMngr::instance(), SIGNAL(signalProgressMessageChanged(QString)),
                 item, SLOT(slotProgressStatus(QString)));

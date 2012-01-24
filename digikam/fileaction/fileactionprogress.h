@@ -39,10 +39,10 @@ namespace Digikam
 class FileActionProgress : public ProgressItem
 {
     Q_OBJECT
-    
+
 public:
 
-    FileActionProgress();
+    FileActionProgress(const char* name);
     ~FileActionProgress();
 
 Q_SIGNALS:

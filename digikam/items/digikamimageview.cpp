@@ -7,7 +7,7 @@
  * Description : Qt item view for images
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software you can redistribute it
@@ -75,6 +75,7 @@
 #include "imageviewutilities.h"
 #include "imagewindow.h"
 #include "fileactionmngr.h"
+#include "fileactionprogress.h"
 #include "thumbnailloadthread.h"
 #include "tagregion.h"
 #include "addtagslineedit.h"
@@ -90,6 +91,9 @@ DigikamImageView::DigikamImageView(QWidget* parent)
     d->editPipeline.plugDatabaseEditor();
     d->editPipeline.plugTrainer();
     d->editPipeline.construct();
+
+    connect(&d->editPipeline, SIGNAL(scheduled()),
+            this, SLOT(slotInitProgressIndicator()));
 
     d->normalDelegate = new DigikamImageDelegate(this);
     d->faceDelegate   = new DigikamImageFaceDelegate(this);
@@ -182,18 +186,6 @@ void DigikamImageView::setThumbnailSize(const ThumbnailSize& size)
 int DigikamImageView::fitToWidthIcons()
 {
     return delegate()->calculatethumbSizeToFit(viewport()->size().width());
-}
-
-void DigikamImageView::connectProgressSignals(QObject* progressManager)
-{
-    connect(&d->editPipeline, SIGNAL(started(QString)),
-            progressManager, SLOT(enterProgress(QString)));
-
-    connect(&d->editPipeline, SIGNAL(progressValueChanged(float)),
-            progressManager, SLOT(progressValue(float)));
-
-    connect(&d->editPipeline, SIGNAL(finished()),
-            progressManager, SLOT(finishProgress()));
 }
 
 void DigikamImageView::slotSetupChanged()
@@ -752,6 +744,25 @@ void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 {
     FileActionMngr::instance()->transform(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes),
                                           KExiv2Iface::RotationMatrix::Rotate90);
+}
+
+void DigikamImageView::slotInitProgressIndicator()
+{
+    kDebug() << "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
+    
+    if (!ProgressManager::instance()->findItembyId("FaceActionProgress"))
+    {
+        FileActionProgress* item = new FileActionProgress("FaceActionProgress");
+
+        connect(&d->editPipeline, SIGNAL(started(QString)),
+                item, SLOT(slotProgressStatus(QString)));
+
+        connect(&d->editPipeline, SIGNAL(progressValueChanged(float)),
+                item, SLOT(slotProgressValue(float)));
+
+        connect(&d->editPipeline, SIGNAL(finished()),
+                item, SLOT(slotCompleted()));
+    }
 }
 
 } // namespace Digikam

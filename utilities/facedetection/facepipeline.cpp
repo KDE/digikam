@@ -1032,8 +1032,11 @@ void FacePipeline::FacePipelinePriv::start()
         return;
     }
 
-    WorkerObject*  workerObject;
-    ParallelPipes* pipes;
+    emit q->scheduled();
+
+    WorkerObject*  workerObject = 0;
+    ParallelPipes* pipes        = 0;
+
     foreach(QObject* element, pipeline)
     {
         if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
@@ -1087,8 +1090,9 @@ void FacePipeline::FacePipelinePriv::stop()
 
 void FacePipeline::FacePipelinePriv::applyPriority()
 {
-    WorkerObject*  workerObject;
-    ParallelPipes* pipes;
+    WorkerObject*  workerObject = 0;
+    ParallelPipes* pipes        = 0;
+
     foreach(QObject* element, pipeline)
     {
         if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
@@ -1100,6 +1104,7 @@ void FacePipeline::FacePipelinePriv::applyPriority()
             pipes->setPriority(priority);
         }
     }
+
     if (thumbnailLoadThread)
     {
         thumbnailLoadThread->setPriority(priority);

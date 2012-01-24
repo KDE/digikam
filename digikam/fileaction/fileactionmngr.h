@@ -62,7 +62,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalInitProgressIndicator();
+    void signalScheduled();
 
     void signalProgressMessageChanged(const QString& actionDescription);
     void signalProgressValueChanged(float percent);

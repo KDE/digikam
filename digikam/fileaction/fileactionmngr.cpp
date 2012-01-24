@@ -146,7 +146,7 @@ void FileActionMngr::assignTags(const ImageInfo& info, const QList<int>& tagIDs)
 
 void FileActionMngr::assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
-    emit signalInitProgressIndicator();
+    emit signalScheduled();
     d->schedulingForDB(infos.size());
     d->assignTags(infos, tagIDs);
 }
@@ -168,7 +168,7 @@ void FileActionMngr::removeTags(const ImageInfo& info, const QList<int>& tagIDs)
 
 void FileActionMngr::removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
-    emit signalInitProgressIndicator();
+    emit signalScheduled();
     d->schedulingForDB(infos.size());
     d->removeTags(infos, tagIDs);
 }
@@ -185,14 +185,14 @@ void FileActionMngr::assignColorLabel(const ImageInfo& info, int colorId)
 
 void FileActionMngr::assignPickLabel(const QList<ImageInfo>& infos, int pickId)
 {
-    emit signalInitProgressIndicator();
+    emit signalScheduled();
     d->schedulingForDB(infos.size());
     d->assignPickLabel(infos, pickId);
 }
 
 void FileActionMngr::assignColorLabel(const QList<ImageInfo>& infos, int colorId)
 {
-    emit signalInitProgressIndicator();
+    emit signalScheduled();
     d->schedulingForDB(infos.size());
     d->assignColorLabel(infos, colorId);
 }
@@ -204,14 +204,14 @@ void FileActionMngr::assignRating(const ImageInfo& info, int rating)
 
 void FileActionMngr::assignRating(const QList<ImageInfo>& infos, int rating)
 {
-    emit signalInitProgressIndicator();
+    emit signalScheduled();
     d->schedulingForDB(infos.size());
     d->assignRating(infos, rating);
 }
 
 void FileActionMngr::addToGroup(const ImageInfo& pick, const QList<ImageInfo>& infos)
 {
-    emit signalInitProgressIndicator();
+    emit signalScheduled();
     d->schedulingForDB(infos.size());
     d->editGroup(AddToGroup, pick, infos);
 }
@@ -223,7 +223,7 @@ void FileActionMngr::removeFromGroup(const ImageInfo& info)
 
 void FileActionMngr::removeFromGroup(const QList<ImageInfo>& infos)
 {
-    emit signalInitProgressIndicator();
+    emit signalScheduled();
     d->schedulingForDB(infos.size());
     d->editGroup(RemoveFromGroup, ImageInfo(), infos);
 }
@@ -235,35 +235,35 @@ void FileActionMngr::ungroup(const ImageInfo& info)
 
 void FileActionMngr::ungroup(const QList<ImageInfo>& infos)
 {
-    emit signalInitProgressIndicator();
+    emit signalScheduled();
     d->schedulingForDB(infos.size());
     d->editGroup(Ungroup, ImageInfo(), infos);
 }
 
 void FileActionMngr::setExifOrientation(const QList<ImageInfo>& infos, int orientation)
 {
-    emit signalInitProgressIndicator();
+    emit signalScheduled();
     d->schedulingForDB(infos.size());
     d->setExifOrientation(infos, orientation);
 }
 
 void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const MetadataHub& hub)
 {
-    emit signalInitProgressIndicator();
+    emit signalScheduled();
     d->schedulingForDB(infos.size());
     d->applyMetadata(infos, new MetadataHubOnTheRoad(hub, this));
 }
 
 void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad& hub)
 {
-    emit signalInitProgressIndicator();
+    emit signalScheduled();
     d->schedulingForDB(infos.size());
     d->applyMetadata(infos, new MetadataHubOnTheRoad(hub, this));
 }
 
 void FileActionMngr::transform(const QList<ImageInfo>& infos, KExiv2Iface::RotationMatrix::TransformationAction action)
 {
-    emit signalInitProgressIndicator();
+    emit signalScheduled();
     d->schedulingForWrite(infos.size());
     for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext();)
         d->transform(splitter.next(), action);
