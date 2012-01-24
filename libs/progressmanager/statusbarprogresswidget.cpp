@@ -154,7 +154,7 @@ void StatusbarProgressWidget::slotProgressItemAdded( ProgressItem *item )
 
 void StatusbarProgressWidget::slotProgressItemCompleted( ProgressItem *item )
 {
-    if ( item->parent() ) return; // we are only interested in top level items
+    if ( item && item->parent() ) return; // we are only interested in top level items
 
     connectSingleItem(); // if going back to 1 item
 
