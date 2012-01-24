@@ -56,10 +56,10 @@ class TransactionItemView : public QScrollArea
 
 public:
 
-    explicit TransactionItemView( QWidget * parent = 0, const char * name = 0 );
+    explicit TransactionItemView(QWidget* parent=0, const char* name=0);
     virtual ~TransactionItemView() {}
 
-    TransactionItem *addTransactionItem( ProgressItem *item, bool first );
+    TransactionItem* addTransactionItem(ProgressItem* item, bool first);
 
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
@@ -70,7 +70,7 @@ public Q_SLOTS:
 
 protected:
 
-    virtual void resizeEvent ( QResizeEvent *event );
+    virtual void resizeEvent(QResizeEvent* event);
 
 private:
 
