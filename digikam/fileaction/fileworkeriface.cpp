@@ -134,6 +134,8 @@ void FileActionMngrFileWorker::writeMetadata(const QList<ImageInfo>& infos, Meta
     }
     ScanController::instance()->resumeCollectionScan();
 
+    delete hub;
+
     d->finishedWriting(infos.size());
 }
 

@@ -151,6 +151,11 @@ MetadataHub& MetadataHub::operator=(const MetadataHub& other)
     return *this;
 }
 
+MetadataHub* MetadataHub::clone()
+{
+    return new MetadataHub(*this);
+}
+
 void MetadataHub::reset()
 {
     (*d) = MetadataHubPriv();
@@ -1203,6 +1208,11 @@ MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHubOnTheRoad& other, QO
     : QObject(parent), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
 {
     applyChangeNotifications();
+}
+
+MetadataHub* MetadataHubOnTheRoad::clone()
+{
+    return new MetadataHubOnTheRoad(*this, parent());
 }
 
 void MetadataHubOnTheRoad::applyChangeNotifications()

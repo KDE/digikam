@@ -123,6 +123,12 @@ public:
     MetadataHub& operator=(const MetadataHub&);
     MetadataHub(const MetadataHub&);
 
+    /**
+     * Creates a copy (as always, by value) of this hub.
+     * Shall be reimplemented by subclasses to return an object of the correct type.
+     */
+    virtual MetadataHub* clone();
+
     void reset();
 
     // --------------------------------------------------
@@ -389,6 +395,7 @@ public:
     MetadataHubOnTheRoad(const MetadataHub&);
     MetadataHubOnTheRoad(const MetadataHubOnTheRoad&, QObject* parent = 0);
     ~MetadataHubOnTheRoad();
+    virtual MetadataHub* clone();
 
 protected Q_SLOTS:
 

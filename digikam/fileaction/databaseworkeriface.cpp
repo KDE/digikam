@@ -280,7 +280,8 @@ void FileActionMngrDatabaseWorker::applyMetadata(const QList<ImageInfo>& infos, 
 
     d->schedulingForWrite(infos.size());
     for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
-        emit writeMetadata(splitter.next(), hub);
+        emit writeMetadata(splitter.next(), hub->clone());
+    delete hub;
     d->dbFinished(infos.size());
 }
 
