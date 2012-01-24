@@ -66,6 +66,8 @@ FileActionMngr* FileActionMngr::instance()
 FileActionMngr::FileActionMngr()
     : d(new FileActionMngrPriv(this))
 {
+    qRegisterMetaType<MetadataHub*>("MetadataHub*");
+
     connect(d, SIGNAL(signalProgressMessageChanged(QString)),
             this, SIGNAL(signalProgressMessageChanged(QString)));
 

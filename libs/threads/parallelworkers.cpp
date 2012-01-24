@@ -148,44 +148,53 @@ int ParallelWorkers::ParallelWorkers_qt_metacall(QMetaObject::Call _c, int _id, 
         // This is the common ancestor's meta object, below WorkerObject
         const QMetaObject* mobj = asQObject()->metaObject();
         const int properMethods = mobj->methodCount() - mobj->methodOffset();
-        if (_id < properMethods)
+
+        if (_id >= properMethods)
         {
-            // Get the relevant meta method. I'm not quite sure if this is rock solid.
-            QMetaMethod method = mobj->method(_id + mobj->methodOffset());
-
-            // Copy the argument data - _a is going to be deleted in our current thread
-            QList<QByteArray> types = method.parameterTypes();
-            QVector<QGenericArgument> args(10);
-            for (int i = 0; i<types.size(); i++)
-            {
-                int typeId = QMetaType::type(types[i]);
-                // we use QMetaType to copy the data. _a[0] is reserved for a return parameter.
-                void* data = QMetaType::construct(typeId, _a[i+1]);
-                args[i] = QGenericArgument(types[i], data);
-            }
-
-            // Find the object to be invoked
-            WorkerObject* obj = m_workers.at(m_currentIndex);
-            if (++m_currentIndex == m_workers.size())
-            {
-                m_currentIndex = 0;
-            }
-            kDebug() << "Distributing" << _id << "to" << obj;
-            obj->schedule();
-
-            // Invoke across-thread
-            method.invoke(obj, Qt::QueuedConnection,
-                          args[0],
-                          args[1],
-                          args[2],
-                          args[3],
-                          args[4],
-                          args[5],
-                          args[6],
-                          args[7],
-                          args[8],
-                          args[9]);
+            return _id - properMethods;
         }
+
+        // Get the relevant meta method. I'm not quite sure if this is rock solid.
+        QMetaMethod method = mobj->method(_id + mobj->methodOffset());
+
+        // Copy the argument data - _a is going to be deleted in our current thread
+        QList<QByteArray> types = method.parameterTypes();
+        QVector<QGenericArgument> args(10);
+        for (int i = 0; i<types.size(); i++)
+        {
+            int typeId = QMetaType::type(types[i]);
+            if (!typeId && _a[i+1])
+            {
+                kWarning() << "Unable to handle unregistered datatype" << types[i] << "Dropping signal.";
+                return _id - properMethods;
+            }
+            // we use QMetaType to copy the data. _a[0] is reserved for a return parameter.
+            void* data = QMetaType::construct(typeId, _a[i+1]);
+            args[i] = QGenericArgument(types[i], data);
+        }
+
+        // Find the object to be invoked
+        WorkerObject* obj = m_workers.at(m_currentIndex);
+        if (++m_currentIndex == m_workers.size())
+        {
+            m_currentIndex = 0;
+        }
+        kDebug() << "Distributing" << _id << "to" << obj;
+        obj->schedule();
+
+        // Invoke across-thread
+        method.invoke(obj, Qt::QueuedConnection,
+                        args[0],
+                        args[1],
+                        args[2],
+                        args[3],
+                        args[4],
+                        args[5],
+                        args[6],
+                        args[7],
+                        args[8],
+                        args[9]);
+
         _id -= properMethods;
     }
     return _id;
