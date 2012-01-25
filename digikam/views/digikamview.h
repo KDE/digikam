@@ -214,7 +214,6 @@ private Q_SLOTS:
     void slotImageSelected();
     void slotTogglePreviewMode(const ImageInfo& info);
     void slotDispatchImageSelected();
-    void slotItemsInfoFromAlbums(const ImageInfoList&);
 
     void slotLeftSidebarChangedTab(QWidget* w);
 

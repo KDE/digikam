@@ -51,7 +51,6 @@
 #include "dzoombar.h"
 #include "imagealbummodel.h"
 #include "imagedescedittab.h"
-#include "imageinfoalbumsjob.h"
 #include "imagepreviewview.h"
 #include "imagepropertiessidebardb.h"
 #include "imagethumbnailbar.h"
@@ -1743,27 +1742,10 @@ void DigikamView::slotSlideShowRecursive()
 
     if (album)
     {
-        AlbumList albumList;
-        albumList.append(album);
-        AlbumIterator it(album);
-
-        while (it.current())
-        {
-            albumList.append(*it);
-            ++it;
-        }
-
-        ImageInfoAlbumsJob* job = new ImageInfoAlbumsJob;
-        connect(job, SIGNAL(signalCompleted(ImageInfoList)),
-                this, SLOT(slotItemsInfoFromAlbums(ImageInfoList)));
-        job->allItemsFromAlbums(albumList);
+        SlideShowBuilder* builder = new SlideShowBuilder(album);
+        connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
+                this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
     }
-}
-
-void DigikamView::slotItemsInfoFromAlbums(const ImageInfoList& infoList)
-{
-    ImageInfoList list = infoList;
-    slideShow(list);
 }
 
 void DigikamView::slideShow(const ImageInfoList& infoList)

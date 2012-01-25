@@ -33,6 +33,11 @@
 #include <klocale.h>
 #include <kicon.h>
 
+// Local includes
+
+#include "album.h"
+#include "imageinfoalbumsjob.h"
+
 namespace Digikam
 {
 
@@ -41,11 +46,20 @@ SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
 {
     m_cancel   = false;
     m_infoList = infoList;
-   
+    m_album    = 0;
+
     ProgressManager::addProgressItem(this);
 
-    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
-            this, SLOT(slotCancel()));
+    QTimer::singleShot(500, this, SLOT(slotRun()));
+}
+
+SlideShowBuilder::SlideShowBuilder(Album* album)
+    : ProgressItem(0, "SlideShowBuilder", QString(), QString(), true, true)
+{
+    m_cancel = false;
+    m_album  = album;
+
+    ProgressManager::addProgressItem(this);
 
     QTimer::singleShot(500, this, SLOT(slotRun()));
 }
@@ -56,16 +70,45 @@ SlideShowBuilder::~SlideShowBuilder()
 
 void SlideShowBuilder::slotRun()
 {
+    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
+            this, SLOT(slotCancel()));
+
     setLabel(i18n("Preparing slideshow"));
     setThumbnail(KIcon("digikam").pixmap(22));
-    setTotalItems(m_infoList.count());
+
+    if (m_album)
+    {
+        AlbumList albumList;
+        albumList.append(m_album);
+        AlbumIterator it(m_album);
+
+        while (it.current())
+        {
+            albumList.append(*it);
+            ++it;
+        }
+
+        ImageInfoAlbumsJob* job = new ImageInfoAlbumsJob;
+        connect(job, SIGNAL(signalCompleted(ImageInfoList)),
+                this, SLOT(slotParseImageInfoList(ImageInfoList)));
+        job->allItemsFromAlbums(albumList);
+    }
+    else
+    {
+        slotParseImageInfoList(m_infoList);
+    }
+}
+
+void SlideShowBuilder::slotParseImageInfoList(const ImageInfoList& list)
+{
+    setTotalItems(list.count());
 
     int               i = 0;
     SlideShowSettings settings;
     settings.readFromConfig();
 
-    for (ImageInfoList::const_iterator it = m_infoList.constBegin();
-         !m_cancel && (it != m_infoList.constEnd()) ; ++it)
+    for (ImageInfoList::const_iterator it = list.constBegin();
+         !m_cancel && (it != list.constEnd()) ; ++it)
     {
         ImageInfo info      = *it;
         settings.fileList.append(info.fileUrl());
