@@ -43,6 +43,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 247947 : Images rotated with JPEGLossLess are shifted.
 030 ==> 237808 : digiKam don't rotate JPEG images.
 031 ==> 207190 : Improve "rotate Image" overlay-buttons.
-032 ==> 
+032 ==> 212362 : Add support for instant rotate.
+033 ==> 
 
 
