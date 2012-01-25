@@ -122,6 +122,7 @@
 #include "cameramessagebox.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
+#include "newitemsfinder.h"
 
 using namespace KDcrawIface;
 
@@ -561,6 +562,7 @@ void CameraUI::setupStatusBar()
 {
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+    d->statusProgressBar->setNotificationTitle(d->cameraTitle, KIcon("camera-photo").pixmap(22));
     statusBar()->addWidget(d->statusProgressBar, 100);
 
     //------------------------------------------------------------------------------
@@ -837,10 +839,9 @@ void CameraUI::finishDialog()
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                           i18n("Scanning for new files, please wait..."));
-    foreach(const QString& folder, d->foldersToScan)
-    {
-        ScanController::instance()->scheduleCollectionScan(folder);
-    }
+
+    new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
+
     d->foldersToScan.clear();
 
     deleteLater();
@@ -903,6 +904,7 @@ void CameraUI::slotBusy(bool val)
 
         d->anim->stop();
         d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
+        d->statusProgressBar->setNotify(false);
 
         // like WDestructiveClose, but after camera controller operation has safely finished
         if (d->closed)
@@ -927,9 +929,6 @@ void CameraUI::slotBusy(bool val)
         // Has camera icon view item selection is used to control download post processing,
         // all selection actions are disable when camera interface is busy.
         d->view->viewport()->setEnabled(false);
-
-        d->cameraCancelAction->setEnabled(true);
-        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
 
         // Settings tab is disabled in slotDownload, selectively when downloading
         // Fast dis/enabling would create the impression of flicker, e.g. when retrieving EXIF from camera
@@ -1656,6 +1655,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     }
 
     d->lastDestURL = url;
+    d->statusProgressBar->setNotify(true);
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->setProgressTotalSteps(total);
     d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);

@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
@@ -63,7 +63,7 @@
 #include "dimgpreviewitem.h"
 #include "facegroup.h"
 #include "imageinfo.h"
-#include "metadatamanager.h"
+#include "fileactionmngr.h"
 #include "metadatasettings.h"
 #include "regionframeitem.h"
 #include "tagspopupmenu.h"
@@ -400,7 +400,7 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
 
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedItems);
-    cmhelper.addKipiActions(idList);
+    cmhelper.addRotateMenu(idList);
     cmhelper.addSeparator();
 
     // --------------------------------------------------------
@@ -467,27 +467,27 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
 
 void ImagePreviewView::slotAssignTag(int tagID)
 {
-    MetadataManager::instance()->assignTag(d->item->imageInfo(), tagID);
+    FileActionMngr::instance()->assignTag(d->item->imageInfo(), tagID);
 }
 
 void ImagePreviewView::slotRemoveTag(int tagID)
 {
-    MetadataManager::instance()->removeTag(d->item->imageInfo(), tagID);
+    FileActionMngr::instance()->removeTag(d->item->imageInfo(), tagID);
 }
 
 void ImagePreviewView::slotAssignPickLabel(int pickId)
 {
-    MetadataManager::instance()->assignPickLabel(d->item->imageInfo(), pickId);
+    FileActionMngr::instance()->assignPickLabel(d->item->imageInfo(), pickId);
 }
 
 void ImagePreviewView::slotAssignColorLabel(int colorId)
 {
-    MetadataManager::instance()->assignColorLabel(d->item->imageInfo(), colorId);
+    FileActionMngr::instance()->assignColorLabel(d->item->imageInfo(), colorId);
 }
 
 void ImagePreviewView::slotAssignRating(int rating)
 {
-    MetadataManager::instance()->assignRating(d->item->imageInfo(), rating);
+    FileActionMngr::instance()->assignRating(d->item->imageInfo(), rating);
 }
 
 void ImagePreviewView::slotThemeChanged()
@@ -500,7 +500,6 @@ void ImagePreviewView::slotThemeChanged()
 void ImagePreviewView::slotSetupChanged()
 {
     previewItem()->setLoadFullImageSize(AlbumSettings::instance()->getPreviewLoadFullImageSize());
-    previewItem()->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
 
     d->toolBar->setVisible(AlbumSettings::instance()->getPreviewShowIcons());
     setShowText(AlbumSettings::instance()->getPreviewShowIcons());
@@ -510,36 +509,12 @@ void ImagePreviewView::slotSetupChanged()
 
 void ImagePreviewView::slotRotateLeft()
 {
-    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
-
-    if (action)
-    {
-        QList<QAction*> list = action->menu()->actions();
-        foreach(QAction* ac, list)
-        {
-            if (ac->objectName() == QString("rotate_ccw"))
-            {
-                ac->trigger();
-            }
-        }
-    }
+    FileActionMngr::instance()->transform(QList<ImageInfo>() << d->item->imageInfo(), KExiv2Iface::RotationMatrix::Rotate270);
 }
 
 void ImagePreviewView::slotRotateRight()
 {
-    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
-
-    if (action)
-    {
-        QList<QAction*> list = action->menu()->actions();
-        foreach(QAction* ac, list)
-        {
-            if (ac->objectName() == QString("rotate_cw"))
-            {
-                ac->trigger();
-            }
-        }
-    }
+    FileActionMngr::instance()->transform(QList<ImageInfo>() << d->item->imageInfo(), KExiv2Iface::RotationMatrix::Rotate90);
 }
 
 void ImagePreviewView::slotDeleteItem()

@@ -7,7 +7,8 @@
  * Description : setup Metadata tab.
  *
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +33,7 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QRadioButton>
 #include <QToolButton>
 #include <QVBoxLayout>
 
@@ -75,21 +77,31 @@ public:
     SetupMetadataPriv() :
         exifAutoRotateAsChanged(false),
         exifAutoRotateOrg(false),
+        fieldsGroup(0),
+        readWriteGroup(0),
+        rotationGroup(0),
+        rotationAdvGroup(0),
+        saveTagsBox(0),
         saveCommentsBox(0),
-        exifRotateBox(0),
-        exifSetOrientationBox(0),
+        saveRatingBox(0),
         savePickLabelBox(0),
         saveColorLabelBox(0),
-        saveRatingBox(0),
-        saveTagsBox(0),
         saveDateTimeBox(0),
         saveTemplateBox(0),
         writeRawFilesBox(0),
+        writeXMPSidecarBox(0),
+        readXMPSidecarBox(0),
         updateFileTimeStampBox(0),
+        writingModeCombo(0),
+        rotateByFlag(0),
+        rotateByContents(0),
+        allowRotateByMetadata(0),
+        allowLossyRotate(0),
+        exifRotateBox(0),
+        exifSetOrientationBox(0),
         saveToNepomukBox(0),
         readFromNepomukBox(0),
         resyncButton(0),
-        writingModeCombo(0),
         tab(0),
         tagsCfgPanel(0)
     {
@@ -98,24 +110,36 @@ public:
     bool           exifAutoRotateAsChanged;
     bool           exifAutoRotateOrg;
 
+    QGroupBox*     fieldsGroup;
+    QGroupBox*     readWriteGroup;
+    QGroupBox*     rotationGroup;
+    QGroupBox*     rotationAdvGroup;
+
+    QCheckBox*     saveTagsBox;
     QCheckBox*     saveCommentsBox;
-    QCheckBox*     exifRotateBox;
-    QCheckBox*     exifSetOrientationBox;
+    QCheckBox*     saveRatingBox;
     QCheckBox*     savePickLabelBox;
     QCheckBox*     saveColorLabelBox;
-    QCheckBox*     saveRatingBox;
-    QCheckBox*     saveTagsBox;
     QCheckBox*     saveDateTimeBox;
     QCheckBox*     saveTemplateBox;
+
     QCheckBox*     writeRawFilesBox;
-    QCheckBox*     useXMPSidecarBox;
+    QCheckBox*     writeXMPSidecarBox;
+    QCheckBox*     readXMPSidecarBox;
     QCheckBox*     updateFileTimeStampBox;
+    KComboBox*     writingModeCombo;
+
+    QRadioButton*  rotateByFlag;
+    QRadioButton*  rotateByContents;
+    QCheckBox*     allowRotateByMetadata;
+    QCheckBox*     allowLossyRotate;
+    QCheckBox*     exifRotateBox;
+    QCheckBox*     exifSetOrientationBox;
 
     QCheckBox*     saveToNepomukBox;
     QCheckBox*     readFromNepomukBox;
     QToolButton*   resyncButton;
 
-    KComboBox*     writingModeCombo;
     KTabWidget*    tab;
 
     MetadataPanel* tagsCfgPanel;
@@ -128,121 +152,144 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    QWidget* panel          = new QWidget(d->tab);
-    QVBoxLayout* mainLayout = new QVBoxLayout(panel);
+    QWidget* panel          = new QWidget;
+    QVBoxLayout* mainLayout = new QVBoxLayout;
 
     // --------------------------------------------------------
 
-    QGroupBox* ExifGroup     = new QGroupBox(i18n("EXIF Actions"), panel);
-    QVBoxLayout* gLayout1    = new QVBoxLayout(ExifGroup);
+    d->fieldsGroup = new QGroupBox;
+    QGridLayout* fieldsLayout = new QGridLayout;
 
-    d->exifRotateBox         = new QCheckBox(ExifGroup);
-    d->exifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
+    d->fieldsGroup->setWhatsThis(i18nc("@info:whatsthis",
+                                    "<para>In addition to the pixel content, image files usually "
+                                    "contain a variety of metadata. A lot of the parameters you can use "
+                                    "in digiKam to manage files, such as rating or comment, can be written "
+                                    "to the files' metadata.</para> "
+                                    "<para>Storing in metadata allows to preserve this information "
+                                    "when moving or sending the files to different systems.</para>"));
 
-    d->exifSetOrientationBox = new QCheckBox(ExifGroup);
-    d->exifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip."));
+    QLabel* fieldsIconLabel = new QLabel;
+    fieldsIconLabel->setPixmap(SmallIcon("format-list-unordered", KIconLoader::SizeMedium));
 
-    gLayout1->addWidget(d->exifRotateBox);
-    gLayout1->addWidget(d->exifSetOrientationBox);
-    gLayout1->setMargin(KDialog::spacingHint());
-    gLayout1->setSpacing(0);
+    QLabel* fieldsLabel = new QLabel(i18nc("@label", "Write This Information to the Metadata"));
 
-    // --------------------------------------------------------
-
-    QGroupBox* commonGroup = new QGroupBox(i18n("Common Metadata Actions"), panel);
-    QVBoxLayout* gLayout2  = new QVBoxLayout(commonGroup);
-
-    d->saveTagsBox = new QCheckBox(commonGroup);
-    d->saveTagsBox->setText(i18n("&Save image tags as \"Keywords\" tags in metadata embedded in files"));
-    d->saveTagsBox->setWhatsThis(i18n("Turn on this option to store the image tags "
+    d->saveTagsBox = new QCheckBox;
+    d->saveTagsBox->setText(i18nc("@option:check", "Image tags"));
+    d->saveTagsBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image tags "
                                       "in the XMP and IPTC tags."));
 
-    d->saveTemplateBox = new QCheckBox(commonGroup);
-    d->saveTemplateBox->setText(i18n("&Save metadata template as metadata embedded in files"));
-    d->saveTemplateBox->setWhatsThis(i18n("Turn on this option to store the metadata "
-                                          "template in the XMP and the IPTC tags. "
-                                          "You can set template values to Template setup page."));
-
-    d->saveCommentsBox = new QCheckBox(commonGroup);
-    d->saveCommentsBox->setText(i18n("&Save image captions and title in metadata embedded in files "));
-    d->saveCommentsBox->setWhatsThis(i18n("Turn on this option to store image caption and title "
+    d->saveCommentsBox = new QCheckBox;
+    d->saveCommentsBox->setText(i18nc("@option:check", "Captions and title"));
+    d->saveCommentsBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store image caption and title "
                                           "in the JFIF Comment section, the EXIF tag, the XMP tag, "
                                           "and the IPTC tag."));
 
-    d->saveDateTimeBox = new QCheckBox(commonGroup);
-    d->saveDateTimeBox->setText(i18n("&Save image timestamps in metadata embedded in files"));
-    d->saveDateTimeBox->setWhatsThis(i18n("Turn on this option to store the image date and time "
-                                          "in the EXIF, XMP, and IPTC tags."));
-
-    d->savePickLabelBox = new QCheckBox(commonGroup);
-    d->savePickLabelBox->setText(i18n("&Save image pick label in metadata embedded in files"));
-    d->savePickLabelBox->setWhatsThis(i18n("Turn on this option to store the image pick label "
-                                           "in the XMP tags."));
-
-    d->saveColorLabelBox = new QCheckBox(commonGroup);
-    d->saveColorLabelBox->setText(i18n("&Save image color label in metadata embedded in files"));
-    d->saveColorLabelBox->setWhatsThis(i18n("Turn on this option to store the image color label "
-                                            "in the XMP tags."));
-
-    d->saveRatingBox = new QCheckBox(commonGroup);
-    d->saveRatingBox->setText(i18n("&Save image rating in metadata embedded in files"));
-    d->saveRatingBox->setWhatsThis(i18n("Turn on this option to store the image rating "
+    d->saveRatingBox = new QCheckBox;
+    d->saveRatingBox->setText(i18nc("@option:check", "Rating"));
+    d->saveRatingBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image rating "
                                         "in the EXIF tag and the XMP tags."));
 
-    d->writeRawFilesBox = new QCheckBox(commonGroup);
-    d->writeRawFilesBox->setText(i18n("&Write Metadata to RAW files (experimental)"));
-    d->writeRawFilesBox->setWhatsThis(i18n("Turn on this option to write metadata into RAW TIFF/EP files. "
+    d->savePickLabelBox = new QCheckBox;
+    d->savePickLabelBox->setText(i18nc("@option:check", "Pick label"));
+    d->savePickLabelBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image pick label "
+                                           "in the XMP tags."));
+
+    d->saveColorLabelBox = new QCheckBox;
+    d->saveColorLabelBox->setText(i18nc("@option:check", "Color label"));
+    d->saveColorLabelBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image color label "
+                                            "in the XMP tags."));
+
+    d->saveDateTimeBox = new QCheckBox;
+    d->saveDateTimeBox->setText(i18nc("@option:check", "Timestamps"));
+    d->saveDateTimeBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image date and time "
+                                          "in the EXIF, XMP, and IPTC tags."));
+
+    d->saveTemplateBox = new QCheckBox;
+    d->saveTemplateBox->setText(i18nc("@option:check", "Metadata templates (Copyright etc.)"));
+    d->saveTemplateBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the metadata "
+                                          "template in the XMP and the IPTC tags. "
+                                          "You can set template values to Template setup page."));
+
+    fieldsLayout->addWidget(fieldsIconLabel,       0, 0);
+    fieldsLayout->addWidget(fieldsLabel,           0, 1);
+    fieldsLayout->addWidget(d->saveTagsBox,        1, 0, 1, 3);
+    fieldsLayout->addWidget(d->saveCommentsBox,    2, 0, 1, 3);
+    fieldsLayout->addWidget(d->saveRatingBox,      3, 0, 1, 3);
+    fieldsLayout->addWidget(d->savePickLabelBox,   4, 0, 1, 3);
+    fieldsLayout->addWidget(d->saveColorLabelBox,  5, 0, 1, 3);
+    fieldsLayout->addWidget(d->saveDateTimeBox,    6, 0, 1, 3);
+    fieldsLayout->addWidget(d->saveTemplateBox,    7, 0, 1, 3);
+    fieldsLayout->setColumnStretch(2, 1);
+    d->fieldsGroup->setLayout(fieldsLayout);
+
+    // --------------------------------------------------------
+
+    d->readWriteGroup = new QGroupBox;
+    QGridLayout* readWriteLayout = new QGridLayout;
+
+    QLabel* readWriteIconLabel = new QLabel;
+    readWriteIconLabel->setPixmap(SmallIcon("document-open", KIconLoader::SizeMedium));
+
+    QLabel* readWriteLabel = new QLabel(i18nc("@label", "Reading and Writing Metadata"));
+
+    d->readXMPSidecarBox = new QCheckBox;
+    d->readXMPSidecarBox->setText(i18nc("@option:check", "Read from sidecar files"));
+    d->readXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
+                                            "Turn on this option to read metadata from XMP sidecar files when reading metadata."));
+    d->readXMPSidecarBox->setEnabled(KExiv2::supportXmp());
+
+    d->writeXMPSidecarBox = new QCheckBox;
+    d->writeXMPSidecarBox->setText(i18nc("@option:check", "Write to sidecar files"));
+    d->writeXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
+                                              "Turn on this option to save, as specified, metadata to XMP sidecar files."));
+    d->writeXMPSidecarBox->setEnabled(KExiv2::supportXmp());
+
+    d->writingModeCombo      = new KComboBox;
+    //d->writingModeCombo->addItem(i18n("Write to image only"),                           KExiv2::WRITETOIMAGEONLY);
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only image only"), KExiv2::WRITETOSIDECARONLY4READONLYFILES);
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     KExiv2::WRITETOSIDECARONLY);
+    d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),                KExiv2::WRITETOSIDECARANDIMAGE);
+    d->writingModeCombo->setToolTip(i18nc("@info:tooltip", "Specify the exact mode of XMP sidecar writing"));
+    d->writingModeCombo->setEnabled(false);
+
+    connect(d->writeXMPSidecarBox, SIGNAL(toggled(bool)),
+            d->writingModeCombo, SLOT(setEnabled(bool)));
+
+    d->writeRawFilesBox = new QCheckBox;
+    d->writeRawFilesBox->setText(i18nc("@option:check", "If possible write Metadata to RAW files (experimental)"));
+    d->writeRawFilesBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to write metadata into RAW TIFF/EP files. "
                                            "This feature requires the Exiv2 shared library, version >= 0.18.0. It is still "
                                            "experimental, and is disabled by default."));
     d->writeRawFilesBox->setEnabled(KExiv2::supportMetadataWritting("image/x-raw"));
 
-    d->updateFileTimeStampBox = new QCheckBox(commonGroup);
-    d->updateFileTimeStampBox->setText(i18n("&Update file timestamp when metadata are saved"));
-    d->updateFileTimeStampBox->setWhatsThis(i18n("Turn on this option to update file timestamps when metadata are saved."));
+    d->updateFileTimeStampBox = new QCheckBox;
+    d->updateFileTimeStampBox->setText(i18nc("@option:check", "&Update file timestamp when metadata is saved"));
+    d->updateFileTimeStampBox->setWhatsThis(i18nc("@info:whatsthis",
+                                                  "Turn on this option to update file timestamps when metadata saved."));
 
-    d->useXMPSidecarBox = new QCheckBox(commonGroup);
-    d->useXMPSidecarBox->setText(i18n("&Read metadata from XMP sidecar files (experimental)"));
-    d->useXMPSidecarBox->setWhatsThis(i18n("Turn on this option to prefer metadata from XMP sidecar files when reading metadata."));
-    d->useXMPSidecarBox->setEnabled(KExiv2::supportXmp());
-
-    KHBox* hbox              = new KHBox(commonGroup);
-    QLabel* writingModeLabel = new QLabel(i18n("Metadata Writing Mode:"), hbox);
-    writingModeLabel->setEnabled(KExiv2::supportXmp());
-    d->writingModeCombo      = new KComboBox(hbox);
-    d->writingModeCombo->addItem(i18n("Write to image only"),                           KExiv2::WRITETOIMAGEONLY);
-    d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     KExiv2::WRITETOSIDECARONLY);
-    d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),                KExiv2::WRITETOSIDECARANDIMAGE);
-    d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only image only"), KExiv2::WRITETOSIDECARONLY4READONLYFILES);
-    d->writingModeCombo->setToolTip(i18n("Choose here how metadata should be stored."));
-    d->writingModeCombo->setEnabled(KExiv2::supportXmp());
-
-    gLayout2->addWidget(d->saveTagsBox);
-    gLayout2->addWidget(d->saveTemplateBox);
-    gLayout2->addWidget(d->saveCommentsBox);
-    gLayout2->addWidget(d->saveDateTimeBox);
-    gLayout2->addWidget(d->savePickLabelBox);
-    gLayout2->addWidget(d->saveColorLabelBox);
-    gLayout2->addWidget(d->saveRatingBox);
-    gLayout2->addWidget(d->updateFileTimeStampBox);
-    gLayout2->addWidget(d->writeRawFilesBox);
-    gLayout2->addWidget(d->useXMPSidecarBox);
-    gLayout2->addWidget(hbox);
-    gLayout2->setMargin(KDialog::spacingHint());
-    gLayout2->setSpacing(0);
+    readWriteLayout->addWidget(readWriteIconLabel,        0, 0);
+    readWriteLayout->addWidget(readWriteLabel,            0, 1);
+    readWriteLayout->addWidget(d->readXMPSidecarBox,      1, 0, 1, 3);
+    readWriteLayout->addWidget(d->writeXMPSidecarBox,     2, 0, 1, 3);
+    readWriteLayout->addWidget(d->writingModeCombo,       3, 1, 1, 2);
+    readWriteLayout->addWidget(d->writeRawFilesBox,       4, 0, 1, 3);
+    readWriteLayout->addWidget(d->updateFileTimeStampBox, 5, 0, 1, 3);
+    readWriteLayout->setColumnStretch(3, 1);
+    d->readWriteGroup->setLayout(readWriteLayout);
 
     // --------------------------------------------------------
 
-    QFrame*      box  = new QFrame(panel);
-    QGridLayout* grid = new QGridLayout(box);
-    box->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    QFrame*      infoBox  = new QFrame;
+    QGridLayout* infoBoxGrid = new QGridLayout;
+    infoBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    KUrlLabel* exiv2LogoLabel = new KUrlLabel(box);
+    KUrlLabel* exiv2LogoLabel = new KUrlLabel(infoBox);
     exiv2LogoLabel->setText(QString());
     exiv2LogoLabel->setUrl("http://www.exiv2.org");
     exiv2LogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-exiv2.png")));
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 
-    QLabel* explanation = new QLabel(box);
+    QLabel* explanation = new QLabel(infoBox);
     explanation->setOpenExternalLinks(true);
     explanation->setWordWrap(true);
     QString txt;
@@ -262,24 +309,147 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     explanation->setText(txt);
     explanation->setFont(KGlobalSettings::smallestReadableFont());
 
-    grid->addWidget(exiv2LogoLabel, 0, 0, 1, 1);
-    grid->addWidget(explanation,    0, 1, 1, 2);
-    grid->setColumnStretch(1, 10);
-    grid->setRowStretch(1, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(0);
+    infoBoxGrid->addWidget(exiv2LogoLabel, 0, 0, 1, 1);
+    infoBoxGrid->addWidget(explanation,    0, 1, 1, 2);
+    infoBoxGrid->setColumnStretch(1, 10);
+    infoBoxGrid->setRowStretch(1, 10);
+    infoBoxGrid->setMargin(KDialog::spacingHint());
+    infoBoxGrid->setSpacing(0);
+    infoBox->setLayout(infoBoxGrid);
 
     // --------------------------------------------------------
 
-    mainLayout->setMargin(0);
-    mainLayout->setSpacing(KDialog::spacingHint());
-    mainLayout->addWidget(ExifGroup);
-    mainLayout->addWidget(commonGroup);
-    mainLayout->addSpacing(KDialog::spacingHint());
-    mainLayout->addWidget(box);
-    mainLayout->addStretch();
+    mainLayout->addWidget(d->fieldsGroup);
+    mainLayout->addWidget(d->readWriteGroup);
+    mainLayout->addWidget(infoBox);
+    panel->setLayout(mainLayout);
 
-    d->tab->insertTab(0, panel, i18n("Behavior"));
+    d->tab->addTab(panel, i18n("Behavior"));
+
+    // --------------------------------------------------------
+
+    QWidget* rotationPanel      = new QWidget(d->tab);
+    QVBoxLayout* rotationLayout = new QVBoxLayout;
+
+    d->rotationGroup                 = new QGroupBox;
+    QGridLayout* rotationGroupLayout = new QGridLayout;
+
+    QLabel* rotationExplanation = new QLabel(i18nc("@label", "When rotating a file"));
+    QLabel* rotationIcon        = new QLabel;
+    rotationIcon->setPixmap(SmallIcon("transform-rotate", KIconLoader::SizeMedium));
+
+    d->rotateByFlag             = new QRadioButton(i18nc("@option:radio", "Rotate by only setting a flag"));
+    d->rotateByContents         = new QRadioButton(i18nc("@option:radio", "Rotate by changing the content if possible"));
+    d->allowLossyRotate         = new QCheckBox(i18nc("@option:check", "Even allow lossy rotation if necessary"));
+    d->allowRotateByMetadata    = new QCheckBox(i18nc("@option:check", "Write flag to metadata if possible"));
+
+    connect(d->rotateByContents, SIGNAL(toggled(bool)),
+            d->allowLossyRotate, SLOT(setEnabled(bool)));
+
+    d->rotateByFlag->setChecked(false);
+    d->rotateByContents->setChecked(false);
+    d->allowLossyRotate->setEnabled(false);
+    d->allowLossyRotate->setChecked(false);
+    d->allowRotateByMetadata->setChecked(true);
+
+    d->rotateByFlag->setToolTip(i18nc("@info:tooltip",
+                                      "Rotate files only by changing a flag, not touching the pixel data"));
+    d->rotateByFlag->setWhatsThis(i18nc("@info:whatsthis",
+                                        "<para>A file can be rotated in two ways:<br/> "
+                                        "You can change the contents, rearranging the individual pixels of the image data.<br/> "
+                                        "Or you can set a flag that the file is to be rotated before it is shown.</para> "
+                                        "<para>Select this option if you always want to set only a flag. "
+                                        "This is less obtrusive, but requires support if the file is accessed with another software. "
+                                        "Ensure to allow setting the flag in the metadata if you want to share your files "
+                                        "outside digiKam.</para>"));
+
+    d->rotateByContents->setToolTip(i18nc("@info:tooltip",
+                                          "If possible rotate files by changing the pixel data"));
+    d->rotateByContents->setWhatsThis(i18nc("@info:whatsthis",
+                                        "<para>A file can be rotated in two ways:<br/> "
+                                        "You can change the contents, rearranging the individual pixels of the image data.<br/> "
+                                        "Or you can set a flag that the file is to be rotated before it is shown.</para> "
+                                        "<para>Select this option if you want the file to be rotated by changing the content. "
+                                        "This is a lossless operation for JPEG files. For other formats it is a lossy operation, "
+                                        "which you need to enable explicitly. "
+                                        "It is not support for RAW and other read-only formats, "
+                                        "which will be rotated by flag only.</para>"));
+
+    d->allowLossyRotate->setToolTip(i18nc("@info:tooltip",
+                                          "Rotate files by changing the pixel data even if the operation will incur quality loss"));
+    d->allowLossyRotate->setWhatsThis(i18nc("@info:whatsthis",
+                                            "For some file formats which apply lossy compression, "
+                                            "data will be lost each time the content is rotated. "
+                                            "Check this option to allow lossy rotation. "
+                                            "If not enabled, these files will be rotated by flag."));
+
+    d->allowRotateByMetadata->setToolTip(i18nc("@info:tooltip",
+                                               "When rotating a file by setting a flag, also change this flag in the file's metadata"));
+    d->allowRotateByMetadata->setWhatsThis(i18nc("@info:whatsthis",
+                                                 "File metadata typically contains a flag describing "
+                                                 "that a file shall be shown rotated. "
+                                                 "Enable this option to allow editing this field. "));
+
+    rotationGroupLayout->addWidget(rotationIcon,             0, 0, 1, 1);
+    rotationGroupLayout->addWidget(rotationExplanation,      0, 1, 1, 2);
+    rotationGroupLayout->addWidget(d->rotateByFlag,          1, 0, 1, 3);
+    rotationGroupLayout->addWidget(d->rotateByContents,      2, 0, 1, 3);
+    rotationGroupLayout->addWidget(d->allowLossyRotate,      3, 2, 1, 1);
+    rotationGroupLayout->addWidget(d->allowRotateByMetadata, 4, 0, 1, 3);
+    rotationGroupLayout->setColumnStretch(3, 10);
+
+    d->rotationGroup->setLayout(rotationGroupLayout);
+
+    // --------------------------------------------------------
+
+    d->rotationAdvGroup            = new QGroupBox;
+    QGridLayout* rotationAdvLayout = new QGridLayout;
+
+    QLabel* rotationAdvExpl = new QLabel(i18nc("@label", "Advanced Settings"));
+    QLabel* rotationAdvIcon = new QLabel;
+    rotationAdvIcon->setPixmap(SmallIcon("configure", KIconLoader::SizeMedium));
+
+    d->exifRotateBox         = new QCheckBox;
+    d->exifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
+    d->exifSetOrientationBox = new QCheckBox;
+    d->exifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip."));
+
+    rotationAdvLayout->addWidget(rotationAdvIcon,          0, 0, 1, 1);
+    rotationAdvLayout->addWidget(rotationAdvExpl,          0, 1, 1, 1);
+    rotationAdvLayout->addWidget(d->exifRotateBox,         1, 0, 1, 3);
+    rotationAdvLayout->addWidget(d->exifSetOrientationBox, 2, 0, 1, 3);
+    rotationAdvLayout->setColumnStretch(2, 10);
+    d->rotationAdvGroup->setLayout(rotationAdvLayout);
+
+    // --------------------------------------------------------
+
+    rotationLayout->addWidget(d->rotationGroup);
+    rotationLayout->addWidget(d->rotationAdvGroup);
+    rotationLayout->addStretch();
+    rotationPanel->setLayout(rotationLayout);
+
+    d->tab->addTab(rotationPanel, i18n("Rotation"));
+
+    // --------------------------------------------------------
+
+    QWidget* displayPanel = new QWidget;
+    QGridLayout* displayLayout = new QGridLayout;
+
+    QLabel *displayLabel = new QLabel(i18nc("@info:label", "Select Metadata Fields to Be Displayed"));
+
+    QLabel* displayIcon = new QLabel;
+    displayIcon->setPixmap(SmallIcon("view-list-tree", KIconLoader::SizeMedium));//"folder-image"));
+
+    KTabWidget* displaySubTab = new KTabWidget;
+    d->tagsCfgPanel = new MetadataPanel(displaySubTab);
+
+    displayLayout->addWidget(displayIcon,   0, 0);
+    displayLayout->addWidget(displayLabel,  0, 1);
+    displayLayout->addWidget(displaySubTab, 1, 1, 1, 2);
+    displayLayout->setColumnStretch(2, 1);
+
+    displayPanel->setLayout(displayLayout);
+    d->tab->addTab(displayPanel, i18nc("@title:tab", "Display"));
 
     // --------------------------------------------------------
 
@@ -365,10 +535,6 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->tagsCfgPanel = new MetadataPanel(d->tab);
-
-    // --------------------------------------------------------
-
     readSettings();
 
     connect(exiv2LogoLabel, SIGNAL(leftClickedUrl(QString)),
@@ -411,8 +577,24 @@ void SetupMetadata::applySettings()
     }
 
     MetadataSettingsContainer set;
+
+    set.rotationBehavior = MetadataSettingsContainer::RotateByInternalFlag;
+    if (d->allowRotateByMetadata->isChecked())
+    {
+        set.rotationBehavior |= MetadataSettingsContainer::RotateByMetadataFlag;
+    }
+    if (d->rotateByContents->isChecked())
+    {
+        set.rotationBehavior |= MetadataSettingsContainer::RotateByLosslessRotation;
+        if (d->allowLossyRotate->isChecked())
+        {
+            set.rotationBehavior |= MetadataSettingsContainer::RotateByLossyRotation;
+        }
+    }
+
     set.exifRotate            = d->exifRotateBox->isChecked();
     set.exifSetOrientation    = d->exifSetOrientationBox->isChecked();
+
     set.saveComments          = d->saveCommentsBox->isChecked();
     set.saveDateTime          = d->saveDateTimeBox->isChecked();
     set.savePickLabel         = d->savePickLabelBox->isChecked();
@@ -420,10 +602,21 @@ void SetupMetadata::applySettings()
     set.saveRating            = d->saveRatingBox->isChecked();
     set.saveTags              = d->saveTagsBox->isChecked();
     set.saveTemplate          = d->saveTemplateBox->isChecked();
+
     set.writeRawFiles         = d->writeRawFilesBox->isChecked();
-    set.useXMPSidecar4Reading = d->useXMPSidecarBox->isChecked();
-    set.metadataWritingMode   = d->writingModeCombo->currentIndex();
+    set.useXMPSidecar4Reading = d->readXMPSidecarBox->isChecked();
+
+    if (d->writeXMPSidecarBox->isChecked())
+    {
+        set.metadataWritingMode   = d->writingModeCombo->currentIndex();
+    }
+    else
+    {
+        set.metadataWritingMode   = KExiv2::WRITETOIMAGEONLY;
+    }
+
     set.updateFileTimeStamp   = d->updateFileTimeStampBox->isChecked();
+
     mSettings->setSettings(set);
 
 #ifdef HAVE_NEPOMUK
@@ -460,20 +653,42 @@ void SetupMetadata::readSettings()
 
     MetadataSettingsContainer set = mSettings->settings();
 
+    if (set.rotationBehavior & MetadataSettingsContainer::RotatingPixels)
+    {
+        d->rotateByContents->setChecked(true);
+    }
+    else
+    {
+        d->rotateByFlag->setChecked(true);
+    }
+    d->allowRotateByMetadata->setChecked(set.rotationBehavior & MetadataSettingsContainer::RotateByMetadataFlag);
+    d->allowLossyRotate->setChecked(set.rotationBehavior & MetadataSettingsContainer::RotateByLossyRotation);
+
     d->exifAutoRotateOrg = set.exifRotate;
     d->exifRotateBox->setChecked(d->exifAutoRotateOrg);
     d->exifSetOrientationBox->setChecked(set.exifSetOrientation);
+
+    d->saveTagsBox->setChecked(set.saveTags);
     d->saveCommentsBox->setChecked(set.saveComments);
-    d->saveDateTimeBox->setChecked(set.saveDateTime);
+    d->saveRatingBox->setChecked(set.saveRating);
     d->savePickLabelBox->setChecked(set.savePickLabel);
     d->saveColorLabelBox->setChecked(set.saveColorLabel);
-    d->saveRatingBox->setChecked(set.saveRating);
-    d->saveTagsBox->setChecked(set.saveTags);
+    d->saveDateTimeBox->setChecked(set.saveDateTime);
     d->saveTemplateBox->setChecked(set.saveTemplate);
+
     d->writeRawFilesBox->setChecked(set.writeRawFiles);
-    d->useXMPSidecarBox->setChecked(set.useXMPSidecar4Reading);
-    d->writingModeCombo->setCurrentIndex(set.metadataWritingMode);
+    d->readXMPSidecarBox->setChecked(set.useXMPSidecar4Reading);
     d->updateFileTimeStampBox->setChecked(set.updateFileTimeStamp);
+
+    if (set.metadataWritingMode == KExiv2::WRITETOIMAGEONLY)
+    {
+        d->writeXMPSidecarBox->setChecked(false);
+    }
+    else
+    {
+        d->writeXMPSidecarBox->setChecked(true);
+        d->writingModeCombo->setCurrentIndex(set.metadataWritingMode);
+    }
 
 #ifdef HAVE_NEPOMUK
     d->saveToNepomukBox->setChecked(aSettings->getSyncDigikamToNepomuk());

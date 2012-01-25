@@ -1,13 +1,12 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="12" name="digikamimageplugin_decorate" >
+<gui version="13" name="digikamimageplugin_decorate" >
 
  <MenuBar>
 
   <Menu name="Decorate" ><text>&amp;Decorate</text>
    <Action name="imageplugin_inserttext" />
    <Action name="imageplugin_border" />
-   <Action name="imageplugin_texture" />  
-   <Action name="imageplugin_superimpose" />   
+   <Action name="imageplugin_texture" />
   </Menu>
 
  </MenuBar>
@@ -18,9 +17,8 @@
 
  <ActionProperties>
   <Action name="imageplugin_inserttext" />
-  <Action name="imageplugin_border" />  
-  <Action name="imageplugin_texture" />  
-  <Action name="imageplugin_superimpose" />  
+  <Action name="imageplugin_border" />
+  <Action name="imageplugin_texture" />
  </ActionProperties>
 
 </gui>

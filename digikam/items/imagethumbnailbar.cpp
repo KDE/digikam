@@ -55,7 +55,7 @@
 #include "imagedragdrop.h"
 #include "imageratingoverlay.h"
 #include "imagethumbnaildelegate.h"
-#include "metadatamanager.h"
+#include "fileactionmngr.h"
 
 namespace Digikam
 {
@@ -197,7 +197,7 @@ void ImageThumbnailBar::slotSetupChanged()
 
 void ImageThumbnailBar::assignRating(const QList<QModelIndex>& indexes, int rating)
 {
-    MetadataManager::instance()->assignRating(imageSortFilterModel()->imageInfos(indexes), rating);
+    FileActionMngr::instance()->assignRating(imageSortFilterModel()->imageInfos(indexes), rating);
 }
 
 bool ImageThumbnailBar::event(QEvent* e)

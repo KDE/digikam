@@ -55,6 +55,7 @@ MetadataSettingsContainer::MetadataSettingsContainer()
     useXMPSidecar4Reading = false;
     metadataWritingMode   = KExiv2::WRITETOIMAGEONLY;
     updateFileTimeStamp   = false;
+    rotationBehavior      = RotatingFlags | RotateByLosslessRotation;
 }
 
 void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
@@ -75,6 +76,24 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
     useXMPSidecar4Reading = group.readEntry("Use XMP Sidecar For Reading", false);
     metadataWritingMode   = group.readEntry("Metadata Writing Mode",       (int)KExiv2::WRITETOIMAGEONLY);
     updateFileTimeStamp   = group.readEntry("Update File Timestamp",       false);
+
+    rotationBehavior      = NoRotation;
+    if (group.readEntry("Rotate By Internal Flag", true))
+    {
+        rotationBehavior |= RotateByInternalFlag;
+    }
+    if (group.readEntry("Rotate By Metadata Flag", true))
+    {
+        rotationBehavior |= RotateByMetadataFlag;
+    }
+    if (group.readEntry("Rotate Contents Lossless", true))
+    {
+        rotationBehavior |= RotateByLosslessRotation;
+    }
+    if (group.readEntry("Rotate Contents Lossy", false))
+    {
+        rotationBehavior |= RotateByLossyRotation;
+    }
 }
 
 void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
@@ -95,6 +114,11 @@ void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
     group.writeEntry("Use XMP Sidecar For Reading", useXMPSidecar4Reading);
     group.writeEntry("Metadata Writing Mode",       metadataWritingMode);
     group.writeEntry("Update File Timestamp",       updateFileTimeStamp);
+
+    group.writeEntry("Rotate By Internal Flag",     bool(rotationBehavior & RotateByInternalFlag));
+    group.writeEntry("Rotate By Metadata Flag",     bool(rotationBehavior & RotateByMetadataFlag));
+    group.writeEntry("Rotate Contents Lossless",    bool(rotationBehavior & RotateByLosslessRotation));
+    group.writeEntry("Rotate Contents Lossy",       bool(rotationBehavior & RotateByLossyRotation));
 }
 
 }  // namespace Digikam

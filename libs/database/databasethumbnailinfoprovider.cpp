@@ -42,7 +42,7 @@ namespace Digikam
 ThumbnailInfo DatabaseThumbnailInfoProvider::thumbnailInfo(const QString& path)
 {
     // If code here proves to be a bottleneck we can add custom queries to albumdb to retrieve info all-in-one
-    ImageInfo imageinfo(KUrl::fromPath(path));
+    ImageInfo imageinfo(path);
 
     if (imageinfo.isNull())
     {
@@ -76,5 +76,10 @@ ThumbnailInfo DatabaseThumbnailInfoProvider::thumbnailInfo(const QString& path)
     return thumbinfo;
 }
 
+int DatabaseLoadSaveFileInfoProvider::orientationHint(const QString& path)
+{
+    ImageInfo info(path);
+    return info.orientation();
+}
 
 }  // namespace Digikam

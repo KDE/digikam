@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="202" name="digikam" >
+<gui version="203" name="digikam" >
 
  <MenuBar>
 
@@ -63,7 +63,9 @@
      <Action name="image_read_metadata" />
      <ActionList name="image_metadata_actions"/>
    <Separator />
-     <ActionList name="image_jpeglossless_actions"/>
+     <Action name="image_rotate"/>
+     <Action name="image_flip"/>
+     <Action name="image_transform_exif"/>
      <Action name="image_set_exif_orientation"/>
    <Separator />
      <ActionList name="image_actions"/>

@@ -587,7 +587,9 @@ void CameraController::executeCommand(CameraCommand* cmd)
                 {
                     kDebug() << "Exif autorotate: " << file << " using (" << tempURL << ")";
                     sendLogMsg(i18n("EXIF rotating file %1...", file), DHistoryView::StartingEntry, folder, file);
-                    exifTransform(tempURL.toLocalFile(), file);
+                    JpegRotator rotator(tempURL.toLocalFile());
+                    rotator.setDocumentName(file);
+                    rotator.autoExifTransform();
                 }
 
                 if (!templateTitle.isNull() || fixDateTime)

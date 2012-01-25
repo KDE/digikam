@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
@@ -139,6 +139,7 @@ protected:
 
     bool queryClose();
     void moveEvent(QMoveEvent* e);
+    void closeEvent(QCloseEvent* e);
 
 private:
 
@@ -149,6 +150,7 @@ private:
     void setupActions();
     void setupAccelerators();
     void setupExifOrientationActions();
+    void setupImageTransformActions();
     void loadPlugins();
     void loadCameras();
     void populateThemes();
@@ -190,6 +192,7 @@ private Q_SLOTS:
     void slotSetupChanged();
     void slotSetCheckedExifOrientationAction(const ImageInfo& info);
     void slotResetExifOrientationActions();
+    void slotTransformAction();
 
     void slotKipiPluginPlug();
 
@@ -213,12 +216,15 @@ private Q_SLOTS:
     void slotConfNotifications();
     void slotToggleFullScreen();
 
-    void slotDatabaseMigration();
-    void slotDatabaseRescan();
     void slotRebuildAlbumThumbnails();
     void slotRebuildThumbnails();
     void slotWriteMetadataToAllImages();
     void slotGenerateFingerPrintsFirstTime();
+    void slotDatabaseMigration();
+
+    void slotDatabaseRescan();
+    void slotDatabaseRescanDone();
+
     void slotRebuildFingerPrints();
     void slotRebuildFingerPrintsDone();
 

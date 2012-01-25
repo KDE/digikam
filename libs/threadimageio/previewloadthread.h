@@ -49,21 +49,21 @@ public:
      * Load a preview that is optimized for fast loading.
      * Raw decoding and color management settings will be adjusted.
      */
-    void load(const QString& filePath, int size, bool exifRotate);
+    void load(const QString& filePath, int size);
 
     /**
      * Load a preview that is as large as possible without sacrificing speed
      * for performance. Especially, raw previews are taken if larger than the given size.
      * Raw decoding and color management settings will be adjusted.
      */
-    void loadFastButLarge(const QString& filePath, int minimumSize, bool exifRotate);
+    void loadFastButLarge(const QString& filePath, int minimumSize);
 
     /**
      * Load a preview with higher resolution, trading more quality
      * for less speed.
      * Raw decoding and color management settings will be adjusted.
      */
-    void loadHighQuality(const QString& filePath, bool exifRotate);
+    void loadHighQuality(const QString& filePath);
 
     /**
      * Load a preview. Loading description will not be touched.
@@ -75,7 +75,7 @@ public:
 
 protected:
 
-    LoadingDescription createLoadingDescription(const QString& filePath, int size, bool exifRotate);
+    LoadingDescription createLoadingDescription(const QString& filePath, int size);
 
 protected:
 

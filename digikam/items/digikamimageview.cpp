@@ -7,7 +7,7 @@
  * Description : Qt item view for images
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software you can redistribute it
@@ -74,7 +74,8 @@
 #include "tagslineeditoverlay.h"
 #include "imageviewutilities.h"
 #include "imagewindow.h"
-#include "metadatamanager.h"
+#include "fileactionmngr.h"
+#include "fileactionprogress.h"
 #include "thumbnailloadthread.h"
 #include "tagregion.h"
 #include "addtagslineedit.h"
@@ -90,6 +91,9 @@ DigikamImageView::DigikamImageView(QWidget* parent)
     d->editPipeline.plugDatabaseEditor();
     d->editPipeline.plugTrainer();
     d->editPipeline.construct();
+
+    connect(&d->editPipeline, SIGNAL(scheduled()),
+            this, SLOT(slotInitProgressIndicator()));
 
     d->normalDelegate = new DigikamImageDelegate(this);
     d->faceDelegate   = new DigikamImageFaceDelegate(this);
@@ -149,10 +153,10 @@ DigikamImageView::DigikamImageView(QWidget* parent)
             this, SLOT(setCurrentUrl(KUrl)));
 
     connect(imageModel()->dragDropHandler(), SIGNAL(assignTags(QList<ImageInfo>,QList<int>)),
-            MetadataManager::instance(), SLOT(assignTags(QList<ImageInfo>,QList<int>)));
+            FileActionMngr::instance(), SLOT(assignTags(QList<ImageInfo>,QList<int>)));
 
     connect(imageModel()->dragDropHandler(), SIGNAL(addToGroup(ImageInfo,QList<ImageInfo>)),
-            MetadataManager::instance(), SLOT(addToGroup(ImageInfo,QList<ImageInfo>)));
+            FileActionMngr::instance(), SLOT(addToGroup(ImageInfo,QList<ImageInfo>)));
 
     connect(imageModel()->dragDropHandler(), SIGNAL(dioResult(KJob*)),
             d->utilities, SLOT(slotDIOResult(KJob*)));
@@ -182,18 +186,6 @@ void DigikamImageView::setThumbnailSize(const ThumbnailSize& size)
 int DigikamImageView::fitToWidthIcons()
 {
     return delegate()->calculatethumbSizeToFit(viewport()->size().width());
-}
-
-void DigikamImageView::connectProgressSignals(QObject* progressManager)
-{
-    connect(&d->editPipeline, SIGNAL(started(QString)),
-            progressManager, SLOT(enterProgress(QString)));
-
-    connect(&d->editPipeline, SIGNAL(progressValueChanged(float)),
-            progressManager, SLOT(progressValue(float)));
-
-    connect(&d->editPipeline, SIGNAL(finished()),
-            progressManager, SLOT(finishProgress()));
 }
 
 void DigikamImageView::slotSetupChanged()
@@ -352,7 +344,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedUrls());
     cmhelper.addGotoMenu(selectedImageIDs);
-    cmhelper.addKipiActions(selectedImageIDs);
+    cmhelper.addRotateMenu(selectedImageIDs);
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");
@@ -623,48 +615,48 @@ void DigikamImageView::toggleTagToSelected(int tagID)
             tagToAssign.append(info);
     }
 
-    MetadataManager::instance()->assignTags(tagToAssign, QList<int>() << tagID);
-    MetadataManager::instance()->removeTags(tagToRemove, QList<int>() << tagID);
+    FileActionMngr::instance()->assignTags(tagToAssign, QList<int>() << tagID);
+    FileActionMngr::instance()->removeTags(tagToRemove, QList<int>() << tagID);
 }
 
 void DigikamImageView::assignTagToSelected(int tagID)
 {
-    MetadataManager::instance()->assignTags(selectedImageInfos(), QList<int>() << tagID);
+    FileActionMngr::instance()->assignTags(selectedImageInfos(), QList<int>() << tagID);
 }
 
 void DigikamImageView::removeTagFromSelected(int tagID)
 {
-    MetadataManager::instance()->removeTags(selectedImageInfos(), QList<int>() << tagID);
+    FileActionMngr::instance()->removeTags(selectedImageInfos(), QList<int>() << tagID);
 }
 
 void DigikamImageView::assignPickLabelToSelected(int pickId)
 {
-    MetadataManager::instance()->assignPickLabel(selectedImageInfos(), pickId);
+    FileActionMngr::instance()->assignPickLabel(selectedImageInfos(), pickId);
 }
 
 void DigikamImageView::assignPickLabel(const QModelIndex& index, int pickId)
 {
-    MetadataManager::instance()->assignPickLabel(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), pickId);
+    FileActionMngr::instance()->assignPickLabel(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), pickId);
 }
 
 void DigikamImageView::assignColorLabelToSelected(int colorId)
 {
-    MetadataManager::instance()->assignColorLabel(selectedImageInfos(), colorId);
+    FileActionMngr::instance()->assignColorLabel(selectedImageInfos(), colorId);
 }
 
 void DigikamImageView::assignColorLabel(const QModelIndex& index, int colorId)
 {
-    MetadataManager::instance()->assignColorLabel(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), colorId);
+    FileActionMngr::instance()->assignColorLabel(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), colorId);
 }
 
 void DigikamImageView::assignRatingToSelected(int rating)
 {
-    MetadataManager::instance()->assignRating(selectedImageInfos(), rating);
+    FileActionMngr::instance()->assignRating(selectedImageInfos(), rating);
 }
 
 void DigikamImageView::assignRating(const QList<QModelIndex>& indexes, int rating)
 {
-    MetadataManager::instance()->assignRating(imageFilterModel()->imageInfos(indexes), rating);
+    FileActionMngr::instance()->assignRating(imageFilterModel()->imageInfos(indexes), rating);
 }
 
 void DigikamImageView::setAsAlbumThumbnail(const ImageInfo& setAsThumbnail)
@@ -680,10 +672,12 @@ void DigikamImageView::createNewAlbumForSelected()
 void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
 {
     ImageInfo info = imageFilterModel()->imageInfo(index);
+
     if (info.isNull())
     {
         return;
     }
+
     setCurrentIndex(index);
     imageFilterModel()->toggleGroupOpen(info.id());
 }
@@ -691,37 +685,37 @@ void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
 void DigikamImageView::createGroupFromSelection()
 {
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
-    ImageInfo groupLeader = selectedInfos.takeFirst();
-    MetadataManager::instance()->addToGroup(groupLeader, selectedInfos);
+    ImageInfo groupLeader          = selectedInfos.takeFirst();
+    FileActionMngr::instance()->addToGroup(groupLeader, selectedInfos);
 }
 
 void DigikamImageView::createGroupByTimeFromSelection()
 {
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
-    while (selectedInfos.size() > 0) {
+
+    while (selectedInfos.size() > 0)
+    {
         QList<ImageInfo> group;
         ImageInfo groupLeader = selectedInfos.takeFirst();
-        QDateTime dateTime = groupLeader.dateTime();
-        while (selectedInfos.size()>0 && abs(dateTime.secsTo(selectedInfos.first().dateTime()))<2) {
+        QDateTime dateTime    = groupLeader.dateTime();
+
+        while (selectedInfos.size() > 0 && abs(dateTime.secsTo(selectedInfos.first().dateTime())) < 2)
+        {
             group.push_back(selectedInfos.takeFirst());
         }
-        MetadataManager::instance()->addToGroup(groupLeader, group);
+
+        FileActionMngr::instance()->addToGroup(groupLeader, group);
     }
 }
 
 void DigikamImageView::ungroupSelected()
 {
-    MetadataManager::instance()->ungroup(selectedImageInfos());
+    FileActionMngr::instance()->ungroup(selectedImageInfos());
 }
 
 void DigikamImageView::removeSelectedFromGroup()
 {
-    MetadataManager::instance()->removeFromGroup(selectedImageInfos());
-}
-
-void DigikamImageView::setExifOrientationOfSelected(int orientation)
-{
-    MetadataManager::instance()->setExifOrientation(selectedImageInfos(), orientation);
+    FileActionMngr::instance()->removeFromGroup(selectedImageInfos());
 }
 
 void DigikamImageView::rename()
@@ -749,14 +743,31 @@ void DigikamImageView::rename()
 
 void DigikamImageView::slotRotateLeft(const QList<QModelIndex>& indexes)
 {
-    setSelectedIndexes(indexes);
-    d->triggerRotateAction("rotate_ccw");
+    FileActionMngr::instance()->transform(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes),
+                                          KExiv2Iface::RotationMatrix::Rotate270);
 }
 
 void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 {
-    setSelectedIndexes(indexes);
-    d->triggerRotateAction("rotate_cw");
+    FileActionMngr::instance()->transform(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes),
+                                          KExiv2Iface::RotationMatrix::Rotate90);
+}
+
+void DigikamImageView::slotInitProgressIndicator()
+{
+    if (!ProgressManager::instance()->findItembyId("FaceActionProgress"))
+    {
+        FileActionProgress* item = new FileActionProgress("FaceActionProgress");
+
+        connect(&d->editPipeline, SIGNAL(started(QString)),
+                item, SLOT(slotProgressStatus(QString)));
+
+        connect(&d->editPipeline, SIGNAL(progressValueChanged(float)),
+                item, SLOT(slotProgressValue(float)));
+
+        connect(&d->editPipeline, SIGNAL(finished()),
+                item, SLOT(slotCompleted()));
+    }
 }
 
 } // namespace Digikam

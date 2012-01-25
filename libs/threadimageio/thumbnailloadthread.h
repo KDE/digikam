@@ -173,20 +173,6 @@ public:
     static int maximumThumbnailPixmapSize(bool withHighlighting);
 
     /**
-     * Specify if the thumbnails shall be rotated by Exif.
-     * Note: This only applies to newly created thumbnails. The rotation state of thumbnails
-     * found in the disk cache is unknown, so they are not rotated.
-     * (The only, unsatisfactory solution is the forced recreation of all thumbnails)
-     * Per default, the setting is taken from MetadataSettings
-     */
-    void setExifRotate(bool exifRotate);
-
-    /**
-     * Return true is thumbnails shall be rotated by Exif.
-     */
-    bool exifRotate() const;
-
-    /**
      * If you enable this, the signal thumbnailLoaded(LoadingDescription, QPixmap) will be emitted.
      * If you do not enable this, only the QImage-based signal (see LoadSaveThread) will be emitted.
      *

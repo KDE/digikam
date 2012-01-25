@@ -7,7 +7,7 @@
  * Description : Qt item view for images
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,8 +48,6 @@ public:
     void toggleTagToSelected(int tagID);
     int  fitToWidthIcons();
 
-    void connectProgressSignals(QObject* progressManager);
-
     virtual void setThumbnailSize(const ThumbnailSize& size);
 
 public Q_SLOTS:
@@ -76,7 +74,6 @@ public Q_SLOTS:
     void assignRatingToSelected(int rating);
     void setAsAlbumThumbnail(const ImageInfo& setAsThumbnail);
     void createNewAlbumForSelected();
-    void setExifOrientationOfSelected(int orientation);
     void rename();
 
     void assignPickLabel(const QModelIndex& index, int pickId);
@@ -119,6 +116,7 @@ private Q_SLOTS:
 
     void slotRotateLeft(const QList<QModelIndex>&);
     void slotRotateRight(const QList<QModelIndex>&);
+    void slotInitProgressIndicator();
 
 private:
 

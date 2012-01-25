@@ -47,7 +47,7 @@
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
 #include "contextmenuhelper.h"
-#include "metadatamanager.h"
+#include "fileactionmngr.h"
 #include "tagdragdrop.h"
 #include "tagmodificationhelper.h"
 
@@ -1526,7 +1526,7 @@ void TagTreeView::setAlbumModel(TagModel* model)
         albumModel()->setDragDropHandler(m_dragDropHandler);
 
         connect(albumModel()->dragDropHandler(), SIGNAL(assignTags(QList<qlonglong>,QList<int>)),
-                MetadataManager::instance(), SLOT(assignTags(QList<qlonglong>,QList<int>)));
+                FileActionMngr::instance(), SLOT(assignTags(QList<qlonglong>,QList<int>)));
     }
 
     if (m_albumModel->rootAlbumBehavior() == AbstractAlbumModel::IncludeRootAlbum)

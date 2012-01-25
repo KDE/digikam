@@ -39,9 +39,9 @@ PreviewLoadThread::PreviewLoadThread(QObject* parent)
     m_loadingPolicy = LoadingPolicyFirstRemovePrevious;
 }
 
-LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, int size, bool exifRotate)
+LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, int size)
 {
-    LoadingDescription description(filePath, size, exifRotate);
+    LoadingDescription description(filePath, size);
 
     if (DImg::fileFormat(filePath) == DImg::RAW)
     {
@@ -62,21 +62,21 @@ LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& fi
     return description;
 }
 
-void PreviewLoadThread::load(const QString& filePath, int size, bool exifRotate)
+void PreviewLoadThread::load(const QString& filePath, int size)
 {
-    load(createLoadingDescription(filePath, size, exifRotate));
+    load(createLoadingDescription(filePath, size));
 }
 
-void PreviewLoadThread::loadFastButLarge(const QString& filePath, int size, bool exifRotate)
+void PreviewLoadThread::loadFastButLarge(const QString& filePath, int size)
 {
-    LoadingDescription description      = createLoadingDescription(filePath, size, exifRotate);
+    LoadingDescription description      = createLoadingDescription(filePath, size);
     description.previewParameters.flags |= LoadingDescription::PreviewParameters::FastButLarge;
     load(description);
 }
 
-void PreviewLoadThread::loadHighQuality(const QString& filePath, bool exifRotate)
+void PreviewLoadThread::loadHighQuality(const QString& filePath)
 {
-    load(filePath, 0, exifRotate);
+    load(filePath, 0);
 }
 
 void PreviewLoadThread::load(LoadingDescription description)

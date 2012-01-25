@@ -31,6 +31,7 @@ SET(digikamcore_LIB_SRCS
         ${libdatabasecore_SRCS}
         ${libjpegutils_SRCS}
         ${libthreadimageio_SRCS}
+        ${libprogressmanager_SRCS}
         ${libthememanager_SRCS}
         ${libpgf_SRCS}
         ${pgfutils_SRCS}
@@ -233,7 +234,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libsetup_SRCS}
                  ${libcameragui_SRCS}
                  ${liblighttable_SRCS}
-                 ${libbatch_SRCS}
+                 ${libmaintenance_SRCS}
                  ${libkipiiface_SRCS}
                  ${libsearchwindow_SRCS}
                  ${libfuzzysearch_SRCS}

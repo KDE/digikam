@@ -7,7 +7,7 @@
  * Description : Captions, Tags, and Rating properties editor
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -67,11 +67,15 @@ public:
     void populateTags();
     void setFocusToTagsView();
 
+    void readSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
+
 Q_SIGNALS:
 
-    void progressEntered(const QString&);
-    void progressValueChanged(float);
-    void progressFinished();
+    void signalProgressMessageChanged(const QString& actionDescription);
+    void signalProgressValueChanged(float percent);
+    void signalProgressFinished();
+
     void signalTagFilterMatch(bool);
     void signalPrevItem();
     void signalNextItem();
@@ -101,7 +105,8 @@ private:
     void setMetadataWidgetStatus(int status, QWidget* widget);
     void metadataChange(qlonglong imageId);
     void resetMetadataChangeInfo();
-
+    void initProgressIndicator();
+    
 private Q_SLOTS:
 
     void slotApplyAllChanges();

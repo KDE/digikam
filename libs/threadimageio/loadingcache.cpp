@@ -344,8 +344,9 @@ void LoadingCache::notifyFileChanged(const QString& filePath)
     keys = d->thumbnailFilePathHash.values(filePath);
     foreach(const QString& cacheKey, keys)
     {
-        if (d->thumbnailImageCache.remove(cacheKey) ||
-            d->thumbnailPixmapCache.remove(cacheKey))
+        bool removedImage = d->thumbnailImageCache.remove(cacheKey);
+        bool removedPixmap = d->thumbnailPixmapCache.remove(cacheKey);
+        if (removedImage || removedPixmap)
         {
             emit fileChanged(filePath, cacheKey);
         }

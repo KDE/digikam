@@ -6,7 +6,7 @@
  * Date        : 2010-04-06
  * Description : Multithreaded worker object
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,9 +48,9 @@ public:
 
     WorkerObjectPriv()
     {
-        state     = WorkerObject::Inactive;
-        eventLoop = 0;
-        runnable  = 0;
+        state         = WorkerObject::Inactive;
+        eventLoop     = 0;
+        runnable      = 0;
         inDestruction = false;
         priority      = QThread::InheritPriority;
     }
@@ -61,7 +61,7 @@ public:
     QEventLoop*                  eventLoop;
     WorkerObjectRunnable*        runnable;
     bool                         inDestruction;
-    QThread::Priority             priority;
+    QThread::Priority            priority;
 };
 
 WorkerObject::WorkerObject()

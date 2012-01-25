@@ -96,7 +96,7 @@ ImagePropertiesVersionsTab::~ImagePropertiesVersionsTab()
     delete d;
 }
 
-void ImagePropertiesVersionsTab::readSettings(const KConfigGroup& group)
+void ImagePropertiesVersionsTab::readSettings(KConfigGroup& group)
 {
     QString tab = group.readEntry(d->configActiveTab, "versions");
     if (tab == "versions")

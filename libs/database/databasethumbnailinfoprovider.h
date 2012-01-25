@@ -28,6 +28,7 @@
 
 #include "digikam_export.h"
 #include "thumbnailcreator.h"
+#include "loadsavethread.h"
 
 namespace Digikam
 {
@@ -37,6 +38,13 @@ class DIGIKAM_DATABASE_EXPORT DatabaseThumbnailInfoProvider : public ThumbnailIn
 public:
 
     ThumbnailInfo thumbnailInfo(const QString& path);
+};
+
+class DIGIKAM_DATABASE_EXPORT DatabaseLoadSaveFileInfoProvider : public LoadSaveFileInfoProvider
+{
+public:
+
+    virtual int orientationHint(const QString& path);
 };
 
 

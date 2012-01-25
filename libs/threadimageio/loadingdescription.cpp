@@ -92,7 +92,7 @@ LoadingDescription::LoadingDescription(const QString& filePath, const DRawDecodi
     postProcessingParameters.colorManagement = cm;
 }
 
-LoadingDescription::LoadingDescription(const QString& filePath, int size, bool exifRotate,
+LoadingDescription::LoadingDescription(const QString& filePath, int size,
                                        ColorManagementSettings cm,
                                        LoadingDescription::PreviewParameters::PreviewType type)
     : filePath(filePath)
@@ -102,11 +102,6 @@ LoadingDescription::LoadingDescription(const QString& filePath, int size, bool e
     previewParameters.type                   = type;
     previewParameters.size                   = size;
     postProcessingParameters.colorManagement = cm;
-
-    if (exifRotate)
-    {
-        previewParameters.flags |= PreviewParameters::ExifRotate;
-    }
 }
 
 QString LoadingDescription::cacheKey() const

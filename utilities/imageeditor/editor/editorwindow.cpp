@@ -1992,7 +1992,6 @@ void EditorWindow::setupTempSaveFile(const KUrl& url)
 
     m_savingContext.saveTempFile->setSuffix(".digikamtempfile.tmp");
     m_savingContext.saveTempFile->setAutoRemove(false);
-    m_savingContext.saveTempFile->open();
 
     if (!m_savingContext.saveTempFile->open())
     {

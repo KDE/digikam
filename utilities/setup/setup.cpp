@@ -7,7 +7,7 @@
  * Description : digiKam setup dialog.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Album
@@ -42,7 +42,7 @@
 // Local includes
 
 #include "albumsettings.h"
-#include "batchthumbsgenerator.h"
+#include "thumbnailsgenerator.h"
 #include "setupalbumview.h"
 #include "setupcamera.h"
 #include "setupcategory.h"
@@ -503,8 +503,7 @@ void Setup::okClicked()
             return;
         }
 
-        BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this);
-        thumbsGenerator->show();
+        new ThumbnailsGenerator();
     }
 
     accept();
@@ -534,7 +533,7 @@ void Setup::showPage(Setup::Page page)
     setCurrentPage(item);
 }
 
-Setup::Page Setup::activePageIndex()
+Setup::Page Setup::activePageIndex() const
 {
     KPageWidgetItem* cur = currentPage();
 
@@ -700,8 +699,8 @@ KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
 
         case Setup::VersioningPage:
             return page_versioning;
-#ifdef USE_SCRIPT_IFACE
 
+#ifdef USE_SCRIPT_IFACE
         case Setup::ScriptManagerPage:
             return page_scriptmanager;
 #endif

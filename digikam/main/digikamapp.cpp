@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
@@ -68,7 +68,6 @@
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <kstandardshortcut.h>
-#include <migrationdlg.h>
 #include <ktip.h>
 #include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
@@ -76,7 +75,6 @@
 #include <ktoolbarpopupaction.h>
 #include <ktoolinvocation.h>
 #include <kwindowsystem.h>
-#include <knotificationwrapper.h>
 
 #include <solid/camera.h>
 #include <solid/device.h>
@@ -101,23 +99,29 @@
 
 #include <libkface/face.h>
 
+// Libkexiv2
+
+#include <libkexiv2/rotationmatrix.h>
+
 // Local includes
 
 #include "album.h"
 #include "albumdb.h"
 #include "albumselectdialog.h"
 #include "albumthumbnailloader.h"
-#include "batchalbumssyncmetadata.h"
-#include "batchthumbsgenerator.h"
+#include "metadatasynchronizer.h"
+#include "thumbnailsgenerator.h"
 #include "cameratype.h"
 #include "cameraui.h"
 #include "cameranamehelper.h"
 #include "collectionscanner.h"
 #include "componentsinfo.h"
+#include "databasethumbnailinfoprovider.h"
 #include "digikamadaptor.h"
 #include "dio.h"
 #include "dlogoaction.h"
 #include "facescandialog.h"
+#include "fileactionmngr.h"
 #include "filterstatusbar.h"
 #include "fingerprintsgenerator.h"
 #include "iccsettings.h"
@@ -129,6 +133,7 @@
 #include "queuemgrwindow.h"
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
+#include "loadsavethread.h"
 #include "scancontroller.h"
 #include "setup.h"
 #include "setupeditor.h"
@@ -139,11 +144,17 @@
 #include "thumbnailsize.h"
 #include "dmetadata.h"
 #include "uifilevalidator.h"
-#include "batchfacedetector.h"
+#include "facedetector.h"
 #include "tagscache.h"
 #include "tagsactionmngr.h"
 #include "databaseserverstarter.h"
 #include "metadatasettings.h"
+#include "progressmanager.h"
+#include "progressview.h"
+#include "statusbarprogresswidget.h"
+#include "migrationdlg.h"
+#include "progressmanager.h"
+#include "newitemsfinder.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
@@ -222,6 +233,7 @@ DigikamApp::DigikamApp()
     LoadingCacheInterface::initialize();
     IccSettings::instance()->loadAllProfilesProperties();
     MetadataSettings::instance();
+    ProgressManager::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
 
     // creation of the engine on first use - when drawing -
@@ -283,17 +295,10 @@ DigikamApp::DigikamApp()
 
     setAutoSaveSettings("General Settings", true);
 
-    // now, enable finished the collection scan
-    connect(ScanController::instance(), SIGNAL(collectionScanStarted(QString)),
-            this, SLOT(enterProgress(QString)));
+    // Now, enable finished the collection scan as deferred process
+    new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
 
-    connect(ScanController::instance(), SIGNAL(scanningProgress(float)),
-            this, SLOT(progressValue(float)));
-
-    connect(ScanController::instance(), SIGNAL(collectionScanFinished()),
-            this, SLOT(finishProgress()));
-
-    ScanController::instance()->allowToScanDeferredFiles();
+    LoadSaveThread::setInfoProvider(new DatabaseLoadSaveFileInfoProvider);
 }
 
 DigikamApp::~DigikamApp()
@@ -430,6 +435,14 @@ void DigikamApp::restoreSession()
             ++n;
         }
     }
+}
+
+void DigikamApp::closeEvent(QCloseEvent* e)
+{
+    // may show a progress dialog to finish actions
+    FileActionMngr::instance()->requestShutDown();
+
+    KXmlGuiWindow::closeEvent(e);
 }
 
 const QList<QAction*>& DigikamApp::menuImageActions()
@@ -578,6 +591,15 @@ void DigikamApp::setupStatusBar()
     d->zoomBar->setZoomMinusAction(d->zoomMinusAction);
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     statusBar()->addPermanentWidget(d->zoomBar);
+
+    //------------------------------------------------------------------------------
+
+    ProgressView* view = new ProgressView(statusBar(), this);
+    view->hide();
+
+    StatusbarProgressWidget* littleProgress = new StatusbarProgressWidget(view, statusBar());
+    littleProgress->show();
+    statusBar()->addPermanentWidget(littleProgress);
 
     //------------------------------------------------------------------------------
 
@@ -1108,6 +1130,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
+    setupImageTransformActions();
     setupExifOrientationActions();
 
     // -----------------------------------------------------------------
@@ -2577,15 +2600,14 @@ void DigikamApp::slotConfToolbars()
     {
         createGUI(xmlFile());
         applyMainWindowSettings(d->config->group("General Settings"));
-        plugActionList( QString::fromLatin1("file_actions_import"), d->kipiFileActionsImport );
-        plugActionList( QString::fromLatin1("image_jpeglossless_actions"), d->kipiJpeglosslessActions);
-        plugActionList( QString::fromLatin1("image_print_actions"),  d->kipiPrintActions);
+        plugActionList( QString::fromLatin1("file_actions_import"),    d->kipiFileActionsImport );
+        plugActionList( QString::fromLatin1("image_print_actions"),    d->kipiPrintActions);
         plugActionList( QString::fromLatin1("image_metadata_actions"), d->kipiMetadataActions);
-        plugActionList( QString::fromLatin1("image_actions"),       d->kipiImageActions );
-        plugActionList( QString::fromLatin1("tool_actions"),        d->kipiToolsActions );
-        plugActionList( QString::fromLatin1("batch_actions"),       d->kipiBatchActions );
-        plugActionList( QString::fromLatin1("album_actions"),       d->kipiAlbumActions );
-        plugActionList( QString::fromLatin1("file_actions_export"), d->kipiFileActionsExport );
+        plugActionList( QString::fromLatin1("image_actions"),          d->kipiImageActions );
+        plugActionList( QString::fromLatin1("tool_actions"),           d->kipiToolsActions );
+        plugActionList( QString::fromLatin1("batch_actions"),          d->kipiBatchActions );
+        plugActionList( QString::fromLatin1("album_actions"),          d->kipiAlbumActions );
+        plugActionList( QString::fromLatin1("file_actions_export"),    d->kipiFileActionsExport );
     }
 
     delete dlg;
@@ -2704,6 +2726,9 @@ void DigikamApp::loadPlugins()
     ignores.append( "SimpleViewer" );
     ignores.append( "KioExport" );
 
+    // These plugins have been replaced by digiKam core solution with 2.6.0
+    ignores.append( "JPEGLossless" );
+
     d->kipiPluginLoader = new KIPI::PluginLoader( ignores, d->kipiInterface );
 
     connect( d->kipiPluginLoader, SIGNAL(replug()),
@@ -2723,7 +2748,6 @@ void DigikamApp::slotKipiPluginPlug()
 {
     unplugActionList(QString::fromLatin1("file_actions_export"));
     unplugActionList(QString::fromLatin1("file_actions_import"));
-    unplugActionList(QString::fromLatin1("image_jpeglossless_actions"));
     unplugActionList(QString::fromLatin1("image_print_actions"));
     unplugActionList(QString::fromLatin1("image_metadata_actions"));
     unplugActionList(QString::fromLatin1("image_actions"));
@@ -2737,7 +2761,6 @@ void DigikamApp::slotKipiPluginPlug()
     d->kipiToolsActions.clear();
     d->kipiBatchActions.clear();
     d->kipiAlbumActions.clear();
-    d->kipiJpeglosslessActions.clear();
     d->kipiPrintActions.clear();
     d->kipiMetadataActions.clear();
 
@@ -2765,7 +2788,6 @@ void DigikamApp::slotKipiPluginPlug()
     pluginActionsDisabled << QString("batch_convert_images");           // Obsolete since 1.2.0, replaced by BQM convert tool.
     pluginActionsDisabled << QString("batch_color_images");             // Obsolete since 1.2.0, replaced by BQM color tool.
     pluginActionsDisabled << QString("batch_filter_images");            // Obsolete since 1.2.0, replaced by BQM enhance tool.
-    pluginActionsDisabled << QString("jpeglossless_convert2grayscale"); // Obsolete since 1.7.0, replaced by BQM B&W tool.
 
     for ( KIPI::PluginLoader::PluginList::ConstIterator it = list.constBegin() ;
           it != list.constEnd() ; ++it )
@@ -2843,11 +2865,7 @@ void DigikamApp::slotKipiPluginPlug()
                     }
                     case KIPI::ImagesPlugin:
                     {
-                        if (plugin->objectName() == "JPEGLossless")
-                        {
-                            d->kipiJpeglosslessActions.append(action);
-                        }
-                        else if (plugin->objectName() == "PrintImages")
+                        if (plugin->objectName() == "PrintImages")
                         {
                             d->kipiPrintActions.append(action);
                         }
@@ -2907,7 +2925,6 @@ void DigikamApp::slotKipiPluginPlug()
     // Create GUI menu in according with plugins.
     plugActionList(QString::fromLatin1("file_actions_export"),        d->kipiFileActionsExport);
     plugActionList(QString::fromLatin1("file_actions_import"),        d->kipiFileActionsImport);
-    plugActionList(QString::fromLatin1("image_jpeglossless_actions"), d->kipiJpeglosslessActions);
     plugActionList(QString::fromLatin1("image_print_actions"),        d->kipiPrintActions);
     plugActionList(QString::fromLatin1("image_metadata_actions"),     d->kipiMetadataActions);
     plugActionList(QString::fromLatin1("image_actions"),              d->kipiImageActions);
@@ -2957,8 +2974,14 @@ void DigikamApp::slotDatabaseMigration()
 
 void DigikamApp::slotDatabaseRescan()
 {
-    ScanController::instance()->completeCollectionScan();
+    NewItemsFinder* finder = new NewItemsFinder();
 
+    connect(finder, SIGNAL(signalComplete()),
+            this, SLOT(slotDatabaseRescanDone()));
+}
+
+void DigikamApp::slotDatabaseRescanDone()
+{
     d->view->refreshView();
 
     if (LightTableWindow::lightTableWindowCreated())
@@ -2983,8 +3006,7 @@ void DigikamApp::slotWriteMetadataToAllImages()
         return;
     }
 
-    BatchAlbumsSyncMetadata* syncMetadata = new BatchAlbumsSyncMetadata(this);
-    syncMetadata->show();
+    new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
 }
 
 void DigikamApp::slotRebuildThumbnails()
@@ -3008,14 +3030,12 @@ void DigikamApp::slotRebuildThumbnails()
 
 void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
 {
-    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this, rebuildAll);
-    thumbsGenerator->show();
+    new ThumbnailsGenerator(rebuildAll ? MaintenanceTool::AllItems : MaintenanceTool::MissingItems);
 }
 
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
-    BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this, AlbumManager::instance()->currentAlbum()->id());
-    thumbsGenerator->show();
+    new ThumbnailsGenerator(MaintenanceTool::AlbumItems, AlbumManager::instance()->currentAlbum()->id());
 }
 
 void DigikamApp::slotGenerateFingerPrintsFirstTime()
@@ -3054,23 +3074,21 @@ void DigikamApp::slotScanForFaces()
 
 void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
 {
-    FingerPrintsGenerator* fingerprintsGenerator = new FingerPrintsGenerator(this, rebuildAll);
+    FingerPrintsGenerator* fingerprintsGenerator = new FingerPrintsGenerator(rebuildAll ? MaintenanceTool::AllItems
+                                                                                        : MaintenanceTool::MissingItems);
 
-    connect(fingerprintsGenerator, SIGNAL(signalRebuildAllFingerPrintsDone()),
+    connect(fingerprintsGenerator, SIGNAL(signalComplete()),
             this, SLOT(slotRebuildFingerPrintsDone()));
-
-    fingerprintsGenerator->show();
 }
 
 void DigikamApp::runFaceScanner(const FaceScanSettings& settings)
 {
-    BatchFaceDetector* batchFaceDetector = new BatchFaceDetector(this, settings);
+    FaceDetector* faceDetector = new FaceDetector(settings);
 
-    connect(batchFaceDetector, SIGNAL(signalDetectAllFacesDone()),
+    connect(faceDetector, SIGNAL(signalComplete()),
             this, SLOT(slotScanForFacesDone()));
-
-    batchFaceDetector->show();
 }
+
 void DigikamApp::slotRebuildFingerPrintsDone()
 {
     d->config->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
@@ -3078,9 +3096,6 @@ void DigikamApp::slotRebuildFingerPrintsDone()
 
 void DigikamApp::slotScanForFacesDone()
 {
-    // Pop-up a message to bring user when all is done.
-    KNotificationWrapper("facescanningcompleted", i18n("Update of people database completed."),
-                         this, windowTitle());
     d->config->group("General Settings").writeEntry("Face Scanner First Run", true);
 }
 
@@ -3451,6 +3466,82 @@ void DigikamApp::showToolBars(bool show)
 void DigikamApp::showThumbBar(bool show)
 {
     d->view->toggleShowBar(show);
+}
+
+void DigikamApp::setupImageTransformActions()
+{
+    d->imageRotateActionMenu = new KActionMenu(KIcon("object-rotate-right"), i18n("Rotate"), actionCollection());
+    d->imageRotateActionMenu->setDelayed(false);
+
+    KAction* left = actionCollection()->addAction("rotate_ccw");
+    left->setText(i18nc("rotate image left", "Left"));
+    left->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_Left));
+    connect(left, SIGNAL(triggered(bool)),
+            this, SLOT(slotTransformAction()));
+    d->imageRotateActionMenu->addAction(left);
+
+    KAction* right = actionCollection()->addAction("rotate_cw");
+    right->setText(i18nc("rotate image right", "Right"));
+    right->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_Right));
+    connect(right, SIGNAL(triggered(bool)),
+            this, SLOT(slotTransformAction()));
+    d->imageRotateActionMenu->addAction(right);
+
+    actionCollection()->addAction("image_rotate", d->imageRotateActionMenu);
+
+    // -----------------------------------------------------------------------------------
+
+    d->imageFlipActionMenu = new KActionMenu(KIcon("flip-horizontal"), i18n("Flip"), actionCollection());
+    d->imageFlipActionMenu->setDelayed(false);
+
+    KAction* hori = actionCollection()->addAction("flip_horizontal");
+    hori->setText(i18n("Horizontally"));
+    hori->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Asterisk));
+    connect(hori, SIGNAL(triggered(bool)),
+            this, SLOT(slotTransformAction()));
+    d->imageFlipActionMenu->addAction(hori);
+
+    KAction* verti = actionCollection()->addAction("flip_vertical");
+    verti->setText(i18n("Vertically"));
+    verti->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Slash));
+    connect(verti, SIGNAL(triggered(bool)),
+            this, SLOT(slotTransformAction()));
+    d->imageFlipActionMenu->addAction(verti);
+
+    actionCollection()->addAction("image_flip", d->imageFlipActionMenu);
+
+    // -----------------------------------------------------------------------------------
+
+    d->imageAutoExifActionMenu = new KAction(i18n("Auto Rotate/Flip Using Exif Information"), this);
+    connect(d->imageAutoExifActionMenu, SIGNAL(triggered(bool)),
+            this, SLOT(slotTransformAction()));
+
+    actionCollection()->addAction("image_transform_exif", d->imageAutoExifActionMenu);
+}
+
+void DigikamApp::slotTransformAction()
+{
+    if (sender()->objectName() == "rotate_ccw")
+    {
+        d->view->imageTransform(KExiv2Iface::RotationMatrix::Rotate270);
+    }
+    else if (sender()->objectName() == "rotate_cw")
+    {
+        d->view->imageTransform(KExiv2Iface::RotationMatrix::Rotate90);
+    }
+    else if (sender()->objectName() == "flip_horizontal")
+    {
+        d->view->imageTransform(KExiv2Iface::RotationMatrix::FlipHorizontal);
+    }
+    else if (sender()->objectName() == "flip_vertical")
+    {
+        d->view->imageTransform(KExiv2Iface::RotationMatrix::FlipVertical);
+    }
+    else if (sender()->objectName() == "image_transform_exif")
+    {
+        // special value for FileActionMngr
+        d->view->imageTransform(KExiv2Iface::RotationMatrix::NoTransformation);
+    }
 }
 
 #ifdef USE_SCRIPT_IFACE

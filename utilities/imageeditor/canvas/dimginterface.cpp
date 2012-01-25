@@ -429,8 +429,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
 
             if (!attribute.isValid() || !attribute.toBool())
             {
-                DMetadata metadata(d->image.getMetadata());
-                d->rotatedOrFlipped = d->image.rotateAndFlip(metadata.getImageOrientation());
+                d->rotatedOrFlipped = d->image.rotateAndFlip(LoadSaveThread::exifOrientation(d->image, loadingDescription.filePath));
             }
         }
 

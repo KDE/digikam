@@ -6,7 +6,7 @@
  * Date        : 2010-04-06
  * Description : Multithreaded worker object
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,6 +54,18 @@ public:
         Deactivating
     };
 
+    enum DeactivatingMode
+    {
+        /// Already sent signals are cleared
+        FlushSignals,
+        /// The thread is stopped, but already sent signals remain in the queue
+        KeepSignals,
+        /// The thread is stopped when all signals emitted until now have been processed
+        PhaseOut
+    };
+
+public:
+
     /**
      * Deriving from a worker object allows you to execute your slots in a thread.
      * Implement any slots and connect signals just as usual.
@@ -74,6 +86,15 @@ public:
 
     void wait();
 
+    /** Sets the priority for this dynamic thread.
+     *  Can be set anytime. If the thread is currently not running,
+     *  the priority will be set when it is run next time.
+     *  When you set QThread::InheritPriority (default), the
+     *  priority is not changed but inherited from the thread pool.
+     */
+    void setPriority(QThread::Priority priority);
+    QThread::Priority priority() const;
+
     /** You must normally call schedule() to ensure that the object is active when you send
      *  a signal with work data. Instead, you can use these connect() methods
      *  when connecting your signal to this object, the signal that carries work data.
@@ -85,27 +106,9 @@ public:
     static bool connectAndSchedule(const QObject* sender, const char* signal,
                                    const WorkerObject* receiver, const char* method,
                                    Qt::ConnectionType type = Qt::AutoConnection);
+
     static bool disconnectAndSchedule(const QObject* sender, const char* signal,
                                       const WorkerObject* receiver, const char* method);
-
-    enum DeactivatingMode
-    {
-        /// Already sent signals are cleared
-        FlushSignals,
-        /// The thread is stopped, but already sent signals remain in the queue
-        KeepSignals,
-        /// The thread is stopped when all signals emitted until now have been processed
-        PhaseOut
-    };
-
-    /** Sets the priority for this dynamic thread.
-     *  Can be set anytime. If the thread is currently not running,
-     *  the priority will be set when it is run next time.
-     *  When you set QThread::InheritPriority (default), the
-     *  priority is not changed but inherited from the thread pool.
-     */
-    void setPriority(QThread::Priority priority);
-    QThread::Priority priority() const;
 
 public Q_SLOTS:
 
@@ -136,12 +139,26 @@ protected:
     bool transitionToRunning();
     void transitionToInactive();
 
-    virtual bool event(QEvent* e);
-
     void run();
     void setEventLoop(QEventLoop* loop);
     void addRunnable(WorkerObjectRunnable* loop);
     void removeRunnable(WorkerObjectRunnable* loop);
+
+    /**
+     * If you are deleting data in your destructor which is accessed from the thread,
+     * do one of the following from your destructor to guarantee a safe shutdown:
+     * 1) Call this method
+     * 2) Call stop() and wait(), knowing that nothing will
+     *    call start() anymore after this
+     * 3) Be sure the thread will never be running at destruction.
+     * Note: This irrevocably stops this object.
+     * Note: It is not sufficient that your parent class does this.
+     * Calling this method, or providing one of the above mentioned
+     * equivalent guarantees, must be done by every
+     * single last class in the hierarchy with an implemented destructor deleting data.
+     * (the base class destructor is always called after the derived class)
+     */
+    void shutDown();
 
     /**
      * Called from within thread's event loop to quit processing.
@@ -159,21 +176,7 @@ protected:
      */
     virtual void aboutToDeactivate();
 
-    /**
-     * If you are deleting data in your destructor which is accessed from the thread,
-     * do one of the following from your destructor to guarantee a safe shutdown:
-     * 1) Call this method
-     * 2) Call stop() and wait(), knowing that nothing will
-     *    call start() anymore after this
-     * 3) Be sure the thread will never be running at destruction.
-     * Note: This irrevocably stops this object.
-     * Note: It is not sufficient that your parent class does this.
-     * Calling this method, or providing one of the above mentioned
-     * equivalent guarantees, must be done by every
-     * single last class in the hierarchy with an implemented destructor deleting data.
-     * (the base class destructor is always called after the derived class)
-     */
-    void shutDown();
+    virtual bool event(QEvent* e);
 
 private:
 

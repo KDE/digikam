@@ -128,7 +128,7 @@ class DIGIKAM_EXPORT ThumbBarView : public Q3ScrollView
 
 public:
 
-    explicit ThumbBarView(QWidget* parent, int orientation=Qt::Vertical, bool exifRotate=true,
+    explicit ThumbBarView(QWidget* parent, int orientation=Qt::Vertical,
                           const ThumbBarToolTipSettings& settings=ThumbBarToolTipSettings());
     virtual ~ThumbBarView();
 
@@ -142,9 +142,6 @@ public:
     void triggerUpdate();
 
     void setSelected(ThumbBarItem* item);
-
-    void setExifRotate(bool exifRotate);
-    bool getExifRotate();
 
     void setToolTipSettings(const ThumbBarToolTipSettings& settings);
     ThumbBarToolTipSettings& getToolTipSettings() const;

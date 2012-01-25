@@ -6,7 +6,7 @@
  * Date        : 2009-02-10
  * Description : flip image batch tool.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -97,13 +97,15 @@ bool Flip::toolOperations()
 
     if (isJpegImage(inputUrl().toLocalFile()) && image().isNull())
     {
+        JpegRotator rotator(inputUrl().toLocalFile());
+        rotator.setDestinationFile(outputUrl().toLocalFile());
         switch (flip)
         {
             case DImg::HORIZONTAL:
-                return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), FlipHorizontal));
+                return rotator.exifTransform(KExiv2Iface::RotationMatrix::FlipHorizontal);
                 break;
             case DImg::VERTICAL:
-                return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), FlipVertical));
+                return rotator.exifTransform(KExiv2Iface::RotationMatrix::FlipVertical);
                 break;
             default:
                 kDebug() << "Unknown flip action";

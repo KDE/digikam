@@ -280,13 +280,19 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
+    /// Emitted when processing is scheduled.
+    void scheduled();
+
     /// Emitted when processing has started
     void started(const QString& message);
+
     /// Emitted when one package has finished processing
     void processed(const FacePipelinePackage& package);
     void progressValueChanged(float progress);
+
     /// Emitted when the last package has finished processing
     void finished();
+
     /// Emitted when one or several packages were skipped, usually because they have already been scanned.
     void skipped(const QList<ImageInfo>& skippedInfos);
 

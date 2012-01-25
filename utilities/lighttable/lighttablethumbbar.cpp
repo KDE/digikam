@@ -46,7 +46,7 @@
 #include "contextmenuhelper.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
-#include "metadatamanager.h"
+#include "fileactionmngr.h"
 #include "thumbnailloadthread.h"
 
 namespace Digikam
@@ -317,17 +317,17 @@ void LightTableThumbBar::slotAssignRating(int rating)
 
 void LightTableThumbBar::assignPickLabel(const ImageInfo& info, int pickId)
 {
-    MetadataManager::instance()->assignPickLabel(info, pickId);
+    FileActionMngr::instance()->assignPickLabel(info, pickId);
 }
 
 void LightTableThumbBar::assignRating(const ImageInfo& info, int rating)
 {
-    MetadataManager::instance()->assignRating(info, rating);
+    FileActionMngr::instance()->assignRating(info, rating);
 }
 
 void LightTableThumbBar::assignColorLabel(const ImageInfo& info, int colorId)
 {
-    MetadataManager::instance()->assignColorLabel(info, colorId);
+    FileActionMngr::instance()->assignColorLabel(info, colorId);
 }
 
 void LightTableThumbBar::toggleTag(int tagID)
@@ -337,9 +337,9 @@ void LightTableThumbBar::toggleTag(int tagID)
     if (!info.isNull())
     {
         if (!info.tagIds().contains(tagID))
-            MetadataManager::instance()->assignTag(info, tagID);
+            FileActionMngr::instance()->assignTag(info, tagID);
         else
-            MetadataManager::instance()->removeTag(info, tagID);
+            FileActionMngr::instance()->removeTag(info, tagID);
     }
 }
 

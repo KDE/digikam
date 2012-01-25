@@ -3,6 +3,12 @@ digiKam 2.6.0 - Release date: 2012-02-05
 
 NEW FEATURES:
 
+General        : Add a Progress Manager as into Kontact to drive process running in parallele.
+General        : KIPI JPEGLossLess tool is now disabled in digiKam. A dedicated solution is now implemented 
+                 in digiKam core to rotate/flip image using multithreading and versioning.
+ImageEditor    : Template Superimpose feature have been moved to PhotoLayoutEditor kipi-plugin.
+
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 286730 : digiKam crash when tagging faces.
@@ -12,4 +18,17 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 287772 : Build failed against boost-1.48 [patch].
 006 ==> 267777 : Versioning not working properly when saving changes in the image editor.
 007 ==> 290466 : MacPorts digiKam package fails to build.
-008 ==> 
+008 ==> 268262 : Editor: Color: Color Effects: Vivid - black areas become reddish.
+009 ==> 283491 : Caption/Tags tab: Active sub-tab not restored after restart [patch].
+010 ==> 234067 : Annoying list of languages to select from when entering picture captions [patch].
+011 ==> 277328 : Album Icon View Header linkable.
+012 ==> 290022 : Edit and Rotate in the Light Table open or change the wrong image.
+013 ==> 171823 : Add a non-permanent template superimpose option.
+014 ==> 103696 : Fit image into superimpose template.
+015 ==> 117343 : JJ: Border images - Christmas and other seasons templates wanted.
+016 ==> 103695 : Precise movement in superimpose template.
+017 ==> 289264 : Add option: "show thumbbar in full-screen picture preview".
+018 ==> 237452 : Tagging interface functionality lost.
+019 ==> 192055 : Typo digiKam tip of the day.
+020 ==> 
+

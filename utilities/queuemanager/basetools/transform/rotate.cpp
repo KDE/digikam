@@ -6,7 +6,7 @@
  * Date        : 2009-02-10
  * Description : rotate image batch tool.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,13 +47,14 @@
 #include "jpegutils.h"
 #include "freerotationfilter.h"
 #include "freerotationsettings.h"
+#include "loadsavethread.h"
 
 using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class RotatePriv
+class Rotate::RotatePriv
 {
 public:
 
@@ -177,27 +178,26 @@ bool Rotate::toolOperations()
 
     if (isJpegImage(inputUrl().toLocalFile()) && image().isNull())
     {
+        JpegRotator rotator(inputUrl().toLocalFile());
+        rotator.setDestinationFile(outputUrl().toLocalFile());
         if (useExif)
         {
-            if (!exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Auto))
-            {
-                return false;
-            }
+            return rotator.autoExifTransform();
         }
         else
         {
             switch (rotation)
             {
                 case DImg::ROT90:
-                    return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate90));
+                    return rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate90);
                     break;
                 case DImg::ROT180:
-                    return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate180));
+                    return rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate180);
                     break;
                 case DImg::ROT270:
-                    return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate270));
+                    return rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate270);
                     break;
-                default:      // Custom value
+                default:
 
                     // there is no loss less methode to turn JPEG image with a custom angle.
                     if (!loadToDImg())
@@ -224,59 +224,16 @@ bool Rotate::toolOperations()
 
     if (useExif)
     {
-        DMetadata meta(inputUrl().toLocalFile());
-
-        switch (meta.getImageOrientation())
-        {
-            case DMetadata::ORIENTATION_HFLIP:
-                image().flip(DImg::HORIZONTAL);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_180:
-                image().rotate(DImg::ROT180);
-                break;
-
-            case DMetadata::ORIENTATION_VFLIP:
-                image().flip(DImg::VERTICAL);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90_HFLIP:
-                image().flip(DImg::HORIZONTAL);
-                image().rotate(DImg::ROT90);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90:
-                image().rotate(DImg::ROT90);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_90_VFLIP:
-                image().flip(DImg::VERTICAL);
-                image().rotate(DImg::ROT90);
-                break;
-
-            case DMetadata::ORIENTATION_ROT_270:
-                image().rotate(DImg::ROT270);
-                break;
-
-            default:
-                // DMetadata::ORIENTATION_NORMAL
-                // DMetadata::ORIENTATION_UNSPECIFIED
-                // Nothing to do...
-                break;
-        }
+        image().rotateAndFlip(LoadSaveThread::exifOrientation(image(), inputUrl().toLocalFile()));
     }
     else
     {
         switch (rotation)
         {
             case DImg::ROT90:
-                image().rotate(DImg::ROT90);
-                break;
             case DImg::ROT180:
-                image().rotate(DImg::ROT180);
-                break;
             case DImg::ROT270:
-                image().rotate(DImg::ROT270);
+                image().rotate((DImg::ANGLE)rotation);
                 break;
             default:      // Custom value
                 FreeRotationFilter fr(&image(), 0L, prm);

@@ -7,7 +7,7 @@
  * Description : Captions, Tags, and Rating properties editor
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
@@ -47,6 +47,9 @@
 #include <kdialog.h>
 #include <ktabwidget.h>
 #include <kdebug.h>
+
+// Libkexiv2 includes
+
 #include <libkexiv2/altlangstredit.h>
 
 // Libkdcraw includes
@@ -62,7 +65,7 @@
 #include "albumthumbnailloader.h"
 #include "collectionscanner.h"
 #include "databasetransaction.h"
-#include "metadatamanager.h"
+#include "fileactionmngr.h"
 #include "ratingwidget.h"
 #include "scancontroller.h"
 #include "tagcheckview.h"
@@ -76,6 +79,7 @@
 #include "imageinfo.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
+#include "fileactionprogress.h"
 
 namespace Digikam
 {
@@ -310,7 +314,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     d->recentTagsBtn->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
     d->recentTagsBtn->setMenu(recentTagsMenu);
     d->recentTagsBtn->setPopupMode(QToolButton::InstantPopup);
-    d->recentTagsMapper   = new QSignalMapper(this);    
+    d->recentTagsMapper   = new QSignalMapper(this);
 
     grid3->addWidget(d->newTagEdit,   0, 0, 1, 2);
     grid3->addWidget(d->tagCheckView, 1, 0, 1, 2);
@@ -333,6 +337,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     d->templateSelector = new TemplateSelector(infoArea);
     d->templateViewer   = new TemplateViewer(infoArea);
+    d->templateViewer->setObjectName("ImageDescEditTab Expander");
 
     grid2->addWidget(d->templateSelector, 0, 0, 1, 2);
     grid2->addWidget(d->templateViewer,   1, 0, 1, 2);
@@ -431,42 +436,38 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
 
     connect(watch, SIGNAL(signalImageCaptionChanged(qlonglong)),
             this, SLOT(slotImageCaptionChanged(qlonglong)));
-
-    // -- read config ---------------------------------------------------------
-
-    /// @todo Implement read/writeSettings functions with externally supplied groups
-
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group2       = config->group("Image Properties SideBar");
-    d->tabWidget->setCurrentIndex(group2.readEntry("ImageDescEditTab Tab",
-                                  (int)ImageDescEditTabPriv::DESCRIPTIONS));
-    d->templateViewer->setObjectName("ImageDescEditTab Expander");
-
-#if KDCRAW_VERSION >= 0x020000
-    d->templateViewer->readSettings(group2);
-#else
-    d->templateViewer->readSettings();
-#endif
-
-    d->tagCheckView->setConfigGroup(group2);
-    d->tagCheckView->setEntryPrefix("ImageDescEditTab TagCheckView");
-    d->tagCheckView->loadState();
-    d->tagsSearchBar->setConfigGroup(group2);
-    d->tagsSearchBar->setEntryPrefix("ImageDescEditTab SearchBar");
-    d->tagsSearchBar->loadState();
 }
 
 ImageDescEditTab::~ImageDescEditTab()
 {
-    // FIXME: this slot seems to be called several times, which can also be seen when changing the metadata of
-    // an image and then switching to another one, because you'll get the dialog created by slotChangingItems()
-    // twice, and this seems to be exactly the problem when called here.
-    // We should disable the slot here at the moment, otherwise digikam crashes.
-    //slotChangingItems();
+    delete d;
+}
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Image Properties SideBar");
-    group.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
+void ImageDescEditTab::readSettings(KConfigGroup& group)
+{
+    d->tabWidget->setCurrentIndex(group.readEntry("ImageDescEdit Tab", (int)ImageDescEditTabPriv::DESCRIPTIONS));
+    d->titleEdit->setCurrentLanguageCode(group.readEntry("ImageDescEditTab TitleLang", QString()));
+    d->captionsEdit->setCurrentLanguageCode(group.readEntry("ImageDescEditTab CaptionsLang", QString()));
+
+#if KDCRAW_VERSION >= 0x020000
+    d->templateViewer->readSettings(group);
+#else
+    d->templateViewer->readSettings();
+#endif
+
+    d->tagCheckView->setConfigGroup(group);
+    d->tagCheckView->setEntryPrefix("ImageDescEditTab TagCheckView");
+    d->tagCheckView->loadState();
+    d->tagsSearchBar->setConfigGroup(group);
+    d->tagsSearchBar->setEntryPrefix("ImageDescEditTab SearchBar");
+    d->tagsSearchBar->loadState();
+}
+
+void ImageDescEditTab::writeSettings(KConfigGroup& group)
+{
+    group.writeEntry("ImageDescEdit Tab",             d->tabWidget->currentIndex());
+    group.writeEntry("ImageDescEditTab TitleLang",    d->titleEdit->currentLanguageCode());
+    group.writeEntry("ImageDescEditTab CaptionsLang", d->captionsEdit->currentLanguageCode());
 
 #if KDCRAW_VERSION >= 0x020000
     d->templateViewer->writeSettings(group);
@@ -474,12 +475,8 @@ ImageDescEditTab::~ImageDescEditTab()
     d->templateViewer->writeSettings();
 #endif
 
-    group.sync();
-
     d->tagCheckView->saveState();
     d->tagsSearchBar->saveState();
-
-    delete d;
 }
 
 bool ImageDescEditTab::singleSelection() const
@@ -661,7 +658,7 @@ void ImageDescEditTab::slotApplyAllChanges()
         return;
     }
 
-    MetadataManager::instance()->applyMetadata(d->currInfos, d->hub);
+    FileActionMngr::instance()->applyMetadata(d->currInfos, d->hub);
 
     d->modified = false;
     d->hub.resetChanged();
@@ -747,7 +744,8 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
 
 void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 {
-    emit progressEntered(i18n("Reading metadata from files. Please wait..."));
+    initProgressIndicator();
+    emit signalProgressMessageChanged(i18n("Reading metadata from files. Please wait..."));
 
     d->ignoreImageAttributesWatch = true;
     int i                         = 0;
@@ -769,14 +767,14 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
         fileHub.write(info);
         */
 
-        emit progressValueChanged(i++/(float)d->currInfos.count());
+        emit signalProgressValueChanged(i++/(float)d->currInfos.count());
         kapp->processEvents();
     }
 
     ScanController::instance()->resumeCollectionScan();
     d->ignoreImageAttributesWatch = false;
 
-    emit progressFinished();
+    emit signalProgressFinished();
 
     // reload everything
     setInfos(d->currInfos);
@@ -784,7 +782,8 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 
 void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
 {
-    emit progressEntered(i18n("Writing metadata to files. Please wait..."));
+    initProgressIndicator();
+    emit signalProgressMessageChanged(i18n("Writing metadata to files. Please wait..."));
 
     int i = 0;
     foreach(const ImageInfo& info, d->currInfos)
@@ -795,11 +794,11 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
         // write out to file DMetadata
         fileHub.write(info.filePath());
 
-        emit progressValueChanged(i++/(float)d->currInfos.count());
+        emit signalProgressValueChanged(i++/(float)d->currInfos.count());
         kapp->processEvents();
     }
 
-    emit progressFinished();
+    emit signalProgressFinished();
 }
 
 bool ImageDescEditTab::eventFilter(QObject* o, QEvent* e)
@@ -870,7 +869,7 @@ void ImageDescEditTab::slotCommentChanged()
 void ImageDescEditTab::slotTitleChanged()
 {
     CaptionsMap titles;
-    
+
     titles.fromAltLangMap(d->titleEdit->values());
     d->hub.setTitles(titles);
     setMetadataWidgetStatus(d->hub.titlesStatus(), d->titleEdit);
@@ -1421,13 +1420,30 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
         tmpSet.insert(relations.at(i).second);
     }
 
-    MetadataManager::instance()->applyMetadata(ImageInfoList(tmpSet.toList()), d->hub);
+    FileActionMngr::instance()->applyMetadata(ImageInfoList(tmpSet.toList()), d->hub);
 
     d->modified = false;
     d->hub.resetChanged();
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
     d->applyToAllVersionsButton->setEnabled(false);
+}
+
+void ImageDescEditTab::initProgressIndicator()
+{
+    if (!ProgressManager::instance()->findItembyId("ImageDescEditTabProgress"))
+    {
+        FileActionProgress* item = new FileActionProgress("ImageDescEditTabProgress");
+
+        connect(this, SIGNAL(signalProgressMessageChanged(QString)),
+                item, SLOT(slotProgressStatus(QString)));
+
+        connect(this, SIGNAL(signalProgressValueChanged(float)),
+                item, SLOT(slotProgressValue(float)));
+
+        connect(this, SIGNAL(signalProgressFinished()),
+                item, SLOT(slotCompleted()));
+    }
 }
 
 }  // namespace Digikam

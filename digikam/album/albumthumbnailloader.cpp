@@ -343,7 +343,6 @@ void AlbumThumbnailLoader::addUrl(Album* album, const KUrl& url)
                 d->iconTagThumbThread = new ThumbnailLoadThread();
                 d->iconTagThumbThread->setThumbnailSize(d->iconSize);
                 d->iconTagThumbThread->setSendSurrogatePixmap(false);
-                d->iconTagThumbThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
                 connect(d->iconTagThumbThread,
                         SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
                         SLOT(slotGotThumbnailFromIcon(LoadingDescription,QPixmap)),
@@ -360,7 +359,6 @@ void AlbumThumbnailLoader::addUrl(Album* album, const KUrl& url)
                 d->iconAlbumThumbThread = new ThumbnailLoadThread();
                 d->iconAlbumThumbThread->setThumbnailSize(d->iconSize);
                 d->iconAlbumThumbThread->setSendSurrogatePixmap(false);
-                d->iconAlbumThumbThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
                 connect(d->iconAlbumThumbThread,
                         SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
                         SLOT(slotGotThumbnailFromIcon(LoadingDescription,QPixmap)),

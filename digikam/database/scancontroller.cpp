@@ -438,7 +438,7 @@ void ScanController::allowToScanDeferredFiles()
 
 void ScanController::completeCollectionScan(SplashScreen* splash, bool defer)
 {
-    d->splash         = splash;
+    d->splash = splash;
     createProgressDialog();
     // we only need to count the files in advance
     //if we show a progress percentage in progress dialog
@@ -1070,10 +1070,11 @@ void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset&
     {
         DatabaseFields::Set changes = changeset.changes();
 
-        if (changes & DatabaseFields::ModificationDate)
+        if (changes & DatabaseFields::ModificationDate
+            || changes & DatabaseFields::Orientation)
         {
             ImageInfo info(imageId);
-            kDebug() << imageId << info.filePath();
+            //kDebug() << imageId << info.filePath();
             notifyFileChanged(info.filePath());
         }
     }

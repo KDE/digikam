@@ -6,7 +6,7 @@
  * Date        : 2009-07-12
  * Description : caption editor
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include <libkexiv2/version.h>
 #include <libkexiv2/altlangstredit.h>
 
 using namespace KExiv2Iface;
@@ -104,6 +105,27 @@ void CaptionEdit::reset()
     d->authorEdit->blockSignals(false);
 
     d->captionsValues.clear();
+}
+
+QString CaptionEdit::currentLanguageCode() const
+{
+    return d->altLangStrEdit->currentLanguageCode();
+}
+
+void CaptionEdit::setCurrentLanguageCode(const QString& lang)
+{
+#if KEXIV2_VERSION >= 0x020101
+    if(d->altLangStrEdit->currentLanguageCode().isEmpty())
+    {
+        d->altLangStrEdit->setCurrentLanguageCode("x-default");
+    }
+    else
+    {
+        d->altLangStrEdit->setCurrentLanguageCode(lang);
+    }
+#else
+    Q_UNUSED(lang);
+#endif
 }
 
 void CaptionEdit::slotAddValue(const QString& lang, const QString& text)

@@ -403,7 +403,7 @@ void PreviewLoader::process(FacePipelineExtendedPackage::Ptr package)
     }
 
     scheduledPackages << package;
-    loadFastButLarge(package->filePath, 1600, MetadataSettings::instance()->settings().exifRotate);
+    loadFastButLarge(package->filePath, 1600);
     //load(package->filePath, 800, MetadataSettings::instance()->settings().exifRotate);
     //loadHighQuality(package->filePath, MetadataSettings::instance()->settings().exifRotate);
 
@@ -1032,8 +1032,11 @@ void FacePipeline::FacePipelinePriv::start()
         return;
     }
 
-    WorkerObject*  workerObject;
-    ParallelPipes* pipes;
+    emit q->scheduled();
+
+    WorkerObject*  workerObject = 0;
+    ParallelPipes* pipes        = 0;
+
     foreach(QObject* element, pipeline)
     {
         if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
@@ -1087,8 +1090,9 @@ void FacePipeline::FacePipelinePriv::stop()
 
 void FacePipeline::FacePipelinePriv::applyPriority()
 {
-    WorkerObject*  workerObject;
-    ParallelPipes* pipes;
+    WorkerObject*  workerObject = 0;
+    ParallelPipes* pipes        = 0;
+
     foreach(QObject* element, pipeline)
     {
         if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
@@ -1100,6 +1104,7 @@ void FacePipeline::FacePipelinePriv::applyPriority()
             pipes->setPriority(priority);
         }
     }
+
     if (thumbnailLoadThread)
     {
         thumbnailLoadThread->setPriority(priority);
@@ -1114,7 +1119,6 @@ void FacePipeline::FacePipelinePriv::createThumbnailLoadThread()
         thumbnailLoadThread->setPixmapRequested(false);
         thumbnailLoadThread->setThumbnailSize(ThumbnailLoadThread::maximumThumbnailSize());
         // KFaceIface::Image::recommendedSizeForRecognition()
-        thumbnailLoadThread->setExifRotate(MetadataSettings::instance()->settings().exifRotate);
         thumbnailLoadThread->setPriority(priority);
     }
 

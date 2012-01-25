@@ -390,7 +390,7 @@ DatabaseAccessUnlock::~DatabaseAccessUnlock()
     }
 
     // update lock count
-    DatabaseAccess::d->lock.lockCount = count;
+    DatabaseAccess::d->lock.lockCount += count;
 }
 
 }  // namespace Digikam

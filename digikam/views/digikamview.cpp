@@ -7,10 +7,10 @@
  * Description : implementation of album view interface.
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
- * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2011      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +45,7 @@
 #include "albumhistory.h"
 #include "albumsettings.h"
 #include "stackedview.h"
-#include "batchsyncmetadata.h"
+#include "metadatasynchronizer.h"
 #include "digikamapp.h"
 #include "digikamimageview.h"
 #include "dzoombar.h"
@@ -64,7 +64,7 @@
 #include "metadatasettings.h"
 #include "globals.h"
 #include "metadatahub.h"
-#include "metadatamanager.h"
+#include "fileactionmngr.h"
 #include "queuemgrwindow.h"
 #include "scancontroller.h"
 #include "sidebar.h"
@@ -76,6 +76,7 @@
 #include "tagscache.h"
 #include "searchxml.h"
 #include "faceiface.h"
+#include "fileactionprogress.h"
 #include "versionmanagersettings.h"
 
 namespace Digikam
@@ -424,15 +425,6 @@ void DigikamView::setupConnections()
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
-    connect(d->rightSideBar->imageDescEditTab(), SIGNAL(progressEntered(QString)),
-            d->parent, SLOT(enterProgress(QString)));
-
-    connect(d->rightSideBar->imageDescEditTab(), SIGNAL(progressValueChanged(float)),
-            d->parent, SLOT(progressValue(float)));
-
-    connect(d->rightSideBar->imageDescEditTab(), SIGNAL(progressFinished()),
-            d->parent, SLOT(finishProgress()));
-
     connect(d->fuzzySearchSideBar, SIGNAL(signalUpdateFingerPrints()),
             d->parent, SLOT(slotRebuildFingerPrints()));
 
@@ -471,7 +463,7 @@ void DigikamView::setupConnections()
 
     connect(d->filterWidget, SIGNAL(signalMimeTypeFilterChanged(int)),
             model, SLOT(setMimeTypeFilter(int)));
-    
+
     connect(d->filterWidget, SIGNAL(signalGeolocationFilterChanged(ImageFilterSettings::GeolocationCondition)),
             model, SLOT(setGeolocationFilter(ImageFilterSettings::GeolocationCondition)));
 
@@ -522,23 +514,14 @@ void DigikamView::setupConnections()
     connect(d->stackedview, SIGNAL(signalGotoTagAndItem(int)),
             this, SLOT(slotGotoTagAndItem(int)));
 
-    // -- MetadataManager progress ---------------
+    // -- FileActionMngr progress ---------------
 
-    connect(MetadataManager::instance(), SIGNAL(progressMessageChanged(QString)),
-            d->parent, SLOT(enterProgress(QString)));
 
-    connect(MetadataManager::instance(), SIGNAL(progressValueChanged(float)),
-            d->parent, SLOT(progressValue(float)));
+    connect(FileActionMngr::instance(), SIGNAL(signalProgressScheduled()),
+            this, SLOT(slotInitProgressIndicator()));
 
-    connect(MetadataManager::instance(), SIGNAL(progressFinished()),
-            d->parent, SLOT(finishProgress()));
-
-    connect(MetadataManager::instance(), SIGNAL(orientationChangeFailed(QStringList)),
-            this, SLOT(slotOrientationChangeFailed(QStringList)));
-
-    // -- Icon view progress
-
-    d->iconView->connectProgressSignals(d->parent);
+    connect(FileActionMngr::instance(), SIGNAL(signalImageChangeFailed(QString, QStringList)),
+            this, SLOT(slotImageChangeFailed(QString, QStringList)));
 
     // -- timers ---------------
 
@@ -609,7 +592,6 @@ void DigikamView::connectIconViewFilter(FilterStatusBar* filterbar)
 
     connect(filterbar, SIGNAL(signalPopupFiltersView()),
             this, SLOT(slotPopupFiltersView()));
-
 }
 
 void DigikamView::DigikamViewPriv::addPageUpDownActions(DigikamView* q, QWidget* w)
@@ -1359,21 +1341,6 @@ void DigikamView::slotAlbumPropsEdit()
     d->albumModificationHelper->slotAlbumEdit(d->albumManager->currentPAlbum());
 }
 
-void DigikamView::connectBatchSyncMetadata(BatchSyncMetadata* syncMetadata)
-{
-    connect(syncMetadata, SIGNAL(signalBegin(QString)),
-            d->parent, SLOT(enterCancellableProgress(QString)));
-
-    connect(syncMetadata, SIGNAL(signalProgressValue(float)),
-            d->parent, SLOT(progressValue(float)));
-
-    connect(syncMetadata, SIGNAL(signalComplete()),
-            d->parent, SLOT(finishProgress()));
-
-    connect(d->parent, SIGNAL(signalCancelButtonPressed()),
-            syncMetadata, SLOT(slotAbort()));
-}
-
 void DigikamView::slotAlbumWriteMetadata()
 {
     Album* album = d->albumManager->currentAlbum();
@@ -1382,10 +1349,7 @@ void DigikamView::slotAlbumWriteMetadata()
     {
         return;
     }
-
-    BatchSyncMetadata* syncMetadata = new BatchSyncMetadata(album, BatchSyncMetadata::WriteFromDatabaseToFile, this);
-    connectBatchSyncMetadata(syncMetadata);
-    syncMetadata->parseAlbum();
+    new MetadataSynchronizer(album, MetadataSynchronizer::WriteFromDatabaseToFile);
 }
 
 void DigikamView::slotAlbumReadMetadata()
@@ -1396,28 +1360,19 @@ void DigikamView::slotAlbumReadMetadata()
     {
         return;
     }
-
-    BatchSyncMetadata* syncMetadata = new BatchSyncMetadata(album, BatchSyncMetadata::ReadFromFileToDatabase, this);
-    connectBatchSyncMetadata(syncMetadata);
-    syncMetadata->parseAlbum();
+    new MetadataSynchronizer(album, MetadataSynchronizer::ReadFromFileToDatabase);
 }
 
 void DigikamView::slotImageWriteMetadata()
 {
     ImageInfoList selected = d->iconView->selectedImageInfos();
-
-    BatchSyncMetadata* syncMetadata = new BatchSyncMetadata(selected, BatchSyncMetadata::WriteFromDatabaseToFile, this);
-    connectBatchSyncMetadata(syncMetadata);
-    syncMetadata->parseList();
+    new MetadataSynchronizer(selected, MetadataSynchronizer::WriteFromDatabaseToFile);
 }
 
 void DigikamView::slotImageReadMetadata()
 {
     ImageInfoList selected = d->iconView->selectedImageInfos();
-
-    BatchSyncMetadata* syncMetadata = new BatchSyncMetadata(selected, BatchSyncMetadata::ReadFromFileToDatabase, this);
-    connectBatchSyncMetadata(syncMetadata);
-    syncMetadata->parseList();
+    new MetadataSynchronizer(selected, MetadataSynchronizer::ReadFromFileToDatabase);
 }
 
 // ----------------------------------------------------------------
@@ -1537,11 +1492,6 @@ void DigikamView::slotImageFindSimilar()
         d->fuzzySearchSideBar->newSimilarSearch(current);
         slotLeftSideBarActivate(d->fuzzySearchSideBar);
     }
-}
-
-void DigikamView::slotImageExifOrientation(int orientation)
-{
-    d->iconView->setExifOrientationOfSelected(orientation);
 }
 
 void DigikamView::slotEditor()
@@ -1904,23 +1854,14 @@ void DigikamView::slotSidebarTabTitleStyleChanged()
     //     d->rightSideBar->applySettings();
 }
 
-void DigikamView::slotOrientationChangeFailed(const QStringList& failedFileNames)
+void DigikamView::slotImageChangeFailed(const QString& message, const QStringList& fileNames)
 {
-    if (failedFileNames.isEmpty())
+    if (fileNames.isEmpty())
     {
         return;
     }
 
-    if (failedFileNames.count() == 1)
-    {
-        KMessageBox::error(0, i18n("Failed to revise Exif orientation for file %1.",
-                                   failedFileNames.at(0)));
-    }
-    else
-    {
-        KMessageBox::errorList(0, i18n("Failed to revise Exif orientation these files:"),
-                               failedFileNames);
-    }
+    KMessageBox::errorList(0, message, fileNames);
 }
 
 void DigikamView::slotLeftSideBarActivateAlbums()
@@ -1991,6 +1932,33 @@ bool DigikamView::hasCurrentItem() const
     // We should actually get this directly from the selection model,
     // but the iconView is fine for now.
     return !d->iconView->currentInfo().isNull();
+}
+
+void DigikamView::slotImageExifOrientation(int orientation)
+{
+    FileActionMngr::instance()->setExifOrientation(d->iconView->selectedImageInfos(), orientation);
+}
+
+void DigikamView::imageTransform(KExiv2Iface::RotationMatrix::TransformationAction transform)
+{
+    FileActionMngr::instance()->transform(d->iconView->selectedImageInfos(), transform);
+}
+
+void DigikamView::slotInitProgressIndicator()
+{
+    if (!ProgressManager::instance()->findItembyId("FileActionProgress"))
+    {
+        FileActionProgress* item = new FileActionProgress("FileActionProgress");
+
+        connect(FileActionMngr::instance(), SIGNAL(signalProgressMessageChanged(QString)),
+                item, SLOT(slotProgressStatus(QString)));
+
+        connect(FileActionMngr::instance(), SIGNAL(signalProgressValueChanged(float)),
+                item, SLOT(slotProgressValue(float)));
+
+        connect(FileActionMngr::instance(), SIGNAL(signalProgressFinished()),
+                item, SLOT(slotCompleted()));
+    }
 }
 
 }  // namespace Digikam

@@ -6,7 +6,7 @@
  * Date        : 2008-05-19
  * Description : Find Duplicates View.
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at googlemail dot com>
  *
@@ -31,10 +31,6 @@
 #include <QWidget>
 #include <QPixmap>
 #include <QTreeWidget>
-
-// KDE includes
-
-#include <kjob.h>
 
 // Local includes
 
@@ -76,12 +72,7 @@ private Q_SLOTS:
     void slotClear();
     void slotFindDuplicates();
     void slotDuplicatesAlbumActived(QTreeWidgetItem*, int);
-
-    void slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong);
-    void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
-    void slotDuplicatesSearchResult(KJob*);
-
-    void slotCancelButtonPressed();
+    void slotComplete();
 
     void slotAlbumSelectionChanged(Album*, Qt::CheckState);
     void slotTagSelectionChanged(Album*, Qt::CheckState);

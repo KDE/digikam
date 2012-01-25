@@ -44,6 +44,7 @@
 namespace Digikam
 {
 
+class DMetadata;
 class LoadSaveTask;
 
 class DIGIKAM_EXPORT LoadSaveNotifier
@@ -61,6 +62,19 @@ public:
     virtual void savingProgress(const QString& filePath, float progress) = 0;
     virtual void imageSaved(const QString& filePath, bool success) = 0;
     virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img) = 0;
+};
+
+class DIGIKAM_EXPORT LoadSaveFileInfoProvider
+{
+public:
+
+    virtual ~LoadSaveFileInfoProvider() {}
+    /**
+     * Gives a hint at the orientation of the image.
+     * This can be used to supersede the Exif information in the file.
+     * Will not be used if DMetadata::ORIENTATION_UNSPECIFIED (default value)
+     */
+    virtual int orientationHint(const QString& path) = 0;
 };
 
 // -------------------------------------------------------------------------------------------------------
@@ -109,6 +123,9 @@ public:
 
     void setNotificationPolicy(NotificationPolicy notificationPolicy);
 
+    static void setInfoProvider(LoadSaveFileInfoProvider* infoProvider);
+    static LoadSaveFileInfoProvider* infoProvider();
+
     /**
      * Utility to make sure that an image is rotated according to Exif tag.
      * Detects if an image has previously already been rotated: You can
@@ -117,6 +134,14 @@ public:
      * Returns false if a rotation was not needed.
      */
     static bool exifRotate(DImg& image, const QString& filePath);
+
+    /**
+     * Retrieves the Exif orientation, either from the info provider if available,
+     * or from the metadata
+     */
+    static int exifOrientation(const DImg& image, const QString& filePath);
+    static int exifOrientation(const QString& filePath, const DMetadata& metadata,
+                               bool isRaw, bool fromRawEmbeddedPreview);
 
 Q_SIGNALS:
 

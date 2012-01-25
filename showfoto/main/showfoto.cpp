@@ -559,11 +559,8 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 
-    bool exifRotate = group.readEntry("EXIF Rotate", true);
-    m_canvas->setExifOrient(exifRotate);
-    d->thumbBar->setExifRotate(exifRotate);
-
-    m_setExifOrientationTag   = group.readEntry("EXIF Set Orientation", true);
+    /*bool exifRotate = group.readEntry("EXIF Rotate", true);
+    m_setExifOrientationTag   = group.readEntry("EXIF Set Orientation", true);*/
 
     Digikam::ThumbBarToolTipSettings settings;
     settings.showToolTips   = group.readEntry("Show ToolTips", true);

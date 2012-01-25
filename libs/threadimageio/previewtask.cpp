@@ -52,6 +52,7 @@
 
 #include "dmetadata.h"
 #include "jpegutils.h"
+#include "metadatasettings.h"
 #include "previewloadthread.h"
 
 namespace Digikam
@@ -110,7 +111,7 @@ void PreviewLoadingTask::execute()
 
             // rotate if needed - images are unrotated in the cache,
             // except for RAW images, which are already rotated by dcraw.
-            if (m_loadingDescription.previewParameters.exifRotate())
+            if (MetadataSettings::instance()->settings().exifRotate)
             {
                 m_img = m_img.copy();
                 LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
@@ -180,7 +181,7 @@ void PreviewLoadingTask::execute()
 
         // The image from the cache may or may not be rotated and post processed.
         // exifRotate() and postProcess() will detect if work is needed.
-        if (m_loadingDescription.previewParameters.exifRotate())
+        if (MetadataSettings::instance()->settings().exifRotate)
         {
             LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
         }
@@ -391,7 +392,7 @@ void PreviewLoadingTask::execute()
         }
 
         // Scale if hinted, Store previews rotated in the cache (?)
-        if (m_loadingDescription.previewParameters.exifRotate())
+        if (MetadataSettings::instance()->settings().exifRotate)
         {
             LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
         }

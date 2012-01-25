@@ -1047,6 +1047,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawsettingsbox.cpp
        )
 
+    SET(libprogressmanager_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/overlaywidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/progressview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/progressmanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/statusbarprogresswidget.cpp
+       )
+
     SET(libthememanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/thememanager/thememanager.cpp
        )
@@ -1055,6 +1062,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/threadmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/workerobject.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/dynamicthread.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/parallelworkers.cpp
        )
 
     # ==================================================================================================
@@ -1178,14 +1186,19 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
        )
 
-    SET(libbatch_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfojob.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/imageinfoalbumsjob.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchthumbsgenerator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchalbumssyncmetadata.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchsyncmetadata.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/fingerprintsgenerator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchfacedetector.cpp
+    SET(libmaintenance_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancetool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancepictpathtool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancethumbtool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancepreviewtool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfojob.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfoalbumsjob.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/metadatasynchronizer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/fingerprintsgenerator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/duplicatesfinder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/newitemsfinder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/thumbnailsgenerator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/facedetector.cpp
        )
 
     SET(libdatabasecore_SRCS
@@ -1433,8 +1446,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/assignnameoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/facerejectionoverlay.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata/metadatahub.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata/metadatamanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/metadatahub.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileactionprogress.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileactionmngr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileactionmngr_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/imageinfotasksplitter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/databaseworkeriface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileworkeriface.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscompletionbox.cpp
@@ -1454,6 +1472,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/editablesearchtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/sidebarwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/slideshowbuilder.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/stackedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/digikamview.cpp
@@ -1480,7 +1499,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/main
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils
@@ -1533,6 +1552,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/thememanager
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager
@@ -1553,7 +1573,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/controller
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/devices

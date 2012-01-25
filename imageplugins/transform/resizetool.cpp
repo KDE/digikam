@@ -6,7 +6,7 @@
  * Date        : 2005-04-07
  * Description : a tool to resize an image
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -201,8 +201,7 @@ ResizeTool::ResizeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
-    d->mainTab                = new KTabWidget(d->gboxSettings->plainPage());
+    d->mainTab                = new KTabWidget();
     QWidget* firstPage        = new QWidget(d->mainTab);
     QGridLayout* grid         = new QGridLayout(firstPage);
 
@@ -277,11 +276,14 @@ ResizeTool::ResizeTool(QObject* parent)
 
     d->settingsWidget = new GreycstorationSettings(d->mainTab);
 
-    gridSettings->addWidget(d->mainTab,                               0, 1, 1, 1);
-    gridSettings->addWidget(new QLabel(d->gboxSettings->plainPage()), 1, 1, 1, 1);
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(d->gboxSettings->spacingHint());
-    gridSettings->setRowStretch(2, 10);
+    // -------------------------------------------------------------
+
+    QGridLayout* grid2 = new QGridLayout();
+    grid2->addWidget(d->mainTab, 0, 1, 1, 1);
+    grid2->setMargin(d->gboxSettings->spacingHint());
+    grid2->setSpacing(d->gboxSettings->spacingHint());
+    grid2->setRowStretch(1, 10);
+    d->gboxSettings->plainPage()->setLayout(grid2);
 
     setToolSettings(d->gboxSettings);
     init();

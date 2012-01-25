@@ -24,6 +24,10 @@
 
 #include "loadsavethread.moc"
 
+// KExiv2 includes
+
+#include <libkexiv2/rotationmatrix.h>
+
 // Local includes
 
 #include "dmetadata.h"
@@ -51,7 +55,11 @@ public:
     QTime         notificationTime;
 
     LoadSaveTask* lastTask;
+
+    static LoadSaveFileInfoProvider* infoProvider;
 };
+
+LoadSaveFileInfoProvider* LoadSaveThread::LoadSaveThreadPriv::infoProvider = 0;
 
 //---------------------------------------------------------------------------------------------------
 
@@ -67,6 +75,16 @@ LoadSaveThread::~LoadSaveThread()
 {
     wait();
     delete d;
+}
+
+void LoadSaveThread::setInfoProvider(LoadSaveFileInfoProvider* infoProvider)
+{
+    LoadSaveThreadPriv::infoProvider = infoProvider;
+}
+
+LoadSaveFileInfoProvider* LoadSaveThread::infoProvider()
+{
+    return LoadSaveThreadPriv::infoProvider;
 }
 
 void LoadSaveThread::load(LoadingDescription description)
@@ -249,6 +267,53 @@ bool LoadSaveThread::querySendNotifyEvent()
     return false;
 }
 
+int LoadSaveThread::exifOrientation(const DImg& image, const QString& filePath)
+{
+    QVariant attribute = image.attribute("fromRawEmbeddedPreview");
+    return exifOrientation(filePath, DMetadata(image.getMetadata()),
+                           image.detectedFormat() == DImg::RAW,
+                           (attribute.isValid() && attribute.toBool()));
+}
+
+int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& metadata,
+                                    bool isRaw, bool fromRawEmbeddedPreview)
+{
+    int dbOrientation = KExiv2::ORIENTATION_UNSPECIFIED;
+    if (infoProvider())
+    {
+        dbOrientation = infoProvider()->orientationHint(filePath);
+    }
+
+    int exifOrientation = metadata.getImageOrientation();
+
+    // Raw files are already rotated properly by dcraw. Only perform auto-rotation with JPEG/PNG/TIFF file.
+    // We don't have a feedback from dcraw about auto-rotated RAW file during decoding.
+
+    if (isRaw && !fromRawEmbeddedPreview)
+    {
+        // Did the user apply any additional rotation over the metadata flag?
+        if (dbOrientation == KExiv2::ORIENTATION_UNSPECIFIED || dbOrientation == exifOrientation)
+        {
+            return KExiv2::ORIENTATION_NORMAL;
+        }
+        // Assume A is the orientation as from metadata, B is an additional operation applied by the user,
+        // C is the current orientation in the database.
+        // A*B = C and B = A_inv * C
+        QMatrix A = KExiv2Iface::RotationMatrix::toMatrix((KExiv2::ImageOrientation)exifOrientation);
+        QMatrix C = KExiv2Iface::RotationMatrix::toMatrix((KExiv2::ImageOrientation)dbOrientation);
+        QMatrix A_inv = A.inverted();
+        QMatrix B = A_inv * C;
+        RotationMatrix m(B.m11(), B.m12(), B.m21(), B.m22());
+        return m.exifOrientation();
+    }
+
+    if (dbOrientation != KExiv2::ORIENTATION_UNSPECIFIED)
+    {
+        return dbOrientation;
+    }
+    return exifOrientation;
+}
+
 bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
 {
     // Keep in sync with the variant in thumbnailcreator.cpp
@@ -259,21 +324,9 @@ bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
         return false;
     }
 
-    // Raw files are already rotated properly by dcraw. Only perform auto-rotation with JPEG/PNG/TIFF file.
-    // We don't have a feedback from dcraw about auto-rotated RAW file during decoding. Return true anyway.
-
-    attribute = image.attribute("fromRawEmbeddedPreview");
-
-    if (DImg::fileFormat(filePath) == DImg::RAW && !(attribute.isValid() && attribute.toBool()) )
-    {
-        return true;
-    }
-
     // Rotate thumbnail based on metadata orientation information
 
-    DMetadata metadata(filePath);
-    DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-    bool rotatedOrFlipped                   = image.rotateAndFlip(orientation);
+    bool rotatedOrFlipped = image.rotateAndFlip(exifOrientation(image, filePath));
     image.setAttribute("exifRotated", true);
 
     return rotatedOrFlipped;
