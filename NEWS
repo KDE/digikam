@@ -46,6 +46,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 032 ==> 212362 : Add support for instant rotate.
 033 ==> 232777 : Lost images, when they are rotated on (over-)full hd resp. partition.
 034 ==> 208504 : Add type icon to images under the thumbnail (patch).
-035 ==> 
+035 ==> 262183 : Rating in thumbbar view is broken.
+036 ==> 
 
 
