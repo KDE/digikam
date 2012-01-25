@@ -69,6 +69,7 @@
 #include "scancontroller.h"
 #include "sidebar.h"
 #include "slideshow.h"
+#include "slideshowbuilder.h"
 #include "statusprogressbar.h"
 #include "filtersidebarwidget.h"
 #include "tagmodificationhelper.h"
@@ -177,6 +178,8 @@ public:
 DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollection)
     : KHBox(parent), d(new DigikamViewPriv)
 {
+    qRegisterMetaType<SlideShowSettings>("SlideShowSettings");
+
     d->parent          = static_cast<DigikamApp*>(parent);
     d->modelCollection = modelCollection;
     d->albumManager    = AlbumManager::instance();
@@ -1768,56 +1771,31 @@ void DigikamView::slotItemsInfoFromAlbums(const ImageInfoList& infoList)
 
 void DigikamView::slideShow(const ImageInfoList& infoList)
 {
-    int     i = 0;
-    float cnt = (float)infoList.count();
-    d->parent->enterProgress(this,
-                             i18np("Preparing slideshow of 1 image. Please wait...","Preparing slideshow of %1 images. Please wait...", infoList.count()));
+    SlideShowBuilder* builder = new SlideShowBuilder(infoList);
 
-    SlideShowSettings settings;
-    settings.readFromConfig();
+    connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
+            this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
+}
 
-    d->cancelSlideShow = false;
+void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings)
+{
+    SlideShow* slide = new SlideShow(settings);
 
-    for (ImageInfoList::const_iterator it = infoList.constBegin();
-         !d->cancelSlideShow && (it != infoList.constEnd()) ; ++it)
+    if (settings.startWithCurrent)
     {
-        ImageInfo info = *it;
-        settings.fileList.append(info.fileUrl());
-        SlidePictureInfo pictInfo;
-        pictInfo.comment    = info.comment();
-        pictInfo.title      = info.title();
-        pictInfo.rating     = info.rating();
-        pictInfo.colorLabel = info.colorLabel();
-        pictInfo.pickLabel  = info.pickLabel();
-        pictInfo.photoInfo  = info.photoInfoContainer();
-        settings.pictInfoMap.insert(info.fileUrl(), pictInfo);
-
-        d->parent->progressValue(this, (int)((i++/cnt)*100.0));
-        kapp->processEvents();
+        slide->setCurrent(d->iconView->currentUrl());
     }
 
-    d->parent->finishProgress(this);
+    connect(slide, SIGNAL(signalRatingChanged(KUrl, int)),
+            this, SLOT(slotRatingChanged(KUrl, int)));
 
-    if (!d->cancelSlideShow)
-    {
-        SlideShow* slide = new SlideShow(settings);
+    connect(slide, SIGNAL(signalColorLabelChanged(KUrl, int)),
+            this, SLOT(slotColorLabelChanged(KUrl, int)));
 
-        if (settings.startWithCurrent)
-        {
-            slide->setCurrent(d->iconView->currentUrl());
-        }
+    connect(slide, SIGNAL(signalPickLabelChanged(KUrl, int)),
+            this, SLOT(slotPickLabelChanged(KUrl, int)));
 
-        connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
-                this, SLOT(slotRatingChanged(KUrl,int)));
-
-        connect(slide, SIGNAL(signalColorLabelChanged(KUrl,int)),
-                this, SLOT(slotColorLabelChanged(KUrl,int)));
-
-        connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
-                this, SLOT(slotPickLabelChanged(KUrl,int)));
-
-        slide->show();
-    }
+    slide->show();
 }
 
 void DigikamView::slotCancelSlideShow()

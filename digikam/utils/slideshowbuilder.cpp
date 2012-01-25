@@ -47,7 +47,7 @@ SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
 
-    QTimer::singleShot(500, this, SLOT(slotInit()));
+    QTimer::singleShot(500, this, SLOT(slotRun()));
 }
 
 SlideShowBuilder::~SlideShowBuilder()
