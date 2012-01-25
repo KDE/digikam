@@ -30,5 +30,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 289264 : Add option: "show thumbbar in full-screen picture preview".
 018 ==> 237452 : Tagging interface functionality lost.
 019 ==> 192055 : Typo digiKam tip of the day.
-020 ==> 
+020 ==> 284212 : Quick Collection and Progress Center as into KMail.
+021 ==> 
 
