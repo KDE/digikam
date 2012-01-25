@@ -38,6 +38,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 215770 : Png files can't be rotated without help of imagemagick.
 025 ==> 147968 : Some images are erroneously rotated.
 026 ==> 240146 : If I press rotate on the thumbnail of a photo an error occurs.
-027 ==> 
+027 ==> 257772 : Image rotate/flip does not work.
+028 ==> 
 
 
