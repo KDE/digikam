@@ -33,5 +33,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 192055 : Typo digiKam tip of the day.
 020 ==> 284212 : Quick Collection and Progress Center as into KMail.
 021 ==> 137191 : I'd like to rotate only the thumbnail of an image (and not allow rotate raw image).
-022 ==> 
+022 ==> 286213 : digiKam allows RAW (ORF) photos to be rotated, but then fails.
+023 ==> 
 
