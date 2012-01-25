@@ -31,5 +31,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 237452 : Tagging interface functionality lost.
 019 ==> 192055 : Typo digiKam tip of the day.
 020 ==> 284212 : Quick Collection and Progress Center as into KMail.
-021 ==> 
+021 ==> 137191 : I'd like to rotate only the thumbnail of an image (and not allow rotate raw image).
+022 ==> 
 
