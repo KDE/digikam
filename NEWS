@@ -44,7 +44,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 237808 : digiKam don't rotate JPEG images.
 031 ==> 207190 : Improve "rotate Image" overlay-buttons.
 032 ==> 212362 : Add support for instant rotate.
-033 ==> 232777 - lost images, when they are rotated on (over-)full hd resp. partition.
-034 ==> 
+033 ==> 232777 : Lost images, when they are rotated on (over-)full hd resp. partition.
+034 ==> 208504 : Add type icon to images under the thumbnail (patch).
+035 ==> 
 
 
