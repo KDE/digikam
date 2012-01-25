@@ -39,6 +39,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 147968 : Some images are erroneously rotated.
 026 ==> 240146 : If I press rotate on the thumbnail of a photo an error occurs.
 027 ==> 257772 : Image rotate/flip does not work.
-028 ==> 
+028 ==> 233585 : Rotate image fails with digikam on Archlinux and pictures on NTFS.
+029 ==> 
 
 
