@@ -3,6 +3,7 @@ digiKam 2.6.0-beta1 - Release date: 2012-02-05
 
 NEW FEATURES:
 
+General        : Thumbs/Preview for read-only files (as RAW) can be rotated through a flag in thumbnails database.
 General        : Add a Progress Manager as into Kontact to drive process running in parallele.
 General        : KIPI JPEGLossLess tool is now disabled in digiKam. A dedicated solution is now implemented 
                  in digiKam core to rotate/flip image using multithreading and versioning.
