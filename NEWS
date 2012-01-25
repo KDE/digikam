@@ -42,6 +42,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 233585 : Rotate image fails with digikam on Archlinux and pictures on NTFS.
 029 ==> 247947 : Images rotated with JPEGLossLess are shifted.
 030 ==> 237808 : digiKam don't rotate JPEG images.
-031 ==> 
+031 ==> 207190 : Improve "rotate Image" overlay-buttons.
+032 ==> 
 
 
