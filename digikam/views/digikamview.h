@@ -228,7 +228,6 @@ private Q_SLOTS:
     void slotEscapePreview();
 
     void slotSlideShowBuilderComplete(const SlideShowSettings& settings);
-    void slotCancelSlideShow();
 
     void slotThumbSizeEffect();
     void slotZoomFactorChanged(double);

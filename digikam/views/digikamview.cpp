@@ -89,7 +89,6 @@ public:
 
     DigikamViewPriv() :
         needDispatchSelection(false),
-        cancelSlideShow(false),
         useAlbumHistory(false),
         initialAlbumID(0),
         thumbSize(ThumbnailSize::Medium),
@@ -124,8 +123,9 @@ public:
     QString                       userPresentableAlbumTitle(const QString& album);
     void                          addPageUpDownActions(DigikamView* q, QWidget* w);
 
+public:
+
     bool                          needDispatchSelection;
-    bool                          cancelSlideShow;
     bool                          useAlbumHistory;
 
     int                           initialAlbumID;
@@ -188,7 +188,7 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
     d->tagModificationHelper    = new TagModificationHelper(this, this);
     d->searchModificationHelper = new SearchModificationHelper(this, this);
 
-    d->splitter = new SidebarSplitter;
+    d->splitter    = new SidebarSplitter;
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
     d->splitter->setFrameShape( QFrame::NoFrame );
@@ -206,7 +206,7 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
     d->stackedview->setDockArea(d->dockArea);
 
     d->iconView = d->stackedview->imageIconView();
-    d->mapView = d->stackedview->mapWidgetView();
+    d->mapView  = d->stackedview->mapWidgetView();
 
     d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
     d->addPageUpDownActions(this, d->stackedview->thumbBar());
@@ -358,9 +358,6 @@ void DigikamView::setupConnections()
 
     connect(d->parent, SIGNAL(signalPasteAlbumItemsSelection()),
             d->iconView, SLOT(paste()));
-
-    connect(d->parent, SIGNAL(signalCancelButtonPressed()),
-            this, SLOT(slotCancelSlideShow()));
 
     // -- AlbumManager connections --------------------------------
 
@@ -1796,11 +1793,6 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
             this, SLOT(slotPickLabelChanged(KUrl, int)));
 
     slide->show();
-}
-
-void DigikamView::slotCancelSlideShow()
-{
-    d->cancelSlideShow = true;
 }
 
 void DigikamView::toggleShowBar(bool b)
