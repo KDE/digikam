@@ -35,5 +35,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 137191 : I'd like to rotate only the thumbnail of an image (and not allow rotate raw image).
 022 ==> 286213 : digiKam allows RAW (ORF) photos to be rotated, but then fails.
 023 ==> 289222 : Rotate jpeg images isn't multithreaded.
-024 ==> 
+024 ==> 215770 : Png files can't be rotated without help of imagemagick.
+025 ==> 
 
