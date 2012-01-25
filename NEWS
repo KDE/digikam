@@ -36,5 +36,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 286213 : digiKam allows RAW (ORF) photos to be rotated, but then fails.
 023 ==> 289222 : Rotate jpeg images isn't multithreaded.
 024 ==> 215770 : Png files can't be rotated without help of imagemagick.
-025 ==> 
+025 ==> 147968 : Some images are erroneously rotated.
+026 ==> 
+
 
