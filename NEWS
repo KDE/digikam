@@ -6,7 +6,7 @@ NEW FEATURES:
 General        : Thumbs/Preview for read-only files (as RAW) can be rotated through a flag in thumbnails database.
 General        : Add a Progress Manager as into Kontact to drive process running in parallele.
 General        : KIPI JPEGLossLess tool is now disabled in digiKam. A dedicated solution is now implemented 
-                 in digiKam core to rotate/flip image using multithreading and versioning.
+                 in digiKam core to rotate/flip image using multithreading, parallelization, and image versioning.
 ImageEditor    : Template Superimpose feature have been moved to PhotoLayoutEditor kipi-plugin.
 
 
@@ -34,5 +34,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 284212 : Quick Collection and Progress Center as into KMail.
 021 ==> 137191 : I'd like to rotate only the thumbnail of an image (and not allow rotate raw image).
 022 ==> 286213 : digiKam allows RAW (ORF) photos to be rotated, but then fails.
-023 ==> 
+023 ==> 289222 : Rotate jpeg images isn't multithreaded.
+024 ==> 
 
