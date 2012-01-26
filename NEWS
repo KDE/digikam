@@ -48,6 +48,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 208504 : Add type icon to images under the thumbnail (patch).
 035 ==> 262183 : Rating in thumbbar view is broken.
 036 ==> 280044 : Thumbnails flicker.
-037 ==> 
+037 ==> 211757 : digiKam preview: next image with left arrow key.
+038 ==> 
 
 
