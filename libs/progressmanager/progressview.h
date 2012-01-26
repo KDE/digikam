@@ -112,7 +112,7 @@ public Q_SLOTS:
 
     void slotItemCanceled();
 
-protected:
+private:
 
     QProgressBar* mProgress;
     QPushButton*  mCancelButton;
@@ -133,6 +133,7 @@ public:
 
     ProgressView(QWidget* alignWidget, QWidget* parent, const char* name = 0);
     ~ProgressView();
+
     void setVisible(bool b);
 
 public Q_SLOTS:
@@ -161,7 +162,7 @@ protected:
 
     virtual void closeEvent(QCloseEvent*);
 
-protected:
+private:
 
     bool                                        mWasLastShown;
     TransactionItemView*                        mScrollView;
