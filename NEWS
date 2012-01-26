@@ -51,5 +51,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 036 ==> 280044 : Thumbnails flicker.
 037 ==> 211757 : digiKam preview: next image with left arrow key.
 038 ==> 228869 : Rename image and overwriting existing messes up the thumbnail display.
+039 ==> 
 
 
