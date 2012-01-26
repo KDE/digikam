@@ -210,6 +210,7 @@ Q_SIGNALS:
      * @param The canceled item;
      */
     void progressItemCanceled(ProgressItem*);
+    void progressItemCanceled(const QString& id);
 
     /**
      * Emitted when the status message of an item changed. Should be used by

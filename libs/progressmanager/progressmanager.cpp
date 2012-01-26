@@ -122,6 +122,7 @@ void ProgressItem::cancel()
     }
     setStatus( i18n( "Aborting..." ) );
     emit progressItemCanceled( this );
+    emit progressItemCanceled( this->id() );
 }
 
 void ProgressItem::setProgress(unsigned int v)
