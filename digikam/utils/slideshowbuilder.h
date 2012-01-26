@@ -62,9 +62,8 @@ private Q_SLOTS:
 
 private:
 
-    bool          m_cancel;
-    ImageInfoList m_infoList;
-    Album*        m_album;
+    class SlideShowBuilderPriv;
+    SlideShowBuilderPriv* const d;
 };
 
 } // namespace Digikam

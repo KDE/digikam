@@ -41,12 +41,26 @@
 namespace Digikam
 {
 
-SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
-    : ProgressItem(0, "SlideShowBuilder", QString(), QString(), true, true)
+class SlideShowBuilder::SlideShowBuilderPriv
 {
-    m_cancel   = false;
-    m_infoList = infoList;
-    m_album    = 0;
+public:
+
+    SlideShowBuilderPriv() :
+        cancel(false),
+        album(0)
+    {
+    }
+
+    bool          cancel;
+    ImageInfoList infoList;
+    Album*        album;
+};
+    
+SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
+    : ProgressItem(0, "SlideShowBuilder", QString(), QString(), true, true),
+      d(new SlideShowBuilderPriv)
+{
+    d->infoList = infoList;
 
     ProgressManager::addProgressItem(this);
 
@@ -54,10 +68,10 @@ SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
 }
 
 SlideShowBuilder::SlideShowBuilder(Album* album)
-    : ProgressItem(0, "SlideShowBuilder", QString(), QString(), true, true)
+    : ProgressItem(0, "SlideShowBuilder", QString(), QString(), true, true),
+      d(new SlideShowBuilderPriv)
 {
-    m_cancel = false;
-    m_album  = album;
+    d->album = album;
 
     ProgressManager::addProgressItem(this);
 
@@ -66,6 +80,7 @@ SlideShowBuilder::SlideShowBuilder(Album* album)
 
 SlideShowBuilder::~SlideShowBuilder()
 {
+    delete d;
 }
 
 void SlideShowBuilder::slotRun()
@@ -76,11 +91,11 @@ void SlideShowBuilder::slotRun()
     setLabel(i18n("Preparing slideshow"));
     setThumbnail(KIcon("digikam").pixmap(22));
 
-    if (m_album)
+    if (d->album)
     {
         AlbumList albumList;
-        albumList.append(m_album);
-        AlbumIterator it(m_album);
+        albumList.append(d->album);
+        AlbumIterator it(d->album);
 
         while (it.current())
         {
@@ -95,7 +110,7 @@ void SlideShowBuilder::slotRun()
     }
     else
     {
-        slotParseImageInfoList(m_infoList);
+        slotParseImageInfoList(d->infoList);
     }
 }
 
@@ -108,7 +123,7 @@ void SlideShowBuilder::slotParseImageInfoList(const ImageInfoList& list)
     settings.readFromConfig();
 
     for (ImageInfoList::const_iterator it = list.constBegin();
-         !m_cancel && (it != list.constEnd()) ; ++it)
+         !d->cancel && (it != list.constEnd()) ; ++it)
     {
         ImageInfo info      = *it;
         settings.fileList.append(info.fileUrl());
@@ -125,7 +140,7 @@ void SlideShowBuilder::slotParseImageInfoList(const ImageInfoList& list)
         kapp->processEvents();
     }
 
-    if (!m_cancel)
+    if (!d->cancel)
         emit signalComplete(settings);
 
     setComplete();
@@ -133,7 +148,7 @@ void SlideShowBuilder::slotParseImageInfoList(const ImageInfoList& list)
 
 void SlideShowBuilder::slotCancel()
 {
-    m_cancel = true;
+    d->cancel = true;
 }
 
 }  // namespace Digikam
