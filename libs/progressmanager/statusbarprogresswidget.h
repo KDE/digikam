@@ -35,15 +35,6 @@
 #include "digikam_export.h"
 #include "progressmanager.h"
 
-class QBoxLayout;
-class QEvent;
-class QProgressBar;
-class QPushButton;
-class QStackedWidget;
-class QBoxLayout;
-class QLabel;
-class QTimer;
-
 namespace Digikam
 {
 class ProgressItem;
@@ -56,7 +47,8 @@ class DIGIKAM_EXPORT StatusbarProgressWidget : public QFrame
 public:
 
     StatusbarProgressWidget(ProgressView* progressView, QWidget* parent, bool button = true);
-
+    ~StatusbarProgressWidget();
+    
 public Q_SLOTS:
 
     void slotClean();
@@ -82,28 +74,8 @@ protected:
 
 private:
 
-    enum Mode
-    {
-        None,
-        Progress
-    };
-
-private:
-
-    uint            m_mode;
-    bool            m_bShowButton;
-
-    QProgressBar*   m_pProgressBar;
-    QLabel*         m_pLabel;
-    QPushButton*    m_pButton;
-
-    QBoxLayout*     m_box;
-    QStackedWidget* m_stack;
-    ProgressItem*   m_currentItem;
-    ProgressView*   m_progressView;
-    QTimer*         m_delayTimer;
-    QTimer*         m_busyTimer;
-    QTimer*         m_cleanTimer;
+    class StatusbarProgressWidgetPriv;
+    StatusbarProgressWidgetPriv* const d;
 };
 
 } // namespace Digikam
