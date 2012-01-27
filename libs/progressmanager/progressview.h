@@ -27,9 +27,7 @@
 
 // Qt includes
 
-#include <QPixmap>
 #include <QScrollArea>
-#include <QMap>
 
 // KDE includes
 
@@ -40,15 +38,50 @@
 #include "overlaywidget.h"
 #include "digikam_export.h"
 
-class QProgressBar;
-class QFrame;
-class QLabel;
-class QPushButton;
-
 namespace Digikam
 {
 class ProgressItem;
-class TransactionItem;
+
+class TransactionItem : public KVBox
+{
+    Q_OBJECT
+
+public:
+
+    TransactionItem(QWidget* parent, ProgressItem* item, bool first);
+    ~TransactionItem();
+
+    void hideHLine();
+
+    void setProgress(int progress);
+    void setLabel(const QString&);
+    void setThumbnail(const QPixmap&);
+
+    // the given text is interpreted as RichText, so you might need to
+    // Qt::escape() it before passing
+    void setStatus(const QString&);
+
+    void setTotalSteps( int totalSteps );
+
+    ProgressItem* item() const;
+
+    void addSubTransaction(ProgressItem* item);
+
+    // The progressitem is deleted immediately, we take 5s to go out,
+    // so better not use mItem during this time.
+    void setItemComplete();
+
+public Q_SLOTS:
+
+    void slotItemCanceled();
+
+private:
+
+    class TransactionItemPriv;
+    TransactionItemPriv* const d;
+};
+
+// --------------------------------------------------------------------------------
 
 class TransactionItemView : public QScrollArea
 {
@@ -74,53 +107,7 @@ protected:
 
 private:
 
-    KVBox* mBigBox;
-};
-
-// --------------------------------------------------------------------------------
-
-class TransactionItem : public KVBox
-{
-    Q_OBJECT
-
-public:
-
-    TransactionItem(QWidget* parent, ProgressItem* item, bool first);
-    ~TransactionItem();
-
-    void hideHLine();
-
-    void setProgress(int progress);
-    void setLabel(const QString&);
-    void setThumbnail(const QPixmap&);
-
-    // the given text is interpreted as RichText, so you might need to
-    // Qt::escape() it before passing
-    void setStatus(const QString&);
-
-    void setTotalSteps( int totalSteps );
-
-    ProgressItem* item() const { return mItem; }
-
-    void addSubTransaction(ProgressItem* item);
-
-    // The progressitem is deleted immediately, we take 5s to go out,
-    // so better not use mItem during this time.
-    void setItemComplete() { mItem = 0; }
-
-public Q_SLOTS:
-
-    void slotItemCanceled();
-
-private:
-
-    QProgressBar* mProgress;
-    QPushButton*  mCancelButton;
-    QLabel*       mItemLabel;
-    QLabel*       mItemStatus;
-    QLabel*       mItemThumb;
-    QFrame*       mFrame;
-    ProgressItem* mItem;
+    KVBox* m_bigBox;
 };
 
 // --------------------------------------------------------------------------------
@@ -164,10 +151,8 @@ protected:
 
 private:
 
-    bool                                        mWasLastShown;
-    TransactionItemView*                        mScrollView;
-    TransactionItem*                            mPreviousItem;
-    QMap<const ProgressItem*, TransactionItem*> mTransactionsToListviewItems;
+    class ProgressViewPriv;
+    ProgressViewPriv* const d;
 };
 
 } // namespace Digikam

@@ -95,27 +95,26 @@ public:
     QTimer*         cleanTimer;
 };
 
-StatusbarProgressWidget::StatusbarProgressWidget( ProgressView* progressView, QWidget* parent, bool button )
-    : QFrame( parent ), d(new StatusbarProgressWidgetPriv)
+StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* progressView, QWidget* parent, bool button)
+    : QFrame(parent), d(new StatusbarProgressWidgetPriv)
 {
     d->progressView = progressView;
     d->bShowButton  = button;
     
-    int w = fontMetrics().width( " 999.9 kB/s 00:00:01 " ) + 8;
-    d->box = new QHBoxLayout( this );
+    int w  = fontMetrics().width(" 999.9 kB/s 00:00:01 ") + 8;
+    d->box = new QHBoxLayout(this);
     d->box->setMargin(0);
     d->box->setSpacing(0);
 
-    d->pButton = new QPushButton( this );
-    d->pButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum,
-                                            QSizePolicy::Minimum ) );
-    QPixmap smallIcon = SmallIcon( "go-up" );
-    d->pButton->setIcon( smallIcon );
-    d->box->addWidget( d->pButton  );
-    d->stack = new QStackedWidget( this );
-    int maximumHeight = qMax( smallIcon.height(), fontMetrics().height() );
-    d->stack->setMaximumHeight( maximumHeight );
-    d->box->addWidget( d->stack );
+    d->pButton        = new QPushButton(this);
+    d->pButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    QPixmap smallIcon = SmallIcon("go-up");
+    d->pButton->setIcon(smallIcon);
+    d->box->addWidget(d->pButton);
+    d->stack          = new QStackedWidget(this);
+    int maximumHeight = qMax(smallIcon.height(), fontMetrics().height());
+    d->stack->setMaximumHeight(maximumHeight);
+    d->box->addWidget(d->stack);
 
     d->pButton->setToolTip(i18n("Open detailed progress dialog"));
 
@@ -143,21 +142,23 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressView* progressView, QW
     connect(ProgressManager::instance(), SIGNAL(progressItemCompleted(ProgressItem*)),
             this, SLOT(slotProgressItemCompleted(ProgressItem*)));
 
-    connect(ProgressManager::instance(), SIGNAL(progressItemUsesBusyIndicator(ProgressItem*,bool)),
+    connect(ProgressManager::instance(), SIGNAL(progressItemUsesBusyIndicator(ProgressItem*, bool)),
             this, SLOT(updateBusyMode()));
 
     connect(progressView, SIGNAL(visibilityChanged(bool)),
             this, SLOT(slotProgressViewVisible(bool)));
 
-    d->delayTimer = new QTimer( this );
-    d->delayTimer->setSingleShot( true );
-    connect(d->delayTimer, SIGNAL( timeout() ),
-            this, SLOT( slotShowItemDelayed() ) );
+    d->delayTimer = new QTimer(this);
+    d->delayTimer->setSingleShot(true);
 
-    d->cleanTimer = new QTimer( this );
-    d->cleanTimer->setSingleShot( true );
+    connect(d->delayTimer, SIGNAL(timeout()),
+            this, SLOT(slotShowItemDelayed()));
+
+    d->cleanTimer = new QTimer(this);
+    d->cleanTimer->setSingleShot(true);
+
     connect(d->cleanTimer, SIGNAL(timeout()),
-            this, SLOT(slotClean()) );
+            this, SLOT(slotClean()));
 }
 
 StatusbarProgressWidget::~StatusbarProgressWidget()
@@ -173,7 +174,7 @@ StatusbarProgressWidget::~StatusbarProgressWidget()
 void StatusbarProgressWidget::updateBusyMode()
 {
     connectSingleItem(); // if going to 1 item
-    if ( d->currentItem )
+    if (d->currentItem)
     {
         // Exactly one item
         delete d->busyTimer;
@@ -183,37 +184,39 @@ void StatusbarProgressWidget::updateBusyMode()
     else
     {
         // N items
-        if ( !d->busyTimer )
+        if (!d->busyTimer)
         {
-            d->busyTimer = new QTimer( this );
-            connect( d->busyTimer, SIGNAL( timeout() ),
-                    this, SLOT( slotBusyIndicator() ) );
-            d->delayTimer->start( 1000 );
+            d->busyTimer = new QTimer(this);
+
+            connect(d->busyTimer, SIGNAL(timeout()),
+                    this, SLOT(slotBusyIndicator()));
+
+            d->delayTimer->start(1000);
         }
     }
 }
 
-void StatusbarProgressWidget::slotProgressItemAdded( ProgressItem *item )
+void StatusbarProgressWidget::slotProgressItemAdded(ProgressItem* item)
 {
-    if ( item->parent() )
+    if (item->parent())
         return; // we are only interested in top level items
 
     updateBusyMode();
 }
 
-void StatusbarProgressWidget::slotProgressItemCompleted( ProgressItem *item )
+void StatusbarProgressWidget::slotProgressItemCompleted(ProgressItem* item)
 {
-    if ( item && item->parent() ) return; // we are only interested in top level items
+    if (item && item->parent()) return; // we are only interested in top level items
 
     connectSingleItem(); // if going back to 1 item
 
-    if ( ProgressManager::instance()->isEmpty() )
+    if (ProgressManager::instance()->isEmpty())
     {
         // No item
         // Done. In 5s the progress-widget will close, then we can clean up the statusbar
         d->cleanTimer->start(5000);
     }
-    else if ( d->currentItem )
+    else if (d->currentItem)
     {
         // Exactly one item
         delete d->busyTimer;
@@ -224,45 +227,45 @@ void StatusbarProgressWidget::slotProgressItemCompleted( ProgressItem *item )
 
 void StatusbarProgressWidget::connectSingleItem()
 {
-    if ( d->currentItem )
+    if (d->currentItem)
     {
-        disconnect(d->currentItem, SIGNAL( progressItemProgress( ProgressItem *, unsigned int ) ),
-                   this, SLOT( slotProgressItemProgress( ProgressItem *, unsigned int ) ) );
+        disconnect(d->currentItem, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)),
+                   this, SLOT(slotProgressItemProgress(ProgressItem*, unsigned int)));
         d->currentItem = 0;
     }
     d->currentItem = ProgressManager::instance()->singleItem();
-    if ( d->currentItem )
+    if (d->currentItem)
     {
-        connect(d->currentItem, SIGNAL( progressItemProgress( ProgressItem *, unsigned int ) ),
-                this, SLOT( slotProgressItemProgress( ProgressItem *, unsigned int ) ) );
+        connect(d->currentItem, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)),
+                this, SLOT(slotProgressItemProgress(ProgressItem*, unsigned int)));
     }
 }
 
 void StatusbarProgressWidget::activateSingleItemMode()
 {
-    d->pProgressBar->setMaximum( 100 );
-    d->pProgressBar->setValue( d->currentItem->progress() );
-    d->pProgressBar->setTextVisible( true );
+    d->pProgressBar->setMaximum(100);
+    d->pProgressBar->setValue(d->currentItem->progress());
+    d->pProgressBar->setTextVisible(true);
 }
 
 void StatusbarProgressWidget::slotShowItemDelayed()
 {
     bool noItems = ProgressManager::instance()->isEmpty();
-    if ( d->currentItem )
+    if (d->currentItem)
     {
         activateSingleItemMode();
     }
-    else if ( !noItems )
+    else if (!noItems)
     {
         // N items
-        d->pProgressBar->setMaximum( 0 );
-        d->pProgressBar->setTextVisible( false );
-        Q_ASSERT( d->busyTimer );
-        if ( d->busyTimer )
-        d->busyTimer->start( 100 );
+        d->pProgressBar->setMaximum(0);
+        d->pProgressBar->setTextVisible(false);
+        Q_ASSERT(d->busyTimer);
+        if (d->busyTimer)
+            d->busyTimer->start(100);
     }
 
-    if ( !noItems && d->mode == StatusbarProgressWidgetPriv::None )
+    if (!noItems && d->mode == StatusbarProgressWidgetPriv::None)
     {
         d->mode = StatusbarProgressWidgetPriv::Progress;
         setMode();
@@ -272,13 +275,13 @@ void StatusbarProgressWidget::slotShowItemDelayed()
 void StatusbarProgressWidget::slotBusyIndicator()
 {
     int p = d->pProgressBar->value();
-    d->pProgressBar->setValue( p + 10 );
+    d->pProgressBar->setValue(p + 10);
 }
 
-void StatusbarProgressWidget::slotProgressItemProgress( ProgressItem *item, unsigned int value )
+void StatusbarProgressWidget::slotProgressItemProgress(ProgressItem* item, unsigned int value)
 {
     Q_ASSERT( item == d->currentItem); // the only one we should be connected to
-    d->pProgressBar->setValue( value );
+    d->pProgressBar->setValue(value);
 }
 
 void StatusbarProgressWidget::setMode()
@@ -311,9 +314,9 @@ void StatusbarProgressWidget::setMode()
 void StatusbarProgressWidget::slotClean()
 {
     // check if a new item showed up since we started the timer. If not, clear
-    if ( ProgressManager::instance()->isEmpty() )
+    if (ProgressManager::instance()->isEmpty())
     {
-        d->pProgressBar->setValue( 0 );
+        d->pProgressBar->setValue(0);
         //d->pLabel->clear();
         d->mode = StatusbarProgressWidgetPriv::None;
         setMode();
@@ -322,11 +325,11 @@ void StatusbarProgressWidget::slotClean()
 
 bool StatusbarProgressWidget::eventFilter(QObject*, QEvent* ev)
 {
-    if ( ev->type() == QEvent::MouseButtonPress )
+    if (ev->type() == QEvent::MouseButtonPress)
     {
         QMouseEvent* e = (QMouseEvent*)ev;
 
-        if ( e->button() == Qt::LeftButton && d->mode != StatusbarProgressWidgetPriv::None )
+        if (e->button() == Qt::LeftButton && d->mode != StatusbarProgressWidgetPriv::None)
         {
             // toggle view on left mouse button
             // Consensus seems to be that we should show/hide the fancy dialog when the user
@@ -341,16 +344,16 @@ bool StatusbarProgressWidget::eventFilter(QObject*, QEvent* ev)
 void StatusbarProgressWidget::slotProgressViewVisible(bool b)
 {
     // Update the hide/show button when the detailed one is shown/hidden
-    if ( b )
+    if (b)
     {
-        d->pButton->setIcon( SmallIcon( "go-down" ) );
-        d->pButton->setToolTip( i18n("Hide detailed progress window") );
+        d->pButton->setIcon(SmallIcon("go-down"));
+        d->pButton->setToolTip(i18n("Hide detailed progress window"));
         setMode();
     }
     else
     {
-        d->pButton->setIcon( SmallIcon( "go-up" ) );
-        d->pButton->setToolTip( i18n("Show detailed progress window") );
+        d->pButton->setIcon(SmallIcon("go-up"));
+        d->pButton->setToolTip(i18n("Show detailed progress window"));
     }
 }
 

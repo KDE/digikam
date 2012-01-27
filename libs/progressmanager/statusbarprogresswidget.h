@@ -33,7 +33,6 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "progressmanager.h"
 
 namespace Digikam
 {
@@ -55,7 +54,7 @@ public Q_SLOTS:
 
     void slotProgressItemAdded(ProgressItem* i);
     void slotProgressItemCompleted(ProgressItem* i);
-    void slotProgressItemProgress(ProgressItem* i, unsigned int value );
+    void slotProgressItemProgress(ProgressItem* i, unsigned int value);
 
 protected Q_SLOTS:
 
