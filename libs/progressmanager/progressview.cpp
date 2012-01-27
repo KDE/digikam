@@ -297,18 +297,17 @@ public:
         previousItem(0)
     {
     }
-    
+
     bool                                        wasLastShown;
     TransactionItemView*                        scrollView;
     TransactionItem*                            previousItem;
     QMap<const ProgressItem*, TransactionItem*> transactionsToListviewItems;
 };
-    
+
 ProgressView::ProgressView(QWidget* alignWidget, QWidget* parent, const char* name)
     : OverlayWidget(alignWidget, parent, name), d(new ProgressViewPriv)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
-
     setAutoFillBackground(true);
 
     d->scrollView = new TransactionItemView( this, "ProgressScrollView" );
