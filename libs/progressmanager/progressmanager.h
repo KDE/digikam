@@ -439,10 +439,6 @@ private:
 
     virtual void addProgressItemImpl(ProgressItem* t, ProgressItem* parent);
 
-public:
-
-    struct ProgressManagerPrivate;
-
 private:
 
     QHash<QString, ProgressItem*> mTransactions;

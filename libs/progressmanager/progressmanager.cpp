@@ -295,12 +295,16 @@ unsigned int ProgressItem::progress() const
 
 // --------------------------------------------------------------------------
 
-struct ProgressManager::ProgressManagerPrivate
+class ProgressManagerPrivate
 {
+public:
+
     ProgressManager instance;
 };
 
-K_GLOBAL_STATIC(ProgressManager::ProgressManagerPrivate, progressManagerPrivate)
+K_GLOBAL_STATIC(ProgressManagerPrivate, progressManagerPrivate)
+
+// --------------------------------------------------------------------------
 
 ProgressManager::ProgressManager()
     : QObject()
