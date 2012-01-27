@@ -137,41 +137,28 @@ public:
      * Reset the progress value of this item to 0 and the status string to
      * the empty string.
      */
-    void reset()
-    {
-        setProgress(0);
-        setStatus(QString());
-        mCompleted = 0;
-    }
+    void reset();
 
     void cancel();
+    bool canceled() const;
 
     // Often needed values for calculating progress.
-    void         setTotalItems( unsigned int v )         { mTotal = v;        }
-    unsigned int totalItems() const                      { return mTotal;     }
-    void         setCompletedItems( unsigned int v )     { mCompleted = v;    }
-    unsigned int completedItems() const                  { return mCompleted; }
-    void         incCompletedItems( unsigned int v = 1 ) { mCompleted += v;   }
-
-    bool canceled() const                                { return mCanceled;  }
+    void         setTotalItems(unsigned int v);
+    unsigned int totalItems() const;
+    void         setCompletedItems(unsigned int v);
+    unsigned int completedItems() const;
+    void         incCompletedItems(unsigned int v = 1);
 
     /**
      * Recalculate progress according to total/completed items and update.
      */
-    void updateProgress()
-    {
-        setProgress( mTotal? mCompleted * 100 / mTotal : 0 );
-    }
+    void updateProgress();
 
     /**
      * Advance total items processed by n values and update percentage in progressbar.
      * @param v The value to advance.
      */
-    void advance(unsigned int v)
-    {
-        setCompletedItems(completedItems()+v);
-        updateProgress();
-    }
+    void advance(unsigned int v);
 
     void addChild(ProgressItem* kiddo);
     void removeChild(ProgressItem* kiddo);

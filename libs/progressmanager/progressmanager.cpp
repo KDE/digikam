@@ -168,6 +168,54 @@ void ProgressItem::setThumbnail(const QPixmap& thumb)
     emit progressItemThumbnail(this, pix);
 }
 
+void ProgressItem::reset()
+{
+    setProgress(0);
+    setStatus(QString());
+    mCompleted = 0;
+}
+
+void ProgressItem::updateProgress()
+{
+    setProgress(mTotal? mCompleted * 100 / mTotal : 0);
+}
+
+void ProgressItem::advance(unsigned int v)
+{
+    setCompletedItems(completedItems() + v);
+    updateProgress();
+}
+
+void ProgressItem::setTotalItems(unsigned int v)
+{
+    mTotal = v;
+}
+
+unsigned int ProgressItem::totalItems() const
+{
+    return mTotal;
+}
+
+void ProgressItem::setCompletedItems(unsigned int v)
+{
+    mCompleted = v;
+}
+
+unsigned int ProgressItem::completedItems() const
+{
+    return mCompleted;
+}
+
+void ProgressItem::incCompletedItems(unsigned int v)
+{
+    mCompleted += v;
+}
+
+bool ProgressItem::canceled() const
+{
+    return mCanceled;
+}
+
 // --------------------------------------------------------------------------
 
 struct ProgressManager::ProgressManagerPrivate
