@@ -340,7 +340,7 @@ ProgressView::ProgressView(QWidget* alignWidget, QWidget* parent, const char* na
     connect(pm, SIGNAL(progressItemCompleted(ProgressItem*)),
             this, SLOT(slotTransactionCompleted(ProgressItem*)));
 
-    connect(pm, SIGNAL(progressIted->progress(ProgressItem*, unsigned int)),
+    connect(pm, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)),
             this, SLOT(slotTransactionProgress(ProgressItem*, unsigned int)));
 
     connect(pm, SIGNAL(progressItemStatus(ProgressItem*, const QString&)),
