@@ -382,7 +382,7 @@ void KipiInterface::progressStatusChanged(const QString& id, const QString& stat
     }
 }
 
-void KipiInterface::progresssThumbnailChanged(const QString& id, const QPixmap& thumb)
+void KipiInterface::progressThumbnailChanged(const QString& id, const QPixmap& thumb)
 {
     ProgressItem* item = ProgressManager::instance()->findItembyId(id);
     if (item)
