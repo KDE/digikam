@@ -41,18 +41,18 @@ unsigned int ProgressManager::s_uID = 1000;
 ProgressItem::ProgressItem(ProgressItem* parent, const QString& id,
                            const QString& label, const QString& status,
                            bool canBeCanceled, bool hasThumb)
-    : mId(id),
-      mLabel(label),
-      mStatus(status),
-      mParent(parent),
+    : mWaitingForKids(false),
+      mCanceled(false),
+      mUsesBusyIndicator(false),
       mCanBeCanceled(canBeCanceled),
       mHasThumb(hasThumb),
       mProgress(0),
       mTotal(0),
       mCompleted(0),
-      mWaitingForKids(false),
-      mCanceled(false),
-      mUsesBusyIndicator(false)
+      mId(id),
+      mLabel(label),
+      mStatus(status),
+      mParent(parent)
 {
 }
 
@@ -81,7 +81,7 @@ void ProgressItem::setComplete()
     }
 }
 
-void ProgressItem::addChild(ProgressItem * kiddo)
+void ProgressItem::addChild(ProgressItem* kiddo)
 {
     mChildren.insert(kiddo, true);
 }
@@ -188,7 +188,7 @@ ProgressManager::~ProgressManager()
 
 ProgressManager* ProgressManager::instance()
 {
-    return progressManagerPrivate.isDestroyed() ? 0 : &progressManagerPrivate->instance ;
+    return progressManagerPrivate.isDestroyed() ? 0 : &progressManagerPrivate->instance;
 }
 
 ProgressItem* ProgressManager::createProgressItemImpl(ProgressItem* parent,

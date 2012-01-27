@@ -246,29 +246,25 @@ Q_SIGNALS:
 
 private:
 
-    QString         mId;
-    QString         mLabel;
-    QString         mStatus;
-    ProgressItem*   mParent;
-    bool            mCanBeCanceled;
-    bool            mHasThumb;
-    unsigned int    mProgress;
-    ProgressItemMap mChildren;
-    unsigned int    mTotal;
-    unsigned int    mCompleted;
     bool            mWaitingForKids;
     bool            mCanceled;
     bool            mUsesBusyIndicator;
+    bool            mCanBeCanceled;
+    bool            mHasThumb;
 
-    friend class ProgressManager;
+    unsigned int    mProgress;
+    unsigned int    mTotal;
+    unsigned int    mCompleted;
+
+    QString         mId;
+    QString         mLabel;
+    QString         mStatus;
+
+    ProgressItem*   mParent;
+    ProgressItemMap mChildren;
 };
 
-} //namespace Digikam
-
 // --------------------------------------------------------------------------------------------
-
-namespace Digikam
-{
 
 /**
  * The ProgressManager singleton keeps track of all ongoing transactions
