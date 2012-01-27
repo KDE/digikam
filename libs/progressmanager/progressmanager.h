@@ -308,10 +308,7 @@ public:
     static ProgressItem* createProgressItem(const QString& label,
                                             const QString& status = QString(),
                                             bool  canBeCanceled = true,
-                                            bool  hasThumb = false)
-    {
-        return instance()->createProgressItemImpl(0, getUniqueID(), label, status, canBeCanceled, hasThumb);
-    }
+                                            bool  hasThumb = false);
 
     /**
      * Creates a new progressItem with the given parent, id, label and initial
@@ -331,11 +328,7 @@ public:
                                             const QString& label,
                                             const QString& status = QString(),
                                             bool  canBeCanceled = true,
-                                            bool  hasThumb = false
-                                           )
-    {
-        return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled, hasThumb);
-    }
+                                            bool  hasThumb = false);
 
     /**
      * Use this version if you have the id string of the parent and want to
@@ -346,11 +339,7 @@ public:
                                             const QString& label,
                                             const QString& status = QString(),
                                             bool  canBeCanceled = true,
-                                            bool  hasThumb = false
-                                           )
-    {
-        return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled, hasThumb);
-    }
+                                            bool  hasThumb = false);
 
     /**
      * Version without a parent.
@@ -359,10 +348,7 @@ public:
                                             const QString& label,
                                             const QString& status = QString(),
                                             bool  canBeCanceled = true,
-                                            bool  hasThumb = false)
-    {
-        return instance()->createProgressItemImpl(0, id, label, status, canBeCanceled, hasThumb);
-    }
+                                            bool  hasThumb = false);
 
     /**
      * Add a created progressItem outside manager with the given parent.
@@ -377,10 +363,7 @@ public:
      * Ask all listeners to show the progress dialog, because there is
      * something that wants to be shown.
      */
-    static void emitShowProgressView()
-    {
-       instance()->emitShowProgressViewImpl();
-    }
+    static void emitShowProgressView();
 
 Q_SIGNALS:
 

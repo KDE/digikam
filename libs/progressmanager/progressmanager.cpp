@@ -480,4 +480,32 @@ void ProgressManager::slotAbortAll()
     }
 }
 
+void ProgressManager::emitShowProgressView()
+{
+    instance()->emitShowProgressViewImpl();
+}
+
+ProgressItem* ProgressManager::createProgressItem(const QString& label, const QString& status, bool canBeCanceled, bool hasThumb)
+{
+    return instance()->createProgressItemImpl(0, getUniqueID(), label, status, canBeCanceled, hasThumb);
+}
+
+ProgressItem* ProgressManager::createProgressItem(ProgressItem* parent, const QString& id, const QString& label,
+                                                  const QString& status, bool canBeCanceled, bool hasThumb)
+{
+    return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled, hasThumb);
+}
+
+ProgressItem* ProgressManager::createProgressItem(const QString& parent, const QString& id, const QString& label,
+                                                  const QString& status, bool canBeCanceled, bool hasThumb)
+{
+    return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled, hasThumb);
+}
+
+ProgressItem* ProgressManager::createProgressItem(const QString& id, const QString& label, const QString& status,
+                                                  bool canBeCanceled, bool hasThumb)
+{
+    return instance()->createProgressItemImpl(0, id, label, status, canBeCanceled, hasThumb);
+}
+
 } // namespace Digikam
