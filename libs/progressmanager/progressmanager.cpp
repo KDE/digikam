@@ -120,7 +120,9 @@ void ProgressItem::cancel()
             kid->cancel();
         }
     }
+
     setStatus( i18n( "Aborting..." ) );
+
     emit progressItemCanceled( this );
     emit progressItemCanceled( this->id() );
 }
@@ -131,7 +133,7 @@ void ProgressItem::setProgress(unsigned int v)
     emit progressItemProgress(this, mProgress);
 }
 
-void ProgressItem::setLabel( const QString& v)
+void ProgressItem::setLabel(const QString& v)
 {
     mLabel = v;
     emit progressItemLabel( this, mLabel );
@@ -216,6 +218,46 @@ bool ProgressItem::canceled() const
     return mCanceled;
 }
 
+const QString& ProgressItem::id() const
+{
+    return mId;
+}
+
+ProgressItem* ProgressItem::parent() const
+{
+    return mParent;
+}
+
+const QString& ProgressItem::label() const
+{
+    return mLabel;
+}
+
+const QString& ProgressItem::status() const
+{
+    return mStatus;
+}
+
+bool ProgressItem::canBeCanceled() const
+{
+    return mCanBeCanceled;
+}
+
+bool ProgressItem::usesBusyIndicator() const
+{
+    return mUsesBusyIndicator;
+}
+
+bool ProgressItem::hasThumbnail() const
+{
+    return mHasThumb;
+}
+
+unsigned int ProgressItem::progress() const
+{
+    return mProgress;
+}
+
 // --------------------------------------------------------------------------
 
 struct ProgressManager::ProgressManagerPrivate
@@ -223,7 +265,7 @@ struct ProgressManager::ProgressManagerPrivate
     ProgressManager instance;
 };
 
-K_GLOBAL_STATIC( ProgressManager::ProgressManagerPrivate, progressManagerPrivate )
+K_GLOBAL_STATIC(ProgressManager::ProgressManagerPrivate, progressManagerPrivate)
 
 ProgressManager::ProgressManager()
     : QObject()

@@ -58,17 +58,17 @@ public:
      * @return The id string which uniquely identifies the operation
      *         represented by this item.
      */
-    const QString& id() const { return mId; }
+    const QString& id() const;
 
     /**
      * @return The parent item of this one, if there is one.
      */
-    ProgressItem* parent() const { return mParent; }
+    ProgressItem* parent() const;
 
     /**
      * @return The user visible string to be used to represent this item.
      */
-    const QString& label() const { return mLabel; }
+    const QString& label() const;
 
     /**
      * @param v Set the user visible string identifying this item.
@@ -78,7 +78,7 @@ public:
     /**
      * @return The string to be used for showing this item's current status.
      */
-    const QString& status() const { return mStatus; }
+    const QString& status() const;
 
     /**
      * Set the string to be used for showing this item's current status.
@@ -89,24 +89,24 @@ public:
     /**
      * @return Whether this item can be canceled.
      */
-    bool canBeCanceled() const { return mCanBeCanceled; }
+    bool canBeCanceled() const;
 
     /**
      * @return whether this item uses a busy indicator instead of real progress display
      */
-    bool usesBusyIndicator() const { return mUsesBusyIndicator; }
+    bool usesBusyIndicator() const;
 
     /**
      * Sets whether this item uses a busy indicator instead of real progress for its progress bar.
      * If it uses a busy indicator, you are still responsible for calling setProgress() from time to
      * time to update the busy indicator.
      */
-    void setUsesBusyIndicator( bool useBusyIndicator );
+    void setUsesBusyIndicator(bool useBusyIndicator);
 
     /**
      * @return whether this item has a thumbnail.
      */
-    bool hasThumbnail() const { return mHasThumb; }
+    bool hasThumbnail() const;
 
     /**
      * Sets whether this item has a thumbnail.
@@ -116,7 +116,7 @@ public:
     /**
      * @return The current progress value of this item in percent.
      */
-    unsigned int progress() const { return mProgress; }
+    unsigned int progress() const;
 
     /**
      * Set the progress (percentage of completion) value of this item.
