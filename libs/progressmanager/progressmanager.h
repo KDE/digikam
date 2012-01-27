@@ -40,10 +40,6 @@
 namespace Digikam
 {
 
-class ProgressItem;
-class ProgressManager;
-typedef QMap<ProgressItem*, bool> ProgressItemMap;
-
 class DIGIKAM_EXPORT ProgressItem : public QObject
 {
     Q_OBJECT
@@ -51,7 +47,7 @@ class DIGIKAM_EXPORT ProgressItem : public QObject
 public:
 
     ProgressItem(ProgressItem* parent, const QString& id, const QString& label,
-                 const QString& status, bool isCancellable, bool hasThumb);
+                 const QString& status, bool canBeCanceled, bool hasThumb);
     virtual ~ProgressItem();
 
     /**
@@ -233,22 +229,8 @@ Q_SIGNALS:
 
 private:
 
-    bool            mWaitingForKids;
-    bool            mCanceled;
-    bool            mUsesBusyIndicator;
-    bool            mCanBeCanceled;
-    bool            mHasThumb;
-
-    unsigned int    mProgress;
-    unsigned int    mTotal;
-    unsigned int    mCompleted;
-
-    QString         mId;
-    QString         mLabel;
-    QString         mStatus;
-
-    ProgressItem*   mParent;
-    ProgressItemMap mChildren;
+    class ProgressItemPriv;
+    ProgressItemPriv* const d;
 };
 
 // --------------------------------------------------------------------------------------------

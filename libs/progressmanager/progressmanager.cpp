@@ -38,33 +38,68 @@ namespace Digikam
 
 unsigned int ProgressManager::s_uID = 1000;
 
+class ProgressItem::ProgressItemPriv
+{
+public:
+
+    typedef QMap<ProgressItem*, bool> ProgressItemMap;
+
+public:
+    
+    ProgressItemPriv() :
+      waitingForKids(false),
+      canceled(false),
+      usesBusyIndicator(false),
+      canBeCanceled(false),
+      hasThumb(false),
+      progress(0),
+      total(0),
+      completed(0),
+      parent(0)
+    {
+    }
+
+    bool            waitingForKids;
+    bool            canceled;
+    bool            usesBusyIndicator;
+    bool            canBeCanceled;
+    bool            hasThumb;
+
+    unsigned int    progress;
+    unsigned int    total;
+    unsigned int    completed;
+
+    QString         id;
+    QString         label;
+    QString         status;
+
+    ProgressItem*   parent;
+    ProgressItemMap children;
+};
+
 ProgressItem::ProgressItem(ProgressItem* parent, const QString& id,
                            const QString& label, const QString& status,
                            bool canBeCanceled, bool hasThumb)
-    : mWaitingForKids(false),
-      mCanceled(false),
-      mUsesBusyIndicator(false),
-      mCanBeCanceled(canBeCanceled),
-      mHasThumb(hasThumb),
-      mProgress(0),
-      mTotal(0),
-      mCompleted(0),
-      mId(id),
-      mLabel(label),
-      mStatus(status),
-      mParent(parent)
+    : d(new ProgressItemPriv)
 {
+      d->canBeCanceled = canBeCanceled;
+      d->hasThumb      = hasThumb;
+      d->id            = id;
+      d->label         = label;
+      d->status        = status;
+      d->parent        = parent;
 }
 
 ProgressItem::~ProgressItem()
 {
+    delete d;
 }
 
 void ProgressItem::setComplete()
 {
-    if ( mChildren.isEmpty() )
+    if ( d->children.isEmpty() )
     {
-        if ( !mCanceled )
+        if ( !d->canceled )
         {
             setProgress( 100 );
         }
@@ -77,21 +112,21 @@ void ProgressItem::setComplete()
     }
     else
     {
-        mWaitingForKids = true;
+        d->waitingForKids = true;
     }
 }
 
 void ProgressItem::addChild(ProgressItem* kiddo)
 {
-    mChildren.insert(kiddo, true);
+    d->children.insert(kiddo, true);
 }
 
 void ProgressItem::removeChild(ProgressItem* kiddo)
 {
-    mChildren.remove(kiddo);
+    d->children.remove(kiddo);
 
     // in case we were waiting for the last kid to go away, now is the time
-    if (mChildren.count() == 0 && mWaitingForKids)
+    if (d->children.count() == 0 && d->waitingForKids)
     {
         emit progressItemCompleted(this);
         deleteLater();
@@ -100,15 +135,15 @@ void ProgressItem::removeChild(ProgressItem* kiddo)
 
 void ProgressItem::cancel()
 {
-    if ( mCanceled || !mCanBeCanceled )
+    if ( d->canceled || !d->canBeCanceled )
     {
         return;
     }
 
-    mCanceled = true;
+    d->canceled = true;
 
     // Cancel all children.
-    QList<ProgressItem*> kids = mChildren.keys();
+    QList<ProgressItem*> kids = d->children.keys();
     QList<ProgressItem*>::Iterator it( kids.begin() );
     QList<ProgressItem*>::Iterator end( kids.end() );
 
@@ -129,25 +164,25 @@ void ProgressItem::cancel()
 
 void ProgressItem::setProgress(unsigned int v)
 {
-    mProgress = v;
-    emit progressItemProgress(this, mProgress);
+    d->progress = v;
+    emit progressItemProgress(this, d->progress);
 }
 
 void ProgressItem::setLabel(const QString& v)
 {
-    mLabel = v;
-    emit progressItemLabel( this, mLabel );
+    d->label = v;
+    emit progressItemLabel( this, d->label );
 }
 
 void ProgressItem::setStatus(const QString& v)
 {
-    mStatus = v;
-    emit progressItemStatus(this, mStatus);
+    d->status = v;
+    emit progressItemStatus(this, d->status);
 }
 
 void ProgressItem::setUsesBusyIndicator(bool useBusyIndicator)
 {
-    mUsesBusyIndicator = useBusyIndicator;
+    d->usesBusyIndicator = useBusyIndicator;
     emit progressItemUsesBusyIndicator(this, useBusyIndicator);
 }
 
@@ -174,12 +209,12 @@ void ProgressItem::reset()
 {
     setProgress(0);
     setStatus(QString());
-    mCompleted = 0;
+    d->completed = 0;
 }
 
 void ProgressItem::updateProgress()
 {
-    setProgress(mTotal? mCompleted * 100 / mTotal : 0);
+    setProgress(d->total? d->completed * 100 / d->total : 0);
 }
 
 void ProgressItem::advance(unsigned int v)
@@ -190,72 +225,72 @@ void ProgressItem::advance(unsigned int v)
 
 void ProgressItem::setTotalItems(unsigned int v)
 {
-    mTotal = v;
+    d->total = v;
 }
 
 unsigned int ProgressItem::totalItems() const
 {
-    return mTotal;
+    return d->total;
 }
 
 void ProgressItem::setCompletedItems(unsigned int v)
 {
-    mCompleted = v;
+    d->completed = v;
 }
 
 unsigned int ProgressItem::completedItems() const
 {
-    return mCompleted;
+    return d->completed;
 }
 
 void ProgressItem::incCompletedItems(unsigned int v)
 {
-    mCompleted += v;
+    d->completed += v;
 }
 
 bool ProgressItem::canceled() const
 {
-    return mCanceled;
+    return d->canceled;
 }
 
 const QString& ProgressItem::id() const
 {
-    return mId;
+    return d->id;
 }
 
 ProgressItem* ProgressItem::parent() const
 {
-    return mParent;
+    return d->parent;
 }
 
 const QString& ProgressItem::label() const
 {
-    return mLabel;
+    return d->label;
 }
 
 const QString& ProgressItem::status() const
 {
-    return mStatus;
+    return d->status;
 }
 
 bool ProgressItem::canBeCanceled() const
 {
-    return mCanBeCanceled;
+    return d->canBeCanceled;
 }
 
 bool ProgressItem::usesBusyIndicator() const
 {
-    return mUsesBusyIndicator;
+    return d->usesBusyIndicator;
 }
 
 bool ProgressItem::hasThumbnail() const
 {
-    return mHasThumb;
+    return d->hasThumb;
 }
 
 unsigned int ProgressItem::progress() const
 {
-    return mProgress;
+    return d->progress;
 }
 
 // --------------------------------------------------------------------------
