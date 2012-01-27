@@ -54,17 +54,8 @@
 #include "kipiimagecollectionselector.h"
 #include "kipiuploadwidget.h"
 
-class QDateTime;
-class QTreeWidget;
-
-class KTabWidget;
-
 namespace Digikam
 {
-class ThumbnailLoadThread;
-class Album;
-class PAlbum;
-class TAlbum;
 
 class KipiInterface : public KIPI::Interface
 {
@@ -99,7 +90,7 @@ public:
     QString progressScheduled(const QString& title, bool canBeCanceled, bool hasThumb) const;
     void progressValueChanged(const QString& id, float percent);
     void progressStatusChanged(const QString& id, const QString& status);
-    void progresssThumbnailChanged(const QString& id, const QPixmap& thumb);
+    void progressThumbnailChanged(const QString& id, const QPixmap& thumb);
     void progressCompleted(const QString& id);
 #endif // KIPI_VERSION >= 0x010500
 
