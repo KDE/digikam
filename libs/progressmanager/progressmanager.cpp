@@ -276,6 +276,24 @@ ProgressManager::~ProgressManager()
 {
 }
 
+bool ProgressManager::isEmpty() const
+{
+    return mTransactions.isEmpty();
+}
+
+ProgressItem* ProgressManager::findItembyId(const QString& id) const
+{
+    if (!id.isEmpty())
+        return mTransactions.value(id, 0);
+
+    return 0;
+}
+
+QString ProgressManager::getUniqueID()
+{
+    return QString::number( ++s_uID );
+}
+
 ProgressManager* ProgressManager::instance()
 {
     return progressManagerPrivate.isDestroyed() ? 0 : &progressManagerPrivate->instance;

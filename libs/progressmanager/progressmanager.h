@@ -284,20 +284,11 @@ public:
     /**
      * @return true when there are no more progress items.
      */
-    bool isEmpty() const
-    {
-        return mTransactions.isEmpty();
-    }
+    bool isEmpty() const;
 
     /** @return the progressitem for this id if it exist, else null.
      */
-    ProgressItem* findItembyId(const QString& id) const
-    {
-        if (!id.isEmpty())
-            return mTransactions.value(id, 0);
-
-        return 0;
-    }
+    ProgressItem* findItembyId(const QString& id) const;
 
     /**
      * @return the only top level progressitem when there's only one.
@@ -319,10 +310,7 @@ public:
      * number as the id string for your progressItem to ensure it is unique.
      * @return
      */
-    static QString getUniqueID()
-    {
-        return QString::number( ++s_uID );
-    }
+    static QString getUniqueID();
 
      /**
       * Creates a ProgressItem with a unique id and the given label.
