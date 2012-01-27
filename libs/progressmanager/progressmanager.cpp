@@ -36,8 +36,6 @@
 namespace Digikam
 {
 
-unsigned int ProgressManager::s_uID = 1000;
-
 class ProgressItem::ProgressItemPriv
 {
 public:
@@ -294,6 +292,8 @@ unsigned int ProgressItem::progress() const
 }
 
 // --------------------------------------------------------------------------
+
+unsigned int ProgressManager::s_uID = 1000;
 
 class ProgressManagerPrivate
 {
