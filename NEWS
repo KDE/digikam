@@ -54,5 +54,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 117301 : Thumbnails generation process running for visible thumbnails only, if it is sensible in order to avoid unnecessary waiting.
 040 ==> 292578 : Windows 7 prof. 32Bits, Context Menu not fully visible.
 041 ==> 292645 : Build fails at imageproperties/captionedit.cpp.
-042 ==> 
+042 ==> 275122 : Rotating a TIFF file wipes out its metadata.
+043 ==> 
 
