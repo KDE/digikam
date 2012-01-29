@@ -6,7 +6,7 @@
  * Date        : 2009-09-14
  * Description : a class to manipulate the results of an renaming options
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,13 +37,13 @@ public:
 };
 
 Modifier::Modifier(const QString& name, const QString& description)
-    : Parseable(name), d(new ModifierPriv)
+    : Rule(name), d(new ModifierPriv)
 {
     setDescription(description);
 }
 
 Modifier::Modifier(const QString& name, const QString& description, const QString& icon)
-    : Parseable(name, icon), d(new ModifierPriv)
+    : Rule(name, icon), d(new ModifierPriv)
 {
     setDescription(description);
 }

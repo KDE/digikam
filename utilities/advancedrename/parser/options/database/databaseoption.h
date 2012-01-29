@@ -6,7 +6,7 @@
  * Date        : 2010-05-19
  * Description : an option to provide database information to the parser
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,7 +32,7 @@
 // Local includes
 
 #include "option.h"
-#include "parseabledialog.h"
+#include "ruledialog.h"
 
 class KLineEdit;
 
@@ -41,13 +41,13 @@ namespace Digikam
 class DbKeysCollection;
 class DbKeySelectorView;
 
-class DatabaseOptionDialog : public ParseableDialog
+class DatabaseOptionDialog : public RuleDialog
 {
     Q_OBJECT
 
 public:
 
-    DatabaseOptionDialog(Parseable* parent);
+    DatabaseOptionDialog(Rule* parent);
     ~DatabaseOptionDialog();
 
     DbKeySelectorView* dbkeySelectorView;

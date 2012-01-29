@@ -6,7 +6,7 @@
  * Date        : 2009-09-14
  * Description : a class to manipulate the results of an renaming options
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,13 +26,13 @@
 
 // Local includes
 
-#include "parseable.h"
+#include "rule.h"
 
 namespace Digikam
 {
 
 class ModifierPriv;
-class Modifier : public Parseable
+class Modifier : public Rule
 {
     Q_OBJECT
 
