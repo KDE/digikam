@@ -131,7 +131,7 @@ bool ImageIface::previewType() const
 
 DColor ImageIface::getColorInfoFromOriginalImage(const QPoint& point) const
 {
-    if ( !DImgInterface::defaultInterface()->getImage() || point.x() > originalWidth() || point.y() > originalHeight() )
+    if (!DImgInterface::defaultInterface()->getImage() || point.x() > originalWidth() || point.y() > originalHeight())
     {
         kWarning() << "Coordinate out of range or no image data available!";
         return DColor();
@@ -142,7 +142,7 @@ DColor ImageIface::getColorInfoFromOriginalImage(const QPoint& point) const
 
 DColor ImageIface::getColorInfoFromPreviewImage(const QPoint& point) const
 {
-    if ( d->previewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
+    if (d->previewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight())
     {
         kWarning() << "Coordinate out of range or no image data available!";
         return DColor();
@@ -153,7 +153,7 @@ DColor ImageIface::getColorInfoFromPreviewImage(const QPoint& point) const
 
 DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point) const
 {
-    if ( d->targetPreviewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
+    if (d->targetPreviewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight())
     {
         kWarning() << "Coordinate out of range or no image data available!";
         return DColor();
@@ -194,7 +194,7 @@ uchar* ImageIface::getPreviewImage() const
             bool   s    = DImgInterface::defaultInterface()->sixteenBit();
             bool   a    = DImgInterface::defaultInterface()->hasAlpha();
 
-            QScopedArrayPointer<uchar> data (DImgInterface::defaultInterface()->getImageSelection());
+            QScopedArrayPointer<uchar> data(DImgInterface::defaultInterface()->getImageSelection());
 
             DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
             im = new DImg(w, h, s, a, data.data(), true);
@@ -291,7 +291,7 @@ void ImageIface::putOriginalImage(const QString& caller, const FilterAction& act
 
 void ImageIface::putOriginalIccProfile(const IccProfile& profile)
 {
-    DImgInterface::defaultInterface()->putIccProfile( profile );
+    DImgInterface::defaultInterface()->putIccProfile(profile);
 }
 
 void ImageIface::putImageSelection(const QString& caller, const FilterAction& action, uchar* data)
@@ -406,7 +406,7 @@ PhotoInfoContainer ImageIface::getPhotographInformation() const
 void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainter* painter)
 {
     QPainter localPainter;
-    QPainter* p=0;
+    QPainter* p = 0;
 
     if (painter)
     {
@@ -421,7 +421,7 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainte
     int width  = w > 0 ? qMin(d->previewWidth, w)  : d->previewWidth;
     int height = h > 0 ? qMin(d->previewHeight, h) : d->previewHeight;
 
-    if ( !d->targetPreviewImage.isNull() )
+    if (!d->targetPreviewImage.isNull())
     {
         if (d->targetPreviewImage.hasAlpha())
         {
