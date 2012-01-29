@@ -353,10 +353,9 @@ void InPaintingTool::processCImgUrl(const QString& url)
 void InPaintingTool::prepareEffect()
 {
     ImageIface iface(0, 0);
-    uchar* data      = iface.getOriginalImage();
+    QScopedArrayPointer<uchar> data(iface.getOriginalImage());
     d->originalImage = DImg(iface.originalWidth(), iface.originalHeight(),
-                            iface.originalSixteenBit(), iface.originalHasAlpha(), data);
-    delete [] data;
+                            iface.originalSixteenBit(), iface.originalHasAlpha(), data.data());
 
     // Selected area from the image and mask creation:
     //
