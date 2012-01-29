@@ -313,17 +313,17 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     // -------------------------------------------------------------------
     // Get image data.
 
-    uchar* data = 0;
+    QScopedArrayPointer<uchar> data;
 
     if (m_loadFlags & LoadImageData)
     {
         if (m_sixteenBit)          // 16 bits image.
         {
-            data = new_failureTolerant(imageWidth()*imageHeight()*8);
+            data.reset(new_failureTolerant(imageWidth() * imageHeight() * 8));
         }
         else
         {
-            data = new_failureTolerant(imageWidth()*imageHeight()*4);
+            data.reset(new_failureTolerant(imageWidth() * imageHeight() * 4));
         }
 
         if (!data)
@@ -342,8 +342,8 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         }
 
         uint   checkPoint     = 0;
-        uchar* dst            = data;
-        unsigned short* dst16 = (unsigned short*)data;
+        uchar* dst            = data.data();
+        unsigned short* dst16 = (unsigned short*)data.data();
 
         for (y = 0 ; y < (long)imageHeight() ; ++y)
         {
@@ -357,7 +357,6 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 if (ret != 0)
                 {
                     kDebug() << "Error decoding JPEG2000 image data";
-                    delete [] data;
                     jas_image_destroy(jp2_image);
 
                     for (i = 0 ; i < (long)number_components ; ++i)
@@ -470,7 +469,6 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
                 if (!observer->continueQuery(m_image))
                 {
-                    delete [] data;
                     jas_image_destroy(jp2_image);
 
                     for (i = 0 ; i < (long)number_components ; ++i)
@@ -532,7 +530,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         observer->progressInfo(m_image, 1.0);
     }
 
-    imageData() = data;
+    imageData() = data.take();
     imageSetAttribute("format", "JP2");
     imageSetAttribute("originalColorModel", colorModel);
     imageSetAttribute("originalBitDepth", maximum_component_depth);

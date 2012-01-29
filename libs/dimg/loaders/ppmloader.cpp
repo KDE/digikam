@@ -129,13 +129,13 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         observer->progressInfo(m_image, 0.1F);
     }
 
-    unsigned short* data = 0;
+    QScopedArrayPointer<unsigned short> data;
 
     if (m_loadFlags & LoadImageData)
     {
-        data = new_short_failureTolerant(width*height*4);
+        data.reset(new_short_failureTolerant(width*height*4));
 
-        if (!data)
+        if (data.isNull())
         {
             kDebug() << "Failed to allocate memory for loading" << filePath;
             fclose(file);
@@ -143,7 +143,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             return false;
         }
 
-        unsigned short* dst  = data;
+        unsigned short* dst  = data.data();
         uchar src[6];
         float fac = 65535.0 / rgbmax;
         int checkpoint = 0;
@@ -161,7 +161,6 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
                 if (!observer->continueQuery(m_image))
                 {
-                    delete [] data;
                     fclose( file );
                     loadingFailed();
                     return false;
@@ -191,7 +190,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     imageWidth()  = width;
     imageHeight() = height;
-    imageData()   = (uchar*)data;
+    imageData()   = (uchar*)data.take();
     imageSetAttribute("format", "PPM");
     imageSetAttribute("originalColorFormat", DImg::RGB);
     imageSetAttribute("originalBitDepth", 8);
