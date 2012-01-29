@@ -88,7 +88,8 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     int h           = m_orgImage.height();
     bool sixteenBit = m_orgImage.sixteenBit();
 
-    uchar* desData            = 0;
+    QScopedArrayPointer<uchar> desData;
+
     ImageHistogram* histogram = 0;
     ImageLevels* levels       = 0;
 
@@ -99,11 +100,11 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     {
         if (sixteenBit)
         {
-            desData = new uchar[w * h * 8];
+            desData.reset(new uchar[w * h * 8]);
         }
         else
         {
-            desData = new uchar[w * h * 4];
+            desData.reset(new uchar[w * h * 4]);
         }
 
         postProgress(20);
@@ -142,7 +143,7 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     // Apply the lut to the image.
     if (runningFlag())
     {
-        levels->levelsLutProcess(data, desData, w, h);
+        levels->levelsLutProcess(data, desData.data(), w, h);
         postProgress(70);
     }
 
@@ -150,17 +151,16 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     {
         if (sixteenBit)
         {
-            memcpy(data, desData, w * h * 8);
+            memcpy(data, desData.data(), w * h * 8);
         }
         else
         {
-            memcpy(data, desData, w * h * 4);
+            memcpy(data, desData.data(), w * h * 4);
         }
 
         postProgress(80);
     }
 
-    delete [] desData;
     delete histogram;
     delete levels;
 
