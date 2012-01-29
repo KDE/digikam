@@ -95,16 +95,19 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
 
     postProgress(10);
 
+    int sizeSixteenBit = w * h * 8;
+    int sizeEightBit = w * h * 4;
+
     // Create the new empty destination image data space.
     if (runningFlag())
     {
         if (sixteenBit)
         {
-            desData.reset(new uchar[w * h * 8]);
+            desData.reset(new uchar[sizeSixteenBit]);
         }
         else
         {
-            desData.reset(new uchar[w * h * 4]);
+            desData.reset(new uchar[sizeEightBit]);
         }
 
         postProgress(20);
@@ -151,11 +154,11 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     {
         if (sixteenBit)
         {
-            memcpy(data, desData.data(), w * h * 8);
+            memcpy(data, desData.data(), sizeSixteenBit);
         }
         else
         {
-            memcpy(data, desData.data(), w * h * 4);
+            memcpy(data, desData.data(), sizeEightBit);
         }
 
         postProgress(80);
