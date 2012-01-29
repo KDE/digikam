@@ -108,10 +108,10 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     rewind(file);
 
     // FIXME: scanf without field width limits can crash with huge input data
-    if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4)
+    if (fscanf(file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4)
     {
         kDebug() << "Corrupted PPM file.";
-        fclose (file);
+        fclose(file);
         loadingFailed();
         return false;
     }
@@ -119,7 +119,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     if (rgbmax <= 255)
     {
         kDebug() << "Not a 16 bits per color per pixel PPM file.";
-        fclose (file);
+        fclose(file);
         loadingFailed();
         return false;
     }
@@ -133,7 +133,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     if (m_loadFlags & LoadImageData)
     {
-        data.reset(new_short_failureTolerant(width*height*4));
+        data.reset(new_short_failureTolerant(width * height * 4));
 
         if (data.isNull())
         {
@@ -161,22 +161,22 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
                 if (!observer->continueQuery(m_image))
                 {
-                    fclose( file );
+                    fclose(file);
                     loadingFailed();
                     return false;
                 }
 
-                observer->progressInfo(m_image, 0.1 + (0.9 * ( ((float)h)/((float)height) )));
+                observer->progressInfo(m_image, 0.1 + (0.9 * (((float)h) / ((float)height))));
             }
 
             for (int w = 0; w < width; ++w)
             {
 
-                fread (src, 6 *sizeof(unsigned char), 1, file);
+                fread(src, 6 * sizeof(unsigned char), 1, file);
 
-                dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
-                dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
-                dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
+                dst[0] = (unsigned short)((src[4] * 256 + src[5]) * fac);    // Blue
+                dst[1] = (unsigned short)((src[2] * 256 + src[3]) * fac);    // Green
+                dst[2] = (unsigned short)((src[0] * 256 + src[1]) * fac);    // Red
                 dst[3] = 0xFFFF;
 
                 dst += 4;
@@ -184,7 +184,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         }
     }
 
-    fclose( file );
+    fclose(file);
 
     //----------------------------------------------------------
 
