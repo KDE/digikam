@@ -89,9 +89,8 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     bool sixteenBit = m_orgImage.sixteenBit();
 
     QScopedArrayPointer<uchar> desData;
-
-    ImageHistogram* histogram = 0;
-    ImageLevels* levels       = 0;
+    QScopedPointer<ImageHistogram> histogram;
+    QScopedPointer<ImageLevels> levels;
 
     postProgress(10);
 
@@ -116,8 +115,8 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     // Create an histogram of the reference image.
     if (runningFlag())
     {
-        histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(),
-                                       m_refImage.height(), m_refImage.sixteenBit());
+        histogram.reset(new ImageHistogram(m_refImage.bits(), m_refImage.width(),
+                                           m_refImage.height(), m_refImage.sixteenBit()));
         histogram->calculate();
         postProgress(30);
     }
@@ -125,14 +124,14 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     // Create an empty instance of levels to use.
     if (runningFlag())
     {
-        levels = new ImageLevels(sixteenBit);
+        levels.reset(new ImageLevels(sixteenBit));
         postProgress(40);
     }
 
     // Initialize an auto levels correction of the histogram.
     if (runningFlag())
     {
-        levels->levelsAuto(histogram);
+        levels->levelsAuto(histogram.data());
         postProgress(50);
     }
 
@@ -163,9 +162,6 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
 
         postProgress(80);
     }
-
-    delete histogram;
-    delete levels;
 
     if (runningFlag())
     {
