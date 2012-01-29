@@ -151,16 +151,16 @@ InPaintingTool::InPaintingTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
-    d->gboxSettings->setButtons(EditorToolSettings::Default|
-                                EditorToolSettings::Ok|
-                                EditorToolSettings::Try|
-                                EditorToolSettings::Load|
-                                EditorToolSettings::SaveAs|
+    d->gboxSettings->setButtons(EditorToolSettings::Default |
+                                EditorToolSettings::Ok |
+                                EditorToolSettings::Try |
+                                EditorToolSettings::Load |
+                                EditorToolSettings::SaveAs |
                                 EditorToolSettings::Cancel);
 
     // -------------------------------------------------------------
 
-    d->mainTab               = new KTabWidget( d->gboxSettings->plainPage());
+    d->mainTab               = new KTabWidget(d->gboxSettings->plainPage());
     QWidget* firstPage       = new QWidget(d->mainTab);
 
     KUrlLabel* cimgLogoLabel = new KUrlLabel();
@@ -374,16 +374,16 @@ void InPaintingTool::prepareEffect()
     QPixmap inPaintingMask(iface.originalWidth(), iface.originalHeight());
     inPaintingMask.fill(Qt::black);
     QPainter p(&inPaintingMask);
-    p.fillRect( selectionRect, QBrush(Qt::white) );
+    p.fillRect(selectionRect, QBrush(Qt::white));
     p.end();
 
     GreycstorationContainer settings = d->settingsWidget->settings();
 
-    int x1 = (int)(selectionRect.left()   - 2*settings.amplitude);
-    int y1 = (int)(selectionRect.top()    - 2*settings.amplitude);
-    int x2 = (int)(selectionRect.right()  + 2*settings.amplitude);
-    int y2 = (int)(selectionRect.bottom() + 2*settings.amplitude);
-    d->maskRect = QRect(x1, y1, x2-x1, y2-y1);
+    int x1 = (int)(selectionRect.left()   - 2 * settings.amplitude);
+    int y1 = (int)(selectionRect.top()    - 2 * settings.amplitude);
+    int x2 = (int)(selectionRect.right()  + 2 * settings.amplitude);
+    int y2 = (int)(selectionRect.bottom() + 2 * settings.amplitude);
+    d->maskRect = QRect(x1, y1, x2 - x1, y2 - y1);
 
     // Mask area normalization.
     // We need to check if mask area is out of image size else inpainting give strange results.
@@ -436,12 +436,12 @@ void InPaintingTool::putPreviewData()
     GreycstorationContainer settings = d->settingsWidget->settings();
 
     d->cropImage = filter()->getTargetImage();
-    QRect cropSel((int)(2*settings.amplitude), (int)(2*settings.amplitude),
+    QRect cropSel((int)(2 * settings.amplitude), (int)(2 * settings.amplitude),
                   iface->selectedWidth(), iface->selectedHeight());
     DImg imDest = d->cropImage.copy(cropSel);
 
     iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(),
-                            iface->previewHeight())).bits());
+                                               iface->previewHeight())).bits());
     d->previewWidget->updatePreview();
     d->isComputed = true;
     d->lastFilterAction = filter()->filterAction();
@@ -468,17 +468,17 @@ void InPaintingTool::putFinalData()
 void InPaintingTool::slotLoadSettings()
 {
     KUrl loadInpaintingFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                              QString( "*" ), kapp->activeWindow(),
-                              QString( i18n("Photograph In-Painting Settings File to Load")) );
+                                                      QString("*"), kapp->activeWindow(),
+                                                      QString(i18n("Photograph In-Painting Settings File to Load")));
 
-    if ( loadInpaintingFile.isEmpty() )
+    if (loadInpaintingFile.isEmpty())
     {
         return;
     }
 
     QFile file(loadInpaintingFile.toLocalFile());
 
-    if ( file.open(QIODevice::ReadOnly) )
+    if (file.open(QIODevice::ReadOnly))
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Inpainting Configuration File V2")))
         {
@@ -504,17 +504,17 @@ void InPaintingTool::slotLoadSettings()
 void InPaintingTool::slotSaveAsSettings()
 {
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                               QString( "*" ), kapp->activeWindow(),
-                               QString( i18n("Photograph In-Painting Settings File to Save")) );
+                                                       QString("*"), kapp->activeWindow(),
+                                                       QString(i18n("Photograph In-Painting Settings File to Save")));
 
-    if ( saveRestorationFile.isEmpty() )
+    if (saveRestorationFile.isEmpty())
     {
         return;
     }
 
     QFile file(saveRestorationFile.toLocalFile());
 
-    if ( file.open(QIODevice::WriteOnly) )
+    if (file.open(QIODevice::WriteOnly))
     {
         d->settingsWidget->saveSettings(file, QString("# Photograph Inpainting Configuration File V2"));
     }
