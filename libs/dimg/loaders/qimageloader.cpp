@@ -75,19 +75,23 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             colorModel = DImg::COLORMODELUNKNOWN;
             originalDepth = 0;
             break;
+
         case QImage::Format_Mono:
         case QImage::Format_MonoLSB:
             colorModel = DImg::MONOCHROME;
             originalDepth = 1;
             break;
+
         case QImage::Format_Indexed8:
             colorModel = DImg::INDEXED;
             originalDepth = 0;
             break;
+
         case QImage::Format_RGB32:
             colorModel = DImg::RGB;
             originalDepth = 8;
             break;
+
         case QImage::Format_ARGB32:
         case QImage::Format_ARGB32_Premultiplied:
             colorModel = DImg::RGB;
@@ -100,7 +104,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     uint w      = target.width();
     uint h      = target.height();
-    uchar* data = new_failureTolerant(w*h*4);
+    uchar* data = new_failureTolerant(w * h * 4);
 
     if (!data)
     {
@@ -112,7 +116,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     uint*  sptr = (uint*)target.bits();
     uchar* dptr = data;
 
-    for (uint i = 0 ; i < w*h ; ++i)
+    for (uint i = 0 ; i < w * h ; ++i)
     {
         dptr[0] = qBlue(*sptr);
         dptr[1] = qGreen(*sptr);
@@ -136,7 +140,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     imageSetAttribute("format", "PNG");
     imageSetAttribute("originalColorModel", colorModel);
     imageSetAttribute("originalBitDepth", originalDepth);
-    imageSetAttribute("originalSize", QSize(w,h));
+    imageSetAttribute("originalSize", QSize(w, h));
 
     return true;
 }

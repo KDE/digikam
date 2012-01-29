@@ -70,9 +70,9 @@ PGFSettings::PGFSettings(QWidget* parent)
     d->PGFGrid     = new QGridLayout(this);
     d->PGFLossLess = new QCheckBox(i18n("Lossless PGF files"), this);
 
-    d->PGFLossLess->setWhatsThis( i18n("<p>Toggle lossless compression for PGF images.</p>"
-                                       "<p>If this option is enabled, a lossless method will be used "
-                                       "to compress PGF pictures.</p>"));
+    d->PGFLossLess->setWhatsThis(i18n("<p>Toggle lossless compression for PGF images.</p>"
+                                      "<p>If this option is enabled, a lossless method will be used "
+                                      "to compress PGF pictures.</p>"));
 
     d->PGFcompression = new KIntNumInput(3, this);
     d->PGFcompression->setRange(1, 9, 1);

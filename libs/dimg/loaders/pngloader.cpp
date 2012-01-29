@@ -99,7 +99,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     f = fopen(QFile::encodeName(filePath), "rb");
 
-    if ( !f )
+    if (!f)
     {
         kDebug() << "Cannot open image file.";
         loadingFailed();
@@ -229,8 +229,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     png_read_info(png_ptr, info_ptr);
 
-    png_get_IHDR(png_ptr, info_ptr, (png_uint_32*) (&w32),
-                 (png_uint_32*) (&h32), &bit_depth, &color_type,
+    png_get_IHDR(png_ptr, info_ptr, (png_uint_32*)(&w32),
+                 (png_uint_32*)(&h32), &bit_depth, &color_type,
                  &interlace_type, NULL, NULL);
 
     width  = (int)w32;
@@ -244,18 +244,22 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             m_hasAlpha = false;
             colorModel = DImg::RGB;
             break;
+
         case PNG_COLOR_TYPE_RGB_ALPHA:     // RGBA
             m_hasAlpha = true;
             colorModel = DImg::RGB;
             break;
+
         case PNG_COLOR_TYPE_GRAY:          // Grayscale
             m_hasAlpha = false;
             colorModel = DImg::GRAYSCALE;
             break;
+
         case PNG_COLOR_TYPE_GRAY_ALPHA:    // Grayscale + Alpha
             m_hasAlpha = true;
             colorModel = DImg::GRAYSCALE;
             break;
+
         case PNG_COLOR_TYPE_PALETTE:       // Indexed
             m_hasAlpha = false;
             colorModel = DImg::INDEXED;
@@ -472,11 +476,11 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
         if (m_sixteenBit)
         {
-            data = new_failureTolerant(width*height*8);    // 16 bits/color/pixel
+            data = new_failureTolerant(width * height * 8); // 16 bits/color/pixel
         }
         else
         {
-            data = new_failureTolerant(width*height*4);    // 8 bits/color/pixel
+            data = new_failureTolerant(width * height * 4); // 8 bits/color/pixel
         }
 
         cleanupData->setData(data);
@@ -532,10 +536,10 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     }
 
                     // use 10% - 80% for progress while reading rows
-                    observer->progressInfo(m_image, 0.1 + (0.7 * ( ((float)y)/((float)height) )) );
+                    observer->progressInfo(m_image, 0.1 + (0.7 * (((float)y) / ((float)height))));
                 }
 
-                png_read_rows(png_ptr, lines+y, NULL, 1);
+                png_read_rows(png_ptr, lines + y, NULL, 1);
             }
         }
 
@@ -549,18 +553,18 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             {
                 uchar ptr[8];   // One pixel to swap
 
-                for (int p = 0; p < width*height*8; p+=8)
+                for (int p = 0; p < width * height * 8; p += 8)
                 {
-                    memcpy (&ptr[0], &data[p], 8);  // Current pixel
+                    memcpy(&ptr[0], &data[p], 8);   // Current pixel
 
                     data[ p ] = ptr[1];  // Blue
-                    data[p+1] = ptr[0];
-                    data[p+2] = ptr[3];  // Green
-                    data[p+3] = ptr[2];
-                    data[p+4] = ptr[5];  // Red
-                    data[p+5] = ptr[4];
-                    data[p+6] = ptr[7];  // Alpha
-                    data[p+7] = ptr[6];
+                    data[p + 1] = ptr[0];
+                    data[p + 2] = ptr[3]; // Green
+                    data[p + 3] = ptr[2];
+                    data[p + 4] = ptr[5]; // Red
+                    data[p + 5] = ptr[4];
+                    data[p + 6] = ptr[7]; // Alpha
+                    data[p + 7] = ptr[6];
                 }
             }
         }
@@ -577,7 +581,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     if (m_loadFlags & LoadICCData)
     {
         png_charp   profile_name;
-        iCCP_data   profile_data=NULL;
+        iCCP_data   profile_data = NULL;
         png_uint_32 profile_size;
         int         compression_type;
 
@@ -685,7 +689,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
     f = fopen(QFile::encodeName(filePath), "wb");
 
-    if ( !f )
+    if (!f)
     {
         kDebug() << "Cannot open target image file.";
         return false;
@@ -1011,36 +1015,36 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
                 return false;
             }
 
-            observer->progressInfo(m_image, 0.2 + (0.8 * ( ((float)y)/((float)imageHeight()) )));
+            observer->progressInfo(m_image, 0.2 + (0.8 * (((float)y) / ((float)imageHeight()))));
         }
 
         j = 0;
 
         if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)
         {
-            for (x = 0; x < imageWidth()*imageBytesDepth(); x+=imageBytesDepth())
+            for (x = 0; x < imageWidth()*imageBytesDepth(); x += imageBytesDepth())
             {
                 if (imageSixteenBit())
                 {
                     if (imageHasAlpha())
                     {
-                        data[j++] = ptr[x+1];  // Blue
+                        data[j++] = ptr[x + 1]; // Blue
                         data[j++] = ptr[ x ];
-                        data[j++] = ptr[x+3];  // Green
-                        data[j++] = ptr[x+2];
-                        data[j++] = ptr[x+5];  // Red
-                        data[j++] = ptr[x+4];
-                        data[j++] = ptr[x+7];  // Alpha
-                        data[j++] = ptr[x+6];
+                        data[j++] = ptr[x + 3]; // Green
+                        data[j++] = ptr[x + 2];
+                        data[j++] = ptr[x + 5]; // Red
+                        data[j++] = ptr[x + 4];
+                        data[j++] = ptr[x + 7]; // Alpha
+                        data[j++] = ptr[x + 6];
                     }
                     else
                     {
-                        data[j++] = ptr[x+1];  // Blue
+                        data[j++] = ptr[x + 1]; // Blue
                         data[j++] = ptr[ x ];
-                        data[j++] = ptr[x+3];  // Green
-                        data[j++] = ptr[x+2];
-                        data[j++] = ptr[x+5];  // Red
-                        data[j++] = ptr[x+4];
+                        data[j++] = ptr[x + 3]; // Green
+                        data[j++] = ptr[x + 2];
+                        data[j++] = ptr[x + 5]; // Red
+                        data[j++] = ptr[x + 4];
                     }
                 }
                 else
@@ -1048,26 +1052,26 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
                     if (imageHasAlpha())
                     {
                         data[j++] = ptr[ x ];  // Blue
-                        data[j++] = ptr[x+1];  // Green
-                        data[j++] = ptr[x+2];  // Red
-                        data[j++] = ptr[x+3];  // Alpha
+                        data[j++] = ptr[x + 1]; // Green
+                        data[j++] = ptr[x + 2]; // Red
+                        data[j++] = ptr[x + 3]; // Alpha
                     }
                     else
                     {
                         data[j++] = ptr[ x ];  // Blue
-                        data[j++] = ptr[x+1];  // Green
-                        data[j++] = ptr[x+2];  // Red
+                        data[j++] = ptr[x + 1]; // Green
+                        data[j++] = ptr[x + 2]; // Red
                     }
                 }
             }
         }
         else
         {
-            int bytes = (imageSixteenBit() ? 2:1) * (imageHasAlpha() ? 4:3);
+            int bytes = (imageSixteenBit() ? 2 : 1) * (imageHasAlpha() ? 4 : 3);
 
-            for (x = 0; x < imageWidth()*imageBytesDepth(); x+=imageBytesDepth())
+            for (x = 0; x < imageWidth()*imageBytesDepth(); x += imageBytesDepth())
             {
-                memcpy(data+j, ptr+x, bytes);
+                memcpy(data + j, ptr + x, bytes);
                 j += bytes;
             }
         }
@@ -1116,13 +1120,13 @@ void PNGLoader::writeRawProfile(png_struct* ping, png_info* ping_info, char* pro
 
     png_uint_32    allocated_length, description_length;
 
-    const uchar hex[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+    const uchar hex[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     kDebug() << "Writing Raw profile: type=" << profile_type << ", length=" << length;
 
     text               = (png_textp) png_malloc(ping, (png_uint_32) sizeof(png_text));
     description_length = strlen((const char*) profile_type);
-    allocated_length   = (png_uint_32) (length*2 + (length >> 5) + 20 + description_length);
+    allocated_length   = (png_uint_32)(length * 2 + (length >> 5) + 20 + description_length);
 
     text[0].text   = (png_charp) png_malloc(ping, allocated_length);
     text[0].key    = (png_charp) png_malloc(ping, (png_uint_32) 80);
@@ -1133,36 +1137,36 @@ void PNGLoader::writeRawProfile(png_struct* ping, png_info* ping_info, char* pro
 
     sp = (uchar*)profile_data;
     dp = text[0].text;
-    *dp++='\n';
+    *dp++ = '\n';
 
     copyString(dp, (const char*) profile_type, allocated_length);
 
     dp += description_length;
-    *dp++='\n';
+    *dp++ = '\n';
 
-    formatString(dp, allocated_length-strlen(text[0].text), "%8lu ", length);
+    formatString(dp, allocated_length - strlen(text[0].text), "%8lu ", length);
 
     dp += 8;
 
-    for (i=0; i < (long) length; ++i)
+    for (i = 0; i < (long) length; ++i)
     {
-        if (i%36 == 0)
+        if (i % 36 == 0)
         {
-            *dp++='\n';
+            *dp++ = '\n';
         }
 
-        *(dp++)=(char) hex[((*sp >> 4) & 0x0f)];
-        *(dp++)=(char) hex[((*sp++ ) & 0x0f)];
+        *(dp++) = (char) hex[((*sp >> 4) & 0x0f)];
+        *(dp++) = (char) hex[((*sp++) & 0x0f)];
     }
 
-    *dp++='\n';
-    *dp='\0';
-    text[0].text_length = (png_size_t) (dp-text[0].text);
+    *dp++ = '\n';
+    *dp = '\0';
+    text[0].text_length = (png_size_t)(dp - text[0].text);
     text[0].compression = -1;
 
     if (text[0].text_length <= allocated_length)
     {
-        png_set_text(ping, ping_info,text, 1);
+        png_set_text(ping, ping_info, text, 1);
     }
 
     png_free(ping, text[0].text);
@@ -1180,7 +1184,7 @@ size_t PNGLoader::concatenateString(char* destination, const char* source, const
 
     size_t               count;
 
-    if ( !destination || !source || length == 0 )
+    if (!destination || !source || length == 0)
     {
         return 0;
     }
@@ -1194,28 +1198,28 @@ size_t PNGLoader::concatenateString(char* destination, const char* source, const
         ++q;
     }
 
-    count = (size_t) (q-destination);
-    i     = length-count;
+    count = (size_t)(q - destination);
+    i     = length - count;
 
     if (i == 0)
     {
-        return(count+strlen(p));
+        return(count + strlen(p));
     }
 
     while (*p != '\0')
     {
         if (i != 1)
         {
-            *q++=(*p);
+            *q++ = (*p);
             --i;
         }
 
         ++p;
     }
 
-    *q='\0';
+    *q = '\0';
 
-    return(count+(p-source));
+    return(count + (p - source));
 }
 
 size_t PNGLoader::copyString(char* destination, const char* source, const size_t length)
@@ -1226,7 +1230,7 @@ size_t PNGLoader::copyString(char* destination, const char* source, const size_t
 
     register size_t      i;
 
-    if ( !destination || !source || length == 0 )
+    if (!destination || !source || length == 0)
     {
         return 0;
     }
@@ -1239,7 +1243,7 @@ size_t PNGLoader::copyString(char* destination, const char* source, const size_t
     {
         do
         {
-            if ((*q++=(*p++)) == '\0')
+            if ((*q++ = (*p++)) == '\0')
             {
                 break;
             }
@@ -1251,7 +1255,7 @@ size_t PNGLoader::copyString(char* destination, const char* source, const size_t
     {
         if (length != 0)
         {
-            *q='\0';
+            *q = '\0';
         }
 
         do
@@ -1260,16 +1264,16 @@ size_t PNGLoader::copyString(char* destination, const char* source, const size_t
         while (*p++ != '\0');
     }
 
-    return((size_t) (p-source-1));
+    return((size_t)(p - source - 1));
 }
 
-long PNGLoader::formatString(char* string, const size_t length, const char* format,...)
+long PNGLoader::formatString(char* string, const size_t length, const char* format, ...)
 {
     long n;
 
     va_list operands;
 
-    va_start(operands,format);
+    va_start(operands, format);
     n = (long) formatStringList(string, length, format, operands);
     va_end(operands);
     return(n);
@@ -1281,7 +1285,7 @@ long PNGLoader::formatStringList(char* string, const size_t length, const char* 
 
     if (n < 0)
     {
-        string[length-1] = '\0';
+        string[length - 1] = '\0';
     }
 
     return((long) n);

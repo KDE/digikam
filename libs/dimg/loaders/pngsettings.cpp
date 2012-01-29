@@ -69,14 +69,14 @@ PNGSettings::PNGSettings(QWidget* parent)
     d->PNGcompression->setSliderEnabled(true);
     d->labelPNGcompression = new QLabel(i18n("PNG compression:"), this);
 
-    d->PNGcompression->setWhatsThis( i18n("<p>The compression value for PNG images:</p>"
-                                          "<p><b>1</b>: low compression (large file size but "
-                                          "short compression duration - default)<br/>"
-                                          "<b>5</b>: medium compression<br/>"
-                                          "<b>9</b>: high compression (small file size but "
-                                          "long compression duration)</p>"
-                                          "<p><b>Note: PNG is always a lossless image "
-                                          "compression format.</b></p>"));
+    d->PNGcompression->setWhatsThis(i18n("<p>The compression value for PNG images:</p>"
+                                         "<p><b>1</b>: low compression (large file size but "
+                                         "short compression duration - default)<br/>"
+                                         "<b>5</b>: medium compression<br/>"
+                                         "<b>9</b>: high compression (small file size but "
+                                         "long compression duration)</p>"
+                                         "<p><b>Note: PNG is always a lossless image "
+                                         "compression format.</b></p>"));
 
     d->PNGGrid->addWidget(d->labelPNGcompression, 0, 0, 1, 2);
     d->PNGGrid->addWidget(d->PNGcompression,      1, 1, 1, 2);
@@ -108,7 +108,7 @@ int PNGSettings::convertCompressionForLibPng(int value)
 {
     // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
 
-    return( (int)(((1.0-100.0)/8.0) * (float)value + 100.0 - ((1.0-100.0)/8.0)) );
+    return((int)(((1.0 - 100.0) / 8.0) * (float)value + 100.0 - ((1.0 - 100.0) / 8.0)));
 }
 
 }  // namespace Digikam

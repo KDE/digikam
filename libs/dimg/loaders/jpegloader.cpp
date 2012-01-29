@@ -245,7 +245,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     // read dimension (nominal values from header)
     int w = cinfo.image_width;
     int h = cinfo.image_height;
-    QSize originalSize(w,h);
+    QSize originalSize(w, h);
 
     // Libjpeg handles the following conversions:
     // YCbCr => GRAYSCALE, YCbCr => RGB, GRAYSCALE => RGB, YCCK => CMYK
@@ -256,23 +256,28 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             // perhaps jpeg_read_header did some guessing, leave value unchanged
             colorModel = DImg::COLORMODELUNKNOWN;
             break;
+
         case JCS_GRAYSCALE:
             cinfo.out_color_space     = JCS_RGB;
             colorModel = DImg::GRAYSCALE;
             break;
+
         case JCS_RGB:
             cinfo.out_color_space     = JCS_RGB;
             colorModel = DImg::RGB;
             break;
+
         case JCS_YCbCr:
             cinfo.out_color_space     = JCS_RGB;
             colorModel = DImg::YCBCR;
             break;
+
         case JCS_CMYK:
         case JCS_YCCK:
             cinfo.out_color_space     = JCS_CMYK;
             colorModel = DImg::CMYK;
             break;
+
         default:
             break;
     }
@@ -294,16 +299,16 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             int imgSize = qMax(cinfo.image_width, cinfo.image_height);
 
             // libjpeg supports 1/1, 1/2, 1/4, 1/8
-            int scale=1;
+            int scale = 1;
 
-            while (scaledLoadingSize* scale*2<=imgSize)
+            while (scaledLoadingSize* scale * 2 <= imgSize)
             {
-                scale*=2;
+                scale *= 2;
             }
 
-            if (scale>8)
+            if (scale > 8)
             {
-                scale=8;
+                scale = 8;
             }
 
             //cinfo.scale_num = 1;
@@ -331,11 +336,11 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         // -------------------------------------------------------------------
         // Get scanlines
 
-        uchar* ptr, *line[16], *data=0;
-        uchar* ptr2=0;
+        uchar* ptr, *line[16], *data = 0;
+        uchar* ptr2 = 0;
         int    x, y, l, i, scans;
-//        int count;
-//        int prevy;
+        //        int count;
+        //        int prevy;
 
         if (cinfo.rec_outbuf_height > 16)
         {
@@ -389,8 +394,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         }
 
         ptr2  = dest;
-//        count = 0;
-//        prevy = 0;
+        //        count = 0;
+        //        prevy = 0;
 
         if (cinfo.output_components == 3)
         {
@@ -416,7 +421,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         return false;
                     }
 
-                    observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
+                    observer->progressInfo(m_image, 0.1 + (0.8 * (((float)l) / ((float)h))));
                 }
 
                 jpeg_read_scanlines(&cinfo, &line[0], cinfo.rec_outbuf_height);
@@ -467,7 +472,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         return false;
                     }
 
-                    observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
+                    observer->progressInfo(m_image, 0.1 + (0.8 * (((float)l) / ((float)h))));
                 }
 
                 jpeg_read_scanlines(&cinfo, line, cinfo.rec_outbuf_height);
@@ -519,7 +524,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         return false;
                     }
 
-                    observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)l)/((float)h) )));
+                    observer->progressInfo(m_image, 0.1 + (0.8 * (((float)l) / ((float)h))));
                 }
 
                 jpeg_read_scanlines(&cinfo, &line[0], cinfo.rec_outbuf_height);
@@ -567,10 +572,10 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             startedDecompress = true;
         }
 
-        JOCTET* profile_data=NULL;
+        JOCTET* profile_data = NULL;
         uint    profile_size;
 
-        read_icc_profile (&cinfo, &profile_data, &profile_size);
+        read_icc_profile(&cinfo, &profile_data, &profile_size);
 
         if (profile_data != NULL)
         {
@@ -578,7 +583,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             profile_rawdata.resize(profile_size);
             memcpy(profile_rawdata.data(), profile_data, profile_size);
             imageSetIccProfile(profile_rawdata);
-            free (profile_data);
+            free(profile_data);
         }
         else
         {
@@ -738,6 +743,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
             cinfo.comp_info[2].v_samp_factor = 1;
             break;
         }
+
         case 2:  // 2x2, 1x1, 1x1 (4:1:1) : High
         {
             kDebug() << "Using LibJPEG high chroma-subsampling (4:1:1)";
@@ -749,6 +755,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
             cinfo.comp_info[2].v_samp_factor = 1;
             break;
         }
+
         default:  // 1x1 1x1 1x1 (4:4:4) : None
         {
             kDebug() << "Using LibJPEG none chroma-subsampling (4:4:4)";
@@ -779,7 +786,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
     if (!profile_rawdata.isEmpty())
     {
-        write_icc_profile (&cinfo, (JOCTET*)profile_rawdata.data(), profile_rawdata.size());
+        write_icc_profile(&cinfo, (JOCTET*)profile_rawdata.data(), profile_rawdata.size());
     }
 
     if (observer)
@@ -790,7 +797,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     // -------------------------------------------------------------------
     // Write Image data.
 
-    uchar* line       = new uchar[w*3];
+    uchar* line       = new uchar[w * 3];
     uchar* dstPtr     = 0;
     uint   checkPoint = 0;
     cleanupData->setLine(line);
@@ -800,7 +807,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
         uchar* srcPtr = data;
 
-        for (uint j=0; j<h; ++j)
+        for (uint j = 0; j < h; ++j)
         {
 
             if (observer && j == checkPoint)
@@ -815,7 +822,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
                 }
 
                 // use 0-20% for pseudo-progress, now fill 20-100%
-                observer->progressInfo(m_image, 0.2 + (0.8 * ( ((float)j)/((float)h) )));
+                observer->progressInfo(m_image, 0.2 + (0.8 * (((float)j) / ((float)h))));
             }
 
             dstPtr = line;
@@ -837,7 +844,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     {
         unsigned short* srcPtr = (unsigned short*)data;
 
-        for (uint j=0; j<h; ++j)
+        for (uint j = 0; j < h; ++j)
         {
 
             if (observer && j == checkPoint)
@@ -852,16 +859,16 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
                 }
 
                 // use 0-20% for pseudo-progress, now fill 20-100%
-                observer->progressInfo(m_image, 0.2 + (0.8 * ( ((float)j)/((float)h) )));
+                observer->progressInfo(m_image, 0.2 + (0.8 * (((float)j) / ((float)h))));
             }
 
             dstPtr = line;
 
             for (uint i = 0; i < w; ++i)
             {
-                dstPtr[2] = (srcPtr[0] * 255UL)/65535UL;    // Blue
-                dstPtr[1] = (srcPtr[1] * 255UL)/65535UL;    // Green
-                dstPtr[0] = (srcPtr[2] * 255UL)/65535UL;    // Red
+                dstPtr[2] = (srcPtr[0] * 255UL) / 65535UL;  // Blue
+                dstPtr[1] = (srcPtr[1] * 255UL) / 65535UL;  // Green
+                dstPtr[0] = (srcPtr[2] * 255UL) / 65535UL;  // Red
 
                 srcPtr += 4;
                 dstPtr += 3;

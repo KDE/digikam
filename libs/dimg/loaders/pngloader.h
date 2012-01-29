@@ -67,7 +67,7 @@ private:
 
     size_t concatenateString(char* destination, const char* source, const size_t length);
     size_t copyString(char* destination, const char* source, const size_t length);
-    long   formatString(char* string, const size_t length, const char* format,...);
+    long   formatString(char* string, const size_t length, const char* format, ...);
     long   formatStringList(char* string, const size_t length, const char* format, va_list operands);
 
 private:
