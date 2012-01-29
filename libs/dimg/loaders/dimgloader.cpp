@@ -347,24 +347,22 @@ QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* img)
 
     if (size)
     {
-        char* databuf = new char[size];
-        int   read;
+        QScopedArrayPointer<char> databuf(new char[size]);
+        int read;
 
         // Read first 100 kB
-        if ((read = file.read(databuf, size)) > 0)
+        if ((read = file.read(databuf.data(), size)) > 0)
         {
-            md5.addData(databuf, read);
+            md5.addData(databuf.data(), read);
         }
 
         // Read last 100 kB
         file.seek(file.size() - size);
 
-        if ((read = file.read(databuf, size)) > 0)
+        if ((read = file.read(databuf.data(), size)) > 0)
         {
-            md5.addData(databuf, read);
+            md5.addData(databuf.data(), read);
         }
-
-        delete [] databuf;
     }
 
     QByteArray hash = md5.result().toHex();
