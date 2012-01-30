@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-01-16
- * Description : Maintenance tool using thumbnails load thread as items processor.
+ * Date        : 2006-30-08
+ * Description : batch thumbnails generator
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MAINTENANCETHUMBTOOL_H
-#define MAINTENANCETHUMBTOOL_H
+#ifndef THUMBSGENERATOR_H
+#define THUMBSGENERATOR_H
 
 // Qt includes
 
@@ -30,45 +30,46 @@
 
 // Local includes
 
-#include "maintenancepictpathtool.h"
+#include "progressmanager.h"
 
 namespace Digikam
 {
 
 class LoadingDescription;
-class ThumbnailLoadThread;
 
-class MaintenanceThumbTool : public MaintenancePictPathTool
+class ThumbsGenerator : public ProgressItem
 {
     Q_OBJECT
 
 public:
 
-    MaintenanceThumbTool(const QString& id, Mode mode=AllItems, int albumId=-1);
-    virtual ~MaintenanceThumbTool();
+    explicit ThumbsGenerator(int albumId=-1, bool rebuildAll=true);
+    ~ThumbsGenerator();
 
-protected:
+Q_SIGNALS:
 
-    /** Return thumbs loader instance
-     */
-    ThumbnailLoadThread* thumbsLoadThread()  const;
+    void signalComplete();
 
-    /** Re-implement this if you want to use thumb loader as items processor
-     */
-    virtual void gotNewThumbnail(const LoadingDescription&, const QPixmap&) {};
+private:
+
+    void complete();
+    void processOne();
+
+protected Q_SLOTS:
+
+    void slotCancel();
 
 private Q_SLOTS:
 
-    /** Called by thumbnail thread. This slot call gotNewThumbnail()
-     */
+    void slotRebuildThumbs();
     void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
 
 private:
 
-    class MaintenanceThumbToolPriv;
-    MaintenanceThumbToolPriv* const d;
+    class ThumbsGeneratorPriv;
+    ThumbsGeneratorPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* MAINTENANCETHUMBTOOL_H */
+#endif /* THUMBSGENERATOR_H */

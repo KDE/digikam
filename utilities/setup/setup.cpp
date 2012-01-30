@@ -42,7 +42,7 @@
 // Local includes
 
 #include "albumsettings.h"
-#include "thumbnailsgenerator.h"
+#include "thumbsgenerator.h"
 #include "setupalbumview.h"
 #include "setupcamera.h"
 #include "setupcategory.h"
@@ -503,7 +503,7 @@ void Setup::okClicked()
             return;
         }
 
-        new ThumbnailsGenerator();
+        new ThumbsGenerator();
     }
 
     accept();

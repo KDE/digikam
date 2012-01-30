@@ -45,7 +45,7 @@
 #include "contextmenuhelper.h"
 #include "itemviewtooltip.h"
 #include "tooltipfiller.h"
-#include "thumbnailsgenerator.h"
+#include "thumbsgenerator.h"
 
 namespace Digikam
 {
@@ -206,7 +206,7 @@ void AlbumSelectionTreeView::slotRebuildThumbs()
         return;
     }
 
-    new ThumbnailsGenerator(MaintenanceTool::AlbumItems, album->id());
+    new ThumbsGenerator(album->id());
 }
 
 bool AlbumSelectionTreeView::viewportEvent(QEvent* event)
