@@ -96,7 +96,7 @@ ThumbsGenerator::ThumbsGenerator(int albumId, bool rebuildAll)
 
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
-    
+
     setLabel(i18n("Thumbs"));
 
     QTimer::singleShot(500, this, SLOT(slotRebuildThumbs()));
@@ -229,7 +229,7 @@ void ThumbsGenerator::complete()
     QTime now, t = now.addMSecs(d->duration.elapsed());
     // Pop-up a message to bring user when all is done.
     KNotificationWrapper(id(),
-                         i18n("Thumbs Generation is done.\nDuration: %1", t.toString()),
+                         i18n("Thumbs generation is done.\nDuration: %1", t.toString()),
                          kapp->activeWindow(), label());
 
     emit signalComplete();

@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2008-05-16
- * Description : finger-prints generator
+ * Date        : 2012-01-30
+ * Description : maintenance dialog
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,52 +21,35 @@
  *
  * ============================================================ */
 
-#ifndef FINGERPRINTSGENERATOR_H
-#define FINGERPRINTSGENERATOR_H
+#ifndef MAINTENANCEDLG_H
+#define MAINTENANCEDLG_H
+
+// KDE includes
+
+#include <kdialog.h>
 
 // Local includes
 
-#include "progressmanager.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DImg;
-class LoadingDescription;
-
-class FingerPrintsGenerator : public ProgressItem
+class DIGIKAM_EXPORT MaintenanceDlg : public KDialog
 {
     Q_OBJECT
 
 public:
 
-    FingerPrintsGenerator(bool rebuildAll);
-    ~FingerPrintsGenerator();
-
-Q_SIGNALS:
-
-    void signalComplete();
+    explicit MaintenanceDlg(QWidget* parent=0);
+    ~MaintenanceDlg();
 
 private:
 
-    void complete();
-    void processOne();
-
-protected Q_SLOTS:
-
-    void slotCancel();
-
-private Q_SLOTS:
-
-    void slotRebuildFingerPrints();
-    void slotGotImagePreview(const LoadingDescription&, const DImg&);
-
-private:
-
-    class FingerPrintsGeneratorPriv;
-    FingerPrintsGeneratorPriv* const d;
+    class MaintenanceDlgPriv;
+    MaintenanceDlgPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* FINGERPRINTSGENERATOR_H */
+#endif  // MAINTENANCEDLG_H

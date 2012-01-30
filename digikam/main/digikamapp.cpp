@@ -2931,10 +2931,9 @@ void DigikamApp::slotScanForFaces()
 
 void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
 {
-    FingerPrintsGenerator* fingerprintsGenerator = new FingerPrintsGenerator(rebuildAll ? MaintenanceTool::AllItems
-                                                                                        : MaintenanceTool::MissingItems);
+    FingerPrintsGenerator* generator = new FingerPrintsGenerator(rebuildAll);
 
-    connect(fingerprintsGenerator, SIGNAL(signalComplete()),
+    connect(generator, SIGNAL(signalComplete()),
             this, SLOT(slotRebuildFingerPrintsDone()));
 }
 

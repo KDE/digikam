@@ -1195,9 +1195,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/facedetector.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/thumbsgenerator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/fingerprintsgenerator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancetool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancepictpathtool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancepreviewtool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancedlg.cpp
        )
 
     SET(libdatabasecore_SRCS
