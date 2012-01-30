@@ -36,6 +36,7 @@
 
 namespace Digikam
 {
+class Album;
 
 class SlideShowBuilder : public ProgressItem
 {
@@ -43,7 +44,10 @@ class SlideShowBuilder : public ProgressItem
 
 public:
 
+    /** Contructor to work on image list */
     SlideShowBuilder(const ImageInfoList& infoList);
+    /** Contructor to work on recursive mode from album */
+    SlideShowBuilder(Album* album);
     ~SlideShowBuilder();
 
 Q_SIGNALS:
@@ -54,11 +58,12 @@ private Q_SLOTS:
 
     void slotRun();
     void slotCancel();
+    void slotParseImageInfoList(const ImageInfoList& list);
 
 private:
 
-    bool          m_cancel;
-    ImageInfoList m_infoList;
+    class SlideShowBuilderPriv;
+    SlideShowBuilderPriv* const d;
 };
 
 } // namespace Digikam

@@ -6,7 +6,7 @@
  * Date        : 2009-08-08
  * Description : an option to provide date information to the parser
  *
- * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,7 +33,7 @@
 // Local includes
 
 #include "option.h"
-#include "parseabledialog.h"
+#include "ruledialog.h"
 
 namespace Ui
 {
@@ -87,7 +87,7 @@ private:
 
 // --------------------------------------------------------
 
-class DateOptionDialog : public ParseableDialog
+class DateOptionDialog : public RuleDialog
 {
     Q_OBJECT
 
@@ -102,7 +102,7 @@ public:
 
 public:
 
-    DateOptionDialog(Parseable* parent);
+    DateOptionDialog(Rule* parent);
     ~DateOptionDialog();
 
     Ui::DateOptionDialogWidget* const ui;

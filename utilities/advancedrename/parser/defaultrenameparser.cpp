@@ -7,7 +7,7 @@
  * Description : the default parser for the AdvancedRename utility,
  *               includes all renaming options
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

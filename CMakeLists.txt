@@ -28,7 +28,7 @@ SET(DIGIKAM_RELEASE_DATE "2012-02-05")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "")
+SET(DIGIKAM_SUFFIX_VERSION "-beta1")
 
 # ==================================================================================================
 # Set env. variables accordingly.
@@ -899,6 +899,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ENDIF(MSVC)
 
     SET(libthreadimageio_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/filereadwritelock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/loadsavethread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/managedloadsavethread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/sharedloadsavethread.cpp
@@ -1187,18 +1188,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libmaintenance_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancetool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancepictpathtool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancethumbtool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancepreviewtool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfojob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfoalbumsjob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/metadatasynchronizer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/fingerprintsgenerator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/duplicatesfinder.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/newitemsfinder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/thumbnailsgenerator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/facedetector.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/thumbsgenerator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/fingerprintsgenerator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancedlg.cpp
        )
 
     SET(libdatabasecore_SRCS

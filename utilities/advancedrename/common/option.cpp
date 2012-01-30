@@ -6,7 +6,7 @@
  * Date        : 2009-08-08
  * Description : an abstract option class
  *
- * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,13 +37,13 @@ public:
 };
 
 Option::Option(const QString& name, const QString& description)
-    : Parseable(name), d(new OptionPriv)
+    : Rule(name), d(new OptionPriv)
 {
     setDescription(description);
 }
 
 Option::Option(const QString& name, const QString& description, const QString& icon)
-    : Parseable(name, icon), d(new OptionPriv)
+    : Rule(name, icon), d(new OptionPriv)
 {
     setDescription(description);
 }

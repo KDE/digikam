@@ -2201,15 +2201,14 @@ void DImg::crop(int x, int y, int w, int h)
 
     uint  oldw = width();
     uint  oldh = height();
-    uchar* old = stripImageData();
+    QScopedArrayPointer<uchar> old(stripImageData());
 
     // set new image data, bits(), width(), height() change
     setImageDimension(w, h);
     allocateData();
 
     // copy image region (x|y), wxh, from old data to point (0|0) of new data
-    bitBlt(old, bits(), x, y, w, h, 0, 0, oldw, oldh, width(), height(), sixteenBit(), bytesDepth(), bytesDepth());
-    delete [] old;
+    bitBlt(old.data(), bits(), x, y, w, h, 0, 0, oldw, oldh, width(), height(), sixteenBit(), bytesDepth(), bytesDepth());
 }
 
 void DImg::resize(int w, int h)

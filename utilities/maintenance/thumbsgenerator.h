@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-01-16
- * Description : Maintenance tool using picture paths list
+ * Date        : 2006-30-08
+ * Description : batch thumbnails generator
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,44 +21,55 @@
  *
  * ============================================================ */
 
-#ifndef MAINTENANCEPICTPATHTOOL_H
-#define MAINTENANCEPICTPATHTOOL_H
+#ifndef THUMBSGENERATOR_H
+#define THUMBSGENERATOR_H
 
 // Qt includes
 
-#include <QString>
+#include <QPixmap>
 
 // Local includes
 
-#include "maintenancetool.h"
+#include "progressmanager.h"
 
 namespace Digikam
 {
 
-class MaintenancePictPathTool : public MaintenanceTool
+class LoadingDescription;
+
+class ThumbsGenerator : public ProgressItem
 {
     Q_OBJECT
 
 public:
 
-    MaintenancePictPathTool(const QString& id, Mode mode=AllItems, int albumId=-1);
-    virtual ~MaintenancePictPathTool();
+    explicit ThumbsGenerator(int albumId=-1, bool rebuildAll=true);
+    ~ThumbsGenerator();
 
-protected:
+Q_SIGNALS:
 
-    /** Return all paths to process. Data container can be customized.
-     */
-    QStringList& allPicturesPath();
-
-    void populateItemsToProcess();
-    bool isEmpty() const;
+    void signalComplete();
 
 private:
 
-    class MaintenancePictPathToolPriv;
-    MaintenancePictPathToolPriv* const d;
+    void complete();
+    void processOne();
+
+protected Q_SLOTS:
+
+    void slotCancel();
+
+private Q_SLOTS:
+
+    void slotRebuildThumbs();
+    void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
+
+private:
+
+    class ThumbsGeneratorPriv;
+    ThumbsGeneratorPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* MAINTENANCEPICTPATHTOOL_H */
+#endif /* THUMBSGENERATOR_H */

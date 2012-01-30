@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2010-05-01
- * Description : an abstract parseable class
+ * Description : an abstract rule class
  *
- * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PARSEABLE_H
-#define PARSEABLE_H
+#ifndef RULE_H
+#define RULE_H
 
 // Local includes
 
@@ -38,8 +38,8 @@ class QString;
 namespace Digikam
 {
 
-class ParseablePriv;
-class Parseable : public QObject
+class RulePriv;
+class Rule : public QObject
 {
     Q_OBJECT
 
@@ -53,9 +53,9 @@ public:
 
 public:
 
-    Parseable(const QString& name);
-    Parseable(const QString& name, const QString& icon);
-    virtual ~Parseable();
+    Rule(const QString& name);
+    Rule(const QString& name, const QString& icon);
+    virtual ~Rule();
 
     /**
      * returns the currently assigned regExp object. Note that it is returned as a const ref, meaning
@@ -79,7 +79,7 @@ public:
     QRegExp& regExp() const;
 
     QString description() const;
-    QPixmap icon(Parseable::IconType type = Parseable::Action) const;
+    QPixmap icon(Rule::IconType type = Rule::Action) const;
 
     /**
      * @return a list of all registered tokens
@@ -162,7 +162,7 @@ protected:
     void setIcon(const QString& pixmap);
 
     /**
-     * If multiple tokens have been assigned to a Parseable, a menu will be created.
+     * If multiple tokens have been assigned to a rule, a menu will be created.
      * If you want to display a menu for every defined token, set this method to 'true' and
      * re-implement the @see slotTokenTriggered method.
      * @param value boolean parameter to set token menu usage
@@ -175,8 +175,8 @@ protected Q_SLOTS:
 
 private:
 
-    Parseable(const Parseable&);
-    Parseable& operator=(const Parseable&);
+    Rule(const Rule&);
+    Rule& operator=(const Rule&);
 
     QPushButton* createButton(const QString& name, const QIcon& icon);
     bool         tokenAtPosition(ParseResults& results, int pos);
@@ -184,9 +184,9 @@ private:
 
 private:
 
-    ParseablePriv* const d;
+    RulePriv* const d;
 };
 
 } // namespace Digikam
 
-#endif /* PARSEABLE_H */
+#endif /* RULE_H */

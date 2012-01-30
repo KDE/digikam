@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2006-30-08
- * Description : batch thumbnails generator
+ * Date        : 2012-01-30
+ * Description : maintenance dialog
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,31 +21,35 @@
  *
  * ============================================================ */
 
-#ifndef THUMBNAILSGENERATOR_H
-#define THUMBNAILSGENERATOR_H
+#ifndef MAINTENANCEDLG_H
+#define MAINTENANCEDLG_H
+
+// KDE includes
+
+#include <kdialog.h>
 
 // Local includes
 
-#include "maintenancethumbtool.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class ThumbnailsGenerator : public MaintenanceThumbTool
+class DIGIKAM_EXPORT MaintenanceDlg : public KDialog
 {
     Q_OBJECT
 
 public:
 
-    ThumbnailsGenerator(Mode mode=AllItems, int albumId=-1);
-    ~ThumbnailsGenerator();
+    explicit MaintenanceDlg(QWidget* parent=0);
+    ~MaintenanceDlg();
 
 private:
 
-    void filterItemstoProcess();
-    void processOne();
+    class MaintenanceDlgPriv;
+    MaintenanceDlgPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* THUMBNAILSGENERATOR_H */
+#endif  // MAINTENANCEDLG_H

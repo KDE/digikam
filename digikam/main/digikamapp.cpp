@@ -110,7 +110,6 @@
 #include "albumselectdialog.h"
 #include "albumthumbnailloader.h"
 #include "metadatasynchronizer.h"
-#include "thumbnailsgenerator.h"
 #include "cameratype.h"
 #include "cameraui.h"
 #include "cameranamehelper.h"
@@ -142,6 +141,7 @@
 #include "thememanager.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "thumbsgenerator.h"
 #include "dmetadata.h"
 #include "uifilevalidator.h"
 #include "facedetector.h"
@@ -512,7 +512,7 @@ void DigikamApp::downloadFromUdi(const QString& udi)
     }
 }
 
-QString DigikamApp::currentDatabaseParameters()
+QString DigikamApp::currentDatabaseParameters() const
 {
     DatabaseParameters parameters = DatabaseAccess::parameters();
     KUrl url;
@@ -572,9 +572,9 @@ void DigikamApp::setupView()
 
 void DigikamApp::setupStatusBar()
 {
-    d->statusProgressBar = new StatusProgressBar(statusBar());
-    d->statusProgressBar->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
-    statusBar()->addWidget(d->statusProgressBar, 100);
+    d->statusLabel = new KSqueezedTextLabel(statusBar());
+    d->statusLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+    statusBar()->addWidget(d->statusLabel, 100);
 
     //------------------------------------------------------------------------------
 
@@ -634,9 +634,6 @@ void DigikamApp::setupStatusBar()
 
     connect(d->statusNavigateBar, SIGNAL(signalLastItem()),
             d->view, SLOT(slotLastItem()));
-
-    connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
-            this, SIGNAL(signalCancelButtonPressed()));
 }
 
 void DigikamApp::setupAccelerators()
@@ -1538,7 +1535,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
         }
     }
 
-    d->statusProgressBar->setText(d->statusBarSelectionText);
+    d->statusLabel->setText(d->statusBarSelectionText);
     d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);
 }
 
@@ -1595,131 +1592,6 @@ void DigikamApp::slotSwitchedToMapView()
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     d->imageMapViewAction->setChecked(true);
     d->showBarAction->setEnabled(false);
-}
-
-void DigikamApp::enterProgress(const QString& message)
-{
-    enterProgress((quintptr)sender(), message, false);
-}
-
-void DigikamApp::enterCancellableProgress(const QString& message)
-{
-    enterProgress((quintptr)sender(), message, true);
-}
-
-void DigikamApp::progressValue(float progress)
-{
-    progressValue((quintptr)sender(), progress);
-}
-
-void DigikamApp::finishProgress()
-{
-    finishProgress((quintptr)sender());
-}
-
-void DigikamApp::enterProgress(QObject* sender, const QString& message)
-{
-    enterProgress((quintptr)sender, message, false);
-}
-
-void DigikamApp::enterCancellableProgress(QObject* sender, const QString& message)
-{
-    enterProgress((quintptr)sender, message, true);
-}
-
-void DigikamApp::progressValue(QObject* sender, float progress)
-{
-    progressValue((quintptr)sender, progress);
-}
-
-void DigikamApp::finishProgress(QObject* sender)
-{
-    finishProgress((quintptr)sender);
-}
-
-void DigikamApp::DigikamAppPriv::updateProgressBar()
-{
-    if (progressEntries.isEmpty())
-    {
-        statusProgressBar->progressBarMode(StatusProgressBar::TextMode, QString());
-        // Restore the text that we set for selection
-        if (!statusBarSelectionText.isNull())
-        {
-            statusProgressBar->setText(statusBarSelectionText);
-        }
-    }
-    else
-    {
-        bool canCancelOne = false;
-        foreach(const ProgressEntry& entry, progressEntries)
-        {
-            if (entry.canCancel)
-            {
-                canCancelOne = true;
-                break;
-            }
-        }
-        QString message;
-        if (progressEntries.size() == 1)
-        {
-            message = progressEntries.constBegin().value().message;
-        }
-        else
-        {
-            message = i18nc("@info:status Background tasks/actions", "%1 Tasks", progressEntries.size());
-        }
-
-        statusProgressBar->progressBarMode(canCancelOne ? StatusProgressBar::ProgressBarMode
-                                                        : StatusProgressBar::CancelProgressBarMode,
-                                           message);
-    }
-
-    updateProgressValue();
-}
-
-void DigikamApp::DigikamAppPriv::updateProgressValue()
-{
-    if (progressEntries.isEmpty())
-    {
-        return;
-    }
-
-    float progress = 0;
-    foreach(const ProgressEntry& entry, progressEntries)
-    {
-        progress += entry.progress;
-    }
-    statusProgressBar->setProgressValue( lround(progress / progressEntries.size() * 100) );
-}
-
-void DigikamApp::enterProgress(quintptr id, const QString& message)
-{
-    enterProgress(id, message, false);
-}
-
-void DigikamApp::enterProgress(quintptr id, const QString& message, bool canCancel)
-{
-    ProgressEntry entry;
-    entry.message = message;
-    entry.canCancel = canCancel;
-    d->progressEntries[id] = entry;
-    d->updateProgressBar();
-}
-
-void DigikamApp::progressValue(quintptr id, float progress)
-{
-    if (!d->progressEntries.contains(id))
-    {
-        return;
-    }
-    d->progressEntries[id].progress = progress;
-    d->updateProgressValue();
-}
-
-void DigikamApp::finishProgress(quintptr id)
-{
-    d->progressEntries.remove(id);
-    d->updateProgressBar();
 }
 
 void DigikamApp::slotExit()
@@ -3030,12 +2902,12 @@ void DigikamApp::slotRebuildThumbnails()
 
 void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
 {
-    new ThumbnailsGenerator(rebuildAll ? MaintenanceTool::AllItems : MaintenanceTool::MissingItems);
+    new ThumbsGenerator(-1, rebuildAll);
 }
 
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
-    new ThumbnailsGenerator(MaintenanceTool::AlbumItems, AlbumManager::instance()->currentAlbum()->id());
+    new ThumbsGenerator(AlbumManager::instance()->currentAlbum()->id());
 }
 
 void DigikamApp::slotGenerateFingerPrintsFirstTime()
@@ -3074,10 +2946,9 @@ void DigikamApp::slotScanForFaces()
 
 void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
 {
-    FingerPrintsGenerator* fingerprintsGenerator = new FingerPrintsGenerator(rebuildAll ? MaintenanceTool::AllItems
-                                                                                        : MaintenanceTool::MissingItems);
+    FingerPrintsGenerator* generator = new FingerPrintsGenerator(rebuildAll);
 
-    connect(fingerprintsGenerator, SIGNAL(signalComplete()),
+    connect(generator, SIGNAL(signalComplete()),
             this, SLOT(slotRebuildFingerPrintsDone()));
 }
 

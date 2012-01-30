@@ -151,7 +151,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     TIFFGetFieldDefaulted(tif, TIFFTAG_PLANARCONFIG, &planar_config);
 
     if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0
-        || rows_per_strip == 0 || rows_per_strip == (unsigned int)-1)
+        || rows_per_strip == 0 || rows_per_strip == (unsigned int) - 1)
     {
         kWarning()  << "TIFF loader: Cannot handle non-stripped images. Loading file "
                     << filePath;
@@ -160,11 +160,11 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         return false;
     }
 
-    if (   bits_per_sample   == 0
+    if (bits_per_sample   == 0
         || samples_per_pixel == 0
         || rows_per_strip    == 0
-//        || rows_per_strip    >  h
-        )
+        //        || rows_per_strip    >  h
+       )
     {
         kWarning() << "TIFF loader: Encountered invalid value in image." << endl
                    << " bits_per_sample   : " << bits_per_sample  << endl
@@ -204,26 +204,33 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         case PHOTOMETRIC_MINISBLACK:
             colorModel = DImg::GRAYSCALE;
             break;
+
         case PHOTOMETRIC_RGB:
             colorModel = DImg::RGB;
             break;
+
         case PHOTOMETRIC_PALETTE:
             colorModel = DImg::INDEXED;
             break;
+
         case PHOTOMETRIC_MASK:
             colorModel = DImg::MONOCHROME;
             break;
+
         case PHOTOMETRIC_SEPARATED:
             colorModel = DImg::CMYK;
             break;
+
         case PHOTOMETRIC_YCBCR:
             colorModel = DImg::YCBCR;
             break;
+
         case PHOTOMETRIC_CIELAB:
         case PHOTOMETRIC_ICCLAB:
         case PHOTOMETRIC_ITULAB:
             colorModel = DImg::CIELAB;
             break;
+
         case PHOTOMETRIC_LOGL:
         case PHOTOMETRIC_LOGLUV:
             colorModel = DImg::COLORMODELRAW;
@@ -253,10 +260,10 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     if (m_loadFlags & LoadICCData)
     {
-        uchar*  profile_data=0;
+        uchar*  profile_data = 0;
         uint32  profile_size;
 
-        if (TIFFGetField (tif, TIFFTAG_ICCPROFILE, &profile_size, &profile_data))
+        if (TIFFGetField(tif, TIFFTAG_ICCPROFILE, &profile_size, &profile_data))
         {
             QByteArray profile_rawdata;
             profile_rawdata.resize(profile_size);
@@ -273,7 +280,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     // -------------------------------------------------------------------
     // Get image data.
 
-    uchar* data   = 0;
+    QScopedArrayPointer<uchar> data;
 
     if (m_loadFlags & LoadImageData)
     {
@@ -287,13 +294,12 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
         if (bits_per_sample == 16)          // 16 bits image.
         {
-            data  = new_failureTolerant(w*h*8);
+            data.reset(new_failureTolerant(w * h * 8));
             QScopedArrayPointer<uchar> strip(new_failureTolerant(strip_size));
 
             if (!data || strip.isNull())
             {
                 kDebug() << "Failed to allocate memory for TIFF image" << filePath;
-                delete[] data;
                 TIFFClose(tif);
                 loadingFailed();
                 return false;
@@ -304,7 +310,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
             uint checkpoint = 0;
 
-            for (tstrip_t st=0; st < num_of_strips; ++st)
+            for (tstrip_t st = 0; st < num_of_strips; ++st)
             {
                 if (observer && st == checkpoint)
                 {
@@ -312,13 +318,12 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
                     if (!observer->continueQuery(m_image))
                     {
-                        delete [] data;
                         TIFFClose(tif);
                         loadingFailed();
                         return false;
                     }
 
-                    observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)st)/((float)num_of_strips) )));
+                    observer->progressInfo(m_image, 0.1 + (0.8 * (((float)st) / ((float)num_of_strips))));
                 }
 
                 bytesRead = TIFFReadEncodedStrip(tif, st, strip.data(), strip_size);
@@ -326,7 +331,6 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 if (bytesRead == -1)
                 {
                     kDebug() << "Failed to read strip";
-                    delete [] data;
                     TIFFClose(tif);
                     loadingFailed();
                     return false;
@@ -339,14 +343,14 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 }
 
                 ushort* stripPtr = (ushort*)(strip.data());
-                ushort* dataPtr  = (ushort*)(data + offset);
+                ushort* dataPtr  = (ushort*)(data.data() + offset);
                 ushort* p;
 
                 // tiff data is read as BGR or ABGR or Greyscale
 
                 if (samples_per_pixel == 1)   // See B.K.O #148400: Greyscale pictures only have _one_ sample per pixel
                 {
-                    for (int i=0; i < bytesRead/2; ++i)
+                    for (int i = 0; i < bytesRead / 2; ++i)
                     {
                         // We have to read two bytes for one pixel
                         p = dataPtr;
@@ -370,11 +374,11 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         dataPtr += 4;
                     }
 
-                    offset += bytesRead*4;         // The _byte_offset in the data array is, of course, four times bytesRead
+                    offset += bytesRead * 4;       // The _byte_offset in the data array is, of course, four times bytesRead
                 }
                 else if ((samples_per_pixel == 3) && (planar_config == PLANARCONFIG_CONTIG))
                 {
-                    for (int i=0; i < bytesRead/6; ++i)
+                    for (int i = 0; i < bytesRead / 6; ++i)
                     {
                         p = dataPtr;
 
@@ -397,11 +401,11 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         dataPtr += 4;
                     }
 
-                    offset += bytesRead/6 * 8;
+                    offset += bytesRead / 6 * 8;
                 }
                 else if ((samples_per_pixel == 3) && (planar_config == PLANARCONFIG_SEPARATE))
                 {
-                    for (int i=0; i < bytesRead/2; ++i)
+                    for (int i = 0; i < bytesRead / 2; ++i)
                     {
                         p = dataPtr;
 
@@ -414,9 +418,11 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                                     p[3] = *stripPtr++;
                                     p[2] = 0xFFFF;
                                     break;
+
                                 case 1:
                                     p[0] = *stripPtr++;
                                     break;
+
                                 case 2:
                                     p[1] = *stripPtr++;
                                     break;
@@ -430,9 +436,11 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                                     p[2] = *stripPtr++;
                                     p[3] = 0xFFFF;
                                     break;
+
                                 case 1:
                                     p[1] = *stripPtr++;
                                     break;
+
                                 case 2:
                                     p[0] = *stripPtr++;
                                     break;
@@ -442,11 +450,11 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         dataPtr += 4;
                     }
 
-                    offset += bytesRead/2 * 8;
+                    offset += bytesRead / 2 * 8;
                 }
                 else if ((samples_per_pixel == 4) && (planar_config == PLANARCONFIG_CONTIG))
                 {
-                    for (int i=0; i < bytesRead/8; ++i)
+                    for (int i = 0; i < bytesRead / 8; ++i)
                     {
                         p = dataPtr;
 
@@ -473,7 +481,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 }
                 else if ((samples_per_pixel == 4) && (planar_config == PLANARCONFIG_SEPARATE))
                 {
-                    for (int i=0; i < bytesRead/2; ++i)
+                    for (int i = 0; i < bytesRead / 2; ++i)
                     {
                         p = dataPtr;
 
@@ -485,12 +493,15 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                                 case 0:
                                     p[3] = *stripPtr++;
                                     break;
+
                                 case 1:
                                     p[0] = *stripPtr++;
                                     break;
+
                                 case 2:
                                     p[1] = *stripPtr++;
                                     break;
+
                                 case 3:
                                     p[2] = *stripPtr++;
                                     break;
@@ -503,12 +514,15 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                                 case 0:
                                     p[2] = *stripPtr++;
                                     break;
+
                                 case 1:
                                     p[1] = *stripPtr++;
                                     break;
+
                                 case 2:
                                     p[0] = *stripPtr++;
                                     break;
+
                                 case 3:
                                     p[3] = *stripPtr++;
                                     break;
@@ -518,19 +532,18 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         dataPtr += 4;
                     }
 
-                    offset += bytesRead/2 * 8;
+                    offset += bytesRead / 2 * 8;
                 }
             }
         }
         else       // Non 16 bits images ==> get it on BGRA 8 bits.
         {
-            data  = new_failureTolerant(w*h*4);
-            QScopedArrayPointer<uchar> strip(new_failureTolerant(w*rows_per_strip*4));
+            data.reset(new_failureTolerant(w * h * 4));
+            QScopedArrayPointer<uchar> strip(new_failureTolerant(w * rows_per_strip * 4));
 
             if (!data || strip.isNull())
             {
                 kDebug() << "Failed to allocate memory for TIFF image" << filePath;
-                delete[] data;
                 TIFFClose(tif);
                 loadingFailed();
                 return false;
@@ -552,7 +565,6 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             {
                 kDebug() << "Failed to set up RGBA reading of image, filename "
                          << TIFFFileName(tif) <<  " error message from Libtiff: " << emsg;
-                delete [] data;
                 TIFFClose(tif);
                 loadingFailed();
                 return false;
@@ -571,19 +583,18 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
                     if (!observer->continueQuery(m_image))
                     {
-                        delete [] data;
                         TIFFClose(tif);
                         loadingFailed();
                         return false;
                     }
 
-                    observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)row)/((float)h) )));
+                    observer->progressInfo(m_image, 0.1 + (0.8 * (((float)row) / ((float)h))));
                 }
 
                 img.row_offset  = row;
                 img.col_offset  = 0;
 
-                if ( row + rows_per_strip > img.height )
+                if (row + rows_per_strip > img.height)
                 {
                     rows_to_read = img.height - row;
                 }
@@ -594,10 +605,9 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
                 // Read data
 
-                if (TIFFRGBAImageGet(&img, (uint32*)strip.data(), img.width, rows_to_read ) == -1)
+                if (TIFFRGBAImageGet(&img, (uint32*)strip.data(), img.width, rows_to_read) == -1)
                 {
                     kDebug() << "Failed to read image data";
-                    delete [] data;
                     TIFFClose(tif);
                     loadingFailed();
                     return false;
@@ -606,12 +616,12 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 pixelsRead = rows_to_read * img.width;
 
                 uchar* stripPtr = (uchar*)(strip.data());
-                uchar* dataPtr  = (uchar*)(data + offset);
+                uchar* dataPtr  = (uchar*)(data.data() + offset);
                 uchar* p;
 
                 // Reverse red and blue
 
-                for (int i=0; i < pixelsRead; ++i)
+                for (int i = 0; i < pixelsRead; ++i)
                 {
                     p = dataPtr;
 
@@ -652,11 +662,11 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     imageWidth()  = w;
     imageHeight() = h;
-    imageData()   = data;
+    imageData()   = data.take();
     imageSetAttribute("format", "TIFF");
     imageSetAttribute("originalColorModel", colorModel);
     imageSetAttribute("originalBitDepth", bits_per_sample);
-    imageSetAttribute("originalSize", QSize(w,h));
+    imageSetAttribute("originalSize", QSize(w, h));
 
     return true;
 }
@@ -744,7 +754,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     if (!ba.isEmpty())
     {
 #if defined(TIFFTAG_PHOTOSHOP)
-        TIFFSetField (tif, TIFFTAG_PHOTOSHOP, (uint32)ba.size(), (uchar*)ba.data());
+        TIFFSetField(tif, TIFFTAG_PHOTOSHOP, (uint32)ba.size(), (uchar*)ba.data());
 #endif
     }
 
@@ -798,9 +808,9 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     uchar*  pixel;
     double  alpha_factor;
     uint32  x, y;
-    uint8   r8, g8, b8, a8=0;
-    uint16  r16, g16, b16, a16=0;
-    int     i=0;
+    uint8   r8, g8, b8, a8 = 0;
+    uint16  r16, g16, b16, a16 = 0;
+    int     i = 0;
 
     uint8* buf = (uint8*)_TIFFmalloc(TIFFScanlineSize(tif));
 
@@ -827,7 +837,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
                 return false;
             }
 
-            observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)y)/((float)h) )));
+            observer->progressInfo(m_image, 0.1 + (0.8 * (((float)y) / ((float)h))));
         }
 
         i = 0;
@@ -836,21 +846,21 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
         {
             pixel = &data[((y * w) + x) * imageBytesDepth()];
 
-            if ( imageSixteenBit() )        // 16 bits image.
+            if (imageSixteenBit())          // 16 bits image.
             {
-                b16 = (uint16)(pixel[0]+256*pixel[1]);
-                g16 = (uint16)(pixel[2]+256*pixel[3]);
-                r16 = (uint16)(pixel[4]+256*pixel[5]);
+                b16 = (uint16)(pixel[0] + 256 * pixel[1]);
+                g16 = (uint16)(pixel[2] + 256 * pixel[3]);
+                r16 = (uint16)(pixel[4] + 256 * pixel[5]);
 
                 if (imageHasAlpha())
                 {
                     // TIFF makes you pre-mutiply the RGB components by alpha
 
-                    a16          = (uint16)(pixel[6]+256*pixel[7]);
+                    a16          = (uint16)(pixel[6] + 256 * pixel[7]);
                     alpha_factor = ((double)a16 / 65535.0);
-                    r16          = (uint16)(r16*alpha_factor);
-                    g16          = (uint16)(g16*alpha_factor);
-                    b16          = (uint16)(b16*alpha_factor);
+                    r16          = (uint16)(r16 * alpha_factor);
+                    g16          = (uint16)(g16 * alpha_factor);
+                    b16          = (uint16)(b16 * alpha_factor);
                 }
 
                 // This might be endian dependent
@@ -880,9 +890,9 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
                     a8           = (uint8)(pixel[3]);
                     alpha_factor = ((double)a8 / 255.0);
-                    r8           = (uint8)(r8*alpha_factor);
-                    g8           = (uint8)(g8*alpha_factor);
-                    b8           = (uint8)(b8*alpha_factor);
+                    r8           = (uint8)(r8 * alpha_factor);
+                    g8           = (uint8)(g8 * alpha_factor);
+                    b8           = (uint8)(b8 * alpha_factor);
                 }
 
                 // This might be endian dependent
@@ -915,8 +925,8 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
     QImage thumb = m_image->smoothScale(160, 120, Qt::KeepAspectRatio).copyQImage();
 
-    TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,      (uint32)thumb.width());
-    TIFFSetField(tif, TIFFTAG_IMAGELENGTH,     (uint32)thumb.height());
+    TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, (uint32)thumb.width());
+    TIFFSetField(tif, TIFFTAG_IMAGELENGTH, (uint32)thumb.height());
     TIFFSetField(tif, TIFFTAG_PHOTOMETRIC,     PHOTOMETRIC_RGB);
     TIFFSetField(tif, TIFFTAG_PLANARCONFIG,    PLANARCONFIG_CONTIG);
     TIFFSetField(tif, TIFFTAG_ORIENTATION,     ORIENTATION_TOPLEFT);
@@ -1013,7 +1023,7 @@ void TIFFLoader::tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag,
 
     if (!tag.isEmpty())
     {
-        TIFFSetField (tif, tiffTag, (uint32)tag.size(), (char*)tag.data());
+        TIFFSetField(tif, tiffTag, (uint32)tag.size(), (char*)tag.data());
     }
 }
 

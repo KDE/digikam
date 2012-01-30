@@ -95,12 +95,11 @@ bool FileActionMngr::requestShutDown()
     }
 
     QPointer<KProgressDialog> dialog = new KProgressDialog;
+    dialog->progressBar()->setMinimum(0);
+    dialog->progressBar()->setMaximum(0);
     dialog->setAllowCancel(true);
     dialog->setMinimumDuration(100);
     dialog->setLabelText(i18nc("@label", "Finishing tasks"));
-
-    connect(this, SIGNAL(signalProgressValueChanged(int)),
-            dialog->progressBar(), SLOT(setValue(int)));
 
     connect(this, SIGNAL(signalProgressFinished()),
             dialog, SLOT(accept()));

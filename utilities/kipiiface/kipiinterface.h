@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,6 +39,7 @@
 
 // LibKIPI includes
 
+#include <libkipi/version.h>
 #include <libkipi/interface.h>
 #include <libkipi/imagecollection.h>
 #include <libkipi/imageinfo.h>
@@ -53,17 +54,8 @@
 #include "kipiimagecollectionselector.h"
 #include "kipiuploadwidget.h"
 
-class QDateTime;
-class QTreeWidget;
-
-class KTabWidget;
-
 namespace Digikam
 {
-class ThumbnailLoadThread;
-class Album;
-class PAlbum;
-class TAlbum;
 
 class KipiInterface : public KIPI::Interface
 {
@@ -93,6 +85,14 @@ public:
     QAbstractItemModel* getTagTree() const;
 
     QVariant hostSetting(const QString& settingName);
+
+#if KIPI_VERSION >= 0x010500
+    QString progressScheduled(const QString& title, bool canBeCanceled, bool hasThumb) const;
+    void progressValueChanged(const QString& id, float percent);
+    void progressStatusChanged(const QString& id, const QString& status);
+    void progressThumbnailChanged(const QString& id, const QPixmap& thumb);
+    void progressCompleted(const QString& id);
+#endif // KIPI_VERSION >= 0x010500
 
 public Q_SLOTS:
 

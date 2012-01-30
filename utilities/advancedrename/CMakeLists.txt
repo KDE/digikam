@@ -24,3 +24,4 @@ TARGET_LINK_LIBRARIES(advancedrename
         ${KDCRAW_LIBRARIES}
         digikamdatabase
 )
+

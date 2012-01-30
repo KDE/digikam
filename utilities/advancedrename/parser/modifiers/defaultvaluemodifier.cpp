@@ -6,7 +6,7 @@
  * Date        : 2009-11-11
  * Description : a modifier for setting a default value if option parsing failed
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,8 +37,8 @@
 namespace Digikam
 {
 
-DefaultValueDialog::DefaultValueDialog(Parseable* parent)
-    : ParseableDialog(parent),
+DefaultValueDialog::DefaultValueDialog(Rule* parent)
+    : RuleDialog(parent),
       valueInput(0)
 {
     QString defaultValueStr = i18n("Default Value");

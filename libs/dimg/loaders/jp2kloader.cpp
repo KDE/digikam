@@ -195,6 +195,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             colorModel = DImg::RGB;
             break;
         }
+
         case JAS_CLRSPC_FAM_GRAY:
         {
             components[0] = jas_image_getcmptbytype(jp2_image, JAS_IMAGE_CT_GRAY_Y);
@@ -211,6 +212,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             colorModel        = DImg::GRAYSCALE;
             break;
         }
+
         case JAS_CLRSPC_FAM_YCBCR:
         {
             components[0] = jas_image_getcmptbytype(jp2_image, JAS_IMAGE_CT_YCBCR_Y);
@@ -238,6 +240,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             colorModel = DImg::YCBCR;
             break;
         }
+
         default:
         {
             jas_image_destroy(jp2_image);
@@ -281,9 +284,9 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
     for (i = 0; i < (long)number_components; ++i)
     {
-        maximum_component_depth = qMax((long)jas_image_cmptprec(jp2_image,components[i]),
+        maximum_component_depth = qMax((long)jas_image_cmptprec(jp2_image, components[i]),
                                        (long)maximum_component_depth);
-        pixels[i] = jas_matrix_create(1, ((unsigned int)imageWidth())/x_step[i]);
+        pixels[i] = jas_matrix_create(1, ((unsigned int)imageWidth()) / x_step[i]);
 
         if (!pixels[i])
         {
@@ -313,17 +316,17 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     // -------------------------------------------------------------------
     // Get image data.
 
-    uchar* data = 0;
+    QScopedArrayPointer<uchar> data;
 
     if (m_loadFlags & LoadImageData)
     {
         if (m_sixteenBit)          // 16 bits image.
         {
-            data = new_failureTolerant(imageWidth()*imageHeight()*8);
+            data.reset(new_failureTolerant(imageWidth() * imageHeight() * 8));
         }
         else
         {
-            data = new_failureTolerant(imageWidth()*imageHeight()*4);
+            data.reset(new_failureTolerant(imageWidth() * imageHeight() * 4));
         }
 
         if (!data)
@@ -342,8 +345,8 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         }
 
         uint   checkPoint     = 0;
-        uchar* dst            = data;
-        unsigned short* dst16 = (unsigned short*)data;
+        uchar* dst            = data.data();
+        unsigned short* dst16 = (unsigned short*)data.data();
 
         for (y = 0 ; y < (long)imageHeight() ; ++y)
         {
@@ -357,7 +360,6 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 if (ret != 0)
                 {
                     kDebug() << "Error decoding JPEG2000 image data";
-                    delete [] data;
                     jas_image_destroy(jp2_image);
 
                     for (i = 0 ; i < (long)number_components ; ++i)
@@ -377,7 +379,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 {
                     for (x = 0 ; x < (long)imageWidth() ; ++x)
                     {
-                        dst[0] = (uchar)(scale[0]*jas_matrix_getv(pixels[0], x/x_step[0]));
+                        dst[0] = (uchar)(scale[0] * jas_matrix_getv(pixels[0], x / x_step[0]));
                         dst[1] = dst[0];
                         dst[2] = dst[0];
                         dst[3] = 0xFF;
@@ -387,6 +389,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
                     break;
                 }
+
                 case 3: // RGB.
                 {
                     if (!m_sixteenBit)   // 8 bits image.
@@ -394,11 +397,11 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         for (x = 0 ; x < (long)imageWidth() ; ++x)
                         {
                             // Blue
-                            dst[0] = (uchar)(scale[2]*jas_matrix_getv(pixels[2], x/x_step[2]));
+                            dst[0] = (uchar)(scale[2] * jas_matrix_getv(pixels[2], x / x_step[2]));
                             // Green
-                            dst[1] = (uchar)(scale[1]*jas_matrix_getv(pixels[1], x/x_step[1]));
+                            dst[1] = (uchar)(scale[1] * jas_matrix_getv(pixels[1], x / x_step[1]));
                             // Red
-                            dst[2] = (uchar)(scale[0]*jas_matrix_getv(pixels[0], x/x_step[0]));
+                            dst[2] = (uchar)(scale[0] * jas_matrix_getv(pixels[0], x / x_step[0]));
                             // Alpha
                             dst[3] = 0xFF;
 
@@ -410,11 +413,11 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         for (x = 0 ; x < (long)imageWidth() ; ++x)
                         {
                             // Blue
-                            dst16[0] = (unsigned short)(scale[2]*jas_matrix_getv(pixels[2], x/x_step[2]));
+                            dst16[0] = (unsigned short)(scale[2] * jas_matrix_getv(pixels[2], x / x_step[2]));
                             // Green
-                            dst16[1] = (unsigned short)(scale[1]*jas_matrix_getv(pixels[1], x/x_step[1]));
+                            dst16[1] = (unsigned short)(scale[1] * jas_matrix_getv(pixels[1], x / x_step[1]));
                             // Red
-                            dst16[2] = (unsigned short)(scale[0]*jas_matrix_getv(pixels[0], x/x_step[0]));
+                            dst16[2] = (unsigned short)(scale[0] * jas_matrix_getv(pixels[0], x / x_step[0]));
                             // Alpha
                             dst16[3] = 0xFFFF;
 
@@ -424,6 +427,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
                     break;
                 }
+
                 case 4: // RGBA.
                 {
                     if (!m_sixteenBit)   // 8 bits image.
@@ -431,13 +435,13 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         for (x = 0 ; x < (long)imageWidth() ; ++x)
                         {
                             // Blue
-                            dst[0] = (uchar)(scale[2] * jas_matrix_getv(pixels[2], x/x_step[2]));
+                            dst[0] = (uchar)(scale[2] * jas_matrix_getv(pixels[2], x / x_step[2]));
                             // Green
-                            dst[1] = (uchar)(scale[1] * jas_matrix_getv(pixels[1], x/x_step[1]));
+                            dst[1] = (uchar)(scale[1] * jas_matrix_getv(pixels[1], x / x_step[1]));
                             // Red
-                            dst[2] = (uchar)(scale[0] * jas_matrix_getv(pixels[0], x/x_step[0]));
+                            dst[2] = (uchar)(scale[0] * jas_matrix_getv(pixels[0], x / x_step[0]));
                             // Alpha
-                            dst[3] = (uchar)(scale[3] * jas_matrix_getv(pixels[3], x/x_step[3]));
+                            dst[3] = (uchar)(scale[3] * jas_matrix_getv(pixels[3], x / x_step[3]));
 
                             dst += 4;
                         }
@@ -447,13 +451,13 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                         for (x = 0 ; x < (long)imageWidth() ; ++x)
                         {
                             // Blue
-                            dst16[0] = (unsigned short)(scale[2]*jas_matrix_getv(pixels[2], x/x_step[2]));
+                            dst16[0] = (unsigned short)(scale[2] * jas_matrix_getv(pixels[2], x / x_step[2]));
                             // Green
-                            dst16[1] = (unsigned short)(scale[1]*jas_matrix_getv(pixels[1], x/x_step[1]));
+                            dst16[1] = (unsigned short)(scale[1] * jas_matrix_getv(pixels[1], x / x_step[1]));
                             // Red
-                            dst16[2] = (unsigned short)(scale[0]*jas_matrix_getv(pixels[0], x/x_step[0]));
+                            dst16[2] = (unsigned short)(scale[0] * jas_matrix_getv(pixels[0], x / x_step[0]));
                             // Alpha
-                            dst16[3] = (unsigned short)(scale[3]*jas_matrix_getv(pixels[3], x/x_step[3]));
+                            dst16[3] = (unsigned short)(scale[3] * jas_matrix_getv(pixels[3], x / x_step[3]));
 
                             dst16 += 4;
                         }
@@ -470,7 +474,6 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
                 if (!observer->continueQuery(m_image))
                 {
-                    delete [] data;
                     jas_image_destroy(jp2_image);
 
                     for (i = 0 ; i < (long)number_components ; ++i)
@@ -484,7 +487,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     return false;
                 }
 
-                observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)y)/((float)imageHeight()) )));
+                observer->progressInfo(m_image, 0.1 + (0.8 * (((float)y) / ((float)imageHeight()))));
             }
         }
     }
@@ -532,7 +535,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         observer->progressInfo(m_image, 1.0);
     }
 
-    imageData() = data;
+    imageData() = data.take();
     imageSetAttribute("format", "JP2");
     imageSetAttribute("originalColorModel", colorModel);
     imageSetAttribute("originalBitDepth", maximum_component_depth);
@@ -619,10 +622,10 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     // -------------------------------------------------------------------
     // Check color space.
 
-    if (number_components >= 3 )    // RGB & RGBA
+    if (number_components >= 3)     // RGB & RGBA
     {
         // Alpha Channel
-        if (number_components == 4 )
+        if (number_components == 4)
         {
             jas_image_setcmpttype(jp2_image, 3, JAS_IMAGE_CT_OPACITY);
         }
@@ -677,7 +680,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
     unsigned char* data = imageData();
     unsigned char* pixel;
-    unsigned short r, g, b, a=0;
+    unsigned short r, g, b, a = 0;
     uint           checkpoint = 0;
 
     for (y = 0 ; y < (long)imageHeight() ; ++y)
@@ -700,22 +703,22 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
                 return false;
             }
 
-            observer->progressInfo(m_image, 0.1 + (0.8 * ( ((float)y)/((float)imageHeight()) )));
+            observer->progressInfo(m_image, 0.1 + (0.8 * (((float)y) / ((float)imageHeight()))));
         }
 
         for (x = 0 ; x < (long)imageWidth() ; ++x)
         {
             pixel = &data[((y * imageWidth()) + x) * imageBytesDepth()];
 
-            if ( imageSixteenBit() )        // 16 bits image.
+            if (imageSixteenBit())          // 16 bits image.
             {
-                b = (unsigned short)(pixel[0]+256*pixel[1]);
-                g = (unsigned short)(pixel[2]+256*pixel[3]);
-                r = (unsigned short)(pixel[4]+256*pixel[5]);
+                b = (unsigned short)(pixel[0] + 256 * pixel[1]);
+                g = (unsigned short)(pixel[2] + 256 * pixel[3]);
+                r = (unsigned short)(pixel[4] + 256 * pixel[5]);
 
                 if (imageHasAlpha())
                 {
-                    a = (unsigned short)(pixel[6]+256*pixel[7]);
+                    a = (unsigned short)(pixel[6] + 256 * pixel[7]);
                 }
             }
             else                            // 8 bits image.
@@ -776,14 +779,14 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     }
 
     QString     rate;
-    QTextStream ts( &rate, QIODevice::WriteOnly );
+    QTextStream ts(&rate, QIODevice::WriteOnly);
 
     // NOTE: to have a lossless compression use quality=100.
     // jp2_encode()::optstr:
     // - rate=#B => the resulting file size is about # bytes
     // - rate=0.0 .. 1.0 => the resulting file size is about the factor times
     //                      the uncompressed size
-    ts << "rate=" << ( quality / 100.0F );
+    ts << "rate=" << (quality / 100.0F);
 
     kDebug() << "JPEG2000 quality: " << quality;
     kDebug() << "JPEG2000 " << rate;

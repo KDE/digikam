@@ -6,7 +6,7 @@
  * Date        : 2009-08-08
  * Description : an abstract option class
  *
- * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,13 +26,13 @@
 
 // Local includes
 
-#include "parseable.h"
+#include "rule.h"
 
 namespace Digikam
 {
 
 class OptionPriv;
-class Option : public Parseable
+class Option : public Rule
 {
     Q_OBJECT
 

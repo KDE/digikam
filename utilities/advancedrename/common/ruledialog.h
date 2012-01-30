@@ -5,9 +5,9 @@
  *
  * Date        : 2010-05-01
  * Description : a dialog that can be used to display a configuration
- *               dialog for a parseable
+ *               dialog for a rule
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PARSEABLEDIALOG_H
-#define PARSEABLEDIALOG_H
+#ifndef RULEDIALOG_H
+#define RULEDIALOG_H
 
 // KDE includes
 
@@ -32,24 +32,24 @@
 namespace Digikam
 {
 
-class Parseable;
-class ParseableDialogPriv;
+class Rule;
+class RuleDialogPriv;
 
-class ParseableDialog : public KDialog
+class RuleDialog : public KDialog
 {
     Q_OBJECT
 
 public:
 
-    ParseableDialog(Parseable* parent);
-    virtual ~ParseableDialog();
+    RuleDialog(Rule* parent);
+    virtual ~RuleDialog();
 
     void setSettingsWidget(QWidget* settingsWidget);
 
 private:
 
-    ParseableDialog(const ParseableDialog&);
-    ParseableDialog& operator=(const ParseableDialog&);
+    RuleDialog(const RuleDialog&);
+    RuleDialog& operator=(const RuleDialog&);
 
     void setDialogTitle(const QString& title);
     void setDialogDescription(const QString& description);
@@ -57,9 +57,9 @@ private:
 
 private:
 
-    ParseableDialogPriv* const d;
+    RuleDialogPriv* const d;
 };
 
 } // namespace Digikam
 
-#endif /* PARSEABLEDIALOG_H */
+#endif /* RULEDIALOG_H */

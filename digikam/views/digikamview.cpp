@@ -51,7 +51,6 @@
 #include "dzoombar.h"
 #include "imagealbummodel.h"
 #include "imagedescedittab.h"
-#include "imageinfoalbumsjob.h"
 #include "imagepreviewview.h"
 #include "imagepropertiessidebardb.h"
 #include "imagethumbnailbar.h"
@@ -69,6 +68,7 @@
 #include "scancontroller.h"
 #include "sidebar.h"
 #include "slideshow.h"
+#include "slideshowbuilder.h"
 #include "statusprogressbar.h"
 #include "filtersidebarwidget.h"
 #include "tagmodificationhelper.h"
@@ -88,7 +88,6 @@ public:
 
     DigikamViewPriv() :
         needDispatchSelection(false),
-        cancelSlideShow(false),
         useAlbumHistory(false),
         initialAlbumID(0),
         thumbSize(ThumbnailSize::Medium),
@@ -123,8 +122,9 @@ public:
     QString                       userPresentableAlbumTitle(const QString& album);
     void                          addPageUpDownActions(DigikamView* q, QWidget* w);
 
+public:
+
     bool                          needDispatchSelection;
-    bool                          cancelSlideShow;
     bool                          useAlbumHistory;
 
     int                           initialAlbumID;
@@ -177,6 +177,8 @@ public:
 DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollection)
     : KHBox(parent), d(new DigikamViewPriv)
 {
+    qRegisterMetaType<SlideShowSettings>("SlideShowSettings");
+
     d->parent          = static_cast<DigikamApp*>(parent);
     d->modelCollection = modelCollection;
     d->albumManager    = AlbumManager::instance();
@@ -185,7 +187,7 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
     d->tagModificationHelper    = new TagModificationHelper(this, this);
     d->searchModificationHelper = new SearchModificationHelper(this, this);
 
-    d->splitter = new SidebarSplitter;
+    d->splitter    = new SidebarSplitter;
     d->splitter->setFrameStyle( QFrame::NoFrame );
     d->splitter->setFrameShadow( QFrame::Plain );
     d->splitter->setFrameShape( QFrame::NoFrame );
@@ -203,7 +205,7 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
     d->stackedview->setDockArea(d->dockArea);
 
     d->iconView = d->stackedview->imageIconView();
-    d->mapView = d->stackedview->mapWidgetView();
+    d->mapView  = d->stackedview->mapWidgetView();
 
     d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
     d->addPageUpDownActions(this, d->stackedview->thumbBar());
@@ -355,9 +357,6 @@ void DigikamView::setupConnections()
 
     connect(d->parent, SIGNAL(signalPasteAlbumItemsSelection()),
             d->iconView, SLOT(paste()));
-
-    connect(d->parent, SIGNAL(signalCancelButtonPressed()),
-            this, SLOT(slotCancelSlideShow()));
 
     // -- AlbumManager connections --------------------------------
 
@@ -1743,86 +1742,39 @@ void DigikamView::slotSlideShowRecursive()
 
     if (album)
     {
-        AlbumList albumList;
-        albumList.append(album);
-        AlbumIterator it(album);
-
-        while (it.current())
-        {
-            albumList.append(*it);
-            ++it;
-        }
-
-        ImageInfoAlbumsJob* job = new ImageInfoAlbumsJob;
-        connect(job, SIGNAL(signalCompleted(ImageInfoList)),
-                this, SLOT(slotItemsInfoFromAlbums(ImageInfoList)));
-        job->allItemsFromAlbums(albumList);
+        SlideShowBuilder* builder = new SlideShowBuilder(album);
+        connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
+                this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
     }
-}
-
-void DigikamView::slotItemsInfoFromAlbums(const ImageInfoList& infoList)
-{
-    ImageInfoList list = infoList;
-    slideShow(list);
 }
 
 void DigikamView::slideShow(const ImageInfoList& infoList)
 {
-    int     i = 0;
-    float cnt = (float)infoList.count();
-    d->parent->enterProgress(this,
-                             i18np("Preparing slideshow of 1 image. Please wait...","Preparing slideshow of %1 images. Please wait...", infoList.count()));
+    SlideShowBuilder* builder = new SlideShowBuilder(infoList);
 
-    SlideShowSettings settings;
-    settings.readFromConfig();
-
-    d->cancelSlideShow = false;
-
-    for (ImageInfoList::const_iterator it = infoList.constBegin();
-         !d->cancelSlideShow && (it != infoList.constEnd()) ; ++it)
-    {
-        ImageInfo info = *it;
-        settings.fileList.append(info.fileUrl());
-        SlidePictureInfo pictInfo;
-        pictInfo.comment    = info.comment();
-        pictInfo.title      = info.title();
-        pictInfo.rating     = info.rating();
-        pictInfo.colorLabel = info.colorLabel();
-        pictInfo.pickLabel  = info.pickLabel();
-        pictInfo.photoInfo  = info.photoInfoContainer();
-        settings.pictInfoMap.insert(info.fileUrl(), pictInfo);
-
-        d->parent->progressValue(this, (int)((i++/cnt)*100.0));
-        kapp->processEvents();
-    }
-
-    d->parent->finishProgress(this);
-
-    if (!d->cancelSlideShow)
-    {
-        SlideShow* slide = new SlideShow(settings);
-
-        if (settings.startWithCurrent)
-        {
-            slide->setCurrent(d->iconView->currentUrl());
-        }
-
-        connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
-                this, SLOT(slotRatingChanged(KUrl,int)));
-
-        connect(slide, SIGNAL(signalColorLabelChanged(KUrl,int)),
-                this, SLOT(slotColorLabelChanged(KUrl,int)));
-
-        connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
-                this, SLOT(slotPickLabelChanged(KUrl,int)));
-
-        slide->show();
-    }
+    connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
+            this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
 }
 
-void DigikamView::slotCancelSlideShow()
+void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings)
 {
-    d->cancelSlideShow = true;
+    SlideShow* slide = new SlideShow(settings);
+
+    if (settings.startWithCurrent)
+    {
+        slide->setCurrent(d->iconView->currentUrl());
+    }
+
+    connect(slide, SIGNAL(signalRatingChanged(KUrl, int)),
+            this, SLOT(slotRatingChanged(KUrl, int)));
+
+    connect(slide, SIGNAL(signalColorLabelChanged(KUrl, int)),
+            this, SLOT(slotColorLabelChanged(KUrl, int)));
+
+    connect(slide, SIGNAL(signalPickLabelChanged(KUrl, int)),
+            this, SLOT(slotPickLabelChanged(KUrl, int)));
+
+    slide->show();
 }
 
 void DigikamView::toggleShowBar(bool b)

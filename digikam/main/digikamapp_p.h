@@ -44,6 +44,7 @@
 #include <kmenu.h>
 #include <kstatusbar.h>
 #include <kcombobox.h>
+#include <ksqueezedtextlabel.h>
 
 // LibKIPI includes
 
@@ -60,7 +61,6 @@
 #include "splashscreen.h"
 #include "kipiinterface.h"
 #include "dzoombar.h"
-#include "statusprogressbar.h"
 #include "statusnavigatebar.h"
 #include "digikamview.h"
 
@@ -196,7 +196,7 @@ public:
         cameraList(0),
         tagsActionManager(0),
         zoomBar(0),
-        statusProgressBar(0),
+        statusLabel(0),
         statusNavigateBar(0),
         about(0),
         kipiPluginLoader(0),
@@ -346,7 +346,7 @@ public:
     CameraList*                         cameraList;
     TagsActionMngr*                     tagsActionManager;
     DZoomBar*                           zoomBar;
-    StatusProgressBar*                  statusProgressBar;
+    KSqueezedTextLabel*                 statusLabel;
     StatusNavigateBar*                  statusNavigateBar;
     QString                             statusBarSelectionText;
     KComboBox*                          mapViewSwitcher;
@@ -356,10 +356,6 @@ public:
     KIPI::PluginLoader*                 kipiPluginLoader;
 
     DigikamModelCollection*             modelCollection;
-
-    QHash<quintptr, ProgressEntry>      progressEntries;
-    void updateProgressBar();
-    void updateProgressValue();
 };
 
 }  // namespace Digikam

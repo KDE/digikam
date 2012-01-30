@@ -123,7 +123,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         }
 
         if (!KDcrawIface::KDcraw::decodeRAWImage(filePath, m_rawDecodingSettings,
-                data, width, height, rgbmax))
+                                                 data, width, height, rgbmax))
         {
             loadingFailed();
             return false;
@@ -169,7 +169,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
     if (m_rawDecodingSettings.sixteenBitsImage)       // 16 bits image
     {
-        uchar* image = new_failureTolerant(width*height*8);
+        uchar* image = new_failureTolerant(width * height * 8);
 
         if (!image)
         {
@@ -193,22 +193,22 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
                     return false;
                 }
 
-                observer->progressInfo(m_image, 0.7 + 0.2*(((float)h)/((float)height)) );
+                observer->progressInfo(m_image, 0.7 + 0.2 * (((float)h) / ((float)height)));
             }
 
             for (int w = 0; w < width; ++w)
             {
                 if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)     // Intel
                 {
-                    dst[0] = (unsigned short)((src[5]*256 + src[4]) * fac);      // Blue
-                    dst[1] = (unsigned short)((src[3]*256 + src[2]) * fac);      // Green
-                    dst[2] = (unsigned short)((src[1]*256 + src[0]) * fac);      // Red
+                    dst[0] = (unsigned short)((src[5] * 256 + src[4]) * fac);    // Blue
+                    dst[1] = (unsigned short)((src[3] * 256 + src[2]) * fac);    // Green
+                    dst[2] = (unsigned short)((src[1] * 256 + src[0]) * fac);    // Red
                 }
                 else
                 {
-                    dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
-                    dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
-                    dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
+                    dst[0] = (unsigned short)((src[4] * 256 + src[5]) * fac);    // Blue
+                    dst[1] = (unsigned short)((src[2] * 256 + src[3]) * fac);    // Green
+                    dst[2] = (unsigned short)((src[0] * 256 + src[1]) * fac);    // Red
                 }
 
                 dst[3] = 0xFFFF;
@@ -224,7 +224,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     }
     else        // 8 bits image
     {
-        uchar* image = new_failureTolerant(width*height*4);
+        uchar* image = new_failureTolerant(width * height * 4);
 
         if (!image)
         {
@@ -248,7 +248,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
                     return false;
                 }
 
-                observer->progressInfo(m_image, 0.7 + 0.2*(((float)h)/((float)height)) );
+                observer->progressInfo(m_image, 0.7 + 0.2 * (((float)h) / ((float)height)));
             }
 
             for (int w = 0; w < width; ++w)
@@ -282,26 +282,31 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             imageSetIccProfile(IccProfile::sRGB());
             break;
         }
+
         case RawDecodingSettings::ADOBERGB:
         {
             imageSetIccProfile(IccProfile::adobeRGB());
             break;
         }
+
         case RawDecodingSettings::WIDEGAMMUT:
         {
             imageSetIccProfile(IccProfile::wideGamutRGB());
             break;
         }
+
         case RawDecodingSettings::PROPHOTO:
         {
             imageSetIccProfile(IccProfile::proPhotoRGB());
             break;
         }
+
         case RawDecodingSettings::CUSTOMOUTPUTCS:
         {
             imageSetIccProfile(m_rawDecodingSettings.outputProfile);
             break;
         }
+
         case RawDecodingSettings::RAWCOLOR:
         {
             // No icc color-space profile to assign in RAW color mode.

@@ -6,7 +6,7 @@
  * Date        : 2009-08-08
  * Description : an option to provide date information to the parser
  *
- * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -112,8 +112,8 @@ QVariant DateFormat::format(const QString& identifier)
 
 // --------------------------------------------------------
 
-DateOptionDialog::DateOptionDialog(Parseable* parent)
-    : ParseableDialog(parent), ui(new Ui::DateOptionDialogWidget)
+DateOptionDialog::DateOptionDialog(Rule* parent)
+    : RuleDialog(parent), ui(new Ui::DateOptionDialogWidget)
 {
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);

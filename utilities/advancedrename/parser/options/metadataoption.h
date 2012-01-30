@@ -6,7 +6,7 @@
  * Date        : 2009-08-08
  * Description : an option to provide metadata information to the parser
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,7 +31,7 @@
 // Local includes
 
 #include "option.h"
-#include "parseabledialog.h"
+#include "ruledialog.h"
 
 class KLineEdit;
 
@@ -40,13 +40,13 @@ namespace Digikam
 
 class MetadataPanel;
 
-class MetadataOptionDialog : public ParseableDialog
+class MetadataOptionDialog : public RuleDialog
 {
     Q_OBJECT
 
 public:
 
-    MetadataOptionDialog(Parseable* parent);
+    MetadataOptionDialog(Rule* parent);
     ~MetadataOptionDialog();
 
     MetadataPanel* metadataPanel;

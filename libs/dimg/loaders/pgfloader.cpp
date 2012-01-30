@@ -175,10 +175,12 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 m_hasAlpha = false;
                 colorModel = DImg::RGB;
                 break;
+
             case ImageModeRGBA:
                 m_hasAlpha = true;
                 colorModel = DImg::RGB;
                 break;
+
             default:
                 kDebug() << "Cannot load PGF image: color mode not supported (" << pgf.Mode() << ")";
                 loadingFailed();
@@ -191,6 +193,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             case 3:
             case 4:
                 break;
+
             default:
                 kDebug() << "Cannot load PGF image: color channels number not supported (" << pgf.Channels() << ")";
                 loadingFailed();
@@ -206,10 +209,12 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             case 32:    // RGBA 8 bits.
                 m_sixteenBit = false;
                 break;
+
             case 48:    // RGB 16 bits.
             case 64:    // RGBA 16 bits.
                 m_sixteenBit = true;
                 break;
+
             default:
                 kDebug() << "Cannot load PGF image: color bits depth not supported (" << bitDepth << ")";
                 loadingFailed();
@@ -248,7 +253,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 scaledLoadingSize = attribute.toInt();
                 int i, w, h;
 
-                for (i=pgf.Levels()-1 ; i>=0 ; --i)
+                for (i = pgf.Levels() - 1 ; i >= 0 ; --i)
                 {
                     w = pgf.Width(i);
                     h = pgf.Height(i);
@@ -272,18 +277,18 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 
             if (m_sixteenBit)
             {
-                data = new uchar[width*height*8];    // 16 bits/color/pixel
+                data = new uchar[width * height * 8]; // 16 bits/color/pixel
             }
             else
             {
-                data = new uchar[width*height*4];    // 8 bits/color/pixel
+                data = new uchar[width * height * 4]; // 8 bits/color/pixel
             }
 
             // Fill all with 255 including alpha channel.
             memset(data, 0xFF, width * height * (m_sixteenBit ? 8 : 4));
 
             pgf.Read(level, CallbackForLibPGF, this);
-            pgf.GetBitmap(m_sixteenBit ? width*8 : width*4,
+            pgf.GetBitmap(m_sixteenBit ? width * 8 : width * 4,
                           (UINT8*)data,
                           m_sixteenBit ? 64 : 32,
                           NULL,

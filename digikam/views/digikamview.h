@@ -56,6 +56,7 @@ class AlbumSettings;
 class Album;
 class BatchSyncMetadata;
 class FilterStatusBar;
+class SlideShowSettings;
 
 class DigikamView : public KHBox
 {
@@ -213,7 +214,6 @@ private Q_SLOTS:
     void slotImageSelected();
     void slotTogglePreviewMode(const ImageInfo& info);
     void slotDispatchImageSelected();
-    void slotItemsInfoFromAlbums(const ImageInfoList&);
 
     void slotLeftSidebarChangedTab(QWidget* w);
 
@@ -225,7 +225,8 @@ private Q_SLOTS:
 
     void slotViewModeChanged();
     void slotEscapePreview();
-    void slotCancelSlideShow();
+
+    void slotSlideShowBuilderComplete(const SlideShowSettings& settings);
 
     void slotThumbSizeEffect();
     void slotZoomFactorChanged(double);

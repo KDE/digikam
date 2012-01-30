@@ -36,35 +36,68 @@
 namespace Digikam
 {
 
-unsigned int ProgressManager::s_uID = 1000;
+class ProgressItem::ProgressItemPriv
+{
+public:
+
+    typedef QMap<ProgressItem*, bool> ProgressItemMap;
+
+public:
+    
+    ProgressItemPriv() :
+      waitingForKids(false),
+      canceled(false),
+      usesBusyIndicator(false),
+      canBeCanceled(false),
+      hasThumb(false),
+      progress(0),
+      total(0),
+      completed(0),
+      parent(0)
+    {
+    }
+
+    bool            waitingForKids;
+    bool            canceled;
+    bool            usesBusyIndicator;
+    bool            canBeCanceled;
+    bool            hasThumb;
+
+    unsigned int    progress;
+    unsigned int    total;
+    unsigned int    completed;
+
+    QString         id;
+    QString         label;
+    QString         status;
+
+    ProgressItem*   parent;
+    ProgressItemMap children;
+};
 
 ProgressItem::ProgressItem(ProgressItem* parent, const QString& id,
                            const QString& label, const QString& status,
                            bool canBeCanceled, bool hasThumb)
-    : mId(id),
-      mLabel(label),
-      mStatus(status),
-      mParent(parent),
-      mCanBeCanceled(canBeCanceled),
-      mHasThumb(hasThumb),
-      mProgress(0),
-      mTotal(0),
-      mCompleted(0),
-      mWaitingForKids(false),
-      mCanceled(false),
-      mUsesBusyIndicator(false)
+    : d(new ProgressItemPriv)
 {
+      d->canBeCanceled = canBeCanceled;
+      d->hasThumb      = hasThumb;
+      d->id            = id;
+      d->label         = label;
+      d->status        = status;
+      d->parent        = parent;
 }
 
 ProgressItem::~ProgressItem()
 {
+    delete d;
 }
 
 void ProgressItem::setComplete()
 {
-    if ( mChildren.isEmpty() )
+    if ( d->children.isEmpty() )
     {
-        if ( !mCanceled )
+        if ( !d->canceled )
         {
             setProgress( 100 );
         }
@@ -77,21 +110,21 @@ void ProgressItem::setComplete()
     }
     else
     {
-        mWaitingForKids = true;
+        d->waitingForKids = true;
     }
 }
 
-void ProgressItem::addChild(ProgressItem * kiddo)
+void ProgressItem::addChild(ProgressItem* kiddo)
 {
-    mChildren.insert(kiddo, true);
+    d->children.insert(kiddo, true);
 }
 
 void ProgressItem::removeChild(ProgressItem* kiddo)
 {
-    mChildren.remove(kiddo);
+    d->children.remove(kiddo);
 
     // in case we were waiting for the last kid to go away, now is the time
-    if (mChildren.count() == 0 && mWaitingForKids)
+    if (d->children.count() == 0 && d->waitingForKids)
     {
         emit progressItemCompleted(this);
         deleteLater();
@@ -100,15 +133,15 @@ void ProgressItem::removeChild(ProgressItem* kiddo)
 
 void ProgressItem::cancel()
 {
-    if ( mCanceled || !mCanBeCanceled )
+    if ( d->canceled || !d->canBeCanceled )
     {
         return;
     }
 
-    mCanceled = true;
+    d->canceled = true;
 
     // Cancel all children.
-    QList<ProgressItem*> kids = mChildren.keys();
+    QList<ProgressItem*> kids = d->children.keys();
     QList<ProgressItem*>::Iterator it( kids.begin() );
     QList<ProgressItem*>::Iterator end( kids.end() );
 
@@ -120,31 +153,34 @@ void ProgressItem::cancel()
             kid->cancel();
         }
     }
+
     setStatus( i18n( "Aborting..." ) );
+
     emit progressItemCanceled( this );
+    emit progressItemCanceled( this->id() );
 }
 
 void ProgressItem::setProgress(unsigned int v)
 {
-    mProgress = v;
-    emit progressItemProgress(this, mProgress);
+    d->progress = v;
+    emit progressItemProgress(this, d->progress);
 }
 
-void ProgressItem::setLabel( const QString& v)
+void ProgressItem::setLabel(const QString& v)
 {
-    mLabel = v;
-    emit progressItemLabel( this, mLabel );
+    d->label = v;
+    emit progressItemLabel( this, d->label );
 }
 
 void ProgressItem::setStatus(const QString& v)
 {
-    mStatus = v;
-    emit progressItemStatus(this, mStatus);
+    d->status = v;
+    emit progressItemStatus(this, d->status);
 }
 
 void ProgressItem::setUsesBusyIndicator(bool useBusyIndicator)
 {
-    mUsesBusyIndicator = useBusyIndicator;
+    d->usesBusyIndicator = useBusyIndicator;
     emit progressItemUsesBusyIndicator(this, useBusyIndicator);
 }
 
@@ -167,14 +203,108 @@ void ProgressItem::setThumbnail(const QPixmap& thumb)
     emit progressItemThumbnail(this, pix);
 }
 
+void ProgressItem::reset()
+{
+    setProgress(0);
+    setStatus(QString());
+    d->completed = 0;
+}
+
+void ProgressItem::updateProgress()
+{
+    setProgress(d->total? d->completed * 100 / d->total : 0);
+}
+
+void ProgressItem::advance(unsigned int v)
+{
+    setCompletedItems(completedItems() + v);
+    updateProgress();
+}
+
+void ProgressItem::setTotalItems(unsigned int v)
+{
+    d->total = v;
+}
+
+unsigned int ProgressItem::totalItems() const
+{
+    return d->total;
+}
+
+void ProgressItem::setCompletedItems(unsigned int v)
+{
+    d->completed = v;
+}
+
+unsigned int ProgressItem::completedItems() const
+{
+    return d->completed;
+}
+
+void ProgressItem::incCompletedItems(unsigned int v)
+{
+    d->completed += v;
+}
+
+bool ProgressItem::canceled() const
+{
+    return d->canceled;
+}
+
+const QString& ProgressItem::id() const
+{
+    return d->id;
+}
+
+ProgressItem* ProgressItem::parent() const
+{
+    return d->parent;
+}
+
+const QString& ProgressItem::label() const
+{
+    return d->label;
+}
+
+const QString& ProgressItem::status() const
+{
+    return d->status;
+}
+
+bool ProgressItem::canBeCanceled() const
+{
+    return d->canBeCanceled;
+}
+
+bool ProgressItem::usesBusyIndicator() const
+{
+    return d->usesBusyIndicator;
+}
+
+bool ProgressItem::hasThumbnail() const
+{
+    return d->hasThumb;
+}
+
+unsigned int ProgressItem::progress() const
+{
+    return d->progress;
+}
+
 // --------------------------------------------------------------------------
 
-struct ProgressManager::ProgressManagerPrivate
+unsigned int ProgressManager::s_uID = 1000;
+
+class ProgressManagerPrivate
 {
+public:
+
     ProgressManager instance;
 };
 
-K_GLOBAL_STATIC( ProgressManager::ProgressManagerPrivate, progressManagerPrivate )
+K_GLOBAL_STATIC(ProgressManagerPrivate, progressManagerPrivate)
+
+// --------------------------------------------------------------------------
 
 ProgressManager::ProgressManager()
     : QObject()
@@ -185,9 +315,27 @@ ProgressManager::~ProgressManager()
 {
 }
 
+bool ProgressManager::isEmpty() const
+{
+    return mTransactions.isEmpty();
+}
+
+ProgressItem* ProgressManager::findItembyId(const QString& id) const
+{
+    if (!id.isEmpty())
+        return mTransactions.value(id, 0);
+
+    return 0;
+}
+
+QString ProgressManager::getUniqueID()
+{
+    return QString::number( ++s_uID );
+}
+
 ProgressManager* ProgressManager::instance()
 {
-    return progressManagerPrivate.isDestroyed() ? 0 : &progressManagerPrivate->instance ;
+    return progressManagerPrivate.isDestroyed() ? 0 : &progressManagerPrivate->instance;
 }
 
 ProgressItem* ProgressManager::createProgressItemImpl(ProgressItem* parent,
@@ -334,6 +482,34 @@ void ProgressManager::slotAbortAll()
         it.next();
         it.value()->cancel();
     }
+}
+
+void ProgressManager::emitShowProgressView()
+{
+    instance()->emitShowProgressViewImpl();
+}
+
+ProgressItem* ProgressManager::createProgressItem(const QString& label, const QString& status, bool canBeCanceled, bool hasThumb)
+{
+    return instance()->createProgressItemImpl(0, getUniqueID(), label, status, canBeCanceled, hasThumb);
+}
+
+ProgressItem* ProgressManager::createProgressItem(ProgressItem* parent, const QString& id, const QString& label,
+                                                  const QString& status, bool canBeCanceled, bool hasThumb)
+{
+    return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled, hasThumb);
+}
+
+ProgressItem* ProgressManager::createProgressItem(const QString& parent, const QString& id, const QString& label,
+                                                  const QString& status, bool canBeCanceled, bool hasThumb)
+{
+    return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled, hasThumb);
+}
+
+ProgressItem* ProgressManager::createProgressItem(const QString& id, const QString& label, const QString& status,
+                                                  bool canBeCanceled, bool hasThumb)
+{
+    return instance()->createProgressItemImpl(0, id, label, status, canBeCanceled, hasThumb);
 }
 
 } // namespace Digikam

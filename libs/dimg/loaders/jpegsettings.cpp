@@ -103,17 +103,17 @@ JPEGSettings::JPEGSettings(QWidget* parent)
     d->subSamplingCB->insertItem(0, i18n("None"));    // 1x1, 1x1, 1x1 (4:4:4)
     d->subSamplingCB->insertItem(1, i18n("Medium"));  // 2x1, 1x1, 1x1 (4:2:2)
     d->subSamplingCB->insertItem(2, i18n("High"));    // 2x2, 1x1, 1x1 (4:1:1)
-    d->subSamplingCB->setWhatsThis( i18n("<p>JPEG Chroma subsampling level \n(color is saved with less resolution "
-                                         "than luminance):</p>"
-                                         "<p><b>None</b>=best: uses 4:4:4 ratio. Does not employ chroma "
-                                         "subsampling at all. This preserves edges and contrasting "
-                                         "colors, whilst adding no additional compression</p>"
-                                         "<p><b>Medium</b>: uses 4:2:2 ratio. Medium compression: reduces "
-                                         "the color resolution by one-third with little to "
-                                         "no visual difference</p>"
-                                         "<p><b>High</b>: use 4:1:1 ratio. High compression: suits "
-                                         "images with soft edges but tends to alter colors</p>"
-                                         "<p><b>Note: JPEG always uses lossy compression.</b></p>"));
+    d->subSamplingCB->setWhatsThis(i18n("<p>JPEG Chroma subsampling level \n(color is saved with less resolution "
+                                        "than luminance):</p>"
+                                        "<p><b>None</b>=best: uses 4:4:4 ratio. Does not employ chroma "
+                                        "subsampling at all. This preserves edges and contrasting "
+                                        "colors, whilst adding no additional compression</p>"
+                                        "<p><b>Medium</b>: uses 4:2:2 ratio. Medium compression: reduces "
+                                        "the color resolution by one-third with little to "
+                                        "no visual difference</p>"
+                                        "<p><b>High</b>: use 4:1:1 ratio. High compression: suits "
+                                        "images with soft edges but tends to alter colors</p>"
+                                        "<p><b>Note: JPEG always uses lossy compression.</b></p>"));
 
     d->JPEGGrid->addWidget(d->labelJPEGcompression, 0, 0, 1, 2);
     d->JPEGGrid->addWidget(d->JPEGcompression,      1, 0, 1, 2);
@@ -161,7 +161,7 @@ int JPEGSettings::convertCompressionForLibJpeg(int value)
 {
     // JPEG quality slider settings : 1 - 100 ==> libjpeg settings : 25 - 100.
 
-    return( (int)((75.0/100.0) * (float)value + 26.0 - (75.0/100.0)) );
+    return((int)((75.0 / 100.0) * (float)value + 26.0 - (75.0 / 100.0)));
 }
 
 }  // namespace Digikam

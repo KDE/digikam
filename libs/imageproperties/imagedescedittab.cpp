@@ -50,6 +50,7 @@
 
 // Libkexiv2 includes
 
+#include <libkexiv2/version.h>
 #include <libkexiv2/altlangstredit.h>
 
 // Libkdcraw includes
@@ -446,7 +447,9 @@ ImageDescEditTab::~ImageDescEditTab()
 void ImageDescEditTab::readSettings(KConfigGroup& group)
 {
     d->tabWidget->setCurrentIndex(group.readEntry("ImageDescEdit Tab", (int)ImageDescEditTabPriv::DESCRIPTIONS));
+#if KEXIV2_VERSION >= 0x020101
     d->titleEdit->setCurrentLanguageCode(group.readEntry("ImageDescEditTab TitleLang", QString()));
+#endif
     d->captionsEdit->setCurrentLanguageCode(group.readEntry("ImageDescEditTab CaptionsLang", QString()));
 
 #if KDCRAW_VERSION >= 0x020000

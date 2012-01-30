@@ -33,39 +33,97 @@
 #include <klocale.h>
 #include <kicon.h>
 
+// Local includes
+
+#include "album.h"
+#include "imageinfoalbumsjob.h"
+
 namespace Digikam
 {
 
-SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
-    : ProgressItem(0, "SlideShowBuilder", QString(), QString(), true, true)
+class SlideShowBuilder::SlideShowBuilderPriv
 {
-    m_cancel   = false;
-    m_infoList = infoList;
-   
+public:
+
+    SlideShowBuilderPriv() :
+        cancel(false),
+        album(0)
+    {
+    }
+
+    bool          cancel;
+    ImageInfoList infoList;
+    Album*        album;
+};
+    
+SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
+    : ProgressItem(0, "SlideShowBuilder", QString(), QString(), true, true),
+      d(new SlideShowBuilderPriv)
+{
+    d->infoList = infoList;
+
     ProgressManager::addProgressItem(this);
 
-    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
-            this, SLOT(slotCancel()));
+    QTimer::singleShot(500, this, SLOT(slotRun()));
+}
 
-    QTimer::singleShot(500, this, SLOT(slotInit()));
+SlideShowBuilder::SlideShowBuilder(Album* album)
+    : ProgressItem(0, "SlideShowBuilder", QString(), QString(), true, true),
+      d(new SlideShowBuilderPriv)
+{
+    d->album = album;
+
+    ProgressManager::addProgressItem(this);
+
+    QTimer::singleShot(500, this, SLOT(slotRun()));
 }
 
 SlideShowBuilder::~SlideShowBuilder()
 {
+    delete d;
 }
 
 void SlideShowBuilder::slotRun()
 {
+    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
+            this, SLOT(slotCancel()));
+
     setLabel(i18n("Preparing slideshow"));
     setThumbnail(KIcon("digikam").pixmap(22));
-    setTotalItems(m_infoList.count());
+
+    if (d->album)
+    {
+        AlbumList albumList;
+        albumList.append(d->album);
+        AlbumIterator it(d->album);
+
+        while (it.current())
+        {
+            albumList.append(*it);
+            ++it;
+        }
+
+        ImageInfoAlbumsJob* job = new ImageInfoAlbumsJob;
+        connect(job, SIGNAL(signalCompleted(ImageInfoList)),
+                this, SLOT(slotParseImageInfoList(ImageInfoList)));
+        job->allItemsFromAlbums(albumList);
+    }
+    else
+    {
+        slotParseImageInfoList(d->infoList);
+    }
+}
+
+void SlideShowBuilder::slotParseImageInfoList(const ImageInfoList& list)
+{
+    setTotalItems(list.count());
 
     int               i = 0;
     SlideShowSettings settings;
     settings.readFromConfig();
 
-    for (ImageInfoList::const_iterator it = m_infoList.constBegin();
-         !m_cancel && (it != m_infoList.constEnd()) ; ++it)
+    for (ImageInfoList::const_iterator it = list.constBegin();
+         !d->cancel && (it != list.constEnd()) ; ++it)
     {
         ImageInfo info      = *it;
         settings.fileList.append(info.fileUrl());
@@ -82,7 +140,7 @@ void SlideShowBuilder::slotRun()
         kapp->processEvents();
     }
 
-    if (!m_cancel)
+    if (!d->cancel)
         emit signalComplete(settings);
 
     setComplete();
@@ -90,7 +148,7 @@ void SlideShowBuilder::slotRun()
 
 void SlideShowBuilder::slotCancel()
 {
-    m_cancel = true;
+    d->cancel = true;
 }
 
 }  // namespace Digikam

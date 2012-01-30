@@ -6,7 +6,7 @@
  * Date        : 2010-05-22
  * Description : header list view item
  *
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2010-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

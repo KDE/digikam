@@ -6,7 +6,7 @@
  * Date        : 2009-09-18
  * Description : a modifier for displaying only a range of a token result
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,7 +27,7 @@
 // Local includes
 
 #include "modifier.h"
-#include "parseabledialog.h"
+#include "ruledialog.h"
 
 namespace Ui
 {
@@ -37,13 +37,13 @@ class RangeModifierDialogWidget;
 namespace Digikam
 {
 
-class RangeDialog : public ParseableDialog
+class RangeDialog : public RuleDialog
 {
     Q_OBJECT
 
 public:
 
-    RangeDialog(Parseable* parent);
+    RangeDialog(Rule* parent);
     ~RangeDialog();
 
     Ui::RangeModifierDialogWidget* const ui;

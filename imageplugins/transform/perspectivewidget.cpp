@@ -679,13 +679,13 @@ void PerspectiveWidget::transformAffine(DImg* orgImage, DImg* destImage,
 
     double tu[5],tv[5],tw[5];     // undivided source coordinates and divisor
 
-    uchar* data=0 , *newData=0;
-    bool   sixteenBit;
-    int    coords;
-    int    width, height;
-    int    bytesDepth;
-    int    offset;
-    uchar* dest=0, *d2=0;
+    uchar* data = 0, *newData = 0;
+    bool sixteenBit;
+    int coords;
+    int width, height;
+    int bytesDepth;
+    int offset;
+    uchar* d2 = 0;
     DColor color;
 
     bytesDepth  = orgImage->bytesDepth();
@@ -717,7 +717,7 @@ void PerspectiveWidget::transformAffine(DImg* orgImage, DImg* destImage,
     x2 = u2;
     y2 = v2;
 
-    dest = new uchar[width * bytesDepth];
+    QScopedArrayPointer<uchar> dest(new uchar[width * bytesDepth]);
 
     uinc = m.coeff[0][0];
     vinc = m.coeff[1][0];
@@ -736,7 +736,7 @@ void PerspectiveWidget::transformAffine(DImg* orgImage, DImg* destImage,
         tv[0] = vinc * (x1 + 0.5) + m.coeff[1][1] * (y + 0.5) + m.coeff[1][2] - 0.5;
         tw[0] = winc * (x1 + 0.5) + m.coeff[2][1] * (y + 0.5) + m.coeff[2][2];
 
-        d2 = dest;
+        d2 = dest.data();
 
         for (x = x1; x < x2; ++x)
         {
@@ -815,10 +815,8 @@ void PerspectiveWidget::transformAffine(DImg* orgImage, DImg* destImage,
         //  set the pixel region row
 
         offset = (y - y1) * width * bytesDepth;
-        memcpy(newData + offset, dest, width * bytesDepth);
+        memcpy(newData + offset, dest.data(), width * bytesDepth);
     }
-
-    delete [] dest;
 }
 
 void PerspectiveWidget::paintEvent(QPaintEvent*)

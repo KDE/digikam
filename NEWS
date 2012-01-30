@@ -1,11 +1,13 @@
 *****************************************************************************************************
-digiKam 2.6.0 - Release date: 2012-02-05
+digiKam 2.6.0-beta1 - Release date: 2012-02-05
 
 NEW FEATURES:
 
+General        : Thumbs/Preview for read-only files (as RAW) can be rotated through a flag in thumbnails database.
 General        : Add a Progress Manager as into Kontact to drive process running in parallele.
 General        : KIPI JPEGLossLess tool is now disabled in digiKam. A dedicated solution is now implemented 
-                 in digiKam core to rotate/flip image using multithreading and versioning.
+                 in digiKam core to rotate/flip image using multithreading, parallelization, and image versioning.
+KipiInterface  : Handle progress events from kipi tools through digiKam Progress Manager.
 ImageEditor    : Template Superimpose feature have been moved to PhotoLayoutEditor kipi-plugin.
 
 
@@ -30,5 +32,28 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 289264 : Add option: "show thumbbar in full-screen picture preview".
 018 ==> 237452 : Tagging interface functionality lost.
 019 ==> 192055 : Typo digiKam tip of the day.
-020 ==> 
+020 ==> 284212 : Quick Collection and Progress Center as into KMail.
+021 ==> 137191 : I'd like to rotate only the thumbnail of an image (and not allow rotate raw image).
+022 ==> 286213 : digiKam allows RAW (ORF) photos to be rotated, but then fails.
+023 ==> 289222 : Rotate jpeg images isn't multithreaded.
+024 ==> 215770 : Png files can't be rotated without help of imagemagick.
+025 ==> 147968 : Some images are erroneously rotated.
+026 ==> 240146 : If I press rotate on the thumbnail of a photo an error occurs.
+027 ==> 257772 : Image rotate/flip does not work.
+028 ==> 233585 : Rotate image fails with digikam on Archlinux and pictures on NTFS.
+029 ==> 247947 : Images rotated with JPEGLossLess are shifted.
+030 ==> 237808 : digiKam don't rotate JPEG images.
+031 ==> 207190 : Improve "rotate Image" overlay-buttons.
+032 ==> 212362 : Add support for instant rotate.
+033 ==> 232777 : Lost images, when they are rotated on (over-)full hd resp. partition.
+034 ==> 208504 : Add type icon to images under the thumbnail (patch).
+035 ==> 262183 : Rating in thumbbar view is broken.
+036 ==> 280044 : Thumbnails flicker.
+037 ==> 211757 : digiKam preview: next image with left arrow key.
+038 ==> 228869 : Rename image and overwriting existing messes up the thumbnail display.
+039 ==> 117301 : Thumbnails generation process running for visible thumbnails only, if it is sensible in order to avoid unnecessary waiting.
+040 ==> 292578 : Windows 7 prof. 32Bits, Context Menu not fully visible.
+041 ==> 292645 : Build fails at imageproperties/captionedit.cpp.
+042 ==> 275122 : Rotating a TIFF file wipes out its metadata.
+043 ==> 
 

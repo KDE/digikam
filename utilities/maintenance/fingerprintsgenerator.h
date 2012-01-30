@@ -26,8 +26,7 @@
 
 // Local includes
 
-#include "maintenancepreviewtool.h"
-#include "haariface.h"
+#include "progressmanager.h"
 
 namespace Digikam
 {
@@ -35,27 +34,37 @@ namespace Digikam
 class DImg;
 class LoadingDescription;
 
-class FingerPrintsGenerator : public MaintenancePreviewTool
+class FingerPrintsGenerator : public ProgressItem
 {
     Q_OBJECT
 
 public:
 
-    FingerPrintsGenerator(Mode mode=AllItems, int albumId=-1);
+    FingerPrintsGenerator(bool rebuildAll);
     ~FingerPrintsGenerator();
+
+Q_SIGNALS:
+
+    void signalComplete();
 
 private:
 
-    void filterItemstoProcess();
+    void complete();
     void processOne();
+
+protected Q_SLOTS:
+
+    void slotCancel();
 
 private Q_SLOTS:
 
-    void gotNewPreview(const LoadingDescription&, const DImg&);
+    void slotRebuildFingerPrints();
+    void slotGotImagePreview(const LoadingDescription&, const DImg&);
 
 private:
 
-    HaarIface m_haarIface;
+    class FingerPrintsGeneratorPriv;
+    FingerPrintsGeneratorPriv* const d;
 };
 
 }  // namespace Digikam

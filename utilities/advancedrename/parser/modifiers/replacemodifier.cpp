@@ -6,7 +6,7 @@
  * Date        : 2009-09-18
  * Description : a modifier for replacing text in a token result
  *
- * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,14 +35,14 @@
 
 // Local includes
 
-#include "parseabledialog.h"
+#include "ruledialog.h"
 #include "ui_replacemodifierdialogwidget.h"
 
 namespace Digikam
 {
 
-ReplaceDialog::ReplaceDialog(Parseable* parent)
-    : ParseableDialog(parent), ui(new Ui::ReplaceModifierDialogWidget())
+ReplaceDialog::ReplaceDialog(Rule* parent)
+    : RuleDialog(parent), ui(new Ui::ReplaceModifierDialogWidget())
 {
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);

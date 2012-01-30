@@ -5,9 +5,9 @@
  *
  * Date        : 2010-05-01
  * Description : a dialog that can be used to display a configuration
- *               dialog for a parseable
+ *               dialog for a rule
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "parseabledialog.moc"
+#include "ruledialog.moc"
 
 // Qt includes
 
@@ -38,16 +38,16 @@
 
 // Local includes
 
-#include "parseable.h"
+#include "rule.h"
 
 namespace Digikam
 {
 
-class ParseableDialogPriv
+class RuleDialogPriv
 {
 public:
 
-    ParseableDialogPriv() :
+    RuleDialogPriv() :
         dialogTitle(0),
         dialogDescription(0),
         dialogIcon(0),
@@ -61,8 +61,8 @@ public:
     QWidget* settingsWidget;
 };
 
-ParseableDialog::ParseableDialog(Parseable* parent)
-    : KDialog(0), d(new ParseableDialogPriv)
+RuleDialog::RuleDialog(Rule* parent)
+    : KDialog(0), d(new RuleDialogPriv)
 {
     d->dialogTitle       = new QLabel(this);
     d->dialogDescription = new QLabel(this);
@@ -70,7 +70,7 @@ ParseableDialog::ParseableDialog(Parseable* parent)
 
     setDialogTitle(parent->objectName());
     setDialogDescription(parent->description());
-    setDialogIcon(parent->icon(Parseable::Dialog));
+    setDialogIcon(parent->icon(Rule::Dialog));
 
     d->dialogTitle->setAlignment(Qt::AlignHCenter);
     d->dialogDescription->setAlignment(Qt::AlignHCenter);
@@ -99,12 +99,12 @@ ParseableDialog::ParseableDialog(Parseable* parent)
     setMinimumWidth(300);
 }
 
-ParseableDialog::~ParseableDialog()
+RuleDialog::~RuleDialog()
 {
     delete d;
 }
 
-void ParseableDialog::setDialogTitle(const QString& title)
+void RuleDialog::setDialogTitle(const QString& title)
 {
     // remove ellipsis and "&&" from the string
     QString _title = title;
@@ -114,17 +114,17 @@ void ParseableDialog::setDialogTitle(const QString& title)
     setCaption(_title);
 }
 
-void ParseableDialog::setDialogDescription(const QString& description)
+void RuleDialog::setDialogDescription(const QString& description)
 {
     d->dialogDescription->setText(description);
 }
 
-void ParseableDialog::setDialogIcon(const QPixmap& icon)
+void RuleDialog::setDialogIcon(const QPixmap& icon)
 {
     d->dialogIcon->setPixmap(icon);
 }
 
-void ParseableDialog::setSettingsWidget(QWidget* settingsWidget)
+void RuleDialog::setSettingsWidget(QWidget* settingsWidget)
 {
     delete d->settingsWidget;
 

@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT PNGSettings : public QWidget
 
 public:
 
-    PNGSettings(QWidget* parent=0);
+    PNGSettings(QWidget* parent = 0);
     ~PNGSettings();
 
     void setCompressionValue(int val);

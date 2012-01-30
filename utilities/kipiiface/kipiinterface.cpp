@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,6 +52,7 @@
 #include "thumbnailloadthread.h"
 #include "kipiimageinfo.h"
 #include "kipiimagecollection.h"
+#include "progressmanager.h"
 
 namespace Digikam
 {
@@ -347,5 +348,58 @@ QVariant KipiInterface::hostSetting(const QString& settingName)
 
     return QVariant();
 }
+
+#if KIPI_VERSION >= 0x010500
+
+QString KipiInterface::progressScheduled(const QString& title, bool canBeCanceled, bool hasThumb) const
+{
+    ProgressItem* item = ProgressManager::createProgressItem(title, QString(), canBeCanceled, hasThumb);
+
+    if (canBeCanceled)
+    {
+        connect(item, SIGNAL(progressItemCanceled(QString)),
+                this, SIGNAL(progressCanceled(QString)));
+    }
+
+    return item->id();
+}
+
+void KipiInterface::progressValueChanged(const QString& id, float percent)
+{
+    ProgressItem* item = ProgressManager::instance()->findItembyId(id);
+    if (item)
+    {
+        item->setProgress(percent);
+    }
+}
+
+void KipiInterface::progressStatusChanged(const QString& id, const QString& status)
+{
+    ProgressItem* item = ProgressManager::instance()->findItembyId(id);
+    if (item)
+    {
+        item->setStatus(status);
+    }
+}
+
+void KipiInterface::progressThumbnailChanged(const QString& id, const QPixmap& thumb)
+{
+    ProgressItem* item = ProgressManager::instance()->findItembyId(id);
+    if (item)
+    {
+        item->setThumbnail(thumb);
+    }
+}
+
+void KipiInterface::progressCompleted(const QString& id)
+{
+    ProgressItem* item = ProgressManager::instance()->findItembyId(id);
+    if (item)
+    {
+        item->setComplete();
+    }
+}
+
+#endif // KIPI_VERSION >= 0x010500
 
 }  // namespace Digikam

@@ -40,10 +40,6 @@
 namespace Digikam
 {
 
-class ProgressItem;
-class ProgressManager;
-typedef QMap<ProgressItem*, bool> ProgressItemMap;
-
 class DIGIKAM_EXPORT ProgressItem : public QObject
 {
     Q_OBJECT
@@ -51,24 +47,24 @@ class DIGIKAM_EXPORT ProgressItem : public QObject
 public:
 
     ProgressItem(ProgressItem* parent, const QString& id, const QString& label,
-                 const QString& status, bool isCancellable, bool hasThumb);
+                 const QString& status, bool canBeCanceled, bool hasThumb);
     virtual ~ProgressItem();
 
     /**
      * @return The id string which uniquely identifies the operation
      *         represented by this item.
      */
-    const QString& id() const { return mId; }
+    const QString& id() const;
 
     /**
      * @return The parent item of this one, if there is one.
      */
-    ProgressItem* parent() const { return mParent; }
+    ProgressItem* parent() const;
 
     /**
      * @return The user visible string to be used to represent this item.
      */
-    const QString& label() const { return mLabel; }
+    const QString& label() const;
 
     /**
      * @param v Set the user visible string identifying this item.
@@ -78,7 +74,7 @@ public:
     /**
      * @return The string to be used for showing this item's current status.
      */
-    const QString& status() const { return mStatus; }
+    const QString& status() const;
 
     /**
      * Set the string to be used for showing this item's current status.
@@ -89,24 +85,24 @@ public:
     /**
      * @return Whether this item can be canceled.
      */
-    bool canBeCanceled() const { return mCanBeCanceled; }
+    bool canBeCanceled() const;
 
     /**
      * @return whether this item uses a busy indicator instead of real progress display
      */
-    bool usesBusyIndicator() const { return mUsesBusyIndicator; }
+    bool usesBusyIndicator() const;
 
     /**
      * Sets whether this item uses a busy indicator instead of real progress for its progress bar.
      * If it uses a busy indicator, you are still responsible for calling setProgress() from time to
      * time to update the busy indicator.
      */
-    void setUsesBusyIndicator( bool useBusyIndicator );
+    void setUsesBusyIndicator(bool useBusyIndicator);
 
     /**
      * @return whether this item has a thumbnail.
      */
-    bool hasThumbnail() const { return mHasThumb; }
+    bool hasThumbnail() const;
 
     /**
      * Sets whether this item has a thumbnail.
@@ -116,7 +112,7 @@ public:
     /**
      * @return The current progress value of this item in percent.
      */
-    unsigned int progress() const { return mProgress; }
+    unsigned int progress() const;
 
     /**
      * Set the progress (percentage of completion) value of this item.
@@ -137,41 +133,28 @@ public:
      * Reset the progress value of this item to 0 and the status string to
      * the empty string.
      */
-    void reset()
-    {
-        setProgress(0);
-        setStatus(QString());
-        mCompleted = 0;
-    }
+    void reset();
 
     void cancel();
+    bool canceled() const;
 
     // Often needed values for calculating progress.
-    void         setTotalItems( unsigned int v )         { mTotal = v;        }
-    unsigned int totalItems() const                      { return mTotal;     }
-    void         setCompletedItems( unsigned int v )     { mCompleted = v;    }
-    unsigned int completedItems() const                  { return mCompleted; }
-    void         incCompletedItems( unsigned int v = 1 ) { mCompleted += v;   }
-
-    bool canceled() const                                { return mCanceled;  }
+    void         setTotalItems(unsigned int v);
+    unsigned int totalItems() const;
+    void         setCompletedItems(unsigned int v);
+    unsigned int completedItems() const;
+    void         incCompletedItems(unsigned int v = 1);
 
     /**
      * Recalculate progress according to total/completed items and update.
      */
-    void updateProgress()
-    {
-        setProgress( mTotal? mCompleted * 100 / mTotal : 0 );
-    }
+    void updateProgress();
 
     /**
      * Advance total items processed by n values and update percentage in progressbar.
      * @param v The value to advance.
      */
-    void advance(unsigned int v)
-    {
-        setCompletedItems(completedItems()+v);
-        updateProgress();
-    }
+    void advance(unsigned int v);
 
     void addChild(ProgressItem* kiddo);
     void removeChild(ProgressItem* kiddo);
@@ -210,6 +193,7 @@ Q_SIGNALS:
      * @param The canceled item;
      */
     void progressItemCanceled(ProgressItem*);
+    void progressItemCanceled(const QString& id);
 
     /**
      * Emitted when the status message of an item changed. Should be used by
@@ -245,29 +229,11 @@ Q_SIGNALS:
 
 private:
 
-    QString         mId;
-    QString         mLabel;
-    QString         mStatus;
-    ProgressItem*   mParent;
-    bool            mCanBeCanceled;
-    bool            mHasThumb;
-    unsigned int    mProgress;
-    ProgressItemMap mChildren;
-    unsigned int    mTotal;
-    unsigned int    mCompleted;
-    bool            mWaitingForKids;
-    bool            mCanceled;
-    bool            mUsesBusyIndicator;
-
-    friend class ProgressManager;
+    class ProgressItemPriv;
+    ProgressItemPriv* const d;
 };
 
-} //namespace Digikam
-
 // --------------------------------------------------------------------------------------------
-
-namespace Digikam
-{
 
 /**
  * The ProgressManager singleton keeps track of all ongoing transactions
@@ -300,20 +266,11 @@ public:
     /**
      * @return true when there are no more progress items.
      */
-    bool isEmpty() const
-    {
-        return mTransactions.isEmpty();
-    }
+    bool isEmpty() const;
 
     /** @return the progressitem for this id if it exist, else null.
      */
-    ProgressItem* findItembyId(const QString& id) const
-    {
-        if (!id.isEmpty())
-            return mTransactions.value(id, 0);
-
-        return 0;
-    }
+    ProgressItem* findItembyId(const QString& id) const;
 
     /**
      * @return the only top level progressitem when there's only one.
@@ -335,10 +292,7 @@ public:
      * number as the id string for your progressItem to ensure it is unique.
      * @return
      */
-    static QString getUniqueID()
-    {
-        return QString::number( ++s_uID );
-    }
+    static QString getUniqueID();
 
      /**
       * Creates a ProgressItem with a unique id and the given label.
@@ -354,10 +308,7 @@ public:
     static ProgressItem* createProgressItem(const QString& label,
                                             const QString& status = QString(),
                                             bool  canBeCanceled = true,
-                                            bool  hasThumb = false)
-    {
-        return instance()->createProgressItemImpl(0, getUniqueID(), label, status, canBeCanceled, hasThumb);
-    }
+                                            bool  hasThumb = false);
 
     /**
      * Creates a new progressItem with the given parent, id, label and initial
@@ -377,11 +328,7 @@ public:
                                             const QString& label,
                                             const QString& status = QString(),
                                             bool  canBeCanceled = true,
-                                            bool  hasThumb = false
-                                           )
-    {
-        return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled, hasThumb);
-    }
+                                            bool  hasThumb = false);
 
     /**
      * Use this version if you have the id string of the parent and want to
@@ -392,11 +339,7 @@ public:
                                             const QString& label,
                                             const QString& status = QString(),
                                             bool  canBeCanceled = true,
-                                            bool  hasThumb = false
-                                           )
-    {
-        return instance()->createProgressItemImpl(parent, id, label, status, canBeCanceled, hasThumb);
-    }
+                                            bool  hasThumb = false);
 
     /**
      * Version without a parent.
@@ -405,10 +348,7 @@ public:
                                             const QString& label,
                                             const QString& status = QString(),
                                             bool  canBeCanceled = true,
-                                            bool  hasThumb = false)
-    {
-        return instance()->createProgressItemImpl(0, id, label, status, canBeCanceled, hasThumb);
-    }
+                                            bool  hasThumb = false);
 
     /**
      * Add a created progressItem outside manager with the given parent.
@@ -423,10 +363,7 @@ public:
      * Ask all listeners to show the progress dialog, because there is
      * something that wants to be shown.
      */
-    static void emitShowProgressView()
-    {
-       instance()->emitShowProgressViewImpl();
-    }
+    static void emitShowProgressView();
 
 Q_SIGNALS:
 
@@ -501,10 +438,6 @@ private:
                                                  bool  hasThumb);
 
     virtual void addProgressItemImpl(ProgressItem* t, ProgressItem* parent);
-
-public:
-
-    struct ProgressManagerPrivate;
 
 private:
 
