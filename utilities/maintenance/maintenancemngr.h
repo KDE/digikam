@@ -42,7 +42,7 @@ class MaintenanceMngr : public QObject
 
 public:
 
-    MaintenanceMngr();
+    MaintenanceMngr(QObject* parent);
     ~MaintenanceMngr();
 
     void setSettings(const MaintenanceSettings& settings);
@@ -57,6 +57,9 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
+    void slotStage1();  // Thumbnails
+    void slotStage2();  // Fingerprints
+    void slotStage3();  // Fingerprints
 
 private:
 

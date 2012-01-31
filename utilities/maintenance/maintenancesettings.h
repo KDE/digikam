@@ -36,19 +36,23 @@ public:
 
     MaintenanceSettings()
     {
-        rebuildAllThumbs       = true;
-        rebuildAllFingerPrints = true;
+        thumbnails       = false;
+        scanThumbs       = false;
+        fingerPrints     = false;
+        scanFingerPrints = false;
     };
 
     virtual ~MaintenanceSettings() {};
 
 public:
 
+    bool thumbnails;
     /// Rebuild all thumbnails or only scan missing items.
-    bool rebuildAllThumbs;
+    bool scanThumbs;
 
+    bool fingerPrints;
     /// Rebuild all fingerprints or only scan missing items.
-    bool rebuildAllFingerPrints;
+    bool scanFingerPrints;
 };
 
 }  // namespace Digikam

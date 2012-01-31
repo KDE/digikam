@@ -35,6 +35,8 @@
 // Local includes
 
 #include "maintenancesettings.h"
+#include "thumbsgenerator.h"
+#include "fingerprintsgenerator.h"
 
 namespace Digikam
 {
@@ -53,8 +55,8 @@ public:
     MaintenanceSettings settings;
 };
 
-MaintenanceMngr::MaintenanceMngr()
-    : d(new MaintenanceMngrPriv)
+MaintenanceMngr::MaintenanceMngr(QObject* parent)
+    : QObject(parent), d(new MaintenanceMngrPriv)
 {
 }
 
@@ -68,17 +70,54 @@ void MaintenanceMngr::setSettings(const MaintenanceSettings& settings)
     d->settings = settings;
 }
 
-void MaintenanceMngr::start()
+bool MaintenanceMngr::isRunning() const
 {
+    return d->running;
 }
 
 void MaintenanceMngr::stop()
 {
 }
 
-bool MaintenanceMngr::isRunning() const
+void MaintenanceMngr::start()
 {
-    return d->running;
+    kDebug() << "settings.thumbnails : " << d->settings.thumbnails;
+    kDebug() << "settings.scanThumbs : " << d->settings.scanThumbs;
+    kDebug() << "settings.fingerPrints : " << d->settings.fingerPrints;
+    kDebug() << "settings.scanFingerPrints : " << d->settings.scanFingerPrints;
+    slotStage1();
+}
+
+void MaintenanceMngr::slotStage1()
+{
+    if (d->settings.thumbnails)
+    {
+        ThumbsGenerator* gene = new ThumbsGenerator(-1, d->settings.scanThumbs);
+        connect(gene, SIGNAL(signalComplete()),
+                this, SLOT(slotStage2()));
+    }
+    else
+    {
+        slotStage2();
+    }
+}
+
+void MaintenanceMngr::slotStage2()
+{
+    if (d->settings.fingerPrints)
+    {
+        FingerPrintsGenerator* gene = new FingerPrintsGenerator(d->settings.scanFingerPrints);
+        connect(gene, SIGNAL(signalComplete()),
+                this, SLOT(slotStage3()));
+    }
+    else
+    {
+        slotStage3();
+    }
+}
+
+void MaintenanceMngr::slotStage3()
+{
 }
 
 }  // namespace Digikam
