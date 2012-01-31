@@ -26,12 +26,10 @@
 
 // Local includes
 
-#include "digikam_export.h"
-
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT MaintenanceSettings
+class MaintenanceSettings
 {
 
 public:

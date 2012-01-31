@@ -30,12 +30,10 @@
 
 // Local includes
 
-#include "digikam_export.h"
-
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT MaintenanceDlg : public KDialog
+class MaintenanceDlg : public KDialog
 {
     Q_OBJECT
 
