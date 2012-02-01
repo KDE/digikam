@@ -778,10 +778,10 @@ void AdjustLevelsTool::readSettings()
             highOutput = group.readEntry(d->configHighOutputChannelEntry.arg(i), max);
 
             d->levels->setLevelGammaValue(i, gamma);
-            d->levels->setLevelLowInputValue(i, sb ? lowInput*255 : lowInput);
-            d->levels->setLevelHighInputValue(i, sb ? highInput*255 : highInput);
-            d->levels->setLevelLowOutputValue(i, sb ? lowOutput*255 : lowOutput);
-            d->levels->setLevelHighOutputValue(i, sb ? highOutput*255 : highOutput);
+            d->levels->setLevelLowInputValue(i, sb ? lowInput : lowInput / 256);
+            d->levels->setLevelHighInputValue(i, sb ? highInput : highInput / 256);
+            d->levels->setLevelLowOutputValue(i, sb ? lowOutput : lowOutput / 256);
+            d->levels->setLevelHighOutputValue(i, sb ? highOutput : highOutput / 256);
         }
     }
 
@@ -835,10 +835,10 @@ void AdjustLevelsTool::writeSettings()
             highOutput = d->levels->getLevelHighOutputValue(i);
 
             group.writeEntry(d->configGammaChannelEntry.arg(i), gamma);
-            group.writeEntry(d->configLowInputChannelEntry.arg(i),   sb ? lowInput/255   : lowInput);
-            group.writeEntry(d->configLowOutputChannelEntry.arg(i),  sb ? lowOutput/255  : lowOutput);
-            group.writeEntry(d->configHighInputChannelEntry.arg(i),  sb ? highInput/255  : highInput);
-            group.writeEntry(d->configHighOutputChannelEntry.arg(i), sb ? highOutput/255 : highOutput);
+            group.writeEntry(d->configLowInputChannelEntry.arg(i),   sb ? lowInput   : lowInput * 256);
+            group.writeEntry(d->configLowOutputChannelEntry.arg(i),  sb ? lowOutput  : lowOutput * 256);
+            group.writeEntry(d->configHighInputChannelEntry.arg(i),  sb ? highInput  : highInput * 256);
+            group.writeEntry(d->configHighOutputChannelEntry.arg(i), sb ? highOutput : highOutput * 256);
         }
     }
 
