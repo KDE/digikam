@@ -29,7 +29,6 @@ SET(digikamcore_LIB_SRCS
         ${libdimgfilters_SRCS}
         ${libdmetadata_SRCS}
         ${libdatabasecore_SRCS}
-        ${liblprof_SRCS}
         ${libjpegutils_SRCS}
         ${libthreadimageio_SRCS}
         ${libprogressmanager_SRCS}
