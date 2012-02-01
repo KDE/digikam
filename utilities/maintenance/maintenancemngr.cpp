@@ -39,6 +39,7 @@
 #include "thumbsgenerator.h"
 #include "fingerprintsgenerator.h"
 #include "duplicatesfinder.h"
+#include "metadatasynchronizer.h"
 
 namespace Digikam
 {
@@ -49,7 +50,7 @@ public:
 
     MaintenanceMngrPriv()
     {
-        running = false;
+        running = false;        
     }
 
     bool                running;
@@ -90,12 +91,13 @@ void MaintenanceMngr::start()
     kDebug() << "settings.scanFingerPrints : " << d->settings.scanFingerPrints;
     kDebug() << "settings.duplicates       : " << d->settings.duplicates;
     kDebug() << "settings.similarity       : " << d->settings.similarity;
+    kDebug() << "settings.metadata         : " << d->settings.metadata;
     slotStage1();
 }
 
 void MaintenanceMngr::slotStage1()
 {
-    if (d->settings.newItems)
+    if (d->settings.thumbnails)
     {
         NewItemsFinder* tool = new NewItemsFinder();
         connect(tool, SIGNAL(signalComplete()),
@@ -150,6 +152,21 @@ void MaintenanceMngr::slotStage4()
 }
 
 void MaintenanceMngr::slotStage5()
+{
+    if (d->settings.duplicates)
+    {
+        MetadataSynchronizer* tool = new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
+        connect(tool, SIGNAL(signalComplete()),
+                this, SLOT(slotStage6()));
+    }
+    else
+    {
+        slotStage6();
+    }
+    
+}
+
+void MaintenanceMngr::slotStage6()
 {
 }
 

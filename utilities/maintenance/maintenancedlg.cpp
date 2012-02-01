@@ -57,6 +57,7 @@ public:
         Thumbnails,
         FingerPrints,
         Duplicates,
+        Metadata,
         Stretch
     };
     
@@ -101,7 +102,8 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
     d->expanderBox     = new RExpanderBoxExclusive(page);
     d->expanderBox->setIsToolBox(true);
 
-    d->expanderBox->insertItem(MaintenanceDlgPriv::NewItems, d->scanThumbs, i18n("Scan for new items"), "NewItems", false);
+    d->expanderBox->insertItem(MaintenanceDlgPriv::NewItems, new QLabel(i18n("No option")),
+                               i18n("Scan for new items"), "NewItems", false);
     d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::NewItems, true);
 
     d->scanThumbs       = new QCheckBox(i18n("Scan for changed or non-cataloged items (faster)"));
@@ -112,15 +114,19 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
     d->expanderBox->insertItem(MaintenanceDlgPriv::FingerPrints, d->scanFingerprints, i18n("Rebuild Finger-prints"), "Fingerprints", false);
     d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::FingerPrints, true);
 
-    KHBox* hbox      = new KHBox;
-    QLabel* simLabel = new QLabel(i18n("Similarity (in percents): "), hbox);
-    d->similarity    = new KIntNumInput(hbox);
+    KHBox* hbox   = new KHBox;
+    new QLabel(i18n("Similarity (in percents): "), hbox);
+    d->similarity = new KIntNumInput(hbox);
     d->similarity->setValue(90);
     d->similarity->setRange(0, 100, 1);
     d->similarity->setSliderEnabled(false);
     d->expanderBox->insertItem(MaintenanceDlgPriv::Duplicates, hbox, i18n("Find Duplicates Items"), "Duplicates", false);
     d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::Duplicates, true);
 
+    d->expanderBox->insertItem(MaintenanceDlgPriv::Metadata, new QLabel(i18n("No option")),
+                               i18n("Sync image metadata with Database"), "Metadata", false);
+    d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::Metadata, true);
+    
     d->expanderBox->insertStretch(MaintenanceDlgPriv::Stretch);
 
     grid->addWidget(d->logo,        0, 0, 3, 1);
@@ -149,6 +155,7 @@ MaintenanceSettings MaintenanceDlg::settings() const
     settings.scanFingerPrints = d->scanFingerprints->isChecked();
     settings.duplicates       = d->expanderBox->isChecked(MaintenanceDlgPriv::Duplicates);
     settings.similarity       = d->similarity->value();
+    settings.metadata         = d->expanderBox->isChecked(MaintenanceDlgPriv::Metadata);
     return settings;
 }
 

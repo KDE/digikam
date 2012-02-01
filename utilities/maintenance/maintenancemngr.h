@@ -61,7 +61,8 @@ private Q_SLOTS:
     void slotStage2();  // Thumbnails
     void slotStage3();  // Finger-prints
     void slotStage4();  // Duplicates
-    void slotStage5();  // 
+    void slotStage5();  // Metadata
+    void slotStage6();  // 
 
 private:
 

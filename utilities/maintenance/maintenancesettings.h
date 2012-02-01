@@ -43,6 +43,7 @@ public:
         scanFingerPrints = false;
         duplicates       = false;
         similarity       = 90;
+        metadata         = false;
     };
 
     virtual ~MaintenanceSettings() {};
@@ -66,6 +67,9 @@ public:
     bool duplicates;
     /// Similarity between items to compare, in percents.
     int  similarity;
+
+    /// Sync image metadata with DB
+    bool metadata;
 };
 
 }  // namespace Digikam

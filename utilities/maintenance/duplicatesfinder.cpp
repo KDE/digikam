@@ -36,10 +36,8 @@
 
 // Local includes
 
-#include "albuminfo.h"
-#include "albumdb.h"
-#include "databaseaccess.h"
-#include "databasebackend.h"
+#include "album.h"
+#include "albummanager.h"
 #include "imagelister.h"
 #include "knotificationwrapper.h"
 
@@ -79,11 +77,11 @@ DuplicatesFinder::DuplicatesFinder(int similarity)
     : ProgressItem(0, "DuplicatesFinder", QString(), QString(), true, true),
       d(new DuplicatesFinderPriv)
 {
+    d->similarity        = similarity;
+    AlbumList palbumList = AlbumManager::instance()->allPAlbums();
     QStringList albumsIdList;
-    d->similarity             = similarity;
-    QList<AlbumRootInfo> list = DatabaseAccess().db()->getAlbumRoots();
-    foreach(AlbumRootInfo inf, list)
-        albumsIdList << QString::number(inf.id);
+    foreach(Album* a, palbumList)
+        albumsIdList << QString::number(a->id());
 
     d->job->addMetaData("albumids",   albumsIdList.join(","));
     init();
