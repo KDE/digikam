@@ -47,6 +47,10 @@ public:
 
     MaintenanceSettings settings() const;
 
+private Q_SLOTS:
+
+    void slotItemToggled(int index, bool b);
+
 private:
 
     class MaintenanceDlgPriv;
