@@ -36,23 +36,36 @@ public:
 
     MaintenanceSettings()
     {
+        newItems         = false;
         thumbnails       = false;
         scanThumbs       = false;
         fingerPrints     = false;
         scanFingerPrints = false;
+        duplicates       = false;
+        similarity       = 90;
     };
 
     virtual ~MaintenanceSettings() {};
 
 public:
 
+    /// Find new items on whole collection
+    bool newItems;
+
+    /// Generate thumbnails
     bool thumbnails;
     /// Rebuild all thumbnails or only scan missing items.
     bool scanThumbs;
 
+    /// Generate finger-prints
     bool fingerPrints;
     /// Rebuild all fingerprints or only scan missing items.
     bool scanFingerPrints;
+
+    /// Scan for new items
+    bool duplicates;
+    /// Similarity between items to compare, in percents.
+    int  similarity;
 };
 
 }  // namespace Digikam

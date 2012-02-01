@@ -35,8 +35,10 @@
 // Local includes
 
 #include "maintenancesettings.h"
+#include "newitemsfinder.h"
 #include "thumbsgenerator.h"
 #include "fingerprintsgenerator.h"
+#include "duplicatesfinder.h"
 
 namespace Digikam
 {
@@ -47,7 +49,7 @@ public:
 
     MaintenanceMngrPriv()
     {
-        running = false;        
+        running = false;
     }
 
     bool                running;
@@ -81,19 +83,22 @@ void MaintenanceMngr::stop()
 
 void MaintenanceMngr::start()
 {
-    kDebug() << "settings.thumbnails : " << d->settings.thumbnails;
-    kDebug() << "settings.scanThumbs : " << d->settings.scanThumbs;
-    kDebug() << "settings.fingerPrints : " << d->settings.fingerPrints;
+    kDebug() << "settings.newItems         : " << d->settings.newItems;
+    kDebug() << "settings.thumbnails       : " << d->settings.thumbnails;
+    kDebug() << "settings.scanThumbs       : " << d->settings.scanThumbs;
+    kDebug() << "settings.fingerPrints     : " << d->settings.fingerPrints;
     kDebug() << "settings.scanFingerPrints : " << d->settings.scanFingerPrints;
+    kDebug() << "settings.duplicates       : " << d->settings.duplicates;
+    kDebug() << "settings.similarity       : " << d->settings.similarity;
     slotStage1();
 }
 
 void MaintenanceMngr::slotStage1()
 {
-    if (d->settings.thumbnails)
+    if (d->settings.newItems)
     {
-        ThumbsGenerator* gene = new ThumbsGenerator(-1, d->settings.scanThumbs);
-        connect(gene, SIGNAL(signalComplete()),
+        NewItemsFinder* tool = new NewItemsFinder();
+        connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage2()));
     }
     else
@@ -104,10 +109,10 @@ void MaintenanceMngr::slotStage1()
 
 void MaintenanceMngr::slotStage2()
 {
-    if (d->settings.fingerPrints)
+    if (d->settings.thumbnails)
     {
-        FingerPrintsGenerator* gene = new FingerPrintsGenerator(d->settings.scanFingerPrints);
-        connect(gene, SIGNAL(signalComplete()),
+        ThumbsGenerator* tool = new ThumbsGenerator(d->settings.scanThumbs);
+        connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage3()));
     }
     else
@@ -117,6 +122,34 @@ void MaintenanceMngr::slotStage2()
 }
 
 void MaintenanceMngr::slotStage3()
+{
+    if (d->settings.fingerPrints)
+    {
+        FingerPrintsGenerator* tool = new FingerPrintsGenerator(d->settings.scanFingerPrints);
+        connect(tool, SIGNAL(signalComplete()),
+                this, SLOT(slotStage4()));
+    }
+    else
+    {
+        slotStage4();
+    }
+}
+
+void MaintenanceMngr::slotStage4()
+{
+    if (d->settings.duplicates)
+    {
+        DuplicatesFinder* tool = new DuplicatesFinder(d->settings.similarity);
+        connect(tool, SIGNAL(signalComplete()),
+                this, SLOT(slotStage5()));
+    }
+    else
+    {
+        slotStage5();
+    }
+}
+
+void MaintenanceMngr::slotStage5()
 {
 }
 

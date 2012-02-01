@@ -25,13 +25,9 @@
 
 // Qt includes
 
-#include <QHeaderView>
 #include <QLabel>
 #include <QCheckBox>
-#include <QPushButton>
 #include <QGridLayout>
-#include <QVBoxLayout>
-#include <QTreeWidget>
 
 // Libkdcraw includes
 
@@ -43,7 +39,8 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <ksqueezedtextlabel.h>
+#include <knuminput.h>
+#include <khbox.h>
 
 using namespace KDcrawIface;
 
@@ -54,11 +51,23 @@ class MaintenanceDlg::MaintenanceDlgPriv
 {
 public:
 
+    enum Operation
+    {
+        NewItems = 0,
+        Thumbnails,
+        FingerPrints,
+        Duplicates,
+        Stretch
+    };
+    
+public:
+
     MaintenanceDlgPriv() :
         logo(0),
         title(0),
         scanThumbs(0),
         scanFingerprints(0),
+        similarity(0),
         expanderBox(0)
     {
     }
@@ -67,6 +76,7 @@ public:
     QLabel*                title;
     QCheckBox*             scanThumbs;
     QCheckBox*             scanFingerprints;
+    KIntNumInput*          similarity;
     RExpanderBoxExclusive* expanderBox;
 };
 
@@ -91,23 +101,36 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
     d->expanderBox     = new RExpanderBoxExclusive(page);
     d->expanderBox->setIsToolBox(true);
 
+    d->expanderBox->insertItem(MaintenanceDlgPriv::NewItems, d->scanThumbs, i18n("Scan for new items"), "NewItems", false);
+    d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::NewItems, true);
+
     d->scanThumbs       = new QCheckBox(i18n("Scan for changed or non-cataloged items (faster)"));
-    d->expanderBox->insertItem(0, d->scanThumbs, i18n("Rebuild Thumbnails"), "Thumbnails", false);
-    d->expanderBox->setCheckBoxVisible(0, true);
+    d->expanderBox->insertItem(MaintenanceDlgPriv::Thumbnails, d->scanThumbs, i18n("Rebuild Thumbnails"), "Thumbnails", false);
+    d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::Thumbnails, true);
 
     d->scanFingerprints = new QCheckBox(i18n("Scan for changed or non-cataloged items (faster)"));
-    d->expanderBox->insertItem(1, d->scanFingerprints, i18n("Rebuild Finger-prints"), "Fingerprints", false);
-    d->expanderBox->setCheckBoxVisible(1, true);
+    d->expanderBox->insertItem(MaintenanceDlgPriv::FingerPrints, d->scanFingerprints, i18n("Rebuild Finger-prints"), "Fingerprints", false);
+    d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::FingerPrints, true);
 
-    d->expanderBox->insertStretch(2);
+    KHBox* hbox      = new KHBox;
+    QLabel* simLabel = new QLabel(i18n("Similarity (in percents): "), hbox);
+    d->similarity    = new KIntNumInput(hbox);
+    d->similarity->setValue(90);
+    d->similarity->setRange(0, 100, 1);
+    d->similarity->setSliderEnabled(false);
+    d->expanderBox->insertItem(MaintenanceDlgPriv::Duplicates, hbox, i18n("Find Duplicates Items"), "Duplicates", false);
+    d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::Duplicates, true);
+
+    d->expanderBox->insertStretch(MaintenanceDlgPriv::Stretch);
 
     grid->addWidget(d->logo,        0, 0, 3, 1);
-    grid->addWidget(d->title,          0, 1, 1, 1);
+    grid->addWidget(d->title,       0, 1, 1, 1);
     grid->addWidget(d->expanderBox, 1, 1, 3, 1);
     grid->setSpacing(spacingHint());
     grid->setMargin(0);
     grid->setColumnStretch(1, 10);
 
+    setMinimumSize(500, 300);
     adjustSize();
 }
 
@@ -119,10 +142,13 @@ MaintenanceDlg::~MaintenanceDlg()
 MaintenanceSettings MaintenanceDlg::settings() const
 {
     MaintenanceSettings settings;
-    settings.thumbnails       = d->expanderBox->isChecked(0);
+    settings.newItems         = d->expanderBox->isChecked(MaintenanceDlgPriv::NewItems);
+    settings.thumbnails       = d->expanderBox->isChecked(MaintenanceDlgPriv::Thumbnails);
     settings.scanThumbs       = d->scanThumbs->isChecked();
-    settings.fingerPrints     = d->expanderBox->isChecked(1);
+    settings.fingerPrints     = d->expanderBox->isChecked(MaintenanceDlgPriv::FingerPrints);
     settings.scanFingerPrints = d->scanFingerprints->isChecked();
+    settings.duplicates       = d->expanderBox->isChecked(MaintenanceDlgPriv::Duplicates);
+    settings.similarity       = d->similarity->value();
     return settings;
 }
 

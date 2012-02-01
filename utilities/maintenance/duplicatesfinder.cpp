@@ -23,43 +23,92 @@
 
 #include "duplicatesfinder.moc"
 
+// Qt includes
+
+#include <QTime>
+
 // KDE includes
 
+#include <kio/job.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kicon.h>
 
 // Local includes
 
+#include "albuminfo.h"
+#include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
 #include "imagelister.h"
 #include "knotificationwrapper.h"
 
+using namespace KIO;
+
 namespace Digikam
 {
 
+class DuplicatesFinder::DuplicatesFinderPriv
+{
+public:
+
+    DuplicatesFinderPriv() :
+        similarity(90),
+        job(0)
+    {
+        duration.start();
+        job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
+    }
+
+    int   similarity;
+    QTime duration;
+    Job*  job;
+};
+    
 DuplicatesFinder::DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity)
-    : ProgressItem(0, "DuplicatesFinder", QString(), QString(), true, true)
+    : ProgressItem(0, "DuplicatesFinder", QString(), QString(), true, true),
+      d(new DuplicatesFinderPriv)
+{
+    d->similarity = similarity;
+    d->job->addMetaData("albumids",   albumsIdList.join(","));
+    d->job->addMetaData("tagids",     tagsIdList.join(","));
+    init();
+}
+
+DuplicatesFinder::DuplicatesFinder(int similarity)
+    : ProgressItem(0, "DuplicatesFinder", QString(), QString(), true, true),
+      d(new DuplicatesFinderPriv)
+{
+    QStringList albumsIdList;
+    d->similarity             = similarity;
+    QList<AlbumRootInfo> list = DatabaseAccess().db()->getAlbumRoots();
+    foreach(AlbumRootInfo inf, list)
+        albumsIdList << QString::number(inf.id);
+
+    d->job->addMetaData("albumids",   albumsIdList.join(","));
+    init();
+}
+
+DuplicatesFinder::~DuplicatesFinder()
+{
+    delete d;
+}
+
+void DuplicatesFinder::init()
 {
     ProgressManager::addProgressItem(this);
 
-    m_duration.start();
-    double thresh = similarity / 100.0;
+    double thresh = d->similarity / 100.0;
+    d->job->addMetaData("duplicates", "normal");
+    d->job->addMetaData("threshold",  QString::number(thresh));
 
-    m_job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
-    m_job->addMetaData("duplicates", "normal");
-    m_job->addMetaData("albumids",   albumsIdList.join(","));
-    m_job->addMetaData("tagids",     tagsIdList.join(","));
-    m_job->addMetaData("threshold",  QString::number(thresh));
-
-    connect(m_job, SIGNAL(result(KJob*)),
+    connect(d->job, SIGNAL(result(KJob*)),
             this, SLOT(slotDuplicatesSearchResult()));
 
-    connect(m_job, SIGNAL(totalAmount(KJob*, KJob::Unit, qulonglong)),
+    connect(d->job, SIGNAL(totalAmount(KJob*, KJob::Unit, qulonglong)),
             this, SLOT(slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong)));
 
-    connect(m_job, SIGNAL(processedAmount(KJob*, KJob::Unit, qulonglong)),
+    connect(d->job, SIGNAL(processedAmount(KJob*, KJob::Unit, qulonglong)),
             this, SLOT(slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong)));
 
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
@@ -67,10 +116,6 @@ DuplicatesFinder::DuplicatesFinder(const QStringList& albumsIdList, const QStrin
 
     setLabel(i18n("Find duplicates items"));
     setThumbnail(KIcon("tools-wizard").pixmap(22));
-}
-
-DuplicatesFinder::~DuplicatesFinder()
-{
 }
 
 void DuplicatesFinder::slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong amount)
@@ -86,12 +131,12 @@ void DuplicatesFinder::slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qu
 
 void DuplicatesFinder::slotDuplicatesSearchResult()
 {
-    QTime now, t = now.addMSecs(m_duration.elapsed());
+    QTime now, t = now.addMSecs(d->duration.elapsed());
     // Pop-up a message to bring user when all is done.
     KNotificationWrapper(id(),
                          i18n("Find duplicates is done.\nDuration: %1", t.toString()),
                          kapp->activeWindow(), label());
-    m_job = NULL;
+    d->job = NULL;
 
     emit signalComplete();
 
@@ -100,10 +145,10 @@ void DuplicatesFinder::slotDuplicatesSearchResult()
 
 void DuplicatesFinder::slotCancel()
 {
-    if (m_job)
+    if (d->job)
     {
-        m_job->kill();
-        m_job = NULL;
+        d->job->kill();
+        d->job = NULL;
     }
 
     emit signalComplete();

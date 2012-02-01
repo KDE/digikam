@@ -27,18 +27,14 @@
 // Qt includes
 
 #include <QString>
-#include <QTime>
 
 // KDE includes
 
-#include <kio/job.h>
 #include <kjob.h>
 
 // Local includes
 
 #include "progressmanager.h"
-
-using namespace KIO;
 
 namespace Digikam
 {
@@ -49,7 +45,9 @@ class DuplicatesFinder : public ProgressItem
 
 public:
 
-    DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity);
+    DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity=90);
+    /// Version to find all duplicates over whole collections
+    DuplicatesFinder(int similarity=90);
     ~DuplicatesFinder();
 
 Q_SIGNALS:
@@ -65,8 +63,12 @@ private Q_SLOTS:
 
 private:
 
-    QTime m_duration;
-    Job*  m_job;
+    void init();
+
+private:
+
+    class DuplicatesFinderPriv;
+    DuplicatesFinderPriv* const d;
 };
 
 } // namespace Digikam

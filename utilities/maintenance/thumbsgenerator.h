@@ -43,7 +43,7 @@ class ThumbsGenerator : public ProgressItem
 
 public:
 
-    explicit ThumbsGenerator(int albumId=-1, bool rebuildAll=true);
+    explicit ThumbsGenerator(bool rebuildAll=true, int albumId=-1);
     ~ThumbsGenerator();
 
 Q_SIGNALS:

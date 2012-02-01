@@ -81,7 +81,7 @@ public:
     ThumbnailLoadThread* thumbLoadThread;
 };
 
-ThumbsGenerator::ThumbsGenerator(int albumId, bool rebuildAll)
+ThumbsGenerator::ThumbsGenerator(bool rebuildAll, int albumId)
     : ProgressItem(0, "ThumbsGenerator", QString(), QString(), true, true),
       d(new ThumbsGeneratorPriv)
 {

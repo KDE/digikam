@@ -57,9 +57,11 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotStage1();  // Thumbnails
-    void slotStage2();  // Fingerprints
-    void slotStage3();  // Fingerprints
+    void slotStage1();  // New items
+    void slotStage2();  // Thumbnails
+    void slotStage3();  // Finger-prints
+    void slotStage4();  // Duplicates
+    void slotStage5();  // 
 
 private:
 

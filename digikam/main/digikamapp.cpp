@@ -155,6 +155,8 @@
 #include "migrationdlg.h"
 #include "progressmanager.h"
 #include "newitemsfinder.h"
+#include "maintenancedlg.h"
+#include "maintenancemngr.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
@@ -2868,6 +2870,7 @@ void DigikamApp::slotWriteMetadataToAllImages()
 
 void DigikamApp::slotRebuildThumbnails()
 {
+
     QString msg = i18n("Image thumbnailing can take some time.\n"
                        "Which would you prefer?\n"
                        "- Scan for missing thumbnails (quick)\n"
@@ -2883,16 +2886,26 @@ void DigikamApp::slotRebuildThumbnails()
     }
 
     runThumbnailsGenerator(result == KMessageBox::Yes ? false : true);
+
+/*
+    MaintenanceDlg* dlg = new MaintenanceDlg(this);
+    int ret = dlg->exec();
+    if (ret == QDialog::Accepted)
+    {
+        MaintenanceMngr* mngr = new MaintenanceMngr(this);
+        mngr->setSettings(dlg->settings());
+        mngr->start();
+    }*/
 }
 
 void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
 {
-    new ThumbsGenerator(-1, rebuildAll);
+    new ThumbsGenerator(rebuildAll);
 }
 
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
-    new ThumbsGenerator(AlbumManager::instance()->currentAlbum()->id());
+    new ThumbsGenerator(true, AlbumManager::instance()->currentAlbum()->id());
 }
 
 void DigikamApp::slotGenerateFingerPrintsFirstTime()
