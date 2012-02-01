@@ -30,12 +30,9 @@
 
 // Local includes
 
-<<<<<<< HEAD
 #include "digikam_export.h"
 #include "maintenancesettings.h"
 
-=======
->>>>>>> 5675e1f0e2474ce294d26d4ff7bc9ea061737fe0
 namespace Digikam
 {
 
