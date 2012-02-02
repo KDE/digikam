@@ -2848,15 +2848,7 @@ void DigikamApp::slotRebuildAlbumThumbnails()
 
 void DigikamApp::slotGenerateFingerPrintsFirstTime()
 {
-    FingerPrintsGenerator* generator = new FingerPrintsGenerator(true);
-
-    connect(generator, SIGNAL(signalComplete()),
-            this, SLOT(slotRebuildFingerPrintsDone()));
-}
-
-void DigikamApp::slotRebuildFingerPrintsDone()
-{
-    d->config->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
+    new FingerPrintsGenerator(true);
 }
 
 void DigikamApp::slotScanForFaces()
@@ -2865,21 +2857,8 @@ void DigikamApp::slotScanForFaces()
 
     if (dialog.exec() == QDialog::Accepted)
     {
-        runFaceScanner(dialog.settings());
+        new FaceDetector(dialog.settings());
     }
-}
-
-void DigikamApp::runFaceScanner(const FaceScanSettings& settings)
-{
-    FaceDetector* faceDetector = new FaceDetector(settings);
-
-    connect(faceDetector, SIGNAL(signalComplete()),
-            this, SLOT(slotScanForFacesDone()));
-}
-
-void DigikamApp::slotScanForFacesDone()
-{
-    d->config->group("General Settings").writeEntry("Face Scanner First Run", true);
 }
 
 void DigikamApp::slotRecurseAlbums(bool checked)

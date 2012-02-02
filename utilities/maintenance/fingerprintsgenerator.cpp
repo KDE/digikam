@@ -36,6 +36,7 @@
 #include <kapplication.h>
 #include <kcodecs.h>
 #include <klocale.h>
+#include <kconfig.h>
 #include <kstandardguiitem.h>
 
 // Local includes
@@ -191,6 +192,9 @@ void FingerPrintsGenerator::complete()
                          kapp->activeWindow(), label());
 
     emit signalComplete();
+
+    // Switch on scanned for finger-prints flag on digiKam config file.
+    KGlobal::config()->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
 
     setComplete();
 }

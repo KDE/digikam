@@ -32,6 +32,7 @@
 // KDE includes
 
 #include <kicon.h>
+#include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kpushbutton.h>
@@ -343,6 +344,9 @@ void FaceDetector::complete()
     {
         new BenchmarkMessageDisplay(d->pipeline.benchmarkResult());
     }
+
+    // Switch on scanned for faces flag on digiKam config file.
+    KGlobal::config()->group("General Settings").writeEntry("Face Scanner First Run", true);
 
     setComplete();
 }

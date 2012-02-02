@@ -122,29 +122,28 @@ protected:
 
 private:
 
-    bool setup();
-    bool setupICC();
-    void setupView();
-    void setupStatusBar();
-    void setupActions();
-    void setupAccelerators();
-    void setupExifOrientationActions();
-    void setupImageTransformActions();
-    void loadPlugins();
-    void loadCameras();
-    void populateThemes();
-    void preloadWindows();
-    void fillSolidMenus();
-    bool checkSolidCamera(const Solid::Device& cameraDevice);
+    bool    setup();
+    bool    setupICC();
+    void    setupView();
+    void    setupStatusBar();
+    void    setupActions();
+    void    setupAccelerators();
+    void    setupExifOrientationActions();
+    void    setupImageTransformActions();
+    void    loadPlugins();
+    void    loadCameras();
+    void    populateThemes();
+    void    preloadWindows();
+    void    fillSolidMenus();
+    bool    checkSolidCamera(const Solid::Device& cameraDevice);
     QString labelForSolidCamera(const Solid::Device& cameraDevice);
-    void openSolidCamera(const QString& udi, const QString& label = QString());
-    void openSolidUsmDevice(const QString& udi, const QString& label = QString());
-    void runFaceScanner(const FaceScanSettings& rebuildAll);
-    void updateCameraMenu();
-    void updateQuickImportAction();
-    void initGui();
-    void showToolBars(bool show=true);
-    void showThumbBar(bool show=true);
+    void    openSolidCamera(const QString& udi, const QString& label = QString());
+    void    openSolidUsmDevice(const QString& udi, const QString& label = QString());
+    void    updateCameraMenu();
+    void    updateQuickImportAction();
+    void    initGui();
+    void    showToolBars(bool show=true);
+    void    showThumbBar(bool show=true);
 
 private Q_SLOTS:
 
@@ -196,14 +195,10 @@ private Q_SLOTS:
     void slotMaintenance();
     void slotMaintenanceDone();
 
+    void slotGenerateFingerPrintsFirstTime();
     void slotRebuildAlbumThumbnails();
     void slotDatabaseMigration();
-
-    void slotGenerateFingerPrintsFirstTime();
-    void slotRebuildFingerPrintsDone();
-
     void slotScanForFaces();
-    void slotScanForFacesDone();
 
     void slotZoomSliderChanged(int);
     void slotThumbSizeChanged(int);
