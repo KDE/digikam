@@ -424,18 +424,8 @@ void DigikamView::setupConnections()
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
-    connect(d->fuzzySearchSideBar, SIGNAL(signalUpdateFingerPrints()),
-            d->parent, SLOT(slotRebuildFingerPrints()));
-
-    connect(d->fuzzySearchSideBar, SIGNAL(signalGenerateFingerPrintsFirstTime()),
-            d->parent, SLOT(slotGenerateFingerPrintsFirstTime()));
-
     connect(d->peopleSideBar, SIGNAL(signalDetectFaces()),
             d->parent, SLOT(slotScanForFaces()));
-    /*
-        connect(d->fuzzySearchSideBar, SIGNAL(signalGenerateFingerPrintsFirstTime()),
-                d->parent, SLOT(slotGenerateFingerPrintsFirstTime()));
-    */
 
     connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(QList<qlonglong>,QString)),
             d->iconView->imageFilterModel(), SLOT(setIdWhitelist(QList<qlonglong>,QString)));

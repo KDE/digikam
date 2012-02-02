@@ -7,7 +7,7 @@
  * Description : Find Duplicates View.
  *
  * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
@@ -51,6 +51,7 @@
 #include "duplicatesfinder.h"
 #include "albumselectcombobox.h"
 #include "abstractalbummodel.h"
+#include "fingerprintsgenerator.h"
 
 namespace Digikam
 {
@@ -237,7 +238,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* parent)
     // ---------------------------------------------------------------
 
     connect(d->updateFingerPrtBtn, SIGNAL(clicked()),
-            this, SIGNAL(signalUpdateFingerPrints()));
+            this, SLOT(slotUpdateFingerPrints()));
 
     connect(d->scanDuplicatesBtn, SIGNAL(clicked()),
             this, SLOT(slotFindDuplicates()));
@@ -555,6 +556,11 @@ void FindDuplicatesView::resetAlbumsAndTags()
     d->albumModel->resetCheckedAlbums();
     d->tagModel->resetCheckedAlbums();
     checkForValidSettings();
+}
+
+void FindDuplicatesView::slotUpdateFingerPrints()
+{
+    new FingerPrintsGenerator(false);
 }
 
 }  // namespace Digikam

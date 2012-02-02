@@ -154,7 +154,6 @@
 #include "maintenancemngr.h"
 #include "newitemsfinder.h"
 #include "thumbsgenerator.h"
-#include "fingerprintsgenerator.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
@@ -2844,11 +2843,6 @@ void DigikamApp::slotMaintenanceDone()
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
     new ThumbsGenerator(true, AlbumManager::instance()->currentAlbum()->id());
-}
-
-void DigikamApp::slotGenerateFingerPrintsFirstTime()
-{
-    new FingerPrintsGenerator(true);
 }
 
 void DigikamApp::slotScanForFaces()

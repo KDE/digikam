@@ -195,7 +195,6 @@ private Q_SLOTS:
     void slotMaintenance();
     void slotMaintenanceDone();
 
-    void slotGenerateFingerPrintsFirstTime();
     void slotRebuildAlbumThumbnails();
     void slotDatabaseMigration();
     void slotScanForFaces();
