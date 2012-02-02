@@ -9,7 +9,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,6 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
-#include "dmetadata.h"
 #include "imageattributeswatch.h"
 #include "imagecomments.h"
 #include "imageposition.h"
@@ -132,37 +131,16 @@ void KipiImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
     }
 
     m_info.setDateTime(time);
-    //AlbumManager::instance()->refreshItemHandler( _url );
 }
 
 int KipiImageInfo::angle()
 {
-    if (MetadataSettings::instance()->settings().exifRotate)
-    {
-        // DMetadata metadata(_url.toLocalFile());
-        // DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-
-        switch (m_info.orientation())
-        {
-            case DMetadata::ORIENTATION_ROT_180:
-                return 180;
-            case DMetadata::ORIENTATION_ROT_90:
-            case DMetadata::ORIENTATION_ROT_90_HFLIP:
-            case DMetadata::ORIENTATION_ROT_90_VFLIP:
-                return 90;
-            case DMetadata::ORIENTATION_ROT_270:
-                return 270;
-            default:
-                return 0;
-        }
-    }
-
-    return 0;
+    return m_info.orientation();
 }
 
-void KipiImageInfo::setAngle(int /*angle*/)
+void KipiImageInfo::setAngle(int angle)
 {
-    // TODO: set digiKam database with this information.
+    m_info.setOrientation(angle);
 }
 
 #if KIPI_VERSION >= 0x010200
