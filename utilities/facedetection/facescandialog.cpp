@@ -6,7 +6,7 @@
  * Date        : 2010-10-09
  * Description : Dialog to choose options for face scanning
  *
- * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -343,7 +343,7 @@ void FaceScanDialog::setupUi()
     d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Skip images already scanned"), FaceScanSettings::Skip);
     d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Scan again and merge results"), FaceScanSettings::Merge);
     d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Clear unconfirmed results and rescan"), FaceScanSettings::Rescan);
-    d->alreadyScannedBox->setCurrentIndex(0);
+    d->alreadyScannedBox->setCurrentIndex(FaceScanSettings::Skip);
     QGridLayout* detectAndRecognizeLabelLayout   = new QGridLayout;
     detectAndRecognizeLabelLayout->addWidget(detectAndRecognizeLabel, 0, 0, 1, -1);
     detectAndRecognizeLabelLayout->setColumnMinimumWidth(0, 10);
@@ -356,7 +356,7 @@ void FaceScanDialog::setupUi()
     //reRecognizeLabel->setWordWrap(true);
     reRecognizeLabel->setButton(d->reRecognizeButton);
     ButtonExtendedLabel* reRecognizeIcon = new ButtonExtendedLabel;
-    reRecognizeIcon->setPixmap(SmallIcon("edit-image-face-recognize", KIconLoader::SizeMedium));
+    reRecognizeIcon->setPixmap(SmallIcon("edit-image-face-recognize", KIconLoader::SizeLarge));
     reRecognizeIcon->setButton(d->reRecognizeButton);
     reRecognizeIcon->setAlignment(Qt::AlignCenter);
 

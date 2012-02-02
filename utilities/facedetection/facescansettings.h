@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-10-09
- * Description : Dialog to choose options for face scanning
+ * Description : Face scan settings
  *
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,60 +21,62 @@
  *
  * ============================================================ */
 
-#ifndef FACESCANDIALOG_H
-#define FACESCANDIALOG_H
+#ifndef FACESCANSETTINGS_H
+#define FACESCANSETTINGS_H
 
 // Qt includes
 
 #include <QList>
 
-// KDE includes
-
-#include <kdialog.h>
-
-// Local includes
-
-#include "statesavingobject.h"
-#include "facescansettings.h"
-
 namespace Digikam
 {
 
-class FaceScanDialog : public KDialog, public StateSavingObject
+class Album;
+
+class FaceScanSettings
 {
-    Q_OBJECT
+public:
+
+    enum ScanTask
+    {
+        DetectAndRecognize,
+        RecognizeMarkedFaces,
+        RetrainAll,
+        Benchmark
+    };
+
+    // for detect and recognize
+    enum AlreadyScannedHandling
+    {
+        Skip,
+        Merge,
+        Rescan
+    };
 
 public:
 
-    FaceScanDialog(QWidget* parent = 0);
-    ~FaceScanDialog();
+    FaceScanSettings()
+    {
+        useFullCpu             = true;
+        accuracy               = 80;
+        task                   = DetectAndRecognize;
+        alreadyScannedHandling = Skip;
+    }
 
-    FaceScanSettings settings() const;
+    // processing power
+    bool                   useFullCpu;
 
-protected:
+    // detection
+    double                 accuracy;
 
-    void doLoadState();
-    void doSaveState();
-    void accept();
+    // albums to scan
+    QList<Album*>          albums;
 
-protected Q_SLOTS:
+    ScanTask               task;
 
-    void setDetectionDefaultParameters();
-    void updateClearButtons();
-    void retrainAllButtonToggled(bool on);
-    void benchmarkButtonToggled(bool on);
-
-private:
-
-    void setupUi();
-    void setupConnections();
-
-private:
-
-    class FaceScanDialogPriv;
-    FaceScanDialogPriv* const d;
+    AlreadyScannedHandling alreadyScannedHandling;
 };
 
 } // namespace Digikam
 
-#endif // FACESCANDIALOG_H
+#endif // FACESCANSETTINGS_H
