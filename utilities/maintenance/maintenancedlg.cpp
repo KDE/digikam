@@ -43,6 +43,7 @@
 #include <knuminput.h>
 #include <khbox.h>
 #include <kseparator.h>
+#include <kconfig.h>
 
 // Local includes
 
@@ -208,6 +209,18 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
 void MaintenanceDlg::slotMetadataSetup()
 {
     Setup::execSinglePage(this, Setup::MetadataPage);
+}
+
+void MaintenanceDlg::writeSettings()
+{
+    KConfigGroup group;
+    d->expanderBox->writeSettings(group);
+}
+
+void MaintenanceDlg::readSettings()
+{
+    KConfigGroup group;
+    d->expanderBox->readSettings(group);
 }
 
 }  // namespace Digikam

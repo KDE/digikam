@@ -51,7 +51,12 @@ private Q_SLOTS:
 
     void slotItemToggled(int index, bool b);
     void slotMetadataSetup();
-    
+
+private:
+
+    void writeSettings();
+    void readSettings();
+
 private:
 
     class MaintenanceDlgPriv;
