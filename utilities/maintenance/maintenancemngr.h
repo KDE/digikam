@@ -28,9 +28,6 @@
 
 #include <QObject>
 
-// Local includes
-
-
 namespace Digikam
 {
 
@@ -61,7 +58,7 @@ private Q_SLOTS:
     void slotStage3();  // Finger-prints
     void slotStage4();  // Duplicates
     void slotStage5();  // Metadata
-    void slotStage6();  // 
+    void slotStage6();  // All is done.
     void slotCancel();
 
 private:

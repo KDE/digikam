@@ -104,7 +104,7 @@ void MaintenanceMngr::slotStage1()
                 this, SLOT(slotStage2()));
 
         connect(tool, SIGNAL(progressItemCanceled(const QString&)),
-            this, SLOT(slotCancel()));
+                this, SLOT(slotCancel()));
     }
     else
     {
@@ -122,7 +122,7 @@ void MaintenanceMngr::slotStage2()
                 this, SLOT(slotStage3()));
 
         connect(tool, SIGNAL(progressItemCanceled(const QString&)),
-            this, SLOT(slotCancel()));
+                this, SLOT(slotCancel()));
     }
     else
     {
@@ -140,7 +140,7 @@ void MaintenanceMngr::slotStage3()
                 this, SLOT(slotStage4()));
 
         connect(tool, SIGNAL(progressItemCanceled(const QString&)),
-            this, SLOT(slotCancel()));
+                this, SLOT(slotCancel()));
     }
     else
     {
@@ -158,7 +158,7 @@ void MaintenanceMngr::slotStage4()
                 this, SLOT(slotStage5()));
 
         connect(tool, SIGNAL(progressItemCanceled(const QString&)),
-            this, SLOT(slotCancel()));
+                this, SLOT(slotCancel()));
     }
     else
     {
@@ -176,7 +176,7 @@ void MaintenanceMngr::slotStage5()
                 this, SLOT(slotStage6()));
 
         connect(tool, SIGNAL(progressItemCanceled(const QString&)),
-            this, SLOT(slotCancel()));
+                this, SLOT(slotCancel()));
     }
     else
     {
