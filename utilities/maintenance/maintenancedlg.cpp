@@ -229,7 +229,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
     connect(d->metadataSetup, SIGNAL(clicked()),
             this, SLOT(slotMetadataSetup()));
 
-    setMinimumSize(500, 300);
+    setMinimumSize(500, 350);
     adjustSize();
     readSettings();
 }
