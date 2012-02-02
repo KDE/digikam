@@ -118,7 +118,6 @@
 #include "digikamadaptor.h"
 #include "dio.h"
 #include "dlogoaction.h"
-#include "facescandialog.h"
 #include "fileactionmngr.h"
 #include "filterstatusbar.h"
 #include "iccsettings.h"
@@ -141,7 +140,6 @@
 #include "thumbnailsize.h"
 #include "dmetadata.h"
 #include "uifilevalidator.h"
-#include "facedetector.h"
 #include "tagscache.h"
 #include "tagsactionmngr.h"
 #include "databaseserverstarter.h"
@@ -2843,16 +2841,6 @@ void DigikamApp::slotMaintenanceDone()
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
     new ThumbsGenerator(true, AlbumManager::instance()->currentAlbum()->id());
-}
-
-void DigikamApp::slotScanForFaces()
-{
-    FaceScanDialog dialog;
-
-    if (dialog.exec() == QDialog::Accepted)
-    {
-        new FaceDetector(dialog.settings());
-    }
 }
 
 void DigikamApp::slotRecurseAlbums(bool checked)

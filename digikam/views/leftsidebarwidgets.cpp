@@ -59,6 +59,8 @@
 #include "searchxml.h"
 #include "tagfolderview.h"
 #include "timelinewidget.h"
+#include "facescandialog.h"
+#include "facedetector.h"
 
 namespace Digikam
 {
@@ -1164,7 +1166,12 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
 
     connect(d->rescanButton, SIGNAL(pressed()),
-            this, SIGNAL(signalDetectFaces()) );
+            this, SLOT(slotScanForFaces()) );
+}
+
+PeopleSideBarWidget::~PeopleSideBarWidget()
+{
+    delete d;
 }
 
 QPixmap PeopleSideBarWidget::getIcon()
@@ -1211,9 +1218,14 @@ void PeopleSideBarWidget::changeAlbumFromHistory(Album* album)
     d->tagFolderView->setCurrentAlbum(dynamic_cast<TAlbum*>(album));
 }
 
-PeopleSideBarWidget::~PeopleSideBarWidget()
+void PeopleSideBarWidget::slotScanForFaces()
 {
-    delete d;
+    FaceScanDialog dialog;
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        new FaceDetector(dialog.settings());
+    }
 }
 
 } // namespace Digikam

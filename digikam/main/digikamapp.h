@@ -197,7 +197,6 @@ private Q_SLOTS:
 
     void slotRebuildAlbumThumbnails();
     void slotDatabaseMigration();
-    void slotScanForFaces();
 
     void slotZoomSliderChanged(int);
     void slotThumbSizeChanged(int);

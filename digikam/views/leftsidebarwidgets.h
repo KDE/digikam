@@ -340,14 +340,12 @@ public:
 private Q_SLOTS:
 
     void slotInit();
+    void slotScanForFaces();
 
 Q_SIGNALS:
 
     void requestFaceMode(bool on);
 
-    void signalDetectFaces();
-    void signalScanForFacesFirstTime();
-    void signalResumeScanForFaces();
     void signalFindDuplicatesInAlbum(Album*);
 
 private:
