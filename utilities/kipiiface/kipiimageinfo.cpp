@@ -44,7 +44,6 @@
 #include "imageposition.h"
 #include "globals.h"
 #include "tagscache.h"
-#include "metadatasettings.h"
 
 namespace Digikam
 {
