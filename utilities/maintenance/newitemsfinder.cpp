@@ -41,6 +41,10 @@ namespace Digikam
 NewItemsFinder::NewItemsFinder(FinderMode mode, const QStringList& foldersToScan)
     : ProgressItem(0, "NewItemsFinder", QString(), QString(), true, true)
 {
+    ProgressManager::addProgressItem(this);
+    setLabel(i18n("Find new items"));
+    setThumbnail(KIcon("view-refresh").pixmap(22));
+
     m_duration.start();
 
     connect(ScanController::instance(), SIGNAL(collectionScanStarted(QString)),
@@ -82,17 +86,14 @@ NewItemsFinder::~NewItemsFinder()
 
 void NewItemsFinder::slotScanStarted(const QString& info)
 {
-    ProgressManager::addProgressItem(this);
-    setUsesBusyIndicator(true);
-    setLabel(i18n("Find new items"));
     setStatus(info);
-    setThumbnail(KIcon("view-refresh").pixmap(22));
 }
 
-void NewItemsFinder::slotProgressValue(float /*v*/)
+void NewItemsFinder::slotProgressValue(float p)
 {
-    // FIXME: sound like progress indication from ScanController are not suitable... Why ?
-//    setProgress((int)(v*100.0));
+    uint v = (uint)(p*100.0);
+    if (v > progress())
+        setProgress(v);
 }
 
 void NewItemsFinder::slotScanCompleted()
