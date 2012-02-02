@@ -83,20 +83,25 @@ public:
     {
     }
 
-    QLabel*       logo;
-    QLabel*       title;
-    QCheckBox*    scanThumbs;
-    QCheckBox*    scanFingerprints;
-    QPushButton*  metadataSetup;
-    KHBox*        hbox;
-    KHBox*        hbox2;
-    KIntNumInput* similarity;
-    RExpanderBox* expanderBox;
+    static const QString configGroupName;
+    
+    QLabel*              logo;
+    QLabel*              title;
+    QCheckBox*           scanThumbs;
+    QCheckBox*           scanFingerprints;
+    QPushButton*         metadataSetup;
+    KHBox*               hbox;
+    KHBox*               hbox2;
+    KIntNumInput*        similarity;
+    RExpanderBox*        expanderBox;
 };
+
+const QString MaintenanceDlg::MaintenanceDlgPriv::configGroupName("MaintenanceDlg Settings");
 
 MaintenanceDlg::MaintenanceDlg(QWidget* parent)
     : KDialog(parent), d(new MaintenanceDlgPriv)
 {
+    setHelp("digikam");
     setCaption(i18n("Maintenance"));
     setButtons(Ok|Help|Cancel);
     setDefaultButton(Cancel);
@@ -164,10 +169,12 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
 
     setMinimumSize(500, 300);
     adjustSize();
+    readSettings();
 }
 
 MaintenanceDlg::~MaintenanceDlg()
 {
+    writeSettings();
     delete d;
 }
 
@@ -213,13 +220,15 @@ void MaintenanceDlg::slotMetadataSetup()
 
 void MaintenanceDlg::writeSettings()
 {
-    KConfigGroup group;
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
     d->expanderBox->writeSettings(group);
 }
 
 void MaintenanceDlg::readSettings()
 {
-    KConfigGroup group;
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
     d->expanderBox->readSettings(group);
 }
 
