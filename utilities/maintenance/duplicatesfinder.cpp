@@ -62,7 +62,7 @@ public:
     QTime duration;
     Job*  job;
 };
-    
+
 DuplicatesFinder::DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity)
     : ProgressItem(0, "DuplicatesFinder", QString(), QString(), true, true),
       d(new DuplicatesFinderPriv)

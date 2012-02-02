@@ -48,7 +48,7 @@ public:
         ScanDeferredFiles,        // Defer whole collection scan.
         ScheduleCollectionScan    // Scan imediatly folders list passed in contructor.
     };
-    
+
 public:
 
     NewItemsFinder(FinderMode mode=CompleteCollectionScan, const QStringList& foldersToScan=QStringList());
