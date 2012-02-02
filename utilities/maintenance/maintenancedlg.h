@@ -51,6 +51,7 @@ private Q_SLOTS:
 
     void slotItemToggled(int index, bool b);
     void slotMetadataSetup();
+    void slotOk();
 
 private:
 

@@ -153,7 +153,7 @@ void MaintenanceMngr::slotStage4()
 
 void MaintenanceMngr::slotStage5()
 {
-    if (d->settings.duplicates)
+    if (d->settings.metadata)
     {
         MetadataSynchronizer* tool = new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
         connect(tool, SIGNAL(signalComplete()),

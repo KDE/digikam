@@ -74,7 +74,7 @@ public:
         logo(0),
         title(0),
         scanThumbs(0),
-        scanFingerprints(0),
+        scanFingerPrints(0),
         metadataSetup(0),
         hbox(0),
         hbox2(0),
@@ -88,7 +88,7 @@ public:
     QLabel*              logo;
     QLabel*              title;
     QCheckBox*           scanThumbs;
-    QCheckBox*           scanFingerprints;
+    QCheckBox*           scanFingerPrints;
     QPushButton*         metadataSetup;
     KHBox*               hbox;
     KHBox*               hbox2;
@@ -127,8 +127,8 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
     d->expanderBox->insertItem(MaintenanceDlgPriv::Thumbnails, d->scanThumbs, SmallIcon("view-process-all"), i18n("Rebuild Thumbnails"), "Thumbnails", false);
     d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::Thumbnails, true);
 
-    d->scanFingerprints = new QCheckBox(i18n("Scan for changed or non-cataloged items (faster)"));
-    d->expanderBox->insertItem(MaintenanceDlgPriv::FingerPrints, d->scanFingerprints, SmallIcon("run-build"), i18n("Rebuild Finger-prints"), "Fingerprints", false);
+    d->scanFingerPrints = new QCheckBox(i18n("Scan for changed or non-cataloged items (faster)"));
+    d->expanderBox->insertItem(MaintenanceDlgPriv::FingerPrints, d->scanFingerPrints, SmallIcon("run-build"), i18n("Rebuild Finger-prints"), "Fingerprints", false);
     d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::FingerPrints, true);
 
     d->hbox        = new KHBox;
@@ -161,6 +161,9 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
     grid->setMargin(0);
     grid->setColumnStretch(1, 10);
 
+    connect(this, SIGNAL(okClicked()),
+            this, SLOT(slotOk()));
+
     connect(d->expanderBox, SIGNAL(signalItemToggled(int, bool)),
             this, SLOT(slotItemToggled(int, bool)));
 
@@ -174,22 +177,62 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
 
 MaintenanceDlg::~MaintenanceDlg()
 {
-    writeSettings();
     delete d;
+}
+
+void MaintenanceDlg::slotOk()
+{
+    writeSettings();
 }
 
 MaintenanceSettings MaintenanceDlg::settings() const
 {
-    MaintenanceSettings settings;
-    settings.newItems         = d->expanderBox->isChecked(MaintenanceDlgPriv::NewItems);
-    settings.thumbnails       = d->expanderBox->isChecked(MaintenanceDlgPriv::Thumbnails);
-    settings.scanThumbs       = d->scanThumbs->isChecked();
-    settings.fingerPrints     = d->expanderBox->isChecked(MaintenanceDlgPriv::FingerPrints);
-    settings.scanFingerPrints = d->scanFingerprints->isChecked();
-    settings.duplicates       = d->expanderBox->isChecked(MaintenanceDlgPriv::Duplicates);
-    settings.similarity       = d->similarity->value();
-    settings.metadata         = d->expanderBox->isChecked(MaintenanceDlgPriv::Metadata);
-    return settings;
+    MaintenanceSettings prm;
+    prm.newItems         = d->expanderBox->isChecked(MaintenanceDlgPriv::NewItems);
+    prm.thumbnails       = d->expanderBox->isChecked(MaintenanceDlgPriv::Thumbnails);
+    prm.scanThumbs       = d->scanThumbs->isChecked();
+    prm.fingerPrints     = d->expanderBox->isChecked(MaintenanceDlgPriv::FingerPrints);
+    prm.scanFingerPrints = d->scanFingerPrints->isChecked();
+    prm.duplicates       = d->expanderBox->isChecked(MaintenanceDlgPriv::Duplicates);
+    prm.similarity       = d->similarity->value();
+    prm.metadata         = d->expanderBox->isChecked(MaintenanceDlgPriv::Metadata);
+    return prm;
+}
+
+void MaintenanceDlg::readSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+    d->expanderBox->readSettings(group);
+
+    MaintenanceSettings prm;
+
+    d->expanderBox->setChecked(MaintenanceDlgPriv::NewItems,            group.readEntry("NewItems",     prm.newItems));
+    d->expanderBox->setChecked(MaintenanceDlgPriv::Thumbnails,          group.readEntry("Thumbnails",   prm.thumbnails));
+    d->scanThumbs->setChecked(group.readEntry("ScanThumbs",             prm.scanThumbs));
+    d->expanderBox->setChecked(MaintenanceDlgPriv::FingerPrints,        group.readEntry("FingerPrints", prm.fingerPrints));
+    d->scanFingerPrints->setChecked(group.readEntry("ScanFingerPrints", prm.scanFingerPrints));
+    d->expanderBox->setChecked(MaintenanceDlgPriv::Duplicates,          group.readEntry("Duplicates",   prm.duplicates));
+    d->similarity->setValue(group.readEntry("Similarity",               prm.similarity));
+    d->expanderBox->setChecked(MaintenanceDlgPriv::Metadata,            group.readEntry("Metadata",     prm.metadata));
+}
+
+void MaintenanceDlg::writeSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+    d->expanderBox->writeSettings(group);
+
+    MaintenanceSettings prm   = settings();
+
+    group.writeEntry("NewItems",         prm.newItems);
+    group.writeEntry("Thumbnails",       prm.thumbnails);
+    group.writeEntry("ScanThumbs",       prm.scanThumbs);
+    group.writeEntry("FingerPrints",     prm.fingerPrints);
+    group.writeEntry("ScanFingerPrints", prm.scanFingerPrints);
+    group.writeEntry("Duplicates",       prm.duplicates);
+    group.writeEntry("Similarity",       prm.similarity);
+    group.writeEntry("Metadata",         prm.metadata);
 }
 
 void MaintenanceDlg::slotItemToggled(int index, bool b)
@@ -200,7 +243,7 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
             d->scanThumbs->setEnabled(b);
             break;
         case MaintenanceDlgPriv::FingerPrints:
-            d->scanFingerprints->setEnabled(b);
+            d->scanFingerPrints->setEnabled(b);
             break;
         case MaintenanceDlgPriv::Duplicates:
             d->hbox->setEnabled(b);
@@ -216,20 +259,6 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
 void MaintenanceDlg::slotMetadataSetup()
 {
     Setup::execSinglePage(this, Setup::MetadataPage);
-}
-
-void MaintenanceDlg::writeSettings()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
-    d->expanderBox->writeSettings(group);
-}
-
-void MaintenanceDlg::readSettings()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
-    d->expanderBox->readSettings(group);
 }
 
 }  // namespace Digikam
