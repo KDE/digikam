@@ -1294,28 +1294,9 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction* scanNewAction = new KAction(KIcon("view-refresh"), i18n("Scan for New Images"), this);
-    connect(scanNewAction, SIGNAL(triggered()), this, SLOT(slotDatabaseRescan()));
-    actionCollection()->addAction("database_rescan", scanNewAction);
-
-    // -----------------------------------------------------------
-
-    KAction* rebuildThumbnailsAction = new KAction(KIcon("view-process-all"), i18n("Rebuild All Thumbnails..."), this);
-    connect(rebuildThumbnailsAction, SIGNAL(triggered()), this, SLOT(slotRebuildThumbnails()));
-    actionCollection()->addAction("thumbnails_rebuild", rebuildThumbnailsAction);
-
-    // -----------------------------------------------------------
-
-    KAction* rebuildFingerPrintsAction = new KAction(KIcon("run-build"), i18n("Rebuild Fingerprints..."), this);
-    connect(rebuildFingerPrintsAction, SIGNAL(triggered()), this, SLOT(slotRebuildFingerPrints()));
-    actionCollection()->addAction("fingerprints_rebuild", rebuildFingerPrintsAction);
-
-    // -----------------------------------------------------------
-
-    KAction* writeMetadataAction = new KAction(KIcon("run-build-file"),
-                                               i18n("Write Metadata to All Images"), this);
-    connect(writeMetadataAction, SIGNAL(triggered()), this, SLOT(slotWriteMetadataToAllImages()));
-    actionCollection()->addAction("sync_metadata", writeMetadataAction);
+    d->maintenanceAction = new KAction(KIcon("run-build-prune"), i18n("Maintenance..."), this);
+    connect(d->maintenanceAction, SIGNAL(triggered()), this, SLOT(slotMaintenance()));
+    actionCollection()->addAction("maintenance", d->maintenanceAction);
 
     // -----------------------------------------------------------
 
@@ -2831,15 +2812,21 @@ void DigikamApp::slotDatabaseMigration()
     dlg.exec();
 }
 
-void DigikamApp::slotDatabaseRescan()
+void DigikamApp::slotMaintenance()
 {
-    NewItemsFinder* finder = new NewItemsFinder();
+    MaintenanceDlg* dlg = new MaintenanceDlg(this);
+    if (dlg->exec() == QDialog::Accepted)
+    {
+        MaintenanceMngr* mngr = new MaintenanceMngr(this);
 
-    connect(finder, SIGNAL(signalComplete()),
-            this, SLOT(slotDatabaseRescanDone()));
+        connect(mngr, SIGNAL(signalComplete()),
+                this, SLOT(slotMaintenanceDone()));
+
+        mngr->setSettings(dlg->settings());
+    }
 }
 
-void DigikamApp::slotDatabaseRescanDone()
+void DigikamApp::slotMaintenanceDone()
 {
     d->view->refreshView();
 
@@ -2854,55 +2841,6 @@ void DigikamApp::slotDatabaseRescanDone()
     }
 }
 
-void DigikamApp::slotWriteMetadataToAllImages()
-{
-    QString msg = i18n("This action will update the metadata of all available files from information stored in the database. "
-                       "This can take some time. \nDo you want to continue?");
-    int result = KMessageBox::warningContinueCancel(this, msg);
-
-    if (result != KMessageBox::Continue)
-    {
-        return;
-    }
-
-    new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
-}
-
-void DigikamApp::slotRebuildThumbnails()
-{
-
-    QString msg = i18n("Image thumbnailing can take some time.\n"
-                       "Which would you prefer?\n"
-                       "- Scan for missing thumbnails (quick)\n"
-                       "- Rebuild all thumbnails (takes a long time)");
-    int result = KMessageBox::questionYesNoCancel(this, msg,
-                                                  i18n("Warning"),
-                                                  KGuiItem(i18n("Scan")),
-                                                  KGuiItem(i18n("Rebuild All")));
-
-    if (result == KMessageBox::Cancel)
-    {
-        return;
-    }
-
-    runThumbnailsGenerator(result == KMessageBox::Yes ? false : true);
-
-/*
-    MaintenanceDlg* dlg = new MaintenanceDlg(this);
-    int ret = dlg->exec();
-    if (ret == QDialog::Accepted)
-    {
-        MaintenanceMngr* mngr = new MaintenanceMngr(this);
-        mngr->setSettings(dlg->settings());
-        mngr->start();
-    }*/
-}
-
-void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
-{
-    new ThumbsGenerator(rebuildAll);
-}
-
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
     new ThumbsGenerator(true, AlbumManager::instance()->currentAlbum()->id());
@@ -2910,26 +2848,15 @@ void DigikamApp::slotRebuildAlbumThumbnails()
 
 void DigikamApp::slotGenerateFingerPrintsFirstTime()
 {
-    runFingerPrintsGenerator(true);
+    FingerPrintsGenerator* generator = new FingerPrintsGenerator(true);
+
+    connect(generator, SIGNAL(signalComplete()),
+            this, SLOT(slotRebuildFingerPrintsDone()));
 }
 
-void DigikamApp::slotRebuildFingerPrints()
+void DigikamApp::slotRebuildFingerPrintsDone()
 {
-    QString msg = i18n("Image fingerprinting can take some time.\n"
-                       "Which would you prefer?\n"
-                       "- Scan for changed or non-cataloged items in the database (quick)\n"
-                       "- Rebuild all fingerprints (takes a long time)");
-    int result = KMessageBox::questionYesNoCancel(this, msg,
-                                                  i18n("Warning"),
-                                                  KGuiItem(i18n("Scan")),
-                                                  KGuiItem(i18n("Rebuild All")));
-
-    if (result == KMessageBox::Cancel)
-    {
-        return;
-    }
-
-    runFingerPrintsGenerator(result == KMessageBox::Yes ? false : true);
+    d->config->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
 }
 
 void DigikamApp::slotScanForFaces()
@@ -2942,25 +2869,12 @@ void DigikamApp::slotScanForFaces()
     }
 }
 
-void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
-{
-    FingerPrintsGenerator* generator = new FingerPrintsGenerator(rebuildAll);
-
-    connect(generator, SIGNAL(signalComplete()),
-            this, SLOT(slotRebuildFingerPrintsDone()));
-}
-
 void DigikamApp::runFaceScanner(const FaceScanSettings& settings)
 {
     FaceDetector* faceDetector = new FaceDetector(settings);
 
     connect(faceDetector, SIGNAL(signalComplete()),
             this, SLOT(slotScanForFacesDone()));
-}
-
-void DigikamApp::slotRebuildFingerPrintsDone()
-{
-    d->config->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
 }
 
 void DigikamApp::slotScanForFacesDone()
