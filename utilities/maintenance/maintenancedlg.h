@@ -50,7 +50,8 @@ public:
 private Q_SLOTS:
 
     void slotItemToggled(int index, bool b);
-
+    void slotMetadataSetup();
+    
 private:
 
     class MaintenanceDlgPriv;

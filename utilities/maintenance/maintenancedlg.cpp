@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QLabel>
+#include <QPushButton>
 #include <QCheckBox>
 #include <QGridLayout>
 
@@ -42,6 +43,10 @@
 #include <knuminput.h>
 #include <khbox.h>
 #include <kseparator.h>
+
+// Local includes
+
+#include "setup.h"
 
 using namespace KDcrawIface;
 
@@ -69,7 +74,9 @@ public:
         title(0),
         scanThumbs(0),
         scanFingerprints(0),
+        metadataSetup(0),
         hbox(0),
+        hbox2(0),
         similarity(0),
         expanderBox(0)
     {
@@ -79,7 +86,9 @@ public:
     QLabel*       title;
     QCheckBox*    scanThumbs;
     QCheckBox*    scanFingerprints;
+    QPushButton*  metadataSetup;
     KHBox*        hbox;
+    KHBox*        hbox2;
     KIntNumInput* similarity;
     RExpanderBox* expanderBox;
 };
@@ -116,7 +125,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
     d->expanderBox->insertItem(MaintenanceDlgPriv::FingerPrints, d->scanFingerprints, SmallIcon("run-build"), i18n("Rebuild Finger-prints"), "Fingerprints", false);
     d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::FingerPrints, true);
 
-    d->hbox    = new KHBox;
+    d->hbox        = new KHBox;
     new QLabel(i18n("Similarity (in percents): "), d->hbox);
     QWidget* space = new QWidget(d->hbox);
     d->hbox->setStretchFactor(space, 10);
@@ -127,7 +136,12 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
     d->expanderBox->insertItem(MaintenanceDlgPriv::Duplicates, d->hbox, SmallIcon("tools-wizard"), i18n("Find Duplicates Items"), "Duplicates", false);
     d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::Duplicates, true);
 
-    d->expanderBox->insertItem(MaintenanceDlgPriv::Metadata, new QLabel(i18n("<qt><i>no option</i></qt>")), SmallIcon("run-build-file"),
+    d->hbox2         = new KHBox;
+    new QLabel(i18n("Check metadata setup panel for details: "), d->hbox2);
+    QWidget* space2  = new QWidget(d->hbox2);
+    d->hbox2->setStretchFactor(space2, 10);
+    d->metadataSetup = new QPushButton(i18n("Settings..."), d->hbox2);
+    d->expanderBox->insertItem(MaintenanceDlgPriv::Metadata, d->hbox2, SmallIcon("run-build-file"),
                                i18n("Sync image metadata with Database"), "Metadata", false);
     d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::Metadata, true);
 
@@ -143,6 +157,9 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
 
     connect(d->expanderBox, SIGNAL(signalItemToggled(int, bool)),
             this, SLOT(slotItemToggled(int, bool)));
+
+    connect(d->metadataSetup, SIGNAL(clicked()),
+            this, SLOT(slotMetadataSetup()));
 
     setMinimumSize(500, 300);
     adjustSize();
@@ -180,9 +197,17 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
         case MaintenanceDlgPriv::Duplicates:
             d->hbox->setEnabled(b);
             break;
-        default :  // NewItems, Metadata
+        case MaintenanceDlgPriv::Metadata:
+            d->hbox2->setEnabled(b);
+            break;
+        default :  // NewItems
             break;
     }
+}
+
+void MaintenanceDlg::slotMetadataSetup()
+{
+    Setup::execSinglePage(this, Setup::MetadataPage);
 }
 
 }  // namespace Digikam
