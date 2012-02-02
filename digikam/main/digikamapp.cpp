@@ -2821,11 +2821,13 @@ void DigikamApp::slotMaintenance()
                 this, SLOT(slotMaintenanceDone()));
 
         mngr->setSettings(dlg->settings());
+        d->maintenanceAction->setEnabled(false);
     }
 }
 
 void DigikamApp::slotMaintenanceDone()
 {
+    d->maintenanceAction->setEnabled(true);
     d->view->refreshView();
 
     if (LightTableWindow::lightTableWindowCreated())

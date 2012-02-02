@@ -53,7 +53,7 @@ public:
 
     MaintenanceMngrPriv()
     {
-        running = false;        
+        running = false;
     }
 
     bool                running;
@@ -76,11 +76,6 @@ MaintenanceMngr::~MaintenanceMngr()
 bool MaintenanceMngr::isRunning() const
 {
     return d->running;
-}
-
-void MaintenanceMngr::slotCancel()
-{
-    d->running = false;
 }
 
 void MaintenanceMngr::setSettings(const MaintenanceSettings& settings)
@@ -198,6 +193,12 @@ void MaintenanceMngr::slotStage6()
                          i18n("All operations are done.\nDuration: %1", t.toString()),
                          kapp->activeWindow(), i18n("digiKam Maintenance"));
 
+    emit signalComplete();
+}
+
+void MaintenanceMngr::slotCancel()
+{
+    d->running = false;
     emit signalComplete();
 }
 
