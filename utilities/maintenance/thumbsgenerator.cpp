@@ -240,7 +240,6 @@ void ThumbsGenerator::complete()
 void ThumbsGenerator::slotCancel()
 {
     d->cancel = true;
-    emit signalComplete();
     setComplete();
 }
 

@@ -198,7 +198,6 @@ void FingerPrintsGenerator::complete()
 void FingerPrintsGenerator::slotCancel()
 {
     d->cancel = true;
-    emit signalComplete();
     setComplete();
 }
 

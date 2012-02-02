@@ -111,9 +111,6 @@ void NewItemsFinder::slotScanCompleted()
 void NewItemsFinder::slotCancel()
 {
     ScanController::instance()->cancelCompleteScan();
-
-    emit signalComplete();
-
     setComplete();
 }
 

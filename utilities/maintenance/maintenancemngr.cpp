@@ -26,11 +26,13 @@
 // Qt includes
 
 #include <QString>
+#include <QTime>
 
 // KDE includes
 
-#include <kurl.h>
+#include <klocale.h>
 #include <kdebug.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -40,6 +42,7 @@
 #include "fingerprintsgenerator.h"
 #include "duplicatesfinder.h"
 #include "metadatasynchronizer.h"
+#include "knotificationwrapper.h"
 
 namespace Digikam
 {
@@ -55,6 +58,8 @@ public:
 
     bool                running;
 
+    QTime               duration;
+
     MaintenanceSettings settings;
 };
 
@@ -68,22 +73,19 @@ MaintenanceMngr::~MaintenanceMngr()
     delete d;
 }
 
-void MaintenanceMngr::setSettings(const MaintenanceSettings& settings)
-{
-    d->settings = settings;
-}
-
 bool MaintenanceMngr::isRunning() const
 {
     return d->running;
 }
 
-void MaintenanceMngr::stop()
+void MaintenanceMngr::slotCancel()
 {
+    d->running = false;
 }
 
-void MaintenanceMngr::start()
+void MaintenanceMngr::setSettings(const MaintenanceSettings& settings)
 {
+    d->settings = settings;
     kDebug() << "settings.newItems         : " << d->settings.newItems;
     kDebug() << "settings.thumbnails       : " << d->settings.thumbnails;
     kDebug() << "settings.scanThumbs       : " << d->settings.scanThumbs;
@@ -92,6 +94,8 @@ void MaintenanceMngr::start()
     kDebug() << "settings.duplicates       : " << d->settings.duplicates;
     kDebug() << "settings.similarity       : " << d->settings.similarity;
     kDebug() << "settings.metadata         : " << d->settings.metadata;
+
+    d->duration.start();
     slotStage1();
 }
 
@@ -100,8 +104,12 @@ void MaintenanceMngr::slotStage1()
     if (d->settings.newItems)
     {
         NewItemsFinder* tool = new NewItemsFinder();
+
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage2()));
+
+        connect(tool, SIGNAL(progressItemCanceled(const QString&)),
+            this, SLOT(slotCancel()));
     }
     else
     {
@@ -114,8 +122,12 @@ void MaintenanceMngr::slotStage2()
     if (d->settings.thumbnails)
     {
         ThumbsGenerator* tool = new ThumbsGenerator(d->settings.scanThumbs);
+
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage3()));
+
+        connect(tool, SIGNAL(progressItemCanceled(const QString&)),
+            this, SLOT(slotCancel()));
     }
     else
     {
@@ -128,8 +140,12 @@ void MaintenanceMngr::slotStage3()
     if (d->settings.fingerPrints)
     {
         FingerPrintsGenerator* tool = new FingerPrintsGenerator(d->settings.scanFingerPrints);
+
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage4()));
+
+        connect(tool, SIGNAL(progressItemCanceled(const QString&)),
+            this, SLOT(slotCancel()));
     }
     else
     {
@@ -142,8 +158,12 @@ void MaintenanceMngr::slotStage4()
     if (d->settings.duplicates)
     {
         DuplicatesFinder* tool = new DuplicatesFinder(d->settings.similarity);
+
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage5()));
+
+        connect(tool, SIGNAL(progressItemCanceled(const QString&)),
+            this, SLOT(slotCancel()));
     }
     else
     {
@@ -156,18 +176,29 @@ void MaintenanceMngr::slotStage5()
     if (d->settings.metadata)
     {
         MetadataSynchronizer* tool = new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
+
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage6()));
+
+        connect(tool, SIGNAL(progressItemCanceled(const QString&)),
+            this, SLOT(slotCancel()));
     }
     else
     {
         slotStage6();
     }
-    
 }
 
 void MaintenanceMngr::slotStage6()
 {
+    d->running   = false;
+    QTime now, t = now.addMSecs(d->duration.elapsed());
+    // Pop-up a message to bring user when all is done.
+    KNotificationWrapper("digiKam Maintenance", // not i18n
+                         i18n("All operations are done.\nDuration: %1", t.toString()),
+                         kapp->activeWindow(), i18n("digiKam Maintenance"));
+
+    emit signalComplete();
 }
 
 }  // namespace Digikam

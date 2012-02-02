@@ -46,14 +46,13 @@ public:
     ~MaintenanceMngr();
 
     void setSettings(const MaintenanceSettings& settings);
-    
+
     void start();
-    void stop();
     bool isRunning() const;
 
 Q_SIGNALS:
 
-    void signalCompleted();
+    void signalComplete();
 
 private Q_SLOTS:
 
@@ -63,6 +62,7 @@ private Q_SLOTS:
     void slotStage4();  // Duplicates
     void slotStage5();  // Metadata
     void slotStage6();  // 
+    void slotCancel();
 
 private:
 

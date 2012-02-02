@@ -149,8 +149,6 @@ void DuplicatesFinder::slotCancel()
         d->job = NULL;
     }
 
-    emit signalComplete();
-
     setComplete();
 }
 
