@@ -97,7 +97,7 @@ void MaintenanceMngr::start()
 
 void MaintenanceMngr::slotStage1()
 {
-    if (d->settings.thumbnails)
+    if (d->settings.newItems)
     {
         NewItemsFinder* tool = new NewItemsFinder();
         connect(tool, SIGNAL(signalComplete()),

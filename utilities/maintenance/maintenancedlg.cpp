@@ -215,6 +215,9 @@ void MaintenanceDlg::readSettings()
     d->expanderBox->setChecked(MaintenanceDlgPriv::Duplicates,          group.readEntry("Duplicates",   prm.duplicates));
     d->similarity->setValue(group.readEntry("Similarity",               prm.similarity));
     d->expanderBox->setChecked(MaintenanceDlgPriv::Metadata,            group.readEntry("Metadata",     prm.metadata));
+    
+    for (int i = MaintenanceDlgPriv::NewItems ; i < MaintenanceDlgPriv::Stretch ; ++i)
+        slotItemToggled(i, d->expanderBox->isChecked(i));
 }
 
 void MaintenanceDlg::writeSettings()
