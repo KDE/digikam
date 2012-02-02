@@ -7,8 +7,8 @@
  * Description : Handling accesss to one image and associated data
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -444,7 +444,7 @@ int ImageInfo::pickLabel() const
     int pickLabel = TagsCache::instance()->pickLabelFromTags(tagIds());
 
     ImageInfoWriteLocker lock;
-    m_data.constCastData()->pickLabel = pickLabel == -1 ? NoPickLabel : pickLabel;
+    m_data.constCastData()->pickLabel       = (pickLabel == -1) ? NoPickLabel : pickLabel;
     m_data.constCastData()->pickLabelCached = true;
     return m_data->pickLabel;
 }
@@ -461,7 +461,7 @@ int ImageInfo::colorLabel() const
     int colorLabel = TagsCache::instance()->colorLabelFromTags(tagIds());
 
     ImageInfoWriteLocker lock;
-    m_data.constCastData()->colorLabel = colorLabel == -1 ? NoColorLabel : colorLabel;
+    m_data.constCastData()->colorLabel       = (colorLabel == -1) ? NoColorLabel : colorLabel;
     m_data.constCastData()->colorLabelCached = true;
     return m_data->colorLabel;
 }
@@ -537,7 +537,7 @@ QSize ImageInfo::dimensions() const
     RETURN_IF_CACHED(imageSize)
     QVariantList values = DatabaseAccess().db()->getImageInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
     ImageInfoWriteLocker lock;
-    m_data.constCastData()->imageSizeCached= true;
+    m_data.constCastData()->imageSizeCached = true;
     if (values.size() == 2)
     {
         m_data.constCastData()->imageSize = QSize(values.at(0).toInt(), values.at(1).toInt());
@@ -556,7 +556,7 @@ QList<int> ImageInfo::tagIds() const
 
     QList<int> ids = DatabaseAccess().db()->getItemTagIDs(m_data->id);
     ImageInfoWriteLocker lock;
-    m_data.constCastData()->tagIds = ids;
+    m_data.constCastData()->tagIds       = ids;
     m_data.constCastData()->tagIdsCached = true;
     return ids;
 }
@@ -574,7 +574,7 @@ void ImageInfoList::loadTagIds() const
         {
             continue;
         }
-        info.m_data.constCastData()->tagIds = ids;
+        info.m_data.constCastData()->tagIds       = ids;
         info.m_data.constCastData()->tagIdsCached = true;
     }
 }
@@ -603,7 +603,7 @@ DatabaseUrl ImageInfo::databaseUrl() const
         return DatabaseUrl();
     }
 
-    QString album = ImageInfoStatic::cache()->albumRelativePath(m_data->albumId);
+    QString album     = ImageInfoStatic::cache()->albumRelativePath(m_data->albumId);
     QString albumRoot = CollectionManager::instance()->albumRootPath(m_data->albumRootId);
 
     ImageInfoReadLocker lock;
@@ -752,7 +752,7 @@ int ImageInfo::numberOfGroupedImages() const
     int groupedImages = DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped).size();
 
     ImageInfoWriteLocker lock;
-    m_data.constCastData()->groupedImages = groupedImages;
+    m_data.constCastData()->groupedImages       = groupedImages;
     m_data.constCastData()->groupedImagesCached = true;
     return m_data->groupedImages;
 }
@@ -771,7 +771,7 @@ qlonglong ImageInfo::groupImageId() const
     int groupImage = ids.isEmpty() ? -1 : ids.first();
 
     ImageInfoWriteLocker lock;
-    m_data.constCastData()->groupImage = groupImage;
+    m_data.constCastData()->groupImage       = groupImage;
     m_data.constCastData()->groupImageCached = true;
     return m_data->groupImage;
 }
@@ -782,13 +782,13 @@ void ImageInfoList::loadGroupImageIds() const
     ImageInfoWriteLocker lock;
     for (int i=0; i<size(); i++)
     {
-        const ImageInfo& info = at(i);
+        const ImageInfo& info            = at(i);
         const QList<qlonglong>& groupIds = allGroupIds.at(i);
         if (!info.m_data)
         {
             continue;
         }
-        info.m_data.constCastData()->groupImage = groupIds.isEmpty() ? -1 : groupIds.first();
+        info.m_data.constCastData()->groupImage       = groupIds.isEmpty() ? -1 : groupIds.first();
         info.m_data.constCastData()->groupImageCached = true;
     }
 }
@@ -907,12 +907,11 @@ ImagePosition ImageInfo::imagePosition() const
     if (!m_data->positionsCached)
     {
         ImageInfoWriteLocker lock;
-        m_data.constCastData()->longitude      = pos.longitudeNumber();
-        m_data.constCastData()->latitude       = pos.latitudeNumber();
-        m_data.constCastData()->altitude       = pos.altitude();
-        m_data.constCastData()->hasCoordinates = pos.hasCoordinates();
-        m_data.constCastData()->hasAltitude    = pos.hasAltitude();
-
+        m_data.constCastData()->longitude       = pos.longitudeNumber();
+        m_data.constCastData()->latitude        = pos.latitudeNumber();
+        m_data.constCastData()->altitude        = pos.altitude();
+        m_data.constCastData()->hasCoordinates  = pos.hasCoordinates();
+        m_data.constCastData()->hasAltitude     = pos.hasAltitude();
         m_data.constCastData()->positionsCached = true;
     }
 
@@ -1219,7 +1218,7 @@ void ImageInfo::setColorLabel(int colorId)
         return;
     }
 
-    QList<int> currentTagIds   = tagIds();
+    QList<int> currentTagIds    = tagIds();
     QVector<int> colorLabelTags = TagsCache::instance()->colorLabelTags();
 
     // Color Label is an exclusive tag.
@@ -1251,7 +1250,7 @@ void ImageInfo::setRating(int value)
     DatabaseAccess().db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Rating);
 
     ImageInfoWriteLocker lock;
-    m_data->rating = value;
+    m_data->rating       = value;
     m_data->ratingCached = true;
 }
 
@@ -1275,7 +1274,7 @@ void ImageInfo::setDateTime(const QDateTime& dateTime)
     DatabaseAccess().db()->changeImageInformation(m_data->id, QVariantList() << dateTime, DatabaseFields::CreationDate);
 
     ImageInfoWriteLocker lock;
-    m_data->creationDate = dateTime;
+    m_data->creationDate       = dateTime;
     m_data->creationDateCached = true;
 }
 
@@ -1351,7 +1350,7 @@ ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
 QDebug& operator<<(QDebug& stream, const ImageInfo& info)
 {
     return stream << "ImageInfo [id = " << info.id() << ", databaseurl = "
-           << info.databaseUrl() << "]";
+                  << info.databaseUrl() << "]";
 }
 
 }  // namespace Digikam
