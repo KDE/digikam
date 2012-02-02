@@ -879,24 +879,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
            )
     ENDIF(MSVC)
 
-    # Gilles Caulier 12/01/06: lprof implementation is C not C++ and do not
-    # support 'nofinal' compilation option.
-    KDE4_NO_ENABLE_FINAL(liblprof)
-    SET(liblprof_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmshull.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmslm.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmslnr.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsmatn.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsmkmsh.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsmntr.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsoutl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmspcoll.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsprf.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsreg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsscn.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmssheet.cpp
-       )
-
     SET(libthreadimageio_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/filereadwritelock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/loadsavethread.cpp
@@ -1513,7 +1495,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/kioslave
         ${CMAKE_CURRENT_SOURCE_DIR}/libs
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify
