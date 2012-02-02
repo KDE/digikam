@@ -29,6 +29,7 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <QGridLayout>
+#include <QComboBox>
 
 // Libkdcraw includes
 
@@ -48,6 +49,7 @@
 // Local includes
 
 #include "setup.h"
+#include "facescansettings.h"
 
 using namespace KDcrawIface;
 
@@ -65,6 +67,7 @@ public:
         FingerPrints,
         Duplicates,
         Metadata,
+        FaceDetection,
         Stretch
     };
 
@@ -76,22 +79,26 @@ public:
         scanThumbs(0),
         scanFingerPrints(0),
         metadataSetup(0),
+        faceScannedHandling(0),
         hbox(0),
         hbox2(0),
+        hbox3(0),
         similarity(0),
         expanderBox(0)
     {
     }
 
     static const QString configGroupName;
-    
+
     QLabel*              logo;
     QLabel*              title;
     QCheckBox*           scanThumbs;
     QCheckBox*           scanFingerPrints;
     QPushButton*         metadataSetup;
+    QComboBox*           faceScannedHandling;
     KHBox*               hbox;
     KHBox*               hbox2;
+    KHBox*               hbox3;
     KIntNumInput*        similarity;
     RExpanderBox*        expanderBox;
 };
@@ -151,6 +158,18 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
                                i18n("Sync image metadata with Database"), "Metadata", false);
     d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::Metadata, true);
 
+    d->hbox3               = new KHBox;
+    new QLabel(i18n("Faces data management: "), d->hbox3);
+    QWidget* space3        = new QWidget(d->hbox3);
+    d->hbox2->setStretchFactor(space3, 10);
+    d->faceScannedHandling = new QComboBox(d->hbox3);
+    d->faceScannedHandling->addItem(i18n("Skip images already scanned"),          FaceScanSettings::Skip);
+    d->faceScannedHandling->addItem(i18n("Scan again and merge results"),         FaceScanSettings::Merge);
+    d->faceScannedHandling->addItem(i18n("Clear unconfirmed results and rescan"), FaceScanSettings::Rescan);
+    d->expanderBox->insertItem(MaintenanceDlgPriv::FaceDetection, d->hbox3, SmallIcon("edit-image-face-detect"),
+                               i18n("Face Detection"), "FaceDetection", false);
+    d->expanderBox->setCheckBoxVisible(MaintenanceDlgPriv::FaceDetection, true);
+
     d->expanderBox->insertStretch(MaintenanceDlgPriv::Stretch);
 
     grid->addWidget(d->logo,        0, 0, 1, 1);
@@ -160,6 +179,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
     grid->setSpacing(spacingHint());
     grid->setMargin(0);
     grid->setColumnStretch(1, 10);
+    grid->setRowStretch(2, 10);
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOk()));
@@ -188,14 +208,16 @@ void MaintenanceDlg::slotOk()
 MaintenanceSettings MaintenanceDlg::settings() const
 {
     MaintenanceSettings prm;
-    prm.newItems         = d->expanderBox->isChecked(MaintenanceDlgPriv::NewItems);
-    prm.thumbnails       = d->expanderBox->isChecked(MaintenanceDlgPriv::Thumbnails);
-    prm.scanThumbs       = d->scanThumbs->isChecked();
-    prm.fingerPrints     = d->expanderBox->isChecked(MaintenanceDlgPriv::FingerPrints);
-    prm.scanFingerPrints = d->scanFingerPrints->isChecked();
-    prm.duplicates       = d->expanderBox->isChecked(MaintenanceDlgPriv::Duplicates);
-    prm.similarity       = d->similarity->value();
-    prm.metadata         = d->expanderBox->isChecked(MaintenanceDlgPriv::Metadata);
+    prm.newItems                            = d->expanderBox->isChecked(MaintenanceDlgPriv::NewItems);
+    prm.thumbnails                          = d->expanderBox->isChecked(MaintenanceDlgPriv::Thumbnails);
+    prm.scanThumbs                          = d->scanThumbs->isChecked();
+    prm.fingerPrints                        = d->expanderBox->isChecked(MaintenanceDlgPriv::FingerPrints);
+    prm.scanFingerPrints                    = d->scanFingerPrints->isChecked();
+    prm.duplicates                          = d->expanderBox->isChecked(MaintenanceDlgPriv::Duplicates);
+    prm.similarity                          = d->similarity->value();
+    prm.metadata                            = d->expanderBox->isChecked(MaintenanceDlgPriv::Metadata);
+    prm.faceDetection                       = d->expanderBox->isChecked(MaintenanceDlgPriv::FaceDetection);
+    prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->currentIndex();
     return prm;
 }
 
@@ -207,15 +229,17 @@ void MaintenanceDlg::readSettings()
 
     MaintenanceSettings prm;
 
-    d->expanderBox->setChecked(MaintenanceDlgPriv::NewItems,            group.readEntry("NewItems",     prm.newItems));
-    d->expanderBox->setChecked(MaintenanceDlgPriv::Thumbnails,          group.readEntry("Thumbnails",   prm.thumbnails));
-    d->scanThumbs->setChecked(group.readEntry("ScanThumbs",             prm.scanThumbs));
-    d->expanderBox->setChecked(MaintenanceDlgPriv::FingerPrints,        group.readEntry("FingerPrints", prm.fingerPrints));
-    d->scanFingerPrints->setChecked(group.readEntry("ScanFingerPrints", prm.scanFingerPrints));
-    d->expanderBox->setChecked(MaintenanceDlgPriv::Duplicates,          group.readEntry("Duplicates",   prm.duplicates));
-    d->similarity->setValue(group.readEntry("Similarity",               prm.similarity));
-    d->expanderBox->setChecked(MaintenanceDlgPriv::Metadata,            group.readEntry("Metadata",     prm.metadata));
-    
+    d->expanderBox->setChecked(MaintenanceDlgPriv::NewItems,      group.readEntry("NewItems",      prm.newItems));
+    d->expanderBox->setChecked(MaintenanceDlgPriv::Thumbnails,    group.readEntry("Thumbnails",    prm.thumbnails));
+    d->scanThumbs->setChecked(group.readEntry("ScanThumbs",                        prm.scanThumbs));
+    d->expanderBox->setChecked(MaintenanceDlgPriv::FingerPrints,  group.readEntry("FingerPrints",  prm.fingerPrints));
+    d->scanFingerPrints->setChecked(group.readEntry("ScanFingerPrints",            prm.scanFingerPrints));
+    d->expanderBox->setChecked(MaintenanceDlgPriv::Duplicates,    group.readEntry("Duplicates",    prm.duplicates));
+    d->similarity->setValue(group.readEntry("Similarity",                          prm.similarity));
+    d->expanderBox->setChecked(MaintenanceDlgPriv::Metadata,      group.readEntry("Metadata",      prm.metadata));
+    d->expanderBox->setChecked(MaintenanceDlgPriv::FaceDetection, group.readEntry("FaceDetection", prm.faceDetection));
+    d->faceScannedHandling->setCurrentIndex(group.readEntry("FaceScannedHandling", (int)prm.faceSettings.alreadyScannedHandling));
+
     for (int i = MaintenanceDlgPriv::NewItems ; i < MaintenanceDlgPriv::Stretch ; ++i)
         slotItemToggled(i, d->expanderBox->isChecked(i));
 }
@@ -228,14 +252,16 @@ void MaintenanceDlg::writeSettings()
 
     MaintenanceSettings prm   = settings();
 
-    group.writeEntry("NewItems",         prm.newItems);
-    group.writeEntry("Thumbnails",       prm.thumbnails);
-    group.writeEntry("ScanThumbs",       prm.scanThumbs);
-    group.writeEntry("FingerPrints",     prm.fingerPrints);
-    group.writeEntry("ScanFingerPrints", prm.scanFingerPrints);
-    group.writeEntry("Duplicates",       prm.duplicates);
-    group.writeEntry("Similarity",       prm.similarity);
-    group.writeEntry("Metadata",         prm.metadata);
+    group.writeEntry("NewItems",            prm.newItems);
+    group.writeEntry("Thumbnails",          prm.thumbnails);
+    group.writeEntry("ScanThumbs",          prm.scanThumbs);
+    group.writeEntry("FingerPrints",        prm.fingerPrints);
+    group.writeEntry("ScanFingerPrints",    prm.scanFingerPrints);
+    group.writeEntry("Duplicates",          prm.duplicates);
+    group.writeEntry("Similarity",          prm.similarity);
+    group.writeEntry("Metadata",            prm.metadata);
+    group.writeEntry("FaceDetection",       prm.faceDetection);
+    group.writeEntry("FaceScannedHandling", (int)prm.faceSettings.alreadyScannedHandling);
 }
 
 void MaintenanceDlg::slotItemToggled(int index, bool b)
@@ -253,6 +279,9 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
             break;
         case MaintenanceDlgPriv::Metadata:
             d->hbox2->setEnabled(b);
+            break;
+        case MaintenanceDlgPriv::FaceDetection:
+            d->hbox3->setEnabled(b);
             break;
         default :  // NewItems
             break;

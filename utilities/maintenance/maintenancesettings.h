@@ -26,6 +26,8 @@
 
 // Local includes
 
+#include "facescansettings.h"
+
 namespace Digikam
 {
 
@@ -46,30 +48,37 @@ public:
         metadata         = false;
     };
 
-    virtual ~MaintenanceSettings() {};
+    virtual ~MaintenanceSettings()
+    {
+    };
 
 public:
 
     /// Find new items on whole collection
-    bool newItems;
+    bool             newItems;
 
     /// Generate thumbnails
-    bool thumbnails;
+    bool             thumbnails;
     /// Rebuild all thumbnails or only scan missing items.
-    bool scanThumbs;
+    bool             scanThumbs;
 
     /// Generate finger-prints
-    bool fingerPrints;
+    bool             fingerPrints;
     /// Rebuild all fingerprints or only scan missing items.
-    bool scanFingerPrints;
+    bool             scanFingerPrints;
 
     /// Scan for new items
-    bool duplicates;
+    bool             duplicates;
     /// Similarity between items to compare, in percents.
-    int  similarity;
+    int              similarity;
 
     /// Sync image metadata with DB
-    bool metadata;
+    bool             metadata;
+
+    /// Scan for faces
+    bool             faceDetection;
+    /// Face detection settings
+    FaceScanSettings faceSettings;
 };
 
 }  // namespace Digikam

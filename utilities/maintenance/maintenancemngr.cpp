@@ -42,6 +42,7 @@
 #include "fingerprintsgenerator.h"
 #include "duplicatesfinder.h"
 #include "metadatasynchronizer.h"
+#include "facedetector.h"
 #include "knotificationwrapper.h"
 
 namespace Digikam
@@ -81,14 +82,16 @@ bool MaintenanceMngr::isRunning() const
 void MaintenanceMngr::setSettings(const MaintenanceSettings& settings)
 {
     d->settings = settings;
-    kDebug() << "settings.newItems         : " << d->settings.newItems;
-    kDebug() << "settings.thumbnails       : " << d->settings.thumbnails;
-    kDebug() << "settings.scanThumbs       : " << d->settings.scanThumbs;
-    kDebug() << "settings.fingerPrints     : " << d->settings.fingerPrints;
-    kDebug() << "settings.scanFingerPrints : " << d->settings.scanFingerPrints;
-    kDebug() << "settings.duplicates       : " << d->settings.duplicates;
-    kDebug() << "settings.similarity       : " << d->settings.similarity;
-    kDebug() << "settings.metadata         : " << d->settings.metadata;
+    kDebug() << "settings.newItems            : " << d->settings.newItems;
+    kDebug() << "settings.thumbnails          : " << d->settings.thumbnails;
+    kDebug() << "settings.scanThumbs          : " << d->settings.scanThumbs;
+    kDebug() << "settings.fingerPrints        : " << d->settings.fingerPrints;
+    kDebug() << "settings.scanFingerPrints    : " << d->settings.scanFingerPrints;
+    kDebug() << "settings.duplicates          : " << d->settings.duplicates;
+    kDebug() << "settings.similarity          : " << d->settings.similarity;
+    kDebug() << "settings.metadata            : " << d->settings.metadata;
+    kDebug() << "settings.facedetection       : " << d->settings.faceDetection;
+    kDebug() << "settings.faceScannedHandling : " << d->settings.faceSettings.alreadyScannedHandling;
 
     d->duration.start();
     slotStage1();
@@ -185,6 +188,24 @@ void MaintenanceMngr::slotStage5()
 }
 
 void MaintenanceMngr::slotStage6()
+{
+    if (d->settings.faceDetection)
+    {
+        FaceDetector* tool = new FaceDetector(d->settings.faceSettings);
+
+        connect(tool, SIGNAL(signalComplete()),
+                this, SLOT(slotDone()));
+
+        connect(tool, SIGNAL(progressItemCanceled(const QString&)),
+                this, SLOT(slotCancel()));
+    }
+    else
+    {
+        slotDone();
+    }
+}
+
+void MaintenanceMngr::slotDone()
 {
     d->running   = false;
     QTime now, t = now.addMSecs(d->duration.elapsed());

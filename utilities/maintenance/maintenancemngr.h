@@ -58,7 +58,9 @@ private Q_SLOTS:
     void slotStage3();  // Finger-prints
     void slotStage4();  // Duplicates
     void slotStage5();  // Metadata
-    void slotStage6();  // All is done.
+    void slotStage6();  // Face detection
+
+    void slotDone();
     void slotCancel();
 
 private:

@@ -50,7 +50,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "facepipeline.h"
-#include "facescandialog.h"
+#include "facescansettings.h"
 #include "imageinfo.h"
 #include "imageinfojob.h"
 #include "knotificationwrapper.h"
