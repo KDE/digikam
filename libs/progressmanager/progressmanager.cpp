@@ -43,17 +43,17 @@ public:
     typedef QMap<ProgressItem*, bool> ProgressItemMap;
 
 public:
-    
+
     ProgressItemPriv() :
-      waitingForKids(false),
-      canceled(false),
-      usesBusyIndicator(false),
-      canBeCanceled(false),
-      hasThumb(false),
-      progress(0),
-      total(0),
-      completed(0),
-      parent(0)
+        waitingForKids(false),
+        canceled(false),
+        usesBusyIndicator(false),
+        canBeCanceled(false),
+        hasThumb(false),
+        progress(0),
+        total(0),
+        completed(0),
+        parent(0)
     {
     }
 
@@ -80,12 +80,12 @@ ProgressItem::ProgressItem(ProgressItem* parent, const QString& id,
                            bool canBeCanceled, bool hasThumb)
     : d(new ProgressItemPriv)
 {
-      d->canBeCanceled = canBeCanceled;
-      d->hasThumb      = hasThumb;
-      d->id            = id;
-      d->label         = label;
-      d->status        = status;
-      d->parent        = parent;
+    d->canBeCanceled = canBeCanceled;
+    d->hasThumb      = hasThumb;
+    d->id            = id;
+    d->label         = label;
+    d->status        = status;
+    d->parent        = parent;
 }
 
 ProgressItem::~ProgressItem()
