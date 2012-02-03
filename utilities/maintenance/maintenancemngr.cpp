@@ -120,6 +120,7 @@ void MaintenanceMngr::slotStage2()
     if (d->settings.thumbnails)
     {
         ThumbsGenerator* tool = new ThumbsGenerator(d->settings.scanThumbs);
+        tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage3()));

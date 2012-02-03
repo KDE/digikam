@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QTime>
 #include <QString>
 
 // Local includes

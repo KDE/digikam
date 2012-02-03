@@ -30,38 +30,29 @@
 
 // Local includes
 
-#include "progressmanager.h"
+#include "maintenancetool.h"
 
 namespace Digikam
 {
 
 class LoadingDescription;
 
-class ThumbsGenerator : public ProgressItem
+class ThumbsGenerator : public MaintenanceTool
 {
     Q_OBJECT
 
 public:
 
-    explicit ThumbsGenerator(bool rebuildAll=true, int albumId=-1);
+    explicit ThumbsGenerator(bool rebuildAll=true, int albumId=-1, ProgressItem* parent=0);
     ~ThumbsGenerator();
-
-Q_SIGNALS:
-
-    void signalComplete();
 
 private:
 
-    void complete();
     void processOne();
-
-protected Q_SLOTS:
-
-    void slotCancel();
 
 private Q_SLOTS:
 
-    void slotRebuildThumbs();
+    void slotStart();
     void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
 
 private:

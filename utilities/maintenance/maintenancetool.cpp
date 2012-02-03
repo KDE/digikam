@@ -23,6 +23,10 @@
 
 #include "maintenancetool.moc"
 
+// Qt includes
+
+#include <QTime>
+
 // KDE includes
 
 #include <kapplication.h>

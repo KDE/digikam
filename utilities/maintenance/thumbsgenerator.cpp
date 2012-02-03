@@ -29,12 +29,10 @@
 #include <QTimer>
 #include <QDir>
 #include <QFileInfo>
-#include <QDateTime>
 #include <QPixmap>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kcodecs.h>
 #include <klocale.h>
 
@@ -51,7 +49,6 @@
 #include "thumbnailsize.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
-#include "knotificationwrapper.h"
 #include "config-digikam.h"
 
 namespace Digikam
@@ -62,27 +59,23 @@ class ThumbsGenerator::ThumbsGeneratorPriv
 public:
 
     ThumbsGeneratorPriv() :
-        cancel(false),
         rebuildAll(true),
+        albumId(-1),
         thumbLoadThread(0)
     {
-        duration.start();
     }
 
-    bool                 cancel;
     bool                 rebuildAll;
 
     int                  albumId;
-
-    QTime                duration;
 
     QStringList          allPicturesPath;
 
     ThumbnailLoadThread* thumbLoadThread;
 };
 
-ThumbsGenerator::ThumbsGenerator(bool rebuildAll, int albumId)
-    : ProgressItem(0, "ThumbsGenerator", QString(), QString(), true, true),
+ThumbsGenerator::ThumbsGenerator(bool rebuildAll, int albumId, ProgressItem* parent)
+    : MaintenanceTool("ThumbsGenerator", parent),
       d(new ThumbsGeneratorPriv)
 {
     ProgressManager::addProgressItem(this);
@@ -94,12 +87,9 @@ ThumbsGenerator::ThumbsGenerator(bool rebuildAll, int albumId)
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription, QPixmap)));
 
-    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
-            this, SLOT(slotCancel()));
-
     setLabel(i18n("Thumbs"));
 
-    QTimer::singleShot(500, this, SLOT(slotRebuildThumbs()));
+    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 ThumbsGenerator::~ThumbsGenerator()
@@ -107,8 +97,10 @@ ThumbsGenerator::~ThumbsGenerator()
     delete d;
 }
 
-void ThumbsGenerator::slotRebuildThumbs()
+void ThumbsGenerator::slotStart()
 {
+    MaintenanceTool::slotStart();
+
     // Get all digiKam albums collection pictures path.
     AlbumList palbumList;
 
@@ -122,7 +114,7 @@ void ThumbsGenerator::slotRebuildThumbs()
     }
 
     for (AlbumList::const_iterator it = palbumList.constBegin();
-         !d->cancel && (it != palbumList.constEnd()); ++it )
+         !canceled() && (it != palbumList.constEnd()); ++it )
     {
         if (!(*it))
         {
@@ -184,7 +176,7 @@ void ThumbsGenerator::slotRebuildThumbs()
 
 void ThumbsGenerator::processOne()
 {
-    if (d->cancel || d->allPicturesPath.isEmpty())
+    if (canceled() || d->allPicturesPath.isEmpty())
     {
         return;
     }
@@ -196,7 +188,7 @@ void ThumbsGenerator::processOne()
 
 void ThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (d->cancel || d->allPicturesPath.isEmpty())
+    if (canceled() || d->allPicturesPath.isEmpty())
     {
         return;
     }
@@ -216,31 +208,12 @@ void ThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, const QPi
 
     if (d->allPicturesPath.isEmpty())
     {
-        complete();
+        slotDone();
     }
     else
     {
         processOne();
     }
-}
-
-void ThumbsGenerator::complete()
-{
-    QTime now, t = now.addMSecs(d->duration.elapsed());
-    // Pop-up a message to bring user when all is done.
-    KNotificationWrapper(id(),
-                         i18n("Thumbs generation is done.\nDuration: %1", t.toString()),
-                         kapp->activeWindow(), label());
-
-    emit signalComplete();
-
-    setComplete();
-}
-
-void ThumbsGenerator::slotCancel()
-{
-    d->cancel = true;
-    setComplete();
 }
 
 }  // namespace Digikam
