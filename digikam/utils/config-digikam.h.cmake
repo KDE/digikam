@@ -63,6 +63,10 @@
 /* Define to 1 if we know how to start mysqld */
 #cmakedefine HAVE_INTERNALMYSQL 1
 
+/* remember the lcms library version to use */
+#cmakedefine USE_LCMS_VERSION_1000 1
+#cmakedefine USE_LCMS_VERSION_2000 1
+
 #ifdef USE_EXT_LIBPGF
 #define PGFCodecVersionID 0x${PGF_CODEC_VERSION_ID}
 #endif

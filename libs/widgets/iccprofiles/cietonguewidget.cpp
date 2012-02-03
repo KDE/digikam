@@ -215,7 +215,7 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget* parent, cmsHPROFILE hMon
     d->progressTimer = new QTimer(this);
     setMinimumSize(w, h);
     setAttribute(Qt::WA_DeleteOnClose);
-    cmsErrorAction(LCMS_ERROR_SHOW);
+    dkCmsErrorAction(LCMS_ERROR_SHOW);
 
     if (hMonitor)
     {
@@ -223,11 +223,11 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget* parent, cmsHPROFILE hMon
     }
     else
     {
-        d->hMonitorProfile = cmsCreate_sRGBProfile();
+        d->hMonitorProfile = dkCmsCreate_sRGBProfile();
     }
 
-    d->hXYZProfile = cmsCreateXYZProfile();
-    d->hXFORM      = cmsCreateTransform(d->hXYZProfile, TYPE_XYZ_16,
+    d->hXYZProfile = dkCmsCreateXYZProfile();
+    d->hXFORM      = dkCmsCreateTransform(d->hXYZProfile, TYPE_XYZ_16,
                                         d->hMonitorProfile, TYPE_RGB_8,
                                         INTENT_PERCEPTUAL, 0);
 
@@ -247,9 +247,9 @@ CIETongueWidget::~CIETongueWidget()
 //         free(d->Measurement.Allowed);
 //     }
 
-    cmsDeleteTransform(d->hXFORM);
-    cmsCloseProfile(d->hXYZProfile);
-    cmsCloseProfile(d->hMonitorProfile);
+    dkCmsDeleteTransform(d->hXFORM);
+    dkCmsCloseProfile(d->hXYZProfile);
+    dkCmsCloseProfile(d->hMonitorProfile);
     delete d;
 }
 
@@ -263,7 +263,7 @@ bool CIETongueWidget::setProfileData(const QByteArray& profileData)
     if (!profileData.isEmpty())
     {
         LcmsLock lock;
-        cmsHPROFILE hProfile = cmsOpenProfileFromMem((void*)profileData.data(), (DWORD)profileData.size());
+        cmsHPROFILE hProfile = dkCmsOpenProfileFromMem((void*)profileData.data(), (DWORD)profileData.size());
 
         if (!hProfile)
         {
@@ -273,7 +273,7 @@ bool CIETongueWidget::setProfileData(const QByteArray& profileData)
         else
         {
             setProfile(hProfile);
-            cmsCloseProfile(hProfile);
+            dkCmsCloseProfile(hProfile);
             d->profileDataAvailable = true;
             d->loadingImageSucess   = true;
         }
@@ -298,7 +298,7 @@ bool CIETongueWidget::setProfileFromFile(const KUrl& file)
     if (!file.isEmpty() && file.isValid())
     {
         LcmsLock lock;
-        cmsHPROFILE hProfile = cmsOpenProfileFromFile(QFile::encodeName(file.toLocalFile()), "r");
+        cmsHPROFILE hProfile = dkCmsOpenProfileFromFile(QFile::encodeName(file.toLocalFile()), "r");
 
         if (!hProfile)
         {
@@ -308,7 +308,7 @@ bool CIETongueWidget::setProfileFromFile(const KUrl& file)
         else
         {
             setProfile(hProfile);
-            cmsCloseProfile(hProfile);
+            dkCmsCloseProfile(hProfile);
             d->profileDataAvailable = true;
             d->loadingImageSucess   = true;
         }
@@ -333,24 +333,24 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
     // Get the white point.
 
     ZeroMemory(&(d->MediaWhite), sizeof(cmsCIEXYZ));
-    cmsTakeMediaWhitePoint(&(d->MediaWhite), hProfile);
+    dkCmsTakeMediaWhitePoint(&(d->MediaWhite), hProfile);
     cmsCIExyY White;
-    cmsXYZ2xyY(&White, &(d->MediaWhite));
+    dkCmsXYZ2xyY(&White, &(d->MediaWhite));
 
     // Get the colorant matrix.
 
     ZeroMemory(&(d->Primaries), sizeof(cmsCIExyYTRIPLE));
 
-    if (cmsIsTag(hProfile, icSigRedColorantTag)   &&
-        cmsIsTag(hProfile, icSigGreenColorantTag) &&
-        cmsIsTag(hProfile, icSigBlueColorantTag))
+    if (dkCmsIsTag(hProfile, icSigRedColorantTag)   &&
+        dkCmsIsTag(hProfile, icSigGreenColorantTag) &&
+        dkCmsIsTag(hProfile, icSigBlueColorantTag))
     {
         MAT3 Mat;
 
-        if (cmsReadICCMatrixRGB2XYZ(&Mat, hProfile))
+        if (dkCmsReadICCMatrixRGB2XYZ(&Mat, hProfile))
         {
             // Undo chromatic adaptation
-            if (cmsAdaptMatrixFromD50(&Mat, &White))
+            if (dkCmsAdaptMatrixFromD50(&Mat, &White))
             {
                 cmsCIEXYZ tmp;
 
@@ -359,19 +359,19 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
                 tmp.Z = Mat.v[2].n[0];
 
                 // ScaleToWhite(&MediaWhite, &tmp);
-                cmsXYZ2xyY(&(d->Primaries.Red), &tmp);
+                dkCmsXYZ2xyY(&(d->Primaries.Red), &tmp);
 
                 tmp.X = Mat.v[0].n[1];
                 tmp.Y = Mat.v[1].n[1];
                 tmp.Z = Mat.v[2].n[1];
                 // ScaleToWhite(&MediaWhite, &tmp);
-                cmsXYZ2xyY(&(d->Primaries.Green), &tmp);
+                dkCmsXYZ2xyY(&(d->Primaries.Green), &tmp);
 
                 tmp.X = Mat.v[0].n[2];
                 tmp.Y = Mat.v[1].n[2];
                 tmp.Z = Mat.v[2].n[2];
                 // ScaleToWhite(&MediaWhite, &tmp);
-                cmsXYZ2xyY(&(d->Primaries.Blue), &tmp);
+                dkCmsXYZ2xyY(&(d->Primaries.Blue), &tmp);
             }
         }
     }
@@ -382,7 +382,7 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
     char*  CharTarget     = 0;
     size_t CharTargetSize = 0;
 
-    if (cmsTakeCharTargetData(hProfile, &CharTarget, &CharTargetSize))
+    if (dkCmsTakeCharTargetData(hProfile, &CharTarget, &CharTargetSize))
     {
 //         LCMSHANDLE hSheet = cmsxIT8LoadFromMem(CharTarget, CharTargetSize);
 // 
@@ -427,8 +427,8 @@ QRgb CIETongueWidget::colorByCoord(double x, double y)
     WORD XYZW[3];
     BYTE RGB[3];
 
-    cmsFloat2XYZEncoded(XYZW, &XYZ);
-    cmsDoTransform(d->hXFORM, XYZW, RGB, 1);
+    dkCmsFloat2XYZEncoded(XYZW, &XYZ);
+    dkCmsDoTransform(d->hXFORM, XYZW, RGB, 1);
 
     return qRgb(RGB[0], RGB[1], RGB[2]);
 }
@@ -616,7 +616,7 @@ void CIETongueWidget::drawPatches()
 //         {
 //             LPcmsCIEXYZ XYZ = &p ->XYZ;
 //             cmsCIExyY xyY;
-//             cmsXYZ2xyY(&xyY, XYZ);
+//             dkCmsXYZ2xyY(&xyY, XYZ);
 // 
 //             drawSmallElipse(&xyY,  0, 0, 0, 4);
 // 
@@ -633,7 +633,7 @@ void CIETongueWidget::drawPatches()
 //                 }
 // 
 //                 cmsCIExyY Pt;
-//                 cmsXYZ2xyY(&Pt, &p->XYZProof);
+//                 dkCmsXYZ2xyY(&Pt, &p->XYZProof);
 //                 int icx1, icx2, icy1, icy2;
 // 
 //                 mapPoint(icx1, icy1, &xyY);
@@ -675,18 +675,18 @@ void CIETongueWidget::sweep_sRGB()
     int r, g, b;
     cmsHPROFILE hXYZ, hsRGB;
 
-    hXYZ  = cmsCreateXYZProfile();
-    hsRGB = cmsCreate_sRGBProfile();
+    hXYZ  = dkCmsCreateXYZProfile();
+    hsRGB = dkCmsCreate_sRGBProfile();
 
-    cmsHTRANSFORM xform = cmsCreateTransform(hsRGB, TYPE_RGB_16, hXYZ, TYPE_XYZ_16,
+    cmsHTRANSFORM xform = dkCmsCreateTransform(hsRGB, TYPE_RGB_16, hXYZ, TYPE_XYZ_16,
                           INTENT_ABSOLUTE_COLORIMETRIC, cmsFLAGS_NOTPRECALC);
     WORD RGB[3], XYZ[3];
     cmsCIEXYZ xyz, MediaWhite;
     cmsCIExyY xyY, WhitePt;
     int x1, y1;
 
-    cmsTakeMediaWhitePoint(&MediaWhite, hsRGB);
-    cmsXYZ2xyY(&WhitePt, &MediaWhite);
+    dkCmsTakeMediaWhitePoint(&MediaWhite, hsRGB);
+    dkCmsXYZ2xyY(&WhitePt, &MediaWhite);
 
     for (r=0; r < 65536; r += 1024)
     {
@@ -697,24 +697,24 @@ void CIETongueWidget::sweep_sRGB()
                 RGB[0] = r;
                 RGB[1] = g;
                 RGB[2] = b;
-                cmsDoTransform(xform, RGB, XYZ, 1);
-                cmsXYZEncoded2Float(&xyz, XYZ);
-                cmsXYZ2xyY(&xyY, &xyz);
+                dkCmsDoTransform(xform, RGB, XYZ, 1);
+                dkCmsXYZEncoded2Float(&xyz, XYZ);
+                dkCmsXYZ2xyY(&xyY, &xyz);
                 mapPoint(x1, y1, &xyY);
                 d->painter.drawPoint(x1 + d->xBias, y1);
             }
         }
     }
 
-    cmsDeleteTransform(xform);
-    cmsCloseProfile(hXYZ);
-    cmsCloseProfile(hsRGB);
+    dkCmsDeleteTransform(xform);
+    dkCmsCloseProfile(hXYZ);
+    dkCmsCloseProfile(hsRGB);
 }
 
 void CIETongueWidget::drawWhitePoint()
 {
     cmsCIExyY Whitem_pntxyY;
-    cmsXYZ2xyY(&Whitem_pntxyY, &(d->MediaWhite));
+    dkCmsXYZ2xyY(&Whitem_pntxyY, &(d->MediaWhite));
     drawSmallElipse(&Whitem_pntxyY,  255, 255, 255, 8);
 }
 
