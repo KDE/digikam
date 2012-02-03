@@ -105,15 +105,16 @@ void KipiImageInfo::setTitle(const QString& newName)
 
 QString KipiImageInfo::description()
 {
-    return m_info.comment();
+    QMap<QString, QVariant> map = attributes();
+    if (!map.isEmpty()) return map.value("comment", QString()).toString();
+    return QString();
 }
 
 void KipiImageInfo::setDescription( const QString& description )
 {
-    DatabaseAccess access;
-    ImageComments comments = m_info.imageComments(access);
-    // we set a comment with default language, author and date null
-    comments.addComment(description);
+    QMap<QString, QVariant> map;
+    map.insert("comment", description);
+    addAttributes(map);
 }
 
 QDateTime KipiImageInfo::time( KIPI::TimeSpec /*spec*/ )
@@ -148,7 +149,6 @@ void KipiImageInfo::cloneData( ImageInfoShared* const other )
 void KipiImageInfo::cloneData( ImageInfoShared* other )
 #endif
 {
-    setDescription( other->description() );
     setTime( other->time(KIPI::FromInfo), KIPI::FromInfo );
     addAttributes( other->attributes() );
 }
@@ -162,7 +162,7 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
     if (p)
     {
         // Get default title property from database
-        res["comment"]       = description();
+        res["comment"]       = m_info.comment();;
 
         // Get default title property from database
         res["title"]         = m_info.title();
@@ -228,7 +228,10 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         if (attributes.contains("comment"))
         {
             QString comment = attributes["comment"].toString();
-            setDescription(comment);
+            DatabaseAccess access;
+            ImageComments comments = m_info.imageComments(access);
+            // we set a comment with default language, author and date null
+            comments.addComment(comment);
         }
 
         // Set digiKam date of picture into database.
