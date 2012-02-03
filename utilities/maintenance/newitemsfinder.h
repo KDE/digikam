@@ -26,17 +26,16 @@
 
 // Qt includes
 
-#include <QTime>
 #include <QString>
 
 // Local includes
 
-#include "progressmanager.h"
+#include "maintenancetool.h"
 
 namespace Digikam
 {
 
-class NewItemsFinder : public ProgressItem
+class NewItemsFinder : public MaintenanceTool
 {
     Q_OBJECT
 
@@ -51,23 +50,16 @@ public:
 
 public:
 
-    NewItemsFinder(FinderMode mode=CompleteCollectionScan, const QStringList& foldersToScan=QStringList());
+    NewItemsFinder(FinderMode mode=CompleteCollectionScan, const QStringList& foldersToScan=QStringList(), 
+                   ProgressItem* parent=0);
     ~NewItemsFinder();
-
-Q_SIGNALS:
-
-    void signalComplete();
 
 private Q_SLOTS:
 
+    void slotTotalFilesToScan(int);
     void slotScanStarted(const QString& info);
     void slotProgressValue(float);
-    void slotScanCompleted();
     void slotCancel();
-
-private:
-
-    QTime m_duration;
 };
 
 } // namespace Digikam

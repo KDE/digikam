@@ -102,6 +102,7 @@ void MaintenanceMngr::slotStage1()
     if (d->settings.newItems)
     {
         NewItemsFinder* tool = new NewItemsFinder();
+        tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage2()));
