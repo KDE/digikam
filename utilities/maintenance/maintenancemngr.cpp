@@ -139,6 +139,7 @@ void MaintenanceMngr::slotStage3()
     if (d->settings.fingerPrints)
     {
         FingerPrintsGenerator* tool = new FingerPrintsGenerator(d->settings.scanFingerPrints);
+        tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage4()));
