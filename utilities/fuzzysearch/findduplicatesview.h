@@ -7,7 +7,7 @@
  * Description : Find Duplicates View.
  *
  * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
@@ -54,10 +54,6 @@ public:
 
     SAlbum* currentFindDuplicatesAlbum() const;
 
-Q_SIGNALS:
-
-    void signalUpdateFingerPrints();
-
 public Q_SLOTS:
 
     void slotSetSelectedAlbum(Album*);
@@ -73,6 +69,7 @@ private Q_SLOTS:
     void slotFindDuplicates();
     void slotDuplicatesAlbumActived(QTreeWidgetItem*, int);
     void slotComplete();
+    void slotUpdateFingerPrints();
 
     void slotAlbumSelectionChanged(Album*, Qt::CheckState);
     void slotTagSelectionChanged(Album*, Qt::CheckState);

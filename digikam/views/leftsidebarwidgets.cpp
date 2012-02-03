@@ -7,7 +7,7 @@
  * Description : left sidebar widgets
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,6 +59,8 @@
 #include "searchxml.h"
 #include "tagfolderview.h"
 #include "timelinewidget.h"
+#include "facescandialog.h"
+#include "facedetector.h"
 
 namespace Digikam
 {
@@ -955,12 +957,6 @@ FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* parent, SearchModel*
     QVBoxLayout* layout = new QVBoxLayout(this);
 
     layout->addWidget(d->fuzzySearchView);
-
-    connect(d->fuzzySearchView, SIGNAL(signalUpdateFingerPrints()),
-            this, SIGNAL(signalUpdateFingerPrints()));
-
-    connect(d->fuzzySearchView, SIGNAL(signalGenerateFingerPrintsFirstTime()),
-            this, SIGNAL(signalGenerateFingerPrintsFirstTime()));
 }
 
 FuzzySearchSideBarWidget::~FuzzySearchSideBarWidget()
@@ -1170,7 +1166,12 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
 
     connect(d->rescanButton, SIGNAL(pressed()),
-            this, SIGNAL(signalDetectFaces()) );
+            this, SLOT(slotScanForFaces()) );
+}
+
+PeopleSideBarWidget::~PeopleSideBarWidget()
+{
+    delete d;
 }
 
 QPixmap PeopleSideBarWidget::getIcon()
@@ -1217,9 +1218,14 @@ void PeopleSideBarWidget::changeAlbumFromHistory(Album* album)
     d->tagFolderView->setCurrentAlbum(dynamic_cast<TAlbum*>(album));
 }
 
-PeopleSideBarWidget::~PeopleSideBarWidget()
+void PeopleSideBarWidget::slotScanForFaces()
 {
-    delete d;
+    FaceScanDialog dialog;
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        new FaceDetector(dialog.settings());
+    }
 }
 
 } // namespace Digikam

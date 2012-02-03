@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well.com>
  * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -157,7 +157,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->fieldsGroup = new QGroupBox;
+    d->fieldsGroup            = new QGroupBox;
     QGridLayout* fieldsLayout = new QGridLayout;
 
     d->fieldsGroup->setWhatsThis(i18nc("@info:whatsthis",
@@ -171,9 +171,9 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     QLabel* fieldsIconLabel = new QLabel;
     fieldsIconLabel->setPixmap(SmallIcon("format-list-unordered", KIconLoader::SizeMedium));
 
-    QLabel* fieldsLabel = new QLabel(i18nc("@label", "Write This Information to the Metadata"));
+    QLabel* fieldsLabel     = new QLabel(i18nc("@label", "Write This Information to the Metadata"));
 
-    d->saveTagsBox = new QCheckBox;
+    d->saveTagsBox          = new QCheckBox;
     d->saveTagsBox->setText(i18nc("@option:check", "Image tags"));
     d->saveTagsBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image tags "
                                       "in the XMP and IPTC tags."));
@@ -224,7 +224,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->readWriteGroup = new QGroupBox;
+    d->readWriteGroup            = new QGroupBox;
     QGridLayout* readWriteLayout = new QGridLayout;
 
     QLabel* readWriteIconLabel = new QLabel;
@@ -232,19 +232,19 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
     QLabel* readWriteLabel = new QLabel(i18nc("@label", "Reading and Writing Metadata"));
 
-    d->readXMPSidecarBox = new QCheckBox;
+    d->readXMPSidecarBox   = new QCheckBox;
     d->readXMPSidecarBox->setText(i18nc("@option:check", "Read from sidecar files"));
     d->readXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
                                             "Turn on this option to read metadata from XMP sidecar files when reading metadata."));
     d->readXMPSidecarBox->setEnabled(KExiv2::supportXmp());
 
-    d->writeXMPSidecarBox = new QCheckBox;
+    d->writeXMPSidecarBox  = new QCheckBox;
     d->writeXMPSidecarBox->setText(i18nc("@option:check", "Write to sidecar files"));
     d->writeXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
                                               "Turn on this option to save, as specified, metadata to XMP sidecar files."));
     d->writeXMPSidecarBox->setEnabled(KExiv2::supportXmp());
 
-    d->writingModeCombo      = new KComboBox;
+    d->writingModeCombo    = new KComboBox;
     //d->writingModeCombo->addItem(i18n("Write to image only"),                           KExiv2::WRITETOIMAGEONLY);
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only image only"), KExiv2::WRITETOSIDECARONLY4READONLYFILES);
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     KExiv2::WRITETOSIDECARONLY);
@@ -405,8 +405,8 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->rotationAdvGroup            = new QGroupBox;
     QGridLayout* rotationAdvLayout = new QGridLayout;
 
-    QLabel* rotationAdvExpl = new QLabel(i18nc("@label", "Advanced Settings"));
-    QLabel* rotationAdvIcon = new QLabel;
+    QLabel* rotationAdvExpl  = new QLabel(i18nc("@label", "Advanced Settings"));
+    QLabel* rotationAdvIcon  = new QLabel;
     rotationAdvIcon->setPixmap(SmallIcon("configure", KIconLoader::SizeMedium));
 
     d->exifRotateBox         = new QCheckBox;
@@ -432,16 +432,16 @@ SetupMetadata::SetupMetadata(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QWidget* displayPanel = new QWidget;
+    QWidget* displayPanel      = new QWidget;
     QGridLayout* displayLayout = new QGridLayout;
 
-    QLabel *displayLabel = new QLabel(i18nc("@info:label", "Select Metadata Fields to Be Displayed"));
+    QLabel* displayLabel       = new QLabel(i18nc("@info:label", "Select Metadata Fields to Be Displayed"));
 
-    QLabel* displayIcon = new QLabel;
+    QLabel* displayIcon        = new QLabel;
     displayIcon->setPixmap(SmallIcon("view-list-tree", KIconLoader::SizeMedium));//"folder-image"));
 
-    KTabWidget* displaySubTab = new KTabWidget;
-    d->tagsCfgPanel = new MetadataPanel(displaySubTab);
+    KTabWidget* displaySubTab  = new KTabWidget;
+    d->tagsCfgPanel            = new MetadataPanel(displaySubTab);
 
     displayLayout->addWidget(displayIcon,   0, 0);
     displayLayout->addWidget(displayLabel,  0, 1);
@@ -495,7 +495,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     QGridLayout* nepoGrid = new QGridLayout(nepoBox);
     nepoBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    QLabel* nepoLogoLabel = new QLabel;
+    QLabel* nepoLogoLabel   = new QLabel;
     nepoLogoLabel->setPixmap(KIconLoader::global()->loadIcon("nepomuk", KIconLoader::NoGroup, KIconLoader::SizeLarge));
 
     QLabel* nepoExplanation = new QLabel(nepoBox);

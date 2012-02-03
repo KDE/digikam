@@ -7,8 +7,8 @@
  * Description : Handling accesses to one image and associated data
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -114,12 +114,12 @@ public:
     /**
      * Returns if this objects contains valid data
      */
-    bool      isNull() const;
+    bool isNull() const;
 
     /**
      * @return the name of the image
      */
-    QString   name() const;
+    QString name() const;
 
     /**
      * @return the datetime of the image
@@ -140,7 +140,7 @@ public:
      * @return the dimensions of the image (valid only if dimensions
      * have been requested)
      */
-    QSize     dimensions() const;
+    QSize dimensions() const;
 
     /**
      * Returns the digikamalbums:// URL.
@@ -153,23 +153,23 @@ public:
      * Returns the file:// url.
      * This is equivalent to databaseUrl().fileUrl()
      */
-    KUrl       fileUrl() const;
+    KUrl fileUrl() const;
 
     /**
      * Equivalent to fileUrl().path()
      */
     // Deprecate?
-    QString   filePath() const;
+    QString filePath() const;
 
     /**
      * @return the unique image id for this item
      */
-    qlonglong   id() const;
+    qlonglong id() const;
 
     /**
      * @return the id of the PAlbum to which this item belongs
      */
-    int       albumId() const;
+    int albumId() const;
 
     /**
      * The album root id
@@ -179,27 +179,27 @@ public:
     /**
      * @return the default title for this item
      */
-    QString   title() const;
+    QString title() const;
 
     /**
      * @return the default comment for this item
      */
-    QString   comment() const;
+    QString comment() const;
 
     /**
      * Returns the Pick Label Id (see PickLabel values in globals.h)
      */
-    int       pickLabel() const;
+    int pickLabel() const;
 
     /**
      * Returns the Color Label Id (see ColorLabel values in globals.h)
      */
-    int       colorLabel() const;
+    int colorLabel() const;
 
     /**
      * Returns the rating
      */
-    int       rating() const;
+    int rating() const;
 
     /**
      * Returns the category of the item: Image, Audio, Video
@@ -209,7 +209,7 @@ public:
     /** Returns the image format / mimetype as a standardized
      *  string (see DBSCHEMA.ODS).
      */
-    QString   format() const;
+    QString format() const;
 
     /**
      * @return a list of IDs of tags assigned to this item
@@ -397,48 +397,48 @@ public:
      * Adds a tag to the item (writes it to database)
      * @param tagID the ID of the tag to add
      */
-    void        setTag(int tagID);
+    void setTag(int tagID);
 
     /**
      * Adds tags in the list to the item.
      * Tags are created if they do not yet exist
      */
-    void        addTagPaths(const QStringList& tagPaths);
+    void addTagPaths(const QStringList& tagPaths);
 
     /**
      * Remove a tag from the item (removes it from database)
      * @param tagID the ID of the tag to remove
      */
-    void        removeTag(int tagID);
+    void removeTag(int tagID);
 
     /**
      * Remove all tags from the item (removes it from database)
      */
-    void        removeAllTags();
+    void removeAllTags();
 
     /** Set the pick Label Id for the item (see PickLabel values from globals.h)
      */
-    void        setPickLabel(int value);
+    void setPickLabel(int value);
 
     /**
      * Set the color Label Id for the item (see ColorLabel values from globals.h)
      */
-    void        setColorLabel(int value);
+    void setColorLabel(int value);
 
     /**
      * Set the rating for the item
      */
-    void        setRating(int value);
+    void setRating(int value);
 
     /**
      * Set the orientation for the item
      */
-    void        setOrientation(int value);
+    void setOrientation(int value);
 
     /**
      * Set the visibility flag - triggers between Visible and Hidden
      */
-    void        setVisible(bool isVisible);
+    void setVisible(bool isVisible);
 
     /**
      * Copy database information of this item to a newly created item
@@ -447,7 +447,7 @@ public:
      * @return an ImageInfo object of the new item
      */
     //TODO: Move to album?
-    ImageInfo   copyItem(int dstAlbumID, const QString& dstFileName);
+    ImageInfo copyItem(int dstAlbumID, const QString& dstFileName);
 
 private:
 

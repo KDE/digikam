@@ -23,9 +23,12 @@
 
 #include "newitemsfinder.moc"
 
+// Qt includes
+
+#include <QTimer>
+
 // KDE includes
 
-#include <kapplication.h>
 #include <klocale.h>
 #include <kicon.h>
 #include <kdebug.h>
@@ -33,88 +36,110 @@
 // Local includes
 
 #include "scancontroller.h"
-#include "knotificationwrapper.h"
 
 namespace Digikam
 {
 
-NewItemsFinder::NewItemsFinder(FinderMode mode, const QStringList& foldersToScan)
-    : ProgressItem(0, "NewItemsFinder", QString(), QString(), true, true)
+class NewItemsFinder::NewItemsFinderPriv
 {
-    m_duration.start();
+public:
 
+    NewItemsFinderPriv() :
+        mode(CompleteCollectionScan)
+    {
+    }
+
+    FinderMode  mode;
+    QStringList foldersToScan;
+};
+
+NewItemsFinder::NewItemsFinder(FinderMode mode, const QStringList& foldersToScan, ProgressItem* parent)
+    : MaintenanceTool("NewItemsFinder", parent), d(new NewItemsFinderPriv)
+{
     connect(ScanController::instance(), SIGNAL(collectionScanStarted(QString)),
             this, SLOT(slotScanStarted(QString)));
 
-    connect(ScanController::instance(), SIGNAL(scanningProgress(float)),
-            this, SLOT(slotProgressValue(float)));
+    connect(ScanController::instance(), SIGNAL(totalFilesToScan(int)),
+            this, SLOT(slotTotalFilesToScan(int)));
 
-    connect(ScanController::instance(), SIGNAL(collectionScanFinished()),
-            this, SLOT(slotScanCompleted()));
+    connect(ScanController::instance(), SIGNAL(filesScanned(int)),
+            this, SLOT(slotFilesScanned(int)));
 
-    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
-            this, SLOT(slotCancel()));
+    connect(ScanController::instance(), SIGNAL(completeScanDone()),
+            this, SLOT(slotDone()));
 
-    switch(mode)
+    d->mode          = mode;
+    d->foldersToScan = foldersToScan;
+
+    QTimer::singleShot(500, this, SLOT(slotStart()));
+}
+
+NewItemsFinder::~NewItemsFinder()
+{
+    delete d;
+}
+
+void NewItemsFinder::slotStart()
+{
+    MaintenanceTool::slotStart();
+
+    switch(d->mode)
     {
         case ScanDeferredFiles:
         {
+            kDebug() << "scan mode: ScanDeferredFiles";
+
             ScanController::instance()->allowToScanDeferredFiles();
             break;
         }
         case CompleteCollectionScan:
         {
+            kDebug() << "scan mode: CompleteCollectionScan";
+
             ScanController::instance()->completeCollectionScan();
             break;
         }
         case ScheduleCollectionScan:
         {
-            foreach(const QString& folder, foldersToScan)
+            kDebug() << "scan mode: ScheduleCollectionScan";
+
+            foreach(const QString& folder, d->foldersToScan)
                 ScanController::instance()->scheduleCollectionScan(folder);
             break;
         }
     }
 }
 
-NewItemsFinder::~NewItemsFinder()
-{
-}
-
 void NewItemsFinder::slotScanStarted(const QString& info)
 {
     ProgressManager::addProgressItem(this);
-    setUsesBusyIndicator(true);
     setLabel(i18n("Find new items"));
     setStatus(info);
     setThumbnail(KIcon("view-refresh").pixmap(22));
 }
 
-void NewItemsFinder::slotProgressValue(float /*v*/)
+void NewItemsFinder::slotTotalFilesToScan(int t)
 {
-    // FIXME: sound like progress indication from ScanController are not suitable... Why ?
-//    setProgress((int)(v*100.0));
+    //kDebug() << "total scan value : " << t;
+    setTotalItems(t);
 }
 
-void NewItemsFinder::slotScanCompleted()
+void NewItemsFinder::slotFilesScanned(int s)
 {
-    QTime now, t = now.addMSecs(m_duration.elapsed());
-    // Pop-up a message to bring user when all is done.
-    KNotificationWrapper(id(),
-                         i18n("Find new items is done.\nDuration: %1", t.toString()),
-                         kapp->activeWindow(), label());
-
-    emit signalComplete();
-
-    setComplete();
+    //kDebug() << "file scanned : " << s;
+    advance(s);
 }
 
 void NewItemsFinder::slotCancel()
 {
     ScanController::instance()->cancelCompleteScan();
+    MaintenanceTool::slotCancel();
+}
 
-    emit signalComplete();
-
-    setComplete();
+void NewItemsFinder::slotDone()
+{
+    //kDebug() << "fired!! ";
+    MaintenanceTool::slotDone();
 }
 
 }  // namespace Digikam

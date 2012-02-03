@@ -206,7 +206,7 @@ void AlbumSelectionTreeView::slotRebuildThumbs()
         return;
     }
 
-    new ThumbsGenerator(album->id());
+    new ThumbsGenerator(true, album->id());
 }
 
 bool AlbumSelectionTreeView::viewportEvent(QEvent* event)

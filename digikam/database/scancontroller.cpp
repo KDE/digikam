@@ -7,8 +7,8 @@
  * Description : scan pictures interface.
  *
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -770,6 +770,7 @@ void ScanController::slotTotalFilesToScan(int count)
         d->progressDialog->incrementMaximum(count);
     }
     d->totalFilesToScan = count;
+    emit totalFilesToScan(d->totalFilesToScan);
 }
 
 void ScanController::slotStartCompleteScan()
@@ -800,15 +801,16 @@ void ScanController::slotStartScanningAlbum(const QString& albumRoot, const QStr
     }
 }
 
-void ScanController::slotScannedFiles(int filesScanned)
+void ScanController::slotScannedFiles(int scanned)
 {
     if (d->progressDialog)
     {
-        d->progressDialog->advance(filesScanned);
+        d->progressDialog->advance(scanned);
     }
     if (d->totalFilesToScan)
     {
-        emit scanningProgress(double(filesScanned) / double(d->totalFilesToScan));
+        emit filesScanned(scanned);
+        emit scanningProgress(double(scanned) / double(d->totalFilesToScan));
     }
 }
 

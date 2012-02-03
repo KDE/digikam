@@ -7,8 +7,8 @@
  * Description : scan pictures interface.
  *
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -182,6 +182,9 @@ Q_SIGNALS:
     void errorFromInitialization(const QString&);
     void progressFromInitialization(const QString&, int);
 
+    void totalFilesToScan(int);
+    void filesScanned(int);
+
     void collectionScanStarted(const QString& message);
     void scanningProgress(float progress);
     void collectionScanFinished();
@@ -191,7 +194,7 @@ private Q_SLOTS:
     void slotStartCompleteScan();
     void slotTotalFilesToScan(int count);
     void slotStartScanningAlbum(const QString& albumRoot, const QString& album);
-    void slotScannedFiles(int filesScanned);
+    void slotScannedFiles(int scanned);
     void slotStartScanningAlbumRoot(const QString& albumRoot);
     void slotStartScanningForStaleAlbums();
     void slotStartScanningAlbumRoots();

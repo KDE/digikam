@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-01-20
- * Description : Duplicates items finder.
+ * Date        : 2012-01-31
+ * Description : maintenance manager
  *
  * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,34 +21,31 @@
  *
  * ============================================================ */
 
-#ifndef DUPLICATESFINDER_H
-#define DUPLICATESFINDER_H
+#ifndef MAINTENANCEMNGR_H
+#define MAINTENANCEMNGR_H
 
 // Qt includes
 
-#include <QString>
-
-// KDE includes
-
-#include <kjob.h>
-
-// Local includes
-
-#include "progressmanager.h"
+#include <QObject>
 
 namespace Digikam
 {
 
-class DuplicatesFinder : public ProgressItem
+class MaintenanceSettings;
+
+class MaintenanceMngr : public QObject
 {
     Q_OBJECT
 
 public:
 
-    DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity=90);
-    /// Version to find all duplicates over whole collections
-    DuplicatesFinder(int similarity=90);
-    ~DuplicatesFinder();
+    MaintenanceMngr(QObject* parent);
+    ~MaintenanceMngr();
+
+    void setSettings(const MaintenanceSettings& settings);
+
+    void start();
+    bool isRunning() const;
 
 Q_SIGNALS:
 
@@ -56,21 +53,22 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotDuplicatesSearchResult();
-    void slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong);
-    void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
+    void slotStage1();  // New items
+    void slotStage2();  // Thumbnails
+    void slotStage3();  // Finger-prints
+    void slotStage4();  // Duplicates
+    void slotStage5();  // Metadata
+    void slotStage6();  // Face detection
+
+    void slotDone();
     void slotCancel();
 
 private:
 
-    void init();
-
-private:
-
-    class DuplicatesFinderPriv;
-    DuplicatesFinderPriv* const d;
+    class MaintenanceMngrPriv;
+    MaintenanceMngrPriv* const d;
 };
 
-} // namespace Digikam
+}  // namespace Digikam
 
-#endif /* DUPLICATESFINDER_H */
+#endif /* MAINTENANCEMNGR_H */

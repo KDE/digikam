@@ -31,11 +31,12 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "maintenancesettings.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT MaintenanceDlg : public KDialog
+class MaintenanceDlg : public KDialog
 {
     Q_OBJECT
 
@@ -43,6 +44,19 @@ public:
 
     explicit MaintenanceDlg(QWidget* parent=0);
     ~MaintenanceDlg();
+
+    MaintenanceSettings settings() const;
+
+private Q_SLOTS:
+
+    void slotItemToggled(int index, bool b);
+    void slotMetadataSetup();
+    void slotOk();
+
+private:
+
+    void writeSettings();
+    void readSettings();
 
 private:
 

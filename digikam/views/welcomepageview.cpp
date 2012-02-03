@@ -7,7 +7,7 @@
  * Description : a widget to display a welcome page
  *               on root album.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
@@ -111,6 +111,8 @@ QString WelcomePageView::infoPage() const
     newFeatures << i18n("New option to setup a collection as default download place with camera device;");
     newFeatures << i18n("New option to filter camera icon-view;");
     newFeatures << i18n("New option to download items from camera in just one-click;");
+    newFeatures << i18n("New progress manager to manage easily all parallelized process;");
+    newFeatures << i18n("New tool to run all maintenance process in background;");
     newFeatures << i18n("Speed-up improvements to be connected to camera device;");
     newFeatures << i18n("Support for the latest camera RAW files using <a href=\"http://www.libraw.org\">LibRaw</a>, "
                         "including Foveon-sensor-based cameras, Nikon D7000 and D5100, Canon 600D and 1100D, Pentax K5, Olympus E5 and Sony Alpha/Nex "

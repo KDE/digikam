@@ -29,13 +29,12 @@
 #include <QTimer>
 #include <QDir>
 #include <QFileInfo>
-#include <QDateTime>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kcodecs.h>
 #include <klocale.h>
+#include <kconfig.h>
 #include <kstandardguiitem.h>
 
 // Local includes
@@ -48,7 +47,6 @@
 #include "haar.h"
 #include "haariface.h"
 #include "previewloadthread.h"
-#include "knotificationwrapper.h"
 #include "metadatasettings.h"
 
 namespace Digikam
@@ -59,17 +57,12 @@ class FingerPrintsGenerator::FingerPrintsGeneratorPriv
 public:
 
     FingerPrintsGeneratorPriv() :
-        cancel(false),
         rebuildAll(true),
         previewLoadThread(0)
     {
-        duration.start();
     }
 
-    bool               cancel;
     bool               rebuildAll;
-
-    QTime              duration;
 
     QStringList        allPicturesPath;
 
@@ -78,8 +71,8 @@ public:
     HaarIface          haarIface;
 };
 
-FingerPrintsGenerator::FingerPrintsGenerator(bool rebuildAll)
-    : ProgressItem(0, "FingerPrintsGenerator", QString(), QString(), true, true),
+FingerPrintsGenerator::FingerPrintsGenerator(bool rebuildAll, ProgressItem* parent)
+    : MaintenanceTool("FingerPrintsGenerator", parent),
       d(new FingerPrintsGeneratorPriv)
 {
     ProgressManager::addProgressItem(this);
@@ -90,12 +83,9 @@ FingerPrintsGenerator::FingerPrintsGenerator(bool rebuildAll)
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
             this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
 
-    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
-            this, SLOT(slotCancel()));
-
     setLabel(i18n("Finger-prints"));
 
-    QTimer::singleShot(500, this, SLOT(slotRebuildFingerPrints()));
+    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 FingerPrintsGenerator::~FingerPrintsGenerator()
@@ -103,8 +93,10 @@ FingerPrintsGenerator::~FingerPrintsGenerator()
     delete d;
 }
 
-void FingerPrintsGenerator::slotRebuildFingerPrints()
+void FingerPrintsGenerator::slotStart()
 {
+    MaintenanceTool::slotStart();
+
     const AlbumList palbumList = AlbumManager::instance()->allPAlbums();
 
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
@@ -112,7 +104,7 @@ void FingerPrintsGenerator::slotRebuildFingerPrints()
     if (d->rebuildAll)
     {
         for (AlbumList::ConstIterator it = palbumList.constBegin();
-             !d->cancel && (it != palbumList.constEnd()); ++it)
+             !canceled() && (it != palbumList.constEnd()); ++it)
         {
             d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
         }
@@ -134,7 +126,7 @@ void FingerPrintsGenerator::slotRebuildFingerPrints()
 
 void FingerPrintsGenerator::processOne()
 {
-    if (d->cancel)
+    if (canceled())
     {
         return;
     }
@@ -174,7 +166,7 @@ void FingerPrintsGenerator::slotGotImagePreview(const LoadingDescription& desc, 
 
     if (d->allPicturesPath.isEmpty())
     {
-        complete();
+        slotDone();
     }
     else
     {
@@ -182,24 +174,12 @@ void FingerPrintsGenerator::slotGotImagePreview(const LoadingDescription& desc, 
     }
 }
 
-void FingerPrintsGenerator::complete()
+void FingerPrintsGenerator::slotDone()
 {
-    QTime now, t = now.addMSecs(d->duration.elapsed());
-    // Pop-up a message to bring user when all is done.
-    KNotificationWrapper(id(),
-                         i18n("Finger-prints generation is done.\nDuration: %1", t.toString()),
-                         kapp->activeWindow(), label());
+    // Switch on scanned for finger-prints flag on digiKam config file.
+    KGlobal::config()->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
 
-    emit signalComplete();
-
-    setComplete();
-}
-
-void FingerPrintsGenerator::slotCancel()
-{
-    d->cancel = true;
-    emit signalComplete();
-    setComplete();
+    MaintenanceTool::slotDone();
 }
 
 }  // namespace Digikam

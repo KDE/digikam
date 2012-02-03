@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="203" name="digikam" >
+<gui version="204" name="digikam" >
 
  <MenuBar>
 
@@ -118,10 +118,7 @@
         <Action name="search_advanced" />
         <Action name="find_duplicates" />
       <Separator/>
-        <Action name="database_rescan" />
-        <Action name="thumbnails_rebuild" />
-        <Action name="fingerprints_rebuild" />
-        <Action name="sync_metadata" />
+        <Action name="maintenance" />
       <Separator/>
         <ActionList name="album_actions"/>
       <Separator/>

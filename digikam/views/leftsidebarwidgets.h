@@ -7,7 +7,7 @@
  * Description : left sidebar widgets
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -270,11 +270,6 @@ public:
     void newDuplicatesSearch(Album* album);
     void newSimilarSearch(const ImageInfo& imageInfo);
 
-Q_SIGNALS:
-
-    void signalUpdateFingerPrints();
-    void signalGenerateFingerPrintsFirstTime();
-
 private:
 
     class FuzzySearchSideBarWidgetPriv;
@@ -345,14 +340,12 @@ public:
 private Q_SLOTS:
 
     void slotInit();
+    void slotScanForFaces();
 
 Q_SIGNALS:
 
     void requestFaceMode(bool on);
 
-    void signalDetectFaces();
-    void signalScanForFacesFirstTime();
-    void signalResumeScanForFaces();
     void signalFindDuplicatesInAlbum(Album*);
 
 private:

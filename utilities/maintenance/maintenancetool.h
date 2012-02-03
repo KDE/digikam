@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-01-20
- * Description : new items finder.
+ * Date        : 2012-02-02
+ * Description : maintenance tool
  *
  * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef NEWITEMSFINDER_H
-#define NEWITEMSFINDER_H
+#ifndef MAINTENANCETOOL_H
+#define MAINTENANCETOOL_H
 
 // Qt includes
 
@@ -30,45 +30,43 @@
 
 // Local includes
 
-#include "maintenancetool.h"
+#include "progressmanager.h"
 
 namespace Digikam
 {
 
-class NewItemsFinder : public MaintenanceTool
+class MaintenanceTool : public ProgressItem
 {
     Q_OBJECT
 
 public:
 
-    enum FinderMode
-    {
-        CompleteCollectionScan,   // Scan whole collection imediatly.
-        ScanDeferredFiles,        // Defer whole collection scan.
-        ScheduleCollectionScan    // Scan imediatly folders list passed in contructor.
-    };
+    MaintenanceTool(const QString& id, ProgressItem* parent=0);
+    ~MaintenanceTool();
 
-public:
+    /** If true, show a notification message on desktop notification manager 
+     * with time elpased to run process.
+     */
+    void setNotificationEnabled(bool b);
 
-    NewItemsFinder(FinderMode mode=CompleteCollectionScan, const QStringList& foldersToScan=QStringList(), 
-                   ProgressItem* parent=0);
-    ~NewItemsFinder();
+Q_SIGNALS:
 
-private Q_SLOTS:
+    /** Emit when process is done (not canceled).
+     */
+    void signalComplete();
 
-    void slotStart();
-    void slotScanStarted(const QString&);
-    void slotTotalFilesToScan(int);
-    void slotFilesScanned(int);
-    void slotCancel();
-    void slotDone();
+protected Q_SLOTS:
+
+    virtual void slotStart();
+    virtual void slotDone();
+    virtual void slotCancel();
 
 private:
 
-    class NewItemsFinderPriv;
-    NewItemsFinderPriv* const d;
+    class MaintenanceToolPriv;
+    MaintenanceToolPriv* const d;
 };
 
 } // namespace Digikam
 
-#endif /* NEWITEMSFINDER_H */
+#endif /* MAINTENANCETOOL_H */

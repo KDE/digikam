@@ -3,9 +3,11 @@ digiKam 2.6.0-beta1 - Release date: 2012-02-05
 
 NEW FEATURES:
 
+General        : New tool to run all maintenance process in background.
+General        : Lprof 3rd party library have been removed from core implementation.
 General        : Thumbs/Preview for read-only files (as RAW) can be rotated through a flag in thumbnails database.
 General        : Add a Progress Manager as into Kontact to drive process running in parallele.
-General        : KIPI JPEGLossLess tool is now disabled in digiKam. A dedicated solution is now implemented 
+General        : KIPI JPEGLossLess tool is now disabled in digiKam. A dedicated solution is now implemented.
                  in digiKam core to rotate/flip image using multithreading, parallelization, and image versioning.
 KipiInterface  : Handle progress events from kipi tools through digiKam Progress Manager.
 ImageEditor    : Template Superimpose feature have been moved to PhotoLayoutEditor kipi-plugin.
@@ -55,5 +57,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 040 ==> 292578 : Windows 7 prof. 32Bits, Context Menu not fully visible.
 041 ==> 292645 : Build fails at imageproperties/captionedit.cpp.
 042 ==> 275122 : Rotating a TIFF file wipes out its metadata.
-043 ==> 
-
+043 ==> 278909 : Create fingerprints during thumbnail generation.
+044 ==> 228314 : Timeline view in digiKam scroll's left but not right.
+045 ==> 

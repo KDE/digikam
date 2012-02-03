@@ -9,7 +9,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,13 +39,11 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
-#include "dmetadata.h"
 #include "imageattributeswatch.h"
 #include "imagecomments.h"
 #include "imageposition.h"
 #include "globals.h"
 #include "tagscache.h"
-#include "metadatasettings.h"
 
 namespace Digikam
 {
@@ -105,64 +103,54 @@ void KipiImageInfo::setTitle(const QString& newName)
 }
 #endif // KIPI_VERSION >= 0x010300
 
+#if KIPI_VERSION < 0x010500
 QString KipiImageInfo::description()
 {
-    return m_info.comment();
+    QMap<QString, QVariant> map = attributes();
+    if (!map.isEmpty()) return map.value("comment", QString()).toString();
+    return QString();
 }
 
 void KipiImageInfo::setDescription( const QString& description )
 {
-    DatabaseAccess access;
-    ImageComments comments = m_info.imageComments(access);
-    // we set a comment with default language, author and date null
-    comments.addComment(description);
+    QMap<QString, QVariant> map;
+    map.insert("comment", description);
+    addAttributes(map);
 }
+
+int KipiImageInfo::angle()
+{
+    QMap<QString, QVariant> map = attributes();
+    if (!map.isEmpty()) return map.value("angle", 0).toInt();
+    return 0;
+}
+
+void KipiImageInfo::setAngle(int orientation)
+{
+    QMap<QString, QVariant> map;
+    map.insert("angle", orientation);
+    addAttributes(map);
+}
+#endif // KIPI_VERSION < 0x010500
 
 QDateTime KipiImageInfo::time( KIPI::TimeSpec /*spec*/ )
 {
-    return m_info.dateTime();
+    QMap<QString, QVariant> map = attributes();
+    if (!map.isEmpty()) return map.value("date", QDateTime()).toDateTime();
+    return QDateTime();
 }
 
-void KipiImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
+void KipiImageInfo::setTime(const QDateTime& date, KIPI::TimeSpec)
 {
-    if ( !time.isValid() )
+    if ( !date.isValid() )
     {
         kWarning() << "Invalid datetime specified";
         return;
     }
 
-    m_info.setDateTime(time);
-    //AlbumManager::instance()->refreshItemHandler( _url );
-}
-
-int KipiImageInfo::angle()
-{
-    if (MetadataSettings::instance()->settings().exifRotate)
-    {
-        // DMetadata metadata(_url.toLocalFile());
-        // DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
-
-        switch (m_info.orientation())
-        {
-            case DMetadata::ORIENTATION_ROT_180:
-                return 180;
-            case DMetadata::ORIENTATION_ROT_90:
-            case DMetadata::ORIENTATION_ROT_90_HFLIP:
-            case DMetadata::ORIENTATION_ROT_90_VFLIP:
-                return 90;
-            case DMetadata::ORIENTATION_ROT_270:
-                return 270;
-            default:
-                return 0;
-        }
-    }
-
-    return 0;
-}
-
-void KipiImageInfo::setAngle(int /*angle*/)
-{
-    // TODO: set digiKam database with this information.
+    QMap<QString, QVariant> map;
+    map.insert("date", date);
+    addAttributes(map);
 }
 
 #if KIPI_VERSION >= 0x010200
@@ -171,8 +159,6 @@ void KipiImageInfo::cloneData( ImageInfoShared* const other )
 void KipiImageInfo::cloneData( ImageInfoShared* other )
 #endif
 {
-    setDescription( other->description() );
-    setTime( other->time(KIPI::FromInfo), KIPI::FromInfo );
     addAttributes( other->attributes() );
 }
 
@@ -185,16 +171,16 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
     if (p)
     {
         // Get default title property from database
-        res["comment"]       = description();
+        res["comment"]       = m_info.comment();
 
         // Get default title property from database
         res["title"]         = m_info.title();
 
         // Get date property from database
-        res["date"]          = time(KIPI::FromInfo);
+        res["date"]          = m_info.dateTime();
 
         // Get angle property from database
-        res["angle"]          = angle();
+        res["angle"]         = m_info.orientation();
 
         QList<int> tagIds    = m_info.tagIds();
         // Get digiKam Tags Path list of picture from database.
@@ -250,22 +236,25 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         // Set digiKam default Title of picture into database.
         if (attributes.contains("comment"))
         {
-            QString comment = attributes["comment"].toString();
-            setDescription(comment);
+            QString comment        = attributes["comment"].toString();
+            DatabaseAccess access;
+            ImageComments comments = m_info.imageComments(access);
+            // we set a comment with default language, author and date null
+            comments.addComment(comment);
         }
 
         // Set digiKam date of picture into database.
         if (attributes.contains("date"))
         {
             QDateTime date = attributes["date"].toDateTime();
-            setTime(date);
+            m_info.setDateTime(date);
         }
 
         // Set digiKam angle of picture into database.
         if (attributes.contains("angle"))
         {
             int angle = attributes["angle"].toInt();
-            setAngle(angle);
+            m_info.setOrientation(angle);
         }
 
         // Set digiKam default Title of picture into database.
@@ -392,7 +381,7 @@ void KipiImageInfo::delAttributes(const QStringList& res)
         // Remove angle.
         if (res.contains("angle"))
         {
-            setAngle(0);
+            m_info.setOrientation(0);
         }
 
         // Remove all Titles.
