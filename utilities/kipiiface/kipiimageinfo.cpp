@@ -119,28 +119,36 @@ void KipiImageInfo::setDescription( const QString& description )
 
 QDateTime KipiImageInfo::time( KIPI::TimeSpec /*spec*/ )
 {
-    return m_info.dateTime();
+    QMap<QString, QVariant> map = attributes();
+    if (!map.isEmpty()) return map.value("date", QDateTime()).toDateTime();
+    return QDateTime();
 }
 
-void KipiImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
+void KipiImageInfo::setTime(const QDateTime& date, KIPI::TimeSpec)
 {
-    if ( !time.isValid() )
+    if ( !date.isValid() )
     {
         kWarning() << "Invalid datetime specified";
         return;
     }
 
-    m_info.setDateTime(time);
+    QMap<QString, QVariant> map;
+    map.insert("date", date);
+    addAttributes(map);
 }
 
 int KipiImageInfo::angle()
 {
-    return m_info.orientation();
+    QMap<QString, QVariant> map = attributes();
+    if (!map.isEmpty()) return map.value("angle", 0).toInt();
+    return 0;
 }
 
-void KipiImageInfo::setAngle(int angle)
+void KipiImageInfo::setAngle(int orientation)
 {
-    m_info.setOrientation(angle);
+    QMap<QString, QVariant> map;
+    map.insert("angle", orientation);
+    addAttributes(map);
 }
 
 #if KIPI_VERSION >= 0x010200
@@ -149,7 +157,6 @@ void KipiImageInfo::cloneData( ImageInfoShared* const other )
 void KipiImageInfo::cloneData( ImageInfoShared* other )
 #endif
 {
-    setTime( other->time(KIPI::FromInfo), KIPI::FromInfo );
     addAttributes( other->attributes() );
 }
 
@@ -168,10 +175,10 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
         res["title"]         = m_info.title();
 
         // Get date property from database
-        res["date"]          = time(KIPI::FromInfo);
+        res["date"]          = m_info.dateTime();
 
         // Get angle property from database
-        res["angle"]          = angle();
+        res["angle"]         = m_info.orientation();;
 
         QList<int> tagIds    = m_info.tagIds();
         // Get digiKam Tags Path list of picture from database.
@@ -238,14 +245,14 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         if (attributes.contains("date"))
         {
             QDateTime date = attributes["date"].toDateTime();
-            setTime(date);
+            m_info.setDateTime(date);
         }
 
         // Set digiKam angle of picture into database.
         if (attributes.contains("angle"))
         {
             int angle = attributes["angle"].toInt();
-            setAngle(angle);
+            m_info.setOrientation(angle);
         }
 
         // Set digiKam default Title of picture into database.
@@ -372,7 +379,7 @@ void KipiImageInfo::delAttributes(const QStringList& res)
         // Remove angle.
         if (res.contains("angle"))
         {
-            setAngle(0);
+            m_info.setOrientation(0);
         }
 
         // Remove all Titles.

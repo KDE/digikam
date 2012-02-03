@@ -76,10 +76,10 @@ public:
     void      setDescription(const QString&);
 
     QDateTime time(KIPI::TimeSpec);
-    void      setTime(const QDateTime& time, KIPI::TimeSpec spec = KIPI::FromInfo );
+    void      setTime(const QDateTime& date, KIPI::TimeSpec spec = KIPI::FromInfo );
 
     int       angle();
-    void      setAngle(int angle);
+    void      setAngle(int orientation);
 
 #if KIPI_VERSION >= 0x010200
     void cloneData(ImageInfoShared* const other);
