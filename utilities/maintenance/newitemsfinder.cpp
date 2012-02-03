@@ -87,22 +87,24 @@ NewItemsFinder::~NewItemsFinder()
 void NewItemsFinder::slotScanStarted(const QString& info)
 {
     ProgressManager::addProgressItem(this);
-    //setUsesBusyIndicator(true);
     setLabel(i18n("Find new items"));
     setStatus(info);
     setThumbnail(KIcon("view-refresh").pixmap(22));
+
+    // Sound like ScanController progress indication is a mess. Why ?
+    setUsesBusyIndicator(true);
 }
 
 void NewItemsFinder::slotTotalFilesToScan(int t)
 {
-    kDebug() << "total scan value : " << t;
+    //kDebug() << "total scan value : " << t;
     setTotalItems(t);
 }
 
 void NewItemsFinder::slotProgressValue(float v)
 {
     int i = (int)(v*totalItems());
-    kDebug() << "scan progress value : " << v << " (" << i << ")";
+    //kDebug() << "scan progress value : " << v << " (" << i << ")";
     setProgress(i);
 }
 
