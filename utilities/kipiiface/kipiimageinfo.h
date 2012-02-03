@@ -71,16 +71,18 @@ public:
     void      setTitle(const QString&);
 #endif // KIPI_VERSION >= 0x010300
 
-    /// Manage default comment property
+/// Deprecated methods with libkipi 1.5.0. Use attributes()/addAttributes() methods instead.
+#if KIPI_VERSION < 0x010500
     QString   description();
     void      setDescription(const QString&);
 
-    QDateTime time(KIPI::TimeSpec);
-    void      setTime(const QDateTime& time, KIPI::TimeSpec spec = KIPI::FromInfo );
-
     int       angle();
-    void      setAngle(int angle);
+    void      setAngle(int orientation);
+#endif // KIPI_VERSION < 0x010500
 
+    QDateTime time(KIPI::TimeSpec);
+    void      setTime(const QDateTime& date, KIPI::TimeSpec spec = KIPI::FromInfo );
+    
 #if KIPI_VERSION >= 0x010200
     void cloneData(ImageInfoShared* const other);
 #else
