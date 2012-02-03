@@ -522,6 +522,7 @@ Action=Popup
 
 [Event/DuplicatesFinder]
 Name=Update of duplicates items in database complete
+Name[cs]=Aktualizace duplicitních položek v databázi dokončena
 Name[da]=Opdatering af duplikerede elementer i databasen gennemført
 Name[el]=Η ενημέρωση διπλών αντικειμένων στη βάση δεδομένων ολοκληρώθηκε
 Name[gl]=Completouse a actualización dos elementos duplicados da base de datos
@@ -533,6 +534,7 @@ Name[sv]=Uppdatering av duplicerade objekt i databas klar
 Name[uk]=Пошук дублікатів у базі даних завершено
 Name[x-test]=xxUpdate of duplicates items in database completexx
 Comment=The update of the duplicates items in database has completed.
+Comment[cs]=Aktualizace duplicitních položek v databázi byla dokončena.
 Comment[da]=Opdateringen af duplikerede elementer i databasen er gennemført.
 Comment[el]=Η ενημέρωση διπλών αντικειμένων στη βάση δεδομένων έχει ολοκληρωθεί.
 Comment[gl]=Completouse a actualización dos elementos duplicados da base de datos
@@ -547,6 +549,7 @@ Action=Popup
 
 [Event/NewItemsFinder]
 Name=Find of new items in database complete
+Name[cs]=Hledání nových položek v databázi dokončeno
 Name[da]=Søgning efter nye elementer i databasen er gennemført
 Name[el]=Η ενημέρωση νέων αντικειμένων στη βάση δεδομένων ολοκληρώθηκε
 Name[gl]=Completouse a busca de elementos novos na base de datos
@@ -558,6 +561,7 @@ Name[sv]=Sökning efter nya objekt i databas klar
 Name[uk]=Пошук нових зображень завершено
 Name[x-test]=xxFind of new items in database completexx
 Comment=The scan of the new items in database has completed.
+Comment[cs]=Prohledávání nových položek v databázi bylo dokončeno.
 Comment[da]=Scanning efter nye elementer i databasen er gennemført.
 Comment[el]=Η ενημέρωση νέων αντικειμένων στη βάση δεδομένων έχει ολοκληρωθεί.
 Comment[gl]=Completouse o exame dos elementos novos da base de datos.
