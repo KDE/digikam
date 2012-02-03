@@ -56,10 +56,17 @@ public:
 
 private Q_SLOTS:
 
+    void slotStart();
+    void slotScanStarted(const QString&);
     void slotTotalFilesToScan(int);
-    void slotScanStarted(const QString& info);
-    void slotProgressValue(float);
+    void slotFilesScanned(int);
     void slotCancel();
+    void slotDone();
+
+private:
+
+    class NewItemsFinderPriv;
+    NewItemsFinderPriv* const d;
 };
 
 } // namespace Digikam

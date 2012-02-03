@@ -801,15 +801,16 @@ void ScanController::slotStartScanningAlbum(const QString& albumRoot, const QStr
     }
 }
 
-void ScanController::slotScannedFiles(int filesScanned)
+void ScanController::slotScannedFiles(int scanned)
 {
     if (d->progressDialog)
     {
-        d->progressDialog->advance(filesScanned);
+        d->progressDialog->advance(scanned);
     }
     if (d->totalFilesToScan)
     {
-        emit scanningProgress(double(filesScanned) / double(d->totalFilesToScan));
+        emit filesScanned(scanned);
+        emit scanningProgress(double(scanned) / double(d->totalFilesToScan));
     }
 }
 

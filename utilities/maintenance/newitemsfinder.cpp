@@ -23,6 +23,10 @@
 
 #include "newitemsfinder.moc"
 
+// Qt includes
+
+#include <QTimer>
+
 // KDE includes
 
 #include <klocale.h>
@@ -36,22 +40,50 @@
 namespace Digikam
 {
 
-NewItemsFinder::NewItemsFinder(FinderMode mode, const QStringList& foldersToScan, ProgressItem* parent)
-    : MaintenanceTool("NewItemsFinder", parent)
+class NewItemsFinder::NewItemsFinderPriv
 {
-    connect(ScanController::instance(), SIGNAL(totalFilesToScan(int)),
-            this, SLOT(slotTotalFilesToScan(int)));
+public:
 
+    NewItemsFinderPriv() :
+        mode(CompleteCollectionScan)
+    {
+    }
+
+    FinderMode  mode;
+    QStringList foldersToScan;
+};
+
+NewItemsFinder::NewItemsFinder(FinderMode mode, const QStringList& foldersToScan, ProgressItem* parent)
+    : MaintenanceTool("NewItemsFinder", parent), d(new NewItemsFinderPriv)
+{
     connect(ScanController::instance(), SIGNAL(collectionScanStarted(QString)),
             this, SLOT(slotScanStarted(QString)));
 
-    connect(ScanController::instance(), SIGNAL(scanningProgress(float)),
-            this, SLOT(slotProgressValue(float)));
+    connect(ScanController::instance(), SIGNAL(totalFilesToScan(int)),
+            this, SLOT(slotTotalFilesToScan(int)));
+
+    connect(ScanController::instance(), SIGNAL(filesScanned(int)),
+            this, SLOT(slotFilesScanned(int)));
 
     connect(ScanController::instance(), SIGNAL(completeScanDone()),
             this, SLOT(slotDone()));
 
-    switch(mode)
+    d->mode          = mode;
+    d->foldersToScan = foldersToScan;
+
+    QTimer::singleShot(500, this, SLOT(slotStart()));
+}
+
+NewItemsFinder::~NewItemsFinder()
+{
+    delete d;
+}
+
+void NewItemsFinder::slotStart()
+{
+    MaintenanceTool::slotStart();
+
+    switch(d->mode)
     {
         case ScanDeferredFiles:
         {
@@ -71,17 +103,11 @@ NewItemsFinder::NewItemsFinder(FinderMode mode, const QStringList& foldersToScan
         {
             kDebug() << "scan mode: ScheduleCollectionScan";
 
-            foreach(const QString& folder, foldersToScan)
+            foreach(const QString& folder, d->foldersToScan)
                 ScanController::instance()->scheduleCollectionScan(folder);
             break;
         }
     }
-
-    MaintenanceTool::slotStart();
-}
-
-NewItemsFinder::~NewItemsFinder()
-{
 }
 
 void NewItemsFinder::slotScanStarted(const QString& info)
@@ -90,9 +116,6 @@ void NewItemsFinder::slotScanStarted(const QString& info)
     setLabel(i18n("Find new items"));
     setStatus(info);
     setThumbnail(KIcon("view-refresh").pixmap(22));
-
-    // Sound like ScanController progress indication is a mess. Why ?
-    setUsesBusyIndicator(true);
 }
 
 void NewItemsFinder::slotTotalFilesToScan(int t)
@@ -101,17 +124,22 @@ void NewItemsFinder::slotTotalFilesToScan(int t)
     setTotalItems(t);
 }
 
-void NewItemsFinder::slotProgressValue(float v)
+void NewItemsFinder::slotFilesScanned(int s)
 {
-    int i = (int)(v*totalItems());
-    //kDebug() << "scan progress value : " << v << " (" << i << ")";
-    setProgress(i);
+    //kDebug() << "file scanned : " << s;
+    advance(s);
 }
 
 void NewItemsFinder::slotCancel()
 {
     ScanController::instance()->cancelCompleteScan();
     MaintenanceTool::slotCancel();
+}
+
+void NewItemsFinder::slotDone()
+{
+    //kDebug() << "fired!! ";
+    MaintenanceTool::slotDone();
 }
 
 }  // namespace Digikam

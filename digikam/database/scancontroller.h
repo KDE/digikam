@@ -183,6 +183,8 @@ Q_SIGNALS:
     void progressFromInitialization(const QString&, int);
 
     void totalFilesToScan(int);
+    void filesScanned(int);
+
     void collectionScanStarted(const QString& message);
     void scanningProgress(float progress);
     void collectionScanFinished();
@@ -192,7 +194,7 @@ private Q_SLOTS:
     void slotStartCompleteScan();
     void slotTotalFilesToScan(int count);
     void slotStartScanningAlbum(const QString& albumRoot, const QString& album);
-    void slotScannedFiles(int filesScanned);
+    void slotScannedFiles(int scanned);
     void slotStartScanningAlbumRoot(const QString& albumRoot);
     void slotStartScanningForStaleAlbums();
     void slotStartScanningAlbumRoots();
