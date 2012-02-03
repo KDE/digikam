@@ -102,6 +102,7 @@ void MaintenanceMngr::slotStage1()
     if (d->settings.newItems)
     {
         NewItemsFinder* tool = new NewItemsFinder();
+        tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage2()));
@@ -120,6 +121,7 @@ void MaintenanceMngr::slotStage2()
     if (d->settings.thumbnails)
     {
         ThumbsGenerator* tool = new ThumbsGenerator(d->settings.scanThumbs);
+        tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage3()));
@@ -138,6 +140,7 @@ void MaintenanceMngr::slotStage3()
     if (d->settings.fingerPrints)
     {
         FingerPrintsGenerator* tool = new FingerPrintsGenerator(d->settings.scanFingerPrints);
+        tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage4()));

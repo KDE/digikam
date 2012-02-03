@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "progressmanager.h"
+#include "maintenancetool.h"
 
 namespace Digikam
 {
@@ -34,31 +34,23 @@ namespace Digikam
 class DImg;
 class LoadingDescription;
 
-class FingerPrintsGenerator : public ProgressItem
+class FingerPrintsGenerator : public MaintenanceTool
 {
     Q_OBJECT
 
 public:
 
-    FingerPrintsGenerator(bool rebuildAll);
+    FingerPrintsGenerator(bool rebuildAll, ProgressItem* parent=0);
     ~FingerPrintsGenerator();
-
-Q_SIGNALS:
-
-    void signalComplete();
 
 private:
 
-    void complete();
     void processOne();
-
-protected Q_SLOTS:
-
-    void slotCancel();
 
 private Q_SLOTS:
 
-    void slotRebuildFingerPrints();
+    void slotStart();
+    void slotDone();
     void slotGotImagePreview(const LoadingDescription&, const DImg&);
 
 private:
