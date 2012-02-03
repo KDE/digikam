@@ -36,8 +36,22 @@
 namespace Digikam
 {
 
+class MaintenanceTool::MaintenanceToolPriv
+{
+public:
+
+    MaintenanceToolPriv()
+    {
+        notification = true;
+    }
+
+    bool  notification;
+    QTime duration;
+};
+
 MaintenanceTool::MaintenanceTool(ProgressItem* parent)
-    : ProgressItem(parent, QString(), QString(), QString(), true, true)
+    : ProgressItem(parent, QString(), QString(), QString(), true, true),
+      d(new MaintenanceToolPriv)
 {
     connect(this, SIGNAL(progressItemCanceled(QString)),
             this, SLOT(slotCancel()));
@@ -45,20 +59,29 @@ MaintenanceTool::MaintenanceTool(ProgressItem* parent)
 
 MaintenanceTool::~MaintenanceTool()
 {
+    delete d;
+}
+
+void MaintenanceTool::setNotificationEnabled(bool b)
+{
+    d->notification = b;
 }
 
 void MaintenanceTool::slotStart()
 {
-    m_duration.start();
+    d->duration.start();
 }
 
 void MaintenanceTool::slotDone()
 {
-    QTime now, t = now.addMSecs(m_duration.elapsed());
-    // Pop-up a message to bring user when all is done.
-    KNotificationWrapper(id(),
-                         i18n("Process is done.\nDuration: %1", t.toString()),
-                         kapp->activeWindow(), label());
+    QTime now, t = now.addMSecs(d->duration.elapsed());
+    if (d->notification)
+    {
+        // Pop-up a message to bring user when all is done.
+        KNotificationWrapper(id(),
+                            i18n("Process is done.\nDuration: %1", t.toString()),
+                            kapp->activeWindow(), label());
+    }
 
     emit signalComplete();
 

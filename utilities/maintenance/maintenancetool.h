@@ -45,8 +45,15 @@ public:
     MaintenanceTool(ProgressItem* parent=0);
     ~MaintenanceTool();
 
+    /** If true, show a notification message on desktop notification manager 
+     * with time elpased to run process.
+     */
+    void setNotificationEnabled(bool b);
+
 Q_SIGNALS:
 
+    /** Emit when process is done (not canceled).
+     */
     void signalComplete();
 
 protected Q_SLOTS:
@@ -57,7 +64,8 @@ protected Q_SLOTS:
 
 private:
 
-    QTime m_duration;
+    class MaintenanceToolPriv;
+    MaintenanceToolPriv* const d;
 };
 
 } // namespace Digikam
