@@ -58,4 +58,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 041 ==> 292645 : Build fails at imageproperties/captionedit.cpp.
 042 ==> 275122 : Rotating a TIFF file wipes out its metadata.
 043 ==> 278909 : Create fingerprints during thumbnail generation.
-044 ==> 
+044 ==> 228314 : timeline view in digiKam scroll's left but not right
+045 ==> 
