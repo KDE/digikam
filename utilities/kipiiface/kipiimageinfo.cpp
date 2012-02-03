@@ -103,6 +103,7 @@ void KipiImageInfo::setTitle(const QString& newName)
 }
 #endif // KIPI_VERSION >= 0x010300
 
+#if KIPI_VERSION < 0x010500
 QString KipiImageInfo::description()
 {
     QMap<QString, QVariant> map = attributes();
@@ -116,6 +117,21 @@ void KipiImageInfo::setDescription( const QString& description )
     map.insert("comment", description);
     addAttributes(map);
 }
+
+int KipiImageInfo::angle()
+{
+    QMap<QString, QVariant> map = attributes();
+    if (!map.isEmpty()) return map.value("angle", 0).toInt();
+    return 0;
+}
+
+void KipiImageInfo::setAngle(int orientation)
+{
+    QMap<QString, QVariant> map;
+    map.insert("angle", orientation);
+    addAttributes(map);
+}
+#endif // KIPI_VERSION < 0x010500
 
 QDateTime KipiImageInfo::time( KIPI::TimeSpec /*spec*/ )
 {
@@ -137,20 +153,6 @@ void KipiImageInfo::setTime(const QDateTime& date, KIPI::TimeSpec)
     addAttributes(map);
 }
 
-int KipiImageInfo::angle()
-{
-    QMap<QString, QVariant> map = attributes();
-    if (!map.isEmpty()) return map.value("angle", 0).toInt();
-    return 0;
-}
-
-void KipiImageInfo::setAngle(int orientation)
-{
-    QMap<QString, QVariant> map;
-    map.insert("angle", orientation);
-    addAttributes(map);
-}
-
 #if KIPI_VERSION >= 0x010200
 void KipiImageInfo::cloneData( ImageInfoShared* const other )
 #else
@@ -169,7 +171,7 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
     if (p)
     {
         // Get default title property from database
-        res["comment"]       = m_info.comment();;
+        res["comment"]       = m_info.comment();
 
         // Get default title property from database
         res["title"]         = m_info.title();
@@ -178,7 +180,7 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
         res["date"]          = m_info.dateTime();
 
         // Get angle property from database
-        res["angle"]         = m_info.orientation();;
+        res["angle"]         = m_info.orientation();
 
         QList<int> tagIds    = m_info.tagIds();
         // Get digiKam Tags Path list of picture from database.
@@ -234,7 +236,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         // Set digiKam default Title of picture into database.
         if (attributes.contains("comment"))
         {
-            QString comment = attributes["comment"].toString();
+            QString comment        = attributes["comment"].toString();
             DatabaseAccess access;
             ImageComments comments = m_info.imageComments(access);
             // we set a comment with default language, author and date null
