@@ -42,7 +42,7 @@ class MaintenanceTool : public ProgressItem
 
 public:
 
-    MaintenanceTool(ProgressItem* parent=0);
+    MaintenanceTool(const QString& id, ProgressItem* parent=0);
     ~MaintenanceTool();
 
     /** If true, show a notification message on desktop notification manager 
@@ -55,12 +55,6 @@ Q_SIGNALS:
     /** Emit when process is done (not canceled).
      */
     void signalComplete();
-
-protected:
-
-    /** Return true if process have been canceled.
-     */
-    bool isCanceled() const;
 
 protected Q_SLOTS:
 

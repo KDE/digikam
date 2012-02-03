@@ -43,16 +43,14 @@ public:
     MaintenanceToolPriv()
     {
         notification = true;
-        cancel       = false;
     }
 
     bool  notification;
-    bool  cancel;
     QTime duration;
 };
 
-MaintenanceTool::MaintenanceTool(ProgressItem* parent)
-    : ProgressItem(parent, QString(), QString(), QString(), true, true),
+MaintenanceTool::MaintenanceTool(const QString& id, ProgressItem* parent)
+    : ProgressItem(parent, id, QString(), QString(), true, true),
       d(new MaintenanceToolPriv)
 {
     connect(this, SIGNAL(progressItemCanceled(QString)),
@@ -67,11 +65,6 @@ MaintenanceTool::~MaintenanceTool()
 void MaintenanceTool::setNotificationEnabled(bool b)
 {
     d->notification = b;
-}
-
-bool MaintenanceTool::isCanceled() const
-{
-    return d->cancel;
 }
 
 void MaintenanceTool::slotStart()
@@ -97,7 +90,6 @@ void MaintenanceTool::slotDone()
 
 void MaintenanceTool::slotCancel()
 {
-    d->cancel = true;
     setComplete();
 }
 
