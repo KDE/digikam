@@ -43,9 +43,11 @@ public:
     MaintenanceToolPriv()
     {
         notification = true;
+        cancel       = false;
     }
 
     bool  notification;
+    bool  cancel;
     QTime duration;
 };
 
@@ -65,6 +67,11 @@ MaintenanceTool::~MaintenanceTool()
 void MaintenanceTool::setNotificationEnabled(bool b)
 {
     d->notification = b;
+}
+
+bool MaintenanceTool::isCanceled() const
+{
+    return d->cancel;
 }
 
 void MaintenanceTool::slotStart()
@@ -90,6 +97,7 @@ void MaintenanceTool::slotDone()
 
 void MaintenanceTool::slotCancel()
 {
+    d->cancel = true;
     setComplete();
 }
 

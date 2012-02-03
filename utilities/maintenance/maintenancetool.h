@@ -56,6 +56,12 @@ Q_SIGNALS:
      */
     void signalComplete();
 
+protected:
+
+    /** Return true if process have been canceled.
+     */
+    bool isCanceled() const;
+
 protected Q_SLOTS:
 
     virtual void slotStart();
