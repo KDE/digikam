@@ -65,6 +65,8 @@ public:
 
     /** Re-implemented from libKexiv2 to use dcraw identify method if Exiv2 failed. */
     bool load(const QString& filePath) const;
+    bool save(const QString& filePath) const;
+    bool applyChanges() const;
 
     /** Try to extract metadata using dcraw identify method */
     bool loadUsingDcraw(const QString& filePath) const;

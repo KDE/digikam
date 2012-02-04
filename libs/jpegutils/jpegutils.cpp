@@ -70,6 +70,7 @@ extern "C"
 
 #include "config-digikam.h"
 #include "dmetadata.h"
+#include "filereadwritelock.h"
 #include "transupp.h"
 
 #ifdef Q_CC_MSVC
@@ -125,6 +126,8 @@ static void jpegutils_jpeg_output_message(j_common_ptr cinfo)
 
 bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 {
+    FileReadLocker lock(path);
+
     if (!isJpegImage(path))
     {
         return false;
@@ -347,6 +350,8 @@ bool JpegRotator::exifTransform(TransformAction action)
 
 bool JpegRotator::exifTransform(const KExiv2Iface::RotationMatrix &matrix)
 {
+    FileWriteLocker lock(m_destFile);
+
     QFileInfo fi(m_file);
 
     if (!fi.exists())
