@@ -8,6 +8,9 @@
  *
  * Copyright (C) 2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
+ * Parts of this file are based on qreadwritelock.cpp, LGPL,
+ * Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -28,11 +31,13 @@
 #include <QHash>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QThread>
 #include <QWaitCondition>
 
 // KDE includes
 
 #include <kglobal.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -47,7 +52,7 @@ class FileReadWriteLockPriv
 public:
     FileReadWriteLockPriv(const QString& filePath)
         : filePath(filePath),
-          ref(0), waitingReaders(0), waitingWriters(0), readers(0), writer(false)
+          ref(0), waitingReaders(0), waitingWriters(0), accessCount(0), writer(0)
     {
     }
 
@@ -55,12 +60,14 @@ public:
     int     ref;
     int     waitingReaders;
     int     waitingWriters;
-    int     readers;
-    bool    writer;
+
+    int     accessCount;
+    Qt::HANDLE writer;
+    QHash<Qt::HANDLE, int> readers;
 
     bool isFree() const
     {
-        return !readers && !writer && !waitingReaders && !waitingWriters;
+        return readers.isEmpty() && !writer && !waitingReaders && !waitingWriters;
     }
 };
 
@@ -95,8 +102,8 @@ private:
 
     Entry *entry_locked(const QString& filePath);
     void drop_locked(Entry* entry);
-    void lockForRead_locked(Entry* entry);
-    void lockForWrite_locked(Entry* entry);
+    bool lockForRead_locked(Entry* entry, int mode, int timeout);
+    bool lockForWrite_locked(Entry* entry, int mode, int timeout);
     void unlock_locked(Entry* entry);
 };
 
@@ -140,90 +147,154 @@ void FileReadWriteLockStaticPrivate::drop_locked(Entry* entry)
 void FileReadWriteLockStaticPrivate::lockForRead(Entry* entry)
 {
     QMutexLocker lock(&mutex);
-    lockForRead_locked(entry);
-}
-
-void FileReadWriteLockStaticPrivate::lockForRead_locked(Entry* entry)
-{
-    while (entry->writer)
-    {
-        entry->waitingReaders++;
-        readerWait.wait(&mutex);
-        entry->waitingReaders--;
-    }
-    entry->readers++;
-}
-
-void FileReadWriteLockStaticPrivate::lockForWrite(Entry* entry)
-{
-    QMutexLocker lock(&mutex);
-    lockForWrite_locked(entry);
-}
-
-void FileReadWriteLockStaticPrivate::lockForWrite_locked(Entry* entry)
-{
-    while (entry->writer || entry->readers)
-    {
-        entry->waitingWriters++;
-        writerWait.wait(&mutex);
-        entry->waitingWriters--;
-    }
-    entry->writer = true;
+    lockForRead_locked(entry, 0, 0);
 }
 
 bool FileReadWriteLockStaticPrivate::tryLockForRead(Entry* entry)
 {
     QMutexLocker lock(&mutex);
-    if (entry->writer)
-    {
-        return false;
-    }
-    entry->readers++;
-    return true;
+    return lockForRead_locked(entry, 1, 0);
 }
 
 bool FileReadWriteLockStaticPrivate::tryLockForRead(Entry* entry, int timeout)
 {
     QMutexLocker lock(&mutex);
-    if (entry->writer)
+    return lockForRead_locked(entry, 2, timeout);
+}
+
+bool FileReadWriteLockStaticPrivate::lockForRead_locked(Entry* entry, int mode, int timeout)
+{
+    Qt::HANDLE self = QThread::currentThreadId();
+
+    // already recursively write-locked by this thread?
+    if (entry->writer == self)
     {
-        entry->waitingReaders++;
-        readerWait.wait(&mutex, timeout);
-        entry->waitingReaders--;
+        // If we already have the write lock recursively, just add another write lock instead of the read lock.
+        // This situation is clean and all right.
+        --entry->accessCount;
+        return true;
     }
-    if (entry->writer)
+    // recursive read lock by this thread?
+    QHash<Qt::HANDLE, int>::iterator it = entry->readers.find(self);
+    if (it != entry->readers.end())
     {
-        return false;
+        ++it.value();
+        ++entry->accessCount;
+        return true;
     }
-    entry->readers++;
+
+    if (mode == 1)
+    {
+        // tryLock
+        if (entry->accessCount < 0)
+        {
+            return false;
+        }
+    }
+    else
+    {
+        while (entry->accessCount < 0 || entry->waitingWriters)
+        {
+            if (mode == 2)
+            {
+                // tryLock with timeout
+                ++entry->waitingReaders;
+                bool success = readerWait.wait(&mutex, timeout);
+                --entry->waitingReaders;
+                if (!success)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                // lock
+                ++entry->waitingReaders;
+                readerWait.wait(&mutex);
+                --entry->waitingReaders;
+            }
+        }
+    }
+
+    entry->readers.insert(self, 1);
+    ++entry->accessCount;
     return true;
+}
+
+void FileReadWriteLockStaticPrivate::lockForWrite(Entry* entry)
+{
+    QMutexLocker lock(&mutex);
+    lockForWrite_locked(entry, 0, 0);
 }
 
 bool FileReadWriteLockStaticPrivate::tryLockForWrite(Entry* entry)
 {
     QMutexLocker lock(&mutex);
-    if (entry->writer || entry->readers)
-    {
-        return false;
-    }
-    entry->writer = true;
-    return true;
+    return lockForWrite_locked(entry, 1, 0);
 }
 
 bool FileReadWriteLockStaticPrivate::tryLockForWrite(Entry* entry, int timeout)
 {
     QMutexLocker lock(&mutex);
-    if (entry->writer || entry->readers)
+    return lockForRead_locked(entry, 2, timeout);
+}
+
+bool FileReadWriteLockStaticPrivate::lockForWrite_locked(Entry* entry, int mode, int timeout)
+{
+    Qt::HANDLE self = QThread::currentThreadId();
+
+    // recursive write-lock by this thread?
+    if (entry->writer == self)
     {
-        entry->waitingWriters++;
-        writerWait.wait(&mutex, timeout);
-        entry->waitingWriters--;
+        --entry->accessCount;
+        return true;
     }
-    if (entry->writer || entry->readers)
+
+    // recursive read lock by this thread?
+    QHash<Qt::HANDLE, int>::iterator it = entry->readers.find(self);
+    int recursiveReadLockCount = 0;
+    if (it != entry->readers.end())
     {
-        return false;
+        // We could deadlock, or promote the read locks to write locks
+        kWarning() << "Locking for write, recursively locked for read: Promoting existing read locks to write locks! "
+                   << "Avoid this situation.";
+        // The lock was locked for read it.value() times by this thread recursively
+        recursiveReadLockCount = it.value();
+        entry->accessCount    -= it.value();
+        entry->readers.erase(it);
     }
-    entry->writer = true;
+
+    while (entry->accessCount != 0)
+    {
+        if (mode == 1)
+        {
+            // tryLock
+            return false;
+        }
+        else if (mode == 2)
+        {
+            // tryLock with timeout
+            entry->waitingWriters++;
+            bool success = writerWait.wait(&mutex, timeout);
+            entry->waitingWriters--;
+            if (!success)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            // lock
+            entry->waitingWriters++;
+            writerWait.wait(&mutex);
+            entry->waitingWriters--;
+        }
+    }
+
+    entry->writer = self;
+    --entry->accessCount;
+    // if we had recursive read locks, they are now promoted to write locks
+    entry->accessCount -= recursiveReadLockCount;
     return true;
 }
 
@@ -235,28 +306,42 @@ void FileReadWriteLockStaticPrivate::unlock(Entry* entry)
 
 void FileReadWriteLockStaticPrivate::unlock_locked(Entry* entry)
 {
-    if (entry->writer)
+    bool unlocked = false;
+    if (entry->accessCount > 0)
     {
-        entry->writer = false;
+        // releasing a read lock
+        Qt::HANDLE self = QThread::currentThreadId();
+        QHash<Qt::HANDLE, int>::iterator it = entry->readers.find(self);
+        if (it != entry->readers.end())
+        {
+            if (--it.value() <= 0)
+            {
+                entry->readers.erase(it);
+            }
+        }
+
+        unlocked = --entry->accessCount == 0;
     }
-    else
+    else if (entry->accessCount < 0 && ++entry->accessCount == 0)
     {
-        entry->readers--;
+        // released a write lock
+        unlocked = true;
+        entry->writer = 0;
     }
 
-    if (entry->waitingWriters)
+    if (unlocked)
     {
-        if (!entry->readers)
+        if (entry->waitingWriters)
         {
             // we must wake all as it is one wait condition for all entries
             writerWait.wakeAll();
         }
+        else if (entry->waitingReaders)
+        {
+            readerWait.wakeAll();
+        }
     }
-    else if (entry->waitingReaders)
-    {
-        // we must wake all as it is one wait condition for all entries
-        readerWait.wakeAll();
-    }
+
 }
 
 // --- Combination methods ---
@@ -265,7 +350,7 @@ Entry *FileReadWriteLockStaticPrivate::entryLockedForRead(const QString& filePat
 {
     QMutexLocker lock(&mutex);
     Entry* e = entry_locked(filePath);
-    lockForRead_locked(e);
+    lockForRead_locked(e, 0, 0);
     return e;
 }
 
@@ -273,7 +358,7 @@ Entry *FileReadWriteLockStaticPrivate::entryLockedForWrite(const QString& filePa
 {
     QMutexLocker lock(&mutex);
     Entry* e = entry_locked(filePath);
-    lockForWrite_locked(e);
+    lockForWrite_locked(e, 0, 0);
     return e;
 }
 
@@ -348,7 +433,6 @@ FileReadLocker::~FileReadLocker()
 FileWriteLocker::FileWriteLocker(const QString& filePath)
     : d(static_d->entryLockedForWrite(filePath))
 {
-    static_d->lockForWrite(d);
 }
 
 FileWriteLocker::~FileWriteLocker()
