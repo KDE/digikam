@@ -25,7 +25,7 @@
 
 // Qt includes
 
-#include <QTime>
+#include <QTimer>
 
 // KDE includes
 
@@ -54,37 +54,36 @@ public:
         similarity(90),
         job(0)
     {
-        duration.start();
-        job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
     }
 
-    int   similarity;
-    QTime duration;
-    Job*  job;
+    int         similarity;
+    QStringList albumsIdList;
+    QStringList tagsIdList;
+    Job*        job;
 };
 
-DuplicatesFinder::DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity)
-    : ProgressItem(0, "DuplicatesFinder", QString(), QString(), true, true),
+DuplicatesFinder::DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity, ProgressItem* parent)
+    : MaintenanceTool("DuplicatesFinder", parent),
       d(new DuplicatesFinderPriv)
 {
-    d->similarity = similarity;
-    d->job->addMetaData("albumids",   albumsIdList.join(","));
-    d->job->addMetaData("tagids",     tagsIdList.join(","));
-    init();
+    d->similarity   = similarity;
+    d->albumsIdList = albumsIdList;
+    d->tagsIdList   = tagsIdList;
+
+    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
-DuplicatesFinder::DuplicatesFinder(int similarity)
-    : ProgressItem(0, "DuplicatesFinder", QString(), QString(), true, true),
+DuplicatesFinder::DuplicatesFinder(int similarity, ProgressItem* parent)
+    : MaintenanceTool("DuplicatesFinder", parent),
       d(new DuplicatesFinderPriv)
 {
     d->similarity        = similarity;
     AlbumList palbumList = AlbumManager::instance()->allPAlbums();
     QStringList albumsIdList;
     foreach(Album* a, palbumList)
-        albumsIdList << QString::number(a->id());
+        d->albumsIdList << QString::number(a->id());
 
-    d->job->addMetaData("albumids",   albumsIdList.join(","));
-    init();
+    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 DuplicatesFinder::~DuplicatesFinder()
@@ -92,25 +91,29 @@ DuplicatesFinder::~DuplicatesFinder()
     delete d;
 }
 
-void DuplicatesFinder::init()
+void DuplicatesFinder::slotStart()
 {
+    MaintenanceTool::slotStart();
     ProgressManager::addProgressItem(this);
 
     double thresh = d->similarity / 100.0;
+    d->job        = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
+    d->job->addMetaData("albumids",   d->albumsIdList.join(","));
+
+    if (!d->tagsIdList.isEmpty())
+        d->job->addMetaData("tagids", d->tagsIdList.join(","));
+
     d->job->addMetaData("duplicates", "normal");
     d->job->addMetaData("threshold",  QString::number(thresh));
 
     connect(d->job, SIGNAL(result(KJob*)),
-            this, SLOT(slotDuplicatesSearchResult()));
+            this, SLOT(slotDone()));
 
     connect(d->job, SIGNAL(totalAmount(KJob*, KJob::Unit, qulonglong)),
             this, SLOT(slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong)));
 
     connect(d->job, SIGNAL(processedAmount(KJob*, KJob::Unit, qulonglong)),
             this, SLOT(slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong)));
-
-    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
-            this, SLOT(slotCancel()));
 
     setLabel(i18n("Find duplicates items"));
     setThumbnail(KIcon("tools-wizard").pixmap(22));
@@ -127,18 +130,10 @@ void DuplicatesFinder::slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qu
     updateProgress();
 }
 
-void DuplicatesFinder::slotDuplicatesSearchResult()
+void DuplicatesFinder::slotDone()
 {
-    QTime now, t = now.addMSecs(d->duration.elapsed());
-    // Pop-up a message to bring user when all is done.
-    KNotificationWrapper(id(),
-                         i18n("Find duplicates is done.\nDuration: %1", t.toString()),
-                         kapp->activeWindow(), label());
     d->job = NULL;
-
-    emit signalComplete();
-
-    setComplete();
+    MaintenanceTool::slotDone();
 }
 
 void DuplicatesFinder::slotCancel()
@@ -149,7 +144,7 @@ void DuplicatesFinder::slotCancel()
         d->job = NULL;
     }
 
-    setComplete();
+    MaintenanceTool::slotCancel();
 }
 
 }  // namespace Digikam

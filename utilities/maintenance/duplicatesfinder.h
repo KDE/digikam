@@ -34,36 +34,29 @@
 
 // Local includes
 
-#include "progressmanager.h"
+#include "maintenancetool.h"
 
 namespace Digikam
 {
 
-class DuplicatesFinder : public ProgressItem
+class DuplicatesFinder : public MaintenanceTool
 {
     Q_OBJECT
 
 public:
 
-    DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity=90);
+    DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity=90, ProgressItem* parent=0);
     /// Version to find all duplicates over whole collections
-    DuplicatesFinder(int similarity=90);
+    DuplicatesFinder(int similarity=90, ProgressItem* parent=0);
     ~DuplicatesFinder();
-
-Q_SIGNALS:
-
-    void signalComplete();
 
 private Q_SLOTS:
 
-    void slotDuplicatesSearchResult();
+    void slotStart();
+    void slotDone();
+    void slotCancel();
     void slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong);
     void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
-    void slotCancel();
-
-private:
-
-    void init();
 
 private:
 
