@@ -49,6 +49,15 @@ LevelsFilter::LevelsFilter(DImg* orgImage, QObject* parent, const LevelsContaine
     initFilter();
 }
 
+LevelsFilter::LevelsFilter(const LevelsContainer& settings, DImgThreadedFilter* master,
+        const DImg& orgImage, DImg& destImage, int progressBegin, int progressEnd)
+    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "LevelsFilter")
+{
+    m_settings = settings;
+    initFilter();
+    destImage = m_destImage;
+}
+
 LevelsFilter::~LevelsFilter()
 {
     cancelFilter();

@@ -76,6 +76,8 @@ public:
 
     explicit LevelsFilter(QObject* parent = 0);
     explicit LevelsFilter(DImg* orgImage, QObject* parent=0, const LevelsContainer& settings=LevelsContainer());
+    explicit LevelsFilter(const LevelsContainer& settings, DImgThreadedFilter* master,
+            const DImg& orgImage, DImg& destImage, int progressBegin=0, int progressEnd=100);
     virtual ~LevelsFilter();
 
     static QString          FilterIdentifier()
