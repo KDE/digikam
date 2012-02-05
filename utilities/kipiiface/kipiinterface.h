@@ -41,18 +41,21 @@
 
 #include <libkipi/version.h>
 #include <libkipi/interface.h>
-#include <libkipi/imagecollection.h>
-#include <libkipi/imageinfo.h>
-#include <libkipi/imageinfoshared.h>
-#include <libkipi/imagecollectionshared.h>
 
 // Local includes
 
 #include "albummanager.h"
 #include "loadingdescription.h"
-#include "imageinfo.h"
 #include "kipiimagecollectionselector.h"
 #include "kipiuploadwidget.h"
+
+namespace KIPI
+{
+    class ImageInfo;
+    class ImageCollection;
+    class ImageCollectionSelector;
+    class UploadWidget;
+}
 
 namespace Digikam
 {
@@ -66,32 +69,32 @@ public:
     explicit KipiInterface(QObject* parent, const char* name=0);
     ~KipiInterface();
 
-    KIPI::ImageCollection currentAlbum();
-    KIPI::ImageCollection currentSelection();
+    KIPI::ImageCollection        currentAlbum();
+    KIPI::ImageCollection        currentSelection();
     QList<KIPI::ImageCollection> allAlbums();
-    KIPI::ImageInfo info( const KUrl& );
+    KIPI::ImageInfo              info( const KUrl& );
 
     bool addImage( const KUrl&, QString& errmsg );
     void delImage( const KUrl& );
     void refreshImages( const KUrl::List& urls );
 
-    int features() const;
+    int  features() const;
 
     void thumbnail( const KUrl& url, int size );
     void thumbnails( const KUrl::List& list, int size );
 
     KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget* parent);
-    KIPI::UploadWidget* uploadWidget(QWidget* parent);
-    QAbstractItemModel* getTagTree() const;
+    KIPI::UploadWidget*            uploadWidget(QWidget* parent);
+    QAbstractItemModel*            getTagTree() const;
 
     QVariant hostSetting(const QString& settingName);
 
 #if KIPI_VERSION >= 0x010500
     QString progressScheduled(const QString& title, bool canBeCanceled, bool hasThumb) const;
-    void progressValueChanged(const QString& id, float percent);
-    void progressStatusChanged(const QString& id, const QString& status);
-    void progressThumbnailChanged(const QString& id, const QPixmap& thumb);
-    void progressCompleted(const QString& id);
+    void    progressValueChanged(const QString& id, float percent);
+    void    progressStatusChanged(const QString& id, const QString& status);
+    void    progressThumbnailChanged(const QString& id, const QPixmap& thumb);
+    void    progressCompleted(const QString& id);
 #endif // KIPI_VERSION >= 0x010500
 
 public Q_SLOTS:
