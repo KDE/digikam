@@ -178,6 +178,7 @@ void MaintenanceMngr::slotStage5()
     if (d->settings.metadata)
     {
         MetadataSynchronizer* tool = new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
+        tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage6()));

@@ -27,14 +27,14 @@
 // Local includes
 
 #include "imageinfo.h"
-#include "progressmanager.h"
+#include "maintenancetool.h"
 
 namespace Digikam
 {
 
 class Album;
 
-class MetadataSynchronizer : public ProgressItem
+class MetadataSynchronizer : public MaintenanceTool
 {
     Q_OBJECT
 
@@ -49,22 +49,19 @@ public:
 public:
 
     /** Constructor which sync all pictures metadata pictures from whole Albums collection */
-    MetadataSynchronizer(SyncDirection direction);
+    MetadataSynchronizer(SyncDirection direction, ProgressItem* parent=0);
 
     /** Constructor which sync all pictures metadata from an Album */
-    MetadataSynchronizer(Album* album, SyncDirection direction = WriteFromDatabaseToFile);
+    MetadataSynchronizer(Album* album, SyncDirection direction = WriteFromDatabaseToFile, ProgressItem* parent=0);
 
     /** Constructor which sync all pictures metadata from an images list */
-    MetadataSynchronizer(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile);
+    MetadataSynchronizer(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile, ProgressItem* parent=0);
 
     ~MetadataSynchronizer();
 
-Q_SIGNALS:
-
-    void signalComplete();
-
 private Q_SLOTS:
 
+    void slotStart();
     void slotParseAlbums();
     void slotAlbumParsed(const ImageInfoList&);
     void slotOneAlbumIsComplete();
@@ -72,7 +69,6 @@ private Q_SLOTS:
 
 private:
 
-    void init();
     void parseList();
     void parsePicture();
     void processOneAlbum();
