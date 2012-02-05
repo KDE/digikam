@@ -28,6 +28,7 @@
 
 #include <QClipboard>
 #include <QVBoxLayout>
+#include <QTimer>
 
 // KDE includes
 
@@ -54,7 +55,6 @@
 #include "facescansettings.h"
 #include "imageinfo.h"
 #include "imageinfojob.h"
-#include "knotificationwrapper.h"
 
 namespace Digikam
 {
@@ -98,13 +98,10 @@ public:
     {
         benchmark  = false;
         total      = 0;
-
-        duration.start();
     }
 
     bool               benchmark;
 
-    QTime              duration;
     int                total;
 
     AlbumPointerList<> albumTodoList;
@@ -112,13 +109,8 @@ public:
     FacePipeline       pipeline;
 };
 
-FaceDetector::FaceDetector(const FaceScanSettings& settings)
-    : ProgressItem(0,
-                   "FaceDetector",
-                   QString(),
-                   QString(),
-                   true,
-                   true),
+FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* parent)
+    : MaintenanceTool("FaceDetector", parent),
       d(new FaceDetectorPriv)
 {
     if (settings.task == FaceScanSettings::RetrainAll)
@@ -201,10 +193,10 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings)
             this, SLOT(slotItemsInfo(ImageInfoList)));
 
     connect(&d->albumListing, SIGNAL(signalCompleted()),
-            this, SLOT(continueAlbumListing()));
+            this, SLOT(slotContinueAlbumListing()));
 
     connect(&d->pipeline, SIGNAL(finished()),
-            this, SLOT(continueAlbumListing()));
+            this, SLOT(slotContinueAlbumListing()));
 
     connect(&d->pipeline, SIGNAL(processed(FacePipelinePackage)),
             this, SLOT(slotShowOneDetected(FacePipelinePackage)));
@@ -225,7 +217,7 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings)
     }
 
     if (ProgressManager::addProgressItem(this))
-        startAlbumListing();
+        QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 FaceDetector::~FaceDetector()
@@ -233,8 +225,10 @@ FaceDetector::~FaceDetector()
     delete d;
 }
 
-void FaceDetector::startAlbumListing()
+void FaceDetector::slotStart()
 {
+    MaintenanceTool::slotStart();
+
     setThumbnail(KIcon("edit-image-face-show").pixmap(22));
     setUsesBusyIndicator(true);
 
@@ -296,10 +290,10 @@ void FaceDetector::startAlbumListing()
     setLabel(i18n("Updating faces database."));
     setTotalItems(d->total);
 
-    continueAlbumListing();
+    slotContinueAlbumListing();
 }
 
-void FaceDetector::continueAlbumListing()
+void FaceDetector::slotContinueAlbumListing()
 {
     kDebug() << d->albumListing.isRunning() << !d->pipeline.hasFinished();
 
@@ -316,7 +310,7 @@ void FaceDetector::continueAlbumListing()
     {
         if (d->albumTodoList.isEmpty())
         {
-            return complete();
+            return slotDone();
         }
 
         album = d->albumTodoList.takeFirst();
@@ -331,15 +325,8 @@ void FaceDetector::slotItemsInfo(const ImageInfoList& items)
     d->pipeline.process(items);
 }
 
-void FaceDetector::complete()
+void FaceDetector::slotDone()
 {
-    QTime now, t = now.addMSecs(d->duration.elapsed());
-    // Pop-up a message to bring user when all is done.
-    KNotificationWrapper(id(),
-                         i18n("Face Detection is done.\nDuration: %1", t.toString()),
-                         kapp->activeWindow(), label());
-    emit signalComplete();
-
     if (d->benchmark)
     {
         new BenchmarkMessageDisplay(d->pipeline.benchmarkResult());
@@ -348,13 +335,13 @@ void FaceDetector::complete()
     // Switch on scanned for faces flag on digiKam config file.
     KGlobal::config()->group("General Settings").writeEntry("Face Scanner First Run", true);
 
-    setComplete();
+    MaintenanceTool::slotDone();
 }
 
 void FaceDetector::slotCancel()
 {
     d->pipeline.cancel();
-    setComplete();
+    MaintenanceTool::slotCancel();
 }
 
 void FaceDetector::slotImagesSkipped(const QList<ImageInfo>& infos)

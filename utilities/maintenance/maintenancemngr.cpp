@@ -197,6 +197,7 @@ void MaintenanceMngr::slotStage6()
     if (d->settings.faceDetection)
     {
         FaceDetector* tool = new FaceDetector(d->settings.faceSettings);
+        tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotDone()));
