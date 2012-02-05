@@ -159,6 +159,7 @@ void MaintenanceMngr::slotStage4()
     if (d->settings.duplicates)
     {
         DuplicatesFinder* tool = new DuplicatesFinder(d->settings.similarity);
+        tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage5()));
