@@ -40,13 +40,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-// Lcms includes
-
-#include <lcms.h>
-#if LCMS_VERSION < 114
-#define cmsTakeCopyright(profile) "Unknown"
-#endif // LCMS_VERSION < 114
-
 // Local includes
 
 #include "cietonguewidget.h"
@@ -127,7 +120,7 @@ public:
 ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
     : MetadataWidget(parent), d(new ICCProfileWidgetPriv)
 {
-    cmsErrorAction(LCMS_ERROR_SHOW);
+    dkCmsErrorAction(LCMS_ERROR_SHOW);
 
     // Set the translated ICC tags titles/descriptions list
     d->iccTagsDescription["Icc.Header.Name"]            = ICCTagInfo(i18n("Name"),
@@ -303,43 +296,43 @@ bool ICCProfileWidget::decodeMetadata()
 
     DMetadata::MetaDataMap metaDataMap;
 
-    if ( !QString(cmsTakeProductName(hProfile)).isEmpty() )
+    if ( !QString(dkCmsTakeProductName(hProfile)).isEmpty() )
     {
-        metaDataMap.insert("Icc.Header.Name", QString(cmsTakeProductName(hProfile)).replace('\n', ' '));
+        metaDataMap.insert("Icc.Header.Name", QString(dkCmsTakeProductName(hProfile)).replace('\n', ' '));
     }
 
-    if ( !QString(cmsTakeProductDesc(hProfile)).isEmpty() )
+    if ( !QString(dkCmsTakeProductDesc(hProfile)).isEmpty() )
     {
-        metaDataMap.insert("Icc.Header.Description", QString(cmsTakeProductDesc(hProfile)).replace('\n', ' '));
+        metaDataMap.insert("Icc.Header.Description", QString(dkCmsTakeProductDesc(hProfile)).replace('\n', ' '));
     }
 
-    if ( !QString(cmsTakeProductInfo(hProfile)).isEmpty() )
+    if ( !QString(dkCmsTakeProductInfo(hProfile)).isEmpty() )
     {
-        metaDataMap.insert("Icc.Header.Information", QString(cmsTakeProductInfo(hProfile)).replace('\n', ' '));
+        metaDataMap.insert("Icc.Header.Information", QString(dkCmsTakeProductInfo(hProfile)).replace('\n', ' '));
     }
 
-    if ( !QString(cmsTakeManufacturer(hProfile)).isEmpty() )
+    if ( !QString(dkCmsTakeManufacturer(hProfile)).isEmpty() )
     {
-        metaDataMap.insert("Icc.Header.Manufacturer", QString(cmsTakeManufacturer(hProfile)).replace('\n', ' '));
+        metaDataMap.insert("Icc.Header.Manufacturer", QString(dkCmsTakeManufacturer(hProfile)).replace('\n', ' '));
     }
 
-    if ( !QString(cmsTakeModel(hProfile)).isEmpty() )
+    if ( !QString(dkCmsTakeModel(hProfile)).isEmpty() )
     {
-        metaDataMap.insert("Icc.Header.Model", QString(cmsTakeModel(hProfile)).replace('\n', ' '));
+        metaDataMap.insert("Icc.Header.Model", QString(dkCmsTakeModel(hProfile)).replace('\n', ' '));
     }
 
-    if ( !QString(cmsTakeCopyright(hProfile)).isEmpty() )
+    if ( !QString(dkCmsTakeCopyright(hProfile)).isEmpty() )
     {
-        metaDataMap.insert("Icc.Header.Copyright", QString(cmsTakeCopyright(hProfile)).replace('\n', ' '));
+        metaDataMap.insert("Icc.Header.Copyright", QString(dkCmsTakeCopyright(hProfile)).replace('\n', ' '));
     }
 
-    metaDataMap.insert("Icc.Header.ProfileID",      QString::number((uint)*cmsTakeProfileID(hProfile)));
-    metaDataMap.insert("Icc.Header.ProfileVersion", QString::number((uint)cmsGetProfileICCversion(hProfile)));
-    metaDataMap.insert("Icc.Header.CMMFlags",       QString::number((uint)cmsTakeHeaderFlags(hProfile)));
+    metaDataMap.insert("Icc.Header.ProfileID",      QString::number((uint)*dkCmsTakeProfileID(hProfile)));
+    metaDataMap.insert("Icc.Header.ProfileVersion", QString::number((uint)dkCmsGetProfileICCversion(hProfile)));
+    metaDataMap.insert("Icc.Header.CMMFlags",       QString::number((uint)dkCmsTakeHeaderFlags(hProfile)));
 
     QString colorSpace;
 
-    switch (cmsGetColorSpace(hProfile))
+    switch (dkCmsGetColorSpace(hProfile))
     {
         case icSigLabData:
             colorSpace = i18n("Lab");
@@ -374,7 +367,7 @@ bool ICCProfileWidget::decodeMetadata()
 
     QString connectionSpace;
 
-    switch (cmsGetPCS(hProfile))
+    switch (dkCmsGetPCS(hProfile))
     {
         case icSigLabData:
             connectionSpace = i18n("Lab");
@@ -409,7 +402,7 @@ bool ICCProfileWidget::decodeMetadata()
 
     QString device;
 
-    switch ((int)cmsGetDeviceClass(hProfile))
+    switch ((int)dkCmsGetDeviceClass(hProfile))
     {
         case icSigInputClass:
             device = i18n("Input device");
@@ -441,7 +434,7 @@ bool ICCProfileWidget::decodeMetadata()
 
     QString intent;
 
-    switch (cmsTakeRenderingIntent(hProfile))
+    switch (dkCmsTakeRenderingIntent(hProfile))
     {
         case 0:
             intent = i18n("Perceptual");

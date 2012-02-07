@@ -42,10 +42,7 @@
 
 // Lcms includes
 
-#include <lcms.h>
-#if LCMS_VERSION < 114
-#define cmsTakeCopyright(profile) "Unknown"
-#endif // LCMS_VERSION < 114
+#include "digikam-lcms.h"
 
 // Local includes
 
@@ -145,7 +142,7 @@ public:
         {
             currentDescription = TransformDescription();
             LcmsLock lock;
-            cmsDeleteTransform(handle);
+            dkCmsDeleteTransform(handle);
             handle = 0;
         }
     }
@@ -233,7 +230,7 @@ IccTransform::~IccTransform()
 void IccTransform::init()
 {
     LcmsLock lock;
-    cmsErrorAction(LCMS_ERROR_SHOW);
+    dkCmsErrorAction(LCMS_ERROR_SHOW);
 }
 
 void IccTransform::setInputProfile(const IccProfile& profile)
@@ -450,7 +447,7 @@ TransformDescription IccTransform::getDescription(const DImg& image)
     // our image data has 4 bytes per pixel with the fourth byte filled with 0xFF.
     if (image.sixteenBit())
     {
-        /*switch (cmsGetColorSpace(description.inputProfile))
+        /*switch (dkCmsGetColorSpace(description.inputProfile))
         {
             case icSigGrayData:
                 description.inputFormat = TYPE_GRAYA_16;
@@ -505,7 +502,7 @@ TransformDescription IccTransform::getProofingDescription(const DImg& image)
 
     if (d->checkGamut)
     {
-        cmsSetAlarmCodes(d->checkGamutColor.red(), d->checkGamutColor.green(), d->checkGamutColor.blue());
+        dkCmsSetAlarmCodes(d->checkGamutColor.red(), d->checkGamutColor.green(), d->checkGamutColor.blue());
         description.transformFlags |= cmsFLAGS_GAMUTCHECK;
     }
 
@@ -529,7 +526,7 @@ bool IccTransform::open(TransformDescription& description)
     d->currentDescription = description;
 
     LcmsLock lock;
-    d->handle = cmsCreateTransform(description.inputProfile,
+    d->handle = dkCmsCreateTransform(description.inputProfile,
                                    description.inputFormat,
                                    description.outputProfile,
                                    description.outputFormat,
@@ -562,7 +559,7 @@ bool IccTransform::openProofing(TransformDescription& description)
     d->currentDescription = description;
 
     LcmsLock lock;
-    d->handle = cmsCreateProofingTransform(description.inputProfile,
+    d->handle = dkCmsCreateProofingTransform(description.inputProfile,
                                            description.inputFormat,
                                            description.outputProfile,
                                            description.outputFormat,
@@ -721,7 +718,7 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
             int pixelsThisStep = qMin(p, pixelsPerStep);
             int size           = pixelsThisStep * bytesDepth;
             LcmsLock lock;
-            cmsDoTransform(d->handle, data, data, pixelsThisStep);
+            dkCmsDoTransform(d->handle, data, data, pixelsThisStep);
             data += size;
 
             if (observer && p <= checkPoint)
@@ -741,7 +738,7 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
             int size           = pixelsThisStep * bytesDepth;
             LcmsLock lock;
             memcpy(buffer.data(), data, size);
-            cmsDoTransform(d->handle, buffer.data(), data, pixelsThisStep);
+            dkCmsDoTransform(d->handle, buffer.data(), data, pixelsThisStep);
             data += size;
 
             if (observer && p <= checkPoint)
@@ -766,7 +763,7 @@ void IccTransform::transform(QImage& image, const TransformDescription&)
         int pixelsThisStep = qMin(p, pixelsPerStep);
         int size           = pixelsThisStep * bytesDepth;
         LcmsLock lock;
-        cmsDoTransform(d->handle, data, data, pixelsThisStep);
+        dkCmsDoTransform(d->handle, data, data, pixelsThisStep);
         data += size;
     }
 }

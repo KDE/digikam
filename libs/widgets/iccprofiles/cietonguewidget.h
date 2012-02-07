@@ -39,10 +39,7 @@
 
 // lcms includes
 
-#include <lcms.h>
-#if LCMS_VERSION < 114
-#define cmsTakeCopyright(profile) "Unknown"
-#endif // LCMS_VERSION < 114
+#include "digikam-lcms.h"
 
 // Local includes
 

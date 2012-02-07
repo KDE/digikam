@@ -139,9 +139,10 @@ INCLUDE(KDE4Defaults)
 INCLUDE(MacroLibrary)
 
 INCLUDE(FindPackageHandleStandardArgs)
+INCLUDE(FindPkgConfig)
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
-FIND_PACKAGE(LCMS)
+FIND_PACKAGE(PkgConfig)
 FIND_PACKAGE(JPEG)
 FIND_PACKAGE(PNG)
 FIND_PACKAGE(TIFF)
@@ -154,6 +155,38 @@ FIND_PACKAGE(KGeoMap)
 FIND_PACKAGE(PGF)
 FIND_PACKAGE(CLAPACK)
 FIND_PACKAGE(Boost) # 1.36.0)
+
+# manage the lcms{1,2} library
+# at the moment we STILL DEFAULT TO LCMS1 because the porting to lcms2 is incomplete
+# when libs/dklcms/digikam-lcms.cpp is completed we can move the default to lcms2
+# if we decide to drop support for lcms1 the layer of abstraction introduced by libs/dklcms 
+# may become superfluous and the dkCms* functions can be merged back.
+FIND_PACKAGE(LCMS)
+IF (LCMS_FOUND)
+    SET(USE_LCMS_VERSION_1000 1)
+ELSE (LCMS_FOUND)
+    IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
+        MESSAGE(STATUS "Found lcms2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIRS}")
+        MESSAGE(WARNING "Support for lcms2 is still incomplete and possibly buggy")
+        MESSAGE(WARNING "Please install lcms1 if available")
+        SET(LCMS_FOUND ${LCMS2_FOUND})
+        SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
+        SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIRS})
+        SET(USE_LCMS_VERSION_2000 1)
+    ENDIF (LCMS_FOUND)
+ENDIF (LCMS_FOUND)
+# pkg_check_modules(LCMS2 REQUIRED lcms2)
+# if (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
+#     MESSAGE(STATUS "Found lcms2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIRS}")
+#     SET(LCMS_FOUND ${LCMS2_FOUND})
+#     SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
+#     SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIRS})
+#     SET(USE_LCMS_VERSION_2000 1)
+# else (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
+#     FIND_PACKAGE(LCMS)
+#     MESSAGE(STATUS "Found lcms1: ${LCMS_LIBRARIES}  ${LCMS_INCLUDE_DIR}")
+#     SET(USE_LCMS_VERSION_1000 1)
+# endif (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
 
 # To link under Solaris (see B.K.O #274484)
 IF(NOT WIN32)
@@ -736,6 +769,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libdimgfilters_SRCS
         ${libclapack_SRCS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dklcms/digikam-lcms.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgbuiltinfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgfiltermanager.cpp
@@ -1495,6 +1529,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/transform
         ${CMAKE_CURRENT_SOURCE_DIR}/kioslave
         ${CMAKE_CURRENT_SOURCE_DIR}/libs
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dklcms
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo

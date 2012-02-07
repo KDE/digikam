@@ -27,7 +27,7 @@
 
 // LCMS
 
-#include <lcms.h>
+#include "digikam-lcms.h"
 
 // Qt includes
 
@@ -87,7 +87,7 @@ public:
         if (handle)
         {
             LcmsLock lock;
-            cmsCloseProfile(handle);
+            dkCmsCloseProfile(handle);
             handle = 0;
         }
     }
@@ -316,7 +316,7 @@ bool IccProfile::open()
     if (!d->data.isEmpty())
     {
         LcmsLock lock;
-        d->handle = cmsOpenProfileFromMem(d->data.data(), (DWORD)d->data.size());
+        d->handle = dkCmsOpenProfileFromMem(d->data.data(), (DWORD)d->data.size());
     }
     else if (!d->filePath.isNull())
     {
@@ -329,7 +329,7 @@ bool IccProfile::open()
         }
 
         LcmsLock lock;
-        d->handle = cmsOpenProfileFromMem(d->data.data(), (DWORD)d->data.size());
+        d->handle = dkCmsOpenProfileFromMem(d->data.data(), (DWORD)d->data.size());
     }
 
     return d->handle;
@@ -383,7 +383,7 @@ QString IccProfile::description()
     }
 
     LcmsLock lock;
-    const char* desc = cmsTakeProductDesc(d->handle);
+    const char* desc = dkCmsTakeProductDesc(d->handle);
 
     if (desc && desc[0] != '\0')
     {
@@ -412,7 +412,7 @@ IccProfile::ProfileType IccProfile::type()
 
     LcmsLock lock;
 
-    switch ((int)cmsGetDeviceClass(d->handle))
+    switch ((int)dkCmsGetDeviceClass(d->handle))
     {
         case icSigInputClass:
         case 0x6e6b7066: // 'nkbf', proprietary in Nikon profiles
