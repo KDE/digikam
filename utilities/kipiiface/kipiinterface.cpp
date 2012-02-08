@@ -95,6 +95,7 @@ KipiInterface::KipiInterface(QObject* parent, const char* name)
 
 KipiInterface::~KipiInterface()
 {
+    delete d;
 }
 
 KIPI::ImageCollection KipiInterface::currentAlbum()
@@ -178,8 +179,9 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
     KUrl::List ulist = urls;
 
     // Hard Refresh
-    QSet<QString> dirs;
+    QSet<QString>    dirs;
     QList<qlonglong> ids;
+
     foreach(const KUrl& url, urls)
     {
         ImageInfo info(url);
@@ -195,7 +197,9 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
         ImageAttributesWatch::instance()->fileMetadataChanged(url);
         dirs << url.directory();
     }
+
     ScanController::instance()->hintAtModificationOfItems(ids);
+
     foreach(const QString& dir, dirs)
     {
         ScanController::instance()->scheduleCollectionScan(dir);
@@ -308,7 +312,7 @@ QAbstractItemModel* KipiInterface::getTagTree() const
     if (!d->tagModel)
     {
         QAbstractItemModel* newTagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, NULL);
-        d->tagModel = newTagModel;
+        d->tagModel                     = newTagModel;
     }
 
     return d->tagModel;
@@ -348,9 +352,9 @@ QVariant KipiInterface::hostSetting(const QString& settingName)
 
         AlbumSettings* s = AlbumSettings::instance();
         return QString(s->getImageFileFilter() + ' ' +
-                s->getMovieFileFilter() + ' ' +
-                s->getAudioFileFilter() + ' ' +
-                s->getRawFileFilter());
+                       s->getMovieFileFilter() + ' ' +
+                       s->getAudioFileFilter() + ' ' +
+                       s->getRawFileFilter());
     }
 
     return QVariant();

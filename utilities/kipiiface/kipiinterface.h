@@ -74,14 +74,14 @@ public:
     QList<KIPI::ImageCollection> allAlbums();
     KIPI::ImageInfo              info( const KUrl& );
 
-    bool addImage( const KUrl&, QString& errmsg );
-    void delImage( const KUrl& );
-    void refreshImages( const KUrl::List& urls );
+    bool addImage(const KUrl&, QString& errmsg);
+    void delImage(const KUrl&);
+    void refreshImages(const KUrl::List& urls);
 
     int  features() const;
 
-    void thumbnail( const KUrl& url, int size );
-    void thumbnails( const KUrl::List& list, int size );
+    void thumbnail(const KUrl& url, int size);
+    void thumbnails(const KUrl::List& list, int size);
 
     KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget* parent);
     KIPI::UploadWidget*            uploadWidget(QWidget* parent);
