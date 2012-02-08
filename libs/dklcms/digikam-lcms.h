@@ -257,10 +257,6 @@ LCMSAPI DWORD         LCMSEXPORT           dkCmsTakeHeaderFlags(cmsHPROFILE hPro
 
 LCMSAPI const BYTE*   LCMSEXPORT           dkCmsTakeProfileID(cmsHPROFILE hProfile);
 
-LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsTakeCreationDateTime(struct tm *Dest, cmsHPROFILE hProfile);
-
-LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsTakeCalibrationDateTime(struct tm *Dest, cmsHPROFILE hProfile);
-
 LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig);
 
 LCMSAPI int           LCMSEXPORT           dkCmsTakeRenderingIntent(cmsHPROFILE hProfile);

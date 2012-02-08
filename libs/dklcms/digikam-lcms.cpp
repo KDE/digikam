@@ -104,18 +104,6 @@ LCMSAPI const BYTE*   LCMSEXPORT dkCmsTakeProfileID(cmsHPROFILE hProfile)
     return ret;
 }
 
-LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeCreationDateTime(struct tm* Dest, cmsHPROFILE hProfile)
-{
-    //TODO: Dest = ???;
-    return FALSE;
-}
-
-LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeCalibrationDateTime(struct tm* Dest, cmsHPROFILE hProfile)
-{
-    //TODO: Dest = ???;
-    return FALSE;
-}
-
 LCMSAPI int           LCMSEXPORT dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
 {
     //TODO: return (int) Icc -> RenderingIntent;
