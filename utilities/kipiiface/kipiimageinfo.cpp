@@ -32,6 +32,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+// LibKipi includes
+
+#include <libkipi/interface.h>
+
 // Local includes
 
 #include "album.h"

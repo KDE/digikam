@@ -42,13 +42,16 @@
 // LibKipi includes
 
 #include <libkipi/version.h>
-#include <libkipi/interface.h>
-#include <libkipi/imageinfo.h>
 #include <libkipi/imageinfoshared.h>
 
 // Local includes
 
 #include "imageinfo.h"
+
+namespace KIPI
+{
+    class Interface;
+}
 
 namespace Digikam
 {
