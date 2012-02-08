@@ -39,16 +39,19 @@
 
 #include <kurl.h>
 
-// LibKIPI includes
+// LibKipi includes
 
 #include <libkipi/version.h>
-#include <libkipi/interface.h>
-#include <libkipi/imageinfo.h>
 #include <libkipi/imageinfoshared.h>
 
 // Local includes
 
 #include "imageinfo.h"
+
+namespace KIPI
+{
+    class Interface;
+}
 
 namespace Digikam
 {
@@ -62,16 +65,6 @@ public:
     KipiImageInfo(KIPI::Interface* const interface, const KUrl& url);
     ~KipiImageInfo();
 
-#if KIPI_VERSION >= 0x010300
-    QString   name();
-    void      setName(const QString&);
-#else
-    /// Deprecated methods: for KIPI title here want mean "filename", not comment Title property.
-    QString   title();
-    void      setTitle(const QString&);
-#endif // KIPI_VERSION >= 0x010300
-
-
 #if KIPI_VERSION >= 0x010200
     void cloneData(ImageInfoShared* const other);
 #else
@@ -83,9 +76,19 @@ public:
     void                    delAttributes(const QStringList& res);
     void                    clearAttributes();
 
-/// Deprecated methods with libkipi 1.5.0. Use attributes()/addAttributes() methods instead.
+/// DEPRECATED METHODS with libkipi 1.5.0. Use attributes()/addAttributes() methods instead.
 
 #if KIPI_VERSION < 0x010500
+
+#if KIPI_VERSION >= 0x010300
+    QString   name();
+    void      setName(const QString&);
+#else
+    /// Deprecated methods: for KIPI title here want mean "filename", not comment Title property.
+    QString   title();
+    void      setTitle(const QString&);
+#endif // KIPI_VERSION >= 0x010300
+
     QString   description();
     void      setDescription(const QString&);
 
