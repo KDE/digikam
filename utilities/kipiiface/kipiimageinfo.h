@@ -71,18 +71,7 @@ public:
     void      setTitle(const QString&);
 #endif // KIPI_VERSION >= 0x010300
 
-/// Deprecated methods with libkipi 1.5.0. Use attributes()/addAttributes() methods instead.
-#if KIPI_VERSION < 0x010500
-    QString   description();
-    void      setDescription(const QString&);
 
-    int       angle();
-    void      setAngle(int orientation);
-#endif // KIPI_VERSION < 0x010500
-
-    QDateTime time(KIPI::TimeSpec);
-    void      setTime(const QDateTime& date, KIPI::TimeSpec spec = KIPI::FromInfo );
-    
 #if KIPI_VERSION >= 0x010200
     void cloneData(ImageInfoShared* const other);
 #else
@@ -90,9 +79,23 @@ public:
 #endif // KIPI_VERSION >= 0x010200
 
     QMap<QString, QVariant> attributes();
-    void addAttributes(const QMap<QString, QVariant>& res);
-    void delAttributes(const QStringList& res);
-    void clearAttributes();
+    void                    addAttributes(const QMap<QString, QVariant>& res);
+    void                    delAttributes(const QStringList& res);
+    void                    clearAttributes();
+
+/// Deprecated methods with libkipi 1.5.0. Use attributes()/addAttributes() methods instead.
+
+#if KIPI_VERSION < 0x010500
+    QString   description();
+    void      setDescription(const QString&);
+
+    int       angle();
+    void      setAngle(int orientation);
+
+    QDateTime time(KIPI::TimeSpec);
+    void      setTime(const QDateTime& date, KIPI::TimeSpec spec = KIPI::FromInfo );
+
+#endif // KIPI_VERSION < 0x010500
 
 private:
 

@@ -24,6 +24,7 @@ Name[is]=digiKam Finna og Hala niður
 Name[it]=Rileva e scarica con digiKam
 Name[ja]=digiKam 検出とダウンロード
 Name[km]=រក​ឃើញ និង​ទាញយក digiKam
+Name[lt]=digiKam aptikimas ir atsiuntimas
 Name[lv]=digiKam noteicējs un ielādētājs
 Name[nb]=digiKam «oppdag og last ned»
 Name[nl]=Detecteren en downloaden

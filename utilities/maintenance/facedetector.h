@@ -27,9 +27,7 @@
 
 // Local includes
 
-#include "progressmanager.h"
-
-class QWidget;
+#include "maintenancetool.h"
 
 namespace Digikam
 {
@@ -39,33 +37,24 @@ class FacePipelinePackage;
 class FaceScanSettings;
 class ImageInfo;
 class ImageInfoList;
-class LoadingDescription;
 
-class FaceDetector : public ProgressItem
+class FaceDetector : public MaintenanceTool
 {
     Q_OBJECT
 
 public:
 
-    explicit FaceDetector(const FaceScanSettings& settings);
+    explicit FaceDetector(const FaceScanSettings& settings, ProgressItem* parent=0);
     ~FaceDetector();
-
-Q_SIGNALS:
-
-    void signalComplete();
-
-private:
-
-    void complete();
-    void processOne();
 
 private Q_SLOTS:
 
-    void startAlbumListing();
-    void continueAlbumListing();
+    void slotStart();
+    void slotContinueAlbumListing();
     void slotItemsInfo(const ImageInfoList&);
     void slotImagesSkipped(const QList<ImageInfo>&);
     void slotShowOneDetected(const FacePipelinePackage& package);
+    void slotDone();
     void slotCancel();
 
 private:

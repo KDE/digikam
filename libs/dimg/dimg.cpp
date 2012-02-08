@@ -80,6 +80,7 @@ extern "C"
 #include "pgfloader.h"
 #include "qimageloader.h"
 #include "jpegloader.h"
+#include "filereadwritelock.h"
 #include "iccmanager.h"
 #include "icctransform.h"
 #include "exposurecontainer.h"
@@ -414,6 +415,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* o
     setAttribute("detectedFileFormat", format);
     setAttribute("originalFilePath", filePath);
 
+    FileReadLocker lock(filePath);
     switch (format)
     {
         case (NONE):
@@ -653,6 +655,7 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
     QString frm = format.toUpper();
     setAttribute("savedFilePath", filePath);
 
+    FileWriteLocker lock(filePath);
     if (frm == "JPEG" || frm == "JPG" || frm == "JPE")
     {
         // JPEG does not support transparency, so we shall provide an image without alpha channel.

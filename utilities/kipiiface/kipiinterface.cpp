@@ -25,21 +25,28 @@
 
 #include "kipiinterface.moc"
 
+// Qt includes
+
+#include <QAbstractItemModel>
+
 // KDE includes
 
 #include <kconfig.h>
 #include <klocale.h>
 #include <kdebug.h>
 
-// Qt includes
+// Libkipi includes
 
-#include <QAbstractItemModel>
+#include <libkipi/imagecollection.h>
+#include <libkipi/imageinfoshared.h>
+#include <libkipi/imagecollectionshared.h>
 
 // Local includes
 
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
+#include "imageinfo.h"
 #include "metadatasettings.h"
 #include "collectionmanager.h"
 #include "databaseaccess.h"

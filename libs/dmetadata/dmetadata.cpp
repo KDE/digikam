@@ -47,6 +47,7 @@
 
 // Local includes
 
+#include "filereadwritelock.h"
 #include "metadatasettings.h"
 #include "template.h"
 #include "version.h"
@@ -103,6 +104,7 @@ bool DMetadata::load(const QString& filePath) const
     // In first, we trying to get metadata using Exiv2,
     // else we will use dcraw to extract minimal information.
 
+    FileReadLocker lock(filePath);
     if (!KExiv2::load(filePath))
     {
         if (!loadUsingDcraw(filePath))
@@ -112,6 +114,18 @@ bool DMetadata::load(const QString& filePath) const
     }
 
     return true;
+}
+
+bool DMetadata::save(const QString& filePath) const
+{
+    FileWriteLocker lock(filePath);
+    return KExiv2::save(filePath);
+}
+
+bool DMetadata::applyChanges() const
+{
+    FileWriteLocker lock(getFilePath());
+    return KExiv2::applyChanges();
 }
 
 bool DMetadata::loadUsingDcraw(const QString& filePath) const

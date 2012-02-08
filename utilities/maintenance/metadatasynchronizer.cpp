@@ -27,13 +27,12 @@
 
 #include <QString>
 #include <QTimer>
-#include <QDateTime>
 
 // KDE includes
 
 #include <kicon.h>
-#include <kapplication.h>
 #include <klocale.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -42,7 +41,6 @@
 #include "collectionscanner.h"
 #include "imageinfojob.h"
 #include "metadatahub.h"
-#include "knotificationwrapper.h"
 
 namespace Digikam
 {
@@ -53,19 +51,13 @@ class MetadataSynchronizer::MetadataSynchronizerPriv
 public:
 
     MetadataSynchronizerPriv() :
-        cancel(false),
         imageInfoIndex(0),
         imageInfoJob(0),
         direction(MetadataSynchronizer::WriteFromDatabaseToFile)
     {
-        duration.start();
     }
 
-    bool                                cancel;
-
     int                                 imageInfoIndex;
-
-    QTime                               duration;
 
     AlbumList                           palbumList;
     AlbumList::Iterator                 albumsIt;
@@ -79,55 +71,41 @@ public:
     MetadataSynchronizer::SyncDirection direction;
 };
 
-MetadataSynchronizer::MetadataSynchronizer(SyncDirection direction)
-    : ProgressItem(0,
-                   "MetadataSynchronizer",
-                   QString(),
-                   QString(),
-                   true,
-                   true),
+MetadataSynchronizer::MetadataSynchronizer(SyncDirection direction, ProgressItem* parent)
+    : MaintenanceTool("MetadataSynchronizer", parent),
       d(new MetadataSynchronizerPriv)
 {
     d->palbumList = AlbumManager::instance()->allPAlbums();
     d->direction  = direction;
 
-    init();
+    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
-MetadataSynchronizer::MetadataSynchronizer(Album* album, SyncDirection direction)
-    : ProgressItem(0,
-                   "MetadataSynchronizer",
-                   QString(),
-                   QString(),
-                   true,
-                   true),
+MetadataSynchronizer::MetadataSynchronizer(Album* album, SyncDirection direction, ProgressItem* parent)
+    : MaintenanceTool("MetadataSynchronizer", parent),
       d(new MetadataSynchronizerPriv)
 {
     d->palbumList.append(album);
     d->direction = direction;
 
-    init();
+    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
-MetadataSynchronizer::MetadataSynchronizer(const ImageInfoList& list, SyncDirection direction)
-    : ProgressItem(0,
-                   "MetadataSynchronizer",
-                    QString(),
-                    QString(),
-                    true,
-                    true),
+MetadataSynchronizer::MetadataSynchronizer(const ImageInfoList& list, SyncDirection direction, ProgressItem* parent)
+    : MaintenanceTool("MetadataSynchronizer", parent),
       d(new MetadataSynchronizerPriv)
 {
     d->imageInfoList = list;
     d->direction     = direction;
 
-    init();
+    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 // Common methods ----------------------------------------------------------------------------
 
-void MetadataSynchronizer::init()
+void MetadataSynchronizer::slotStart()
 {
+    MaintenanceTool::slotStart();
     d->imageInfoJob = new ImageInfoJob;
 
     connect(d->imageInfoJob, SIGNAL(signalItemsInfo(ImageInfoList)),
@@ -151,9 +129,8 @@ MetadataSynchronizer::~MetadataSynchronizer()
 
 void MetadataSynchronizer::slotCancel()
 {
-    d->cancel = true;
     d->imageInfoJob->stop();
-    setComplete();
+    MaintenanceTool::slotCancel();
 }
 
 // Parse Albums methods ------------------------------------------------------------------
@@ -167,7 +144,7 @@ void MetadataSynchronizer::slotParseAlbums()
 
 void MetadataSynchronizer::processOneAlbum()
 {
-    if (d->cancel) return;
+    if (canceled()) return;
 
     if (d->albumsIt == d->palbumList.end())     // All albums are parsed.
     {
@@ -208,19 +185,13 @@ void MetadataSynchronizer::parseList()
 
     setTotalItems(d->imageInfoList.count());
 
-    while (d->imageInfoIndex != d->imageInfoList.size() && !d->cancel)
+    while (d->imageInfoIndex != d->imageInfoList.size() && !canceled())
     {
         parsePicture();
         kapp->processEvents();
     }
 
-    QTime now, t = now.addMSecs(d->duration.elapsed());
-    // Pop-up a message to bring user when all is done.
-    KNotificationWrapper(id(),
-                         i18n("Process is done.\nDuration: %1", t.toString()),
-                         kapp->activeWindow(), label());
-    emit signalComplete();
-    setComplete();
+    MaintenanceTool::slotDone();
 }
 
 // TODO : use multithreading to process this method.

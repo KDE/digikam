@@ -164,7 +164,6 @@ simplified.  The basic parts where Little CMS 2 differs from 1.x series are:
     * ·    Pipelines
 
 
-
 On internal advanced functions, the underlying implementation has changed significantly.
 You still can do all what lcms1 did, but in some cases by using a different approach.
 There are no longer gamma curves or matrix-shaper functions. Even the LUT functions are

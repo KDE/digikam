@@ -103,56 +103,6 @@ void KipiImageInfo::setTitle(const QString& newName)
 }
 #endif // KIPI_VERSION >= 0x010300
 
-#if KIPI_VERSION < 0x010500
-QString KipiImageInfo::description()
-{
-    QMap<QString, QVariant> map = attributes();
-    if (!map.isEmpty()) return map.value("comment", QString()).toString();
-    return QString();
-}
-
-void KipiImageInfo::setDescription( const QString& description )
-{
-    QMap<QString, QVariant> map;
-    map.insert("comment", description);
-    addAttributes(map);
-}
-
-int KipiImageInfo::angle()
-{
-    QMap<QString, QVariant> map = attributes();
-    if (!map.isEmpty()) return map.value("angle", 0).toInt();
-    return 0;
-}
-
-void KipiImageInfo::setAngle(int orientation)
-{
-    QMap<QString, QVariant> map;
-    map.insert("angle", orientation);
-    addAttributes(map);
-}
-#endif // KIPI_VERSION < 0x010500
-
-QDateTime KipiImageInfo::time( KIPI::TimeSpec /*spec*/ )
-{
-    QMap<QString, QVariant> map = attributes();
-    if (!map.isEmpty()) return map.value("date", QDateTime()).toDateTime();
-    return QDateTime();
-}
-
-void KipiImageInfo::setTime(const QDateTime& date, KIPI::TimeSpec)
-{
-    if ( !date.isValid() )
-    {
-        kWarning() << "Invalid datetime specified";
-        return;
-    }
-
-    QMap<QString, QVariant> map;
-    map.insert("date", date);
-    addAttributes(map);
-}
-
 #if KIPI_VERSION >= 0x010200
 void KipiImageInfo::cloneData( ImageInfoShared* const other )
 #else
@@ -450,5 +400,57 @@ void KipiImageInfo::clearAttributes()
 
     delAttributes(attr);
 }
+
+/// Deprecated methods with libkipi 1.5.0. Use attributes()/addAttributes() methods instead.
+
+#if KIPI_VERSION < 0x010500
+QString KipiImageInfo::description()
+{
+    QMap<QString, QVariant> map = attributes();
+    if (!map.isEmpty()) return map.value("comment", QString()).toString();
+    return QString();
+}
+
+void KipiImageInfo::setDescription( const QString& description )
+{
+    QMap<QString, QVariant> map;
+    map.insert("comment", description);
+    addAttributes(map);
+}
+
+int KipiImageInfo::angle()
+{
+    QMap<QString, QVariant> map = attributes();
+    if (!map.isEmpty()) return map.value("angle", 0).toInt();
+    return 0;
+}
+
+void KipiImageInfo::setAngle(int orientation)
+{
+    QMap<QString, QVariant> map;
+    map.insert("angle", orientation);
+    addAttributes(map);
+}
+
+QDateTime KipiImageInfo::time( KIPI::TimeSpec /*spec*/ )
+{
+    QMap<QString, QVariant> map = attributes();
+    if (!map.isEmpty()) return map.value("date", QDateTime()).toDateTime();
+    return QDateTime();
+}
+
+void KipiImageInfo::setTime(const QDateTime& date, KIPI::TimeSpec)
+{
+    if ( !date.isValid() )
+    {
+        kWarning() << "Invalid datetime specified";
+        return;
+    }
+
+    QMap<QString, QVariant> map;
+    map.insert("date", date);
+    addAttributes(map);
+}
+#endif // KIPI_VERSION < 0x010500
 
 }  // namespace Digikam

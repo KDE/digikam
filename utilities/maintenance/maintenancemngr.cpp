@@ -159,6 +159,7 @@ void MaintenanceMngr::slotStage4()
     if (d->settings.duplicates)
     {
         DuplicatesFinder* tool = new DuplicatesFinder(d->settings.similarity);
+        tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage5()));
@@ -177,6 +178,7 @@ void MaintenanceMngr::slotStage5()
     if (d->settings.metadata)
     {
         MetadataSynchronizer* tool = new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
+        tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage6()));
@@ -195,6 +197,7 @@ void MaintenanceMngr::slotStage6()
     if (d->settings.faceDetection)
     {
         FaceDetector* tool = new FaceDetector(d->settings.faceSettings);
+        tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotDone()));
