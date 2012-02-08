@@ -63,46 +63,6 @@ PAlbum* KipiImageInfo::parentAlbum() const
     return AlbumManager::instance()->findPAlbum(m_info.albumId());
 }
 
-#if KIPI_VERSION >= 0x010300
-QString KipiImageInfo::name()
-{
-    return m_info.name();
-}
-
-void KipiImageInfo::setName(const QString& newName)
-{
-    // Here we get informed that a plugin has renamed the file
-
-    PAlbum* p = parentAlbum();
-
-    if ( p && !newName.isEmpty() )
-    {
-        DatabaseAccess().db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
-        _url = _url.upUrl();
-        _url.addPath(newName);
-    }
-}
-#else
-QString KipiImageInfo::title()
-{
-    return m_info.name();
-}
-
-void KipiImageInfo::setTitle(const QString& newName)
-{
-    // Here we get informed that a plugin has renamed the file
-
-    PAlbum* p = parentAlbum();
-
-    if ( p && !newName.isEmpty() )
-    {
-        DatabaseAccess().db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
-        _url = _url.upUrl();
-        _url.addPath(newName);
-    }
-}
-#endif // KIPI_VERSION >= 0x010300
-
 #if KIPI_VERSION >= 0x010200
 void KipiImageInfo::cloneData( ImageInfoShared* const other )
 #else
@@ -120,6 +80,9 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
 
     if (p)
     {
+        // Get item name property from database
+        res["name"]          = m_info.name();
+
         // Get default title property from database
         res["comment"]       = m_info.comment();
 
@@ -128,21 +91,23 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
 
         // Get date property from database
         res["date"]          = m_info.dateTime();
+        res["isexactdate"]   = true;
 
-        // Get angle property from database
-        res["angle"]         = m_info.orientation();
+        // Get orientation property from database
+        res["orientation"]   = m_info.orientation();
+        res["angle"]         = m_info.orientation();           // NOTE: for compatibility. Deprecated and replaced by "orientation".
 
-        QList<int> tagIds    = m_info.tagIds();
         // Get digiKam Tags Path list of picture from database.
         // Ex.: "City/Paris/Monuments/Notre Dame"
-
+        QList<int> tagIds    = m_info.tagIds();
         QStringList tagspath = AlbumManager::instance()->tagPaths(tagIds, false);
         res["tagspath"]      = tagspath;
 
-        // Get digiKam Tags name list of picture from database.
+        // Get digiKam Tags name (keywords) list of picture from database.
         // Ex.: "Notre Dame"
         QStringList tags     = AlbumManager::instance()->tagNames(tagIds);
-        res["tags"]          = tags;
+        res["keywords"]      = tags;
+        res["tags"]          = tags;                          // NOTE: for compatibility. Deprecated and replaced by "keywords".
 
         // Get digiKam Rating of picture from database.
         int rating           = m_info.rating();
@@ -169,6 +134,10 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
             res["altitude"]  = alt;
         }
 
+        // Get file size from database.
+        qlonglong size       = m_info.fileSize();
+        res["filesize"]      = size;
+
         // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
 
@@ -183,6 +152,21 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
     {
         QMap<QString, QVariant> attributes = res;
 
+        // Here we get informed that a plugin has renamed item
+        if (attributes.contains("name"))
+        {
+            PAlbum* p       = parentAlbum();
+            QString newName = attributes["name"].toString();
+
+            if (p && !newName.isEmpty())
+            {
+                DatabaseAccess().db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
+                _url = _url.upUrl();
+                _url.addPath(newName);
+            }
+            attributes.remove("name");
+        }
+
         // Set digiKam default Title of picture into database.
         if (attributes.contains("comment"))
         {
@@ -191,6 +175,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             ImageComments comments = m_info.imageComments(access);
             // we set a comment with default language, author and date null
             comments.addComment(comment);
+            attributes.remove("comment");
         }
 
         // Set digiKam date of picture into database.
@@ -198,13 +183,17 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         {
             QDateTime date = attributes["date"].toDateTime();
             m_info.setDateTime(date);
+            attributes.remove("date");
         }
 
-        // Set digiKam angle of picture into database.
-        if (attributes.contains("angle"))
+        // Set digiKam orientation of picture into database.
+        if (attributes.contains("angle") ||                 // NOTE: for compatibility. Deprecated and replaced by "orientation".
+            attributes.contains("orientation"))
         {
-            int angle = attributes["angle"].toInt();
+            int angle = attributes["orientation"].toInt();
             m_info.setOrientation(angle);
+            attributes.remove("angle");
+            attributes.remove("orientation");
         }
 
         // Set digiKam default Title of picture into database.
@@ -215,16 +204,18 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             ImageComments comments = m_info.imageComments(access);
             // we set a comment with default language, author and date null
             comments.addTitle(title);
+            attributes.remove("title");
         }
 
         // Set digiKam Tags Path list of picture into database.
         // Ex.: "City/Paris/Monuments/Notre Dame"
-        if (attributes.find("tagspath") != attributes.end())
+        if (attributes.contains("tagspath"))
         {
             QStringList tagspaths = attributes["tagspath"].toStringList();
 
             QList<int> tagIds     = TagsCache::instance()->getOrCreateTags(tagspaths);
             DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_info.id(), tagIds);
+            attributes.remove("tagspath");
         }
 
         // Set digiKam Rating of picture into database.
@@ -236,6 +227,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             {
                 m_info.setRating(rating);
             }
+            attributes.remove("rating");
         }
 
         // Set digiKam Color Label of picture into database.
@@ -247,6 +239,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             {
                 m_info.setColorLabel(color);
             }
+            attributes.remove("colorlabel");
         }
 
         // Set digiKam Pick Label of picture into database.
@@ -258,6 +251,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             {
                 m_info.setPickLabel(pick);
             }
+            attributes.remove("picklabel");
         }
 
         // GPS location management from plugins.
@@ -277,6 +271,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
                 {
                     position.setLatitude(lat);
                 }
+                attributes.remove("latitude");
             }
 
             // Set GPS longitude location of picture into database.
@@ -288,6 +283,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
                 {
                     position.setLongitude(lng);
                 }
+                attributes.remove("longitude");
             }
 
             // Set GPS altitude location of picture into database.
@@ -295,12 +291,16 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             {
                 double alt = attributes["altitude"].toDouble();
                 position.setAltitude(alt);
+                attributes.remove("altitude");
             }
 
             position.apply();
         }
 
         // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
+
+        if (!attributes.isEmpty())
+            kWarning() << "These attributes are not yet managed by digiKam KIPI interface: " << attributes;
     }
 
     // To update sidebar content. Some kipi-plugins use this way to refresh sidebar
@@ -314,68 +314,87 @@ void KipiImageInfo::delAttributes(const QStringList& res)
 
     if (p)
     {
+        QStringList attributes = res;
+
         // Remove all Comments.
-        if (res.contains("comment"))
+        if (attributes.contains("comment"))
         {
             DatabaseAccess access;
             ImageComments comments = m_info.imageComments(access);
             comments.removeAll(DatabaseComment::Comment);
+            attributes.removeAll("comment");
         }
 
         // Remove date.
-        if (res.contains("date"))
+        if (attributes.contains("date"))
         {
             m_info.setDateTime(QDateTime());
+            attributes.removeAll("date");
         }
 
-        // Remove angle.
-        if (res.contains("angle"))
+        // Remove orientation.
+        if (attributes.contains("angle") ||                 // NOTE: for compatibility. Deprecated and replaced by "orientation".
+            attributes.contains("orientation"))
         {
             m_info.setOrientation(0);
+            attributes.removeAll("angle");
+            attributes.removeAll("orientation");
         }
 
         // Remove all Titles.
-        if (res.contains("title"))
+        if (attributes.contains("title"))
         {
             DatabaseAccess access;
             ImageComments comments = m_info.imageComments(access);
             comments.removeAll(DatabaseComment::Title);
+            attributes.removeAll("title");
         }
 
         // Remove all tags of a picture from database.
-        if (res.contains("tags"))
+        if (attributes.contains("tags") ||                   // NOTE: for compatibility. Deprecated and replaced by "tagspath".
+            attributes.contains("tagspath")
+        )
         {
             m_info.removeAllTags();
+            attributes.removeAll("tags");
+            attributes.removeAll("tagspath");
         }
 
         // Remove digiKam Rating of picture from database.
-        if (res.contains("rating"))
+        if (attributes.contains("rating"))
         {
             m_info.setRating(RatingMin);
+            attributes.removeAll("rating");
         }
 
         // Remove digiKam Color Label of picture from database.
-        if (res.contains("colorlabel"))
+        if (attributes.contains("colorlabel"))
         {
             m_info.setColorLabel(NoColorLabel);
+            attributes.removeAll("colorlabel");
         }
 
         // Remove digiKam Pick Label of picture from database.
-        if (res.contains("picklabel"))
+        if (attributes.contains("picklabel"))
         {
             m_info.setPickLabel(NoPickLabel);
+            attributes.removeAll("picklabel");
         }
 
         // GPS location management from plugins.
 
-        if (res.contains("gpslocation"))
+        if (attributes.contains("gpslocation"))
         {
             ImagePosition position = m_info.imagePosition();
             position.remove();
             position.apply();
+            attributes.removeAll("gpslocation");
         }
 
         // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
+
+        if (!attributes.isEmpty())
+            kWarning() << "These attributes are not yet managed by digiKam KIPI interface: " << attributes;
     }
 
     // To update sidebar content. Some kipi-plugins use this way to refresh sidebar
@@ -389,8 +408,8 @@ void KipiImageInfo::clearAttributes()
     attr.append("comment");
     attr.append("date");
     attr.append("title");
-    attr.append("angle");
-    attr.append("tags");
+    attr.append("orientation");
+    attr.append("tagspath");
     attr.append("rating");
     attr.append("colorlabel");
     attr.append("picklabel");
@@ -401,9 +420,44 @@ void KipiImageInfo::clearAttributes()
     delAttributes(attr);
 }
 
-/// Deprecated methods with libkipi 1.5.0. Use attributes()/addAttributes() methods instead.
+/// DEPRECATED METHODS with libkipi 1.5.0. Use attributes()/addAttributes() methods instead.
 
 #if KIPI_VERSION < 0x010500
+
+#if KIPI_VERSION >= 0x010300
+
+QString KipiImageInfo::name()
+{
+    QMap<QString, QVariant> map = attributes();
+    if (!map.isEmpty()) return map.value("name", QString()).toString();
+    return QString();
+}
+
+void KipiImageInfo::setName(const QString& newName)
+{
+    QMap<QString, QVariant> map;
+    map.insert("name", newName);
+    addAttributes(map);
+}
+
+#else // KIPI_VERSION >= 0x010300
+
+QString KipiImageInfo::title()
+{
+    QMap<QString, QVariant> map = attributes();
+    if (!map.isEmpty()) return map.value("name", QString()).toString();
+    return QString();
+}
+
+void KipiImageInfo::setTitle(const QString& newName)
+{
+    QMap<QString, QVariant> map;
+    map.insert("name", newName);
+    addAttributes(map);
+}
+
+#endif // KIPI_VERSION >= 0x010300
+
 QString KipiImageInfo::description()
 {
     QMap<QString, QVariant> map = attributes();
@@ -432,7 +486,7 @@ void KipiImageInfo::setAngle(int orientation)
     addAttributes(map);
 }
 
-QDateTime KipiImageInfo::time( KIPI::TimeSpec /*spec*/ )
+QDateTime KipiImageInfo::time(KIPI::TimeSpec)
 {
     QMap<QString, QVariant> map = attributes();
     if (!map.isEmpty()) return map.value("date", QDateTime()).toDateTime();
@@ -451,6 +505,7 @@ void KipiImageInfo::setTime(const QDateTime& date, KIPI::TimeSpec)
     map.insert("date", date);
     addAttributes(map);
 }
+
 #endif // KIPI_VERSION < 0x010500
 
 }  // namespace Digikam
