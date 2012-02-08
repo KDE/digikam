@@ -1,0 +1,177 @@
+Friday, December 17, 2010
+
+Multithreading question
+
+
+Question: Do I need a rocket science degree to deal with lcms2 in multithreading mode?
+What are ContextID and THR functions?
+
+
+Actually it is a lot more simple. ContexID is nothing else that a void pointer that user
+can associate to profiles and/or transforms. It has no meaning. Is just a sort of used
+defined cargo that you can use on your convenience. lcms does nothing with that . It has
+no relationship with threads, but can be used to store information about the thread.
+Obviously you can ignore it if wish so. Then, by default this void pointer is set to NULL
+when creating the transform or opening the profiles. Additionally, if the programmer wish,
+there are functions which end with THR that can set the this to values other than NULL. In
+this way the threads, processes or wathever that are using the profiles and transforms can
+retrieve the value. It is just a way to store a 32 bit value along the handles.
+
+
+On the other hand we have the 1-pixel cache. This is very convenient on slow interpolation
+methods when most of the pixels in the image are similar. Obviously, caching means the
+transform should store the result of last processed pixel, then in the case two threads
+are using the same transform at the same time, memory read/write operations on this value
+may clash and therefore you need some sort of semaphore. Ok, you can use a semaphore (the
+pthreads) or just get rid of the cache enterely. Please note that in some situations the
+cache is not used at all, i.e., on matrix-shaper to matrix-shaper 8 bit, it is actually
+faster to do always the computations, so the cache schema is discarded on this case. On
+CMYK trilinear, cache is being used as interpolation tends to be slow.
+
+
+So, to answer your questions: If you use redundant transforms, you need not to worry about
+anything as each transform is using different cache. May be fast, but this is big a waste
+of memory. If you share the same transform on several threads, which is very efficient,
+you have either to disable the cache or to enable pthreads. I would reccomend to disable
+the cache, the performance gain when using multiple threads is huge, the performance gain
+when using cache is  small. If you need more performance, just add more threads. You have
+not to use cmsCreateTransformTHR, this is just a way to add a user-defined variable to the
+handle, and finally cmsDoTransform does not have any ContexID, the error reports the
+ContextID associated with the transform being used. As a hint, ContexID are more useful
+when you want write a memory management plug-in to specialize memory mangement for
+multithreading, as the memory management pluging does recive ContextID when a memory
+operation is requested. The testebed application does use this feature to check memory
+consistency.
+
+Posted by Marti Maria
+
+-----------
+
+Saturday, June 26, 2010
+Reusing same transform on different pixel types
+I got this question twice, so here are some comments.
+
+cmsChangeBuffersFormat() is gone in 2.0
+
+There is a good reason to do that: optimization
+
+
+When you create a transform, you supply the profiles and the expected buffer format. Then,
+the engine, on depending on things like number of channels and bit depth can choose to
+implement such transform in different ways.
+
+
+ Let's take an example. If you create a AdobeRGB to  sRGB transform using TYPE_RGB_8 for
+both input and output, the engine can guess that the maximum precision you would require
+is 8 bits, and then simplify the curve and matrix handling to, for example 1.14 fixed
+point.
+
+ 
+This precision is enough for 8 bits but not for 16 bits, so if you change the format after
+creating the transform to TYPE_RGB_16, you would end either with artifacts or throughput
+loss.
+
+
+Remember lcms 2 allows you to close the profiles after creating the transform. This is
+very convenient feature but prevents to recalculate the transform by reading the profile
+again. And there are situations, MPE for example when different precision means different
+tags.
+
+
+Overall I think the balancing of losing "change format" versus optimization and early
+profile closing is good. Otherwise you can always create a new transform for each format.
+Since you can close the profiles after creation, the amount of  allocated resources should
+remain low. 
+
+
+------------
+
+
+Saturday, May 8, 2010
+ I am pleased to the announce the release 2.0 of the LittleCMS open source color engine.
+
+ Version 2.0 is an important milestone, among other improvements, it delivers: 
+
+    * Full implementation of the ICC standard 
+    * Improved documentation 
+    * Better portability 
+    * Easier extensibility
+
+
+Migration to 2.x branch is highly encouraged. 
+ 
+
+Little CMS intends to be a small-footprint color management engine, with special focus on accuracy and performance. It uses the International Color Consortium standard (ICC), which is the modern standard when regarding to color management. The ICC specification is widely used and is referred to in many International and other de-facto standards.
+ 
+For more information, please take a look on: 
+
+Main site: 
+http://www.littlecms.com/
+Downloads:
+http://www.littlecms.com/download.html
+
+ 
+Posted by Marti Maria at 7:16 PM 5 comments
+Labels: release 
+
+
+----------------
+
+Monday, November 30, 2009
+Backwards compatibility
+Little CMS 2 is almost a full rewrite of 1.x series, so there is no guarantee of backwards
+compatibility. Having said this, if your application doesnât make use of advanced
+features, probably all what you need to do is to change the include file from lcms.h to
+lcms2.h and maybe to do some minor tweaks on your code. Profile opening and transform
+creation functions are kept the same, but there are some changes in the flags.  Little CMS
+2 does offer more ways to access profiles, so it is certainly possible your code will get
+simplified.  The basic parts where Little CMS 2 differs from 1.x series are:
+
+    * Â·    Transform flags
+    * Â·    Error handling
+    * Â·    Textual information retrieval
+    * Â·    New non-ICC intents
+    * Â·    Floating point modes
+    * Â·    Pipelines
+
+
+
+On internal advanced functions, the underlying implementation has changed significantly.
+You still can do all what lcms1 did, but in some cases by using a different approach.
+There are no longer gamma curves or matrix-shaper functions. Even the LUT functions are
+gone. All that has been superseded by:
+
+    * Â·    Gamma functions -> Tone curves
+    * Â·    Matrix Shaper, LUT -> Pipelines
+    * Â·    LUT resampling -> Optimization engine
+
+There is no one-to-one correspondence between old and new functions, but most old
+functionality can be implemented with new functions.
+Posted by Marti Maria at 7:01 PM 0 comments
+Labels: documentation, icc 
+
+
+------------------
+
+Sunday, November 29, 2009
+What is new from lcms 1.x
+First obvious question is âwhy should I upgrade to Little CMS 2.0â. Here are some clues:
+
+Little CMS 2.0 is a full v4 CMM, which can accept v2 profiles. Little CMS 1.xx was a v2
+CMM which can deal with (some) V4 profiles. The difference is important, as 2.0 handling
+of PCS is different, definitively better and far more accurate.
+
+    * It does accept and understand floating point profiles (MPE) with DToBxx tags. (Yes,
+it works!) It has 32 bits precision. (lcms 1.xx was 16 bits)
+    * It handles float and double formats directly. MPE profiles are evaluated in floating
+point with no precision loss.
+    * It has plug-in architecture that allows you to change interpolation, add new
+proprietary tags, add new âsmart CMMâ intents, etc.
+    * Is faster. In some combinations, has a x 6 throughput boost.
+    * Some new algorithms, incomplete state of adaptation, Jan Morovicâs segment maxima
+gamut boundary descriptor, better K preservationâ¦
+    * Historic issues, like faulty icc34.h, freeing profiles after creating transform,
+etc. All is solved.
+
+Posted by Marti Maria at 5:25 PM 0 comments
+Labels: documentation, speed 
