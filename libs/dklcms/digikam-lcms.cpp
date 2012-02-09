@@ -21,25 +21,26 @@
  *
  * ============================================================ */
 
+#include <QtCore/QString>
+
 #include <config-digikam.h>
 
 #if defined(USE_LCMS_VERSION_2000)
 
 #include <lcms2.h>
+
 #include "digikam-lcms.h"
 
 
 LCMSAPI int    LCMSEXPORT dkCmsErrorAction(int nAction)
 {
-    // TODO: there is error logging
+    // TODO: Where is error logging?
     return 0;
 }
 
 LCMSAPI DWORD  LCMSEXPORT dkCmsGetProfileICCversion(cmsHPROFILE hProfile)
 {
-    // ./libs/widgets/iccprofiles/iccprofilewidget.cpp
-    // metaDataMap.insert("Icc.Header.ProfileVersion", QString::number((uint)cmsGetProfileICCversion(hProfile)));
-    return 0;
+    return (DWORD) cmsGetEncodedICCversion(hProfile);
 }
 
 LCMSEXPORT void dkCmsSetAlarmCodes(int r, int g, int b)
@@ -49,46 +50,61 @@ LCMSEXPORT void dkCmsSetAlarmCodes(int r, int g, int b)
     NewAlarm[1] = (cmsUInt16Number)g;
     NewAlarm[2] = (cmsUInt16Number)b;
     cmsSetAlarmCodes(NewAlarm);
-    //void cmsSetAlarmCodes(cmsUInt16Number NewAlarm[cmsMAXCHANNELS]);
 }
 
-LCMSAPI const char*   LCMSEXPORT dkCmsTakeProductName(cmsHPROFILE hProfile)
+LCMSAPI QString        LCMSEXPORT dkCmsTakeProductName(cmsHPROFILE hProfile)
 {
-    //static char Name[LCMS_DESC_MAX*2+4];
-    static char Name[1];
-    Name[0] = '\0';
-    return Name;
+    char buffer[1024];
+    const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigCrdInfoTag);
+    if (mlu == NULL) return QString();
+    cmsMLUgetASCII(mlu, "PS", "nm", buffer, 1024);
+    return QString(buffer);
 }
 
-LCMSAPI const char*   LCMSEXPORT dkCmsTakeProductDesc(cmsHPROFILE hProfile)
+LCMSAPI const char*    LCMSEXPORT dkCmsTakeProductDesc(cmsHPROFILE hProfile)
 {
+    // TODO: What I'm supposed to use here??
     static char ret[1]; ret[0] = '\0'; return ret;
 }
 
-LCMSAPI const char*   LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
+LCMSAPI QString        LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
 {
-    static char ret[1]; ret[0] = '\0'; return ret;
+    int len;
+    char buffer[1024];
+    len = cmsGetProfileInfoASCII(hProfile, cmsInfoDescription, "en", "US", buffer, 1024);
+    return QString(buffer);
 }
 
-LCMSAPI const char*   LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
+LCMSAPI QString        LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
 {
-    static char ret[1]; ret[0] = '\0'; return ret;
+    int len;
+    char buffer[1024];
+    len = cmsGetProfileInfoASCII(hProfile, cmsInfoManufacturer, "en", "US", buffer, 1024);
+    return QString(buffer);
 }
 
 LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile)
 {
-    //TODO:
-    return FALSE;
+    Dest = (LPcmsCIEXYZ)cmsReadTag(hProfile, cmsSigMediaWhitePointTag);
+    return (Dest != NULL);
 }
 
-LCMSAPI const char*   LCMSEXPORT dkCmsTakeModel(cmsHPROFILE hProfile)
+LCMSAPI QString       LCMSEXPORT dkCmsTakeModel(cmsHPROFILE hProfile)
 {
-    static char ret[1]; ret[0] = '\0'; return ret;
+    char buffer[1024];
+    const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigDeviceModelDescTag);
+    if (mlu == NULL) return QString();
+    cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
+    return QString(buffer);
 }
 
-LCMSAPI const char*   LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
+LCMSAPI QString        LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
 {
-    static char ret[1]; ret[0] = '\0'; return ret;
+    char buffer[1024];
+    const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigCopyrightTag);
+    if (mlu == NULL) return QString();
+    cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
+    return QString(buffer);
 }
 
 
@@ -100,14 +116,14 @@ LCMSAPI DWORD         LCMSEXPORT dkCmsTakeHeaderFlags(cmsHPROFILE hProfile)
 
 LCMSAPI const BYTE*   LCMSEXPORT dkCmsTakeProfileID(cmsHPROFILE hProfile)
 {
-    const BYTE* ret = new BYTE(0);
-    return ret;
+    cmsUInt8Number* ProfileID = new cmsUInt8Number();
+    cmsGetHeaderProfileID(hProfile, ProfileID);
+    return (BYTE*) ProfileID;
 }
 
 LCMSAPI int           LCMSEXPORT dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
 {
-    //TODO: return (int) Icc -> RenderingIntent;
-    return 0;
+    return (int) cmsGetHeaderRenderingIntent(hProfile);
 }
 
 LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeCharTargetData(cmsHPROFILE hProfile, char** Data, size_t* len)
@@ -121,13 +137,13 @@ LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeCharTargetData(cmsHPROFILE hProfile, c
 
 LCMSBOOL dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt)
 {
-    // FIXME:
+    // TODO: 
     return FALSE;
 }
 
 LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
 {
-    // FIXME:
+    // TODO: 
     return FALSE;
 }
 

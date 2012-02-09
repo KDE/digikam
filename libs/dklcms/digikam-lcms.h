@@ -239,19 +239,19 @@ LCMSAPI DWORD  LCMSEXPORT                  dkCmsGetProfileICCversion(cmsHPROFILE
 
 LCMSEXPORT void                            dkCmsSetAlarmCodes(int r, int g, int b);
 
-LCMSAPI const char*   LCMSEXPORT           dkCmsTakeProductName(cmsHPROFILE hProfile);
+LCMSAPI QString       LCMSEXPORT           dkCmsTakeProductName(cmsHPROFILE hProfile);
 
 LCMSAPI const char*   LCMSEXPORT           dkCmsTakeProductDesc(cmsHPROFILE hProfile);
 
-LCMSAPI const char*   LCMSEXPORT           dkCmsTakeProductInfo(cmsHPROFILE hProfile);
+LCMSAPI QString       LCMSEXPORT           dkCmsTakeProductInfo(cmsHPROFILE hProfile);
 
-LCMSAPI const char*   LCMSEXPORT           dkCmsTakeManufacturer(cmsHPROFILE hProfile);
+LCMSAPI QString       LCMSEXPORT           dkCmsTakeManufacturer(cmsHPROFILE hProfile);
 
 LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile);
 
-LCMSAPI const char*   LCMSEXPORT           dkCmsTakeModel(cmsHPROFILE hProfile);
+LCMSAPI QString       LCMSEXPORT           dkCmsTakeModel(cmsHPROFILE hProfile);
 
-LCMSAPI const char*   LCMSEXPORT           dkCmsTakeCopyright(cmsHPROFILE hProfile);
+LCMSAPI QString       LCMSEXPORT           dkCmsTakeCopyright(cmsHPROFILE hProfile);
 
 LCMSAPI DWORD         LCMSEXPORT           dkCmsTakeHeaderFlags(cmsHPROFILE hProfile);
 
