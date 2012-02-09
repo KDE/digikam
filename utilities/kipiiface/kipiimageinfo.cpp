@@ -60,8 +60,7 @@ namespace Digikam
 KipiImageInfo::KipiImageInfo(KIPI::Interface* const interface, const KUrl& url)
     : KIPI::ImageInfoShared(interface, url)
 {
-    // See B.K.O #
-    // Check if item is registered in DB. For scan controller to parse it before to get info from DB.
+    // Check if item is registered in DB. Call scan-controller to parse it before to get info from DB.
     ScanController::instance()->scanFileDirectly(url.path());
 
     m_info = ImageInfo(url);
