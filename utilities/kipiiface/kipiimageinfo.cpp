@@ -26,6 +26,10 @@
 
 #include "kipiimageinfo.h"
 
+// Qt includes
+
+#include <QDir>
+
 // KDE includes
 
 #include <kconfig.h>
@@ -47,6 +51,7 @@
 #include "imagecomments.h"
 #include "imageposition.h"
 #include "globals.h"
+#include "scancontroller.h"
 #include "tagscache.h"
 
 namespace Digikam
@@ -55,7 +60,15 @@ namespace Digikam
 KipiImageInfo::KipiImageInfo(KIPI::Interface* const interface, const KUrl& url)
     : KIPI::ImageInfoShared(interface, url)
 {
+    // See B.K.O #
+    // Check if item is registered in DB. For scan controller to parse it before to get info from DB.
+    ScanController::instance()->scanFileDirectly(url.path());
+
     m_info = ImageInfo(url);
+    if (m_info.isNull())
+    {
+        kDebug() << "DB Info is null (" << url.path() << ")";
+    }
 }
 
 KipiImageInfo::~KipiImageInfo()
@@ -73,7 +86,26 @@ void KipiImageInfo::cloneData( ImageInfoShared* const other )
 void KipiImageInfo::cloneData( ImageInfoShared* other )
 #endif
 {
-    addAttributes( other->attributes() );
+#if KIPI_VERSION >= 0x010500
+    KUrl otherUrl = other->url();
+#else
+    KUrl otherUrl = other->path();
+#endif
+
+    KUrl srcDirURL(QDir::cleanPath(_url.directory()));
+    PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
+
+    KUrl dstDirURL(QDir::cleanPath(otherUrl.directory()));
+    PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
+
+    if (dstAlbum && srcAlbum)
+    {
+        ImageInfo parentInf(otherUrl.toLocalFile());
+        kDebug() << "Clone DB Info:";
+        kDebug() << "from : " << parentInf.fileUrl().path();
+        kDebug() << "to   : " << _url.path();
+        ScanController::instance()->scanFileDirectlyCopyAttributes(_url.toLocalFile(), parentInf.id());
+    }
 }
 
 QMap<QString, QVariant> KipiImageInfo::attributes()
@@ -303,6 +335,14 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
         // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
 
+        // Remove read-only attributes.
+
+        attributes.remove("filesize");
+        attributes.remove("isexactdate");
+        attributes.remove("keywords");
+        attributes.remove("tags");
+
+        // Check if others attributes are not yet managed here...
         if (!attributes.isEmpty())
             kWarning() << "These attributes are not yet managed by digiKam KIPI interface: " << attributes;
     }
