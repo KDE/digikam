@@ -75,7 +75,8 @@ public:
         progressView(0),
         delayTimer(0),
         busyTimer(0),
-        cleanTimer(0)
+        cleanTimer(0),
+        notificationTimer(0)
     {
     }
 
@@ -93,14 +94,15 @@ public:
     QTimer*         delayTimer;
     QTimer*         busyTimer;
     QTimer*         cleanTimer;
+    QTimer*         notificationTimer;  // To popup list when new item is added
 };
 
 StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* progressView, QWidget* parent, bool button)
     : QFrame(parent), d(new StatusbarProgressWidgetPriv)
 {
-    d->progressView = progressView;
-    d->bShowButton  = button;
-    
+    d->progressView      = progressView;
+    d->bShowButton       = button;
+
     int w  = fontMetrics().width(" 999.9 kB/s 00:00:01 ") + 8;
     d->box = new QHBoxLayout(this);
     d->box->setMargin(0);
@@ -133,6 +135,8 @@ StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* progressView, QWi
 
     setMode();
 
+    // -------------------------------------------------------------------------------------------------
+
     connect(d->pButton, SIGNAL(clicked()),
             progressView, SLOT(slotToggleVisibility()));
 
@@ -159,6 +163,13 @@ StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* progressView, QWi
 
     connect(d->cleanTimer, SIGNAL(timeout()),
             this, SLOT(slotClean()));
+
+    d->notificationTimer = new QTimer(this);
+    d->notificationTimer->setSingleShot(true);
+
+    connect(d->notificationTimer, SIGNAL(timeout()),
+            d->pButton, SLOT(animateClick()));
+
 }
 
 StatusbarProgressWidget::~StatusbarProgressWidget()
@@ -198,6 +209,12 @@ void StatusbarProgressWidget::updateBusyMode()
 
 void StatusbarProgressWidget::slotProgressItemAdded(ProgressItem* item)
 {
+    if (!d->progressView->isVisible())
+    {
+        QTimer::singleShot(1000, d->pButton, SLOT(animateClick()));
+        d->notificationTimer->start(6000);
+    }
+
     if (item->parent())
         return; // we are only interested in top level items
 
