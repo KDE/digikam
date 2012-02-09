@@ -53,7 +53,6 @@
 #define dkCmsOpenProfileFromFile     cmsOpenProfileFromFile
 #define dkCmsOpenProfileFromMem      cmsOpenProfileFromMem
 #define dkCmsSetAlarmCodes           cmsSetAlarmCodes
-#define dkCmsTakeCharTargetData      cmsTakeCharTargetData
 #define dkCmsTakeCopyright           cmsTakeCopyright
 #define dkCmsTakeHeaderFlags         cmsTakeHeaderFlags
 #define dkCmsTakeManufacturer        cmsTakeManufacturer
@@ -260,8 +259,6 @@ LCMSAPI const BYTE*   LCMSEXPORT           dkCmsTakeProfileID(cmsHPROFILE hProfi
 LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig);
 
 LCMSAPI int           LCMSEXPORT           dkCmsTakeRenderingIntent(cmsHPROFILE hProfile);
-
-LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsTakeCharTargetData(cmsHPROFILE hProfile, char** Data, size_t* len);
 
 LCMSBOOL                                   dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt);
 

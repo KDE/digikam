@@ -69,17 +69,15 @@ LCMSAPI const char*    LCMSEXPORT dkCmsTakeProductDesc(cmsHPROFILE hProfile)
 
 LCMSAPI QString        LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
 {
-    int len;
     char buffer[1024];
-    len = cmsGetProfileInfoASCII(hProfile, cmsInfoDescription, "en", "US", buffer, 1024);
+    cmsGetProfileInfoASCII(hProfile, cmsInfoDescription, "en", "US", buffer, 1024);
     return QString(buffer);
 }
 
 LCMSAPI QString        LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
 {
-    int len;
     char buffer[1024];
-    len = cmsGetProfileInfoASCII(hProfile, cmsInfoManufacturer, "en", "US", buffer, 1024);
+    cmsGetProfileInfoASCII(hProfile, cmsInfoManufacturer, "en", "US", buffer, 1024);
     return QString(buffer);
 }
 
@@ -110,8 +108,7 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
 
 LCMSAPI DWORD         LCMSEXPORT dkCmsTakeHeaderFlags(cmsHPROFILE hProfile)
 {
-    //TODO: LPLCMSICCPROFILE  Icc = (LPLCMSICCPROFILE) hProfile;
-    return (DWORD) 0;
+    return (DWORD) cmsGetHeaderFlags(hProfile);
 }
 
 LCMSAPI const BYTE*   LCMSEXPORT dkCmsTakeProfileID(cmsHPROFILE hProfile)
@@ -126,19 +123,14 @@ LCMSAPI int           LCMSEXPORT dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
     return (int) cmsGetHeaderRenderingIntent(hProfile);
 }
 
-LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeCharTargetData(cmsHPROFILE hProfile, char** Data, size_t* len)
-{
-    *Data = NULL;
-    *len  = 0;
-    //TODO: Data = ???;
-    //TODO: len = ???;
-    return FALSE;
-}
-
+// White Point & Primary chromas handling
+// Returns the final chrmatic adaptation from illuminant FromIll to Illuminant ToIll
+// The cone matrix can be specified in ConeMatrix. 
+// If NULL, assuming D50 source. White point is given in xyY
 LCMSBOOL dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt)
 {
-    // TODO: 
-    return FALSE;
+    // TODO: all based on private stuff, need to understand what digikam do in cietonguewidget with dkCmsAdaptMatrixFromD50
+    return TRUE;
 }
 
 LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
