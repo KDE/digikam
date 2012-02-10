@@ -537,8 +537,10 @@ Action=Popup
 
 [Event/DuplicatesFinder]
 Name=Update of duplicates items in database complete
+Name[ca]=Actualització completada de la base de dades d'elements duplicats
 Name[cs]=Aktualizace duplicitních položek v databázi dokončena
 Name[da]=Opdatering af duplikerede elementer i databasen gennemført
+Name[de]=Aktualisierung der doppelten Einträge in der Datenbank abgeschlossen
 Name[el]=Η ενημέρωση διπλών αντικειμένων στη βάση δεδομένων ολοκληρώθηκε
 Name[gl]=Completouse a actualización dos elementos duplicados da base de datos
 Name[is]=Uppfærslu margtekinna atriða í gagnagrunni er lokið
@@ -550,8 +552,10 @@ Name[sv]=Uppdatering av duplicerade objekt i databas klar
 Name[uk]=Пошук дублікатів у базі даних завершено
 Name[x-test]=xxUpdate of duplicates items in database completexx
 Comment=The update of the duplicates items in database has completed.
+Comment[ca]=L'actualització de la base de dades d'elements duplicats ha finalitzat.
 Comment[cs]=Aktualizace duplicitních položek v databázi byla dokončena.
 Comment[da]=Opdateringen af duplikerede elementer i databasen er gennemført.
+Comment[de]=Die Aktualisierung der doppelten Einträge in der Datenbank ist abgeschlossen.
 Comment[el]=Η ενημέρωση διπλών αντικειμένων στη βάση δεδομένων έχει ολοκληρωθεί.
 Comment[gl]=Completouse a actualización dos elementos duplicados da base de datos
 Comment[is]=Uppfærslu margtekinna atriða í gagnagrunni er lokið.
@@ -566,8 +570,10 @@ Action=Popup
 
 [Event/NewItemsFinder]
 Name=Find of new items in database complete
+Name[ca]=Actualització completada de la base d'elements nous
 Name[cs]=Hledání nových položek v databázi dokončeno
 Name[da]=Søgning efter nye elementer i databasen er gennemført
+Name[de]=Aktualisierung neuer Einträge in der Datenbank abgeschlossen
 Name[el]=Η ενημέρωση νέων αντικειμένων στη βάση δεδομένων ολοκληρώθηκε
 Name[gl]=Completouse a busca de elementos novos na base de datos
 Name[is]=Leit nýrra atriða í gagnagrunni er lokið
@@ -579,6 +585,7 @@ Name[sv]=Sökning efter nya objekt i databas klar
 Name[uk]=Пошук нових зображень завершено
 Name[x-test]=xxFind of new items in database completexx
 Comment=The scan of the new items in database has completed.
+Comment[ca]=L'actualització de la base de dades d'elements nous ha finalitzat.
 Comment[cs]=Prohledávání nových položek v databázi bylo dokončeno.
 Comment[da]=Scanning efter nye elementer i databasen er gennemført.
 Comment[el]=Η ενημέρωση νέων αντικειμένων στη βάση δεδομένων έχει ολοκληρωθεί.
