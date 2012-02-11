@@ -321,8 +321,8 @@ QAbstractItemModel* KipiInterface::getTagTree() const
 QVariant KipiInterface::hostSetting(const QString& settingName)
 {
     MetadataSettings* mSettings = MetadataSettings::instance();
-
-    if (!mSettings)
+    AlbumSettings* aSettings    = AlbumSettings::instance();
+    if (!mSettings || !aSettings)
     {
         return QVariant();
     }
@@ -347,14 +347,29 @@ QVariant KipiInterface::hostSetting(const QString& settingName)
     }
     else if (settingName == QString("FileExtensions"))
     {
-        // do not save this into a local variable, as this
+        // NOTE : do not save type mime settings into a local variable, as this
         // might change in the main app
 
-        AlbumSettings* s = AlbumSettings::instance();
-        return QString(s->getImageFileFilter() + ' ' +
-                       s->getMovieFileFilter() + ' ' +
-                       s->getAudioFileFilter() + ' ' +
-                       s->getRawFileFilter());
+        return QString(aSettings->getImageFileFilter() + ' ' +
+                       aSettings->getMovieFileFilter() + ' ' +
+                       aSettings->getAudioFileFilter() + ' ' +
+                       aSettings->getRawFileFilter());
+    }
+    else if (settingName == QString("ImagesExtensions"))
+    {
+        return QString(aSettings->getImageFileFilter());
+    }
+    else if (settingName == QString("RawExtensions"))
+    {
+        return QString(aSettings->getRawFileFilter());
+    }
+    else if (settingName == QString("VideoExtensions"))
+    {
+        return QString(aSettings->getMovieFileFilter());
+    }
+    else if (settingName == QString("AudioExtensions"))
+    {
+        return QString(aSettings->getAudioFileFilter());
     }
 
     return QVariant();
