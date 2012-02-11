@@ -209,18 +209,26 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
 
 int KipiInterface::features() const
 {
-    return(
-              KIPI::HostSupportsTags            | KIPI::HostSupportsRating      |
-              KIPI::HostAcceptNewImages         | KIPI::HostSupportsThumbnails  |
-              KIPI::HostSupportsProgressBar     |
-              KIPI::ImagesHasComments           | KIPI::ImagesHasTitlesWritable |
-              KIPI::ImagesHasTime               |
-              KIPI::CollectionsHaveComments     | KIPI::CollectionsHaveCategory |
-              KIPI::CollectionsHaveCreationDate
+    return(KIPI::CollectionsHaveComments
+         | KIPI::CollectionsHaveCategory
+         | KIPI::CollectionsHaveCreationDate
+         | KIPI::ImagesHasComments
+         | KIPI::ImagesHasTitlesWritable
+         | KIPI::ImagesHasTime
+         | KIPI::HostSupportsTags
+         | KIPI::HostSupportsRating
+         | KIPI::HostAcceptNewImages
+         | KIPI::HostSupportsThumbnails
+         | KIPI::HostSupportsProgressBar
+#if KIPI_VERSION >= 0x010500
+         | KIPI::HostSupportsItemLock
+         | KIPI::HostSupportsPickLabel
+         | KIPI::HostSupportsColorLabel
+#endif // KIPI_VERSION >= 0x010500
           );
 }
 
-bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
+bool KipiInterface::addImage(const KUrl& url, QString& errmsg)
 {
     // Note : All copy/move operations are processed by the plugins.
 
@@ -243,7 +251,7 @@ bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
     return true;
 }
 
-void KipiInterface::delImage( const KUrl& url )
+void KipiInterface::delImage(const KUrl& url)
 {
     KUrl rootURL(CollectionManager::instance()->albumRoot(url));
 
