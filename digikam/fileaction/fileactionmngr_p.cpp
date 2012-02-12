@@ -24,6 +24,11 @@
 
 #include "fileactionmngr_p.moc"
 
+// KDE includes
+
+#include <kdebug.h>
+#include <klocale.h>
+
 // Local includes
 
 #include "thumbnailloadthread.h"
@@ -47,23 +52,21 @@ FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
     sleepTimer->setSingleShot(true);
     sleepTimer->setInterval(1000);
 
-    dbTodo     = 0;
-    dbDone     = 0;
-    writerTodo = 0;
-    writerDone = 0;
-
     connectToDatabaseWorker();
 
     connectDatabaseToFileWorker();
 
-    connect(this, SIGNAL(signalTransform(QList<ImageInfo>, int)),
-            fileWorker, SLOT(transform(QList<ImageInfo>, int)), Qt::DirectConnection);
+    connect(this, SIGNAL(signalTransform(FileActionImageInfoList, int)),
+            fileWorker, SLOT(transform(FileActionImageInfoList, int)), Qt::DirectConnection);
 
     connect(fileWorker, SIGNAL(imageDataChanged(QString, bool, bool)),
             this, SLOT(slotImageDataChanged(QString, bool, bool)));
 
-    connect(this, SIGNAL(signalProgressFinished()),
-            sleepTimer, SLOT(start()));
+    connect(&dbProgress, SIGNAL(lastItemCompleted()),
+            this, SLOT(slotLastProgressItemCompleted()));
+
+    connect(&fileProgress, SIGNAL(lastItemCompleted()),
+            this, SLOT(slotLastProgressItemCompleted()));
 
     connect(sleepTimer, SIGNAL(timeout()),
             this, SLOT(slotSleepTimer()));
@@ -72,47 +75,52 @@ FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
 void FileActionMngr::FileActionMngrPriv::connectToDatabaseWorker()
 {
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAddTags(QList<ImageInfo>, QList<int>)),
-                                     dbWorker, SLOT(assignTags(QList<ImageInfo>, QList<int>)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAddTags(FileActionImageInfoList, QList<int>)),
+                                     dbWorker, SLOT(assignTags(FileActionImageInfoList, QList<int>)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalRemoveTags(QList<ImageInfo>, QList<int>)),
-                                     dbWorker, SLOT(removeTags(QList<ImageInfo>, QList<int>)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalRemoveTags(FileActionImageInfoList, QList<int>)),
+                                     dbWorker, SLOT(removeTags(FileActionImageInfoList, QList<int>)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignPickLabel(QList<ImageInfo>, int)),
-                                     dbWorker, SLOT(assignPickLabel(QList<ImageInfo>, int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignPickLabel(FileActionImageInfoList, int)),
+                                     dbWorker, SLOT(assignPickLabel(FileActionImageInfoList, int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignColorLabel(QList<ImageInfo>, int)),
-                                     dbWorker, SLOT(assignColorLabel(QList<ImageInfo>, int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignColorLabel(FileActionImageInfoList, int)),
+                                     dbWorker, SLOT(assignColorLabel(FileActionImageInfoList, int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignRating(QList<ImageInfo>, int)),
-                                     dbWorker, SLOT(assignRating(QList<ImageInfo>, int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalAssignRating(FileActionImageInfoList, int)),
+                                     dbWorker, SLOT(assignRating(FileActionImageInfoList, int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalEditGroup(int, ImageInfo, QList<ImageInfo>)),
-                                     dbWorker, SLOT(editGroup(int, ImageInfo, QList<ImageInfo>)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalEditGroup(int, ImageInfo, FileActionImageInfoList)),
+                                     dbWorker, SLOT(editGroup(int, ImageInfo, FileActionImageInfoList)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalSetExifOrientation(QList<ImageInfo>, int)),
-                                     dbWorker, SLOT(setExifOrientation(QList<ImageInfo>, int)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalSetExifOrientation(FileActionImageInfoList, int)),
+                                     dbWorker, SLOT(setExifOrientation(FileActionImageInfoList, int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalApplyMetadata(QList<ImageInfo>, MetadataHub*)),
-                                     dbWorker, SLOT(applyMetadata(QList<ImageInfo>, MetadataHub*)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalApplyMetadata(FileActionImageInfoList, MetadataHub*)),
+                                     dbWorker, SLOT(applyMetadata(FileActionImageInfoList, MetadataHub*)));
 }
 
 void FileActionMngr::FileActionMngrPriv::connectDatabaseToFileWorker()
 {
-    connect(dbWorker, SIGNAL(writeMetadataToFiles(QList<ImageInfo>)),
-            fileWorker, SLOT(writeMetadataToFiles(QList<ImageInfo>)), Qt::DirectConnection);
+    connect(dbWorker, SIGNAL(writeMetadataToFiles(FileActionImageInfoList)),
+            fileWorker, SLOT(writeMetadataToFiles(FileActionImageInfoList)), Qt::DirectConnection);
 
-    connect(dbWorker, SIGNAL(writeOrientationToFiles(QList<ImageInfo>, int)),
-            fileWorker, SLOT(writeOrientationToFiles(QList<ImageInfo>, int)), Qt::DirectConnection);
+    connect(dbWorker, SIGNAL(writeOrientationToFiles(FileActionImageInfoList, int)),
+            fileWorker, SLOT(writeOrientationToFiles(FileActionImageInfoList, int)), Qt::DirectConnection);
 
-    connect(dbWorker, SIGNAL(writeMetadata(QList<ImageInfo>, MetadataHub*)),
-            fileWorker, SLOT(writeMetadata(QList<ImageInfo>, MetadataHub*)), Qt::DirectConnection);
+    connect(dbWorker, SIGNAL(writeMetadata(FileActionImageInfoList, MetadataHub*)),
+            fileWorker, SLOT(writeMetadata(FileActionImageInfoList, MetadataHub*)), Qt::DirectConnection);
 }
 
 FileActionMngr::FileActionMngrPriv::~FileActionMngrPriv()
 {
     delete dbWorker;
     delete fileWorker;
+}
+
+bool FileActionMngr::FileActionMngrPriv::isActive() const
+{
+    return dbProgress.activeProgressItems || fileProgress.activeProgressItems;
 }
 
 bool FileActionMngr::FileActionMngrPriv::shallSendForWriting(qlonglong id)
@@ -139,15 +147,24 @@ void FileActionMngr::FileActionMngrPriv::startingToWrite(const QList<ImageInfo>&
 
 void FileActionMngr::FileActionMngrPriv::slotSleepTimer()
 {
-    if (dbTodo == 0)
+    if (!dbProgress.activeProgressItems)
     {
         dbWorker->deactivate();
     }
 
-    if (writerTodo == 0)
+    if (!fileProgress.activeProgressItems)
     {
         fileWorker->deactivate();
     }
+}
+
+void FileActionMngr::FileActionMngrPriv::slotLastProgressItemCompleted()
+{
+    if (!isActive())
+    {
+        emit signalTasksFinished();
+    }
+    sleepTimer->start();
 }
 
 void FileActionMngr::FileActionMngrPriv::slotImageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache)
@@ -164,6 +181,53 @@ void FileActionMngr::FileActionMngrPriv::slotImageDataChanged(const QString& pat
     }
 }
 
+FileActionMngrPrivProgressItemCreator* FileActionMngr::FileActionMngrPriv::dbProgressCreator()
+{
+    return &dbProgress;
+}
+
+FileActionMngrPrivProgressItemCreator* FileActionMngr::FileActionMngrPriv::fileProgressCreator()
+{
+    return &fileProgress;
+}
+
+ProgressItem* FileActionMngrPrivProgressItemCreator::createProgressItem(const QString& action)
+{
+    return new ProgressItem(0, ProgressManager::instance()->getUniqueID(), action, QString(), true, true);
+    /*
+    if (!parentProgressItems.first())
+    {
+        parentProgressItems.createFirstItem(i18n("Editing Database"));
+    }
+    return parentProgressItems.first();
+    */
+    /*
+    if (!parentProgressItems.second())
+    {
+        parentProgressItems.createSecondItem(i18n("Writing to Files"));
+    }
+    return parentProgressItems.second();
+    */
+}
+
+void FileActionMngrPrivProgressItemCreator::addProgressItem(ProgressItem* item)
+{
+    activeProgressItems.ref();
+    connect(item, SIGNAL(progressItemCompleted(ProgressItem*)),
+            this, SLOT(slotProgressItemCompleted()),
+            Qt::DirectConnection
+           );
+    ProgressManager::addProgressItem(item);
+    kDebug() << "active items" << activeProgressItems;
+}
+
+void FileActionMngrPrivProgressItemCreator::slotProgressItemCompleted()
+{
+    activeProgressItems.deref();
+    kDebug() << "active items" << activeProgressItems;
+}
+
+/*
 void FileActionMngr::FileActionMngrPriv::setDBAction(const QString& action)
 {
     dbMessage = action;
@@ -273,5 +337,6 @@ void FileActionMngr::FileActionMngrPriv::updateProgress()
 
     emit signalProgressValueChanged(percent);
 }
+*/
 
 } // namespace Digikam

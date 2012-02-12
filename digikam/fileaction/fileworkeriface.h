@@ -30,9 +30,10 @@
 
 // Local includes
 
+#include "fileactionmngr.h"
+#include "fileactionimageinfolist.h"
 #include "imageinfo.h"
 #include "workerobject.h"
-#include "fileactionmngr.h"
 
 namespace Digikam
 {
@@ -45,10 +46,10 @@ class FileWorkerInterface : public WorkerObject
 
 public Q_SLOTS:
 
-    void writeOrientationToFiles(const QList<ImageInfo>&, int)        {};
-    virtual void writeMetadataToFiles(const QList<ImageInfo>&)        {};
-    virtual void writeMetadata(const QList<ImageInfo>&, MetadataHub*) {};
-    virtual void transform(const QList<ImageInfo>&, int)              {};
+    void writeOrientationToFiles(FileActionImageInfoList, int)        {};
+    virtual void writeMetadataToFiles(FileActionImageInfoList)        {};
+    virtual void writeMetadata(FileActionImageInfoList, MetadataHub*) {};
+    virtual void transform(FileActionImageInfoList, int)              {};
 
 Q_SIGNALS:
 
@@ -68,10 +69,10 @@ public:
 
 public:
 
-    void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
-    void writeMetadataToFiles(const QList<ImageInfo>& infos);
-    void writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
-    void transform(const QList<ImageInfo>& infos, int orientation);
+    void writeOrientationToFiles(FileActionImageInfoList infos, int orientation);
+    void writeMetadataToFiles(FileActionImageInfoList infos);
+    void writeMetadata(FileActionImageInfoList infos, MetadataHub* hub);
+    void transform(FileActionImageInfoList infos, int orientation);
 
 private:
 

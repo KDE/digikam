@@ -1473,6 +1473,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/imageinfotasksplitter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/databaseworkeriface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileworkeriface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileactionimageinfolist.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscompletionbox.cpp

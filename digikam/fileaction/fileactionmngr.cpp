@@ -67,6 +67,7 @@ FileActionMngr::FileActionMngr()
     : d(new FileActionMngrPriv(this))
 {
     qRegisterMetaType<MetadataHub*>("MetadataHub*");
+    qRegisterMetaType<FileActionImageInfoList>("FileActionImageInfoList");
 
     connect(d, SIGNAL(signalProgressMessageChanged(QString)),
             this, SIGNAL(signalProgressMessageChanged(QString)));
@@ -91,6 +92,7 @@ bool FileActionMngr::requestShutDown()
 {
     if (!isActive())
     {
+        shutDown();
         return true;
     }
 
@@ -101,10 +103,8 @@ bool FileActionMngr::requestShutDown()
     dialog->setMinimumDuration(100);
     dialog->setLabelText(i18nc("@label", "Finishing tasks"));
 
-    connect(this, SIGNAL(signalProgressFinished()),
+    connect(d, SIGNAL(signalTasksFinished()),
             dialog, SLOT(accept()));
-
-    d->updateProgress();
 
     dialog->exec();
     // Either, we finished and all is fine, or the user cancelled and we kill
@@ -122,7 +122,7 @@ void FileActionMngr::shutDown()
 
 bool FileActionMngr::isActive()
 {
-    return d->dbTodo || d->writerTodo;
+    return d->isActive();
 }
 
 void FileActionMngr::assignTags(const QList<qlonglong>& ids, const QList<int>& tagIDs)
@@ -147,9 +147,9 @@ void FileActionMngr::assignTags(const ImageInfo& info, const QList<int>& tagIDs)
 
 void FileActionMngr::assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
-    emit signalProgressScheduled();
-    d->schedulingForDB(infos.size());
-    d->assignTags(infos, tagIDs);
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    taskList.schedulingForDB(i18n("Assigning image tags"), d->dbProgressCreator());
+    d->assignTags(taskList, tagIDs);
 }
 
 void FileActionMngr::removeTag(const ImageInfo& info, int tagID)
@@ -169,9 +169,9 @@ void FileActionMngr::removeTags(const ImageInfo& info, const QList<int>& tagIDs)
 
 void FileActionMngr::removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
-    emit signalProgressScheduled();
-    d->schedulingForDB(infos.size());
-    d->removeTags(infos, tagIDs);
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    taskList.schedulingForDB(i18n("Removing image tags"), d->dbProgressCreator());
+    d->removeTags(taskList, tagIDs);
 }
 
 void FileActionMngr::assignPickLabel(const ImageInfo& info, int pickId)
@@ -186,16 +186,16 @@ void FileActionMngr::assignColorLabel(const ImageInfo& info, int colorId)
 
 void FileActionMngr::assignPickLabel(const QList<ImageInfo>& infos, int pickId)
 {
-    emit signalProgressScheduled();
-    d->schedulingForDB(infos.size());
-    d->assignPickLabel(infos, pickId);
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    taskList.schedulingForDB(i18n("Assigning image pick label"), d->dbProgressCreator());
+    d->assignPickLabel(taskList, pickId);
 }
 
 void FileActionMngr::assignColorLabel(const QList<ImageInfo>& infos, int colorId)
 {
-    emit signalProgressScheduled();
-    d->schedulingForDB(infos.size());
-    d->assignColorLabel(infos, colorId);
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    taskList.schedulingForDB(i18n("Assigning image color label"), d->dbProgressCreator());
+    d->assignColorLabel(taskList, colorId);
 }
 
 void FileActionMngr::assignRating(const ImageInfo& info, int rating)
@@ -205,16 +205,16 @@ void FileActionMngr::assignRating(const ImageInfo& info, int rating)
 
 void FileActionMngr::assignRating(const QList<ImageInfo>& infos, int rating)
 {
-    emit signalProgressScheduled();
-    d->schedulingForDB(infos.size());
-    d->assignRating(infos, rating);
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    taskList.schedulingForDB(i18n("Assigning image ratings"), d->dbProgressCreator());
+    d->assignRating(taskList, rating);
 }
 
 void FileActionMngr::addToGroup(const ImageInfo& pick, const QList<ImageInfo>& infos)
 {
-    emit signalProgressScheduled();
-    d->schedulingForDB(infos.size());
-    d->editGroup(AddToGroup, pick, infos);
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    taskList.schedulingForDB(i18n("Editing group"), d->dbProgressCreator());
+    d->editGroup(AddToGroup, pick, taskList);
 }
 
 void FileActionMngr::removeFromGroup(const ImageInfo& info)
@@ -224,9 +224,9 @@ void FileActionMngr::removeFromGroup(const ImageInfo& info)
 
 void FileActionMngr::removeFromGroup(const QList<ImageInfo>& infos)
 {
-    emit signalProgressScheduled();
-    d->schedulingForDB(infos.size());
-    d->editGroup(RemoveFromGroup, ImageInfo(), infos);
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    taskList.schedulingForDB(i18n("Editing group"), d->dbProgressCreator());
+    d->editGroup(RemoveFromGroup, ImageInfo(), taskList);
 }
 
 void FileActionMngr::ungroup(const ImageInfo& info)
@@ -236,37 +236,37 @@ void FileActionMngr::ungroup(const ImageInfo& info)
 
 void FileActionMngr::ungroup(const QList<ImageInfo>& infos)
 {
-    emit signalProgressScheduled();
-    d->schedulingForDB(infos.size());
-    d->editGroup(Ungroup, ImageInfo(), infos);
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    taskList.schedulingForDB(i18n("Editing group"), d->dbProgressCreator());
+    d->editGroup(Ungroup, ImageInfo(), taskList);
 }
 
 void FileActionMngr::setExifOrientation(const QList<ImageInfo>& infos, int orientation)
 {
-    emit signalProgressScheduled();
-    d->schedulingForDB(infos.size());
-    d->setExifOrientation(infos, orientation);
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    taskList.schedulingForDB(i18n("Updating orientation in database"), d->dbProgressCreator());
+    d->setExifOrientation(taskList, orientation);
 }
 
 void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const MetadataHub& hub)
 {
-    emit signalProgressScheduled();
-    d->schedulingForDB(infos.size());
-    d->applyMetadata(infos, new MetadataHubOnTheRoad(hub, this));
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    taskList.schedulingForDB(i18n("Applying metadata"), d->dbProgressCreator());
+    d->applyMetadata(taskList, new MetadataHubOnTheRoad(hub, this));
 }
 
 void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad& hub)
 {
-    emit signalProgressScheduled();
-    d->schedulingForDB(infos.size());
-    d->applyMetadata(infos, new MetadataHubOnTheRoad(hub, this));
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    taskList.schedulingForDB(i18n("Applying metadata"), d->dbProgressCreator());
+    d->applyMetadata(taskList, new MetadataHubOnTheRoad(hub, this));
 }
 
 void FileActionMngr::transform(const QList<ImageInfo>& infos, KExiv2Iface::RotationMatrix::TransformationAction action)
 {
-    emit signalProgressScheduled();
-    d->schedulingForWrite(infos.size());
-    for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext();)
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    taskList.schedulingForWrite(i18n("Rotating images"), d->fileProgressCreator());
+    for (ImageInfoTaskSplitter splitter(taskList); splitter.hasNext();)
         d->transform(splitter.next(), action);
 }
 

@@ -30,19 +30,19 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "fileactionimageinfolist.h"
 
 namespace Digikam
 {
 
-class ImageInfoTaskSplitter : public QList<ImageInfo>
+class ImageInfoTaskSplitter : public FileActionImageInfoList
 {
 public:
 
-    ImageInfoTaskSplitter(const QList<ImageInfo>& list);
+    ImageInfoTaskSplitter(const FileActionImageInfoList& list);
     ~ImageInfoTaskSplitter();
 
-    QList<ImageInfo> next();
+    FileActionImageInfoList next();
     bool hasNext() const;
 
 protected:

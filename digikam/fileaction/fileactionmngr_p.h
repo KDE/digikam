@@ -33,11 +33,12 @@
 
 // Local includes
 
-#include "parallelworkers.h"
 #include "databaseworkeriface.h"
-#include "fileworkeriface.h"
-#include "metadatahub.h"
 #include "fileactionmngr.h"
+#include "fileworkeriface.h"
+#include "fileactionimageinfolist.h"
+#include "metadatahub.h"
+#include "parallelworkers.h"
 
 namespace Digikam
 {
@@ -47,6 +48,26 @@ enum GroupAction
     AddToGroup,
     RemoveFromGroup,
     Ungroup
+};
+
+class FileActionMngrPrivProgressItemCreator : public QObject, public FileActionProgressItemCreator
+{
+    Q_OBJECT
+
+public:
+
+    ProgressItem* createProgressItem(const QString& action);
+    void addProgressItem(ProgressItem* item);
+
+    QAtomicInt activeProgressItems;
+
+Q_SIGNALS:
+
+    void lastItemCompleted();
+
+public Q_SLOTS:
+
+    void slotProgressItemCompleted();
 };
 
 class FileActionMngr::FileActionMngrPriv : public QObject
@@ -60,67 +81,64 @@ public:
 
 Q_SIGNALS:
 
-    // connected to FileActionMngr public signals
-    void signalProgressMessageChanged(const QString& actionDescription);
-    void signalProgressValueChanged(float percent);
-    void signalProgressFinished();
+    void signalTasksFinished();
 
     // inter-thread signals: connected to database worker slots
-    void signalAddTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
-    void signalRemoveTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
-    void signalAssignPickLabel(const QList<ImageInfo>& infos, int pickId);
-    void signalAssignColorLabel(const QList<ImageInfo>& infos, int colorId);
-    void signalAssignRating(const QList<ImageInfo>& infos, int rating);
-    void signalSetExifOrientation(const QList<ImageInfo>& infos, int orientation);
-    void signalApplyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub);
-    void signalEditGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos);
-    void signalTransform(const QList<ImageInfo>& infos, int orientation);
+    void signalAddTags(const FileActionImageInfoList& infos, const QList<int>& tagIDs);
+    void signalRemoveTags(const FileActionImageInfoList& infos, const QList<int>& tagIDs);
+    void signalAssignPickLabel(const FileActionImageInfoList& infos, int pickId);
+    void signalAssignColorLabel(const FileActionImageInfoList& infos, int colorId);
+    void signalAssignRating(const FileActionImageInfoList& infos, int rating);
+    void signalSetExifOrientation(const FileActionImageInfoList& infos, int orientation);
+    void signalApplyMetadata(const FileActionImageInfoList& infos, MetadataHub* hub);
+    void signalEditGroup(int groupAction, const ImageInfo& pick, const FileActionImageInfoList& infos);
+    void signalTransform(const FileActionImageInfoList& infos, int orientation);
 
 public:
 
     // -- Signal-emitter glue code --
 
-    void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
+    void assignTags(const FileActionImageInfoList& infos, const QList<int>& tagIDs)
     {
         emit signalAddTags(infos, tagIDs);
     }
 
-    void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
+    void removeTags(const FileActionImageInfoList& infos, const QList<int>& tagIDs)
     {
         emit signalRemoveTags(infos, tagIDs);
     }
 
-    void assignPickLabel(const QList<ImageInfo>& infos, int pickId)
+    void assignPickLabel(const FileActionImageInfoList& infos, int pickId)
     {
         emit signalAssignPickLabel(infos, pickId);
     }
 
-    void assignColorLabel(const QList<ImageInfo>& infos, int colorId)
+    void assignColorLabel(const FileActionImageInfoList& infos, int colorId)
     {
         emit signalAssignColorLabel(infos, colorId);
     }
 
-    void assignRating(const QList<ImageInfo>& infos, int rating)
+    void assignRating(const FileActionImageInfoList& infos, int rating)
     {
         emit signalAssignRating(infos, rating);
     }
 
-    void editGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos)
+    void editGroup(int groupAction, const ImageInfo& pick, const FileActionImageInfoList& infos)
     {
         emit signalEditGroup(groupAction, pick, infos);
     }
 
-    void setExifOrientation(const QList<ImageInfo>& infos, int orientation)
+    void setExifOrientation(const FileActionImageInfoList& infos, int orientation)
     {
         emit signalSetExifOrientation(infos, orientation);
     }
 
-    void applyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub)
+    void applyMetadata(const FileActionImageInfoList& infos, MetadataHub* hub)
     {
         emit signalApplyMetadata(infos, hub);
     }
 
-    void transform(const QList<ImageInfo>& infos, int orientation)
+    void transform(const FileActionImageInfoList& infos, int orientation)
     {
         emit signalTransform(infos, orientation);
     }
@@ -129,52 +147,28 @@ public:
 
     // -- Workflow controlling --
 
-    /// before sending to db worker
-    void schedulingForDB(int numberOfInfos);
-
-    /// called by db worker to say what it is doing
-    void setDBAction(const QString& action);
+    bool isActive() const;
 
     /// db worker will send info to file worker if returns true
     bool shallSendForWriting(qlonglong id);
 
-    /// db worker progress info
-    void dbProcessedOne();
-    void dbProcessed(int numberOfInfos);
-    void dbFinished(int numberOfInfos);
-
-    /// db worker calls this before sending to file worker
-    void schedulingForWrite(int numberOfInfos);
-    void schedulingForOrientationWrite(int numberOfInfos);
-
-    /// called by file worker to say what it is doing
-    void setWriterAction(const QString& action);
-
     /// file worker calls this when receiving a task
     void startingToWrite(const QList<ImageInfo>& infos);
-
-    /// file worker calls this when finished
-    void writtenToOne();
-
-    void finishedWriting(int numberOfInfos);
 
     void connectToDatabaseWorker();
     void connectDatabaseToFileWorker();
 
-    void updateProgress();
-    void updateProgressMessage();
+    FileActionMngrPrivProgressItemCreator* dbProgressCreator();
+    FileActionMngrPrivProgressItemCreator* fileProgressCreator();
 
 public Q_SLOTS:
 
     void slotImageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache);
     void slotSleepTimer();
+    void slotLastProgressItemCompleted();
 
 public:
 
-    int                                   dbTodo;
-    int                                   dbDone;
-    int                                   writerTodo;
-    int                                   writerDone;
     QSet<qlonglong>                       scheduledToWrite;
     QString                               dbMessage;
     QString                               writerMessage;
@@ -186,6 +180,9 @@ public:
     ParallelAdapter<FileWorkerInterface>* fileWorker;
 
     QTimer*                               sleepTimer;
+
+    FileActionMngrPrivProgressItemCreator dbProgress;
+    FileActionMngrPrivProgressItemCreator fileProgress;
 };
 
 } // namespace Digikam

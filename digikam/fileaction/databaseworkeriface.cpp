@@ -36,19 +36,17 @@
 namespace Digikam
 {
 
-void FileActionMngrDatabaseWorker::assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
+void FileActionMngrDatabaseWorker::assignTags(FileActionImageInfoList infos, const QList<int>& tagIDs)
 {
-    d->setDBAction(i18n("Assigning image tags. Please wait..."));
     changeTags(infos, tagIDs, true);
 }
 
-void FileActionMngrDatabaseWorker::removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
+void FileActionMngrDatabaseWorker::removeTags(FileActionImageInfoList infos, const QList<int>& tagIDs)
 {
-    d->setDBAction(i18n("Removing image tags. Please wait..."));
     changeTags(infos, tagIDs, false);
 }
 
-void FileActionMngrDatabaseWorker::changeTags(const QList<ImageInfo>& infos,
+void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
                                               const QList<int>& tagIDs, bool addOrRemove)
 {
     MetadataHub      hub;
@@ -75,7 +73,7 @@ void FileActionMngrDatabaseWorker::changeTags(const QList<ImageInfo>& infos,
                 forWriting << info;
             }
 
-            d->dbProcessedOne();
+            infos.dbProcessedOne();
             group.allowLift();
         }
         //ScanController::instance()->resumeCollectionScan();
@@ -84,18 +82,17 @@ void FileActionMngrDatabaseWorker::changeTags(const QList<ImageInfo>& infos,
     // send for writing file metadata
     if (!forWriting.isEmpty())
     {
-        d->schedulingForWrite(forWriting.size());
-        for (ImageInfoTaskSplitter splitter(forWriting); splitter.hasNext(); )
+        FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
+        forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
+        for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
             emit writeMetadataToFiles(splitter.next());
     }
 
-    d->dbFinished(infos.size());
+    infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::assignPickLabel(const QList<ImageInfo>& infos, int pickId)
+void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos, int pickId)
 {
-    d->setDBAction(i18n("Assigning image pick label. Please wait..."));
-
     MetadataHub      hub;
     QList<ImageInfo> forWriting;
 
@@ -114,7 +111,7 @@ void FileActionMngrDatabaseWorker::assignPickLabel(const QList<ImageInfo>& infos
                 forWriting << info;
             }
 
-            d->dbProcessedOne();
+            infos.dbProcessedOne();
             group.allowLift();
         }
         //ScanController::instance()->resumeCollectionScan();
@@ -123,18 +120,17 @@ void FileActionMngrDatabaseWorker::assignPickLabel(const QList<ImageInfo>& infos
     // send for writing file metadata
     if (!forWriting.isEmpty())
     {
-        d->schedulingForWrite(forWriting.size());
-        for (ImageInfoTaskSplitter splitter(forWriting); splitter.hasNext(); )
+        FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
+        forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
+        for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
             emit writeMetadataToFiles(splitter.next());
     }
 
-    d->dbFinished(infos.size());
+    infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::assignColorLabel(const QList<ImageInfo>& infos, int colorId)
+void FileActionMngrDatabaseWorker::assignColorLabel(FileActionImageInfoList infos, int colorId)
 {
-    d->setDBAction(i18n("Assigning image color label. Please wait..."));
-
     MetadataHub      hub;
     QList<ImageInfo> forWriting;
 
@@ -153,7 +149,7 @@ void FileActionMngrDatabaseWorker::assignColorLabel(const QList<ImageInfo>& info
                 forWriting << info;
             }
 
-            d->dbProcessedOne();
+            infos.dbProcessedOne();
             group.allowLift();
         }
         //ScanController::instance()->resumeCollectionScan();
@@ -162,18 +158,17 @@ void FileActionMngrDatabaseWorker::assignColorLabel(const QList<ImageInfo>& info
     // send for writing file metadata
     if (!forWriting.isEmpty())
     {
-        d->schedulingForWrite(forWriting.size());
-        for (ImageInfoTaskSplitter splitter(forWriting); splitter.hasNext(); )
+        FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
+        forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
+        for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
             emit writeMetadataToFiles(splitter.next());
     }
 
-    d->dbFinished(infos.size());
+    infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::assignRating(const QList<ImageInfo>& infos, int rating)
+void FileActionMngrDatabaseWorker::assignRating(FileActionImageInfoList infos, int rating)
 {
-    d->setDBAction(i18n("Assigning image ratings. Please wait..."));
-
     rating = qMin(RatingMax, qMax(RatingMin, rating));
     MetadataHub      hub;
     QList<ImageInfo> forWriting;
@@ -193,7 +188,7 @@ void FileActionMngrDatabaseWorker::assignRating(const QList<ImageInfo>& infos, i
                 forWriting << info;
             }
 
-            d->dbProcessedOne();
+            infos.dbProcessedOne();
             group.allowLift();
         }
         //ScanController::instance()->resumeCollectionScan();
@@ -202,18 +197,17 @@ void FileActionMngrDatabaseWorker::assignRating(const QList<ImageInfo>& infos, i
     // send for writing file metadata
     if (!forWriting.isEmpty())
     {
-        d->schedulingForWrite(forWriting.size());
-        for (ImageInfoTaskSplitter splitter(forWriting); splitter.hasNext(); )
+        FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
+        forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
+        for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
             emit writeMetadataToFiles(splitter.next());
     }
 
-    d->dbFinished(infos.size());
+    infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ImageInfo& pick, const QList<ImageInfo>& infos)
+void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ImageInfo& pick, FileActionImageInfoList infos)
 {
-    d->setDBAction(i18n("Editing group. Please wait..."));
-
     {
         DatabaseOperationGroup group;
         group.setMaximumTime(200);
@@ -234,16 +228,15 @@ void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ImageInfo& p
                     break;
             }
 
-            d->dbProcessedOne();
+            infos.dbProcessedOne();
             group.allowLift();
         }
     }
-    d->dbFinished(infos.size());
+    infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::setExifOrientation(const QList<ImageInfo>& infos, int orientation)
+void FileActionMngrDatabaseWorker::setExifOrientation(FileActionImageInfoList infos, int orientation)
 {
-    d->setDBAction(i18n("Updating orientation in database. Please wait..."));
     {
         DatabaseOperationGroup group;
         group.setMaximumTime(200);
@@ -252,17 +245,15 @@ void FileActionMngrDatabaseWorker::setExifOrientation(const QList<ImageInfo>& in
             info.setOrientation(orientation);
         }
     }
-    d->dbProcessed(infos.count());
-    d->schedulingForOrientationWrite(infos.count());
+    infos.dbProcessed(infos.count());
+    infos.schedulingForWrite(infos.count(), i18n("Revising Exif Orientation tags"), d->fileProgressCreator());
     for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
         emit writeOrientationToFiles(splitter.next(), orientation);
-    d->dbFinished(infos.size());
+    infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::applyMetadata(const QList<ImageInfo>& infos, MetadataHub* hub)
+void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, MetadataHub* hub)
 {
-    d->setDBAction(i18n("Applying metadata. Please wait..."));
-
     //ScanController::instance()->suspendCollectionScan();
     {
         DatabaseOperationGroup group;
@@ -272,17 +263,17 @@ void FileActionMngrDatabaseWorker::applyMetadata(const QList<ImageInfo>& infos, 
         {
             // apply to database
             hub->write(info);
-            d->dbProcessedOne();
+            infos.dbProcessedOne();
             group.allowLift();
         }
     }
     //ScanController::instance()->resumeCollectionScan();
 
-    d->schedulingForWrite(infos.size());
+    infos.schedulingForWrite(infos.size(), i18n("Writing metadata to files"), d->fileProgressCreator());
     for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
         emit writeMetadata(splitter.next(), hub->clone());
     delete hub;
-    d->dbFinished(infos.size());
+    infos.dbFinished();
 }
 
 } // namespace Digikam

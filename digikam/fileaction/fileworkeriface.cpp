@@ -41,10 +41,8 @@
 namespace Digikam
 {
 
-void FileActionMngrFileWorker::writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation)
+void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList infos, int orientation)
 {
-    d->setWriterAction(i18n("Revising Exif Orientation tags. Please wait..."));
-
     QStringList failedItems;
 
     foreach(const ImageInfo& info, infos)
@@ -67,7 +65,7 @@ void FileActionMngrFileWorker::writeOrientationToFiles(const QList<ImageInfo>& i
             ImageAttributesWatch::instance()->fileMetadataChanged(url);
         }
 
-        d->writtenToOne();
+        infos.writtenToOne();
     }
 
     if (!failedItems.isEmpty())
@@ -75,12 +73,11 @@ void FileActionMngrFileWorker::writeOrientationToFiles(const QList<ImageInfo>& i
         emit imageChangeFailed(i18n("Failed to revise Exif orientation these files:"), failedItems);
     }
 
-    d->finishedWriting(infos.size());
+    infos.finishedWriting();
 }
 
-void FileActionMngrFileWorker::writeMetadataToFiles(const QList<ImageInfo>& infos)
+void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList infos)
 {
-    d->setWriterAction(i18n("Writing metadata to files. Please wait..."));
     d->startingToWrite(infos);
 
     MetadataHub hub;
@@ -100,16 +97,15 @@ void FileActionMngrFileWorker::writeMetadataToFiles(const QList<ImageInfo>& info
 
         // hub emits fileMetadataChanged
 
-        d->writtenToOne();
+        infos.writtenToOne();
     }
     ScanController::instance()->resumeCollectionScan();
 
-    d->finishedWriting(infos.size());
+    infos.finishedWriting();
 }
 
-void FileActionMngrFileWorker::writeMetadata(const QList<ImageInfo>& infos, MetadataHub* hub)
+void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, MetadataHub* hub)
 {
-    d->setWriterAction(i18n("Writing metadata to files. Please wait..."));
     d->startingToWrite(infos);
 
     MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();
@@ -130,18 +126,17 @@ void FileActionMngrFileWorker::writeMetadata(const QList<ImageInfo>& infos, Meta
 
         // hub emits fileMetadataChanged
 
-        d->writtenToOne();
+        infos.writtenToOne();
     }
     ScanController::instance()->resumeCollectionScan();
 
     delete hub;
 
-    d->finishedWriting(infos.size());
+    infos.finishedWriting();
 }
 
-void FileActionMngrFileWorker::transform(const QList<ImageInfo>& infos, int action)
+void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int action)
 {
-    d->setWriterAction(i18n("Transforming items. Please wait..."));
     d->startingToWrite(infos);
 
     QStringList failedItems;
@@ -274,7 +269,7 @@ void FileActionMngrFileWorker::transform(const QList<ImageInfo>& infos, int acti
             ImageAttributesWatch::instance()->fileMetadataChanged(info.fileUrl());
         }
 
-        d->writtenToOne();
+        infos.writtenToOne();
     }
 
     if (!failedItems.isEmpty())
@@ -283,7 +278,7 @@ void FileActionMngrFileWorker::transform(const QList<ImageInfo>& infos, int acti
     }
 
     ScanController::instance()->resumeCollectionScan();
-    d->finishedWriting(infos.size());
+    infos.finishedWriting();
 }
 
 } // namespace Digikam

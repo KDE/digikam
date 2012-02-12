@@ -29,8 +29,8 @@
 namespace Digikam
 {
 
-ImageInfoTaskSplitter::ImageInfoTaskSplitter(const QList<ImageInfo>& list)
-    : QList<ImageInfo>(list)
+ImageInfoTaskSplitter::ImageInfoTaskSplitter(const FileActionImageInfoList& list)
+    : FileActionImageInfoList(list)
 {
     int parts = ParallelWorkers::optimalWorkerCount();
     m_n       = qMax(1, list.size() / parts);
@@ -40,7 +40,7 @@ ImageInfoTaskSplitter::~ImageInfoTaskSplitter()
 {
 }
 
-QList<ImageInfo> ImageInfoTaskSplitter::next()
+FileActionImageInfoList ImageInfoTaskSplitter::next()
 {
     QList<ImageInfo> list;
 
@@ -60,7 +60,7 @@ QList<ImageInfo> ImageInfoTaskSplitter::next()
         erase(begin(), begin() + m_n);
     }
 
-    return list;
+    return FileActionImageInfoList::continueTask(list, progress());;
 }
 
 bool ImageInfoTaskSplitter::hasNext() const

@@ -62,11 +62,6 @@ public:
 
 Q_SIGNALS:
 
-    void signalProgressScheduled();
-    void signalProgressMessageChanged(const QString& actionDescription);
-    void signalProgressValueChanged(float percent);
-    void signalProgressFinished();
-
     void signalImageChangeFailed(const QString& message, const QStringList& fileNames);
 
 public Q_SLOTS:
