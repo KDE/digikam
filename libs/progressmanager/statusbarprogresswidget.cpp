@@ -277,7 +277,6 @@ void StatusbarProgressWidget::slotShowItemDelayed()
         // N items
         d->pProgressBar->setMaximum(0);
         d->pProgressBar->setTextVisible(false);
-        Q_ASSERT(d->busyTimer);
         if (d->busyTimer)
             d->busyTimer->start(100);
     }
@@ -297,7 +296,10 @@ void StatusbarProgressWidget::slotBusyIndicator()
 
 void StatusbarProgressWidget::slotProgressItemProgress(ProgressItem* item, unsigned int value)
 {
-    Q_ASSERT( item == d->currentItem); // the only one we should be connected to
+    if (item != d->currentItem) // single item mode; discard others
+    {
+        return;
+    }
     d->pProgressBar->setValue(value);
 }
 

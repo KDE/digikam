@@ -24,6 +24,12 @@
 
 #include "progressmanager.moc"
 
+// Qt includes
+
+#include <QAtomicInt>
+#include <QMutex>
+#include <QMutexLocker>
+
 // KDE includes
 
 #include <kdebug.h>
@@ -57,15 +63,15 @@ public:
     {
     }
 
-    bool            waitingForKids;
-    bool            canceled;
+    volatile bool   waitingForKids;
+    volatile bool   canceled;
     bool            usesBusyIndicator;
     bool            canBeCanceled;
     bool            hasThumb;
 
-    unsigned int    progress;
-    unsigned int    total;
-    unsigned int    completed;
+    QAtomicInt      progress;
+    QAtomicInt      total;
+    QAtomicInt      completed;
 
     QString         id;
     QString         label;
@@ -102,10 +108,6 @@ void ProgressItem::setComplete()
             setProgress( 100 );
         }
         emit progressItemCompleted( this );
-        if ( parent() )
-        {
-            parent()->removeChild( this );
-        }
         deleteLater();
     }
     else
@@ -160,12 +162,6 @@ void ProgressItem::cancel()
     emit progressItemCanceled( this->id() );
 }
 
-void ProgressItem::setProgress(unsigned int v)
-{
-    d->progress = v;
-    emit progressItemProgress(this, d->progress);
-}
-
 void ProgressItem::setLabel(const QString& v)
 {
     d->label = v;
@@ -210,20 +206,33 @@ void ProgressItem::reset()
     d->completed = 0;
 }
 
+void ProgressItem::setProgress(unsigned int v)
+{
+    d->progress.fetchAndStoreOrdered(v);
+    kDebug() << "progress is" << d->progress;
+    emit progressItemProgress(this, v);
+}
+
 void ProgressItem::updateProgress()
 {
-    setProgress(d->total? d->completed * 100 / d->total : 0);
+    int total = d->total;
+    setProgress(total? d->completed * 100 / total : 0);
 }
 
 void ProgressItem::advance(unsigned int v)
 {
-    setCompletedItems(completedItems() + v);
+    incCompletedItems(v);
     updateProgress();
 }
 
 void ProgressItem::setTotalItems(unsigned int v)
 {
-    d->total = v;
+    d->total.fetchAndStoreOrdered(v);
+}
+
+void ProgressItem::incTotalItems(unsigned int v)
+{
+    d->total.fetchAndAddOrdered(v);
 }
 
 unsigned int ProgressItem::totalItems() const
@@ -233,7 +242,7 @@ unsigned int ProgressItem::totalItems() const
 
 void ProgressItem::setCompletedItems(unsigned int v)
 {
-    d->completed = v;
+    d->completed.fetchAndStoreOrdered(v);
 }
 
 unsigned int ProgressItem::completedItems() const
@@ -243,7 +252,12 @@ unsigned int ProgressItem::completedItems() const
 
 void ProgressItem::incCompletedItems(unsigned int v)
 {
-    d->completed += v;
+    d->completed.fetchAndAddOrdered(v);
+}
+
+bool ProgressItem::totalCompleted() const
+{
+    return d->completed == d->total;
 }
 
 bool ProgressItem::canceled() const
@@ -293,70 +307,113 @@ unsigned int ProgressItem::progress() const
 
 // --------------------------------------------------------------------------
 
-unsigned int ProgressManager::s_uID = 1000;
+class ProgressManagerCreator
+{
+public:
+    ProgressManager object;
+};
 
-class ProgressManagerPrivate
+class ProgressManager::ProgressManagerPriv
 {
 public:
 
-    ProgressManager instance;
+    ProgressManagerPriv()
+        : uID(1000)
+    {
+    }
+
+    QMutex                        mutex;
+    QHash<QString, ProgressItem*> transactions;
+    QAtomicInt                    uID;
+
+    void addItem(ProgressItem* t, ProgressItem* parent);
+    void removeItem(ProgressItem* t);
 };
 
-K_GLOBAL_STATIC(ProgressManagerPrivate, progressManagerPrivate)
+K_GLOBAL_STATIC(ProgressManagerCreator, creator)
+
+void ProgressManager::ProgressManagerPriv::addItem(ProgressItem* t, ProgressItem* parent)
+{
+    if (!t)
+    {
+        return;
+    }
+
+    QMutexLocker lock(&mutex);
+
+    transactions.insert(t->id(), t);
+    if (parent)
+    {
+        parent->addChild(t);
+    }
+}
+
+void ProgressManager::ProgressManagerPriv::removeItem(ProgressItem* t)
+{
+    if (!t)
+    {
+        return;
+    }
+
+    QMutexLocker lock(&mutex);
+
+    transactions.remove(t->id());
+    if (t->parent())
+    {
+        t->parent()->removeChild(t);
+    }
+}
 
 // --------------------------------------------------------------------------
 
 ProgressManager::ProgressManager()
-    : QObject()
+    : d(new ProgressManagerPriv)
 {
 }
 
 ProgressManager::~ProgressManager()
 {
+    delete d;
 }
 
 bool ProgressManager::isEmpty() const
 {
-    return mTransactions.isEmpty();
+    return d->transactions.isEmpty();
 }
 
 ProgressItem* ProgressManager::findItembyId(const QString& id) const
 {
-    if (!id.isEmpty())
-        return mTransactions.value(id, 0);
+    if (id.isEmpty())
+        return 0;
 
-    return 0;
+    QMutexLocker lock(&d->mutex);
+    return d->transactions.value(id);
 }
 
 QString ProgressManager::getUniqueID()
 {
-    return QString::number( ++s_uID );
+    return QString::number( d->uID.fetchAndAddOrdered(1) );
 }
 
 ProgressManager* ProgressManager::instance()
 {
-    return progressManagerPrivate.isDestroyed() ? 0 : &progressManagerPrivate->instance;
+    return creator.isDestroyed() ? 0 : &creator->object;
 }
 
 ProgressItem* ProgressManager::createProgressItemImpl(ProgressItem* parent,
-                                                      const QString& id,
-                                                      const QString& label,
-                                                      const QString& status,
-                                                      bool  cancellable,
-                                                      bool  hasThumb
-                                                     )
+                                                             const QString& id,
+                                                             const QString& label,
+                                                             const QString& status,
+                                                             bool  cancellable,
+                                                             bool  hasThumb
+                                                            )
 {
-    ProgressItem* t = 0;
+    ProgressItem* t = findItembyId(id);
 
-    if ( !findItembyId(id))
+    if (!t)
     {
         t = new ProgressItem(parent, id, label, status, cancellable, hasThumb);
         addProgressItemImpl(t, parent);
-    }
-    else
-    {
-        // Hm, is this what makes the most sense?
-        t = findItembyId(id);
     }
     return t;
 }
@@ -391,19 +448,8 @@ bool ProgressManager::addProgressItem(ProgressItem* t, ProgressItem* parent)
 
 void ProgressManager::addProgressItemImpl(ProgressItem* t, ProgressItem* parent)
 {
-    mTransactions.insert(t->id(), t);
-    if (parent)
-    {
-        ProgressItem* p = findItembyId(parent->id());
-        if (p)
-        {
-            kDebug() << "Add child progress " << t->id() << " to " << p->id();
-            p->addChild(t);
-        }
-    }
-
     connect(t, SIGNAL(progressItemCompleted(ProgressItem*)),
-            this, SLOT(slotTransactionCompleted(ProgressItem*)));
+            this, SLOT(slotTransactionCompleted(ProgressItem*)), Qt::DirectConnection);
 
     connect(t, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)),
             this, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)));
@@ -426,6 +472,9 @@ void ProgressManager::addProgressItemImpl(ProgressItem* t, ProgressItem* parent)
     connect(t, SIGNAL(progressItemThumbnail(ProgressItem*, const QPixmap&)),
             this, SIGNAL(progressItemThumbnail(ProgressItem*, const QPixmap&)));
 
+    d->addItem(t, parent);
+    kDebug() << "added item" << t;
+
     emit progressItemAdded(t);
 }
 
@@ -436,11 +485,12 @@ void ProgressManager::emitShowProgressViewImpl()
 
 void ProgressManager::slotTransactionCompleted(ProgressItem* item)
 {
-    if (item)
+    if (!item)
     {
-        mTransactions.remove(item->id());
-        emit progressItemCompleted(item);
+        return;
     }
+    d->removeItem(item);
+    emit progressItemCompleted(item);
 }
 
 void ProgressManager::slotStandardCancelHandler(ProgressItem* item)
@@ -450,9 +500,15 @@ void ProgressManager::slotStandardCancelHandler(ProgressItem* item)
 
 ProgressItem* ProgressManager::singleItem() const
 {
-    ProgressItem* item                               = 0;
-    QHash<QString, ProgressItem*>::const_iterator it = mTransactions.constBegin();
-    while ( it != mTransactions.constEnd() )
+    QHash<QString,ProgressItem*> hash;
+    {
+        QMutexLocker lock(&d->mutex);
+        hash = d->transactions;
+    }
+
+    ProgressItem* item = 0;
+    QHash<QString, ProgressItem*>::const_iterator it = hash.constBegin();
+    while ( it != hash.constEnd() )
     {
         // No single item for progress possible, as one of them is a busy indicator one.
         if ( (*it)->usesBusyIndicator() )
@@ -476,7 +532,13 @@ ProgressItem* ProgressManager::singleItem() const
 
 void ProgressManager::slotAbortAll()
 {
-    QHashIterator<QString, ProgressItem*> it(mTransactions);
+    QHash<QString,ProgressItem*> hash;
+    {
+        QMutexLocker lock(&d->mutex);
+        hash = d->transactions;
+    }
+
+    QHashIterator<QString, ProgressItem*> it(hash);
     while (it.hasNext())
     {
         it.next();
@@ -491,7 +553,7 @@ void ProgressManager::emitShowProgressView()
 
 ProgressItem* ProgressManager::createProgressItem(const QString& label, const QString& status, bool canBeCanceled, bool hasThumb)
 {
-    return instance()->createProgressItemImpl(0, getUniqueID(), label, status, canBeCanceled, hasThumb);
+    return instance()->createProgressItemImpl(0, instance()->getUniqueID(), label, status, canBeCanceled, hasThumb);
 }
 
 ProgressItem* ProgressManager::createProgressItem(ProgressItem* parent, const QString& id, const QString& label,

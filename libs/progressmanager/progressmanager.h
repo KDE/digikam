@@ -140,10 +140,12 @@ public:
 
     // Often needed values for calculating progress.
     void         setTotalItems(unsigned int v);
+    void         incTotalItems(unsigned int v = 1);
     unsigned int totalItems() const;
     void         setCompletedItems(unsigned int v);
-    unsigned int completedItems() const;
     void         incCompletedItems(unsigned int v = 1);
+    unsigned int completedItems() const;
+    bool         totalCompleted() const;
 
     /**
      * Recalculate progress according to total/completed items and update.
@@ -261,8 +263,6 @@ class DIGIKAM_EXPORT ProgressManager : public QObject
 
 public:
 
-    virtual ~ProgressManager();
-
     /**
      * @return true when there are no more progress items.
      */
@@ -292,7 +292,7 @@ public:
      * number as the id string for your progressItem to ensure it is unique.
      * @return
      */
-    static QString getUniqueID();
+    QString getUniqueID();
 
      /**
       * Creates a ProgressItem with a unique id and the given label.
@@ -420,6 +420,7 @@ private:
     ProgressManager();
      // prevent unsolicited copies
     ProgressManager(const ProgressManager&);
+    ~ProgressManager();
 
     void emitShowProgressViewImpl();
 
@@ -441,10 +442,9 @@ private:
 
 private:
 
-    QHash<QString, ProgressItem*> mTransactions;
-    static unsigned int           s_uID;
-
-    friend struct ProgressManagerPrivate;
+    class ProgressManagerPriv;
+    ProgressManagerPriv* const d;
+    friend class ProgressManagerCreator;
 };
 
 } // namespace Digikam
