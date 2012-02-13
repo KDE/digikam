@@ -41,7 +41,7 @@ From a terminal, using your account user-name (here replace "foo" by your accoun
 
 > sudo chown -R foo ~/Library/Preferences/KDE
 > sudo chown -R foo /Library/LaunchAgents/org.freedesktop.dbus-session.plist
-> sudo launchctl load -w /Library/LaunchAgents/org.freedesktop.dbus-session.plist
+> launchctl load -w /Library/LaunchAgents/org.freedesktop.dbus-session.plist
 
 
 4 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
