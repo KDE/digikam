@@ -778,7 +778,7 @@ void ScanController::slotStartCompleteScan()
     d->totalFilesToScan = 0;
     slotTriggerShowProgressDialog();
 
-    QString message = i18n("Preparing collection scan");
+    QString message = i18n("Preparing collection scan...");
 
     if (d->splash)
     {
@@ -824,7 +824,7 @@ void ScanController::slotStartScanningAlbumRoot(const QString& albumRoot)
 
 void ScanController::slotStartScanningForStaleAlbums()
 {
-    QString message = i18n("Scanning for removed albums");
+    QString message = i18n("Scanning for removed albums...");
 
     if (d->splash)
     {
@@ -838,7 +838,7 @@ void ScanController::slotStartScanningForStaleAlbums()
 
 void ScanController::slotStartScanningAlbumRoots()
 {
-    QString message = i18n("Scanning images in individual albums");
+    QString message = i18n("Scanning images in individual albums...");
 
     if (d->splash)
     {
@@ -931,7 +931,7 @@ void ScanController::slotErrorFromInitialization(const QString& errorMessage)
 
 void ScanController::setInitializationMessage()
 {
-    QString message = i18n("Initializing database");
+    QString message = i18n("Initializing database...");
 
     if (d->splash)
     {

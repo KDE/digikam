@@ -164,7 +164,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
 {
     if (d->splash)
     {
-        d->splash->message(i18n("Loading Image Plugins"));
+        d->splash->message(i18n("Loading Image Plugins..."));
     }
 
     int cpt = 0;
