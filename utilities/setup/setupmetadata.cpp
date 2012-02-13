@@ -608,7 +608,7 @@ void SetupMetadata::applySettings()
 
     if (d->writeXMPSidecarBox->isChecked())
     {
-        set.metadataWritingMode   = d->writingModeCombo->currentIndex();
+        set.metadataWritingMode   = (KExiv2::MetadataWritingMode)d->writingModeCombo->currentIndex();
     }
     else
     {

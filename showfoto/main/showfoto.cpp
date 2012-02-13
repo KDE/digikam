@@ -209,7 +209,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     if (d->splash)
     {
-        d->splash->message(i18n("Checking ICC repository"));
+        d->splash->message(i18n("Checking ICC repository..."));
     }
     d->validIccPath = Digikam::SetupICC::iccRepositoryIsValid();
 
@@ -217,7 +217,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     if (d->splash)
     {
-        d->splash->message(i18n("Loading themes"));
+        d->splash->message(i18n("Loading themes..."));
     }
     Digikam::ThemeManager::instance();
 
