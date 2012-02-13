@@ -72,7 +72,7 @@ public:
     KIPI::ImageCollection        currentAlbum();
     KIPI::ImageCollection        currentSelection();
     QList<KIPI::ImageCollection> allAlbums();
-    KIPI::ImageInfo              info( const KUrl& );
+    KIPI::ImageInfo              info(const KUrl&);
 
     bool addImage(const KUrl&, QString& errmsg);
     void delImage(const KUrl&);
