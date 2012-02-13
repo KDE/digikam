@@ -53,7 +53,7 @@ From a terminal, using your account user-name (here replace "foo" by your accoun
 > git clone git://anongit.kde.org/digikam-software-compilation ./2.x
 > cd 2.x
 > ./download-repos
-> bootstrap.macports
+> ./bootstrap.macports
 
 * If all is fine digiKam software compilation can be compiled as well into "build" sub-folder:
 
