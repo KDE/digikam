@@ -27,15 +27,9 @@
 
 #include <kconfiggroup.h>
 
-// LibKExiv2 includes
-
-#include <libkexiv2/kexiv2.h>
-
 // Local includes
 
 #include "metadatasettings.h"
-
-using namespace KExiv2Iface;
 
 namespace Digikam
 {
@@ -74,10 +68,12 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 
     writeRawFiles         = group.readEntry("Write RAW Files",             false);
     useXMPSidecar4Reading = group.readEntry("Use XMP Sidecar For Reading", false);
-    metadataWritingMode   = group.readEntry("Metadata Writing Mode",       (int)KExiv2::WRITETOIMAGEONLY);
+    metadataWritingMode   = (KExiv2::MetadataWritingMode)group.readEntry("Metadata Writing Mode",
+                                                                           (int)KExiv2::WRITETOIMAGEONLY);
     updateFileTimeStamp   = group.readEntry("Update File Timestamp",       false);
 
     rotationBehavior      = NoRotation;
+
     if (group.readEntry("Rotate By Internal Flag", true))
     {
         rotationBehavior |= RotateByInternalFlag;
@@ -112,7 +108,7 @@ void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 
     group.writeEntry("Write RAW Files",             writeRawFiles);
     group.writeEntry("Use XMP Sidecar For Reading", useXMPSidecar4Reading);
-    group.writeEntry("Metadata Writing Mode",       metadataWritingMode);
+    group.writeEntry("Metadata Writing Mode",       (int)metadataWritingMode);
     group.writeEntry("Update File Timestamp",       updateFileTimeStamp);
 
     group.writeEntry("Rotate By Internal Flag",     bool(rotationBehavior & RotateByInternalFlag));

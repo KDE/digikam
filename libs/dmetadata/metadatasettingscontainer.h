@@ -29,11 +29,17 @@
 #include <QFlags>
 #include <QString>
 
+// LibKExiv2 includes
+
+#include <libkexiv2/kexiv2.h>
+
 // Local includes
 
 #include "digikam_export.h"
 
 class KConfigGroup;
+
+using namespace KExiv2Iface;
 
 namespace Digikam
 {
@@ -67,7 +73,7 @@ public:
         RotateByLosslessRotation = 1 << 2,
         RotateByLossyRotation    = 1 << 3,
 
-        RotatingFlags            = RotateByInternalFlag | RotateByMetadataFlag,
+        RotatingFlags            = RotateByInternalFlag     | RotateByMetadataFlag,
         RotatingPixels           = RotateByLosslessRotation | RotateByLossyRotation
     };
     Q_DECLARE_FLAGS(RotationBehaviorFlags, RotationBehaviorFlag)
@@ -79,25 +85,25 @@ public:
 
 public:
 
-    bool                  exifRotate;
-    bool                  exifSetOrientation;
+    bool                        exifRotate;
+    bool                        exifSetOrientation;
 
-    bool                  saveComments;
-    bool                  saveDateTime;
-    bool                  savePickLabel;
-    bool                  saveColorLabel;
-    bool                  saveRating;
+    bool                        saveComments;
+    bool                        saveDateTime;
+    bool                        savePickLabel;
+    bool                        saveColorLabel;
+    bool                        saveRating;
 
-    bool                  saveTemplate;
-    bool                  saveTags;
+    bool                        saveTemplate;
+    bool                        saveTags;
 
-    bool                  writeRawFiles;
-    bool                  updateFileTimeStamp;
-    bool                  useXMPSidecar4Reading;
+    bool                        writeRawFiles;
+    bool                        updateFileTimeStamp;
+    bool                        useXMPSidecar4Reading;
 
-    int                   metadataWritingMode;
+    KExiv2::MetadataWritingMode metadataWritingMode;
 
-    RotationBehaviorFlags rotationBehavior;
+    RotationBehaviorFlags       rotationBehavior;
 };
 
 }  // namespace Digikam
