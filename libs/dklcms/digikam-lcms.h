@@ -119,18 +119,9 @@ typedef cmsCIELab FAR* LPcmsCIELab;
 
 typedef void* cmsHPROFILE;             // Opaque typedefs to hide internals
 
-// Vectors
-typedef struct
-{
-    double n[3];
-} VEC3;            // Float Vector
-
-typedef struct
-{
-    VEC3 v[3];
-} MAT3;            // Matrix
-
-typedef MAT3 FAR* LPMAT3;
+// these have changed from previous definitions
+typedef cmsCIEXYZTRIPLE MAT3;
+typedef cmsCIEXYZTRIPLE FAR* LPMAT3;
 
 /* profileClass enumerations */
 typedef enum
@@ -263,6 +254,7 @@ LCMSAPI int           LCMSEXPORT           dkCmsTakeRenderingIntent(cmsHPROFILE 
 LCMSBOOL                                   dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt);
 
 LCMSBOOL                                   dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile);
+//LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(cmsCIEXYZTRIPLE *r, cmsHPROFILE hProfile);
 
 LCMSAPI cmsHPROFILE   LCMSEXPORT           dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize);
 

@@ -127,12 +127,12 @@ creation functions are kept the same, but there are some changes in the flags.  
 2 does offer more ways to access profiles, so it is certainly possible your code will get
 simplified.  The basic parts where Little CMS 2 differs from 1.x series are:
 
-    * Â·    Transform flags
-    * Â·    Error handling
-    * Â·    Textual information retrieval
-    * Â·    New non-ICC intents
-    * Â·    Floating point modes
-    * Â·    Pipelines
+    -    Transform flags
+    -    Error handling
+    -    Textual information retrieval
+    -    New non-ICC intents
+    -    Floating point modes
+    -    Pipelines
 
 
 
@@ -141,21 +141,20 @@ You still can do all what lcms1 did, but in some cases by using a different appr
 There are no longer gamma curves or matrix-shaper functions. Even the LUT functions are
 gone. All that has been superseded by:
 
-    * Â·    Gamma functions -> Tone curves
-    * Â·    Matrix Shaper, LUT -> Pipelines
-    * Â·    LUT resampling -> Optimization engine
+    -    Gamma functions -> Tone curves
+    -    Matrix Shaper, LUT -> Pipelines
+    -    LUT resampling -> Optimization engine
 
 There is no one-to-one correspondence between old and new functions, but most old
 functionality can be implemented with new functions.
 Posted by Marti Maria at 7:01 PM 0 comments
 Labels: documentation, icc 
 
-
 ------------------
 
 Sunday, November 29, 2009
 What is new from lcms 1.x
-First obvious question is âwhy should I upgrade to Little CMS 2.0â. Here are some clues:
+First obvious question is "why should I upgrade to Little CMS 2.0". Here are some clues:
 
 Little CMS 2.0 is a full v4 CMM, which can accept v2 profiles. Little CMS 1.xx was a v2
 CMM which can deal with (some) V4 profiles. The difference is important, as 2.0 handling
@@ -175,3 +174,41 @@ etc. All is solved.
 
 Posted by Marti Maria at 5:25 PM 0 comments
 Labels: documentation, speed 
+
+------------------
+
+Monday, July 27, 2009
+
+Less is more
+If you have devoted some time to review the new API, maybe you have discovered an odd thing:
+there are some functions missing. Ok, you can blame me for remove *that* function doing
+exactly what you need. Of course that may be my mistake. But please consider perhaps I have
+good reasons to do that.
+
+Let's take one example:
+
+cmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile);
+
+This function no longer exists in lcms 2.0 API.
+
+Well, many people were using this function to retrieve primaries of a profile. So, for example,
+if you want to know which are the AdobeRGB primaries, just call the function with the right
+profile and here you go.
+
+Seems easy, and useful, but trust me, it is not. The real reason d'être of this function is
+somehow surprising. Not because it is handy but because is precise. Please consider this piece
+of pseudo-code:
+
+cmsXYZTRIPLE Result;
+hXYZ = cmsCreateXYZProfile()
+xform = cmsCreateTransform(hProfile, TYPE_RGB_DBL, hXYZ, TYPE_XYZ_DBL, INTENT_RELATIVE_COLRIMETRIC, 0)
+cmsDoTransform(xform, {{ 1, 0, 0}, {0, 1, 0}, {0,0,1}}, &Result, 3)
+
+Do you follow it? I create a transform from the profile (in RGB) to XYZ. Then I convert max of R, 
+and B to XYZ. I am obtaining the primaries! Despite it seems more complex, this method is much 
+better because is guaranteed to work in *any* profile, not only on matrix-shaper ones.
+
+So, what is the point of having the old function? Easy: lcms 1.x was precission-limited to 16 bits, 
+so you cannot obtain primaries with enough precision with the method described above. But that does 
+not apply with lcms2, where you have an outstanding 64-bit double precission. Less is more in 
+this particular case! 

@@ -48,6 +48,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "iccprofile.h"
 
 namespace Digikam
@@ -336,12 +337,12 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
             // Undo chromatic adaptation
             if (dkCmsAdaptMatrixFromD50(&Mat, &White))
             {
+#if defined(USE_LCMS_VERSION_1000)
                 cmsCIEXYZ tmp;
 
                 tmp.X = Mat.v[0].n[0];
                 tmp.Y = Mat.v[1].n[0];
                 tmp.Z = Mat.v[2].n[0];
-
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Red), &tmp);
 
@@ -356,6 +357,27 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
                 tmp.Z = Mat.v[2].n[2];
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Blue), &tmp);
+#else
+                cmsCIEXYZ tmp;
+
+                tmp.X = Mat.Red.X;
+                tmp.Y = Mat.Green.X;
+                tmp.Z = Mat.Blue.X;
+                // ScaleToWhite(&MediaWhite, &tmp);
+                dkCmsXYZ2xyY(&(d->Primaries.Red), &tmp);
+
+                tmp.X = Mat.Red.Y;
+                tmp.Y = Mat.Green.Y;
+                tmp.Z = Mat.Blue.Y;
+                // ScaleToWhite(&MediaWhite, &tmp);
+                dkCmsXYZ2xyY(&(d->Primaries.Green), &tmp);
+
+                tmp.X = Mat.Red.Z;
+                tmp.Y = Mat.Green.Z;
+                tmp.Z = Mat.Blue.Z;
+                // ScaleToWhite(&MediaWhite, &tmp);
+                dkCmsXYZ2xyY(&(d->Primaries.Blue), &tmp);
+#endif
             }
         }
     }

@@ -133,10 +133,35 @@ LCMSBOOL dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt)
     return TRUE;
 }
 
+cmsBool GetProfileRGBPrimaries(cmsHPROFILE hProfile,
+                                cmsCIEXYZTRIPLE *result,
+                                cmsUInt32Number intent)
+{
+    cmsHPROFILE hXYZ;
+    cmsHTRANSFORM hTransform;
+    cmsFloat64Number rgb[3][3] = {{1., 0., 0.},
+    {0., 1., 0.},
+    {0., 0., 1.}};
+
+    hXYZ = cmsCreateXYZProfile();
+    if (hXYZ == NULL) return FALSE;
+
+    hTransform = cmsCreateTransform(hProfile, TYPE_RGB_DBL, hXYZ, TYPE_XYZ_DBL,
+        intent, cmsFLAGS_NOCACHE | cmsFLAGS_NOOPTIMIZE);
+    cmsCloseProfile(hXYZ);
+    if (hTransform == NULL) return FALSE;
+
+    cmsDoTransform(hTransform, rgb, result, 3);
+    cmsDeleteTransform(hTransform);
+    return TRUE;
+}
+
+
 LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
 {
-    // TODO: 
-    return FALSE;
+    // See README @ Monday, July 27, 2009 @ Less is more
+    // The example seem to be wrong, let's see if this one work
+    return (LCMSBOOL) GetProfileRGBPrimaries(hProfile, r, INTENT_PERCEPTUAL);
 }
 
 LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize)
