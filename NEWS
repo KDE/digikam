@@ -62,5 +62,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 228314 : Timeline view in digiKam scroll's left but not right.
 045 ==> 293563 : digikam-2.6.0-beta1 build failed.
 046 ==> 293897 : Sony A350 (alpha 350) camera detected, but no import posible.
-047 ==> 
+047 ==> 237552 : Thumbnails generation process for selected images only.
+048 ==> 
 
