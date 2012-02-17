@@ -45,6 +45,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kpixmapsequence.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -321,6 +322,7 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
     dkCmsTakeMediaWhitePoint(&(d->MediaWhite), hProfile);
     cmsCIExyY White;
     dkCmsXYZ2xyY(&White, &(d->MediaWhite));
+    kDebug() << "Profile white point : x=" << White.x << " y=" << White.y << " Y=" << White.Y;
 
     // Get the colorant matrix.
 
