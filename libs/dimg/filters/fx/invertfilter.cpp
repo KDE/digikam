@@ -73,7 +73,7 @@ void InvertFilter::filterImage()
             ptr[0] = 255 - ptr[0];
             ptr[1] = 255 - ptr[1];
             ptr[2] = 255 - ptr[2];
-            ptr[3] = 255 - ptr[3];
+            // XXX: don't invert alpha channel! ptr[3] = 255 - ptr[3];
             ptr += 4;
         }
     }
@@ -86,7 +86,7 @@ void InvertFilter::filterImage()
             ptr[0] = 65535 - ptr[0];
             ptr[1] = 65535 - ptr[1];
             ptr[2] = 65535 - ptr[2];
-            ptr[3] = 65535 - ptr[3];
+            // XXX: don't invert alpha channel! ptr[3] = 65535 - ptr[3];
             ptr += 4;
         }
     }

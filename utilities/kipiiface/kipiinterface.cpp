@@ -209,18 +209,26 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
 
 int KipiInterface::features() const
 {
-    return(
-              KIPI::HostSupportsTags            | KIPI::HostSupportsRating      |
-              KIPI::HostAcceptNewImages         | KIPI::HostSupportsThumbnails  |
-              KIPI::HostSupportsProgressBar     |
-              KIPI::ImagesHasComments           | KIPI::ImagesHasTitlesWritable |
-              KIPI::ImagesHasTime               |
-              KIPI::CollectionsHaveComments     | KIPI::CollectionsHaveCategory |
-              KIPI::CollectionsHaveCreationDate
+    return(KIPI::CollectionsHaveComments
+         | KIPI::CollectionsHaveCategory
+         | KIPI::CollectionsHaveCreationDate
+         | KIPI::ImagesHasComments
+         | KIPI::ImagesHasTitlesWritable
+         | KIPI::ImagesHasTime
+         | KIPI::HostSupportsTags
+         | KIPI::HostSupportsRating
+         | KIPI::HostAcceptNewImages
+         | KIPI::HostSupportsThumbnails
+         | KIPI::HostSupportsProgressBar
+#if KIPI_VERSION >= 0x010500
+         | KIPI::HostSupportsItemLock
+         | KIPI::HostSupportsPickLabel
+         | KIPI::HostSupportsColorLabel
+#endif // KIPI_VERSION >= 0x010500
           );
 }
 
-bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
+bool KipiInterface::addImage(const KUrl& url, QString& errmsg)
 {
     // Note : All copy/move operations are processed by the plugins.
 
@@ -243,7 +251,7 @@ bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
     return true;
 }
 
-void KipiInterface::delImage( const KUrl& url )
+void KipiInterface::delImage(const KUrl& url)
 {
     KUrl rootURL(CollectionManager::instance()->albumRoot(url));
 
@@ -321,8 +329,8 @@ QAbstractItemModel* KipiInterface::getTagTree() const
 QVariant KipiInterface::hostSetting(const QString& settingName)
 {
     MetadataSettings* mSettings = MetadataSettings::instance();
-
-    if (!mSettings)
+    AlbumSettings* aSettings    = AlbumSettings::instance();
+    if (!mSettings || !aSettings)
     {
         return QVariant();
     }
@@ -347,14 +355,29 @@ QVariant KipiInterface::hostSetting(const QString& settingName)
     }
     else if (settingName == QString("FileExtensions"))
     {
-        // do not save this into a local variable, as this
+        // NOTE : do not save type mime settings into a local variable, as this
         // might change in the main app
 
-        AlbumSettings* s = AlbumSettings::instance();
-        return QString(s->getImageFileFilter() + ' ' +
-                       s->getMovieFileFilter() + ' ' +
-                       s->getAudioFileFilter() + ' ' +
-                       s->getRawFileFilter());
+        return QString(aSettings->getImageFileFilter() + ' ' +
+                       aSettings->getMovieFileFilter() + ' ' +
+                       aSettings->getAudioFileFilter() + ' ' +
+                       aSettings->getRawFileFilter());
+    }
+    else if (settingName == QString("ImagesExtensions"))
+    {
+        return QString(aSettings->getImageFileFilter());
+    }
+    else if (settingName == QString("RawExtensions"))
+    {
+        return QString(aSettings->getRawFileFilter());
+    }
+    else if (settingName == QString("VideoExtensions"))
+    {
+        return QString(aSettings->getMovieFileFilter());
+    }
+    else if (settingName == QString("AudioExtensions"))
+    {
+        return QString(aSettings->getAudioFileFilter());
     }
 
     return QVariant();

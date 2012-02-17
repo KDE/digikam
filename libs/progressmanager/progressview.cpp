@@ -57,8 +57,6 @@
 namespace Digikam
 {
 
-static const int MAX_LABEL_WIDTH = 650;
-
 class TransactionItem;
 
 TransactionItemView::TransactionItemView(QWidget* parent, const char* name)
@@ -148,6 +146,7 @@ class TransactionItem::TransactionItemPriv
 public:
 
     TransactionItemPriv() :
+        maxLabelWidth(650),
         progress(0),
         cancelButton(0),
         itemLabel(0),
@@ -158,12 +157,15 @@ public:
     {
     }
 
+    const int     maxLabelWidth;
+
     QProgressBar* progress;
     QPushButton*  cancelButton;
     QLabel*       itemLabel;
     QLabel*       itemStatus;
     QLabel*       itemThumb;
     QFrame*       frame;
+
     ProgressItem* item;
 };
 
@@ -194,7 +196,7 @@ TransactionItem::TransactionItem(QWidget* parent, ProgressItem* item, bool first
         h->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
     }
 
-    d->itemLabel = new QLabel(fontMetrics().elidedText(item->label(), Qt::ElideRight, MAX_LABEL_WIDTH), h);
+    d->itemLabel = new QLabel(fontMetrics().elidedText(item->label(), Qt::ElideRight, d->maxLabelWidth), h);
     h->layout()->addWidget(d->itemLabel);
     h->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
 
@@ -207,8 +209,10 @@ TransactionItem::TransactionItem(QWidget* parent, ProgressItem* item, bool first
     {
         d->cancelButton = new QPushButton(SmallIcon("dialog-cancel"), QString(), h);
         d->cancelButton->setToolTip( i18n("Cancel this operation."));
+
         connect(d->cancelButton, SIGNAL( clicked()),
                 this, SLOT(slotItemCanceled()));
+
         h->layout()->addWidget(d->cancelButton);
     }
 
@@ -219,7 +223,7 @@ TransactionItem::TransactionItem(QWidget* parent, ProgressItem* item, bool first
 
     d->itemStatus = new QLabel(h);
     d->itemStatus->setTextFormat(Qt::RichText);
-    d->itemStatus->setText(fontMetrics().elidedText(item->status(), Qt::ElideRight, MAX_LABEL_WIDTH));
+    d->itemStatus->setText(fontMetrics().elidedText(item->status(), Qt::ElideRight, d->maxLabelWidth));
     h->layout()->addWidget(d->itemStatus);
     if (first)
     {
@@ -254,7 +258,7 @@ void TransactionItem::setItemComplete()
 
 void TransactionItem::setLabel(const QString& label)
 {
-    d->itemLabel->setText(fontMetrics().elidedText(label, Qt::ElideRight, MAX_LABEL_WIDTH));
+    d->itemLabel->setText(fontMetrics().elidedText(label, Qt::ElideRight, d->maxLabelWidth));
 }
 
 void TransactionItem::setThumbnail(const QPixmap& thumb)
@@ -264,7 +268,7 @@ void TransactionItem::setThumbnail(const QPixmap& thumb)
 
 void TransactionItem::setStatus(const QString& status)
 {
-    d->itemStatus->setText(fontMetrics().elidedText(status, Qt::ElideRight, MAX_LABEL_WIDTH));
+    d->itemStatus->setText(fontMetrics().elidedText(status, Qt::ElideRight, d->maxLabelWidth));
 }
 
 void TransactionItem::setTotalSteps(int totalSteps)
