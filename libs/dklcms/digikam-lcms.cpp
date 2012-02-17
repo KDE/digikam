@@ -305,8 +305,12 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
 
 LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile)
 {
-    Dest = (LPcmsCIEXYZ)cmsReadTag(hProfile, cmsSigMediaWhitePointTag);
-    return (Dest != NULL);
+
+  LPcmsCIEXYZ tag = (LPcmsCIEXYZ)cmsReadTag(hProfile, cmsSigMediaWhitePointTag);
+  if (tag == NULL) return FALSE;
+
+  *Dest = *tag;
+  return TRUE;
 }
 
 LCMSAPI QString       LCMSEXPORT dkCmsTakeModel(cmsHPROFILE hProfile)
