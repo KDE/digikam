@@ -53,7 +53,6 @@
 #define dkCmsOpenProfileFromFile     cmsOpenProfileFromFile
 #define dkCmsOpenProfileFromMem      cmsOpenProfileFromMem
 #define dkCmsSetAlarmCodes           cmsSetAlarmCodes
-#define dkCmsTakeCharTargetData      cmsTakeCharTargetData
 #define dkCmsTakeCopyright           cmsTakeCopyright
 #define dkCmsTakeHeaderFlags         cmsTakeHeaderFlags
 #define dkCmsTakeManufacturer        cmsTakeManufacturer
@@ -76,7 +75,7 @@
 #if defined(USE_LCMS_VERSION_2000)
 
 #define CMS_USE_CPP_API 1
-#include <lcms2.h> 
+#include <lcms2.h>
 
 #define LCMS_DESC_MAX     512
 
@@ -108,7 +107,7 @@
 
 
 typedef int            LCMSBOOL;
-typedef unsigned char  BYTE, *LPBYTE; 
+typedef unsigned char  BYTE, *LPBYTE;
 typedef unsigned short WORD, *LPWORD;
 typedef unsigned long  DWORD, *LPDWORD;
 typedef void*          LPVOID;
@@ -120,18 +119,9 @@ typedef cmsCIELab FAR* LPcmsCIELab;
 
 typedef void* cmsHPROFILE;             // Opaque typedefs to hide internals
 
-// Vectors
-typedef struct
-{
-    double n[3];
-} VEC3;            // Float Vector
-
-typedef struct
-{
-    VEC3 v[3];
-} MAT3;            // Matrix
-
-typedef MAT3 FAR* LPMAT3;
+// these have changed from previous definitions
+typedef cmsCIEXYZTRIPLE MAT3;
+typedef cmsCIEXYZTRIPLE FAR* LPMAT3;
 
 /* profileClass enumerations */
 typedef enum
@@ -146,7 +136,7 @@ typedef enum
     icMaxEnumClass                      = 0xFFFFFFFFL
 } icProfileClassSignature;
 
-/* 
+/*
  * Color Space Signatures
  * Note that only icSigXYZData and icSigLabData are valid
  * Profile Connection Spaces (PCSs)
@@ -208,7 +198,7 @@ typedef enum
     icSigMeasurementTag                 = 0x6D656173L,  /* 'meas' */
     icSigMediaBlackPointTag             = 0x626B7074L,  /* 'bkpt' */
     icSigMediaWhitePointTag             = 0x77747074L,  /* 'wtpt' */
-    icSigNamedColorTag                  = 0x6E636f6CL,  /* 'ncol' 
+    icSigNamedColorTag                  = 0x6E636f6CL,  /* 'ncol'
                                                          * OBSOLETE, use ncl2 */
     icSigNamedColor2Tag                 = 0x6E636C32L,  /* 'ncl2' */
     icSigPreview0Tag                    = 0x70726530L,  /* 'pre0' */
@@ -239,37 +229,32 @@ LCMSAPI DWORD  LCMSEXPORT                  dkCmsGetProfileICCversion(cmsHPROFILE
 
 LCMSEXPORT void                            dkCmsSetAlarmCodes(int r, int g, int b);
 
-LCMSAPI const char*   LCMSEXPORT           dkCmsTakeProductName(cmsHPROFILE hProfile);
+LCMSAPI QString       LCMSEXPORT           dkCmsTakeProductName(cmsHPROFILE hProfile);
 
 LCMSAPI const char*   LCMSEXPORT           dkCmsTakeProductDesc(cmsHPROFILE hProfile);
 
-LCMSAPI const char*   LCMSEXPORT           dkCmsTakeProductInfo(cmsHPROFILE hProfile);
+LCMSAPI QString       LCMSEXPORT           dkCmsTakeProductInfo(cmsHPROFILE hProfile);
 
-LCMSAPI const char*   LCMSEXPORT           dkCmsTakeManufacturer(cmsHPROFILE hProfile);
+LCMSAPI QString       LCMSEXPORT           dkCmsTakeManufacturer(cmsHPROFILE hProfile);
 
 LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile);
 
-LCMSAPI const char*   LCMSEXPORT           dkCmsTakeModel(cmsHPROFILE hProfile);
+LCMSAPI QString       LCMSEXPORT           dkCmsTakeModel(cmsHPROFILE hProfile);
 
-LCMSAPI const char*   LCMSEXPORT           dkCmsTakeCopyright(cmsHPROFILE hProfile);
+LCMSAPI QString       LCMSEXPORT           dkCmsTakeCopyright(cmsHPROFILE hProfile);
 
 LCMSAPI DWORD         LCMSEXPORT           dkCmsTakeHeaderFlags(cmsHPROFILE hProfile);
 
 LCMSAPI const BYTE*   LCMSEXPORT           dkCmsTakeProfileID(cmsHPROFILE hProfile);
 
-LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsTakeCreationDateTime(struct tm *Dest, cmsHPROFILE hProfile);
-
-LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsTakeCalibrationDateTime(struct tm *Dest, cmsHPROFILE hProfile);
-
 LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig);
 
 LCMSAPI int           LCMSEXPORT           dkCmsTakeRenderingIntent(cmsHPROFILE hProfile);
 
-LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsTakeCharTargetData(cmsHPROFILE hProfile, char** Data, size_t* len);
-
 LCMSBOOL                                   dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt);
 
 LCMSBOOL                                   dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile);
+//LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(cmsCIEXYZTRIPLE *r, cmsHPROFILE hProfile);
 
 LCMSAPI cmsHPROFILE   LCMSEXPORT           dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize);
 

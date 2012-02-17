@@ -26,20 +26,243 @@
 #if defined(USE_LCMS_VERSION_2000)
 
 #include <lcms2.h>
+
+#include <QtCore/QString>
+
 #include "digikam-lcms.h"
 
+#include <lcms2_plugin.h>
+
+// CMSAPI void               CMSEXPORT _cmsVEC3init(cmsVEC3* r, cmsFloat64Number x, cmsFloat64Number y, cmsFloat64Number z) { };
+// CMSAPI void               CMSEXPORT _cmsMAT3per(cmsMAT3* r, const cmsMAT3* a, const cmsMAT3* b) { };
+// CMSAPI cmsBool            CMSEXPORT _cmsMAT3inverse(const cmsMAT3* a, cmsMAT3* b) { return TRUE; };
+// CMSAPI void               CMSEXPORT _cmsMAT3eval(cmsVEC3* r, const cmsMAT3* a, const cmsVEC3* v) { };
+
+#define MATRIX_DET_TOLERANCE    0.0001
+
+// Initiate a vector
+void CMSEXPORT _cmsVEC3init(cmsVEC3* r, cmsFloat64Number x, cmsFloat64Number y, cmsFloat64Number z)
+{
+    r -> n[VX] = x;
+    r -> n[VY] = y;
+    r -> n[VZ] = z;
+}
+
+// Multiply two matrices
+void CMSEXPORT _cmsMAT3per(cmsMAT3* r, const cmsMAT3* a, const cmsMAT3* b)
+{
+#define ROWCOL(i, j) \
+    a->v[i].n[0]*b->v[0].n[j] + a->v[i].n[1]*b->v[1].n[j] + a->v[i].n[2]*b->v[2].n[j]
+
+    _cmsVEC3init(&r-> v[0], ROWCOL(0,0), ROWCOL(0,1), ROWCOL(0,2));
+    _cmsVEC3init(&r-> v[1], ROWCOL(1,0), ROWCOL(1,1), ROWCOL(1,2));
+    _cmsVEC3init(&r-> v[2], ROWCOL(2,0), ROWCOL(2,1), ROWCOL(2,2));
+
+#undef ROWCOL //(i, j)
+}
+
+
+// Inverse of a matrix b = a^(-1)
+cmsBool  CMSEXPORT _cmsMAT3inverse(const cmsMAT3* a, cmsMAT3* b)
+{
+   cmsFloat64Number det, c0, c1, c2;
+
+   c0 =  a -> v[1].n[1]*a -> v[2].n[2] - a -> v[1].n[2]*a -> v[2].n[1];
+   c1 = -a -> v[1].n[0]*a -> v[2].n[2] + a -> v[1].n[2]*a -> v[2].n[0];
+   c2 =  a -> v[1].n[0]*a -> v[2].n[1] - a -> v[1].n[1]*a -> v[2].n[0];
+
+   det = a -> v[0].n[0]*c0 + a -> v[0].n[1]*c1 + a -> v[0].n[2]*c2;
+
+   if (fabs(det) < MATRIX_DET_TOLERANCE) return FALSE;  // singular matrix; can't invert
+
+   b -> v[0].n[0] = c0/det;
+   b -> v[0].n[1] = (a -> v[0].n[2]*a -> v[2].n[1] - a -> v[0].n[1]*a -> v[2].n[2])/det;
+   b -> v[0].n[2] = (a -> v[0].n[1]*a -> v[1].n[2] - a -> v[0].n[2]*a -> v[1].n[1])/det;
+   b -> v[1].n[0] = c1/det;
+   b -> v[1].n[1] = (a -> v[0].n[0]*a -> v[2].n[2] - a -> v[0].n[2]*a -> v[2].n[0])/det;
+   b -> v[1].n[2] = (a -> v[0].n[2]*a -> v[1].n[0] - a -> v[0].n[0]*a -> v[1].n[2])/det;
+   b -> v[2].n[0] = c2/det;
+   b -> v[2].n[1] = (a -> v[0].n[1]*a -> v[2].n[0] - a -> v[0].n[0]*a -> v[2].n[1])/det;
+   b -> v[2].n[2] = (a -> v[0].n[0]*a -> v[1].n[1] - a -> v[0].n[1]*a -> v[1].n[0])/det;
+
+   return TRUE;
+}
+
+// Evaluate a vector across a matrix
+void CMSEXPORT _cmsMAT3eval(cmsVEC3* r, const cmsMAT3* a, const cmsVEC3* v)
+{
+    r->n[VX] = a->v[0].n[VX]*v->n[VX] + a->v[0].n[VY]*v->n[VY] + a->v[0].n[VZ]*v->n[VZ];
+    r->n[VY] = a->v[1].n[VX]*v->n[VX] + a->v[1].n[VY]*v->n[VY] + a->v[1].n[VZ]*v->n[VZ];
+    r->n[VZ] = a->v[2].n[VX]*v->n[VX] + a->v[2].n[VY]*v->n[VY] + a->v[2].n[VZ]*v->n[VZ];
+}
+
+
+// Compute chromatic adaptation matrix using Chad as cone matrix
+static
+cmsBool ComputeChromaticAdaptation(cmsMAT3* Conversion,
+                                const cmsCIEXYZ* SourceWhitePoint,
+                                const cmsCIEXYZ* DestWhitePoint,
+                                const cmsMAT3* Chad)
+
+{
+
+    cmsMAT3 Chad_Inv;
+    cmsVEC3 ConeSourceXYZ, ConeSourceRGB;
+    cmsVEC3 ConeDestXYZ, ConeDestRGB;
+    cmsMAT3 Cone, Tmp;
+
+
+    Tmp = *Chad;
+    if (!_cmsMAT3inverse(&Tmp, &Chad_Inv)) return FALSE;
+
+    _cmsVEC3init(&ConeSourceXYZ, SourceWhitePoint -> X,
+                             SourceWhitePoint -> Y,
+                             SourceWhitePoint -> Z);
+
+    _cmsVEC3init(&ConeDestXYZ,   DestWhitePoint -> X,
+                             DestWhitePoint -> Y,
+                             DestWhitePoint -> Z);
+
+    _cmsMAT3eval(&ConeSourceRGB, Chad, &ConeSourceXYZ);
+    _cmsMAT3eval(&ConeDestRGB,   Chad, &ConeDestXYZ);
+
+    // Build matrix
+    _cmsVEC3init(&Cone.v[0], ConeDestRGB.n[0]/ConeSourceRGB.n[0],    0.0,  0.0);
+    _cmsVEC3init(&Cone.v[1], 0.0,   ConeDestRGB.n[1]/ConeSourceRGB.n[1],   0.0);
+    _cmsVEC3init(&Cone.v[2], 0.0,   0.0,   ConeDestRGB.n[2]/ConeSourceRGB.n[2]);
+
+
+    // Normalize
+    _cmsMAT3per(&Tmp, &Cone, Chad);
+    _cmsMAT3per(Conversion, &Chad_Inv, &Tmp);
+
+    return TRUE;
+}
+
+// Returns the final chrmatic adaptation from illuminant FromIll to Illuminant ToIll
+// The cone matrix can be specified in ConeMatrix. If NULL, Bradford is assumed
+cmsBool  _cmsAdaptationMatrix(cmsMAT3* r, const cmsMAT3* ConeMatrix, const cmsCIEXYZ* FromIll, const cmsCIEXYZ* ToIll)
+{
+    cmsMAT3 LamRigg   = {{ // Bradford matrix
+        {{  0.8951,  0.2664, -0.1614 }},
+        {{ -0.7502,  1.7135,  0.0367 }},
+        {{  0.0389, -0.0685,  1.0296 }}
+    }};
+
+    if (ConeMatrix == NULL)
+        ConeMatrix = &LamRigg;
+
+    return ComputeChromaticAdaptation(r, FromIll, ToIll, ConeMatrix);
+}
+
+// Same as anterior, but assuming D50 destination. White point is given in xyY
+static
+cmsBool _cmsAdaptMatrixToD50(cmsMAT3* r, const cmsCIExyY* SourceWhitePt)
+{
+    cmsCIEXYZ Dn;
+    cmsMAT3 Bradford;
+    cmsMAT3 Tmp;
+
+    cmsxyY2XYZ(&Dn, SourceWhitePt);
+
+    if (!_cmsAdaptationMatrix(&Bradford, NULL, &Dn, cmsD50_XYZ())) return FALSE;
+
+    Tmp = *r;
+    _cmsMAT3per(r, &Bradford, &Tmp);
+
+    return TRUE;
+}
+
+// Build a White point, primary chromas transfer matrix from RGB to CIE XYZ
+// This is just an approximation, I am not handling all the non-linear
+// aspects of the RGB to XYZ process, and assumming that the gamma correction
+// has transitive property in the tranformation chain.
+//
+// the alghoritm:
+//
+//            - First I build the absolute conversion matrix using
+//              primaries in XYZ. This matrix is next inverted
+//            - Then I eval the source white point across this matrix
+//              obtaining the coeficients of the transformation
+//            - Then, I apply these coeficients to the original matrix
+//
+cmsBool _cmsBuildRGB2XYZtransferMatrix(cmsMAT3* r, const cmsCIExyY* WhitePt, const cmsCIExyYTRIPLE* Primrs)
+{
+    cmsVEC3 WhitePoint, Coef;
+    cmsMAT3 Result, Primaries;
+    cmsFloat64Number xn, yn;
+    cmsFloat64Number xr, yr;
+    cmsFloat64Number xg, yg;
+    cmsFloat64Number xb, yb;
+
+    xn = WhitePt -> x;
+    yn = WhitePt -> y;
+    xr = Primrs -> Red.x;
+    yr = Primrs -> Red.y;
+    xg = Primrs -> Green.x;
+    yg = Primrs -> Green.y;
+    xb = Primrs -> Blue.x;
+    yb = Primrs -> Blue.y;
+
+    // Build Primaries matrix
+    _cmsVEC3init(&Primaries.v[0], xr,        xg,         xb);
+    _cmsVEC3init(&Primaries.v[1], yr,        yg,         yb);
+    _cmsVEC3init(&Primaries.v[2], (1-xr-yr), (1-xg-yg),  (1-xb-yb));
+
+
+    // Result = Primaries ^ (-1) inverse matrix
+    if (!_cmsMAT3inverse(&Primaries, &Result))
+        return FALSE;
+
+
+    _cmsVEC3init(&WhitePoint, xn/yn, 1.0, (1.0-xn-yn)/yn);
+
+    // Across inverse primaries ...
+    _cmsMAT3eval(&Coef, &Result, &WhitePoint);
+
+    // Give us the Coefs, then I build transformation matrix
+    _cmsVEC3init(&r -> v[0], Coef.n[VX]*xr,          Coef.n[VY]*xg,          Coef.n[VZ]*xb);
+    _cmsVEC3init(&r -> v[1], Coef.n[VX]*yr,          Coef.n[VY]*yg,          Coef.n[VZ]*yb);
+    _cmsVEC3init(&r -> v[2], Coef.n[VX]*(1.0-xr-yr), Coef.n[VY]*(1.0-xg-yg), Coef.n[VZ]*(1.0-xb-yb));
+
+
+    return _cmsAdaptMatrixToD50(r, WhitePt);
+
+}
+
+
+
+
+// WAS: Same as anterior, but assuming D50 source. White point is given in xyY
+static
+cmsBool cmsAdaptMatrixFromD50(cmsMAT3* r, const cmsCIExyY* DestWhitePt)
+{
+    cmsCIEXYZ Dn;
+    cmsMAT3 Bradford;
+    cmsMAT3 Tmp;
+
+    cmsxyY2XYZ(&Dn, DestWhitePt);
+
+    if (!_cmsAdaptationMatrix(&Bradford, NULL, &Dn, cmsD50_XYZ())) return FALSE;
+
+    Tmp = *r;
+    _cmsMAT3per(r, &Bradford, &Tmp);
+
+    return TRUE;
+}
+
+
+////////////////////////////////////////////////////
 
 LCMSAPI int    LCMSEXPORT dkCmsErrorAction(int nAction)
 {
-    // TODO: there is error logging
+    // TODO: Where is error logging?
     return 0;
 }
 
 LCMSAPI DWORD  LCMSEXPORT dkCmsGetProfileICCversion(cmsHPROFILE hProfile)
 {
-    // ./libs/widgets/iccprofiles/iccprofilewidget.cpp
-    // metaDataMap.insert("Icc.Header.ProfileVersion", QString::number((uint)cmsGetProfileICCversion(hProfile)));
-    return 0;
+    return (DWORD) cmsGetEncodedICCversion(hProfile);
 }
 
 LCMSEXPORT void dkCmsSetAlarmCodes(int r, int g, int b)
@@ -49,98 +272,118 @@ LCMSEXPORT void dkCmsSetAlarmCodes(int r, int g, int b)
     NewAlarm[1] = (cmsUInt16Number)g;
     NewAlarm[2] = (cmsUInt16Number)b;
     cmsSetAlarmCodes(NewAlarm);
-    //void cmsSetAlarmCodes(cmsUInt16Number NewAlarm[cmsMAXCHANNELS]);
 }
 
-LCMSAPI const char*   LCMSEXPORT dkCmsTakeProductName(cmsHPROFILE hProfile)
+LCMSAPI QString        LCMSEXPORT dkCmsTakeProductName(cmsHPROFILE hProfile)
 {
-    //static char Name[LCMS_DESC_MAX*2+4];
-    static char Name[1];
-    Name[0] = '\0';
-    return Name;
+    char buffer[1024];
+    const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigCrdInfoTag);
+    if (mlu == NULL) return QString();
+    cmsMLUgetASCII(mlu, "PS", "nm", buffer, 1024);
+    return QString(buffer);
 }
 
-LCMSAPI const char*   LCMSEXPORT dkCmsTakeProductDesc(cmsHPROFILE hProfile)
+LCMSAPI const char*    LCMSEXPORT dkCmsTakeProductDesc(cmsHPROFILE hProfile)
 {
+    // TODO: What I'm supposed to use here??
     static char ret[1]; ret[0] = '\0'; return ret;
 }
 
-LCMSAPI const char*   LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
+LCMSAPI QString        LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
 {
-    static char ret[1]; ret[0] = '\0'; return ret;
+    char buffer[1024];
+    cmsGetProfileInfoASCII(hProfile, cmsInfoDescription, "en", "US", buffer, 1024);
+    return QString(buffer);
 }
 
-LCMSAPI const char*   LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
+LCMSAPI QString        LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
 {
-    static char ret[1]; ret[0] = '\0'; return ret;
+    char buffer[1024];
+    cmsGetProfileInfoASCII(hProfile, cmsInfoManufacturer, "en", "US", buffer, 1024);
+    return QString(buffer);
 }
 
 LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile)
 {
-    //TODO:
-    return FALSE;
+    Dest = (LPcmsCIEXYZ)cmsReadTag(hProfile, cmsSigMediaWhitePointTag);
+    return (Dest != NULL);
 }
 
-LCMSAPI const char*   LCMSEXPORT dkCmsTakeModel(cmsHPROFILE hProfile)
+LCMSAPI QString       LCMSEXPORT dkCmsTakeModel(cmsHPROFILE hProfile)
 {
-    static char ret[1]; ret[0] = '\0'; return ret;
+    char buffer[1024];
+    const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigDeviceModelDescTag);
+    if (mlu == NULL) return QString();
+    cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
+    return QString(buffer);
 }
 
-LCMSAPI const char*   LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
+LCMSAPI QString        LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
 {
-    static char ret[1]; ret[0] = '\0'; return ret;
+    char buffer[1024];
+    const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigCopyrightTag);
+    if (mlu == NULL) return QString();
+    cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
+    return QString(buffer);
 }
 
 
 LCMSAPI DWORD         LCMSEXPORT dkCmsTakeHeaderFlags(cmsHPROFILE hProfile)
 {
-    //TODO: LPLCMSICCPROFILE  Icc = (LPLCMSICCPROFILE) hProfile;
-    return (DWORD) 0;
+    return (DWORD) cmsGetHeaderFlags(hProfile);
 }
 
 LCMSAPI const BYTE*   LCMSEXPORT dkCmsTakeProfileID(cmsHPROFILE hProfile)
 {
-    const BYTE* ret = new BYTE(0);
-    return ret;
-}
-
-LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeCreationDateTime(struct tm* Dest, cmsHPROFILE hProfile)
-{
-    //TODO: Dest = ???;
-    return FALSE;
-}
-
-LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeCalibrationDateTime(struct tm* Dest, cmsHPROFILE hProfile)
-{
-    //TODO: Dest = ???;
-    return FALSE;
+    cmsUInt8Number* ProfileID = new cmsUInt8Number();
+    cmsGetHeaderProfileID(hProfile, ProfileID);
+    return (BYTE*) ProfileID;
 }
 
 LCMSAPI int           LCMSEXPORT dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
 {
-    //TODO: return (int) Icc -> RenderingIntent;
-    return 0;
+    return (int) cmsGetHeaderRenderingIntent(hProfile);
 }
 
-LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeCharTargetData(cmsHPROFILE hProfile, char** Data, size_t* len)
-{
-    *Data = NULL;
-    *len  = 0;
-    //TODO: Data = ???;
-    //TODO: len = ???;
-    return FALSE;
-}
-
+// White Point & Primary chromas handling
+// Returns the final chrmatic adaptation from illuminant FromIll to Illuminant ToIll
+// The cone matrix can be specified in ConeMatrix.
+// If NULL, assuming D50 source. White point is given in xyY
 LCMSBOOL dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt)
 {
-    // FIXME:
-    return FALSE;
+    // TODO: all based on private stuff, need to understand what digikam do in cietonguewidget with dkCmsAdaptMatrixFromD50
+    //return TRUE;
+    return cmsAdaptMatrixFromD50((cmsMAT3*) r, (const cmsCIExyY*) DestWhitePt);
 }
+
+cmsBool GetProfileRGBPrimaries(cmsHPROFILE hProfile,
+                               cmsCIEXYZTRIPLE *result,
+                               cmsUInt32Number intent)
+{
+    cmsHPROFILE hXYZ;
+    cmsHTRANSFORM hTransform;
+    cmsFloat64Number rgb[3][3] = {{1., 0., 0.},
+                                  {0., 1., 0.},
+                                  {0., 0., 1.}};
+
+    hXYZ = cmsCreateXYZProfile();
+    if (hXYZ == NULL) return FALSE;
+    hTransform = cmsCreateTransform(hProfile, TYPE_RGB_DBL, hXYZ, TYPE_XYZ_DBL,
+        intent, cmsFLAGS_NOCACHE | cmsFLAGS_NOOPTIMIZE);
+    cmsCloseProfile(hXYZ);
+    if (hTransform == NULL) return FALSE;
+
+    cmsDoTransform(hTransform, rgb, result, 3);
+    cmsDeleteTransform(hTransform);
+    return TRUE;
+}
+
 
 LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
 {
-    // FIXME:
-    return FALSE;
+    // See README @ Monday, July 27, 2009 @ Less is more
+    // The example seem to be wrong, let's see if this one work
+    return (LCMSBOOL) GetProfileRGBPrimaries(hProfile, r, INTENT_RELATIVE_COLORIMETRIC);
 }
 
 LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize)
