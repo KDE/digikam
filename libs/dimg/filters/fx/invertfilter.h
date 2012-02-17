@@ -42,7 +42,7 @@ public:
     explicit InvertFilter(DImg* orgImage, QObject* parent=0);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
-    explicit InvertFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
+    explicit InvertFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, DImg& destImage,
                           int progressBegin=0, int progressEnd=100);
 
     ~InvertFilter();
