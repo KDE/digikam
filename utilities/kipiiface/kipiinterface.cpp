@@ -235,7 +235,7 @@ bool KipiInterface::addImage(const KUrl& url, QString& errmsg)
 
     if ( url.isValid() == false )
     {
-        errmsg = i18n("Target URL %1 is not valid.",url.toLocalFile());
+        errmsg = i18n("Target URL %1 is not valid.", url.toLocalFile());
         return false;
     }
 
@@ -435,24 +435,27 @@ void KipiInterface::progressCompleted(const QString& id)
     }
 }
 
+// ---------------------------------------------------------------------------------------
+
 class KipiInterfaceFileReadWriteLock : public KIPI::FileReadWriteLock
 {
 public:
 
     KipiInterfaceFileReadWriteLock(const QString& filePath) : key(filePath) {}
     ~KipiInterfaceFileReadWriteLock() {}
-    void lockForRead() { key.lockForRead(); }
-    void lockForWrite() { key.lockForWrite(); }
-    bool tryLockForRead() { return key.tryLockForRead(); }
-    bool tryLockForRead(int timeout) { return key.tryLockForRead(timeout); }
-    bool tryLockForWrite() { return key.tryLockForWrite(); }
+
+    void lockForRead()                { key.lockForRead();                   }
+    void lockForWrite()               { key.lockForWrite();                  }
+    bool tryLockForRead()             { return key.tryLockForRead();         }
+    bool tryLockForRead(int timeout)  { return key.tryLockForRead(timeout);  }
+    bool tryLockForWrite()            { return key.tryLockForWrite();        }
     bool tryLockForWrite(int timeout) { return key.tryLockForWrite(timeout); }
-    void unlock() { key.unlock(); }
+    void unlock()                     { key.unlock();                        }
 
     FileReadWriteLockKey key;
 };
 
-KIPI::FileReadWriteLock* KipiInterface::createReadWriteLock(const KUrl& url)
+KIPI::FileReadWriteLock* KipiInterface::createReadWriteLock(const KUrl& url) const
 {
     return new KipiInterfaceFileReadWriteLock(url.toLocalFile());
 }
