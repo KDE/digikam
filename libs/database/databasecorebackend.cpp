@@ -1622,4 +1622,17 @@ QString DatabaseCoreBackend::lastError()
     return d->databaseForThread().lastError().text();
 }
 
+int DatabaseCoreBackend::maximumBoundValues() const
+{
+    Q_D(const DatabaseCoreBackend);
+    if (d->parameters.isSQLite())
+    {
+        return 999; // SQLITE_MAX_VARIABLE_NUMBER
+    }
+    else
+    {
+        return 65535; // MySQL
+    }
+}
+
 }  // namespace Digikam
