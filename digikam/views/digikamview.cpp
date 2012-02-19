@@ -502,10 +502,6 @@ void DigikamView::setupConnections()
 
     // -- FileActionMngr progress ---------------
 
-
-    connect(FileActionMngr::instance(), SIGNAL(signalProgressScheduled()),
-            this, SLOT(slotInitProgressIndicator()));
-
     connect(FileActionMngr::instance(), SIGNAL(signalImageChangeFailed(QString, QStringList)),
             this, SLOT(slotImageChangeFailed(QString, QStringList)));
 
@@ -1881,23 +1877,6 @@ void DigikamView::slotImageExifOrientation(int orientation)
 void DigikamView::imageTransform(KExiv2Iface::RotationMatrix::TransformationAction transform)
 {
     FileActionMngr::instance()->transform(d->iconView->selectedImageInfos(), transform);
-}
-
-void DigikamView::slotInitProgressIndicator()
-{
-    if (!ProgressManager::instance()->findItembyId("FileActionProgress"))
-    {
-        FileActionProgress* item = new FileActionProgress("FileActionProgress");
-
-        connect(FileActionMngr::instance(), SIGNAL(signalProgressMessageChanged(QString)),
-                item, SLOT(slotProgressStatus(QString)));
-
-        connect(FileActionMngr::instance(), SIGNAL(signalProgressValueChanged(float)),
-                item, SLOT(slotProgressValue(float)));
-
-        connect(FileActionMngr::instance(), SIGNAL(signalProgressFinished()),
-                item, SLOT(slotCompleted()));
-    }
 }
 
 }  // namespace Digikam
