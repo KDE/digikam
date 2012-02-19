@@ -414,6 +414,11 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotTransactionCompleted(ProgressItem* item);
+    void slotTransactionCompletedDeferred(ProgressItem* item);
+
+signals:
+
+    void completeTransactionDeferred(ProgressItem* item);
 
 private:
 

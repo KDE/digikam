@@ -26,9 +26,11 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QAtomicInt>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QThread>
 
 // KDE includes
 
@@ -108,7 +110,6 @@ void ProgressItem::setComplete()
             setProgress( 100 );
         }
         emit progressItemCompleted( this );
-        deleteLater();
     }
     else
     {
@@ -129,7 +130,6 @@ void ProgressItem::removeChild(ProgressItem* kiddo)
     if (d->children.count() == 0 && d->waitingForKids)
     {
         emit progressItemCompleted(this);
-        deleteLater();
     }
 }
 
@@ -209,7 +209,6 @@ void ProgressItem::reset()
 void ProgressItem::setProgress(unsigned int v)
 {
     d->progress.fetchAndStoreOrdered(v);
-    kDebug() << "progress is" << d->progress;
     emit progressItemProgress(this, v);
 }
 
@@ -369,6 +368,11 @@ void ProgressManager::ProgressManagerPriv::removeItem(ProgressItem* t)
 ProgressManager::ProgressManager()
     : d(new ProgressManagerPriv)
 {
+    if (thread() != QApplication::instance()->thread())
+    {
+        kWarning() << "Attention: ProgressManager was created from a thread. Create it in the main thread!";
+        moveToThread(QApplication::instance()->thread());
+    }
 }
 
 ProgressManager::~ProgressManager()
@@ -448,8 +452,23 @@ bool ProgressManager::addProgressItem(ProgressItem* t, ProgressItem* parent)
 
 void ProgressManager::addProgressItemImpl(ProgressItem* t, ProgressItem* parent)
 {
+    if (t->thread() != thread())
+    {
+        if (t->thread() != QThread::currentThread())
+        {
+            // we cannot moveToThread this item living in a third thread. Refusing to add.
+            kError() << "Refusing to add in thread 1 a ProgressItem created in thread 2 to ProgressManager, living in thread 3";
+            return;
+        }
+        // Move to ProgressManager's thread
+        t->moveToThread(thread());
+    }
+
     connect(t, SIGNAL(progressItemCompleted(ProgressItem*)),
             this, SLOT(slotTransactionCompleted(ProgressItem*)), Qt::DirectConnection);
+
+    connect(this, SIGNAL(completeTransactionDeferred(ProgressItem*)),
+            this, SLOT(slotTransactionCompletedDeferred(ProgressItem*)));
 
     connect(t, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)),
             this, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)));
@@ -473,7 +492,6 @@ void ProgressManager::addProgressItemImpl(ProgressItem* t, ProgressItem* parent)
             this, SIGNAL(progressItemThumbnail(ProgressItem*, const QPixmap&)));
 
     d->addItem(t, parent);
-    kDebug() << "added item" << t;
 
     emit progressItemAdded(t);
 }
@@ -490,7 +508,14 @@ void ProgressManager::slotTransactionCompleted(ProgressItem* item)
         return;
     }
     d->removeItem(item);
+    // move to UI thread
+    emit completeTransactionDeferred(item);
+}
+
+void ProgressManager::slotTransactionCompletedDeferred(ProgressItem* item)
+{
     emit progressItemCompleted(item);
+    item->deleteLater();
 }
 
 void ProgressManager::slotStandardCancelHandler(ProgressItem* item)
