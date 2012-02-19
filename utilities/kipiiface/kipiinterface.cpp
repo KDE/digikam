@@ -205,7 +205,6 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
     {
         ScanController::instance()->scheduleCollectionScan(dir);
     }
-
 }
 
 int KipiInterface::features() const
@@ -281,7 +280,7 @@ void KipiInterface::slotSelectionChanged(int count)
     emit selectionChanged(count);
 }
 
-void KipiInterface::slotCurrentAlbumChanged( Album* album )
+void KipiInterface::slotCurrentAlbumChanged(Album* album)
 {
     emit currentAlbumChanged( album != 0 );
 }
