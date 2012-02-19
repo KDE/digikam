@@ -43,6 +43,7 @@ namespace Digikam
 
 void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList infos, int orientation)
 {
+    kDebug() << infos.size();
     QStringList failedItems;
 
     foreach(const ImageInfo& info, infos)
@@ -66,6 +67,7 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList i
         }
 
         infos.writtenToOne();
+        kDebug() << "writtenToOne";
     }
 
     if (!failedItems.isEmpty())
@@ -73,6 +75,7 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList i
         emit imageChangeFailed(i18n("Failed to revise Exif orientation these files:"), failedItems);
     }
 
+    kDebug() << "calling finishedWriting";
     infos.finishedWriting();
 }
 
@@ -106,6 +109,7 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
 
 void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, MetadataHub* hub)
 {
+    kDebug() << "writeMetadata" << infos.size();
     d->startingToWrite(infos);
 
     MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();

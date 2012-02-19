@@ -218,13 +218,11 @@ void FileActionMngrPrivProgressItemCreator::addProgressItem(ProgressItem* item)
             Qt::DirectConnection
            );
     ProgressManager::addProgressItem(item);
-    kDebug() << "active items" << activeProgressItems;
 }
 
 void FileActionMngrPrivProgressItemCreator::slotProgressItemCompleted()
 {
     activeProgressItems.deref();
-    kDebug() << "active items" << activeProgressItems;
 }
 
 /*

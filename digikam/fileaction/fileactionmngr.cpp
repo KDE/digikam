@@ -69,15 +69,6 @@ FileActionMngr::FileActionMngr()
     qRegisterMetaType<MetadataHub*>("MetadataHub*");
     qRegisterMetaType<FileActionImageInfoList>("FileActionImageInfoList");
 
-    connect(d, SIGNAL(signalProgressMessageChanged(QString)),
-            this, SIGNAL(signalProgressMessageChanged(QString)));
-
-    connect(d, SIGNAL(signalProgressValueChanged(float)),
-            this, SIGNAL(signalProgressValueChanged(float)));
-
-    connect(d, SIGNAL(signalProgressFinished()),
-            this, SIGNAL(signalProgressFinished()));
-
     connect(d->fileWorker, SIGNAL(imageChangeFailed(QString, QStringList)),
             this, SIGNAL(signalImageChangeFailed(QString, QStringList)));
 }
@@ -252,14 +243,16 @@ void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const Metadata
 {
     FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
     taskList.schedulingForDB(i18n("Applying metadata"), d->dbProgressCreator());
-    d->applyMetadata(taskList, new MetadataHubOnTheRoad(hub, this));
+    // create hub parent-less, we will need to clone() it in a thread,
+    // and that does not work with parent in a different thread
+    d->applyMetadata(taskList, new MetadataHubOnTheRoad(hub));
 }
 
 void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad& hub)
 {
     FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
     taskList.schedulingForDB(i18n("Applying metadata"), d->dbProgressCreator());
-    d->applyMetadata(taskList, new MetadataHubOnTheRoad(hub, this));
+    d->applyMetadata(taskList, new MetadataHubOnTheRoad(hub));
 }
 
 void FileActionMngr::transform(const QList<ImageInfo>& infos, KExiv2Iface::RotationMatrix::TransformationAction action)

@@ -52,13 +52,11 @@ void TwoProgressItemsContainer::createProgressItem(QAtomicPointer<ProgressItem>&
 
 void TwoProgressItemsContainer::checkFinish(QAtomicPointer<ProgressItem>& ptr)
 {
-    kDebug() << ptr->totalItems() << ptr->completedItems();
     if (ptr->totalCompleted())
     {
         ProgressItem* item = ptr;
         if (item && ptr.testAndSetOrdered(item, 0))
         {
-            kDebug() << "Setting item complete";
             item->setComplete();
         }
     }
@@ -66,7 +64,6 @@ void TwoProgressItemsContainer::checkFinish(QAtomicPointer<ProgressItem>& ptr)
 
 void FileActionProgressItemContainer::schedulingForDB(int numberOfInfos, const QString& action, FileActionProgressItemCreator* creator)
 {
-    kDebug() << numberOfInfos << action;
     createFirstItem(action, creator);
     firstItem->incTotalItems(numberOfInfos);
 }
@@ -79,12 +76,10 @@ void FileActionProgressItemContainer::dbProcessed(int numberOfInfos)
 void FileActionProgressItemContainer::dbFinished()
 {
     checkFinish(firstItem);
-    kDebug() << "checked db";
 }
 
 void FileActionProgressItemContainer::schedulingForWrite(int numberOfInfos, const QString& action, FileActionProgressItemCreator* creator)
 {
-    kDebug() << numberOfInfos << action;
     createSecondItem(action, creator);
     secondItem->incTotalItems(numberOfInfos);
 }
@@ -97,7 +92,6 @@ void FileActionProgressItemContainer::written(int numberOfInfos)
 void FileActionProgressItemContainer::finishedWriting()
 {
     checkFinish(secondItem);
-    kDebug() << "checked writing";
 }
 
 FileActionImageInfoList FileActionImageInfoList::create(const QList<ImageInfo>& infos)
