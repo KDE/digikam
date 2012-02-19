@@ -53,6 +53,7 @@
 #include "digikamapp.h"
 #include "digikamview.h"
 #include "loadingcacheinterface.h"
+#include "filereadwritelock.h"
 #include "scancontroller.h"
 #include "imageattributeswatch.h"
 #include "thumbnailsize.h"
@@ -221,7 +222,7 @@ int KipiInterface::features() const
          | KIPI::HostSupportsThumbnails
          | KIPI::HostSupportsProgressBar
 #if KIPI_VERSION >= 0x010500
-         | KIPI::HostSupportsItemLock
+         | KIPI::HostSupportsReadWriteLock
          | KIPI::HostSupportsPickLabel
          | KIPI::HostSupportsColorLabel
 #endif // KIPI_VERSION >= 0x010500
@@ -432,6 +433,28 @@ void KipiInterface::progressCompleted(const QString& id)
     {
         item->setComplete();
     }
+}
+
+class KipiInterfaceFileReadWriteLock : public KIPI::FileReadWriteLock
+{
+public:
+
+    KipiInterfaceFileReadWriteLock(const QString& filePath) : key(filePath) {}
+    ~KipiInterfaceFileReadWriteLock() {}
+    void lockForRead() { key.lockForRead(); }
+    void lockForWrite() { key.lockForWrite(); }
+    bool tryLockForRead() { return key.tryLockForRead(); }
+    bool tryLockForRead(int timeout) { return key.tryLockForRead(timeout); }
+    bool tryLockForWrite() { return key.tryLockForWrite(); }
+    bool tryLockForWrite(int timeout) { return key.tryLockForWrite(timeout); }
+    void unlock() { key.unlock(); }
+
+    FileReadWriteLockKey key;
+};
+
+KIPI::FileReadWriteLock* KipiInterface::createReadWriteLock(const KUrl& url)
+{
+    return new KipiInterfaceFileReadWriteLock(url.toLocalFile());
 }
 
 #endif // KIPI_VERSION >= 0x010500
