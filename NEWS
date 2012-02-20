@@ -67,5 +67,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 049 ==> 282907 : No items are displayed when I enable 'Include Album Sub-Tree' in a folder containing one image and many folders.
 050 ==> 294458 : Std namespace issue in libkface [patch].
 051 ==> 286127 : Resize tool in digikam corrupt transparencies on png files.
-052 ==>
+052 ==> 294423 : Build error under Solaris [patch].
+053 ==> 
+
 
