@@ -416,7 +416,31 @@ LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
     LCMSBOOL ret;
 
     // See README @ Monday, July 27, 2009 @ Less is more
-    return (LCMSBOOL) GetProfileRGBPrimaries(hProfile, r, INTENT_RELATIVE_COLORIMETRIC);
+    // return static_cast<LCMSBOOL>( GetProfileRGBPrimaries(hProfile, r, INTENT_RELATIVE_COLORIMETRIC) );
+
+    result.Red.X   = static_cast<double>(r->Red.X)  ;
+    result.Red.Y   = static_cast<double>(r->Red.Y)  ;
+    result.Red.Z   = static_cast<double>(r->Red.Z)  ;
+    result.Green.X = static_cast<double>(r->Green.X);
+    result.Green.Y = static_cast<double>(r->Green.Y);
+    result.Green.Z = static_cast<double>(r->Green.Z);
+    result.Blue.X  = static_cast<double>(r->Blue.X) ;
+    result.Blue.Y  = static_cast<double>(r->Blue.Y) ;
+    result.Blue.Z  = static_cast<double>(r->Blue.Z) ;
+
+    ret = GetProfileRGBPrimaries(hProfile, &result, INTENT_RELATIVE_COLORIMETRIC);
+
+    r->Red.X   = result.Red.X;
+    r->Red.Y   = result.Green.X;
+    r->Red.Z   = result.Blue.X;
+    r->Green.X = result.Red.Y;
+    r->Green.Y = result.Green.Y;
+    r->Green.Z = result.Blue.Y;
+    r->Blue.X  = result.Red.Z;
+    r->Blue.Y  = result.Green.Z;
+    r->Blue.Z  = result.Blue.Z;
+
+    return ret;
 }
 
 LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize)
