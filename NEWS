@@ -65,5 +65,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 237552 : Thumbnails generation process for selected images only.
 048 ==> 231777 : Scrolling in Albumview should be smoothed.
 049 ==> 282907 : No items are displayed when I enable 'Include Album Sub-Tree' in a folder containing one image and many folders.
-050 ==> 
+050 ==> 294458 : Std namespace issue in libkface [patch].
+051 ==> 
 
