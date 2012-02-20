@@ -37,6 +37,7 @@
 // Local includes
 
 #include "databasefields.h"
+#include "globals.h"
 #include "imageinfo.h"
 #include "tagscache.h"
 #include "versionmanagersettings.h"
@@ -270,6 +271,32 @@ void ImageFilterSettings::setIdWhitelist(const QList<qlonglong>& idList, const Q
     }
 }
 
+template <class ContainerA, class ContainerB>
+bool containsAnyOf(const ContainerA& listA, const ContainerB& listB)
+{
+    foreach (const typename ContainerA::value_type& a, listA)
+    {
+        if (listB.contains(a))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+template <class ContainerA, typename Value, class ContainerB>
+bool containsNoneOfExcept(const ContainerA& list, const ContainerB& noneOfList, const Value& exception)
+{
+    foreach (const typename ContainerB::value_type& n, noneOfList)
+    {
+        if (n != exception && list.contains(n))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 {
     if (foundText)
@@ -346,16 +373,21 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
     if (!m_pickLabelTagFilter.isEmpty())
     {
-        bool matchPL      = false;
         QList<int> tagIds = info.tagIds();
+        bool matchPL = false;
 
-        for (QList<int>::const_iterator it = m_pickLabelTagFilter.begin();
-             it != m_pickLabelTagFilter.end(); ++it)
+        if (containsAnyOf(m_pickLabelTagFilter, tagIds))
         {
-            if (tagIds.contains(*it))
+            matchPL = true;
+        }
+        else if (!matchPL)
+        {
+            int noPickLabelTagId = TagsCache::instance()->tagForPickLabel(NoPickLabel);
+            if (m_pickLabelTagFilter.contains(noPickLabelTagId))
             {
-                matchPL = true;
-                break;
+                // Searching for "has no ColorLabel" requires special handling:
+                // Scan that the tag ids contains none of the ColorLabel tags, except maybe the NoColorLabel tag
+                matchPL = containsNoneOfExcept(tagIds, TagsCache::instance()->pickLabelTags(), noPickLabelTagId);
             }
         }
 
@@ -366,16 +398,21 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
     if (!m_colorLabelTagFilter.isEmpty())
     {
-        bool matchCL      = false;
         QList<int> tagIds = info.tagIds();
+        bool matchCL = false;
 
-        for (QList<int>::const_iterator it = m_colorLabelTagFilter.begin();
-             it != m_colorLabelTagFilter.end(); ++it)
+        if (containsAnyOf(m_colorLabelTagFilter, tagIds))
         {
-            if (tagIds.contains(*it))
+            matchCL = true;
+        }
+        else if (!matchCL)
+        {
+            int noColorLabelTagId = TagsCache::instance()->tagForColorLabel(NoColorLabel);
+            if (m_colorLabelTagFilter.contains(noColorLabelTagId))
             {
-                matchCL = true;
-                break;
+                // Searching for "has no ColorLabel" requires special handling:
+                // Scan that the tag ids contains none of the ColorLabel tags, except maybe the NoColorLabel tag
+                matchCL = containsNoneOfExcept(tagIds, TagsCache::instance()->colorLabelTags(), noColorLabelTagId);
             }
         }
 
