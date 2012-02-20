@@ -553,20 +553,20 @@ void IccManager::transformToSRGB(QImage& qimage, const IccProfile& input)
     }
 }
 
-void IccManager::transformForDisplay(QImage& qimage, const IccProfile& displayProfile)
+void IccManager::transformForDisplay(QImage& qimage, const IccProfile& displayProfile1)
 {
     if (qimage.isNull())
     {
         return;
     }
 
-    if (displayProfile.isNull())
+    if (displayProfile1.isNull())
     {
         return;
     }
 
     IccProfile inputProfile = IccProfile::sRGB();
-    IccProfile outputProfile(displayProfile);
+    IccProfile outputProfile(displayProfile1);
 
     if (!inputProfile.isSameProfileAs(outputProfile))
     {

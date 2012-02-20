@@ -22,6 +22,8 @@
  * ============================================================ */
 
 #include <config-digikam.h>
+#include <kdebug.h>
+
 
 #if defined(USE_LCMS_VERSION_2000)
 
@@ -306,7 +308,7 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
 LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile)
 {
 
-  LPcmsCIEXYZ tag = (LPcmsCIEXYZ)cmsReadTag(hProfile, cmsSigMediaWhitePointTag);
+  LPcmsCIEXYZ tag = static_cast<LPcmsCIEXYZ>( cmsReadTag(hProfile, cmsSigMediaWhitePointTag) );
   if (tag == NULL) return FALSE;
 
   *Dest = *tag;
@@ -334,19 +336,19 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
 
 LCMSAPI DWORD         LCMSEXPORT dkCmsTakeHeaderFlags(cmsHPROFILE hProfile)
 {
-    return (DWORD) cmsGetHeaderFlags(hProfile);
+    return static_cast<DWORD>( cmsGetHeaderFlags(hProfile) );
 }
 
 LCMSAPI const BYTE*   LCMSEXPORT dkCmsTakeProfileID(cmsHPROFILE hProfile)
 {
     cmsUInt8Number* ProfileID = new cmsUInt8Number();
     cmsGetHeaderProfileID(hProfile, ProfileID);
-    return (BYTE*) ProfileID;
+    return static_cast<BYTE*>( ProfileID );
 }
 
 LCMSAPI int           LCMSEXPORT dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
 {
-    return (int) cmsGetHeaderRenderingIntent(hProfile);
+    return static_cast<int>( cmsGetHeaderRenderingIntent(hProfile) );
 }
 
 // White Point & Primary chromas handling
@@ -356,8 +358,32 @@ LCMSAPI int           LCMSEXPORT dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
 LCMSBOOL dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt)
 {
     // TODO: all based on private stuff, need to understand what digikam do in cietonguewidget with dkCmsAdaptMatrixFromD50
-    //return TRUE;
-    return cmsAdaptMatrixFromD50((cmsMAT3*) r, (const cmsCIExyY*) DestWhitePt);
+    cmsMAT3 result;
+    bool ret = FALSE;
+
+    result.v[0].n[0] = r->Red.X  ;
+    result.v[0].n[1] = r->Red.Y  ;
+    result.v[0].n[2] = r->Red.Z  ;
+    result.v[1].n[0] = r->Green.X;
+    result.v[1].n[1] = r->Green.Y;
+    result.v[1].n[2] = r->Green.Z;
+    result.v[2].n[0] = r->Blue.X ;
+    result.v[2].n[1] = r->Blue.Y ;
+    result.v[2].n[2] = r->Blue.Z ;
+
+    ret = cmsAdaptMatrixFromD50(&result, static_cast<const cmsCIExyY*>( DestWhitePt ));
+
+    r->Red.X   = result.v[0].n[0];
+    r->Red.Y   = result.v[0].n[1];
+    r->Red.Z   = result.v[0].n[2];
+    r->Green.X = result.v[1].n[0];
+    r->Green.Y = result.v[1].n[1];
+    r->Green.Z = result.v[1].n[2];
+    r->Blue.X  = result.v[2].n[0];
+    r->Blue.Y  = result.v[2].n[1];
+    r->Blue.Z  = result.v[2].n[2];
+
+    return ret;
 }
 
 cmsBool GetProfileRGBPrimaries(cmsHPROFILE hProfile,
@@ -385,24 +411,51 @@ cmsBool GetProfileRGBPrimaries(cmsHPROFILE hProfile,
 
 LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
 {
+
+    MAT3 result;
+    LCMSBOOL ret;
+
     // See README @ Monday, July 27, 2009 @ Less is more
-    // The example seem to be wrong, let's see if this one work
-    return (LCMSBOOL) GetProfileRGBPrimaries(hProfile, r, INTENT_RELATIVE_COLORIMETRIC);
+    // return static_cast<LCMSBOOL>( GetProfileRGBPrimaries(hProfile, r, INTENT_RELATIVE_COLORIMETRIC) );
+
+    result.Red.X   = static_cast<double>(r->Red.X)  ;
+    result.Red.Y   = static_cast<double>(r->Red.Y)  ;
+    result.Red.Z   = static_cast<double>(r->Red.Z)  ;
+    result.Green.X = static_cast<double>(r->Green.X);
+    result.Green.Y = static_cast<double>(r->Green.Y);
+    result.Green.Z = static_cast<double>(r->Green.Z);
+    result.Blue.X  = static_cast<double>(r->Blue.X) ;
+    result.Blue.Y  = static_cast<double>(r->Blue.Y) ;
+    result.Blue.Z  = static_cast<double>(r->Blue.Z) ;
+
+    ret = GetProfileRGBPrimaries(hProfile, &result, INTENT_RELATIVE_COLORIMETRIC);
+
+    r->Red.X   = result.Red.X;
+    r->Red.Y   = result.Green.X;
+    r->Red.Z   = result.Blue.X;
+    r->Green.X = result.Red.Y;
+    r->Green.Y = result.Green.Y;
+    r->Green.Z = result.Blue.Y;
+    r->Blue.X  = result.Red.Z;
+    r->Blue.Y  = result.Green.Z;
+    r->Blue.Z  = result.Blue.Z;
+
+    return ret;
 }
 
 LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize)
 {
-    return cmsOpenProfileFromMem(MemPtr, (cmsUInt32Number) dwSize);
+    return cmsOpenProfileFromMem(MemPtr, static_cast<cmsUInt32Number>( dwSize ));
 }
 
 LCMSAPI icProfileClassSignature LCMSEXPORT dkCmsGetDeviceClass(cmsHPROFILE hProfile)
 {
-    return (icProfileClassSignature) cmsGetDeviceClass(hProfile);
+    return static_cast<icProfileClassSignature>( cmsGetDeviceClass(hProfile) );
 }
 
 LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsCloseProfile(cmsHPROFILE hProfile)
 {
-    return (LCMSBOOL) cmsCloseProfile(hProfile);
+    return static_cast<LCMSBOOL>( cmsCloseProfile(hProfile) );
 }
 
 LCMSAPI cmsHTRANSFORM LCMSEXPORT dkCmsCreateProofingTransform(cmsHPROFILE Input,
@@ -415,13 +468,13 @@ LCMSAPI cmsHTRANSFORM LCMSEXPORT dkCmsCreateProofingTransform(cmsHPROFILE Input,
                                                               DWORD dwFlags)
 {
     return cmsCreateProofingTransform(Input,
-                                      (cmsUInt32Number) InputFormat,
-                                      (cmsHPROFILE) Output,
-                                      (cmsUInt32Number) OutputFormat,
+                                      static_cast<cmsUInt32Number>( InputFormat ),
+                                      static_cast<cmsHPROFILE>( Output ),
+                                      static_cast<cmsUInt32Number>( OutputFormat ),
                                       Proofing,
-                                      (cmsUInt32Number) Intent,
-                                      (cmsUInt32Number) ProofingIntent,
-                                      (cmsUInt32Number) dwFlags);
+                                      static_cast<cmsUInt32Number>( Intent ),
+                                      static_cast<cmsUInt32Number>( ProofingIntent ),
+                                      static_cast<cmsUInt32Number>( dwFlags ));
 }
 
 LCMSAPI cmsHTRANSFORM LCMSEXPORT dkCmsCreateTransform(cmsHPROFILE Input,
@@ -432,11 +485,11 @@ LCMSAPI cmsHTRANSFORM LCMSEXPORT dkCmsCreateTransform(cmsHPROFILE Input,
                                                       DWORD dwFlags)
 {
     return cmsCreateTransform(Input,
-                              (cmsUInt32Number) InputFormat,
+                              static_cast<cmsUInt32Number>( InputFormat ),
                               Output,
-                              (cmsUInt32Number) OutputFormat,
-                              (cmsUInt32Number) Intent,
-                              (cmsUInt32Number) dwFlags);
+                              static_cast<cmsUInt32Number>( OutputFormat ),
+                              static_cast<cmsUInt32Number>( Intent ),
+                              static_cast<cmsUInt32Number>( dwFlags ));
 }
 
 LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsCreateXYZProfile()
@@ -456,7 +509,7 @@ LCMSAPI void         LCMSEXPORT dkCmsDeleteTransform(cmsHTRANSFORM hTransform)
 
 LCMSAPI double        LCMSEXPORT dkCmsDeltaE(LPcmsCIELab Lab1, LPcmsCIELab Lab2)
 {
-    return (double) cmsDeltaE((cmsCIELab*) Lab1, (cmsCIELab*) Lab2);
+    return static_cast<double>( cmsDeltaE(static_cast<cmsCIELab*>( Lab1 ), static_cast<cmsCIELab*>( Lab2 )) );
 }
 
 LCMSAPI void          LCMSEXPORT dkCmsDoTransform(cmsHTRANSFORM Transform,
@@ -465,30 +518,30 @@ LCMSAPI void          LCMSEXPORT dkCmsDoTransform(cmsHTRANSFORM Transform,
                                                   unsigned int Size)
 {
     cmsDoTransform(Transform,
-                   (const void *) InputBuffer,
-                   (void *) OutputBuffer,
-                   (cmsUInt32Number) Size);
+                   static_cast<const void *>( InputBuffer ),
+                   static_cast<void *> ( OutputBuffer ),
+                   static_cast<cmsUInt32Number>( Size ));
 
 }
 
 LCMSAPI void          LCMSEXPORT dkCmsFloat2XYZEncoded(WORD XYZ[3], const cmsCIEXYZ* fXYZ)
 {
-    cmsFloat2XYZEncoded((cmsUInt16Number*) &XYZ[3], (const cmsCIEXYZ*)fXYZ);
+    cmsFloat2XYZEncoded(static_cast<cmsUInt16Number*>( &XYZ[3] ), static_cast<const cmsCIEXYZ*>( fXYZ ));
 }
 
 LCMSAPI icColorSpaceSignature   LCMSEXPORT dkCmsGetColorSpace(cmsHPROFILE hProfile)
 {
-    return (icColorSpaceSignature) cmsGetColorSpace(hProfile);
+    return static_cast<icColorSpaceSignature>( cmsGetColorSpace(hProfile) );
 }
 
 LCMSAPI icColorSpaceSignature   LCMSEXPORT dkCmsGetPCS(cmsHPROFILE hProfile)
 {
-    return (icColorSpaceSignature) cmsGetPCS(hProfile);
+    return static_cast<icColorSpaceSignature>( cmsGetPCS(hProfile) );
 }
 
 LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig)
 {
-    return (LCMSBOOL) cmsIsTag(hProfile, (cmsTagSignature) sig);
+    return static_cast<LCMSBOOL>( cmsIsTag(hProfile, (cmsTagSignature) sig) );
 }
 
 LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsOpenProfileFromFile(const char* ICCProfile, const char* sAccess)
@@ -498,12 +551,12 @@ LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsOpenProfileFromFile(const char* ICCProfile
 
 LCMSAPI void          LCMSEXPORT dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* Source)
 {
-    cmsXYZ2xyY((cmsCIExyY*) Dest, Source);
+    cmsXYZ2xyY(static_cast<cmsCIExyY*>(Dest), Source);
 }
 
 LCMSAPI void          LCMSEXPORT dkCmsXYZEncoded2Float(LPcmsCIEXYZ fxyz, const WORD XYZ[3])
 {
-    cmsXYZEncoded2Float((cmsCIEXYZ*) fxyz, (const cmsUInt16Number*) &XYZ[3]);
+    cmsXYZEncoded2Float(static_cast<cmsCIEXYZ*>(fxyz) , static_cast<const cmsUInt16Number*>(&XYZ[3]));
 }
 
 #endif // defined(USE_LCMS_VERSION_2000)

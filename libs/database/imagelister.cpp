@@ -197,7 +197,7 @@ void ImageLister::listAlbum(ImageListerReceiver* receiver,
         for (int i=0; i<albumIds.size(); i++)
         {
             QString q = query;
-            QList<QVariant> ids = (albumIds.size() <= maxParams) ? ids : albumIds.mid(i, maxParams);
+            QList<QVariant> ids = (albumIds.size() <= maxParams) ? albumIds : albumIds.mid(i, maxParams);
             i += ids.count();
             QList<QVariant> v;
 

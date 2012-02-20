@@ -254,7 +254,6 @@ LCMSAPI int           LCMSEXPORT           dkCmsTakeRenderingIntent(cmsHPROFILE 
 LCMSBOOL                                   dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt);
 
 LCMSBOOL                                   dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile);
-//LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(cmsCIEXYZTRIPLE *r, cmsHPROFILE hProfile);
 
 LCMSAPI cmsHPROFILE   LCMSEXPORT           dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize);
 

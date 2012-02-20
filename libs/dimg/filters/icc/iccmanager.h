@@ -129,7 +129,7 @@ public:
     static void transformToSRGB(QImage& qimage, const IccProfile& inputProfile);
 
     /** Transforms the given QImage from sRGB to given display profile. */
-    static void transformForDisplay(QImage& qimage, const IccProfile& displayProfile = displayProfile());
+    static void transformForDisplay(QImage& qimage, const IccProfile& displayProfile1 = displayProfile());
 
 protected:
 
