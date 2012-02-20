@@ -53,6 +53,7 @@
 #include "digikamapp.h"
 #include "digikamview.h"
 #include "loadingcacheinterface.h"
+#include "filereadwritelock.h"
 #include "scancontroller.h"
 #include "imageattributeswatch.h"
 #include "thumbnailsize.h"
@@ -204,7 +205,6 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
     {
         ScanController::instance()->scheduleCollectionScan(dir);
     }
-
 }
 
 int KipiInterface::features() const
@@ -221,7 +221,7 @@ int KipiInterface::features() const
          | KIPI::HostSupportsThumbnails
          | KIPI::HostSupportsProgressBar
 #if KIPI_VERSION >= 0x010500
-         | KIPI::HostSupportsItemLock
+         | KIPI::HostSupportsReadWriteLock
          | KIPI::HostSupportsPickLabel
          | KIPI::HostSupportsColorLabel
 #endif // KIPI_VERSION >= 0x010500
@@ -234,7 +234,7 @@ bool KipiInterface::addImage(const KUrl& url, QString& errmsg)
 
     if ( url.isValid() == false )
     {
-        errmsg = i18n("Target URL %1 is not valid.",url.toLocalFile());
+        errmsg = i18n("Target URL %1 is not valid.", url.toLocalFile());
         return false;
     }
 
@@ -280,7 +280,7 @@ void KipiInterface::slotSelectionChanged(int count)
     emit selectionChanged(count);
 }
 
-void KipiInterface::slotCurrentAlbumChanged( Album* album )
+void KipiInterface::slotCurrentAlbumChanged(Album* album)
 {
     emit currentAlbumChanged( album != 0 );
 }
@@ -432,6 +432,31 @@ void KipiInterface::progressCompleted(const QString& id)
     {
         item->setComplete();
     }
+}
+
+// ---------------------------------------------------------------------------------------
+
+class KipiInterfaceFileReadWriteLock : public KIPI::FileReadWriteLock
+{
+public:
+
+    KipiInterfaceFileReadWriteLock(const QString& filePath) : key(filePath) {}
+    ~KipiInterfaceFileReadWriteLock() {}
+
+    void lockForRead()                { key.lockForRead();                   }
+    void lockForWrite()               { key.lockForWrite();                  }
+    bool tryLockForRead()             { return key.tryLockForRead();         }
+    bool tryLockForRead(int timeout)  { return key.tryLockForRead(timeout);  }
+    bool tryLockForWrite()            { return key.tryLockForWrite();        }
+    bool tryLockForWrite(int timeout) { return key.tryLockForWrite(timeout); }
+    void unlock()                     { key.unlock();                        }
+
+    FileReadWriteLockKey key;
+};
+
+KIPI::FileReadWriteLock* KipiInterface::createReadWriteLock(const KUrl& url) const
+{
+    return new KipiInterfaceFileReadWriteLock(url.toLocalFile());
 }
 
 #endif // KIPI_VERSION >= 0x010500

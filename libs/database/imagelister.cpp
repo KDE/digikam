@@ -192,11 +192,23 @@ void ImageLister::listAlbum(ImageListerReceiver* receiver,
 
     if (m_recursive)
     {
-        DatabaseAccess access;
-        query += "Images.album IN (";
-        access.db()->addBoundValuePlaceholders(query, albumIds.size());
-        query += ");";
-        access.backend()->execSql(query, albumIds, &values);
+        // SQLite allows no more than 999 parameters
+        const int maxParams = DatabaseAccess().backend()->maximumBoundValues();
+        for (int i=0; i<albumIds.size(); i++)
+        {
+            QString q = query;
+            QList<QVariant> ids = (albumIds.size() <= maxParams) ? ids : albumIds.mid(i, maxParams);
+            i += ids.count();
+            QList<QVariant> v;
+
+            DatabaseAccess access;
+            q += "Images.album IN (";
+            access.db()->addBoundValuePlaceholders(q, ids.size());
+            q += ");";
+            access.backend()->execSql(q, ids, &v);
+
+            values += v;
+        }
     }
     else
     {

@@ -95,6 +95,8 @@ public:
     void    progressStatusChanged(const QString& id, const QString& status);
     void    progressThumbnailChanged(const QString& id, const QPixmap& thumb);
     void    progressCompleted(const QString& id);
+
+    KIPI::FileReadWriteLock* createReadWriteLock(const KUrl& url) const;
 #endif // KIPI_VERSION >= 0x010500
 
 public Q_SLOTS:

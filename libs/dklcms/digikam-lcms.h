@@ -75,7 +75,7 @@
 #if defined(USE_LCMS_VERSION_2000)
 
 #define CMS_USE_CPP_API 1
-#include <lcms2.h> 
+#include <lcms2.h>
 
 #define LCMS_DESC_MAX     512
 
@@ -107,7 +107,7 @@
 
 
 typedef int            LCMSBOOL;
-typedef unsigned char  BYTE, *LPBYTE; 
+typedef unsigned char  BYTE, *LPBYTE;
 typedef unsigned short WORD, *LPWORD;
 typedef unsigned long  DWORD, *LPDWORD;
 typedef void*          LPVOID;
@@ -136,7 +136,7 @@ typedef enum
     icMaxEnumClass                      = 0xFFFFFFFFL
 } icProfileClassSignature;
 
-/* 
+/*
  * Color Space Signatures
  * Note that only icSigXYZData and icSigLabData are valid
  * Profile Connection Spaces (PCSs)
@@ -198,7 +198,7 @@ typedef enum
     icSigMeasurementTag                 = 0x6D656173L,  /* 'meas' */
     icSigMediaBlackPointTag             = 0x626B7074L,  /* 'bkpt' */
     icSigMediaWhitePointTag             = 0x77747074L,  /* 'wtpt' */
-    icSigNamedColorTag                  = 0x6E636f6CL,  /* 'ncol' 
+    icSigNamedColorTag                  = 0x6E636f6CL,  /* 'ncol'
                                                          * OBSOLETE, use ncl2 */
     icSigNamedColor2Tag                 = 0x6E636C32L,  /* 'ncl2' */
     icSigPreview0Tag                    = 0x70726530L,  /* 'pre0' */

@@ -1,3 +1,26 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2012-02-03
+ * Description : wrapper to help on lcms2 porting
+ *
+ * Copyright (C) 2012 by Francesco Riosa <francesco+kde dot pnpitalia dot it>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
 #include <config-digikam.h>
 
 #if defined(USE_LCMS_VERSION_2000)
@@ -17,7 +40,7 @@
 
 #define MATRIX_DET_TOLERANCE    0.0001
 
-// Initiate a vector 
+// Initiate a vector
 void CMSEXPORT _cmsVEC3init(cmsVEC3* r, cmsFloat64Number x, cmsFloat64Number y, cmsFloat64Number z)
 {
     r -> n[VX] = x;
@@ -74,7 +97,7 @@ void CMSEXPORT _cmsMAT3eval(cmsVEC3* r, const cmsMAT3* a, const cmsVEC3* v)
 }
 
 
-// Compute chromatic adaptation matrix using Chad as cone matrix 
+// Compute chromatic adaptation matrix using Chad as cone matrix
 static
 cmsBool ComputeChromaticAdaptation(cmsMAT3* Conversion,
                                 const cmsCIEXYZ* SourceWhitePoint,
@@ -82,7 +105,7 @@ cmsBool ComputeChromaticAdaptation(cmsMAT3* Conversion,
                                 const cmsMAT3* Chad)
 
 {
-      
+
     cmsMAT3 Chad_Inv;
     cmsVEC3 ConeSourceXYZ, ConeSourceRGB;
     cmsVEC3 ConeDestXYZ, ConeDestRGB;
@@ -129,14 +152,14 @@ cmsBool  _cmsAdaptationMatrix(cmsMAT3* r, const cmsMAT3* ConeMatrix, const cmsCI
     if (ConeMatrix == NULL)
         ConeMatrix = &LamRigg;
 
-    return ComputeChromaticAdaptation(r, FromIll, ToIll, ConeMatrix);   
+    return ComputeChromaticAdaptation(r, FromIll, ToIll, ConeMatrix);
 }
 
 // Same as anterior, but assuming D50 destination. White point is given in xyY
 static
 cmsBool _cmsAdaptMatrixToD50(cmsMAT3* r, const cmsCIExyY* SourceWhitePt)
 {
-    cmsCIEXYZ Dn;      
+    cmsCIEXYZ Dn;
     cmsMAT3 Bradford;
     cmsMAT3 Tmp;
 
@@ -204,7 +227,7 @@ cmsBool _cmsBuildRGB2XYZtransferMatrix(cmsMAT3* r, const cmsCIExyY* WhitePt, con
 
 
     return _cmsAdaptMatrixToD50(r, WhitePt);
-    
+
 }
 
 
@@ -214,7 +237,7 @@ cmsBool _cmsBuildRGB2XYZtransferMatrix(cmsMAT3* r, const cmsCIExyY* WhitePt, con
 static
 cmsBool cmsAdaptMatrixFromD50(cmsMAT3* r, const cmsCIExyY* DestWhitePt)
 {
-    cmsCIEXYZ Dn;      
+    cmsCIEXYZ Dn;
     cmsMAT3 Bradford;
     cmsMAT3 Tmp;
 
@@ -328,7 +351,7 @@ LCMSAPI int           LCMSEXPORT dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
 
 // White Point & Primary chromas handling
 // Returns the final chrmatic adaptation from illuminant FromIll to Illuminant ToIll
-// The cone matrix can be specified in ConeMatrix. 
+// The cone matrix can be specified in ConeMatrix.
 // If NULL, assuming D50 source. White point is given in xyY
 LCMSBOOL dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt)
 {

@@ -44,12 +44,13 @@ InvertFilter::InvertFilter(DImg* orgImage, QObject* parent)
 }
 
 InvertFilter::InvertFilter(DImgThreadedFilter* parentFilter,
-                           const DImg& orgImage, const DImg& destImage,
+                           const DImg& orgImage, DImg& destImage,
                            int progressBegin, int progressEnd)
     : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
                          parentFilter->filterName() + ": InvertFilter")
 {
-    filterImage();
+    initFilter();
+    destImage = m_destImage;
 }
 
 InvertFilter::~InvertFilter()

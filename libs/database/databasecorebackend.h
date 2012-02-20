@@ -422,6 +422,12 @@ public:
      */
     QSqlError lastSQLError();
 
+    /**
+     * Returns the maximum number of bound parameters allowed per query.
+     * This value depends on the database engine.
+     */
+    int maximumBoundValues() const;
+
     /*
         Qt SQL driver supported features
         SQLITE3:
