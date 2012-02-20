@@ -336,6 +336,17 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
 
         if (dkCmsReadICCMatrixRGB2XYZ(&Mat, hProfile))
         {
+#if defined(USE_LCMS_VERSION_1000)
+            kDebug() << "dkCmsReadICCMatrixRGB2XYZ(1): " \
+            << "[" << Mat.v[0].n[0] << ", " << Mat.v[0].n[1] << ", " << Mat.v[0].n[2] << "]" \
+            << "[" << Mat.v[1].n[0] << ", " << Mat.v[1].n[1] << ", " << Mat.v[1].n[2] << "]" \
+            << "[" << Mat.v[2].n[0] << ", " << Mat.v[2].n[1] << ", " << Mat.v[2].n[2] << "]" ;
+#else
+            kDebug() << "dkCmsReadICCMatrixRGB2XYZ(2): " \
+            << "[" << Mat.Red.X << ", " << Mat.Red.Y << ", " << Mat.Red.Z << "]" \
+            << "[" << Mat.Green.X << ", " << Mat.Green.Y << ", " << Mat.Green.Z << "]" \
+            << "[" << Mat.Blue.X << ", " << Mat.Blue.Y << ", " << Mat.Blue.Z << "]" ;
+#endif
             // Undo chromatic adaptation
             if (dkCmsAdaptMatrixFromD50(&Mat, &White))
             {
@@ -345,19 +356,21 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
                 tmp.X = Mat.v[0].n[0];
                 tmp.Y = Mat.v[1].n[0];
                 tmp.Z = Mat.v[2].n[0];
-
+                kDebug() << "d->Primaries.Red   : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Red), &tmp);
 
                 tmp.X = Mat.v[0].n[1];
                 tmp.Y = Mat.v[1].n[1];
                 tmp.Z = Mat.v[2].n[1];
+                kDebug() << "d->Primaries.Green : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Green), &tmp);
 
                 tmp.X = Mat.v[0].n[2];
                 tmp.Y = Mat.v[1].n[2];
                 tmp.Z = Mat.v[2].n[2];
+                kDebug() << "d->Primaries.Blue  : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Blue), &tmp);
 #else
@@ -366,18 +379,21 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
                 tmp.X = Mat.Red.X;
                 tmp.Y = Mat.Green.X;
                 tmp.Z = Mat.Blue.X;
+                kDebug() << "d->Primaries.Red   : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Red), &tmp);
 
                 tmp.X = Mat.Red.Y;
                 tmp.Y = Mat.Green.Y;
                 tmp.Z = Mat.Blue.Y;
+                kDebug() << "d->Primaries.Green : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Green), &tmp);
 
                 tmp.X = Mat.Red.Z;
                 tmp.Y = Mat.Green.Z;
                 tmp.Z = Mat.Blue.Z;
+                kDebug() << "d->Primaries.Blue  : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Blue), &tmp);
 #endif

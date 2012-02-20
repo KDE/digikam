@@ -212,3 +212,4 @@ So, what is the point of having the old function? Easy: lcms 1.x was precission-
 so you cannot obtain primaries with enough precision with the method described above. But that does
 not apply with lcms2, where you have an outstanding 64-bit double precission. Less is more in
 this particular case!
+
