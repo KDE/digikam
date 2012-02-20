@@ -1632,7 +1632,7 @@ QString DatabaseCoreBackend::lastError()
 int DatabaseCoreBackend::maximumBoundValues() const
 {
     Q_D(const DatabaseCoreBackend);
-    if (d->parameters.isSQLite())
+    if (d->parameters.isImgSQLite())
     {
         return 999; // SQLITE_MAX_VARIABLE_NUMBER
     }
