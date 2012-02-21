@@ -70,6 +70,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 052 ==> 294423 : Build error under Solaris [patch].
 053 ==> 286437 : "No flag" filter doesn't work.
 054 ==> 281877 : Redo same result as discard changes.
-055 ==> 
-
+055 ==> 294105 : Please support lcms2
+056 ==> 
 
