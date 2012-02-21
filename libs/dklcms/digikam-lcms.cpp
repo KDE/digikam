@@ -35,10 +35,51 @@
 
 #include <lcms2_plugin.h>
 
-// CMSAPI void               CMSEXPORT _cmsVEC3init(cmsVEC3* r, cmsFloat64Number x, cmsFloat64Number y, cmsFloat64Number z) { };
-// CMSAPI void               CMSEXPORT _cmsMAT3per(cmsMAT3* r, const cmsMAT3* a, const cmsMAT3* b) { };
-// CMSAPI cmsBool            CMSEXPORT _cmsMAT3inverse(const cmsMAT3* a, cmsMAT3* b) { return TRUE; };
-// CMSAPI void               CMSEXPORT _cmsMAT3eval(cmsVEC3* r, const cmsMAT3* a, const cmsVEC3* v) { };
+///////////////////////////////////////////////////////////////////////
+
+
+void _l2tol1MAT3(MAT3* l2, MAT3* l1)
+{
+    // TODO: this seem plain wrong and don't provide perfect result
+    l1->Red.X   = static_cast<cmsFloat64Number>( l2->Red.X );
+    l1->Red.Y   = static_cast<cmsFloat64Number>( l2->Green.X );
+    l1->Red.Z   = static_cast<cmsFloat64Number>( l2->Blue.X );
+    l1->Green.X = static_cast<cmsFloat64Number>( l2->Red.Y );
+    l1->Green.Y = static_cast<cmsFloat64Number>( l2->Green.Y );
+    l1->Green.Z = static_cast<cmsFloat64Number>( l2->Blue.Y );
+    l1->Blue.X  = static_cast<cmsFloat64Number>( l2->Red.Z );
+    l1->Blue.Y  = static_cast<cmsFloat64Number>( l2->Green.Z );
+    l1->Blue.Z  = static_cast<cmsFloat64Number>( l2->Blue.Z );
+}
+
+void _l1LPMAT3tol2cmsMAT3(LPMAT3 l1, cmsMAT3* l2)
+{
+    l2->v[0].n[0] = static_cast<cmsFloat64Number>( l1->Red.X );
+    l2->v[0].n[1] = static_cast<cmsFloat64Number>( l1->Red.Y );
+    l2->v[0].n[2] = static_cast<cmsFloat64Number>( l1->Red.Z );
+    l2->v[1].n[0] = static_cast<cmsFloat64Number>( l1->Green.X );
+    l2->v[1].n[1] = static_cast<cmsFloat64Number>( l1->Green.Y );
+    l2->v[1].n[2] = static_cast<cmsFloat64Number>( l1->Green.Z );
+    l2->v[2].n[0] = static_cast<cmsFloat64Number>( l1->Blue.X );
+    l2->v[2].n[1] = static_cast<cmsFloat64Number>( l1->Blue.Y );
+    l2->v[2].n[2] = static_cast<cmsFloat64Number>( l1->Blue.Z );
+}
+
+void _l2cmsMAT3tol1LPMAT3(cmsMAT3* l2, LPMAT3 l1)
+{
+    l1->Red.X   = static_cast<cmsFloat64Number>( l2->v[0].n[0] );
+    l1->Red.Y   = static_cast<cmsFloat64Number>( l2->v[0].n[1] );
+    l1->Red.Z   = static_cast<cmsFloat64Number>( l2->v[0].n[2] );
+    l1->Green.X = static_cast<cmsFloat64Number>( l2->v[1].n[0] );
+    l1->Green.Y = static_cast<cmsFloat64Number>( l2->v[1].n[1] );
+    l1->Green.Z = static_cast<cmsFloat64Number>( l2->v[1].n[2] );
+    l1->Blue.X  = static_cast<cmsFloat64Number>( l2->v[2].n[0] );
+    l1->Blue.Y  = static_cast<cmsFloat64Number>( l2->v[2].n[1] );
+    l1->Blue.Z  = static_cast<cmsFloat64Number>( l2->v[2].n[2] );
+}
+
+///////////////////////////////////////////////////////////////////////
+
 
 #define MATRIX_DET_TOLERANCE    0.0001
 
@@ -233,6 +274,7 @@ cmsBool _cmsBuildRGB2XYZtransferMatrix(cmsMAT3* r, const cmsCIExyY* WhitePt, con
 }
 
 
+///////////////////////////////////////////////////////////////////////
 
 
 // WAS: Same as anterior, but assuming D50 source. White point is given in xyY
@@ -278,31 +320,138 @@ LCMSEXPORT void dkCmsSetAlarmCodes(int r, int g, int b)
 
 LCMSAPI QString        LCMSEXPORT dkCmsTakeProductName(cmsHPROFILE hProfile)
 {
-    char buffer[1024];
-    const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigCrdInfoTag);
-    if (mlu == NULL) return QString();
-    cmsMLUgetASCII(mlu, "PS", "nm", buffer, 1024);
-    return QString(buffer);
+
+    static char Name[1024*2+4];
+    char Manufacturer[1024], Model[1024];
+
+    Name[0] = '\0';
+    Manufacturer[0] = Model[0] = '\0';
+    cmsMLU* mlu;
+
+    if (cmsIsTag(hProfile, cmsSigDeviceMfgDescTag)) {
+        mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigDeviceMfgDescTag) );
+        cmsMLUgetASCII(mlu, "en", "US", Manufacturer, 1024);
+    }
+
+    if (cmsIsTag(hProfile, cmsSigDeviceModelDescTag)) {
+        mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigDeviceModelDescTag) );
+        cmsMLUgetASCII(mlu, "en", "US", Model, 1024);
+    }
+
+    if (!Manufacturer[0] && !Model[0]) {
+
+        if (cmsIsTag(hProfile, cmsSigProfileDescriptionTag)) {
+            mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigProfileDescriptionTag) );
+            cmsMLUgetASCII(mlu, "en", "US", Name, 1024);
+            return QString::fromLatin1(Name);
+        }
+        else
+        {
+            return QString::fromLatin1("{no name}");
+        }
+    }
+
+    if (!Manufacturer[0] ||
+            strncmp(Model, Manufacturer, 8) == 0 || strlen(Model) > 30)
+    {
+        strcpy(Name, Model);
+    }
+    else
+    {
+        sprintf(Name, "%s - %s", Model, Manufacturer);
+    }
+
+    return QString::fromLatin1(Name);
 }
 
-LCMSAPI const char*    LCMSEXPORT dkCmsTakeProductDesc(cmsHPROFILE hProfile)
+LCMSAPI QString        LCMSEXPORT dkCmsTakeProductDesc(cmsHPROFILE hProfile)
 {
-    // TODO: What I'm supposed to use here??
-    static char ret[1]; ret[0] = '\0'; return ret;
+    static char Name[2048];
+    cmsMLU* mlu;
+
+    if (cmsIsTag(hProfile, cmsSigProfileDescriptionTag))
+    {
+        mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigProfileDescriptionTag) );
+        cmsMLUgetASCII(mlu, "en", "US", Name, 1024);
+    }
+    else
+    {
+        return dkCmsTakeProductName(hProfile);
+    }
+
+    if (strncmp(Name, "Copyrig", 7) == 0)
+    {
+        return dkCmsTakeProductName(hProfile);
+    }
+
+    return QString::fromLatin1(Name);
 }
 
 LCMSAPI QString        LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
 {
-    char buffer[1024];
-    cmsGetProfileInfoASCII(hProfile, cmsInfoDescription, "en", "US", buffer, 1024);
-    return QString(buffer);
+    static char Info[4096];
+    cmsMLU* mlu;
+
+    Info[0] = '\0';
+
+    if (cmsIsTag(hProfile, cmsSigProfileDescriptionTag))
+    {
+        char Desc[1024];
+
+        mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigProfileDescriptionTag) );
+        cmsMLUgetASCII(mlu, "en", "US", Desc, 1024);
+        strcat(Info, Desc);
+    }
+
+
+    if (cmsIsTag(hProfile, cmsSigCopyrightTag))
+    {
+        char Copyright[1024];
+
+        mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigCopyrightTag) );
+        cmsMLUgetASCII(mlu, "en", "US", Copyright, 1024);
+        strcat(Info, " - ");
+        strcat(Info, Copyright);
+    }
+
+    #define K007         static_cast<cmsTagSignature>( 0x4B303037 )
+
+    if (cmsIsTag(hProfile, K007))
+    {
+        char MonCal[1024];
+
+        mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, K007) );
+        cmsMLUgetASCII(mlu, "en", "US", MonCal, 1024);
+        strcat(Info, " - ");
+        strcat(Info, MonCal);
+    }
+    else
+    {
+        /*
+         *  _cmsIdentifyWhitePoint is complex and partly redundant
+         *  with cietonguewidget, leave this part off
+         *  untill the full lcms2 implementation
+         *
+        cmsCIEXYZ WhitePt;
+        char WhiteStr[1024];
+
+        dkCmsTakeMediaWhitePoint(&WhitePt, hProfile);
+        _cmsIdentifyWhitePoint(WhiteStr, &WhitePt);
+        strcat(Info, " - ");
+        strcat(Info, WhiteStr);
+        */
+    }
+
+    #undef K007
+
+    return QString::fromLatin1(Info);
 }
 
 LCMSAPI QString        LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
 {
     char buffer[1024];
     cmsGetProfileInfoASCII(hProfile, cmsInfoManufacturer, "en", "US", buffer, 1024);
-    return QString(buffer);
+    return QString::fromLatin1(buffer);
 }
 
 LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile)
@@ -321,7 +470,7 @@ LCMSAPI QString       LCMSEXPORT dkCmsTakeModel(cmsHPROFILE hProfile)
     const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigDeviceModelDescTag);
     if (mlu == NULL) return QString();
     cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
-    return QString(buffer);
+    return QString::fromLatin1(buffer);
 }
 
 LCMSAPI QString        LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
@@ -330,7 +479,7 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
     const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigCopyrightTag);
     if (mlu == NULL) return QString();
     cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
-    return QString(buffer);
+    return QString::fromLatin1(buffer);
 }
 
 
@@ -355,36 +504,52 @@ LCMSAPI int           LCMSEXPORT dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
 // Returns the final chrmatic adaptation from illuminant FromIll to Illuminant ToIll
 // The cone matrix can be specified in ConeMatrix.
 // If NULL, assuming D50 source. White point is given in xyY
+
 LCMSBOOL dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt)
 {
     // TODO: all based on private stuff, need to understand what digikam do in cietonguewidget with dkCmsAdaptMatrixFromD50
     cmsMAT3 result;
     bool ret = FALSE;
 
-    result.v[0].n[0] = r->Red.X  ;
-    result.v[0].n[1] = r->Red.Y  ;
-    result.v[0].n[2] = r->Red.Z  ;
-    result.v[1].n[0] = r->Green.X;
-    result.v[1].n[1] = r->Green.Y;
-    result.v[1].n[2] = r->Green.Z;
-    result.v[2].n[0] = r->Blue.X ;
-    result.v[2].n[1] = r->Blue.Y ;
-    result.v[2].n[2] = r->Blue.Z ;
+    _l1LPMAT3tol2cmsMAT3(r, &result);
 
     ret = cmsAdaptMatrixFromD50(&result, static_cast<const cmsCIExyY*>( DestWhitePt ));
 
-    r->Red.X   = result.v[0].n[0];
-    r->Red.Y   = result.v[0].n[1];
-    r->Red.Z   = result.v[0].n[2];
-    r->Green.X = result.v[1].n[0];
-    r->Green.Y = result.v[1].n[1];
-    r->Green.Z = result.v[1].n[2];
-    r->Blue.X  = result.v[2].n[0];
-    r->Blue.Y  = result.v[2].n[1];
-    r->Blue.Z  = result.v[2].n[2];
+    _l2cmsMAT3tol1LPMAT3(&result, r);
 
     return ret;
 }
+
+// LCMSBOOL dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt)
+// {
+//     // TODO: all based on private stuff, need to understand what digikam do in cietonguewidget with dkCmsAdaptMatrixFromD50
+//     cmsMAT3 result;
+//     bool ret = FALSE;
+//
+//     result.v[0].n[0] = r->Red.X  ;
+//     result.v[0].n[1] = r->Red.Y  ;
+//     result.v[0].n[2] = r->Red.Z  ;
+//     result.v[1].n[0] = r->Green.X;
+//     result.v[1].n[1] = r->Green.Y;
+//     result.v[1].n[2] = r->Green.Z;
+//     result.v[2].n[0] = r->Blue.X ;
+//     result.v[2].n[1] = r->Blue.Y ;
+//     result.v[2].n[2] = r->Blue.Z ;
+//
+//     ret = cmsAdaptMatrixFromD50(&result, static_cast<const cmsCIExyY*>( DestWhitePt ));
+//
+//     r->Red.X   = result.v[0].n[0];
+//     r->Red.Y   = result.v[0].n[1];
+//     r->Red.Z   = result.v[0].n[2];
+//     r->Green.X = result.v[1].n[0];
+//     r->Green.Y = result.v[1].n[1];
+//     r->Green.Z = result.v[1].n[2];
+//     r->Blue.X  = result.v[2].n[0];
+//     r->Blue.Y  = result.v[2].n[1];
+//     r->Blue.Z  = result.v[2].n[2];
+//
+//     return ret;
+// }
 
 cmsBool GetProfileRGBPrimaries(cmsHPROFILE hProfile,
                                cmsCIEXYZTRIPLE *result,
@@ -408,7 +573,6 @@ cmsBool GetProfileRGBPrimaries(cmsHPROFILE hProfile,
     return TRUE;
 }
 
-
 LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
 {
 
@@ -418,27 +582,9 @@ LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
     // See README @ Monday, July 27, 2009 @ Less is more
     // return static_cast<LCMSBOOL>( GetProfileRGBPrimaries(hProfile, r, INTENT_RELATIVE_COLORIMETRIC) );
 
-    result.Red.X   = static_cast<double>(r->Red.X)  ;
-    result.Red.Y   = static_cast<double>(r->Red.Y)  ;
-    result.Red.Z   = static_cast<double>(r->Red.Z)  ;
-    result.Green.X = static_cast<double>(r->Green.X);
-    result.Green.Y = static_cast<double>(r->Green.Y);
-    result.Green.Z = static_cast<double>(r->Green.Z);
-    result.Blue.X  = static_cast<double>(r->Blue.X) ;
-    result.Blue.Y  = static_cast<double>(r->Blue.Y) ;
-    result.Blue.Z  = static_cast<double>(r->Blue.Z) ;
-
     ret = GetProfileRGBPrimaries(hProfile, &result, INTENT_RELATIVE_COLORIMETRIC);
 
-    r->Red.X   = result.Red.X;
-    r->Red.Y   = result.Green.X;
-    r->Red.Z   = result.Blue.X;
-    r->Green.X = result.Red.Y;
-    r->Green.Y = result.Green.Y;
-    r->Green.Z = result.Blue.Y;
-    r->Blue.X  = result.Red.Z;
-    r->Blue.Y  = result.Green.Z;
-    r->Blue.Z  = result.Blue.Z;
+    _l2tol1MAT3(&result, r);
 
     return ret;
 }

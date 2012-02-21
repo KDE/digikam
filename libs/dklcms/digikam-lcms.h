@@ -231,7 +231,7 @@ LCMSEXPORT void                            dkCmsSetAlarmCodes(int r, int g, int 
 
 LCMSAPI QString       LCMSEXPORT           dkCmsTakeProductName(cmsHPROFILE hProfile);
 
-LCMSAPI const char*   LCMSEXPORT           dkCmsTakeProductDesc(cmsHPROFILE hProfile);
+LCMSAPI QString       LCMSEXPORT           dkCmsTakeProductDesc(cmsHPROFILE hProfile);
 
 LCMSAPI QString       LCMSEXPORT           dkCmsTakeProductInfo(cmsHPROFILE hProfile);
 

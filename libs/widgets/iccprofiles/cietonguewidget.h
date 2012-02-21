@@ -91,8 +91,6 @@ private:
     void biasedLine(int x1, int y1, int x2, int y2);
     void biasedText(int x, int y, const QString& txt);
 
-    void sweep_sRGB();
-
     void setProfile(cmsHPROFILE hProfile);
 
 private Q_SLOTS:

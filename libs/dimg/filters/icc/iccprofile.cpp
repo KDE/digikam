@@ -383,11 +383,10 @@ QString IccProfile::description()
     }
 
     LcmsLock lock;
-    const char* desc = dkCmsTakeProductDesc(d->handle);
 
-    if (desc && desc[0] != '\0')
+    if ( !QString(dkCmsTakeProductDesc(d->handle)).isEmpty() )
     {
-        d->description = QString::fromLatin1(desc);
+        d->description = QString(dkCmsTakeProductDesc(d->handle)).replace('\n', ' ');
     }
 
     return d->description;
