@@ -450,6 +450,7 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
 LCMSAPI QString        LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
 {
     char buffer[1024];
+    buffer[0] = '\0';
     cmsGetProfileInfoASCII(hProfile, cmsInfoManufacturer, "en", "US", buffer, 1024);
     return QString::fromLatin1(buffer);
 }
@@ -468,6 +469,7 @@ LCMSAPI QString       LCMSEXPORT dkCmsTakeModel(cmsHPROFILE hProfile)
 {
     char buffer[1024];
     const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigDeviceModelDescTag);
+    buffer[0] = '\0';
     if (mlu == NULL) return QString();
     cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
     return QString::fromLatin1(buffer);
@@ -477,6 +479,7 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
 {
     char buffer[1024];
     const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigCopyrightTag);
+    buffer[0] = '\0';
     if (mlu == NULL) return QString();
     cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
     return QString::fromLatin1(buffer);
@@ -687,7 +690,7 @@ LCMSAPI icColorSpaceSignature   LCMSEXPORT dkCmsGetPCS(cmsHPROFILE hProfile)
 
 LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig)
 {
-    return static_cast<LCMSBOOL>( cmsIsTag(hProfile, (cmsTagSignature) sig) );
+    return static_cast<LCMSBOOL>( cmsIsTag(hProfile, static_cast<cmsTagSignature>( sig )) );
 }
 
 LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsOpenProfileFromFile(const char* ICCProfile, const char* sAccess)
