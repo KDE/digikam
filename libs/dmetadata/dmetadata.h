@@ -44,13 +44,15 @@
 #include "metadatainfo.h"
 #include "digikam_export.h"
 
+using namespace KExiv2Iface;
+
 namespace Digikam
 {
 
 class Template;
 class IccProfile;
 
-class DIGIKAM_EXPORT DMetadata : public KExiv2Iface::KExiv2
+class DIGIKAM_EXPORT DMetadata : public KExiv2
 {
 
 public:

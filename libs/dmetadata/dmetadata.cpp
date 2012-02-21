@@ -73,7 +73,7 @@ DMetadata::DMetadata(const QString& filePath)
 
 #if KEXIV2_VERSION >= 0x010000
 DMetadata::DMetadata(const KExiv2Data& data)
-    : KExiv2Iface::KExiv2(data)
+    : KExiv2(data)
 {
     registerMetadataSettings();
 }
