@@ -440,8 +440,13 @@ class KipiInterfaceFileReadWriteLock : public KIPI::FileReadWriteLock
 {
 public:
 
-    KipiInterfaceFileReadWriteLock(const QString& filePath) : key(filePath) {}
+    KipiInterfaceFileReadWriteLock(const QString& filePath)
+        : key(filePath)
+    {}
+
     ~KipiInterfaceFileReadWriteLock() {}
+
+public:
 
     void lockForRead()                { key.lockForRead();                   }
     void lockForWrite()               { key.lockForWrite();                  }
@@ -450,6 +455,8 @@ public:
     bool tryLockForWrite()            { return key.tryLockForWrite();        }
     bool tryLockForWrite(int timeout) { return key.tryLockForWrite(timeout); }
     void unlock()                     { key.unlock();                        }
+
+public:
 
     FileReadWriteLockKey key;
 };
