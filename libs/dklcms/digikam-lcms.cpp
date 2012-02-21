@@ -670,12 +670,11 @@ LCMSAPI void          LCMSEXPORT dkCmsDoTransform(cmsHTRANSFORM Transform,
                    static_cast<const void *>( InputBuffer ),
                    static_cast<void *> ( OutputBuffer ),
                    static_cast<cmsUInt32Number>( Size ));
-
 }
 
 LCMSAPI void          LCMSEXPORT dkCmsFloat2XYZEncoded(WORD XYZ[3], const cmsCIEXYZ* fXYZ)
 {
-    cmsFloat2XYZEncoded(static_cast<cmsUInt16Number*>( &XYZ[3] ), static_cast<const cmsCIEXYZ*>( fXYZ ));
+    cmsFloat2XYZEncoded(XYZ, fXYZ);
 }
 
 LCMSAPI icColorSpaceSignature   LCMSEXPORT dkCmsGetColorSpace(cmsHPROFILE hProfile)
@@ -701,11 +700,6 @@ LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsOpenProfileFromFile(const char* ICCProfile
 LCMSAPI void          LCMSEXPORT dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* Source)
 {
     cmsXYZ2xyY(static_cast<cmsCIExyY*>(Dest), Source);
-}
-
-LCMSAPI void          LCMSEXPORT dkCmsXYZEncoded2Float(LPcmsCIEXYZ fxyz, const WORD XYZ[3])
-{
-    cmsXYZEncoded2Float(static_cast<cmsCIEXYZ*>(fxyz) , static_cast<const cmsUInt16Number*>(&XYZ[3]));
 }
 
 #endif // defined(USE_LCMS_VERSION_2000)
