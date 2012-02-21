@@ -632,47 +632,6 @@ void CIETongueWidget::drawColorantTriangle()
     biasedLine(x3, y3, x1, y1);
 }
 
-void CIETongueWidget::sweep_sRGB()
-{
-    int r, g, b;
-    cmsHPROFILE hXYZ, hsRGB;
-
-    hXYZ  = dkCmsCreateXYZProfile();
-    hsRGB = dkCmsCreate_sRGBProfile();
-
-    cmsHTRANSFORM xform = dkCmsCreateTransform(hsRGB, TYPE_RGB_16, hXYZ, TYPE_XYZ_16,
-                          INTENT_ABSOLUTE_COLORIMETRIC, cmsFLAGS_NOTPRECALC);
-    WORD RGB[3], XYZ[3];
-    cmsCIEXYZ xyz, MediaWhite;
-    cmsCIExyY xyY, WhitePt;
-    int x1, y1;
-
-    dkCmsTakeMediaWhitePoint(&MediaWhite, hsRGB);
-    dkCmsXYZ2xyY(&WhitePt, &MediaWhite);
-
-    for (r=0; r < 65536; r += 1024)
-    {
-        for (g=0; g < 65536; g += 1024)
-        {
-            for (b=0; b < 65536; b += 1024)
-            {
-                RGB[0] = r;
-                RGB[1] = g;
-                RGB[2] = b;
-                dkCmsDoTransform(xform, RGB, XYZ, 1);
-                dkCmsXYZEncoded2Float(&xyz, XYZ);
-                dkCmsXYZ2xyY(&xyY, &xyz);
-                mapPoint(x1, y1, &xyY);
-                d->painter.drawPoint(x1 + d->xBias, y1);
-            }
-        }
-    }
-
-    dkCmsDeleteTransform(xform);
-    dkCmsCloseProfile(hXYZ);
-    dkCmsCloseProfile(hsRGB);
-}
-
 void CIETongueWidget::drawWhitePoint()
 {
     cmsCIExyY Whitem_pntxyY;
