@@ -64,7 +64,6 @@
 #define dkCmsTakeProfileID           cmsTakeProfileID
 #define dkCmsTakeRenderingIntent     cmsTakeRenderingIntent
 #define dkCmsXYZ2xyY                 cmsXYZ2xyY
-#define dkCmsXYZEncoded2Float        cmsXYZEncoded2Float
 #define dkCmsAdaptMatrixFromD50      cmsAdaptMatrixFromD50
 #define dkCmsReadICCMatrixRGB2XYZ    cmsReadICCMatrixRGB2XYZ
 
@@ -301,8 +300,6 @@ LCMSAPI LCMSBOOL                LCMSEXPORT dkCmsIsTag(cmsHPROFILE hProfile, icTa
 LCMSAPI cmsHPROFILE             LCMSEXPORT dkCmsOpenProfileFromFile(const char *ICCProfile, const char *sAccess);
 
 LCMSAPI void                    LCMSEXPORT dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* Source);
-
-LCMSAPI void                    LCMSEXPORT dkCmsXYZEncoded2Float(LPcmsCIEXYZ fxyz, const WORD XYZ[3]);
 
 #endif // defined(USE_LCMS_VERSION_2000)
 

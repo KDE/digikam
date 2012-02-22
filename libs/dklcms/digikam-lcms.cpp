@@ -450,6 +450,7 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
 LCMSAPI QString        LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
 {
     char buffer[1024];
+    buffer[0] = '\0';
     cmsGetProfileInfoASCII(hProfile, cmsInfoManufacturer, "en", "US", buffer, 1024);
     return QString::fromLatin1(buffer);
 }
@@ -468,6 +469,7 @@ LCMSAPI QString       LCMSEXPORT dkCmsTakeModel(cmsHPROFILE hProfile)
 {
     char buffer[1024];
     const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigDeviceModelDescTag);
+    buffer[0] = '\0';
     if (mlu == NULL) return QString();
     cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
     return QString::fromLatin1(buffer);
@@ -477,6 +479,7 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
 {
     char buffer[1024];
     const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigCopyrightTag);
+    buffer[0] = '\0';
     if (mlu == NULL) return QString();
     cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
     return QString::fromLatin1(buffer);
@@ -667,12 +670,11 @@ LCMSAPI void          LCMSEXPORT dkCmsDoTransform(cmsHTRANSFORM Transform,
                    static_cast<const void *>( InputBuffer ),
                    static_cast<void *> ( OutputBuffer ),
                    static_cast<cmsUInt32Number>( Size ));
-
 }
 
 LCMSAPI void          LCMSEXPORT dkCmsFloat2XYZEncoded(WORD XYZ[3], const cmsCIEXYZ* fXYZ)
 {
-    cmsFloat2XYZEncoded(static_cast<cmsUInt16Number*>( &XYZ[3] ), static_cast<const cmsCIEXYZ*>( fXYZ ));
+    cmsFloat2XYZEncoded(XYZ, fXYZ);
 }
 
 LCMSAPI icColorSpaceSignature   LCMSEXPORT dkCmsGetColorSpace(cmsHPROFILE hProfile)
@@ -687,7 +689,7 @@ LCMSAPI icColorSpaceSignature   LCMSEXPORT dkCmsGetPCS(cmsHPROFILE hProfile)
 
 LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig)
 {
-    return static_cast<LCMSBOOL>( cmsIsTag(hProfile, (cmsTagSignature) sig) );
+    return static_cast<LCMSBOOL>( cmsIsTag(hProfile, static_cast<cmsTagSignature>( sig )) );
 }
 
 LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsOpenProfileFromFile(const char* ICCProfile, const char* sAccess)
@@ -698,11 +700,6 @@ LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsOpenProfileFromFile(const char* ICCProfile
 LCMSAPI void          LCMSEXPORT dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* Source)
 {
     cmsXYZ2xyY(static_cast<cmsCIExyY*>(Dest), Source);
-}
-
-LCMSAPI void          LCMSEXPORT dkCmsXYZEncoded2Float(LPcmsCIEXYZ fxyz, const WORD XYZ[3])
-{
-    cmsXYZEncoded2Float(static_cast<cmsCIEXYZ*>(fxyz) , static_cast<const cmsUInt16Number*>(&XYZ[3]));
 }
 
 #endif // defined(USE_LCMS_VERSION_2000)

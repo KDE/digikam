@@ -172,7 +172,6 @@ public:
         gridside(0),
         progressTimer(0),
         hMonitorProfile(0),
-        hXYZProfile(0),
         hXFORM(0)
     {
         progressPix         = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
@@ -200,7 +199,6 @@ public:
     KPixmapSequence progressPix;
 
     cmsHPROFILE     hMonitorProfile;
-    cmsHPROFILE     hXYZProfile;
     cmsHTRANSFORM   hXFORM;
     cmsCIExyYTRIPLE Primaries;
     cmsCIEXYZ       MediaWhite;
@@ -209,6 +207,7 @@ public:
 CIETongueWidget::CIETongueWidget(int w, int h, QWidget* parent, cmsHPROFILE hMonitor)
     : QWidget(parent), d(new CIETongueWidgetPriv)
 {
+    cmsHPROFILE hXYZProfile;
     d->progressTimer = new QTimer(this);
     setMinimumSize(w, h);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -223,10 +222,17 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget* parent, cmsHPROFILE hMon
         d->hMonitorProfile = dkCmsCreate_sRGBProfile();
     }
 
-    d->hXYZProfile = dkCmsCreateXYZProfile();
-    d->hXFORM      = dkCmsCreateTransform(d->hXYZProfile, TYPE_XYZ_16,
-                                        d->hMonitorProfile, TYPE_RGB_8,
-                                        INTENT_PERCEPTUAL, 0);
+    hXYZProfile = dkCmsCreateXYZProfile();
+    if (hXYZProfile == NULL) return;
+
+
+    d->hXFORM = dkCmsCreateTransform(hXYZProfile, TYPE_XYZ_16,
+                                     d->hMonitorProfile, TYPE_RGB_8,
+                                     INTENT_PERCEPTUAL, 0);
+
+    dkCmsCloseProfile(hXYZProfile);
+
+    if (d->hXFORM == NULL) kDebug() << "Wrong d->hXFORM" ;
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
@@ -235,7 +241,6 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget* parent, cmsHPROFILE hMon
 CIETongueWidget::~CIETongueWidget()
 {
     dkCmsDeleteTransform(d->hXFORM);
-    dkCmsCloseProfile(d->hXYZProfile);
     dkCmsCloseProfile(d->hMonitorProfile);
     delete d;
 }
