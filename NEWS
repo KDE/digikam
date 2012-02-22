@@ -71,5 +71,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 053 ==> 286437 : "No flag" filter doesn't work.
 054 ==> 281877 : Redo same result as discard changes.
 055 ==> 294105 : Please support lcms2
-056 ==> 
+056 ==> 294585 : Crash on facebook export.
+057 ==> 
 
