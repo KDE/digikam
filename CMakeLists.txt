@@ -9,6 +9,7 @@ OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (
 OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"     ON)
 OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"    OFF)
 OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                 ON)
+OPTION(ENABLE_LCMS2            "Link digiKam to lcms2 (experimental) (default=OFF)"              OFF)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -156,23 +157,41 @@ FIND_PACKAGE(PGF)
 FIND_PACKAGE(CLAPACK)
 FIND_PACKAGE(Boost) # 1.36.0)
 
-# manage the lcms{1,2} library
-# at the moment we STILL DEFAULT TO LCMS1 because the porting to lcms2 is incomplete
-# when libs/dklcms/digikam-lcms.cpp is completed we can move the default to lcms2
-# if we decide to drop support for lcms1 the layer of abstraction introduced by libs/dklcms 
-# may become superfluous and the dkCms* functions can be merged back.
-pkg_check_modules(LCMS2 REQUIRED lcms2)
-if (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
-    MESSAGE(STATUS "Found lcms2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIRS}")
-    SET(LCMS_FOUND ${LCMS2_FOUND})
-    SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
-    SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIRS})
-    SET(USE_LCMS_VERSION_2000 1)
-else (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
-    FIND_PACKAGE(LCMS)
-    MESSAGE(STATUS "Found lcms1: ${LCMS_LIBRARIES}  ${LCMS_INCLUDE_DIR}")
-    SET(USE_LCMS_VERSION_1000 1)
-endif (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
+# lcms{1,2} library
+# at the moment (2.6) we STILL DEFAULT TO LCMS1 because the porting to lcms2 is
+# experimental.
+# It's possible to force lcms2 enabling the ENABLE_LCMS2 option
+# future plans:
+#   2.7 will compile against lcms2 by default but lcms1 will stay as a fallback
+#   2.8 will support lcms2 only, probably ENABLE_LCMS2 will be removed too
+#       unless we decide to support another color managment library
+# Note, if ENABLE_LCMS2 is set and there is no lcms2 build will fail, even if
+# lcms1 is present
+IF (ENABLE_LCMS2)
+  pkg_check_modules(LCMS2 REQUIRED lcms2)
+  IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
+      MESSAGE(STATUS "Found lcms2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIRS}")
+      SET(LCMS_FOUND ${LCMS2_FOUND})
+      SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
+      SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIRS})
+      SET(USE_LCMS_VERSION_2000 1)
+  ENDIF  (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
+ELSE (ENABLE_LCMS2)
+  FIND_PACKAGE(LCMS)
+  IF (LCMS_FOUND)
+      SET(USE_LCMS_VERSION_1000 1)
+  ELSE (LCMS_FOUND)
+      IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
+          MESSAGE(STATUS "Found lcms2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIRS}")
+          MESSAGE(WARNING "Support for lcms2 is still incomplete and possibly buggy")
+          MESSAGE(WARNING "Please install lcms1 if available")
+          SET(LCMS_FOUND ${LCMS2_FOUND})
+          SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
+          SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIRS})
+          SET(USE_LCMS_VERSION_2000 1)
+      ENDIF (LCMS_FOUND)
+  ENDIF (LCMS_FOUND)
+ENDIF (ENABLE_LCMS2)
 
 # To link under Solaris (see B.K.O #274484)
 IF(NOT WIN32)
