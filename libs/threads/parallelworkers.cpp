@@ -179,7 +179,6 @@ int ParallelWorkers::ParallelWorkers_qt_metacall(QMetaObject::Call _c, int _id, 
         {
             m_currentIndex = 0;
         }
-        kDebug() << "Distributing" << _id << "to" << obj;
         obj->schedule();
 
         // Invoke across-thread

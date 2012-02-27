@@ -46,7 +46,7 @@ class FileWorkerInterface : public WorkerObject
 
 public Q_SLOTS:
 
-    void writeOrientationToFiles(FileActionImageInfoList, int)        {};
+    virtual void writeOrientationToFiles(FileActionImageInfoList, int){};
     virtual void writeMetadataToFiles(FileActionImageInfoList)        {};
     virtual void writeMetadata(FileActionImageInfoList, MetadataHub*) {};
     virtual void transform(FileActionImageInfoList, int)              {};

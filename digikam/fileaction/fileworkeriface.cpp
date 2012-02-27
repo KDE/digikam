@@ -43,13 +43,10 @@ namespace Digikam
 
 void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList infos, int orientation)
 {
-    kDebug() << infos.size();
     QStringList failedItems;
 
     foreach(const ImageInfo& info, infos)
     {
-        //kDebug() << "Setting Exif Orientation tag to " << orientation;
-
         QString path                  = info.filePath();
         DMetadata metadata(path);
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
@@ -67,7 +64,6 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList i
         }
 
         infos.writtenToOne();
-        kDebug() << "writtenToOne";
     }
 
     if (!failedItems.isEmpty())
@@ -75,7 +71,6 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList i
         emit imageChangeFailed(i18n("Failed to revise Exif orientation these files:"), failedItems);
     }
 
-    kDebug() << "calling finishedWriting";
     infos.finishedWriting();
 }
 
@@ -109,7 +104,6 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
 
 void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, MetadataHub* hub)
 {
-    kDebug() << "writeMetadata" << infos.size();
     d->startingToWrite(infos);
 
     MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();
@@ -148,7 +142,6 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
 
     foreach(const ImageInfo& info, infos)
     {
-        kDebug() << info.name() << QThread::currentThread();
         QString path = info.filePath();
         QString format = info.format();
         KExiv2::ImageOrientation currentOrientation = (KExiv2::ImageOrientation)info.orientation();
@@ -263,7 +256,6 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
             }
         }
 
-        kDebug() << "Settings database flag to" << finalOrientation;
         // DB rotation
         ImageInfo(info).setOrientation(finalOrientation);
 
