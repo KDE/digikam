@@ -77,8 +77,9 @@ public:
     DeleteItem(QTreeWidget* const parent, const KUrl& url);
     virtual ~DeleteItem();
 
-    bool hasValidThumbnail() const;
-    KUrl url() const;
+    bool    hasValidThumbnail() const;
+    KUrl    url() const;
+    QString fileUrl() const;
 
     void setThumb(const QPixmap& pix, bool hasThumb=true);
 

@@ -75,19 +75,7 @@ DeleteItem::DeleteItem(QTreeWidget* const parent, const KUrl& url)
 {
     d->url = url;
     setThumb(SmallIcon("image-x-generic", parent->iconSize().width(), KIconLoader::DisabledState), false);
-
-    if (d->url.isLocalFile()) 
-    {
-        setText(1, d->url.toLocalFile());
-    }
-    else if (d->url.protocol() == "digikamalbums")
-    {
-        setText(1, DatabaseUrl(d->url).fileUrl().toLocalFile());
-    }
-    else
-    {
-        setText(1, d->url.prettyUrl());
-    }
+    setText(1, fileUrl());
 }
 
 DeleteItem::~DeleteItem()
@@ -103,6 +91,19 @@ bool DeleteItem::hasValidThumbnail() const
 KUrl DeleteItem::url() const
 {
     return d->url;
+}
+
+QString DeleteItem::fileUrl() const
+{
+    if (d->url.isLocalFile())
+    {
+        return (d->url.toLocalFile());
+    }
+    else if (d->url.protocol() == "digikamalbums")
+    {
+        return (DatabaseUrl(d->url).fileUrl().toLocalFile());
+    }
+    return (d->url.prettyUrl());
 }
 
 void DeleteItem::setThumb(const QPixmap& pix, bool hasThumb)
@@ -179,10 +180,10 @@ void DeleteItemList::slotThumbnailLoaded(const LoadingDescription& desc, const Q
     {
         DeleteItem* item = dynamic_cast<DeleteItem*>(*it);
 
-        kDebug() << item->url().toLocalFile();
+        kDebug() << item->fileUrl();
         kDebug() << desc.filePath;
 
-        if (item && item->url().toLocalFile() == desc.filePath)
+        if (item && item->fileUrl() == desc.filePath)
         {
             if (!pix.isNull())
             {
@@ -200,7 +201,7 @@ void DeleteItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const
 
     if (item && !item->hasValidThumbnail())
     {
-        d->thumbLoadThread->find(item->url().toLocalFile());
+        d->thumbLoadThread->find(item->fileUrl());
     }
 
     QTreeWidget::drawRow(p, opt, index);
