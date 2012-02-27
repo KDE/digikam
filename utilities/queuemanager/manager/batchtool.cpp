@@ -31,6 +31,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPolygon>
+#include <QTemporaryFile>
 
 // KDE includes
 
@@ -40,6 +41,7 @@
 // Local includes
 
 #include "dimgloaderobserver.h"
+#include "filereadwritelock.h"
 
 namespace Digikam
 {
@@ -333,27 +335,22 @@ bool BatchTool::isLastChainedTool() const
 
 void BatchTool::setOutputUrlFromInputUrl()
 {
-    QFileInfo fi(inputUrl().fileName());
 
     QString path(workingUrl().toLocalFile());
-    path.append("/.");
-    path.append(QString::number(QDateTime::currentDateTime().toTime_t()));
-    path.append("-");
-    path.append(fi.fileName());
-    kDebug() << "path: " << path;
+    QString suffix = outputSuffix();
+    if (suffix.isEmpty())
+    {
+        QFileInfo fi(inputUrl().fileName());
+        suffix = fi.completeSuffix();
+    }
+    SafeTemporaryFile temp(workingUrl().toLocalFile() + "/BatchTool-XXXXXX.digikamtempfile." + suffix);
+    temp.setAutoRemove(false);
+    temp.open();
+    kDebug() << "path: " << temp.fileName();
 
     KUrl url;
     url.setPath(path);
-    setOutputUrl(url);
-
-    if (!outputSuffix().isEmpty())
-    {
-        KUrl url     = outputUrl();
-        QString base = url.fileName();
-        base.append(QString(".%1").arg(outputSuffix()));
-        url.setFileName(base);
-        setOutputUrl(url);
-    }
+    setOutputUrl(KUrl::fromPath(temp.fileName()));
 }
 
 bool BatchTool::loadToDImg() const

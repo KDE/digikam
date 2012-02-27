@@ -57,7 +57,6 @@ extern "C"
 // KDE includes
 
 #include <kdebug.h>
-#include <ktemporaryfile.h>
 
 // Qt includes
 
@@ -384,9 +383,7 @@ bool JpegRotator::exifTransform(const KExiv2Iface::RotationMatrix &matrix)
     QStringList unlinkLater;
     for (int i=0; i<actions.size(); i++)
     {
-        KTemporaryFile temp;
-        temp.setPrefix(dir + "/");
-        temp.setSuffix(".digikamtempfile.jpg");
+        SafeTemporaryFile temp(dir + "/JpegRotator-XXXXXX.digikamtempfile.jpg");
         temp.setAutoRemove(false);
         temp.open();
 
