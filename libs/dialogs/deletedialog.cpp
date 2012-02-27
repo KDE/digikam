@@ -70,23 +70,23 @@ public:
     KUrl url;
 };
 
-DeleteItem::DeleteItem(QTreeWidget* parent, const KUrl& url)
+DeleteItem::DeleteItem(QTreeWidget* const parent, const KUrl& url)
     : QTreeWidgetItem(parent), d(new DeleteItemPriv)
 {
     d->url = url;
     setThumb(SmallIcon("image-x-generic", parent->iconSize().width(), KIconLoader::DisabledState), false);
 
-    if ( d->url.isLocalFile() ) //path is null for non-local
+    if (d->url.isLocalFile()) 
     {
-        setText(1, d->url.toLocalFile() );
+        setText(1, d->url.toLocalFile());
     }
     else if ( d->url.protocol() == "digikamalbums")
     {
-        setText(1, DatabaseUrl(d->url).fileUrl().toLocalFile() );
+        setText(1, DatabaseUrl(d->url).fileUrl().toLocalFile());
     }
     else
     {
-        setText(1, d->url.prettyUrl() );
+        setText(1, d->url.prettyUrl());
     }
 }
 
@@ -145,7 +145,7 @@ public:
     ThumbnailLoadThread* thumbLoadThread;
 };
 
-DeleteItemList::DeleteItemList(QWidget* parent)
+DeleteItemList::DeleteItemList(QWidget* const parent)
     : QTreeWidget(parent), d(new DeleteItemListPriv)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
@@ -178,6 +178,9 @@ void DeleteItemList::slotThumbnailLoaded(const LoadingDescription& desc, const Q
     while (*it)
     {
         DeleteItem* item = dynamic_cast<DeleteItem*>(*it);
+
+        kDebug() << item->url().toLocalFile();
+        kDebug() << desc.filePath;
 
         if (item && item->url().toLocalFile() == desc.filePath)
         {
@@ -235,7 +238,7 @@ public:
     DeleteDialogMode::DeleteMode deleteMode;
 };
 
-DeleteWidget::DeleteWidget(QWidget* parent)
+DeleteWidget::DeleteWidget(QWidget* const parent)
     : QWidget(parent), d(new DeleteWidgetPriv)
 {
     setObjectName("DeleteDialogBase");
@@ -463,7 +466,7 @@ public:
     DeleteWidget* widget;
 };
 
-DeleteDialog::DeleteDialog(QWidget* parent)
+DeleteDialog::DeleteDialog(QWidget* const parent)
     : KDialog(parent), d(new DeleteDialogPriv)
 {
     setButtons(User1 | Cancel);

@@ -74,7 +74,7 @@ class DeleteItem : public QTreeWidgetItem
 
 public:
 
-    DeleteItem(QTreeWidget* parent, const KUrl& url);
+    DeleteItem(QTreeWidget* const parent, const KUrl& url);
     virtual ~DeleteItem();
 
     bool hasValidThumbnail() const;
@@ -96,7 +96,7 @@ class DeleteItemList : public QTreeWidget
 
 public:
 
-    DeleteItemList(QWidget* parent=0);
+    DeleteItemList(QWidget* const parent=0);
     virtual ~DeleteItemList();
 
 private :
@@ -121,7 +121,7 @@ class DeleteWidget : public QWidget
 
 public:
 
-    DeleteWidget(QWidget* parent = 0);
+    DeleteWidget(QWidget* const parent = 0);
     virtual ~DeleteWidget();
 
     void setFiles(const KUrl::List& files);
@@ -161,7 +161,7 @@ public:
 
 public:
 
-    DeleteDialog(QWidget* parent);
+    DeleteDialog(QWidget* const parent);
     virtual ~DeleteDialog();
 
     bool confirmDeleteList(const KUrl::List& condemnedURLs,
