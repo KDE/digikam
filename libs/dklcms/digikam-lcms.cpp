@@ -21,22 +21,29 @@
  *
  * ============================================================ */
 
-#include <config-digikam.h>
+// Qt includes
+
+#include <QString>
+
+// KDE includes
+
 #include <kdebug.h>
 
+// Local includes
+
+#include <config-digikam.h>
+
+// LCMS includes
 
 #if defined(USE_LCMS_VERSION_2000)
 
 #include <lcms2.h>
-
-#include <QtCore/QString>
 
 #include "digikam-lcms.h"
 
 #include <lcms2_plugin.h>
 
 ///////////////////////////////////////////////////////////////////////
-
 
 void _l2tol1MAT3(MAT3* l2, MAT3* l1)
 {
@@ -79,7 +86,6 @@ void _l2cmsMAT3tol1LPMAT3(cmsMAT3* l2, LPMAT3 l1)
 }
 
 ///////////////////////////////////////////////////////////////////////
-
 
 #define MATRIX_DET_TOLERANCE    0.0001
 
@@ -131,7 +137,7 @@ cmsBool  CMSEXPORT _cmsMAT3inverse(const cmsMAT3* a, cmsMAT3* b)
    return TRUE;
 }
 
-// Evaluate a vector across a matrix
+/// Evaluate a vector across a matrix
 void CMSEXPORT _cmsMAT3eval(cmsVEC3* r, const cmsMAT3* a, const cmsVEC3* v)
 {
     r->n[VX] = a->v[0].n[VX]*v->n[VX] + a->v[0].n[VY]*v->n[VY] + a->v[0].n[VZ]*v->n[VZ];
@@ -139,21 +145,16 @@ void CMSEXPORT _cmsMAT3eval(cmsVEC3* r, const cmsMAT3* a, const cmsVEC3* v)
     r->n[VZ] = a->v[2].n[VX]*v->n[VX] + a->v[2].n[VY]*v->n[VY] + a->v[2].n[VZ]*v->n[VZ];
 }
 
-
-// Compute chromatic adaptation matrix using Chad as cone matrix
-static
-cmsBool ComputeChromaticAdaptation(cmsMAT3* Conversion,
-                                const cmsCIEXYZ* SourceWhitePoint,
-                                const cmsCIEXYZ* DestWhitePoint,
-                                const cmsMAT3* Chad)
-
+/// Compute chromatic adaptation matrix using Chad as cone matrix
+static cmsBool ComputeChromaticAdaptation(cmsMAT3* Conversion,
+                                          const cmsCIEXYZ* SourceWhitePoint,
+                                          const cmsCIEXYZ* DestWhitePoint,
+                                          const cmsMAT3* Chad)
 {
-
     cmsMAT3 Chad_Inv;
     cmsVEC3 ConeSourceXYZ, ConeSourceRGB;
     cmsVEC3 ConeDestXYZ, ConeDestRGB;
     cmsMAT3 Cone, Tmp;
-
 
     Tmp = *Chad;
     if (!_cmsMAT3inverse(&Tmp, &Chad_Inv)) return FALSE;
@@ -174,7 +175,6 @@ cmsBool ComputeChromaticAdaptation(cmsMAT3* Conversion,
     _cmsVEC3init(&Cone.v[1], 0.0,   ConeDestRGB.n[1]/ConeSourceRGB.n[1],   0.0);
     _cmsVEC3init(&Cone.v[2], 0.0,   0.0,   ConeDestRGB.n[2]/ConeSourceRGB.n[2]);
 
-
     // Normalize
     _cmsMAT3per(&Tmp, &Cone, Chad);
     _cmsMAT3per(Conversion, &Chad_Inv, &Tmp);
@@ -182,11 +182,14 @@ cmsBool ComputeChromaticAdaptation(cmsMAT3* Conversion,
     return TRUE;
 }
 
-// Returns the final chrmatic adaptation from illuminant FromIll to Illuminant ToIll
-// The cone matrix can be specified in ConeMatrix. If NULL, Bradford is assumed
-cmsBool  _cmsAdaptationMatrix(cmsMAT3* r, const cmsMAT3* ConeMatrix, const cmsCIEXYZ* FromIll, const cmsCIEXYZ* ToIll)
+/** Returns the final chrmatic adaptation from illuminant FromIll to Illuminant ToIll
+    The cone matrix can be specified in ConeMatrix. If NULL, Bradford is assumed
+*/
+cmsBool _cmsAdaptationMatrix(cmsMAT3* r, const cmsMAT3* ConeMatrix, const cmsCIEXYZ* FromIll, const cmsCIEXYZ* ToIll)
 {
-    cmsMAT3 LamRigg   = {{ // Bradford matrix
+    // Bradford matrix
+    cmsMAT3 LamRigg =
+    {{
         {{  0.8951,  0.2664, -0.1614 }},
         {{ -0.7502,  1.7135,  0.0367 }},
         {{  0.0389, -0.0685,  1.0296 }}
@@ -198,9 +201,8 @@ cmsBool  _cmsAdaptationMatrix(cmsMAT3* r, const cmsMAT3* ConeMatrix, const cmsCI
     return ComputeChromaticAdaptation(r, FromIll, ToIll, ConeMatrix);
 }
 
-// Same as anterior, but assuming D50 destination. White point is given in xyY
-static
-cmsBool _cmsAdaptMatrixToD50(cmsMAT3* r, const cmsCIExyY* SourceWhitePt)
+/// Same as anterior, but assuming D50 destination. White point is given in xyY
+static cmsBool _cmsAdaptMatrixToD50(cmsMAT3* r, const cmsCIExyY* SourceWhitePt)
 {
     cmsCIEXYZ Dn;
     cmsMAT3 Bradford;
@@ -216,19 +218,19 @@ cmsBool _cmsAdaptMatrixToD50(cmsMAT3* r, const cmsCIExyY* SourceWhitePt)
     return TRUE;
 }
 
-// Build a White point, primary chromas transfer matrix from RGB to CIE XYZ
-// This is just an approximation, I am not handling all the non-linear
-// aspects of the RGB to XYZ process, and assumming that the gamma correction
-// has transitive property in the tranformation chain.
-//
-// the alghoritm:
-//
-//            - First I build the absolute conversion matrix using
-//              primaries in XYZ. This matrix is next inverted
-//            - Then I eval the source white point across this matrix
-//              obtaining the coeficients of the transformation
-//            - Then, I apply these coeficients to the original matrix
-//
+/** Build a White point, primary chromas transfer matrix from RGB to CIE XYZ
+    This is just an approximation, I am not handling all the non-linear
+    aspects of the RGB to XYZ process, and assumming that the gamma correction
+    has transitive property in the tranformation chain.
+
+    the alghoritm:
+
+               - First I build the absolute conversion matrix using
+                 primaries in XYZ. This matrix is next inverted
+               - Then I eval the source white point across this matrix
+                 obtaining the coeficients of the transformation
+               - Then, I apply these coeficients to the original matrix
+*/
 cmsBool _cmsBuildRGB2XYZtransferMatrix(cmsMAT3* r, const cmsCIExyY* WhitePt, const cmsCIExyYTRIPLE* Primrs)
 {
     cmsVEC3 WhitePoint, Coef;
@@ -252,11 +254,9 @@ cmsBool _cmsBuildRGB2XYZtransferMatrix(cmsMAT3* r, const cmsCIExyY* WhitePt, con
     _cmsVEC3init(&Primaries.v[1], yr,        yg,         yb);
     _cmsVEC3init(&Primaries.v[2], (1-xr-yr), (1-xg-yg),  (1-xb-yb));
 
-
     // Result = Primaries ^ (-1) inverse matrix
     if (!_cmsMAT3inverse(&Primaries, &Result))
         return FALSE;
-
 
     _cmsVEC3init(&WhitePoint, xn/yn, 1.0, (1.0-xn-yn)/yn);
 
@@ -270,16 +270,14 @@ cmsBool _cmsBuildRGB2XYZtransferMatrix(cmsMAT3* r, const cmsCIExyY* WhitePt, con
 
 
     return _cmsAdaptMatrixToD50(r, WhitePt);
-
 }
 
 
 ///////////////////////////////////////////////////////////////////////
 
 
-// WAS: Same as anterior, but assuming D50 source. White point is given in xyY
-static
-cmsBool cmsAdaptMatrixFromD50(cmsMAT3* r, const cmsCIExyY* DestWhitePt)
+/// WAS: Same as anterior, but assuming D50 source. White point is given in xyY
+static cmsBool cmsAdaptMatrixFromD50(cmsMAT3* r, const cmsCIExyY* DestWhitePt)
 {
     cmsCIEXYZ Dn;
     cmsMAT3 Bradford;
@@ -295,16 +293,15 @@ cmsBool cmsAdaptMatrixFromD50(cmsMAT3* r, const cmsCIExyY* DestWhitePt)
     return TRUE;
 }
 
-
 ////////////////////////////////////////////////////
 
-LCMSAPI int    LCMSEXPORT dkCmsErrorAction(int nAction)
+LCMSAPI int LCMSEXPORT dkCmsErrorAction(int nAction)
 {
     // TODO: Where is error logging?
     return 0;
 }
 
-LCMSAPI DWORD  LCMSEXPORT dkCmsGetProfileICCversion(cmsHPROFILE hProfile)
+LCMSAPI DWORD LCMSEXPORT dkCmsGetProfileICCversion(cmsHPROFILE hProfile)
 {
     return (DWORD) cmsGetEncodedICCversion(hProfile);
 }
@@ -318,9 +315,8 @@ LCMSEXPORT void dkCmsSetAlarmCodes(int r, int g, int b)
     cmsSetAlarmCodes(NewAlarm);
 }
 
-LCMSAPI QString        LCMSEXPORT dkCmsTakeProductName(cmsHPROFILE hProfile)
+LCMSAPI QString LCMSEXPORT dkCmsTakeProductName(cmsHPROFILE hProfile)
 {
-
     static char Name[1024*2+4];
     char Manufacturer[1024], Model[1024];
 
@@ -328,19 +324,22 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeProductName(cmsHPROFILE hProfile)
     Manufacturer[0] = Model[0] = '\0';
     cmsMLU* mlu;
 
-    if (cmsIsTag(hProfile, cmsSigDeviceMfgDescTag)) {
+    if (cmsIsTag(hProfile, cmsSigDeviceMfgDescTag))
+    {
         mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigDeviceMfgDescTag) );
         cmsMLUgetASCII(mlu, "en", "US", Manufacturer, 1024);
     }
 
-    if (cmsIsTag(hProfile, cmsSigDeviceModelDescTag)) {
+    if (cmsIsTag(hProfile, cmsSigDeviceModelDescTag))
+    {
         mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigDeviceModelDescTag) );
         cmsMLUgetASCII(mlu, "en", "US", Model, 1024);
     }
 
     if (!Manufacturer[0] && !Model[0]) {
 
-        if (cmsIsTag(hProfile, cmsSigProfileDescriptionTag)) {
+        if (cmsIsTag(hProfile, cmsSigProfileDescriptionTag))
+        {
             mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigProfileDescriptionTag) );
             cmsMLUgetASCII(mlu, "en", "US", Name, 1024);
             return QString::fromLatin1(Name);
@@ -351,8 +350,7 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeProductName(cmsHPROFILE hProfile)
         }
     }
 
-    if (!Manufacturer[0] ||
-            strncmp(Model, Manufacturer, 8) == 0 || strlen(Model) > 30)
+    if (!Manufacturer[0] || strncmp(Model, Manufacturer, 8) == 0 || strlen(Model) > 30)
     {
         strcpy(Name, Model);
     }
@@ -364,10 +362,10 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeProductName(cmsHPROFILE hProfile)
     return QString::fromLatin1(Name);
 }
 
-LCMSAPI QString        LCMSEXPORT dkCmsTakeProductDesc(cmsHPROFILE hProfile)
+LCMSAPI QString LCMSEXPORT dkCmsTakeProductDesc(cmsHPROFILE hProfile)
 {
     static char Name[2048];
-    cmsMLU* mlu;
+    cmsMLU* mlu = 0;
 
     if (cmsIsTag(hProfile, cmsSigProfileDescriptionTag))
     {
@@ -387,10 +385,10 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeProductDesc(cmsHPROFILE hProfile)
     return QString::fromLatin1(Name);
 }
 
-LCMSAPI QString        LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
+LCMSAPI QString LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
 {
     static char Info[4096];
-    cmsMLU* mlu;
+    cmsMLU* mlu=0;
 
     Info[0] = '\0';
 
@@ -403,7 +401,6 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
         strcat(Info, Desc);
     }
 
-
     if (cmsIsTag(hProfile, cmsSigCopyrightTag))
     {
         char Copyright[1024];
@@ -414,7 +411,7 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
         strcat(Info, Copyright);
     }
 
-    #define K007         static_cast<cmsTagSignature>( 0x4B303037 )
+    #define K007 static_cast<cmsTagSignature>( 0x4B303037 )
 
     if (cmsIsTag(hProfile, K007))
     {
@@ -447,7 +444,7 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
     return QString::fromLatin1(Info);
 }
 
-LCMSAPI QString        LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
+LCMSAPI QString LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
 {
     char buffer[1024];
     buffer[0] = '\0';
@@ -455,7 +452,7 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
     return QString::fromLatin1(buffer);
 }
 
-LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile)
+LCMSAPI LCMSBOOL LCMSEXPORT dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile)
 {
 
   LPcmsCIEXYZ tag = static_cast<LPcmsCIEXYZ>( cmsReadTag(hProfile, cmsSigMediaWhitePointTag) );
@@ -465,17 +462,17 @@ LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsH
   return TRUE;
 }
 
-LCMSAPI QString       LCMSEXPORT dkCmsTakeModel(cmsHPROFILE hProfile)
+LCMSAPI QString LCMSEXPORT dkCmsTakeModel(cmsHPROFILE hProfile)
 {
     char buffer[1024];
     const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigDeviceModelDescTag);
-    buffer[0] = '\0';
+    buffer[0]         = '\0';
     if (mlu == NULL) return QString();
     cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
     return QString::fromLatin1(buffer);
 }
 
-LCMSAPI QString        LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
+LCMSAPI QString LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
 {
     char buffer[1024];
     const cmsMLU* mlu = (const cmsMLU*)cmsReadTag(hProfile, cmsSigCopyrightTag);
@@ -485,20 +482,19 @@ LCMSAPI QString        LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
     return QString::fromLatin1(buffer);
 }
 
-
-LCMSAPI DWORD         LCMSEXPORT dkCmsTakeHeaderFlags(cmsHPROFILE hProfile)
+LCMSAPI DWORD LCMSEXPORT dkCmsTakeHeaderFlags(cmsHPROFILE hProfile)
 {
     return static_cast<DWORD>( cmsGetHeaderFlags(hProfile) );
 }
 
-LCMSAPI const BYTE*   LCMSEXPORT dkCmsTakeProfileID(cmsHPROFILE hProfile)
+LCMSAPI const BYTE* LCMSEXPORT dkCmsTakeProfileID(cmsHPROFILE hProfile)
 {
     cmsUInt8Number* ProfileID = new cmsUInt8Number();
     cmsGetHeaderProfileID(hProfile, ProfileID);
     return static_cast<BYTE*>( ProfileID );
 }
 
-LCMSAPI int           LCMSEXPORT dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
+LCMSAPI int LCMSEXPORT dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
 {
     return static_cast<int>( cmsGetHeaderRenderingIntent(hProfile) );
 }
@@ -555,7 +551,7 @@ LCMSBOOL dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt)
 // }
 
 cmsBool GetProfileRGBPrimaries(cmsHPROFILE hProfile,
-                               cmsCIEXYZTRIPLE *result,
+                               cmsCIEXYZTRIPLE* result,
                                cmsUInt32Number intent)
 {
     cmsHPROFILE hXYZ;
@@ -567,7 +563,7 @@ cmsBool GetProfileRGBPrimaries(cmsHPROFILE hProfile,
     hXYZ = cmsCreateXYZProfile();
     if (hXYZ == NULL) return FALSE;
     hTransform = cmsCreateTransform(hProfile, TYPE_RGB_DBL, hXYZ, TYPE_XYZ_DBL,
-        intent, cmsFLAGS_NOCACHE | cmsFLAGS_NOOPTIMIZE);
+                                    intent, cmsFLAGS_NOCACHE | cmsFLAGS_NOOPTIMIZE);
     cmsCloseProfile(hXYZ);
     if (hTransform == NULL) return FALSE;
 
@@ -578,7 +574,6 @@ cmsBool GetProfileRGBPrimaries(cmsHPROFILE hProfile,
 
 LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
 {
-
     MAT3 result;
     LCMSBOOL ret;
 
@@ -592,7 +587,7 @@ LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
     return ret;
 }
 
-LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize)
+LCMSAPI cmsHPROFILE LCMSEXPORT dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize)
 {
     return cmsOpenProfileFromMem(MemPtr, static_cast<cmsUInt32Number>( dwSize ));
 }
@@ -602,7 +597,7 @@ LCMSAPI icProfileClassSignature LCMSEXPORT dkCmsGetDeviceClass(cmsHPROFILE hProf
     return static_cast<icProfileClassSignature>( cmsGetDeviceClass(hProfile) );
 }
 
-LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsCloseProfile(cmsHPROFILE hProfile)
+LCMSAPI LCMSBOOL LCMSEXPORT dkCmsCloseProfile(cmsHPROFILE hProfile)
 {
     return static_cast<LCMSBOOL>( cmsCloseProfile(hProfile) );
 }
@@ -641,30 +636,30 @@ LCMSAPI cmsHTRANSFORM LCMSEXPORT dkCmsCreateTransform(cmsHPROFILE Input,
                               static_cast<cmsUInt32Number>( dwFlags ));
 }
 
-LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsCreateXYZProfile()
+LCMSAPI cmsHPROFILE LCMSEXPORT dkCmsCreateXYZProfile()
 {
     return cmsCreateXYZProfile();
 }
 
-LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsCreate_sRGBProfile()
+LCMSAPI cmsHPROFILE LCMSEXPORT dkCmsCreate_sRGBProfile()
 {
     return cmsCreate_sRGBProfile();
 }
 
-LCMSAPI void         LCMSEXPORT dkCmsDeleteTransform(cmsHTRANSFORM hTransform)
+LCMSAPI void LCMSEXPORT dkCmsDeleteTransform(cmsHTRANSFORM hTransform)
 {
     cmsDeleteTransform(hTransform);
 }
 
-LCMSAPI double        LCMSEXPORT dkCmsDeltaE(LPcmsCIELab Lab1, LPcmsCIELab Lab2)
+LCMSAPI double LCMSEXPORT dkCmsDeltaE(LPcmsCIELab Lab1, LPcmsCIELab Lab2)
 {
     return static_cast<double>( cmsDeltaE(static_cast<cmsCIELab*>( Lab1 ), static_cast<cmsCIELab*>( Lab2 )) );
 }
 
-LCMSAPI void          LCMSEXPORT dkCmsDoTransform(cmsHTRANSFORM Transform,
-                                                  LPVOID InputBuffer,
-                                                  LPVOID OutputBuffer,
-                                                  unsigned int Size)
+LCMSAPI void LCMSEXPORT dkCmsDoTransform(cmsHTRANSFORM Transform,
+                                         LPVOID InputBuffer,
+                                         LPVOID OutputBuffer,
+                                         unsigned int Size)
 {
     cmsDoTransform(Transform,
                    static_cast<const void *>( InputBuffer ),
@@ -672,32 +667,32 @@ LCMSAPI void          LCMSEXPORT dkCmsDoTransform(cmsHTRANSFORM Transform,
                    static_cast<cmsUInt32Number>( Size ));
 }
 
-LCMSAPI void          LCMSEXPORT dkCmsFloat2XYZEncoded(WORD XYZ[3], const cmsCIEXYZ* fXYZ)
+LCMSAPI void LCMSEXPORT dkCmsFloat2XYZEncoded(WORD XYZ[3], const cmsCIEXYZ* fXYZ)
 {
     cmsFloat2XYZEncoded(XYZ, fXYZ);
 }
 
-LCMSAPI icColorSpaceSignature   LCMSEXPORT dkCmsGetColorSpace(cmsHPROFILE hProfile)
+LCMSAPI icColorSpaceSignature LCMSEXPORT dkCmsGetColorSpace(cmsHPROFILE hProfile)
 {
     return static_cast<icColorSpaceSignature>( cmsGetColorSpace(hProfile) );
 }
 
-LCMSAPI icColorSpaceSignature   LCMSEXPORT dkCmsGetPCS(cmsHPROFILE hProfile)
+LCMSAPI icColorSpaceSignature LCMSEXPORT dkCmsGetPCS(cmsHPROFILE hProfile)
 {
     return static_cast<icColorSpaceSignature>( cmsGetPCS(hProfile) );
 }
 
-LCMSAPI LCMSBOOL      LCMSEXPORT dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig)
+LCMSAPI LCMSBOOL LCMSEXPORT dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig)
 {
     return static_cast<LCMSBOOL>( cmsIsTag(hProfile, static_cast<cmsTagSignature>( sig )) );
 }
 
-LCMSAPI cmsHPROFILE   LCMSEXPORT dkCmsOpenProfileFromFile(const char* ICCProfile, const char* sAccess)
+LCMSAPI cmsHPROFILE LCMSEXPORT dkCmsOpenProfileFromFile(const char* ICCProfile, const char* sAccess)
 {
     return cmsOpenProfileFromFile(ICCProfile, sAccess);
 }
 
-LCMSAPI void          LCMSEXPORT dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* Source)
+LCMSAPI void LCMSEXPORT dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* Source)
 {
     cmsXYZ2xyY(static_cast<cmsCIExyY*>(Dest), Source);
 }

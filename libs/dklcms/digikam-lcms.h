@@ -34,7 +34,6 @@
 
 #endif // LCMS_VERSION < 114
 
-
 #define dkCmsCloseProfile            cmsCloseProfile
 #define dkCmsCreateProofingTransform cmsCreateProofingTransform
 #define dkCmsCreateTransform         cmsCreateTransform
@@ -67,9 +66,7 @@
 #define dkCmsAdaptMatrixFromD50      cmsAdaptMatrixFromD50
 #define dkCmsReadICCMatrixRGB2XYZ    cmsReadICCMatrixRGB2XYZ
 
-
 #endif // defined(USE_LCMS_VERSION_000)
-
 
 #if defined(USE_LCMS_VERSION_2000)
 
@@ -104,11 +101,10 @@
 #  endif
 #endif
 
-
 typedef int            LCMSBOOL;
-typedef unsigned char  BYTE, *LPBYTE;
-typedef unsigned short WORD, *LPWORD;
-typedef unsigned long  DWORD, *LPDWORD;
+typedef unsigned char  BYTE,     *LPBYTE;
+typedef unsigned short WORD,     *LPWORD;
+typedef unsigned long  DWORD,    *LPDWORD;
 typedef void*          LPVOID;
 
 // Colorspaces
@@ -261,20 +257,20 @@ LCMSAPI icProfileClassSignature LCMSEXPORT dkCmsGetDeviceClass(cmsHPROFILE hProf
 LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsCloseProfile(cmsHPROFILE hProfile);
 
 LCMSAPI cmsHTRANSFORM LCMSEXPORT           dkCmsCreateProofingTransform(cmsHPROFILE Input,
-                                                         DWORD InputFormat,
-                                                         cmsHPROFILE Output,
-                                                         DWORD OutputFormat,
-                                                         cmsHPROFILE Proofing,
-                                                         int Intent,
-                                                         int ProofingIntent,
-                                                         DWORD dwFlags);
+                                                                        DWORD InputFormat,
+                                                                        cmsHPROFILE Output,
+                                                                        DWORD OutputFormat,
+                                                                        cmsHPROFILE Proofing,
+                                                                        int Intent,
+                                                                        int ProofingIntent,
+                                                                        DWORD dwFlags);
 
 LCMSAPI cmsHTRANSFORM LCMSEXPORT           dkCmsCreateTransform(cmsHPROFILE Input,
-                                                         DWORD InputFormat,
-                                                         cmsHPROFILE Output,
-                                                         DWORD OutputFormat,
-                                                         int Intent,
-                                                         DWORD dwFlags);
+                                                                DWORD InputFormat,
+                                                                cmsHPROFILE Output,
+                                                                DWORD OutputFormat,
+                                                                int Intent,
+                                                                DWORD dwFlags);
 
 LCMSAPI cmsHPROFILE   LCMSEXPORT           dkCmsCreateXYZProfile();
 
@@ -297,7 +293,7 @@ LCMSAPI icColorSpaceSignature   LCMSEXPORT dkCmsGetPCS(cmsHPROFILE hProfile);
 
 LCMSAPI LCMSBOOL                LCMSEXPORT dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig);
 
-LCMSAPI cmsHPROFILE             LCMSEXPORT dkCmsOpenProfileFromFile(const char *ICCProfile, const char *sAccess);
+LCMSAPI cmsHPROFILE             LCMSEXPORT dkCmsOpenProfileFromFile(const char* ICCProfile, const char* sAccess);
 
 LCMSAPI void                    LCMSEXPORT dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* Source);
 
