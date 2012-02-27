@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QString>
+#include <QTemporaryFile>
 
 // Local includes
 
@@ -80,6 +81,16 @@ public:
 private:
 
     FileReadWriteLockPriv* d;
+};
+
+class DIGIKAM_EXPORT SafeTemporaryFile : public QTemporaryFile
+{
+public:
+    SafeTemporaryFile();
+    SafeTemporaryFile(const QString& templ);
+    bool open() { return open(QIODevice::ReadWrite); }
+protected:
+    virtual bool open(QIODevice::OpenMode);
 };
 
 }

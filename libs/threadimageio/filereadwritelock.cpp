@@ -80,6 +80,8 @@ public:
     QMutex         mutex;
     QWaitCondition readerWait;
     QWaitCondition writerWait;
+
+    QMutex         tempFileMutex;
     
     QHash<QString, Entry*> entries;
 
@@ -439,6 +441,22 @@ FileWriteLocker::~FileWriteLocker()
 {
     static_d->unlockAndDrop(d);
 }
+
+SafeTemporaryFile::SafeTemporaryFile()
+{
+}
+
+SafeTemporaryFile::SafeTemporaryFile(const QString& templ)
+    : QTemporaryFile(templ)
+{
+}
+
+bool SafeTemporaryFile::open(QIODevice::OpenMode mode)
+{
+    QMutexLocker lock(&static_d->tempFileMutex);
+    return QTemporaryFile::open(mode);
+}
+
 
 }
 
