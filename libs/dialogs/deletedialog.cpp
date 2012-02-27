@@ -6,9 +6,9 @@
  * Date        : 2005-05-07
  * Description : a dialog to delete item.
  *
- * Copyright (C) 2004 by Michael Pyne <michael.pyne@kdemail.net>
- * Copyright (C) 2006 by Ian Monroe <ian@monroe.nu>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2004      by Michael Pyne <michael.pyne@kdemail.net>
+ * Copyright (C) 2006      by Ian Monroe <ian@monroe.nu>
+ * Copyright (C) 2009      by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -80,7 +80,7 @@ DeleteItem::DeleteItem(QTreeWidget* const parent, const KUrl& url)
     {
         setText(1, d->url.toLocalFile());
     }
-    else if ( d->url.protocol() == "digikamalbums")
+    else if (d->url.protocol() == "digikamalbums")
     {
         setText(1, DatabaseUrl(d->url).fileUrl().toLocalFile());
     }
@@ -162,8 +162,8 @@ DeleteItemList::DeleteItemList(QWidget* const parent)
     setToolTip(i18n("List of files that are about to be deleted."));
     setWhatsThis(i18n("This is the list of items that are about to be deleted."));
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
-            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription, QPixmap)));
 }
 
 DeleteItemList::~DeleteItemList()
@@ -197,10 +197,12 @@ void DeleteItemList::slotThumbnailLoaded(const LoadingDescription& desc, const Q
 void DeleteItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
     DeleteItem* item = dynamic_cast<DeleteItem*>(itemFromIndex(index));
+
     if (item && !item->hasValidThumbnail())
     {
         d->thumbLoadThread->find(item->url().toLocalFile());
     }
+
     QTreeWidget::drawRow(p, opt, index);
 }
 
@@ -318,13 +320,14 @@ DeleteWidget::~DeleteWidget()
     delete d;
 }
 
-void DeleteWidget::setFiles(const KUrl::List& files)
+void DeleteWidget::setUrls(const KUrl::List& urls)
 {
     d->fileList->clear();
 
-    for ( KUrl::List::ConstIterator it = files.begin(); it != files.end(); ++it)
+    kDebug() << urls;
+    foreach(KUrl url, urls)
     {
-        new DeleteItem(d->fileList, *it);
+        new DeleteItem(d->fileList, url);
     }
 
     updateText();
@@ -497,7 +500,7 @@ bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
                                      DeleteDialogMode::ListMode listMode,
                                      DeleteDialogMode::DeleteMode deleteMode)
 {
-    setURLs(condemnedFiles);
+    setUrls(condemnedFiles);
     presetDeleteMode(deleteMode);
     setListMode(listMode);
 
@@ -519,9 +522,9 @@ bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
     return exec() == QDialog::Accepted;
 }
 
-void DeleteDialog::setURLs(const KUrl::List& files)
+void DeleteDialog::setUrls(const KUrl::List& urls)
 {
-    d->widget->setFiles(files);
+    d->widget->setUrls(urls);
 }
 
 void DeleteDialog::slotUser1Clicked()
@@ -643,6 +646,5 @@ void DeleteDialog::keyPressEvent(QKeyEvent* e)
 
     KDialog::keyPressEvent(e);
 }
-
 
 } // namespace Digikam

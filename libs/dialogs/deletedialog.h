@@ -6,9 +6,9 @@
  * Date        : 2005-05-07
  * Description : a dialog to delete item.
  *
- * Copyright (C) 2004 by Michael Pyne <michael.pyne@kdemail.net>
- * Copyright (C) 2006 by Ian Monroe <ian@monroe.nu>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2004      by Michael Pyne <michael.pyne@kdemail.net>
+ * Copyright (C) 2006      by Ian Monroe <ian@monroe.nu>
+ * Copyright (C) 2009      by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -124,7 +124,7 @@ public:
     DeleteWidget(QWidget* const parent = 0);
     virtual ~DeleteWidget();
 
-    void setFiles(const KUrl::List& files);
+    void setUrls(const KUrl::List& urls);
     void setListMode(DeleteDialogMode::ListMode mode);
     void setDeleteMode(DeleteDialogMode::DeleteMode deleteMode);
 
@@ -169,7 +169,7 @@ public:
                            DeleteDialogMode::DeleteMode deleteMode);
     bool shouldDelete() const;
 
-    void setURLs(const KUrl::List& files);
+    void setUrls(const KUrl::List& urls);
     void presetDeleteMode(DeleteDialogMode::DeleteMode mode);
     void setListMode(DeleteDialogMode::ListMode mode);
 
