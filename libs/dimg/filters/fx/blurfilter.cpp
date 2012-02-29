@@ -6,7 +6,7 @@
  * Date        : 2005-17-07
  * Description : A Gaussian Blur threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -34,6 +34,10 @@
 
 #include "CImg.h"
 
+// Qt includes
+
+#include <qmath.h>
+
 // KDE includes
 
 #include <kdebug.h>
@@ -43,20 +47,20 @@ using namespace cimg_library;
 namespace Digikam
 {
 
-BlurFilter::BlurFilter(QObject* parent)
+BlurFilter::BlurFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-BlurFilter::BlurFilter(DImg* orgImage, QObject* parent, int radius)
+BlurFilter::BlurFilter(DImg* const orgImage, QObject* const parent, int radius)
     : DImgThreadedFilter(orgImage, parent, "GaussianBlur")
 {
     m_radius = radius;
     initFilter();
 }
 
-BlurFilter::BlurFilter(DImgThreadedFilter* parentFilter,
+BlurFilter::BlurFilter(DImgThreadedFilter* const parentFilter,
                        const DImg& orgImage, const DImg& destImage,
                        int progressBegin, int progressEnd, int radius)
     : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
@@ -210,7 +214,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
 
     for (i = 0; runningFlag() && (i < nKSize); ++i)
     {
-        x = sqrt((i - nCenter) * (i - nCenter));
+        x = qSqrt((i - nCenter) * (i - nCenter));
         Kernel[i] = (int)(factor * exp(-0.5 * pow((x / sd), 2)) / (sd * sqrt(2.0 * M_PI)));
     }
 
