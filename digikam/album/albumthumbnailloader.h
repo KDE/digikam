@@ -49,6 +49,23 @@ class AlbumThumbnailLoader : public QObject
 
 public:
 
+    /**
+     * Album thumbnail size is configurable via the settings menu.
+     * Some widgets use smaller icons than other widgets.
+     * These widgets do not need to know the currently set icon size from
+     * the setup and calculate a smaller size, but can simply request
+     * a relatively smaller icon.
+     * Depending on the user-chosen icon size, this size may in fact not
+     * be smaller than the normal size.
+     */
+    enum RelativeSize
+    {
+        NormalSize,
+        SmallerSize
+    };
+
+public:
+
     static AlbumThumbnailLoader* instance();
 
     void cleanUp();
@@ -65,21 +82,6 @@ public:
     int  thumbnailSize() const;
 
     /**
-     * Album thumbnail size is configurable via the settings menu.
-     * Some widgets use smaller icons than other widgets.
-     * These widgets do not need to know the currently set icon size from
-     * the setup and calculate a smaller size, but can simply request
-     * a relatively smaller icon.
-     * Depending on the user-chosen icon size, this size may in fact not
-     * be smaller than the normal size.
-     */
-    enum RelativeSize
-    {
-        NormalSize,
-        SmallerSize
-    };
-
-    /**
      * Request thumbnail for given album.
      * The thumbnail will be loaded
      * and returned asynchronously by the signals.
@@ -87,7 +89,7 @@ public:
      * no action will be taken, and false is returned.
      *
     */
-    bool getAlbumThumbnail(PAlbum* album);
+    bool getAlbumThumbnail(PAlbum* const album);
 
     /**
       * Request thumbnail for given album,
@@ -98,7 +100,7 @@ public:
       * by the signals, and a default icon is returned here.
       * If no icon is associated, the default icon is returned.
     */
-    QPixmap getAlbumThumbnailDirectly(PAlbum* album);
+    QPixmap getAlbumThumbnailDirectly(PAlbum* const album);
 
     /**
       * Behaves similar to the above method.
@@ -117,7 +119,7 @@ public:
       * obtained below, or used as is when SmallerSize is requested anyway.
       * @return Returns true if icon is loaded asynchronously.
       */
-    bool getTagThumbnail(TAlbum* album, QPixmap& icon);
+    bool getTagThumbnail(TAlbum* const album, QPixmap& icon);
 
     /**
       * Loads tag thumbnail,
@@ -128,7 +130,7 @@ public:
       * by the signals (unblended), and a default icon is returned here.
       * If no icon is associated, the default icon is returned.
       */
-    QPixmap getTagThumbnailDirectly(TAlbum* album, bool blendIcons = true);
+    QPixmap getTagThumbnailDirectly(TAlbum* const album, bool blendIcons = true);
 
     /**
      * Return standard tag and album icons.
@@ -137,7 +139,7 @@ public:
      */
     QPixmap getStandardTagIcon(RelativeSize size = NormalSize);
     QPixmap getStandardTagRootIcon(RelativeSize size = NormalSize);
-    QPixmap getStandardTagIcon(TAlbum* album, RelativeSize size = NormalSize);
+    QPixmap getStandardTagIcon(TAlbum* const album, RelativeSize size = NormalSize);
     QPixmap getNewTagIcon(RelativeSize size = NormalSize);
 
     QPixmap getStandardAlbumIcon(RelativeSize size = NormalSize);
@@ -185,7 +187,7 @@ private:
     AlbumThumbnailLoader();
     ~AlbumThumbnailLoader();
 
-    void    addUrl(Album* album, const KUrl& url);
+    void    addUrl(Album* const album, const KUrl& url);
     QPixmap loadIcon(const QString& name, int size = 0);
     QPixmap createTagThumbnail(const QPixmap& albumThumbnail);
     int     computeIconSize(RelativeSize size);

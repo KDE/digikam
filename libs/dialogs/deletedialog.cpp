@@ -74,7 +74,23 @@ DeleteItem::DeleteItem(QTreeWidget* const parent, const KUrl& url)
     : QTreeWidgetItem(parent), d(new DeleteItemPriv)
 {
     d->url = url;
-    setThumb(SmallIcon("image-x-generic", parent->iconSize().width(), KIconLoader::DisabledState), false);
+
+    if (d->url.protocol() == "digikamalbums")
+    {
+        if (DatabaseUrl(d->url).isAlbumUrl())
+        {
+            setThumb(SmallIcon("folder", parent->iconSize().width()));
+        }
+        else
+        {
+            setThumb(SmallIcon("tag", parent->iconSize().width()));
+        }
+    }
+    else
+    {
+        setThumb(SmallIcon("image-x-generic", parent->iconSize().width(), KIconLoader::DisabledState), false);
+    }
+
     setText(1, fileUrl());
 }
 
@@ -160,7 +176,7 @@ DeleteItemList::DeleteItemList(QWidget* const parent)
     setHeaderLabels(QStringList() << i18n("Thumb") << i18n("Path"));
     header()->setResizeMode(0, QHeaderView::ResizeToContents);
     header()->setResizeMode(1, QHeaderView::Stretch);
-    setToolTip(i18n("List of files that are about to be deleted."));
+    setToolTip(i18n("List of items that are about to be deleted."));
     setWhatsThis(i18n("This is the list of items that are about to be deleted."));
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
@@ -180,9 +196,6 @@ void DeleteItemList::slotThumbnailLoaded(const LoadingDescription& desc, const Q
     {
         DeleteItem* item = dynamic_cast<DeleteItem*>(*it);
 
-        kDebug() << item->fileUrl();
-        kDebug() << desc.filePath;
-
         if (item && item->fileUrl() == desc.filePath)
         {
             if (!pix.isNull())
@@ -191,6 +204,7 @@ void DeleteItemList::slotThumbnailLoaded(const LoadingDescription& desc, const Q
             }
             return;
         }
+
         ++it;
     }
 }
@@ -283,13 +297,13 @@ DeleteWidget::DeleteWidget(QWidget* const parent)
     d->shouldDelete->setGeometry(QRect(0, 0, 542, 32));
     d->shouldDelete->setToolTip(i18n("If checked, files will be permanently removed instead of being placed "
                                     "in the Trash."));
-    d->shouldDelete->setWhatsThis(i18n("<p>If this box is checked, files will be "
+    d->shouldDelete->setWhatsThis(i18n("<p>If this box is checked, items will be "
                                       "<b>permanently removed</b> instead of "
                                       "being placed in the Trash.</p>"
                                       "<p><em>Use this option with caution</em>: most filesystems "
                                       "are unable to "
-                                      "undelete deleted files reliably.</p>"));
-    d->shouldDelete->setText(i18n("&Delete files instead of moving them to the trash"));
+                                      "undelete deleted items reliably.</p>"));
+    d->shouldDelete->setText(i18n("&Delete items instead of moving them to the trash"));
 
     connect(d->shouldDelete, SIGNAL(toggled(bool)),
             this, SLOT(slotShouldDelete(bool)));
@@ -325,7 +339,6 @@ void DeleteWidget::setUrls(const KUrl::List& urls)
 {
     d->fileList->clear();
 
-    kDebug() << urls;
     foreach(KUrl url, urls)
     {
         new DeleteItem(d->fileList, url);
@@ -356,17 +369,17 @@ void DeleteWidget::updateText()
     // set "do not ask again checkbox text
     if (d->deleteMode == DeleteDialogMode::DeletePermanently)
     {
-        d->doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
+        d->doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and items will "
                                            "be directly and permanently deleted."));
         d->doNotShowAgain->setWhatsThis(i18n("If this box is checked, this dialog will no longer be shown, "
-                                             "and files will be directly and permanently deleted."));
+                                             "and items will be directly and permanently deleted."));
     }
     else
     {
-        d->doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
+        d->doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and items will "
                                            "be directly moved to the Trash."));
         d->doNotShowAgain->setWhatsThis(i18n("If this box is checked, this dialog will no longer be shown, "
-                                             "and files will be directly moved to the Trash."));
+                                             "and items will be directly moved to the Trash."));
     }
 
     switch (d->listMode)
@@ -387,7 +400,7 @@ void DeleteWidget::updateText()
                 d->deleteText->setText(i18n("These items will be moved to Trash."));
                 d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
                                           KIconLoader::Desktop, KIconLoader::SizeLarge));
-                d->numFiles->setText(i18np("<b>1</b> file selected.", "<b>%1</b> files selected.",
+                d->numFiles->setText(i18np("<b>1</b> item selected.", "<b>%1</b> items selected.",
                                            d->fileList->topLevelItemCount()));
             }
 
@@ -614,7 +627,7 @@ void DeleteDialog::setListMode(DeleteDialogMode::ListMode mode)
     switch (mode)
     {
         case DeleteDialogMode::Files:
-            setCaption(i18n("About to delete selected files"));
+            setCaption(i18n("About to delete selected items"));
             break;
 
         case DeleteDialogMode::Albums:

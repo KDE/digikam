@@ -81,9 +81,13 @@ public:
 class AlbumThumbnailLoaderCreator
 {
 public:
+
     AlbumThumbnailLoader object;
 };
+
 K_GLOBAL_STATIC(AlbumThumbnailLoaderCreator, creator)
+
+// ---------------------------------------------------------------------------------------------
 
 AlbumThumbnailLoader* AlbumThumbnailLoader::instance()
 {
@@ -128,7 +132,7 @@ QPixmap AlbumThumbnailLoader::getStandardTagRootIcon(RelativeSize relativeSize)
     return loadIcon("tag-folder", computeIconSize(relativeSize));
 }
 
-QPixmap AlbumThumbnailLoader::getStandardTagIcon(TAlbum* album, RelativeSize relativeSize)
+QPixmap AlbumThumbnailLoader::getStandardTagIcon(TAlbum* const album, RelativeSize relativeSize)
 {
     if (album->isRoot())
     {
@@ -155,7 +159,7 @@ QPixmap AlbumThumbnailLoader::getStandardAlbumRootIcon(RelativeSize relativeSize
     return loadIcon("folder-image", computeIconSize(relativeSize));
 }
 
-QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum* album, RelativeSize relativeSize)
+QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum* const album, RelativeSize relativeSize)
 {
     if (album->isRoot() || album->isAlbumRoot())
     {
@@ -194,7 +198,7 @@ QPixmap AlbumThumbnailLoader::loadIcon(const QString& name, int size)
     return iconLoader->loadIcon(name, KIconLoader::NoGroup, size);
 }
 
-bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* album, QPixmap& icon)
+bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* const album, QPixmap& icon)
 {
     int size = computeIconSize(SmallerSize);
     /*
@@ -228,7 +232,7 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* album, QPixmap& icon)
     }
 }
 
-QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* album, bool blendIcon)
+QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* const album, bool blendIcon)
 {
     int size = computeIconSize(SmallerSize);
 
@@ -273,7 +277,7 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* album, bool blendI
     return getStandardTagIcon(album);
 }
 
-bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum* album)
+bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum* const album)
 {
     if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
     {
@@ -287,7 +291,7 @@ bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum* album)
     return true;
 }
 
-QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum* album)
+QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum* const album)
 {
     if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
     {
@@ -306,7 +310,7 @@ QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum* album)
     return getStandardAlbumIcon(album);
 }
 
-void AlbumThumbnailLoader::addUrl(Album* album, const KUrl& url)
+void AlbumThumbnailLoader::addUrl(Album* const album, const KUrl& url)
 {
     /*
     QPixmap* pix = d->cache->find(album->iconKURL().toLocalFile());
