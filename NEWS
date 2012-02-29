@@ -73,6 +73,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 055 ==> 294105 : Please support lcms2
 056 ==> 294585 : Crash on facebook export.
 057 ==> 294995 : Delete photos and their management in the database Mysql.
-058 ==> 
-
-
+058 ==> 295104 : Sdt namespace ambiguity in BlurFilter [patch].
+059 ==> 
