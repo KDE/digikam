@@ -97,6 +97,10 @@ void KNotificationWrapper(const QString& eventId, const QString& message,
     //       In a regular KDE session, KNotify should be running already.
     if (!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.knotify"))
     {
+        if (!parent)
+        {
+            return;
+        }
         NotificationPassivePopup* popup = new NotificationPassivePopup(parent);
         popup->showNotification(windowTitle, message, logoPixmap);
     }
