@@ -28,11 +28,11 @@
 // Qt includes
 
 #include <QString>
+#include <QTemporaryFile>
 
 // KDE includes
 
 #include <kurl.h>
-#include <ktemporaryfile.h>
 
 // Local includes
 
@@ -86,7 +86,7 @@ public:
     KUrl                destinationURL;
     KUrl                moveSrcURL;
 
-    KTemporaryFile*     saveTempFile;
+    QTemporaryFile*     saveTempFile;
     QString             saveTempFileName;
 
     VersionFileOperation versionFileOperation;

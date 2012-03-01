@@ -127,6 +127,7 @@
 #include "editortoolsettings.h"
 #include "editortooliface.h"
 #include "exposurecontainer.h"
+#include "filereadwritelock.h"
 #include "filesaveoptionsbox.h"
 #include "filesaveoptionsdlg.h"
 #include "iccpostloadingmanager.h"
@@ -1973,24 +1974,29 @@ void EditorWindow::finishSaving(bool success)
 
 void EditorWindow::setupTempSaveFile(const KUrl& url)
 {
-#ifdef _WIN32
-    KUrl parent(url.directory(KUrl::AppendTrailingSlash));
-    QString tempDir = parent.toLocalFile();
-#else
-    QString tempDir = url.directory(KUrl::AppendTrailingSlash);
-#endif
-
-    // use magic file extension which tells the digikamalbums ioslave to ignore the file
-    m_savingContext.saveTempFile = new KTemporaryFile();
-
     // if the destination url is on local file system, try to set the temp file
     // location to the destination folder, otherwise use a local default
+    QString tempDir;
     if (url.isLocalFile())
     {
-        m_savingContext.saveTempFile->setPrefix(tempDir);
+        #ifdef _WIN32
+        KUrl parent(url.directory());
+        tempDir = parent.toLocalFile();
+        #else
+        tempDir = url.directory();
+        #endif
+    }
+    else
+    {
+        tempDir = QDir::tempPath();
     }
 
-    m_savingContext.saveTempFile->setSuffix(".digikamtempfile.tmp");
+    QString path = url.path();
+    int lastDot  = path.lastIndexOf(QLatin1Char('.'));
+    QString suffix = path.mid(lastDot+1);
+
+    // use magic file extension which tells the digikamalbums ioslave to ignore the file
+    m_savingContext.saveTempFile = new SafeTemporaryFile(tempDir + "/EditorWindow-XXXXXX.digikamtempfile." + suffix);
     m_savingContext.saveTempFile->setAutoRemove(false);
 
     if (!m_savingContext.saveTempFile->open())

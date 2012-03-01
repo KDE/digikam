@@ -74,4 +74,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 056 ==> 294585 : Crash on facebook export.
 057 ==> 294995 : Delete photos and their management in the database Mysql.
 058 ==> 295104 : Sdt namespace ambiguity in BlurFilter [patch].
-059 ==> 
+059 ==> 294884 : Digikam crash at startup (due to notification window).
+060 ==> 
