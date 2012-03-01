@@ -120,6 +120,7 @@ Use CMake "-DENABLE_INTERNALMYSQL=no"     flag to compile digiKam without intern
 Use CMake "-DENABLE_ADVANCEDDEBUGMSG=yes" flag to compile digiKam with more internal debug messages, especially in image loaders (disabled by default).
 Use CMake "-DENABLE_NEPOMUKSUPPORT=no"    flag to compile digiKam without Nepomuk support                                        (enabled by default ).
 Use CMake "-DKDE4_BUILD_TESTS=yes"        flag to compile digiKam source code unit tests                                         (disabled by default).
+Use CMake "-DENABLE_LCMS2=yes"            flag to compile digiKam source code against lcms2 instead lcms1                        (disabled by default).
 
 To support Video thumbnails under Linux, please install "mplayerthumbs" package.
 
