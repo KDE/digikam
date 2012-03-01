@@ -4,12 +4,12 @@ PROJECT(digikam)
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: digikam")
 
-OPTION(ENABLE_SCRIPTIFACE      "Build digiKam with experimental scripting support (default=OFF)" OFF)
-OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (default=ON)"     ON)
-OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"     ON)
-OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"    OFF)
-OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                 ON)
-OPTION(ENABLE_LCMS2            "Link digiKam to lcms2 (experimental) (default=OFF)"              OFF)
+OPTION(ENABLE_SCRIPTIFACE      "Build digiKam with experimental scripting support (default=OFF)"  OFF)
+OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (default=ON)"      ON)
+OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"      ON)
+OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"     OFF)
+OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                  ON)
+OPTION(ENABLE_LCMS2            "Link digiKam to LCMS2 instead LCMS1 (experimental) (default=OFF)" OFF)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -157,39 +157,41 @@ FIND_PACKAGE(PGF)
 FIND_PACKAGE(CLAPACK)
 FIND_PACKAGE(Boost) # 1.36.0)
 
-# LCMS version 1 and 2 library
+# LCMS version 1 and 2 library handling
 # See B.K.O #294105
-# at the moment (2.6) we STILL DEFAULT TO LCMS1 because the porting to lcms2 is
-# experimental.
-# It's possible to force lcms2 enabling the ENABLE_LCMS2 option
-# future plans:
+# At the moment (2.6) we still DEFAULT to LCMS1 because porting to LCMS2 still experimental.
+# It's possible to force to use LCMS2 by switch on ENABLE_LCMS2 option
+# Future plans:
 #   2.7 will compile against lcms2 by default but lcms1 will stay as a fallback
 #   2.8 will support lcms2 only, probably ENABLE_LCMS2 will be removed too
 #       unless we decide to support another color managment library
-# Note, if ENABLE_LCMS2 is set and there is no lcms2 build will fail, even if
-# lcms1 is present
+# Note: if ENABLE_LCMS2 is on and no LCMS2 is available, build will fail, even if LCMS1 is present
 IF (ENABLE_LCMS2)
+    MESSAGE(STATUS "Check for LCMS2 availability...")
     PKG_CHECK_MODULES(LCMS2 REQUIRED lcms2)
     IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
-        MESSAGE(STATUS "Found lcms2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIRS}")
+        MESSAGE(STATUS "Found LCMS2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
         SET(LCMS_FOUND ${LCMS2_FOUND})
         SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
-        SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIRS})
+        SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIR})
         SET(USE_LCMS_VERSION_2000 1)
     ENDIF  (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
 ELSE (ENABLE_LCMS2)
+    MESSAGE(STATUS "Check for LCMS1 availability...")
     FIND_PACKAGE(LCMS)
     IF (LCMS_FOUND)
+        MESSAGE(STATUS "Found LCMS1: ${LCMS_LIBRARIES} ${LCMS_INCLUDE_DIR}")
         SET(USE_LCMS_VERSION_1000 1)
     ELSE (LCMS_FOUND)
+        MESSAGE(STATUS "Check for LCMS2 availability instead LCMS1...")
         PKG_CHECK_MODULES(LCMS2 REQUIRED lcms2)
         IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
-            MESSAGE(STATUS "Found lcms2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIRS}")
-            MESSAGE(WARNING "Support for lcms version 2 still experimental")
-            MESSAGE(WARNING "Please install lcms version 1 if possible")
+            MESSAGE(STATUS "Found LCMS2 instead LCMS1: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
+            MESSAGE(WARNING "Support of LCMS2 still experimental")
+            MESSAGE(WARNING "Please install LCMS1 if possible")
             SET(LCMS_FOUND ${LCMS2_FOUND})
             SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
-            SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIRS})
+            SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIR})
             SET(USE_LCMS_VERSION_2000 1)
         ENDIF (LCMS_FOUND)
     ENDIF (LCMS_FOUND)
