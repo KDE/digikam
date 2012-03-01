@@ -203,19 +203,19 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
     double       x, sd, factor, lnsd, lnfactor;
     register int i, j, n, h, w;
 
-    nKSize      = 2 * radius + 1;
-    nCenter     = nKSize / 2;
+    nKSize   = 2 * radius + 1;
+    nCenter  = nKSize / 2;
     QScopedArrayPointer<int> Kernel(new int[nKSize]);
 
     lnfactor = (4.2485 - 2.7081) / 10 * nKSize + 2.7081;
     lnsd     = (0.5878 + 0.5447) / 10 * nKSize - 0.5447;
-    factor   = exp(lnfactor);
-    sd       = exp(lnsd);
+    factor   = qExp(lnfactor);
+    sd       = qExp(lnsd);
 
     for (i = 0; runningFlag() && (i < nKSize); ++i)
     {
         x = qSqrt((i - nCenter) * (i - nCenter));
-        Kernel[i] = (int)(factor * exp(-0.5 * pow((x / sd), 2)) / (sd * sqrt(2.0 * M_PI)));
+        Kernel[i] = (int)(factor * qExp(-0.5 * qPow((x / sd), 2)) / (sd * qSqrt(2.0 * M_PI)));
     }
 
     // Now, we need to convolve the image descriptor.
@@ -259,7 +259,8 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
         {
             if (!sixteenBit)        // 8 bits image.
             {
-                uchar* org, *dst;
+                uchar* org = 0;
+                uchar* dst = 0;
 
                 // first of all, we need to blur the horizontal lines
 
@@ -301,7 +302,8 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
             }
             else                 // 16 bits image.
             {
-                unsigned short* org, *dst;
+                unsigned short* org = 0;
+                unsigned short* dst = 0;
 
                 // first of all, we need to blur the horizontal lines
 
@@ -373,7 +375,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
                         j = i + n * 4 * width;
 
                         // finally, we sum the pixels using a method similar to assigntables
-                        org = &pBlur[j];
+                        org   = &pBlur[j];
                         nSumA += arrMult[n + radius][org[3]];
                         nSumR += arrMult[n + radius][org[2]];
                         nSumG += arrMult[n + radius][org[1]];
@@ -469,7 +471,7 @@ FilterAction BlurFilter::filterAction()
     return action;
 }
 
-void BlurFilter::readParameters(const Digikam::FilterAction& action)
+void BlurFilter::readParameters(const FilterAction& action)
 {
     m_radius = action.parameter("radius").toInt();
 }

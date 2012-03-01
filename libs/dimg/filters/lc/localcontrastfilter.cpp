@@ -7,10 +7,10 @@
  * Description : Enhance image with local contrasts (as human eye does).
  *               LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>
  *
- * Copyright (C) 2009 by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
- * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at gmail dot com>
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2009      by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
+ * Copyright (C) 2009      by Julien Pontabry <julien dot pontabry at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +27,10 @@
 
 #include "localcontrastfilter.h"
 
+// Qt includes
+
+#include <qmath.h>
+
 // KDE includes
 
 #include <kdebug.h>
@@ -38,7 +42,7 @@
 namespace Digikam
 {
 
-class LocalContrastFilterPriv
+class LocalContrastFilter::LocalContrastFilterPriv
 {
 public:
 
@@ -210,19 +214,19 @@ float LocalContrastFilter::func(float x1, float x2)
     //test function
     if (d->par.function_id==1)
     {
-        p=pow(0.1,fabs((x2*2.0-1.0))*d->current_process_power_value*0.02);
-        if (x2<0.5) result=pow(x1,p);
-        else result=1.0-pow(1.0-x1,p);
+        p=qPow(0.1,qFabs((x2*2.0-1.0))*d->current_process_power_value*0.02);
+        if (x2<0.5) result=qPow(x1,p);
+        else result=1.0-qPow(1.0-x1,p);
         return result;
     };
     //test function
     if (function_id==1)
     {
         p=d->current_process_power_value*0.3+1e-4;
-        x2=1.0/(1.0+exp(-(x2*2.0-1.0)*p*0.5));
-        float f=1.0/(1.0+exp((1.0-(x1-x2+0.5)*2.0)*p));
-        float m0=1.0/(1.0+exp((1.0-(-x2+0.5)*2.0)*p));
-        float m1=1.0/(1.0+exp((1.0-(-x2+1.5)*2.0)*p));
+        x2=1.0/(1.0+qExp(-(x2*2.0-1.0)*p*0.5));
+        float f=1.0/(1.0+qExp((1.0-(x1-x2+0.5)*2.0)*p));
+        float m0=1.0/(1.0+qExp((1.0-(-x2+0.5)*2.0)*p));
+        float m1=1.0/(1.0+qExp((1.0-(-x2+1.5)*2.0)*p));
         result=(f-m0)/(m1-m0);
         return result;
     };
@@ -232,15 +236,15 @@ float LocalContrastFilter::func(float x1, float x2)
     {
         case 0:  //power function
         {
-            p = (float)(pow((double)10.0, (double)fabs((x2 * 2.0 - 1.0)) * d->current_process_power_value * 0.02));
+            p = (float)(qPow((double)10.0, (double)qFabs((x2 * 2.0 - 1.0)) * d->current_process_power_value * 0.02));
 
             if (x2 >= 0.5)
             {
-                result = pow(x1, p);
+                result = qPow(x1, p);
             }
             else
             {
-                result = (float)(1.0 - pow((double)1.0 - x1, (double)p));
+                result = (float)(1.0 - qPow((double)1.0 - x1, (double)p));
             }
 
             break;
@@ -248,7 +252,7 @@ float LocalContrastFilter::func(float x1, float x2)
 
         case 1:  //linear function
         {
-            p      = (float)(1.0 / (1 + exp(-(x2 * 2.0 - 1.0) * d->current_process_power_value * 0.04)));
+            p      = (float)(1.0 / (1 + qExp(-(x2 * 2.0 - 1.0) * d->current_process_power_value * 0.04)));
             result = (x1 < p) ? (float)(x1 * (1.0 - p) / p) : (float)((1.0 - p) + (x1 - p) * p / (1.0 - p));
             break;
         }
@@ -310,8 +314,8 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
                 float dest_b = func(src_b, blur);
 
                 img[pos]     = dest_r;
-                img[pos + 1]   = dest_g;
-                img[pos + 2]   = dest_b;
+                img[pos + 1] = dest_g;
+                img[pos + 2] = dest_b;
 
                 pos += 3;
             }
@@ -375,14 +379,14 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
         inplace_blur(blurimage.data(), sizex, sizey, blur_value);
 
         pos              = 0;
-        float pow        = (float)(2.5 * d->par.get_unsharp_mask_power());
-        float threshold  = (float)(d->par.unsharp_mask.threshold * pow / 250.0);
+        float pw         = (float)(2.5 * d->par.get_unsharp_mask_power());
+        float threshold  = (float)(d->par.unsharp_mask.threshold * pw / 250.0);
         float threshold2 = threshold / 2;
 
         for (int i = 0 ; runningFlag() && (i < size) ; ++i)
         {
-            float dval     = (val[i] - blurimage[i]) * pow;
-            float abs_dval = fabs(dval);
+            float dval     = (val[i] - blurimage[i]) * pw;
+            float abs_dval = qFabs(dval);
 
             if (abs_dval < threshold)
             {
@@ -402,9 +406,9 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
                 }
             }
 
-            float r   = img[pos]  + dval;
-            float g   = img[pos + 1] + dval;
-            float b   = img[pos + 2] + dval;
+            float r = img[pos]  + dval;
+            float g = img[pos + 1] + dval;
+            float b = img[pos + 2] + dval;
 
             if (r < 0.0)
             {
@@ -454,7 +458,7 @@ void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float 
         return;
     }
 
-    float a = (float)(exp(log(0.25) / blur));
+    float a = (float)(qExp(log(0.25) / blur));
 
     if ((a <= 0.0) || (a >= 1.0))
     {
@@ -701,9 +705,9 @@ FilterAction LocalContrastFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("function_id", d->par.function_id);
-    action.addParameter("high_saturation", d->par.high_saturation);
-    action.addParameter("low_saturation", d->par.low_saturation);
+    action.addParameter("function_id",      d->par.function_id);
+    action.addParameter("high_saturation",  d->par.high_saturation);
+    action.addParameter("low_saturation",   d->par.low_saturation);
     action.addParameter("stretch_contrast", d->par.stretch_contrast);
 
     for (int nstage = 0 ; nstage < TONEMAPPING_MAX_STAGES ; ++nstage)
@@ -714,7 +718,7 @@ FilterAction LocalContrastFilter::filterAction()
         if (d->par.stage[nstage].enabled)
         {
             action.addParameter(stage + "power", d->par.stage[nstage].power);
-            action.addParameter(stage + "blur", d->par.stage[nstage].blur);
+            action.addParameter(stage + "blur",  d->par.stage[nstage].blur);
         }
     }
 
@@ -722,8 +726,8 @@ FilterAction LocalContrastFilter::filterAction()
 
     if (d->par.unsharp_mask.enabled)
     {
-        action.addParameter("unsharp_mask:blur", d->par.unsharp_mask.blur);
-        action.addParameter("unsharp_mask:power", d->par.unsharp_mask.power);
+        action.addParameter("unsharp_mask:blur",      d->par.unsharp_mask.blur);
+        action.addParameter("unsharp_mask:power",     d->par.unsharp_mask.power);
         action.addParameter("unsharp_mask:threshold", d->par.unsharp_mask.threshold);
     }
 
@@ -732,16 +736,16 @@ FilterAction LocalContrastFilter::filterAction()
     return action;
 }
 
-void LocalContrastFilter::readParameters(const Digikam::FilterAction& action)
+void LocalContrastFilter::readParameters(const FilterAction& action)
 {
-    d->par.function_id = action.parameter("function_id").toInt();
-    d->par.high_saturation = action.parameter("high_saturation").toInt();
-    d->par.low_saturation = action.parameter("low_saturation").toInt();
+    d->par.function_id      = action.parameter("function_id").toInt();
+    d->par.high_saturation  = action.parameter("high_saturation").toInt();
+    d->par.low_saturation   = action.parameter("low_saturation").toInt();
     d->par.stretch_contrast = action.parameter("stretch_contrast").toBool();
 
     for (int nstage = 0 ; nstage < TONEMAPPING_MAX_STAGES ; ++nstage)
     {
-        QString stage = QString("stage[%1]:").arg(nstage);
+        QString stage                = QString("stage[%1]:").arg(nstage);
         d->par.stage[nstage].enabled = action.parameter(stage + "enabled").toBool();
 
         if (d->par.stage[nstage].enabled)
@@ -755,13 +759,12 @@ void LocalContrastFilter::readParameters(const Digikam::FilterAction& action)
 
     if (d->par.unsharp_mask.enabled)
     {
-        d->par.unsharp_mask.blur = action.parameter("unsharp_mask:blur").toFloat();
-        d->par.unsharp_mask.power = action.parameter("unsharp_mask:power").toFloat();
+        d->par.unsharp_mask.blur      = action.parameter("unsharp_mask:blur").toFloat();
+        d->par.unsharp_mask.power     = action.parameter("unsharp_mask:power").toFloat();
         d->par.unsharp_mask.threshold = action.parameter("unsharp_mask:threshold").toInt();
     }
 
     d->generator.seed(action.parameter("randomSeed").toUInt());
 }
-
 
 } // namespace Digikam

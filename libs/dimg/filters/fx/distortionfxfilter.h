@@ -6,7 +6,7 @@
  * Date        : 2005-07-18
  * Description : Distortion FX threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -47,8 +47,8 @@ class DIGIKAM_EXPORT DistortionFXFilter : public DImgThreadedFilter
 
 public:
 
-    explicit DistortionFXFilter(QObject* parent = 0);
-    explicit DistortionFXFilter(DImg* orgImage, QObject* parent=0, int effectType=0,
+    explicit DistortionFXFilter(QObject* const parent = 0);
+    explicit DistortionFXFilter(DImg* const orgImage, QObject* const parent=0, int effectType=0,
                                 int level=0, int iteration=0, bool antialiasing=true);
 
     ~DistortionFXFilter();
@@ -57,14 +57,17 @@ public:
     {
         return "digikam:DistortionFXFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Distortion Effect");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -74,7 +77,9 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
+
     void                    readParameters(const FilterAction& action);
 
 public:
@@ -122,19 +127,6 @@ private:
     void setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
                            uchar* data, uchar* pResBits,
                            int w, int h, double nw, double nh, bool AntiAlias);
-    /*
-    //UNUSED
-
-    inline double maximumRadius(int Height, int Width, double Angle);
-
-    // This function does the same thing that ShadeColors function but using double variables.
-    inline double proportionalValue (double DestValue, double SrcValue, double Shade)
-    {
-        if (Shade == 0.0) return DestValue;
-        if (Shade == 255.0) return SrcValue;
-        return ((DestValue * (255.0 - Shade) + SrcValue * Shade) / 256.0);
-    };
-    */
 
     // Return the limit defined the max and min values.
     inline int Lim_Max(int Now, int Up, int Max)
@@ -170,11 +162,11 @@ private:
 
 private:
 
-    bool m_antiAlias;
+    bool    m_antiAlias;
 
-    int  m_level;
-    int  m_iteration;
-    int  m_effectType;
+    int     m_level;
+    int     m_iteration;
+    int     m_effectType;
     quint32 m_randomSeed;
 };
 

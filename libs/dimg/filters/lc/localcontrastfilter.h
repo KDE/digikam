@@ -7,9 +7,9 @@
  * Description : Enhance image with local contrasts (as human eye does).
  *               LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>
  *
- * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at gmail dot com>
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2009      by Julien Pontabry <julien dot pontabry at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,29 +43,30 @@ using namespace Digikam;
 namespace Digikam
 {
 
-class LocalContrastFilterPriv;
-
 class DIGIKAM_EXPORT LocalContrastFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit LocalContrastFilter(QObject* parent = 0);
-    explicit LocalContrastFilter(DImg* image, QObject* parent=0, const LocalContrastContainer& par=LocalContrastContainer());
+    explicit LocalContrastFilter(QObject* const parent = 0);
+    explicit LocalContrastFilter(DImg* const image, QObject* const parent=0, const LocalContrastContainer& par=LocalContrastContainer());
     ~LocalContrastFilter();
 
     static QString          FilterIdentifier()
     {
         return "digikam:LocalContrastFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Local Contrast Filter");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -75,7 +76,9 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
+
     void                    readParameters(const FilterAction& action);
 
 private:
@@ -96,6 +99,7 @@ private:
 
 private:
 
+    class LocalContrastFilterPriv;
     LocalContrastFilterPriv* const d;
 };
 

@@ -6,9 +6,9 @@
  * Date        : 2005-05-25
  * Description : Raindrop threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original RainDrop algorithm copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -30,13 +30,13 @@
 
 // C++ includes
 
-#include <cmath>
 #include <cstdlib>
 
 // Qt includes
 
 #include <QDateTime>
 #include <QRect>
+#include <qmath.h>
 
 // Local includes
 
@@ -45,14 +45,14 @@
 namespace Digikam
 {
 
-RainDropFilter::RainDropFilter(QObject* parent)
+RainDropFilter::RainDropFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-RainDropFilter::RainDropFilter(DImg* orgImage, QObject* parent, int drop,
-                               int amount, int coeff, QRect* selection)
+RainDropFilter::RainDropFilter(DImg* const orgImage, QObject* const parent, int drop,
+                               int amount, int coeff, QRect* const selection)
     : DImgThreadedFilter(orgImage, parent, "RainDrop")
 {
     m_drop   = drop;
@@ -117,10 +117,10 @@ void RainDropFilter::filterImage()
 
         // Build the target image.
 
-        m_destImage.bitBltImage(&zone1Dest, 0, 0);
-        m_destImage.bitBltImage(&zone2Dest, m_selectedX, 0);
-        m_destImage.bitBltImage(&zone3Dest, m_selectedX, m_selectedY + m_selectedH);
-        m_destImage.bitBltImage(&zone4Dest, m_selectedX + m_selectedW, 0);
+        m_destImage.bitBltImage(&zone1Dest,   0, 0);
+        m_destImage.bitBltImage(&zone2Dest,   m_selectedX, 0);
+        m_destImage.bitBltImage(&zone3Dest,   m_selectedX, m_selectedY + m_selectedH);
+        m_destImage.bitBltImage(&zone4Dest,   m_selectedX + m_selectedW, 0);
         m_destImage.bitBltImage(&selectedImg, m_selectedX, m_selectedY);
     }
     else
@@ -153,13 +153,13 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
     bool   bResp;
     int    nRandSize, i;
     int    nRandX, nRandY;
-    int    nCounter = 0;
-    int    nWidth   = orgImage->width();
-    int    nHeight  = orgImage->height();
+    int    nCounter   = 0;
+    int    nWidth     = orgImage->width();
+    int    nHeight    = orgImage->height();
     bool   sixteenBit = orgImage->sixteenBit();
     int    bytesDepth = orgImage->bytesDepth();
-    uchar* data = orgImage->bits();
-    uchar* pResBits = destImage->bits();
+    uchar* data       = orgImage->bits();
+    uchar* pResBits   = destImage->bits();
 
     if (Amount <= 0)
     {
@@ -191,14 +191,12 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
 
         do
         {
-            nRandX = m_generator.number(0, nWidth - 1);
-            nRandY = m_generator.number(0, nHeight - 1);
-
+            nRandX    = m_generator.number(0, nWidth - 1);
+            nRandY    = m_generator.number(0, nHeight - 1);
             nRandSize = m_generator.number(MinDropSize, MaxDropSize);
-
-            bResp = CreateRainDrop(data, nWidth, nHeight, sixteenBit, bytesDepth,
-                                   pResBits, pStatusBits.data(),
-                                   nRandX, nRandY, nRandSize, Coeff, bLimitRange);
+            bResp     = CreateRainDrop(data, nWidth, nHeight, sixteenBit, bytesDepth,
+                                       pResBits, pStatusBits.data(),
+                                       nRandX, nRandY, nRandSize, Coeff, bLimitRange);
 
             ++nCounter;
         }
@@ -241,16 +239,16 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
         {
             for (w = -nHalfSize; runningFlag() && (w <= nHalfSize); ++w)
             {
-                lfRadius = sqrt(h * h + w * w);
-                lfAngle = atan2((double)h, (double)w);
+                lfRadius = qSqrt(h * h + w * w);
+                lfAngle = qAtan2((double)h, (double)w);
 
                 if (lfRadius <= (double)nHalfSize)
                 {
                     lfOldRadius = lfRadius;
-                    lfRadius = (exp(lfRadius / lfDiv) - 1.0) / Coeff;
+                    lfRadius    = (qExp(lfRadius / lfDiv) - 1.0) / Coeff;
 
-                    nw1 = (int)((double)X + lfRadius * cos(lfAngle));
-                    nh1 = (int)((double)Y + lfRadius * sin(lfAngle));
+                    nw1 = (int)((double)X + lfRadius * qCos(lfAngle));
+                    nh1 = (int)((double)Y + lfRadius * qSin(lfAngle));
 
                     nw2 = X + w;
                     nh2 = Y + h;
@@ -371,15 +369,15 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
                                     nBright = (nBright - 1) * 256 + 1;
                                 }
 
-                                imageData.setRed(LimitValues16(imageData.red()   + nBright));
+                                imageData.setRed(LimitValues16(imageData.red()     + nBright));
                                 imageData.setGreen(LimitValues16(imageData.green() + nBright));
-                                imageData.setBlue(LimitValues16(imageData.blue()  + nBright));
+                                imageData.setBlue(LimitValues16(imageData.blue()   + nBright));
                             }
                             else
                             {
-                                imageData.setRed(LimitValues8(imageData.red()   + nBright));
+                                imageData.setRed(LimitValues8(imageData.red()     + nBright));
                                 imageData.setGreen(LimitValues8(imageData.green() + nBright));
-                                imageData.setBlue(LimitValues8(imageData.blue()  + nBright));
+                                imageData.setBlue(LimitValues8(imageData.blue()   + nBright));
                             }
 
                             imageData.setPixel(pResBits + Offset(Width, nw2, nh2, bytesDepth));
@@ -396,11 +394,11 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
         {
             for (w = -nHalfSize - nBlurRadius; runningFlag() && (w <= nHalfSize + nBlurRadius); ++w)
             {
-                lfRadius = sqrt(h * h + w * w);
+                lfRadius = qSqrt(h * h + w * w);
 
                 if (lfRadius <= (double)nHalfSize * 1.1)
                 {
-                    nTotalR = nTotalG = nTotalB = 0;
+                    nTotalR     = nTotalG = nTotalB = 0;
                     nBlurPixels = 0;
 
                     for (nh1 = -nBlurRadius; runningFlag() && (nh1 <= nBlurRadius); ++nh1)
@@ -432,9 +430,9 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
                         // to preserve alpha channel
                         imageData.setColor(pResBits + offset, sixteenBit);
 
-                        imageData.setRed(nTotalR / nBlurPixels);
+                        imageData.setRed(nTotalR   / nBlurPixels);
                         imageData.setGreen(nTotalG / nBlurPixels);
-                        imageData.setBlue(nTotalB / nBlurPixels);
+                        imageData.setBlue(nTotalB  / nBlurPixels);
 
                         imageData.setPixel(pResBits + offset);
                     }
@@ -532,11 +530,11 @@ FilterAction RainDropFilter::filterAction()
     return action;
 }
 
-void RainDropFilter::readParameters(const Digikam::FilterAction& action)
+void RainDropFilter::readParameters(const FilterAction& action)
 {
-    m_amount = action.parameter("amount").toInt();
-    m_coeff = action.parameter("coeff").toInt();
-    m_drop = action.parameter("drop").toInt();
+    m_amount    = action.parameter("amount").toInt();
+    m_coeff     = action.parameter("coeff").toInt();
+    m_drop      = action.parameter("drop").toInt();
     m_selectedH = action.parameter("selectedH").toInt();
     m_selectedW = action.parameter("selectedW").toInt();
     m_selectedX = action.parameter("selectedX").toInt();

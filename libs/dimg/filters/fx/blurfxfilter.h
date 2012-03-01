@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Blur FX threaded image filter.
  *
- * Copyright 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -45,8 +45,8 @@ class DIGIKAM_EXPORT BlurFXFilter : public DImgThreadedFilter
 
 public:
 
-    explicit BlurFXFilter(QObject* parent = 0);
-    explicit BlurFXFilter(DImg* orgImage, QObject* parent=0, int blurFXType=ZoomBlur,
+    explicit BlurFXFilter(QObject* const parent = 0);
+    explicit BlurFXFilter(DImg* const orgImage, QObject* const parent=0, int blurFXType=ZoomBlur,
                           int distance=100, int level=45);
     ~BlurFXFilter() {};
 
@@ -54,14 +54,17 @@ public:
     {
         return "digikam:BlurFXFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Blur FX Filter");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -71,7 +74,9 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
+
     void                    readParameters(const FilterAction& action);
 
 public:
@@ -236,9 +241,9 @@ private:
 
 private:
 
-    int m_blurFXType;
-    int m_distance;
-    int m_level;
+    int     m_blurFXType;
+    int     m_distance;
+    int     m_level;
     quint32 m_randomSeed;
 };
 

@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2005-05-25
- * Description : Blur FX threaded image filter.
+ * Description : Color FX threaded image filter.
  *
- * Copyright 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -45,8 +45,8 @@ class DIGIKAM_EXPORT ColorFXFilter : public DImgThreadedFilter
 
 public:
 
-    explicit ColorFXFilter(QObject* parent = 0);
-    explicit ColorFXFilter(DImg* orgImage, QObject* parent,
+    explicit ColorFXFilter(QObject* const parent = 0);
+    explicit ColorFXFilter(DImg* const orgImage, QObject* const parent,
                            int colorFXType = Solarize, int level = 25, int iterations = 2);
     ~ColorFXFilter() {};
 
@@ -54,14 +54,17 @@ public:
     {
         return "digikam:ColorFXFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Color FX Filter");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -71,7 +74,9 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
+
     void                    readParameters(const FilterAction& action);
 
 public:

@@ -6,8 +6,8 @@
  * Date        : 2009-08-09
  * Description : LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>.
  *
- * Copyright (C) 2009 by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,7 +29,10 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
-#include <cmath>
+
+// Qt includes
+
+#include <qmath.h>
 
 // KDE includes
 
@@ -65,7 +68,7 @@ LocalContrastContainer::~LocalContrastContainer()
 float LocalContrastContainer::get_power(int nstage)
 {
     float power = stage[nstage].power;
-    power       = (float)(pow(power / 100.0, 1.5) * 100.0);
+    power       = (float)(qPow(power / 100.0, 1.5) * 100.0);
     return power;
 }
 
@@ -77,7 +80,7 @@ float LocalContrastContainer::get_blur(int nstage)
 float LocalContrastContainer::get_unsharp_mask_power()
 {
     float power = unsharp_mask.power;
-    power       = (float)(pow(power / 100.0, 3.0) * 10.0);
+    power       = (float)(qPow(power / 100.0, 3.0) * 10.0);
     return power;
 }
 

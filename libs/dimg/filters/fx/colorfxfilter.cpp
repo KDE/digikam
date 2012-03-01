@@ -4,11 +4,11 @@
  * http://www.digikam.org
  *
  * Date        : 2004-02-14
- * Description : a digiKam image plugin for to apply a color
- *               effect to an image.
+ * Description : Color FX threaded image filter.
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,8 +27,7 @@
 
 // Qt includes
 
-
-// KDE includes
+#include <qmath.h>
 
 // Local includes
 
@@ -39,13 +38,13 @@
 namespace Digikam
 {
 
-ColorFXFilter::ColorFXFilter(QObject* parent)
+ColorFXFilter::ColorFXFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-ColorFXFilter::ColorFXFilter(DImg* orgImage, QObject* parent, int type, int level, int iterations)
+ColorFXFilter::ColorFXFilter(DImg* const orgImage, QObject* const parent, int type, int level, int iterations)
     : DImgThreadedFilter(orgImage, parent, "ColorFX")
 {
     m_colorFXType = type;
@@ -89,8 +88,8 @@ void ColorFXFilter::solarize(DImg* orgImage, DImg* destImage, int factor)
 
     if (!sb)        // 8 bits image.
     {
-        uint threshold = (uint)((100 - factor) * (255 + 1) / 100);
-        threshold      = qMax((uint)1, threshold);
+        uint threshold   = (uint)((100 - factor) * (255 + 1) / 100);
+        threshold        = qMax((uint)1, threshold);
         const uchar* ptr = data;
         uchar* dst       = pResBits;
         uchar  a, r, g, b;
@@ -303,7 +302,7 @@ void ColorFXFilter::neonFindEdges(DImg* orgImage, DImg* destImage, bool neon, in
     // initial copy
     memcpy(pResBits, data, Width * Height * bytesDepth);
 
-    double intensityFactor = sqrt(1 << Intensity);
+    double intensityFactor = qSqrt(1 << Intensity);
 
     for (int h = 0; h < Height; ++h)
     {
@@ -349,11 +348,11 @@ void ColorFXFilter::neonFindEdges(DImg* orgImage, DImg* destImage, bool neon, in
 
                     if (neon)
                     {
-                        ptr[k] = CLAMP0255((int)(sqrt((double)color_1 + color_2) * intensityFactor));
+                        ptr[k] = CLAMP0255((int)(qSqrt((double)color_1 + color_2) * intensityFactor));
                     }
                     else
                     {
-                        ptr[k] = 255 - CLAMP0255((int)(sqrt((double)color_1 + color_2) * intensityFactor));
+                        ptr[k] = 255 - CLAMP0255((int)(qSqrt((double)color_1 + color_2) * intensityFactor));
                     }
                 }
             }
@@ -373,7 +372,7 @@ FilterAction ColorFXFilter::filterAction()
     return action;
 }
 
-void ColorFXFilter::readParameters(const Digikam::FilterAction& action)
+void ColorFXFilter::readParameters(const FilterAction& action)
 {
     m_colorFXType = action.parameter("type").toInt();
     m_iterations  = action.parameter("iteration").toInt();
@@ -381,4 +380,3 @@ void ColorFXFilter::readParameters(const Digikam::FilterAction& action)
 }
 
 }  // namespace DigikamFxFiltersImagePlugin
-

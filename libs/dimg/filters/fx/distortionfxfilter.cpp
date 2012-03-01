@@ -6,7 +6,7 @@
  * Date        : 2005-07-18
  * Description : Distortion FX threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -32,12 +32,12 @@
 
 // C++ includes
 
-#include <cmath>
 #include <cstdlib>
 
 // Qt includes
 
 #include <QDateTime>
+#include <qmath.h>
 
 // Local includes
 
@@ -48,20 +48,20 @@
 namespace Digikam
 {
 
-DistortionFXFilter::DistortionFXFilter(QObject* parent)
+DistortionFXFilter::DistortionFXFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-DistortionFXFilter::DistortionFXFilter(DImg* orgImage, QObject* parent, int effectType,
-                                       int level, int iteration, bool antialiasing)
+DistortionFXFilter::DistortionFXFilter(DImg* const orgImage, QObject* const parent, int effectType,
+                                       int level, int iteration, bool antialiaqSing)
     : DImgThreadedFilter(orgImage, parent, "DistortionFX")
 {
     m_effectType = effectType;
     m_level      = level;
     m_iteration  = iteration;
-    m_antiAlias  = antialiasing;
+    m_antiAlias  = antialiaqSing;
     m_randomSeed = RandomNumberGenerator::timeSeed();
 
     initFilter();
@@ -188,7 +188,7 @@ void DistortionFXFilter::setPixelFromOther(int Width, int Height, bool sixteenBi
     }
 }
 
-/* Function to apply the fisheye effect backported from ImageProcessing version 2
+/* Function to apply the fisheye effect backported from ImageProcesqSing version 2
  *
  * data             => The image data in RGBA mode.
  * Width            => Width of image.
@@ -237,7 +237,7 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
     }
 
     lfRadMax = (double)qMax(Height, Width) / 2.0;
-    lfCoeff = lfRadMax / log(fabs(lfCoeffStep) * lfRadMax + 1.0);
+    lfCoeff  = lfRadMax / qLn(qFabs(lfCoeffStep) * lfRadMax + 1.0);
 
     // main loop
 
@@ -250,23 +250,23 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
             tw = lfXScale * (double)(w - nHalfW);
 
             // we find the distance from the center
-            lfRadius = sqrt(th * th + tw * tw);
+            lfRadius = qSqrt(th * th + tw * tw);
 
             if (lfRadius < lfRadMax)
             {
-                lfAngle = atan2(th, tw);
+                lfAngle = qAtan2(th, tw);
 
                 if (Coeff > 0.0)
                 {
-                    lfRadius = (exp(lfRadius / lfCoeff) - 1.0) / lfCoeffStep;
+                    lfRadius = (qExp(lfRadius / lfCoeff) - 1.0) / lfCoeffStep;
                 }
                 else
                 {
-                    lfRadius = lfCoeff * log(1.0 + (-1.0 * lfCoeffStep) * lfRadius);
+                    lfRadius = lfCoeff * qLn(1.0 + (-1.0 * lfCoeffStep) * lfRadius);
                 }
 
-                nw = (double)nHalfW + (lfRadius / lfXScale) * cos(lfAngle);
-                nh = (double)nHalfH + (lfRadius / lfYScale) * sin(lfAngle);
+                nw = (double)nHalfW + (lfRadius / lfXScale) * qCos(lfAngle);
+                nh = (double)nHalfH + (lfRadius / lfYScale) * qSin(lfAngle);
 
                 setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
             }
@@ -289,7 +289,7 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
     }
 }
 
-/* Function to apply the twirl effect backported from ImageProcessing version 2
+/* Function to apply the twirl effect backported from ImageProcesqSing version 2
  *
  * data             => The image data in RGBA mode.
  * Width            => Width of image.
@@ -353,21 +353,21 @@ void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int Twirl, bool 
             tw = lfXScale * (double)(w - nHalfW);
 
             // now, we get the distance
-            lfCurrentRadius = sqrt(th * th + tw * tw);
+            lfCurrentRadius = qSqrt(th * th + tw * tw);
 
             // if distance is less than maximum radius...
             if (lfCurrentRadius < lfRadMax)
             {
                 // we find the angle from the center
-                lfAngle = atan2(th, tw);
+                lfAngle = qAtan2(th, tw);
                 // we get the accumuled angle
                 lfAngleSum = lfAngleStep * (-1.0 * (lfCurrentRadius - lfRadMax));
                 // ok, we sum angle with accumuled to find a new angle
                 lfNewAngle = lfAngle + lfAngleSum;
 
                 // now we find the exact position's x and y
-                nw = (double)nHalfW + cos(lfNewAngle) * (lfCurrentRadius / lfXScale);
-                nh = (double)nHalfH + sin(lfNewAngle) * (lfCurrentRadius / lfYScale);
+                nw = (double)nHalfW + qCos(lfNewAngle) * (lfCurrentRadius / lfXScale);
+                nh = (double)nHalfH + qSin(lfNewAngle) * (lfCurrentRadius / lfYScale);
 
                 setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
             }
@@ -432,12 +432,12 @@ void DistortionFXFilter::cilindrical(DImg* orgImage, DImg* destImage, double Coe
 
     if (Horizontal)
     {
-        lfCoeffX = (double)nHalfW / log(fabs(lfCoeffStep) * nHalfW + 1.0);
+        lfCoeffX = (double)nHalfW / qLn(qFabs(lfCoeffStep) * nHalfW + 1.0);
     }
 
     if (Vertical)
     {
-        lfCoeffY = (double)nHalfH / log(fabs(lfCoeffStep) * nHalfH + 1.0);
+        lfCoeffY = (double)nHalfH / qLn(qFabs(lfCoeffStep) * nHalfH + 1.0);
     }
 
     // initial copy
@@ -450,18 +450,18 @@ void DistortionFXFilter::cilindrical(DImg* orgImage, DImg* destImage, double Coe
         for (w = 0; runningFlag() && (w < Width); ++w)
         {
             // we find the distance from the center
-            nh = fabs((double)(h - nHalfH));
-            nw = fabs((double)(w - nHalfW));
+            nh = qFabs((double)(h - nHalfH));
+            nw = qFabs((double)(w - nHalfW));
 
             if (Horizontal)
             {
                 if (Coeff > 0.0)
                 {
-                    nw = (exp(nw / lfCoeffX) - 1.0) / lfCoeffStep;
+                    nw = (qExp(nw / lfCoeffX) - 1.0) / lfCoeffStep;
                 }
                 else
                 {
-                    nw = lfCoeffX * log(1.0 + (-1.0 * lfCoeffStep) * nw);
+                    nw = lfCoeffX * qLn(1.0 + (-1.0 * lfCoeffStep) * nw);
                 }
             }
 
@@ -469,11 +469,11 @@ void DistortionFXFilter::cilindrical(DImg* orgImage, DImg* destImage, double Coe
             {
                 if (Coeff > 0.0)
                 {
-                    nh = (exp(nh / lfCoeffY) - 1.0) / lfCoeffStep;
+                    nh = (qExp(nh / lfCoeffY) - 1.0) / lfCoeffStep;
                 }
                 else
                 {
-                    nh = lfCoeffY * log(1.0 + (-1.0 * lfCoeffStep) * nh);
+                    nh = lfCoeffY * qLn(1.0 + (-1.0 * lfCoeffStep) * nh);
                 }
             }
 
@@ -527,7 +527,7 @@ void DistortionFXFilter::multipleCorners(DImg* orgImage, DImg* destImage, int Fa
     int nHalfW = Width / 2, nHalfH = Height / 2;
     double lfAngle, lfNewRadius, lfCurrentRadius, lfRadMax;
 
-    lfRadMax = sqrt(Height * Height + Width * Width) / 2.0;
+    lfRadMax = qSqrt(Height * Height + Width * Width) / 2.0;
 
     // main loop
 
@@ -540,16 +540,16 @@ void DistortionFXFilter::multipleCorners(DImg* orgImage, DImg* destImage, int Fa
             nw = nHalfW - w;
 
             // now, we get the distance
-            lfCurrentRadius = sqrt(nh * nh + nw * nw);
+            lfCurrentRadius = qSqrt(nh * nh + nw * nw);
             // we find the angle from the center
-            lfAngle = atan2(nh, nw) * (double)Factor;
+            lfAngle = qAtan2(nh, nw) * (double)Factor;
 
             // ok, we sum angle with accumuled to find a new angle
             lfNewRadius = lfCurrentRadius * lfCurrentRadius / lfRadMax;
 
             // now we find the exact position's x and y
-            nw = (double)nHalfW - (cos(lfAngle) * lfNewRadius);
-            nh = (double)nHalfH - (sin(lfAngle) * lfNewRadius);
+            nw = (double)nHalfW - (qCos(lfAngle) * lfNewRadius);
+            nh = (double)nHalfH - (qSin(lfAngle) * lfNewRadius);
 
             setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
         }
@@ -564,7 +564,7 @@ void DistortionFXFilter::multipleCorners(DImg* orgImage, DImg* destImage, int Fa
     }
 }
 
-/* Function to apply the Polar Coordinates effect backported from ImageProcessing version 2
+/* Function to apply the Polar Coordinates effect backported from ImageProcesqSing version 2
  *
  * data             => The image data in RGBA mode.
  * Width            => Width of image.
@@ -616,9 +616,9 @@ void DistortionFXFilter::polarCoordinates(DImg* orgImage, DImg* destImage, bool 
             if (Type)
             {
                 // now, we get the distance
-                lfRadius = sqrt(th * th + tw * tw);
+                lfRadius = qSqrt(th * th + tw * tw);
                 // we find the angle from the center
-                lfAngle = atan2(tw, th);
+                lfAngle = qAtan2(tw, th);
 
                 // now we find the exact position's x and y
                 nh = lfRadius * (double) Height / lfRadMax;
@@ -631,8 +631,8 @@ void DistortionFXFilter::polarCoordinates(DImg* orgImage, DImg* destImage, bool 
                 lfRadius = (double)(h) * lfRadMax / (double)Height;
                 lfAngle  = (double)(w) * (2 * M_PI) / (double) Width;
 
-                nw = (double)nHalfW - (lfRadius / lfXScale) * sin(lfAngle);
-                nh = (double)nHalfH - (lfRadius / lfYScale) * cos(lfAngle);
+                nw = (double)nHalfW - (lfRadius / lfXScale) * qSin(lfAngle);
+                nh = (double)nHalfH - (lfRadius / lfYScale) * qCos(lfAngle);
             }
 
             setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
@@ -648,7 +648,7 @@ void DistortionFXFilter::polarCoordinates(DImg* orgImage, DImg* destImage, bool 
     }
 }
 
-/* Function to apply the circular waves effect backported from ImageProcessing version 2
+/* Function to apply the circular waves effect backported from ImageProcesqSing version 2
  *
  * data             => The image data in RGBA mode.
  * Width            => Width of image.
@@ -692,7 +692,7 @@ void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, i
 
     Phase *= ANGLE_RATIO;
 
-    lfRadMax = sqrt(Height * Height + Width * Width);
+    lfRadMax = qSqrt(Height * Height + Width * Width);
 
     for (h = 0; runningFlag() && (h < Height); ++h)
     {
@@ -701,15 +701,15 @@ void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, i
             nw = X - w;
             nh = Y - h;
 
-            lfRadius = sqrt(nw * nw + nh * nh);
+            lfRadius = qSqrt(nw * nw + nh * nh);
 
             if (WavesType)
             {
                 lfNewAmp = Amplitude * lfRadius / lfRadMax;
             }
 
-            nw = (double)w + lfNewAmp * sin(lfFreqAngle * lfRadius + Phase);
-            nh = (double)h + lfNewAmp * cos(lfFreqAngle * lfRadius + Phase);
+            nw = (double)w + lfNewAmp * qSin(lfFreqAngle * lfRadius + Phase);
+            nh = (double)h + lfNewAmp * qCos(lfFreqAngle * lfRadius + Phase);
 
             setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
         }
@@ -735,7 +735,7 @@ void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, i
  * Direction        => Vertical or horizontal flag.
  *
  * Theory           => This is an amazing effect, very funny, and very simple to
- *                     understand. You just need understand how sin and cos works.
+ *                     understand. You just need understand how qSin and qCos works.
  */
 void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
                                int Amplitude, int Frequency,
@@ -763,7 +763,7 @@ void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
 
         for (h = 0; runningFlag() && (h < Height); ++h)
         {
-            tx = lround(Amplitude * sin((Frequency * 2) * h * (M_PI / 180)));
+            tx = lround(Amplitude * qSin((Frequency * 2) * h * (M_PI / 180)));
             destImage->bitBltImage(orgImage, 0, h,  Width, 1,  tx, h);
 
             if (FillSides)
@@ -787,7 +787,7 @@ void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
 
         for (w = 0; runningFlag() && (w < Width); ++w)
         {
-            ty = lround(Amplitude * sin((Frequency * 2) * w * (M_PI / 180)));
+            ty = lround(Amplitude * qSin((Frequency * 2) * w * (M_PI / 180)));
             destImage->bitBltImage(orgImage, w, 0, 1, Height, w, ty);
 
             if (FillSides)
@@ -854,20 +854,20 @@ void DistortionFXFilter::blockWaves(DImg* orgImage, DImg* destImage,
             nw = nHalfW - w;
             nh = nHalfH - h;
 
-//            Radius = sqrt (nw * nw + nh * nh);
+//            Radius = qSqrt (nw * nw + nh * nh);
 
             if (Mode)
             {
-                nw = (int)(w + Amplitude * sin(Frequency * nw * (M_PI / 180)));
-                nh = (int)(h + Amplitude * cos(Frequency * nh * (M_PI / 180)));
+                nw = (int)(w + Amplitude * qSin(Frequency * nw * (M_PI / 180)));
+                nh = (int)(h + Amplitude * qCos(Frequency * nh * (M_PI / 180)));
             }
             else
             {
-                nw = (int)(w + Amplitude * sin(Frequency * w * (M_PI / 180)));
-                nh = (int)(h + Amplitude * cos(Frequency * h * (M_PI / 180)));
+                nw = (int)(w + Amplitude * qSin(Frequency * w * (M_PI / 180)));
+                nh = (int)(h + Amplitude * qCos(Frequency * h * (M_PI / 180)));
             }
 
-            offset = getOffset(Width, w, h, bytesDepth);
+            offset      = getOffset(Width, w, h, bytesDepth);
             offsetOther = getOffsetAdjusted(Width, Height, (int)nw, (int)nh, bytesDepth);
 
             // read color
@@ -896,7 +896,7 @@ void DistortionFXFilter::blockWaves(DImg* orgImage, DImg* destImage,
  * Random           => Maximum random value
  *
  * Theory           => Similar to Tile effect from Photoshop and very easy to
- *                     understand. We get a rectangular area using WSize and HSize and
+ *                     understand. We get a rectangular area uqSing WSize and HSize and
  *                     replace in a position with a random distance from the original
  *                     position.
  */
@@ -951,58 +951,29 @@ FilterAction DistortionFXFilter::filterAction()
     action.setDisplayableName(DisplayableName());
 
     action.addParameter("antiAlias", m_antiAlias);
-    action.addParameter("type", m_effectType);
+    action.addParameter("type",      m_effectType);
     action.addParameter("iteration", m_iteration);
-    action.addParameter("level", m_level);
+    action.addParameter("level",     m_level);
 
     if (m_effectType == Tile)
     {
         action.addParameter("randomSeed", m_randomSeed);
     }
 
-
     return action;
 }
 
-void DistortionFXFilter::readParameters(const Digikam::FilterAction& action)
+void DistortionFXFilter::readParameters(const FilterAction& action)
 {
-    m_antiAlias = action.parameter("antiAlias").toBool();
+    m_antiAlias  = action.parameter("antiAlias").toBool();
     m_effectType = action.parameter("type").toInt();
-    m_iteration = action.parameter("iteration").toInt();
-    m_level = action.parameter("level").toInt();
+    m_iteration  = action.parameter("iteration").toInt();
+    m_level      = action.parameter("level").toInt();
 
     if (m_effectType == Tile)
     {
         m_randomSeed = action.parameter("randomSeed").toUInt();
     }
 }
-
-// UNUSED
-/* Function to return the maximum radius with a determined angle
- *
- * Height           => Height of the image
- * Width            => Width of the image
- * Angle            => Angle to analyze the maximum radius
- *
- * Theory           => This function calculates the maximum radius to that angle
- *                     so, we can build an oval circumference
- */
-/*
-double DistortionFXFilter::maximumRadius(int Height, int Width, double Angle)
-{
-   double MaxRad, MinRad;
-   double Radius, DegAngle = fabs (Angle * 57.295);    // Rads -> Degrees
-
-   MinRad = qMin (Height, Width) / 2.0;                // Gets the minor radius
-   MaxRad = qMax (Height, Width) / 2.0;                // Gets the major radius
-
-   // Find the quadrant between -PI/2 and PI/2
-   if (DegAngle > 90.0)
-       Radius = proportionalValue (MinRad, MaxRad, (DegAngle * (255.0 / 90.0)));
-   else
-       Radius = proportionalValue (MaxRad, MinRad, ((DegAngle - 90.0) * (255.0 / 90.0)));
-   return (Radius);
-}
-*/
 
 }  // namespace Digikam

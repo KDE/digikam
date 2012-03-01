@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Blur FX threaded image filter.
  *
- * Copyright 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Blur algorithms copyrighted 2004 by
@@ -31,13 +31,13 @@
 
 // C++ includes
 
-#include <cmath>
 #include <cstdlib>
 #include <cstring>
 
 // Qt includes
 
 #include <QDateTime>
+#include <qmath.h>
 
 // Local includes
 
@@ -48,13 +48,13 @@
 namespace Digikam
 {
 
-BlurFXFilter::BlurFXFilter(QObject* parent)
+BlurFXFilter::BlurFXFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-BlurFXFilter::BlurFXFilter(DImg* orgImage, QObject* parent, int blurFXType, int distance, int level)
+BlurFXFilter::BlurFXFilter(DImg* const orgImage, QObject* const parent, int blurFXType, int distance, int level)
     : DImgThreadedFilter(orgImage, parent, "BlurFX")
 {
     m_blurFXType = blurFXType;
@@ -168,7 +168,7 @@ void BlurFXFilter::zoomBlur(DImg* orgImage, DImg* destImage, int X, int Y, int D
     DColor color;
     int offset;
 
-    lfRadMax = sqrt(Height * Height + Width * Width);
+    lfRadMax = qSqrt(Height * Height + Width * Width);
 
     // number of added pixels
     nCount = 0;
@@ -186,8 +186,8 @@ void BlurFXFilter::zoomBlur(DImg* orgImage, DImg* destImage, int X, int Y, int D
             nw = X - w;
             nh = Y - h;
 
-            lfRadius    = sqrt(nw * nw + nh * nh);
-            lfAngle     = atan2((double)nh, (double)nw);
+            lfRadius    = qSqrt(nw * nw + nh * nh);
+            lfAngle     = qAtan2((double)nh, (double)nw);
             lfNewRadius = (lfRadius * Distance) / lfRadMax;
 
             for (r = 0; runningFlag() && (r <= lfNewRadius); ++r)
@@ -316,15 +316,15 @@ void BlurFXFilter::radialBlur(DImg* orgImage, DImg* destImage, int X, int Y, int
             nw = X - w;
             nh = Y - h;
 
-            Radius   = sqrt(nw * nw + nh * nh);
-            AngleRad = atan2((double)nh, (double)nw);
+            Radius   = qSqrt(nw * nw + nh * nh);
+            AngleRad = qAtan2((double)nh, (double)nw);
 
             for (int a = -Distance; runningFlag() && (a <= Distance); ++a)
             {
                 Angle = AngleRad + nMultArray[a + Distance];
                 // we need to calc the positions
-                nw = (int)(X - Radius * cos(Angle));
-                nh = (int)(Y - Radius * sin(Angle));
+                nw = (int)(X - Radius * qCos(Angle));
+                nh = (int)(Y - Radius * qSin(Angle));
 
                 if (IsInside(Width, Height, nw, nh))
                 {
@@ -463,7 +463,7 @@ void BlurFXFilter::focusBlur(DImg* orgImage, DImg* destImage,
         {
             nw = X - w;
 
-            lfRadius = sqrt(nh * nh + nw * nw);
+            lfRadius = qSqrt(nh * nh + nw * nw);
 
             if (sixteenBit)
             {
@@ -476,7 +476,7 @@ void BlurFXFilter::focusBlur(DImg* orgImage, DImg* destImage,
 
             // Read color values
             offset = GetOffset(Width, w, h, bytesDepth);
-            ptr = pResBits + offset;
+            ptr    = pResBits + offset;
             colorOrgImage.setColor(data + offset, sixteenBit);
             colorBlurredImage.setColor(ptr, sixteenBit);
 
@@ -1549,7 +1549,7 @@ FilterAction BlurFXFilter::filterAction()
     return action;
 }
 
-void BlurFXFilter::readParameters(const Digikam::FilterAction& action)
+void BlurFXFilter::readParameters(const FilterAction& action)
 {
     m_blurFXType = action.parameter("type").toInt();
     m_distance = action.parameter("distance").toInt();
@@ -1560,7 +1560,5 @@ void BlurFXFilter::readParameters(const Digikam::FilterAction& action)
         m_randomSeed = action.parameter("randomSeed").toUInt();
     }
 }
-
-
 
 }  // namespace Digikam
