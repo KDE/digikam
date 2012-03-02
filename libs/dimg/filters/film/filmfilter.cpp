@@ -8,6 +8,7 @@
 #include <QListWidget>
 
 #include <kdebug.h>
+#include <cmath>
 
 #include "filmfilter.h"
 #include "invertfilter.h"
@@ -285,7 +286,7 @@ double FilmContainer::blackPointForChannel(int ch) const
     if (ch == LuminosityChannel || ch == AlphaChannel)
         return 0.0;
 
-    return ::pow10(-d->profile.dmax(ch)) * (d->sixteenBit ? 65535 : 256);
+    return pow(10, -d->profile.dmax(ch)) * (d->sixteenBit ? 65535 : 256);
 }
 
 double FilmContainer::gammaForChannel(int ch) const
